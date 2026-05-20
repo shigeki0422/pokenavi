@@ -95,9 +95,9 @@ heroImage: '../../assets/blog-placeholder-3.jpg'
   <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" />
   <div>
     <h2 style="margin:0 0 8px">ガブリアス</h2>
-    <div class="type-row">
-      <img src="/images/types/type-15-dragon.png" alt="ドラゴン" class="type-badge" />
-      <img src="/images/types/type-04-ground.png" alt="じめん" class="type-badge" />
+    <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
+      <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:44px;height:44px" />
+      <img src="/images/types/type-04-ground.png" alt="じめん" style="width:44px;height:44px" />
     </div>
   </div>
 </div>
@@ -122,13 +122,13 @@ heroImage: '../../assets/blog-placeholder-3.jpg'
 
 <div class="type-row">
   <strong>タイプ：</strong>
-  <img src="/images/types/type-15-dragon.png" alt="ドラゴン" class="type-badge" title="ドラゴン" />
-  <img src="/images/types/type-04-ground.png" alt="じめん" class="type-badge" title="じめん" />
+  <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="ドラゴン" />
+  <img src="/images/types/type-04-ground.png" alt="じめん" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="じめん" />
 </div>
 
 | 弱点（4倍） | 弱点（2倍） | 無効 |
 |:--:|:--:|:--:|
-| <img src="/images/types/type-14-ice.png" alt="こおり" class="type-badge-sm" /> こおり | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" class="type-badge-sm" /> ドラゴン・<img src="/images/types/type-17-fairy.png" alt="フェアリー" class="type-badge-sm" /> フェアリー | <img src="/images/types/type-12-electric.png" alt="でんき" class="type-badge-sm" /> でんき |
+| <img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> こおり | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> ドラゴン・<img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> フェアリー | <img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> でんき |
 
 弱点はこおり・ドラゴン・フェアリーの3タイプ。一方でポケモンチャンピオンズ環境で多いでんきタイプを**完全無効化**し、じめんタイプの攻撃でブリジュラス・ハラバリーなどの電気ポケモンを一撃で倒せるのが大きな強みです。
 
@@ -138,16 +138,16 @@ heroImage: '../../assets/blog-placeholder-3.jpg'
 
 ### 1. 技範囲が圧倒的に広い
 
-| 技 | タイプ | 採用率 |
-|:--|:--:|:--:|
-| じしん | <img src="/images/types/type-04-ground.png" alt="じめん" class="type-badge-sm" /> | 99.2% |
-| ステルスロック | <img src="/images/types/type-05-rock.png" alt="いわ" class="type-badge-sm" /> | 51.9% |
-| げきりん | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" class="type-badge-sm" /> | 49.0% |
-| がんせきふうじ | <img src="/images/types/type-05-rock.png" alt="いわ" class="type-badge-sm" /> | 40.3% |
-| スケイルショット | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" class="type-badge-sm" /> | 33.0% |
-| いわなだれ | <img src="/images/types/type-05-rock.png" alt="いわ" class="type-badge-sm" /> | 23.6% |
-| どくづき | <img src="/images/types/type-03-poison.png" alt="どく" class="type-badge-sm" /> | 19.6% |
-| ほのおのキバ | <img src="/images/types/type-09-fire.png" alt="ほのお" class="type-badge-sm" /> | 14.1% |
+| 技 | 採用率 |
+|:--|:--:|
+| <img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> じしん | 99.2% |
+| <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ステルスロック | 51.9% |
+| <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> げきりん | 49.0% |
+| <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> がんせきふうじ | 40.3% |
+| <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> スケイルショット | 33.0% |
+| <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> いわなだれ | 23.6% |
+| <img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> どくづき | 19.6% |
+| <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ほのおのキバ | 14.1% |
 
 じしん1本でブリジュラス・ハラバリーを完封しつつ、ドラゴン技・いわ技・どくづき・ほのおのキバを組み合わせることで**ほぼすべての環境ポケモンに等倍以上が取れます**。これだけの技範囲を持ちながら攻撃130・素早さ102を持つポケモンは他にほとんど存在しません。
 
@@ -450,10 +450,10 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 
 | 苦手な相手 | 理由 | 解決策 |
 |---|---|---|
-| <img src="/images/pokemon/pokemon-0730-00.webp" alt="" class="poke-icon" />アシレーヌ・<img src="/images/pokemon/pokemon-0670-05.webp" alt="" class="poke-icon" />フラエッテ | <img src="/images/types/type-17-fairy.png" alt="フェアリー" class="type-badge-sm" />フェアリー技4倍 | <img src="/images/pokemon/pokemon-0212-00.webp" alt="" class="poke-icon" />ハッサム・<img src="/images/pokemon/pokemon-0681-00.webp" alt="" class="poke-icon" />ギルガルドで受ける |
-| <img src="/images/pokemon/pokemon-0149-00.webp" alt="" class="poke-icon" />メガカイリュー・<img src="/images/pokemon/pokemon-0635-00.webp" alt="" class="poke-icon" />サザンドラ | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" class="type-badge-sm" />ドラゴン技2倍 | <img src="/images/types/type-17-fairy.png" alt="フェアリー" class="type-badge-sm" />フェアリータイプで受ける |
-| <img src="/images/pokemon/pokemon-0478-00.webp" alt="" class="poke-icon" />ユキメノコ・<img src="/images/pokemon/pokemon-0038-01.webp" alt="" class="poke-icon" />アローラキュウコン | <img src="/images/types/type-14-ice.png" alt="こおり" class="type-badge-sm" />こおり技4倍 | 先制で倒すか交代で受ける |
-| <img src="/images/pokemon/pokemon-0094-00.webp" alt="" class="poke-icon" />ゲンガー・<img src="/images/pokemon/pokemon-0778-00.webp" alt="" class="poke-icon" />ミミッキュ | 影分身・道連れで崩す | タスキで1ターン確保 |
+| <img src="/images/pokemon/pokemon-0730-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:3px">アシレーヌ・<img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:3px">フラエッテ | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle;margin-right:3px">フェアリー技4倍 | <img src="/images/pokemon/pokemon-0212-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:3px">ハッサム・<img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:3px">ギルガルドで受ける |
+| <img src="/images/pokemon/pokemon-0149-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:3px">メガカイリュー・<img src="/images/pokemon/pokemon-0635-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:3px">サザンドラ | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:3px">ドラゴン技2倍 | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle;margin-right:3px">フェアリータイプで受ける |
+| <img src="/images/pokemon/pokemon-0478-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:3px">ユキメノコ・<img src="/images/pokemon/pokemon-0038-01.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:3px">アローラキュウコン | <img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle;margin-right:3px">こおり技4倍 | 先制で倒すか交代で受ける |
+| <img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:3px">ゲンガー・<img src="/images/pokemon/pokemon-0778-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:3px">ミミッキュ | 影分身・道連れで崩す | タスキで1ターン確保 |
 
 ### 持ち物別・相性の良いポケモン
 
@@ -461,16 +461,16 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 
 ガブリアスがステルスロックを撒いた後、フェアリー耐性を持つ後続につなぐ構築が安定します。
 
-- <img src="/images/pokemon/pokemon-1018-00.webp" alt="" class="poke-icon" />**ブリジュラス**（電気・はがねで多くに打点、ゴーストタイプ無効）
-- <img src="/images/pokemon/pokemon-0730-00.webp" alt="" class="poke-icon" />**アシレーヌ**（フェアリー技でドラゴンを一掃）
-- <img src="/images/pokemon/pokemon-0823-00.webp" alt="" class="poke-icon" />**アーマーガア**（物理受け、釣り交換先）
+- <img src="/images/pokemon/pokemon-1018-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ブリジュラス**（電気・はがねで多くに打点、ゴーストタイプ無効）
+- <img src="/images/pokemon/pokemon-0730-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**アシレーヌ**（フェアリー技でドラゴンを一掃）
+- <img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**アーマーガア**（物理受け、釣り交換先）
 
 **<img src="/images/items/item-0287-scarf.png" alt="こだわりスカーフ" class="item-icon" /> スカーフ型のパーティ**
 
 高速処理で詰める型なので、詰め切れない耐久ポケモンを突破する手段を別枠で用意しておく必要があります。
 
-- <img src="/images/pokemon/pokemon-0094-00.webp" alt="" class="poke-icon" />**ゲンガー**（催眠・トリックで崩し）
-- <img src="/images/pokemon/pokemon-0115-00.webp" alt="" class="poke-icon" />**ガルーラ**・<img src="/images/pokemon/pokemon-0428-00.webp" alt="" class="poke-icon" />**ミミロップ**（メガシンカで受けを突破）
+- <img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ゲンガー**（催眠・トリックで崩し）
+- <img src="/images/pokemon/pokemon-0115-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ガルーラ**・<img src="/images/pokemon/pokemon-0428-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ミミロップ**（メガシンカで受けを突破）
 
 **<img src="/images/items/item-0158-obon.png" alt="オボンのみ" class="item-icon" /> オボン型のパーティ（ドラゴンテール構築）**
 
@@ -480,7 +480,7 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 
 ## シーズンM-2での環境的な位置づけ
 
-M-2でガブリアスが1位を保っている背景には、**ブリジュラス・ハラバリーという電気ポケモンの台頭**があります。ガブリアスはでんきタイプを完全無効化した上で、じしん1発でこれらを倒せる数少ないポケモン。使用率2位の<img src="/images/pokemon/pokemon-1018-00.webp" alt="" class="poke-icon" />ブリジュラスへの最強の回答がガブリアスという構図で、「ブリジュラスに強いポケモン」を採用する際の第一候補になり続けています。
+M-2でガブリアスが1位を保っている背景には、**ブリジュラス・ハラバリーという電気ポケモンの台頭**があります。ガブリアスはでんきタイプを完全無効化した上で、じしん1発でこれらを倒せる数少ないポケモン。使用率2位の<img src="/images/pokemon/pokemon-1018-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />ブリジュラスへの最強の回答がガブリアスという構図で、「ブリジュラスに強いポケモン」を採用する際の第一候補になり続けています。
 
 また注目の動向として、**キラフロルナイトの採用率が5/13→5/20の1週間で+19.3pt急増**しています。キラフロルのメガシンカは特殊技主体となるため、ガブリアスにとっての直接的な脅威にはなりにくいですが、特殊アタッカーが増えることでわんぱく型の価値が上がる可能性があります。
 
