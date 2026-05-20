@@ -128,7 +128,7 @@ heroImage: '../../assets/blog-placeholder-3.jpg'
 
 | 弱点（4倍） | 弱点（2倍） | 無効 |
 |:--:|:--:|:--:|
-| <img src="/images/types/type-13-ice.png" alt="こおり" class="type-badge-sm" /> こおり | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" class="type-badge-sm" /> ドラゴン・<img src="/images/types/type-17-fairy.png" alt="フェアリー" class="type-badge-sm" /> フェアリー | <img src="/images/types/type-12-electric.png" alt="でんき" class="type-badge-sm" /> でんき |
+| <img src="/images/types/type-14-ice.png" alt="こおり" class="type-badge-sm" /> こおり | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" class="type-badge-sm" /> ドラゴン・<img src="/images/types/type-17-fairy.png" alt="フェアリー" class="type-badge-sm" /> フェアリー | <img src="/images/types/type-12-electric.png" alt="でんき" class="type-badge-sm" /> でんき |
 
 弱点はこおり・ドラゴン・フェアリーの3タイプ。一方でポケモンチャンピオンズ環境で多いでんきタイプを**完全無効化**し、じめんタイプの攻撃でブリジュラス・ハラバリーなどの電気ポケモンを一撃で倒せるのが大きな強みです。
 
@@ -452,7 +452,7 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 |---|---|---|
 | <img src="/images/pokemon/pokemon-0730-00.webp" alt="" class="poke-icon" />アシレーヌ・<img src="/images/pokemon/pokemon-0670-05.webp" alt="" class="poke-icon" />フラエッテ | <img src="/images/types/type-17-fairy.png" alt="フェアリー" class="type-badge-sm" />フェアリー技4倍 | <img src="/images/pokemon/pokemon-0212-00.webp" alt="" class="poke-icon" />ハッサム・<img src="/images/pokemon/pokemon-0681-00.webp" alt="" class="poke-icon" />ギルガルドで受ける |
 | <img src="/images/pokemon/pokemon-0149-00.webp" alt="" class="poke-icon" />メガカイリュー・<img src="/images/pokemon/pokemon-0635-00.webp" alt="" class="poke-icon" />サザンドラ | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" class="type-badge-sm" />ドラゴン技2倍 | <img src="/images/types/type-17-fairy.png" alt="フェアリー" class="type-badge-sm" />フェアリータイプで受ける |
-| <img src="/images/pokemon/pokemon-0478-00.webp" alt="" class="poke-icon" />ユキメノコ・<img src="/images/pokemon/pokemon-0038-01.webp" alt="" class="poke-icon" />アローラキュウコン | <img src="/images/types/type-13-ice.png" alt="こおり" class="type-badge-sm" />こおり技4倍 | 先制で倒すか交代で受ける |
+| <img src="/images/pokemon/pokemon-0478-00.webp" alt="" class="poke-icon" />ユキメノコ・<img src="/images/pokemon/pokemon-0038-01.webp" alt="" class="poke-icon" />アローラキュウコン | <img src="/images/types/type-14-ice.png" alt="こおり" class="type-badge-sm" />こおり技4倍 | 先制で倒すか交代で受ける |
 | <img src="/images/pokemon/pokemon-0094-00.webp" alt="" class="poke-icon" />ゲンガー・<img src="/images/pokemon/pokemon-0778-00.webp" alt="" class="poke-icon" />ミミッキュ | 影分身・道連れで崩す | タスキで1ターン確保 |
 
 ### 持ち物別・相性の良いポケモン
