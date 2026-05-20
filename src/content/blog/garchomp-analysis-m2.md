@@ -151,6 +151,129 @@ heroImage: '../../assets/blog-placeholder-3.jpg'
 
 じしん1本でブリジュラス・ハラバリーを完封しつつ、ドラゴン技・いわ技・どくづき・ほのおのキバを組み合わせることで**ほぼすべての環境ポケモンに等倍以上が取れます**。これだけの技範囲を持ちながら攻撃130・素早さ102を持つポケモンは他にほとんど存在しません。
 
+下表は上位ポケモンへの各攻撃技の効果をまとめたものです。<span style="color:#e67e22;font-weight:bold">◎</span>=効果抜群（2倍）、<span style="color:#dc2626;font-weight:bold">◎◎</span>=4倍、<span style="color:#94a3b8">○</span>=等倍、<span style="color:#60a5fa">△</span>=いまひとつ、<span style="color:#2563eb;font-weight:bold">△△</span>=¼倍、<span style="color:#64748b">×</span>=無効
+
+<div style="overflow-x:auto;margin:16px 0;">
+<table style="width:100%;border-collapse:collapse;font-size:0.82rem;">
+<thead>
+<tr style="background:#f1f5f9;">
+  <th style="padding:8px 12px;text-align:left;border:1px solid #cbd5e1;min-width:140px">ポケモン</th>
+  <th style="padding:6px 4px;text-align:center;border:1px solid #cbd5e1;min-width:64px"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;display:block;margin:0 auto 2px">じしん</th>
+  <th style="padding:6px 4px;text-align:center;border:1px solid #cbd5e1;min-width:64px"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;display:block;margin:0 auto 2px">げきりん</th>
+  <th style="padding:6px 4px;text-align:center;border:1px solid #cbd5e1;min-width:72px"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;display:block;margin:0 auto 2px">がんせきふうじ</th>
+  <th style="padding:6px 4px;text-align:center;border:1px solid #cbd5e1;min-width:64px"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;display:block;margin:0 auto 2px">どくづき</th>
+  <th style="padding:6px 4px;text-align:center;border:1px solid #cbd5e1;min-width:72px"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;display:block;margin:0 auto 2px">ほのおのキバ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス<br><small style="color:#94a3b8">はがね/ドラゴン</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#64748b">×</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0939-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハラバリー<br><small style="color:#94a3b8">でんき</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ<br><small style="color:#94a3b8">くさ/あく</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ<br><small style="color:#94a3b8">みず/フェアリー</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#64748b">×</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン<br><small style="color:#94a3b8">ほのお/ひこう</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#64748b">×</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">◎◎<br><small>4倍</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア<br><small style="color:#94a3b8">はがね/ひこう</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#64748b">×</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#64748b">×</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ<br><small style="color:#94a3b8">かくとう/はがね</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#2563eb;font-weight:bold">△△<br><small>¼倍</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#64748b">×</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス<br><small style="color:#94a3b8">みず/ひこう</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#64748b">×</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0670-05.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ:永遠<br><small style="color:#94a3b8">フェアリー</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#64748b">×</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー<br><small style="color:#94a3b8">ゴースト/どく</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス<br><small style="color:#94a3b8">ほのお/むし</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">◎◎<br><small>4倍</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム<br><small style="color:#94a3b8">はがね/むし</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#64748b">×</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">◎◎<br><small>4倍</small></td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ<br><small style="color:#94a3b8">ゴースト/フェアリー</small></td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#64748b">×</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;text-align:center;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+</tr>
+</tbody>
+</table>
+</div>
+
 ### 2. ステルスロックを覚える物理アタッカー
 
 ```
@@ -327,10 +450,10 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 
 | 苦手な相手 | 理由 | 解決策 |
 |---|---|---|
-| <img src="/images/pokemon/pokemon-0730-00.webp" alt="" class="poke-icon" />アシレーヌ・フラエッテ | フェアリー技4倍 | <img src="/images/pokemon/pokemon-0212-00.webp" alt="" class="poke-icon" />ハッサム・<img src="/images/pokemon/pokemon-0681-00.webp" alt="" class="poke-icon" />ギルガルドで受ける |
-| メガカイリュー・サザンドラ | ドラゴン技2倍 | フェアリータイプで受ける |
-| ユキメノコ・アローラキュウコン | こおり技4倍 | 先制で倒すか交代で受ける |
-| ゲンガー・ミミッキュ | 影分身・道連れで崩す | タスキで1ターン確保 |
+| <img src="/images/pokemon/pokemon-0730-00.webp" alt="" class="poke-icon" />アシレーヌ・<img src="/images/pokemon/pokemon-0670-05.webp" alt="" class="poke-icon" />フラエッテ | <img src="/images/types/type-17-fairy.png" alt="フェアリー" class="type-badge-sm" />フェアリー技4倍 | <img src="/images/pokemon/pokemon-0212-00.webp" alt="" class="poke-icon" />ハッサム・<img src="/images/pokemon/pokemon-0681-00.webp" alt="" class="poke-icon" />ギルガルドで受ける |
+| <img src="/images/pokemon/pokemon-0149-00.webp" alt="" class="poke-icon" />メガカイリュー・<img src="/images/pokemon/pokemon-0635-00.webp" alt="" class="poke-icon" />サザンドラ | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" class="type-badge-sm" />ドラゴン技2倍 | <img src="/images/types/type-17-fairy.png" alt="フェアリー" class="type-badge-sm" />フェアリータイプで受ける |
+| <img src="/images/pokemon/pokemon-0478-00.webp" alt="" class="poke-icon" />ユキメノコ・<img src="/images/pokemon/pokemon-0038-01.webp" alt="" class="poke-icon" />アローラキュウコン | <img src="/images/types/type-13-ice.png" alt="こおり" class="type-badge-sm" />こおり技4倍 | 先制で倒すか交代で受ける |
+| <img src="/images/pokemon/pokemon-0094-00.webp" alt="" class="poke-icon" />ゲンガー・<img src="/images/pokemon/pokemon-0778-00.webp" alt="" class="poke-icon" />ミミッキュ | 影分身・道連れで崩す | タスキで1ターン確保 |
 
 ### 持ち物別・相性の良いポケモン
 
@@ -347,7 +470,7 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 高速処理で詰める型なので、詰め切れない耐久ポケモンを突破する手段を別枠で用意しておく必要があります。
 
 - <img src="/images/pokemon/pokemon-0094-00.webp" alt="" class="poke-icon" />**ゲンガー**（催眠・トリックで崩し）
-- <img src="/images/pokemon/pokemon-0115-00.webp" alt="" class="poke-icon" />**ガルーラ・ミミロップ**（メガシンカで受けを突破）
+- <img src="/images/pokemon/pokemon-0115-00.webp" alt="" class="poke-icon" />**ガルーラ**・<img src="/images/pokemon/pokemon-0428-00.webp" alt="" class="poke-icon" />**ミミロップ**（メガシンカで受けを突破）
 
 **<img src="/images/items/item-0158-obon.png" alt="オボンのみ" class="item-icon" /> オボン型のパーティ（ドラゴンテール構築）**
 
