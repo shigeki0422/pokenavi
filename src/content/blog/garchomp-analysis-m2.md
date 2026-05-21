@@ -453,7 +453,7 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 <thead>
 <tr>
   <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">苦手な相手</th>
-  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left;width:140px">理由</th>
+  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">理由</th>
   <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">解決策</th>
 </tr>
 </thead>
