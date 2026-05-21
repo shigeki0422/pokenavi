@@ -452,29 +452,29 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
 <thead>
 <tr>
-  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left;white-space:nowrap">苦手な相手</th>
-  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left;white-space:nowrap">理由</th>
-  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left;white-space:nowrap">解決策</th>
+  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">苦手な相手</th>
+  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left;width:140px">理由</th>
+  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">解決策</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0730-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">アシレーヌ・<img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">フラエッテ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">フェアリー技4倍</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0212-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ハッサム・<img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ギルガルドで受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0730-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">アシレーヌ</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">フラエッテ</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">フェアリー技4倍</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0212-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ハッサム</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ギルガルドで受ける</span></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0149-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">メガカイリュー・<img src="/images/pokemon/pokemon-0635-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">サザンドラ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">ドラゴン技2倍</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">フェアリータイプで受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0149-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">メガカイリュー</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0635-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">サザンドラ</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">ドラゴン技2倍</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">フェアリータイプで受ける</span></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0478-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ユキメノコ・<img src="/images/pokemon/pokemon-0038-01.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">アローラキュウコン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">こおり技4倍</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0478-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ユキメノコ</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0038-01.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">アローラキュウコン</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">こおり技4倍</span></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">先制で倒すか交代で受ける</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ゲンガー・<img src="/images/pokemon/pokemon-0778-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ミミッキュ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ゲンガー</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0778-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ミミッキュ</span></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">影分身・道連れで崩す</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">タスキで1ターン確保</td>
 </tr>
