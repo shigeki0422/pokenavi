@@ -106,15 +106,40 @@ heroImage: '../../assets/hero-garchomp-m2.png'
 
 この記事では実際の対戦データをもとに、ガブリアスがなぜ強いのか、どのような型で使われているのか、どんなパーティに入れるべきかを徹底的に掘り下げます。
 
+> ⚠️ 本記事のデータはM-2シーズン開始8日目（2026/05/20）時点の集計です
+
 ---
 
 ## 基本スペック
 
 ### 種族値
 
-| HP | こうげき | ぼうぎょ | とくこう | とくぼう | すばやさ | 合計 |
-|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
-| 108 | 130 | 95 | 80 | 85 | 102 | 600 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px;border:1px solid #cbd5e1">HP</th>
+  <th style="padding:8px;border:1px solid #cbd5e1">こうげき</th>
+  <th style="padding:8px;border:1px solid #cbd5e1">ぼうぎょ</th>
+  <th style="padding:8px;border:1px solid #cbd5e1">とくこう</th>
+  <th style="padding:8px;border:1px solid #cbd5e1">とくぼう</th>
+  <th style="padding:8px;border:1px solid #cbd5e1">すばやさ</th>
+  <th style="padding:8px;border:1px solid #cbd5e1">合計</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px;border:1px solid #cbd5e1">108</td>
+  <td style="padding:8px;border:1px solid #cbd5e1"><strong>130</strong></td>
+  <td style="padding:8px;border:1px solid #cbd5e1">95</td>
+  <td style="padding:8px;border:1px solid #cbd5e1">80</td>
+  <td style="padding:8px;border:1px solid #cbd5e1">85</td>
+  <td style="padding:8px;border:1px solid #cbd5e1"><strong>102</strong></td>
+  <td style="padding:8px;border:1px solid #cbd5e1">600</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 攻撃130・素早さ102という数値が際立っています。素早さ102はルカリオ・ゲッコウガといった主要な高速アタッカーを上回り、**最速で使うことでほぼすべての無振りポケモンを先制できる**優秀なライン。さらに攻撃130は環境最高水準で、努力値を振らなくてもダメージが大きい。
 
@@ -126,9 +151,24 @@ heroImage: '../../assets/hero-garchomp-m2.png'
   <img src="/images/types/type-04-ground.png" alt="じめん" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="じめん" />
 </div>
 
-| 弱点（4倍） | 弱点（2倍） | 無効 |
-|:--:|:--:|:--:|
-| <img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> こおり | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> ドラゴン・<img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> フェアリー | <img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> でんき |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（4倍）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（2倍）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> こおり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> ドラゴン・<img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> フェアリー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> でんき</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 弱点はこおり・ドラゴン・フェアリーの3タイプ。一方でポケモンチャンピオンズ環境で多いでんきタイプを**完全無効化**し、じめんタイプの攻撃でブリジュラス・ハラバリーなどの電気ポケモンを一撃で倒せるのが大きな強みです。
 
@@ -138,16 +178,50 @@ heroImage: '../../assets/hero-garchomp-m2.png'
 
 ### 1. 技範囲が圧倒的に広い
 
-| 技 | 採用率 |
-|:--|:--:|
-| <img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> じしん | 99.2% |
-| <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ステルスロック | 51.9% |
-| <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> げきりん | 49.0% |
-| <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> がんせきふうじ | 40.3% |
-| <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> スケイルショット | 33.0% |
-| <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> いわなだれ | 23.6% |
-| <img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> どくづき | 19.6% |
-| <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ほのおのキバ | 14.1% |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> じしん</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">99.2%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ステルスロック</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">51.9%</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> げきりん</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">49.0%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> がんせきふうじ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40.3%</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> スケイルショット</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">33.0%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> いわなだれ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">23.6%</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> どくづき</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19.6%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ほのおのキバ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14.1%</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 じしん1本でブリジュラス・ハラバリーを完封しつつ、ドラゴン技・いわ技・どくづき・ほのおのキバを組み合わせることで**ほぼすべての環境ポケモンに等倍以上が取れます**。これだけの技範囲を持ちながら攻撃130・素早さ102を持つポケモンは他にほとんど存在しません。
 
@@ -352,12 +426,44 @@ heroImage: '../../assets/hero-garchomp-m2.png'
 
 シーズン序盤（5/13）はタスキとの差が10pt以上ありましたが、5/15〜5/17にかけて両者が35%台で**ほぼ逆転寸前まで拮抗**しました。スカーフ型の採用が増えたタイミングで「タスキ持ちに弱いが先制技対策になるスカーフ」の需要が上昇した動きと考えられます。
 
-| 日付 | タスキ型 | スカーフ型 | 差 |
-|:--|:--:|:--:|:--:|
-| 5/13 | 39.9% | 29.7% | +10.2pt |
-| 5/15 | 36.4% | 33.9% | +2.5pt ← 急接近 |
-| 5/17 | 35.8% | 35.0% | **+0.8pt ← 最も拮抗** |
-| 5/20 | 37.5% | 34.5% | +3.0pt ← 再びタスキが優位 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">日付</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タスキ型</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">スカーフ型</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">差</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">5/13</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">39.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">29.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">+10.2pt</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">5/15</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">36.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">33.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">+2.5pt ← 急接近</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">5/17</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">35.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">35.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>+0.8pt ← 最も拮抗</strong></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">5/20</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">37.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">34.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">+3.0pt ← 再びタスキが優位</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 **スカーフ型と同居率が高いポケモン（M-1データ）**：
 
@@ -515,12 +621,54 @@ M-2でガブリアスが1位を保っている背景には、**ブリジュラ�
 
 ## まとめ
 
-| 型 | 持ち物 | 採用率 | 強み | 弱み | 主な用途 |
-|---|:--:|:--:|---|---|---|
-| タスキ型 | <img src="/images/items/item-0275-tasuki.png" alt="きあいのタスキ" class="item-icon" /> | 37.5% | 確実に仕事、先発安定 | 先制技・天候に弱い | SR撒き＋1体処理 |
-| スカーフ型 | <img src="/images/items/item-0287-scarf.png" alt="こだわりスカーフ" class="item-icon" /> | 34.5% | 最速、詰め性能高い | タスキ持ちに弱い | 中〜後発の一掃 |
-| つるぎのまい型 | <img src="/images/items/item-0157-ram.png" alt="ラムのみ" class="item-icon" /> | 18.3% | 積み後の突破力 | 積む隙が必要 | 詰め・全抜き |
-| オボン型 | <img src="/images/items/item-0158-obon.png" alt="オボンのみ" class="item-icon" /> | 16.0% | 耐久力、ドラゴンテール | 火力不足 | SR撒き＋流し |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">型</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">持ち物</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">強み</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">弱み</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">主な用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">タスキ型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/items/item-0275-tasuki.png" alt="きあいのタスキ" class="item-icon" /></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">37.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">確実に仕事、先発安定</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技・天候に弱い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ステロ撒き＋1体処理</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">スカーフ型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/items/item-0287-scarf.png" alt="こだわりスカーフ" class="item-icon" /></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">34.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">最速、詰め性能高い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">タスキ持ちに弱い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">中〜後発の一掃</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/items/item-0157-ram.png" alt="ラムのみ" class="item-icon" /></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">積み後の突破力</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">積む隙が必要</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">詰め・全抜き</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">オボン型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/items/item-0158-obon.png" alt="オボンのみ" class="item-icon" /></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">耐久力、ドラゴンテール</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">火力不足</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ステロ撒き＋流し</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ガブリアスはタスキ・スカーフ・オボンの3つの型がいずれも20〜37%の採用率を保っており、**どの型かが読みにくい**のも強さの一因です。パーティを見ただけでは「タスキか、スカーフか」の判断が難しく、対面での択を押し付けやすい。
 
