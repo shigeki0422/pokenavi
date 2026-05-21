@@ -2,7 +2,7 @@
 title: '【ポケモンチャンピオンズ】ガブリアス徹底考察 M-2シーズン使用率1位の全て'
 description: 'シーズンM-2シングルバトルで使用率1位のガブリアスを徹底分析。タスキ型・スカーフ型・オボン型の3大構築を解説し、シーズン中の環境変化データや相性の良いパーティ構成まで、実データをもとに紹介します。'
 pubDate: '2026-05-20'
-heroImage: '../../assets/blog-placeholder-3.jpg'
+heroImage: '../../assets/hero-garchomp-m2.png'
 ---
 
 <style>
