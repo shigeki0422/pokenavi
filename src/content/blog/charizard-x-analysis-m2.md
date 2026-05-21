@@ -2,7 +2,7 @@
 title: '【ポケモンチャンピオンズ】メガリザードンX徹底考察 M-2シーズン ほのお/ドラゴンの全て'
 description: 'M-2シーズンで使用率5位のリザードン。そのうち37.2%が選ぶメガリザードンXを徹底分析。かたいツメ×りゅうのまいの崩し力、物理・特殊両対応の構築法、ステロ対策まで実データをもとに解説します。'
 pubDate: '2026-05-22'
-heroImage: '../../assets/blog-placeholder-1.jpg'
+heroImage: '../../assets/hero-charizard-x-m2.png'
 ---
 
 <style>

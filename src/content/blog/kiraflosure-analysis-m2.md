@@ -2,7 +2,7 @@
 title: '【ポケモンチャンピオンズ】メガキラフロル徹底考察 M-2シーズン ステロ×高火力の二刀流'
 description: 'M-2シーズン使用率13位のメガキラフロルを徹底分析。ポケモンチャンピオンズオリジナルのメガ進化を持つキラフロルのメガ型・タスキ型の使い分け、ニードルガードの活用法、じめん×4倍への対策まで実データをもとに解説します。'
 pubDate: '2026-05-22'
-heroImage: '../../assets/blog-placeholder-5.jpg'
+heroImage: '../../assets/hero-kiraflosure-m2.png'
 ---
 
 <style>

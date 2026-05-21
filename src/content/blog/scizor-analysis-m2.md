@@ -2,7 +2,7 @@
 title: '【ポケモンチャンピオンズ】メガハッサム徹底考察 M-2シーズン ほのお一点弱点の鋼鉄バレット'
 description: 'M-2シングルバトルで使用率15位のメガハッサムを徹底分析。テクニシャン+バレットパンチの先制最強コンビ、つるぎのまい積みの破壊力、ほのお一点弱点の安心感と対策、いじっぱりHA振りの運用まで実データで解説します。'
 pubDate: '2026-05-22'
-heroImage: '../../assets/blog-placeholder-2.jpg'
+heroImage: '../../assets/hero-scizor-m2.png'
 ---
 
 <style>

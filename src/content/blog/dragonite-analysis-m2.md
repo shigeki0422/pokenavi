@@ -2,7 +2,7 @@
 title: '【ポケモンチャンピオンズ】メガカイリュー徹底考察 M-2シーズン オリジナルメガの全て'
 description: 'M-2シングルバトル使用率17位のメガカイリューを徹底分析。ひかえめCS型・特殊4色技・しんそく先制のメカニズムを解説し、ラムのみ型・耐久型・りゅうのまい型の3構築と相性パーティまで実データをもとに紹介します。'
 pubDate: '2026-05-22'
-heroImage: '../../assets/blog-placeholder-4.jpg'
+heroImage: '../../assets/hero-dragonite-m2.png'
 ---
 
 <style>

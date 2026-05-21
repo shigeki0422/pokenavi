@@ -2,7 +2,7 @@
 title: '【ポケモンチャンピオンズ】メガゲンガー徹底考察 M-2シーズン かげふみ＋みちづれの全て'
 description: 'M-2シーズン使用率12位のメガゲンガーを徹底分析。かげふみ+みちづれの道連れ戦略、C170ヘドロウェーブの火力、おくびょうCS型とタスキ型の使い分けまで実データをもとに解説します。'
 pubDate: '2026-05-22'
-heroImage: '../../assets/blog-placeholder-5.jpg'
+heroImage: '../../assets/hero-gengar-m2.png'
 ---
 
 <style>
