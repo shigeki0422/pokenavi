@@ -650,7 +650,7 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">速攻</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね＋とびタイプでどくに強く、おいかぜサポート</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね＋ひこうタイプでどくに強く、とんぼがえりでサイクル回し</td>
 </tr>
 </tbody>
 </table>
@@ -671,22 +671,22 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ギルガルド</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0212-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ハッサム</span></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">はがね技で弱点</span></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアスのじしんで処理</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:2px">ギルガルド・<img src="/images/pokemon/pokemon-0212-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:2px">ハッサム</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">はがね技で弱点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ガブリアスのじしんで処理</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ゲンガー</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">催眠で積み展開を妨害</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みがわりを張ってから積む・先にゲンガーを処理</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0448-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ルカリオ</span></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">こうそくいどう＋はがね技で上から処理</span></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギャラドスのいかくで削いでからフラエッテ投入</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0448-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">はがね技で弱点を突いてくる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アーマーガアのひこう耐性で受けてサイクルを回す</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0038-01.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">アローラキュウコン</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0038-01.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アローラキュウコン</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あられ＋ふぶきの連打でみがわり破壊</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技で倒すか、ガブリアスで地面技を通す</td>
 </tr>
