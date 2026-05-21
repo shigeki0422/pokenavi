@@ -79,24 +79,59 @@ M-2環境のシングルバトルで**フラエッテナイト採用率97.4%**�
 
 ## 基本スペック
 
-### 種族値
+### 種族値（メガフラエッテ）
 
-<table class="stat-table">
-  <thead><tr><th>HP</th><th>こうげき</th><th>ぼうぎょ</th><th>とくこう</th><th>とくぼう</th><th>すばやさ</th><th>合計</th></tr></thead>
-  <tbody>
-    <tr>
-      <td><div class="bar-wrap"><div class="bar" style="width:55px"></div><span>74</span></div></td>
-      <td><div class="bar-wrap"><div class="bar" style="width:49px"></div><span>65</span></div></td>
-      <td><div class="bar-wrap"><div class="bar" style="width:50px"></div><span>67</span></div></td>
-      <td><div class="bar-wrap"><div class="bar" style="width:94px"></div><span><strong>125</strong></span></div></td>
-      <td><div class="bar-wrap"><div class="bar" style="width:96px"></div><span><strong>128</strong></span></div></td>
-      <td><div class="bar-wrap"><div class="bar" style="width:69px"></div><span>92</span></div></td>
-      <td><strong>551</strong></td>
-    </tr>
-  </tbody>
-</table>
+<div style="max-width:360px;margin:16px 0;font-size:0.9em">
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0e6f8">
+    <span style="width:52px;color:#555;font-weight:600">HP</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:37%;background:linear-gradient(90deg,#c084db,#e879a8);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">74</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0e6f8">
+    <span style="width:52px;color:#555;font-weight:600">こうげき</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:42.5%;background:linear-gradient(90deg,#c084db,#e879a8);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">85</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0e6f8">
+    <span style="width:52px;color:#555;font-weight:600">ぼうぎょ</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:43.5%;background:linear-gradient(90deg,#c084db,#e879a8);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">87</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0e6f8">
+    <span style="width:52px;color:#555;font-weight:600">とくこう</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:77.5%;background:linear-gradient(90deg,#9333ea,#db2777);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right"><strong>155</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0e6f8">
+    <span style="width:52px;color:#555;font-weight:600">とくぼう</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:74%;background:linear-gradient(90deg,#9333ea,#db2777);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right"><strong>148</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #f0e6f8">
+    <span style="width:52px;color:#555;font-weight:600">すばやさ</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:51%;background:linear-gradient(90deg,#c084db,#e879a8);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">102</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
+    <span style="width:52px;color:#555">合計</span>
+    <div style="flex:1"></div>
+    <span style="width:32px;text-align:right;color:#9333ea">651</span>
+  </div>
+</div>
 
-とくこう125・とくぼう128は最上位クラス。素早さ92はやや控えめですが、おくびょうCS振りで多くの環境ポケモンを上回れます。
+メガ進化でとくこう**125→155**、とくぼう**128→148**、すばやさ**92→102**と大幅強化。合計種族値651は環境内でもトップクラスです。
 
 ### タイプ相性（メガ進化前）
 
@@ -125,6 +160,18 @@ M-2環境のシングルバトルで**フラエッテナイト採用率97.4%**�
 | こうごうせい | <img src="/images/types/type-11-grass.png" alt="くさ" style="width:22px;height:22px;vertical-align:middle"> | — | — | 22.4% | HPを最大値の1/2回復 |
 | あまえる | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"> | — | 100 | 12.0% | 相手のこうげき-2 |
 | みがわり | <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:22px;height:22px;vertical-align:middle"> | — | — | 9.8% | HP1/4消費でみがわり生成 |
+
+### フェアリーオーラによる実質威力
+
+メガ進化後の特性フェアリーオーラにより、フェアリー技の威力が全て1.33倍になります。
+
+| 技 | 表記威力 | フェアリーオーラ補正後 |
+|:--|:--:|:--:|
+| ムーンフォース | 95 | **126** |
+| ドレインキッス | 50 | **67** |
+| はめつのひかり | 140 | **186** |
+
+はめつのひかりの実質威力186は全技の中でもトップクラスであり、反動を考慮しても破壊力は圧倒的です。
 
 ### 3枠固定コアと4枠目の二択
 
@@ -183,7 +230,11 @@ M-2環境のシングルバトルで**フラエッテナイト採用率97.4%**�
 | **持ち物** | フラエッテナイト 97.4% | — |
 | **特性** | フラワーベール 97.5% | きょうせい 2.5% |
 
-持ち物はフラエッテナイト一択。特性フラワーベールはくさタイプの能力低下を無効にする。
+持ち物はフラエッテナイト一択。
+
+**特性の変化に注意**：メガ進化前の特性は「フラワーベール（草タイプの能力低下を防ぐ）」ですが、メガ進化後は**フェアリーオーラ**に変わります。フェアリーオーラは**場に出ている全ポケモンのフェアリー技の威力を1.33倍にする**特性です。
+
+この特性はメガフラエッテ自身のムーンフォース・はめつのひかり・ドレインキッスを強化するだけでなく、**相手のフェアリー技も強化してしまう**点に注意が必要です。ただしシングルバトルでは相手のフェアリーアタッカーと同時に場に立つ機会が限られるため、実質的には自分の火力底上げとして機能します。
 
 ---
 
