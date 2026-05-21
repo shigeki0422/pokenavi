@@ -509,7 +509,7 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 <tr>
   <td style="padding:8px 12px;border:1px solid #e2e8f0">弱点</td>
   <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">はがね・どく</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">でんき・いわ</td>
+  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">でんき・かくとう・むし・くさ・フェアリー</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #e2e8f0">特性（メガ前）</td>
@@ -522,16 +522,15 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 ### なぜこの組み合わせが強いか
 
-**フラエッテ → ギャラドスへの補完**
+**フラエッテ選出時の補完（メガギャラドスが苦手な相手をフラエッテがカバー）**
 
-- フラエッテのフェアリー技が、ギャラドスが苦手なドラゴン・かくとうタイプに有効
-- ギャラドスが弱いでんきタイプに対して、フラエッテは等倍で受けられる
+- フラエッテのフェアリー技は、メガギャラドス（みず/あく）が×2弱点を持つ**かくとうタイプ**に対して有効
+- 環境上位の**ドラゴンタイプ**全般にもフェアリー技で×2を取れる
 
-**ギャラドス → フラエッテへの補完**
+**ギャラドス選出時の補完（フラエッテが苦手な相手をメガギャラドスがカバー）**
 
-- いかくで相手の物理こうげきを下げてフラエッテが積みやすい盤面を作る
 - ギャラドスのじしんでフラエッテの弱点であるはがね（ブリジュラス・ギルガルドなど）を処理
-- ギャラドスが苦手ないわタイプをフラエッテのムーンフォースが中程度に打てる
+- フラエッテが苦手などく・はがね主体の相手に対して物理制圧で対応できる
 
 **ギャラドスの主要データ（M-2）**
 
@@ -588,9 +587,9 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">催眠・トリックで相手の積みを崩す</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">物理受け</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0472-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">グライオン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアスの後に置ける地面耐性</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">物理受け・サポート</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうでどく耐性・ちょうはつでフラエッテの積みを守る（使用率6位）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">速攻・先制技</td>
