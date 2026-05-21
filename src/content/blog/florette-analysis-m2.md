@@ -396,11 +396,11 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 ### 型③：ひかえめHB型（耐久火力両立）
 
-**ひかえめ42.6%のうち、HB+c等の耐久振りスプレッドが相当数を占める**
+**ひかえめ42.6%のうち、HB+C等の耐久振りスプレッドが相当数を占める**
 
 ```
 性格：ひかえめ
-努力値：HB+c（HP・ぼうぎょ重点、とくこうに余りを振る）
+努力値：HB+C（HP・ぼうぎょ重点、とくこうに余りを振る）
 持ち物：フラエッテナイト
 技構成：ムーンフォース / めいそう / ドレインキッス / こうごうせい or みがわり
 ```
@@ -438,7 +438,7 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
   <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">努力値</td>
   <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">CS</td>
   <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">CS</td>
-  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">HB+c</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">HB+C</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">めいそう</td>
