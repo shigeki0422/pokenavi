@@ -1,6 +1,6 @@
 ---
-title: '【ポケモンチャンピオンズ】メガスターミー徹底考察 M-2シーズン 物理変貌の全て'
-description: 'M-2シングルバトル使用率20位・メガ採用率97.8%のメガスターミーを徹底分析。特殊型から物理型への劇的変化の秘密、アクアブレイク＋アクアジェット先制の仕組み、アイススピナー・クイックターン活用法を実データをもとに解説します。'
+title: '【ポケモンチャンピオンズ】メガスターミー徹底考察 M-2シーズン 物理みずの全貌'
+description: 'M-2シングルバトル使用率20位・メガ採用率97.8%のメガスターミーを徹底分析。高速物理みずアタッカーとしての強み、アクアブレイク＋アクアジェット先制の仕組み、アイススピナー・クイックターン活用法を実データをもとに解説します。'
 pubDate: '2026-05-22'
 heroImage: '../../assets/hero-starmie-m2.png'
 ---
@@ -29,7 +29,7 @@ heroImage: '../../assets/hero-starmie-m2.png'
     <h2 style="margin:0 0 6px">メガスターミー</h2>
     <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
       <img src="/images/types/type-10-water.png" alt="みず" style="width:44px;height:44px" />
-      <img src="/images/types/type-18-psychic.png" alt="エスパー" style="width:44px;height:44px" />
+      <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.85rem;color:#555">
       使用率 <strong>20位</strong> ／ スターミナイト採用率 <strong>97.8%</strong>
@@ -45,7 +45,7 @@ heroImage: '../../assets/hero-starmie-m2.png'
 
 スターミナイト採用率**97.8%**という数字は、ポケモンチャンピオンズのシングルバトルM-2データの中でも際立った数値です。通常スターミーはとくこう100・すばやさ115を誇る特殊アタッカーとして有名ですが、ポケモンチャンピオンズオリジナルのメガ進化では、こうげきが大幅強化され物理アタッカーに変貌します。
 
-この「特殊型から物理型への劇的変化」こそが、メガスターミーの最大の面白さです。全採用技を見ると**アクアブレイク・アクアジェット・アイススピナー・クイックターン・しねんのずつき・サイコカッター**と、全て物理技で構成されています。性格もいじっぱり71.4%・ようき24.9%と物理型ほぼ一択。AS型61.9%という努力値配分も、こうげきとすばやさに全力投資する姿勢を示しています。
+この「すばやさと火力を兼ね備えた物理みずアタッカー」こそが、メガスターミーの核心です。全採用技を見ると**アクアブレイク・アクアジェット・アイススピナー・クイックターン・しねんのずつき・サイコカッター**と、全て物理技で構成されています。性格もいじっぱり71.4%・ようき24.9%と物理型ほぼ一択。AS型61.9%という努力値配分も、こうげきとすばやさに全力投資する姿勢を示しています。
 
 この記事では実データをもとに、なぜメガスターミーがこれほど高い採用率を誇るのか、どのような型で使われているのか、そしてパーティにどう組み込むべきかを徹底的に分析します。
 
@@ -53,11 +53,11 @@ heroImage: '../../assets/hero-starmie-m2.png'
 
 ## なぜ今メガスターミーが強いのか
 
-### 1. 特殊型から物理型への劇的変化が生み出す"読み外し"
+### 1. みず物理アタッカーとしての希少性
 
-通常スターミーの印象は「みず/エスパーの特殊アタッカー」です。サイコキネシス・なみのり・れいとうビームなどの特殊技を想定して対面に出してくる相手に対し、メガスターミーは物理技で攻撃してきます。
+M-2環境のみずタイプの中で、メガスターミーは**物理みずアタッカー**という独自ポジションを確立しています。アシレーヌ（4位）が特殊みずアタッカーの代表格である中、メガスターミーは全技が物理で構成されており、相手のとくぼう（D）ではなくぼうぎょ（B）を突く動きができます。
 
-この「想定外の物理技」は対面で相手の受け選択を完全に狂わせます。特殊受けを想定して出したポケモンがアクアブレイクで削られ、特殊耐久の低いポケモンが物理受けのまま出てきてやられる——こうした「読み外し」の強さがメガスターミーの大きな武器です。
+すばやさ115という高い素早さに加えてこうげきも大幅強化されたメガ進化後は、「速くて火力も高い物理みずアタッカー」として環境に確固たる地位を持ちます。
 
 ### 2. みずタイプ物理技の完全支配：アクアブレイク＋アクアジェット
 
@@ -134,7 +134,7 @@ heroImage: '../../assets/hero-starmie-m2.png'
 <div class="type-row">
   <strong>タイプ：</strong>
   <img src="/images/types/type-10-water.png" alt="みず" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="みず" />
-  <img src="/images/types/type-18-psychic.png" alt="エスパー" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="エスパー" />
+  <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="エスパー" />
 </div>
 
 <div style="overflow-x:auto;margin:12px 0">
@@ -149,7 +149,7 @@ heroImage: '../../assets/hero-starmie-m2.png'
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <img src="/images/types/type-12-electric.png" alt="でんき" style="width:24px;height:24px;vertical-align:middle;margin-right:3px">でんき
-    <img src="/images/types/type-13-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">くさ
+    <img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">くさ
     <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">ゴースト
     <img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">あく
     <img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">むし
@@ -158,8 +158,8 @@ heroImage: '../../assets/hero-starmie-m2.png'
     <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:3px">ほのお
     <img src="/images/types/type-10-water.png" alt="みず" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">みず
     <img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">はがね
-    <img src="/images/types/type-18-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">エスパー（0.5倍）
-    <img src="/images/types/type-09-fire.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">こおり（0.5倍）
+    <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">エスパー（0.5倍）
+    <img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">こおり（0.5倍）
   </td>
 </tr>
 </tbody>
@@ -216,28 +216,28 @@ heroImage: '../../assets/hero-starmie-m2.png'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>しねんのずつき</strong></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-18-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">物理</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>43.1%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパーSTAB物理技。どく・かくとうへの打点</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>サイコカッター</strong></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-18-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">物理</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>23.4%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">急所率が高いエスパー物理技。しねんのずつきの代替</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>こうそくスピン</strong></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">物理</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">8.1%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ステロ・まきびし等の撒き技消去＋すばやさ上昇</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ビルドアップ</strong></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">変化</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげき・ぼうぎょ+1の積み技。耐久も上げながら強化</td>
@@ -246,7 +246,7 @@ heroImage: '../../assets/hero-starmie-m2.png'
 </table>
 </div>
 
-**全採用技が物理技のみ**という点は、メガスターミーの最大の特徴です。通常スターミーの特殊型をイメージして対戦する相手を、全て物理技で翻弄するスタイルが確立されています。
+**全採用技が物理技のみ**という点は、メガスターミーの最大の特徴です。高速物理みずアタッカーとして、アクアブレイクの高火力とアクアジェットの先制技を軸に相手を処理するスタイルが確立されています。
 
 ### 技の組み合わせパターン解説
 
@@ -615,7 +615,7 @@ M-2環境にはみずタイプのポケモンが複数います（アシレー�
 
 ## まとめ
 
-メガスターミーは「通常スターミーは特殊型」という常識を覆す、ポケモンチャンピオンズオリジナルのメガ進化の面白さを体現するポケモンです。97.8%というほぼ全員がメガ石を採用する事実が、このメガ進化の価値の高さを証明しています。
+メガスターミーはポケモンチャンピオンズオリジナルのメガ進化によって、すばやさ115の高速物理みずアタッカーに変貌したポケモンです。97.8%というほぼ全員がメガ石を採用する事実が、このメガ進化の価値の高さを証明しています。
 
 いじっぱりAS型でアクアブレイク+アクアジェット+アイススピナーの3本柱を持ちつつ、クイックターンかしねんのずつきを選択するのが現環境のスタンダードです。でんき・くさ・あく・ゴーストへの対策をパートナーに任せながら、みず物理技で環境上位を削っていくスタイルが基本となります。
 
