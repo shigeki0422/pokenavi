@@ -350,15 +350,62 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 ### 型の選択マトリクス
 
-| | 型①：めいそう積みエース | 型②：フルアタ即時火力 | 型③：耐久火力両立 |
-|:--|:--:|:--:|:--:|
-| **性格** | おくびょう / ひかえめ | おくびょう | ひかえめ |
-| **努力値** | CS | CS | HB+c |
-| **めいそう** | ○ | ✕ | ○ |
-| **はめつのひかり** | ✕ | ○ | ✕ |
-| **ドレインキッス** | 積み回復 | 反動補填 | 積み回復 |
-| **4枠目** | みがわり / サイコキネシス | サイコキネシス | こうごうせい / みがわり |
-| **速度** | 速い（先手優先） | 速い（先手優先） | 遅い（耐えて積む） |
+<div style="overflow-x:auto;margin:16px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left"></th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">型①<br>めいそう積みエース</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">型②<br>フルアタ即時火力</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">型③<br>耐久火力両立</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">性格</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">おくびょう / ひかえめ</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">おくびょう</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">ひかえめ</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">努力値</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">CS</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">CS</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">HB+c</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">めいそう</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">○</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">✕</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">○</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">はめつのひかり</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">✕</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">○</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">✕</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">ドレインキッス</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">積み回復</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">反動補填</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">積み回復</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">4枠目</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">みがわり /<br>サイコキネシス</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">サイコキネシス</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">こうごうせい /<br>みがわり</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">速度</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">速い（先手優先）</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">速い（先手優先）</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">遅い（耐えて積む）</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ---
 
