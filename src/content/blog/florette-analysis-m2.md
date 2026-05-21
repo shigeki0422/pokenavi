@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】メガフラエッテ徹底考察 M-2シーズン・メガ進化の全て'
-description: 'シーズンM-2（5/20時点・使用率11位）でメガ進化率97%を誇るメガフラエッテを徹底分析。めいそう×ドレインキッスの崩し性能、相方メガギャラドスとのダブルメガ構築、パーティ全体の組み方まで実データをもとに解説します。'
+description: 'シーズンM-2（5/20時点・使用率11位）でメガ進化率97%を誇るメガフラエッテを徹底分析。めいそう×ドレインキッスの崩し性能、ギャラドスとの6枠構成、パーティ全体の組み方まで実データをもとに解説します。'
 pubDate: '2026-05-21'
 heroImage: '../../assets/hero-florette-m2.png'
 ---
@@ -432,7 +432,7 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 ## フラエッテを軸にしたパーティ構成案
 
-構築6枠のうちメガ枠2（フラエッテ＋ギャラドス）を確保した上で、残り4枠に何を入れるかが鍵です。
+1試合にメガ進化できるのは1体のみです。フラエッテ（フラエッテナイト）とギャラドス（ギャラドスナイト）を同じ6枠に入れておき、**フラエッテが有利な対面にはフラエッテ＋サポート2体を選出してメガフラエッテ軸**で戦い、はがね・どくが多い等フラエッテが不利な相手には**ギャラドス＋サポート2体に切り替えてメガギャラドス軸**で戦う、というスイッチ選出が基本思想です。
 
 ### パーティ構成案①「ステロ展開型」
 
@@ -447,14 +447,14 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ①（主軸）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガフラエッテ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">めいそう積み全抜きエース</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主軸メガ枠</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ（フラエッテナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">めいそう積み全抜きエース。基本選出</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ②（物理エース）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0130-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガギャラドス</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いかく＋りゅうのまいで物理制圧</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">代替メガ枠</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0130-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（ギャラドスナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね・どくが多い相手にフラエッテの代わりに選出しメガ進化</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">展開サポート</td>
@@ -480,11 +480,15 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 </table>
 </div>
 
-この構成の流れ：
+**フラエッテ選出時の流れ：**
 1. **ガブリアス**でステルスロック展開・相手のはがねタイプをじしんで処理
-2. **メガギャラドス**のいかくで相手の物理アタッカーを抑制し、りゅうのまいで加速
-3. **メガフラエッテ**が盤面が整った後にめいそう積みから全抜き
-4. ゲンガー・ルカリオが詰め・崩し役
+2. **メガフラエッテ**が盤面が整った後にめいそう積みから全抜き
+3. ゲンガー・ルカリオが詰め・崩し役
+
+**ギャラドス選出時（はがね・どく主体の相手）：**
+1. **ガブリアス**でステルスロック・電気対策
+2. **メガギャラドス**のいかく＋りゅうのまいで物理制圧
+3. ルカリオ・ゲンガーがサポート
 
 ### パーティ構成案②「サイクル崩し型」
 
@@ -499,14 +503,14 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ①（主軸）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガフラエッテ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">めいそう＋みがわりで安定した積み詰め</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主軸メガ枠</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ（フラエッテナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">めいそう＋みがわりで安定した積み詰め。基本選出</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ②（物理エース）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0130-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガギャラドス</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いかく＋ちょうはつで相手のサポート封じ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">代替メガ枠</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0130-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（ギャラドスナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フラエッテ不利時に代わりに選出。いかく＋ちょうはつで相手のサポート封じ</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ステロ撒き</td>
@@ -578,6 +582,6 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 - **フラエッテナイト採用率97.4%**——実質メガ進化専用枠として機能
 - **めいそう＋ドレインキッスの自己完結**でタスキ・先制技に強く、長期戦でも制圧できる
-- **メガギャラドスとのダブルメガ構築**が同居率データで裏付けられた最強コンビ
+- **ギャラドスとの同居率1位**——フラエッテが苦手な相手にはギャラドスをメガ進化させる選出に切り替える2択構成として機能
 
-ガブリアスでステロを撒いてからメガフラエッテ・メガギャラドスの二枚看板で詰める構築は、M-2環境の中核的な戦略の一つです。次シーズンでの採用も十分に検討に値します。
+同じ6枠にフラエッテとギャラドスを共存させ、対面に応じてどちらをメガ進化させるか選ぶ構成は、M-2環境の中核的な戦略の一つです。次シーズンでの採用も十分に検討に値します。
