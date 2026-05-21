@@ -682,7 +682,7 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0448-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">はがね技で弱点を突いてくる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">バレットパンチ（先制はがね技）で上から弱点を突いてくる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アーマーガアのひこう耐性で受けてサイクルを回す</td>
 </tr>
 <tr>
