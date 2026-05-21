@@ -139,14 +139,20 @@ M-2環境のシングルバトルで注目を集めるメガフラエッテ（5/
 
 ### タイプ相性（メガ進化前）
 
-| タイプ | 弱点・耐性 |
-|:--|:--|
-| <img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> はがね | <strong style="color:#e53e3e">×2</strong> |
-| <img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> どく | <strong style="color:#e53e3e">×2</strong> |
-| <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> ドラゴン | <strong style="color:#2563eb">×0（無効）</strong> |
-| <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> かくとう | <strong style="color:#60a5fa">×0.5</strong> |
-| <img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> あく | <strong style="color:#60a5fa">×0.5</strong> |
-| <img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> むし | <strong style="color:#60a5fa">×0.5</strong> |
+<div style="overflow-x:auto;margin:16px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left">タイプ</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">弱点・耐性</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> はがね</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><strong style="color:#e53e3e">×2</strong></td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> どく</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><strong style="color:#e53e3e">×2</strong></td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> ドラゴン</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><strong style="color:#2563eb">×0（無効）</strong></td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> かくとう</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><strong style="color:#60a5fa">×0.5</strong></td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> あく</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><strong style="color:#60a5fa">×0.5</strong></td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0"><img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> むし</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><strong style="color:#60a5fa">×0.5</strong></td></tr>
+</tbody></table></div>
 
 ドラゴン無効はM-2環境で極めて価値が高く、使用率上位を占める**ガブリアス・リザードン・サザンドラ・カイリュー**のドラゴン技を完全に無効化できます。弱点ははがねとどくの2タイプのみ。
 
@@ -154,26 +160,43 @@ M-2環境のシングルバトルで注目を集めるメガフラエッテ（5/
 
 ## 採用技の解説
 
-| 技 | タイプ | 威力 | 命中 | 採用率 | 効果 |
-|:--|:--:|:--:|:--:|:--:|:--|
-| ムーンフォース | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"> | 95 | 100 | 87.1% | 10%でとくこう-1 |
-| めいそう | <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:22px;height:22px;vertical-align:middle"> | — | — | 84.4% | とくこう・とくぼう+1 |
-| ドレインキッス | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"> | 50 | 100 | 75.1% | 与ダメの1/2を回復 |
-| はめつのひかり | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"> | 140 | 90 | 46.7% | 与ダメの1/2を自分も受ける |
-| サイコキネシス | <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:22px;height:22px;vertical-align:middle"> | 90 | 100 | 38.8% | 10%でとくぼう-1 |
-| こうごうせい | <img src="/images/types/type-11-grass.png" alt="くさ" style="width:22px;height:22px;vertical-align:middle"> | — | — | 22.4% | HPを最大値の1/2回復 |
-| あまえる | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"> | — | 100 | 12.0% | 相手のこうげき-2 |
-| みがわり | <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:22px;height:22px;vertical-align:middle"> | — | — | 9.8% | HP1/4消費でみがわり生成 |
+<div style="overflow-x:auto;margin:16px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left">技</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">威力</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">命中</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">採用率</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left">効果</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">ムーンフォース</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">95</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">100</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">87.1%</td><td style="padding:8px 12px;border:1px solid #e2d4f0">10%でとくこう-1</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">めいそう</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:22px;height:22px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">—</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">—</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">84.4%</td><td style="padding:8px 12px;border:1px solid #e2d4f0">とくこう・とくぼう+1</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">ドレインキッス</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">50</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">100</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">75.1%</td><td style="padding:8px 12px;border:1px solid #e2d4f0">与ダメの1/2を回復</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">はめつのひかり</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">140</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">90</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">46.7%</td><td style="padding:8px 12px;border:1px solid #e2d4f0">与ダメの1/2を自分も受ける</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">サイコキネシス</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:22px;height:22px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">90</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">100</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">38.8%</td><td style="padding:8px 12px;border:1px solid #e2d4f0">10%でとくぼう-1</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">こうごうせい</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:22px;height:22px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">—</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">—</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">22.4%</td><td style="padding:8px 12px;border:1px solid #e2d4f0">HPを最大値の1/2回復</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">あまえる</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">—</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">100</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">12.0%</td><td style="padding:8px 12px;border:1px solid #e2d4f0">相手のこうげき-2</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">みがわり</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:22px;height:22px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">—</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">—</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">9.8%</td><td style="padding:8px 12px;border:1px solid #e2d4f0">HP1/4消費でみがわり生成</td></tr>
+</tbody></table></div>
 
 ### フェアリーオーラによる実質威力
 
 メガ進化後の特性フェアリーオーラにより、フェアリー技の威力が全て1.33倍になります。
 
-| 技 | 表記威力 | フェアリーオーラ補正後 |
-|:--|:--:|:--:|
-| ムーンフォース | 95 | **126** |
-| ドレインキッス | 50 | **67** |
-| はめつのひかり | 140 | **186** |
+<div style="overflow-x:auto;margin:16px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left">技</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">表記威力</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">フェアリーオーラ補正後</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">ムーンフォース</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">95</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><strong>126</strong></td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">ドレインキッス</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">50</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><strong>67</strong></td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">はめつのひかり</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">140</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><strong>186</strong></td></tr>
+</tbody></table></div>
 
 はめつのひかりの実質威力186は全技の中でもトップクラスであり、反動を考慮しても破壊力は圧倒的です。
 
@@ -181,13 +204,20 @@ M-2環境のシングルバトルで注目を集めるメガフラエッテ（5/
 
 採用率データが示す**ムーンフォース(87%) + ドレインキッス(75%)** の2技はほぼ全型共通ですが、残り2枠で型の方向性が大きく分かれます。
 
-| | めいそう積みエース型 | フルアタ型 |
-|:--|:--|:--|
-| **技構成** | ムーンフォース / めいそう / ドレインキッス / みがわり | はめつのひかり / ムーンフォース / ドレインキッス / サイコキネシス |
-| **めいそう** | ○ 採用 | ✕ 非採用 |
-| **はめつのひかり** | ✕ 非採用 | ○ 採用 |
-| **ドレインキッスの役割** | 積んだとくこうで継続回復 | はめつのひかり反動のHP補填 |
-| **勝ち筋** | 積み上がれば全抜き | 即時威力186で押し切る |
+<div style="overflow-x:auto;margin:16px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left"></th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">めいそう積みエース型</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">フルアタ型</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">技構成</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">ムーンフォース / めいそう /<br>ドレインキッス / みがわり</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">はめつのひかり / ムーンフォース /<br>ドレインキッス / サイコキネシス</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">めいそう</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">○ 採用</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">✕ 非採用</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">はめつのひかり</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">✕ 非採用</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">○ 採用</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">ドレインキッスの役割</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">積んだとくこうで継続回復</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">はめつのひかり反動のHP補填</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">勝ち筋</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">積み上がれば全抜き</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">即時威力186で押し切る</td></tr>
+</tbody></table></div>
 
 **はめつのひかりとドレインキッスは同居する**——ただし「積みながら回復する型」ではなく、めいそうなしの純粋なアタッカー型として組み合わせます。めいそう(84.4%)とはめつのひかり(46.7%)がそれぞれ高い採用率を示すのは、この2型が並行して使われているためです。
 
@@ -197,10 +227,17 @@ M-2環境のシングルバトルで注目を集めるメガフラエッテ（5/
 
 ## 持ち物・特性
 
-| 項目 | 採用率1位 | 採用率2位 |
-|:--|:--|:--|
-| **持ち物** | フラエッテナイト 97.4% | — |
-| **特性** | フラワーベール 97.5% | きょうせい 2.5% |
+<div style="overflow-x:auto;margin:16px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left">項目</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">採用率1位</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">採用率2位</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">持ち物</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">フラエッテナイト 97.4%</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">—</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">特性</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">フラワーベール 97.5%</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">きょうせい 2.5%</td></tr>
+</tbody></table></div>
 
 持ち物はフラエッテナイト一択。
 
@@ -269,10 +306,18 @@ M-2の主要3ターゲット（おくびょうC252、C実数値207）で具体�
 
 アシレーヌ（おくびょうCS：HP155, D135, フェアリー中性×1）
 
-| | ダメージ幅 | HP155比 | 確定数 |
-|:--|:--:|:--:|:--|
-| ムーンフォース | 111〜131 | 72〜85% | 確定2発 |
-| **はめつのひかり** | **162〜191** | **105〜123%** | **確定1発** |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left"></th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">ダメージ幅</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">HP155比</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">確定数</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">ムーンフォース</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">111〜131</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">72〜85%</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">確定2発</td></tr>
+<tr style="background:#fff0f8"><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:700">はめつのひかり</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">162〜191</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">105〜123%</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">確定1発</td></tr>
+</tbody></table></div>
 
 積みなし・素の状態で確定1発が取れる最も明確なシナリオ。
 
@@ -284,10 +329,18 @@ M-2の主要3ターゲット（おくびょうC252、C実数値207）で具体�
 
 マルチスケイルはHP満タン時にダメージを1/2にする特性。フルHPの状態では効果が残る。
 
-| | 通常ダメージ | **マルチスケイル後（÷2）** | HP198への確定数 |
-|:--|:--:|:--:|:--|
-| ムーンフォース | 249〜294 | 124〜147（63〜74%） | **確定2発** |
-| **はめつのひかり** | **365〜430** | **182〜215（92〜109%）** | **乱数8/16（50%）で1発** |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left"></th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">通常ダメージ</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">マルチスケイル後（÷2）</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">HP198への確定数</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">ムーンフォース</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">249〜294</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">124〜147（63〜74%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center"><strong>確定2発</strong></td></tr>
+<tr style="background:#fff0f8"><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:700">はめつのひかり</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">365〜430</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">182〜215（92〜109%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">乱数8/16（50%）で1発</td></tr>
+</tbody></table></div>
 
 HP特化しないアタッカー型（HP=166）に対しては、はめつのひかり最小値182 > HP166 → **確定1発**。
 
@@ -301,10 +354,17 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 リザードン（ほのお/ひこう）はステルスロックに×4弱点（ほのお×2・ひこう×2）→ HP50%削り（76ダメージ、残り77HP）。
 
-| | ステロ前（HP153残り） | **ステロ後（HP77残り）** |
-|:--|:--|:--|
-| ムーンフォース（70〜83） | 確定2発（46〜54%） | **乱数7/16（43.75%）で1発** |
-| **はめつのひかり（103〜122）** | 確定2発（67〜80%） | **確定1発（134〜159%）** |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left"></th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">ステロ前（HP153残り）</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">ステロ後（HP77残り）</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">ムーンフォース（70〜83）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">確定2発（46〜54%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">乱数7/16（43.75%）で1発</td></tr>
+<tr style="background:#fff0f8"><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:700">はめつのひかり（103〜122）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">確定2発（67〜80%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">確定1発（134〜159%）</td></tr>
+</tbody></table></div>
 
 ステロ前は両者とも確定2発。ステロ後にはめつのひかりが確定1発、ムーンフォースはランダム43.75%にとどまります。**ガブリアスのステルスロック展開を前提とする構築では、ステロ後リザードンを確実に処理できる**点がフルアタ型固有の優位性です。
 
@@ -312,10 +372,18 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 **C252投資が必須条件**
 
-| C努力値 | 実数値 | アシレーヌ（HP155, D135）への最小ダメージ | 判定 |
-|:--|:--:|:--:|:--|
-| 252（おくびょう） | 207 | 162（105%） | **確定1発** |
-| 0（未投資） | 175 | 136（88%） | 確定2発 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left">C努力値</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">実数値</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">アシレーヌ（HP155, D135）への最小ダメージ</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">判定</th>
+</tr></thead>
+<tbody>
+<tr style="background:#fff0f8"><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:700">252（おくびょう）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">207</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">162（105%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">確定1発</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">0（未投資）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">175</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">136（88%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">確定2発</td></tr>
+</tbody></table></div>
 
 未投資ではアシレーヌへの確定1発が成立しません。フルアタ型は**C252一択**です。
 
@@ -467,13 +535,19 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 **ギャラドスの主要データ（M-2）**
 
-| 項目 | データ |
-|:--|:--|
-| 使用率 | 10位 |
-| 性格（1位）| いじっぱり 45.1% |
-| 努力値（1位）| AS（すばやさ・こうげき全振り）38.1% |
-| 技構成 | たきのぼり / りゅうのまい / じしん / こおりのキバ |
-| ギャラドスナイト採用率 | 76.3% |
+<div style="overflow-x:auto;margin:16px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr>
+  <th style="padding:8px 12px;background:#eff6ff;border:1px solid #bfdbfe;text-align:left">項目</th>
+  <th style="padding:8px 12px;background:#eff6ff;border:1px solid #bfdbfe;text-align:left">データ</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">使用率</td><td style="padding:8px 12px;border:1px solid #dbeafe">10位</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">性格（1位）</td><td style="padding:8px 12px;border:1px solid #dbeafe">いじっぱり 45.1%</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">努力値（1位）</td><td style="padding:8px 12px;border:1px solid #dbeafe">AS（すばやさ・こうげき全振り）38.1%</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">技構成</td><td style="padding:8px 12px;border:1px solid #dbeafe">たきのぼり / りゅうのまい / じしん / こおりのキバ</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">ギャラドスナイト採用率</td><td style="padding:8px 12px;border:1px solid #dbeafe">76.3%</td></tr>
+</tbody></table></div>
 
 ---
 
