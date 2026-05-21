@@ -85,20 +85,13 @@ M-2環境のシングルバトルで**フラエッテナイト採用率97.4%**�
   <thead><tr><th>HP</th><th>こうげき</th><th>ぼうぎょ</th><th>とくこう</th><th>とくぼう</th><th>すばやさ</th><th>合計</th></tr></thead>
   <tbody>
     <tr>
-      <td>74</td><td>65</td><td>67</td>
-      <td><strong>125</strong></td><td><strong>128</strong></td><td>92</td>
-      <td><strong>551</strong></td>
-    </tr>
-    <tr>
-      <td>
-        <div class="bar-wrap"><div class="bar" style="width:55px"></div><span>74</span></div>
-      </td>
+      <td><div class="bar-wrap"><div class="bar" style="width:55px"></div><span>74</span></div></td>
       <td><div class="bar-wrap"><div class="bar" style="width:49px"></div><span>65</span></div></td>
       <td><div class="bar-wrap"><div class="bar" style="width:50px"></div><span>67</span></div></td>
-      <td><div class="bar-wrap"><div class="bar" style="width:94px"></div><span>125</span></div></td>
-      <td><div class="bar-wrap"><div class="bar" style="width:96px"></div><span>128</span></div></td>
+      <td><div class="bar-wrap"><div class="bar" style="width:94px"></div><span><strong>125</strong></span></div></td>
+      <td><div class="bar-wrap"><div class="bar" style="width:96px"></div><span><strong>128</strong></span></div></td>
       <td><div class="bar-wrap"><div class="bar" style="width:69px"></div><span>92</span></div></td>
-      <td></td>
+      <td><strong>551</strong></td>
     </tr>
   </tbody>
 </table>
