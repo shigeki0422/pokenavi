@@ -114,32 +114,56 @@ heroImage: '../../assets/hero-garchomp-m2.png'
 
 ### 種族値
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
-<thead>
-<tr style="background:#f1f5f9">
-  <th style="padding:8px;border:1px solid #cbd5e1">HP</th>
-  <th style="padding:8px;border:1px solid #cbd5e1">こうげき</th>
-  <th style="padding:8px;border:1px solid #cbd5e1">ぼうぎょ</th>
-  <th style="padding:8px;border:1px solid #cbd5e1">とくこう</th>
-  <th style="padding:8px;border:1px solid #cbd5e1">とくぼう</th>
-  <th style="padding:8px;border:1px solid #cbd5e1">すばやさ</th>
-  <th style="padding:8px;border:1px solid #cbd5e1">合計</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px;border:1px solid #cbd5e1">108</td>
-  <td style="padding:8px;border:1px solid #cbd5e1"><strong>130</strong></td>
-  <td style="padding:8px;border:1px solid #cbd5e1">95</td>
-  <td style="padding:8px;border:1px solid #cbd5e1">80</td>
-  <td style="padding:8px;border:1px solid #cbd5e1">85</td>
-  <td style="padding:8px;border:1px solid #cbd5e1"><strong>102</strong></td>
-  <td style="padding:8px;border:1px solid #cbd5e1">600</td>
-</tr>
-</tbody>
-</table>
+<div style="max-width:360px;margin:16px 0;font-size:0.9em">
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:68px;min-width:68px;color:#555;font-weight:600;white-space:nowrap">HP</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:54%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">108</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:68px;min-width:68px;color:#555;font-weight:600;white-space:nowrap">こうげき</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:65%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right"><strong>130</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:68px;min-width:68px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:47.5%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">95</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:68px;min-width:68px;color:#555;font-weight:600;white-space:nowrap">とくこう</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:40%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">80</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:68px;min-width:68px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:42.5%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">85</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:68px;min-width:68px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:51%;background:linear-gradient(90deg,#34d399,#059669);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right"><strong>102</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
+    <span style="width:68px;min-width:68px;color:#555;white-space:nowrap">合計</span>
+    <div style="flex:1"></div>
+    <span style="width:32px;text-align:right;color:#2563eb">600</span>
+  </div>
 </div>
+
 
 攻撃130・素早さ102という数値が際立っています。素早さ102はルカリオ・ゲッコウガといった主要な高速アタッカーを上回り、**最速で使うことでほぼすべての無振りポケモンを先制できる**優秀なライン。さらに攻撃130は環境最高水準で、努力値を振らなくてもダメージが大きい。
 
