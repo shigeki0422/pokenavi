@@ -326,7 +326,7 @@ M-2の主要3ターゲット（おくびょうC252、C実数値207）で具体�
 
 カイリュー（HP特化型：HP198, D120、フェアリー技弱点、**マルチスケイル残り**）
 
-マルチスケイルはHP満タン時にダメージを1/2にする特性。フルHPの状態では効果が残る。
+マルチスケイルはHP満タン時にダメージを1/2にする特性。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
