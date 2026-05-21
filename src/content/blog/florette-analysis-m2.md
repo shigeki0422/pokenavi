@@ -369,22 +369,22 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 ---
 
-**C252投資が必須条件**
+**C252振りが必須**
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
 <thead><tr>
-  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left">C努力値</th>
+  <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:left">Cの振り方</th>
   <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">実数値</th>
   <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">アシレーヌ（HP155, D135）への最小ダメージ</th>
   <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">判定</th>
 </tr></thead>
 <tbody>
-<tr style="background:#fff0f8"><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:700">252（おくびょう）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">207</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">162（105%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">確定1発</td></tr>
-<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">0（未投資）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">175</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">136（88%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">確定2発</td></tr>
+<tr style="background:#fff0f8"><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:700">252振り（おくびょう）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">207</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">162（105%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">確定1発</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #e2d4f0">無振り</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">175</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">136（88%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">確定2発</td></tr>
 </tbody></table></div>
 
-未投資ではアシレーヌへの確定1発が成立しません。フルアタ型は**C252一択**です。
+無振りではアシレーヌへの確定1発が成立しません。フルアタ型は**C252振り一択**です。
 
 ムーンフォースを使う場面：HPが減って反動が致命傷になりうる局面、または命中90のリスクを避けたい局面で使い分けます。
 
