@@ -144,7 +144,7 @@ M-2環境のシングルバトルで**フラエッテナイト採用率97.4%**�
 | <img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> あく | <strong style="color:#60a5fa">×0.5</strong> |
 | <img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle;margin-right:4px"> むし | <strong style="color:#60a5fa">×0.5</strong> |
 
-ドラゴン無効がM-2環境で極めて価値が高く、**ガブリアス・リザードン・サザンドラ・カイリュー**に対して電気タイプポケモンと並ぶ数少ない完全シャットアウト枠。弱点は鋼とどくの2タイプのみ。
+ドラゴン無効はM-2環境で極めて価値が高く、使用率上位を占める**ガブリアス・リザードン・サザンドラ・カイリュー**のドラゴン技を完全に無効化できます。弱点ははがねとどくの2タイプのみ。
 
 ---
 
