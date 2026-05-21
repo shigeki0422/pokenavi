@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】メガギャラドス徹底考察 M-2シーズン使用率10位の全て'
-description: 'M-2シングルバトルで使用率10位のメガギャラドスを徹底分析。メガ進化でみず/ひこう→みず/あくへのタイプ変化、りゅうのまい+かたいアゴの破壊力、りゅうのまい積み型・ちょうはつ型・非メガ耐久型の3大構築を実データで徹底解説します。'
+description: 'M-2シングルバトルで使用率10位のメガギャラドスを徹底分析。メガ進化でみず/ひこう→みず/あくへのタイプ変化、特性かたやぶり、A155+りゅうのまいの全抜き性能、りゅうのまい積み型・ちょうはつ型の3大構築を実データで徹底解説します。'
 pubDate: '2026-05-22'
 heroImage: '../../assets/hero-gyarados-m2.png'
 ---
@@ -36,7 +36,7 @@ heroImage: '../../assets/hero-gyarados-m2.png'
 
 シーズンM-2（2026/5/13〜6/17）のシングルバトルで、ギャラドスは**使用率10位**を記録。そのうち**64.6%がギャラドスナイトを採用**しており、約3割強は非メガ構成での運用となっています。
 
-メガギャラドスの最大の特徴は**メガ進化によるタイプの変化**です。メガ前はみず/ひこうタイプですが、メガ進化後は**みず/あくタイプに変わります**。これにより弱点・耐性・無効のセットが大きく変化し、使い方と立ち回りも変わります。さらに特性**かたいアゴ**でかみつく系技が強化され、A155というトップクラスの攻撃力と組み合わせることで、りゅうのまい後の破壊力は環境最強クラスです。
+メガギャラドスの最大の特徴は**メガ進化によるタイプの変化**です。メガ前はみず/ひこうタイプですが、メガ進化後は**みず/あくタイプに変わります**。これにより弱点・耐性・無効のセットが大きく変化し、使い方と立ち回りも変わります。さらに特性**かたやぶり**（相手の特性を無視して技を使える）により、ふゆう持ちポケモンへのじしんも通ります。A155というトップクラスの攻撃力とりゅうのまいの組み合わせで、積み後の全抜き性能は環境最強クラスです。
 
 ---
 
@@ -60,7 +60,7 @@ heroImage: '../../assets/hero-gyarados-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">メガ前（みず/ひこう）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin:2px">
-    <img src="/images/types/type-11-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin:2px">
+    <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin:2px">
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#2563eb;font-weight:bold">× 無効</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#94a3b8">○ 等倍</td>
@@ -92,15 +92,21 @@ heroImage: '../../assets/hero-gyarados-m2.png'
 
 ## なぜ今メガギャラドスが強いのか
 
-### 1. りゅうのまい後のA155+かたいアゴで全抜き性能
+### 1. りゅうのまい後のA155で全抜き性能
 
-メガギャラドスの最大の破壊力は**りゅうのまい+かたいアゴ**の組み合わせです。
+メガギャラドスの最大の破壊力は**A155 × りゅうのまい**の組み合わせです。
 
-りゅうのまいはAとSを同時に1段階アップする積み技で、1積みするとA155が約233相当になります。そこにかたいアゴでこおりのキバが威力65×1.5=97.5相当に強化され、りゅうのまい後の実質火力は非常に高くなります。
+りゅうのまいはAとSを同時に1段階アップする積み技で、1積みするとA155がA233相当（Lv50 いじっぱりA252振りの実数値277の約1.5倍、実数値にすると約186→279相当）になります。みずSTABのたきのぼり（BP80）やじめん無効回避なしのじしん（BP100）の組み合わせで、積み後は多くの環境ポケモンを確定圏内に収められます。
 
-ドラゴンタイプに弱点を突けるこおりのキバは採用率45.2%で、環境上位のガブリアス（ドラゴン×2弱点）を確定1発圏に入れるための重要な技です。りゅうのまい1積み後の実力は環境最強クラスで、処理しきれないまま積まれると試合がそのまま終わることもあります。
+こおりのキバは採用率45.2%で、環境上位のガブリアス（こおり×4弱点）への確定打点です。りゅうのまい1積み後は実力が大幅に上がり、処理しきれないまま積まれると試合がそのまま終わることもあります。
 
-### 2. メガ後タイプ変化によるエスパー無効
+### 2. 特性かたやぶりの効果
+
+メガ進化後の特性**かたやぶり**は「相手の特性を無視して技を使える」効果です。最も重要な使い道は**ふゆう持ちポケモンへのじしんが通る**点です。通常ふゆうを持つポケモン（ロトム系など）にじしんが無効化されますが、かたやぶりなら関係なく命中します。
+
+ただし、かたやぶりには**火力の補正はありません**。こおりのキバ・かみくだく・たきのぼりはいずれも素の威力そのままです。メガギャラドスの攻撃力の源泉はA155の高い種族値とりゅうのまいの積み技にあります。
+
+### 3. メガ後タイプ変化によるエスパー無効
 
 あくタイプを獲得したことでエスパー技が**完全無効**になります。環境でエスパー技を採用しているポケモン（フラエッテ永遠のムーンフォース除く）に対して安全に動けるようになります。
 
@@ -245,9 +251,9 @@ A155は環境トップクラスの攻撃力です。D130という高い特防は
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px">
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
-      <span><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
+      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
-      <span><img src="/images/types/type-13-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
     </div>
   </td>
@@ -255,7 +261,7 @@ A155は環境トップクラスの攻撃力です。D130という高い特防は
     <span style="font-size:0.85em">みず・ほのお・こおり・ゴースト・あく</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/types/type-18-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー
+    <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー
   </td>
 </tr>
 </tbody>
@@ -306,20 +312,20 @@ A155は環境トップクラスの攻撃力です。D130という高い特防は
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>こおりのキバ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65（かたいアゴ後97.5）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>45.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かたいアゴ×1.5。ガブリアス・ドラゴン勢への確定打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアスに4倍。りゅうのまい後に確定1発圏内</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>パワーウィップ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">38.3%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みずタイプに等倍以上。アシレーヌ・カバルドンへの打点</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ちょうはつ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.6%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">2ターン変化技封じ。相手の積み技・回復技・ステロを封じる</td>
@@ -341,9 +347,9 @@ A155は環境トップクラスの攻撃力です。D130という高い特防は
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かみくだく</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80（かたいアゴ120）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.7%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かたいアゴ×1.5。あく打点としてゲンガー等への対策</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくSTAB打点。Dダウン20%の追加効果あり</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アクアテール</strong></td>
@@ -388,7 +394,7 @@ A155は環境トップクラスの攻撃力です。D130という高い特防は
 
 **強み:**
 
-いじっぱりA252振りで実数値最大のA155を活かします。りゅうのまいを1積みするとAが約233相当になり、かたいアゴを持つメガ後でこおりのキバ（威力97.5）を打てば、ガブリアスを**確定1発**圏内に入れられます。
+いじっぱりA252振りで実数値最大のA155（実数値277）を活かします。りゅうのまいを1積みするとAが1.5倍（実数値約416相当）になり、こおりのキバ（BP65）でガブリアスのこおり4倍弱点を突けば**確定1発**圏内に入れられます。
 
 S81はやや遅いですが、りゅうのまいでS+1になると実数値が約120相当になり、環境の多くのポケモンを追い越せます。ようきを選ばず**いじっぱり**を採用することで、1積み後のA火力を最大化し、S+1後の素早さで十分に先手を取れる設計です。
 
@@ -740,7 +746,7 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 
 メガギャラドスは「メガ進化によるタイプ変化」を理解した上で使うことが最重要です。メガ前のみず/ひこうとメガ後のみず/あくでは、じめん有効・エスパー無効という大きな変化があります。
 
-A155という最高水準の攻撃力とりゅうのまいによる全抜き性能は環境トップクラスで、こおりのキバのかたいアゴ強化によってガブリアス（環境1位）を確定1発圏内に入れられるため、環境適応力が非常に高いポケモンです。
+A155という最高水準の攻撃力とりゅうのまいによる全抜き性能は環境トップクラスで、積み後のこおりのキバでガブリアス（環境1位）のこおり4倍弱点を突いて確定1発圏内に入れられるため、環境適応力が非常に高いポケモンです。
 
 M-2環境で多いリザードン・ガブリアスへの有利マッチと、採用率10位という実績が証明するように、適切なパーティ構成と「メガ後はじしんが通る」という知識を持って使えば、ランク上位を目指すための強力な駒になります。
 

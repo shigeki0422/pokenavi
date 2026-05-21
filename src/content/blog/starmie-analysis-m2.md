@@ -85,7 +85,7 @@ Lv50・いじっぱり・A252振りの実数値は**A167**で、ちからもち�
 <tr style="background:#fafafa">
   <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">メガギャラドス</td>
   <td style="padding:8px;border:1px solid #cbd5e1">155</td>
-  <td style="padding:8px;border:1px solid #cbd5e1">かたいアゴ（物理全体でなく噛み技のみ）</td>
+  <td style="padding:8px;border:1px solid #cbd5e1">かたやぶり（火力補正なし）</td>
   <td style="padding:8px;border:1px solid #cbd5e1">277</td>
 </tr>
 <tr>
