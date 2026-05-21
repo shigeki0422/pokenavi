@@ -678,7 +678,7 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">催眠で積み展開を妨害</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みがわりを張ってから積む・先にゲンガーを処理</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みがわりを張ってから積む・サイコキネシス採用なら先にゲンガーを処理（どくタイプに×2）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0448-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ</td>
@@ -686,9 +686,9 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アーマーガアのひこう耐性で受けてサイクルを回す</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0038-01.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アローラキュウコン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あられ＋ふぶきの連打でみがわり破壊</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技で倒すか、ガブリアスで地面技を通す</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0970-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-03-poison.png" alt="どく" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">どく技（ヘドロばくだん等）で弱点を突く（使用率13位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアスのじしんで処理・先にキラフロルを排除してからフラエッテを展開</td>
 </tr>
 </tbody>
 </table>
