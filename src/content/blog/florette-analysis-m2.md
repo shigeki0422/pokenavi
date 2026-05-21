@@ -152,7 +152,7 @@ M-2環境のシングルバトルで**フラエッテナイト採用率97.4%**�
 
 | 技 | タイプ | 威力 | 命中 | 採用率 | 効果 |
 |:--|:--:|:--:|:--:|:--:|:--|
-| ムーンフォース | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"> | 95 | 95 | 87.1% | 30%でとくぼう-1 |
+| ムーンフォース | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"> | 95 | 100 | 87.1% | 10%でとくこう-1 |
 | めいそう | <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:22px;height:22px;vertical-align:middle"> | — | — | 84.4% | とくこう・とくぼう+1 |
 | ドレインキッス | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"> | 50 | 100 | 75.1% | 与ダメの1/2を回復 |
 | はめつのひかり | <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:22px;height:22px;vertical-align:middle"> | 140 | 90 | 46.7% | 与ダメの1/2を自分も受ける |
@@ -217,7 +217,7 @@ M-2環境のシングルバトルで**フラエッテナイト採用率97.4%**�
 
 ムーンフォースを選ぶ場面：
   ・自分のHPが少なく、反動ダメージが致命傷になりうる
-  ・30%のとくぼう低下を狙いたい（削り＋崩し）
+  ・10%のとくこう低下を狙いたい（削り＋崩し）
   ・命中90のリスクを避けたい局面
 ```
 
