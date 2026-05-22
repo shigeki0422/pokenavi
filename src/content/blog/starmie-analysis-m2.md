@@ -114,8 +114,6 @@ Lv50・いじっぱり・A252振りの実数値は**A167**で、ちからもち�
 
 アイススピナー採用率64.8%は、みずタイプが苦手とするくさタイプ・ドラゴンタイプへの回答として機能しています。M-2環境トップにいるガブリアス（1位）への打点として特に重要で、こおり4倍のガブリアスを確実に処理できます。
 
-加えてアイススピナーには**フィールド状態（グラスフィールド・エレキフィールドなど）を消去する効果**があるため、環境のフィールド展開に対するメタとしても機能します。
-
 ---
 
 ## 基本スペック
@@ -339,7 +337,7 @@ Lv50・いじっぱり・A252振り（実A167）、ちからもち適用後（�
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">物理</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>64.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン（ガブリアス等）・くさ対策。フィールド消去効果</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン（ガブリアス等）・くさ対策</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>クイックターン</strong></td>
