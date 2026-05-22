@@ -2,7 +2,7 @@ name: Deploy to Cloudflare Pages
 
 on:
   push:
-    branches: [main]
+    branches: [main, draft]
 
 jobs:
   deploy:
@@ -18,6 +18,8 @@ jobs:
       - run: npm ci
 
       - run: npm run build
+        env:
+          INCLUDE_DRAFTS: ${{ github.ref_name == 'draft' && 'true' || 'false' }}
 
       - uses: cloudflare/wrangler-action@v3
         with:
