@@ -735,12 +735,6 @@ AS最大化型に比べてこうげきまたはすばやさが落ちるため、
     <div style="font-size:0.68rem;color:#555;margin-top:2px">でんき・くさを無効化。ブリジュラスへじしん打点</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0450-00.webp" alt="ラグラージ">
-    <div class="name">じめんタイプ</div>
-    <div class="rate">でんき対策</div>
-    <div style="font-size:0.68rem;color:#555;margin-top:2px">スターミーのでんき弱点をカバー</div>
-  </div>
-  <div class="partner-card">
     <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン">
     <div class="name">リザードン</div>
     <div class="rate">使用率5位</div>
@@ -750,7 +744,7 @@ AS最大化型に比べてこうげきまたはすばやさが落ちるため、
     <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー">
     <div class="name">メガカイリュー</div>
     <div class="rate">使用率17位</div>
-    <div style="font-size:0.68rem;color:#555;margin-top:2px">ゴースト・あく対策。特殊4色でサポート（1メガルールに注意）</div>
+    <div style="font-size:0.68rem;color:#555;margin-top:2px">ゴースト・あく対策。特殊4色でサポート</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0428-00.webp" alt="ミミロップ">
@@ -765,10 +759,6 @@ AS最大化型に比べてこうげきまたはすばやさが落ちるため、
     <div style="font-size:0.68rem;color:#555;margin-top:2px">アーマーガア・ブリジュラスへの対抗馬</div>
   </div>
 </div>
-
-**パーティ構成の注意点：1メガルール**
-
-ポケモンチャンピオンズでは1度の対戦で**メガ進化できるのは1体のみ**（1メガルール）です。スターミナイト97.8%のメガスターミーをパーティに入れる場合、他のポケモンはメガ石を持てません。メガカイリュー（カイリュナイト80.8%）とメガスターミーを同じパーティに入れると、どちらか一方しかメガ進化できないため、対戦前の選出段階での戦略的判断が重要になります。
 
 ---
 
