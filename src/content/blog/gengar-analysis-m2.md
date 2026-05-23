@@ -418,14 +418,14 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
     <img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">ヘドロウェーブ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">81.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">C170の主力技。威力95・命中100。フェアリー・くさに等倍以上が取れる万能技</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">C170の主力技。威力95・命中100。フェアリー（フラエッテ含む）・くさに抜群が取れる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">シャドーボール
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">73.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト技の主力。エスパー・ゴーストに等倍以上。フラエッテ(永遠)への有効打</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト技の主力。エスパー・ゴーストに抜群。フェアリーへの有効打はヘドロウェーブ</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
