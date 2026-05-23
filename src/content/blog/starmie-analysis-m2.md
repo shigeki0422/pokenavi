@@ -92,7 +92,7 @@ Lv50・いじっぱり・A252振りの実数値は**A167**で、ちからもち�
 <tr>
   <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">メガルカリオ</td>
   <td style="padding:8px;border:1px solid #cbd5e1">145</td>
-  <td style="padding:8px;border:1px solid #cbd5e1">てきおうりょく（STAB×2.0）</td>
+  <td style="padding:8px;border:1px solid #cbd5e1">てきおうりょく（タイプ一致補正×2.0）</td>
   <td style="padding:8px;border:1px solid #cbd5e1">200</td>
 </tr>
 </tbody>
@@ -208,7 +208,7 @@ Lv50・いじっぱり・A252振りの実数値は**A167**で、ちからもち�
 
 ### ちからもち火力指数考察
 
-「火力指数 = 実A × 技の基本威力 × STAB補正」で技ごとの相対的な火力を比較します。  
+「火力指数 = 実A × 技の基本威力 × タイプ一致補正」で技ごとの相対的な火力を比較します。  
 Lv50・いじっぱり・A252振り（実A167）、ちからもち適用後（実質A334）。
 
 <div style="overflow-x:auto;margin:12px 0">
@@ -217,7 +217,7 @@ Lv50・いじっぱり・A252振り（実A167）、ちからもち適用後（�
 <tr style="background:#f1f5f9">
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">技名</th>
   <th style="padding:8px 8px;border:1px solid #cbd5e1">基本威力</th>
-  <th style="padding:8px 8px;border:1px solid #cbd5e1">STAB</th>
+  <th style="padding:8px 8px;border:1px solid #cbd5e1">タイプ一致</th>
   <th style="padding:8px 8px;border:1px solid #cbd5e1">火力指数</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">備考</th>
 </tr>
@@ -240,7 +240,7 @@ Lv50・いじっぱり・A252振り（実A167）、ちからもち適用後（�
 <tr style="background:#fafafa">
   <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">アイススピナー</td>
   <td style="padding:8px;border:1px solid #cbd5e1">80</td>
-  <td style="padding:8px;border:1px solid #cbd5e1">×1.0（非STAB）</td>
+  <td style="padding:8px;border:1px solid #cbd5e1">×1.0（タイプ不一致）</td>
   <td style="padding:8px;border:1px solid #cbd5e1">26,720</td>
   <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">ガブリアスに4倍 → 実効106,880</td>
 </tr>
@@ -256,8 +256,8 @@ Lv50・いじっぱり・A252振り（実A167）、ちからもち適用後（�
 </div>
 
 **比較：他Tier1の主力技火力指数**  
-メガガブリアス じしん（A233・STAB）: 233×100×1.5 = **34,950**  
-メガギャラドス アクアブレイク（A277・STAB）: 277×85×1.5 = **35,318**
+メガガブリアス じしん（A233・タイプ一致）: 233×100×1.5 = **34,950**  
+メガギャラドス アクアブレイク（A277・タイプ一致）: 277×85×1.5 = **35,318**
 
 メガスターミーのアクアブレイク火力指数**42,585**は、同じみず物理技のメガギャラドスを**20%超上回る**。ちからもちの効果がいかに強力かを示しています。
 
@@ -383,7 +383,7 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">物理</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>90.5%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずSTAB高打点。Bダウン付きで次のターンも有利に</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずタイプ一致高打点。Bダウン付きで次のターンも有利に</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アクアジェット</strong></td>
@@ -411,7 +411,7 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">物理</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>43.1%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパーSTAB物理技。どく・かくとうへの打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパータイプ一致物理技。どく・かくとうへの打点</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>サイコカッター</strong></td>
@@ -455,7 +455,7 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
 - クイックターン（53.6%）: サイクル戦の要として4枠目に頻出
 
 **選択技（採用率20〜45%）**
-- しねんのずつき（43.1%）: エスパーSTABの強打点。どく・かくとうを処理
+- しねんのずつき（43.1%）: エスパータイプ一致の強打点。どく・かくとうを処理
 - サイコカッター（23.4%）: しねんのずつきより威力は下がるが急所率の高さが魅力
 
 **実践でよく見る技セット3パターン：**
@@ -484,10 +484,10 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
 
 | 技 | タイプ | 採用理由 |
 |---|---|---|
-| アクアブレイク | みず（物理） | STABメイン打点・Bダウン効果 |
+| アクアブレイク | みず（物理） | タイプ一致メイン打点・Bダウン効果 |
 | アクアジェット | みず（物理）先制 | フィニッシャー先制技 |
 | アイススピナー | こおり（物理） | ドラゴン・くさ対策 |
-| しねんのずつき / クイックターン | エスパー（物理） / みず（物理） | エスパーSTAB / サイクル維持 |
+| しねんのずつき / クイックターン | エスパー（物理） / みず（物理） | エスパータイプ一致 / サイクル維持 |
 
 **強み**  
 いじっぱり補正によるA最大化（実A167）+ ちからもちで**実質A334**が実現。アクアブレイク火力指数**42,585**は環境最高水準で、多くの相手を確定2発圏内に収めます。アクアブレイクでBダウンを狙いながら、次ターン以降アクアジェットで先制フィニッシュという黄金パターンが安定して機能します。
@@ -510,10 +510,10 @@ M-2環境トップのガブリアスに対してアイススピナーが4倍有�
 
 | 技 | タイプ | 採用理由 |
 |---|---|---|
-| アクアブレイク | みず（物理） | STABメイン打点 |
+| アクアブレイク | みず（物理） | タイプ一致メイン打点 |
 | アクアジェット | みず（物理）先制 | 先制フィニッシャー |
 | アイススピナー | こおり（物理） | ガブリアス・ドラゴン対策 |
-| クイックターン / サイコカッター | みず（物理） / エスパー（物理） | サイクル維持 / エスパーSTAB |
+| クイックターン / サイコカッター | みず（物理） / エスパー（物理） | サイクル維持 / エスパータイプ一致 |
 
 **強み**  
 いじっぱり型よりもすばやさが高い分、より多くのポケモンに先制できます。特に同族（みずタイプ等）との対面でのスピード勝負を制しやすく、速い環境では安定して上を取れます。こうげきはいじっぱりより下がりますが、メガ進化後の強化されたこうげきがあれば十分な打点が出ます。
