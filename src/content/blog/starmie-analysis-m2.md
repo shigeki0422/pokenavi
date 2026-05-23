@@ -460,11 +460,46 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
 
 **実践でよく見る技セット3パターン：**
 
-| パターン | 技1 | 技2 | 技3 | 技4 | 特徴 |
-|---|---|---|---|---|---|
-| ドラゴン対策型 | アクアブレイク | アクアジェット | アイススピナー | しねんのずつき | ガブリアス・ドラゴンに強い |
-| サイクル型 | アクアブレイク | アクアジェット | クイックターン | アイススピナー | 場持ち重視・情報収集 |
-| 積み型 | アクアブレイク | アクアジェット | ビルドアップ | アイススピナー | 積んで全抜きを狙う |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">パターン</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技1</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技2</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技3</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技4</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">特徴</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:600">ドラゴン対策型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアジェット</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイススピナー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">しねんのずつき</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアス・ドラゴンに強い</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:600">サイクル型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアジェット</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">クイックターン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイススピナー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">場持ち重視・情報収集</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:600">積み型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアジェット</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ビルドアップ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイススピナー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">積んで全抜きを狙う</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 アイススピナーとクイックターンを両立した4技構成も考えられますが、その場合しねんのずつき/サイコカッターのどちらかを諦めることになり、ゴースト・どく・かくとうへの対応が弱くなります。技構成は環境メタと相談しながら決める必要があります。
 
@@ -482,12 +517,21 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
 
 **技構成（例）**
 
-| 技 | タイプ | 採用理由 |
-|---|---|---|
-| アクアブレイク | みず（物理） | タイプ一致メイン打点・Bダウン効果 |
-| アクアジェット | みず（物理）先制 | フィニッシャー先制技 |
-| アイススピナー | こおり（物理） | ドラゴン・くさ対策 |
-| しねんのずつき / クイックターン | エスパー（物理） / みず（物理） | エスパータイプ一致 / サイクル維持 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用理由</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク</td><td style="padding:8px 12px;border:1px solid #cbd5e1">みず（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致メイン打点・Bダウン効果</td></tr>
+<tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1">アクアジェット</td><td style="padding:8px 12px;border:1px solid #cbd5e1">みず（物理）先制</td><td style="padding:8px 12px;border:1px solid #cbd5e1">フィニッシャー先制技</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #cbd5e1">アイススピナー</td><td style="padding:8px 12px;border:1px solid #cbd5e1">こおり（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン・くさ対策</td></tr>
+<tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1">しねんのずつき / クイックターン</td><td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー（物理） / みず（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">エスパータイプ一致 / サイクル維持</td></tr>
+</tbody>
+</table>
+</div>
 
 **強み**  
 いじっぱり補正によるA最大化（実A167）+ ちからもちで**実質A334**が実現。アクアブレイク火力指数**42,585**は環境最高水準で、多くの相手を確定2発圏内に収めます。アクアブレイクでBダウンを狙いながら、次ターン以降アクアジェットで先制フィニッシュという黄金パターンが安定して機能します。
@@ -508,12 +552,21 @@ M-2環境トップのガブリアスに対してアイススピナーが4倍有�
 
 **技構成（例）**
 
-| 技 | タイプ | 採用理由 |
-|---|---|---|
-| アクアブレイク | みず（物理） | タイプ一致メイン打点 |
-| アクアジェット | みず（物理）先制 | 先制フィニッシャー |
-| アイススピナー | こおり（物理） | ガブリアス・ドラゴン対策 |
-| クイックターン / サイコカッター | みず（物理） / エスパー（物理） | サイクル維持 / エスパータイプ一致 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用理由</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク</td><td style="padding:8px 12px;border:1px solid #cbd5e1">みず（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致メイン打点</td></tr>
+<tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1">アクアジェット</td><td style="padding:8px 12px;border:1px solid #cbd5e1">みず（物理）先制</td><td style="padding:8px 12px;border:1px solid #cbd5e1">先制フィニッシャー</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #cbd5e1">アイススピナー</td><td style="padding:8px 12px;border:1px solid #cbd5e1">こおり（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアス・ドラゴン対策</td></tr>
+<tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1">クイックターン / サイコカッター</td><td style="padding:8px 12px;border:1px solid #cbd5e1">みず（物理） / エスパー（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">サイクル維持 / エスパータイプ一致</td></tr>
+</tbody>
+</table>
+</div>
 
 **強み**  
 いじっぱり型よりもすばやさが高い分、より多くのポケモンに先制できます。特に同族（みずタイプ等）との対面でのスピード勝負を制しやすく、速い環境では安定して上を取れます。こうげきはいじっぱりより下がりますが、メガ進化後の強化されたこうげきがあれば十分な打点が出ます。
@@ -532,12 +585,21 @@ M-2環境トップのガブリアスに対してアイススピナーが4倍有�
 
 **技構成（例）**
 
-| 技 | タイプ | 採用理由 |
-|---|---|---|
-| アクアブレイク | みず（物理） | メインウェポン |
-| アクアジェット | みず（物理）先制 | フィニッシャー |
-| アイススピナー / クイックターン | こおり / みず | 対ドラゴン / サイクル |
-| ビルドアップ / こうそくスピン | かくとう変化 / ノーマル物理 | 積み技 / ステロ消去 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead><tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用理由</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク</td><td style="padding:8px 12px;border:1px solid #cbd5e1">みず（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">メインウェポン</td></tr>
+<tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1">アクアジェット</td><td style="padding:8px 12px;border:1px solid #cbd5e1">みず（物理）先制</td><td style="padding:8px 12px;border:1px solid #cbd5e1">フィニッシャー</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #cbd5e1">アイススピナー / クイックターン</td><td style="padding:8px 12px;border:1px solid #cbd5e1">こおり / みず</td><td style="padding:8px 12px;border:1px solid #cbd5e1">対ドラゴン / サイクル</td></tr>
+<tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1">ビルドアップ / こうそくスピン</td><td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう変化 / ノーマル物理</td><td style="padding:8px 12px;border:1px solid #cbd5e1">積み技 / ステロ消去</td></tr>
+</tbody>
+</table>
+</div>
 
 **強み**  
 耐久寄りの配分によって特殊技（でんき・くさ等）への耐久を高め、より多くの攻撃を耐えながら反撃できます。ビルドアップ採用型ではこうげきとぼうぎょを両方積めるため、長期戦でも強みを発揮します。こうそくスピン採用型はステロ・まきびしを消去しながらすばやさを上げる追加効果で、後続にも貢献します。
