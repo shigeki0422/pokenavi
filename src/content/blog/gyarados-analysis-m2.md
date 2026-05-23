@@ -1,8 +1,8 @@
 ---
 title: '【ポケモンチャンピオンズ】メガギャラドス徹底考察 M-2シーズン使用率10位の全て'
 description: 'M-2シングルバトルで使用率10位のメガギャラドスを徹底分析。メガ進化でみず/ひこう→みず/あくへのタイプ変化、特性かたやぶり、A155+りゅうのまいの全抜き性能、りゅうのまい積み型・ちょうはつ型の3大構築を実データで徹底解説します。'
-pubDate: '2026-05-22'
-draft: true
+pubDate: '2026-05-23'
+draft: false
 heroImage: '../../assets/hero-gyarados-m2.png'
 ---
 
@@ -51,9 +51,12 @@ heroImage: '../../assets/hero-gyarados-m2.png'
 <tr style="background:#f1f5f9">
   <th style="padding:10px 12px;border:1px solid #cbd5e1;text-align:left">状態</th>
   <th style="padding:10px 12px;border:1px solid #cbd5e1">タイプ</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">じめん技</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">エスパー技</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">ゴースト技</th>
+  <th style="padding:10px 8px;border:1px solid #cbd5e1">じめん技</th>
+  <th style="padding:10px 8px;border:1px solid #cbd5e1">エスパー技</th>
+  <th style="padding:10px 8px;border:1px solid #cbd5e1">でんき技</th>
+  <th style="padding:10px 8px;border:1px solid #cbd5e1">かくとう技</th>
+  <th style="padding:10px 8px;border:1px solid #cbd5e1">フェアリー技</th>
+  <th style="padding:10px 8px;border:1px solid #cbd5e1">いわ技</th>
 </tr>
 </thead>
 <tbody>
@@ -63,9 +66,12 @@ heroImage: '../../assets/hero-gyarados-m2.png'
     <img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin:2px">
     <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin:2px">
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#2563eb;font-weight:bold">× 無効</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#94a3b8">○ 等倍</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#94a3b8">○ 等倍</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#2563eb;font-weight:bold">× 無効</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#94a3b8">○ 等倍</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">▲ ×4弱点</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#22c55e;font-weight:bold">◎ 半減</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#94a3b8">○ 等倍</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#ef4444;font-weight:bold">▲ ×2弱点</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">メガ後（みず/あく）</td>
@@ -73,9 +79,12 @@ heroImage: '../../assets/hero-gyarados-m2.png'
     <img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin:2px">
     <img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin:2px">
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#94a3b8">○ 等倍</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#2563eb;font-weight:bold">× 無効</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#94a3b8">○ 等倍</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#94a3b8">○ 等倍</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#2563eb;font-weight:bold">× 無効</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#ef4444;font-weight:bold">▲ ×2弱点</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">▲ ×2弱点</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">▲ ×2弱点</td>
+  <td style="padding:8px 8px;border:1px solid #cbd5e1;color:#94a3b8">○ 等倍</td>
 </tr>
 </tbody>
 </table>
@@ -83,9 +92,12 @@ heroImage: '../../assets/hero-gyarados-m2.png'
 
 **特に重要なポイント:**
 
-- **ガブリアスのじしんがメガ後は等倍で入る** → メガ前は無効だったが、メガ進化後はひこうタイプを失うため等倍ダメージを受ける
-- **エスパーが完全無効になる** → あくタイプの特性でエスパー技を無効化。エスパー型ポケモンの攻撃を受けない
-- **でんき弱点は引き続き存在** → みずタイプの弱点として残る
+- **じめんが無効→等倍に悪化** → ひこうタイプを失うため、ガブリアスのじしんが等倍で通るようになる
+- **かくとうが半減→×2弱点に悪化** → メガ前は半減で受けられたかくとう技が、メガ後は弱点になる
+- **フェアリーが等倍→×2弱点に悪化** → あくタイプの弱点としてフェアリー技が新たに刺さるようになる
+- **でんき弱点が×4→×2に軽減** → ひこうタイプとの複合で×4だったでんき弱点がみず単換算の×2に下がり、耐えて反撃できる場面が増える
+- **いわ弱点が×2→等倍に軽減** → ひこうのいわ弱点が消え、いわ技を等倍で受けられるようになる
+- **エスパーが等倍→無効に改善** → あくタイプによりエスパー技を完全に無効化できる
 
 この変化を理解することが、メガギャラドスの正しい使い方の第一歩です。「ひこうタイプだからじしんが通らない」という読みは**メガ後は通用しません**。
 
@@ -97,7 +109,7 @@ heroImage: '../../assets/hero-gyarados-m2.png'
 
 メガギャラドスの最大の破壊力は**A155 × りゅうのまい**の組み合わせです。
 
-りゅうのまいはAとSを同時に1段階アップする積み技で、1積みするとA155がA233相当（Lv50 いじっぱりA252振りの実数値277の約1.5倍、実数値にすると約186→279相当）になります。みず一致のたきのぼり（BP80）やじめん無効回避なしのじしん（BP100）の組み合わせで、積み後は多くの環境ポケモンを確定圏内に収められます。
+りゅうのまいはAとSを1段階アップする積み技で、1積みするとA155がA233相当（Lv50 いじっぱりA252振りの実数値277の約1.5倍、実数値にすると約186→279相当）になります。みず一致のたきのぼり（BP80）やじめん無効回避なしのじしん（BP100）の組み合わせで、積み後は多くの環境ポケモンを確定圏内に収められます。
 
 こおりのキバは採用率45.2%で、環境上位のガブリアス（こおり×4弱点）への確定打点です。りゅうのまい1積み後は実力が大幅に上がり、処理しきれないまま積まれると試合がそのまま終わることもあります。
 
@@ -107,15 +119,15 @@ heroImage: '../../assets/hero-gyarados-m2.png'
 
 ただし、かたやぶりには**火力の補正はありません**。こおりのキバ・かみくだく・たきのぼりはいずれも素の威力そのままです。メガギャラドスの攻撃力の源泉はA155の高い種族値とりゅうのまいの積み技にあります。
 
-### 3. メガ後タイプ変化によるエスパー無効
+### 3. メガ進化前のいかくで物理ダメージを軽減
 
-あくタイプを獲得したことでエスパー技が**完全無効**になります。環境でエスパー技を採用しているポケモン（フラエッテ永遠のムーンフォース除く）に対して安全に動けるようになります。
+メガ進化前のギャラドスの特性は**いかく**で、場に出た瞬間に相手のこうげきを1段階下げます。これを活かして「いかくで相手の物理火力を下げてからメガ進化する」という立ち回りが可能です。
 
-また、ゴーストタイプはメガ前のひこう時代と比べて変化し、あくタイプの影響でゴースト等倍となります（ゴーストはノーマルを無効にするがあくには通る）。ゲンガー（12位）の技には引き続き注意が必要です。
+いかくで相手のこうげきをあらかじめ下げておくことで、りゅうのまいを積むターンの被ダメージを軽減できます。物理アタッカーが多い相手に対して特に有効で、積み技を通す準備を安全に進められます。
 
-### 3. ちょうはつによる変化技封じ
+### 4. ちょうはつによる変化技封じ
 
-採用率30.6%のちょうはつは、相手の積み技・回復技・ステルスロックなどを2ターン封じます。積み合いになりやすい環境で、先にちょうはつを打つことで相手のつるぎのまいやなきごえをシャットアウトできます。
+採用率30.6%のちょうはつは、相手の積み技・回復技・ステルスロックなどを2ターン封じます。積み合いになりやすい環境で、先にちょうはつを打つことで相手のつるぎのまいやてっぺきをシャットアウトできます。
 
 メガギャラドス自身のS81は環境でやや遅めですが、環境下位のポケモンや無振りのサポート系ポケモンよりは速いため、ちょうはつを先手で打てるシーンも多くあります。
 
@@ -175,7 +187,7 @@ heroImage: '../../assets/hero-gyarados-m2.png'
   </div>
 </div>
 
-A155は環境トップクラスの攻撃力です。D130という高い特防はみずタイプポケモンの特殊技を半減で受けられる強みがあり、B109と合わせて物理・特殊ともに一定の耐久を持っています。S81はやや遅く、環境の主要アタッカーより遅いため、りゅうのまいでS補強するか後手で受けてから切り返す立ち回りが基本になります。
+A155は環境トップクラスの攻撃力です。D130という高い特防とB109で物理・特殊ともに一定の耐久を持っています。さらにいかくで相手のこうげきを下げることで、物理方面では数値以上に硬く立ち回れます。S81はやや遅く、環境の主要アタッカーより遅いため、りゅうのまいでS補強するか後手で受けてから切り返す立ち回りが基本になります。
 
 ### メガ前→メガ後ステータス変化
 
@@ -294,35 +306,35 @@ A155は環境トップクラスの攻撃力です。D130という高い特防は
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">84.0%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">安定したみず打点。命中100・ひるみ効果あり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">安定したみず打点。命中100・ひるみ20%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうのまい</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">73.0%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">A・S同時+1。1積みで全抜き射程に入るポケモンが激増</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">A・S+1。1積みで全抜き射程に入るポケモンが激増</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>じしん</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">100</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>65.6%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんきタイプ（ブリジュラス等）への確定打点。高採用必須技</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね・でんきタイプ（ブリジュラス・ハラバリー等）への確定打点。高採用必須技</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>こおりのキバ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>45.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアスに4倍。りゅうのまい後に確定1発圏内</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアスに4倍。りゅうのまい後に確定1発圏内。命中95%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>パワーウィップ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">38.3%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずタイプに等倍以上。アシレーヌ・カバルドンへの打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずタイプに等倍以上。アシレーヌ・カバルドンへの打点。命中85%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ちょうはつ</strong></td>
@@ -334,16 +346,16 @@ A155は環境トップクラスの攻撃力です。D130という高い特防は
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ゆきなだれ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60（先手75）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60（条件達成時120）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20.5%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">後手時に威力75になる。こおりのキバとの選択肢</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">後攻確定。そのターン相手から技ダメージを受けていれば威力2倍（120）。こおりのキバとの選択肢</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>やけっぱち</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75（状態異常時112）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75（条件達成時150）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく打点。やけど時に威力が1.5倍。非メガ採用の可能性も</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお打点。前ターンに自分が動けなかった・技を外した・失敗した場合に威力2倍（150）。非メガ採用の可能性も</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かみくだく</strong></td>
@@ -411,13 +423,13 @@ S81はやや遅いですが、りゅうのまいでS+1になると実数値が�
 
 S81は積み前では環境の主要アタッカーに先手を取られます。りゅうのまいを打つターンが必要なため、対戦相手にちょうはつを打たれると詰み状態になるリスクがあります。
 
-また、メガ進化ターン（1ターン目）はまだメガ前状態のため、メガ前のじめん無効を期待していた行動が、次のターンにはじめん等倍で通るようになる点を忘れないようにしましょう。
+また、メガ進化後はひこうタイプを失うためじめんが等倍で通るようになります。メガ前のじめん無効を前提にした立ち回りは、メガ進化後には通用しない点に注意が必要です。
 
 ---
 
 ### 型2: ちょうはつ積み型
 
-**採用率: AS 38.1%（ちょうはつ込み）/ ようき 41.2%**
+**採用率: AS 38.1% / ようき 41.2%**
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -448,13 +460,13 @@ S81は積み前では環境の主要アタッカーに先手を取られます�
 1. **相手のりゅうのまい封じ**: メガギャラドスのミラー対策として、相手のりゅうのまいを先に封じる
 2. **カバルドンのステロ封じ**: カバルドン（8位）が初手ステロを打ってくるのをちょうはつで阻止
 3. **回復技封じ**: ねむるやアシストパワー準備を封じる
-4. **相手の積み技カウンター**: つるぎのまいやこわいかお等の積み技をシャットアウト
+4. **相手の積み技カウンター**: つるぎのまいやりゅうのまい等の積み技をシャットアウト
 
 ようき型でS122（最速実数値）を確保することで、ちょうはつを多くのポケモンより先手で打てるようになります。ちょうはつを打った後、相手の次の行動を読んでりゅうのまいを積むか攻撃するかを判断します。
 
 **弱み:**
 
-技スロットにちょうはつを使うため、技範囲が純積み型より狭くなります。こおりのキバかじしんの一方のみ採用になるケースが多く、特定タイプへの打点が欠落します。
+技スロットにちょうはつを使うため、技範囲が積み型より狭くなります。こおりのキバかじしんの一方のみ採用になるケースが多く、特定タイプへの打点が欠落します。
 
 ---
 
@@ -532,7 +544,7 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 
 ## 環境ポケモンへの相性分析
 
-### 有利なマッチアップ
+### 有利なポケモン
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -553,14 +565,7 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ やや有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼりが等倍。S81はルカリオS90に先手を取られるが、りゅうのまい積み後で逆転可能</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    カバルドン（8位）
+    <img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン" style="width:32px;height:32px;vertical-align:middle;margin-right:6px">カバルドン（8位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">パワーウィップでくさ×2弱点。ちょうはつでステロ封じも可能</td>
@@ -572,18 +577,11 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼりでみず×2弱点（ほのお/ひこう）。りゅうのまい後なら確定1発圏内</td>
 </tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんがはがね/ドラゴンに有効（×2程度）。たきのぼりも等倍で通る</td>
-</tr>
 </tbody>
 </table>
 </div>
 
-### 苦手なマッチアップと対策
+### 苦手なポケモンと対策
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -597,24 +595,17 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0658-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
+    <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー×2弱点。ムーンフォースが痛い</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">パワーウィップで逆に弱点を突ける（くさ×2）。りゅうのまい後なら優位に</td>
 </tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（13位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ×2弱点。ギガドレインで回復しながら処理される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">こおりのキバでこおりタイプ等倍。たきのぼりで等倍。ちょうはつでギガドレイン封じも</td>
-</tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0609-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">シャンデラ系（でんき）
+    <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき×2弱点。素早さでも先手を取られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんでじめんタイプとして対抗。パーティのじめんタイプで処理</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき技（10まんボルト等）でギャラドスのでんき×2弱点を突いてくる。タイプははがね/ドラゴンだがでんき技を使う代表格</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんでブリジュラスのじめん弱点を突く。パーティのじめんタイプで処理</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -622,13 +613,6 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう×2弱点。インファイトが刺さる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">S81でルカリオS112に先手を取られる。りゅうのまいが通る状況を作る必要あり</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    ビークイン等（むしタイプ）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし×2弱点（あくタイプ弱点）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">環境での採用率は低い。たきのぼりで等倍ダメージ</td>
 </tr>
 </tbody>
 </table>
@@ -648,22 +632,10 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
     <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき対策。メガギャラドスのでんき弱点をフォロー</div>
   </div>
   <div class="partner-card">
-    
-    <div class="name">ハピナス</div>
-    <div class="rate">特殊受け</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき・フェアリー特殊技を受ける。ギャラドスの苦手を補完</div>
-  </div>
-  <div class="partner-card">
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">環境6位</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">かくとう・むし技を半減で受ける。ギャラドスの弱点補完</div>
-  </div>
-  <div class="partner-card">
-    
-    <div class="name">ジバコイル</div>
-    <div class="rate">フェアリー対策</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">フェアリー技半減。はがねタイプでアシレーヌ等に対応</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0448-00.webp" alt="メガルカリオ">
@@ -672,10 +644,10 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
     <div style="font-size:0.65rem;color:#888;margin-top:2px">非メガギャラドスとの組み合わせで同パーティに入れられる</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0724-00.webp" alt="マスカーニャ">
+    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
     <div class="name">マスカーニャ</div>
     <div class="rate">環境3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">くさ/あく。フェアリー対策にもなり技範囲補完</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">くさ/あく。エスパー・ゴーストへのあく技、みず・じめんへのくさ技で技範囲補完</div>
   </div>
 </div>
 
@@ -684,11 +656,28 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 以下の役割を補う5体を選ぶのが基本です。
 
 1. **でんき対策**: じめんタイプ（ガブリアス等）やでんき無効・半減のポケモン
-2. **フェアリー対策**: はがね・どくタイプでアシレーヌ・ミミロップに対応
+2. **フェアリー対策**: はがね・どくタイプでアシレーヌ等に対応
 3. **かくとう対策**: ひこうタイプ（アーマーガア等）でメガルカリオのインファイトを半減
 4. **先手アタッカー**: S81と遅めのギャラドスの代わりに先制できるポケモン
 
 非メガ型を選択する場合は、別のメガ進化ポケモン（メガルカリオ・メガリザードン等）と組み合わせてメガ進化権を有効活用するパーティ設計が有効です。
+
+---
+
+## データ分析：非メガ35.4%が示すタイプ変化のトレードオフ
+
+ギャラドスナイトの採用率は64.6%で、環境上位10体の中では比較的「メガ進化しない選択肢」が多いポケモンです。
+
+| 選択 | タイプ | A実数値 | じめん耐性 | 特徴 |
+|---|---|---|---|---|
+| 非メガ型（64.6%） | みず/ひこう | A125 | **無効**（ひこう） | でんき×2倍弱点 |
+| メガ型（35.4%） | みず/あく | **A155** | **等倍**（じめん） | でんき半減 |
+
+メガ進化するとこうげきが30上昇する一方、**じめん無効が失われじめんが等倍で通るようになる**というタイプ変化が発生します。M-2環境ではガブリアス（使用率1位・じしん採用率59.6%）が最多使用ポケモンであるため、このじめん等倍化は無視できないリスクです。
+
+非メガ型の持ち物採用率を見ると、たべのこし17.1%・オボンのみ6.9%・ラムのみ5.2%・カゴのみ3.8%と、**耐久・状態異常対策アイテムが上位**を占めており、メガ進化権を別のポケモンに譲った上で長期戦を見据えた構成が多いことが分かります。
+
+非メガ型はじめん無効・ひこうタイプを維持したまま強力なアタッカーとして機能し、かつメガ進化権を別のポケモンに回せる点で独自の強みがあります。35.4%という採用率はその実用性を裏付けています。
 
 ---
 
@@ -699,7 +688,6 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 <thead>
 <tr style="background:#1e3a5f;color:#fff">
   <th style="padding:10px 12px;border:1px solid #cbd5e1;text-align:left">型</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">採用率</th>
   <th style="padding:10px 12px;border:1px solid #cbd5e1">性格</th>
   <th style="padding:10px 12px;border:1px solid #cbd5e1">主な技</th>
   <th style="padding:10px 12px;border:1px solid #cbd5e1">強み</th>
@@ -708,8 +696,7 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">りゅうのまい純積み型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">38.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">りゅうのまい積み型</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">りゅうのまい・たきのぼり・じしん・こおりのキバ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">積み後の全抜き力最大。A火力を最大化</td>
@@ -717,7 +704,6 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ちょうはつ+積み型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">〜38%内</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">ちょうはつ・りゅうのまい・たきのぼり・じしん</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">相手の積み技・ステロを封じてから積める</td>
@@ -725,7 +711,6 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">AS+H補強型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">12.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり/ようき</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">りゅうのまい・たきのぼり・じしん・こおりのキバ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">積み前の被ダメ軽減。耐久性向上</td>
@@ -733,7 +718,6 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">非メガ耐久型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">35.4%（非メガ全体）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">わんぱく/いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">りゅうのまい・たきのぼり・じしん・ちょうはつ/ねむる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">他メガとの共存。じめん無効（ひこう）維持</td>
