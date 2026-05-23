@@ -659,85 +659,68 @@ AS最大化型に比べてこうげきまたはすばやさが落ちるため、
 
 ---
 
-## 相性の良いメガ進化パートナー：メガガブリアス
+## パーティ構成案
 
-スターミーと最も多く同居するのがM-2環境使用率1位のガブリアス——データが示す通り、メガスターミーの最有力パートナーはメガガブリアスです。
+M-1シーズンのスターミー同居率データ（1位：ガブリアス、3位：アーマーガア、4位：ペリッパー、5位：ギルガルド）をもとに、実際の使われ方に即した2パターンを示します。
+
+### パーティ構成案①「ガブリアス軸 バランス型」
+
+スターミーの同居率1位はガブリアス。でんき無効のじめんタイプとして、スターミーの最大の弱点をカバーしながら、ステルスロックで試合全体のダメージ効率を上げる構成です。
 
 <div style="overflow-x:auto;margin:16px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
 <thead>
 <tr>
-  <th style="padding:8px 12px;background:#f0f9ff;border:1px solid #bae6fd;text-align:left">項目</th>
-  <th style="padding:8px 12px;background:#e0f2fe;border:1px solid #7dd3fc;text-align:center"><img src="/images/pokemon/pokemon-0121-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガスターミー</th>
-  <th style="padding:8px 12px;background:#fef9c3;border:1px solid #fde047;text-align:center"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガガブリアス</th>
+  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">役割</th>
+  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">ポケモン</th>
+  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">採用理由</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0">攻撃軸</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">物理（ちからもちで実質A334）</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">物理（こうげき170）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主軸</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0121-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（スターミナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ちからもち高火力＋クイックターンでサイクルを主導</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0">主な技</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">アクアブレイク・アクアジェット・アイススピナー</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">じしん・りゅうのまい・ステルスロック</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき対策・ステロ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき無効・ブリジュラスへじしん打点。ステルスロックでクイックターンのダメージ蓄積を底上げ</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0">タイプ</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">みず・エスパー</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">じめん・ドラゴン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">物理受け・起点作り</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうタイプでくさ耐性・あく耐性。とんぼがえりでスターミーを安全に着地</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0">弱点</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">でんき・くさ・あく・ゴースト</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">こおり・ドラゴン・フェアリー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">特殊受け</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">キングシールドで削りを防ぎつつ後出し。スターミーのゴースト弱点への抑止力</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0">特性（メガ後）</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">ちからもち</td>
-  <td style="padding:8px 12px;border:1px solid #e2e8f0;text-align:center">すなのこうげき</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく・ゴースト崩し</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミーが苦手なゴースト・あく主体の相手に催眠・トリックで崩す</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・むし処理</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0006-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミーの弱点・くさ/むしをほのお技で一掃</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-### なぜこの組み合わせが強いか
-
-**スターミー選出時の補完（メガガブリアスが苦手な相手をスターミーがカバー）**
-
-- ガブリアスが苦手なほのおタイプ（リザードン等）にアクアブレイクで強力な打点
-- ガブリアスが弱点を持つフェアリータイプにしねんのずつきが等倍以上で通る
-
-**ガブリアス選出時の補完（スターミーが苦手な相手をメガガブリアスがカバー）**
-
-- じめんタイプのじしんでスターミーの最大の脅威・ブリジュラスを確実に処理
-- でんきタイプ全般に対してでんき無効（じめんタイプ）で出し勝ちを作れる
-- スターミーが苦手なあく・ゴースト主体の相手に物理火力で制圧できる
-
-**ガブリアスの主要データ（M-2）**
-
-<div style="overflow-x:auto;margin:16px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.92em">
-<thead><tr>
-  <th style="padding:8px 12px;background:#fefce8;border:1px solid #fde047;text-align:left">項目</th>
-  <th style="padding:8px 12px;background:#fefce8;border:1px solid #fde047;text-align:left">データ</th>
-</tr></thead>
-<tbody>
-<tr><td style="padding:8px 12px;border:1px solid #fef08a;font-weight:600;background:#fffef0">使用率</td><td style="padding:8px 12px;border:1px solid #fef08a">1位</td></tr>
-<tr><td style="padding:8px 12px;border:1px solid #fef08a;font-weight:600;background:#fffef0">性格（1位）</td><td style="padding:8px 12px;border:1px solid #fef08a">ようき</td></tr>
-<tr><td style="padding:8px 12px;border:1px solid #fef08a;font-weight:600;background:#fffef0">努力値（1位）</td><td style="padding:8px 12px;border:1px solid #fef08a">AS（すばやさ・こうげき全振り）</td></tr>
-<tr><td style="padding:8px 12px;border:1px solid #fef08a;font-weight:600;background:#fffef0">技構成</td><td style="padding:8px 12px;border:1px solid #fef08a">じしん / りゅうのまい / ステルスロック / アイスカッター</td></tr>
-<tr><td style="padding:8px 12px;border:1px solid #fef08a;font-weight:600;background:#fffef0">ガブリアスナイト採用率</td><td style="padding:8px 12px;border:1px solid #fef08a">環境上位の物理エースとしてメガ石採用が多い</td></tr>
-</tbody></table></div>
+**立ち回りの基本：**
+1. **アーマーガア**のとんぼがえりorガブリアスのステルスロックで試合の主導権を取る
+2. **メガスターミー**がアクアブレイク＋クイックターンで削りとサイクルを両立
+3. スターミーが不利な相手（でんき・くさ・あく）はガブリアス・リザードン・ゲンガーで対処
 
 ---
 
-## メガスターミーを軸にしたパーティ構成案
+### パーティ構成案②「ペリッパー雨展開型」
 
-1試合にメガ進化できるのは1体のみです。スターミー（スターミナイト）とガブリアス（ガブリアスナイト）を同じ6枠に入れておき、**スターミーが有利な対面にはスターミー＋サポート2体を選出してメガスターミー軸**で戦い、でんき・くさ・あくが多い等スターミーが不利な相手には**ガブリアス＋サポート2体に切り替えてメガガブリアス軸**で戦う、というスイッチ選出が基本思想です。
-
-### パーティ構成案①「ステロ展開型」
+M-1スターミーの同居率4位はペリッパー。ペリッパーのあめふらしで雨状態を作り、**アクアブレイクの火力を1.5倍**に引き上げる構成です。ちからもちとの組み合わせで火力指数はさらに跳ね上がります。
 
 <div style="overflow-x:auto;margin:16px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -750,104 +733,43 @@ AS最大化型に比べてこうげきまたはすばやさが落ちるため、
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主軸メガ枠</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">雨下エース</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0121-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（スターミナイト）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ちからもち高火力＋クイックターンで起点作り。基本選出</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">雨下アクアブレイクがちからもちと合わさり火力指数約63,000超。アクアジェットも雨下1.5倍</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">代替メガ枠</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（ガブリアスナイト）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき・くさ主体の相手にスターミーの代わりに選出しメガ進化</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ステロ＋崩し</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミーのあく・ゴースト弱点への打点。催眠・トリックで相手の積みを崩す</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">物理受け・サポート</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうタイプでくさ・あく耐性。とんぼがえりでスターミーを後ろから展開</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">特殊エース</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0006-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミーの苦手なくさ・むし処理。メガリザードンY採用でスターミーの雨補完にもなる</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">速攻・先制技</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0448-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">マッハパンチでキラフロル・ゲンガー等の処理。スターミーが不得意なあくタイプを補完</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-**スターミー選出時の流れ：**
-1. **アーマーガア**のとんぼがえりでスターミーを安全に着地
-2. **メガスターミー**がアクアブレイク高火力で削り、クイックターンでサイクルを回す
-3. ゲンガー・ルカリオが詰め・崩し役
-
-**ガブリアス選出時（でんき・くさ・あく主体の相手）：**
-1. **メガガブリアス**のりゅうのまい＋じしんで物理制圧
-2. アーマーガア・ルカリオがサポート
-3. リザードンがほのおで相手のくさ・はがねを処理
-
-### パーティ構成案②「クイックターンサイクル型」
-
-<div style="overflow-x:auto;margin:16px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.92em">
-<thead>
-<tr>
-  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">役割</th>
-  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">ポケモン</th>
-  <th style="padding:8px 12px;background:#f1f5f9;border:1px solid #cbd5e1;text-align:left">採用理由</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主軸メガ枠</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0121-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（スターミナイト）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">クイックターン＋アクアジェットの先制技でサイクルを主導。基本選出</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">代替メガ枠</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（ガブリアスナイト）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミー不利時に選出切り替え。ステルスロックでスターミーのクイックターンダメージを底上げ</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">積みエース</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0149-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガカイリュー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミーのクイックターンで有利対面を作り、りゅうのまいから全抜き</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">サイクルサポート</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">キングシールドで削りを防ぎつつ特殊受け。スターミーのあく・ゴースト弱点をゴーストタイプで牽制</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">天候展開</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0279-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ペリッパー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あめふらしで登場即雨展開。とんぼがえりでスターミーを後ろから安全に着地</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき対策</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0248-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">バンギラス</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき半減・すなあらしでスターミーの耐久サポート。あく技でゴースト処理</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき無効・じしんでブリジュラス処理。雨パの天敵・でんきタイプへの最終防衛線</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ対策</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0006-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミーの弱点・くさ・むしをほのお技で一掃</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">特殊受け</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ペリッパー・スターミーに強い特殊アタッカーを受ける。はがねタイプでくさ半減</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく・ゴースト処理</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0448-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（ルカリオナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう/はがねタイプでスターミーの弱点・あく/ゴーストを補完。バレットパンチで先制</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・むし処理</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミー・ペリッパーが弱いくさタイプを牽制。はがねタイプでフェアリーも半減</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-**スターミー選出時の流れ：**
-1. **メガスターミー**がクイックターンで相手に圧力をかけながらカイリューを後ろから着地
-2. **メガカイリュー**がりゅうのまい積みから全抜きを狙う
-3. スターミーのアクアジェットが相手の削れた先発を掃除
-
-**ガブリアス選出時（でんき・あく主体の相手）：**
-1. **ガブリアス**のステルスロックでダメージ蓄積を開始
-2. **メガガブリアス**のりゅうのまいで詰める
-3. ギルガルド・バンギラスが受け回しでサポート
+**立ち回りの基本：**
+1. **ペリッパー**を先発してとんぼがえりで雨を維持しながらスターミーを着地
+2. 雨下の**メガスターミー**がアクアブレイクで一撃圏内を広げてクイックターンでサイクルを回す
+3. でんきタイプにはガブリアスを、あく・ゴーストにはルカリオを当てて補完
 
 ---
 
