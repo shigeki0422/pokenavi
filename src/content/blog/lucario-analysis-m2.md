@@ -24,7 +24,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
   <div>
     <h2 style="margin:0 0 8px">メガルカリオ</h2>
     <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
-      <img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:44px;height:44px" />
+      <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:44px;height:44px" />
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
@@ -186,7 +186,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
 
 <div class="type-row">
   <strong>タイプ：</strong>
-  <img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="かくとう" />
+  <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="かくとう" />
   <img src="/images/types/type-08-steel.png" alt="はがね" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="はがね" />
 </div>
 
@@ -205,8 +205,8 @@ heroImage: '../../assets/hero-lucario-m2.png'
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
-      <span><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
-      <span><img src="/images/types/type-18-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
+      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
+      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -242,7 +242,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>インファイト</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">100（実質240）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">70.1%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">てきおうりょくのタイプ一致補正×2.0。使用後BとD1段階ダウン</td>
@@ -263,21 +263,21 @@ heroImage: '../../assets/hero-lucario-m2.png'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>38.2%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">A2段階アップ。AS型の必須技。1積みで全抜き圏が大幅拡大</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>しんくうは</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40（実質80）先制</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">28.0%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう先制技。優先度+1。CS特殊型でも採用可能</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はどうだん</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80（実質160）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">24.6%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">特殊かくとう技。CS型のメインウェポン。インファイトのB・Dダウンなし</td>
@@ -291,7 +291,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>しんそく</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40先制</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+1。ノーマルタイプ先制技。タスキ処理の保険として採用</td>
@@ -332,7 +332,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
 <div>
 <strong>性格:</strong> ようき（A↑ S↓は使わない）<br>
 <strong>努力値:</strong> A252 S252 B4（AS振り）<br>
-<strong>持ち物:</strong> <img class="item-icon" src="/images/items/mega-stone.png" alt="ルカリオナイト">ルカリオナイト
+<strong>持ち物:</strong> ルカリオナイト
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -374,7 +374,7 @@ S112最速を活かし、ほぼ全ての無振りポケモンより先手を取�
 <div>
 <strong>性格:</strong> おくびょう（S↑ A↓）<br>
 <strong>努力値:</strong> C252 S252 B4（CS振り）<br>
-<strong>持ち物:</strong> <img class="item-icon" src="/images/items/mega-stone.png" alt="ルカリオナイト">ルカリオナイト
+<strong>持ち物:</strong> ルカリオナイト
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -418,7 +418,7 @@ A145を生かしきれないため、物理型と比べると積み技による�
 <div>
 <strong>性格:</strong> ようき（S上昇）<br>
 <strong>努力値:</strong> A188 B68 S252 程度<br>
-<strong>持ち物:</strong> <img class="item-icon" src="/images/items/mega-stone.png" alt="ルカリオナイト">ルカリオナイト
+<strong>持ち物:</strong> ルカリオナイト
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -459,7 +459,7 @@ Bに努力値を回すことで、つるぎのまい積み中に受ける物理�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0006-01.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
+    <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ やや有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">S100でメガルカリオS112が先手。コメットパンチ等で処理。ただしほのお技には要注意</td>
@@ -473,7 +473,7 @@ Bに努力値を回すことで、つるぎのまい積み中に受ける物理�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0879-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
+    <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトでかくとう×2。S98でメガルカリオ先手。確定1発圏内</td>
@@ -517,7 +517,7 @@ Bに努力値を回すことで、つるぎのまい積み中に受ける物理�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0484-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">パルキア系（エスパー）
+    パルキア系（エスパー）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパーが弱点×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">先手で処理するかパーティで見る</td>
@@ -554,7 +554,7 @@ Bに努力値を回すことで、つるぎのまい積み中に受ける物理�
     <div style="font-size:0.65rem;color:#888;margin-top:2px">エスパー・ほのお対策として補完</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0423-00.webp" alt="トドロクツキ">
+    
     <div class="name">カバルドン</div>
     <div class="rate">環境8位</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">砂嵐+ステロでダメージ蓄積サポート</div>
@@ -578,7 +578,7 @@ Bに努力値を回すことで、つるぎのまい積み中に受ける物理�
     <div style="font-size:0.65rem;color:#888;margin-top:2px">かくとう弱点の処理。ブレイブバードで格闘対策</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0462-00.webp" alt="ジバコイル">
+    
     <div class="name">ジバコイル</div>
     <div class="rate">エスパー対策</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">はがねタイプでエスパー半減。でんき・はがね攻撃</div>

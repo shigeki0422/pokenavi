@@ -384,7 +384,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 <tr>
   <td style="padding:6px 10px;border:1px solid #86efac">3</td>
   <td style="padding:6px 10px;border:1px solid #86efac"><strong>エアスラッシュ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-11-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-02-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center">75</td>
   <td style="padding:6px 10px;border:1px solid #86efac">かくとう・むし・くさへの打点確保</td>
 </tr>
@@ -452,7 +452,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かたいツメで実質156。りゅうのまい型の核</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>エアスラッシュ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>エアスラッシュ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう・くさへの打点。ひるみ30%も優秀</td>
@@ -482,7 +482,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かたいツメで実質104。ドラゴン・みずへの打点</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>はねやすめ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>はねやすめ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.8%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HP50%回復。耐久型・積み後の長期戦向け</td>
@@ -494,7 +494,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・ひこうへの打点。かたいツメで実質97.5</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-13-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ソーラービーム</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ソーラービーム</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">58.6%*</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">※Y型込みの数値。Xではほぼ非採用</td>
@@ -554,7 +554,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 
 <div class="partner-grid">
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-1008-00.webp" alt="コライドン">
+    
     <div class="name">アーマーガア</div>
     <div class="rate">じめん・いわ無効</div>
   </div>
@@ -564,7 +564,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
     <div class="rate">フェアリー・みず対策</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0449-00.webp" alt="カバルドン">
+    
     <div class="name">カバルドン</div>
     <div class="rate">ステロ阻止・物理受け</div>
   </div>

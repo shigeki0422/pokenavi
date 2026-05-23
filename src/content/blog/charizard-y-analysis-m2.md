@@ -98,7 +98,7 @@ heroImage: '../../assets/hero-charizard-y-m2.png'
     <h2 style="margin:0 0 8px">メガリザードンY</h2>
     <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:44px;height:44px" />
-      <img src="/images/types/type-11-flying.png" alt="ひこう" style="width:44px;height:44px" />
+      <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.85rem;color:#555">
       使用率 <strong style="color:#dc2626">5位</strong>（リザードン全体） ／
@@ -255,7 +255,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 <div class="type-row">
   <strong>タイプ：</strong>
   <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="ほのお" />
-  <img src="/images/types/type-11-flying.png" alt="ひこう" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="ひこう" />
+  <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="ひこう" />
 </div>
 
 <div style="overflow-x:auto;margin:12px 0">
@@ -327,14 +327,14 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 <tr style="background:#fffbeb">
   <td style="padding:6px 10px;border:1px solid #fcd34d">2</td>
   <td style="padding:6px 10px;border:1px solid #fcd34d"><strong>ソーラービーム</strong></td>
-  <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center"><img src="/images/types/type-13-grass.png" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center"><img src="/images/types/type-11-grass.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center">120</td>
   <td style="padding:6px 10px;border:1px solid #fcd34d">ひでりで即発動。みず・じめん・いわへの打点</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #fcd34d">3</td>
   <td style="padding:6px 10px;border:1px solid #fcd34d"><strong>エアスラッシュ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center"><img src="/images/types/type-11-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center"><img src="/images/types/type-02-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center">75</td>
   <td style="padding:6px 10px;border:1px solid #fcd34d">ひこう一致技。かくとう・むし・くさへ</td>
 </tr>
@@ -394,21 +394,21 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 <tr style="background:#f0fdf4">
   <td style="padding:6px 10px;border:1px solid #86efac">2</td>
   <td style="padding:6px 10px;border:1px solid #86efac"><strong>ソーラービーム</strong></td>
-  <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-13-grass.png" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-11-grass.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center">120</td>
   <td style="padding:6px 10px;border:1px solid #86efac">ひでりで即発動。みず/いわ/じめんへの打点</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #86efac">3</td>
   <td style="padding:6px 10px;border:1px solid #86efac"><strong>エアスラッシュ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-11-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-02-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center">75</td>
   <td style="padding:6px 10px;border:1px solid #86efac">ひこう一致打点。ひるみ30%も優秀</td>
 </tr>
 <tr style="background:#f0fdf4">
   <td style="padding:6px 10px;border:1px solid #86efac">4</td>
   <td style="padding:6px 10px;border:1px solid #86efac"><strong>はねやすめ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-01-normal.png" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-00-normal.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center">—</td>
   <td style="padding:6px 10px;border:1px solid #86efac">HP50%回復。S高い分先に動いて回復できる</td>
 </tr>
@@ -453,7 +453,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-13-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ソーラービーム</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ソーラービーム</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>58.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひでりで即発動。Y最多採用技。みず/いわ/じめん打点</td>
@@ -465,7 +465,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひでり×一致補正込みで実質202.5。安定したほのお打点</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>エアスラッシュ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>エアスラッシュ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう一致技。かくとう・くさへ。ひるみ30%</td>
@@ -477,7 +477,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">C-2の代わりに最大火力。ひでり込みで実質292.5</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>はねやすめ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>はねやすめ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.8%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HP50%回復。S優位を活かして先に回復できる場面も</td>
@@ -520,7 +520,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
   <td style="padding:8px 12px;border:1px solid #fed7aa">ウルガモス・ヒードランなど後続が強化</td>
 </tr>
 <tr style="background:#fffbeb">
-  <td style="padding:8px 12px;border:1px solid #fed7aa"><img src="/images/types/type-13-grass.png" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ソーラービーム持ち</td>
+  <td style="padding:8px 12px;border:1px solid #fed7aa"><img src="/images/types/type-11-grass.png" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ソーラービーム持ち</td>
   <td style="padding:8px 12px;border:1px solid #fed7aa">2ターン→1ターン即発動</td>
   <td style="padding:8px 12px;border:1px solid #fed7aa">くさタイプへの広範囲対応</td>
 </tr>
@@ -555,7 +555,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
   <td style="padding:8px 12px;border:1px solid #fca5a5">アーマーガア・ハッサム</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0382-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（使用率2位）</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（使用率2位）</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">ブレイブバードorいわ技でYを一撃。S60で後手になるが技次第</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">ガブリアス・カバルドン</td>
 </tr>
@@ -609,7 +609,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
     <div class="rate">いわ受け・特殊耐性</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0245-00.webp" alt="ハッサム">
+    
     <div class="name">ハッサム</div>
     <div class="rate">フェアリー・いわ対策</div>
   </div>

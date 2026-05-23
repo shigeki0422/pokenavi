@@ -381,7 +381,7 @@ A155は環境トップクラスの攻撃力です。D130という高い特防は
 <div>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>努力値:</strong> A252 S252 H4（AS振り）<br>
-<strong>持ち物:</strong> <img class="item-icon" src="/images/items/mega-stone.png" alt="ギャラドスナイト">ギャラドスナイト
+<strong>持ち物:</strong> ギャラドスナイト
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -429,7 +429,7 @@ S81は積み前では環境の主要アタッカーに先手を取られます�
 <div>
 <strong>性格:</strong> ようき（S↑ C↓）<br>
 <strong>努力値:</strong> A252 S252 H4（AS振り）<br>
-<strong>持ち物:</strong> <img class="item-icon" src="/images/items/mega-stone.png" alt="ギャラドスナイト">ギャラドスナイト
+<strong>持ち物:</strong> ギャラドスナイト
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -472,7 +472,7 @@ S81は積み前では環境の主要アタッカーに先手を取られます�
 <div>
 <strong>性格:</strong> いじっぱり / ようき<br>
 <strong>努力値:</strong> H84 A172 S252 程度<br>
-<strong>持ち物:</strong> <img class="item-icon" src="/images/items/mega-stone.png" alt="ギャラドスナイト">ギャラドスナイト
+<strong>持ち物:</strong> ギャラドスナイト
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -560,7 +560,7 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0423-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（8位）
+    カバルドン（8位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">パワーウィップでくさ×2弱点。ちょうはつでステロ封じも可能</td>
@@ -604,7 +604,7 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0871-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（13位）
+    <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（13位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ×2弱点。ギガドレインで回復しながら処理される</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">こおりのキバでこおりタイプ等倍。たきのぼりで等倍。ちょうはつでギガドレイン封じも</td>
@@ -625,7 +625,7 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0416-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ビークイン等（むしタイプ）
+    ビークイン等（むしタイプ）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">むし×2弱点（あくタイプ弱点）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">環境での採用率は低い。たきのぼりで等倍ダメージ</td>
@@ -648,19 +648,19 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
     <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき対策。メガギャラドスのでんき弱点をフォロー</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0185-00.webp" alt="ハピナス">
+    
     <div class="name">ハピナス</div>
     <div class="rate">特殊受け</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき・フェアリー特殊技を受ける。ギャラドスの苦手を補完</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0879-00.webp" alt="アーマーガア">
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">環境6位</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">かくとう・むし技を半減で受ける。ギャラドスの弱点補完</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0462-00.webp" alt="ジバコイル">
+    
     <div class="name">ジバコイル</div>
     <div class="rate">フェアリー対策</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">フェアリー技半減。はがねタイプでアシレーヌ等に対応</div>

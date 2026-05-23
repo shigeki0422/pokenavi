@@ -157,15 +157,15 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center">
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
-      <span><img src="/images/types/type-18-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
-      <span><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
+      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
+      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center">
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
-      <span><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
-      <span><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
+      <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
+      <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">なし</td>
@@ -517,7 +517,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/types/type-13-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">エナジーボール
+    <img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">エナジーボール
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.3%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・じめん・いわへの抜群。だいちのちからと合わせて水タイプのカバレッジ確保</td>
@@ -566,14 +566,14 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0423-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">みず/じめんタイプ全般
+    みず/じめんタイプ全般
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技もみず技も4倍と2倍弱点で超危険</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">エナジーボール採用で抵抗できる場合も。基本は後続のくさタイプで対処</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0484-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">パルキア等みずタイプ
+    パルキア等みずタイプ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず×2倍。特にC特化みずアタッカーのなみのり等で削られやすい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">エナジーボールで等倍以上が取れる。先手を取れるなら強気に攻める</td>
@@ -593,7 +593,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 
 <div class="partner-grid">
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0822-00.webp" alt="アーマーガア" />
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" />
     <div class="name">アーマーガア</div>
     <div class="rate">使用率6位</div>
     <div style="font-size:0.65rem;color:#555;margin-top:2px">ガブリアスのじしんを無効化。キラフロルの最大弱点を完全にカバー</div>
@@ -617,13 +617,13 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
     <div style="font-size:0.65rem;color:#555;margin-top:2px">キラフロルが苦手なみずタイプへの回答。はがね技でエスパーも対処</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0598-00.webp" alt="ナットレイ" />
+    
     <div class="name">ナットレイ</div>
     <div class="rate">くさ/はがね</div>
     <div style="font-size:0.65rem;color:#555;margin-top:2px">みず・じめん・エスパーを耐性で受ける。キラフロルの弱点3つをカバー</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0006-01.webp" alt="メガリザX" />
+    <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザX" />
     <div class="name">メガリザX</div>
     <div class="rate">タスキキラと相性◎</div>
     <div style="font-size:0.65rem;color:#555;margin-top:2px">タスキキラフロルでステロを撒き、メガリザXがエースとして後発</div>

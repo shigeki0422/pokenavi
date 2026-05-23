@@ -112,14 +112,14 @@ heroImage: '../../assets/hero-scizor-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669">相殺</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">かくとう</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">かくとう</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">×0.5</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">×1（等倍）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669">相殺</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">ひこう</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">ひこう</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">×0.5</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">×1（等倍）</td>
@@ -163,7 +163,7 @@ heroImage: '../../assets/hero-scizor-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">メガハッサムより低い</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0245-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">スイクン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">スイクン</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">115</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">メガハッサムより低い</td>
 </tr>
@@ -312,7 +312,7 @@ M-2環境で最も採用率が高い基本形です。
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img class="item-icon" src="/images/items/mega-stone.png" alt="">ハッサムナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ハッサムナイト</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例①</strong></td>
@@ -375,7 +375,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img class="item-icon" src="/images/items/mega-stone.png" alt="">ハッサムナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ハッサムナイト</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例</strong></td>
@@ -425,7 +425,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img class="item-icon" src="/images/items/mega-stone.png" alt="">ハッサムナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ハッサムナイト</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例</strong></td>
@@ -519,14 +519,14 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>89.3%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげき2段階アップ。積み後のバレットパンチが先制圏で多くのポケモンを確定1発に</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>インファイト</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>74.7%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがねタイプへの対抗手段。ガブリアスやトリトドンなど幅広い相手に通る。ぼうぎょ・とくぼうが各1段階下がるデメリットあり</td>
 </tr>
@@ -540,7 +540,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はねやすめ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>27.7%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HP半分回復。耐久型で長期戦を狙う場合に採用。防御140と組み合わせると場持ちが大幅に向上</td>
 </tr>
@@ -554,7 +554,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ダブルウイング</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>11.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">40×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">テクニシャン補正あり（40×1.5=60×2）。かくとう・むし弱点への対抗手段として採用される場合がある</td>
 </tr>
@@ -598,25 +598,25 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 </thead>
 <tbody>
 <tr style="background:#fee2e2">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-01.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードンX</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードンX</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>4倍弱点のほのお持ち最大の天敵</strong>。フレアドライブ一発で確定1発。メガハッサムが場に出ている状態でリザードンXが出てきたら即交代必至</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">リザードン対策枠を必ずパーティに入れる（みず・いわ・ドラゴン等）</td>
 </tr>
 <tr style="background:#fee2e2">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-02.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードンY</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードンY</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位（同)</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">日照りソーラービームなどのほのお技で4倍弱点。Cが高いため一撃で倒される</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">リザードンX同様に対策枠が必要</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0244-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">エンテイ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エンテイ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおタイプの強力なアタッカー。4倍弱点で倒される</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">出し負けを避ける</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0485-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ヒードラン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヒードラン</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお/はがね複合でインファイトが等倍。ほのお技4倍弱点で一撃を受ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技持ちをパーティに</td>
@@ -655,7 +655,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
     <div class="rate">高速+タイプ補完</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0076-00.webp" alt="ゴローニャ">
+    
     <div class="name">いわタイプ枠</div>
     <div class="rate">ほのお・ひこう対策</div>
   </div>

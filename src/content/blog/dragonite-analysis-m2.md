@@ -30,7 +30,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
     <h2 style="margin:0 0 6px">メガカイリュー</h2>
     <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
       <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:44px;height:44px" />
-      <img src="/images/types/type-11-flying.png" alt="ひこう" style="width:44px;height:44px" />
+      <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.85rem;color:#555">
       使用率 <strong>17位</strong> ／ カイリュナイト採用率 <strong>80.8%</strong>
@@ -66,7 +66,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 <tr style="background:#f1f5f9">
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">ポケモン</th>
   <th style="padding:6px 4px;border:1px solid #cbd5e1;min-width:60px"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:26px;height:26px;display:block;margin:0 auto 2px">りゅうせいぐん</th>
-  <th style="padding:6px 4px;border:1px solid #cbd5e1;min-width:60px"><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:26px;height:26px;display:block;margin:0 auto 2px">エアスラッシュ</th>
+  <th style="padding:6px 4px;border:1px solid #cbd5e1;min-width:60px"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:26px;height:26px;display:block;margin:0 auto 2px">エアスラッシュ</th>
   <th style="padding:6px 4px;border:1px solid #cbd5e1;min-width:60px"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:26px;height:26px;display:block;margin:0 auto 2px">10まんボルト</th>
   <th style="padding:6px 4px;border:1px solid #cbd5e1;min-width:60px"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:26px;height:26px;display:block;margin:0 auto 2px">かえんほうしゃ</th>
 </tr>
@@ -101,7 +101,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
 </tr>
 <tr>
-  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0879-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
@@ -129,7 +129,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
 </tr>
 <tr>
-  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0277-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ミミロップ</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0428-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ミミロップ</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
@@ -220,7 +220,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 <div class="type-row">
   <strong>タイプ：</strong>
   <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="ドラゴン" />
-  <img src="/images/types/type-11-flying.png" alt="ひこう" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="ひこう" />
+  <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="ひこう" />
 </div>
 
 <div style="overflow-x:auto;margin:12px 0">
@@ -245,10 +245,10 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle;margin-right:2px">むし（0.5倍）<br>
-    <img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-right:2px">かくとう（0.5倍）<br>
+    <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-right:2px">かくとう（0.5倍）<br>
     <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:2px">ほのお（0.5倍）<br>
     <img src="/images/types/type-10-water.png" alt="みず" style="width:24px;height:24px;vertical-align:middle;margin-right:2px">みず（0.5倍）<br>
-    <img src="/images/types/type-13-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:2px">くさ（0.25倍）
+    <img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:2px">くさ（0.25倍）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle;margin-right:2px">じめん
@@ -278,7 +278,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>エアスラッシュ</strong></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>54.5%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう一致技。ひるみ30%付きでサイクルを崩す</td>
@@ -306,14 +306,14 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>しんそく</strong></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">物理</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>44.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技フィニッシャー。りゅうせいぐんCダウン後の保険</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はねやすめ</strong></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">変化</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>35.3%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HP回復。耐久寄り運用・みがわりとの組み合わせ</td>
@@ -341,7 +341,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>みがわり</strong></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">変化</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12.7%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はねやすめ・たべのこしとの組み合わせで耐久戦</td>
@@ -507,7 +507,7 @@ CS比較でのとくこうとすばやさが若干低下するため、火力面
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #fca5a5">
-    <img src="/images/pokemon/pokemon-0277-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ミミロップ
+    <img src="/images/pokemon/pokemon-0428-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ミミロップ
     <small style="color:#94a3b8;display:block">ノーマル/フェアリー</small>
   </td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">フェアリータイプでりゅうせいぐんが無効。高いこうげきと特性で対策</td>
@@ -515,7 +515,7 @@ CS比較でのとくこうとすばやさが若干低下するため、火力面
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #fca5a5">
-    <img src="/images/pokemon/pokemon-1001-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">フラエッテ（永遠）
+    <img src="/images/pokemon/pokemon-0670-05.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">フラエッテ（永遠）
     <small style="color:#94a3b8;display:block">フェアリー</small>
   </td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">フェアリータイプでりゅうせいぐん無効。高いとくぼうでダメージが通りにくい</td>
@@ -523,7 +523,7 @@ CS比較でのとくこうとすばやさが若干低下するため、火力面
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #fca5a5">
-    <img src="/images/pokemon/pokemon-0879-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア
+    <img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア
     <small style="color:#94a3b8;display:block">はがね/ひこう</small>
   </td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">はがね/ひこうでドラゴン0.5倍・ひこう0.5倍。高い物理耐久</td>
@@ -531,7 +531,7 @@ CS比較でのとくこうとすばやさが若干低下するため、火力面
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #fca5a5">
-    <img src="/images/pokemon/pokemon-0245-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">スイクン系・みずタイプ高耐久
+    スイクン系・みずタイプ高耐久
     <small style="color:#94a3b8;display:block">みず</small>
   </td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">Dが高いみずタイプはかえんほうしゃが通らず、10まんボルトも耐える場合がある</td>
@@ -571,13 +571,13 @@ CS比較でのとくこうとすばやさが若干低下するため、火力面
     <div style="font-size:0.68rem;color:#555;margin-top:2px">ミミロップ・フラエッテへの回答</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0476-00.webp" alt="ドータクン系">
+    
     <div class="name">はがねタイプ</div>
     <div class="rate">こおり受け</div>
     <div style="font-size:0.68rem;color:#555;margin-top:2px">カイリューの4倍弱点こおりを受けられる</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0113-00.webp" alt="ハピナス">
+    
     <div class="name">とくぼう壁</div>
     <div class="rate">特殊受け</div>
     <div style="font-size:0.68rem;color:#555;margin-top:2px">カイリューが苦手な特殊こおり技を受ける</div>

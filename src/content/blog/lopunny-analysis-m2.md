@@ -23,8 +23,8 @@ heroImage: '../../assets/hero-lopunny-m2.png'
   <div>
     <h2 style="margin:0 0 6px">ミミロップ（メガ進化）</h2>
     <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
-      <img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
-      <img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
+      <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
+      <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="margin-top:6px;font-size:0.85rem;color:#555">
       使用率 <strong>14位</strong> ／ メガ石採用率（ミミロップナイト）<strong>96.4%</strong>
@@ -172,8 +172,8 @@ heroImage: '../../assets/hero-lopunny-m2.png'
 
 <div style="display:flex;align-items:center;gap:6px;margin:10px 0">
   <strong>タイプ：</strong>
-  <img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
-  <img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
+  <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
+  <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
 </div>
 
 <div style="overflow-x:auto;margin:12px 0">
@@ -189,9 +189,9 @@ heroImage: '../../assets/hero-lopunny-m2.png'
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
-      <span><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> かくとう</span>
-      <span><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> ひこう</span>
-      <span><img src="/images/types/type-18-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> エスパー</span>
+      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> かくとう</span>
+      <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> ひこう</span>
+      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> エスパー</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> フェアリー</span>
     </div>
   </td>
@@ -245,7 +245,7 @@ M-2環境で最も採用率が高い形です。
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img class="item-icon" src="/images/items/mega-stone.png" alt="">ミミロップナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ミミロップナイト</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例①</strong></td>
@@ -304,7 +304,7 @@ M-2環境で最も採用率が高い形です。
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img class="item-icon" src="/images/items/mega-stone.png" alt="">ミミロップナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ミミロップナイト</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例</strong></td>
@@ -354,7 +354,7 @@ M-2環境で最も採用率が高い形です。
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img class="item-icon" src="/images/items/mega-stone.png" alt="">ミミロップナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ミミロップナイト</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例</strong></td>
@@ -396,14 +396,14 @@ M-2環境で最も採用率が高い形です。
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ねこだまし</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>67.4%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">40</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技・相手を1ターン怯ませる。S135で確実に先手をとれるため安定した妨害手段</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>インファイト</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>62.5%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">最高威力のかくとう技。使用後ぼうぎょ・とくぼうが各1段階下がるデメリットあり。スクラッピーでゴーストにも有効</td>
 </tr>
@@ -417,28 +417,28 @@ M-2環境で最も採用率が高い形です。
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とびひざげり</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>31.6%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">130</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">威力130の高火力かくとう技。外れると自分がダメージを受けるリスクあり。インファイトとの差別化ポイントはデメリット内容</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>マッハパンチ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>31.5%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">40</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">先制かくとう技（優先度+1）。スクラッピーでゴーストにも有効。つるぎのまい後のフィニッシュ手段</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>30.6%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげき2段階アップ。A136→272相当になり、多くのポケモンを確定1発圏に</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>メガトンキック</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>23.6%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル一致の高火力技。かくとう耐性（はがね・ノーマルなど）持ちへの対抗手段</td>
 </tr>
@@ -459,7 +459,7 @@ M-2環境で最も採用率が高い形です。
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ギガインパクト</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>13.5%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">150</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">威力150の大技だが使用後1ターン反動で動けない。つるぎのまいとの組み合わせで確定1発フィニッシャーとして採用</td>
 </tr>
@@ -496,7 +496,7 @@ M-2環境で最も採用率が高い形です。
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-01.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードンX</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードンX</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン/ほのおタイプ。インファイトが等倍、かつリザードンX自体の火力も高い</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチで対抗可能。ただし先制できる保証が必要</td>
@@ -539,7 +539,7 @@ M-2環境で最も採用率が高い形です。
 
 <div class="partner-grid">
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0800-00.webp" alt="ネクロズマ">
+    
     <div class="name">ネクロズマ系</div>
     <div class="rate">エスパー対策</div>
   </div>

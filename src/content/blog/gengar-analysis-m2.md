@@ -1,6 +1,6 @@
 ---
-title: '【ポケモンチャンピオンズ】メガゲンガー徹底考察 M-2シーズン かげふみ＋みちづれの全て'
-description: 'M-2シーズン使用率12位のメガゲンガーを徹底分析。かげふみ+みちづれの道連れ戦略、C170ヘドロウェーブの火力、おくびょうCS型とタスキ型の使い分けまで実データをもとに解説します。'
+title: '【ポケモンチャンピオンズ】メガゲンガー徹底考察 M-2シーズン かげふみ詰め・高火力アタッカー完全解説'
+description: 'M-2シーズン使用率12位のメガゲンガーを徹底分析。かげふみで逃げ場をなくし、C170ヘドロウェーブの超火力で削る戦略を解説。おくびょうCS型とタスキ型の使い分けまで実データをもとに解説します。'
 pubDate: '2026-05-22'
 draft: true
 heroImage: '../../assets/hero-gengar-m2.png'
@@ -38,19 +38,17 @@ heroImage: '../../assets/hero-gengar-m2.png'
 
 M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**を記録しています。ゲンガナイト採用率が**83.3%**と非常に高く、ほとんどのプレイヤーがメガ進化を前提に採用しています。
 
-その理由は単純です。メガゲンガーは「逃げ場なし」「道連れ」「C170の超火力」という3つの要素が合わさり、**相手のパーティの軸を確実に1体処理できる**存在だからです。
+その理由は単純です。メガゲンガーは「かげふみによる逃げ場なし」「C170の超火力」「S130の先制力」という3つの要素が合わさり、**相手のパーティの軸を確実に1体処理できる**存在だからです。
 
 ---
 
 ## なぜ今メガゲンガーが強いのか
 
-### 理由1: かげふみ＋みちづれの「道連れ戦略」
+### 理由1: かげふみによる交代封じ
 
 通常の対戦では、相手が不利な対面になったとき**すぐ交代**して状況をリセットできます。しかしメガゲンガーの「かげふみ」は**場に出ている相手ポケモンを強制的にその場に縛りつけ、交代を一切許しません**。
 
-そこへ「みちづれ」を使えば、次のターンに攻撃技を受けると同時に相手を道連れにして1体確実に処理できます。相手はこの状況から逃れる手段がほぼなく、確実に1体をトレードすることが可能です。
-
-これが「道連れ戦略」と呼ばれる、M-2環境で猛威を振るっているゲンガーの最強ギミックです。
+交代を封じた状態でC170のヘドロウェーブやシャドーボールで削り、相手を対面処理するのが基本戦術です。みちづれ（採用率約30%）を採用した場合は道連れ戦略も選択肢に入ります。
 
 ### 理由2: C170＋S130のスペックが環境最高水準
 
@@ -163,7 +161,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center">
-      <span><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
+      <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
     </div>
   </td>
@@ -207,7 +205,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img class="item-icon" src="/images/items/mega-stone.webp" alt="ゲンガナイト" onerror="this.style.display='none'">ゲンガナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゲンガナイト</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">技構成例①</td>
@@ -227,7 +225,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 
 **強み：**
 
-メガゲンガー最大の武器は「かげふみ＋みちづれ」コンビです。道連れ戦略の流れは以下の通りです。
+かげふみで相手の交代を封じてからC170の攻撃で削るのが基本です。みちづれを採用する場合、道連れ戦略の流れは以下の通りです。
 
 1. 相手の強力なポケモン（ガブリアスやルカリオなど）に対してゲンガーを繰り出す
 2. メガ進化してかげふみを発動。相手は**交代不能**になる
@@ -466,7 +464,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">まもる
+    <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">まもる
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15.3%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">どくどく・おにびのターン消費補助。相手の技を読んで情報収集にも使える</td>
@@ -492,7 +490,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 ### 技の組み合わせ戦略
 
 **【道連れ軸】ヘドロウェーブ＋シャドーボール＋みちづれ＋α**
-最も採用率が高い基本構成。4枠目はこごえるかぜ・おにび・きあいだまのいずれかから環境に合わせて選択します。みちづれがないと道連れ戦略が成立しないため、みちづれは最優先で採用してください。
+最も採用率が高い基本構成。4枠目はこごえるかぜ・おにび・きあいだまのいずれかから環境に合わせて選択します。
 
 **【おにびたたりめ軸】ヘドロウェーブ＋たたりめ＋おにび＋みちづれ**
 物理アタッカーが多い環境向けの構成。おにびを当ててこうげきを半分にしてから、たたりめで威力2倍の攻撃を繰り返す戦法です。かげふみで逃げられないため、おにびを当てた後はほぼ詰め状態になります。
@@ -558,13 +556,13 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
     <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーが苦手な物理アタッカーを後出しで処理</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0598-00.webp" alt="ナットレイ" />
+    
     <div class="name">ナットレイ</div>
     <div class="rate">くさ/はがね</div>
     <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーの弱点エスパー・あくをはがねで耐性カバー</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0006-01.webp" alt="リザードン(X)" />
+    <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン(X)" />
     <div class="name">メガリザX</div>
     <div class="rate">使用率5位</div>
     <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーがタスキ運用時のメガ枠候補</div>
@@ -576,13 +574,13 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
     <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーの弱点エスパーをあくの力持ち技でカバー</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0879-00.webp" alt="アーマーガア" />
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" />
     <div class="name">アーマーガア</div>
     <div class="rate">使用率6位</div>
     <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーのじめん弱点をひこうタイプで完全カバー</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0230-00.webp" alt="キングドラ" />
+    
     <div class="name">キングドラ</div>
     <div class="rate">みず/ドラゴン</div>
     <div style="font-size:0.65rem;color:#555;margin-top:2px">こごえるかぜで遅くした相手に上から攻撃できる</div>
