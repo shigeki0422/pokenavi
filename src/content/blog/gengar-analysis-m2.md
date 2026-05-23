@@ -500,6 +500,275 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 
 ---
 
+## データ分析①：きあいだまのカバレッジ価値
+
+ゲンガーはゴースト/どくの2タイプを軸に戦うが、この2種類だけでは環境上位20体の多くに等倍止まりとなる。きあいだまを採用することで何体を抜群圏に追加できるかを計算した。
+
+**判定基準**：そのポケモンのタイプに対して最も高い倍率が取れる技を選択
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.88em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">順位・ポケモン</th>
+  <th style="padding:6px 8px;border:1px solid #cbd5e1">タイプ</th>
+  <th style="padding:6px 8px;border:1px solid #cbd5e1">ゴースト<br><span style="font-size:0.8em;font-weight:normal">シャドーボール</span></th>
+  <th style="padding:6px 8px;border:1px solid #cbd5e1">どく<br><span style="font-size:0.8em;font-weight:normal">ヘドロウェーブ</span></th>
+  <th style="padding:6px 8px;border:1px solid #cbd5e1">かくとう<br><span style="font-size:0.8em;font-weight:normal">きあいだま</span></th>
+  <th style="padding:6px 8px;border:1px solid #cbd5e1">最大倍率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">1位 ガブリアス</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">ドラゴン/じめん</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">2位 ブリジュラス</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">はがね/ドラゴン</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#f0fdf4;font-weight:bold">×2</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#16a34a">×2 ★</td>
+</tr>
+<tr>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0934-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">3位 マスカーニャ</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">くさ/あく</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#f0fdf4;font-weight:bold">×2</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#f0fdf4">×2</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#16a34a">×2</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">4位 アシレーヌ</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">みず/フェアリー</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#f0fdf4;font-weight:bold">×2</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#16a34a">×2</td>
+</tr>
+<tr>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">5位 リザードン</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">ほのお/ひこう</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">6位 アーマーガア</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">はがね/ひこう</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
+</tr>
+<tr>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0902-01.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">7位 イダイトウ(♂)</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">みず/ほのお</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">8位 カバルドン</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">じめん</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
+</tr>
+<tr>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0448-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">9位 ルカリオ</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">かくとう/はがね</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#f0fdf4;font-weight:bold">×2</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#16a34a">×2 ★</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0130-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">11位 ギャラドス</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">みず/ひこう</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
+</tr>
+<tr>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0670-05.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">12位 フラエッテ:永遠</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">フェアリー</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#f0fdf4;font-weight:bold">×2</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#16a34a">×2</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0681-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">13位 ギルガルド</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">はがね/ゴースト</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#f0fdf4;font-weight:bold">×2</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.25</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fef2f2">×0</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#16a34a">×2</td>
+</tr>
+<tr>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0970-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">14位 キラフロル</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">いわ/どく</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fef2f2">×0.25</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0428-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">15位 ミミロップ</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">ノーマル(/かくとう)</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fef2f2">×0</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#f0fdf4;font-weight:bold">×2</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#16a34a">×2 ★</td>
+</tr>
+<tr>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0149-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">16位 カイリュー</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">ドラゴン/ひこう</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0212-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">17位 ハッサム</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">むし/はがね</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fef2f2">×0.25</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
+</tr>
+<tr>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">18位 ウルガモス</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">ほのお/むし</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0778-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">19位 ミミッキュ</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">ゴースト/フェアリー</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#f0fdf4;font-weight:bold">×2</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fef2f2">×0</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#16a34a">×2</td>
+</tr>
+<tr>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0121-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">20位 スターミー</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">みず/エスパー</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#f0fdf4;font-weight:bold">×2</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold;color:#16a34a">×2</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div style="background:#f0fdf4;border-left:4px solid #16a34a;padding:10px 16px;margin:12px 0;border-radius:0 6px 6px 0;font-size:0.9em">
+<strong>きあいだまの採用価値：</strong>ゴースト+どく技のみでは上位20体中<strong>7体(35%)</strong>にしか抜群が取れない。きあいだまを加えると<strong>10体(50%)</strong>に拡大。特に2位ブリジュラス・9位ルカリオという環境上位の重要ポケモンへの抜群が初めて取れる点が採用率40.8%の裏付けとなっている。<br>
+一方、1位ガブリアス・5位リザードン・6位アーマーガア・8位カバルドンなど10体は3技すべてで等倍止まりとなる。これらへはC170の火力での強引な2発圏内での対処が現実的な対策となる。
+</div>
+
+---
+
+## データ分析②：M-1→M-2シーズン技構成の変化
+
+M-1とM-2で技採用率を比較すると、ゲンガーの戦い方が大きく変化していることがわかる。
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">M-1</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">M-2</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">変化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-03-poison.png" alt="どく" style="width:20px;height:20px;vertical-align:middle;margin-right:4px">ヘドロウェーブ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">82.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">81.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#64748b">−0.6pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:20px;height:20px;vertical-align:middle;margin-right:4px">シャドーボール</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">83.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">73.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#dc2626">−9.8pp ↓</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:20px;height:20px;vertical-align:middle;margin-right:4px">みちづれ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">45.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">30.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">−14.8pp ↓↓</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:20px;height:20px;vertical-align:middle;margin-right:4px">きあいだま</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">38.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">40.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#64748b">+2.6pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:20px;height:20px;vertical-align:middle;margin-right:4px">こごえるかぜ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">27.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">35.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#16a34a">+8.0pp ↑</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:20px;height:20px;vertical-align:middle;margin-right:4px">たたりめ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">14.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">24.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#16a34a;font-weight:bold">+10.2pp ↑↑</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:20px;height:20px;vertical-align:middle;margin-right:4px">おにび</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">13.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">23.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#16a34a;font-weight:bold">+9.3pp ↑↑</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:20px;height:20px;vertical-align:middle;margin-right:4px">みがわり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">16.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">11.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#dc2626">−4.9pp ↓</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+**読み取れる環境変化の3つのポイント：**
+
+**① みちづれの急落（−14.8pp）とおにびたたりめの台頭（各+9〜10pp）**
+
+M-2でおにびとたたりめが同時に急増しているのは偶然ではない。「かげふみで縛る→おにびでこうげきを半分に下げる→たたりめで実質2倍ダメージ」という詰め戦術がM-2で広まったことを示している。おにびを採用するとみちづれの枠が埋まるため、みちづれの採用率が押し出される形で低下している。
+
+**② こごえるかぜの増加（+8.0pp）**
+
+M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9位)など高S帯のポケモンが多く、こごえるかぜで後続のS関係を整えるニーズが高まっている。
+
+**③ 同居ポケモンの変化**
+
+| M-1 上位4 | M-2 上位4 |
+|---|---|
+| ガブリアス・アシレーヌ・アーマーガア・**ブラッキー** | ガブリアス・アシレーヌ・アーマーガア・**ブリジュラス** |
+
+ブラッキーに代わりブリジュラスが上位に入った。M-2ではブリジュラスへの対策としてきあいだまの採用が増えた点（+2.6pp）とも整合している。
+
+---
+
 ## パーティ構成
 
 ### 苦手なポケモン
