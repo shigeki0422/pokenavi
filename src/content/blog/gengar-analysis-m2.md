@@ -387,11 +387,6 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">◎ 最強ギミック</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">△ 交代逃げされる</td>
 </tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん耐性</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">× 等倍で入る</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">◎ 完全無効</td>
-</tr>
 </tbody>
 </table>
 </div>
