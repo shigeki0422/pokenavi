@@ -419,7 +419,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
     <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">シャドーボール
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">73.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト技の主力。エスパー・ゴーストに抜群。フェアリーへの有効打はヘドロウェーブ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト技の主力。エスパー・ゴーストに抜群</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
