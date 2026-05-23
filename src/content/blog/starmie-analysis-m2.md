@@ -261,6 +261,66 @@ Lv50・いじっぱり・A252振り（実A167）、ちからもち適用後（�
 
 メガスターミーのアクアブレイク火力指数**42,585**は、同じみず物理技のメガギャラドスを**20%超上回る**。ちからもちの効果がいかに強力かを示しています。
 
+---
+
+#### 等倍アクアブレイクが確定1発を取れるM-2上位ポケモン
+
+いじっぱりA252・実A334の条件で、みずタイプ**等倍**のM-2上位ポケモンへのダメージを、各記事の使用率最多型の実数値で算出します。
+
+```
+Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
+ダメージ幅 = floor(Base × 1.5 × 0.85) 〜 floor(Base × 1.5)
+```
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<thead>
+<tr style="background:#e0f2fe">
+  <th style="padding:8px 12px;border:1px solid #7dd3fc;text-align:left">ポケモン</th>
+  <th style="padding:8px 12px;border:1px solid #7dd3fc;text-align:left">使用率最多型（採用率）</th>
+  <th style="padding:8px 12px;border:1px solid #7dd3fc;text-align:center">B実数値</th>
+  <th style="padding:8px 12px;border:1px solid #7dd3fc;text-align:center">HP実数値</th>
+  <th style="padding:8px 12px;border:1px solid #7dd3fc;text-align:center">ダメージ幅</th>
+  <th style="padding:8px 12px;border:1px solid #7dd3fc;text-align:center">HP比</th>
+  <th style="padding:8px 12px;border:1px solid #7dd3fc;text-align:center">確定数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #bae6fd">メガゲンガー（12位）<br><small style="color:#94a3b8">ゴースト/どく</small></td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd">おくびょうCS252（63.0%）</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">100</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">135</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">161〜190</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">119〜141%</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center;font-weight:700;color:#0369a1">確定1発</td>
+</tr>
+<tr style="background:#f0f9ff">
+  <td style="padding:8px 12px;border:1px solid #bae6fd">メガルカリオ（9位）<br><small style="color:#94a3b8">かくとう/はがね</small></td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd">ようきA252S252B4（57.8%）</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">109</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">145</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">147〜174</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">101〜120%</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center;font-weight:700;color:#0369a1">確定1発</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #bae6fd">メガミミロップ（14位）<br><small style="color:#94a3b8">ノーマル/かくとう</small></td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd">ようきAS252（約60〜65%）</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">114</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">140</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">141〜166</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">101〜119%</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center;font-weight:700;color:#0369a1">確定1発</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+メガルカリオは最小乱数でHP比101%、メガミミロップも最小乱数101%と、いずれもギリギリ全乱数で確定1発に届いています。使用率最多型の標準的な耐久では、等倍であっても1発で落とせる——これがちからもち実質A334の火力水準です。
+
+---
+
 ### タイプ・弱点
 
 <div class="type-row">
