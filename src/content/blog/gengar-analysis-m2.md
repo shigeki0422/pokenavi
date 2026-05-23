@@ -1,8 +1,8 @@
 ---
 title: '【ポケモンチャンピオンズ】メガゲンガー徹底考察 M-2シーズン かげふみ詰め・高火力アタッカー完全解説'
 description: 'M-2シーズン使用率12位のメガゲンガーを徹底分析。かげふみで逃げ場をなくし、C170ヘドロウェーブの超火力で削る戦略を解説。おくびょうCS型とタスキ型の使い分けまで実データをもとに解説します。'
-pubDate: '2026-05-22'
-draft: true
+pubDate: '2026-05-23'
+draft: false
 heroImage: '../../assets/hero-gengar-m2.png'
 ---
 
@@ -201,7 +201,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">努力値</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS（とくこうMAX・すばやさMAX）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS全振り（C252・S252）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
@@ -267,7 +267,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">努力値</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS（とくこうMAX・すばやさMAX）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS全振り（C252・S252）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
@@ -285,7 +285,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 
 ひかえめにすることで、おくびょうより約9%とくこうが増加します。ヘドロウェーブやシャドーボールの火力がさらに上がり、確定2発だったものが確定1発になる場面も出てきます。特にD方面が高いポケモン（アシレーヌ・ブリジュラスなど）への削り性能が向上します。
 
-きあいだまを組み込んだ場合、ノーマル・あく・いわ・はがねタイプへのカバレッジが広がります。ブリジュラスへの特効技として機能するほか、カバルドン（使用率8位）に対してもきあいだまが等倍で入るのが有効です。
+きあいだまを組み込んだ場合、ノーマル・あく・いわ・はがねタイプへの対策が広がります。ブリジュラスへの特効技として機能するほか、カバルドン（使用率8位）に対してもきあいだまが等倍で入るのが有効です。
 
 **弱み：**
 
@@ -315,7 +315,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">努力値</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS（とくこうMAX・すばやさMAX）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS全振り（C252・S252）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
@@ -426,7 +426,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
     <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">きあいだま
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40.8%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル・はがね・あく・いわへの抜群。ブリジュラスへのカバレッジとして有効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル・はがね・あく・いわに抜群。ブリジュラスへの対策として有効</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -440,14 +440,14 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
     <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">みちづれ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.7%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かげふみとのシナジーが絶大。逃げられない相手から確実に1体処理する核心技</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かげふみとのシナジーが絶大。逃げられない相手から確実に1体処理するメイン技</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">たたりめ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">25.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">状態異常の相手に威力2倍。おにびと組み合わせると実質的な大ダメージ源になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">状態異常の相手に威力2倍。おにびと組み合わせると大ダメージ源になる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -468,7 +468,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
     <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">みがわり
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みちづれ読みの相手へのカウンター。みがわりを残した状態でみちづれを仕込める</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かげふみで縛った相手のおにびやでんじはなど変化技をブロックし、安全に攻撃できるターンを確保する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -489,16 +489,16 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 **【おにびたたりめ軸】ヘドロウェーブ＋たたりめ＋おにび＋みちづれ**
 物理アタッカーが多い環境向けの構成。おにびを当ててこうげきを半分にしてから、たたりめで威力2倍の攻撃を繰り返す戦法です。かげふみで逃げられないため、おにびを当てた後はほぼ詰め状態になります。
 
-**【みがわりみちづれ軸】シャドーボール＋ヘドロウェーブ＋みがわり＋みちづれ**
-みちづれ読みの相手（変化技やみまもりなど）に対してみがわりを張り、みがわりが残った状態でみちづれを仕込む上級者向け構成です。
+**【みがわり軸】シャドーボール＋ヘドロウェーブ＋みがわり＋おにび**
+かげふみで縛った相手が変化技（おにび・でんじはなど）を多用してくる場合に有効な構成。みがわりで変化技をブロックしながら安全に攻撃し、こちらからおにびを当てて詰め状態に持ち込みます。
 
 ---
 
-## データ分析①：きあいだまのカバレッジ価値
+## データ分析①：きあいだまの攻撃範囲の価値
 
-ゲンガーはゴースト/どくの2タイプを軸に戦うが、この2種類だけでは環境上位20体の多くに等倍止まりとなる。きあいだまを採用することで何体を抜群圏に追加できるかを計算した。
+ゲンガーはゴースト/どくの2タイプを軸に戦いますが、この2種類だけでは環境上位20体の多くに等倍止まりとなります。きあいだまを採用することで何体を抜群圏に追加できるかを計算しました。
 
-**判定基準**：そのポケモンのタイプに対して最も高い倍率が取れる技を選択
+**判定基準**：そのポケモンのタイプに対して最も高い倍率が取れる技を選択します
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.88em;text-align:center">
@@ -570,7 +570,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
   <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">8位 カバルドン</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0450-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">8位 カバルドン</td>
   <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">じめん</td>
   <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
   <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fff7ed">×0.5</td>
@@ -642,7 +642,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
   <td style="padding:6px 8px;border:1px solid #cbd5e1;font-weight:bold">×1</td>
 </tr>
 <tr>
-  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">18位 ウルガモス</td>
+  <td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0637-00.webp" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">18位 ウルガモス</td>
   <td style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.8em">ほのお/むし</td>
   <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
   <td style="padding:6px 8px;border:1px solid #cbd5e1;background:#fefce8">×1</td>
@@ -670,15 +670,15 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </div>
 
 <div style="background:#f0fdf4;border-left:4px solid #16a34a;padding:10px 16px;margin:12px 0;border-radius:0 6px 6px 0;font-size:0.9em">
-<strong>きあいだまの採用価値：</strong>ゴースト+どく技のみでは上位20体中<strong>7体(35%)</strong>にしか抜群が取れない。きあいだまを加えると<strong>10体(50%)</strong>に拡大。特に2位ブリジュラス・9位ルカリオという環境上位の重要ポケモンへの抜群が初めて取れる点が採用率40.8%の裏付けとなっている。<br>
-一方、1位ガブリアス・5位リザードン・6位アーマーガア・8位カバルドンなど10体は3技すべてで等倍止まりとなる。これらへはC170の火力での強引な2発圏内での対処が現実的な対策となる。
+<strong>きあいだまの採用価値：</strong>ゴースト+どく技のみでは上位20体中<strong>7体(35%)</strong>にしか抜群が取れません。きあいだまを加えると<strong>10体(50%)</strong>に拡大します。特に2位ブリジュラス・9位ルカリオという環境上位の重要ポケモンに抜群が初めて取れる点が採用率40.8%の裏付けとなっています。<br>
+一方、1位ガブリアス・5位リザードン・6位アーマーガア・8位カバルドンなど10体は3技すべてで等倍止まりとなります。これらへはC170の火力での強引な2発圏内での対処が現実的です。
 </div>
 
 ---
 
 ## データ分析②：M-1→M-2シーズン技構成の変化
 
-M-1とM-2で技採用率を比較すると、ゲンガーの戦い方が大きく変化していることがわかる。
+M-1とM-2で技採用率を比較すると、ゲンガーの戦い方が大きく変化していることがわかります。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
@@ -747,11 +747,11 @@ M-1とM-2で技採用率を比較すると、ゲンガーの戦い方が大き�
 
 **① みちづれの急落（−14.8pp）とおにびたたりめの台頭（各+9〜10pp）**
 
-M-2でおにびとたたりめが同時に急増しているのは偶然ではない。「かげふみで縛る→おにびでこうげきを半分に下げる→たたりめで実質2倍ダメージ」という詰め戦術がM-2で広まったことを示している。おにびを採用するとみちづれの枠が埋まるため、みちづれの採用率が押し出される形で低下している。
+M-2でおにびとたたりめが同時に急増しているのは、「かげふみで縛る→おにびでこうげきを半分に下げる→たたりめで2倍ダメージ」という詰め戦術がM-2で広まったためです。おにびを採用するとみちづれの枠が埋まるため、みちづれの採用率が押し出される形で低下しています。
 
 **② こごえるかぜの増加（+8.0pp）**
 
-M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9位)など高S帯のポケモンが多く、こごえるかぜで後続のS関係を整えるニーズが高まっている。
+M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9位)など高S帯のポケモンが多く、こごえるかぜで後続のS関係を整えるニーズが高まっています。
 
 **③ 同居ポケモンの変化**
 
@@ -759,7 +759,7 @@ M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9
 |---|---|
 | ガブリアス・アシレーヌ・アーマーガア・**ブラッキー** | ガブリアス・アシレーヌ・アーマーガア・**ブリジュラス** |
 
-ブラッキーに代わりブリジュラスが上位に入った。M-2ではブリジュラスへの対策としてきあいだまの採用が増えた点（+2.6pp）とも整合している。
+ブラッキーに代わりブリジュラスが上位に入りました。
 
 ---
 
@@ -781,7 +781,7 @@ M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが2倍弱点で通る。S102のため後攻で受けるとほぼ瀕死</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが2倍弱点。メガゲンガーのSは上だが、スカーフガブリアスへの先制やタスキで耐えられてからのじしんはほぼ瀕死になるため要警戒</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おにびで無力化してからたたりめ</td>
 </tr>
 <tr style="background:#fafafa">
@@ -789,14 +789,14 @@ M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴンテール・りゅうのはどう等のドラゴン技やはがね技が弱点</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだまで特効。ただし先手を確保できる場合のみ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだまで対策</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0197-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブラッキー等あくタイプ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あく技はゴーストタイプに等倍以上。かみくだくなどで削られやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みちづれで道連れに</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだまで対策</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -819,12 +819,6 @@ M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9
     <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーが苦手な物理アタッカーを後出しで処理</div>
   </div>
   <div class="partner-card">
-    
-    <div class="name">ナットレイ</div>
-    <div class="rate">くさ/はがね</div>
-    <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーの弱点エスパー・あくをはがねで耐性カバー</div>
-  </div>
-  <div class="partner-card">
     <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン(X)" />
     <div class="name">メガリザX</div>
     <div class="rate">使用率5位</div>
@@ -834,19 +828,13 @@ M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9
     <img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム" />
     <div class="name">ハッサム</div>
     <div class="rate">使用率15位</div>
-    <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーの弱点エスパーをあくの力持ち技でカバー</div>
+    <div style="font-size:0.65rem;color:#555;margin-top:2px">はがねタイプでゲンガーの弱点エスパーを半減で受けられる</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" />
     <div class="name">アーマーガア</div>
     <div class="rate">使用率6位</div>
     <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーのじめん弱点をひこうタイプで完全カバー</div>
-  </div>
-  <div class="partner-card">
-    
-    <div class="name">キングドラ</div>
-    <div class="rate">みず/ドラゴン</div>
-    <div style="font-size:0.65rem;color:#555;margin-top:2px">こごえるかぜで遅くした相手に上から攻撃できる</div>
   </div>
 </div>
 
@@ -856,7 +844,7 @@ M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9
 
 1. **じめん対策を1体** — メガゲンガーはじめん技が弱点なので、ひこうタイプやふゆう持ちのポケモンをパーティに入れると安心。アーマーガア（使用率6位）がゲンガーと相性が良い。
 
-2. **あく・エスパー対策** — これらのタイプの技を無効化・半減できるポケモン（はがねタイプ等）で補完する。
+2. **あく・エスパー対策** — エスパーははがねタイプ（ハッサム等）で半減、あく技はフェアリーやかくとうタイプで対応する。
 
 3. **物理受け役の確保** — ゲンガーのB80は決して高くなく、物理技への耐性は限定的。ゲンガーがおにびを入れられなかった場面でも安心できる物理受けが1体いると理想的。
 
