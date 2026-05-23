@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】メガミミロップ徹底考察 M-2シーズン S135先制系の全て'
-description: 'M-2シングルバトルで使用率14位のメガミミロップを徹底分析。S135最速+スクラッピー+ねこだましの三位一体が生む先制支配戦術、ようき型・いじっぱり型の使い分け、苦手なポケモンとの対策まで実データをもとに解説します。'
+description: 'M-2シングルバトルで使用率14位のメガミミロップを徹底分析。S135最速+スクラッピー+ねこだましを活かした立ち回り、ようき型・いじっぱり型の使い分け、苦手なポケモンとの対策まで実データをもとに解説します。'
 pubDate: '2026-05-22'
 draft: true
 heroImage: '../../assets/hero-lopunny-m2.png'
@@ -440,7 +440,7 @@ M-2環境で最も採用率が高い形です。
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>23.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">120</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマルSTABの高火力技。かくとう耐性（はがね・ノーマルなど）持ちへの対抗手段</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル一致の高火力技。かくとう耐性（はがね・ノーマルなど）持ちへの対抗手段</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とんぼがえり</strong></td>
@@ -528,7 +528,7 @@ M-2環境で最も採用率が高い形です。
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0227-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう/はがね複合。インファイトが等倍かつひこうタイプでこちらの弱点を突ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこう複合。インファイトが等倍かつひこうタイプでこちらの弱点を突ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">メガトンキック（ノーマル技）で対抗可能</td>
 </tr>
 </tbody>
@@ -573,7 +573,7 @@ M-2環境で最も採用率が高い形です。
 **パーティ構成のポイント:**
 1. **フェアリー・エスパー対策枠**が必須：ゲンガー（あく技持ち）やはがねタイプのポケモンを入れることで、メガミミロップの天敵に対応できます
 2. **ねこだまし活用の後続**：ねこだましで1ターン相手を止めた後、有利な後続を展開するのがメガミミロップの基本運用。そのため、**強力な先発・後発ポケモンとのコンビネーション**を意識した構成が重要です
-3. **1メガルール**：メガミミロップを採用した場合、他のメガ進化ポケモンは使用できません（1対戦1メガルール）。メガ枠をミミロップに使う価値があるかをパーティ全体で考える必要があります
+3. **メガ枠の選択**：メガミミロップを採用する価値がパーティ全体に合うかを考える必要があります
 
 ---
 
@@ -620,6 +620,6 @@ M-2環境で最も採用率が高い形です。
 </table>
 </div>
 
-メガミミロップはM-2環境において、**S135最速による速度制圧**・**スクラッピーによるゴースト貫通**・**ねこだましによる先制サポート**という3つの特性を活かした、他のポケモンには代替できない独自の役割を持っています。ようき最速型が主流（69.3%）というデータが示すように、現環境では純粋な速度を活かしたサポート型運用が最も評価されています。
+メガミミロップはM-2環境において、**S135最速**・**スクラッピーによるゴースト貫通**・**ねこだましによる先制サポート**という3つの特性を組み合わせた立ち回りが強みです。ようき最速型が主流（69.3%）というデータが示すように、現環境では純粋な速度を活かしたサポート型運用が最も評価されています。
 
 弱点の多さ（かくとう・ひこう・エスパー・フェアリー）と耐久の低さは無視できませんが、「先手をとり続けること」を前提とした立ち回りで、パーティの要として機能できます。フェアリー・エスパー対策枠をしっかり用意したうえで、メガ枠に採用する価値は十分にあります。

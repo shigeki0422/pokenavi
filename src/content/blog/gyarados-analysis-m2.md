@@ -97,7 +97,7 @@ heroImage: '../../assets/hero-gyarados-m2.png'
 
 メガギャラドスの最大の破壊力は**A155 × りゅうのまい**の組み合わせです。
 
-りゅうのまいはAとSを同時に1段階アップする積み技で、1積みするとA155がA233相当（Lv50 いじっぱりA252振りの実数値277の約1.5倍、実数値にすると約186→279相当）になります。みずSTABのたきのぼり（BP80）やじめん無効回避なしのじしん（BP100）の組み合わせで、積み後は多くの環境ポケモンを確定圏内に収められます。
+りゅうのまいはAとSを同時に1段階アップする積み技で、1積みするとA155がA233相当（Lv50 いじっぱりA252振りの実数値277の約1.5倍、実数値にすると約186→279相当）になります。みず一致のたきのぼり（BP80）やじめん無効回避なしのじしん（BP100）の組み合わせで、積み後は多くの環境ポケモンを確定圏内に収められます。
 
 こおりのキバは採用率45.2%で、環境上位のガブリアス（こおり×4弱点）への確定打点です。りゅうのまい1積み後は実力が大幅に上がり、処理しきれないまま積まれると試合がそのまま終わることもあります。
 
@@ -350,7 +350,7 @@ A155は環境トップクラスの攻撃力です。D130という高い特防は
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.7%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくSTAB打点。Dダウン20%の追加効果あり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく一致打点。Bダウン20%の追加効果あり</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アクアテール</strong></td>
@@ -681,7 +681,7 @@ HPに努力値を回して耐久を補強します。A155はそもそも非常�
 
 **パーティ構成の基本方針:**
 
-メガギャラドスは1メガルールにより、他のメガ進化と共存できません。以下の役割を補う5体を選ぶのが基本です。
+以下の役割を補う5体を選ぶのが基本です。
 
 1. **でんき対策**: じめんタイプ（ガブリアス等）やでんき無効・半減のポケモン
 2. **フェアリー対策**: はがね・どくタイプでアシレーヌ・ミミロップに対応

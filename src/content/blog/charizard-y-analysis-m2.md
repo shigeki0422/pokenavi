@@ -122,12 +122,12 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px;margin:16px 0;font-size:0.9em">
   <strong>かえんほうしゃ実質威力（ひでり補正あり）</strong><br>
   <span style="font-size:1.1em;color:#ea580c">
-    威力90 × STAB1.5 × ひでり1.5 = <strong>実質威力202.5</strong>
+    威力90 × タイプ一致補正1.5 × ひでり1.5 = <strong>実質威力202.5</strong>
   </span><br>
   <small style="color:#777;margin-top:4px;display:block">※さらにひかえめ補正（×1.1）がかかる場合は実質222以上</small>
 </div>
 
-これはフルパワーで使うオーバーヒート（威力130×STAB1.5）の195を超える数値です。ひでりの恩恵は「天気を無料で展開できる」だけでなく、**毎ターンほのお技が安定して最大火力を発揮する**という点で、他のほのおタイプとの差別化要因になっています。
+これはフルパワーで使うオーバーヒート（威力130×タイプ一致補正1.5）の195を超える数値です。ひでりの恩恵は「天気を無料で展開できる」だけでなく、**毎ターンほのお技が安定して最大火力を発揮する**という点で、他のほのおタイプとの差別化要因になっています。
 
 ### 2. ソーラービーム即発動で技範囲が劇的に広がる
 
@@ -248,7 +248,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 </table>
 </div>
 
-とくこう+50という変化量が際立っています。Xのとくこう+21と比較してもYのとくこうの伸びは別格。さらとくぼう+30によりD115となり、特殊耐久が大幅強化されています。
+とくこう+50という変化量はXの+21と比べて大きく上回ります。さらとくぼう+30によりD115となり、特殊耐久が大幅強化されています。
 
 ### タイプ・弱点
 
@@ -336,7 +336,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
   <td style="padding:6px 10px;border:1px solid #fcd34d"><strong>エアスラッシュ</strong></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center"><img src="/images/types/type-11-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #fcd34d">STABひこう技。かくとう・むし・くさへ</td>
+  <td style="padding:6px 10px;border:1px solid #fcd34d">ひこう一致技。かくとう・むし・くさへ</td>
 </tr>
 <tr style="background:#fffbeb">
   <td style="padding:6px 10px;border:1px solid #fcd34d">4</td>
@@ -352,7 +352,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 
 **採用率データとの照合**: ソーラービーム58.6%・かえんほうしゃ41.4%・エアスラッシュ30.2%・オーバーヒート26.1%という実データがこの型を裏付けています。
 
-**ひかえめCS振りの優位性**: C159×ひかえめ補正（×1.1）によって実数値C174超相当の特殊火力を発揮します。ひでり込みのかえんほうしゃはCS無振り（D無振り）のほとんどのポケモンを確定2発以内に取れます。相手がCS振りでなくHB振りのポケモンでも、ひでりSTAB込みの高威力で突破できるケースが多い。
+**ひかえめCS振りの優位性**: C159×ひかえめ補正（×1.1）によって実数値C174超相当の特殊火力を発揮します。ひでり込みのかえんほうしゃはCS無振り（D無振り）のほとんどのポケモンを確定2発以内に取れます。相手がCS振りでなくHB振りのポケモンでも、ひでり×タイプ一致補正込みの高威力で突破できるケースが多い。
 
 **ソーラービームの刺さり先**: みず・いわ・じめんタイプへの打点として機能します。環境上位では:
 - **カバルドン**（じめん/いわ): ソーラービームで弱点を突ける
@@ -403,7 +403,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
   <td style="padding:6px 10px;border:1px solid #86efac"><strong>エアスラッシュ</strong></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-11-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #86efac">STABひこう打点。ひるみ30%も優秀</td>
+  <td style="padding:6px 10px;border:1px solid #86efac">ひこう一致打点。ひるみ30%も優秀</td>
 </tr>
 <tr style="background:#f0fdf4">
   <td style="padding:6px 10px;border:1px solid #86efac">4</td>
@@ -462,13 +462,13 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>かえんほうしゃ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">41.4%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひでりSTAB込みで実質202.5。安定したほのお打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひでり×一致補正込みで実質202.5。安定したほのお打点</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>エアスラッシュ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">STABひこう技。かくとう・くさへ。ひるみ30%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう一致技。かくとう・くさへ。ひるみ30%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>オーバーヒート</strong></td>
@@ -566,7 +566,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0745-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（使用率8位）</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">すなあらし+ステロ展開でYを完全に機能不全にする</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">すなあらし+ステロ展開でYの行動を大きく制限する</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">マスカーニャ・アシレーヌ</td>
 </tr>
 <tr>
@@ -619,7 +619,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 
 **天候パーティとの組み合わせ**: ひでりが発動した後、**ウルガモス（ほのおタイプ・ひでり恩恵）**などを後続に置くことで、メガリザードンYが倒された後も天候パーティとして機能させることができます。
 
-**1メガルールでの注意点**: 1度の対戦でメガ進化できるのは1体のみというルール上、メガリザードンYを使う場合は他のメガ枠との選択を迫られます。Yを選ぶ場合、パーティ全体がひでり展開で機能するよう設計することで最大の恩恵を得られます。
+**構築の方向性**: Yを選ぶ場合、パーティ全体がひでり展開で機能するよう設計することで最大の恩恵を得られます。
 
 ---
 
@@ -694,6 +694,6 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 - **ソーラービーム即発動**によりみず・いわ・じめんへの打点を確保できる広い技範囲
 - **いわ4倍弱点・ステロ1/2ダメージ**は致命的→アーマーガアなどのステロ対策ポケモンとのセットが前提
 - **天候パーティのリーダー**として後続ポケモンへ恩恵を与えるパーティ全体設計が可能
-- 1メガルールのもと、**ひでり天候展開を軸にしたパーティ構築**が最大の強みを引き出す
+- **ひでり天候展開を軸にしたパーティ構築**が最大の強みを引き出す
 
 いわ4倍という大きなリスクを抱えながらも、それを補って余りある圧倒的な特殊火力がM-2環境でYを選ぶ筆頭の理由です。**ステロを撒かせない守りの構築**と組み合わせることで、メガリザードンYは環境最強クラスの火力砲台として機能します。

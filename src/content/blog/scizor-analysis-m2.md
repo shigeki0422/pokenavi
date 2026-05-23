@@ -69,7 +69,7 @@ heroImage: '../../assets/hero-scizor-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">60</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">×はがねSTAB補正</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">×はがね一致補正</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">60 × 1.5</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#059669">90相当</strong></td>
 </tr>
@@ -485,9 +485,9 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 </div>
 
 **メタルコート型の採用意義:**
-1メガルールにおいて、メガ枠を別のポケモン（ガブリアスやリザードン等）に使いたい場合、ハッサムは無メガで採用されます。その際、メタルコートを持たせることで**バレットパンチの威力をさらに1.2倍に強化**できます。
+メガ枠を別のポケモン（ガブリアスやリザードン等）に使いたい場合、ハッサムは無メガで採用されます。その際、メタルコートを持たせることで**バレットパンチの威力をさらに1.2倍に強化**できます。
 
-テクニシャン+STAB+メタルコートのバレットパンチは実質威力108相当（40×1.5×1.5×1.2）になります。種族値はメガ前（A130）になりますが、それでも十分な先制火力を確保できます。
+テクニシャン+タイプ一致補正+メタルコートのバレットパンチは実質威力108相当（40×1.5×1.5×1.2）になります。種族値はメガ前（A130）になりますが、それでも十分な先制火力を確保できます。
 
 **弱み:**
 - メガ進化しないためA130（メガ後A150より20低い）
@@ -514,7 +514,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>99.7%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">40</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技（優先度+1）。テクニシャン+STABで実質威力90相当。ほぼ全員が採用する必須技</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技（優先度+1）。テクニシャン+タイプ一致補正で実質威力90相当。ほぼ全員が採用する必須技</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
@@ -563,7 +563,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>7.5%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">60</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">テクニシャン補正対象外（ちょうど威力60なので対象外）。むしSTABの通常火力枠として少数採用</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">テクニシャン補正対象外（ちょうど威力60なので対象外）。むし一致の通常火力枠として少数採用</td>
 </tr>
 </tbody>
 </table>
@@ -673,7 +673,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 
 **パーティ構成のポイント:**
 1. **リザードン対策は最優先:** みず・いわタイプのポケモンを必ず採用する。アシレーヌ（4位）やギャラドス（10位）はM-2でも上位にいるため、自然な形で組み込める
-2. **1メガルール:** メガハッサムを採用した場合、他のメガ進化は使用不可。メガ枠の価値を十分に活かせるパーティにする
+2. **メガ枠の使い方:** メガハッサムを採用した場合、他のメガ進化は使用不可。メガ枠の価値を十分に活かせるパーティにする
 3. **速度不足の補完:** すばやさ75と遅いため、高速アタッカーとのコンビを組むことで、「高速アタッカーで削る→メガハッサムのバレットパンチで確定2発圏へ」という流れが作れる
 4. **はねやすめ採用時:** 長期戦が見込まれる場合、はねやすめ型は耐久をさらに活かせる。対面性能が下がる代わりに「場持ち」が大幅に向上
 

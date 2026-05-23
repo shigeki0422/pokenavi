@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】メガカイリュー徹底考察 M-2シーズン オリジナルメガの全て'
-description: 'M-2シングルバトル使用率17位のメガカイリューを徹底分析。ひかえめCS型・特殊4色技・しんそく先制のメカニズムを解説し、ラムのみ型・耐久型・りゅうのまい型の3構築と相性パーティまで実データをもとに紹介します。'
+description: 'M-2シングルバトル使用率17位のメガカイリューを徹底分析。ひかえめCS型・特殊4色技・しんそく先制のメカニズムを解説し、CS型・ラムのみ型・りゅうのまい型の主要構築と相性パーティまで実データをもとに紹介します。'
 pubDate: '2026-05-22'
 draft: true
 heroImage: '../../assets/hero-dragonite-m2.png'
@@ -281,14 +281,14 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>54.5%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこうSTAB技。ひるみ30%付きでサイクルを崩す</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう一致技。ひるみ30%付きでサイクルを崩す</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうせいぐん</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>52.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴンSTAB・高火力。Cダウン後はしんそくで詰める</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン一致・高火力。Cダウン後はしんそくで詰める</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>10まんボルト</strong></td>
@@ -365,8 +365,8 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 
 | 技 | タイプ | 採用理由 |
 |---|---|---|
-| エアスラッシュ | ひこう（特殊） | STAB・ひるみ効果 |
-| りゅうせいぐん | ドラゴン（特殊） | ドラゴンSTAB最高打点 |
+| エアスラッシュ | ひこう（特殊） | ひこう一致・ひるみ効果 |
+| りゅうせいぐん | ドラゴン（特殊） | ドラゴン一致最高打点 |
 | 10まんボルト | でんき（特殊） | みずタイプ対策 |
 | かえんほうしゃ | ほのお（特殊） | はがね・くさ対策 |
 
@@ -390,7 +390,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 
 | 技 | タイプ | 採用理由 |
 |---|---|---|
-| エアスラッシュ | ひこう（特殊） | STAB技 |
+| エアスラッシュ | ひこう（特殊） | ひこう一致技 |
 | りゅうせいぐん | ドラゴン（特殊） | 最高打点 |
 | 10まんボルト | でんき（特殊） | みずタイプ対策 |
 | はねやすめ / かえんほうしゃ | ひこう / ほのお | 自己回復 or 4色補完 |
@@ -415,7 +415,7 @@ CS比較でのとくこうとすばやさが若干低下するため、火力面
 | 技 | タイプ | 採用理由 |
 |---|---|---|
 | りゅうせいぐん | ドラゴン（特殊） | 最高打点 |
-| エアスラッシュ | ひこう（特殊） | STAB |
+| エアスラッシュ | ひこう（特殊） | ひこう一致 |
 | 10まんボルト / かえんほうしゃ | でんき / ほのお | タイプ補完 |
 | しんそく | ノーマル（物理）先制 | Cダウン後のフィニッシャー |
 
@@ -441,7 +441,7 @@ CS比較でのとくこうとすばやさが若干低下するため、火力面
 | りゅうのまい | ドラゴン（変化） | こうげき・すばやさ+1 |
 | しんそく | ノーマル（物理）先制 | 先制フィニッシャー |
 | じしん | じめん（物理） | はがね・でんき処理 |
-| げきりん / りゅうのいぶき | ドラゴン（物理） | ドラゴンSTAB物理 |
+| げきりん / りゅうのいぶき | ドラゴン（物理） | ドラゴン一致物理 |
 
 **強み**  
 りゅうのまいで積んだ後は物理こうげき134が実質的にさらに高まり、高耐久ポケモンも突破できます。しんそくとじしんによる物理範囲で、特殊型が苦手な相手（Dの高いポケモン）にも対応できます。こうげき134は環境でも最高水準。
@@ -577,12 +577,6 @@ CS比較でのとくこうとすばやさが若干低下するため、火力面
     <div style="font-size:0.68rem;color:#555;margin-top:2px">カイリューの4倍弱点こおりを受けられる</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0260-00.webp" alt="ラグラージ">
-    <div class="name">みず系サポート</div>
-    <div class="rate">ステロ展開</div>
-    <div style="font-size:0.68rem;color:#555;margin-top:2px">ステロで相手を削りカイリューの確定圏を広げる</div>
-  </div>
-  <div class="partner-card">
     <img src="/images/pokemon/pokemon-0113-00.webp" alt="ハピナス">
     <div class="name">とくぼう壁</div>
     <div class="rate">特殊受け</div>
@@ -657,4 +651,4 @@ CS比較でのとくこうとすばやさが若干低下するため、火力面
 
 メガカイリューはポケモンチャンピオンズオリジナルのメガ進化を活かした特殊4色型が現環境の主流です。こおり4倍弱点という明確な弱点を持ちながら、それを上回るタイプカバレッジと火力でM-2シングル17位の使用率を維持しています。
 
-1メガルールの中でカイリュナイトを採用するかどうかは、パーティの戦略全体に関わる重要な判断です。80.8%という高い採用率が示す通り、メガカイリューはその価値を十分に証明しています。環境に幅広く刺さる特殊4色技+しんそく構成を軸に、パーティの弱点を補完するポケモンを揃えることが、メガカイリューを最大限に活かす鍵となります。
+80.8%という高い採用率が示す通り、メガカイリューはその価値を十分に証明しています。環境に幅広く刺さる特殊4色技+しんそく構成を軸に、パーティの弱点を補完するポケモンを揃えることが、メガカイリューを最大限に活かす鍵となります。
