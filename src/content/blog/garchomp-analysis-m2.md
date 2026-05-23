@@ -589,22 +589,22 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0730-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">アシレーヌ</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">フラエッテ</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">アシレーヌ</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="フラエッテ" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">フラエッテ</span></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">フェアリー技4倍</span></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0212-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ハッサム</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ギルガルドで受ける</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ハッサム</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ギルガルドで受ける</span></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0149-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">メガカイリュー</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0635-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">サザンドラ</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">メガカイリュー</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0635-00.webp" alt="サザンドラ" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">サザンドラ</span></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">ドラゴン技2倍</span></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">フェアリータイプで受ける</span></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0478-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ユキメノコ</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0038-01.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">アローラキュウコン</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0478-00.webp" alt="ユキメノコ" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ユキメノコ</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0038-01.webp" alt="アローラキュウコン" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">アローラキュウコン</span></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">こおり技4倍</span></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">先制で倒すか交代で受ける</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ゲンガー</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0778-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ミミッキュ</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="ゲンガー" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ゲンガー</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ミミッキュ</span></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">影分身・道連れで崩す</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">タスキで1ターン確保</td>
 </tr>
@@ -618,16 +618,16 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 
 ガブリアスがステルスロックを撒いた後、フェアリー耐性を持つ後続につなぐ構築が安定します。
 
-- <img src="/images/pokemon/pokemon-1018-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ブリジュラス**（電気・はがねで多くに打点、ゴーストタイプ無効）
-- <img src="/images/pokemon/pokemon-0730-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**アシレーヌ**（フェアリー技でドラゴンを一掃）
-- <img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**アーマーガア**（物理受け、釣り交換先）
+- <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ブリジュラス**（電気・はがねで多くに打点、ゴーストタイプ無効）
+- <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**アシレーヌ**（フェアリー技でドラゴンを一掃）
+- <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**アーマーガア**（物理受け、釣り交換先）
 
 **<img src="/images/items/item-0287-scarf.png" alt="こだわりスカーフ" class="item-icon" /> スカーフ型のパーティ**
 
 高速処理で詰める型なので、詰め切れない耐久ポケモンを突破する手段を別枠で用意しておく必要があります。
 
-- <img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ゲンガー**（催眠・トリックで崩し）
-- <img src="/images/pokemon/pokemon-0115-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ガルーラ**・<img src="/images/pokemon/pokemon-0428-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ミミロップ**（メガシンカで受けを突破）
+- <img src="/images/pokemon/pokemon-0094-00.webp" alt="ゲンガー" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ゲンガー**（催眠・トリックで崩し）
+- <img src="/images/pokemon/pokemon-0115-00.webp" alt="ガルーラ" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ガルーラ**・<img src="/images/pokemon/pokemon-0428-00.webp" alt="ミミロップ" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />**ミミロップ**（メガシンカで受けを突破）
 
 **<img src="/images/items/item-0158-obon.png" alt="オボンのみ" class="item-icon" /> オボン型のパーティ（ドラゴンテール構築）**
 
@@ -637,7 +637,7 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 
 ## シーズンM-2での環境的な位置づけ
 
-M-2でガブリアスが1位を保っている背景には、**ブリジュラス・ハラバリーという電気ポケモンの台頭**があります。ガブリアスはでんきタイプを完全無効化した上で、じしん1発でこれらを倒せる数少ないポケモン。使用率2位の<img src="/images/pokemon/pokemon-1018-00.webp" alt="" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />ブリジュラスへの最強の回答がガブリアスという構図で、「ブリジュラスに強いポケモン」を採用する際の第一候補になり続けています。
+M-2でガブリアスが1位を保っている背景には、**ブリジュラス・ハラバリーという電気ポケモンの台頭**があります。ガブリアスはでんきタイプを完全無効化した上で、じしん1発でこれらを倒せる数少ないポケモン。使用率2位の<img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:36px;height:36px;vertical-align:middle;margin-right:4px" />ブリジュラスへの最強の回答がガブリアスという構図で、「ブリジュラスに強いポケモン」を採用する際の第一候補になり続けています。
 
 また注目の動向として、**キラフロルナイトの採用率が5/13→5/20の1週間で+19.3pt急増**しています。キラフロルのメガシンカは特殊技主体となるため、ガブリアスにとっての直接的な脅威にはなりにくいですが、特殊アタッカーが増えることでわんぱく型の価値が上がる可能性があります。
 
@@ -697,3 +697,10 @@ M-2でガブリアスが1位を保っている背景には、**ブリジュラ�
 ガブリアスはタスキ・スカーフ・オボンの3つの型がいずれも20〜37%の採用率を保っており、**どの型かが読みにくい**のも強さの一因です。パーティを見ただけでは「タスキか、スカーフか」の判断が難しく、対面での択を押し付けやすい。
 
 M-2シーズンも折り返し地点を過ぎたころ、ガブリアスはまだ1位の座を守っています。シーズン後半でスカーフとタスキの勢力図がどう変わるかも注目です。
+
+---
+
+## 関連考察記事
+
+- [【ポケモンチャンピオンズ】メガフラエッテ徹底考察 M-2シーズン](/blog/florette-analysis-m2/)
+- [【ポケモンチャンピオンズ】メガスターミー徹底考察 M-2シーズン](/blog/starmie-analysis-m2/)

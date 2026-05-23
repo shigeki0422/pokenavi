@@ -678,32 +678,32 @@ M-1シーズンのスターミー同居率データ（1位：ガブリアス、3
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">主軸</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0121-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（スターミナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0121-00.webp" alt="スターミー" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（スターミナイト）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ちからもち高火力＋クイックターンでサイクルを主導</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき対策・ステロ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき無効・ブリジュラスへじしん打点。ステルスロックでクイックターンのダメージ蓄積を底上げ</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">物理受け・起点作り</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうタイプでくさ耐性・あく耐性。とんぼがえりでスターミーを安全に着地</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">特殊受け</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">キングシールドで削りを防ぎつつ後出し。スターミーのゴースト弱点への抑止力</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あく・ゴースト崩し</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="ゲンガー" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミーが苦手なゴースト・あく主体の相手に催眠・トリックで崩す</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・むし処理</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0006-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミーの弱点・くさ/むしをほのお技で一掃</td>
 </tr>
 </tbody>
@@ -733,32 +733,32 @@ M-1スターミーの同居率4位はペリッパー。ペリッパーのあめ�
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">雨下エース</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0121-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（スターミナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0121-00.webp" alt="スターミー" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（スターミナイト）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">雨下アクアブレイクがちからもちと合わさり火力指数約63,000超。アクアジェットも雨下1.5倍</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">天候展開</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0279-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ペリッパー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0279-00.webp" alt="ペリッパー" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ペリッパー</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あめふらしで登場即雨展開。とんぼがえりでスターミーを後ろから安全に着地</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき対策</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき無効・じしんでブリジュラス処理。雨パの天敵・でんきタイプへの最終防衛線</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">特殊受け</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ペリッパー・スターミーに強い特殊アタッカーを受ける。はがねタイプでくさ半減</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あく・ゴースト処理</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0448-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（ルカリオナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（ルカリオナイト）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう/はがねタイプでスターミーの弱点・あく/ゴーストを補完。バレットパンチで先制</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・むし処理</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">スターミー・ペリッパーが弱いくさタイプを牽制。はがねタイプでフェアリーも半減</td>
 </tr>
 </tbody>
@@ -872,3 +872,10 @@ M-2環境にはみずタイプのポケモンが複数います（アシレー�
 97.8%というほぼ全員がメガ石を採用する事実は、「ちからもちなしのスターミーに採用価値はない」という環境の総意です。いじっぱりAS型でアクアブレイク+アクアジェット+アイススピナーの3本柱を持ちつつ、クイックターンかしねんのずつきを選択するのが現環境のスタンダードです。
 
 でんき・くさ・あく・ゴーストへの対策をパートナーに任せながら、ちからもちの火力でM-2環境上位を削っていくスタイルがメガスターミーの基本となります。
+
+---
+
+## 関連考察記事
+
+- [【ポケモンチャンピオンズ】ガブリアス徹底考察 M-2シーズン使用率1位](/blog/garchomp-analysis-m2/)
+- [【ポケモンチャンピオンズ】メガフラエッテ徹底考察 M-2シーズン](/blog/florette-analysis-m2/)

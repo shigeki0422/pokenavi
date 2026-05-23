@@ -118,12 +118,12 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right;color:#2563eb">500</span>
+    <span style="width:40px;text-align:right;white-space:nowrap;color:#2563eb">500</span>
   </div>
 </div>
 
 <div style="background:#f0f9ff;border-left:4px solid #3b82f6;padding:10px 16px;margin:12px 0;border-radius:0 6px 6px 0;font-size:0.9em">
-<strong>メガ進化前後の変化：</strong> B45→80（+35）、C130→170（+40）、D90→95（+5）、S110→130（+20）。メガ進化でとくこうが一気に40も上昇するのが最大の恩恵です。とくせいも「ふゆう」から「かげふみ」に変わります。
+<strong>メガ進化前後の変化：</strong> B45→80（+35）、C130→170（+40）、D90→95（+5）、S110→130（+20）。メガ進化でとくこうが一気に40も上昇するのが最大の恩恵です。とくせいも「のろわれボディ」から「かげふみ」に変わります。
 </div>
 
 ### タイプ・弱点
@@ -151,7 +151,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
     <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center">
       <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
       <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
-      <span><img src="/images/types/type-18-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
+      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
     </div>
   </td>
@@ -164,7 +164,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center">
       <span><img src="/images/types/type-01-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
-      <span><img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
+      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
     </div>
   </td>
 </tr>
@@ -173,8 +173,8 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </div>
 
 <div style="background:#fff7ed;border-left:4px solid #f97316;padding:10px 16px;margin:12px 0;border-radius:0 6px 6px 0;font-size:0.9em">
-<strong>重要：メガ進化でふゆうを失う</strong><br>
-メガ前のゲンガーは特性「ふゆう」でじめん技が無効でした。しかしメガ進化すると特性が「かげふみ」に変わり、<strong>じめん技が等倍で通ってしまいます</strong>。環境1位のガブリアスのじしんが確定2発で入ることを必ず意識してください。じめんタイプのポケモンがいる相手には迂闊にメガ進化しないのが基本です。
+<strong>じめん技に注意</strong><br>
+ゲンガーはゴースト/どくタイプのため、メガ進化前後を問わず<strong>じめん技が2倍弱点</strong>です。特性はのろわれボディ（メガ後はかげふみ）でじめん無効ではありません。環境1位のガブリアスのじしんが確定2発で入ることを必ず意識してください。じめんタイプのポケモンがいる相手には注意が必要です。
 </div>
 
 ---
@@ -338,7 +338,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 
 メガゲンガー型との最大の違いは、メガ進化枠を消費しない点です。パーティの別のポケモンをメガ進化させながら、ゲンガーは非メガで先発サポートに徹するという選択肢が生まれます。
 
-タスキ+ふゆうの組み合わせにより、ガブリアスのじしんを受けてもタスキで生き延び、次のターンにおにびやこごえるかぜを確実に通せる場面もあります（ただしすでにダメージを受けている場合はタスキが機能しないので注意）。
+タスキにより、ガブリアスのじしんを1発耐えて次のターンにおにびやこごえるかぜを確実に通せる場面もあります（ただしすでにダメージを受けている場合はタスキが機能しないので注意）。
 
 **弱み：**
 
@@ -373,7 +373,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">特性</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">かげふみ（交代封じ）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">ふゆう（じめん無効）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">のろわれボディ</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">とくこう</td>
@@ -431,7 +431,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/types/type-02-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">きあいだま
+    <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">きあいだま
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40.8%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル・はがね・あく・いわへの抜群。ブリジュラスへのカバレッジとして有効</td>
@@ -520,7 +520,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが等倍で通る（メガ後はふゆう消失）。S102のため後攻で受けるとほぼ瀕死</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが2倍弱点で通る。S102のため後攻で受けるとほぼ瀕死</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おにびで無力化してからたたりめ</td>
 </tr>
 <tr style="background:#fafafa">
@@ -638,7 +638,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 
 メガゲンガーはM-2シーズンにおける「逃げ場なし詰め」の代表格です。かげふみ＋みちづれの道連れ戦略は相手のパーティの軸を確実に処理できます。
 
-一方で、HPの低さとじめん弱点（メガ後はふゆう消失）という明確な脆さもあります。特にガブリアスやじめんアタッカーがいる相手には慎重な立ち回りが求められます。
+一方で、HPの低さとじめん弱点という明確な脆さもあります。特にガブリアスやじめんアタッカーがいる相手には慎重な立ち回りが求められます。
 
 初めてメガゲンガーを使うなら**おくびょうCS型＋ヘドロウェーブ＋シャドーボール＋みちづれ＋こごえるかぜ**の構成から始めるのが最も安定しています。かげふみ＋みちづれのタイミングを体で覚えることが、メガゲンガーを使いこなす第一歩です。
 

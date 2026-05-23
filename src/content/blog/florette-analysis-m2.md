@@ -485,8 +485,8 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 <thead>
 <tr>
   <th style="padding:8px 12px;background:#f0f9ff;border:1px solid #bae6fd;text-align:left">項目</th>
-  <th style="padding:8px 12px;background:#fce4f3;border:1px solid #f9a8d4;text-align:center"><img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガフラエッテ</th>
-  <th style="padding:8px 12px;background:#eff6ff;border:1px solid #bfdbfe;text-align:center"><img src="/images/pokemon/pokemon-0130-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガギャラドス</th>
+  <th style="padding:8px 12px;background:#fce4f3;border:1px solid #f9a8d4;text-align:center"><img src="/images/pokemon/pokemon-0670-05.webp" alt="フラエッテ" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガフラエッテ</th>
+  <th style="padding:8px 12px;background:#eff6ff;border:1px solid #bfdbfe;text-align:center"><img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガギャラドス</th>
 </tr>
 </thead>
 <tbody>
@@ -567,32 +567,32 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">主軸メガ枠</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ（フラエッテナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="フラエッテ" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ（フラエッテナイト）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">めいそう積み全抜きエース。基本選出</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">代替メガ枠</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0130-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（ギャラドスナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（ギャラドスナイト）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね・どくが多い相手にフラエッテの代わりに選出しメガ進化</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">展開サポート</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ステルスロック＋はがね処理（じしん）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">崩し</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0094-00.webp" alt="ゲンガー" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">催眠・トリックで相手の積みを崩す</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">物理受け・サポート</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうでどく耐性・ちょうはつでフラエッテの積みを守る（使用率6位）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">速攻・先制技</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0448-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">マッハパンチ＋はがね技でフラエッテの弱点を補完</td>
 </tr>
 </tbody>
@@ -623,32 +623,32 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">主軸メガ枠</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ（フラエッテナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="フラエッテ" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ（フラエッテナイト）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">めいそう＋みがわりで安定した積み詰め。基本選出</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">代替メガ枠</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0130-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（ギャラドスナイト）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（ギャラドスナイト）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フラエッテ不利時に代わりに選出。いかく＋ちょうはつで相手のサポート封じ</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ステロ撒き</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0143-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カビゴン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0143-00.webp" alt="カビゴン" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カビゴン</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">のろい積み＋どくどく＋ステロで削り</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">電気対策</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ギャラドスの弱点・でんきに強い</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">特殊受け</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね耐性でフラエッテの裏から出せる・キングシールド</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">速攻</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね＋ひこうタイプでどくに強く、とんぼがえりでサイクル回し</td>
 </tr>
 </tbody>
@@ -670,22 +670,22 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0681-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:2px">ギルガルド・<img src="/images/pokemon/pokemon-0212-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:2px">ハッサム</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド" style="width:32px;height:32px;vertical-align:middle;margin-right:2px">ギルガルド・<img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム" style="width:32px;height:32px;vertical-align:middle;margin-right:2px">ハッサム</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">はがね技で弱点</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0445-00.webp" alt="" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ガブリアスのじしんで処理</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ガブリアスのじしんで処理</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0094-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0094-00.webp" alt="ゲンガー" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">催眠で積み展開を妨害</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みがわりを張ってから積む・サイコキネシス採用なら先にゲンガーを処理（どくタイプに×2）</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0448-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">バレットパンチ（先制はがね技）で上から弱点を突いてくる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アーマーガアのひこう耐性で受けてサイクルを回す</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0970-00.webp" alt="" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0970-00.webp" alt="キラフロル" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-03-poison.png" alt="どく" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">どく技（ヘドロばくだん等）で弱点を突く（使用率13位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアスのじしんで処理・先にキラフロルを排除してからフラエッテを展開</td>
 </tr>
@@ -704,3 +704,10 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 - **ギャラドスとの同居率1位**——フラエッテが苦手な相手にはギャラドスをメガ進化させる選出に切り替える2択構成として機能
 
 同じ6枠にフラエッテとギャラドスを共存させ、対面に応じてどちらをメガ進化させるか選ぶ構成は、M-2環境の中核的な戦略の一つです。次シーズンでの採用も十分に検討に値します。
+
+---
+
+## 関連考察記事
+
+- [【ポケモンチャンピオンズ】ガブリアス徹底考察 M-2シーズン使用率1位](/blog/garchomp-analysis-m2/)
+- [【ポケモンチャンピオンズ】メガスターミー徹底考察 M-2シーズン](/blog/starmie-analysis-m2/)
