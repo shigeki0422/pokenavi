@@ -691,7 +691,7 @@ AS最大化型に比べてこうげきまたはすばやさが落ちるため、
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #fca5a5">
-    <img src="/images/pokemon/pokemon-0879-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア
+    <img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア
     <small style="color:#94a3b8;display:block">はがね/ひこう</small>
   </td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">物理Bが高く、みず・こおり技が0.5倍。でんき技も持てる</td>
@@ -699,7 +699,7 @@ AS最大化型に比べてこうげきまたはすばやさが落ちるため、
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #fca5a5">
-    <img src="/images/pokemon/pokemon-0001-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">くさタイプ全般
+    <img src="/images/pokemon/pokemon-0003-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">くさタイプ全般
     <small style="color:#94a3b8;display:block">くさ</small>
   </td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">くさ技でスターミーが2倍を受ける。アイススピナーで処理できるが先手取られる場合も</td>
@@ -707,7 +707,7 @@ AS最大化型に比べてこうげきまたはすばやさが落ちるため、
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #fca5a5">
-    <img src="/images/pokemon/pokemon-0596-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">でんきタイプ全般
+    <img src="/images/pokemon/pokemon-0135-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">でんきタイプ全般
     <small style="color:#94a3b8;display:block">でんき</small>
   </td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">でんき技が2倍。物理技でのみず耐性を突かれると処理される</td>
@@ -735,7 +735,7 @@ AS最大化型に比べてこうげきまたはすばやさが落ちるため、
     <div style="font-size:0.68rem;color:#555;margin-top:2px">でんき・くさを無効化。ブリジュラスへじしん打点</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0260-00.webp" alt="ラグラージ">
+    <img src="/images/pokemon/pokemon-0450-00.webp" alt="ラグラージ">
     <div class="name">じめんタイプ</div>
     <div class="rate">でんき対策</div>
     <div style="font-size:0.68rem;color:#555;margin-top:2px">スターミーのでんき弱点をカバー</div>
@@ -753,7 +753,7 @@ AS最大化型に比べてこうげきまたはすばやさが落ちるため、
     <div style="font-size:0.68rem;color:#555;margin-top:2px">ゴースト・あく対策。特殊4色でサポート（1メガルールに注意）</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0277-00.webp" alt="ミミロップ">
+    <img src="/images/pokemon/pokemon-0428-00.webp" alt="ミミロップ">
     <div class="name">フェアリータイプ</div>
     <div class="rate">あく・ゴースト受け</div>
     <div style="font-size:0.68rem;color:#555;margin-top:2px">スターミーのあく・ゴースト弱点を受ける</div>
