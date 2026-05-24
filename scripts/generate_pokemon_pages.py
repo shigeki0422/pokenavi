@@ -225,7 +225,6 @@ POKEMON_DATA = {
         "file": "charizard", "dex": 6, "id": "0006-00",
         "types": ["ほのお", "ひこう"],
         "stats": [78, 84, 78, 109, 85, 100],
-        "analysis": ["charizard-x-analysis-m2", "charizard-y-analysis-m2"],
     },
     "アーマーガア": {
         "file": "corviknight", "dex": 823, "id": "0823-00",
@@ -246,7 +245,6 @@ POKEMON_DATA = {
         "file": "lucario", "dex": 448, "id": "0448-00",
         "types": ["かくとう", "はがね"],
         "stats": [70, 110, 70, 115, 70, 90],
-        "analysis": ["lucario-analysis-m2"],
     },
     "ゲンガー": {
         "file": "gengar", "dex": 94, "id": "0094-00",
@@ -276,13 +274,11 @@ POKEMON_DATA = {
         "file": "glimmora", "dex": 970, "id": "0970-00",
         "types": ["いわ", "どく"],
         "stats": [83, 55, 90, 125, 90, 81],
-        "analysis": ["kiraflosure-analysis-m2"],
     },
     "ミミロップ": {
         "file": "lopunny", "dex": 428, "id": "0428-00",
         "types": ["ノーマル"],
         "stats": [65, 76, 84, 54, 96, 105],
-        "analysis": ["lopunny-analysis-m2"],
     },
     "カイリュー": {
         "file": "dragonite", "dex": 149, "id": "0149-00",
@@ -294,7 +290,6 @@ POKEMON_DATA = {
         "file": "scizor", "dex": 212, "id": "0212-00",
         "types": ["むし", "はがね"],
         "stats": [70, 130, 100, 55, 80, 65],
-        "analysis": ["scizor-analysis-m2"],
     },
     "ウルガモス": {
         "file": "volcarona", "dex": 637, "id": "0637-00",
