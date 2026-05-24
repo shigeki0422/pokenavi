@@ -51,12 +51,26 @@ src/
 - 使用する前に `public/images/pokemon/` に実際にファイルが存在するか確認する
 - 存在しないファイルを参照する場合は img タグを除去してテキストのみにする
 
+**種族値バー（合計行）**
+- 合計値の span には必ず `min-width:40px;white-space:nowrap` を指定する（3桁数値が改行されるのを防ぐ）
+- 例: `<span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">580</span>`
+
+**メガシンカ種族値バー（差分表示）**
+- 実数値（`width:32px`固定）と差分（`width:40px`固定）を**必ず別 span** にする。同じ span に入れると実数値カラムがずれる
+- 差分なし: `<span style="width:32px;text-align:right">78</span><span style="width:40px"></span>`
+- 差分あり（増加）: `<span style="width:32px;text-align:right"><strong style="color:#dc2626">130</strong></span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+46</span>`
+- 差分あり（減少）: `<span style="width:32px;text-align:right">92</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#dc2626">-10</span>`
+- 合計行も同様に2 span構成: `<span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">700</span><span style="width:40px"></span>`
+- generate_pokemon_pages.py の `generate_mega_section()` が自動処理するため、スクリプト経由で生成したページは修正不要。garchomp.md のみ手動管理
+
 ### 事実確認
 - タイプ・技・特性は必ず正確に記載する（例：アーマーガアは はがね/ひこう、でんきではない）
-- ステータス記号: A=こうげき、B=ぼうぎょ、C=とくこう、D=とくぼう、S=すばやさ、H=HP
+- ステータス記号: A=こうげき、B=ぼうぎょ、C=とくこう、D=とくぼう、S=すばやさ、H=HP。**略称は必ず大文字**（AS+H、HBS等。「h」「s」など小文字は不可）
 - 技の追加効果も正確に（例：アクアブレイクはBダウン、Dダウンではない）
 - 「STAB」は使わず「タイプ一致補正」または「一致技」と書く
 - 「上から倒す」「先制できる」の記述は対象ポケモンのSと比較してから書く（例：メガスターミーS120より遅いポケモンを「上から倒せる」と書かない）
+- メガ進化タイプ変化による耐性変化を正確に記述する。「無効→等倍」になっても「弱点になる」とは書かない（例：ギャラドスのじめん無効→等倍は「2倍弱点」ではなく「等倍で通る」）
+- 「〇〇対策」と書く前にタイプ相性を確認する。逆方向の誤りに注意（例：あくタイプはフェアリーに×2弱点なのでフェアリー対策にならない）
 
 ### 文章スタイル
 - 自明な情報は書かない（「1試合に1体しかメガ進化できない」「メガ進化枠を消費するため他のポケモンはメガ石を使えない」等のメガ全般に言えるルール説明、「メガ石採用率がほぼ100%」等の当然の帰結、「Lv50」等の競技で一律の前提条件）
@@ -65,6 +79,10 @@ src/
 - 採用率の低い技・戦略を「最大の特徴」「最強ギミック」として取り上げない（例：採用率30%の技を「最大の武器」と書かない）
 - 「〇〇タイプとの使い分け」は採用実績のある技・型が複数ある場合のみ書く
 - 文脈から突然無関係なポケモンを挿入しない
+- 「マッチアップ」は使わず「有利なポケモン」「苦手なポケモン」と書く
+- 「純〇〇型」の「純」は不要。「積み型」「耐久型」で十分
+- 型ごとの弱みはその型に固有の弱点を書く（他の型にも共通する弱点を特定型の弱みとして書かない）
+- 「〜の全て」「〜全て」はタイトルに使わない（仰々しい）。代わりに「採用率と立ち回り」「型別解説」など具体的な表現を使う
 
 ### 環境知識（ポケモンチャンピオンズ）
 - 現在実装されていないポケモンは言及しない（例：ラグラージは未実装）
@@ -101,6 +119,147 @@ src/
 - ポケモンチャンピオンズ使用率・同居率: https://champs.pokedb.tokyo
 - ランキング補助: https://gamewith.jp/pokemon-champions/
 - Smogon Usage Stats（参考）
+
+## データ取得ルール
+- 使用率・採用率・同居率データはクロール済みDBに保存されているため、ポケモン情報ページ（`src/content/pokemon/`）作成時は**ソースサイトへのアクセス不要**
+- チームメイト（同居率TOP10）の順位は**同居率順位**で表示する（使用率順位ではない）
+- DBにないデータが必要な場合のみ、ユーザーに確認してからアクセスする
+
+## ポケモン情報ページ作成手順
+
+テンプレートは `src/content/pokemon/garchomp.md`。以下の手順で作成する。
+
+### ステップ1: DBからデータを取得（全て `scripts/pokenavi.db`）
+
+`SEASON`・`POKEMON` を置換して実行。最新クロール日は `MAX(crawled_date)` で自動取得。
+
+```bash
+# 使用率・pokemon_id（画像ファイル名の元）
+sqlite3 scripts/pokenavi.db "
+SELECT rank, pokemon_id, usage_rate
+FROM pokemon_usage
+WHERE season='M-2' AND rule='single' AND pokemon='POKEMON'
+  AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_usage WHERE season='M-2' AND rule='single');"
+
+# 集計日（ページ表示用）
+sqlite3 scripts/pokenavi.db "SELECT MAX(crawled_date) FROM pokemon_moves WHERE season='M-2' AND rule='single' AND pokemon='POKEMON';"
+
+# 技TOP10
+sqlite3 scripts/pokenavi.db "
+SELECT rank, move, usage_rate FROM pokemon_moves
+WHERE season='M-2' AND rule='single' AND pokemon='POKEMON'
+  AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_moves WHERE season='M-2' AND rule='single' AND pokemon='POKEMON')
+ORDER BY rank LIMIT 10;"
+
+# 持ち物TOP10
+sqlite3 scripts/pokenavi.db "
+SELECT rank, item, usage_rate FROM pokemon_items
+WHERE season='M-2' AND rule='single' AND pokemon='POKEMON'
+  AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_items WHERE season='M-2' AND rule='single' AND pokemon='POKEMON')
+ORDER BY rank LIMIT 10;"
+
+# 特性
+sqlite3 scripts/pokenavi.db "
+SELECT rank, ability, usage_rate FROM pokemon_abilities
+WHERE season='M-2' AND rule='single' AND pokemon='POKEMON'
+  AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_abilities WHERE season='M-2' AND rule='single' AND pokemon='POKEMON')
+ORDER BY rank LIMIT 5;"
+
+# 性格TOP10
+sqlite3 scripts/pokenavi.db "
+SELECT rank, nature, usage_rate FROM pokemon_natures
+WHERE season='M-2' AND rule='single' AND pokemon='POKEMON'
+  AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_natures WHERE season='M-2' AND rule='single' AND pokemon='POKEMON')
+ORDER BY rank LIMIT 10;"
+
+# ステータス振りTOP10（H/A/B/C/D/S数値付き）
+sqlite3 scripts/pokenavi.db "
+SELECT rank, ev_spread, ev_h, ev_a, ev_b, ev_c, ev_d, ev_s, usage_rate FROM pokemon_evs
+WHERE season='M-2' AND rule='single' AND pokemon='POKEMON'
+  AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_evs WHERE season='M-2' AND rule='single' AND pokemon='POKEMON')
+ORDER BY rank LIMIT 10;"
+
+# チームメイトTOP10（pokemon_id付き）
+sqlite3 scripts/pokenavi.db "
+SELECT p.rank, p.partner, u.pokemon_id
+FROM pokemon_partners p
+LEFT JOIN pokemon_usage u
+  ON u.pokemon=p.partner AND u.season=p.season AND u.rule=p.rule
+  AND u.crawled_date=(SELECT MAX(crawled_date) FROM pokemon_usage WHERE season='M-2' AND rule='single')
+WHERE p.pokemon='POKEMON' AND p.season='M-2' AND p.rule='single'
+  AND p.crawled_date=(SELECT MAX(crawled_date) FROM pokemon_partners WHERE season='M-2' AND rule='single' AND pokemon='POKEMON')
+ORDER BY p.rank;"
+```
+
+### ステップ2: ポケモン画像
+
+`pokemon_usage.pokemon_id` の値（例：`0445-00`）を使い `/images/pokemon/pokemon-0445-00.webp` を参照。
+**記憶で図鑑番号を決めつけない**。JOINでpokemon_idがNULLになった場合（名前表記ゆれ）は以下で確認：
+
+```bash
+ls public/images/pokemon/ | grep "DEXNUMBER"
+# または usage テーブルで名前を検索
+sqlite3 scripts/pokenavi.db "SELECT pokemon, pokemon_id FROM pokemon_usage WHERE pokemon LIKE '%NAME%' AND season='M-2' AND rule='single' LIMIT 5;"
+```
+
+ファイルが存在しない場合は img タグを除去してテキストのみ表示（CLAUDE.md 基本ルール準拠）。
+
+### ステップ3: 技のタイプアイコン
+
+タイプ画像は `/images/types/type-XX-name.png`（番号表は CLAUDE.md 上部を参照）。
+技のタイプはゲーム知識から判断し、正確に記載すること。
+
+### ステップ4: 持ち物アイコン
+
+**個別PNGが存在するもの**（`public/images/items/` にある7件）:
+| ファイル名 | 持ち物 |
+|---|---|
+| item-0157-ram.png | ラムのみ |
+| item-0158-obon.png | オボンのみ |
+| item-0188-yache.png | ヤチェのみ |
+| item-0197-haban.png | ハバンのみ |
+| item-0275-tasuki.png | きあいのタスキ |
+| item-0287-scarf.png | こだわりスカーフ |
+| item-0683-garchompite.png | ガブリアスナイト（他メガ石も同様） |
+
+**上記以外は全てスプライトシートを使用**：
+```bash
+# アイテム番号を item-sprite.css から検索（アイテム番号を知っている場合）
+python3 -c "
+import re, sys
+css = open('public/images/items/item-sprite.css').read()
+num = sys.argv[1]  # 例: '0234'
+m = re.search(r'--item-' + num + r':([^;]+)', css)
+print(m.group(1) if m else 'NOT FOUND')
+" 0234
+```
+
+スプライトの表示HTML（24px）:
+```html
+<!-- position の値 = CSS変数の値 × 0.375 -->
+<span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:Xpx Ypx;flex-shrink:0"></span>
+```
+
+主要アイテムのスプライト位置（24px換算済み）:
+| 持ち物 | X | Y |
+|---|---|---|
+| たべのこし | -288 | -192 |
+| ひかりのこな | -384 | -168 |
+| やわらかいすな | -360 | -192 |
+| こだわりメガネ | -216 | -264 |
+| こだわりはちまき | -192 | -264 |
+| いのちのたま | 0 | -192 |
+
+新しいアイテムのスプライト位置が必要な場合は、アイテム番号をCSSから調べて × 0.375 で換算する。
+
+### ステップ5: 名前表記ゆれへの注意
+
+`pokemon_partners` と `pokemon_usage` で名前が一致しないケースがある（例：フラエッテ(えいえん)↔フラエッテ:永遠）。
+JOINでpokemon_idがNULLになった場合は次で確認：
+
+```bash
+sqlite3 scripts/pokenavi.db "SELECT DISTINCT pokemon, pokemon_id FROM pokemon_usage WHERE season='M-2' AND rule='single' AND pokemon LIKE '%NAME%';"
+```
 
 ## 収益モデル
 - 月次分析レポート販売（デジタル商品）

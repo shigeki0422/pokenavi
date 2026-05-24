@@ -3,6 +3,9 @@ const today = new Date();
 ---
 
 <footer>
+	<div class="links">
+		<a href="/privacy">プライバシーポリシー</a>
+	</div>
 	&copy; 2026 ポケナビ
 </footer>
 <style>
@@ -11,5 +14,13 @@ const today = new Date();
 		background: linear-gradient(var(--gray-gradient)) no-repeat;
 		color: rgb(var(--gray));
 		text-align: center;
+	}
+	.links {
+		margin-bottom: 0.8em;
+		font-size: 0.85rem;
+	}
+	.links a {
+		color: rgb(var(--gray));
+		text-decoration: underline;
 	}
 </style>

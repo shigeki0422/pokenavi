@@ -1,0 +1,70 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'プライバシーポリシー | ポケナビ';
+const description = 'ポケナビのプライバシーポリシー。広告・アクセス解析・Cookieの取り扱いについて説明します。';
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 2em 1.5em 4em;
+        color: rgb(var(--gray-dark));
+        line-height: 1.8;
+      }
+      h1 { font-size: 1.6rem; margin-bottom: 0.4em; }
+      h2 { font-size: 1.15rem; margin: 2em 0 0.5em; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3em; }
+      p, li { font-size: 0.95rem; }
+      ul { padding-left: 1.4em; }
+      .updated { font-size: 0.82rem; color: rgb(var(--gray)); margin-bottom: 2em; }
+      a { color: rgb(var(--accent)); }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>プライバシーポリシー</h1>
+      <p class="updated">最終更新日：2026年5月24日</p>
+
+      <p>ポケナビ（以下「当サイト」）は、ユーザーのプライバシーを尊重し、個人情報の保護に努めます。本ページでは、当サイトにおける情報の取り扱いについて説明します。</p>
+
+      <h2>広告について</h2>
+      <p>当サイトは Google AdSense を利用した広告を掲載しています。Google AdSense は、ユーザーの興味に応じた広告を配信するために Cookie を使用します。Cookie を無効にする方法や、広告のパーソナライズを無効にする方法については、<a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">Google の広告ポリシー</a>をご覧ください。</p>
+
+      <h2>アフィリエイトについて</h2>
+      <p>当サイトは Amazon.co.jp アソシエイトプログラムに参加しています。記事内のリンクを経由してご購入いただいた場合、当サイトに紹介料が発生することがあります。購入者の費用が増えることはありません。</p>
+
+      <h2>アクセス解析について</h2>
+      <p>当サイトは Cloudflare Web Analytics を使用してアクセス状況を計測しています。このツールは Cookie を使用せず、個人を特定する情報を収集しません。詳細は <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare のプライバシーポリシー</a>をご覧ください。</p>
+
+      <h2>Cookieについて</h2>
+      <p>当サイトでは以下の目的で Cookie を使用することがあります。</p>
+      <ul>
+        <li>Google AdSense による広告配信の最適化</li>
+      </ul>
+      <p>ブラウザの設定から Cookie を無効にすることが可能ですが、一部機能が正常に動作しない場合があります。</p>
+
+      <h2>免責事項</h2>
+      <p>当サイトに掲載している情報は、できる限り正確を期していますが、内容の完全性・正確性・有用性を保証するものではありません。当サイトの利用によって生じたいかなる損害についても、運営者は責任を負いません。</p>
+      <p>また、当サイトからリンクされている外部サイトの内容については、当サイトは関与しておらず、責任を負いません。</p>
+
+      <h2>著作権</h2>
+      <p>当サイトに掲載している文章・画像等のコンテンツの著作権は、特に明記がない限り当サイト運営者に帰属します。無断転載・複製はお断りします。</p>
+      <p>ポケモンに関する名称・画像等の著作権は株式会社ポケモン・任天堂株式会社等に帰属します。</p>
+
+      <h2>プライバシーポリシーの変更</h2>
+      <p>法令の改正や運営方針の変更により、本ポリシーを予告なく改定する場合があります。改定後の内容は当ページに掲載した時点で有効となります。</p>
+
+      <h2>お問い合わせ</h2>
+      <p>本ポリシーに関するお問い合わせは、以下のメールアドレスまでご連絡ください。</p>
+      <p><a href="mailto:welkinring13@gmail.com">welkinring13@gmail.com</a></p>
+    </main>
+    <Footer />
+  </body>
+</html>

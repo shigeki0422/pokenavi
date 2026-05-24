@@ -11,6 +11,10 @@ const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const posts = (await getCollection('blog'))
 	.filter((post) => showDrafts || !post.data.draft)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const pokemonPages = (await getCollection('pokemon'))
+	.filter((p) => showDrafts || !p.data.draft)
+	.sort((a, b) => a.data.dexNumber - b.data.dexNumber);
 ---
 
 <!doctype html>
@@ -94,8 +98,24 @@ const posts = (await getCollection('blog'))
 				<p>使用率・パーティ構成・勝率をデータサイエンスの視点で分析します</p>
 			</section>
 
+			<section style="margin-bottom:3rem">
+				<h2 class="section-title">ポケモン情報 <a href="/pokemon/" style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:8px">すべて見る →</a></h2>
+				<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px">
+					{pokemonPages.map((p) => (
+						<a href={`/pokemon/${p.id}/`} style="display:block;text-decoration:none;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+							<img
+								src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
+								alt={p.data.pokemonName}
+								style="width:64px;height:64px;display:block;margin:0 auto 4px"
+							/>
+							<div style="font-size:0.75rem;font-weight:bold;color:rgb(var(--black))">{p.data.pokemonName}</div>
+						</a>
+					))}
+				</div>
+			</section>
+
 			<section>
-				<h2 class="section-title">最新記事</h2>
+				<h2 class="section-title">考察記事 <a href="/blog/" style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:8px">すべて見る →</a></h2>
 				<ul>
 					{
 						posts.map((post) => (
