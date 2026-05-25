@@ -12,10 +12,11 @@ const posts = (await getCollection('blog'))
 	.filter((post) => showDrafts || !post.data.draft)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
-const pokemonPages = (await getCollection('pokemon'))
+const allPokemonPages = (await getCollection('pokemon'))
 	.filter((p) => showDrafts || !p.data.draft)
-	.sort((a, b) => (a.data.usageRank ?? 999) - (b.data.usageRank ?? 999))
-	.slice(0, 10);
+	.sort((a, b) => (a.data.usageRank ?? 999) - (b.data.usageRank ?? 999));
+const pokemonPages = allPokemonPages.slice(0, 10);
+const pokemonTotal = allPokemonPages.length;
 ---
 
 <!doctype html>
@@ -100,18 +101,27 @@ const pokemonPages = (await getCollection('pokemon'))
 			</section>
 
 			<section style="margin-bottom:3rem">
-				<h2 class="section-title">ポケモン情報 <a href="/pokemon/" style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:8px">すべて見る →</a></h2>
-				<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px">
-					{pokemonPages.map((p) => (
-						<a href={`/pokemon/${p.id}/`} style="display:block;text-decoration:none;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
-							<img
-								src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
-								alt={p.data.pokemonName}
-								style="width:64px;height:64px;display:block;margin:0 auto 4px"
-							/>
-							<div style="font-size:0.75rem;font-weight:bold;color:rgb(var(--black))">{p.data.pokemonName}</div>
-						</a>
-					))}
+				<h2 class="section-title">ポケモン情報 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">使用率 TOP10</span></h2>
+				<div style="position:relative">
+					<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px">
+						{pokemonPages.map((p) => (
+							<a href={`/pokemon/${p.id}/`} style="display:block;text-decoration:none;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+								<img
+									src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
+									alt={p.data.pokemonName}
+									style="width:64px;height:64px;display:block;margin:0 auto 4px"
+								/>
+								<div style="font-size:0.72rem;font-weight:bold;color:rgb(var(--gray));margin-bottom:1px">{p.data.usageRank}位</div>
+								<div style="font-size:0.75rem;font-weight:bold;color:rgb(var(--black))">{p.data.pokemonName}</div>
+							</a>
+						))}
+					</div>
+					<div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to bottom,transparent,white);pointer-events:none"></div>
+				</div>
+				<div style="text-align:center;margin-top:8px">
+					<a href="/pokemon/" style="display:inline-block;padding:10px 28px;background:rgb(var(--accent));color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:700;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+						すべて見る（全{pokemonTotal}件）→
+					</a>
 				</div>
 			</section>
 
