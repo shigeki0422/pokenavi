@@ -853,7 +853,7 @@ description: '{desc}'
 pokemonName: '{display_name}'
 dexNumber: {pdata['dex']}{image_form_line}
 pubDate: '2026-05-24'
-draft: true
+draft: false
 {f"analysisSlug: '{analysis_slugs[0]}'" if len(analysis_slugs) == 1 else ""}
 ---"""
 
