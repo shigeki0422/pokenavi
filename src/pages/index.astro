@@ -14,7 +14,8 @@ const posts = (await getCollection('blog'))
 
 const pokemonPages = (await getCollection('pokemon'))
 	.filter((p) => showDrafts || !p.data.draft)
-	.sort((a, b) => a.data.dexNumber - b.data.dexNumber);
+	.sort((a, b) => (a.data.usageRank ?? 999) - (b.data.usageRank ?? 999))
+	.slice(0, 10);
 ---
 
 <!doctype html>

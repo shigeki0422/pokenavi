@@ -3,6 +3,7 @@ title: 'ルカリオ | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズ M-2シーズンのルカリオ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率9位。'
 pokemonName: 'ルカリオ'
 dexNumber: 448
+usageRank: 9
 pubDate: '2026-05-24'
 draft: false
 
@@ -125,12 +126,12 @@ draft: false
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">せいぎのこころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">あくタイプの技を受けるとこうげきが1段階上がる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8.6%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ふくつのこころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるんだときすばやさが2段階上がる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7.6%</td>
 </tr>
 </tbody>

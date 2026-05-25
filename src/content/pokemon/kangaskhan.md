@@ -3,6 +3,7 @@ title: 'ガルーラ | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズ M-2シーズンのガルーラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率33位。'
 pokemonName: 'ガルーラ'
 dexNumber: 115
+usageRank: 33
 pubDate: '2026-05-24'
 draft: false
 

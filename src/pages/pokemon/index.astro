@@ -7,7 +7,7 @@ import Header from '../../components/Header.astro';
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const pages = (await getCollection('pokemon'))
 	.filter((p) => showDrafts || !p.data.draft)
-	.sort((a, b) => a.data.dexNumber - b.data.dexNumber);
+	.sort((a, b) => (a.data.usageRank ?? 999) - (b.data.usageRank ?? 999));
 ---
 
 <!doctype html>

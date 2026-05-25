@@ -3,6 +3,7 @@ title: 'フラエッテ（永遠） | ポケモンチャンピオンズ 使用�
 description: 'ポケモンチャンピオンズ M-2シーズンのフラエッテ（永遠）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率13位。'
 pokemonName: 'フラエッテ（永遠）'
 dexNumber: 670
+usageRank: 13
 imageForm: '05'
 pubDate: '2026-05-24'
 draft: false

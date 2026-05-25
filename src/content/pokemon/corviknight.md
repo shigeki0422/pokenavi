@@ -3,6 +3,7 @@ title: 'アーマーガア | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズ M-2シーズンのアーマーガア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率6位。'
 pokemonName: 'アーマーガア'
 dexNumber: 823
+usageRank: 6
 pubDate: '2026-05-24'
 draft: false
 
@@ -120,7 +121,7 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">プレッシャー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技のPPを1ターンに2倍消費させる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">64.7%</td>
 </tr>
 <tr>
@@ -130,7 +131,7 @@ draft: false
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">きんちょうかん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のきのみを使えなくする</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.0%</td>
 </tr>
 </tbody>

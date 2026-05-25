@@ -3,6 +3,7 @@ title: 'クエスパトラ | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズ M-2シーズンのクエスパトラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率35位。'
 pokemonName: 'クエスパトラ'
 dexNumber: 956
+usageRank: 35
 pubDate: '2026-05-24'
 draft: false
 

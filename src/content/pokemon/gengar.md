@@ -3,6 +3,7 @@ title: 'ゲンガー | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズ M-2シーズンのゲンガー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率10位。'
 pokemonName: 'ゲンガー'
 dexNumber: 94
+usageRank: 10
 pubDate: '2026-05-24'
 draft: false
 analysisSlug: 'gengar-analysis-m2'
@@ -217,7 +218,7 @@ analysisSlug: 'gengar-analysis-m2'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px">きあいだま</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:20px;height:20px"> きあいだま</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">40.1%</td>
 </tr>
 <tr>

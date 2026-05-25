@@ -3,6 +3,7 @@ title: 'ハッサム | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズ M-2シーズンのハッサム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率17位。'
 pokemonName: 'ハッサム'
 dexNumber: 212
+usageRank: 17
 pubDate: '2026-05-24'
 draft: false
 

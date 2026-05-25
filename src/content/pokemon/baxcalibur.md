@@ -3,6 +3,7 @@ title: 'ブリジュラス | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズ M-2シーズンのブリジュラス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率2位。'
 pokemonName: 'ブリジュラス'
 dexNumber: 1018
+usageRank: 2
 pubDate: '2026-05-24'
 draft: false
 
@@ -125,7 +126,7 @@ draft: false
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">がんじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HP満タンのとき一撃では倒れない。一撃必殺技も無効</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">22.5%</td>
 </tr>
 <tr style="background:#fafafa">

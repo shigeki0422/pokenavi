@@ -3,6 +3,7 @@ title: 'ラウドボーン | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズ M-2シーズンのラウドボーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率26位。'
 pokemonName: 'ラウドボーン'
 dexNumber: 911
+usageRank: 26
 pubDate: '2026-05-24'
 draft: false
 

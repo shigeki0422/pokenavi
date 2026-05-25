@@ -3,6 +3,7 @@ title: 'リザードン | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズ M-2シーズンのリザードン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率5位。'
 pokemonName: 'リザードン'
 dexNumber: 6
+usageRank: 5
 pubDate: '2026-05-24'
 draft: false
 
@@ -120,7 +121,7 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">もうか</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/3以下になるとほのおタイプの技の威力が1.5倍になる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">86.6%</td>
 </tr>
 <tr>

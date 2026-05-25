@@ -851,7 +851,8 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
 title: '{display_name} | ポケモンチャンピオンズ 使用率・基礎データ M-2'
 description: '{desc}'
 pokemonName: '{display_name}'
-dexNumber: {pdata['dex']}{image_form_line}
+dexNumber: {pdata['dex']}
+usageRank: {usage_rank}{image_form_line}
 pubDate: '2026-05-24'
 draft: false
 {f"analysisSlug: '{analysis_slugs[0]}'" if len(analysis_slugs) == 1 else ""}

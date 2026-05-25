@@ -22,6 +22,7 @@ const pokemon = defineCollection({
 		description: z.string(),
 		pokemonName: z.string(),
 		dexNumber: z.number(),
+		usageRank: z.number().optional(),
 		imageForm: z.string().optional().default('00'),
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),

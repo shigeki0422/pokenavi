@@ -3,6 +3,7 @@ title: 'ミミロップ | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズ M-2シーズンのミミロップ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率15位。'
 pokemonName: 'ミミロップ'
 dexNumber: 428
+usageRank: 15
 pubDate: '2026-05-24'
 draft: false
 
@@ -124,7 +125,7 @@ draft: false
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">メロメロボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をメロメロ状態にする</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">23.2%</td>
 </tr>
 <tr style="background:#fafafa">

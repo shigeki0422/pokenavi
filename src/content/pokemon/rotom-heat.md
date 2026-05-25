@@ -3,6 +3,7 @@ title: 'ヒートロトム | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズ M-2シーズンのヒートロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率49位。'
 pokemonName: 'ヒートロトム'
 dexNumber: 479
+usageRank: 49
 imageForm: '01'
 pubDate: '2026-05-24'
 draft: false

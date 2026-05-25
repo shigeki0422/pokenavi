@@ -3,6 +3,7 @@ title: 'オオニューラ | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズ M-2シーズンのオオニューラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率34位。'
 pokemonName: 'オオニューラ'
 dexNumber: 903
+usageRank: 34
 pubDate: '2026-05-24'
 draft: false
 
