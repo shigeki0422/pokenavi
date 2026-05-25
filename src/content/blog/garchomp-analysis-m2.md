@@ -590,7 +590,7 @@ M-1データではイダイトウ（オス）(66%)・フラエッテ（永遠）
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">アシレーヌ</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0670-05.webp" alt="フラエッテ" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">フラエッテ</span></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">フェアリー技4倍</span></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">フェアリー技2倍</span></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ハッサム</span>・<span style="white-space:nowrap"><img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド" style="width:36px;height:36px;vertical-align:middle;margin-right:4px">ギルガルドで受ける</span></td>
 </tr>
 <tr>
