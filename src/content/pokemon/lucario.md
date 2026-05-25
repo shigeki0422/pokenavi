@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズ M-2シーズンのルカリオ�
 pokemonName: 'ルカリオ'
 dexNumber: 448
 pubDate: '2026-05-24'
-draft: true
+draft: false
 
 ---
 

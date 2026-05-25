@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズ M-2シーズンのミミロッ�
 pokemonName: 'ミミロップ'
 dexNumber: 428
 pubDate: '2026-05-24'
-draft: true
+draft: false
 
 ---
 

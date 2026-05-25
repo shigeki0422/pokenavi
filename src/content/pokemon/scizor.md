@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズ M-2シーズンのハッサム�
 pokemonName: 'ハッサム'
 dexNumber: 212
 pubDate: '2026-05-24'
-draft: true
+draft: false
 
 ---
 

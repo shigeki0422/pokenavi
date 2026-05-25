@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズ M-2シーズンのキラフロ�
 pokemonName: 'キラフロル'
 dexNumber: 970
 pubDate: '2026-05-24'
-draft: true
+draft: false
 
 ---
 
