@@ -256,7 +256,7 @@ M-2で確認できる主要な3型を紹介します。型①②はどちらも�
 
 ```
 性格：おくびょう
-努力値：CS（とくこう・すばやさ全振り）
+EV：C32 S32（とくこう・すばやさ全振り、余りH2）
 持ち物：フラエッテナイト
 技構成：ムーンフォース / めいそう / ドレインキッス / みがわり
 ```
@@ -265,7 +265,7 @@ M-2で確認できる主要な3型を紹介します。型①②はどちらも�
 
 メガ進化後のすばやさ種族値は102。ガブリアス（102）と同値で、リザードン（100）・サザンドラ（98）・メガギャラドス（81）より速い位置にあります。ただし**ゲンガー（110）には上から抜かれる**ため、何もしなければゲンガーに先手を渡すことになります。
 
-おくびょうCS全振りにすることで、**無補正ガブリアスへの先手**が取れるようになり、リザードン・サザンドラには確実に先手を取れます。**先に動けるかどうかはめいそうを積めるかどうかを直接決定する**ため、おくびょう採用の優先度が高くなっています。
+おくびょうC32 S32全振りにすることで、**無補正ガブリアスへの先手**が取れるようになり、リザードン・サザンドラには確実に先手を取れます。**先に動けるかどうかはめいそうを積めるかどうかを直接決定する**ため、おくびょう採用の優先度が高くなっています。
 
 4枠目のみがわりは積み展開の安定化に貢献します。ゲンガーの催眠・トリックを最も警戒するなら初手みがわりから入るのが安全で、みがわりが維持されている間に積んで制圧します。
 
@@ -275,7 +275,7 @@ M-2で確認できる主要な3型を紹介します。型①②はどちらも�
 
 ```
 性格：おくびょう
-努力値：CS（とくこう・すばやさ全振り）
+EV：C32 S32（とくこう・すばやさ全振り、余りH2）
 持ち物：フラエッテナイト
 技構成：はめつのひかり / ムーンフォース / ドレインキッス / サイコキネシス
 ```
@@ -297,7 +297,7 @@ Base     = floor( 22 × 威力 × SpA / SpD ) ÷ 50 + 2
 
 ムーンフォース(95) vs はめつのひかり(140) の威力比 = **1.474倍**。この差から、ムーンフォースがHP残量の **68%以上** を与えている相手に対し、はめつのひかりが確定1発を取れる計算になります（0.68 × 1.474 ≈ 1.00）。
 
-M-2の主要3ターゲット（おくびょうC252、C実数値207）で具体的に検証します。
+M-2の主要3ターゲット（おくびょうC32振り、C実数値207）で具体的に検証します。
 
 ---
 
@@ -369,7 +369,7 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 ---
 
-**C252振りが必須**
+**C32振りが必須**
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -380,11 +380,11 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
   <th style="padding:8px 12px;background:#f8f0fb;border:1px solid #ddb8ee;text-align:center">判定</th>
 </tr></thead>
 <tbody>
-<tr style="background:#fff0f8"><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:700">252振り（おくびょう）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">207</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">162（105%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">確定1発</td></tr>
+<tr style="background:#fff0f8"><td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:700">C32振り（おくびょう）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">207</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">162（105%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center;font-weight:700">確定1発</td></tr>
 <tr><td style="padding:8px 12px;border:1px solid #e2d4f0">無振り</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">175</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">136（88%）</td><td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">確定2発</td></tr>
 </tbody></table></div>
 
-無振りではアシレーヌへの確定1発が成立しません。フルアタ型は**C252振り一択**です。
+無振りではアシレーヌへの確定1発が成立しません。フルアタ型は**C32振り一択**です。
 
 ムーンフォースを使う場面：HPが減って反動が致命傷になりうる局面、または命中90のリスクを避けたい局面で使い分けます。
 
@@ -400,14 +400,14 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 
 ```
 性格：ひかえめ
-努力値：HB+C（HP・ぼうぎょ重点、とくこうに余りを振る）
+EV：H32 B29 C5（HP・ぼうぎょ重点、とくこうに余りを振る）
 持ち物：フラエッテナイト
 技構成：ムーンフォース / めいそう / ドレインキッス / こうごうせい or みがわり
 ```
 
 **ひかえめ+耐久振りの意図**
 
-性格ひかえめはとくこうを+10%補正します。これにHB方向の努力値配分を組み合わせることで、**おくびょうCS型より遅いが物理1発耐え性能を持ちながら、ずぶといCS型よりとくこうが高い**という中間ポジションを実現します。
+性格ひかえめはとくこうを+10%補正します。これにHB方向のEV配分を組み合わせることで、**おくびょうCS型より遅いが物理1発耐え性能を持ちながら、ずぶといCS型よりとくこうが高い**という中間ポジションを実現します。
 
 物理耐久を確保することでルカリオ・ハッサムなどのはがね物理アタッカーの攻撃を1発耐えてめいそうを積む展開が可能。こうごうせい採用でターンをまたいだ回復を組み合わせれば、削られながらも積み続けられる持久戦型のエースになります。みがわり採用の場合はゲンガーの催眠・トリックへの耐性を確保しつつ積む展開が可能です。
 
@@ -435,10 +435,10 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
   <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">ひかえめ</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">努力値</td>
-  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">CS</td>
-  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">CS</td>
-  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">HB+C</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">EV</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">C32 S32</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">C32 S32</td>
+  <td style="padding:8px 12px;border:1px solid #e2d4f0;text-align:center">H32 B29 C5</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #e2d4f0;font-weight:600;background:#fdf8ff">めいそう</td>
@@ -542,7 +542,7 @@ HP特化しないアタッカー型（HP=166）に対しては、はめつのひ
 <tbody>
 <tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">使用率</td><td style="padding:8px 12px;border:1px solid #dbeafe">10位</td></tr>
 <tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">性格（1位）</td><td style="padding:8px 12px;border:1px solid #dbeafe">いじっぱり 45.1%</td></tr>
-<tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">努力値（1位）</td><td style="padding:8px 12px;border:1px solid #dbeafe">AS（すばやさ・こうげき全振り）38.1%</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">EV（1位）</td><td style="padding:8px 12px;border:1px solid #dbeafe">A32 S32（こうげき・すばやさ全振り）38.1%</td></tr>
 <tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">技構成</td><td style="padding:8px 12px;border:1px solid #dbeafe">たきのぼり / りゅうのまい / じしん / こおりのキバ</td></tr>
 <tr><td style="padding:8px 12px;border:1px solid #dbeafe;font-weight:600;background:#f8fbff">ギャラドスナイト採用率</td><td style="padding:8px 12px;border:1px solid #dbeafe">76.3%</td></tr>
 </tbody></table></div>

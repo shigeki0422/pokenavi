@@ -1,6 +1,6 @@
 ---
-title: '【ポケモンチャンピオンズ】メガリザードンY徹底考察 M-2シーズン ひでりの最強特殊アタッカー全て'
-description: 'M-2シーズンで使用率5位のリザードン。61.4%が選ぶメガリザードンYを徹底分析。C159×ひでりの圧倒的火力、ソーラービーム即発動による技範囲の広さ、いわ4倍弱点への対策まで実データをもとに解説します。'
+title: '【ポケモンチャンピオンズ】メガリザードンY考察 M-2 ひでり特殊エース 採用型と晴れ展開の解説'
+description: 'M-2シーズンで使用率5位のリザードン。63.6%が選ぶメガリザードンYを徹底分析。C159×ひでりのトップクラス火力、ソーラービーム即発動による技範囲の広さ、いわ4倍弱点への対策まで実データをもとに解説します。'
 pubDate: '2026-05-22'
 draft: true
 heroImage: '../../assets/hero-charizard-y-m2.png'
@@ -102,20 +102,20 @@ heroImage: '../../assets/hero-charizard-y-m2.png'
     </div>
     <div style="margin-top:8px;font-size:0.85rem;color:#555">
       使用率 <strong style="color:#dc2626">5位</strong>（リザードン全体） ／
-      メガ石採用率 <strong style="color:#ea580c">61.4%</strong>
+      メガ石採用率 <strong style="color:#ea580c">63.6%</strong>
     </div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-2シーズン開始8日目（2026/05/20）時点の集計です
+> ⚠️ 本記事のデータはM-2シーズン（2026/05/30）時点の集計です
 
-M-2シーズンシングルバトルでリザードン全体は**使用率5位**を記録。そのうち実に**61.4%がリザードナイトYを採用**しており、メガリザードンXの37.2%を大きく上回っています。この差はひとえに**ひでり＋C159という突出した特殊火力**から来ています。メガ進化した瞬間から天候「にほんばれ」が発動し、ほのお技が1.5倍になるだけでなく、相手の天候パーティへのカウンターとしても機能する万能性——それがM-2環境でYが主流となっている最大の理由です。
+M-2シーズンシングルバトルでリザードン全体は**使用率5位**を記録。そのうち実に**63.6%がリザードナイトYを採用**しており、メガリザードンXの34.9%を大きく上回っています。この差はひとえに**ひでり＋C159という突出した特殊火力**から来ています。メガ進化した瞬間から天候「にほんばれ」が発動し、ほのお技が1.5倍になるだけでなく、相手の天候パーティへのカウンターとしても機能する万能性——それがM-2環境でYが主流となっている最大の理由です。
 
 ---
 
 ## なぜ今、メガリザードンYが強いのか
 
-### 1. C159×ひでりの実質火力は環境最高水準
+### 1. C159×ひでりの実質火力はトップクラス
 
 メガリザードンYのとくこうは**159**。これだけでも環境トップクラスの数値ですが、とくせい**ひでり**によってメガ進化と同時に「にほんばれ」が発動し、ほのお技が×1.5倍になります。かえんほうしゃ（威力90）の実質ダメージ計算をすると:
 
@@ -127,11 +127,11 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <small style="color:#777;margin-top:4px;display:block">※さらにひかえめ補正（×1.1）がかかる場合は実質222以上</small>
 </div>
 
-これはフルパワーで使うオーバーヒート（威力130×タイプ一致補正1.5）の195を超える数値です。ひでりの恩恵は「天気を無料で展開できる」だけでなく、**毎ターンほのお技が安定して最大火力を発揮する**という点で、他のほのおタイプとの差別化要因になっています。
+ひでりの恩恵は「天気を無料で展開できる」だけでなく、**毎ターンほのお技が安定して最大火力を発揮する**という点で、他のほのおタイプとの差別化要因になっています。
 
 ### 2. ソーラービーム即発動で技範囲が劇的に広がる
 
-通常のソーラービームは2ターンかかりますが、にほんばれ状態では**1ターンで即発動**します。ソーラービームの採用率が58.6%という高さを誇るのは、ひでりとのシナジーによって「みず・いわ・じめん」という本来のYの弱点タイプに対してくさタイプで打点を持てるからです。特にYの4倍弱点であるいわタイプへの間接的カウンター、そして**カバルドン（みず弱点）・ガブリアス（みず弱点）へのソーラービーム採用**は対環境上位への回答となっています。
+通常のソーラービームは2ターンかかりますが、にほんばれ状態では**1ターンで即発動**します。ソーラービームの採用率が61.0%という高さを誇るのは、ひでりとのシナジーによってくさが2倍以上通る相手に対して打点を持てるからです。たとえばカバルドン（じめん/いわ）はくさ×2×1=×2、イダイトウ（みず）はくさ×2でいずれも弱点。一方ガブリアス（じめん/ドラゴン）はくさ×2×0.5=等倍止まりですが、それでもC159の高火力で削りを入れられます。
 
 ### 3. 天候パーティへのカウンター兼リーダー役
 
@@ -189,7 +189,7 @@ M-2環境では天候パーティとの対面が想定されます。相手が�
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right;color:#2563eb">634</span>
+    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">634</span>
   </div>
 </div>
 
@@ -248,7 +248,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 </table>
 </div>
 
-とくこう+50という変化量はXの+21と比べて大きく上回ります。さらとくぼう+30によりD115となり、特殊耐久が大幅強化されています。
+とくこう+50という変化量はXの+21と比べて大きく上回ります。さらにとくぼう+30によりD115となり、特殊耐久が大幅強化されています。
 
 ### タイプ・弱点
 
@@ -301,7 +301,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
   <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンY" style="width:48px;height:48px">
   <div>
     <strong>ひでりソーラービーム型</strong><br>
-    <small style="color:#555">CS振り ／ ひかえめ（最多採用）</small>
+    <small style="color:#555">C32 S32 ／ ひかえめ（最多採用）</small>
   </div>
 </div>
 
@@ -336,28 +336,28 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
   <td style="padding:6px 10px;border:1px solid #fcd34d"><strong>エアスラッシュ</strong></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center"><img src="/images/types/type-02-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #fcd34d">ひこう一致技。かくとう・むし・くさへ</td>
+  <td style="padding:6px 10px;border:1px solid #fcd34d">ひこう一致技。かくとう・むし・くさへ。命中95%・ひるみ30%</td>
 </tr>
 <tr style="background:#fffbeb">
   <td style="padding:6px 10px;border:1px solid #fcd34d">4</td>
   <td style="padding:6px 10px;border:1px solid #fcd34d"><strong>オーバーヒート</strong></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center"><img src="/images/types/type-09-fire.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center">130</td>
-  <td style="padding:6px 10px;border:1px solid #fcd34d">最大火力の捨て技。フィニッシュ・先制に</td>
+  <td style="padding:6px 10px;border:1px solid #fcd34d">最大火力の捨て技。フィニッシュに。命中90%・C-2</td>
 </tr>
 </tbody>
 </table>
 </div>
 </div>
 
-**採用率データとの照合**: ソーラービーム58.6%・かえんほうしゃ41.4%・エアスラッシュ30.2%・オーバーヒート26.1%という実データがこの型を裏付けています。
+**採用率データとの照合**: ソーラービーム61.0%・かえんほうしゃ42.4%・エアスラッシュ32.9%・オーバーヒート26.6%という実データがこの型を裏付けています。
 
 **ひかえめCS振りの優位性**: C159×ひかえめ補正（×1.1）によって実数値C174超相当の特殊火力を発揮します。ひでり込みのかえんほうしゃはCS無振り（D無振り）のほとんどのポケモンを確定2発以内に取れます。相手がCS振りでなくHB振りのポケモンでも、ひでり×タイプ一致補正込みの高威力で突破できるケースが多い。
 
-**ソーラービームの刺さり先**: みず・いわ・じめんタイプへの打点として機能します。環境上位では:
-- **カバルドン**（じめん/いわ): ソーラービームで弱点を突ける
-- **ガブリアス**（じめん）: ソーラービームが等倍だがC159の威力で大ダメージ
-- **イダイトウ**（みず）: ソーラービームで弱点
+**ソーラービームの刺さり先**: くさが2倍以上通る相手への打点として機能します。環境上位では:
+- **カバルドン**（じめん/いわ）: くさ×2×1=×2弱点を突ける
+- **イダイトウ**（みず）: くさ×2弱点を突ける
+- **ガブリアス**（じめん/ドラゴン）: くさ×2×0.5=等倍止まりだがC159の威力で削りは入る
 
 ---
 
@@ -368,7 +368,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
   <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンY" style="width:48px;height:48px">
   <div>
     <strong>おくびょう最速型</strong><br>
-    <small style="color:#555">CS振り ／ おくびょう（28.8%採用）</small>
+    <small style="color:#555">C32 S32 ／ おくびょう（30.0%採用）</small>
   </div>
 </div>
 
@@ -389,7 +389,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
   <td style="padding:6px 10px;border:1px solid #86efac"><strong>かえんほうしゃ</strong></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-09-fire.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center">90</td>
-  <td style="padding:6px 10px;border:1px solid #86efac">安定打点。ひでり込みで環境最高水準の火力</td>
+  <td style="padding:6px 10px;border:1px solid #86efac">安定打点。ひでり込みでトップクラスの火力</td>
 </tr>
 <tr style="background:#f0fdf4">
   <td style="padding:6px 10px;border:1px solid #86efac">2</td>
@@ -403,7 +403,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
   <td style="padding:6px 10px;border:1px solid #86efac"><strong>エアスラッシュ</strong></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-02-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #86efac">ひこう一致打点。ひるみ30%も優秀</td>
+  <td style="padding:6px 10px;border:1px solid #86efac">ひこう一致打点。命中95%・ひるみ30%</td>
 </tr>
 <tr style="background:#f0fdf4">
   <td style="padding:6px 10px;border:1px solid #86efac">4</td>
@@ -417,7 +417,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 </div>
 </div>
 
-**おくびょうvs.ひかえめの選択**: おくびょうにするとSが最速100族になり、S無振り同速グループを確実に上から抜けます。ひかえめ比でCが1.1→1.0に下がりますが、先手を取れる相手の範囲が広がることで**Cに振った火力を活かす機会が増える**という考え方もあります。M-2の採用率ではひかえめ31.7%・おくびょう28.8%と拮抗しており、環境のS100ラインポケモンの多さによって選択が変わります。
+**おくびょうvs.ひかえめの選択**: おくびょうにするとSが最速100族になり、S無振り同速グループを確実に上から抜けます。ひかえめ比でCが1.1→1.0に下がりますが、先手を取れる相手の範囲が広がることで**Cに振った火力を活かす機会が増える**という考え方もあります。M-2の採用率ではひかえめ32.7%・おくびょう30.0%と拮抗しており、環境のS100ラインポケモンの多さによって選択が変わります。
 
 ---
 
@@ -428,12 +428,12 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
   <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンY" style="width:48px;height:48px">
   <div>
     <strong>HB+CS複合型</strong><br>
-    <small style="color:#555">HB+cs振り（4.1%採用）</small>
+    <small style="color:#555">H32 B20 C11 S3（4.6%採用）</small>
   </div>
 </div>
 
 <p style="font-size:0.88em;color:#555;margin:8px 0">
-Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さです。この型はBに努力値を少し振ることで、物理打点（特にガブリアスのじしん等）への耐性を確保しながら特殊火力も維持するバランス型です。採用率4.1%と低いですが、ステロが撒かれやすい環境への対応策として存在感があります。
+Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さです。この型はBにEVを少し振ることで、物理打点（特にガブリアスのじしん等）への耐性を確保しながら特殊火力も維持するバランス型です。採用率4.6%と低いですが、ステロが撒かれやすい環境への対応策として存在感があります。
 </p>
 </div>
 
@@ -454,45 +454,45 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ソーラービーム</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>58.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>61.0%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひでりで即発動。Y最多採用技。みず/いわ/じめん打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひでりで即発動。Y最多採用技。くさが2倍以上通る相手への打点</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>かえんほうしゃ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">41.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">42.4%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひでり×一致補正込みで実質202.5。安定したほのお打点</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>エアスラッシュ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">32.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう一致技。かくとう・くさへ。ひるみ30%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう一致技。かくとう・くさへ。命中95%・ひるみ30%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>オーバーヒート</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26.6%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">130</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">C-2の代わりに最大火力。ひでり込みで実質292.5</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">命中90%・C-2の代わりに最大火力。ひでり込みで実質292.5</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>はねやすめ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.1%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HP50%回復。S優位を活かして先に回復できる場面も</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>フレアドライブ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">35.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">33.3%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">Xより少数だがYでも採用例。物理打点の補完</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主にX型の物理一致技（採用率はX/Y合算値）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ニトロチャージ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">28.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">50</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S+1積み技。Yでも採用されるS強化手段</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主にX型のS+1積み技（採用率はX/Y合算値）</td>
 </tr>
 </tbody>
 </table>
@@ -517,7 +517,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 <tr>
   <td style="padding:8px 12px;border:1px solid #fed7aa"><img src="/images/types/type-09-fire.png" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ほのおタイプ全般</td>
   <td style="padding:8px 12px;border:1px solid #fed7aa">ほのお技×1.5倍</td>
-  <td style="padding:8px 12px;border:1px solid #fed7aa">ウルガモス・ヒードランなど後続が強化</td>
+  <td style="padding:8px 12px;border:1px solid #fed7aa">ウルガモスなど後続が強化</td>
 </tr>
 <tr style="background:#fffbeb">
   <td style="padding:8px 12px;border:1px solid #fed7aa"><img src="/images/types/type-11-grass.png" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ソーラービーム持ち</td>
@@ -533,7 +533,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 </table>
 </div>
 
-**重要な点**: メガ進化後のひでりは「ひでり」扱いです。相手がすなあらしや雨を展開していても、**メガ進化と同時にひでりで上書き**します。ただし相手が後から天候変化技を使う、または相手もひでり持ちを繰り出した場合は上書きされます。M-2では天候パーティへのカウンターとしてメガリザードンYを採用するケースも見られます。
+**重要な点**: 相手がすなあらしや雨を展開していても、**メガ進化と同時ににほんばれで上書き**します。ただし相手が後から天候変化技を使う、または相手もひでり持ちを繰り出した場合は上書きされます。M-2では天候パーティへのカウンターとしてメガリザードンYを採用するケースも見られます。
 
 ---
 
@@ -555,24 +555,19 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
   <td style="padding:8px 12px;border:1px solid #fca5a5">アーマーガア・ハッサム</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（使用率2位）</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">ブレイブバードorいわ技でYを一撃。S60で後手になるが技次第</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">ガブリアス・カバルドン</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（使用率10位）</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（使用率12位）</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">ストーンエッジでYの4倍弱点。威嚇でA降下も</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">ルカリオ・ブリジュラス</td>
 </tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0745-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（使用率8位）</td>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0745-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（使用率7位）</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">すなあらし+ステロ展開でYの行動を大きく制限する</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">マスカーニャ・アシレーヌ</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #fca5a5">ステルスロック展開</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5"><strong>ステロ1/2ダメージ（4倍弱点）</strong>。ほぼ即死水準</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">アーマーガア（くるいむしゃ除去）・デフォグ持ち</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">アーマーガア（デフォグで除去）・スピンやデフォグ持ち</td>
 </tr>
 </tbody>
 </table>
@@ -584,7 +579,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 
 <div class="partner-grid">
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0227-00.webp" alt="アーマーガア">
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">ステロ除去・物理受け</div>
   </div>
@@ -601,7 +596,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
-    <div class="rate">ひでり恩恵・相互補完</div>
+    <div class="rate">いわ受け・相互補完</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド">
@@ -609,7 +604,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
     <div class="rate">いわ受け・特殊耐性</div>
   </div>
   <div class="partner-card">
-    
+    <img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム">
     <div class="name">ハッサム</div>
     <div class="rate">フェアリー・いわ対策</div>
   </div>
@@ -637,8 +632,8 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 <tbody>
 <tr>
   <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">採用率</td>
-  <td style="padding:8px 14px;border:1px solid #cbd5e1">37.2%</td>
-  <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fefce8"><strong>61.4%</strong></td>
+  <td style="padding:8px 14px;border:1px solid #cbd5e1">34.9%</td>
+  <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fefce8"><strong>63.6%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">主力の向き</td>
@@ -686,14 +681,32 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 
 ---
 
+## データ分析①：ひでり補正が生む実質火力 — 通常のほのおアタッカーとの比較
+
+メガリザードンYの最大の強みである「C159×ひでり」の火力を定量的に示します。かえんほうしゃの実質威力を条件別に比較すると以下の通りです。
+
+| 条件 | 実質威力（かえんほうしゃ） | 計算式 |
+|---|---|---|
+| 一般的なほのおアタッカー（タイプ一致のみ） | 135 | 威力90×1.5 |
+| メガリザードンY（おくびょう・ひでりあり） | 202.5 | 威力90×1.5×1.5 |
+| **メガリザードンY（ひかえめ・ひでりあり）** | **222** | **威力90×1.5×1.5×1.1** |
+
+ひかえめCS型のかえんほうしゃ（実質222）は、一般的なほのおアタッカー（実質135）と比べると**約1.65倍の火力**を誇ります。同じ技名でも受けるダメージはまったく別物です。
+
+ソーラービームが採用率1位（61.0%）である理由も定量的に説明できます。通常は2ターン必要なソーラービームが、ひでり下では1ターンで即発動します。つまり「みず/いわ/じめんへの打点」を**タイムコストゼロで追加できる**という効果です。かえんほうしゃで通常の相手を処理しながら、弱点タイプにはソーラービームで対応するという構成が、ひでりがある限りほぼノーコストで成立するためソーラービームの採用が合理的になっています。
+
+また、オーバーヒートはひでり込みで実質威力292.5（威力130×1.5×1.5）に達します。C-2デメリットを受け入れた上でも、この1発でほとんどのポケモンを確定圏内に捉えられるため、26.6%という一定の採用率が維持されています。
+
+---
+
 ## まとめ
 
-メガリザードンYはM-2シーズンで全リザードン採用の**61.4%**を占める、環境最強クラスの特殊アタッカーです。
+メガリザードンYはM-2シーズンで全リザードン採用の**63.6%**を占める、トップクラスの特殊アタッカーです。
 
 - **C159×ひでり**の組み合わせでかえんほうしゃの実質威力は202.5——安定した超火力
-- **ソーラービーム即発動**によりみず・いわ・じめんへの打点を確保できる広い技範囲
+- **ソーラービーム即発動**によりくさが2倍以上通る相手への打点を確保できる広い技範囲
 - **いわ4倍弱点・ステロ1/2ダメージ**は致命的→アーマーガアなどのステロ対策ポケモンとのセットが前提
 - **天候パーティのリーダー**として後続ポケモンへ恩恵を与えるパーティ全体設計が可能
 - **ひでり天候展開を軸にしたパーティ構築**が最大の強みを引き出す
 
-いわ4倍という大きなリスクを抱えながらも、それを補って余りある圧倒的な特殊火力がM-2環境でYを選ぶ筆頭の理由です。**ステロを撒かせない守りの構築**と組み合わせることで、メガリザードンYは環境最強クラスの火力砲台として機能します。
+いわ4倍という大きなリスクを抱えながらも、それを補って余りある圧倒的な特殊火力がM-2環境でYを選ぶ筆頭の理由です。**ステロを撒かせない守りの構築**と組み合わせることで、メガリザードンYはトップクラスの火力砲台として機能します。

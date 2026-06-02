@@ -367,7 +367,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 
 <div class="build-header">
   <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.7%）</span>
-  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">努力値：CS（35.0%）</span>
+  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 H2（22.2%）</span>
 </div>
 
 **技構成（例）**
@@ -391,7 +391,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 
 <div class="build-header">
   <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.7%）</span>
-  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">努力値：CS（35.0%）</span>
+  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 H2（22.2%）</span>
   <span style="background:#16a34a;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：カイリュナイト</span>
 </div>
 
@@ -416,7 +416,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 
 <div class="build-header">
   <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.7%）</span>
-  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">努力値：HBS補強（CS+HB）</span>
+  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 B1 H1（11.3%）</span>
   <span style="background:#16a34a;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：カイリュナイト</span>
 </div>
 
@@ -430,7 +430,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 | はねやすめ | ひこう（変化） | HP回復でマルチスケイル再発動を狙う |
 
 **強み**  
-HBに努力値を振ることで物理方面の耐久が向上し、マルチスケイルと合わせて先発での行動保証がさらに高まります。はねやすめでHPを満タンに戻すことでマルチスケイルを再発動し、2度目の被弾も半減できる場面があります。
+HBにEVを振ることで物理方面の耐久が向上し、マルチスケイルと合わせて先発での行動保証がさらに高まります。はねやすめでHPを満タンに戻すことでマルチスケイルを再発動し、2度目の被弾も半減できる場面があります。
 
 **弱み**  
 CSフルに振った型よりとくこうとすばやさが下がるため、火力・速度で劣ります。はねやすめを打つ隙がない試合展開では、回復技の枠が無駄になることもあります。
@@ -441,7 +441,7 @@ CSフルに振った型よりとくこうとすばやさが下がるため、火
 
 <div class="build-header">
   <span style="background:#dc2626;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ / いじっぱり / ようき</span>
-  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">努力値：CS / AS</span>
+  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 / A32 S32</span>
   <span style="background:#d97706;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：ラムのみ（12.4%）など</span>
 </div>
 

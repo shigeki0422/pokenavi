@@ -1,6 +1,6 @@
 ---
-title: '【ポケモンチャンピオンズ】メガリザードンX徹底考察 M-2シーズン ほのお/ドラゴンの全て'
-description: 'M-2シーズンで使用率5位のリザードン。そのうち37.2%が選ぶメガリザードンXを徹底分析。かたいツメ×りゅうのまいの崩し力、物理・特殊両対応の構築法、ステロ対策まで実データをもとに解説します。'
+title: '【ポケモンチャンピオンズ】メガリザードンX考察 M-2 物理ほのお/ドラゴン型 採用率と立ち回り'
+description: 'M-2シーズンで使用率5位のリザードン。そのうち34.9%が選ぶメガリザードンXを徹底分析。かたいツメ×りゅうのまいの崩し力、物理・特殊両対応の構築法、ステロ対策まで実データをもとに解説します。'
 pubDate: '2026-05-22'
 draft: true
 heroImage: '../../assets/hero-charizard-x-m2.png'
@@ -102,26 +102,26 @@ heroImage: '../../assets/hero-charizard-x-m2.png'
     </div>
     <div style="margin-top:8px;font-size:0.85rem;color:#555">
       使用率 <strong style="color:#dc2626">5位</strong>（リザードン全体） ／
-      メガ石採用率 <strong style="color:#7c3aed">37.2%</strong>
+      メガ石採用率 <strong style="color:#7c3aed">34.9%</strong>
     </div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-2シーズン開始8日目（2026/05/20）時点の集計です
+> ⚠️ 本記事のデータはM-2シーズン（2026/05/30）時点の集計です
 
-M-2シーズンシングルバトルでリザードン全体は**使用率5位**を記録。そのうち約37.2%がリザードナイトXを持たせてメガリザードンXとして運用されています。シーズントップのメガリザードンYが61.4%という数字を誇る中でも、Xを選ぶプレイヤーが確実に存在している理由は明確です——**かたいツメ×りゅうのまいによる物理崩し力**、そしてフェアリー・ドラゴンといった特殊受けを一撃で吹き飛ばすほのお/ドラゴンという強力なタイプ複合にあります。
+M-2シーズンシングルバトルでリザードン全体は**使用率5位**を記録。そのうち約34.9%がリザードナイトXを持たせてメガリザードンXとして運用されています。シーズントップのメガリザードンYが63.6%という数字を誇る中でも、Xを選ぶプレイヤーが確実に存在している理由は明確です——**かたいツメ×りゅうのまいによる物理崩し力**、そしてほのお/ドラゴンという攻守に優れたタイプ複合にあります。
 
 ---
 
 ## なぜ今、メガリザードンXが強いのか
 
-### 1. かたいツメ＋りゅうのまいで環境最高クラスの崩し力
+### 1. かたいツメ＋りゅうのまいでトップクラスの崩し力
 
-メガリザードンXのとくせい**かたいツメ**は、接触技の威力を×1.3にする効果を持ちます。フレアドライブ（威力120）がかたいツメで実質威力156、ドラゴンクロー（威力80）が実質威力104となります。さらに**りゅうのまい**で+1こうげき・+1すばやさを積めば、積み後の実質ほのお一致フレアドライブはこうげき130×1.5（タイプ一致補正）×1.3（かたいツメ）×1.5（りゅうのまい）という破壊的なダメージを叩き出します。M-2環境で猛威を振るうガブリアスやブリジュラスに対して、りゅうのまい1回から確定2発以内に持ち込めるケースが増えることで、**積みエース型の決定力としては環境最高水準**です。
+メガリザードンXのとくせい**かたいツメ**は、接触技の威力を×1.3にする効果を持ちます。フレアドライブ（威力120）がかたいツメで実質威力156、ドラゴンクロー（威力80）が実質威力104となります。さらに**りゅうのまい**で+1こうげき・+1すばやさを積めば、積み後の実質ほのお一致フレアドライブはこうげき130×1.5（タイプ一致補正）×1.3（かたいツメ）×1.5（りゅうのまい）という破壊的なダメージを叩き出します。M-2環境で猛威を振るうガブリアスやブリジュラスに対して、りゅうのまい1回から確定2発以内に持ち込めるケースが増えることで、**積みエース型の決定力としてはトップクラス**です。
 
 ### 2. ほのお/ドラゴン複合タイプによる広い技範囲
 
-メガリザードンYがひこうタイプを持つのに対し、Xはドラゴンタイプに変化します。このタイプは「こおり弱点がない」という点で特筆されます（ほのおタイプがこおりの弱点を打ち消す）。また、ドラゴン技がタイプ一致で使えるため、**みず/じめん/いわ以外の全タイプに対してほのお or ドラゴンのどちらかで等倍以上**が取れるカバレッジを誇ります。特に環境上位のガブリアス・ブリジュラス・カイリューといったドラゴン系には、ドラゴン一致技が突き刺さります。
+メガリザードンYがひこうタイプを持つのに対し、Xはドラゴンタイプに変化します。このタイプは「こおり弱点がない」という点で特筆されます（ほのおタイプがこおりの弱点を打ち消す）。また、ドラゴン技がタイプ一致で使えるため、**みず/じめん/いわ以外の全タイプに対してほのお or ドラゴンのどちらかで等倍以上**が取れる攻撃範囲を誇ります。特に環境上位のガブリアス・ブリジュラス・カイリューといったドラゴン系には、ドラゴン一致技が突き刺さります。
 
 ### 3. こうげき130・とくこう130の両刀ポテンシャル
 
@@ -179,11 +179,11 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right;color:#2563eb">634</span>
+    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">634</span>
   </div>
 </div>
 
-こうげき・とくこう が共に130という完全均等な両刀数値は、レジェンド級ポケモン並みの破壊力を持ちます。ぼうぎょ111は物理耐久面でも水準以上で、積み展開に入りやすい。一方でとくぼう85・HP78というDラインの薄さは、特殊技（特に弱点技）への耐性がなく、水・電気・竜技での確定1発圏に入るリスクがあります。すばやさ100はS無振りで環境トップのガブリアス（102）やブリジュラス（60）との比較でいえば、**ようき最速でS4振りガブリアスを上回り、りゅうのまい後は実質S200相当**で全環境ポケモンを抜けます。
+こうげき・とくこう が共に130という完全均等な両刀数値は、レジェンド級ポケモン並みの破壊力を持ちます。ぼうぎょ111は物理耐久面でも水準以上で、積み展開に入りやすい。一方でとくぼう85・HP78というDラインの薄さは、特殊技（特に弱点技）への耐性がなく、水・電気・竜技での確定1発圏に入るリスクがあります。すばやさ100はS無振りで環境トップのガブリアス（102）やブリジュラス（60）との比較でいえば、**ようき最速でガブリアス（102）と競る水準まで届き、りゅうのまい後は環境の大半を上から叩けます**。
 
 ### メガ進化前後の変化
 
@@ -336,11 +336,11 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 </div>
 </div>
 
-**採用率データとの照合**: りゅうのまい28.9%・フレアドライブ35.6%・ドラゴンクロー25.9%・かみなりパンチ19.8%という実データが、この型の採用を裏付けています。
+**採用率データとの照合**: りゅうのまい26.9%・フレアドライブ33.3%・ドラゴンクロー24.0%・かみなりパンチ18.2%という実データが、この型の採用を裏付けています。
 
-**ようきvs.いじっぱり**: ようきAS振りの場合、S無振り状態でS100グループ（ウルガモスなど）と同速になります。いじっぱりはAをさらに伸ばす代わりにSが落ちるため、S抜き調整が必要。対戦環境にS100ラインのポケモンが多いM-2では**ようき推奨**です。りゅうのまいを1回積んだ後のS実数値は環境最速クラスとなり、アシレーヌ・マスカーニャ・ミミッキュなどを軒並み上から踏めます。
+**ようきvs.いじっぱり**: ようきAS振りの場合、S無振り状態でS100グループ（ウルガモスなど）と同速になります。いじっぱりはAをさらに伸ばす代わりにSが落ちるため、S抜き調整が必要。対戦環境にS100ラインのポケモンが多いM-2では**ようき推奨**です。りゅうのまいを1回積んだ後のS実数値は環境上位の大半を上回り、アシレーヌ・マスカーニャ・ミミッキュなどを上から踏めます。
 
-**フレアドライブの反動問題**: 1/3ダメージの反動があるフレアドライブは連打できません。積んだ後に2体程度で役割を終えるイメージが基本。はねやすめ（採用率22.8%）と組み合わせることで持久力を高める選択肢もあります。
+**フレアドライブ運用の注意**: フレアドライブは1/3ダメージの反動があるため連打できません。積んだ後に2体程度で役割を終えるイメージが基本。はねやすめ（採用率22.1%）と組み合わせることで持久力を高める選択肢もあります。
 
 ---
 
@@ -386,14 +386,14 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <td style="padding:6px 10px;border:1px solid #86efac"><strong>エアスラッシュ</strong></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-02-flying.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #86efac">かくとう・むし・くさへの打点確保</td>
+  <td style="padding:6px 10px;border:1px solid #86efac">かくとう・むし・くさへの打点確保。命中95%・ひるみ30%</td>
 </tr>
 <tr style="background:#f0fdf4">
   <td style="padding:6px 10px;border:1px solid #86efac">4</td>
   <td style="padding:6px 10px;border:1px solid #86efac"><strong>オーバーヒート</strong></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center"><img src="/images/types/type-09-fire.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #86efac;text-align:center">130</td>
-  <td style="padding:6px 10px;border:1px solid #86efac">捨て技気味の超火力フィニッシュ技（C-2）</td>
+  <td style="padding:6px 10px;border:1px solid #86efac">捨て技気味の超火力フィニッシュ技（C-2・命中90%）</td>
 </tr>
 </tbody>
 </table>
@@ -404,7 +404,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 
 **CS型の相性**: 相手の物理受け（ぼうぎょ振りポケモン）を特殊技で貫通できるため、**相手の裏をかく読み合い性能**が高い。ただしニトロチャージは威力50と低く、ニトロチャージ段階では即効性がありません。積む余裕を作れるパーティ構成が前提となります。
 
-採用率データでは**ニトロチャージ30.2%・かえんほうしゃ41.4%・エアスラッシュ30.2%・オーバーヒート26.1%**という結果が、CS混合型の実採用を示しています。
+採用率データでは**ニトロチャージ28.9%・かえんほうしゃ42.4%・エアスラッシュ32.9%・オーバーヒート26.6%**という結果が、CS混合型の実採用を示しています。
 
 ---
 
@@ -415,12 +415,12 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンX" style="width:48px;height:48px">
   <div>
     <strong>はねやすめ型</strong><br>
-    <small style="color:#555">HB振り ／ ずぶとい（採用率1.2%）</small>
+    <small style="color:#555">HB振り ／ ずぶとい</small>
   </div>
 </div>
 
 <p style="font-size:0.88em;color:#555;margin:8px 0">
-はねやすめ採用率22.8%に示されるように、一定数のプレイヤーが耐久寄りの型を採用。ずぶといHB振りとはねやすめを組み合わせることで、みず・じめん・いわ弱点技への耐性を高めつつ長期戦へ持ち込む戦術です。ただし採用率1.2%と低く、M-2では特殊なサブオプションとなっています。
+はねやすめ採用率22.1%に示されるように、一定数のプレイヤーが耐久寄りの型を採用。ずぶといHB振りとはねやすめを組み合わせることで、みず・じめん・いわ弱点技への耐性を高めつつ長期戦へ持ち込む戦術です。ただしずぶとい採用率は1.0%と低く、M-2では特殊なサブオプションとなっています。
 </p>
 </div>
 
@@ -441,61 +441,61 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>かえんほうしゃ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">41.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">42.4%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">安定したほのお打点。CS型の主力技</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>フレアドライブ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">35.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">33.3%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かたいツメで実質156。りゅうのまい型の核</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>エアスラッシュ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">32.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう・くさへの打点。ひるみ30%も優秀</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ニトロチャージ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">28.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">50</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">S+1の積み+ほのお打点。CS型の加速手段</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>りゅうのまい</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">28.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">A+1・S+1。1積みで全抜き射程に入る</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>オーバーヒート</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26.6%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">130</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">C-2の代わりに最大威力。フィニッシュ技</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">C-2の代わりに高威力。フィニッシュ技</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ドラゴンクロー</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">25.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">24.0%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かたいツメで実質104。ドラゴン・みずへの打点</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>はねやすめ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.1%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HP50%回復。耐久型・積み後の長期戦向け</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>かみなりパンチ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・ひこうへの打点。かたいツメで実質97.5</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ソーラービーム</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">58.6%*</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">61.0%*</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">※Y型込みの数値。Xではほぼ非採用</td>
 </tr>
@@ -526,7 +526,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">みず+フェアリーでXの弱点を複数カバー</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">みず技がXの2倍弱点を突く（フェアリーは等倍）。S速い個体も多い</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">ブリジュラス・カイリュー</td>
 </tr>
 <tr>
@@ -535,8 +535,8 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <td style="padding:8px 12px;border:1px solid #fca5a5">アーマーガア・ギルガルド</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0869-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">S高い。くさ等倍なので大ダメージは与えにくい</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">無積みのXより速く、トリックフラワーやはたきおとすで先手を取られる（ほのお技は2倍で通る）</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">アーマーガア・ハッサム</td>
 </tr>
 <tr>
@@ -554,17 +554,12 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 
 <div class="partner-grid">
   <div class="partner-card">
-    
-    <div class="name">アーマーガア</div>
-    <div class="rate">じめん・いわ無効</div>
-  </div>
-  <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">フェアリー・みず対策</div>
   </div>
   <div class="partner-card">
-    
+    <img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン">
     <div class="name">カバルドン</div>
     <div class="rate">ステロ阻止・物理受け</div>
   </div>
@@ -574,7 +569,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
     <div class="rate">フェアリー対策</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0227-00.webp" alt="アーマーガア">
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">ステロ除去・物理受け</div>
   </div>
@@ -588,8 +583,6 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 **ステロ対策の重要性**: メガリザードンXはステルスロック（ステロ）によって1/4ダメージを受けます。**カバルドン・アーマーガアのような高耐久ポケモンでステロを撒かせない**、あるいはステロを除去できるポケモンをパーティに入れることが前提となります。
 
 **アーマーガアとの相性**: アーマーガアはじめんタイプを無効化でき、いわ技にも一定の耐性があります。さらに**Xが苦手なガブリアスに対してアーマーガアで後出しできる**という相性補完の良さも優秀です。
-
-**構築方針**: **同じリザードンでもYとXを1匹ずつ入れる選択肢**は対戦相手への択を広げますが、パーティの一貫性を保つためには基本的に使うメガ枠を1体に絞った構築が安定します。
 
 ---
 
@@ -607,8 +600,8 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 <tbody>
 <tr>
   <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">採用率</td>
-  <td style="padding:8px 14px;border:1px solid #cbd5e1">37.2%</td>
-  <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fefce8"><strong>61.4%</strong></td>
+  <td style="padding:8px 14px;border:1px solid #cbd5e1">34.9%</td>
+  <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fefce8"><strong>63.6%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">主力の向き</td>
@@ -641,13 +634,33 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 
 ---
 
+## データ分析①：「積みエース」の実態 — りゅうのまいは採用率5位
+
+メガリザードンXは「かたいツメ×りゅうのまいの積みエース」として語られることが多いですが、実際の技採用率を順に並べると意外な実態が見えてきます。
+
+| 順位 | 技 | 採用率 | 分類 |
+|---|---|---|---|
+| 1 | かえんほうしゃ | **42.4%** | 特殊ほのお |
+| 2 | フレアドライブ | 33.3% | 物理ほのお |
+| 3 | エアスラッシュ | 32.9% | 特殊ひこう |
+| 4 | ニトロチャージ | 28.9% | S積み |
+| **5** | **りゅうのまい** | **26.9%** | **物理A・S積み** |
+
+「積みエースの象徴」であるりゅうのまいは採用率5位（26.9%）で、最多技かえんほうしゃ（42.4%）より**15.5ポイント低い**数値です。さらにS積み技のニトロチャージ（28.9%）にも及ばない結果となっています。
+
+この数字が示すのは、メガリザードンXの実運用が「物理りゅうのまい型」と「特殊ニトロチャージCS型」に二分されているという現実です。「X=物理積みエース」というイメージが先行しがちですが、実際は約40%が特殊技主体のCS型構成を採用しています。
+
+相手が「X=物理型」と読んで物理受けを投入してくる場面では、特殊CS型が有効に刺さります。YではなくXを選ぶ理由のひとつに、この「型の読み合い性能」があります。
+
+---
+
 ## まとめ
 
-メガリザードンXはM-2シーズンで全リザードン採用の37.2%を占める、**物理崩し特化のメガ進化アタッカー**です。
+メガリザードンXはM-2シーズンで全リザードン採用の34.9%を占める、**物理崩し特化のメガ進化アタッカー**です。
 
 - **かたいツメ×りゅうのまい**の組み合わせは積み1回から全抜き射程が広がる破壊力
 - ほのお/ドラゴンのタイプ複合で**4倍弱点が存在しない**ことは安定感に直結
 - こうげき130・とくこう130の**両刀ポテンシャル**が相手の対策を難しくする
 - ステロ（ステルスロック）は1/4ダメージで大きな痛手→**ステロ対策ポケモンとセット**が前提
 
-メガリザードンY（61.4%）の方が採用率は高いですが、**相手のHB振りポケモンを崩したい・積みエースで対戦を決めたい**という戦略なら、Xを選ぶ明確な理由があります。パーティ全体での弱点補完を意識して構築してみてください。
+メガリザードンY（63.6%）の方が採用率は高いですが、**相手のHB振りポケモンを崩したい・積みエースで対戦を決めたい**という戦略なら、Xを選ぶ明確な理由があります。パーティ全体での弱点補完を意識して構築してみてください。

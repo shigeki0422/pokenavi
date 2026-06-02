@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】メガキラフロル徹底考察 M-2シーズン ステロ×高火力の二刀流'
-description: 'M-2シーズン使用率13位のメガキラフロルを徹底分析。ポケモンチャンピオンズオリジナルのメガ進化を持つキラフロルのメガ型・タスキ型の使い分け、ニードルガードの活用法、じめん×4倍への対策まで実データをもとに解説します。'
+description: 'M-2シーズン使用率15位のメガキラフロルを徹底分析。キラフロルナイト採用率54.2%、メガ型・タスキ型の使い分け、ステルスロック+高火力の二刀流スタイル、じめん×4倍への対策まで実データをもとに解説します。'
 pubDate: '2026-05-22'
 draft: true
 heroImage: '../../assets/hero-kiraflosure-m2.png'
@@ -28,17 +28,15 @@ heroImage: '../../assets/hero-kiraflosure-m2.png'
       <img src="/images/types/type-05-rock.png" alt="いわ" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="いわ" />
     </div>
     <div style="margin-top:8px;font-size:0.9rem">
-      <span style="background:#fef3c7;border:1px solid #f59e0b;padding:3px 10px;border-radius:4px;margin-right:8px;font-weight:bold">使用率 13位</span>
-      <span style="background:#f0fdf4;border:1px solid #22c55e;padding:3px 10px;border-radius:4px;font-weight:bold">キラフロルナイト 53.3%</span>
+      <span style="background:#fef3c7;border:1px solid #f59e0b;padding:3px 10px;border-radius:4px;margin-right:8px;font-weight:bold">使用率 15位</span>
+      <span style="background:#f0fdf4;border:1px solid #22c55e;padding:3px 10px;border-radius:4px;font-weight:bold">キラフロルナイト 54.2%</span>
     </div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-2シーズン開始8日目（2026/05/20）時点の集計です
+> ⚠️ 本記事のデータはM-2シーズン（2026/05/30）時点の集計です
 
-M-2シーズンのシングルバトルで、キラフロルは**使用率13位**を記録しています。キラフロルナイト採用率は**53.3%**と高く、しかしタスキ型も**35.4%**と非常に多い、2つの主要な型が並立しているユニークなポケモンです。
-
-キラフロルのメガ進化は**ポケモンチャンピオンズのオリジナル要素**です。標準のポケモンゲームシリーズにはキラフロルのメガ進化は存在せず、ポケモンチャンピオンズの世界でのみ使用できます。
+M-2シーズンのシングルバトルで、キラフロルは**使用率15位**を記録しています。キラフロルナイト採用率は**54.2%**と高く、しかしタスキ型も**36.0%**と非常に多い、2つの主要な型が並立しているユニークなポケモンです。
 
 メガキラフロルは「ステルスロック要因」と「高火力特殊アタッカー」という2つの役割を同時にこなせる、現環境随一の**汎用性の高い二刀流ポケモン**として注目されています。
 
@@ -48,7 +46,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 
 ### 理由1: ステルスロック＋高火力特殊攻撃の「二刀流」が強力
 
-多くの高火力アタッカーはステルスロックを覚えないか、覚えてもサポートに徹するため火力を妥協しています。しかしキラフロルはステルスロックを採用（35.9%）しながら、**パワージェム・ヘドロウェーブ・だいちのちから**という広いカバレッジの高威力技も持ちます。
+多くの高火力アタッカーはステルスロックを覚えないか、覚えてもサポートに徹するため火力を妥協しています。しかしキラフロルはステルスロックを採用（36.5%）しながら、**パワージェム・ヘドロウェーブ・だいちのちから**という広い攻撃範囲の高威力技も持ちます。
 
 ステルスロックを撒いた上でそのままアタッカーとして機能するため、**1体で2役をこなせる**圧倒的なコストパフォーマンスが強みです。メガ進化後はさらに特殊火力とすばやさが大幅に向上するため、ステロ後もすぐ攻撃に転じられます。
 
@@ -60,11 +58,11 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 - **ヘドロウェーブ（どく）**: フェアリー・くさタイプに抜群。環境のフラエッテ(永遠)に強い
 - **だいちのちから（じめん）**: はがね・どく・いわ・でんきに抜群。ブリジュラスへの特効
 
-この3技だけでM-2環境上位15体のほとんどに等倍以上を取れるカバレッジを持ちます。「技範囲が狭い」と感じる場面がほぼないのがキラフロルの大きな武器です。
+この3技だけでM-2環境上位15体のほとんどに等倍以上を取れる攻撃範囲を持ちます。「技範囲が狭い」と感じる場面がほぼないのがキラフロルの大きな武器です。
 
-### 理由3: ニードルガード（固有技）が接触技主体の環境に刺さる
+### 理由3: ニードルガードが接触技主体の環境に刺さる
 
-キラフロル固有技の「ニードルガード」（採用率29.2%）は、**相手の接触技を受けた際に相手のHPの1/8を削る**効果を持ちます。
+キラフロルの主力変化技「ニードルガード」（採用率27.9%）は、**相手の接触技を受けた際に相手のHPの1/8を削る**効果を持ちます。
 
 環境上位のガブリアス（じしん・げきりん等接触技多数）、ルカリオ（インファイト等）、ハッサム（バレットパンチ等）といった接触技メインのポケモンが多い環境では、ニードルガードを張るだけでじわじわとHPを削れます。特にかげふみや交代封じのない状況でも相手の接触技を抑制する心理的プレッシャーとして機能します。
 
@@ -122,13 +120,13 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right;color:#2563eb">485</span>
+    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">485</span>
   </div>
 </div>
 
 <div style="background:#fef3c7;border-left:4px solid #f59e0b;padding:10px 16px;margin:12px 0;border-radius:0 6px 6px 0;font-size:0.9em">
 <strong>メガ進化後の種族値について：</strong><br>
-キラフロルのメガ進化はポケモンチャンピオンズのオリジナルであるため、詳細な種族値の公式データは確認中です。ただし、実戦データからおくびょうCS型が主流（58.3%）であることが判明しており、<strong>とくこうとすばやさが通常より大幅に強化されている</strong>ことは確実です。本記事では通常のキラフロルの種族値を基準として解説します。
+メガキラフロルの詳細な種族値は公式データが未公開のため、本記事では通常のキラフロルの種族値を基準として解説します。実戦データからおくびょうCS型が主流（57.8%）であることが判明しており、<strong>とくこうとすばやさが通常より大幅に強化されている</strong>ことは確実です。
 </div>
 
 ### タイプ・弱点
@@ -197,7 +195,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 ### 型1：おくびょうCS型（メガキラフロル）── 最多採用の主流型
 
 <div class="build-header">
-  <span style="background:#7c3aed;color:white;padding:3px 10px;border-radius:4px;font-size:0.85rem;font-weight:bold">採用率 約58.3%（性格おくびょう）</span>
+  <span style="background:#7c3aed;color:white;padding:3px 10px;border-radius:4px;font-size:0.85rem;font-weight:bold">採用率 約57.8%（性格おくびょう）</span>
   <span style="background:#f0fdf4;border:1px solid #22c55e;padding:3px 10px;border-radius:4px;font-size:0.85rem">キラフロルナイト</span>
 </div>
 
@@ -215,8 +213,8 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう（すばやさ↑ / こうげき↓）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">努力値</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS（とくこうMAX・すばやさMAX）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">EV</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS全振り（C32・S32）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
@@ -251,7 +249,6 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 **弱み：**
 
 - じめん×4倍という超危険な弱点があり、ガブリアスのじしんで確定1発圏内に入る可能性が高い
-- キラフロルナイト採用によりメガ枠を消費する
 - ぼうぎょが90（通常時）とそれほど高くなく、物理攻撃には注意が必要
 
 ---
@@ -259,7 +256,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 ### 型2：ひかえめCS型（メガキラフロル）── 火力特化
 
 <div class="build-header">
-  <span style="background:#db2777;color:white;padding:3px 10px;border-radius:4px;font-size:0.85rem;font-weight:bold">採用率 31.4%（性格ひかえめ）</span>
+  <span style="background:#db2777;color:white;padding:3px 10px;border-radius:4px;font-size:0.85rem;font-weight:bold">採用率 33.0%（性格ひかえめ）</span>
   <span style="background:#f0fdf4;border:1px solid #22c55e;padding:3px 10px;border-radius:4px;font-size:0.85rem">キラフロルナイト</span>
 </div>
 
@@ -277,8 +274,8 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかえめ（とくこう↑ / こうげき↓）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">努力値</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS（とくこうMAX・すばやさMAX）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">EV</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS全振り（C32・S32）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
@@ -307,7 +304,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 ### 型3：タスキ型（非メガ）── 先発ステロ撒き
 
 <div class="build-header">
-  <span style="background:#64748b;color:white;padding:3px 10px;border-radius:4px;font-size:0.85rem;font-weight:bold">採用率 35.4%</span>
+  <span style="background:#64748b;color:white;padding:3px 10px;border-radius:4px;font-size:0.85rem;font-weight:bold">採用率 36.0%</span>
   <span style="background:#fff7ed;border:1px solid #f97316;padding:3px 10px;border-radius:4px;font-size:0.85rem">きあいのタスキ</span>
 </div>
 
@@ -325,8 +322,8 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう（すばやさ↑ / こうげき↓）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">努力値</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS（とくこうMAX・すばやさMAX）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">EV</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS全振り（C32・S32）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
@@ -350,22 +347,21 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 
 ステロ後は残りHP1でも、パワージェムやヘドロウェーブで相手に1発追加ダメージを与えてから退場するのが理想的な動きです。これによりパーティ後続のポケモンが有利な状況（ステロダメ蓄積＋相手の1体消耗）でゲームに入れます。
 
-メガ枠を消費しないため、パーティの別のポケモンをメガ進化させる構成に組み込みやすいのも大きな特徴です。タスキキラフロル＋メガゲンガーや、タスキキラフロル＋メガリザードンといった組み合わせが考えられます。
+メガ枠を消費しないため、パーティの別のポケモンをメガ進化させる構成に組み込みやすいのも大きな特徴です。同居率上位のミミロップやギャラドスをメガ枠に回し、タスキキラフロルで先発ステロを撒く組み合わせが考えられます。
 
-**キラースピン**（採用率20.2%）は固有技であり、詳細な効果は把握中ですが、タスキ型での採用が見られます。ステロ撒き後の場の状況をリセットする効果があると推測されます。
+**キラースピン**（採用率20.6%）はタスキ型での採用が見られます。
 
 **弱み：**
 
 - 非メガのためとくこうが低く、単純な火力で劣る
-- タスキはすでにダメージを受けた状態では機能しない
-- ステルスロックは相手にすでに撒かれている場合は効果が薄い
+- タスキは事前にステロやスリップダメージを受けていると確定1発を耐えられず、ステロ撒きの役割を果たせない
 
 ---
 
 ### 型4：おだやか型 ── 特殊受け＋ステロ役
 
 <div class="build-header">
-  <span style="background:#64748b;color:white;padding:3px 10px;border-radius:4px;font-size:0.85rem;font-weight:bold">採用率 7.6%（性格おだやか）</span>
+  <span style="background:#64748b;color:white;padding:3px 10px;border-radius:4px;font-size:0.85rem;font-weight:bold">採用率 6.1%（性格おだやか）</span>
 </div>
 
 <div style="overflow-x:auto;margin:12px 0">
@@ -393,7 +389,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 </table>
 </div>
 
-採用率7.6%と少数派ですが、特殊受け役として運用する選択肢もあります。通常のとくぼう100という高い数値をおだやかでさらに強化し、アシレーヌやアシレーヌ等の高C水タイプに対面した際の安定性を高める型です。
+採用率6.1%と少数派ですが、特殊受け役として運用する選択肢もあります。通常のとくぼう100という高い数値をおだやかでさらに強化し、アシレーヌやイダイトウ等の高C水タイプに対面した際の安定性を高める型です。
 
 ---
 
@@ -418,19 +414,19 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">タスキ おくびょうCS</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">35.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">36.0%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">先発ステロ係</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">★★★★（他にメガ枠を使うとき）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかえめCS メガ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">約31%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">約33%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">火力特化</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">★★★（D高い環境で）</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おだやか 受け型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6.1%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">特殊受け＋ステロ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">★★（特殊多い環境限定）</td>
 </tr>
@@ -456,71 +452,71 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">パワージェム
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">85.0%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ特殊技の主力。同タイプ一致で威力UP。ひこう・ほのお・むし・こおりに抜群</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">85.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ特殊技の主力。タイプ一致補正で威力UP。ひこう・ほのお・むし・こおりに抜群</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">ヘドロウェーブ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">69.7%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく一致技。フェアリー・くさに抜群。フラエッテ(永遠)への有効打として特に重要</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">69.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく一致技。フェアリー・くさに抜群。どく付与10%。フラエッテ(永遠)への有効打として特に重要</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">だいちのちから
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">65.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">66.8%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">特殊じめん技。はがね・どく・いわ・でんきに抜群。ブリジュラスへの最重要特効技</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">ステルスロック
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">35.9%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">交代時に相手にダメージを与えるフィールド技。パーティ全体の勝率向上に直結</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">36.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">交代時に相手にダメージを与える設置技。パーティ全体の勝率向上に直結</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">ニードルガード
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">29.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">【固有技】接触技を受けると相手のHP1/8を削る。物理アタッカー誘い込みに有効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">27.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">接触技を受けると相手のHP1/8を削る。物理アタッカー誘い込みに有効</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">マッドショット
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19.1%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">命中100・すばやさ低下効果付き。低威力だが相手のSを確実に下げる補助用途も</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">キラースピン
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">【固有技】詳細効果は調査中。タスキ型での採用が見られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">タスキ型を中心に採用が見られる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">ロックカット
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16.1%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">すばやさを2段階UP。非メガ時の素早さ不足を補い、後続の全抜き体制を作る</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">どくどく
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12.0%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">相手を猛毒状態に。ニードルガードとの組み合わせで場持ち戦術として機能</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">エナジーボール
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.3%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・じめん・いわへの抜群。だいちのちからと合わせて水タイプのカバレッジ確保</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・じめん・いわに抜群。だいちのちからと合わせてみずタイプへの対策確保</td>
 </tr>
 </tbody>
 </table>
@@ -528,7 +524,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 
 ### ニードルガードの戦略的活用
 
-ニードルガードはキラフロル固有の技であり、発動ターンに**相手の接触技を受けると相手のHPの1/8を削ります**。以下のような戦術的な活用が考えられます。
+ニードルガードは発動ターンに**相手の接触技を受けると相手のHPの1/8を削ります**。以下のような戦術的な活用が考えられます。
 
 **【ニードルガード誘い込み戦術】**
 1. 相手のガブリアス等の物理アタッカーを前に、ニードルガードを使用
@@ -566,24 +562,24 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    みず/じめんタイプ全般
+    <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（使用率7位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技もみず技も4倍と2倍弱点で超危険</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エナジーボール採用で抵抗できる場合も。基本は後続のくさタイプで対処</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんがじめん×4倍で致命傷。高耐久でこちらのいわ・どく技を等倍で受け止め、じわじわ削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちからも等倍止まり。対面は避け、くさ・みずタイプの後続で対処する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    パルキア等みずタイプ
+    <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（使用率4位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず×2倍。特にC特化みずアタッカーのなみのり等で削られやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エナジーボールで等倍以上が取れる。先手を取れるなら強気に攻める</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず一致技がいわ側に×2で通る。高Cからのハイドロカノン等を等倍受けでも大きく削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">後続のくさタイプで受ける。エナジーボール採用なら等倍以上で削り返せる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0475-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">エスパータイプ全般
+    <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（使用率20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー×2倍。サイコキネシス等の特殊技でまとまったダメージを受ける</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">パワージェムで先手特効が取れる場合も。先手確保が前提</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず一致技がいわ側に×2、加えてエスパーがどく側に×2で通る。S115と高速で上から特殊技を浴びせてくる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">後続のあく・ゴーストタイプで対処。直接対面は避ける</td>
 </tr>
 </tbody>
 </table>
@@ -593,40 +589,34 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 
 <div class="partner-grid">
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" />
-    <div class="name">アーマーガア</div>
-    <div class="rate">使用率6位</div>
-    <div style="font-size:0.65rem;color:#555;margin-top:2px">ガブリアスのじしんを無効化。キラフロルの最大弱点を完全にカバー</div>
+    <img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム" />
+    <div class="name">ハッサム</div>
+    <div class="rate">同居率1位</div>
+    <div style="font-size:0.65rem;color:#555;margin-top:2px">キラフロルが苦手なエスパー・みず受けを補完。バレットパンチで先制も取れる</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" />
+    <div class="name">カイリュー</div>
+    <div class="rate">同居率2位</div>
+    <div style="font-size:0.65rem;color:#555;margin-top:2px">ステロ蓄積後のエースとして機能。マルチスケイルで耐えて切り返せる</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" />
     <div class="name">ガブリアス</div>
-    <div class="rate">使用率1位</div>
+    <div class="rate">同居率3位</div>
     <div style="font-size:0.65rem;color:#555;margin-top:2px">キラフロルのステロと相性抜群。高火力エースとして後発で機能</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" />
-    <div class="name">リザードン</div>
-    <div class="rate">使用率5位</div>
-    <div style="font-size:0.65rem;color:#555;margin-top:2px">ステロが撒ければリザードンがより有利に動ける</div>
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" />
+    <div class="name">アーマーガア</div>
+    <div class="rate">同居率7位</div>
+    <div style="font-size:0.65rem;color:#555;margin-top:2px">ガブリアスのじしんを無効化。キラフロルの最大弱点を完全にカバー</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0530-00.webp" alt="ドリュウズ" />
-    <div class="name">ドリュウズ</div>
-    <div class="rate">じめん/はがね</div>
-    <div style="font-size:0.65rem;color:#555;margin-top:2px">キラフロルが苦手なみずタイプへの回答。はがね技でエスパーも対処</div>
-  </div>
-  <div class="partner-card">
-    
-    <div class="name">ナットレイ</div>
-    <div class="rate">くさ/はがね</div>
-    <div style="font-size:0.65rem;color:#555;margin-top:2px">みず・じめん・エスパーを耐性で受ける。キラフロルの弱点3つをカバー</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザX" />
-    <div class="name">メガリザX</div>
-    <div class="rate">タスキキラと相性◎</div>
-    <div style="font-size:0.65rem;color:#555;margin-top:2px">タスキキラフロルでステロを撒き、メガリザXがエースとして後発</div>
+    <img src="/images/pokemon/pokemon-0121-00.webp" alt="スターミー" />
+    <div class="name">スターミー</div>
+    <div class="rate">同居率8位</div>
+    <div style="font-size:0.65rem;color:#555;margin-top:2px">高速のみず枠でキラフロルが苦手なみずタイプ対面を肩代わりできる</div>
   </div>
 </div>
 
@@ -642,11 +632,24 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 
 ---
 
-## ポケモンチャンピオンズ独自のメガ進化について
+## データ分析①：3色技の攻撃範囲 定量分析 — 環境上位へのタイプ倍率一覧
 
-キラフロルのメガ進化（メガキラフロル）は**ポケモンチャンピオンズのみに存在するオリジナルの強化形態**です。キラフロル自体は第9世代（スカーレット・バイオレット）で初登場したポケモンですが、標準のシリーズ作品にメガ進化システムが存在しないため、ポケモンチャンピオンズが独自に設計したメガ進化です。
+メガキラフロルがパワージェム・ヘドロウェーブ・だいちのちからの3技を採用する合理性を、環境上位ポケモンへの倍率で検証します。
 
-このように、ポケモンチャンピオンズでは第6世代以降のポケモンにも独自のメガ進化が追加されており、環境の多様性を生んでいます。メガキラフロルの特殊火力とすばやさの大幅強化は、通常キラフロルの課題だった「Sの遅さ」を解消しつつ、高火力アタッカーとしての地位を確立させています。
+| ポケモン（使用率） | パワージェム（いわ） | ヘドロウェーブ（どく） | だいちのちから（じめん） | 最大倍率 |
+|---|---|---|---|---|
+| ガブリアス（1位） | ×1 | ×1 | ×1 | ×1 |
+| ブリジュラス（2位） | ×0.5 | ×0 | ×2 | ×2 |
+| マスカーニャ（3位） | ×1 | ×2 | ×1 | ×2 |
+| アシレーヌ（4位） | ×1 | ×2 | ×1 | ×2 |
+| リザードン（5位） | ×4 | ×1 | ×0 | **×4** |
+| アーマーガア（6位） | ×1 | ×0 | ×0 | ×1 |
+| カバルドン（7位） | ×1 | ×1 | ×1 | ×1 |
+| イダイトウ（8位） | ×1 | ×1 | ×1 | ×1 |
+| ルカリオ（9位） | ×0.5 | ×0 | ×2 | ×2 |
+| ゲンガー（10位） | ×1 | ×0.5 | ×2 | ×2 |
+
+環境使用率上位10体のうち**6体に対していずれかの技が×2以上**を取れます。特にリザードンへのパワージェムは×4が通り、はがね複合のブリジュラス・ルカリオやどく複合のゲンガーにはだいちのちから×2が刺さります。一方で使用率1位のガブリアスはいわ・どく・じめんがいずれも等倍止まりで、3技だけでは突破しにくい点が弱みです。なお、ひこう複合のリザードン・アーマーガアへのだいちのちからは無効（×0）で通らない点にも注意が必要です。
 
 ---
 
@@ -665,8 +668,8 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
   <td style="padding:8px 12px;border:1px solid #cbd5e1;vertical-align:top">
     <ul style="margin:0;padding-left:16px">
       <li>ステロ＋高火力特殊攻撃の二刀流</li>
-      <li>パワージェム＋ヘドロウェーブ＋だいちのちからの最広カバレッジ</li>
-      <li>ニードルガード（固有技）で物理誘い込み</li>
+      <li>パワージェム＋ヘドロウェーブ＋だいちのちからの広い攻撃範囲</li>
+      <li>ニードルガードで物理アタッカーを誘い込み</li>
       <li>メガ型・タスキ型の2択で対応力高い</li>
       <li>ポケモンチャンピオンズ独自の強化により高Sを持つ</li>
     </ul>
@@ -684,7 +687,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 </table>
 </div>
 
-メガキラフロルはM-2シーズンにおける**「二刀流のスペシャリスト」**です。ステロを撒きながらそのままアタッカーとして機能できるコストパフォーマンスは環境最高水準であり、広い技範囲と固有技のニードルガードにより多くの対面で有効な選択肢を持てます。
+メガキラフロルはM-2シーズンにおける**「二刀流のスペシャリスト」**です。ステロを撒きながらそのままアタッカーとして機能できるコストパフォーマンスは環境最高水準であり、広い技範囲とニードルガードにより多くの対面で有効な選択肢を持てます。
 
 ただし、じめん×4倍という超危険弱点は常に意識が必要です。パーティにアーマーガア等のじめん対策を確実に入れ、ガブリアスとの直接対面は絶対に避ける立ち回りが求められます。
 
@@ -692,4 +695,4 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率13位*
 
 ---
 
-*最終更新: 2026年5月21日 / M-2シーズン*
+*最終更新: 2026年5月30日 / M-2シーズン*

@@ -200,8 +200,8 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう（すばやさ↑ / こうげき↓）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">努力値</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS全振り（C252・S252）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">EV</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">C32 S32（余りH2）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
@@ -235,7 +235,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 
 この戦略のポイントは、**相手が交代できない状況でみちづれを使う**点にあります。通常の対戦なら相手は「みちづれを使うターンに交代すれば良い」と逃げられますが、かげふみがある限りその逃げ道が完全に塞がれています。
 
-さらにS130というすばやさにより、おくびょう252振りで環境最速付近の実数値を持ちます。多くのポケモンに先手を取りながら**C170のヘドロウェーブ**を叩き込める場面は非常に多く、こごえるかぜを採用すれば後続のポケモンも有利な状況で迎えられます。
+さらにS130というすばやさにより、おくびょうS32振りで環境最速付近の実数値を持ちます。多くのポケモンに先手を取りながら**C170のヘドロウェーブ**を叩き込める場面は非常に多く、こごえるかぜを採用すれば後続のポケモンも有利な状況で迎えられます。
 
 **弱み：**
 
@@ -266,8 +266,8 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかえめ（とくこう↑ / こうげき↓）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">努力値</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS全振り（C252・S252）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">EV</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">C32 S32</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
@@ -314,8 +314,8 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう（すばやさ↑ / こうげき↓）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">努力値</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">CS全振り（C252・S252）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">EV</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">C32 S32</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
@@ -426,7 +426,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
     <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">きあいだま
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40.8%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル・はがね・あく・いわに抜群。ブリジュラスへの対策として有効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル・はがね・あく・いわに抜群。命中70%。ブリジュラスへの対策として有効</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

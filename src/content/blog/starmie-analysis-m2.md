@@ -45,7 +45,7 @@ heroImage: '../../assets/hero-starmie-m2.png'
 
 その理由は特性**ちからもち**にあります。メガ進化後の特性ちからもちは「物理技の攻撃力を2倍にする」という効果で、メガスターミーのこうげき（種族値100）を実質200相当に引き上げます。これはTier1の中でも突出した数値です。
 
-全採用技を見ると**アクアブレイク・アクアジェット・アイススピナー・クイックターン・しねんのずつき・サイコカッター**と、全て物理技で構成されています。性格もいじっぱり71.4%・ようき24.9%と物理型ほぼ一択。AS型61.9%という努力値配分は、ちからもちの恩恵を最大化するこうげきと、すばやさ120を活かすすばやさへの全力投資を示しています。
+全採用技を見ると**アクアブレイク・アクアジェット・アイススピナー・クイックターン・しねんのずつき・サイコカッター**と、全て物理技で構成されています。性格もいじっぱり71.4%・ようき24.9%と物理型ほぼ一択。AS型61.9%というEV配分は、ちからもちの恩恵を最大化するこうげきと、すばやさ120を活かすすばやさへの全力投資を示しています。
 
 この記事では実データをもとに、なぜメガスターミーがこれほど高い採用率を誇るのか、どのような型で使われているのか、そしてパーティにどう組み込むべきかを徹底的に分析します。
 
@@ -57,7 +57,7 @@ heroImage: '../../assets/hero-starmie-m2.png'
 
 メガスターミー最大の強みは特性**ちからもち**です。「物理技の攻撃力を2倍にする」この特性によって、種族値こうげき100のスターミーが実質こうげき200として機能します。
 
-Lv50・いじっぱり・A252振りの実数値は**A167**で、ちからもち適用後は**実質A334**。これはTier1環境のあらゆる物理アタッカーを上回ります。
+Lv50・いじっぱり・A32振りの実数値は**A167**で、ちからもち適用後は**実質A334**。これはTier1環境のあらゆる物理アタッカーを上回ります。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.88em;text-align:center">
@@ -66,7 +66,7 @@ Lv50・いじっぱり・A252振りの実数値は**A167**で、ちからもち�
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">ポケモン</th>
   <th style="padding:8px 8px;border:1px solid #cbd5e1">こうげき種族値</th>
   <th style="padding:8px 8px;border:1px solid #cbd5e1">特性補正</th>
-  <th style="padding:8px 8px;border:1px solid #cbd5e1">実質こうげき（Lv50いじA252）</th>
+  <th style="padding:8px 8px;border:1px solid #cbd5e1">実質こうげき（Lv50いじA32）</th>
 </tr>
 </thead>
 <tbody>
@@ -104,7 +104,7 @@ Lv50・いじっぱり・A252振りの実数値は**A167**で、ちからもち�
 
 アクアブレイク90.5%・アクアジェット87.2%という採用率は、この2つが事実上のメガスターミーの代名詞であることを示しています。
 
-- **アクアブレイク**：高威力みず物理技。Bダウンの追加効果で次のターンも有利
+- **アクアブレイク**：高威力みず物理技。Bダウン20%の追加効果で次のターンも有利
 - **アクアジェット**：優先度+1の先制みず物理技。削れた相手を確実に仕留める
 
 高火力の通常技と先制技の組み合わせは、「倒しきれなかった場合の保険」が常に機能する状態を作ります。アクアブレイクで削り→アクアジェットで確実にフィニッシュ、という2段攻撃が非常に強力です。
@@ -208,7 +208,7 @@ Lv50・いじっぱり・A252振りの実数値は**A167**で、ちからもち�
 ### ちからもち火力指数考察
 
 「火力指数 = 実A × 技の基本威力 × タイプ一致補正」で技ごとの相対的な火力を比較します。  
-Lv50・いじっぱり・A252振り（実A167）、ちからもち適用後（実質A334）。
+Lv50・いじっぱり・A32振り（実A167）、ちからもち適用後（実質A334）。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.88em;text-align:center">
@@ -264,7 +264,7 @@ Lv50・いじっぱり・A252振り（実A167）、ちからもち適用後（�
 
 #### 等倍アクアブレイクが確定1発を取れるM-2上位ポケモン
 
-いじっぱりA252・実A334の条件で、みずタイプ**等倍**のM-2上位ポケモンへのダメージを、各記事の使用率最多型の実数値で算出します。
+いじっぱりA32・実A334の条件で、みずタイプ**等倍**のM-2上位ポケモンへのダメージを、各記事の使用率最多型の実数値で算出します。
 
 ```
 Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
@@ -287,7 +287,7 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #bae6fd">メガゲンガー（12位）<br><small style="color:#94a3b8">ゴースト/どく</small></td>
-  <td style="padding:8px 12px;border:1px solid #bae6fd">おくびょうCS252（63.0%）</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd">おくびょうC32 S32（63.0%）</td>
   <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">100</td>
   <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">135</td>
   <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">161〜190</td>
@@ -296,7 +296,7 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
 </tr>
 <tr style="background:#f0f9ff">
   <td style="padding:8px 12px;border:1px solid #bae6fd">メガルカリオ（9位）<br><small style="color:#94a3b8">かくとう/はがね</small></td>
-  <td style="padding:8px 12px;border:1px solid #bae6fd">ようきA252S252B4（57.8%）</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd">ようきA32 S32 B4（57.8%）</td>
   <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">109</td>
   <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">145</td>
   <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">147〜174</td>
@@ -305,7 +305,7 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #bae6fd">メガミミロップ（14位）<br><small style="color:#94a3b8">ノーマル/かくとう</small></td>
-  <td style="padding:8px 12px;border:1px solid #bae6fd">ようきAS252（約60〜65%）</td>
+  <td style="padding:8px 12px;border:1px solid #bae6fd">ようきA32 S32（約60〜65%）</td>
   <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">114</td>
   <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">140</td>
   <td style="padding:8px 12px;border:1px solid #bae6fd;text-align:center">141〜166</td>
@@ -447,7 +447,7 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
 - アクアブレイク（90.5%）
 - アクアジェット（87.2%）
 
-この2本はメガスターミーの根幹をなすみず物理技コンビで、ほぼ全ての型に採用されます。アクアブレイクで高火力を出しつつBダウン追加効果、アクアジェットで先制フィニッシュという役割分担が完成されています。
+この2本はメガスターミーの根幹をなすみず物理技コンビで、ほぼ全ての型に採用されます。アクアブレイクで高火力を出しつつBダウン20%追加効果、アクアジェットで先制フィニッシュという役割分担が完成されています。
 
 **高採用（採用率50%以上）**
 - アイススピナー（64.8%）: ガブリアス・ドラゴン対策として3枠目に最も選ばれる
@@ -510,7 +510,7 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
 
 <div class="build-header">
   <span style="background:#dc2626;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：いじっぱり（71.4%）</span>
-  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">努力値：AS（61.9%）</span>
+  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：A32 S32（53.5%）</span>
   <span style="background:#1d4ed8;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：スターミナイト（97.8%）</span>
 </div>
 
@@ -524,7 +524,7 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用理由</th>
 </tr></thead>
 <tbody>
-<tr><td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク</td><td style="padding:8px 12px;border:1px solid #cbd5e1">みず（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致メイン打点・Bダウン効果</td></tr>
+<tr><td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク</td><td style="padding:8px 12px;border:1px solid #cbd5e1">みず（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致メイン打点・Bダウン20%</td></tr>
 <tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1">アクアジェット</td><td style="padding:8px 12px;border:1px solid #cbd5e1">みず（物理）先制</td><td style="padding:8px 12px;border:1px solid #cbd5e1">フィニッシャー先制技</td></tr>
 <tr><td style="padding:8px 12px;border:1px solid #cbd5e1">アイススピナー</td><td style="padding:8px 12px;border:1px solid #cbd5e1">こおり（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン・くさ対策</td></tr>
 <tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1">しねんのずつき / クイックターン</td><td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー（物理） / みず（物理）</td><td style="padding:8px 12px;border:1px solid #cbd5e1">エスパータイプ一致 / サイクル維持</td></tr>
@@ -546,7 +546,7 @@ M-2環境トップのガブリアスに対してアイススピナーが4倍有�
 
 <div class="build-header">
   <span style="background:#059669;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ようき（24.9%）</span>
-  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">努力値：AS（61.9%）</span>
+  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：A32 S32（53.5%）</span>
 </div>
 
 **技構成（例）**
@@ -579,7 +579,7 @@ M-2環境トップのガブリアスに対してアイススピナーが4倍有�
 
 <div class="build-header">
   <span style="background:#dc2626;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：いじっぱり（71.4%）</span>
-  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">努力値：HD+A（5.5%）/ AS+H（3.5%）/ AS+B（3.6%）</span>
+  <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：HD+A（4.9%）/ AS+H（3.2%）/ AS+B（3.5%）</span>
 </div>
 
 **技構成（例）**

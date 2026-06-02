@@ -1,6 +1,6 @@
 ---
-title: '【ポケモンチャンピオンズ】メガハッサム徹底考察 M-2シーズン ほのお一点弱点の鋼鉄バレット'
-description: 'M-2シングルバトルで使用率15位のメガハッサムを徹底分析。テクニシャン+バレットパンチの先制最強コンビ、つるぎのまい積みの破壊力、ほのお一点弱点の安心感と対策、いじっぱりHA振りの運用まで実データで解説します。'
+title: '【ポケモンチャンピオンズ】メガハッサム 考察 M-2シーズン 使用率と型別解説'
+description: 'M-2シングルバトルで使用率14位のメガハッサムを徹底分析。テクニシャン+バレットパンチの高水準な先制技、つるぎのまい積みの破壊力、ほのお一点弱点の耐性と対策、いじっぱりHA振りの運用まで実データで解説します。'
 pubDate: '2026-05-22'
 draft: true
 heroImage: '../../assets/hero-scizor-m2.png'
@@ -27,22 +27,22 @@ heroImage: '../../assets/hero-scizor-m2.png'
       <img src="/images/types/type-06-bug.png" alt="むし" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="margin-top:6px;font-size:0.85rem;color:#555">
-      使用率 <strong>15位</strong> ／ メガ石採用率（ハッサムナイト）<strong>78.3%</strong>
+      使用率 <strong>14位</strong> ／ メガ石採用率（ハッサムナイト）<strong>79.1%</strong>
     </div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-2シーズン開始8日目（2026/05/20）時点の集計です
+> ⚠️ 本記事のデータはM-2シーズン（2026/05/30時点）の集計です
 
-シーズンM-2（2026/5/13〜6/17）のシングルバトルで、ハッサムは**使用率15位**を記録しています。注目すべきはメガ石採用率が78.3%である点で、残り約22%はメガ進化なしで採用されています。これはメタルコート（10.4%）やオボンのみ（4.4%）など、別の持ち物型にも相当の需要があることを示しています。
+シーズンM-2（2026/5/13〜6/17）のシングルバトルで、ハッサムは**使用率14位**を記録しています。注目すべきはメガ石採用率が79.1%である点で、残り約21%はメガ進化なしで採用されています。これはメタルコート（9.5%）やオボンのみ（4.0%）など、別の持ち物型にも相当の需要があることを示しています。
 
-それでもメガハッサムが強力な理由は明白です——**テクニシャン補正+バレットパンチという最強の先制技**、**A150+つるぎのまいで積み後に絶大な破壊力**、そして**はがね/むしという組み合わせによるほのお一点弱点という安心感**。複数の役割を同時にこなせる万能アタッカーとして、M-2環境で安定した地位を保っています。
+それでもメガハッサムが強力な理由は明白です——**テクニシャン補正+バレットパンチという高水準の先制技**、**A150+つるぎのまいで積み後に絶大な破壊力**、そして**はがね/むしという組み合わせによるほのお一点弱点という安心感**。複数の役割を同時にこなせる万能アタッカーとして、M-2環境で安定した地位を保っています。
 
 ---
 
 ## なぜ今メガハッサムが強いのか
 
-### 理由1: テクニシャン+バレットパンチ——環境最強クラスの先制技
+### 理由1: テクニシャン+バレットパンチ——高水準の先制技
 
 バレットパンチの採用率は**99.7%**。ほぼ全てのハッサム使いがこの技を採用しているという圧倒的な数字です。
 
@@ -79,7 +79,7 @@ heroImage: '../../assets/hero-scizor-m2.png'
 
 **先制技（優先度+1）で実質威力90**というのは、通常の先制技と比べても破格です。マッハパンチ（優先度+1、威力40→テクニシャン適用外のかくとうタイプ）と比較しても、はがねというタイプのほうが通りが良い場面が多いです。
 
-さらに**A150+つるぎのまい後のバレットパンチ**は、積んだ後なら先制でありながら多くのポケモンを確定1発圏に捉えることができます。「積んだ後に先制技でフィニッシュ」という、通常のアタッカーにはない強みがメガハッサムの最大の特徴です。
+さらに**A150+つるぎのまい後のバレットパンチ**は、積んだ後なら先制でありながら多くのポケモンを確定1発圏に捉えることができます。「積んだ後に先制技でフィニッシュ」という流れが、メガハッサムの大きな強みです。
 
 ### 理由2: はがね/むし複合——ほのお以外は全て等倍以下
 
@@ -158,13 +158,13 @@ heroImage: '../../assets/hero-scizor-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0227-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">98</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">メガハッサムより低い</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">スイクン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">115</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アシレーヌ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">74</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">メガハッサムより低い</td>
 </tr>
 <tr style="background:#fafafa">
@@ -230,7 +230,7 @@ HA振りによってこの防御140が最大化されます。環境の多くの
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right;color:#2563eb">600</span>
+    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">600</span>
   </div>
 </div>
 
@@ -281,15 +281,15 @@ HA振りによってこの防御140が最大化されます。環境の多くの
 
 ## 主要型の解説
 
-### 型① いじっぱり HA 積みバレット型（最多・36.8%）
+### 型① いじっぱり HA+b 積みバレット型（最多・14.2%）
 
-M-2環境で最も採用率が高い基本形です。
+EV振りの中で最も採用率が高い基本形です。HAをベースに余りをぼうぎょへ振り、物理耐久をわずかに上積みしています。
 
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0212-00.webp" alt="メガハッサム" style="width:48px;height:48px" />
   <div>
-    <strong>いじっぱり HA積みバレット型</strong><br>
-    <small style="color:#666">EV採用率 36.8%</small>
+    <strong>いじっぱり HA+b 積みバレット型</strong><br>
+    <small style="color:#666">EV振り採用率 14.2%</small>
   </div>
 </div>
 
@@ -307,8 +307,8 @@ M-2環境で最も採用率が高い基本形です。
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり（こうげき↑ とくこう↓）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>努力値</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HP252 こうげき252（HA）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32 B2（HA+b）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
@@ -327,11 +327,11 @@ M-2環境で最も採用率が高い基本形です。
 </div>
 
 **強み:**
-- A150×いじっぱり（×1.1）= 実質A165相当の攻撃力
+- A150×いじっぱり補正（×1.1）= A実数値165（こうげきEV32振り時）の攻撃力
 - テクニシャン+バレットパンチの先制技が最大効率で機能
-- ぼうぎょ252振りのHA型として計算するとHP・防御ともに最大化
-- つるぎのまい後（A330相当）のバレットパンチが広い範囲で確定1発
-- インファイトでリザードン以外の多くの障害（はがね系）を削れる
+- HA振りベースで耐久を確保しつつ、余りのぼうぎょで物理耐久を上積み
+- つるぎのまい後（A実数値165×2=330相当）のバレットパンチが広い範囲で確定1発
+- インファイトでリザードン以外の多くのはがね系を削れる
 
 **弱み:**
 - ほのお技1発で即戦闘不能（リザードン・ほのお技持ちに絶対に出し負けしない読みが必要）
@@ -341,8 +341,8 @@ M-2環境で最も採用率が高い基本形です。
 **立ち回りのポイント:**
 HA振りの真価は「つるぎのまいを積める場面を作れること」にあります。ぼうぎょ140という数値のおかげで、多くの物理技を1発受けながらつるぎのまいを積めます。積んだ後はバレットパンチ（先制・実質威力90+A330補正）で多くのポケモンを確定1発圏に捉えられます。
 
-**はたきおとす（56.0%採用）の役割:**
-テクニシャン対象外（威力65）ですが、**命中100で相手の持ち物を永続的に消失させる**副効果が強力です。相手のオボンのみ・食べ残し・こだわり系アイテムを消し飛ばしながら等倍以上のダメージが与えられます。特にメガストーンを持った相手に打つと…消えるのかどうかはゲームのルールによりますが、**持ち物消失の嫌がらせ効果**は多くの場面で有効です。
+**はたきおとす（53.6%採用）の役割:**
+テクニシャン対象外（威力65）ですが、**命中100で相手の持ち物を永続的に消失させる**副効果が強力です。相手のオボンのみ・食べ残し・こだわり系アイテムを消し飛ばしながら等倍以上のダメージが与えられます。なおメガストーンや進化アイテムははたきおとすでは奪えない仕様のため、メガ進化要員には持ち物消失を狙えませんが、消耗品・補正アイテムを落とす効果は多くの場面で有効です。
 
 ---
 
@@ -352,7 +352,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
   <img src="/images/pokemon/pokemon-0212-00.webp" alt="メガハッサム" style="width:48px;height:48px" />
   <div>
     <strong>いじっぱり HA+s 速度調整型</strong><br>
-    <small style="color:#666">採用率 12.5%+5.8%</small>
+    <small style="color:#666">EV振り採用率 12.5%</small>
   </div>
 </div>
 
@@ -370,8 +370,8 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>努力値</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HP / こうげき / すばやさ（HA+s）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32 S2（HA+s）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
@@ -386,7 +386,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 </div>
 
 **強み:**
-- Sに振ることで同速の遅いポケモン（カバルドン・ブルアポスルなど）に先手をとれる可能性が増す
+- Sに振ることで素早さの近い遅めのポケモン（カバルドン・ブリジュラスなど）に先手をとれる可能性が増す
 - バレットパンチ（先制技）に頼らない正面対決の選択肢が増える
 - はねやすめ不採用で技範囲を広げやすい
 
@@ -396,13 +396,13 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 
 ---
 
-### 型③ いじっぱり HA+d 特殊耐久調整型（7.2%）
+### 型③ いじっぱり HA+d 特殊耐久調整型（7.6%）
 
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0212-00.webp" alt="メガハッサム" style="width:48px;height:48px" />
   <div>
     <strong>いじっぱり HA+d 特殊耐久調整型</strong><br>
-    <small style="color:#666">採用率 7.2%</small>
+    <small style="color:#666">EV振り採用率 7.6%</small>
   </div>
 </div>
 
@@ -420,8 +420,8 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>努力値</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HP / こうげき / とくぼう（HA+d）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32 D2（HA+d）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
@@ -438,20 +438,20 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 **強み:**
 - Dに振ることで特殊方面（りゅうせいぐん・なみのり等）への耐性を補強できる
 - 物理防御140に特殊防御も上乗せした「全体的に固い」ポケモンになれる
-- はねやすめ（27.7%採用）との組み合わせで長期的な場持ちを目指せる
+- はねやすめ（29.6%採用）との組み合わせで長期的な場持ちを目指せる
 
 **採用意図:**
-メガハッサムはとくぼうが115（メガ前80）と大幅に上昇しているため、特殊耐久型の価値が生まれています。ゲンガー（12位）やアシレーヌ（4位）などの特殊アタッカーに対して、1発耐えながらバレットパンチで倒す立ち回りが狙えます。
+メガハッサムはとくぼうが115（メガ前80）と大幅に上昇しているため、特殊耐久型の価値が生まれています。ゲンガー（10位）やアシレーヌ（4位）などの特殊アタッカーに対して、1発耐えながらバレットパンチで倒す立ち回りが狙えます。
 
 ---
 
-### 型④ 無メガ・メタルコート型（10.4%）
+### 型④ 無メガ・メタルコート型（9.5%）
 
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム（通常）" style="width:48px;height:48px" />
   <div>
     <strong>無メガ メタルコート型</strong><br>
-    <small style="color:#666">持ち物採用率 10.4%（メガなし）</small>
+    <small style="color:#666">持ち物採用率 9.5%（メガなし）</small>
   </div>
 </div>
 
@@ -466,11 +466,11 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>性格</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり（92.5%）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり（91.0%）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>努力値</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HA（主に）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32（主に）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
@@ -518,49 +518,49 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>89.3%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>86.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげき2段階アップ。積み後のバレットパンチが先制圏で多くのポケモンを確定1発に</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>インファイト</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>74.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>72.4%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがねタイプへの対抗手段。ガブリアスやトリトドンなど幅広い相手に通る。ぼうぎょ・とくぼうが各1段階下がるデメリットあり</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はたきおとす</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>56.0%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>53.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">65</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">テクニシャン対象外（威力65）。相手の持ち物を永続消失させる副効果。オボンのみ・たべのこし消去に有効</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はねやすめ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>27.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>29.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HP半分回復。耐久型で長期戦を狙う場合に採用。防御140と組み合わせると場持ちが大幅に向上</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とんぼがえり</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>19.9%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>20.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">70</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に自分が引っ込む。先発で使ってダメージを与えながら有利な後続に交代するサイクル戦術</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代できる。先発で使ってダメージを与えながら有利な後続に繋ぐサイクル戦術</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ダブルウイング</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>11.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>12.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">40×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">テクニシャン補正あり（40×1.5=60×2）。かくとう・むし弱点への対抗手段として採用される場合がある</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>むしくい</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>7.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>7.9%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">60</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">テクニシャン補正対象外（ちょうど威力60なので対象外）。むし一致の通常火力枠として少数採用</td>
@@ -571,14 +571,14 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 
 ### 技の選択方針
 
-**ほぼ確定枠:** バレットパンチ（99.7%）＋つるぎのまい（89.3%）の2枠は実質確定です。
+**ほぼ確定枠:** バレットパンチ（99.7%）＋つるぎのまい（86.6%）の2枠は実質確定です。
 
 **選択枠（2枠）:** 以下から採用
-- **はがね対策・汎用火力:** インファイト（74.7%）— ほぼ必須に近い
-- **持ち物消去:** はたきおとす（56.0%）— 環境にオボンのみ・食べ残し持ちが多いなら有効
-- **場持ち:** はねやすめ（27.7%）— 長期戦・受け回し型に
-- **サイクル戦:** とんぼがえり（19.9%）— 交代を絡めた戦術向け
-- **テクニシャン技:** ダブルウイング（11.8%）— ひこう技でかくとう・むし弱点への対抗
+- **はがね対策・汎用火力:** インファイト（72.4%）— ほぼ必須に近い
+- **持ち物消去:** はたきおとす（53.6%）— 環境にオボンのみ・食べ残し持ちが多いなら有効
+- **場持ち:** はねやすめ（29.6%）— 長期戦・受け回し型に
+- **サイクル戦:** とんぼがえり（20.6%）— 交代を絡めた戦術向け
+- **テクニシャン技:** ダブルウイング（12.6%）— ひこう技でかくとう・むし弱点への対抗
 
 ---
 
@@ -598,34 +598,22 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 </thead>
 <tbody>
 <tr style="background:#fee2e2">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードンX</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードン</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>4倍弱点のほのお持ち最大の天敵</strong>。フレアドライブ一発で確定1発。メガハッサムが場に出ている状態でリザードンXが出てきたら即交代必至</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ほのお4倍弱点を突く最大の天敵</strong>。Xはフレアドライブ、Yは高いCの炎技で確定1発。場に出ている状態でリザードンが出てきたら即交代必至</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">リザードン対策枠を必ずパーティに入れる（みず・いわ・ドラゴン等）</td>
 </tr>
-<tr style="background:#fee2e2">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードンY</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位（同)</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">日照りソーラービームなどのほのお技で4倍弱点。Cが高いため一撃で倒される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">リザードンX同様に対策枠が必要</td>
-</tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エンテイ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおタイプの強力なアタッカー。4倍弱点で倒される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">出し負けを避ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうでバレットパンチ・むし技を半減し、こちらの有効打が乏しい。はねやすめで居座られると突破に手間取る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトで等倍を入れるか、ほのお・でんき枠に任せる</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヒードラン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお/はがね複合でインファイトが等倍。ほのお技4倍弱点で一撃を受ける</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技持ちをパーティに</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ほのお技持ち全般</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお4倍弱点は回避不能。環境にリザードンが5位に存在する以上、常に警戒が必要</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお対策枠の準備と読み合い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0681-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ギルガルド</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">シールドフォルムの高いぼうぎょでバレットパンチを半減し受けやすく、キングシールドでインファイトを読まれると手痛い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・じめん枠で対応する</td>
 </tr>
 </tbody>
 </table>
@@ -655,27 +643,40 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
     <div class="rate">高速+タイプ補完</div>
   </div>
   <div class="partner-card">
-    
-    <div class="name">いわタイプ枠</div>
-    <div class="rate">ほのお・ひこう対策</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0227-00.webp" alt="アーマーガア">
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">サポート+耐久</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0530-00.webp" alt="ドリュウズ">
     <div class="name">ドリュウズ</div>
-    <div class="rate">ステロ+ヒードラン対策</div>
+    <div class="rate">ステロ+みず対策</div>
   </div>
 </div>
 
 **パーティ構成のポイント:**
-1. **リザードン対策は最優先:** みず・いわタイプのポケモンを必ず採用する。アシレーヌ（4位）やギャラドス（10位）はM-2でも上位にいるため、自然な形で組み込める
+1. **リザードン対策は最優先:** みず・いわタイプのポケモンを必ず採用する。アシレーヌ（4位）やギャラドス（12位）はM-2でも上位にいるため、自然な形で組み込める
 2. **メガ枠の使い方:** メガハッサムを採用した場合、他のメガ進化は使用不可。メガ枠の価値を十分に活かせるパーティにする
 3. **速度不足の補完:** すばやさ75と遅いため、高速アタッカーとのコンビを組むことで、「高速アタッカーで削る→メガハッサムのバレットパンチで確定2発圏へ」という流れが作れる
 4. **はねやすめ採用時:** 長期戦が見込まれる場合、はねやすめ型は耐久をさらに活かせる。対面性能が下がる代わりに「場持ち」が大幅に向上
+
+---
+
+## データ分析①：テクニシャン+バレットパンチ99.7%の数値的根拠
+
+バレットパンチの採用率99.7%はハッサムの技の中でも突出した高水準ですが、この数値の背景にはテクニシャン補正の計算があります。
+
+| 条件 | バレットパンチ威力 | 倍率 | 備考 |
+|---|---|---|---|
+| 素の威力 | 40 | — | 先制技（+1優先度） |
+| テクニシャン補正 | 60 | ×1.5 | 威力60以下に発動 |
+| タイプ一致補正 | **90** | ×1.5 | はがねタイプ一致 |
+
+テクニシャン（威力60以下の技を1.5倍）+タイプ一致の組み合わせで、先制技としての実質威力が90に達します。
+
+この90という数値は、先制技でない通常の「アイアンヘッド（威力80）」を上回り、しかも優先度+1で先手を取れます。S75と遅いメガハッサムにとって、「後手でも確実に動ける先制技が実質威力90」という組み合わせが99.7%という採用率を生んでいます。
+
+メガ進化後のA150と組み合わせると、耐久に振っていないポケモンへの確定圏内が広がり、「場に出るだけで相手の行動を制限する」抑止力として機能します。
 
 ---
 
@@ -697,9 +698,9 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">積みバレット型</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HA</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">HA+b</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">バレットパンチ / つるぎのまい / インファイト / はたきおとす</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">36.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">14.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">中・後発で積んでフィニッシュ</td>
 </tr>
 <tr style="background:#fafafa">
@@ -707,7 +708,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HA+s</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">バレットパンチ / つるぎのまい / インファイト / とんぼがえり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">12.5%+5.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">12.5%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">遅いポケモンへの先手確保</td>
 </tr>
 <tr>
@@ -715,7 +716,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HA+d</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">バレットパンチ / つるぎのまい / はねやすめ / インファイト</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">7.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">7.6%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">特殊アタッカーに1発耐えてバレット</td>
 </tr>
 <tr style="background:#fafafa">
@@ -723,15 +724,15 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HA</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">バレットパンチ / つるぎのまい / インファイト / はたきおとす</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">9.5%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">メガ枠を別ポケモンに使う場合</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-メガハッサムはM-2環境において、**テクニシャン+バレットパンチという先制最強コンビ**・**A150+つるぎのまいによる積み後の爆発力**・**ほのお一点弱点という安心感のある耐性**を兼ね備えた万能アタッカーです。
+メガハッサムはM-2環境において、**テクニシャン+バレットパンチという高水準の先制技**・**A150+つるぎのまいによる積み後の爆発力**・**ほのお一点弱点という安心感のある耐性**を兼ね備えた万能アタッカーです。
 
-いじっぱりHA振りが最多（36.8%）であることが示すように、最もシンプルで強い使い方は「HA振りで耐久を確保→中・後発でつるぎのまいを積む→バレットパンチで先制フィニッシュ」という形です。
+いじっぱり（91.0%）が大半を占め、EV振りもHA軸が最多であることが示すように、最もシンプルで強い使い方は「HA振りで耐久を確保→中・後発でつるぎのまいを積む→バレットパンチで先制フィニッシュ」という形です。
 
 リザードン（5位）への4倍弱点は常に警戒が必要で、**パーティにほのお対策枠を必ず用意する**ことが使用条件と言えます。それさえクリアすれば、はがね/むし複合タイプの安定した耐性を最大限に活かした対戦ができる強力なメガ進化ポケモンです。

@@ -352,8 +352,8 @@ M-2環境で最も採用率が高い形です。
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき（すばやさ↑ とくこう↓）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>努力値</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげき252 すばやさ252（AS）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">A32 S32（AS）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
@@ -408,8 +408,8 @@ M-2環境で最も採用率が高い形です。
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり（こうげき↑ とくこう↓）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>努力値</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげき252 すばやさ252（AS）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">A32 S32（AS）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
