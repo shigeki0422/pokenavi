@@ -1,8 +1,8 @@
 ---
-title: '【ポケモンチャンピオンズ】メガミミロップ徹底考察 M-2シーズン S135先制系の全て'
-description: 'M-2シングルバトルで使用率14位のメガミミロップを徹底分析。S135最速+スクラッピー+ねこだましを活かした立ち回り、ようき型・いじっぱり型の使い分け、苦手なポケモンとの対策まで実データをもとに解説します。'
+title: '【ポケモンチャンピオンズ】メガミミロップ考察 M-2 S135高速+ねこだまし 型別採用率と立ち回り'
+description: 'M-2シングルバトルで使用率14位のメガミミロップを分析。S135で環境上位の先手をとりつつ、ねこだまし67.4%でパーティをサポート。ようき型・いじっぱり型の使い分けと、スカーフガブリアス対策まで実データをもとに解説します。'
 pubDate: '2026-05-22'
-draft: true
+draft: false
 heroImage: '../../assets/hero-lopunny-m2.png'
 ---
 
@@ -36,7 +36,7 @@ heroImage: '../../assets/hero-lopunny-m2.png'
 
 シーズンM-2（2026/5/13〜6/17）のシングルバトルで、ミミロップは**使用率14位**を記録しています。メガ石採用率96.4%という圧倒的な数字が示すとおり、ミミロップを使うならほぼ全員がメガ進化を選択しています。
 
-その理由は明快です——**S135というポケモンチャンピオンズ最速クラスの素早さ**、**スクラッピーによるゴーストへの攻撃貫通**、**ねこだましによる先制妨害**の3つが組み合わさった、他のポケモンには真似できない唯一無二のデザインを持っているからです。
+その理由は明快です——**S135という使用率TOP50内トップクラスの素早さ**、**きもったまによるゴーストへの攻撃貫通**、**ねこだましによる先制妨害**の3つが高水準で組み合わさったデザインを持っているからです。
 
 ---
 
@@ -44,71 +44,185 @@ heroImage: '../../assets/hero-lopunny-m2.png'
 
 ### 理由1: S135は環境トップクラス——先手を取り続ける速さ
 
-メガ進化後のすばやさ135は、M-2環境の主要ポケモンをほぼすべて上回ります。
+メガ進化後のすばやさ135は、**使用率TOP50内でメガゲッコウガに次ぐ2番目の速さ**です。以下は使用率TOP50内のS種族値ランキング（速い順・上位抜粋）です。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">すばやさ</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">メガミミロップとの比較</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">すばやさ順位（TOP50内）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン（使用率）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">S種族値</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">ミミロップとの関係</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ガブリアス</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">102</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">✓ 上回る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">1位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0658-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガゲッコウガ（28位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">142</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">↑ 上回られる</td>
 </tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0448-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ルカリオ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">112</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">✓ 上回る</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0094-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ゲンガー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">130</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">✓ 上回る</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0727-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ガオガエン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">65</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">✓ 上回る</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0428-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px"><strong>メガミミロップ</strong></td>
+<tr style="background:#fef9c3">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">2位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0428-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px"><strong>メガミミロップ（14位）</strong>
+  </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>135</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#2563eb;font-weight:bold">— 基準</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">3位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0655-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガマフォクシー（25位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">134</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">↓ 上回る（差+1）</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">3位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガゲンガー（10位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">130</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">↓ 上回る</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">5位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0908-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">123</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">↓ 上回る</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">6位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0658-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ゲッコウガ（素・28位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">122</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">↓ 上回る</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">8位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0121-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガスターミー（20位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">↓ 上回る</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">9位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0637-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">119</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">↓ 上回る</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0448-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガルカリオ（9位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">115</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">↓ 上回る</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">102</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#059669;font-weight:bold">↓ 上回る</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">スカーフガブリアス（1位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">153（スカーフ込み）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">↑ 上回られる</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-ようきで最速にすると、スカーフなしのゲンガー（130）・ルカリオ（112）・ガブリアス（102）をすべて上回ります。これだけの素早さがあれば、ほとんどの場面で**先手を取ってねこだましを打つ**ことができます。
+<p style="font-size:0.8em;color:#666;margin:4px 0">※ TOP50外でより速いポケモン：メガプテラ・メガフーディン（S=150）、メガスピアー（S=145）、ドラパルト（S=142）、メガライボルト（S=135・同速）</p>
 
-スカーフ型ガブリアス（102×1.5=153）には後手になりますが、そのための対策としてトリプルアクセルが採用されています（後述）。
+スカーフなしではメガゲッコウガ（S=142）にのみ先手を取られ、それ以外のポケモンには先手を取れます。スカーフ持ちではガブリアス（S=153相当）にも上から動かれます。ガブリアスへの打点としてトリプルアクセル（こおり技）が採用されています（後述）。
 
-### 理由2: スクラッピー——ゴーストタイプの盾を無視する固有特性
+### 理由2: きもったま——ノーマル・かくとう技の等倍範囲が環境トップクラス
 
-メガ進化後の特性「スクラッピー」は、**ノーマル・かくとうタイプの技をゴーストタイプにも通常ダメージで当てられる**という非常に特殊な効果を持ちます。
+**ノーマル・かくとう技はもともと等倍範囲が広く、弱点を突けるタイプも多い**のが強みです。ただしひこう・フェアリーなど半減タイプも存在し、ゴーストタイプには完全に無効化されていました。きもったまはこの無効を解消し、ノーマル・かくとう技両方をゴーストタイプに通せるようにします。
 
-通常、インファイト（かくとう）やとびひざげりはゴーストタイプに無効化されますが、スクラッピーがあればそのままダメージを与えられます。環境で見かけるゲンガー（使用率12位）に対して「かくとう技が入らない…」という心配が不要になるのは大きなアドバンテージです。
+かくとう技の全18タイプに対する相性を整理すると：
 
-**スクラッピーの効果まとめ:**
-- インファイト → ゲンガーに等倍ダメージ
-- とびひざげり → ゲンガーに等倍ダメージ
-- マッハパンチ → ゲンガーに先制等倍ダメージ
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:6px 10px;border:1px solid #cbd5e1">倍率</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left">タイプ</th>
+</tr>
+</thead>
+<tbody>
+<tr style="background:#fef9c3">
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;font-weight:bold;color:#dc2626">×2（弱点）</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left">ノーマル・いわ・はがね・こおり・あく <span style="color:#555;font-size:0.85em">（5タイプ）</span></td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;font-weight:bold;color:#2563eb">×1（等倍）</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left">かくとう・じめん・ほのお・みず・くさ・でんき・ドラゴン・ゴースト<span style="color:#059669;font-weight:bold">*</span> <span style="color:#555;font-size:0.85em">（8タイプ）</span></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;font-weight:bold;color:#555">×0.5（半減）</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left">ひこう・どく・むし・エスパー・フェアリー <span style="color:#555;font-size:0.85em">（5タイプ）</span></td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;font-weight:bold;color:#6b7280">×0（無効）</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><span style="text-decoration:line-through;color:#9ca3af">ゴースト</span> → <span style="color:#059669;font-weight:bold">きもったまで等倍に</span> <span style="color:#555;font-size:0.85em">（0タイプ）</span></td>
+</tr>
+</tbody>
+</table>
+</div>
 
-ただし、この特性はあくまで「攻撃が通る」だけであり、**ゴーストタイプの技がミミロップに当たらない（防御側の無効）**という点は変わりません。
+<p style="font-size:0.85em;color:#059669;margin:4px 0 12px"><strong>* きもったまにより、かくとう技を「無効」にできるタイプが存在しない状態になります。</strong></p>
+
+きもったまによって相性が変わるのは、使用率TOP50内のゴースト複合ポケモン6体です。
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.88em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:6px 10px;border:1px solid #cbd5e1">使用率</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left">ポケモン</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1">きもったまなし</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1">きもったまあり</th>
+</tr>
+</thead>
+<tbody>
+<tr style="background:#fff7ed"><td style="padding:6px 10px;border:1px solid #cbd5e1">8位</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0902-00.webp" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">イダイトウ(オス)</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#6b7280;font-weight:bold">無効</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#2563eb;font-weight:bold">等倍 ↑</td></tr>
+<tr style="background:#fff7ed"><td style="padding:6px 10px;border:1px solid #cbd5e1">10位</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0094-00.webp" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">ゲンガー</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#6b7280;font-weight:bold">無効</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#555;font-weight:bold">半減 ↑</td></tr>
+<tr style="background:#fff7ed"><td style="padding:6px 10px;border:1px solid #cbd5e1">11位</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0681-00.webp" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">ギルガルド</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#6b7280;font-weight:bold">無効</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">弱点×2 ↑</td></tr>
+<tr style="background:#fff7ed"><td style="padding:6px 10px;border:1px solid #cbd5e1">19位</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0778-00.webp" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">ミミッキュ</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#6b7280;font-weight:bold">無効</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#555;font-weight:bold">半減 ↑</td></tr>
+<tr style="background:#fff7ed"><td style="padding:6px 10px;border:1px solid #cbd5e1">26位</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0937-00.webp" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">ソウブレイズ</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#6b7280;font-weight:bold">無効</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#2563eb;font-weight:bold">等倍 ↑</td></tr>
+<tr style="background:#fff7ed"><td style="padding:6px 10px;border:1px solid #cbd5e1">29位</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0911-00.webp" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">ラウドボーン</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#6b7280;font-weight:bold">無効</td><td style="padding:6px 10px;border:1px solid #cbd5e1;color:#2563eb;font-weight:bold">等倍 ↑</td></tr>
+</tbody>
+</table>
+</div>
+
+きもったまなしでは**TOP50内の6体にノーマル・かくとう技が完全に無効化**されます。きもったまがあればすべてにダメージを与えられ、特に**ギルガルド（11位）は無効→弱点×2**という大きな恩恵があります。
+
 
 ### 理由3: 多彩な先制・妨害技が生む柔軟な立ち回り
 
 メガミミロップは単純な高速アタッカーではなく、**サポートとしても機能できる**のが大きな強みです。
 
-- **ねこだまし**（先制・相手を1ターン怯ませる）：67.4%の採用率。S135で相手より先に動いてねこだまし→後続交代という流れは、対戦の主導権を握る基本戦術です
+- **ねこだまし**（先制・相手を1ターン怯ませる）：67.4%の採用率。S135で確実に先手をとって相手の行動を1ターン封じることで、次のターンの技選択を有利に進められる
 - **マッハパンチ**（先制かくとう技）：31.5%採用。つるぎのまいで積んだ後にスカーフ持ちへ打ち込む場面でも活躍
-- **とんぼがえり**（22.2%）：S135で先手をとってとんぼがえりすることで、**相手が何をしてきても後続へ繋げられる**安定した動き
+- **とんぼがえり**（22.2%）：S135で先手をとって攻撃しつつ自分が引っ込めるため、相手の反撃を受ける前に後続へ安全に繋げられる対面操作技
 
 ---
 
@@ -162,7 +276,7 @@ heroImage: '../../assets/hero-lopunny-m2.png'
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right;color:#2563eb">580</span>
+    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">580</span>
   </div>
 </div>
 
@@ -206,9 +320,7 @@ heroImage: '../../assets/hero-lopunny-m2.png'
 </table>
 </div>
 
-弱点は4タイプと多め。特にエスパー・フェアリーはM-2環境に多く（フラエッテ永遠が11位、エスパー技持ちも多数）、**受け出しされただけで即倒されるリスク**があります。ゴーストタイプは防御的には無効のままですが、スクラッピーにより攻撃は通ります。
-
-ポケモンチャンピオンズには1メガルールがあるため、相手も1体しかメガ進化できません。メガミミロップを出すかどうかの判断と、相手のメガ枠との読み合いが重要になります。
+弱点は4タイプと多め。HP65と耐久面は低く、弱点技は一撃で倒されることも多い。特にエスパー・フェアリーはM-2環境に多く（フラエッテ永遠が11位、アシレーヌ・ミミッキュなどフェアリータイプも上位に集中）、これらのポケモンとの対面は基本的に不利です。
 
 ---
 
@@ -222,7 +334,7 @@ M-2環境で最も採用率が高い形です。
   <img src="/images/pokemon/pokemon-0428-00.webp" alt="メガミミロップ" style="width:48px;height:48px" />
   <div>
     <strong>ようき AS最速先制型</strong><br>
-    <small style="color:#666">採用率推定 約60〜65%</small>
+    <small style="color:#666">性格採用率 69.3%</small>
   </div>
 </div>
 
@@ -260,72 +372,19 @@ M-2環境で最も採用率が高い形です。
 </div>
 
 **強み:**
-- S135最速でほぼ全ての相手に先手
-- ようきにすることでS252振りの価値が最大化
-- ねこだまし→後続誘導→インファイトの流れが安定
-- トリプルアクセルはスカーフガブリアス（S153）に対して3連攻撃で合計ダメージを出せる唯一の手段
+- S実数値205で、いじっぱり型（S187）では先手を取れないようきマスカーニャ（S192・使用率3位）、おくびょうメガマフォクシー（S204・25位・おくびょう採用率87%）にも先手を取れる
+- ようきでS135を確保し、いじっぱり型（S補正なし）と同じS135を維持しながら攻撃も最大まで伸ばせる
+- ねこだましで被ダメなしの安定した先制打点を確保しつつ、次のターンにインファイトの高火力やとんぼがえりでの対面操作など状況に応じた器用な動きができる
 
 **弱み:**
-- 攻撃を最速で活かしきるには先手必須なため、マッハパンチなど先制技との組み合わせが重要
-- HP65の低さから被弾には弱い
-- ねこだまし→相手交代で空振りするリスクがある
+- ねこだましは場に出た最初のターンにしか使えないため、一度引いて再出場した場合は使えない
 
 **立ち回りのポイント:**
-ねこだましは相手が交代した場合には効かないため、相手の行動を読む必要があります。対戦序盤は先発でねこだまし→後続へのつなぎ、または中盤に疲弊した相手へのインファイトで確定1発圏に持ち込む使い方が一般的です。とんぼがえりを採用した場合は、**S135で先制とんぼがえり→ほぼ必ず後続への有利交代**ができるため、パーティ全体の回転率が高まります。
+対戦序盤は先発でねこだまし→後続へのつなぎ、または中盤に疲弊した相手へのインファイトで確定1発圏に持ち込む使い方が一般的です。とんぼがえりを採用した場合は、**S135で先制とんぼがえり→相手の反撃前に後続へ引ける**ため、パーティ全体のサイクル回転率が高まります。
 
 ---
 
-### 型② ようき AS+h 耐久調整型（23.6%）
-
-<div class="build-header">
-  <img src="/images/pokemon/pokemon-0428-00.webp" alt="メガミミロップ" style="width:48px;height:48px" />
-  <div>
-    <strong>ようき AS+h 耐久調整型</strong><br>
-    <small style="color:#666">採用率 23.6%</small>
-  </div>
-</div>
-
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
-<thead>
-<tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">項目</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>性格</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>努力値</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HP調整 / こうげき / すばやさ（AS+h）</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ミミロップナイト</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ねこだまし / インファイト / つるぎのまい / マッハパンチ（またはとんぼがえり）</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-**強み:**
-- HP無振り（65）に比べてHPに振ることで、特にステロやねこだまし後の自分へのカウンターに対する耐久が上がる
-- AS最速型と同様のS135を維持しながら、少しだけ場持ちをよくする
-- つるぎのまい採用で積んだ後のインファイト・マッハパンチが大幅に強化される（A272相当）
-
-**弱み:**
-- HPに振った分、こうげきが下がるトレードオフが生じる
-- 基本的な弱点は型①と同様
-
----
-
-### 型③ いじっぱり 火力特化型（28.9%）
+### 型② いじっぱり 火力特化型（28.9%）
 
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0428-00.webp" alt="メガミミロップ" style="width:48px;height:48px" />
@@ -370,12 +429,11 @@ M-2環境で最も採用率が高い形です。
 - つるぎのまいと組み合わせることで積んだ後のマッハパンチが先制圏内で多くのポケモンを倒せる
 
 **弱み:**
-- ようきと比べてS補正がないため、素のS135は維持できるが最速の確認がしにくい
-- とびひざげりは外れると反動でダメージを受けるリスクがある
-- ねこだましを採用しない場合、先制サポートとしての役割が下がる
+- S実数値がようき（205）より低い187にとどまるため、ようきマスカーニャ（S192）やおくびょうメガマフォクシー（S204）に先手を取られる
+- ねこだましを採用しない場合、先制で相手の行動を封じる手段がなくなる
 
 **いじっぱり型の採用意義:**
-ようきが69.3%に対していじっぱりが28.9%という数字が示すように、いじっぱりは少数派ですがしっかりとした採用理由があります。S135というベースすばやさ自体が既に十分高いため、「性格補正なしでもほぼ先手がとれる→だったら攻撃を伸ばしたほうがいい」という考え方です。特につるぎのまい型では積んだ後のダメージ量が変わるため、**火力勝負の場面でよりはっきりした確定1発ラインを狙いたい**プレイヤーが選択します。
+A実数値がようき（188）に対していじっぱり（206）と約10%高く、ようき型では2発必要な相手を1発で倒せるケースが生まれます。特につるぎのまい後（A412相当）はその差がさらに広がります。一方で、ようきマスカーニャ（使用率3位）やおくびょうメガマフォクシー（25位）に先手を取られるリスクを受け入れる選択です。
 
 ---
 
@@ -398,14 +456,14 @@ M-2環境で最も採用率が高い形です。
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>67.4%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">40</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技・相手を1ターン怯ませる。S135で確実に先手をとれるため安定した妨害手段</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技（優先度+3）・相手を1ターン怯ませる。優先度が高いため相手のSに関わらず確実に先手をとれる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>インファイト</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>62.5%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">120</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">最高威力のかくとう技。使用後ぼうぎょ・とくぼうが各1段階下がるデメリットあり。スクラッピーでゴーストにも有効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">威力120の安定命中かくとう技。使用後ぼうぎょ・とくぼうが各1段階下がるデメリットあり。きもったまでゴーストにも有効</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>トリプルアクセル</strong></td>
@@ -419,14 +477,14 @@ M-2環境で最も採用率が高い形です。
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>31.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">130</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">威力130の高火力かくとう技。外れると自分がダメージを受けるリスクあり。インファイトとの差別化ポイントはデメリット内容</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">威力130の高火力かくとう技。命中90%・外れると自分がダメージを受けるリスクあり。インファイトとの差別化ポイントはデメリット内容</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>マッハパンチ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>31.5%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">40</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">先制かくとう技（優先度+1）。スクラッピーでゴーストにも有効。つるぎのまい後のフィニッシュ手段</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">先制かくとう技（優先度+1）。きもったまでゴーストにも有効。つるぎのまい後のフィニッシュ手段</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
@@ -440,21 +498,21 @@ M-2環境で最も採用率が高い形です。
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>23.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">120</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル一致の高火力技。かくとう耐性（はがね・ノーマルなど）持ちへの対抗手段</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル一致の高火力技。かくとう技を半減するひこう・どく・むし・エスパー・フェアリータイプへ等倍で通る</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とんぼがえり</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>22.2%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">70</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に自分が引っ込む。S135で先手をとってとんぼがえり→後続有利展開。サイクル戦で優秀</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に自分が交代できる。S135で先手をとって攻撃しつつ有利な後続に繋げるサイクル技</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>れいとうパンチ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>21.2%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">75</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">安定命中のこおり技。ガブリアス・ランドロスなどじめん/ドラゴン勢に等倍以上が取れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">安定命中のこおり技。ガブリアス（ドラゴン/じめん・使用率1位）、カイリュー（ドラゴン/ひこう・16位）にこおり×4で刺さる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ギガインパクト</strong></td>
@@ -495,26 +553,8 @@ M-2環境で最も採用率が高い形です。
 </tr>
 </thead>
 <tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードンX</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン/ほのおタイプ。インファイトが等倍、かつリザードンX自体の火力も高い</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチで対抗可能。ただし先制できる保証が必要</td>
-</tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0282-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">サーナイト</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー/フェアリー複合タイプ。メガミミロップの弱点2タイプを同時に突く天敵</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">出し負けを避ける。パーティにあく/はがね枠で対処</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0869-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">マホイップ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー単タイプ。インファイト等倍だがフェアリー技で弱点を突かれる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガトンキック（ノーマル技）が等倍で入る</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0869-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">フラエッテ（永遠）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0670-05.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">フラエッテ（永遠）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー技持ち。サポート役として対面すると大きな被害を受ける可能性</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（等倍）で先手からの削りを狙う</td>
@@ -522,14 +562,20 @@ M-2環境で最も採用率が高い形です。
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">スカーフガブリアス</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">1位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">スカーフ込みS153でメガミミロップ（135）を上回る。上から動かれると先制を取られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">スカーフ込みS153でメガミミロップ（135）を上回り、こちらが先手を取れない数少ない相手</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">トリプルアクセル（こおり技3連打）が対抗手段</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0227-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこう複合。インファイトが等倍かつひこうタイプでこちらの弱点を突ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">メガトンキック（ノーマル技）で対抗可能</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アシレーヌ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/フェアリー複合。かくとう技を半減し弱点を突けないうえ、高い耐久でこちらの攻撃を受けつつフェアリー技でこちらの弱点を突ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">有効打が乏しく対面は不利。受け出しを許さない立ち回りが必要</td>
 </tr>
 </tbody>
 </table>
@@ -539,29 +585,19 @@ M-2環境で最も採用率が高い形です。
 
 <div class="partner-grid">
   <div class="partner-card">
-    
-    <div class="name">ネクロズマ系</div>
-    <div class="rate">エスパー対策</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0094-00.webp" alt="ゲンガー">
-    <div class="name">ゲンガー</div>
-    <div class="rate">フェアリー誘引</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0227-00.webp" alt="アーマーガア">
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
-    <div class="rate">ひこう補完</div>
+    <div class="rate">フェアリー半減</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
+    <div class="name">ブリジュラス</div>
+    <div class="rate">フェアリー半減・受け</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">高火力補完</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0359-00.webp" alt="アブソル">
-    <div class="name">あくタイプ枠</div>
-    <div class="rate">エスパー無効化</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0530-00.webp" alt="ドリュウズ">
@@ -571,9 +607,8 @@ M-2環境で最も採用率が高い形です。
 </div>
 
 **パーティ構成のポイント:**
-1. **フェアリー・エスパー対策枠**が必須：ゲンガー（あく技持ち）やはがねタイプのポケモンを入れることで、メガミミロップの天敵に対応できます
-2. **ねこだまし活用の後続**：ねこだましで1ターン相手を止めた後、有利な後続を展開するのがメガミミロップの基本運用。そのため、**強力な先発・後発ポケモンとのコンビネーション**を意識した構成が重要です
-3. **メガ枠の選択**：メガミミロップを採用する価値がパーティ全体に合うかを考える必要があります
+1. **フェアリー対策枠**が重要：アシレーヌ・フラエッテ（永遠）などミミロップの弱点を突くフェアリータイプに対し、フェアリーを半減するはがねタイプ（アーマーガア・ブリジュラス）で受けられる構成が望ましい
+2. **ねこだまし活用の後続**：ねこだましで相手の行動を1ターン封じた後、こちらは自由に技を選択できる。とんぼがえりで後続に繋ぐか、インファイトで攻めるかをその場で判断できるのがメガミミロップの強み
 
 ---
 
@@ -597,16 +632,8 @@ M-2環境で最も採用率が高い形です。
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">AS</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ねこだまし / インファイト / トリプルアクセル / とんぼがえり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">70.2%中の大半</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">69.3%（性格採用率）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">先発でサポート・スカーフガブリアス対策</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">耐久調整型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">AS+h</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ねこだまし / インファイト / つるぎのまい / マッハパンチ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">23.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">中発で積みから制圧、少し場持ちが良い</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">火力特化型</td>
@@ -620,6 +647,6 @@ M-2環境で最も採用率が高い形です。
 </table>
 </div>
 
-メガミミロップはM-2環境において、**S135最速**・**スクラッピーによるゴースト貫通**・**ねこだましによる先制サポート**という3つの特性を組み合わせた立ち回りが強みです。ようき最速型が主流（69.3%）というデータが示すように、現環境では純粋な速度を活かしたサポート型運用が最も評価されています。
+メガミミロップはM-2環境において、**S135高速**・**きもったまによるゴースト貫通**・**ねこだましによる先制サポート**という3つの特性を組み合わせた立ち回りが強みです。ようき最速型が主流（69.3%）というデータが示すように、現環境では純粋な速度を活かしたサポート型運用が最も評価されています。
 
-弱点の多さ（かくとう・ひこう・エスパー・フェアリー）と耐久の低さは無視できませんが、「先手をとり続けること」を前提とした立ち回りで、パーティの要として機能できます。フェアリー・エスパー対策枠をしっかり用意したうえで、メガ枠に採用する価値は十分にあります。
+弱点の多さ（かくとう・ひこう・エスパー・フェアリー）と耐久の低さは無視できませんが、「先手をとり続けること」を前提とした立ち回りで、パーティの要として機能できます。特に環境上位に多いフェアリータイプ（アシレーヌ・フラエッテ永遠など）への対策枠を用意したうえで、メガ枠に採用する価値は十分にあります。
