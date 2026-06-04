@@ -195,7 +195,6 @@ HP95・ぼうぎょ93・とくぼう110とバランスの取れた耐久に、�
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
-      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -203,6 +202,7 @@ HP95・ぼうぎょ93・とくぼう110とバランスの取れた耐久に、�
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう(×0.25)</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし(×0.25)</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -216,7 +216,7 @@ HP95・ぼうぎょ93・とくぼう110とバランスの取れた耐久に、�
 </table>
 </div>
 
-じめん・ドラゴンを無効化し、かくとう・むしを×0.25、あくを×0.5で受ける優秀な耐性を持ちます。一方、メガ前のフェアリー単体では等倍だった**はがね・どく・でんきがメガ後はすべて×2弱点**になる点に注意が必要です（ひこうが加わったことで増えた弱点）。こおり・いわ・くさも×2で通り、弱点が6タイプに増えます。受け出しの際は相手の打点タイプを必ず確認してから繰り出します。
+じめん・ドラゴンを無効化し、かくとう・むしを×0.25、あく・くさを×0.5で受ける優秀な耐性を持ちます。一方、メガ前のフェアリー単体では等倍だった**でんきがメガ後は×2弱点**になり、こおり・いわも×2で通る点に注意が必要です（ひこうが加わったことで増えた弱点）。メガ前から弱点のはがね・どくと合わせ、弱点は5タイプです。受け出しの際は相手の打点タイプを必ず確認してから繰り出します。
 
 ---
 
@@ -390,7 +390,7 @@ HBずぶといで物理方面を厚くし、ガブリアスのじしん無効を
 
 ### 主要ポケモンとの相性
 
-使用率上位（TOP30目安）から、メガピクシーと相性がはっきり出るポケモンを有利・不利の両面で挙げます。メガ後はフェアリー/ひこうとなりじめん・ドラゴンを無効化する一方、はがね・どく・でんき・こおり・いわ・くさが×2弱点で、すばやさ70と遅いため弱点技を持つ相手には積む前に押し切られる点に注意してください。
+使用率上位（TOP30目安）から、メガピクシーと相性がはっきり出るポケモンを有利・不利の両面で挙げます。メガ後はフェアリー/ひこうとなりじめん・ドラゴンを無効化する一方、はがね・どく・でんき・こおり・いわが×2弱点で、すばやさ70と遅いため弱点技を持つ相手には積む前に押し切られる点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -421,7 +421,7 @@ HBずぶといで物理方面を厚くし、ガブリアスのじしん無効を
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン技無効・あく技×0.5で受けやすく、ムーンフォースが×2で刺さる。かえんほうしゃ採用個体には注意だが等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン技無効・あく技×0.5で受けやすく、ムーンフォース（あく/ドラゴンに×4）で容易に倒せる。かえんほうしゃ(67.0%)を受けても等倍止まり</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -450,6 +450,13 @@ HBずぶといで物理方面を厚くし、ガブリアスのじしん無効を
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（99.7%・はがね先制）が×2弱点で、すばやさ70でも先制で削られる。つるぎのまい（86.6%）後は確定圏。かえんほうしゃ採用なら切り返せる</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（81.7%・どく）が×2弱点。すばやさ110で先手を取られ、積む前に縛られる。ムーンフォースはどく/ゴーストに等倍止まり</td>
 </tr>
 </tbody>
 </table>
@@ -618,7 +625,7 @@ HBずぶといで物理方面を厚くし、ガブリアスのじしん無効を
 
 メガピクシーはメガ進化でフェアリー/ひこうへ変化し、じめん・ドラゴンを無効化しながらコスモパワーで要塞化する積みフェアリーです。使用率1位ガブリアスのじしん・げきりんを両方無効化して起点にできる点が差別化要素で、ドラゴン・じめん・あくアタッカーに対する受け出しから全抜きを狙えます。マジックミラーで変化技の妨害を跳ね返せるため、積みの安定性も高水準です。
 
-一方、メガ後はメガ前にはなかったはがね・どく・でんき・こおり・いわの×2弱点を抱え、すばやさ70と遅いため、ブリジュラス・キラフロル・ハッサムのように弱点タイプを高火力で撃てる相手には積む隙がありません。これらをパーティのほのお枠・じめん枠でケアし、起点にできる相手を引き込めるかが、使用率35位のこのポケモンを活かす鍵になります。
+一方、メガ後はメガ前から弱点のはがね・どくに加え、ひこう追加で増えたでんき・こおり・いわの×2弱点を抱え、すばやさ70と遅いため、ブリジュラス・キラフロル・ハッサムのように弱点タイプを高火力で撃てる相手には積む隙がありません。これらをパーティのほのお枠・じめん枠でケアし、起点にできる相手を引き込めるかが、使用率35位のこのポケモンを活かす鍵になります。
 
 ---
 
@@ -627,5 +634,3 @@ HBずぶといで物理方面を厚くし、ガブリアスのじしん無効を
 - [天敵となるはがねアタッカー ハッサムのM-2考察](/blog/scizor-analysis-m2/)
 - [弱点でんき/はがねを撃つブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
 - [起点にしやすい使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
-</content>
-</invoke>

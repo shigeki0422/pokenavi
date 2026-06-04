@@ -151,6 +151,7 @@ HP104・ぼうぎょ100の物理耐久が高く、おにびと合わせて物理
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
+      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
@@ -298,7 +299,7 @@ HBに寄せるため特殊耐久が手薄で、ウォッシュロトムのハイ
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
 <strong>特性:</strong> てんねん<br>
-<strong>性格:</strong> おだやか（D↑ A↓）<br>
+<strong>性格:</strong> おだやか（D↑ C↓）<br>
 <strong>EV:</strong> H32 D32（余り2はBまたはS）<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ
 </div>
@@ -314,7 +315,7 @@ HBに寄せるため特殊耐久が手薄で、ウォッシュロトムのハイ
 
 **強み:**
 
-HB型では受けにくい特殊アタッカーに寄せた型です。とくぼう75はHB型のままだと特殊高火力に押し切られますが、おだやか＋HD振りで底上げすることで、サザンドラのかえんほうしゃ（半減）やフレアソング読みで出てくる特殊枠を受けやすくなります。ひかえめ（8.0%）採用個体はとくこう110を伸ばし、フレアソング・たたりめの削り役としての性能を上げています。
+HB型では受けにくい特殊アタッカーに寄せた型です。とくぼう75はHB型のままだと特殊高火力に押し切られますが、おだやか＋HD振りで底上げすることで、弱点でない特殊技（リザードンのかえんほうしゃ＝ほのお半減、サザンドラのりゅうせいぐん＝等倍など）を受けやすくなります。ただしサザンドラのあくのはどう（採用率98.5%）のような弱点特殊技はHD振りでも×2のため受け切れません。ひかえめ（8.0%）採用個体はとくこう110を伸ばし、フレアソング・たたりめの削り役としての性能を上げています。
 
 **HB型との使い分け:**
 
@@ -361,7 +362,7 @@ HB型がルカリオ・ハッサム等の物理つるぎのまいエースを止
     <img src="/images/pokemon/pokemon-0428-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミロップ（13位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト・とびひざげり・マッハパンチ（かくとう）無効、ねこだまし（ノーマル）も無効。てんねんでつるぎのまい無視。トリプルアクセル（こおり）は等倍止まりで決定打にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト・とびひざげり・マッハパンチ（かくとう）無効、ねこだまし（ノーマル）も無効。てんねんでつるぎのまい無視。トリプルアクセル（こおり）はほのお半減で通らず決定打にならない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -425,7 +426,7 @@ HB型がルカリオ・ハッサム等の物理つるぎのまいエースを止
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.0%）が×2弱点。なまける（53.2%）持ちで相互に回復し合うが、てんねん同士で積みも効かず、こちらの打点が乏しく崩しきれない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.0%）が×2弱点。なまける（53.2%）持ちで相互に回復し合う消耗戦になるが、フレアソング・ゴースト打点ともにカバルドンに等倍止まりで、高耐久を削りきれない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・みず技で弱点を突けるアシレーヌ・フシギバナを後投げし、じしんを受けつつ突破する</td>
 </tr>
 <tr>
@@ -433,13 +434,13 @@ HB型がルカリオ・ハッサム等の物理つるぎのまいエースを止
     <img src="/images/pokemon/pokemon-0658-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲッコウガ（28位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">なみのり（みず）・あくのはどう（あく）がともに×2弱点。S122で先手を取られ、高火力特殊で1〜2発圏内に入れられ受けが成立しない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技を半減するブリジュラス（はがね/ドラゴン）を引き先にし、ラスターカノンでフェアリーも見つつ後続から処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・あく技を半減するアシレーヌ（みず/フェアリー）で受け、ゲッコウガより速いマスカーニャ（S123）等で上から処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">シャドーボール（採用率71.1%）が×2弱点。S110で先手を取られ、こちらのシャドーボールも相手のゴーストに半減され撃ち合いで不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">シャドーボール（採用率71.1%）が×2弱点。S110で先手を取られ、こちらのシャドーボールもゲンガーに×2で通る相互×2の撃ち合いだが、先手と火力で押し負ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あくタイプのドドゲザン（ふいうちでゴーストに×2の先制打点）やサザンドラを後投げし、上から処理する</td>
 </tr>
 <tr>
@@ -447,7 +448,7 @@ HB型がルカリオ・ハッサム等の物理つるぎのまいエースを止
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はたきおとす（あく・採用率57.6%）が×2弱点でたべのこし等の持ち物も落とされる。S123で先手を取られ、てんねんはあっても弱点物理で削られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">マスカーニャのくさ・あくを半減するブリジュラスや、ほのお技で弱点を突けるリザードンを合わせて処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">マスカーニャのくさ技（トリックフラワー）を1/4に軽減するブリジュラスや、ほのお技で弱点を突けるリザードンを合わせて処理する</td>
 </tr>
 </tbody>
 </table>
@@ -482,7 +483,7 @@ HB型がルカリオ・ハッサム等の物理つるぎのまいエースを止
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでみず・あくを半減し、ラウドボーンの苦手な特殊みずを受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでみずを半減し、ラウドボーンの苦手な特殊みずを受ける</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0003-00.webp" alt="フシギバナ">
@@ -496,7 +497,7 @@ HB型がルカリオ・ハッサム等の物理つるぎのまいエースを止
 
 ラウドボーンは物理アタッカーをてんねん＋おにびで止める受け駒です。弱点のみず・じめん・あくを補う引き先を必ず用意します。
 
-1. **みず対策**: ブリジュラス（みず半減）やくさタイプのフシギバナでウォッシュロトム・ゲッコウガを受ける枠
+1. **みず対策**: ブリジュラス（みず半減）やくさタイプのフシギバナでウォッシュロトムを受ける枠。れいとうビーム（採用率89.6%）持ちのゲッコウガには両者とも弱点を突かれるため、アシレーヌ等みず・あく両方を半減する枠で受ける
 2. **じめん対策**: ひこうタイプ（アーマーガア）やくさ・みずタイプでガブリアス・カバルドンのじしんを受ける枠
 3. **あく・ゴースト対策**: ゲンガー・マスカーニャに上から打点を持てるあく・ゴーストアタッカーを用意
 4. **削り役との連携**: 同居率上位のゲッコウガ・マスカーニャなど高速アタッカーで、ラウドボーンが起点にした相手を上から処理

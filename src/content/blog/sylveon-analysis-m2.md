@@ -322,7 +322,7 @@ A65のためあくびで居座っても削りが甘く、まもる・あくび�
 
 **強み:**
 
-ひかえめC32でとくこう110を最大化し、フェアリースキンのハイパーボイス（実質威力108相当）の火力を上げる型です。HB型がA65で削り不足になりやすいのに対し、こちらはドラゴン・あく・かくとうの環境上位を一致技で大きく削れます。マジカルフレイムで弱点のはがねにも打点を持てるため、受けに回らず攻撃でアドバンテージを取りに行けます。
+ひかえめC32でとくこう110を最大化し、フェアリースキン＋一致補正で実質威力162相当になるハイパーボイスの火力を上げる型です。HB型がA65で削り不足になりやすいのに対し、こちらはドラゴン・あく・かくとうの環境上位を一致技で大きく削れます。マジカルフレイムで弱点のはがねにも打点を持てるため、受けに回らず攻撃でアドバンテージを取りに行けます。
 
 すばやさ60と遅いため、削り残しはでんこうせっか（フェアリースキンでフェアリー化・優先度+1）で先制処理でき、相手のすばやさに関わらず詰められます。
 
@@ -360,14 +360,14 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく・ドラゴン複合にハイパーボイスが×2（あく2×ドラゴン1）。主力のあくのはどう（99%）は半減、りゅうせいぐん（90%）は無効。ほのお技持ちには注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく・ドラゴン複合にハイパーボイスが×4（あく2×ドラゴン2）。主力のあくのはどう（99%）は半減、りゅうせいぐん（90%）は無効。ただしS98でこちらが後手、かえんほうしゃ（67%）は等倍で通る</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン技を無効化、ハイパーボイスが×2（ドラゴン2×ひこう1）。ただしじしん・しんそく等の非ドラゴン技や、しんそく（先制）での削りには注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン技を無効化、ハイパーボイスが×2（ドラゴン2×ひこう1）。ただしS80でこちらが後手、しんそく（46%・先制）やじしん（15%）等の非ドラゴン技での削りには注意</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -388,7 +388,7 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンでハイパーボイスが半減（はがね0.5）、ラスターカノン（56%）がはがね×2弱点。りゅうせいぐんは無効だがはがね技で受け負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンでハイパーボイスは等倍止まり（はがね0.5×ドラゴン2）。ラスターカノン（56%）がはがね×2弱点で、りゅうせいぐんは無効だがはがね・でんき技で受け負ける</td>
 </tr>
 </tbody>
 </table>
@@ -410,7 +410,7 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく/はがねでハイパーボイス半減（あく2×はがね0.5＝等倍）、アイアンヘッド（87%）がはがね×2弱点。先制技ふいうち（99%）でもあく等倍で削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく/はがねでハイパーボイスは等倍止まり（あく2×はがね0.5）。アイアンヘッド（87%）がはがね×2弱点で、A65のニンフィアでは等倍打点では落とし切れない。先制技ふいうち（99%・あく半減）で削られながら起点にされる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">マジカルフレイム（ほのお×2）で弱点を突くか、じめん・かくとう技を持つポケモンを同伴して後出しで処理する</td>
 </tr>
 <tr style="background:#fafafa">
@@ -431,7 +431,7 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンでハイパーボイス半減、ラスターカノン（56%）・10まんボルト（67%）で削られる。ラスターカノンははがね×2弱点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンでハイパーボイスは等倍止まり（はがね0.5×ドラゴン2）。ラスターカノン（56%）・10まんボルト（67%）で削られ、ラスターカノンははがね×2弱点</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">マジカルフレイム（ほのお×2）で弱点を突く。耐久が高く一撃では落ちないため、じめん・かくとう技を持つアタッカーを後出しで合わせる</td>
 </tr>
 <tr>
@@ -507,7 +507,7 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
 | でんこうせっか | 40 | 48 | **72相当** | — |
 | はかいこうせん | 150 | 180 | **270相当** | — |
 
-ニンフィアはフェアリー専用技を覚えにくいため、フェアリースキンは「ノーマル技を高威力のフェアリー一致技に変換する」役割を担います。注目すべきは**でんこうせっか**で、本来威力40の先制技がフェアリー化＋1.2倍で実質威力72相当になり、しかもドラゴン・あく・かくとうに×2で通ります。すばやさ60で大半の相手に後手を踏むニンフィアにとって、相手のすばやさに関わらず通る先制フェアリー技は、削り残しの処理や低耐久アタッカーへの先制点として機能します（採用率57.5%）。
+ニンフィアはフェアリー専用技を覚えにくいため、フェアリースキンは「ノーマル技を高威力のフェアリー一致技に変換する」役割を担います。注目すべきは**でんこうせっか**で、本来威力40の先制技がフェアリー化＋1.2倍で実質威力72相当になり、しかもドラゴン・あく・かくとうに×2で通ります。ただしでんこうせっかは物理技でA65依存のため、C110で撃つハイパーボイスと同じ威力値でも実ダメージははるかに小さく、役割は「相手のすばやさに関わらず通る削り残しの処理・低耐久アタッカーへの先制点」に限られます（採用率57.5%）。
 
 主力のハイパーボイス（実質162相当・採用率96.9%）に目が行きますが、フェアリースキンの本質は「フェアリー技を覚えにくいニンフィアに、音技かつ先制技という別軸の打点を一致技として与える」点にあります。
 

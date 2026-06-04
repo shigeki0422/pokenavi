@@ -187,6 +187,7 @@ HP100・防御110・特防100にすなおこしの特防1.5倍が加わり、両
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
+      <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
@@ -327,7 +328,7 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
 
 **弱み:**
 
-すばやさ61のまま動くため、かくとう×4を持つルカリオ・オオニューラに上から一致技で落とされると受け出しが成立しません。積み技を持たないこの型は、高耐久のはがね（アーマーガア等）に対し はたきおとす半減・いわ技半減で決定打を欠き、はがねを突破できないと膠着します。
+すばやさ61のまま動くため、かくとう×4を持つルカリオ・オオニューラに上から一致技で落とされると受け出しが成立しません。積み技を持たないこの型は、高耐久のアーマーガア（ひこう/はがね）に対し はたきおとす・いわ技がともに等倍止まりで決定打を欠き、はねやすめで回復されると膠着します。
 
 ---
 
@@ -395,14 +396,14 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ エスパー技には強い</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">しねんのずつき（39.4%）等のエスパー技を無効化。ただし主力のアクアブレイク（89.2%）が×2弱点でS115から先制され、先制アクアジェット（86.9%）まで持つため対面では押し負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">しねんのずつき（39.4%）等のエスパー技を無効化。ただし主力のアクアブレイク（89.2%）が×2弱点で、メガスターミーのS120から先制され、先制アクアジェット（86.9%）まで持つため対面では押し負ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0681-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド（11位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんがはがね/ゴーストに×2。主力のかげうち（96.2%）・ポルターガイスト（67.6%）のゴースト技を半減し受けつつ殴れる。せいなるつるぎ（31.7%）採用個体のかくとう×4には注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんがはがね/ゴースト複合に×2。主力のかげうち（96.2%）・ポルターガイスト（67.6%）のゴースト技を半減し受けつつ殴れる。せいなるつるぎ（31.7%）採用個体のかくとう×4には注意</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -416,14 +417,14 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ ストーンエッジ採用時有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ストーンエッジがほのお/ひこうのメガYに×4。ほのお技は半減。ただしメガX（ほのお/ドラゴン）はいわ×2止まり、地震を持つ個体には×2を返される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ストーンエッジがほのお/ひこうのメガYに×4、ほのお技も半減で受けやすい。ただしメガX（ほのお/ドラゴン）にはいわ×2止まりで、こうげき種族値130の物理技を等倍で受けるため一方的には倒せない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">▲ 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率72.4%）がかくとう×4。じしん×2で抜けるが、はたきおとす・いわ技ははがねに半減され先に落とされやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率72.4%）がかくとう×4。じしん×2で抜けるが、はたきおとす・いわ技はともに等倍止まりで、先制のバレットパンチ（99.7%）込みで先に削られやすい</td>
 </tr>
 </tbody>
 </table>
@@ -445,15 +446,15 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率71.5%）がかくとう×4。S112で先手を取られ、てきおうりょく補正の一致技で耐久を貫かれる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう・はがねをともに半減するアーマーガア（ひこう/はがね）に後出しし、インファイト×0.25・はどうだん×0.5で受けてはねやすめで居座る。ピクシー（フェアリー）はかくとう半減でしんくうは（先制）も受けられる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率71.5%）がかくとう×4。メガ進化でS112、こうげき種族値145の一致技で耐久を貫かれる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう技を半減するピクシー（フェアリー）に後出しし、インファイト・はどうだん・しんくうは（先制）をいずれも×0.5で受ける。アーマーガア（ひこう/はがね）はインファイトこそ等倍だが、はがね技（コメットパンチ・バレットパンチ）を半減し高い防御で耐えてはねやすめで居座れる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0903-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">オオニューラ（33位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（98.6%）・フェイタルクロー（95.4%）でかくとう×4。先制のねこだまし＋高速かくとう技で上から崩される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のフェイタルクロー（あく）・インファイトをともに半減し、どく技も等倍以下のピクシー（フェアリー）に後出しする。アクロバット（ひこう・採用率11.5%）がフェアリーに×2のため、これを持つ個体には後続のはがね枠を当てる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のフェイタルクロー（あく）・インファイト・じごくづき（あく・52.3%）をいずれも半減するピクシー（フェアリー）に後出しする。アクロバット（ひこう・採用率11.5%）がフェアリーに×2のため、これを持つ個体には後続のはがね枠を当てる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -480,8 +481,8 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ技半減（ひこう0.5×はがね1）・はたきおとす等倍と決定打を欠く。はねやすめで回復され、はがね耐性で削り合いに持ち込まれると突破できない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率45.9%）が×2ではがねを刺す。でんき・ほのお技を持つ後続で突破する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ技等倍（ひこう×2×はがね0.5）・はたきおとす等倍と決定打を欠く。はねやすめで回復され、高い防御で削り合いに持ち込まれると突破できない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんはひこうで無効化されるため通らない。でんき・ほのお技を持つ後続で突破する</td>
 </tr>
 </tbody>
 </table>
@@ -516,13 +517,13 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">かくとう・じめんを半減/無効。苦手なルカリオ・ガブリアスの受け先</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">じめんを無効・かくとうを等倍で受け、高い防御でルカリオ・ガブリアスを受ける</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド">
     <div class="name">ギルガルド</div>
     <div class="rate">同居率6位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ゴーストでかくとうを半減し受け先を担う。フェアリーへの打点も補完</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ゴースト複合でかくとうを無効化し受け先を担う。フェアリーへの打点も補完</div>
   </div>
 </div>
 
@@ -530,9 +531,9 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
 
 バンギラスはかくとう×4が最大の穴で、みず・じめん・はがねも×2と弱点が多いため、残り5体で以下の役割を補います。
 
-1. **かくとう対策**: ひこう・エスパー・フェアリー（アーマーガア・ギルガルド等）でルカリオ・オオニューラの一致かくとうを受ける
+1. **かくとう対策**: かくとう無効のゴースト（ギルガルド）・かくとう半減のフェアリー（ピクシー）でルカリオ・オオニューラの一致かくとうを受ける。アーマーガアはかくとう等倍だが高耐久とはがね半減で受け先になる
 2. **みず・じめん対策**: くさ（メガニウム等）でアシレーヌ・ガブリアスの攻撃を半減して受ける
-3. **はがね突破**: じしん持ちのガブリアス等でアーマーガア・ブリジュラスを処理する
+3. **はがね突破**: じしん持ちのガブリアス等でブリジュラスを×2で処理する（アーマーガアはひこうでじしん無効のため、でんき・ほのお技で対処する）
 4. **砂嵐の活用**: すなあらしを活かせるいわ・じめんタイプを並べ、相手の削りと特防補正を共有する
 
 ---

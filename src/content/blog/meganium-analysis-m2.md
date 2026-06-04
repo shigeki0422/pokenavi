@@ -136,7 +136,7 @@ draft: true
 <table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（2倍）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2／×4）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（0.5倍以下）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
 </tr>
@@ -145,7 +145,7 @@ draft: true
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
-      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
+      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく（×4）</span>
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
@@ -170,7 +170,7 @@ draft: true
 </table>
 </div>
 
-くさ/フェアリーは**ドラゴン技を無効化**し、みず・でんき・じめん・かくとう・あくを半減、くさを4分の1に抑える優秀な耐性を持ちます。環境1位ガブリアスのげきりん（採用率47.9%）・スケイルショットを無効化でき、B115・D115の高耐久と合わせて受け出しの起点になります。一方、弱点はどく・ほのお・こおり・ひこう・はがねの5タイプ。とくにメガ前のくさ単では等倍だった**はがね・どくが弱点に変わる**点に注意が必要です。
+くさ/フェアリーは**ドラゴン技を無効化**し、みず・でんき・じめん・かくとう・あくを半減、くさを4分の1に抑える優秀な耐性を持ちます。環境1位ガブリアスのげきりん（採用率47.9%）・スケイルショットを無効化でき、B115・D115の高耐久と合わせて受け出しの起点になります。一方、弱点はどく・ほのお・こおり・ひこう・はがねの5タイプ。とくにメガ前のくさ単では等倍だった**はがね・どくが弱点に変わり、どくは2タイプとも×2で刺さる×4弱点**になる点に注意が必要です。
 
 ---
 
@@ -299,7 +299,7 @@ EV振りで最も多いのは無振り（HC・37.3%）で、次いでHCにSを2�
 
 ### 主要ポケモンとの相性
 
-使用率上位（TOP30目安）から、メガメガニウムと相性がはっきり出るポケモンを有利・不利の両面で挙げます。メガ後はくさ/フェアリーでドラゴンを無効化しみず・でんき・じめん・かくとう・あくを半減する一方、すばやさ80と遅く、ほのお・こおり・ひこう・はがね・どくを×2で突かれる点に注意してください。
+使用率上位（TOP30目安）から、メガメガニウムと相性がはっきり出るポケモンを有利・不利の両面で挙げます。メガ後はくさ/フェアリーでドラゴンを無効化しみず・でんき・じめん・かくとう・あくを半減する一方、すばやさ80と遅く、ほのお・こおり・ひこう・はがねを×2、どくを×4で突かれる点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -314,32 +314,22 @@ EV振りで最も多いのは無振り（HC・37.3%）で、次いでHCにSを2�
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ソーラービームが×2（じめん/ドラゴン）。げきりん（48%）はフェアリーで無効、じしんもくさ/フェアリーで半減。耐久で受けつつ一致技で押せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">マジカルシャインが×2（フェアリー→ドラゴン）。げきりん（48%）はフェアリーで無効、じしん（99%）もくさ/フェアリーで半減。耐久で受けつつフェアリー一致技で押せる（ソーラービームはドラゴンに半減されるため等倍）</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん単にソーラービームが×2。じしんはくさで半減。低速なので殴り合いで優位</td>
 </tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/ひこうにソーラービームが×2（みず2×ひこう1）。みず技は半減。先手は取られるがHC耐久で耐えて押し返せる</td>
-</tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンにウェザーボール（ほのお）が×2。りゅうせいぐん（65%）はフェアリーで無効、10まんボルトはくさ/フェアリーで半減</td>
-</tr>
-<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（炎技に注意）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく/ドラゴンにマジカルシャインが×2。りゅうせいぐん・あくのはどうは半減。ただしかえんほうしゃ（67%）はこちらに×2で刺さるため一撃で押し切りたい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく/ドラゴンにマジカルシャインが×4（フェアリー→あく・ドラゴンとも×2）。りゅうせいぐん（90%）はフェアリーで無効、あくのはどう（99%）は半減。ただしかえんほうしゃ（67%）はこちらに×2で刺さるため一撃で押し切りたい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/はがねにウェザーボール（ほのお）が×4（むし2×はがね2）。先制技バレットパンチ（はがね・100%）はこちらに×2のため、削れていると危険。1発で落としきりたい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/はがねにウェザーボール（ほのお）が×4（むし2×はがね2）。先制技バレットパンチ（はがね・99.7%）はこちらに×2のため、削れていると危険。1発で落としきりたい</td>
 </tr>
 </tbody>
 </table>
@@ -367,7 +357,7 @@ EV振りで最も多いのは無振り（HC・37.3%）で、次いでHCにSを2�
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（80%）がこちらに×2。むし/ほのおにくさ・フェアリー技は半減、ウェザーボール（ほのお）も半減で打点が乏しい。S100で先手を取られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">げんしのちから（いわ×2）を採用するか、みず・いわタイプをパーティに入れて受ける。ちょうのまいを積まれる前に後続で弱点を突く</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">げんしのちから（いわはむし/ほのおに×4）を採用するか、みず・いわタイプをパーティに入れて受ける。ちょうのまいを積まれる前に後続で弱点を突く</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0937-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ソウブレイズ（26位）</td>
@@ -381,8 +371,8 @@ EV振りで最も多いのは無振り（HC・37.3%）で、次いでHCにSを2�
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S123でこちらより速い。トリプルアクセル（72%・こおり）がこちらに×2で刺さり、上から削られる。くさ/あくにこちらのくさ・あく半減技は通りにくい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ウェザーボール（ほのお×2）で対面処理を狙うが先手を許すため、ほのお・ひこう技を持つ後続で受けてから縛る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S123でこちらより大きく速い。トリプルアクセル（72%・こおり）がこちらに×2で刺さり、3段ヒットでみがわりも貫通して上から削られる。こちらのウェザーボール（ほのお）・マジカルシャイン（フェアリー）はくさ/あくに×2で通るが、先手を取れず撃ち合いが安定しない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ウェザーボール（ほのお×2）での対面処理は先手を許すため安定しない。マスカーニャより速いほのお・ひこう・むし技持ち（リザードン等）を後続に置き、交代から縛る</td>
 </tr>
 </tbody>
 </table>
@@ -399,7 +389,7 @@ EV振りで最も多いのは無振り（HC・37.3%）で、次いでHCにSを2�
     <img src="/images/pokemon/pokemon-0956-00.webp" alt="クエスパトラ">
     <div class="name">クエスパトラ</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速エスパー枠。メガニウムが苦手などく・はがね・キラフロルにエスパー打点を上から通す</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速エスパー枠。メガニウムが半減されるどくタイプ（いわ/どくのキラフロル等）にエスパー打点を上から通す</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0248-00.webp" alt="バンギラス">
@@ -449,13 +439,13 @@ EV振りで最も多いのは無振り（HC・37.3%）で、次いでHCにSを2�
 
 採用率を見ると、ソーラービーム97.7%・ウェザーボール94.7%・こうごうせい70.1%と、メガソーラーの恩恵を受ける3技がそのまま主力技として上位を占めます。これは「メガソーラーありき」で技構成が組まれていることをデータが裏付けています。
 
-注目すべきは**ウェザーボールのタイプ変化**です。くさ技（ソーラービーム）はくさ・ほのお・どく・むし・はがね・ドラゴン・ひこうに半減〜無効と通りにくく、単体ではアタッカーとして範囲が狭い。そこへ常時ほのお・威力100のウェザーボールが加わることで、**ソーラービームが半減されるはがね・むし・くさ・こおりにそのまま有効打が通る**相補関係ができます。実際、はがね/ドラゴンのブリジュラス（2位）、むし/はがねのハッサム（14位・×4）など、くさ技が刺さらないはがね複合に対してウェザーボールが裏の打点として機能します。メガソーラーは「晴れパーティの天候役」ではなく、**メガメガニウム単体の技範囲を晴れで完成させる自己完結型の特性**として使われているのが、この採用構成から読み取れます。
+注目すべきは**ウェザーボールのタイプ変化**です。くさ技（ソーラービーム）はくさ・ほのお・どく・むし・はがね・ドラゴン・ひこうに半減〜無効と通りにくく、単体ではアタッカーとして範囲が狭い。そこへ常時ほのお・威力100のウェザーボールが加わることで、**ソーラービームが半減されるはがね・むし・くさ・こおりにそのまま有効打が通る**相補関係ができます。実際、むし/はがねのハッサム（14位・×4）、はがね/ゴーストのギルガルド（11位・×2）など、くさ技が刺さらないはがね複合に対してウェザーボールが裏の打点として機能します（ただしほのおを半減するドラゴン・みず・いわ複合には等倍以下に留まる点は要注意）。メガソーラーは「晴れパーティの天候役」ではなく、**メガメガニウム単体の技範囲を晴れで完成させる自己完結型の特性**として使われているのが、この採用構成から読み取れます。
 
 ---
 
 ## まとめ
 
-メガメガニウム（くさ/フェアリー）は、特性メガソーラーによる常時晴れで**ソーラービームの溜めなし連射・ウェザーボールのほのお化・こうごうせいの回復量増加**を同時に得る、自己完結型の特殊アタッカーです。とくこう143とB115・D115の高耐久を両立し、ドラゴン無効＋みず・でんき・じめん・かくとう・あく半減の優秀な耐性で、ガブリアス・カバルドン・ギャラドスといった上位に受け出しから攻めを通せます。
+メガメガニウム（くさ/フェアリー）は、特性メガソーラーによる常時晴れで**ソーラービームの溜めなし連射・ウェザーボールのほのお化・こうごうせいの回復量増加**を同時に得る、自己完結型の特殊アタッカーです。とくこう143とB115・D115の高耐久を両立し、ドラゴン無効＋みず・でんき・じめん・かくとう・あく半減の優秀な耐性で、ガブリアス（マジカルシャイン×2）・カバルドン（ソーラービーム×2）といった上位に受け出しから攻めを通せます。
 
 弱点はすばやさ80の遅さと、ほのお・こおり・ひこう・はがね・どくの5弱点。とくにリザードン・ウルガモス・マスカーニャなど高速で弱点を突く相手には、いわ・みずタイプの後続でケアする構築が前提です。メガニウムナイト採用率98.6%が示すとおり、メガ進化後の性能を最大限に引き出す技構成を組めるかが、この37位という立ち位置を活かす鍵になります。
 
@@ -466,5 +456,3 @@ EV振りで最も多いのは無振り（HC・37.3%）で、次いでHCにSを2�
 - [天敵となる高速ほのお リザードン（Y）のM-2考察](/blog/charizard-y-analysis-m2/)
 - [ドラゴンを無効化できる相手 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [くさ技が刺さる地面エース カバルドンのM-2考察](/blog/hippowdon-analysis-m2/)
-</content>
-</invoke>

@@ -290,7 +290,7 @@ HP105・B100・D100と耐久が高水準でまとまり、A125の攻撃力と合
 
 ### 型1: いじっぱりAS型（最多採用）
 
-**性格採用率: いじっぱり 89.3%**　**EV: AS+hb 20.5%（AS振りに余りをHBへ）**
+**性格採用率: いじっぱり 89.3%**　**EV: AS+HB 20.5%（AS振りに余りをHBへ）**
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -316,7 +316,7 @@ HP105・B100・D100と耐久が高水準でまとまり、A125の攻撃力と合
 
 **強み:**
 
-A32・S32の最速いじっぱりは、すばやさ実数値でメガ後S100相当に届き、ガブリアス（S102）にこそ届かないものの、リザードン（S100）と同速、サザンドラ（S98）・ミミッキュ（S96）・キラフロル（S86）といった環境上位を上から叩けます。れいとうパンチ・じしんの2枠で弱点を突き分け、ふいうちでこちらより速いマスカーニャ（S123）・オオニューラ（S120）・スターミー（S115）・ゲンガー（S110）にも先制で打点を持てます。
+A32・S32の最速いじっぱりは、すばやさ実数値でメガ後S100相当に届き、ガブリアス（S102）にこそ届かないものの、リザードン（S100）と同速、サザンドラ（S98）・キラフロル（S86）といった環境上位を上から叩けます。れいとうパンチ・じしんの2枠で弱点を突き分け、ふいうちでこちらより速いマスカーニャ（S123）・オオニューラ（S120）・スターミー（S115）・ゲンガー（S110）にも先制で打点を持てます。
 
 おやこあいですてみタックルが2回判定になるため、HA振りより火力で劣るぶんを2発目の上乗せが補います。きあいのタスキ持ちを1ターンで処理できるのもAS型の強みです。
 
@@ -420,6 +420,20 @@ AS型がすばやさで先制できたリザードン・サザンドラ・キラ
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（炎技採用時）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのパンチ（採用率21%）が×4（むし2×はがね2）で刺さる。S65で先手。炎技不採用だとじしん半減・ノーマル半減で打点が細く、つるぎのまい＋バレットパンチに注意</td>
 </tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが×4（いわ2×どく2）。S86でこちらが先手。だいちのちから・パワージェムはノーマルに等倍で、こちらの弱点は突かれない</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチが×2（あく1×ドラゴン2）。S98でこちらが先手。あくのはどう・りゅうせいぐんはノーマルに等倍で弱点を突かれない</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -456,7 +470,7 @@ AS型がすばやさで先制できたリザードン・サザンドラ・キラ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう/はがねでじしん無効・ノーマル等倍、れいとうパンチも半減（ひこう2×はがね0.5＝等倍）でB105を抜けない。はねやすめ（98%）で受け回される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう/はがねでじしんは無効、れいとうパンチも等倍（ひこう2×はがね0.5）止まりで、ノーマル技も等倍。決定打を欠きB105を抜けない。はねやすめ（98%）で受け回される</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのパンチ（×2）採用個体なら殴り合える。非採用なら、でんき・ほのおタイプを同伴して弱点を突いて処理する</td>
 </tr>
 <tr style="background:#fafafa">
@@ -464,7 +478,7 @@ AS型がすばやさで先制できたリザードン・サザンドラ・キラ
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">S123でこちらより速い。とんぼがえり（70%）で削りつつ交代され、トリックフラワー（93%・急所必中）で居座る側に消耗を強いられる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（先制）で削る。みず・ひこう・どくなどくさ/あくの弱点を突けるタイプを同伴して上から処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（先制）で削る。ひこう・むし・ほのおなどくさ/あくの弱点を突けるタイプを同伴して上から処理する</td>
 </tr>
 </tbody>
 </table>
@@ -550,10 +564,10 @@ AS型がすばやさで先制できたリザードン・サザンドラ・キラ
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">いじっぱりAS型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">AS+hb 20.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">AS+HB 20.5%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">すてみタックル・れいとうパンチ・じしん・ふいうち</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">リザードン・サザンドラ等を上から処理。タスキ貫通</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">サザンドラ・キラフロル等を上から処理。タスキ貫通</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">オオニューラ・マスカーニャに先手を取れない</td>
 </tr>
 <tr style="background:#fafafa">

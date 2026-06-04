@@ -279,7 +279,7 @@ D方向の振りが薄いため、フラエッテ:永遠のムーンフォース
 
 ### 型2: HDシンクロ特殊受け型（少数）
 
-**性格採用率: わんぱく 20.8%ほか（D↑性格 おだやか9.0%・しんちょう6.0%）**
+**性格採用率: おだやか 9.0%・しんちょう 6.0%（D↑性格・合計約15%）**
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -306,7 +306,7 @@ D方向の振りが薄いため、フラエッテ:永遠のムーンフォース
 
 **強み:**
 
-HD（D↑）型はEV振りで約2割を占め、種族値D130をさらに伸ばして特殊アタッカーを受けます。HB型では受けにくいフラエッテ:永遠・アシレーヌのフェアリー技に対しても、弱点等倍化はできないものの被害を抑えられます。特性シンクロ（31.6%）は、相手のどくどく・やけど・まひを受けると相手にも同じ状態異常を返すため、ステルスロックや受けサイクルでこちらに状態異常を入れてくる相手を逆に削れます。
+HD（D↑）型はEV振りで約15%を占め、種族値D130をさらに伸ばして特殊アタッカーを受けます。HB型では受けにくいフラエッテ:永遠・アシレーヌのフェアリー技に対しても、弱点等倍化はできないものの被害を抑えられます。特性シンクロ（31.6%）は、相手のどくどく・やけど・まひを受けると相手にも同じ状態異常を返すため、ステルスロックや受けサイクルでこちらに状態異常を入れてくる相手を逆に削れます。
 
 **弱み:**
 
@@ -348,8 +348,8 @@ HB型と比べてぼうぎょが下がるため、ガブリアス・ドドゲザ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト技をあくで半減。エスパー技は無効。特殊主体だがD130で受けやすい（どくタイプのためどくどくは効かないが、イカサマで削り長期戦に持ち込める）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">シャドーボール（71.1%）はあく半減だが、主力のヘドロウェーブ（どく・81.7%）は等倍で通り、きあいだま（かくとう・37.4%）採用個体には×2弱点を突かれる。D130で耐え一致イカサマで削れるが、どくタイプにどくどくが効かず一方的な受けにはならない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -363,7 +363,7 @@ HB型と比べてぼうぎょが下がるため、ガブリアス・ドドゲザ
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（71.5%）がかくとう×2弱点。てきおうりょくで実質威力240、HB振りでも受けきれない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">A110＋一致インファイト（71.5%）がかくとう×2弱点。HB振りでも受けきれず、イカサマの返しより先に落とされる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -392,7 +392,7 @@ HB型と比べてぼうぎょが下がるため、ガブリアス・ドドゲザ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">てきおうりょくインファイト（採用率71.5%）がかくとう×2。HB振りでも一撃で落とされ、受け出しが成立しない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">A110＋一致インファイト（採用率71.5%）がかくとう×2。HB振りでも受け切れず、受け出しが成立しない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとうを半減するアーマーガア（はがね/ひこう）・ゲンガー（かくとう半減）等を後出しして受け、こちらが処理する。ブラッキーは初手から対面させない</td>
 </tr>
 <tr style="background:#fafafa">
@@ -524,7 +524,7 @@ HB型と比べてぼうぎょが下がるため、ガブリアス・ドドゲザ
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">HDイカサマ特殊受け型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">わんぱく/おだやか系 約2割</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">おだやか/しんちょう系 約15%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">イカサマ・ねがいごと・まもる・どくどく</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">特殊アタッカーへの被害を抑える。シンクロで状態異常返し</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">物理受けが下がり高A物理の被害増</td>

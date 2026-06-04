@@ -56,7 +56,7 @@ draft: true
 
 これらに対し、へんげんじざいで撃つ技のタイプ次第で弱点を突き分けられるのが強みです。例えばガブリアス・カイリュー（ドラゴン/ひこう・16位）にはれいとうビームが×2で通り、上から処理を狙えます。
 
-ただしマスカーニャ（くさ/あく・S123・3位）はわずかに上を取られ、こおり技のトリプルアクセル（採用率72.2%）でこちらが×2弱点を突かれます。S122は環境トップクラスですが「全てを抜ける」速さではない点に注意してください。
+ただしマスカーニャ（くさ/あく・S123・3位）はわずかに上を取られ、はたきおとす（採用率57.6%）で持ち物を叩き落とされます。トリプルアクセル（72.2%）はみず/あくに×0.5で軽減できますが、先手を取られてタスキを連続技で貫通される点が痛手です。S122は環境トップクラスですが「全てを抜ける」速さではない点に注意してください。
 
 ### 2. れいとうビームでドラゴン・じめん勢を上から落とす
 
@@ -485,7 +485,7 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0479-02.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウォッシュロトム（22位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（56.8%）が×2弱点。みず技は半減、れいとうビームも等倍でこちらの打点が薄く、撃ち合いで押し負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（56.8%）が×2弱点。みず技・れいとうビームともに×0.5で半減され、あくのはどう（等倍）しか通らず打点が薄く、撃ち合いで押し負ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき技を半減できるくさ・じめん枠（フシギバナ等）に引いて受ける。じめんタイプならボルトチェンジも透かせる</td>
 </tr>
 <tr>
@@ -504,9 +504,9 @@ draft: true
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フシギバナ（27位）
+    <img src="/images/pokemon/pokemon-0003-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フシギバナ（27位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ/どくでみず技を半減、こちらはくさ×2弱点を突かれる。高Dでなみのり・れいとうビームも通りにくく殴り合いで不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ/どくでみず技を半減、こちらはくさ×2弱点を突かれる。れいとうビームは×2で刺さるがD100で一撃には足りず、低耐久のこちらは反撃のくさ技×2で先に落とされやすい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブはくさに半減されるため、ほのお・エスパー・ひこう枠（リザードン等）を合わせてくさ弱点を突く</td>
 </tr>
 </tbody>

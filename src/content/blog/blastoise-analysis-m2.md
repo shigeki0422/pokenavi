@@ -401,8 +401,8 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずのはどうが×2（いわ2×どく1）。S55でからをやぶる前から先手。主力パワージェム（いわ）はみず単に等倍</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずのはどうが×2（いわ2×どく1）。S86でからをやぶる前は先手を取られるが、1積みで上から叩ける。だいちのちから（採用率66.8%）がみず単に×2で刺さるため、積みターンに後出しはしない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -416,7 +416,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0911-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ラウドボーン（29位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずのはどうが×2（ほのお2×ゴースト1）。S75でからをやぶる前から先手。主力フレアソング（ほのお）はみず単に半減</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずのはどうが×2（ほのお2×ゴースト1）。S66でからをやぶる前から先手。主力フレアソング（ほのお）はみず単に半減</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -461,7 +461,7 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0003-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フシギバナ（27位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギガドレイン（採用率56.9%）・やどりぎのタネ（58.5%）でくさ技×2を通しつつ自己回復し、こちらの波動技（みず半減・はどうだん等倍）では削りきれず受けループに持ち込まれる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちから（採用率88.4%）がみず単に×2、ギガドレイン（56.9%）もくさ×2。やどりぎのタネ（58.5%）・こうごうせい（72.7%）で自己回復しつつ削られ、こちらの波動技（みず半減・はどうだん等倍）では押し切れず受けループに持ち込まれる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・ひこう・どく・エスパー・むしタイプ（リザードン・ハッサム等）でくさを半減しつつ弱点を突いて処理する。やどりぎのタネを撒かれる前に交代で躱す</td>
 </tr>
 <tr>
@@ -531,14 +531,14 @@ draft: true
 | 相手タイプ例（環境順位） | みずのはどう | はどうだん | あくのはどう |
 |---|---|---|---|
 | ガブリアス（ドラゴン/じめん・1位） | ×2 | ×1 | ×1 |
-| マスカーニャ（くさ/あく・3位） | ×1 | ×2 | ×0.5 |
+| マスカーニャ（くさ/あく・3位） | ×0.5 | ×2 | ×0.5 |
 | アシレーヌ（みず/フェアリー・4位） | ×0.5 | ×0.5 | ×0.5 |
-| ゲンガー（ゴースト/どく・10位） | ×1 | ×0.5 | ×2 |
+| ゲンガー（ゴースト/どく・10位） | ×1 | ×0（無効） | ×2 |
 | ドドゲザン（あく/はがね・24位） | ×1 | ×2 | ×0.5 |
 
-この表から見えるのは、波動3種は「広く×2を取る」組み合わせではなく、**1つの技が半減される相手を別の技が等倍以上で補う**設計だという点です。みずのはどうがマスカーニャに等倍止まりでもはどうだんが×2で刺さり、はどうだんがゲンガーに半減される一方であくのはどうが×2で通ります。からをやぶるで攻撃を切る都合上、半減を踏んで火力が落ちる事態を避けることが全抜きの前提になるため、×2の数より「全相手に等倍以上を1枠は確保する」ことが優先されているわけです。
+この表から見えるのは、波動3種は「広く×2を取る」組み合わせではなく、**1つの技が半減される相手を別の技が等倍以上で補う**設計だという点です。みずのはどうがマスカーニャに半減されてもはどうだんが×2で刺さり、はどうだんがゲンガーに無効化される一方であくのはどうが×2で通ります。からをやぶるで攻撃を切る都合上、半減を踏んで火力が落ちる事態を避けることが全抜きの前提になるため、×2の数より「全相手に等倍以上を1枠は確保する」ことが優先されているわけです。
 
-逆に、3種すべてが半減になるのが**みず/フェアリー（アシレーヌ等）**です。みず・あくはみずに、かくとうはフェアリーに半減されるため、メガランチャー波動型は同じみず受けに打点を欠きます。れいとうビーム（24.2%）もみず半減でこの穴を埋めにくく、対みず/フェアリーは波動型単体では押し切れない構造的な弱みとして残ります。
+逆に、3種すべてが半減になるのが**みず/フェアリー（アシレーヌ等）**です。みずはみずに、かくとう・あくはフェアリーに半減されるため、メガランチャー波動型は同じみず受けに打点を欠きます。れいとうビーム（24.2%）もみず半減でこの穴を埋めにくく、対みず/フェアリーは波動型単体では押し切れない構造的な弱みとして残ります。
 
 ---
 

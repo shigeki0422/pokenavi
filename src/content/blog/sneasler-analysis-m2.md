@@ -60,7 +60,7 @@ draft: true
 
 ### 3. ねこだまし・つるぎのまいで起動ターンを作れる
 
-ねこだまし（採用率36.3%）は優先度+1の先制技で、**相手の素早さに関わらず先制**してひるませます。起動を1ターン安全に進める時間を作る用途で、低耐久のオオニューラが展開の起点を確保するのに使われます。つるぎのまい（30.8%）はA2段階アップで、しろいハーブ起動後の高速インファイトの一撃をさらに伸ばし、半端な耐久ラインを確定圏へ押し込みます。
+ねこだまし（採用率36.3%）は優先度+3の先制技で、**相手の素早さに関わらず先制**してひるませます。起動を1ターン安全に進める時間を作る用途で、低耐久のオオニューラが展開の起点を確保するのに使われます。つるぎのまい（30.8%）はA2段階アップで、しろいハーブ起動後の高速インファイトの一撃をさらに伸ばし、半端な耐久ラインを確定圏へ押し込みます。
 
 ---
 
@@ -122,6 +122,7 @@ draft: true
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×4）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（¼）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½）</th>
 </tr>
 </thead>
@@ -139,8 +140,12 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
-      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
+    </div>
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
@@ -151,7 +156,7 @@ draft: true
 </table>
 </div>
 
-エスパーが**×4の致命的な弱点**となる点が最大の注意点です。じめん・ひこうも×2で通り、いずれもオオニューラのぼうぎょ60では一撃で落とされかねません。一方でかくとう・あく・むしを軽減できるため、マスカーニャのはたきおとす（あく0.5）やトリックフラワー（くさ0.5）、ゲッコウガのつじぎり（あく0.5）といった環境上位の高速勢の主力を半減でき、起動さえできれば撃ち合いに持ち込めます。
+エスパーが**×4の致命的な弱点**となる点が最大の注意点です。じめん・ひこうも×2で通り、いずれもオオニューラのぼうぎょ60では一撃で落とされかねません。一方でかくとう・むしを¼、くさ・どく・いわ・あくを半減で受けられるため、マスカーニャのはたきおとす（あく0.5）・トリックフラワー（くさ0.5）やゲッコウガのあくのはどう（あく0.5）といった環境上位の高速勢の主力を軽減でき、被弾しても一撃で崩されにくくなります。
 
 ---
 
@@ -362,7 +367,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じごくづき（あく）が×2でS110＜120より先手。ただしヘドロウェーブ（どく81.7%）はこちらに×0.5だが、シャドーボールやきあいだま無し前提。みちづれ（30.5%）に注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じごくづき（あく×2、採用率52.3%）採用個体ならS110＜120で先手で削れる。主力のヘドロウェーブ（どく81.7%）・きあいだま（かくとう37.4%）はいずれもこちらに×0.5で弱点を突かれない。みちづれ（30.5%）で相討ちを狙われる点に注意</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -398,8 +403,8 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">しねんのずつき（39.4%）・サイコカッター（24.7%）のエスパー技がこちらに×4。S115＜120で先手は取れるがインファイト等倍では一撃にできず、返しのエスパー技で落とされる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェイタルクロー（どく等倍）で削り、エスパー技を半減するはがね・あくタイプで受ける。エスパー技未採用の物理型なら撃ち合える</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のアクアブレイク（89.2%）・アイススピナー（64.9%）はこちらに等倍だが、しねんのずつき（39.4%）・サイコカッター（24.7%）のエスパー技を持つ個体はこちらに×4で一撃。S115＜120で先手は取れるがインファイト（みず/エスパーに等倍）では一撃にできず、エスパー技採用個体には撃ち負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェイタルクロー（どく等倍）で削れるが確定数は遅い。エスパー技を半減するはがね・あくタイプを同伴して後出しで処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -449,7 +454,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">じめん枠。オオニューラの弱点であるエスパー・はがねに地震で打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">じめん枠。オオニューラが等倍止まりのはがね・どくにじしんで打点</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
