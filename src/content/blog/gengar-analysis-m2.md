@@ -233,14 +233,14 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 4. 相手が攻撃技を使ってくれば、みちづれが発動して相手を道連れに倒す
 5. 相手がみちづれを警戒して変化技を使った場合は、次ターンにヘドロウェーブ等で削る
 
-この戦略のポイントは、**相手が交代できない状況でみちづれを使う**点にあります。通常の対戦なら相手は「みちづれを使うターンに交代すれば良い」と逃げられますが、かげふみがある限りその逃げ道が完全に塞がれています。
+この戦略のポイントは、**相手が交代できない状況でみちづれを使う**点にあります。通常の対戦なら相手は「みちづれを使うターンに交代すれば良い」と逃げられますが、かげふみがある限りその逃げ道が塞がれています。
 
 さらにS130というすばやさにより、おくびょうS32振りで環境最速付近の実数値を持ちます。多くのポケモンに先手を取りながら**C170のヘドロウェーブ**を叩き込める場面は非常に多く、こごえるかぜを採用すれば後続のポケモンも有利な状況で迎えられます。
 
 **弱み：**
 
 - HPが60と低く、じめん・ゴースト・エスパー・あく技が1発入ると瀕死になりやすい
-- ガブリアス（使用率1位）がじしんで確定2発圏内に捉えられることが多く、素直な対面は避けるべき
+- ガブリアス（使用率1位）のじしん（採用率99.2%）が2倍弱点で確定2発圏内に入るため、繰り出す前におにびで攻撃を半分にするか、じしんを無効化できるひこう・ふゆう持ち（アーマーガア等）を後出しで合わせる
 - かげふみで逃げられない分、相手が「みちづれ読み」の変化技を多用してくると消耗する
 
 ---
@@ -384,7 +384,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">道連れ戦略</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">◎ 最強ギミック</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">◎ 交代を縛って確実に通せる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">△ 交代逃げされる</td>
 </tr>
 </tbody>
@@ -440,7 +440,7 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
     <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">みちづれ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.7%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かげふみとのシナジーが絶大。逃げられない相手から確実に1体処理するメイン技</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かげふみと噛み合う技。逃げられない相手から確実に1体処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -781,29 +781,29 @@ M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが2倍弱点。メガゲンガーのSは上だが、スカーフガブリアスへの先制やタスキで耐えられてからのじしんはほぼ瀕死になるため要警戒</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">おにびで無力化してからたたりめ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）が2倍弱点で確定2発圏内。メガゲンガーのSは上だが、スカーフ型の先制やタスキで耐えてからのじしんで落とされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">先手でおにびを入れてこうげきを半減→たたりめで詰める。じしんを無効化するアーマーガア（ひこう）を後出しで合わせるのも有効</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴンテール・りゅうのはどう等のドラゴン技やはがね技が弱点</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだまで対策</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンでシャドーボール・ヘドロウェーブをいずれも半減以下に抑え、ドラゴン技で削り返してくる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだま（はがねに×2）で抜群を取って削る。命中70%が不安なら、はがねを半減できるじめん・ほのおの一致アタッカーを後出しで詰める</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0197-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブラッキー等あくタイプ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく技はゴーストタイプに等倍以上。かみくだくなどで削られやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだまで対策</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">シャドーボールがあくに半減され有効打が乏しい。ブラッキーはイカサマ（採用率97.2%）でゲンガーのCに依存せず削ってくる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだまがあく×2で抜群。きあいだま非採用ならかくとう・フェアリーの補完アタッカーを同伴し、後出しで処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0196-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">エーフィ等エスパータイプ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー技が弱点。高Cのエスパー技が届く前に仕事を終わらせる必要がある</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S130で先手を取りシャドーボール</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">サイコキネシス（エーフィ採用率75.5%）が2倍弱点。S65のエーフィにはS130で先手を取れるが、こちらもエスパー技が抜群で撃ち合いは不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">先手のシャドーボール（エスパーに×2）で上から落とす。同速・高速のエスパーにはエスパー技を半減するはがね（ハッサム等）を後出しで合わせる</td>
 </tr>
 </tbody>
 </table>
@@ -834,7 +834,7 @@ M-2環境ではガブリアス(1位)・マスカーニャ(3位)・ルカリオ(9
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" />
     <div class="name">アーマーガア</div>
     <div class="rate">使用率6位</div>
-    <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーのじめん弱点をひこうタイプで完全カバー</div>
+    <div style="font-size:0.65rem;color:#555;margin-top:2px">ゲンガーのじめん弱点をひこうタイプでカバー</div>
   </div>
 </div>
 

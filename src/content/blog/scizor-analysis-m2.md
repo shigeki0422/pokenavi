@@ -36,7 +36,7 @@ heroImage: '../../assets/hero-scizor-m2.png'
 
 シーズンM-2（2026/5/13〜6/17）のシングルバトルで、ハッサムは**使用率14位**を記録しています。注目すべきはメガ石採用率が79.1%である点で、残り約21%はメガ進化なしで採用されています。これはメタルコート（9.5%）やオボンのみ（4.0%）など、別の持ち物型にも相当の需要があることを示しています。
 
-それでもメガハッサムが強力な理由は明白です——**テクニシャン補正+バレットパンチという高水準の先制技**、**A150+つるぎのまいで積み後に絶大な破壊力**、そして**はがね/むしという組み合わせによるほのお一点弱点という安心感**。複数の役割を同時にこなせる万能アタッカーとして、M-2環境で安定した地位を保っています。
+それでもメガハッサムが強力な理由は明白です——**テクニシャン補正+バレットパンチという高水準の先制技**、**A150+つるぎのまいで積み後の高い火力**、そして**はがね/むしという組み合わせによるほのお一点弱点という安心感**。複数の役割を同時にこなせる万能アタッカーとして、M-2環境で安定した地位を保っています。
 
 ---
 
@@ -44,7 +44,7 @@ heroImage: '../../assets/hero-scizor-m2.png'
 
 ### 理由1: テクニシャン+バレットパンチ——高水準の先制技
 
-バレットパンチの採用率は**99.7%**。ほぼ全てのハッサム使いがこの技を採用しているという圧倒的な数字です。
+バレットパンチの採用率は**99.7%**。ほぼ全てのハッサム使いがこの技を採用しています。
 
 その理由は特性テクニシャンにあります。テクニシャンは**威力60以下の技の威力を1.5倍**にする特性です。
 
@@ -101,7 +101,7 @@ heroImage: '../../assets/hero-scizor-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">ほのお</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">×2</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×4（超危険）</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×4（超ばつぐん）</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">4倍弱点</td>
 </tr>
 <tr style="background:#fafafa">
@@ -136,11 +136,11 @@ heroImage: '../../assets/hero-scizor-m2.png'
 </table>
 </div>
 
-「弱点が多そう」という先入観とは裏腹に、**実質的な弱点はほのお4倍のみ**という驚異的な耐性を誇ります。M-2環境においてリザードン（5位）が多いため油断は禁物ですが、それ以外のポケモンに対しては非常に安定した耐性を持つことができます。
+「弱点が多そう」という先入観とは裏腹に、**実質的な弱点はほのお4倍のみ**という高水準の耐性を持ちます。M-2環境においてリザードン（5位）が多いため油断は禁物ですが、それ以外のポケモンに対しては非常に安定した耐性を持つことができます。
 
 ### 理由3: HA振り防御140で場持ちよく積める中・後発運用
 
-メガハッサムはすばやさ75と遅めですが、その分**HA振りで防御140という高水準の物理耐久**を確保できます。
+メガハッサムはすばやさ75と遅めですが、その分**HA振りで防御140という高水準の物理耐久**を確保できます。これは環境の物理受け・高耐久ポケモンと並べてもトップクラスの数値です（下表は環境で防御に定評のあるポケモンと種族値を比較したもの）。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
@@ -158,18 +158,23 @@ heroImage: '../../assets/hero-scizor-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">105</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0681-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ギルガルド（シールド）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">140</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">同値</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0227-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">エアームド</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">140</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">同値</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ブリジュラス</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">130</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">メガハッサムより低い</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アシレーヌ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">74</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">メガハッサムより低い</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ガブリアス</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">95</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0450-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">カバルドン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">118</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">メガハッサムより低い</td>
 </tr>
 </tbody>
@@ -234,7 +239,7 @@ HA振りによってこの防御140が最大化されます。環境の多くの
   </div>
 </div>
 
-**A150が圧巻の数値**。さらにぼうぎょ140というトップクラスの防御もあります。一方でHP70・すばやさ75と低く、正面から殴り合うというよりも**後手でバレットパンチを打ち込む、または耐久を活かして積んでからフィニッシュ**というスタイルが基本になります。
+**A150は環境トップクラスの数値**。さらにぼうぎょ140という高水準の防御もあります。一方でHP70・すばやさ75と低く、正面から殴り合うというよりも**後手でバレットパンチを打ち込む、または耐久を活かして積んでからフィニッシュ**というスタイルが基本になります。
 
 とくぼう100もメガ進化で強化（80→100）されており、特殊方面の被ダメージも想定より少ない場面があります。
 
@@ -603,12 +608,12 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 <tr style="background:#fee2e2">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードン</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ほのお4倍を突く最大の天敵</strong>。S100でこちらより速く、かえんほうしゃ（42.4%）・フレアドライブ（33.3%）で確定1発。後出しは不可能</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ほのお4倍を突く最も警戒すべき相手</strong>。S100でこちらより速く、かえんほうしゃ（42.4%）・フレアドライブ（33.3%）で確定1発。後出しは不可能</td>
 </tr>
 <tr style="background:#fee2e2">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0637-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ウルガモス</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（79.7%）がほのお4倍で確定1発。S100で先に動かれ、ちょうのまい（97.4%）を積まれると手がつけられない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（79.7%）がほのお4倍で確定1発。S100で先に動かれ、ちょうのまい（97.4%）を積まれると突破が困難。後出しは避け、リザードンと同様にほのおを受けられる枠で対応する</td>
 </tr>
 <tr style="background:#fee2e2">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0655-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">マフォクシー</td>

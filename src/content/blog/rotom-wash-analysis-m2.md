@@ -404,35 +404,35 @@ draft: true
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">トリックフラワー（くさ・採用率92.9%・必中急所）が×2弱点。すばやさ123で上から削られ、はたきおとすで持ち物も落とされる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技を半減するほのお・はがねタイプ（ハッサム等）を同伴し、マスカーニャの前に引いて受ける。ウォッシュロトム単体では対面しない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技を×0.5で受けるむし/はがねのハッサムを後出しし、むしくい（むし・×4）で処理する。ボルトチェンジでマスカーニャを削ってからハッサムに引く流れも有効</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0902-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">イダイトウ(オス)（8位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おはかまいり（ゴースト・採用率99.9%）が×2弱点で高火力。アクアジェット（みず先制・91.1%）はこちら半減だが、おはかまいりで上から崩される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴーストを半減するあく・ノーマルタイプ（ドドゲザン等）を同伴して受ける。10まんボルトはみず/ゴーストに×2で通るが受け出しは不可</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">おはかまいりを×0.5で受けるあく/はがねのドドゲザンを後出しし、ふいうち（あく先制・採用率99.0%）でゴースト×2を突いて処理する。先制技ならアクアジェットより先に動ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどう（あく・採用率98.5%）が×2弱点。すばやさ98で先手を取られ、こちらのみず・でんき技は等倍止まりで決定力がない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくを半減するフェアリー・かくとうタイプ（フラエッテ永遠等）を同伴して受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうを×0.5で受けるフェアリーのフラエッテ:永遠を後出しし、ムーンフォース（フェアリー・あく/ドラゴンに×4・採用率87.0%）で処理する。めいそうを積めば撃ち合いにも強い</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（19位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かげうち・シャドークロー（ゴースト・採用率93.6%/61.0%）が×2弱点。ばけのかわで一撃を耐えてから上から崩される。こちらのみず・でんきはゴースト/フェアリーに等倍止まり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴーストを半減するあくタイプ（ドドゲザン・サザンドラ等）を同伴して受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かげうち・シャドークローを×0.5で受けるあく/はがねのドドゲザンを後出しする。1発でばけのかわを割り、アイアンヘッド（はがね・フェアリーに×2・採用率86.9%）で処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0003-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フシギバナ（27位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ一致技が×2弱点。みず・でんきはくさ/どくに半減でこちらの打点が乏しい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・ひこう・エスパー技を持つアタッカーで弱点を突く。対面は避け後続で処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技を×0.25で受けるむし/はがねのハッサムを後出しし、むしくい（むし・くさ/どくに×2）で処理する。ボルトチェンジで削ってからハッサムに引いてもよい</td>
 </tr>
 </tbody>
 </table>
