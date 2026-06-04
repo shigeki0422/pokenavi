@@ -140,7 +140,7 @@ heroImage: '../../assets/hero-scizor-m2.png'
 
 ### 理由3: HA振り防御140で場持ちよく積める中・後発運用
 
-メガハッサムはすばやさ75と遅めですが、その分**HA振りで防御140という城壁のような耐久力**を確保できます。
+メガハッサムはすばやさ75と遅めですが、その分**HA振りで防御140という高水準の物理耐久**を確保できます。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
@@ -159,7 +159,7 @@ heroImage: '../../assets/hero-scizor-m2.png'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">98</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">105</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">メガハッサムより低い</td>
 </tr>
 <tr>
@@ -216,9 +216,9 @@ HA振りによってこの防御140が最大化されます。環境の多くの
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:57.5%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+      <div style="width:50%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">115</span>
+    <span style="width:32px;text-align:right">100</span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
@@ -236,7 +236,7 @@ HA振りによってこの防御140が最大化されます。環境の多くの
 
 **A150が圧巻の数値**。さらにぼうぎょ140というトップクラスの防御もあります。一方でHP70・すばやさ75と低く、正面から殴り合うというよりも**後手でバレットパンチを打ち込む、または耐久を活かして積んでからフィニッシュ**というスタイルが基本になります。
 
-とくぼう115もメガ進化で大幅に強化（80→115）されており、特殊方面の被ダメージも想定より少ない場面があります。
+とくぼう100もメガ進化で強化（80→100）されており、特殊方面の被ダメージも想定より少ない場面があります。
 
 ### タイプ・弱点（メガ後）
 
@@ -331,10 +331,10 @@ EV振りの中で最も採用率が高い基本形です。HAをベースに余�
 - テクニシャン+バレットパンチの先制技が最大効率で機能
 - HA振りベースで耐久を確保しつつ、余りのぼうぎょで物理耐久を上積み
 - つるぎのまい後（A実数値165×2=330相当）のバレットパンチが広い範囲で確定1発
-- インファイトでリザードン以外の多くのはがね系を削れる
+- インファイトでアーマーガア以外の多くのはがね系（ブリジュラス・ドドゲザン等）に等倍以上を入れられる
 
 **弱み:**
-- ほのお技1発で即戦闘不能（リザードン・ほのお技持ちに絶対に出し負けしない読みが必要）
+- ほのお技1発で即戦闘不能（ほのお技持ちに絶対に出し負けしない読みが必要）
 - すばやさ75と遅いため、正面対決では後手になる場面が多い
 - はたきおとすはテクニシャン対象外（威力65）のため、補正なし
 
@@ -379,7 +379,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ / つるぎのまい / インファイト / はたきおとす（またはとんぼがえり）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ / つるぎのまい / インファイト / とんぼがえり</td>
 </tr>
 </tbody>
 </table>
@@ -441,7 +441,7 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 - はねやすめ（29.6%採用）との組み合わせで長期的な場持ちを目指せる
 
 **採用意図:**
-メガハッサムはとくぼうが115（メガ前80）と大幅に上昇しているため、特殊耐久型の価値が生まれています。ゲンガー（10位）やアシレーヌ（4位）などの特殊アタッカーに対して、1発耐えながらバレットパンチで倒す立ち回りが狙えます。
+メガハッサムはとくぼうが100（メガ前80）に上昇しているため、特殊耐久型の価値が生まれています。ゲンガー（10位）やアシレーヌ（4位）などの特殊アタッカーに対して、1発耐えながらバレットパンチで倒す立ち回りが狙えます。
 
 ---
 
@@ -584,7 +584,11 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 
 ## パーティ構成
 
-### 苦手なポケモン
+この節は使用率TOP25から、メガハッサム（S75・ほのお4倍）のタイプ相性と相手の主力技（採用率）を突き合わせ、相性がはっきり出る相手だけを有利・不利の両面で抽出する。倍率はバレットパンチ（はがね技）・インファイト（かくとう技）と、相手の主力技がこちらに通る倍率の両方で判定した。
+
+#### 苦手なポケモン
+
+ほのお技で4倍弱点を突かれる相手と、こちらの有効打が通らないはがね系を挙げる。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -593,72 +597,117 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">使用率</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">苦手な理由</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">対策</th>
 </tr>
 </thead>
 <tbody>
 <tr style="background:#fee2e2">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードン</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ほのお4倍弱点を突く最大の天敵</strong>。Xはフレアドライブ、Yは高いCの炎技で確定1発。場に出ている状態でリザードンが出てきたら即交代必至</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">リザードン対策枠を必ずパーティに入れる（みず・いわ・ドラゴン等）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ほのお4倍を突く最大の天敵</strong>。S100でこちらより速く、かえんほうしゃ（42.4%）・フレアドライブ（33.3%）で確定1発。後出しは不可能</td>
+</tr>
+<tr style="background:#fee2e2">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0637-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ウルガモス</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（79.7%）がほのお4倍で確定1発。S100で先に動かれ、ちょうのまい（97.4%）を積まれると手がつけられない</td>
+</tr>
+<tr style="background:#fee2e2">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0655-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">マフォクシー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">25位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S104でこちらより速く、かえんほうしゃ（65.5%）がほのお4倍で確定1発</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうでバレットパンチ・むし技を半減し、こちらの有効打が乏しい。はねやすめで居座られると突破に手間取る</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトで等倍を入れるか、ほのお・でんき枠に任せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうでバレットパンチ×0.25・むし技×0.5。インファイトもひこうに半減され等倍止まり。はねやすめ（98.1%）で居座られると突破不能。一方こちらへの打点も乏しく、起点にしてつるぎのまいを積める場合もある</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0681-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ギルガルド</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">シールドフォルムの高いぼうぎょでバレットパンチを半減し受けやすく、キングシールドでインファイトを読まれると手痛い</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・じめん枠で対応する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ゴーストでバレットパンチ×0.5。シールドフォルムの高ぼうぎょで受けられ、キングシールド（84.2%）でインファイトを読まれA2段階ダウン。かげうち（96.2%）で削られる</td>
 </tr>
 </tbody>
 </table>
 </div>
 
 <div style="background:#fef3cd;border:1px solid #f59e0b;border-radius:8px;padding:12px 16px;margin:12px 0">
-  <strong>⚠️ リザードン対策は必須</strong><br>
-  M-2環境でリザードンは5位という高い使用率を誇ります。メガハッサムを採用する場合、パーティには必ずリザードン（ほのお技）への対策枠を設ける必要があります。リザードンを処理できるみずタイプ（アシレーヌ・ギャラドス）やいわタイプのポケモンとのコンビが基本です。
+  <strong>⚠️ ほのお対策枠は必須</strong><br>
+  ほのお4倍弱点はリザードン（5位）・ウルガモス（18位）・マフォクシー（25位）の3体に共通し、いずれもS100以上でメガハッサムより速く後出しが効かない。採用する場合は、これらを後出しから処理できる枠を必ず用意する。具体的には<strong>アシレーヌ</strong>（ほのお半減＋うたかたのアリアで等倍以上）、<strong>ギャラドス</strong>（ほのお半減＋たきのぼり）でほのお技を受け流すか、高耐久＋じしんを持つ<strong>カバルドン</strong>でリザードン・マフォクシーに打点を作る。ハッサムを引いてこれらで対応する動きを基本にする。
+</div>
+
+#### 有利なポケモン
+
+バレットパンチ（はがね技：いわ・こおり・フェアリーに×2）が刺さり、相手の主力技でこちらの弱点を突かれない相手を挙げる。S75で多くの相手に後手を踏むため、つるぎのまいを1積みしてからバレットパンチで縛る運用が前提。
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">使用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">有利な理由</th>
+</tr>
+</thead>
+<tbody>
+<tr style="background:#dcfce7">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0970-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">キラフロル</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ/どくにバレットパンチ×2で先制圏。主力のヘドロウェーブ（69.4%）はどく無効、パワージェム（85.3%）もはがね/むしに等倍以下で受けられる</td>
+</tr>
+<tr style="background:#dcfce7">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0778-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ミミッキュ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/フェアリーにバレットパンチ×2。ばける後もつるぎのまい後のバレットパンチで縛れる。じゃれつく（91.9%）はこちら×0.5で軽い</td>
+</tr>
+<tr style="background:#dcfce7">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0670-05.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">フラエッテ（永遠）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー単にバレットパンチ×2。ムーンフォース（87.0%）はこちら×0.5で軽く、めいそうを積む前にバレットパンチで処理しやすい</td>
+</tr>
+<tr style="background:#dcfce7">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0149-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">カイリュー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン/ひこう。マルチスケイル下でもつるぎのまい後のバレットパンチ＋追撃で押し切れ、相手のドラゴン技・じしんはこちら等倍以下。ほのお技を持たれていなければ有利</td>
+</tr>
+</tbody>
+</table>
 </div>
 
 ### 相性の良いパーティパートナー
+
+以下はハッサムの同居率TOP10のうち、役割が噛み合うパートナーを抜粋した（カッコ内は同居率順位）。
 
 <div class="partner-grid">
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ">
     <div class="name">アシレーヌ</div>
-    <div class="rate">リザードン対策</div>
+    <div class="rate">同居5位／ほのお受け</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス">
-    <div class="name">ギャラドス</div>
-    <div class="rate">ほのお引受け</div>
+    <img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン">
+    <div class="name">カバルドン</div>
+    <div class="rate">同居9位／高耐久・ステロ</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
-    <div class="rate">高速+タイプ補完</div>
+    <div class="rate">同居3位／高速・タイプ補完</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
-    <div class="name">アーマーガア</div>
-    <div class="rate">サポート+耐久</div>
+    <img src="/images/pokemon/pokemon-0428-00.webp" alt="ミミロップ">
+    <div class="name">ミミロップ</div>
+    <div class="rate">同居1位／ねこだまし起点</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0530-00.webp" alt="ドリュウズ">
-    <div class="name">ドリュウズ</div>
-    <div class="rate">ステロ+みず対策</div>
+    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
+    <div class="name">ブリジュラス</div>
+    <div class="rate">同居4位／特殊受け</div>
   </div>
 </div>
 
 **パーティ構成のポイント:**
-1. **リザードン対策は最優先:** みず・いわタイプのポケモンを必ず採用する。アシレーヌ（4位）やギャラドス（12位）はM-2でも上位にいるため、自然な形で組み込める
-2. **メガ枠の使い方:** メガハッサムを採用した場合、他のメガ進化は使用不可。メガ枠の価値を十分に活かせるパーティにする
-3. **速度不足の補完:** すばやさ75と遅いため、高速アタッカーとのコンビを組むことで、「高速アタッカーで削る→メガハッサムのバレットパンチで確定2発圏へ」という流れが作れる
-4. **はねやすめ採用時:** 長期戦が見込まれる場合、はねやすめ型は耐久をさらに活かせる。対面性能が下がる代わりに「場持ち」が大幅に向上
+1. **ほのお対策が最優先:** ほのお4倍を受け流せる枠を必ず添える。同居率上位のアシレーヌ（ほのお半減）や、高耐久でじしんを持つカバルドンが自然に組み込める
+2. **速度不足の補完:** S75と遅いため、ガブリアス（S102）など高速アタッカーで先に削り、メガハッサムのバレットパンチで縛る流れを作る。ミミロップ（ねこだまし）で動きを止めて積みの起点を作るのも有効
+3. **はねやすめ採用時:** 長期戦が見込まれる場合、はねやすめ型は耐久をさらに活かせる。対面性能が下がる代わりに場持ちが向上する
 
 ---
 
@@ -735,4 +784,4 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 
 いじっぱり（91.0%）が大半を占め、EV振りもHA軸が最多であることが示すように、最もシンプルで強い使い方は「HA振りで耐久を確保→中・後発でつるぎのまいを積む→バレットパンチで先制フィニッシュ」という形です。
 
-リザードン（5位）への4倍弱点は常に警戒が必要で、**パーティにほのお対策枠を必ず用意する**ことが使用条件と言えます。それさえクリアすれば、はがね/むし複合タイプの安定した耐性を最大限に活かした対戦ができる強力なメガ進化ポケモンです。
+ほのお4倍弱点（リザードン・ウルガモス・マフォクシー）への対策枠を用意できれば、はがね/むし複合の安定した耐性を活かして戦える強力なメガ進化ポケモンです。

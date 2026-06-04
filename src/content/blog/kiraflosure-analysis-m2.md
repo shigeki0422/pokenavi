@@ -62,9 +62,9 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率15位*
 
 ### 理由3: ニードルガードが接触技主体の環境に刺さる
 
-キラフロルの主力変化技「ニードルガード」（採用率27.9%）は、**相手の接触技を受けた際に相手のHPの1/8を削る**効果を持ちます。
+キラフロルの主力変化技「ニードルガード」（採用率27.9%）は、**まもると同様にそのターンの相手の技を防ぎ、加えて接触技で攻撃してきた相手の最大HPの1/8を削る**効果を持ちます。防御技でありながら反射ダメージを与えられる点が特徴です。
 
-環境上位のガブリアス（じしん・げきりん等接触技多数）、ルカリオ（インファイト等）、ハッサム（バレットパンチ等）といった接触技メインのポケモンが多い環境では、ニードルガードを張るだけでじわじわとHPを削れます。特にかげふみや交代封じのない状況でも相手の接触技を抑制する心理的プレッシャーとして機能します。
+環境上位のルカリオ（インファイト71.5%）、ハッサム（バレットパンチ等）、マスカーニャ（接触技主体）といった接触技メインのポケモンが多い環境では、技を防ぎつつじわじわとHPを削れます。ただしガブリアスの主力じしん（採用率上位・非接触技）は防げてもHP反射は発生せず、げきりん等の接触ドラゴン技を選ばれたときのみ削れる点に注意が必要です。
 
 ---
 
@@ -99,34 +99,34 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率15位*
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくこう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:45%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+      <div style="width:65%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">90</span>
+    <span style="width:32px;text-align:right">130</span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:50%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+      <div style="width:40.5%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">100</span>
+    <span style="width:32px;text-align:right">81</span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:33.5%;background:linear-gradient(90deg,#34d399,#059669);height:12px;border-radius:4px"></div>
+      <div style="width:43%;background:linear-gradient(90deg,#34d399,#059669);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">67</span>
+    <span style="width:32px;text-align:right">86</span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">485</span>
+    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">525</span>
   </div>
 </div>
 
 <div style="background:#fef3c7;border-left:4px solid #f59e0b;padding:10px 16px;margin:12px 0;border-radius:0 6px 6px 0;font-size:0.9em">
 <strong>メガ進化後の種族値について：</strong><br>
-メガキラフロルの詳細な種族値は公式データが未公開のため、本記事では通常のキラフロルの種族値を基準として解説します。実戦データからおくびょうCS型が主流（57.8%）であることが判明しており、<strong>とくこうとすばやさが通常より大幅に強化されている</strong>ことは確実です。
+メガキラフロルの詳細な種族値は公式データが未公開のため、本記事では通常のキラフロルの種族値を基準として解説します。通常時点でとくこう130とアタッカー級の高さを持ち、実戦データからおくびょうCS型が主流（57.8%）であることが判明しているため、<strong>もとから高いとくこうとすばやさ86がメガ進化でさらに強化されている</strong>ことは確実です。
 </div>
 
 ### タイプ・弱点
@@ -389,7 +389,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率15位*
 </table>
 </div>
 
-採用率6.1%と少数派ですが、特殊受け役として運用する選択肢もあります。通常のとくぼう100という高い数値をおだやかでさらに強化し、アシレーヌやイダイトウ等の高C水タイプに対面した際の安定性を高める型です。
+採用率6.1%と少数派です。素のとくぼうは81とやや心もとないため、おだやかで補強してアシレーヌのうたかたのアリア（特殊みず・いわ側×2）等を受ける安定性を確保する型ですが、火力を犠牲にする分メガCS型に比べ役割が限定的です。
 
 ---
 
@@ -478,10 +478,10 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率15位*
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">ニードルガード
+    <img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">ニードルガード
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">27.9%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">接触技を受けると相手のHP1/8を削る。物理アタッカー誘い込みに有効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">まもる系の防御技。そのターンの相手の技を防ぎ、接触技で攻撃してきた相手の最大HP1/8を削る。物理アタッカー誘い込みに有効</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -492,10 +492,10 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率15位*
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">キラースピン
+    <img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle;margin-right:5px">キラースピン
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">タスキ型を中心に採用が見られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく物理技。相手をどく状態にしつつ、自分の場のステルスロック・まきびし等のハザードを解除する。タスキ型を中心に採用が見られる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -524,15 +524,14 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率15位*
 
 ### ニードルガードの戦略的活用
 
-ニードルガードは発動ターンに**相手の接触技を受けると相手のHPの1/8を削ります**。以下のような戦術的な活用が考えられます。
+ニードルガードはまもる系の防御技で、発動ターンに**相手の技を防ぎつつ、接触技で攻撃してきた相手の最大HPの1/8を削ります**。以下のような戦術的な活用が考えられます。
 
 **【ニードルガード誘い込み戦術】**
-1. 相手のガブリアス等の物理アタッカーを前に、ニードルガードを使用
-2. ガブリアスがじしんを選択した場合→キラフロルは4倍ダメージで瀕死になる可能性（ニードルガード不発）
-3. ガブリアスが接触技（げきりん等）を選択した場合→1/8削れてキラフロルが生存
-4. 読みが噛み合えば相手をどくどくやニードルガードのダメージで消耗させられる
+1. 接触技主体の物理アタッカーを前に、ニードルガードを使用
+2. ルカリオのインファイト（接触・採用率71.5%）等を防ぎつつ1/8を削れる
+3. 読みが噛み合えば相手をどくどくやニードルガードのダメージで消耗させられる
 
-ただし、じめん×4倍の超危険弱点があるため、ガブリアス対面でのニードルガードは高リスクです。接触技主体のルカリオ（インファイト採用率高）やハッサム（バレットパンチ）に対してのほうがリターンが安定します。
+接触技主体のルカリオ（インファイト71.5%）やハッサム（バレットパンチ）に対してリターンが安定します。一方ガブリアスはじしん（非接触）を選ばれるとHP反射が発生せず、防御効果のみとなります。
 
 **【どくどく＋ニードルガード持久戦】**
 相手をどくどく状態にしてからニードルガードを張り続け、じわじわとHPを削る戦術です。ただし現環境のシングルバトルでは素早く決着をつける構成が主流のため、持久戦は相手のパーティ次第で有効性が変わります。
@@ -542,6 +541,8 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率15位*
 ## パーティ構成
 
 ### 苦手なポケモン
+
+使用率TOP30から、キラフロルの弱点（じめん×4／みず・エスパー・かくとう×2）を一致技で突ける、またはキラフロルより速くて弱点技を持つポケモンを選定しました。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -565,21 +566,35 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率15位*
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（使用率7位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんがじめん×4倍で致命傷。高耐久でこちらのいわ・どく技を等倍で受け止め、じわじわ削られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちからも等倍止まり。対面は避け、くさ・みずタイプの後続で対処する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちからも等倍止まり。同伴のアーマーガア（じしん無効）に引いて受け、こちらの引き先で削る</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（使用率9位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（かくとう・採用率71.5%）がいわ側に×2。つるぎのまい＋しんそく型だと先制で押し切られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ニードルガードでインファイトを防ぎつつ1/8削る、または同伴のカイリュー（マルチスケイルで耐えて切り返し）に引く</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（使用率10位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちからがじめん×2で刺さるが、ゲンガーはS110でメガキラフロルより速く、きあいだま（かくとう・37.4%）でいわ側×2を先に通される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">対面から殴り合わず、同伴のカイリュー（きあいだまを半減、シャドーボール等倍）に引いて受ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（使用率4位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず一致技がいわ側に×2で通る。高Cからのハイドロカノン等を等倍受けでも大きく削られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">後続のくさタイプで受ける。エナジーボール採用なら等倍以上で削り返せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力はムーンフォース（フェアリー・97.0%）でこれは等倍だが、うたかたのアリア（みず・79.2%）がいわ側×2。みず最高威力のなみのり採用は16.8%と少なく、みず弱点が大きく刺さるのは条件付き</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">同伴のハッサム（フェアリーを半減するはがね）で後出し受けし、バレットパンチで縛る。エナジーボール採用なら対面で等倍以上に削り返せる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（使用率20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず一致技がいわ側に×2、加えてエスパーがどく側に×2で通る。S115と高速で上から特殊技を浴びせてくる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">後続のあく・ゴーストタイプで対処。直接対面は避ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">物理型で、アクアブレイク（みず・89.2%）がいわ側×2、アイススピナー（こおり・64.9%）も通る。S115でメガキラフロルより速く上から殴ってくる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">同伴のカイリュー（みず半減・マルチスケイルで耐える）に引いて受け、切り返す。直接対面からの殴り合いは避ける</td>
 </tr>
 </tbody>
 </table>
@@ -628,7 +643,7 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率15位*
 
 2. **ステロを活かすエースの確保** — キラフロルがステロを撒いた後に登場するエースが明確に決まっていると、立ち回りがシンプルになります。ガブリアス（使用率1位）との相性は特に良好です。
 
-3. **みず対策** — キラフロルはみず×2倍弱点のため、環境上位のアシレーヌ（使用率4位）対面が厳しくなります。くさタイプかドラゴン技持ちでアシレーヌに対応できるポケモンを1体確保しましょう。
+3. **みず対策** — キラフロルはみず×2倍弱点のため、物理みず型のスターミー（アクアブレイク89%）やみず技持ちのイダイトウ対面が厳しくなります。みずを半減できるカイリュー等を1体確保しておくと、後出しから受けて切り返せます。
 
 ---
 
@@ -692,6 +707,14 @@ M-2シーズンのシングルバトルで、キラフロルは**使用率15位*
 ただし、じめん×4倍という超危険弱点は常に意識が必要です。パーティにアーマーガア等のじめん対策を確実に入れ、ガブリアスとの直接対面は絶対に避ける立ち回りが求められます。
 
 初めてメガキラフロルを使うなら**おくびょうCS型＋パワージェム＋ヘドロウェーブ＋だいちのちから＋ステルスロック**の構成から始めるのが最もシンプルで強力です。ステロを撒いた後の後続エースとして誰を起用するかを事前に決めておくと、立ち回りがぶれない安定した構成になります。
+
+---
+
+### 関連考察記事
+
+- [ガブリアス徹底考察 M-2シーズン使用率1位](/blog/garchomp-analysis-m2/) — キラフロルの最大弱点じめん×4の筆頭。同居率3位の相棒でもある使用率1位の立ち回りを解説
+- [メガゲンガー徹底考察 M-2シーズン](/blog/gengar-analysis-m2/) — キラフロルより速く弱点を突く使用率10位。苦手対面の相手側を理解する
+- [メガスターミー徹底考察 M-2シーズン](/blog/starmie-analysis-m2/) — みず×2弱点を突く高速物理アタッカー。対策する側の型を把握する
 
 ---
 

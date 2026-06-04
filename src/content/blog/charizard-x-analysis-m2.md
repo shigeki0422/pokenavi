@@ -125,7 +125,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 
 ### 3. こうげき130・とくこう130の両刀ポテンシャル
 
-メガリザードンXはこうげき130・とくこう130という完全な両刀数値を持つ稀有なポケモンです。物理に偏ったAS型（りゅうのまい）だけでなく、ニトロチャージ採用のCS型や、かみなりパンチでみずタイプをケアする混合型も成立します。相手のHB振りポケモンをとくこう技でケアできる柔軟性は、Xを「読まれにくい」アタッカーとして機能させます。
+メガリザードンXはこうげき130・とくこう130という完全な両刀数値を持つ稀有なポケモンです。物理に偏ったAS型（りゅうのまい）だけでなく、ニトロチャージ採用のCS型や、かみなりパンチでギャラドス・アシレーヌといったみず複合をケアする混合型も成立します（みず単体ならほのお技を等倍で受けられるため、かみなりパンチは主にひこう・みず複合への上振れ打点）。相手のHB振りポケモンをとくこう技でケアできる柔軟性は、Xを「読まれにくい」アタッカーとして機能させます。
 
 ---
 
@@ -183,7 +183,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   </div>
 </div>
 
-こうげき・とくこう が共に130という完全均等な両刀数値は、レジェンド級ポケモン並みの破壊力を持ちます。ぼうぎょ111は物理耐久面でも水準以上で、積み展開に入りやすい。一方でとくぼう85・HP78というDラインの薄さは、特殊技（特に弱点技）への耐性がなく、水・電気・竜技での確定1発圏に入るリスクがあります。すばやさ100はS無振りで環境トップのガブリアス（102）やブリジュラス（60）との比較でいえば、**ようき最速でガブリアス（102）と競る水準まで届き、りゅうのまい後は環境の大半を上から叩けます**。
+こうげき・とくこう が共に130という完全均等な両刀数値は、レジェンド級ポケモン並みの破壊力を持ちます。ぼうぎょ111は物理耐久面でも水準以上で、積み展開に入りやすい。一方でとくぼう85・HP78というDラインの薄さは、特殊技（特に弱点技）への耐性がなく、水・電気・竜技での確定1発圏に入るリスクがあります。すばやさ種族値100は、環境トップのガブリアス（種族値102）にわずかに届かずブリジュラス（種族値85）より速いという位置取り。**ようき最速のS実数値は152となりガブリアス（最速S実数値169）には及びませんが、りゅうのまい1回でS実数値228相当まで上がり、環境の大半を上から叩けます**。
 
 ### メガ進化前後の変化
 
@@ -259,22 +259,21 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">なし</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> みず<br>
     <img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> じめん<br>
     <img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> いわ<br>
     <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> ドラゴン<br>
     <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> フェアリー
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <small style="color:#555">こおり弱点なし（ほのおで相殺）</small><br>
-    ほのお½ / くさ½ / でんき½ / むし½
+    <small style="color:#555">こおり弱点なし（ほのおで相殺）／みずも×2(ほのお)×0.5(ドラゴン)＝等倍</small><br>
+    ほのお½ / くさ½ / でんき½ / むし½ / みず1
   </td>
 </tr>
 </tbody>
 </table>
 </div>
 
-メガリザードンXの重要なポイントは**4倍弱点が存在しない**こと。メガリザードンYが4倍いわ弱点を持つのと対照的に、Xは弱点が5つある代わりに特定タイプでの即死が起きにくい。ただし**ステロ（ステルスロック）はいわタイプ扱いのダメージで最大1/4ダメージ**を受けるため、ステロ展開への対策は必須です。
+メガリザードンXの重要なポイントは**4倍弱点が存在しない**こと。メガリザードンYが4倍いわ弱点を持つのと対照的に、Xは弱点が4つ（じめん・いわ・ドラゴン・フェアリー）ある代わりに特定タイプでの即死が起きにくい。みず技はほのお×2・ドラゴン×0.5で等倍止まりに抑えられる点も見逃せません。ただし**ステロ（ステルスロック）はいわタイプ扱いのダメージで最大1/4ダメージ**を受けるため、ステロ展開への対策は必須です。
 
 ---
 
@@ -322,14 +321,14 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <td style="padding:6px 10px;border:1px solid #fcd34d"><strong>ドラゴンクロー</strong></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center"><img src="/images/types/type-15-dragon.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center">80</td>
-  <td style="padding:6px 10px;border:1px solid #fcd34d">かたいツメで実質104。ドラゴン・みず等への打点</td>
+  <td style="padding:6px 10px;border:1px solid #fcd34d">かたいツメで実質104。ガブリアス・カイリュー等ドラゴンへの打点</td>
 </tr>
 <tr style="background:#fffbeb">
   <td style="padding:6px 10px;border:1px solid #fcd34d">4</td>
   <td style="padding:6px 10px;border:1px solid #fcd34d"><strong>かみなりパンチ</strong></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center"><img src="/images/types/type-12-electric.png" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #fcd34d;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #fcd34d">みず/ひこうへの打点確保。かたいツメで実質97.5</td>
+  <td style="padding:6px 10px;border:1px solid #fcd34d">ギャラドス・アシレーヌ等みず複合への打点確保。かたいツメで実質97.5</td>
 </tr>
 </tbody>
 </table>
@@ -420,13 +419,15 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 </div>
 
 <p style="font-size:0.88em;color:#555;margin:8px 0">
-はねやすめ採用率22.1%に示されるように、一定数のプレイヤーが耐久寄りの型を採用。ずぶといHB振りとはねやすめを組み合わせることで、みず・じめん・いわ弱点技への耐性を高めつつ長期戦へ持ち込む戦術です。ただしずぶとい採用率は1.0%と低く、M-2では特殊なサブオプションとなっています。
+はねやすめ採用率22.1%に示されるように、一定数のプレイヤーが耐久寄りの型を採用。ずぶといHB振りとはねやすめを組み合わせることで、じめん・いわ弱点技への耐性を高めつつ長期戦へ持ち込む戦術です。ただしずぶとい採用率は1.0%と低く、M-2では特殊なサブオプションとなっています。
 </p>
 </div>
 
 ---
 
 ## 主要な技と採用率
+
+> 技採用率はリザードンX・Yを区別しない**合算データ**です。フレアドライブ・ドラゴンクロー・りゅうのまいはX型（物理）、ソーラービーム・かえんほうしゃ等の特殊技はX/Y双方に跨がる点に留意してください。以降の各型解説の採用率も同じ合算値を参照しています。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -479,7 +480,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ドラゴンクロー</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">24.0%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かたいツメで実質104。ドラゴン・みずへの打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かたいツメで実質104。ガブリアス・カイリュー等ドラゴンへの打点</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>はねやすめ</strong></td>
@@ -491,7 +492,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>かみなりパンチ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・ひこうへの打点。かたいツメで実質97.5</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギャラドス・アシレーヌ等みず複合への打点。かたいツメで実質97.5</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ソーラービーム</strong></td>
@@ -521,13 +522,13 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">みず・ドラゴン弱点を突かれ、威嚇でAダウン</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">ブリジュラス・ハッサム</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">じしん（採用率63.7%）が×2で刺さり、りゅうのまいで上から制圧される（たきのぼりのみず技は等倍）。威嚇でこちらのAも下がる</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">ブリジュラス・カイリュー（でんき技でみず複合を処理）</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">みず技がXの2倍弱点を突く（フェアリーは等倍）。S速い個体も多い</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">ブリジュラス・カイリュー</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">ムーンフォース（採用率97.0%）のフェアリー技がドラゴンに×2で刺さる。みず技は等倍だが、アクアジェット（66.6%）の先制で削られる</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">ハッサム（はがねでフェアリー半減・ほのお等倍）・ブリジュラス</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス</td>
@@ -550,13 +551,53 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 
 ---
 
+## 有利を取れる主要ポケモンとの相性
+
+苦手な相手だけでなく、リザードンXが有利を取れる相手も押さえておきます。**使用率TOP25のうち、Xの一致技（ほのお・ドラゴン）が×2以上で刺さり、かつ相手の主力技（pokemon_moves採用率で確認）がXの弱点を突かない相手**を選定しました。タイプ相性は2タイプの倍率を掛け合わせて算出しています。
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<thead>
+<tr style="background:#dcfce7">
+  <th style="padding:8px 12px;border:1px solid #86efac;text-align:left">相手</th>
+  <th style="padding:8px 12px;border:1px solid #86efac;text-align:left">刺さる打点</th>
+  <th style="padding:8px 12px;border:1px solid #86efac;text-align:left">有利な理由・留意点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #86efac"><img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム<br><small>使用率14位</small></td>
+  <td style="padding:8px 12px;border:1px solid #86efac">ほのお ×4（むし×2・はがね×2）</td>
+  <td style="padding:8px 12px;border:1px solid #86efac">フレアドライブ・かえんほうしゃが一致×4で確1圏。バレットパンチ（はがね½）・インファイト（かくとう等倍）はXの弱点を突かず、被ダメも軽い</td>
+</tr>
+<tr style="background:#f0fdf4">
+  <td style="padding:8px 12px;border:1px solid #86efac"><img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ<br><small>使用率21位</small></td>
+  <td style="padding:8px 12px;border:1px solid #86efac">ドラゴン ×2（あく等倍・ドラゴン×2）</td>
+  <td style="padding:8px 12px;border:1px solid #86efac">ドラゴンクローが一致×2。あくのはどう・りゅうせいぐんは弱点を突かず、だいちのちから採用は8.9%と低い。りゅうのまい後はS98を上から踏める</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #86efac"><img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー<br><small>使用率16位</small></td>
+  <td style="padding:8px 12px;border:1px solid #86efac">ドラゴン ×2（ドラゴン×2・ひこう等倍）</td>
+  <td style="padding:8px 12px;border:1px solid #86efac">ドラゴンクローが一致×2でS80を上から叩ける。ただしじしん（15.2%）が×2、しんそく（45.6%）は先制で削られるため過信は禁物</td>
+</tr>
+<tr style="background:#f0fdf4">
+  <td style="padding:8px 12px;border:1px solid #86efac"><img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン<br><small>使用率24位</small></td>
+  <td style="padding:8px 12px;border:1px solid #86efac">ほのお ×2（あく等倍・はがね×2）</td>
+  <td style="padding:8px 12px;border:1px solid #86efac">一致ほのお技が×2。けたぐり（かくとう等倍・17.6%）以外にXの弱点を突く技がない。ただしふいうち（あく・99.0%）は先制で入るため、削れた状態では注意</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+---
+
 ## 相性の良いパーティメンバー
 
 <div class="partner-grid">
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
-    <div class="rate">フェアリー・みず対策</div>
+    <div class="rate">フェアリー半減・後出し処理</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン">
@@ -582,7 +623,9 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 
 **ステロ対策の重要性**: メガリザードンXはステルスロック（ステロ）によって1/4ダメージを受けます。**カバルドン・アーマーガアのような高耐久ポケモンでステロを撒かせない**、あるいはステロを除去できるポケモンをパーティに入れることが前提となります。
 
-**アーマーガアとの相性**: アーマーガアはじめんタイプを無効化でき、いわ技にも一定の耐性があります。さらに**Xが苦手なガブリアスに対してアーマーガアで後出しできる**という相性補完の良さも優秀です。
+**アーマーガアとの相性**: アーマーガアはひこうタイプでじしんを無効化でき、ガブリアスのじしん・ギャラドスのじしんといったXの×2弱点技を後出しから受け止められます。受け出し後はちょうはつでステロ展開を妨害し、はねやすめで居座る動きが安定。**Xが苦手なガブリアス・ギャラドスへの後出し役**として相性補完が優秀です。
+
+**先制技ケアの考え方**: Xはアシレーヌのアクアジェット・ドドゲザンのふいうち等の先制技で削れた状態を狩られやすいため、りゅうのまいを積むのは相手の先制技持ちを処理した後が安全。マスカーニャ（S123）など無積みで上を取る相手には、対面で積まず一度引いてから再展開する判断も有効です。
 
 ---
 
@@ -610,7 +653,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
 </tr>
 <tr>
   <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">最大弱点</td>
-  <td style="padding:8px 14px;border:1px solid #cbd5e1">4倍弱点なし（5種2倍）</td>
+  <td style="padding:8px 14px;border:1px solid #cbd5e1">4倍弱点なし（4種2倍）</td>
   <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fee2e2">いわ4倍</td>
 </tr>
 <tr style="background:#fafafa">
