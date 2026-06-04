@@ -147,11 +147,10 @@ draft: true
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし(0.25)</span>
+      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
-      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
       <span><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ドラゴン</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
@@ -163,6 +162,7 @@ draft: true
       <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
+      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
     </div>
   </td>
 </tr>
@@ -170,7 +170,7 @@ draft: true
 </table>
 </div>
 
-はがね/ゴーストはノーマル・かくとう・どくを無効化し、9タイプを半減（むしは×0.25）する優秀な耐性を持ちます。特に**かくとうを無効化**できる点は、環境のかくとう技（ルカリオのインファイト、ハッサムのインファイト等）を完全に受けられることを意味し、防御面でのギルガルドの価値を支えています。シールドフォルムのぼうぎょ140・とくぼう140と組み合わせると、半減・無効タイプの攻撃はほとんど通りません。
+はがね/ゴーストはノーマル・かくとう・どく・エスパーを無効化し、8タイプ（むしは×0.25）を半減する優秀な耐性を持ちます。特に**かくとう・エスパーを無効化**できる点は、環境のかくとう技（ルカリオのインファイト採用率71.5%等）やエスパー技（スターミーのしねんのずつき等）を完全に受けられることを意味し、防御面でのギルガルドの価値を支えています。シールドフォルムのぼうぎょ140・とくぼう140と組み合わせると、半減・無効タイプの攻撃はほとんど通りません。
 
 ただし弱点のほのお・じめん・あく・ゴーストは×2で通り、これらの技を持つ相手には注意が必要です。
 
@@ -374,28 +374,28 @@ EVはHA振り（H32 A32）が主流で、HP・こうげきに厚く振ること�
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー技はこちらにはがね0.5で半減、みず技も等倍。こちらのゴースト技はエスパーに×2。シールドの高耐久で受けつつ反撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー技（しねんのずつき39%）はゴースト無効でこちらに通らず、みず技も等倍。こちらのゴースト技はエスパーに×2。シールドの高耐久で受けつつ反撃できる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率72%）はかくとう無効、コメットパンチ／バレットパンチもはがね0.5で半減。シールドの高耐久でほぼ受けきり、せいなるつるぎ／アイアンヘッドで反撃</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率71.5%）はかくとう無効、コメットパンチ／バレットパンチもはがね0.5で半減。シールドの高耐久でほぼ受けきり、せいなるつるぎ／アイアンヘッドで反撃</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン技は半減、接触物理にはキングシールドでAを下げて対応可。ただしじしん・ほのお技（フレアドライブ等）を持つ個体には弱点を突かれるため型次第</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン技は半減、接触物理にはキングシールドでAを下げて対応可。ただしかえんほうしゃ（採用率47.8%）はほのお×2、じしん（15.2%）はじめん×2弱点で、これらを持つ個体には弱点を突かれるため型次第</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99%）がじめん×2弱点。S102で先手を取られ、ブレード時のぼうぎょ50では受けきれない。詳細は下表で扱う</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）がじめん×2弱点。S102で先手を取られ、ブレード時のぼうぎょ50では受けきれない。詳細は下表で扱う</td>
 </tr>
 </tbody>
 </table>
@@ -419,21 +419,21 @@ EVはHA振り（H32 A32）が主流で、HP・こうげきに厚く振ること�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99%）がじめん×2弱点。S102で先手を取られ、ブレードのぼうぎょ50では確定で落ちる。シールド時でもじしんは重い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）がじめん×2弱点。S102で先手を取られ、ブレードのぼうぎょ50では確定で落ちる。シールド時でもじしんは重い</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんを無効化するひこうタイプ（アーマーガア等）や、ガブリアスに弱点を突けるこおり・ドラゴン・フェアリータイプを同伴し、ガブリアスの前に引いて処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（42%）・オーバーヒート（27%）・フレアドライブ（33%）などほのお技がほのお×2弱点。S100で先手を取られ、こちらのはがね技も両形態に半減で打点が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（採用率42.4%）・フレアドライブ（33.3%）・オーバーヒート（26.6%）などほのお技がほのお×2弱点。S100で先手を取られ、こちらのはがね技もほのお半減で打点が乏しい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・いわ・でんきタイプを同伴し、リザードンに後出しして弱点を突いて処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどう（採用率99%）があく×2弱点、かえんほうしゃ（67%）はほのお×2弱点。S98で先手を取られ、ブレード時に上から弱点技で落とされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどう（採用率98.5%）があく×2弱点、かえんほうしゃ（67.0%）はほのお×2弱点。S98で先手を取られ、ブレード時に上から弱点技で落とされる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリータイプ（アシレーヌ等）やかくとうタイプを同伴し、サザンドラの弱点を突いて後続から処理する</td>
 </tr>
 <tr style="background:#fafafa">
@@ -447,8 +447,8 @@ EVはHA振り（H32 A32）が主流で、HP・こうげきに厚く振ること�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（採用率99%）・ドゲザン（96%）のあく技があく×2弱点。こちらのゴースト技はあく無効、はがね技も半減で打点が乏しい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">せいなるつるぎ（かくとう×2）を採用した個体なら反撃可。かくとう・じめんタイプを同伴して弱点を突く</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（採用率99.0%）・ドゲザン（96.4%）のあく技があく×2弱点。こちらのゴースト技はあく無効、はがね技も半減で打点が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">せいなるつるぎ（あく/はがねに×4）を採用した個体なら反撃可。かくとう・じめんタイプを同伴して弱点を突く</td>
 </tr>
 </tbody>
 </table>

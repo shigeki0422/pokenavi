@@ -46,7 +46,7 @@ draft: true
 
 ウルガモスの強みは**ちょうのまい（採用率97.4%）**による3ステータス同時上昇です。1積みでとくこう・とくぼう・すばやさがそれぞれ1段階上がります。元のとくこう135が積みで実質1.5倍となり、ほのおのまい（威力80）・むしのさざめき（威力90）の一致技が一気に重くなります。
 
-すばやさ種族値100は素の状態で中速ですが、1積みでS実数値が1.5倍になり、環境最速級のマスカーニャ（S123）・ゲッコウガ（S122）・スターミー（S115）も抜き去れる速度域に入ります。火力と素早さを同時に得られるため、積みが通れば상手の高速アタッカーごと制圧できるのがこのポケモンの核です。
+すばやさ種族値100は素の状態で中速ですが、1積みでS実数値が1.5倍になり、環境最速級のマスカーニャ（S123）・ゲッコウガ（S122）・スターミー（S115）も抜き去れる速度域に入ります。火力と素早さを同時に得られるため、積みが通れば相手の高速アタッカーごと制圧できるのがこのポケモンの核です。
 
 ### 2. ほのおのからだ＋あさのひざしで居座って積む
 
@@ -147,9 +147,9 @@ draft: true
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお(¼)</span>
-      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ(¼)</span>
-      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね(¼)</span>
+      <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
@@ -315,7 +315,7 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
 
 **弱み:**
 
-ずぶとい型に比べぼうぎょに振らないため、いかくのないギャラドスのたきのぼりやマスカーニャのトリックフラワー（急所固定）など物理高火力で積み前に削られやすくなります。きあいのタスキ採用でも、ステルスロックやがんせきふうじの先制を受けるとタスキが潰れ、積みターンを得られません。
+ずぶとい型に比べぼうぎょに振らないため、ギャラドスのたきのぼり（みず×2）やカイリューのエアスラッシュ（ひこう×2）など弱点を突く物理高火力で積み前に削られやすくなります。きあいのタスキ採用でも、ステルスロックやがんせきふうじの先制を受けるとタスキが潰れ、積みターンを得られません。
 
 ---
 
@@ -347,14 +347,14 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（1積み後）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまいが×2（くさ2×あく1）。素ではS123に先を取られるが、1積み後のS実数値で上回り抜き返せる。トリプルアクセル（むし0.5×ほのお1＝0.5）も軽い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまいが×2（くさ2×あく1）。素ではS123に先を取られるが、1積み後のS実数値で上回り抜き返せる。主力トリックフラワー（くさ・92.9%）はむし0.5×ほのお0.5＝×0.25で軽い</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまいが×4（むし2×はがね2）。バレットパンチ（むし0.5×ほのお1＝0.5）・インファイト（×0.5）も半減で、対面から制圧しやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまいが×4（むし2×はがね2）。バレットパンチ（はがね・むし0.5×ほのお0.5＝×0.25）・インファイト（かくとう・×0.5）も半減で、対面から制圧しやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -376,6 +376,13 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼり（86%・みず×2）が高威力で通り、いかくでこちらの積み前の被ダメ計算も狂う。S81だが高HB・A125で受けつつ殴り返される</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エアスラッシュ（56%・ひこう×2）が通り、しんそく（46%）の先制でタスキ・残りHPも詰められる。S80で素では先を取れても弱点技で押し負ける</td>
 </tr>
 </tbody>
 </table>
@@ -436,13 +443,13 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
     <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ">
     <div class="name">ミミッキュ</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ばけのかわで起点を作りやすく、ウルガモスが苦手ないわ技のじめん枠に先制で対応</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ばけのかわで起点を作りやすく、ウルガモスが苦手なじめん・いわアタッカーに先制技で対応</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速じめん枠。じしんでウルガモスが苦手な岩・どく・はがね枠に上から打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速じめん枠。じしんでウルガモスが弱点を突かれるキラフロル等のいわ・どくに上から打点</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">

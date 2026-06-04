@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】ウォッシュロトム考察 M-2 使用率22位 ボルトチェンジとおにびの起点作り'
-description: 'M-2シングルバトルで使用率22位のウォッシュロトムを徹底分析。ハイドロポンプ採用率98.5%・ボルトチェンジ88.7%・おにび80.6%のサポート型から、ふゆうでじめん無効・くさ/ゴースト/あく弱点まで実データで解説。HD耐久型の立ち回りと苦手なポケモンの対策を紹介します。'
+description: 'M-2シングルバトルで使用率22位のウォッシュロトムを徹底分析。ハイドロポンプ採用率98.5%・ボルトチェンジ88.7%・おにび80.6%のサポート型から、ふゆうでじめん無効・弱点はくさ×2のみという優秀な耐性まで実データで解説。HD耐久型の立ち回りと苦手なポケモンの対策を紹介します。'
 pubDate: '2026-06-04'
 draft: true
 ---
@@ -136,18 +136,15 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
-      <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
-      <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね（¼）</span>
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
-      <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
-      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -158,7 +155,7 @@ draft: true
 </table>
 </div>
 
-弱点はくさ・ゴースト・あくの3タイプのみで、いずれも×2で通ります。ほのお・みず・でんき・こおり・ひこう・はがねの6タイプを半減でき、ふゆうでじめんを無効化するため、環境に多いじめん・ほのお・はがね物理に受け出ししやすい耐性構成です。一方で、8位イダイトウ（オス）のおはかまいり（ゴースト・採用率99.9%）や21位サザンドラのあくのはどう（あく・98.5%）など、弱点を突く一致技を主力に持つ相手には受け出しできません。
+弱点はくさ×2の1タイプのみで、ほのお・みず・こおり・ひこうを半減、はがねを×0.25でき、ふゆうでじめんを無効化します。弱点が1つに絞られる耐性は環境屈指で、じめん・ほのお・はがね物理に受け出ししやすい構成です。一方でHP50・両防御107と耐久実数値そのものは高くないため、弱点を突くくさ技や、等倍でも高火力・高速のアタッカーには1〜2発で崩されます。3位マスカーニャのトリックフラワー（くさ・採用率92.9%）が×2で刺さる点と、ゲッコウガ（28位・S122）・スターミー（20位・S115）などすばやさ86を上回る等倍アタッカーが主な切り崩し手段になります。
 
 ---
 
@@ -318,7 +315,7 @@ draft: true
 
 ### 主要ポケモンとの相性
 
-使用率TOP30のうち、ウォッシュロトムと相性がはっきり出るポケモンを有利・不利の両面から挙げます。基準は「こちらの一致技（みず・でんき）が×2で通り、相手の主力技を受けられるか」「すばやさ86で先手を取れるか」「弱点のくさ・ゴースト・あくを突かれないか」です。ふゆうでじめんを無効化する一方、HP50と低耐久で弱点技を1発でも貰うと崩れやすい点に注意してください。
+使用率TOP30のうち、ウォッシュロトムと相性がはっきり出るポケモンを有利・不利の両面から挙げます。基準は「こちらの一致技（みず・でんき）が×2で通り、相手の主力技を受けられるか」「すばやさ86で先手を取れるか」「唯一の弱点くさを突かれないか」です。ふゆうでじめんを無効化する一方、HP50・両防御107で耐久実数値は高くないため、くさ技や等倍でも高火力・高速の技を貰うと崩れやすい点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -387,7 +384,7 @@ draft: true
 
 ### 苦手なポケモンと対策
 
-弱点のくさ・ゴースト・あくを一致技で突いてくる相手、またはすばやさ86を上回り高火力で押してくる相手が苦手です。
+唯一の弱点くさを一致技で突いてくる相手、またはすばやさ86を上回りHP50を等倍高火力で押し切ってくる相手が苦手です。弱点はくさだけなので「弱点を突かれて落ちる」より「等倍でも上から削り切られる」負け筋が中心になります。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -403,36 +400,36 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">トリックフラワー（くさ・採用率92.9%・必中急所）が×2弱点。すばやさ123で上から削られ、はたきおとすで持ち物も落とされる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技を×0.5で受けるむし/はがねのハッサムを後出しし、むしくい（むし・×4）で処理する。ボルトチェンジでマスカーニャを削ってからハッサムに引く流れも有効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">唯一の弱点くさを突くトリックフラワー（くさ・採用率92.9%・必中急所）が×2。すばやさ123で上から削られ、はたきおとすでオボンのみも落とされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技を×0.25で受けるむし/ほのおのウルガモスを後出しし、ほのおのまい（ほのお・くさ/あくに×2・採用率79.7%）で処理する。ボルトチェンジで削ってから引く流れも有効</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0902-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">イダイトウ(オス)（8位）
+    <img src="/images/pokemon/pokemon-0658-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲッコウガ（28位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">おはかまいり（ゴースト・採用率99.9%）が×2弱点で高火力。アクアジェット（みず先制・91.1%）はこちら半減だが、おはかまいりで上から崩される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">おはかまいりを×0.5で受けるあく/はがねのドドゲザンを後出しし、ふいうち（あく先制・採用率99.0%）でゴースト×2を突いて処理する。先制技ならアクアジェットより先に動ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">弱点は突かないが、すばやさ122で先手を取り、れいとうビーム（89.6%）・あくのはどう（75.9%）等の等倍高火力でHP50を1〜2発で削り切る。こちらのみず技はあく/みずに半減で決定力に欠ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">とくぼうの高いブリジュラス（はがね/ドラゴン）を後出しし、等倍のれいとうビーム・あくのはどうを受け切ってラスターカノン等で削る。ボルトチェンジで先に削っておく</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
+    <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどう（あく・採用率98.5%）が×2弱点。すばやさ98で先手を取られ、こちらのみず・でんき技は等倍止まりで決定力がない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうを×0.5で受けるフェアリーのフラエッテ:永遠を後出しし、ムーンフォース（フェアリー・あく/ドラゴンに×4・採用率87.0%）で処理する。めいそうを積めば撃ち合いにも強い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">弱点は突かないが、すばやさ115で先手を取り、アイススピナー（64.9%）・しねんのずつき等の等倍打点で押される。こちらのみず技は半減で打ち合いに不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパーを×2で突くあく/はがねのドドゲザンを後出しし、ふいうち（あく先制・エスパーに×2・採用率99.0%）で先制処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（19位）
+    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かげうち・シャドークロー（ゴースト・採用率93.6%/61.0%）が×2弱点。ばけのかわで一撃を耐えてから上から崩される。こちらのみず・でんきはゴースト/フェアリーに等倍止まり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かげうち・シャドークローを×0.5で受けるあく/はがねのドドゲザンを後出しする。1発でばけのかわを割り、アイアンヘッド（はがね・フェアリーに×2・採用率86.9%）で処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">弱点は突かないが、すばやさ110で先手を取り、シャドーボール（71.1%）・ヘドロウェーブ（81.7%）等の等倍特殊高火力でHP50を削り切る。みちづれにも注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/どくを×2で突くあく/はがねのドドゲザンを後出しし、ふいうち（あく先制・ゴーストに×2・採用率99.0%）で先制処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0003-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フシギバナ（27位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ一致技が×2弱点。みず・でんきはくさ/どくに半減でこちらの打点が乏しい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技を×0.25で受けるむし/はがねのハッサムを後出しし、むしくい（むし・くさ/どくに×2）で処理する。ボルトチェンジで削ってからハッサムに引いてもよい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギガドレイン（くさ・56.9%）が×2弱点。主力のだいちのちから（88.4%）はふゆうで無効化できるが、くさ技採用個体にはこちらの打点が乏しく削り合いで負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技を×0.25で受けるむし/ほのおのウルガモスを後出しし、ほのおのまい（ほのお・くさ/どくに×2・採用率79.7%）で処理する</td>
 </tr>
 </tbody>
 </table>
@@ -467,23 +464,23 @@ draft: true
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
     <div class="name">マスカーニャ</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">くさ枠でロトムが苦手なくさ受け（フシギバナ等）に打点。とんぼがえりで対面操作を補完</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速くさ枠で対面操作役を共有。とんぼがえりとボルトチェンジで対面操作を二重化する</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ">
     <div class="name">ルカリオ</div>
     <div class="rate">同居率5位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね複合であくを半減。ボルトチェンジから着地し高火力で詰める</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">かくとう/はがねでロトムの弱点くさを×0.5。ボルトチェンジから着地し高火力で詰める</div>
   </div>
 </div>
 
 **パーティ構成の基本方針:**
 
-ウォッシュロトムは弱点がくさ・ゴースト・あくの3つに絞られる代わりにHP50と低耐久で、攻撃面の決定力も低めです。ボルトチェンジで対面を操作しつつ、以下の役割を後続で補います。
+ウォッシュロトムは弱点がくさ×2の1つだけと優秀な反面、HP50・両防御107で耐久実数値は高くなく、攻撃面の決定力も低めです。弱点は少ないので「くさ対策」と「等倍で上から殴る高速アタッカーの受け」が後続の役割になります。
 
-1. **くさ・あく対策**: はがね・ほのおタイプ（ダイケンキ ヒスイ・ハッサム等）でくさを、フェアリー・かくとうであくを受ける枠
-2. **決定力の補完**: ガブリアス・ルカリオなど、おにびで起点化した相手を上から倒すアタッカー
-3. **対面操作の連携**: とんぼがえり・クイックターン持ち（サザンドラ・マスカーニャ）でボルトチェンジと組み合わせ、有利対面を作り続ける
+1. **くさ対策**: ダイケンキ ヒスイ（みず/はがね）・ルカリオ（かくとう/はがね）・サザンドラ（あく/ドラゴン）などくさを×0.5以下で受ける枠
+2. **高速アタッカーの受け**: ゲッコウガ・スターミー・ゲンガーなどS86を上回る等倍高火力に後出しできる耐久・耐性枠（ブリジュラス・ドドゲザン等）
+3. **決定力の補完**: ガブリアス・ルカリオなど、おにびで起点化した相手を上から倒すアタッカー
 
 ---
 
@@ -541,7 +538,7 @@ draft: true
 
 ウォッシュロトムは、ふゆうでじめんを無効化する耐性とボルトチェンジ・おにびを軸にした起点作りで、M-2で使用率22位を維持しています。ガブリアス・カバルドンといった環境上位のじめん枠に後出しして弱点を突き、おにびで物理アタッカーを機能停止させるのが基本的な仕事です。
 
-一方で弱点のくさ・ゴーストを一致技で突くマスカーニャ（3位）・イダイトウ オス（8位）には受け出しできず、決定力も低いため単体で完結する枠ではありません。ボルトチェンジで有利な味方に繋ぐ前提で、くさ・あく受けと決定力のあるアタッカーを後続に揃えることが採用の条件になります。
+弱点はくさ×2の1つだけと優秀ですが、唯一の弱点を突くマスカーニャ（3位）に加え、HP50・両防御107の耐久を等倍高火力で上から削るゲッコウガ（28位・S122）・スターミー（20位・S115）・ゲンガー（10位・S110）には受け出しできず、決定力も低いため単体で完結する枠ではありません。ボルトチェンジで有利な味方に繋ぐ前提で、くさ受けと高速アタッカーに後出しできる枠、決定力のあるアタッカーを後続に揃えることが採用の条件になります。
 
 ---
 

@@ -349,7 +349,7 @@ HC振りでとくこう126を活かしつつ、HP80に振ってオボンのみ�
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォースが×2。げきりん（47.9%）は無効、じしん（99.2%）も等倍止まり。ただしがんせきふうじ（40.0%）・いわなだれ（23.1%）のいわ技は×2で被弾するため油断は禁物</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォースが×2。げきりん（47.9%）は無効、じしん（99.2%）も等倍止まりで弱点を突かれない。ただしS102で先手を取られるため、削れた相手をアクアジェットで詰める動きが軸になる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -415,14 +415,14 @@ HC振りでとくこう126を活かしつつ、HP80に振ってオボンのみ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ/どくでこちらの一致技がともに等倍以下、どく技がアシレーヌに×2弱点。S86で先手を取られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技を持つポケモン（ガブリアス・カバルドン）を合わせ、いわ/どくの×4弱点を突いて一掃する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリアは×2で通るが、S86で先手を取られたうえヘドロウェーブ（69.4%・どく）が×2弱点。受け出しから一撃を受ける展開になり、撃ち合いは不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技を持つポケモン（ガブリアス・カバルドン）を合わせ、いわ/どくの×4弱点をだいちのちから・じしんで突いて処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S110で先手を取られ、ヘドロウェーブ（81.7%・どく）が×2弱点。こちらの一致技はともに等倍止まりで一撃を取れず、撃ち合いで先に削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S110で先手を取られ、ヘドロウェーブ（81.7%・どく）が×2弱点。こちらはうたかたのアリアが等倍・ムーンフォースは×0.5で有効打を欠き、撃ち合いで先に削られる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あく・じめん技を持つポケモン（ドドゲザン・ガブリアス等）でゴースト/どくの弱点を突き、後出しから処理する</td>
 </tr>
 </tbody>
@@ -535,7 +535,7 @@ HC振りでとくこう126を活かしつつ、HP80に振ってオボンのみ�
 
 アシレーヌはムーンフォース＋うたかたのアリアの受けにくい一致技2枚と、とくこう126・とくぼう116の特殊性能を両立した使用率4位のアタッカー兼耐久枠です。ドラゴン無効・あく半減により、ガブリアス・サザンドラ・カイリューといった環境上位のドラゴン勢に強く出られるのが最大の武器です。
 
-一方ですばやさ60と遅く、ウォッシュロトム・フシギバナ・キラフロルなどでんき・くさ・どくの弱点を突いてくる相手には上から処理されやすいため、じめん・ほのお枠でこれらをケアするパーティ構成が前提になります。先制アクアジェットと一致技の範囲を活かし、苦手な弱点枠を味方で受け持つことで持ち味が最大化します。
+一方ですばやさ60と遅く、ウォッシュロトム・フシギバナ・キラフロルなどでんき・くさ・どくの弱点を突いてくる相手には上から処理されやすいため、じめん・ほのお枠でこれらをケアするパーティ構成が前提になります。先制アクアジェットと一致技の範囲を活かし、苦手な弱点枠を味方で受け持つ構成が安定します。
 
 ---
 

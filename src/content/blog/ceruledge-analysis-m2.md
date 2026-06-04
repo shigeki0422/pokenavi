@@ -202,7 +202,7 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">82.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ソウブレイズ専用のほのお物理技。急所に当たりやすい。はがね・くさ・こおりへの打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ソウブレイズ専用のほのお物理技。与ダメージの1/2を回復。はがね・くさ・こおりへの打点</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
@@ -309,7 +309,7 @@ EV振りは「AS + hb」41.4%、「AS + h」20.5%、「AS + hd」11.1%と、い�
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むねんのつるぎ（ほのお）が×2、インファイト（かくとう）も×2。S85同士の同速だが、主力の10まんボルト・りゅうせいぐん（特殊）はとくぼう100で軽減できる。つるぎのまい後は確定圏</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">むねんのつるぎ（ほのお）が×2、インファイト（かくとう）も×2。S85同士の同速だが、主力の10まんボルト・りゅうせいぐん（特殊）はとくぼう100で受けやすい。つるぎのまい後は確定圏</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -406,7 +406,7 @@ EV振りは「AS + hb」41.4%、「AS + h」20.5%、「AS + hd」11.1%と、い�
     <img src="/images/pokemon/pokemon-0003-00.webp" alt="フシギバナ">
     <div class="name">フシギバナ</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">くさ/どくでみず・じめん・いわを半減〜等倍で受け、苦手なカバルドン・アシレーヌに打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">くさ/どくでみずを半減。くさ打点で苦手なカバルドン・アシレーヌの弱点を突く</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
@@ -424,7 +424,7 @@ EV振りは「AS + hb」41.4%、「AS + h」20.5%、「AS + hd」11.1%と、い�
     <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)">
     <div class="name">イダイトウ(オス)</div>
     <div class="rate">同居率7位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/ゴーストで苦手なみず枠に打点を持ち、相手のゴースト技を半減</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/ゴーストでソウブレイズが苦手なみず・じめん・いわ枠に打点を持ち、ノーマル・かくとうを無効化</div>
   </div>
 </div>
 

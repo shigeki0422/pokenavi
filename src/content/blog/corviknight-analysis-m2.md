@@ -48,7 +48,6 @@ draft: true
 
 - じめん（×0）・どく（×0）を無効化
 - くさ（×0.25）・むし（×0.25）を大幅軽減
-- かくとう（×1・等倍）、いわ（×1・等倍）を等倍止まり
 - ドラゴン・フェアリー・ノーマル・エスパー（各×0.5）を半減
 
 使用率1位ガブリアスのじしん（採用率99.2%）を無効化できるのが象徴的で、環境最多の物理地面アタッカーに対する受け出し性能が、6位という使用率を支えています。
@@ -146,8 +145,8 @@ draft: true
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ(×0.25)</span>
-      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし(×0.25)</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
+      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
       <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
       <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
       <span><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ドラゴン</span>
@@ -356,14 +355,14 @@ draft: true
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">トリックフラワー（くさ×0.25）・はたきおとす（あく等倍）・トリプルアクセル（こおり等倍）いずれも軽傷。ボディプレスがあくに等倍で通る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のトリックフラワー（くさ×0.25）・はたきおとす（あく等倍）・トリプルアクセル（こおり等倍）はいずれも軽傷。ただしかみなりパンチ（採用率21.8%）はでんき×2弱点なので、持つ個体には受け出さない。ボディプレスがくさ/あくの複合に×2で通る</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（どく×0）無効、シャドーボール（ゴースト等倍）・きあいだま（かくとう等倍）止まり。ほのお・でんき技を持たず、居座って削れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（どく×0）無効、シャドーボール（ゴースト等倍）・きあいだま（かくとう等倍）止まり。ほのお・でんき技を持たず崩されにくい。ただしボディプレス（かくとう）はゴーストに×0で無効なので、削るならアイアンヘッドやとんぼがえりに頼る</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -377,7 +376,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（あく等倍）・アイアンヘッド（はがね×0.5）・ドゲザン（あく等倍）いずれも弱点ではない。ボディプレスがあく/はがねに×2で刺さる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（あく等倍）・アイアンヘッド（はがね×0.5）・ドゲザン（あく等倍）いずれも弱点ではない。ボディプレスがあく/はがねの複合に×4で刺さる</td>
 </tr>
 </tbody>
 </table>
@@ -408,7 +407,7 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×2弱点。ボディプレスははがね/ドラゴンに×1止まりで、はねやすめで居座っても削り切れず、でんき技で先に崩される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×2弱点。ボディプレスははがね/ドラゴンの複合に×2で通るものの、こうげき87・ぼうぎょ依存では決定打にならず、先に高威力でんき技で崩される</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめんタイプ（ガブリアス・カバルドン）でブリジュラスに後出しし、じしんで弱点を突く。アーマーガアでは受けに行かない</td>
 </tr>
 <tr>
@@ -423,21 +422,21 @@ draft: true
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（採用率67.0%）・だいもんじ（14.2%）のほのお技が×2弱点。あくのはどう・りゅうせいぐんは半減だが、ほのお技で受け回しを崩される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技を持つ個体には受け出さない。ボディプレスがあく/ドラゴンに等倍なので、ほのお技未採用と読めた時のみ居座る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技を持つ個体には受け出さない。ボディプレスがあく/ドラゴンの複合に×2で通るので、ほのお技未採用と読めた時のみ居座って削る</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（採用率79.7%）がほのお×2弱点。ちょうのまい（97.4%）で特攻・特防・命中を上げられると、はねやすめの回復を上回る火力で押し切られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ちょうはつでちょうのまいを止めるか、いわ・みずタイプ（キラフロル等のいわ技）でほのお/むしの×2弱点を突いて処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ちょうはつでちょうのまいを止めるか、いわ・みずタイプ（キラフロル等のいわ技）でほのお/むしの複合に×4が刺さる弱点を突いて処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちから（じめん）は通常無効だが、はねやすめ使用ターンはひこうが消えてじめん×2で刺さる。パワージェム（いわ等倍）も高い特攻で削られ、ステルスロックで受け出しを重くされる。こちらの有効打はボディプレス（いわ/どくに×2）頼み</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ボディプレスがいわ/どくに×2で通るため、てっぺきで固めて殴り合える。きりばらいで撒かれたステルスロックを除去して受け回しを継続する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちから（じめん）は通常無効だが、はねやすめ使用ターンはひこうが消えてじめん×2で刺さる。パワージェム（いわ等倍）も高い特攻で削られ、ステルスロックで受け出しを重くされる。こちらの有効打はボディプレス（いわ/どくの複合に等倍）頼みで火力が出ない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ボディプレスはいわ/どくに等倍止まりで打ち負けやすい。てっぺきで固めて居座りつつ、きりばらいで撒かれたステルスロックを除去して受け回しを継続する</td>
 </tr>
 </tbody>
 </table>

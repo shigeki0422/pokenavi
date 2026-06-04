@@ -142,7 +142,7 @@ draft: true
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
-      <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
+      <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
       <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
@@ -243,7 +243,7 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">130</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">溜め技だが晴れ下では即発動。でんき最大火力</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">溜め技だがあめ下では即発動＋C1段階上昇。でんき最大火力</td>
 </tr>
 </tbody>
 </table>
@@ -363,15 +363,15 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（ドラゴン1×ひこう2＝×2）・りゅうせいぐん（×2）で先手。じしん採用は15.2%と低くこちらの弱点は突かれにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ やや有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（ドラゴン1×ひこう2＝×2）・りゅうせいぐん（×2）で弱点を突ける。ただしS100＞85で先手は取られる。じしん採用は15.2%と低くこちらの弱点は突かれにくい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はどうだんが×4（あく2×はがね2）。S85＞50で先手。相手のかくとう打点は薄く、ふいうちもこちらは半減（あく0.5×はがね1）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はどうだんが×4（あく2×はがね2）。S85＞50で先手。相手のかくとう打点は薄く、先制のふいうちもこちらには等倍（あく1×はがね1）で一撃にならない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -416,7 +416,7 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.0%）が×2。高HP・高Bでこちらの特殊技を耐え、あくび（94.2%）・ほえる（44.5%）でステロや積みを流される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.0%）が×2。高HP・高Bでこちらの特殊技を耐え、あくび（94.2%）・ふきとばし（44.5%）でステロや積みを流される</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・みず・こおり技を持つ高速枠（マスカーニャ等）を同伴し、後出しから弱点（×2）で処理する</td>
 </tr>
 <tr>

@@ -32,7 +32,7 @@ draft: true
 
 > ⚠️ 本記事のデータはM-2シーズン（2026/05/30）時点の集計です
 
-シーズンM-2（2026/5/13〜6/17）のシングルバトルで、カバルドンは**使用率7位**を記録。攻撃的なアタッカーが上位を占めるなか、純粋な耐久・起点作り役として唯一トップ10に入っているポケモンです。
+シーズンM-2（2026/5/13〜6/17）のシングルバトルで、カバルドンは**使用率7位**を記録。攻撃的なアタッカーが上位を占めるなか、耐久・起点作りに特化した受け役としてトップ10に定着しています。
 
 カバルドンの役割は明確で、**あくび（採用率94.2%）で相手を流し、ステルスロック（84.4%）を撒き、なまける（53.2%）で居座る**という起点作りに特化しています。じめん単タイプの素直な耐性とHP108・ぼうぎょ118の高い物理耐久を土台に、後続のアタッカーが通る盤面を整えるのが仕事です。
 
@@ -153,7 +153,7 @@ HP108・ぼうぎょ118の物理耐久が突出する一方、とくぼう72・�
 </table>
 </div>
 
-弱点はみず・くさ・こおりの3タイプのみとシンプルで、いずれもこの3タイプを一致技で持つ相手（アシレーヌ・マスカーニャ・フシギバナ等）が天敵になります。でんき無効はブリジュラスやウォッシュロトムの10まんボルトを透かせる点で価値が高く、いわ半減はバンギラス・テラパゴス系のいわ技を受けやすくします。
+弱点はみず・くさ・こおりの3タイプのみとシンプルで、いずれもこの3タイプを一致技で持つ相手（アシレーヌ・マスカーニャ・フシギバナ等）が天敵になります。でんき無効はブリジュラスやウォッシュロトムの10まんボルトを透かせる点で価値が高く、いわ半減はバンギラスのいわ技を受けやすくします。
 
 ---
 
@@ -176,7 +176,7 @@ HP108・ぼうぎょ118の物理耐久が突出する一方、とくぼう72・�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">100</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">98.0%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">唯一の攻撃技。一致技で最低限の打点を確保し、ねむり・交代に対する詰め手にもなる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほぼ唯一の攻撃技。一致技で最低限の打点を確保し、ねむり・交代に対する詰め手にもなる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>あくび</strong></td>
@@ -252,7 +252,7 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
 <strong>性格:</strong> わんぱく（B↑ C↓）<br>
-<strong>EV:</strong> H32 B32（HB振り。採用率18.1%の最多スプレッド）<br>
+<strong>EV:</strong> H32 B32（HB振り。HB系で最多の採用率18.1%）<br>
 <strong>持ち物:</strong> オボンのみ / たべのこし
 </div>
 <div>
@@ -307,7 +307,7 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
 
 **弱み:**
 
-ぼうぎょに回す余裕が減るため、ガブリアスのスケイルショット（連続技でB低下）やマスカーニャの物理一致技を受けたときの消耗がHB型より大きくなります。物理高火力に対してはなまけるの回復が追いつきにくい場面が出ます。
+ぼうぎょに回す余裕が減るため、ガブリアスのじしん・スケイルショットやマスカーニャの物理一致技を受けたときの消耗がHB型より大きくなります。物理高火力に対してはなまけるの回復が追いつきにくい場面が出ます。
 
 ---
 
@@ -339,14 +339,14 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（HB型）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）はカバルドンに等倍で、HB型なら受けてなまける回復が間に合う。あくび＋ステルスロックで起点化。ただしスケイルショットでBを削られる点に注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）はカバルドンに等倍で、HB型なら受けてなまける回復が間に合う。あくび＋ステルスロックで起点化。ただしスケイルショットの連続ヒットで削りを受ける点に注意</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/どくにじしんが×2（どく2×ゴースト1）で刺さる。みず・くさ・こおり技を持たないためカバルドン側の弱点を突かれにくく、起点を作りやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/どくにじしんが×2（どく2×ゴースト1）で刺さる。主力はヘドロウェーブ・シャドーボールで弱点を突かれにくく起点を作りやすい。ただしこごえるかぜ（36.7%）はこおりで×2弱点のため、持つ個体には居座らず流す</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -517,7 +517,7 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">しんちょう 16.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 D32</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">特殊アタッカーに対応。EVスプレッドは最多採用（24.0%）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">物理高火力で消耗。スケイルショット等のB低下に弱い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">物理高火力で消耗。ガブリアス等の物理一致技に弱い</td>
 </tr>
 </tbody>
 </table>
@@ -525,7 +525,7 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
 
 **総評:**
 
-カバルドンはあくび94.2%・ステルスロック84.4%という起点作りパッケージと、HP108・ぼうぎょ118の物理耐久、すなおこしによる継続ダメージを兼ね備えた、M-2環境で唯一トップ10入りした受け・サポート役です。攻撃をアタッカー陣に任せ、自分は盤面を整えることに徹する役割分担型のポケモンです。
+カバルドンはあくび94.2%・ステルスロック84.4%という起点作りパッケージと、HP108・ぼうぎょ118の物理耐久、すなおこしによる継続ダメージを兼ね備えた、M-2環境でトップ10入りした受け・サポート役です。攻撃をアタッカー陣に任せ、自分は盤面を整えることに徹する役割分担型のポケモンです。
 
 物理アタッカー・でんきタイプ・はがねタイプに対しては受け出しから起点作りを通せる一方、みず・くさ・こおりを一致技で持つアシレーヌ・マスカーニャ・ギャラドス・フシギバナには弱点を突かれて崩されます。これらの処理役をパーティで明確に用意できるかが、カバルドンを軸にした構築の安定度を左右します。HB型かHD型かは、想定する環境が物理寄りか特殊寄りかで選び分けるのが基本です。
 

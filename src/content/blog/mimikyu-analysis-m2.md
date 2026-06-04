@@ -127,8 +127,8 @@ draft: true
 <table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（2倍）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（0.5倍）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
 </tr>
 </thead>
@@ -143,7 +143,6 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
-      <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -336,7 +335,7 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×2（ドラゴン2×じめん1）。げきりん（48%）は無効。じしん（99%）は等倍だがばけのかわで1発無効化でき、つるぎのまい後に上から押せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×2（ドラゴン2×じめん1）。げきりん（48%）は無効。じしん（99%）は等倍だがばけのかわで1発無効化でき、S102とこちらより速い相手でもつるぎのまい後はじゃれつく＋かげうちで仕留めやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -350,14 +349,14 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×2（あく1×ドラゴン2）。あく一致技はミミッキュに×0.5。ばけのかわで1発受けてつるぎのまいを積みやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×2（あく1×ドラゴン2）。あくのはどう（98.5%）・りゅうせいぐん（90.2%）は等倍で、ばけのかわで1発受けてつるぎのまいを積みやすい。つるぎのまい後はじゃれつくで確定圏</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×2（くさ1×あく2）。あく技はミミッキュに×0.5。S123でこちらより速いが、ばけのかわ＋かげうちで上から削れる。トリックフラワーの急所貫通には注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×2（くさ1×あく2）。はたきおとす（57.6%）・ふいうち（12.0%）のあく技は等倍。S123でこちらより速いが、ばけのかわ＋かげうちで上から削れる。トリックフラワーの急所貫通には注意</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -371,7 +370,7 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッド（87%）がはがね×2弱点。ふいうち（99%）はあくで×0.5だが、ばけのかわが剥がれた後ははがね技で落とされやすい。じゃれつくも鋼に半減</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッド（87%）がはがね×2弱点。ふいうち（99%）も等倍で先制が刺さり、ばけのかわが剥がれた後ははがね技で落とされやすい。じゃれつくはあく×2×はがね½で等倍止まり</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -430,7 +429,7 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッド（87%）がはがね×2。ふいうち（99%）のあく先制も重なり、ばけのかわ剥がし後に押し切られる。じゃれつくは鋼半減</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッド（87%）がはがね×2。ふいうち（99%）のあく先制（等倍）も重なり、ばけのかわ剥がし後に押し切られる。じゃれつくは等倍止まりで決定打に欠ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん・ほのお・かくとう技で弱点を突けるポケモン（ガブリアス・ルカリオ等）を同伴して後続から処理する。ふいうちは攻撃しないターンに透かせる</td>
 </tr>
 <tr>
@@ -463,7 +462,7 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
     <img src="/images/pokemon/pokemon-0121-00.webp" alt="スターミー">
     <div class="name">スターミー</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">S115の高速みず枠。ゴースト技は半減し、エスパー技でゲンガー等に打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">S115の高速みず枠。エスパー技でゲンガーの弱点を突き、苦手な高速ゴーストを上から処理</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
@@ -475,7 +474,7 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでゴースト技半減。ステロ展開でミミッキュの起点作り</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ドラゴン無効のミミッキュとはがねで弱点を分担。ステロ展開でミミッキュの起点作り</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン">

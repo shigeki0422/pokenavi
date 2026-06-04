@@ -43,9 +43,9 @@ draft: true
 
 ### 1. S123＋こだわりスカーフで環境最上位を上から殴れる
 
-すばやさ種族値**123**はそれ自体で環境上位ですが、採用率77.2%の**こだわりスカーフ**を持つと、いじっぱりでもすばやさ実数値が約1.5倍に跳ね上がります。これにより、本来こちらより速いゲッコウガ（S122）・スターミー（S115）・ゲンガー（S110）・マフォクシー（S104）といった高速アタッカーすら上から叩けます。
+すばやさ種族値**123**は環境TOP25で最速で、素のままでもゲッコウガ（S122）・スターミー（S115）・ゲンガー（S110）・マフォクシー（S104）といった高速アタッカーを上回ります。採用率77.2%の**こだわりスカーフ**を積むと、いじっぱりでもすばやさ実数値が約1.5倍に跳ね上がり、相手のスカーフ持ちや能力上昇後の相手まで含めて先手を取りに行けます。
 
-スカーフ込みのS123は環境上位の素のすばやさをほぼ全て上回るため、「先に動いて削る・縛る」立ち回りの起点になります。
+スカーフ込みのS123は環境のほぼ全ての相手に先制できるため、「先に動いて削る・縛る」立ち回りの起点になります。
 
 ### 2. へんげんじざいで全技がタイプ一致補正×1.5
 
@@ -299,7 +299,7 @@ draft: true
 
 **強み:**
 
-こだわりスカーフ込みのすばやさで、素のすばやさが上のゲッコウガ（S122）・スターミー（S115）・ゲンガー（S110）すら上から叩けます。性格はいじっぱり46.9%・ようき45.1%とほぼ拮抗しており、いじっぱりはこうげき実数値が約10%高く確定数を縮め、ようきはスカーフなしでも素のS123を最大化して同速での取りこぼしを減らせます。
+素のS123が環境TOP25で最速のため、ゲッコウガ（S122）・スターミー（S115）・ゲンガー（S110）には持ち物に関係なく先手を取れます。こだわりスカーフを積む価値は、相手のスカーフ持ちや、りゅうのまい等で加速した相手の上も取れる点にあります。性格はいじっぱり46.9%・ようき45.1%とほぼ拮抗しており、いじっぱりはこうげき実数値が約10%高く確定数を縮め、ようきは同じスカーフ持ち同士のミラーやS同速での取りこぼしを減らせます。
 
 とんぼがえりを絡めれば、スカーフで技を固定される拘束を緩和しながら有利対面を作り直せます。トリックフラワーは必中かつ必ず急所に当たるため、回避・命中不安がなく、相手のぼうぎょ上昇を無視して通せるのも安定感につながります。
 
@@ -382,14 +382,14 @@ draft: true
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/エスパーにトリックフラワー×2・はたきおとす×2。エスパー技は無効。素のS115をスカーフで、スカーフ型でも素のS123で先手</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/エスパーにトリックフラワー×2・はたきおとす×2。エスパー技は無効。素のS123＞115で持ち物に関係なく先手</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はたきおとすが×2（あく→ゴースト2×どく1）。スカーフで素のS110を上回る。低耐久同士だが先制＋あく一致で押し勝ちやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はたきおとすが×2（あく→ゴースト2×どく1）。素のS123＞110で先手。低耐久同士だが先制＋あく一致で押し勝ちやすい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -403,14 +403,14 @@ draft: true
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 不利寄り</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンにトリックフラワー×0.25・はたきおとす半減で打点がほぼ通らない。B130の高耐久。けたぐり（かくとう×2）採用なら抜けるが採用率12.5%と低い。基本はとんぼがえりで引く</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンにトリックフラワー×0.25・はたきおとす等倍だがB130の高耐久で打点が通らない。けたぐり（かくとう×2）採用なら抜けるが採用率12.5%と低い。基本はとんぼがえりで引く</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう/はがねに主要技がほぼ通らず（くさ×0.25・あく半減・こおり等倍・むし×0.25）、ひこう技はこちらに×2弱点。けたぐり（かくとう×2）以外に有効打がなく受け出しされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう/はがねに主要技がほぼ通らず（くさ×0.25・あく等倍・こおり等倍・むし×0.25・けたぐりも等倍）、有効打を欠く一方でひこう技はこちらに×2弱点で受け出しされる</td>
 </tr>
 </tbody>
 </table>
@@ -434,7 +434,7 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/はがね。先制技バレットパンチ（採用率99.7%）がむし＝×4弱点で、スカーフで上を取っていても優先度+1で先に大ダメージ。こちらはくさ×0.25・あく×0.5で打点が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/はがね。先制技バレットパンチ（採用率99.7%）がむし＝×4弱点で、スカーフで上を取っていても優先度+1で先に大ダメージ。こちらはくさ×0.25・あく等倍で打点が乏しい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">マスカーニャを引かせ、ほのお・ひこう技を持つ枠（リザードン等）を後出しして弱点を突く。対面したら無理に殴らずとんぼがえりで交代</td>
 </tr>
 <tr style="background:#fafafa">
@@ -449,7 +449,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/ほのお。トリプルアクセル×0.5・くさ×0.25で打点が薄く、ほのおのまい（79.7%）はこちらに×2弱点。ちょうのまいを積まれると突破不能</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">パワージェム（いわ→むし1×ほのお2＝×2）採用なら対面で押せるが採用率7.6%と低い。いわ・みず・でんき技を持つ枠で受けて弱点を突く</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">パワージェム（いわ→むし2×ほのお2＝×4）採用なら対面で押せるが採用率7.6%と低い。いわ・みず・でんき技を持つ枠で受けて弱点を突く</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -473,7 +473,7 @@ draft: true
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでマスカーニャの苦手なむし・ほのお・こおりを半減。高耐久で受け回しの軸</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでマスカーニャの×4弱点むしを半減、×2弱点のほのお・こおりも等倍に抑える。高耐久で受け回しの軸</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ">

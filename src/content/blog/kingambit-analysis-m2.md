@@ -197,14 +197,14 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">85</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">96.4%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく一致のメインウェポン。急所に当たりやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく一致のメインウェポン。必中</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アイアンヘッド</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>86.9%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね一致技。フェアリー・いわ・こおりに刺さる。30%ひるみ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね一致技。フェアリー・いわ・こおりに刺さる。20%ひるみ</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
@@ -218,7 +218,7 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">重さ依存</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">同タイプのドドゲザンや重いはがね（ブリジュラス等）への打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく技が等倍以下のはがね（ブリジュラス＝かくとう×2等）や同タイプのドドゲザンへの打点</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ハサミギロチン</strong></td>
@@ -238,7 +238,7 @@ draft: true
 </table>
 </div>
 
-技構成はふいうち・ドゲザン・アイアンヘッドの一致3技に、つるぎのまいを加えた「積み＋先制」がほぼ確定枠です。けたぐり以下は選択技で、けたぐりは重い同タイプ・はがねへの数少ないかくとう打点になります。
+技構成はふいうち・ドゲザン・アイアンヘッドの一致3技に、つるぎのまいを加えた「積み＋先制」がほぼ確定枠です。けたぐり以下は選択技で、けたぐりはあく技が通りにくいはがね（ブリジュラス等）や同タイプのドドゲザンへの数少ないかくとう打点になります。
 
 ---
 
@@ -341,7 +341,7 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガスターミー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー無効でしねんのずつき（39%）・サイコカッター（25%）を透かせる。主力のアクアブレイク（89%）・アイススピナー（65%）も等倍。ドゲザン（みず1×エスパー2＝×2）で大ダメージ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー無効でしねんのずつき（39%）・サイコカッター（25%）を透かせる。主力のアクアブレイク（89%）は等倍、アイススピナー（65%）ははがねで×0.5。ドゲザン（みず1×エスパー2＝×2）で大ダメージ</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -361,8 +361,8 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0670-05.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ:永遠（17位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッドがフェアリー単体に×2。主力のムーンフォース（87%）はこちらのはがねで×0.5半減。S50＜92で先手は取られるがふいうちで縛れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッドがフェアリー単体に×2。主力のムーンフォース（87%・フェアリー2×はがね0.5）はこちらに等倍で通り、めいそう（86%）を積まれると等倍でも負担が大きい。S50＜92で先手は取られるがふいうちで縛れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -393,14 +393,14 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガルカリオ（9位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（72%・かくとう）が×4。S112で先手を取られ、てきおうりょく補正の一致かくとう技で物理耐久ごと一撃。ふいうちはあく0.5×はがね1＝×0.5で削りも甘い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（72%・かくとう）が×4。S112で先手を取られ、てきおうりょく補正の一致かくとう技で物理耐久ごと一撃。ふいうちはあく0.5×はがね0.5＝×0.25で削りも通らない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう・エスパー・フェアリーなどかくとうを半減/無効するポケモン（アーマーガア・ゲンガー等）を同伴し、ルカリオの前に引いて受ける</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0428-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガミミロップ（13位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（61%）・とびひざげり（34%・かくとう）が×4。S135で先手＋ねこだましで縛られ、こちらのふいうちはねこだまし読みでも当てづらい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（61%）・とびひざげり（34%・かくとう）が×4。S135で先手を取られ、ねこだまし（63%）でひるませてからかくとう技で一撃</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとうを半減/無効するひこう（アーマーガア）・エスパーを同伴し、後続から受けてかくとう技を透かす</td>
 </tr>
 <tr>
@@ -414,7 +414,7 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2、S100で先手。こちらのあく技は等倍止まり、アイアンヘッドはメガY（ほのお/ひこう）に半減でメガX（ほのお/ドラゴン）にも等倍と打点が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2、S100で先手。こちらのあく技は等倍止まり、アイアンヘッドはメガY（ほのお/ひこう）に×0.5、メガX（ほのお/ドラゴン）には×0.25と打点が乏しい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・いわ・でんきタイプを同伴し、リザードンに後出しして弱点を突いて処理する</td>
 </tr>
 <tr>

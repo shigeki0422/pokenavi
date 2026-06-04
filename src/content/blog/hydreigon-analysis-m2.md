@@ -48,15 +48,15 @@ draft: true
 - マスカーニャ（S123・使用率3位）
 - マフォクシー（メガ後S134・25位）
 - ゲンガー（メガ後S130・10位）
-- スターミー（メガ後S115・20位）
+- スターミー（メガ後S120・20位）
 
-これらはいずれもサザンドラのあくのはどう（マフォクシー・スターミー・ゲンガーはエスパー/ゴーストで×2）か等倍打点が先に通るため、スカーフによる先手が活きます。
+マフォクシー・スターミー・ゲンガーにはあくのはどうがエスパー/ゴーストに×2で通り、マスカーニャ（くさ/あく）にはかえんほうしゃが×2で通るため、スカーフによる先手が活きます。
 
 ただしスカーフを最速おくびょう（実数値約201）にしても、**同じくスカーフを巻いた高速勢には先手保証がありません**。とくにスカーフガブリアス（すばやさ実数値約253相当）には届かず、ガブリアスのドラゴン技・スケイルショットはサザンドラに弱点で通るため、対スカーフでは不利です。
 
 ### 2. あく/ドラゴンの広い攻撃範囲
 
-あくのはどう・りゅうせいぐん・かえんほうしゃの3技だけで、はがね・くさ・ドラゴン・エスパー・ゴーストに高倍率の打点が通ります。一致技2種の通りが良いうえ、補助のかえんほうしゃがブリジュラス（2位）・アーマーガア（6位）・ハッサム（14位）といった環境上位のはがね勢に刺さるため、スカーフで上から削り役として機能します。
+あくのはどう・りゅうせいぐん・かえんほうしゃの3技だけで、はがね・くさ・ドラゴン・エスパー・ゴーストに高倍率の打点が通ります。一致技2種の通りが良いうえ、補助のかえんほうしゃがアーマーガア（6位）に×2・ハッサム（14位）に×4と環境上位のはがね勢に刺さるため、スカーフで上から削り役として機能します。
 
 ### 3. とんぼがえりで有利対面を維持しながら回す
 
@@ -144,7 +144,7 @@ draft: true
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
-      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ（0.25倍）</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
     </div>
@@ -201,7 +201,7 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>67.0%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね・くさへの打点。ブリジュラス・アーマーガア・ハッサムに×2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね・くさへの打点。アーマーガアに×2、ハッサムに×4（ブリジュラスはドラゴンで半減され等倍）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>だいもんじ</strong></td>
@@ -222,14 +222,14 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">8.9%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく・はがねへの打点。キラフロル（いわ/どく）に×2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく・はがねへの打点。キラフロル（いわ/どく）に×4</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>きあいだま</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7.8%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">命中率70。ドドゲザン（あく/はがね）など一致技が等倍止まりの相手への奇襲</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">命中率70。ドドゲザン（あく/はがね）など一致技が半減される相手への奇襲（かくとうで×4）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ちょうはつ</strong></td>
@@ -352,23 +352,23 @@ draft: true
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃが×2（はがね2×ドラゴン1）。S85より先手。りゅうせいぐんはドラゴン2×はがね0.5＝等倍止まりなのでほのお技で叩く</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃはほのお2×はがね2×ドラゴン0.5＝等倍止まり、一致りゅうせいぐんもドラゴン2×はがね0.5＝等倍で、高耐久を抜けない。S85より先手は取れるが、相手のりゅうせいぐん（採用率64.8%）はドラゴン×2で通るため撃ち合いは不利</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0655-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マフォクシー（25位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（あく2×ほのお1、エスパーに刺さる）。スカーフでメガ後S134を上回り、相手のエスパー技はサザンドラに無効。ほのお技には注意だがあく技で先制処理しやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（先手前提）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（あく2×ほのお1）。スカーフでメガ後S134を上回り先制でき、エスパー技は無効。ただしマジカルシャイン（採用率32.6%）はフェアリー×4のため、削れた状態での後出しや同速での被弾は致命傷</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（みず1×エスパー2）。スカーフでメガ後S115より先手。みず技はドラゴンで半減、エスパー技は無効。アクアジェット（採用率87%）の先制には削れていると注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（みず1×エスパー2）。スカーフでメガ後S120より先手で先制できる。みず技はドラゴンで半減、エスパー技は無効。ただしアイススピナー（採用率64.9%）はこおりで×2、アクアジェット（採用率87%）の先制も通るため、削れた状態での後出しは禁物</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（ゴースト2×どく1）。スカーフでメガ後S130を上回る。シャドーボール（採用率71%）はゴーストがサザンドラに等倍だが、こちらが先に高倍率で叩ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（ゴースト2×どく1）。スカーフでメガ後S130を上回り、先に高倍率で叩ける。きあいだま（採用率37.4%）はかくとう×2だが、こちらが先手を取れていれば被弾前に処理できる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）</td>
@@ -404,12 +404,12 @@ draft: true
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォースがフェアリー×4で確定1発。高耐久でこちらの一致技でも落としきれない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリーを半減できるはがね・どくタイプ（ギルガルド・キラフロル等）を同伴し、アシレーヌの前に後出しして受ける。サザンドラはとんぼがえりで引いてその枠に繋ぐ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリーを半減できるギルガルド（はがね/ゴースト）やキラフロル（いわ/どく）を同伴し、アシレーヌの前に後出しして受ける。サザンドラはとんぼがえりで引いてその枠に繋ぐ</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（19位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×4。ばけのかわで1発耐え、かげうちの先制も持つため速度で上回っても倒しきれない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね（ギルガルド等）でじゃれつくを半減して受け、かげうちを等倍に抑える。ばけのかわを別ポケモンの攻撃で先に剥がしてからサザンドラのあく技で詰める</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギルガルド（はがね/ゴースト）ならじゃれつく・かげうちをいずれも半減して受けられる。ばけのかわを別ポケモンの攻撃で先に剥がしてからサザンドラのあく技で詰める</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（スカーフ型）（1位）</td>
@@ -418,7 +418,7 @@ draft: true
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく/はがねであくのはどう×0.5・りゅうせいぐん等倍と一致技が通りにくく、ふいうち（採用率99%）の先制であく技をこちらに×1で押し付けてくる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく/はがねであくのはどう×0.5・りゅうせいぐん×0.5（はがねがドラゴンを半減）と一致技がどちらも通りにくく、こちらの一致技で押し切れないうちに、つるぎのまい（採用率72.3%）から高火力のアイアンヘッド等で詰めてくる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだま（かくとう×4）を持つ個体なら上から処理できる。持たない場合はかくとう・ほのお・じめん技持ちを同伴し、はがねの弱点を突いて落とす</td>
 </tr>
 </tbody>
@@ -442,7 +442,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム">
     <div class="name">ウォッシュロトム</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき/みずでサザンドラの弱点こおり・むしを半減。ボルトチェンジで対面操作を補強</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき/みずでサザンドラの弱点こおりを半減し、フェアリーには等倍で受け先になる。ボルトチェンジで対面操作を補強</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド">
@@ -468,8 +468,8 @@ draft: true
 
 サザンドラはフェアリー×4を筆頭に弱点が多く、こだわりスカーフで技も固定されるため、残り5体で弱点とハザードを補います。
 
-1. **フェアリー対策**: ギルガルドなどはがね/どく枠でフェアリー技を半減して受ける
-2. **ドラゴン・こおり対策**: スターミー・ウォッシュロトムなどでドラゴン技を等倍以下に抑える受け先を用意
+1. **フェアリー対策**: ギルガルド（はがね/ゴースト）やキラフロル（いわ/どく）などフェアリーを半減できる枠で受ける
+2. **こおり・ドラゴン対策**: みずタイプのスターミー・ウォッシュロトムでこおり技を半減し、ドラゴン技はギルガルド（はがね/ゴースト）で半減して受ける
 3. **ハザード展開**: ガブリアス等でステルスロックを撒き、とんぼがえりの交代戦と合わせて削りを稼ぐ
 4. **対スカーフ高速勢**: サザンドラより速いスカーフガブリアスを止める先制技・受け枠を確保する
 

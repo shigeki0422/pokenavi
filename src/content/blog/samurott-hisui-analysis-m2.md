@@ -53,7 +53,7 @@ draft: true
 
 ### 3. せいなるつるぎが能力変化を無視する
 
-せいなるつるぎは相手の能力上昇を無視してダメージを与える技です。てっぺき・めいそうなどで防御・特防を積んだ相手にも、積み前と同じダメージを通せます。アーマーガア（てっぺき採用率63.5%）やめいそう持ちのアシレーヌ・フラエッテ:永遠など、耐久を積んで居座る相手への崩し手段として価値があります。
+せいなるつるぎは相手の防御・特防の上昇を無視してダメージを与える技です。てっぺきなどで防御を積んだ相手にも、積み前と同じダメージを通せます。てっぺき採用率63.5%のアーマーガア（ひこう/はがねでせいなるつるぎは等倍）のように、防御を積んで居座る物理受けに対し、積みを無視して等倍打点を維持できる点で価値があります。なお相手がフェアリー（アシレーヌ・フラエッテ:永遠など）の場合はかくとうが×0.5に半減されるため、能力無視があっても崩し手段にはなりません。
 
 ---
 
@@ -131,7 +131,7 @@ draft: true
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず(0.25)</span>
+      <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
@@ -147,7 +147,7 @@ draft: true
 </table>
 </div>
 
-あくタイプがエスパーを無効化し、みず×0.25・ほのお・こおり・はがね・ゴースト・あくを半減します。原種のみず単体と比べ、エスパー無効とゴースト・あく半減を獲得した一方、原種が等倍だったかくとう・むし・くさを弱点として抱える点が大きな違いです。弱点はくさ・でんき・かくとう・むし・フェアリーの5タイプで、いずれも×2で通ります。
+あくタイプがエスパーを無効化し、みず・ほのお・こおり・はがね・ゴースト・あくを半減します。原種のみず単体と比べ、エスパー無効とゴースト・あく半減を獲得した一方、原種が等倍だったかくとう・むし・くさを弱点として抱える点が大きな違いです。弱点はくさ・でんき・かくとう・むし・フェアリーの5タイプで、いずれも×2で通ります。
 
 ---
 
@@ -225,7 +225,7 @@ draft: true
 </table>
 </div>
 
-れいとうビーム（採用率9.9%）はとくこう100を活かした特殊技で、せいなるつるぎが等倍止まりのガブリアス・カイリューにこおり弱点×2を通すための選択肢です。物理技主体の構成ながら、ドラゴンへの打点として一部に採用されています。
+れいとうビーム（採用率9.9%）はとくこう100を活かした特殊技で、切る技が等倍以下に止まるガブリアス・カイリューにこおり×4を通すための選択肢です。物理技主体の構成ながら、ドラゴンへの打点として一部に採用されています。
 
 ---
 
@@ -265,7 +265,7 @@ draft: true
 
 **弱み:**
 
-ようき型ではないため、S85同速ライン（ブリジュラスなど）に対しいじっぱりだと素早さで競り負ける場合があります。また弱点5タイプはいずれも環境上位（ルカリオのインファイト、マスカーニャのくさ技、アシレーヌのフェアリー技など）に分布しており、先制されると低いとくぼうで一撃で落とされやすい点が課題です。
+ようき型ではないため、S85同速ライン（ブリジュラスなど）に対しいじっぱりだと素早さで競り負ける場合があります。また弱点5タイプはこちらより速い環境上位（メガルカリオS112のインファイト、マスカーニャS123のトリックフラワーなど）に分布しており、上から弱点を突かれると低いぼうぎょ・とくぼうで一撃で落とされやすい点が課題です。
 
 ---
 
@@ -337,7 +337,7 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
     <img src="/images/pokemon/pokemon-0681-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド（11位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">せいなるつるぎが×2（はがね2×ゴースト1）＋きれあじ補正。S60で先手。主力のかげうち・ポルターガイスト（ゴースト）はこちらに×0.5。シールドフォルムのB140に注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひけん・ちえなみ（あく）が×2（はがね1×ゴースト2）＋きれあじ補正。S60で先手。せいなるつるぎはかくとうがゴーストに無効のため通らない点に注意。主力のかげうち・ポルターガイスト（ゴースト）はこちらに×0.5。シールドフォルムのB140に注意</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -397,7 +397,7 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー・採用率97%）がこちらに×2弱点。とくぼう65では特殊耐久も足りず、せいなるつるぎ（はがね・あくでなくかくとう）はみず/フェアリーに等倍止まりで一撃に届きにくい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく・はがね・ほのおタイプ（キラフロル・ブリジュラス・リザードン等）を同伴し、フェアリー技を半減して後出し処理する。アンコール型ならめいそうを縛って起点化を防ぐ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー技を半減できるどくタイプ（キラフロル＝いわ/どくで×0.5）やはがね/ひこうのアーマーガア（×0.5）を同伴し、後出し処理する。アンコール型ならめいそうを縛って起点化を防ぐ</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -418,14 +418,14 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
     <img src="/images/pokemon/pokemon-0670-05.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ:永遠（17位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー・採用率87%）がこちらに×2弱点。めいそう（86%）で積まれると、せいなるつるぎの能力無視はあっても等倍打点では落とし切れず、ドレインキッスで回復され持久戦で負ける</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく・はがねタイプ（キラフロル・ブリジュラス等）を同伴してフェアリー技を半減し受ける。アンコールでめいそうを縛り、後続のはがね・どく打点で突破する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー技を半減できるキラフロル（いわ/どく）やアーマーガア（ひこう/はがね）を同伴して受ける。アンコールでめいそうを縛り、後続のどく打点で突破する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（19位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ばけのかわで一撃を耐え、じゃれつく（フェアリー・採用率92%）がこちらに×2弱点。つるぎのまい（87%）の起点にされやすい。こちらの先制ふいうちもばけのかわで止まる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく・はがねタイプを同伴してフェアリー技を半減し受ける。ばけのかわを別の駒で剥がしてから処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー技を半減できるキラフロル（いわ/どく）やアーマーガア（ひこう/はがね）を同伴して受ける。ばけのかわを別の駒で剥がしてから処理する</td>
 </tr>
 </tbody>
 </table>
@@ -442,13 +442,13 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
     <img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム">
     <div class="name">ウォッシュロトム</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/でんきでくさ・むしを半減。でんき技でヒスイダイケンキが苦手なみず・ひこう枠に打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/でんきででんきを半減し、苦手なハラバリー等のでんき枠を受けられる。でんき技でひこう・みず枠に打点</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0983-00.webp" alt="ドドゲザン">
     <div class="name">ドドゲザン</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">あく/はがねでフェアリー・むしを半減。苦手なフェアリー枠を後出しで受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">あく/はがねでむしを1/4に軽減。はがね技で苦手なフェアリー枠に弱点を突いて攻める</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
@@ -460,13 +460,13 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
     <img src="/images/pokemon/pokemon-0970-00.webp" alt="キラフロル">
     <div class="name">キラフロル</div>
     <div class="rate">同居率6位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">いわ/どくでフェアリーを半減、むしにも耐性。アシレーヌ・ウルガモス等の苦手枠を受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">いわ/どくでフェアリーを半減し、アシレーヌの苦手枠を受ける。いわ技でウルガモスに弱点を突く</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこう/はがねでくさ・むし・フェアリーを半減。とんぼがえりで対面操作</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこう/はがねでくさ・フェアリーを半減し、苦手枠を後出しで受ける。とんぼがえりで対面操作</div>
   </div>
 </div>
 
@@ -474,7 +474,7 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
 
 ヒスイダイケンキはとくぼう65と弱点5タイプの広さがネックなので、残り5体で以下の役割を補います。
 
-1. **フェアリー対策**: どく・はがねタイプ（ドドゲザン・キラフロル等）でムーンフォース等を半減して受ける枠
+1. **フェアリー対策**: フェアリー技を半減できるキラフロル（いわ/どく）・アーマーガア（ひこう/はがね）でムーンフォース等を受ける枠
 2. **でんき対策**: じめんタイプ（ガブリアス等）でパラボラチャージ等を無効化する枠
 3. **くさ・むし対策**: はがね・ほのおタイプ（アーマーガア・リザードン等）で受ける枠
 4. **まきびし活用**: ひけん・ちえなみのまきびしと相性の良い、相手の交代を誘う展開役
@@ -532,9 +532,9 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
 
 **総評:**
 
-ヒスイダイケンキは、きれあじで底上げされたあく/かくとう/みずの切る技を軸に、まきびし設置と先制ふいうちを兼ねる中速物理アタッカーです。せいなるつるぎの能力無視と相まって、はがね・ゴースト・あく系（ドドゲザン・ギルガルド等）への明確な有利を持ちます。
+ヒスイダイケンキは、きれあじで底上げされたあく/かくとう/みずの切る技を軸に、まきびし設置と先制ふいうちを兼ねる中速物理アタッカーです。せいなるつるぎの×4が刺さるドドゲザンや、ひけん・ちえなみのあく×2でゴースト系を上から削れるギルガルドなど、はがね・ゴースト・あく系への明確な有利を持ちます。
 
-一方で、みず/あくが抱えるくさ・でんき・かくとう・むし・フェアリーの弱点5タイプはいずれも環境上位（ルカリオ・マスカーニャ・アシレーヌ・ウルガモス等）に分布し、とくぼう65・S85では先制弱点技で落とされやすいのが使用率23位に留まる主因です。フェアリー・でんき・くさを受けられる駒をパーティで補い、まきびし＋切る技の削りを後続のアタッカーに繋げる構築運用が、このポケモンの強みを引き出す前提になります。
+一方で、みず/あくが抱えるくさ・でんき・かくとう・むし・フェアリーの弱点5タイプはいずれも環境上位（ルカリオ・マスカーニャ・アシレーヌ・ウルガモス等）に分布し、ぼうぎょ80・とくぼう65では弱点技を受けると崩されやすいのが使用率23位に留まる主因です。フェアリー・でんき・くさを受けられる駒をパーティで補い、まきびし＋切る技の削りを後続のアタッカーに繋げる構築運用が、このポケモンの強みを引き出す前提になります。
 
 ---
 
