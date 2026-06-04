@@ -83,7 +83,7 @@ heroImage: '../../assets/hero-scizor-m2.png'
 
 ### 理由2: はがね/むし複合——ほのお以外は全て等倍以下
 
-メガハッサムのタイプ相性は、防御面で非常に優れた組み合わせです。一般的にはがねタイプはかくとう・じめんに弱く、むしタイプはほのお・ひこう・いわに弱いと思われがちですが、**この2タイプを組み合わせると相殺効果で実質弱点はほのお（4倍）のみ**になります。
+メガハッサムのタイプ相性は、防御面で非常に優れた組み合わせです。はがね単体ではかくとう・じめん・ほのお、むし単体ではほのお・ひこう・いわが弱点ですが、**この2タイプを組み合わせると弱点はほのお（4倍）のみ**になります。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
@@ -241,7 +241,7 @@ HA振りによってこの防御140が最大化されます。環境の多くの
 
 **A150は環境トップクラスの数値**。さらにぼうぎょ140という高水準の防御もあります。一方でHP70・すばやさ75と低く、正面から殴り合うというよりも**後手でバレットパンチを打ち込む、または耐久を活かして積んでからフィニッシュ**というスタイルが基本になります。
 
-とくぼう100もメガ進化で強化（80→100）されており、特殊方面の被ダメージも想定より少ない場面があります。
+とくぼうも80→100に強化され、HP70と合わせて特殊方面も一定の耐久を持ちます。
 
 ### タイプ・弱点（メガ後）
 
@@ -256,7 +256,6 @@ HA振りによってこの防御140が最大化されます。環境の多くの
 <thead>
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（4倍）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">等倍（実質相殺）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½以下）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
 </tr>
@@ -266,11 +265,19 @@ HA振りによってこの防御140が最大化されます。環境の多くの
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> ほのお
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.8em;text-align:left">
-    かくとう・じめん・ひこう・いわ（各々相殺）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.8em;text-align:left">
-    ノーマル・くさ・こおり・ドラゴン・フェアリー（½）
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
+    <div style="display:flex;flex-wrap:wrap;gap:4px">
+      <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle">ノーマル</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle">くさ</span>
+      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle">エスパー</span>
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle">はがね</span>
+      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle">むし</span>
+      <span><img src="/images/types/type-10-water.png" alt="みず" style="width:24px;height:24px;vertical-align:middle">みず</span>
+      <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:24px;height:24px;vertical-align:middle">でんき</span>
+      <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle">こおり</span>
+      <span><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle">ドラゴン</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle">フェアリー</span>
+    </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> どく
@@ -280,7 +287,7 @@ HA振りによってこの防御140が最大化されます。環境の多くの
 </table>
 </div>
 
-どくタイプを完全無効化することも特筆すべき点です。フラエッテ（永遠）のムーンフォースや一部のどく技を無効化できる点は場面によって活きることがあります。
+どくタイプの技を無効化できるのも利点で、環境のどくどくや一部のどく技を受けずに済みます。
 
 ---
 
