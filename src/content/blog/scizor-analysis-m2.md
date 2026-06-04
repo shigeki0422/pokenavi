@@ -293,15 +293,15 @@ HA振りによってこの防御140が最大化されます。環境の多くの
 
 ## 主要型の解説
 
-### 型① いじっぱり HA+b 積みバレット型（最多・14.2%）
+### 型① いじっぱり HA最大振り メガ型（最多）
 
-EV振りの中で最も採用率が高い基本形です。HAをベースに余りをぼうぎょへ振り、物理耐久をわずかに上積みしています。
+メガハッサムの基本形。いじっぱりでHA最大振り、余り2を H・B・S・D のどこかに振るバリエーションで、合計採用率は約34%（HA+b 14.2%・HA+s 12.5%・HA+d 7.6%）。余り2は実数値で1しか動かず確定数に影響するケースは稀のため、本質的な型としては1つにまとめる。技構成と持ち物の差で立ち回りが分かれる。
 
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0212-00.webp" alt="メガハッサム" style="width:48px;height:48px" />
   <div>
-    <strong>いじっぱり HA+b 積みバレット型</strong><br>
-    <small style="color:#666">EV振り採用率 14.2%</small>
+    <strong>いじっぱり HA最大振り メガ型</strong><br>
+    <small style="color:#666">EV振り採用率合計 約34%</small>
   </div>
 </div>
 
@@ -320,135 +320,35 @@ EV振りの中で最も採用率が高い基本形です。HAをベースに余�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32 B2（HA+b）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32（余り2はH・B・S・Dから選択）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ハッサムナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ハッサムナイト（79.1%）</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例①</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ / つるぎのまい / インファイト / はたきおとす</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>必須技</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（99.7%）・つるぎのまい（86.6%）・インファイト（72.4%）</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例②</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ / つるぎのまい / はねやすめ / インファイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>選択技</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はたきおとす（53.6%）／はねやすめ（29.6%）／とんぼがえり（20.6%）</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-**強み:**
-- 余り2をBに振ることでぼうぎょ実数値が他型より1高くなり、物理アタッカーへの耐久確定数を上積みできる（型②のS振り・型③のD振りより物理耐久寄り）
-- いじっぱりHA最大振り（型②③と共通）にBの上積みが加わるため、つるぎのまいを積む対面で最も耐久を盤石にできる
-
-**弱み:**
-- 余りをBに振るため、型③（HA+D）の特殊耐久補強や型②（HA+S）の速度ラインは取れない
-- A・B以外への投資が極小のため、特殊技で削られる流れや、抜きたいライン（カバルドン等）に届かない場面は型①では補えない
+**選択技による立ち回りの違い:**
+- **はたきおとす型（53.6%）**: 命中100で相手の持ち物（オボン・食べ残し・こだわり系等）を永続消失させる副効果が強力。テクニシャン対象外（威力65）だが等倍以上で削れる。メガストーン・進化アイテムは奪えない仕様
+- **はねやすめ型（29.6%）**: つるぎのまい→はねやすめで長期戦に持ち込み、半減・無効タイプの多さを活かして粘る構成
+- **とんぼがえり型（20.6%）**: メガ進化前から繰り出しと交代を行い、対面操作で有利な選出を作る
 
 **立ち回りのポイント:**
-HA振りの真価は「つるぎのまいを積める場面を作れること」にあります。ぼうぎょ140という数値のおかげで、多くの物理技を1発受けながらつるぎのまいを積めます。積んだ後はバレットパンチ（先制・実質威力90+A330補正）で多くのポケモンを確定1発圏に捉えられます。
-
-**はたきおとす（53.6%採用）の役割:**
-テクニシャン対象外（威力65）ですが、**命中100で相手の持ち物を永続的に消失させる**副効果が強力です。相手のオボンのみ・食べ残し・こだわり系アイテムを消し飛ばしながら等倍以上のダメージが与えられます。なおメガストーンや進化アイテムははたきおとすでは奪えない仕様のため、メガ進化要員には持ち物消失を狙えませんが、消耗品・補正アイテムを落とす効果は多くの場面で有効です。
+ぼうぎょ140という数値のおかげで、多くの物理技を1発受けながらつるぎのまいを積めます。積んだ後はバレットパンチ（先制・実質威力90+A330補正）で多くのポケモンを確定1発圏に捉えられます。
 
 ---
 
-### 型② いじっぱり HA+s 速度調整型（12.5%）
-
-<div class="build-header">
-  <img src="/images/pokemon/pokemon-0212-00.webp" alt="メガハッサム" style="width:48px;height:48px" />
-  <div>
-    <strong>いじっぱり HA+s 速度調整型</strong><br>
-    <small style="color:#666">EV振り採用率 12.5%</small>
-  </div>
-</div>
-
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
-<thead>
-<tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">項目</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>性格</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32 S2（HA+s）</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ハッサムナイト</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ / つるぎのまい / インファイト / とんぼがえり</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-**強み:**
-- 型①（HA+B）・型③（HA+D）では届かないSラインを取りに行ける構成で、相手の同S帯やS無振りの中速ポケモンを先制できる確率が上がる
-
-**弱み:**
-- 型①の余りB振り・型③のD振りで得られる耐久上積みを切るため、つるぎのまい後の積みターン確保が型①より一段不安定になる
-
----
-
-### 型③ いじっぱり HA+d 特殊耐久調整型（7.6%）
-
-<div class="build-header">
-  <img src="/images/pokemon/pokemon-0212-00.webp" alt="メガハッサム" style="width:48px;height:48px" />
-  <div>
-    <strong>いじっぱり HA+d 特殊耐久調整型</strong><br>
-    <small style="color:#666">EV振り採用率 7.6%</small>
-  </div>
-</div>
-
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
-<thead>
-<tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">項目</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>性格</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32 D2（HA+d）</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ハッサムナイト</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ / つるぎのまい / インファイト / はねやすめ</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-**強み:**
-- 型①（B振り）・型②（S振り）にはない特殊耐久の上積みを取れる構成で、特殊技寄りの相手への確定数を1段引き上げられる
-
-**採用意図:**
-メガハッサムはとくぼうが100（メガ前80）に上昇しているため、特殊耐久型の価値が生まれています。ゲンガー（10位）やアシレーヌ（4位）などの特殊アタッカーに対して、1発耐えながらバレットパンチで倒す立ち回りが狙えます。
-
----
-
-### 型④ 無メガ・メタルコート型（9.5%）
+### 型② 無メガ・メタルコート型（9.5%）
 
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム（通常）" style="width:48px;height:48px" />
@@ -747,33 +647,17 @@ HA振りの真価は「つるぎのまいを積める場面を作れること」
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">積みバレット型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">HA最大振り メガ型</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HA+b</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">バレットパンチ / つるぎのまい / インファイト / はたきおとす</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">14.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">中・後発で積んでフィニッシュ</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">速度調整型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HA+s</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">バレットパンチ / つるぎのまい / インファイト / とんぼがえり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">12.5%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">遅いポケモンへの先手確保</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">特殊耐久型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HA+d</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">バレットパンチ / つるぎのまい / はねやすめ / インファイト</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">7.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">特殊アタッカーに1発耐えてバレット</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32（余り2は任意）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">バレットパンチ / つるぎのまい / インファイト / はたきおとす or はねやすめ or とんぼがえり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">約34%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">メガ枠で採用する基本形</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">無メガ メタルコート型</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HA</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">バレットパンチ / つるぎのまい / インファイト / はたきおとす</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">9.5%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">メガ枠を別ポケモンに使う場合</td>
