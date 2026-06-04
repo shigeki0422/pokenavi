@@ -160,7 +160,7 @@ draft: true
 </table>
 </div>
 
-くさ/フェアリーはドラゴンを無効化し、みず・でんき・じめん・かくとう・あくを半減（くさは×0.25）と、地面・水・格闘・悪の物理アタッカーに比較的強い受け面を持ちます。一方で**どくが×4**（くさ×2・フェアリー×2）と最大の弱点で、キラフロルのヘドロウェーブ（採用率69.4%）やゲッコウガのヘドロウェーブ（64.5%）が致命傷になります。ほのお・こおり・ひこう・はがねも×2で通る点に注意が必要です。
+くさ/フェアリーはドラゴンを無効化し、みず・でんき・くさ・じめん・かくとう・あくを半減（いずれも×0.5）と、地面・水・格闘・悪の物理アタッカーに比較的強い受け面を持ちます。一方で**どくが×4**（くさ×2・フェアリー×2）と最大の弱点で、キラフロルのヘドロウェーブ（採用率69.4%）やゲッコウガのヘドロウェーブ（64.5%）が致命傷になります。ほのお・こおり・ひこう・はがねも×2で通る点に注意が必要です。
 
 ---
 
@@ -355,44 +355,51 @@ draft: true
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（じめん）を半減、げきりん（ドラゴン）は無効。S116＞102でアンコール先制も可。積み読みアンコールで起点化を防げる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（じめん）を半減、げきりん（ドラゴン）は無効。アンコールはいたずらごころで先制し、つるぎのまいの起点化を防げる。ただしどくづき（どく・採用率19.4%）を持つ個体には×4で落とされる点に注意</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0939-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハラバリー（同居7位）
+    <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（じめん）を半減し弱点技を持たない。ちょうはつでステルスロック・あくび・なまけるを封じ、やどりぎのタネで一方的に削れる典型的な起点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0939-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハラバリー（32位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき技を半減。いたずらごころのアンコール・ちょうはつで展開役を機能停止させられる</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技を半減。S115をわずかに上回り、アンコールで積み・回復を先に縛れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">▲ 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技は半減できるが、アイススピナー（こおり・採用率64.9%）が×2で致命傷。アンコールはいたずらごころで先制できるものの、被弾を凌ぐにはタスキ前提</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">▲ 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（採用率42%）・フレアドライブ（33%）がほのお×2で致命傷。アンコール等は通るがタスキ前提でしか動けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（採用率42.4%）・フレアドライブ（33.3%）がほのお×2で致命傷。アンコール等は通るがタスキ前提でしか動けない</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">▲ 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（どく・採用率69%）が×4で一撃。変化技は通るがタスキでも2発目で落ちる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（どく・採用率69.4%）が×4で一撃。変化技は通るがタスキでも2発目で落ちる</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">▲ 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッド（はがね）が×2。ムーンフォースもはがねで半減され有効打が乏しい。アンコールは通るが押し切れない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッド（はがね・採用率31.1%）が×2。ムーンフォースもはがねで半減され有効打が乏しい。アンコールは通るが押し切れない</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
@@ -422,34 +429,34 @@ draft: true
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あくタイプにいたずらごころの変化技が無効。アンコール・おきみやげ・ちょうはつが一切通らず、S123で上から処理される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エルフーンで対処せず、フェアリーが半減できるはがね・どく枠（アーマーガア・キラフロル等）に引いて受ける。エルフーンの仕事は悪以外の相手に温存する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エルフーンで対処せず、こおり技（トリプルアクセル）を半減できるはがね枠（アーマーガア等）に引いて受ける。エルフーンの仕事は悪以外の相手に温存する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくタイプで変化技が無効。あくのはどう（採用率99%）・かえんほうしゃ（67%）でムーンフォース半減のこちらを上から削る</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー打点を持つアシレーヌ等で受け出し、ムーンフォースで弱点を突いて処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくタイプで変化技が無効になり、アンコール・ちょうはつといったサポートの仕事が消える。あくのはどう（採用率98.5%）・りゅうせいぐん（90.2%）で削られる（ムーンフォースはあく/ドラゴンに×4で通るため、攻撃技を持つ個体なら一矢報いられる）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー打点を持つアシレーヌ等で受け出し、ムーンフォースで弱点（×4）を突いて処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0658-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲッコウガ（28位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくタイプで変化技が無効。ヘドロウェーブ（どく・採用率64%）が×4、S122で上を取られ一撃</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくタイプで変化技が無効。ヘドロウェーブ（どく・採用率64.5%）が×4、S122で上を取られ一撃</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みずを半減できるウォッシュロトム等で受け、でんき技で弱点を突く。エルフーンは後出ししない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（採用率80%）がほのお×2で致命傷。ちょうのまいで積まれると突破不能。アンコールは通るが積み後の引き先が必要</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">積み始めにアンコールでちょうのまいを固定し、その隙にいわ・みず・でんき技を持つ後続に引いて弱点で落とす</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（採用率79.7%）がほのお×2で致命傷。ちょうのまいで積まれると突破不能。アンコールは通るが積み後の引き先が必要</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">積み始めにアンコールでちょうのまいを固定し、その隙にいわ・みず技を持つ後続に引いて弱点で落とす</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（どく・採用率69%）が×4で一撃。ステルスロック（37%）でこちらのタスキも潰される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（どく・採用率69.4%）が×4で一撃。ステルスロック（36.5%）でこちらのタスキも潰される</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技（だいちのちから等）で弱点を突けるガブリアス等を同伴し、後出しして処理する</td>
 </tr>
 </tbody>
@@ -514,14 +521,14 @@ draft: true
 
 | 技 | 分類 | 採用率 | 役割 |
 |---|---|---|---|
-| ムーンフォース | 特殊 | 91.4% | 唯一のほぼ必須打点 |
+| ムーンフォース | 特殊 | 91.4% | ほぼ必須の主打点 |
 | アンコール | 変化 | 77.9% | 行動固定 |
 | おいかぜ | 変化 | 55.9% | 味方加速 |
 | がむしゃら | 物理 | 43.3% | タスキ後の削り |
 | やどりぎのタネ | 変化 | 33.2% | 継続削り |
 | おきみやげ | 変化 | 26.4% | 後続サポート |
 
-ムーンフォース91.4%は「唯一外せない攻撃技」であり、これは**裏を返せば残り3枠を変化技で固める前提**だということです。アンコール＋おいかぜを両採用すると攻撃枠はムーンフォース1つに絞られ、エルフーンが「自分で削るポケモン」ではなく「相手を縛り味方を通すポケモン」として運用されていることが、採用率の偏りからはっきり読み取れます。火力で評価して採用すると役割を誤るため、起点作り・展開補助の枠として組み込むのが正しい使い方です。
+ムーンフォース91.4%は「ほぼ外せない攻撃技」であり、これは**裏を返せば残り3枠を変化技中心で固める前提**だということです（がむしゃら43.3%も攻撃技ですが、これはタスキ後の削り専用で打点としては機能しません）。アンコール＋おいかぜを両採用すると攻撃枠はムーンフォース1つに絞られ、エルフーンが「自分で削るポケモン」ではなく「相手を縛り味方を通すポケモン」として運用されていることが、採用率の偏りからはっきり読み取れます。火力で評価して採用すると役割を誤るため、起点作り・展開補助の枠として組み込むのが正しい使い方です。
 
 加えて、これらの変化技は**いたずらごころで優先度+1になって初めて価値が出る**ものです。特性採用率98.7%がいたずらごころに集中している事実は、変化技偏重の技構成と完全に噛み合っており、エルフーンというポケモンが「特性ありきの補助役」であることをデータが裏付けています。
 

@@ -185,9 +185,9 @@ draft: true
 <table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（2倍）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">等倍で通る主なタイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½以下）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
 </tr>
 </thead>
 <tbody>
@@ -202,19 +202,14 @@ draft: true
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず(0.25)</span>
-      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ(0.25)</span>
-      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね(0.5)</span>
-      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー(0.5)</span>
+      <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
+      <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
     </div>
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
-      <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
-      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
-    </div>
-  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#94a3b8">なし</td>
 </tr>
 </tbody>
 </table>
@@ -404,7 +399,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0009-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カメックス（30位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技を0.25倍に抑え、やどりぎ＋ギガドレインで継続的に削れる。こちらのくさ技は等倍で通る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技を0.25倍に抑え、やどりぎ＋ギガドレイン（くさ技がみずに×2）で継続的に削れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -418,7 +413,7 @@ draft: true
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがねタイプにやどりぎ無効。10まんボルト（66.9%）が等倍で通り、こちらの打点はかえんほうしゃ等倍止まり。消耗戦に持ち込めない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがねタイプにやどりぎ無効。こちらの打点はかえんほうしゃ等倍止まりで高耐久のブリジュラスを崩せず、消耗戦に持ち込めない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -463,7 +458,7 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがねタイプでやどりぎのタネが無効。10まんボルト（66.9%）が等倍で通り、こちらの打点も等倍止まりで崩せない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがねタイプでやどりぎのタネが無効。こちらの打点はかえんほうしゃ等倍止まりで、高耐久のブリジュラスを崩せない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん・かくとう技でブリジュラスの弱点を突けるポケモン（ガブリアス等）に対面を任せる</td>
 </tr>
 <tr style="background:#fafafa">
@@ -509,7 +504,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)">
     <div class="name">イダイトウ(オス)</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/ゴースト。スコヴィランの弱点じめん技を半減し、みず打点でじめん勢に反撃</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/ゴースト。じめんに弱点を突かれず受け出しでき、みず打点でガブリアスなどじめん勢に反撃</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
@@ -521,7 +516,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0143-00.webp" alt="カビゴン">
     <div class="name">カビゴン</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">高HP・高Dの特殊受け。スコヴィランが苦手なエスパー・ひこう特殊を後続から受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">高HP・高Dの特殊受け。スコヴィランが弱点を突かれるひこう特殊などを後続から受ける</div>
   </div>
 </div>
 

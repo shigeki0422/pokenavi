@@ -36,7 +36,7 @@ draft: true
 
 シーズンM-2（2026/5/13〜6/17）のシングルバトルで、ヒートロトムは**使用率49位**。同じロトムでも使用率22位のウォッシュロトムには及びませんが、**でんき/ほのお**という攻撃範囲と、特性**ふゆう**によるじめん無効を武器に独自の枠を確保しています。
 
-ヒートロトムの核は、**ふゆうでじめん技を完全無効**にしながら、でんき・ほのおの一致技で環境のはがね勢（アーマーガア・ハッサム・ブリジュラス）を逆に咎められる点です。オーバーヒート（採用率97.4%）とでんき技で、受けに来る相手を широкに削れます。
+ヒートロトムの核は、**ふゆうでじめん技を完全無効**にしながら、でんき・ほのおの一致技で環境のはがね勢（アーマーガア・ハッサム）を逆に咎められる点です。オーバーヒート（採用率97.4%）とでんき技で、受けに来る相手を広く削れます。
 
 ---
 
@@ -343,7 +343,7 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">オーバーヒートが×2（ひこう1×はがね2）。とくこう53と特殊耐久も並程度で、被弾もはがね/ひこう側の打点が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">オーバーヒートが×2（ひこう1×はがね2）。アイアンヘッド（31.1%）はほのお側に×0.5、ブレイブバード（19.0%）も等倍止まりで、こちらへの有効打が乏しい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -407,6 +407,20 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0902-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">イダイトウ(オス)（8位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S78に先手は取れるが、ウェーブタックル（96.5%）が×2弱点で高HP50を一撃圏に入れられ、アクアジェット（91.1%）の先制でも削られる。でんき技は等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">スカーフ型で上から10まんボルトを撃ちつつ、みず技を半減するみず受け（ミロカロス・カビゴン）へボルトチェンジで引く</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S86で同速、パワージェム（85.3%）が×2弱点。特殊技のためおにびでは火力を落とせず、いわ打点で上から崩される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">同速のため先手は安定しない。いわを半減するはがね・じめんタイプ（ブリジュラス・ガブリアス）を後続に置き、じめん・みず打点（キラフロルの弱点）を持つ枠で処理する</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">S115でこちらより速く、アクアブレイク（89.2%）が×2弱点。アクアジェット（86.9%）の先制もあり上から崩される。でんき技は等倍止まりで一撃にならない</td>
@@ -437,14 +451,14 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0503-01.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ダイケンキ(ヒスイ)（23位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/かくとうでシェルブレード（72.0%）が×2弱点。先制のふいうち（65.7%）も持ち、せいなるつるぎはこちらの能力変化を無視して火力を通す</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">オーバーヒートでせいなるつるぎ型を削りつつ、みず・かくとうを半減するひこう・エスパータイプを同伴して受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/あくでシェルブレード（72.0%）が×2弱点。先制のふいうち（65.7%）も持ち、せいなるつるぎ（86.0%）はこちらの能力変化を無視して火力を通す</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S86＞S85で同速に近いため、オーバーヒートで先に削るか、みずを半減するみず・くさタイプ（ミロカロス・フシギバナ等）を後続に置いて受ける</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-苦手は「みず技で弱点を突く高速・積みアタッカー」に集中します。耐久型は定数回復を上回るみず打点で崩されるため、みずを半減できる枠（ウォッシュロトム・フシギバナ等）を後続に用意し、ボルトチェンジで安全に繋ぐ構築が対策の軸になります。
+苦手は「みず・いわ技で弱点を突くアタッカー」に集中します。特に同速のキラフロル（いわ）はおにびが火力に効かず、高速・先制持ちのみず勢は定数回復を上回る打点で耐久型を崩してきます。みず・いわを半減できる枠（ミロカロス・フシギバナ・ブリジュラス等）を後続に用意し、ボルトチェンジで安全に繋ぐ構築が対策の軸になります。
 
 ---
 
@@ -547,7 +561,7 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
 
 ヒートロトムは、ふゆうによる地面無効とでんき/ほのおの広い攻撃範囲を両立した中速の特殊枠です。使用率1位ガブリアスのじしん（採用率99.2%）を透かし、おにびで物理アタッカーを機能停止させながら、はがね勢（アーマーガア・ハッサム）にはオーバーヒートで×2〜×4の打点を入れられるのが最大の強みです。
 
-一方、みず・いわが弱点で、スターミー・ギャラドス・ゲッコウガなど速いみずアタッカーには上から弱点を突かれて受けきれません。これらはみず技を半減するミロカロス・カビゴンらをパーティに同伴し、ボルトチェンジで安全に引いて処理するのが基本戦術です。攻撃と拘束を1体で両立できる器用さが、種族値合計520でも使用率49位を維持する理由です。
+一方、みず・いわが弱点で、スターミー・ギャラドス・ゲッコウガなど速いみずアタッカーや、同速でパワージェムを撃つキラフロル（いわ）には弱点を突かれて受けきれません。これらはみず・いわを半減するミロカロス・カビゴン・ブリジュラスらをパーティに同伴し、ボルトチェンジで安全に引いて処理するのが基本戦術です。攻撃と拘束を1体で両立できる器用さが、種族値合計520でも使用率49位を維持する理由です。
 
 ---
 

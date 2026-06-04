@@ -301,7 +301,7 @@ draft: true
 
 **弱み:**
 
-メガ化でぼうぎょが140→110に下がり、受け性能が落ちます。弱点のほのお・でんきは×2のまま残るうえ、すじがねいりで自分から不利な相手に縛られると、ほのお・でんき技で一方的に削られる危険があります。とくこう40のため特殊方向の打点が一切なく、ブレイブバードを半減する高耐久のはがね・いわには手数で押し負けます。
+メガ化でぼうぎょが140→110に下がり、受け性能が落ちます。弱点のほのお・でんきは×2のまま残るため、リザードンやハラバリーなどほのお・でんきアタッカーに対面すると一方的に削られます。とくこう40のため特殊方向の打点が一切なく、ブレイブバードを半減する高耐久のはがね・いわ（ブリジュラス等）には手数で押し負けます。
 
 ---
 
@@ -369,14 +369,14 @@ draft: true
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力トリックフラワー（くさ・93%）が×0.25。トリプルアクセル（こおり・72%）も等倍止まり。受け出してブレイブバードで反撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力トリックフラワー（くさ・92.9%）が×0.25、トリプルアクセル（こおり・72.2%）も等倍止まり。受け出してブレイブバードで反撃できる（かみなりパンチ21.8%採用個体には×2を通される）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンでこちらの一致技は両方半減。互いに決定打を欠き、ちょうはつ・ステロでの起点勝負になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき・66.9%）がこちらに×2で通る。こちらの一致技は両方半減（ブレイブバード×0.5・アイアンヘッド×0.25）され、削り合いで一方的に不利</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -442,8 +442,8 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンにブレイブバード・アイアンヘッドが半減され、決定打がない。高耐久で受け合いに持ち込まれる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドリルライナー（はがねに×2）採用個体で削る。かくとう・じめんアタッカーを合わせて処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき・66.9%）が×2で通る一方、こちらの一致技は両方半減され決定打がない。受け合いでも一方的に削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめんタイプ（ガブリアス等）を同伴しでんき技を透かして後出し。ドリルライナー（はがねに×2）採用個体なら自分でも削れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

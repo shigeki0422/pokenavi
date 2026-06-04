@@ -265,7 +265,7 @@ draft: true
 
 **弱み:**
 
-ようき型ならすばやさ実数値で並ぶS80前後（カイリュー無振り個体など）に先制を譲るリスクがある一方、いじっぱり型はそれらに後手を踏みます。ただしこおりのつぶてが先制で通るため、対ドラゴン・ひこうではこの差は出にくく、あくまで等倍の同速勝負を捨てた構成です。
+いじっぱり型はS補正がないぶん、ようき型なら先手を取れるS80前後（カイリュー無振り個体など）の同速ラインに後手を踏みます。こおり技が通るドラゴン・ひこうにはこおりのつぶての先制で削れるためこの差は出にくいものの、こおり技が通らない等倍相手との速度勝負を捨てた構成だという点は理解しておく必要があります。
 
 ---
 
@@ -314,7 +314,7 @@ draft: true
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが×2（はがね2×ドラゴン1）で刺さる。S85でこちらより速いが、相手の主力10まんボルト（67%）はじめんで無効化できるのが大きい。りゅうせいぐん（65%）はこちら等倍で、つららばり等で削り合えば五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが×2（はがね2×ドラゴン1）で刺さる。S85でこちらより速いが、相手の主力10まんボルト（67%）はじめんで無効化できるのが大きい。りゅうせいぐん（65%）はこちら等倍で、つららばり等で削り合えば五分。ただしはどうだん（27%）を持つ個体には×2弱点を突かれる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -370,6 +370,13 @@ draft: true
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技×2弱点。アクアジェット（67%）の先制でタスキ後も詰められ、こちらのじしんはみず/フェアリーに等倍止まり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みずを半減するくさ・みず・ドラゴンタイプを後出しし、でんき技（アシレーヌに×2）を持つウォッシュロトム等を合わせて処理する</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ソーラービーム（くさ・61%）がこちらに×2弱点。S100で上から殴られ、ひこうタイプのためじしんが無効。こおりのつぶては×1等倍止まりで落としきれない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ技（リザードンに×4）を持つポケモンや、でんき技を持つウォッシュロトム等を合わせ、上から処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

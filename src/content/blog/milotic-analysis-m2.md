@@ -377,7 +377,7 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
     <img src="/images/pokemon/pokemon-0018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（むし/ほのお）両方を半減し特殊耐久で受けきる。れいとうビームが×2、ねっとうが×2で打点十分。ただしギガドレイン（59%）はくさ×2のため注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（むし/ほのお）を半減し特殊耐久で受けきる。一致ねっとうがほのおに×2で打点十分（れいとうビームはむし/ほのおに×0.5で通らない）。ただしギガドレイン（59%）はくさ×2のため注意</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -391,7 +391,7 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（99%）・ドゲザン等の物理技をねっとうのやけどで弱化できる。ねっとうははがね/あくに等倍。つるぎのまい（72%）の積みにはくろいきりで対応</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（99%）・ドゲザン等の物理技をねっとうのやけどで弱化できる。ねっとうははがね/あくに×0.5で打点は薄いが、やけどでA物理を腐らせて受け返す。つるぎのまい（72%）の積みにはくろいきりで対応</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -576,5 +576,3 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
 - [天敵となる電気枠 ウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
 - [苦手な草枠 フシギバナのM-2考察](/blog/venusaur-analysis-m2/)
 - [同居率3位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
-</content>
-</invoke>

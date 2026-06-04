@@ -137,7 +137,6 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
-      <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -147,6 +146,7 @@ draft: true
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
+      <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -357,16 +357,23 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
     <img src="/images/pokemon/pokemon-0003-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ぼうふうが×2（ひこう→くさ2×あく1）で通る。ただしS123で先制され、トリプルアクセル（こおり・採用率72.2%）が×2で刺さるため撃ち合いは不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ぼうふうが×2（ひこう→くさ2×あく1）で通る。マスカーニャ側の主力技はいずれもペリッパーに等倍（くさ・あく・こおりとも×1）だが、S123から先制され、こちらは耐久が薄く撃ち合いは不利</td>
 </tr>
 <tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×4（ドラゴン2×ひこう2）。ただしS80から先制され、10まんボルト（採用率47.6%）採用個体にはこちらがでんき×4で落とされる。撃ち合いは持ち物と相手の技次第</td>
+</tr>
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×4で致命傷。なみのりは×0.5（はがね半減）でほとんど通らない</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0479-02.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウォッシュロトム（22位）
   </td>
@@ -407,8 +414,8 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0658-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲッコウガ（28位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビーム（採用率89.6%）がこおり×2、S122で先制される。HP60・D70と脆く雨始動前に落とされやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">削れていればでんこうせっか採用個体で先に倒す。みず半減のくさ枠（メガニウム）で受けてから雨エースで上を取る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S122で先制され、あくのはどう（75.9%）・れいとうビーム（89.6%）が等倍で入る。HP60・D70と脆く、雨を撒く前に上から削られやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">先制を取れないため受けに回す。みず技を半減できるくさ枠（メガニウム・同居率8位）で後出しし、雨エースで上から処理する</td>
 </tr>
 </tbody>
 </table>
@@ -476,7 +483,7 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
 | おいかぜ | 補助（素早さ2倍） | 20.5% |
 | はねやすめ | 補助（回復） | 8.4% |
 
-純粋な補助技であるおいかぜ20.5%・はねやすめ8.4%に対し、攻撃4技がいずれも50%超（とんぼがえり含む上位3技は74%以上）です。これは、ペリッパーが「雨を撒いて引っ込む置物」ではなく、**雨を撒いた初手から自分も削りに行き、不利になったらとんぼがえりで雨エースに繋ぐ**という攻撃的な始動役として運用されていることを示します。とりわけれいとうビーム74.0%の高さは、雨だけでは触りにくいガブリアス（1位）・カイリュー（16位）の2大ドラゴン/じめんに×4の打点を持たせ、始動と削りを1体で兼ねる設計の表れです。
+純粋な補助技であるおいかぜ20.5%・はねやすめ8.4%に対し、攻撃4技がいずれも50%超（とんぼがえり含む上位3技は74%以上）です。これは、ペリッパーが「雨を撒いて引っ込む置物」ではなく、**雨を撒いた初手から自分も削りに行き、不利になったらとんぼがえりで雨エースに繋ぐ**という攻撃的な始動役として運用されていることを示します。とりわけれいとうビーム74.0%の高さは、雨だけでは触りにくい2大ドラゴンのガブリアス（1位・ドラゴン/じめん）・カイリュー（16位・ドラゴン/ひこう）にこおり×4の打点を持たせ、始動と削りを1体で兼ねる設計の表れです。
 
 ---
 

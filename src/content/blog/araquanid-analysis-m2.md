@@ -54,7 +54,7 @@ draft: true
 
 ### 3. ミラーコートで特殊アタッカーを返り討ちにする
 
-採用率79.5%の**ミラーコート**は、受けた特殊技のダメージを2倍にして返す技です。D132で特殊技を耐えやすいオニシズクモと相性が良く、ゲンガー（10位）のシャドーボール（採用率71.1%）やウォッシュロトム（22位）のハイドロポンプ（採用率98.5%）など、特殊エースの攻撃をそのまま大ダメージで打ち返せます。アタッカー性能の低いA70・C50を補い、相手依存ながら大きな打点を確保する選択です。
+採用率79.5%の**ミラーコート**は、受けた特殊技のダメージを2倍にして返す技です（優先度-5で必ず後攻）。D132で特殊技を耐えやすいオニシズクモと相性が良く、ゲンガー（10位）のシャドーボール（採用率71.1%）など、こちらが耐えられる等倍以下の特殊打点をそのまま大ダメージで打ち返せます。アタッカー性能の低いA70・C50を補い、相手依存ながら大きな打点を確保する選択です。ただしでんき・ひこうの弱点を突く特殊技は耐えられず返せない点には注意が必要です。
 
 ---
 
@@ -139,8 +139,7 @@ draft: true
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお（タイプ等倍、すいほうで実質0.5）</span>
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
     </div>
@@ -316,7 +315,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）は等倍で耐える。アクアブレイクが×2（ドラゴン1×じめん2）で弱点を突き、すいほう補正で大ダメージ。スカーフ型には先に動かれる点に注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）は等倍でB92が受け、アクアブレイクが×2（ドラゴン1×じめん2）で弱点を突き、すいほう補正で大ダメージ。S102で先攻されるため受け出してから動くのが前提</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -330,7 +329,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（特殊受け）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">シャドーボール（71.1%）・ヘドロウェーブ（81.7%）・きあいだま（37.4%）はいずれも等倍で、D132とミラーコート（優先度-5で後攻確定）の的になる。特殊技を2倍で返せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">シャドーボール（71.1%）・ヘドロウェーブ（81.7%）は等倍、きあいだま（37.4%）は半減（かくとう×むし0.5）。いずれもD132で耐えやすく、ミラーコート（優先度-5で後攻確定）で特殊技を2倍で返せる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -362,7 +361,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">トリックフラワー（92.9・急所固定で耐久無視）・トリプルアクセル（72.2）でD132を貫通。S123で先手。はたきおとし（57.6%）でオボンのみも落とされる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">急所固定のトリックフラワーは耐久で受けられない。アクアブレイクはくさ/あくに等倍止まり。ひこう・どく・はがねタイプを後出しして処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">急所固定のトリックフラワーは耐久で受けられない。アクアブレイクはくさ/あくに半減（みず×くさ0.5＝×0.5）で押し返せない。ひこう・どく・はがねタイプを後出しして処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -389,8 +388,8 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンでアクアブレイクが半減（はがね1×ドラゴン0.5＝×0.5）。C125の特殊高火力でラスターカノン等が等倍で重く、決定力負けする</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイクで押し切れない。かくとう・じめん技を持つアタッカー（ルカリオ等）を合わせて弱点を突く</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイクが半減（みず×はがね1×ドラゴン0.5＝×0.5）で押せない一方、10まんボルト（66.9%）のでんき技が×2弱点。C125からの一致でんき技でこちらが先に落ちる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">受け出しは厳禁。でんき技を無効化するじめんタイプ（ガブリアス等）を後出しし、かくとう・じめん技を持つアタッカー（ルカリオ等）で弱点を突く</td>
 </tr>
 </tbody>
 </table>
@@ -425,7 +424,7 @@ draft: true
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ネットで遅くした相手をC125特殊で抜く。でんき半減の受け要員にも</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ネットで遅くした相手をC125特殊で抜く。でんき技を¼で受ける要員にも</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ">
@@ -441,7 +440,7 @@ draft: true
 
 1. **ネットを活かす中速アタッカー**: ニンフィア・ブリジュラスなど、相手のSを1段階削ったあとに上を取れる火力枠
 2. **でんき技対策**: じめんタイプ（ガブリアス等）でウォッシュロトム・カイリューのでんき技を無効化する枠
-3. **ひこう・くさ対策**: でんき技を持つ枠でアーマーガアやマスカーニャを処理する役割
+3. **アーマーガア対策**: でんき技を持つ枠（ウォッシュロトム等）でアーマーガアの弱点（ひこう2×はがね1＝×2）を突く役割。くさ/あくのマスカーニャにはひこう・どく・はがねの打点で対応する
 
 ---
 
