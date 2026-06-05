@@ -1,8 +1,8 @@
 ---
 title: '【ポケモンチャンピオンズ】メガリザードンY考察 M-2 ひでり特殊エース 採用型と晴れ展開の解説'
 description: 'M-2シーズンで使用率5位のリザードン。63.6%が選ぶメガリザードンYを徹底分析。C159×ひでりのトップクラス火力、ソーラービーム即発動による技範囲の広さ、いわ4倍弱点への対策まで実データをもとに解説します。'
-pubDate: '2026-05-22'
-draft: true
+pubDate: '2026-06-05'
+draft: false
 heroImage: '../../assets/hero-charizard-y-m2.png'
 ---
 
@@ -109,33 +109,39 @@ heroImage: '../../assets/hero-charizard-y-m2.png'
 
 > ⚠️ 本記事のデータはM-2シーズン（2026/05/30）時点の集計です
 
-M-2シーズンシングルバトルでリザードン全体は**使用率5位**を記録。そのうち実に**63.6%がリザードナイトYを採用**しており、メガリザードンXの34.9%を大きく上回っています。この差はひとえに**ひでり＋C159という突出した特殊火力**から来ています。メガ進化した瞬間から天候「にほんばれ」が発動し、ほのお技が1.5倍になるだけでなく、相手の天候パーティへのカウンターとしても機能する万能性——それがM-2環境でYが主流となっている最大の理由です。
+M-2シーズンシングルバトルでリザードン全体は**使用率5位**を記録。リザードナイトYの採用率は**63.6%**、リザードナイトXは**34.9%**で、同じポケモンでメガ型が二極化しているのが特徴です。Y型は**C種族値159とひでりによるほのお技×1.5補正**を活かした特殊エース、X型はりゅうのまい起点の物理積みエースという役割分担になっており、対策側は型読みを強いられます。本記事ではY型に絞って採用型・技構成・有利不利の相手を実データで解説します。
 
 ---
 
 ## なぜ今、メガリザードンYが強いのか
 
-### 1. C159×ひでりの実質火力はトップクラス
+メガリザードンYの強さは、メガ後特性**ひでり**を前提に成立しています。ひでりは場に出た（メガ進化した）ターンに天候を「にほんばれ」にする特性で、相手がすなあらし・あめなどを展開していても繰り出した瞬間に上書きできます。この「にほんばれ」状態がもたらす2つの効果が、Yの主力運用を支えています。
 
-メガリザードンYのとくこうは**159**。これだけでも環境トップクラスの数値ですが、とくせい**ひでり**によってメガ進化と同時に「にほんばれ」が発動し、ほのお技が×1.5倍になります。かえんほうしゃ（威力90）の実質ダメージ計算をすると:
+### 1. ひでり×C159で実質火力がトップクラス
+
+メガリザードンYのとくこうは**159**。これだけでも環境トップクラスの数値ですが、にほんばれ下ではほのお技が×1.5倍になります。かえんほうしゃ（威力90）の実質ダメージ計算をすると:
 
 <div style="background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px;margin:16px 0;font-size:0.9em">
   <strong>かえんほうしゃ実質威力（ひでり補正あり）</strong><br>
   <span style="font-size:1.1em;color:#ea580c">
     威力90 × タイプ一致補正1.5 × ひでり1.5 = <strong>実質威力202.5</strong>
   </span><br>
-  <small style="color:#777;margin-top:4px;display:block">※さらにひかえめ補正（×1.1）がかかる場合は実質222以上</small>
+  <small style="color:#777;margin-top:4px;display:block">※ひかえめならC実数値が約10%上がり、ダメージが約1割上乗せされる</small>
 </div>
 
-ひでりの恩恵は「天気を無料で展開できる」だけでなく、**毎ターンほのお技が安定して最大火力を発揮する**という点で、他のほのおタイプとの差別化要因になっています。
+通常のほのおタイプと比べ、**毎ターンほのお技が×1.5補正で安定して撃てる**点が差別化要因です。
 
-### 2. ソーラービーム即発動で技範囲が劇的に広がる
+### 2. ソーラービーム即発動で技範囲が広がる
 
-通常のソーラービームは2ターンかかりますが、にほんばれ状態では**1ターンで即発動**します。ソーラービームの採用率が61.0%という高さを誇るのは、ひでりとのシナジーによってくさが2倍以上通る相手に対して打点を持てるからです。たとえばカバルドン（じめん単）はくさ×2、イダイトウ（みず/ゴースト）はくさ×2×1=×2でいずれも弱点。一方ガブリアス（ドラゴン/じめん）はくさ×2×0.5=等倍止まりですが、それでもC159の高火力で削りを入れられます。
+通常のソーラービームは溜め1ターンが必要ですが、にほんばれ下では**1ターンで即発動**します。ソーラービームの採用率が61.0%という高さを誇るのは、Yのメインウェポンであるほのお・ひこう技が等倍以下に止まるみず・じめん系の高耐久ポケモン（アシレーヌ・カバルドン・イダイトウなど）に対する**サブウェポン**として機能するからです。これらにくさ技は×2が通り、ほのお・ひこう一致技だけでは崩しきれない相手を抜けるようになります。一方ガブリアス（ドラゴン/じめん）はくさ×2×0.5=等倍止まりですが、それでもC159の高火力で削りは入れられます。
 
-### 3. 天候パーティへのカウンター兼リーダー役
+後続でほのおタイプを採用していれば、ウルガモスのほのおのまい等もにほんばれ補正の恩恵を受けられます。
 
-M-2環境では天候パーティとの対面が想定されます。相手がすなあらしや雨パを使う場合でも、メガリザードンYのひでりは**メガ進化した瞬間に相手の天候を上書き**します（ただし「にほんばれ」の持続は天候設置ターンに依存）。自パーティに天候アタッカー（ひでりで強化されるほのおタイプなど）を入れることで、メガリザードンYが展開した後に後続が恩恵を受ける「天候パーティ」としての運用も強力です。
+### 3. にほんばれ下ではみず弱点が実質等倍に抑えられる
+
+にほんばれ下では**みず技の威力が0.5倍に弱化**します。メガリザードンYはみず×2弱点ですが、ひでり下なら ×2×0.5=**実質×1（等倍）**まで軽減できます。アシレーヌ（みず/フェアリー・使用率4位）のうたかたのアリア・なみのり、イダイトウ(オス)（みず/ゴースト・8位）のたきのぼり、スターミー（みず/エスパー・20位）のアクアブレイク89.2%など、環境のみず技に対して被ダメージが半減します。
+
+ひでりは火力面（×1.5補正）だけでなく、**みず弱点を実質等倍まで打ち消す防御効果も併せ持つ**点が、メガリザードンY運用の安定性を支えています。なお、いわ×4・でんき×2の弱点はひでりで軽減できないため、これらは依然として大きな脅威です。
 
 ---
 
@@ -193,7 +199,26 @@ M-2環境では天候パーティとの対面が想定されます。相手が�
   </div>
 </div>
 
-C159は現環境の特殊アタッカーの中でもトップクラスの数値です。とくぼう115はXの85と比べて大幅に高く、特殊受けとして後出しされる相手にも打ち合えます。一方でぼうぎょ78は低く、物理攻撃への耐性は高くありません。すばやさ100は中速圏で、おくびょう最速にしてもS100族止まり。環境TOP30のうちマスカーニャ（S123）・ゲッコウガ（S122）・スターミー（S115）・ゲンガー（S110）・ミミロップ（S105）・マフォクシー（S104）・ガブリアス（S102）はYより速く、上から動けない。特にガブリアスはS102で先にがんせきふうじ（いわ4倍）を通せる点が致命的で、Yの素早さは「上を取れる相手」より「抜けない上位」を意識して立ち回る必要がある。**おくびょう最速かひかえめCSの選択**が重要になる。
+C種族値159は現環境の特殊アタッカーで最上位クラスです。D種族値115はXのD85より大幅に高く、対面で特殊技を1発耐えてC159で殴り返す立ち回りが可能になります。一方でB種族値78は低く、物理技には脆い。S種族値100はおくびょう最速でS実数値**167**止まりで、環境TOP50のうち以下のポケモンはメガ後の最速S実数値がメガリザードンYを上回ります。
+
+**メガ進化後にメガリザードンYを上回る相手**
+
+- メガゲッコウガ（28位・メガ石40.8%・S142 → S実数値213）
+- メガミミロップ（13位・メガ石96.9%・S135 → S実数値205）
+- メガマフォクシー（25位・メガ石96.5%・S134 → S実数値204）
+- メガゲンガー（10位・メガ石82.4%・S130 → S実数値199）
+- メガスターミー（20位・メガ石97.7%・S120 → S実数値188）
+- メガルカリオ（9位・メガ石97.4%・S112 → S実数値178）
+- メガフラエッテ(永遠)（17位・メガ石97.4%・S102 → S実数値169）
+- メガキラフロル（15位・メガ石54.2%・S101 → S実数値168）
+
+**メガを介さず素早さで上回る相手**
+
+- マスカーニャ（3位・S123 → S実数値192）
+- ゲッコウガ素体（28位・S122 → S実数値191）
+- ガブリアス（1位・S102 → S実数値169）
+
+特にガブリアス（S実数値169）とメガフラエッテ(永遠)（S実数値169）はおくびょう最速のメガリザードンY（S実数値167）を**2差で上回る**ため、ガブリアスのがんせきふうじ採用率40.0%・いわなだれ採用率23.1%（いわ×4）、メガフラエッテのムーンフォース等が先に通ります。**おくびょう最速かひかえめCSの選択**は、こうした上位S帯との関係で決まります。
 
 ### メガ進化前後の変化
 
@@ -262,23 +287,32 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 <table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（4倍）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（2倍）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">無効・耐性</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;background:#fee2e2">
-    <img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> <strong>いわ（4倍）</strong>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;background:#fee2e2;vertical-align:top">
+    <div style="margin-bottom:6px"><strong>×4</strong></div>
+    <img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin:2px"><br>
+    <div style="margin:8px 0 6px"><strong>×2</strong></div>
+    <img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin:2px">
+    <img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin:2px">
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> みず<br>
-    <img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px"> でんき
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;vertical-align:top">
+    <div style="margin-bottom:6px"><strong>×1/2</strong></div>
+    <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin:2px">
+    <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin:2px">
+    <img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin:2px">
+    <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin:2px">
+    <div style="margin:8px 0 6px"><strong>×1/4</strong></div>
+    <img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin:2px">
+    <img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin:2px">
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    じめん <strong>無効</strong>（ひこうタイプ）<br>
-    ほのお½ / くさ½ / むし½ / かくとう½
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;vertical-align:top">
+    <img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin:2px">
   </td>
 </tr>
 </tbody>
@@ -286,8 +320,8 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 </div>
 
 <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;padding:12px;margin:12px 0">
-  <strong style="color:#dc2626">⚠️ いわ4倍弱点は致命的</strong><br>
-  メガリザードンYの最大の弱点は<strong>いわタイプへの4倍弱点</strong>です。ステルスロック（ステロ）が設置されている状態で登場すると、最大HPの<strong>1/2ダメージ</strong>を受けます（通常は1/4、4倍弱点は1/2）。ガブリアス（がんせきふうじでいわ4倍を直接突く）や、カバルドン（ステルスロック設置でYの後出しに1/2を蓄積させる）など、環境上位のいわダメージ源との対面は致命的です。<strong>ステロ対策ポケモンとのセット採用が必須</strong>です。
+  <strong style="color:#dc2626">いわ×4弱点の重み</strong><br>
+  メガリザードンYは<strong>いわ技を×4</strong>で受けます。ステルスロックが設置された場で繰り出すと、最大HPの<strong>1/2</strong>を場に出た瞬間に削られます。環境上位ではガブリアス（がんせきふうじ40.0%・いわなだれ23.1%）が直接いわ技で焼き、カバルドン（ステルスロック84.4%）はステルスロックでメガリザードンYの繰り出しを咎めます。
 </div>
 
 ---
@@ -350,12 +384,12 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 </div>
 </div>
 
-**採用率データとの照合**: ソーラービーム61.0%・かえんほうしゃ42.4%・エアスラッシュ32.9%・オーバーヒート26.6%という実データがこの型を裏付けています。
+**採用率データとの照合**: ソーラービーム61.0%・かえんほうしゃ42.4%・エアスラッシュ32.9%・オーバーヒート26.6%・はねやすめ22.1%はY型の主力技です（採用率はリザードン全体での集計だが、X型主流のフレアドライブ33.3%・りゅうのまい26.9%・ドラゴンクロー24.0%とは技プールが分かれており、上記の特殊技群はY型の構成を反映しています）。
 
-**ひかえめCS振りの優位性**: 種族値C159にひかえめ補正（×1.1）がかかり、ダメージ計算上はおくびょう型より約1割高い特殊火力になります（実数値そのものはEV振りとレベルで決まるため、ここでは性格補正分の伸びを指します）。ひでり込みのかえんほうしゃはD無振りのほとんどのポケモンを確定2発以内に取れます。相手がCS振りでなくHB振りのポケモンでも、ひでり×タイプ一致補正込みの高威力で突破できるケースが多い。
+**ひかえめC振りの効果**: C種族値159にひかえめ補正（×1.1）がかかり、おくびょう型より約1割高い特殊火力になります。ひでり×タイプ一致補正の実質威力202.5でD無振りの中耐久ポケモンを2発圏に入れる火力です。
 
-**ソーラービームの刺さり先**: くさが2倍以上通る相手への打点として機能します。環境上位では:
-- **カバルドン**（じめん単）: くさ×2弱点を突ける。ステロ撒きの起点役を即発動ソーラービームで牽制できる
+**ソーラービームの刺さり先**: メインのほのお・ひこう一致技が等倍以下に止まる、みず・じめん系の高耐久ポケモンを崩すためのサブウェポンです。環境上位では:
+- **カバルドン**（じめん単）: くさ×2弱点を突ける。ステルスロック撒きの起点役を即発動ソーラービームで牽制できる
 - **イダイトウ**（みず/ゴースト）: くさ×2×1=×2弱点を突ける
 - **ガブリアス**（ドラゴン/じめん）: くさ×2×0.5=等倍止まりだがC159の威力で削りは入る
 
@@ -417,11 +451,11 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 </div>
 </div>
 
-**おくびょうvs.ひかえめの選択**: おくびょうにするとSが最速100族になり、S無振り同速グループを確実に上から抜けます。ひかえめ比でCが1.1→1.0に下がりますが、先手を取れる相手の範囲が広がることで**Cに振った火力を活かす機会が増える**という考え方もあります。M-2の採用率ではひかえめ32.7%・おくびょう30.0%と拮抗しており、環境のS100ラインポケモンの多さによって選択が変わります。
+**おくびょう型とひかえめ型の差**: おくびょう最速のS実数値は167で、種族値S100帯のウルガモス（同S実数値167で同速）やそれ以下の中速ポケモンを上から動けます。一方でガブリアス（S実数値169）・マスカーニャ・ゲッコウガ・スターミー・ゲンガー・ミミロップ・マフォクシーには先手を取れません。性格採用率はひかえめ32.7%・おくびょう30.0%。
 
 ---
 
-### 型3: ステロケア意識型（ひかえめ・HB+CS）
+### 型3: HB+CS複合型（ひかえめ）
 
 <div style="background:#eff6ff;border:1px solid #93c5fd;border-radius:8px;padding:14px;margin:16px 0">
 <div class="build-header">
@@ -433,7 +467,7 @@ C159は現環境の特殊アタッカーの中でもトップクラスの数値�
 </div>
 
 <p style="font-size:0.88em;color:#555;margin:8px 0">
-Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さです。この型はBにEVを少し振ることで、物理打点（特にガブリアスのじしん等）への耐性を確保しながら特殊火力も維持するバランス型です。採用率4.6%と低いですが、ステロが撒かれやすい環境への対応策として存在感があります。
+B種族値78の物理耐久にEVを振り、ガブリアスのスケイルショット・マスカーニャのトリックフラワー・ハッサムのバレットパンチなど、ひこうで無効化できない物理技を1発耐えやすくする型です。CS両振りの火力は落ちますが、低耐久のYを物理対面でも崩されにくくする選択として4.6%が採用しています。
 </p>
 </div>
 
@@ -456,7 +490,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>ソーラービーム</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>61.0%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひでりで即発動。Y最多採用技。くさが2倍以上通る相手への打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひでりで即発動。Y最多採用技。ほのお・ひこうが等倍以下に止まるみず・じめん系を崩すサブウェポン</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> <strong>かえんほうしゃ</strong></td>
@@ -494,62 +528,83 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 
 ## 天候パーティ構築でのメガリザードンY
 
-メガリザードンYの最大の特徴はひでりの「天候パーティリーダー」としての役割です。
+メガリザードンYは単独でひでり＋C159＋ソーラービーム即発動が完結するため、天候パーティとしての構築は限定的です。同居率TOP10にもようりょくそ・すなかき等の天候依存特性ポケモンは入っていません。
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
-<thead>
-<tr style="background:#fff7ed">
-  <th style="padding:8px 12px;border:1px solid #fed7aa;text-align:left">ひでり恩恵ポケモン</th>
-  <th style="padding:8px 12px;border:1px solid #fed7aa;text-align:left">恩恵内容</th>
-  <th style="padding:8px 12px;border:1px solid #fed7aa;text-align:left">パーティでの役割</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #fed7aa"><img src="/images/types/type-09-fire.png" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ほのおタイプ全般</td>
-  <td style="padding:8px 12px;border:1px solid #fed7aa">ほのお技×1.5倍</td>
-  <td style="padding:8px 12px;border:1px solid #fed7aa">ウルガモスなど後続が強化</td>
-</tr>
-<tr style="background:#fffbeb">
-  <td style="padding:8px 12px;border:1px solid #fed7aa"><img src="/images/types/type-11-grass.png" style="width:24px;height:24px;vertical-align:middle;margin-right:5px"> ソーラービーム持ち</td>
-  <td style="padding:8px 12px;border:1px solid #fed7aa">2ターン→1ターン即発動</td>
-  <td style="padding:8px 12px;border:1px solid #fed7aa">くさタイプへの広範囲対応</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #fed7aa">葉緑素（ようりょくそ）持ち</td>
-  <td style="padding:8px 12px;border:1px solid #fed7aa">S2倍</td>
-  <td style="padding:8px 12px;border:1px solid #fed7aa">超高速くさタイプアタッカーとして機能</td>
-</tr>
-</tbody>
-</table>
-</div>
+ひでり下のほのお技×1.5の恩恵を受ける後続として、くもがくれ採用のウルガモス（晴れ下で命中率低下による耐久寄与）を組む構築は稀に見られますが、メジャーではありません。なお、くさタイプのフシギバナはメガ進化採用率93.2%でメガフシギバナ（あついしぼう）になるため、ようりょくそ運用は事実上ありません。
 
-**重要な点**: 相手がすなあらしや雨を展開していても、**メガ進化と同時ににほんばれで上書き**します。ただし相手が後から天候変化技を使う、または相手もひでり持ちを繰り出した場合は上書きされます。M-2では天候パーティへのカウンターとしてメガリザードンYを採用するケースも見られます。
+**天候の取り合い**: ひでりはメガ進化したターンに天候を「にほんばれ」にします。相手があめ・すなあらしを先に展開していても、メガリザードンYが繰り出されたターンに天候は「にほんばれ」へ書き換わります。逆に相手があとから天候変化技や天候特性ポケモンを繰り出した場合は上書きされます。
 
 ---
 
-## 弱点となる相手ポケモンと対策
+## 苦手な相手と有利な相手（TOP30から抽出）
+
+選定基準：使用率TOP30のうち、相手の主力技（採用率20%以上）でこちらの弱点を突かれる相手を「苦手」、こちらの技で弱点を突けて相手の主力技ではこちらが半減以下に抑えられる相手を「有利」とする。
+
+### 苦手な相手
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead>
 <tr style="background:#fee2e2">
-  <th style="padding:8px 12px;border:1px solid #fca5a5;text-align:left">天敵ポケモン</th>
-  <th style="padding:8px 12px;border:1px solid #fca5a5;text-align:left">理由</th>
-  <th style="padding:8px 12px;border:1px solid #fca5a5;text-align:left">対策パートナー案</th>
+  <th style="padding:8px 12px;border:1px solid #fca5a5;text-align:left">相手</th>
+  <th style="padding:8px 12px;border:1px solid #fca5a5;text-align:left">苦手な理由（技は採用率付き）</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（使用率1位）</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">S102でYのS100を上から抜く。がんせきふうじ（いわ）が4倍弱点。さらにステルスロック84%・じしん採用率99%でYの起点を作る</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">アーマーガア・ハッサム</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">じしん99.2%はひこうで無効化できるものの、S実数値169でおくびょう最速のメガリザードンY（S実数値167）を抜き、先制から放たれるがんせきふうじ40.0%・いわなだれ23.1%でいわ×4を一発で焼かれる。さらにステルスロック50.7%で繰り出し自体も最大HP1/2で咎められる</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（使用率7位）</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">じめん単タイプ。ステルスロック84%を撒きYの後出しに1/2ダメージを蓄積させる起点役（いわ技採用はほぼゼロのため直接の打点は持たない）</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">アーマーガア（デフォグでステロ除去）</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">10まんボルト66.9%でこちらでんき×2。S種族値85で遅いが、ガブリアス・マスカーニャ等の上位S帯のあとに後出しできる。ラスターカノン55.7%は×0.25（はがね半減×ひこう半減）で軽い</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">ステルスロック84.4%でメガリザードンYの繰り出しに最大HP1/2のダメージを蓄積。あくび94.2%で流される。じしん98.0%はひこうで無効だが、ステルスロック撒きの起点役として致命的</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">10まんボルト47.6%でこちらでんき×2。かえんほうしゃ47.8%はこちら半減だが、エアスラッシュ55.6%は等倍（ひこう→ほのお1×ひこう1）。でんき技採用個体には特に不利</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">S実数値183でおくびょう最速のメガリザードンY（S実数値167）を抜く。主力のアクアブレイク89.2%はひでり下で実質等倍まで軽減できるものの、しねんのずつき39.4%・サイコカッター24.7%採用のエスパー個体には先制でエスパー×2を突かれる。低耐久（H78/B78）のこちらは厳しい</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0479-05.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウォッシュロトム（22位）</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">ハイドロポンプ98.5%はひでり下で実質等倍まで軽減できるが、ボルトチェンジ88.7%・10まんボルト56.8%のでんき×2は軽減できず確定圏。ボルトチェンジで対面操作もされ、ひでりを撒き直す手間も加わる</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+### 有利な相手
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<thead>
+<tr style="background:#dcfce7">
+  <th style="padding:8px 12px;border:1px solid #86efac;text-align:left">相手</th>
+  <th style="padding:8px 12px;border:1px solid #86efac;text-align:left">有利な理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #86efac"><img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）</td>
+  <td style="padding:8px 12px;border:1px solid #86efac">むし/はがねにほのお技×4。S実数値167でハッサム（S65）を大幅に抜くが、主力のバレットパンチ99.7%は優先度+1の先制技でSの優位は無効化される。ただしバレットパンチ×0.25（はがね→ほのお0.5×ひこう0.5・テクニシャン込み実質威力60相当）は低耐久（H78/B78）でも耐えられる範囲のため、先制バレットパンチを受けてから同ターン中にかえんほうしゃ×4で焼く展開が成立する。インファイト72.4%は×0.5（かくとう→ほのお1×ひこう0.5）、はたきおとす53.6%は等倍だが、メガリザードンY側の持ち物はリザードナイトYで落とせない</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #86efac"><img src="/images/pokemon/pokemon-0003-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フシギバナ（27位）</td>
+  <td style="padding:8px 12px;border:1px solid #86efac">くさ/どくにほのお技×2・ひこう技×2。主力のだいちのちから88.4%はこちらひこうで無効、ギガドレイン56.9%は×0.25（くさ→ほのお0.5×ひこう0.5）、ヘドロばくだん55.0%は等倍（どく→ほのお1×ひこう1）でこちらの弱点を突く打点はない。ひでり下のかえんほうしゃで圧倒できる。ただしメガフシギバナの場合はあついしぼうでほのお×1相当に落ちる点に注意</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #86efac"><img src="/images/pokemon/pokemon-0681-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド（11位）</td>
+  <td style="padding:8px 12px;border:1px solid #86efac">はがね/ゴーストにかえんほうしゃ×2（はがね2×ゴースト1）。S種族値60に対し最速S実数値167で大幅に先制し、ひでり込みのかえんほうしゃで上から焼ける。かげうち96.2%は優先度+1だが等倍（ゴースト→ほのお1×ひこう1）かつC97なので致命傷にはならない。ポルターガイスト67.6%・シャドーボール26.5%も等倍止まり、アイアンヘッド30.7%は×0.25（はがね→ほのお0.5×ひこう0.5）、せいなるつるぎ31.7%は×0.5（かくとう→ほのお1×ひこう0.5）</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #86efac"><img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）</td>
+  <td style="padding:8px 12px;border:1px solid #86efac">あく/はがねにかえんほうしゃ×2（あく1×はがね2）。S種族値50に対し最速S実数値167で大幅に先制し、ひでり込みのかえんほうしゃで上から削れる。ただしふいうち99.0%は等倍（ほのお1×ひこう1）でA135の先制技が痛く、低耐久のこちらは確定数次第で拮抗する。条件付きの有利</td>
 </tr>
 </tbody>
 </table>
@@ -559,44 +614,68 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 
 ## 相性の良いパーティメンバー
 
+リザードンの同居率TOP10（M-2、最新クロール）は以下です。
+
 <div class="partner-grid">
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
-    <div class="name">アーマーガア</div>
-    <div class="rate">ステロ除去・物理受け</div>
+    <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ">
+    <div class="name">アシレーヌ（同居率1位）</div>
+    <div class="rate">特殊エースの補完</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ">
-    <div class="name">ルカリオ</div>
-    <div class="rate">いわ対策・フェアリー対策</div>
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
+    <div class="name">アーマーガア（2位）</div>
+    <div class="rate">物理受け・とんぼがえり</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
-    <div class="name">ガブリアス</div>
-    <div class="rate">自軍ならステロ展開役（対面では天敵）</div>
+    <div class="name">ガブリアス（3位）</div>
+    <div class="rate">ステルスロック展開役</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
-    <div class="name">ブリジュラス</div>
-    <div class="rate">いわ受け・相互補完</div>
+    <div class="name">ブリジュラス（4位）</div>
+    <div class="rate">いわ・でんき受け</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
+    <div class="name">マスカーニャ（5位）</div>
+    <div class="rate">高速物理アタッカー</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン">
+    <div class="name">カバルドン（6位）</div>
+    <div class="rate">ステルスロック展開役</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)">
+    <div class="name">イダイトウ(オス)（7位）</div>
+    <div class="rate">みず物理アタッカー</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ">
+    <div class="name">ミミッキュ（8位）</div>
+    <div class="rate">ばけのかわ起点・つるぎのまい</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ">
+    <div class="name">ルカリオ（9位）</div>
+    <div class="rate">かくとう・はがねアタッカー</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド">
-    <div class="name">ギルガルド</div>
-    <div class="rate">いわ受け・特殊耐性</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム">
-    <div class="name">ハッサム</div>
-    <div class="rate">フェアリー・いわ対策</div>
+    <div class="name">ギルガルド（10位）</div>
+    <div class="rate">いわ受け・キングシールド</div>
   </div>
 </div>
 
-**アーマーガアが最重要パートナー**: メガリザードンYにとって最も危険なのはステロによる1/2ダメージです。アーマーガアはデフォグでステロを除去でき、さらにガブリアスのじしんをひこうタイプで無効化、がんせきふうじ（いわ）も耐性で受けられます。具体的な運用は「初手でガブリアス等のステロ撒きを誘い、アーマーガアでデフォグ→ステロのない盤面でメガリザードンYを後出し」という流れ。これによりYは登場時の1/2ダメージを回避し、満タンからかえんほうしゃ・ソーラービームの確定数計算通りに殴れます。
+**アーマーガア（同居率2位）の役割**: 同居率2位の物理受け。はねやすめ98.1%・てっぺき63.5%で耐久を確保し、とんぼがえり62.1%でメガリザードンYを安全に後投げできます。ガブリアスのじしん99.2%をひこうで無効化できる点は重要ですが、いわ技は「はがね半減×ひこう弱点＝等倍」で受けるため、いわ技の受け役にはなりません。設置技除去のきりばらいは採用率13.6%で少数派なので、ステルスロック対策の主役にはなりにくい点に注意。
 
-**ガブリアスは自軍採用と対面で役割が逆**: 上記の天敵表のガブリアスは「相手の」ガブリアスを指します。自軍に採用する場合はステロ撒き・物理崩し役として優秀で、Yのいわ4倍を突いてくる相手（カバルドンなど）への先制ステロ返しにも使えます。
+**ガブリアス・カバルドン（同居率3位・6位）の役割**: 自軍に採用すればステルスロック撒き役。ガブリアスのステルスロック採用率は50.7%、カバルドンは84.4%。相手のメガリザードンY・ウルガモス等のいわ×4ポケモンを削る起点になります。「対面で苦手な相手」と「自軍に入れたいパートナー」が同一ポケモンなのは、ステルスロックという技自体の役割の重さを示しています。
 
-**天候パーティとの組み合わせ**: ひでりが発動した後、**ウルガモス（ほのおタイプ・ひでり恩恵）**などを後続に置くことで、メガリザードンYが倒された後も後続のほのお技×1.5を維持できます。
+**ブリジュラス（同居率4位）の役割**: メガリザードンYが弱点とするいわ（はがね0.5×ドラゴン1=×0.5）・でんき（はがね0.5×ドラゴン0.5=×0.25）・みず（はがね0.5×ドラゴン0.5=×0.25）をすべて半減以下で受けられる耐性補完。メガリザードンYが苦手なウォッシュロトムのハイドロポンプも半減（×0.25）で受け、10まんボルト（採用率66.9%）で反撃できます。
+
+**後続のほのおアタッカー**: ウルガモス（使用率18位）は同居率TOP10圏外ながら、ひでり下で自分のほのお技も×1.5になる強化対象です。ただし同居率上位はアシレーヌ・アーマーガア・ガブリアスなど天候非依存のポケモンが占めており、天候パーティとしての採用は限定的。晴れ下のソーラービーム即発動と一致補正で**単独でも完結する特殊エース**としての運用が主流です。
 
 ---
 
@@ -635,10 +714,10 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 <tr>
   <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">最大弱点</td>
   <td style="padding:8px 14px;border:1px solid #cbd5e1">4倍弱点なし（5種2倍）</td>
-  <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fee2e2"><strong>いわ4倍（ステロ1/2）</strong></td>
+  <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fee2e2"><strong>いわ4倍（ステルスロック1/2）</strong></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ステロダメージ</td>
+  <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ステルスロックダメージ</td>
   <td style="padding:8px 14px;border:1px solid #cbd5e1">1/4</td>
   <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fee2e2"><strong>1/2（致命的）</strong></td>
 </tr>
@@ -650,7 +729,7 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 <tr style="background:#fafafa">
   <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">天候シナジー</td>
   <td style="padding:8px 14px;border:1px solid #cbd5e1">なし</td>
-  <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fefce8"><strong>天候パーティのリーダー</strong></td>
+  <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fefce8"><strong>ひでり自己完結（天候パーティ採用は限定的）</strong></td>
 </tr>
 <tr>
   <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">Yを選ぶ状況</td>
@@ -663,34 +742,43 @@ Yの最大の問題はステロによる1/2ダメージとぼうぎょの低さ�
 
 ---
 
-## データ分析①：ひでり補正が生む実質火力 — 通常のほのおアタッカーとの比較
+## データ分析①：リザードナイトY 63.6% vs X 34.9% — 同一ポケモンでメガ型が二極化する構造
 
-メガリザードンYの最大の強みである「C159×ひでり」の火力を定量的に示します。かえんほうしゃの実質威力を条件別に比較すると以下の通りです。
+同じポケモンの2系統のメガ石が両方とも30%超で採用されるのは現環境でも稀です。リザードンの場合、リザードナイトY（63.6%）とリザードナイトX（34.9%）が併存し、それぞれ別系統の技プールに分かれています。
 
-| 条件 | 実質威力（かえんほうしゃ） | 計算式 |
+| 系統 | 主力技と採用率 | 役割 |
 |---|---|---|
-| 一般的なほのおアタッカー（タイプ一致のみ） | 135 | 威力90×1.5 |
-| メガリザードンY（おくびょう・ひでりあり） | 202.5 | 威力90×1.5×1.5 |
-| **メガリザードンY（ひかえめ・ひでりあり）** | **222** | **威力90×1.5×1.5×1.1** |
+| Y型主流 | ソーラービーム61.0%・かえんほうしゃ42.4%・エアスラッシュ32.9%・オーバーヒート26.6%・はねやすめ22.1% | C種族値159＋ひでりの特殊エース |
+| X型主流 | フレアドライブ33.3%・ニトロチャージ28.9%・りゅうのまい26.9%・ドラゴンクロー24.0%・かみなりパンチ18.2% | かたいツメ＋りゅうのまい起点の物理積みエース |
 
-ひかえめCS型のかえんほうしゃ（実質222）は、一般的なほのおアタッカー（実質135）と比べると**約1.65倍の火力**を誇ります。同じ技名でも受けるダメージはまったく別物です。
+技採用率はリザードン全体での集計ですが、特殊技（ソーラービーム・かえんほうしゃ・オーバーヒート）と物理技（フレアドライブ・ニトロチャージ・ドラゴンクロー）が明確に分かれており、合算採用率がそのまま各メガ石の採用率（Y=63.6%、X=34.9%）に近くなっています。**対策側はリザードン選出時にY型かX型かを読まないと対面を誤る**——Y型を想定してD振り受けを選ぶと、X型のドラゴンクロー＋りゅうのまいで物理側から崩される、という非対称な読み合いが発生します。
 
-ソーラービームが採用率1位（61.0%）である理由も定量的に説明できます。通常は2ターン必要なソーラービームが、ひでり下では1ターンで即発動します。つまり「みず/いわ/じめんへの打点」を**タイムコストゼロで追加できる**という効果です。かえんほうしゃで通常の相手を処理しながら、弱点タイプにはソーラービームで対応するという構成が、ひでりがある限りほぼノーコストで成立するためソーラービームの採用が合理的になっています。
+## データ分析②：Y型主力技と環境TOP10のタイプ相性カバレッジ
 
-また、オーバーヒートはひでり込みで実質威力292.5（威力130×1.5×1.5）に達します。C-2デメリットを受け入れた上でも、この1発でほとんどのポケモンを確定圏内に捉えられるため、26.6%という一定の採用率が維持されています。
+Y型の主力2技（かえんほうしゃ＋ソーラービーム）が環境TOP10へどう刺さるかを倍率で示します。
 
-**この火力が立ち回りに与える示唆**は「弱点を突かない相手すら2発で落とせる」点にあります。ひかえめCS型のかえんほうしゃ（実質222）は、ほのおを等倍で受けるカバルドン（じめん単・使用率7位）のようなHB寄りの高耐久にも刺さり、ソーラービーム（くさ×2弱点）と合わせれば確定2発が見込めます。一方で**逆算すると弱点を突かれた側のYは1発で沈む**——ガブリアスのがんせきふうじ（いわ4倍）はYに対し、ステロ1/2の蓄積がなくても高乱数〜確定1発の圏内です。つまり「Yは殴り合えば2発で大半を落とすが、いわ技には触れた瞬間に落ちる」という非対称性こそが、ステロ管理と素早さラインの見極めが勝敗を分ける理由になっています。
+| 順位 | ポケモン | かえんほうしゃ | ソーラービーム |
+|---|---|---|---|
+| 1 | ガブリアス（ドラゴン/じめん） | ×0.5（ほのお0.5×じめん1） | ×1（くさ2×ドラゴン0.5） |
+| 2 | ブリジュラス（はがね/ドラゴン） | ×1（はがね2×ドラゴン0.5） | ×0.25（くさ0.5×はがね0.5） |
+| 3 | マスカーニャ（くさ/あく） | ×2（くさ2×あく1） | ×0.5（くさ半減） |
+| 4 | アシレーヌ（みず/フェアリー） | ×0.25（ほのお0.5×フェアリー0.5） | ×2（くさ2×フェアリー1） |
+| 5 | リザードン（ほのお/ひこう） | ×0.5 | ×0.25（くさ0.5×ひこう0.5） |
+| 6 | アーマーガア（はがね/ひこう） | ×2（はがね2×ひこう1） | ×0.25 |
+| 7 | カバルドン（じめん） | ×1 | ×2 |
+| 8 | イダイトウ(オス)（みず/ゴースト） | ×0.5 | ×2（くさ2×ゴースト1） |
+| 9 | ルカリオ（かくとう/はがね） | ×2（はがね2×かくとう1） | ×0.5（かくとう1×はがね0.5） |
+| 10 | ギルガルド（はがね/ゴースト） | ×2（はがね2×ゴースト1） | ×0.5（くさ0.5×ゴースト1） |
+
+かえんほうしゃ単体ではTOP10のうち**4体に×2、2体に×1、4体に×0.5以下**。ソーラービームは**3体に×2、1体に×1、6体に×0.5以下**。**2技を併用すると、リザードンを除くTOP10の9体すべてに×1以上の打点が成立**します（同タイプのリザードン以外でカバレッジが不足する相手はいない）。ソーラービームの採用率が61.0%と最も高い理由は、ほのお技を半減・無効化するみず／じめん／いわタイプの高耐久相手（環境上位ではアシレーヌ・カバルドン・イダイトウなど）を弱点で抜くためです。
 
 ---
 
 ## まとめ
 
-メガリザードンYはM-2シーズンで全リザードン採用の**63.6%**を占める、トップクラスの特殊アタッカーです。
+メガリザードンYはM-2シーズンで全リザードン採用の**63.6%**を占める特殊エースです。
 
-- **C159×ひでり**の組み合わせでかえんほうしゃの実質威力は202.5——安定した高火力
-- **ソーラービーム即発動**によりくさが2倍以上通る相手への打点を確保できる広い技範囲
-- **いわ4倍弱点・ステロ1/2ダメージ**は致命的→アーマーガアなどのステロ対策ポケモンとのセットが前提
-- **天候パーティのリーダー**として後続ポケモンへ恩恵を与えるパーティ全体設計が可能
-- **ひでり天候展開を軸にしたパーティ構築**が最大の強みを引き出す
-
-いわ4倍という大きなリスクを抱えながらも、それを補える高い特殊火力がM-2環境でYを選ぶ主な理由です。**ステロを撒かせない守りの構築**と組み合わせることで、メガリザードンYはトップクラスの特殊アタッカーとして機能します。
+- **C種族値159×ひでり**でかえんほうしゃ実質威力202.5（ひかえめならC実数値232）
+- **ソーラービーム即発動**でアシレーヌ・カバルドン・イダイトウ等のみず/じめん受けに×2の打点
+- **いわ×4・ステルスロック最大HP1/2**——カバルドン（ステルスロック84.4%）・ガブリアス（いわ技合算約63%）が苦手
+- **同居率1〜4位はアシレーヌ・アーマーガア・ガブリアス・ブリジュラス**で、ステルスロック展開役（ガブリアス・カバルドン）と耐性補完（アーマーガア・ブリジュラス）を組み合わせるのが定番
