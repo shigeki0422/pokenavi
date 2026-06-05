@@ -1,0 +1,81 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = '運営者情報 | ポケナビ';
+const description = 'ポケナビの運営方針・コンテンツ作成方針・サイト運営者について紹介します。';
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 2em 1.5em 4em;
+        color: rgb(var(--gray-dark));
+        line-height: 1.8;
+      }
+      h1 { font-size: 1.6rem; margin-bottom: 0.4em; }
+      h2 { font-size: 1.15rem; margin: 2em 0 0.5em; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3em; }
+      p, li { font-size: 0.95rem; }
+      ul { padding-left: 1.4em; }
+      .updated { font-size: 0.82rem; color: rgb(var(--gray)); margin-bottom: 2em; }
+      a { color: rgb(var(--accent)); }
+      .profile-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1em 0;
+        font-size: 0.92rem;
+      }
+      .profile-table th, .profile-table td {
+        padding: 0.6em 0.8em;
+        border: 1px solid #e2e8f0;
+        text-align: left;
+      }
+      .profile-table th {
+        background: #f8fafc;
+        width: 10em;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>運営者情報</h1>
+      <p class="updated">最終更新日：2026年6月5日</p>
+
+      <h2>サイト概要</h2>
+      <table class="profile-table">
+        <tr><th>サイト名</th><td>ポケナビ</td></tr>
+        <tr><th>URL</th><td>https://pokenavi.jp</td></tr>
+        <tr><th>運営開始</th><td>2026年5月</td></tr>
+        <tr><th>対象</th><td>ポケモンチャンピオンズ（ランクマッチ・対戦勢）</td></tr>
+        <tr><th>運営者</th><td>ポケナビ運営チーム</td></tr>
+      </table>
+
+      <h2>運営方針</h2>
+      <p>ポケナビは、ポケモン対戦における意思決定を「データの観点」から支援することを目的としたサイトです。プレイヤーの経験則や直感だけに頼らず、使用率・採用率・同居率といった実データを根拠に、ポケモンごとの考察記事を執筆しています。</p>
+
+      <h2>コンテンツ作成方針</h2>
+      <p>本サイトの記事は、以下の方針で執筆しています。</p>
+      <ul>
+        <li><strong>事実に基づく分析</strong>：「強い」「弱い」の評価は必ず採用率・使用率・ダメージ倍率などの数値を根拠とします</li>
+        <li><strong>公平性の重視</strong>：有利な相手・不利な相手の両方を網羅的に提示し、特定の主張に都合の良いデータだけを抽出しないことを徹底します</li>
+        <li><strong>正確性の検証</strong>：複合タイプの相性は2タイプの倍率を必ず掛け合わせて計算し、技や特性の効果はゲーム仕様に基づいて記述します</li>
+        <li><strong>独立レビュー</strong>：すべての記事は公開前に20以上の観点で検証し、事実誤認・公平性違反を洗い出した上で公開しています</li>
+      </ul>
+
+      <h2>免責事項</h2>
+      <p>本サイトに掲載している情報は、できる限り正確を期していますが、内容の完全性・正確性・有用性を保証するものではありません。本サイトの利用によって生じたいかなる損害についても、運営者は責任を負いません。詳細は<a href="/privacy">プライバシーポリシー</a>をご覧ください。</p>
+
+      <h2>著作権</h2>
+      <p>本サイト掲載のテキスト・図表は、特に明記がない限り当サイト運営者に帰属します。ポケモン・関連用語・キャラクター画像等の著作権は株式会社ポケモン・任天堂株式会社等に帰属します。</p>
+
+    </main>
+    <Footer />
+  </body>
+</html>

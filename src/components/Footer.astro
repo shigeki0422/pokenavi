@@ -4,6 +4,8 @@ const today = new Date();
 
 <footer>
 	<div class="links">
+		<a href="/about">運営者情報</a>
+		<span class="sep">|</span>
 		<a href="/privacy">プライバシーポリシー</a>
 	</div>
 	&copy; 2026 ポケナビ
@@ -22,5 +24,10 @@ const today = new Date();
 	.links a {
 		color: rgb(var(--gray));
 		text-decoration: underline;
+	}
+	.links .sep {
+		margin: 0 0.6em;
+		color: rgb(var(--gray));
+		opacity: 0.5;
 	}
 </style>
