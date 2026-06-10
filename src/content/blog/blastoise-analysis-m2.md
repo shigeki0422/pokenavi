@@ -313,6 +313,7 @@ heroImage: '../../assets/hero-blastoise-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> げきりゅう（71.7%）<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
 <strong>EV:</strong> C32 S32（最多はCS+H2振り）<br>
 <strong>持ち物:</strong> カメックスナイト
@@ -351,6 +352,7 @@ heroImage: '../../assets/hero-blastoise-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> げきりゅう（71.7%）<br>
 <strong>性格:</strong> おくびょう（S↑ A↓）<br>
 <strong>EV:</strong> C32 S32（CS振り）<br>
 <strong>持ち物:</strong> カメックスナイト

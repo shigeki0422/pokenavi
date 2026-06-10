@@ -327,6 +327,7 @@ HP95・ぼうぎょ93・とくぼう110とバランスの取れた耐久に、�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> マジックミラー（メガ後）/ てんねん（83.9%）<br>
 <strong>性格:</strong> ずぶとい（B↑ C↓）<br>
 <strong>EV:</strong> H32 B32（HB振り。最多分布。余りはDかS）<br>
 <strong>持ち物:</strong> ピクシナイト
@@ -363,6 +364,7 @@ HBずぶといで物理方面を厚くし、ガブリアスのじしん無効を
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> マジックミラー（メガ後）/ てんねん（83.9%）<br>
 <strong>性格:</strong> おだやか（D↑ A↓）<br>
 <strong>EV:</strong> H32 D32（HD振り。特殊受け型）<br>
 <strong>持ち物:</strong> ピクシナイト

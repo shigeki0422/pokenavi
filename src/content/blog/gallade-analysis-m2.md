@@ -254,6 +254,7 @@ heroImage: '../../assets/hero-gallade-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> きれあじ（90.5%）<br>
 <strong>性格:</strong> ようき（S↑）<br>
 <strong>EV:</strong> A32 S32 H2（最多スプレッド、採用率48.0%）<br>
 <strong>持ち物:</strong> こだわりスカーフ
@@ -288,6 +289,7 @@ heroImage: '../../assets/hero-gallade-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> きれあじ（90.5%）<br>
 <strong>性格:</strong> ようき（S↑）<br>
 <strong>EV:</strong> A32 S32（AS振り）<br>
 <strong>持ち物:</strong> きあいのタスキ

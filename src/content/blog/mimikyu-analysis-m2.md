@@ -251,6 +251,7 @@ EV振りの最多は **A32 S32**（こうげき・すばやさ最大振り、余
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> ばけのかわ（100.0%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> A32 S32（余り2はHかBに）<br>
 <strong>持ち物:</strong> のろいのおふだ / ラムのみ / ピントレンズ
@@ -291,6 +292,7 @@ EV上位に **H28 A30 B7 S1**・**H32 A32 B2** などHAB寄りでSを捨てた�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> ばけのかわ（100.0%）<br>
 <strong>性格:</strong> いじっぱり / わんぱく<br>
 <strong>EV:</strong> H32 A32 B2（HAB寄り、S最小）<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ

@@ -259,6 +259,7 @@ EVスプレッドはHA基本（HP・こうげき両振り）と、すばやさ�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> そうだいしょう（88.9%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> H32 A32（余り2はS/B/Dへ）<br>
 <strong>持ち物:</strong> くろいメガネ
@@ -297,6 +298,7 @@ H32A32でHP・物理耐久を確保しつつ、こうげき135に最大振りと
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> そうだいしょう（88.9%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> A32 S32（余りはHへ）<br>
 <strong>持ち物:</strong> くろいメガネ / きあいのタスキ

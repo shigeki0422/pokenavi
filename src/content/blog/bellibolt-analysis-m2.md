@@ -231,6 +231,7 @@ HP109に防御91・とくぼう83とバランスの取れた耐久を持ちま�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> でんきにかえる（99.5%）<br>
 <strong>性格:</strong> おだやか（D↑ A↓）<br>
 <strong>EV:</strong> H32 D32（HD振り。余りをBに振る個体も多い）<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ
@@ -267,6 +268,7 @@ A方向に振らないため打点はパラボラチャージのみで、毒の�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> でんきにかえる（99.5%）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）<br>
 <strong>EV:</strong> H32 B32（HB振り）<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ

@@ -268,6 +268,7 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> ふゆう（100.0%）<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）／おくびょう（S↑ C↓）<br>
 <strong>EV:</strong> C32 S32（最多型はH+2振り）<br>
 <strong>持ち物:</strong> こだわりスカーフ
@@ -306,6 +307,7 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> ふゆう（100.0%）<br>
 <strong>性格:</strong> おくびょう（S↑ C↓）<br>
 <strong>EV:</strong> C32 S32<br>
 <strong>持ち物:</strong> きあいのタスキ

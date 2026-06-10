@@ -267,9 +267,9 @@ heroImage: '../../assets/hero-meganium-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> しんりょく（74.3%）／メガ後はメガソーラー<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
 <strong>EV:</strong> H32 C32（余りはSへ少量振る個体が多い）<br>
-<strong>特性:</strong> メガソーラー（メガ後）<br>
 <strong>持ち物:</strong> メガニウムナイト
 </div>
 <div>

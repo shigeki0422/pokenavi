@@ -249,6 +249,7 @@ heroImage: '../../assets/hero-espathra-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> かそく（99.5%）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）<br>
 <strong>EV:</strong> H32 B30 D2 S2（最多のHB+ds型）<br>
 <strong>持ち物:</strong> オボンのみ / たべのこし
@@ -287,6 +288,7 @@ heroImage: '../../assets/hero-espathra-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> かそく（99.5%）<br>
 <strong>性格:</strong> おくびょう（S↑ A↓）/ ひかえめ（C↑ A↓）<br>
 <strong>EV:</strong> C32 S32 H2（最多のCS+h型）<br>
 <strong>持ち物:</strong> きあいのタスキ / オボンのみ

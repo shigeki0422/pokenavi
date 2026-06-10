@@ -326,7 +326,7 @@ heroImage: '../../assets/hero-greninja-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> へんげんじざい<br>
+<strong>特性:</strong> へんげんじざい（82.4%）<br>
 <strong>性格:</strong> おくびょう（S↑ A↓）<br>
 <strong>EV:</strong> C32 S32（CS振り。最多はH+2）<br>
 <strong>持ち物:</strong> きあいのタスキ
@@ -363,7 +363,7 @@ heroImage: '../../assets/hero-greninja-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> へんげんじざい<br>
+<strong>特性:</strong> へんげんじざい（82.4%）<br>
 <strong>性格:</strong> おくびょう（S↑ A↓）<br>
 <strong>EV:</strong> C32 S32（CS振り）<br>
 <strong>持ち物:</strong> ゲッコウガナイト

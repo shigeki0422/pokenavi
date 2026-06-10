@@ -297,6 +297,7 @@ HP105・B100・D100と耐久が高水準でまとまり、A125の攻撃力と合
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> きもったま（90.9%）※メガ後おやこあい<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> A32 S32（余りをHBに）<br>
 <strong>持ち物:</strong> ガルーラナイト
@@ -335,6 +336,7 @@ HBへの振りが余り程度のため耐久面はメガ後の素の数値頼み
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> きもったま（90.9%）※メガ後おやこあい<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> H32 A32（耐久重視）<br>
 <strong>持ち物:</strong> ガルーラナイト

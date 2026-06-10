@@ -330,6 +330,7 @@ heroImage: '../../assets/hero-delphox-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> もうか（92.6%）<br>
 <strong>性格:</strong> おくびょう（S↑ A↓）<br>
 <strong>EV:</strong> C32 S32（CS振り。余りはHに振り18.2%が最多）<br>
 <strong>持ち物:</strong> マフォクシナイト
@@ -364,6 +365,7 @@ S134で先手を取りながらわるだくみを積めるのが核です。1積
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> もうか（92.6%）<br>
 <strong>性格:</strong> おくびょう（S↑ A↓）<br>
 <strong>EV:</strong> C32 S32（CS振り）<br>
 <strong>持ち物:</strong> マフォクシナイト

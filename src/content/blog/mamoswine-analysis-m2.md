@@ -245,6 +245,7 @@ heroImage: '../../assets/hero-mamoswine-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> あついしぼう（71.3%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> A32 S32（AS振り。余り2はHに振る個体が最多48.0%）<br>
 <strong>持ち物:</strong> きあいのタスキ

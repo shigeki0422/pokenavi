@@ -279,9 +279,9 @@ HP95・D125の特殊耐久に対し、B79は控えめで物理方面はそれほ
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> かちき（45.2%）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）<br>
 <strong>EV:</strong> H32 B32（HB全振り。最多型）<br>
-<strong>特性:</strong> かちき / ふしぎなうろこ<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ
 </div>
 <div>
@@ -318,9 +318,9 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> かちき（45.2%）<br>
 <strong>性格:</strong> おだやか（D↑ A↓）<br>
 <strong>EV:</strong> H32 D32（HD振り）<br>
-<strong>特性:</strong> かちき<br>
 <strong>持ち物:</strong> たべのこし
 </div>
 <div>
