@@ -1,0 +1,75 @@
+---
+import meta from '../data/article-meta.json';
+
+interface Props {
+	currentSlug: string;
+	body: string;
+	max?: number;
+}
+
+const { currentSlug, body, max = 12 } = Astro.props;
+
+type Meta = Record<string, { name: string; rank: number; types: string[]; matchKey: string }>;
+const m = meta as Meta;
+
+// 本文に matchKey が登場する他記事を抽出（使用率順）
+const mentioned = Object.entries(m)
+	.filter(([slug, v]) => slug !== currentSlug && body.includes(v.matchKey))
+	.map(([slug, v]) => ({ slug, ...v }))
+	.sort((a, b) => a.rank - b.rank)
+	.slice(0, max);
+---
+
+{mentioned.length > 0 && (
+	<aside class="mentioned">
+		<h2>この記事に登場するポケモンの考察</h2>
+		<div class="chips">
+			{mentioned.map((e) => (
+				<a class="chip" href={`/blog/${e.slug}/`}>
+					<span class="chip-rank">{e.rank}位</span>{e.name}
+				</a>
+			))}
+		</div>
+	</aside>
+)}
+
+<style>
+	.mentioned {
+		margin: 2.5rem 0 0;
+		padding: 1.5rem 0 0;
+		border-top: 1px solid #e2e8f0;
+	}
+	.mentioned h2 {
+		font-size: 1.1rem;
+		margin: 0 0 1rem;
+		color: rgb(var(--gray-dark));
+	}
+	.chips {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+	}
+	.chip {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		padding: 6px 12px;
+		border: 1px solid #e2e8f0;
+		border-radius: 999px;
+		font-size: 0.85rem;
+		font-weight: 600;
+		text-decoration: none;
+		color: rgb(var(--gray-dark));
+		background: #fff;
+		transition: background 0.15s, border-color 0.15s;
+	}
+	.chip:hover {
+		background: #f8fafc;
+		border-color: #cbd5e1;
+	}
+	.chip-rank {
+		font-size: 0.72rem;
+		font-weight: 700;
+		color: #e67e22;
+	}
+</style>

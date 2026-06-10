@@ -7,11 +7,12 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
+import MentionedPokemon from '../components/MentionedPokemon.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
 
-type Props = CollectionEntry<'blog'>['data'] & { slug?: string };
+type Props = CollectionEntry<'blog'>['data'] & { slug?: string; body?: string };
 
-const { title, description, pubDate, updatedDate, heroImage, slug } = Astro.props;
+const { title, description, pubDate, updatedDate, heroImage, slug, body } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
 const articleUrl = new URL(Astro.url.pathname, Astro.site).toString();
@@ -111,6 +112,7 @@ const breadcrumbJsonLd = {
 					<slot />
 					<AdUnit />
 					<AffiliateProducts category="pokemon" />
+					{body && <MentionedPokemon currentSlug={slug ?? ''} body={body} />}
 					<RelatedPosts currentSlug={slug ?? ''} />
 				</div>
 			</article>
