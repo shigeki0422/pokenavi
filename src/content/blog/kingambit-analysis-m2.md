@@ -51,7 +51,7 @@ heroImage: '../../assets/hero-kingambit-m2.png'
 
 ### 2. そうだいしょうで火力を底上げ
 
-特性**そうだいしょう**（採用率88.9%）は、味方が倒されるたびにこうげき・とくこうが上がる特性です。試合が進み後続が削られた終盤ほど火力が伸び、こうげき135がさらに底上げされます。終盤にふいうち＋つるぎのまいの積みが合わさると、半端な耐久では受けきれない火力になります。
+特性**そうだいしょう**（採用率88.9%）は、登場時にその試合で倒れた味方1体につき技の威力が10%上がる特性です（最大5体で+50%）。倒れた数は登場した瞬間に固定されるため、後続を失った終盤に繰り出すほど威力補正が大きくなります。+50%まで乗ればこうげき135の打点が大幅に伸び、ここにつるぎのまいの積みが合わさると半端な耐久では受けきれない火力になります。
 
 ### 3. 耐性の多いタイプで居座りやすい
 
@@ -245,7 +245,7 @@ heroImage: '../../assets/hero-kingambit-m2.png'
 
 ## 主要型の解説
 
-EVスプレッドはHA基本（HP・こうげき両振り）と、すばやさを伸ばすAS型に大別されます。下記は性格分布（いじっぱり92.0%が大半）と、`pokemon_evs` の振り分布を指標としています。
+EVスプレッドはHA基本（HP・こうげき両振り）と、すばやさを伸ばすAS型に大別されます。下記は性格分布（いじっぱり92.0%が大半）とEVの振り分布を指標としています。
 
 ### 型1: つるぎのまいHA耐久型（最多採用）
 
@@ -313,11 +313,11 @@ H32A32でHP・物理耐久を確保しつつ、こうげき135に最大振りと
 
 **強み:**
 
-すばやさを伸ばすことで、HA型では先手を取れないすばやさ50〜80帯（カバルドンS47・ハッサムS65・アーマーガアS67等）に対しドゲザン・アイアンヘッドを先に通せます。ふいうち頼みだったHA型に対し、攻撃技の選択肢を読まれても通常技で上から殴れる試合が増えます。きあいのタスキ（採用率12.8%）を持てば、かくとう×4弱点で本来一撃で落ちる相手にも1回行動を保証できます。
+すばやさを最大まで振るとS実数値は約86になり、HA型（S実数値約70）では抜けないアシレーヌ・ギルガルド（ともに種族値S60）などすばやさに振らない低速ポケモンに、ドゲザン・アイアンヘッドを先に通せます。ふいうち頼みだったHA型に対し、攻撃技の選択肢を読まれても通常技で上から殴れる試合が増えます。ただし抜ける範囲はこの低速帯に限られ、S65以上の相手はS投資で容易にこちらを上回ります。きあいのタスキ（採用率12.8%）を持てば、かくとう×4弱点で本来一撃で落ちる相手にも1回行動を保証できます。
 
 **弱み:**
 
-Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積むために1ターン耐える動きが安定しません。すばやさ50を伸ばしても環境上位の高速アタッカー（メガルカリオS112・メガスターミーS120等）には届かないため、抜ける範囲は中速までに限られます。
+Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積むために1ターン耐える動きが安定しません。S投資のわりに種族値50が低く、環境上位の高速アタッカー（メガルカリオS112・メガスターミーS120等）には遠く届かないため、ふいうちの先制が依然として主力である点はHA型と変わりません。
 
 ---
 
@@ -325,7 +325,7 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
 
 ### 有利・五分なポケモン
 
-使用率上位（TOP30目安）のうち、ドドゲザンと相性がはっきり出る相手を有利・不利の両面から挙げます。あく/はがねはエスパー無効・多耐性で受けに強い一方、すばやさ50と低く、相手の主力技がかくとう・ほのお・じめんならふいうち以外で勝負しづらい点に注意してください。相手の技は採用率（`pokemon_moves`）を確認したうえで選定しています。
+使用率上位（TOP30目安）のうち、ドドゲザンと相性がはっきり出る相手を有利・不利の両面から挙げます。あく/はがねはエスパー無効・多耐性で受けに強い一方、すばやさ50と低く、相手の主力技がかくとう・ほのお・じめんならふいうち以外で勝負しづらい点に注意してください。相手の技は採用率を確認したうえで選定しています。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -342,7 +342,7 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガスターミー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー無効でしねんのずつき（39%）・サイコカッター（25%）を透かせる。主力のアクアブレイク（89%）は等倍、アイススピナー（65%）ははがねで×0.5。ドゲザン（みず1×エスパー2＝×2）で大ダメージ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー無効でしねんのずつき（39%）・サイコカッター（25%）を透かせる。主力のアクアブレイク（89%）ははがねで×0.5、アイススピナー（65%）も×0.5。ドゲザン（みず1×エスパー2＝×2）で大ダメージ</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -355,15 +355,15 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（格闘技に注意）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（82%・どく）を無効、シャドーボール（71%）も×0.5半減。ドゲザン・ふいうち（ともにゴースト2×どく1＝×2）が刺さる。ただしきあいだま（37%・かくとう）はこちらに×4のため、きあいだまを持つ個体には後出し不可</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分（格闘技に注意）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（82%・どく）を無効、シャドーボール（71%）も×0.5半減。ドゲザン・ふいうち（ともにゴースト2×どく1＝×2）が刺さる。ただしきあいだま（37%・かくとう）はこちらに×4で、3個体に1体以上が後出し不可。きあいだま非搭載個体には有利だが、採用率が高いため後出しは読みが必要</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0670-05.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ:永遠（17位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッドがフェアリー単体に×2。主力のムーンフォース（87%・フェアリー2×はがね0.5）はこちらに等倍で通り、めいそう（86%）を積まれると等倍でも負担が大きい。S50＜92で先手は取られるがふいうちで縛れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッドがフェアリー単体に×2。主力のムーンフォース（87%・フェアリー2×はがね0.5）はこちらに等倍で通り、めいそう（86%）を積まれると等倍でも負担が大きい。メガ後S102でこちらのS50より速く先手は取られるがふいうちで縛れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -395,14 +395,14 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガルカリオ（9位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（72%・かくとう）が×4。S112で先手を取られ、てきおうりょく補正の一致かくとう技で物理耐久ごと一撃。ふいうちはあく0.5×はがね0.5＝×0.25で削りも通らない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう・エスパー・フェアリーなどかくとうを半減/無効するポケモン（アーマーガア・ゲンガー等）を同伴し、ルカリオの前に引いて受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとうを無効化するゴースト（ゲンガー・ミミッキュ）や半減するエスパー・フェアリーを同伴し、ルカリオの前に引いて受ける</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0428-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガミミロップ（13位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（61%）・とびひざげり（34%・かくとう）が×4。S135で先手を取られ、ねこだまし（63%）でひるませてからかくとう技で一撃</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとうを半減/無効するひこう（アーマーガア）・エスパーを同伴し、後続から受けてかくとう技を透かす</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとうを無効化するゴースト（ゲンガー）や半減するエスパー・フェアリーを同伴し、後続から受けてかくとう技を透かす</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -415,7 +415,7 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2、S100で先手。こちらのあく技は等倍止まり、アイアンヘッドはメガY（ほのお/ひこう）に×0.5、メガX（ほのお/ドラゴン）には×0.25と打点が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2、S100で先手。こちらのあく技はメガY（ほのお/ひこう）に等倍・メガX（ほのお/ドラゴン）に×0.5、アイアンヘッドもメガYに×0.5・メガXに×0.25と打点が乏しい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・いわ・でんきタイプを同伴し、リザードンに後出しして弱点を突いて処理する</td>
 </tr>
 <tr>
@@ -446,7 +446,7 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
     <img src="/images/pokemon/pokemon-0655-00.webp" alt="マフォクシー">
     <div class="name">マフォクシー</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">S104の高速特殊枠で、低速のドドゲザンが苦手な相手に上から打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">メガ後S134の高速特殊枠で、低速のドドゲザンが苦手な相手に上から打点</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
@@ -464,7 +464,7 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">同居率9位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ひこうでかくとう半減・じめん無効。苦手なルカリオ・ガブを受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ひこうでじめん無効。高い物理耐久で苦手なガブリアスのじしんを受ける</div>
   </div>
 </div>
 
@@ -472,8 +472,8 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
 
 ドドゲザンはかくとう×4・ほのお/じめん×2という重い弱点を抱えるため、残り5体で以下の役割を補います。
 
-1. **かくとう対策**: ひこう（アーマーガア）・エスパー・フェアリーでメガルカリオ・メガミミロップのかくとう技を受ける枠
-2. **じめん対策**: ひこう・ふゆうでガブリアス・カバルドンのじしんを無効化する枠
+1. **かくとう対策**: かくとうを無効化するゴースト（ゲンガー・ミミッキュ）や半減するエスパー・フェアリーでメガルカリオ・メガミミロップのかくとう技を受ける枠
+2. **じめん対策**: ひこう（アーマーガア）・ふゆうでガブリアス・カバルドンのじしんを無効化する枠
 3. **ほのお対策**: みず（ダイケンキ・イダイトウ等）でリザードンのほのお技を受ける枠
 4. **削りサポート**: ステルスロック（ガブリアス等）で相手をふいうち圏内に押し込む
 
@@ -523,7 +523,7 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">AS型</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">AS系 17.3%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">つるぎのまい・ふいうち・ドゲザン・アイアンヘッド</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">中速まで上から通常技。タスキで一撃を防げる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">低速帯に上から通常技。タスキで一撃を防げる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">物理耐久が下がり積みが不安定。高速勢には届かない</td>
 </tr>
 </tbody>

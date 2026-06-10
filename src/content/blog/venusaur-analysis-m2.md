@@ -166,7 +166,7 @@ heroImage: '../../assets/hero-venusaur-m2.png'
 </table>
 </div>
 
-メガ進化でぼうぎょ+40・とくぼう+20と耐久が大きく伸び、特性もしんりょく（または非メガのようりょくそ）から**あついしぼう**に変わります。素早さは80のまま据え置きで、メガ後も後手から動く前提は変わりません。
+メガ進化でぼうぎょ+40・とくぼう+20と耐久が大きく伸び、特性も非メガのようりょくそ（採用率69.8%）から**あついしぼう**に変わります。素早さは80のまま据え置きで、メガ後も後手から動く前提は変わりません。
 
 ### タイプ・弱点（あついしぼう適用）
 
@@ -200,7 +200,6 @@ heroImage: '../../assets/hero-venusaur-m2.png'
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
-      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">なし</td>
@@ -232,7 +231,7 @@ heroImage: '../../assets/hero-venusaur-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">88.4%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">最多採用。どくを半減するはがね・どく・ほのおへの一貫打点。低確率でDダウン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">最多採用。一致技を半減するはがね・どく・ほのおに×2の貫通打点。低確率でDダウン</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>こうごうせい</strong></td>
@@ -323,7 +322,7 @@ heroImage: '../../assets/hero-venusaur-m2.png'
 
 **強み:**
 
-あついしぼうでほのおを等倍にしつつ、おだやかでとくぼうをさらに伸ばすことで、メガリザードンYのかえんほうしゃやウルガモスのほのおのまいといった特殊ほのお技を受けやすくなります。みず・でんきの特殊アタッカー（アシレーヌ・ウォッシュロトム等）にも受け出しでき、ギガドレインとこうごうせいで回復しながら居座れます。
+あついしぼうでほのおを等倍にしつつ、おだやかでとくぼうをさらに伸ばすことで、ラウドボーンのフレアソングやウルガモスのほのおのまいといった特殊ほのお技を受けやすくなります。みず・でんきの特殊アタッカー（アシレーヌ・ウォッシュロトム等）にも受け出しでき、ギガドレインとこうごうせいで回復しながら居座れます。
 
 **弱み:**
 
@@ -413,7 +412,7 @@ HD型が特殊ほのお・みず・でんきの受け出しに強いのに対し
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギガドレインは等倍（ドラゴン0.5×じめん2）だが吸収で居座れる。じしん（99%）も等倍で耐え、いわなだれ・がんせきふうじも等倍。S102で先手を取られるため、HB型で受けつつ削る形になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギガドレインは等倍（くさ→ドラゴン0.5×じめん2）だが吸収で居座れる。じしん（99%）も等倍で耐え、いわなだれ・がんせきふうじも等倍。S102で先手を取られるため、HB型で受けつつ削る形になる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -466,13 +465,13 @@ HD型が特殊ほのお・みず・でんきの受け出しに強いのに対し
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">3つの攻撃技すべてが半減以下（だいちのちからは無効）で有効打がなく、はねやすめ（98%）で回復され崩せない。ブレイブバードは弱点×2</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき・ほのおタイプ（ウォッシュロトムの10まんボルト等。はがね・ひこうの弱点を突ける）を同伴し、後出しして処理する。どくどくも入らないため自力では落とせない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおタイプ（ソウブレイズのむねんのつるぎ等。はがねの弱点を×2で突ける）を同伴し、後出しして処理する。どくどくも入らないため自力では落とせない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むしのさざめき（むし・34%）が×2、ちょうのまい（97%）で積まれると特殊耐久を抜かれる。ほのおは等倍だがあさのひざし（64%）で回復され、こちらのギガドレイン×0.25では崩せない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こちらの攻撃技はギガドレイン×0.25・ヘドロばくだん等倍・だいちのちから等倍と決定打がなく、あさのひざし（64%）で回復されて崩せない。ちょうのまい（97%）で積まれるとほのおのまい（80%）で押し切られる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みずタイプ（ギャラドスのたきのぼり・カメックスのみずのはどう等。ほのおに×2）を同伴し、ちょうのまいで積む前に弱点を突いて落とす</td>
 </tr>
 <tr style="background:#fafafa">
@@ -486,7 +485,7 @@ HD型が特殊ほのお・みず・でんきの受け出しに強いのに対し
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0911-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ラウドボーン（29位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちから×2が通るがHP104・高耐久で一撃が遠く、なまける（96%）で回復され、どくどくを入れても回復で押し返される。ほのお技フレアソング（100%）を等倍で撃たれ続け、ギガドレイン×0.5の吸収では削り負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちから×2が通るがHP104・高耐久で一撃が遠く、なまける（96%）で回復され、どくどくを入れても回復で押し返される。ほのお技フレアソング（99.6%）を等倍で撃たれ続け、ギガドレイン×0.5の吸収では削り負ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・いわ・じめんタイプ（カメックス・ガブリアス等）を同伴し、ほのお/ゴーストの弱点を突いて処理を任せる</td>
 </tr>
 </tbody>
@@ -516,7 +515,7 @@ HD型が特殊ほのお・みず・でんきの受け出しに強いのに対し
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">いわ・じめん技でフシギバナが苦手なリザードン・ウルガモスのほのお枠に打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">いわ技でフシギバナが苦手なリザードン・ウルガモスのほのお枠に×4打点</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
@@ -537,7 +536,7 @@ HD型が特殊ほのお・みず・でんきの受け出しに強いのに対し
 メガフシギバナは弱点がエスパー・ひこうの2つに絞られる代わりに、その2タイプを速い使い手に突かれると脆く、アーマーガアのような打点皆無の相手も自力では崩せません。残り5体で以下を補います。
 
 1. **エスパー対策**: あくタイプのブラッキーでメガマフォクシー・メガスターミーのエスパー技を無効化して受け、ソウブレイズのゴースト技（ポルターガイスト等は×2）で上から削る枠
-2. **ひこう対策**: でんき技でアーマーガア・リザードンを処理（ウォッシュロトムの10まんボルトはどちらにも×2）。リザードンにはいわ×4の打点も刺さる
+2. **ひこう対策**: でんき技でリザードンを処理（ウォッシュロトムの10まんボルトはほのお/ひこうのリザードンに×2、いわ×4の打点も刺さる）。アーマーガアははがねが弱点のほのおタイプ（ソウブレイズ等）で処理する
 3. **崩し性能の補完**: ゲッコウガ等の高速アタッカーで、受けで止めた相手を上から落とす速攻枠
 
 ---
@@ -599,7 +598,7 @@ HD型が特殊ほのお・みず・でんきの受け出しに強いのに対し
 
 メガフシギバナはあついしぼうでくさ/どくの弱点をエスパー・ひこうの2つに絞り、ぼうぎょ123・とくぼう120の高耐久にこうごうせい・ギガドレインの回復を重ねた居座り耐久アタッカーです。みず・でんき・かくとう・フェアリーを半減できる受け範囲の広さから、アシレーヌ・カメックス・カバルドンといった水・地面の相手に強く出られます。
 
-一方、すばやさ80では環境上位のアタッカーに軒並み先手を取られ、エスパー・ひこうで弱点を突くメガマフォクシー・リザードン・アーマーガアには受けが成立しません。特にアーマーガアは3つの攻撃技がすべて半減以下で崩しようがないため、あく枠・でんき/いわ枠での弱点補完が前提になります。受けの広さを活かしつつ、突破できない相手をパーティ全体でケアできるかが、27位という使用率での評価を分けるポイントです。
+一方、すばやさ80では環境上位のアタッカーに軒並み先手を取られ、エスパー・ひこうで弱点を突くメガマフォクシー・リザードン・アーマーガアには受けが成立しません。特にアーマーガアは3つの攻撃技がすべて半減以下で崩しようがないため、エスパー対策のあく枠、リザードンを落とすでんき/いわ枠、アーマーガアのはがねを突くほのお枠での弱点補完が前提になります。受けの広さを活かしつつ、突破できない相手をパーティ全体でケアできるかが、27位という使用率での評価を分けるポイントです。
 
 ---
 

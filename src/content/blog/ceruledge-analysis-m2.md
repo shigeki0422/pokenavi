@@ -310,7 +310,7 @@ EV振りは「AS + hb」41.4%、「AS + h」20.5%、「AS + hd」11.1%と、い�
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むねんのつるぎ（ほのお）が×2、インファイト（かくとう）も×2。S85同士の同速だが、主力の10まんボルト・りゅうせいぐん（特殊）はとくぼう100で受けやすい。つるぎのまい後は確定圏</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力の10まんボルト・りゅうせいぐん（特殊）はとくぼう100で受けやすく、はどうだん（26.9%）はかくとうで無効。S85同士の同速。打点はインファイト（かくとう×2）が必要で、むねんのつるぎはほのお×2×ドラゴン0.5＝等倍。つるぎのまい後なら等倍でも押し込める</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -355,7 +355,7 @@ EV振りは「AS + hb」41.4%、「AS + h」20.5%、「AS + hd」11.1%と、い�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）がじめん×2弱点。S102で素では先手を取られる。こちらのポルターガイスト・むねんのつるぎはどちらも等倍で一撃に届かない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）がじめん×2弱点。S102で素では先手を取られる。こちらの打点はポルターガイストが等倍止まり、むねんのつるぎはドラゴンに半減で、一撃には届かない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんを無効化するひこう・ふゆうのポケモン（アーマーガア等）を同伴し受け回す。タスキで耐えてくだけるよろいで抜き返し、つるぎのまい後のポルターガイストで仕留める</td>
 </tr>
 <tr style="background:#fafafa">
@@ -369,14 +369,14 @@ EV振りは「AS + hb」41.4%、「AS + h」20.5%、「AS + hd」11.1%と、い�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアジェット（66.6%）がみず×2かつ先制で、かげうちと同じ優先度のため遅いソウブレイズは後攻。タスキ後もアクアジェットで縛られる。うたかたのアリア（79.2%）もみず×2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリア（79.2%）がみず×2の一致技。先制のアクアジェット（66.6%）もみず×2で、タスキで耐えた残りHPを先制で削られて縛られる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・でんきタイプ（ウォッシュロトム等）を同伴し、弱点を突いて後出しから処理する。ソウブレイズ単体での切り返しは難しい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク（89.2%）がみず×2、S115（メガ120）で先手。アクアジェット（86.9%）も先制みず×2で、タスキ後も詰め残しを許さない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク（89.2%）がみず×2、メガ後S130で先手。アクアジェット（86.9%）も先制みず×2で、タスキ後も詰め残しを許さない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・でんきタイプで上から弱点を突く。かげうち（エスパー×2）でタスキ込みなら相打ちは狙えるが、有利対面とは言えない</td>
 </tr>
 <tr>
@@ -472,4 +472,3 @@ EV振りは「AS + hb」41.4%、「AS + h」20.5%、「AS + hd」11.1%と、い�
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [同じゴースト先制アタッカー ギルガルドのM-2考察](/blog/aegislash-analysis-m2/)
 - [起点を潰す砂・ステロ枠 カバルドンのM-2考察](/blog/hippowdon-analysis-m2/)
-</content>
