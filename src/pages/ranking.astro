@@ -1,0 +1,100 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import meta from '../data/article-meta.json';
+
+const TYPE_NUM: Record<string, string> = {
+	ノーマル: '00', かくとう: '01', ひこう: '02', どく: '03', じめん: '04',
+	いわ: '05', むし: '06', ゴースト: '07', はがね: '08', ほのお: '09',
+	みず: '10', くさ: '11', でんき: '12', エスパー: '13', こおり: '14',
+	ドラゴン: '15', あく: '16', フェアリー: '17',
+};
+const TYPE_SLUG: Record<string, string> = {
+	'00': 'normal', '01': 'fighting', '02': 'flying', '03': 'poison', '04': 'ground',
+	'05': 'rock', '06': 'bug', '07': 'ghost', '08': 'steel', '09': 'fire',
+	'10': 'water', '11': 'grass', '12': 'electric', '13': 'psychic', '14': 'ice',
+	'15': 'dragon', '16': 'dark', '17': 'fairy',
+};
+const typeImg = (t: string) => `/images/types/type-${TYPE_NUM[t]}-${TYPE_SLUG[TYPE_NUM[t]]}.png`;
+
+const entries = Object.entries(meta as Record<string, { name: string; rank: number; types: string[] }>)
+	.map(([slug, v]) => ({ slug, ...v }))
+	.sort((a, b) => a.rank - b.rank);
+
+const TYPE_ORDER = ['ノーマル','ほのお','みず','でんき','くさ','こおり','かくとう','どく','じめん','ひこう','エスパー','むし','いわ','ゴースト','ドラゴン','あく','はがね','フェアリー'];
+const usedTypes = TYPE_ORDER.filter((t) => entries.some((e) => e.types.includes(t)));
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
+const pageTitle = '【ポケモンチャンピオンズ】M-2 使用率ランキング 全考察まとめ｜TOP50';
+const pageDesc = 'ポケモンチャンピオンズ M-2シーズンのシングルバトル使用率ランキング。各ポケモンの型・採用率・立ち回りを実データで分析した考察記事を使用率順に一覧でまとめています。';
+
+const itemListJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'ItemList',
+	name: pageTitle,
+	itemListElement: entries.map((e, i) => ({
+		'@type': 'ListItem',
+		position: i + 1,
+		url: `${siteUrl}/blog/${e.slug}/`,
+		name: `${e.name}（使用率${e.rank}位）`,
+	})),
+};
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead title={pageTitle} description={pageDesc} />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
+		<style>
+			.rank-hero { text-align: center; padding: 2.5rem 1rem 2rem; border-bottom: 1px solid rgb(var(--gray-light)); margin-bottom: 2rem; }
+			.rank-hero h1 { font-size: 1.9rem; margin: 0 0 0.6rem; line-height: 1.3; }
+			.rank-hero p { color: rgb(var(--gray)); margin: 0; font-size: 0.95rem; }
+			.rank-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+			.rank-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: inherit; background: #fff; transition: background 0.15s, border-color 0.15s; }
+			.rank-row:hover { background: #f8fafc; border-color: #cbd5e1; }
+			.rank-num { flex-shrink: 0; width: 44px; text-align: center; font-weight: 700; font-size: 1.05rem; color: #e67e22; }
+			.rank-name { flex: 1; min-width: 0; font-weight: 600; }
+			.rank-types { display: flex; gap: 3px; flex-shrink: 0; }
+			.rank-types img { width: 26px; height: 26px; }
+			.type-nav { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 1.5rem; }
+			.type-nav-label { font-size: 0.85rem; color: rgb(var(--gray)); margin-right: 4px; }
+			.type-chip { display: inline-flex; align-items: center; gap: 3px; padding: 4px 10px 4px 4px; border: 1px solid #e2e8f0; border-radius: 999px; font-size: 0.8rem; text-decoration: none; color: inherit; background: #fff; }
+			.type-chip:hover { background: #f8fafc; border-color: #cbd5e1; }
+			.type-chip img { width: 20px; height: 20px; }
+			@media (max-width: 720px) { .rank-hero h1 { font-size: 1.4rem; } }
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section class="rank-hero">
+				<h1>ポケモンチャンピオンズ M-2 使用率ランキング 全考察まとめ</h1>
+				<p>シングルバトルの使用率順に、各ポケモンの型・採用率・立ち回りの考察記事をまとめています（全{entries.length}件）</p>
+			</section>
+			<nav class="type-nav">
+				<span class="type-nav-label">タイプ別に見る：</span>
+				{usedTypes.map((t) => (
+					<a href={`/type/${TYPE_SLUG[TYPE_NUM[t]]}/`} class="type-chip">
+						<img src={typeImg(t)} alt={t} />{t}
+					</a>
+				))}
+			</nav>
+			<ol class="rank-list">
+				{entries.map((e) => (
+					<li>
+						<a class="rank-row" href={`/blog/${e.slug}/`}>
+							<span class="rank-num">{e.rank}位</span>
+							<span class="rank-name">{e.name}</span>
+							<span class="rank-types">
+								{e.types.map((t) => <img src={typeImg(t)} alt={t} title={t} />)}
+							</span>
+						</a>
+					</li>
+				))}
+			</ol>
+		</main>
+		<Footer />
+	</body>
+</html>
