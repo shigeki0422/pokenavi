@@ -263,6 +263,7 @@ B107・D107と両受けが高く、HP50の低さを補う形で物理・特殊�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> ふゆう（100.0%）<br>
 <strong>性格:</strong> ひかえめ（C↑）／おくびょう（S↑）<br>
 <strong>EV:</strong> C32 S32（最多のCS振り。余り2はHへ）<br>
 <strong>持ち物:</strong> こだわりスカーフ 28.3% / オボンのみ 34.3%
@@ -299,6 +300,7 @@ EV採用率最多は「CS + h」（C32 S32、20.6%）で、ひかえめC特化�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> ふゆう（100.0%）<br>
 <strong>性格:</strong> ずぶとい（B↑）／おだやか（D↑）<br>
 <strong>EV:</strong> H32 B32（HB）または H32 D32寄り<br>
 <strong>持ち物:</strong> たべのこし 17.4% / オボンのみ 34.3%

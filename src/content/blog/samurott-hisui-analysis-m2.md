@@ -244,6 +244,7 @@ heroImage: '../../assets/hero-samurott-hisui-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> きれあじ（99.2%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> A32 S32（最多型はH+2。採用率32.7%）<br>
 <strong>持ち物:</strong> きあいのタスキ / くろいメガネ
@@ -282,6 +283,7 @@ heroImage: '../../assets/hero-samurott-hisui-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> きれあじ（99.2%）<br>
 <strong>性格:</strong> いじっぱり<br>
 <strong>EV:</strong> H20 A32 S10前後（B・Dにも少量）<br>
 <strong>持ち物:</strong> オボンのみ / たべのこし 等

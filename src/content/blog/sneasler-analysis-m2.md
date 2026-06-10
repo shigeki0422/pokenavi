@@ -256,7 +256,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> かるわざ<br>
+<strong>特性:</strong> かるわざ（78.2%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> A32 S32（余り2はHに振る＝最多型）<br>
 <strong>持ち物:</strong> しろいハーブ
@@ -295,7 +295,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> かるわざ<br>
+<strong>特性:</strong> かるわざ（78.2%）<br>
 <strong>性格:</strong> ようき（S↑ C↓）<br>
 <strong>EV:</strong> A32 S32<br>
 <strong>持ち物:</strong> しろいハーブ / きあいのタスキ

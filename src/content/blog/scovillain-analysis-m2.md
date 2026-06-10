@@ -304,7 +304,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> ムラっけ（メガ進化でとびだすハバネロ）<br>
+<strong>特性:</strong> ムラっけ（64.4%）（メガ進化でとびだすハバネロ）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）<br>
 <strong>EV:</strong> H32 B32（HB特化。余りはD）<br>
 <strong>持ち物:</strong> スコヴィラナイト
@@ -339,7 +339,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> ムラっけ / ふみん<br>
+<strong>特性:</strong> ムラっけ（64.4%）/ ふみん（32.8%）<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
 <strong>EV:</strong> H32 B32 中心（C寄せはHB+C）<br>
 <strong>持ち物:</strong> スコヴィラナイト

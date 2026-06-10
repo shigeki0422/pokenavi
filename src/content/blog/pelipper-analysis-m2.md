@@ -262,6 +262,7 @@ heroImage: '../../assets/hero-pelipper-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> あめふらし（99.8%）<br>
 <strong>性格:</strong> のんき／ずぶとい（B寄り）<br>
 <strong>EV:</strong> H32 B30 D4（HBオボン）<br>
 <strong>持ち物:</strong> オボンのみ（採用率54.0%）
@@ -298,6 +299,7 @@ heroImage: '../../assets/hero-pelipper-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> あめふらし（99.8%）<br>
 <strong>性格:</strong> ひかえめ（C↑）／おくびょう（S↑）<br>
 <strong>EV:</strong> C32 S32（CS振り、余りH2）<br>
 <strong>持ち物:</strong> きあいのタスキ（21.1%）／こだわりスカーフ（7.5%）

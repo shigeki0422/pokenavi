@@ -252,6 +252,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> ふゆう（100.0%）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）／おだやか（D↑ A↓）<br>
 <strong>EV:</strong> H32 D24 B10（HDB配分。最多型）<br>
 <strong>持ち物:</strong> オボンのみ / たべのこし
@@ -288,6 +289,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> ふゆう（100.0%）<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）／おくびょう（S↑ A↓）<br>
 <strong>EV:</strong> C32 S32（CS振り。余り2はH）<br>
 <strong>持ち物:</strong> こだわりスカーフ（採用率15.7%） / オボンのみ

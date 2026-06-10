@@ -280,6 +280,7 @@ heroImage: '../../assets/hero-skarmory-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> くだけるよろい（37.1%）<br>
 <strong>性格:</strong> ようき（S↑ C↓）<br>
 <strong>EV:</strong> A32 S32（AS振り。最多はAS+H）<br>
 <strong>持ち物:</strong> エアームドナイト（採用率66.6%）
@@ -318,6 +319,7 @@ heroImage: '../../assets/hero-skarmory-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> がんじょう（61.9%）<br>
 <strong>性格:</strong> わんぱく（B↑ C↓）<br>
 <strong>EV:</strong> H32 B32（HB振り）<br>
 <strong>持ち物:</strong> オボンのみ(13.2%) / たべのこし(10.4%)

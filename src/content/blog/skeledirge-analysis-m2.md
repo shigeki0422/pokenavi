@@ -260,7 +260,7 @@ EV振りはHB型（ずぶとい 67.3%）とHD型（おだやか 21.9%・ひか�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> てんねん<br>
+<strong>特性:</strong> てんねん（99.2%）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）<br>
 <strong>EV:</strong> H32 B32（最多型。余り2はD）<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ / カシブのみ
@@ -299,7 +299,7 @@ HBに寄せるため特殊耐久が手薄で、ウォッシュロトムのハイ
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> てんねん<br>
+<strong>特性:</strong> てんねん（99.2%）<br>
 <strong>性格:</strong> おだやか（D↑ C↓）<br>
 <strong>EV:</strong> H32 D32（余り2はBまたはS）<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ
