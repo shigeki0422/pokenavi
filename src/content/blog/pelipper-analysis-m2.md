@@ -147,7 +147,6 @@ heroImage: '../../assets/hero-pelipper-m2.png'
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
-      <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -344,14 +343,14 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×4（ドラゴン2×じめん2）。主力のじしん（採用率99.2%）はひこうで無効。ただしがんせきふうじ（40.0%）はいわ等倍で通り、S102から先制される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×4（ドラゴン2×じめん2）。主力のじしん（採用率99.2%）はひこうで無効。ただしがんせきふうじ（40.0%）はいわ×2弱点を突かれ、S実数値169（最速S102）から先制される</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">なみのりが×2、雨下でほのお技を半減。あめふらしで相手の晴れ・ほのお火力を打ち消せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">大半がメガ進化（Y 63.6%・X 34.9%）。あめふらしで晴れを打ち消し、雨でほのお技を半減。なみのりはメガY（ほのお/ひこう）に×2、メガX（ほのお/ドラゴン）には等倍。メガ後S実数値152〜167で先制されるため受けは不可</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -365,14 +364,14 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×4（ドラゴン2×ひこう2）。ただしS80から先制され、10まんボルト（採用率47.6%）採用個体にはこちらがでんき×4で落とされる。撃ち合いは持ち物と相手の技次第</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×4（ドラゴン2×ひこう2）。ただしカイリュナイト80.7%でメガ後S実数値152、ペリッパーS実数値128では先制される。10まんボルト（採用率47.6%）採用個体にはこちらがでんき×4で落とされ、撃ち合いは持ち物と相手の技次第</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×4で致命傷。なみのりは×0.5（はがね半減）でほとんど通らない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×4で致命傷。なみのりは×0.25（はがね・ドラゴンで半減）でほとんど通らない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -401,7 +400,7 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×4。なみのりは×0.5で削れず、一方的に落とされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×4。なみのりは×0.25で削れず、一方的に落とされる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ペリッパーは引いて、じめん技を持つガブリアス（同居率6位）など、はがねに刺さる枠で受け回す</td>
 </tr>
 <tr style="background:#fafafa">

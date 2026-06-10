@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】オニシズクモ考察 M-2 使用率41位 ねばねばネット型の採用率と立ち回り'
-description: 'M-2シングルバトルで使用率41位のオニシズクモを徹底分析。ねばねばネット採用率93.6%・ミラーコート79.5%のサポート＋耐久型を解説。すいほうによるアクアブレイク強化、D132の特殊耐久、相性の良い相手・苦手な相手まで実データで紹介します。'
+description: 'M-2シングルバトルで使用率41位のオニシズクモを徹底分析。ねばねばネット採用率93.6%・ミラーコート79.5%のサポート＋耐久型を解説。すいほうでみず技2倍、D132の特殊耐久、相性の良い相手・苦手な相手まで実データで紹介します。'
 pubDate: '2026-06-04'
 draft: true
 heroImage: '../../assets/hero-araquanid-m2.png'
@@ -35,7 +35,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
 
 シーズンM-2（2026/5/13〜6/17）のシングルバトルで、オニシズクモは**使用率41位**。アタッカーとして火力を出すポケモンではなく、**ねばねばネット（採用率93.6%）でのすばやさ操作**と、**ミラーコート（採用率79.5%）による特殊アタッカー返し**を軸にした、サポート兼耐久型として使われています。
 
-特性は**すいほう**が99.3%。みず技の威力1.5倍・ほのお技半減・やけど無効という効果を持ち、D132の高い特殊耐久と噛み合うことで、特殊主体の相手に強い受け回しを成立させます。
+特性は**すいほう**が99.3%。みず技の威力2倍・ほのお技半減・やけど無効という効果を持ち、D132の高い特殊耐久と噛み合うことで、特殊主体の相手に強い受け回しを成立させます。
 
 ---
 
@@ -113,7 +113,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
   </div>
 </div>
 
-合計454と低めですが、とくぼう132に振り分けが寄った極端な特殊受け型のステータスです。ぼうぎょ92も並以上あり、物理・特殊どちらもある程度受けられます。一方でこうげき70・とくこう50と攻撃性能は低く、火力は**すいほう補正の乗るみず技**に依存します。すばやさ42は環境最遅クラスで、自分から上を取って動く設計ではありません。
+合計454と低めですが、とくぼう132に振り分けが寄った極端な特殊受け型のステータスです。ぼうぎょ92も並以上あり、物理・特殊どちらもある程度受けられます。一方でこうげき70・とくこう50と攻撃性能は低く、火力は**すいほうで2倍になるみず技**に依存します。すばやさ42は環境最遅クラスで、自分から上を取って動く設計ではありません。
 
 ### タイプ・弱点
 
@@ -127,14 +127,15 @@ heroImage: '../../assets/hero-araquanid-m2.png'
 <table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（2倍）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（0.5倍以下）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2/×4）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½）</th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
+      <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ（×4）</span>
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
     </div>
@@ -143,6 +144,9 @@ heroImage: '../../assets/hero-araquanid-m2.png'
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
+      <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
+      <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
     </div>
   </td>
 </tr>
@@ -150,7 +154,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
 </table>
 </div>
 
-弱点はでんき・ひこうの2タイプのみで、いずれも×2（でんき＝みず2×むし1、ひこう＝みず1×むし2）です。くさ技はみず2×むし0.5で等倍、いわ技もみず2×むし0.5で等倍に収まります。ほのお技はみず0.5×むし2でタイプ上は等倍ですが、すいほうの0.5倍補正がかかり実質0.5倍に抑えられます。みず（みず0.5×むし1）・かくとう（かくとう1×むし0.5）を半減し、やけど無効も合わせ、特殊受けとして安定したタイプ耐性を持ちます。
+最大の弱点はいわで、みず2×むし2の×4です。でんき（みず2×むし1）・ひこう（みず1×むし2）も×2弱点です。くさ技はみず2×むし0.5で等倍に収まります。ほのお技はみず0.5×むし2でタイプ上は等倍ですが、すいほうの0.5倍補正がかかり実質0.5倍に抑えられます。みず（みず0.5×むし1）・かくとう（かくとう1×むし0.5）・じめん（じめん2×むし0.5）・こおり（こおり1×むし0.5）・はがね（はがね1×むし0.5）を半減し、やけど無効も合わせ、特殊受けとして安定したタイプ耐性を持ちます。
 
 ---
 
@@ -180,7 +184,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">85</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">86.6%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力打点。タイプ一致＋すいほう1.5倍。追加効果は相手のBダウン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力打点。タイプ一致＋すいほう2倍。追加効果は相手のBダウン</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ミラーコート</strong></td>
@@ -194,7 +198,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致むし物理。追加効果で相手のSダウン。あく・エスパーへの打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致むし物理。追加効果で相手のAダウン。あく・エスパーへの打点</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>きゅうけつ</strong></td>
@@ -284,7 +288,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
 
 性格は**いじっぱり53.3%**が最多で、わんぱく16.8%・ひかえめ8.9%・しんちょう8.0%が続きます。EVは**HA + b（H32 A32 B2、採用率24.8%）**を筆頭にHA振りが大半を占めます。低いこうげき70でもアクアブレイクの打点を少しでも確保するため、攻撃に振る型が主流です。わんぱく・しんちょうのHB・HD型は、物理または特殊受けにさらに寄せた耐久重視構成です。
 
-すいほうでみず技が1.5倍になるため、いじっぱりHA型のアクアブレイクは見た目の数値以上の威力が出ます。性格・EVともに「火力をある程度持たせた特殊受け」という設計で一貫しています。
+すいほうでみず技が2倍になるため、いじっぱりHA型のアクアブレイクは見た目の数値以上の威力が出ます。性格・EVともに「火力をある程度持たせた特殊受け」という設計で一貫しています。
 
 ---
 
@@ -308,31 +312,24 @@ heroImage: '../../assets/hero-araquanid-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（42.4%）・フレアドライブ（33.3%）はタイプ等倍だがすいほうで実質0.5倍。アクアブレイクが×2（ほのお2×ひこう1）で刺さる。ただしエアスラッシュ（32.9%）はこちらに×2弱点なので被弾前に動きたい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（42.4%）・フレアドライブ（33.3%）はタイプ等倍だがすいほうで実質0.5倍。アクアブレイクが×2（ほのお2×ひこう1）で刺さる。ただしエアスラッシュ（32.9%）はこちらに×2弱点で、持たれた個体には先に削られるので過信は禁物</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）は等倍でB92が受け、アクアブレイクが×2（ドラゴン1×じめん2）で弱点を突き、すいほう補正で大ダメージ。S102で先攻されるため受け出してから動くのが前提</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）は等倍でB92が受けられる。ただしアクアブレイクはドラゴン0.5×じめん2で等倍止まり（すいほう込みでようやく一致等倍）。A130・S102で先攻されるため、受け出して耐えてからの反撃前提で過信はできない</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ/どく。アクアブレイクが×2（いわ2×どく1）。パワージェム（85.3%）はみず2×むし0.5で等倍、ヘドロウェーブ（69.4%）も等倍でD132で耐える</td>
-</tr>
-<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（特殊受け）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">シャドーボール（71.1%）・ヘドロウェーブ（81.7%）は等倍、きあいだま（37.4%）は半減（かくとう×むし0.5）。いずれもD132で耐えやすく、ミラーコート（優先度-5で後攻確定）で特殊技を2倍で返せる</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
@@ -362,7 +359,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">トリックフラワー（92.9・急所固定で耐久無視）・トリプルアクセル（72.2）でD132を貫通。S123で先手。はたきおとし（57.6%）でオボンのみも落とされる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">急所固定のトリックフラワーは耐久で受けられない。アクアブレイクはくさ/あくに半減（みず×くさ0.5＝×0.5）で押し返せない。ひこう・どく・はがねタイプを後出しして処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">急所固定のトリックフラワーは耐久で受けられない。アクアブレイクはくさ/あくに半減（みず×くさ0.5＝×0.5）で押し返せない。ひこう・どく・フェアリータイプを後出しして処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -382,15 +379,22 @@ heroImage: '../../assets/hero-araquanid-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク等倍だが高B＋はねやすめ（98.1%）で削りきれず、ボディプレス（70.9%）・てっぺき（63.5%）で居座られる。こちらの打点が乏しく対面の決定力で負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイクははがねで半減（みず×はがね0.5）。高B＋はねやすめ（98.1%）で削りきれず、ボディプレス（70.9%）・てっぺき（63.5%）で居座られる。こちらの打点が乏しく対面の決定力で負ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき技でアーマーガアの弱点（ひこう2×はがね1＝×2）を突けるウォッシュロトム等を合わせて処理を任せる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイクが半減（みず×はがね1×ドラゴン0.5＝×0.5）で押せない一方、10まんボルト（66.9%）のでんき技が×2弱点。C125からの一致でんき技でこちらが先に落ちる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイクが¼（みず×はがね0.5×ドラゴン0.5）でほぼ通らない一方、10まんボルト（66.9%）のでんき技が×2弱点。C125からの高火力でんき技でこちらが先に落ちる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">受け出しは厳禁。でんき技を無効化するじめんタイプ（ガブリアス等）を後出しし、かくとう・じめん技を持つアタッカー（ルカリオ等）で弱点を突く</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ/どく。パワージェム（85.3%）がいわ2×むし2の×4弱点で、C130から急所込みでなくとも致命傷。S55はオニシズクモより速い。アクアブレイクは×2で通るが先に押し切られやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">受け出しは厳禁。じめん・はがね・かくとうタイプを後出ししていわ技を半減し、上から処理する</td>
 </tr>
 </tbody>
 </table>
@@ -441,7 +445,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
 
 1. **ネットを活かす中速アタッカー**: ニンフィア・ブリジュラスなど、相手のSを1段階削ったあとに上を取れる火力枠
 2. **でんき技対策**: じめんタイプ（ガブリアス等）でウォッシュロトム・カイリューのでんき技を無効化する枠
-3. **アーマーガア対策**: でんき技を持つ枠（ウォッシュロトム等）でアーマーガアの弱点（ひこう2×はがね1＝×2）を突く役割。くさ/あくのマスカーニャにはひこう・どく・はがねの打点で対応する
+3. **アーマーガア対策**: でんき技を持つ枠（ウォッシュロトム等）でアーマーガアの弱点（ひこう2×はがね1＝×2）を突く役割。くさ/あくのマスカーニャにはひこう・どく・フェアリーの打点で対応する
 
 ---
 
@@ -454,7 +458,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
 | ねばねばネット | 設置（速度操作） | 93.6% |
 | アクアブレイク | 主力打点 | 86.6% |
 | ミラーコート | 特殊返し | 79.5% |
-| とびかかる | 打点＋Sダウン | 30.6% |
+| とびかかる | 打点＋Aダウン | 30.6% |
 | きゅうけつ | 自己回復 | 18.0% |
 
 打点技で採用率80%超なのはアクアブレイク1つだけで、残る確定2枠は**設置のねばねばネットとカウンター技のミラーコート**です。攻撃技を2枠以上積む構成が主流の環境上位アタッカーとは対照的で、オニシズクモは「自分で殴って崩す」のではなく「相手のすばやさを下げて後続に託す」「特殊技を打ち返す」役割に振り切っています。

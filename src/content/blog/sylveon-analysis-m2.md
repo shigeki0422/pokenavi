@@ -236,7 +236,7 @@ heroImage: '../../assets/hero-sylveon-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7.4%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリーが等倍のソウブレイズ・ラウドボーン等ほのお/ゴーストへの打点</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリーが半減のソウブレイズ・ラウドボーン等ほのお/ゴーストに、ゴースト×2で刺さる打点</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ミストフィールド</strong></td>
@@ -309,7 +309,7 @@ A65のためあくびで居座っても削りが甘く、まもる・あくび�
 <div>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
 <strong>EV:</strong> H32 C32（HC振り。余りをSに2）<br>
-<strong>持ち物:</strong> たべのこし / こだわりスカーフ
+<strong>持ち物:</strong> たべのこし / オボンのみ
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -329,7 +329,7 @@ A65のためあくびで居座っても削りが甘く、まもる・あくび�
 
 **弱み:**
 
-HB型と比べてぼうぎょに振らないため物理を受けにくく、A65・S60と攻撃性能と素早さは中途半端です。上から殴る役割は担えず、低耐久を上から叩かれると一方的に倒されます。スカーフ採用は0.5%と少なく、基本は遅いアタッカーとして運用される点に注意が必要です。
+HB型と比べてぼうぎょに振らないため物理を受けにくく、A65・S60と攻撃性能と素早さは中途半端です。上から殴る役割は担えず、低耐久を上から叩かれると一方的に倒されます。S60のまま運用するのが基本で、削り残しはでんこうせっかの先制に頼る点が攻撃型としての上限になります。
 
 ---
 
@@ -354,7 +354,7 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">げきりん（48%）・スケイルショット（34%）を無効化、ハイパーボイスが×2。ただしじしん（99%）は等倍で通り、低Bでは2発耐えが厳しいため受けっぱなしは不可</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">げきりん（48%）・スケイルショット（34%）を無効化、ハイパーボイスが×2。ただしじしん（99%）は等倍で通り、低Bでは2発耐えが厳しいため受けっぱなしは不可。どくづき（19%）を持つ個体にはどく×2弱点を突かれる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -382,7 +382,7 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/どくで、ヘドロウェーブ（82%）がどく×2弱点。S110で先手を取られ、こちらのフェアリーは等倍止まりで決定打にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/どくで、ヘドロウェーブ（82%）がどく×2弱点。S110で先手を取られ、こちらのフェアリーはどく半減で½止まり（フェアリー0.5×ゴースト1）と決定打にならない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -425,7 +425,7 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/どくでヘドロウェーブ（82%）がどく×2弱点。S110で先手を取られ、こちらの一致技は等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/どくでヘドロウェーブ（82%）がどく×2弱点。S110で先手を取られ、こちらの一致技はどく半減で½止まり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんこうせっか（先制）で削った後に処理するか、ドドゲザン等のあくタイプ（ゴースト技を半減）を同伴してシャドーボールを受ける</td>
 </tr>
 <tr style="background:#fafafa">
@@ -433,13 +433,13 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンでハイパーボイスは等倍止まり（はがね0.5×ドラゴン2）。ラスターカノン（56%）・10まんボルト（67%）で削られ、ラスターカノンははがね×2弱点</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">マジカルフレイム（ほのお×2）で弱点を突く。耐久が高く一撃では落ちないため、じめん・かくとう技を持つアタッカーを後出しで合わせる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ニンフィアの技は等倍以下しか入らない（マジカルフレイムもほのお×ドラゴンで等倍）。じめん・かくとう技を持つアタッカーを後出しで合わせて処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお/ひこうでフェアリーが等倍止まり、S100で先手を取られる。ほのお技でマジカルフレイムを上から撃ち返され、火力負けする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガY（ほのお/ひこう）にはフェアリー½止まり、メガX（ほのお/ドラゴン）でも等倍止まり。S100で先手を取られ、ほのお技で上から撃ち返されて火力負けする</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ・みず・でんきタイプを同伴してリザードンに後出しし、弱点を突いて処理する</td>
 </tr>
 </tbody>
@@ -500,7 +500,7 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
 
 ## データ分析①：フェアリースキン補正で変わる実質威力
 
-ニンフィアの特性「フェアリースキン」はノーマル技をフェアリータイプに変え、威力を1.2倍します。この補正がタイプ一致補正と重なることで、見た目の威力以上のダメージが出ます。
+ニンフィアが採用するノーマル技を、フェアリースキン1.2倍×一致補正1.5倍を乗せた実質威力で横並びにすると、どの技がどの役割を担うかが見えてきます。
 
 | 技 | 基本威力 | スキン1.2倍後 | 一致補正×1.5込み | 通常フェアリー技との差 |
 |---|---|---|---|---|

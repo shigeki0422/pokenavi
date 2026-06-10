@@ -47,7 +47,7 @@ heroImage: '../../assets/hero-whimsicott-m2.png'
 
 エルフーンの軸は**特性いたずらごころ**。アンコール・おいかぜ・ちょうはつ・やどりぎのタネといった変化技が優先度+1で動くため、相手の攻撃より先に補助を差し込めます。すばやさ種族値116と元から速いうえに、変化技は優先度で先制するため、**こちらより速い相手にもアンコールや行動妨害を先に決められる**のが最大の利点です。
 
-特にアンコール（採用率77.9%）は、相手が積み技や変化技を使った直後に縛ると、その技を3ターン連打させられます。つるぎのまい・りゅうのまいなどを積んできた相手をアンコールで固定し、その隙に引いて起点回避や後続のセットアップにつなげる動きが基本です。
+特にアンコール（採用率77.9%）は、相手が積み技や変化技を使った直後に縛ると、その技を3ターン連打させられます。つるぎのまい・りゅうのまいなどを積んできた相手をアンコールで固定し、その隙に引いて起点回避や後続の積み技につなげる動きが基本です。
 
 ### 2. おいかぜで味方全体を加速する
 
@@ -395,12 +395,19 @@ heroImage: '../../assets/hero-whimsicott-m2.png'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">▲ 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（どく・採用率81.7%）が×4で一撃。Sはこちらが上回り変化技も通るが、ムーンフォースはどく半減で有効打にならず、タスキで耐えても返しのヘドロウェーブで落とされる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">▲ 不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッド（はがね・採用率31.1%）が×2。ムーンフォースもはがねで半減され有効打が乏しい。アンコールは通るが押し切れない</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
@@ -430,7 +437,7 @@ heroImage: '../../assets/hero-whimsicott-m2.png'
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あくタイプにいたずらごころの変化技が無効。アンコール・おきみやげ・ちょうはつが一切通らず、S123で上から処理される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エルフーンで対処せず、こおり技（トリプルアクセル）を半減できるはがね枠（アーマーガア等）に引いて受ける。エルフーンの仕事は悪以外の相手に温存する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エルフーンで対処せず、はたきおとす・トリプルアクセルを物理高耐久で受けられるアーマーガア等のはがね枠に引く。エルフーンの仕事は悪以外の相手に温存する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -464,7 +471,7 @@ heroImage: '../../assets/hero-whimsicott-m2.png'
 </table>
 </div>
 
-苦手筋の中心は**あくタイプ**です。いたずらごころの変化技はあくタイプに無効化される（あくタイプは変化技の優先度上昇を受け付けず効果が及ばない）ため、アンコール・おきみやげ・ちょうはつといった主力の仕事が丸ごと消えます。マスカーニャ・サザンドラ・ゲッコウガ・ドドゲザンが初手に来た場合は、エルフーンで無理に仕事をせず引くのが鉄則です。
+苦手筋の中心は**あくタイプ**です。いたずらごころで優先度が上がった変化技はあくタイプの相手に無効化される（技そのものが失敗する）ため、アンコール・おきみやげ・ちょうはつといった主力の仕事が丸ごと消えます。マスカーニャ・サザンドラ・ゲッコウガ・ドドゲザンが初手に来た場合は、エルフーンで無理に仕事をせず引くのが鉄則です。
 
 ---
 
@@ -495,7 +502,7 @@ heroImage: '../../assets/hero-whimsicott-m2.png'
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこう/はがねで悪・どく・はがねを受け、エルフーンが引く先になる</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">どく無効・はがね半減で高耐久。悪は等倍だが物理を受けエルフーンの引き先になる</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
@@ -512,7 +519,7 @@ heroImage: '../../assets/hero-whimsicott-m2.png'
 1. **悪タイプ対応**: フェアリーが等倍以上で通るはがね・どく・地面枠（アーマーガア・キラフロル・ガブリアス）で受け、エルフーンの引き先にする
 2. **どく・ほのお対策**: はがね/ひこうのエアームドやアーマーガアでヘドロウェーブ・ほのお技を受ける枠
 3. **おいかぜの受け手**: 素早さで一歩届かない高火力アタッカー（ガブリアス等）を後ろに控えさせ、加速して上から制圧する展開
-4. **天候・ハザード展開**: ペリッパーのあめ、キラフロル・エアームドのステルスロックで定数ダメージを蓄積
+4. **天候・設置展開**: ペリッパーのあめ、キラフロル・エアームドのステルスロックで定数ダメージを蓄積
 
 ---
 
