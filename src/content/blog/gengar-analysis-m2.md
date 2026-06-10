@@ -196,10 +196,14 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </thead>
 <tbody>
 <tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">特性</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">のろわれボディ（100.0%）<span style="font-size:0.85em;color:#666">※メガ進化後かげふみ</span></td>
+</tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">性格</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう（すばやさ↑ / こうげき↓）</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">EV</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">C32 S32（余りH2）</td>
 </tr>
@@ -262,10 +266,14 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </thead>
 <tbody>
 <tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">特性</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">のろわれボディ（100.0%）<span style="font-size:0.85em;color:#666">※メガ進化後かげふみ</span></td>
+</tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">性格</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかえめ（とくこう↑ / こうげき↓）</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">EV</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">C32 S32</td>
 </tr>
@@ -310,14 +318,18 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率12位**�
 </thead>
 <tbody>
 <tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">特性</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">のろわれボディ（100.0%）</td>
+</tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">性格</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう（すばやさ↑ / こうげき↓）</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">EV</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">C32 S32</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">持ち物</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいのタスキ</td>
 </tr>

@@ -252,6 +252,7 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> すなおこし（99.8%）<br>
 <strong>性格:</strong> わんぱく（B↑ C↓）<br>
 <strong>EV:</strong> H32 B32（HB振り。HB系で最多の採用率18.1%）<br>
 <strong>持ち物:</strong> オボンのみ / たべのこし
@@ -288,6 +289,7 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> すなおこし（99.8%）<br>
 <strong>性格:</strong> しんちょう（D↑ C↓）<br>
 <strong>EV:</strong> H32 D32（HD振り。採用率24.0%の最多スプレッド）<br>
 <strong>持ち物:</strong> オボンのみ / たべのこし

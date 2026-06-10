@@ -348,6 +348,10 @@ M-2環境で最も採用率が高い形です。
 </thead>
 <tbody>
 <tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>特性</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゅうなん（74.3%）※メガ後きもったま</td>
+</tr>
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>性格</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき（すばやさ↑ とくこう↓）</td>
 </tr>
@@ -403,6 +407,10 @@ M-2環境で最も採用率が高い形です。
 </tr>
 </thead>
 <tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>特性</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゅうなん（74.3%）※メガ後きもったま</td>
+</tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>性格</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり（こうげき↑ とくこう↓）</td>

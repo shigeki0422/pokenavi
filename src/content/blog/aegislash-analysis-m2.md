@@ -277,6 +277,7 @@ heroImage: '../../assets/hero-aegislash-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> バトルスイッチ（100.0%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> H32 A32 + b/d（最多はHA + BD微調整、採用率13.1%）<br>
 <strong>持ち物:</strong> たべのこし / のろいのおふだ
@@ -315,6 +316,7 @@ EVはHA振り（H32 A32）が主流で、HP・こうげきに厚く振ること�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> バトルスイッチ（100.0%）<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
 <strong>EV:</strong> H32 C32 + a（HC型、採用率3.2%）<br>
 <strong>持ち物:</strong> たべのこし / のろいのおふだ

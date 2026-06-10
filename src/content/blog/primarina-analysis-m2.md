@@ -260,6 +260,7 @@ heroImage: '../../assets/hero-primarina-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> げきりゅう（95.2%）<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
 <strong>EV:</strong> H32 C32（HC振り。残り2はSかDに）<br>
 <strong>持ち物:</strong> オボンのみ / しんぴのしずく
@@ -296,6 +297,7 @@ HC振りでとくこう126を活かしつつ、HP80に振ってオボンのみ�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> げきりゅう（95.2%）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）<br>
 <strong>EV:</strong> H32 B32（HB振り。物理方向を補強）<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ

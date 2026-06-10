@@ -270,6 +270,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> がんじょう（21.9%）<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
 <strong>EV:</strong> C32 S32（最多配分・採用率18.0%。余りはHへ）<br>
 <strong>持ち物:</strong> しろいハーブ / こだわりスカーフ
@@ -306,6 +307,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> じきゅうりょく（78.0%）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）<br>
 <strong>EV:</strong> H32 B32（ずぶといはHB寄せ、おだやかはHD寄せが主流）<br>
 <strong>持ち物:</strong> オボンのみ / たべのこし

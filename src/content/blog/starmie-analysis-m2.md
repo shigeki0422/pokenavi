@@ -509,6 +509,7 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
 ### 型1：いじっぱりAS型（アクアブレイク+アクアジェット主軸）―― 最も採用率の高いスタンダード型
 
 <div class="build-header">
+  <span style="background:#6366f1;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：しぜんかいふく（89.7%）</span>
   <span style="background:#dc2626;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：いじっぱり（71.4%）</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：A32 S32（53.5%）</span>
   <span style="background:#1d4ed8;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：スターミナイト（97.8%）</span>
@@ -545,6 +546,7 @@ M-2環境トップのガブリアスに対してアイススピナーが4倍有�
 ### 型2：ようきAS型（スピード特化）―― 2番目に多い高速物理型
 
 <div class="build-header">
+  <span style="background:#6366f1;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：しぜんかいふく（89.7%）</span>
   <span style="background:#059669;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ようき（24.9%）</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：A32 S32（53.5%）</span>
 </div>
@@ -578,6 +580,7 @@ M-2環境トップのガブリアスに対してアイススピナーが4倍有�
 ### 型3：AS+耐久振り型（HD+AまたはAS+H）
 
 <div class="build-header">
+  <span style="background:#6366f1;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：しぜんかいふく（89.7%）</span>
   <span style="background:#dc2626;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：いじっぱり（71.4%）</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：HD+A（4.9%）/ AS+H（3.2%）/ AS+B（3.5%）</span>
 </div>

@@ -284,6 +284,7 @@ heroImage: '../../assets/hero-meowscarada-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> へんげんじざい（95.0%）<br>
 <strong>性格:</strong> いじっぱり（A↑）またはようき（S↑）<br>
 <strong>EV:</strong> A32 S32（最多型はAS＋余りH2）<br>
 <strong>持ち物:</strong> こだわりスカーフ
@@ -320,6 +321,7 @@ heroImage: '../../assets/hero-meowscarada-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> へんげんじざい（95.0%）<br>
 <strong>性格:</strong> ようき（S↑）<br>
 <strong>EV:</strong> A32 S32<br>
 <strong>持ち物:</strong> きあいのタスキ

@@ -269,6 +269,7 @@ heroImage: '../../assets/hero-corviknight-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> プレッシャー（63.9%）<br>
 <strong>性格:</strong> わんぱく（B↑ C↓）<br>
 <strong>EV:</strong> H32 B32（最多型はHB＋余りをD2）<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ
@@ -305,6 +306,7 @@ heroImage: '../../assets/hero-corviknight-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> プレッシャー（63.9%）<br>
 <strong>性格:</strong> わんぱく / のんき<br>
 <strong>EV:</strong> H32 B32（物理受け基準）<br>
 <strong>持ち物:</strong> たべのこし

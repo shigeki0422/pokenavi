@@ -391,6 +391,7 @@ A155は環境トップクラスの攻撃力です。D130という高い特防と
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> いかく（98.8%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> A32 S32（AS振り）<br>
 <strong>持ち物:</strong> ギャラドスナイト
@@ -439,6 +440,7 @@ S81は積み前では環境の主要アタッカーに先手を取られます�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> いかく（98.8%）<br>
 <strong>性格:</strong> ようき（S↑ C↓）<br>
 <strong>EV:</strong> A32 S32（AS振り）<br>
 <strong>持ち物:</strong> ギャラドスナイト
@@ -482,6 +484,7 @@ S81は積み前では環境の主要アタッカーに先手を取られます�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> いかく（98.8%）<br>
 <strong>性格:</strong> いじっぱり / ようき<br>
 <strong>EV:</strong> A32 S32 + H少々（AS+H/B振り）<br>
 <strong>持ち物:</strong> ギャラドスナイト
@@ -516,6 +519,7 @@ HPにEVを回して耐久を補強します。A155はそもそも非常に高い
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> いかく（98.8%）<br>
 <strong>性格:</strong> わんぱく（B↑ C↓）/ いじっぱり<br>
 <strong>EV:</strong> HB または AS<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ / ラムのみ

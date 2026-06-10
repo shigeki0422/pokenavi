@@ -340,6 +340,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> せいしんりょく（84.0%）<br>
 <strong>性格:</strong> ようき（A↑ S↓は使わない）<br>
 <strong>EV:</strong> A32 S32（AS振り。余り2はHかBに振る）<br>
 <strong>持ち物:</strong> ルカリオナイト
@@ -382,6 +383,7 @@ CS特殊型と比べ、初手から特殊耐久の高い相手に打点を選び
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> せいしんりょく（84.0%）<br>
 <strong>性格:</strong> おくびょう（S↑ A↓）<br>
 <strong>EV:</strong> C32 S32（CS振り、最多型はH+2振り）<br>
 <strong>持ち物:</strong> ルカリオナイト

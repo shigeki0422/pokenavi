@@ -315,6 +315,10 @@ HA振りによってこの防御140が最大化されます。環境の多くの
 </thead>
 <tbody>
 <tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>特性</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">テクニシャン（98.6%）</td>
+</tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>性格</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり（こうげき↑ とくこう↓）</td>
 </tr>
@@ -368,18 +372,22 @@ HA振りによってこの防御140が最大化されます。環境の多くの
 </thead>
 <tbody>
 <tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>特性</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">テクニシャン（98.6%）</td>
+</tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>性格</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり（91.0%）</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">H32 A32（主に）</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">メタルコート（はがねタイプの技威力×1.2）</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>技構成例</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ / つるぎのまい / インファイト / はたきおとす</td>
 </tr>

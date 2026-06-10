@@ -366,6 +366,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 ### 型1：ひかえめCS型（特殊4色技）―― 最も採用率の高いスタンダード型
 
 <div class="build-header">
+  <span style="background:#6b7280;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：マルチスケイル（98.2%）</span>
   <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.7%）</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 H2（22.2%）</span>
 </div>
@@ -390,6 +391,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 ### 型2：ひかえめCS型（しんそく採用）―― りゅうせいぐん後の詰めを確実にする型
 
 <div class="build-header">
+  <span style="background:#6b7280;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：マルチスケイル（98.2%）</span>
   <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.7%）</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 H2（22.2%）</span>
   <span style="background:#16a34a;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：カイリュナイト</span>
@@ -415,6 +417,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 ### 型3：ひかえめHBS型（メガ耐久特殊型）―― マルチスケイルを活かした崩し型
 
 <div class="build-header">
+  <span style="background:#6b7280;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：マルチスケイル（98.2%）</span>
   <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.7%）</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 B1 H1（11.3%）</span>
   <span style="background:#16a34a;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：カイリュナイト</span>
@@ -440,6 +443,7 @@ CSフルに振った型よりとくこうとすばやさが下がるため、火
 ### 型4：非メガ型（ラムのみ / りゅうのまい物理）―― メガ進化権を別のポケモンに渡す構成
 
 <div class="build-header">
+  <span style="background:#6b7280;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：マルチスケイル（98.2%）</span>
   <span style="background:#dc2626;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ / いじっぱり / ようき</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 / A32 S32</span>
   <span style="background:#d97706;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：ラムのみ（12.4%）など</span>
