@@ -561,6 +561,99 @@ AS型がすばやさで上から叩けたサザンドラ（S98）などに先手
 
 ---
 
+## データ分析②：おやこあいで「実質威力」と「追加効果の発生確率」が両方上がる
+
+おやこあいの価値は2回攻撃でダメージが増えることだけではありません。**2発目でも技の追加効果が独立して判定される**ため、こおり・やけど・まひ・ひるみといった追加効果の発生確率も上がります。採用率上位の技について、実質威力（1発目＋2発目0.25倍）と、追加効果の実質発生確率（2回判定で「少なくとも1回」発生する確率 ＝ 1－(1－p)²）を整理します。
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">技（採用率）</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1">表示威力</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1">実質威力<br>（1発目＋2発目）</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1">追加効果</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1">単発確率</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1">2回判定の<br>実質発生確率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">れいとうパンチ（76.6%）</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">75</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">75＋19＝<strong>94</strong></td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">こおり</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">10%</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1"><strong style="color:#dc2626">19.0%</strong></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">じしん（75.5%）</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">100</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">100＋25＝<strong>125</strong></td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">—</td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">ふいうち（61.8%）</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">70</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">70＋18＝<strong>88</strong></td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">—</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">すてみタックル（48.8%）</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">120</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">120＋30＝<strong>150</strong></td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">反動1/3</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">100%</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">2回分受ける</td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">ねこだまし（45.4%）</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">40</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">40＋10＝<strong>50</strong></td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">ひるみ</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">100%</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">100%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">のしかかり（23.8%）</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">85</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">85＋21＝<strong>106</strong></td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">まひ</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">30%</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1"><strong style="color:#dc2626">51.0%</strong></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">ほのおのパンチ（21.2%）</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">75</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">75＋19＝<strong>94</strong></td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">やけど</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">10%</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1"><strong style="color:#dc2626">19.0%</strong></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">かみなりパンチ（7.2%）</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">75</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">75＋19＝<strong>94</strong></td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">まひ</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1">10%</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1"><strong style="color:#dc2626">19.0%</strong></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+実質威力は1発目に対して一律で約1.25倍（2発目が4分の1）になりますが、注目すべきは追加効果のある技です。れいとうパンチ・ほのおのパンチ・かみなりパンチのこおり・やけど・まひは、単発なら10%でも**2回判定で19.0%**まで上がります。採用率最多のれいとうパンチ（76.6%）は、こおり×4で通るドラゴン・じめん勢への弱点打点に加え、5回に1回の凍結という上振れも内包しているわけです。
+
+のしかかり（採用率23.8%）はさらに顕著で、まひ30%が**実質51.0%**となり、半数以上の確率で相手にまひを撒けます。すばやさ実数値152のメガガルーラは高速勢に先手を取れませんが、のしかかりでまひが入れば相手のすばやさが半分になり、次のターンから上を取り返せます。追加効果の発生率が2倍前後に底上げされるこの性質が、単純な火力以上にメガガルーラの技選択に幅を与えています。
+
+一方、すてみタックルは反動（与ダメージの1/3）も**親・子の2回分**受けるため、おやこあいでは反動負担も増える点には注意が必要です。
+
+---
+
 ## まとめ：型別比較
 
 <div style="overflow-x:auto;margin:12px 0">
