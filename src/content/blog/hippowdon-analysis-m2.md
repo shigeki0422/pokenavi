@@ -43,7 +43,7 @@ heroImage: '../../assets/hero-hippowdon-m2.png'
 
 ### 1. あくび＋ステルスロックの起点作りパッケージ
 
-カバルドンの技構成は起点作りに振り切っています。**あくび（94.2%）**で相手に交代を強制し、生まれた交代の隙に**ステルスロック（84.4%）**を設置。相手は交代のたびに最大HPの一定割合を失うため、後続アタッカーの確定数が1つずつ繰り上がります。さらに**ふきとばし（44.5%）**で積みアタッカーの能力上昇をリセットしつつ、ステルスロックのダメージを強制的に蓄積させられます。
+カバルドンの技構成は起点作りに振り切っています。**あくび（94.2%）**で相手に交代を強制し、生まれた交代の隙に**ステルスロック（84.4%）**を設置。相手は繰り出すたびに、いわタイプ相性に応じた固定割合（等倍1/8・×2なら1/4・×4なら1/2）を失うため、後続アタッカーの確定数が1つずつ繰り上がります。さらに**ふきとばし（44.5%）**で積みアタッカーの能力上昇をリセットしつつ、ステルスロックのダメージを強制的に蓄積させられます。
 
 あくびは命中するとねむり状態の予約になるため、相手は受けるか交代するかの二択を迫られます。どちらに転んでもカバルドン側が次の行動（ステルスロック・なまける・交代）を選べるのが強みです。
 
@@ -344,24 +344,24 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/どくにじしんが×2（どく2×ゴースト1）で刺さる。主力はヘドロウェーブ・シャドーボールで弱点を突かれにくく起点を作りやすい。ただしこごえるかぜ（36.7%）はこおりで×2弱点のため、持つ個体には居座らず流す</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ ソーラービームに注意</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技・ひこう技はカバルドンに等倍で耐久受けが利く。ただしソーラービーム（採用率61.0%）はくさ技でカバルドンに×2弱点。晴れ展開からの一撃には居座れない</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0681-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド（11位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ゴーストにじしんが×2。みず・くさ・こおり技を持たず、カバルドンの弱点を突けない。あくびで流して起点化できる</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ・インファイト（72.4%）ともカバルドンに等倍以下で、みず・くさ・こおり技を持たず弱点を突けない。つるぎのまい（86.6%）の積みはふきとばしで流せる</td>
 </tr>
 </tbody>
 </table>
@@ -413,7 +413,7 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0902-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">イダイトウ(オス)（8位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/ゴーストの一致みず技が×2弱点。高火力のみずアタッカーで、ゴースト技も併せ持つため受け出しても安定しない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">一致ウェーブタックル（96.5%）・アクアジェット（91.1%）のみず技が×2弱点。A種族値の高い物理みずアタッカーで、HD型でも一致みず技の連打は受けきれない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技を半減・無効化できる枠（フシギバナ、特性ちょすい等）を同伴して受け、後出しで処理する</td>
 </tr>
 </tbody>

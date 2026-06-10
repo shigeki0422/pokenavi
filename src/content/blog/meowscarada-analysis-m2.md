@@ -36,28 +36,28 @@ heroImage: '../../assets/hero-meowscarada-m2.png'
 
 シーズンM-2（2026/5/13〜6/17）のシングルバトルで、マスカーニャは**使用率3位**を記録。特性は**へんげんじざい（採用率95.0%）**がほぼ一択で、持ち物は**こだわりスカーフ77.2%**・**きあいのタスキ18.2%**に二極化しています。
 
-マスカーニャの軸は、すばやさ種族値**123**の高速性と、へんげんじざいによる全技タイプ一致補正です。へんげんじざいは出した技のタイプに自身が変化する特性で、どの技を撃ってもタイプ一致補正×1.5が乗ります。これにより、くさ・あく以外のサブウェポンも高い実効火力で振れる対面操作型のアタッカーとして機能します。
+マスカーニャの軸は、すばやさ種族値**123**の高速性と、へんげんじざいによる柔軟な打点です。へんげんじざいは場に出るたびに1回、最初に出した技のタイプへ自身が変化する特性で、その技にタイプ一致補正×1.5が乗ります。これにより、登場直後の一撃はくさ・あく以外のサブウェポンも一致補正込みの高火力で振れ、対面操作と組み合わせて打点を選べるアタッカーとして機能します。
 
 ---
 
 ## なぜマスカーニャが使用率3位なのか
 
-### 1. S123＋こだわりスカーフで環境最上位を上から殴れる
+### 1. S123＋こだわりスカーフで高速アタッカー帯を上から殴れる
 
-すばやさ種族値**123**は環境TOP25で最速で、素のままでもゲッコウガ（S122）・スターミー（S115）・ゲンガー（S110）・マフォクシー（S104）といった高速アタッカーを上回ります。採用率77.2%の**こだわりスカーフ**を積むと、いじっぱりでもすばやさ実数値が約1.5倍に跳ね上がり、相手のスカーフ持ちや能力上昇後の相手まで含めて先手を取りに行けます。
+すばやさ種族値**123**は無補正でも、ゲッコウガ（S122）・スターミー（S115）・ゲンガー（素のS110）・マフォクシー（S104）といった高速アタッカーを素で上回ります。ただし環境にはメガゲンガー（メガ後S130、採用率82.4%）・メガミミロップ（メガ後S135、採用率96.9%）のように素のマスカーニャより速い相手もいるため、これらに先手を取るには採用率77.2%の**こだわりスカーフ**が前提になります。スカーフを積むといじっぱりでもすばやさ実数値が約1.5倍となり、メガゲンガー・メガミミロップや、りゅうのまい等で加速した相手の上も取れます。
 
-スカーフ込みのS123は環境のほぼ全ての相手に先制できるため、「先に動いて削る・縛る」立ち回りの起点になります。
+スカーフ込みなら環境上位のほぼ全てに先制できるため、「先に動いて削る・縛る」立ち回りの起点になります。
 
-### 2. へんげんじざいで全技がタイプ一致補正×1.5
+### 2. へんげんじざいで登場直後の一撃にタイプ一致補正×1.5
 
-へんげんじざいは、出した技のタイプにマスカーニャ自身が変化する特性です。結果として**毎ターン、撃つ技がタイプ一致補正×1.5の対象**になります。
+へんげんじざいは、場に出るたびに1回だけ、最初に出した技のタイプへマスカーニャ自身が変化する特性です。結果として**登場後の最初の一撃は、撃った技がタイプ一致補正×1.5の対象**になります。
 
 - トリックフラワー（くさ・威力70）：くさ一致＋必中急所で実質高威力
 - はたきおとす（あく・威力65）：あく一致でゴースト・エスパーへの打点
-- トリプルアクセル（こおり・威力20×3）：撃った瞬間こおり一致補正が乗り、ドラゴン・ひこうへ刺さる
+- トリプルアクセル（こおり・威力20×3）：こおり一致補正が乗り、ドラゴン・ひこうへ刺さる
 - かみなりパンチ（でんき・威力75）：でんき一致でみず・ひこうへの打点
 
-くさ/あくの2タイプだけでは打点が乏しい相手にも、サブウェポンを一致補正込みで通せるのが、攻撃範囲の広さにつながっています。
+くさ/あくの2タイプだけでは打点が乏しい相手にも、登場直後ならサブウェポンを一致補正込みで通せる点が、攻撃範囲の広さにつながっています。とんぼがえりで一度引いて再登場すれば、次の相手に合わせて別タイプの一致技を当て直せます。
 
 ### 3. とんぼがえりで対面を選びながら削れる
 
@@ -300,7 +300,7 @@ heroImage: '../../assets/hero-meowscarada-m2.png'
 
 **強み:**
 
-素のS123が環境TOP25で最速のため、ゲッコウガ（S122）・スターミー（S115）・ゲンガー（S110）には持ち物に関係なく先手を取れます。こだわりスカーフを積む価値は、相手のスカーフ持ちや、りゅうのまい等で加速した相手の上も取れる点にあります。性格はいじっぱり46.9%・ようき45.1%とほぼ拮抗しており、いじっぱりはこうげき実数値が約10%高く確定数を縮め、ようきは同じスカーフ持ち同士のミラーやS同速での取りこぼしを減らせます。
+素のS123でゲッコウガ（S122）・スターミー（S115）・素のゲンガー（S110）には持ち物に関係なく先手を取れます。一方でメガゲンガー（S130・採用率82.4%）・メガミミロップ（S135・採用率96.9%）は素のマスカーニャより速いため、こだわりスカーフを積むことでこれらや、りゅうのまい等で加速した相手の上も取れるようになります。性格はいじっぱり46.9%・ようき45.1%とほぼ拮抗しており、いじっぱりはこうげき実数値が約10%高く確定数を縮め、ようきは同じスカーフ持ち同士のミラーやS同速での取りこぼしを減らせます。
 
 とんぼがえりを絡めれば、スカーフで技を固定される拘束を緩和しながら有利対面を作り直せます。トリックフラワーは必中かつ必ず急所に当たるため、回避・命中不安がなく、相手のぼうぎょ上昇を無視して通せるのも安定感につながります。
 
@@ -375,8 +375,8 @@ heroImage: '../../assets/hero-meowscarada-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん単体にトリックフラワーが×2、S47より大幅に速い。高HBだが急所込みの一致くさ技で削れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 速いが一撃は不可</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん単体にトリックフラワー×2、S47より大幅に速い。ただしHP108・B118と硬く急所込みでも一撃は不可で、居座るとじしん（98.0%）×2で落とされる。削ってからとんぼがえりで引くのが安全</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -390,14 +390,14 @@ heroImage: '../../assets/hero-meowscarada-m2.png'
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はたきおとすが×2（あく→ゴースト2×どく1）。素のS123＞110で先手。低耐久同士だが先制＋あく一致で押し勝ちやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はたきおとすが×2（あく→ゴースト2×どく1）。ただし採用率82.4%のメガゲンガーはS130で素のマスカーニャより速く、先手にはスカーフが必要。スカーフ込みなら上から低耐久を突ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（炎技に注意）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつく×4（あく2×ドラゴン2）・トリプルアクセル×2。S123＞98で先手。ただしほのお技を持つ個体にはくさ側が×2弱点で被弾は痛い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 技選択次第</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S123＞98で先手は取れ、じゃれつく×4（あく2×ドラゴン2）採用なら上から大ダメージ。ただしじゃれつくは採用率14.4%と少なく、標準のトリプルアクセル×2では確1にならない。かえんほうしゃ67.0%・だいもんじ14.2%とほのお技採用が過半数で、撃ち返されるとくさ側×2で落とされるため、じゃれつく非搭載では有利と言い切れない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -408,10 +408,17 @@ heroImage: '../../assets/hero-meowscarada-m2.png'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0428-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミロップ（13位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ後S135（採用率96.9%）で素のマスカーニャより速く、スカーフでようやく同等。かくとう/ノーマルにこちらの主要技は等倍止まりで、インファイト61.1%・とびひざげり33.5%のかくとう技がこちらに×2弱点。マッハパンチ36.8%の先制も持つ</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう/はがねに主要技がほぼ通らず（くさ×0.25・あく等倍・こおり等倍・むし×0.25・けたぐりも等倍）、有効打を欠く一方でひこう技はこちらに×2弱点で受け出しされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう/はがねに主要技がほぼ通らず（くさ×0.25・あく等倍・こおり等倍・むし×0.25・けたぐりも等倍）、高耐久で有効打を欠く。一致技で削れず受け出しされるため打開しづらい</td>
 </tr>
 </tbody>
 </table>
@@ -419,7 +426,7 @@ heroImage: '../../assets/hero-meowscarada-m2.png'
 
 ### 苦手なポケモンと対策
 
-選定基準は「マスカーニャの主力技を半減・無効化し、かつこちらの弱点を突けるTOP30圏内の相手」です。
+選定基準は「マスカーニャの主力技を等倍以下に抑え、かつこちらの弱点を突けるTOP30圏内の相手」です。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -453,6 +460,13 @@ heroImage: '../../assets/hero-meowscarada-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">パワージェム（いわ→むし2×ほのお2＝×4）採用なら対面で押せるが採用率7.6%と低い。いわ・みず・でんき技を持つ枠で受けて弱点を突く</td>
 </tr>
 <tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう/はがね。トリックフラワー・はたきおとす・トリプルアクセルがいずれも×0.5に半減され（はがね耐性）、高A種族値を抜けない。一方でインファイト71.5%・先制のしんくうは26.0%のかくとう技がこちらに×2弱点。スカーフで上は取れても半減打点では落とせない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとうを半減しつつ弱点を突ける枠を後出しする（リザードン等のほのお/ひこうはかくとう半減＋ほのお技がはがね側×2、ガブリアスはじしんがはがね側×2）。対面では無理せずとんぼがえりで引く</td>
+</tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（19位）
   </td>
@@ -564,7 +578,7 @@ heroImage: '../../assets/hero-meowscarada-m2.png'
 
 **総評:**
 
-マスカーニャはS123＋こだわりスカーフによる速度と、へんげんじざいで全技にタイプ一致補正を乗せる攻撃範囲の広さを両立した、M-2環境上位の高速アタッカーです。トリックフラワーの必中・必ず急所という安定性と、とんぼがえりによる対面操作が、扱いやすさと使用率3位を支えています。
+マスカーニャはS123＋こだわりスカーフによる速度と、へんげんじざいで登場直後の一撃に一致補正を乗せて打点を選べる攻撃範囲の広さを両立した、M-2環境上位の高速アタッカーです。トリックフラワーの必中・必ず急所という安定性と、とんぼがえりによる対面操作が、扱いやすさと使用率3位を支えています。
 
 一方で耐久は紙でむし×4弱点が刺さるため、ハッサムの先制バレットパンチやリザードン・ソウブレイズといったほのお複合には明確に弱い点を理解しておく必要があります。ブリジュラス・アシレーヌ・リザードンなど弱点を補完するパートナーと組み、「上から削る・とんぼがえりで引く」を軸に立ち回るのが基本戦術となります。
 

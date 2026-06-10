@@ -215,7 +215,7 @@ HP120と高めの数値を持ちますが、ぼうぎょ65・とくぼう75と�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60（実質120）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>78.7%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代できる。不利対面から有利な後続へ繋ぐピボット</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代できる。不利対面から有利な後続へ繋ぐ対面操作技</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>こうそくいどう</strong></td>
@@ -242,7 +242,7 @@ HP120と高めの数値を持ちますが、ぼうぎょ65・とくぼう75と�
 </table>
 </div>
 
-主力4枠は**おはかまいり・ウェーブタックル・アクアジェット・クイックターン**でほぼ固定されています（いずれも採用率78%以上）。みず技2枚＋ゴースト一致＋ピボットという構成で、こだわりスカーフでも技を切り替えながら立ち回れるよう、攻撃技と交代技をバランスよく積んでいるのが特徴です。
+主力4枠は**おはかまいり・ウェーブタックル・アクアジェット・クイックターン**でほぼ固定されています（いずれも採用率78%以上）。みず技2枚＋ゴースト一致＋交代技という構成で、こだわりスカーフでも技を切り替えながら立ち回れるよう、攻撃技と交代技をバランスよく積んでいるのが特徴です。
 
 ---
 
@@ -252,7 +252,7 @@ HP120と高めの数値を持ちますが、ぼうぎょ65・とくぼう75と�
 
 ### 型1: こだわりスカーフようき型（最多採用）
 
-**性格採用率: ようき 66.9%**（こうげき↑すばやさ↑の物理型のうち最多）
+**性格採用率: ようき 66.9%**（すばやさ↑とくこう↓。物理型のうち最多）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -262,7 +262,7 @@ HP120と高めの数値を持ちますが、ぼうぎょ65・とくぼう75と�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>性格:</strong> ようき（A↑ C↓）<br>
+<strong>性格:</strong> ようき（S↑ C↓）<br>
 <strong>EV:</strong> A32 S32（最多型は余りをHに2）<br>
 <strong>持ち物:</strong> こだわりスカーフ（74.2%）<br>
 <strong>特性:</strong> てきおうりょく
@@ -334,10 +334,10 @@ HP120と高めの数値を持ちますが、ぼうぎょ65・とくぼう75と�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0658-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲッコウガ
+    <img src="/images/pokemon/pokemon-0658-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲッコウガ（みず/あく）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">スカーフでS122の上を取り、おはかまいり（ゴースト×2）で低耐久を上から落とせる。ただしあくのはどう（採用率75.9%）はこちらに×2のため、先制を活かして一撃で倒しきりたい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">スカーフでS122の上は取れるが、みず技は半減（みず0.5）・ゴースト技も半減（あく0.5）で有効打がなく低耐久を削りきれない。逆にあくのはどう（採用率75.9%）はこちらに×2弱点。先制で殴られると一致弱点で落とされる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -376,13 +376,13 @@ HP120と高めの数値を持ちますが、ぼうぎょ65・とくぼう75と�
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（あく/はがね）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技ふいうち（採用率99%・あく）がこちらに×2で刺さり、おはかまいり主体だと優先度で先に削られる。みず技ははがねで半減</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう・じめん・ほのおタイプ（弱点×2）を同伴し後出しで処理する。こちらから出すなら反動の乗らないウェーブタックル以外は通りにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう・じめん・ほのおタイプ（弱点×2）を同伴し後出しで処理する。みず技もゴースト技も半減され有効打がないため、対面では無理に殴らずクイックターンで引く</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（あく/ドラゴン）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどう（採用率98.5%）がこちらに×2弱点。こちらのみず技はドラゴンで半減（×0.5）・ゴースト技は等倍と有効打が乏しく、特殊耐久も高いため撃ち合いで負けやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどう（採用率98.5%）がこちらに×2弱点。こちらのみず技はドラゴンで半減（×0.5）・ゴースト技もあくで半減（×0.5）と有効打がなく、特殊耐久も高いため撃ち合いで負けやすい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー・こおり・かくとうタイプ（弱点）を同伴して後出しで受ける。クイックターンで有利な後続に引く</td>
 </tr>
 <tr>

@@ -48,11 +48,11 @@ heroImage: '../../assets/hero-archaludon-m2.png'
 
 ### 2. とくこう125からの広い攻撃範囲
 
-とくこう種族値は125。10まんボルト（採用率66.9%）・りゅうせいぐん（64.8%）・ラスターカノン（55.7%）と特殊技の採用率が高く、でんき・ドラゴン・はがねの3すくみで広い範囲に等倍以上の打点を持ちます。とくにでんき技はみず・ひこうタイプへ刺さり、使用率上位のアシレーヌ（みず/フェアリー・4位）やギャラドス（みず/ひこう・12位）に有効です。
+とくこう種族値は125。10まんボルト（採用率66.9%）・りゅうせいぐん（64.8%）・ラスターカノン（55.7%）と特殊技の採用率が高く、でんき・ドラゴン・はがねの3タイプで広い範囲に等倍以上の打点を持ちます。とくにでんき技はみず・ひこうタイプへ刺さり、使用率上位のアシレーヌ（みず/フェアリー・4位）やギャラドス（みず/ひこう・12位）に有効です。
 
 ### 3. じきゅうりょく＋ステルスロックで起点を作れる
 
-特性じきゅうりょく（78.0%）は物理攻撃を受けるたびにぼうぎょが1段階上がるため、物理アタッカーと撃ち合うほど硬くなります。ステルスロック（採用率49.8%）・ほえる（23.4%）・ドラゴンテール（18.8%）を併せ持つ個体は、ハザードを撒いて相手を流し、交代ダメージを蓄積させる起点役として機能します。
+特性じきゅうりょく（78.0%）は物理攻撃を受けるたびにぼうぎょが1段階上がるため、物理アタッカーと撃ち合うほど硬くなります。ステルスロック（採用率49.8%）・ほえる（23.4%）・ドラゴンテール（18.8%）を併せ持つ個体は、ステルスロックを撒いて相手を流し、交代ダメージを蓄積させる起点役として機能します。
 
 ---
 
@@ -271,7 +271,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
-<strong>EV:</strong> C32 S32（最多スプレッド「CS + h」採用率18.0%。余りはHへ）<br>
+<strong>EV:</strong> C32 S32（最多配分・採用率18.0%。余りはHへ）<br>
 <strong>持ち物:</strong> しろいハーブ / こだわりスカーフ
 </div>
 <div>
@@ -286,7 +286,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
 
 **強み:**
 
-とくこう125をCS最大振りで活かす型です。最多のステータス振りは「CS + h」（C32 S32、採用率18.0%）で、すばやさを確保しつつ最大火力を出します。りゅうせいぐんはアシレーヌ・ギャラドスといったでんき・ドラゴンが等倍以上で通る相手に高い一撃を入れられ、しろいハーブを持てばりゅうせいぐんのCダウンを1度だけ即リセットできるため、火力を落とさず連発に近い運用ができます。耐久型（ずぶとい・おだやか）と異なり、初手から能動的に上位の高耐久を削れるのが利点です。
+とくこう125をCS最大振りで活かす型です。最多のステータス振りはC32 S32（採用率18.0%）で、すばやさを確保しつつ最大火力を出します。りゅうせいぐんはアシレーヌ・ギャラドスといったでんき・ドラゴンが等倍以上で通る相手に高い一撃を入れられ、しろいハーブを持てばりゅうせいぐんのCダウンを1度だけ即リセットできるため、火力を落とさず連発に近い運用ができます。耐久型（ずぶとい・おだやか）と異なり、初手から能動的に上位の高耐久を削れるのが利点です。
 
 **弱み:**
 
@@ -307,7 +307,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
 <strong>性格:</strong> ずぶとい（B↑ A↓）<br>
-<strong>EV:</strong> H32 B32（スプレッド「HB + d」採用率2.1%等。HD配分も主流）<br>
+<strong>EV:</strong> H32 B32（ずぶといはHB寄せ、おだやかはHD寄せが主流）<br>
 <strong>持ち物:</strong> オボンのみ / たべのこし
 </div>
 <div>
@@ -322,7 +322,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
 
 **強み:**
 
-特性じきゅうりょくで物理を受けるたびにBが上がり、ずぶとい＋H振りと合わせて物理アタッカーを起点にステルスロックを撒けます。ほえる・ドラゴンテールで積みアタッカーを流しながら交代ダメージを稼げるため、特殊型のように一撃で削るのではなく、ハザードと強制交代で盤面を削り続ける役割です。オボンのみ・たべのこしによる回復を絡め、特殊型では持続しにくい長期戦を支えられます。
+特性じきゅうりょくで物理を受けるたびにBが上がり、ずぶとい＋H振りと合わせて物理アタッカーを起点にステルスロックを撒けます。ほえる・ドラゴンテールで積みアタッカーを流しながら交代ダメージを稼げるため、特殊型のように一撃で削るのではなく、ステルスロックと強制交代で盤面を削り続ける役割です。オボンのみ・たべのこしによる回復を絡め、特殊型では持続しにくい長期戦を支えられます。
 
 **弱み:**
 
@@ -332,7 +332,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
 
 ## 環境ポケモンへの相性分析
 
-### 主要ポケモンとの相性
+### 有利・不利がはっきり出る主要ポケモン
 
 使用率上位のうち、ブリジュラスと相性がはっきり出るポケモンを有利・不利の両面から挙げます。はがね/ドラゴンは弱点がかくとう・じめんの2タイプのみで多くの攻撃を等倍以下に抑えますが、すばやさ85・とくぼう65と先手と特殊耐久には欠けるため、上から殴る高速勢・かくとう/じめんの物理打点を持つ相手が苦手という構図です。
 
@@ -372,7 +372,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はどうだんが×4（あく2×はがね2）。S85＞50で先手。相手のかくとう打点は薄く、先制のふいうちもこちらには等倍（あく1×はがね1）で一撃にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はどうだんが×4（あく2×はがね2）。S85＞50で先手。先制のふいうちもこちらには等倍（あく1×はがね1）で一撃にならない。ただしけたぐり（17.6%）採用個体にはかくとう×2を通される</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -380,13 +380,6 @@ heroImage: '../../assets/hero-archaludon-m2.png'
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルトが×2（ほのお1×ひこう2）だがS100＞85で先手を取られる。相手のほのお技はこちらに等倍止まりで一撃では落ちにくい</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ やや有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はどうだんが×2（むし1×はがね2）。S85＞65で先手。相手のむし・はがね技はこちらに半減以下で、撃ち合いで優位</td>
 </tr>
 </tbody>
 </table>
@@ -415,26 +408,33 @@ heroImage: '../../assets/hero-archaludon-m2.png'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率71.5%）がかくとう×2。メガ後S実数値はようきで180とこちらより速く、つるぎのまい（39.3%）で積めばA一致打点で確定圏。しんくうは（26.0%）の先制も負う</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">単体での後出しは困難。じめんを通せるガブリアスやかくとうを無効化するイダイトウ（みず/ゴースト）を後出しし、インファイト後にB・Dが下がった隙を突いて処理する</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.0%）が×2。高HP・高Bでこちらの特殊技を耐え、あくび（94.2%）・ふきとばし（44.5%）でステロや積みを流される</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・みず・こおり技を持つ高速枠（マスカーニャ等）を同伴し、後出しから弱点（×2）で処理する</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">S123でこちらより速く、けたぐり（採用率12.5%）採用個体にはかくとう×2を上から通される。素のトリックフラワー（必中・急所）でも継続的に削られる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">こだわりスカーフ型で先手を取り10まんボルト圏内に。または、ひこう・どく・むし技を持つ枠で後続から弱点を突く</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおは等倍だがちょうのまい（97.4%）でC・D・命中を積まれると、とくぼう65のこちらは特殊で押し負ける。S100でこちらより速い</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">積む前に削るのが前提。いわ技（×4）を持つ高速枠を後出しし、積み始めのターンに弱点で落とす</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0937-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ソウブレイズ（26位）
   </td>
@@ -491,7 +491,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
 1. **じめん対策**: ひこうタイプ（リザードン・ギャラドス）でガブリアス・カバルドンのじしんを無効化する枠
 2. **かくとう対策**: ゴースト複合（イダイトウ）やフェアリー（アシレーヌ）でかくとう技を受ける枠
 3. **高速地面枠**: ガブリアス等で、ブリジュラスが上から殴られる地面・かくとう枠に先制で打点を入れる
-4. **ハザード連携**: ステルスロックを撒いたあと、高速アタッカーで交代を強要し削りを最大化
+4. **ステルスロック連携**: ステルスロックを撒いたあと、高速アタッカーで交代を強要し削りを最大化
 
 ---
 

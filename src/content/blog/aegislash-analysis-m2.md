@@ -56,9 +56,9 @@ heroImage: '../../assets/hero-aegislash-m2.png'
 
 ### 3. キングシールドで受けと能力低下を両立
 
-**キングシールド**（採用率84.2%）はまもると同様にそのターンの攻撃を防ぎつつ、ギルガルドをシールドフォルム（ぼうぎょ140・とくぼう140）に戻します。さらに、防いだ相手が接触技を使っていた場合は相手のこうげきを2段階下げる追加効果があります。
+**キングシールド**（採用率84.2%）はまもると同様にそのターンの攻撃を防ぎつつ、ギルガルドをシールドフォルム（ぼうぎょ140・とくぼう140）に戻します。さらに、防いだ相手が接触技を使っていた場合は相手のこうげきを1段階下げる追加効果があります。
 
-つるぎのまい（38.0%）で攻撃を積んだ後、キングシールドでシールドに戻って高耐久で耐える、という攻守の切り替えが1体で完結します。接触物理アタッカー（ガブリアス・カイリュー・ルカリオ等）に対しては、キングシールドでこうげきを2段階下げて起点化できます。
+つるぎのまい（38.0%）で攻撃を積んだ後、キングシールドでシールドに戻って高耐久で耐える、という攻守の切り替えが1体で完結します。接触物理アタッカー（ガブリアス・カイリュー・ルカリオ等）に対しては、キングシールドでこうげきを1段階下げて起点化できます。
 
 ---
 
@@ -163,7 +163,6 @@ heroImage: '../../assets/hero-aegislash-m2.png'
       <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
-      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
     </div>
   </td>
 </tr>
@@ -171,7 +170,7 @@ heroImage: '../../assets/hero-aegislash-m2.png'
 </table>
 </div>
 
-はがね/ゴーストはノーマル・かくとう・どく・エスパーを無効化し、8タイプ（むしは×0.25）を半減する優秀な耐性を持ちます。特に**かくとう・エスパーを無効化**できる点は、環境のかくとう技（ルカリオのインファイト採用率71.5%等）やエスパー技（スターミーのしねんのずつき等）を完全に受けられることを意味し、防御面でのギルガルドの価値を支えています。シールドフォルムのぼうぎょ140・とくぼう140と組み合わせると、半減・無効タイプの攻撃はほとんど通りません。
+はがね/ゴーストはノーマル・かくとう・どくを無効化し、8タイプ（むしは×0.25）を半減する優秀な耐性を持ちます。特に**かくとうを無効化**できる点は、環境のかくとう技（ルカリオのインファイト採用率71.5%等）を完全に受けられることを意味し、防御面でのギルガルドの価値を支えています。エスパー技もはがねで半減（×0.5）するため、スターミーのしねんのずつき等を受けやすい点も含め、シールドフォルムのぼうぎょ140・とくぼう140と組み合わせると半減・無効タイプの攻撃はほとんど通りません。
 
 ただし弱点のほのお・じめん・あく・ゴーストは×2で通り、これらの技を持つ相手には注意が必要です。
 
@@ -203,7 +202,7 @@ heroImage: '../../assets/hero-aegislash-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">84.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃を防ぎシールドに変化。接触技なら相手のAを2段階ダウン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃を防ぎシールドに変化。接触技なら相手のAを1段階ダウン</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ポルターガイスト</strong></td>
@@ -296,7 +295,7 @@ heroImage: '../../assets/hero-aegislash-m2.png'
 
 EVはHA振り（H32 A32）が主流で、HP・こうげきに厚く振ることでブレード時の火力とシールド時の耐久の両立を狙います。つるぎのまいをシールドフォルムのまま積めるため、ぼうぎょ140・とくぼう140の高耐久で耐えながらこうげきを2段階上げ、次のターンにブレードのこうげき140＋積み2段階でポルターガイストを叩き込めます。
 
-かげうちが先制技として詰めを担うため、低速でも積み後の全抜きを狙いやすいのが特徴です。せいなるつるぎを採用すると、ポルターガイストが半減・無効になるあく・はがね（ドドゲザン・ハッサム等）にも打点を持てます。
+かげうちが先制技として詰めを担うため、低速でも積み後の全抜きを狙いやすいのが特徴です。せいなるつるぎを採用すると、ポルターガイストが半減・無効になるあく複合（ドドゲザンはゴースト×0.5・あく無効だが、せいなるつるぎのかくとうがあく/はがねに×4）にも打点を持てます。
 
 **弱み:**
 
@@ -332,7 +331,7 @@ EVはHA振り（H32 A32）が主流で、HP・こうげきに厚く振ること�
 
 **強み:**
 
-シャドーボールはポルターガイストと違い相手の道具に依存せず、どの相手にも安定して撃てるのが物理型との差です。ラスターカノンを加えることで、ゴーストを半減するはがね（ブリジュラス・ドドゲザン等）にもはがね打点を通せます。物理受け（カバルドン等の高ぼうぎょ枠）に対しては特殊技の方がダメージが通るため、物理型の苦手枠を崩せます。
+シャドーボールはポルターガイストと違い相手の道具に依存せず、どの相手にも安定して撃てるのが物理型との差です。ラスターカノンを加えることで、はがねが等倍以上で通るフェアリー・いわ・こおり（フラエッテ・ミミッキュ等）への打点を特殊側でも確保できます。物理受け（カバルドン等の高ぼうぎょ枠）に対しては特殊側にも回せるため、物理型の苦手枠を崩せます。
 
 **弱み:**
 
@@ -368,14 +367,14 @@ EVはHA振り（H32 A32）が主流で、HP・こうげきに厚く振ること�
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力トリックフラワー（くさ）はこちらに等倍だが、はたきおとす（採用率57.6%）はあく×2弱点でたべのこし等の道具も奪われる。S123で先手を取られる点も重い。キングシールドで接触技のAを下げられるが過信は禁物</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力トリックフラワー（くさ）ははがね/ゴーストに半減（×0.5）だが、はたきおとす（採用率57.6%）はあく×2弱点でたべのこし等の道具も奪われる。S123で先手を取られる点も重い。キングシールドで接触技のAを下げられるが過信は禁物</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー技（しねんのずつき39%）はゴースト無効でこちらに通らず、みず技も等倍。こちらのゴースト技はエスパーに×2。シールドの高耐久で受けつつ反撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー技（しねんのずつき39%）ははがねで半減（×0.5）、みず技も等倍で大きく入らない。こちらのゴースト技はエスパーに×2。シールドの高耐久で受けつつ反撃できる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -442,13 +441,13 @@ EVはHA振り（H32 A32）が主流で、HP・こうげきに厚く振ること�
     <img src="/images/pokemon/pokemon-0937-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ソウブレイズ（26位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお/ゴーストでほのお技・ゴースト技ともこちらに×2。かげうちのゴースト先制もこちらにゴースト×2で刺さり、低速の撃ち合いで不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・いわタイプでほのお技を受けつつ弱点を突く。あくタイプでゴースト技を無効化して後出しする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・いわタイプでほのお技を受けつつ弱点を突く。あくタイプならゴースト技を半減（×0.5）でき、ソウブレイズのかくとう（インファイト36.3%）にも強く後出ししやすい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（採用率99.0%）・ドゲザン（96.4%）のあく技があく×2弱点。こちらのゴースト技はあく無効、はがね技も半減で打点が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（採用率99.0%）・ドゲザン（96.4%）のあく技があく×2弱点。こちらのゴースト技はあく/はがねに半減（×0.5）、はがね技も半減で打点が乏しい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">せいなるつるぎ（あく/はがねに×4）を採用した個体なら反撃可。かくとう・じめんタイプを同伴して弱点を突く</td>
 </tr>
 </tbody>

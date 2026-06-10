@@ -350,14 +350,14 @@ HC振りでとくこう126を活かしつつ、HP80に振ってオボンのみ�
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォースが×2。げきりん（47.9%）は無効、じしん（99.2%）も等倍止まりで弱点を突かれない。ただしS102で先手を取られるため、削れた相手をアクアジェットで詰める動きが軸になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォースが×2。げきりん（47.9%）は無効、じしん（99.2%）も等倍止まり。ただしS102で先手を取られるため、削れた相手をアクアジェットで詰める動きが軸。どくづき（19.4%・どく）を持つ個体には×2で返される点に注意</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォースが×2、ドラゴン技は無効。マルチスケイル下でも一致フェアリーで大きく削れる。れいとうビーム採用ならさらに通る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォースが×2でドラゴン技も無効だが、10まんボルト（47.6%・でんき）が×2弱点。S80で先手を取られるうえ、約半数の個体に上からでんき技で弱点を突かれるため撃ち合いは拮抗。でんき技のない個体には有利</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -370,8 +370,8 @@ HC振りでとくこう126を活かしつつ、HP80に振ってオボンのみ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリアが×2、相手のほのお技はこちらに半減。ただしS100で先手を取られ、ソーラービーム（61.0%・くさ技）を持つ個体には×2で返される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガY（ほのお/ひこう）にはうたかたのアリアが×2でほのお技も半減できるが、ソーラービーム（61.0%・くさ）が×2弱点でメガ後S実数値167に上から焼かれる。メガX（ほのお/ドラゴン）には一致技がともに等倍で有効打を欠く</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -534,7 +534,7 @@ HC振りでとくこう126を活かしつつ、HP80に振ってオボンのみ�
 
 **総評:**
 
-アシレーヌはムーンフォース＋うたかたのアリアの受けにくい一致技2枚と、とくこう126・とくぼう116の特殊性能を両立した使用率4位のアタッカー兼耐久枠です。ドラゴン無効・あく半減により、ガブリアス・サザンドラ・カイリューといった環境上位のドラゴン勢に強く出られるのが最大の武器です。
+アシレーヌはムーンフォース＋うたかたのアリアの受けにくい一致技2枚と、とくこう126・とくぼう116の特殊性能を両立した使用率4位のアタッカー兼耐久枠です。ドラゴン無効・あく半減により、ガブリアス・サザンドラといった環境上位のドラゴン勢に強く出られるのが最大の武器です（ただしでんき技を持つカイリューには弱点を突かれるため過信は禁物）。
 
 一方ですばやさ60と遅く、ウォッシュロトム・フシギバナ・キラフロルなどでんき・くさ・どくの弱点を突いてくる相手には上から処理されやすいため、じめん・ほのお枠でこれらをケアするパーティ構成が前提になります。先制アクアジェットと一致技の範囲を活かし、苦手な弱点枠を味方で受け持つ構成が安定します。
 

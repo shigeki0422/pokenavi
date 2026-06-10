@@ -57,7 +57,7 @@ heroImage: '../../assets/hero-volcarona-m2.png'
 
 ### 3. ギガドレインで苦手なみず・いわ・じめんに打点
 
-サブウェポンの**ギガドレイン（採用率59.2%）**は、一致技ほのお・むしが半減されるみず・いわ・じめんタイプに刺さるくさ技です。HP吸収でウルガモス自身の延命にもつながり、弱点を突いてくるカバルドン・キラフロル・各種みずタイプに対する貴重な打点になります。一致技だけでは止まりやすい相手を崩す役割を担います。
+サブウェポンの**ギガドレイン（採用率59.2%）**は、一致技ほのお・むしが半減されるみず・いわ・じめん単タイプに刺さるくさ技です。HP吸収でウルガモス自身の延命にもつながり、じめん単のカバルドン（×2）など一致技が通りにくい相手への打点になります。複合タイプでは倍率が下がり（キラフロルのいわ/どく・ギャラドスのみず/ひこうは等倍）、決定打にはなりにくい点は把握しておきたいところです。
 
 ---
 
@@ -143,12 +143,10 @@ heroImage: '../../assets/hero-volcarona-m2.png'
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
-      <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
@@ -162,7 +160,7 @@ heroImage: '../../assets/hero-volcarona-m2.png'
 </table>
 </div>
 
-最大の注意点は**いわ技の×4弱点**（いわ×2[むし] × ×2[ほのお]）です。低耐久と相まって、いわ技は無振りでも致命傷になります。ガブリアスのいわなだれ・がんせきふうじ、キラフロルのパワージェムなど、環境にいわ技持ちは多く、これらと対面した時点でちょうのまいの起点作りは破綻します。一方でかくとう・はがね・くさ・むし・フェアリー・こおりを軽減し、はがね・くさ・ほのおは¼まで落とせるため、これらを撃つ相手の前ではD方面の硬さを生かして積みやすくなります。
+最大の注意点は**いわ技の×4弱点**（いわ×2[むし] × ×2[ほのお]）です。低耐久と相まって、いわ技は無振りでも致命傷になります。ガブリアスのいわなだれ・がんせきふうじ、キラフロルのパワージェムなど、環境にいわ技持ちは多く、これらと対面した時点でちょうのまいの起点作りは破綻します。一方でかくとう・はがね・むし・フェアリー・こおりを半減し、くさは¼まで落とせるため、これらを撃つ相手の前ではD方面の硬さを生かして積みやすくなります。
 
 ---
 
@@ -280,7 +278,7 @@ heroImage: '../../assets/hero-volcarona-m2.png'
 
 **弱み:**
 
-ひかえめ・おくびょう型と比べ攻撃に振らないぶん、積み前の火力が出ず、起点役を倒し切れずに居座られると手数で押し切られます。さらにいわ×4弱点は耐久振りでも耐えきれず、がんせきふうじ・いわなだれを持つガブリアスやキラフロルと対面した瞬間に積みプランが崩れます。
+ひかえめ・おくびょう型と比べ攻撃に振らないぶん、積み前の火力が出ず、起点役を倒し切れずに居座られると手数で押し切られます。ぼうぎょに寄せても、ウルガモス共通のいわ×4弱点だけは耐久振りで補えず、ガブリアスやキラフロルのいわ技で一撃なのは火力型と変わりません。
 
 ---
 
@@ -297,7 +295,7 @@ heroImage: '../../assets/hero-volcarona-m2.png'
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
 <strong>性格:</strong> ひかえめ（C↑ A↓）／おくびょう（S↑ A↓）<br>
-<strong>EV:</strong> C32 S32（CS振り。最多はH+2振り）<br>
+<strong>EV:</strong> C32 S32（CS振り。余りはHに回す配分が多い）<br>
 <strong>持ち物:</strong> オボンのみ / きあいのタスキ
 </div>
 <div>
@@ -312,11 +310,11 @@ heroImage: '../../assets/hero-volcarona-m2.png'
 
 **強み:**
 
-CS振りでとくこう・すばやさを最大化し、積み前から火力と素早さを出せる型です。おくびょうなら積む前のS実数値が高く、1積み後はマスカーニャ（S123）やゲッコウガ（S122）も上から叩けます。きあいのタスキ（採用率9.1%）と合わせれば、いわ技以外の弱点技に対しても1回耐えてちょうのまいを積むチャンスを作れます。ずぶとい型より積み前の制圧力が高く、起点役を自力で削ってから積みに入れるのが利点です。
+CS振りでとくこう・すばやさを最大化し、積み前から火力と素早さを出せる型です。おくびょうなら積む前のS実数値が高く、1積み後はマスカーニャ（S123）やゲッコウガ（S122）も上から叩けます。きあいのタスキ（採用率9.1%）と合わせれば、HP満タンならいわ技の×4でも1回耐えてちょうのまいを積むチャンスを作れます。ずぶとい型より積み前の制圧力が高く、起点役を自力で削ってから積みに入れるのが利点です。
 
 **弱み:**
 
-ずぶとい型に比べぼうぎょに振らないため、ギャラドスのたきのぼり（みず×2）やカイリューのエアスラッシュ（ひこう×2）など弱点を突く物理高火力で積み前に削られやすくなります。きあいのタスキ採用でも、ステルスロックやがんせきふうじの先制を受けるとタスキが潰れ、積みターンを得られません。
+ずぶとい型に比べぼうぎょに振らないため、ギャラドスのたきのぼり（みず×2）やカイリューのエアスラッシュ（ひこう×2）など弱点を突く物理高火力で積み前に削られやすくなります。きあいのタスキ採用でも、ステルスロックでHPが削れていると満タン前提が崩れてタスキが発動せず、積みターンを得られません。
 
 ---
 
@@ -324,7 +322,7 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
 
 ### 主要ポケモンとの相性
 
-使用率上位のうち、ウルガモスと相性がはっきり出るポケモンを有利・不利の両面から挙げます。ウルガモスは1積みでS実数値が1.5倍になり中速以下の多くを抜けますが、HP85・B65と物理耐久が低く、いわ×4・みず×2・じめん×2・ひこう×2を突かれると積み前に崩れる点に注意してください。
+使用率上位のうち、ウルガモスと相性がはっきり出るポケモンを有利・不利の両面から挙げます。ウルガモスは1積みでS実数値が1.5倍になり中速以下の多くを抜けますが、HP85・B65と物理耐久が低く、いわ×4・みず×2・ひこう×2を突かれると積み前に崩れる点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -340,8 +338,8 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまいが×2（はがね2×ドラゴン1）。S100＞85で先手。主力の10まんボルト・りゅうせいぐん・ラスターカノンはいずれもウルガモスに等倍以下で、積みの起点にしやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまいは等倍（はがね2×ドラゴン0.5）止まりだが、主力の10まんボルト・りゅうせいぐん・ラスターカノンはいずれもウルガモスに等倍以下。S100＞85で先手も取れ、積みの起点にしやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -385,6 +383,13 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">エアスラッシュ（56%・ひこう×2）が通り、しんそく（46%）の先制でタスキ・残りHPも詰められる。S80で素では先を取れても弱点技で押し負ける</td>
 </tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S115で素のウルガモスより速く、アクアブレイク（89%・みず×2）で上から削られる。アクアジェット（87%・みず×2先制）も持ち、1積みで素早さを抜き返しても先制技で詰められる</td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -406,14 +411,14 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">がんせきふうじ（40%）・いわなだれ（23%）が×4。S102で素のウルガモスより速く、いわ技1発で落ちる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ウルガモスを引っ込め、いわ技を半減するみず・はがねタイプ（アシレーヌ・ブリジュラス等）を後出しして処理する。ギガドレイン（×2）持ちのウルガモスでも先制を取られるため対面では交代が前提</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ウルガモスを引っ込め、いわ技を半減するみず・はがねタイプ（アシレーヌ・ブリジュラス等）を後出しして処理する。ギガドレインを持ってもガブリアス（じめん/ドラゴン）には等倍止まりで先制も取られるため、対面では交代が前提</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">パワージェム（85%・いわ×4）が高採用。だいちのちから（67%・じめん×2）も刺さり、こちらの一致ほのお・むしはどく半減で打点が細い</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギガドレイン（みず・いわ・じめんへの打点）を持たせ、先手で削れない場合はみずタイプを後出しして処理する。積みの起点にはせず引いて対応する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">パワージェム（85%・いわ×4）が高採用で一撃で落とされる。こちらの一致ほのお・むしはどく半減で打点が細く、ギガドレインもいわ/どくに等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギガドレインを持ってもいわ/どくには等倍で決定打にならない。みず・じめんタイプ（アシレーヌ・カバルドン等）を後出ししていわ/どくの弱点を突き、積みの起点にはせず引いて対応する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -426,7 +431,7 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <span style="margin-left:0"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px"></span>リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ソーラービーム（61%）はくさだがウルガモスには等倍。主流のメガYはほのお/ひこうでこちらの一致ほのおが半減され、エアスラッシュ（33%・ひこう×2）で上から削られる。S100同士で素早さ勝負は不安定</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ソーラービーム（61%）のくさはウルガモスに¼で軽いが、主流のメガリザードンY（採用率63.6%）はほのお/ひこうでこちらの一致ほのおが半減され、エアスラッシュ（33%・ひこう×2）で上から削られる。メガ後S100同士で素早さ勝負は不安定</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ・でんき・みずタイプ（キラフロル・ウォッシュロトム等）を後出ししてひこう/ほのおの弱点を突く。ウルガモス単体では撃ち合わない</td>
 </tr>
 </tbody>
@@ -444,13 +449,13 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
     <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ">
     <div class="name">ミミッキュ</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ばけのかわで起点を作りやすく、ウルガモスが苦手なじめん・いわアタッカーに先制技で対応</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ばけのかわで居座り、ガブリアスにはじゃれつく（フェアリー×2）、削れた相手にはかげうちの先制で対応できる</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速じめん枠。じしんでウルガモスが弱点を突かれるキラフロル等のいわ・どくに上から打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速じめん枠。ウルガモスにいわ技を撃つキラフロル（いわ/どく）にじしんが×4で上から刺さる</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
@@ -468,7 +473,7 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
     <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)">
     <div class="name">イダイトウ(オス)</div>
     <div class="rate">同居率9位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">みずタイプでウルガモスが苦手ないわ・じめん枠に弱点打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">みずタイプでウルガモスにいわ技を撃つキラフロル・ガブリアスへ×2の弱点打点</div>
   </div>
 </div>
 
@@ -476,10 +481,10 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
 
 ウルガモスはいわ×4を筆頭に弱点が多く物理耐久も低いため、残り5体で以下の役割を補います。
 
-1. **いわ技対策**: はがね（ブリジュラス）でいわ技を半減して受ける枠
-2. **じめん技対策**: ばけのかわや先制技でじめんアタッカーを処理する枠（ミミッキュ等）
+1. **いわ技対策**: はがね（ブリジュラス）でいわ技を半減して受ける枠。ガブリアス・キラフロルのいわ技に代わって受ける
+2. **ガブリアスへの打点**: じゃれつく（フェアリー×2）＋かげうちの先制を持つミミッキュで、いわ技持ちのガブリアスを縛る枠
 3. **対面操作**: とんぼがえり持ち（マスカーニャ）でウルガモスを安全に着地させる枠
-4. **みず・いわ枠への打点**: でんき・くさ・いわ技で苦手なみずタイプ（ギャラドス等）を返す枠
+4. **みず枠への打点**: でんき・くさ技でギャラドス・スターミーなど高速みずアタッカーを返す枠
 
 ---
 
@@ -536,9 +541,9 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
 
 **総評:**
 
-ウルガモスはちょうのまい1積みでC・D・Sを同時に上げ、起点さえ作れれば全抜きを狙える積みアタッカーです。M-2環境では使用率2位のブリジュラス、3位のマスカーニャ（1積み後）、14位のハッサムといった上位はがね・くさ・むし複合に一致ほのお技が刺さり、これらを起点に積みを通せるのが強みです。
+ウルガモスはちょうのまい1積みでC・D・Sを同時に上げ、起点さえ作れれば全抜きを狙える積みアタッカーです。M-2環境では3位のマスカーニャ（くさ/あく・1積み後）や14位のハッサム（むし/はがね）といった上位に一致ほのお技が×2以上で刺さり、2位のブリジュラスのように相手の打点が等倍以下で通らない相手も起点にして積みを通せるのが強みです。
 
-一方で**いわ技×4弱点**が常に重く、使用率1位ガブリアスのいわ技や15位キラフロルのパワージェムと対面すると積みプランが破綻します。低い物理耐久と相まって、これら岩・地面・水の高速アタッカーをパーティ全体でどう処理するかが採用の前提条件です。起点を安全に作るためのとんぼがえり要員・いわ技半減枠を揃えられるかが、使用率18位のウルガモスを勝ち筋に変えられるかを分けます。
+一方で**いわ技×4弱点**が常に重く、使用率1位ガブリアスのいわ技や15位キラフロルのパワージェムと対面すると積みプランが破綻します。低い物理耐久と相まって、いわ・みず・ひこうで弱点を突く高速アタッカーをパーティ全体でどう処理するかが採用の前提条件です。起点を安全に作るためのとんぼがえり要員・いわ技半減枠を揃えられるかが、使用率18位のウルガモスを勝ち筋に変えられるかを分けます。
 
 ---
 
@@ -547,5 +552,3 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [いわ×4を突くキラフロルのM-2考察](/blog/kiraflosure-analysis-m2/)
 - [積み前に削られる相手 ギャラドスのM-2考察](/blog/gyarados-analysis-m2/)
-</content>
-</invoke>

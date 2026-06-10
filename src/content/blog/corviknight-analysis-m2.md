@@ -148,6 +148,7 @@ heroImage: '../../assets/hero-corviknight-m2.png'
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
       <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
       <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
       <span><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ドラゴン</span>
@@ -209,7 +210,7 @@ heroImage: '../../assets/hero-corviknight-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>62.1%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代。受け出し後に有利な味方へ繋ぐピボット技</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃しながら交代。受け出し後に有利な味方へ繋ぐ対面操作技</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アイアンヘッド</strong></td>
@@ -288,18 +289,18 @@ heroImage: '../../assets/hero-corviknight-m2.png'
 
 **弱み:**
 
-積みターンを使うため、てっぺきを積む隙にちょうはつを撃たれると機能停止します。また、とくぼう方向はてっぺきで補強できないため、後述のほのお・でんきの特殊打点で上から崩されると立て直しが効きません。
+てっぺきを積むターンを攻撃に使わないため、とんぼがえり型と違い対面を選んで繋ぐ動きができず、積む隙にちょうはつを撃たれると物理完封の前提が崩れて機能停止します。
 
 ---
 
-### 型2: とんぼがえりピボット型
+### 型2: とんぼがえり対面操作型
 
 **指標: とんぼがえり採用率 62.1%**
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:48px;height:48px">
-  <strong style="font-size:1.05em">とんぼがえりピボット型</strong>
+  <strong style="font-size:1.05em">とんぼがえり対面操作型</strong>
 </div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
@@ -353,31 +354,24 @@ heroImage: '../../assets/hero-corviknight-m2.png'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のトリックフラワー（くさ×0.25）・はたきおとす（あく等倍）・トリプルアクセル（こおり等倍）はいずれも軽傷。ただしかみなりパンチ（採用率21.8%）はでんき×2弱点なので、持つ個体には受け出さない。ボディプレスがくさ/あくの複合に×2で通る</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（どく×0）無効、シャドーボール（ゴースト等倍）・きあいだま（かくとう等倍）止まり。ほのお・でんき技を持たず崩されにくい。ただしボディプレス（かくとう）はゴーストに×0で無効なので、削るならアイアンヘッドやとんぼがえりに頼る</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">コメットパンチ（はがね×0.5）半減、インファイト（かくとう×1）等倍。ほのお・でんき技を持たず、てっぺき＋はねやすめで物理を受け切れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">コメットパンチ（はがね×0.25）・バレットパンチ（はがね×0.25）を大幅軽減、インファイト（かくとう×1）等倍。ほのお・でんき技を持たず、てっぺき＋はねやすめで物理を受け切れる</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（あく等倍）・アイアンヘッド（はがね×0.5）・ドゲザン（あく等倍）いずれも弱点ではない。ボディプレスがあく/はがねの複合に×4で刺さる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（あく等倍）・アイアンヘッド（はがね×0.25）・ドゲザン（あく等倍）いずれも弱点ではない。ボディプレスがあく/はがねの複合に×4で刺さる</td>
 </tr>
 </tbody>
 </table>
@@ -422,7 +416,7 @@ heroImage: '../../assets/hero-corviknight-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（採用率67.0%）・だいもんじ（14.2%）のほのお技が×2弱点。あくのはどう・りゅうせいぐんは半減だが、ほのお技で受け回しを崩される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（採用率67.0%）・だいもんじ（14.2%）のほのお技が×2弱点。あくのはどう（あく等倍）・りゅうせいぐん（ドラゴン×0.5）は軽傷だが、ほのお技で受け回しを崩される</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技を持つ個体には受け出さない。ボディプレスがあく/ドラゴンの複合に×2で通るので、ほのお技未採用と読めた時のみ居座って削る</td>
 </tr>
 <tr>
