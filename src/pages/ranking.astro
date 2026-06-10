@@ -2,7 +2,7 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import meta from '../data/article-meta.json';
+import articleMeta from '../data/article-meta.json';
 
 const TYPE_NUM: Record<string, string> = {
 	ノーマル: '00', かくとう: '01', ひこう: '02', どく: '03', じめん: '04',
@@ -18,7 +18,7 @@ const TYPE_SLUG: Record<string, string> = {
 };
 const typeImg = (t: string) => `/images/types/type-${TYPE_NUM[t]}-${TYPE_SLUG[TYPE_NUM[t]]}.png`;
 
-const entries = Object.entries(meta as Record<string, { name: string; rank: number; types: string[] }>)
+const entries = Object.entries(articleMeta as Record<string, { name: string; rank: number; types: string[] }>)
 	.map(([slug, v]) => ({ slug, ...v }))
 	.sort((a, b) => a.rank - b.rank);
 

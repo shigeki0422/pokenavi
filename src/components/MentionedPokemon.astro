@@ -1,5 +1,5 @@
 ---
-import meta from '../data/article-meta.json';
+import articleMeta from '../data/article-meta.json';
 
 interface Props {
 	currentSlug: string;
@@ -10,7 +10,7 @@ interface Props {
 const { currentSlug, body, max = 12 } = Astro.props;
 
 type Meta = Record<string, { name: string; rank: number; types: string[]; matchKey: string }>;
-const m = meta as Meta;
+const m = articleMeta as Meta;
 
 // 本文に matchKey が登場する他記事を抽出（使用率順）
 const mentioned = Object.entries(m)

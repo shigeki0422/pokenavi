@@ -2,7 +2,7 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
-import meta from '../../data/article-meta.json';
+import articleMeta from '../../data/article-meta.json';
 
 const TYPE_NUM: Record<string, string> = {
 	ノーマル: '00', かくとう: '01', ひこう: '02', どく: '03', じめん: '04',
@@ -35,13 +35,13 @@ export function getStaticPaths() {
 		'15': 'dragon', '16': 'dark', '17': 'fairy',
 	};
 	const used = new Set<string>();
-	for (const v of Object.values(meta as Meta)) for (const t of v.types) used.add(t);
+	for (const v of Object.values(articleMeta as Meta)) for (const t of v.types) used.add(t);
 	return [...used].map((jp) => ({ params: { type: slug[num[jp]] } }));
 }
 
 const { type } = Astro.params;
 const jp = SLUG_TO_JP[type as string];
-const entries = Object.entries(meta as Meta)
+const entries = Object.entries(articleMeta as Meta)
 	.map(([slug, v]) => ({ slug, ...v }))
 	.filter((e) => e.types.includes(jp))
 	.sort((a, b) => a.rank - b.rank);
