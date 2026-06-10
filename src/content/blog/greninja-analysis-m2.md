@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】ゲッコウガ考察 M-2 使用率28位 へんげんじざいの型と立ち回り'
-description: 'M-2シングルバトルで使用率28位のゲッコウガを徹底分析。S122の高速とへんげんじざい（採用率82.4%）による不意のタイプ変化、れいとうビーム89.6%・あくのはどう75.9%のCS特殊型、タスキ/スカーフ/メガゲッコウガナイト40.8%の持ち物分岐を実データで解説します。'
+description: 'M-2シングルバトルで使用率28位のゲッコウガを徹底分析。S122の高速とへんげんじざい（採用率82.4%）による不意のタイプ変化、れいとうビーム89.6%・あくのはどう75.9%のCS特殊型、タスキ/スカーフ/ゲッコウガナイト40.8%の持ち物分岐を実データで解説します。'
 pubDate: '2026-06-04'
 draft: true
 heroImage: '../../assets/hero-greninja-m2.png'
@@ -61,7 +61,7 @@ heroImage: '../../assets/hero-greninja-m2.png'
 
 ### 2. れいとうビームでドラゴン・じめん勢を上から落とす
 
-ゲッコウガの技で最も採用率が高いのは**れいとうビーム（89.6%）**です。みず/あくのタイプ一致ではないものの、こおり技はドラゴン・じめん・ひこう・くさに刺さり、環境上位のガブリアス（ドラゴン/じめん）・カイリュー（ドラゴン/ひこう）に×2で通ります。S122で上を取れるため、これらの高速ドラゴンを先手で削れるのが大きな採用理由です。
+ゲッコウガの技で最も採用率が高いのは**れいとうビーム（89.6%）**です。みず/あくのタイプ一致ではないものの、こおり技はドラゴン・じめん・ひこう・くさに刺さり、環境上位のガブリアス（ドラゴン/じめん）・カイリュー（ドラゴン/ひこう）にはどちらも×4で通ります。S122で上を取れるため、これらの高速ドラゴンを先手で削れるのが大きな採用理由です。
 
 ### 3. へんげんじざいで「どの技も一致技」になる
 
@@ -312,11 +312,11 @@ heroImage: '../../assets/hero-greninja-m2.png'
 
 ## 主要型の解説
 
-型①・型②は性格分布（ひかえめ／おくびょう）と持ち物分布を指標としています。
+各型は持ち物分布（タスキ35.2%／ゲッコウガナイト40.8%／スカーフ15.5%）を指標としています。性格はひかえめ52.0%・おくびょう37.8%が二分しますが、S122で環境上位を上から叩く役割を活かすには、いずれの型も素早さ補正のおくびょうが基本です。
 
 ### 型1: きあいのタスキ高速アタッカー型（最多級）
 
-**指標: きあいのタスキ 35.2%／ひかえめ 52.0%**
+**指標: きあいのタスキ 35.2%**
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -347,7 +347,7 @@ heroImage: '../../assets/hero-greninja-m2.png'
 
 **弱み:**
 
-タスキは天候ダメージや先制技・設置ダメージで簡単に潰れます。ステルスロックが撒かれた盤面では受け出しが効かず、メガと異なり火力が控えめなため、相手の高耐久（カバルドン・ブリジュラス等）を一撃で抜けない場面が増えます。EVのCS振りでとくこう・すばやさを最大化しているため、被弾には特に脆くなります。
+タスキは天候ダメージや先制技・設置ダメージで簡単に潰れます。ステルスロックが撒かれた盤面では受け出しが効かず、メガ型と異なりとくこうが103止まりのため、相手の高耐久（カバルドン・ブリジュラス等）を一撃で抜けない場面が増えます。
 
 ---
 
@@ -380,7 +380,7 @@ heroImage: '../../assets/hero-greninja-m2.png'
 
 **強み:**
 
-メガ後はすばやさ142で、タスキ型では同速以下になるマスカーニャ（S123）を上から叩けます。とくこう133に上がるため、タスキ型では削り切れない高耐久にも一致技がより通りやすくなります。タスキ型が「1回耐えて返す」のに対し、メガ型は「最初から上を取って押し切る」純粋な火力・速度型です。
+メガ後はすばやさ142で、タスキ型では同速以下になるマスカーニャ（S123）を上から叩けます。とくこう133に上がるため、タスキ型では削り切れない高耐久にも一致技がより通りやすくなります。タスキ型が「1回耐えて返す」のに対し、メガ型は「最初から上を取って押し切る」火力・速度重視の型です。
 
 **弱み:**
 
@@ -398,7 +398,7 @@ heroImage: '../../assets/hero-greninja-m2.png'
 
 ### 主要ポケモンとの相性
 
-使用率上位のうち、ゲッコウガと相性がはっきり出るポケモンを有利・不利の両面から挙げます。S122（おくびょう最大振り）でほぼ上を取れる一方、HP72・B67・D71と耐久は低く、弱点（でんき・くさ・かくとう・むし・フェアリー）はもちろん等倍でも被弾は重い点に注意してください。
+使用率上位のうち、ゲッコウガと相性がはっきり出るポケモンを有利・不利の両面から挙げます。S122（おくびょう最大振り）で素のすばやさは環境上位を上回る一方、こだわりスカーフ持ちやメガ進化で速度を上げる相手には先手を許す点、そしてHP72・B67・D71と耐久は低く、弱点（でんき・くさ・かくとう・むし・フェアリー）はもちろん等倍でも被弾は重い点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -429,21 +429,21 @@ heroImage: '../../assets/hero-greninja-m2.png'
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">なみのりが×2（ほのお弱点）。S122＞100で先手。低耐久同士の撃ち合いで上から押せる。エアスラッシュ（32.9%）等のひこう技は等倍</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ石採用率98.5%だが、メガリザードンY（S実数値167）でもゲッコウガのS実数値191が上回り先手。なみのりはメガリザードンY（ほのお/ひこう）に×2、メガリザードンX（ほのお/ドラゴン・34.9%）には等倍になる点に注意。低耐久同士の撃ち合いで上から押せる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（ゴースト弱点）。S122＞110で先手。シャドーボール（71.1%）はあくで×0.5に軽減でき、ヘドロウェーブ（81.7%）はみず/あくに等倍</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ メガ間で速度勝負</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（ゴースト弱点）。シャドーボール（71.1%）はあくで×0.5に軽減できる。ただしゲンガナイト採用率82.4%でメガ後はS130（S実数値200）となり、非メガのゲッコウガ（S実数値191）は先手を取られる。メガゲッコウガ（S実数値213）なら上を取れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×2（ドラゴン弱点・あくは等倍）。S122＞98で先手。かえんほうしゃ（67%）はみずで×0.5に軽減でき、撃ち合いで優位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ スカーフに先手を許す</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×2（ドラゴン弱点・あくは等倍）。素のすばやさはS122＞98だが、こだわりスカーフ採用率79.7%でサザンドラ側が先手を取る個体が大半。かえんほうしゃ（67.0%）はみずで×0.5に軽減できるので、先に動かれても1発耐えれば返せる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -507,7 +507,7 @@ heroImage: '../../assets/hero-greninja-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0003-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フシギバナ（27位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ/どくでみず技を半減、こちらはくさ×2弱点を突かれる。れいとうビームは×2で刺さるがD100で一撃には足りず、低耐久のこちらは反撃のくさ技×2で先に落とされやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ/どくでみず技を半減、こちらはくさ×2弱点を突かれる。先手のれいとうビームは×2で刺さるがD100で一撃には届かず、耐えられて返しのくさ技×2で落とされやすい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブはくさに半減されるため、ほのお・エスパー・ひこう枠（リザードン等）を合わせてくさ弱点を突く</td>
 </tr>
 </tbody>

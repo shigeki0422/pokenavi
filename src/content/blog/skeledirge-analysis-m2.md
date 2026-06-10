@@ -132,7 +132,7 @@ HP104・ぼうぎょ100の物理耐久が高く、おにびと合わせて物理
 <thead>
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（2倍）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（0.5倍）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½・むしは¼）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
 </tr>
 </thead>
@@ -277,7 +277,7 @@ EV振りはHB型（ずぶとい 67.3%）とHD型（おだやか 21.9%・ひか�
 
 **強み:**
 
-ぼうぎょに振り切り、てんねん＋おにびで物理アタッカーを完全に止める型です。HP104・ぼうぎょ100にずぶとい補正とHB振りを重ねるため、ルカリオ・ミミロップ・ハッサムといったつるぎのまい物理エースを、積みを無視しつつおにびで火力を削って受け切れます。かくとう技を無効化するゴーストタイプも噛み合い、これらの主力かくとう技そのものが通りません。
+ぼうぎょに振り切り、てんねん＋おにびで物理アタッカーを強く止める型です。HP104・ぼうぎょ100にずぶとい補正とHB振りを重ねるため、ルカリオ・ミミロップといったつるぎのまい物理エースを、積みを無視しつつおにびで火力を削って受け切れます。かくとう技を無効化するゴーストタイプも噛み合い、これらの主力かくとう技そのものが通りません（ハッサムははたきおとすのあく弱点を突かれるため止め切れない個体がある）。
 
 たべのこし（採用率34.0%）採用ならなまけると合わせて回復量が増し、居座り性能が上がります。オボンのみ（25.8%）は不意の高乱数に対する保険、カシブのみ（13.7%）はゴースト弱点を1回半減してミミッキュのかげうち等を耐える択になります。
 
@@ -355,14 +355,14 @@ HB型がルカリオ・ハッサム等の物理つるぎのまいエースを止
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ・コメットパンチ（はがね）半減、インファイト（かくとう）無効、てんねんでつるぎのまい無視。ただしはたきおとす（あく・採用率53.6%）は×2弱点で持ち物も落とされる点に注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ・コメットパンチ（はがね）半減、インファイト（かくとう）無効、てんねんでつるぎのまい無視と止め性能は高いが、はたきおとす（あく・採用率53.6%）が×2弱点で持ち物も落とされるため、半数の個体には受け切れず五分に近い</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0428-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミロップ（13位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 超有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト・とびひざげり・マッハパンチ（かくとう）無効、ねこだまし（ノーマル）も無効。てんねんでつるぎのまい無視。トリプルアクセル（こおり）はほのお半減で通らず決定打にならない</td>
 </tr>
 <tr style="background:#fafafa">
@@ -540,7 +540,7 @@ HB型がルカリオ・ハッサム等の物理つるぎのまいエースを止
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">ずぶとい 67.3%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ずぶとい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">物理つるぎのまいエースの止め</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">てんねん＋おにびで物理エースを完封</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">てんねん＋おにびで物理エースを強く受ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">特殊高火力に押し切られやすい</td>
 </tr>
 <tr style="background:#fafafa">
@@ -557,7 +557,7 @@ HB型がルカリオ・ハッサム等の物理つるぎのまいエースを止
 
 **総評:**
 
-ラウドボーンは**てんねん**で積みアタッカーを単体で止め、**なまける・おにび**で居座る受け駒です。ゴーストタイプでノーマル・かくとうを無効化するため、つるぎのまい＋かくとう技で崩すルカリオ・ミミロップ・ハッサムに滅法強いのが最大の役割です。
+ラウドボーンは**てんねん**で積みアタッカーを単体で止め、**なまける・おにび**で居座る受け駒です。ゴーストタイプでノーマル・かくとうを無効化するため、つるぎのまい＋かくとう技で崩すルカリオ・ミミロップに滅法強いのが最大の役割です（ハッサムははたきおとす採用個体には五分）。
 
 一方、すばやさ66で常に後攻になり、弱点のみず・じめん・あくが環境上位（ガブリアス・カバルドン・ウォッシュロトム・ゲッコウガ・マスカーニャ）に集中するため、単体での受け範囲は限られます。これらへの引き先をパーティで用意できるかが採用の前提で、物理エースの多い構築に強く刺さる対策枠として使用率29位に位置しています。HB型かHD型かは、止めたいエースが物理か特殊かで選び分けるのが基本です。
 

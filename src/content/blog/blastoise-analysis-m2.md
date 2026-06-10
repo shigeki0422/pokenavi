@@ -393,10 +393,10 @@ heroImage: '../../assets/hero-blastoise-m2.png'
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
+    <img src="/images/pokemon/pokemon-0655-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マフォクシー（25位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずのはどうがドラゴン/じめんに×2（ドラゴン1×じめん2）。S102だが、からをやぶる1積みで抜いて先制。主力じしん（採用率99.2%）はみず単に等倍で耐えやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずのはどうが×2（ほのお2×エスパー1）。主力かえんほうしゃ（採用率65.5%）はみず単に半減、サイコショック・サイコキネシスも等倍止まり。S104でからをやぶる前は先手を取られるが、1積みで上から叩ける</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -410,7 +410,7 @@ heroImage: '../../assets/hero-blastoise-m2.png'
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はどうだんが×2（あく1×はがね2）。S50でからをやぶる前から先手。あくのはどうは半減されるためはどうだんを選ぶ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はどうだんが×4（あく2×はがね2）。S50でからをやぶる前から先手。あくのはどうは半減されるためはどうだんを選ぶ</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -531,11 +531,11 @@ heroImage: '../../assets/hero-blastoise-m2.png'
 
 | 相手タイプ例（環境順位） | みずのはどう | はどうだん | あくのはどう |
 |---|---|---|---|
-| ガブリアス（ドラゴン/じめん・1位） | ×2 | ×1 | ×1 |
+| ガブリアス（ドラゴン/じめん・1位） | ×1 | ×1 | ×1 |
 | マスカーニャ（くさ/あく・3位） | ×0.5 | ×2 | ×0.5 |
 | アシレーヌ（みず/フェアリー・4位） | ×0.5 | ×0.5 | ×0.5 |
 | ゲンガー（ゴースト/どく・10位） | ×1 | ×0（無効） | ×2 |
-| ドドゲザン（あく/はがね・24位） | ×1 | ×2 | ×0.5 |
+| ドドゲザン（あく/はがね・24位） | ×1 | ×4 | ×0.5 |
 
 この表から見えるのは、波動3種は「広く×2を取る」組み合わせではなく、**1つの技が半減される相手を別の技が等倍以上で補う**設計だという点です。みずのはどうがマスカーニャに半減されてもはどうだんが×2で刺さり、はどうだんがゲンガーに無効化される一方であくのはどうが×2で通ります。からをやぶるで攻撃を切る都合上、半減を踏んで火力が落ちる事態を避けることが全抜きの前提になるため、×2の数より「全相手に等倍以上を1枠は確保する」ことが優先されているわけです。
 
