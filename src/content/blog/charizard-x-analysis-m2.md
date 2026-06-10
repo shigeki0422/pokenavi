@@ -289,7 +289,7 @@ M-2シーズンシングルバトルでリザードン全体は**使用率5位**
   <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンX" style="width:48px;height:48px">
   <div>
     <strong>りゅうのまい型</strong><br>
-    <small style="color:#555">AS振り ／ ようき or いじっぱり</small>
+    <small style="color:#555">ようき or いじっぱり ／ AS振り ／ 特性 もうか（86.1%）→メガ後かたいツメ ／ 持ち物 リザードナイトＸ</small>
   </div>
 </div>
 

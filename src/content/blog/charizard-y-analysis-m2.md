@@ -335,7 +335,7 @@ C種族値159は現環境の特殊アタッカーで最上位クラスです。D
   <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンY" style="width:48px;height:48px">
   <div>
     <strong>ひでりソーラービーム型</strong><br>
-    <small style="color:#555">C32 S32 ／ ひかえめ（最多採用）</small>
+    <small style="color:#555">ひかえめ（最多採用）／ C32 S32 ／ 特性 もうか（86.1%）→メガ後ひでり ／ 持ち物 リザードナイトＹ</small>
   </div>
 </div>
 
@@ -402,7 +402,7 @@ C種族値159は現環境の特殊アタッカーで最上位クラスです。D
   <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンY" style="width:48px;height:48px">
   <div>
     <strong>おくびょう最速型</strong><br>
-    <small style="color:#555">C32 S32 ／ おくびょう（30.0%採用）</small>
+    <small style="color:#555">おくびょう（30.0%採用）／ C32 S32 ／ 特性 もうか（86.1%）→メガ後ひでり ／ 持ち物 リザードナイトＹ</small>
   </div>
 </div>
 
@@ -462,7 +462,7 @@ C種族値159は現環境の特殊アタッカーで最上位クラスです。D
   <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンY" style="width:48px;height:48px">
   <div>
     <strong>HB+CS複合型</strong><br>
-    <small style="color:#555">H32 B20 C11 S3（4.6%採用）</small>
+    <small style="color:#555">ひかえめ ／ H32 B20 C11 S3（4.6%採用）／ 特性 もうか（86.1%）→メガ後ひでり ／ 持ち物 リザードナイトＹ</small>
   </div>
 </div>
 

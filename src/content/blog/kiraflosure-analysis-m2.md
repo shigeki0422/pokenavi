@@ -220,7 +220,7 @@ heroImage: '../../assets/hero-kiraflosure-m2.png'
 <tr><td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>性格</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう（57.8%）または ひかえめ（33.0%）</td></tr>
 <tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>EV</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1">C32 S32（余り2はH・B・Dから選択）</td></tr>
 <tr><td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>持ち物</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1">キラフロルナイト（54.2%）</td></tr>
-<tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>特性（メガ後）</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1">てきおうりょく（一致技×2.0）</td></tr>
+<tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>特性</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1">どくげしょう（88.5%）※メガ後てきおうりょく（一致技×2.0）</td></tr>
 <tr><td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>必須技</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1">パワージェム（85.3%）・ヘドロウェーブ（69.4%）・だいちのちから（66.8%）</td></tr>
 <tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1;white-space:nowrap"><strong>選択技</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1">ニードルガード（27.9%）／ステルスロック（36.5%）／マッドショット（19.1%）／ロックカット（16.1%）</td></tr>
 </tbody>
