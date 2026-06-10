@@ -273,6 +273,7 @@ heroImage: '../../assets/hero-whimsicott-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> いたずらごころ（98.7%）<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）／おくびょう（S↑ A↓）<br>
 <strong>EV:</strong> C32 S32（余りをHに）<br>
 <strong>持ち物:</strong> きあいのタスキ（61.7%）
@@ -311,6 +312,7 @@ heroImage: '../../assets/hero-whimsicott-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> いたずらごころ（98.7%）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）／おだやか（D↑ A↓）<br>
 <strong>EV:</strong> H32 B32（HB耐久）<br>
 <strong>持ち物:</strong> たべのこし（23.5%）

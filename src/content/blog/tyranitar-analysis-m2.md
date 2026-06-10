@@ -309,6 +309,7 @@ HP100・防御110・特防100にすなおこしの特防1.5倍が加わり、両
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> すなおこし（99.4%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> H32 A32（余りをD/Bへ）。最多はHA+D<br>
 <strong>持ち物:</strong> バンギラスナイト / たべのこし / オボンのみ
@@ -345,6 +346,7 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> すなおこし（99.4%）<br>
 <strong>性格:</strong> しんちょう（D↑ C↓）<br>
 <strong>EV:</strong> H32 D32（余りをA/Bへ）。最多はHD+A<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ / ヨプのみ
@@ -381,6 +383,7 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> すなおこし（99.4%）<br>
 <strong>性格:</strong> ようき（S↑ C↓）<br>
 <strong>EV:</strong> A32 S32（余りをHへ）。最多採用のEV配分<br>
 <strong>持ち物:</strong> バンギラスナイト / ラムのみ

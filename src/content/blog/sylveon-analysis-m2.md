@@ -269,6 +269,7 @@ heroImage: '../../assets/hero-sylveon-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> フェアリースキン（98.6%）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）<br>
 <strong>EV:</strong> H32 B32（HB振り。余りをDかSに2）<br>
 <strong>持ち物:</strong> たべのこし / ようせいのハネ
@@ -307,6 +308,7 @@ A65のためあくびで居座っても削りが甘く、まもる・あくび�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> フェアリースキン（98.6%）<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
 <strong>EV:</strong> H32 C32（HC振り。余りをSに2）<br>
 <strong>持ち物:</strong> たべのこし / オボンのみ

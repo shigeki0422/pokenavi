@@ -260,6 +260,7 @@ HP160・とくぼう110で特殊方向は無振りでも厚く、ぼうぎょ65�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> あついしぼう（93.0%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
 <strong>EV:</strong> A32 B32（残り2をDかH。AB+D 13.3%が最多）<br>
 <strong>持ち物:</strong> たべのこし / ヨプのみ
@@ -296,6 +297,7 @@ HD型に比べて特殊耐久の補強がB方向に分散するぶん、ウォ�
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> あついしぼう（93.0%）<br>
 <strong>性格:</strong> しんちょう（D↑ C↓）<br>
 <strong>EV:</strong> H32 D32（残り2をB。HD+B 10.7%が最多）<br>
 <strong>持ち物:</strong> たべのこし / カゴのみ

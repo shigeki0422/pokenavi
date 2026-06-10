@@ -251,10 +251,10 @@ heroImage: '../../assets/hero-umbreon-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> せいしんりょく（68.4%）<br>
 <strong>性格:</strong> ずぶとい（B↑ A↓）<br>
 <strong>EV:</strong> H32 B32（D方向に余りを2前後）<br>
-<strong>持ち物:</strong> たべのこし<br>
-<strong>特性:</strong> せいしんりょく（68.4%）
+<strong>持ち物:</strong> たべのこし
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -290,10 +290,10 @@ D方向の振りが薄いため、フラエッテ:永遠のムーンフォース
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
+<strong>特性:</strong> シンクロ（31.6%）<br>
 <strong>性格:</strong> おだやか（D↑ A↓）など<br>
 <strong>EV:</strong> H32 D32（B方向に余りを2前後）<br>
-<strong>持ち物:</strong> たべのこし<br>
-<strong>特性:</strong> シンクロ（31.6%）
+<strong>持ち物:</strong> たべのこし
 </div>
 <div>
 <strong>技構成:</strong><br>
