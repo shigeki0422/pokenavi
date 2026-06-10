@@ -334,7 +334,7 @@ heroImage: '../../assets/hero-espathra-m2.png'
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">素のS105＞S102で先手。弱点を突く技を持たず、めいそうを積めば特殊耐久でじしん以外を流せる。スカーフ型もかそく1段階で抜き返せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">素のS105＞S102で先手。じしん（じめん）・げきりんとも×1止まりで弱点を突かれず、こちらは上からめいそう＋ルミナコリジョンで攻め込める。スカーフ型もかそく1段階で抜き返せる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -348,7 +348,7 @@ heroImage: '../../assets/hero-espathra-m2.png'
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（採用率99.7%）が先制かつむし/はがねのはがね打点。エスパー一致は等倍で、低耐久のこちらは先制技で削られ積む前に崩れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こちらのエスパー一致がむし/はがねに×0.5で半減され有効打にならず、逆にバレットパンチ（採用率99.7%）の先制技で毎ターン削られる。低耐久ゆえ積む前にじわじわ崩れる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -387,28 +387,28 @@ heroImage: '../../assets/hero-espathra-m2.png'
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">S123で素のクエスパトラ（S105）より速く、はたきおとす（採用率57.6%・あく×2）で先手で崩される。とんぼがえりで起点化も拒否される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね・フェアリータイプ（ブリジュラス・ピクシー等）を後出ししてあく技を半減で受け、クエスパトラはバトンの受け先に温存する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリータイプ（ピクシー等）を後出しすればはたきおとす（あく）を×0.5で半減して受けられる。クエスパトラはバトンの受け先に温存する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">S110で素のクエスパトラより速く、シャドーボール（採用率71.1%・ゴースト×2）で低耐久のこちらを上から先に落とす。かそくが乗る前の初手が特に危険</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくタイプ（サザンドラ・ドドゲザン等）でゴースト技を半減して受ける。タスキで耐えればエスパー技がゲンガーに×2で返せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドドゲザン（あく/はがね）でシャドーボールを半減・ヘドロウェーブを無効に受ける（ただしきあいだま採用37.4%の個体には×4なので過信は禁物）。クエスパトラ側はタスキで1発耐えればエスパー技が×2で返せる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（19位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ばけのかわで1発耐え、かげうち（採用率93.6%・ゴースト×2）の先制技で削られる。つるぎのまい（86.7%）からの全抜きを許すと止まらない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくタイプでかげうち・シャドークローを半減して受け、ばけのかわを剥がしてから倒す。まもるでばけのかわを消費させない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドドゲザン（あく/はがね）でかげうち・シャドークロー（×0.5）とじゃれつく（×0.25）を受け、ばけのかわを剥がしてから倒す（ドレインパンチ採用24.8%の個体には×4なので注意）。まもるでばけのかわを消費させない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0503-01.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ダイケンキ(ヒスイ)（23位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひけん・ちえなみ（98.2%・あく×2）とふいうち（65.7%・あく×2）のあく打点で崩される。先制技ふいうちを持つためかそくで上を取っても削られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく半減のフェアリー（ピクシー）を合わせて受け、ふいうちを読んでまもる・みがわりで透かす</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S85なので素のクエスパトラが上を取れる。脅威はふいうち（先制・あく×2）に絞られるため、まもる・みがわりで透かしてからルミナコリジョンで攻める。ふいうちを耐えるきあいのタスキも有効</td>
 </tr>
 </tbody>
 </table>
@@ -437,7 +437,7 @@ heroImage: '../../assets/hero-espathra-m2.png'
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがねであく・むし技を半減。苦手なはがね複合への引き先</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがねでむし技を半減。めいそう＋ルミナコリジョンの特防ダウンを引き継ぐバトン先</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
@@ -457,7 +457,7 @@ heroImage: '../../assets/hero-espathra-m2.png'
 
 クエスパトラは弱点のあく・ゴーストが環境に多く単体完結しにくいため、残り5体で以下を補います。
 
-1. **あく・ゴースト対策**: フェアリー（ピクシー）・はがね（ブリジュラス）でマスカーニャ・ゲンガー・ミミッキュの弱点技を半減して受ける枠
+1. **あく・ゴースト対策**: フェアリー（ピクシー）でマスカーニャのはたきおとす（あく）を半減、あくタイプ（ドドゲザン等）でゲンガー・ミミッキュのゴースト技を半減して受ける枠
 2. **バトンタッチの受け先**: かそくのS上昇・めいそうの積みを活かせる高火力アタッカー（ガブリアス・イダイトウ等）
 3. **はがねあくへの打点**: ドドゲザンなどエスパー技が通らない相手に、じめん・かくとう等で殴れる枠
 

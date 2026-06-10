@@ -255,7 +255,7 @@ HP100・防御110・特防100にすなおこしの特防1.5倍が加わり、両
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">35.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">交代read時に設置。高耐久で繰り返し撒き直せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">交代を読んで設置。高耐久で繰り返し撒き直せる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうのまい</strong></td>
@@ -325,7 +325,7 @@ HP100・防御110・特防100にすなおこしの特防1.5倍が加わり、両
 
 **強み:**
 
-HA振り（HP・こうげき最大振り）でこうげき134を最大化しつつ、すなおこしの特防補正と高い防御で耐久を確保します。EV最多の「HA+D」（採用率9.5%）はとくぼうにも余りを割き、特殊・物理どちらの攻撃も1発受けてから はたきおとすで持ち物を奪い、反撃する受けつつ殴る運用です。じしん＋れいとうパンチで はがね・じめん/ドラゴンまで打点が広く、相手を選ばず削りを入れられます。
+HA振り（HP・こうげき最大振り）でこうげき134を最大化しつつ、すなおこしの特防補正と高い防御で耐久を確保します。いじっぱりHA型の中ではHA+D（採用率9.5%）が最多で、とくぼうにも余りを割き、特殊・物理どちらの攻撃も1発受けてから はたきおとすで持ち物を奪い、反撃する受けつつ殴る運用です。じしん＋れいとうパンチで はがね・じめん/ドラゴンまで打点が広く、相手を選ばず削りを入れられます。
 
 **弱み:**
 
@@ -354,7 +354,7 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
 ・はたきおとす<br>
 ・ストーンエッジ / じしん<br>
 ・ステルスロック<br>
-・りゅうのまい / ばかぢから
+・れいとうパンチ / ばかぢから
 </div>
 </div>
 </div>
@@ -366,6 +366,42 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
 **弱み:**
 
 こうげきに振らないためいじっぱり型より火力が落ち、決定力よりサポート寄りになります。物理アタッカーに対してはいじっぱり型ほどの反撃ダメージが出ず、相手を倒しきれずターンを渡しやすいのが、同じバンギラスでも物理型と異なる弱みです。
+
+---
+
+### 型3: ようきりゅうのまい抜き型
+
+**性格採用率: ようき 14.6%**（S振り抜き型の指標。いじっぱり・しんちょうに次ぐ3番手）
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
+<div class="build-header">
+  <img src="/images/pokemon/pokemon-0248-00.webp" alt="バンギラス" style="width:48px;height:48px">
+  <strong style="font-size:1.05em">ASようき抜き型</strong>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
+<div>
+<strong>性格:</strong> ようき（S↑ C↓）<br>
+<strong>EV:</strong> A32 S32（余りをHへ）。最多採用のEV配分<br>
+<strong>持ち物:</strong> バンギラスナイト / ラムのみ
+</div>
+<div>
+<strong>技構成:</strong><br>
+・りゅうのまい<br>
+・はたきおとす<br>
+・ストーンエッジ<br>
+・じしん / れいとうパンチ
+</div>
+</div>
+</div>
+
+**強み:**
+
+S振りでりゅうのまいを1積みするとS実数値が124→186まで伸び、最速ガブリアス（S実数値169）を含む中速〜高速帯を抜き返して全抜きを狙えます。耐久重視のHA・HD型では積んでも素早さが足りず抜き性能が出ないため、S投資で抜き役に振り切れる点がこの型固有の強みです。受けではなく、対面で1回積んでから制圧する攻めの勝ち筋を持ちます。
+
+**弱み:**
+
+HD型のような特殊耐久補強がなく、積む前に上から殴られると起点を作れません。ラムのみ以外の弱点ケアきのみを持てないため、積みターンを与えてくれる遅い相手や交代際でしか起動できず、HA・HD型より対面の安定性で劣ります。
 
 ---
 
@@ -425,7 +461,7 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">▲ 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率72.4%）がかくとう×4。じしん×2で抜けるが、はたきおとす・いわ技はともに等倍止まりで、先制のバレットパンチ（99.7%）込みで先に削られやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率72.4%）がかくとう×4。じしん・はたきおとす・いわ技はいずれも等倍止まりで決定打を欠き、先制のバレットパンチ（99.7%）込みで先に削られやすい</td>
 </tr>
 </tbody>
 </table>
@@ -455,7 +491,7 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
     <img src="/images/pokemon/pokemon-0903-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">オオニューラ（33位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（98.6%）・フェイタルクロー（95.4%）でかくとう×4。先制のねこだまし＋高速かくとう技で上から崩される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のフェイタルクロー（あく）・インファイト・じごくづき（あく・52.3%）をいずれも半減するピクシー（フェアリー）に後出しする。アクロバット（ひこう・採用率11.5%）がフェアリーに×2のため、これを持つ個体には後続のはがね枠を当てる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のフェイタルクロー（あく）・インファイト・じごくづき（あく・52.3%）をいずれも半減するピクシー（フェアリー）に後出しする。フェイタルクローはあく半減でピクシーがほぼ受け切れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -588,6 +624,14 @@ HA振り（HP・こうげき最大振り）でこうげき134を最大化しつ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">はたきおとす・ステルスロック・りゅうのまい・じしん</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">特殊耐久が一段上。設置と居座りが安定</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">火力が下がり倒しきれずターンを渡す</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ようき抜き型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき 14.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">りゅうのまい・はたきおとす・ストーンエッジ・じしん</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">積んで高速帯を抜き全抜きを狙える</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">耐久補強がなく積む前に崩れやすい</td>
 </tr>
 </tbody>
 </table>
