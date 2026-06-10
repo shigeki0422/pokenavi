@@ -156,7 +156,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
 </table>
 </div>
 
-弱点はくさ×2の1タイプのみで、ほのお・みず・こおり・ひこうを半減、はがねを×0.25でき、ふゆうでじめんを無効化します。弱点が1つに絞られる耐性は環境屈指で、じめん・ほのお・はがね物理に受け出ししやすい構成です。一方でHP50・両防御107と耐久実数値そのものは高くないため、弱点を突くくさ技や、等倍でも高火力・高速のアタッカーには1〜2発で崩されます。3位マスカーニャのトリックフラワー（くさ・採用率92.9%）が×2で刺さる点と、ゲッコウガ（28位・S122）・スターミー（20位・S115）などすばやさ86を上回る等倍アタッカーが主な切り崩し手段になります。
+弱点はくさ×2の1タイプのみで、ほのお・みず・こおり・ひこうを半減、はがねを×0.25でき、ふゆうでじめんを無効化します。弱点が1つに絞られる耐性は環境屈指で、じめん・ほのお・はがね物理に受け出ししやすい構成です。一方でHP50・両防御107と耐久実数値そのものは高くないため、弱点を突くくさ技や、等倍でも高火力・高速のアタッカーには1〜2発で崩されます。3位マスカーニャのトリックフラワー（くさ・採用率92.9%）が×2で刺さる点と、ゲッコウガ（28位・S122）・ゲンガー（10位・S110）などすばやさ86を上回り等倍高火力で押せるアタッカーが主な切り崩し手段になります。
 
 ---
 
@@ -353,15 +353,15 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ やや有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">こちらのみず・でんき技ははがね/ひこうに半減で打点は乏しいが、相手のボディプレス・アイアンヘッドはこちら半減で受けられ、おにびで起点化できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト／ボルトチェンジが×2（でんき1×ひこう2）で刺さる。ボディプレス・アイアンヘッドはこちら半減で受けられ、おにびでも起点化できる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルトが×4（でんき2×みず2、みず/ひこうの両方に有効）。すばやさ86＞81で先手。いかくは入るがでんき技で一撃圏</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルトが×4（でんき→みず2×ひこう2）。すばやさ86＞81で先手。いかくは入るがでんき技で一撃圏</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -372,6 +372,13 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルトが×2（でんき→みず2×エスパー1）で刺さる。アクアブレイク・アクアジェット（みず・89.2%/86.9%）・アイススピナー（こおり・64.9%）はいずれもこちら半減で、すばやさ115で先手でも有効打が乏しい</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
@@ -381,7 +388,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
 </table>
 </div>
 
-アーマーガア戦はみず・でんき技ともはがね/ひこうに半減され打点が乏しいため、やや有利の根拠は「相手の物理技を半減で受けつつおにびで起点化できる」点にあります。決定力はないので削りきりは後続に任せます。
+アーマーガア戦は10まんボルト／ボルトチェンジ（でんき）がひこう複合に×2で通り、相手のボディプレス・アイアンヘッドはこちら半減で受けられます。みず技ははがね/ひこうに半減（みず0.5×ひこう1）なのででんき技で攻めます。決定力は高くないので削りきりは後続に任せます。
 
 ### 苦手なポケモンと対策
 
@@ -408,24 +415,17 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0658-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲッコウガ（28位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">弱点は突かないが、すばやさ122で先手を取り、れいとうビーム（89.6%）・あくのはどう（75.9%）等の等倍高火力でHP50を1〜2発で削り切る。こちらのみず技はあく/みずに半減で決定力に欠ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき技は×2で通るが、すばやさ122で先に動かれ、あくのはどう（あく・75.9%）等倍やみずしゅりけん（先制・みず半減でも連続技）でHP50を先に削られやすい。こちらのみず技はあく/みずに半減</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">とくぼうの高いブリジュラス（はがね/ドラゴン）を後出しし、等倍のれいとうビーム・あくのはどうを受け切ってラスターカノン等で削る。ボルトチェンジで先に削っておく</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">弱点は突かないが、すばやさ115で先手を取り、アイススピナー（64.9%）・しねんのずつき等の等倍打点で押される。こちらのみず技は半減で打ち合いに不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパーを×2で突くあく/はがねのドドゲザンを後出しし、ふいうち（あく先制・エスパーに×2・採用率99.0%）で先制処理する</td>
-</tr>
-<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">弱点は突かないが、すばやさ110で先手を取り、シャドーボール（71.1%）・ヘドロウェーブ（81.7%）等の等倍特殊高火力でHP50を削り切る。みちづれにも注意</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/どくを×2で突くあく/はがねのドドゲザンを後出しし、ふいうち（あく先制・ゴーストに×2・採用率99.0%）で先制処理する</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0003-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フシギバナ（27位）
   </td>
@@ -453,7 +453,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
     <img src="/images/pokemon/pokemon-0503-01.webp" alt="ダイケンキ(ヒスイ)">
     <div class="name">ダイケンキ(ヒスイ)</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/はがねでくさを半減。ボルトチェンジから着地させる受けの相方</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/あくの高速アタッカー。ボルトチェンジから着地して決定力を補う</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
@@ -479,8 +479,8 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
 
 ウォッシュロトムは弱点がくさ×2の1つだけと優秀な反面、HP50・両防御107で耐久実数値は高くなく、攻撃面の決定力も低めです。弱点は少ないので「くさ対策」と「等倍で上から殴る高速アタッカーの受け」が後続の役割になります。
 
-1. **くさ対策**: ダイケンキ ヒスイ（みず/はがね）・ルカリオ（かくとう/はがね）・サザンドラ（あく/ドラゴン）などくさを×0.5以下で受ける枠
-2. **高速アタッカーの受け**: ゲッコウガ・スターミー・ゲンガーなどS86を上回る等倍高火力に後出しできる耐久・耐性枠（ブリジュラス・ドドゲザン等）
+1. **くさ対策**: ルカリオ（かくとう/はがね）・サザンドラ（あく/ドラゴン）などくさを×0.5以下で受ける枠
+2. **高速アタッカーの受け**: ゲッコウガ・ゲンガーなどS86を上回る等倍高火力に後出しできる耐久・耐性枠（ブリジュラス・ドドゲザン等）
 3. **決定力の補完**: ガブリアス・ルカリオなど、おにびで起点化した相手を上から倒すアタッカー
 
 ---
@@ -539,7 +539,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
 
 ウォッシュロトムは、ふゆうでじめんを無効化する耐性とボルトチェンジ・おにびを軸にした起点作りで、M-2で使用率22位を維持しています。ガブリアス・カバルドンといった環境上位のじめん枠に後出しして弱点を突き、おにびで物理アタッカーを機能停止させるのが基本的な仕事です。
 
-弱点はくさ×2の1つだけと優秀ですが、唯一の弱点を突くマスカーニャ（3位）に加え、HP50・両防御107の耐久を等倍高火力で上から削るゲッコウガ（28位・S122）・スターミー（20位・S115）・ゲンガー（10位・S110）には受け出しできず、決定力も低いため単体で完結する枠ではありません。ボルトチェンジで有利な味方に繋ぐ前提で、くさ受けと高速アタッカーに後出しできる枠、決定力のあるアタッカーを後続に揃えることが採用の条件になります。
+弱点はくさ×2の1つだけと優秀ですが、唯一の弱点を突くマスカーニャ（3位）に加え、HP50・両防御107の耐久を等倍高火力で上から削るゲッコウガ（28位・S122）・ゲンガー（10位・S110）には先手で削られ、決定力も低いため単体で完結する枠ではありません。ボルトチェンジで有利な味方に繋ぐ前提で、くさ受けと高速アタッカーに後出しできる枠、決定力のあるアタッカーを後続に揃えることが採用の条件になります。
 
 ---
 

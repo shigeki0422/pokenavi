@@ -48,13 +48,13 @@ heroImage: '../../assets/hero-mimikyu-m2.png'
 
 弱点であるゴースト技・はがね技を初手で受けても、ばけのかわが剥がれるだけで本体は無傷。その隙に**つるぎのまい**でAを2段階上げれば、いじっぱりA32（こうげき実数値約156）からタイプ一致じゃれつく・かげうちの火力が大きく伸びます。低耐久のアタッカーが多い環境で「1回は必ず動ける」保証は、積みの起点として価値があります。
 
-### 2. かげうちで上から弱点を突く相手を先制処理
+### 2. かげうちで高速アタッカーを先制処理
 
 ゴースト先制技**かげうち**は採用率93.6%とほぼ必須技です。優先度+1で動くため、**相手のすばやさに関わらず先制**できます。
 
-ミミッキュのS96を上回る高速アタッカー（ゲッコウガS122・マスカーニャS123・スターミーS115など）に対しても、つるぎのまいを積んだ後ならかげうちで上から削れます。S96では抜けない相手を先制技で処理できる点が、低速気味のこうげき種族値を補っています。
+ミミッキュのS96を上回る高速アタッカー（ゲッコウガS122・マスカーニャS123・スターミーS115など）に対しても、つるぎのまいを積んだ後ならかげうちで上から削れます。S96では抜けない相手を先制技で処理できる点が、控えめなすばやさを補っています。
 
-### 3. ノーマル・かくとう・ドラゴンを完全に透かせる
+### 3. ノーマル・かくとう・ドラゴンを無効化できる
 
 ゴースト/フェアリーの複合は**ノーマル・かくとう・ドラゴンを無効化**します。環境上位のガブリアス（げきりん）・カイリュー（しんそく等のノーマル先制技）・ルカリオやミミロップのかくとう技を透かせるため、これらに対する積みの起点を作りやすいタイプです。
 
@@ -129,7 +129,7 @@ heroImage: '../../assets/hero-mimikyu-m2.png'
 <thead>
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½/¼）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
 </tr>
 </thead>
@@ -143,7 +143,7 @@ heroImage: '../../assets/hero-mimikyu-m2.png'
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
+      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし（¼）</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -209,7 +209,7 @@ heroImage: '../../assets/hero-mimikyu-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">24.8%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">与ダメの半分回復。弱点のはがね（ドドゲザン・ハッサム等）への打点兼回復</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">与ダメの半分回復。あく/はがねのドドゲザンに×4で刺さる打点兼回復（むし/はがねのハッサムには等倍）</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>のろい</strong></td>
@@ -319,7 +319,7 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
 
 ### 主要ポケモンとの相性
 
-使用率上位（TOP30目安）のうち、ミミッキュと相性がはっきり出るポケモンを有利・不利の両面から挙げます。基準は「①ミミッキュの一致技（じゃれつく＝フェアリー／かげうち・シャドークロー＝ゴースト）が等倍以上で通るか」「②相手の主力技（pokemon_movesで採用率を確認）がミミッキュの弱点（ゴースト・はがね）を突くか」の2点です。つるぎのまい後の火力とばけのかわの1回保証を前提に判定しています。
+使用率上位（TOP30目安）のうち、ミミッキュと相性がはっきり出るポケモンを有利・不利の両面から挙げます。基準は「①ミミッキュの一致技（じゃれつく＝フェアリー／かげうち・シャドークロー＝ゴースト）が等倍以上で通るか」「②相手の主力技（採用率の高い技）がミミッキュの弱点（ゴースト・はがね）を突くか」の2点です。つるぎのまい後の火力とばけのかわの1回保証を前提に判定しています。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -349,22 +349,22 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×2（あく1×ドラゴン2）。あくのはどう（98.5%）・りゅうせいぐん（90.2%）は等倍で、ばけのかわで1発受けてつるぎのまいを積みやすい。つるぎのまい後はじゃれつくで確定圏</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×4（あく2×ドラゴン2）。あくのはどう（98.5%）・りゅうせいぐん（90.2%）は等倍で、ばけのかわで1発受けてつるぎのまいを積みやすい。つるぎのまい後はじゃれつくで確定圏</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×2（くさ1×あく2）。はたきおとす（57.6%）・ふいうち（12.0%）のあく技は等倍。S123でこちらより速いが、ばけのかわ＋かげうちで上から削れる。トリックフラワーの急所貫通には注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×2（くさ1×あく2）。はたきおとす（57.6%）・ふいうち（12.0%）のあく技は等倍。S123でこちらより速いが、ばけのかわで1発耐えてかげうちで上から削れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0428-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミロップ（13位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（61%）・とびひざげり（34%）・マッハパンチ（37%）のかくとう技は全て無効。ねこだましでばけのかわは剥がれるが、シャドークロー等のゴースト技で上から処理しやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル/かくとうのため、インファイト（61%）・マッハパンチ（37%）のかくとう技もノーマル先制技も全て無効で有効打が乏しい。じゃれつくはかくとう×2で刺さる（ゴースト技はノーマルに無効なので不可）。ミミロップナイト採用率96.9%でメガ後S135（S実数値205）はこちらより速いが、決定打を持たれにくい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -385,7 +385,7 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（99.7%・はがね先制）が×2弱点。先制技でばけのかわを剥がしつつ削られ、じゃれつくも鋼に半減で打点が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（99.7%・はがね先制）が×2弱点。先制技でばけのかわを剥がしつつ削られ、じゃれつくもむし/はがねに¼で打点が乏しい</td>
 </tr>
 </tbody>
 </table>
@@ -423,8 +423,8 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（99.7%）がはがね先制で×2弱点。先制でばけのかわを剥がしながら削られ、じゃれつくは鋼半減で反撃が通りにくい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技を持つポケモン（リザードン・ウルガモス等）を同伴し、後出しからほのお技で弱点を突いて処理する。ドレインパンチ採用なら回復しつつ削れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（99.7%）がはがね先制で×2弱点。先制でばけのかわを剥がしながら削られ、じゃれつくはむし½×はがね½で¼に激減し反撃が通りにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技を持つポケモン（リザードン・ウルガモス等）を同伴し、後出しからほのお技で弱点を突いて処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -450,7 +450,7 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
 
 ### 相性の良いポケモン
 
-同居率（pokemon_partners）TOP10から、ミミッキュの弱点補完になる枠を紹介します。
+同居率TOP10から、ミミッキュの弱点補完になる枠を紹介します。
 
 <div class="partner-grid">
   <div class="partner-card">
@@ -475,7 +475,7 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ドラゴン無効のミミッキュとはがねで弱点を分担。ステロ展開でミミッキュの起点作り</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ドラゴン無効のミミッキュとはがねで弱点を分担。ステルスロック展開でミミッキュの起点作り</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン">
@@ -502,9 +502,9 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
 | 性格 | 補正 | 採用率 | A実数値(A32) | S実数値(S32) |
 |---|---|---|---|---|
 | いじっぱり | A↑ C↓ | **81.6%** | 約156 | 約148 |
-| ようき | S↑ C↓ | 14.0% | 約142 | 約163 |
+| ようき | S↑ C↓ | 14.0% | 約142 | 約162 |
 
-ようきにしてもS実数値は約163で、ゲッコウガ（S122・実数値約170以上）やマスカーニャ（S123）、スターミー（S115）といった環境の高速勢を素のすばやさで抜けるわけではありません。つまり**ようきに振っても「抜きたい相手を抜けない」中途半端なすばやさ**になりやすいのです。
+ようきにしてもS実数値は約162で、ゲッコウガ（S122・実数値約170以上）やマスカーニャ（S123）、スターミー（S115）といった環境の高速勢を素のすばやさで抜けるわけではありません。つまり**ようきに振っても「抜きたい相手を抜けない」中途半端なすばやさ**になりやすいのです。
 
 それなら攻撃の通りを優先し、つるぎのまい後の確定数を稼ぐいじっぱりの方が合理的になります。実際、上を取りにいく動きは素のすばやさではなく**先制技かげうち（採用率93.6%）に委ねる設計**になっており、性格でいじっぱりが8割を占めるのはこの役割分担の裏返しです。すばやさで殴り勝つのではなく、ばけのかわで1発耐えて積み、足りない上を取る部分を先制技で補う——これがミミッキュの基本構造です。
 

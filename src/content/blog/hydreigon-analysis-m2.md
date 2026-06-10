@@ -44,7 +44,7 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
 
 ### 1. こだわりスカーフ＋S98で環境の高速勢を上から叩く
 
-サザンドラのすばやさ種族値は**98**。最多のひかえめ（Sに補正なし）にこだわりスカーフを合わせると、すばやさ実数値122×1.5で**約183**に達します。これは無補正S98からスカーフ倍率で押し上げた数値で、環境のスカーフ無し高速勢をまとめて上から叩けます。
+サザンドラのすばやさ種族値は**98**。最多のひかえめ（Sに補正なし）にこだわりスカーフを合わせると、すばやさ実数値150×1.5で**225**に達します。これは無補正S98からスカーフ倍率で押し上げた数値で、環境のスカーフ無し高速勢をまとめて上から叩けます。
 
 - マスカーニャ（S123・使用率3位）
 - マフォクシー（メガ後S134・25位）
@@ -53,7 +53,7 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
 
 マフォクシー・スターミー・ゲンガーにはあくのはどうがエスパー/ゴーストに×2で通り、マスカーニャ（くさ/あく）にはかえんほうしゃが×2で通るため、スカーフによる先手が活きます。
 
-ただしスカーフを最速おくびょう（実数値約201）にしても、**同じくスカーフを巻いた高速勢には先手保証がありません**。とくにスカーフガブリアス（すばやさ実数値約253相当）には届かず、ガブリアスのドラゴン技・スケイルショットはサザンドラに弱点で通るため、対スカーフでは不利です。
+ただしスカーフを最速おくびょう（実数値165・スカーフ込み247）にしても、**同じくスカーフを巻いた高速勢には先手保証がありません**。とくに最速スカーフガブリアス（すばやさ実数値169・スカーフ込み253）には届かず、ガブリアスのドラゴン技・スケイルショットはサザンドラに弱点で通るため、対スカーフでは不利です。
 
 ### 2. あく/ドラゴンの広い攻撃範囲
 
@@ -284,9 +284,9 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
 
 **強み:**
 
-ひかえめC振り（とくこう実数値約167）でスカーフ補正のすばやさ実数値約183を確保し、マスカーニャ（S123）・メガマフォクシー（S134）・メガゲンガー（S130）といった環境上位の高速アタッカーを上から叩けます。あくのはどうがメガマフォクシー・メガゲンガー・スターミーのエスパー/ゴーストに×2で刺さり、一致りゅうせいぐんはガブリアス・カイリューといったドラゴンに×2で通ります。とんぼがえりで不利対面を擦り抜けつつ後続に繋げられるのも、技固定のあるスカーフ型と噛み合います。
+ひかえめC振り（とくこう実数値194）でスカーフ補正のすばやさ実数値225を確保し、マスカーニャ（S123）・メガマフォクシー（S134）・メガゲンガー（S130）といった環境上位の高速アタッカーを上から叩けます。あくのはどうがメガマフォクシー・メガゲンガー・スターミーのエスパー/ゴーストに×2で刺さり、一致りゅうせいぐんはガブリアス・カイリューといったドラゴンに×2で通ります。とんぼがえりで不利対面を擦り抜けつつ後続に繋げられるのも、技固定のあるスカーフ型と噛み合います。
 
-おくびょうにすればすばやさ実数値約201となり、最速スカーフ同士の同速争いを意識する場合に選ばれますが、とくこうが下がるため確定数が落ちる点はトレードオフです。
+おくびょうにすればスカーフ込みのすばやさ実数値が247（C実数値177）となり、最速スカーフ同士の同速争いを意識する場合に選ばれますが、とくこうが下がるため確定数が落ちる点はトレードオフです。
 
 **弱み:**
 
@@ -326,15 +326,15 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
 
 **弱み:**
 
-スカーフの先手保証を失うため、すばやさ実数値約122では中速以上の相手に先に動かれます。タスキはステルスロックやとんぼがえりの定数ダメージで容易に潰れ、フェアリー×4の弱点はタスキで1発耐えても次のフェアリー技で落ちるため、起点作成の成功率はスカーフ型より不安定です。
+スカーフの先手保証を失うため、すばやさ実数値165では一部の高速勢に先に動かれます。タスキはステルスロックやとんぼがえりの定数ダメージで容易に潰れ、フェアリー×4の弱点はタスキで1発耐えても次のフェアリー技で落ちるため、起点作成の成功率はスカーフ型より不安定です。
 
 ---
 
 ## 環境ポケモンへの相性分析
 
-### 主要ポケモンとの相性
+### 有利・不利がはっきり出る相手
 
-使用率上位（TOP30目安）から、サザンドラと相性がはっきり出る相手を有利・不利の両面で挙げます。基準は、サザンドラの一致技・かえんほうしゃの倍率と、スカーフ込みのすばやさ実数値約183との速度関係、相手の主力技がサザンドラの弱点（特にフェアリー×4）を突くかの3点です。
+使用率上位（TOP30目安）から、サザンドラと相性がはっきり出る相手を有利・不利の両面で挙げます。基準は、サザンドラの一致技・かえんほうしゃの倍率と、スカーフ込みのすばやさ実数値225との速度関係、相手の主力技がサザンドラの弱点（特にフェアリー×4）を突くかの3点です。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -358,18 +358,18 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0655-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マフォクシー（25位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（先手前提）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（あく2×ほのお1）。スカーフでメガ後S134を上回り先制でき、エスパー技は無効。ただしマジカルシャイン（採用率32.6%）はフェアリー×4のため、削れた状態での後出しや同速での被弾は致命傷</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#d97706;font-weight:bold">△ 五分（先手で上から圧）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（あく1×エスパー2）。スカーフでメガ後S134を上回り先制でき、エスパー技は無効。ただし一致あくのはどうでもメガマフォクシーを1発では落とせず（C194で約7〜8割）、マジカルシャイン（採用率32.6%）がフェアリー×4で返ってくるため、上から殴れても確実な有利とは言えない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（みず1×エスパー2）。スカーフでメガ後S120より先手で先制できる。みず技はドラゴンで半減、エスパー技は無効。ただしアイススピナー（採用率64.9%）はこおりで×2、アクアジェット（採用率87%）の先制も通るため、削れた状態での後出しは禁物</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（みず1×エスパー2）。スカーフでメガ後S120を上回り先制できる。みず技はドラゴンで半減、エスパー技は無効。ただしアイススピナー（採用率64.9%）はこおりで×2、アクアジェット（採用率87%）の先制も通るため、削れた状態での後出しは禁物</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（ゴースト2×どく1）。スカーフでメガ後S130を上回り、先に高倍率で叩ける。きあいだま（採用率37.4%）はかくとう×2だが、こちらが先手を取れていれば被弾前に処理できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（ゴースト2×どく1）。スカーフでメガ後S130を上回り、先に高倍率で叩ける（C194で約9割〜乱数1発）。きあいだま（採用率37.4%）はかくとう×2のため、1発で落としきれないと反撃で大きく削られる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）</td>
@@ -414,7 +414,7 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（スカーフ型）（1位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">スカーフガブリアスにはすばやさ実数値約183でも先手を取られ、げきりん・スケイルショットがドラゴン×2で通る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">最速スカーフガブリアス（S実数値253）にはすばやさ実数値225でも先手を取られ、げきりん・スケイルショットがドラゴン×2で通る</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー（アシレーヌ・フラエッテ等）やこおり技持ちを同伴し、ドラゴン技を半減・無効化できる枠で受ける。サザンドラ自身はとんぼがえりで引いて被弾を避ける</td>
 </tr>
 <tr style="background:#fafafa">
@@ -437,7 +437,7 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
     <img src="/images/pokemon/pokemon-0121-00.webp" alt="スターミー">
     <div class="name">スターミー</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速みず枠。サザンドラが苦手なフェアリーへの打点とハザード回収を担う</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速みず枠。サザンドラの弱点こおりを半減し、クイックターンで対面操作を補う</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム">
@@ -467,11 +467,11 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
 
 **パーティ構成の基本方針:**
 
-サザンドラはフェアリー×4を筆頭に弱点が多く、こだわりスカーフで技も固定されるため、残り5体で弱点とハザードを補います。
+サザンドラはフェアリー×4を筆頭に弱点が多く、こだわりスカーフで技も固定されるため、残り5体で弱点と設置技を補います。
 
 1. **フェアリー対策**: ギルガルド（はがね/ゴースト）やキラフロル（いわ/どく）などフェアリーを半減できる枠で受ける
 2. **こおり・ドラゴン対策**: みずタイプのスターミー・ウォッシュロトムでこおり技を半減し、ドラゴン技はギルガルド（はがね/ゴースト）で半減して受ける
-3. **ハザード展開**: ガブリアス等でステルスロックを撒き、とんぼがえりの交代戦と合わせて削りを稼ぐ
+3. **ステルスロック展開**: ガブリアス等でステルスロックを撒き、とんぼがえりの交代戦と合わせて削りを稼ぐ
 4. **対スカーフ高速勢**: サザンドラより速いスカーフガブリアスを止める先制技・受け枠を確保する
 
 ---
@@ -509,7 +509,7 @@ heroImage: '../../assets/hero-hydreigon-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">こだわりスカーフ型</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">スカーフ 79.7%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">あくのはどう・りゅうせいぐん・とんぼがえり・かえんほうしゃ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S183で高速勢を上から処理。とんぼがえりで対面操作</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S225で高速勢を上から処理。とんぼがえりで対面操作</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">技固定。スカーフ同士には先手保証なし</td>
 </tr>
 <tr style="background:#fafafa">

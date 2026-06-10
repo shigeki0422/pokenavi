@@ -234,7 +234,7 @@ heroImage: '../../assets/hero-samurott-hisui-m2.png'
 
 ### 型1: AS物理アタッカー型（最多採用）
 
-**性格採用率: いじっぱり 64.9%**（A↑ S↓。物理アタッカー型の指標で最多）
+**性格採用率: いじっぱり 64.9%**（A↑ C↓。物理アタッカー型の指標で最多）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -306,7 +306,7 @@ AS型はS32で同速・最速勝負に賭け、先制ふいうちと合わせて
 
 **弱み:**
 
-S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリジュラスS85、ドドゲザンS50やギルガルドS60など）にも上を取られ、有利対面でも先制されます。耐久に振っても弱点5タイプの×2打点は重く、特殊アタッカーの一致弱点技は受け切れない点はAS型と共通の課題です。
+S10前後（S実数値110）ではAS型（S実数値121）が先手を取れていたS85前後の同速勢に上を取られ、有利対面でも先制を許します。なおドドゲザンS50・ギルガルドS60のような格下のSにはHA型でも先手を取れます。耐久に振っても弱点5タイプの×2打点は重く、特殊アタッカーの一致弱点技は受け切れない点はAS型と共通の課題です。
 
 ---
 
@@ -314,7 +314,7 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
 
 ### 主要ポケモンとの相性
 
-使用率TOP30のうち、ヒスイダイケンキと相性がはっきり出るポケモンを有利・不利の両面から挙げます。S85・こうげき108を基準に、きれあじ補正の乗った切る技（ひけん・ちえなみ／せいなるつるぎ／シェルブレード）の通りと、相手の主力技（採用率はpokemon_movesで確認）がこちらの弱点5タイプ（くさ・でんき・かくとう・むし・フェアリー）を突くかで判定しています。
+使用率TOP30のうち、ヒスイダイケンキと相性がはっきり出るポケモンを有利・不利の両面から挙げます。S85・こうげき108を基準に、きれあじ補正の乗った切る技（ひけん・ちえなみ／せいなるつるぎ／シェルブレード）の通りと、相手の主力技（採用率を確認）がこちらの弱点5タイプ（くさ・でんき・かくとう・むし・フェアリー）を突くかで判定しています。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -338,7 +338,7 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
     <img src="/images/pokemon/pokemon-0681-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド（11位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひけん・ちえなみ（あく）が×2（はがね1×ゴースト2）＋きれあじ補正。S60で先手。せいなるつるぎはかくとうがゴーストに無効のため通らない点に注意。主力のかげうち・ポルターガイスト（ゴースト）はこちらに×0.5。シールドフォルムのB140に注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひけん・ちえなみ（あく）が×2（はがね1×ゴースト2）＋きれあじ補正。S60で先手。せいなるつるぎはかくとうがゴーストに無効のため通らない。主力のかげうち・ポルターガイスト（ゴースト）はこちらに×0.5。ただしせいなるつるぎ採用個体（31.7%）はこちらに×2で通るため、シールドフォルムのB140と合わせ過信は禁物</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -366,7 +366,7 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">▲ 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（かくとう）がこちらに×2弱点。メガ後S112でこちらが遅く、低いとくぼう・防御を上から削られる。せいなるつるぎは等倍止まり（はがね2×かくとう0.5）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（かくとう）がこちらに×2弱点。メガ後S112でこちらが遅く、低いとくぼう・防御を上から削られる。せいなるつるぎは×2（かくとう1×はがね2）で通るが先手を取られる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -397,7 +397,7 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー・採用率97%）がこちらに×2弱点。とくぼう65では特殊耐久も足りず、せいなるつるぎ（はがね・あくでなくかくとう）はみず/フェアリーに等倍止まりで一撃に届きにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー・採用率97%）がこちらに×2弱点。とくぼう65では特殊耐久も足りず、かくとうのせいなるつるぎはみず/フェアリーに×0.5（フェアリーがかくとう半減）で半減され打点がない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー技を半減できるどくタイプ（キラフロル＝いわ/どくで×0.5）やはがね/ひこうのアーマーガア（×0.5）を同伴し、後出し処理する。アンコール型ならめいそうを縛って起点化を防ぐ</td>
 </tr>
 <tr style="background:#fafafa">
@@ -412,7 +412,7 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">S100でこちらより速く、むしのさざめき（むし・採用率34%）・ギガドレイン（くさ・59%）がともにこちらに×2弱点。ちょうのまいの起点にされやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ・でんきタイプ（キラフロル・ハラバリー等）を同伴し、ちょうのまい前に弱点で処理する。アンコール型ならちょうのまいを縛れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ技でいわ×4を突けるキラフロル（いわ/どく）を同伴し、ちょうのまい前に処理する。アンコール型ならちょうのまいを縛れる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -449,7 +449,7 @@ S10前後ではS85のAS型が先手を取れていた同速〜中速勢（ブリ
     <img src="/images/pokemon/pokemon-0983-00.webp" alt="ドドゲザン">
     <div class="name">ドドゲザン</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">あく/はがねでむしを1/4に軽減。はがね技で苦手なフェアリー枠に弱点を突いて攻める</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">あく/はがねでくさ・でんきを半減し苦手枠を受ける。はがね技で苦手なフェアリー枠に弱点を突く</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
