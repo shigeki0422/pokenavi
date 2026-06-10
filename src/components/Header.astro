@@ -1,8 +1,10 @@
 ---
 import { SITE_TITLE } from '../consts';
 import HeaderLink from './HeaderLink.astro';
+import Sidebar from './Sidebar.astro';
 ---
 
+<Sidebar />
 <header>
 	<nav>
 		<h2><a href="/">{SITE_TITLE}</a></h2>
@@ -43,5 +45,32 @@ import HeaderLink from './HeaderLink.astro';
 	nav a.active {
 		text-decoration: none;
 		border-bottom-color: var(--accent);
+	}
+	@media (max-width: 720px) {
+		nav {
+			flex-wrap: wrap;
+			padding: 0.3rem 0;
+		}
+		h2 {
+			width: 100%;
+			text-align: center;
+			padding: 0.3rem 0;
+		}
+		.internal-links {
+			width: 100%;
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+		nav a {
+			padding: 0.5em 0.5em;
+			font-size: 0.9rem;
+		}
+	}
+	/* PCではサイドバーがナビを担うのでヘッダー自体を隠す */
+	@media (min-width: 1024px) {
+		header {
+			display: none;
+		}
 	}
 </style>
