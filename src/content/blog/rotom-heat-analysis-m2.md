@@ -49,7 +49,7 @@ heroImage: '../../assets/hero-rotom-heat-m2.png'
 
 ### 2. でんき＋ほのおの一致技ではがね・みず・くさを同時に見る
 
-オーバーヒート（ほのお）と10まんボルト／ボルトチェンジ（でんき）の2タイプで、はがね・みず・くさ・ひこう・むし・こおり・フェアリーへ等倍以上が通ります。特に、はがね/ひこうのアーマーガア（6位）にはオーバーヒートが×2、はがね単複合のハッサム（14位）にも×2が刺さり、でんき技ではアシレーヌ（4位）・ギャラドス（12位）といったみず勢に等倍以上を入れられます。受け回しが効くタイプでありながら、攻撃範囲で能動的に削れるのが持ち味です。
+オーバーヒート（ほのお）と10まんボルト／ボルトチェンジ（でんき）の2タイプで、はがね・みず・くさ・ひこう・むし・こおり・フェアリーへ等倍以上が通ります。特に、はがね/ひこうのアーマーガア（6位）にはオーバーヒートが×2、むし/はがねのハッサム（14位）には×4が刺さり、でんき技ではアシレーヌ（4位）に×2、ギャラドス（12位）に×4とみず勢へ大ダメージを入れられます。受け回しが効くタイプでありながら、攻撃範囲で能動的に削れるのが持ち味です。
 
 ### 3. ボルトチェンジで有利な対面を維持する
 
@@ -325,7 +325,7 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
 
 ## 環境ポケモンへの相性分析
 
-### 主要ポケモンとの相性
+### 有利・不利がはっきり出る主要ポケモン
 
 使用率TOP30のうち、ヒートロトムと相性がはっきり出る相手を有利・不利の両面から挙げます。一致技（ほのお・でんき）の通りとふゆうによるじめん無効を基準に、相手の主力技の採用率も加味しています。
 
@@ -355,33 +355,40 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0681-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド（11位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">オーバーヒートが×2（ゴースト1×はがね2）。S60に先手を取れ、かげうち（96.2%）・ポルターガイスト（67.6%）はゴースト等倍、アイアンヘッドははがね×0.5で有効打が乏しい</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（地面無効）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ふゆうでじしん（採用率99.2%）を無効化。おにびでAを半減でき、げきりん主体の個体も機能停止に追い込める。ただしいわなだれ（23.1%）持ちは×2弱点に注意</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（地面無効）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん単タイプでじしんが主力のためふゆうで無力化。おにびで定数ダメージを蓄積し、起点にできる</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0003-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フシギバナ（27位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">オーバーヒートが×2（くさ2×どく1）。S86＞80で先手を取り、くさ・どく技はこちらに半減〜等倍止まり</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼり（85.9%）が×2弱点。S81に先手は取れるが、りゅうのまい（73.3%）後は上を取られ、でんき技は等倍止まりで一撃では落とせない</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
@@ -410,7 +417,7 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0902-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">イダイトウ(オス)（8位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S78に先手は取れるが、ウェーブタックル（96.5%）が×2弱点で高HP50を一撃圏に入れられ、アクアジェット（91.1%）の先制でも削られる。でんき技は等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S78に先手は取れるが、ウェーブタックル（96.5%）が×2弱点でHP50の低耐久を一撃圏に入れられ、アクアジェット（91.1%）の先制でも削られる。でんき技は等倍止まり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">スカーフ型で上から10まんボルトを撃ちつつ、みず技を半減するみず受け（ミロカロス・カビゴン）へボルトチェンジで引く</td>
 </tr>
 <tr style="background:#fafafa">
@@ -517,12 +524,12 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
 | 技 | 採用率 | 役割 |
 |---|---|---|
 | オーバーヒート | 97.4% | 一致ほのお打点 |
-| ボルトチェンジ | 87.7% | 一致でんき打点＋ピボット |
+| ボルトチェンジ | 87.7% | 一致でんき打点＋攻撃しつつ交代 |
 | おにび | 70.4% | 物理アタッカーのA半減＋定数ダメージ |
 | 10まんボルト | 54.1% | 居座り用でんき打点 |
 | いたみわけ | 9.6% | HP回復補助 |
 
-この分布が意味するのは、ヒートロトムが「殴り合うアタッカー」ではなく「**ふゆうで地面を透かし、おにびで物理を機能停止させる起点づくり兼受け**」として使われているという点です。特性ふゆうがガブリアス（使用率1位・じしん99.2%）・カバルドン（7位）の地面技を無効化することと、おにびで物理アタッカーのAを半減させることは噛み合っており、環境上位の物理地面・物理ドラゴンに対して「攻撃を透かして弱体化させる」一貫した動きを取れます。攻撃技1枠＋ボルトチェンジ＋おにび＋10まんボルトという、ダメージと拘束を両立した4枠が、低い種族値合計520でも49位に残る理由です。
+攻撃技を伸ばすわるだくみは9.2%に留まり、攻撃枠を増やすより変化技のおにびを優先する個体が7倍以上多いことが分かります。つまりヒートロトムは「火力で押し切るアタッカー」ではなく「物理を機能停止させる起点役兼受け」として採用されているのが、技分布から読み取れる構築思想です。性格でもひかえめ・おくびょうのCアタッカー型（67.1%）と、ずぶとい・おだやかの受け型（29.5%）に二極化しており、おにびの高採用率はこの受け型の多さと整合します。攻撃技1枠＋ボルトチェンジ＋おにび＋10まんボルトという拘束寄りの4枠構成が、種族値合計520でも49位に残る理由です。
 
 ---
 

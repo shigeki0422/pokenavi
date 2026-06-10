@@ -51,7 +51,7 @@ heroImage: '../../assets/hero-gallade-m2.png'
 
 ### 2. こだわりスカーフでS80の遅さを補う
 
-エルレイドのすばやさ種族値は**80**で、環境上位では中速にとどまります。そこで採用率1位の持ち物が**こだわりスカーフ**（27.7%）。ようき＋すばやさ最大振りのスカーフでS実数値は約270に達し、ガブリアス（S102）・スターミー（S115）・ゲッコウガ（S122）・マスカーニャ（S123）といった素では先手を取れない高速勢の上から、せいなるつるぎ・サイコカッターを叩き込めます。素のすばやさが低いぶん、スカーフによる奇襲性が高いのがエルレイドの使われ方です。
+エルレイドのすばやさ種族値は**80**で、環境上位では中速にとどまります。そこで採用率1位の持ち物が**こだわりスカーフ**（27.7%）。ようき＋すばやさ最大振りのスカーフでS実数値は約217に達し、ガブリアス（S102）・スターミー（S115）・ゲッコウガ（S122）・マスカーニャ（S123）といった素では先手を取れない高速勢の上から、せいなるつるぎ・サイコカッターを叩き込めます。素のすばやさが低いぶん、スカーフによる奇襲性が高いのがエルレイドの使われ方です。
 
 ### 3. かげうちで先制処理ができる
 
@@ -127,7 +127,6 @@ heroImage: '../../assets/hero-gallade-m2.png'
 <table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×4）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½）</th>
 </tr>
@@ -137,10 +136,6 @@ heroImage: '../../assets/hero-gallade-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
-    </div>
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
     </div>
@@ -156,7 +151,7 @@ heroImage: '../../assets/hero-gallade-m2.png'
 </table>
 </div>
 
-弱点はゴースト・ひこう・フェアリーの3タイプ。なかでもひこうはエスパー×2・かくとう×2が重なって**×4**になり、ゲンガー・ミミッキュのゴーストやアシレーヌのフェアリー（ともに×2）と合わせ、環境上位に弱点を突ける相手が多いタイプです。低い物理耐久と相まって受け出しは難しく、かくとう・いわを½で軽減できる程度にとどまります。
+弱点はゴースト・ひこう・フェアリーの3タイプで、いずれも×2。リザードンのひこう技、ゲンガー・ミミッキュのゴースト、アシレーヌ・ミミッキュのフェアリーと、環境上位に弱点を突ける相手が多いタイプです。低い物理耐久と相まって受け出しは難しく、かくとう・いわを½で軽減できる程度にとどまります。
 
 ---
 
@@ -275,7 +270,7 @@ heroImage: '../../assets/hero-gallade-m2.png'
 
 **強み:**
 
-ようきAS＋スカーフですばやさ実数値が約270に達し、素では先手を取れないガブリアス（S102）・スターミー（S115）・ゲッコウガ（S122）・マスカーニャ（S123）を上から殴れます。きれあじせいなるつるぎはガブリアス・ドドゲザン（あく/はがね、かくとう×4）に高打点、サイコカッターはゲンガー・フシギバナのどく勢に通り、スカーフを切り札にした奇襲的なスイープが狙えます。
+ようきAS＋スカーフですばやさ実数値が約217に達し、素では先手を取れないガブリアス（S102）・スターミー（S115）・ゲッコウガ（S122）・マスカーニャ（S123）を上から殴れます。きれあじせいなるつるぎはガブリアス・ドドゲザン（あく/はがね、かくとう×4）に高打点、サイコカッターはゲンガー・フシギバナのどく勢に通り、スカーフを切り札にした奇襲的な抜きが狙えます。
 
 **弱み:**
 
@@ -356,7 +351,7 @@ heroImage: '../../assets/hero-gallade-m2.png'
 
 **強み:**
 
-S110はようき最大振りでS実数値約213となり、ガブリアス（S102）・リザードン（S100）の上を素で取れます。スカーフに頼らず先手を取れるため、つるぎのまい（採用率6.8%）を絡めた積みアタッカーとして全抜きを狙えるのがメガ型の方向性です。せいしんりょくでひるみを無効化でき、ねこだまし始動の崩しにも強くなります。
+S110はようき最大振りでS実数値約178となり、ガブリアス（S実数値169）・リザードン（S実数値167）の上を素で取れます。スカーフに頼らず先手を取れるため、つるぎのまい（採用率6.8%）を絡めた積みアタッカーとして全抜きを狙えるのがメガ型の方向性です。せいしんりょくでひるみを無効化でき、ねこだまし始動の崩しにも強くなります。
 
 **弱み:**
 
@@ -395,8 +390,8 @@ S110はようき最大振りでS実数値約213となり、ガブリアス（S10
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">リーフブレード×2（いわ2×どく1）。せいなるつるぎはいわ2×どく0.5＝等倍止まりだが、S86をスカーフで上から取れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">せいなるつるぎ（いわ2×どく0.5＝等倍）・リーフブレード（いわ2×どく0.5＝等倍）とも弱点は突けない。S86をスカーフで上から取れるが、高Bには等倍打点で押し切りにくい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）</td>
@@ -406,7 +401,7 @@ S110はようき最大振りでS実数値約213となり、ガブリアス（S10
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう技（エアスラッシュ採用率32.9%）がエルレイドに×4、かえんほうしゃ（42.4%）も等倍で痛い。こちらの一致技はかくとう0.5・エスパー等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう技（エアスラッシュ採用率32.9%）がエルレイドに×2、かえんほうしゃ（42.4%）も等倍で痛い。こちらの一致技はかくとう0.5・エスパー等倍止まり</td>
 </tr>
 </tbody>
 </table>
@@ -436,12 +431,12 @@ S110はようき最大振りでS実数値約213となり、ガブリアス（S10
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エアスラッシュ（ひこう×4・採用率32.9%）・かえんほうしゃ（42.4%）で上から削られ、こちらの一致技はかくとう0.5・エスパー等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エアスラッシュ（ひこう×2・採用率32.9%）・かえんほうしゃ（42.4%）で上から削られ、こちらの一致技はかくとう0.5・エスパー等倍止まり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・いわ・でんきタイプ（アシレーヌ・キラフロル等）を同伴し、リザードンに後出しして弱点を突いて処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">せいなるつるぎ等倍（ひこう0.5×はがね2）止まりで高Bを抜けず、ボディプレス（採用率70.9%）で殴り返される。ブレイブバード（ひこう×4・採用率19.0%）も飛んでくる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">せいなるつるぎ等倍（かくとう→ひこう0.5×はがね2＝等倍）止まりで高Bを抜けず、ボディプレス（採用率70.9%）で殴り返される。ブレイブバード（ひこう×2・採用率19.0%）も飛んでくる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき・ほのおタイプ（ウォッシュロトム・リザードン等）で弱点を突く。せいなるつるぎはてっぺきを無視できるので、はがね半減を承知でなら削りには使える</td>
 </tr>
 <tr>
@@ -499,7 +494,7 @@ S110はようき最大振りでS実数値約213となり、ガブリアス（S10
 1. **ゴースト対策**: あく・ゴーストタイプ（ドドゲザン等）でゲンガー・ミミッキュのゴースト打点を受ける枠
 2. **ひこう対策**: でんき・いわタイプ（ウォッシュロトム・キラフロル等）でリザードン・ギャラドスの上を取る枠
 3. **フェアリー対策**: どく・はがねタイプ（キラフロル・ハッサム等）でアシレーヌ・ミミッキュを半減する枠
-4. **ステルスロック展開**: ガブリアス等でステロを撒き、相手のタスキを潰してエルレイドのスイープを通す
+4. **ステルスロック展開**: ガブリアス等でステロを撒き、相手のタスキを潰してエルレイドの全抜きを通す
 
 ---
 
@@ -509,9 +504,9 @@ S110はようき最大振りでS実数値約213となり、ガブリアス（S10
 
 | 持ち物 | 採用率 | 想定すばやさ | 立ち回り |
 |---|---|---|---|
-| こだわりスカーフ | 27.7% | S実数値約270（最速勢の上） | 奇襲スイープ。技は固定 |
+| こだわりスカーフ | 27.7% | S実数値約217（最速勢の上） | 奇襲的な抜き。技は固定 |
 | きあいのタスキ | 26.5% | S80（素のまま） | 1回行動保証＋かげうちで詰め |
-| エルレイドナイト | 25.6% | S実数値約213（S102勢の上） | つるぎのまい始動の全抜き |
+| エルレイドナイト | 25.6% | S実数値約178（S102勢の上） | つるぎのまい始動の全抜き |
 
 この分布の実戦的な意味は、**相手のすばやさ計算が成立しない**点にあります。たとえばガブリアス（S102）の前に出てきたエルレイドが、スカーフなら上から、メガなら同じく上から、タスキなら下から動く。相手はどの型かを初手で確定できず、これが低い物理耐久を抱えるエルレイドが使用率46位に位置する奇襲性の源泉です。技構成（せいなるつるぎ・サイコカッターはどの型でも共通）が型によって変わらないぶん、持ち物だけが読み合いの軸になります。
 

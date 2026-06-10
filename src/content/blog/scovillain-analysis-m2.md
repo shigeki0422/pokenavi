@@ -172,7 +172,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 </table>
 </div>
 
-ぼうぎょ・とくぼうが65→85に上がり、HB振りと噛み合って物理・特殊両面の耐久が底上げされます。**とびだすハバネロ**は、物理アタッカーから攻撃を受けるとそのままやけどを撒けるため、ムラっけで上昇したぼうぎょと合わせて物理アタッカーの居座りを許しにくくします。なお進化前の素早さ75から伸びないため、依然として上から殴る型ではありません。
+ぼうぎょ・とくぼうが65→85に上がり、HB振りと噛み合って物理・特殊両面の耐久が底上げされます。**とびだすハバネロ**は、技のダメージを受けると攻撃してきた相手をやけど状態にするため、特にこうげきが下がって火力が落ちる物理アタッカーの居座りを許しにくくします。なお進化前の素早さ75から伸びないため、依然として上から殴る型ではありません。
 
 ### タイプ・弱点
 
@@ -187,7 +187,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 <thead>
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½以下）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½・¼）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
 </tr>
 </thead>
@@ -206,7 +206,6 @@ heroImage: '../../assets/hero-scovillain-m2.png'
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
-      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
     </div>
   </td>
@@ -322,7 +321,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 
 **強み:**
 
-ずぶとい＋HB特化で物理アタッカーに対する受けが安定します。やどりぎのタネとたべのこし（耐久寄せ個体）・ギガドレインの回復を重ね、相手のHPを削りながら粘り続けられます。ムラっけでぼうぎょ・とくぼうが上がれば受けがさらに堅くなり、こうげき・とくこうが上がれば反撃火力も得られます。メガ進化後はとびだすハバネロにより、殴ってきた物理アタッカーをやけどにして居座りを崩しにくくします。
+ひかえめ型がとくこう補正で火力に寄せるのに対し、ずぶとい型はB↑補正で物理アタッカーへの受け出しが安定するのが最大の差です。物理方面の被ダメージが小さいため、やどりぎ＋まもるで粘る本来の消耗戦を最も成立させやすい型です。メガ進化後はとびだすハバネロにより、殴ってきた相手をやけどにでき、特に火力が落ちる物理アタッカーの居座りを崩しにくくします。
 
 **弱み:**
 
@@ -367,7 +366,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 
 ## 環境ポケモンへの相性分析
 
-### 主要ポケモンとの相性
+### 有利・不利がはっきり出る相手
 
 使用率TOP30のうち、スコヴィランと相性がはっきり出るポケモンを有利・不利の両面から挙げます。みず0.25倍・くさ0.25倍を活かせるみず・くさ枠には強く居座れる一方、すばやさ75と弱点4タイプ（ひこう・どく・じめん・いわ）を突く相手には受けが成立しない点に注意してください。
 
@@ -386,7 +385,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・フェアリーともに半減（みず0.25・フェアリー0.5）。やどりぎ＋ギガドレインで居座り、消耗させやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリア（みず・採用率79.2%）を0.25倍に抑えられる。ムーンフォース（フェアリー・97.0%）は等倍だが、やどりぎ＋ギガドレインで居座り消耗させやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -400,7 +399,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
     <img src="/images/pokemon/pokemon-0009-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カメックス（30位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技を0.25倍に抑え、やどりぎ＋ギガドレイン（くさ技がみずに×2）で継続的に削れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず単タイプでやどりぎが通り、ギガドレイン（みずに×2）で継続的に削れる。主力のはどうだん（かくとう・90.0%）は等倍だが、HB振りなら受けつつ消耗させやすい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

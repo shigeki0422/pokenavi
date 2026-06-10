@@ -248,7 +248,7 @@ HP95・D125の特殊耐久に対し、B79は控えめで物理方面はそれほ
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>メロメロボディ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>33.3%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">接触してきた相手を30%でメロメロにする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">異性から接触技を受けると30%でメロメロにする</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ふしぎなうろこ</strong></td>
@@ -335,7 +335,7 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
 
 **強み:**
 
-性格おだやか（17.2%）でとくぼうを上げ、元から高いD125をさらに伸ばす型です。HB型がぼうぎょを補って汎用的に受けるのに対し、HD型は特殊アタッカー（サザンドラ・リザードン特殊型・アシレーヌ）への受け性能に特化します。ミラーコートとの相性が良く、半減で耐えた特殊技を2倍で反射して特殊アタッカーを返り討ちにできます。
+性格おだやか（17.2%）でとくぼうを上げ、元から高いD125をさらに伸ばす型です。HB型がぼうぎょを補って汎用的に受けるのに対し、HD型は有効打を欠く特殊アタッカー（サザンドラ・アシレーヌ）への受け性能に特化します。ミラーコートとの相性が良く、半減で耐えた特殊技を2倍で反射して特殊アタッカーを返り討ちにできます。
 
 **弱み:**
 
@@ -363,8 +363,8 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（42%）・フレアドライブ（33%）を半減。ねっとうがほのお/ひこうに×2弱点。ただしソーラービーム（61%）はくさで×2のため警戒</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（42%）・フレアドライブ（33%）は半減でき、ねっとうがほのお/ひこうに×2で弱点を突ける。ただしソーラービーム（61%）はくさ×2で、溜めターンに回復しても採用過半数のため受け切りは安定しない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -375,10 +375,10 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
+    <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（むし/ほのお）を半減し特殊耐久で受けきる。一致ねっとうがほのおに×2で打点十分（れいとうビームはむし/ほのおに×0.5で通らない）。ただしギガドレイン（59%）はくさ×2のため注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのまい（むし/ほのお）は半減でき、一致ねっとうがほのおに×2で刺さる。ただしギガドレイン（59%）がくさ×2で、ちょうのまい（97%）で積まれると吸われ負ける。くろいきりで積みは流せる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -447,17 +447,10 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
+    <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちから・パワージェムはミロカロスに等倍だが、ヘドロウェーブ（69%・どく）で削られつつステルスロックで負担。ねっとう・れいとうビームは半減〜等倍で有効打が薄い</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技（だいちのちから等）を持つガブリアス・カバルドンでいわ/どくの弱点（×2）を突いて落とす</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0681-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド（11位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ねっとう・れいとうビームをはがね/ゴーストで半減され、有効打が通らない。こちらの攻撃が軽く、起点にされやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技（だいちのちから・じしん）を持つアタッカーではがねの弱点（×2）を突いて処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（67%）がでんき×2弱点。ねっとうははがね/ドラゴンに半減され、れいとうビームも等倍止まりで有効打が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんきを無効化するじめんタイプ（ガブリアス・カバルドン）を後出しして10まんボルトを透かし、じめん技ではがねの弱点（×2）を突く</td>
 </tr>
 </tbody>
 </table>
@@ -473,7 +466,7 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
     <img src="/images/pokemon/pokemon-0479-01.webp" alt="ヒートロトム">
     <div class="name">ヒートロトム</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき/ほのおでミロカロスの弱点くさを半減し合う。ボルトチェンジで起点作り</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき/ほのおでミロカロスの弱点くさを半減して受ける。ボルトチェンジで起点作り</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0887-00.webp" alt="ドラパルト">
@@ -566,7 +559,7 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
 
 **総評:**
 
-ミロカロスはHP95・D125の特殊耐久とじこさいせい（93.6%）を軸に、ほのお特殊枠（リザードン・サザンドラ）を起点にしながら相手を消耗させる受け型です。ねっとうのやけど・かちきの切り返し・ミラーコートの反射・くろいきりの積みリセットを組み合わせ、攻撃面の薄さを盤面コントロールで補います。
+ミロカロスはHP95・D125の特殊耐久とじこさいせい（93.6%）を軸に、サザンドラのような有効打を欠く特殊アタッカーを起点にしながら相手を消耗させる受け型です。ねっとうのやけど・かちきの切り返し・ミラーコートの反射・くろいきりの積みリセットを組み合わせ、攻撃面の薄さを盤面コントロールで補います。
 
 一方で弱点のでんき（ウォッシュロトム）・くさ（フシギバナ・マスカーニャ）には受け出しできず、これらをパーティの他5体（じめん枠・ほのお/はがね枠）で確実にケアできるかが採用の前提になります。アタッカー全盛の環境で50位という位置は、受け構築の軸として一定の需要があることを示しています。
 
