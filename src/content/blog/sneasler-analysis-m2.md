@@ -57,7 +57,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
 - サザンドラ（S98・21位）
 - マフォクシー（S104・25位）
 
-ただしS120を上回る高速勢には起動前は先手を取られます。最速マスカーニャ（S123・3位）・ゲッコウガ（S122・28位）は、こちらがようきS189でも僅かに上回られるため、かるわざ起動前のターンは無理に正面から撃ち合わないことが前提になります。
+ただしS120を上回る高速勢には起動前は先手を取られます。最速マスカーニャ（S実数値192）・ゲッコウガ（同191、メガ進化時はS実数値213）は、こちらがようきS189でも上回られるため、かるわざ起動前のターンは無理に正面から撃ち合わないことが前提になります。
 
 ### 3. ねこだまし・つるぎのまいで起動ターンを作れる
 
@@ -141,15 +141,16 @@ heroImage: '../../assets/hero-sneasler-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
-      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
+      <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
     </div>
   </td>
 </tr>
@@ -157,7 +158,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
 </table>
 </div>
 
-エスパーが**×4の致命的な弱点**となる点が最大の注意点です。じめん・ひこうも×2で通り、いずれもオオニューラのぼうぎょ60では一撃で落とされかねません。一方でかくとう・むしを¼、くさ・どく・いわ・あくを半減で受けられるため、マスカーニャのはたきおとす（あく0.5）・トリックフラワー（くさ0.5）やゲッコウガのあくのはどう（あく0.5）といった環境上位の高速勢の主力を軽減でき、被弾しても一撃で崩されにくくなります。
+エスパーが**×4の致命的な弱点**となる点が最大の注意点です。じめん・ひこうも×2で通り、いずれもオオニューラのぼうぎょ60では一撃で落とされかねません。一方でむしを¼、どく・いわ・ゴースト・くさ・あく・フェアリーを半減で受けられるため、マスカーニャのはたきおとす（あく0.5）・トリックフラワー（くさ0.5）やゲッコウガのあくのはどう（あく0.5）といった環境上位の高速勢の主力を軽減でき、被弾しても一撃で崩されにくくなります。
 
 ---
 
@@ -278,7 +279,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
 
 **弱み:**
 
-しろいハーブを起動に使うため、起動キーであるインファイトを撃つ初動でB・Dが下がる隙が生まれます。エスパー（×4）・じめん・ひこう（×2）を持つ相手の前では、起動ターンに弱点技を合わせられると低耐久ゆえ即座に崩されます。ようき型と異なり起動前のS172圏では同速帯のS120ポケモンや、ようきなら五分に持ち込める一部の高速勢にも先手を許す点が、いじっぱり型固有のリスクです。
+しろいハーブを起動に使うため、起動キーであるインファイトを撃つ初動でB・Dが下がる隙が生まれます。エスパー（×4）・じめん・ひこう（×2）を持つ相手の前では、起動ターンに弱点技を合わせられると低耐久ゆえ即座に崩されます。起動前のS実数値172は、ようき型のS189なら先手を取れるスターミー（最速S183）・ゲンガー（最速S178）に後攻となる点が、いじっぱり型固有のリスクです。
 
 ---
 
@@ -368,7 +369,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じごくづき（あく×2、採用率52.3%）採用個体ならS110＜120で先手で削れる。主力のヘドロウェーブ（どく81.7%）・きあいだま（かくとう37.4%）はいずれもこちらに×0.5で弱点を突かれない。みちづれ（30.5%）で相討ちを狙われる点に注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じごくづき（あく×2、採用率52.3%）採用個体なら大ダメージを与えられるが、最速個体のS実数値178はいじっぱりS172を上回り起動前は後攻になる。主力のヘドロウェーブ（どく81.7%）・きあいだま（かくとう37.4%）はいずれもこちらに×0.5で弱点を突かれない。みちづれ（30.5%）で相討ちを狙われる点に注意</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -397,15 +398,15 @@ heroImage: '../../assets/hero-sneasler-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0655-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マフォクシー（25位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">サイコショック（50.4%）・サイコキネシス（38.3%）がエスパー×4で、低耐久のオオニューラは一撃。S104＜120で先手は取れるが、こちらのインファイトはほのお1×エスパー0.5＝×0.5半減で一撃に届かない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェイタルクロー（どく×2）なら先手で大ダメージ。確実に倒すにはあく・はがねタイプ（ドドゲザン等）を同伴し後出しで処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">サイコショック（50.4%）・サイコキネシス（38.3%）がエスパー×4で、低耐久のオオニューラは一撃。S104（最速実数値171）にはいじっぱりS172で先手を取れるが、こちらのインファイトはほのお1×エスパー0.5＝×0.5半減、フェイタルクローもどく等倍で一撃に届かない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じごくづき（あく×2）採用個体なら先手で大ダメージを与えられる。確実に倒すにはエスパー技を半減するあく・はがねタイプ（ドドゲザン等）を同伴し後出しで処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のアクアブレイク（89.2%）・アイススピナー（64.9%）はこちらに等倍だが、しねんのずつき（39.4%）・サイコカッター（24.7%）のエスパー技を持つ個体はこちらに×4で一撃。S115＜120で先手は取れるがインファイト（みず/エスパーに等倍）では一撃にできず、エスパー技採用個体には撃ち負ける</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェイタルクロー（どく等倍）で削れるが確定数は遅い。エスパー技を半減するはがね・あくタイプを同伴して後出しで処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のアクアブレイク（89.2%）・アイススピナー（64.9%）はこちらに等倍だが、しねんのずつき（39.4%）・サイコカッター（24.7%）のエスパー技を持つ個体はこちらに×4で一撃。最速個体のS実数値183はいじっぱりS172を上回り、起動前は先手も取れない。インファイトはみず/エスパーに等倍で一撃にできず撃ち負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じごくづき（あく×2）なら大ダメージだが起動前は後攻。エスパー技を半減するはがね・あくタイプを同伴して後出しで処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -455,7 +456,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">じめん枠。オオニューラが等倍止まりのはがね・どくにじしんで打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">じめん枠。一致技が両方半減されるどく勢にじしんで打点</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
@@ -467,7 +468,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
     <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)">
     <div class="name">イダイトウ(オス)</div>
     <div class="rate">同居率9位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/ゴーストでエスパーを半減。みず技でじめん勢に打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず技でオオニューラが苦手なじめん・いわ・ほのお勢に上から打点</div>
   </div>
 </div>
 
@@ -478,7 +479,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
 1. **エスパー対策**: あく・はがねタイプ（ブリジュラス等）でエスパー技を受ける枠
 2. **じめん対策**: ひこう・くさタイプを置き、ガブリアス・カバルドンのじしんを受ける枠
 3. **起点作り**: ねこだまし・とんぼがえりで対面を整え、有利な相手に起動を通す
-4. **高速の上から処理**: オオニューラが起動前に抜けないマスカーニャ・ゲッコウガをでんき・氷技で先に削る枠
+4. **高速の上から処理**: オオニューラが起動前に抜けないマスカーニャ・ゲッコウガをでんき・こおり技で先に削る枠
 
 ---
 
@@ -518,7 +519,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">インファイト・フェイタルクロー・じごくづき・ねこだまし</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">A実数値が高く一撃の火力で勝る。起動後の全抜き性能</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">起動前S172で最速マスカーニャ・ゲッコウガに先攻される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">起動前S172でスターミー・ゲンガーに後攻（ようきS189なら先手）</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">かるわざAS型（ようき）</td>
@@ -545,5 +546,3 @@ heroImage: '../../assets/hero-sneasler-m2.png'
 - [同じ高速かくとうアタッカー メガルカリオのM-2考察](/blog/lucario-analysis-m2/)
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [後出しで処理したいリザードン(Y)のM-2考察](/blog/charizard-y-analysis-m2/)
-</content>
-</invoke>

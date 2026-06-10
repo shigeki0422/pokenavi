@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】ハラバリー考察 M-2 使用率32位 受け型の技採用率と立ち回り'
-description: 'M-2シングルバトルで使用率32位のハラバリーを徹底分析。特性でんきにかえる、パラボラチャージ採用率98.9%・なまける83.0%の耐久受け型を解説。みずびたしでじめん技を無力化する立ち回りや環境上位への相性を実データで紹介します。'
+description: 'M-2シングルバトルで使用率32位のハラバリーを徹底分析。特性でんきにかえる、パラボラチャージ採用率98.9%・なまける83.0%の耐久受け型を解説。みずびたしで相手を水化させてでんき技を×2で通す立ち回りや、ガブリアス・カバルドンなど環境上位への有利不利を実データで紹介します。'
 pubDate: '2026-06-04'
 draft: true
 heroImage: '../../assets/hero-bellibolt-m2.png'
@@ -53,7 +53,7 @@ heroImage: '../../assets/hero-bellibolt-m2.png'
 
 ### 3. ボルトチェンジ・みずびたしで対面を操作する
 
-ボルトチェンジ（採用率67.9%）は攻撃後に交代できるでんき技で、不利な相手に殴ってから後続へつなげます。みずびたし（65.5%）は**相手をみずタイプに変える**変化技で、じめん技しか弱点を突けないガブリアスやカバルドンに対し、相手のタイプを書き換えてこちらの一致でんき技を×2で通すという択を作れます。
+ボルトチェンジ（採用率67.9%）は攻撃後に交代できるでんき技で、不利な相手に殴ってから後続へつなげます。みずびたし（65.5%）は**相手をみずタイプに変える**変化技で、でんき技が無効・半減で通らないガブリアスやカバルドンに対し、相手のタイプを書き換えてこちらの一致でんき技を×2で通すという択を作れます。
 
 ---
 
@@ -211,7 +211,7 @@ HP109に防御91・とくぼう83とバランスの取れた耐久を持ちま�
 </table>
 </div>
 
-技4枠は**パラボラチャージ＋なまける**を軸に、ボルトチェンジ・みずびたし・どくどくから2枠を選ぶのが標準です。攻撃技2枠（パラボラチャージ・ボルトチェンジ）はいずれもでんき一致で、補助技で受け回しを支える純粋なサポート役の構成です。
+技4枠は**パラボラチャージ＋なまける**を軸に、ボルトチェンジ・みずびたし・どくどくから2枠を選ぶのが標準です。攻撃技2枠（パラボラチャージ・ボルトチェンジ）はいずれもでんき一致で、補助技で受け回しを支えるサポート役の構成です。
 
 ---
 
@@ -247,7 +247,7 @@ HP109に防御91・とくぼう83とバランスの取れた耐久を持ちま�
 
 **強み:**
 
-HDおだやかで特殊耐久を最大化し、アシレーヌ・スターミー・サザンドラといった特殊アタッカーを受け止めます。どくどくで対面の物理受けや高耐久ポケモンを毒で削り、なまける・パラボラチャージで自分は回復し続けるため、ターンをかけて相手の数的有利を作れます。持ち物はたべのこし（採用率54.5%）が最多で、毎ターンの回復量がさらに上乗せされます。
+HDおだやかで特殊耐久を最大化し、アシレーヌ・ゲッコウガ・サザンドラといった特殊アタッカーを受け止めます。どくどくで対面の物理受けや高耐久ポケモンを毒で削り、なまける・パラボラチャージで自分は回復し続けるため、ターンをかけて相手の数的有利を作れます。持ち物はたべのこし（採用率54.5%）が最多で、毎ターンの回復量がさらに上乗せされます。
 
 **弱み:**
 
@@ -283,7 +283,7 @@ A方向に振らないため打点はパラボラチャージのみで、毒の�
 
 **強み:**
 
-HBずぶといで物理方向に厚くし、ギャラドスのたきのぼり（×0.5）など物理みず技を受けながら居座れる型です。おだやか型が特殊受けに寄るのに対し、こちらはみずびたしを軸にした対面操作に重きを置きます。相手をみずタイプに書き換えると、ガブリアス・カバルドンといった本来こちらが手を出せないじめん勢にも一致パラボラチャージが×2で通り、回復しながら反撃できます。
+HBずぶといで物理方向に厚くし、じめん以外の物理技を受けながら居座れる型です。おだやか型が特殊受けに寄るのに対し、こちらはみずびたしを軸にした対面操作に重きを置きます。相手をみずタイプに書き換えると、ガブリアス・カバルドンといった本来こちらが手を出せないじめん勢にも一致パラボラチャージが×2で通り、回復しながら反撃できます。
 
 **弱み:**
 
@@ -293,7 +293,7 @@ HBずぶといで物理方向に厚くし、ギャラドスのたきのぼり（
 
 ## 環境ポケモンへの相性分析
 
-### 主要ポケモンとの相性
+### 使用率上位ポケモンとの有利不利
 
 使用率上位（TOP30目安）のうち、ハラバリーと相性がはっきり出るポケモンを有利・不利の両面から挙げます。ハラバリーはでんき単で弱点がじめんのみ、HP109の耐久となまけるの回復で特殊アタッカーを受けやすい一方、すばやさ45と低速で、じめん技を持つ相手や毒の効かないはがね・どくタイプには打点・受けともに乏しくなります。
 
@@ -318,36 +318,36 @@ HBずぶといで物理方向に厚くし、ギャラドスのたきのぼり（
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼり（85.9%）が×0.5、パラボラチャージがみず/ひこうに×2。HB型なら居座って回復しつつ削れる（ただしじしん採用63.7%には注意）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">パラボラチャージがみず/ひこうに×4（みず2×ひこう2）で刺さるが、ギャラドスのじしん採用率63.7%が弱点×2で重く、後出しは安定しない。じしん非搭載個体には有利</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">パラボラチャージがひこうに×2で通り、回復しながら削れる。ほのお技は等倍止まりでなまけるが間に合う</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガY（採用約64%・ほのお/ひこう）にはパラボラチャージが×2で通り有利。メガX（約35%・ほのお/ドラゴン）にはドラゴンが半減して×0.5となり削りづらい。いずれもこちらに等倍以上の高火力ほのお技が刺さる点には注意</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">パラボラチャージはひこう×2だがはがねで相殺し等倍（でんき2×0.5）。毒は無効で削れず、相手のはがね技も半減され決め手を欠く膠着</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">パラボラチャージがひこう/はがねに×2（ひこう2×はがね1）で通り、回復しながら削れる。アイアンヘッド・ボディプレスはこちらに等倍だが火力が低く、被弾も軽い。ただし毒は無効ではねやすめで粘られると決定打に欠ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）が弱点×2、こちらのでんき技は×0.5（じめん半減）。みずびたしで水化できれば反撃可能だが、初手の被弾は重い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）が弱点×2、こちらのでんき技はじめんに無効（×0）で通らない。みずびたしで水化できれば反撃可能だが、初手の被弾は重い</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.0%）が弱点×2、でんき技は×0.5。あくび（94.2%）でこちらを流され、なまける合戦でも高耐久に押し負けやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.0%）が弱点×2、でんき技はじめんに無効（×0）。あくび（94.2%）でこちらを流され、なまける合戦でも高耐久に押し負けやすい</td>
 </tr>
 </tbody>
 </table>
@@ -369,28 +369,28 @@ HBずぶといで物理方向に厚くし、ギャラドスのたきのぼり（
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）が弱点×2で一撃が重い。こちらのでんき技はじめんに×0.5でほぼ通らず、毒も入らない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">対面したらみずびたしで水化させ、一致パラボラチャージ（×2）で回復しつつ削る。水化前に縛られそうならボルトチェンジでくさ・こおり打点を持つ後続へ逃がす</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）が弱点×2で一撃が重い。こちらのでんき技はじめんに無効（×0）でまったく通らず、すばやさでも先制される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">対面したらみずびたしで水化させ、一致パラボラチャージ（×2）で回復しつつ削る。水化前に縛られそうならボルトチェンジでこおり・フェアリー打点を持つ後続へ逃がす</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.0%）が弱点×2。あくび（94.2%）で流され、高HP・なまける（53.2%）で削り合いに勝てず、毒も無効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.0%）が弱点×2でこちらのでんき技はじめんに無効（×0）。あくび（94.2%）で流され、高HP・なまける（53.2%）で削り合いに勝てない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・こおり・みず技でじめんに弱点を突けるポケモン（マスカーニャ等）にボルトチェンジで引き継ぐ。居座らず役割対象を絞る</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンで毒が無効、こちらのでんき技ははがねに×0.5。10まんボルト（66.9%）・りゅうせいぐん（64.8%）で削られ、起点にされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンで毒が無効、こちらのでんき技はドラゴンに×0.5で半減され通らない。10まんボルト（66.9%）・りゅうせいぐん（64.8%）で削られ、起点にされる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">居座らずボルトチェンジでじめん・かくとう打点を持つ後続へ。ブリジュラスにはガブリアスのじしん等で上から処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく/はがねで毒が無効、でんき技は×0.5。高Bを削れず、ふいうち・つるぎのまいの起点にされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく/はがねで毒が無効。でんき技は等倍で通るが威力65では高Bを削り切れず、ふいうち（99.0%）・つるぎのまい（72.3%）の起点にされる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう・ほのお・じめん技を持つ後続へボルトチェンジで引く。ハラバリー単体では受からないと割り切る</td>
 </tr>
 </tbody>
@@ -460,7 +460,7 @@ HBずぶといで物理方向に厚くし、ギャラドスのたきのぼり（
 
 採用率上位5技のうち**3技が補助技**で、残る攻撃2技もでんき一致に統一されています。これはハラバリーが火力でなく「回復・毒・タイプ変化・交代」という択の多さで仕事をするポケモンであることを数値が示しています。
 
-注目すべきはみずびたしの採用率65.5%。これは単なる選択肢ではなく、でんき技がじめんに×0.5でほぼ通らないという弱点を、相手を水化させて×2に反転させるための半ば必須技です。攻撃技がでんき一致に偏っているからこそ、その通りにくさを補うみずびたしが過半数に採用されている——技構成の偏りと補完が噛み合った設計と読めます。
+注目すべきはみずびたしの採用率65.5%。これは単なる選択肢ではなく、でんき技がじめんタイプには無効（×0）でまったく通らないという弱点を、相手を水化させて×2に反転させるための半ば必須技です。攻撃技がでんき一致に偏っているからこそ、その通りにくさを補うみずびたしが過半数に採用されている——技構成の偏りと補完が噛み合った設計と読めます。
 
 ---
 
@@ -498,7 +498,7 @@ HBずぶといで物理方向に厚くし、ギャラドスのたきのぼり（
 
 **総評:**
 
-ハラバリーは火力ではなく、弱点じめんのみという優秀なタイプ耐性・HP109の耐久・なまけるの回復、そしてみずびたしやボルトチェンジの択の多さで仕事をする受け軸ポケモンです。M-2環境ではアシレーヌ・ギャラドス・リザードンといった上位の特殊・みず系を受けながら、毒と回復で時間を稼げるのが強みです。
+ハラバリーは火力ではなく、弱点じめんのみという優秀なタイプ耐性・HP109の耐久・なまけるの回復、そしてみずびたしやボルトチェンジの択の多さで仕事をする受け軸ポケモンです。M-2環境ではアシレーヌをはじめとする上位の特殊アタッカーを受けながら、毒と回復で時間を稼げるのが強みです。一方でみず・ひこう勢でもじしんを搭載する個体（ギャラドス等）には後出しが利かず、メガリザードンXのようにドラゴン複合でこちらのでんき技を半減する相手も出てくるため、有利不利はタイプと搭載技を見て判断する必要があります。
 
 一方、使用率1位ガブリアス・7位カバルドンのじしんが弱点を突き、毒の効かないブリジュラス・ドドゲザンには起点にされるため、これらは後続のじめん受け・かくとう/じめん打点で補う前提になります。みずびたしで苦手なじめん勢を水化させて反撃する択をどれだけ通せるかが、ハラバリーを活かす鍵となります。
 
