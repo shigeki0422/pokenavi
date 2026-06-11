@@ -8,12 +8,38 @@ import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'pokemon'>['data'];
 
-const { title, description, pubDate, updatedDate } = Astro.props;
+const { title, description, pubDate, updatedDate, pokemonName, dexNumber, imageForm } = Astro.props;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
+const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const dexPad = String(dexNumber ?? 0).padStart(4, '0');
+const pokemonImageUrl = `${siteUrl}/images/pokemon/pokemon-${dexPad}-${imageForm ?? '00'}.webp`;
+
+const pokemonJsonLd = pokemonName ? {
+	'@context': 'https://schema.org',
+	'@type': 'Thing',
+	name: pokemonName,
+	description,
+	url: pageUrl,
+	image: pokemonImageUrl,
+} : null;
+
+const breadcrumbJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: 'ホーム', item: siteUrl + '/' },
+		{ '@type': 'ListItem', position: 2, name: 'ポケモン情報', item: siteUrl + '/pokemon/' },
+		{ '@type': 'ListItem', position: 3, name: pokemonName ?? title, item: pageUrl },
+	],
+};
 ---
 
 <html lang="ja">
 	<head>
 		<BaseHead title={title} description={description} />
+		{pokemonJsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(pokemonJsonLd)} />}
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 		<style>
 			main {
 				width: calc(100% - 2em);

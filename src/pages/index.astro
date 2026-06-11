@@ -17,12 +17,23 @@ const allPokemonPages = (await getCollection('pokemon'))
 	.sort((a, b) => (a.data.usageRank ?? 999) - (b.data.usageRank ?? 999));
 const pokemonPages = allPokemonPages.slice(0, 10);
 const pokemonTotal = allPokemonPages.length;
+
+const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
+const organizationJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'Organization',
+	name: SITE_TITLE,
+	url: siteUrl,
+	logo: { '@type': 'ImageObject', url: siteUrl + '/logo-mark.png' },
+	description: SITE_DESCRIPTION,
+};
 ---
 
 <!doctype html>
 <html lang="ja">
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} imageUrl="/og-image.png" />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
 		<style>
 			.hero {
 				text-align: center;
