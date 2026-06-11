@@ -183,7 +183,7 @@ analysisSlug: 'banette-analysis-m2'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px">ダストシュート</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-03-poison.png" alt="どく" style="width:20px;height:20px"> ダストシュート</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9.8%</td>
 </tr>
 <tr>
@@ -217,7 +217,7 @@ analysisSlug: 'banette-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ジュペッタナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-360px -48px;flex-shrink:0"></span>ジュペッタナイト</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.4%</td>
 </tr>
 <tr>
@@ -227,7 +227,7 @@ analysisSlug: 'banette-analysis-m2'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">のろいのおふだ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-24px -24px;flex-shrink:0"></span>のろいのおふだ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.1%</td>
 </tr>
 <tr>
@@ -237,7 +237,7 @@ analysisSlug: 'banette-analysis-m2'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ゲンガナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-192px -48px;flex-shrink:0"></span>ゲンガナイト</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.0%</td>
 </tr>
 <tr>
@@ -247,17 +247,17 @@ analysisSlug: 'banette-analysis-m2'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ギャラドスナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-120px -48px;flex-shrink:0"></span>ギャラドスナイト</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ミミロップナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-408px -72px;flex-shrink:0"></span>ミミロップナイト</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.0%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ルカリオナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-96px -96px;flex-shrink:0"></span>ルカリオナイト</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.0%</td>
 </tr>
 <tr>

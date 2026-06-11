@@ -153,7 +153,7 @@ analysisSlug: 'milotic-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px">ねっとう</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-10-water.png" alt="みず" style="width:20px;height:20px"> ねっとう</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">95.2%</td>
 </tr>
 <tr>
@@ -173,7 +173,7 @@ analysisSlug: 'milotic-analysis-m2'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px">くろいきり</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:20px;height:20px"> くろいきり</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">47.0%</td>
 </tr>
 <tr>
@@ -188,7 +188,7 @@ analysisSlug: 'milotic-analysis-m2'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px">とぐろをまく</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-03-poison.png" alt="どく" style="width:20px;height:20px"> とぐろをまく</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3.5%</td>
 </tr>
 <tr style="background:#fafafa">
@@ -217,7 +217,7 @@ analysisSlug: 'milotic-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-288px -192px;flex-shrink:0"></span>たべのこし</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-408px 0px;flex-shrink:0"></span>たべのこし</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">46.4%</td>
 </tr>
 <tr>
@@ -232,37 +232,37 @@ analysisSlug: 'milotic-analysis-m2'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">しんぴのしずく</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-312px 0px;flex-shrink:0"></span>しんぴのしずく</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.2%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-384px -168px;flex-shrink:0"></span>ひかりのこな</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-48px -24px;flex-shrink:0"></span>ひかりのこな</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.4%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">せんせいのツメ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-384px 0px;flex-shrink:0"></span>せんせいのツメ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.7%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">かいがらのすず</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-72px 0px;flex-shrink:0"></span>かいがらのすず</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">カゴのみ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-48px -48px;flex-shrink:0"></span>カゴのみ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.6%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">リンドのみ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-72px -96px;flex-shrink:0"></span>リンドのみ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.4%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ソクノのみ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-456px -48px;flex-shrink:0"></span>ソクノのみ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.3%</td>
 </tr>
 </tbody>

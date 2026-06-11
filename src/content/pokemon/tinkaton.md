@@ -154,7 +154,7 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px">デカハンマー</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:20px;height:20px"> デカハンマー</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">97.1%</td>
 </tr>
 <tr>
@@ -179,7 +179,7 @@ draft: false
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px">じならし</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:20px;height:20px"> じならし</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">23.5%</td>
 </tr>
 <tr style="background:#fafafa">
@@ -189,7 +189,7 @@ draft: false
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px">アイスハンマー</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:20px;height:20px"> アイスハンマー</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">11.0%</td>
 </tr>
 <tr style="background:#fafafa">
@@ -218,7 +218,7 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">シュカのみ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-288px -48px;flex-shrink:0"></span>シュカのみ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">31.7%</td>
 </tr>
 <tr>
@@ -238,7 +238,7 @@ draft: false
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-288px -192px;flex-shrink:0"></span>たべのこし</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-408px 0px;flex-shrink:0"></span>たべのこし</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8.2%</td>
 </tr>
 <tr>
@@ -248,7 +248,7 @@ draft: false
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">オッカのみ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-360px -24px;flex-shrink:0"></span>オッカのみ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.0%</td>
 </tr>
 <tr>
@@ -258,12 +258,12 @@ draft: false
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">せんせいのツメ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-384px 0px;flex-shrink:0"></span>せんせいのツメ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-384px -168px;flex-shrink:0"></span>ひかりのこな</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-48px -24px;flex-shrink:0"></span>ひかりのこな</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.9%</td>
 </tr>
 </tbody>

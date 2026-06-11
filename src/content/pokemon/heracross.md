@@ -164,7 +164,7 @@ analysisSlug: 'heracross-analysis-m2'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px">タネマシンガン</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:20px;height:20px"> タネマシンガン</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">81.9%</td>
 </tr>
 <tr>
@@ -174,7 +174,7 @@ analysisSlug: 'heracross-analysis-m2'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px">ミサイルばり</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-06-bug.png" alt="むし" style="width:20px;height:20px"> ミサイルばり</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">43.3%</td>
 </tr>
 <tr>
@@ -184,7 +184,7 @@ analysisSlug: 'heracross-analysis-m2'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px">フェイント</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:20px;height:20px"> フェイント</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7.6%</td>
 </tr>
 <tr>
@@ -194,7 +194,7 @@ analysisSlug: 'heracross-analysis-m2'
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px">メガホーン</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-06-bug.png" alt="むし" style="width:20px;height:20px"> メガホーン</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.0%</td>
 </tr>
 <tr>
@@ -218,7 +218,7 @@ analysisSlug: 'heracross-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ヘラクロスナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-312px -72px;flex-shrink:0"></span>ヘラクロスナイト</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">96.7%</td>
 </tr>
 <tr>
@@ -233,12 +233,12 @@ analysisSlug: 'heracross-analysis-m2'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">しろいハーブ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-288px 0px;flex-shrink:0"></span>しろいハーブ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.2%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">せんせいのツメ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-384px 0px;flex-shrink:0"></span>せんせいのツメ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.1%</td>
 </tr>
 <tr>
@@ -253,17 +253,17 @@ analysisSlug: 'heracross-analysis-m2'
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">カイロスナイト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-24px -48px;flex-shrink:0"></span>カイロスナイト</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.0%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ピントレンズ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-168px -72px;flex-shrink:0"></span>ピントレンズ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">くろおび</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-240px 0px;flex-shrink:0"></span>くろおび</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.0%</td>
 </tr>
 </tbody>
