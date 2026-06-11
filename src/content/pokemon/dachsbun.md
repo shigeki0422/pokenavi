@@ -2,7 +2,7 @@
 title: 'フレフワン | ポケモンチャンピオンズ 使用率・基礎データ M-2'
 description: 'ポケモンチャンピオンズ M-2シーズンのフレフワン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率208位。'
 pokemonName: 'フレフワン'
-dexNumber: 927
+dexNumber: 683
 usageRank: 208
 pubDate: '2026-05-24'
 draft: false
@@ -10,14 +10,14 @@ draft: false
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
-  <img src="/images/pokemon/pokemon-0927-00.webp" alt="フレフワン" style="width:96px;height:96px" />
+  <img src="/images/pokemon/pokemon-0683-00.webp" alt="フレフワン" style="width:96px;height:96px" />
   <div>
     <h1 style="margin:0 0 6px;font-size:1.6rem">フレフワン</h1>
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.927</strong>　／　M-2 使用率 <strong style="color:#dc2626">208位</strong>
+      全国図鑑 <strong>No.683</strong>　／　M-2 使用率 <strong style="color:#dc2626">208位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-05-24</div>
   </div>
