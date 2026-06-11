@@ -412,7 +412,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率71.5%）がかくとう×2。メガ後S実数値はようきで180とこちらより速く、つるぎのまい（39.3%）で積めばA一致打点で確定圏。しんくうは（26.0%）の先制も負う</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（採用率71.5%）がかくとう×2。メガ後Sはようきで180とこちらより速く、つるぎのまい（39.3%）で積めばA一致打点で確定圏。しんくうは（26.0%）の先制も負う</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">単体での後出しは困難。じめんを通せるガブリアスやかくとうを無効化するイダイトウ（みず/ゴースト）を後出しし、インファイト後にB・Dが下がった隙を突いて処理する</td>
 </tr>
 <tr>

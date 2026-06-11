@@ -1,0 +1,2027 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>バトルシミュレータ | ポケナビ</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --accent: #2337ff;
+    --accent-blue: #2563eb;
+  }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+  /* ── ログカラー（白背景用） ── */
+  .log-line.damage         { color: #ea580c; }
+  .log-line.supereffective { color: #d97706; font-weight: 600; }
+  .log-line.noteffective   { color: #9ca3af; }
+  .log-line.heal           { color: #16a34a; }
+  .log-line.status         { color: #9333ea; }
+  .log-line.mega           { color: #db2777; font-weight: 700; }
+  .log-line.transform      { color: #7c3aed; font-weight: 700; }
+  .log-line.faint          { color: #dc2626; font-weight: 700; }
+  .log-line.info           { color: #6b7280; }
+  .log-line.party-header   { color: #111827; font-weight: 700; margin-top: 2px; }
+  .log-line.party-detail   { color: #2563eb; font-size: 0.82em; padding-left: 0.5em; }
+  .log-line.reveal-p1      { color: #1d4ed8; font-style: italic; font-size: 0.88em; }
+  .log-line.reveal-p2      { color: #b91c1c; font-style: italic; font-size: 0.88em; }
+
+  /* ── スロットカード ── */
+  .slot-card        { background: #fff; cursor: pointer; }
+  .slot-card:hover  { border-color: #93c5fd !important; }
+  .slot-card.active-my   { border-color: #3b82f6 !important; background: #eff6ff; }
+  .slot-card.active-opp  { border-color: #f87171 !important; background: #fff1f2; }
+  .slot-header { background: transparent; }
+
+  /* ── ポケカード（バトルビュー） ── */
+  .poke-card          { background: #fff; border: 1px solid #e5e7eb; }
+  .poke-card.active-p1{ background: #eff6ff; border-color: #3b82f6; }
+  .poke-card.active-p2{ background: #fff1f2; border-color: #f87171; }
+  .poke-card.fainted  { opacity: 0.4; }
+  .poke-card.substitute { box-shadow: 0 0 0 2px #9ca3af inset; }
+  .hp-bar-inner { transition: width 0.4s ease; }
+
+  /* ── 入力・セレクト ── */
+  select, input[type=number] {
+    color: #374151;
+    background-color: #fff;
+  }
+  select { color-scheme: light; }
+  input[list]::-webkit-calendar-picker-indicator { display: none; }
+
+  /* ── ポケアイコン ── */
+  .poke-icon { image-rendering: pixelated; }
+
+  /* ── 手動バトル ── */
+  .move-btn {
+    border-radius: 10px; padding: 8px 10px; font-weight: 700;
+    text-align: left; transition: filter 0.12s, transform 0.1s;
+    border: 2px solid rgba(0,0,0,0.15); color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+    cursor: pointer; min-height: 64px;
+  }
+  .move-btn:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+  .move-btn:active:not(:disabled) { transform: translateY(0); filter: brightness(0.95); }
+  .move-btn:disabled { opacity: 0.38; cursor: not-allowed; }
+  .pp-bar { height: 3px; border-radius: 2px; background: rgba(255,255,255,0.25); margin-top: 4px; }
+  .pp-bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s; }
+  .pp-low  { color: #fca5a5; font-weight: 800; }
+  .pp-zero { color: #f87171; font-weight: 800; }
+  .switch-btn {
+    border-radius: 8px; padding: 7px 10px; font-weight: 600;
+    text-align: left; transition: background 0.12s; cursor: pointer;
+    border: 1.5px solid #e5e7eb; background: #fff;
+  }
+  .switch-btn:hover { background: #eff6ff; border-color: #93c5fd; }
+  #manual-log { max-height: 160px; overflow-y: auto; font-size: 0.8rem; }
+  .manual-log-turn { border-left: 3px solid #3b82f6; padding-left: 8px; margin-bottom: 4px; }
+  /* 選出カード */
+  .ps-card {
+    border: 2px solid #e5e7eb; border-radius: 12px; padding: 8px;
+    cursor: pointer; background: #fff; text-align: center;
+    transition: border-color 0.15s, background 0.15s, transform 0.1s;
+    position: relative; user-select: none;
+  }
+  .ps-card:hover { border-color: #93c5fd; background: #eff6ff; }
+  .ps-card.selected { border-color: #3b82f6; background: #dbeafe; }
+  .ps-card:active { transform: scale(0.97); }
+  .ps-badge {
+    position: absolute; top: 4px; left: 4px;
+    width: 20px; height: 20px; border-radius: 50%;
+    background: #3b82f6; color: #fff; font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+
+<!-- ── サイトヘッダー ── -->
+<header class="bg-white border-b border-gray-200 shadow-sm">
+  <div class="max-w-6xl mx-auto px-4 h-12 flex items-center gap-6">
+    <a href="https://pokenavi.jp" class="flex items-center gap-1.5 font-bold text-gray-900 text-base">
+      <span class="text-blue-600 text-lg">⚔</span>ポケナビ
+    </a>
+    <nav class="flex items-center gap-5 text-sm">
+      <a href="https://pokenavi.jp/pokemon/" class="text-gray-500 hover:text-gray-900 transition-colors">ポケモン別</a>
+      <a href="https://pokenavi.jp/blog/" class="text-gray-500 hover:text-gray-900 transition-colors">考察記事</a>
+      <a href="#" class="text-blue-600 font-medium border-b-2 border-blue-600 pb-0.5 leading-none">シミュレータ</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ── ページタイトル ── -->
+<div class="bg-white border-b border-gray-200">
+  <div class="max-w-6xl mx-auto px-4 py-4">
+    <div class="flex items-center gap-2 text-xs text-gray-400 mb-1">
+      <a href="https://pokenavi.jp" class="hover:text-blue-600">ポケナビ</a>
+      <span>/</span><span>バトルシミュレータ</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-3">
+      <h1 class="text-xl font-bold text-gray-900">バトルシミュレータ</h1>
+      <span class="bg-orange-100 text-orange-700 border border-orange-200 px-2 py-0.5 rounded-full text-xs font-bold">M-1</span>
+    </div>
+    <p class="text-sm text-gray-500 mt-1">M-1 上位ランカーの実際の構築でAI対戦。モンテカルロ法で勝率を算出できます。</p>
+  </div>
+</div>
+
+<main class="max-w-6xl mx-auto px-4 py-6 space-y-5">
+
+  <!-- ── 自分のパーティ（横一面） ── -->
+  <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="bg-blue-600 px-4 py-2.5 flex items-center gap-3">
+      <span class="w-5 h-5 bg-white/20 rounded-full text-xs flex items-center justify-center text-white font-bold shrink-0">自</span>
+      <h2 class="text-white font-bold text-sm">自分のパーティ</h2>
+      <select id="my-template-select"
+        class="ml-auto border-0 bg-blue-500 hover:bg-blue-400 text-white text-xs rounded-lg px-2 py-1.5 focus:outline-none cursor-pointer"
+        onchange="applyTemplate('my', this.value)">
+        <option value="">テンプレートから読み込む</option>
+      </select>
+    </div>
+    <div class="p-3">
+      <div id="my-slots" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+        <button id="my-add-btn" onclick="addSlot('my')"
+          class="rounded-xl border-2 border-dashed border-gray-200 hover:border-blue-300 hover:bg-blue-50 text-gray-300 hover:text-blue-400 transition-colors flex items-center justify-center text-2xl font-light" style="min-height:68px">＋</button>
+      </div>
+      <div id="active-slot-detail" class="hidden mt-3 px-4 py-3 space-y-2.5 bg-gray-50 border border-gray-200 rounded-xl"></div>
+    </div>
+  </section>
+
+  <!-- ── モード切り替えタブ ── -->
+  <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+    <div class="flex items-center border-b border-gray-100">
+      <button id="tab-battle" onclick="switchMode('battle')"
+        class="px-5 py-2.5 text-sm font-bold transition-colors bg-red-500 text-white">⚔ 対戦シミュレーション</button>
+      <button id="tab-analysis" onclick="switchMode('analysis')"
+        class="px-5 py-2.5 text-sm font-bold transition-colors text-gray-500 hover:text-gray-700 hover:bg-gray-50">📊 全ランカー総当たり</button>
+      <div id="status-msg" class="text-sm font-medium ml-auto mr-4"></div>
+    </div>
+  </div>
+
+  <!-- ── 1試合モード ── -->
+  <div id="mode-battle" class="space-y-4">
+
+    <!-- 対戦相手パーティ -->
+    <section class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
+      <div class="bg-red-500 px-4 py-2.5 flex items-center gap-3">
+        <span class="w-5 h-5 bg-white/20 rounded-full text-xs flex items-center justify-center text-white font-bold shrink-0">相</span>
+        <h2 class="text-white font-bold text-sm">対戦相手パーティ</h2>
+        <select id="opp-template-select"
+          class="ml-auto border-0 bg-red-400 hover:bg-red-300 text-white text-xs rounded-lg px-2 py-1.5 focus:outline-none cursor-pointer"
+          onchange="applyTemplate('opp', this.value)">
+          <option value="">テンプレートから読み込む</option>
+        </select>
+      </div>
+      <div class="p-3">
+        <div id="opp-slots" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+          <button id="opp-add-btn" onclick="addSlot('opp')"
+            class="rounded-xl border-2 border-dashed border-gray-200 hover:border-red-300 hover:bg-red-50 text-gray-300 hover:text-red-400 transition-colors flex items-center justify-center text-2xl font-light" style="min-height:68px">＋</button>
+        </div>
+        <div id="opp-slot-detail" class="hidden mt-3 px-4 py-3 space-y-2.5 bg-gray-50 border border-gray-200 rounded-xl"></div>
+      </div>
+    </section>
+
+    <!-- 操作パネル -->
+    <section class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3">
+      <div class="flex flex-wrap gap-3 items-center">
+        <button id="btn-battle" onclick="startBattle()"
+          class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-bold rounded-lg transition-colors text-sm shadow-sm whitespace-nowrap">
+          ▶ 1試合詳細
+        </button>
+        <button id="btn-manual" onclick="startManualBattle()"
+          class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors text-sm shadow-sm whitespace-nowrap">
+          ⚔ 手動バトル
+        </button>
+        <button id="btn-random" onclick="startRandomBattle()"
+          class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition-colors text-sm shadow-sm whitespace-nowrap">
+          🎲 ランダム対戦（秘匿）
+        </button>
+        <button id="btn-sim" onclick="startSim()"
+          class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg transition-colors text-sm shadow-sm whitespace-nowrap">
+          ◎ シミュレーション
+        </button>
+        <div class="flex items-center gap-1.5">
+          <label class="text-gray-500 text-xs font-medium whitespace-nowrap">試行数</label>
+          <input id="trials-input" type="number" value="50" min="10" max="5000" step="10"
+            class="w-20 border border-gray-300 rounded-lg px-2 py-1 text-center text-sm focus:outline-none focus:ring-2 focus:ring-blue-300">
+        </div>
+      </div>
+    </section>
+
+    <!-- シミュレーション結果 -->
+    <div id="sim-result" class="hidden bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+      <h3 class="font-bold text-gray-700 mb-4 text-sm uppercase tracking-wider">シミュレーション結果</h3>
+      <div class="grid grid-cols-3 gap-4 text-center mb-4">
+        <div>
+          <div class="text-blue-600 text-4xl font-bold tabular-nums" id="sr-p1"></div>
+          <div class="text-gray-400 text-xs mt-1 uppercase tracking-wide">自分 勝率</div>
+          <div class="text-gray-400 text-xs mt-0.5" id="sr-p1-wins"></div>
+        </div>
+        <div>
+          <div class="text-gray-400 text-3xl font-bold tabular-nums" id="sr-draw"></div>
+          <div class="text-gray-400 text-xs mt-1 uppercase tracking-wide">引き分け</div>
+        </div>
+        <div>
+          <div class="text-red-500 text-4xl font-bold tabular-nums" id="sr-p2"></div>
+          <div class="text-gray-400 text-xs mt-1 uppercase tracking-wide">相手 勝率</div>
+          <div class="text-gray-400 text-xs mt-0.5" id="sr-p2-wins"></div>
+        </div>
+      </div>
+      <div class="h-3 rounded-full bg-gray-100 overflow-hidden flex">
+        <div id="sr-bar1" class="h-full bg-blue-500 transition-all duration-700 rounded-l-full"></div>
+        <div id="sr-bar2" class="h-full bg-red-400 transition-all duration-700 rounded-r-full"></div>
+      </div>
+    </div>
+
+    <!-- 選出画面 -->
+    <div id="party-select-view" class="hidden">
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 space-y-4">
+        <!-- ヘッダー -->
+        <div class="flex items-center gap-3">
+          <button onclick="cancelPartySelect()"
+            class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">← キャンセル</button>
+          <h3 class="flex-1 text-center font-bold text-gray-700">選出する3体を選択（クリック順が出場順）</h3>
+        </div>
+
+        <!-- 相手の見せ合い6体（ランダム秘匿対戦の公開情報） -->
+        <div id="ps-opp-preview" class="hidden">
+          <div class="text-xs font-bold text-red-500 mb-1 text-center">相手の見せ合い6体（持ち物・技・選出3匹は不明）</div>
+          <div class="flex flex-wrap justify-center gap-2" id="ps-opp-grid"></div>
+        </div>
+
+        <!-- 選出順プレビュー -->
+        <div class="flex justify-center gap-4" id="ps-order-slots">
+          <div class="text-center">
+            <div class="text-xs text-gray-400 font-bold mb-1">1番手</div>
+            <div id="ps-slot-0" class="w-20 h-20 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-300 text-2xl">？</div>
+          </div>
+          <div class="text-center">
+            <div class="text-xs text-gray-400 font-bold mb-1">2番手</div>
+            <div id="ps-slot-1" class="w-20 h-20 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-300 text-2xl">？</div>
+          </div>
+          <div class="text-center">
+            <div class="text-xs text-gray-400 font-bold mb-1">3番手</div>
+            <div id="ps-slot-2" class="w-20 h-20 rounded-xl border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center text-gray-300 text-2xl">？</div>
+          </div>
+        </div>
+
+        <!-- 手持ち6体グリッド -->
+        <div class="grid grid-cols-3 gap-2" id="ps-pokemon-grid"></div>
+
+        <!-- 確定ボタン -->
+        <div class="flex justify-center pt-1">
+          <button id="ps-confirm-btn" onclick="confirmPartySelect()" disabled
+            class="px-8 py-2.5 bg-green-600 hover:bg-green-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-bold rounded-lg text-sm transition-colors">
+            確定してバトル開始 →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 手動バトルビュー -->
+    <div id="manual-view" class="hidden space-y-3">
+      <!-- ヘッダー -->
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-3 flex items-center gap-3">
+        <button onclick="endManualBattle()"
+          class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm transition-colors">← 終了</button>
+        <div class="flex-1 text-center">
+          <span class="text-gray-400 text-sm">Turn </span>
+          <span id="manual-turn-display" class="text-gray-900 font-bold text-xl tabular-nums">0</span>
+        </div>
+        <div id="manual-weather-badge" class="hidden px-2.5 py-1 rounded-full text-xs font-bold"></div>
+        <div id="manual-trick-room-badge" class="hidden px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 border border-purple-300"></div>
+        <div id="manual-status-badge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-yellow-100 text-yellow-700 border border-yellow-300">待機中</div>
+      </div>
+      <!-- フィールド -->
+      <div class="grid grid-cols-2 gap-3">
+        <div id="manual-p1-side" class="bg-blue-50 rounded-xl border border-blue-200 p-3"></div>
+        <div id="manual-p2-side" class="bg-red-50 rounded-xl border border-red-200 p-3"></div>
+      </div>
+      <!-- ログ -->
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-3">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-xs font-bold text-gray-400 uppercase tracking-wider">バトルログ</div>
+          <button id="manual-copy-log" onclick="copyManualLog()"
+                  class="px-3 py-1 text-xs font-bold rounded-lg bg-gray-100 hover:bg-gray-200 text-gray-700 border border-gray-300">
+            📋 全ログをコピー
+          </button>
+        </div>
+        <div id="manual-log" class="space-y-0.5"></div>
+      </div>
+      <!-- アクションパネル -->
+      <div id="manual-actions" class="bg-white rounded-xl border border-gray-200 shadow-sm p-4 space-y-3">
+        <div class="text-sm font-bold text-gray-700">行動を選択</div>
+        <!-- メガ進化トグル -->
+        <div id="manual-mega-row" class="hidden items-center gap-2">
+          <input type="checkbox" id="manual-mega-cb" class="w-4 h-4 rounded">
+          <label for="manual-mega-cb" class="text-sm font-bold text-pink-600 cursor-pointer">★ メガ進化する</label>
+        </div>
+        <!-- 技ボタン -->
+        <div class="grid grid-cols-2 gap-2" id="manual-move-grid"></div>
+        <!-- 交代ボタン -->
+        <div id="manual-switch-section" class="hidden">
+          <div class="text-xs font-bold text-gray-400 mb-1.5 uppercase tracking-wider">交代先</div>
+          <div id="manual-switch-grid" class="space-y-1.5"></div>
+        </div>
+      </div>
+      <!-- 勝敗表示 -->
+      <div id="manual-result" class="hidden bg-white rounded-xl border border-gray-200 shadow-sm p-6 text-center">
+        <div id="manual-result-text" class="text-2xl font-bold mb-2"></div>
+        <button onclick="endManualBattle()" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-sm">もどる</button>
+      </div>
+    </div>
+
+    <!-- バトルビュー -->
+    <div id="battle-view" class="hidden space-y-4">
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-3 flex items-center gap-3">
+        <button onclick="prevTurn()" id="btn-prev"
+          class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-30 transition-colors" disabled>◀ 前</button>
+        <div class="flex-1 text-center">
+          <span class="text-gray-400 text-sm">Turn </span>
+          <span id="turn-display" class="text-gray-900 font-bold text-xl tabular-nums">0</span>
+          <span id="turn-total" class="text-gray-400 text-sm"> / 0</span>
+        </div>
+        <div id="weather-badge" class="hidden px-2.5 py-1 rounded-full text-xs font-bold"></div>
+        <div id="trick-room-badge" class="hidden px-2.5 py-1 rounded-full text-xs font-bold bg-purple-100 text-purple-700 border border-purple-300"></div>
+        <button onclick="nextTurn()" id="btn-next"
+          class="px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg text-sm disabled:opacity-30 transition-colors" disabled>次 ▶</button>
+        <button onclick="toggleAutoPlay()" id="btn-auto"
+          class="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors">▶▶ 自動</button>
+        <div id="result-badge" class="hidden px-3 py-1 rounded-full text-sm font-bold"></div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+          <div class="text-blue-600 font-bold text-xs mb-3 uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-4 h-4 bg-blue-600 rounded-full text-white flex items-center justify-center text-xs">自</span>自分
+          </div>
+          <div id="p1-field" class="space-y-2"></div>
+        </div>
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+          <div class="text-red-500 font-bold text-xs mb-3 uppercase tracking-wider flex items-center gap-1.5">
+            <span class="w-4 h-4 bg-red-500 rounded-full text-white flex items-center justify-center text-xs">相</span>相手
+          </div>
+          <div id="p2-field" class="space-y-2"></div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-4">
+        <div class="text-gray-400 text-xs font-bold mb-2 uppercase tracking-wider">Battle Log</div>
+        <div id="battle-log" class="font-mono text-xs space-y-0.5 max-h-56 overflow-y-auto bg-gray-50 rounded-lg p-2"></div>
+      </div>
+    </div>
+
+  </div><!-- /mode-battle -->
+
+  <!-- ── 全ランカー総当たりモード ── -->
+  <div id="mode-analysis" class="hidden space-y-4">
+
+    <!-- 操作パネル -->
+    <section class="bg-white rounded-xl border border-gray-200 shadow-sm px-4 py-3">
+      <div class="flex flex-wrap gap-3 items-center">
+        <button id="btn-analysis" onclick="startFullAnalysis()"
+          class="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-lg transition-colors text-sm shadow-sm whitespace-nowrap">
+          📊 全ランカー分析
+        </button>
+        <div class="flex items-center gap-1.5">
+          <label class="text-gray-500 text-xs font-medium whitespace-nowrap">×</label>
+          <input id="analysis-trials-input" type="number" value="30" min="10" max="200" step="10"
+            class="w-14 border border-gray-300 rounded-lg px-2 py-1 text-center text-sm focus:outline-none focus:ring-2 focus:ring-purple-300">
+          <label class="text-gray-500 text-xs font-medium whitespace-nowrap">試行/パーティ</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- 全ランカー分析結果 -->
+    <div id="analysis-result" class="hidden bg-white rounded-xl border border-gray-200 shadow-sm p-5">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="font-bold text-gray-700 text-sm uppercase tracking-wider">全ランカー対戦分析</h3>
+        <div id="analysis-meta" class="text-xs text-gray-400"></div>
+      </div>
+      <div id="analysis-progress" class="hidden mb-5">
+        <div class="flex justify-between text-xs text-gray-500 mb-1.5">
+          <span id="analysis-progress-label">分析中...</span>
+          <span id="analysis-progress-text">0 / 0</span>
+        </div>
+        <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
+          <div id="analysis-progress-bar" class="h-full bg-purple-500 transition-all rounded-full" style="width:0%"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="bg-green-50 rounded-xl p-3 border border-green-200">
+          <div class="text-xs font-bold text-green-700 mb-3 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>得意（勝率 55%以上）
+          </div>
+          <div id="analysis-strong" class="space-y-1.5"></div>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-3 border border-gray-200">
+          <div class="text-xs font-bold text-gray-600 mb-3 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-yellow-400 inline-block"></span>五分（45〜54%）
+          </div>
+          <div id="analysis-even" class="space-y-1.5"></div>
+        </div>
+        <div class="bg-red-50 rounded-xl p-3 border border-red-200">
+          <div class="text-xs font-bold text-red-700 mb-3 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span>苦手（45%未満）
+          </div>
+          <div id="analysis-weak" class="space-y-1.5"></div>
+        </div>
+      </div>
+      <!-- ポケモン別統計 -->
+      <div id="analysis-poke-stats" class="hidden mt-5 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="bg-green-50 rounded-xl p-3 border border-green-200">
+          <div class="text-xs font-bold text-green-700 mb-3 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>得意なポケモン（対面勝率 上位・要選出10件以上）
+          </div>
+          <div id="analysis-poke-strong" class="space-y-1"></div>
+        </div>
+        <div class="bg-red-50 rounded-xl p-3 border border-red-200">
+          <div class="text-xs font-bold text-red-700 mb-3 flex items-center gap-1.5">
+            <span class="w-2 h-2 rounded-full bg-red-400 inline-block"></span>苦手なポケモン（対面勝率 下位・要選出10件以上）
+          </div>
+          <div id="analysis-poke-weak" class="space-y-1"></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /mode-analysis -->
+
+</main>
+
+<footer class="border-t border-gray-200 mt-12 py-6 text-center text-xs text-gray-400">
+  <a href="https://pokenavi.jp" class="hover:text-blue-600 transition-colors">ポケナビ</a>
+  <span class="mx-2">—</span>ポケモンチャンピオンズ 対戦データ分析
+</footer>
+
+<datalist id="pokemon-list"></datalist>
+
+<script>
+// ── テンプレートデータ (M-1 上位構築) ─────────────────────────────
+const PARTY_TEMPLATES = [
+  { id: "m1-1-サックー", name: "#1 サックー", tag: "M-1 #1", party: ["ルカリオ@ルカリオナイト:ようき:インファイト|コメットパンチ|ストーンエッジ|しんそく:2/27/9/0/0/28:せいしんりょく", "フラエッテ(永遠)@フラエッテナイト:おくびょう:はめつのひかり|ムーンフォース|ドレインキッス|めいそう:0/0/10/24/0/32:フラワーベール", "ウォッシュロトム@たべのこし:おだやか:ハイドロポンプ|ボルトチェンジ|おにび|いたみわけ:32/0/10/0/24/0:ふゆう", "ウルガモス@ラムのみ:ずぶとい:ほのおのまい|ちょうのまい|おにび|あさのひざし:31/0/31/0/0/4:ほのおのからだ", "マスカーニャ@こだわりスカーフ:いじっぱり:トリックフラワー|かみなりパンチ|トリプルアクセル|とんぼがえり:4/30/20/0/0/12:へんげんじざい", "ガブリアス@オボンのみ:いじっぱり:ドラゴンテール|じしん|ステルスロック|まきびし:32/0/32/0/0/2:さめはだ"] },
+  { id: "m1-2-攻め意識", name: "#2 攻め意識", tag: "M-1 #2", party: ["スターミー@スターミナイト:いじっぱり:クイックターン|アクアジェット|アクアブレイク|アイススピナー:2/32/0/0/0/32:しぜんかいふく", "アーマーガア@オボンのみ:のんき:とんぼがえり|てっぺき|ボディプレス|はねやすめ:32/0/32/0/2/0:プレッシャー", "ハラバリー@たべのこし:なまいき:どくどく|ボルトチェンジ|パラボラチャージ|なまける:31/0/4/0/31/0:でんきにかえる", "ダイケンキ (ヒスイ)@くろいメガネ:いじっぱり:シェルブレード|ひけん・ちえなみ|ふいうち|せいなるつるぎ:20/32/2/0/2/10:きれあじ", "キラフロル@キラフロルナイト:ひかえめ:ヘドロウェーブ|ロックカット|パワージェム|だいちのちから:1/0/1/32/0/32:どくげしょう", "エルフーン@きあいのタスキ:ひかえめ:ムーンフォース|がむしゃら|アンコール|おいかぜ:2/0/0/32/0/32:いたずらごころ"] },
+  { id: "m1-3-くまおつ", name: "#3 くまおつ", tag: "M-1 #3", party: ["イダイトウ (オス)@こだわりスカーフ:ようき:おはかまいり|ウェーブタックル|クイックターン|アクアジェット:2/32/0/0/0/32:てきおうりょく", "ハッサム@ハッサムナイト:いじっぱり:バレットパンチ|インファイト|はたきおとす|つるぎのまい:30/32/1/0/1/2:テクニシャン", "ゲンガー@きあいのタスキ:おくびょう:シャドーボール|ヘドロウェーブ|こごえるかぜ|ちょうはつ:2/0/0/32/0/32:のろわれボディ", "ブリジュラス@オボンのみ:ずぶとい:ドラゴンテール|ほえる|10まんボルト|ステルスロック:32/0/11/0/22/1:じきゅうりょく", "ビビヨン@たべのこし:おくびょう:ぼうふう|みがわり|ちょうのまい|ねむりごな:2/0/0/32/0/32:ふくがん", "カメックス@カメックスナイト:おくびょう:みずのはどう|あくのはどう|はどうだん|からをやぶる:11/0/1/32/0/22:げきりゅう"] },
+  { id: "m1-5-らいざ", name: "#5 らいざ", tag: "M-1 #5", party: ["ミミッキュ@ようせいのハネ:いじっぱり:かげうち|じゃれつく|ドレインパンチ|つるぎのまい:21/26/19/0/0/0:ばけのかわ", "ギャラドス@ギャラドスナイト:いじっぱり:たきのぼり|こおりのキバ|じしん|りゅうのまい:5/32/0/0/0/26:いかく", "ギルガルド@たべのこし:ゆうかん:キングシールド|かげうち|シャドーボール|アイアンヘッド:32/0/3/11/20/0:バトルスイッチ", "ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|いわなだれ|ステルスロック:2/32/0/0/0/32:さめはだ", "リザードン@リザードナイトY:ひかえめ:オーバーヒート|かえんほうしゃ|エアスラッシュ|りゅうのはどう:14/0/12/21/0/19:もうか", "ミロカロス@ラムのみ:ずぶとい:ねっとう|れいとうビーム|くろいきり|じこさいせい:32/0/27/0/0/7:メロメロボディ"] },
+  { id: "m1-6-キョウタ", name: "#6 キョウタ", tag: "M-1 #6", party: ["カバルドン@オボンのみ:しんちょう:じしん|ステルスロック|あくび|ふきとばし:32/0/2/0/32/0:すなおこし", "ドリュウズ@やわらかいすな:いじっぱり:じしん|アイアンヘッド|いわなだれ|つるぎのまい:6/25/3/0/0/32:すなかき", "ヤミラミ@ヤミラミナイト:ずぶとい:イカサマ|おにび|めいそう|じこさいせい:32/0/25/0/9/0:いたずらごころ", "ルカリオ@ルカリオナイト:ようき:インファイト|コメットパンチ|バレットパンチ|つるぎのまい:2/32/0/0/0/32:せいしんりょく", "ゲッコウガ@こだわりスカーフ:ひかえめ:なみのり|れいとうビーム|ヘドロウェーブ|あくのはどう:4/0/4/30/0/28:へんげんじざい", "ギャラドス@たべのこし:ようき:たきのぼり|パワーウィップ|ちょうはつ|りゅうのまい:21/11/1/0/1/32:いかく"] },
+  { id: "m1-7-みるふぃ", name: "#7 みるふぃ", tag: "M-1 #7", party: ["ギャラドス@たべのこし:わんぱく:たきのぼり|パワーウィップ|ゆきなだれ|でんじは:31/0/32/0/0/3:いかく", "カバルドン@オボンのみ:わんぱく:じしん|あくび|なまける|ステルスロック:32/0/22/0/12/0:すなおこし", "ゲンガー@ゲンガナイト:ひかえめ:シャドーボール|ヘドロウェーブ|わるだくみ|まもる:12/0/0/23/0/31:のろわれボディ", "ハッサム@ハッサムナイト:いじっぱり:バレットパンチ|むしくい|はねやすめ|つるぎのまい:26/32/0/0/0/8:テクニシャン", "マスカーニャ@こだわりスカーフ:いじっぱり:トリックフラワー|はたきおとす|とんぼがえり|かみなりパンチ:2/32/0/0/0/32:へんげんじざい", "アシレーヌ@ようせいのハネ:ひかえめ:うたかたのアリア|ムーンフォース|アクアジェット|めいそう:32/0/0/24/0/10:げきりゅう"] },
+  { id: "m1-8-ピッツ", name: "#8 ピッツ", tag: "M-1 #8", party: ["スターミー@スターミナイト:いじっぱり:アクアブレイク|サイコカッター|アイススピナー|アクアジェット:32/14/0/0/20/0:しぜんかいふく", "ペリッパー@オボンのみ:のんき:なみのり|ぼうふう|れいとうビーム|とんぼがえり:32/0/30/0/4/0:あめふらし", "イダイトウ (オス)@こだわりスカーフ:ようき:ウェーブタックル|おはかまいり|クイックターン|アクアジェット:0/32/1/0/1/32:てきおうりょく", "ゲッコウガ@くろいメガネ:ひかえめ:なみのり|あくのはどう|れいとうビーム|みがわり:2/0/0/32/0/32:げきりゅう", "ブリジュラス@たべのこし:ひかえめ:りゅうせいぐん|ラスターカノン|エレクトロビーム|みがわり:32/0/0/8/0/26:じきゅうりょく", "フラエッテ(永遠)@フラエッテナイト:ひかえめ:ムーンフォース|ドレインキッス|ミストフィールド|めいそう:26/0/6/16/0/18:フラワーベール"] },
+  { id: "m1-9-ミルク", name: "#9 ミルク", tag: "M-1 #9", party: ["ガブリアス@きあいのタスキ:いじっぱり:スケイルショット|じしん|がんせきふうじ|ステルスロック:2/32/0/0/0/32:さめはだ", "ギルガルド@たべのこし:いじっぱり:ポルターガイスト|かげうち|キングシールド|つるぎのまい:32/30/1/0/1/2:バトルスイッチ", "カイリュー@カイリュナイト:ひかえめ:エアスラッシュ|かえんほうしゃ|みがわり|はねやすめ:31/0/1/15/1/18:マルチスケイル", "ブリジュラス@オボンのみ:ずぶとい:りゅうせいぐん|ラスターカノン|10まんボルト|ステルスロック:32/0/20/5/9/0:じきゅうりょく", "マスカーニャ@こだわりスカーフ:ようき:トリックフラワー|はたきおとす|じゃれつく|とんぼがえり:0/32/2/0/0/32:へんげんじざい", "フラエッテ(永遠)@フラエッテナイト:おくびょう:ムーンフォース|めいそう|あまえる|こうごうせい:32/0/13/0/1/20:フラワーベール"] },
+  { id: "m1-10-シグマ", name: "#10 シグマ", tag: "M-1 #10", party: ["カバルドン@たべのこし:のんき:じしん|あくび|まもる|なまける:32/0/15/0/19/0:すなおこし", "キラフロル@キラフロルナイト:ひかえめ:パワージェム|ヘドロウェーブ|だいちのちから|ニードルガード:1/0/1/32/0/32:どくげしょう", "マスカーニャ@こだわりスカーフ:ようき:トリックフラワー|とんぼがえり|どくびし|トリック:24/12/11/0/0/19:へんげんじざい", "ブリジュラス@オボンのみ:ずぶとい:りゅうせいぐん|10まんボルト|ステルスロック|ほえる:32/0/3/12/16/3:じきゅうりょく", "スターミー@スターミナイト:いじっぱり:アクアブレイク|こうそくスピン|ビルドアップ|じこさいせい:32/17/2/0/0/15:しぜんかいふく", "ローブシン@きあいのタスキ:いじっぱり:インファイト|れいとうパンチ|どくづき|マッハパンチ:2/32/0/0/0/32:ちからずく"] },
+  { id: "m1-11-よしこぽけ", name: "#11 よしこぽけ", tag: "M-1 #11", party: ["カバルドン@たべのこし:わんぱく:じしん|あくび|まもる|なまける:32/0/32/0/2/0:すなおこし", "ゲンガー@ゲンガナイト:ひかえめ:たたりめ|ヘドロウェーブ|こごえるかぜ|おにび:30/0/0/12/1/23:のろわれボディ", "マスカーニャ@こだわりスカーフ:ようき:イカサマ|けたぐり|かみなりパンチ|とんぼがえり:24/0/24/0/0/18:へんげんじざい", "アシレーヌ@しんぴのしずく:れいせい:ムーンフォース|なみのり|クイックターン|アンコール:32/0/10/24/0/0:げきりゅう", "ガブリアス@きあいのタスキ:いじっぱり:スケイルショット|じしん|ほのおのキバ|つるぎのまい:0/32/2/0/0/32:さめはだ", "ブリジュラス@オボンのみ:しんちょう:ドラゴンテール|アイアンヘッド|ミラーコート|ステルスロック:32/0/0/0/32/2:じきゅうりょく"] },
+  { id: "m1-12-トレーナー", name: "#12 トレーナー", tag: "M-1 #12", party: ["スコヴィラン@スコヴィラナイト:いじっぱり:フレアドライブ|リーフストーム|みがわり|やどりぎのタネ:31/2/0/0/32/1:ふみん", "ブリジュラス@オボンのみ:ずぶとい:りゅうせいぐん|ステルスロック|でんじは|ドラゴンテール:32/0/1/1/32/0:じきゅうりょく", "イダイトウ (オス)@こだわりスカーフ:いじっぱり:ウェーブタックル|おはかまいり|クイックターン|アクアジェット:0/32/2/0/0/32:てきおうりょく", "ソウブレイズ@きあいのタスキ:いじっぱり:ポルターガイスト|インファイト|つるぎのまい|かげうち:1/32/1/0/0/32:くだけるよろい", "アーマーガア@たべのこし:しんちょう:ブレイブバード|ビルドアップ|はねやすめ|ちょうはつ:32/0/0/0/28/6:プレッシャー", "ゲッコウガ@ゲッコウガナイト:ひかえめ:ハイドロポンプ|ヘドロウェーブ|くさむすび|れいとうビーム:16/0/2/27/0/21:へんげんじざい"] },
+  { id: "m1-13-もんぶりゃん", name: "#13 もんぶりゃん", tag: "M-1 #13", party: ["カバルドン@オボンのみ:わんぱく:じしん|ステルスロック|あくび|なまける:32/0/18/0/16/0:すなおこし", "ルカリオ@ルカリオナイト:ようき:インファイト|コメットパンチ|つるぎのまい|バレットパンチ:2/32/0/0/0/32:せいぎのこころ", "カイリュー@カイリュナイト:ひかえめ:りゅうせいぐん|エアスラッシュ|10まんボルト|しんそく:1/0/1/32/0/32:マルチスケイル", "アシレーヌ@しんぴのしずく:ひかえめ:なみのり|ムーンフォース|ミストフィールド|アクアジェット:30/0/0/24/0/12:げきりゅう", "ガブリアス@こだわりスカーフ:いじっぱり:じしん|げきりん|がんせきふうじ|ほのおのキバ:2/32/0/0/0/32:さめはだ", "ギルガルド@たべのこし:なまいき:キングシールド|シャドーボール|アイアンヘッド|かげうち:32/4/0/0/30/0:バトルスイッチ"] },
+  { id: "m1-14-せっきー", name: "#14 せっきー", tag: "M-1 #14", party: ["ルカリオ@ルカリオナイト:ようき:インファイト|コメットパンチ|しんそく|つるぎのまい:2/32/0/0/0/32:せいしんりょく", "リザードン@リザードナイトY:おくびょう:かえんほうしゃ|りゅうのはどう|ソーラービーム|みがわり:0/0/29/17/0/20:もうか", "カバルドン@たべのこし:わんぱく:じしん|ステルスロック|あくび|ふきとばし:32/0/12/0/22/0:すなおこし", "ウォッシュロトム@オボンのみ:ずぶとい:10まんボルト|ハイドロポンプ|ボルトチェンジ|おにび:32/0/13/0/14/7:ふゆう", "マスカーニャ@こだわりスカーフ:ようき:トリックフラワー|イカサマ|パワージェム|とんぼがえり:8/13/25/0/0/20:へんげんじざい", "ミミッキュ@のろいのおふだ:いじっぱり:シャドークロー|じゃれつく|かげうち|つるぎのまい:29/30/4/0/0/3:ばけのかわ"] },
+  { id: "m1-16-はとよめ", name: "#16 はとよめ", tag: "M-1 #16", party: ["スコヴィラン@スコヴィラナイト:しんちょう:しっとのほのお|ギガドレイン|やどりぎのタネ|まもる:32/0/2/0/32/0:ムラっけ", "ミミッキュ@ようせいのハネ:いじっぱり:じゃれつく|かげうち|つるぎのまい|のろい:27/29/4/0/0/6:ばけのかわ", "イダイトウ (オス)@しんぴのしずく:いじっぱり:ウェーブタックル|おはかまいり|アクアジェット|クイックターン:0/28/0/0/26/12:てきおうりょく", "ミミロップ@ミミロップナイト:ようき:メガトンキック|インファイト|マッハパンチ|つるぎのまい:11/27/0/0/0/28:じゅうなん", "ウォッシュロトム@カゴのみ:おだやか:ハイドロポンプ|ほうでん|わるだくみ|ねむる:32/0/0/0/32/2:ふゆう", "ガブリアス@こだわりスカーフ:ようき:じしん|げきりん|いわなだれ|どくづき:0/32/1/0/1/32:さめはだ"] },
+  { id: "m1-17-すーけん", name: "#17 すーけん", tag: "M-1 #17", party: ["スターミー@スターミナイト:ようき:アクアブレイク|アイススピナー|クイックターン|アクアジェット:7/32/0/0/0/27:しぜんかいふく", "ブリジュラス@りゅうのキバ:ひかえめ:りゅうせいぐん|ステルスロック|10まんボルト|ドラゴンテール:26/0/0/30/0/10:じきゅうりょく", "カバルドン@オボンのみ:わんぱく:じしん|あくび|なまける|ふきとばし:32/0/2/0/32/0:すなおこし", "キラフロル@キラフロルナイト:ひかえめ:ヘドロウェーブ|パワージェム|だいちのちから|ロックカット:1/0/1/32/0/32:どくげしょう", "マスカーニャ@こだわりスカーフ:ようき:トリックフラワー|イカサマ|トリック|とんぼがえり:32/0/16/0/0/18:へんげんじざい", "エアームド@エアームドナイト:ようき:ブレイブバード|つるぎのまい|ドリルライナー|はねやすめ:31/7/0/0/0/28:くだけるよろい"] },
+  { id: "m1-18-わたぼう", name: "#18 わたぼう", tag: "M-1 #18", party: ["ガブリアス@きあいのタスキ:いじっぱり:スケイルショット|じしん|がんせきふうじ|ステルスロック:2/32/0/0/0/32:さめはだ", "アーマーガア@たべのこし:のんき:ボディプレス|とんぼがえり|てっぺき|はねやすめ:32/0/32/0/2/0:プレッシャー", "ルカリオ@ルカリオナイト:ようき:コメットパンチ|インファイト|バレットパンチ|いわなだれ:2/32/0/0/0/32:せいしんりょく", "サザンドラ@こだわりスカーフ:ひかえめ:あくのはどう|りゅうせいぐん|かえんほうしゃ|とんぼがえり:2/0/0/32/0/32:ふゆう", "アシレーヌ@オボンのみ:ひかえめ:なみのり|ムーンフォース|クイックターン|アクアジェット:32/0/0/32/2/0:げきりゅう", "ゲンガー@ゲンガナイト:ひかえめ:シャドーボール|ヘドロウェーブ|きあいだま|こごえるかぜ:2/0/0/32/0/32:のろわれボディ"] },
+  { id: "m1-19-ふゆの", name: "#19 ふゆの", tag: "M-1 #19", party: ["カバルドン@たべのこし:わんぱく:じしん|がんせきふうじ|ステルスロック|あくび:32/0/14/0/20/0:すなおこし", "フラエッテ(永遠)@フラエッテナイト:おくびょう:ムーンフォース|めいそう|みがわり|こうごうせい:15/0/10/9/0/32:フラワーベール", "ウルガモス@オボンのみ:ひかえめ:マジカルフレイム|ギガドレイン|ちょうのまい|あさのひざし:32/0/5/5/0/24:ほのおのからだ", "ギャラドス@ギャラドスナイト:いじっぱり:たきのぼり|パワーウィップ|こおりのキバ|りゅうのまい:13/23/1/0/1/28:いかく", "ハッサム@ハッサムナイト:いじっぱり:バレットパンチ|つじぎり|のろい|はねやすめ:30/25/10/0/1/0:テクニシャン", "ダイケンキ (ヒスイ)@きあいのタスキ:むじゃき:ひけん・ちえなみ|れいとうビーム|しんくうは|アンコール:0/31/1/11/0/23:きれあじ"] },
+  { id: "m1-20-mellow", name: "#20 mellow", tag: "M-1 #20", party: ["フラエッテ(永遠)@フラエッテナイト:おくびょう:ムーンフォース|サイコキネシス|はめつのひかり|まもる:2/0/0/32/0/32:フラワーベール", "ブリジュラス@オボンのみ:ずぶとい:りゅうせいぐん|10まんボルト|イカサマ|ステルスロック:32/0/20/0/14/0:じきゅうりょく", "ブラッキー@たべのこし:ずぶとい:イカサマ|あくび|まもる|ねがいごと:32/0/32/0/2/0:せいしんりょく", "ガブリアス@きあいのタスキ:ようき:スケイルショット|じしん|がんせきふうじ|ステルスロック:0/31/3/0/0/32:さめはだ", "イダイトウ (オス)@こだわりスカーフ:ようき:ウェーブタックル|おはかまいり|クイックターン|アクアジェット:0/32/2/0/0/32:てきおうりょく", "フシギバナ@フシギバナイト:ずぶとい:ギガドレイン|だいちのちから|やどりぎのタネ|こうごうせい:32/0/27/0/7/0:しんりょく"] },
+  { id: "m1-21-パージュ", name: "#21 パージュ", tag: "M-1 #21", party: ["マフォクシー@マフォクシナイト:おくびょう:マジカルフレイム|サイコキネシス|おにび|アンコール:31/0/24/0/0/11:もうか", "ドデカバシ@オボンのみ:いじっぱり:くちばしキャノン|はたきおとす|とんぼがえり|アンコール:32/0/32/0/2/0:スキルリンク", "ドドゲザン@くろいメガネ:いじっぱり:ドゲザン|アイアンヘッド|ふいうち|つるぎのまい:8/32/1/0/1/24:そうだいしょう", "ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|どくづき|がんせきふうじ:0/32/2/0/0/32:さめはだ", "エンペルト@たべのこし:なまいき:まもる|クイックターン|あくび|ステルスロック:32/0/24/0/10/0:げきりゅう", "アシレーヌ@ラムのみ:ひかえめ:なみのり|ムーンフォース|サイコキネシス|めいそう:20/0/7/25/0/14:げきりゅう"] },
+  { id: "m1-22-いくり", name: "#22 いくり", tag: "M-1 #22", party: ["オニゴーリ@たべのこし:おくびょう:みがわり|まもる|フリーズドライ|ぜったいれいど:22/0/8/0/10/26:ムラっけ", "スコヴィラン@スコヴィラナイト:ひかえめ:やどりぎのタネ|こわいかお|かえんほうしゃ|リーフストーム:32/0/2/12/0/20:ムラっけ", "ウツボット@ウツボットナイト:うっかりや:しびれごな|どくびし|ちからをすいとる|ギガドレイン:32/0/0/10/0/24:ようりょくそ", "ピクシー@ピクシナイト:おだやか:でんじは|アンコール|かえんほうしゃ|ムーンフォース:32/0/1/0/10/23:てんねん", "ミミッキュ@でんきだま:ようき:なげつける|じゃれつく|のろい|ちょうはつ:1/25/18/0/0/22:ばけのかわ", "ドラパルト@きあいのタスキ:おくびょう:でんじは|のろい|たたりめ|りゅうせいぐん:2/0/0/32/0/32:のろわれボディ"] },
+  { id: "m1-23-グーヤント", name: "#23 グーヤント", tag: "M-1 #23", party: ["ガブリアス@きあいのタスキ:いじっぱり:じしん|スケイルショット|ドラゴンテール|ステルスロック:2/32/0/0/0/32:さめはだ", "ニンフィア@ようせいのハネ:のんき:ハイパーボイス|でんこうせっか|まもる|あくび:32/0/32/0/2/0:フェアリースキン", "ゲンガー@ゲンガナイト:おくびょう:シャドーボール|ヘドロウェーブ|ほろびのうた|わるだくみ:30/0/0/0/28/8:のろわれボディ", "ブラッキー@たべのこし:ずぶとい:イカサマ|あくび|ねがいごと|まもる:32/0/28/0/0/6:せいしんりょく", "ギャラドス@オボンのみ:いじっぱり:たきのぼり|パワーウィップ|ちょうはつ|りゅうのまい:30/15/8/0/0/13:いかく", "マフォクシー@マフォクシナイト:おくびょう:かえんほうしゃ|サイコキネシス|きあいだま|わるだくみ:21/0/0/15/0/30:もうか"] },
+  { id: "m1-24-かみやん", name: "#24 かみやん", tag: "M-1 #24", party: ["リザードン@リザードナイトY:ひかえめ:オーバーヒート|ウェザーボール|ソーラービーム|はねやすめ:32/0/20/11/0/3:もうか", "ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|いわなだれ|ほのおのキバ:0/32/2/0/0/32:さめはだ", "アーマーガア@たべのこし:のんき:アイアンヘッド|とんぼがえり|きりばらい|はねやすめ:32/0/18/0/13/0:プレッシャー", "ミミロップ@ミミロップナイト:いじっぱり:ねこだまし|とびひざげり|メガトンキック|れいとうパンチ:1/32/5/0/0/28:じゅうなん", "ドドゲザン@きあいのタスキ:いじっぱり:ドゲザン|アイアンヘッド|ふいうち|ハサミギロチン:2/32/0/0/0/32:そうだいしょう", "アシレーヌ@オボンのみ:れいせい:うたかたのアリア|ムーンフォース|アクアジェット|めいそう:32/0/20/14/0/0:げきりゅう"] },
+  { id: "m1-25-佐藤", name: "#25 佐藤", tag: "M-1 #25", party: ["ガルーラ@ガルーラナイト:いじっぱり:すてみタックル|じしん|れいとうパンチ|ふいうち:1/32/1/0/0/32:きもったま", "カメックス@カメックスナイト:ひかえめ:みずのはどう|あくのはどう|はどうだん|アクアジェット:19/0/5/25/0/17:あめうけざら", "キュウコン (アローラ)@とけないこおり:おくびょう:ふぶき|フリーズドライ|わるだくみ|オーロラベール:7/0/1/29/0/29:ゆきふらし", "ハッサム@メタルコート:いじっぱり:バレットパンチ|はたきおとす|インファイト|つるぎのまい:30/30/1/0/0/5:テクニシャン", "ソウブレイズ@きあいのタスキ:いじっぱり:ポルターガイスト|むねんのつるぎ|かげうち|つるぎのまい:1/32/1/0/0/32:くだけるよろい", "イダイトウ (オス)@こだわりスカーフ:ようき:ウェーブタックル|おはかまいり|アクアジェット|クイックターン:0/32/2/0/0/32:てきおうりょく"] },
+  { id: "m1-26-兎に角ぴりか", name: "#26 兎に角ぴりか", tag: "M-1 #26", party: ["カバルドン@オボンのみ:わんぱく:じしん|あくび|まもる|ふきとばし:32/0/2/0/32/0:すなおこし", "ギャラドス@ギャラドスナイト:いじっぱり:アクアテール|じしん|やけっぱち|りゅうのまい:1/32/1/0/0/32:いかく", "デカヌチャン@シュカのみ:ようき:デカハンマー|じならし|ステルスロック|アンコール:13/23/1/0/0/29:かたやぶり", "フラエッテ(永遠)@フラエッテナイト:ひかえめ:ムーンフォース|ドレインキッス|アシストパワー|あまえる:26/0/28/6/0/6:フラワーベール", "ゾロアーク@きあいのタスキ:おくびょう:シャドーボール|こごえるかぜ|ちょうはつ|おきみやげ:1/0/1/32/0/32:イリュージョン", "ポットデス@しろいハーブ:ずぶとい:シャドーボール|からをやぶる|ちからをすいとる|バトンタッチ:24/0/24/0/0/18:のろわれボディ"] },
+  { id: "m1-28-まき", name: "#28 まき", tag: "M-1 #28", party: ["リザードン@リザードナイトX:ようき:フレアドライブ|ドラゴンクロー|はねやすめ|りゅうのまい:12/29/3/0/1/21:もうか", "カバルドン@オボンのみ:わんぱく:じしん|あくび|ステルスロック|なまける:32/0/1/0/32/1:すなおこし", "イダイトウ (オス)@こだわりスカーフ:ようき:おはかまいり|ウェーブタックル|アクアジェット|クイックターン:2/32/0/0/0/32:てきおうりょく", "フラエッテ(永遠)@フラエッテナイト:おくびょう:ムーンフォース|ドレインキッス|サイコキネシス|めいそう:2/0/0/32/0/32:フラワーベール", "ブリジュラス@たべのこし:ずぶとい:りゅうせいぐん|10まんボルト|イカサマ|ほえる:32/0/23/3/0/8:じきゅうりょく", "ゲッコウガ@きあいのタスキ:ひかえめ:あくのはどう|れいとうビーム|マッドショット|どくびし:2/0/0/32/0/32:へんげんじざい"] },
+  { id: "m1-29-あまに", name: "#29 あまに", tag: "M-1 #29", party: ["ギャラドス@ギャラドスナイト:いじっぱり:たきのぼり|かみくだく|じしん|りゅうのまい:1/32/0/0/1/32:いかく", "ガブリアス@こだわりスカーフ:いじっぱり:じしん|げきりん|いわなだれ|ほのおのキバ:0/32/2/0/0/32:さめはだ", "ブリジュラス@オボンのみ:おくびょう:りゅうせいぐん|てっていこうせん|ほえる|ステルスロック:2/0/0/32/0/32:がんじょう", "アシレーヌ@たべのこし:ずぶとい:ムーンフォース|うたかたのアリア|クイックターン|ほろびのうた:32/0/32/1/1/0:げきりゅう", "ルカリオ@ルカリオナイト:おくびょう:しんくうは|きあいだま|ラスターカノン|てっていこうせん:0/0/2/32/0/32:ふくつのこころ", "イダイトウ (オス)@きあいのタスキ:いじっぱり:アクアジェット|おはかまいり|ウェーブタックル|こうそくいどう:0/32/2/0/0/32:てきおうりょく"] },
+  { id: "m1-30-SnowParty", name: "#30 SnowParty", tag: "M-1 #30", party: ["ハッサム@ハッサムナイト:いじっぱり:バレットパンチ|はたきおとす|つるぎのまい|インファイト:30/30/0/0/0/6:テクニシャン", "ブリジュラス@しろいハーブ:ひかえめ:りゅうせいぐん|てっていこうせん|10まんボルト|あくのはどう:2/0/0/32/0/32:がんじょう", "ウルガモス@きあいのタスキ:ひかえめ:ほのおのまい|むしのさざめき|ちょうのまい|ギガドレイン:1/0/1/32/0/32:むしのしらせ", "ミミッキュ@ピントレンズ:いじっぱり:じゃれつく|シャドークロー|つるぎのまい|かげうち:28/30/7/0/0/1:ばけのかわ", "カバルドン@オボンのみ:わんぱく:ステルスロック|じしん|あくび|ふきとばし:32/0/2/0/32/0:すなおこし", "ギャラドス@ギャラドスナイト:いじっぱり:たきのぼり|じしん|りゅうのまい|こおりのキバ:5/32/1/0/1/27:いかく"] },
+  { id: "m1-32-ふか", name: "#32 ふか", tag: "M-1 #32", party: ["フラエッテ(永遠)@フラエッテナイト:ひかえめ:ムーンフォース|ドレインキッス|めいそう|はめつのひかり:26/0/3/5/0/32:フラワーベール", "ブリジュラス@こだわりスカーフ:おくびょう:ラスターカノン|りゅうせいぐん|エレクトロビーム|10まんボルト:2/0/0/32/0/32:じきゅうりょく", "ガブリアス@きあいのタスキ:いじっぱり:じしん|スケイルショット|がんせきふうじ|ステルスロック:2/32/0/0/0/32:さめはだ", "スターミー@スターミナイト:いじっぱり:アクアブレイク|アクアジェット|ビルドアップ|サイコカッター:2/32/0/0/0/32:はっこう", "ギルガルド@たべのこし:いじっぱり:ポルターガイスト|インファイト|キングシールド|かげうち:32/30/4/0/0/0:バトルスイッチ", "ペリッパー@オボンのみ:ひかえめ:ウェザーボール|ぼうふう|れいとうビーム|とんぼがえり:32/0/0/19/15/0:あめふらし"] },
+  { id: "m1-33-ミント", name: "#33 ミント", tag: "M-1 #33", party: ["リザードン@リザードナイトY:おくびょう:ウェザーボール|ソーラービーム|おにび|はねやすめ:28/0/5/1/0/32:もうか", "イダイトウ (オス)@きあいのタスキ:いじっぱり:おはかまいり|ウェーブタックル|アクアジェット|こうそくいどう:0/32/2/0/0/32:てきおうりょく", "アーマーガア@ひかりのこな:のんき:アイアンヘッド|とんぼがえり|きりばらい|はねやすめ:32/2/23/0/9/0:ミラーアーマー", "ガブリアス@オボンのみ:わんぱく:げきりん|じしん|ドラゴンテール|ステルスロック:32/1/32/0/0/1:さめはだ", "ブラッキー@たべのこし:ずぶとい:イカサマ|あくび|まもる|ねがいごと:32/0/32/0/2/0:せいしんりょく", "ルカリオ@ルカリオナイト:ようき:コメットパンチ|インファイト|しんそく|つるぎのまい:10/32/0/0/1/23:せいしんりょく"] },
+  { id: "m1-34-ふゆ", name: "#34 ふゆ", tag: "M-1 #34", party: ["スターミー@スターミナイト:いじっぱり:アクアブレイク|アクアジェット|アイススピナー|クイックターン:2/32/0/0/0/32:しぜんかいふく", "ガブリアス@こだわりスカーフ:いじっぱり:じしん|げきりん|ほのおのキバ|アイアンヘッド:2/32/0/0/0/32:さめはだ", "ブリジュラス@オボンのみ:おだやか:りゅうせいぐん|ミラーコート|ほえる|ステルスロック:32/0/0/0/30/4:じきゅうりょく", "ギルガルド@たべのこし:いじっぱり:ポルターガイスト|かげうち|せいなるつるぎ|キングシールド:32/32/0/0/0/2:バトルスイッチ", "バンギラス@シュカのみ:いじっぱり:がんせきふうじ|じしん|れいとうパンチ|ステルスロック:32/11/0/0/23/0:すなおこし", "メガニウム@メガニウムナイト:ひかえめ:ソーラービーム|ウェザーボール|みがわり|こうごうせい:21/0/0/32/0/13:しんりょく"] },
+  { id: "m1-35-はる", name: "#35 はる", tag: "M-1 #35", party: ["ゲンガー@ゲンガナイト:ひかえめ:たたりめ|ヘドロウェーブ|おにび|いたみわけ:24/0/1/16/2/23:のろわれボディ", "アーマーガア@たべのこし:のんき:ブレイブバード|とんぼがえり|きりばらい|はねやすめ:32/0/25/0/9/0:ミラーアーマー", "ガブリアス@こだわりスカーフ:いじっぱり:じしん|げきりん|いわなだれ|ほのおのキバ:0/30/5/0/0/31:さめはだ", "ミミロップ@ミミロップナイト:いじっぱり:ねこだまし|とびひざげり|れいとうパンチ|メガトンキック:7/30/0/0/0/29:じゅうなん", "ブリジュラス@オボンのみ:ずぶとい:りゅうせいぐん|ラスターカノン|10まんボルト|イカサマ:32/0/10/17/3/4:じきゅうりょく", "ダイケンキ (ヒスイ)@くろいメガネ:いじっぱり:ひけん・ちえなみ|シェルブレード|ふいうち|アンコール:24/32/0/0/1/9:きれあじ"] },
+  { id: "m1-36-ナブラ", name: "#36 ∇ナブラ", tag: "M-1 #36", party: ["ガルーラ@ガルーラナイト:いじっぱり:のしかかり|じしん|れいとうパンチ|ふいうち:27/32/0/0/0/7:きもったま", "ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|いわなだれ|ステルスロック:0/32/2/0/0/32:さめはだ", "ゲンガー@ゲンガナイト:ひかえめ:シャドーボール|ほろびのうた|みちづれ|まもる:24/0/0/10/0/32:のろわれボディ", "アーマーガア@たべのこし:のんき:とんぼがえり|ボディプレス|てっぺき|はねやすめ:32/0/32/0/2/0:プレッシャー", "アシレーヌ@オボンのみ:れいせい:ムーンフォース|うたかたのアリア|アクアジェット|アンコール:32/0/18/4/12/0:げきりゅう", "ソウブレイズ@きあいのタスキ:いじっぱり:ポルターガイスト|むねんのつるぎ|かげうち|つるぎのまい:1/32/1/0/0/32:もらいび"] },
+  { id: "m1-38-めろーる", name: "#38 めろーる", tag: "M-1 #38", party: ["マスカーニャ@きあいのタスキ:うっかりや:はどうだん|パワージェム|ふいうち|どくびし:0/2/0/32/0/32:へんげんじざい", "マフォクシー@マフォクシナイト:おくびょう:マジカルフレイム|ねがいごと|まもる|おにび:32/0/30/0/0/4:もうか", "ブリジュラス@たべのこし:ずぶとい:りゅうのはどう|エレクトロビーム|まもる|みがわり:32/0/10/1/23/0:じきゅうりょく", "イダイトウ (オス)@しんぴのしずく:いじっぱり:おはかまいり|ウェーブタックル|アクアジェット|こうそくいどう:2/32/14/0/0/18:てきおうりょく", "フラエッテ(永遠)@フラエッテナイト:ひかえめ:ムーンフォース|はめつのひかり|サイコキネシス|くさわけ:18/0/0/26/0/22:きょうせい", "ガブリアス@オボンのみ:わんぱく:じしん|ステルスロック|ドラゴンテール|まきびし:32/0/19/0/15/0:さめはだ"] },
+  { id: "m1-39-monshi", name: "#39 monshi", tag: "M-1 #39", party: ["ミミロップ@ミミロップナイト:いじっぱり:とびひざげり|メガトンキック|マッハパンチ|つるぎのまい:1/32/1/0/0/32:じゅうなん", "ニンフィア@ようせいのハネ:ひかえめ:ハイパーボイス|でんこうせっか|マジカルフレイム|あくび:5/0/22/30/0/9:フェアリースキン", "ブリジュラス@オボンのみ:ずぶとい:りゅうのはどう|ほえる|ミラーコート|ステルスロック:32/0/1/0/32/1:じきゅうりょく", "イダイトウ (オス)@のろいのおふだ:いじっぱり:ウェーブタックル|おはかまいり|アクアジェット|こうそくいどう:0/32/2/0/0/32:てきおうりょく", "メタモン@きあいのタスキ:ゆうかん:へんしん|なし|なし|なし:32/32/0/0/2/0:かわりもの", "カメックス@カメックスナイト:ひかえめ:ハイドロポンプ|あくのはどう|はどうだん|からをやぶる:5/0/0/31/0/30:あめうけざら"] },
+  { id: "m1-41-シルク", name: "#41 シルク", tag: "M-1 #41", party: ["ギルガルド@たべのこし:れいせい:キングシールド|シャドーボール|アイアンヘッド|かげうち:32/2/0/32/0/0:バトルスイッチ", "カバルドン@オボンのみ:わんぱく:あくび|じしん|ステルスロック|なまける:32/0/32/0/2/0:すなおこし", "フラエッテ(永遠)@フラエッテナイト:おくびょう:ムーンフォース|めいそう|こうごうせい|サイコキネシス:32/0/16/0/0/18:フラワーベール", "カイリュー@カイリュナイト:おくびょう:りゅうせいぐん|エアスラッシュ|はねやすめ|かえんほうしゃ:19/0/0/26/0/21:マルチスケイル", "マスカーニャ@こだわりスカーフ:いじっぱり:トリックフラワー|はたきおとす|トリプルアクセル|とんぼがえり:7/32/0/0/0/27:へんげんじざい", "オオニューラ@きあいのタスキ:いじっぱり:フェイタルクロー|インファイト|どくびし|じごくづき:2/32/0/0/0/32:どくしゅ"] },
+  { id: "m1-42-らりる", name: "#42 らりる", tag: "M-1 #42", party: ["ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|どくづき|ステルスロック:0/32/2/0/0/32:さめはだ", "フラエッテ(永遠)@フラエッテナイト:おくびょう:ムーンフォース|サイコキネシス|こうごうせい|めいそう:26/0/0/8/0/32:フラワーベール", "リザードン@リザードナイトY:ひかえめ:かえんほうしゃ|ソーラービーム|おにび|はねやすめ:32/0/3/13/0/18:もうか", "アーマーガア@たべのこし:なまいき:ブレイブバード|とんぼがえり|きりばらい|はねやすめ:32/0/2/0/32/0:ミラーアーマー", "ブリジュラス@オボンのみ:おだやか:りゅうせいぐん|ラスターカノン|ステルスロック|ほえる:32/0/5/0/25/4:じきゅうりょく", "アシレーヌ@しんぴのしずく:れいせい:ムーンフォース|なみのり|アクアジェット|アンコール:32/0/10/24/0/0:げきりゅう"] },
+  { id: "m1-43-ワイアットのゆっくり実況", name: "#43 ワイアットのゆっくり実況", tag: "M-1 #43", party: ["ガルーラ@ガルーラナイト:ようき:すてみタックル|じしん|れいとうパンチ|ふいうち:11/32/1/0/0/22:きもったま", "ゲンガー@ゲンガナイト:おくびょう:たたりめ|ヘドロウェーブ|おにび|いたみわけ:24/0/0/16/0/26:のろわれボディ", "ガブリアス@こだわりスカーフ:ようき:げきりん|じしん|いわなだれ|ステルスロック:2/32/0/0/0/32:さめはだ", "サザンドラ@たべのこし:ひかえめ:あくのはどう|かえんほうしゃ|わるだくみ|みがわり:14/0/0/32/0/20:ふゆう", "ブリジュラス@シュカのみ:ひかえめ:りゅうせいぐん|ラスターカノン|10まんボルト|ほえる:32/0/19/15/0/0:じきゅうりょく", "アシレーヌ@オボンのみ:ずぶとい:ムーンフォース|なみのり|アンコール|めいそう:31/0/26/0/0/9:げきりゅう"] },
+  { id: "m1-47-あるかちゃん", name: "#47 あるかちゃん*", tag: "M-1 #47", party: ["ミミッキュ@ラムのみ:いじっぱり:じゃれつく|ウッドハンマー|かげうち|つるぎのまい:1/32/1/0/0/32:ばけのかわ", "ガルーラ@ガルーラナイト:いじっぱり:のしかかり|れいとうパンチ|ともえなげ|からげんき:17/30/13/0/1/5:きもったま", "ダイケンキ (ヒスイ)@きあいのタスキ:いじっぱり:シェルブレード|ひけん・ちえなみ|アンコール|せいなるつるぎ:0/32/1/0/1/32:きれあじ", "カイリュー@カイリュナイト:うっかりや:りゅうせいぐん|エアスラッシュ|10まんボルト|じしん:0/15/0/31/0/20:マルチスケイル", "ヤドキング@シュカのみ:ずぶとい:ヘドロばくだん|かえんほうしゃ|れいとうビーム|さむいギャグ:29/0/31/6/0/0:さいせいりょく", "ミミロップ@ミミロップナイト:いじっぱり:マッハパンチ|ねこだまし|ギガインパクト|とびひざげり:1/32/7/0/0/26:じゅうなん"] },
+  { id: "m1-50-かんた", name: "#50 かんた", tag: "M-1 #50", party: ["ミミロップ@ミミロップナイト:いじっぱり:つるぎのまい|インファイト|れいとうパンチ|かみなりパンチ:7/31/10/0/0/18:じゅうなん", "アーマーガア@するどいくちばし:わんぱく:ブレイブバード|ちょうはつ|ビルドアップ|はねやすめ:32/0/31/0/0/3:ミラーアーマー", "マスカーニャ@きあいのタスキ:うっかりや:トリックフラワー|はどうだん|パワージェム|どくびし:0/2/0/32/0/32:へんげんじざい", "ガブリアス@オボンのみ:のんき:まきびし|じしん|ドラゴンテール|ステルスロック:30/0/17/0/19/0:さめはだ", "カイリュー@カイリュナイト:ひかえめ:かえんほうしゃ|りゅうのはどう|ふきとばし|はねやすめ:31/0/12/22/0/1:マルチスケイル", "ギルガルド@たべのこし:なまいき:キングシールド|かげうち|アイアンヘッド|シャドーボール:32/12/0/0/22/0:バトルスイッチ"] },
+  { id: "m1-51-Key", name: "#51 Key", tag: "M-1 #51", party: ["カバルドン@オボンのみ:わんぱく:じしん|あくび|ステルスロック|ふきとばし:32/0/2/0/32/0:すなおこし", "ドリュウズ@やわらかいすな:いじっぱり:じしん|アイアンヘッド|いわなだれ|つるぎのまい:0/32/8/0/1/25:すなかき", "ギャラドス@ギャラドスナイト:いじっぱり:たきのぼり|こおりのキバ|パワーウィップ|りゅうのまい:1/32/1/0/0/32:いかく", "メガニウム@メガニウムナイト:ひかえめ:ソーラービーム|ウェザーボール|マジカルシャイン|こうごうせい:32/0/3/17/0/14:リーフガード", "ブリジュラス@ピントレンズ:ひかえめ:りゅうせいぐん|10まんボルト|きあいだめ|みがわり:31/0/2/25/0/8:じきゅうりょく", "ソウブレイズ@こだわりスカーフ:ようき:むねんのつるぎ|ポルターガイスト|インファイト|おにび:1/32/1/0/0/32:もらいび"] },
+  { id: "m1-55-ほいみんちゃん", name: "#55 ほいみんちゃん", tag: "M-1 #55", party: ["ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|いわなだれ|アイアンヘッド:2/32/0/0/0/32:さめはだ", "フラエッテ(永遠)@フラエッテナイト:おくびょう:はめつのひかり|ムーンフォース|ドレインキッス|めいそう:2/0/0/32/0/32:フラワーベール", "イダイトウ (オス)@きあいのタスキ:いじっぱり:ウェーブタックル|おはかまいり|アクアジェット|こうそくいどう:2/32/0/0/0/32:てきおうりょく", "ブリジュラス@オボンのみ:ずぶとい:りゅうせいぐん|10まんボルト|ステルスロック|ほえる:31/0/11/0/24/0:じきゅうりょく", "ギャラドス@ギャラドスナイト:いじっぱり:たきのぼり|じしん|パワーウィップ|りゅうのまい:1/32/1/0/0/32:いかく", "ウルガモス@ラムのみ:ひかえめ:かえんほうしゃ|むしのさざめき|みがわり|ちょうのまい:29/0/13/5/0/19:むしのしらせ"] },
+  { id: "m1-56-ナイン", name: "#56 ナイン", tag: "M-1 #56", party: ["サーナイト@サーナイトナイト:ひかえめ:ハイパーボイス|サイコショック|マジカルフレイム|しんくうは:32/0/18/16/0/0:トレース", "サザンドラ@こだわりスカーフ:ひかえめ:りゅうせいぐん|あくのはどう|かえんほうしゃ|とんぼがえり:2/0/0/32/0/32:ふゆう", "ギルガルド@シュカのみ:いじっぱり:かげうち|アイアンヘッド|インファイト|つるぎのまい:24/32/0/0/0/10:バトルスイッチ", "カバルドン@たべのこし:わんぱく:じしん|こおりのキバ|あくび|なまける:32/0/32/0/2/0:すなおこし", "ギャラドス@オボンのみ:いじっぱり:たきのぼり|こおりのキバ|パワーウィップ|ちょうはつ:6/24/24/0/0/12:いかく", "キラフロル@キラフロルナイト:おくびょう:パワージェム|ヘドロウェーブ|だいちのちから|ニードルガード:1/0/0/20/13/32:どくげしょう"] },
+  { id: "m1-58-zakuro", name: "#58 zakuro", tag: "M-1 #58", party: ["カバルドン@オボンのみ:わんぱく:じしん|あくび|ステルスロック|なまける:32/0/22/0/12/0:すなおこし", "ミミロップ@ミミロップナイト:いじっぱり:ねこだまし|とびひざげり|れいとうパンチ|かみなりパンチ:11/24/5/0/0/26:じゅうなん", "キラフロル@キラフロルナイト:ひかえめ:パワージェム|ヘドロばくだん|だいちのちから|エナジーボール:1/0/1/32/0/32:どくげしょう", "サザンドラ@こだわりスカーフ:ひかえめ:りゅうせいぐん|あくのはどう|かえんほうしゃ|きあいだま:2/0/8/27/0/29:ふゆう", "ギルガルド@たべのこし:れいせい:シャドーボール|かげうち|アイアンヘッド|キングシールド:32/0/0/30/4/0:バトルスイッチ", "ギャラドス@カゴのみ:いじっぱり:たきのぼり|パワーウィップ|ゆきなだれ|ねむる:31/15/13/0/7/0:いかく"] },
+  { id: "m1-59-ノア", name: "#59 ノア", tag: "M-1 #59", party: ["ルカリオ@ルカリオナイト:おくびょう:はどうだん|あくのはどう|てっていこうせん|しんくうは:2/0/0/32/0/32:せいしんりょく", "ブラッキー@たべのこし:わんぱく:イカサマ|あくび|ねがいごと|まもる:32/0/32/0/2/0:せいしんりょく", "アシレーヌ@カゴのみ:ひかえめ:うたかたのアリア|ムーンフォース|めいそう|ねむる:32/0/15/9/0/10:げきりゅう", "ガブリアス@きあいのタスキ:いじっぱり:じしん|がんせきふうじ|スケイルショット|ステルスロック:0/32/2/0/0/32:さめはだ", "アーマーガア@オボンのみ:のんき:ボディプレス|てっぺき|はねやすめ|とんぼがえり:32/0/32/0/2/0:プレッシャー", "ゲンガー@ゲンガナイト:おくびょう:シャドーボール|ヘドロウェーブ|きあいだま|みちづれ:2/0/0/32/0/32:のろわれボディ"] },
+  { id: "m1-62-ムー", name: "#62 ムー", tag: "M-1 #62", party: ["オニシズクモ@オボンのみ:いじっぱり:アクアブレイク|こわいかお|ミラーコート|ねばねばネット:32/30/4/0/0/0:すいほう", "フラエッテ(永遠)@フラエッテナイト:おくびょう:はめつのひかり|ドレインキッス|サイコキネシス|めいそう:2/0/11/21/0/32:フラワーベール", "ブラッキー@たべのこし:のんき:イカサマ|あくび|まもる|ねがいごと:32/0/32/0/2/0:シンクロ", "リザードン@リザードナイトY:ひかえめ:かえんほうしゃ|ソーラービーム|おにび|はねやすめ:32/0/32/2/0/0:もうか", "イダイトウ (オス)@こだわりスカーフ:ようき:ウェーブタックル|おはかまいり|アクアジェット|クイックターン:2/32/0/0/0/32:てきおうりょく", "ゲンガー@ゲンガナイト:ひかえめ:たたりめ|ヘドロウェーブ|おにび|いたみわけ:24/0/0/10/1/31:のろわれボディ"] },
+  { id: "m1-63-ぱんたろ", name: "#63 ぱんたろ", tag: "M-1 #63", party: ["ゲンガー@ゲンガナイト:ひかえめ:ヘドロウェーブ|たたりめ|おにび|まもる:32/0/0/2/0/32:のろわれボディ", "ブラッキー@たべのこし:ずぶとい:まもる|イカサマ|あくび|ねがいごと:32/0/32/0/2/0:せいしんりょく", "ガブリアス@きあいのタスキ:いじっぱり:スケイルショット|じしん|がんせきふうじ|ステルスロック:2/32/0/0/0/32:さめはだ", "アシレーヌ@オボンのみ:れいせい:ムーンフォース|うたかたのアリア|クイックターン|ほろびのうた:32/0/15/18/1/0:げきりゅう", "ハッサム@ハッサムナイト:いじっぱり:バレットパンチ|インファイト|つるぎのまい|はねやすめ:26/32/0/0/0/8:テクニシャン", "ウォッシュロトム@こだわりスカーフ:ひかえめ:ハイドロポンプ|10まんボルト|ボルトチェンジ|トリック:2/0/0/32/0/32:ふゆう"] },
+  { id: "m1-64-ピロスケ", name: "#64 ピロスケ", tag: "M-1 #64", party: ["エーフィ@まがったスプーン:おくびょう:サイコキネシス|あさのひざし|めいそう|ほえる:14/0/0/27/0/25:マジックミラー", "ブラッキー@たべのこし:ずぶとい:イカサマ|ねがいごと|あくび|まもる:32/0/32/0/0/2:せいしんりょく", "ゲンガー@ゲンガナイト:おくびょう:たたりめ|ヘドロウェーブ|おにび|わるだくみ:18/0/0/29/1/18:のろわれボディ", "ガブリアス@きあいのタスキ:いじっぱり:じしん|スケイルショット|どくづき|ステルスロック:6/20/11/0/0/29:さめはだ", "カメックス@オボンのみ:ずぶとい:なみのり|あくび|れいとうビーム|こうそくスピン:32/0/30/0/4/0:げきりゅう", "リザードン@リザードナイトX:いじっぱり:フレアドライブ|ドラゴンクロー|はねやすめ|りゅうのまい:32/10/0/0/0/24:もうか"] },
+  { id: "m1-65-虫コロリ", name: "#65 虫コロリ", tag: "M-1 #65", party: ["ミミロップ@ミミロップナイト:いじっぱり:ねこだまし|とびひざげり|れいとうパンチ|とんぼがえり:9/22/8/0/1/26:じゅうなん", "カバルドン@オボンのみ:わんぱく:じしん|あくび|なまける|ステルスロック:32/0/12/0/22/0:すなおこし", "エアームド@エアームドナイト:ようき:ブレイブバード|つるぎのまい|ちょうはつ|はねやすめ:31/0/7/0/0/28:がんじょう", "ハラバリー@たべのこし:ずぶとい:ボルトチェンジ|パラボラチャージ|みずびたし|なまける:32/0/19/0/12/3:でんきにかえる", "マスカーニャ@きあいのタスキ:いじっぱり:トリックフラワー|はたきおとす|ふいうち|どくびし:1/32/1/0/0/32:しんりょく", "キラフロル@こだわりスカーフ:おくびょう:ヘドロウェーブ|パワージェム|だいちのちから|どくどく:1/0/1/32/0/32:ふしょく"] },
+  { id: "m1-66-むむ", name: "#66 むむ", tag: "M-1 #66", party: ["ルカリオ@ルカリオナイト:うっかりや:はどうだん|てっていこうせん|しんくうは|いわなだれ:8/3/0/32/0/23:せいしんりょく", "カイリュー@カイリュナイト:ひかえめ:りゅうせいぐん|10まんボルト|エアスラッシュ|かえんほうしゃ:1/0/1/32/0/32:せいしんりょく", "イダイトウ (オス)@きあいのタスキ:いじっぱり:ウェーブタックル|おはかまいり|アクアジェット|クイックターン:2/32/0/0/0/32:てきおうりょく", "ブリジュラス@オボンのみ:ひかえめ:りゅうせいぐん|ラスターカノン|10まんボルト|ステルスロック:32/0/16/15/0/3:じきゅうりょく", "アシレーヌ@しんぴのしずく:ひかえめ:なみのり|ムーンフォース|アクアジェット|アンコール:32/0/15/10/0/9:げきりゅう", "ミミロップ@ミミロップナイト:いじっぱり:インファイト|メガトンキック|マッハパンチ|つるぎのまい:15/32/0/0/0/19:じゅうなん"] },
+  { id: "m1-67-ケミ케미", name: "#67 ケミ(케미)", tag: "M-1 #67", party: ["ガルーラ@ガルーラナイト:いじっぱり:すてみタックル|じしん|れいとうパンチ|ほのおのパンチ:2/32/0/0/0/32:きもったま", "リザードン@リザードナイトX:いじっぱり:フレアドライブ|げきりん|ニトロチャージ|つるぎのまい:4/30/0/0/0/32:もうか", "ミミッキュ@ラムのみ:いじっぱり:じゃれつく|シャドークロー|かげうち|つるぎのまい:28/32/3/0/0/3:ばけのかわ", "ブリジュラス@しろいハーブ:ひかえめ:りゅうせいぐん|てっていこうせん|10まんボルト|あくのはどう:0/0/0/32/2/32:がんじょう", "ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|ほのおのキバ|いわなだれ:0/30/4/0/0/32:さめはだ", "アシレーヌ@オボンのみ:ひかえめ:うたかたのアリア|ムーンフォース|アクアジェット|めいそう:32/0/0/24/0/10:げきりゅう"] },
+  { id: "m1-70-みつば", name: "#70 みつば", tag: "M-1 #70", party: ["ゲンガー@ゲンガナイト:ひかえめ:ヘドロウェーブ|シャドーボール|クリアスモッグ|わるだくみ:24/0/0/19/0/23:のろわれボディ", "アーマーガア@オボンのみ:のんき:ボディプレス|とんぼがえり|てっぺき|はねやすめ:32/0/15/0/19/0:プレッシャー", "ルカリオ@ルカリオナイト:ようき:コメットパンチ|インファイト|いわなだれ|バレットパンチ:10/32/0/0/0/24:せいしんりょく", "サザンドラ@こだわりスカーフ:おくびょう:りゅうせいぐん|あくのはどう|かえんほうしゃ|とんぼがえり:2/0/0/32/0/32:ふゆう", "アシレーヌ@オボンのみ:れいせい:ムーンフォース|なみのり|アンコール|クイックターン:32/0/20/14/0/0:げきりゅう", "ガブリアス@きあいのタスキ:ようき:スケイルショット|じしん|がんせきふうじ|ステルスロック:2/32/0/0/0/32:さめはだ"] },
+  { id: "m1-71-Lazy", name: "#71 Lazy", tag: "M-1 #71", party: ["カバルドン@オボンのみ:わんぱく:じしん|ステルスロック|あくび|なまける:32/0/22/0/12/0:すなおこし", "カイロス@カイロスナイト:いじっぱり:のしかかり|でんこうせっか|じしん|つるぎのまい:1/32/1/0/0/32:かいりきバサミ", "カメックス@カメックスナイト:ひかえめ:ハイドロポンプ|はどうだん|あくのはどう|からをやぶる:1/0/1/32/0/32:げきりゅう", "ブリジュラス@たべのこし:ひかえめ:ドラゴンテール|10まんボルト|はどうだん|みがわり:32/0/20/5/1/8:じきゅうりょく", "キラフロル@きあいのタスキ:おくびょう:パワージェム|ヘドロウェーブ|マッドショット|ステルスロック:1/0/1/32/0/32:どくげしょう", "マスカーニャ@こだわりスカーフ:いじっぱり:トリックフラワー|はたきおとす|トリプルアクセル|かみなりパンチ:0/32/1/0/1/32:へんげんじざい"] },
+  { id: "m1-72-イカエ", name: "#72 イカエ", tag: "M-1 #72", party: ["スターミー@スターミナイト:いじっぱり:アクアブレイク|しねんのずつき|アイススピナー|アクアジェット:24/24/0/0/18/0:しぜんかいふく", "ローブシン@オボンのみ:いじっぱり:ドレインパンチ|かみなりパンチ|マッハパンチ|カウンター:32/22/0/0/12/0:てつのこぶし", "ウルガモス@ヨロギのみ:ひかえめ:だいもんじ|むしのさざめき|ちょうのまい|みがわり:29/0/13/6/0/18:むしのしらせ", "ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|いわなだれ|なげつける:4/32/1/0/0/29:さめはだ", "ブリジュラス@ピントレンズ:おくびょう:りゅうせいぐん|ラスターカノン|10まんボルト|きあいだま:2/0/0/32/0/32:がんじょう", "ゾロアーク@きあいのタスキ:おくびょう:シャドーボール|きあいだま|こごえるかぜ|かげうち:1/1/0/32/0/32:イリュージョン"] },
+  { id: "m1-73-かいぷー", name: "#73 かいぷー", tag: "M-1 #73", party: ["マフォクシー@マフォクシナイト:おくびょう:マジカルフレイム|サイコショック|おにび|マジカルシャイン:25/0/6/6/0/29:もうか", "キュウコン (アローラ)@オボンのみ:おくびょう:ふぶき|フリーズドライ|バトンタッチ|めいそう:11/0/20/9/0/26:ゆきふらし", "ガブリアス@ラムのみ:ようき:じしん|スケイルショット|つるぎのまい|かみなりのキバ:0/32/2/0/0/32:さめはだ", "アシレーヌ@カゴのみ:ずぶとい:ムーンフォース|なみのり|めいそう|ねむる:30/0/26/0/0/10:げきりゅう", "エレザード@きあいのタスキ:おくびょう:10まんボルト|きあいだま|りゅうのはどう|へびにらみ:4/0/0/32/1/29:かんそうはだ", "アーマーガア@たべのこし:しんちょう:ブレイブバード|ちょうはつ|はねやすめ|ビルドアップ:32/1/1/0/6/26:ミラーアーマー"] },
+  { id: "m1-75-でーりぃ", name: "#75 でーりぃ", tag: "M-1 #75", party: ["フラエッテ(永遠)@フラエッテナイト:おくびょう:ムーンフォース|はめつのひかり|めいそう|バトンタッチ:26/0/0/8/0/32:フラワーベール", "ブリジュラス@たべのこし:ひかえめ:りゅうのはどう|あくのはどう|10まんボルト|みがわり:32/0/7/15/1/11:じきゅうりょく", "ガブリアス@きあいのタスキ:ようき:じしん|スケイルショット|がんせきふうじ|ステルスロック:2/32/0/0/0/32:さめはだ", "イダイトウ (オス)@こだわりスカーフ:ようき:おはかまいり|ウェーブタックル|クイックターン|アクアジェット:2/32/0/0/0/32:てきおうりょく", "ハッサム@ハッサムナイト:いじっぱり:バレットパンチ|インファイト|はたきおとす|つるぎのまい:30/30/0/0/0/6:テクニシャン", "ウルガモス@オボンのみ:おくびょう:ほのおのまい|おにび|あさのひざし|ちょうのまい:32/0/26/1/1/6:ほのおのからだ"] },
+  { id: "m1-76-しゃぼん", name: "#76 しゃぼん", tag: "M-1 #76", party: ["ミミロップ@ミミロップナイト:いじっぱり:ねこだまし|とびひざげり|マッハパンチ|つるぎのまい:15/32/1/0/0/18:じゅうなん", "ブリジュラス@たべのこし:ずぶとい:りゅうせいぐん|10まんボルト|ほえる|ステルスロック:32/0/10/0/24/0:じきゅうりょく", "アシレーヌ@オボンのみ:ひかえめ:うたかたのアリア|ムーンフォース|アクアジェット|アンコール:32/0/14/4/7/9:げきりゅう", "ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|いわなだれ|ほのおのキバ:2/32/0/0/0/32:さめはだ", "ギルガルド@のろいのおふだ:いじっぱり:ポルターガイスト|インファイト|かげうち|つるぎのまい:22/20/1/0/0/23:バトルスイッチ", "ユキメノコ@ユキメノコナイト:おくびょう:ふぶき|シャドーボール|ちょうはつ|みちづれ:12/0/0/27/0/27:のろわれボディ"] },
+  { id: "m1-77-まどれーぬ", name: "#77 まどれーぬ", tag: "M-1 #77", party: ["カバルドン@たべのこし:わんぱく:じしん|あくび|ステルスロック|なまける:32/0/18/0/16/0:すなおこし", "マスカーニャ@こだわりスカーフ:ようき:トリックフラワー|イカサマ|トリック|とんぼがえり:30/1/16/0/0/18:へんげんじざい", "ミミッキュ@ラムのみ:いじっぱり:じゃれつく|かげうち|つるぎのまい|ドレインパンチ:11/30/8/0/0/17:ばけのかわ", "アーマーガア@オボンのみ:わんぱく:アイアンヘッド|ボディプレス|てっぺき|はねやすめ:32/0/15/0/17/2:ミラーアーマー", "ゲンガー@ゲンガナイト:おくびょう:シャドーボール|ヘドロウェーブ|10まんボルト|わるだくみ:16/0/2/25/0/23:のろわれボディ", "カイリュー@カイリュナイト:ひかえめ:りゅうせいぐん|10まんボルト|かえんほうしゃ|しんそく:21/0/0/27/0/18:マルチスケイル"] },
+  { id: "m1-78-おにーやん", name: "#78 おにーやん", tag: "M-1 #78", party: ["ガルーラ@ガルーラナイト:いじっぱり:のしかかり|じしん|れいとうパンチ|ふいうち:27/32/7/0/0/0:きもったま", "ガブリアス@こだわりスカーフ:いじっぱり:じしん|げきりん|いわなだれ|ステルスロック:0/30/11/0/0/25:さめはだ", "リザードン@リザードナイトY:ひかえめ:かえんほうしゃ|ソーラービーム|ブラストバーン|オーバーヒート:14/0/0/32/0/20:もうか", "アシレーヌ@オボンのみ:れいせい:ムーンフォース|なみのり|アクアジェット|アンコール:32/0/18/4/12/0:げきりゅう", "アーマーガア@たべのこし:のんき:てっぺき|ボディプレス|はねやすめ|とんぼがえり:32/0/32/0/2/0:プレッシャー", "ゲンガー@ゲンガナイト:おくびょう:シャドーボール|みちづれ|まもる|ほろびのうた:24/0/0/10/0/32:のろわれボディ"] },
+  { id: "m1-79-ヒロ", name: "#79 ヒロ", tag: "M-1 #79", party: ["ミミロップ@ミミロップナイト:いじっぱり:ねこだまし|インファイト|メガトンキック|マッハパンチ:1/32/1/0/0/32:ぶきよう", "ギルガルド@のろいのおふだ:いじっぱり:つるぎのまい|かげうち|ポルターガイスト|せいなるつるぎ:20/32/0/0/0/14:バトルスイッチ", "カバルドン@オボンのみ:のんき:あくび|じしん|ステルスロック|なまける:32/0/20/0/14/0:すなおこし", "リザードン@リザードナイトY:ひかえめ:オーバーヒート|かえんほうしゃ|ソーラービーム|ニトロチャージ:28/0/0/11/0/27:サンパワー", "イダイトウ (オス)@しんぴのしずく:いじっぱり:ウェーブタックル|アクアジェット|クイックターン|おはかまいり:0/32/16/0/1/17:てきおうりょく", "バイバニラ@とけないこおり:ひかえめ:ちょうはつ|フリーズドライ|ふぶき|こおりのつぶて:31/0/7/28/0/0:ゆきふらし"] },
+  { id: "m1-82-城崎", name: "#82 城崎", tag: "M-1 #82", party: ["マフォクシー@マフォクシナイト:おくびょう:かえんほうしゃ|サイコキネシス|みがわり|アンコール:5/0/0/32/0/29:もうか", "ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|がんせきふうじ|ステルスロック:8/32/1/0/0/25:さめはだ", "ブリジュラス@オボンのみ:ずぶとい:りゅうせいぐん|ミラーコート|ほえる|ステルスロック:32/0/10/1/22/1:じきゅうりょく", "ドドゲザン@くろいメガネ:いじっぱり:ドゲザン|アイアンヘッド|ふいうち|つるぎのまい:8/32/0/0/0/26:そうだいしょう", "アシレーヌ@カゴのみ:ひかえめ:うたかたのアリア|ムーンフォース|めいそう|ねむる:32/0/24/0/0/10:げきりゅう", "マスカーニャ@きあいのタスキ:さみしがり:トリックフラワー|はたきおとす|ふいうち|どくびし:2/32/0/0/0/32:しんりょく"] },
+  { id: "m1-83-ほわろり", name: "#83 ほわろり", tag: "M-1 #83", party: ["フラエッテ(永遠)@フラエッテナイト:おくびょう:ムーンフォース|はめつのひかり|サイコキネシス|めいそう:6/0/0/28/0/32:フラワーベール", "マフォクシー@マフォクシナイト:おくびょう:マジカルフレイム|サイコショック|きあいだま|みがわり:15/0/0/22/0/29:もうか", "ソウブレイズ@きあいのタスキ:いじっぱり:むねんのつるぎ|ポルターガイスト|かげうち|つるぎのまい:1/32/1/0/0/32:くだけるよろい", "ガブリアス@こだわりスカーフ:いじっぱり:じしん|げきりん|どくづき|がんせきふうじ:2/20/19/0/0/25:さめはだ", "ブリジュラス@たべのこし:ひかえめ:りゅうせいぐん|ラスターカノン|10まんボルト|イカサマ:32/0/8/15/1/10:じきゅうりょく", "アシレーヌ@しんぴのしずく:ひかえめ:ムーンフォース|うたかたのアリア|アクアジェット|ミストフィールド:32/0/0/18/14/2:げきりゅう"] },
+  { id: "m1-85-HANABI", name: "#85 HANABI", tag: "M-1 #85", party: ["ガブリアス@こだわりスカーフ:いじっぱり:げきりん|じしん|がんせきふうじ|ステルスロック:2/32/0/0/0/32:さめはだ", "ガルーラ@ガルーラナイト:いじっぱり:のしかかり|じしん|れいとうパンチ|ほのおのパンチ:1/32/1/0/0/32:きもったま", "ゲンガー@ゲンガナイト:おくびょう:たたりめ|ヘドロウェーブ|おにび|いたみわけ:30/0/2/17/0/17:のろわれボディ", "アシレーヌ@たべのこし:ずぶとい:なみのり|ドレインキッス|みがわり|めいそう:32/0/26/0/0/8:げきりゅう", "アーマーガア@なし:のんき:しっぺがえし|とんぼがえり|てっぺき|はねやすめ:32/0/32/0/2/0:プレッシャー", "ミミッキュ@ようせいのハネ:いじっぱり:じゃれつく|かげうち|つるぎのまい|のろい:29/32/5/0/0/0:ばけのかわ"] },
+  { id: "m1-86-SBM", name: "#86 SBM", tag: "M-1 #86", party: ["ルカリオ@ルカリオナイト:ようき:インファイト|コメットパンチ|バレットパンチ|つるぎのまい:2/32/0/0/0/32:せいしんりょく", "ドヒドイデ@なし:しんちょう:どくづき|しっぺがえし|じこさいせい|どくどく:32/0/2/0/32/0:さいせいりょく", "フラエッテ(永遠)@フラエッテナイト:ずぶとい:ムーンフォース|こうごうせい|めいそう|ドレインキッス:32/0/32/0/0/2:フラワーベール", "ブラッキー@たべのこし:ずぶとい:イカサマ|あくび|ねがいごと|まもる:32/0/32/0/1/1:せいしんりょく", "イダイトウ (オス)@こだわりスカーフ:ようき:ウェーブタックル|おはかまいり|クイックターン|アクアジェット:2/32/0/0/0/32:てきおうりょく", "ガブリアス@オボンのみ:わんぱく:じしん|ステルスロック|まきびし|ドラゴンテール:32/0/25/0/0/9:さめはだ"] },
+  { id: "m1-87-ヒアサム", name: "#87 ヒアサム", tag: "M-1 #87", party: ["エンペルト@シュカのみ:ひかえめ:なみのり|れいとうビーム|ラスターカノン|しんくうは:32/0/0/28/0/6:かちき", "ソウブレイズ@きあいのタスキ:いじっぱり:ポルターガイスト|インファイト|かげうち|つるぎのまい:0/32/0/0/2/32:くだけるよろい", "ミミッキュ@のろいのおふだ:いじっぱり:シャドークロー|ドレインパンチ|かげうち|つるぎのまい:13/32/13/0/0/8:ばけのかわ", "カバルドン@オボンのみ:わんぱく:じしん|あくび|ステルスロック|ふきとばし:32/0/12/0/22/0:すなおこし", "エアームド@エアームドナイト:いじっぱり:ブレイブバード|アイアンヘッド|ドリルライナー|つるぎのまい:31/10/0/0/0/25:くだけるよろい", "カメックス@カメックスナイト:ひかえめ:しおふき|あくのはどう|はどうだん|からをやぶる:21/0/1/15/0/29:あめうけざら"] },
+  { id: "m1-90-きりーね", name: "#90 きりーね", tag: "M-1 #90", party: ["ミミロップ@ミミロップナイト:いじっぱり:ねこだまし|とびひざげり|ギガインパクト|つるぎのまい:1/32/1/0/0/32:じゅうなん", "アーマーガア@なし:しんちょう:アイアンヘッド|どろぼう|ビルドアップ|はねやすめ:32/0/7/0/25/2:ミラーアーマー", "ガブリアス@オボンのみ:わんぱく:じしん|ドラゴンテール|まきびし|ステルスロック:32/0/32/0/0/2:さめはだ", "ブリジュラス@たべのこし:ひかえめ:ラスターカノン|ドラゴンテール|10まんボルト|みがわり:32/0/21/11/1/1:じきゅうりょく", "イダイトウ (オス)@きあいのタスキ:いじっぱり:おはかまいり|ウェーブタックル|アクアジェット|こうそくいどう:0/32/2/0/0/32:てきおうりょく", "フラエッテ(永遠)@フラエッテナイト:おくびょう:めいそう|ドレインキッス|はめつのひかり|サイコキネシス:26/0/3/5/0/32:フラワーベール"] },
+  { id: "m1-91-そつれん", name: "#91 そつれん", tag: "M-1 #91", party: ["ガルーラ@ガルーラナイト:いじっぱり:ねこだまし|すてみタックル|じしん|れいとうパンチ:21/32/3/0/1/9:きもったま", "ガブリアス@きあいのタスキ:ようき:スケイルショット|じしん|がんせきふうじ|ステルスロック:0/31/3/0/0/32:さめはだ", "ブリジュラス@カゴのみ:ひかえめ:りゅうせいぐん|ラスターカノン|エレクトロビーム|ねむる:26/0/1/25/1/13:じきゅうりょく", "ミミッキュ@ラムのみ:いじっぱり:かげうち|じゃれつく|ドレインパンチ|つるぎのまい:2/32/32/0/0/0:ばけのかわ", "アシレーヌ@オボンのみ:ひかえめ:うたかたのアリア|ムーンフォース|クイックターン|アクアジェット:32/0/0/30/0/4:げきりゅう", "マフォクシー@マフォクシナイト:ひかえめ:かえんほうしゃ|サイコショック|くさむすび|わるだくみ:31/0/5/11/0/19:もうか"] },
+  { id: "m1-92-菖蒲湯", name: "#92 菖蒲湯", tag: "M-1 #92", party: ["ハッサム@ハッサムナイト:わんぱく:バレットパンチ|はたきおとす|とんぼがえり|はねやすめ:32/2/32/0/0/0:テクニシャン", "ヤドキング@たべのこし:おだやか:かえんほうしゃ|めいそう|どくどく|なまける:31/0/5/0/30/0:さいせいりょく", "メタモン@こだわりスカーフ:のんき:へんしん|なし|なし|なし:32/2/32/0/0/0:かわりもの", "ダイケンキ (ヒスイ)@オボンのみ:わんぱく:ひけん・ちえなみ|せいなるつるぎ|アンコール|ふいうち:32/0/25/0/0/9:きれあじ", "ガブリアス@きあいのタスキ:いじっぱり:じしん|スケイルショット|ストーンエッジ|つるぎのまい:2/32/0/0/0/32:さめはだ", "カイリュー@カイリュナイト:おくびょう:りゅうせいぐん|れいとうビーム|10まんボルト|しんそく:13/0/0/32/0/21:マルチスケイル"] },
+  { id: "m1-94-ガルドぽけ", name: "#94 ガルドぽけ", tag: "M-1 #94", party: ["マスカーニャ@こだわりスカーフ:ようき:トリックフラワー|イカサマ|トリプルアクセル|トリック:24/0/25/0/0/17:へんげんじざい", "ガブリアス@オボンのみ:わんぱく:じしん|スケイルショット|がんせきふうじ|まきびし:30/2/18/0/0/16:さめはだ", "フラエッテ(永遠)@フラエッテナイト:おくびょう:ムーンフォース|ドレインキッス|めいそう|こうごうせい:26/0/7/1/0/32:フラワーベール", "リザードン@リザードナイトY:ひかえめ:かえんほうしゃ|ソーラービーム|ニトロチャージ|はねやすめ:22/0/9/3/0/32:もうか", "ギルガルド@たべのこし:ゆうかん:ポルターガイスト|アイアンヘッド|かげうち|キングシールド:32/1/1/0/32/0:バトルスイッチ", "ブリジュラス@カゴのみ:ずぶとい:10まんボルト|ドラゴンテール|ねむる|ステルスロック:32/0/30/0/4/0:じきゅうりょく"] },
+  { id: "m1-95-따라큐", name: "#95 따라큐", tag: "M-1 #95", party: ["ガブリアス@こだわりスカーフ:いじっぱり:じしん|げきりん|ほのおのキバ|ねごと:0/30/4/0/0/32:さめはだ", "リザードン@リザードナイトX:いじっぱり:フレアドライブ|げきりん|ニトロチャージ|つるぎのまい:4/30/0/0/0/32:もうか", "ゲッコウガ@きあいのタスキ:ひかえめ:なみのり|あくのはどう|みずしゅりけん|ヘドロウェーブ:0/0/1/32/1/32:げきりゅう", "ルカリオ@ルカリオナイト:ようき:インファイト|バレットパンチ|かみなりパンチ|れいとうパンチ:6/27/0/0/6/27:せいしんりょく", "ミミッキュ@ピントレンズ:いじっぱり:じゃれつく|かげうち|つるぎのまい|シャドークロー:29/30/7/0/0/0:ばけのかわ", "アーマーガア@オボンのみ:しんちょう:ドリルくちばし|ちょうはつ|とんぼがえり|はねやすめ:32/0/27/0/5/2:プレッシャー"] },
+  { id: "m1-96-クマPちゃん", name: "#96 クマ(Pちゃん)", tag: "M-1 #96", party: ["マスカーニャ@じしゃく:ようき:かみなりパンチ|トリプルアクセル|けたぐり|ふいうち:8/32/2/0/0/24:へんげんじざい", "マフォクシー@マフォクシナイト:おくびょう:サイコショック|かえんほうしゃ|マジカルシャイン|わるだくみ:15/0/6/16/0/29:もうか", "アシレーヌ@ソクノのみ:ひかえめ:ムーンフォース|サイコノイズ|アンコール|アクアジェット:32/0/5/14/2/13:うるおいボイス", "ハッサム@ラムのみ:いじっぱり:バレットパンチ|ダメおし|むしくい|つるぎのまい:14/30/2/0/1/19:テクニシャン", "ブリジュラス@オボンのみ:ずぶとい:ラスターカノン|りゅうのはどう|ほえる|ステルスロック:31/0/11/0/15/9:じきゅうりょく", "ギャラドス@ギャラドスナイト:いじっぱり:こおりのキバ|じしん|パワーウィップ|りゅうのまい:31/5/2/0/0/28:いかく"] },
+  { id: "m1-98-かもねぎなべ", name: "#98 かもねぎなべ", tag: "M-1 #98", party: ["メガニウム@メガニウムナイト:ひかえめ:ソーラービーム|ウェザーボール|やどりぎのタネ|みがわり:26/0/12/15/0/13:リーフガード", "ワルビアル@こだわりスカーフ:いじっぱり:じしん|はたきおとす|インファイト|ステルスロック:1/32/1/0/0/32:いかく", "ハッサム@なし:のんき:バレットパンチ|どろぼう|とんぼがえり|はねやすめ:30/0/4/0/32/0:テクニシャン", "ヤドキング@たべのこし:なまいき:サイコノイズ|まもる|どくどく|さむいギャグ:31/0/3/0/32/0:さいせいりょく", "ガブリアス@オボンのみ:わんぱく:じしん|ドラゴンテール|まきびし|ステルスロック:32/0/25/0/9/0:さめはだ", "イルカマン(ナイーブ)@しんぴのしずく:いじっぱり:ジェットパンチ|インファイト|アンコール|クイックターン:16/32/0/0/0/18:マイティチェンジ"] },
+  { id: "m1-99-KOH", name: "#99 KOH", tag: "M-1 #99", party: ["ブラッキー@たべのこし:のんき:イカサマ|まもる|あくび|ねがいごと:32/0/32/0/2/0:せいしんりょく", "ルカリオ@ルカリオナイト:ようき:インファイト|コメットパンチ|いわなだれ|くさわけ:10/31/0/0/2/23:せいしんりょく", "ゲンガー@ゲンガナイト:おくびょう:ヘドロウェーブ|たたりめ|クリアスモッグ|おにび:32/0/0/8/11/15:のろわれボディ", "カイリュー@ハバンのみ:ひかえめ:りゅうせいぐん|エアスラッシュ|かえんほうしゃ|はねやすめ:21/0/1/30/0/14:マルチスケイル", "アシレーヌ@オボンのみ:なまいき:なみのり|ムーンフォース|クイックターン|めいそう:32/0/25/8/1/0:げきりゅう", "ダイケンキ (ヒスイ)@きあいのタスキ:やんちゃ:クイックターン|ひけん・ちえなみ|せいなるつるぎ|れいとうビーム:0/32/2/0/0/32:きれあじ"] },
+  { id: "m1-100-ずみはる", name: "#100 ずみはる", tag: "M-1 #100", party: ["ハッサム@ハッサムナイト:いじっぱり:バレットパンチ|はたきおとす|つるぎのまい|インファイト:28/30/0/0/0/8:テクニシャン", "ガブリアス@オボンのみ:わんぱく:ドラゴンテール|じしん|ステルスロック|がんせきふうじ:30/0/27/0/0/9:さめはだ", "フラエッテ(永遠)@フラエッテナイト:おくびょう:ムーンフォース|ドレインキッス|めいそう|こうごうせい:2/0/11/21/0/32:フラワーベール", "ダイケンキ (ヒスイ)@きあいのタスキ:いじっぱり:ひけん・ちえなみ|ふいうち|ちょうはつ|シェルブレード:2/32/0/0/0/32:きれあじ", "イダイトウ (オス)@こだわりスカーフ:いじっぱり:おはかまいり|ウェーブタックル|アクアジェット|クイックターン:2/32/3/0/0/29:てきおうりょく", "ラウドボーン@たべのこし:ずぶとい:フレアソング|シャドーボール|あくび|なまける:32/0/20/0/14/0:てんねん"] },
+];
+
+// ── ポケモン画像ID対応表 ──────────────────────────────────────────
+const POKEMON_ID = {
+  'フシギバナ':'0003-00','リザードン':'0006-00','カメックス':'0009-00','スピアー':'0015-00','ピジョット':'0018-00','アーボック':'0024-00',
+  'ピカチュウ':'0025-00','ライチュウ':'0026-00','ピクシー':'0036-00','キュウコン':'0038-00','ウインディ':'0059-00','フーディン':'0065-00',
+  'カイリキー':'0068-00','ウツボット':'0071-00','ヤドラン':'0080-00','ゲンガー':'0094-00','ガルーラ':'0115-00','スターミー':'0121-00',
+  'カイロス':'0127-00','ケンタロス':'0128-00','ケンタロス:格':'0128-01','ケンタロス:炎':'0128-02','ケンタロス:水':'0128-03','ギャラドス':'0130-00',
+  'メタモン':'0132-00','シャワーズ':'0134-00','サンダース':'0135-00','ブースター':'0136-00','プテラ':'0142-00','カビゴン':'0143-00',
+  'カイリュー':'0149-00','メガニウム':'0154-00','バクフーン':'0157-00','オーダイル':'0160-00','アリアドス':'0168-00','デンリュウ':'0181-00',
+  'マリルリ':'0184-00','ニョロトノ':'0186-00','エーフィ':'0196-00','ブラッキー':'0197-00','ヤドキング':'0199-00','フォレトス':'0205-00',
+  'ハガネール':'0208-00','ハッサム':'0212-00','ヘラクロス':'0214-00','エアームド':'0227-00','ヘルガー':'0229-00','バンギラス':'0248-00',
+  'ペリッパー':'0279-00','サーナイト':'0282-00','ヤミラミ':'0302-00','ボスゴドラ':'0306-00','チャーレム':'0308-00','ライボルト':'0310-00',
+  'サメハダー':'0319-00','バクーダ':'0323-00','コータス':'0324-00','チルタリス':'0334-00','ミロカロス':'0350-00','ポワルン':'0351-00',
+  'ジュペッタ':'0354-00','チリーン':'0358-00','アブソル':'0359-00','オニゴーリ':'0362-00','ドダイトス':'0389-00','ゴウカザル':'0392-00',
+  'エンペルト':'0395-00','レントラー':'0405-00','ロズレイド':'0407-00','ラムパルド':'0409-00','トリデプス':'0411-00','ミミロップ':'0428-00',
+  'ミカルゲ':'0442-00','ガブリアス':'0445-00','ルカリオ':'0448-00','カバルドン':'0450-00','ドクロッグ':'0454-00','ユキノオー':'0460-00',
+  'マニューラ':'0461-00','ドサイドン':'0464-00','リーフィア':'0470-00','グレイシア':'0471-00','グライオン':'0472-00','マンムー':'0473-00',
+  'エルレイド':'0475-00','ユキメノコ':'0478-00','ロトム':'0479-00','ヒートロトム':'0479-01','フロストロトム':'0479-03','スピンロトム':'0479-04',
+  'カットロトム':'0479-05','ジャローダ':'0497-00','エンブオー':'0500-00','ダイケンキ':'0503-00','ミルホッグ':'0505-00','レパルダス':'0510-00',
+  'ヤナッキー':'0512-00','バオッキー':'0514-00','ヒヤッキー':'0516-00','ドリュウズ':'0530-00','タブンネ':'0531-00','ローブシン':'0534-00',
+  'エルフーン':'0547-00','ワルビアル':'0553-00','デスカーン':'0563-00','ダストダス':'0569-00','ゾロアーク':'0571-00','ランクルス':'0579-00',
+  'バイバニラ':'0584-00','エモンガ':'0587-00','シャンデラ':'0609-00','ツンベアー':'0614-00','マッギョ':'0618-00','ゴルーグ':'0623-00',
+  'サザンドラ':'0635-00','ウルガモス':'0637-00','ブリガロン':'0652-00','マフォクシー':'0655-00','ゲッコウガ':'0658-00','ホルード':'0660-00',
+  'ファイアロー':'0663-00','ビビヨン':'0666-18','フラージェス':'0671-00','ゴロンダ':'0675-00','トリミアン':'0676-00','ニャオニクス(オス)':'0678-00',
+  'ニャオニクス(メス)':'0678-01','ギルガルド':'0681-00','フレフワン':'0683-00','ペロリーム':'0685-00','ブロスター':'0693-00','エレザード':'0695-00',
+  'ガチゴラス':'0697-00','アマルルガ':'0699-00','ニンフィア':'0700-00','ルチャブル':'0701-00','デデンネ':'0702-00','ヌメルゴン':'0706-00',
+  'クレッフィ':'0707-00','オーロット':'0709-00','パンプジン(ちゅうだましゅ)':'0711-00','パンプジン(こだましゅ)':'0711-01','パンプジン(おおだましゅ)':'0711-02','パンプジン(ギガだましゅ)':'0711-03',
+  'クレベース':'0713-00','オンバーン':'0715-00','ジュナイパー':'0724-00','ガオガエン':'0727-00','アシレーヌ':'0730-00','ドデカバシ':'0733-00',
+  'ケケンカニ':'0740-00','ルガルガン(昼)':'0745-00','ルガルガン(まよなか)':'0745-01','ルガルガン(たそがれ)':'0745-02','ドヒドイデ':'0748-00','バンバドロ':'0750-00',
+  'オニシズクモ':'0752-00','エンニュート':'0758-00','アマージョ':'0763-00','ヤレユータン':'0765-00','ナゲツケサル':'0766-00','ミミッキュ':'0778-00',
+  'ジジーロン':'0780-00','ジャラランガ':'0784-00','アーマーガア':'0823-00','アップリュー':'0841-00','タルップル':'0842-00','サダイジャ':'0844-00',
+  'ポットデス':'0855-00','ブリムオン':'0858-00','バリコオル':'0866-00','デスバーン':'0867-00','マホイップ':'0869-00','モルペコ':'0877-00',
+  'ドラパルト':'0887-00','アヤシシ':'0899-00','バサギリ':'0900-00','イダイトウ(オス)':'0902-00','イダイトウ(メス)':'0902-01','オオニューラ':'0903-00',
+  'マスカーニャ':'0908-00','ラウドボーン':'0911-00','ウェーニバル':'0914-00','イッカネズミ':'0925-00','キョジオーン':'0934-00','グレンアルマ':'0936-00',
+  'ソウブレイズ':'0937-00','ハラバリー':'0939-00','スコヴィラン':'0952-00','クエスパトラ':'0956-00','デカヌチャン':'0959-00','イルカマン':'0964-00',
+  'ミミズズ':'0968-00','キラフロル':'0970-00','リキキリン':'0981-00','ドドゲザン':'0983-00','ヤバソチャ':'1013-00','ブリジュラス':'1018-00',
+  'カミツオロチ':'1019-00','フラエッテ:永遠':'0670-05','フラエッテ(永遠)':'0670-05','キュウコン(アローラ)':'0038-01','ライチュウ(アローラ)':'0026-01','ヤドキング(ガラル)':'0199-01',
+  'ヤドラン(ガラル)':'0080-02','マッギョ(ガラル)':'0618-01','ダイケンキ(ヒスイ)':'0503-01','ゾロアーク(ヒスイ)':'0571-01','ウインディ(ヒスイ)':'0059-01','バクフーン(ヒスイ)':'0157-01',
+  'クレベース(ヒスイ)':'0713-01','ジュナイパー(ヒスイ)':'0724-01','ヌメルゴン(ヒスイ)':'0706-01','ウォッシュロトム':'0479-02',
+};
+
+const NATURE_LABELS = {
+  'いじっぱり': 'A↑C↓', 'ゆうかん': 'A↑S↓', 'やんちゃ': 'A↑D↓', 'さみしがり': 'A↑B↓',
+  'ずぶとい':   'B↑A↓', 'のんき':   'B↑S↓', 'わんぱく': 'B↑C↓', 'のうてんき': 'B↑D↓',
+  'おくびょう': 'S↑A↓', 'せっかち': 'S↑B↓', 'ようき':   'S↑C↓', 'むじゃき': 'S↑D↓',
+  'ひかえめ':   'C↑A↓', 'おっとり': 'C↑B↓', 'うっかりや':'C↑D↓', 'れいせい': 'C↑S↓',
+  'おだやか':   'D↑A↓', 'おとなしい':'D↑B↓', 'なまいき': 'D↑S↓', 'しんちょう':'D↑C↓',
+};
+
+function natureLabel(name) {
+  const label = NATURE_LABELS[name];
+  return label ? `${name}（${label}）` : name;
+}
+
+function pokeImgSrc(name) {
+  // スペースあり括弧 → スペースなし括弧に正規化してルックアップ
+  const normalized = name.replace(/ \(/g, '(');
+  const id = POKEMON_ID[normalized] || POKEMON_ID[name];
+  return id ? `/images/pokemon/pokemon-${id}.webp` : null;
+}
+
+// ── State ─────────────────────────────────────────────────────────
+let pokemonNames = [];
+let battleData = null;
+let currentTurn = 0;
+let autoTimer = null;
+let slotCounters = { my: 0, opp: 0 };
+let activeDetailSlots = { my: null, opp: null };
+
+// ── Init ──────────────────────────────────────────────────────────
+async function init() {
+  pokemonNames = await fetch('/api/pokemon').then(r => r.json());
+  const dl = document.getElementById('pokemon-list');
+  pokemonNames.forEach(n => {
+    const opt = document.createElement('option'); opt.value = n; dl.appendChild(opt);
+  });
+
+  ['my-template-select', 'opp-template-select'].forEach(selId => {
+    const sel = document.getElementById(selId);
+    if (!sel) return;
+    PARTY_TEMPLATES.forEach(t => {
+      const o = document.createElement('option');
+      o.value = t.id; o.textContent = `${t.name}【${t.tag}】`;
+      sel.appendChild(o);
+    });
+  });
+
+  applyTemplate('my', "m1-2-攻め意識");
+  document.getElementById('my-template-select').value = "m1-2-攻め意識";
+  applyTemplate('opp', "m1-5-らいざ");
+  document.getElementById('opp-template-select').value = "m1-5-らいざ";
+  switchMode('battle');
+}
+
+// ── テンプレート適用 ──────────────────────────────────────────────
+function applyTemplate(side, templateId) {
+  if (!templateId) return;
+  const tmpl = PARTY_TEMPLATES.find(t => t.id === templateId);
+  if (!tmpl) return;
+
+  if (activeDetailSlots[side]) {
+    const detailAreaId = side === 'my' ? 'active-slot-detail' : 'opp-slot-detail';
+    const detailArea = document.getElementById(detailAreaId);
+    if (detailArea) { detailArea.innerHTML = ''; detailArea.classList.add('hidden'); }
+    activeDetailSlots[side] = null;
+  }
+
+  const container = document.getElementById(`${side}-slots`);
+  Array.from(container.querySelectorAll('[data-slot-id]')).forEach(c => c.remove());
+  slotCounters[side] = 0;
+  const addBtn = document.getElementById(`${side}-add-btn`);
+  if (addBtn) addBtn.classList.remove('hidden');
+  tmpl.party.forEach(() => addSlot(side, ''));
+  const cards = container.querySelectorAll('[data-slot-id]');
+  tmpl.party.forEach((spec, i) => { if (cards[i]) _applySpecToCard(cards[i], spec); });
+}
+
+function _applySpecToCard(card, spec) {
+  let s = spec;
+  let item = '', nature = '', moves = [], evStr = '', ability = '';
+  if (s.includes('@')) {
+    const [pre, post] = s.split('@');
+    s = pre;
+    const rest = post.split(':');
+    item = rest[0];
+    if (rest.length > 1) s += ':' + rest.slice(1).join(':');
+  }
+  const parts = s.split(':');
+  const name = parts[0];
+  if (parts[1]) nature = parts[1];
+  if (parts[2]) moves = parts[2].split('|').filter(Boolean);
+  if (parts[3]) evStr = parts[3];
+  if (parts[4]) ability = parts[4];
+
+  card.querySelector('.name-input').value = name;
+  card._pendingSpec = { item, nature, moves, evStr, ability };
+
+  const applyPending = () => {
+    const p = card._pendingSpec;
+    if (!p) return;
+    const forceSelect = (sel, val, label = null) => {
+      if (!sel || !val) return;
+      if (![...sel.options].some(o => o.value === val)) {
+        const o = document.createElement('option');
+        o.value = val; o.textContent = label ?? val; sel.appendChild(o);
+      }
+      sel.value = val;
+    };
+    const root = _detailRoot(card);
+    forceSelect(root.querySelector('.item-select'),    p.item,    p.item    ? `${p.item}  (圏外)` : null);
+    forceSelect(root.querySelector('.nature-select'),  p.nature);
+    forceSelect(root.querySelector('.ability-select'), p.ability, p.ability ? `${p.ability}  (圏外)` : null);
+    if (p.evStr) setEvStats(card, p.evStr);
+    p.moves.forEach((mv, idx) => {
+      const sel = root.querySelector(`.move-select[data-move-idx="${idx}"]`);
+      forceSelect(sel, mv, `${mv}  (圏外)`);
+    });
+    delete card._pendingSpec;
+    refreshPokeIcon(card);
+    updateSummary(card);
+  };
+  card._applyPending = applyPending;
+  const normalizedName = name.replace(/ \(/g, '(');
+  const detailsName = pokemonNames.includes(name) ? name
+    : pokemonNames.includes(normalizedName) ? normalizedName
+    : pokemonNames.includes(name.replace('(永遠)', ':永遠')) ? name.replace('(永遠)', ':永遠')
+    : null;
+  if (detailsName) {
+    loadPokemonDetails(card, detailsName).then(() => applyPending());
+  } else {
+    applyPending();
+  }
+}
+
+function getOppSpecs() {
+  return Array.from(document.querySelectorAll('#opp-slots [data-slot-id]'))
+    .map(buildSpec).filter(Boolean);
+}
+
+// ── アイコン更新 ──────────────────────────────────────────────────
+function refreshPokeIcon(card) {
+  const name = card.querySelector('.name-input').value.trim();
+  const img  = card.querySelector('.poke-icon');
+  if (!img) return;
+  const src = pokeImgSrc(name);
+  if (src) { img.src = src; img.classList.remove('hidden'); }
+  else      { img.src = ''; img.classList.add('hidden'); }
+}
+
+// ── スロット生成 ──────────────────────────────────────────────────
+function addSlot(side, defaultName = '') {
+  const container = document.getElementById(`${side}-slots`);
+  const addBtn = document.getElementById(`${side}-add-btn`);
+  if (container.querySelectorAll('[data-slot-id]').length >= 6) return;
+  const idx = slotCounters[side]++;
+
+  const card = document.createElement('div');
+  card.className = 'slot-card rounded-xl border border-gray-200 shadow-sm overflow-hidden';
+  card.dataset.slotId = `${side}-${idx}`;
+  card.onclick = () => toggleDetail(card);
+
+  card.innerHTML = `
+    <div class="slot-header flex items-center gap-1 px-2 py-2">
+      <img class="poke-icon w-8 h-8 object-contain hidden flex-shrink-0" alt="">
+      <input type="text" list="pokemon-list" placeholder="ポケモン名" autocomplete="off"
+        value="${defaultName}"
+        class="flex-1 bg-transparent border-0 outline-none text-xs font-medium placeholder-gray-300 name-input min-w-0 text-gray-800">
+      <button class="text-gray-300 hover:text-red-400 text-base leading-none px-0.5 shrink-0 transition-colors" onclick="event.stopPropagation();removeSlot(this)">×</button>
+    </div>
+    <div class="px-2 pb-1.5">
+      <span class="slot-summary text-xs text-gray-400 truncate block leading-tight"></span>
+    </div>
+    <div class="detail-body hidden space-y-2.5">
+      <div class="grid grid-cols-2 gap-2">
+        <div>
+          <div class="text-xs text-gray-500 mb-1 font-medium">持ち物</div>
+          <select class="item-select w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-300"></select>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500 mb-1 font-medium">性格</div>
+          <select class="nature-select w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-300"></select>
+        </div>
+        <div class="col-span-2">
+          <div class="text-xs text-gray-500 mb-1 font-medium">特性</div>
+          <select class="ability-select w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-blue-300"></select>
+        </div>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1 font-medium">技</div>
+        <div class="grid grid-cols-2 gap-1">
+          <select class="move-select w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none" data-move-idx="0"></select>
+          <select class="move-select w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none" data-move-idx="1"></select>
+          <select class="move-select w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none" data-move-idx="2"></select>
+          <select class="move-select w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none" data-move-idx="3"></select>
+        </div>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1 font-medium">EV振り</div>
+        <select class="ev-preset w-full border border-gray-200 rounded-lg px-2 py-1.5 text-xs focus:outline-none mb-2"></select>
+        <div class="grid grid-cols-6 gap-1 text-center">
+          <div><div class="text-xs text-gray-400 font-bold mb-0.5">H</div><select class="ev-stat ev-h w-full border border-gray-200 rounded px-0.5 py-1 text-xs text-center focus:outline-none"></select></div>
+          <div><div class="text-xs text-gray-400 font-bold mb-0.5">A</div><select class="ev-stat ev-a w-full border border-gray-200 rounded px-0.5 py-1 text-xs text-center focus:outline-none"></select></div>
+          <div><div class="text-xs text-gray-400 font-bold mb-0.5">B</div><select class="ev-stat ev-b w-full border border-gray-200 rounded px-0.5 py-1 text-xs text-center focus:outline-none"></select></div>
+          <div><div class="text-xs text-gray-400 font-bold mb-0.5">C</div><select class="ev-stat ev-c w-full border border-gray-200 rounded px-0.5 py-1 text-xs text-center focus:outline-none"></select></div>
+          <div><div class="text-xs text-gray-400 font-bold mb-0.5">D</div><select class="ev-stat ev-d w-full border border-gray-200 rounded px-0.5 py-1 text-xs text-center focus:outline-none"></select></div>
+          <div><div class="text-xs text-gray-400 font-bold mb-0.5">S</div><select class="ev-stat ev-s w-full border border-gray-200 rounded px-0.5 py-1 text-xs text-center focus:outline-none"></select></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  card.querySelectorAll('.ev-stat').forEach(sel => {
+    for (let v = 0; v <= 32; v++) {
+      const o = document.createElement('option'); o.value = v; o.textContent = v; sel.appendChild(o);
+    }
+  });
+
+  card.querySelector('.ev-preset').addEventListener('change', e => {
+    if (e.target.value) setEvStats(card, e.target.value);
+    updateSummary(card);
+  });
+
+  if (addBtn) container.insertBefore(card, addBtn);
+  else container.appendChild(card);
+  if (addBtn && container.querySelectorAll('[data-slot-id]').length >= 6) {
+    addBtn.classList.add('hidden');
+  }
+
+  const nameInput = card.querySelector('.name-input');
+  nameInput.addEventListener('change', () => onNameChange(card));
+  nameInput.addEventListener('input', () => {
+    if (pokemonNames.includes(nameInput.value.trim())) onNameChange(card);
+  });
+  card.querySelectorAll('select:not(.ev-preset)').forEach(s => s.addEventListener('change', () => updateSummary(card)));
+
+  if (defaultName && pokemonNames.includes(defaultName)) {
+    loadPokemonDetails(card, defaultName);
+  }
+}
+
+function removeSlot(btn) {
+  const card = btn.closest('[data-slot-id]');
+  const side = card.dataset.slotId.startsWith('opp') ? 'opp' : 'my';
+  const detailAreaId = side === 'my' ? 'active-slot-detail' : 'opp-slot-detail';
+  if (activeDetailSlots[side] === card) {
+    const detailArea = document.getElementById(detailAreaId);
+    if (detailArea) { detailArea.innerHTML = ''; detailArea.classList.add('hidden'); }
+    activeDetailSlots[side] = null;
+  }
+  card.remove();
+  const addBtn = document.getElementById(`${side}-add-btn`);
+  if (addBtn) addBtn.classList.remove('hidden');
+}
+
+function toggleDetail(target) {
+  const card = target.closest ? target.closest('[data-slot-id]') : target;
+  if (!card) return;
+  const side = card.dataset.slotId.startsWith('opp') ? 'opp' : 'my';
+  const activeClass = side === 'my' ? 'active-my' : 'active-opp';
+  const detailAreaId = side === 'my' ? 'active-slot-detail' : 'opp-slot-detail';
+  const detailArea = document.getElementById(detailAreaId);
+
+  if (activeDetailSlots[side] === card) {
+    const detailBody = detailArea.querySelector('.detail-body');
+    if (detailBody) { detailBody.classList.add('hidden'); card.appendChild(detailBody); }
+    detailArea.classList.add('hidden');
+    card.classList.remove(activeClass);
+    activeDetailSlots[side] = null;
+    return;
+  }
+
+  if (activeDetailSlots[side]) {
+    const prevBody = detailArea.querySelector('.detail-body');
+    if (prevBody) { prevBody.classList.add('hidden'); activeDetailSlots[side].appendChild(prevBody); }
+    activeDetailSlots[side].classList.remove(activeClass);
+  }
+
+  const newBody = card.querySelector('.detail-body');
+  if (newBody) { newBody.classList.remove('hidden'); detailArea.appendChild(newBody); }
+  detailArea.classList.remove('hidden');
+  card.classList.add(activeClass);
+  activeDetailSlots[side] = card;
+}
+
+// ── 詳細データのロード ────────────────────────────────────────────
+async function onNameChange(card) {
+  const name = card.querySelector('.name-input').value.trim();
+  if (!name || !pokemonNames.includes(name)) return;
+  await loadPokemonDetails(card, name);
+  refreshPokeIcon(card);
+}
+
+async function loadPokemonDetails(card, name) {
+  let data;
+  try {
+    data = await fetch(`/api/pokemon/${encodeURIComponent(name)}/details`).then(r => r.json());
+  } catch (e) { return; }
+
+  const root = _detailRoot(card);
+
+  fillSelect(root.querySelector('.item-select'),
+    [...data.items, {item: '', usage_rate: null}],
+    d => d.item,
+    d => d.item ? `${d.item}  (${d.usage_rate}%)` : '--- なし ---');
+  fillSelect(root.querySelector('.nature-select'),
+    data.natures, d => d.nature, d => `${natureLabel(d.nature)}  (${d.usage_rate}%)`);
+  fillSelect(root.querySelector('.ability-select'),
+    data.abilities || [], d => d.ability,
+    d => d.usage_rate != null ? `${d.ability}  (${d.usage_rate}%)` : d.ability);
+
+  const rankedMoves = data.moves.filter(m => m.usage_rate != null && m.usage_rate > 0);
+  const unrankedMoves = data.moves.filter(m => m.usage_rate == null);
+  root.querySelectorAll('.move-select').forEach((sel, i) => {
+    const saved = sel.value;
+    sel.innerHTML = '';
+    rankedMoves.forEach(m => {
+      const o = document.createElement('option');
+      o.value = m.move; o.textContent = `${m.move}  (${m.usage_rate}%)`; sel.appendChild(o);
+    });
+    if (unrankedMoves.length > 0) {
+      const sep = document.createElement('option');
+      sep.disabled = true; sep.textContent = '── その他の技 ──'; sel.appendChild(sep);
+      unrankedMoves.forEach(m => {
+        const o = document.createElement('option');
+        o.value = m.move; o.textContent = m.move; sel.appendChild(o);
+      });
+    }
+    if (saved && [...sel.options].some(o => o.value === saved)) {
+      sel.value = saved;
+    } else {
+      sel.selectedIndex = Math.min(i, rankedMoves.length - 1);
+    }
+  });
+
+  const evPreset = root.querySelector('.ev-preset');
+  const prevEvStr = getEvStrFromCard(card);
+  fillSelect(evPreset, data.evs,
+    d => `${d.ev_h}/${d.ev_a}/${d.ev_b}/${d.ev_c}/${d.ev_d}/${d.ev_s}`,
+    d => `${d.ev_spread}  H${d.ev_h} A${d.ev_a} B${d.ev_b} C${d.ev_c} D${d.ev_d} S${d.ev_s}  (${d.usage_rate}%)`);
+  if (prevEvStr !== '0/0/0/0/0/0') setEvStats(card, prevEvStr);
+  else if (evPreset?.value) setEvStats(card, evPreset.value);
+
+  updateSummary(card);
+}
+
+function fillSelect(sel, items, valFn, textFn) {
+  const saved = sel.value;
+  sel.innerHTML = '';
+  items.forEach(d => {
+    const o = document.createElement('option');
+    o.value = valFn(d); o.textContent = textFn(d); sel.appendChild(o);
+  });
+  if (saved && [...sel.options].some(o => o.value === saved)) {
+    sel.value = saved;
+  }
+}
+
+// ── EV個別セレクト操作 ───────────────────────────────────────────
+function getEvStrFromCard(card) {
+  const root = _detailRoot(card);
+  return ['ev-h','ev-a','ev-b','ev-c','ev-d','ev-s']
+    .map(cls => parseInt(root.querySelector('.' + cls)?.value) || 0).join('/');
+}
+
+function setEvStats(card, evStr) {
+  const root = _detailRoot(card);
+  const parts = evStr.split('/').map(Number);
+  ['ev-h','ev-a','ev-b','ev-c','ev-d','ev-s'].forEach((cls, i) => {
+    const sel = root.querySelector('.' + cls);
+    if (sel) sel.value = parts[i] ?? 0;
+  });
+}
+
+function updateSummary(card) {
+  const root = _detailRoot(card);
+  const item = root.querySelector('.item-select')?.value || '';
+  card.querySelector('.slot-summary').textContent = item;
+}
+
+// ── スペック文字列生成 ────────────────────────────────────────────
+function _detailRoot(card) {
+  const side = card.dataset.slotId?.startsWith('opp') ? 'opp' : 'my';
+  if (activeDetailSlots[side] === card) {
+    const id = side === 'my' ? 'active-slot-detail' : 'opp-slot-detail';
+    return document.getElementById(id) || card;
+  }
+  return card;
+}
+
+function buildSpec(card) {
+  const name    = card.querySelector('.name-input').value.trim();
+  if (!name) return null;
+  const root    = _detailRoot(card);
+  const item    = root.querySelector('.item-select')?.value ?? '';
+  const nature  = root.querySelector('.nature-select')?.value ?? '';
+  const ability = root.querySelector('.ability-select')?.value ?? '';
+  const moves   = Array.from(root.querySelectorAll('.move-select')).map(s => s.value);
+  const evStr   = getEvStrFromCard(card);
+  const allMoves = moves.every(m => m);
+  const hasEv = evStr !== '0/0/0/0/0/0', hasAbility = !!ability;
+  let spec = name;
+  if (item) spec += '@' + item;
+  else spec += '@なし';
+  if (nature || allMoves || hasEv || hasAbility) spec += ':' + (nature || '');
+  if (allMoves || hasEv || hasAbility)            spec += ':' + (allMoves ? moves.join('|') : '');
+  if (hasEv || hasAbility)                        spec += ':' + (hasEv ? evStr : '');
+  if (hasAbility)                                 spec += ':' + ability;
+  return spec;
+}
+
+function getSpecs(side) {
+  return Array.from(document.querySelectorAll(`#${side}-slots [data-slot-id]`))
+    .map(buildSpec).filter(Boolean);
+}
+
+// ── バトル実行 ────────────────────────────────────────────────────
+async function startBattle() {
+  const p1 = getSpecs('my'), p2 = getOppSpecs();
+  if (!p1.length || !p2.length) { alert('パーティを入力してください'); return; }
+  stopAutoPlay();
+  setStatus('バトル実行中…', 'text-yellow-500');
+  document.getElementById('battle-view').classList.add('hidden');
+  document.getElementById('sim-result').classList.add('hidden');
+  document.getElementById('btn-battle').disabled = true;
+  try {
+    const res = await fetch('/api/battle/stream', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p1, p2, season: 'M-2' }),
+    });
+    const events = (await res.text()).split('\n\n')
+      .filter(s => s.startsWith('data:'))
+      .map(s => JSON.parse(s.slice(5).trim()));
+    battleData = { turns: [], result: 0, winner: '' };
+    for (const ev of events) {
+      if (ev.type === 'init')  battleData.turns.push(ev.turn);
+      if (ev.type === 'turn')  battleData.turns.push(ev.turn);
+      if (ev.type === 'end') { battleData.result = ev.result; battleData.winner = ev.winner; }
+      if (ev.type === 'error') { alert('エラー: ' + ev.message); return; }
+    }
+    document.getElementById('turn-total').textContent = ` / ${battleData.turns.length - 1}`;
+    document.getElementById('battle-view').classList.remove('hidden');
+    currentTurn = 0; renderTurn(0);
+    setStatus(`完了 (${battleData.turns.length - 1}ターン)`, 'text-green-600');
+  } catch (e) {
+    setStatus('エラー: ' + e.message, 'text-red-500');
+  } finally {
+    document.getElementById('btn-battle').disabled = false;
+  }
+}
+
+// ── シミュレーション ──────────────────────────────────────────────
+async function startSim() {
+  const p1 = getSpecs('my'), p2 = getOppSpecs();
+  const trials = parseInt(document.getElementById('trials-input').value) || 500;
+  if (!p1.length || !p2.length) { alert('パーティを入力してください'); return; }
+  setStatus('シミュレーション中…', 'text-yellow-500');
+  document.getElementById('btn-sim').disabled = true;
+  document.getElementById('sim-result').classList.add('hidden');
+  try {
+    const res = await fetch('/api/simulate', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p1, p2, trials, season: 'M-2' }),
+    });
+    const d = await res.json();
+    if (!res.ok) { alert(d.detail || 'エラー'); return; }
+    document.getElementById('sr-p1').textContent    = (d.win_rate1 * 100).toFixed(1) + '%';
+    document.getElementById('sr-p2').textContent    = (d.win_rate2 * 100).toFixed(1) + '%';
+    document.getElementById('sr-draw').textContent  = ((d.draws / d.trials) * 100).toFixed(1) + '%';
+    document.getElementById('sr-p1-wins').textContent = `${d.wins1}勝 / ${d.trials}試行`;
+    document.getElementById('sr-p2-wins').textContent = `${d.wins2}勝 / ${d.trials}試行`;
+    document.getElementById('sr-bar1').style.width  = (d.win_rate1 * 100) + '%';
+    document.getElementById('sr-bar2').style.width  = (d.win_rate2 * 100) + '%';
+    document.getElementById('sim-result').classList.remove('hidden');
+    setStatus(`完了 (${d.trials}試行)`, 'text-green-600');
+  } catch (e) {
+    setStatus('エラー: ' + e.message, 'text-red-500');
+  } finally {
+    document.getElementById('btn-sim').disabled = false;
+  }
+}
+
+// ── 全ランカー分析 ────────────────────────────────────────────────
+async function startFullAnalysis() {
+  const mySpecs = getSpecs('my');
+  if (!mySpecs.length) { alert('自分のパーティを入力してください'); return; }
+  window._myAnalysisSpecs = mySpecs;
+
+  const trials = parseInt(document.getElementById('analysis-trials-input').value) || 30;
+  const total  = PARTY_TEMPLATES.length;
+
+  document.getElementById('btn-analysis').disabled = true;
+  document.getElementById('analysis-result').classList.remove('hidden');
+  ['analysis-strong','analysis-even','analysis-weak'].forEach(id => {
+    document.getElementById(id).innerHTML = '<div class="text-xs text-gray-400 text-center py-3">…</div>';
+  });
+  document.getElementById('analysis-poke-stats').classList.add('hidden');
+  document.getElementById('analysis-meta').textContent = '';
+
+  const progressEl  = document.getElementById('analysis-progress');
+  const progressBar = document.getElementById('analysis-progress-bar');
+  const progressText  = document.getElementById('analysis-progress-text');
+  const progressLabel = document.getElementById('analysis-progress-label');
+  progressEl.classList.remove('hidden');
+  progressBar.style.width = '0%';
+
+  const results = [];
+  const allPokeWins = {};
+  const allPokeLosses = {};
+  setStatus('全ランカー分析中…', 'text-purple-600');
+
+  for (let i = 0; i < PARTY_TEMPLATES.length; i++) {
+    const tmpl = PARTY_TEMPLATES[i];
+    progressLabel.textContent = `分析中: ${tmpl.name}`;
+    progressText.textContent  = `${i + 1} / ${total}`;
+    progressBar.style.width   = `${Math.round((i + 1) / total * 100)}%`;
+
+    try {
+      const res = await fetch('/api/simulate', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p1: mySpecs, p2: tmpl.party, trials, season: 'M-2' }),
+      });
+      if (!res.ok) throw new Error('API error');
+      const d = await res.json();
+      results.push({ template: tmpl, winRate: d.win_rate1, wins: d.wins1, losses: d.wins2, draws: d.draws });
+      Object.entries(d.p2_poke_wins || {}).forEach(([name, cnt]) => {
+        allPokeWins[name] = (allPokeWins[name] || 0) + cnt;
+      });
+      Object.entries(d.p2_poke_losses || {}).forEach(([name, cnt]) => {
+        allPokeLosses[name] = (allPokeLosses[name] || 0) + cnt;
+      });
+    } catch (e) {
+      results.push({ template: tmpl, winRate: null, error: true });
+    }
+  }
+
+  progressEl.classList.add('hidden');
+
+  const sorted = results.filter(r => r.winRate !== null).sort((a, b) => b.winRate - a.winRate);
+  const strong = sorted.filter(r => r.winRate >= 0.55);
+  const even   = sorted.filter(r => r.winRate >= 0.45 && r.winRate < 0.55);
+  const weak   = sorted.filter(r => r.winRate <  0.45);
+
+  renderAnalysisGroup('analysis-strong', strong, 'green');
+  renderAnalysisGroup('analysis-even',   even,   'yellow');
+  renderAnalysisGroup('analysis-weak',   weak,   'red');
+
+  console.log('[Analysis] allPokeWins:', allPokeWins, 'allPokeLosses:', allPokeLosses);
+  renderPokeWinRates(allPokeWins, allPokeLosses);
+  document.getElementById('analysis-poke-stats').classList.remove('hidden');
+
+  const pokeWinCount = Object.values(allPokeWins).reduce((a,b)=>a+b,0);
+  const pokeLossCount = Object.values(allPokeLosses).reduce((a,b)=>a+b,0);
+  document.getElementById('analysis-meta').textContent =
+    `${total}パーティ × ${trials}試行 ｜ 得意 ${strong.length}  五分 ${even.length}  苦手 ${weak.length}` +
+    (pokeWinCount + pokeLossCount > 0 ? `` : `  ⚠ ポケモン別統計なし`);
+
+  setStatus('分析完了', 'text-green-600');
+  document.getElementById('btn-analysis').disabled = false;
+}
+
+function renderAnalysisGroup(containerId, results, color) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  if (!results.length) {
+    container.innerHTML = '<div class="text-xs text-gray-400 text-center py-3">なし</div>';
+    return;
+  }
+  const barColor  = { green: 'bg-green-500', yellow: 'bg-yellow-400', red: 'bg-red-400' }[color];
+  const textColor = { green: 'text-green-600', yellow: 'text-amber-600', red: 'text-red-600' }[color];
+  results.forEach(r => {
+    const pct = (r.winRate * 100).toFixed(1);
+    const div = document.createElement('div');
+    div.className = 'rounded-lg p-2 bg-white border border-gray-100 hover:border-gray-300 cursor-pointer transition-colors group';
+    div.innerHTML = `
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs font-bold text-gray-700 truncate group-hover:text-blue-600 transition-colors">${r.template.name}</span>
+        <span class="text-xs font-bold ${textColor} ml-2 shrink-0">${pct}%</span>
+      </div>
+      <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden mb-1">
+        <div class="h-full ${barColor} rounded-full" style="width:${pct}%"></div>
+      </div>
+      <div class="text-xs text-gray-400">${r.wins}勝 ${r.draws}分 ${r.losses}負</div>
+    `;
+    div.onclick = () => {
+      document.getElementById('opp-template-select').value = r.template.id;
+      showMatchupExplain(window._myAnalysisSpecs, r.template, r.winRate);
+    };
+    container.appendChild(div);
+  });
+}
+
+// ── 苦手理由の構造解説（6×6マッチアップ） ──────────────────────────
+async function showMatchupExplain(mySpecs, template, winRate) {
+  if (!mySpecs || !mySpecs.length) return;
+  const ov = document.getElementById('matchup-explain');
+  const body = document.getElementById('me-body');
+  document.getElementById('me-title').textContent =
+    `${template.name} 戦の構造分析（勝率 ${winRate != null ? (winRate*100).toFixed(1)+'%' : '-'}）`;
+  body.innerHTML = '<div class="text-sm text-gray-400 py-6 text-center">計算中…</div>';
+  ov.classList.remove('hidden');
+  try {
+    const d = await fetch('/api/matchup_explain', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p1: mySpecs, p2: template.party, season: 'M-2' }),
+    }).then(r => r.json());
+    const vColor = v => v === 'A' ? 'bg-green-100 text-green-700' : v === 'B' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-500';
+    let html = `<div class="mb-3 p-3 rounded-lg bg-amber-50 border border-amber-200 text-sm text-gray-800">${d.summary}</div>`;
+    html += `<div class="text-xs text-gray-500 mb-2">1v1集計: <b class="text-green-600">自分有利 ${d.a_win}</b> / <b class="text-red-600">相手有利 ${d.b_win}</b>（セル=与ダメ/被ダメ HP%・色=どちらが勝つ1v1か）</div>`;
+    html += '<div class="overflow-x-auto"><table class="text-xs border-collapse"><tr><th class="p-1 text-gray-400">自↓ / 相手→</th>';
+    d.namesB.forEach(n => { html += `<th class="p-1 font-bold text-gray-600 whitespace-nowrap">${n}</th>`; });
+    html += '</tr>';
+    d.cells.forEach((row, i) => {
+      html += `<tr><td class="p-1 font-bold text-gray-600 whitespace-nowrap">${d.namesA[i]}</td>`;
+      row.forEach(c => {
+        html += `<td class="p-1 text-center ${vColor(c.v)} rounded" style="min-width:52px"><div class="font-bold">${c.dealt}/${c.taken}</div></td>`;
+      });
+      html += '</tr>';
+    });
+    html += '</table></div>';
+    if (d.liabilities.length) html += `<div class="mt-3 text-xs"><b class="text-red-600">穴</b>（多くに1v1負け）: ${d.liabilities.slice(0,4).map(x=>`${x.name}(${x.loses}/${d.namesB.length})`).join('、')}</div>`;
+    if (d.threats.length) html += `<div class="mt-1 text-xs"><b class="text-red-600">相手の脅威</b>（多くに1v1勝ち）: ${d.threats.slice(0,4).map(x=>`${x.name}${x.setup?'(積み有)':''}(${x.wins})`).join('、')}</div>`;
+    html += '<div class="mt-4 pt-3 border-t border-gray-200"><div class="text-xs font-bold text-gray-700 mb-1">実戦の敗因（30戦シミュ）</div><div id="me-battle" class="text-sm text-gray-400">計算中…</div></div>';
+    body.innerHTML = html;
+    // 第2層: 実戦の敗因（非同期）
+    try {
+      const b = await fetch('/api/matchup_battle', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p1: mySpecs, p2: template.party, season: 'M-2' }),
+      }).then(r => r.json());
+      let bh = `<div class="p-3 rounded-lg bg-rose-50 border border-rose-200 text-gray-800">${b.summary}</div>`;
+      bh += `<div class="text-xs text-gray-500 mt-2">勝率 ${(b.win_rate*100).toFixed(0)}%（${b.wins}勝${b.losses}負${b.draws}分）`;
+      if (b.setup_loss_rate >= 0.2) bh += ` ｜ <b class="text-red-600">積み全抜き負け ${(b.setup_loss_rate*100).toFixed(0)}%</b>`;
+      bh += '</div>';
+      if (b.opp_survive_on_loss.length) bh += `<div class="text-xs mt-1"><b class="text-red-600">倒せない核</b>（敗北時に生存）: ${b.opp_survive_on_loss.slice(0,4).map(x=>`${x.name}(${(x.rate*100).toFixed(0)}%)`).join('、')}</div>`;
+      if (b.your_dead_on_loss.length) bh += `<div class="text-xs mt-1"><b class="text-gray-600">落ちやすい自個体</b>: ${b.your_dead_on_loss.slice(0,4).map(x=>`${x.name}(${(x.rate*100).toFixed(0)}%)`).join('、')}</div>`;
+      document.getElementById('me-battle').innerHTML = bh;
+    } catch (e) {
+      const el = document.getElementById('me-battle'); if (el) el.innerHTML = '<span class="text-red-400">実戦解析に失敗</span>';
+    }
+  } catch (e) {
+    body.innerHTML = '<div class="text-sm text-red-500 py-6 text-center">解析に失敗しました</div>';
+  }
+}
+
+// 相手ポケモン別「対面勝率」でランキング（採用率の高さに引きずられないよう、選出数を分母に）
+function renderPokeWinRates(wins, losses) {
+  const names = new Set([...Object.keys(wins), ...Object.keys(losses)]);
+  const stats = [];
+  let totalSel = 0;
+  names.forEach(n => {
+    const w = wins[n] || 0, l = losses[n] || 0, tot = w + l;
+    totalSel += tot;
+    if (tot > 0) stats.push({ name: n, w, l, tot, rate: w / tot });
+  });
+  if (!stats.length) {
+    _renderRateList('analysis-poke-strong', [], 'green');
+    _renderRateList('analysis-poke-weak',   [], 'red');
+    return;
+  }
+  // 最低サンプル閾値でノイズ除去（平均選出数の3割 or 10、ただし対象が6未満なら閾値撤廃）
+  const minN = Math.max(10, Math.round(totalSel / names.size * 0.3));
+  let pool = stats.filter(s => s.tot >= minN);
+  if (pool.length < 6) pool = stats;
+  const strong = [...pool].sort((a, b) => b.rate - a.rate || b.tot - a.tot).slice(0, 10);
+  const weak   = [...pool].sort((a, b) => a.rate - b.rate || b.tot - a.tot).slice(0, 10);
+  _renderRateList('analysis-poke-strong', strong, 'green');
+  _renderRateList('analysis-poke-weak',   weak,   'red');
+}
+
+function _renderRateList(containerId, rows, color) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+  if (!rows.length) {
+    container.innerHTML = '<div class="text-xs text-gray-400 text-center py-2">データなし</div>';
+    return;
+  }
+  const barColor  = color === 'green' ? 'bg-green-400' : 'bg-red-400';
+  const textColor = color === 'green' ? 'text-green-700' : 'text-red-700';
+  const lossBar   = color === 'red';   // 苦手は「負け率」をバーにして悪いほど長く見せる
+  rows.forEach(s => {
+    const imgSrc = pokeImgSrc(s.name);
+    const pct = Math.round(s.rate * 100);
+    const barW = lossBar ? (100 - pct) : pct;
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-2';
+    div.innerHTML = `
+      ${imgSrc ? `<img src="${imgSrc}" width="28" height="28" style="object-fit:contain;image-rendering:pixelated;flex-shrink:0" alt="${s.name}">` : `<div style="width:28px;height:28px;flex-shrink:0"></div>`}
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between mb-0.5">
+          <span class="text-xs font-medium text-gray-700 truncate">${s.name}</span>
+          <span class="text-xs font-bold ${textColor} ml-1 shrink-0">勝率${pct}% <span class="text-gray-400 font-normal">(${s.w}/${s.tot})</span></span>
+        </div>
+        <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+          <div class="h-full ${barColor} rounded-full" style="width:${barW}%"></div>
+        </div>
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// ── ターン表示 ────────────────────────────────────────────────────
+function renderTurn(idx) {
+  if (!battleData || idx < 0 || idx >= battleData.turns.length) return;
+  currentTurn = idx;
+  const t = battleData.turns[idx];
+  document.getElementById('turn-display').textContent = t.turn;
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === battleData.turns.length - 1;
+  renderSide('p1-field', t.side1, 'p1');
+  renderSide('p2-field', t.side2, 'p2');
+  renderLog(t.logs || []);
+  renderWeather(t.weather);
+  renderTrickRoom(t.trick_room, t.trick_room_count);
+  const badge = document.getElementById('result-badge');
+  if (idx === battleData.turns.length - 1 && battleData.result !== 0) {
+    const isP1 = battleData.result === 1;
+    badge.classList.remove('hidden');
+    badge.textContent = (isP1 ? '🏆 自分' : '🏆 相手') + ' ' + battleData.winner;
+    badge.className = `px-3 py-1 rounded-full text-sm font-bold ${isP1 ? 'bg-blue-600 text-white' : 'bg-red-500 text-white'}`;
+  } else {
+    badge.classList.add('hidden');
+  }
+}
+
+const STATUS_BADGE = {
+  burn:      { text: '🔥やけど',   cls: 'bg-red-100 text-red-700 border-red-300' },
+  paralysis: { text: '⚡まひ',     cls: 'bg-yellow-100 text-yellow-700 border-yellow-400' },
+  sleep:     { text: '💤ねむり',   cls: 'bg-blue-100 text-blue-600 border-blue-300' },
+  freeze:    { text: '🧊こおり',   cls: 'bg-sky-100 text-sky-700 border-sky-300' },
+  poison:    { text: '☠どく',     cls: 'bg-purple-100 text-purple-700 border-purple-300' },
+  badpoison: { text: '☠どくどく', cls: 'bg-purple-200 text-purple-800 border-purple-400' },
+};
+const VOLATILE_BADGE = {
+  confused:       { text: '😵こんらん',      cls: 'bg-pink-100 text-pink-600 border-pink-300' },
+  seeded:         { text: '🌱やどりぎ',      cls: 'bg-green-100 text-green-700 border-green-300' },
+  taunt:          { text: '😈ちょうはつ',    cls: 'bg-gray-100 text-gray-600 border-gray-300' },
+  encore:         { text: '🔄アンコール',    cls: 'bg-orange-100 text-orange-600 border-orange-300' },
+  blade_forme:    { text: '⚔ブレードフォルム', cls: 'bg-red-100 text-red-700 border-red-300' },
+  shield_forme:   { text: '🛡シールドフォルム', cls: 'bg-indigo-100 text-indigo-700 border-indigo-300' },
+  disguise_broken:{ text: '💨ばけのかわ破れ', cls: 'bg-yellow-100 text-yellow-700 border-yellow-400' },
+  electro_charged:{ text: '⚡チャージ中',     cls: 'bg-yellow-100 text-yellow-600 border-yellow-400' },
+  substitute:     { cls: 'bg-gray-100 text-gray-600 border-gray-400 font-bold' },
+  salted:         { text: '🧂しおづけ',        cls: 'bg-orange-100 text-orange-600 border-orange-300' },
+  transformed:    { text: '🎭へんしん中',      cls: 'bg-purple-100 text-purple-700 border-purple-300' },
+  illusion:       { text: '👻イリュージョン',  cls: 'bg-indigo-100 text-indigo-700 border-indigo-300' },
+};
+
+function makeBadge(text, cls) {
+  const s = document.createElement('span');
+  s.className = `inline-block text-xs px-1 py-px rounded border font-bold leading-tight ${cls}`;
+  s.textContent = text;
+  return s;
+}
+
+function renderSide(containerId, sideData, side) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+
+  // フィールド効果バー
+  const effects = [];
+  if (sideData.stealth_rock) effects.push({ text: '◆ステロ', cls: 'bg-orange-100 text-orange-700 border-orange-300' });
+  if (sideData.spikes === 1)  effects.push({ text: '▲まきびし', cls: 'bg-yellow-100 text-yellow-700 border-yellow-400' });
+  if (sideData.spikes === 2)  effects.push({ text: '▲▲まきびし×2', cls: 'bg-yellow-100 text-yellow-700 border-yellow-400' });
+  if (sideData.spikes >= 3)   effects.push({ text: '▲▲▲まきびし×3', cls: 'bg-yellow-200 text-yellow-800 border-yellow-500' });
+  if (sideData.reflect)       effects.push({ text: `🛡リフレクター(${sideData.reflect_count})`, cls: 'bg-blue-100 text-blue-700 border-blue-300' });
+  if (sideData.light_screen)  effects.push({ text: `✨ひかりのかべ(${sideData.light_screen_count})`, cls: 'bg-yellow-50 text-yellow-800 border-yellow-400' });
+  if (sideData.aurora_veil)   effects.push({ text: `❄オーロラベール(${sideData.aurora_veil_count})`, cls: 'bg-sky-100 text-sky-700 border-sky-300' });
+
+  if (effects.length) {
+    const bar = document.createElement('div');
+    bar.className = 'flex flex-wrap gap-1 mb-2';
+    effects.forEach(e => bar.appendChild(makeBadge(e.text, e.cls)));
+    container.appendChild(bar);
+  }
+
+  // ポケモンカード
+  sideData.party.forEach((p, i) => {
+    if (p.unknown) {
+      const u = document.createElement('div');
+      u.className = 'poke-card rounded-xl p-2.5 flex items-center gap-2.5 opacity-60';
+      u.innerHTML = '<div style="width:52px;height:52px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#9ca3af;border:1px dashed #d1d5db;border-radius:0.5rem">？</div><div class="text-xs text-gray-400">未開示</div>';
+      container.appendChild(u);
+      return;
+    }
+    const isActive = i === sideData.active_idx;
+    const ratio = p.max_hp > 0 ? p.hp / p.max_hp : 0;
+    const barColor = ratio > 0.5 ? 'bg-green-400' : ratio > 0.25 ? 'bg-yellow-400' : 'bg-red-400';
+    const imgSrc = pokeImgSrc(p.name);
+    const div = document.createElement('div');
+    const activeClass = isActive ? (side==='p1' ? 'active-p1' : 'active-p2') : '';
+    const subClass = (p.substitute_hp > 0 && p.alive) ? 'substitute' : '';
+    div.className = `poke-card rounded-xl p-2.5 transition-all flex items-center gap-2.5 ${!p.alive ? 'fainted' : activeClass} ${subClass}`.trim();
+
+    const badgeRow = document.createElement('div');
+    badgeRow.className = 'flex flex-wrap gap-0.5 mt-0.5';
+    if (p.status && STATUS_BADGE[p.status]) {
+      const b = STATUS_BADGE[p.status];
+      badgeRow.appendChild(makeBadge(b.text, b.cls));
+    }
+    if (p.confused) badgeRow.appendChild(makeBadge(VOLATILE_BADGE.confused.text, VOLATILE_BADGE.confused.cls));
+    if (p.seeded)   badgeRow.appendChild(makeBadge(VOLATILE_BADGE.seeded.text,   VOLATILE_BADGE.seeded.cls));
+    if (p.taunt)    badgeRow.appendChild(makeBadge(VOLATILE_BADGE.taunt.text,     VOLATILE_BADGE.taunt.cls));
+    if (p.encore)   badgeRow.appendChild(makeBadge(VOLATILE_BADGE.encore.text,    VOLATILE_BADGE.encore.cls));
+    if (p.blade_forme)    badgeRow.appendChild(makeBadge(VOLATILE_BADGE.blade_forme.text,   VOLATILE_BADGE.blade_forme.cls));
+    else if (p.name && p.name.includes('ギルガルド') && p.alive) badgeRow.appendChild(makeBadge(VOLATILE_BADGE.shield_forme.text, VOLATILE_BADGE.shield_forme.cls));
+    if (p.disguise_broken) badgeRow.appendChild(makeBadge(VOLATILE_BADGE.disguise_broken.text, VOLATILE_BADGE.disguise_broken.cls));
+    if (p.electro_charged) badgeRow.appendChild(makeBadge(VOLATILE_BADGE.electro_charged.text, VOLATILE_BADGE.electro_charged.cls));
+    if (p.substitute_hp > 0) badgeRow.appendChild(makeBadge(`🪆みがわり(${p.substitute_hp})`, VOLATILE_BADGE.substitute.cls));
+    if (p.salted)       badgeRow.appendChild(makeBadge(VOLATILE_BADGE.salted.text,       VOLATILE_BADGE.salted.cls));
+    if (p.transformed)  badgeRow.appendChild(makeBadge(VOLATILE_BADGE.transformed.text,  VOLATILE_BADGE.transformed.cls));
+    if (p.illusion_name) badgeRow.appendChild(makeBadge(`${VOLATILE_BADGE.illusion.text}:${p.illusion_name}`, VOLATILE_BADGE.illusion.cls));
+
+    if (p.stages && p.alive) {
+      const stageLabels = {A:'攻',B:'防',C:'特攻',D:'特防',S:'速'};
+      Object.entries(p.stages).forEach(([key, val]) => {
+        if (val === 0) return;
+        const plus = val > 0;
+        const cls = plus
+          ? 'bg-blue-50 text-blue-700 border-blue-300'
+          : 'bg-red-50 text-red-700 border-red-300';
+        const arrow = plus ? '▲' : '▼';
+        badgeRow.appendChild(makeBadge(`${stageLabels[key]}${arrow}${Math.abs(val)}`, cls));
+      });
+    }
+
+    const typeImgHtml = (type) => {
+      if (!type) return '';
+      const TYPE_IMG = {
+        'ノーマル':'type-00-normal','かくとう':'type-01-fighting','ひこう':'type-02-flying',
+        'どく':'type-03-poison','じめん':'type-04-ground','いわ':'type-05-rock',
+        'むし':'type-06-bug','ゴースト':'type-07-ghost','はがね':'type-08-steel',
+        'ほのお':'type-09-fire','みず':'type-10-water','くさ':'type-11-grass',
+        'でんき':'type-12-electric','エスパー':'type-13-psychic','こおり':'type-14-ice',
+        'ドラゴン':'type-15-dragon','あく':'type-16-dark','フェアリー':'type-17-fairy',
+      };
+      const img = TYPE_IMG[type];
+      if (!img) return '';
+      return `<img src="images/types/${img}.png" alt="${type}" title="${type}" style="height:14px;width:auto;image-rendering:pixelated;">`;
+    };
+    div.innerHTML = `
+      ${imgSrc ? `<img src="${imgSrc}" width="44" height="44" style="object-fit:contain;image-rendering:pixelated;flex-shrink:0${!p.alive ? ';filter:grayscale(1)' : ''}" alt="${p.name}">` : `<div style="width:44px;height:44px;flex-shrink:0"></div>`}
+      <div class="flex-1 min-w-0">
+        <div class="flex items-center justify-between mb-1">
+          <span class="font-bold text-sm truncate ${!p.alive ? 'line-through text-gray-400' : 'text-gray-800'}">
+            ${isActive ? '<span class="text-blue-500 mr-0.5">▶</span>' : ''}${p.mega ? '★' : ''}${p.transformed ? `<span title="へんしん前: ${p.name}">${p.name}</span><span class="text-purple-500 text-xs ml-1 font-bold">🎭</span>` : p.illusion_name ? `<span title="正体: ${p.name}">${p.illusion_name}</span><span class="text-indigo-400 text-xs ml-1">?</span>` : p.name}${p.mega ? '<span class="text-pink-500 text-xs ml-1 font-bold">Mega</span>' : ''}${p.hero ? '<span class="text-cyan-600 text-xs ml-1 font-bold">Hero</span>' : (!p.hero && p.name === 'イルカマン' ? '<span class="text-gray-400 text-xs ml-1">Naive</span>' : '')}
+          </span>
+          <span class="text-xs tabular-nums ml-2 shrink-0 ${!p.alive ? 'text-gray-300' : 'text-gray-500'}">${p.alive ? `${p.hp}/${p.max_hp}` : '倒'}</span>
+        </div>
+        <div style="display:flex;gap:2px;margin-bottom:3px;">${typeImgHtml(p.type1)}${typeImgHtml(p.type2)}</div>
+        <div class="h-2 rounded-full bg-gray-100 overflow-hidden">
+          <div class="hp-bar-inner h-full ${barColor} rounded-full" style="width:${(ratio*100).toFixed(1)}%"></div>
+        </div>
+      </div>
+    `;
+    if (badgeRow.children.length) div.querySelector('.flex-1').appendChild(badgeRow);
+
+    // アクティブポケモンの技PP一覧（折りたたみ）
+    if (isActive && p.alive && p.moves && p.moves.length > 0) {
+      const ppList = document.createElement('div');
+      ppList.className = 'mt-1.5 grid grid-cols-2 gap-x-2 gap-y-0.5';
+      p.moves.forEach(mv => {
+        const ppRatio = mv.max_pp > 0 ? mv.pp / mv.max_pp : 0;
+        const ppColor = mv.pp === 0 ? '#f87171' : ppRatio <= 0.25 ? '#fbbf24' : '#6ee7b7';
+        const ppTextCls = mv.pp === 0 ? 'color:#f87171;font-weight:700'
+                        : ppRatio <= 0.25 ? 'color:#d97706;font-weight:600' : '';
+        const barW = Math.round(ppRatio * 100);
+        const row = document.createElement('div');
+        row.innerHTML = `
+          <div class="flex justify-between items-center text-xs leading-tight">
+            <span class="truncate text-gray-600" style="max-width:70%">${mv.name}</span>
+            <span style="font-size:10px;${ppTextCls}">${mv.pp}/${mv.max_pp}</span>
+          </div>
+          <div style="height:2px;background:rgba(0,0,0,0.07);border-radius:1px;">
+            <div style="height:100%;width:${barW}%;background:${ppColor};border-radius:1px;transition:width 0.3s"></div>
+          </div>`;
+        ppList.appendChild(row);
+      });
+      div.querySelector('.flex-1').appendChild(ppList);
+    }
+
+    container.appendChild(div);
+  });
+}
+
+const WEATHER_STYLE = {
+  sandstorm: { icon: '🌪', label: 'すなあらし', cls: 'bg-yellow-100 text-yellow-700 border border-yellow-300' },
+  rain:      { icon: '🌧', label: 'あめ',       cls: 'bg-blue-100 text-blue-700 border border-blue-300' },
+  sunny:     { icon: '☀', label: 'はれ',       cls: 'bg-orange-100 text-orange-700 border border-orange-300' },
+  hail:      { icon: '❄', label: 'あられ',     cls: 'bg-sky-100 text-sky-700 border border-sky-300' },
+};
+
+function renderWeather(weather) {
+  const badge = document.getElementById('weather-badge');
+  if (!weather) {
+    badge.classList.add('hidden');
+    return;
+  }
+  const w = WEATHER_STYLE[weather];
+  if (!w) { badge.classList.add('hidden'); return; }
+  badge.className = `px-2.5 py-1 rounded-full text-xs font-bold ${w.cls}`;
+  badge.textContent = `${w.icon} ${w.label}`;
+  badge.classList.remove('hidden');
+}
+
+function renderTrickRoom(active, count) {
+  const badge = document.getElementById('trick-room-badge');
+  if (!active) { badge.classList.add('hidden'); return; }
+  badge.textContent = `⏱ トリックルーム${count > 0 ? `(${count})` : ''}`;
+  badge.classList.remove('hidden');
+}
+
+function renderLog(logs) {
+  const container = document.getElementById('battle-log');
+  container.innerHTML = '';
+  logs.forEach(line => {
+    const div = document.createElement('div');
+    div.className = 'log-line ' + classifyLog(line);
+    div.textContent = line;
+    container.appendChild(div);
+  });
+  container.scrollTop = container.scrollHeight;
+}
+
+function classifyLog(line) {
+  if (line.startsWith('▷P1:'))                                       return 'reveal-p1';
+  if (line.startsWith('▷P2:'))                                       return 'reveal-p2';
+  if (line.startsWith('P1選出') || line.startsWith('P2選出'))        return 'party-header';
+  if (line.startsWith('  '))                                          return 'party-detail';
+  if (line.includes('ダメ') || line.includes('反動'))                return 'damage';
+  if (line.includes('こうかはばつぐん') || line.includes('急所'))     return 'supereffective';
+  if (line.includes('こうかはいまひとつ') || line.includes('こうかはない')) return 'noteffective';
+  if (line.includes('回復') || line.includes('タスキ') || line.includes('がんじょう') ||
+      line.includes('発動！'))                                         return 'heal';
+  if (line.includes('まひ') || line.includes('やけど') || line.includes('ねむり') ||
+      line.includes('こおり') || line.includes('どく'))              return 'status';
+  if (line.includes('ステルスロック') || line.includes('まき散らし') || line.includes('スパイク') ||
+      line.includes('リフレクター') || line.includes('ひかりのかべ') || line.includes('オーロラベール') ||
+      line.includes('トリックルーム'))                                return 'info';
+  if (line.includes('メガ進化'))                                     return 'mega';
+  if (line.includes('へんしん した') || line.includes('イリュージョンが解けた')) return 'transform';
+  if (line.includes('倒'))                                           return 'faint';
+  return 'info';
+}
+
+// ── ナビゲーション ────────────────────────────────────────────────
+function prevTurn() { renderTurn(currentTurn - 1); }
+function nextTurn() { renderTurn(currentTurn + 1); }
+
+const BTN_AUTO_BASE   = 'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors';
+const BTN_AUTO_IDLE   = BTN_AUTO_BASE + ' bg-green-500 hover:bg-green-600 text-white';
+const BTN_AUTO_ACTIVE = BTN_AUTO_BASE + ' bg-yellow-400 hover:bg-yellow-500 text-gray-800';
+
+function toggleAutoPlay() {
+  if (autoTimer) {
+    stopAutoPlay();
+  } else {
+    const btn = document.getElementById('btn-auto');
+    btn.textContent = '⏸ 停止';
+    btn.className = BTN_AUTO_ACTIVE;
+    autoTimer = setInterval(() => {
+      if (currentTurn >= battleData.turns.length - 1) { stopAutoPlay(); return; }
+      renderTurn(currentTurn + 1);
+    }, 800);
+  }
+}
+
+function stopAutoPlay() {
+  if (autoTimer) { clearInterval(autoTimer); autoTimer = null; }
+  const btn = document.getElementById('btn-auto');
+  if (btn) { btn.textContent = '▶▶ 自動'; btn.className = BTN_AUTO_IDLE; }
+}
+
+function setStatus(msg, cls) {
+  const el = document.getElementById('status-msg');
+  el.textContent = msg; el.className = `text-sm font-medium mr-4 ml-auto ${cls}`;
+}
+
+function switchMode(mode) {
+  document.getElementById('mode-battle').classList.toggle('hidden', mode !== 'battle');
+  document.getElementById('mode-analysis').classList.toggle('hidden', mode !== 'analysis');
+  const tabB = document.getElementById('tab-battle');
+  const tabA = document.getElementById('tab-analysis');
+  if (mode === 'battle') {
+    tabB.className = 'px-5 py-2.5 text-sm font-bold transition-colors bg-red-500 text-white';
+    tabA.className = 'px-5 py-2.5 text-sm font-bold transition-colors text-gray-500 hover:text-gray-700 hover:bg-gray-50';
+  } else {
+    tabB.className = 'px-5 py-2.5 text-sm font-bold transition-colors text-gray-500 hover:text-gray-700 hover:bg-gray-50';
+    tabA.className = 'px-5 py-2.5 text-sm font-bold transition-colors bg-purple-600 text-white';
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (!battleData) return;
+  if (e.key === 'ArrowRight' || e.key === 'l') nextTurn();
+  if (e.key === 'ArrowLeft'  || e.key === 'h') prevTurn();
+  if (e.key === ' ') { e.preventDefault(); toggleAutoPlay(); }
+});
+
+init();
+
+// ── 手動バトル ────────────────────────────────────────────────────────
+
+const TYPE_BG = {
+  'ノーマル':'#9FA19F','かくとう':'#D56723','ひこう':'#3DC7EF',
+  'どく':    '#B97FC9','じめん':  '#AB9842','いわ':  '#A38C21',
+  'むし':    '#729F3F','ゴースト':'#7B62A3','はがね':'#9EB7B8',
+  'ほのお':  '#FD7D24','みず':    '#4592C4','くさ':  '#9BCC50',
+  'でんき':  '#EED535','エスパー':'#F366B9','こおり':'#51C4E7',
+  'ドラゴン':'#53A4CF','あく':    '#707070','フェアリー':'#FDB9E9',
+};
+const CAT_ICON = { physical:'⚔', special:'✦', status:'○' };
+
+let manualBattleId = null;
+let _psSpecs = { p1: [], p2: [] };
+let _psSelected = [];  // 選出済みインデックス（最大3）
+let manualFullLog = [];  // 対戦開始〜終了の全ログ（一括コピー用）
+let _randomOpp = false;   // ランダム秘匿対戦モード
+let _manualHidden = false; // 現対戦が秘匿か
+let _randomPreviewId = null; // 抽選済みランダム相手のID
+
+// 全ログをクリップボードへ（雨パ等を手動操作した結果を共有する用）
+async function copyManualLog() {
+  const text = manualFullLog.join('\n');
+  const btn = document.getElementById('manual-copy-log');
+  try {
+    await navigator.clipboard.writeText(text);
+    if (btn) { const o = btn.textContent; btn.textContent = '✓ コピーしました'; setTimeout(() => btn.textContent = o, 1500); }
+  } catch (e) {
+    // クリップボードAPIが使えない場合は選択用テキストエリアでフォールバック
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (_) {}
+    document.body.removeChild(ta);
+    if (btn) { const o = btn.textContent; btn.textContent = '✓ コピーしました'; setTimeout(() => btn.textContent = o, 1500); }
+  }
+}
+
+// スペック文字列から名前・持ち物を取り出す
+function _specName(spec) { return spec.split('@')[0].split(':')[0].trim(); }
+function _specItem(spec) {
+  if (!spec.includes('@')) return '';
+  return spec.split('@')[1].split(':')[0].trim();
+}
+
+function startManualBattle() {
+  const p1 = getSpecs('my'), p2 = getOppSpecs();
+  if (!p1.length || !p2.length) { alert('パーティを入力してください'); return; }
+  _randomOpp = false;
+  _randomPreviewId = null;
+  _psSpecs = { p1, p2 };
+  _psSelected = [];
+  document.getElementById('ps-opp-preview').classList.add('hidden');
+  _showPartySelectView(p1);
+}
+
+async function startRandomBattle() {
+  const p1 = getSpecs('my');
+  if (!p1.length) { alert('自分のパーティを入力してください'); return; }
+  _randomOpp = true;                 // 相手はランダム・秘匿
+  _psSpecs = { p1, p2: [] };
+  _psSelected = [];
+  setStatus('相手を抽選中…', 'text-yellow-500');
+  try {
+    const r = await fetch('/api/manual/random_preview').then(r => r.json());
+    _randomPreviewId = r.preview_id;
+    _renderOppPreview(r.opponent);
+  } catch (e) {
+    setStatus('抽選エラー: ' + e.message, 'text-red-500'); return;
+  }
+  _showPartySelectView(p1);
+}
+
+function _renderOppPreview(opp) {
+  const grid = document.getElementById('ps-opp-grid');
+  grid.innerHTML = '';
+  opp.forEach(p => {
+    const img = pokeImgSrc(p.name);
+    const c = document.createElement('div');
+    c.className = 'flex flex-col items-center w-16';
+    c.innerHTML =
+      (img ? `<img src="${img}" width="44" height="44" style="object-fit:contain;image-rendering:pixelated" alt="">`
+           : `<div style="width:44px;height:44px"></div>`) +
+      `<div class="text-[10px] text-gray-600 leading-tight text-center truncate w-full">${p.name}</div>`;
+    grid.appendChild(c);
+  });
+  document.getElementById('ps-opp-preview').classList.remove('hidden');
+}
+
+function _showPartySelectView(specs) {
+  document.getElementById('battle-view').classList.add('hidden');
+  document.getElementById('sim-result').classList.add('hidden');
+  document.getElementById('manual-view').classList.add('hidden');
+  document.getElementById('party-select-view').classList.remove('hidden');
+  _buildPartySelectGrid(specs);
+  _updatePartySelectUI();
+  setStatus('3体を選択してください', 'text-blue-600');
+}
+
+function _buildPartySelectGrid(specs) {
+  const grid = document.getElementById('ps-pokemon-grid');
+  grid.innerHTML = '';
+  specs.forEach((spec, idx) => {
+    const name = _specName(spec);
+    const item = _specItem(spec);
+    const imgSrc = pokeImgSrc(name);
+    const card = document.createElement('div');
+    card.className = 'ps-card';
+    card.dataset.idx = idx;
+    card.innerHTML = `
+      <div class="ps-badge hidden"></div>
+      ${imgSrc
+        ? `<img src="${imgSrc}" width="52" height="52" style="object-fit:contain;image-rendering:pixelated;margin:0 auto 2px;" alt="">`
+        : `<div style="width:52px;height:52px;margin:0 auto 2px;"></div>`}
+      <div class="text-xs font-bold text-gray-800 leading-tight truncate">${name}</div>
+      ${item ? `<div class="text-xs text-gray-400 truncate">@${item}</div>` : ''}
+    `;
+    card.addEventListener('click', () => _togglePokeSelect(idx));
+    grid.appendChild(card);
+  });
+}
+
+function _togglePokeSelect(idx) {
+  const pos = _psSelected.indexOf(idx);
+  if (pos >= 0) {
+    _psSelected.splice(pos, 1);
+  } else {
+    if (_psSelected.length >= 3) return;
+    _psSelected.push(idx);
+  }
+  _updatePartySelectUI();
+}
+
+function _updatePartySelectUI() {
+  const specs = _psSpecs.p1;
+  // カードのバッジ更新
+  document.querySelectorAll('.ps-card').forEach(card => {
+    const idx = parseInt(card.dataset.idx);
+    const pos = _psSelected.indexOf(idx);
+    const badge = card.querySelector('.ps-badge');
+    if (pos >= 0) {
+      card.classList.add('selected');
+      badge.classList.remove('hidden');
+      badge.textContent = pos + 1;
+    } else {
+      card.classList.remove('selected');
+      badge.classList.add('hidden');
+    }
+  });
+
+  // 選出順プレビュー更新
+  for (let i = 0; i < 3; i++) {
+    const slot = document.getElementById(`ps-slot-${i}`);
+    if (_psSelected[i] !== undefined) {
+      const name = _specName(specs[_psSelected[i]]);
+      const imgSrc = pokeImgSrc(name);
+      slot.innerHTML = imgSrc
+        ? `<img src="${imgSrc}" width="56" height="56" style="object-fit:contain;image-rendering:pixelated;" alt="${name}">`
+        : `<span class="text-xs font-bold text-gray-700">${name}</span>`;
+      slot.style.borderStyle = 'solid';
+      slot.style.borderColor = '#3b82f6';
+      slot.style.background = '#dbeafe';
+    } else {
+      slot.innerHTML = '<span class="text-gray-300 text-2xl">？</span>';
+      slot.style.borderStyle = 'dashed';
+      slot.style.borderColor = '#d1d5db';
+      slot.style.background = '#f9fafb';
+    }
+  }
+
+  // 確定ボタン
+  document.getElementById('ps-confirm-btn').disabled = _psSelected.length < 3;
+}
+
+function cancelPartySelect() {
+  document.getElementById('party-select-view').classList.add('hidden');
+  setStatus('', '');
+}
+
+async function confirmPartySelect() {
+  if (_psSelected.length < 3) return;
+  document.getElementById('ps-confirm-btn').disabled = true;
+  setStatus('バトル開始中…', 'text-yellow-500');
+  try {
+    const res = await fetch('/api/manual/start', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p1: _psSpecs.p1, p2: _psSpecs.p2, season: 'M-2', p1_indices: _psSelected,
+                             random_opponent: !!_randomOpp, hidden: !!_randomOpp,
+                             preview_id: _randomPreviewId }),
+    });
+    const d = await res.json();
+    if (!res.ok) { alert(d.detail || 'エラー'); return; }
+    manualBattleId = d.battle_id;
+    _manualHidden = !!_randomOpp;
+
+    // 全ログを初期化（ヘッダに両者の構成を記録）
+    manualFullLog = ['=== 手動バトル（あなた vs 学習AI）' + (_randomOpp ? '・ランダム秘匿' : '') + ' ==='];
+    if (d.side1 && d.side1.party) manualFullLog.push('あなた: ' + d.side1.party.map(p => p.name).join(' / '));
+    if (_randomOpp) manualFullLog.push('AI(相手): ？（ランダム・対戦中に判明）');
+    else if (d.side2 && d.side2.party) manualFullLog.push('AI(相手): ' + d.side2.party.map(p => p.name).join(' / '));
+    manualFullLog.push('');
+
+    document.getElementById('party-select-view').classList.add('hidden');
+    document.getElementById('manual-result').classList.add('hidden');
+    document.getElementById('manual-view').classList.remove('hidden');
+    document.getElementById('manual-log').innerHTML = '';
+    _renderManualState(d);
+    setStatus('手動バトル中', 'text-green-600');
+  } catch (e) {
+    setStatus('エラー: ' + e.message, 'text-red-500');
+    document.getElementById('ps-confirm-btn').disabled = false;
+  }
+}
+
+function endManualBattle() {
+  manualBattleId = null;
+  document.getElementById('manual-view').classList.add('hidden');
+  document.getElementById('party-select-view').classList.add('hidden');
+  setStatus('', '');
+}
+
+async function submitManualAction(actionType, params = {}) {
+  if (!manualBattleId) return;
+
+  // ボタンを全部無効化
+  document.querySelectorAll('#manual-actions button, #manual-actions input[type=checkbox]')
+    .forEach(el => el.disabled = true);
+  document.getElementById('manual-status-badge').textContent = '処理中…';
+
+  try {
+    const body = { battle_id: manualBattleId, action_type: actionType,
+                   do_mega: document.getElementById('manual-mega-cb').checked, ...params };
+    const res = await fetch('/api/manual/action', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
+    const d = await res.json();
+    if (!res.ok) { alert(d.detail || 'エラー'); return; }
+
+    _renderManualState(d);
+
+    if (d.done) {
+      manualBattleId = null;
+      document.getElementById('manual-actions').classList.add('hidden');
+      document.getElementById('manual-result').classList.remove('hidden');
+      const names = { 1: 'あなたの勝利！🎉', 2: '相手の勝利…😓', 0: '引き分け' };
+      const colors = { 1: 'text-blue-600', 2: 'text-red-500', 0: 'text-gray-500' };
+      const rt = document.getElementById('manual-result-text');
+      rt.textContent = names[d.winner] || '終了';
+      rt.className = 'text-2xl font-bold mb-2 ' + (colors[d.winner] || '');
+      manualFullLog.push('', `=== 結果: ${names[d.winner] || '終了'} (${d.turn}ターン) ===`);
+      setStatus('バトル終了', 'text-gray-500');
+    }
+  } catch (e) {
+    setStatus('エラー: ' + e.message, 'text-red-500');
+    document.querySelectorAll('#manual-actions button, #manual-actions input[type=checkbox]')
+      .forEach(el => el.disabled = false);
+  }
+}
+
+function _renderManualState(d) {
+  // ターン
+  document.getElementById('manual-turn-display').textContent = d.turn;
+  document.getElementById('manual-status-badge').textContent =
+    d.done ? '終了' : d.awaiting_switch ? '交代先を選択' : '行動選択中';
+  document.getElementById('manual-status-badge').className =
+    'px-2.5 py-1 rounded-full text-xs font-bold ' +
+    (d.done ? 'bg-gray-100 text-gray-500 border border-gray-300'
+    : d.awaiting_switch ? 'bg-orange-100 text-orange-700 border border-orange-300'
+    : 'bg-green-100 text-green-700 border border-green-300');
+
+  // 天候・トリル
+  _renderManualWeather(d.weather);
+  _renderManualTrickRoom(d.trick_room, d.trick_room_count);
+
+  // フィールド
+  _renderManualSide('manual-p1-side', d.side1, 'p1');
+  _renderManualSide('manual-p2-side', d.side2, 'p2');
+
+  // ログ追記
+  if (d.logs && d.logs.length) {
+    const container = document.getElementById('manual-log');
+    const wrapper = document.createElement('div');
+    wrapper.className = 'manual-log-turn';
+    d.logs.forEach(line => {
+      const div = document.createElement('div');
+      div.className = 'log-line ' + classifyLog(line);
+      div.textContent = line;
+      wrapper.appendChild(div);
+      manualFullLog.push(line);  // 全ログに蓄積
+    });
+    container.appendChild(wrapper);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  // アクションパネル
+  const megaCb = document.getElementById('manual-mega-cb');
+  megaCb.checked = false;
+  megaCb.disabled = false;
+  if (!d.done && d.actions) {
+    document.getElementById('manual-actions').classList.remove('hidden');
+    _renderManualActions(d.actions, d.awaiting_switch);
+  } else if (!d.done) {
+    document.getElementById('manual-actions').classList.add('hidden');
+  }
+}
+
+function _renderManualSide(containerId, sideData, side) {
+  renderSide(containerId, sideData, side);
+  // タイトルラベルを先頭に挿入
+  const container = document.getElementById(containerId);
+  const label = document.createElement('div');
+  label.className = 'text-xs font-bold mb-2 ' + (side === 'p1' ? 'text-blue-600' : 'text-red-500');
+  label.textContent = side === 'p1' ? '▶ あなた (P1)' : '▶ 相手 (P2)';
+  container.insertBefore(label, container.firstChild);
+}
+
+function _renderManualWeather(weather) {
+  const badge = document.getElementById('manual-weather-badge');
+  if (!weather) { badge.classList.add('hidden'); return; }
+  const w = WEATHER_STYLE[weather];
+  if (!w) { badge.classList.add('hidden'); return; }
+  badge.className = `px-2.5 py-1 rounded-full text-xs font-bold ${w.cls}`;
+  badge.textContent = `${w.icon} ${w.label}`;
+  badge.classList.remove('hidden');
+}
+
+function _renderManualTrickRoom(active, count) {
+  const badge = document.getElementById('manual-trick-room-badge');
+  if (!active) { badge.classList.add('hidden'); return; }
+  badge.textContent = `⏱ トリックルーム${count > 0 ? `(${count})` : ''}`;
+  badge.classList.remove('hidden');
+}
+
+function _renderManualActions(actions, awaitingSwitch = false) {
+  // メガ進化・技ボタン: 交代待ち中は非表示
+  const megaRow = document.getElementById('manual-mega-row');
+  const moveGrid = document.getElementById('manual-move-grid');
+
+  if (awaitingSwitch) {
+    megaRow.classList.add('hidden');
+    moveGrid.innerHTML = '<div class="col-span-2 text-sm text-orange-700 font-bold py-1">⬆ 交代するポケモンを選んでください</div>';
+    // スイッチセクションだけ描画して終了
+    const switchSection = document.getElementById('manual-switch-section');
+    const switchGrid = document.getElementById('manual-switch-grid');
+    switchGrid.innerHTML = '';
+    if (actions.switches && actions.switches.length > 0) {
+      switchSection.classList.remove('hidden');
+      actions.switches.forEach(sw => {
+        const btn = document.createElement('button');
+        btn.className = 'switch-btn w-full flex items-center gap-2';
+        const ratio = sw.max_hp > 0 ? sw.hp / sw.max_hp : 0;
+        const barColor = ratio > 0.5 ? '#4ade80' : ratio > 0.25 ? '#facc15' : '#f87171';
+        btn.innerHTML = `
+          <span class="font-bold text-sm text-gray-800 flex-1 text-left">${sw.name}</span>
+          <span class="text-xs text-gray-500 tabular-nums">${sw.hp}/${sw.max_hp}</span>
+          <div style="width:60px;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;">
+            <div style="width:${(ratio*100).toFixed(0)}%;height:100%;background:${barColor};border-radius:3px;"></div>
+          </div>
+        `;
+        btn.onclick = () => submitManualAction('switch', { switch_to: sw.idx });
+        switchGrid.appendChild(btn);
+      });
+    } else {
+      switchSection.classList.add('hidden');
+    }
+    return;
+  }
+
+  // メガ進化
+  if (actions.can_mega) {
+    megaRow.classList.remove('hidden');
+    megaRow.style.display = 'flex';
+  } else {
+    megaRow.classList.add('hidden');
+  }
+
+  // 技ボタン
+  moveGrid.innerHTML = '';
+  actions.moves.forEach(mv => {
+    const btn = document.createElement('button');
+    const bg = TYPE_BG[mv.type] || '#999';
+    btn.className = 'move-btn';
+    btn.style.background = bg;
+    btn.disabled = mv.disabled;
+    const power = mv.power ? mv.power : '—';
+    const catIcon = CAT_ICON[mv.category] || '';
+    const effLabel = mv.eff == null ? '' : mv.eff >= 4 ? '◎ばつぐん×4' : mv.eff >= 2 ? '◎ばつぐん' : mv.eff === 0 ? '✕効果なし' : mv.eff < 1 ? '△いまひとつ' : '';
+    const effColor = mv.eff == null ? '' : mv.eff >= 2 ? 'color:#fef3c7;font-weight:bold' : mv.eff === 0 ? 'color:#fca5a5' : mv.eff < 1 ? 'color:#d1d5db' : '';
+    // PP表示
+    const pp     = mv.pp ?? '?';
+    const maxPp  = mv.max_pp ?? pp;   // max_ppがなければ現在値で代用
+    const ppRatio = (maxPp > 0) ? mv.pp / maxPp : 0;
+    const ppColor = mv.pp === 0 ? '#f87171' : ppRatio <= 0.25 ? '#fbbf24' : '#86efac';
+    const ppClass = mv.pp === 0 ? 'pp-zero' : ppRatio <= 0.25 ? 'pp-low' : '';
+    const ppBarW  = maxPp > 0 ? Math.round(ppRatio * 100) : 100;
+    btn.innerHTML = `
+      <div class="text-xs opacity-80 mb-0.5">${mv.type} ${catIcon}</div>
+      <div class="text-sm leading-tight">${mv.name}</div>
+      <div class="text-xs mt-0.5 flex justify-between gap-1">
+        <span style="opacity:.75">威力 ${power}</span>
+        <span class="${ppClass}" style="opacity:.9">PP ${pp}</span>
+        ${effLabel ? `<span style="${effColor}">${effLabel}</span>` : ''}
+      </div>
+      <div class="pp-bar"><div class="pp-bar-fill" style="width:${ppBarW}%;background:${ppColor}"></div></div>
+    `;
+    btn.onclick = () => submitManualAction('move', { move_idx: mv.idx });
+    moveGrid.appendChild(btn);
+  });
+
+  // 交代ボタン
+  const switchSection = document.getElementById('manual-switch-section');
+  const switchGrid = document.getElementById('manual-switch-grid');
+  switchGrid.innerHTML = '';
+  if (actions.switches.length > 0) {
+    switchSection.classList.remove('hidden');
+    actions.switches.forEach(sw => {
+      const btn = document.createElement('button');
+      btn.className = 'switch-btn w-full flex items-center gap-2';
+      const ratio = sw.max_hp > 0 ? sw.hp / sw.max_hp : 0;
+      const barColor = ratio > 0.5 ? '#4ade80' : ratio > 0.25 ? '#facc15' : '#f87171';
+      btn.innerHTML = `
+        <span class="font-bold text-sm text-gray-800 flex-1 text-left">${sw.name}</span>
+        <span class="text-xs text-gray-500 tabular-nums">${sw.hp}/${sw.max_hp}</span>
+        <div style="width:60px;height:6px;background:#e5e7eb;border-radius:3px;overflow:hidden;">
+          <div style="width:${(ratio*100).toFixed(0)}%;height:100%;background:${barColor};border-radius:3px;"></div>
+        </div>
+      `;
+      btn.onclick = () => submitManualAction('switch', { switch_to: sw.idx });
+      switchGrid.appendChild(btn);
+    });
+  } else {
+    switchSection.classList.add('hidden');
+  }
+}
+
+</script>
+
+<!-- 苦手理由の構造解説モーダル -->
+<div id="matchup-explain" class="hidden fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+     onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[85vh] overflow-auto p-5">
+    <div class="flex items-center justify-between mb-3">
+      <h3 id="me-title" class="text-sm font-bold text-gray-800">構造分析</h3>
+      <button onclick="document.getElementById('matchup-explain').classList.add('hidden')"
+              class="text-gray-400 hover:text-gray-700 text-xl leading-none">×</button>
+    </div>
+    <div id="me-body"></div>
+  </div>
+</div>
+</body>
+</html>

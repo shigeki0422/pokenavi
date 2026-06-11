@@ -51,7 +51,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
 
 ### 2. S112で環境上位の中速アタッカーに先手を取れる
 
-メガ進化後のすばやさ種族値は**112**。ようき＋すばやさ最大振りですばやさ実数値180になり、使用率上位を占める中速アタッカーに対し、相手も最速の場合でも先手を取れます。
+メガ進化後のすばやさ種族値は**112**。ようき＋すばやさ最大振りですばやさ180になり、使用率上位を占める中速アタッカーに対し、相手も最速の場合でも先手を取れます。
 
 - ガブリアス（S102・使用率1位）
 - ブリジュラス（S85・2位）
@@ -501,7 +501,7 @@ A145を生かしきれないため、物理型と比べると積み技による�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが弱点×2。スカーフ型はすばやさ実数値約253で先手を取られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが弱点×2。スカーフ型はすばやさ約253で先手を取られる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんを無効化できるひこうタイプ（アーマーガア等）を同伴し、ガブリアスの前に引いて受ける。スカーフ型には先制技で削る</td>
 </tr>
 <tr style="background:#fafafa">

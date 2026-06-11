@@ -1,7 +1,8 @@
 """
 gamewith.jp/pokemon-champions クローラー
-- 使用率ランキング（/555373）
-- 各ポケモン詳細（技・持ち物・特性・性格・能力ポイント・同居ポケモン）
+- 使用率ランキング（div._pkm span._name から全213体取得）
+- 個別ページはJavaScriptレンダリングが必要なためスキップ
+  → 技/持ち物/特性/性格/努力値は pokedb.py で取得
 """
 import re
 import time
@@ -14,9 +15,9 @@ from bs4 import BeautifulSoup
 import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).parent.parent))
-from db import get_conn
+from db import get_conn, today
 
-BASE       = "https://gamewith.jp"
+BASE        = "https://gamewith.jp"
 RANKING_URL = f"{BASE}/pokemon-champions/555373"
 DOUBLE_URL  = f"{BASE}/pokemon-champions/558230"
 JST = timezone(timedelta(hours=9))
@@ -32,7 +33,7 @@ def now_jst():
     return datetime.now(JST).strftime("%Y-%m-%d %H:%M:%S")
 
 
-def fetch(url: str) -> None:
+def fetch(url: str):
     try:
         r = requests.get(url, headers=HEADERS, timeout=20)
         r.raise_for_status()
@@ -43,173 +44,94 @@ def fetch(url: str) -> None:
         return None
 
 
-def parse_rate(text: str) -> None:
-    m = re.search(r"[\d.]+", text or "")
-    return float(m.group()) if m else None
-
-
 def get_season_from_page(soup: BeautifulSoup) -> str:
-    """ページ内のシーズン表記を取得（例: シーズンM-2）"""
     text = soup.get_text()
     m = re.search(r"シーズン(M-\d+)", text)
     return m.group(1) if m else "unknown"
 
 
-def crawl_ranking(rule_str: str = "single") -> tuple[str, list[dict]]:
-    """ランキングページからポケモン一覧とURLを取得"""
+def get_data_date_from_page(soup: BeautifulSoup) -> str:
+    """「集計日：M/D(曜)」から YYYY-MM-DD を返す。見つからなければ今日の日付"""
+    text = soup.get_text()
+    m = re.search(r"集計日[：:]\s*(\d{1,2})/(\d{1,2})", text)
+    if m:
+        month, day = int(m.group(1)), int(m.group(2))
+        year = datetime.now(JST).year
+        # 月が未来になる場合は前年とみなす（年をまたぐケース対応）
+        if month > datetime.now(JST).month:
+            year -= 1
+        return f"{year:04d}-{month:02d}-{day:02d}"
+    return today()
+
+
+def crawl_ranking(rule_str: str = "single") -> tuple:
+    """ランキングページから全ポケモンの順位・名前・図鑑番号を取得"""
     url = RANKING_URL if rule_str == "single" else DOUBLE_URL
     soup = fetch(url)
     if not soup:
         return "unknown", []
 
     season = get_season_from_page(soup)
+    data_date = get_data_date_from_page(soup)
     pokemons = []
-    seen = set()
 
-    for a in soup.select("a[href*='/pokemon-champions/']"):
-        href = a.get("href", "")
-        # ランキング・記事ページ以外を除外
-        if not re.search(r"/pokemon-champions/\d+$", href):
+    for div in soup.select("div._pkm"):
+        rank = div.get("data-rank")
+        if not rank:
             continue
-        article_id = re.search(r"/(\d+)$", href).group(1)
-        if article_id in ("555373", "558230", "546413"):  # ランキングページ自身を除外
+        name_el = div.select_one("span._name")
+        if not name_el:
             continue
-        name = a.get_text(strip=True)
-        name = re.sub(r"\s+", "", name)
-        if not name or name in seen or len(name) > 15:
+        name = name_el.get_text(strip=True)
+        if not name:
             continue
-        seen.add(name)
+
+        # 図鑑番号を画像URLから抽出（例: gacha/445.png → 445）
+        img = div.select_one("img[data-original]")
+        dex_no = None
+        if img:
+            m = re.search(r"/gacha/(\d+)\.png", img.get("data-original", ""))
+            if m:
+                dex_no = m.group(1)
+
         pokemons.append({
+            "rank": int(rank),
             "pokemon": name,
-            "url": BASE + href if href.startswith("/") else href
+            "pokemon_id": dex_no,  # 図鑑番号をIDとして保存
         })
 
-    # 順位を付与
-    for i, p in enumerate(pokemons, 1):
-        p["rank"] = i
-
-    print(f"  {rule_str} {len(pokemons)}体を取得 (シーズン: {season})")
-    return season, pokemons
-
-
-def crawl_pokemon_detail(season: str, rule_str: str, pokemon: dict, conn: sqlite3.Connection):
-    """個別ページから詳細データを取得してDBに保存"""
-    name = pokemon["pokemon"]
-    url  = pokemon["url"]
-    soup = fetch(url)
-    at   = now_jst()
-
-    if not soup:
-        conn.execute(
-            "INSERT INTO crawl_log (crawled_at,source,url,season,rule,pokemon,status,message) VALUES(?,?,?,?,?,?,?,?)",
-            (at, "gamewith", url, season, rule_str, name, "error", "fetch failed")
-        )
-        conn.commit()
-        return
-
-    full_text = soup.get_text("\n")
-    lines = full_text.split("\n")
-
-    def extract_section(keyword: str) -> list[tuple[int, str, float]]:
-        """キーワード以降の行から (rank, label, rate) を抽出"""
-        rows, in_section, rank = [], False, 0
-        for line in lines:
-            line = line.strip()
-            if keyword in line and not in_section:
-                in_section = True
-                continue
-            if in_section:
-                m = re.search(r"([\d.]+)%", line)
-                if m:
-                    label = re.sub(r"[\d.]+%", "", line).strip()
-                    label = re.sub(r"^\d+\s*位?\s*", "", label).strip()
-                    if label and 1 <= len(label) <= 25:
-                        rank += 1
-                        rows.append((rank, label, float(m.group(1))))
-                elif rank >= 3:
-                    break
-        return rows[:10]
-
-    # シングル / ダブルのセクションを判定して抽出
-    section_prefix = "シングル" if rule_str == "single" else "ダブル"
-
-    moves     = extract_section(f"{section_prefix}バトル") or extract_section("わざ")
-    items     = extract_section("持ち物")
-    abilities = extract_section("特性")
-    natures   = extract_section("性格")
-    evs       = extract_section("能力ポイント")
-
-    def bulk_insert(table: str, col: str, data: list[tuple]):
-        if not data:
-            return
-        conn.executemany(f"""
-            INSERT OR REPLACE INTO {table}
-                (season, rule, pokemon, rank, {col}, usage_rate, source, crawled_at)
-            VALUES (?,?,?,?,?,?,?,?)
-        """, [(season, rule_str, name, r, label, rate, "gamewith", at)
-              for r, label, rate in data])
-
-    bulk_insert("pokemon_moves",     "move",      moves)
-    bulk_insert("pokemon_items",     "item",      items)
-    bulk_insert("pokemon_abilities", "ability",   abilities)
-    bulk_insert("pokemon_natures",   "nature",    natures)
-    bulk_insert("pokemon_evs",       "ev_spread", evs)
-
-    # 同居ポケモン
-    partner_links = soup.select(f"a[href*='/pokemon-champions/']")
-    partners, seen = [], {name}
-    for a in partner_links:
-        pname = a.get_text(strip=True)
-        pname = re.sub(r"\s+", "", pname)
-        if pname and pname not in seen and len(pname) <= 15:
-            seen.add(pname)
-            partners.append(pname)
-        if len(partners) >= 10:
-            break
-    if partners:
-        conn.executemany("""
-            INSERT OR REPLACE INTO pokemon_partners
-                (season, rule, pokemon, rank, partner, source, crawled_at)
-            VALUES (?,?,?,?,?,?,?)
-        """, [(season, rule_str, name, r+1, p, "gamewith", at)
-              for r, p in enumerate(partners)])
-
-    conn.execute(
-        "INSERT INTO crawl_log (crawled_at,source,url,season,rule,pokemon,status) VALUES(?,?,?,?,?,?,?)",
-        (at, "gamewith", url, season, rule_str, name, "success")
-    )
-    conn.commit()
+    pokemons.sort(key=lambda p: p["rank"])
+    print(f"  {rule_str} {len(pokemons)}体を取得 (シーズン: {season}, 集計日: {data_date})")
+    return season, data_date, pokemons
 
 
 def crawl_season(rules: list = ["single"], limit=None):
     conn = get_conn()
+    crawled_date = today()
 
     for rule_str in rules:
         print(f"\n=== gamewith: {rule_str} ===")
-        season, pokemons = crawl_ranking(rule_str)
+        season, data_date, pokemons = crawl_ranking(rule_str)
         if not pokemons:
             continue
 
-        # 使用率ランキングを保存
+        targets = pokemons[:limit] if limit else pokemons
+
         at = now_jst()
         conn.executemany("""
             INSERT OR REPLACE INTO pokemon_usage
-                (season, rule, rank, pokemon, pokemon_id, usage_rate, source, crawled_at)
-            VALUES (?,?,?,?,?,?,?,?)
-        """, [(season, rule_str, p["rank"], p["pokemon"], None, None, "gamewith", at)
-              for p in pokemons])
+                (season, rule, rank, pokemon, pokemon_id, usage_rate, source, crawled_date, crawled_at)
+            VALUES (?,?,?,?,?,?,?,?,?)
+        """, [(season, rule_str, p["rank"], p["pokemon"], p["pokemon_id"],
+               None, "gamewith", data_date, at)
+              for p in targets])
         conn.commit()
 
-        targets = pokemons[:limit] if limit else pokemons
-        for i, p in enumerate(targets, 1):
-            print(f"  [{i:3}/{len(targets)}] {p['pokemon']}", end="\r")
-            crawl_pokemon_detail(season, rule_str, p, conn)
-            time.sleep(DELAY)
-
-        print(f"\n  完了: {len(targets)}体")
+        print(f"  完了: {len(targets)}体")
+        print(f"  ※ 個別ページ（技/持ち物等）はJSレンダリング必須のためスキップ → pokedb で補完")
 
     conn.close()
 
 
 if __name__ == "__main__":
-    crawl_season(rules=["single"], limit=20)
+    crawl_season(rules=["single"])

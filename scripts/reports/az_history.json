@@ -1,0 +1,8 @@
+[
+  {"iter": 1, "games": 520, "samples": 13649, "value_acc": 0.695, "rain_delta": -0.0145, "rain_pos": 0.0},
+  {"iter": 2, "games": 520, "samples": 12711, "value_acc": 0.698, "rain_delta": -0.0164, "rain_pos": 0.0},
+  {"iter": 3, "games": 520, "samples": 12335, "value_acc": 0.741, "rain_delta": -0.0012, "rain_pos": 0.30},
+  {"iter": 4, "games": 520, "samples": 12225, "value_acc": 0.708, "rain_delta": -0.0035, "rain_pos": 0.22},
+  {"iter": 5, "games": 520, "samples": 11764, "value_acc": 0.721, "rain_delta": 0.0089, "rain_pos": 1.0},
+  {"iter": 6, "games": 520, "samples": 12096, "value_acc": 0.744, "rain_delta": 0.0136, "rain_pos": 1.0}
+]

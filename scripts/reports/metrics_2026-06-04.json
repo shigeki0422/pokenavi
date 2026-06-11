@@ -1,0 +1,25 @@
+{
+  "date": "2026-06-04",
+  "n_parties": 73,
+  "search_vs_heuristic": {
+    "search": 22,
+    "heuristic": 8,
+    "winrate": 0.7333333333333333
+  },
+  "nash_vs_heuristic_selection": {
+    "nash": 200,
+    "heuristic": 100,
+    "winrate": 0.6666666666666666,
+    "cards": 2628
+  },
+  "combined_vs_baseline": {
+    "learned": 13,
+    "baseline": 7,
+    "winrate": 0.65
+  },
+  "belief_calibration": {
+    "prior_err": 9.08966977242697,
+    "post_err": 5.210939547817118,
+    "improvement": 0.4267184971202996
+  }
+}

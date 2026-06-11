@@ -113,7 +113,7 @@ heroImage: '../../assets/hero-ninetales-alola-m2.png'
   </div>
 </div>
 
-すばやさ109・とくぼう100が目を引く配分で、とくこう81は特殊アタッカーとしては控えめです。おくびょう（採用率87.3%）でEVを最大振りすると**すばやさ実数値は177**になり、ガブリアス（最速S実数値169）やカイリュー（S実数値145）を上から叩けます。一方、とくこうはおくびょうC32振りで**とくこう実数値133**にとどまり、火力で押し切るより、ゆき・オーロラベール・必中ふぶきという補助＋削りの仕事で貢献するポケモンです。
+すばやさ109・とくぼう100が目を引く配分で、とくこう81は特殊アタッカーとしては控えめです。おくびょう（採用率87.3%）でEVを最大振りすると**すばやさは177**になり、ガブリアス（最速S169）やカイリュー（S145）を上から叩けます。一方、とくこうはおくびょうC32振りで**とくこう133**にとどまり、火力で押し切るより、ゆき・オーロラベール・必中ふぶきという補助＋削りの仕事で貢献するポケモンです。
 
 ### タイプ・弱点
 
@@ -265,11 +265,11 @@ heroImage: '../../assets/hero-ninetales-alola-m2.png'
 
 **強み:**
 
-ゆきふらしでゆきを展開し、初手からオーロラベールを張って後続のエースが積む・殴る隙を作れます。とけないこおりでふぶき・フリーズドライの威力が1.2倍になるため、補助を張りながらこおり技の削りも両立できます。S実数値177で環境上位のアタッカーより先に動けるため、ベール展開を被弾前に通しやすい点も補助役として有利です。
+ゆきふらしでゆきを展開し、初手からオーロラベールを張って後続のエースが積む・殴る隙を作れます。とけないこおりでふぶき・フリーズドライの威力が1.2倍になるため、補助を張りながらこおり技の削りも両立できます。S177で環境上位のアタッカーより先に動けるため、ベール展開を被弾前に通しやすい点も補助役として有利です。
 
 **弱み:**
 
-きあいのタスキ型と異なり、弱点技を1回耐える保険がありません。はがね×4・ほのお×2の弱点を突かれると、ベールを張る前に落とされる場面が増えます。火力もとくこう実数値133止まりで、わるだくみ型のように単体で押し切る力はありません。
+きあいのタスキ型と異なり、弱点技を1回耐える保険がありません。はがね×4・ほのお×2の弱点を突かれると、ベールを張る前に落とされる場面が増えます。火力もとくこう133止まりで、わるだくみ型のように単体で押し切る力はありません。
 
 ---
 
@@ -312,7 +312,7 @@ heroImage: '../../assets/hero-ninetales-alola-m2.png'
 
 ### 補足: わるだくみ積み型（26.9%）
 
-わるだくみでとくこうを2段階上げ、補助役ではなく特殊アタッカーとして押し切る型です。アンコールで相手の積み技・補助技を縛ってから積むと隙を作りやすく、ふぶき・フリーズドライ・ムーンフォースの範囲で上から削れます。ただしとくこう実数値133が素の値のため、無補正では1回積んでようやく中火力という水準で、ベールを張らないぶん補助役としての貢献は失われます。
+わるだくみでとくこうを2段階上げ、補助役ではなく特殊アタッカーとして押し切る型です。アンコールで相手の積み技・補助技を縛ってから積むと隙を作りやすく、ふぶき・フリーズドライ・ムーンフォースの範囲で上から削れます。ただしとくこう133が素の値のため、無補正では1回積んでようやく中火力という水準で、ベールを張らないぶん補助役としての貢献は失われます。
 
 ---
 
@@ -320,7 +320,7 @@ heroImage: '../../assets/hero-ninetales-alola-m2.png'
 
 ### 主要ポケモンとの相性
 
-使用率上位のうち、キュウコン（アローラ）と相性がはっきり出るポケモンを有利・不利の両面から挙げます。S実数値177（おくびょう）で環境上位を上から叩ける一方、HP実数値149・ぼうぎょ実数値95と低く、はがね×4・ほのお×2の弱点技には極端に脆い点に注意してください。
+使用率上位のうち、キュウコン（アローラ）と相性がはっきり出るポケモンを有利・不利の両面から挙げます。S177（おくびょう）で環境上位を上から叩ける一方、HP149・ぼうぎょ95と低く、はがね×4・ほのお×2の弱点技には極端に脆い点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -337,28 +337,28 @@ heroImage: '../../assets/hero-ninetales-alola-m2.png'
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふぶきが×4（ドラゴン2×じめん2）。S実数値177＞169で先手。げきりん（47.9%）はフェアリーで無効化できる。ただしいわ・ほのお技を持つ個体には×2弱点を突かれる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふぶきが×4（ドラゴン2×じめん2）。S177＞169で先手。げきりん（47.9%）はフェアリーで無効化できる。ただしいわ・ほのお技を持つ個体には×2弱点を突かれる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふぶきが×4（ドラゴン2×ひこう2）。S実数値177＞145で先手。ドラゴン技はフェアリーで無効。ただしかえんほうしゃ（47.8%）は×2弱点（ほのお）を突き、しんそくの先制も合わせると、これらを持つ個体やマルチスケイル下では確定で落としきれない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふぶきが×4（ドラゴン2×ひこう2）。S177＞145で先手。ドラゴン技はフェアリーで無効。ただしかえんほうしゃ（47.8%）は×2弱点（ほのお）を突き、しんそくの先制も合わせると、これらを持つ個体やマルチスケイル下では確定で落としきれない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライが×2（みず特効）。S実数値177＞112で先手。ムーンフォース（97.0%）はフェアリーで×0.5、アクアジェット（66.6%）もみずで×0.5に軽減でき、被弾を抑えて削り合える。ただし低耐久ゆえ一撃で落としきれないと反撃で削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライが×2（みず特効）。S177＞112で先手。ムーンフォース（97.0%）はフェアリーで×0.5、アクアジェット（66.6%）もみずで×0.5に軽減でき、被弾を抑えて削り合える。ただし低耐久ゆえ一撃で落としきれないと反撃で削られる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ 速度逆転で先手を許す</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふぶきが×2（くさ弱点）。だがS実数値192＞177で上を取られ、はたきおとす（57.6%）でとけないこおりを叩き落とされる。トリプルアクセル（72.2%）はこおりで×0.5に軽減できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふぶきが×2（くさ弱点）。だがS192＞177で上を取られ、はたきおとす（57.6%）でとけないこおりを叩き落とされる。トリプルアクセル（72.2%）はこおりで×0.5に軽減できる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -372,7 +372,7 @@ heroImage: '../../assets/hero-ninetales-alola-m2.png'
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（42.4%）が×2弱点（ほのお）。ふぶきはほのお/ひこうに等倍止まりで一撃に届かず、被弾で崩れる。S実数値177＞167で先手は取れるが押し切れない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（42.4%）が×2弱点（ほのお）。ふぶきはほのお/ひこうに等倍止まりで一撃に届かず、被弾で崩れる。S177＞167で先手は取れるが押し切れない</td>
 </tr>
 </tbody>
 </table>
@@ -415,14 +415,14 @@ heroImage: '../../assets/hero-ninetales-alola-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S実数値192で上を取られ、はたきおとす（57.6%）でとけないこおりを落とされる。トリックフラワー（くさ・92.9%）は等倍で通る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S192で上を取られ、はたきおとす（57.6%）でとけないこおりを落とされる。トリックフラワー（くさ・92.9%）は等倍で通る</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・はがね枠（ハッサム・ソウブレイズ等）を後続に置いてくさ・あくを半減しつつ上から殴る</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-苦手な相手は「キュウコン（アローラ）の弱点（はがね・ほのお・いわ）を等倍以上で突く相手」と「S実数値177を上回る、または先制技で隙を突く相手」に大別されます。いずれも単体での切り返しは難しいため、ベール展開後に後続のタイプ補完で受ける構築が前提になります。
+苦手な相手は「キュウコン（アローラ）の弱点（はがね・ほのお・いわ）を等倍以上で突く相手」と「S177を上回る、または先制技で隙を突く相手」に大別されます。いずれも単体での切り返しは難しいため、ベール展開後に後続のタイプ補完で受ける構築が前提になります。
 
 ---
 
@@ -531,7 +531,7 @@ heroImage: '../../assets/hero-ninetales-alola-m2.png'
 
 **総評:**
 
-キュウコン（アローラ）はゆきふらしとオーロラベールを軸に、ゆき天候を自前で作って後続を補助する起点役です。ゆき下で必中になるふぶき・みずに刺さるフリーズドライで削りも兼ね、S実数値177で環境上位のアタッカーより先に動ける点が補助役として有利に働きます。
+キュウコン（アローラ）はゆきふらしとオーロラベールを軸に、ゆき天候を自前で作って後続を補助する起点役です。ゆき下で必中になるふぶき・みずに刺さるフリーズドライで削りも兼ね、S177で環境上位のアタッカーより先に動ける点が補助役として有利に働きます。
 
 持ち物はとけないこおり46.7%・きあいのタスキ23.5%が中心で、「こおり技の威力を伸ばす」か「弱点技を1回耐えてベールを確定で通す」かで役割が変わります。一方、はがね×4・ほのお×2の弱点と低耐久から単体性能は高くなく、ハッサムのバレットパンチやリザードンのかえんほうしゃには後続のタイプ補完で対応する前提のポケモンです。
 

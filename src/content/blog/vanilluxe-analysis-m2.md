@@ -112,7 +112,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
   </div>
 </div>
 
-とくこう110が軸で、ふぶき・フリーズドライの高威力こおり技を撃つ特殊アタッカーです。ひかえめC32でとくこう実数値は178。一方すばやさは79と控えめで、ひかえめ（S無補正）でのS実数値は131に留まります。HP71・B85・D95と耐久は並程度で、弱点のほのお・かくとう・いわ・はがねを等倍の相手にも被弾は重く、ゆきふらしで雪を撒きつつふぶき・フリーズドライで先に削るか、こおりのつぶてで先制を取る立ち回りが基本です。
+とくこう110が軸で、ふぶき・フリーズドライの高威力こおり技を撃つ特殊アタッカーです。ひかえめC32でとくこうは178。一方すばやさは79と控えめで、ひかえめ（S無補正）でのSは131に留まります。HP71・B85・D95と耐久は並程度で、弱点のほのお・かくとう・いわ・はがねを等倍の相手にも被弾は重く、ゆきふらしで雪を撒きつつふぶき・フリーズドライで先に削るか、こおりのつぶてで先制を取る立ち回りが基本です。
 
 ### タイプ・弱点
 
@@ -250,7 +250,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
 
 **強み:**
 
-とけないこおりでこおり技の火力を底上げし、ひかえめC32のとくこう実数値178からふぶき・フリーズドライで大ダメージを与えます。HCに耐久を少し割く配分で、こおりのつぶての先制を絡めて低耐久の相手を縛れます。タスキ型と比べて持ち物分の火力が乗るため、確定数を縮めて削り切れる場面が増えます。
+とけないこおりでこおり技の火力を底上げし、ひかえめC32のとくこう178からふぶき・フリーズドライで大ダメージを与えます。HCに耐久を少し割く配分で、こおりのつぶての先制を絡めて低耐久の相手を縛れます。タスキ型と比べて持ち物分の火力が乗るため、確定数を縮めて削り切れる場面が増えます。
 
 **弱み:**
 
@@ -299,7 +299,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
 
 ### 主要ポケモンとの相性
 
-使用率上位のうち、バイバニラと相性がはっきり出るポケモンを有利・不利の両面から挙げます。S実数値131（ひかえめ）は環境上位の多くより遅く、こおりのつぶての先制で補う一方、ほのお・かくとう・いわ・はがねの弱点技を等倍相手より重く受ける点に注意してください。
+使用率上位のうち、バイバニラと相性がはっきり出るポケモンを有利・不利の両面から挙げます。S131（ひかえめ）は環境上位の多くより遅く、こおりのつぶての先制で補う一方、ほのお・かくとう・いわ・はがねの弱点技を等倍相手より重く受ける点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -316,7 +316,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ 速度で押される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">こおり技は×4（ドラゴン2×じめん2）で弱点を突けるが、ガブリアスのS実数値はようき169・いじっぱり154でこちらの131を上回り、先制じしん（採用率99.2%）×2で先に落とされやすい。こおりのつぶて×4の先制でしか確実な打点を取れない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こおり技は×4（ドラゴン2×じめん2）で弱点を突けるが、ガブリアスのSはようき169・いじっぱり154でこちらの131を上回り、先制じしん（採用率99.2%）×2で先に落とされやすい。こおりのつぶて×4の先制でしか確実な打点を取れない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -330,21 +330,21 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">こおり技が×2（じめん）。S実数値131＞わんぱくカバルドンの112で先手。ただし高耐久のため一撃では落とせず、じしんの×2や設置で押し返される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こおり技が×2（じめん）。S131＞わんぱくカバルドンの112で先手。ただし高耐久のため一撃では落とせず、じしんの×2や設置で押し返される</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0887-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドラパルト（51位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ 速度で押される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">こおり技が×2（ドラゴン）。だがS実数値213でこちらより大きく速く、先に殴られる。こおりのつぶての先制でしか削れず、被弾で崩れやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こおり技が×2（ドラゴン）。だがS213でこちらより大きく速く、先に殴られる。こおりのつぶての先制でしか削れず、被弾で崩れやすい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2弱点。メガリザードンY（63.6%）・X（34.9%）ともS実数値167でこちらの131を上回り先手で焼かれる。こおり技はほのお/ひこう（Y）にも、ほのお/ドラゴン（X）にも×0.5×2＝等倍止まりで一撃に届かない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2弱点。メガリザードンY（63.6%）・X（34.9%）ともS167でこちらの131を上回り先手で焼かれる。こおり技はほのお/ひこう（Y）にも、ほのお/ドラゴン（X）にも×0.5×2＝等倍止まりで一撃に届かない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -380,7 +380,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2弱点。メガリザードンY・XともS実数値167でこちらより速く、こおり技は等倍止まりで一撃に届かない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2弱点。メガリザードンY・XともS167でこちらより速く、こおり技は等倍止まりで一撃に届かない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ・みず・でんきタイプを後続に置き、ほのおを半減しつつ弱点を突いて受ける。こおりのつぶてで削り残しを処理する補助に留める</td>
 </tr>
 <tr style="background:#fafafa">
@@ -408,7 +408,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
 </table>
 </div>
 
-苦手な相手は「バイバニラの弱点（ほのお・かくとう・いわ・はがね）を等倍以上で突き、低耐久のこちらを撃ち合いで倒しきる相手」と「S実数値131を上回り先手で殴る相手」に大別されます。いずれも単体での切り返しは難しく、後続のタイプ補完で受ける構築が前提になります。
+苦手な相手は「バイバニラの弱点（ほのお・かくとう・いわ・はがね）を等倍以上で突き、低耐久のこちらを撃ち合いで倒しきる相手」と「S131を上回り先手で殴る相手」に大別されます。いずれも単体での切り返しは難しく、後続のタイプ補完で受ける構築が前提になります。
 
 ---
 
@@ -427,7 +427,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
     <img src="/images/pokemon/pokemon-0887-00.webp" alt="ドラパルト">
     <div class="name">ドラパルト</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">S実数値213の高速枠。バイバニラが遅い相手を上から削る役割を補完</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">S213の高速枠。バイバニラが遅い相手を上から削る役割を補完</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
@@ -456,7 +456,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
 1. **ほのお対策**: いわ・みず・ほのお（ヒートロトム・ウォッシュロトム等）でリザードンのほのお技を半減して受ける枠
 2. **かくとう対策**: ひこう・エスパー・フェアリーでルカリオのかくとう技を半減する枠
 3. **はがね対策**: じめん・かくとう・ほのお（ガブリアス・リザードン）でブリジュラス等のはがねに弱点を突く枠
-4. **速度補完**: S実数値131を上回る相手を、ドラパルト等の高速枠で上から削る
+4. **速度補完**: S131を上回る相手を、ドラパルト等の高速枠で上から削る
 
 ---
 
@@ -526,7 +526,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
 
 **総評:**
 
-バイバニラはゆきふらし（99.3%）でふぶきを必中運用し、フリーズドライ・こおりのつぶてと合わせてこおり技に一貫特化した特殊アタッカーです。フリーズドライでみず複合にも刺さり、こおりのつぶての先制でS実数値131の遅さを補う点が武器になります。
+バイバニラはゆきふらし（99.3%）でふぶきを必中運用し、フリーズドライ・こおりのつぶてと合わせてこおり技に一貫特化した特殊アタッカーです。フリーズドライでみず複合にも刺さり、こおりのつぶての先制でS131の遅さを補う点が武器になります。
 
 持ち物はとけないこおり81.1%への一極集中で、火力を盛ってこおり技で押し切る役割に振り切っています。一方、こおり単タイプは弱点が4タイプ（ほのお・かくとう・いわ・はがね）と多く、耐性もこおりのみで、リザードン・ルカリオ・ブリジュラスといった弱点を突ける環境上位には単体で勝てません。これらは後続のタイプ補完で受ける構築が前提になります。
 

@@ -118,7 +118,7 @@ def parse_pokedb_page(lines: list, section_header: str, pattern: str) -> list:
 
     rank = 0
     i = start
-    while i < len(lines) and len(results) < 10:
+    while i < len(lines) and len(results) < 20:
         line = lines[i]
 
         if pattern == "move":

@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】メガカイリュー考察 M-2 特殊4色型 採用率と型別解説'
-description: 'M-2シングルバトル使用率17位のメガカイリューを徹底分析。ひかえめCS型・特殊4色技・しんそく先制のメカニズムを解説し、CS型・ラムのみ型・りゅうのまい型の主要構築と相性パーティまで実データをもとに紹介します。'
+description: 'M-2シングルバトル使用率16位のメガカイリューを徹底分析。ひかえめCS特殊型・特殊4色技・しんそく先制のメカニズムを解説し、CS型・しんそく型・はねやすめ型・非メガ物理型の主要構築と相性パーティまで実データをもとに紹介します。'
 pubDate: '2026-05-24'
 draft: false
 heroImage: '../../assets/hero-dragonite-m2.png'
@@ -33,18 +33,18 @@ heroImage: '../../assets/hero-dragonite-m2.png'
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.85rem;color:#555">
-      使用率 <strong>17位</strong> ／ カイリュナイト採用率 <strong>80.8%</strong>
+      使用率 <strong>16位</strong> ／ カイリュナイト採用率 <strong>80.7%</strong>
     </div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-2シーズン開始8日目（2026/05/20）時点の集計です
+> ⚠️ 本記事のデータはM-2シーズン2026/05/30時点の集計です
 
 ---
 
-ポケモンチャンピオンズのシングルバトルM-2シーズンで、カイリューは**使用率17位**を記録しています。その採用構成を見ると、カイリュナイトを持たせたメガカイリュー運用が**80.8%**と大きな割合を占めており、「カイリューを採用するならメガ進化させる」という認識がプレイヤーに広く浸透していることが分かります。
+ポケモンチャンピオンズのシングルバトルM-2シーズンで、カイリューは**使用率16位**を記録しています。その採用構成を見ると、カイリュナイトを持たせたメガカイリュー運用が**80.7%**と大きな割合を占めており、「カイリューを採用するならメガ進化させる」という認識がプレイヤーに広く浸透していることが分かります。
 
-ポケモンチャンピオンズのメガカイリューは**とくこうとすばやさが大幅強化されたメガ進化**です。データからその特性が明確に表れています。ひかえめ採用率66.7%・CS型が35.0%で主流となっており、エアスラッシュ・りゅうせいぐん・10まんボルト・かえんほうしゃという特殊4色技構成が環境に刺さっています。
+メガカイリューは**とくこうとすばやさが強化されるメガ進化**で、ひかえめ採用率66.5%が示す通り特殊アタッカー運用が主流です。エアスラッシュ55.6%・りゅうせいぐん53.1%・10まんボルト47.6%・かえんほうしゃ47.8%という特殊4色技構成が環境に刺さっています。
 
 この記事では実際の対戦データをもとに、メガカイリューが採用される理由・主要な型の解説・苦手なポケモンと対処法・相性の良いパーティ構成まで徹底的に掘り下げます。
 
@@ -54,11 +54,11 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 
 ### 1. メガ進化でとくこうが大きく向上
 
-メガ進化によってとくこうが100→145、すばやさが80→100に大幅強化されます。一方こうげきは134→124に低下するため、通常カイリューの物理アタッカーとしてのイメージとは異なり、メガ進化後は特殊アタッカーとして運用するのが最適解です。ひかえめ採用率66.7%・CS型35.0%というデータがその事実を裏付けており、エアスラッシュ54.5%・りゅうせいぐん52.8%という技採用率もメガカイリューが特殊技主体で立ち回ることを示しています。
+メガ進化によってとくこうが100→145、すばやさが80→100に強化されます。一方こうげきは134→124に低下するため、通常カイリューの物理アタッカーとしてのイメージとは異なり、メガ進化後は特殊アタッカー運用が主流です。ひかえめ採用率66.5%というデータがその事実を裏付けており、エアスラッシュ55.6%・りゅうせいぐん53.1%という特殊技の採用率もメガカイリューが特殊技主体で立ち回ることを示しています。
 
 ### 2. マルチスケイルで初手の生存率が高い
 
-カイリューの特性**マルチスケイル**は、HPが満タンのとき受けるダメージを半減する効果を持ちます。こおり4倍弱点という致命的なリスクを抱えながらも使用率17位を維持できている理由の一つがこれで、先発で出した初ターンは確定1発圏内の攻撃も多くを耐えられます。メガ進化前後どちらでも特性は変わらないため、メガ進化するターンを含めてマルチスケイルの恩恵を受け続けられます。ただし状態異常・天候ダメージ・ステルスロック等でHPが削られると効果を失う点には注意が必要です。
+カイリューの特性**マルチスケイル**は、HPが満タンのとき受けるダメージを半減する効果を持ちます。こおり4倍弱点という致命的なリスクを抱えながらも使用率16位を維持できている理由の一つがこれで、先発で出した初ターンは確定1発圏内の攻撃も耐える場面があります。メガ進化前後どちらでも特性は変わらないため、メガ進化するターンを含めてマルチスケイルの恩恵を受け続けられます。ただし状態異常・天候ダメージ・ステルスロック等でHPが削られると効果を失う点には注意が必要です。
 
 ### 3. 特殊4色技でM-2環境の主要ポケモンの多くに等倍以上を取れる
 
@@ -81,14 +81,14 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#ef4444;font-weight:bold">✕</td>
-  <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ブリジュラス</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
-  <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
-  <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;border:1px solid #cbd5e1;color:#3b82f6">¼</td>
+  <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アシレーヌ</td>
@@ -98,9 +98,9 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードン</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガリザードンY</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
-  <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+  <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
 </tr>
@@ -112,16 +112,16 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0448-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ルカリオ</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0448-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガルカリオ</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
 </tr>
 <tr>
-  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0130-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ギャラドス</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0130-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガギャラドス</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
-  <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+  <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
 </tr>
@@ -133,34 +133,34 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
 </tr>
 <tr>
-  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0428-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ミミロップ</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0428-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガミミロップ</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0212-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ハッサム</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0212-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガハッサム</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
-  <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
+  <td style="padding:6px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">◎×4</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-<small>◎=効果抜群（2倍）、○=等倍、△=いまひとつ（0.5倍）</small>
+<small>◎×4=4倍、◎=効果抜群（2倍）、○=等倍、△=いまひとつ（0.5倍）、¼=4分の1、✕=無効。相手はメガ運用が主流のためメガ後タイプで判定（メガギャラドス＝みず/あく、メガミミロップ＝ノーマル/かくとう、メガハッサム＝むし/はがね等）。</small>
 
-このように、4つの技だけで環境の主要ポケモンほぼ全てに対して等倍以上を取れるのが、メガカイリューが採用される大きな理由です。
+このように、4色の技で各相手に最低1つは等倍以上の打点を確保できる点が、メガカイリューが採用される大きな理由です。ただしガブリアス・アシレーヌ・ブリジュラスのように刺さる技が限定される相手もおり、技構成次第では有効打を欠く点には注意が必要です。
 
 ### 4. しんそく先制技がフィニッシャーとして機能する
 
-しんそくの採用率は44.6%と半数近くに達しています。ノーマルタイプの先制技であるしんそくは、相手をメガカイリューの特殊技で削ったあと、残りHPを確実に仕留めるフィニッシャーとして機能します。特に：
+しんそくの採用率は45.6%と半数近くに達しています。ノーマルタイプの先制技であるしんそくは、相手をメガカイリューの特殊技で削ったあと、残りHPを仕留めるフィニッシャーとして機能します。特に：
 
-- りゅうせいぐんのCダウン後に安全に詰められる
-- 相手の先制技（アクアジェットなど）に対して後手を打てる
-- すばやさが低いポケモンへの確実な削り
+- りゅうせいぐんでとくこうが2段階下がった後でも、物理技のしんそくなら火力が落ちずに削りを継続できる
+- 優先度+2のしんそくは、アクアジェット（優先度+1）など多くの先制技より先に動ける
+- すばやさで上を取られる相手にも、削れていれば先制技で確実に倒し切れる
 
 という場面で輝きます。特殊4色技で削りを入れ、しんそくで締めるという流れが、メガカイリューの基本的な立ち回りです。
 
@@ -289,70 +289,70 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>エアスラッシュ</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>54.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>55.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう一致技。命中95%・ひるみ30%で相手の行動を封じる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうせいぐん</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>52.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>53.1%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン一致・高火力。命中90%・Cダウン後はしんそくで詰める</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>10まんボルト</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>49.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>47.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みずタイプ（アシレーヌ・ギャラドス）への有効打</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かえんほうしゃ</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>48.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>47.8%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね・くさタイプ（ハッサム等）処理</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>しんそく</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">物理</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>44.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>45.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">先制技フィニッシャー。りゅうせいぐんCダウン後の保険</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はねやすめ</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">変化</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>35.3%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>35.6%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HP回復。耐久寄り運用・みがわりとの組み合わせ</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>じしん</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">物理</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">物理型・AS型での採用。でんき・はがね対策</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>れいとうビーム</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアスミラー・じめんタイプへの有効打</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうのまい</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">変化</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14.8%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">物理積み型。こうげき・すばやさ+1</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>みがわり</strong></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">変化</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13.0%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はねやすめ・たべのこしとの組み合わせで耐久戦</td>
 </tr>
 </tbody>
@@ -367,8 +367,9 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 
 <div class="build-header">
   <span style="background:#6b7280;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：マルチスケイル（98.2%）</span>
-  <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.7%）</span>
+  <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.5%）</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 H2（22.2%）</span>
+  <span style="background:#16a34a;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：カイリュナイト</span>
 </div>
 
 **技構成（例）**
@@ -392,7 +393,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 
 <div class="build-header">
   <span style="background:#6b7280;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：マルチスケイル（98.2%）</span>
-  <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.7%）</span>
+  <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.5%）</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 H2（22.2%）</span>
   <span style="background:#16a34a;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：カイリュナイト</span>
 </div>
@@ -418,7 +419,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
 
 <div class="build-header">
   <span style="background:#6b7280;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：マルチスケイル（98.2%）</span>
-  <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.7%）</span>
+  <span style="background:#3b82f6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ（66.5%）</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 B1 H1（11.3%）</span>
   <span style="background:#16a34a;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：カイリュナイト</span>
 </div>
@@ -446,7 +447,7 @@ CSフルに振った型よりとくこうとすばやさが下がるため、火
   <span style="background:#6b7280;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">特性：マルチスケイル（98.2%）</span>
   <span style="background:#dc2626;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">性格：ひかえめ / いじっぱり / ようき</span>
   <span style="background:#8b5cf6;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">EV：C32 S32 / A32 S32</span>
-  <span style="background:#d97706;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：ラムのみ（12.4%）など</span>
+  <span style="background:#d97706;color:white;padding:4px 10px;border-radius:4px;font-size:0.85rem">持ち物：ラムのみ（11.7%）など</span>
 </div>
 
 **代表的な技構成**
@@ -480,12 +481,12 @@ CSフルに振った型よりとくこうとすばやさが下がるため、火
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>カイリュナイト</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>80.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>80.7%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ進化でとくこう100→145・すばやさ80→100に大幅強化。特殊アタッカーとして高い火力を得る</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ラムのみ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.7%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">まひ・やけど・ねむり無効化。状態異常技への保険</td>
 </tr>
 <tr>
@@ -495,14 +496,14 @@ CSフルに振った型よりとくこうとすばやさが下がるため、火
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>シルクのスカーフ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">0.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">0.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">しんそく強化。ノーマル技の火力を上げる特化型</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-カイリュナイト80.8%という採用率は、メガ進化によるステータス強化が通常状態との差を大きく上回ることを示しています。ラムのみ12.4%は、メガカイリューを採用する際にメガ石を持てない場合の次善策として、通常カイリューとして状態異常対策をして使うプレイヤーが一定数いることを示しています。
+カイリュナイト80.7%という採用率は、メガ進化によるステータス強化が通常状態との差を大きく上回ることを示しています。ラムのみ11.7%は、メガカイリューを採用する際にメガ石を持てない場合の次善策として、通常カイリューとして状態異常対策をして使うプレイヤーが一定数いることを示しています。
 
 ---
 
@@ -525,23 +526,23 @@ CSフルに振った型よりとくこうとすばやさが下がるため、火
     <img src="/images/pokemon/pokemon-0670-05.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">フラエッテ（永遠）
     <small style="color:#94a3b8;display:block">フェアリー</small>
   </td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">フェアリータイプでりゅうせいぐん無効。高いとくぼうでダメージが通りにくい</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">どくタイプのパートナーで対処。かえんほうしゃ・エアスラッシュを通す</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">フェアリーでりゅうせいぐん無効。とくぼうが高く、かえんほうしゃ・エアスラッシュ（ともに等倍）でも確定数が伸びない</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">どく技で弱点（×2）を突けるキラフロル等のパートナーで処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #fca5a5">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア
     <small style="color:#94a3b8;display:block">はがね/ひこう</small>
   </td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">はがね/ひこうでドラゴン0.5倍・ひこう0.5倍。高い物理耐久</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">かえんほうしゃで2倍（はがね弱点）を狙う。10まんボルトははがね半減・ひこう2倍で等倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">りゅうせいぐん・エアスラッシュをともに0.5倍で受け、高い物理耐久とはねやすめで居座る。かえんほうしゃ非採用（採用率47.8%）の型では突破しづらい</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">かえんほうしゃ（はがね弱点×2）を採用しておく。10まんボルトははがね0.5倍・ひこう2倍で等倍止まり</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #fca5a5">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガスターミー
     <small style="color:#94a3b8;display:block">みず/エスパー</small>
   </td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">アイススピナー（こおり4倍）を持つ場合、確定1発で倒される</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">アイススピナー（採用率64.9%）がこおり4倍を突き、こちらの満タンマルチスケイルでも確定1発圏内</td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">メガカイリューを後発に温存し、ガブリアスなどで先に処理する</td>
 </tr>
 </tbody>
@@ -550,39 +551,41 @@ CSフルに振った型よりとくこうとすばやさが下がるため、火
 
 ### 相性の良いパートナー
 
+同居率上位（champs.pokedb.tokyoの同居データ）から、フェアリー対策やステルスロック撒きを担える補完枠を挙げます。
+
 <div class="partner-grid">
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0970-00.webp" alt="キラフロル">
+    <div class="name">キラフロル</div>
+    <div class="rate">同居率1位</div>
+    <div style="font-size:0.68rem;color:#555;margin-top:2px">ヘドロウェーブ（どく×2）でフェアリーに打点。ステルスロックも撒ける</div>
+  </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
-    <div class="rate">使用率1位</div>
-    <div style="font-size:0.68rem;color:#555;margin-top:2px">フェアリー・いわへの物理打点を担当</div>
+    <div class="rate">同居率3位</div>
+    <div style="font-size:0.68rem;color:#555;margin-top:2px">ステルスロック撒き。いわ・はがねへの物理打点を担当</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム">
-    <div class="name">ハッサム</div>
-    <div class="rate">使用率15位</div>
-    <div style="font-size:0.68rem;color:#555;margin-top:2px">フェアリー・こおり受け。こおりが4倍のカイリューを補完</div>
+    <img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド">
+    <div class="name">ギルガルド</div>
+    <div class="rate">同居率6位</div>
+    <div style="font-size:0.68rem;color:#555;margin-top:2px">はがね/ゴーストでフェアリー技0.5倍。フラエッテを受け回せる</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
-    <div class="name">アーマーガア</div>
-    <div class="rate">使用率6位</div>
-    <div style="font-size:0.68rem;color:#555;margin-top:2px">はがね/ひこうでフェアリー半減。アイアンヘッドでフラエッテに打点</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0530-00.webp" alt="ドリュウズ">
-    <div class="name">ドリュウズ</div>
-    <div class="rate">使用率13位</div>
-    <div style="font-size:0.68rem;color:#555;margin-top:2px">ステロ+アイアンヘッドでフェアリー処理。いわ弱点のカイリューにじしんで打点</div>
+    <img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン">
+    <div class="name">カバルドン</div>
+    <div class="rate">同居率8位</div>
+    <div style="font-size:0.68rem;color:#555;margin-top:2px">ステルスロック+あくびで起点を作り、物理を受け止める</div>
   </div>
 </div>
 
-メガカイリューを採用する際の主な弱点補完は**こおり対策**と**フェアリー対策**の2軸です。特にこおり技（アイススピナー・れいとうビーム・ふぶき）を扱うポケモンに対して、先発でチェックできるポケモンをパーティに入れることが必須です。
+メガカイリューを採用する際の主な弱点補完は**フェアリー対策**です。りゅうせいぐんを無効化するフェアリー（フラエッテ等）に対し、どく・はがねで殴れるポケモンを添えると役割を回しやすくなります。こおり4倍弱点については、環境上位にこおり技持ちが少ない（アイススピナー持ちのメガスターミーが主）ため、その個体を後発処理できる枠を1つ用意すれば足ります。
 
 **推奨パーティ構成の方針：**
 1. メガカイリュー（特殊4色技フィニッシャー）
-2. フェアリー・こおり対策のはがねタイプ（ハッサム・アーマーガアなど）
-3. ステロを撒けるサポート役（ガブリアス・カバルドンなど）
+2. フェアリーに弱点（どく・はがね）を突けるポケモン（キラフロル・ギルガルドなど）
+3. ステルスロックを撒けるサポート役（ガブリアス・カバルドンなど）
 
 ---
 
@@ -612,13 +615,13 @@ CSフルに振った型よりとくこうとすばやさが下がるため、火
   <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">環境に広く刺さる汎用構成</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">CS+HB ラムのみ型</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">HBS はねやすめ型</td>
   <td style="padding:8px;border:1px solid #cbd5e1">★★★★☆</td>
   <td style="padding:8px;border:1px solid #cbd5e1">★★★★☆</td>
   <td style="padding:8px;border:1px solid #cbd5e1">★★★★☆</td>
-  <td style="padding:8px;border:1px solid #cbd5e1">★★★★☆</td>
-  <td style="padding:8px;border:1px solid #cbd5e1">★★★★☆</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">状態異常が多い環境・安定重視</td>
+  <td style="padding:8px;border:1px solid #cbd5e1">★★★★★</td>
+  <td style="padding:8px;border:1px solid #cbd5e1">★☆☆☆☆</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">はねやすめで居座る耐久寄り運用</td>
 </tr>
 <tr>
   <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">CS+しんそく型</td>
@@ -630,18 +633,18 @@ CSフルに振った型よりとくこうとすばやさが下がるため、火
   <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">りゅうせいぐんを気兼ねなく打ちたい時</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">AS りゅうのまい型</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;font-weight:bold">非メガ りゅうのまい型</td>
   <td style="padding:8px;border:1px solid #cbd5e1">★★★★☆</td>
   <td style="padding:8px;border:1px solid #cbd5e1">★★★☆☆</td>
-  <td style="padding:8px;border:1px solid #cbd5e1">★★★★★</td>
   <td style="padding:8px;border:1px solid #cbd5e1">★★★☆☆</td>
-  <td style="padding:8px;border:1px solid #cbd5e1">★☆☆☆☆</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">積み展開・物理環境</td>
+  <td style="padding:8px;border:1px solid #cbd5e1">★★★☆☆</td>
+  <td style="padding:8px;border:1px solid #cbd5e1">★★★★☆</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">メガ枠を他に譲る積み展開</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-メガカイリューは特殊4色型が現環境の主流です。こおり4倍弱点という明確な弱点を持ちながら、それを上回るタイプ範囲と火力でM-2シングル17位の使用率を維持しています。
+メガカイリューは特殊4色型が現環境の主流です。こおり4倍弱点という明確な弱点を持ちながら、それを上回るタイプ範囲と火力でM-2シングル16位の使用率を維持しています。
 
-カイリュナイト採用率80.8%が示す通り、メガカイリューは特殊アタッカーとして広く採用されています。環境に幅広く刺さる特殊4色技+しんそく構成を軸に、パーティの弱点を補完するポケモンを揃えることが、メガカイリューを最大限に活かす鍵となります。
+カイリュナイト採用率80.7%が示す通り、メガカイリューは特殊アタッカーとして広く採用されています。環境に幅広く刺さる特殊4色技+しんそく構成を軸に、パーティの弱点を補完するポケモンを揃えることが、メガカイリューを最大限に活かす鍵となります。

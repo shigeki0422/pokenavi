@@ -345,14 +345,14 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×4（ドラゴン2×じめん2）。主力のじしん（採用率99.2%）はひこうで無効。ただしがんせきふうじ（40.0%）はいわ×2弱点を突かれ、S実数値169（最速S102）から先制される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×4（ドラゴン2×じめん2）。主力のじしん（採用率99.2%）はひこうで無効。ただしがんせきふうじ（40.0%）はいわ×2弱点を突かれ、S169（最速S102）から先制される</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">大半がメガ進化（Y 63.6%・X 34.9%）。あめふらしで晴れを打ち消し、雨でほのお技を半減。なみのりはメガY（ほのお/ひこう）に×2、メガX（ほのお/ドラゴン）には等倍。メガ後S実数値152〜167で先制されるため受けは不可</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">大半がメガ進化（Y 63.6%・X 34.9%）。あめふらしで晴れを打ち消し、雨でほのお技を半減。なみのりはメガY（ほのお/ひこう）に×2、メガX（ほのお/ドラゴン）には等倍。メガ後S152〜167で先制されるため受けは不可</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -366,7 +366,7 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×4（ドラゴン2×ひこう2）。ただしカイリュナイト80.7%でメガ後S実数値152、ペリッパーS実数値128では先制される。10まんボルト（採用率47.6%）採用個体にはこちらがでんき×4で落とされ、撃ち合いは持ち物と相手の技次第</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×4（ドラゴン2×ひこう2）。ただしカイリュナイト80.7%でメガ後S152、ペリッパーS128では先制される。10まんボルト（採用率47.6%）採用個体にはこちらがでんき×4で落とされ、撃ち合いは持ち物と相手の技次第</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

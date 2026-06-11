@@ -229,15 +229,15 @@ heroImage: '../../assets/hero-kiraflosure-m2.png'
 
 **性格の選択（おくびょう vs ひかえめ）:**
 
-C32振り時のS実数値・C実数値は以下の通り。
+C32振り時のS・Cは以下の通り。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
 <thead>
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">性格</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">S実数値（S101）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1">C実数値（C150）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">S（S101）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">C（C150）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">抜けるライン</th>
 </tr>
 </thead>
@@ -246,7 +246,7 @@ C32振り時のS実数値・C実数値は以下の通り。
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">おくびょう（57.8%）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>S168</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">C202</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">最速リザードン・ウルガモス（S実数値167）を1差で上抜き。最速ガブリアス（S169）にはわずかに届かない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">最速リザードン・ウルガモス（S167）を1差で上抜き。最速ガブリアス（S169）にはわずかに届かない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ひかえめ（33.0%）</td>
@@ -258,7 +258,7 @@ C32振り時のS実数値・C実数値は以下の通り。
 </table>
 </div>
 
-**強み（型②との対比）:** ひかえめなら型②の最大C200を上回るC222まで火力を伸ばせ、おくびょうならS実数値168でS100族（リザードン・ウルガモス）を1差で上抜きできる。メガ後のてきおうりょくが乗ることで、型②の通常一致技×1.5に対し×2.0で実質威力が約33%上回る。
+**強み（型②との対比）:** ひかえめなら型②の最大C200を上回るC222まで火力を伸ばせ、おくびょうならS168でS100族（リザードン・ウルガモス）を1差で上抜きできる。メガ後のてきおうりょくが乗ることで、型②の通常一致技×1.5に対し×2.0で実質威力が約33%上回る。
 
 **弱み（型②との対比）:** 持ち物がキラフロルナイト固定で、タスキ・たべのこしによる耐久保険が一切ない。メガ進化のターンを使うため初手の起点作りが1テンポ遅れる。
 
@@ -296,7 +296,7 @@ C32振り時のS実数値・C実数値は以下の通り。
 
 **強み（型①との対比）:** タスキで1発耐えが保証されるため、初手で確実にステルスロック（採用率36.5%）を撒ける。じめん×4・みず×2の弱点を突かれても1発で落ちず、最低限の仕事が約束される。メガ枠を別ポケモンに譲れる。
 
-**弱み（型①との対比）:** 一致技がてきおうりょく×2.0ではなく通常の×1.5止まりで、パワージェム実質威力120／ヘドロウェーブ142.5までしか伸びない（型①と比べ約25%火力ダウン）。S実数値も通常種族値S86止まり（おくびょうC32S32時 S151）で、型①のメガ後S168に届かない。タスキは1試合1回しか機能せず、再登場時には素の耐久で殴り合うことになる。
+**弱み（型①との対比）:** 一致技がてきおうりょく×2.0ではなく通常の×1.5止まりで、パワージェム実質威力120／ヘドロウェーブ142.5までしか伸びない（型①と比べ約25%火力ダウン）。Sも通常種族値S86止まり（おくびょうC32S32時 S151）で、型①のメガ後S168に届かない。タスキは1試合1回しか機能せず、再登場時には素の耐久で殴り合うことになる。
 
 ---
 
@@ -321,7 +321,7 @@ C32振り時のS実数値・C実数値は以下の通り。
 <tr><td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ニードルガード</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>27.9%</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">—</td><td style="padding:8px 12px;border:1px solid #cbd5e1">守りつつ接触技に反撃ダメージ。メガ進化ターンの隙消しに使える</td></tr>
 <tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>キラースピン</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>20.6%</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">30</td><td style="padding:8px 12px;border:1px solid #cbd5e1">自分側の設置技（ステルスロック・どくびし等）を除去＋S1段階アップ。設置依存環境への対抗</td></tr>
 <tr><td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>マッドショット</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>19.1%</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">55</td><td style="padding:8px 12px;border:1px solid #cbd5e1">相手のS1段階ダウン。S101を補強し中速帯を縛る</td></tr>
-<tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ロックカット</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>16.1%</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">—</td><td style="padding:8px 12px;border:1px solid #cbd5e1">自分のS2段階アップ。おくびょうメガキラフロル（S実数値168）から積めばS336相当となり、最速スカーフ持ちも含めて上から動ける</td></tr>
+<tr style="background:#fafafa"><td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ロックカット</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>16.1%</strong></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td><td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:right">—</td><td style="padding:8px 12px;border:1px solid #cbd5e1">自分のS2段階アップ。おくびょうメガキラフロル（S168）から積めばS336相当となり、最速スカーフ持ちも含めて上から動ける</td></tr>
 </tbody>
 </table>
 </div>
@@ -349,7 +349,7 @@ C32振り時のS実数値・C実数値は以下の通り。
 <tr style="background:#fee2e2">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0445-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ガブリアス</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">1位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん99.2%が<strong>じめん×4で確定1発</strong>。最速ガブリアスS実数値169はおくびょうメガキラフロルS実数値168を1差で抜き、後出し・対面どちらも勝てない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん99.2%が<strong>じめん×4で確定1発</strong>。最速ガブリアスS169はおくびょうメガキラフロルS168を1差で抜き、後出し・対面どちらも勝てない</td>
 </tr>
 <tr style="background:#fee2e2">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0450-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">カバルドン</td>
@@ -402,7 +402,7 @@ C32振り時のS実数値・C実数値は以下の通り。
 <tr style="background:#dcfce7">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードン</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお/ひこうにパワージェムが<strong>×4で確定1発</strong>。ソーラービーム61.0%はくさ技だが2ターン技で隙が大きい。最速同士でもS実数値168対167で1差先行</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお/ひこうにパワージェムが<strong>×4で確定1発</strong>。ソーラービーム61.0%はくさ技だが2ターン技で隙が大きい。最速同士でもS168対167で1差先行</td>
 </tr>
 <tr style="background:#dcfce7">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0149-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">カイリュー</td>
@@ -412,7 +412,7 @@ C32振り時のS実数値・C実数値は以下の通り。
 <tr style="background:#dcfce7">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0637-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ウルガモス</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/ほのおにパワージェムが<strong>×4で確定1発</strong>。ほのおのまい79.7%・むしのさざめき33.7%・ギガドレイン59.2%いずれもこちらの弱点ではない。最速同士でもS実数値168対167で1差先行</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/ほのおにパワージェムが<strong>×4で確定1発</strong>。ほのおのまい79.7%・むしのさざめき33.7%・ギガドレイン59.2%いずれもこちらの弱点ではない。最速同士でもS168対167で1差先行</td>
 </tr>
 <tr style="background:#dcfce7">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0670-05.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">フラエッテ（永遠）</td>
@@ -532,7 +532,7 @@ TOP6スプレッド全てが**C32 S32確定**で、違いは余り2の振り先�
 
 キラフロルはM-2環境において、**特性てきおうりょくによる一致技×2.0補正**でC150以上の火力を引き出し、**メガ後S101でS100族を上抜く**特殊アタッカーです。
 
-CS振り95%超・C32 S32固定という構築の収束が示すように、最もシンプルで強い使い方は「**メガ進化でC150×てきおうりょくの最大火力を確保し、S実数値168（おくびょう最速）から一致技で詰める**」形です。
+CS振り95%超・C32 S32固定という構築の収束が示すように、最もシンプルで強い使い方は「**メガ進化でC150×てきおうりょくの最大火力を確保し、S168（おくびょう最速）から一致技で詰める**」形です。
 
 じめん×4（ガブリアス・カバルドン）・みず×2（スターミー・ギャラドス）・はがね×2（ハッサム・ブリジュラス）への対策枠を用意できれば、フェアリー・ほのお・ひこう・むしタイプを軒並み確定1発圏に捉える強力なメガ進化ポケモンです。
 

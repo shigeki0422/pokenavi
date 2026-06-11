@@ -373,7 +373,7 @@ HC振りでとくこう126を活かしつつ、HP80に振ってオボンのみ�
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガY（ほのお/ひこう）にはうたかたのアリアが×2でほのお技も半減できるが、ソーラービーム（61.0%・くさ）が×2弱点でメガ後S実数値167に上から焼かれる。メガX（ほのお/ドラゴン）には一致技がともに等倍で有効打を欠く</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガY（ほのお/ひこう）にはうたかたのアリアが×2でほのお技も半減できるが、ソーラービーム（61.0%・くさ）が×2弱点でメガ後S167に上から焼かれる。メガX（ほのお/ドラゴン）には一致技がともに等倍で有効打を欠く</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

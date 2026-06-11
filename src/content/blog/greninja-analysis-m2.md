@@ -429,14 +429,14 @@ heroImage: '../../assets/hero-greninja-m2.png'
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ石採用率98.5%だが、メガリザードンY（S実数値167）でもゲッコウガのS実数値191が上回り先手。なみのりはメガリザードンY（ほのお/ひこう）に×2、メガリザードンX（ほのお/ドラゴン・34.9%）には等倍になる点に注意。低耐久同士の撃ち合いで上から押せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ石採用率98.5%だが、メガリザードンY（S167）でもゲッコウガのS191が上回り先手。なみのりはメガリザードンY（ほのお/ひこう）に×2、メガリザードンX（ほのお/ドラゴン・34.9%）には等倍になる点に注意。低耐久同士の撃ち合いで上から押せる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ メガ間で速度勝負</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（ゴースト弱点）。シャドーボール（71.1%）はあくで×0.5に軽減できる。ただしゲンガナイト採用率82.4%でメガ後はS130（S実数値200）となり、非メガのゲッコウガ（S実数値191）は先手を取られる。メガゲッコウガ（S実数値213）なら上を取れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどうが×2（ゴースト弱点）。シャドーボール（71.1%）はあくで×0.5に軽減できる。ただしゲンガナイト採用率82.4%でメガ後はS130（S200）となり、非メガのゲッコウガ（S191）は先手を取られる。メガゲッコウガ（S213）なら上を取れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
