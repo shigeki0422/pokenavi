@@ -267,7 +267,7 @@ MEGA_DATA = {
 # ---- 各ポケモンの静的データ ----
 POKEMON_DATA = {
     "ブリジュラス": {
-        "file": "baxcalibur", "dex": 1018, "id": "1018-00",
+        "file": "archaludon", "dex": 1018, "id": "1018-00",
         "types": ["ドラゴン", "はがね"],
         "stats": [90, 105, 130, 125, 65, 85],
     },
