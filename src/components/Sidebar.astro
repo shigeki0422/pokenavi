@@ -18,7 +18,10 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 ---
 
 <aside class="sidebar">
-	<a class="sb-brand" href="/">{SITE_TITLE}</a>
+	<a class="sb-brand" href="/">
+		<img class="sb-logo" src="/logo-mark.png" alt="ポケナビ ロゴ" width="36" height="36" />
+		<span class="sb-brand-text">{SITE_TITLE}</span>
+	</a>
 	<nav class="sb-nav">
 		<a href="/" class:list={['sb-link', { active: isActive('/') }]}>ホーム</a>
 		<a href="/ranking" class:list={['sb-link', { active: isActive('/ranking') }]}>使用率ランキング</a>
@@ -61,11 +64,26 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 		}
 	}
 	.sb-brand {
-		font-weight: 700;
-		font-size: 1.05rem;
-		color: rgb(var(--black));
+		display: flex;
+		align-items: center;
+		gap: 0.55rem;
 		text-decoration: none;
-		padding: 0.4rem 1.2rem 0.8rem;
+		padding: 0.5rem 1.0rem 0.9rem;
+		border-bottom: 1px solid #f1f5f9;
+		margin-bottom: 0.2rem;
+	}
+	.sb-logo {
+		width: 36px;
+		height: 36px;
+		border-radius: 8px;
+		flex-shrink: 0;
+		box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+	}
+	.sb-brand-text {
+		font-weight: 800;
+		font-size: 1.1rem;
+		color: rgb(var(--gray-dark));
+		letter-spacing: -0.01em;
 	}
 	.sb-nav {
 		display: flex;

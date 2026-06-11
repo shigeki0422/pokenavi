@@ -7,7 +7,12 @@ import Sidebar from './Sidebar.astro';
 <Sidebar />
 <header>
 	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
+		<h2>
+			<a href="/" class="brand-link">
+				<img src="/logo-mark.png" alt="ポケナビ ロゴ" width="28" height="28" class="brand-logo" />
+				{SITE_TITLE}
+			</a>
+		</h2>
 		<div class="internal-links">
 			<HeaderLink href="/ranking">使用率ランキング</HeaderLink>
 			<HeaderLink href="/pokemon">ポケモン情報</HeaderLink>
@@ -30,6 +35,17 @@ import Sidebar from './Sidebar.astro';
 	h2 a,
 	h2 a.active {
 		text-decoration: none;
+	}
+	.brand-link {
+		display: flex;
+		align-items: center;
+		gap: 0.45rem;
+	}
+	.brand-logo {
+		width: 28px;
+		height: 28px;
+		border-radius: 6px;
+		box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 	}
 	nav {
 		display: flex;
