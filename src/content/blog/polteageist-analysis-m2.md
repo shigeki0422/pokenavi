@@ -48,15 +48,15 @@ heroImage: '../../assets/hero-polteageist-m2.png'
 
 ポットデスの最大の役割は、**からをやぶる**で攻撃・特攻・素早さを2段階上げ、**バトンタッチ**でその上昇を後続へ引き継ぐことです。からをやぶる採用率99.1%・バトンタッチ88.4%とほぼ全個体がこの組み合わせを採用しており、ポットデス自身が殴るより「能力上昇を別のアタッカーに渡す」設計が定着しています。
 
-S2段階上昇（×2）後のすばやさは、ずぶとい無補正でS実数値122→**244**まで届きます。この上昇をバトンで受けた後続は、素のすばやさを問わず大半の相手より先に動けます。
+最多のHBS振り（H24 B24 S18）ではすばやさS実数値108で、からをやぶる2段階上昇（×2）後は**216**まで届きます。この上昇をバトンで受けた後続は、素のすばやさを問わず大半の相手より先に動けます。
 
 ### 2. しろいハーブでからをやぶるの隙を消す
 
 からをやぶるは攻撃・特攻・素早さを2段階上げる代わりに、**防御・特防を1段階下げる**デメリットがあります。**しろいハーブ（採用率93.4%）**はこの能力低下を1度だけ回復するため、積んだ直後に防御・特防が下がった状態を即座に元へ戻せます。低下分を打ち消してから殴られるため、積みの隙を最小化できるのが採用理由です。
 
-### 3. ゴースト単で起点を作りやすい
+### 3. ゴースト単で受け出して積み始めやすい
 
-ポットデスはゴースト単タイプで、**ノーマル・かくとう技を無効化**します。ノーマル技のしんそく（カイリュー）やかくとう技のインファイト等を透かせるため、これらの技を撃ってくる相手の前で受け出してからをやぶるを積み始められます。低い素早さ（S実数値122）でも、無効化できる技を持つ相手に対してなら被弾せず積む隙を作れます。
+ポットデスはゴースト単タイプで、**ノーマル・かくとう技を無効化**します。ノーマル技のしんそく（カイリュー）やかくとう技のインファイト等を透かせるため、これらの技を主体とする相手の前で受け出してからをやぶるを積み始められます。低い素早さ（最多振りでS実数値108）でも、有効打のない相手に対してなら被弾を抑えて積む隙を作れます。
 
 ---
 
@@ -114,7 +114,7 @@ S2段階上昇（×2）後のすばやさは、ずぶとい無補正でS実数�
   </div>
 </div>
 
-とくこう134・とくぼう114が高く、こうげき65・ぼうぎょ65・すばやさ70は控えめです。ずぶとい（B↑）でHB振りすると、ぼうぎょ実数値はB128まで上がり、HP実数値167と合わせて物理を1発耐えてからをやぶるを積めます。攻撃技を撃つ役割よりも、高い特防（D実数値166）と補正込みの物理耐久を活かして「積む1ターンを確保する」種族値構成です。
+とくこう134・とくぼう114が高く、こうげき65・ぼうぎょ65・すばやさ70は控えめです。ずぶとい（B↑）の最多HBS振り（H24 B24 S18）ではぼうぎょ実数値B119まで上がり、HP実数値167と合わせて物理を1発耐えてからをやぶるを積めます。攻撃技を撃つ役割よりも、無補正でもD実数値134の高い特防と補正込みの物理耐久を活かして「積む1ターンを確保する」種族値構成です。
 
 ### タイプ・弱点
 
@@ -157,7 +157,7 @@ S2段階上昇（×2）後のすばやさは、ずぶとい無補正でS実数�
 </table>
 </div>
 
-ノーマル・かくとうを無効化できる点が起点作りで重要で、しんそく（カイリュー）やインファイト・きあいだま等を透かしてからをやぶるを積み始められます。弱点はゴースト・あくの2タイプのみで、被弾面は狭め。ただしゴースト技のシャドーボール、あく技のはたきおとす・ふいうち等は×2で通り、低いHP実数値167では弱点技を1発耐えられない場面があるため、これらを撃つ相手の前では積めません。
+ノーマル・かくとうを無効化できる点が受け出して積み始めるうえで重要で、しんそく（カイリュー）やインファイト・きあいだま等を透かしてからをやぶるを積み始められます。弱点はゴースト・あくの2タイプのみで、被弾面は狭め。ただしゴースト技のシャドーボール、あく技のはたきおとす・ふいうち等は×2で通り、低いHP実数値167では弱点技を1発耐えられない場面があるため、これらを撃つ相手の前では積めません。
 
 ---
 
@@ -306,7 +306,7 @@ S2段階上昇（×2）後のすばやさは、ずぶとい無補正でS実数�
 
 **弱み:**
 
-アシストパワー（エスパー）はあくタイプに無効化されるため、ゾロアーク（ヒスイ・39位）等のあく枠を後続に控えられると、積んでも通せません。バトン型のように後続へ上昇を逃がせず、止められると積み直しが効かない一発勝負になります。
+アシストパワー（エスパー）はあくタイプに無効化されるため、サザンドラ（21位）・ドドゲザン（24位）等のあく枠を後続に控えられると、積んでも通せません。バトン型のように後続へ上昇を逃がせず、止められると積み直しが効かない一発勝負になります。
 
 ---
 
@@ -314,7 +314,7 @@ S2段階上昇（×2）後のすばやさは、ずぶとい無補正でS実数�
 
 ### 主要ポケモンとの相性
 
-ポットデスは「積む隙を作れるか」で相性が決まります。ノーマル・かくとうを無効化でき、弱点はゴースト・あくの2タイプのみと被弾面は狭いものの、低いHP実数値167のため弱点技は1発で落とされます。素のすばやさはS実数値122と遅く、からをやぶる前は大半の相手に先手を取られる点も踏まえ、有利・不利の両面を挙げます。
+ポットデスは「積む隙を作れるか」で相性が決まります。ノーマル・かくとうを無効化でき、弱点はゴースト・あくの2タイプのみと被弾面は狭いものの、低いHP実数値167のため弱点技は1発で落とされます。素のすばやさはS実数値108〜122と遅く、からをやぶる前は大半の相手に先手を取られる点も踏まえ、有利・不利の両面を挙げます。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -330,21 +330,21 @@ S2段階上昇（×2）後のすばやさは、ずぶとい無補正でS実数�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 起点にしやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）はゴーストに無効。 HB振りでげきりん（47.9%）も1発耐えやすく、受け出してからをやぶるを積み始められる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 有効打はないが居座りは厳しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）・げきりん（47.9%）はいずれもゴーストに等倍で弱点は突かれない。ただし高いこうげきの等倍じしんはHP実数値167に半分以上通り、ちからをすいとるでこうげきを下げないと安全に積めない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0530-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドリュウズ（同居1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 起点にしやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.5%）・アイアンヘッドはゴーストに無効・等倍。物理偏重のためちからをすいとるでこうげきを下げつつ積める</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 有効打はないが居座りは厳しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.5%）・アイアンヘッド（96.1%）はいずれもゴーストに等倍で弱点は突かれない。物理偏重なのでちからをすいとるでこうげきを下げれば積めるが、下げる前の等倍打点は重い</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（同居7位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 起点にしやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 受け出して積みやすい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん主体でゴーストに有効打が薄い。S47と遅く、ちからをすいとるで火力を削りながら安全に積める</td>
 </tr>
 <tr style="background:#fafafa">
@@ -366,7 +366,7 @@ S2段階上昇（×2）後のすばやさは、ずぶとい無補正でS実数�
     <img src="/images/pokemon/pokemon-0571-01.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゾロアーク（ヒスイ・39位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく技がゴースト×2弱点。アシストパワー（エスパー）も無効化され、自己完結型の抜きが通らない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマル/ゴーストでシャドーボール（49.6%）がゴースト×2弱点。S105で素のすばやさを上回り、積む前に処理される</td>
 </tr>
 </tbody>
 </table>
@@ -396,21 +396,21 @@ S2段階上昇（×2）後のすばやさは、ずぶとい無補正でS実数�
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">シャドーボール（71.1%）がゴースト×2弱点。素早さで上を取られ、積む前に落とされる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく枠（ゾロアーク等）を後続に置いてゴースト技を半減し、上から処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく単タイプ（バンギラス・ブラッキー等）を後続に置いてゴースト技を半減し、上から処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0354-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ジュペッタ（59位）
+    <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（19位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト技がゴースト×2弱点。 A115の物理打点で、HB振りでも弱点技を受け切れない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かげうち（93.6%）が先制のゴースト×2弱点。素早さに関係なく先に弱点技を入れられ、HP実数値167では受け切れない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ノーマルタイプ（ゴースト技無効）を後続に置いて受け、上から処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0959-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">デカヌチャン（同居10位帯）
+    <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー/はがねでシャドーボールを軽減せず通すが落とし切れず、はたきおとす等あく技を持つ個体に持ち物を叩かれる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく技を半減できるどく・はがね枠を後続に合わせ、削り合いを避けて積み直す盤面を作る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどう（98.5%）があく×2弱点。S98でこちらの素のすばやさを上回り、積む前に弱点技で落とされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく技を半減するフェアリー・かくとう枠を後続に合わせ、削り合いを避けて受け回す</td>
 </tr>
 </tbody>
 </table>
@@ -447,7 +447,7 @@ S2段階上昇（×2）後のすばやさは、ずぶとい無補正でS実数�
     <img src="/images/pokemon/pokemon-0571-01.webp" alt="ゾロアーク（ヒスイ）">
     <div class="name">ゾロアーク（ヒスイ）</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">あく技を半減し、苦手なゲンガー等のゴースト技を受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ノーマル/ゴースト。S105でバトンのS上昇を受けゴースト打点で抜く</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
@@ -462,8 +462,8 @@ S2段階上昇（×2）後のすばやさは、ずぶとい無補正でS実数�
 ポットデスは積んでバトンする起点役のため、残り5体で以下の役割を補います。
 
 1. **バトン先のアタッカー**: A・Sを受け取って全抜きを狙える物理エース（ドリュウズ・ギャラドス）を1〜2体置く
-2. **あく技の受け**: ゾロアーク（ヒスイ）・ブリジュラス等であく技を半減し、はたきおとす・ふいうちの弱点を受ける枠
-3. **ゴースト技の受け**: ノーマルタイプ（ゴースト技無効）でゲンガー・ジュペッタのゴースト打点を受ける枠
+2. **あく技の受け**: ブリジュラス（はがね/ドラゴン）等であく技を半減し、はたきおとす・ふいうちの弱点を受ける枠
+3. **ゴースト技の受け**: ノーマルタイプ（ゴースト技無効）でゲンガー・ミミッキュのゴースト打点を受ける枠
 4. **積む隙の確保**: じめん・かくとう主体の相手（ガブリアス・ドリュウズ等）を呼べる盤面を作り、無効化しながら積み始める
 
 ---
@@ -537,7 +537,7 @@ C134の高い特攻を持ちながら、攻撃技はシャドーボール（90.3
 
 ポットデスはからをやぶる（99.1%）で攻撃・特攻・素早さを2段階積み、しろいハーブ（93.4%）で低下を打ち消し、バトンタッチ（88.4%）で後続へ上昇を引き継ぐ起点役です。高い特攻134を持ちながら攻撃技はシャドーボール1枚に絞られ、役割は「自分で抜く」より「後続のアタッカーを起動させる」ことに寄っています。
 
-ゴースト単タイプでノーマル・かくとうを無効化でき、弱点はゴースト・あくの2タイプのみと積む隙を作りやすい一方、HP実数値167と素のすばやさS実数値122は低く、ゴースト・あく技で弱点を突かれると積む前に落とされます。バトン先の物理エース（ドリュウズ・ギャラドス）と、あく技を半減する後続を揃えた構築単位での運用が前提になります。
+ゴースト単タイプでノーマル・かくとうを無効化でき、弱点はゴースト・あくの2タイプのみと積む隙を作りやすい一方、HP実数値167と素のすばやさS実数値108〜122は低く、ゴースト・あく技で弱点を突かれると積む前に落とされます。バトン先の物理エース（ドリュウズ・ギャラドス）と、あく技を半減する後続を揃えた構築単位での運用が前提になります。
 
 ---
 

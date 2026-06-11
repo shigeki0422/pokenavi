@@ -45,9 +45,9 @@ heroImage: '../../assets/hero-heracross-m2.png'
 
 ### 1. スキルリンクで連続技が常に5発フルヒットする
 
-メガ後特性のスキルリンクは、ロックブラスト・タネマシンガン・ミサイルばりなど「2〜5回ヒット」の連続技を**常に最高回数の5発**で撃てます。1発あたりの威力は25ですが、5発で実質威力125相当となり、しかもタイプ一致補正が乗ります。
+メガ後特性のスキルリンクは、ロックブラスト・タネマシンガン・ミサイルばりなど「2〜5回ヒット」の連続技を**常に最高回数の5発**で撃てます。1発あたりの威力は25ですが、5発で実質威力125相当となり、むし一致のミサイルばりはさらにタイプ一致補正も乗ります。
 
-連続技の利点はヒット数が固定される点だけではありません。**1発ごとに判定が入るため、きあいのタスキを連続技で貫通でき、カイリューのマルチスケイル（HP満タン時の被ダメ半減）も1発目で剥がして残り4発を等倍で通せます**。みがわりも1発で割って残りを本体に通せるため、耐久調整や保険アイテムを連続技だけで崩しにかかれます。
+連続技の利点はヒット数が固定される点だけではありません。**1発ごとに判定が入るため、きあいのタスキを連続技で貫通でき、カイリューのマルチスケイル（HP満タン時の被ダメ半減）も1発目で剥がして残り4発は半減なしで通せます**。みがわりも1発で割って残りを本体に通せるため、耐久調整や保険アイテムを連続技だけで崩しにかかれます。
 
 ### 2. メガ後A185の高火力をインファイトで叩き込む
 
@@ -214,7 +214,7 @@ heroImage: '../../assets/hero-heracross-m2.png'
 </table>
 </div>
 
-**ひこうが×4**（むし×2・かくとう×2）と非常に重く、メガリザードンY・ウルガモス・カイリューといった環境上位の飛行・はね技に致命傷を負います。ほのお・エスパー・フェアリーも×2で、メガヘラクロスは耐久が中程度まで上がるものの弱点を突かれると一撃で落ちやすい点に注意が必要です。一方、くさ・じめん・あく・むし・かくとうを半減できるため、ガブリアスのじしん（じめん半減・等倍ではなく½）やマスカーニャのはたきおとす（あく½）を1発受けてから殴り返せます。
+**ひこうが×4**（むし×2・かくとう×2）と非常に重く、メガリザードンY・ウルガモス・カイリューといった環境上位のひこう技に致命傷を負います。ほのお・エスパー・フェアリーも×2で、メガヘラクロスは耐久が中程度まで上がるものの弱点を突かれると一撃で落ちやすい点に注意が必要です。一方、くさ・じめん・あく・むし・かくとうを半減できるため、ガブリアスのじしん（½）やマスカーニャのはたきおとす（½）を1発受けてから殴り返せます。
 
 ---
 
@@ -333,7 +333,7 @@ heroImage: '../../assets/hero-heracross-m2.png'
 
 **弱み:**
 
-S実数値127はいじっぱりの宿命で、メガミミロップ（S実数値205）・メガルカリオ（180）・マスカーニャ（192）など弱点を突ける高速アタッカーには先手を許します。耐久を活かして1発耐えてから殴り返す立ち回り前提のため、ひこう×4を突く攻撃には耐えきれず崩されます。
+S実数値127はようき型の139より遅く、ようき型なら同速以下に持ち込めるブリジュラス（137）にも後手に回ります。メガミミロップ（S実数値205）・メガルカリオ（180）・マスカーニャ（192）といった弱点を突ける高速アタッカーへの遅さは両型共通ですが、ようき型で先手を取れる中速帯すら抜けない点がいじっぱり型固有の弱みです。
 
 ---
 
@@ -395,14 +395,14 @@ S実数値127はいじっぱりの宿命で、メガミミロップ（S実数値
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトが×4（あく2×はがね2）。じしんも×2で通る。S実数値127＞ドドゲザンS実数値81で先手。確定1発圏</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトが×4（あく2×はがね2）。じしんも×2で通る。S実数値127＞ドドゲザンS実数値102で先手。確定1発圏</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（先手は許す）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ミサイルばりが×4（くさ2×あく2）、インファイトも×2。ただしS実数値192で先手を取られ、はたきおとす（あく½だが等倍以上で重い）を先に受ける。連続技でタスキは貫通</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ミサイルばりが×4（くさ2×あく2）、インファイトも×2。ただしS実数値192で先手を取られ、はたきおとす（あく½）を先に受ける。連続技でタスキは貫通</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -423,14 +423,14 @@ S実数値127はいじっぱりの宿命で、メガミミロップ（S実数値
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ロックブラストが×2で連続技がマルチスケイルを剥がして通るが、S実数値127で先手を許す。ブレイブバード等のひこう技は×4で致命傷、しんそく（ノーマル等倍）でも先制で削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ロックブラストが×2で連続技がマルチスケイルを剥がして通るが、S実数値127で先手を許す。エアスラッシュ（採用率55.6%）等のひこう技は×4で致命傷、しんそく（45.6%・ノーマル等倍）でも先制で削られる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ロックブラストが×4で刺さるが、メガリザードンY（S実数値149）に先手を許し、ほのお技（×2）・ひこう技（×4）で先に焼かれる。撃ち合いで間に合わない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ロックブラストが×4で刺さるが、メガリザードンY（S実数値152、おくびょうなら167）に先手を許し、ほのお技（×2）・ひこう技（×4）で先に焼かれる。撃ち合いで間に合わない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -459,28 +459,28 @@ S実数値127はいじっぱりの宿命で、メガミミロップ（S実数値
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガリザードンY（S実数値149）にS実数値127で先手を許し、ほのお×2・ひこう×4の技で先に落とされる。ロックブラスト×4で抜けるが間に合わない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガリザードンY（S実数値152、おくびょうなら167）にS実数値127で先手を許し、ほのお×2・ひこう×4の技で先に落とされる。ロックブラスト×4で抜けるが間に合わない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ロックブラストを持つ高速のいわ・でんき枠を後続に置く。じめん枠（ガブリアス）でメガリザードンXのじしん圏に置き、Yには高耐久のいわ・みず半減枠で受ける</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう技が×4で致命傷。S実数値127で先手を許し、はね技で先に落とされやすい。ロックブラストはマルチスケイル下でも連続技で通るが一撃には届かない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エアスラッシュ等のひこう技が×4で致命傷。S実数値127で先手を許し、先に落とされやすい。ロックブラストはマルチスケイル下でも連続技で通るが一撃には届かない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">こおり・でんき・いわ技を持つ高速枠（スターミー・でんきロトム等）でひこう技圏外から落とす。はがね・いわタイプでひこう技を半減して受ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（19位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ばけのかわで連続技以外の一撃を防がれ、ムーンフォース（フェアリー×2）・じゃれつく等で弱点を突かれる。インファイトはゴーストに×0で無効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ばけのかわで連続技以外の一撃を防がれ、じゃれつく（採用率91.9%・フェアリー×2）で弱点を突かれる。インファイトはゴーストに×0で無効</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ロックブラスト・タネマシンガン等の連続技でばけのかわを剥がしてから殴る。はがね・どくタイプを後続に置きフェアリー技を半減して受ける</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0681-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギルガルド（11位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトがゴーストに×0で無効。ロックブラスト・ミサイルばりも半減〜¼で打点が薄く、シャドーボール等で削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトがゴーストに×0で無効。ロックブラスト・ミサイルばりも半減〜¼で打点が薄く、ポルターガイスト（67.6%）等で削られる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（はがね/ゴーストに×2）を必ず採用して弱点を突く。シールドフォルムのうちはあくタイプを合わせてゴースト技を半減して受ける</td>
 </tr>
 </tbody>
@@ -518,7 +518,7 @@ S実数値127はいじっぱりの宿命で、メガミミロップ（S実数値
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでひこう・フェアリーを半減し、苦手なカイリューを受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでひこう技を半減し、苦手なカイリューを受ける</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
@@ -532,7 +532,7 @@ S実数値127はいじっぱりの宿命で、メガミミロップ（S実数値
 
 メガヘラクロスはS実数値127と低速で、ひこう×4をはじめ弱点も4タイプあるため、残り5体で以下の役割を補います。
 
-1. **ひこう・ほのお対策**: はがね・いわ（ブリジュラス）でメガリザードンY・カイリューのひこう技を半減して受ける枠
+1. **ひこう対策**: はがね/ドラゴンのブリジュラスでメガリザードンY・カイリューのひこう技を半減して受ける枠
 2. **高速アタッカーへの先手**: S123以上の高速枠（マスカーニャ・ガブリアス）でメガヘラクロスが抜けない上位を上から削る枠
 3. **先制技での詰め**: ローブシンのマッハパンチで、メガヘラクロスが削った高速アタッカーを優先度技で処理する枠
 4. **対面の切り返し**: メタモンで相手の高速エースをコピーし、先手で崩される展開を返す枠
@@ -553,7 +553,7 @@ S実数値127はいじっぱりの宿命で、メガミミロップ（S実数値
 
 注目すべきは、**むし一致のミサイルばり（43.3%）より、非一致のロックブラスト（89.9%）・タネマシンガン（81.9%）の採用率が高い**点です。通常はタイプ一致補正が乗る一致技が優先されますが、メガヘラクロスはスキルリンクで連続技が5発固定になるため、「一致補正の有無」より「かくとう・むしが半減される相手を補えるタイプか」で連続技を選んでいます。
 
-かくとう技は飛行・エスパー・むし・フェアリーに半減〜無効、むし技は飛行・はがね・ほのお等に半減されます。この穴をいわ（飛行に×2）・くさ（みず・じめんに×2）の連続技で埋めることで、メガヘラクロスは半減されにくい打点を2方向に確保しています。連続技は1発25でも、スキルリンク5発で実質125相当かつタスキ・みがわり・マルチスケイルを貫通するため、サブウェポンながら一致技に匹敵する役割を担えます。これがミサイルばりより両者の採用率が高い理由です。
+かくとう技は飛行・エスパー・むし・フェアリーに半減〜無効、むし技は飛行・はがね・ほのお等に半減されます。一致技だけでは飛行・みず・じめんに打点が通らないため、いわ（飛行に×2）・くさ（みず・じめんに×2）の連続技で半減されにくい打点を2方向に補っているのが採用率に表れています。むし一致のミサイルばりがこの2技より採用率が低いのは、むし技の通る相手（エスパー・あく・くさ）がインファイトのかくとう打点と範囲が重なりやすく、補完価値が小さいためと読み取れます。
 
 ---
 

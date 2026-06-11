@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】ホルード考察 M-2 使用率64位 ちからもち・タスキでじしんを上から通す物理アタッカー'
-description: 'M-2シングルバトルで使用率64位のホルードを徹底分析。ちからもち（採用率99.8%）で実質A実数値236相当のじしん、れいとうパンチ・かみなりパンチのパンチ範囲、きあいのタスキ79.3%・スカーフ14.5%の持ち物分岐を実データで解説。S130の中速とノーマル単の弱点も両面から検証します。'
+description: 'M-2シングルバトルで使用率64位のホルードを徹底分析。ちからもち（採用率99.8%）で実質A実数値236相当のじしん、れいとうパンチ・かみなりパンチのパンチ範囲、きあいのタスキ79.3%・スカーフ14.5%の持ち物分岐を実データで解説。S実数値130の中速と、ノーマル/じめん複合のかくとう・みず・くさ・こおり弱点も両面から検証します。'
 pubDate: '2026-06-11'
 draft: true
 heroImage: '../../assets/hero-greedent-m2.png'
@@ -25,6 +25,7 @@ heroImage: '../../assets/hero-greedent-m2.png'
     <h2 style="margin:0 0 8px">ホルード</h2>
     <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:44px;height:44px" />
+      <img src="/images/types/type-04-ground.png" alt="じめん" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
       使用率: <strong style="color:#e67e22">64位</strong>　特性: <strong>ちからもち 99.8%</strong>
@@ -36,7 +37,7 @@ heroImage: '../../assets/hero-greedent-m2.png'
 
 シーズンM-2（2026/5/13〜6/17）のシングルバトルで、ホルードは**使用率64位**を記録。特性は**ちからもち（採用率99.8%）**でほぼ統一されており、ほおぶくろ・ものひろいは少数派です。
 
-ホルードの軸は**ちからもちでこうげき実数値が2倍になる**点です。こうげき種族値は56と低いものの、いじっぱりAS振りでA実数値118、ちからもち適用後は実質**236相当**となり、A130のブリジュラスやA134のカイリューを上回る火力で物理技を撃てます。じしん（採用率99.7%）を主軸に、れいとうパンチ・かみなりパンチでパンチ範囲を広げる中速物理アタッカーです。
+ホルードの軸は**ちからもちでこうげき実数値が2倍になる**点です。こうげき種族値は56と低いものの、いじっぱりAS振りでA実数値118、ちからもち適用後は実質**236相当**となり、A130のガブリアス（A実数値200）やA134のカイリュー（A実数値204）を上回る火力で物理技を撃てます。じしん（採用率99.7%）を主軸に、れいとうパンチ・かみなりパンチでパンチ範囲を広げる中速物理アタッカーです。
 
 持ち物は**きあいのタスキ 79.3%・こだわりスカーフ 14.5%**に二分されます。本記事ではタスキ型を基準に、スカーフ型の差分も併せて解説します。
 
@@ -46,11 +47,11 @@ heroImage: '../../assets/hero-greedent-m2.png'
 
 ### 1. ちからもちで実質A実数値236相当のじしんを撃つ
 
-ホルードのこうげき種族値は56と低水準ですが、特性**ちからもち（採用率99.8%）はこうげき実数値を2倍にする**ため、火力は種族値の見た目を大きく超えます。いじっぱりAS振りでA実数値118、ちからもち適用後は実質**A実数値236相当**。これはA130のブリジュラス（いじっぱりAS振りでA実数値約200）やA134のカイリューを上回り、A56という低種族値からは想像しにくい高火力を、じしん（採用率99.7%）に乗せられます。
+ホルードのこうげき種族値は56と低水準ですが、特性**ちからもち（採用率99.8%）はこうげき実数値を2倍にする**ため、火力は種族値の見た目を大きく超えます。いじっぱりAS振りでA実数値118、ちからもち適用後は実質**A実数値236相当**。これはA130のガブリアス（いじっぱりAS振りでA実数値200）やA134のカイリュー（A実数値204）を上回り、A56という低種族値からは想像しにくい高火力を、じしん（採用率99.7%）に乗せられます。
 
 ### 2. じしんがはがね・どく・いわ・でんき勢に広く刺さる
 
-ホルードの技で最も採用率が高いのは**じしん（99.7%）**です。じめん技は環境上位のブリジュラス（はがね/ドラゴン・2位）・ルカリオ（かくとう/はがね・9位）・ゲンガー（ゴースト/どく・10位）・ギルガルド（はがね/ゴースト・11位）・ドドゲザン（あく/はがね・24位）にいずれも×2で通り、キラフロル（いわ/どく・15位）には×4で刺さります。ちからもちの2倍火力と合わせ、これらの高耐久はがね・どく勢を上から削れるのが大きな採用理由です。
+ホルードの技で最も採用率が高いのは**じしん（99.7%）**です。じめん技は環境上位のブリジュラス（はがね/ドラゴン・2位）・ルカリオ（かくとう/はがね・9位）・ゲンガー（ゴースト/どく・10位）・ギルガルド（はがね/ゴースト・11位）・ドドゲザン（あく/はがね・24位）にいずれも×2で通り、キラフロル（いわ/どく・15位）には×4で刺さります。ちからもちの2倍火力と合わせ、これらの高耐久はがね・どく勢に大きな打点を持てるのが採用理由です（ブリジュラスS実数値137・ゲンガーS実数値178等はホルードより速いため、先手を取るにはスカーフ型かタスキでの一耐えが前提）。
 
 ### 3. れいとうパンチ・かみなりパンチでじしんの通らない相手を補完
 
@@ -119,9 +120,10 @@ heroImage: '../../assets/hero-greedent-m2.png'
 <div class="type-row">
   <strong>タイプ：</strong>
   <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="ノーマル" />
+  <img src="/images/types/type-04-ground.png" alt="じめん" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="じめん" />
 </div>
 
-ホルードは**ノーマル単タイプ**です。弱点・耐性が少なく、弱点はかくとうのみ、ゴースト技を無効化できるのが対戦上の特徴です。
+ホルードは**ノーマル/じめんの複合タイプ**です。かくとうに加え、じめんが背負うみず・くさ・こおりが×2弱点で、低耐久のホルードには重い被弾になります。一方ででんき技を無効化（じめん）、ゴースト技も無効化（ノーマル）でき、無効タイプを2つ持つのが対戦上の特徴です。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
@@ -137,6 +139,9 @@ heroImage: '../../assets/hero-greedent-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
+      <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
+      <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -145,14 +150,17 @@ heroImage: '../../assets/hero-greedent-m2.png'
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
+      <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
+      <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
+    </div>
   </td>
 </tr>
 </tbody>
 </table>
 </div>
 
-ノーマル単は弱点がかくとうの1タイプのみで、ゴースト技を無効化できます。ゲンガー（ゴースト/どく）のシャドーボールやミミッキュ（ゴースト/フェアリー・19位）のゴースト技を透かせる一方、かくとう技は等倍より重い×2で通る点に注意が必要です。ルカリオのインファイト（採用率71.5%）・ばかぢからを持つかくとう勢には、タスキで耐えても返しに落とされやすくなります。
+ノーマル/じめんはゴースト技（ノーマル）とでんき技（じめん）を無効化できます。ゲンガー（ゴースト/どく）のシャドーボールやミミッキュ（ゴースト/フェアリー・19位）のゴースト技、でんき勢の10まんボルト等を透かせます。一方、弱点はかくとう・みず・くさ・こおりの4タイプと多く、低耐久のホルードはこれらの一致技に弱い点に注意が必要です。ルカリオのインファイト（採用率71.5%）等のかくとう技や、マスカーニャ等のくさ・みず勢のサブウェポンには、タスキで耐えても返しに落とされやすくなります。
 
 ---
 
@@ -175,7 +183,7 @@ heroImage: '../../assets/hero-greedent-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">100</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">99.7%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力打点。はがね・どく・いわ・でんき・ゴースト勢に広く刺さる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力打点。はがね・どく・いわ・でんき勢に広く×2で刺さる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>でんこうせっか</strong></td>
@@ -333,14 +341,14 @@ heroImage: '../../assets/hero-greedent-m2.png'
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが×2（はがね弱点）。ちからもちの2倍火力で高耐久でも削れる。S実数値130＞137の相手だが、こちらが速い。ただし10まんボルト（66.9%）は等倍で通り、撃ち合いは油断できない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが×2（はがね弱点）。ちからもちの2倍火力で高耐久でも一撃圏に近づける。ブリジュラスのでんき技（10まんボルト66.9%）はじめんが無効化できるのが大きい。ただしブリジュラスS実数値137＞ホルードS実数値130でわずかに遅く、こだわらない撃ち合いでは先手を許す</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが×2（どく弱点）。ノーマル単はシャドーボール（採用率上位のゴースト技）を無効化できる。低耐久のゲンガーをじしんで一撃圏に入れられる。ただしS実数値110＞130でこちらが先手</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ 速度勝負</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが×2（どく弱点）でシャドーボール（71.1%）も無効化できるが、ゲンガーS実数値178＞ホルードS実数値130で先に動かれ、きあいだま（37.4%・かくとう×2）・こごえるかぜ（36.7%・こおり×2）で先制で弱点を突かれる。タスキで耐えてじしんで返すか、スカーフ型で上から叩く展開が前提</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -361,14 +369,14 @@ heroImage: '../../assets/hero-greedent-m2.png'
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S実数値192＞130でこちらより速い。はたきおとす（57.6%）でタスキ・スカーフを叩き落とされ、トリプルアクセル（72.2%・ノーマル単に等倍）の連続技でタスキを貫通される。じしんはくさ/あくに×0.5で半減され打点が薄い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S実数値192＞130でこちらより速い。はたきおとす（57.6%）でタスキ・スカーフを叩き落とされ、トリプルアクセル（72.2%・じめん複合にこおり×2）の連続技でタスキを貫通しつつ弱点を突かれる。じしんはくさ/あくに×0.5で半減され打点が薄い</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう/はがねでインファイト（71.5%）がノーマル単に×2弱点。メガルカリオ（S実数値180）はこちらより速く、先制で弱点を突かれる。じしんは×2で通るが、タスキで耐えても返しに落とされやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう/はがねでインファイト（71.5%）がホルードに×2弱点。メガルカリオ（S実数値180）はこちらより速く、先制で弱点を突かれる。じしんは×2で通るが、タスキで耐えても返しに落とされやすい</td>
 </tr>
 </tbody>
 </table>
@@ -390,7 +398,7 @@ heroImage: '../../assets/hero-greedent-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（9位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（71.5%）がノーマル単に×2弱点。メガルカリオはS実数値180でホルードより速く、先手のかくとう技で落とされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト（71.5%）・しんくうは（26.0%・先制）がホルードに×2弱点。メガルカリオはS実数値180でホルードより速く、先手のかくとう技で落とされる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんがはがねに×2で通るので、タスキで耐えてから返すか、ひこう・エスパー・フェアリーの後続（リザードン等）でかくとう技を半減して受ける</td>
 </tr>
 <tr style="background:#fafafa">
@@ -398,14 +406,14 @@ heroImage: '../../assets/hero-greedent-m2.png'
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお/ひこうでじしんが無効。S実数値167（メガY）でこちらより速く、かえんほうしゃ（42.4%）等で先に焼かれる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かみなりパンチ（ひこうに×2）を入れた個体で対応するか、いわ・でんき・みずの後続でほのお技を半減して受ける。がんせきふうじでSを下げて後続に繋ぐのも有効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かみなりパンチ（ひこうに×2）を入れた個体で対応するか、いわ・みず・ドラゴンの後続でほのお技を半減して受ける。がんせきふうじでSを下げて後続に繋ぐのも有効</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（99.7%）の先制技でタスキ後の低HPを刈られる。つるぎのまい（86.6%）を積まれるとちからもちの2倍火力でも一撃で落とせず、積み後のバレットパンチで詰められる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんがはがねに×2、ほのおのパンチがむし/はがねに×4で通るので、ほのおのパンチ採用個体で先に削る。ほのお・ひこうの後続でバレットパンチを半減して受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおのパンチがむし/はがねに×4で通るので、ほのおのパンチ採用個体で先に削る。ほのお・みず・でんき・はがねの後続でバレットパンチ（はがね）を半減して受ける</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -418,8 +426,8 @@ heroImage: '../../assets/hero-greedent-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0902-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">イダイトウ オス（8位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/ゴーストでじしんが等倍。ノーマル単はゴースト技を無効化できるが、こちらの主力じしんが半減されず等倍止まりで一撃に届かず、撃ち合いで押し負ける</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かみなりパンチ（みずに×2）採用個体で弱点を突く。でんき・くさの後続でみず技を半減して受け回す</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のおはかまいり（99.9%・ゴースト）は無効化できるが、ウェーブタックル（96.5%）・アクアジェット（91.1%・先制）のみず技がじめん複合に×2で刺さる。じしんはみず/ゴーストに等倍止まりで、低耐久のホルードはみず技の被弾で先に崩れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かみなりパンチ（みずに×2）採用個体で先制アクアジェットの前に削り切る。でんき・くさの後続でみず技を半減して受け回す</td>
 </tr>
 </tbody>
 </table>
@@ -450,7 +458,7 @@ heroImage: '../../assets/hero-greedent-m2.png'
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでホルードの弱点かくとうを半減し、苦手なルカリオを受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでホルードの弱点みず・くさを1/4で受け、苦手なマスカーニャのくさ・みず技を流せる</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)">
@@ -462,18 +470,18 @@ heroImage: '../../assets/hero-greedent-m2.png'
     <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン">
     <div class="name">リザードン</div>
     <div class="rate">同居率5位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ほのお/ひこうでかくとう技を半減。マスカーニャのくさ・あく技も受けられる</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ほのお/ひこうでホルードの弱点かくとう・くさを半減し、ルカリオのインファイトを受ける</div>
   </div>
 </div>
 
 **パーティ構成の基本方針:**
 
-ホルードは中速で弱点かくとうを×2で突かれるため、残り5体で以下の役割を補います。
+ホルードは中速で、弱点のかくとう・みず・くさ・こおりを×2で突かれるため、残り5体で以下の役割を補います。
 
-1. **かくとう対策**: ひこう・エスパー・フェアリー（リザードン・ブリジュラス）でルカリオのインファイトを半減・無効化する枠
-2. **高速アタッカー対策**: ユキメノコ等の高速枠で、ホルードが先手を取られるガブリアス・マスカーニャに先制打点を持つ
-3. **じしん無効・等倍対策**: バサギリ等のひこう・ほのおへ弱点を突ける枠で、ホルードのじしんが通らないリザードンを崩す
-4. **受け回し**: イダイトウ等でかくとう技を透かし、ホルードが落ちた後の対面を立て直す
+1. **かくとう対策**: ひこう・エスパー・フェアリー（リザードン等）やゴースト（イダイトウ・ユキメノコ）でルカリオのインファイトを半減・無効化する枠
+2. **みず・くさ対策**: ブリジュラス等の、ホルードの弱点みず・くさを1/4〜半減で受けられる枠
+3. **高速アタッカー対策**: ユキメノコ等の高速枠で、ホルードが先手を取られるガブリアス・マスカーニャ・ゲンガーに先制打点を持つ
+4. **じしん無効・等倍対策**: バサギリ等のひこう・ほのおへ弱点を突ける枠で、ホルードのじしんが通らないリザードンを崩す
 
 ---
 
@@ -484,11 +492,12 @@ heroImage: '../../assets/hero-greedent-m2.png'
 | ポケモン | A種族値 | A実数値（いじっぱりAS） | ちからもち適用後 |
 |---|---|---|---|
 | ホルード | 56 | 118 | **236相当** |
-| ブリジュラス | 130 | 約200 | — |
-| カイリュー | 134 | 約205 | — |
-| ガブリアス | 130 | 約200 | — |
+| ドドゲザン | 135 | 205 | — |
+| カイリュー | 134 | 204 | — |
+| ハッサム | 130 | 200 | — |
+| ガブリアス | 130 | 200 | — |
 
-A56という種族値だけを見るとアタッカー適性は低く見えますが、ちからもち適用後の**実質A実数値236相当**は、A130級のブリジュラス・ガブリアスのいじっぱりAS振り（A実数値約200）を上回ります。つまりホルードの火力評価は「種族値A56の弱いポケモン」ではなく「環境トップ級のA実数値を持つ物理アタッカー」として行うべきで、これがじしん99.7%という一点突破の技構成が成立する理由です。
+A56という種族値だけを見るとアタッカー適性は低く見えますが、ちからもち適用後の**実質A実数値236相当**は、A130〜135級のドドゲザン・カイリュー・ガブリアスのいじっぱりAS振り（A実数値200〜205）を上回ります。つまりホルードの火力評価は「種族値A56の弱いポケモン」ではなく「環境トップ級のA実数値を持つ物理アタッカー」として行うべきで、これがじしん99.7%という一点突破の技構成が成立する理由です。
 
 一方で、この火力は特性に全面的に依存します。ちからもちを無効化されたり、特性が書き換わると火力が半減するため、ホルードの強さは「特性ありき」である点も同時に読み取れます。
 
@@ -528,9 +537,9 @@ A56という種族値だけを見るとアタッカー適性は低く見えま�
 
 **総評:**
 
-ホルードはちからもち（採用率99.8%）で実質A実数値236相当の火力を得る物理アタッカーです。じしん（99.7%）を主軸に、はがね・どく・いわ・でんき・ゴースト勢を上から削り、れいとうパンチ・かみなりパンチでじしんの通らないドラゴン・ひこう・みず複合を補完します。種族値A56からは想像できない火力が、特性によって成立しているのが最大の特徴です。
+ホルードはちからもち（採用率99.8%）で実質A実数値236相当の火力を得る物理アタッカーです。じしん（99.7%）を主軸に、はがね・どく・いわ・でんき勢へ大きな打点を持ち、れいとうパンチ・かみなりパンチでじしんの通らないドラゴン・ひこう・みず複合を補完します。種族値A56からは想像できない火力が、特性によって成立しているのが最大の特徴です。
 
-持ち物はきあいのタスキ79.3%・こだわりスカーフ14.5%に二分され、「1回耐えて先制で詰める」か「最速で上を取る」かで役割が変わります。一方、S実数値130（いじっぱり）は中速帯でガブリアス・マスカーニャ等の高速勢に先手を許し、ノーマル単のかくとう×2弱点を突かれると低耐久で崩れます。これらは構築単位の補完が前提で、苦手なルカリオ・リザードン・ハッサムには後続のタイプ補完で対応する必要があります。
+持ち物はきあいのタスキ79.3%・こだわりスカーフ14.5%に二分され、「1回耐えて先制で詰める」か「最速で上を取る」かで役割が変わります。一方、S実数値130（いじっぱり）は中速帯でガブリアス・マスカーニャ・ゲンガー等の高速勢に先手を許し、ノーマル/じめん複合のかくとう・みず・くさ・こおり×2弱点を突かれると低耐久で崩れます。これらは構築単位の補完が前提で、苦手なルカリオ・リザードン・ハッサム・マスカーニャには後続のタイプ補完で対応する必要があります。
 
 ---
 
@@ -538,5 +547,3 @@ A56という種族値だけを見るとアタッカー適性は低く見えま�
 
 - [れいとうパンチが×4で刺さる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [じしんが無効で苦手 リザードンのM-2考察](/blog/charizard-y-analysis-m2/)
-</content>
-</invoke>

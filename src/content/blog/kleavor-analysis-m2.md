@@ -427,7 +427,7 @@ heroImage: '../../assets/hero-kleavor-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンで岩斧・シザークロス・つじぎりを半減。インファイト（かくとう×2）以外は通らず、B130の高耐久で一撃が難しい。10まんボルト（66.9%）が等倍で重い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンで岩斧・シザークロスを半減、つじぎりも等倍止まり。インファイト（かくとう×2）以外は通らず、B130の高耐久で一撃が難しい。10まんボルト（66.9%）が等倍で重い</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトではがね弱点を突くか、じめん・かくとう枠（ローブシン等）を合わせて受け回す</td>
 </tr>
 <tr>
