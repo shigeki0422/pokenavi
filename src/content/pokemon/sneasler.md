@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かるわざ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">もちものを失うとすばやさが2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">持っていた道具がなくなると素早さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">78.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">どくしゅ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を使ったとき30%の確率で相手をどく状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手に接触技を当てると30%の確率でどく状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">21.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">プレッシャー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技のPPを1ターンに2倍消費させる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分に対し、相手の使う技のPPを1多く減らす。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.3%</td>
 </tr>
 </tbody>

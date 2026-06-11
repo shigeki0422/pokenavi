@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ちからずく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">追加効果がある技の威力が1.3倍になるが追加効果はなくなる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃の追加効果はなくなるが、1.3倍の威力で技を出す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">39.4%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">いかく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に相手全体のこうげきを1段階下げる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手の攻撃を1段階下げる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">32.2%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">いかりのつぼ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の攻撃が急所に当たると、自分の攻撃が6段階目まで上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">28.4%</td>
 </tr>
 </tbody>

@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ひでり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に天気をにほんばれにする（5ターン）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時から5ターンの間、にほんばれ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">89.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">もらいび</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技を受けると無効化し、自分のほのお技が強化される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技が効かず、自分はもらいび状態になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10.9%</td>
 </tr>
 </tbody>

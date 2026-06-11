@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">さいせいりょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">手持ちに戻ると最大HPの1/3回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">84.5%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">かんろなミツ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手の回避率を1段階下げる。1回の戦闘で1度しか発動しない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">11.6%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ねんちゃく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">持っている道具を相手に奪われず失わない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4.0%</td>
 </tr>
 </tbody>

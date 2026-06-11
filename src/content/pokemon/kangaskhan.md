@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">きもったま</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゴーストタイプにノーマル・かくとうの技が当たる。いかくを受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ノーマル・かくとうタイプの技をゴーストタイプに当てられる。いかくも効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">90.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">せいしんりょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるみ状態にならない。いかくを受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の攻撃にひるまず、いかくも効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">はやおき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむり状態のとき通常より早く目覚める</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむり状態になっても2倍の早さで目覚める。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.2%</td>
 </tr>
 </tbody>
@@ -147,7 +147,7 @@ draft: false
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：おやこあい** — 技が2回ヒットする（2回目は威力の25%）
+**特性：おやこあい** — 攻撃技が2回の連続攻撃になる。2回目は0.25倍の威力だが、技の効果は2回分発動する。
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">

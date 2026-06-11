@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">スキルリンク</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">連続技を使うと最高回数まで出せる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">86.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">するどいめ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">命中率が下がらない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の回避率の変化を無視し、命中率も下げられない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">11.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ちからずく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">追加効果がある技の威力が1.3倍になるが追加効果はなくなる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃の追加効果はなくなるが、1.3倍の威力で技を出す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.7%</td>
 </tr>
 </tbody>

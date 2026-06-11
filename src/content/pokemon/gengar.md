@@ -121,7 +121,7 @@ analysisSlug: 'gengar-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">のろわれボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手の技をかなしばりにする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">技のダメージを受けると30%の確率で4ターンの間、相手をわざふうじ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">100.0%</td>
 </tr>
 </tbody>
@@ -138,7 +138,7 @@ analysisSlug: 'gengar-analysis-m2'
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:36px;height:36px;vertical-align:middle" /><img src="/images/types/type-03-poison.png" alt="どく" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：かげふみ** — 相手のポケモンを逃げられなくする
+**特性：かげふみ** — ゴーストタイプ以外の相手が交代できなくなる。
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">

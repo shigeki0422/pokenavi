@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ポイズンヒール</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">どく状態のときターン終了時にHPが回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">どく・もうどく状態になるとターン終わりにHPが減らず最大HPの1/8回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">57.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">かいりきバサミ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技や特性で攻撃を下げられない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">32.0%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">すながくれ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">砂嵐のとき回避率が1.25倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">すなあらし状態の時、回避率が1.25倍になる。すなあらしのダメージを受けない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10.8%</td>
 </tr>
 </tbody>

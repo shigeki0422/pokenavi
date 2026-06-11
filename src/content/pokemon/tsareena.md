@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">じょおうのいげん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分と味方に対し、相手は先制技を使えない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">83.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">スイートベール</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分と味方は、ねむり・ねむけ状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">16.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">リーフガード</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれのとき状態異常にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれ状態の時、状態異常にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.6%</td>
 </tr>
 </tbody>

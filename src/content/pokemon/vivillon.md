@@ -122,17 +122,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ふくがん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">技の命中率が1.3倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.6%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">りんぷん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のもちものや特性の効果を受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">技の追加効果が効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.3%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">フレンドガード</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">味方が受けるダメージを3/4にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.0%</td>
 </tr>
 </tbody>

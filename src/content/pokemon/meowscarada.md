@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">へんげんじざい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">使った技のタイプになる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場するたび1回だけ、自分が出す技と同じタイプに変化する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">95.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">しんりょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/3以下になるとくさタイプの技の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になると、くさタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5.0%</td>
 </tr>
 </tbody>

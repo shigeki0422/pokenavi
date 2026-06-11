@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ノーガード</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">お互いの技の命中率が100%になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">76.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">やるき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむり・ねむけ状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">20.6%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">するどいめ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">命中率が下がらない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の回避率の変化を無視し、命中率も下げられない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.4%</td>
 </tr>
 </tbody>

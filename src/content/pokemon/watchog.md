@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">アナライズ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ターンの最後に技を出すと技の威力が1.3倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">85.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">はっこう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の回避率の変化を無視し、命中率も下げられない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">するどいめ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">命中率が下がらない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の回避率の変化を無視し、命中率も下げられない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3.2%</td>
 </tr>
 </tbody>

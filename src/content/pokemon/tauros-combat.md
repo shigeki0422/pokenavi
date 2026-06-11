@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">いかく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に相手全体のこうげきを1段階下げる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手の攻撃を1段階下げる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">85.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">はんすう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">きのみを食べた次のターン終わりに、また同じきのみを1度だけ食べる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">12.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">いかりのつぼ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の攻撃が急所に当たると、自分の攻撃が6段階目まで上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.6%</td>
 </tr>
 </tbody>

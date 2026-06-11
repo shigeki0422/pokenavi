@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ふしょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">はがねタイプ・どくタイプの相手もどく状態・もうどく状態にできる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">93.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">どんかん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">いかく・おだやか・ちょうはつ・いじわるなどの変化技を受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">メロメロ・ちょうはつ状態にならず、相手の特性「いかく」も効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6.8%</td>
 </tr>
 </tbody>

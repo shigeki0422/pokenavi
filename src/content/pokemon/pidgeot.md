@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">はとむね</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技や特性で防御を下げられない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">63.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">するどいめ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">命中率が下がらない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の回避率の変化を無視し、命中率も下げられない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">28.6%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ちどりあし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">こんらん状態の時、回避率が2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8.2%</td>
 </tr>
 </tbody>

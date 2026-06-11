@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かたやぶり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の特性を無視して攻撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の特性に関係なく技を出すことができる（例外となる特性もある）。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">94.6%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">マイペース</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">こんらん状態にならず、相手の特性「いかく」も効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3.1%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">わるいてぐせ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分が道具を持っていない時、接触技を受けると相手の道具を盗んでしまう。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.4%</td>
 </tr>
 </tbody>

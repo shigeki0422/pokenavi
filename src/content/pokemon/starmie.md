@@ -121,17 +121,17 @@ analysisSlug: 'starmie-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">しぜんかいふく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">控えに戻ると状態異常が回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">手持ちに戻ると状態異常が治る。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">89.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">はっこう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の回避率の変化を無視し、命中率も下げられない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5.6%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">アナライズ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ターンの最後に技を出すと技の威力が1.3倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4.7%</td>
 </tr>
 </tbody>

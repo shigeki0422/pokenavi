@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">さいせいりょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">手持ちに戻ると最大HPの1/3回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">93.4%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">いやしのこころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ターン終わりに、状態異常の味方を50%の確率で治す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ぶきよう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">このポケモンが持っている道具は効果を発揮しない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.0%</td>
 </tr>
 </tbody>

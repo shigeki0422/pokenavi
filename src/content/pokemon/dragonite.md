@@ -121,12 +121,12 @@ analysisSlug: 'dragonite-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">マルチスケイル</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが満タンの時に受けるダメージが半減する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">98.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">せいしんりょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるみ状態にならない。いかくを受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の攻撃にひるまず、いかくも効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.8%</td>
 </tr>
 </tbody>

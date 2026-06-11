@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ぼうおん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">音の技が効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">54.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">がんじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HP満タンのとき一撃では倒れない。一撃必殺技も無効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが満タンの時、一撃でひんしになる技のダメージを受けると、HPを1残して耐える。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">45.9%</td>
 </tr>
 </tbody>

@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かそく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">毎ターン終了時にすばやさが1段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ターン終わりに素早さが1段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">97.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">さめはだ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">直接攻撃を受けると相手に最大HPの1/8のダメージ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると、相手の最大HPの1/8のダメージを与える。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.1%</td>
 </tr>
 </tbody>

@@ -120,12 +120,12 @@ analysisSlug: 'ditto-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かわりもの</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">目の前のポケモンに変身する。HP以外のステータスも同じになる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">じゅうなん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">まひ状態にならない。まひのすばやさ低下も受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">まひ状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.9%</td>
 </tr>
 </tbody>

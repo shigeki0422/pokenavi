@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ほおぶくろ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">きのみを食べた時、その効果に加えて最大HPの1/3回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">84.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ものひろい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">バトル後にどうぐを入手できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">道具未所持時、自分以外が消費した道具をターン終わりに拾う。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">15.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">プラス</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">プラスかマイナスの特性を持つ味方が場にいると特攻が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.5%</td>
 </tr>
 </tbody>

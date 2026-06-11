@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ゆきふらし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に天気をゆきにする（5ターン）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時から5ターンの間、ゆき状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.3%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">くだけるよろい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">物理攻撃を受けるとぼうぎょが1段階下がりすばやさが2段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">物理技でダメージを受けると防御が1段階下がり素早さが2段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">アイスボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆきのとき毎ターンHPが少しずつ回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆき状態の時、ターン終わりに最大HPの1/16回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.2%</td>
 </tr>
 </tbody>

@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">あめふらし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に天気をあめにする（5ターン）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時から5ターンの間、あめ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">94.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ちょすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">みずタイプの技を受けるとHPが回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">みずタイプの技が効かず、最大HPの1/4回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">しめりけ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">じばく・だいばくはつなどの自爆技を封じる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">全員、爆発技が使用できず、爆発する特性も発動しない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.3%</td>
 </tr>
 </tbody>

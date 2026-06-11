@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">げきりゅう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/3以下になるとみずタイプの技の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になると、みずタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">95.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">うるおいボイス</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">音の技がみずタイプになる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4.8%</td>
 </tr>
 </tbody>

@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">いたずらごころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">変化技が先制で出せる（優先度+1）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">変化技の優先度が1段階上がる。あくタイプの相手への変化技は無効になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">マジシャン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃したとき相手のもちものを奪う</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分が道具を持っていない時、技でダメージを与えた相手の道具を奪う。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.8%</td>
 </tr>
 </tbody>

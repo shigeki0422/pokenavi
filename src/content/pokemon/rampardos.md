@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かたやぶり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の特性を無視して攻撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の特性に関係なく技を出すことができる（例外となる特性もある）。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">56.8%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ちからずく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">追加効果がある技の威力が1.3倍になるが追加効果はなくなる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃の追加効果はなくなるが、1.3倍の威力で技を出す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">43.2%</td>
 </tr>
 </tbody>

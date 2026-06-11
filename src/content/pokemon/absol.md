@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">きょううん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">きゅうしょアップ+1になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">47.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">せいぎのこころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">あくタイプの技を受けるとこうげきが1段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">あくタイプの技のダメージを受けると攻撃が1段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">41.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">プレッシャー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技のPPを1ターンに2倍消費させる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分に対し、相手の使う技のPPを1多く減らす。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10.9%</td>
 </tr>
 </tbody>

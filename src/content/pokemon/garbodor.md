@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">くだけるよろい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">物理攻撃を受けるとぼうぎょが1段階下がりすばやさが2段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">物理技でダメージを受けると防御が1段階下がり素早さが2段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">64.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ゆうばく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技でひんしになると相手の最大HPの1/4のダメージを与える。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">29.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">あくしゅう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃時10%の確率で相手をひるませる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">技でダメージを与えた時10%の確率で相手をひるませる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6.2%</td>
 </tr>
 </tbody>

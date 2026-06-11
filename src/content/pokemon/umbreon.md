@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">せいしんりょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるみ状態にならない。いかくを受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の攻撃にひるまず、いかくも効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">68.4%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">シンクロ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常になると相手にも同じ状態異常を与える</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技や特性でどく・もうどく・まひ・やけど状態になると相手も同じ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">31.6%</td>
 </tr>
 </tbody>

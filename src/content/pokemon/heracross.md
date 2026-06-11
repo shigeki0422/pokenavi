@@ -121,17 +121,17 @@ analysisSlug: 'heracross-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">じしんかじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃で相手を倒すと攻撃が1段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">58.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">こんじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常のときこうげきが1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常の時、攻撃が1.5倍になる。やけどによる物理ダメージ半減は無視する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">40.7%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">むしのしらせ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になるとむしタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.1%</td>
 </tr>
 </tbody>

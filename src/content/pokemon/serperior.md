@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">あまのじゃく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分に対する能力変化が逆転し、上がる時には下がり、下がる時には上がる（自分の技でも相手の技でも対象が自分なら逆転）。自分が相手に与える能力変化は通常通り。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.5%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">しんりょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/3以下になるとくさタイプの技の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になると、くさタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.5%</td>
 </tr>
 </tbody>

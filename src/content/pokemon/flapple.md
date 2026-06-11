@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">はりきり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">こうげきが1.5倍になるが命中率が0.8倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">物理技を使う時攻撃が1.5倍になるが命中率が0.8倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">86.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">じゅくせい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">食べるきのみの効果が2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">13.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">くいしんぼう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HP半分以下になるとすぐにきのみを食べる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/4以下で食べるきのみを、HPが1/2以下で食べる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.4%</td>
 </tr>
 </tbody>

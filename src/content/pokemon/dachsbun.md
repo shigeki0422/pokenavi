@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">アロマベール</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分と味方は、メロメロ・ちょうはつ・連続不可・わざふうじ・かいふくふうじ・アンコール状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">96.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">いやしのこころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ターン終わりに、状態異常の味方を50%の確率で治す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3.3%</td>
 </tr>
 </tbody>

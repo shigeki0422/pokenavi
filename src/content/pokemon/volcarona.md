@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ほのおのからだ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をやけど状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をやけど状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">89.5%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">むしのしらせ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になるとむしタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10.5%</td>
 </tr>
 </tbody>

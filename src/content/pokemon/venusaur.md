@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ようりょくそ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれのときすばやさが2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれ状態の時、素早さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">69.8%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">しんりょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/3以下になるとくさタイプの技の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になると、くさタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">30.2%</td>
 </tr>
 </tbody>
@@ -143,7 +143,7 @@ draft: false
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:36px;height:36px;vertical-align:middle" /><img src="/images/types/type-03-poison.png" alt="どく" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：あついしぼう** — —
+**特性：あついしぼう** — ほのおタイプ・こおりタイプの技で受けるダメージが半減する。
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">

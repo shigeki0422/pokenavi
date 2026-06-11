@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">げきりゅう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/3以下になるとみずタイプの技の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になると、みずタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">86.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">くいしんぼう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HP半分以下になるとすぐにきのみを食べる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/4以下で食べるきのみを、HPが1/2以下で食べる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">13.9%</td>
 </tr>
 </tbody>

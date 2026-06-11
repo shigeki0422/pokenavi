@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">プレッシャー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技のPPを1ターンに2倍消費させる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分に対し、相手の使う技のPPを1多く減らす。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">63.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ミラーアーマー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分が受ける能力を下げる効果を受けずに相手に跳ね返す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">35.1%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">きんちょうかん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のきのみを使えなくする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のきのみを食べられなくさせる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.0%</td>
 </tr>
 </tbody>

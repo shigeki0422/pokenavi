@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ゆきかき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆき状態の時、素早さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">47.3%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">すいすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">あめ状態の時、素早さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">40.2%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ゆきがくれ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆきのとき回避率が1.25倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆき状態の時、回避率が1.25倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">12.5%</td>
 </tr>
 </tbody>

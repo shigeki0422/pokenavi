@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かるわざ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">もちものを失うとすばやさが2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">持っていた道具がなくなると素早さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">84.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">スイートベール</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分と味方は、ねむり・ねむけ状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">15.1%</td>
 </tr>
 </tbody>

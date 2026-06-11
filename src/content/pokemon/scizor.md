@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">テクニシャン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">威力60以下の技の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">威力が60以下の技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">98.6%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ライトメタル</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分の重さが半分になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分の重さが1/2になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.7%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">むしのしらせ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になるとむしタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.6%</td>
 </tr>
 </tbody>
@@ -148,7 +148,7 @@ draft: false
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-06-bug.png" alt="むし" style="width:36px;height:36px;vertical-align:middle" /><img src="/images/types/type-08-steel.png" alt="はがね" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：テクニシャン** — 威力60以下の技の威力が1.5倍になる
+**特性：テクニシャン** — 威力が60以下の技の威力が1.5倍になる。
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">

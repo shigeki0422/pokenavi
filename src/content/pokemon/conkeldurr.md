@@ -120,17 +120,17 @@ analysisSlug: 'conkeldurr-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">てつのこぶし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">パンチの技の威力が1.2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">62.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ちからずく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">追加効果がある技の威力が1.3倍になるが追加効果はなくなる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃の追加効果はなくなるが、1.3倍の威力で技を出す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">24.7%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">こんじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常のときこうげきが1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常の時、攻撃が1.5倍になる。やけどによる物理ダメージ半減は無視する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">13.2%</td>
 </tr>
 </tbody>

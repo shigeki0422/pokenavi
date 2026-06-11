@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">もらいび</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技を受けると無効化し、自分のほのお技が強化される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技が効かず、自分はもらいび状態になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">87.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">こんじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常のときこうげきが1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常の時、攻撃が1.5倍になる。やけどによる物理ダメージ半減は無視する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">13.0%</td>
 </tr>
 </tbody>

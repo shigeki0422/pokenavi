@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">まけんき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">こうげきが下げられると逆にこうげきが2段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手に能力を下げられると攻撃が2段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">75.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">レシーバー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">倒された味方の特性と同じ特性になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">24.1%</td>
 </tr>
 </tbody>

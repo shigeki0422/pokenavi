@@ -120,12 +120,12 @@ analysisSlug: 'polteageist-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">のろわれボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手の技をかなしばりにする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">技のダメージを受けると30%の確率で4ターンの間、相手をわざふうじ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">92.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">くだけるよろい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">物理攻撃を受けるとぼうぎょが1段階下がりすばやさが2段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">物理技でダメージを受けると防御が1段階下がり素早さが2段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7.3%</td>
 </tr>
 </tbody>

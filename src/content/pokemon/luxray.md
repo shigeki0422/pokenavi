@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">いかく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に相手全体のこうげきを1段階下げる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手の攻撃を1段階下げる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">93.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">こんじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常のときこうげきが1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常の時、攻撃が1.5倍になる。やけどによる物理ダメージ半減は無視する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5.2%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">とうそうしん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手と性別が同じ時技の威力が1.25倍、違うと0.75倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.6%</td>
 </tr>
 </tbody>

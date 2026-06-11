@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">マジックガード</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">直接ダメージ以外のダメージを受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃以外ではダメージを受けない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">80.6%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">さいせいりょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">手持ちに戻ると最大HPの1/3回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">18.6%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ぼうじん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">すなあらしで受けるダメージが効かない。粉の技・特性も効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.8%</td>
 </tr>
 </tbody>

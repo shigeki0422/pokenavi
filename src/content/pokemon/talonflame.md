@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">はやてのつばさ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが満タンの時、ひこうタイプの技の優先度が1上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">60.5%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ほのおのからだ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をやけど状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をやけど状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">39.5%</td>
 </tr>
 </tbody>

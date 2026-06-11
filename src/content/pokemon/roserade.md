@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">しぜんかいふく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">控えに戻ると状態異常が回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">手持ちに戻ると状態異常が治る。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">61.4%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">どくのトゲ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をどく状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">36.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">テクニシャン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">威力60以下の技の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">威力が60以下の技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.2%</td>
 </tr>
 </tbody>

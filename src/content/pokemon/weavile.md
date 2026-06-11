@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">プレッシャー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技のPPを1ターンに2倍消費させる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分に対し、相手の使う技のPPを1多く減らす。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">51.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">わるいてぐせ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分が道具を持っていない時、接触技を受けると相手の道具を盗んでしまう。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">48.8%</td>
 </tr>
 </tbody>

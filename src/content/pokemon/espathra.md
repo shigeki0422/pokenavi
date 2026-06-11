@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かそく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">毎ターン終了時にすばやさが1段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ターン終わりに素早さが1段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.5%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">びんじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手がステータスを上昇させると同じステータスを1段階上げる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の能力が上がった時、自分も同じように能力が上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">おみとおし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に相手のもちものを把握する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手が持っている道具を知ることができる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.1%</td>
 </tr>
 </tbody>

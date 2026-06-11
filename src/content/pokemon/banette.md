@@ -120,17 +120,17 @@ analysisSlug: 'banette-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">おみとおし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に相手のもちものを把握する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手が持っている道具を知ることができる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">86.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ふみん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむり状態にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむけ・ねむり状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">のろわれボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手の技をかなしばりにする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">技のダメージを受けると30%の確率で4ターンの間、相手をわざふうじ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3.9%</td>
 </tr>
 </tbody>

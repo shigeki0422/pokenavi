@@ -120,17 +120,17 @@ analysisSlug: 'milotic-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かちき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手に能力を下げられると特攻が2段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">45.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">メロメロボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をメロメロ状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">異性から接触技を受けると30%の確率で相手をメロメロ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">33.3%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ふしぎなうろこ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常のとき防御が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常の時、防御が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">21.4%</td>
 </tr>
 </tbody>

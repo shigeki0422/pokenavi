@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">きよめのしお</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常にならない。ゴーストタイプの技で受けるダメージが半減する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">89.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">がんじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HP満タンのとき一撃では倒れない。一撃必殺技も無効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが満タンの時、一撃でひんしになる技のダメージを受けると、HPを1残して耐える。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9.3%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">クリアボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">能力を下げる効果を受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技や特性で能力ランクが下がらない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.0%</td>
 </tr>
 </tbody>

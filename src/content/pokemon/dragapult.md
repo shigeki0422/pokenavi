@@ -121,17 +121,17 @@ analysisSlug: 'dragapult-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">すりぬけ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の壁（リフレクター・光のかべ等）の効果を無視して攻撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のひかりのかべ・リフレクター・オーロラベール・しんぴのまもり・みがわりを無視して技を使う。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">56.5%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">クリアボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">能力を下げる効果を受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技や特性で能力ランクが下がらない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">26.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">のろわれボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手の技をかなしばりにする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">技のダメージを受けると30%の確率で4ターンの間、相手をわざふうじ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">17.1%</td>
 </tr>
 </tbody>

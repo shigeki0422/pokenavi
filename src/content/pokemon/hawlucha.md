@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かるわざ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">もちものを失うとすばやさが2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">持っていた道具がなくなると素早さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">45.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">かたやぶり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の特性を無視して攻撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の特性に関係なく技を出すことができる（例外となる特性もある）。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">42.6%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">じゅうなん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">まひ状態にならない。まひのすばやさ低下も受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">まひ状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">11.7%</td>
 </tr>
 </tbody>

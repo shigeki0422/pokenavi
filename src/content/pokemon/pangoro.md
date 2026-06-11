@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">きもったま</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゴーストタイプにノーマル・かくとうの技が当たる。いかくを受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ノーマル・かくとうタイプの技をゴーストタイプに当てられる。いかくも効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">54.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">てつのこぶし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">パンチの技の威力が1.2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">31.3%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">かたやぶり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の特性を無視して攻撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の特性に関係なく技を出すことができる（例外となる特性もある）。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">14.7%</td>
 </tr>
 </tbody>

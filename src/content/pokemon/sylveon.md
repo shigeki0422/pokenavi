@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">フェアリースキン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ノーマルタイプの技がフェアリータイプになり威力が1.2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ノーマルタイプの技がフェアリータイプになり、威力が1.2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">98.6%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">メロメロボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をメロメロ状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">異性から接触技を受けると30%の確率で相手をメロメロ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.4%</td>
 </tr>
 </tbody>

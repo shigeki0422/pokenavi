@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">すりぬけ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の壁（リフレクター・光のかべ等）の効果を無視して攻撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のひかりのかべ・リフレクター・オーロラベール・しんぴのまもり・みがわりを無視して技を使う。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">69.6%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">プレッシャー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技のPPを1ターンに2倍消費させる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分に対し、相手の使う技のPPを1多く減らす。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">30.4%</td>
 </tr>
 </tbody>

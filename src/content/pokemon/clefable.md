@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">てんねん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の能力ランク上昇を無視して攻撃・防御できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の能力変化を無視して攻撃し、攻撃を受ける（素早さは無視できない）。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">83.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">マジックガード</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">直接ダメージ以外のダメージを受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃以外ではダメージを受けない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">15.2%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">メロメロボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をメロメロ状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">異性から接触技を受けると30%の確率で相手をメロメロ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.8%</td>
 </tr>
 </tbody>

@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">おみとおし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に相手のもちものを把握する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手が持っている道具を知ることができる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">80.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">すりぬけ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の壁（リフレクター・光のかべ等）の効果を無視して攻撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のひかりのかべ・リフレクター・オーロラベール・しんぴのまもり・みがわりを無視して技を使う。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">18.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">テレパシー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">味方からの攻撃を回避する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.2%</td>
 </tr>
 </tbody>

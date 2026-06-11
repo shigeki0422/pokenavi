@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">あついしぼう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプ・こおりタイプの技で受けるダメージが半減する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">71.3%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">どんかん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">いかく・おだやか・ちょうはつ・いじわるなどの変化技を受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">メロメロ・ちょうはつ状態にならず、相手の特性「いかく」も効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">27.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ゆきがくれ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆきのとき回避率が1.25倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆき状態の時、回避率が1.25倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.8%</td>
 </tr>
 </tbody>

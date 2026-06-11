@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">すいほう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">みずタイプの技の威力が2倍になりほのおタイプの技のダメージを半減する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技で受けるダメージが半減する。みずタイプの技の威力が2倍になる。やけど状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.3%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ちょすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">みずタイプの技を受けるとHPが回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">みずタイプの技が効かず、最大HPの1/4回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.7%</td>
 </tr>
 </tbody>

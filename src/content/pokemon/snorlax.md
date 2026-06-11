@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">あついしぼう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプ・こおりタイプの技で受けるダメージが半減する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">93.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">めんえき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">どく・ねむりなど状態異常にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">どく・もうどく状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6.2%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">くいしんぼう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HP半分以下になるとすぐにきのみを食べる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/4以下で食べるきのみを、HPが1/2以下で食べる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.7%</td>
 </tr>
 </tbody>

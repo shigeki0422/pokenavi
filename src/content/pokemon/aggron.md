@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">がんじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HP満タンのとき一撃では倒れない。一撃必殺技も無効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが満タンの時、一撃でひんしになる技のダメージを受けると、HPを1残して耐える。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">83.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ヘヴィメタル</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分の重さが2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分の重さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">12.8%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">いしあたま</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分もダメージを受ける技を出してもHPが減らない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4.1%</td>
 </tr>
 </tbody>

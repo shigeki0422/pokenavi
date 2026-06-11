@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">いたずらごころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">変化技が先制で出せる（優先度+1）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">変化技の優先度が1段階上がる。あくタイプの相手への変化技は無効になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">92.6%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">かるわざ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">もちものを失うとすばやさが2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">持っていた道具がなくなると素早さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6.8%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">じゅうなん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">まひ状態にならない。まひのすばやさ低下も受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">まひ状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.6%</td>
 </tr>
 </tbody>

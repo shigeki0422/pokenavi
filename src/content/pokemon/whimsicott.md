@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">いたずらごころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">変化技が先制で出せる（優先度+1）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">変化技の優先度が1段階上がる。あくタイプの相手への変化技は無効になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">98.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">すりぬけ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の壁（リフレクター・光のかべ等）の効果を無視して攻撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のひかりのかべ・リフレクター・オーロラベール・しんぴのまもり・みがわりを無視して技を使う。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ようりょくそ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれのときすばやさが2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれ状態の時、素早さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.5%</td>
 </tr>
 </tbody>

@@ -121,17 +121,17 @@ analysisSlug: 'kleavor-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">きれあじ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">切る技（スラッシュ系）の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">切る技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">98.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">むしのしらせ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になるとむしタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ちからずく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">追加効果がある技の威力が1.3倍になるが追加効果はなくなる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃の追加効果はなくなるが、1.3倍の威力で技を出す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.2%</td>
 </tr>
 </tbody>

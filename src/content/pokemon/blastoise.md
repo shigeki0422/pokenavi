@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">げきりゅう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/3以下になるとみずタイプの技の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になると、みずタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">71.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">あめうけざら</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">雨のとき毎ターンHPが最大HPの1/16回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">あめ状態の時、ターン終わりに最大HPの1/16回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">28.3%</td>
 </tr>
 </tbody>
@@ -142,7 +142,7 @@ draft: false
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-10-water.png" alt="みず" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：メガランチャー** — はどう系の技（みずのはどう・はどうだん等）の威力が1.5倍になる
+**特性：メガランチャー** — 波動の技の威力が1.5倍になる。
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">

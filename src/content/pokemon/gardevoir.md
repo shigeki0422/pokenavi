@@ -121,17 +121,17 @@ analysisSlug: 'gardevoir-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">トレース</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手の特性と同じ特性になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">92.5%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">シンクロ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常になると相手にも同じ状態異常を与える</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技や特性でどく・もうどく・まひ・やけど状態になると相手も同じ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6.8%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">テレパシー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">味方からの攻撃を回避する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.7%</td>
 </tr>
 </tbody>

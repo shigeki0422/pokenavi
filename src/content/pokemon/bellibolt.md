@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">でんきにかえる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃を受けた次のターン、でんきタイプの技の威力が2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">技のダメージを受けるとでんき威力アップ状態になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.5%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">せいでんき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をまひ状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をまひ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">しめりけ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">じばく・だいばくはつなどの自爆技を封じる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">全員、爆発技が使用できず、爆発する特性も発動しない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.2%</td>
 </tr>
 </tbody>

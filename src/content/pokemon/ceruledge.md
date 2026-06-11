@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">くだけるよろい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">物理攻撃を受けるとぼうぎょが1段階下がりすばやさが2段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">物理技でダメージを受けると防御が1段階下がり素早さが2段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">86.3%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">もらいび</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技を受けると無効化し、自分のほのお技が強化される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技が効かず、自分はもらいび状態になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">13.7%</td>
 </tr>
 </tbody>

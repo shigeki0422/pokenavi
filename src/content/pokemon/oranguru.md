@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">せいしんりょく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるみ状態にならない。いかくを受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の攻撃にひるまず、いかくも効かない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">79.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">きょうせい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">味方が道具を消費すると自分の持っている道具を味方に渡す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">13.7%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">テレパシー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">味方からの攻撃を回避する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7.2%</td>
 </tr>
 </tbody>

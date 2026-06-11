@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">てんねん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の能力ランク上昇を無視して攻撃・防御できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の能力変化を無視して攻撃し、攻撃を受ける（素早さは無視できない）。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">もうか</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/3以下になるとほのおタイプの技の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になると、ほのおタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.8%</td>
 </tr>
 </tbody>

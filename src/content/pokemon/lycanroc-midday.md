@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">すなかき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">砂嵐のときすばやさが2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">すなあらし状態の時、素早さが2倍になる。すなあらしのダメージを受けない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">45.4%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ふくつのこころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるんだときすばやさが2段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるむと素早さが1段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">44.1%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">するどいめ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">命中率が下がらない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の回避率の変化を無視し、命中率も下げられない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10.5%</td>
 </tr>
 </tbody>

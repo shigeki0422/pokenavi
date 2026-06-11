@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">じしんかじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃で相手を倒すと攻撃が1段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">65.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">かいりきバサミ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技や特性で攻撃を下げられない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">26.0%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">かたやぶり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の特性を無視して攻撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の特性に関係なく技を出すことができる（例外となる特性もある）。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9.0%</td>
 </tr>
 </tbody>

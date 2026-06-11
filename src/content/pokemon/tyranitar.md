@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">すなおこし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に天気をすなあらしにする（5ターン）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時から5ターンの間、すなあらし状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.4%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">きんちょうかん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のきのみを使えなくする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のきのみを食べられなくさせる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.6%</td>
 </tr>
 </tbody>
@@ -143,7 +143,7 @@ draft: false
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:36px;height:36px;vertical-align:middle" /><img src="/images/types/type-16-dark.png" alt="あく" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：すなおこし** — 登場時に天気をすなあらしにする（5ターン）
+**特性：すなおこし** — 登場した時から5ターンの間、すなあらし状態にする。
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">

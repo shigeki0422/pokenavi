@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かんそうはだ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技で受けるダメージが1.25倍になる。みずタイプの技でHPが回復</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">みずタイプの技が効かず最大HPの1/4回復する。ほのおタイプの技で受けるダメージが1.25倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">91.0%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">どくしゅ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を使ったとき30%の確率で相手をどく状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手に接触技を当てると30%の確率でどく状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6.1%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">きけんよち</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手が自分への効果バツグンや一撃必殺の技を持っていることを察知できる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.8%</td>
 </tr>
 </tbody>

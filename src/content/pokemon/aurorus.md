@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ゆきふらし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に天気をゆきにする（5ターン）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時から5ターンの間、ゆき状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">85.3%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">フリーズスキン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ノーマルタイプの技がこおりタイプになり、威力が1.2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">14.7%</td>
 </tr>
 </tbody>

@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">マジックミラー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の変化技を跳ね返す</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の変化技を受けず相手に跳ね返す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">99.7%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">きけんよち</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手が自分への効果バツグンや一撃必殺の技を持っていることを察知できる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.2%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">いやしのこころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ターン終わりに、状態異常の味方を50%の確率で治す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.1%</td>
 </tr>
 </tbody>

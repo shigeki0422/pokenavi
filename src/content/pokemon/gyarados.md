@@ -121,12 +121,12 @@ analysisSlug: 'gyarados-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">いかく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に相手全体のこうげきを1段階下げる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手の攻撃を1段階下げる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">98.8%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">じしんかじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">攻撃で相手を倒すと攻撃が1段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.2%</td>
 </tr>
 </tbody>
@@ -143,7 +143,7 @@ analysisSlug: 'gyarados-analysis-m2'
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-10-water.png" alt="みず" style="width:36px;height:36px;vertical-align:middle" /><img src="/images/types/type-16-dark.png" alt="あく" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：かたやぶり** — 相手の特性を無視して攻撃できる
+**特性：かたやぶり** — 相手の特性に関係なく技を出すことができる（例外となる特性もある）。
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">

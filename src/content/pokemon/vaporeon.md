@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ちょすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">みずタイプの技を受けるとHPが回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">みずタイプの技が効かず、最大HPの1/4回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">98.4%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">うるおいボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">あめ状態の時、ターン終わりに状態異常が治る。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.6%</td>
 </tr>
 </tbody>

@@ -120,12 +120,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ゆきがくれ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆきのとき回避率が1.25倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆき状態の時、回避率が1.25倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">81.6%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">アイスボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆきのとき毎ターンHPが少しずつ回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆき状態の時、ターン終わりに最大HPの1/16回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">18.4%</td>
 </tr>
 </tbody>

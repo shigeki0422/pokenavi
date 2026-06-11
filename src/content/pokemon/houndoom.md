@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">もらいび</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技を受けると無効化し、自分のほのお技が強化される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技が効かず、自分はもらいび状態になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">88.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">きんちょうかん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のきのみを使えなくする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のきのみを食べられなくさせる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6.1%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">はやおき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむり状態のとき通常より早く目覚める</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむり状態になっても2倍の早さで目覚める。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5.8%</td>
 </tr>
 </tbody>

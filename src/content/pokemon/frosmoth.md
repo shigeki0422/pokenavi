@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">バリアフリー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時に相手・味方の場のひかりのかべ・リフレクター・オーロラベール状態を解除する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">70.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">アイスボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆきのとき毎ターンHPが少しずつ回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ゆき状態の時、ターン終わりに最大HPの1/16回復する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">16.8%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ちどりあし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">こんらん状態の時、回避率が2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">13.1%</td>
 </tr>
 </tbody>

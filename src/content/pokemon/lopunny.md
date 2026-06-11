@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">じゅうなん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">まひ状態にならない。まひのすばやさ低下も受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">まひ状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">74.3%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">メロメロボディ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をメロメロ状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">異性から接触技を受けると30%の確率で相手をメロメロ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">23.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ぶきよう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">このポケモンが持っている道具は効果を発揮しない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.3%</td>
 </tr>
 </tbody>
@@ -147,7 +147,7 @@ draft: false
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:36px;height:36px;vertical-align:middle" /><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：こんじょう** — 状態異常のときこうげきが1.5倍になる
+**特性：こんじょう** — 状態異常の時、攻撃が1.5倍になる。やけどによる物理ダメージ半減は無視する。
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">

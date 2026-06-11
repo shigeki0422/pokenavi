@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">きれあじ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">切る技（スラッシュ系）の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">切る技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">90.5%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">せいぎのこころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">あくタイプの技を受けるとこうげきが1段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">あくタイプの技のダメージを受けると攻撃が1段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5.1%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ふくつのこころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるんだときすばやさが2段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるむと素早さが1段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4.4%</td>
 </tr>
 </tbody>
@@ -148,7 +148,7 @@ draft: false
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:36px;height:36px;vertical-align:middle" /><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：かたやぶり** — 相手の特性を無視して攻撃できる
+**特性：かたやぶり** — 相手の特性に関係なく技を出すことができる（例外となる特性もある）。
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">

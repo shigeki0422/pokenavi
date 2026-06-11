@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ムラっけ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ターン終了時にランダムで1つのステータスが2段階上昇し別の1つが1段階下降する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ターン終わりに能力のどれかが2段階上がり、別のどれかが1段階下がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">64.4%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ふみん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむり状態にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむけ・ねむり状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">32.8%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ようりょくそ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれのときすばやさが2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれ状態の時、素早さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.9%</td>
 </tr>
 </tbody>

@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">もうか</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/3以下になるとほのおタイプの技の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になると、ほのおタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">86.1%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">サンパワー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれ状態だと特攻が1.5倍になるが毎ターン最大HPの1/8減る。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">13.9%</td>
 </tr>
 </tbody>
@@ -143,7 +143,7 @@ draft: false
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:36px;height:36px;vertical-align:middle" /><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：かたいつめ** — 接触技の威力が1.3倍になる
+**特性：かたいつめ** — —
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
@@ -221,7 +221,7 @@ draft: false
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:36px;height:36px;vertical-align:middle" /><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：ひでり** — 登場時に天気をにほんばれにする（5ターン）
+**特性：ひでり** — 登場した時から5ターンの間、にほんばれ状態にする。
 
 <div style="max-width:380px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">

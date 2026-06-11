@@ -121,12 +121,12 @@ analysisSlug: 'victreebel-analysis-m2'
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ようりょくそ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれのときすばやさが2倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれ状態の時、素早さが2倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">94.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">くいしんぼう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HP半分以下になるとすぐにきのみを食べる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが1/4以下で食べるきのみを、HPが1/2以下で食べる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5.8%</td>
 </tr>
 </tbody>

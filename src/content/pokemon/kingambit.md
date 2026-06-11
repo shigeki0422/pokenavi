@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">そうだいしょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">控えに倒されたポケモンの数に応じてこうげき・とくこうが上がる（1体ごとに10%、最大50%）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、その戦闘で倒された手持ち1体につき技の威力が10%上がる。最大50%。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">88.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">まけんき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">こうげきが下げられると逆にこうげきが2段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手に能力を下げられると攻撃が2段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">プレッシャー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の技のPPを1ターンに2倍消費させる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">自分に対し、相手の使う技のPPを1多く減らす。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.3%</td>
 </tr>
 </tbody>

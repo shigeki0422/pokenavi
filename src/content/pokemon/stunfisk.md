@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">せいでんき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をまひ状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をまひ状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">90.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">すながくれ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">砂嵐のとき回避率が1.25倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">すなあらし状態の時、回避率が1.25倍になる。すなあらしのダメージを受けない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8.8%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">じゅうなん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">まひ状態にならない。まひのすばやさ低下も受けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">まひ状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.1%</td>
 </tr>
 </tbody>

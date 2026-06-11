@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">しゅうかく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">使ったきのみをターン終わりに50%（にほんばれ中は必ず）作り出す。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">95.8%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">おみとおし</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場時に相手のもちものを把握する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">登場した時、相手が持っている道具を知ることができる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.8%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">しぜんかいふく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">控えに戻ると状態異常が回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">手持ちに戻ると状態異常が治る。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.5%</td>
 </tr>
 </tbody>

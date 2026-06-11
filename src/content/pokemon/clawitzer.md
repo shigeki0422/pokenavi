@@ -120,7 +120,7 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">メガランチャー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">はどう系の技（みずのはどう・はどうだん等）の威力が1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">波動の技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">100.0%</td>
 </tr>
 </tbody>

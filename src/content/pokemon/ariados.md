@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ふみん</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむり状態にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ねむけ・ねむり状態にならない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">73.8%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">むしのしらせ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">HPが最大HPの1/3以下になるとむしタイプの技の威力が1.5倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">17.6%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">スナイパー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">急所に当てた時の威力が1.5倍ではなく2.25倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8.7%</td>
 </tr>
 </tbody>

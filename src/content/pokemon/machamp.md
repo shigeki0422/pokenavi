@@ -120,17 +120,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">ノーガード</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">お互いの技の命中率が100%になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">83.8%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">こんじょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常のときこうげきが1.5倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">状態異常の時、攻撃が1.5倍になる。やけどによる物理ダメージ半減は無視する。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">16.1%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ふくつのこころ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるんだときすばやさが2段階上がる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ひるむと素早さが1段階上がる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.2%</td>
 </tr>
 </tbody>

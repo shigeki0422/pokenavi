@@ -121,12 +121,12 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">しぜんかいふく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">控えに戻ると状態異常が回復する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">手持ちに戻ると状態異常が治る。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">51.3%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ノーてんき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">あらゆる天気の影響をなくす。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">48.7%</td>
 </tr>
 </tbody>

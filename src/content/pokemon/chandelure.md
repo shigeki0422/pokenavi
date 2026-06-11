@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">もらいび</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技を受けると無効化し、自分のほのお技が強化される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技が効かず、自分はもらいび状態になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">64.2%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">すりぬけ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手の壁（リフレクター・光のかべ等）の効果を無視して攻撃できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">相手のひかりのかべ・リフレクター・オーロラベール・しんぴのまもり・みがわりを無視して技を使う。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">22.0%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">ほのおのからだ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をやけど状態にする</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">接触技を受けると30%の確率で相手をやけど状態にする。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">13.8%</td>
 </tr>
 </tbody>

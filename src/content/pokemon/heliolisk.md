@@ -121,17 +121,17 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">かんそうはだ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">ほのおタイプの技で受けるダメージが1.25倍になる。みずタイプの技でHPが回復</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">みずタイプの技が効かず最大HPの1/4回復する。ほのおタイプの技で受けるダメージが1.25倍になる。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">94.9%</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">サンパワー</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">にほんばれ状態だと特攻が1.5倍になるが毎ターン最大HPの1/8減る。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;">すながくれ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">砂嵐のとき回避率が1.25倍になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">すなあらし状態の時、回避率が1.25倍になる。すなあらしのダメージを受けない。</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.7%</td>
 </tr>
 </tbody>
