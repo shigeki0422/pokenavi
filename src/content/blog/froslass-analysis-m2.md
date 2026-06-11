@@ -50,7 +50,7 @@ heroImage: '../../assets/hero-froslass-m2.png'
 - ガブリアス（S102・最速でS実数値169・使用率1位）
 - メガリザードンY（メガ後S100・S実数値167・使用率上位）
 - サザンドラ（S98・最速でS実数値165）
-- アシレーヌ（S60・S実数値123）
+- アシレーヌ（S60・ひかえめでS実数値112・使用率4位）
 
 これらに先手を取り、ふぶきで弱点を突くか、初手でオーロラベールを張って後続の起点を作れます。一方、マスカーニャ（S123・最速でS実数値192・使用率3位）にはわずかに上を取られる点には注意が必要です。
 
@@ -223,7 +223,7 @@ heroImage: '../../assets/hero-froslass-m2.png'
 </table>
 </div>
 
-ゴーストタイプによりノーマル・かくとうを無効化できるのが対戦上重要で、ドドゲザンのけたぐり（かくとう）やノーマル技を透かせます。一方、弱点のほのお・いわ・はがね・ゴースト・あくは5タイプと多く、特にあく・ゴーストは相手のゴースト・あくアタッカー同士で弱点を突き合う関係になります。ぼうぎょ70・HP70の物理耐久は低く、あく・はがねの物理技は等倍でも重い点に注意が必要です。
+ゴーストタイプによりノーマル・かくとうを無効化できるのが対戦上重要で、ドドゲザンのけたぐり（かくとう）やノーマル技を透かせます。一方、弱点のほのお・いわ・はがね・ゴースト・あくは5タイプと多く、特にあく・ゴーストは相手のゴースト・あくアタッカー同士で弱点を突き合う関係になります。ぼうぎょ70・HP70の物理耐久は低く、あく・はがね・いわの物理技は×2弱点で、低耐久も相まって一撃で崩されやすい点に注意が必要です。
 
 ---
 
@@ -375,7 +375,7 @@ heroImage: '../../assets/hero-froslass-m2.png'
 
 **強み:**
 
-ベール枠の代わりにわるだくみを採用し、ゆき・ベール下でとくこうを2段階上げてから全抜きを狙う型です。ベール型がベールの軽減で居座るのに対し、こちらは火力そのものを伸ばして「1回積めば一致技で広く確定圏に入れる」攻めの型です。ひかえめ採用ならとくこう実数値211を起点にわるだくみで底上げできます。
+ベール枠の代わりにわるだくみを採用し、ゆき・ベール下でとくこうを2段階上げてから全抜きを狙う型です。ベール型がベールの軽減で居座るのに対し、こちらは火力そのものを伸ばして「1回積めば一致技で広く確定圏に入れる」攻めの型です。ひかえめ採用ならとくこう実数値211を基点にわるだくみで火力を底上げできます。
 
 **弱み:**
 
@@ -393,7 +393,7 @@ heroImage: '../../assets/hero-froslass-m2.png'
 
 ### 主要ポケモンとの相性
 
-使用率上位のうち、メガユキメノコと相性がはっきり出るポケモンを有利・不利の両面から挙げます。すばやさ実数値189で環境上位の多くを上回る一方、マスカーニャ（S実数値192）には上を取られ、ぼうぎょ70・HP70の物理耐久は低く、あく・はがね・ほのおの物理技は等倍以上で重い点に注意してください。
+使用率上位のうち、メガユキメノコと相性がはっきり出るポケモンを有利・不利の両面から挙げます。すばやさ実数値189で環境上位の多くを上回る一方、マスカーニャ（S実数値192）には上を取られ、ぼうぎょ70・HP70の物理耐久は低く、あく・はがね・いわの物理技は×2弱点で重い点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -416,15 +416,15 @@ heroImage: '../../assets/hero-froslass-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふぶきが×4（ドラゴン2×ひこう2）。マルチスケイル下でも高乱数。ただししんそく（あく等倍の先制）で削り返される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふぶきが×4（ドラゴン2×ひこう2）で先制できるが、マルチスケイルで初撃を耐えられやすい。かえんほうしゃ（47.8%・ほのお×2）を持つ個体には返り討ちにされ、しんそくはゴーストで無効。火力を伸ばすかゆきで弱らせてから処理したい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用時）が×2（みず弱点）。S実数値189＞123で先手。ムーンフォース（97.0%）はこおり/ゴーストに等倍止まりで、低耐久同士の撃ち合いを上から押せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用時）が×2（みず弱点）。S実数値189＞112で先手。ムーンフォース（97.0%）はこおり/ゴーストに等倍止まりで、低耐久同士の撃ち合いを上から押せる。ただし10まんボルト非採用個体（約57%）は等倍止まりで決め手に欠ける</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -438,14 +438,14 @@ heroImage: '../../assets/hero-froslass-m2.png'
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S実数値192でこちらより速い。はたきおとす（57.6%・あく×2）でメガ前なら持ち物を叩き落とされ、トリックフラワー（くさ等倍）でも低耐久を削られる。ふぶき×2は刺さるが後手</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S実数値192でこちらより速い。はたきおとす（57.6%・あく×2）でメガ前なら持ち物を叩き落とされつつ弱点を突かれる。トリックフラワー（くさ×0.5）は半減だが必中で削られる。ふぶき×2は刺さるが後手</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（使用率上位）
+    <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（99.0%・あく×2の先制）でS優位が無意味化。アイアンヘッド（86.9%・はがね×2）も弱点。こちらのふぶき・シャドーボールは等倍止まりで撃ち合いに勝てない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（99.0%・あく×2の先制）でS優位が無意味化。アイアンヘッド（86.9%・はがね×2）も弱点。こちらのふぶき・シャドーボールはともに×0.5に半減され撃ち合いに勝てない</td>
 </tr>
 </tbody>
 </table>
@@ -465,9 +465,9 @@ heroImage: '../../assets/hero-froslass-m2.png'
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（使用率上位）
+    <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（99.0%・あく×2）の先制でS実数値189の優位を無視され、こちらの一致技は両方とも等倍で押し負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（99.0%・あく×2）の先制でS実数値189の優位を無視され、こちらの一致技は両方とも×0.5に半減され押し負ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん・かくとう・ほのお枠（ガブリアスのじしん等）を合わせてはがね弱点を突く。みちづれ採用なら落とされ際に道連れで1体持っていく</td>
 </tr>
 <tr style="background:#fafafa">
@@ -475,13 +475,13 @@ heroImage: '../../assets/hero-froslass-m2.png'
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンでふぶき・シャドーボールともに等倍、ラスターカノン（55.7%・はがね×2）で弱点を突かれ高耐久で抜けない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん・かくとう枠（ガブリアスのじしん、ブリジュラスのはがね弱点を突くポケモン）を合わせる。10まんボルトはドラゴン/はがねに半減されるため打点にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん・かくとう枠（ガブリアスのじしん、ブリジュラスのはがね弱点を突くポケモン）を合わせる。10まんボルトはドラゴン/はがねに×0.25まで激減するため打点にならない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（同居率4位）
+    <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/ほのおでふぶき（こおり）が×0.5、ほのお技（ひのこ・だいもんじ）が×2弱点。高とくぼうで特殊一致技を受けられる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（42.4%）・オーバーヒート（26.6%）が×2弱点で、低耐久のこちらは一撃で落とされやすい。ふぶきはほのお/ひこうに等倍止まりで決定打にならない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ・みず・でんき枠でほのお側の弱点を突く。先制こおりのつぶてでは火力不足で落とせない</td>
 </tr>
 <tr style="background:#fafafa">
@@ -495,7 +495,7 @@ heroImage: '../../assets/hero-froslass-m2.png'
 </table>
 </div>
 
-苦手な相手は「メガユキメノコの弱点（あく・はがね・ほのお）を等倍以上で突き、低耐久のこちらを撃ち合いで倒しきる相手」と「ふいうち等の先制技でS実数値189の優位を無視する相手」に大別されます。いずれも単体での切り返しは難しく、後続のタイプ補完で受ける構築が前提になります。
+苦手な相手は「メガユキメノコの弱点（ほのお・いわ・はがね・ゴースト・あく）を×2で突き、低耐久のこちらを撃ち合いで倒しきる相手」と「ふいうち等の先制技でS実数値189の優位を無視する相手」に大別されます。いずれも単体での切り返しは難しく、後続のタイプ補完で受ける構築が前提になります。
 
 ---
 
@@ -508,7 +508,7 @@ heroImage: '../../assets/hero-froslass-m2.png'
     <img src="/images/pokemon/pokemon-0748-00.webp" alt="ドヒドイデ">
     <div class="name">ドヒドイデ</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">どく/みずの高耐久でメガユキメノコの苦手な物理を受け、ベール下で起点を維持する</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">どく/みずの高耐久でメガユキメノコの苦手な物理を受け、ベール展開後の盤面を支える</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0660-00.webp" alt="ホルード">
@@ -543,7 +543,7 @@ heroImage: '../../assets/hero-froslass-m2.png'
 1. **ベール下のフィニッシャー**: ホルード・ウルガモス・ドドゲザン等、ベールの軽減を活かして積み技から全抜きを狙う枠
 2. **はがね対策**: じめん・かくとう（ガブリアスのじしん）で苦手なブリジュラス・ドドゲザンのはがね弱点を突く枠
 3. **物理受け**: 高耐久のどく/みず（ドヒドイデ）で、メガユキメノコが苦手な物理アタッカーを受け止める枠
-4. **先制技ケア**: ドドゲザンのふいうち・カイリューのしんそくに削られた後を、高耐久の後続で受け止める
+4. **先制技ケア**: ドドゲザンのふいうち（あく×2）に上から削られた後を、高耐久の後続で受け止める
 
 ---
 
@@ -566,7 +566,7 @@ heroImage: '../../assets/hero-froslass-m2.png'
 
 ## データ分析②：使用率60位でも残る「ベール展開枠」としての需要
 
-メガユキメノコのすばやさ実数値189は環境上位の多くを上回りますが、こうげき80・ぼうぎょ70・HP70・とくこう140と火力・耐久は突出して高いわけではありません。使用率60位という位置づけは、純粋なアタッカー性能では上位のメガゲッコウガ（とくこう実数値192・メガ後）やマスカーニャに見劣りすることを反映しています。
+メガユキメノコのすばやさ実数値189は環境上位の多くを上回りますが、こうげき80・ぼうぎょ70・HP70と耐久は低く、純粋なアタッカーとして突出しているわけではありません。とくこう実数値211自体は高水準ですが、たとえばメガゲッコウガ（メガ後S実数値213）はより速く、こおり/ゴーストにない一致あく打点とタイプ範囲の広さで攻撃役として勝るなど、同じ「高速特殊枠」でも純アタッカー性能で上回る選択肢が複数あります。使用率60位という位置づけは、その差を反映しています。
 
 それでも採用される根拠は、オーロラベール採用率68.1%が示す**展開役としての需要**です。ゆきふらし＋オーロラベールを1体で完結できるポケモンは限られ、メガユキメノコは「展開役が攻撃もこなす」という枠の圧縮を提供します。同居率上位にホルード（ノーマル/じめん）・ウルガモス（むし/ほのお）・ドドゲザン（あく/はがね）といった積み技を持つアタッカーが並ぶことからも、メガユキメノコが「ベール下で後続を通す軸」として組まれていることが読み取れます。アタッカー単体の数値ではなく、ベール展開という役割が使用率を下支えしているのが、このポケモンの構築上の位置づけです。
 
@@ -608,7 +608,7 @@ heroImage: '../../assets/hero-froslass-m2.png'
 
 メガユキメノコはすばやさ実数値189とゆきふらしを軸に、ふぶき（必中・×4でドラゴンに刺さる）とオーロラベールを1体で両立する高速展開アタッカーです。ゆきの自動展開がベール採用と必中ふぶきの前提を肩代わりするため、展開役を別に用意せず「ゆき＋ベール＋一致打点」を完結できる点が最大の武器です。
 
-一方、こうげき80・ぼうぎょ70・HP70の物理耐久は低く、あく・はがね・ほのおの弱点5タイプは構築単位の補完が前提です。ドドゲザンのふいうち・ブリジュラスのラスターカノンなど、弱点を突きつつ撃ち合いに勝てる相手には後続のタイプ補完で対応する必要があります。使用率60位という位置づけは、アタッカー単体の数値ではなくベール展開という役割が支えており、ベール下で後続を通す軸として構築に組み込むのが基本になります。
+一方、こうげき80・ぼうぎょ70・HP70の物理耐久は低く、あく・はがね・ほのおの弱点5タイプは構築単位の補完が前提です。ドドゲザンのふいうちで先制を無視する相手や、ブリジュラスのラスターカノンで弱点を突きつつ撃ち合いに勝てる相手には、後続のタイプ補完で対応する必要があります。使用率60位という位置づけは、アタッカー単体の数値ではなくベール展開という役割が支えており、ベール下で後続を通す軸として構築に組み込むのが基本になります。
 
 ---
 
