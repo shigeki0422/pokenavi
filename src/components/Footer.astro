@@ -3,6 +3,12 @@ const today = new Date();
 ---
 
 <footer>
+	<div class="social">
+		<a href="https://x.com/pokenavi_jp" target="_blank" rel="noopener noreferrer" aria-label="ポケナビ X (Twitter)">
+			<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.737-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+			@pokenavi_jp
+		</a>
+	</div>
 	<div class="links">
 		<a href="/about">運営者情報</a>
 		<span class="sep">|</span>
@@ -20,6 +26,20 @@ const today = new Date();
 	.links {
 		margin-bottom: 0.8em;
 		font-size: 0.85rem;
+	}
+	.social {
+		margin-bottom: 0.8em;
+	}
+	.social a {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4em;
+		color: rgb(var(--gray));
+		text-decoration: none;
+		font-size: 0.9rem;
+	}
+	.social a:hover {
+		color: rgb(var(--accent));
 	}
 	.links a {
 		color: rgb(var(--gray));
