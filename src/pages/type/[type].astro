@@ -81,11 +81,11 @@ const pageDesc = `ポケモンチャンピオンズ M-2シーズンで使用率�
 				{entries.map((e) => (
 					<li>
 						<a class="t-row" href={`/blog/${e.slug}/`}>
+							<span class="t-num">{e.rank}位</span>
 							{e.dex
 								? <img class="t-icon" src={`/images/pokemon/pokemon-${String(e.dex).padStart(4,'0')}-${e.form ?? '00'}.webp`} alt={e.name} loading="lazy" />
 								: <div class="t-icon" />
 							}
-							<span class="t-num">{e.rank}位</span>
 							<span class="t-name">{e.name}</span>
 							<span class="t-types">
 								{e.types.map((t) => <img src={typeImg(t)} alt={t} title={t} />)}
