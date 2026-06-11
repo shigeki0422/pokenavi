@@ -148,11 +148,17 @@ def fetch_pokemon_data(conn, name_jp):
 
     rank, pid, dbname = row
     # タイプ
-    cur.execute("""
-        SELECT type1, type2 FROM pokemon_base_stats
-        WHERE pokemon_name=? LIMIT 1
-    """, (name_jp,))
-    type_row = cur.fetchone()
+    type_candidates = [name_jp]
+    if suffix:
+        type_candidates += [suffix + base, base]
+    for tc in type_candidates:
+        cur.execute("""
+            SELECT type1, type2 FROM pokemon_base_stats
+            WHERE pokemon_name=? LIMIT 1
+        """, (tc,))
+        type_row = cur.fetchone()
+        if type_row:
+            break
     type1 = type_row[0] if type_row else None
     type2 = type_row[1] if type_row else None
 
