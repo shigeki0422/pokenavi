@@ -1,626 +1,768 @@
 {
- "aegislash-analysis-m2": {
-  "name": "ギルガルド",
-  "rank": 11,
-  "types": [
-   "はがね",
-   "ゴースト"
-  ],
-  "matchKey": "ギルガルド"
- },
- "araquanid-analysis-m2": {
-  "name": "オニシズクモ",
-  "rank": 41,
-  "types": [
-   "みず",
-   "むし"
-  ],
-  "matchKey": "オニシズクモ"
- },
- "archaludon-analysis-m2": {
-  "name": "ブリジュラス",
-  "rank": 2,
-  "types": [
-   "はがね",
-   "ドラゴン"
-  ],
-  "matchKey": "ブリジュラス"
- },
- "azumarill-analysis-m2": {
-  "name": "マリルリ",
-  "rank": 68,
-  "types": [
-   "みず",
-   "フェアリー"
-  ],
-  "matchKey": "マリルリ"
- },
- "banette-analysis-m2": {
-  "name": "ジュペッタ",
-  "rank": 59,
-  "types": [
-   "ゴースト"
-  ],
-  "matchKey": "ジュペッタ"
- },
- "basculegion-analysis-m2": {
-  "name": "イダイトウ（オス）",
-  "rank": 8,
-  "types": [
-   "みず",
-   "ゴースト"
-  ],
-  "matchKey": "イダイトウ"
- },
- "bellibolt-analysis-m2": {
-  "name": "ハラバリー",
-  "rank": 32,
-  "types": [
-   "でんき"
-  ],
-  "matchKey": "ハラバリー"
- },
- "blastoise-analysis-m2": {
-  "name": "メガカメックス",
-  "rank": 30,
-  "types": [
-   "みず"
-  ],
-  "matchKey": "カメックス"
- },
- "ceruledge-analysis-m2": {
-  "name": "ソウブレイズ",
-  "rank": 26,
-  "types": [
-   "ほのお",
-   "ゴースト"
-  ],
-  "matchKey": "ソウブレイズ"
- },
- "charizard-x-analysis-m2": {
-  "name": "メガリザードンX",
-  "rank": 5,
-  "types": [
-   "ほのお",
-   "ドラゴン"
-  ],
-  "matchKey": "リザードンX"
- },
- "charizard-y-analysis-m2": {
-  "name": "メガリザードンY",
-  "rank": 5,
-  "types": [
-   "ほのお",
-   "ひこう"
-  ],
-  "matchKey": "リザードンY"
- },
- "clefable-analysis-m2": {
-  "name": "メガピクシー",
-  "rank": 35,
-  "types": [
-   "フェアリー",
-   "ひこう"
-  ],
-  "matchKey": "ピクシー"
- },
- "conkeldurr-analysis-m2": {
-  "name": "ローブシン",
-  "rank": 61,
-  "types": [
-   "かくとう"
-  ],
-  "matchKey": "ローブシン"
- },
- "corviknight-analysis-m2": {
-  "name": "アーマーガア",
-  "rank": 6,
-  "types": [
-   "はがね",
-   "ひこう"
-  ],
-  "matchKey": "アーマーガア"
- },
- "delphox-analysis-m2": {
-  "name": "メガマフォクシー",
-  "rank": 25,
-  "types": [
-   "ほのお",
-   "エスパー"
-  ],
-  "matchKey": "マフォクシー"
- },
- "ditto-analysis-m2": {
-  "name": "メタモン",
-  "rank": 66,
-  "types": [
-   "ノーマル"
-  ],
-  "matchKey": "メタモン"
- },
- "dragapult-analysis-m2": {
-  "name": "ドラパルト",
-  "rank": 51,
-  "types": [
-   "ドラゴン",
-   "ゴースト"
-  ],
-  "matchKey": "ドラパルト"
- },
- "dragonite-analysis-m2": {
-  "name": "メガカイリュー",
-  "rank": 17,
-  "types": [
-   "ドラゴン",
-   "ひこう"
-  ],
-  "matchKey": "カイリュー"
- },
- "empoleon-analysis-m2": {
-  "name": "エンペルト",
-  "rank": 58,
-  "types": [
-   "みず",
-   "はがね"
-  ],
-  "matchKey": "エンペルト"
- },
- "espathra-analysis-m2": {
-  "name": "クエスパトラ",
-  "rank": 36,
-  "types": [
-   "エスパー"
-  ],
-  "matchKey": "クエスパトラ"
- },
- "excadrill-analysis-m2": {
-  "name": "ドリュウズ",
-  "rank": 55,
-  "types": [
-   "じめん",
-   "はがね"
-  ],
-  "matchKey": "ドリュウズ"
- },
- "florette-analysis-m2": {
-  "name": "フラエッテ（永遠の花）",
-  "rank": 11,
-  "types": [
-   "フェアリー"
-  ],
-  "matchKey": "フラエッテ"
- },
- "froslass-analysis-m2": {
-  "name": "ユキメノコ",
-  "rank": 60,
-  "types": [
-   "こおり",
-   "ゴースト"
-  ],
-  "matchKey": "ユキメノコ"
- },
- "gallade-analysis-m2": {
-  "name": "エルレイド",
-  "rank": 46,
-  "types": [
-   "エスパー",
-   "かくとう"
-  ],
-  "matchKey": "エルレイド"
- },
- "garchomp-analysis-m2": {
-  "name": "ガブリアス",
-  "rank": 1,
-  "types": [
-   "ドラゴン",
-   "じめん"
-  ],
-  "matchKey": "ガブリアス"
- },
- "gardevoir-analysis-m2": {
-  "name": "サーナイト",
-  "rank": 54,
-  "types": [
-   "エスパー",
-   "フェアリー"
-  ],
-  "matchKey": "サーナイト"
- },
- "gengar-analysis-m2": {
-  "name": "メガゲンガー",
-  "rank": 12,
-  "types": [
-   "ゴースト",
-   "どく"
-  ],
-  "matchKey": "ゲンガー"
- },
- "goodra-hisui-analysis-m2": {
-  "name": "ヌメルゴン（ヒスイ）",
-  "rank": 67,
-  "types": [
-   "はがね",
-   "ドラゴン"
-  ],
-  "matchKey": "ヌメルゴン"
- },
- "greedent-analysis-m2": {
-  "name": "ホルード",
-  "rank": 64,
-  "types": [
-   "ノーマル",
-   "じめん"
-  ],
-  "matchKey": "ホルード"
- },
- "greninja-analysis-m2": {
-  "name": "ゲッコウガ",
-  "rank": 28,
-  "types": [
-   "みず",
-   "あく"
-  ],
-  "matchKey": "ゲッコウガ"
- },
- "gyarados-analysis-m2": {
-  "name": "メガギャラドス",
-  "rank": 10,
-  "types": [
-   "みず",
-   "あく"
-  ],
-  "matchKey": "ギャラドス"
- },
- "heracross-analysis-m2": {
-  "name": "メガヘラクロス",
-  "rank": 65,
-  "types": [
-   "むし",
-   "かくとう"
-  ],
-  "matchKey": "ヘラクロス"
- },
- "hippowdon-analysis-m2": {
-  "name": "カバルドン",
-  "rank": 7,
-  "types": [
-   "じめん"
-  ],
-  "matchKey": "カバルドン"
- },
- "hydreigon-analysis-m2": {
-  "name": "サザンドラ",
-  "rank": 21,
-  "types": [
-   "あく",
-   "ドラゴン"
-  ],
-  "matchKey": "サザンドラ"
- },
- "kangaskhan-analysis-m2": {
-  "name": "メガガルーラ",
-  "rank": 34,
-  "types": [
-   "ノーマル"
-  ],
-  "matchKey": "ガルーラ"
- },
- "kingambit-analysis-m2": {
-  "name": "ドドゲザン",
-  "rank": 24,
-  "types": [
-   "あく",
-   "はがね"
-  ],
-  "matchKey": "ドドゲザン"
- },
- "kiraflosure-analysis-m2": {
-  "name": "キラフロル",
-  "rank": 15,
-  "types": [
-   "いわ",
-   "どく"
-  ],
-  "matchKey": "キラフロル"
- },
- "kleavor-analysis-m2": {
-  "name": "バサギリ",
-  "rank": 63,
-  "types": [
-   "むし",
-   "いわ"
-  ],
-  "matchKey": "バサギリ"
- },
- "lopunny-analysis-m2": {
-  "name": "ミミロップ（メガ進化）",
-  "rank": 14,
-  "types": [
-   "ノーマル",
-   "かくとう"
-  ],
-  "matchKey": "ミミロップ"
- },
- "lucario-analysis-m2": {
-  "name": "メガルカリオ",
-  "rank": 9,
-  "types": [
-   "かくとう",
-   "はがね"
-  ],
-  "matchKey": "ルカリオ"
- },
- "mamoswine-analysis-m2": {
-  "name": "マンムー",
-  "rank": 45,
-  "types": [
-   "こおり",
-   "じめん"
-  ],
-  "matchKey": "マンムー"
- },
- "meganium-analysis-m2": {
-  "name": "メガニウム（メガメガニウム）",
-  "rank": 37,
-  "types": [
-   "くさ",
-   "フェアリー"
-  ],
-  "matchKey": "ニウム"
- },
- "meowscarada-analysis-m2": {
-  "name": "マスカーニャ",
-  "rank": 3,
-  "types": [
-   "くさ",
-   "あく"
-  ],
-  "matchKey": "マスカーニャ"
- },
- "milotic-analysis-m2": {
-  "name": "ミロカロス",
-  "rank": 50,
-  "types": [
-   "みず"
-  ],
-  "matchKey": "ミロカロス"
- },
- "mimikyu-analysis-m2": {
-  "name": "ミミッキュ",
-  "rank": 19,
-  "types": [
-   "ゴースト",
-   "フェアリー"
-  ],
-  "matchKey": "ミミッキュ"
- },
- "ninetales-alola-analysis-m2": {
-  "name": "キュウコン（アローラ）",
-  "rank": 52,
-  "types": [
-   "こおり",
-   "フェアリー"
-  ],
-  "matchKey": "キュウコン"
- },
- "pelipper-analysis-m2": {
-  "name": "ペリッパー",
-  "rank": 42,
-  "types": [
-   "みず",
-   "ひこう"
-  ],
-  "matchKey": "ペリッパー"
- },
- "polteageist-analysis-m2": {
-  "name": "ポットデス",
-  "rank": 62,
-  "types": [
-   "ゴースト"
-  ],
-  "matchKey": "ポットデス"
- },
- "primarina-analysis-m2": {
-  "name": "アシレーヌ",
-  "rank": 4,
-  "types": [
-   "みず",
-   "フェアリー"
-  ],
-  "matchKey": "アシレーヌ"
- },
- "rotom-heat-analysis-m2": {
-  "name": "ヒートロトム",
-  "rank": 49,
-  "types": [
-   "でんき",
-   "ほのお"
-  ],
-  "matchKey": "ヒートロトム"
- },
- "rotom-wash-analysis-m2": {
-  "name": "ウォッシュロトム",
-  "rank": 22,
-  "types": [
-   "でんき",
-   "みず"
-  ],
-  "matchKey": "ウォッシュロトム"
- },
- "samurott-hisui-analysis-m2": {
-  "name": "ダイケンキ（ヒスイ）",
-  "rank": 23,
-  "types": [
-   "みず",
-   "あく"
-  ],
-  "matchKey": "ダイケンキ"
- },
- "scizor-analysis-m2": {
-  "name": "ハッサム（メガ進化）",
-  "rank": 14,
-  "types": [
-   "はがね",
-   "むし"
-  ],
-  "matchKey": "ハッサム"
- },
- "scovillain-analysis-m2": {
-  "name": "スコヴィラン",
-  "rank": 47,
-  "types": [
-   "くさ",
-   "ほのお"
-  ],
-  "matchKey": "スコヴィラン"
- },
- "skarmory-analysis-m2": {
-  "name": "エアームド",
-  "rank": 44,
-  "types": [
-   "はがね",
-   "ひこう"
-  ],
-  "matchKey": "エアームド"
- },
- "skeledirge-analysis-m2": {
-  "name": "ラウドボーン",
-  "rank": 29,
-  "types": [
-   "ほのお",
-   "ゴースト"
-  ],
-  "matchKey": "ラウドボーン"
- },
- "slowbro-analysis-m2": {
-  "name": "ヤドラン",
-  "rank": 70,
-  "types": [
-   "みず",
-   "エスパー"
-  ],
-  "matchKey": "ヤドラン"
- },
- "slowking-galar-analysis-m2": {
-  "name": "ヤドキング（ガラル）",
-  "rank": 56,
-  "types": [
-   "どく",
-   "エスパー"
-  ],
-  "matchKey": "ヤドキング"
- },
- "sneasler-analysis-m2": {
-  "name": "オオニューラ",
-  "rank": 33,
-  "types": [
-   "かくとう",
-   "どく"
-  ],
-  "matchKey": "オオニューラ"
- },
- "snorlax-analysis-m2": {
-  "name": "カビゴン",
-  "rank": 48,
-  "types": [
-   "ノーマル"
-  ],
-  "matchKey": "カビゴン"
- },
- "starmie-analysis-m2": {
-  "name": "メガスターミー",
-  "rank": 20,
-  "types": [
-   "みず",
-   "エスパー"
-  ],
-  "matchKey": "スターミー"
- },
- "sylveon-analysis-m2": {
-  "name": "ニンフィア",
-  "rank": 40,
-  "types": [
-   "フェアリー"
-  ],
-  "matchKey": "ニンフィア"
- },
- "toxapex-analysis-m2": {
-  "name": "ドヒドイデ",
-  "rank": 57,
-  "types": [
-   "どく",
-   "みず"
-  ],
-  "matchKey": "ドヒドイデ"
- },
- "tyranitar-analysis-m2": {
-  "name": "バンギラス",
-  "rank": 38,
-  "types": [
-   "いわ",
-   "あく"
-  ],
-  "matchKey": "バンギラス"
- },
- "umbreon-analysis-m2": {
-  "name": "ブラッキー",
-  "rank": 31,
-  "types": [
-   "あく"
-  ],
-  "matchKey": "ブラッキー"
- },
- "vanilluxe-analysis-m2": {
-  "name": "バイバニラ",
-  "rank": 53,
-  "types": [
-   "こおり"
-  ],
-  "matchKey": "バイバニラ"
- },
- "venusaur-analysis-m2": {
-  "name": "メガフシギバナ",
-  "rank": 27,
-  "types": [
-   "くさ",
-   "どく"
-  ],
-  "matchKey": "フシギバナ"
- },
- "victreebel-analysis-m2": {
-  "name": "ウツボット",
-  "rank": 69,
-  "types": [
-   "くさ",
-   "どく"
-  ],
-  "matchKey": "ウツボット"
- },
- "volcarona-analysis-m2": {
-  "name": "ウルガモス",
-  "rank": 18,
-  "types": [
-   "むし",
-   "ほのお"
-  ],
-  "matchKey": "ウルガモス"
- },
- "whimsicott-analysis-m2": {
-  "name": "エルフーン",
-  "rank": 43,
-  "types": [
-   "くさ",
-   "フェアリー"
-  ],
-  "matchKey": "エルフーン"
- },
- "zoroark-hisui-analysis-m2": {
-  "name": "ゾロアーク（ヒスイ）",
-  "rank": 39,
-  "types": [
-   "ノーマル",
-   "ゴースト"
-  ],
-  "matchKey": "ゾロアーク"
- }
+  "aegislash-analysis-m2": {
+    "name": "ギルガルド",
+    "rank": 11,
+    "types": [
+      "はがね",
+      "ゴースト"
+    ],
+    "matchKey": "ギルガルド",
+    "dex": 681,
+    "form": "00"
+  },
+  "araquanid-analysis-m2": {
+    "name": "オニシズクモ",
+    "rank": 41,
+    "types": [
+      "みず",
+      "むし"
+    ],
+    "matchKey": "オニシズクモ",
+    "dex": 752,
+    "form": "00"
+  },
+  "archaludon-analysis-m2": {
+    "name": "ブリジュラス",
+    "rank": 2,
+    "types": [
+      "はがね",
+      "ドラゴン"
+    ],
+    "matchKey": "ブリジュラス",
+    "dex": 1018,
+    "form": "00"
+  },
+  "azumarill-analysis-m2": {
+    "name": "マリルリ",
+    "rank": 68,
+    "types": [
+      "みず",
+      "フェアリー"
+    ],
+    "matchKey": "マリルリ",
+    "dex": 184,
+    "form": "00"
+  },
+  "banette-analysis-m2": {
+    "name": "ジュペッタ",
+    "rank": 59,
+    "types": [
+      "ゴースト"
+    ],
+    "matchKey": "ジュペッタ",
+    "dex": 354,
+    "form": "00"
+  },
+  "basculegion-analysis-m2": {
+    "name": "イダイトウ（オス）",
+    "rank": 8,
+    "types": [
+      "みず",
+      "ゴースト"
+    ],
+    "matchKey": "イダイトウ",
+    "dex": 902,
+    "form": "00"
+  },
+  "bellibolt-analysis-m2": {
+    "name": "ハラバリー",
+    "rank": 32,
+    "types": [
+      "でんき"
+    ],
+    "matchKey": "ハラバリー",
+    "dex": 939,
+    "form": "00"
+  },
+  "blastoise-analysis-m2": {
+    "name": "メガカメックス",
+    "rank": 30,
+    "types": [
+      "みず"
+    ],
+    "matchKey": "カメックス",
+    "dex": 9,
+    "form": "00"
+  },
+  "ceruledge-analysis-m2": {
+    "name": "ソウブレイズ",
+    "rank": 26,
+    "types": [
+      "ほのお",
+      "ゴースト"
+    ],
+    "matchKey": "ソウブレイズ",
+    "dex": 937,
+    "form": "00"
+  },
+  "charizard-x-analysis-m2": {
+    "name": "メガリザードンX",
+    "rank": 5,
+    "types": [
+      "ほのお",
+      "ドラゴン"
+    ],
+    "matchKey": "リザードンX",
+    "dex": 6,
+    "form": "00"
+  },
+  "charizard-y-analysis-m2": {
+    "name": "メガリザードンY",
+    "rank": 5,
+    "types": [
+      "ほのお",
+      "ひこう"
+    ],
+    "matchKey": "リザードンY",
+    "dex": 6,
+    "form": "00"
+  },
+  "clefable-analysis-m2": {
+    "name": "メガピクシー",
+    "rank": 35,
+    "types": [
+      "フェアリー",
+      "ひこう"
+    ],
+    "matchKey": "ピクシー",
+    "dex": 36,
+    "form": "00"
+  },
+  "conkeldurr-analysis-m2": {
+    "name": "ローブシン",
+    "rank": 61,
+    "types": [
+      "かくとう"
+    ],
+    "matchKey": "ローブシン",
+    "dex": 534,
+    "form": "00"
+  },
+  "corviknight-analysis-m2": {
+    "name": "アーマーガア",
+    "rank": 6,
+    "types": [
+      "はがね",
+      "ひこう"
+    ],
+    "matchKey": "アーマーガア",
+    "dex": 823,
+    "form": "00"
+  },
+  "delphox-analysis-m2": {
+    "name": "メガマフォクシー",
+    "rank": 25,
+    "types": [
+      "ほのお",
+      "エスパー"
+    ],
+    "matchKey": "マフォクシー",
+    "dex": 655,
+    "form": "00"
+  },
+  "ditto-analysis-m2": {
+    "name": "メタモン",
+    "rank": 66,
+    "types": [
+      "ノーマル"
+    ],
+    "matchKey": "メタモン",
+    "dex": 132,
+    "form": "00"
+  },
+  "dragapult-analysis-m2": {
+    "name": "ドラパルト",
+    "rank": 51,
+    "types": [
+      "ドラゴン",
+      "ゴースト"
+    ],
+    "matchKey": "ドラパルト",
+    "dex": 887,
+    "form": "00"
+  },
+  "dragonite-analysis-m2": {
+    "name": "メガカイリュー",
+    "rank": 17,
+    "types": [
+      "ドラゴン",
+      "ひこう"
+    ],
+    "matchKey": "カイリュー",
+    "dex": 149,
+    "form": "00"
+  },
+  "empoleon-analysis-m2": {
+    "name": "エンペルト",
+    "rank": 58,
+    "types": [
+      "みず",
+      "はがね"
+    ],
+    "matchKey": "エンペルト",
+    "dex": 395,
+    "form": "00"
+  },
+  "espathra-analysis-m2": {
+    "name": "クエスパトラ",
+    "rank": 36,
+    "types": [
+      "エスパー"
+    ],
+    "matchKey": "クエスパトラ",
+    "dex": 956,
+    "form": "00"
+  },
+  "excadrill-analysis-m2": {
+    "name": "ドリュウズ",
+    "rank": 55,
+    "types": [
+      "じめん",
+      "はがね"
+    ],
+    "matchKey": "ドリュウズ",
+    "dex": 530,
+    "form": "00"
+  },
+  "florette-analysis-m2": {
+    "name": "フラエッテ（永遠の花）",
+    "rank": 11,
+    "types": [
+      "フェアリー"
+    ],
+    "matchKey": "フラエッテ",
+    "dex": 670,
+    "form": "05"
+  },
+  "froslass-analysis-m2": {
+    "name": "ユキメノコ",
+    "rank": 60,
+    "types": [
+      "こおり",
+      "ゴースト"
+    ],
+    "matchKey": "ユキメノコ",
+    "dex": 478,
+    "form": "00"
+  },
+  "gallade-analysis-m2": {
+    "name": "エルレイド",
+    "rank": 46,
+    "types": [
+      "エスパー",
+      "かくとう"
+    ],
+    "matchKey": "エルレイド",
+    "dex": 475,
+    "form": "00"
+  },
+  "garchomp-analysis-m2": {
+    "name": "ガブリアス",
+    "rank": 1,
+    "types": [
+      "ドラゴン",
+      "じめん"
+    ],
+    "matchKey": "ガブリアス",
+    "dex": 445,
+    "form": "00"
+  },
+  "gardevoir-analysis-m2": {
+    "name": "サーナイト",
+    "rank": 54,
+    "types": [
+      "エスパー",
+      "フェアリー"
+    ],
+    "matchKey": "サーナイト",
+    "dex": 282,
+    "form": "00"
+  },
+  "gengar-analysis-m2": {
+    "name": "メガゲンガー",
+    "rank": 12,
+    "types": [
+      "ゴースト",
+      "どく"
+    ],
+    "matchKey": "ゲンガー",
+    "dex": 94,
+    "form": "00"
+  },
+  "goodra-hisui-analysis-m2": {
+    "name": "ヌメルゴン（ヒスイ）",
+    "rank": 67,
+    "types": [
+      "はがね",
+      "ドラゴン"
+    ],
+    "matchKey": "ヌメルゴン",
+    "dex": 706,
+    "form": "01"
+  },
+  "greedent-analysis-m2": {
+    "name": "ホルード",
+    "rank": 64,
+    "types": [
+      "ノーマル",
+      "じめん"
+    ],
+    "matchKey": "ホルード",
+    "dex": 660,
+    "form": "00"
+  },
+  "greninja-analysis-m2": {
+    "name": "ゲッコウガ",
+    "rank": 28,
+    "types": [
+      "みず",
+      "あく"
+    ],
+    "matchKey": "ゲッコウガ",
+    "dex": 658,
+    "form": "00"
+  },
+  "gyarados-analysis-m2": {
+    "name": "メガギャラドス",
+    "rank": 10,
+    "types": [
+      "みず",
+      "あく"
+    ],
+    "matchKey": "ギャラドス",
+    "dex": 130,
+    "form": "00"
+  },
+  "heracross-analysis-m2": {
+    "name": "メガヘラクロス",
+    "rank": 65,
+    "types": [
+      "むし",
+      "かくとう"
+    ],
+    "matchKey": "ヘラクロス",
+    "dex": 214,
+    "form": "00"
+  },
+  "hippowdon-analysis-m2": {
+    "name": "カバルドン",
+    "rank": 7,
+    "types": [
+      "じめん"
+    ],
+    "matchKey": "カバルドン",
+    "dex": 450,
+    "form": "00"
+  },
+  "hydreigon-analysis-m2": {
+    "name": "サザンドラ",
+    "rank": 21,
+    "types": [
+      "あく",
+      "ドラゴン"
+    ],
+    "matchKey": "サザンドラ",
+    "dex": 635,
+    "form": "00"
+  },
+  "kangaskhan-analysis-m2": {
+    "name": "メガガルーラ",
+    "rank": 34,
+    "types": [
+      "ノーマル"
+    ],
+    "matchKey": "ガルーラ",
+    "dex": 115,
+    "form": "00"
+  },
+  "kingambit-analysis-m2": {
+    "name": "ドドゲザン",
+    "rank": 24,
+    "types": [
+      "あく",
+      "はがね"
+    ],
+    "matchKey": "ドドゲザン",
+    "dex": 983,
+    "form": "00"
+  },
+  "kiraflosure-analysis-m2": {
+    "name": "キラフロル",
+    "rank": 15,
+    "types": [
+      "いわ",
+      "どく"
+    ],
+    "matchKey": "キラフロル",
+    "dex": 970,
+    "form": "00"
+  },
+  "kleavor-analysis-m2": {
+    "name": "バサギリ",
+    "rank": 63,
+    "types": [
+      "むし",
+      "いわ"
+    ],
+    "matchKey": "バサギリ",
+    "dex": 900,
+    "form": "00"
+  },
+  "lopunny-analysis-m2": {
+    "name": "ミミロップ（メガ進化）",
+    "rank": 14,
+    "types": [
+      "ノーマル",
+      "かくとう"
+    ],
+    "matchKey": "ミミロップ",
+    "dex": 428,
+    "form": "00"
+  },
+  "lucario-analysis-m2": {
+    "name": "メガルカリオ",
+    "rank": 9,
+    "types": [
+      "かくとう",
+      "はがね"
+    ],
+    "matchKey": "ルカリオ",
+    "dex": 448,
+    "form": "00"
+  },
+  "mamoswine-analysis-m2": {
+    "name": "マンムー",
+    "rank": 45,
+    "types": [
+      "こおり",
+      "じめん"
+    ],
+    "matchKey": "マンムー",
+    "dex": 473,
+    "form": "00"
+  },
+  "meganium-analysis-m2": {
+    "name": "メガニウム（メガメガニウム）",
+    "rank": 37,
+    "types": [
+      "くさ",
+      "フェアリー"
+    ],
+    "matchKey": "ニウム",
+    "dex": 154,
+    "form": "00"
+  },
+  "meowscarada-analysis-m2": {
+    "name": "マスカーニャ",
+    "rank": 3,
+    "types": [
+      "くさ",
+      "あく"
+    ],
+    "matchKey": "マスカーニャ",
+    "dex": 908,
+    "form": "00"
+  },
+  "milotic-analysis-m2": {
+    "name": "ミロカロス",
+    "rank": 50,
+    "types": [
+      "みず"
+    ],
+    "matchKey": "ミロカロス",
+    "dex": 350,
+    "form": "00"
+  },
+  "mimikyu-analysis-m2": {
+    "name": "ミミッキュ",
+    "rank": 19,
+    "types": [
+      "ゴースト",
+      "フェアリー"
+    ],
+    "matchKey": "ミミッキュ",
+    "dex": 778,
+    "form": "00"
+  },
+  "ninetales-alola-analysis-m2": {
+    "name": "キュウコン（アローラ）",
+    "rank": 52,
+    "types": [
+      "こおり",
+      "フェアリー"
+    ],
+    "matchKey": "キュウコン",
+    "dex": 38,
+    "form": "01"
+  },
+  "pelipper-analysis-m2": {
+    "name": "ペリッパー",
+    "rank": 42,
+    "types": [
+      "みず",
+      "ひこう"
+    ],
+    "matchKey": "ペリッパー",
+    "dex": 279,
+    "form": "00"
+  },
+  "polteageist-analysis-m2": {
+    "name": "ポットデス",
+    "rank": 62,
+    "types": [
+      "ゴースト"
+    ],
+    "matchKey": "ポットデス",
+    "dex": 855,
+    "form": "00"
+  },
+  "primarina-analysis-m2": {
+    "name": "アシレーヌ",
+    "rank": 4,
+    "types": [
+      "みず",
+      "フェアリー"
+    ],
+    "matchKey": "アシレーヌ",
+    "dex": 730,
+    "form": "00"
+  },
+  "rotom-heat-analysis-m2": {
+    "name": "ヒートロトム",
+    "rank": 49,
+    "types": [
+      "でんき",
+      "ほのお"
+    ],
+    "matchKey": "ヒートロトム",
+    "dex": 479,
+    "form": "01"
+  },
+  "rotom-wash-analysis-m2": {
+    "name": "ウォッシュロトム",
+    "rank": 22,
+    "types": [
+      "でんき",
+      "みず"
+    ],
+    "matchKey": "ウォッシュロトム",
+    "dex": 479,
+    "form": "02"
+  },
+  "samurott-hisui-analysis-m2": {
+    "name": "ダイケンキ（ヒスイ）",
+    "rank": 23,
+    "types": [
+      "みず",
+      "あく"
+    ],
+    "matchKey": "ダイケンキ",
+    "dex": 503,
+    "form": "01"
+  },
+  "scizor-analysis-m2": {
+    "name": "ハッサム（メガ進化）",
+    "rank": 14,
+    "types": [
+      "はがね",
+      "むし"
+    ],
+    "matchKey": "ハッサム",
+    "dex": 212,
+    "form": "00"
+  },
+  "scovillain-analysis-m2": {
+    "name": "スコヴィラン",
+    "rank": 47,
+    "types": [
+      "くさ",
+      "ほのお"
+    ],
+    "matchKey": "スコヴィラン",
+    "dex": 952,
+    "form": "00"
+  },
+  "skarmory-analysis-m2": {
+    "name": "エアームド",
+    "rank": 44,
+    "types": [
+      "はがね",
+      "ひこう"
+    ],
+    "matchKey": "エアームド",
+    "dex": 227,
+    "form": "00"
+  },
+  "skeledirge-analysis-m2": {
+    "name": "ラウドボーン",
+    "rank": 29,
+    "types": [
+      "ほのお",
+      "ゴースト"
+    ],
+    "matchKey": "ラウドボーン",
+    "dex": 911,
+    "form": "00"
+  },
+  "slowbro-analysis-m2": {
+    "name": "ヤドラン",
+    "rank": 70,
+    "types": [
+      "みず",
+      "エスパー"
+    ],
+    "matchKey": "ヤドラン",
+    "dex": 80,
+    "form": "00"
+  },
+  "slowking-galar-analysis-m2": {
+    "name": "ヤドキング（ガラル）",
+    "rank": 56,
+    "types": [
+      "どく",
+      "エスパー"
+    ],
+    "matchKey": "ヤドキング",
+    "dex": 199,
+    "form": "01"
+  },
+  "sneasler-analysis-m2": {
+    "name": "オオニューラ",
+    "rank": 33,
+    "types": [
+      "かくとう",
+      "どく"
+    ],
+    "matchKey": "オオニューラ",
+    "dex": 903,
+    "form": "00"
+  },
+  "snorlax-analysis-m2": {
+    "name": "カビゴン",
+    "rank": 48,
+    "types": [
+      "ノーマル"
+    ],
+    "matchKey": "カビゴン",
+    "dex": 143,
+    "form": "00"
+  },
+  "starmie-analysis-m2": {
+    "name": "メガスターミー",
+    "rank": 20,
+    "types": [
+      "みず",
+      "エスパー"
+    ],
+    "matchKey": "スターミー",
+    "dex": 121,
+    "form": "00"
+  },
+  "sylveon-analysis-m2": {
+    "name": "ニンフィア",
+    "rank": 40,
+    "types": [
+      "フェアリー"
+    ],
+    "matchKey": "ニンフィア",
+    "dex": 700,
+    "form": "00"
+  },
+  "toxapex-analysis-m2": {
+    "name": "ドヒドイデ",
+    "rank": 57,
+    "types": [
+      "どく",
+      "みず"
+    ],
+    "matchKey": "ドヒドイデ",
+    "dex": 748,
+    "form": "00"
+  },
+  "tyranitar-analysis-m2": {
+    "name": "バンギラス",
+    "rank": 38,
+    "types": [
+      "いわ",
+      "あく"
+    ],
+    "matchKey": "バンギラス",
+    "dex": 248,
+    "form": "00"
+  },
+  "umbreon-analysis-m2": {
+    "name": "ブラッキー",
+    "rank": 31,
+    "types": [
+      "あく"
+    ],
+    "matchKey": "ブラッキー",
+    "dex": 197,
+    "form": "00"
+  },
+  "vanilluxe-analysis-m2": {
+    "name": "バイバニラ",
+    "rank": 53,
+    "types": [
+      "こおり"
+    ],
+    "matchKey": "バイバニラ",
+    "dex": 584,
+    "form": "00"
+  },
+  "venusaur-analysis-m2": {
+    "name": "メガフシギバナ",
+    "rank": 27,
+    "types": [
+      "くさ",
+      "どく"
+    ],
+    "matchKey": "フシギバナ",
+    "dex": 3,
+    "form": "00"
+  },
+  "victreebel-analysis-m2": {
+    "name": "ウツボット",
+    "rank": 69,
+    "types": [
+      "くさ",
+      "どく"
+    ],
+    "matchKey": "ウツボット",
+    "dex": 71,
+    "form": "00"
+  },
+  "volcarona-analysis-m2": {
+    "name": "ウルガモス",
+    "rank": 18,
+    "types": [
+      "むし",
+      "ほのお"
+    ],
+    "matchKey": "ウルガモス",
+    "dex": 637,
+    "form": "00"
+  },
+  "whimsicott-analysis-m2": {
+    "name": "エルフーン",
+    "rank": 43,
+    "types": [
+      "くさ",
+      "フェアリー"
+    ],
+    "matchKey": "エルフーン",
+    "dex": 547,
+    "form": "00"
+  },
+  "zoroark-hisui-analysis-m2": {
+    "name": "ゾロアーク（ヒスイ）",
+    "rank": 39,
+    "types": [
+      "ノーマル",
+      "ゴースト"
+    ],
+    "matchKey": "ゾロアーク",
+    "dex": 571,
+    "form": "01"
+  }
 }

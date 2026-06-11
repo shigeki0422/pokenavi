@@ -1,0 +1,74 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_TITLE } from '../consts';
+---
+
+<!doctype html>
+<html lang="ja">
+	<head>
+		<BaseHead title={`ページが見つかりません | ${SITE_TITLE}`} description="お探しのページは存在しないか、移動した可能性があります。" />
+		<style>
+			main {
+				max-width: 600px;
+				margin: 0 auto;
+				padding: 4rem 1.5rem;
+				text-align: center;
+			}
+			.code {
+				font-size: 5rem;
+				font-weight: 900;
+				color: #e2e8f0;
+				line-height: 1;
+				margin-bottom: 0.5rem;
+			}
+			h1 {
+				font-size: 1.4rem;
+				margin: 0 0 1rem;
+				color: rgb(var(--gray-dark));
+			}
+			p {
+				color: rgb(var(--gray));
+				margin-bottom: 2rem;
+			}
+			.links {
+				display: flex;
+				gap: 12px;
+				justify-content: center;
+				flex-wrap: wrap;
+			}
+			.btn {
+				padding: 10px 24px;
+				border-radius: 6px;
+				text-decoration: none;
+				font-weight: 700;
+				font-size: 0.9rem;
+				transition: opacity 0.2s;
+			}
+			.btn:hover { opacity: 0.8; }
+			.btn-primary {
+				background: var(--accent);
+				color: white;
+			}
+			.btn-secondary {
+				background: #f1f5f9;
+				color: rgb(var(--gray-dark));
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<div class="code">404</div>
+			<h1>ページが見つかりません</h1>
+			<p>お探しのページは存在しないか、URLが変更された可能性があります。</p>
+			<div class="links">
+				<a href="/" class="btn btn-primary">トップページへ</a>
+				<a href="/pokemon/" class="btn btn-secondary">ポケモン情報</a>
+				<a href="/blog/" class="btn btn-secondary">考察記事</a>
+			</div>
+		</main>
+		<Footer />
+	</body>
+</html>
