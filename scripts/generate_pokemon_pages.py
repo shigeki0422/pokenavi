@@ -1542,7 +1542,7 @@ def query_db(conn, table, pokemon, col, alias=None):
 
 def item_icon_html(item_name: str) -> str:
     if item_name in ITEM_PNG:
-        return f'<img src="/images/items/{ITEM_PNG[item_name]}" alt="{item_name}" style="width:24px;height:24px">'
+        return f'<img src="/images/items/{ITEM_PNG[item_name]}" alt="{item_name}" style="width:24px;height:24px" loading="lazy">'
     if item_name in ITEM_SPRITE and ITEM_SPRITE[item_name]:
         x, y = ITEM_SPRITE[item_name]
         return (f'<span style="display:inline-block;width:24px;height:24px;'
@@ -1648,7 +1648,7 @@ draft: false
     )
     header = f"""
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
-  <img src="/images/pokemon/pokemon-{file_id}.webp" alt="{display_name}" style="width:96px;height:96px" />
+  <img src="/images/pokemon/pokemon-{file_id}.webp" alt="{display_name}" style="width:96px;height:96px" loading="eager" />
   <div>
     <h1 style="margin:0 0 6px;font-size:1.6rem">{display_name}</h1>
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">{type_icons}
@@ -1900,7 +1900,7 @@ draft: false
         rank = row["rank"]
         if pid:
             partner_cards += f'''  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-{pid}.webp" alt="{partner}" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-{pid}.webp" alt="{partner}" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">{partner}</div>
     <div style="font-size:0.68rem;color:#888">{rank}位</div>
   </div>
@@ -1942,7 +1942,7 @@ draft: false
             }
             title = title_map.get(slug, f"【ポケモンチャンピオンズ】{display_name}考察 M-2")
             cards += f'''<a href="/blog/{slug}/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
-  <img src="/images/pokemon/pokemon-{file_id}.webp" alt="{display_name}" style="width:56px;height:56px;flex-shrink:0">
+  <img src="/images/pokemon/pokemon-{file_id}.webp" alt="{display_name}" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
     <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">{title}</div>

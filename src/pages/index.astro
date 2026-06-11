@@ -121,6 +121,9 @@ const organizationJsonLd = {
 									src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
 									alt={p.data.pokemonName}
 									style="width:64px;height:64px;display:block;margin:0 auto 4px"
+									loading="eager"
+									width="64"
+									height="64"
 								/>
 								<div style="font-size:0.72rem;font-weight:bold;color:rgb(var(--gray));margin-bottom:1px">{p.data.usageRank}位</div>
 								<div style="font-size:0.75rem;font-weight:bold;color:rgb(var(--black))">{p.data.pokemonName}</div>

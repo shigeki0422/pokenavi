@@ -10,7 +10,7 @@ draft: false
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
-  <img src="/images/pokemon/pokemon-0136-00.webp" alt="ブースター" style="width:96px;height:96px" />
+  <img src="/images/pokemon/pokemon-0136-00.webp" alt="ブースター" style="width:96px;height:96px" loading="eager" />
   <div>
     <h1 style="margin:0 0 6px;font-size:1.6rem">ブースター</h1>
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">
@@ -217,12 +217,12 @@ draft: false
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0275-tasuki.png" alt="きあいのタスキ" style="width:24px;height:24px">きあいのタスキ</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0275-tasuki.png" alt="きあいのタスキ" style="width:24px;height:24px" loading="lazy">きあいのタスキ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">16.3%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0158-obon.png" alt="オボンのみ" style="width:24px;height:24px">オボンのみ</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0158-obon.png" alt="オボンのみ" style="width:24px;height:24px" loading="lazy">オボンのみ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">15.5%</td>
 </tr>
 <tr>
@@ -232,7 +232,7 @@ draft: false
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0287-scarf.png" alt="こだわりスカーフ" style="width:24px;height:24px">こだわりスカーフ</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0287-scarf.png" alt="こだわりスカーフ" style="width:24px;height:24px" loading="lazy">こだわりスカーフ</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6.4%</td>
 </tr>
 <tr>
@@ -399,52 +399,52 @@ draft: false
 
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin:12px 0">
   <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0134-00.webp" alt="シャワーズ" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-0134-00.webp" alt="シャワーズ" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">シャワーズ</div>
     <div style="font-size:0.68rem;color:#888">1位</div>
   </div>
   <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0197-00.webp" alt="ブラッキー" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-0197-00.webp" alt="ブラッキー" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">ブラッキー</div>
     <div style="font-size:0.68rem;color:#888">2位</div>
   </div>
   <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0196-00.webp" alt="エーフィ" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-0196-00.webp" alt="エーフィ" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">エーフィ</div>
     <div style="font-size:0.68rem;color:#888">3位</div>
   </div>
   <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0700-00.webp" alt="ニンフィア" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-0700-00.webp" alt="ニンフィア" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">ニンフィア</div>
     <div style="font-size:0.68rem;color:#888">4位</div>
   </div>
   <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0135-00.webp" alt="サンダース" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-0135-00.webp" alt="サンダース" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">サンダース</div>
     <div style="font-size:0.68rem;color:#888">5位</div>
   </div>
   <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0471-00.webp" alt="グレイシア" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-0471-00.webp" alt="グレイシア" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">グレイシア</div>
     <div style="font-size:0.68rem;color:#888">6位</div>
   </div>
   <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">ガブリアス</div>
     <div style="font-size:0.68rem;color:#888">7位</div>
   </div>
   <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0470-00.webp" alt="リーフィア" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-0470-00.webp" alt="リーフィア" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">リーフィア</div>
     <div style="font-size:0.68rem;color:#888">8位</div>
   </div>
   <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">マスカーニャ</div>
     <div style="font-size:0.68rem;color:#888">9位</div>
   </div>
   <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:56px;height:56px;display:block;margin:0 auto 4px">
+    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
     <div style="font-size:0.72rem;font-weight:bold">ブリジュラス</div>
     <div style="font-size:0.68rem;color:#888">10位</div>
   </div>

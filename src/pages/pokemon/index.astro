@@ -47,11 +47,12 @@ const pages = (await getCollection('pokemon'))
 			<h1>ポケモン情報</h1>
 			<p class="subtitle">M-2シーズン 使用率・種族値・採用率データ</p>
 			<div class="grid">
-				{pages.map((p) => (
+				{pages.map((p, i) => (
 					<a class="card" href={`/pokemon/${p.id}/`}>
 						<img
 							src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
 							alt={p.data.pokemonName}
+							loading={i < 20 ? 'eager' : 'lazy'}
 						/>
 						<div class="dex">No.{p.data.dexNumber}</div>
 						<div class="name">{p.data.pokemonName}</div>

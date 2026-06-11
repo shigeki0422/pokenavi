@@ -10,19 +10,58 @@ from typing import List
 from .pokemon import parse_pokemon_spec, build_from_spec
 from .battle import BattleField
 from .features import _expected_frac
-from .data import get_type_effectiveness
+from .damage import calc_damage
+
+
+_ENDURE_ITEMS = {"きあいのタスキ"}
+_ENDURE_ABILITIES = {"がんじょう", "ばけのかわ"}
+
+
+def _best_dmg(att, deff, fld, priority_only=False):
+    """att→deff の最大与ダメージHP割合（priority_only=Trueで優先度技に限定）。"""
+    if not att.is_alive or not deff.is_alive:
+        return 0.0
+    best = 0.0
+    for mv in att.moves:
+        if mv and mv.power and mv.category != "status":
+            if priority_only and not (mv.priority and mv.priority > 0):
+                continue
+            try:
+                f = calc_damage(att, deff, mv, fld, random_roll=0.925) / max(1, deff.max_hp)
+            except Exception:
+                f = 0.0
+            best = max(best, min(1.5, f))
+    return best
+
+
+def _endures(p):
+    """満タンからのOHKOを1回耐える（きあいのタスキ/がんじょう/ばけのかわ）。"""
+    return p.item in _ENDURE_ITEMS or p.ability in _ENDURE_ABILITIES
 
 
 def _verdict(a, b, fld):
-    """a vs b の1v1: 与ダメ/被ダメ(HP割合)・速度から勝敗を概算。"""
-    da = _expected_frac(a, b, fld)   # a→b HP割合/ターン
-    db = _expected_frac(b, a, fld)   # b→a
-    ta = math.ceil(1 / da) if da > 0 else 99
-    tb = math.ceil(1 / db) if db > 0 else 99
+    """a vs b の1v1: 与ダメ/被ダメ・速度に加え、タスキ/がんじょう(1発耐え)・優先度を考慮。"""
+    da = _best_dmg(a, b, fld); db = _best_dmg(b, a, fld)
+    da_pri = _best_dmg(a, b, fld, True); db_pri = _best_dmg(b, a, fld, True)
+
+    def turns(frac, endure):
+        if frac <= 0:
+            return 99
+        n = math.ceil(1 / min(1.5, frac))
+        if endure and frac >= 1.0:   # 満タンOHKOをタスキ/がんじょうで耐える→+1手
+            n += 1
+        return n
+    ta = turns(da, _endures(b)); tb = turns(db, _endures(a))
     af = a.get_effective_speed() >= b.get_effective_speed()
-    if ta < tb or (ta == tb and af):
+    # 先制権: 速い側が先。ただし遅い側が「優先度技でOHKO」できるなら先に動ける（相手がタスキ等で耐えない場合）
+    a_first = af
+    if not af and da_pri >= 1.0 and not _endures(b):
+        a_first = True
+    elif af and db_pri >= 1.0 and not _endures(a) and da < 1.0:
+        a_first = False   # a速いがKOしきれず、b側の優先度OHKOが刺さる
+    if ta < tb or (ta == tb and a_first):
         v = "A"
-    elif tb < ta or (tb == ta and not af):
+    elif tb < ta or (tb == ta and not a_first):
         v = "B"
     else:
         v = "even"
@@ -33,6 +72,19 @@ def _has_setup(p):
     SETUP = {"つるぎのまい", "りゅうのまい", "ちょうのまい", "めいそう", "わるだくみ",
              "からをやぶる", "てっぺき", "ビルドアップ", "とぐろをまく", "こうそくいどう", "バトンタッチ"}
     return any(mv and mv.name_jp in SETUP for mv in (p.moves or []))
+
+
+def _poke_build(p):
+    """型情報（分析結果の根拠表示用）。"""
+    return {
+        "name": p.name,
+        "type": "/".join(t for t in (p.type1, p.type2) if t),
+        "item": p.item or "-",
+        "ability": p.ability or "-",
+        "nature": getattr(p, "nature", "-"),
+        "speed": p.get_effective_speed(),
+        "moves": [m.name_jp for m in p.moves if m],
+    }
 
 
 def explain_matchup(specsA: List[str], specsB: List[str], loader, season: str = "M-2") -> dict:
@@ -87,6 +139,8 @@ def explain_matchup(specsA: List[str], specsB: List[str], loader, season: str = 
         "liabilities": [{"name": n, "loses": c} for n, c in liabilities],
         "threats": [{"name": n, "wins": c, "setup": s} for n, c, s in threats],
         "summary": summary,
+        "buildsA": [_poke_build(p) for p in A],
+        "buildsB": [_poke_build(p) for p in B],
     }
 
 
