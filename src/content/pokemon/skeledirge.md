@@ -456,3 +456,16 @@ draft: false
 </div>
 
 ---
+
+---
+
+## 考察記事
+
+<a href="/blog/skeledirge-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0911-00.webp" alt="ラウドボーン" style="width:56px;height:56px;flex-shrink:0">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ラウドボーン考察 M-2 使用率29位 てんねん耐久型の採用率と立ち回り</div>
+    <div style="font-size:0.8rem;color:#666;margin-top:4px">M-2シングルバトルで使用率29位のラウドボーンを分析。特性てんねん99.2%で積みアタッカーを無力化し、なまける95.6%・おにび76.4%で居座る耐久型を解…</div>
+  </div>
+</a>

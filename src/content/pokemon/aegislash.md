@@ -451,3 +451,16 @@ draft: false
 </div>
 
 ---
+
+---
+
+## 考察記事
+
+<a href="/blog/aegislash-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド" style="width:56px;height:56px;flex-shrink:0">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ギルガルド考察 M-2 使用率11位 バトルスイッチの両刀型と立ち回り</div>
+    <div style="font-size:0.8rem;color:#666;margin-top:4px">M-2シングルバトルで使用率11位のギルガルドを徹底分析。バトルスイッチでシールド/ブレードを切り替える両刀型、かげうち96%・キングシールド84%の技構成、た…</div>
+  </div>
+</a>

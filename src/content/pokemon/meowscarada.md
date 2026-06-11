@@ -456,3 +456,16 @@ draft: false
 </div>
 
 ---
+
+---
+
+## 考察記事
+
+<a href="/blog/meowscarada-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:56px;height:56px;flex-shrink:0">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】マスカーニャ考察 M-2 使用率3位 こだわりスカーフ型の立ち回りと対策</div>
+    <div style="font-size:0.8rem;color:#666;margin-top:4px">M-2シングルバトルで使用率3位のマスカーニャを徹底分析。へんげんじざい採用率95%、こだわりスカーフ77.2%による高速アタッカー運用、トリックフラワー・とん…</div>
+  </div>
+</a>

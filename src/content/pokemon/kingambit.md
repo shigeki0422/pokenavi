@@ -457,3 +457,16 @@ draft: false
 </div>
 
 ---
+
+---
+
+## 考察記事
+
+<a href="/blog/kingambit-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0983-00.webp" alt="ドドゲザン" style="width:56px;height:56px;flex-shrink:0">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ドドゲザン考察 M-2 使用率24位 そうだいしょう型の採用率と立ち回り</div>
+    <div style="font-size:0.8rem;color:#666;margin-top:4px">M-2シングルバトルで使用率24位のドドゲザンを徹底分析。そうだいしょう88.9%・ふいうち99.0%・くろいメガネ66.1%の実データから、つるぎのまいHA型…</div>
+  </div>
+</a>
