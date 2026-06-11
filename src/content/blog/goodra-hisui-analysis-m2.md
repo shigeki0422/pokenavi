@@ -53,7 +53,7 @@ heroImage: '../../assets/hero-goodra-hisui-m2.png'
 
 ### 2. とくぼう150＋たべのこしで特殊を起点なく受けきる
 
-とくぼう種族値150は環境屈指の高さで、おだやか（D↑）H32 D32振りで**とくぼう実数値222**に達します。HP実数値171と合わせ、半減の多い特殊技ならほぼ無傷で受けられます。たべのこし（採用率43.8%）でターン終わりにHPを回復しながら居座り、特殊アタッカーに対して時間をかけて勝ちにいくのが基本の動きです。
+とくぼう種族値150は環境屈指の高さで、おだやか（D↑）H32 D32振りで**とくぼう実数値222**に達します。HP実数値187と合わせ、半減の多い特殊技ならほぼ無傷で受けられます。たべのこし（採用率43.8%）でターン終わりにHPを回復しながら居座り、特殊アタッカーに対して時間をかけて勝ちにいくのが基本の動きです。
 
 ### 3. たてこもる＋ボディプレスで物理にも厚くなる
 
@@ -134,7 +134,7 @@ heroImage: '../../assets/hero-goodra-hisui-m2.png'
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">HP</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">H32</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>171</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>187</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">とくぼう</td>
@@ -144,12 +144,12 @@ heroImage: '../../assets/hero-goodra-hisui-m2.png'
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ぼうぎょ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">B32・ずぶとい（B↑）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>149</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>167</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">とくこう</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">C32・ひかえめ（C↑）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">160</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">178</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">すばやさ</td>
@@ -160,7 +160,7 @@ heroImage: '../../assets/hero-goodra-hisui-m2.png'
 </table>
 </div>
 
-特殊受け型ではHP171・とくぼう222で、半減の多い特殊技を高い確率で2発以上耐えます。物理受け型ではぼうぎょ149を起点に、たてこもるで2段階上げれば実質的なぼうぎょは大きく伸び、ボディプレスの打点もそれに連動します。すばやさは無補正最大振りでも112止まりで、環境上位の多くに先手を取られる前提で立ち回ります。
+特殊受け型ではHP187・とくぼう222で、半減の多い特殊技を高い確率で2発以上耐えます。物理受け型ではぼうぎょ167からたてこもるで2段階上げれば実質的なぼうぎょは大きく伸び、ボディプレスの打点もそれに連動します。すばやさは無補正最大振りでも112止まりで、環境上位の多くに先手を取られる前提で立ち回ります。
 
 ### タイプ・弱点
 
@@ -323,7 +323,7 @@ heroImage: '../../assets/hero-goodra-hisui-m2.png'
 
 **強み:**
 
-おだやかでとくぼう実数値222まで伸ばし、HP171と合わせて半減の多い特殊技を高確率で2発以上耐えます。たべのこしで回復しながら居座れるため、特殊アタッカー相手には削り合いで優位に立てます。ぬめぬめは接触技を受けると相手のすばやさを1段階下げるため、物理アタッカーに殴られても次以降のすばやさで差を詰められます。物理受け型より特殊方面の数値が約20%高く、ウォッシュロトム・サザンドラ等の特殊ドラゴン・でんき相手に明確に有利です。
+おだやかでとくぼう実数値222まで伸ばし、HP187と合わせて半減の多い特殊技を高確率で2発以上耐えます。たべのこしで回復しながら居座れるため、特殊アタッカー相手には削り合いで優位に立てます。ぬめぬめは接触技を受けると相手のすばやさを1段階下げるため、物理アタッカーに殴られても次以降のすばやさで差を詰められます。物理受け型より特殊方面の数値が約20%高く、ウォッシュロトム等の特殊でんき・みず相手に明確に有利です。
 
 **弱み:**
 
@@ -360,17 +360,17 @@ heroImage: '../../assets/hero-goodra-hisui-m2.png'
 
 **強み:**
 
-たてこもるでぼうぎょを2段階上げ、特殊受け型では受けきれない物理アタッカーにも居座れます。ボディプレスはぼうぎょの数値で攻撃するため、たてこもるで上げたぼうぎょがそのまま打点に直結し、低い攻撃種族値を介さず火力を出せます。ぼうぎょ実数値149を起点に積めば、はがね/ドラゴンが等倍以上で受けるあく・いわ・はがねへ強烈なボディプレスを通せる点は、ボディプレスを採用しない特殊受け型にはない強みです。
+たてこもるでぼうぎょを2段階上げ、特殊受け型では受けきれない物理アタッカーにも居座れます。ボディプレスはぼうぎょの数値で攻撃するため、たてこもるで上げたぼうぎょがそのまま打点に直結し、低い攻撃種族値を介さず火力を出せます。ぼうぎょ実数値167からたてこもるを積めば、はがね/ドラゴンが等倍以上で受けるあく・いわ・はがねへ強烈なボディプレスを通せる点は、ボディプレスを採用しない特殊受け型にはない強みです。
 
 **弱み:**
 
-たてこもる・ボディプレスはかくとう技なので、相手がゴーストタイプ（採用率は環境で限定的）だと無効化され打点が消えます。また積む過程でターンを使うため、削り切る速度が遅く、かくとう・じめん弱点を持つ高火力アタッカーには積む前に押し切られます。
+打点がボディプレス（かくとう）頼みのため、相手がゴーストタイプ（採用率は環境で限定的）だと無効化され攻め手が消えます。また積む過程でターンを使うため、削り切る速度が遅く、かくとう・じめん弱点を持つ高火力アタッカーには積む前に押し切られます。
 
 ---
 
 ### 補足: 特性の選択
 
-ぬめぬめ（44.0%）は接触物理技を受けるたびに相手のすばやさを1段階下げる特性で、低速のヒスイヌメルゴンが物理アタッカーとの速度差を縮めるのに役立ちます。**シェルアーマー（28.8%）**は相手の攻撃が急所に当たらなくなる特性で、耐久型として「急所による事故負け」を消せます。**そうしょく（27.1%）**はくさ技を無効化しこうげきを1段階上げる特性で、もともと×0.25のくさをさらに無効化し、マスカーニャのトリックフラワー等を起点に受け出せます。耐久を信頼するならシェルアーマー、くさ受けを徹底するならそうしょくと、役割で選び分けます。
+ぬめぬめ（44.0%）は接触技を受けると相手のすばやさを1段階下げる特性で、低速のヒスイヌメルゴンが物理アタッカーとの速度差を縮めるのに役立ちます。**シェルアーマー（28.8%）**は相手の攻撃が急所に当たらなくなる特性で、耐久型として「急所による事故負け」を消せます。**そうしょく（27.1%）**はくさ技を無効化しこうげきを1段階上げる特性で、もともと×0.25のくさをさらに無効化し、マスカーニャのトリックフラワー等を透かして受け出せます。耐久を信頼するならシェルアーマー、くさ受けを徹底するならそうしょくと、役割で選び分けます。
 
 ---
 
@@ -401,8 +401,8 @@ heroImage: '../../assets/hero-goodra-hisui-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルトが×4（みず2×ひこう2）で刺さる。ギャラドスのたきのぼり（みず×0.5）は半減でき、受けながら一撃圏に入れられる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ 技構成依存</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルトが×4（みず2×ひこう2）で刺さり、たきのぼり（みず×0.5）は半減できる。ただしじしん（63.7%）は×2弱点を突き、S81＞60で先手も取られるため、地面技持ちには受け出しできない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -416,14 +416,14 @@ heroImage: '../../assets/hero-goodra-hisui-m2.png'
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">トリックフラワー（くさ×0.25）・とんぼがえり（むし×0.5）・はたきおとす（あく等倍）をいずれも軽減〜等倍で受けられる。かえんほうしゃが×2で通る。かみなりパンチ（21.8%）持ちには削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">トリックフラワー（くさ×0.25）・とんぼがえり（むし×0.5）・はたきおとす（あく等倍）をいずれも軽減〜等倍で受けられる。かえんほうしゃが×2で通る。けたぐり（12.5%）はかくとう×2弱点だが採用率は低い</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ 技構成依存</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガリザードンYのオーバーヒート（ほのお等倍）は耐えやすく、れいとうビームが×2で通る。一方じしん採用個体には×2弱点を突かれるため、地面技の有無で評価が変わる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガリザードンY（ほのお/ひこう）の特殊技をD222で受けやすく、ほのお等倍・ソーラービーム（くさ¼）・エアスラッシュ（ひこう×0.5）を軽減できる。こちらは10まんボルトが×2で通り、削り合いで優位に立てる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -474,14 +474,7 @@ heroImage: '../../assets/hero-goodra-hisui-m2.png'
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">じめん技持ちアタッカー
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアスのじしん99.2%に代表されるじめん技が×2弱点で、はがね/ドラゴンの耐性網を貫通される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめんを無効化するひこう枠（ギャラドス・リザードン）やふゆう枠を後続に置き、地面技を透かしてから受け回す</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位・じしん型）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガリザードンXのじしん採用個体は×2弱点を突き、S実数値でも上を取られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビームが×2で通るため、たべのこしで粘りつつ削るか、より速いみず・いわ枠（ギャラドス）に引いて受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめんを無効化するひこう枠（ドデカバシ・ギャラドス）やふゆう枠を後続に置き、地面技を透かしてから受け回す</td>
 </tr>
 </tbody>
 </table>
@@ -566,10 +559,10 @@ heroImage: '../../assets/hero-goodra-hisui-m2.png'
 | でんき | ×0.5 | ウォッシュロトム・10まんボルト勢 |
 | みず | ×0.5 | アシレーヌ・ギャラドス |
 | くさ | ×0.25 | マスカーニャ・フシギバナ |
-| エスパー | ×0.5 | ヤドラン・サザンドラ受け |
+| エスパー | ×0.5 | マフォクシー・フラエッテ |
 | こおり | ×1.0 | 各種れいとうビーム |
 
-環境の特殊打点で等倍以上が通るのは、こおり・ほのお・ゴースト・ドラゴン・あく・フェアリーに限られ、いずれも×2以上にはなりません。つまり**特殊技に対しては最悪でも等倍**であり、半減・¼が大半を占めます。とくぼう222・HP171の特殊耐久指数（約37,962）は、これら半減技を実質2〜3発受けられる水準で、たべのこしの回復（毎ターンHP約10）を挟めば特殊アタッカーとの削り合いはほぼ負けません。一方、この受け性能は弱点のかくとう・じめんには一切適用されない点が、構築段階での補完を必須にしています。
+環境の特殊打点で等倍以上が通るのは、こおり・ほのお・ゴースト・ドラゴン・あく・フェアリーに限られ、いずれも×2以上にはなりません。つまり**特殊技に対しては最悪でも等倍**であり、半減・¼が大半を占めます。とくぼう222・HP187の特殊耐久指数（約41,514）は、これら半減技を実質2〜3発受けられる水準で、たべのこしの回復（毎ターンHP約12）を挟めば特殊アタッカーとの削り合いはほぼ負けません。一方、この受け性能は弱点のかくとう・じめんには一切適用されない点が、構築段階での補完を必須にしています。
 
 ---
 

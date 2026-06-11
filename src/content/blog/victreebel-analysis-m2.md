@@ -51,7 +51,7 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 
 ### 2. ギガドレイン・ふいうちで居座りながら削る
 
-ギガドレイン（採用率55.6%）はくさ一致の吸収技で、ダメージを与えつつHPを回復します。ちからをすいとると合わせ、被弾を回復で取り返しながら盤面に残り続けるのが基本の動きです。さらに**ふいうち（45.8%）**はあくタイプの優先度+1技で、すばやさに関係なく先制でき、ゴースト・エスパーへ刺さります。メガ後のすばやさは実数値134（無補正122）と速くないため、遅さを補う打点としてふいうちが機能します。
+ギガドレイン（採用率55.6%）はくさ一致の吸収技で、ダメージを与えつつHPを回復します。ちからをすいとると合わせ、被弾を回復で取り返しながら盤面に残り続けるのが基本の動きです。さらに**ふいうち（45.8%）**はあくタイプの優先度+1技で、すばやさに関係なく先制でき、ゴースト・エスパーへ刺さります。メガ後のすばやさは実数値122（無補正）と速くないため、遅さを補う打点としてふいうちが機能します。
 
 ### 3. アンコールで相手の行動を縛る
 
@@ -172,7 +172,7 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 
 メガ後の特性とびだすなかみは「ひんしになった時、攻撃してきた相手に自分が受けたダメージと同じだけのダメージを与える」効果です。倒され際に相手へ道連れ級の反撃を返せるため、ちからをすいとるで粘ったあと最後に相手を道連れにする動きと噛み合います。
 
-ここで重要なのが、**通常特性のようりょくそ（採用率94.2%）はメガ進化すると失われる**点です。ようりょくそは「にほんばれ状態のときすばやさ2倍」ですが、M-2環境で晴れを撒く特性ひでり持ち（キュウコン・コータス）はいずれも使用率TOP50圏外で、にほんばれを採用する環境ポケモンも見当たりません。つまり晴れが用意されない上に、98.0%がメガ進化で特性をとびだすなかみへ上書きするため、**ようりょくそはほぼ機能しません**。メガウツボットはすばやさ実数値134（無補正122）止まりの中速ポケモンとして運用するのが実態です。
+ここで重要なのが、**通常特性のようりょくそ（採用率94.2%）はメガ進化すると失われる**点です。ようりょくそは「にほんばれ状態のときすばやさ2倍」ですが、M-2環境で晴れを撒く特性ひでり持ち（キュウコン・コータス）はいずれも使用率TOP50圏外で、にほんばれを採用する環境ポケモンも見当たりません。つまり晴れが用意されない上に、98.0%がメガ進化で特性をとびだすなかみへ上書きするため、**ようりょくそはほぼ機能しません**。メガウツボットはすばやさ実数値122（無補正）止まりの中速ポケモンとして運用するのが実態です。
 
 ### タイプ・弱点
 
@@ -197,7 +197,6 @@ heroImage: '../../assets/hero-victreebel-m2.png'
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
-      <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
       <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
     </div>
@@ -207,7 +206,6 @@ heroImage: '../../assets/hero-victreebel-m2.png'
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
-      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ（0.25）</span>
     </div>
@@ -220,7 +218,7 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 </table>
 </div>
 
-くさ/どくはみず・でんき・かくとう・くさ・フェアリーを半減でき、特に物理アタッカーのかくとう・みず技を受けやすい点がちからをすいとるでの粘りと噛み合います。一方、弱点は**ほのお・こおり・じめん・ひこう・エスパーの5タイプがいずれも×2**で、ガブリアスのじしん（採用率99.2%）・リザードンのほのお技・マスカーニャのトリプルアクセル（こおり）など、環境上位の主力技が刺さる点に注意が必要です。
+くさ/どくはみず・でんき・かくとう・フェアリーを半減、くさを0.25で受けられ、物理アタッカーのかくとう・みず技を受けやすい点がちからをすいとるでの粘りと噛み合います。じめんはくさ半減×どく2倍で等倍、むしもくさ2倍×どく半減で等倍に収まります。一方、弱点は**ほのお・こおり・ひこう・エスパーの4タイプがいずれも×2**で、リザードンのほのお・ひこう技、マスカーニャのトリプルアクセル（こおり）、ウルガモスのほのお技など、環境上位の主力技が刺さる点に注意が必要です。
 
 ---
 
@@ -327,7 +325,7 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 <div>
 <strong>特性:</strong> ようりょくそ（94.2%）※メガ後とびだすなかみ<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
-<strong>EV:</strong> H32 C32（HC振り。最多はH+2やC+2）<br>
+<strong>EV:</strong> H32 C32（HC振り。余り2はS/Aへ）<br>
 <strong>持ち物:</strong> ウツボットナイト
 </div>
 <div>
@@ -342,11 +340,11 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 
 **強み:**
 
-ちからをすいとる＋ギガドレインの二重回復で物理アタッカーに居座り、こうげきを下げて殴り合いを成立させなくします。ヘドロウェーブ採用でフェアリーへ×2の特殊打点を持ち、アンコールで積み技・変化技を縛れます。とくこう実数値187（メガ後ひかえめ）でギガドレインの回復量・打点を確保できる、特殊寄りの粘り型です。
+ちからをすいとる＋ギガドレインの二重回復で物理アタッカーに居座り、こうげきを下げて殴り合いを成立させなくします。ヘドロウェーブ採用でフェアリーへ×2の特殊打点を持ち、アンコールで積み技・変化技を縛れます。とくこう実数値205（メガ後ひかえめ）でギガドレインの回復量・打点を確保できる、特殊寄りの粘り型です。
 
 **弱み:**
 
-ふいうちが特殊型では抜けやすく、あくの先制打点が薄くなります。すばやさ実数値134止まりで、後述の物理寄り型と異なり物理の確定数を詰める速さもないため、弱点技を持つ高速アタッカーには先手で焼かれて回復が間に合わない場面が増えます。
+ふいうちが特殊型では抜けやすく、あくの先制打点が薄くなります。すばやさ実数値122止まりで弱点技を持つ高速アタッカーには先手で焼かれて回復が間に合わない場面が増えます。
 
 ---
 
@@ -379,7 +377,7 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 
 **強み:**
 
-こうげき実数値194（メガ後いじっぱり）でふいうちの先制打点が重く、特殊型では削り切れないゴースト・エスパーを優先度+1で処理できます。はたきおとす採用でメガ前の相手の持ち物を落とせるのも物理型固有の選択です。ちからをすいとるで自分のこうげきが下がっても、回復目的の技なのでふいうち主体の打点は維持できます。
+こうげき実数値194（メガ後いじっぱり）でふいうちの先制打点が重く、特殊型では削り切れないゴースト・エスパーを優先度+1で処理できます。はたきおとす採用でメガ前の相手の持ち物を落とせるのも物理型固有の選択です。ふいうちが一致のあく物理打点を兼ねるため、相手のこうげきを下げて回復しつつ先制でも削れます。
 
 **弱み:**
 
@@ -397,7 +395,7 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 
 ### 主要ポケモンとの相性
 
-使用率上位のうち、ウツボットと相性がはっきり出るポケモンを有利・不利の両面から挙げます。ちからをすいとるで物理アタッカーに強い一方、すばやさ実数値134（無補正122）と中速で、弱点（ほのお・こおり・じめん・ひこう・エスパー）を突く高速アタッカーには先手で焼かれる点に注意してください。
+使用率上位のうち、ウツボットと相性がはっきり出るポケモンを有利・不利の両面から挙げます。ちからをすいとるで物理アタッカーに強い一方、すばやさ実数値122（無補正）と中速で、弱点（ほのお・こおり・ひこう・エスパー）を突く高速アタッカーには先手で焼かれる点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -434,29 +432,29 @@ heroImage: '../../assets/hero-victreebel-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）が×2弱点。S102でこちらより速く、ちからをすいとるで下げても×2じしんは重い。スケイルショット（34.4%・等倍）を持つ個体は追加で削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#e67e22;font-weight:bold">△ 互角</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）はくさ半減×どく2倍で等倍。ちからをすいとるでこうげきを下げれば物理を枯らせるが、S169でこちらより速く、つるぎのまい（19.6%）やほのおのキバ（14.4%・×2）を持つ個体には押し切られる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・ひこうともに×2弱点で、S100からこちら（S実数値134）の上を取られる。特殊アタッカーのためちからをすいとるが効かず、回復が間に合わない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・ひこうともに×2弱点で、メガ後S実数値167からこちら（S実数値122）の上を取られる。特殊アタッカーのためちからをすいとるが効かず、回復が間に合わない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">トリプルアクセル（72.2%・こおり）が×2でS123から先制。連続技なのでちからをすいとるの回復より蓄積ダメージが勝ちやすい。はたきおとす（57.6%）でメガ前を狩られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">トリプルアクセル（72.2%・こおり）が×2でS実数値192から先制。連続技なのでちからをすいとるの回復より蓄積ダメージが勝ちやすい。はたきおとす（57.6%）でメガ前を狩られる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/ほのおでほのお技が×2弱点。S100でこちらの上を取り、特殊型のためちからをすいとるが無力。ふいうち（あく等倍）では一撃に届かない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/ほのおでほのお技が×2弱点。S実数値167でこちらの上を取り、特殊型のためちからをすいとるが無力。ふいうち（あく等倍）では一撃に届かない</td>
 </tr>
 </tbody>
 </table>
@@ -476,44 +474,37 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
+    <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）が×2弱点。S102で先手を取られ、ちからをすいとるで下げても×2の一致じしんは重く居座れない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう・ふゆうでじめんを透かせるアーマーガア等を後続に置く。ギガドレイン（じめん/ドラゴンに×2弱点ではないが地面複合に通る）はガブには等倍止まりなので、引いて受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技×2弱点をメガ後S実数値167の先手で突かれ、特殊アタッカーなのでちからをすいとるが無効。回復で耐えきれない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・いわ枠（ウォッシュロトム・カバルドンのいわ技等）でほのおを半減して受け、上から処理する。ふいうちでは火力不足なので無理に対面しない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・ひこう×2弱点をS100の先手で突かれ、特殊アタッカーなのでちからをすいとるが無効。回復で耐えきれない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・いわ枠（ウォッシュロトム・カバルドンのいわ技等）でほのおを半減して受け、上から処理する。ふいうちでは火力不足なので無理に対面しない</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">トリプルアクセル（72.2%・こおり×2）の連続技がちからをすいとるの回復を上回り、S123で先制。はたきおとすでメガ前のウツボットナイトを落とされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">トリプルアクセル（72.2%・こおり×2）の連続技がちからをすいとるの回復を上回り、S実数値192で先制。はたきおとす（57.6%）でメガ前のウツボットナイトを落とされる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・はがね・どく枠（ハッサム・ドドゲザン等）でこおり技を半減し、あく弱点を突いて処理する後続を用意する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技×2弱点をS100で先制され、特殊型のためちからをすいとるが効かない。ちょうのまいで積まれると一層手がつけられない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技×2弱点をS実数値167で先制され、特殊型のためちからをすいとるが効かない。ちょうのまいで積まれると一層手がつけられない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ・みず枠（カバルドンのいわ技・ウォッシュロトム）でほのおを半減しつつ、ガブリアス等の高速ドラゴンで上から処理する。アンコールでちょうのまいを縛れる個体なら粘れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/はがねでヘドロウェーブ・ギガドレインともに半減〜等倍。ちからをすいとるで物理は枯らせるが、こちらの打点が乏しく押し込めない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・じめん枠（リザードン・ガブリアス等）ではがね弱点を突く後続を置く。ヘドロウェーブはむしに半減されるため単体での突破は狙わない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく技はがね無効でヘドロウェーブが通らず、ギガドレインも×0.25。ちからをすいとるで物理は枯らせるが、こちらの有効打が乏しく押し込めない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお枠（リザードン等）ではがね弱点を突く後続を置く。どく技は無効・くさ技は×0.25なので単体での突破は狙わない</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-苦手な相手は「ウツボットの弱点（ほのお・こおり・じめん・ひこう・エスパー）を高速で突く特殊アタッカー」と「はがね等でこちらの打点を半減し、撃ち合いで押し込めない相手」に大別されます。ちからをすいとるは特殊アタッカーには無力なため、後続のタイプ補完で受ける構築が前提です。
+苦手な相手は「ウツボットの弱点（ほのお・こおり・ひこう・エスパー）を高速で突く特殊アタッカー」と「はがね等でこちらの打点を半減・無効化し、撃ち合いで押し込めない相手」に大別されます。ちからをすいとるは特殊アタッカーには無力なため、後続のタイプ補完で受ける構築が前提です。
 
 ---
 
@@ -556,7 +547,7 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 
 **パーティ構成の基本方針:**
 
-ウツボットは弱点が5タイプと多く、特殊アタッカーには無力なため、残り5体で以下の役割を補います。
+ウツボットは弱点が4タイプあり、特殊アタッカーには無力なため、残り5体で以下の役割を補います。
 
 1. **エスパー対策**: あく・ゴースト（ヤミラミ・イダイトウ）でエスパー技を透かす枠
 2. **ほのお対策**: みず・いわ（ウォッシュロトム・カバルドン等）でリザードン・ウルガモスのほのお技を半減する枠
@@ -579,7 +570,7 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 
 ほぼ全数が採用するちからをすいとる（97.2%）は攻撃技ではなく、相手のこうげきを下げて回復する変化技です。次点のギガドレイン（55.6%）も吸収技で、純粋な攻撃技で最も高いヘドロウェーブですら33.3%にとどまります。**回復・行動阻害系（ちからをすいとる97.2%＋アンコール38.2%）が攻撃技を上回る**この分布は、ウツボットが「火力で押す」のではなく「相手を枯らして居座る」ことを前提に運用されていることを示します。
 
-さらにこの設計は、メガ後すばやさ実数値134止まりという遅さと噛み合っています。上から殴れない以上、ちからをすいとるで物理を枯らし、ふいうち（優先度+1）で遅さを無視した先制打点を持つのが合理的な選択です。火力を伸ばす持ち物（こだわり系）が実装されていない環境では、ウツボットナイト98.0%・ちからをすいとる97.2%という「メガで耐久を上げて粘る」一択に近い構築思想が読み取れます。
+さらにこの設計は、メガ後すばやさ実数値122止まりという遅さと噛み合っています。上から殴れない以上、ちからをすいとるで物理を枯らし、ふいうち（優先度+1）で遅さを無視した先制打点を持つのが合理的な選択です。火力を底上げする持ち物（いのちのたま・こだわりハチマキ／メガネ等）が実装されていない環境では、ウツボットナイト98.0%・ちからをすいとる97.2%という「メガで耐久を上げて粘る」一択に近い構築思想が読み取れます。
 
 ---
 
@@ -624,7 +615,7 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 
 **総評:**
 
-ウツボットはウツボットナイト（98.0%）でメガ進化し、ちからをすいとる（97.2%）で物理アタッカーのこうげきを下げて回復しながら居座る粘り型です。ギガドレインの二重回復・ふいうちの先制・アンコールの行動縛りで、火力で押すのではなく相手を枯らして勝つ動きを軸にします。ドドゲザン・ウォッシュロトム・アシレーヌのような弱点を突けない相手には強い一方、すばやさ実数値134止まりで弱点5タイプを高速で突くリザードン・マスカーニャ・ウルガモスには先手で焼かれます。
+ウツボットはウツボットナイト（98.0%）でメガ進化し、ちからをすいとる（97.2%）で物理アタッカーのこうげきを下げて回復しながら居座る粘り型です。ギガドレインの二重回復・ふいうちの先制・アンコールの行動縛りで、火力で押すのではなく相手を枯らして勝つ動きを軸にします。ドドゲザン・ウォッシュロトム・アシレーヌのような弱点を突けない相手には強い一方、すばやさ実数値122止まりで弱点4タイプを高速で突くリザードン・マスカーニャ・ウルガモスには先手で焼かれます。
 
 通常特性ようりょくそは環境に晴れ要員がほぼおらず、98.0%がメガ進化でとびだすなかみへ上書きするため機能しません。中速・低めの素早さを前提に、苦手な高速特殊アタッカーは後続のタイプ補完で受ける構築が必須です。
 

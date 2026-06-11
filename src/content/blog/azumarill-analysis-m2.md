@@ -147,6 +147,8 @@ heroImage: '../../assets/hero-azumarill-m2.png'
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
+      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
     </div>
   </td>
@@ -158,7 +160,7 @@ heroImage: '../../assets/hero-azumarill-m2.png'
 </table>
 </div>
 
-フェアリーによりドラゴン技を無効化できるのが対戦上重要で、ガブリアスのげきりん（採用率47.9%）やサザンドラのりゅうせいぐん（53.1%）を透かせます。かくとう・あくも半減できるため、ドラゴン・あく・かくとう技の通りが悪いマリルリは、これらのタイプを軸にする相手に受け出しから動けます。一方、弱点のでんき・くさ・どくは3タイプと少なめですが、ウォッシュロトムのでんき技やキラフロルのどく技など環境に通し手が存在する点には注意が必要です。
+フェアリーによりドラゴン技を無効化できるのが対戦上重要で、ガブリアスのげきりん（採用率47.9%）やサザンドラのりゅうせいぐん（90.2%）を透かせます。かくとう・あくも半減できるため、ドラゴン・あく・かくとう技の通りが悪いマリルリは、これらのタイプを軸にする相手に受け出しから動けます。一方、弱点のでんき・くさ・どくは3タイプと少なめですが、ウォッシュロトムのでんき技やキラフロルのどく技など環境に通し手が存在する点には注意が必要です。
 
 ---
 
@@ -223,7 +225,7 @@ heroImage: '../../assets/hero-azumarill-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.5%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">様子見・はらだいこの起点づくりに</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">様子見。はらだいこを積む隙づくりに</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はたきおとす</strong></td>
@@ -346,21 +348,21 @@ heroImage: '../../assets/hero-azumarill-m2.png'
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×4（あく2×ドラゴン2）。りゅうせいぐん（53.1%）はフェアリーで無効。先制アクアジェットも合わせて上から詰められる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×4（あく2×ドラゴン2）。りゅうせいぐん（90.2%）はフェアリーで無効。あくのはどう（98.5%）・かえんほうしゃ（67.0%）はみず／フェアリーで半減。先制アクアジェットも合わせて上から詰められる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク・アクアジェットが×2（ほのお弱点）。先制アクアジェットでメガリザードンYのスカーフ並みの速度も無視して削れる。ただしソーラービーム等のくさ技を持つ個体には弱点で返される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ くさ技に注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアブレイク・アクアジェットが×2（ほのお弱点）で先制で削れる。ただしソーラービーム（61.0%）がくさ×2弱点を突くため過半数の個体には先に縛られる。くさ技なしの個体にのみ有利</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ばかぢからが×4（あく2×はがね2）。ふいうち（99.0%）はあくで等倍だが、こちらのアクアジェットも先制のため撃ち合える。じゃれつくは等倍</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ばかぢからが×4（あく2×はがね2）。ふいうち（99.0%）はフェアリーで半減（あく×0.5）。じゃれつくはあく×はがねで等倍だが、ばかぢから×4とアクアジェットの先制で上から詰められる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -375,6 +377,20 @@ heroImage: '../../assets/hero-azumarill-m2.png'
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（56.8%）が×2弱点（でんき）。みず技は半減され、おにび（80.6%）でこうげきを下げられると火力が機能不全になる</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">トリックフラワー（92.9%）が×2弱点（くさ）。Sが大幅に上で、はらだいこを積む前に上から落とされる。アクアジェットは先制だが半減され削り切れない</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（10位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（81.7%）が×2弱点（どく）。Sが上で、はらだいこ前に上から縛られる。じゃれつくはどくで半減され、アクアジェットも等倍止まりで先に動かれる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -462,7 +478,7 @@ heroImage: '../../assets/hero-azumarill-m2.png'
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでどく・くさを半減し、苦手なくさ・どく技を受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでどくを無効・くさを半減し、苦手なくさ・どく技を受ける</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン">
@@ -536,7 +552,7 @@ heroImage: '../../assets/hero-azumarill-m2.png'
 
 マリルリはちからもち（採用率88.1%）でA実数値112を実質224相当まで引き上げ、はらだいこ（56.7%）でこうげきを最大化、アクアジェット（89.7%）の先制で速度を介さず全抜きを狙う物理アタッカーです。じゃれつく（88.2%）でドラゴン・あく・かくとうにも刺さり、みず／フェアリーの2タイプで攻撃範囲を補い合えます。
 
-持ち物はオボンのみ66.3%・ラムのみ12.2%で、「積んで先制全抜き」と「状態異常を防いで素火力で殴る」のどちらを取るかで役割が変わります。一方、すばやさ実数値63の低速とでんき・くさ・どくの弱点は構築単位の補完が前提で、苦手なウォッシュロトム・アーマーガア・フシギバナには後続のタイプ補完で対応する必要があります。
+持ち物はオボンのみ66.3%・ラムのみ12.2%で、「積んで先制全抜き」と「状態異常を防いで素火力で殴る」のどちらを取るかで役割が変わります。一方、すばやさ実数値63の低速とでんき・くさ・どくの弱点は構築単位の補完が前提で、上から弱点を突くマスカーニャ・ゲンガー・ウォッシュロトムや、打点を半減するアーマーガア・フシギバナには後続のタイプ補完で対応する必要があります。
 
 ---
 
