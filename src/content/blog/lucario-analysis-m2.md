@@ -60,7 +60,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
 
 これらにはインファイトが等倍以上で通り、高火力を上から押し付けやすいのが強みです。なお、リザードン（S100・5位）も素早さでは上回りますが、相手のほのお技がメガルカリオに×2で刺さりこちらの打点は半減のため、先手を取っても不利です（後述の「苦手なポケモン」で扱います）。
 
-ただし112を上回る高速勢には先手を取られます。メガゲッコウガ（みず/あく）・マスカーニャ（くさ/あく）はいずれもインファイトが×2（あく2）で1発圏内のため、ステルスロックや先発の攻撃でHPを削っておき、バレットパンチ（実質80）・しんそくの先制技で詰めれば先に倒せます。明確に不利なのは、**上から弱点を突けるメガマフォクシー・メガミミロップ・メガスターミー**で、これらは後述の「苦手なポケモン」で扱います。
+ただし112を上回る高速勢には先手を取られます。メガゲッコウガ（みず/あく）・マスカーニャ（くさ/あく）はいずれもインファイトが×2（あく2）で1発圏内のため、ステルスロックや先発の攻撃でHPを削っておき、バレットパンチ（実質80）・しんそくの先制技で詰めれば先に倒せます。明確に不利なのは、**上から弱点を突けるメガマフォクシー（ほのお）・メガミミロップ（かくとう）**や、上から高速で撃ち合えるメガスターミーで、これらは後述の「苦手なポケモン」で扱います。
 
 ### 3. 先制技でタスキ・低HP処理（相手のSに関わらず先制）
 
@@ -206,7 +206,6 @@ heroImage: '../../assets/hero-lucario-m2.png'
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
-      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -230,7 +229,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
 </table>
 </div>
 
-はがねタイプがどくを無効化し、さらに9タイプへの耐性を持つのが特徴です。フェアリー技・ドラゴン技を半減できる点は環境的に重要です。ただし、環境のドラゴン・フェアリータイプ（ガブリアス・カイリュー・リザードン等）はじしんやほのお技などルカリオの弱点を突く技を併せ持つことが多く、タイプ耐性があっても受け出しできるわけではありません。弱点はほのお・じめん・かくとう・エスパーの4タイプで、いずれも×2で通ります。
+はがねタイプがどくを無効化し、さらに9タイプへの耐性を持つのが特徴です。フェアリー技・ドラゴン技を半減できる点は環境的に重要です。ただし、環境のドラゴン・フェアリータイプ（ガブリアス・カイリュー・リザードン等）はじしんやほのお技などルカリオの弱点を突く技を併せ持つことが多く、タイプ耐性があっても受け出しできるわけではありません。弱点はほのお・じめん・かくとうの3タイプで、いずれも×2で通ります（エスパーはかくとう×2×はがね½で等倍に収まります）。
 
 ---
 
@@ -340,7 +339,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> せいしんりょく（84.0%）<br>
+<strong>特性:</strong> せいしんりょく（84.0%）※メガ後てきおうりょく<br>
 <strong>性格:</strong> ようき（A↑ S↓は使わない）<br>
 <strong>EV:</strong> A32 S32（AS振り。余り2はHかBに振る）<br>
 <strong>持ち物:</strong> ルカリオナイト
@@ -365,7 +364,7 @@ S112最速を活かし、ほぼ全ての無振りポケモンより先手を取�
 
 **弱み:**
 
-CS特殊型と比べ、初手から特殊耐久の高い相手に打点を選びにくく、つるぎのまいの積みターンを通す必要があります。積みを狙うターンに弱点（ほのお・じめん・エスパー）を突かれると一気に崩されます。
+CS特殊型と比べ、初手から特殊耐久の高い相手に打点を選びにくく、つるぎのまいの積みターンを通す必要があります。積みを狙うターンに弱点（ほのお・じめん・かくとう）を突かれると一気に崩されます。
 
 また、ガブリアスのじしんは2倍弱点で、スカーフガブリアスには先手を取られます。ガブリアスが多い環境では、初手にルカリオを置かずじしんを無効化できるひこうタイプ（アーマーガア等）から入り、ガブリアスを処理または引かせてからルカリオを後投げで通すと安全です。
 
@@ -383,7 +382,7 @@ CS特殊型と比べ、初手から特殊耐久の高い相手に打点を選び
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> せいしんりょく（84.0%）<br>
+<strong>特性:</strong> せいしんりょく（84.0%）※メガ後てきおうりょく<br>
 <strong>性格:</strong> おくびょう（S↑ A↓）<br>
 <strong>EV:</strong> C32 S32（CS振り、最多型はH+2振り）<br>
 <strong>持ち物:</strong> ルカリオナイト
@@ -420,7 +419,7 @@ A145を生かしきれないため、物理型と比べると積み技による�
 
 ### 主要ポケモンとの相性
 
-使用率上位のうち、メガルカリオと相性がはっきり出るポケモンを有利・不利の両面から挙げます。メガ後はS112（実数値180）に上がり、てきおうりょくでかくとう・はがねの一致技が実質×2補正となる一方、HP70・D70と耐久は低く、こちらの弱点（ほのお・じめん・かくとう・エスパー）を突いてくる相手には脆い点に注意してください。
+使用率上位のうち、メガルカリオと相性がはっきり出るポケモンを有利・不利の両面から挙げます。メガ後はS112（実数値180）に上がり、てきおうりょくでかくとう・はがねの一致技が実質×2補正となる一方、HP70・D70と耐久は低く、こちらの弱点（ほのお・じめん・かくとう）を突いてくる相手には脆い点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -465,9 +464,16 @@ A145を生かしきれないため、物理型と比べると積み技による�
     <img src="/images/pokemon/pokemon-0670-05.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フラエッテ:永遠（17位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー単体にコメットパンチ／ラスターカノンが×2。S112＞メガ後S102で先手確保。主力のムーンフォース（採用率87%）もこちらのはがねで×0.5半減でき、撃ち合いで優位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー単体にコメットパンチ／ラスターカノンが×2。S実数値180＞メガ後S169で先手を取り、はがね技で確定圏。主力のムーンフォース（採用率87%）はこちらに等倍（フェアリー2×はがね½）だが、先手の×2はがね技で先に押し切れる</td>
 </tr>
 <tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ/どくにコメットパンチ／ラスターカノンが×2。S実数値180＞メガ後S168で先手確保</td>
+</tr>
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
@@ -515,8 +521,8 @@ A145を生かしきれないため、物理型と比べると積み技による�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0655-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガマフォクシー（25位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S134で先手を取られ、ほのお・エスパーともにメガルカリオに×2弱点。上から弱点技で先に落とされる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">削れていればバレットパンチ等の先制技で先に倒す。みず・あくタイプを同伴して後続から受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S134（S実数値204）で上を取られ、かえんほうしゃ（採用率66%）のほのお技がメガルカリオに×2。低耐久を上から削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">削れていればバレットパンチ等の先制技で先に倒す。みず・いわタイプを同伴して後続から受ける</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -529,22 +535,22 @@ A145を生かしきれないため、物理型と比べると積み技による�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガスターミー（20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S120で先手を取られる。しねんのずつき（39%）・サイコカッター（25%）などエスパー技を持つ個体には弱点×2で上から落とされる（主力のみず技はこちらに半減）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ等の先制技で削るか、エスパーを半減するはがねタイプで受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S120（S実数値189）で上を取られ、アクアジェット（採用率87%）の先制技も持つ。こちらの一致技はみず/エスパーに半減（はがね½・かくとう½）で打点が乏しく、撃ち合いで主導権を取りにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">削れていればバレットパンチ等の先制技で削る。でんき・くさタイプを同伴して後続から弱点を突く</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（18位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/ほのおにインファイト×0.5（むし0.5×ほのお1）・コメットパンチ×0.5と打点が乏しく、ほのお技はメガルカリオに×2弱点。素ではルカリオ（S112）が速いが、ちょうのまい1積みで抜かれる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（×2、ほのお）で弱点を突くか、みず・いわタイプをパーティに入れて受ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/ほのおにインファイト×0.5（むし0.5×ほのお1）・コメットパンチ×0.5と打点が乏しく、ほのお技はメガルカリオに×2弱点。素ではルカリオ（S実数値180）が速いが、ちょうのまい1積みで抜かれる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ技（×4）・みず技（×2）で弱点を突くポケモンをパーティに入れて受ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">高HP・高Bの耐久にA125の高火力を備え、弱点を突けないこちらでは殴り合いで押し負ける。さらにいかくでこちらのAを1段階下げられ、つるぎのまいの積みも実質1段階分削られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガルカリオ単体では受からない。でんき・いわ技を持つポケモン（弱点×2）をパーティで合わせる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガルカリオ単体では受からない。でんき技（×4）・いわ技（×2）で弱点を突くポケモンをパーティで合わせる</td>
 </tr>
 </tbody>
 </table>
@@ -573,7 +579,7 @@ A145を生かしきれないため、物理型と比べると積み技による�
     <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)">
     <div class="name">イダイトウ(オス)</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/ゴーストでルカリオの弱点エスパーを半減し、ほのおも半減。みず技でガブリアスに打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/ゴーストでルカリオの弱点ほのおを半減。みず技でガブリアス・リザードンに打点</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ">
@@ -593,27 +599,26 @@ A145を生かしきれないため、物理型と比べると積み技による�
 
 メガルカリオは耐久が低く弱点も4タイプと多いため、残り5体で以下の役割を補います。
 
-1. **ガブリアス対策**: カバルドンやみず・こおりタイプでガブリアスのじしんを受ける枠
-2. **ほのお対策**: みずタイプ（アシレーヌ等）でほのお攻撃を受ける枠
-3. **エスパー対策**: あく・はがねタイプでエスパー技を受ける枠
+1. **じめん（ガブリアス）対策**: カバルドンやみず・こおりタイプでガブリアスのじしんを受ける枠
+2. **ほのお対策**: みずタイプ（アシレーヌ等）でリザードン・マフォクシーのほのお技を受ける枠
+3. **かくとう対策**: ひこう・エスパータイプでメガミミロップ等のかくとう技を受ける枠
 4. **ステルスロック展開**: カバルドン等でステロを撒き、交換読みダメージを蓄積
 
 ---
 
-## データ分析①：てきおうりょく補正が生む実質威力の差
+## データ分析①：技採用率が示す「先制技4枠目」の枠争い
 
-メガルカリオの特性「てきおうりょく」はタイプ一致補正を通常の1.5倍から2.0倍に引き上げます。この差が具体的な威力数値でどれだけ影響するかを確認します。
+メガルカリオの技採用率を並べると、メインウェポンとは別に**先制技が3種で票を分け合っている**構図が見えます。
 
-| 技 | 基本威力 | 通常タイプ一致（×1.5） | てきおうりょく（×2.0） | 倍率差 |
-|---|---|---|---|---|
-| インファイト | 120 | 180 | **240** | +33% |
-| コメットパンチ | 90 | 135 | **180** | +33% |
-| バレットパンチ | 40 | 60 | **80** | +33% |
-| しんそく（参考・一致なし） | 80 | — | 80 | — |
+| 技 | タイプ | 役割 | 採用率 |
+|---|---|---|---|
+| バレットパンチ | はがね | 先制（一致・実質80） | 48.0% |
+| しんそく | ノーマル | 先制（一致なし・威力40） | 23.6% |
+| しんくうは | かくとう | 先制（一致・実質80） | 26.0% |
 
-補正率自体は全技一律で+33%だが、立ち回り上の意味が最も大きいのは**先制技バレットパンチの底上げ**です。基本威力40の先制技が実質80に達し、これは表最下段の「しんそく（一致補正なし・威力80）」と同じ瞬間火力を、フェアリー・いわ・こおりに刺さるはがねという広い攻撃範囲で、しかも先制で出せることを意味します。一般的なはがね使いのバレットパンチ（一致×1.5で実質60）と比べても33%高く、HP70・D70と低耐久なメガルカリオが「先に削られても先制技で詰める」動きを成立させる土台になっています。
+3つの先制技の採用率を合計すると97.6%に達し、ほぼ全ての個体が**いずれか1種の先制技を必ず搭載**していることが分かります。HP70・D70と低耐久なメガルカリオにとって、上から殴られても瀕死圏の相手を取りこぼさない先制技は「枠を1つ割く価値のある必須要素」と扱われていると読めます。
 
-メインのインファイト（実質240・採用率71.5%）の高さに目が行きがちですが、てきおうりょくの価値は「つるぎのまいを積まなくても先制技だけで詰め筋ができる」点にあり、これが積みアタッカーでありながら積みなしでも機能する柔軟さにつながっています。
+タイプ一致のバレットパンチ（実質80）・しんくうは（実質80）が物理型・特殊型でそれぞれ主流になる一方、しんそく23.6%は一致補正が乗らない（威力40）にもかかわらず一定数採用されています。バレットパンチははがねを半減するほのお・みず・でんき・はがねタイプに通りにくく、しんくうははかくとうを半減するひこう・エスパー・どくに刺さりません。しんそくはこれら一致先制技が半減される相手にも等倍で40を入れられるため、低耐久ゆえに相手の取りこぼしが致命傷になるルカリオが、先制技の通り先を散らす保険として採用していると読めます。
 
 ---
 

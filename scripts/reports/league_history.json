@@ -313,5 +313,32 @@
     "pool": 5,
     "sec": 240.1,
     "elapsed_min": 141.0
+  },
+  {
+    "iter": 36,
+    "arena_w": 103,
+    "arena_l": 90,
+    "accepted": false,
+    "pool": 5,
+    "sec": 249.5,
+    "elapsed_min": 145.2
+  },
+  {
+    "iter": 37,
+    "arena_w": 104,
+    "arena_l": 89,
+    "accepted": false,
+    "pool": 5,
+    "sec": 250.0,
+    "elapsed_min": 149.4
+  },
+  {
+    "iter": 38,
+    "arena_w": 108,
+    "arena_l": 87,
+    "accepted": true,
+    "pool": 6,
+    "sec": 241.4,
+    "elapsed_min": 153.4
   }
 ]
