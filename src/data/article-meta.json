@@ -26,6 +26,23 @@
   ],
   "matchKey": "ブリジュラス"
  },
+ "azumarill-analysis-m2": {
+  "name": "マリルリ",
+  "rank": 68,
+  "types": [
+   "みず",
+   "フェアリー"
+  ],
+  "matchKey": "マリルリ"
+ },
+ "banette-analysis-m2": {
+  "name": "ジュペッタ",
+  "rank": 59,
+  "types": [
+   "ゴースト"
+  ],
+  "matchKey": "ジュペッタ"
+ },
  "basculegion-analysis-m2": {
   "name": "イダイトウ（オス）",
   "rank": 8,
@@ -87,6 +104,14 @@
   ],
   "matchKey": "ピクシー"
  },
+ "conkeldurr-analysis-m2": {
+  "name": "ローブシン",
+  "rank": 61,
+  "types": [
+   "かくとう"
+  ],
+  "matchKey": "ローブシン"
+ },
  "corviknight-analysis-m2": {
   "name": "アーマーガア",
   "rank": 6,
@@ -105,6 +130,23 @@
   ],
   "matchKey": "マフォクシー"
  },
+ "ditto-analysis-m2": {
+  "name": "メタモン",
+  "rank": 66,
+  "types": [
+   "ノーマル"
+  ],
+  "matchKey": "メタモン"
+ },
+ "dragapult-analysis-m2": {
+  "name": "ドラパルト",
+  "rank": 51,
+  "types": [
+   "ドラゴン",
+   "ゴースト"
+  ],
+  "matchKey": "ドラパルト"
+ },
  "dragonite-analysis-m2": {
   "name": "メガカイリュー",
   "rank": 17,
@@ -114,6 +156,15 @@
   ],
   "matchKey": "カイリュー"
  },
+ "empoleon-analysis-m2": {
+  "name": "エンペルト",
+  "rank": 58,
+  "types": [
+   "みず",
+   "はがね"
+  ],
+  "matchKey": "エンペルト"
+ },
  "espathra-analysis-m2": {
   "name": "クエスパトラ",
   "rank": 36,
@@ -122,6 +173,15 @@
   ],
   "matchKey": "クエスパトラ"
  },
+ "excadrill-analysis-m2": {
+  "name": "ドリュウズ",
+  "rank": 55,
+  "types": [
+   "じめん",
+   "はがね"
+  ],
+  "matchKey": "ドリュウズ"
+ },
  "florette-analysis-m2": {
   "name": "フラエッテ（永遠の花）",
   "rank": 11,
@@ -129,6 +189,15 @@
    "フェアリー"
   ],
   "matchKey": "フラエッテ"
+ },
+ "froslass-analysis-m2": {
+  "name": "ユキメノコ",
+  "rank": 60,
+  "types": [
+   "こおり",
+   "ゴースト"
+  ],
+  "matchKey": "ユキメノコ"
  },
  "gallade-analysis-m2": {
   "name": "エルレイド",
@@ -148,6 +217,15 @@
   ],
   "matchKey": "ガブリアス"
  },
+ "gardevoir-analysis-m2": {
+  "name": "サーナイト",
+  "rank": 54,
+  "types": [
+   "エスパー",
+   "フェアリー"
+  ],
+  "matchKey": "サーナイト"
+ },
  "gengar-analysis-m2": {
   "name": "メガゲンガー",
   "rank": 12,
@@ -156,6 +234,24 @@
    "どく"
   ],
   "matchKey": "ゲンガー"
+ },
+ "goodra-hisui-analysis-m2": {
+  "name": "ヌメルゴン（ヒスイ）",
+  "rank": 67,
+  "types": [
+   "はがね",
+   "ドラゴン"
+  ],
+  "matchKey": "ヌメルゴン"
+ },
+ "greedent-analysis-m2": {
+  "name": "ホルード",
+  "rank": 64,
+  "types": [
+   "ノーマル",
+   "じめん"
+  ],
+  "matchKey": "ホルード"
  },
  "greninja-analysis-m2": {
   "name": "ゲッコウガ",
@@ -174,6 +270,15 @@
    "あく"
   ],
   "matchKey": "ギャラドス"
+ },
+ "heracross-analysis-m2": {
+  "name": "メガヘラクロス",
+  "rank": 65,
+  "types": [
+   "むし",
+   "かくとう"
+  ],
+  "matchKey": "ヘラクロス"
  },
  "hippowdon-analysis-m2": {
   "name": "カバルドン",
@@ -217,6 +322,15 @@
    "どく"
   ],
   "matchKey": "キラフロル"
+ },
+ "kleavor-analysis-m2": {
+  "name": "バサギリ",
+  "rank": 63,
+  "types": [
+   "むし",
+   "いわ"
+  ],
+  "matchKey": "バサギリ"
  },
  "lopunny-analysis-m2": {
   "name": "ミミロップ（メガ進化）",
@@ -280,6 +394,15 @@
   ],
   "matchKey": "ミミッキュ"
  },
+ "ninetales-alola-analysis-m2": {
+  "name": "キュウコン（アローラ）",
+  "rank": 52,
+  "types": [
+   "こおり",
+   "フェアリー"
+  ],
+  "matchKey": "キュウコン"
+ },
  "pelipper-analysis-m2": {
   "name": "ペリッパー",
   "rank": 42,
@@ -288,6 +411,14 @@
    "ひこう"
   ],
   "matchKey": "ペリッパー"
+ },
+ "polteageist-analysis-m2": {
+  "name": "ポットデス",
+  "rank": 62,
+  "types": [
+   "ゴースト"
+  ],
+  "matchKey": "ポットデス"
  },
  "primarina-analysis-m2": {
   "name": "アシレーヌ",
@@ -361,6 +492,24 @@
   ],
   "matchKey": "ラウドボーン"
  },
+ "slowbro-analysis-m2": {
+  "name": "ヤドラン",
+  "rank": 70,
+  "types": [
+   "みず",
+   "エスパー"
+  ],
+  "matchKey": "ヤドラン"
+ },
+ "slowking-galar-analysis-m2": {
+  "name": "ヤドキング（ガラル）",
+  "rank": 56,
+  "types": [
+   "どく",
+   "エスパー"
+  ],
+  "matchKey": "ヤドキング"
+ },
  "sneasler-analysis-m2": {
   "name": "オオニューラ",
   "rank": 33,
@@ -395,6 +544,15 @@
   ],
   "matchKey": "ニンフィア"
  },
+ "toxapex-analysis-m2": {
+  "name": "ドヒドイデ",
+  "rank": 57,
+  "types": [
+   "どく",
+   "みず"
+  ],
+  "matchKey": "ドヒドイデ"
+ },
  "tyranitar-analysis-m2": {
   "name": "バンギラス",
   "rank": 38,
@@ -412,6 +570,14 @@
   ],
   "matchKey": "ブラッキー"
  },
+ "vanilluxe-analysis-m2": {
+  "name": "バイバニラ",
+  "rank": 53,
+  "types": [
+   "こおり"
+  ],
+  "matchKey": "バイバニラ"
+ },
  "venusaur-analysis-m2": {
   "name": "メガフシギバナ",
   "rank": 27,
@@ -420,6 +586,15 @@
    "どく"
   ],
   "matchKey": "フシギバナ"
+ },
+ "victreebel-analysis-m2": {
+  "name": "ウツボット",
+  "rank": 69,
+  "types": [
+   "くさ",
+   "どく"
+  ],
+  "matchKey": "ウツボット"
  },
  "volcarona-analysis-m2": {
   "name": "ウルガモス",
