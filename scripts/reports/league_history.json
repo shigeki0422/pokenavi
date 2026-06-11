@@ -277,5 +277,41 @@
     "pool": 5,
     "sec": 230.3,
     "elapsed_min": 124.5
+  },
+  {
+    "iter": 32,
+    "arena_w": 94,
+    "arena_l": 100,
+    "accepted": false,
+    "pool": 5,
+    "sec": 249.7,
+    "elapsed_min": 128.6
+  },
+  {
+    "iter": 33,
+    "arena_w": 95,
+    "arena_l": 99,
+    "accepted": false,
+    "pool": 5,
+    "sec": 255.7,
+    "elapsed_min": 132.9
+  },
+  {
+    "iter": 34,
+    "arena_w": 99,
+    "arena_l": 96,
+    "accepted": false,
+    "pool": 5,
+    "sec": 248.4,
+    "elapsed_min": 137.0
+  },
+  {
+    "iter": 35,
+    "arena_w": 96,
+    "arena_l": 99,
+    "accepted": false,
+    "pool": 5,
+    "sec": 240.1,
+    "elapsed_min": 141.0
   }
 ]

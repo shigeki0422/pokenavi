@@ -81,7 +81,7 @@ heroImage: '../../assets/hero-kiraflosure-m2.png'
 
 通常のC150アタッカーが「一致技×1.5で実質180」を打つところ、キラフロルは**一致技だけで実質190**に届きます。C150の数値が高いこと以上に、この×2.0補正が火力の天井を引き上げています。
 
-非一致のだいちのちから（実質威力90）も、はがね・どく・いわなど一致技を半減してくる相手に対し抜群を取る等倍以上の二枚目の選択肢として機能します。
+非一致のだいちのちから（威力90）も、いわ・どく一致技を半減するはがね・どくタイプに対する二枚目の打点として機能します（じめんはブリジュラスに×2、ハッサムには等倍）。
 
 ### 理由2: メガ進化で C130→150・S86→101 と火力と速度が同時に伸びる（メガ型）
 
@@ -165,6 +165,7 @@ heroImage: '../../assets/hero-kiraflosure-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
       <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle">じめん<strong style="color:#dc2626">×4</strong></span>
+      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle">かくとう×2</span>
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:24px;height:24px;vertical-align:middle">みず×2</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle">はがね×2</span>
       <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle">エスパー×2</span>
@@ -172,16 +173,12 @@ heroImage: '../../assets/hero-kiraflosure-m2.png'
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle">かくとう</span>
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle">どく</span>
-      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle">フェアリー</span>
-      <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle">ノーマル</span>
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle">ひこう</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle">いわ</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle">むし</span>
-      <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle">ゴースト</span>
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle">ほのお</span>
-      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle">くさ</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle">フェアリー</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
@@ -334,7 +331,7 @@ C32振り時のS・Cは以下の通り。
 
 ### 苦手なポケモン
 
-じめん×4・みず×2・はがね×2を採用率20%以上で突いてくる相手、またはお互い有効打が乏しく長期戦で削り負ける相手をリストアップ。
+じめん×4・みず×2・はがね×2・かくとう×2・エスパー×2を採用率20%以上で突いてくる相手、またはお互い有効打が乏しく長期戦で削り負ける相手をリストアップ。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -359,7 +356,17 @@ C32振り時のS・Cは以下の通り。
 <tr style="background:#fee2e2">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ブリジュラス</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">2位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ラスターカノン55.7%が<strong>はがね×2</strong>で重く、10まんボルト66.9%も等倍で通る。こちらのパワージェムははがね/ドラゴンに×0.5×0.5=×0.25で通らず、だいちのちから(×2)で削るしかないが先制を取られて落ちる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ラスターカノン55.7%が<strong>はがね×2</strong>で重く、10まんボルト66.9%も等倍で通る。こちらのパワージェムははがね/ドラゴンに×0.5で通らず、だいちのちから(×2)で削るしかないが、決定打に欠け削り合いで不利</td>
+</tr>
+<tr style="background:#fee2e2">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アシレーヌ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリア79.2%・なみのり・アクアジェット66.6%が<strong>みず×2</strong>。こちらのヘドロウェーブはフェアリーに×2だがアクアジェットの先制で削られ、撃ち合いで先に落ちやすい</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0902-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">イダイトウ (オス)</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">8位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ウェーブタックル96.5%が<strong>みず×2</strong>、アクアジェット91.1%の先制でタスキ後も詰められる。こちらのいわ・どく・じめん技はいずれも等倍以下で決定打に欠ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0130-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ギャラドス</td>
@@ -374,12 +381,12 @@ C32振り時のS・Cは以下の通り。
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0212-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ハッサム</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ99.7%が<strong>はがね×2</strong>で先制圏。こちらのヘドロウェーブははがね/むしに×0.25、パワージェムも×0.5で火力が通らず、だいちのちから×2しか有効打が無い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ99.7%が<strong>はがね×2</strong>で先制圏、インファイト72.4%も<strong>かくとう×2</strong>。こちらのヘドロウェーブははがね/むしに無効、パワージェム・だいちのちからも等倍止まりで決定打に欠ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうにより<strong>だいちのちからが無効化</strong>され、パワージェムは等倍・ヘドロウェーブは×0.5と有効打が乏しい。一方アーマーガアもこちらの弱点を突けないが、てっぺき63.5%＋ボディプレス70.9%＋はねやすめ98.1%で居座られると長期戦で確実に削り負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうにより<strong>だいちのちからが無効化</strong>され、ヘドロウェーブもはがねに<strong>無効</strong>、パワージェムは等倍止まりで有効打が乏しい。一方アーマーガアもこちらの弱点を突けないが、てっぺき63.5%＋ボディプレス70.9%＋はねやすめ98.1%で居座られると長期戦で確実に削り負ける</td>
 </tr>
 </tbody>
 </table>
@@ -402,22 +409,17 @@ C32振り時のS・Cは以下の通り。
 <tr style="background:#dcfce7">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードン</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお/ひこうにパワージェムが<strong>×4で確定1発</strong>。ソーラービーム61.0%はくさ技だが2ターン技で隙が大きい。最速同士でもS168対167で1差先行</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">パワージェムがメガY（ほのお/ひこう・採用63.6%）に<strong>×4</strong>、メガX（ほのお/ドラゴン・34.9%）にも<strong>×2</strong>で刺さる。ソーラービーム61.0%はくさ技だが等倍かつ2ターン技で隙が大きい。最速同士でもS168対167で1差先行</td>
 </tr>
 <tr style="background:#dcfce7">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0149-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">カイリュー</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン/ひこうにパワージェムが<strong>×4</strong>。みず・じめん弱点技を突かれない。S80でこちらが先行（しんそく45.6%は先制で通るが等倍止まり）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン/ひこうにパワージェムが<strong>×2</strong>。みず・じめん・はがね・エスパー弱点技を突かれない。S80でこちらが先行（しんそく45.6%は先制で通るが等倍止まり）</td>
 </tr>
 <tr style="background:#dcfce7">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0637-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ウルガモス</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/ほのおにパワージェムが<strong>×4で確定1発</strong>。ほのおのまい79.7%・むしのさざめき33.7%・ギガドレイン59.2%いずれもこちらの弱点ではない。最速同士でもS168対167で1差先行</td>
-</tr>
-<tr style="background:#dcfce7">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0670-05.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">フラエッテ（永遠）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリーにヘドロウェーブ×2＝実質威力380。ムーンフォースはどく耐性で×0.5</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/ほのおにパワージェムが<strong>×4で確定1発</strong>。ほのおのまい79.7%・むしのさざめき33.7%・ギガドレイン59.2%いずれもこちらの弱点ではない。最速同士でもS168対167で1差先行で、ちょうのまい97.4%を積まれる前に上から縛れる</td>
 </tr>
 </tbody>
 </table>
@@ -431,7 +433,7 @@ C32振り時のS・Cは以下の通り。
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム">
     <div class="name">ハッサム</div>
-    <div class="rate">同居1位／じめん受け（耐性×0.5）</div>
+    <div class="rate">同居1位／みず・はがね・エスパー半減</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー">
@@ -456,7 +458,7 @@ C32振り時のS・Cは以下の通り。
 </div>
 
 **パーティ構成のポイント:**
-1. **じめん受けが最優先:** じめん×4はガブリアス（1位）・カバルドン（7位）に確定1発で抜かれる致命傷。同居率1位ハッサム（じめん×0.5）、2位カイリュー（じめん無効）、7位アーマーガア（じめん無効）が自然に組み込まれているのは、この受け枠を埋めるための構築選択であることがデータから読み取れる
+1. **じめん受けが最優先:** じめん×4はガブリアス（1位）・カバルドン（7位）に確定1発で抜かれる致命傷。同居率2位カイリュー（じめん無効）、7位アーマーガア（じめん無効）が自然に組み込まれているのは、この受け枠を埋めるための構築選択であることがデータから読み取れる。同居1位ハッサム（むし/はがね）はじめんこそ等倍だが、みず・はがね・エスパー弱点を半減し高耐久で受けられる
 2. **はがね受け補完:** ブリジュラス（同居4位）はラスターカノン・10まんボルトを半減でき、キラフロルが対面取れないハッサム・ブリジュラス対面を裏から処理できる
 3. **タスキ型はステロ起点役:** 型②採用時は同居率2位カイリュー・3位ガブリアスなどの一致技フィニッシャーを後ろに置き、ステロダメージで確定数を1段階繰り上げる役割分担になる
 
@@ -534,6 +536,6 @@ TOP6スプレッド全てが**C32 S32確定**で、違いは余り2の振り先�
 
 CS振り95%超・C32 S32固定という構築の収束が示すように、最もシンプルで強い使い方は「**メガ進化でC150×てきおうりょくの最大火力を確保し、S168（おくびょう最速）から一致技で詰める**」形です。
 
-じめん×4（ガブリアス・カバルドン）・みず×2（スターミー・ギャラドス）・はがね×2（ハッサム・ブリジュラス）への対策枠を用意できれば、フェアリー・ほのお・ひこう・むしタイプを軒並み確定1発圏に捉える強力なメガ進化ポケモンです。
+じめん×4（ガブリアス・カバルドン）・みず×2（アシレーヌ・スターミー・ギャラドス）・はがね×2（ハッサム・ブリジュラス）への対策枠を用意できれば、ほのお・ひこう・むしタイプにパワージェム×2〜×4、フェアリータイプにヘドロウェーブ×2と一致技だけで広く抜群を取れる強力なメガ進化ポケモンです。
 
 関連記事: [メガハッサム考察 M-2 使用率14位](/blog/scizor-analysis-m2)
