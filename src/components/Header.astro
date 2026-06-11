@@ -13,11 +13,9 @@ import Sidebar from './Sidebar.astro';
 				{SITE_TITLE}
 			</a>
 		</h2>
-		<div class="internal-links">
-			<HeaderLink href="/ranking">使用率ランキング</HeaderLink>
-			<HeaderLink href="/pokemon">ポケモン情報</HeaderLink>
-			<HeaderLink href="/blog">考察記事</HeaderLink>
-		</div>
+		<button class="hamburger" id="menu-btn" aria-label="メニューを開く" aria-expanded="false">
+			<span></span><span></span><span></span>
+		</button>
 	</nav>
 </header>
 <style>
@@ -51,37 +49,40 @@ import Sidebar from './Sidebar.astro';
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
+		height: 52px;
 	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
+	.hamburger {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		gap: 5px;
+		width: 40px;
+		height: 40px;
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 6px;
+		border-radius: 8px;
 	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--accent);
+	.hamburger:hover {
+		background: rgb(var(--gray-light));
 	}
-	@media (max-width: 720px) {
-		nav {
-			flex-wrap: wrap;
-			padding: 0.3rem 0;
-		}
-		h2 {
-			width: 100%;
-			text-align: center;
-			padding: 0.3rem 0;
-		}
-		.internal-links {
-			width: 100%;
-			display: flex;
-			justify-content: center;
-			flex-wrap: wrap;
-		}
-		nav a {
-			padding: 0.5em 0.5em;
-			font-size: 0.9rem;
-		}
+	.hamburger span {
+		display: block;
+		width: 22px;
+		height: 2px;
+		background: rgb(var(--gray-dark));
+		border-radius: 2px;
+		transition: transform 0.25s, opacity 0.25s;
+	}
+	.hamburger[aria-expanded="true"] span:nth-child(1) {
+		transform: translateY(7px) rotate(45deg);
+	}
+	.hamburger[aria-expanded="true"] span:nth-child(2) {
+		opacity: 0;
+	}
+	.hamburger[aria-expanded="true"] span:nth-child(3) {
+		transform: translateY(-7px) rotate(-45deg);
 	}
 	/* PCではサイドバーがナビを担うのでヘッダー自体を隠す */
 	@media (min-width: 1024px) {
