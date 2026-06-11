@@ -599,3 +599,26 @@ draft: false
 </div>
 
 ---
+
+
+---
+
+## 考察記事
+
+<a href="/blog/charizard-x-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンX" style="width:56px;height:56px;flex-shrink:0">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガリザードンX考察 M-2 物理ほのお/ドラゴン型 採用率と立ち回り</div>
+    <div style="font-size:0.8rem;color:#666;margin-top:4px">M-2使用率5位。かたいツメ×りゅうのまいの崩し力、物理・特殊両対応の構築法を解説。</div>
+  </div>
+</a>
+
+<a href="/blog/charizard-y-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンY" style="width:56px;height:56px;flex-shrink:0">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガリザードンY考察 M-2 ひでり特殊エース 採用型と晴れ展開の解説</div>
+    <div style="font-size:0.8rem;color:#666;margin-top:4px">M-2使用率5位。C159×ひでりのトップクラス火力、ソーラービーム即発動による技範囲の広さを解説。</div>
+  </div>
+</a>
