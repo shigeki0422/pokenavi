@@ -38,11 +38,25 @@ class _ForcedFirst:
 class SearchAI:
     def __init__(self, loader: DataLoader, rollouts: int = 16, depth: int = 50,
                  season: str = "M-2", rollout_ai=None, seed: int = 0, value_fn=None,
-                 roll_pessimism=None, policy_fn=None, policy_weight=0.15):
+                 roll_pessimism=None, policy_fn=None, policy_weight=0.15,
+                 adversarial: bool = False, opp_k: int = 6):
         self.loader = loader
         self.K = rollouts
         self.depth = depth
         self.season = season
+        # adversarial=True: 現手番を「同時手番ゼロ和ゲーム」として解く。
+        #   自分の候補×相手の候補のペイオフ行列をロールアウトで作り、相手は最善応手(ナッシュ)を取る前提。
+        #   ＝「相手は固定方策」を仮定する従来1手に対し、相手の択(読み合い)を評価に入れる。
+        self.adversarial = adversarial
+        self.opp_k = opp_k   # 相手候補手の上限（計算量抑制。priorで上位に絞る）
+        # tree_search=True: 深さ限定 expectiminimax。各手番(自分手×相手手)を解決し、
+        #   結果状態を価値ネットで直接採点（ロールアウトを排す）。priorで上位tree_kに枝刈り、
+        #   各手番をゼロ和で解く(=maximin)。tree_depth=展開する手番(ターン)数。
+        self.tree_search = False
+        self.tree_depth = 1
+        self.tree_k = 3
+        self.tree_det = max(1, rollouts)   # 決定化(相手構成サンプル)数
+        self.tree_roll = 0.85              # 解決時の固定ダメージロール(分散低減)
         # ロールアウト相手は呼び出し側が指定（netを持つ箇所は NetGreedyAI(net) を渡す＝
         # 読みの相手も賢い前提＝AlphaZero的）。未指定時のみ HeuristicAI にフォールバック。
         self.rollout_ai = rollout_ai or HeuristicAI()
@@ -72,7 +86,12 @@ class SearchAI:
         cands = self._candidate_actions(my_side, opp_side, field)
         if len(cands) <= 1:
             return cands[0] if cands else self._fallback(my_side, opp_side, field)
-        scored = self.score_actions(my_side, opp_side, field)
+        if self.tree_search:
+            scored = self.score_actions_tree(my_side, opp_side, field)
+        elif self.adversarial:
+            scored = self.score_actions_adversarial(my_side, opp_side, field)
+        else:
+            scored = self.score_actions(my_side, opp_side, field)
         return max(scored, key=lambda x: x[1])[0]
 
     def score_actions(self, my_side, opp_side, field):
@@ -99,6 +118,166 @@ class SearchAI:
                 score += self.policy_weight * priors.get(self._action_index(act), 0.0)
             scored.append((act, score))
         return scored
+
+    def score_actions_adversarial(self, my_side, opp_side, field):
+        """現手番を同時手番ゼロ和ゲームとして解く。各自分手の「相手最善応手に対する価値」を返す。
+
+        各決定化(相手構成サンプル)ごとに:
+          ペイオフ行列 M[i][j] = 自分手i・相手手j を同時に打って depth ターン進めた評価
+          → solve_zero_sum で相手の混合最善戦略 y を解き、各自分手の vs-y 価値を accumulate。
+        K個の決定化で平均して返す（隠れ情報の不確実性を平均）。
+        """
+        from .selection import solve_zero_sum
+        belief = my_side.belief if my_side.belief is not None else OpponentBelief(self.loader, self.season)
+        belief.observe_disclosure(my_side.opp_view)
+        my_cands = self._candidate_actions(my_side, opp_side, field)
+        if len(my_cands) <= 1:
+            return [(my_cands[0], 1.0)] if my_cands else []
+        my_is_s1 = (my_side.field_idx == 0)
+        priors = {}
+        if self.policy_fn is not None:
+            try:
+                priors = self.policy_fn(my_side, opp_side, field) or {}
+            except Exception:
+                priors = {}
+        agg = [0.0] * len(my_cands); nconf = 0
+        for _ in range(self.K):
+            cfg = self._sample_opp_config(opp_side, belief)
+            s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
+            bs1, bs2, bfield = copy.deepcopy((s1, s2, field))
+            dopp = bs2 if my_is_s1 else bs1; dme = bs1 if my_is_s1 else bs2
+            for poke, c in zip(dopp.party, cfg):
+                if c is not None:
+                    self._determinize(poke, c)
+            opp_cands = self._candidate_actions(dopp, dme, bfield)
+            if not opp_cands:
+                continue
+            opp_cands = self._limit_opp(opp_cands, dopp, dme, bfield)
+            M = [[self._eval_joint(bs1, bs2, bfield, my_cands[i], opp_cands[j], my_is_s1)
+                  for j in range(len(opp_cands))] for i in range(len(my_cands))]
+            _x, y, _v = solve_zero_sum(M, iters=1500)
+            for i in range(len(my_cands)):
+                agg[i] += sum(M[i][j] * y[j] for j in range(len(opp_cands)))
+            nconf += 1
+        if nconf == 0:
+            return self.score_actions(my_side, opp_side, field)
+        out = []
+        for i, act in enumerate(my_cands):
+            sc = agg[i] / nconf
+            if priors:
+                sc += self.policy_weight * priors.get(self._action_index(act), 0.0)
+            out.append((act, sc))
+        return out
+
+    def _limit_opp(self, opp_cands, dopp, dme, field):
+        """相手候補手を opp_k 件に制限（計算量抑制）。policy_fn があれば上位、無ければ先頭。"""
+        if len(opp_cands) <= self.opp_k:
+            return opp_cands
+        if self.policy_fn is not None:
+            try:
+                pr = self.policy_fn(dopp, dme, field) or {}
+                opp_cands = sorted(opp_cands, key=lambda a: -pr.get(self._action_index(a), 0.0))
+            except Exception:
+                pass
+        return opp_cands[:self.opp_k]
+
+    def _eval_joint(self, bs1, bs2, bfield, my_act, opp_act, my_is_s1):
+        """自分手・相手手を同時に強制し depth ターン進めて評価（決定化済み状態から）。"""
+        cs1, cs2, cfield = copy.deepcopy((bs1, bs2, bfield))
+        if my_is_s1:
+            a1 = _ForcedFirst(my_act, self.rollout_ai); a2 = _ForcedFirst(opp_act, self.rollout_ai)
+        else:
+            a1 = _ForcedFirst(opp_act, self.rollout_ai); a2 = _ForcedFirst(my_act, self.rollout_ai)
+        b = Battle(cs1, cs2, cfield)
+        winner = b.resume(a1, a2, max_turns=self.depth)
+        return self._score(b, winner, my_is_s1)
+
+    # ── 深さ限定 expectiminimax（葉＝価値ネット直接採点） ──────────────
+    def score_actions_tree(self, my_side, opp_side, field):
+        """各自分手の「相手最善応手に対する、深さtree_depthの木の価値」を返す。"""
+        from .selection import solve_zero_sum
+        belief = my_side.belief if my_side.belief is not None else OpponentBelief(self.loader, self.season)
+        belief.observe_disclosure(my_side.opp_view)
+        my_cands = self._candidate_actions(my_side, opp_side, field)
+        if len(my_cands) <= 1:
+            return [(my_cands[0], 1.0)] if my_cands else []
+        my_is_s1 = (my_side.field_idx == 0)
+        agg = [0.0] * len(my_cands); nconf = 0
+        for _ in range(self.tree_det):
+            cfg = self._sample_opp_config(opp_side, belief)
+            s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
+            bs1, bs2, bfield = copy.deepcopy((s1, s2, field))
+            dopp = bs2 if my_is_s1 else bs1; dme = bs1 if my_is_s1 else bs2
+            for poke, c in zip(dopp.party, cfg):
+                if c is not None:
+                    self._determinize(poke, c)
+            opp_cands = self._topk_actions(dopp, dme, bfield, self.tree_k)
+            mine = self._topk_actions(dme, dopp, bfield, len(my_cands))   # 自分は全候補を保持
+            if not opp_cands or not mine:
+                continue
+            M = [[self._tree_value(bs1, bs2, bfield, a_my, a_op, my_is_s1, self.tree_depth - 1)
+                  for a_op in opp_cands] for a_my in mine]
+            _x, y, _v = solve_zero_sum(M, iters=1500)
+            idx = {self._action_index(a): i for i, a in enumerate(mine)}
+            for c, act in enumerate(my_cands):
+                i = idx.get(self._action_index(act))
+                if i is not None:
+                    agg[c] += sum(M[i][j] * y[j] for j in range(len(opp_cands)))
+            nconf += 1
+        if nconf == 0:
+            return self.score_actions(my_side, opp_side, field)
+        return [(act, agg[c] / nconf) for c, act in enumerate(my_cands)]
+
+    def _topk_actions(self, side, opp, field, k):
+        """side の候補手を prior 上位 k 件に枝刈り。"""
+        cands = self._candidate_actions(side, opp, field)
+        if len(cands) <= k:
+            return cands
+        if self.policy_fn is not None:
+            try:
+                pr = self.policy_fn(side, opp, field) or {}
+                cands = sorted(cands, key=lambda a: -pr.get(self._action_index(a), 0.0))
+            except Exception:
+                pass
+        return cands[:k]
+
+    def _tree_value(self, bs1, bs2, bfield, my_act, opp_act, my_is_s1, depth):
+        """自分手・相手手を1ターン解決し、子状態を深さdepthで再帰評価（葉＝価値ネット）。"""
+        from .selection import solve_zero_sum
+        from . import damage as _dmg
+        cs1, cs2, cfield = copy.deepcopy((bs1, bs2, bfield))
+        if my_is_s1:
+            a1 = _ForcedFirst(my_act, self.rollout_ai); a2 = _ForcedFirst(opp_act, self.rollout_ai)
+        else:
+            a1 = _ForcedFirst(opp_act, self.rollout_ai); a2 = _ForcedFirst(my_act, self.rollout_ai)
+        b = Battle(cs1, cs2, cfield)
+        _prev = _dmg._ROLL_OVERRIDE; _dmg._ROLL_OVERRIDE = self.tree_roll
+        try:
+            winner = b.resume(a1, a2, max_turns=1)   # 1ターンだけ解決
+        finally:
+            _dmg._ROLL_OVERRIDE = _prev
+        if winner != 0:
+            return self._score(b, winner, my_is_s1)
+        if depth <= 0:
+            return self._leaf_value(b, my_is_s1)
+        # さらに1ターン展開（同時手番ゼロ和）
+        me_sub = b.side1 if my_is_s1 else b.side2
+        op_sub = b.side2 if my_is_s1 else b.side1
+        my_next = self._topk_actions(me_sub, op_sub, b.field, self.tree_k)
+        op_next = self._topk_actions(op_sub, me_sub, b.field, self.tree_k)
+        if not my_next or not op_next:
+            return self._leaf_value(b, my_is_s1)
+        M = [[self._tree_value(b.side1, b.side2, b.field, am, ao, my_is_s1, depth - 1)
+              for ao in op_next] for am in my_next]
+        _x, _y, val = solve_zero_sum(M, iters=1000)
+        return val
+
+    def _leaf_value(self, b, my_is_s1):
+        """葉の状態を価値ネットで採点（無ければHP割合）。my視点のP(勝利)。"""
+        if self.value_fn is not None:
+            v1 = self.value_fn(b.side1, b.side2, b.field)
+            return v1 if my_is_s1 else (1.0 - v1)
+        return self._score(b, 0, my_is_s1)
 
     @staticmethod
     def _action_index(act) -> int:

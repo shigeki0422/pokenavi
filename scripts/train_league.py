@@ -78,7 +78,7 @@ def main():
     mode = sys.argv[5] if len(sys.argv) > 5 else ""
     big = mode == "big"
     fresh_std = mode in ("v3", "v4", "v5", "v6", "v7", "exp24", "exp96")  # 標準サイズnetを現feature_dimでゼロ学習
-    strat_p = 0.35 if mode in ("v7", "exp24", "exp96") else 0.15   # 戦略カリキュラム（exp系もv7と同条件で揃える）
+    strat_p = 0.35 if mode in ("v7", "exp24", "exp96", "cont") else 0.15   # 戦略カリキュラム（exp系もv7と同条件で揃える）
     deep = mode == "deep"                            # 現デプロイnetから継続・別ファイル保存
     if big:
         save_path = Path(__file__).resolve().parent / "az_net_big.json"
@@ -86,6 +86,8 @@ def main():
         save_path = Path(__file__).resolve().parent / f"az_net_{mode}.json"
     elif deep:
         save_path = Path(__file__).resolve().parent / "az_net_deep.json"
+    elif mode == "cont":                             # 最良v7から継続・浅探索多ゲーム・別ファイル保存
+        save_path = Path(__file__).resolve().parent / "az_net_cont.json"
     else:
         save_path = AZNP_PATH
     workers = max(1, (os.cpu_count() or 2) - 1)
