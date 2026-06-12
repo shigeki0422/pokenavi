@@ -84,3 +84,12 @@ const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 {cfBeaconToken && (
   <script is:inline defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon={JSON.stringify({ token: cfBeaconToken })}></script>
 )}
+
+<!-- Google Analytics 4 -->
+<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-B9BJX6K5ST"></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-B9BJX6K5ST');
+</script>
