@@ -52,7 +52,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       .bvrow .use{font-size:.7rem;color:rgb(var(--gray))}
       .comp{border:1px solid rgb(var(--gray-light));border-radius:10px;padding:.7em .8em;background:#fcfcfd}
       .comp .ctitle{font-size:.82rem;font-weight:700;margin-bottom:.4em}
-      .iconrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(88px,1fr));gap:.3rem}
+      .iconrow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.3rem}
       .montab{display:flex;flex-direction:column;align-items:center;width:auto;padding:.25em .15em;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#fff;cursor:pointer;font-family:var(--font-atkinson);overflow:hidden}
       .montab.active{border-color:var(--accent);background:#eef2ff}
       .monicon{width:40px;height:40px;object-fit:contain;image-rendering:auto}
@@ -157,7 +157,10 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
         .rp-mon-ico,.rp-mon-ico img{width:30px;height:30px}
         .rp-mon-name{font-size:.68rem}
         .rp-move{font-size:.64rem}
-        .rp-hp{font-size:.56rem;width:auto;min-width:0;white-space:nowrap}
+        /* HP数字をバーに重ねて中央表示（横幅が狭く数字とバーが競合し折り返す問題の回避）*/
+        .rp-mon-body .row{position:relative}
+        .rp-mon-body .hpbar{height:13px}
+        .rp-hp{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;width:auto;min-width:0;white-space:nowrap;font-size:.52rem;font-weight:800;color:#0f172a;text-shadow:0 0 2px #fff,0 0 3px #fff,0 0 3px #fff}
         .rp-boost{font-size:.58rem}
         .rp-label{font-size:.7rem}
       }
@@ -309,7 +312,8 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
         const events=[]; const megaed=new Set(); let ord=0, last=null, pendingOut=null;
         const moveOwner={}; const sideName={}; const SIDEJP={1:'自分',2:'相手'};
         const newAct=(side,name,move)=>{ const e={kind:'act',side:side||0,order:++ord,name,move,target:null,dmg:null,tags:[]}; if(side)sideName[side+'|'+name]=e; if(move)moveOwner[move]=e; events.push(e); last=e; return e; };
-        const findActor=(name,move)=>{ if(move&&moveOwner[move])return moveOwner[move]; for(let i=events.length-1;i>=0;i--){ if(events[i].kind==='act'&&events[i].name===name)return events[i]; } return null; };
+        // 行動は技名(moveOwner)でのみ照合する。名前だけの照合はミラー(同名)で別の技に化けるため禁止。
+        const findActor=(name,move)=>{ return (move&&moveOwner[move])?moveOwner[move]:null; };
         const tag=t=>{ if(last&&last.kind==='act'&&!last.tags.includes(t)) last.tags.push(t); };
         (logs||[]).forEach(raw=>{ const pm=raw.match(/^▷P(\d+):\s*/); const obs=pm?+pm[1]:0; const side=obs?3-obs:0; const l=pm?raw.slice(pm[0].length):raw; let m;
           if(/^P[12]選出:|見せ合い/.test(l)) return;
@@ -374,12 +378,13 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
            <div class="cdrow mvrow"><span class="cdlabel ev">EV</span><span class="mvwrap">${ev||'—'}</span></div>`;
       }
 
+      const rankNo=l=>{const mm=(l||'').match(/#(\d+)/);return mm?+mm[1]:99999;};  // 「M-1#100」の100を数値で抽出（番号順ソート用）
       if(STATIC){
         Promise.all([
           fetch(META+'/index.json').then(r=>r.json()),
           fetch(META+'/icons.json').then(r=>r.json()),
           fetch(META+'/move_types.json').then(r=>r.json())
-        ]).then(([idx,ic,mt])=>{ RANKERS=idx.subjects||[]; ICONS=ic; Object.assign(MOVET,mt);
+        ]).then(([idx,ic,mt])=>{ RANKERS=(idx.subjects||[]).slice().sort((a,b)=>rankNo(a.label)-rankNo(b.label)); ICONS=ic; Object.assign(MOVET,mt);
           RANKERS.forEach(s=>SAVEDWR[s.label]=s.win_rate); renderSubjectList();
           if(RANKERS.length) selectSubject(RANKERS[0]); });
       } else {
@@ -388,8 +393,8 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           fetch(API+'/api/f1/saved').then(r=>r.json()),
           fetch(API+'/api/f1/icons').then(r=>r.json()),
           fetch(API+'/api/f1/move_types').then(r=>r.json())
-        ]).then(([rs,sv,ic,mt])=>{ RANKERS=rs; SAVED=sv; ICONS=ic; Object.assign(MOVET,mt); renderSubjectList();
-          const first = rs.findIndex(r=>sv[r.label]); selectSubject(rs[first>=0?first:0]); });
+        ]).then(([rs,sv,ic,mt])=>{ RANKERS=rs.slice().sort((a,b)=>rankNo(a.label)-rankNo(b.label)); SAVED=sv; ICONS=ic; Object.assign(MOVET,mt); renderSubjectList();
+          const first = RANKERS.findIndex(r=>sv[r.label]); selectSubject(RANKERS[first>=0?first:0]); });
       }
 
       function subjectWR(label){ if(STATIC) return (label in SAVEDWR)?SAVEDWR[label]:null;
