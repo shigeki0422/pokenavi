@@ -291,12 +291,21 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       const ITEM_PNG={"きあいのタスキ":"item-0275-tasuki.png","こだわりスカーフ":"item-0287-scarf.png","オボンのみ":"item-0158-obon.png","ラムのみ":"item-0157-ram.png","ヤチェのみ":"item-0188-yache.png","ハバンのみ":"item-0197-haban.png"};
       const ITEM_SPR={"オレンのみ":[-408,-96],"ラムのみ":[-456,-96],"オボンのみ":[0,-120],"カゴのみ":[-48,-120],"ヒメリのみ":[-72,-120],"ヨロギのみ":[-96,-120],"ビアーのみ":[-120,-120],"リンドのみ":[-24,-144],"モモンのみ":[-48,-144],"リリバのみ":[-72,-144],"オッカのみ":[-96,-144],"チーゴのみ":[-120,-144],"イトケのみ":[-144,-144],"ロゼルのみ":[-168,-144],"ウタンのみ":[-192,-144],"ナモのみ":[-216,-144],"ヤチェのみ":[-240,-144],"ソクノのみ":[-264,-144],"タンガのみ":[-312,-144],"シュカのみ":[-336,-144],"ヨプのみ":[-360,-144],"カシブのみ":[-384,-144],"バコウのみ":[-408,-144],"ホズのみ":[-432,-144],"ハバンのみ":[-456,-144],"コランのみ":[0,-168]};
       function itemIcon(it){ if(ITEM_PNG[it]) return `<img class="iic" src="/images/items/${ITEM_PNG[it]}" alt="">`; const s=ITEM_SPR[it]; return s?`<span class="iic iic-spr" style="background-position:${s[0]}px ${s[1]}px"></span>`:''; }
-      // 行動を陣営別に振り分ける。「▷Pn: … を確認」はnが相手の技を観測したログなので、技の主は相手側(3-n)。
+      // 盤面の行動表示。技の所属側を「確認(相手の技=3-n)」「減少(自分の与ダメ=n)」から判定し、
+      // ダメ行/確認行/外し行で (名前,技) を拾う。確認行の無い再使用技(ドラゴンテール等)も取りこぼさない。
       // side1=自分(P1), side2=相手(P2)。ミラー(両者同名)でも取り違えない。
-      function parseActions(logs){ const m={1:{},2:{}}; let ord=0;
-        (logs||[]).forEach(raw=>{ const pm=raw.match(/^▷P(\d+):\s*/); if(!pm)return; const obs=+pm[1]; if(obs!==1&&obs!==2)return; const side=3-obs; const l=raw.slice(pm[0].length);
-          const r=l.match(/^(.+?) の技【(.+?)】を確認/); if(!r)return;
-          if(!m[side][r[1]]) m[side][r[1]]={move:r[2], order:++ord};
+      function parseActions(logs){ const m={1:{},2:{}}; let ord=0; const moveSide={};
+        (logs||[]).forEach(raw=>{ const pm=raw.match(/^▷P(\d+):\s*/); if(!pm)return; const obs=+pm[1]; if(obs!==1&&obs!==2)return; const l=raw.slice(pm[0].length); let r;
+          if(r=l.match(/^(.+?) の技【(.+?)】を確認/)) moveSide[r[2]]=3-obs;
+          else if(r=l.match(/^(.+?) に (.+?) で (?:約)?-?\d+% 減少/)){ if(moveSide[r[2]]==null) moveSide[r[2]]=obs; }
+        });
+        (logs||[]).forEach(raw=>{ const l=raw.replace(/^▷P\d+:\s*/,''); let r,name,move;
+          if(r=l.match(/^(.+?) の (.+?) → .+? に \d+ダメ/)){name=r[1];move=r[2];}
+          else if(r=l.match(/^(.+?) の (.+?) は外れた/)){name=r[1];move=r[2];}
+          else if(r=l.match(/^(.+?) の技【(.+?)】を確認/)){name=r[1];move=r[2];}
+          else return;
+          const side=moveSide[move]; if(side!==1&&side!==2)return;
+          if(!m[side][name]) m[side][name]={move, order:++ord};
         });
         return m; }
       // 詳細ログの表示順補正：おやこあいの「追撃」は本体ヒットの後に判定されるので、本体ダメ行の後ろへ入れ替える
