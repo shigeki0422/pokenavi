@@ -2955,6 +2955,33 @@ def run_battle(party1, party2, seed=0):
     result = b.run(ai, ai)
     return result, b.turn, b.logs
 
+# 先攻で倒された側は後攻の予約行動を失う（交代先が予約技を実行しない）回帰テスト
+_sr_move = dl.get_move("ステルスロック")
+_atk_sr = dl.get_move("じしん")
+_slow_sr = make_poke(name="おそい", type1="ノーマル", hp_b=1, def_b=1, spd_b=1, moves=["ステルスロック"])
+_bench_sr = make_poke(name="ひかえ", type1="みず", moves=["なまける"])
+_fast_sr = make_poke(name="はやい", type1="じめん", atk_b=220, spd_b=220, moves=["じしん"])
+_b_sr = Battle(BattleSide([_slow_sr, _bench_sr]), BattleSide([_fast_sr]))
+_b_sr._turn_loop(lambda s, o, f: Action(type="move", move=_sr_move, move_idx=0),
+                 lambda s, o, f: Action(type="move", move=_atk_sr, move_idx=0),
+                 max_turns=1)
+check("先攻で気絶した側の予約技を交代先が実行しない",
+      not any("ステルスロックを まき散らした" in l for l in _b_sr.logs)
+      and not _b_sr.field.stealth_rock[_b_sr.side2.field_idx],
+      "logs=" + " / ".join(l for l in _b_sr.logs if "ステルス" in l))
+
+# 必中急所（トリックフラワー）が急所確率・期待ダメージに反映される
+from simulator.battle import crit_chance as _cc
+from simulator.ai import expected_damage as _exp_dmg
+_tf = dl.get_move("トリックフラワー")
+_tf_atk = make_poke(name="マス", type1="くさ", atk_b=130, moves=["トリックフラワー"])
+_tf_def = make_poke(name="的", type1="みず", def_b=100, hp_b=120)
+check("トリックフラワーは必中急所(確率1.0)", _cc(_tf_atk, _tf, _tf_def) == 1.0)
+_armor = make_poke(name="鎧", type1="みず", ability="シェルアーマー")
+check("シェルアーマーは急所無効(確率0.0)", _cc(_tf_atk, _tf, _armor) == 0.0)
+_nc = calc_damage(_tf_atk, _tf_def, _tf, BattleField(), critical=False, random_roll=0.5)
+check("必中急所は期待ダメージに急所が反映される", _exp_dmg(_tf_atk, _tf_def, _tf, BattleField()) > _nc)
+
 # てっていこうせん自傷チェック
 p_finalgambit = make_poke(type1="ノーマル", atk_b=200, hp_b=100, moves=["てっていこうせん"])
 p_tgt_fg = make_poke(def_b=150, hp_b=200)

@@ -136,12 +136,14 @@ def run_simulation_specs(
     season: str = "M-2",
     loader: Optional[DataLoader] = None,
     make_ai=None,
+    sel_temp: float = 0.0,
 ) -> SimResult:
     """
     スペック文字列（ポケモン名[@持ち物][:性格][:技][:EV]）のリストでシミュレーション。
     名前だけ指定すれば run_simulation と同等。
     make_ai: 対戦AIを返す callable（未指定でHeuristicAI）。学習AI(NetGreedyAI等)を渡すと
              表示勝率が「中級志向の学習AI」基準になる（リリース用）。
+    sel_temp: 選出の温度。>0で確定選出でなくスコアのsoftmaxから確率的に3体選ぶ（多様性付与）。
     """
     if loader is None:
         loader = get_loader()
@@ -158,8 +160,8 @@ def run_simulation_specs(
         party1 = [build_from_spec(sp, loader, season=season, randomize=True) for sp in specs1]
         party2 = [build_from_spec(sp, loader, season=season, randomize=True) for sp in specs2]
 
-        selected1 = select_party(party1, party2, loader, n=min(3, len(party1)))
-        selected2 = select_party(party2, party1, loader, n=min(3, len(party2)))
+        selected1 = select_party(party1, party2, loader, n=min(3, len(party1)), temperature=sel_temp)
+        selected2 = select_party(party2, party1, loader, n=min(3, len(party2)), temperature=sel_temp)
 
         result = Battle(BattleSide(selected1), BattleSide(selected2)).run(ai, ai)
 

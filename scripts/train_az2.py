@@ -193,7 +193,7 @@ def eval_vs_strategies(net, loader, parties, N=12, depth=8, seed=31):
 
 
 def _net_ai(net, loader, rollouts, depth, seed, adversarial=False, opp_k=6,
-            tree=False, tree_depth=1, tree_k=3, tree_det=None):
+            tree=False, tree_depth=1, tree_k=3, tree_det=None, tree_extend_k=0):
     """ネットの価値誘導探索AI。ロールアウト相手もネット（NetGreedyAI）＝AlphaZero的。"""
     from simulator.alphazero import NetGreedyAI, legal_actions_indexed
     def vfn(s1, s2, f): return net.evaluate(encode_state(s1, s2, f), [0])[1]
@@ -206,6 +206,7 @@ def _net_ai(net, loader, rollouts, depth, seed, adversarial=False, opp_k=6,
     if tree:
         ai.tree_search = True; ai.tree_depth = tree_depth; ai.tree_k = tree_k
         ai.tree_det = tree_det if tree_det is not None else rollouts
+        ai.tree_extend_k = tree_extend_k
     return ai
 
 

@@ -2,10 +2,11 @@
 AI行動決定モジュール
 usage_rate重み付き確率選択 + ダメージ期待値計算の2軸
 """
+import copy
 import math
 import random
 from typing import List, Optional
-from .battle import Action, BattleSide, BattleField
+from .battle import Action, BattleSide, BattleField, crit_chance
 from .pokemon import BattlePokemon
 from .data import get_type_effectiveness, DataLoader
 from .damage import calc_damage
@@ -65,6 +66,17 @@ def expected_damage(attacker: BattlePokemon, defender: BattlePokemon,
     if eff == 0:
         return 0.0
     dmg = calc_damage(attacker, defender, move, field, critical=False, random_roll=0.5)
+    # 急所期待値（トリックフラワー等の必中急所はpc=1.0でcalc_damage(critical=True)になる）
+    pc = crit_chance(attacker, move, defender)
+    if pc > 0:
+        dmg_crit = calc_damage(attacker, defender, move, field, critical=True, random_roll=0.5)
+        dmg = dmg * (1 - pc) + dmg_crit * pc
+    # へんげんじざい/リベロ: 技使用時にその技タイプへ変化するため全攻撃技がタイプ一致。
+    # 選出評価ではタイプ変化前のため、非一致技にSTAB(1.5)を補正（実戦のcalc_damageは
+    # 技前に変化済みで二重計上にならない＝ここは選出スコア専用）。
+    if attacker.ability in ("へんげんじざい", "リベロ") \
+            and move.type not in (attacker.type1, attacker.type2):
+        dmg *= 1.5
     return dmg * acc
 
 
@@ -539,51 +551,98 @@ class HeuristicAI:
 DEFAULT_AI = HeuristicAI(alpha=0.7)
 
 
+def _temp_sample_indices(scores: List[float], n: int, temperature: float, rng) -> List[int]:
+    """スコアを標準化し softmax(z/T) で n 個を非復元サンプリング（温度付き選出）。"""
+    m = sum(scores) / len(scores)
+    sd = (sum((s - m) ** 2 for s in scores) / len(scores)) ** 0.5 or 1.0
+    z = [(s - m) / sd for s in scores]
+    pool = list(range(len(scores))); chosen = []
+    for _ in range(min(n, len(pool))):
+        ws = [math.exp(z[i] / max(1e-6, temperature)) for i in pool]
+        tot = sum(ws); r = rng.random() * tot
+        for k, i in enumerate(pool):
+            r -= ws[k]
+            if r <= 0:
+                chosen.append(pool.pop(k)); break
+        else:
+            chosen.append(pool.pop())
+    return chosen
+
+
 def select_party(party6: List[BattlePokemon], opp6: List[BattlePokemon],
-                 loader: DataLoader, n: int = 3) -> List[BattlePokemon]:
+                 loader: DataLoader, n: int = 3,
+                 temperature: float = 0.0, rng=None) -> List[BattlePokemon]:
     """
     6匹から3匹選出するAI。
     - 各相手に対する最善技ダメージ期待値の合計でベーススコアを計算
     - 設置技持ちにはゲーム価値ボーナス（相手6匹×将来の交代数を想定）
     - タイプ重複ペナルティ
     - 選出後、リード（先頭）は設置技持ち or 多数相手に有利なポケモンを優先
+    temperature>0 で選出をスコアの softmax から確率的にサンプル（多様性付与）。0で従来の決定的選出。
     """
     if len(party6) <= n:
-        return _order_by_lead(list(party6), opp6)
+        return _order_by_lead(list(party6), opp6, temperature, rng or random)
 
     dummy_field = BattleField()
 
-    def _poke_score(poke: BattlePokemon) -> float:
-        # 各相手への最善技ダメージ期待値合計（攻撃面）
-        score = sum(
-            max(
-                (expected_damage(poke, opp, mv, dummy_field) for mv in poke.moves if mv),
-                default=0.0
-            )
-            for opp in opp6
-        )
-        # 守備面: 各相手の最善技がこのポケモンに与える期待ダメージ（被弾の小ささを評価）。
-        # これを引くことで「相手の脅威に耐えられる＝回答になる」ポケモンを選びやすくする。
-        # HP割合で正規化し攻撃側スケールに合わせる。
-        denom = max(1.0, poke.max_hp)
-        taken = sum(
-            max(
-                (expected_damage(opp, poke, mv, dummy_field) for mv in opp.moves if mv),
-                default=0.0
-            )
-            for opp in opp6
-        ) / denom * _AVG_HP
-        score -= 0.6 * taken
-        # 設置技ボーナス：残り5体分の交代発生を仮定した期待価値
-        has_hazard = any(
-            mv and mv.name_jp in HAZARD_MOVES and mv.category == "status"
-            for mv in poke.moves
-        )
-        if has_hazard:
-            score += len(opp6) * _AVG_HP * 0.125 * 2  # 2 switches per opp 概算
-        return score
+    def _poke_score(poke: BattlePokemon, as_mega: bool = False) -> float:
+        # 相手6体それぞれとの1v1優劣を合計する。
+        # 各対面で「上から確一」「ダメージレースの優劣」「素早さ」を評価し、
+        # サブウェポンの抜群（へんげんじざい等のSTABはexpected_damage側で補正）と
+        # スカーフ等の素早さ（上から動けるか）を反映する。
+        # as_mega=True かつメガ石持ちなら、メガ後の姿（種族値・特性・タイプ）で採点する。
+        p = poke
+        if as_mega and getattr(poke, "mega_data", None) is not None and not poke.mega_evolved:
+            p = copy.deepcopy(poke); p.do_mega_evolve()
+        my_hp = max(1.0, p.max_hp)
+        my_spd = _effective_speed(p, dummy_field)
+        val = 0.0
+        for opp in opp6:
+            opp_hp = max(1.0, opp.max_hp)
+            my_best = _best_expected_damage(p, opp, dummy_field)
+            opp_best = _best_expected_damage(opp, p, dummy_field)
+            faster = my_spd >= _effective_speed(opp, dummy_field)
+            my_ko = my_best >= opp_hp
+            opp_ko = opp_best >= my_hp
+            if my_ko and faster:
+                mv = 2.0                       # 上から確一＝最良の対面
+            elif my_ko and not opp_ko:
+                mv = 1.3                       # 確一を持ち、相手の一撃は耐える
+            elif opp_ko and not faster and not my_ko:
+                mv = -1.5                       # 上から一撃で落とされる不利対面
+            else:
+                mr = min(my_best / opp_hp, 1.5)
+                orr = min(opp_best / my_hp, 1.5)
+                mv = (mr - orr) + (0.3 if faster else -0.3)  # ダメージレース＋先制の優劣
+            val += mv
+        # 設置技ボーナス（後続の起点作り価値）
+        if any(mv and mv.name_jp in HAZARD_MOVES and mv.category == "status"
+               for mv in p.moves):
+            val += 2.0
+        return val
 
-    indexed = sorted(enumerate(party6), key=lambda x: _poke_score(x[1]), reverse=True)
+    # メガは1試合1体のみ。メガ石持ちのうち最も得な1体だけメガ後で評価し、
+    # 2体目以降のメガ石持ちには強い減点を与えて原則2メガ選出を避ける
+    # （非メガで巧く組み合わせる選出は将来課題。現状は強制的に1メガへ寄せる）。
+    MEGA_PENALTY = 50.0
+    _mega_caps = [mp for mp in party6
+                  if getattr(mp, "mega_data", None) is not None and not mp.mega_evolved]
+    _mbest = max(_mega_caps, key=lambda mp: _poke_score(mp, as_mega=True)) if _mega_caps else None
+
+    def _eff_score(poke: BattlePokemon) -> float:
+        is_cap = getattr(poke, "mega_data", None) is not None and not poke.mega_evolved
+        if poke is _mbest:
+            return _poke_score(poke, as_mega=True)                       # メガする1体＝メガ後評価
+        if is_cap:
+            return _poke_score(poke, as_mega=False) - MEGA_PENALTY       # 2体目以降のメガ石持ち
+        return _poke_score(poke, as_mega=False)                          # 非メガ＝素評価
+
+    if temperature and temperature > 0:   # 温度付きサンプリング選出
+        scores = [_eff_score(p) for p in party6]
+        idx = _temp_sample_indices(scores, n, temperature, rng or random)
+        return _order_by_lead([party6[i] for i in idx], opp6, temperature, rng or random)
+
+    indexed = sorted(enumerate(party6), key=lambda x: _eff_score(x[1]), reverse=True)
 
     selected: List[BattlePokemon] = []
     seen_type_pairs: List[tuple] = []
@@ -605,14 +664,14 @@ def select_party(party6: List[BattlePokemon], opp6: List[BattlePokemon],
     return _order_by_lead(selected[:n], opp6)
 
 
-def _order_by_lead(party: List[BattlePokemon], opp6: List[BattlePokemon]) -> List[BattlePokemon]:
+def _order_by_lead(party: List[BattlePokemon], opp6: List[BattlePokemon],
+                   temperature: float = 0.0, rng=None) -> List[BattlePokemon]:
     """
-    選出済みパーティの中から最適なリード（先頭）を選んで並び替える。
-    優先順位:
-      1. 設置技持ち（ステルスロック等）
-      2. 相手の多数に対してばつぐんが出せるポケモン
+    選出済みパーティの中からリード（先頭）を選んで並び替える。
+    評価: 設置技（起点作り）＋相手の多数にばつぐんを出せるか。
+    temperature>0 なら lead スコアの softmax から確率的にサンプル（リードを多様化）。
     """
-    if not party:
+    if not party or len(party) == 1:
         return party
 
     def _lead_score(poke: BattlePokemon) -> float:
@@ -628,11 +687,25 @@ def _order_by_lead(party: List[BattlePokemon], opp6: List[BattlePokemon]) -> Lis
                 if mv and mv.category != "status" and mv.power
             )
         )
-        return (100 if has_hazard else 0) + se_count
+        # 設置技は起点作りとして優位だが、温度で他のリードにもばらけるよう緩めの重み。
+        return (2.0 if has_hazard else 0.0) + se_count
 
-    best = max(party, key=_lead_score)
-    if best is not party[0]:
-        idx = party.index(best)
-        party[0], party[idx] = party[idx], party[0]
+    scores = [_lead_score(p) for p in party]
+    if temperature and temperature > 0:
+        r = rng or random
+        m = sum(scores) / len(scores)
+        sd = (sum((s - m) ** 2 for s in scores) / len(scores)) ** 0.5 or 1.0
+        ws = [math.exp(((s - m) / sd) / max(1e-6, temperature)) for s in scores]
+        tot = sum(ws); pick = r.random() * tot; lead_i = len(ws) - 1
+        acc = 0.0
+        for i, w in enumerate(ws):
+            acc += w
+            if pick <= acc:
+                lead_i = i
+                break
+    else:
+        lead_i = max(range(len(party)), key=lambda i: scores[i])
 
+    if lead_i != 0:
+        party[0], party[lead_i] = party[lead_i], party[0]
     return party

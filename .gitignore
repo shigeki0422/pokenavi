@@ -22,3 +22,17 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# シミュレータ事前計算データ（ローカル/ R2配信。リポジトリには含めない）
+scripts/f1_cache/
+scripts/f1_cache_backup_*/
+scripts/sim_export/
+public/sim-data/subjects/
+# exportが出すがフロント未使用＝コミット不要（saved=5.5MB, rankers）
+public/sim-data/saved.json
+public/sim-data/rankers.json
+# Python キャッシュ・SQLite一時ファイル
+__pycache__/
+*.pyc
+scripts/*.db-shm
+scripts/*.db-wal

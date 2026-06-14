@@ -1,0 +1,685 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = '上位環境シミュレーション（バトルシミュレータ）| ポケナビ';
+const description = 'ランカー同士の総当たり対戦シミュレーション。パーティを選び、各ランカー・各ポケモンとの勝率・選出・1v1相性・実戦リプレイをデータで診断します。';
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style is:global>
+      main { max-width: 1040px; margin: 0 auto; padding: 1.4em 1em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.5rem; margin: 0 0 .2em; }
+      .lead { font-size: .88rem; color: rgb(var(--gray)); margin: 0 0 1.1em; }
+      .seclabel { font-size: .82rem; font-weight: 700; color: rgb(var(--gray)); margin: 0 0 .4em; }
+      .card { background:#fff; border:1px solid rgb(var(--gray-light)); border-radius:12px; box-shadow:0 1px 3px rgba(var(--black),0.05); }
+      .mb { margin-bottom:1.1em; }
+      .muted { font-size:.8rem; color:rgb(var(--gray)); }
+      .row { display:flex; align-items:center; gap:.7rem; flex-wrap:wrap; }
+      .btn { background:var(--accent); color:#fff; border:none; border-radius:8px; padding:.55em 1.2em; font-weight:700; font-size:.85rem; cursor:pointer; font-family:var(--font-atkinson); }
+      .btn:hover{background:var(--accent-dark)} .btn:disabled{opacity:.5;cursor:default}
+      .btn-sm{padding:.35em .8em;font-size:.78rem;border-radius:6px}
+      .btn-ghost{background:rgb(var(--gray-light));color:rgb(var(--gray-dark))}
+      .btn-active{background:var(--accent);color:#fff}
+      .hpbar{height:8px;border-radius:9999px;background:rgb(var(--gray-light));overflow:hidden;flex:1}
+      .hpfill{height:100%;border-radius:9999px;transition:width .2s}
+      .g{color:#16a34a}.r{color:#dc2626}.n{color:rgb(var(--gray-dark))}
+      .bg-g{background:#dcfce7;color:#15803d}.bg-r{background:#fee2e2;color:#b91c1c}.bg-n{background:rgb(var(--gray-light));color:rgb(var(--gray))}
+      /* 上下2分割（一覧＋構成） */
+      .split{display:grid;grid-template-columns:240px 1fr;gap:.8rem;align-items:start}
+      @media(max-width:760px){.split{grid-template-columns:1fr}}
+      .pl-wrap{position:relative}
+      .picklist{border:1px solid rgb(var(--gray));border-radius:10px;overflow-y:scroll;max-height:250px;min-height:0;background:#fff}
+      /* スクロールバーを常時表示（標準scrollbar-widthは付けない＝webkit指定を有効化し、macOSのオーバーレイを無効化） */
+      .picklist::-webkit-scrollbar{-webkit-appearance:none;width:13px}
+      .picklist::-webkit-scrollbar-track{background:#eef0f3;border-radius:0 10px 10px 0}
+      .picklist::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:7px;border:3px solid #eef0f3;min-height:40px}
+      .picklist::-webkit-scrollbar-thumb:hover{background:#64748b}
+      .pitem{display:flex;align-items:center;gap:.5rem;padding:.45em .7em;cursor:pointer;border-top:1px solid #f1f5f9;font-size:.84rem;border-left:3px solid transparent}
+      .pitem:first-child{border-top:none}
+      .pitem:hover{background:#f8fafc}
+      .pitem.active{background:#eef2ff;border-left-color:var(--accent);font-weight:700}
+      .pitem .nm{flex:1;font-weight:700}
+      .pitem .wr{font-weight:700;font-size:.85rem}
+      .bvrow{padding:.45em .1em;border-bottom:1px solid #f1f5f9}
+      .bvrow:last-child{border-bottom:none}
+      .bvhd{display:flex;align-items:center;gap:.5em;flex-wrap:wrap;font-size:.85rem}
+      .bvhd .wr{font-weight:700}
+      .bvrow .mv{font-size:.76rem;color:rgb(var(--gray));margin:.15em 0}
+      .bvrow .use{font-size:.7rem;color:rgb(var(--gray))}
+      .comp{border:1px solid rgb(var(--gray-light));border-radius:10px;padding:.7em .8em;background:#fcfcfd}
+      .comp .ctitle{font-size:.82rem;font-weight:700;margin-bottom:.4em}
+      .iconrow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.3rem}
+      .montab{display:flex;flex-direction:column;align-items:center;width:auto;padding:.25em .15em;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#fff;cursor:pointer;font-family:var(--font-atkinson);overflow:hidden}
+      .montab.active{border-color:var(--accent);background:#eef2ff}
+      .monicon{width:40px;height:40px;object-fit:contain;image-rendering:auto}
+      .mname{font-size:.6rem;line-height:1.1;text-align:center;margin-top:.1em}
+      .mitem{font-size:.56rem;color:rgb(var(--gray));text-align:center;line-height:1.1}
+      .compdetail{margin-top:.5em;border-top:1px solid rgb(var(--gray-light));padding-top:.5em}
+      .cdgrid{display:flex;flex-wrap:wrap;gap:.35em .9em;margin-bottom:.35em}
+      .cdcell{font-size:.8rem}
+      .cdrow{font-size:.8rem;padding:.18em 0}
+      .cdrow.mvrow{display:flex;align-items:flex-start;gap:.35em;margin:.35em 0}
+      .cdlabel{display:inline-block;font-size:.64rem;font-weight:800;padding:.08em .45em;border-radius:5px;margin-right:.35em;color:#fff;vertical-align:1px}
+      .cdlabel.item{background:#0ea5e9}.cdlabel.abil{background:#8b5cf6}.cdlabel.nat{background:#f59e0b}.cdlabel.mv{background:#10b981}.cdlabel.ev{background:#64748b}
+      .cdval{font-weight:600;color:rgb(var(--gray-dark))}
+      .mvwrap{display:inline-flex;flex-wrap:wrap;gap:.25em}
+      .mvchip{display:inline-flex;align-items:center;gap:.15em;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:9999px;padding:.08em .55em;font-size:.75rem;font-weight:600}
+      .evval{font-family:ui-monospace,monospace;font-size:.78rem;letter-spacing:.02em}
+      .evchip{display:inline-flex;align-items:center;gap:.12em;color:#fff;font-size:.7rem;font-weight:700;padding:.06em .5em;border-radius:5px}
+      .evchip b{font-weight:800}
+      .ev-H{background:#16a34a}.ev-A{background:#dc2626}.ev-B{background:#2563eb}.ev-C{background:#7c3aed}.ev-D{background:#0d9488}.ev-S{background:#db2777}
+      .tic{width:15px;height:15px;vertical-align:-2px}
+      .iic{width:24px;height:24px;object-fit:contain;vertical-align:-7px;margin-right:2px}
+      .iic-spr{display:inline-block;background-image:url('/images/items/item-sprite.png');background-size:480px 648px}
+      .rp-move{font-size:.66rem;color:var(--accent-dark);font-weight:700;margin-top:.18em;display:flex;align-items:center;gap:.15em}
+      .rp-move .tic{width:13px;height:13px}
+      .rp-col.opp .rp-move{color:#b91c1c}
+      .rp-order{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#94a3b8;color:#fff;font-size:.55rem;font-weight:800;flex-shrink:0}
+      .rp-order.first{background:#f59e0b}
+      .mon{font-size:.78rem;padding:.2em 0;border-bottom:1px solid #f1f5f9}
+      .mon b{font-weight:700} .mon .mv{color:rgb(var(--gray))}
+      /* タブ */
+      .tabs{display:flex;gap:.4rem;margin-bottom:.7em}
+      .tab{padding:.45em 1.1em;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#fff;font-size:.85rem;font-weight:700;cursor:pointer;font-family:var(--font-atkinson);color:rgb(var(--gray))}
+      .tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+      /* 詳細 */
+      .sect{border:1px solid rgb(var(--gray-light));border-radius:10px;margin-bottom:.7em;background:#fff}
+      .sect-head{padding:.45em .8em;background:#f8fafc;border-radius:10px 10px 0 0;font-size:.78rem;font-weight:700}
+      .sect-body{padding:.6em .8em}
+      .amber{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:.6em;font-size:.84rem}
+      table.mtx{font-size:.72rem;border-collapse:separate;border-spacing:2px}
+      table.mtx th{font-size:.7rem;font-weight:700;padding:.2em;vertical-align:bottom}
+      table.mtx th.dim,table.mtx td.dim{opacity:.32}
+      table.mtx td{text-align:center;border-radius:5px;font-weight:700;padding:.25em;min-width:46px;white-space:nowrap}
+      table.bt{width:100%;font-size:.72rem}table.bt td{padding:.22em .4em;border-bottom:1px solid #f1f5f9;white-space:nowrap}
+      .chip{display:inline-block;padding:.05em .5em;border-radius:9999px;font-size:.72rem;margin:.1em;border:1px solid transparent}
+      .chip.sel{background:#eef2ff;color:var(--accent-dark);border-color:#c7d2fe;font-weight:700}
+      .chip.bench{background:#f1f5f9;color:rgb(var(--gray))}
+      .overlay{position:fixed;inset:0;z-index:60;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:1rem}
+      .overlay.hidden{display:none}
+      .sheet{background:#fff;border-radius:12px;max-width:620px;width:100%;max-height:90vh;overflow:auto;padding:1.1em}
+      .x{background:none;border:none;font-size:1.4rem;line-height:1;color:rgb(var(--gray));cursor:pointer}
+      .log{margin-top:.5em;font-size:.74rem;background:#f8fafc;border:1px solid rgb(var(--gray-light));border-radius:6px;padding:.55em}
+      .rlog-simple div{padding:.12em 0;font-size:.8rem;font-weight:600;color:rgb(var(--gray-dark))}
+      .rlog-sw{display:inline-block;font-size:.62rem;font-weight:800;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:.05em .4em;margin-right:.15em}
+      .rlog-mega{display:inline-block;font-size:.62rem;font-weight:800;background:linear-gradient(90deg,#7c3aed,#db2777);color:#fff;border-radius:4px;padding:.05em .4em;margin-right:.15em}
+      .rlog-side{display:inline-block;font-size:.6rem;font-weight:800;border-radius:4px;padding:.05em .4em;margin-right:.15em}
+      .rlog-side.s1{background:#dbeafe;color:#1d4ed8}
+      .rlog-side.s2{background:#fee2e2;color:#b91c1c}
+      .rlog-simple div .rlog-dmg{font-size:.72rem;font-weight:500;color:rgb(var(--gray))}
+      .rlog-detail{margin-top:.45em;border-top:1px dashed rgb(var(--gray-light));padding-top:.35em}
+      .rlog-detail summary{cursor:pointer;font-size:.72rem;color:var(--accent);font-weight:700}
+      .rlog-full{margin-top:.3em;max-height:8rem;overflow:auto;font-size:.72rem;color:rgb(var(--gray))}
+      .wr-tag{font-weight:700}
+      .hidden{display:none}
+      /* 対戦サマリ */
+      .verdict{font-weight:800;font-size:.92rem;padding:.18em .75em;border-radius:8px}
+      .fbox{border-radius:8px;padding:.5em .7em;margin-bottom:.45em;font-size:.8rem}
+      .fbox.win{background:#f0fdf4;border:1px solid #bbf7d0}
+      .fbox.lose{background:#fef2f2;border:1px solid #fecaca}
+      .frow{margin-top:.25em}
+      .pchip{display:inline-flex;align-items:center;gap:.15rem;padding:.1em .55em .1em .15em;border-radius:9999px;font-size:.72rem;margin:.12em .15em 0 0;font-weight:700}
+      .pchip img{width:22px;height:22px;object-fit:contain}
+      .pchip.good{background:#dcfce7;color:#15803d}
+      .pchip.bad{background:#fee2e2;color:#b91c1c}
+      /* 1v1相性表（アイコン） */
+      .mtx-ico{width:30px;height:30px;object-fit:contain;display:block;margin:0 auto}
+      table.mtx th.mtx-sel{background:#eef2ff;border:1px solid #c7d2fe}
+      .mtx-name{font-size:.58rem;line-height:1.05;margin-top:1px;white-space:nowrap;color:rgb(var(--gray-dark));text-align:center;margin-left:auto;margin-right:auto}
+      .mtx-seltag{font-size:.52rem;font-weight:800;color:#15803d;background:#dcfce7;border-radius:4px;padding:0 .3em;margin-top:1px;display:inline-block}
+      .mtx-corner{font-size:.56rem;color:rgb(var(--gray));text-align:center;line-height:1.15;white-space:nowrap;font-weight:700}
+      /* リプレイ選択チップ（勝敗色・件数増に対応） */
+      .rp-pick-hd{font-size:.8rem;color:rgb(var(--gray-dark));margin:.6em 0 .35em}
+      .rtab-row{display:flex;flex-wrap:wrap;gap:.25em;align-items:flex-end}
+      .rtab{font-size:.78rem;font-weight:700;border:1px solid rgb(var(--gray-light));border-bottom:none;border-radius:8px 8px 0 0;padding:.4em .9em;cursor:pointer;font-family:var(--font-atkinson);background:#f1f5f9;color:rgb(var(--gray));position:relative;top:1px}
+      .rtab.win b{color:#15803d} .rtab.lose b{color:#b91c1c} .rtab.draw b{color:rgb(var(--gray))}
+      .rtab:hover{background:#e8edf3}
+      .rtab.act{background:#fff;color:rgb(var(--gray-dark));border-color:var(--accent);border-bottom:2px solid #fff;z-index:1}
+      .rp-panel{border:1px solid var(--accent);border-radius:0 8px 8px 8px}
+      .rp-title{font-weight:800;color:var(--accent-dark);font-size:.82rem;margin-right:.3em}
+      /* リプレイ（左=自分3体 / 右=相手3体・縦並び） */
+      .rp-banner{text-align:center;font-size:.72rem;color:rgb(var(--gray));margin:.1em 0 .5em;font-weight:700}
+      #replay-ctrl{justify-content:center;gap:.5rem;margin:.1em 0 .6em;padding-bottom:.5em;border-bottom:1px solid rgb(var(--gray-light))}
+      #replay-turn{font-weight:800;font-size:.85rem;min-width:5.5rem;text-align:center}
+      #replay-result{font-weight:700}
+      .rp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;align-content:start}
+      .rp-col{border:1px solid rgb(var(--gray-light));border-radius:10px;padding:.5em;background:#fff}
+      .rp-col.mine{border-color:#c7d2fe;background:#f5f7ff}
+      .rp-col.opp{border-color:#fecaca;background:#fff7f7}
+      .rp-label{font-size:.74rem;font-weight:800;margin-bottom:.45em;text-align:center}
+      .rp-col.mine .rp-label{color:var(--accent-dark)} .rp-col.opp .rp-label{color:#b91c1c}
+      .rp-mon{display:flex;gap:.5rem;align-items:center;padding:.35em;border-radius:8px;margin-bottom:.3em;border:2px solid transparent;transition:all .2s}
+      .rp-mon:last-child{margin-bottom:0}
+      .rp-mon.act{border-color:var(--accent);background:#fff;box-shadow:0 1px 7px rgba(35,55,255,.2)}
+      .rp-col.opp .rp-mon.act{border-color:#ef4444;box-shadow:0 1px 7px rgba(239,68,68,.2)}
+      .rp-mon.dead{opacity:.5}
+      .rp-mon-ico{position:relative;width:44px;height:44px;flex-shrink:0}
+      .rp-mon-ico img{width:44px;height:44px;object-fit:contain}
+      .rp-mon.dead .rp-mon-ico img{filter:grayscale(1)}
+      .rp-x{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.7rem;color:#ef4444;font-weight:800}
+      .rp-active-badge{position:absolute;top:-3px;left:-3px;font-size:.7rem;line-height:1}
+      .rp-mon-body{flex:1;min-width:0}
+      .rp-mon-name{font-size:.76rem;font-weight:700;margin-bottom:.2em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .rp-hp{font-size:.64rem;color:rgb(var(--gray));width:3.4rem;text-align:right;flex-shrink:0}
+      .rp-boost{font-size:.64rem;font-weight:700;margin-top:.15em}
+      .rp-boost .bup{color:#16a34a} .rp-boost .bdn{color:#dc2626}
+      .rp-status{font-size:.6rem;background:#fde68a;color:#92400e;border-radius:4px;padding:0 .3em;font-weight:700}
+      .rp-disg{font-size:.6rem;background:#fee2e2;color:#9d174f;border-radius:4px;padding:0 .3em;font-weight:700}
+      .mtx-help{margin-bottom:.5em}
+      .mtx-help summary{cursor:pointer;font-size:.78rem;color:var(--accent);font-weight:700}
+      .mtx-help:not([open]) .mtx-help-body{display:none}
+      .mtx-help-body{font-size:.78rem;line-height:1.7;color:rgb(var(--gray-dark));margin:.4em 0 .2em;padding:.5em .7em;background:#f8fafc;border-radius:8px}
+      .rp-forme{font-size:.6rem;background:#e0e7ff;color:#3730a3;border-radius:4px;padding:0 .3em;font-weight:700}
+      .rp-charge{font-size:.6rem;background:#fef9c3;color:#854d0e;border-radius:4px;padding:0 .3em;font-weight:700}
+      .rp-vol{font-size:.58rem;background:#f1f5f9;color:#334155;border-radius:4px;padding:0 .3em;font-weight:700}
+      .rp-mega{font-size:.58rem;background:linear-gradient(90deg,#7c3aed,#db2777);color:#fff;border-radius:4px;padding:0 .35em;font-weight:800;letter-spacing:.02em}
+      .rp-tic{width:14px;height:14px;vertical-align:-2px;margin-left:1px}
+      .rp-haz{display:flex;flex-wrap:wrap;gap:.2rem;justify-content:center}
+      .rp-haz:not(:empty){margin-bottom:.4em}
+      .hazchip{font-size:.56rem;font-weight:700;background:#fde68a;color:#92400e;border-radius:4px;padding:.08em .45em}
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>上位環境シミュレーション</h1>
+      <p class="lead">構築記事を公開されている環境トッププレイヤー同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a></p>
+
+      <!-- ① パーティ選択 -->
+      <div class="seclabel">パーティ選択</div>
+      <section class="card mb" style="padding:.9em 1em">
+        <div class="split">
+          <div class="pl-wrap"><div class="picklist" id="subject-list"></div></div>
+          <div class="comp" id="subject-comp"><div class="muted">パーティを選択してください</div></div>
+        </div>
+        <div class="row" style="margin-top:.7em">
+          <button id="btn-analyze" class="btn btn-sm hidden">このパーティで総当たり</button>
+          <span id="status" class="muted"></span>
+        </div>
+        <div id="progress-wrap" class="hidden" style="margin-top:.5em">
+          <div class="hpbar"><div id="progress-fill" class="hpfill" style="width:0%;background:var(--accent)"></div></div>
+          <div id="progress-text" class="muted" style="margin-top:.3em"></div>
+        </div>
+      </section>
+
+      <!-- ② 戦績（タブ） -->
+      <div class="seclabel">戦績</div>
+      <div class="tabs">
+        <button class="tab active" id="tab-ranker" onclick="switchTab('ranker')">VS ランカー</button>
+        <button class="tab" id="tab-pokemon" onclick="switchTab('pokemon')">VS ポケモン</button>
+      </div>
+      <div id="summary" class="muted mb"></div>
+      <div id="sortbar" class="row" style="margin-bottom:.5em">
+        <span class="muted">並び替え:</span>
+        <button class="btn btn-sm btn-ghost" id="sort-num" onclick="setSort('num')">番号順</button>
+        <button class="btn btn-sm btn-ghost" id="sort-wr" onclick="setSort('wr')">勝率順</button>
+      </div>
+
+      <!-- ③ 相手一覧＋構成＋詳細 -->
+      <section class="card" style="padding:.9em 1em">
+        <div class="split">
+          <div class="pl-wrap"><div class="picklist" id="opp-list" style="max-height:300px"></div></div>
+          <div class="comp" id="opp-comp"><div class="muted">左の一覧から対戦相手を選択</div></div>
+        </div>
+        <div id="detail" style="margin-top:.9em"></div>
+      </section>
+    </main>
+    <Footer />
+
+    <script is:inline>
+      const API = (location.port === '8888') ? '' : 'http://localhost:8888';
+      // 本番＝静的配信モード（localhost/8888以外、または ?static=1 で強制）。dev＝従来のローカルAPI。
+      const STATIC = location.search.includes('static=1') || !(location.hostname==='localhost'||location.hostname==='127.0.0.1'||location.port==='8888');
+      const R2_BASE = (location.hostname.endsWith('pokenavi.jp')) ? 'https://sim.pokenavi.jp' : '';   // 本番はR2 / ローカル検証は同梱(/sim-data)
+      const META = '/sim-data';      // 同梱メタ（index/icons/move_types）
+      const R2 = R2_BASE || META;    // 主役別JSONの取得元（本番=R2 / ローカル検証=同梱）
+      let RANKERS = [], SAVED = {}, ICONS = {}, SUBJECT = null, AID = null, CARDS = {}, TAB = 'ranker', SORT = 'num', NUMDIR = 'asc', WRDIR = 'asc';
+      let SUBJDATA = null, SAVEDWR = {};
+      let OPP = null, POKES = [], VSPOKE = {}, RBATTLE = null, RTURN = 0, autoTimer = null;
+      let PSORT = 'num', PNDIR = 'desc', PWDIR = 'asc';   // VSポケモン用ソート（既定=対戦数の降順）
+      const $ = id => document.getElementById(id);
+      const setStatus = (t,c) => { const e=$('status'); e.textContent=t; e.style.color=c||''; };
+      const baseName = s => s.split('@')[0].split(':')[0];
+      function parseSpec(s){
+        const name = s.split('@')[0].split(':')[0];
+        const after = s.includes('@') ? s.split('@').slice(1).join('@') : '';
+        const parts = after.split(':');   // item:nature:moves:evs:ability
+        return { name, item: parts[0]||'', nature: parts[1]||'',
+                 moves: (parts[2]||'').split('|').filter(Boolean),
+                 evs: (parts[3]||'').split('/'), ability: parts[4]||'' };
+      }
+      const iconUrl = name => { const n = name.replace(' (','('); const id = ICONS[n] || ICONS[n.split('(')[0].trim()];
+        return id ? `/images/pokemon/pokemon-${id}.webp` : null; };
+      // 構成パネル：ポケモンアイコン＝タブ ＋ 下に詳細（持ち物/特性/性格/技/EV）
+      function renderComp(containerId, specs, title){
+        const c = $(containerId); c._specs = specs;
+        c.innerHTML = `<div class="ctitle">${title}</div>
+          <div class="iconrow">${specs.map((s,i)=>{const p=parseSpec(s); const u=iconUrl(p.name);
+            return `<button class="montab" onclick="selComp('${containerId}',${i})" title="${p.name}">
+              ${u?`<img class="monicon" src="${u}" alt="${p.name}" onerror="this.style.display='none'">`:''}
+              <span class="mname">${p.name}</span><span class="mitem">${p.item||'—'}</span></button>`;}).join('')}</div>
+          <div class="compdetail" id="${containerId}-d"></div>`;
+        selComp(containerId, 0);
+      }
+      const NATURE = {いじっぱり:'A↑C↓',さみしがり:'A↑B↓',ゆうかん:'A↑S↓',やんちゃ:'A↑D↓',ずぶとい:'B↑A↓',わんぱく:'B↑C↓',のんき:'B↑S↓',のうてんき:'B↑D↓',ひかえめ:'C↑A↓',おっとり:'C↑B↓',れいせい:'C↑S↓',うっかりや:'C↑D↓',おだやか:'D↑A↓',おとなしい:'D↑B↓',なまいき:'D↑S↓',しんちょう:'D↑C↓',おくびょう:'S↑A↓',せっかち:'S↑B↓',ようき:'S↑C↓',むじゃき:'S↑D↓'};
+      const MOVET = {};   // 技名→タイプ（initで取得）
+      const TYPEICON = {ノーマル:['00','normal'],かくとう:['01','fighting'],ひこう:['02','flying'],どく:['03','poison'],じめん:['04','ground'],いわ:['05','rock'],むし:['06','bug'],ゴースト:['07','ghost'],はがね:['08','steel'],ほのお:['09','fire'],みず:['10','water'],くさ:['11','grass'],でんき:['12','electric'],エスパー:['13','psychic'],こおり:['14','ice'],ドラゴン:['15','dragon'],あく:['16','dark'],フェアリー:['17','fairy']};
+      function typeIcon(move){ const t=MOVET[move], e=TYPEICON[t]; return e?`<img class="tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${t}" title="${t}">`:''; }
+      function typeIconName(t){ const e=TYPEICON[t]; return e?`<img class="rp-tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${t}" title="${t}">`:''; }
+      const WEATHER={sunny:'☀ 晴れ',rain:'🌧 あめ',sandstorm:'🌪 すなあらし',hail:'❄ あられ',snow:'❄ ゆき'};
+      const STATUS_JP={burn:'やけど',poison:'どく',badpoison:'もうどく',paralysis:'まひ',sleep:'ねむり',freeze:'こおり'};
+      const ITEM_PNG={"きあいのタスキ":"item-0275-tasuki.png","こだわりスカーフ":"item-0287-scarf.png","オボンのみ":"item-0158-obon.png","ラムのみ":"item-0157-ram.png","ヤチェのみ":"item-0188-yache.png","ハバンのみ":"item-0197-haban.png"};
+      const ITEM_SPR={"オレンのみ":[-408,-96],"ラムのみ":[-456,-96],"オボンのみ":[0,-120],"カゴのみ":[-48,-120],"ヒメリのみ":[-72,-120],"ヨロギのみ":[-96,-120],"ビアーのみ":[-120,-120],"リンドのみ":[-24,-144],"モモンのみ":[-48,-144],"リリバのみ":[-72,-144],"オッカのみ":[-96,-144],"チーゴのみ":[-120,-144],"イトケのみ":[-144,-144],"ロゼルのみ":[-168,-144],"ウタンのみ":[-192,-144],"ナモのみ":[-216,-144],"ヤチェのみ":[-240,-144],"ソクノのみ":[-264,-144],"タンガのみ":[-312,-144],"シュカのみ":[-336,-144],"ヨプのみ":[-360,-144],"カシブのみ":[-384,-144],"バコウのみ":[-408,-144],"ホズのみ":[-432,-144],"ハバンのみ":[-456,-144],"コランのみ":[0,-168]};
+      function itemIcon(it){ if(ITEM_PNG[it]) return `<img class="iic" src="/images/items/${ITEM_PNG[it]}" alt="">`; const s=ITEM_SPR[it]; return s?`<span class="iic iic-spr" style="background-position:${s[0]}px ${s[1]}px"></span>`:''; }
+      // 行動を陣営別に振り分ける。「▷Pn: … を確認」はnが相手の技を観測したログなので、技の主は相手側(3-n)。
+      // side1=自分(P1), side2=相手(P2)。ミラー(両者同名)でも取り違えない。
+      function parseActions(logs){ const m={1:{},2:{}}; let ord=0;
+        (logs||[]).forEach(raw=>{ const pm=raw.match(/^▷P(\d+):\s*/); if(!pm)return; const obs=+pm[1]; if(obs!==1&&obs!==2)return; const side=3-obs; const l=raw.slice(pm[0].length);
+          const r=l.match(/^(.+?) の技【(.+?)】を確認/); if(!r)return;
+          if(!m[side][r[1]]) m[side][r[1]]={move:r[2], order:++ord};
+        });
+        return m; }
+      // 詳細ログの表示順補正：おやこあいの「追撃」は本体ヒットの後に判定されるので、本体ダメ行の後ろへ入れ替える
+      function reorderLogs(logs){
+        const a=[...logs];
+        for(let i=0;i<a.length-1;i++){
+          if(/おやこあい 追撃！/.test(a[i]) && / → .+ に \d+ダメ/.test(a[i+1])){ const t=a[i]; a[i]=a[i+1]; a[i+1]=t; i++; }
+        }
+        return a;
+      }
+      // 簡易ログ：技・交代を発生順に1行ずつ（①②で行動順、各行に技→対象・与ダメ・結果）
+      function summarizeTurn(logs, actives){
+        const events=[]; const megaed=new Set(); let ord=0, last=null, pendingOut=null;
+        const moveOwner={}; const sideName={}; const SIDEJP={1:'自分',2:'相手'};
+        const newAct=(side,name,move)=>{ const e={kind:'act',side:side||0,order:++ord,name,move,target:null,dmg:null,tags:[]}; if(side)sideName[side+'|'+name]=e; if(move)moveOwner[move]=e; events.push(e); last=e; return e; };
+        const findActor=(name,move)=>{ if(move&&moveOwner[move])return moveOwner[move]; for(let i=events.length-1;i>=0;i--){ if(events[i].kind==='act'&&events[i].name===name)return events[i]; } return null; };
+        const tag=t=>{ if(last&&last.kind==='act'&&!last.tags.includes(t)) last.tags.push(t); };
+        (logs||[]).forEach(raw=>{ const pm=raw.match(/^▷P(\d+):\s*/); const obs=pm?+pm[1]:0; const side=obs?3-obs:0; const l=pm?raw.slice(pm[0].length):raw; let m;
+          if(/^P[12]選出:|見せ合い/.test(l)) return;
+          if(obs&&(m=l.match(/^(.+?) に (.+?) で (?:約)?-?\d+% 減少/))){ const e=moveOwner[m[2]]; if(e&&!e.side){ e.side=obs; sideName[obs+'|'+e.name]=e; } return; }
+          if(m=l.match(/^(.+?) はメガ進化した！/)){ megaed.add(m[1]); return; }
+          if(m=l.match(/^(.+?) の (.+?) → (.+?) に (\d+)ダメ/)){ const e=findActor(m[1],m[2])||newAct(0,m[1],m[2]); e.move=e.move||m[2]; e.target=m[3]; e.dmg=+m[4]; last=e; return; }
+          if(m=l.match(/^おやこあい 追撃！ (\d+)ダメ/)){ if(last&&last.kind==='act') last.pb=(last.pb||0)+(+m[1]); return; }
+          if(m=l.match(/^(.+?) は (.+?) を使った/)){ const e=findActor(m[1],m[2]); if(!e){ newAct(side,m[1],m[2]); } else { if(side&&!e.side){e.side=side;sideName[side+'|'+m[1]]=e;} last=e; } return; }
+          if(m=l.match(/^(.+?) の技【(.+?)】を確認/)){ let e=side?sideName[side+'|'+m[1]]:null; if(!e){ e=newAct(side,m[1],m[2]); } else { last=e; } if(m[2])moveOwner[m[2]]=e; return; }
+          if(m=l.match(/^(.+?) の (.+?) は外れた/)){ const e=findActor(m[1],m[2])||newAct(side,m[1],m[2]); e.tags.push('外し'); last=e; return; }
+          if(m=l.match(/^(.+?) はひるんで動けない/)){ const e=findActor(m[1],null)||newAct(side,m[1],'ひるみで動けない'); last=e; return; }
+          if(m=l.match(/^(.+?) は引っ込んだ/)){ pendingOut=m[1]; return; }
+          if(m=l.match(/^(.+?) が出てきた/)){ events.push({kind:'sw',order:++ord,text:pendingOut?`${pendingOut} → ${m[1]}`:`${m[1]} 繰り出し`}); pendingOut=null; last=null; return; }
+          if(m=l.match(/^(.+?) が登場した/)){ events.push({kind:'sw',order:++ord,text:`${m[1]}（瀕死後）`}); last=null; return; }
+          if(m=l.match(/^(.+?) は強制交代させられ/)){ events.push({kind:'sw',order:++ord,text:`${m[1]} が強制交代`}); return; }
+          // ダメージ系（特性・設置・状態・天候・反動）を漏れなく
+          if(m=l.match(/^(.+?) の (.+?)！ (.+?) に (\d+) のダメージ/)){ events.push({kind:'dmg',order:++ord,text:`${m[2]}：${m[3]}に${m[4]}`}); return; }
+          if(m=l.match(/^(.+?) はステルスロックの効果を受けた！\((\d+)\)/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：ステルスロック ${m[2]}`}); return; }
+          if(m=l.match(/^(.+?) は (.+?) で (\d+) のダメージを受けた/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：${m[2]} ${m[3]}`}); return; }
+          if(m=l.match(/^(.+?) は (.+?) のダメージを受けた！\((\d+)\)/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：${m[2]} ${m[3]}`}); return; }
+          if(m=l.match(/^(.+?) は (?:.+? の )?反動を受けた！\((\d+)\)/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：反動 ${m[2]}`}); return; }
+          if(m=l.match(/^(.+?) の (.+?) が叩き落とされた！/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]} の ${m[2]} を落とした`}); return; }
+          if(m=l.match(/^(.+?) の ばけのかわ が破れた！\((\d+)\)/)){ const e=(last&&last.kind==='act')?last:null; if(e){ e.target=m[1]; e.dmg=+m[2]; if(!e.tags.includes('ばけのかわ')) e.tags.push('ばけのかわ'); } else { events.push({kind:'dmg',order:++ord,text:`${m[1]}：ばけのかわ が破れた（${m[2]}）`}); } return; }
+          if(m=l.match(/^(.+?) は (.+?) に効かない/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]} は ${m[2]} に無効（効果なし）`}); return; }
+          if(m=l.match(/^(.+?) の (.+?) は (.+?) に防がれた/)){ const e=findActor(m[1],m[2]); if(e){ if(!e.tags.includes('防がれた')) e.tags.push('防がれた'); } else { events.push({kind:'dmg',order:++ord,text:`${m[2]} は ${m[3]} に防がれた`}); } return; }
+          if(m=l.match(/^(.+?) の オボンのみ が発動！ HPが (\d+) 回復/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：オボンのみ +${m[2]}回復`}); return; }
+          if(m=l.match(/^(.+?) の でんきにかえる！/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：でんきにかえる（充電）`}); return; }
+          if(m=l.match(/^(.+?) (?:の|は) (.+?) で HPが (\d+) 回復/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：${m[2]} +${m[3]}回復`}); return; }
+          if(/ばつぐん/.test(l)){ tag('効果抜群'); return; }
+          if(/いまひとつ/.test(l)){ tag('いまひとつ'); return; }
+          if(/急所に当たった/.test(l)){ tag('急所'); return; }
+          if(/(タスキ|がんじょう).*耐え/.test(l)){ tag('相手耐え'); return; }
+          if(/吹き始めた/.test(l)){ tag('展開'); return; }
+          if(/まき散らされ|ステルスロックを/.test(l)){ tag('設置'); return; }
+          if(m=l.match(/^(.+?) は倒れた/)){ tag(`${m[1]}を倒した`); return; }
+          if(m=l.match(/(こうげき|ぼうぎょ|とくこう|とくぼう|すばやさ) が.*?(上が|下が)/)){ tag(`${m[1]}${m[2]==='上が'?'↑':'↓'}`); return; }
+        });
+        if(actives) events.forEach(e=>{ if(e.kind==='act'&&!e.side&&actives[e.name]) e.side=actives[e.name]; });
+        const circ=['①','②','③','④']; let an=0;
+        return events.sort((a,b)=>a.order-b.order).map(e=>{
+          if(e.kind==='sw') return `<span class="rlog-sw">交代</span> ${e.text}`;
+          if(e.kind==='dmg') return `<span class="rlog-dmg">↳ ${e.text}</span>`;
+          an++; const sl=e.side?`<span class="rlog-side s${e.side}">${SIDEJP[e.side]}</span> `:''; let s=`${circ[an-1]||an} ${sl}${megaed.has(e.name)?'<span class="rlog-mega">メガ</span> ':''}${e.name}：${e.move||'—'}`;
+          if(e.dmg!=null) s+=` → ${e.target} に ${e.dmg}${e.pb?'+'+e.pb:''}`;
+          if(e.tags.length) s+=`（${e.tags.join('・')}）`;
+          return s;
+        });
+      }
+      function selComp(containerId, i){
+        const c = $(containerId); const p = parseSpec(c._specs[i]);
+        c.querySelectorAll('.montab').forEach((e,j)=>e.classList.toggle('active', j===i));
+        const ev = p.evs.length===6 ? ['H','A','B','C','D','S'].map((l,k)=>(p.evs[k]&&p.evs[k]!=='0')?`<span class="evchip ev-${l}">${l}<b>${p.evs[k]}</b></span>`:null).filter(Boolean).join('') : '';
+        const nat = p.nature ? `${p.nature}${NATURE[p.nature]?` (${NATURE[p.nature]})`:''}` : '—';
+        const moves = p.moves.length ? p.moves.map(m=>`<span class="mvchip">${typeIcon(m)}${m}</span>`).join('') : '—';
+        $(containerId+'-d').innerHTML =
+          `<div class="cdgrid">
+             <div class="cdcell"><span class="cdlabel item">持ち物</span><span class="cdval">${itemIcon(p.item)}${p.item||'—'}</span></div>
+             <div class="cdcell"><span class="cdlabel abil">特性</span><span class="cdval">${p.ability||'—'}</span></div>
+             <div class="cdcell"><span class="cdlabel nat">性格</span><span class="cdval">${nat}</span></div>
+           </div>
+           <div class="cdrow mvrow"><span class="cdlabel mv">技</span><span class="mvwrap">${moves}</span></div>
+           <div class="cdrow mvrow"><span class="cdlabel ev">EV</span><span class="mvwrap">${ev||'—'}</span></div>`;
+      }
+
+      if(STATIC){
+        Promise.all([
+          fetch(META+'/index.json').then(r=>r.json()),
+          fetch(META+'/icons.json').then(r=>r.json()),
+          fetch(META+'/move_types.json').then(r=>r.json())
+        ]).then(([idx,ic,mt])=>{ RANKERS=idx.subjects||[]; ICONS=ic; Object.assign(MOVET,mt);
+          RANKERS.forEach(s=>SAVEDWR[s.label]=s.win_rate); renderSubjectList();
+          if(RANKERS.length) selectSubject(RANKERS[0]); });
+      } else {
+        Promise.all([
+          fetch(API+'/api/f1/rankers').then(r=>r.json()),
+          fetch(API+'/api/f1/saved').then(r=>r.json()),
+          fetch(API+'/api/f1/icons').then(r=>r.json()),
+          fetch(API+'/api/f1/move_types').then(r=>r.json())
+        ]).then(([rs,sv,ic,mt])=>{ RANKERS=rs; SAVED=sv; ICONS=ic; Object.assign(MOVET,mt); renderSubjectList();
+          const first = rs.findIndex(r=>sv[r.label]); selectSubject(rs[first>=0?first:0]); });
+      }
+
+      function subjectWR(label){ if(STATIC) return (label in SAVEDWR)?SAVEDWR[label]:null;
+        const s=SAVED[label]; if(!s) return null;
+        const a=s.cards; return a.length? a.reduce((t,c)=>t+c.win_rate,0)/a.length : null; }
+      function renderSubjectList(){
+        $('subject-list').innerHTML = RANKERS.map((r,i)=>{ const wr=subjectWR(r.label);
+          const wrs = wr!=null? `<span class="wr ${wr>=0.55?'g':wr<=0.45?'r':'n'}">${Math.round(wr*100)}%</span>` : `<span class="muted">未</span>`;
+          return `<div class="pitem" data-i="${i}" onclick="selectSubjectIdx(${i})"><span class="nm">${r.label}</span>${wrs}</div>`;
+        }).join('');
+      }
+      function selectSubjectIdx(i){ selectSubject(RANKERS[i]); }
+      async function selectSubject(r){
+        SUBJECT=r; OPP=null;
+        document.querySelectorAll('#subject-list .pitem').forEach(e=>e.classList.toggle('active', RANKERS[+e.dataset.i]===r));
+        $('opp-comp').innerHTML = '<div class="muted">左の一覧から対戦相手を選択</div>';
+        $('detail').innerHTML = ''; $('progress-wrap').classList.add('hidden');
+        CARDS = {}; SUBJDATA = null;
+        if(STATIC){
+          $('btn-analyze').classList.add('hidden'); setStatus('読み込み中…','#b45309');
+          $('subject-comp').innerHTML='<div class="muted">読み込み中…</div>'; $('opp-list').innerHTML='';
+          const d = await fetch(`${R2}/subjects/${r.file}`).then(x=>x.json()).catch(()=>null);
+          if(!SUBJECT || SUBJECT!==r) return;   // 連打時の取り違え防止
+          if(!d){ setStatus('データ取得に失敗しました','#dc2626'); return; }
+          SUBJDATA=d; SUBJECT={label:r.label, party:d.subject.party, file:r.file}; AID=r.label;
+          renderComp('subject-comp', d.subject.party, `${r.label} の構成`);
+          d.cards.forEach(c=>CARDS[c.label]=c); setStatus('',''); renderTab();
+          return;
+        }
+        renderComp('subject-comp', r.party, `${r.label} の構成`);
+        if(SAVED[r.label]){ AID=SAVED[r.label].analysis_id; $('btn-analyze').classList.add('hidden'); setStatus('','');
+          SAVED[r.label].cards.forEach(c=>CARDS[c.label]=c); renderTab();
+        } else { AID=null; $('btn-analyze').classList.remove('hidden'); setStatus('未計算','');
+          $('opp-list').innerHTML='<div class="muted" style="padding:.6em">「このパーティで総当たり」を実行してください</div>'; $('summary').textContent=''; }
+      }
+
+      $('btn-analyze').onclick = async ()=>{
+        if(!SUBJECT) return; $('btn-analyze').disabled=true; $('progress-wrap').classList.remove('hidden'); setStatus('分析中…','#b45309');
+        const res = await fetch(API+'/api/f1/analyze',{method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({p1:SUBJECT.party,n:10,season:'M-2',exclude_label:SUBJECT.label})}).then(r=>r.json());
+        AID=res.analysis_id; pollProgress();
+      };
+      async function pollProgress(){
+        const p = await fetch(API+`/api/f1/progress/${AID}`).then(r=>r.json());
+        if(p.error){ setStatus('エラー: '+p.error,'#dc2626'); return; }
+        $('progress-fill').style.width=(p.total?Math.round(p.done/p.total*100):0)+'%';
+        $('progress-text').textContent=`${p.done} / ${p.total} 戦（${p.cards.length}カード）`;
+        p.cards.forEach(c=>CARDS[c.label]=c); if(TAB==='ranker') renderTab();
+        if(p.running){ setStatus('分析中…','#b45309'); setTimeout(pollProgress,2000); }
+        else{ setStatus('完了','#16a34a'); $('btn-analyze').disabled=false; renderSubjectList(); }
+      }
+
+      function switchTab(t){ TAB=t; $('tab-ranker').classList.toggle('active',t==='ranker'); $('tab-pokemon').classList.toggle('active',t==='pokemon');
+        OPP=null; $('opp-comp').innerHTML='<div class="muted">左の一覧から選択</div>'; $('detail').innerHTML=''; renderTab(); }
+      function renderTab(){ $('sortbar').style.display = 'flex'; if(TAB==='ranker') renderRankerTab(); else renderPokemonTab(); }
+      function setSort(s){
+        if(TAB==='ranker'){
+          if(s===SORT){ if(s==='wr') WRDIR=WRDIR==='asc'?'desc':'asc'; else NUMDIR=NUMDIR==='asc'?'desc':'asc'; }
+          else SORT=s;
+          renderRankerTab();
+        } else {
+          if(s===PSORT){ if(s==='wr') PWDIR=PWDIR==='asc'?'desc':'asc'; else PNDIR=PNDIR==='asc'?'desc':'asc'; }
+          else PSORT=s;
+          renderPokeList();
+        }
+      }
+
+      // VS ランカー
+      function renderRankerTab(){
+        $('sort-num').classList.toggle('btn-active', SORT==='num');
+        $('sort-wr').classList.toggle('btn-active', SORT==='wr');
+        $('sort-num').textContent = SORT==='num' ? (NUMDIR==='asc' ? '番号順 ↑' : '番号順 ↓') : '番号順';
+        $('sort-wr').textContent = SORT==='wr' ? (WRDIR==='asc' ? '勝率順 ↑（苦手→得意）' : '勝率順 ↓（得意→苦手）') : '勝率順';
+        const rn = l => { const m=l.match(/#(\d+)/); return m?+m[1]:9999; };
+        const cards = Object.values(CARDS).sort((a,b)=>
+          SORT==='num' ? (NUMDIR==='asc'?rn(a.label)-rn(b.label):rn(b.label)-rn(a.label))
+                       : (WRDIR==='asc'?a.win_rate-b.win_rate:b.win_rate-a.win_rate));
+        if(!cards.length){ $('opp-list').innerHTML='<div class="muted" style="padding:.6em">データなし</div>'; $('summary').textContent=''; return; }
+        const s=cards.filter(c=>c.win_rate>=0.6).length,w=cards.filter(c=>c.win_rate<=0.4).length;
+        $('summary').textContent=`${SUBJECT.label} vs 全${cards.length}ランカー ｜ 得意 ${s}・五分 ${cards.length-s-w}・苦手 ${w}`;
+        $('opp-list').innerHTML = cards.map(c=>{ const wr=Math.round(c.win_rate*100),cls=c.win_rate>=0.6?'g':c.win_rate<=0.4?'r':'n';
+          return `<div class="pitem" data-label="${encodeURIComponent(c.label)}" onclick="selectOppRanker('${c.label.replace(/'/g,"\\'")}')"><span class="nm">${c.label}</span><span class="muted">${c.wins}-${c.losses}-${c.draws}</span><span class="wr ${cls}">${wr}%</span></div>`;
+        }).join('');
+        if(!OPP || !CARDS[OPP]) selectOppRanker(cards[0].label);
+        else document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.label||'')===OPP));
+      }
+      function selectOppRanker(label){ OPP=label; const c=CARDS[label];
+        document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.label||'')===label));
+        renderComp('opp-comp', c.specs, `${label} の構成`);
+        renderRankerDetail(label, c);
+      }
+      function verdict(wr){
+        if(wr>=1) return {t:'完勝（全勝）',c:'#15803d',bg:'#dcfce7',i:'🏆'};
+        if(wr>=0.67) return {t:'有利',c:'#15803d',bg:'#dcfce7',i:'✅'};
+        if(wr>=0.34) return {t:'互角',c:'#475569',bg:'#f1f5f9',i:'⚖'};
+        if(wr>0) return {t:'苦戦',c:'#b91c1c',bg:'#fee2e2',i:'⚠'};
+        return {t:'相性最悪（全敗）',c:'#b91c1c',bg:'#fee2e2',i:'🛑'};
+      }
+      async function renderRankerDetail(label,c){
+        stopAuto();
+        $('detail').innerHTML='<div class="muted">読み込み中…</div>';
+        let b, d;
+        if(STATIC){ const o=(SUBJDATA&&SUBJDATA.opp&&SUBJDATA.opp[label])||{}; b=o.faults||{}; d=o.matchup||{}; }
+        else { [b,d] = await Promise.all([
+          fetch(API+'/api/f1/faults',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({analysis_id:AID,label})}).then(r=>r.json()),
+          fetch(API+'/api/matchup_explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p1:SUBJECT.party,p2:c.specs,season:'M-2'})}).then(r=>r.json())
+        ]); }
+        const selMe=new Map((b.sel_me||[]).map(x=>[x[0],x[1]])), selOpp=new Map((b.sel_opp||[]).map(x=>[x[0],x[1]]));
+        const chips=(names,m)=>names.map(nm=>{const cnt=m.get(nm)||0;return `<span class="chip ${cnt?'sel':'bench'}">${nm}${cnt?` ${cnt}/${c.n}`:''}</span>`;}).join('');
+        let h=`<div class="sect"><div class="sect-head">🎯 選出（${c.n}戦）</div><div class="sect-body">
+          <div style="margin-bottom:.3em"><span class="muted">自分:</span> ${chips(d.namesA,selMe)}</div>
+          <div><span class="muted">相手:</span> ${chips(d.namesB,selOpp)}</div>
+          <div class="muted" style="margin-top:.3em">※強調＝実際に選出。淡色＝控え。</div></div></div>`;
+        const wrp=Math.round(b.win_rate*100), v=verdict(b.win_rate);
+        const pchip=(x,good)=>{const u=iconUrl(x.name);return `<span class="pchip ${good?'good':'bad'}">${u?`<img src="${u}" onerror="this.style.display='none'">`:''}${x.name} ${Math.round(x.rate*100)}%</span>`;};
+        const carry=b.own_carry_on_win||[], ko=b.opp_ko_on_win||[];
+        h+=`<div class="sect"><div class="sect-head">📊 対戦サマリ</div><div class="sect-body">
+          <div class="row" style="margin-bottom:.5em">
+            <span class="verdict" style="color:${v.c};background:${v.bg}">${v.i} ${v.t}</span>
+            <div class="hpbar" style="max-width:180px"><div class="hpfill" style="width:${wrp}%;background:${v.c}"></div></div>
+            <span class="wr-tag" style="color:${v.c}">${wrp}%</span>
+            <span class="muted">${b.wins}勝 ${b.losses}敗 ${b.draws}分</span>
+          </div>`;
+        if(b.win_rate>=0.5 && (carry.length||ko.length)){
+          h+=`<div class="fbox win"><b class="g">勝ち筋</b>`;
+          if(carry.length) h+=`<div class="frow"><span class="muted">残りやすい主軸: </span>${carry.slice(0,4).map(x=>pchip(x,true)).join('')}</div>`;
+          if(ko.length) h+=`<div class="frow"><span class="muted">安定して倒せる相手: </span>${ko.slice(0,4).map(x=>pchip(x,true)).join('')}</div>`;
+          h+=`</div>`;
+        }
+        if(b.losses>0 && (b.opp_survive_on_loss.length||b.your_dead_on_loss.length||b.setup_loss_rate>=0.3)){
+          h+=`<div class="fbox lose"><b class="r">負け筋</b>`;
+          if(b.opp_survive_on_loss.length) h+=`<div class="frow"><span class="muted">倒し切れない核: </span>${b.opp_survive_on_loss.slice(0,4).map(x=>pchip(x,false)).join('')}</div>`;
+          if(b.your_dead_on_loss.length) h+=`<div class="frow"><span class="muted">落ちやすい自個体: </span>${b.your_dead_on_loss.slice(0,4).map(x=>pchip(x,false)).join('')}</div>`;
+          if(b.setup_loss_rate>=0.3) h+=`<div class="frow"><b class="r">積み全抜き負け ${Math.round(b.setup_loss_rate*100)}%</b></div>`;
+          h+=`</div>`;
+        }
+        const br=b.battle_results||[]; const escL=label.replace(/'/g,"\\'");
+        const tabs=Array.from({length:c.n},(_,i)=>{const res=br[i];const cls=res===1?'win':res===2?'lose':'draw';const mk=res===1?'○勝':res===2?'●負':res===0?'△分':'';return `<button class="rtab ${cls}" id="rchip-${i}" onclick="openReplay('${escL}',${i})">第${i+1}戦${mk?` <b>${mk}</b>`:''}</button>`;}).join('');
+        h+=`<div class="rp-pick-hd">🎬 <b>対戦記録</b> — 実際のシミュレーション結果を再生（タブで各戦、<span class="g">勝</span>/<span class="r">負</span>）</div>
+          <div class="rtab-row">${tabs}</div>
+          <div class="sect rp-panel" id="rp-box" style="margin-top:0">
+            <div class="sect-body">
+              <div class="row" id="replay-ctrl">
+                <span id="rp-title" class="rp-title"></span>
+                <button class="btn btn-sm btn-ghost" onclick="stepTurn(-1)">◀</button>
+                <span id="replay-turn"></span>
+                <button class="btn btn-sm btn-ghost" onclick="stepTurn(1)">▶</button>
+                <button id="btn-auto" class="btn btn-sm" onclick="toggleAuto()">自動再生</button>
+                <span id="replay-result" class="wr-tag"></span>
+              </div>
+              <div id="replay-sides"></div>
+              <div id="replay-log" class="log"></div>
+            </div>
+          </div>
+        </div></div>`;
+        h+=matrixHTML(d, selMe, selOpp);
+        $('detail').innerHTML=h;
+        if(c.n>0) openReplay(label, 0, true);   // 1戦目を既定で開く
+      }
+      function matrixHTML(d, selMe, selOpp){
+        const cell=v=>v==='A'?'bg-g':v==='B'?'bg-r':'bg-n';
+        const hdr=n=>{const u=iconUrl(n); return `${u?`<img class="mtx-ico" src="${u}" title="${n}" alt="${n}" onerror="this.style.display='none'">`:''}<div class="mtx-name">${n}</div>`;};
+        let mt=`<div class="muted" style="margin-bottom:.4em"><span class="bg-g" style="padding:0 .3em;border-radius:3px">自分勝ち</span> <span class="bg-r" style="padding:0 .3em;border-radius:3px">相手勝ち</span> ｜ 数字=与/被ダメ%${selMe?' ｜ 淡色＝選出されなかった個体':''}</div><div style="overflow-x:auto"><table class="mtx"><tr><th class="mtx-corner">自分 ↓<br>相手 →</th>`;
+        d.namesB.forEach(n=>{const sd=selOpp&&selOpp.get(n);mt+=`<th class="${!selOpp||sd?'':'dim'} ${sd?'mtx-sel':''}">${hdr(n)}</th>`;}); mt+='</tr>';
+        d.cells.forEach((row,i)=>{ const nm=d.namesA[i], rsel=selMe&&selMe.get(nm), rdim=(!selMe||rsel)?'':'dim';
+          mt+=`<tr><th class="${rdim} ${rsel?'mtx-sel':''}">${hdr(nm)}</th>`;
+          row.forEach((cc,j)=>{const dim=(!selMe||(rsel&&selOpp.get(d.namesB[j])))?'':'dim';mt+=`<td class="${cell(cc.v)} ${dim}">${cc.dealt}/${cc.taken}</td>`;}); mt+='</tr>'; });
+        mt+='</table></div>';
+        const help = `<details class="mtx-help"><summary>表の見方（与/被ダメと勝敗）</summary>
+          <div class="mtx-help-body">
+            各マスは「左の自分の個体」対「上の相手の個体」の1v1を、互いの<b>最大火力で殴り合った</b>想定で評価します（メガ石持ちはメガ後で評価）。<br>
+            ・<b>数字「与／被」</b>＝1発あたりの最大ダメージ割合。<b>与</b>＝自分の最大打点が相手の最大HPの何%か／<b>被</b>＝相手の最大打点が自分の何%か。<br>
+            ・<b>勝敗</b>（<span class="bg-g" style="padding:0 .3em;border-radius:3px">緑＝自分勝ち</span>／<span class="bg-r" style="padding:0 .3em;border-radius:3px">赤＝相手勝ち</span>）＝この火力で<b>相手を倒すのに必要な手数が少ない方</b>。手数が同じなら<b>素早さが速い方</b>が勝ち。きあいのタスキ／がんじょう（1発耐え）や先制技も加味します。<br>
+            ・例：<b>与45／被83で相手勝ち</b>＝自分は45%×3発必要、相手は83%×2発で倒し切り、かつ相手が速い、という評価。
+          </div></details>`;
+        return `<div class="sect"><div class="sect-head">⚔ 1v1相性表（自分有利 ${d.a_win} / 相手有利 ${d.b_win}）</div><div class="sect-body">${help}${mt}</div></div>`;
+      }
+      function buildsHTML(d){ const bt=arr=>{let t='<table class="bt"><tbody>';
+        (arr||[]).forEach(x=>t+=`<tr><td style="font-weight:700">${x.name}</td><td class="muted">${x.type}</td><td>${x.item}</td><td class="muted">${x.ability}</td><td class="muted">S${x.speed}</td><td class="muted" style="white-space:normal">${(x.moves||[]).join('・')}</td></tr>`);
+        return t+'</tbody></table>';};
+        return `<div class="sect"><div class="sect-head">🧬 型情報</div><div class="sect-body"><div class="muted" style="font-weight:700;color:#dc2626">相手</div>${bt(d.buildsB)}<div class="muted" style="font-weight:700;color:var(--accent-dark);margin-top:.5em">自分</div>${bt(d.buildsA)}</div></div>`;
+      }
+
+      // VS ポケモン（相手に選出された各ポケモンに対する実戦勝敗・型別勝率）
+      async function renderPokemonTab(){
+        if(!SUBJECT){ return; }
+        if(!AID){ $('opp-list').innerHTML='<div class="muted" style="padding:.6em">「このパーティで総当たり」を実行すると、相手ポケモン別の勝敗が表示されます</div>'; $('summary').textContent=''; $('detail').innerHTML=''; $('opp-comp').innerHTML='<div class="muted">左の一覧から選択</div>'; return; }
+        $('opp-list').innerHTML='<div class="muted" style="padding:.6em">集計中…</div>';
+        const d = STATIC ? (SUBJDATA&&SUBJDATA.vs_pokemon || {pokemon:[]})
+          : await fetch(API+'/api/f1/vs_pokemon',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({analysis_id:AID})}).then(r=>r.json());
+        if(d.error){ $('opp-list').innerHTML=`<div class="muted" style="padding:.6em">${d.error}</div>`; $('summary').textContent=''; return; }
+        POKES=d.pokemon||[]; VSPOKE={}; POKES.forEach(p=>VSPOKE[p.name]=p);
+        renderPokeList();
+      }
+      function renderPokeList(){
+        $('sort-num').classList.toggle('btn-active', PSORT==='num');
+        $('sort-wr').classList.toggle('btn-active', PSORT==='wr');
+        $('sort-num').textContent = PSORT==='num' ? (PNDIR==='asc' ? '対戦数順 ↑（少→多）' : '対戦数順 ↓（多→少）') : '対戦数順';
+        $('sort-wr').textContent = PSORT==='wr' ? (PWDIR==='asc' ? '勝率順 ↑（苦手→得意）' : '勝率順 ↓（得意→苦手）') : '勝率順';
+        const arr = [...POKES].sort((a,b)=>
+          PSORT==='num' ? (PNDIR==='asc'?a.n-b.n:b.n-a.n)
+                        : (PWDIR==='asc'?a.win_rate-b.win_rate:b.win_rate-a.win_rate));
+        if(!arr.length){ $('opp-list').innerHTML='<div class="muted" style="padding:.6em">選出データなし</div>'; $('summary').textContent=''; return; }
+        $('summary').textContent=`相手に選出された ${arr.length}種のポケモンに対する ${SUBJECT.label} の戦績（選出された対戦のみ集計）`;
+        $('opp-list').innerHTML = arr.map(p=>{const wr=Math.round(p.win_rate*100),cls=p.win_rate>=0.6?'g':p.win_rate<=0.4?'r':'n';
+          return `<div class="pitem" data-pk="${encodeURIComponent(p.name)}" onclick="selectOppPoke('${p.name.replace(/'/g,"\\'")}')"><span class="nm">${p.name}</span><span class="muted">${p.wins}-${p.losses}-${p.draws}</span><span class="wr ${cls}">${wr}%</span></div>`;}).join('');
+        if(OPP&&VSPOKE[OPP]) document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.pk||'')===OPP));
+        else selectOppPoke(arr[0].name);
+      }
+      async function selectOppPoke(nm){
+        OPP=nm;
+        document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.pk||'')===nm));
+        const p=VSPOKE[nm];
+        if(p){ const wr=Math.round(p.win_rate*100),cls=p.win_rate>=0.6?'g':p.win_rate<=0.4?'r':'n';
+          $('opp-comp').innerHTML=`<div class="ctitle">${nm}</div><div>通算 <b>${p.wins}勝 ${p.losses}敗 ${p.draws}分</b> <span class="wr ${cls}">${wr}%</span></div>`; }
+        // 型別戦績
+        let h='';
+        if(p&&p.builds&&p.builds.length){
+          h+=`<div class="sect"><div class="sect-head">📊 ${nm} の型別戦績（${p.builds.length}型）</div><div class="sect-body">`;
+          const _evk=['H','A','B','C','D','S'];
+          [...p.builds].sort((a,b)=>{                       // 第一キー=勝率(降順)、以降は 持ち物→性格→技→EV→特性
+            if(b.win_rate!==a.win_rate) return b.win_rate-a.win_rate;
+            const s=(x,y)=>((x||'')<(y||'')?-1:(x||'')>(y||'')?1:0);
+            let c=s(a.item,b.item)||s(a.nature,b.nature); if(c) return c;
+            const ma=(a.moves||[]).slice().sort().join('/'),mb=(b.moves||[]).slice().sort().join('/'); if(ma!==mb) return ma<mb?-1:1;
+            for(const k of _evk){const d=((a.evs||{})[k]||0)-((b.evs||{})[k]||0); if(d) return d;}
+            return s(a.ability,b.ability);
+          }).forEach(b=>{const wr=Math.round(b.win_rate*100),cls=b.win_rate>=0.6?'g':b.win_rate<=0.4?'r':'n';
+            const nat=b.nature?`${b.nature}${NATURE[b.nature]?` (${NATURE[b.nature]})`:''}`:'—';
+            const moves=(b.moves&&b.moves.length)?b.moves.map(m=>`<span class="mvchip">${typeIcon(m)}${m}</span>`).join(''):'—';
+            const ev=b.evs?['H','A','B','C','D','S'].map(l=>b.evs[l]?`<span class="evchip ev-${l}">${l}<b>${b.evs[l]}</b></span>`:null).filter(Boolean).join(''):'';
+            const evx=b.ev_variants>1?` <span class="muted" style="font-size:.7rem">ほかEV${b.ev_variants-1}種</span>`:'';
+            h+=`<div class="bvrow">
+              <div class="bvhd"><span class="wr ${cls}">${wr}%</span><span class="muted">${b.wins}勝 ${b.losses}敗 ${b.draws}分</span></div>
+              <div class="cdgrid">
+                <div class="cdcell"><span class="cdlabel item">持ち物</span><span class="cdval">${itemIcon(b.item)}${b.item||'—'}</span></div>
+                <div class="cdcell"><span class="cdlabel abil">特性</span><span class="cdval">${b.ability||'—'}</span></div>
+                <div class="cdcell"><span class="cdlabel nat">性格</span><span class="cdval">${nat}</span></div>
+              </div>
+              <div class="cdrow mvrow"><span class="cdlabel mv">技</span><span class="mvwrap">${moves}</span></div>
+              <div class="cdrow mvrow"><span class="cdlabel ev">EV</span><span class="mvwrap">${ev||'—'}${evx}</span></div>
+              <div class="use">使用ランカー: ${(b.labels||[]).join('・')}</div></div>`;});
+          h+=`</div></div>`;
+        }
+        // 代表型（最多使用）に対する1v1相性表
+        $('detail').innerHTML = h + '<div class="muted" style="padding:.5em">1v1相性表を計算中…</div>';
+        const spec = (p&&p.builds&&p.builds[0]&&p.builds[0].spec) ? p.builds[0].spec : nm;
+        const d = STATIC ? (p&&p.matchup || {namesA:[],namesB:[],cells:[],a_win:0,b_win:0})
+          : await fetch(API+'/api/matchup_explain',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({p1:SUBJECT.party,p2:[spec],season:'M-2'})}).then(r=>r.json());
+        $('detail').innerHTML = h + (d.cells&&d.cells.length ? matrixHTML(d, null, null) : '');
+      }
+
+      // リプレイ（インライン）
+      async function openReplay(label,idx,noscroll){ stopAuto();
+        document.querySelectorAll('.rtab').forEach(e=>e.classList.remove('act')); const ch=$('rchip-'+idx); ch&&ch.classList.add('act');
+        const box=$('rp-box'); if(box){ box.classList.remove('hidden'); const t=$('rp-title'); if(t)t.textContent=`第${idx+1}戦 再生`; $('replay-sides').innerHTML='<div class="muted">読み込み中…</div>'; }
+        const d=STATIC ? ((SUBJDATA&&SUBJDATA.opp&&SUBJDATA.opp[label]&&SUBJDATA.opp[label].replays[idx]) || {error:'記録なし'})
+          : await fetch(API+'/api/f1/replay',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({analysis_id:AID,label,idx})}).then(r=>r.json());
+        if(d.error){ $('replay-sides').innerHTML=`<div class="muted r">${d.error}</div>`; return; }
+        RBATTLE=d; RTURN=0; renderReplay(0); if(!noscroll) box&&box.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+      function closeReplay(){ stopAuto(); const b=$('rp-box'); if(b)b.classList.add('hidden'); RBATTLE=null; document.querySelectorAll('.rtab').forEach(e=>e.classList.remove('act')); }
+      const hpColor=f=>f>0.5?'#22c55e':f>0.2?'#eab308':'#ef4444';
+      function renderMon(p,active,mine,action){
+        const f=p.max_hp?p.hp/p.max_hp:0; const u=iconUrl(p.name);
+        const boosts=Object.entries(p.stages||{}).filter(([,v])=>v).map(([k,v])=>`<span class="${v>0?'bup':'bdn'}">${k}${v>0?'▲':'▼'}${Math.abs(v)}</span>`).join(' ');
+        return `<div class="rp-mon ${active?'act':''} ${p.alive?'':'dead'}">
+          <div class="rp-mon-ico">${u?`<img src="${u}" alt="${p.name}" onerror="this.style.display='none'">`:''}${active?`<span class="rp-active-badge">${mine?'🔵':'🔴'}</span>`:''}${p.alive?'':'<span class="rp-x">×</span>'}</div>
+          <div class="rp-mon-body">
+            <div class="rp-mon-name">${p.name}${typeIconName(p.type1)}${p.type2?typeIconName(p.type2):''}${p.mega?' <span class="rp-mega">メガ</span>':''}${p.blade_forme?' <span class="rp-forme">ブレード</span>':''}${p.hero?' <span class="rp-forme">マイティ</span>':''}${p.status?` <span class="rp-status">${STATUS_JP[p.status]||p.status}</span>`:''}${p.disguise_broken?' <span class="rp-disg">皮破れ</span>':''}${p.electro_charged?' <span class="rp-charge">充電</span>':''}${p.confused?' <span class="rp-vol">😵こんらん</span>':''}${p.seeded?' <span class="rp-vol">🌱やどりぎ</span>':''}${p.taunt?' <span class="rp-vol">😈ちょうはつ</span>':''}${p.encore?' <span class="rp-vol">🔄アンコール</span>':''}${p.salted?' <span class="rp-vol">🧂しおづけ</span>':''}${p.transformed?' <span class="rp-vol">🎭へんしん</span>':''}${p.substitute_hp?` <span class="rp-vol">🪆みがわり(${p.substitute_hp})</span>`:''}${p.illusion_name?` <span class="rp-vol">イリュージョン:${p.illusion_name}</span>`:''}</div>
+            <div class="row" style="gap:.3rem"><div class="hpbar"><div class="hpfill" style="width:${Math.round(f*100)}%;background:${hpColor(f)}"></div></div><span class="rp-hp">${p.hp}/${p.max_hp}</span></div>
+            ${boosts?`<div class="rp-boost">${boosts}</div>`:''}
+            ${action?`<div class="rp-move"><span class="rp-order ${action.order===1?'first':''}" title="${action.order===1?'先攻':'後攻'}">${action.order}</span>${typeIcon(action.move)||'➤'} ${action.move}</div>`:''}
+          </div>
+        </div>`;
+      }
+      function hazardBar(sd){
+        const h=[];
+        if(sd.stealth_rock) h.push('ステルスロック');
+        if(sd.spikes) h.push('まきびし'+(sd.spikes>1?`×${sd.spikes}`:''));
+        if(sd.toxic_spikes) h.push('どくびし'+(sd.toxic_spikes>1?`×${sd.toxic_spikes}`:''));
+        if(sd.reflect) h.push('リフレクター');
+        if(sd.light_screen) h.push('ひかりのかべ');
+        if(sd.aurora_veil) h.push('オーロラベール');
+        return `<div class="rp-haz">${h.map(x=>`<span class="hazchip">${x}</span>`).join('')}</div>`;
+      }
+      function renderColumn(sd,mine,act){
+        return `<div class="rp-col ${mine?'mine':'opp'}"><div class="rp-label">${mine?'自分':'相手'}</div>${hazardBar(sd)}
+          ${sd.party.map((p,i)=>renderMon(p,i===sd.active_idx,mine,(act||{})[p.name])).join('')}</div>`;
+      }
+      function renderReplay(idx){ if(!RBATTLE)return; RTURN=Math.max(0,Math.min(idx,RBATTLE.turns.length-1)); const t=RBATTLE.turns[RTURN];
+        const wc=t.weather_count?`（あと${t.weather_count}）`:''; const wx=(t.weather&&WEATHER[t.weather])?`${WEATHER[t.weather]}${wc}　`:''; const trc=t.trick_room_count?`（あと${t.trick_room_count}）`:''; const tr=t.trick_room?`🌀 トリックルーム${trc}`:''; const ACT=parseActions(t.logs);
+        const banner=(wx||tr)?`<div class="rp-banner">${wx}${tr}</div>`:'';
+        $('replay-sides').innerHTML=`${banner}<div class="rp-grid">${renderColumn(t.side1,true,ACT[1])}${renderColumn(t.side2,false,ACT[2])}</div>`;
+        const acn={}; const a1=t.side1.party[t.side1.active_idx], a2=t.side2.party[t.side2.active_idx]; if(a1&&a2&&a1.name!==a2.name){ acn[a1.name]=1; acn[a2.name]=2; }
+        const simple=summarizeTurn(t.logs, acn);
+        $('replay-log').innerHTML =
+          `<div class="rlog-simple">${simple.length?simple.map(s=>`<div>${s}</div>`).join(''):'<div class="muted">行動なし</div>'}</div>`
+          + `<details class="rlog-detail"><summary>詳細ログを見る</summary><div class="rlog-full">${reorderLogs(t.logs||[]).map(l=>`<div>${l}</div>`).join('')||'—'}</div></details>`;
+        $('replay-turn').textContent=`ターン ${t.turn} / ${RBATTLE.turns.length-1}`;
+        const rb=$('replay-result'); if(RTURN===RBATTLE.turns.length-1){rb.textContent='🏆 '+RBATTLE.winner;rb.className='wr-tag '+(RBATTLE.result===1?'g':RBATTLE.result===2?'r':'n');}else rb.textContent=''; }
+      function stepTurn(d){stopAuto();renderReplay(RTURN+d);}
+      function toggleAuto(){if(autoTimer)stopAuto();else{$('btn-auto').textContent='停止';autoTimer=setInterval(()=>{if(RTURN>=RBATTLE.turns.length-1){stopAuto();return;}renderReplay(RTURN+1);},900);}}
+      function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;}const b=$('btn-auto');if(b)b.textContent='自動再生';}
+    </script>
+  </body>
+</html>

@@ -7,13 +7,16 @@
   観測可能な状態（現在HP割合・ランク変化・状態異常・場・メガ）はクローン元から保持する。
 - 自分側は既知なのでそのまま。ロールアウトの行動は高速な rollout_ai（既定 HeuristicAI）。
 - K個の決定化世界を全候補で共通利用（common random numbers）して候補間の分散を抑える。
+
+探索の質に関する既知の保留ケース（d2の限界に起因する違和感のある手）は
+`deferred_ai_cases.md` に記録。深化(d3)/相手モデル/価値ネット再学習の合否判定に使う。
 """
 import copy
 import random
 from typing import List, Optional
 
 from .battle import Action, Battle, BattleSide, BattleField, is_trapped
-from .data import DataLoader, NATURE_MODS
+from .data import DataLoader, NATURE_MODS, get_type_effectiveness
 from .pokemon import calc_hp, calc_stat
 from .belief import OpponentBelief
 from .ai import (HeuristicAI, _forced_charging_action, _filter_valid_by_lock,
@@ -39,7 +42,9 @@ class SearchAI:
     def __init__(self, loader: DataLoader, rollouts: int = 16, depth: int = 50,
                  season: str = "M-2", rollout_ai=None, seed: int = 0, value_fn=None,
                  roll_pessimism=None, policy_fn=None, policy_weight=0.15,
-                 adversarial: bool = False, opp_k: int = 6):
+                 adversarial: bool = False, opp_k: int = 6,
+                 tree_search: bool = False, tree_depth: int = 1, tree_k: int = 3,
+                 tree_det: int = None, tree_extend_k: int = 0):
         self.loader = loader
         self.K = rollouts
         self.depth = depth
@@ -52,11 +57,18 @@ class SearchAI:
         # tree_search=True: 深さ限定 expectiminimax。各手番(自分手×相手手)を解決し、
         #   結果状態を価値ネットで直接採点（ロールアウトを排す）。priorで上位tree_kに枝刈り、
         #   各手番をゼロ和で解く(=maximin)。tree_depth=展開する手番(ターン)数。
-        self.tree_search = False
-        self.tree_depth = 1
-        self.tree_k = 3
-        self.tree_det = max(1, rollouts)   # 決定化(相手構成サンプル)数
+        self.tree_search = tree_search
+        self.tree_depth = tree_depth
+        self.tree_k = tree_k
+        self.se_bonus = 0.15               # 枝刈り順位での抜群技ボーナス(2倍=+0.15/4倍=+0.30)
+        self.mega_tiebreak_eps = 0.05      # 同一技の素/メガが拮抗時にメガを採る閾値
+        self.dominance_eps = 0.05          # 均衡値がこの差以内の手は最悪応手で優劣判定（リスク回避）
+        self._last_worst = {}              # 直近の手ごと最悪応手値
+        self.tree_det = tree_det if tree_det is not None else max(1, rollouts)   # 決定化数
         self.tree_roll = 0.85              # 解決時の固定ダメージロール(分散低減)
+        # tree_extend_k>0: 選択的深化。tree_depthで全候補を評価後、上位tree_extend_k手だけを
+        #   tree_depth+1 で精査（d3相当を高速化）。0で無効。
+        self.tree_extend_k = tree_extend_k
         # ロールアウト相手は呼び出し側が指定（netを持つ箇所は NetGreedyAI(net) を渡す＝
         # 読みの相手も賢い前提＝AlphaZero的）。未指定時のみ HeuristicAI にフォールバック。
         self.rollout_ai = rollout_ai or HeuristicAI()
@@ -92,7 +104,23 @@ class SearchAI:
             scored = self.score_actions_adversarial(my_side, opp_side, field)
         else:
             scored = self.score_actions(my_side, opp_side, field)
-        return max(scored, key=lambda x: x[1])[0]
+        best_a, best_v = max(scored, key=lambda x: x[1])
+        # ②ドミナンス除去（リスク回避）：均衡値が最良からEPS内の手の中で、最悪応手値が最大の手を選ぶ。
+        # ＝同等の上振れなら下振れの小さい手を採る。上振れが明確に大きい手（正当な読み）は残る
+        # （EPSを超える差は対象外）。worst が無い手は均衡値で代替。
+        worst = getattr(self, "_last_worst", None) or {}
+        if self.tree_search and worst:
+            near = [(a, v) for a, v in scored if v >= best_v - self.dominance_eps]
+            if len(near) > 1:
+                best_a, best_v = max(near, key=lambda av: worst.get(self._action_index(av[0]), av[1]))
+        # メガ優越のタイブレーク：最良が「素の技」で同一技の「メガ版」が拮抗(EPS内)ならメガ版を採る。
+        if (best_a.type == "move" and best_a.move_idx is not None and best_a.move_idx >= 0
+                and not getattr(best_a, "do_mega", False)):
+            for a, v in scored:
+                if (a.type == "move" and a.move_idx == best_a.move_idx
+                        and getattr(a, "do_mega", False) and v >= best_v - self.mega_tiebreak_eps):
+                    return a
+        return best_a
 
     def score_actions(self, my_side, opp_side, field):
         """各候補行動の推定勝率を返す [(Action, score), ...]（説明・可視化用）。"""
@@ -194,15 +222,38 @@ class SearchAI:
 
     # ── 深さ限定 expectiminimax（葉＝価値ネット直接採点） ──────────────
     def score_actions_tree(self, my_side, opp_side, field):
-        """各自分手の「相手最善応手に対する、深さtree_depthの木の価値」を返す。"""
-        from .selection import solve_zero_sum
+        """各自分手の「相手最善応手に対する、深さtree_depthの木の価値」を返す。
+
+        tree_extend_k>0 なら選択的深化：まず tree_depth で全候補を評価し、上位 tree_extend_k 手だけを
+        tree_depth+1 で精査（深い読みが要る“最善手の見極め”だけ深くする＝d3相当を高速化）。
+        """
         belief = my_side.belief if my_side.belief is not None else OpponentBelief(self.loader, self.season)
         belief.observe_disclosure(my_side.opp_view)
         my_cands = self._candidate_actions(my_side, opp_side, field)
         if len(my_cands) <= 1:
             return [(my_cands[0], 1.0)] if my_cands else []
+        res = self._tree_scores_pass(my_side, opp_side, field, belief, None, self.tree_depth)
+        if res is None:
+            self._last_worst = {}
+            return self.score_actions(my_side, opp_side, field)
+        scores, worst = res
+        self._last_worst = worst   # 手ごとの最悪応手値（②ドミナンス除去で参照）
+        if self.tree_extend_k and len(my_cands) > self.tree_extend_k:
+            top = sorted(my_cands, key=lambda a: -scores.get(self._action_index(a), -1.0))[:self.tree_extend_k]
+            restrict = {self._action_index(a) for a in top}
+            deep = self._tree_scores_pass(my_side, opp_side, field, belief, restrict, self.tree_depth + 1)
+            if deep:   # 深化した上位手のみを候補に（浅い手より弱いことが確定済み）
+                dscores, dworst = deep
+                self._last_worst = dworst
+                return [(a, dscores[self._action_index(a)]) for a in top if self._action_index(a) in dscores]
+        return [(a, scores[self._action_index(a)]) for a in my_cands if self._action_index(a) in scores]
+
+    def _tree_scores_pass(self, my_side, opp_side, field, belief, restrict, depth):
+        """tree_det 個の決定化で木を解き、{行動index: 平均価値} を返す。
+        restrict=None で自分の全候補、集合指定でその行動indexのみを行（自分手）に使う。"""
+        from .selection import solve_zero_sum
         my_is_s1 = (my_side.field_idx == 0)
-        agg = [0.0] * len(my_cands); nconf = 0
+        agg = {}; wst = {}; cnt = 0
         for _ in range(self.tree_det):
             cfg = self._sample_opp_config(opp_side, belief)
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
@@ -212,34 +263,51 @@ class SearchAI:
                 if c is not None:
                     self._determinize(poke, c)
             opp_cands = self._topk_actions(dopp, dme, bfield, self.tree_k)
-            mine = self._topk_actions(dme, dopp, bfield, len(my_cands))   # 自分は全候補を保持
+            all_mine = self._candidate_actions(dme, dopp, bfield)
+            mine = [a for a in all_mine if self._action_index(a) in restrict] if restrict is not None else all_mine
             if not opp_cands or not mine:
                 continue
-            M = [[self._tree_value(bs1, bs2, bfield, a_my, a_op, my_is_s1, self.tree_depth - 1)
+            M = [[self._tree_value(bs1, bs2, bfield, a_my, a_op, my_is_s1, depth - 1)
                   for a_op in opp_cands] for a_my in mine]
             _x, y, _v = solve_zero_sum(M, iters=1500)
-            idx = {self._action_index(a): i for i, a in enumerate(mine)}
-            for c, act in enumerate(my_cands):
-                i = idx.get(self._action_index(act))
-                if i is not None:
-                    agg[c] += sum(M[i][j] * y[j] for j in range(len(opp_cands)))
-            nconf += 1
-        if nconf == 0:
-            return self.score_actions(my_side, opp_side, field)
-        return [(act, agg[c] / nconf) for c, act in enumerate(my_cands)]
+            for i, a in enumerate(mine):
+                ix = self._action_index(a)
+                agg[ix] = agg.get(ix, 0.0) + sum(M[i][j] * y[j] for j in range(len(opp_cands)))
+                wst[ix] = wst.get(ix, 0.0) + (min(M[i]) if M[i] else 0.0)   # この手の最悪応手値
+            cnt += 1
+        if cnt == 0:
+            return None
+        return ({ix: v / cnt for ix, v in agg.items()},
+                {ix: w / cnt for ix, w in wst.items()})
 
     def _topk_actions(self, side, opp, field, k):
-        """side の候補手を prior 上位 k 件に枝刈り。"""
+        """side の候補手を上位 k 件に枝刈り。
+        ベースは方策prior（≒採用率）。さらに相手対面に抜群を取れる攻撃技は加点して順位を上げ、
+        サブウェポン（アイススピナー等）の見落としを防ぐ。低採用率の技まで過剰には警戒しない
+        （加点は抜群技のみ・採用率の重みはbeliefサンプリングと方策priorが担保）。"""
         cands = self._candidate_actions(side, opp, field)
         if len(cands) <= k:
             return cands
+        pr = {}
         if self.policy_fn is not None:
             try:
                 pr = self.policy_fn(side, opp, field) or {}
-                cands = sorted(cands, key=lambda a: -pr.get(self._action_index(a), 0.0))
             except Exception:
-                pass
-        return cands[:k]
+                pr = {}
+        tgt = opp.active
+        tgt_alive = tgt is not None and getattr(tgt, "is_alive", False)
+
+        def _score(a):
+            s = pr.get(self._action_index(a), 0.0)
+            mv = getattr(a, "move", None)
+            if tgt_alive and mv and mv.power and mv.category != "status":
+                eff = get_type_effectiveness(mv.type, tgt.type1, tgt.type2)
+                if eff >= 4.0:
+                    s += self.se_bonus * 2
+                elif eff >= 2.0:
+                    s += self.se_bonus
+            return s
+        return sorted(cands, key=lambda a: -_score(a))[:k]
 
     def _tree_value(self, bs1, bs2, bfield, my_act, opp_act, my_is_s1, depth):
         """自分手・相手手を1ターン解決し、子状態を深さdepthで再帰評価（葉＝価値ネット）。"""

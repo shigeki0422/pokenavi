@@ -8,9 +8,11 @@ import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
-const posts = (await getCollection('blog'))
+const allPosts = (await getCollection('blog'))
 	.filter((post) => showDrafts || !post.data.draft)
 	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+const postsTotal = allPosts.length;
+const posts = allPosts.slice(0, 6);   // ホームは最新6件まで（全件は /blog）
 
 const allPokemonPages = (await getCollection('pokemon'))
 	.filter((p) => showDrafts || !p.data.draft)
@@ -97,6 +99,23 @@ const organizationJsonLd = {
 			ul a:hover img {
 				box-shadow: var(--box-shadow);
 			}
+			.bs-feature {
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 14px;
+				padding: 1.6rem 1.8rem;
+				background: linear-gradient(135deg, #f5f7ff, #ffffff);
+				box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+			}
+			.bs-feature h3 { margin: 0 0 0.5rem; font-size: 1.2rem; color: rgb(var(--black)); }
+			.bs-feature p { margin: 0 0 1.1rem; color: rgb(var(--gray)); font-size: 0.95rem; line-height: 1.7; }
+			.bs-points { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.2rem; padding: 0; list-style: none; }
+			.bs-points li { width: auto; background: #eef2ff; color: var(--accent-dark); font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 9999px; }
+			.bs-cta-row { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+			.bs-cta { display: inline-block; padding: 0.6rem 1.3rem; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+			.bs-cta.primary { background: var(--accent); color: #fff; }
+			.bs-cta.primary:hover { background: var(--accent-dark); }
+			.bs-cta.ghost { background: #fff; border: 1px solid var(--accent); color: var(--accent); }
+			.bs-cta.ghost:hover { background: #eef2ff; }
 			@media (max-width: 720px) {
 				.hero h1 { font-size: 1.75rem; }
 				ul li { width: 100%; }
@@ -108,7 +127,25 @@ const organizationJsonLd = {
 		<main>
 			<section class="hero">
 				<h1>データで読み解くポケモン対戦</h1>
-				<p>使用率・パーティ構成・勝率をデータの観点で分析します</p>
+				<p>対戦シミュレーション・使用率・パーティ構成をデータの観点で分析します</p>
+			</section>
+
+			<section style="margin-bottom:3rem">
+				<h2 class="section-title">バトルシミュレータ <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:6px">注目機能</span></h2>
+				<div class="bs-feature">
+					<h3>学習AI同士の対戦で、パーティの強さをデータ診断</h3>
+					<p>自己対戦で学習した対戦AIに先読み探索を組み合わせ、選んだパーティを全ランカーと総当たり。勝率・選出・1v1相性・実戦リプレイを「感覚」ではなく「対戦データ」で確認できます。</p>
+					<ul class="bs-points">
+						<li>全ランカー総当たり</li>
+						<li>勝ち筋・負け筋の分析</li>
+						<li>1v1相性表</li>
+						<li>対戦リプレイ</li>
+					</ul>
+					<div class="bs-cta-row">
+						<a class="bs-cta primary" href="/simulator">上位環境シミュレーションを使う →</a>
+						<a class="bs-cta ghost" href="/battle-simulator">バトルシミュレータとは →</a>
+					</div>
+				</div>
 			</section>
 
 			<section style="margin-bottom:3rem">
@@ -140,7 +177,7 @@ const organizationJsonLd = {
 			</section>
 
 			<section>
-				<h2 class="section-title">考察記事 <a href="/blog/" style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:8px">すべて見る →</a></h2>
+				<h2 class="section-title">考察記事 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">最新{posts.length}件</span></h2>
 				<ul>
 					{
 						posts.map((post) => (
@@ -158,6 +195,11 @@ const organizationJsonLd = {
 						))
 					}
 				</ul>
+				<div style="text-align:center;margin-top:8px">
+					<a href="/blog/" style="display:inline-block;padding:10px 28px;background:var(--accent);color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:700;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+						すべて見る（全{postsTotal}件）→
+					</a>
+				</div>
 			</section>
 		</main>
 		<Footer />

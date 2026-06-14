@@ -23,8 +23,10 @@ ACTION_DIM = 12  # move0-3(no mega), move0-3(mega), switch slot0-2, struggle
 class NetGreedyAI:
     """探索内の相手モデル: 相手手をネットの方策priorで選ぶ（中級＝ネット級の相手）。
     HeuristicAI（初級）相手の読みでは中級手筋に対処できないため、相手も賢い前提で読む。"""
-    def __init__(self, net):
+    def __init__(self, net, temperature: float = 0.0, seed: int = 0):
         self.net = net
+        self.temperature = temperature   # 0=argmax(決定的) / >0=方策priorから温度付きサンプリング
+        self._rng = random.Random(seed)
         self._fallback = HeuristicAI()
 
     def __call__(self, my_side, opp_side, field):
@@ -44,6 +46,17 @@ class NetGreedyAI:
             return self._fallback(my_side, opp_side, field)
         if not prior:
             return legal[0][0]
+        if self.temperature and self.temperature > 0:   # 温度付き: 重み w = p^(1/T)
+            T = self.temperature
+            acts = [(act, max(prior.get(ix, 0.0), 1e-9) ** (1.0 / T)) for act, ix in legal]
+            tot = sum(w for _, w in acts)
+            if tot > 0:
+                r = self._rng.random() * tot
+                for act, w in acts:
+                    r -= w
+                    if r <= 0:
+                        return act
+                return acts[-1][0]
         best = max(prior, key=prior.get)
         for act, ix in legal:
             if ix == best:

@@ -38,7 +38,7 @@ def is_trapped(poke, opponent) -> bool:
     return getattr(poke, "trapped", False) or getattr(poke, "_bound_turns", 0) > 0
 from .opponent_view import OpponentView
 
-MAX_TURNS = 50  # 無限ループ防止
+MAX_TURNS = 30  # 30ターンを超えたら引き分け（長い受け合いの打ち切り）
 
 STAT_JP = {
     "stage_attack": "こうげき",
@@ -1125,30 +1125,6 @@ def _execute_move(
             on_defender_ko(attacker, defender, dmg, logs)
             on_ko(attacker, logs)
 
-    # おやこあい（単発技のみ2回目を25%で追撃）
-    if attacker.ability == "おやこあい" and hits == 1 and total_dmg > 0 and defender.is_alive:
-        pb_dmg = max(1, math.floor(total_dmg * 0.25))
-        if defender.item == "きあいのタスキ" and defender.hp == defender.max_hp and pb_dmg >= defender.hp:
-            pb_dmg = defender.hp - 1
-            defender.item = None
-            on_item_consumed(defender, logs)
-            logs.append(f"{defender.name} のきあいのタスキ で耐えた！（おやこあい2発目）")
-        if defender.ability == "がんじょう" and defender.hp == defender.max_hp and pb_dmg >= defender.hp:
-            pb_dmg = defender.hp - 1
-        if defender.item == "きあいのハチマキ" and pb_dmg >= defender.hp and random.random() < 0.10:
-            pb_dmg = defender.hp - 1
-            logs.append(f"{defender.name} の きあいのハチマキ で耐えた！")
-        defender.take_damage(pb_dmg)
-        total_dmg += pb_dmg
-        logs.append(f"おやこあい 追撃！ {pb_dmg}ダメ")
-        if defender.is_alive:
-            on_after_hit(attacker, defender, move, logs)
-            _apply_secondary(attacker, defender, move, pb_dmg, logs, field, defender_side)
-        _rough_skin_recoil(attacker, defender, move, logs)
-        if not defender.is_alive:
-            on_defender_ko(attacker, defender, pb_dmg, logs)
-            on_ko(attacker, logs)
-
     if hits > 1:
         logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に {total_dmg}ダメ ({hits}回)")
     else:
@@ -1483,6 +1459,32 @@ def _execute_move(
 
     # 反動ダメ（すてみ系）
     _apply_recoil(attacker, defender, move, total_dmg, logs)
+
+    # おやこあい（単発技のみ2回目を25%で追撃）：本体ヒットを完全に処理・記録した後に追撃を適用する
+    if attacker.ability == "おやこあい" and hits == 1 and total_dmg > 0 and defender.is_alive:
+        pb_dmg = max(1, math.floor(total_dmg * 0.25))
+        if defender.item == "きあいのタスキ" and defender.hp == defender.max_hp and pb_dmg >= defender.hp:
+            pb_dmg = defender.hp - 1
+            defender.item = None
+            on_item_consumed(defender, logs)
+            logs.append(f"{defender.name} のきあいのタスキ で耐えた！（おやこあい2発目）")
+        if defender.ability == "がんじょう" and defender.hp == defender.max_hp and pb_dmg >= defender.hp:
+            pb_dmg = defender.hp - 1
+        if defender.item == "きあいのハチマキ" and pb_dmg >= defender.hp and random.random() < 0.10:
+            pb_dmg = defender.hp - 1
+            logs.append(f"{defender.name} の きあいのハチマキ で耐えた！")
+        defender.take_damage(pb_dmg)
+        logs.append(f"おやこあい 追撃！ {pb_dmg}ダメ")
+        pb_rough: List[str] = []
+        if defender.is_alive:
+            on_after_hit(attacker, defender, move, logs)
+            _apply_secondary(attacker, defender, move, pb_dmg, logs, field, defender_side)
+        _rough_skin_recoil(attacker, defender, move, pb_rough)
+        logs.extend(pb_rough)
+        _apply_recoil(attacker, defender, move, pb_dmg, logs)
+        if not defender.is_alive:
+            on_defender_ko(attacker, defender, pb_dmg, logs)
+            on_ko(attacker, logs)
 
     return logs
 
@@ -2373,42 +2375,41 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
     return logs
 
 
-def _check_critical(attacker: BattlePokemon, move: MoveData,
-                    defender: Optional[BattlePokemon] = None) -> bool:
-    # シェルアーマー/カブトアーマー: 急所を受けない
+HIGH_CRIT_MOVES = {
+    "きょうふのつるぎ","からじしボム","スラッシュ","カタストロフィ",
+    "シャドークロー","ナイトスラッシュ","クロスポイズン","サイコカッター","リーフブレード",
+    "3ぼんのや","ストーンエッジ","ブレイズキック",
+    "クラブハンマー","クロスチョップ","つじぎり","ドリルライナー",
+    "アクアカッター","エアカッター","ゴッドバード",
+}
+_CRIT_THRESHOLDS = {0: 1/24, 1: 1/8, 2: 1/2, 3: 1.0}
+
+
+def crit_chance(attacker: BattlePokemon, move: MoveData,
+                defender: Optional[BattlePokemon] = None) -> float:
+    """急所確率（0.0〜1.0）。必中急所(トリックフラワー/ひとでなしvs毒)は1.0。
+    ダメージ期待値の計算（選出評価・相性表）からも参照する。"""
     if defender is not None and defender.ability in ("シェルアーマー", "カブトアーマー"):
-        return False
-
-    # ひとでなし: 毒状態の相手への技は必ず急所
-    if attacker.ability == "ひとでなし" and defender is not None:
-        if defender.status in ("poison", "badpoison"):
-            return True
-
-    # トリックフラワー: 常に急所
+        return 0.0
+    if attacker.ability == "ひとでなし" and defender is not None \
+            and defender.status in ("poison", "badpoison"):
+        return 1.0
     if move.name_jp == "トリックフラワー":
-        return True
-
+        return 1.0
     stage = 0
-    high_crit_moves = {
-        "きょうふのつるぎ","からじしボム","スラッシュ","カタストロフィ",
-        "シャドークロー","ナイトスラッシュ","クロスポイズン","サイコカッター","リーフブレード",
-        "3ぼんのや","ストーンエッジ","ブレイズキック",
-        "クラブハンマー","クロスチョップ","つじぎり","ドリルライナー",
-        "アクアカッター","エアカッター","ゴッドバード",
-    }
-    if move.name_jp in high_crit_moves:
+    if move.name_jp in HIGH_CRIT_MOVES:
         stage = 1
     if attacker.ability in ("きょううん",):
         stage += 1
-    # アイテム急所補正
     from .items import get_crit_stage_bonus
     stage += get_crit_stage_bonus(attacker.item)
-    # きあいだめ等による急所ランク加算
     stage += getattr(attacker, 'crit_stage', 0)
+    return _CRIT_THRESHOLDS.get(min(stage, 3), 1.0)
 
-    thresholds = {0: 1/24, 1: 1/8, 2: 1/2, 3: 1.0}
-    rate = thresholds.get(min(stage, 3), 1.0)
-    return random.random() < rate
+
+def _check_critical(attacker: BattlePokemon, move: MoveData,
+                    defender: Optional[BattlePokemon] = None) -> bool:
+    return random.random() < crit_chance(attacker, move, defender)
 
 
 MULTI_HIT_2 = {
@@ -2918,10 +2919,11 @@ class Battle:
         max_turns: このターン数で打ち切る（ロールアウトの深さ制限用、Noneなら通常のMAX_TURNS）。"""
         return self._turn_loop(ai1, ai2, verbose, max_turns)
 
-    def run(self, ai1, ai2, verbose=False) -> int:
+    def run(self, ai1, ai2, verbose=False, on_turn=None) -> int:
         """
         バトルを実行。戻り値: 1=side1勝利, 2=side2勝利, 0=引き分け(最大ターン超過)
         ai: BattleSide, BattleField → Action を返す callable
+        on_turn: 各ターン完了時に on_turn(self) を呼ぶフック（記録/リプレイ用）。
         """
         # 対戦前の見せ合い：互いに相手の候補6体（種族・タイプ）を確認する
         self.logs.extend(self.side1.opp_view.team_preview(self.side2.party))
@@ -2931,9 +2933,9 @@ class Battle:
         _entry_effects(self.side1.active, 0, self.field, self.side2.active, self.logs, self.side1.party)
         _entry_effects(self.side2.active, 1, self.field, self.side1.active, self.logs, self.side2.party)
 
-        return self._turn_loop(ai1, ai2, verbose)
+        return self._turn_loop(ai1, ai2, verbose, on_turn=on_turn)
 
-    def _turn_loop(self, ai1, ai2, verbose=False, max_turns=None) -> int:
+    def _turn_loop(self, ai1, ai2, verbose=False, max_turns=None, on_turn=None) -> int:
         limit = MAX_TURNS if max_turns is None else min(max_turns, MAX_TURNS)
         while self.turn < limit:
             self.turn += 1
@@ -2961,6 +2963,8 @@ class Battle:
 
             action1 = ai1(self.side1, self.side2, self.field)
             action2 = ai2(self.side2, self.side1, self.field)
+            # 行動を選んだ本体を記録（先攻で倒され交代した場合、後攻の行動権を失わせるため）
+            chooser1, chooser2 = self.side1.active, self.side2.active
 
             # メガ進化（行動前）
             for _side, _action in [(self.side1, action1), (self.side2, action2)]:
@@ -2990,15 +2994,21 @@ class Battle:
                 (self.side2, action2, self.side1) if p1_first
                 else (self.side1, action1, self.side2)
             )
+            second_chooser = chooser1 if second_side is self.side1 else chooser2
 
             # 先攻行動
             self._do_action(first_side, first_opp, first_action,
                             ai2 if p1_first else ai1, opp_action=second_action)
             if not first_opp.has_alive():
+                if on_turn:
+                    on_turn(self)
                 break
 
             # 後攻行動
-            if second_side.active.flinched:
+            if second_side.active is not second_chooser:
+                # 行動者が先攻で倒されて交代済み → このターンは行動権を失う
+                pass
+            elif second_side.active.flinched:
                 self.logs.append(f"{second_side.active.name} はひるんで動けない！")
                 if second_side.active.ability == "ふくつのこころ":
                     second_side.active.stage_speed = min(6, second_side.active.stage_speed + 1)
@@ -3011,10 +3021,14 @@ class Battle:
                 if second_side.active.is_alive:
                     second_side.active._acts_second = False  # type: ignore
             if not second_opp.has_alive():
+                if on_turn:
+                    on_turn(self)
                 break
 
             # ターン終了処理
             self._end_of_turn()
+            if on_turn:
+                on_turn(self)
             if verbose:
                 print(f"T{self.turn}: {self.side1.active} vs {self.side2.active}")
 

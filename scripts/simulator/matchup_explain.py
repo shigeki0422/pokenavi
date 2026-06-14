@@ -8,9 +8,15 @@ import math
 from typing import List
 
 from .pokemon import parse_pokemon_spec, build_from_spec
-from .battle import BattleField
+from .battle import BattleField, crit_chance
 from .features import _expected_frac
 from .damage import calc_damage
+from .items import get_speed_item_multiplier
+
+
+def _eff_speed(p):
+    """実効素早さ（こだわりスカーフ等の道具補正込み）。"""
+    return p.get_effective_speed() * get_speed_item_multiplier(p.item)
 
 
 _ENDURE_ITEMS = {"きあいのタスキ"}
@@ -27,7 +33,14 @@ def _best_dmg(att, deff, fld, priority_only=False):
             if priority_only and not (mv.priority and mv.priority > 0):
                 continue
             try:
-                f = calc_damage(att, deff, mv, fld, random_roll=0.925) / max(1, deff.max_hp)
+                hp = max(1, deff.max_hp)
+                pc = crit_chance(att, mv, deff)
+                d0 = calc_damage(att, deff, mv, fld, critical=False, random_roll=0.925)
+                if pc > 0:
+                    dc = calc_damage(att, deff, mv, fld, critical=True, random_roll=0.925)
+                    f = (d0 * (1 - pc) + dc * pc) / hp
+                else:
+                    f = d0 / hp
             except Exception:
                 f = 0.0
             best = max(best, min(1.5, f))
@@ -52,7 +65,7 @@ def _verdict(a, b, fld):
             n += 1
         return n
     ta = turns(da, _endures(b)); tb = turns(db, _endures(a))
-    af = a.get_effective_speed() >= b.get_effective_speed()
+    af = _eff_speed(a) >= _eff_speed(b)
     # 先制権: 速い側が先。ただし遅い側が「優先度技でOHKO」できるなら先に動ける（相手がタスキ等で耐えない場合）
     a_first = af
     if not af and da_pri >= 1.0 and not _endures(b):
@@ -90,6 +103,10 @@ def _poke_build(p):
 def explain_matchup(specsA: List[str], specsB: List[str], loader, season: str = "M-2") -> dict:
     A = [build_from_spec(parse_pokemon_spec(s), loader, season, randomize=False) for s in specsA]
     B = [build_from_spec(parse_pokemon_spec(s), loader, season, randomize=False) for s in specsB]
+    # メガストーン持ちはメガ後の姿で1v1を評価する（戦う形態＝メガ後）
+    for p in A + B:
+        if getattr(p, "mega_data", None) is not None and not p.mega_evolved:
+            p.do_mega_evolve()
     fld = BattleField()
     cells = []
     a_lose = {i: 0 for i in range(len(A))}   # Aの各個体がBに負ける数

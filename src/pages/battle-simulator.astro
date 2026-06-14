@@ -1,0 +1,92 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'バトルシミュレータとは | ポケナビ';
+const description = 'ポケナビのバトルシミュレータの仕組み・対戦AIのレベル・できること／できないことを解説します。';
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} />
+    <style>
+      main { max-width: 780px; margin: 0 auto; padding: 2em 1.2em 4em; color: rgb(var(--gray-dark)); line-height: 1.85; }
+      h1 { font-size: 1.6rem; margin: 0 0 .4em; }
+      h2 { font-size: 1.15rem; margin: 1.8em 0 .5em; border-bottom: 1px solid #e2e8f0; padding-bottom: .3em; }
+      h3 { font-size: 1.02rem; margin: 1.2em 0 .4em; color: rgb(var(--gray-dark)); }
+      p, li { font-size: .95rem; }
+      ul { padding-left: 1.3em; }
+      .lead { color: rgb(var(--gray)); font-size: .92rem; }
+      a { color: var(--accent); }
+      .cta { display:inline-block; margin-top:1em; padding:.55em 1.3em; background:var(--accent); color:#fff; border-radius:8px; text-decoration:none; font-weight:700; font-size:.9rem; }
+      .note { background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:.8em 1em; font-size:.88rem; margin:1em 0; }
+      table { width:100%; border-collapse:collapse; font-size:.88rem; margin:.8em 0; }
+      th,td { border:1px solid #e2e8f0; padding:.45em .7em; text-align:left; }
+      th { background:#f8fafc; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>バトルシミュレータとは</h1>
+      <p>バトルシミュレータは、ポケモン対戦をシミュレータ上で再現し、さまざまなパーティ同士のバトル・勝敗を予測することで、<strong>パーティの強み・弱みを発見し、環境の動向の把握から、より良いパーティの提案までを目指すサービス</strong>です。</p>
+      <p class="lead">対象はポケモンチャンピオンズ（シングル）。学習した対戦AI同士を実際に戦わせて分析し、勝率や相性を「感覚」ではなく「対戦データ」で確かめられます。</p>
+
+      <h2>対戦AIのレベル</h2>
+      <p>対戦AIは、<strong>自己対戦（AlphaZero型）で学習したニューラルネット（方策＋価値）に、先読み探索を組み合わせたもの</strong>です。各局面で「自分の手 × 相手の手」を展開し、結果の局面を価値ネットで評価して、<strong>最悪のケースでも損が小さい最善手（maximin）</strong>を選びます。相手の手は決め打ちせず、最善応手を想定して読みます。</p>
+      <ul>
+        <li><strong>相手の型は採用率から推定</strong>：持ち物・性格・技・努力値は使用率データから確率的に想定し、対戦中の被ダメージから絞り込みます（不完全情報を前提）。</li>
+        <li><strong>強さの目安</strong>：単純なルールAI（初級）には明確に勝ち越します。目標は「中級者と互角〜やや上」で、読み合い・受け回しなどの上級の駆け引きは発展途上です。</li>
+        <li><strong>指し手は決定的</strong>：同じ局面では常に最善と考える手を選びます（上位環境シミュレーションでは選出・型のばらつきで対戦内容が変化します）。</li>
+        <li><strong>未習熟の戦略</strong>：バトンタッチでの能力引き継ぎや、イリュージョン（姿を偽る）を絡めた高度な戦略はまだ学習途中です。</li>
+      </ul>
+      <p class="lead">※ 完璧な最適解ではありません。あくまで「強めのAI同士の対戦データ」として、傾向の把握にお使いください。</p>
+
+      <h2>上位環境シミュレーション（総当たり）</h2>
+      <p>対象は<strong>構築記事を公開いただいている環境トッププレイヤーのパーティ</strong>です。選んだパーティを、それら各プレイヤーのパーティと総当たりさせ、全対戦の記録を保存します。結果から次を確認できます。</p>
+      <ul>
+        <li><strong>勝率・得意/苦手</strong>：相手プレイヤーごとの勝率。</li>
+        <li><strong>選出</strong>：実際に選出された3体（自分・相手）の頻度。</li>
+        <li><strong>1v1相性表</strong>：6×6の与ダメ/被ダメと勝敗。</li>
+        <li><strong>実戦の敗因</strong>：倒し切れない核・落ちやすい個体・積み全抜きの傾向。</li>
+        <li><strong>リプレイ</strong>：保存された全対戦を後から再生して確認できます。</li>
+      </ul>
+
+      <h2>仕組み</h2>
+      <table>
+        <tr><th>項目</th><th>内容</th></tr>
+        <tr><td>対象</td><td>ポケモンチャンピオンズ シングル（Lv50・努力値32スケール）</td></tr>
+        <tr><td>AI</td><td>方策＋価値ネット ＋ 深さ2の同時手番ゼロ和探索（maximin）</td></tr>
+        <tr><td>1カードの対戦数</td><td>複数戦（選出・型・乱数のばらつきを反映。順次拡張）</td></tr>
+        <tr><td>引き分け</td><td>30ターンを超えても決着しなければ引き分け</td></tr>
+      </table>
+
+      <h2>注意・限界</h2>
+      <div class="note">
+        <ul style="margin:0">
+          <li><strong>勝率の粒度</strong>：勝率は対戦数に応じた粒度で表示されます（対戦数を増やすほど精細になります）。</li>
+          <li><strong>選出視点</strong>：6体の相性が良くても、選出した3体が偏れば結果は変わります。現状は選出を踏まえた分析を表示していますが、選出パターン全体の最適化は今後の課題です。</li>
+          <li><strong>AIの強さ</strong>：上級者の高度な読み合いには及ばない場合があります。データの傾向として参考にしてください。</li>
+        </ul>
+      </div>
+
+      <h2>今後の予定（ロードマップ）</h2>
+      <p>現在の<strong>上位環境シミュレーション（対戦評価）</strong>を土台に、機能追加と既存機能の改善を進めます。</p>
+      <h3>機能追加：パーティ提案・改善分析</h3>
+      <ul>
+        <li><strong>改善提案</strong>：今の6体の「どこを変えればより勝てるか」をAIが分析し、技・持ち物・性格・努力値・個体の入れ替え候補を提示します。</li>
+        <li><strong>一部指定で残りを提案</strong>：数体だけ固定し、残りの枠をAIが環境に合わせて提案します。</li>
+        <li><strong>勝率の再評価</strong>：提案後のパーティを再び総当たりにかけ、変更前後の勝率変化を比較します。</li>
+      </ul>
+      <h3>機能改善</h3>
+      <ul>
+        <li><strong>M-2上位構築の追加</strong>：対象とするトッププレイヤーの構築を順次追加し、総当たりの網羅性を高めます。</li>
+        <li><strong>M-3環境への適応</strong>：新シーズンの使用率・構築データに合わせて対戦AIと対象構築を更新します。新たに解禁されるポケモン・持ち物のシミュレータ対応も進めます。</li>
+      </ul>
+
+      <a class="cta" href="/simulator">上位環境シミュレーションを使う →</a>
+    </main>
+    <Footer />
+  </body>
+</html>
