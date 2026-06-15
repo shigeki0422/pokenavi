@@ -75,7 +75,9 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       .tic{width:15px;height:15px;vertical-align:-2px}
       .iic{width:24px;height:24px;object-fit:contain;vertical-align:-7px;margin-right:2px}
       .iic-spr{display:inline-block;background-image:url('/images/items/item-sprite.png');background-size:480px 648px}
-      .rp-move{font-size:.66rem;color:var(--accent-dark);font-weight:700;margin-top:.18em;display:flex;align-items:center;gap:.15em}
+      .rp-move{font-size:.66rem;color:var(--accent-dark);font-weight:700;margin-top:.18em;display:flex;align-items:center;gap:.15em;white-space:nowrap;min-width:0}
+      .rp-move>span:last-child,.rp-move{overflow:hidden}
+      .rp-badges span{white-space:nowrap}
       .rp-move .tic{width:13px;height:13px}
       .rp-col.opp .rp-move{color:#b91c1c}
       .rp-order{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:#94a3b8;color:#fff;font-size:.55rem;font-weight:800;flex-shrink:0}
@@ -179,7 +181,9 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       .rp-x{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.7rem;color:#ef4444;font-weight:800}
       .rp-active-badge{position:absolute;top:-3px;left:-3px;font-size:.7rem;line-height:1}
       .rp-mon-body{flex:1;min-width:0}
-      .rp-mon-name{font-size:.76rem;font-weight:700;margin-bottom:.2em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .rp-mon-name{font-size:.76rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .rp-badges{display:flex;flex-wrap:wrap;gap:2px;margin:.15em 0}
+      .rp-badges:empty{display:none}
       .rp-hp{font-size:.64rem;color:rgb(var(--gray));width:3.4rem;text-align:right;flex-shrink:0}
       .rp-boost{font-size:.64rem;font-weight:700;margin-top:.15em}
       .rp-boost .bup{color:#16a34a} .rp-boost .bdn{color:#dc2626}
@@ -294,18 +298,23 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       // 盤面の行動表示。技の所属側を「確認(相手の技=3-n)」「減少(自分の与ダメ=n)」から判定し、
       // ダメ行/確認行/外し行で (名前,技) を拾う。確認行の無い再使用技(ドラゴンテール等)も取りこぼさない。
       // side1=自分(P1), side2=相手(P2)。ミラー(両者同名)でも取り違えない。
-      function parseActions(logs){ const m={1:{},2:{}}; let ord=0; const moveSide={};
+      function parseActions(logs, actives){ const m={1:{},2:{}}; let ord=0; const moveSide={};
         (logs||[]).forEach(raw=>{ const pm=raw.match(/^▷P(\d+):\s*/); if(!pm)return; const obs=+pm[1]; if(obs!==1&&obs!==2)return; const l=raw.slice(pm[0].length); let r;
           if(r=l.match(/^(.+?) の技【(.+?)】を確認/)) moveSide[r[2]]=3-obs;
           else if(r=l.match(/^(.+?) に (.+?) で (?:約)?-?\d+% 減少/)){ if(moveSide[r[2]]==null) moveSide[r[2]]=obs; }
         });
-        (logs||[]).forEach(raw=>{ const l=raw.replace(/^▷P\d+:\s*/,''); let r,name,move;
-          if(r=l.match(/^(.+?) の (.+?) → .+? に \d+ダメ/)){name=r[1];move=r[2];}
-          else if(r=l.match(/^(.+?) の (.+?) は外れた/)){name=r[1];move=r[2];}
-          else if(r=l.match(/^(.+?) の技【(.+?)】を確認/)){name=r[1];move=r[2];}
-          else return;
-          const side=moveSide[move]; if(side!==1&&side!==2)return;
-          if(!m[side][name]) m[side][name]={move, order:++ord};
+        const put=(side,name,move,force)=>{ if(side!==1&&side!==2)return; if(force||!m[side][name]) m[side][name]={move, order:(m[side][name]?m[side][name].order:++ord)}; };
+        (logs||[]).forEach(raw=>{ const l=raw.replace(/^▷P\d+:\s*/,''); let r;
+          if(r=l.match(/^(.+?) の (.+?) → .+? に \d+ダメ/)) put(moveSide[r[2]],r[1],r[2]);
+          else if(r=l.match(/^(.+?) の (.+?) は外れた/)) put(moveSide[r[2]],r[1],r[2]);
+          else if(r=l.match(/^(.+?) の技【(.+?)】を確認/)) put(moveSide[r[2]],r[1],r[2]);
+          // 確認/減少の無い再使用技も拾う（守り系・防がれた技など）。側は盤面のアクティブ名で確定。
+          else if(actives){
+            if(r=l.match(/^(.+?) の (キングシールド|トーチカ|ニードルガード|まもる|みきり|こらえる)！/)) put(actives[r[1]],r[1],r[2],true);
+            else if(r=l.match(/^(.+?) は身を守っている/)) put(actives[r[1]],r[1],'守り');
+            else if(r=l.match(/^(.+?) の (.+?) は .+? に防がれた/)) put(actives[r[1]],r[1],r[2]);
+            else if(r=l.match(/^(.+?) は (.+?) を使った/)) put(actives[r[1]],r[1],r[2]);
+          }
         });
         return m; }
       // 詳細ログの表示順補正：おやこあいの「追撃」は本体ヒットの後に判定されるので、本体ダメ行の後ろへ入れ替える
@@ -319,7 +328,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       // 簡易ログ：技・交代を発生順に1行ずつ（①②で行動順、各行に技→対象・与ダメ・結果）
       function summarizeTurn(logs, actives){
         const events=[]; const megaed=new Set(); let ord=0, last=null, pendingOut=null;
-        const moveOwner={}; const sideName={}; const SIDEJP={1:'自分',2:'相手'};
+        const moveOwner={}; const sideName={}; const protectAct={}; const SIDEJP={1:'自分',2:'相手'};
         const newAct=(side,name,move)=>{ const e={kind:'act',side:side||0,order:++ord,name,move,target:null,dmg:null,tags:[]}; if(side)sideName[side+'|'+name]=e; if(move)moveOwner[move]=e; events.push(e); last=e; return e; };
         // 行動は技名(moveOwner)でのみ照合する。名前だけの照合はミラー(同名)で別の技に化けるため禁止。
         const findActor=(name,move)=>{ return (move&&moveOwner[move])?moveOwner[move]:null; };
@@ -334,6 +343,12 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           if(m=l.match(/^(.+?) の技【(.+?)】を確認/)){ let e=side?sideName[side+'|'+m[1]]:null; if(!e){ e=newAct(side,m[1],m[2]); } else { last=e; } if(m[2])moveOwner[m[2]]=e; return; }
           if(m=l.match(/^(.+?) の (.+?) は外れた/)){ const e=findActor(m[1],m[2])||newAct(side,m[1],m[2]); e.tags.push('外し'); last=e; return; }
           if(m=l.match(/^(.+?) はひるんで動けない/)){ const e=findActor(m[1],null)||newAct(side,m[1],'ひるみで動けない'); last=e; return; }
+          // 守り系：再使用ターンは確認行が無いので「身を守っている」「X の キングシールド！」から拾う
+          if(m=l.match(/^(.+?) は身を守っている/)){ const nm=m[1]; let e=events.find(x=>x.kind==='act'&&x.name===nm); if(!e){ e=newAct((actives&&actives[nm])||0,nm,'守り'); } protectAct[nm]=e; last=e; return; }
+          if(m=l.match(/^(.+?) の (キングシールド|トーチカ|ニードルガード|まもる|みきり|こらえる)！/)){ const e=protectAct[m[1]]; if(e){ e.move=m[2]; last=e; } return; }
+          if(m=l.match(/^(.+?) は疲れてこんらんした/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：こんらん（あばれ終了）`}); return; }
+          if(m=l.match(/^(.+?) はこんらんして自分を傷つけた/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：こんらんで自傷`}); return; }
+          if(m=l.match(/^(.+?) はこんらんした/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：こんらんになった`}); return; }
           if(m=l.match(/^(.+?) は引っ込んだ/)){ pendingOut=m[1]; return; }
           if(m=l.match(/^(.+?) が出てきた/)){ events.push({kind:'sw',order:++ord,text:pendingOut?`${pendingOut} → ${m[1]}`:`${m[1]} 繰り出し`}); pendingOut=null; last=null; return; }
           if(m=l.match(/^(.+?) が登場した/)){ events.push({kind:'sw',order:++ord,text:`${m[1]}（瀕死後）`}); last=null; return; }
@@ -347,7 +362,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           if(m=l.match(/^(.+?) の (.+?) が叩き落とされた！/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]} の ${m[2]} を落とした`}); return; }
           if(m=l.match(/^(.+?) の ばけのかわ が破れた！\((\d+)\)/)){ const e=(last&&last.kind==='act')?last:null; if(e){ e.target=m[1]; e.dmg=+m[2]; if(!e.tags.includes('ばけのかわ')) e.tags.push('ばけのかわ'); } else { events.push({kind:'dmg',order:++ord,text:`${m[1]}：ばけのかわ が破れた（${m[2]}）`}); } return; }
           if(m=l.match(/^(.+?) は (.+?) に効かない/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]} は ${m[2]} に無効（効果なし）`}); return; }
-          if(m=l.match(/^(.+?) の (.+?) は (.+?) に防がれた/)){ const e=findActor(m[1],m[2]); if(e){ if(!e.tags.includes('防がれた')) e.tags.push('防がれた'); } else { events.push({kind:'dmg',order:++ord,text:`${m[2]} は ${m[3]} に防がれた`}); } return; }
+          if(m=l.match(/^(.+?) の (.+?) は (.+?) に防がれた/)){ let e=findActor(m[1],m[2]); if(!e){ e=newAct((actives&&actives[m[1]])||0,m[1],m[2]); } if(!e.tags.includes('防がれた')) e.tags.push('防がれた'); last=e; return; }
           if(m=l.match(/^(.+?) の オボンのみ が発動！ HPが (\d+) 回復/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：オボンのみ +${m[2]}回復`}); return; }
           if(m=l.match(/^(.+?) の でんきにかえる！/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：でんきにかえる（充電）`}); return; }
           if(m=l.match(/^(.+?) (?:の|は) (.+?) で HPが (\d+) 回復/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：${m[2]} +${m[3]}回復`}); return; }
@@ -672,7 +687,8 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
         return `<div class="rp-mon ${active?'act':''} ${p.alive?'':'dead'}">
           <div class="rp-mon-ico">${u?`<img src="${u}" alt="${p.name}" onerror="this.style.display='none'">`:''}${active?`<span class="rp-active-badge">${mine?'🔵':'🔴'}</span>`:''}${p.alive?'':'<span class="rp-x">×</span>'}</div>
           <div class="rp-mon-body">
-            <div class="rp-mon-name">${p.name}${typeIconName(p.type1)}${p.type2?typeIconName(p.type2):''}${p.mega?' <span class="rp-mega">メガ</span>':''}${p.blade_forme?' <span class="rp-forme">ブレード</span>':''}${p.hero?' <span class="rp-forme">マイティ</span>':''}${p.status?` <span class="rp-status">${STATUS_JP[p.status]||p.status}</span>`:''}${p.disguise_broken?' <span class="rp-disg">皮破れ</span>':''}${p.electro_charged?' <span class="rp-charge">充電</span>':''}${p.confused?' <span class="rp-vol">😵こんらん</span>':''}${p.seeded?' <span class="rp-vol">🌱やどりぎ</span>':''}${p.taunt?' <span class="rp-vol">😈ちょうはつ</span>':''}${p.encore?' <span class="rp-vol">🔄アンコール</span>':''}${p.salted?' <span class="rp-vol">🧂しおづけ</span>':''}${p.transformed?' <span class="rp-vol">🎭へんしん</span>':''}${p.substitute_hp?` <span class="rp-vol">🪆みがわり(${p.substitute_hp})</span>`:''}${p.illusion_name?` <span class="rp-vol">イリュージョン:${p.illusion_name}</span>`:''}</div>
+            <div class="rp-mon-name">${p.name}${typeIconName(p.type1)}${p.type2?typeIconName(p.type2):''}</div>
+            ${(()=>{const b=`${p.mega?'<span class="rp-mega">メガ</span>':''}${p.blade_forme?'<span class="rp-forme">ブレード</span>':''}${p.hero?'<span class="rp-forme">マイティ</span>':''}${p.status?`<span class="rp-status">${STATUS_JP[p.status]||p.status}</span>`:''}${p.disguise_broken?'<span class="rp-disg">皮破れ</span>':''}${p.electro_charged?'<span class="rp-charge">充電</span>':''}${p.confused?'<span class="rp-vol">😵こんらん</span>':''}${p.seeded?'<span class="rp-vol">🌱やどりぎ</span>':''}${p.taunt?'<span class="rp-vol">😈ちょうはつ</span>':''}${p.encore?'<span class="rp-vol">🔄アンコール</span>':''}${p.salted?'<span class="rp-vol">🧂しおづけ</span>':''}${p.transformed?'<span class="rp-vol">🎭へんしん</span>':''}${p.substitute_hp?`<span class="rp-vol">🪆みがわり(${p.substitute_hp})</span>`:''}${p.illusion_name?`<span class="rp-vol">イリュージョン:${p.illusion_name}</span>`:''}`;return b?`<div class="rp-badges">${b}</div>`:'';})()}
             <div class="row" style="gap:.3rem"><div class="hpbar"><div class="hpfill" style="width:${Math.round(f*100)}%;background:${hpColor(f)}"></div></div><span class="rp-hp">${p.hp}/${p.max_hp}</span></div>
             ${boosts?`<div class="rp-boost">${boosts}</div>`:''}
             ${action?`<div class="rp-move"><span class="rp-order ${action.order===1?'first':''}" title="${action.order===1?'先攻':'後攻'}">${action.order}</span>${typeIcon(action.move)||'➤'} ${action.move}</div>`:''}
@@ -694,10 +710,10 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           ${sd.party.map((p,i)=>renderMon(p,i===sd.active_idx,mine,(act||{})[p.name])).join('')}</div>`;
       }
       function renderReplay(idx){ if(!RBATTLE)return; RTURN=Math.max(0,Math.min(idx,RBATTLE.turns.length-1)); const t=RBATTLE.turns[RTURN];
-        const wc=t.weather_count?`（あと${t.weather_count}）`:''; const wx=(t.weather&&WEATHER[t.weather])?`${WEATHER[t.weather]}${wc}　`:''; const trc=t.trick_room_count?`（あと${t.trick_room_count}）`:''; const tr=t.trick_room?`🌀 トリックルーム${trc}`:''; const ACT=parseActions(t.logs);
+        const acn={}; const a1=t.side1.party[t.side1.active_idx], a2=t.side2.party[t.side2.active_idx]; if(a1&&a2&&a1.name!==a2.name){ acn[a1.name]=1; acn[a2.name]=2; }
+        const wc=t.weather_count?`（あと${t.weather_count}）`:''; const wx=(t.weather&&WEATHER[t.weather])?`${WEATHER[t.weather]}${wc}　`:''; const trc=t.trick_room_count?`（あと${t.trick_room_count}）`:''; const tr=t.trick_room?`🌀 トリックルーム${trc}`:''; const ACT=parseActions(t.logs, acn);
         const banner=(wx||tr)?`<div class="rp-banner">${wx}${tr}</div>`:'';
         $('replay-sides').innerHTML=`${banner}<div class="rp-grid">${renderColumn(t.side1,true,ACT[1])}${renderColumn(t.side2,false,ACT[2])}</div>`;
-        const acn={}; const a1=t.side1.party[t.side1.active_idx], a2=t.side2.party[t.side2.active_idx]; if(a1&&a2&&a1.name!==a2.name){ acn[a1.name]=1; acn[a2.name]=2; }
         const simple=summarizeTurn(t.logs, acn);
         $('replay-log').innerHTML =
           `<div class="rlog-simple">${simple.length?simple.map(s=>`<div>${s}</div>`).join(''):'<div class="muted">行動なし</div>'}</div>`
