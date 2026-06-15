@@ -21,6 +21,13 @@ src/
 └── styles/          # グローバルCSS
 ```
 
+## OGP画像ルール（必須）
+- **`src/pages/` に新規ページを作成する際は、必ず `BaseHead` に `imageUrl` または `image` を指定する**
+  - ブログ記事レイアウト（BlogPost.astro）: `image={heroImage}` → heroImageが自動でOGPになる
+  - 固定ページ（simulator, tools等）: `imageUrl="/og-image.png"` → サイト共通OGPを使う
+- 指定しないと Astro のデフォルト画像（"Build the web you want"）がXカードに表示される
+- X投稿時はURLに `?v=X`（バージョン番号）を付けてキャッシュを回避する
+
 ## コンテンツ規約
 - ブログ記事は `src/content/blog/` に Markdown で追加
 - ファイル名: `{pokemon-name}-analysis.md`（ハイフン区切り、英語）
