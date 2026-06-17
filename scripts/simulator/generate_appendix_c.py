@@ -19,7 +19,8 @@ MEGA_EFFECT = "対応するポケモンがバトル中にメガシンカでき�
 
 
 def is_mega(name: str) -> bool:
-    return name.endswith("ナイト") or name.endswith("ナイトＸ") or name.endswith("ナイトＹ")
+    return (name.endswith("ナイト") or name.endswith("ナイトＸ") or name.endswith("ナイトＹ")
+            or name.endswith("ナイトX") or name.endswith("ナイトY"))
 
 
 # 非メガ環境アイテムの効果文（真実源）

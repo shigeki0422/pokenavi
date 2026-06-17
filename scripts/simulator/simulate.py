@@ -9,7 +9,8 @@ from typing import List, Optional, Callable
 from .data import DataLoader
 from .pokemon import BattlePokemon, build_from_template, parse_pokemon_spec, build_from_spec
 from .battle import Battle, BattleSide, BattleField
-from .ai import HeuristicAI, select_party
+from .ai import HeuristicAI
+from .learned_selection import learned_select_party as select_party  # MCTS教師の学習選出(無効時はheuristic自動フォールバック)
 
 DEFAULT_LOADER: Optional[DataLoader] = None
 

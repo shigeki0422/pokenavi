@@ -12,6 +12,7 @@
 `deferred_ai_cases.md` に記録。深化(d3)/相手モデル/価値ネット再学習の合否判定に使う。
 """
 import copy
+import math
 import random
 from typing import List, Optional
 
@@ -85,6 +86,34 @@ class SearchAI:
         # スコアに policy_weight*prior を加算し、人間の手筋（模倣方策）へソフトに寄せる（PUCT的）。
         self.policy_fn = policy_fn
         self.policy_weight = policy_weight
+        # mcts=True: 全幅expectiminimaxの代わりに IS-MCTS + Decoupled PUCT(DUCT) で探索。
+        #   コストが固定幅 k^(2d-1) でなくシミュ本数 mcts_sims に線形化し、深さは有望ラインに沿って
+        #   選択的に伸びる。葉は価値ネット、priorは方策ネット（＝本物のPUCT/AlphaZero）。
+        #   同時手番は両者独立PUCT、確率(相手隠れ情報)はシミュ毎の決定化で平均(IS-MCTS)。
+        self.mcts = False
+        self.mcts_sims = 400
+        self.c_puct = 1.5
+        self.mcts_fpu = 0.5          # 未訪問手の初期Q(first-play urgency)
+        self.mcts_p_floor = 1e-3     # prior未定義手の最小prior
+        self.mcts_max_depth = 60     # 1シミュの最大実ターン降下数
+        # 各ノードの手の選び方。"duct"=独立PUCT(純粋戦略に収束)、
+        #   "regret"=regret-matching / "exp3"=Exp3（いずれも混合ナッシュ均衡に収束＝同時手番に正しい）。
+        self.mcts_select = "duct"
+        self.rm_prior_mix = 0.25     # regret-matching: 方策priorとの混合率(ネット知識のウォームスタート)
+        self.exp3_eta = 0.05         # Exp3: 学習率
+        self.exp3_gamma = 0.1        # Exp3: 一様探索率(最小確率 gamma/K を保証)
+        # net_eval(s1,s2,f)->(policy_dict, value): encode_state+ネットforwardを1回で方策と価値の両方を返す統合関数。
+        #   設定すると葉展開での value_fn/policy_fn の重複encode+forwardを排除（同一side順はメモ化）。
+        #   未設定(None)なら従来どおり value_fn/policy_fn を個別に呼ぶ（既存挙動・デフォルト）。
+        self.net_eval = None
+        # fast_clone=True: MCTSの状態複製で belief を deepcopy しない（共有/分離）。
+        #   beliefは根での相手構成サンプリングに使うのみでシミュ降下中は参照されないため安全（ビット一致）。
+        self.fast_clone = False
+        # mcts_cache=True: 各ノードに解決後の状態をキャッシュし、降下時の再解決・再cloneを排除（~2x）。
+        #   1手内では相手構成を固定（IS-MCTSの逐次再決定化を廃す）代わりに mcts_ensemble 個の
+        #   決定化ツリーで平均化して隠れ情報のロバスト性を保つ。挙動が変わるので強さは要A/B検証。
+        self.mcts_cache = False
+        self.mcts_ensemble = 16
 
     # ── 公開API（AIコールバック） ──────────────────────────────────
     def __call__(self, my_side: BattleSide, opp_side: BattleSide, field: BattleField) -> Action:
@@ -98,6 +127,8 @@ class SearchAI:
         cands = self._candidate_actions(my_side, opp_side, field)
         if len(cands) <= 1:
             return cands[0] if cands else self._fallback(my_side, opp_side, field)
+        if self.mcts:
+            return self._mcts_choose(my_side, opp_side, field, cands)
         if self.tree_search:
             scored = self.score_actions_tree(my_side, opp_side, field)
         elif self.adversarial:
@@ -270,6 +301,7 @@ class SearchAI:
             M = [[self._tree_value(bs1, bs2, bfield, a_my, a_op, my_is_s1, depth - 1)
                   for a_op in opp_cands] for a_my in mine]
             _x, y, _v = solve_zero_sum(M, iters=1500)
+            y = self._opp_blend(y, opp_cands, dopp, dme, bfield)
             for i, a in enumerate(mine):
                 ix = self._action_index(a)
                 agg[ix] = agg.get(ix, 0.0) + sum(M[i][j] * y[j] for j in range(len(opp_cands)))
@@ -279,6 +311,24 @@ class SearchAI:
             return None
         return ({ix: v / cnt for ix, v in agg.items()},
                 {ix: w / cnt for ix, w in wst.items()})
+
+    def _opp_blend(self, y, opp_cands, side, opp, field):
+        """相手の混合戦略 y（maximin均衡）を、相手の方策prior（≒人間的に自然な手）とブレンド。
+        opp_mix=1.0 で純maximin（従来）、<1.0 で「低確率の相手交代の過大評価」を是正。
+        y_blend = b*y + (1-b)*prior。"""
+        b = getattr(self, "opp_mix", 1.0)
+        if b >= 1.0 or self.policy_fn is None or not opp_cands:
+            return y
+        try:
+            pr = self.policy_fn(side, opp, field) or {}
+        except Exception:
+            return y
+        p = [max(0.0, pr.get(self._action_index(a), 0.0)) for a in opp_cands]
+        s = sum(p)
+        if s <= 0:
+            return y
+        p = [pi / s for pi in p]
+        return [b * y[j] + (1.0 - b) * p[j] for j in range(len(opp_cands))]
 
     def _topk_actions(self, side, opp, field, k):
         """side の候補手を上位 k 件に枝刈り。
@@ -337,8 +387,370 @@ class SearchAI:
             return self._leaf_value(b, my_is_s1)
         M = [[self._tree_value(b.side1, b.side2, b.field, am, ao, my_is_s1, depth - 1)
               for ao in op_next] for am in my_next]
-        _x, _y, val = solve_zero_sum(M, iters=1000)
+        _x, yv, val = solve_zero_sum(M, iters=1000)
+        yb = self._opp_blend(yv, op_next, op_sub, me_sub, b.field)
+        if yb is not yv:   # ブレンド時は「ブレンド相手への最善応手」を局面価値とする
+            val = max(sum(M[i][j] * yb[j] for j in range(len(op_next))) for i in range(len(my_next)))
         return val
+
+    # ── IS-MCTS + Decoupled PUCT（深さの指数爆発を回避する選択的探索） ──────
+    def _mcts_choose(self, my_side, opp_side, field, cands) -> Action:
+        """mcts_sims 回のシミュレーションで根の手を選ぶ。最多訪問手を採用（AlphaZero流）。"""
+        scored = self.score_actions_mcts(my_side, opp_side, field, cands)
+        self._last_worst = {}
+        best_a, best_v = max(scored, key=lambda x: x[1])   # x[1]=訪問数（同点はQでタイブレーク済）
+        # メガ優越タイブレーク：最良が素技で同一技のメガ版が拮抗(訪問近い)ならメガ版
+        if (best_a.type == "move" and best_a.move_idx is not None and best_a.move_idx >= 0
+                and not getattr(best_a, "do_mega", False)):
+            for a, v in scored:
+                if (a.type == "move" and a.move_idx == best_a.move_idx
+                        and getattr(a, "do_mega", False) and v >= best_v * 0.9):
+                    return a
+        return best_a
+
+    def _clone_state(self, s1, s2, field):
+        """MCTSシミュ用の独立コピー。fast_clone時は belief を deepcopy せず分離（シミュ中不使用）。"""
+        if not self.fast_clone:
+            return copy.deepcopy((s1, s2, field))
+        b1, b2 = getattr(s1, "belief", None), getattr(s2, "belief", None)
+        s1.belief = None; s2.belief = None
+        try:
+            cs1, cs2, cf = copy.deepcopy((s1, s2, field))
+        finally:
+            s1.belief = b1; s2.belief = b2
+        return cs1, cs2, cf
+
+    def _build_mcts_root(self, my_side, opp_side, field, cands):
+        """mcts_sims回シミュして根ノードを構築し (root, root_my, my_is_s1) を返す。"""
+        if self.mcts_cache:
+            return self._build_mcts_root_cached(my_side, opp_side, field, cands)
+        belief = my_side.belief if my_side.belief is not None else OpponentBelief(self.loader, self.season)
+        belief.observe_disclosure(my_side.opp_view)
+        my_is_s1 = (my_side.field_idx == 0)
+        root_my = cands if cands is not None else self._candidate_actions(my_side, opp_side, field)
+        root = self._new_node()
+        if len(root_my) <= 1:
+            return root, root_my, my_is_s1
+        for t in range(self.mcts_sims):
+            s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
+            cs1, cs2, cfield = self._clone_state(s1, s2, field)
+            cfg = self._sample_opp_config(opp_side, belief)
+            dopp = cs2 if my_is_s1 else cs1
+            for poke, c in zip(dopp.party, cfg):
+                if c is not None:
+                    self._determinize(poke, c)
+            self._mcts_simulate(root, cs1, cs2, cfield, my_is_s1)
+        return root, root_my, my_is_s1
+
+    def _build_mcts_root_cached(self, my_side, opp_side, field, cands):
+        """状態キャッシュ版：mcts_ensemble個の決定化ツリー(各 sims/E)で探索し、根の訪問を集約。
+        各ツリーはノードに解決後状態を持ち、降下時の再解決・再cloneを排除する。
+        戻り値は擬似root {"N":[集約,{}], "W":[集約,{}]}（下流は root["N"][0]/["W"][0] を読む）。"""
+        belief = my_side.belief if my_side.belief is not None else OpponentBelief(self.loader, self.season)
+        belief.observe_disclosure(my_side.opp_view)
+        my_is_s1 = (my_side.field_idx == 0)
+        root_my = cands if cands is not None else self._candidate_actions(my_side, opp_side, field)
+        aggN = {}; aggW = {}
+        if len(root_my) <= 1:
+            return {"N": [aggN, {}], "W": [aggW, {}]}, root_my, my_is_s1
+        E = max(1, self.mcts_ensemble)
+        per = max(1, self.mcts_sims // E)
+        for _e in range(E):
+            s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
+            cs1, cs2, cfield = self._clone_state(s1, s2, field)
+            cfg = self._sample_opp_config(opp_side, belief)
+            dopp = cs2 if my_is_s1 else cs1
+            for poke, c in zip(dopp.party, cfg):
+                if c is not None:
+                    self._determinize(poke, c)
+            root = self._new_node(); root["state"] = (cs1, cs2, cfield)
+            self._expand_state_node(root, my_is_s1)
+            for _t in range(per):
+                self._mcts_simulate_cached(root, my_is_s1)
+            for ix, n in root["N"][0].items():
+                aggN[ix] = aggN.get(ix, 0) + n
+                aggW[ix] = aggW.get(ix, 0.0) + root["W"][0].get(ix, 0.0)
+        return {"N": [aggN, {}], "W": [aggW, {}]}, root_my, my_is_s1
+
+    def _expand_state_node(self, node, my_is_s1):
+        """node["state"] から両者priorを設定し、葉価値(自分視点)を返す。net_eval優先。"""
+        cs1, cs2, cfield = node["state"]
+        if self.net_eval is not None:
+            return self._expand_with_value(node, cs1, cs2, cfield, my_is_s1)
+        self._expand_node(node, cs1, cs2, cfield, my_is_s1)
+        return self._mcts_leaf_value(cs1, cs2, cfield, my_is_s1)
+
+    def _leaf_value_state(self, node, my_is_s1):
+        cs1, cs2, cfield = node["state"]
+        return self._mcts_leaf_value(cs1, cs2, cfield, my_is_s1)
+
+    def _mcts_simulate_cached(self, root, my_is_s1):
+        """状態キャッシュ降下：子は状態を保持。新規葉のみ1ターン解決(親状態をclone)。"""
+        node = root; path = []; v = None; depth = 0
+        while True:
+            cs1, cs2, cfield = node["state"]
+            me_s = cs1 if my_is_s1 else cs2
+            op_s = cs2 if my_is_s1 else cs1
+            my_cands = self._candidate_actions(me_s, op_s, cfield)
+            opp_cands = self._candidate_actions(op_s, me_s, cfield)
+            if not my_cands or not opp_cands:
+                v = self._leaf_value_state(node, my_is_s1); break
+            idx_me, a_me, sg_me = self._select(node, 0, my_cands)
+            idx_op, a_op, sg_op = self._select(node, 1, opp_cands)
+            path.append((node, idx_me, idx_op, sg_me, sg_op))
+            key = (idx_me, idx_op)
+            child = node["children"].get(key)
+            if child is None:
+                ccs1, ccs2, ccfield = self._clone_state(cs1, cs2, cfield)
+                winner = self._advance_turn(ccs1, ccs2, ccfield, a_me, a_op, my_is_s1)
+                child = self._new_node(); child["state"] = (ccs1, ccs2, ccfield)
+                node["children"][key] = child
+                if winner != 0:
+                    child["terminal"] = True
+                    child["v_me"] = 1.0 if ((winner == 1) == my_is_s1) else 0.0
+                    v = child["v_me"]
+                else:
+                    v = self._expand_state_node(child, my_is_s1)
+                break
+            if child.get("terminal"):
+                v = child["v_me"]; break
+            node = child; depth += 1
+            if depth >= self.mcts_max_depth:
+                v = self._leaf_value_state(node, my_is_s1); break
+        exp3 = (self.mcts_select == "exp3")
+        for (nd, im, io, sm, so) in path:
+            nd["total"] += 1
+            nd["N"][0][im] = nd["N"][0].get(im, 0) + 1
+            nd["W"][0][im] = nd["W"][0].get(im, 0.0) + v
+            nd["N"][1][io] = nd["N"][1].get(io, 0) + 1
+            nd["W"][1][io] = nd["W"][1].get(io, 0.0) + (1.0 - v)
+            if exp3:
+                nd["S"][0][im] = nd["S"][0].get(im, 0.0) + v / max(sm, 1e-9)
+                nd["S"][1][io] = nd["S"][1].get(io, 0.0) + (1.0 - v) / max(so, 1e-9)
+
+    def score_actions_mcts(self, my_side, opp_side, field, cands=None):
+        """根の各自分手の (Action, 訪問数+Q) を返す。可視化/選択共用。"""
+        root, root_my, _ = self._build_mcts_root(my_side, opp_side, field, cands)
+        if len(root_my) <= 1:
+            return [(root_my[0], 1.0)] if root_my else []
+        meN = root["N"][0]; meW = root["W"][0]
+        out = []
+        for a in root_my:
+            ix = self._action_index(a)
+            n = meN.get(ix, 0)
+            q = (meW.get(ix, 0.0) / n) if n else 0.0
+            out.append((a, n + q))   # 訪問数が主、Qで微小タイブレーク
+        return out
+
+    def mcts_policy(self, my_side, opp_side, field, temperature=1.0):
+        """学習用：根の訪問分布πを {action_index: 確率} で返す。戻り (best_action, pi)。
+        新MCTS(同時手番DUCT/regret)を教師信号に使うためのフック。"""
+        cands = self._candidate_actions(my_side, opp_side, field)
+        if not cands:
+            return None, {}
+        if len(cands) == 1:
+            return cands[0], {self._action_index(cands[0]): 1.0}
+        root, root_my, _ = self._build_mcts_root(my_side, opp_side, field, cands)
+        meN = root["N"][0]
+        counts = [(self._action_index(a), meN.get(self._action_index(a), 0)) for a in root_my]
+        tot = sum(n for _, n in counts)
+        if tot <= 0:
+            return root_my[0], {ix: 1.0 / len(counts) for ix, _ in counts}
+        if temperature and temperature > 0 and temperature != 1.0:
+            w = [(ix, (n / tot) ** (1.0 / temperature)) for ix, n in counts]
+            z = sum(x for _, x in w) or 1.0
+            pi = {ix: x / z for ix, x in w}
+        else:
+            pi = {ix: n / tot for ix, n in counts}
+        best = max(root_my, key=lambda a: meN.get(self._action_index(a), 0))
+        return best, pi
+
+    @staticmethod
+    def _new_node():
+        # R=累積後悔(regret-matching用), S=累積推定報酬(Exp3用)。side毎に[me,opp]。
+        return {"N": [{}, {}], "W": [{}, {}], "P": [{}, {}],
+                "R": [{}, {}], "S": [{}, {}],
+                "children": {}, "total": 0, "expanded": False}
+
+    def _policy_dict(self, side, opp, field):
+        if self.policy_fn is None:
+            return {}
+        try:
+            return self.policy_fn(side, opp, field) or {}
+        except Exception:
+            return {}
+
+    def _expand_node(self, node, cs1, cs2, cfield, my_is_s1):
+        me_s = cs1 if my_is_s1 else cs2
+        op_s = cs2 if my_is_s1 else cs1
+        node["P"][0] = self._policy_dict(me_s, op_s, cfield)
+        node["P"][1] = self._policy_dict(op_s, me_s, cfield)
+        node["expanded"] = True
+
+    def _select(self, node, side, cands):
+        """side(0=自分,1=相手)の手を選び (idx, action, 選択確率) を返す。
+        mcts_select で選択則を切替: duct=独立PUCT / regret=regret-matching / exp3=Exp3。"""
+        mode = self.mcts_select
+        if mode == "duct":
+            ix, a = self._duct_select(node, side, cands)
+            return ix, a, 1.0
+        P = node["P"][side]; N = node["N"][side]; W = node["W"][side]
+        # 各候補の (idx, action, Q, prior)
+        items = []
+        for a in cands:
+            ix = self._action_index(a)
+            n = N.get(ix, 0)
+            q = (W.get(ix, 0.0) / n) if n else self.mcts_fpu
+            p = max(P.get(ix, self.mcts_p_floor), self.mcts_p_floor)
+            items.append((ix, a, q, p))
+        psum = sum(p for _, _, _, p in items) or 1.0
+        if mode == "regret":
+            R = node["R"][side]
+            pos = {ix: max(0.0, R.get(ix, 0.0)) for ix, _, _, _ in items}
+            Z = sum(pos.values())
+            if Z > 0:
+                sig = {ix: pos[ix] / Z for ix, _, _, _ in items}
+            else:
+                sig = {ix: 1.0 / len(items) for ix, _, _, _ in items}
+            lam = self.rm_prior_mix
+            sig = {ix: (1 - lam) * sig[ix] + lam * (p / psum) for ix, _, _, p in items}
+            V = sum(sig[ix] * q for ix, _, q, _ in items)   # 現戦略の期待値
+            for ix, _, q, _ in items:                        # 後悔を累積: r(a)=Q(a)-V
+                R[ix] = R.get(ix, 0.0) + (q - V)
+        else:  # exp3
+            S = node["S"][side]; eta = self.exp3_eta
+            logits = {}
+            for ix, _, _, p in items:
+                if ix not in S:                              # priorでウォームスタート(eta*S=log p)
+                    S[ix] = (1.0 / eta) * math.log(max(p / psum, self.mcts_p_floor))
+                logits[ix] = eta * S[ix]
+            m = max(logits.values())
+            ex = {ix: math.exp(logits[ix] - m) for ix in logits}
+            Z = sum(ex.values()); g = self.exp3_gamma; K = len(items)
+            sig = {ix: (1 - g) * ex[ix] / Z + g / K for ix in ex}
+        ix, a = self._sample(items, sig)
+        return ix, a, sig[ix]
+
+    def _sample(self, items, sig):
+        r = self._rng.random(); acc = 0.0
+        for ix, a, _, _ in items:
+            acc += sig[ix]
+            if r <= acc:
+                return ix, a
+        ix, a, _, _ = items[-1]
+        return ix, a
+
+    def _duct_select(self, node, side, cands):
+        """side(0=自分,1=相手)の手を独立PUCTで選ぶ。Q + c_puct*P*sqrt(ΣN)/(1+N)。"""
+        P = node["P"][side]; N = node["N"][side]; W = node["W"][side]
+        sq = math.sqrt(max(1, node["total"]))
+        best = None; bix = None; bs = -1e18
+        for a in cands:
+            ix = self._action_index(a)
+            n = N.get(ix, 0)
+            q = (W.get(ix, 0.0) / n) if n else self.mcts_fpu
+            p = P.get(ix, self.mcts_p_floor)
+            s = q + self.c_puct * p * sq / (1 + n)
+            if s > bs:
+                bs = s; best = a; bix = ix
+        return bix, best
+
+    def _mcts_leaf_value(self, cs1, cs2, cfield, my_is_s1):
+        if self.net_eval is not None:
+            _, v1 = self.net_eval(cs1, cs2, cfield)
+            return v1 if my_is_s1 else (1.0 - v1)
+        if self.value_fn is not None:
+            v1 = self.value_fn(cs1, cs2, cfield)
+            return v1 if my_is_s1 else (1.0 - v1)
+        a = sum(p.hp for p in cs1.party) / max(1, sum(p.max_hp for p in cs1.party))
+        d = sum(p.hp for p in cs2.party) / max(1, sum(p.max_hp for p in cs2.party))
+        v1 = max(0.0, min(1.0, 0.5 + 0.5 * (a - d)))
+        return v1 if my_is_s1 else (1.0 - v1)
+
+    def _advance_turn(self, cs1, cs2, cfield, a_me, a_op, my_is_s1):
+        """決定化済み状態を1ターン分その場で進める（固定ロール）。戻り: winner(0=継続)。"""
+        from . import damage as _dmg
+        if my_is_s1:
+            a1 = _ForcedFirst(a_me, self.rollout_ai); a2 = _ForcedFirst(a_op, self.rollout_ai)
+        else:
+            a1 = _ForcedFirst(a_op, self.rollout_ai); a2 = _ForcedFirst(a_me, self.rollout_ai)
+        b = Battle(cs1, cs2, cfield)
+        _prev = _dmg._ROLL_OVERRIDE; _dmg._ROLL_OVERRIDE = self.tree_roll
+        try:
+            return b.resume(a1, a2, max_turns=1)
+        finally:
+            _dmg._ROLL_OVERRIDE = _prev
+
+    def _expand_with_value(self, node, cs1, cs2, cfield, my_is_s1):
+        """net_eval使用時: 1状態のencode+ネットforwardをメモ化し、両者prior設定＋葉価値を返す。
+        value_fn/policy_fnを個別に呼ぶ従来路の重複encode（3回→2回）を排除。結果はビット一致。"""
+        memo = {}
+        def ev(A, B):
+            k = (id(A), id(B))
+            r = memo.get(k)
+            if r is None:
+                r = self.net_eval(A, B, cfield)   # (policy_dict, value=P(A勝))
+                memo[k] = r
+            return r
+        me_s = cs1 if my_is_s1 else cs2
+        op_s = cs2 if my_is_s1 else cs1
+        pol_me, _ = ev(me_s, op_s)
+        pol_op, _ = ev(op_s, me_s)
+        node["P"][0] = pol_me or {}
+        node["P"][1] = pol_op or {}
+        node["expanded"] = True
+        _, v1 = ev(cs1, cs2)   # side1視点の価値（どちらの視点でも上の2呼びのいずれかとメモ共有）
+        return v1 if my_is_s1 else (1.0 - v1)
+
+    def _mcts_simulate(self, root, cs1, cs2, cfield, my_is_s1):
+        if not root["expanded"]:
+            if self.net_eval is not None:
+                self._expand_with_value(root, cs1, cs2, cfield, my_is_s1)
+            else:
+                self._expand_node(root, cs1, cs2, cfield, my_is_s1)
+        node = root
+        path = []   # [(node, idx_me, idx_op)]
+        depth = 0
+        v = None
+        while True:
+            me_s = cs1 if my_is_s1 else cs2
+            op_s = cs2 if my_is_s1 else cs1
+            my_cands = self._candidate_actions(me_s, op_s, cfield)
+            opp_cands = self._candidate_actions(op_s, me_s, cfield)
+            if not my_cands or not opp_cands:
+                v = self._mcts_leaf_value(cs1, cs2, cfield, my_is_s1); break
+            idx_me, a_me, sg_me = self._select(node, 0, my_cands)
+            idx_op, a_op, sg_op = self._select(node, 1, opp_cands)
+            path.append((node, idx_me, idx_op, sg_me, sg_op))
+            winner = self._advance_turn(cs1, cs2, cfield, a_me, a_op, my_is_s1)
+            depth += 1
+            if winner != 0:
+                v = 1.0 if ((winner == 1) == my_is_s1) else 0.0
+                break
+            key = (idx_me, idx_op)
+            child = node["children"].get(key)
+            if child is None:
+                child = self._new_node()
+                node["children"][key] = child
+                if self.net_eval is not None:
+                    v = self._expand_with_value(child, cs1, cs2, cfield, my_is_s1)
+                else:
+                    self._expand_node(child, cs1, cs2, cfield, my_is_s1)
+                    v = self._mcts_leaf_value(cs1, cs2, cfield, my_is_s1)
+                break
+            node = child
+            if depth >= self.mcts_max_depth:
+                v = self._mcts_leaf_value(cs1, cs2, cfield, my_is_s1); break
+        exp3 = (self.mcts_select == "exp3")
+        for (nd, im, io, sm, so) in path:
+            nd["total"] += 1
+            nd["N"][0][im] = nd["N"][0].get(im, 0) + 1
+            nd["W"][0][im] = nd["W"][0].get(im, 0.0) + v
+            nd["N"][1][io] = nd["N"][1].get(io, 0) + 1
+            nd["W"][1][io] = nd["W"][1].get(io, 0.0) + (1.0 - v)
+            if exp3:   # 重要度重み付き推定報酬を累積: S(a)+=報酬/選択確率
+                nd["S"][0][im] = nd["S"][0].get(im, 0.0) + v / max(sm, 1e-9)
+                nd["S"][1][io] = nd["S"][1].get(io, 0.0) + (1.0 - v) / max(so, 1e-9)
 
     def _leaf_value(self, b, my_is_s1):
         """葉の状態を価値ネットで採点（無ければHP割合）。my視点のP(勝利)。"""
@@ -360,8 +772,10 @@ class SearchAI:
     def _candidate_actions(self, my_side, opp_side, field) -> List[Action]:
         me = my_side.active
         # メガ可能なら「メガする/しない」を独立した選択肢として探索（勝率で比較）
+        # collapse_mega=True: メガ石持ちは常にメガ前提（メガ無し重複を列挙しない＝分岐半減）
         can_mega = (me.mega_data is not None and not me.mega_evolved and not my_side.mega_used)
-        mega_flags = [True, False] if can_mega else [False]
+        mega_flags = (([True] if getattr(self, "collapse_mega", False) else [True, False])
+                      if can_mega else [False])
         valid = [(i, mv) for i, mv in enumerate(me.moves) if mv is not None]
         valid = _filter_valid_by_lock(valid, me)
         pp_valid = _filter_by_pp(valid, me)

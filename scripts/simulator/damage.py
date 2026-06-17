@@ -402,6 +402,10 @@ def calc_damage(
     if eff_type == "ほのお" and getattr(attacker, "_flash_fire_active", False):
         dmg = math.floor(dmg * 1.5)
 
+    # ほのおのたてがみ：ほのお技の威力1.5倍
+    if eff_type == "ほのお" and attacker.ability == "ほのおのたてがみ":
+        dmg = math.floor(dmg * 1.5)
+
     # でんきにかえるチャージ中のでんき技強化（使用後リセット）
     if eff_type == "でんき" and getattr(attacker, "_electromorphosis_charged", False):
         dmg = math.floor(dmg * 1.5)
@@ -427,6 +431,7 @@ _NON_CONTACT_PHYSICAL = {
     "うっぷんばらし", "すなじごく", "だいふんげき", "はなふぶき",
     "ふくろだたき", "ゴッドバード",
     "じわれ", "なげつける", "メタルバースト",
+    "どくばりセンボン",
 }
 
 
@@ -474,7 +479,7 @@ def _effective_power(attacker, defender, move, field, eff_type: str = "") -> int
     if move.name_jp == "おはかまいり":
         power = 50 + 50 * min(5, attacker.fainted_allies)
     elif move.name_jp == "ふんどのこぶし":
-        power = 1 + (50 if attacker.status else 0)
+        power = 50 + 50 * min(6, getattr(attacker, "times_hit", 0))
     elif move.name_jp == "からげんき":
         power = 70 if not attacker.status else 140
     elif move.name_jp == "スケイルショット":
@@ -486,7 +491,8 @@ def _effective_power(attacker, defender, move, field, eff_type: str = "") -> int
     elif move.name_jp == "はたきおとす":
         _it = defender.item
         _is_mega = _it is not None and (_it.endswith("ナイト")
-                                        or _it.endswith("ナイトＸ") or _it.endswith("ナイトＹ"))
+                                        or _it.endswith("ナイトＸ") or _it.endswith("ナイトＹ")
+                                        or _it.endswith("ナイトX") or _it.endswith("ナイトY"))
         if _it is not None and not _is_mega:
             power = math.floor(power * 1.5)
     elif move.name_jp == "たたりめ":
@@ -496,6 +502,9 @@ def _effective_power(attacker, defender, move, field, eff_type: str = "") -> int
         if defender.status is not None:
             power = power * 2
     elif move.name_jp == "ベノムショック":
+        if defender.status in ("poison", "badpoison"):
+            power = power * 2
+    elif move.name_jp == "どくばりセンボン":
         if defender.status in ("poison", "badpoison"):
             power = power * 2
     elif move.name_jp == "ライジングボルト":
@@ -849,6 +858,9 @@ def check_hit(attacker, defender, move, field) -> bool:
 
     # ひかりのこな補正
     hit_rate *= get_evasion_item_mult(defender.item)
+    # こうかくレンズ（攻撃側の命中率補正）
+    from .items import get_accuracy_evasion_item
+    hit_rate *= get_accuracy_evasion_item(attacker.item)
 
     # まもるで無効（フェイント・ゴーストダイブはまもるを貫通）
     if defender.protecting and move.name_jp not in ("フェイント", "ゴーストダイブ"):

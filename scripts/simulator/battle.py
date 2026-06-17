@@ -22,10 +22,22 @@ from .items import (
 )
 
 
+# おうごんのからだ が無効化する「相手に向けた変化技」（自己強化・天候・設置・画面等は対象外）
+_GAG_BLOCK = frozenset({
+    "でんじは", "おにび", "どくどく", "どくのこな", "しびれごな", "ねむりごな", "キノコのほうし",
+    "さいみんじゅつ", "あくび", "へびにらみ", "ちょうおんぱ", "あやしいひかり", "いばる", "おだてる",
+    "ちょうはつ", "アンコール", "かなしばり", "いちゃもん", "やどりぎのタネ", "メロメロ", "くろいまなざし",
+    "なきごえ", "にらみつける", "あまえる", "すなかけ", "フラッシュ", "あまいかおり", "うそなき",
+    "ひっくりかえす", "ワンダールーム", "トリック", "すりかえ", "なかよくする", "このゆびとまれ",
+    "とおせんぼう", "くすぐる", "テクスチャー2",
+})
+
+
 def _is_megastone(item: Optional[str]) -> bool:
     """メガストーン（〜ナイト/ナイトＸ/ナイトＹ）かどうか判定。道具奪取・交換・はたき落としは失敗。"""
     return item is not None and (item.endswith("ナイト")
-                                 or item.endswith("ナイトＸ") or item.endswith("ナイトＹ"))
+                                 or item.endswith("ナイトＸ") or item.endswith("ナイトＹ")
+                                 or item.endswith("ナイトX") or item.endswith("ナイトY"))
 
 
 def is_trapped(poke, opponent) -> bool:
@@ -182,6 +194,7 @@ class BattleSide:
                 setattr(self.active, attr, max(-6, min(6, val)))
             prev._baton_stages = None  # type: ignore
         self.active.turns_out = 0
+        self.active.times_hit = 0
         self.active._switched_this_turn = True  # type: ignore
         self.active.fainted_allies = sum(1 for p in self.party if not p.is_alive)
 
@@ -282,11 +295,12 @@ def _entry_effects(poke: BattlePokemon, side_idx: int, field: BattleField,
     if logs is None:
         logs = []
     poke.turns_out = 0
+    poke.times_hit = 0
     poke._switched_this_turn = False  # type: ignore
     poke._pivot_out = False           # type: ignore
     poke._force_switch = False        # type: ignore
 
-    immune_to_ground = ("ひこう" in (poke.type1, poke.type2) or poke.ability == "ふゆう")
+    immune_to_ground = ("ひこう" in (poke.type1, poke.type2) or poke.ability in ("ふゆう", "うなぎのぼり"))
 
     # ステルスロック（マジックガード無効）
     if field.stealth_rock[side_idx] and poke.ability != "マジックガード":
@@ -571,7 +585,7 @@ def _execute_move(
     if move.name_jp == "リフレクター":
         if not attacker_side.reflect:
             attacker_side.reflect = True
-            attacker_side.reflect_count = 5
+            attacker_side.reflect_count = 8 if attacker.item == "ひかりのねんど" else 5
             logs.append(f"リフレクター が張られた！")
         else:
             logs.append(f"リフレクター はすでに効果中！")
@@ -579,7 +593,7 @@ def _execute_move(
     if move.name_jp == "ひかりのかべ":
         if not attacker_side.light_screen:
             attacker_side.light_screen = True
-            attacker_side.light_screen_count = 5
+            attacker_side.light_screen_count = 8 if attacker.item == "ひかりのねんど" else 5
             logs.append(f"ひかりのかべ が張られた！")
         else:
             logs.append(f"ひかりのかべ はすでに効果中！")
@@ -590,7 +604,7 @@ def _execute_move(
             return logs
         if not attacker_side.aurora_veil:
             attacker_side.aurora_veil = True
-            attacker_side.aurora_veil_count = 5
+            attacker_side.aurora_veil_count = 8 if attacker.item == "ひかりのねんど" else 5
             logs.append(f"オーロラベール が張られた！")
         else:
             logs.append(f"オーロラベール はすでに効果中！")
@@ -638,25 +652,27 @@ def _execute_move(
             logs.append("トリックルーム が発動した！")
         return logs
 
-    # あまごい・にほんばれ等
+    # あまごい・にほんばれ等（天候岩を持っていれば持続8ターン）
+    def _wturns(rock):
+        return 8 if attacker.item == rock else 5
     if move.name_jp == "あまごい":
-        field.weather = "rain"; field.weather_count = 5
+        field.weather = "rain"; field.weather_count = _wturns("しめったいわ")
         logs.append("雨が降り出した！"); return logs
     if move.name_jp == "にほんばれ":
-        field.weather = "sunny"; field.weather_count = 5
+        field.weather = "sunny"; field.weather_count = _wturns("あついいわ")
         logs.append("日差しが強くなった！"); return logs
     if move.name_jp == "すなあらし":
-        field.weather = "sandstorm"; field.weather_count = 5
+        field.weather = "sandstorm"; field.weather_count = _wturns("さらさらいわ")
         logs.append("砂嵐が吹き始めた！"); return logs
     if move.name_jp == "あられ":
-        field.weather = "hail"; field.weather_count = 5
+        field.weather = "hail"; field.weather_count = _wturns("つめたいいわ")
         logs.append("あられが降り始めた！"); return logs
     if move.name_jp == "ゆきげしき":
-        field.weather = "hail"; field.weather_count = 5
+        field.weather = "hail"; field.weather_count = _wturns("つめたいいわ")
         logs.append("雪が降り始めた！"); return logs
 
     if move.name_jp == "さむいギャグ":
-        field.weather = "hail"; field.weather_count = 5
+        field.weather = "hail"; field.weather_count = _wturns("つめたいいわ")
         logs.append("さむいギャグ！ 雪が降り始めた！")
         attacker._pivot_out = True  # type: ignore
         return logs
@@ -674,6 +690,10 @@ def _execute_move(
                 logs.append(f"{attacker.name} の {move.name_jp} は {defender.name} に防がれた！")
             else:
                 logs.append(f"{attacker.name} の {move.name_jp} は外れた！")
+            return logs
+        # おうごんのからだ: 相手に向けた変化技を無効化（自己強化/天候/設置/画面は対象外）
+        if defender.ability == "おうごんのからだ" and move.name_jp in _GAG_BLOCK:
+            logs.append(f"{defender.name} の おうごんのからだ！ {move.name_jp} は効かない！")
             return logs
         logs += _apply_status_move(attacker, defender, move, field, attacker_side, defender_side)
         return logs
@@ -702,6 +722,7 @@ def _execute_move(
     if move.name_jp in SOUND_MOVES and defender.ability == "ぼうおん":
         logs.append(f"{defender.name} の ぼうおん で {move.name_jp} が効かない！")
         return logs
+
 
     # ポルターガイスト：相手が持ち物なしで失敗
     if move.name_jp == "ポルターガイスト" and defender.item is None:
@@ -1681,6 +1702,8 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
                            ("stage_defense", -1), ("stage_sp_defense", -1)],
         "めいそう":       [("stage_sp_attack", 1), ("stage_sp_defense", 1)],
         "ちょうのまい":   [("stage_sp_attack", 1), ("stage_sp_defense", 1), ("stage_speed", 1)],
+        "はいすいのじん": [("stage_attack", 1), ("stage_defense", 1), ("stage_sp_attack", 1),
+                           ("stage_sp_defense", 1), ("stage_speed", 1)],
         "コスモパワー":   [("stage_defense", 1), ("stage_sp_defense", 1)],
         "てっぺき":       [("stage_defense", 2)],
         "ビルドアップ":   [("stage_attack", 1), ("stage_defense", 1)],
@@ -1703,6 +1726,10 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
         logs.append(f"{attacker.name} の 攻撃・特攻 が上がった！")
         return logs
 
+    if n == "はいすいのじん" and attacker.trapped:
+        logs.append(f"{attacker.name} は はいすいのじん を使えない！")
+        return logs
+
     if n in SELF_BOOSTS:
         for attr, delta in SELF_BOOSTS[n]:
             _d = -delta if attacker.ability == "あまのじゃく" else delta
@@ -1720,6 +1747,8 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
                         logs.append(f"{defender.name} の びんじょう！ {STAT_JP.get(attr, attr)} が上がった！")
         if n == "ちいさくなる":
             attacker.minimized = True  # のしかかり等の被弾2倍状態
+        if n == "はいすいのじん":
+            attacker.trapped = True  # 全能力上昇の代償に交代・逃げ不可
         return logs
 
     # ── 能力変化（相手）+ 状態異常（status技）────────────────
@@ -2461,6 +2490,7 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
             "リーフストーム":   [("stage_sp_attack", -2, 1.0)],
             "オーバーヒート":   [("stage_sp_attack", -2, 1.0)],
             "サイコブースト":   [("stage_sp_attack", -2, 1.0)],
+            "ゴールドラッシュ": [("stage_sp_attack", -1, 1.0)],
             "アームハンマー":   [("stage_speed", -1, 1.0)],
             "アーマーキャノン": [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
             "とどめばり":       [("stage_attack", 3, 1.0)],
@@ -2474,6 +2504,10 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
                     if new_val != old_val:
                         logs.append(f"{attacker.name} の {STAT_JP.get(stat, stat)} が{'下がった' if delta < 0 else '上がった'}！")
         return
+
+    # ふんどのこぶし用: 攻撃技で被弾した回数を加算（防御側は生存中）
+    if dmg > 0:
+        defender.times_hit += 1
 
     # ちからずく: 追加効果（状態異常・ひるみ・相手への能力変化）をキャンセル
     # ただし自分自身の確定能力変化（インファイト等）は後段で発動
@@ -2539,6 +2573,7 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
         "どくどくのキバ": ("badpoison", 0.50),
         "ヘドロばくだん": ("poison", 0.30), "ヘドロウェーブ": ("poison", 0.10),
         "ダストシュート": ("poison", 0.30), "シェルアームズ": ("poison", 0.20),
+        "どくばりセンボン": ("poison", 0.50),
         # こんらん
         "ウォーターパルス": ("confused", 0.20), "みずのはどう": ("confused", 0.20),
         "ダイナミックフル": ("confused", 0.10), "ぼうふう":     ("confused", 0.30),
@@ -2641,6 +2676,7 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
         "ブレイククロー": ("stage_defense",    -1, 0.50),
         "ローキック":     ("stage_speed",      -1, 1.00),
         "ワイドブレイカー":("stage_attack",    -1, 1.00),
+        "ソウルクラッシュ": ("stage_sp_attack", -1, 1.00),
     }
     if n in DEF_DOWNS and not force_no_secondary:
         stat, delta, prob = DEF_DOWNS[n]
@@ -2686,6 +2722,7 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
         "リーフストーム": [("stage_sp_attack", -2, 1.0)],
         "オーバーヒート": [("stage_sp_attack", -2, 1.0)],
         "サイコブースト": [("stage_sp_attack", -2, 1.0)],
+        "ゴールドラッシュ": [("stage_sp_attack", -1, 1.0)],
         "だいばくはつ":   [],  # 倒れる（別処理）
         "じばく":         [],
         "フレアソング":   [("stage_sp_attack", 1, 1.0)],
@@ -3154,7 +3191,7 @@ class Battle:
             opp = opp_side.active
             if not me.is_alive or getattr(me, "_info_done", False):
                 continue
-            if me.ability not in ("おみとおし", "きけんよち"):
+            if me.ability not in ("おみとおし", "きけんよち", "よちむ"):
                 continue
             me._info_done = True  # type: ignore
             # おみとおし：相手の持ち物を開示

@@ -193,8 +193,11 @@ def eval_vs_strategies(net, loader, parties, N=12, depth=8, seed=31):
 
 
 def _net_ai(net, loader, rollouts, depth, seed, adversarial=False, opp_k=6,
-            tree=False, tree_depth=1, tree_k=3, tree_det=None, tree_extend_k=0):
-    """ネットの価値誘導探索AI。ロールアウト相手もネット（NetGreedyAI）＝AlphaZero的。"""
+            tree=False, tree_depth=1, tree_k=3, tree_det=None, tree_extend_k=0,
+            mcts=False, mcts_sims=400, c_puct=1.5, mcts_select="duct", mcts_fast=True,
+            mcts_cache=False, mcts_ensemble=16):
+    """ネットの価値誘導探索AI。ロールアウト相手もネット（NetGreedyAI）＝AlphaZero的。
+    mcts_fast=True: MCTS高速化（葉のencode+forward統合＝net_eval、cloneでbelief非複製）。結果はビット一致。"""
     from simulator.alphazero import NetGreedyAI, legal_actions_indexed
     def vfn(s1, s2, f): return net.evaluate(encode_state(s1, s2, f), [0])[1]
     def pfn(s1, s2, f):
@@ -207,6 +210,18 @@ def _net_ai(net, loader, rollouts, depth, seed, adversarial=False, opp_k=6,
         ai.tree_search = True; ai.tree_depth = tree_depth; ai.tree_k = tree_k
         ai.tree_det = tree_det if tree_det is not None else rollouts
         ai.tree_extend_k = tree_extend_k
+    if mcts:
+        ai.mcts = True; ai.mcts_sims = mcts_sims; ai.c_puct = c_puct
+        ai.mcts_select = mcts_select
+        if mcts_fast:
+            def nefn(s1, s2, f):
+                L = [ix for _, ix in legal_actions_indexed(s1, s2, f)]
+                pol, val = net.evaluate(encode_state(s1, s2, f), L if L else [0])
+                return pol, val
+            ai.net_eval = nefn
+            ai.fast_clone = True
+        if mcts_cache:
+            ai.mcts_cache = True; ai.mcts_ensemble = mcts_ensemble
     return ai
 
 
@@ -284,7 +299,7 @@ def main():
         t0 = time.time()
         per = max(1, games_per // workers)
         # 純self-play（ネット対ネットMCTS・相手モデルもネット）＋少量の戦略相手(exploiter, OOD補完)
-        args = [(best, per, n_sims, seed + it * 1000 + wk, 0.25, 1.0, 0.35, 0.15) for wk in range(workers)]
+        args = [(best, per, n_sims, seed + it * 1000 + wk, 0.25, 1.0, 0.60, 0.15) for wk in range(workers)]
         samples = []
         with ctx.Pool(workers) as pool:
             for res in pool.map(_selfplay_worker_strat, args):

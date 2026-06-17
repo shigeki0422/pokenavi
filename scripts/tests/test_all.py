@@ -351,6 +351,61 @@ _pmh2 = make_poke(item="メンタルハーブ")  # 制限なし
 try_mental_herb(_pmh2, [])
 check("メンタルハーブ 制限なしでは消費しない", _pmh2.item == "メンタルハーブ")
 
+# ── M-B(M-3)追加アイテム ──────────────────────────────────────────
+from simulator.items import get_speed_item_multiplier as _gsm, get_accuracy_evasion_item as _gae
+from simulator.battle import Action as _Act
+check("くろいてっきゅう 素早さ0.5", _gsm("くろいてっきゅう") == 0.5)
+check("こうかくレンズ 命中1.1", near(_gae("こうかくレンズ"), 1.1))
+check("こうかくレンズなし 命中1.0", near(_gae(None), 1.0))
+# 状態回復きのみ
+for _berry, _st, _lbl in [("クラボのみ", "paralysis", "まひ"), ("キーのみ", "freeze", "こおり")]:
+    _pb = make_poke(item=_berry); _pb.status = _st; try_cure_berry(_pb, [])
+    check(f"{_berry} {_lbl}回復", _pb.status is None and _pb.item is None)
+    _pb2 = make_poke(item=_berry); _pb2.status = "burn"; try_cure_berry(_pb2, [])
+    check(f"{_berry} 対象外(やけど)は無反応", _pb2.status == "burn" and _pb2.item == _berry)
+_pn = make_poke(item="ナナシのみ"); _pn.confused = True; try_cure_berry(_pn, [])
+check("ナナシのみ こんらん回復", (not _pn.confused) and _pn.item is None)
+_pn2 = make_poke(item="ナナシのみ"); _pn2.status = "burn"; try_cure_berry(_pn2, [])
+check("ナナシのみ 状態異常(やけど)には無反応", _pn2.status == "burn" and _pn2.item == "ナナシのみ")
+
+class _Force:
+    def __init__(self, nm): self.nm = nm
+    def __call__(self, my, opp, f):
+        for i, m in enumerate(my.active.moves):
+            if m and m.name_jp == self.nm:
+                return _Act(type="move", move=m, move_idx=i)
+        return _Act(type="move", move=my.active.moves[0], move_idx=0)
+
+def _weather_after(rock, wmove):
+    holder = make_poke(item=rock, moves=[wmove, "まもる"]); foe = make_poke(moves=["まもる"])
+    f = BattleField(); Battle(BattleSide([holder]), BattleSide([foe]), f).resume(_Force(wmove), _Force("まもる"), max_turns=1)
+    return f.weather_count
+check("しめったいわ 雨8ターン(経過後7)", _weather_after("しめったいわ", "あまごい") == 7)
+check("天候岩なし 雨5ターン(経過後4)", _weather_after(None, "あまごい") == 4)
+check("あついいわ 晴8", _weather_after("あついいわ", "にほんばれ") == 7)
+check("さらさらいわ 砂8", _weather_after("さらさらいわ", "すなあらし") == 7)
+check("つめたいいわ あられ8", _weather_after("つめたいいわ", "あられ") == 7)
+
+def _reflect_after(rock):
+    holder = make_poke(item=rock, moves=["リフレクター", "まもる"]); foe = make_poke(moves=["まもる"])
+    s1 = BattleSide([holder]); Battle(s1, BattleSide([foe]), BattleField()).resume(_Force("リフレクター"), _Force("まもる"), max_turns=1)
+    return s1.reflect_count
+check("ひかりのねんど リフレクター8(経過後7)", _reflect_after("ひかりのねんど") == 7)
+check("ねんどなし リフレクター5(経過後4)", _reflect_after(None) == 4)
+
+import simulator.damage as _dmgmod
+def _drain_heal(root):
+    _dmgmod._ROLL_OVERRIDE = 0.85; random.seed(1)  # 同一ダメージで比較
+    try:
+        holder = make_poke(type1="くさ", spatk_b=120, item=root, moves=["ギガドレイン", "まもる"]); holder.hp = 1
+        foe = make_poke(hp_b=200, spdef_b=60, moves=["なまける"])  # 非防御(吸収を防がない)
+        s1 = BattleSide([holder]); Battle(s1, BattleSide([foe]), BattleField()).resume(_Force("ギガドレイン"), _Force("なまける"), max_turns=1)
+        return holder.hp - 1
+    finally:
+        _dmgmod._ROLL_OVERRIDE = None
+_hr = _drain_heal("おおきなねっこ"); _hn = _drain_heal(None)
+check("おおきなねっこ 吸収1.3倍", _hn > 0 and 1.2 <= _hr / _hn <= 1.4, f"root={_hr} none={_hn}")
+
 # おうじゃのしるし：ダメージ技で10%ひるみ（統計）
 random.seed(31); _ks_flinch = 0; _N_ks = 400
 for _ in range(_N_ks):
@@ -685,6 +740,74 @@ _pmox_n = make_poke(ability="じしんかじょう", atk_b=10)
 _dmox_n = make_poke(type1="ノーマル", hp_b=255, def_b=200)
 execute(_pmox_n, _dmox_n, "たいあたり")
 check("じしんかじょう 非KOでは上がらない", _pmox_n.stage_attack == 0 and _dmox_n.is_alive)
+
+# ── M-B(M-3)追加とくせい ──────────────────────────────────────────
+from simulator.battle import crit_chance as _crit
+from simulator.abilities import check_move_immunity as _cmi
+
+# ほのおのたてがみ: 炎技1.5倍 / 他タイプ無補正
+_pm = make_poke(type1="ほのお", spatk_b=120, ability="ほのおのたてがみ"); _pm0 = make_poke(type1="ほのお", spatk_b=120, ability="もうか")
+_dmn = make_poke(type1="ノーマル", spdef_b=100)
+check("ほのおのたてがみ 炎技1.5倍", near(dmg(_pm, _dmn, "かえんほうしゃ") / dmg(_pm0, _dmn, "かえんほうしゃ"), 1.5))
+check("ほのおのたてがみ 他タイプ無補正", near(dmg(make_poke(spatk_b=120, ability="ほのおのたてがみ"), _dmn, "なみのり") / dmg(make_poke(spatk_b=120, ability="もうか"), _dmn, "なみのり"), 1.0))
+
+# もふもふ: 接触物理0.5 / 炎技2.0 / 非接触は無補正
+_dmf = make_poke(ability="もふもふ", def_b=100, spdef_b=100); _df0 = make_poke(ability="しんりょく", def_b=100, spdef_b=100)
+check("もふもふ 接触物理0.5", near(dmg(make_poke(atk_b=120), _dmf, "たいあたり") / dmg(make_poke(atk_b=120), _df0, "たいあたり"), 0.5))
+check("もふもふ 炎技2.0", near(dmg(make_poke(type1="ほのお", spatk_b=120), _dmf, "かえんほうしゃ") / dmg(make_poke(type1="ほのお", spatk_b=120), _df0, "かえんほうしゃ"), 2.0))
+check("もふもふ 非接触物理は無補正", near(dmg(make_poke(atk_b=120), _dmf, "じしん") / dmg(make_poke(atk_b=120), _df0, "じしん"), 1.0))
+
+# カブトアーマー: 急所率0
+check("カブトアーマー 急所率0", _crit(make_poke(), dl.get_move("たいあたり"), make_poke(ability="カブトアーマー")) == 0.0)
+check("カブトアーマーなし 急所率>0", _crit(make_poke(), dl.get_move("たいあたり"), make_poke(ability="しんりょく")) > 0.0)
+
+# ほうし: 接触技で30%状態異常(統計)
+random.seed(7); _spore = 0
+for _ in range(400):
+    _at = make_poke(); on_after_hit(_at, make_poke(ability="ほうし"), dl.get_move("のしかかり"), [])  # 接触技
+    if _at.status is not None: _spore += 1
+check("ほうし 接触30%状態異常(±)", 80 < _spore < 170, f"{_spore}/400")
+_at_nc = make_poke(); on_after_hit(_at_nc, make_poke(ability="ほうし"), dl.get_move("みずでっぽう"), [])  # 非接触
+check("ほうし 非接触では発動しない", _at_nc.status is None)
+
+# エレキメイカー: 登場時エレキフィールド5ターン / 他特性では張られない(負例)
+_fe = BattleField(); entry_ability(make_poke(ability="エレキメイカー"), make_poke(), _fe)
+check("エレキメイカー 登場でエレキF", _fe.electric_terrain and _fe.electric_terrain_count == 5)
+_fe0 = BattleField(); entry_ability(make_poke(ability="しんりょく"), make_poke(), _fe0)
+check("エレキメイカーなし エレキF張られない", _fe0.electric_terrain is False)
+
+# うなぎのぼり: じめん技無効 + KOで最高能力+1 / 通常特性はじめん無効化しない(負例)
+check("うなぎのぼり じめん技無効", _cmi(make_poke(ability="うなぎのぼり"), "じめん", "じしん"))
+check("通常特性はじめん無効化しない", not _cmi(make_poke(ability="しんりょく"), "じめん", "じしん"))
+check("うなぎのぼり 非じめん技は無効化しない", not _cmi(make_poke(ability="うなぎのぼり"), "みず", "なみのり"))
+_pun = make_poke(ability="うなぎのぼり", spd_b=160)  # 速さが最高能力
+on_ko(_pun, [])
+check("うなぎのぼり KOで最高能力(速)+1", _pun.stage_speed == 1)
+_pun0 = make_poke(ability="しんりょく", spd_b=160); on_ko(_pun0, [])
+check("通常特性はKOで能力上がらない(負例)", _pun0.stage_speed == 0)
+
+# よちむ: 1v1で機械的効果なし(no-op・クラッシュしない)
+_fy = BattleField(); entry_ability(make_poke(ability="よちむ"), make_poke(item="オボンのみ"), _fy)
+check("よちむ 機械的効果なし", _fy.electric_terrain is False)
+
+# おうごんのからだ: 相手の変化技(でんじは)無効 / 自己強化(つるぎのまい)は妨げない
+_dg = make_poke(ability="おうごんのからだ"); execute(make_poke(moves=["でんじは"]), _dg, "でんじは")
+check("おうごんのからだ でんじは無効", _dg.status is None)
+_dn = make_poke(ability="しんりょく"); execute(make_poke(moves=["でんじは"]), _dn, "でんじは")
+check("おうごんのからだなし でんじは有効", _dn.status == "paralysis")
+_as = make_poke(moves=["つるぎのまい"]); execute(_as, make_poke(ability="おうごんのからだ"), "つるぎのまい")
+check("おうごんのからだ 相手の自己強化は妨げない", _as.stage_attack == 2)
+
+# きゅうばん: ふきとばしで強制交代されない
+_kp1 = make_poke(ability="きゅうばん", moves=["まもる"]); _kp2 = make_poke(name="控え", moves=["まもる"])
+_s1k = BattleSide([_kp1, _kp2]); _s2k = BattleSide([make_poke(moves=["ふきとばし"])])
+Battle(_s1k, _s2k, BattleField()).resume(_Force("まもる"), _Force("ふきとばし"), max_turns=1)
+check("きゅうばん 強制交代されない", _s1k.active is _kp1)
+# 負例: きゅうばん無しなら ふきとばし で交代させられる
+_np1 = make_poke(ability="しんりょく", moves=["まもる"]); _np2 = make_poke(name="控え2", moves=["まもる"])
+_s1n = BattleSide([_np1, _np2]); _s2n = BattleSide([make_poke(moves=["ふきとばし"])])
+Battle(_s1n, _s2n, BattleField()).resume(_Force("まもる"), _Force("ふきとばし"), max_turns=1)
+check("きゅうばん無し 強制交代される(負例)", _s1n.active is not _np1)
 
 # ファーコート 物理0.5倍
 p_furcoat = make_poke(type1="ノーマル", ability="ファーコート", def_b=100)

@@ -59,14 +59,14 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0) -
     """1戦を tree d2 で実行し、ターン毎記録（turns）＋勝敗＋最終状態を返す。"""
     random.seed(seed)
     from simulator.pokemon import build_from_spec, parse_pokemon_spec
-    from simulator.ai import select_party
+    from simulator.learned_selection import learned_select_party  # MCTS教師の学習選出(無効時はheuristicに自動フォールバック)
     from simulator.belief import OpponentBelief
     from train_az2 import _net_ai
     L = _W["loader"]; net = _W["net"]
     P1 = [build_from_spec(parse_pokemon_spec(sp), L, season=season, randomize=True) for sp in specs1]
     P2 = [build_from_spec(parse_pokemon_spec(sp), L, season=season, randomize=True) for sp in specs2]
-    sel1 = select_party(P1, P2, L, n=min(3, len(P1)), temperature=sel_temp)
-    sel2 = select_party(P2, P1, L, n=min(3, len(P2)), temperature=sel_temp)
+    sel1 = learned_select_party(P1, P2, L, n=min(3, len(P1)), temperature=sel_temp)
+    sel2 = learned_select_party(P2, P1, L, n=min(3, len(P2)), temperature=sel_temp)
     s1 = BattleSide(sel1, viewer_label="P1"); s2 = BattleSide(sel2, viewer_label="P2")
     s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
     field = BattleField(); battle = Battle(s1, s2, field)

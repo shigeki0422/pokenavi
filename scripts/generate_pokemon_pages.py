@@ -12,6 +12,8 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent / "pokenavi.db"
 OUT_DIR = Path(__file__).parent.parent / "src/content/pokemon"
 
+SEASON = 'M-3'
+
 # ---- 防御タイプ相性チャート（Gen 6+）----
 # DEFENSE[守備タイプ] = {攻撃タイプ: 倍率}
 DEFENSE = {
@@ -1378,6 +1380,24 @@ POKEMON_DATA = {
         "types": ["かくとう"],
         "stats": [75, 110, 105, 30, 70, 100],
     },
+    # --- M-3新規ポケモン ---
+    "ラグラージ": {"file": "swampert", "dex": 260, "id": "0260-00", "types": ["みず", "じめん"], "stats": [100, 110, 90, 85, 90, 60]},
+    "ムクホーク": {"file": "staraptor", "dex": 398, "id": "0398-00", "types": ["ノーマル", "ひこう"], "stats": [85, 120, 70, 50, 60, 100]},
+    "メタグロス": {"file": "metagross", "dex": 376, "id": "0376-00", "types": ["はがね", "エスパー"], "stats": [80, 135, 130, 95, 90, 70]},
+    "サーフゴー": {"file": "gholdengo", "dex": 1000, "id": "1000-00", "types": ["はがね", "ゴースト"], "stats": [87, 60, 95, 133, 91, 84]},
+    "バシャーモ": {"file": "blaziken", "dex": 257, "id": "0257-00", "types": ["ほのお", "かくとう"], "stats": [80, 120, 70, 110, 70, 80]},
+    "クチート": {"file": "mawile", "dex": 303, "id": "0303-00", "types": ["はがね", "フェアリー"], "stats": [50, 85, 85, 55, 55, 50]},
+    "オーロンゲ": {"file": "grimmsnarl", "dex": 861, "id": "0861-00", "types": ["あく", "フェアリー"], "stats": [95, 120, 65, 95, 75, 60]},
+    "コノヨザル": {"file": "annihilape", "dex": 979, "id": "0979-00", "types": ["かくとう", "ゴースト"], "stats": [110, 115, 80, 50, 90, 90]},
+    "ドラミドロ": {"file": "dragalge", "dex": 691, "id": "0691-00", "types": ["どく", "ドラゴン"], "stats": [65, 75, 90, 97, 123, 44]},
+    "シビルドン": {"file": "eelektross", "dex": 604, "id": "0604-00", "types": ["でんき"], "stats": [85, 115, 80, 105, 80, 50]},
+    "ジュカイン": {"file": "sceptile", "dex": 254, "id": "0254-00", "types": ["くさ"], "stats": [70, 85, 65, 105, 85, 120]},
+    "ズルズキン": {"file": "scrafty", "dex": 560, "id": "0560-00", "types": ["あく", "かくとう"], "stats": [65, 90, 115, 45, 115, 58]},
+    "ペンドラー": {"file": "scolipede", "dex": 545, "id": "0545-00", "types": ["むし", "どく"], "stats": [60, 100, 89, 55, 69, 112]},
+    "カエンジシ": {"file": "pyroar", "dex": 668, "id": "0668-00", "types": ["ほのお", "ノーマル"], "stats": [86, 68, 72, 109, 66, 106]},
+    "タイレーツ": {"file": "falinks", "dex": 870, "id": "0870-00", "types": ["かくとう"], "stats": [65, 100, 100, 70, 60, 75]},
+    "ラフレシア": {"file": "vileplume", "dex": 45, "id": "0045-00", "types": ["くさ", "どく"], "stats": [75, 80, 85, 110, 90, 50]},
+    "ハリーセン": {"file": "qwilfish", "dex": 211, "id": "0211-00", "types": ["みず", "どく"], "stats": [65, 95, 85, 55, 55, 85]},
 }
 
 STAT_NAMES = ["HP", "こうげき", "ぼうぎょ", "とくこう", "とくぼう", "すばやさ"]
@@ -1522,7 +1542,9 @@ def get_conn():
     return conn
 
 
-def latest(conn, table, pokemon, field="season='M-2' AND rule='single'"):
+def latest(conn, table, pokemon, field=None):
+    if field is None:
+        field = f"season='{SEASON}' AND rule='single'"
     row = conn.execute(
         f"SELECT MAX(crawled_date) FROM {table} WHERE {field} AND pokemon=?", (pokemon,)
     ).fetchone()
@@ -1534,7 +1556,7 @@ def query_db(conn, table, pokemon, col, alias=None):
     if not date:
         return []
     rows = conn.execute(
-        f"SELECT * FROM {table} WHERE season='M-2' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
+        f"SELECT * FROM {table} WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
         (pokemon, date)
     ).fetchall()
     return rows
@@ -1592,23 +1614,23 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
 
     ev_date = latest(conn, "pokemon_evs", pokemon_name)
     evs = conn.execute(
-        "SELECT rank, ev_spread, ev_h, ev_a, ev_b, ev_c, ev_d, ev_s, usage_rate "
-        "FROM pokemon_evs WHERE season='M-2' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
+        f"SELECT rank, ev_spread, ev_h, ev_a, ev_b, ev_c, ev_d, ev_s, usage_rate "
+        f"FROM pokemon_evs WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
         (pokemon_name, ev_date)
     ).fetchall() if ev_date else []
 
     # チームメイト
     partner_date = latest(conn, "pokemon_partners", pokemon_name)
     usage_date = conn.execute(
-        "SELECT MAX(crawled_date) FROM pokemon_usage WHERE season='M-2' AND rule='single'"
+        f"SELECT MAX(crawled_date) FROM pokemon_usage WHERE season='{SEASON}' AND rule='single'"
     ).fetchone()[0]
     partners = conn.execute(
-        """SELECT p.rank, p.partner, u.pokemon_id
+        f"""SELECT p.rank, p.partner, u.pokemon_id
            FROM pokemon_partners p
            LEFT JOIN pokemon_usage u
              ON u.pokemon=p.partner AND u.season=p.season AND u.rule=p.rule
              AND u.crawled_date=?
-           WHERE p.pokemon=? AND p.season='M-2' AND p.rule='single' AND p.crawled_date=?
+           WHERE p.pokemon=? AND p.season='{SEASON}' AND p.rule='single' AND p.crawled_date=?
            ORDER BY p.rank""",
         (usage_date, pokemon_name, partner_date)
     ).fetchall() if partner_date else []
@@ -1627,11 +1649,11 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
     # ---- フロントマター ----
     type_str = "/".join(types)
     rank_str = f"{usage_rank}位"
-    desc = f"ポケモンチャンピオンズ M-2シーズンの{display_name}基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率{rank_str}。"
+    desc = f"ポケモンチャンピオンズの{display_name}基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率{rank_str}。"
     id_form = pdata["id"].split("-")[1]
     image_form_line = f"\nimageForm: '{id_form}'" if id_form != "00" else ""
     front = f"""---
-title: '{display_name} | ポケモンチャンピオンズ 使用率・基礎データ M-2'
+title: '{display_name} | ポケモンチャンピオンズ 使用率・基礎データ'
 description: '{desc}'
 pokemonName: '{display_name}'
 dexNumber: {pdata['dex']}
@@ -1654,7 +1676,7 @@ draft: false
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">{type_icons}
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.{pdata['dex']}</strong>　／　M-2 使用率 <strong style="color:#dc2626">{rank_str}</strong>
+      全国図鑑 <strong>No.{pdata['dex']}</strong>　／　使用率 <strong style="color:#dc2626">{rank_str}</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：{date}</div>
   </div>
@@ -1827,7 +1849,7 @@ draft: false
 '''
 
     section_data = f"""
-## 使用率データ（M-2シーズン）
+## 使用率データ
 
 ### 技
 
@@ -2141,6 +2163,24 @@ TARGET_POKEMON_ALL = [
     ("パンプジン (ちいさい)", 211),
     ("パンプジン (おおきい)", 212),
     ("ケンタロス:格", 213),
+    # --- M-3新規ポケモン ---
+    ("ラグラージ", 3),
+    ("ムクホーク", 8),
+    ("メタグロス", 10),
+    ("サーフゴー", 12),
+    ("バシャーモ", 16),
+    ("クチート", 17),
+    ("オーロンゲ", 22),
+    ("コノヨザル", 27),
+    ("ドラミドロ", 35),
+    ("シビルドン", 38),
+    ("ジュカイン", 81),
+    ("ズルズキン", 82),
+    ("ペンドラー", 83),
+    ("カエンジシ", 86),
+    ("タイレーツ", 90),
+    ("ラフレシア", 131),
+    ("ハリーセン", 140),
 ]
 TARGET_POKEMON = TARGET_POKEMON_ALL
 

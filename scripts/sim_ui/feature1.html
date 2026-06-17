@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ポケナビ 対戦評価｜パーティ診断</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { background:#f8fafc; }
+  .hpbar { height:6px; border-radius:9999px; background:#e5e7eb; overflow:hidden; }
+  .hpfill { height:100%; border-radius:9999px; transition:width .2s; }
+</style>
+</head>
+<body class="text-gray-800">
+<div class="max-w-5xl mx-auto p-4">
+  <header class="mb-4">
+    <h1 class="text-xl font-bold">対戦評価｜パーティ診断</h1>
+    <p class="text-xs text-gray-500">あなたのパーティを全ランカーと総当たり（各3戦・強いAI=tree d2）。勝率・苦手分析・実戦リプレイ。</p>
+  </header>
+
+  <!-- 主役ランカー選択 -->
+  <section class="bg-white rounded-xl border border-gray-200 p-4 mb-4">
+    <h2 class="text-sm font-bold text-gray-700 mb-2">主役ランカーを選択（このパーティを全ランカーと総当たり）</h2>
+    <select id="ranker-select" class="w-full border border-gray-300 rounded px-2 py-2 text-sm">
+      <option value="">ランカーを選択…</option>
+    </select>
+    <div id="party-view" class="mt-2 text-xs text-gray-500"></div>
+    <div class="mt-3 flex items-center gap-3">
+      <button id="btn-analyze" onclick="startAnalyze()"
+              class="px-5 py-2 rounded-lg bg-indigo-600 text-white text-sm font-bold hover:bg-indigo-700 shadow-sm">全ランカーと総当たり</button>
+      <span id="status" class="text-xs text-gray-500"></span>
+    </div>
+    <div id="progress-wrap" class="mt-3 hidden">
+      <div class="hpbar" style="height:8px"><div id="progress-fill" class="hpfill" style="width:0%;background:#6366f1"></div></div>
+      <div id="progress-text" class="text-xs text-gray-500 mt-1"></div>
+    </div>
+  </section>
+
+  <!-- 結果グリッド -->
+  <section id="results" class="hidden">
+    <div id="summary" class="text-sm text-gray-600 mb-2"></div>
+    <div class="grid md:grid-cols-3 gap-3">
+      <div><div class="text-xs font-bold text-green-700 mb-1">得意（勝率60%以上）</div><div id="col-strong" class="space-y-1"></div></div>
+      <div><div class="text-xs font-bold text-gray-600 mb-1">五分</div><div id="col-even" class="space-y-1"></div></div>
+      <div><div class="text-xs font-bold text-red-700 mb-1">苦手（勝率40%以下）</div><div id="col-weak" class="space-y-1"></div></div>
+    </div>
+  </section>
+</div>
+
+<!-- 構造分析モーダル -->
+<div id="modal" class="hidden fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4"
+     onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[88vh] overflow-auto p-5">
+    <div class="flex items-center justify-between mb-3">
+      <h3 id="modal-title" class="text-sm font-bold text-gray-800">構造分析</h3>
+      <button onclick="document.getElementById('modal').classList.add('hidden')" class="text-gray-400 hover:text-gray-700 text-xl leading-none">×</button>
+    </div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- リプレイモーダル -->
+<div id="replay" class="hidden fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4"
+     onclick="if(event.target===this)this.classList.add('hidden')">
+  <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto p-4">
+    <div class="flex items-center justify-between mb-2">
+      <h3 id="replay-title" class="text-sm font-bold text-gray-800">リプレイ</h3>
+      <button onclick="stopAuto();document.getElementById('replay').classList.add('hidden')" class="text-gray-400 hover:text-gray-700 text-xl leading-none">×</button>
+    </div>
+    <div id="replay-sides" class="space-y-2"></div>
+    <div id="replay-log" class="mt-2 text-xs bg-gray-50 border border-gray-200 rounded p-2 h-24 overflow-auto"></div>
+    <div class="mt-2 flex items-center gap-2">
+      <button onclick="stepTurn(-1)" class="px-3 py-1 rounded bg-gray-200 text-sm">◀</button>
+      <span id="replay-turn" class="text-xs text-gray-600 w-16 text-center"></span>
+      <button onclick="stepTurn(1)" class="px-3 py-1 rounded bg-gray-200 text-sm">▶</button>
+      <button id="btn-auto" onclick="toggleAuto()" class="px-3 py-1 rounded bg-indigo-600 text-white text-sm">自動再生</button>
+      <span id="replay-result" class="ml-auto text-sm font-bold"></span>
+    </div>
+  </div>
+</div>
+
+<script>
+let MY = [], MY_LABEL = null, AID = null, CARDS = {}, RBATTLE = null, RTURN = 0, autoTimer = null, RANKERS = [];
+
+// 主役ランカー選択
+fetch('/api/f1/rankers').then(r => r.json()).then(rs => {
+  RANKERS = rs; const sel = document.getElementById('ranker-select');
+  rs.forEach((r, i) => { const o = document.createElement('option'); o.value = i; o.textContent = r.label; sel.appendChild(o); });
+  sel.onchange = () => {
+    const v = sel.value;
+    if (v === '') { MY = []; MY_LABEL = null; document.getElementById('party-view').textContent = ''; return; }
+    MY = RANKERS[v].party; MY_LABEL = RANKERS[v].label;
+    document.getElementById('party-view').innerHTML = '構成: ' + MY.map(s => s.split('@')[0].split(':')[0]).join(' / ');
+    loadSavedIfAny(MY_LABEL);
+  };
+});
+
+async function loadSavedIfAny(label) {
+  CARDS = {}; ['col-strong','col-even','col-weak'].forEach(id => document.getElementById(id).innerHTML = '');
+  const saved = await fetch('/api/f1/saved').then(r => r.json());
+  if (saved[label]) {
+    AID = saved[label].analysis_id;
+    document.getElementById('results').classList.remove('hidden');
+    saved[label].cards.forEach(c => { CARDS[c.label] = c; addCard(c); });
+    updateSummary();
+    setStatus('保存済みの分析を表示中（再計算不要）', 'text-green-600');
+    document.getElementById('btn-analyze').textContent = '再計算';
+  } else {
+    document.getElementById('results').classList.add('hidden');
+    setStatus('未計算：「全ランカーと総当たり」で実行できます', 'text-gray-500');
+    document.getElementById('btn-analyze').textContent = '全ランカーと総当たり';
+  }
+}
+function setStatus(t, c) { const e = document.getElementById('status'); e.textContent = t; e.className = `text-xs ${c||'text-gray-500'}`; }
+
+async function startAnalyze() {
+  if (!MY.length) { alert('主役ランカーを選択してください'); return; }
+  document.getElementById('btn-analyze').disabled = true;
+  document.getElementById('progress-wrap').classList.remove('hidden');
+  CARDS = {}; ['col-strong','col-even','col-weak'].forEach(id => document.getElementById(id).innerHTML = '');
+  setStatus('分析を開始しています…', 'text-yellow-600');
+  const res = await fetch('/api/f1/analyze', { method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ p1: MY, n: 3, season: 'M-2', exclude_label: MY_LABEL }) }).then(r => r.json());
+  AID = res.analysis_id;
+  document.getElementById('results').classList.remove('hidden');
+  pollProgress();
+}
+
+async function pollProgress() {
+  const p = await fetch(`/api/f1/progress/${AID}`).then(r => r.json());
+  if (p.error) { setStatus('エラー: ' + p.error, 'text-red-500'); return; }
+  const pct = p.total ? Math.round(p.done / p.total * 100) : 0;
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${p.done} / ${p.total} 戦  （${p.cards.length} カード完了）`;
+  p.cards.forEach(c => { if (!CARDS[c.label]) { CARDS[c.label] = c; addCard(c); } });
+  updateSummary();
+  if (p.running) { setStatus('分析中…（強いAIで対戦・記録を保存中）', 'text-yellow-600'); setTimeout(pollProgress, 2000); }
+  else { setStatus(`完了：${Object.keys(CARDS).length}カード`, 'text-green-600');
+         document.getElementById('btn-analyze').disabled = false;
+         document.getElementById('progress-text').textContent += '（完了）'; }
+}
+
+function bucket(wr) { return wr >= 0.6 ? 'col-strong' : wr <= 0.4 ? 'col-weak' : 'col-even'; }
+function addCard(c) {
+  const wr = Math.round(c.win_rate * 100);
+  const color = c.win_rate >= 0.6 ? 'text-green-600' : c.win_rate <= 0.4 ? 'text-red-600' : 'text-gray-600';
+  const el = document.createElement('button');
+  el.className = 'w-full text-left bg-white rounded-lg border border-gray-200 px-3 py-2 hover:border-indigo-400 hover:shadow-sm';
+  el.innerHTML = `<div class="flex items-center justify-between"><span class="text-xs font-bold text-gray-700">${c.label}</span><span class="text-sm font-bold ${color}">${wr}%</span></div><div class="text-[11px] text-gray-400">${c.wins}勝${c.losses}敗${c.draws}分</div>`;
+  el.onclick = () => openCard(c);
+  document.getElementById(bucket(c.win_rate)).appendChild(el);
+}
+function updateSummary() {
+  const arr = Object.values(CARDS); if (!arr.length) return;
+  const s = arr.filter(c => c.win_rate >= 0.6).length, w = arr.filter(c => c.win_rate <= 0.4).length;
+  document.getElementById('summary').textContent = `${arr.length}カード ｜ 得意 ${s}  五分 ${arr.length-s-w}  苦手 ${w}`;
+}
+
+// ── 構造分析モーダル ──
+async function openCard(c) {
+  document.getElementById('modal-title').textContent = `${c.label} 戦の構造分析（勝率 ${Math.round(c.win_rate*100)}%）`;
+  const body = document.getElementById('modal-body');
+  body.innerHTML = '<div class="text-sm text-gray-400 py-6 text-center">計算中…</div>';
+  document.getElementById('modal').classList.remove('hidden');
+  // リプレイボタン（保存記録の再生）
+  let html = `<div class="flex items-center gap-2 mb-3 flex-wrap">
+    <span class="text-xs text-gray-500">記録の再生:</span>
+    ${[0,1,2].slice(0,c.n).map(i=>`<button onclick="openReplay('${c.label}',${i})" class="px-3 py-1.5 rounded bg-indigo-600 text-white text-xs font-bold hover:bg-indigo-700">▶ 第${i+1}戦</button>`).join('')}
+  </div>`;
+  // 実戦敗因（保存記録から）
+  html += '<div id="m-faults" class="rounded-lg border border-gray-200 p-3 mb-3 text-sm text-gray-400">実戦敗因を集計中…</div>';
+  // 1v1相性表＋型（matchup_explain）
+  html += '<div id="m-explain" class="text-sm text-gray-400">相性表・型を計算中…</div>';
+  body.innerHTML = html;
+  // faults
+  fetch('/api/f1/faults', { method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ analysis_id: AID, label: c.label }) }).then(r=>r.json()).then(b => {
+      if (b.error) { document.getElementById('m-faults').innerHTML = b.error; return; }
+      const col = b.win_rate>=0.55?'#16a34a':b.win_rate<=0.45?'#dc2626':'#6b7280';
+      let h = `<div class="text-xs font-bold text-gray-700 mb-1">📊 実戦結果（${b.n}戦）</div>`;
+      h += `<div class="mb-1">${b.summary}</div>`;
+      h += `<div class="flex items-center gap-2"><div class="flex-1 hpbar"><div class="hpfill" style="width:${Math.round(b.win_rate*100)}%;background:${col}"></div></div><span class="text-xs font-bold" style="color:${col}">${Math.round(b.win_rate*100)}%</span></div>`;
+      h += `<div class="text-xs text-gray-500 mt-1">${b.wins}勝 ${b.losses}敗 ${b.draws}分`;
+      if (b.setup_loss_rate >= 0.3) h += ` ｜ <b class="text-red-600">積み全抜き負け ${Math.round(b.setup_loss_rate*100)}%</b>`;
+      h += '</div>';
+      if (b.opp_survive_on_loss.length) h += `<div class="text-xs mt-1"><b class="text-red-600">倒せない核</b>: ${b.opp_survive_on_loss.slice(0,4).map(x=>`${x.name} ${Math.round(x.rate*100)}%`).join('、')}</div>`;
+      if (b.your_dead_on_loss.length) h += `<div class="text-xs mt-1"><b class="text-gray-600">落ちやすい自個体</b>: ${b.your_dead_on_loss.slice(0,4).map(x=>`${x.name} ${Math.round(x.rate*100)}%`).join('、')}</div>`;
+      document.getElementById('m-faults').innerHTML = h;
+    });
+  // matchup_explain
+  fetch('/api/matchup_explain', { method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ p1: MY, p2: c.specs, season: 'M-2' }) }).then(r=>r.json()).then(d => {
+      renderExplain(d);
+    }).catch(()=>{ document.getElementById('m-explain').innerHTML = '<span class="text-red-400">相性表の計算に失敗</span>'; });
+}
+
+function renderExplain(d) {
+  const vColor = v => v==='A' ? 'bg-green-100 text-green-700' : v==='B' ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-500';
+  let mt = `<div class="text-[11px] text-gray-500 mb-2"><span class="inline-block w-3 h-3 rounded bg-green-100 align-middle"></span> 自分が勝つ　<span class="inline-block w-3 h-3 rounded bg-red-100 align-middle"></span> 相手が勝つ　｜ 数字 = 与/被ダメ%</div>`;
+  mt += '<div class="overflow-x-auto"><table class="text-xs border-collapse"><tr><th class="p-1 text-gray-400 whitespace-nowrap">自↓ / 相手→</th>';
+  d.namesB.forEach(n => mt += `<th class="p-1 font-bold text-gray-600 whitespace-nowrap">${n}</th>`);
+  mt += '</tr>';
+  d.cells.forEach((row,i) => { mt += `<tr><td class="p-1 font-bold text-gray-600 whitespace-nowrap">${d.namesA[i]}</td>`;
+    row.forEach(c => mt += `<td class="p-1 text-center ${vColor(c.v)} rounded font-bold" style="min-width:50px">${c.dealt}/${c.taken}</td>`); mt += '</tr>'; });
+  mt += '</table></div>';
+  const bt = (builds) => { let h='<table class="w-full text-[11px]"><tbody>';
+    (builds||[]).forEach(b => h += `<tr class="border-b border-gray-100"><td class="py-1 pr-2 font-bold text-gray-700 whitespace-nowrap">${b.name}</td><td class="py-1 pr-2 text-gray-400">${b.type}</td><td class="py-1 pr-2">${b.item}</td><td class="py-1 pr-2 text-gray-500">${b.ability}</td><td class="py-1 pr-2 text-gray-500">S${b.speed}</td><td class="py-1 text-gray-500">${(b.moves||[]).join('・')}</td></tr>`);
+    return h + '</tbody></table>'; };
+  let h = `<div class="mb-3 p-3 rounded-lg bg-amber-50 border border-amber-200">${d.summary}</div>`;
+  h += `<details class="rounded-lg border border-gray-200 mb-3" open><summary class="px-3 py-2 bg-gray-50 rounded-t-lg text-xs font-bold text-gray-700 cursor-pointer">⚔ 1v1相性表（自分有利 ${d.a_win} / 相手有利 ${d.b_win}）</summary><div class="p-3 border-t border-gray-200">${mt}</div></details>`;
+  h += `<details class="rounded-lg border border-gray-200"><summary class="px-3 py-2 bg-gray-50 rounded-t-lg text-xs font-bold text-gray-700 cursor-pointer">🧬 型情報（相性の根拠）</summary><div class="p-3 border-t border-gray-200"><div class="text-xs font-bold text-red-600 mb-1">相手</div>${bt(d.buildsB)}<div class="text-xs font-bold text-blue-600 mt-3 mb-1">自分</div>${bt(d.buildsA)}</div></details>`;
+  document.getElementById('m-explain').innerHTML = h;
+}
+
+// ── リプレイ（保存記録の再生） ──
+async function openReplay(label, idx) {
+  stopAuto();
+  const d = await fetch('/api/f1/replay', { method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({ analysis_id: AID, label, idx }) }).then(r=>r.json());
+  if (d.error) { alert(d.error); return; }
+  RBATTLE = d; RTURN = 0;
+  document.getElementById('replay-title').textContent = `${label} 第${idx+1}戦 リプレイ（記録再生）`;
+  document.getElementById('replay').classList.remove('hidden');
+  renderReplay(0);
+}
+function hpColor(f) { return f > 0.5 ? '#22c55e' : f > 0.2 ? '#eab308' : '#ef4444'; }
+function renderSide(sd, mine) {
+  const label = mine ? '自分' : '相手';
+  let h = `<div class="text-[11px] font-bold ${mine?'text-blue-600':'text-red-600'} mb-1">${label}</div>`;
+  sd.party.forEach((p, i) => {
+    const f = p.max_hp ? p.hp / p.max_hp : 0;
+    const act = i === sd.active_idx;
+    h += `<div class="flex items-center gap-2 ${act?'font-bold':''} ${p.alive?'':'opacity-40'}">
+      <span class="text-xs w-28 truncate">${act?'▶ ':''}${p.name}${p.status?'・'+p.status:''}</span>
+      <div class="flex-1 hpbar"><div class="hpfill" style="width:${Math.round(f*100)}%;background:${hpColor(f)}"></div></div>
+      <span class="text-[10px] text-gray-400 w-12 text-right">${p.hp}/${p.max_hp}</span></div>`;
+  });
+  return h;
+}
+function renderReplay(idx) {
+  if (!RBATTLE) return;
+  RTURN = Math.max(0, Math.min(idx, RBATTLE.turns.length - 1));
+  const t = RBATTLE.turns[RTURN];
+  document.getElementById('replay-sides').innerHTML =
+    `<div class="bg-white border border-gray-200 rounded p-2">${renderSide(t.side1, true)}</div>` +
+    `<div class="bg-white border border-gray-200 rounded p-2">${renderSide(t.side2, false)}</div>`;
+  document.getElementById('replay-log').innerHTML = (t.logs || []).map(l => `<div>${l}</div>`).join('') || '<span class="text-gray-400">—</span>';
+  document.getElementById('replay-turn').textContent = `T${t.turn} / ${RBATTLE.turns.length-1}`;
+  const rb = document.getElementById('replay-result');
+  if (RTURN === RBATTLE.turns.length - 1) { rb.textContent = '🏆 ' + RBATTLE.winner; rb.className = 'ml-auto text-sm font-bold ' + (RBATTLE.result===1?'text-blue-600':RBATTLE.result===2?'text-red-600':'text-gray-500'); }
+  else rb.textContent = '';
+}
+function stepTurn(d) { stopAuto(); renderReplay(RTURN + d); }
+function toggleAuto() { if (autoTimer) stopAuto(); else { document.getElementById('btn-auto').textContent='停止';
+  autoTimer = setInterval(() => { if (RTURN >= RBATTLE.turns.length-1) { stopAuto(); return; } renderReplay(RTURN+1); }, 900); } }
+function stopAuto() { if (autoTimer) { clearInterval(autoTimer); autoTimer = null; } const b=document.getElementById('btn-auto'); if(b) b.textContent='自動再生'; }
+</script>
+</body>
+</html>

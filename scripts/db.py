@@ -48,7 +48,7 @@ def _create_tables(c: sqlite3.Cursor):
             source       TEXT    NOT NULL,
             crawled_date TEXT    NOT NULL,
             crawled_at   TEXT    NOT NULL,
-            UNIQUE(season, rule, pokemon, rank, source, crawled_date)
+            UNIQUE(season, rule, pokemon, rank, move, source, crawled_date)
         )
     """)
     c.execute("""
@@ -63,7 +63,7 @@ def _create_tables(c: sqlite3.Cursor):
             source       TEXT    NOT NULL,
             crawled_date TEXT    NOT NULL,
             crawled_at   TEXT    NOT NULL,
-            UNIQUE(season, rule, pokemon, rank, source, crawled_date)
+            UNIQUE(season, rule, pokemon, rank, item, source, crawled_date)
         )
     """)
     c.execute("""
@@ -78,7 +78,7 @@ def _create_tables(c: sqlite3.Cursor):
             source       TEXT    NOT NULL,
             crawled_date TEXT    NOT NULL,
             crawled_at   TEXT    NOT NULL,
-            UNIQUE(season, rule, pokemon, rank, source, crawled_date)
+            UNIQUE(season, rule, pokemon, rank, ability, source, crawled_date)
         )
     """)
     c.execute("""
@@ -93,7 +93,7 @@ def _create_tables(c: sqlite3.Cursor):
             source       TEXT    NOT NULL,
             crawled_date TEXT    NOT NULL,
             crawled_at   TEXT    NOT NULL,
-            UNIQUE(season, rule, pokemon, rank, source, crawled_date)
+            UNIQUE(season, rule, pokemon, rank, nature, source, crawled_date)
         )
     """)
     c.execute("""
@@ -114,7 +114,7 @@ def _create_tables(c: sqlite3.Cursor):
             source       TEXT    NOT NULL,
             crawled_date TEXT    NOT NULL,
             crawled_at   TEXT    NOT NULL,
-            UNIQUE(season, rule, pokemon, rank, source, crawled_date)
+            UNIQUE(season, rule, pokemon, rank, ev_spread, source, crawled_date)
         )
     """)
     c.execute("""
@@ -128,7 +128,7 @@ def _create_tables(c: sqlite3.Cursor):
             source       TEXT    NOT NULL,
             crawled_date TEXT    NOT NULL,
             crawled_at   TEXT    NOT NULL,
-            UNIQUE(season, rule, pokemon, rank, source, crawled_date)
+            UNIQUE(season, rule, pokemon, rank, partner, source, crawled_date)
         )
     """)
     c.execute("""

@@ -957,7 +957,7 @@ AI（`ai.py`）は `my_side.opp_view` の既知情報のみを参照して意思
 
 
 
-## 付録A. 全技一覧（DB 495技）
+## 付録A. 全技一覧（DB 501技）
 
 > **ソース**: `scripts/pokenavi.db` の `move_master` テーブル。威力・命中・PP・優先度は DB 値が正。  
 > 「可変」= `power IS NULL`（`_effective_power()` で計算）。「—」= NULL（必中 or 条件なし）。  

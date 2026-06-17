@@ -54,6 +54,12 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
         field.weather_count = weather_duration
         logs.append(f"{poke.name} の {ab}！")
 
+    # エレキメイカー：登場時エレキフィールドを展開
+    if ab == "エレキメイカー" and not getattr(field, "electric_terrain", False):
+        field.electric_terrain = True
+        field.electric_terrain_count = 5
+        logs.append(f"{poke.name} の エレキメイカー！ 足元に電気が流れた！")
+
     # いかく
     if ab == "いかく":
         if opponent.ability in ("クリアボディ", "しろいけむり", "かがくへんかガス",
@@ -136,6 +142,17 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
             ok = attacker.apply_status("paralysis")
             if ok:
                 logs.append(f"{defender.name} の せいでんき！ {attacker.name} が まひ した！")
+
+    # ほうし (接触技 → 30%で どく/まひ/ねむり のいずれか)
+    if ab == "ほうし" and is_contact_move(move) and attacker.ability != "えんかく":
+        if random.random() < 0.30:
+            st = random.choice(["poison", "paralysis", "sleep"])
+            ok = attacker.apply_status(st)
+            if ok:
+                if st == "sleep":
+                    attacker.sleep_count = random.randint(1, 3)
+                _jp = {"poison": "どく", "paralysis": "まひ", "sleep": "ねむり"}[st]
+                logs.append(f"{defender.name} の ほうし！ {attacker.name} は {_jp} になった！")
 
     # のろわれボディ → battle.py の _execute_move 内で処理
 
@@ -301,6 +318,15 @@ def on_ko(attacker: "BattlePokemon", logs: list) -> None:
         attacker.stage_attack = min(6, attacker.stage_attack + 1)
         logs.append(f"{attacker.name} の じしんかじょう！ 攻撃が上がった！")
 
+    if ab == "うなぎのぼり":
+        # 最も高い能力（実数値基準）を1段階上げる
+        _cand = {"stage_attack": attacker.attack, "stage_defense": attacker.defense,
+                 "stage_sp_attack": attacker.sp_attack, "stage_sp_defense": attacker.sp_defense,
+                 "stage_speed": attacker.speed}
+        _best = max(_cand, key=lambda k: _cand[k])
+        setattr(attacker, _best, min(6, getattr(attacker, _best) + 1))
+        logs.append(f"{attacker.name} の うなぎのぼり！ 最も高い能力が上がった！")
+
 
 
 # ── ターン終了時 ────────────────────────────────────────────────────────────
@@ -464,6 +490,10 @@ def check_move_immunity(defender: "BattlePokemon", move_type: str,
 
     # ふゆう：じめん無効（ただしかたやぶり等で無視される）
     if ab == "ふゆう" and move_type == "じめん" and not _grounded:
+        return True
+
+    # うなぎのぼり：地面にいない扱い → じめん技を無効化
+    if ab == "うなぎのぼり" and move_type == "じめん" and not _grounded:
         return True
 
     # でんじふゆう：じめん技を無効化

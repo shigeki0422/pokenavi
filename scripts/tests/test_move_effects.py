@@ -8612,6 +8612,135 @@ check("DB: ワンダールーム 取得可能", dl.get_move("ワンダールー�
 _s1rm, _s2rm, _frm = execute_ctx(make_poke(type1="エスパー"), make_poke(), "ワンダールーム")
 check("ワンダールーム 場の状態: ワンダールーム", bool(getattr(_frm, "wonder_room", 0)))
 
+# ── ゴールドラッシュ ──
+check("DB: ゴールドラッシュ 取得可能", dl.get_move("ゴールドラッシュ") is not None)
+_mv_ゴ_ルドラッシュ = dl.get_move("ゴールドラッシュ")
+if _mv_ゴ_ルドラッシュ:
+    _pa_ゴ_ルドラッシュ = make_poke(type1="はがね", atk_b=100, spatk_b=100)
+    _pd_ゴ_ルドラッシュ = make_poke(type1="こおり", def_b=100, spdef_b=100)
+    _d_ゴ_ルドラッシュ = dmg(_pa_ゴ_ルドラッシュ, _pd_ゴ_ルドラッシュ, "ゴールドラッシュ")
+    check("ダメージ計算: ゴールドラッシュ", _d_ゴ_ルドラッシュ > 0, f"dmg={_d_ゴ_ルドラッシュ}")
+# ゴールドラッシュ: 自分特攻-1
+_mvss_ゴ_ルドラッシュ_sp_attack = dl.get_move("ゴールドラッシュ")
+if _mvss_ゴ_ルドラッシュ_sp_attack:
+    random.seed(0); _got_ゴ_ルドラッシュ_sp_attack = 0
+    for _ in range(60):
+        _pas = make_poke(type1="はがね", atk_b=60, spatk_b=60); _pds = make_poke(type1="こおり", hp_b=255, def_b=255, spdef_b=255)
+        execute(_pas, _pds, "ゴールドラッシュ")
+        if _pas.stage_sp_attack != 0: _got_ゴ_ルドラッシュ_sp_attack = _pas.stage_sp_attack; break
+    check("自分特攻-1: ゴールドラッシュ", _got_ゴ_ルドラッシュ_sp_attack == -1, f"1回適用={_got_ゴ_ルドラッシュ_sp_attack} 期待=-1")
+
+# ── ソウルクラッシュ ──
+check("DB: ソウルクラッシュ 取得可能", dl.get_move("ソウルクラッシュ") is not None)
+_mv_ソウルクラッシュ = dl.get_move("ソウルクラッシュ")
+if _mv_ソウルクラッシュ:
+    _pa_ソウルクラッシュ = make_poke(type1="フェアリー", atk_b=100, spatk_b=100)
+    _pd_ソウルクラッシュ = make_poke(type1="ドラゴン", def_b=100, spdef_b=100)
+    _d_ソウルクラッシュ = dmg(_pa_ソウルクラッシュ, _pd_ソウルクラッシュ, "ソウルクラッシュ")
+    check("ダメージ計算: ソウルクラッシュ", _d_ソウルクラッシュ > 0, f"dmg={_d_ソウルクラッシュ}")
+# ソウルクラッシュ: 相手特攻-1
+_mv_dd_ソウルクラッシュ = dl.get_move("ソウルクラッシュ")
+if _mv_dd_ソウルクラッシュ:
+    _pa_dd = make_poke(type1="フェアリー", atk_b=30, spatk_b=30)
+    random.seed(0); _dd_val_ソウルクラッシュ = 0; _dd_ok_ソウルクラッシュ = False
+    for _ in range(60):
+        _pd_dd = make_poke(type1="ドラゴン", hp_b=255, def_b=255, spdef_b=255)
+        execute(_pa_dd, _pd_dd, "ソウルクラッシュ")
+        if _pd_dd.stage_sp_attack != 0: _dd_val_ソウルクラッシュ = _pd_dd.stage_sp_attack; _dd_ok_ソウルクラッシュ = True; break
+    check("相手特攻-1: ソウルクラッシュ", _dd_ok_ソウルクラッシュ and _dd_val_ソウルクラッシュ == -1, f"1回適用={_dd_val_ソウルクラッシュ} 期待=-1")
+
+# ── ふんどのこぶし ──
+check("DB: ふんどのこぶし 取得可能", dl.get_move("ふんどのこぶし") is not None)
+_mv_ふんどのこぶし = dl.get_move("ふんどのこぶし")
+if _mv_ふんどのこぶし:
+    _pa_ふんどのこぶし = make_poke(type1="ゴースト", atk_b=100, spatk_b=100)
+    _pd_ふんどのこぶし = make_poke(type1="エスパー", def_b=100, spdef_b=100)
+    _d_ふんどのこぶし = dmg(_pa_ふんどのこぶし, _pd_ふんどのこぶし, "ふんどのこぶし")
+    check("ダメージ計算: ふんどのこぶし", _d_ふんどのこぶし > 0, f"dmg={_d_ふんどのこぶし}")
+# ふんどのこぶし: 攻撃技で受けた回数(times_hit)×50 威力上昇(上限350)
+_pf = make_poke(type1="ゴースト", atk_b=100); _df = make_poke(def_b=100)
+_pf.times_hit = 0; _f0 = _ep(_pf, _df, dl.get_move("ふんどのこぶし"), BattleField())
+_pf.times_hit = 3; _f3 = _ep(_pf, _df, dl.get_move("ふんどのこぶし"), BattleField())
+_pf.times_hit = 10; _f10 = _ep(_pf, _df, dl.get_move("ふんどのこぶし"), BattleField())
+check("被弾0で威力50: ふんどのこぶし", _f0 == 50, f"0={_f0}")
+check("被弾3で威力200(50+50×3): ふんどのこぶし", _f3 == 200, f"3={_f3}")
+check("被弾上限6で威力350: ふんどのこぶし", _f10 == 350, f"max={_f10}")
+
+# ── はいすいのじん ──
+check("DB: はいすいのじん 取得可能", dl.get_move("はいすいのじん") is not None)
+# はいすいのじん: 自分攻撃+1
+_mv_sb_はいすいのじん_attack = dl.get_move("はいすいのじん")
+if _mv_sb_はいすいのじん_attack:
+    _pa_sb = make_poke(type1="かくとう"); _pd_sb = make_poke()
+    execute(_pa_sb, _pd_sb, "はいすいのじん")
+    check("自分攻撃+1: はいすいのじん", _pa_sb.stage_attack == 1, f"1回適用={_pa_sb.stage_attack} 期待=+1")
+# はいすいのじん: 自分防御+1
+_mv_sb_はいすいのじん_defense = dl.get_move("はいすいのじん")
+if _mv_sb_はいすいのじん_defense:
+    _pa_sb = make_poke(type1="かくとう"); _pd_sb = make_poke()
+    execute(_pa_sb, _pd_sb, "はいすいのじん")
+    check("自分防御+1: はいすいのじん", _pa_sb.stage_defense == 1, f"1回適用={_pa_sb.stage_defense} 期待=+1")
+# はいすいのじん: 自分特攻+1
+_mv_sb_はいすいのじん_sp_attack = dl.get_move("はいすいのじん")
+if _mv_sb_はいすいのじん_sp_attack:
+    _pa_sb = make_poke(type1="かくとう"); _pd_sb = make_poke()
+    execute(_pa_sb, _pd_sb, "はいすいのじん")
+    check("自分特攻+1: はいすいのじん", _pa_sb.stage_sp_attack == 1, f"1回適用={_pa_sb.stage_sp_attack} 期待=+1")
+# はいすいのじん: 自分特防+1
+_mv_sb_はいすいのじん_sp_defense = dl.get_move("はいすいのじん")
+if _mv_sb_はいすいのじん_sp_defense:
+    _pa_sb = make_poke(type1="かくとう"); _pd_sb = make_poke()
+    execute(_pa_sb, _pd_sb, "はいすいのじん")
+    check("自分特防+1: はいすいのじん", _pa_sb.stage_sp_defense == 1, f"1回適用={_pa_sb.stage_sp_defense} 期待=+1")
+# はいすいのじん: 自分素早さ+1
+_mv_sb_はいすいのじん_speed = dl.get_move("はいすいのじん")
+if _mv_sb_はいすいのじん_speed:
+    _pa_sb = make_poke(type1="かくとう"); _pd_sb = make_poke()
+    execute(_pa_sb, _pd_sb, "はいすいのじん")
+    check("自分素早さ+1: はいすいのじん", _pa_sb.stage_speed == 1, f"1回適用={_pa_sb.stage_speed} 期待=+1")
+# はいすいのじん: 全能力+1かつ自分が交代不可になる。すでに交代不可なら失敗
+_ph = make_poke(type1="かくとう"); execute(_ph, make_poke(), "はいすいのじん")
+check("使用後に交代不可: はいすいのじん", _ph.trapped, f"trapped={_ph.trapped}")
+_ph2 = make_poke(type1="かくとう"); _ph2.trapped = True; execute(_ph2, make_poke(), "はいすいのじん")
+check("すでに交代不可なら失敗(能力上がらない): はいすいのじん", _ph2.stage_attack == 0, f"atk={_ph2.stage_attack}")
+
+# ── どくばりセンボン ──
+check("DB: どくばりセンボン 取得可能", dl.get_move("どくばりセンボン") is not None)
+_mv_どくばりセンボン = dl.get_move("どくばりセンボン")
+if _mv_どくばりセンボン:
+    _pa_どくばりセンボン = make_poke(type1="どく", atk_b=100, spatk_b=100)
+    _pd_どくばりセンボン = make_poke(type1="くさ", def_b=100, spdef_b=100)
+    _d_どくばりセンボン = dmg(_pa_どくばりセンボン, _pd_どくばりセンボン, "どくばりセンボン")
+    check("ダメージ計算: どくばりセンボン", _d_どくばりセンボン > 0, f"dmg={_d_どくばりセンボン}")
+# どくばりセンボン: どく50%
+_mv_s_どくばりセンボン = dl.get_move("どくばりセンボン")
+if _mv_s_どくばりセンボン:
+    random.seed(0); _hit_どくばりセンボン = 0
+    for _ in range(300):
+        _pa2 = make_poke(type1="どく", atk_b=30, spatk_b=30); _pd2 = make_poke(type1="くさ", def_b=255, spdef_b=255, hp_b=255)
+        execute(_pa2, _pd2, "どくばりセンボン")
+        _hit_どくばりセンボン += int((_pd2.status == "poison"))
+    check("追加効果(どく50%): どくばりセンボン", 45 <= _hit_どくばりセンボン <= 270, f"count={_hit_どくばりセンボン}/300")
+    random.seed(1); _immok_どくばりセンボン = True
+    for _ in range(60):
+        _pai = make_poke(type1="どく", atk_b=30, spatk_b=30); _pdi = make_poke(type1="どく", def_b=255, spdef_b=255, hp_b=255)
+        execute(_pai, _pdi, "どくばりセンボン")
+        if _pdi.status == "poison": _immok_どくばりセンボン = False; break
+    check("どく免疫(どく型には無効): どくばりセンボン", _immok_どくばりセンボン, "免疫タイプに状態異常が付与されないこと")
+    random.seed(1); _immok_どくばりセンボン = True
+    for _ in range(60):
+        _pai = make_poke(type1="どく", atk_b=30, spatk_b=30); _pdi = make_poke(type1="はがね", def_b=255, spdef_b=255, hp_b=255)
+        execute(_pai, _pdi, "どくばりセンボン")
+        if _pdi.status == "poison": _immok_どくばりセンボン = False; break
+    check("どく免疫(はがね型には無効): どくばりセンボン", _immok_どくばりセンボン, "免疫タイプに状態異常が付与されないこと")
+# どくばりセンボン: 相手状態異常で威力2倍
+_pcp = make_poke(type1="どく", atk_b=100, spatk_b=100)
+_dn1 = make_poke(type1="くさ", def_b=100, spdef_b=100)
+_dn2 = make_poke(type1="くさ", def_b=100, spdef_b=100); _dn2.status = "poison"
+_pn = _ep(_pcp, _dn1, dl.get_move("どくばりセンボン"), BattleField())
+_pd = _ep(_pcp, _dn2, dl.get_move("どくばりセンボン"), BattleField())
+check("状態異常で威力2倍: どくばりセンボン", _pd == _pn * 2, f"normal={_pn} status={_pd}")
+
 
 print(f'\n全技テスト: {PASS}件PASS / {FAIL}件FAIL (計{PASS+FAIL}件)')
 if FAILURES:

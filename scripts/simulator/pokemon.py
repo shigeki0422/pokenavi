@@ -114,6 +114,7 @@ class BattlePokemon:
     infatuation: bool = False          # メロメロ状態
     torment: bool = False              # いちゃもん（連続同技不可）
     trapped: bool = False              # にげられない（くろいまなざし等）
+    times_hit: int = 0                 # 場に出てから攻撃技で受けた回数（ふんどのこぶし用）
     ability_suppressed: bool = False   # とくせいなし（いえき）
     rooted: bool = False               # ねをはる
     aqua_ring: bool = False            # アクアリング

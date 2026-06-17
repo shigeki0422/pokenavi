@@ -1813,6 +1813,21 @@ for name, type_, cat, power, accuracy, pp, effect in moves:
         tests_for_move.append('check("ひんし0で威力50: おはかまいり", _o0 == 50, f"0={_o0}")')
         tests_for_move.append('check("ひんし3で威力200(50+50×3): おはかまいり", _o3 == 200, f"3={_o3}")')
         tests_for_move.append('check("ひんし上限5で威力300: おはかまいり", _o5 == 300, f"5={_o5}")')
+    elif name == 'はいすいのじん':
+        tests_for_move.append('# はいすいのじん: 全能力+1かつ自分が交代不可になる。すでに交代不可なら失敗')
+        tests_for_move.append('_ph = make_poke(type1="かくとう"); execute(_ph, make_poke(), "はいすいのじん")')
+        tests_for_move.append('check("使用後に交代不可: はいすいのじん", _ph.trapped, f"trapped={_ph.trapped}")')
+        tests_for_move.append('_ph2 = make_poke(type1="かくとう"); _ph2.trapped = True; execute(_ph2, make_poke(), "はいすいのじん")')
+        tests_for_move.append('check("すでに交代不可なら失敗(能力上がらない): はいすいのじん", _ph2.stage_attack == 0, f"atk={_ph2.stage_attack}")')
+    elif name == 'ふんどのこぶし':
+        tests_for_move.append('# ふんどのこぶし: 攻撃技で受けた回数(times_hit)×50 威力上昇(上限350)')
+        tests_for_move.append('_pf = make_poke(type1="ゴースト", atk_b=100); _df = make_poke(def_b=100)')
+        tests_for_move.append('_pf.times_hit = 0; _f0 = _ep(_pf, _df, dl.get_move("ふんどのこぶし"), BattleField())')
+        tests_for_move.append('_pf.times_hit = 3; _f3 = _ep(_pf, _df, dl.get_move("ふんどのこぶし"), BattleField())')
+        tests_for_move.append('_pf.times_hit = 10; _f10 = _ep(_pf, _df, dl.get_move("ふんどのこぶし"), BattleField())')
+        tests_for_move.append('check("被弾0で威力50: ふんどのこぶし", _f0 == 50, f"0={_f0}")')
+        tests_for_move.append('check("被弾3で威力200(50+50×3): ふんどのこぶし", _f3 == 200, f"3={_f3}")')
+        tests_for_move.append('check("被弾上限6で威力350: ふんどのこぶし", _f10 == 350, f"max={_f10}")')
     elif name == 'ほのおのまい':
         tests_for_move.append('# ほのおのまい: 50%で自分の特攻+1')
         tests_for_move.append('random.seed(0); _fd_up = False')
@@ -2194,8 +2209,8 @@ for name, type_, cat, power, accuracy, pp, effect in moves:
         tests_for_move.append('_pkn = make_poke(); _dkn = make_poke(moves=["たいあたり"]); _dkn.last_used_move = "たいあたり"')
         tests_for_move.append('execute(_pkn, _dkn, "かなしばり")')
         tests_for_move.append('check("かなしばり わざ封じ: かなしばり", _dkn.disabled_move == "たいあたり")')
-    elif name in ('ひゃっきやこう', 'ベノムショック', 'たたりめ'):
-        st = 'badpoison' if name == 'ベノムショック' else 'burn'
+    elif name in ('ひゃっきやこう', 'ベノムショック', 'たたりめ', 'どくばりセンボン'):
+        st = 'poison' if name == 'どくばりセンボン' else ('badpoison' if name == 'ベノムショック' else 'burn')
         tests_for_move.append(f'# {name}: 相手状態異常で威力2倍')
         tests_for_move.append(f'_pcp = make_poke(type1="{atk_type}", atk_b=100, spatk_b=100)')
         tests_for_move.append(f'_dn1 = make_poke(type1="{def_type}", def_b=100, spdef_b=100)')

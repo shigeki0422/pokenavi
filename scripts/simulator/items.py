@@ -65,6 +65,8 @@ def get_crit_stage_bonus(item: Optional[str]) -> int:
 def get_speed_item_multiplier(item: Optional[str]) -> float:
     if item == "こだわりスカーフ":
         return 1.5
+    if item == "くろいてっきゅう":
+        return 0.5
     return 1.0
 
 
@@ -144,6 +146,18 @@ def try_cure_berry(poke: "BattlePokemon", logs: list) -> None:
         poke.status = None
         poke.item = None
         logs.append(f"{poke.name} の チーゴのみ！ やけどが治った")
+    elif poke.item == "クラボのみ" and poke.status == "paralysis":
+        poke.status = None
+        poke.item = None
+        logs.append(f"{poke.name} の クラボのみ！ まひが治った")
+    elif poke.item == "キーのみ" and poke.status == "freeze":
+        poke.status = None
+        poke.item = None
+        logs.append(f"{poke.name} の キーのみ！ こおりが治った")
+    elif poke.item == "ナナシのみ" and poke.confused:
+        poke.confused = False
+        poke.item = None
+        logs.append(f"{poke.name} の ナナシのみ！ こんらんが治った")
 
 
 # ── しろいハーブ（能力低下を一度リセット） ──────────────────────────────────
@@ -206,6 +220,8 @@ def has_quick_claw_trigger(item: Optional[str]) -> bool:
 
 def get_accuracy_evasion_item(item: Optional[str]) -> float:
     """命中率補正（攻撃側のアイテム影響）"""
+    if item == "こうかくレンズ":
+        return 1.1
     return 1.0
 
 

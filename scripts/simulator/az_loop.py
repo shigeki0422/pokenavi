@@ -28,26 +28,46 @@ from .search_ai import SearchAI
 from .train_az_np import rain_probe
 
 
+def _n_mega(sel):
+    return sum(1 for p in sel if getattr(p, "mega_data", None) is not None)
+
 def explore_selection(party6, opp6, loader, rng, eps=0.15, k=6):
     """多様性のある選出: 有望top-k候補から一様サンプル（妥当だが多様なマッチアップ）。
-    小確率epsで完全ランダム（真の探索）。決定的選出（毎回同じ3体）による学習分布の偏りを防ぐ。"""
+    小確率epsで完全ランダム（真の探索）。決定的選出（毎回同じ3体）による学習分布の偏りを防ぐ。
+    2メガ選出（メガ石持ち2体以上）は除外（再抽選→最終手段でメガ1体に絞る）。"""
     from .selection import candidate_selections
     if len(party6) <= 3:
         return list(party6)
-    if rng.random() < eps:
-        idxs = rng.sample(range(len(party6)), 3)
-        rng.shuffle(idxs)
-        return [party6[i] for i in idxs]
-    cands = candidate_selections(party6, opp6, k)
-    if not cands:
-        return heuristic_selection(party6, opp6, loader)
-    sel = rng.choice(cands)
-    return [party6[i] for i in sel if i < len(party6)]
+    def _pick():
+        if rng.random() < eps:
+            idxs = rng.sample(range(len(party6)), 3); rng.shuffle(idxs)
+            return [party6[i] for i in idxs]
+        cands = candidate_selections(party6, opp6, k)
+        if not cands:
+            return heuristic_selection(party6, opp6, loader)
+        return [party6[i] for i in rng.choice(cands) if i < len(party6)]
+    sel = _pick()
+    for _ in range(8):
+        if _n_mega(sel) < 2:
+            return sel
+        sel = _pick()
+    out = []; kept = False           # 最終手段: メガ持ちは1体だけ残す
+    for p in sel:
+        if getattr(p, "mega_data", None) is not None:
+            if kept: continue
+            kept = True
+        out.append(p)
+    for p in party6:
+        if len(out) >= 3: break
+        if p not in out and getattr(p, "mega_data", None) is None:
+            out.append(p)
+    return out[:3]
 
 
 class _SelfPlayAI:
     """MCTS自己対戦AI: 探索付きで指し、(状態, 訪問分布π, 合法手) を記録する。"""
-    def __init__(self, loader, net, n_sims, dir_eps, temperature, rng, season="M-2"):
+    def __init__(self, loader, net, n_sims, dir_eps, temperature, rng, season="M-2",
+                 teacher="old", select="duct", c_puct=1.5):
         self.net = net; self.n_sims = n_sims
         self.dir_eps = dir_eps; self.temperature = temperature; self.rng = rng
         # 探索内の相手モデルをネット化（中級＝ネット級の相手前提で読む）。HeuristicAI(初級)では弱い相手しか経験できない。
@@ -55,6 +75,17 @@ class _SelfPlayAI:
         self.opp_ai = NetGreedyAI(net); self._fallback = HeuristicAI()
         self._det = SearchAI(loader, season=season, seed=rng.randint(0, 1 << 30))
         self.records = []  # (features, pi_dict, legal_idxs)
+        # teacher="new": 教師信号を新MCTS(同時手番DUCT/regret)で生成。旧mcts_searchは相手固定の単一エージェント探索。
+        self.teacher = teacher
+        if teacher == "new":
+            def vfn(s1, s2, f): return net.evaluate(encode_state(s1, s2, f), [0])[1]
+            def pfn(s1, s2, f):
+                L2 = [ix for _, ix in legal_actions_indexed(s1, s2, f)]
+                return net.evaluate(encode_state(s1, s2, f), L2)[0] if L2 else {}
+            tai = SearchAI(loader, season=season, seed=rng.randint(0, 1 << 30),
+                           value_fn=vfn, policy_fn=pfn, policy_weight=0.15, rollout_ai=NetGreedyAI(net))
+            tai.mcts = True; tai.mcts_sims = n_sims; tai.c_puct = c_puct; tai.mcts_select = select
+            self._newai = tai
 
     def __call__(self, my_side, opp_side, field):
         me = my_side.active
@@ -63,6 +94,15 @@ class _SelfPlayAI:
         forced = _forced_charging_action(me)
         if forced:
             return forced
+        if self.teacher == "new":
+            feat = encode_state(my_side, opp_side, field)
+            act, pi = self._newai.mcts_policy(my_side, opp_side, field, temperature=self.temperature)
+            if act is None:
+                return self._fallback(my_side, opp_side, field)
+            legal = [ix for _, ix in legal_actions_indexed(my_side, opp_side, field)]
+            if pi and len(legal) > 1:
+                self.records.append((feat, pi, legal))
+            return act
         belief = my_side.belief if my_side.belief is not None else OpponentBelief(self._det.loader, self._det.season)
         belief.observe_disclosure(my_side.opp_view)
         my_is_s1 = (my_side.field_idx == 0)
