@@ -354,42 +354,42 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0038-00.webp" alt="キュウコン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/ninetales/" style="color:inherit;text-decoration:none">キュウコン</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/metagross/" style="color:inherit;text-decoration:none">メタグロス</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>1.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0303-00.webp" alt="クチート" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/mawile/" style="color:inherit;text-decoration:none">クチート</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0038-00.webp" alt="キュウコン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/ninetales/" style="color:inherit;text-decoration:none">キュウコン</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>2.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/greninja/" style="color:inherit;text-decoration:none">ゲッコウガ</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/raichu/" style="color:inherit;text-decoration:none">ライチュウ</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>3.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0497-00.webp" alt="ジャローダ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/serperior/" style="color:inherit;text-decoration:none">ジャローダ</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0584-00.webp" alt="バイバニラ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/vanilluxe/" style="color:inherit;text-decoration:none">バイバニラ</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>4.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0571-00.webp" alt="ゾロアーク" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/zoroark/" style="color:inherit;text-decoration:none">ゾロアーク</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/greninja/" style="color:inherit;text-decoration:none">ゲッコウガ</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>5.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0579-00.webp" alt="チリーン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/chimecho/" style="color:inherit;text-decoration:none">チリーン</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0303-00.webp" alt="クチート" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/mawile/" style="color:inherit;text-decoration:none">クチート</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>6.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0584-00.webp" alt="バイバニラ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/vanilluxe/" style="color:inherit;text-decoration:none">バイバニラ</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0579-00.webp" alt="チリーン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/chimecho/" style="color:inherit;text-decoration:none">チリーン</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>7.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/metagross/" style="color:inherit;text-decoration:none">メタグロス</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0497-00.webp" alt="ジャローダ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/serperior/" style="color:inherit;text-decoration:none">ジャローダ</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>8.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr>
@@ -399,7 +399,7 @@ draft: false
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/raichu/" style="color:inherit;text-decoration:none">ライチュウ</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0571-00.webp" alt="ゾロアーク" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/zoroark/" style="color:inherit;text-decoration:none">ゾロアーク</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>10.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 </tbody>

@@ -394,8 +394,8 @@ draft: false
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/primarina/" style="color:inherit;text-decoration:none">アシレーヌ</a></div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>1.0位</strong></span><span style="font-size:0.82em;color:#94a3b8">前回比 0</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/raichu/" style="color:inherit;text-decoration:none">ライチュウ</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>2.0位</strong></span><span style="font-size:0.82em;color:#16a34a">前回比 +2</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
 <line x1="8" y1="8" x2="232" y2="8" stroke="#e2e8f0" stroke-width="1"/>
 <text x="6" y="11" text-anchor="end" fill="#94a3b8" font-size="8">1</text>
 <line x1="8" y1="28" x2="232" y2="28" stroke="#e2e8f0" stroke-width="1"/>
@@ -404,39 +404,26 @@ draft: false
 <text x="6" y="57" text-anchor="end" fill="#94a3b8" font-size="8">10</text>
 <text x="8" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/17</text>
 <text x="232" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/18</text>
-<polyline points="8,8 232,8" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>
-<circle cx="8" cy="8" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
+<polyline points="8,18 232,8" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="8" cy="18" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
 <circle cx="232" cy="8" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
 <text x="232" y="2" text-anchor="middle" fill="#8b5cf6" font-size="9" font-weight="bold">1位</text>
 </svg></div></div></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0038-00.webp" alt="キュウコン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/ninetales/" style="color:inherit;text-decoration:none">キュウコン</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/meowscarada/" style="color:inherit;text-decoration:none">マスカーニャ</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>2.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-1000-00.webp" alt="サーフゴー" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/gholdengo/" style="color:inherit;text-decoration:none">サーフゴー</a></div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>3.5位</strong></span><span style="font-size:0.82em;color:#16a34a">前回比 +1</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
-<line x1="8" y1="8" x2="232" y2="8" stroke="#e2e8f0" stroke-width="1"/>
-<text x="6" y="11" text-anchor="end" fill="#94a3b8" font-size="8">1</text>
-<line x1="8" y1="28" x2="232" y2="28" stroke="#e2e8f0" stroke-width="1"/>
-<text x="6" y="31" text-anchor="end" fill="#94a3b8" font-size="8">5</text>
-<line x1="8" y1="54" x2="232" y2="54" stroke="#e2e8f0" stroke-width="1"/>
-<text x="6" y="57" text-anchor="end" fill="#94a3b8" font-size="8">10</text>
-<text x="8" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/17</text>
-<text x="232" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/18</text>
-<polyline points="8,23 232,18" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>
-<circle cx="8" cy="23" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
-<circle cx="232" cy="18" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
-<text x="232" y="12" text-anchor="middle" fill="#8b5cf6" font-size="9" font-weight="bold">3位</text>
-</svg></div></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/lucario/" style="color:inherit;text-decoration:none">ルカリオ</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>3.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0257-00.webp" alt="バシャーモ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/blaziken/" style="color:inherit;text-decoration:none">バシャーモ</a></div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>4.5位</strong></span><span style="font-size:0.82em;color:#16a34a">前回比 +1</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/primarina/" style="color:inherit;text-decoration:none">アシレーヌ</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>2.5位</strong></span><span style="font-size:0.82em;color:#dc2626">前回比 -3</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
 <line x1="8" y1="8" x2="232" y2="8" stroke="#e2e8f0" stroke-width="1"/>
 <text x="6" y="11" text-anchor="end" fill="#94a3b8" font-size="8">1</text>
 <line x1="8" y1="28" x2="232" y2="28" stroke="#e2e8f0" stroke-width="1"/>
@@ -445,8 +432,8 @@ draft: false
 <text x="6" y="57" text-anchor="end" fill="#94a3b8" font-size="8">10</text>
 <text x="8" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/17</text>
 <text x="232" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/18</text>
-<polyline points="8,28 232,23" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>
-<circle cx="8" cy="28" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
+<polyline points="8,8 232,23" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="8" cy="8" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
 <circle cx="232" cy="23" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
 <text x="232" y="17" text-anchor="middle" fill="#8b5cf6" font-size="9" font-weight="bold">4位</text>
 </svg></div></div></td>
@@ -458,7 +445,7 @@ draft: false
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/meowscarada/" style="color:inherit;text-decoration:none">マスカーニャ</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0038-00.webp" alt="キュウコン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/ninetales/" style="color:inherit;text-decoration:none">キュウコン</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>6.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr>
@@ -468,8 +455,13 @@ draft: false
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/raichu/" style="color:inherit;text-decoration:none">ライチュウ</a></div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>9.0位</strong></span><span style="font-size:0.82em;color:#16a34a">前回比 +2</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/charizard/" style="color:inherit;text-decoration:none">リザードン</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>8.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0257-00.webp" alt="バシャーモ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/blaziken/" style="color:inherit;text-decoration:none">バシャーモ</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>5.5位</strong></span><span style="font-size:0.82em;color:#dc2626">前回比 -7</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
 <line x1="8" y1="8" x2="232" y2="8" stroke="#e2e8f0" stroke-width="1"/>
 <text x="6" y="11" text-anchor="end" fill="#94a3b8" font-size="8">1</text>
 <line x1="8" y1="28" x2="232" y2="28" stroke="#e2e8f0" stroke-width="1"/>
@@ -478,21 +470,29 @@ draft: false
 <text x="6" y="57" text-anchor="end" fill="#94a3b8" font-size="8">10</text>
 <text x="8" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/17</text>
 <text x="232" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/18</text>
-<polyline points="8,54 232,44" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>
-<circle cx="8" cy="54" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
-<circle cx="232" cy="44" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
-<text x="232" y="38" text-anchor="middle" fill="#8b5cf6" font-size="9" font-weight="bold">8位</text>
+<polyline points="8,13 232,49" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="8" cy="13" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
+<circle cx="232" cy="49" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
+<text x="232" y="43" text-anchor="middle" fill="#8b5cf6" font-size="9" font-weight="bold">9位</text>
 </svg></div></div></td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/charizard/" style="color:inherit;text-decoration:none">リザードン</a></div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>9.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/lucario/" style="color:inherit;text-decoration:none">ルカリオ</a></div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>10.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-1000-00.webp" alt="サーフゴー" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/gholdengo/" style="color:inherit;text-decoration:none">サーフゴー</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>7.5位</strong></span><span style="font-size:0.82em;color:#dc2626">前回比 -5</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
+<line x1="8" y1="8" x2="232" y2="8" stroke="#e2e8f0" stroke-width="1"/>
+<text x="6" y="11" text-anchor="end" fill="#94a3b8" font-size="8">1</text>
+<line x1="8" y1="28" x2="232" y2="28" stroke="#e2e8f0" stroke-width="1"/>
+<text x="6" y="31" text-anchor="end" fill="#94a3b8" font-size="8">5</text>
+<line x1="8" y1="54" x2="232" y2="54" stroke="#e2e8f0" stroke-width="1"/>
+<text x="6" y="57" text-anchor="end" fill="#94a3b8" font-size="8">10</text>
+<text x="8" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/17</text>
+<text x="232" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/18</text>
+<polyline points="8,28 232,54" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>
+<circle cx="8" cy="28" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
+<circle cx="232" cy="54" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
+<text x="232" y="48" text-anchor="middle" fill="#8b5cf6" font-size="9" font-weight="bold">10位</text>
+</svg></div></div></td>
 </tr>
 </tbody>
 </table>
