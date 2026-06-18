@@ -122,11 +122,17 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   function adjust(){
     popup.style.left='0';
     popup.style.right='auto';
+    popup.style.top='calc(100% + 4px)';
+    popup.style.bottom='auto';
     popup.style.display='block';
     var r=popup.getBoundingClientRect();
     if(r.right>window.innerWidth-8){
       popup.style.left='auto';
       popup.style.right='0';
+    }
+    if(r.bottom>window.innerHeight-8){
+      popup.style.top='auto';
+      popup.style.bottom='calc(100% + 4px)';
     }
     popup.style.display='';
   }
@@ -187,11 +193,17 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   function adjust(){
     popup.style.left='0';
     popup.style.right='auto';
+    popup.style.top='calc(100% + 4px)';
+    popup.style.bottom='auto';
     popup.style.display='block';
     var r=popup.getBoundingClientRect();
     if(r.right>window.innerWidth-8){
       popup.style.left='auto';
       popup.style.right='0';
+    }
+    if(r.bottom>window.innerHeight-8){
+      popup.style.top='auto';
+      popup.style.bottom='calc(100% + 4px)';
     }
     popup.style.display='';
   }
