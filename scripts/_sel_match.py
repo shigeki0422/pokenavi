@@ -6,15 +6,23 @@ import sys, os, random, math
 from multiprocessing import Pool
 import _pop_gen as G
 
-SEASON = "M-2"
+SEASON = os.environ.get("COEVO_SEASON", "M-2")
 _W = {}
 def _winit():
     os.environ.setdefault("OMP_NUM_THREADS", "1")
     from simulator.simulate import get_loader
     from simulator.az_np import PVNetNP
     from train_az2 import _net_ai
-    _W["L"] = get_loader(); _W["net"] = PVNetNP.load()
-    _W["dai"] = _net_ai(_W["net"], _W["L"], 0, 12, 0, tree=True, tree_depth=2, tree_k=4, tree_det=8)
+    selnet = os.environ.get("SEL_NET")
+    _W["L"] = get_loader(); _W["net"] = PVNetNP.load(selnet) if selnet else PVNetNP.load()
+    if os.environ.get("BATTLE_AI") == "mcts":
+        sims = int(os.environ.get("MCTS_SIMS", "400"))
+        _W["dai"] = _net_ai(_W["net"], _W["L"], 0, 12, 0, mcts=True, mcts_sims=sims, mcts_select="regret", mcts_fast=True)
+    else:
+        _W["dai"] = _net_ai(_W["net"], _W["L"], 0, 12, 0, tree=True, tree_depth=2, tree_k=4, tree_det=8)
+    if os.environ.get("SEL_METHOD") == "mcts":
+        ssims = int(os.environ.get("SEL_SIMS", "100"))
+        _W["selai"] = _net_ai(_W["net"], _W["L"], 0, 12, 0, mcts=True, mcts_sims=ssims, mcts_select="regret", mcts_fast=True)
 
 def _batch(args):
     seed, parties, gpp = args
@@ -22,8 +30,11 @@ def _batch(args):
     from simulator.battle import BattleSide, Battle
     from simulator.belief import OpponentBelief
     from simulator.ai import select_party
-    from _selnet import select_valuenet
+    from _selnet import select_valuenet, select_mcts
     L = _W["L"]; net = _W["net"]; dai = _W["dai"]; rng = random.Random(seed)
+    use_mcts_sel = os.environ.get("SEL_METHOD") == "mcts"
+    def smart(P, Q):
+        return select_mcts(P, Q, L, _W["selai"], n=3, rng=rng) if use_mcts_sel else select_valuenet(P, Q, L, net, n=3, rng=rng)
     def team(sp): return [build_from_spec(parse_pokemon_spec(s), L, season=SEASON, randomize=False) for s in sp]
     vw = vl = dr = 0
     for idx in range(len(parties) - 1):
@@ -31,13 +42,13 @@ def _batch(args):
         for g in range(gpp):
             try:
                 PA = team(a); PB = team(b)
-                vnet_on_1 = (g % 2 == 0)   # 価値ネット選出をどちら側に
+                vnet_on_1 = (g % 2 == 0)   # スマート選出をどちら側に
                 if vnet_on_1:
-                    s1sel = select_valuenet(PA, PB, L, net, n=3, rng=rng)
+                    s1sel = smart(PA, PB)
                     s2sel = select_party(PB, PA, L, n=3, temperature=0.0, rng=rng)
                 else:
                     s1sel = select_party(PA, PB, L, n=3, temperature=0.0, rng=rng)
-                    s2sel = select_valuenet(PB, PA, L, net, n=3, rng=rng)
+                    s2sel = smart(PB, PA)
                 s1 = BattleSide(s1sel); s2 = BattleSide(s2sel)
                 s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
                 w = Battle(s1, s2).run(dai, dai)

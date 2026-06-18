@@ -44,3 +44,42 @@ def select_valuenet(party6, opp6, L, net, n=3, temperature=0.0, rng=None, opp_sa
             acc += w
             if r <= acc: return order
     return max(scored, key=lambda x: x[1])[0]
+
+
+def select_mcts(party6, opp6, L, ai, n=3, rng=None, opp_samples=1, topk=4):
+    """T2選出：候補選出をMCTSのルート価値(ΣW/ΣN=その局面の勝率推定)で評価して選ぶ。
+    生のターン0価値(T1)より、実際に読みを入れた分だけ選出の良し悪しを正確に測れる。
+    コスト抑制: 候補はヒューリスティックtop-k(combo)に限定し、各leadをMCTS評価。
+    ai = _net_ai(mcts=True...) のMCTS探索AI(_build_mcts_root を持つ)。"""
+    import random as _r
+    from itertools import combinations
+    from simulator.battle import BattleSide, BattleField
+    from simulator.belief import OpponentBelief
+    from simulator.ai import select_party
+    rng = rng or _r.Random()
+    k = min(n, len(party6))
+    if len(party6) <= k:
+        return list(party6)
+    def is_mega(p): return getattr(p, "mega_data", None) is not None
+    def rootval(team_self, team_opp):
+        s1 = BattleSide(list(team_self)); s2 = BattleSide(list(team_opp))
+        s1.field_idx = 0; s2.field_idx = 1
+        s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
+        root, root_my, _ = ai._build_mcts_root(s1, s2, BattleField(), None)
+        meN = root["N"][0]; meW = root["W"][0]
+        tot = sum(meN.values())
+        return (sum(meW.values()) / tot) if tot else 0.5
+    opp_sel = select_party(opp6, party6, L, n=min(3, len(opp6)), temperature=0.0, rng=rng)
+    opp_alt = [opp_sel] + [select_party(opp6, party6, L, n=min(3, len(opp6)), temperature=1.0, rng=rng)
+                           for _ in range(max(0, opp_samples - 1))]
+    combos = [c for c in combinations(range(len(party6)), k)
+              if sum(1 for i in c if is_mega(party6[i])) <= 1]
+    rng.shuffle(combos); combos = combos[:max(1, topk)]
+    best_order = None; best_v = -1.0
+    for combo in combos:
+        sub = [party6[i] for i in combo]
+        for li in range(len(sub)):
+            order = [sub[li]] + [sub[j] for j in range(len(sub)) if j != li]
+            v = sum(rootval(order, o) for o in opp_alt) / len(opp_alt)
+            if v > best_v: best_v = v; best_order = order
+    return best_order if best_order is not None else select_party(party6, opp6, L, n=k, rng=rng)

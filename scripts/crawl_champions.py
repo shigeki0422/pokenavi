@@ -13,7 +13,7 @@ from datetime import date
 from PIL import Image
 
 OUTPUT_DIR    = f"/tmp/champ_crawl_{date.today().isoformat()}"
-TOTAL_POKEMON = 130
+TOTAL_POKEMON = 232
 
 LIST_X        = 1600
 LIST_ENTRY_Y  = [350, 482, 614, 746, 878]

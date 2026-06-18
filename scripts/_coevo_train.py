@@ -55,6 +55,15 @@ def _ng_batch(args):
     from simulator.pokemon import build_from_spec, parse_pokemon_spec
     from simulator.ai import select_party
     L = _W["L"]; netA = PVNetNP.load(pathA); netB = PVNetNP.load(pathB); rng = random.Random(seed)
+    gate_ai = os.environ.get("GATE_AI", "ng")
+    if gate_ai == "mcts":
+        from train_az2 import _net_ai
+        gsims = int(os.environ.get("GATE_SIMS", "400"))
+        aiA = _net_ai(netA, L, 0, 12, 0, mcts=True, mcts_sims=gsims, mcts_select="regret", mcts_fast=True)
+        aiB = _net_ai(netB, L, 0, 12, 0, mcts=True, mcts_sims=gsims, mcts_select="regret", mcts_fast=True)
+        mkA = lambda: aiA; mkB = lambda: aiB
+    else:
+        mkA = lambda: NetGreedyAI(netA); mkB = lambda: NetGreedyAI(netB)
     def team(sp): return [build_from_spec(parse_pokemon_spec(s), L, season=SEASON, randomize=False) for s in sp]
     aw = al = dr = 0
     for g in range(n_games):
@@ -64,7 +73,7 @@ def _ng_batch(args):
             sa = select_party(A, B, L, n=3, temperature=0.3, rng=rng); sb = select_party(B, A, L, n=3, temperature=0.3, rng=rng)
             s1 = BattleSide(sa); s2 = BattleSide(sb); s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
             Aon1 = (g % 2 == 0)
-            ai1 = NetGreedyAI(netA if Aon1 else netB); ai2 = NetGreedyAI(netB if Aon1 else netA)
+            ai1 = mkA() if Aon1 else mkB(); ai2 = mkB() if Aon1 else mkA()
             w = Battle(s1, s2).run(ai1, ai2)
             if w == 0: dr += 1
             elif (w == 1) == Aon1: aw += 1
@@ -95,8 +104,10 @@ def main():
     pool = [G.gen_party(D, rng) for _ in range(poolN)]   # 多様な生成集団（=拡充データ源）
     print(f"多様パーティ集団 {len(pool)} 生成", flush=True)
     anchor = PVNetNP.load(); anchor.save(ANCHOR_TMP)       # 凍結アンカー（=現行ネット, 本番az_net_np.jsonは不変）
-    net = copy.deepcopy(anchor); net.save(NET_TMP)
-    print(f"アンカー(現行ネット)を凍結。学習ネットは別管理。", flush=True)
+    start = os.environ.get("START_NET")                     # 継続学習: 既存学習ネットから再開（アンカーは現行のまま）
+    net = PVNetNP.load(start) if start else copy.deepcopy(anchor)
+    net.save(NET_TMP)
+    print(f"アンカー(現行ネット)を凍結。学習ネット開始={'継続:'+start if start else '現行から'}。", flush=True)
     for ep in range(epochs):
         t0 = time.time()
         per = max(1, games // workers)

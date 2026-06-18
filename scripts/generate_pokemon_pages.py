@@ -1592,6 +1592,188 @@ def stat_bar_html(label: str, value: int, color: str, bold=False, s_color=None) 
   </div>'''
 
 
+CHART_COLORS = ['#3b82f6','#ef4444','#10b981','#f59e0b','#8b5cf6','#ec4899','#06b6d4','#84cc16','#f97316','#a855f7']
+
+
+def _fmt_date(d: str) -> str:
+    p = d.split('-')
+    return f"{int(p[1])}/{int(p[2])}"
+
+
+def make_trend_chart(series: list, dates: list, top_n: int = 7) -> str:
+    """
+    series: [{name: str, values: [float|None]}] aligned with dates
+    Returns SVG line chart + HTML legend, or '' when < 2 dates.
+    """
+    if len(dates) < 2:
+        return ''
+    series = [s for s in series if any(v is not None for v in s['values'])][:top_n]
+    if not series:
+        return ''
+
+    W, H = 560, 210
+    ML, MR, MT, MB = 38, 8, 12, 26
+    pw, ph = W - ML - MR, H - MT - MB
+
+    def px(i): return ML + pw * i / max(len(dates) - 1, 1)
+    def py(v): return MT + ph * (1 - v / 100)
+
+    out = [f'<svg viewBox="0 0 {W} {H}" style="width:100%;max-width:{W}px;height:auto;display:block;margin:4px 0" xmlns="http://www.w3.org/2000/svg">']
+    out.append(f'<rect x="{ML}" y="{MT}" width="{pw}" height="{ph}" fill="#fafafa" rx="2"/>')
+
+    for pct in [0, 25, 50, 75, 100]:
+        y = py(pct)
+        out.append(f'<line x1="{ML}" y1="{y:.0f}" x2="{ML+pw}" y2="{y:.0f}" stroke="#e2e8f0" stroke-width="1"/>')
+        out.append(f'<text x="{ML-3}" y="{y+4:.0f}" text-anchor="end" fill="#94a3b8" font-size="9">{pct}%</text>')
+
+    n = len(dates)
+    label_step = max(1, (n - 1) // 6)  # 最大7ラベルに間引く
+
+    for i, d in enumerate(dates):
+        x = px(i)
+        out.append(f'<line x1="{x:.0f}" y1="{MT}" x2="{x:.0f}" y2="{MT+ph}" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/>')
+        if i == 0 or i == n - 1 or i % label_step == 0:
+            out.append(f'<text x="{x:.0f}" y="{H-4}" text-anchor="middle" fill="#64748b" font-size="11" font-weight="500">{_fmt_date(d)}</text>')
+
+    for si, s in enumerate(series):
+        color = CHART_COLORS[si % len(CHART_COLORS)]
+        pts = [(i, v) for i, v in enumerate(s['values']) if v is not None]
+        if not pts:
+            continue
+        if len(pts) >= 2:
+            out.append(f'<polyline points="{" ".join(f"{px(i):.0f},{py(v):.0f}" for i,v in pts)}" fill="none" stroke="{color}" stroke-width="2" stroke-linejoin="round"/>')
+        for i, v in pts:
+            r = "4" if n <= 10 else "2.5"
+            out.append(f'<circle cx="{px(i):.0f}" cy="{py(v):.0f}" r="{r}" fill="{color}" stroke="#fff" stroke-width="1.5"><title>{_fmt_date(dates[i])}: {v}%</title></circle>')
+
+    out.append('</svg>')
+
+    leg = []
+    for si, s in enumerate(series):
+        color = CHART_COLORS[si % len(CHART_COLORS)]
+        last_v = next((v for v in reversed(s['values']) if v is not None), None)
+        leg.append(
+            f'<span style="display:inline-flex;align-items:center;gap:4px;margin:0 10px 4px 0;font-size:0.78em">'
+            f'<svg width="20" height="3" style="flex-shrink:0"><line x1="0" y1="1.5" x2="20" y2="1.5" stroke="{color}" stroke-width="2.5"/></svg>'
+            f'{s["name"]}<span style="color:#64748b"> {last_v}%</span></span>'
+        )
+    out.append(f'<div style="display:flex;flex-wrap:wrap;margin:2px 0 6px {ML}px">{"".join(leg)}</div>')
+    return '\n'.join(out)
+
+
+def make_rank_trend_chart(rank_history: dict, dates: list, top_n: int = 7) -> str:
+    """
+    rank_history: {name: {date: rank(int)}}
+    Y axis inverted: rank 1 at top. Returns '' when < 2 dates.
+    """
+    if len(dates) < 2:
+        return ''
+    entries = sorted(rank_history.keys(), key=lambda p: sum(rank_history[p].get(d, 99) for d in dates))[:top_n]
+    if not entries:
+        return ''
+
+    W, H = 560, 200
+    ML, MR, MT, MB = 38, 8, 12, 26
+    pw, ph = W - ML - MR, H - MT - MB
+    R_MIN, R_MAX = 1, 10
+
+    def px(i): return ML + pw * i / max(len(dates) - 1, 1)
+    def py(r): return MT + ph * (r - R_MIN) / (R_MAX - R_MIN)
+
+    out = [f'<svg viewBox="0 0 {W} {H}" style="width:100%;max-width:{W}px;height:auto;display:block;margin:4px 0" xmlns="http://www.w3.org/2000/svg">']
+    out.append(f'<rect x="{ML}" y="{MT}" width="{pw}" height="{ph}" fill="#fafafa" rx="2"/>')
+
+    for r in [1, 3, 5, 7, 10]:
+        y = py(r)
+        out.append(f'<line x1="{ML}" y1="{y:.0f}" x2="{ML+pw}" y2="{y:.0f}" stroke="#e2e8f0" stroke-width="1"/>')
+        out.append(f'<text x="{ML-3}" y="{y+4:.0f}" text-anchor="end" fill="#94a3b8" font-size="9">{r}位</text>')
+
+    n2 = len(dates)
+    label_step2 = max(1, (n2 - 1) // 6)
+
+    for i, d in enumerate(dates):
+        x = px(i)
+        out.append(f'<line x1="{x:.0f}" y1="{MT}" x2="{x:.0f}" y2="{MT+ph}" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/>')
+        if i == 0 or i == n2 - 1 or i % label_step2 == 0:
+            out.append(f'<text x="{x:.0f}" y="{H-4}" text-anchor="middle" fill="#64748b" font-size="11" font-weight="500">{_fmt_date(d)}</text>')
+
+    for si, name in enumerate(entries):
+        color = CHART_COLORS[si % len(CHART_COLORS)]
+        pts = [(i, rank_history[name][d]) for i, d in enumerate(dates) if d in rank_history[name]]
+        if not pts:
+            continue
+        if len(pts) >= 2:
+            out.append(f'<polyline points="{" ".join(f"{px(i):.0f},{py(r):.0f}" for i,r in pts)}" fill="none" stroke="{color}" stroke-width="2" stroke-linejoin="round"/>')
+        for i, r in pts:
+            dot_r = "4" if n2 <= 10 else "2.5"
+            out.append(f'<circle cx="{px(i):.0f}" cy="{py(r):.0f}" r="{dot_r}" fill="{color}" stroke="#fff" stroke-width="1.5"><title>{_fmt_date(dates[i])}: {r}位</title></circle>')
+
+    out.append('</svg>')
+
+    leg = []
+    for si, name in enumerate(entries):
+        color = CHART_COLORS[si % len(CHART_COLORS)]
+        last_r = rank_history[name].get(dates[-1])
+        rank_str = f" {last_r}位" if last_r is not None else ""
+        leg.append(
+            f'<span style="display:inline-flex;align-items:center;gap:4px;margin:0 10px 4px 0;font-size:0.78em">'
+            f'<svg width="20" height="3" style="flex-shrink:0"><line x1="0" y1="1.5" x2="20" y2="1.5" stroke="{color}" stroke-width="2.5"/></svg>'
+            f'{name}<span style="color:#64748b">{rank_str}</span></span>'
+        )
+    out.append(f'<div style="display:flex;flex-wrap:wrap;margin:2px 0 6px {ML}px">{"".join(leg)}</div>')
+    return '\n'.join(out)
+
+
+def delta_html(prev, curr: float) -> str:
+    if prev is None:
+        return '<span style="color:#9ca3af">—</span>'
+    diff = curr - prev
+    if abs(diff) < 0.05:
+        return '<span style="color:#9ca3af">±0.0</span>'
+    color = '#16a34a' if diff > 0 else '#dc2626'
+    sign = '+' if diff > 0 else ''
+    return f'<span style="color:{color};font-weight:600">{sign}{diff:.1f}</span>'
+
+
+def get_all_dates(conn, table: str, pokemon: str) -> list:
+    rows = conn.execute(
+        f"SELECT DISTINCT crawled_date FROM {table} WHERE season='{SEASON}' AND rule='single' AND pokemon=? ORDER BY crawled_date",
+        (pokemon,)
+    ).fetchall()
+    return [r[0] for r in rows]
+
+
+def get_partner_rank_history(conn, pokemon: str, dates: list) -> dict:
+    """Returns {partner: {date: rank(int)}}"""
+    result = {}
+    for d in dates:
+        rows = conn.execute(
+            f"SELECT partner, rank FROM pokemon_partners WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
+            (pokemon, d)
+        ).fetchall()
+        for row in rows:
+            p, rank = row[0], int(row[1])
+            if p not in result:
+                result[p] = {}
+            result[p][d] = rank
+    return result
+
+
+def get_history(conn, table: str, pokemon: str, key_col: str, dates: list) -> dict:
+    result = {}
+    for d in dates:
+        rows = conn.execute(
+            f"SELECT {key_col}, usage_rate FROM {table} WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
+            (pokemon, d)
+        ).fetchall()
+        for row in rows:
+            k, rate = row[0], float(row[1])
+            if k not in result:
+                result[k] = {}
+            result[k][d] = rate
+    return result
+
+
 def generate_page(pokemon_name: str, usage_rank: int) -> str:
     pdata = POKEMON_DATA[pokemon_name]
     display_name = pdata.get("display_name", pokemon_name)
@@ -1618,6 +1800,17 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
         f"FROM pokemon_evs WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
         (pokemon_name, ev_date)
     ).fetchall() if ev_date else []
+
+    # 全日付（トレンド用）
+    all_move_dates = get_all_dates(conn, "pokemon_moves", pokemon_name)
+    all_item_dates = get_all_dates(conn, "pokemon_items", pokemon_name)
+    all_partner_dates = get_all_dates(conn, "pokemon_partners", pokemon_name)
+    has_move_trend = len(all_move_dates) >= 2
+    has_item_trend = len(all_item_dates) >= 2
+    has_partner_trend = len(all_partner_dates) >= 2
+    move_history = get_history(conn, "pokemon_moves", pokemon_name, "move", all_move_dates) if has_move_trend else {}
+    item_history = get_history(conn, "pokemon_items", pokemon_name, "item", all_item_dates) if has_item_trend else {}
+    partner_rank_history = get_partner_rank_history(conn, pokemon_name, all_partner_dates) if has_partner_trend else {}
 
     # チームメイト
     partner_date = latest(conn, "pokemon_partners", pokemon_name)
@@ -1783,15 +1976,47 @@ draft: false
                       for n, a, w in cols)
         return f'<tr style="background:#f1f5f9">{ths}</tr>'
 
+    # チャート用データ構築
+    def _build_series(history, keys, all_dates):
+        series = []
+        for k in keys:
+            h = history.get(k, {})
+            vals = [h.get(d) for d in all_dates]
+            series.append({"name": k, "values": vals})
+        return series
+
+    move_chart = make_trend_chart(
+        _build_series(move_history, [r["move"] for r in moves], all_move_dates),
+        all_move_dates
+    ) if has_move_trend else ''
+
+    item_chart = make_trend_chart(
+        _build_series(item_history, [r["item"] for r in items], all_item_dates),
+        all_item_dates
+    ) if has_item_trend else ''
+
+    partner_chart = make_rank_trend_chart(partner_rank_history, all_partner_dates) if has_partner_trend else ''
+
     # 技テーブル
     move_rows = ""
     for i, row in enumerate(moves):
         mv = row["move"]
-        rate = row["usage_rate"]
+        rate = float(row["usage_rate"])
         bg = ' style="background:#fef9c3"' if i == 0 else (' style="background:#fafafa"' if i % 2 == 0 else "")
         mt = get_move_type(mv)
         icon = f'{type_icon_html(mt)} ' if mt else ""
-        move_rows += f'''<tr{bg}>
+        if has_move_trend:
+            prev_rate = move_history.get(mv, {}).get(all_move_dates[-2])
+            delt = delta_html(prev_rate, rate)
+            move_rows += f'''<tr{bg}>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}"><div style="display:flex;align-items:center;gap:6px">{icon}{mv}</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{rate}%</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;white-space:nowrap">{delt}</td>
+</tr>
+'''
+        else:
+            move_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}"><div style="display:flex;align-items:center;gap:6px">{icon}{mv}</div></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{rate}%</td>
@@ -1802,11 +2027,22 @@ draft: false
     item_rows = ""
     for i, row in enumerate(items):
         it = row["item"]
-        rate = row["usage_rate"]
+        rate = float(row["usage_rate"])
         bg = ' style="background:#fef9c3"' if i == 0 else (' style="background:#fafafa"' if i % 2 == 0 else "")
         icon = item_icon_html(it)
         icon_wrap = f'<div style="display:flex;align-items:center;gap:6px">{icon}{it}</div>' if icon else it
-        item_rows += f'''<tr{bg}>
+        if has_item_trend:
+            prev_rate = item_history.get(it, {}).get(all_item_dates[-2])
+            delt = delta_html(prev_rate, rate)
+            item_rows += f'''<tr{bg}>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{icon_wrap}</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{rate}%</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;white-space:nowrap">{delt}</td>
+</tr>
+'''
+        else:
+            item_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{icon_wrap}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{rate}%</td>
@@ -1848,10 +2084,15 @@ draft: false
 </tr>
 '''
 
+    move_th_extra = '  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:60px">前回比</th>' if has_move_trend else ''
+    item_th_extra = '  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:60px">前回比</th>' if has_item_trend else ''
+
     section_data = f"""
 ## 使用率データ
 
 ### 技
+
+{move_chart}
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -1859,6 +2100,7 @@ draft: false
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+{move_th_extra}
 </tr></thead>
 <tbody>
 {move_rows}</tbody>
@@ -1867,12 +2109,15 @@ draft: false
 
 ### 持ち物
 
+{item_chart}
+
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">持ち物</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+{item_th_extra}
 </tr></thead>
 <tbody>
 {item_rows}</tbody>
@@ -1933,10 +2178,14 @@ draft: false
     <div style="font-size:0.68rem;color:#888">{rank}位</div>
   </div>
 '''
+    partner_chart_md = f"""
+{partner_chart}
+""" if partner_chart else ""
+
     section_partners = f"""
 
 ### チームメイト（同居率 TOP10）
-
+{partner_chart_md}
 <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin:12px 0">
 {partner_cards}</div>
 

@@ -3,16 +3,23 @@
 これが効けば穴埋め最適化/改善提案を ms 級でできる（実対戦バッチ20-40分を蒸留）。
 phase1 ラベル生成(NetGreedy・並列) → phase2 学習 → phase3 相関検証(held-out)。
 """
-import sys, os, random, math, pickle
+import sys, os, random, math, pickle, json
 import numpy as np
 from multiprocessing import Pool
 import _pop_gen as G
 from _selector import ValMLP
 
-SEASON = "M-2"
-GN = 16  # gauntlet(固定メタ)サイズ
+SEASON = os.environ.get("COEVO_SEASON", "M-2")
+GN = int(os.environ.get("SCORER_GN", "16"))  # gauntlet(固定メタ)サイズ
+_K = int(os.environ.get("SCORER_K", "4"))    # 各パーティの勝率推定の対戦数/相手
 
 def _gauntlet(D):
+    # 共進化で発見した強構築があればガントレット(=強い相手)に使う。
+    # ランダム生成相手より型の良し悪しの識別信号が強い(build_signalの知見)。
+    path = f"/tmp/coevo_parties_{SEASON}.json"
+    if os.path.exists(path):
+        parties = json.load(open(path, encoding="utf-8"))["parties"][:GN]
+        return [p["specs"] for p in parties]
     return [G.gen_party(D, random.Random(50000 + k)) for k in range(GN)]
 
 # ---- パーティ特徴量（順不同・固定長） ----
@@ -61,12 +68,21 @@ def _winit():
     from simulator.az_np import PVNetNP
     from simulator.alphazero import NetGreedyAI
     _W["L"] = get_loader(); _W["net"] = PVNetNP.load(); _W["NG"] = NetGreedyAI
+    _W["mode"] = os.environ.get("BATTLE_AI", "ng")
+    if _W["mode"] == "d2":
+        from train_az2 import _net_ai
+        _W["d2"] = _net_ai(_W["net"], _W["L"], 0, 12, 0, tree=True, tree_depth=2, tree_k=4, tree_det=8)
+    elif _W["mode"] == "mcts":
+        from train_az2 import _net_ai
+        sims = int(os.environ.get("MCTS_SIMS", "1200"))
+        _W["mcts"] = _net_ai(_W["net"], _W["L"], 0, 12, 0, mcts=True, mcts_sims=sims,
+                             mcts_select="regret", mcts_fast=True)
 
 def _team(sp):
     from simulator.pokemon import build_from_spec, parse_pokemon_spec
     return [build_from_spec(parse_pokemon_spec(s), _W["L"], season=SEASON, randomize=False) for s in sp]
 
-def _winrate_vs_gauntlet(cand_specs, gauntlet, rng, K=4):
+def _winrate_vs_gauntlet(cand_specs, gauntlet, rng, K=_K):
     from simulator.battle import BattleSide, Battle
     from simulator.belief import OpponentBelief
     from simulator.ai import select_party
@@ -78,8 +94,11 @@ def _winrate_vs_gauntlet(cand_specs, gauntlet, rng, K=4):
             sa = select_party(PA, PB, L, n=3, temperature=0.3, rng=rng)
             sb = select_party(PB, PA, L, n=3, temperature=0.3, rng=rng)
             s1 = BattleSide(sa); s2 = BattleSide(sb); s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
+            _m = _W.get("mode")
+            ai1, ai2 = ((_W["mcts"], _W["mcts"]) if _m == "mcts"
+                        else (_W["d2"], _W["d2"]) if _m == "d2" else (NG(net), NG(net)))
             try:
-                w = Battle(s1, s2).run(NG(net), NG(net))
+                w = Battle(s1, s2).run(ai1, ai2)
             except Exception:
                 w = 0
             if w != 0:

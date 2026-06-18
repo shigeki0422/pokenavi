@@ -9,7 +9,7 @@ import _pop_gen as G
 import _coevo as C
 from _party_scorer import encode_party
 
-SEASON = "M-2"
+SEASON = os.environ.get("COEVO_SEASON", "M-2")
 _W = {}
 def _winit():
     os.environ.setdefault("OMP_NUM_THREADS", "1")
@@ -24,6 +24,11 @@ def _winit():
     if _W["mode"] == "d2":
         from train_az2 import _net_ai
         _W["d2"] = _net_ai(_W["net"], _W["L"], 0, 12, 0, tree=True, tree_depth=2, tree_k=4, tree_det=8)
+    elif _W["mode"] == "mcts":
+        from train_az2 import _net_ai
+        sims = int(os.environ.get("MCTS_SIMS", "1200"))
+        _W["mcts"] = _net_ai(_W["net"], _W["L"], 0, 12, 0, mcts=True, mcts_sims=sims,
+                             mcts_select="regret", mcts_fast=True)
 
 def _team(sp):
     from simulator.pokemon import build_from_spec, parse_pokemon_spec
@@ -79,7 +84,9 @@ def _ab(args):
             sa = select_party(A, B, L, n=3, temperature=0.3, rng=rng)
             sb = select_party(B, A, L, n=3, temperature=0.3, rng=rng)
             s1 = BattleSide(sa); s2 = BattleSide(sb); s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
-            ai1, ai2 = (_W["d2"], _W["d2"]) if _W.get("mode") == "d2" else (NG(net), NG(net))
+            _m = _W.get("mode")
+            ai1, ai2 = ((_W["mcts"], _W["mcts"]) if _m == "mcts"
+                        else (_W["d2"], _W["d2"]) if _m == "d2" else (NG(net), NG(net)))
             try:
                 w = Battle(s1, s2).run(ai1, ai2)
             except Exception:
