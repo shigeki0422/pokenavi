@@ -268,6 +268,12 @@ MEGA_DATA = {
 
 # ---- 各ポケモンの静的データ ----
 POKEMON_DATA = {
+    "ガブリアス": {
+        "file": "garchomp", "dex": 445, "id": "0445-00",
+        "types": ["ドラゴン", "じめん"],
+        "stats": [108, 130, 95, 80, 85, 102],
+        "analysis": ["garchomp-analysis-m2"],
+    },
     "ブリジュラス": {
         "file": "archaludon", "analysis": ["archaludon-analysis-m2"], "dex": 1018, "id": "1018-00",
         "types": ["ドラゴン", "はがね"],
@@ -1422,6 +1428,65 @@ def get_ability_desc(ability_name: str) -> str:
     return "—"
 
 
+def get_move_desc(move_name: str) -> str:
+    conn = get_conn()
+    row = conn.execute(
+        "SELECT type, category, power, pp, accuracy, effect_text FROM move_master WHERE name_jp=?", (move_name,)
+    ).fetchone()
+    conn.close()
+    if not row:
+        return ""
+    type_jp, cat, power, pp, accuracy, effect = row
+
+    CAT_COLOR = {"physical": "#ef4444", "special": "#3b82f6", "status": "#10b981"}
+    cat_jp = {"physical": "物理", "special": "特殊", "status": "変化"}.get(cat, cat or "")
+    cat_color = CAT_COLOR.get(cat, "#6b7280")
+
+    # タイプバッジ
+    type_num = TYPE_NUM.get(type_jp, "00")
+    type_slug = TYPE_SLUG.get(type_jp, "normal")
+    type_badge = (f'<img src="/images/types/type-{type_num}-{type_slug}.png" '
+                  f'alt="{type_jp}" style="height:16px;vertical-align:middle">')
+
+    # カテゴリバッジ
+    cat_badge = (f'<span style="background:{cat_color};color:#fff;font-size:0.72em;'
+                 f'padding:1px 5px;border-radius:3px;font-weight:600">{cat_jp}</span>')
+
+    # スタットチップ
+    def chip(label, val, color="#475569"):
+        return (f'<span style="background:#f1f5f9;color:{color};font-size:0.78em;'
+                f'padding:2px 6px;border-radius:4px;white-space:nowrap">'
+                f'<span style="color:#94a3b8;font-size:0.85em">{label}</span> <b>{val}</b></span>')
+
+    chips = []
+    if power:
+        chips.append(chip("威力", power, "#1e293b"))
+    if accuracy:
+        chips.append(chip("命中", f"{accuracy}%", "#1e293b"))
+    if pp:
+        chips.append(chip("PP", pp))
+    chips_html = f'<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px">{"".join(chips)}</div>' if chips else ''
+
+    effect_html = f'<div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">{effect}</div>' if effect else ''
+
+    return (
+        f'<div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">'
+        f'{type_badge}{cat_badge}'
+        f'</div>'
+        f'{chips_html}'
+        f'{effect_html}'
+    )
+
+
+def get_item_desc(item_name: str) -> str:
+    conn = get_conn()
+    row = conn.execute(
+        "SELECT effect_text FROM item_master WHERE name_jp=?", (item_name,)
+    ).fetchone()
+    conn.close()
+    return row[0] if row and row[0] else ""
+
+
 
 
 def generate_mega_section(pokemon_name: str, base_types: list, base_stats: list) -> str:
@@ -1556,7 +1621,7 @@ def query_db(conn, table, pokemon, col, alias=None):
     if not date:
         return []
     rows = conn.execute(
-        f"SELECT * FROM {table} WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
+        f"SELECT * FROM {table} WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY usage_rate DESC LIMIT 10",
         (pokemon, date)
     ).fetchall()
     return rows
@@ -1598,6 +1663,130 @@ CHART_COLORS = ['#3b82f6','#ef4444','#10b981','#f59e0b','#8b5cf6','#ec4899','#06
 def _fmt_date(d: str) -> str:
     p = d.split('-')
     return f"{int(p[1])}/{int(p[2])}"
+
+
+def _make_trend_svg(filled: list, w=240, h=72) -> str:
+    """filled=[(date,value)...] のSVGトレンドチャート（グラデーション面塗り＋グリッド線）"""
+    pad_l, pad_r, pad_t, pad_b = 8, 8, 8, 18
+    cw = w - pad_l - pad_r
+    ch = h - pad_t - pad_b
+    vs = [v for _, v in filled]
+    lo, hi = min(vs), max(vs)
+    rng = hi - lo if hi > lo else max(hi * 0.1, 1)
+    lo = max(0, lo - rng * 0.15)
+    hi = min(100, hi + rng * 0.15)
+    rng = hi - lo
+
+    def px(i): return pad_l + cw * i / max(len(filled) - 1, 1)
+    def py(v): return pad_t + ch * (1 - (v - lo) / rng)
+
+    # グリッド線（横3本）
+    grid = ''
+    for frac in [0.0, 0.5, 1.0]:
+        gy = pad_t + ch * frac
+        gv = hi - rng * frac
+        grid += (f'<line x1="{pad_l}" y1="{gy:.1f}" x2="{w-pad_r}" y2="{gy:.1f}" '
+                 f'stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/>'
+                 f'<text x="{pad_l-2}" y="{gy+3:.1f}" font-size="7" fill="#94a3b8" text-anchor="end">{gv:.0f}</text>')
+
+    # 面塗りポリゴン（グラデーション）
+    area_pts = ' '.join(f'{px(i):.1f},{py(v):.1f}' for i, (_, v) in enumerate(filled))
+    bottom_y = pad_t + ch
+    area_pts_closed = (area_pts
+                       + f' {px(len(filled)-1):.1f},{bottom_y:.1f}'
+                       + f' {px(0):.1f},{bottom_y:.1f}')
+
+    # ドット＆値ラベル（最初・最後・最大・最小）
+    special = {0, len(filled)-1, vs.index(max(vs)), vs.index(min(vs))}
+    dots = ''
+    labels = ''
+    for i, (d, v) in enumerate(filled):
+        cx, cy = px(i), py(v)
+        is_last = (i == len(filled) - 1)
+        fill = '#ef4444' if is_last else '#3b82f6'
+        r = 3.5 if is_last else 2.5
+        dots += f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="{r}" fill="{fill}" stroke="#fff" stroke-width="1.5"/>'
+        if i in special:
+            dy = -7 if cy > pad_t + ch * 0.5 else 12
+            anchor = 'start' if i == 0 else ('end' if i == len(filled)-1 else 'middle')
+            labels += f'<text x="{cx:.1f}" y="{cy+dy:.1f}" font-size="8.5" fill="#1e293b" font-weight="600" text-anchor="{anchor}">{v}%</text>'
+
+    # X軸日付
+    date_labels = ''
+    n = len(filled)
+    step = max(1, (n - 1) // 4)
+    for idx in range(n):
+        if idx == 0 or idx == n - 1 or idx % step == 0:
+            anchor = 'start' if idx == 0 else ('end' if idx == n-1 else 'middle')
+            date_labels += (f'<text x="{px(idx):.1f}" y="{h:.1f}" font-size="7.5" fill="#6b7280" '
+                            f'text-anchor="{anchor}">{_fmt_date(filled[idx][0])}</text>')
+
+    total_h = h + 2
+    return (
+        f'<svg width="{w}" height="{total_h}" viewBox="0 0 {w} {total_h}" xmlns="http://www.w3.org/2000/svg">'
+        f'<defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1">'
+        f'<stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/>'
+        f'<stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/>'
+        f'</linearGradient></defs>'
+        f'{grid}'
+        f'<polygon points="{area_pts_closed}" fill="url(#ag)"/>'
+        f'<polyline points="{area_pts}" fill="none" stroke="#3b82f6" stroke-width="2"/>'
+        f'{dots}{labels}{date_labels}'
+        f'</svg>'
+    )
+
+
+def make_rate_bar_cell(rate: float, values: list, dates: list, effect: str = "", prev_rate=None) -> str:
+    """
+    採用率を横バーで表示。ホバーでポップアップ（効果説明＋トレンドチャート）表示。
+    CSSクラス pn-rate-wrap / pn-popup を使用（style要素は section_data で一括注入）。
+    """
+    bar_pct = min(rate, 100)
+    if prev_rate is not None:
+        diff = round(rate - prev_rate, 1)
+        sign = '+' if diff > 0 else ''
+        delta_color = '#16a34a' if diff > 0 else ('#dc2626' if diff < 0 else '#94a3b8')
+        delta_html = f'<span style="font-size:0.78em;color:{delta_color};width:40px;text-align:right;white-space:nowrap;flex-shrink:0">{sign}{diff}</span>'
+    else:
+        delta_html = '<span style="width:40px;flex-shrink:0"></span>'
+    bar = (
+        f'<div style="display:flex;align-items:center;gap:6px;padding:2px 0">'
+        f'<div style="flex:1;background:#e2e8f0;border-radius:3px;height:16px;overflow:hidden">'
+        f'<div style="background:#3b82f6;height:100%;width:{bar_pct}%"></div>'
+        f'</div>'
+        f'<span style="width:52px;text-align:right;font-weight:600;font-size:0.9em;flex-shrink:0">{rate}%</span>'
+        f'{delta_html}'
+        f'</div>'
+    )
+
+    filled = [(d, v) for d, v in zip(dates, values) if v is not None]
+    has_trend = len(filled) >= 2
+    has_popup = effect or has_trend
+
+    if not has_popup:
+        return f'<div style="padding:2px 0">{bar}</div>'
+
+    # 効果HTML
+    effect_block = f'<div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:{"8" if has_trend else "0"}px">{effect}</div>' if effect else ''
+
+    # セパレーター
+    sep = '<div style="border-top:1px solid #e2e8f0;margin:8px 0"></div>' if (effect and has_trend) else ''
+
+    # トレンドチャート
+    chart_block = ''
+    if has_trend:
+        svg = _make_trend_svg(filled)
+        chart_block = (
+            f'<div style="font-size:0.75em;color:#64748b;font-weight:600;margin-bottom:4px;letter-spacing:0.02em">採用率の推移</div>'
+            f'{svg}'
+        )
+
+    popup = (
+        f'<div class="pn-popup">'
+        f'{effect_block}{sep}{chart_block}'
+        f'</div>'
+    )
+    return f'<div class="pn-rate-wrap">{bar}{popup}</div>'
 
 
 def make_trend_chart(series: list, dates: list, top_n: int = 7) -> str:
@@ -1658,6 +1847,38 @@ def make_trend_chart(series: list, dates: list, top_n: int = 7) -> str:
             f'{s["name"]}<span style="color:#64748b"> {last_v}%</span></span>'
         )
     out.append(f'<div style="display:flex;flex-wrap:wrap;margin:2px 0 6px {ML}px">{"".join(leg)}</div>')
+    return '\n'.join(out)
+
+
+def _make_rank_mini_svg(rank_vals: list, dates: list, w=240, h=72) -> str:
+    """ランク推移SVG（1位=上）。rank_valsはdatesと同順でNone許容。"""
+    pad_l, pad_r, pad_t, pad_b = 8, 8, 8, 18
+    valid = [(i, v) for i, v in enumerate(rank_vals) if v is not None]
+    if len(valid) < 2:
+        return ''
+    R_MIN, R_MAX = 1, 10
+    pw, ph = w - pad_l - pad_r, h - pad_t - pad_b
+
+    def px(i): return pad_l + pw * i / max(len(dates) - 1, 1)
+    def py(r): return pad_t + ph * (r - R_MIN) / max(R_MAX - R_MIN, 1)
+
+    n = len(dates)
+    label_step = max(1, (n - 1) // 4)
+    out = [f'<svg viewBox="0 0 {w} {h}" style="width:100%;max-width:{w}px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">']
+    for r in [1, 5, 10]:
+        y = py(r)
+        out.append(f'<line x1="{pad_l}" y1="{y:.0f}" x2="{w-pad_r}" y2="{y:.0f}" stroke="#e2e8f0" stroke-width="1"/>')
+        out.append(f'<text x="{pad_l-2}" y="{y+3:.0f}" text-anchor="end" fill="#94a3b8" font-size="8">{r}</text>')
+    for i, d in enumerate(dates):
+        if i == 0 or i == n - 1 or i % label_step == 0:
+            out.append(f'<text x="{px(i):.0f}" y="{h-2}" text-anchor="middle" fill="#64748b" font-size="9">{_fmt_date(d)}</text>')
+    pts_str = ' '.join(f'{px(i):.0f},{py(v):.0f}' for i, v in valid)
+    out.append(f'<polyline points="{pts_str}" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>')
+    for i, v in valid:
+        out.append(f'<circle cx="{px(i):.0f}" cy="{py(v):.0f}" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>')
+    latest_i, latest_v = valid[-1]
+    out.append(f'<text x="{px(latest_i):.0f}" y="{py(latest_v)-6:.0f}" text-anchor="middle" fill="#8b5cf6" font-size="9" font-weight="bold">{latest_v}位</text>')
+    out.append('</svg>')
     return '\n'.join(out)
 
 
@@ -1744,18 +1965,18 @@ def get_all_dates(conn, table: str, pokemon: str) -> list:
 
 
 def get_partner_rank_history(conn, pokemon: str, dates: list) -> dict:
-    """Returns {partner: {date: rank(int)}}"""
+    """Returns {partner: {date: position(int)}} — position is row order (1-10), not DB rank column"""
     result = {}
     for d in dates:
         rows = conn.execute(
-            f"SELECT partner, rank FROM pokemon_partners WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
+            f"SELECT partner FROM pokemon_partners WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? LIMIT 10",
             (pokemon, d)
         ).fetchall()
-        for row in rows:
-            p, rank = row[0], int(row[1])
+        for i, row in enumerate(rows, 1):
+            p = row[0]
             if p not in result:
                 result[p] = {}
-            result[p][d] = rank
+            result[p][d] = i
     return result
 
 
@@ -1763,7 +1984,7 @@ def get_history(conn, table: str, pokemon: str, key_col: str, dates: list) -> di
     result = {}
     for d in dates:
         rows = conn.execute(
-            f"SELECT {key_col}, usage_rate FROM {table} WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
+            f"SELECT {key_col}, usage_rate FROM {table} WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY usage_rate DESC LIMIT 10",
             (pokemon, d)
         ).fetchall()
         for row in rows:
@@ -1797,7 +2018,7 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
     ev_date = latest(conn, "pokemon_evs", pokemon_name)
     evs = conn.execute(
         f"SELECT rank, ev_spread, ev_h, ev_a, ev_b, ev_c, ev_d, ev_s, usage_rate "
-        f"FROM pokemon_evs WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY rank LIMIT 10",
+        f"FROM pokemon_evs WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY usage_rate DESC LIMIT 10",
         (pokemon_name, ev_date)
     ).fetchall() if ev_date else []
 
@@ -1805,12 +2026,21 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
     all_move_dates = get_all_dates(conn, "pokemon_moves", pokemon_name)
     all_item_dates = get_all_dates(conn, "pokemon_items", pokemon_name)
     all_partner_dates = get_all_dates(conn, "pokemon_partners", pokemon_name)
+    all_nature_dates = get_all_dates(conn, "pokemon_natures", pokemon_name)
+    all_ev_dates = get_all_dates(conn, "pokemon_evs", pokemon_name)
+    all_ability_dates = get_all_dates(conn, "pokemon_abilities", pokemon_name)
     has_move_trend = len(all_move_dates) >= 2
     has_item_trend = len(all_item_dates) >= 2
     has_partner_trend = len(all_partner_dates) >= 2
+    has_nature_trend = len(all_nature_dates) >= 2
+    has_ev_trend = len(all_ev_dates) >= 2
+    has_ability_trend = len(all_ability_dates) >= 2
     move_history = get_history(conn, "pokemon_moves", pokemon_name, "move", all_move_dates) if has_move_trend else {}
     item_history = get_history(conn, "pokemon_items", pokemon_name, "item", all_item_dates) if has_item_trend else {}
     partner_rank_history = get_partner_rank_history(conn, pokemon_name, all_partner_dates) if has_partner_trend else {}
+    nature_history = get_history(conn, "pokemon_natures", pokemon_name, "nature", all_nature_dates) if has_nature_trend else {}
+    ev_history = get_history(conn, "pokemon_evs", pokemon_name, "ev_spread", all_ev_dates) if has_ev_trend else {}
+    ability_history = get_history(conn, "pokemon_abilities", pokemon_name, "ability", all_ability_dates) if has_ability_trend else {}
 
     # チームメイト
     partner_date = latest(conn, "pokemon_partners", pokemon_name)
@@ -1823,9 +2053,10 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
            LEFT JOIN pokemon_usage u
              ON u.pokemon=p.partner AND u.season=p.season AND u.rule=p.rule
              AND u.crawled_date=?
+             AND u.rank=(SELECT MIN(rank) FROM pokemon_usage WHERE pokemon=p.partner AND season=p.season AND rule=p.rule AND crawled_date=?)
            WHERE p.pokemon=? AND p.season='{SEASON}' AND p.rule='single' AND p.crawled_date=?
            ORDER BY p.rank""",
-        (usage_date, pokemon_name, partner_date)
+        (usage_date, usage_date, pokemon_name, partner_date)
     ).fetchall() if partner_date else []
 
     conn.close()
@@ -1851,7 +2082,7 @@ description: '{desc}'
 pokemonName: '{display_name}'
 dexNumber: {pdata['dex']}
 usageRank: {usage_rank}{image_form_line}
-pubDate: '2026-05-24'
+pubDate: '{date}'
 draft: false
 {f"analysisSlug: '{analysis_slugs[0]}'" if len(analysis_slugs) == 1 else ""}
 ---"""
@@ -1937,30 +2168,41 @@ draft: false
 
 ---"""
 
+    RATE_CELL_STYLE = """<style>
+.pn-rate-wrap{position:static}
+.pn-rate-wrap{position:relative;display:inline-block;width:100%}
+.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:nowrap}
+.pn-rate-wrap:hover .pn-popup{display:block}
+</style>"""
+
     # ---- 特性 ----
     ability_rows = ""
     for i, row in enumerate(abilities):
         ab = row["ability"]
-        rate = row["usage_rate"]
+        rate = float(row["usage_rate"])
         desc_text = get_ability_desc(ab)
         bg = ' style="background:#fef9c3"' if i == 0 else (' style="background:#fafafa"' if i % 2 == 0 else "")
-        bold_open = "<font-weight:bold>" if i == 0 else ""
+        vals = [ability_history.get(ab, {}).get(d) for d in all_ability_dates] if has_ability_trend else []
+        prev = ability_history.get(ab, {}).get(all_ability_dates[-2]) if has_ability_trend else None
+        rate_cell = make_rate_bar_cell(rate, vals, all_ability_dates, effect=desc_text, prev_rate=prev)
         ability_rows += f'''<tr{bg}>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{ab}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#555">{desc_text}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{rate}%</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;min-width:160px">{rate_cell}</td>
 </tr>
 '''
     section_ability = f"""
 ## 特性
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+{RATE_CELL_STYLE}
+
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
 <thead>
 <tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:30%">特性名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">効果</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:80px">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率 <span style="font-size:0.8em;color:#94a3b8;font-weight:400">{'ⓘ 効果・推移' if has_ability_trend else 'ⓘ 効果'}</span></th>
 </tr>
 </thead>
 <tbody>
@@ -1976,25 +2218,6 @@ draft: false
                       for n, a, w in cols)
         return f'<tr style="background:#f1f5f9">{ths}</tr>'
 
-    # チャート用データ構築
-    def _build_series(history, keys, all_dates):
-        series = []
-        for k in keys:
-            h = history.get(k, {})
-            vals = [h.get(d) for d in all_dates]
-            series.append({"name": k, "values": vals})
-        return series
-
-    move_chart = make_trend_chart(
-        _build_series(move_history, [r["move"] for r in moves], all_move_dates),
-        all_move_dates
-    ) if has_move_trend else ''
-
-    item_chart = make_trend_chart(
-        _build_series(item_history, [r["item"] for r in items], all_item_dates),
-        all_item_dates
-    ) if has_item_trend else ''
-
     partner_chart = make_rank_trend_chart(partner_rank_history, all_partner_dates) if has_partner_trend else ''
 
     # 技テーブル
@@ -2005,21 +2228,13 @@ draft: false
         bg = ' style="background:#fef9c3"' if i == 0 else (' style="background:#fafafa"' if i % 2 == 0 else "")
         mt = get_move_type(mv)
         icon = f'{type_icon_html(mt)} ' if mt else ""
-        if has_move_trend:
-            prev_rate = move_history.get(mv, {}).get(all_move_dates[-2])
-            delt = delta_html(prev_rate, rate)
-            move_rows += f'''<tr{bg}>
+        vals = [move_history.get(mv, {}).get(d) for d in all_move_dates] if has_move_trend else []
+        prev = move_history.get(mv, {}).get(all_move_dates[-2]) if has_move_trend else None
+        rate_cell = make_rate_bar_cell(rate, vals, all_move_dates, effect=get_move_desc(mv), prev_rate=prev)
+        move_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}"><div style="display:flex;align-items:center;gap:6px">{icon}{mv}</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{rate}%</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;white-space:nowrap">{delt}</td>
-</tr>
-'''
-        else:
-            move_rows += f'''<tr{bg}>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}"><div style="display:flex;align-items:center;gap:6px">{icon}{mv}</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{rate}%</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;min-width:160px">{rate_cell}</td>
 </tr>
 '''
 
@@ -2031,21 +2246,13 @@ draft: false
         bg = ' style="background:#fef9c3"' if i == 0 else (' style="background:#fafafa"' if i % 2 == 0 else "")
         icon = item_icon_html(it)
         icon_wrap = f'<div style="display:flex;align-items:center;gap:6px">{icon}{it}</div>' if icon else it
-        if has_item_trend:
-            prev_rate = item_history.get(it, {}).get(all_item_dates[-2])
-            delt = delta_html(prev_rate, rate)
-            item_rows += f'''<tr{bg}>
+        vals = [item_history.get(it, {}).get(d) for d in all_item_dates] if has_item_trend else []
+        prev = item_history.get(it, {}).get(all_item_dates[-2]) if has_item_trend else None
+        rate_cell = make_rate_bar_cell(rate, vals, all_item_dates, effect=get_item_desc(it), prev_rate=prev)
+        item_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{icon_wrap}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{rate}%</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;white-space:nowrap">{delt}</td>
-</tr>
-'''
-        else:
-            item_rows += f'''<tr{bg}>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{icon_wrap}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{rate}%</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;min-width:160px">{rate_cell}</td>
 </tr>
 '''
 
@@ -2053,16 +2260,19 @@ draft: false
     nature_rows = ""
     for i, row in enumerate(natures):
         nat = row["nature"]
-        rate = row["usage_rate"]
+        rate = float(row["usage_rate"])
         bg = ' style="background:#fef9c3"' if i == 0 else (' style="background:#fafafa"' if i % 2 == 0 else "")
         eff_str = ""
         if nat in NATURE_EFFECTS:
             up, dn = NATURE_EFFECTS[nat]
             eff_str = f' <small style="color:#666">（{up} {dn}）</small>'
+        vals = [nature_history.get(nat, {}).get(d) for d in all_nature_dates] if has_nature_trend else []
+        prev = nature_history.get(nat, {}).get(all_nature_dates[-2]) if has_nature_trend else None
+        rate_cell = make_rate_bar_cell(rate, vals, all_nature_dates, prev_rate=prev)
         nature_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{nat}{eff_str}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{rate}%</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;min-width:160px">{rate_cell}</td>
 </tr>
 '''
 
@@ -2077,30 +2287,30 @@ draft: false
     ev_rows = ""
     for i, row in enumerate(evs):
         bg = ' style="background:#fef9c3"' if i == 0 else (' style="background:#fafafa"' if i % 2 == 0 else "")
+        rate = float(row["usage_rate"])
+        vals = [ev_history.get(row["ev_spread"], {}).get(d) for d in all_ev_dates] if has_ev_trend else []
+        prev = ev_history.get(row["ev_spread"], {}).get(all_ev_dates[-2]) if has_ev_trend else None
+        rate_cell = make_rate_bar_cell(rate, vals, all_ev_dates, prev_rate=prev)
         ev_rows += f'''<tr{bg}>
   <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   {ev_cell(row["ev_h"])}{ev_cell(row["ev_a"])}{ev_cell(row["ev_b"])}{ev_cell(row["ev_c"])}{ev_cell(row["ev_d"])}{ev_cell(row["ev_s"])}
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{row["usage_rate"]}%</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1;min-width:160px">{rate_cell}</td>
 </tr>
 '''
-
-    move_th_extra = '  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:60px">前回比</th>' if has_move_trend else ''
-    item_th_extra = '  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:60px">前回比</th>' if has_item_trend else ''
 
     section_data = f"""
 ## 使用率データ
 
+{RATE_CELL_STYLE}
+
 ### 技
 
-{move_chart}
-
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
-{move_th_extra}
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_move_trend else ''}</th>
 </tr></thead>
 <tbody>
 {move_rows}</tbody>
@@ -2109,15 +2319,12 @@ draft: false
 
 ### 持ち物
 
-{item_chart}
-
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">持ち物</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
-{item_th_extra}
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_item_trend else ''}</th>
 </tr></thead>
 <tbody>
 {item_rows}</tbody>
@@ -2126,12 +2333,12 @@ draft: false
 
 ### 性格
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">性格</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_nature_trend else ''}</th>
 </tr></thead>
 <tbody>
 {nature_rows}</tbody>
@@ -2142,8 +2349,8 @@ draft: false
 
 <p style="font-size:0.8em;color:#666;margin:4px 0 8px">H=HP A=こうげき B=ぼうぎょ C=とくこう D=とくぼう S=すばやさ　最大値=32</p>
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:36px">順位</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">H</th>
@@ -2152,7 +2359,7 @@ draft: false
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">C</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">D</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">S</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_ev_trend else ''}</th>
 </tr></thead>
 <tbody>
 {ev_rows}</tbody>
@@ -2160,34 +2367,73 @@ draft: false
 </div>"""
 
     # ---- チームメイト ----
-    partner_cards = ""
-    for row in partners:
+    partner_rows = ""
+    for i, row in enumerate(partners, 1):
         partner = row["partner"]
         pid = row["pokemon_id"]
-        rank = row["rank"]
+        rank = i  # partner rank in DB is unreliable for M-3; use position
+        bg = ' style="background:#fef9c3"' if rank == 1 else (' style="background:#fafafa"' if rank % 2 == 0 else "")
+        partner_file = POKEMON_DATA.get(partner, {}).get("file")
+        partner_url = f'/pokemon/{partner_file}/' if partner_file else None
         if pid:
-            partner_cards += f'''  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-{pid}.webp" alt="{partner}" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">{partner}</div>
-    <div style="font-size:0.68rem;color:#888">{rank}位</div>
-  </div>
-'''
+            img_html = f'<img src="/images/pokemon/pokemon-{pid}.webp" alt="{partner}" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy">'
         else:
-            partner_cards += f'''  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:88px">
-    <div style="font-size:0.72rem;font-weight:bold">{partner}</div>
-    <div style="font-size:0.68rem;color:#888">{rank}位</div>
-  </div>
+            img_html = ""
+
+        rank_vals = [partner_rank_history.get(partner, {}).get(d) for d in all_partner_dates] if has_partner_trend else []
+        filled_vals = [v for v in rank_vals if v is not None]
+        prev_rank = partner_rank_history.get(partner, {}).get(all_partner_dates[-2]) if has_partner_trend and len(all_partner_dates) >= 2 else None
+
+        info_parts = []
+        if filled_vals:
+            avg = sum(filled_vals) / len(filled_vals)
+            info_parts.append(f'<span style="font-size:0.9em;color:#1e293b">平均 <strong>{avg:.1f}位</strong></span>')
+        if prev_rank is not None:
+            diff = prev_rank - rank
+            sign = '+' if diff > 0 else ''
+            delta_color = '#16a34a' if diff > 0 else ('#dc2626' if diff < 0 else '#94a3b8')
+            info_parts.append(f'<span style="font-size:0.82em;color:{delta_color}">前回比 {sign}{diff}</span>')
+
+        info_html = f'<div style="display:flex;align-items:center;gap:12px;padding:2px 0">{"".join(info_parts)}</div>' if info_parts else '<div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div>'
+
+        if has_partner_trend and filled_vals:
+            chart_svg = _make_rank_mini_svg(rank_vals, all_partner_dates)
+            popup = (
+                f'<div class="pn-popup" style="min-width:220px">'
+                f'<div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div>'
+                f'{chart_svg}'
+                f'</div>'
+            )
+            info_cell = f'<div class="pn-rate-wrap">{info_html}{popup}</div>'
+        else:
+            info_cell = info_html
+
+        partner_rows += f'''<tr{bg}>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if rank==1 else ''}">{rank}</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if rank==1 else ''}"><div style="display:flex;align-items:center">{img_html}{'<a href="' + partner_url + '" style="color:inherit;text-decoration:none">' + partner + '</a>' if partner_url else partner}</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1">{info_cell}</td>
+</tr>
 '''
-    partner_chart_md = f"""
-{partner_chart}
-""" if partner_chart else ""
+
+    rank_header = f'平均順位・前回比 <span style="font-size:0.8em;color:#94a3b8;font-weight:400">{"ⓘ 推移" if has_partner_trend else ""}</span>'
 
     section_partners = f"""
 
-### チームメイト（同居率 TOP10）
-{partner_chart_md}
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin:12px 0">
-{partner_cards}</div>
+### 同じチーム TOP10
+
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:30%">ポケモン</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">{rank_header}</th>
+</tr>
+</thead>
+<tbody>
+{partner_rows}</tbody>
+</table>
+</div>
 
 ---"""
 
@@ -2235,7 +2481,7 @@ draft: false
 
 
 TARGET_POKEMON_ALL = [
-    ("ブリジュラス", 2), ("マスカーニャ", 3), ("アシレーヌ", 4), ("リザードン", 5),
+    ("ガブリアス", 1), ("ブリジュラス", 2), ("マスカーニャ", 3), ("アシレーヌ", 4), ("リザードン", 5),
     ("アーマーガア", 6), ("イダイトウ (オス)", 7), ("カバルドン", 8), ("ルカリオ", 9),
     ("ゲンガー", 10), ("ギャラドス", 11), ("ギルガルド", 12), ("フラエッテ:永遠", 13),
     ("キラフロル", 14), ("ミミロップ", 15), ("カイリュー", 16), ("ハッサム", 17),
@@ -2435,13 +2681,25 @@ TARGET_POKEMON = TARGET_POKEMON_ALL
 
 if __name__ == "__main__":
     import sys
+    # DBから最新の使用率順位を取得
+    _conn = sqlite3.connect(DB_PATH)
+    _latest_date = _conn.execute(
+        f"SELECT MAX(crawled_date) FROM pokemon_usage WHERE season='{SEASON}' AND rule='single'"
+    ).fetchone()[0]
+    _rank_map = {row[0]: row[1] for row in _conn.execute(
+        f"SELECT pokemon, rank FROM pokemon_usage WHERE season='{SEASON}' AND rule='single' AND crawled_date=?",
+        (_latest_date,)
+    ).fetchall()}
+    _conn.close()
+
     targets = TARGET_POKEMON
     if len(sys.argv) > 1:
         names = set(sys.argv[1:])
         targets = [(p, r) for p, r in TARGET_POKEMON_ALL if p in names or POKEMON_DATA.get(p, {}).get("file", "") in names]
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    for pokemon, rank in targets:
+    for pokemon, _static_rank in targets:
         pdata = POKEMON_DATA[pokemon]
+        rank = _rank_map.get(pokemon, _static_rank)
         filename = OUT_DIR / f"{pdata['file']}.md"
         print(f"  生成: {filename.name} ({pokemon} 使用率{rank}位)")
         content = generate_page(pokemon, rank)

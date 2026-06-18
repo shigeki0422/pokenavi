@@ -15,45 +15,66 @@ const pages = (await getCollection('pokemon'))
 	<head>
 		<BaseHead
 			title="ポケモン図鑑 | ポケナビ"
-			description="ポケモンチャンピオンズ M-2シーズンのポケモン別使用率・種族値・タイプ相性データ一覧"
+			description="ポケモンチャンピオンズのポケモン別使用率・種族値・タイプ相性データ一覧"
 		/>
 		<style>
 			main { max-width: 960px; margin: auto; padding: 1em 2em; }
 			h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-			.subtitle { color: rgb(var(--gray)); font-size: 0.9rem; margin-bottom: 2rem; }
+			.subtitle { color: rgb(var(--gray)); font-size: 0.9rem; margin-bottom: 1rem; }
+			.search-bar {
+				width: 100%;
+				padding: 8px 12px;
+				font-size: 1rem;
+				border: 1px solid #cbd5e1;
+				border-radius: 8px;
+				margin-bottom: 1.2rem;
+				box-sizing: border-box;
+				outline: none;
+			}
+			.search-bar:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
 			.grid {
 				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-				gap: 12px;
+				grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+				gap: 10px;
 			}
 			.card {
 				display: block;
 				text-decoration: none;
 				border: 1px solid #e2e8f0;
 				border-radius: 8px;
-				padding: 12px 8px;
+				padding: 8px 6px;
 				text-align: center;
 				transition: box-shadow 0.2s;
 			}
 			.card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-			.card img { width: 72px; height: 72px; display: block; margin: 0 auto 6px; }
-			.card .dex { font-size: 0.7rem; color: rgb(var(--gray)); }
-			.card .name { font-size: 0.9rem; font-weight: 700; color: rgb(var(--black)); }
+			.card img { width: 52px; height: 52px; display: block; margin: 0 auto 4px; }
+			.card .rank { font-size: 0.65rem; font-weight: 700; color: #dc2626; margin-bottom: 1px; }
+			.card .dex { font-size: 0.65rem; color: rgb(var(--gray)); }
+			.card .name { font-size: 0.8rem; font-weight: 700; color: rgb(var(--black)); }
+			.card.hidden { display: none; }
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
 			<h1>ポケモン情報</h1>
-			<p class="subtitle">M-2シーズン 使用率・種族値・採用率データ</p>
-			<div class="grid">
+			<p class="subtitle">使用率・種族値・採用率データ</p>
+			<input
+				type="search"
+				id="pokemon-search"
+				class="search-bar"
+				placeholder="ポケモン名で絞り込み..."
+				autocomplete="off"
+			/>
+			<div class="grid" id="pokemon-grid">
 				{pages.map((p, i) => (
-					<a class="card" href={`/pokemon/${p.id}/`}>
+					<a class="card" href={`/pokemon/${p.id}/`} data-name={p.data.pokemonName}>
 						<img
 							src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
 							alt={p.data.pokemonName}
 							loading={i < 20 ? 'eager' : 'lazy'}
 						/>
+						{p.data.usageRank && <div class="rank">使用率 {p.data.usageRank}位</div>}
 						<div class="dex">No.{p.data.dexNumber}</div>
 						<div class="name">{p.data.pokemonName}</div>
 					</a>
@@ -61,5 +82,19 @@ const pages = (await getCollection('pokemon'))
 			</div>
 		</main>
 		<Footer />
+		<script>
+			function toKatakana(str: string): string {
+				return str.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+			}
+			const input = document.getElementById('pokemon-search') as HTMLInputElement;
+			const cards = document.querySelectorAll<HTMLElement>('#pokemon-grid .card');
+			input.addEventListener('input', () => {
+				const q = toKatakana(input.value.trim());
+				cards.forEach(card => {
+					const name = toKatakana(card.dataset.name ?? '');
+					card.classList.toggle('hidden', q !== '' && !name.includes(q));
+				});
+			});
+		</script>
 	</body>
 </html>

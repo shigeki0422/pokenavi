@@ -1,6 +1,6 @@
 ---
-title: 'パンプジン（おおきい） | ポケモンチャンピオンズ 使用率・基礎データ M-2'
-description: 'ポケモンチャンピオンズ M-2シーズンのパンプジン（おおきい）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率212位。'
+title: 'パンプジン（おおきい） | ポケモンチャンピオンズ 使用率・基礎データ'
+description: 'ポケモンチャンピオンズのパンプジン（おおきい）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率212位。'
 pokemonName: 'パンプジン（おおきい）'
 dexNumber: 711
 usageRank: 212
@@ -19,7 +19,7 @@ draft: false
       <img src="/images/types/type-11-grass.png" alt="くさ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.711</strong>　／　M-2 使用率 <strong style="color:#dc2626">212位</strong>
+      全国図鑑 <strong>No.711</strong>　／　使用率 <strong style="color:#dc2626">212位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-05-24</div>
   </div>
@@ -110,13 +110,20 @@ draft: false
 
 ## 特性
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<style>
+.pn-rate-wrap{position:static}
+.pn-rate-wrap{position:relative;display:inline-block;width:100%}
+.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:nowrap}
+.pn-rate-wrap:hover .pn-popup{display:block}
+</style>
+
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
 <thead>
 <tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:30%">特性名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">効果</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:80px">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率 <span style="font-size:0.8em;color:#94a3b8;font-weight:400">ⓘ 効果</span></th>
 </tr>
 </thead>
 <tbody>
@@ -126,196 +133,53 @@ draft: false
 
 ---
 
-## 使用率データ（M-2シーズン）
+## 使用率データ
+
+<style>
+.pn-rate-wrap{position:static}
+.pn-rate-wrap{position:relative;display:inline-block;width:100%}
+.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:nowrap}
+.pn-rate-wrap:hover .pn-popup{display:block}
+</style>
 
 ### 技
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率</th>
 </tr></thead>
 <tbody>
-<tr style="background:#fef9c3">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:20px;height:20px"> おにび</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">59.6%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:20px;height:20px"> やどりぎのタネ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">58.8%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:20px;height:20px"> ポルターガイスト</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">52.8%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:20px;height:20px"> パワーウィップ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">49.3%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:20px;height:20px"> かげうち</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">45.3%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:20px;height:20px"> トリックルーム</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">22.1%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:20px;height:20px"> だいばくはつ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">19.8%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:20px;height:20px"> のろい</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">16.2%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:20px;height:20px"> タネばくだん</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">14.3%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:20px;height:20px"> みちづれ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8.5%</td>
-</tr>
 </tbody>
 </table>
 </div>
 
 ### 持ち物
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">持ち物</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率</th>
 </tr></thead>
 <tbody>
-<tr style="background:#fef9c3">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0158-obon.png" alt="オボンのみ" style="width:24px;height:24px" loading="lazy">オボンのみ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">34.4%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-336px -168px;flex-shrink:0"></span>たべのこし</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">14.6%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-456px -48px;flex-shrink:0"></span>のろいのおふだ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">13.8%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0275-tasuki.png" alt="きあいのタスキ" style="width:24px;height:24px" loading="lazy">きあいのタスキ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8.8%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0287-scarf.png" alt="こだわりスカーフ" style="width:24px;height:24px" loading="lazy">こだわりスカーフ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7.7%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-288px -168px;flex-shrink:0"></span>シルクのスカーフ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5.3%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-288px -192px;flex-shrink:0"></span>せんせいのツメ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2.9%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-72px -72px;flex-shrink:0"></span>ひかりのこな</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.9%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-96px -144px;flex-shrink:0"></span>オッカのみ</div></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.1%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">きせきのタネ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.1%</td>
-</tr>
 </tbody>
 </table>
 </div>
 
 ### 性格
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">性格</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率</th>
 </tr></thead>
 <tbody>
-<tr style="background:#fef9c3">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">わんぱく <small style="color:#666">（B↑ C↓）</small></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">39.7%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ゆうかん <small style="color:#666">（A↑ S↓）</small></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">20.0%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">いじっぱり <small style="color:#666">（A↑ C↓）</small></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">19.8%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ようき <small style="color:#666">（S↑ C↓）</small></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6.5%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">しんちょう <small style="color:#666">（D↑ C↓）</small></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6.0%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ずぶとい <small style="color:#666">（B↑ A↓）</small></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3.8%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">やんちゃ <small style="color:#666">（C↑ D↓）</small></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.6%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">のんき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">1.1%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">おだやか <small style="color:#666">（D↑ A↓）</small></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.7%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;">おっとり <small style="color:#666">（C↑ S↓）</small></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">0.3%</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -324,8 +188,8 @@ draft: false
 
 <p style="font-size:0.8em;color:#666;margin:4px 0 8px">H=HP A=こうげき B=ぼうぎょ C=とくこう D=とくぼう S=すばやさ　最大値=32</p>
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:36px">順位</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">H</th>
@@ -334,117 +198,28 @@ draft: false
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">C</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">D</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">S</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">採用率</th>
 </tr></thead>
 <tbody>
-<tr style="background:#fef9c3">
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">14.8%</td>
-</tr>
-<tr>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">2</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">14.5%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">3</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">16.6%</td>
-</tr>
-<tr>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">4</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">11.0%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">1</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">1</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">5.0%</td>
-</tr>
-<tr>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">6</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">3.2%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">7</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">1.3%</td>
-</tr>
-<tr>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">8</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">4.4%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">1.4%</td>
-</tr>
-<tr>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">31</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">26</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">9</td>
-  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">4.2%</td>
-</tr>
 </tbody>
 </table>
 </div>
 
 
-### チームメイト（同居率 TOP10）
+### 同じチーム TOP10
 
-<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin:12px 0">
-  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">ガブリアス</div>
-    <div style="font-size:0.68rem;color:#888">1位</div>
-  </div>
-  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">カイリュー</div>
-    <div style="font-size:0.68rem;color:#888">2位</div>
-  </div>
-  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">リザードン</div>
-    <div style="font-size:0.68rem;color:#888">3位</div>
-  </div>
-  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">ブリジュラス</div>
-    <div style="font-size:0.68rem;color:#888">4位</div>
-  </div>
-  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0248-00.webp" alt="バンギラス" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">バンギラス</div>
-    <div style="font-size:0.68rem;color:#888">5位</div>
-  </div>
-  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0530-00.webp" alt="ドリュウズ" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">ドリュウズ</div>
-    <div style="font-size:0.68rem;color:#888">6位</div>
-  </div>
-  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0199-01.webp" alt="ヤドキング (ガラル)" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">ヤドキング (ガラル)</div>
-    <div style="font-size:0.68rem;color:#888">7位</div>
-  </div>
-  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">ウォッシュロトム</div>
-    <div style="font-size:0.68rem;color:#888">8位</div>
-  </div>
-  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0009-00.webp" alt="カメックス" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">カメックス</div>
-    <div style="font-size:0.68rem;color:#888">9位</div>
-  </div>
-  <div style="text-align:center;padding:8px;border:1px solid #e2e8f0;border-radius:8px">
-    <img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド" style="width:56px;height:56px;display:block;margin:0 auto 4px" loading="lazy">
-    <div style="font-size:0.72rem;font-weight:bold">ギルガルド</div>
-    <div style="font-size:0.68rem;color:#888">10位</div>
-  </div>
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:30%">ポケモン</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">平均順位・前回比 <span style="font-size:0.8em;color:#94a3b8;font-weight:400"></span></th>
+</tr>
+</thead>
+<tbody>
+</tbody>
+</table>
 </div>
 
 ---

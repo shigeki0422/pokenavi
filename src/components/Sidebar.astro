@@ -33,17 +33,7 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 
 		<a href="/pokemon" class:list={['sb-link', { active: isActive('/pokemon') }]}>ポケモン情報</a>
 		<a href="/ranking" class:list={['sb-sublink', { active: isActive('/ranking') }]}>使用率ランキング</a>
-
 		<a href="/blog" class:list={['sb-link', { active: isActive('/blog') }]}>考察記事</a>
-		<div class="sb-subcat">タイプ別</div>
-		<nav class="sb-types">
-			{TYPES.map(([jp, slug]) => (
-				<a href={`/type/${slug}/`} class:list={['sb-type', { active: path === `/type/${slug}/` }]}>
-					<img src={`/images/types/type-${NUM[slug]}-${slug}.png`} alt={jp} />
-					<span>{jp}</span>
-				</a>
-			))}
-		</nav>
 	</nav>
 	<div class="sb-foot">
 		<a href="/about">運営者情報</a>
