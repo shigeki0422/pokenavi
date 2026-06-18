@@ -42,16 +42,15 @@ const breadcrumbJsonLd = {
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 		<style>
 			main {
-				width: calc(100% - 2em);
+				width: 100%;
 				max-width: 100%;
 				margin: 0;
 			}
 			.prose {
-				width: min(960px, calc(100% - 2em));
+				width: min(1100px, calc(100% - 2em));
 				margin: auto;
 				padding: 1em;
 				color: rgb(var(--gray-dark));
-				overflow-x: hidden;
 			}
 			.prose :global(table) {
 				display: block;
