@@ -27,7 +27,7 @@ analysisSlug: 'kangaskhan-analysis-m2'
 
 ## 種族値
 
-<div style="max-width:380px;margin:16px 0;font-size:0.9em">
+<div style="max-width:560px;margin:16px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">HP</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
@@ -181,7 +181,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 **特性：おやこあい** — 攻撃技が2回の連続攻撃になる。2回目は0.25倍の威力だが、技の効果は2回分発動する。
 
-<div style="max-width:380px;margin:10px 0;font-size:0.9em">
+<div style="max-width:560px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">HP</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">

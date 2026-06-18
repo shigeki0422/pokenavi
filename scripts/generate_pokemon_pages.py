@@ -1583,7 +1583,7 @@ def generate_mega_section(pokemon_name: str, base_types: list, base_stats: list)
 
 **特性：{ability}** — {ability_desc}
 
-<div style="max-width:380px;margin:10px 0;font-size:0.9em">
+<div style="max-width:560px;margin:10px 0;font-size:0.9em">
 {stat_bars}
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
@@ -2120,7 +2120,7 @@ draft: false
     section_stats = f"""
 ## 種族値
 
-<div style="max-width:380px;margin:16px 0;font-size:0.9em">
+<div style="max-width:560px;margin:16px 0;font-size:0.9em">
 {stat_bars}
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
