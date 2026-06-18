@@ -416,7 +416,7 @@ draft: false
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0670-01.webp" alt="フラエッテ(永遠)" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy">フラエッテ(永遠)</div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0670-01.webp" alt="フラエッテ(永遠)" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/floette-eternal/" style="color:inherit;text-decoration:none">フラエッテ(永遠)</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>5.5位</strong></span><span style="font-size:0.82em;color:#dc2626">前回比 -9</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
 <line x1="8" y1="8" x2="232" y2="8" stroke="#e2e8f0" stroke-width="1"/>
 <text x="6" y="11" text-anchor="end" fill="#94a3b8" font-size="8">1</text>
