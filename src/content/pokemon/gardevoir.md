@@ -112,9 +112,34 @@ analysisSlug: 'gardevoir-analysis-m2'
 <style>
 .pn-rate-wrap{position:static}
 .pn-rate-wrap{position:relative;display:inline-block;width:100%}
-.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:nowrap}
-.pn-rate-wrap:hover .pn-popup{display:block}
+.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
+.pn-rate-wrap:hover .pn-popup,.pn-rate-wrap:focus-within .pn-popup{display:block}
 </style>
+<script>
+document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
+  var popup=wrap.querySelector('.pn-popup');
+  if(!popup)return;
+  function adjust(){
+    popup.style.left='0';
+    popup.style.right='auto';
+    popup.style.display='block';
+    var r=popup.getBoundingClientRect();
+    if(r.right>window.innerWidth-8){
+      popup.style.left='auto';
+      popup.style.right='0';
+    }
+    popup.style.display='';
+  }
+  wrap.addEventListener('mouseenter',adjust);
+  wrap.addEventListener('touchstart',function(e){
+    e.preventDefault();
+    adjust();
+    popup.style.display='block';
+    function hide(ev){if(!wrap.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
+    setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
+  });
+});
+</script>
 
 <div style="margin:12px 0;overflow:visible">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
@@ -152,9 +177,34 @@ analysisSlug: 'gardevoir-analysis-m2'
 <style>
 .pn-rate-wrap{position:static}
 .pn-rate-wrap{position:relative;display:inline-block;width:100%}
-.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:nowrap}
-.pn-rate-wrap:hover .pn-popup{display:block}
+.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
+.pn-rate-wrap:hover .pn-popup,.pn-rate-wrap:focus-within .pn-popup{display:block}
 </style>
+<script>
+document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
+  var popup=wrap.querySelector('.pn-popup');
+  if(!popup)return;
+  function adjust(){
+    popup.style.left='0';
+    popup.style.right='auto';
+    popup.style.display='block';
+    var r=popup.getBoundingClientRect();
+    if(r.right>window.innerWidth-8){
+      popup.style.left='auto';
+      popup.style.right='0';
+    }
+    popup.style.display='';
+  }
+  wrap.addEventListener('mouseenter',adjust);
+  wrap.addEventListener('touchstart',function(e){
+    e.preventDefault();
+    adjust();
+    popup.style.display='block';
+    function hide(ev){if(!wrap.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
+    setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
+  });
+});
+</script>
 
 ### 技
 

@@ -112,9 +112,34 @@ draft: false
 <style>
 .pn-rate-wrap{position:static}
 .pn-rate-wrap{position:relative;display:inline-block;width:100%}
-.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:nowrap}
-.pn-rate-wrap:hover .pn-popup{display:block}
+.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
+.pn-rate-wrap:hover .pn-popup,.pn-rate-wrap:focus-within .pn-popup{display:block}
 </style>
+<script>
+document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
+  var popup=wrap.querySelector('.pn-popup');
+  if(!popup)return;
+  function adjust(){
+    popup.style.left='0';
+    popup.style.right='auto';
+    popup.style.display='block';
+    var r=popup.getBoundingClientRect();
+    if(r.right>window.innerWidth-8){
+      popup.style.left='auto';
+      popup.style.right='0';
+    }
+    popup.style.display='';
+  }
+  wrap.addEventListener('mouseenter',adjust);
+  wrap.addEventListener('touchstart',function(e){
+    e.preventDefault();
+    adjust();
+    popup.style.display='block';
+    function hide(ev){if(!wrap.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
+    setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
+  });
+});
+</script>
 
 <div style="margin:12px 0;overflow:visible">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
@@ -142,9 +167,34 @@ draft: false
 <style>
 .pn-rate-wrap{position:static}
 .pn-rate-wrap{position:relative;display:inline-block;width:100%}
-.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:nowrap}
-.pn-rate-wrap:hover .pn-popup{display:block}
+.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
+.pn-rate-wrap:hover .pn-popup,.pn-rate-wrap:focus-within .pn-popup{display:block}
 </style>
+<script>
+document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
+  var popup=wrap.querySelector('.pn-popup');
+  if(!popup)return;
+  function adjust(){
+    popup.style.left='0';
+    popup.style.right='auto';
+    popup.style.display='block';
+    var r=popup.getBoundingClientRect();
+    if(r.right>window.innerWidth-8){
+      popup.style.left='auto';
+      popup.style.right='0';
+    }
+    popup.style.display='';
+  }
+  wrap.addEventListener('mouseenter',adjust);
+  wrap.addEventListener('touchstart',function(e){
+    e.preventDefault();
+    adjust();
+    popup.style.display='block';
+    function hide(ev){if(!wrap.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
+    setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
+  });
+});
+</script>
 
 ### 技
 
@@ -164,7 +214,7 @@ draft: false
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:20px;height:20px"> ゴールドラッシュ</div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;min-width:160px"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:6px;padding:2px 0"><div style="flex:1;background:#e2e8f0;border-radius:3px;height:16px;overflow:hidden"><div style="background:#3b82f6;height:100%;width:86.1%"></div></div><span style="width:52px;text-align:right;font-weight:600;font-size:0.9em;flex-shrink:0">86.1%</span><span style="font-size:0.78em;color:#dc2626;width:40px;text-align:right;white-space:nowrap;flex-shrink:0">-2.3</span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:8px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-08-steel.png" alt="はがね" style="height:16px;vertical-align:middle"><span style="background:#3b82f6;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">特殊</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">威力</span> <b>120</b></span><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">命中</span> <b>100%</b></span><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>5</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">自分の特攻を1段階下げる。</div></div><div style="border-top:1px solid #e2e8f0;margin:8px 0"></div><div style="font-size:0.75em;color:#64748b;font-weight:600;margin-bottom:4px;letter-spacing:0.02em">採用率の推移</div><svg width="240" height="74" viewBox="0 0 240 74" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/></linearGradient></defs><line x1="8" y1="8.0" x2="232" y2="8.0" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/><text x="6" y="11.0" font-size="7" fill="#94a3b8" text-anchor="end">89</text><line x1="8" y1="31.0" x2="232" y2="31.0" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/><text x="6" y="34.0" font-size="7" fill="#94a3b8" text-anchor="end">87</text><line x1="8" y1="54.0" x2="232" y2="54.0" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/><text x="6" y="57.0" font-size="7" fill="#94a3b8" text-anchor="end">86</text><polygon points="8.0,13.3 232.0,48.7 232.0,54.0 8.0,54.0" fill="url(#ag)"/><polyline points="8.0,13.3 232.0,48.7" fill="none" stroke="#3b82f6" stroke-width="2"/><circle cx="8.0" cy="13.3" r="2.5" fill="#3b82f6" stroke="#fff" stroke-width="1.5"/><circle cx="232.0" cy="48.7" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="1.5"/><text x="8.0" y="25.3" font-size="8.5" fill="#1e293b" font-weight="600" text-anchor="start">88.4%</text><text x="232.0" y="41.7" font-size="8.5" fill="#1e293b" font-weight="600" text-anchor="end">86.1%</text><text x="8.0" y="72.0" font-size="7.5" fill="#6b7280" text-anchor="start">6/17</text><text x="232.0" y="72.0" font-size="7.5" fill="#6b7280" text-anchor="end">6/18</text></svg></div></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1;min-width:160px"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:6px;padding:2px 0"><div style="flex:1;background:#e2e8f0;border-radius:3px;height:16px;overflow:hidden"><div style="background:#3b82f6;height:100%;width:86.1%"></div></div><span style="width:52px;text-align:right;font-weight:600;font-size:0.9em;flex-shrink:0">86.1%</span><span style="font-size:0.78em;color:#dc2626;width:40px;text-align:right;white-space:nowrap;flex-shrink:0">-2.3</span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:8px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-08-steel.png" alt="はがね" style="height:16px;vertical-align:middle"><span style="background:#3b82f6;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">特殊</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">威力</span> <b>120</b></span><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">命中</span> <b>95%</b></span><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>8</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">使用後、自分の特攻を2段階下げる。</div></div><div style="border-top:1px solid #e2e8f0;margin:8px 0"></div><div style="font-size:0.75em;color:#64748b;font-weight:600;margin-bottom:4px;letter-spacing:0.02em">採用率の推移</div><svg width="240" height="74" viewBox="0 0 240 74" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ag" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0.25"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0.02"/></linearGradient></defs><line x1="8" y1="8.0" x2="232" y2="8.0" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/><text x="6" y="11.0" font-size="7" fill="#94a3b8" text-anchor="end">89</text><line x1="8" y1="31.0" x2="232" y2="31.0" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/><text x="6" y="34.0" font-size="7" fill="#94a3b8" text-anchor="end">87</text><line x1="8" y1="54.0" x2="232" y2="54.0" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="3,3"/><text x="6" y="57.0" font-size="7" fill="#94a3b8" text-anchor="end">86</text><polygon points="8.0,13.3 232.0,48.7 232.0,54.0 8.0,54.0" fill="url(#ag)"/><polyline points="8.0,13.3 232.0,48.7" fill="none" stroke="#3b82f6" stroke-width="2"/><circle cx="8.0" cy="13.3" r="2.5" fill="#3b82f6" stroke="#fff" stroke-width="1.5"/><circle cx="232.0" cy="48.7" r="3.5" fill="#ef4444" stroke="#fff" stroke-width="1.5"/><text x="8.0" y="25.3" font-size="8.5" fill="#1e293b" font-weight="600" text-anchor="start">88.4%</text><text x="232.0" y="41.7" font-size="8.5" fill="#1e293b" font-weight="600" text-anchor="end">86.1%</text><text x="8.0" y="72.0" font-size="7.5" fill="#6b7280" text-anchor="start">6/17</text><text x="232.0" y="72.0" font-size="7.5" fill="#6b7280" text-anchor="end">6/18</text></svg></div></div></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
