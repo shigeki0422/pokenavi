@@ -5,6 +5,32 @@ import Header from '../components/Header.astro';
 import rankingData from '../data/ranking.json';
 import { getCollection } from 'astro:content';
 
+const NAME_MAP: Record<string, string> = {
+  'イダイトウ(オス)': 'イダイトウ (オス)',
+  'イダイトウ(メス)': 'イダイトウ（メス）',
+  'アローラキュウコン': 'キュウコン（アローラ）',
+  'フラエッテ(永遠)': 'フラエッテ（永遠）',
+  'ヒスイゾロアーク': 'ゾロアーク（ヒスイ）',
+  'ヒスイウインディ': 'ウインディ（ヒスイ）',
+  'ヒスイヌメルゴン': 'ヌメルゴン（ヒスイ）',
+  'ヒスイバクフーン': 'バクフーン（ヒスイ）',
+  'ガラルヤドラン': 'ヤドラン（ガラル）',
+  'ガラルヤドキング': 'ヤドキング（ガラル）',
+  'ルガルガン(昼)': 'ルガルガン（まひる）',
+  'ルガルガン(たそがれ)': 'ルガルガン（たそがれ）',
+  'ルガルガン(まよなか)': 'ルガルガン（まよなか）',
+  'ニャオニクス(オス)': 'ニャオニクス（オス）',
+  'ニャオニクス(メス)': 'ニャオニクス（メス）',
+  'ケンタロス:水': 'ケンタロス（水）',
+  'ケンタロス:炎': 'ケンタロス（炎）',
+  'ケンタロス:格': 'ケンタロス（格）',
+  'ヒスイクレベース': 'クレベース（ヒスイ）',
+  'ヒスイジュナイパー': 'ジュナイパー（ヒスイ）',
+  'ガラルマッギョ': 'マッギョ（ガラル）',
+  'ヒスイダイケンキ': 'ダイケンキ（ヒスイ）',
+  'アローラライチュウ': 'ライチュウ（アローラ）',
+};
+
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const pokemonPages = await getCollection('pokemon', p => showDrafts || !p.data.draft);
 const pageById: Record<string, string> = {};
@@ -31,7 +57,7 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
   <head>
     <BaseHead title={pageTitle} description={pageDesc} />
     <style>
-      main { max-width: 1100px; margin: auto; padding: 1em 1.5em; }
+      main { max-width: 1100px; margin: auto; padding: 1em 1.5em; overflow-x: hidden; }
       h1 { font-size: 1.5rem; margin-bottom: 0.3rem; }
       .subtitle { color: #64748b; font-size: 0.88rem; margin-bottom: 1.2rem; }
 
@@ -70,8 +96,11 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
       .pager-btn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; font-weight: 700; }
 
       @media (max-width: 600px) {
-        main { padding: 0.8em; }
+        main { padding: 0.5em; }
         .poke-cell img { width: 28px; height: 28px; }
+        th, td { padding: 5px 6px; font-size: 0.8rem; }
+        th.col-pokemon { min-width: 110px; }
+        .poke-name { font-size: 0.8rem; }
       }
     </style>
   </head>
@@ -100,7 +129,8 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
               const latestData = p.dates[latestDate];
               const currentRank = latestData?.rank ?? '–';
               const imgSrc = p.id ? `/images/pokemon/pokemon-${p.id}.webp` : null;
-              const pokemonUrl = pageById[p.name] ? `/pokemon/${pageById[p.name]}/` : null;
+              const lookupName = NAME_MAP[p.name] ?? p.name;
+              const pokemonUrl = pageById[lookupName] ? `/pokemon/${pageById[lookupName]}/` : null;
 
               return (
                 <tr>
