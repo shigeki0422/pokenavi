@@ -40,8 +40,12 @@ def _predict(model, X):
 
 def learned_select_party(party6, opp6, loader, n=3, temperature=0.0, rng=None):
     """学習選出。temperature=0 で最良の3体(リード順)、>0 で softmax(score/temp) サンプリング。
-    select_party と同一シグネチャ。モデル未ロード/3体以下は heuristic にフォールバック。"""
+    select_party と同一シグネチャ。モデル未ロード/3体以下は heuristic にフォールバック。
+    SELECT_MODE=mcts のときはMCTS選出(探索ベース・ヒューリスティック比+6〜9pt)へ委譲する。"""
     from .ai import select_party
+    if os.environ.get("SELECT_MODE") == "mcts":
+        from .mcts_selection import mcts_select_party
+        return mcts_select_party(party6, opp6, loader, n=n, temperature=temperature, rng=rng)
     model = _load()
     if model is None or len(party6) <= n:
         return select_party(party6, opp6, loader, n=n, temperature=temperature, rng=rng)
@@ -54,11 +58,12 @@ def learned_select_party(party6, opp6, loader, n=3, temperature=0.0, rng=None):
     for _ in range(2):
         opp_sels.append(select_party(opp6, party6, loader, n=min(n, len(opp6)), temperature=1.0, rng=rng))
 
+    _max_mega = int(os.environ.get("MAX_MEGA", "2"))   # メガ石2枚保持は合法(進化は1戦1体)。2メガ選出は基本的に強い
     cands = []  # (ordered_selection, score)
     for combo in combinations(range(len(party6)), n):
         sub = [party6[i] for i in combo]
-        if sum(1 for p in sub if getattr(p, "mega_data", None) is not None) > 1:
-            continue  # 2メガ選出は回避（現環境の制約）
+        if sum(1 for p in sub if getattr(p, "mega_data", None) is not None) > _max_mega:
+            continue
         for li in range(n):
             order = [sub[li]] + [sub[j] for j in range(n) if j != li]
             xs = []

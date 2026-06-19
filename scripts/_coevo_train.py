@@ -32,7 +32,8 @@ def _selfplay_batch(args):
         a, b = rng.sample(pool_specs, 2)
         try:
             A = team(a); B = team(b)
-            sa = explore_selection(A, B, L, rng, 0.3); sb = explore_selection(B, A, L, rng, 0.3)  # 通常多様性(2メガ回避済)
+            _eps = float(os.environ.get("SEL_EPS", "0.3"))   # 選出探索度(1.0=全探索でsynergy 3体組も経験)
+            sa = explore_selection(A, B, L, rng, _eps); sb = explore_selection(B, A, L, rng, _eps)
             s1 = BattleSide(sa); s2 = BattleSide(sb); s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
             tch = os.environ.get("TEACHER", "old"); sel = os.environ.get("TEACHER_SELECT", "duct")
             ai1 = _SelfPlayAI(L, net, n_sims, 0.25, 1.0, rng, teacher=tch, select=sel)
@@ -92,6 +93,56 @@ def ng_eval(pool, pathA, pathB, N, workers, seedbase):
     from math import erfc; pv = erfc(abs(z) / math.sqrt(2)) if dec else 1.0
     return aw, al, dr, wr, pv
 
+def _broad_party(D, rng, topN=90):
+    """top使用率種から広く6体を組む(usage偏重を緩め、synergyの同居を自然に発生させる)。
+    制約: 重複種なし・重複道具なし・メガ最大1。各種はusage上位セット。"""
+    species = [p for p, _ in D["usage"][:topN]]
+    if len(species) < 6:
+        species = [p for p, _ in D["usage"]]
+    pick = rng.sample(species, 6)
+    specs = []; used_items = set(); megas = 0
+    for nm in pick:
+        items = sorted(D["items"].get(nm, {}), key=D["items"][nm].get, reverse=True) if D["items"].get(nm) else [None]
+        item = None
+        for it in (items or [None]):
+            if it in used_items: continue
+            ismega = bool(it and "ナイト" in it)
+            if ismega and megas >= 1: continue
+            item = it; break
+        if item and "ナイト" in item: megas += 1
+        if item: used_items.add(item)
+        ab = max(D["abil"].get(nm, {"": 1}), key=D["abil"].get(nm, {"": 1}).get) if D["abil"].get(nm) else None
+        mv = sorted(D["moves"].get(nm, {}), key=D["moves"][nm].get, reverse=True)[:4] if D["moves"].get(nm) else []
+        nat = max(D["natures"].get(nm, {"": 1}), key=D["natures"].get(nm, {"": 1}).get) if D["natures"].get(nm) else None
+        ev = D["evs"].get(nm, [(None, 1)])[0][0]
+        specs.append(G._spec(nm, item, nat, mv, ev, ab))
+    return specs
+
+
+def _rain_value(net_path, L, D, rng):
+    """雨コア選出(ペリッパー+メガラグラージ)のターン0ネット価値。学習で上がるか追う指標。"""
+    from simulator.az_np import PVNetNP
+    from simulator.battle import BattleSide, BattleField
+    from simulator.belief import OpponentBelief
+    from simulator.pokemon import build_from_spec, parse_pokemon_spec
+    from simulator.features import encode_state
+    from simulator.ai import select_party
+    net = PVNetNP.load(net_path)
+    def F(nm, it, ab):
+        mv = sorted(D["moves"].get(nm, {}), key=D["moves"][nm].get, reverse=True)[:4] if D["moves"].get(nm) else []
+        nat = max(D["natures"].get(nm, {"": 1}), key=D["natures"].get(nm, {"": 1}).get) if D["natures"].get(nm) else None
+        ev = D["evs"].get(nm, [(None, 1)])[0][0]
+        return G._spec(nm, it, nat, mv, ev, ab)
+    def team(sp): return [build_from_spec(parse_pokemon_spec(s), L, season=SEASON, randomize=False) for s in sp]
+    rain = team([F("ペリッパー", "しめったいわ", "あめふらし"), F("ラグラージ", "ラグラージナイト", "げきりゅう"), F("マスカーニャ", "きあいのタスキ", "へんげんじざい")])
+    vs = []
+    for _ in range(6):
+        opp = team(G.gen_party(D, rng))
+        s1 = BattleSide(rain); s2 = BattleSide(opp); s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
+        vs.append(net.evaluate(encode_state(s1, s2, BattleField()), [0])[1])
+    return sum(vs) / len(vs)
+
+
 def main():
     epochs = int(sys.argv[1]) if len(sys.argv) > 1 else 4
     games = int(sys.argv[2]) if len(sys.argv) > 2 else 1500
@@ -101,8 +152,21 @@ def main():
     from simulator.az_np import PVNetNP
     from simulator.az_loop import to_arrays
     D = G.load(season=SEASON); rng = random.Random(0)
-    pool = [G.gen_party(D, rng) for _ in range(poolN)]   # 多様な生成集団（=拡充データ源）
-    print(f"多様パーティ集団 {len(pool)} 生成", flush=True)
+    pool_file = os.environ.get("POOL_FILE")
+    diverse = os.environ.get("DIVERSE_POOL") == "1"
+    if pool_file:
+        import json
+        pf = json.load(open(pool_file))
+        pool = [p["specs"] for p in pf["parties"]]   # 共進化で自然発見した集団(雨等のsynergyが台頭)
+        src = f"進化集団:{pool_file}"
+    elif diverse:
+        pool = [_broad_party(D, rng) for _ in range(poolN)]   # top使用率から広く6体=synergy同居を自然発生
+        src = "広域(_broad)"
+    else:
+        pool = [G.gen_party(D, rng) for _ in range(poolN)]   # 多様な生成集団（=拡充データ源）
+        src = "標準(gen)"
+    print(f"多様パーティ集団 {len(pool)} 生成 ({src})", flush=True)
+    probe_L = __import__("simulator.simulate", fromlist=["get_loader"]).get_loader() if os.environ.get("RAIN_PROBE") == "1" else None
     new_arch = os.environ.get("NEW_ARCH") == "1"
     if new_arch:
         # 新encode次元のネットをゼロ初期化。アンカー=best-so-far(採用ごとに更新)で単調改善・ドリフト防止。
@@ -116,6 +180,8 @@ def main():
         net = PVNetNP.load(_start) if _start else PVNetNP(dim, hidden=256, hidden2=128, seed=0)
         net.save(NET_TMP); net.save(ANCHOR_TMP)
         print(f"新アーキ: 入力{dim}次元 開始={'継続:'+_start if _start else 'ゼロ初期化'}。アンカー=best-so-far方式。", flush=True)
+        if probe_L is not None:
+            print(f"  [雨コア価値0] {_rain_value(NET_TMP, probe_L, D, random.Random(7)):.3f}", flush=True)
     else:
         anchor = PVNetNP.load(); anchor.save(ANCHOR_TMP)       # 凍結アンカー（=現行ネット, 本番az_net_np.jsonは不変）
         start = os.environ.get("START_NET")                     # 継続学習: 既存学習ネットから再開（アンカーは現行のまま）
@@ -132,23 +198,33 @@ def main():
         X, PI, M, Y = to_arrays(samples)
         cand = copy.deepcopy(net); cand.train_pi(X, PI, M, Y, epochs=15, lr=0.05, batch=256)
         cand.save(NET_TMP + ".cand")
-        # ゲート: 候補 vs 凍結アンカー（大標本）
-        aw, al, dr, wr, pv = ng_eval(pool, NET_TMP + ".cand", ANCHOR_TMP, 300, workers, 5000 + ep)
-        accept = wr >= 0.52
-        if accept:
+        no_gate = os.environ.get("NO_GATE") == "1"
+        if no_gate:
+            # 探索的選出(ε大)で得た実結果価値はヒューリスティック選出ゲートに映らない→常に蓄積。
             net = cand; net.save(NET_TMP)
-            if new_arch:
-                net.save(ANCHOR_TMP)   # best-so-far を更新（次epochはこれを超えるかで判定）
+            if new_arch: net.save(ANCHOR_TMP)
+            gate_s = "蓄積(NO_GATE)"
+        else:
+            # ゲート: 候補 vs 凍結アンカー（大標本）
+            aw, al, dr, wr, pv = ng_eval(pool, NET_TMP + ".cand", ANCHOR_TMP, 300, workers, 5000 + ep)
+            accept = wr >= 0.52
+            if accept:
+                net = cand; net.save(NET_TMP)
+                if new_arch: net.save(ANCHOR_TMP)
+            gate_s = (f"候補vs{'best-so-far' if new_arch else '凍結アンカー'} {aw}-{al}"
+                      f"({wr*100:.1f}% p={pv:.3f}) [{'採用' if accept else '棄却'}]")
+        rain_s = ""
+        if probe_L is not None:
+            rain_s = f" 雨コア価値={_rain_value(NET_TMP, probe_L, D, random.Random(7)):.3f}"
         print(f"[epoch{ep+1}/{epochs}] 自己対戦{per*workers}局 学習{len(samples)}サンプル "
-              f"候補vs{'best-so-far' if new_arch else '凍結アンカー'} {aw}-{al}({wr*100:.1f}% p={pv:.3f}) [{'採用' if accept else '棄却'}] "
-              f"{time.time()-t0:.0f}秒", flush=True)
+              f"{gate_s}{rain_s} {time.time()-t0:.0f}秒", flush=True)
     # 最終評価: 学習ネット vs 凍結アンカー（大標本）
     net.save("/tmp/coevo_final.json")
     aw, al, dr, wr, pv = ng_eval(pool, "/tmp/coevo_final.json", ANCHOR_TMP, 600, workers, 99000)
     print(f"\n=== 最終: 学習ネット vs 現行ネット（多様集団・600戦・NetGreedy）===", flush=True)
     print(f"学習ネット: {aw}勝 {al}敗 {dr}分 → 勝率{wr*100:.1f}%  p={pv:.4f}  "
           f"{'有意に強化' if pv<0.05 and wr>0.5 else ('有意に弱化' if pv<0.05 else '有意差なし')}", flush=True)
-    out = "az_net_coevo.json" if SEASON == "M-2" else f"az_net_coevo_{SEASON}.json"
+    out = os.environ.get("OUT_NET") or ("az_net_coevo.json" if SEASON == "M-2" else f"az_net_coevo_{SEASON}.json")
     import shutil; shutil.copy("/tmp/coevo_final.json", out)
     print(f"学習ネットを {out} に保存（本番az_net_np.jsonは不変）", flush=True)
 

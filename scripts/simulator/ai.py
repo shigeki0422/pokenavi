@@ -4,6 +4,7 @@ usage_rate重み付き確率選択 + ダメージ期待値計算の2軸
 """
 import copy
 import math
+import os
 import random
 from typing import List, Optional
 from .battle import Action, BattleSide, BattleField, crit_chance
@@ -621,10 +622,11 @@ def select_party(party6: List[BattlePokemon], opp6: List[BattlePokemon],
             val += 2.0
         return val
 
-    # メガは1試合1体のみ。メガ石持ちのうち最も得な1体だけメガ後で評価し、
-    # 2体目以降のメガ石持ちには強い減点を与えて原則2メガ選出を避ける
-    # （非メガで巧く組み合わせる選出は将来課題。現状は強制的に1メガへ寄せる）。
-    MEGA_PENALTY = 50.0
+    # メガは1試合1体のみ進化可。メガ石持ちのうち最も得な1体だけメガ後で評価し、
+    # 2体目以降のメガ石持ちには減点を与える（メガできない＝素の姿で戦う前提のコスト）。
+    # 2メガ選出は相手次第でどちらをメガするか選べる柔軟性が強いので、減点は控えめにする。
+    # env MEGA_PENALTY で調整可（既定50。検証では下げても2メガ選出はほぼ増えず勝率も改善せず＝元値維持）。
+    MEGA_PENALTY = float(os.environ.get("MEGA_PENALTY", "50"))
     _mega_caps = [mp for mp in party6
                   if getattr(mp, "mega_data", None) is not None and not mp.mega_evolved]
     _mbest = max(_mega_caps, key=lambda mp: _poke_score(mp, as_mega=True)) if _mega_caps else None

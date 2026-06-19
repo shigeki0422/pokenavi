@@ -45,13 +45,15 @@ def _fresh_species(rng, exclude):
     return G._wchoice(uw, rng)
 
 def repair(mons, rng):
-    # 1) 種族重複除去
+    # 1) 種族重複除去（図鑑番号ベース＝リージョン違い同種も同居不可）
+    dexmap = D.get("dex", {})
+    def dx(nm): return dexmap.get(nm, nm)
     seen = set()
     for m in mons:
-        if m["name"] in seen:
+        if dx(m["name"]) in seen:
             ns = _fresh_species(rng, seen | {x["name"] for x in mons})
             if ns: m.clear(); m.update(_gen_mon(ns, rng))
-        seen.add(m["name"])
+        seen.add(dx(m["name"]))
     # 2) 持ち物重複除去
     used = set()
     for m in mons:

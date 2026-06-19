@@ -18,10 +18,11 @@ def canon(name):
 
 def load(db=DB, season=SEASON, rule=RULE):
     c = sqlite3.connect(db); c.row_factory = sqlite3.Row
-    ubest = {}
-    for r in c.execute("SELECT pokemon,rank FROM pokemon_usage WHERE season=? AND rule=? ORDER BY rank", (season, rule)):
+    ubest = {}; dex = {}
+    for r in c.execute("SELECT pokemon,rank,pokemon_id FROM pokemon_usage WHERE season=? AND rule=? ORDER BY rank", (season, rule)):
         p = canon(r["pokemon"])
         if p not in ubest: ubest[p] = r["rank"]           # 最良ランクで統合
+        if p not in dex and r["pokemon_id"]: dex[p] = r["pokemon_id"][:4]   # 図鑑番号4桁(リージョン違いは同dex)
     usage = sorted(ubest.items(), key=lambda x: x[1])
     partners = defaultdict(dict)
     for r in c.execute("SELECT pokemon,partner,rank FROM pokemon_partners WHERE season=? AND rule=? ORDER BY rank", (season, rule)):
@@ -42,8 +43,24 @@ def load(db=DB, season=SEASON, rule=RULE):
         evs[canon(r["pokemon"])].append(((r["ev_h"], r["ev_a"], r["ev_b"], r["ev_c"], r["ev_d"], r["ev_s"]), r["u"] or 0.0))
     megastones = set(r["mega_stone"] for r in c.execute("SELECT mega_stone FROM pokemon_mega_stats") if r["mega_stone"])
     mega_pokemon = set(p for p, idist in items.items() if any(k in megastones for k in idist))
+    # メガ石→メガ後A/C（物理/特殊の向き判定用）
+    mega_by_stone = {}
+    for r in c.execute("SELECT mega_stone,attack,sp_attack FROM pokemon_mega_stats"):
+        if r["mega_stone"]: mega_by_stone[r["mega_stone"]] = {"a": r["attack"], "c": r["sp_attack"]}
+    # 技カテゴリ（physical/special/status）
+    move_cat = {r["name_jp"]: r["category"] for r in c.execute("SELECT name_jp,category FROM move_master")}
+    # 学習攻撃技を種族×カテゴリ別に威力降順（向き補正の補充用）
+    learn_atk = defaultdict(list)
+    q = ("SELECT ls.pokemon_name p, m.name_jp nm, m.category cat, m.power pw FROM pokemon_learnsets ls "
+         "JOIN move_master m ON m.name_jp=ls.move_jp WHERE m.power IS NOT NULL AND m.category IN ('physical','special')")
+    tmp = defaultdict(list)
+    for r in c.execute(q):
+        tmp[(canon(r["p"]), r["cat"])].append((r["nm"], r["pw"] or 0))
+    for k, lst in tmp.items():
+        learn_atk[k] = [nm for nm, _ in sorted(lst, key=lambda x: -x[1])]
     return dict(usage=usage, partners=partners, moves=moves, items=items, natures=natures, abil=abil, evs=evs,
-                megastones=megastones, mega_pokemon=mega_pokemon)
+                megastones=megastones, mega_pokemon=mega_pokemon, dex=dex,
+                mega_by_stone=mega_by_stone, move_cat=move_cat, learn_atk=dict(learn_atk))
 
 def _wchoice(weights, rng):
     items = [(k, w) for k, w in weights.items() if w > 0]
@@ -62,26 +79,64 @@ def _wsample_dict(d, k, rng):  # d: {value: weight}; 上位kを重み付き非�
         out.append(ch); pool.pop(ch, None)
     return out
 
+# 性格の同軸swap（特殊↔物理。素早さ補正/補正なしの軸は保つ）
+_NAT_SWAP = {"ひかえめ": "いじっぱり", "おくびょう": "ようき", "ずぶとい": "わんぱく", "おだやか": "しんちょう",
+             "いじっぱり": "ひかえめ", "ようき": "おくびょう", "わんぱく": "ずぶとい", "しんちょう": "おだやか"}
+_SPEC_NAT = {"ひかえめ", "おくびょう", "ずぶとい", "おだやか"}
+_PHYS_NAT = {"いじっぱり", "ようき", "わんぱく", "しんちょう"}
+
+def mega_orient(D, item):
+    """メガ石→'phys'/'spec'（メガ後A>Cなら物理）。非メガ/不明はNone。"""
+    m = D.get("mega_by_stone", {}).get(item)
+    if not m or m["a"] is None or m["c"] is None: return None
+    return "phys" if m["a"] > m["c"] else "spec"
+
+def orient_set(D, p, item, mv, nat, ev):
+    """選んだメガ石の物理/特殊の向きに、技・性格・EVを合わせ直す。
+    使用率は種族単位で支配的フォルム(例メガライチュウY特殊)に偏るため、別石(メガX物理)に
+    その型が乗る誤ビルドを是正。反対カテゴリ攻撃技を除去→学習技で補充、性格/EVを同軸へ。"""
+    o = mega_orient(D, item)
+    if o is None: return mv, nat, ev
+    cat = D.get("move_cat", {}); want = "physical" if o == "phys" else "special"
+    other = "special" if o == "phys" else "physical"
+    kept = [x for x in (mv or []) if cat.get(x) != other]
+    if sum(1 for x in kept if cat.get(x) == want) < 2:
+        for cand in D.get("learn_atk", {}).get((p, want), []):
+            if cand not in kept: kept.append(cand)
+            if len(kept) >= 4: break
+    kept = kept[:4] if kept else mv
+    if nat in _NAT_SWAP and ((o == "phys" and nat in _SPEC_NAT) or (o == "spec" and nat in _PHYS_NAT)):
+        nat = _NAT_SWAP[nat]
+    if ev:
+        h, a, b, c, d, s = ev
+        if (o == "phys" and c > a) or (o == "spec" and a > c): a, c = c, a
+        ev = (h, a, b, c, d, s)
+    return kept, nat, ev
+
 def gen_party(D, rng, usage_floor=0.15):
     uw = {p: 1.0 / rk for p, rk in D["usage"]}      # ランク→Zipf重み
     if not uw: raise RuntimeError("usageデータ無し")
+    dexmap = D.get("dex", {})
+    def dx(p): return dexmap.get(p, p)               # 図鑑番号(無ければ名前)＝同種判定キー
     team = [_wchoice(uw, rng)]
+    used_dex = {dx(team[0])}
     while len(team) < 6:
         cw = defaultdict(float)
         for picked in team:                          # 同居率（相方ランク）で synergy
             for partner, rk in D["partners"].get(picked, []):
-                if partner not in team: cw[partner] += 1.0 / rk
+                if partner not in team and dx(partner) not in used_dex: cw[partner] += 1.0 / rk
         for p, w in uw.items():                       # 使用率フロア（探索）
-            if p not in team: cw[p] += usage_floor * w
+            if p not in team and dx(p) not in used_dex: cw[p] += usage_floor * w
         nxt = _wchoice(cw, rng)
         if nxt is None:
             for p, _ in D["usage"]:
-                if p not in team: nxt = p; break
-        if nxt is None or nxt in team: break
-        team.append(nxt)
+                if p not in team and dx(p) not in used_dex: nxt = p; break
+        if nxt is None or nxt in team or dx(nxt) in used_dex: break
+        team.append(nxt); used_dex.add(dx(nxt))
     # --- メガ可能個体を最低1体は含める（0なら最下位を差替え＝必ず1〜2メガ可能に） ---
     if not any(p in D["mega_pokemon"] for p in team):
-        cands = {p: uw.get(p, 0.01) for p in D["mega_pokemon"] if p not in team}
+        keep_dex = {dx(p) for p in team[:-1]}        # 差替え対象(team[-1])以外の同種は避ける
+        cands = {p: uw.get(p, 0.01) for p in D["mega_pokemon"] if p not in team and dx(p) not in keep_dex}
         if cands: team[-1] = _wchoice(cands, rng)
     # --- 持ち物：重複禁止＋メガは最大2（3メガ禁止） ---
     used_items = set(); mega = 0; mons = []
@@ -113,6 +168,7 @@ def gen_party(D, rng, usage_floor=0.15):
         if evpairs:
             i = _wchoice({i: w for i, (sp, w) in enumerate(evpairs)}, rng)
             ev = evpairs[i][0] if i is not None else None
+        mv, nat, ev = orient_set(D, p, m["item"], mv, nat, ev)   # メガ石の物理/特殊に型を合わせる
         specs.append(_spec(p, m["item"], nat, mv, ev, ab))
     return specs
 

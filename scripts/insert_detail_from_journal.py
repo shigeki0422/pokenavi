@@ -83,6 +83,10 @@ OCR_ABILITIES = {
     "てのこぶし": "てつのこぶし",
     "よりよくそ": "ようりょくそ",
 }
+OCR_NATURES = {
+    "すぶとい": "ずぶとい", "すばとい": "ずぶとい", "すぼとい": "ずぶとい", "ずぼとい": "ずぶとい",
+    "おくびよう": "おくびょう", "いっぱり": "いじっぱり", "のてんき": "のうてんき", "すばやい": "おくびょう",
+}
 OCR_POKEMON = {
     "プリジュラス": "ブリジュラス",
     "バリッパー": "ペリッパー",
@@ -305,9 +309,10 @@ def main():
             inserted["abilities"] += conn.execute("SELECT changes()").fetchone()[0]
 
         for i, na in enumerate(rec.get("natures", []), 1):
+            nat = OCR_NATURES.get(na["name"], na["name"])
             conn.execute(
                 "INSERT OR IGNORE INTO pokemon_natures(season,rule,pokemon,rank,nature,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?)",
-                ("M-3","single",pokemon,i,na["name"],na["rate"],"champions_adb",CRAWLED_DATE,now)
+                ("M-3","single",pokemon,i,nat,na["rate"],"champions_adb",CRAWLED_DATE,now)
             )
             inserted["natures"] += conn.execute("SELECT changes()").fetchone()[0]
 
