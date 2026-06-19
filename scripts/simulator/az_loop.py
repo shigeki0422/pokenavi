@@ -95,7 +95,19 @@ class _SelfPlayAI:
         if forced:
             return forced
         if self.teacher == "new":
-            feat = encode_state(my_side, opp_side, field)
+            # 記録特徴は相手の隠れ情報をbeliefからサンプル(決定化)した状態で作る＝不完全情報。
+            # 真の相手特性/持物/技を学習に漏らさない。MCTS探索は内部で別途決定化して指す。
+            belief = my_side.belief if my_side.belief is not None else OpponentBelief(self._det.loader, self._det.season)
+            belief.observe_disclosure(my_side.opp_view)
+            my_is_s1 = (my_side.field_idx == 0)
+            s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
+            cs1, cs2, cfield = copy.deepcopy((s1, s2, field))
+            copp = cs2 if my_is_s1 else cs1
+            cfg = self._det._sample_opp_config(opp_side, belief)
+            for poke, c in zip(copp.party, cfg):
+                if c is not None:
+                    self._det._determinize(poke, c)
+            feat = encode_state(cs1, cs2, cfield) if my_is_s1 else encode_state(cs2, cs1, cfield)
             act, pi = self._newai.mcts_policy(my_side, opp_side, field, temperature=self.temperature)
             if act is None:
                 return self._fallback(my_side, opp_side, field)
@@ -114,7 +126,7 @@ class _SelfPlayAI:
         for poke, c in zip(copp.party, cfg):
             if c is not None:
                 self._det._determinize(poke, c)
-        feat = encode_state(my_side, opp_side, field)
+        feat = encode_state(cs1, cs2, cfield) if my_is_s1 else encode_state(cs2, cs1, cfield)
         b = Battle(cs1, cs2, cfield)
         act, pi = mcts_search(b, my_is_s1, self.net, self.opp_ai, n_sims=self.n_sims,
                               dir_eps=self.dir_eps, temperature=self.temperature,

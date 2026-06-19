@@ -13,23 +13,12 @@ from typing import List
 from .data import get_type_effectiveness
 from .damage import calc_damage
 from .items import get_speed_item_multiplier
-from .ability_categories import (CATEGORIES as _ABIL_CATS, ABILITY_CAT_BITS as _ABIL_CAT_BITS,
-                                 SPECIES_PRIOR_CATS as _SPECIES_PRIOR_CATS)
-
-_N_ABIL_CATS = len(_ABIL_CATS)
-_ZERO_ABIL_CATS = [0.0] * _N_ABIL_CATS
-
-def _ability_cats(p, opp_belief=False):
-    """特性の効果カテゴリベクトル（与えられた状態の実特性）。
-    不完全情報は呼び出し側の決定化（相手の隠れ情報をbeliefからサンプル）で担保するため、
-    ここでは状態どおりに符号化する。決定化済み状態なら相手特性=サンプル値（真値ではない）。"""
-    return [float(b) for b in _ABIL_CAT_BITS.get(p.ability, _ZERO_ABIL_CATS)]
 
 TYPES = ["ノーマル", "ほのお", "みず", "でんき", "くさ", "こおり", "かくとう", "どく",
          "じめん", "ひこう", "エスパー", "むし", "いわ", "ゴースト", "ドラゴン",
          "あく", "はがね", "フェアリー"]
 _TI = {t: i for i, t in enumerate(TYPES)}
-_WEATHER = {None: 0, "rain": 1, "sun": 2, "sunny": 2, "sandstorm": 3, "hail": 4, "snow": 4}
+_WEATHER = {None: 0, "rain": 1, "sun": 2, "sandstorm": 3, "hail": 4, "snow": 4}
 _STATUS = {"paralysis": 0, "sleep": 1, "freeze": 2, "burn": 3, "poison": 4, "badpoison": 4}
 _STAGES = ["stage_attack", "stage_defense", "stage_sp_attack", "stage_sp_defense", "stage_speed",
            "stage_accuracy", "stage_evasion"]   # v7: 命中・回避ランク追加
@@ -47,10 +36,10 @@ _ABIL_FLAGS = [
     {"いかく"},                                                   # いかく
     {"あめふらし", "すなおこし", "ゆきふらし"},                    # 天候設置
     {"さいせいりょく"},                                            # 再生
-    {"がんじょう", "ばけのかわ", "マルチスケイル", "マジックガード"},  # 耐え/削り耐性
-    {"すなかき", "ようりょくそ", "すいすい", "ゆきかき"},            # 天候加速
+    {"がんじょう", "ばけのかわ", "マルチスケイル"},                # 耐え
+    {"すなかき", "ようりょくそ"},                                  # 天候加速
     {"いたずらごころ"},                                            # 優先度+1(変化)
-    {"マジックミラー", "ミラーアーマー", "おうごんのからだ"},        # 相手変化技を無効/反射
+    {"マジックミラー", "ミラーアーマー"},                          # 反射
     {"イリュージョン"},                                            # 身元偽装
     {"ふゆう"},                                                    # 地面無効
     {"もらいび"},                                                  # 炎吸収
@@ -138,10 +127,7 @@ def _real_speed(p, side, field) -> float:
     if getattr(side, "tailwind", False):
         spd *= 2
     w = field.weather
-    if ((p.ability == "すなかき" and w == "sandstorm")
-            or (p.ability == "ようりょくそ" and w == "sunny")
-            or (p.ability == "すいすい" and w == "rain")
-            or (p.ability == "ゆきかき" and w in ("hail", "snow"))):
+    if (p.ability == "すなかき" and w == "sandstorm") or (p.ability == "ようりょくそ" and w == "sun"):
         spd *= 2
     return spd
 
@@ -182,7 +168,7 @@ def _volatile_block(p) -> List[float]:
     ]
 
 
-_POKE = 2 + len(TYPES) + 5 + 6 + len(_ITEM_FLAGS) + _N_ABIL_CATS + 1 + len(TYPES) + 10 + _VOL  # 特性は54効果カテゴリ
+_POKE = 2 + len(TYPES) + 5 + 6 + len(_ITEM_FLAGS) + len(_ABIL_FLAGS) + 1 + len(TYPES) + 10 + _VOL  # =96
 _PER_SIDE = 3 * _POKE + 7 + 2   # 7=能力ランク(A/B/C/D/S+命中+回避)
 _MATRIX = 6
 _SPEEDMAT = 9
@@ -190,7 +176,7 @@ _DISCLOSE = 18
 _FIELD = 5 + 1 + 4 + 1 + 2 + 1 + 8 + 2 + 10 + 4   # +4: wish/future-sight予約（両陣営）= 38
 
 
-def _poke_block(p, side, opp_belief=False) -> List[float]:
+def _poke_block(p, side) -> List[float]:
     if p is None:
         return [0.0] * _POKE
     alive = 1.0 if p.is_alive else 0.0
@@ -205,16 +191,15 @@ def _poke_block(p, side, opp_belief=False) -> List[float]:
     stats = [p.max_hp / 250.0, p.attack / 300.0, p.defense / 300.0,
              p.sp_attack / 300.0, p.sp_defense / 300.0, p.speed / 300.0]
     items = _flags(p.item, _ITEM_FLAGS)
-    # 特性は効果カテゴリで表現。相手側(opp_belief指定)は未知特性をマスク（不完全情報）。
-    abils = _ability_cats(p, opp_belief)
+    abils = _flags(p.ability, _ABIL_FLAGS)
     megav = 1.0 if (p.mega_data is not None and not p.mega_evolved and not side.mega_used) else 0.0
     return [alive, hpf] + tvec + st + stats + items + abils + [megav] + _move_features(p) + _volatile_block(p)
 
 
-def _side_features(side, opp_belief=False) -> List[float]:
+def _side_features(side) -> List[float]:
     block: List[float] = []
     for p in _ordered_party(side):
-        block += _poke_block(p, side, opp_belief)
+        block += _poke_block(p, side)
     act = side.active
     block += [max(-1.0, min(1.0, getattr(act, s, 0) / 6.0)) for s in _STAGES]
     alive = [p for p in side.party if p.is_alive]
@@ -243,8 +228,7 @@ def _disclosure(opp_view, ordered) -> List[float]:
 def encode_state(side1, side2, field) -> List[float]:
     a1, a2 = side1.active, side2.active
     o1, o2 = _ordered_party(side1), _ordered_party(side2)
-    # P(side1勝利)をside1視点で予測: side1=自分(フル情報)、side2=相手(未知特性はside1のbeliefでマスク)
-    f = _side_features(side1) + _side_features(side2, getattr(side1, "belief", None))
+    f = _side_features(side1) + _side_features(side2)
 
     # 期待ダメージ行列（相手画面で半減）
     for tgt in o2:

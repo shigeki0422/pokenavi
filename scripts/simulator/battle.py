@@ -1525,6 +1525,22 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
             logs += _apply_status_move(defender, attacker, move, field, defender_side, attacker_side)
         return logs
 
+    # ひっくりかえす（相手の能力ランク変化を全て逆転）
+    if n == "ひっくりかえす":
+        if defender.ability == "マジックミラー" and attacker.ability != "マジックミラー":
+            logs.append(f"{defender.name} の マジックミラー で ひっくりかえす を跳ね返した！")
+            return logs + _apply_status_move(defender, attacker, move, field, defender_side, attacker_side)
+        _stg = ("stage_attack", "stage_defense", "stage_sp_attack", "stage_sp_defense",
+                "stage_speed", "stage_accuracy", "stage_evasion")
+        changed = False
+        for s in _stg:
+            v = getattr(defender, s, 0)
+            if v != 0:
+                setattr(defender, s, -v); changed = True
+        logs.append(f"{defender.name} の 能力変化が逆転した！" if changed
+                    else f"しかし {defender.name} の 能力に変化がなかった！")
+        return logs
+
     # みがわり（HP1/4消費してみがわりを作る）
     if n == "みがわり":
         cost = attacker.max_hp // 4
@@ -2490,7 +2506,7 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
             "リーフストーム":   [("stage_sp_attack", -2, 1.0)],
             "オーバーヒート":   [("stage_sp_attack", -2, 1.0)],
             "サイコブースト":   [("stage_sp_attack", -2, 1.0)],
-            "ゴールドラッシュ": [("stage_sp_attack", -1, 1.0)],
+            "ゴールドラッシュ": [("stage_sp_attack", -2, 1.0)],
             "アームハンマー":   [("stage_speed", -1, 1.0)],
             "アーマーキャノン": [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
             "とどめばり":       [("stage_attack", 3, 1.0)],
@@ -2722,7 +2738,7 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
         "リーフストーム": [("stage_sp_attack", -2, 1.0)],
         "オーバーヒート": [("stage_sp_attack", -2, 1.0)],
         "サイコブースト": [("stage_sp_attack", -2, 1.0)],
-        "ゴールドラッシュ": [("stage_sp_attack", -1, 1.0)],
+        "ゴールドラッシュ": [("stage_sp_attack", -2, 1.0)],
         "だいばくはつ":   [],  # 倒れる（別処理）
         "じばく":         [],
         "フレアソング":   [("stage_sp_attack", 1, 1.0)],

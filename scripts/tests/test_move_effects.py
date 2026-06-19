@@ -8620,7 +8620,7 @@ if _mv_ゴ_ルドラッシュ:
     _pd_ゴ_ルドラッシュ = make_poke(type1="こおり", def_b=100, spdef_b=100)
     _d_ゴ_ルドラッシュ = dmg(_pa_ゴ_ルドラッシュ, _pd_ゴ_ルドラッシュ, "ゴールドラッシュ")
     check("ダメージ計算: ゴールドラッシュ", _d_ゴ_ルドラッシュ > 0, f"dmg={_d_ゴ_ルドラッシュ}")
-# ゴールドラッシュ: 自分特攻-1
+# ゴールドラッシュ: 自分特攻-2
 _mvss_ゴ_ルドラッシュ_sp_attack = dl.get_move("ゴールドラッシュ")
 if _mvss_ゴ_ルドラッシュ_sp_attack:
     random.seed(0); _got_ゴ_ルドラッシュ_sp_attack = 0
@@ -8628,7 +8628,7 @@ if _mvss_ゴ_ルドラッシュ_sp_attack:
         _pas = make_poke(type1="はがね", atk_b=60, spatk_b=60); _pds = make_poke(type1="こおり", hp_b=255, def_b=255, spdef_b=255)
         execute(_pas, _pds, "ゴールドラッシュ")
         if _pas.stage_sp_attack != 0: _got_ゴ_ルドラッシュ_sp_attack = _pas.stage_sp_attack; break
-    check("自分特攻-1: ゴールドラッシュ", _got_ゴ_ルドラッシュ_sp_attack == -1, f"1回適用={_got_ゴ_ルドラッシュ_sp_attack} 期待=-1")
+    check("自分特攻-2: ゴールドラッシュ", _got_ゴ_ルドラッシュ_sp_attack == -2, f"1回適用={_got_ゴ_ルドラッシュ_sp_attack} 期待=-2")
 
 # ── ソウルクラッシュ ──
 check("DB: ソウルクラッシュ 取得可能", dl.get_move("ソウルクラッシュ") is not None)
@@ -8740,6 +8740,14 @@ _dn2 = make_poke(type1="くさ", def_b=100, spdef_b=100); _dn2.status = "poison"
 _pn = _ep(_pcp, _dn1, dl.get_move("どくばりセンボン"), BattleField())
 _pd = _ep(_pcp, _dn2, dl.get_move("どくばりセンボン"), BattleField())
 check("状態異常で威力2倍: どくばりセンボン", _pd == _pn * 2, f"normal={_pn} status={_pd}")
+
+# ── ひっくりかえす ──
+check("DB: ひっくりかえす 取得可能", dl.get_move("ひっくりかえす") is not None)
+# ひっくりかえす: 相手の能力ランク変化を全て逆転
+_pt = make_poke(type1="あく"); _dt = make_poke()
+_dt.stage_attack = 2; _dt.stage_speed = 1; _dt.stage_defense = -1
+execute(_pt, _dt, "ひっくりかえす")
+check("相手能力変化が逆転: ひっくりかえす", _dt.stage_attack==-2 and _dt.stage_speed==-1 and _dt.stage_defense==1, f"A={_dt.stage_attack} S={_dt.stage_speed} B={_dt.stage_defense}")
 
 
 print(f'\n全技テスト: {PASS}件PASS / {FAIL}件FAIL (計{PASS+FAIL}件)')

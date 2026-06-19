@@ -103,11 +103,25 @@ def main():
     D = G.load(season=SEASON); rng = random.Random(0)
     pool = [G.gen_party(D, rng) for _ in range(poolN)]   # 多様な生成集団（=拡充データ源）
     print(f"多様パーティ集団 {len(pool)} 生成", flush=True)
-    anchor = PVNetNP.load(); anchor.save(ANCHOR_TMP)       # 凍結アンカー（=現行ネット, 本番az_net_np.jsonは不変）
-    start = os.environ.get("START_NET")                     # 継続学習: 既存学習ネットから再開（アンカーは現行のまま）
-    net = PVNetNP.load(start) if start else copy.deepcopy(anchor)
-    net.save(NET_TMP)
-    print(f"アンカー(現行ネット)を凍結。学習ネット開始={'継続:'+start if start else '現行から'}。", flush=True)
+    new_arch = os.environ.get("NEW_ARCH") == "1"
+    if new_arch:
+        # 新encode次元のネットをゼロ初期化。アンカー=best-so-far(採用ごとに更新)で単調改善・ドリフト防止。
+        from simulator.features import encode_state
+        from simulator.battle import BattleSide, BattleField
+        from simulator.pokemon import build_from_spec, parse_pokemon_spec
+        _L = __import__("simulator.simulate", fromlist=["get_loader"]).get_loader()
+        _samp = [build_from_spec(parse_pokemon_spec(s), _L, season=SEASON, randomize=False) for s in pool[0][:3]]
+        dim = len(encode_state(BattleSide(_samp), BattleSide(_samp), BattleField()))
+        _start = os.environ.get("START_NET")
+        net = PVNetNP.load(_start) if _start else PVNetNP(dim, hidden=256, hidden2=128, seed=0)
+        net.save(NET_TMP); net.save(ANCHOR_TMP)
+        print(f"新アーキ: 入力{dim}次元 開始={'継続:'+_start if _start else 'ゼロ初期化'}。アンカー=best-so-far方式。", flush=True)
+    else:
+        anchor = PVNetNP.load(); anchor.save(ANCHOR_TMP)       # 凍結アンカー（=現行ネット, 本番az_net_np.jsonは不変）
+        start = os.environ.get("START_NET")                     # 継続学習: 既存学習ネットから再開（アンカーは現行のまま）
+        net = PVNetNP.load(start) if start else copy.deepcopy(anchor)
+        net.save(NET_TMP)
+        print(f"アンカー(現行ネット)を凍結。学習ネット開始={'継続:'+start if start else '現行から'}。", flush=True)
     for ep in range(epochs):
         t0 = time.time()
         per = max(1, games // workers)
@@ -123,8 +137,10 @@ def main():
         accept = wr >= 0.52
         if accept:
             net = cand; net.save(NET_TMP)
+            if new_arch:
+                net.save(ANCHOR_TMP)   # best-so-far を更新（次epochはこれを超えるかで判定）
         print(f"[epoch{ep+1}/{epochs}] 自己対戦{per*workers}局 学習{len(samples)}サンプル "
-              f"候補vs凍結アンカー {aw}-{al}({wr*100:.1f}% p={pv:.3f}) [{'採用' if accept else '棄却'}] "
+              f"候補vs{'best-so-far' if new_arch else '凍結アンカー'} {aw}-{al}({wr*100:.1f}% p={pv:.3f}) [{'採用' if accept else '棄却'}] "
               f"{time.time()-t0:.0f}秒", flush=True)
     # 最終評価: 学習ネット vs 凍結アンカー（大標本）
     net.save("/tmp/coevo_final.json")

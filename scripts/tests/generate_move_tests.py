@@ -1813,6 +1813,12 @@ for name, type_, cat, power, accuracy, pp, effect in moves:
         tests_for_move.append('check("ひんし0で威力50: おはかまいり", _o0 == 50, f"0={_o0}")')
         tests_for_move.append('check("ひんし3で威力200(50+50×3): おはかまいり", _o3 == 200, f"3={_o3}")')
         tests_for_move.append('check("ひんし上限5で威力300: おはかまいり", _o5 == 300, f"5={_o5}")')
+    elif name == 'ひっくりかえす':
+        tests_for_move.append('# ひっくりかえす: 相手の能力ランク変化を全て逆転')
+        tests_for_move.append('_pt = make_poke(type1="あく"); _dt = make_poke()')
+        tests_for_move.append('_dt.stage_attack = 2; _dt.stage_speed = 1; _dt.stage_defense = -1')
+        tests_for_move.append('execute(_pt, _dt, "ひっくりかえす")')
+        tests_for_move.append('check("相手能力変化が逆転: ひっくりかえす", _dt.stage_attack==-2 and _dt.stage_speed==-1 and _dt.stage_defense==1, f"A={_dt.stage_attack} S={_dt.stage_speed} B={_dt.stage_defense}")')
     elif name == 'はいすいのじん':
         tests_for_move.append('# はいすいのじん: 全能力+1かつ自分が交代不可になる。すでに交代不可なら失敗')
         tests_for_move.append('_ph = make_poke(type1="かくとう"); execute(_ph, make_poke(), "はいすいのじん")')

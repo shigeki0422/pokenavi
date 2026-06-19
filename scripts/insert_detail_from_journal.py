@@ -9,9 +9,7 @@ from pathlib import Path
 DB = Path(__file__).parent / "pokenavi.db"
 
 WF_DIRS = [
-    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_8aa015a9-90d",
-    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_26060029-28b",
-    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_12bd1603-308",
+    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_935ad6a9-410",
 ]
 
 OCR_MOVES = {
@@ -28,6 +26,7 @@ OCR_MOVES = {
     "サンダータイプ": "サンダーダイブ",
     "フレイズキック": "ブレイズキック",
     "じこくづき": "じごくづき",
+    "しこくづき": "じごくづき",
     "かんせきぶうじ": "がんせきふうじ",
     "ボルターガイスト": "ポルターガイスト",
     "ほうふう": "ぼうふう",
@@ -38,11 +37,39 @@ OCR_MOVES = {
     "あきのひざし": "あさのひざし",
     "しびれこな": "しびれごな",
     "ばくおんば": "ばくおんぱ",
+    "とんぼかえり": "とんぼがえり",
+    "みかわり": "みがわり",
+    "ふううち": "ふいうち",
+    "ふううち": "ふいうち",
+    "ふういうち": "ふいうち",
+    "ふういち": "ふいうち",
+    "パレットパンチ": "バレットパンチ",
+    "ねっぽう": "ねっぷう",
+    "しごくづき": "じごくづき",
+    "じこづくじ": "じごくづき",
+    "しゅうでん": "じゅうでん",
+    "へドロばくだん": "ヘドロばくだん",
+    "へドロウェーブ": "ヘドロウェーブ",
+    "ていていこうせん": "てっていこうせん",
+    "ボルダーガイスト": "ポルターガイスト",
+    "かむしゃら": "がむしゃら",
+    "はめのひかり": "はめつのひかり",
+    "したばた": "じたばた",
+    "3ほんのや": "3ぼんのや",
+    "ねっきのだいち": "ねっさのだいち",
+    "どわすれ": "ドわすれ",
+    "エネルギーボール": "エナジーボール",
+    "オーラベール": "オーロラベール",
 }
 OCR_ITEMS = {
     "ヨブのみ": "ヨプのみ",
     "フーティナイト": "フーディナイト",
     "ジバルドナイト": "シビルドナイト",
+    "ヤチエのみ": "ヤチェのみ",
+    "バンドラナイト": "ペンドラナイト",
+    "ピアーのみ": "ビアーのみ",
+    "ユキノオート": "ユキノオナイト",
+    "ビジョットナイト": "ピジョットナイト",
 }
 OCR_ABILITIES = {
     "すなかくれ": "すながくれ",
@@ -50,6 +77,11 @@ OCR_ABILITIES = {
     "どしよく": "どしょく",
     "ちからすく": "ちからずく",
     "かんじょう": "がんじょう",
+    "はんずう": "はんすう",
+    "ほうおん": "ほのおのからだ",
+    "ほうじん": "ほうし",
+    "てのこぶし": "てつのこぶし",
+    "よりよくそ": "ようりょくそ",
 }
 OCR_POKEMON = {
     "プリジュラス": "ブリジュラス",
@@ -102,9 +134,45 @@ OCR_POKEMON = {
     "パシャーモ": "バシャーモ",
     "ジュベッタ": "ジュペッタ",
     "ズルスキン": "ズルズキン",
+    # 新規追加 (rank 151-232)
+    "バロリーム": "ペロリーム",
+    "ビジョット": "ピジョット",
+    "ボウルツ": "ポワルン",
+    "マボイツツ": "マホイップ",
+    "ファンロトム": "ロトム",
+    "デリーニャ": "ランクルス",
+    "バリコンオル": "バリコオル",
+    "パリコンオル": "バリコオル",
+    "アブレーヌ": "アブソル",
+    "パイバニラ": "バイバニラ",
+    "カイエンジン": "カエンジシ",
+    "ロープシン": "ローブシン",
+    "ワインディ": "ヒスイウインディ",
+    "イツカネズミ": "イッカネズミ",
+    "ラブレシア": "ラフレシア",
+    "ガルビアル": "ガブリアス",
+    "グレッフィ": "クレッフィ",
+    "エアニュート": "エンニュート",
+    "ブジンロン": "ジジーロン",
+    "ドナイドン": "ドサイドン",
+    "マッキョ": "マッギョ",
+    "ダルップル": "タルップル",
+    "グレバース": "クレベース",
+    "トリテプス": "トリデプス",
+    "フラエッテ": "フラエッテ(永遠)",
+    # パートナー追加補正
+    "ミミツキ": "ミミッキュ",
+    "ミミツキュ": "ミミッキュ",
+    "ラムバルド": "ラムパルド",
+    "テンリュウ": "デンリュウ",
+    "フーテイン": "フーディン",
+    "ベンダー": "ペンドラー",
+    "ピビヨン": "ビビヨン",
+    "テスカーン": "デスカーン",
+    "テテンネ": "デデンネ",
 }
 
-CRAWLED_DATE = "2026-06-17"
+CRAWLED_DATE = "2026-06-18"
 
 def ev_spread(ev):
     parts = []
@@ -141,11 +209,6 @@ def main():
     ability_master = set(r[0] for r in conn.execute("SELECT name_jp FROM ability_master"))
     pokemon_master = set(r[0] for r in conn.execute("SELECT pokemon_name FROM pokemon_base_stats"))
 
-    # rankからpokemon_usageの正式名を引くルックアップ（フォーム違い対応）
-    rank_to_pokemon = {}
-    for row in conn.execute("SELECT rank, pokemon FROM pokemon_usage WHERE season='M-3' AND rule='single'"):
-        rank_to_pokemon[row[0]] = row[1]
-
     now = datetime.now(timezone.utc).isoformat()
 
     # 重複を避けるため最新のrank→dataをキープ（後のWFが正しい）
@@ -154,14 +217,37 @@ def main():
         for jsonl in sorted(glob.glob(f"{wf_dir}/*.jsonl")):
             for rec in extract_structured_outputs(jsonl):
                 rank = rec["rank"]
-                # 同じrankが複数ある場合は後者で上書き（最後のWFが最新）
                 if rank not in all_data:
                     all_data[rank] = rec
 
     print(f"Journal から取得: {len(all_data)} ランク")
-    missing_ranks = [r for r in range(1,151) if r not in all_data]
+    total_ranks = max(all_data.keys()) if all_data else 0
+    missing_ranks = [r for r in range(1, total_ranks + 1) if r not in all_data]
     if missing_ranks:
         print(f"  ⚠ 欠落ランク: {missing_ranks}")
+
+    # pokemon_usage 投入（journalのrank+pokemon名から）
+    usage_inserted = 0
+    for rank in sorted(all_data.keys()):
+        rec = all_data[rank]
+        pokemon_raw = rec["pokemon"]
+        pokemon = OCR_POKEMON.get(pokemon_raw, pokemon_raw)
+        if pokemon in pokemon_master:
+            conn.execute(
+                "INSERT OR IGNORE INTO pokemon_usage(season,rule,rank,pokemon,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?)",
+                ("M-3","single",rank,pokemon,"champions_adb",CRAWLED_DATE,now)
+            )
+            usage_inserted += conn.execute("SELECT changes()").fetchone()[0]
+    conn.commit()
+    print(f"pokemon_usage: {usage_inserted}件投入")
+
+    # rankからpokemon_usageの正式名を引くルックアップ（フォーム違い対応）
+    rank_to_pokemon = {}
+    for row in conn.execute(
+        "SELECT rank, pokemon FROM pokemon_usage WHERE season='M-3' AND rule='single' AND crawled_date=?",
+        (CRAWLED_DATE,)
+    ):
+        rank_to_pokemon[row[0]] = row[1]
 
     move_unknown = set()
     item_unknown = set()
@@ -185,64 +271,64 @@ def main():
             skipped_pokemon.append((rank, pokemon_raw, pokemon))
             continue
 
-        for m in rec.get("moves", []):
+        for i, m in enumerate(rec.get("moves", []), 1):
             name = OCR_MOVES.get(m["name"], m["name"])
             if name not in move_master:
                 move_unknown.add(name)
                 continue
             conn.execute(
                 "INSERT OR IGNORE INTO pokemon_moves(season,rule,pokemon,rank,move,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?)",
-                ("M-3","single",pokemon,rank,name,m["rate"],"champions_adb",CRAWLED_DATE,now)
+                ("M-3","single",pokemon,i,name,m["rate"],"champions_adb",CRAWLED_DATE,now)
             )
             inserted["moves"] += conn.execute("SELECT changes()").fetchone()[0]
 
-        for it in rec.get("items", []):
+        for i, it in enumerate(rec.get("items", []), 1):
             name = OCR_ITEMS.get(it["name"], it["name"])
             if name not in item_master:
                 item_unknown.add(name)
                 continue
             conn.execute(
                 "INSERT OR IGNORE INTO pokemon_items(season,rule,pokemon,rank,item,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?)",
-                ("M-3","single",pokemon,rank,name,it["rate"],"champions_adb",CRAWLED_DATE,now)
+                ("M-3","single",pokemon,i,name,it["rate"],"champions_adb",CRAWLED_DATE,now)
             )
             inserted["items"] += conn.execute("SELECT changes()").fetchone()[0]
 
-        for ab in rec.get("abilities", []):
+        for i, ab in enumerate(rec.get("abilities", []), 1):
             name = OCR_ABILITIES.get(ab["name"], ab["name"])
             if name not in ability_master:
                 ability_unknown.add(name)
                 continue
             conn.execute(
                 "INSERT OR IGNORE INTO pokemon_abilities(season,rule,pokemon,rank,ability,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?)",
-                ("M-3","single",pokemon,rank,name,ab["rate"],"champions_adb",CRAWLED_DATE,now)
+                ("M-3","single",pokemon,i,name,ab["rate"],"champions_adb",CRAWLED_DATE,now)
             )
             inserted["abilities"] += conn.execute("SELECT changes()").fetchone()[0]
 
-        for na in rec.get("natures", []):
+        for i, na in enumerate(rec.get("natures", []), 1):
             conn.execute(
                 "INSERT OR IGNORE INTO pokemon_natures(season,rule,pokemon,rank,nature,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?)",
-                ("M-3","single",pokemon,rank,na["name"],na["rate"],"champions_adb",CRAWLED_DATE,now)
+                ("M-3","single",pokemon,i,na["name"],na["rate"],"champions_adb",CRAWLED_DATE,now)
             )
             inserted["natures"] += conn.execute("SELECT changes()").fetchone()[0]
 
-        for ev in rec.get("evs", []):
+        for i, ev in enumerate(rec.get("evs", []), 1):
             spread = ev_spread(ev)
             conn.execute(
                 "INSERT OR IGNORE INTO pokemon_evs(season,rule,pokemon,rank,ev_spread,ev_h,ev_a,ev_b,ev_c,ev_d,ev_s,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                ("M-3","single",pokemon,rank,spread,
+                ("M-3","single",pokemon,i,spread,
                  ev.get("h",0),ev.get("a",0),ev.get("b",0),ev.get("c",0),ev.get("d",0),ev.get("s",0),
                  ev["rate"],"champions_adb",CRAWLED_DATE,now)
             )
             inserted["evs"] += conn.execute("SELECT changes()").fetchone()[0]
 
-        for pt in rec.get("partners", []):
+        for i, pt in enumerate(rec.get("partners", []), 1):
             pname = OCR_POKEMON.get(pt["name"], pt["name"])
             if pname not in pokemon_master:
                 partner_unknown.add(pt["name"])
                 continue
             conn.execute(
                 "INSERT OR IGNORE INTO pokemon_partners(season,rule,pokemon,rank,partner,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?)",
-                ("M-3","single",pokemon,rank,pname,"champions_adb",CRAWLED_DATE,now)
+                ("M-3","single",pokemon,i,pname,"champions_adb",CRAWLED_DATE,now)
             )
             inserted["partners"] += conn.execute("SELECT changes()").fetchone()[0]
 
