@@ -1,9 +1,9 @@
 ---
 title: 'ナゲツケサル | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのナゲツケサル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率198位。'
+description: 'ポケモンチャンピオンズのナゲツケサル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
 pokemonName: 'ナゲツケサル'
 dexNumber: 766
-usageRank: 198
+usageRank: 999
 pubDate: '2026-05-24'
 draft: false
 
@@ -17,7 +17,7 @@ draft: false
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.766</strong>　／　使用率 <strong style="color:#dc2626">198位</strong>
+      全国図鑑 <strong>No.766</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-05-24</div>
   </div>
@@ -79,6 +79,7 @@ draft: false
 
 ---
 
+
 ## タイプ相性
 
 <div style="overflow-x:auto;margin:12px 0">
@@ -109,33 +110,35 @@ draft: false
 ## 特性
 
 <style>
-.pn-rate-wrap{position:static}
 .pn-rate-wrap{position:relative;display:inline-block;width:100%}
-.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
-.pn-rate-wrap:hover .pn-popup,.pn-rate-wrap:focus-within .pn-popup{display:block}
+.pn-popup{display:none;position:fixed;z-index:200;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
 </style>
 <script>
+document.addEventListener('DOMContentLoaded',function(){
 document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   var popup=wrap.querySelector('.pn-popup');
   if(!popup)return;
   function adjust(){
-    popup.style.left='0';
+    var wr=wrap.getBoundingClientRect();
+    popup.style.left=wr.left+'px';
     popup.style.right='auto';
-    popup.style.top='calc(100% + 4px)';
+    popup.style.top=(wr.bottom+4)+'px';
     popup.style.bottom='auto';
+    popup.style.visibility='hidden';
     popup.style.display='block';
     var r=popup.getBoundingClientRect();
     if(r.right>window.innerWidth-8){
       popup.style.left='auto';
-      popup.style.right='0';
+      popup.style.right=(window.innerWidth-wr.right)+'px';
     }
     if(r.bottom>window.innerHeight-8){
       popup.style.top='auto';
-      popup.style.bottom='calc(100% + 4px)';
+      popup.style.bottom=(window.innerHeight-wr.top+4)+'px';
     }
-    popup.style.display='';
+    popup.style.visibility='';
   }
-  wrap.addEventListener('mouseenter',adjust);
+  wrap.addEventListener('mouseenter',function(){adjust();popup.style.display='block';});
+  wrap.addEventListener('mouseleave',function(){popup.style.display='';});
   wrap.addEventListener('touchstart',function(e){
     e.preventDefault();
     adjust();
@@ -144,10 +147,11 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
   });
 });
+});
 </script>
 
 <div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead>
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
@@ -165,33 +169,35 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 ## 使用率データ
 
 <style>
-.pn-rate-wrap{position:static}
 .pn-rate-wrap{position:relative;display:inline-block;width:100%}
-.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
-.pn-rate-wrap:hover .pn-popup,.pn-rate-wrap:focus-within .pn-popup{display:block}
+.pn-popup{display:none;position:fixed;z-index:200;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
 </style>
 <script>
+document.addEventListener('DOMContentLoaded',function(){
 document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   var popup=wrap.querySelector('.pn-popup');
   if(!popup)return;
   function adjust(){
-    popup.style.left='0';
+    var wr=wrap.getBoundingClientRect();
+    popup.style.left=wr.left+'px';
     popup.style.right='auto';
-    popup.style.top='calc(100% + 4px)';
+    popup.style.top=(wr.bottom+4)+'px';
     popup.style.bottom='auto';
+    popup.style.visibility='hidden';
     popup.style.display='block';
     var r=popup.getBoundingClientRect();
     if(r.right>window.innerWidth-8){
       popup.style.left='auto';
-      popup.style.right='0';
+      popup.style.right=(window.innerWidth-wr.right)+'px';
     }
     if(r.bottom>window.innerHeight-8){
       popup.style.top='auto';
-      popup.style.bottom='calc(100% + 4px)';
+      popup.style.bottom=(window.innerHeight-wr.top+4)+'px';
     }
-    popup.style.display='';
+    popup.style.visibility='';
   }
-  wrap.addEventListener('mouseenter',adjust);
+  wrap.addEventListener('mouseenter',function(){adjust();popup.style.display='block';});
+  wrap.addEventListener('mouseleave',function(){popup.style.display='';});
   wrap.addEventListener('touchstart',function(e){
     e.preventDefault();
     adjust();
@@ -200,56 +206,77 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
   });
 });
+});
 </script>
+
+<style>
+@media(min-width:768px){
+  .pn-data-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+}
+</style>
+
+<div class="pn-data-grid">
+
+<div>
 
 ### 技
 
 <div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
 </tr></thead>
 <tbody>
 </tbody>
 </table>
 </div>
+
+</div>
+
+<div>
 
 ### 持ち物
 
 <div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">持ち物</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
 </tr></thead>
 <tbody>
 </tbody>
 </table>
 </div>
+
+</div>
+
+<div>
 
 ### 性格
 
 <div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">性格</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
 </tr></thead>
 <tbody>
 </tbody>
 </table>
 </div>
 
+</div>
+
+<div>
+
 ### ステータス振り
 
-<p style="font-size:0.8em;color:#666;margin:4px 0 8px">H=HP A=こうげき B=ぼうぎょ C=とくこう D=とくぼう S=すばやさ　最大値=32</p>
-
-<div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<div style="margin:12px 0;overflow-x:auto">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:36px">順位</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">H</th>
@@ -258,18 +285,23 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">C</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">D</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">S</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">採用率</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
 </tr></thead>
 <tbody>
 </tbody>
 </table>
 </div>
+<p style="font-size:0.8em;color:#666;margin:4px 0 0">H=HP A=こうげき B=ぼうぎょ C=とくこう D=とくぼう S=すばやさ</p>
+
+</div>
+
+</div>
 
 
-### 同じチーム TOP10
+### 同じチーム
 
 <div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead>
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
