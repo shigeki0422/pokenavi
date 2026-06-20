@@ -77,7 +77,7 @@ const pages = (await getCollection('pokemon'))
 							alt={p.data.pokemonName}
 							loading={i < 20 ? 'eager' : 'lazy'}
 						/>
-						{p.data.usageRank && <div class="rank">使用率 {p.data.usageRank}位</div>}
+						{p.data.usageRank && <div class="rank">使用率 {p.data.usageRank > 200 ? '圏外' : `${p.data.usageRank}位`}</div>}
 						<div class="dex">No.{p.data.dexNumber}</div>
 						<div class="name">{p.data.pokemonName}</div>
 					</a>

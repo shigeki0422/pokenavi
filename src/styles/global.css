@@ -119,11 +119,16 @@ hr {
 	margin: 2rem 0;
 }
 @media (max-width: 720px) {
+	html, body {
+		overflow-x: hidden;
+	}
 	body {
 		font-size: 18px;
 	}
 	main {
 		padding: 1em;
+		width: 100%;
+		box-sizing: border-box;
 	}
 }
 /* PCでは左サイドバー(220px)分の余白を確保 */
