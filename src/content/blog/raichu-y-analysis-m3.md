@@ -464,41 +464,6 @@ draft: false
 
 ---
 
-## まとめ：型別比較
-
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
-<thead>
-<tr style="background:#1e3a5f;color:#fff">
-  <th style="padding:10px 12px;border:1px solid #cbd5e1;text-align:left">型</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">採用率（指標）</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">性格</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">主な技</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">強み</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">弱み</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">おくびょうH2-C32-S32型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">おくびょう 73.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">でんじほう・きあいだま・くさむすび・ボルトチェンジ/みがわり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S200でマスカーニャ（4位, S192）に先手を取れる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">バシャーモ（16位）へのでんじほうが乱数1発（ひかえめは確定1発）</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ひかえめB2-C32-S32型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかえめ 20.5%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかえめ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">でんじほう・きあいだま・くさむすび・ボルトチェンジ/みがわり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">バシャーモ（16位）へのでんじほうが確定1発（おくびょうは乱数1発）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S182でマスカーニャ（4位, S192）に後手を取られる</td>
-</tr>
-</tbody>
-</table>
-</div>
-
 **総評:**
 
 メガライチュウYはノーガード特性でとくこう160のでんじほう・きあいだまが必中になるという、シンプルかつ強力な強みを持つ特殊アタッカーです。使用率3位の背景には、でんき単タイプの少ない弱点（じめんのみ）とノーガードによる命中安定が噛み合っており、読み合いのリスクを下げながら広い攻撃範囲を押し付けられる点があります。
