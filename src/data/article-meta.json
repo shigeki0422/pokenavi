@@ -1,4 +1,15 @@
 {
+  "raichu-y-analysis-m3": {
+    "name": "メガライチュウY",
+    "rank": 3,
+    "types": [
+      "でんき"
+    ],
+    "matchKey": "ライチュウ",
+    "dex": 26,
+    "form": "00",
+    "pokemonId": "raichu"
+  },
   "aegislash-analysis-m2": {
     "name": "ギルガルド",
     "rank": 11,
@@ -8,7 +19,8 @@
     ],
     "matchKey": "ギルガルド",
     "dex": 681,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "aegislash"
   },
   "araquanid-analysis-m2": {
     "name": "オニシズクモ",
@@ -19,7 +31,8 @@
     ],
     "matchKey": "オニシズクモ",
     "dex": 752,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "araquanid"
   },
   "archaludon-analysis-m2": {
     "name": "ブリジュラス",
@@ -30,7 +43,8 @@
     ],
     "matchKey": "ブリジュラス",
     "dex": 1018,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "archaludon"
   },
   "azumarill-analysis-m2": {
     "name": "マリルリ",
@@ -41,7 +55,8 @@
     ],
     "matchKey": "マリルリ",
     "dex": 184,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "azumarill"
   },
   "banette-analysis-m2": {
     "name": "ジュペッタ",
@@ -51,7 +66,8 @@
     ],
     "matchKey": "ジュペッタ",
     "dex": 354,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "banette"
   },
   "basculegion-analysis-m2": {
     "name": "イダイトウ（オス）",
@@ -62,7 +78,8 @@
     ],
     "matchKey": "イダイトウ",
     "dex": 902,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "basculegion"
   },
   "bellibolt-analysis-m2": {
     "name": "ハラバリー",
@@ -72,7 +89,8 @@
     ],
     "matchKey": "ハラバリー",
     "dex": 939,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "bellibolt"
   },
   "blastoise-analysis-m2": {
     "name": "メガカメックス",
@@ -82,7 +100,8 @@
     ],
     "matchKey": "カメックス",
     "dex": 9,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "blastoise"
   },
   "ceruledge-analysis-m2": {
     "name": "ソウブレイズ",
@@ -93,7 +112,8 @@
     ],
     "matchKey": "ソウブレイズ",
     "dex": 937,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "ceruledge"
   },
   "charizard-x-analysis-m2": {
     "name": "メガリザードンX",
@@ -104,7 +124,8 @@
     ],
     "matchKey": "リザードンX",
     "dex": 6,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "charizard"
   },
   "charizard-y-analysis-m2": {
     "name": "メガリザードンY",
@@ -115,7 +136,8 @@
     ],
     "matchKey": "リザードンY",
     "dex": 6,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "charizard"
   },
   "clefable-analysis-m2": {
     "name": "メガピクシー",
@@ -126,7 +148,8 @@
     ],
     "matchKey": "ピクシー",
     "dex": 36,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "clefable"
   },
   "conkeldurr-analysis-m2": {
     "name": "ローブシン",
@@ -136,7 +159,8 @@
     ],
     "matchKey": "ローブシン",
     "dex": 534,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "conkeldurr"
   },
   "corviknight-analysis-m2": {
     "name": "アーマーガア",
@@ -147,7 +171,8 @@
     ],
     "matchKey": "アーマーガア",
     "dex": 823,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "corviknight"
   },
   "delphox-analysis-m2": {
     "name": "メガマフォクシー",
@@ -158,7 +183,8 @@
     ],
     "matchKey": "マフォクシー",
     "dex": 655,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "delphox"
   },
   "ditto-analysis-m2": {
     "name": "メタモン",
@@ -168,7 +194,8 @@
     ],
     "matchKey": "メタモン",
     "dex": 132,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "ditto"
   },
   "dragapult-analysis-m2": {
     "name": "ドラパルト",
@@ -179,7 +206,8 @@
     ],
     "matchKey": "ドラパルト",
     "dex": 887,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "dragapult"
   },
   "dragonite-analysis-m2": {
     "name": "メガカイリュー",
@@ -190,7 +218,8 @@
     ],
     "matchKey": "カイリュー",
     "dex": 149,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "dragonite"
   },
   "empoleon-analysis-m2": {
     "name": "エンペルト",
@@ -201,7 +230,8 @@
     ],
     "matchKey": "エンペルト",
     "dex": 395,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "empoleon"
   },
   "espathra-analysis-m2": {
     "name": "クエスパトラ",
@@ -211,7 +241,8 @@
     ],
     "matchKey": "クエスパトラ",
     "dex": 956,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "espathra"
   },
   "excadrill-analysis-m2": {
     "name": "ドリュウズ",
@@ -222,7 +253,8 @@
     ],
     "matchKey": "ドリュウズ",
     "dex": 530,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "excadrill"
   },
   "florette-analysis-m2": {
     "name": "フラエッテ（永遠の花）",
@@ -232,7 +264,8 @@
     ],
     "matchKey": "フラエッテ",
     "dex": 670,
-    "form": "05"
+    "form": "05",
+    "pokemonId": "floette-eternal"
   },
   "froslass-analysis-m2": {
     "name": "ユキメノコ",
@@ -243,7 +276,8 @@
     ],
     "matchKey": "ユキメノコ",
     "dex": 478,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "froslass"
   },
   "gallade-analysis-m2": {
     "name": "エルレイド",
@@ -254,7 +288,8 @@
     ],
     "matchKey": "エルレイド",
     "dex": 475,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "gallade"
   },
   "garchomp-analysis-m2": {
     "name": "ガブリアス",
@@ -265,7 +300,8 @@
     ],
     "matchKey": "ガブリアス",
     "dex": 445,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "garchomp"
   },
   "gardevoir-analysis-m2": {
     "name": "サーナイト",
@@ -276,7 +312,8 @@
     ],
     "matchKey": "サーナイト",
     "dex": 282,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "gardevoir"
   },
   "gengar-analysis-m2": {
     "name": "メガゲンガー",
@@ -287,7 +324,8 @@
     ],
     "matchKey": "ゲンガー",
     "dex": 94,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "gengar"
   },
   "goodra-hisui-analysis-m2": {
     "name": "ヌメルゴン（ヒスイ）",
@@ -298,7 +336,8 @@
     ],
     "matchKey": "ヌメルゴン",
     "dex": 706,
-    "form": "01"
+    "form": "01",
+    "pokemonId": "goodra-hisui"
   },
   "greedent-analysis-m2": {
     "name": "ホルード",
@@ -309,7 +348,8 @@
     ],
     "matchKey": "ホルード",
     "dex": 660,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "greedent"
   },
   "greninja-analysis-m2": {
     "name": "ゲッコウガ",
@@ -320,7 +360,8 @@
     ],
     "matchKey": "ゲッコウガ",
     "dex": 658,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "greninja"
   },
   "gyarados-analysis-m2": {
     "name": "メガギャラドス",
@@ -331,7 +372,8 @@
     ],
     "matchKey": "ギャラドス",
     "dex": 130,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "gyarados"
   },
   "heracross-analysis-m2": {
     "name": "メガヘラクロス",
@@ -342,7 +384,8 @@
     ],
     "matchKey": "ヘラクロス",
     "dex": 214,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "heracross"
   },
   "hippowdon-analysis-m2": {
     "name": "カバルドン",
@@ -352,7 +395,8 @@
     ],
     "matchKey": "カバルドン",
     "dex": 450,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "hippowdon"
   },
   "hydreigon-analysis-m2": {
     "name": "サザンドラ",
@@ -363,7 +407,8 @@
     ],
     "matchKey": "サザンドラ",
     "dex": 635,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "hydreigon"
   },
   "kangaskhan-analysis-m2": {
     "name": "メガガルーラ",
@@ -373,7 +418,8 @@
     ],
     "matchKey": "ガルーラ",
     "dex": 115,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "kangaskhan"
   },
   "kingambit-analysis-m2": {
     "name": "ドドゲザン",
@@ -384,7 +430,8 @@
     ],
     "matchKey": "ドドゲザン",
     "dex": 983,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "kingambit"
   },
   "kiraflosure-analysis-m2": {
     "name": "キラフロル",
@@ -395,7 +442,8 @@
     ],
     "matchKey": "キラフロル",
     "dex": 970,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "glimmora"
   },
   "kleavor-analysis-m2": {
     "name": "バサギリ",
@@ -406,7 +454,8 @@
     ],
     "matchKey": "バサギリ",
     "dex": 900,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "kleavor"
   },
   "lopunny-analysis-m2": {
     "name": "メガミミロップ",
@@ -417,7 +466,8 @@
     ],
     "matchKey": "メガミミロップ",
     "dex": 428,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "lopunny"
   },
   "lucario-analysis-m2": {
     "name": "メガルカリオ",
@@ -428,7 +478,8 @@
     ],
     "matchKey": "ルカリオ",
     "dex": 448,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "lucario"
   },
   "mamoswine-analysis-m2": {
     "name": "マンムー",
@@ -439,7 +490,8 @@
     ],
     "matchKey": "マンムー",
     "dex": 473,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "mamoswine"
   },
   "meganium-analysis-m2": {
     "name": "メガメガニウム",
@@ -450,7 +502,8 @@
     ],
     "matchKey": "メガメガニウム",
     "dex": 154,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "meganium"
   },
   "meowscarada-analysis-m2": {
     "name": "マスカーニャ",
@@ -461,7 +514,8 @@
     ],
     "matchKey": "マスカーニャ",
     "dex": 908,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "meowscarada"
   },
   "milotic-analysis-m2": {
     "name": "ミロカロス",
@@ -471,7 +525,8 @@
     ],
     "matchKey": "ミロカロス",
     "dex": 350,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "milotic"
   },
   "mimikyu-analysis-m2": {
     "name": "ミミッキュ",
@@ -482,7 +537,8 @@
     ],
     "matchKey": "ミミッキュ",
     "dex": 778,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "mimikyu"
   },
   "ninetales-alola-analysis-m2": {
     "name": "キュウコン（アローラ）",
@@ -493,7 +549,8 @@
     ],
     "matchKey": "キュウコン",
     "dex": 38,
-    "form": "01"
+    "form": "01",
+    "pokemonId": "ninetales-alola"
   },
   "pelipper-analysis-m2": {
     "name": "ペリッパー",
@@ -504,7 +561,8 @@
     ],
     "matchKey": "ペリッパー",
     "dex": 279,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "pelipper"
   },
   "polteageist-analysis-m2": {
     "name": "ポットデス",
@@ -514,7 +572,8 @@
     ],
     "matchKey": "ポットデス",
     "dex": 855,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "polteageist"
   },
   "primarina-analysis-m2": {
     "name": "アシレーヌ",
@@ -525,7 +584,8 @@
     ],
     "matchKey": "アシレーヌ",
     "dex": 730,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "primarina"
   },
   "rotom-heat-analysis-m2": {
     "name": "ヒートロトム",
@@ -536,7 +596,8 @@
     ],
     "matchKey": "ヒートロトム",
     "dex": 479,
-    "form": "01"
+    "form": "01",
+    "pokemonId": "rotom-heat"
   },
   "rotom-wash-analysis-m2": {
     "name": "ウォッシュロトム",
@@ -547,7 +608,8 @@
     ],
     "matchKey": "ウォッシュロトム",
     "dex": 479,
-    "form": "02"
+    "form": "02",
+    "pokemonId": "rotom-wash"
   },
   "samurott-hisui-analysis-m2": {
     "name": "ダイケンキ（ヒスイ）",
@@ -558,7 +620,8 @@
     ],
     "matchKey": "ダイケンキ",
     "dex": 503,
-    "form": "01"
+    "form": "01",
+    "pokemonId": "samurott-hisui"
   },
   "scizor-analysis-m2": {
     "name": "メガハッサム",
@@ -569,7 +632,8 @@
     ],
     "matchKey": "メガハッサム",
     "dex": 212,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "scizor"
   },
   "scovillain-analysis-m2": {
     "name": "スコヴィラン",
@@ -580,7 +644,8 @@
     ],
     "matchKey": "スコヴィラン",
     "dex": 952,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "scovillain"
   },
   "skarmory-analysis-m2": {
     "name": "エアームド",
@@ -591,7 +656,8 @@
     ],
     "matchKey": "エアームド",
     "dex": 227,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "skarmory"
   },
   "skeledirge-analysis-m2": {
     "name": "ラウドボーン",
@@ -602,7 +668,8 @@
     ],
     "matchKey": "ラウドボーン",
     "dex": 911,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "skeledirge"
   },
   "slowbro-analysis-m2": {
     "name": "ヤドラン",
@@ -613,7 +680,8 @@
     ],
     "matchKey": "ヤドラン",
     "dex": 80,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "slowbro"
   },
   "slowking-galar-analysis-m2": {
     "name": "ヤドキング（ガラル）",
@@ -624,7 +692,8 @@
     ],
     "matchKey": "ヤドキング",
     "dex": 199,
-    "form": "01"
+    "form": "01",
+    "pokemonId": "slowking-galar"
   },
   "sneasler-analysis-m2": {
     "name": "オオニューラ",
@@ -635,7 +704,8 @@
     ],
     "matchKey": "オオニューラ",
     "dex": 903,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "sneasler"
   },
   "snorlax-analysis-m2": {
     "name": "カビゴン",
@@ -645,7 +715,8 @@
     ],
     "matchKey": "カビゴン",
     "dex": 143,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "snorlax"
   },
   "starmie-analysis-m2": {
     "name": "メガスターミー",
@@ -656,7 +727,8 @@
     ],
     "matchKey": "スターミー",
     "dex": 121,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "starmie"
   },
   "sylveon-analysis-m2": {
     "name": "ニンフィア",
@@ -666,7 +738,8 @@
     ],
     "matchKey": "ニンフィア",
     "dex": 700,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "sylveon"
   },
   "toxapex-analysis-m2": {
     "name": "ドヒドイデ",
@@ -677,7 +750,8 @@
     ],
     "matchKey": "ドヒドイデ",
     "dex": 748,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "toxapex"
   },
   "tyranitar-analysis-m2": {
     "name": "バンギラス",
@@ -688,7 +762,8 @@
     ],
     "matchKey": "バンギラス",
     "dex": 248,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "tyranitar"
   },
   "umbreon-analysis-m2": {
     "name": "ブラッキー",
@@ -698,7 +773,8 @@
     ],
     "matchKey": "ブラッキー",
     "dex": 197,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "umbreon"
   },
   "vanilluxe-analysis-m2": {
     "name": "バイバニラ",
@@ -708,7 +784,8 @@
     ],
     "matchKey": "バイバニラ",
     "dex": 584,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "vanilluxe"
   },
   "venusaur-analysis-m2": {
     "name": "メガフシギバナ",
@@ -719,7 +796,8 @@
     ],
     "matchKey": "フシギバナ",
     "dex": 3,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "venusaur"
   },
   "victreebel-analysis-m2": {
     "name": "ウツボット",
@@ -730,7 +808,8 @@
     ],
     "matchKey": "ウツボット",
     "dex": 71,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "victreebel"
   },
   "volcarona-analysis-m2": {
     "name": "ウルガモス",
@@ -741,7 +820,8 @@
     ],
     "matchKey": "ウルガモス",
     "dex": 637,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "volcarona"
   },
   "whimsicott-analysis-m2": {
     "name": "エルフーン",
@@ -752,7 +832,8 @@
     ],
     "matchKey": "エルフーン",
     "dex": 547,
-    "form": "00"
+    "form": "00",
+    "pokemonId": "whimsicott"
   },
   "zoroark-hisui-analysis-m2": {
     "name": "ゾロアーク（ヒスイ）",
@@ -763,6 +844,7 @@
     ],
     "matchKey": "ゾロアーク",
     "dex": 571,
-    "form": "01"
+    "form": "01",
+    "pokemonId": "zoroark-hisui"
   }
 }
