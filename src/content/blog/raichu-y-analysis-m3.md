@@ -480,25 +480,69 @@ draft: false
 
 ## データ分析②：ひかえめで確定数が変わる相手
 
-各ポケモンへの最大打点（でんじほう＝でんき一致×1.5、きあいだま＝かくとう非一致×1.0、相手タイプ倍率込み）でおくびょうC212・ひかえめC233を比較。ダメージは最高/最低乱数。HP・D実数値はDB主力EVスプレッドから算出。
+おくびょうC212・ひかえめC233で、D無振り（採用率の多数派）への最大打点を比較。アーマーガアはD振り67%が多数派でH252込みで確定2発のまま変化なし（除外）。
 
-| ポケモン | 使用率 | 技（実効倍率） | HP実 | D実 | 臆病 最高/最低 | 控え目 最高/最低 | 変化 |
-|---|---|---|---|---|---|---|---|
-| ラグラージ | 7位 | きあいだま×1.0（でんき無効） | 175 | 110 | 103/87 | 113/96 | 乱数2発→確定2発 |
-| アーマーガア | 8位 | でんじほう×1.5 | 177 | 105 | 162/137 | 178/151 | 確定2発→乱数1発 |
-| バシャーモ | 16位 | でんじほう×1.5（メガD80） | 155 | 100 | 169/144 | 187/159 | 乱数1発→確定1発 |
-| サーフゴー | 18位 | でんじほう×0.75（でんき半減） | 162 | 111 | 76/65 | 84/71 | 確定3発→乱数2発 |
-| アローラキュウコン | 20位 | でんじほう×1.5 | 148 | 120 | 142/121 | 156/132 | 確定2発→乱数1発 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#1e3a5f;color:#fff">
+<th style="padding:8px 10px;border:1px solid #94a3b8">ポケモン</th>
+<th style="padding:8px 10px;border:1px solid #94a3b8">使用率</th>
+<th style="padding:8px 10px;border:1px solid #94a3b8">技（実効倍率）</th>
+<th style="padding:8px 10px;border:1px solid #94a3b8">D無振り採用率</th>
+<th style="padding:8px 10px;border:1px solid #94a3b8">おくびょう 最高/最低</th>
+<th style="padding:8px 10px;border:1px solid #94a3b8">ひかえめ 最高/最低</th>
+<th style="padding:8px 10px;border:1px solid #94a3b8">変化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">ラグラージ</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">7位</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">きあいだま×1.0（でんき無効）</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">52%</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">103/87</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">113/96</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">乱数2発→確定2発</td>
+</tr>
+<tr style="background:#f8fafc">
+<td style="padding:8px 10px;border:1px solid #cbd5e1">バシャーモ</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">16位</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">でんじほう×1.5（メガD80）</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">67%</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">169/144</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">187/159</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">乱数1発→確定1発</td>
+</tr>
+<tr>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">サーフゴー</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">18位</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">でんじほう×0.75（でんき半減）</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">44%</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">76/65</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">84/71</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">確定3発→乱数2発</td>
+</tr>
+<tr style="background:#f8fafc">
+<td style="padding:8px 10px;border:1px solid #cbd5e1">アローラキュウコン</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">20位</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">でんじほう×1.5</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">47%</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">142/121</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">156/132</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">確定2発→乱数1発</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-**ラグラージ（7位）** はじめんタイプでんき無効のためきあいだまが最大打点。おくびょうは最低乱数87がHP175の半分（88）に届かず乱数2発になる場面があるが、ひかえめは最低乱数96で確定2発。
+**ラグラージ（7位）** はじめんタイプでんき無効のためきあいだまが最大打点。おくびょうは最低乱数87がHP177の半分（89）に届かず乱数2発になる場面があるが、ひかえめは最低乱数96で確定2発。
 
-**アーマーガア（8位）** はでんき等倍（はがね×0.5×ひこう×2＝×1）。おくびょう確定2発がひかえめ乱数1発に変わる。
-
-**バシャーモ（16位）** が最も対戦影響が大きい。おくびょうは最低乱数144でHP155を下回り乱数1発だが、ひかえめは最低乱数159で確定1発。
+**バシャーモ（16位）** が最も対戦影響が大きい。おくびょうは最低乱数144でHP157を下回り乱数1発だが、ひかえめは最低乱数159で確定1発。D無振り67%と採用率も高く、ひかえめであれば安定して処理できる。
 
 **サーフゴー（18位）** ははがね/ゴーストでんき半減のため実効×0.75。確定3発から乱数2発に変わり、ひかえめでも確定2発にはならない。
 
-**アローラキュウコン（20位）** はひかえめで乱数1発に。確定1発にはならず最低乱数132がHP148を下回る点に注意。
+**アローラキュウコン（20位）** はひかえめで乱数1発に。確定1発にはならず最低乱数132がHP150を下回る点に注意。
 
 ---
 
