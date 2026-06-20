@@ -448,13 +448,13 @@ S163以上の相手（ようき型メガムクホークS179等）に先手を取
     <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ">
     <div class="name">アシレーヌ</div>
     <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ムクホークが苦手なほのお・エスパー複合への水技。フェアリー半減でムクホークのフェアリー弱点を受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">フェアリータイプでドラゴン技を無効化し、ガブリアス等のりゅうせいぐんへの耐性補完。あく・かくとう技も半減で受け、ムクホークと異なる耐性を持つ</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン">
     <div class="name">リザードン</div>
     <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">じめん無効のひこうタイプで補完。ムクホークと同じくガブリアスのじしんを無効化できる</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">特殊アタッカーとして物理主体のムクホークと打点の性質を補完。ほのお技でくさ・はがね・こおりタイプへの打点を担う</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー">
@@ -463,10 +463,10 @@ S163以上の相手（ようき型メガムクホークS179等）に先手を取
     <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね複合へのりゅうせいぐんとムクホークのかくとう技で役割補完。でんき技が来たときの受け役</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0080-01.webp" alt="ニョロトノ">
+    <img src="/images/pokemon/pokemon-0186-00.webp" alt="ニョロトノ">
     <div class="name">ニョロトノ</div>
     <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">あめを降らせてでんき技の脅威を軽減するサポート役として連携できる</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">じゅんすいさでみず技を1.5倍に強化し、チームのみず使いをサポート。みず/エスパーでムクホークと異なる役割を担う</div>
   </div>
 </div>
 
