@@ -419,7 +419,7 @@ draft: false
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">天敵対策</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ライチュウYが苦手なじめん枠への打点役。高いA・Sで環境上位を一掃</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">使用率1位の制圧力でライチュウYと並走。げきりんでドラゴン複合（カイリュー等）に×2の打点を持ち、ライチュウYが等倍止まりの相手を処理する</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
@@ -444,6 +444,12 @@ draft: false
     <div class="name">イダイトウ(オス)</div>
     <div class="rate">じめん対策</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">みず技でガブリアス・カバルドンに×2の打点を持つ。じめん技に免疫はなく受け回しには向かない</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
+    <div class="name">マスカーニャ</div>
+    <div class="rate">じめん対策</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">トリックフラワー（くさ）でガブリアス（ドラゴン/じめん）にくさ→じめん×2の打点を持つ。同居率2位</div>
   </div>
 </div>
 
