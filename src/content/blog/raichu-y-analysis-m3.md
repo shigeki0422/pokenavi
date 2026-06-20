@@ -472,6 +472,19 @@ draft: false
 
 ---
 
+## ポケモン詳細ページ
+
+- [アローラライチュウ 詳細データ](/pokemon/raichu-alola/)
+- [ガブリアス 詳細データ](/pokemon/garchomp/)
+- [カバルドン 詳細データ](/pokemon/hippowdon/)
+- [アーマーガア 詳細データ](/pokemon/corviknight/)
+- [アシレーヌ 詳細データ](/pokemon/primarina/)
+- [マスカーニャ 詳細データ](/pokemon/meowscarada/)
+- [ラグラージ 詳細データ](/pokemon/swampert/)
+- [バシャーモ 詳細データ](/pokemon/blaziken/)
+- [サーフゴー 詳細データ](/pokemon/gholdengo/)
+- [アローラキュウコン 詳細データ](/pokemon/ninetales-alola/)
+
 ## 関連記事
 
 - [天敵となる使用率1位 ガブリアスのM-3考察](/blog/garchomp-analysis-m3/)
