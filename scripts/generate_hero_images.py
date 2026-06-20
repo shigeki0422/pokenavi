@@ -184,6 +184,22 @@ ARTICLES = [
             dict(rank=19, name="ミミッキュ", id="0778-00", hi=False),
         ],
     ),
+    # ── メガムクホーク ──
+    dict(
+        out      = "hero-staraptor-m3.png",
+        bg_top   = (220, 230, 255),
+        bg_bot   = (205, 215, 245),
+        badge_bg = (60, 90, 180),
+        row_hi   = (75, 110, 200),
+        shadow_hi= (40, 70, 150),
+        left_lines = ["#6  ムクホーク", "使用率 M-3 6位", "ようきAS型 76.1%"],
+        entries  = [
+            dict(rank=5, name="ミミッキュ",   id="0778-00", hi=False),
+            dict(rank=6, name="ムクホーク",   id="0398-00", hi=True),
+            dict(rank=8, name="アーマーガア", id="0823-00", hi=False),
+            dict(rank=9, name="リザードン",   id="0006-00", hi=False),
+        ],
+    ),
     # ── メガスターミー ──
     dict(
         out      = "hero-starmie-m2.png",

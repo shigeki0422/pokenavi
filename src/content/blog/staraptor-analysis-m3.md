@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】メガムクホーク考察 M-3 使用率6位 型別採用率と立ち回り'
-description: 'M-3シングルバトルで使用率6位のメガムクホークを徹底分析。インファイト99.0%・はねやすめ91.3%・ブレイブバード90.6%の採用率を実データで解説。特性あまのじゃくでインファイト後にAB上昇する仕組みと環境上位への相性・パーティ構成まで紹介します。'
+description: 'M-3シングルバトルで使用率6位のメガムクホークを徹底分析。インファイト98.8%・はねやすめ91.5%・ブレイブバード90.7%の採用率を実データで解説。特性あまのじゃくでインファイト後にAB上昇する仕組みと環境上位への相性・パーティ構成まで紹介します。'
 pubDate: '2026-06-20'
 heroImage: '../../assets/hero-staraptor-m3.png'
 draft: true
@@ -27,7 +27,7 @@ draft: true
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">6位</strong>　特性: <strong>あまのじゃく（メガ後固定）</strong>　メガ前採用特性: <strong>いかく 97.5%</strong>
+      使用率: <strong style="color:#e67e22">6位</strong>　特性: <strong>あまのじゃく（メガ後固定）</strong>　メガ前採用特性: <strong>いかく 97.4%</strong>
     </div>
   </div>
 </div>
@@ -36,7 +36,7 @@ draft: true
 
 シーズンM-3のシングルバトルで、メガムクホークは**使用率6位**を記録。素のムクホーク（ノーマル/ひこう）がメガ進化するとタイプが**かくとう/ひこう**に変わり、特性が**あまのじゃく**（自分の能力低下が逆に上昇に変わる）になります。
 
-この特性の恩恵が最も大きいのがインファイト（採用率99.0%）です。インファイトはかくとうタイプ一致の威力120の高火力技ですが、使用後にこうげき・ぼうぎょが1段階ずつ下がるデメリットがあります。あまのじゃくのもとでは**このデメリットが逆転し、こうげき・ぼうぎょが1段階ずつ上がる**ため、インファイトを連打するほど火力と物理耐久が上がり続ける独自の戦術を取れます。
+この特性の恩恵が最も大きいのがインファイト（採用率98.8%）です。インファイトはかくとうタイプ一致の威力120の高火力技ですが、使用後にこうげき・ぼうぎょが1段階ずつ下がるデメリットがあります。あまのじゃくのもとでは**このデメリットが逆転し、こうげき・ぼうぎょが1段階ずつ上がる**ため、インファイトを連打するほど火力と物理耐久が上がり続ける独自の戦術を取れます。
 
 ---
 
@@ -48,11 +48,11 @@ draft: true
 
 ### 2. かくとう/ひこうの攻撃範囲の広さ
 
-メガ後タイプがかくとう/ひこうになるため、タイプ一致技で広い範囲をカバーします。インファイト（かくとう）はノーマル・はがね・いわ・あく・こおりに等倍以上が通り、ブレイブバード（ひこう、採用率90.6%）はかくとう・むし・くさへの打点になります。ブレイズキック（ほのお、採用率53.1%）を合わせると、はがね・くさ・こおりなどひこう技でも止まりにくい相手への補完打点も確保できます。
+メガ後タイプがかくとう/ひこうになるため、タイプ一致技で広い範囲をカバーします。インファイト（かくとう）はノーマル・はがね・いわ・あく・こおりに等倍以上が通り、ブレイブバード（ひこう、採用率90.7%）はかくとう・むし・くさへの打点になります。ブレイズキック（ほのお、採用率52.2%）を合わせると、はがね・くさ・こおりなどひこう技でも止まりにくい相手への補完打点も確保できます。
 
 ### 3. すばやさ110からの先手と持続戦略
 
-メガ後のすばやさは110で、環境上位の多くより速く先手を取れます。はねやすめ（採用率91.3%）で継続的にHPを回復しながら、インファイトで能力を上げ続けるため、対面での削り合いに強い持続型のアタッカーとして機能します。
+メガ後のすばやさは110で、環境上位の多くより速く先手を取れます。はねやすめ（採用率91.5%）で継続的にHPを回復しながら、インファイトで能力を上げ続けるため、対面での削り合いに強い持続型のアタッカーとして機能します。
 
 ---
 
@@ -163,7 +163,7 @@ draft: true
 </table>
 </div>
 
-ひこうタイプがじめんを無効化するため、環境に多いガブリアスのじしん（採用率99.2%）を完全に無効化できます。むし技はかくとう×0.5・ひこう×0.5の掛け合わせで**×0.25**と大幅に軽減。一方、弱点は5タイプと多く、特にエスパー・フェアリー・ひこうの特殊技を上から浴びると危険です。
+ひこうタイプがじめんを無効化するため、環境に多いガブリアスのじしん（採用率99.7%）を完全に無効化できます。むし技はかくとう×0.5・ひこう×0.5の掛け合わせで**×0.25**と大幅に軽減。一方、弱点は5タイプと多く、特にエスパー・フェアリー・ひこうの特殊技を上から浴びると危険です。
 
 ---
 
@@ -186,86 +186,86 @@ draft: true
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>インファイト</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">99.0%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">98.8%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>はねやすめ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">91.3%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">91.5%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ブレイブバード</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">90.6%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">90.7%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ブレイズキック</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">85</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">53.1%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">52.2%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>とんぼがえり</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">70</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">16.5%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ふきとばし</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">13.9%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">16.1%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>とんぼがえり</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">70</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">15.9%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>みがわり</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8.4%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>でんこうせっか</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7.2%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6.6%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ダブルウイング</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6.5%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>いのちがけ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3.1%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3.2%</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-メガ前の採用特性は**いかく 97.5%**（こうげきを1段階下げる）。メガ進化すると特性はあまのじゃくに自動的に切り替わります。性格は**ようき 75.3%**が最多で、S110を最大まで伸ばす方向が主流です。
+メガ前の採用特性は**いかく 97.4%**（こうげきを1段階下げる）。メガ進化すると特性はあまのじゃくに自動的に切り替わります。性格は**ようき 76.1%**が最多で、S110を最大まで伸ばす方向が主流です。
 
 ---
 
 ## 主要型の解説
 
-性格分布はようき75.3%・いじっぱり19.8%の2択。ようき型はS実数値を優先し、いじっぱり型はこうげきに補正をかけて火力を高める選択になります。
+性格分布はようき76.1%・いじっぱり18.5%の2択。ようき型はS実数値を優先し、いじっぱり型はこうげきに補正をかけて火力を高める選択になります。
 
 ### 型1: ようきAS型（最多採用）
 
-**性格採用率: ようき 75.3%**（S重視型の指標。性格分布で最多）
+**性格採用率: ようき 76.1%**（S重視型の指標。性格分布で最多）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -275,10 +275,10 @@ draft: true
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> いかく（97.5%）※メガ後あまのじゃく<br>
+<strong>特性:</strong> いかく（97.4%）※メガ後あまのじゃく<br>
 <strong>性格:</strong> ようき（S↑ C↓）<br>
-<strong>EV:</strong> H2-A32-S32（採用率28.4%）<br>
-<strong>持ち物:</strong> ムクホークナイト（96.0%）
+<strong>EV:</strong> H2-A32-S32（採用率28.6%）<br>
+<strong>持ち物:</strong> ムクホークナイト（95.8%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -292,7 +292,7 @@ draft: true
 
 **強み:**
 
-ようき最速でS実数値は179（種族値110・EV32・補正1.1）となり、環境上位の多くより先手を取れます。インファイトを初回使用した後はA・Bが1段階ずつ上昇し、2発目以降はこうげき実数値がさらに高まります。いじっぱり型と比べて、A補正なしの代わりにS優位を確保するのがようき型の差別点です。ブレイブバードとの2タイプ一致技でかくとう・ひこうを通せない相手にはブレイズキックで対応します。
+ようき最速でS実数値は178（種族値110・EV32・補正1.1）となり、環境上位の多くより先手を取れます。インファイトを初回使用した後はA・Bが1段階ずつ上昇し、2発目以降はこうげき実数値がさらに高まります。いじっぱり型と比べて、A補正なしの代わりにS優位を確保するのがようき型の差別点です。ブレイブバードとの2タイプ一致技でかくとう・ひこうを通せない相手にはブレイズキックで対応します。
 
 **弱み:**
 
@@ -302,7 +302,7 @@ draft: true
 
 ### 型2: いじっぱりAS型
 
-**性格採用率: いじっぱり 19.8%**（火力重視型の指標）
+**性格採用率: いじっぱり 18.5%**（火力重視型の指標）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -312,10 +312,10 @@ draft: true
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> いかく（97.5%）※メガ後あまのじゃく<br>
+<strong>特性:</strong> いかく（97.4%）※メガ後あまのじゃく<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
-<strong>EV:</strong> H1-A32-B1-S32（採用率11.6%）<br>
-<strong>持ち物:</strong> ムクホークナイト（96.0%）
+<strong>EV:</strong> H1-A32-B1-S32（採用率10.9%）<br>
+<strong>持ち物:</strong> ムクホークナイト（95.8%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -329,11 +329,11 @@ draft: true
 
 **強み:**
 
-こうげきに1.1倍の性格補正がかかり、ようき型よりA実数値が約10%高くなります。インファイト1発目から高い打点を出せるため、耐久寄りの相手をようき型では2発かかるところを1発で倒せる可能性があります。S実数値はようき型（179）に対しいじっぱり型では163（補正なし）となるため、S163超の相手にはようき型が先手を取れる場面でいじっぱり型は後手に回ります。
+こうげきに1.1倍の性格補正がかかり、ようき型よりA実数値が約10%高くなります。インファイト1発目から高い打点を出せるため、耐久寄りの相手をようき型では2発かかるところを1発で倒せる可能性があります。S実数値はようき型（178）に対しいじっぱり型では162（補正なし）となるため、S162超の相手にはようき型が先手を取れる場面でいじっぱり型は後手に回ります。
 
 **弱み:**
 
-S163以上の相手（ようき型メガムクホークS179等）に先手を取られる点で、ようき型とは差があります。いじっぱり型が多数派でないのはこのS帯の差が対環境で影響するためと考えられます。
+S162以上の相手（ようき型メガムクホークS178等）に先手を取られる点で、ようき型とは差があります。いじっぱり型が少数なのはこのS帯の差が対環境で影響するためです。
 
 ---
 
@@ -358,32 +358,32 @@ S163以上の相手（ようき型メガムクホークS179等）に先手を取
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）をひこうタイプで無効化。インファイトがじめん×1・ドラゴン×1で等倍、ブレイブバードがドラゴン×1・ひこう×1で等倍かつS110でメガガブリアスより速い。ガブリアスからの主力打点じしんを受けずに一方的に殴れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.7%）をひこうタイプで無効化。インファイトがじめん×1・ドラゴン×1で等倍、ブレイブバードがドラゴン×1・ひこう×1で等倍かつS110でメガガブリアスより速い。ガブリアスからの主力打点じしんを受けずに一方的に殴れる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（22位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトがあく×0.5×はがね×2=等倍だが、S110＞ドドゲザンで先手。ブレイブバードはあく×1×はがね×1=等倍。ドドゲザンからのふいうち（あく×1×かくとう×0.5=0.5倍）で半減できるため継続的に削られにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトがあく×2×はがね×2=×4で弱点を突ける。ドドゲザンの主力ふいうち（あく×1×かくとう×0.5=0.5倍）は半減で受けられるため、S110でドドゲザンに先手インファイト×4を打ちつつ反撃を半減で凌げる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
+    <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（11位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.0%）を無効化。インファイトがじめん×1で等倍かつS110＞カバルドンで先手。あくびで眠らされると厄介だが、はねやすめで引き続けるか相手の交代に合わせてインファイトを打てる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.3%）を無効化。インファイトがじめん×1で等倍かつS110＞カバルドンで先手。あくびで眠らされると厄介だが、はねやすめで引き続けるか相手の交代に合わせてインファイトを打てる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
+    <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（14位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトがみず×1×フェアリー×2=×2弱点を突かれる側。ムーンフォース（フェアリー×2×かくとう×1=×2）が刺さる。S110＞アシレーヌで先手を取りブレイブバードでみず×1×フェアリー×1=等倍を打てるが、フェアリー弱点持ちのため慎重な対応が必要</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトがみず×1×フェアリー×0.5=0.5倍で半減される。ムーンフォース（フェアリー×2×かくとう×1=×2）はこちらの弱点。S110＞アシレーヌで先手を取りブレイブバードでみず×1×フェアリー×1=等倍を打てる一方、ムーンフォースへの耐性がないため五分の相手</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
+    <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（9位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ やや不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">メガリザードンYはS110で同速帯（メガ後S100なのでこちらが先手）。ただしソーラービーム（くさ×0.5×かくとう×1=0.5倍）は半減だが、ほのお技はかくとう×1×ひこう×1=等倍。メガリザードンXはドラゴン/ほのおでブレイズキックが半減される</td>
@@ -408,24 +408,38 @@ S163以上の相手（ようき型メガムクホークS179等）に先手を取
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0025-01.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ライチュウ（アローラ）（3位）
+    <img src="/images/pokemon/pokemon-0026-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ライチュウ（3位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S130でこちらより速い。10まんボルト（でんき×2）を上から通される。サイコキネシス（エスパー×2）も刺さり2タイプの弱点を同時に突ける相手</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技を持つポケモン（ガブリアス等）を同伴し、ライチュウの前に引いて処理。メガムクホーク自身での対処は難しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S110最速でS178と同速。同速対決になるため先手を確保できない場面があり、でんじほう（でんき×2、採用率96.1%）を先手で通されるリスクがある。きあいだま（かくとう、95.4%）はかくとう×1×ひこう×0.5=×0.5で半減</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技を持つポケモン（ガブリアス等）を同伴し、ライチュウの前に交代して処理する。メガムクホーク自身での対処は難しい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）
+    <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（17位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ウォーターフォール・たきのぼり等のひこう×2技が刺さる。メガギャラドスはS81でこちらより遅いが、たつまき（ひこう×2）・かみなり（でんき×2）で両方の弱点を突ける</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ブレイブバードで先手を取り削れるが、みず技は等倍止まりで受けきれない。でんき技を持つパートナーと連携して処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">りゅうのまい（62.4%）＋こおりのキバ（こおり×2、40.6%）の積み展開が脅威。こおりのキバはひこう弱点を突き、積まれると処理が難しくなる。たきのぼり（みず、90.1%）はこちらに等倍止まりだが、こちらのインファイトもみず×1×ひこう×0.5=0.5倍で有効打が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S178でギャラドスS133より先手を確保できる。ブレイブバードで等倍を入れられるが、りゅうのまいを積まれた後に対処するのは困難。でんき技を持つパートナーで積む前に対処したい</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（4位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">最速S192でムク（S178）より速く、トリプルアクセル（こおり×2、採用率87.6%）を先手で通される。こおり技はひこう弱点×2を突けるため、先手で大ダメージを受ける可能性が高い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ブレイブバード（ひこう）はマスカーニャ（くさ/あく）にひこう→くさ×2・ひこう→あく×1=×2で抜群。ただしS192で先手を取れないため、S操作技を持つパートナーや先制技で対処したい</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0038-01.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アローラキュウコン（20位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライ（こおり×2、84.5%）・ムーンフォース（フェアリー×2、64.6%）で2タイプの弱点を突ける。S177でムク（S178）より遅いため先手を取れるが、オーロラベール（95.0%）を展開されるとチーム全体が詰めにくくなる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S178でS177のアローラキュウコンより先手を確保。先手ブレイブバードでこおり×1×フェアリー×1=等倍を入れるか、はがね技を持つパートナーでオーロラベール展開前に処理したい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0282-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サーナイト（64位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー×2）・サイコキネシス（エスパー×2）の両方が弱点。高とくこうから上から刺される形になりやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね技を持つパートナーを同伴しサーナイトに打点を入れる。メガムクホーク自身のブレイズキックはフェアリー×1×エスパー×1=等倍で有効打を出しにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー×2、43.1%）・サイコキネシス（エスパー×2、32.8%）の両方が弱点。高とくこうの特殊技で弱点2タイプを突かれる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね技を持つパートナーを同伴しサーナイトに打点を入れる。メガムクホーク自身のブレイズキックはほのお→エスパー×1×フェアリー×1=等倍で決定打にならない</td>
 </tr>
 </tbody>
 </table>
@@ -441,32 +455,32 @@ S163以上の相手（ようき型メガムクホークS179等）に先手を取
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ムクホークが苦手なでんき・フェアリーへのじしん打点。じしんをひこうで無効化する役割も逆方向で補完</div>
+    <div class="rate">同居率1位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">じしんでムクホークが苦手なでんき系（ライチュウ等、でんき弱点×2）に打点。ムクホークはひこうでじしん無効のため同チームに採用しやすい</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ">
-    <div class="name">アシレーヌ</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">フェアリータイプでドラゴン技を無効化し、ガブリアス等のりゅうせいぐんへの耐性補完。あく・かくとう技も半減で受け、ムクホークと異なる耐性を持つ</div>
+    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
+    <div class="name">ブリジュラス</div>
+    <div class="rate">同居率2位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">エスパー技をはがねで×0.5、でんき技をドラゴンで×0.5に半減し、ムクホークの弱点2タイプを耐性補完。はがね技でフェアリーへの打点も担う</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン">
-    <div class="name">リザードン</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">特殊アタッカーとして物理主体のムクホークと打点の性質を補完。ほのお技でくさ・はがね・こおりタイプへの打点を担う</div>
+    <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ">
+    <div class="name">ライチュウ</div>
+    <div class="rate">同居率3位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき技でムクホークの弱点であるひこう系（×2）に打点。S110最速S178でムクと同速帯。別角度の高速アタッカーとして役割分担</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー">
-    <div class="name">カイリュー</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね複合へのりゅうせいぐんとムクホークのかくとう技で役割補完。でんき技が来たときの受け役</div>
+    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
+    <div class="name">マスカーニャ</div>
+    <div class="rate">同居率4位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき技をくさで×0.5に半減し、ムクホークのでんき弱点を補完。ゴーストタイプでかくとう技を無効化し、みず・いわへのくさ打点を持つ</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0186-00.webp" alt="ニョロトノ">
-    <div class="name">ニョロトノ</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">じゅんすいさでみず技を1.5倍に強化し、チームのみず使いをサポート。みず/エスパーでムクホークと異なる役割を担う</div>
+    <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ">
+    <div class="name">ミミッキュ</div>
+    <div class="rate">同居率5位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">エスパー技をゴーストで×0.5に半減し、ムクホークのエスパー弱点を補完。ばけのかわで高い場持ちを持ち、終盤の詰め役として機能する</div>
   </div>
 </div>
 
@@ -474,30 +488,30 @@ S163以上の相手（ようき型メガムクホークS179等）に先手を取
 
 メガムクホークは物理アタッカーとして高い突破力を持つ一方、弱点タイプが5つあるため受け役・耐性補完が必要です。残り5体で以下を補います。
 
-1. **でんき対策**: じめん技や雨天候でライチュウ等のでんき勢を牽制できる枠
+1. **でんき対策**: じめん技でライチュウなどのでんきタイプを処理できる枠（ガブリアス等）
 2. **フェアリー・エスパー対策**: はがね技を持つポケモンやどく技でフェアリー弱点をカバー
 3. **ひこう対策**: いわ技・でんき技を持つポケモンでひこう弱点を突いてくる相手への打点を確保
 4. **回復サポート**: はねやすめで自己回復できるためヒーラー役は不要だが、毒・やけど等の状態異常対策は必要
 
 ---
 
-## データ分析①：インファイト99.0%が示す「あまのじゃく特化」の運用思想
+## データ分析①：インファイト98.8%が示す「あまのじゃく特化」の運用思想
 
-メガムクホークの技採用率を並べると、インファイト99.0%という突出した数値が目を引きます。他の技と比較すると、この採用率が何を示しているかが明確になります。
+メガムクホークの技採用率を並べると、インファイト98.8%という突出した数値が目を引きます。他の技と比較すると、この採用率が何を示しているかが明確になります。
 
 | 技 | 採用率 | 役割 |
 |---|---|---|
-| インファイト | 99.0% | あまのじゃくでAB上昇に逆転するメイン技 |
-| はねやすめ | 91.3% | HP回復・継戦能力の確保 |
-| ブレイブバード | 90.6% | タイプ一致ひこう火力 |
-| ブレイズキック | 53.1% | はがね・くさへの補完 |
-| とんぼがえり | 16.5% | 対面操作 |
+| インファイト | 98.8% | あまのじゃくでAB上昇に逆転するメイン技 |
+| はねやすめ | 91.5% | HP回復・継戦能力の確保 |
+| ブレイブバード | 90.7% | タイプ一致ひこう火力 |
+| ブレイズキック | 52.2% | はがね・くさへの補完 |
+| とんぼがえり | 15.9% | 対面操作 |
 
 インファイト・はねやすめ・ブレイブバードの3技は90%を超える採用率を誇り、実質的に**ほぼ全個体がこの3技を確定で採用**しています。これは「インファイトで削り・ブレイブバードで広い範囲をカバー・はねやすめで継戦するセット」が非常に完成度の高いコアであることを示しています。
 
-残り1枠にブレイズキック53.1%・とんぼがえり16.5%が入る形で、ブレイズキックがはがね・くさタイプへの補完打点として過半数に採用されています。とんぼがえりの16.5%は対面操作に特化した運用を選んだ場合の選択肢と見ることができます。
+残り1枠にブレイズキック52.2%・とんぼがえり15.9%が入る形で、ブレイズキックがはがね・くさタイプへの補完打点として過半数に採用されています。とんぼがえりの15.9%は対面操作に特化した運用を選んだ場合の選択肢と見ることができます。
 
-持ち物採用率はムクホークナイト96.0%と圧倒的で、こだわりスカーフ3.4%はほとんど誤差範囲です。これは「インファイト連打でABを上げながら戦う」という特殊性がメガ進化前提の運用と不可分であり、こだわりスカーフ型ではインファイトのデメリット反転という最大の旨みを活かせないためです。
+持ち物採用率はムクホークナイト95.8%と圧倒的で、こだわりスカーフ3.6%はほとんど誤差範囲です。これは「インファイト連打でABを上げながら戦う」という特殊性がメガ進化前提の運用と不可分であり、こだわりスカーフ型ではインファイトのデメリット反転という最大の旨みを活かせないためです。
 
 ---
 
@@ -518,19 +532,19 @@ S163以上の相手（ようき型メガムクホークS179等）に先手を取
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ASようき型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">ようき 75.3%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">ようき 76.1%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">インファイト・ブレイブバード・はねやすめ・ブレイズキック</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S179で環境上位の多くより先手を確保できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S178で環境上位の多くより先手を確保できる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">いじっぱり型より初回インファイトの火力が約10%低い</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ASいじっぱり型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり 19.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり 18.5%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">インファイト・ブレイブバード・はねやすめ・ブレイズキック</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">A補正でようき型より初回インファイトの威力が約10%高い</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S163でようき型（S179）が先手を取れる相手に後手に回る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S162でようき型（S178）が先手を取れる相手に後手に回る</td>
 </tr>
 </tbody>
 </table>
@@ -538,7 +552,7 @@ S163以上の相手（ようき型メガムクホークS179等）に先手を取
 
 **総評:**
 
-メガムクホークはかくとう/ひこうへのタイプ変化と特性あまのじゃくの組み合わせにより、インファイトを連打するほどA・Bが上昇し続ける独自の物理アタッカーです。インファイト99.0%・はねやすめ91.3%・ブレイブバード90.6%の採用率が示すように、3技がほぼ確定の「コア」として機能しており、残り1枠をブレイズキックかとんぼがえりで補完する形が実態です。
+メガムクホークはかくとう/ひこうへのタイプ変化と特性あまのじゃくの組み合わせにより、インファイトを連打するほどA・Bが上昇し続ける独自の物理アタッカーです。インファイト98.8%・はねやすめ91.5%・ブレイブバード90.7%の採用率が示すように、3技がほぼ確定の「コア」として機能しており、残り1枠をブレイズキックかとんぼがえりで補完する形が実態です。
 
 弱点は5タイプと多く、エスパー・フェアリー・でんき・ひこう・こおりの特殊技を上から浴びると危険なため、これらへの対策をパーティ単位で用意する必要があります。ガブリアスのじしんを無効化できるひこうタイプの恩恵は大きく、環境最多使用率のガブリアスに対して一方的に有利を取れる点が使用率6位の一因です。
 
@@ -546,6 +560,6 @@ S163以上の相手（ようき型メガムクホークS179等）に先手を取
 
 ## 関連記事
 
-- [使用率1位 ガブリアスのM-3考察](/blog/garchomp-analysis-m3/)
-- [ムクホークが苦手なライチュウ（アローラ）のM-3考察](/blog/raichu-alola-analysis-m3/)
+- [ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
+- [ムクホークが苦手なライチュウ（Y）のM-3考察](/blog/raichu-y-analysis-m3/)
 - [使用率2位 ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
