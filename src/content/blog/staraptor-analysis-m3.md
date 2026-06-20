@@ -173,48 +173,83 @@ draft: true
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center;width:40px">順位</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">採用率</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>インファイト</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">99.0%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致最大火力。あまのじゃくでA・B上昇に逆転</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">1</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>インファイト</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">99.0%</strong></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はねやすめ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">91.3%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">最大HP半分を回復。長期戦を支える</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>はねやすめ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">91.3%</strong></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ブレイブバード</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">90.6%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致ひこう最大火力。使用者1/3反動</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ブレイブバード</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">90.6%</strong></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ブレイズキック</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">85</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>53.1%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね・くさ・こおりへの補完打点。急所率高め</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ブレイズキック</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">85</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">53.1%</strong></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とんぼがえり</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16.5%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に自分が交代。対面操作に使う</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>とんぼがえり</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">70</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">16.5%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ふきとばし</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">13.9%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>みがわり</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8.4%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>でんこうせっか</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7.2%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ダブルウイング</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6.5%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>いのちがけ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3.1%</td>
 </tr>
 </tbody>
 </table>

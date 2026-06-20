@@ -174,48 +174,48 @@ draft: true
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center;width:40px">順位</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">採用率</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>サンダーダイブ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">44.7%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき物理技。接触技。タイプ一致メイン打点</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">1</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>サンダーダイブ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">100</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">44.7%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ドレインパンチ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">43.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう物理技。与えたダメージの1/2を回復。はがね・ノーマル・こおりへの打点</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ドレインパンチ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">43.8%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>10まんボルト</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">43.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき特殊技。10%で麻痺。タイプ一致・安定した火力</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>10まんボルト</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">43.2%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とぐろをまく</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>40.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく変化技。こうげき・ぼうぎょ・命中を同時に1段階上昇</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>とぐろをまく</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40.2%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かえんほうしゃ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">37.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお特殊技。はがね・くさ・こおりへの補完打点。10%でやけど</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>かえんほうしゃ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">37.6%</td>
 </tr>
 </tbody>
 </table>

@@ -163,48 +163,83 @@ draft: true
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center;width:40px">順位</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">採用率</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>リフレクター</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">88.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">物理ダメージを半減。いたずらごころで先手展開</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">1</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>リフレクター</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">88.2%</strong></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ソウルクラッシュ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">84.0%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致攻撃技。相手のとくこうを1段階下げる</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ソウルクラッシュ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">84.0%</strong></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ひかりのかべ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">81.3%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">特殊ダメージを半減。いたずらごころで先手展開</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ひかりのかべ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">81.3%</strong></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>すてゼリフ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>74.9%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手のこうげきとくこうを1段階下げて強制交代。いたずらごころで先手</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>すてゼリフ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">74.9%</strong></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ちょうはつ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">33.0%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の変化技を3ターン封じる。いたずらごころで先手</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ちょうはつ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">33.0%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ねこだまし</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">13.9%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>イカサマ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">95</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">11.0%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ふいうち</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">70</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5.6%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>じゃれつく</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">1.9%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>パワーウィップ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">0.6%</td>
 </tr>
 </tbody>
 </table>

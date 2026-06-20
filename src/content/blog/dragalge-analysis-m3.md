@@ -171,48 +171,83 @@ draft: true
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center;width:40px">順位</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">採用率</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>クイックターン</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">85.7%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に強制交代。さいせいりょくでHP1/3回復しながら対面操作</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">1</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>クイックターン</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">60</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">85.7%</strong></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうせいぐん</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">130</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">84.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致最大火力。使用後C2段階ダウン</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>りゅうせいぐん</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">130</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">84.2%</strong></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>どくどく</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">45.0%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">もうどく付与。サイクルを回しながら削りを蓄積</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>どくどく</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">45.0%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ヘドロウェーブ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">95</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">39.4%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">タイプ一致どく技。10%でどく状態付与</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ヘドロウェーブ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">95</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">39.4%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>どくびし</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">39.3%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">1枚でどく・2枚でもうどく。交代してくる相手に毒を広げる</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>どくびし</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">39.3%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>10まんボルト</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">31.6%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ヘドロばくだん</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">21.4%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ねっとう</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">13.6%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>くろいきり</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5.6%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>シャドーボール</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5.3%</td>
 </tr>
 </tbody>
 </table>

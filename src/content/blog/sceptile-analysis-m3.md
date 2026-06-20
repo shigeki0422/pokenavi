@@ -122,13 +122,91 @@ S145を誇りながらもしんくうは（かくとう、先制技）を採用�
 
 ## 主要な技と採用率
 
-| 技名 | タイプ | 威力 | 採用率 | 備考 |
-|------|--------|------|--------|------|
-| だいちのちから | <img src="/images/types/type-04-ground.png" alt="じめん" height="16" /> じめん | 90 | 85.1% | はがね・どく・ほのお・いわへの打点。メガ後のでんき無効補完 |
-| りゅうのはどう | <img src="/images/types/type-15-dragon.png" alt="ドラゴン" height="16" /> ドラゴン | 85 | 79.6% | メガ後タイプ一致。命中95%の安定ドラゴン打点 |
-| リーフストーム | <img src="/images/types/type-11-grass.png" alt="くさ" height="16" /> くさ | 130 | 70.6% | C一致最大火力。使用後C2段階低下のため使い切り前提 |
-| しんくうは | <img src="/images/types/type-01-fighting.png" alt="かくとう" height="16" /> かくとう | 40 | 42.4% | 先制技。タスキ潰しや削りに活用 |
-| しっぽきり | <img src="/images/types/type-00-normal.png" alt="ノーマル" height="16" /> ノーマル | — | 32.9% | 場に残れない時の後続優先ターン確保 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center;width:40px">順位</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">1</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>だいちのちから</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">85.1%</strong></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>りゅうのはどう</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">85</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">79.6%</strong></td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>リーフストーム</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">130</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">70.6%</strong></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>しんくうは</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">42.4%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>しっぽきり</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">32.9%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>エナジーボール</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">25.0%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>きあいだま</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">12.1%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>がむしゃら</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8.0%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ギガドレイン</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6.8%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>いわなだれ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4.1%</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 技の採用率を見ると、だいちのちから・りゅうのはどう・リーフストームの3ウェポン構成が基本であることがわかる。4枠目をしんくうはかしっぽきりで選択する形が主流だ。しんくうははタスキ潰しと削り、しっぽきりは対面不利時の起点回避と後続サポートという異なる役割を持ち、パーティ構成に合わせて選択される。
 
