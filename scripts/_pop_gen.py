@@ -43,24 +43,42 @@ def load(db=DB, season=SEASON, rule=RULE):
         evs[canon(r["pokemon"])].append(((r["ev_h"], r["ev_a"], r["ev_b"], r["ev_c"], r["ev_d"], r["ev_s"]), r["u"] or 0.0))
     megastones = set(r["mega_stone"] for r in c.execute("SELECT mega_stone FROM pokemon_mega_stats") if r["mega_stone"])
     mega_pokemon = set(p for p, idist in items.items() if any(k in megastones for k in idist))
-    # メガ石→メガ後A/C（物理/特殊の向き判定用）
-    mega_by_stone = {}
-    for r in c.execute("SELECT mega_stone,attack,sp_attack FROM pokemon_mega_stats"):
-        if r["mega_stone"]: mega_by_stone[r["mega_stone"]] = {"a": r["attack"], "c": r["sp_attack"]}
-    # 技カテゴリ（physical/special/status）
-    move_cat = {r["name_jp"]: r["category"] for r in c.execute("SELECT name_jp,category FROM move_master")}
+    # メガ石→メガ後A/C/タイプ（物理/特殊の向き・一致技判定用）
+    mega_by_stone = {}; mega_stone_dex = {}
+    for r in c.execute("SELECT mega_stone,base_dex,type1,type2,attack,sp_attack,ability FROM pokemon_mega_stats"):
+        if r["mega_stone"]:
+            mega_by_stone[r["mega_stone"]] = {"a": r["attack"], "c": r["sp_attack"], "ability": r["ability"],
+                                              "t": tuple(t for t in (r["type1"], r["type2"]) if t)}
+            if r["base_dex"] is not None: mega_stone_dex[r["mega_stone"]] = f"{int(r['base_dex']):04d}"
+    # 素体A/C/タイプ（非メガの向き・一致技判定用）
+    base = {}
+    for r in c.execute("SELECT pokemon_name,type1,type2,attack,sp_attack FROM pokemon_base_stats"):
+        base[canon(r["pokemon_name"])] = {"a": r["attack"], "c": r["sp_attack"],
+                                          "t": tuple(t for t in (r["type1"], r["type2"]) if t)}
+    # 技カテゴリ/タイプ/威力
+    move_cat = {}; move_type = {}; move_pow = {}
+    for r in c.execute("SELECT name_jp,category,type,power FROM move_master"):
+        move_cat[r["name_jp"]] = r["category"]; move_type[r["name_jp"]] = r["type"]; move_pow[r["name_jp"]] = r["power"]
     # 学習攻撃技を種族×カテゴリ別に威力降順（向き補正の補充用）
+    # 威力は高いが単体採用が罠の技(反動/溜め/低命中)は補充候補から除外
+    _TRAP_ATK = {"ギガインパクト", "はかいこうせん", "ブラストバーン", "ハイドロカノン", "ハードプラント",
+                 "すてみタックル", "とっしん", "メガトンキック", "メガトンパンチ", "ばくれつパンチ",
+                 "ロケットずつき", "はなびらのまい", "ぶんまわす"}
     learn_atk = defaultdict(list)
-    q = ("SELECT ls.pokemon_name p, m.name_jp nm, m.category cat, m.power pw FROM pokemon_learnsets ls "
+    q = ("SELECT ls.pokemon_name p, m.name_jp nm, m.category cat, m.power pw, m.accuracy ac FROM pokemon_learnsets ls "
          "JOIN move_master m ON m.name_jp=ls.move_jp WHERE m.power IS NOT NULL AND m.category IN ('physical','special')")
     tmp = defaultdict(list)
     for r in c.execute(q):
+        if r["nm"] in _TRAP_ATK: continue
+        ac = r["ac"] if r["ac"] is not None else 100
+        if ac < 80: continue                      # 低命中の博打技も除外
         tmp[(canon(r["p"]), r["cat"])].append((r["nm"], r["pw"] or 0))
     for k, lst in tmp.items():
         learn_atk[k] = [nm for nm, _ in sorted(lst, key=lambda x: -x[1])]
     return dict(usage=usage, partners=partners, moves=moves, items=items, natures=natures, abil=abil, evs=evs,
                 megastones=megastones, mega_pokemon=mega_pokemon, dex=dex,
-                mega_by_stone=mega_by_stone, move_cat=move_cat, learn_atk=dict(learn_atk))
+                mega_by_stone=mega_by_stone, mega_stone_dex=mega_stone_dex, base=base,
+                move_cat=move_cat, move_type=move_type, move_pow=move_pow, learn_atk=dict(learn_atk))
 
 def _wchoice(weights, rng):
     items = [(k, w) for k, w in weights.items() if w > 0]
@@ -81,15 +99,21 @@ def _wsample_dict(d, k, rng):  # d: {value: weight}; 上位kを重み付き非�
 
 # 性格の同軸swap（特殊↔物理。素早さ補正/補正なしの軸は保つ）
 _NAT_SWAP = {"ひかえめ": "いじっぱり", "おくびょう": "ようき", "ずぶとい": "わんぱく", "おだやか": "しんちょう",
-             "いじっぱり": "ひかえめ", "ようき": "おくびょう", "わんぱく": "ずぶとい", "しんちょう": "おだやか"}
-_SPEC_NAT = {"ひかえめ", "おくびょう", "ずぶとい", "おだやか"}
-_PHYS_NAT = {"いじっぱり", "ようき", "わんぱく", "しんちょう"}
+             "いじっぱり": "ひかえめ", "ようき": "おくびょう", "わんぱく": "ずぶとい", "しんちょう": "おだやか",
+             "れいせい": "ゆうかん", "ゆうかん": "れいせい"}
+_SPEC_NAT = {"ひかえめ", "おくびょう", "ずぶとい", "おだやか", "れいせい"}
+_PHYS_NAT = {"いじっぱり", "ようき", "わんぱく", "しんちょう", "ゆうかん"}
+
+def valid_megastone(D, name, item):
+    """そのメガ石が種族に正規対応するか（他種石の混入＝クロール誤りを弾く）。"""
+    return item in D.get("mega_stone_dex", {}) and D.get("dex", {}).get(name) == D["mega_stone_dex"][item]
 
 def mega_orient(D, item):
     """メガ石→'phys'/'spec'（メガ後A>Cなら物理）。非メガ/不明はNone。"""
     m = D.get("mega_by_stone", {}).get(item)
     if not m or m["a"] is None or m["c"] is None: return None
-    return "phys" if m["a"] > m["c"] else "spec"
+    a = m["a"] * (2 if m.get("ability") in ("ちからもち", "ヨガパワー") else 1)   # 攻撃2倍特性を反映(例メガスターミーちからもち)
+    return "phys" if a >= m["c"] else "spec"   # A==C(例メガリザードンX130/130・かたいツメ)は物理寄せ
 
 def orient_set(D, p, item, mv, nat, ev):
     """選んだメガ石の物理/特殊の向きに、技・性格・EVを合わせ直す。
@@ -112,6 +136,111 @@ def orient_set(D, p, item, mv, nat, ev):
         if (o == "phys" and c > a) or (o == "spec" and a > c): a, c = c, a
         ev = (h, a, b, c, d, s)
     return kept, nat, ev
+
+# コヒーレント技構成用の役割技/罠/溜め技（_moveset_opt.py と同一の方針）
+_ROLE_ATK = {"ボルトチェンジ", "とんぼがえり", "クイックターン", "ニトロチャージ", "でんこうせっか",
+             "しんそく", "バレットパンチ", "アクアジェット", "ねこだまし"}
+# 性格の物理/特殊判定で除外する攻撃技（役割技＋イカサマ＝自分のAに依存しない物理技）
+_NAT_NEUTRAL = _ROLE_ATK | {"イカサマ"}
+_TRAP = {"ギガインパクト", "はかいこうせん", "ブラストバーン", "ハイドロカノン", "ハードプラント",
+         "すてみタックル", "とっしん", "メガトンキック", "メガトンパンチ", "ばくれつパンチ",
+         "ロケットずつき", "はなびらのまい", "ぶんまわす"}
+_SUN_CHARGE = {"ソーラービーム", "ソーラーブレード"}; _RAIN_CHARGE = {"エレクトロビーム"}
+_ALWAYS_CHARGE = {"あなをほる", "そらをとぶ", "ダイビング", "ゴッドバード", "とびはねる", "メテオビーム", "ゴーストダイブ"}
+_WSET = {"あめふらし": "rain", "あまごい": "rain", "ひでり": "sun", "にほんばれ": "sun",
+         "すなおこし": "sand", "ゆきふらし": "snow", "メガソーラー": "sun"}
+
+def species_orient(D, name, item):
+    """個体の物理/特殊の向き。メガ石ありはメガ後A/C、なければ素体A/C。"""
+    if valid_megastone(D, name, item):
+        return mega_orient(D, item)
+    b = D.get("base", {}).get(name)
+    if not b or b["a"] is None or b["c"] is None: return None
+    return "phys" if b["a"] >= b["c"] else "spec"
+
+def eff_types(D, name, item):
+    """実効タイプ（メガ後 or 素体）。一致技判定用。"""
+    if valid_megastone(D, name, item):
+        return set(D.get("mega_by_stone", {}).get(item, {}).get("t", ()))
+    return set(D.get("base", {}).get(name, {}).get("t", ()))
+
+def _bad_charge(m, weather):
+    return (m in _SUN_CHARGE and "sun" not in weather) or (m in _RAIN_CHARGE and "rain" not in weather) or (m in _ALWAYS_CHARGE)
+
+def coherent_set(D, name, item, mv, nat, ev, weather=None):
+    """フィラーの技構成をコヒーレントに整える（軸はオプティマイザ管轄で対象外）。
+    役割技/変化技/積み/壁は温存。純攻撃技は同タイプ重複を排除（向き一致→高威力を残す）、
+    罠技/文脈外の溜め技を除去、一致技ゼロなら補充、性格/EVを攻撃の主カテゴリへ合わせる。"""
+    weather = weather or set()
+    mv = list(mv or [])
+    if not mv: return mv, nat, ev
+    cat = D["move_cat"]; mtype = D["move_type"]; mpow = D["move_pow"]
+    etypes = eff_types(D, name, item)
+    o = species_orient(D, name, item)
+    want = "physical" if o == "phys" else ("special" if o == "spec" else None)
+    n = len(mv)
+    pure, others = [], []
+    for m in mv:
+        if cat.get(m) in ("physical", "special") and m not in _ROLE_ATK:
+            pure.append(m)
+        else:
+            others.append(m)                       # 役割技/変化/積み/壁/状態技は温存
+    # 罠技・文脈外溜め技を純攻撃から除去
+    pure = [m for m in pure if m not in _TRAP and not _bad_charge(m, weather)]
+    # 同タイプ純攻撃の重複排除（向き一致を優先、次に高威力）
+    by_type = {}
+    for m in pure:
+        t = mtype.get(m)
+        cur = by_type.get(t)
+        if cur is None:
+            by_type[t] = m; continue
+        def score(x):
+            om = 1 if (want and cat.get(x) == want) else 0
+            return (om, mpow.get(x) or 0)
+        if score(m) > score(cur): by_type[t] = m
+    pure = [m for m in pure if by_type.get(mtype.get(m)) == m]
+    seen = set()                                    # 順序保持の重複除去
+    pure = [m for m in pure if not (m in seen or seen.add(m))]
+    # 一致技ゼロなら補充（向き一致・高威力・罠/溜め以外）。枠が埋まっていれば最弱の純攻撃と差し替え
+    if etypes and pure and want and not any(mtype.get(m) in etypes for m in pure):
+        cand = next((x for x in D.get("learn_atk", {}).get((name, want), [])
+                     if mtype.get(x) in etypes and x not in pure and x not in others
+                     and x not in _TRAP and not _bad_charge(x, weather)), None)
+        if cand:
+            if len(pure) + len(others) >= n:
+                pure.remove(min(pure, key=lambda m: mpow.get(m) or 0))
+            pure.insert(0, cand)
+    keep = set(pure) | set(others)
+    out = [m for m in mv if m in keep]              # 元の並び順を保ちつつ生存技を再構成
+    for m in pure + others:                          # 差し替え/補充した技を追加
+        if m not in out: out.append(m)
+    # 欠けた枠を学習技（向き一致・タイプ多様・罠/溜め以外）で補充
+    if len(out) < n and want:
+        have_types = {mtype.get(m) for m in out if cat.get(m) in ("physical", "special")}
+        for cand in D.get("learn_atk", {}).get((name, want), []):
+            if len(out) >= n: break
+            if cand in out or cand in _TRAP or _bad_charge(cand, weather): continue
+            if mtype.get(cand) in have_types: continue
+            out.append(cand); have_types.add(mtype.get(cand))
+    out = out[:n]
+    nat, ev = align_nat_ev(D, out, nat, ev, fallback=o)
+    return out, nat, ev
+
+def align_nat_ev(D, moves, nat, ev, fallback=None):
+    """技構成は触らず、性格/EVを攻撃の主カテゴリへ合わせる（純攻撃が2本以上ある向きにのみ）。
+    役割技/イカサマは自分のAに依存しないので物理/特殊判定から除外。学習済み軸の整合にも使う。"""
+    cat = D["move_cat"]
+    nph = sum(1 for m in moves if cat.get(m) == "physical" and m not in _NAT_NEUTRAL)
+    nsp = sum(1 for m in moves if cat.get(m) == "special" and m not in _NAT_NEUTRAL)
+    majo = "phys" if nph > nsp else ("spec" if nsp > nph else fallback)
+    if majo and (nph + nsp) >= 2:
+        if nat in _NAT_SWAP and ((majo == "phys" and nat in _SPEC_NAT) or (majo == "spec" and nat in _PHYS_NAT)):
+            nat = _NAT_SWAP[nat]
+        if ev:
+            h, a, b, c, d, s = ev
+            if (majo == "phys" and c > a) or (majo == "spec" and a > c): a, c = c, a
+            ev = (h, a, b, c, d, s)
+    return nat, ev
 
 def gen_party(D, rng, usage_floor=0.15):
     uw = {p: 1.0 / rk for p, rk in D["usage"]}      # ランク→Zipf重み
@@ -156,8 +285,8 @@ def gen_party(D, rng, usage_floor=0.15):
             if stones:
                 if m["item"]: used_items.discard(m["item"])
                 m["item"] = _wchoice(stones, rng); used_items.add(m["item"]); mega = 1; break
-    # --- 残り属性 & spec ---
-    specs = []
+    # --- 残り属性 ---
+    attrs = []
     for m in mons:
         p = m["p"]
         nat = _wchoice(D["natures"].get(p, {}), rng)
@@ -168,8 +297,15 @@ def gen_party(D, rng, usage_floor=0.15):
         if evpairs:
             i = _wchoice({i: w for i, (sp, w) in enumerate(evpairs)}, rng)
             ev = evpairs[i][0] if i is not None else None
-        mv, nat, ev = orient_set(D, p, m["item"], mv, nat, ev)   # メガ石の物理/特殊に型を合わせる
-        specs.append(_spec(p, m["item"], nat, mv, ev, ab))
+        attrs.append({"p": p, "item": m["item"], "nat": nat, "ab": ab, "mv": mv, "ev": ev})
+    weather = set()                                  # チームの天候源（特性/技）
+    for a in attrs:
+        for x in [a["ab"]] + (a["mv"] or []):
+            if x in _WSET: weather.add(_WSET[x])
+    specs = []
+    for a in attrs:                                  # 技/性格/EVをコヒーレントに整える
+        mv, nat, ev = coherent_set(D, a["p"], a["item"], a["mv"], a["nat"], a["ev"], weather=weather)
+        specs.append(_spec(a["p"], a["item"], nat, mv, ev, a["ab"]))
     return specs
 
 def _spec(name, item, nature, moves, ev, ability):
