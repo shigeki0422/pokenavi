@@ -96,8 +96,9 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
       .pager-btn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; font-weight: 700; }
 
       @media (max-width: 600px) {
-        main { padding: 0.5em; overflow-x: hidden; }
-        .pager-inner { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+        html, body { overflow-x: hidden; }
+        main { padding: 0.5em; width: 100%; box-sizing: border-box; }
+        .pager-inner { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; max-width: 100%; }
         .pager-btn { flex-shrink: 0; padding: 6px 8px; font-size: 0.78rem; white-space: nowrap; }
         table, table th, table td { white-space: normal !important; }
         .poke-cell img { width: 28px; height: 28px; }
