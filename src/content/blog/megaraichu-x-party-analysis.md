@@ -3,7 +3,7 @@ title: '【ポケモンチャンピオンズ】メガライチュウX 考察 M-3
 description: 'M-3シーズンで使用率3位のライチュウ。だが石の96.6%はメガライチュウY（特殊）で、メガライチュウX（物理）はわずか3.0%。なぜYが主流かをデータで示しつつ、ニッチなメガライチュウXを軸にしたパーティ構成・選出・運用を、対戦シミュレータの実測検証とともに考察します。'
 pubDate: '2026-06-19'
 draft: false
-heroImage: '/og-image.png'
+heroImage: '../../assets/blog-placeholder-1.jpg'
 ---
 
 <style>
@@ -120,20 +120,136 @@ Yの肝は特性**ノーガード**にあります。本来命中50のでんじ�
 
 ---
 
-## メガライチュウXの物理技範囲（カバレッジ）
+## データ分析②：X vs Y 確定数比較（環境上位50体）
 
-電気フィールド下ではワイルドボルト（威力90）が×1.3され、地面にいるポケモンへの一致打点になります。サブの妖・鋼で弱点補完する形が基本です。環境上位への倍率を整理します。
+X はようき・A32（A187）、Y はひかえめ・C32（C233）。相手のEVはM-3環境最多EV採用時。ミミッキュは**ばけのかわ**により初撃が常に無効化されるため比較対象外。
 
-| 相手（使用率） | タイプ | ワイルドボルト（でんき） | じゃれつく（フェアリー） | アイアンテール（はがね） |
-|---|---|---|---|---|
-| ガブリアス（1位） | ドラゴン/じめん | ×0（無効） | <strong>×2</strong> | ×1（等倍） |
-| マスカーニャ（5位） | くさ/あく | ×0.5 | <strong>×2</strong> | ×1（等倍） |
-| サザンドラ（27位） | あく/ドラゴン | ×0.5 | <strong>×4</strong> | ×1（等倍） |
-| アーマーガア（9位） | はがね/ひこう | ×1（等倍） | ×0.5 | ×0.5 |
-| ギャラドス（17位） | みず/ひこう | <strong>×4</strong> | ×1 | ×0.5 |
+<style>
+.ohko-table { width:100%; border-collapse:collapse; font-size:0.88rem; }
+.ohko-table th { background:#f1f5f9; padding:8px 10px; text-align:left; border:1px solid #e2e8f0; white-space:nowrap; }
+.ohko-table td { padding:7px 10px; border:1px solid #e2e8f0; vertical-align:middle; }
+.ohko-table tr:nth-child(even) td { background:#f8fafc; }
+.ohko-ok  { color:#16a34a; font-weight:700; }
+.ohko-bad { color:#94a3b8; }
+.ohko-tag-x { display:inline-block; background:#dbeafe; color:#1d4ed8; font-size:0.78rem; font-weight:700; padding:1px 7px; border-radius:4px; }
+.ohko-tag-y { display:inline-block; background:#fce7f3; color:#9d174d; font-size:0.78rem; font-weight:700; padding:1px 7px; border-radius:4px; }
+</style>
 
-ガブリアスにはでんき技が無効なので、Sで上を取れても**ワイルドボルトでは倒せず、じゃれつく（×2）で殴る必要があります**。Sの優位とでんきの一致打点が噛み合わない点は、X運用の難しさを端的に示しています。一方、ギャラドス（みず/ひこう）にはワイルドボルトが×4で刺さり、ここはXの理想的な対面です。
+### X が優位な相手（9体）
 
+X優位の共通パターンは**ドラゴンタイプ**（フェアリー×2）と**フェアリー・こおり複合**（アイアンテール×2）。Y のでんき技がじめんで無効になる相手でもあり、Y にとって最も苦手なゾーンです。
+
+<div style="overflow-x:auto">
+<table class="ohko-table">
+<thead><tr>
+  <th>相手（使用率）</th><th>タイプ</th><th>X ベスト技（確定数）</th><th>Y ベスト技（確定数）</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td><strong>ガブリアス（1位）</strong></td>
+  <td>ドラゴン/じめん</td>
+  <td>じゃれつく：△乱1（7/16）<br><span class="ohko-ok">ねこだまし→じゃれつく：確定</span></td>
+  <td><span class="ohko-bad">でんじほう：✕無効</span>　きあいだま：確定2発</td>
+</tr>
+<tr>
+  <td><strong>カイリュー（20位）</strong></td>
+  <td>ドラゴン/ひこう</td>
+  <td>じゃれつく：乱1（14/16）※マルチスケイル時<br><span class="ohko-ok">ねこだまし→じゃれつく：確定</span></td>
+  <td>でんじほう：確定2発</td>
+</tr>
+<tr>
+  <td><strong>ドラパルト（43位）</strong></td>
+  <td>ドラゴン/ゴースト</td>
+  <td><span class="ohko-ok">じゃれつく：◎確定1発</span></td>
+  <td>でんじほう：確定2発</td>
+</tr>
+<tr>
+  <td><strong>ドラミドロ（35位）</strong></td>
+  <td>どく/ドラゴン</td>
+  <td><span class="ohko-ok">じゃれつく：乱1（14/16）</span></td>
+  <td>きあいだま：確定2発</td>
+</tr>
+<tr>
+  <td><strong>アローラキュウコン（18位）</strong></td>
+  <td>こおり/フェアリー</td>
+  <td><span class="ohko-ok">アイアンテール：◎確定1発</span></td>
+  <td>でんじほう：確定2発</td>
+</tr>
+<tr>
+  <td><strong>バイバニラ（30位）</strong></td>
+  <td>こおり</td>
+  <td><span class="ohko-ok">アイアンテール：◎確定1発</span></td>
+  <td>きあいだま：確定2発</td>
+</tr>
+<tr>
+  <td><strong>オーロンゲ（19位）</strong></td>
+  <td>あく/フェアリー</td>
+  <td><span class="ohko-ok">アイアンテール：乱1（8/16）</span></td>
+  <td>きあいだま：確定2発</td>
+</tr>
+<tr>
+  <td><strong>フラエッテ（永遠）（41位）</strong></td>
+  <td>フェアリー</td>
+  <td><span class="ohko-ok">アイアンテール：◎確定1発</span></td>
+  <td>でんじほう：確定2発</td>
+</tr>
+<tr>
+  <td><strong>エルフーン（50位）</strong></td>
+  <td>くさ/フェアリー</td>
+  <td><span class="ohko-ok">アイアンテール：◎確定1発</span></td>
+  <td>きあいだま：確定2発</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+### Y が優位な相手（代表例）
+
+Y はきあいだま（かくとう×2 → はがね・ノーマル・あく）・くさむすび（じめん・みず系重量級）・でんじほう（ひこう×2）の3技で環境上位を広くカバー。
+
+<div style="overflow-x:auto">
+<table class="ohko-table">
+<thead><tr>
+  <th>相手（使用率）</th><th>タイプ</th><th>Y ベスト技（確定数）</th><th>X ベスト技（確定数）</th>
+</tr></thead>
+<tbody>
+<tr>
+  <td>ブリジュラス（2位）</td><td>はがね/ドラゴン</td>
+  <td><span class="ohko-ok">きあいだま：◎確定1発</span></td><td>じゃれつく：確定3発</td>
+</tr>
+<tr>
+  <td>ラグラージ（4位）</td><td>みず/じめん</td>
+  <td><span class="ohko-ok">くさむすび：◎確定1発</span></td><td>じゃれつく：確定2発</td>
+</tr>
+<tr>
+  <td>マスカーニャ（5位）</td><td>くさ/あく</td>
+  <td><span class="ohko-ok">きあいだま：◎確定1発</span></td><td>アイアンテール：確定2発</td>
+</tr>
+<tr>
+  <td>アーマーガア（9位）</td><td>ひこう/はがね</td>
+  <td><span class="ohko-ok">でんじほう：◎確定1発</span></td><td>ワイルドボルト：確定2発</td>
+</tr>
+<tr>
+  <td>バシャーモ（16位）</td><td>ほのお/かくとう</td>
+  <td><span class="ohko-ok">きあいだま：◎確定1発</span></td><td>ワイルドボルト：確定2発</td>
+</tr>
+<tr>
+  <td>カバルドン（14位）</td><td>じめん</td>
+  <td><span class="ohko-ok">くさむすび：◎確定1発</span></td><td>じゃれつく：確定3発</td>
+</tr>
+<tr>
+  <td>ドドゲザン（24位）</td><td>あく/はがね</td>
+  <td><span class="ohko-ok">きあいだま：◎確定1発</span></td><td>ワイルドボルト：確定3発</td>
+</tr>
+<tr>
+  <td>ハッサム（31位）</td><td>むし/はがね</td>
+  <td><span class="ohko-ok">きあいだま：◎確定1発</span></td><td>ワイルドボルト：確定2発</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+上位50体で**X優位9体・Y優位20体・同等20体**（ばけのかわのミミッキュ除外）。Xが優位を取れるのは環境のドラゴン・氷・フェアリー勢（アイアンテール/じゃれつくが×2弱点）に絞られ、主流帯（2〜5位のはがね・じめん・みず系）はYが確定1発を連発できる領域。これが石採用率の非対称（Y 96.6% vs X 3.0%）をデータとして裏付けています。
 ---
 
 ## メガライチュウX軸パーティの構成
