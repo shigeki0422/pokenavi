@@ -480,7 +480,9 @@ draft: false
 
 ## データ分析②：ひかえめで確定数が変わる相手
 
-おくびょうC212・ひかえめC233で、D無振り（採用率の多数派）への最大打点を比較。アーマーガアはD振り67%が多数派でH252込みで確定2発のまま変化なし（除外）。
+おくびょうC212・ひかえめC233で、D無振り（多数派）への各ポケモン最大打点を比較。メガ進化率が高い相手（ラグラージ75%・バシャーモ70%）はメガ後ステータスで計算。
+
+**ラグラージ（7位）** はでんき免疫のため最大打点はくさむすび（75%採用）。みず/じめん×4でメガ後D実130に対しても最低乱数248でHP177を超え、**おくびょうでも確定1発**。型選択に関わらず処理できる相手。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
@@ -497,38 +499,20 @@ draft: false
 </thead>
 <tbody>
 <tr>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">ラグラージ</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">7位</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">きあいだま×1.0（でんき無効）</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">52%</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">103/87</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">113/96</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">乱数2発→確定2発</td>
-</tr>
-<tr style="background:#f8fafc">
-<td style="padding:8px 10px;border:1px solid #cbd5e1">バシャーモ</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">メガバシャーモ</td>
 <td style="padding:8px 10px;border:1px solid #cbd5e1">16位</td>
 <td style="padding:8px 10px;border:1px solid #cbd5e1">でんじほう×1.5（メガD80）</td>
 <td style="padding:8px 10px;border:1px solid #cbd5e1">67%</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">169/144</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">187/159</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">169/143</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">187/158</td>
 <td style="padding:8px 10px;border:1px solid #cbd5e1">乱数1発→確定1発</td>
-</tr>
-<tr>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">サーフゴー</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">18位</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">でんじほう×0.75（でんき半減）</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">44%</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">76/65</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">84/71</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">確定3発→乱数2発</td>
 </tr>
 <tr style="background:#f8fafc">
 <td style="padding:8px 10px;border:1px solid #cbd5e1">アローラキュウコン</td>
 <td style="padding:8px 10px;border:1px solid #cbd5e1">20位</td>
 <td style="padding:8px 10px;border:1px solid #cbd5e1">でんじほう×1.5</td>
 <td style="padding:8px 10px;border:1px solid #cbd5e1">47%</td>
-<td style="padding:8px 10px;border:1px solid #cbd5e1">142/121</td>
+<td style="padding:8px 10px;border:1px solid #cbd5e1">142/120</td>
 <td style="padding:8px 10px;border:1px solid #cbd5e1">156/132</td>
 <td style="padding:8px 10px;border:1px solid #cbd5e1">確定2発→乱数1発</td>
 </tr>
@@ -536,11 +520,7 @@ draft: false
 </table>
 </div>
 
-**ラグラージ（7位）** はじめんタイプでんき無効のためきあいだまが最大打点。おくびょうは最低乱数87がHP177の半分（89）に届かず乱数2発になる場面があるが、ひかえめは最低乱数96で確定2発。
-
-**バシャーモ（16位）** が最も対戦影響が大きい。おくびょうは最低乱数144でHP157を下回り乱数1発だが、ひかえめは最低乱数159で確定1発。D無振り67%と採用率も高く、ひかえめであれば安定して処理できる。
-
-**サーフゴー（18位）** ははがね/ゴーストでんき半減のため実効×0.75。確定3発から乱数2発に変わり、ひかえめでも確定2発にはならない。
+**メガバシャーモ（16位）** が最も対戦影響が大きい。メガ後D実100に対し、おくびょうは最低乱数143でHP157を下回り乱数1発だが、ひかえめは最低乱数158で確定1発。D無振り67%の多数派型が対象。
 
 **アローラキュウコン（20位）** はひかえめで乱数1発に。確定1発にはならず最低乱数132がHP150を下回る点に注意。
 
