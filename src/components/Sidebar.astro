@@ -15,6 +15,9 @@ const NUM: Record<string, string> = {
 };
 const path = Astro.url.pathname;
 const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+const isBlogActive = (path === '/blog' || path === '/blog/') || (path.startsWith('/blog/') && !path.startsWith('/blog/m3') && !path.startsWith('/blog/m2'));
+const isM3Active = path.startsWith('/blog/m3') || (path.startsWith('/blog/') && path.includes('-m3'));
+const isM2Active = path.startsWith('/blog/m2') || (path.startsWith('/blog/') && path.includes('-m2'));
 ---
 
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
@@ -33,7 +36,9 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 
 		<a href="/pokemon" class:list={['sb-link', { active: isActive('/pokemon') }]}>ポケモン情報</a>
 		<a href="/ranking" class:list={['sb-sublink', { active: isActive('/ranking') }]}>使用率ランキング</a>
-		<a href="/blog" class:list={['sb-link', { active: isActive('/blog') }]}>考察記事</a>
+		<a href="/blog" class:list={['sb-link', { active: isBlogActive }]}>考察記事</a>
+		<a href="/blog/m3/" class:list={['sb-sublink', { active: isM3Active }]}>M-3 シーズン<span class="season-badge new">NEW</span></a>
+		<a href="/blog/m2/" class:list={['sb-sublink', { active: isM2Active }]}>M-2 シーズン</a>
 	</nav>
 	<div class="sb-foot">
 		<a href="/about">運営者情報</a>
@@ -140,6 +145,18 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
 		opacity: 0.65;
 	}
 	.sb-soon:hover { background: transparent; }
+	.season-badge {
+		font-size: 0.58rem;
+		font-weight: 700;
+		border-radius: 9999px;
+		padding: 0.05em 0.5em;
+		margin-left: 0.45em;
+		letter-spacing: 0.02em;
+	}
+	.season-badge.new {
+		background: #fef3c7;
+		color: #b45309;
+	}
 	.soon-badge {
 		font-size: 0.58rem;
 		font-weight: 700;
