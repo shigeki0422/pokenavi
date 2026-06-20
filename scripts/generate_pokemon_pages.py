@@ -114,106 +114,94 @@ ITEM_PNG = {
     "ガブリアスナイト": "item-0683-garchompite.png",
 }
 ITEM_SPRITE = {
-    # 競技アイテム (ゲーム内ID確認済み)
-    "たべのこし": (-336, -168),      # 212
-    "かいがらのすず": (-360, -168),  # 213
+    # 競技アイテム (pokedb.tokyo item_key確認済み)
+    "たべのこし": (-288, -192),      # 234
+    "かいがらのすず": (-264, -216),  # 253
     "しろいハーブ": (-384, -168),    # 214
-    "でんきだま": (-192, -168),      # 206
-    "おうじゃのしるし": (-24, -168), # 199
-    "シルクのスカーフ": (-288, -168),# 210
-    "ピントレンズ": (0, -192),       # 220
+    "でんきだま": (-336, -192),      # 236
+    "おうじゃのしるし": (-24, -192), # 221
+    "シルクのスカーフ": (-216, -216),# 251
+    "ピントレンズ": (-240, -192),    # 232
     "きあいのハチマキ": (-192, -192),# 230
-    "せんせいのツメ": (-288, -192),  # 234
+    "せんせいのツメ": (-408, -168),  # 217
     "やわらかいすな": (-360, -192),  # 237
     "こだわりスカーフ": (0, -264),   # 287
     "こだわりはちまき": (-24, -264), # 288
     "こだわりメガネ": (-48, -264),   # 289
-    "いのちのたま": (-96, -264),     # 291
+    "いのちのたま": (-72, -240),     # 270
     "ゴツゴツメット": (-432, -336),  # 541
+    "こうかくレンズ": (-432, -216),  # 265
+    "ちからのハチマキ": (-456, -216),# 266
+    "たつじんのおび": (-24, -240),   # 268
+    "ひかりのねんど": (-48, -240),   # 269
+    "メタルコート": (-264, -192),    # 233
+    "メトロノーム": (-240, -240),    # 277
+    "くろいてっきゅう": (-264, -240),# 278
+    "フォーカスレンズ": (-216, -240),# 276
+    "メンタルハーブ": (-456, -168),  # 219
     # タイプ強化アイテム
-    "のろいのおふだ": (-456, -48),   # 62
-    "まがったスプーン": (0, -72),    # 63
-    "ひかりのこな": (-72, -72),      # 79
-    "じしゃく": (-120, -72),         # 81
-    "どくバリ": (-144, -72),         # 82
-    "くろいメガネ": (-192, -72),     # 84
-    # きせきのタネ(70), もくたん(65), りゅうのキバ(66), するどいくちばし(67),
-    # くろおび(68), ぎんのこな(69), しんぴのしずく(72), とけないこおり(74) はCSS未収録
-    # きのみ (ゲーム内ID確認済み: ITEM_PNGのラム=157, オボン=158等と整合)
-    "オレンのみ": (-408, -96),  # 155
-    "ラムのみ": (-456, -96),    # 157
-    "オボンのみ": (0, -120),    # 158
-    "カゴのみ": (-48, -120),    # 160
-    "ヒメリのみ": (-72, -120),  # 161
-    "ヨロギのみ": (-96, -120),  # 162
-    "ビアーのみ": (-120, -120), # 163
-    "リンドのみ": (-24, -144),  # 179
-    "モモンのみ": (-48, -144),  # 180
-    "リリバのみ": (-72, -144),  # 181
-    "オッカのみ": (-96, -144),  # 182
-    "チーゴのみ": (-120, -144), # 183
-    "イトケのみ": (-144, -144), # 184
-    "ロゼルのみ": (-168, -144), # 185
-    "ウタンのみ": (-192, -144), # 186
-    "ナモのみ": (-216, -144),   # 187
-    "ヤチェのみ": (-240, -144), # 188
-    "ソクノのみ": (-264, -144), # 189
-    "タンガのみ": (-312, -144), # 191
-    "シュカのみ": (-336, -144), # 192
-    "ヨプのみ": (-360, -144),   # 193
-    "カシブのみ": (-384, -144), # 194
-    "バコウのみ": (-408, -144), # 195
-    "ホズのみ": (-432, -144),   # 196
-    "ハバンのみ": (-456, -144), # 197
-    "コランのみ": (0, -168),    # 198
-    # メガストーン (XY/ORAS公式ID順)
-    "フシギバナイト": (-144, -384),   # 657
-    "リザードナイトＸ": (-192, -384), # 659
-    "リザードナイトＹ": (-216, -384), # 660
-    "カメックスナイト": (-240, -384), # 661
-    "ゲンガナイト": (-264, -384),     # 662
-    "サーナイトナイト": (-288, -384), # 663
-    "ピクシナイト": (-312, -384),     # 664
-    "バクーダナイト": (-336, -384),   # 665
-    "ジュペッタナイト": (-360, -384), # 666
-    "ガルーラナイト": (-384, -384),   # 667
-    "ヘルガナイト": (-408, -384),     # 668
-    "プテラナイト": (-432, -384),     # 669
-    "ハッサムナイト": (-456, -384),   # 670
-    "ヘラクロスナイト": (0, -408),    # 671
-    "ミミロップナイト": (-24, -408),  # 672
-    "ボスゴドラナイト": (-48, -408),  # 673
-    "スピアナイト": (-72, -408),      # 674
-    "サメハダナイト": (-96, -408),    # 675
-    "ライボルトナイト": (-120, -408), # 676
-    "ルカリオナイト": (-144, -408),   # 677
-    "アブソルナイト": (-168, -408),   # 678
-    "ゴルーグナイト": (-192, -408),   # 679
-    "バンギラスナイト": (-216, -408), # 680
-    "ギャラドスナイト": (-240, -408), # 681
-    "ゲッコウガナイト": (-264, -408), # 682
-    "ガブリアスナイト": (-288, -408), # 683
-    "カイリュナイト": (-312, -408),   # 684
-    "エルレイドナイト": (-336, -408), # 685
-    "ブリガロナイト": (-360, -408),   # 686
-    "ピジョットナイト": (-384, -408), # 687
-    "カイロスナイト": (-408, -408),   # 688
-    "フーディナイト": (-432, -408),   # 693
-    "キラフロルナイト": (-456, -408), # 708
-    "スコヴィラナイト": (0, -432),    # 709
-    "ケケンカニナイト": (-24, -432),  # 752
-    "エアームドナイト": (-48, -432),  # 753
-    "ウツボットナイト": (-72, -432),  # 754
-    "デンリュウナイト": (-96, -432),  # 755
-    "ドリュウズナイト": (-120, -432), # 756
-    "チルタリスナイト": (-168, -432), # 758
-    "チャーレムナイト": (-264, -432), # 762
-    "ハガネールナイト": (-288, -432), # 763
-    "スターミナイト": (-312, -432),   # 764
-    "ジジーロナイト": (-336, -432),   # 767
-    "オーダイルナイト": (-360, -432), # 768
-    "タブンネナイト": (-384, -432),   # 769
-    "エンブオナイト": (-408, -432),   # 770
+    "のろいのおふだ": (-120, -216),  # 247
+    "まがったスプーン": (-144, -216),# 248
+    "ひかりのこな": (-360, -168),    # 213
+    "じしゃく": (0, -216),           # 242
+    "どくバリ": (-72, -216),         # 245
+    "くろいメガネ": (-432, -192),    # 240
+    "くろおび": (-456, -192),        # 241
+    "するどいくちばし": (-48, -216), # 244
+    "きせきのタネ": (-408, -192),    # 239
+    "とけないこおり": (-96, -216),   # 246
+    "しんぴのしずく": (-24, -216),   # 243
+    "もくたん": (-168, -216),        # 249
+    "りゅうのキバ": (-192, -216),    # 250
+    "ものしりメガネ": (0, -240),     # 267
+    "ぎんのこな": (-48, -192),       # 222
+    "ようせいのハネ": (-72, -576),   # 2401
+    # きのみ (ITEM_PNG未収録分)
+    "カゴのみ": (-288, -96),   # 150
+    "オッカのみ": (-144, -144),# 184
+    "イトケのみ": (-168, -144),# 185
+    "ソクノのみ": (-192, -144),# 186
+    "リンドのみ": (-216, -144),# 187
+    "ヨプのみ": (-264, -144),  # 189
+    "シュカのみ": (-312, -144),# 191
+    "バコウのみ": (-336, -144),# 192
+    "ヨロギのみ": (-408, -144),# 195
+    "カシブのみ": (-432, -144),# 196
+    "ナモのみ": (0, -168),     # 198
+    "ロゼルのみ": (-360, -408),# 686
+    # メガストーン (pokedb.tokyo item_key確認済み)
+    "フシギバナイト": (-192, -384),  # 659
+    "リザードナイトＸ": (-216, -384),# 660
+    "リザードナイトＹ": (-168, -408),# 678
+    "カメックスナイト": (-240, -384),# 661
+    "ゲンガナイト": (-120, -384),    # 656
+    "サーナイトナイト": (-144, -384),# 657
+    "バシャーモナイト": (-312, -384),# 664
+    "バンギラスナイト": (-432, -384),# 669
+    "ハッサムナイト": (-456, -384),  # 670
+    "ギャラドスナイト": (-120, -408),# 676
+    "クチートナイト": (-240, -408),  # 681
+    "ライボルトナイト": (-264, -408),# 682
+    "メタグロスナイト": (-168, -432),# 758
+    "ヤドランナイト": (-216, -432),  # 760
+    "アブソルナイト": (-144, -408),  # 677
+    "フーディナイト": (-192, -408),  # 679
+    "チルタリスナイト": (-96, -432), # 755
+    "ピジョットナイト": (-264, -432),# 762
+    "ミミロップナイト": (-360, -432),# 768
+    "ヘルガナイト": (-360, -384),    # 666
+    "ジュペッタナイト": (-408, -384),# 668
+    "プテラナイト": (-24, -408),     # 672
+    "ルカリオナイト": (-48, -408),   # 673
+    "ガルーラナイト": (-96, -408),   # 675
+    "ヘラクロスナイト": (-216, -408),# 680
+    "エルレイドナイト": (-120, -432),# 756
+    "サメハダナイト": (-192, -432),  # 759
+    "オニゴーリナイト": (-288, -432),# 763
+    "カイリュナイト": (-216, -600),  # 3006
+    "メガニウムナイト": (-120, -600),# 3002
+    "ルチャブルナイト": (-264, -600),# 3008
+    "ゴルーグナイト": (-96, -624),   # 3021
 }
 
 # ---- メガシンカデータ ----
@@ -1490,7 +1478,25 @@ def get_item_desc(item_name: str) -> str:
 
 
 def generate_mega_section(pokemon_name: str, base_types: list, base_stats: list) -> str:
-    mega_list = MEGA_DATA.get(pokemon_name)
+    conn = get_conn()
+    db_rows = conn.execute(
+        "SELECT mega_name_jp, mega_stone, type1, type2, hp, attack, defense, sp_attack, sp_defense, speed, ability "
+        "FROM pokemon_mega_stats WHERE base_pokemon_jp=? ORDER BY id",
+        (pokemon_name,)
+    ).fetchall()
+    conn.close()
+    if db_rows:
+        mega_list = []
+        for row in db_rows:
+            types = [row["type1"]] + ([row["type2"]] if row["type2"] else [])
+            mega_list.append({
+                "name": row["mega_name_jp"],
+                "types": types,
+                "stats": [row["hp"], row["attack"], row["defense"], row["sp_attack"], row["sp_defense"], row["speed"]],
+                "ability": row["ability"],
+            })
+    else:
+        mega_list = MEGA_DATA.get(pokemon_name)
     if not mega_list:
         return ""
 
@@ -1746,16 +1752,15 @@ def make_rate_bar_cell(rate: float, values: list, dates: list, effect: str = "",
         diff = round(rate - prev_rate, 1)
         sign = '+' if diff > 0 else ''
         delta_color = '#16a34a' if diff > 0 else ('#dc2626' if diff < 0 else '#94a3b8')
-        delta_html = f'<span style="font-size:0.78em;color:{delta_color};width:40px;text-align:right;white-space:nowrap;flex-shrink:0">{sign}{diff}</span>'
+        delta_html = f'<span style="font-size:0.75em;color:{delta_color};white-space:nowrap"> {sign}{diff}</span>'
     else:
-        delta_html = '<span style="width:40px;flex-shrink:0"></span>'
+        delta_html = ''
     bar = (
-        f'<div style="display:flex;align-items:center;gap:6px;padding:2px 0">'
-        f'<div style="flex:1;background:#e2e8f0;border-radius:3px;height:16px;overflow:hidden">'
-        f'<div style="background:#3b82f6;height:100%;width:{bar_pct}%"></div>'
-        f'</div>'
-        f'<span style="width:52px;text-align:right;font-weight:600;font-size:0.9em;flex-shrink:0">{rate}%</span>'
-        f'{delta_html}'
+        f'<div style="position:relative;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden;padding:2px 0">'
+        f'<div style="position:absolute;inset:0;background:#bfdbfe;width:{bar_pct}%"></div>'
+        f'<span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">'
+        f'{rate}%{delta_html}'
+        f'</span>'
         f'</div>'
     )
 
@@ -2048,15 +2053,15 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
         f"SELECT MAX(crawled_date) FROM pokemon_usage WHERE season='{SEASON}' AND rule='single'"
     ).fetchone()[0]
     partners = conn.execute(
-        f"""SELECT p.rank, p.partner, u.pokemon_id
+        f"""SELECT p.rank, p.partner,
+               (SELECT u.pokemon_id FROM pokemon_usage u
+                WHERE u.pokemon=p.partner AND u.season=p.season AND u.rule=p.rule
+                  AND u.pokemon_id IS NOT NULL
+                ORDER BY u.crawled_date DESC LIMIT 1) AS pokemon_id
            FROM pokemon_partners p
-           LEFT JOIN pokemon_usage u
-             ON u.pokemon=p.partner AND u.season=p.season AND u.rule=p.rule
-             AND u.crawled_date=?
-             AND u.rank=(SELECT MIN(rank) FROM pokemon_usage WHERE pokemon=p.partner AND season=p.season AND rule=p.rule AND crawled_date=?)
            WHERE p.pokemon=? AND p.season='{SEASON}' AND p.rule='single' AND p.crawled_date=?
            ORDER BY p.rank""",
-        (usage_date, usage_date, pokemon_name, partner_date)
+        (pokemon_name, partner_date)
     ).fetchall() if partner_date else []
 
     conn.close()
@@ -2072,7 +2077,7 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
 
     # ---- フロントマター ----
     type_str = "/".join(types)
-    rank_str = f"{usage_rank}位"
+    rank_str = "圏外" if usage_rank > 200 else f"{usage_rank}位"
     desc = f"ポケモンチャンピオンズの{display_name}基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率{rank_str}。"
     id_form = pdata["id"].split("-")[1]
     image_form_line = f"\nimageForm: '{id_form}'" if id_form != "00" else ""
@@ -2169,33 +2174,35 @@ draft: false
 ---"""
 
     RATE_CELL_STYLE = """<style>
-.pn-rate-wrap{position:static}
 .pn-rate-wrap{position:relative;display:inline-block;width:100%}
-.pn-popup{display:none;position:absolute;z-index:200;left:0;top:calc(100% + 4px);background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
-.pn-rate-wrap:hover .pn-popup,.pn-rate-wrap:focus-within .pn-popup{display:block}
+.pn-popup{display:none;position:fixed;z-index:200;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
 </style>
 <script>
+document.addEventListener('DOMContentLoaded',function(){
 document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   var popup=wrap.querySelector('.pn-popup');
   if(!popup)return;
   function adjust(){
-    popup.style.left='0';
+    var wr=wrap.getBoundingClientRect();
+    popup.style.left=wr.left+'px';
     popup.style.right='auto';
-    popup.style.top='calc(100% + 4px)';
+    popup.style.top=(wr.bottom+4)+'px';
     popup.style.bottom='auto';
+    popup.style.visibility='hidden';
     popup.style.display='block';
     var r=popup.getBoundingClientRect();
     if(r.right>window.innerWidth-8){
       popup.style.left='auto';
-      popup.style.right='0';
+      popup.style.right=(window.innerWidth-wr.right)+'px';
     }
     if(r.bottom>window.innerHeight-8){
       popup.style.top='auto';
-      popup.style.bottom='calc(100% + 4px)';
+      popup.style.bottom=(window.innerHeight-wr.top+4)+'px';
     }
-    popup.style.display='';
+    popup.style.visibility='';
   }
-  wrap.addEventListener('mouseenter',adjust);
+  wrap.addEventListener('mouseenter',function(){adjust();popup.style.display='block';});
+  wrap.addEventListener('mouseleave',function(){popup.style.display='';});
   wrap.addEventListener('touchstart',function(e){
     e.preventDefault();
     adjust();
@@ -2203,6 +2210,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     function hide(ev){if(!wrap.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
     setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
   });
+});
 });
 </script>"""
 
@@ -2219,7 +2227,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
         ability_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{ab}</td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;min-width:160px">{rate_cell}</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1">{rate_cell}</td>
 </tr>
 '''
     section_ability = f"""
@@ -2228,7 +2236,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 {RATE_CELL_STYLE}
 
 <div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead>
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
@@ -2265,7 +2273,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
         move_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}"><div style="display:flex;align-items:center;gap:6px">{icon}{mv}</div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;min-width:160px">{rate_cell}</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1">{rate_cell}</td>
 </tr>
 '''
 
@@ -2283,7 +2291,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
         item_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{icon_wrap}</td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;min-width:160px">{rate_cell}</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1">{rate_cell}</td>
 </tr>
 '''
 
@@ -2303,7 +2311,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
         nature_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{nat}{eff_str}</td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1;min-width:160px">{rate_cell}</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1">{rate_cell}</td>
 </tr>
 '''
 
@@ -2325,7 +2333,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
         ev_rows += f'''<tr{bg}>
   <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   {ev_cell(row["ev_h"])}{ev_cell(row["ev_a"])}{ev_cell(row["ev_b"])}{ev_cell(row["ev_c"])}{ev_cell(row["ev_d"])}{ev_cell(row["ev_s"])}
-  <td style="padding:6px 10px;border:1px solid #cbd5e1;min-width:160px">{rate_cell}</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1">{rate_cell}</td>
 </tr>
 '''
 
@@ -2334,54 +2342,74 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 {RATE_CELL_STYLE}
 
+<style>
+@media(min-width:768px){{
+  .pn-data-grid{{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}}
+}}
+</style>
+
+<div class="pn-data-grid">
+
+<div>
+
 ### 技
 
 <div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_move_trend else ''}</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_move_trend else ''}</th>
 </tr></thead>
 <tbody>
 {move_rows}</tbody>
 </table>
 </div>
 
+</div>
+
+<div>
+
 ### 持ち物
 
 <div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">持ち物</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_item_trend else ''}</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_item_trend else ''}</th>
 </tr></thead>
 <tbody>
 {item_rows}</tbody>
 </table>
 </div>
 
+</div>
+
+<div>
+
 ### 性格
 
 <div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">性格</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_nature_trend else ''}</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_nature_trend else ''}</th>
 </tr></thead>
 <tbody>
 {nature_rows}</tbody>
 </table>
 </div>
 
+</div>
+
+<div>
+
 ### ステータス振り
 
-<p style="font-size:0.8em;color:#666;margin:4px 0 8px">H=HP A=こうげき B=ぼうぎょ C=とくこう D=とくぼう S=すばやさ　最大値=32</p>
-
-<div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<div style="margin:12px 0;overflow-x:auto">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:36px">順位</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">H</th>
@@ -2390,11 +2418,16 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">C</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">D</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">S</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_ev_trend else ''}</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率{'  <span style=\"font-size:0.8em;color:#94a3b8;font-weight:400\">ⓘ 詳細</span>' if has_ev_trend else ''}</th>
 </tr></thead>
 <tbody>
 {ev_rows}</tbody>
 </table>
+</div>
+<p style="font-size:0.8em;color:#666;margin:4px 0 0">H=HP A=こうげき B=ぼうぎょ C=とくこう D=とくぼう S=すばやさ</p>
+
+</div>
+
 </div>"""
 
     # ---- チームメイト ----
@@ -2450,10 +2483,10 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
     section_partners = f"""
 
-### 同じチーム TOP10
+### 同じチーム
 
 <div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;min-width:400px">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead>
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
@@ -2504,9 +2537,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
     section_mega = generate_mega_section(pokemon_name, types, stats)
 
-    parts = [front, header, section_stats, section_type, section_ability]
-    if section_mega:
-        parts.append(section_mega)
+    parts = [front, header, section_stats, section_mega, section_type, section_ability]
     parts += [section_data, section_partners, section_analysis]
     return "\n".join(parts)
 
@@ -2730,9 +2761,10 @@ if __name__ == "__main__":
     OUT_DIR.mkdir(parents=True, exist_ok=True)
     for pokemon, _static_rank in targets:
         pdata = POKEMON_DATA[pokemon]
-        rank = _rank_map.get(pokemon, _static_rank)
+        rank = _rank_map.get(pokemon, 999)
+        rank_label = "圏外" if rank > 200 else f"{rank}位"
         filename = OUT_DIR / f"{pdata['file']}.md"
-        print(f"  生成: {filename.name} ({pokemon} 使用率{rank}位)")
+        print(f"  生成: {filename.name} ({pokemon} 使用率{rank_label})")
         content = generate_page(pokemon, rank)
         filename.write_text(content, encoding="utf-8")
     print(f"\n完了: {len(targets)}件")
