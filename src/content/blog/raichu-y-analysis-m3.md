@@ -449,7 +449,7 @@ draft: false
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
     <div class="name">マスカーニャ</div>
     <div class="rate">じめん対策</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">トリックフラワー（くさ）でガブリアス（ドラゴン/じめん）にくさ→じめん×2の打点を持つ。同居率2位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">トリックフラワー（くさ）でカバルドン（じめん単、×2）に打点を持つ。同居率2位</div>
   </div>
 </div>
 
