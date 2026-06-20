@@ -1,0 +1,502 @@
+---
+title: '【ポケモンチャンピオンズ】サーフゴー考察 M-3 使用率15位 型別採用率と立ち回り'
+description: 'M-3シングルバトルで使用率15位のサーフゴーを徹底分析。シャドーボール採用率97.6%・ゴールドラッシュ86.2%の特殊アタッカー型と、わるだくみ46.5%＋じこさいせい43.3%の積み型を実データで解説。特性おうごんのからだによる変化技無効化の強みと環境ポケモンへの相性まで紹介します。'
+pubDate: '2026-06-20'
+heroImage: '../../assets/hero-gholdengo-m3.png'
+draft: true
+---
+
+<style>
+.poke-header { display:flex; align-items:center; gap:16px; margin:20px 0; }
+.poke-header img { width:96px; height:96px; }
+.build-header { display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+.partner-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(120px,1fr)); gap:12px; margin:16px 0; }
+.partner-card { text-align:center; padding:8px; border:1px solid #e2e8f0; border-radius:8px; }
+.partner-card img { width:56px; height:56px; display:block; margin:0 auto 4px; }
+.partner-card .name { font-size:0.75rem; font-weight:bold; }
+.partner-card .rate { font-size:0.7rem; color:#666; }
+.type-row { display:flex; align-items:center; gap:8px; margin:8px 0; }
+</style>
+
+<div class="poke-header">
+  <img src="/images/pokemon/pokemon-1000-00.webp" alt="サーフゴー" />
+  <div>
+    <h2 style="margin:0 0 8px">サーフゴー</h2>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
+      <img src="/images/types/type-08-steel.png" alt="はがね" style="width:44px;height:44px" />
+      <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:44px;height:44px" />
+    </div>
+    <div style="margin-top:8px;font-size:0.9em;color:#555">
+      使用率: <strong style="color:#e67e22">15位</strong>　特性: <strong>おうごんのからだ 100.0%</strong>
+    </div>
+  </div>
+</div>
+
+> ⚠️ 本記事のデータはM-3シーズン（2026/06/20）時点の集計です
+
+シーズンM-3のシングルバトルで、サーフゴーは**使用率15位**を記録。はがね/ゴーストという複合タイプで弱点がほのお・じめん・ゴースト・あくの4タイプに絞られる一方、特性**おうごんのからだ**によってトリック・ちょうはつ・いかく等の変化技を一切受けつけない点が際立っています。とくこう133という高い特殊火力を持ち、こだわりスカーフで即戦力の高速アタッカーとして動く型と、わるだくみ＋じこさいせいで積んで制圧する型の2方向に分かれます。
+
+特性は**おうごんのからだが100.0%**と一択で、相手の変化技（いかく・ちょうはつ・トリック等）を完全シャットアウトする恩恵はどの型でも共通しています。
+
+---
+
+## なぜ今サーフゴーが使用率15位なのか
+
+### 1. おうごんのからだで変化技を完全無効化
+
+特性おうごんのからだは**相手の変化技を全て無効化**します。いかく・ちょうはつ・トリック・でんじは・ねむりごな等を受けつけないため、アタッカーに対して対面で打てる手段が相手に存在しなくなります。採用率100.0%という数字が示すとおり、この特性なしにサーフゴーを採用する理由はなく、環境のいかく持ちやトリック型への明確な回答として機能しています。
+
+### 2. とくこう133からのはがね・ゴースト2タイプ一致打点
+
+とくこう種族値133はシングル環境の特殊アタッカーとして高水準です。シャドーボール（採用率97.6%）はゴーストタイプ一致打点でエスパー・ゴーストに×2、ゴールドラッシュ（採用率86.2%）ははがねタイプ一致でフェアリー・いわ・こおりに×2の打点を持ちます。2タイプの一致技で広いタイプをカバーでき、弱点を突ける相手が環境上位に多いのが使用率維持の要因です。
+
+### 3. こだわりスカーフ型と積み型の二極化で対応範囲が広い
+
+持ち物採用率の最多はこだわりスカーフ（42.6%）で高速アタッカーとして機能する一方、たべのこし（26.6%）＋わるだくみ（46.5%）＋じこさいせい（43.3%）の組み合わせによる積み型も無視できない採用率を持ちます。同じサーフゴーでも、こだわりスカーフ型は上から制圧するアタッカーとして、積み型は耐久を活かして崩すフィニッシャーとして機能するため、対戦相手がどちらの型かを読み誤ると対応が崩れます。
+
+---
+
+## 基本スペック
+
+### 種族値
+
+<div style="max-width:380px;margin:16px 0;font-size:0.9em">
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">HP</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:43.5%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:36px;text-align:right">87</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">こうげき</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:30%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:36px;text-align:right">60</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:47.5%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:36px;text-align:right">95</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくこう</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:66.5%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:36px;text-align:right"><strong style="color:#dc2626">133</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:45.5%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:36px;text-align:right">91</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:42%;background:linear-gradient(90deg,#34d399,#059669);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:36px;text-align:right">84</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
+    <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
+    <div style="flex:1"></div>
+    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">550</span>
+  </div>
+</div>
+
+とくこう133が突出して高く、他のステータスはHP87・ぼうぎょ95・とくぼう91と中堅水準に留まります。すばやさ84は環境の高速勢（S90以上）に先手を取られる場面が多く、こだわりスカーフなしでは上から殴られるリスクが常に存在します。こうげきは60と低いため物理技は採用されず、とくこう133を軸とした特殊型一本になります。
+
+### タイプ・弱点
+
+<div class="type-row">
+  <strong>タイプ：</strong>
+  <img src="/images/types/type-08-steel.png" alt="はがね" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="はがね" />
+  <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="ゴースト" />
+</div>
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（×0.5以下）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
+      <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
+      <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
+      <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
+      <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
+    </div>
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
+      <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
+      <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
+      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし×0.25</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
+      <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
+      <span><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ドラゴン</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
+      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
+    </div>
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
+      <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
+      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
+      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
+    </div>
+  </td>
+</tr>
+</tbody>
+</table>
+</div>
+
+はがね/ゴーストの組み合わせで、ノーマル・かくとう・どくの3タイプを無効化します。はがねが本来弱点のどくを無効化し、ゴーストがかくとうとノーマルを無効化するため、環境で多いかくとう技を受けつけません。むしタイプは×0.25まで軽減します。弱点はほのお・じめん・ゴースト・あくの4タイプで、特にゴースト・あくは環境の特殊アタッカーが採用する技に多く、シャドーボール・ふいうちを持つ相手との対面は危険です。
+
+---
+
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>シャドーボール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">97.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴーストタイプ一致主力技。エスパー・ゴーストに×2。20%でDダウン</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ゴールドラッシュ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">86.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがねタイプ一致最大火力。使用後C2段階ダウン</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>わるだくみ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>46.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">C2段階上昇。じこさいせいと組み合わせて積み型の基盤</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>じこさいせい</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>43.3%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">最大HP半分を回復。積み型での耐久維持に使用</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>トリック</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">36.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こだわりスカーフ型でスカーフを押しつけて相手の行動を縛る</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+---
+
+## 主要型の解説
+
+性格分布はひかえめ51.7%・おくびょう33.9%の2択が主流です。ひかえめはとくこうを伸ばす攻撃重視型、おくびょうはすばやさを伸ばして上から殴る速度重視型で、持ち物や技構成との組み合わせで立ち回りが大きく変わります。
+
+### 型1: こだわりスカーフ高速アタッカー型（最多持ち物）
+
+**持ち物採用率: こだわりスカーフ 42.6%**（アタッカー型の指標。持ち物分布で最多）
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
+<div class="build-header">
+  <img src="/images/pokemon/pokemon-1000-00.webp" alt="サーフゴー" style="width:48px;height:48px">
+  <strong style="font-size:1.05em">CSおくびょうスカーフ型</strong>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
+<div>
+<strong>特性:</strong> おうごんのからだ（100.0%）<br>
+<strong>性格:</strong> おくびょう（S↑ A↓）<br>
+<strong>EV:</strong> C32 S32（最多配分。余りはHへ）<br>
+<strong>持ち物:</strong> こだわりスカーフ（42.6%）
+</div>
+<div>
+<strong>技構成:</strong><br>
+・シャドーボール<br>
+・ゴールドラッシュ<br>
+・トリック<br>
+・（補完技）
+</div>
+</div>
+</div>
+
+**強み:**
+
+こだわりスカーフを持つことでS84から1.5倍のS126相当になり、S90前後の多くのアタッカーを上から殴れます。おうごんのからだによって相手のトリックでスカーフを奪われる心配がないため、こだわりスカーフを安定して維持できるのはサーフゴー固有の利点です。トリック（採用率36.7%）でこだわりスカーフを相手に押しつければ、後続の積みアタッカーに対して行動の縛りをかけられます。ゴールドラッシュはC2段階ダウンの反動があるため、こだわりスカーフ型では打ち逃げして交代するか、使い切りの場面で活用します。
+
+**弱み:**
+
+こだわりスカーフを装備すると技が固定されるため、毎ターン使う技の読み合いが生じます。ゴールドラッシュ使用後にCが2段階下がるデメリットが積み重なると火力が落ちるため、ゴールドラッシュを連発する場面は限られます。ひかえめ型より火力が下がる点、スカーフを持ち物採用率2位のたべのこし（26.6%）と使い分ける積み型と対照的に、持続戦闘力が低い点が弱みです。
+
+---
+
+### 型2: わるだくみ＋じこさいせい積み型（採用率2位持ち物）
+
+**持ち物採用率: たべのこし 26.6%**（積み型の指標。わるだくみ46.5%・じこさいせい43.3%と高い同時採用が示す構成）
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
+<div class="build-header">
+  <img src="/images/pokemon/pokemon-1000-00.webp" alt="サーフゴー" style="width:48px;height:48px">
+  <strong style="font-size:1.05em">HCひかえめ積み型</strong>
+</div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
+<div>
+<strong>特性:</strong> おうごんのからだ（100.0%）<br>
+<strong>性格:</strong> ひかえめ（C↑ A↓）<br>
+<strong>EV:</strong> H2 C32 S32（最多配分22.1%）<br>
+<strong>持ち物:</strong> たべのこし（26.6%）
+</div>
+<div>
+<strong>技構成:</strong><br>
+・シャドーボール<br>
+・ゴールドラッシュ<br>
+・わるだくみ<br>
+・じこさいせい
+</div>
+</div>
+</div>
+
+**強み:**
+
+おうごんのからだでちょうはつ・トリック等の積みを妨害する変化技を受けつけないため、**わるだくみを安定して積める**のがこの型の最大の利点です。たべのこしの毎ターン回復とじこさいせいの合わせ技でHP管理しながら、わるだくみ後のとくこうを最大限活用できます。ひかえめ性格でとくこうをC32まで振ると最多EV配分（H2 C32 S32、採用率22.1%）になり、シャドーボール・ゴールドラッシュの火力が大幅に上がります。積み型ゆえに長期戦で盤面を制圧する役割を担い、スカーフ型とは異なるゲームプランを持ちます。
+
+**弱み:**
+
+わるだくみを積む猶予が必要なため、上から殴れる高速勢が相手に残っている状況では積みのターンを作りにくい点が課題です。じこさいせいで回復しつつ積む展開になると、相手がゴーストタイプやあくタイプの技でC上昇後のサーフゴーを一点突破するリスクがあります。スカーフ型と異なりS84のままのため、S85以上の相手には先手を取られ、弱点のゴースト・あく技を先に受ける展開が生じます。
+
+---
+
+## 環境ポケモンへの相性分析
+
+### 有利・不利がはっきり出る主要ポケモン
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン（環境順位）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">相性</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（環境上位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう・ノーマルを無効化するため、インファイトやしんくうはが通らない。シャドーボールでゴーストタイプ一致の×1（はがね複合には等倍）だが、こちらのゴールドラッシュがはがねタイプ一致で有効打となる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（環境上位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ やや不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">カイリューのいかくをおうごんのからだで無効化できる点は有利。ただしカイリューのS100はスカーフなしのS84より速く先手を取られる。カイリューの主力技（ほのお技・りゅうのまい後の物理技）がこちらの弱点または高威力で刺さる</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）がじめんタイプで×2弱点。S102でスカーフなしより速く先手から一致じめん打点を浴びる。こちらのシャドーボール・ゴールドラッシュは等倍以下</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（環境上位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴールドラッシュがあく/はがね複合に×0.25。シャドーボールも×0.25に落ちる。おうごんのからだでふいうちを受けることはできる（ふいうちは変化技でないため直撃する）点は注意</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+> ※ドドゲザンへのゴールドラッシュは×0.25になります。上記相性判定はシャドーボールの通りを加味した総合評価です。
+
+### 苦手なポケモンと対策
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">苦手理由</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">対策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）がじめん×2弱点。S102でサーフゴーより速く先手から削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこうタイプ枠でガブリアスのじしんを無効化する後続を用意し、サーフゴーの前に引く</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（環境上位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのおはほのお×2弱点。かえんほうしゃ等の特殊ほのお技で先手から大ダメージ。S100でスカーフなし時より速い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こだわりスカーフ型ならSが上回る場面もあるが、先手が読めない場合はリザードンと対面させず交代でみず・いわ枠に引く</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（環境上位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうちはあく技（×2弱点）で先制打点。高いBDでシャドーボールが通りにくく、こちらの一致技の通りが悪い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技やかくとう技を持つ高速枠でドドゲザンを後出し処理し、サーフゴーは別の相手に当てる</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+---
+
+## パーティ構成
+
+### 相性の良いポケモン
+
+<div class="partner-grid">
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
+    <div class="name">ガブリアス</div>
+    <div class="rate">環境1位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">サーフゴーが苦手なほのお・あく枠に対してじしん・りゅうのまいで対処。じめん弱点はひこう枠でカバー</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
+    <div class="name">マスカーニャ</div>
+    <div class="rate">環境上位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">S123の高速枠。サーフゴーが苦手なほのお・じめん枠に先手でくさ・あく打点を入れられる</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス">
+    <div class="name">ギャラドス</div>
+    <div class="rate">環境上位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこうでじめん無効。サーフゴーのじめん弱点（ガブリアスのじしん等）を受けられる枠</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ">
+    <div class="name">アシレーヌ</div>
+    <div class="rate">環境上位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず技でリザードン等のほのおタイプに打点。サーフゴーのほのお弱点をみず枠でケア</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
+    <div class="name">ブリジュラス</div>
+    <div class="rate">環境上位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき・ドラゴン打点で補完。サーフゴーが取れないみず・ひこうへの打点を担う</div>
+  </div>
+</div>
+
+**パーティ構成の基本方針:**
+
+サーフゴーはおうごんのからだで変化技を受けつけない安定したアタッカーですが、ほのお・じめん・ゴースト・あくの4弱点をパーティ全体でケアする必要があります。
+
+1. **じめん対策**: ひこうタイプ（ギャラドス・カイリュー等）でガブリアスのじしんを無効化する枠
+2. **ほのお対策**: みずタイプ（アシレーヌ等）でリザードン・ウルガモス等のほのお技を受ける枠
+3. **ゴースト・あく対策**: ノーマルまたはフェアリータイプでゴースト無効・あく半減の受け枠
+4. **速度補完**: サーフゴー自身がスカーフを持たない積み型の場合、パーティの高速枠でS不足を補う
+
+---
+
+## データ分析①：技採用率から読む「スカーフ型」と「積み型」の分岐
+
+サーフゴーの技採用率と持ち物採用率を並べると、2つの運用方針が数値に表れています。
+
+| 指標 | スカーフ型の痕跡 | 積み型の痕跡 |
+|---|---|---|
+| 持ち物（最多） | こだわりスカーフ 42.6% | たべのこし 26.6% |
+| 変化技 | トリック 36.7% | わるだくみ 46.5% |
+| 回復技 | — | じこさいせい 43.3% |
+| 性格（最多） | おくびょう 33.9% | ひかえめ 51.7% |
+
+ひかえめ51.7%がおくびょう33.9%を上回る点は注目に値します。こだわりスカーフ型はS確保が重要なためおくびょうが多いはずですが、ひかえめが過半数を占めるのは、スカーフを持ちつつもひかえめで火力を優先する個体、またはスカーフなしでわるだくみを積む個体の双方がひかえめを選ぶためです。
+
+持ち物採用率でこだわりスカーフ42.6%に対してたべのこし26.6%・いのちのたま7.9%と続きますが、わるだくみ46.5%・じこさいせい43.3%の採用率はスカーフ採用率（42.6%）を上回っています。これはスカーフを持ちながらもわるだくみを入れる個体、またはスカーフ以外でわるだくみを採用する個体が合算されて積み志向の技が多く見えることを示しています。**対戦時にサーフゴーと対面したら、まずたべのこしの積み型を警戒しながらもスカーフ高速型の可能性を残す**という慎重な読みが確率的に妥当です。
+
+---
+
+## まとめ：型別比較
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#1e3a5f;color:#fff">
+  <th style="padding:10px 12px;border:1px solid #cbd5e1;text-align:left">型</th>
+  <th style="padding:10px 12px;border:1px solid #cbd5e1">採用率（指標）</th>
+  <th style="padding:10px 12px;border:1px solid #cbd5e1">性格</th>
+  <th style="padding:10px 12px;border:1px solid #cbd5e1">主な技</th>
+  <th style="padding:10px 12px;border:1px solid #cbd5e1">強み</th>
+  <th style="padding:10px 12px;border:1px solid #cbd5e1">弱み</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">こだわりスカーフ型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">スカーフ 42.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">シャドーボール・ゴールドラッシュ・トリック</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">速度確保で上から一致技を押しつけ、トリックで縛れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">技固定でゴールドラッシュ後の打ち合いにC低下が響く</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">わるだくみ積み型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">たべのこし 26.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかえめ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">シャドーボール・ゴールドラッシュ・わるだくみ・じこさいせい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">おうごんのからだで妨害されず積めるため、積み後の制圧力が高い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">積む猶予が必要でS84のまま動くため高速勢に先手を取られやすい</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+**総評:**
+
+サーフゴーははがね/ゴーストのタイプ一致打点とおうごんのからだによる変化技完全無効化を武器に、使用率15位を維持するポケモンです。特性の恩恵でちょうはつ・いかく・トリックを受けつけないため、物理アタッカーのいかくや耐久型のちょうはつで対策しようとする構築に対して安定して機能します。
+
+こだわりスカーフ型（42.6%）と積み型（たべのこし26.6%）の2方向が数値上も拮抗しており、対面した際にどちらの型かを読み誤ると対応が崩れます。弱点はほのお・じめん・ゴースト・あくの4タイプで、環境上位のガブリアスのじしん・リザードンのほのお技には後出しできないため、パーティ単位でこれらをケアする枠の確保が前提になります。
+
+---
+
+## 関連記事
+
+- [使用率1位 ガブリアスのM-3考察](/blog/garchomp-analysis-m3/)
+- [使用率2位 ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
