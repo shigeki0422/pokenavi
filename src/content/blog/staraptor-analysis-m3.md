@@ -292,7 +292,7 @@ draft: true
 
 **強み:**
 
-ようき最速でS実数値は178（種族値110・EV32・補正1.1）となり、環境上位の多くより先手を取れます。インファイトを初回使用した後はA・Bが1段階ずつ上昇し、2発目以降はこうげき実数値がさらに高まります。いじっぱり型と比べて、A補正なしの代わりにS優位を確保するのがようき型の差別点です。ブレイブバードとの2タイプ一致技でかくとう・ひこうを通せない相手にはブレイズキックで対応します。
+ようき最速でS実数値は178（種族値110・EV32・補正1.1）。いじっぱり型のS162では後手に回るS162〜178帯（マスカーニャは192で別格だが、同S110族や最速100族など）に対して先手を取れるのがようき型固有の差別点です。A補正なしの代わりにこのS優位を確保することで、相手の上から初回インファイトでA・Bを上げる起点を作れます。
 
 **弱み:**
 
@@ -408,9 +408,9 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0026-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ライチュウ（3位）
+    <img src="/images/pokemon/pokemon-0026-01.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ライチュウY（でんき/エスパー）（3位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S110最速でS178と同速。同速対決になるため先手を確保できない場面があり、でんじほう（でんき×2、採用率96.1%）を先手で通されるリスクがある。きあいだま（かくとう、95.4%）はかくとう×1×ひこう×0.5=×0.5で半減</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S110最速でS178と同速。同速対決になるため先手を確保できない場面があり、でんじほう（でんき×2、採用率96.1%）を先手で通されるリスクがある</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん技を持つポケモン（ガブリアス等）を同伴し、ライチュウの前に交代して処理する。メガムクホーク自身での対処は難しい</td>
 </tr>
 <tr style="background:#fafafa">
@@ -418,7 +418,7 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（17位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">りゅうのまい（62.4%）＋こおりのキバ（こおり×2、40.6%）の積み展開が脅威。こおりのキバはひこう弱点を突き、積まれると処理が難しくなる。たきのぼり（みず、90.1%）はこちらに等倍止まりだが、こちらのインファイトもみず×1×ひこう×0.5=0.5倍で有効打が乏しい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S178でギャラドスS133より先手を確保できる。ブレイブバードで等倍を入れられるが、りゅうのまいを積まれた後に対処するのは困難。でんき技を持つパートナーで積む前に対処したい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">積む前ならS178でギャラドス最速S146より先手を取れる。ブレイブバードで等倍を入れられるが、りゅうのまいでSも上がるため積まれた後は先手も取れず対処は困難。でんき技を持つパートナーで積む前に対処したい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -436,7 +436,7 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0282-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サーナイト（64位）
+    <img src="/images/pokemon/pokemon-0282-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サーナイト（63位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー×2、43.1%）・サイコキネシス（エスパー×2、32.8%）の両方が弱点。高とくこうの特殊技で弱点2タイプを突かれる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね技を持つパートナーを同伴しサーナイトに打点を入れる。メガムクホーク自身のブレイズキックはほのお→エスパー×1×フェアリー×1=等倍で決定打にならない</td>
@@ -456,7 +456,7 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">じしんでムクホークが苦手なでんき系（ライチュウ等、でんき弱点×2）に打点。ムクホークはひこうでじしん無効のため同チームに採用しやすい</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">じしんでムクホークが苦手なでんき系（ライチュウY等、でんき弱点×2）に打点。ムクホークはひこうでじしん無効のため同チームに採用しやすい</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
@@ -465,8 +465,8 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
     <div style="font-size:0.65rem;color:#888;margin-top:2px">エスパー技をはがねで×0.5、でんき技をドラゴンで×0.5に半減し、ムクホークの弱点2タイプを耐性補完。はがね技でフェアリーへの打点も担う</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ">
-    <div class="name">ライチュウ</div>
+    <img src="/images/pokemon/pokemon-0026-01.webp" alt="ライチュウY">
+    <div class="name">ライチュウY</div>
     <div class="rate">同居率3位</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき技でムクホークの弱点であるひこう系（×2）に打点。S110最速S178でムクと同速帯。別角度の高速アタッカーとして役割分担</div>
   </div>
