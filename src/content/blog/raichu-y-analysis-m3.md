@@ -358,13 +358,6 @@ draft: false
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだまが×4。ノーガードで必中になり確実に倒せる。ふいうちはでんきに等倍</td>
 </tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0260-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ラグラージ（みず/じめん）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさむすびが×4（みず弱点×2・じめん弱点×2）。でんじほうはじめん複合で無効なためくさむすびが必須打点。ただしすいすい個体（非メガ21%）は雨下でS2倍になり先手を取られる場合がある</td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -431,7 +424,7 @@ draft: false
     <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ">
     <div class="name">アシレーヌ</div>
     <div class="rate">特殊補完</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ライチュウYが半減されるドラゴン枠に対してムーンフォースで×2の打点を持つ。はがねにはみず技が等倍で通る</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ライチュウYのでんき技がドラゴンに×0.5で半減される相手（カイリュー等）にムーンフォース（フェアリー→ドラゴン×2）で打点を持てる</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
