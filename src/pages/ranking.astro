@@ -187,7 +187,7 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
     </main>
     <Footer />
     <script>
-      const PAGE_SIZE = 20;
+      const PAGE_SIZE = 50;
       const rows = Array.from(document.querySelectorAll<HTMLElement>('#ranking-tbody tr'));
       let currentPage = 1;
       const totalPages = Math.ceil(rows.length / PAGE_SIZE);
