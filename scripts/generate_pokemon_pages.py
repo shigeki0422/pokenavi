@@ -1752,18 +1752,18 @@ def make_rate_bar_cell(rate: float, values: list, dates: list, effect: str = "",
         diff = round(rate - prev_rate, 1)
         sign = '+' if diff > 0 else ''
         delta_color = '#16a34a' if diff > 0 else ('#dc2626' if diff < 0 else '#94a3b8')
-        delta_html = f'<span style="font-size:0.78em;color:{delta_color};white-space:nowrap;margin-left:4px">{sign}{diff}</span>'
+        delta_inner = f'<span style="font-size:0.78em;color:{delta_color};white-space:nowrap">{sign}{diff}</span>'
     else:
-        delta_html = ''
+        delta_inner = ''
     bar = (
         f'<div style="display:flex;align-items:center;gap:4px">'
-        f'<div style="position:relative;flex:1;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden">'
+        f'<div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden">'
         f'<div style="position:absolute;inset:0;background:#bfdbfe;width:{bar_pct}%"></div>'
         f'<span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">'
         f'{rate}%'
         f'</span>'
         f'</div>'
-        f'{delta_html}'
+        f'<span style="width:40px;flex-shrink:0;text-align:right">{delta_inner}</span>'
         f'</div>'
     )
 
