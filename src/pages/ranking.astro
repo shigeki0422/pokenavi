@@ -97,10 +97,12 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
 
       @media (max-width: 600px) {
         main { padding: 0.5em; }
+        table, table th, table td { white-space: normal !important; }
         .poke-cell img { width: 28px; height: 28px; }
-        th, td { padding: 5px 6px; font-size: 0.8rem; }
-        th.col-pokemon { min-width: 110px; }
-        .poke-name { font-size: 0.8rem; }
+        th, td { padding: 5px 6px; font-size: 0.85rem; }
+        th.col-pokemon { min-width: 0; }
+        .poke-name { font-size: 0.85rem; }
+        .col-date-old { display: none; }
       }
     </style>
   </head>
@@ -119,7 +121,7 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
               <th style="width:44px">順位</th>
               <th class="col-pokemon">ポケモン</th>
               {dates.map((d, i) => (
-                <th>{fmtDate(d)}{i === dates.length - 1 ? ' 最新' : ''}</th>
+                <th class={i < dates.length - 1 ? 'col-date-old' : ''}>{fmtDate(d)}{i === dates.length - 1 ? ' 最新' : ''}</th>
               ))}
             </tr>
           </thead>
@@ -150,7 +152,8 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
                   </td>
                   {dates.map((d, di) => {
                     const data = p.dates[d];
-                    if (!data) return <td>–</td>;
+                    const isOld = di < dates.length - 1;
+                    if (!data) return <td class={isOld ? 'col-date-old' : ''}>–</td>;
 
                     const prevDate = di > 0 ? dates[di - 1] : null;
                     const prevData = prevDate ? p.dates[prevDate] : null;
@@ -164,7 +167,7 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
                     }
 
                     return (
-                      <td>
+                      <td class={isOld ? 'col-date-old' : ''}>
                         <span class="rank-val">{data.rank}位</span>{' '}
                         {deltaEl}
                       </td>
