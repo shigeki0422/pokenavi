@@ -395,7 +395,7 @@ draft: false
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（じめん）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率98%）が弱点×2。高HP・高Bで耐久が高く、こちらの攻撃を耐えて返しのじしんで大ダメージ。ただしくさむすびは体重90kgで威力90</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさむすびで弱点（じめん×2）を突ける。先手を取れていればくさむすびで処理可能</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさむすびで弱点（じめん×2）を突ける。カバルドン最速S108に対しひかえめS182でも必ず先手を取れるため、くさむすびで安定して処理できる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
