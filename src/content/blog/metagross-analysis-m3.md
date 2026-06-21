@@ -1,6 +1,6 @@
 ---
-title: '【ポケモンチャンピオンズ】メガメタグロス考察 M-3 使用率10位 型別採用率と立ち回り'
-description: 'M-3シングルバトルで使用率10位のメガメタグロスを徹底分析。サイコファング74.8%・バレットパンチ73.8%の物理アタッカー型を実データで解説。かたいツメ補正による接触技強化と先制打点の組み合わせ、環境上位への相性とパーティ構成まで紹介します。'
+title: '【ポケモンチャンピオンズ】メガメタグロス考察 M-3 使用率7位 型別採用率と立ち回り'
+description: 'M-3シングルバトルで使用率7位のメガメタグロスを実データで分析。サイコファング82.7%・バレットパンチ77.9%の物理アタッカー型を解説。はがね/エスパーの多耐性と弱点4タイプ、メガ後S178の速度ライン、環境上位への相性とパーティ構成まで紹介します。'
 pubDate: '2026-06-20'
 heroImage: '../../assets/hero-metagross-m3.png'
 draft: true
@@ -27,30 +27,30 @@ draft: true
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">10位</strong>　特性（メガ前）: <strong>クリアボディ 99.4%</strong>
+      使用率: <strong style="color:#e67e22">7位</strong>　特性（メガ前）: <strong>クリアボディ 99.2%</strong>
     </div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-3シーズン（2026/06/20）時点の集計です
+> ⚠️ 本記事のデータはM-3シーズン（2026/06/21集計）時点のものです
 
-シーズンM-3のシングルバトルで、メガメタグロスは**使用率10位**を記録。はがね/エスパーという**弱点がほのお・じめんの2タイプのみ**の優秀な耐性を持ち、メガ進化後はこうげき145・ぼうぎょ150・とくぼう110・すばやさ110と全方位で高水準な種族値を備えます。特性かたいツメにより接触技の威力が1.3倍に高まり、サイコファング・じしん・アイアンヘッドといった物理技が軒並み強化されます。
+シーズンM-3のシングルバトルで、メガメタグロスは**使用率7位**を記録。はがね/エスパーは耐性が多く、9タイプを半減・1タイプを無効化する一方、**弱点はほのお・じめん・ゴースト・あくの4タイプ**に絞られます。メガ進化後はこうげき145・ぼうぎょ150・とくぼう110・すばやさ110の高水準な種族値を備え、特性かたいツメで接触技の威力が1.3倍に高まります。
 
 ---
 
-## なぜ今メガメタグロスが使用率10位なのか
+## なぜ今メガメタグロスが使用率7位なのか
 
-### 1. 弱点がほのお・じめんの2タイプのみ
+### 1. 9タイプ半減・どく無効の多耐性
 
-はがね/エスパーの複合タイプは、はがねの豊富な耐性とエスパーが重複して組み合わさり、**弱点がほのお（はがね×2・エスパー×1）・じめん（はがね×2・エスパー×1）の2タイプのみ**に絞られます。かくとう（はがね×2・エスパー×0.5＝等倍）・ゴースト（はがね×0.5・エスパー×2＝等倍）・あく（はがね×0.5・エスパー×2＝等倍）はいずれも等倍止まりで、本来エスパータイプが弱点とするタイプをはがねが打ち消します。どくはがねが無効化するため、毒技を一切受けません。
+はがね/エスパーは、ノーマル・ひこう・いわ・くさ・こおり・ドラゴン・フェアリー・はがねを半減し、エスパーは×0.25まで軽減、どくを無効化します。弱点はほのお・じめん・ゴースト・あくの4タイプのみで、本来エスパーが弱点とするゴースト・あくは残るものの、フェアリー・かくとう（はがね×2・エスパー×0.5＝等倍）などはがねが多くの攻撃を抑えます。半減・無効が広いため、弱点を突かない相手には繰り出しから役割を持てます。
 
-### 2. かたいツメ補正で接触技が1.3倍に強化
+### 2. かたいツメ補正で接触技が1.3倍
 
-メガ進化後の特性かたいツメは、接触判定のある技の威力を1.3倍にします。採用率上位のサイコファング（74.8%・威力80）・じしん（69.9%・威力100）・アイアンヘッド（36.3%・威力80）はいずれも接触技のため、補正後の実質威力はそれぞれ104・130・104相当になります。こうげき145と組み合わせると、素の種族値以上の火力を接触技全般に発揮できます。
+メガ進化後の特性かたいツメは接触技の威力を1.3倍にします。採用率上位のサイコファング（82.7%・接触）・れいとうパンチ（62.4%・接触）・アイアンヘッド（29.7%・接触）はいずれも補正対象です。一方でじしん（73.0%）は非接触のため補正は乗りませんが、こうげき145の高い攻撃種族値と威力100で十分な打点になります。
 
-### 3. バレットパンチによる先制打点とS110の中速帯制圧
+### 3. メガ後S110で中速帯を上から叩く
 
-バレットパンチ（採用率73.8%・優先度+1）により、スカーフなし環境の高速勢にも先制打点を入れられます。加えてメガ後のすばやさ110は、環境上位の中速帯（S80〜100前後）を上から制圧できる水準で、ようき採用60.3%でS実数値169に達し、いじっぱり採用36.4%のA実数値182と合わせて火力・速度の両面を高水準に保てます。
+メガ後すばやさ110は、ようき採用61.7%でS実数値178に達し、S102のガブリアス（最速S実数値169）やS100のメガリザードンY（同167）を上から叩けます。バレットパンチ（採用率77.9%・優先度+1）を併せ持つため、より速い相手にも先制打点を残せます。ただしようき型でもマスカーニャ（最速S実数値192）など一部の高速勢には後手を踏みます。
 
 ---
 
@@ -65,7 +65,7 @@ draft: true
       <div style="width:40%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
     </div>
     <span style="width:32px;text-align:right">80</span>
-    <span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#6b7280"></span>
+    <span style="width:40px"></span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">こうげき</span>
@@ -115,7 +115,7 @@ draft: true
   </div>
 </div>
 
-こうげき145・ぼうぎょ150はいずれも最上位クラスの数値で、物理耐久と物理火力を高次元で両立しています。とくぼう110・すばやさ110もメガ進化前（とくぼう90・すばやさ70）から大幅に上昇しており、特殊方面の被弾にも粘れる耐久と、中速帯を上から制圧できる速度を得ます。HPは80と低めで、ほのお・じめん弱点から一撃で持っていかれないためにH方向のEVが一定数採用される理由です。
+こうげき145・ぼうぎょ150は最上位クラスで、物理火力と物理耐久を高水準で両立します。すばやさ110・とくぼう110もメガ進化前（すばやさ70・とくぼう90）から大幅に上昇しており、中速帯を上から叩く速度と特殊方面の被弾耐性を得ます。HPは80と低めで、弱点4タイプを突かれた際の一撃耐性は高くありません。
 
 ### タイプ・弱点
 
@@ -140,6 +140,8 @@ draft: true
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
+      <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
+      <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -163,7 +165,7 @@ draft: true
 </table>
 </div>
 
-かくとう（はがね×2・エスパー×0.5＝等倍）・ゴースト（はがね×0.5・エスパー×2＝等倍）・あく（はがね×0.5・エスパー×2＝等倍）は2タイプの倍率が打ち消し合い等倍止まりです。エスパーはがねへの2タイプ両方で半減し×0.25の超耐性になります。**弱点はほのお・じめんの2タイプのみ**ですが、いずれも環境物理アタッカーの主力技（ガブリアスのじしん99%超採用等）に頻出するため、対面で受け切るのではなくパーティ単位でケアする必要があります。
+弱点4タイプのうち、じめんは使用率1位ガブリアスのじしん、ほのおはメガリザードンYの炎技、あくはマスカーニャ・サザンドラのあく技と、いずれも環境上位の主力技に頻出します。対面で受け切るのではなく、弱点を突かない相手に繰り出して打点を通す使い方が基本です。
 
 ---
 
@@ -186,99 +188,87 @@ draft: true
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>サイコファング</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">85</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">74.8%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">82.7%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>バレットパンチ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">73.8%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">77.9%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>じしん</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">100</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">69.9%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">73.0%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>れいとうパンチ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">62.5%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">62.4%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>アイアンヘッド</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">36.3%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">29.7%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>コメットパンチ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">26.5%</td>
-</tr>
-<tr>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>かみなりパンチ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">25.6%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>コメットパンチ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">23.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>くさわけ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">50</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5.2%</td>
-</tr>
-<tr>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>くさむすび</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5.1%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>アームハンマー</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">100</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3.6%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4.9%</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-特性はメガ前の**クリアボディ99.4%**が主流で、相手からの能力低下を無効化します。メガ進化後はかたいツメに変化するため、クリアボディはメガ進化前（交代直後など）の能力低下回避のみに機能します。ライトメタル（0.6%）は重さ関連技への対策で採用率は極めて低水準です。
+サイコファング・バレットパンチ・じしん・れいとうパンチの4技で採用上位が固まっています。サイコファングは相手のリフレクター・ひかりのかべを破壊できるタイプ一致技、れいとうパンチはドラゴン・ひこう・じめんへの打点として、ガブリアス・カイリュー等の有力ドラゴンに有効です。じしんは非接触ですがでんき・はがね・ほのおへの打点として73.0%採用されています。
+
+特性はメガ前の**クリアボディ99.2%**が主流で、相手からの能力低下を無効化します。メガ進化後はかたいツメに変化します。持ち物はメタグロスナイト96.7%でほぼ一択です。
 
 ---
 
 ## 主要型の解説
 
-性格分布はようき60.3%・いじっぱり36.4%の2択で、S振りを優先するようき型と火力を最大化するいじっぱり型に二分されます。EV最多採用はH2-A32-S32（42.2%）で、ようき型でS実数値169を確保しつつA最大振りとH2を割り当てる型です。
+性格はようき61.7%・いじっぱり35.0%の2択です。EVはH8-A8系（S振りなし）が最多で、次いでA8-S8系（HP振りなし）が続きます（EVスケールは各ステータス最大8）。S振りの有無で抜ける相手が変わるため、ここでは「S最大振り型」と「耐久寄り型」の2型に分けて解説します。
 
-### 型1: ようきH2-A32-S32型（最多採用）
+### 型1: ようきAS型（最速S178）
 
-**性格採用率: ようき 60.3%**（EV最多H2-A32-S32・採用率42.2%と組み合わせの主軸）
+**性格採用率: ようき 61.7%**
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0376-00.webp" alt="メガメタグロス" style="width:48px;height:48px">
-  <strong style="font-size:1.05em">ようきH2-A32-S32型</strong>
+  <strong style="font-size:1.05em">ようきAS型</strong>
 </div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> クリアボディ（メガ前99.4%）→メガ後かたいツメ<br>
+<strong>特性:</strong> クリアボディ（メガ前99.2%）→メガ後かたいツメ<br>
 <strong>性格:</strong> ようき（S↑ C↓）<br>
-<strong>EV:</strong> H2 A32 S32（採用率42.2%）<br>
-<strong>持ち物:</strong> メタグロスナイト（96.8%）
+<strong>EV:</strong> A8 S8（A8-S8系）<br>
+<strong>持ち物:</strong> メタグロスナイト（96.7%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -292,30 +282,30 @@ draft: true
 
 **強み:**
 
-ようきA32S32でS実数値169、A実数値182を確保します。S169はS102のガブリアスや、S110のほとんどの中速帯を上から制圧できる水準です。かたいツメ補正込みのサイコファング（実質威力110）・じしん（実質130）に加え、バレットパンチ（優先度+1）で削れた高速勢に先制打点を入れられます。れいとうパンチでドラゴンタイプや飛行タイプにも対応し、じしんのほのお・でんき・はがねへの打点と合わせて4技で広い範囲をカバーします。いじっぱり型（A実数値200）と比べてA実数値で約10%劣りますが、S169で抜ける相手（S102〜110台）への先制を維持できる点がようき型の採用理由です。
+ようきS8振りでS実数値178に達し、耐久寄り型（S振りなしでS実数値128）が後手を踏むガブリアス（最速S実数値169）・メガリザードンY（同167）・サザンドラ（同165）を上から叩けます。先手でれいとうパンチをガブリアス・カイリューに、サイコファングを通せる点がS最大振りの価値です。れいとうパンチはこおり技なので、ドラゴン/ひこうのカイリューには×4が入ります。
 
 **弱み:**
 
-C方向は補正下降のため特殊打点はほぼ出せません。HPは80・EV2振りにとどまるため、ほのお・じめん弱点の一撃耐性は高くなく、ガブリアスのじしんや使用率上位の炎技を先に受けると一撃圏内になるケースがあります。いじっぱり型と比べてAが約10%低く、2発かかる相手を1発で倒せないケースも生じます。
+A8振りはようきで補正が乗らずA実数値197にとどまり、いじっぱり耐久寄り型のA実数値216より約9%低くなります。HP振りを切っているため、弱点4タイプを突かれた際の一撃耐性は耐久寄り型より低く、ガブリアスのじしんやメガリザードンYの炎技を先に受ける展開では一撃圏に入りやすくなります。
 
 ---
 
-### 型2: いじっぱりH12-A22-S32型（2番目に多い構成）
+### 型2: いじっぱり耐久寄り型（HA重視）
 
-**性格採用率: いじっぱり 36.4%**（EV H12-A22-S32・採用率5.8%が代表的な配分）
+**性格採用率: いじっぱり 35.0%**
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0376-00.webp" alt="メガメタグロス" style="width:48px;height:48px">
-  <strong style="font-size:1.05em">いじっぱりH12-A22-S32型</strong>
+  <strong style="font-size:1.05em">いじっぱり耐久寄り型</strong>
 </div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> クリアボディ（メガ前99.4%）→メガ後かたいツメ<br>
+<strong>特性:</strong> クリアボディ（メガ前99.2%）→メガ後かたいツメ<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
-<strong>EV:</strong> H12 A22 S32（採用率5.8%）<br>
-<strong>持ち物:</strong> メタグロスナイト（96.8%）
+<strong>EV:</strong> H8 A8（H8-A8系）<br>
+<strong>持ち物:</strong> メタグロスナイト（96.7%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -329,11 +319,11 @@ C方向は補正下降のため特殊打点はほぼ出せません。HPは80・
 
 **強み:**
 
-いじっぱりA32振りのA実数値200はようき型の182と比べて約10%高く、かたいツメ補正込みのじしんやサイコファングで2発かかる耐久型を1発圏内に入れられるケースが増えます。S32はようき同様のS振りが多く、いじっぱりS32のS実数値は154で、S80〜100台の中速帯は引き続き上から制圧できます。バレットパンチの先制火力もA200基準で高くなるため、削れた高速勢への確定数がようき型より有利です。
+いじっぱりA8振りでA実数値216に達し、ようきAS型のA実数値197より約9%高い火力を出せます。さらにHP振りでH実数値が上がるため、ぼうぎょ150と合わせて物理アタッカーの攻撃を受けながら殴り返す展開で安定します。S振りを切る代わりに、バレットパンチ（優先度+1）の先制打点をA216基準で最大化し、速い相手は先制技で削る設計です。
 
 **弱み:**
 
-S154はようき型の169より低く、S102のガブリアス（ようきS実数値169）や、S110台のポケモンには先手を取られます。ようき型が上から倒せる相手に後手を踏む局面では、バレットパンチか先手を取れる味方で補う必要があります。
+S振りがないためS実数値は128前後にとどまり、ようきAS型が上から叩けるガブリアス・メガリザードンY・サザンドラに対して後手を踏みます。これらに先制でれいとうパンチや炎弱点を突けない分、弱点を持つ相手との撃ち合いではバレットパンチや味方の補助に頼る必要があります。
 
 ---
 
@@ -341,7 +331,7 @@ S154はようき型の169より低く、S102のガブリアス（ようきS実�
 
 ### 有利・不利がはっきり出る主要ポケモン
 
-はがね/エスパーは弱点がほのお・じめんの2タイプのみで多くの攻撃を等倍以下に抑えますが、弱点2タイプは環境物理アタッカーの主力技に頻出します。S110で中速帯には先手を取りやすい一方、高速勢や炎・地面打点を持つ相手には注意が必要です。
+メガメタグロスは多くの攻撃を半減しますが、弱点4タイプは環境上位の主力技に頻出します。ようきAS型のS実数値178を基準に、先手と打点の両面で相性を整理します（タイプ倍率は全件検算済み）。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -355,31 +345,31 @@ S154はようき型の169より低く、S102のガブリアス（ようきS実�
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガルカリオ（9位）
+    <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんがかくとう/はがねに等倍×等倍＝等倍で通り、メガルカリオのインファイトはこちらにかくとう×2・エスパー×0.5＝等倍止まり。メガ後S110＞メガルカリオS145には先手を取られるが、バレットパンチで先制打点を入れつつじしんで削れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチがドラゴン/ひこうに×4。ようきS178＞カイリュー最速S145で先手を取れる。カイリューのじしんはひこうで自身も無効だが、こちらへのじしん採用個体でも先手れいとうパンチで圏内に入れやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
+    <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（環境上位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチがドラゴン/ひこうに×4。S110＞カイリューS100で先手かられいとうパンチを入れられる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチがあく/ドラゴンに×2、ようきS178＞サザンドラ最速S165で先手。ただしサザンドラのあく技はこちらにあく×2弱点。先手れいとうパンチで削れるが、相手の襷・スカーフ個体には注意</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0143-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カビゴン（圏内）
+    <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（環境上位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S110＞カビゴンS30台で先手。じしんがノーマルに等倍・サイコファングも等倍で通り、ぼうぎょ150でカビゴンの物理打点も耐えやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんがはがね/ドラゴンに×2で通る。ようきS178＞ブリジュラスS85で先手。相手のはがね・ドラゴン技はこちら半減で受けやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）
+    <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（環境上位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ やや有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（はがね）がみず/ひこうに×0.25の超耐性で打点にならない。れいとうパンチは等倍通過。S110＞ギャラドスS81で先手かられいとうパンチを入れられるが、相手のじしん採用率次第では逆に弱点を突かれる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ミミッキュのシャドークローはゴースト×2でこちらの弱点。バレットパンチ（はがねがゴースト/フェアリーに×2）で削れるが、ばけのかわで一度透かされ、剣の舞からのゴースト技で崩される</td>
 </tr>
 </tbody>
 </table>
@@ -387,7 +377,7 @@ S154はようき型の169より低く、S102のガブリアス（ようきS実�
 
 ### 苦手なポケモンと対策
 
-弱点のほのお・じめんを×2で突ける物理・特殊アタッカーが主な苦手相手です。
+弱点のほのお・じめん・ゴースト・あくを×2で突ける相手が主な苦手対象です。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -403,22 +393,22 @@ S154はようき型の169より低く、S102のガブリアス（ようきS実�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99%超）がじめん×2でこちらの弱点を突く。ようきS169で互いに同速になるが、ガブリアスのじしんA130＋タイプ一致は先に受けると致命打になりやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんを無効化するひこうタイプ（カイリュー・アーマーガア等）を同伴し、ガブリアスの前に引く。その後こちらかられいとうパンチやバレットパンチで削る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99%超）がじめん×2でこちらの弱点を突く。ようきS178＞ガブS169で先手は取れるが、こちらのじしんはドラゴン/じめんに等倍止まりで一撃にならず、撃ち合いで負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんを無効化するひこう・浮遊枠を同伴して受けに引く。先手でれいとうパンチ（ドラゴン/じめんに×2）を入れてから後続で詰める</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガリザードンY（5位圏内）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技（タイプ一致・晴れ補正）がほのお×2でこちらの弱点を突く。メガリザードンYのS実数値はようきS32で167前後と拮抗しており、上から炎技を受けると一撃圏内になりやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんで弱点を突けるが、ひこうタイプのリザードンYにはじしんが等倍で通らない（ひこう無効）。みず技を持つ後続で対処するか、バレットパンチで先制削りを入れてから後続に引く</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技（タイプ一致・晴れ補正）がほのお×2でこちらの弱点。メガ後S100でようきS178が上を取れるが、後出しから晴れ炎技を受けると一撃圏内になりやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんはひこうで無効化されるため、でんき技（かみなりパンチ・ほのお/ひこうに×2）を持つ個体なら先手で削れる。みず・いわ技を持つ後続で処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガルカリオ（9位）※高速個体
+    <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（環境上位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ後S145でこちらのS110より速く、つるぎのまい後のインファイトはかくとう等倍でも一撃圏内になりえる。しんくうは（優先度+1）で先制削りも受ける</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（優先度+1）でインファイト後のBDダウンを活かして削る。じしんでの返しも等倍で通るため、先にバレットパンチで削った後続でじしんを入れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく技がこちらにあく×2弱点。最速S192でようきS178より速く、先手であく技を通される。トリックフラワーの確定急所も脅威</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（優先度+1）で削るが、はがねはくさ/あくに等倍のため一撃にはならない。先制技持ちの後続や、くさ・あくを半減するはがね枠に引く</td>
 </tr>
 </tbody>
 </table>
@@ -428,112 +418,80 @@ S154はようき型の169より低く、S102のガブリアス（ようきS実�
 
 ## パーティ構成
 
-### 相性の良いポケモン
+### 同居率上位のポケモン
 
 <div class="partner-grid">
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速地面枠。メタグロスが苦手なほのお枠へのじしん・いわ技で対抗。互いのじしんが弱点と相性補完になる</div>
+    <div class="rate">同居率1位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速地面枠。メタグロスが苦手なほのお枠へじしん・いわ技で対抗し、攻撃範囲を補完する</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー">
-    <div class="name">カイリュー</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこうでじしんを無効化。ガブリアスのじしん対策に。メタグロスのほのお弱点もカイリューが受ける役割を担える</div>
+    <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ">
+    <div class="name">ミミッキュ</div>
+    <div class="rate">同居率2位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ばけのかわで一発耐え、剣の舞からの全抜き役。メタグロスの苦手なあく枠に対しフェアリー技で対抗できる</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン">
-    <div class="name">リザードン</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこうでじしんを無効化する枠。メタグロスのじめん弱点をカバーしつつ、相手のはがね・くさへの炎技打点を担う</div>
+    <img src="/images/pokemon/pokemon-0635-00.webp" alt="サザンドラ">
+    <div class="name">サザンドラ</div>
+    <div class="rate">同居率3位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">特殊あく/ドラゴンの高速アタッカー。メタグロスのじめん弱点を浮遊で踏み倒し、特殊面から崩す役割</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス">
-    <div class="name">ギャラドス</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこう・みずでほのお・じめん両方をケアできる枠。メタグロスの2つの弱点を1体でカバーする</div>
+    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
+    <div class="name">マスカーニャ</div>
+    <div class="rate">同居率4位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速くさ/あく枠。すりかえ・トリックフラワーで対面を作り、メタグロスが受けにくいみず・じめん枠を削る</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0448-00.webp" alt="メガルカリオ">
-    <div class="name">メガルカリオ</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">かくとう/はがねでほのお弱点を受けつつ、バレットパンチの先制打点を共有。物理アタッカー同士で役割が重なるが高速枠としての補完</div>
+    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
+    <div class="name">ブリジュラス</div>
+    <div class="rate">同居率5位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンの受け・展開枠。メタグロスのじめん弱点を電気技持ちの相手にも対応させ、サイクルを支える</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ">
+    <div class="name">ライチュウ</div>
+    <div class="rate">同居率8位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速でんき枠。メタグロスが苦手なメガリザードンY・水枠に電気打点で対抗する補完アタッカー</div>
   </div>
 </div>
 
 **パーティ構成の基本方針:**
 
-メガメタグロスは物理耐久と接触技強化の物理アタッカーとして機能しますが、弱点のほのお・じめんが環境上位の主力技に多く、パーティ単位でのカバーが必要です。
+メガメタグロスは物理耐久と接触技強化を備えた物理アタッカーですが、弱点のほのお・じめん・ゴースト・あくが環境上位の主力技に多く、パーティ単位でのカバーが必要です。
 
-1. **じめん対策**: ひこうタイプ（カイリュー・リザードン・ギャラドス）でガブリアスのじしん等を無効化する枠
-2. **ほのお対策**: みず・いわ技を持つポケモンでリザードン等の炎技を受ける枠（ギャラドスはみず+ひこうで両方対応可）
-3. **高速枠の補完**: S110で抜けない高速勢（S120以上）にはバレットパンチや後続の先制技で対処する設計
-4. **物理受け突破**: ぼうぎょ150により物理アタッカーの受け役が困難になるため、特殊アタッカーや変化技持ちを崩し役として同伴する
-
----
-
-## データ分析①：技採用率から読み取る「接触技4本」構成の必然性
-
-メガメタグロスの技採用率上位5技を並べると、全て物理・接触技であることが分かります。
-
-| 技 | 接触判定 | かたいツメ補正後実質威力 | 採用率 |
-|---|---|---|---|
-| サイコファング | 接触 | 110（85×1.3） | 74.8% |
-| バレットパンチ | 接触 | 52（40×1.3） | 73.8% |
-| じしん | 接触 | 130（100×1.3） | 69.9% |
-| れいとうパンチ | 接触 | 97（75×1.3） | 62.5% |
-| アイアンヘッド | 接触 | 104（80×1.3） | 36.3% |
-
-5技全てがかたいツメの恩恵を受ける接触技です。こうげき145という高い素の攻撃種族値に1.3倍補正が乗ることで、等倍でもサイコファング・れいとうパンチ・アイアンヘッドが実質100超相当の威力になります。
-
-特に注目されるのはじしんの採用率69.9%です。じしんははがね/エスパータイプのメタグロスが本来弱点とするほのお・でんき・はがねに打点を持てる技で、タイプ一致でない代わりにかたいツメ補正で実質130の威力を出せます。アイアンヘッドと採用率が約33ポイント差（じしん69.9%・アイアンヘッド36.3%）なのは、アイアンヘッドでカバーできるフェアリー・こおりへの打点をバレットパンチで先制補完できるのに対し、じしんにしかできないほのお・でんき・はがねへの打点は代替技がないためです。
-
-性格採用率ようき60.3%・いじっぱり36.4%の拮抗は、「S169で中速帯を上から制圧する」とうき型と「A200でより高い火力を確保する」いじっぱり型の二択が環境の好みで割れている実態を示しています。いずれもS32最大振りが主流（最多EV採用がH2-A32-S32）なことから、**S最大確保は全型共通の前提**となっており、残り枠のH/Aをどこに割り振るかが型の分岐点です。
+1. **じめん対策**: ひこう・浮遊枠（サザンドラ・カイリュー等）でガブリアスのじしんを無効化する
+2. **ほのお対策**: みず・いわ技を持つ枠でメガリザードンYの炎技を受ける
+3. **あく・ゴースト対策**: フェアリー技持ち（ミミッキュ等）でマスカーニャ・サザンドラ・ゴースト勢に対抗する
+4. **高速枠の補完**: ようきS178で抜けないマスカーニャ（S192）等にはバレットパンチや味方の先制技で対処する
 
 ---
 
-## まとめ：型別比較
+## データ分析①：弱点4タイプは環境上位の主力技にどれだけ刺さるか
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
-<thead>
-<tr style="background:#1e3a5f;color:#fff">
-  <th style="padding:10px 12px;border:1px solid #cbd5e1;text-align:left">型</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">採用率（指標）</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">性格</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">主な技</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">強み</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">弱み</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ようきH2-A32-S32型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">EV採用率42.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">サイコファング・バレットパンチ・じしん・れいとうパンチ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S169で中速帯（S110以下）を先制制圧できる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">いじっぱり型よりAが約10%低く確定数が劣るケースがある</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">いじっぱりH12-A22-S32型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">EV採用率5.8%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">サイコファング・バレットパンチ・じしん・れいとうパンチ / アイアンヘッド</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">A実数値200で1発圏内に入れられる相手が増える</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S154でようき型が抜けるS102〜110台に先手を取られる</td>
-</tr>
-</tbody>
-</table>
-</div>
+メガメタグロスの弱点はほのお・じめん・ゴースト・あくの4タイプです。これらが環境上位ポケモンの主力技として実際にどれだけ採用されているかを並べると、「多耐性だが弱点が刺さりやすい」構図が定量的に見えます。
 
-**総評:**
+| 弱点タイプ | 主な使い手（環境順位） | 該当技と採用率 |
+|---|---|---|
+| じめん | ガブリアス（1位） | じしん（99%超） |
+| ほのお | メガリザードンY（上位） | かえんほうしゃ等（一致・高採用） |
+| あく | マスカーニャ・サザンドラ（上位） | はたきおとす・あくのはどう等（一致） |
+| ゴースト | ミミッキュ（上位） | シャドークロー・シャドーボール（一致） |
 
-メガメタグロスははがね/エスパーの優秀な耐性（弱点はほのお・じめんの2タイプのみ）と、メガ後こうげき145・ぼうぎょ150・すばやさ110の高水準な種族値に、かたいツメによる接触技全般の1.3倍強化が加わった物理アタッカーです。採用率上位5技が全て接触技という珍しい構成で、技の選択がそのままかたいツメ補正の恩恵を最大化する方向に集約されています。
+弱点4タイプはいずれも使用率上位のタイプ一致技で運用されており、対面で受け止められる相手は限られます。これがメガメタグロスを「弱点を突かない相手に繰り出して打点を通す」攻めの軸として運用する根拠です。一方で耐性側を見ると、半減9タイプ＋どく無効により、ノーマル・ひこう・いわ・くさ・こおり・ドラゴン・フェアリー・はがねを主力とする相手には繰り出しから役割を持てます。
 
-弱点のほのお・じめんはいずれも環境物理・特殊アタッカーの主力技に多く、ガブリアスのじしんやリザードンの炎技はパーティ単位でカバーする必要があります。ひこうタイプ（カイリュー・リザードン・ギャラドス）を同伴してじめん・ほのおを無効化・軽減しつつ、メガメタグロス自身はS110の先制制圧とバレットパンチの先制打点で中速帯を制圧するのが基本戦術です。
+この耐性と弱点の偏りが、同居率上位に浮遊・ひこう・フェアリー技持ち（サザンドラ・カイリュー・ミミッキュ）が並ぶ理由でもあります。メタグロス側の弱点3タイプ（じめん・あく・ゴースト）を相方が補完する構築思想が、同居率データから読み取れます。
+
+---
+
+## まとめ：総評
+
+メガメタグロスは、はがね/エスパーの多耐性（半減9タイプ＋どく無効）と、メガ後こうげき145・ぼうぎょ150・すばやさ110の高水準な種族値、かたいツメによる接触技強化を備えた物理アタッカーです。ようきAS型はS実数値178でガブリアス・メガリザードンY・サザンドラを上から叩け、いじっぱり耐久寄り型はA実数値216の火力とHP振りの安定感を取ります。S振りの有無で抜ける相手が変わるため、構築の速度ラインに合わせて型を選びます。
+
+弱点のほのお・じめん・ゴースト・あくはいずれも環境上位のタイプ一致技に多く、ガブリアスのじしん・メガリザードンYの炎技・マスカーニャのあく技はパーティ単位でカバーが必要です。浮遊・ひこう・フェアリー技持ちを同伴して弱点3タイプを補完しつつ、メタグロス自身は弱点を突かない相手にれいとうパンチ・サイコファング・じしんで打点を通すのが基本戦術です。
 
 ---
 
