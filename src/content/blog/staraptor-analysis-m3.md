@@ -505,44 +505,9 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
 
 残り1枠にブレイズキック52.2%・とんぼがえり15.9%が入る形で、ブレイズキックがはがね・くさタイプへの補完打点として過半数に採用されています。とんぼがえりの15.9%は対面操作に特化した運用を選んだ場合の選択肢と見ることができます。
 
-持ち物採用率はムクホークナイト95.8%と圧倒的で、こだわりスカーフ3.6%はほとんど誤差範囲です。これは「インファイト連打でABを上げながら戦う」という特殊性がメガ進化前提の運用と不可分であり、こだわりスカーフ型ではインファイトのデメリット反転という最大の旨みを活かせないためです。
+持ち物採用率はムクホークナイト95.8%と圧倒的です。「インファイト連打でABを上げながら戦う」という運用がメガ進化と不可分であり、他の持ち物では特性あまのじゃくの恩恵を活かせません。
 
 ---
-
-## まとめ：型別比較
-
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
-<thead>
-<tr style="background:#1e3a5f;color:#fff">
-  <th style="padding:10px 12px;border:1px solid #cbd5e1;text-align:left">型</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">採用率（指標）</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">性格</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">主な技</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">強み</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">弱み</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ASようき型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">ようき 76.1%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">インファイト・ブレイブバード・はねやすめ・ブレイズキック</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S178で環境上位の多くより先手を確保できる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">いじっぱり型より初回インファイトの火力が約10%低い</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ASいじっぱり型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり 18.5%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">インファイト・ブレイブバード・はねやすめ・ブレイズキック</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">A補正でようき型より初回インファイトの威力が約10%高い</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S162でようき型（S178）が先手を取れる相手に後手に回る</td>
-</tr>
-</tbody>
-</table>
-</div>
 
 **総評:**
 
