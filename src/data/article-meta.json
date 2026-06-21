@@ -2,13 +2,137 @@
   "raichu-y-analysis-m3": {
     "name": "メガライチュウY",
     "rank": 3,
-    "types": [
-      "でんき"
-    ],
+    "types": ["でんき"],
     "matchKey": "ライチュウ",
     "dex": 26,
     "form": "00",
     "pokemonId": "raichu"
+  },
+  "staraptor-analysis-m3": {
+    "name": "メガムクホーク",
+    "rank": 6,
+    "types": ["ノーマル", "ひこう"],
+    "matchKey": "ムクホーク",
+    "dex": 398,
+    "form": "00"
+  },
+  "swampert-analysis-m3": {
+    "name": "メガラグラージ",
+    "rank": 7,
+    "types": ["みず", "じめん"],
+    "matchKey": "ラグラージ",
+    "dex": 260,
+    "form": "00"
+  },
+  "metagross-analysis-m3": {
+    "name": "メガメタグロス",
+    "rank": 10,
+    "types": ["はがね", "エスパー"],
+    "matchKey": "メタグロス",
+    "dex": 376,
+    "form": "00"
+  },
+  "grimmsnarl-analysis-m3": {
+    "name": "オーロンゲ",
+    "rank": 15,
+    "types": ["あく", "フェアリー"],
+    "matchKey": "オーロンゲ",
+    "dex": 861,
+    "form": "00"
+  },
+  "blaziken-analysis-m3": {
+    "name": "メガバシャーモ",
+    "rank": 16,
+    "types": ["ほのお", "かくとう"],
+    "matchKey": "バシャーモ",
+    "dex": 257,
+    "form": "00"
+  },
+  "gholdengo-analysis-m3": {
+    "name": "サーフゴー",
+    "rank": 18,
+    "types": ["はがね", "ゴースト"],
+    "matchKey": "サーフゴー",
+    "dex": 1000,
+    "form": "00"
+  },
+  "mawile-analysis-m3": {
+    "name": "メガクチート",
+    "rank": 24,
+    "types": ["はがね", "フェアリー"],
+    "matchKey": "クチート",
+    "dex": 303,
+    "form": "00"
+  },
+  "dragalge-analysis-m3": {
+    "name": "メガドラミドロ",
+    "rank": 29,
+    "types": ["どく", "ドラゴン"],
+    "matchKey": "ドラミドロ",
+    "dex": 691,
+    "form": "00"
+  },
+  "annihilape-analysis-m3": {
+    "name": "コノヨザル",
+    "rank": 41,
+    "types": ["かくとう", "ゴースト"],
+    "matchKey": "コノヨザル",
+    "dex": 979,
+    "form": "00"
+  },
+  "eelektross-analysis-m3": {
+    "name": "シビルドン",
+    "rank": 62,
+    "types": ["でんき"],
+    "matchKey": "シビルドン",
+    "dex": 604,
+    "form": "00"
+  },
+  "barbaracle-analysis-m3": {
+    "name": "ガメノデス",
+    "rank": 66,
+    "types": ["いわ", "みず"],
+    "matchKey": "ガメノデス",
+    "dex": 689,
+    "form": "00"
+  },
+  "sceptile-analysis-m3": {
+    "name": "ジュカイン",
+    "rank": 68,
+    "types": ["くさ"],
+    "matchKey": "ジュカイン",
+    "dex": 254,
+    "form": "00"
+  },
+  "scrafty-analysis-m3": {
+    "name": "ズルズキン",
+    "rank": 74,
+    "types": ["あく", "かくとう"],
+    "matchKey": "ズルズキン",
+    "dex": 560,
+    "form": "00"
+  },
+  "scolipede-analysis-m3": {
+    "name": "ペンドラー",
+    "rank": 78,
+    "types": ["むし", "どく"],
+    "matchKey": "ペンドラー",
+    "dex": 545,
+    "form": "00"
+  },
+  "pyroar-analysis-m3": {
+    "name": "カエンジシ",
+    "rank": 84,
+    "types": ["ほのお", "ノーマル"],
+    "matchKey": "カエンジシ",
+    "dex": 668,
+    "form": "00"
+  },
+  "overqwil-analysis-m3": {
+    "name": "ハリーマン",
+    "rank": 94,
+    "types": ["あく", "どく"],
+    "matchKey": "ハリーマン"
   },
   "aegislash-analysis-m2": {
     "name": "ギルガルド",
