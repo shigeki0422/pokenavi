@@ -38,7 +38,7 @@ const posts = allPosts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * I
 	<head>
 		<BaseHead
 			title="考察記事一覧 | ポケナビ"
-			description="ポケモンチャンピオンズ M-2シーズンのポケモン別考察記事。使用率上位ポケモンの型・立ち回り・パーティ構成をデータで解説。"
+			description="ポケモンチャンピオンズのポケモン別考察記事。使用率上位ポケモンの型・立ち回り・パーティ構成をデータで解説。"
 		/>
 		<style>
 			main { max-width: 960px; margin: auto; padding: 1.5em 1em; }
@@ -128,7 +128,7 @@ const posts = allPosts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * I
 		<Header />
 		<main>
 			<h1>考察記事</h1>
-			<p class="subtitle">M-2シーズン 使用率上位ポケモン考察（{allPosts.length}件）</p>
+			<p class="subtitle">使用率上位ポケモン考察（{allPosts.length}件）</p>
 			<div class="grid">
 				{posts.map((post, i) => {
 					const meta = (articleMeta as any)[post.id];
