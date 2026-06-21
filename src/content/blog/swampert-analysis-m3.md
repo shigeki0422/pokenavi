@@ -243,6 +243,41 @@ draft: true
 </table>
 </div>
 
+### EV採用率ランキング
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center;width:40px">順位</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">EV（32スケール）</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">実数値（H/A/B/D/S）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">1</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">H2 A32 S32</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">39.9%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">177 / 222 / 130 / 130 / 100（あめ下200）</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">A32 S32</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9.3%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">175 / 202 / 130 / 130 / 123（あめ下246）</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">H32 B32 D2</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8.1%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">207 / 187 / 162 / 132 / 72（あめ下144）</td>
+</tr>
+</tbody>
+</table>
+</div>
+
 ---
 
 ## 主要型の解説
