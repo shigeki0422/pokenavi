@@ -264,12 +264,6 @@ draft: true
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">A32 S32</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9.3%</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">175 / 202 / 130 / 130 / 123（あめ下246）</td>
-</tr>
-<tr>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">H32 B32 D2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8.1%</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">207 / 187 / 162 / 132 / 72（あめ下144）</td>
