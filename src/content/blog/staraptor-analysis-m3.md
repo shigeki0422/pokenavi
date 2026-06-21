@@ -365,7 +365,7 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（22位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトがあく×2×はがね×2=×4で弱点を突ける。ドドゲザンの主力ふいうち（あく×1×かくとう×0.5=0.5倍）は半減で受けられるため、S110でドドゲザンに先手インファイト×4を打ちつつ反撃を半減で凌げる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトがあく・はがねの複合で×4の弱点を突ける。ドドゲザンの主力ふいうち（あく）はかくとう半減で受けられるため、S110でドドゲザンに先手インファイト×4を打ちつつ反撃を半減で凌げる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -379,14 +379,14 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（14位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトがみず×1×フェアリー×0.5=0.5倍で半減される。ムーンフォース（フェアリー×2×かくとう×1=×2）はこちらの弱点。S110＞アシレーヌで先手を取りブレイブバードでみず×1×フェアリー×1=等倍を打てる一方、ムーンフォースへの耐性がないため五分の相手</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトがフェアリー半減で効きにくい。ムーンフォース（フェアリー×2）はこちらの弱点。S110＞アシレーヌで先手を取りブレイブバードを等倍で打てる一方、ムーンフォースへの耐性がないため五分の相手</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（9位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ やや不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガリザードンYはS110で同速帯（メガ後S100なのでこちらが先手）。ただしソーラービーム（くさ×0.5×かくとう×1=0.5倍）は半減だが、ほのお技はかくとう×1×ひこう×1=等倍。メガリザードンXはドラゴン/ほのおでブレイズキックが半減される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガリザードンYはS110で同速帯（メガ後S100なのでこちらが先手）。ソーラービームはくさ半減だが、ほのお技は等倍。メガリザードンXはドラゴン/ほのおでブレイズキックが半減される</td>
 </tr>
 </tbody>
 </table>
@@ -417,7 +417,7 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（17位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">りゅうのまい（採用率62.4%）＋こおりのキバ（こおり×2、採用率40.6%）の積み展開が脅威。こおりのキバはひこう弱点を突き、積まれると処理が難しくなる。たきのぼり（みず、採用率90.1%）はこちらに等倍止まりだが、こちらのインファイトもみず×1×ひこう×0.5=0.5倍で有効打が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">りゅうのまい（採用率62.4%）＋こおりのキバ（こおり×2、採用率40.6%）の積み展開が脅威。こおりのキバはひこう弱点を突き、積まれると処理が難しくなる。たきのぼり（みず、採用率90.1%）はこちらに等倍止まりだが、こちらのインファイトもひこう半減で有効打が乏しい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">積む前ならS178でギャラドス最速S146より先手を取れる。ブレイブバードで等倍を入れられるが、りゅうのまいでSも上がるため積まれた後は先手も取れず対処は困難。でんき技を持つパートナーで積む前に対処したい</td>
 </tr>
 <tr>
@@ -432,14 +432,14 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
     <img src="/images/pokemon/pokemon-0038-01.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アローラキュウコン（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライ（こおり×2、採用率84.5%）・ムーンフォース（フェアリー×2、採用率64.6%）で2タイプの弱点を突ける。S177でメガムクホーク（S178）より遅いため先手を取れるが、オーロラベール（95.0%）を展開されるとチーム全体が詰めにくくなる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S178でS177のアローラキュウコンより先手を確保。先手ブレイブバードでこおり×1×フェアリー×1=等倍を入れるか、はがね技を持つパートナーでオーロラベール展開前に処理したい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S178でS177のアローラキュウコンより先手を確保。先手ブレイブバードを等倍で入れるか、はがね技を持つパートナーでオーロラベール展開前に処理したい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0282-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サーナイト（63位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー×2、採用率43.1%）・サイコキネシス（エスパー×2、採用率32.8%）の両方が弱点。高とくこうの特殊技で弱点2タイプを突かれる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね技を持つパートナーを同伴しサーナイトに打点を入れる。メガムクホーク自身のブレイズキックはほのお→エスパー×1×フェアリー×1=等倍で決定打にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね技を持つパートナーを同伴しサーナイトに打点を入れる。メガムクホーク自身のブレイズキックはほのおが等倍で決定打にならない</td>
 </tr>
 </tbody>
 </table>
