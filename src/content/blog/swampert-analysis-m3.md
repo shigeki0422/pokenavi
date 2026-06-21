@@ -448,41 +448,6 @@ draft: true
 
 ---
 
-## まとめ：型別比較
-
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
-<thead>
-<tr style="background:#1e3a5f;color:#fff">
-  <th style="padding:10px 12px;border:1px solid #cbd5e1;text-align:left">型</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">採用率（指標）</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">性格</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">主な技</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">強み</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">弱み</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">HAいじっぱり物理型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">いじっぱり 56.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">じしん・ウェーブタックル・れいとうパンチ・クイックターン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">A実数値222の高火力で広範囲をカバー。あめ下S244</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">あめなし状態でS122と低速。くさ×4で受け出し不可</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ASようき高速型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき 19.8%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">じしん・ウェーブタックル・れいとうパンチ・クイックターン</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">あめなし状態でS134。あめ下S268で環境トップ帯</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">A実数値202といじっぱり型より約10%低い</td>
-</tr>
-</tbody>
-</table>
-</div>
-
 **総評:**
 
 メガラグラージはみず/じめん複合により弱点がくさのみに絞られる耐性と、こうげき150の高い物理火力を兼ね備えた汎用性の高い物理アタッカーです。じしん・ウェーブタックル・れいとうパンチの3技で広範囲をカバーし、クイックターンでサイクルも回せるため、単なる火力枠にとどまらない対面操作役も担えます。
