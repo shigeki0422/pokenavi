@@ -424,14 +424,14 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（4位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">最速S192でムク（S178）より速く、トリプルアクセル（こおり×2、採用率87.6%）を先手で通される。こおり技はひこう弱点×2を突けるため、先手で大ダメージを受ける可能性が高い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">最速S192でメガムクホーク（S178）より速く、トリプルアクセル（こおり×2、採用率87.6%）を先手で通される。こおり技はひこう弱点×2を突けるため、先手で大ダメージを受ける可能性が高い</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ブレイブバード（ひこう）はマスカーニャ（くさ/あく）にひこう→くさ×2・ひこう→あく×1=×2で抜群。ただしS192で先手を取れないため、S操作技を持つパートナーや先制技で対処したい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0038-01.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アローラキュウコン（20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライ（こおり×2、84.5%）・ムーンフォース（フェアリー×2、64.6%）で2タイプの弱点を突ける。S177でムク（S178）より遅いため先手を取れるが、オーロラベール（95.0%）を展開されるとチーム全体が詰めにくくなる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライ（こおり×2、84.5%）・ムーンフォース（フェアリー×2、64.6%）で2タイプの弱点を突ける。S177でメガムクホーク（S178）より遅いため先手を取れるが、オーロラベール（95.0%）を展開されるとチーム全体が詰めにくくなる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">S178でS177のアローラキュウコンより先手を確保。先手ブレイブバードでこおり×1×フェアリー×1=等倍を入れるか、はがね技を持つパートナーでオーロラベール展開前に処理したい</td>
 </tr>
 <tr>
@@ -468,7 +468,7 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
     <img src="/images/pokemon/pokemon-0026-01.webp" alt="ライチュウY">
     <div class="name">ライチュウY</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき技でムクホークの弱点であるひこう系（×2）に打点。S110最速S178でムクと同速帯。別角度の高速アタッカーとして役割分担</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき技でムクホークの弱点であるひこう系（×2）に打点。S110最速S178でメガムクホークと同速帯。別角度の高速アタッカーとして役割分担</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
