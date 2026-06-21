@@ -329,7 +329,7 @@ draft: true
 <div>
 <strong>特性:</strong> げきりゅう（75.5%）※メガ後すいすい<br>
 <strong>性格:</strong> ようき（S↑ C↓）<br>
-<strong>EV:</strong> A32 S32（採用率9.3%。AとSを最大化）<br>
+<strong>EV:</strong> H2 A32 S32（AとSを最大化。H2は端数調整）<br>
 <strong>持ち物:</strong> ラグラージナイト（74.7%）/ オボンのみ（14.7%）
 </div>
 <div>
