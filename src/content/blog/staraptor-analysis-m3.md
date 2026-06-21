@@ -462,24 +462,18 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">エスパー技をはがねで×0.5、でんき技をドラゴンで×0.5に半減し、ムクホークの弱点2タイプを耐性補完。はがね技でフェアリーへの打点も担う</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0026-01.webp" alt="ライチュウY">
-    <div class="name">ライチュウY</div>
-    <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき技でムクホークの弱点であるひこう系（×2）に打点。S110最速S178でメガムクホークと同速帯。別角度の高速アタッカーとして役割分担</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">エスパー技・でんき技をいずれも半減し、ムクホークの弱点2タイプを耐性補完。はがね技でフェアリーへの打点も担う</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
     <div class="name">マスカーニャ</div>
-    <div class="rate">同居率4位</div>
+    <div class="rate">同居率3位</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき技をくさで×0.5に半減し、ムクホークのでんき弱点を補完。ゴーストタイプでかくとう技を無効化し、みず・いわへのくさ打点を持つ</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ">
     <div class="name">ミミッキュ</div>
-    <div class="rate">同居率5位</div>
+    <div class="rate">同居率4位</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">エスパー技をゴーストで×0.5に半減し、ムクホークのエスパー弱点を補完。ばけのかわで高い場持ちを持ち、終盤の詰め役として機能する</div>
   </div>
 </div>
