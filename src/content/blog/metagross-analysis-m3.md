@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】メガメタグロス考察 M-3 使用率7位 型別採用率と立ち回り'
-description: 'M-3シングルバトルで使用率7位のメガメタグロスを実データで分析。サイコファング82.7%・バレットパンチ77.9%の物理アタッカー型を解説。はがね/エスパーの多耐性と弱点4タイプ、メガ後S178の速度ライン、環境上位への相性とパーティ構成まで紹介します。'
+description: 'M-3シングルバトルで使用率7位のメガメタグロスを実データで分析。サイコファング84.2%・バレットパンチ79.1%の物理アタッカー型を解説。はがね/エスパーの多耐性と弱点4タイプ、メガ後S178の速度ライン、環境上位への相性とパーティ構成まで紹介します。'
 pubDate: '2026-06-20'
 heroImage: '../../assets/hero-metagross-m3.png'
 draft: true
@@ -32,7 +32,7 @@ draft: true
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-3シーズン（2026/06/21集計）時点のものです
+> ⚠️ 本記事のデータはM-3シーズン（2026/06/22集計）時点のものです
 
 シーズンM-3のシングルバトルで、メガメタグロスは**使用率7位**を記録。はがね/エスパーは耐性が多く、9タイプを半減・1タイプを無効化する一方、**弱点はほのお・じめん・ゴースト・あくの4タイプ**に絞られます。メガ進化後はこうげき145・ぼうぎょ150・とくぼう110・すばやさ110の高水準な種族値を備え、特性かたいツメで接触技の威力が1.3倍に高まります。
 
@@ -46,11 +46,11 @@ draft: true
 
 ### 2. かたいツメ補正で接触技が1.3倍
 
-メガ進化後の特性かたいツメは接触技の威力を1.3倍にします。採用率上位のサイコファング（82.7%・接触）・れいとうパンチ（62.4%・接触）・アイアンヘッド（29.7%・接触）はいずれも補正対象です。一方でじしん（73.0%）は非接触のため補正は乗りませんが、こうげき145の高い攻撃種族値と威力100で十分な打点になります。
+メガ進化後の特性かたいツメは接触技の威力を1.3倍にします。採用率上位のサイコファング（84.2%・接触）・れいとうパンチ（61.4%・接触）・アイアンヘッド（28.1%・接触）はいずれも補正対象です。一方でじしん（74.1%）は非接触のため補正は乗りませんが、こうげき145の高い攻撃種族値と威力100で十分な打点になります。
 
 ### 3. メガ後S110で中速帯を上から叩く
 
-メガ後すばやさ110は、ようき採用61.7%でS実数値178に達し、S102のガブリアス（最速S実数値169）やS100のメガリザードンY（同167）を上から叩けます。バレットパンチ（採用率77.9%・優先度+1）を併せ持つため、より速い相手にも先制打点を残せます。ただしようき型でもマスカーニャ（最速S実数値192）など一部の高速勢には後手を踏みます。
+メガ後すばやさ110は、ようき採用60.9%でS実数値178に達し、S102のガブリアス（最速S実数値169）やS100のメガリザードンY（同167）を上から叩けます。バレットパンチ（採用率79.1%・優先度+1）を併せ持つため、より速い相手にも先制打点を残せます。ただしようき型でもマスカーニャ（最速S実数値192）など一部の高速勢には後手を踏みます。
 
 ---
 
@@ -188,35 +188,35 @@ draft: true
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>サイコファング</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">85</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">82.7%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">84.2%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>バレットパンチ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">77.9%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">79.1%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>じしん</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">100</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">73.0%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">74.1%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>れいとうパンチ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">62.4%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">61.4%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>アイアンヘッド</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">29.7%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">28.1%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
@@ -230,20 +230,20 @@ draft: true
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>コメットパンチ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">23.5%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">23.7%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>くさわけ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">50</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4.9%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4.7%</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-サイコファング・バレットパンチ・じしん・れいとうパンチの4技で採用上位が固まっています。サイコファングは相手のリフレクター・ひかりのかべを破壊できるタイプ一致技、れいとうパンチはドラゴン・ひこう・じめんへの打点として、ガブリアス・カイリュー等の有力ドラゴンに有効です。じしんは非接触ですがでんき・はがね・ほのおへの打点として73.0%採用されています。
+サイコファング・バレットパンチ・じしん・れいとうパンチの4技で採用上位が固まっています。サイコファングは相手のリフレクター・ひかりのかべを破壊できるタイプ一致技、れいとうパンチはドラゴン・ひこう・じめんへの打点として、ガブリアス・カイリュー等の有力ドラゴンに有効です。じしんは非接触ですがでんき・はがね・ほのおへの打点として74.1%採用されています。
 
 特性はメガ前の**クリアボディ99.2%**が主流で、相手からの能力低下を無効化します。メガ進化後はかたいツメに変化します。持ち物はメタグロスナイト96.7%でほぼ一択です。
 
@@ -251,11 +251,11 @@ draft: true
 
 ## 主要型の解説
 
-性格はようき61.7%・いじっぱり35.0%の2択です。EVはH8-A8系（S振りなし）が最多で、次いでA8-S8系（HP振りなし）が続きます（EVスケールは各ステータス最大8）。S振りの有無で抜ける相手が変わるため、ここでは「S最大振り型」と「耐久寄り型」の2型に分けて解説します。
+性格はようき60.9%・いじっぱり35.9%の2択です。EVはA32 S32（HP振りなし）が最多で40.1%、次いでH振り・S振りなしの耐久寄り型が続きます。S振りの有無で抜ける相手が変わるため、ここでは「S最大振り型」と「耐久寄り型」の2型に分けて解説します。
 
 ### 型1: ようきAS型（最速S178）
 
-**性格採用率: ようき 61.7%**
+**性格採用率: ようき 60.9%**
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -267,7 +267,7 @@ draft: true
 <div>
 <strong>特性:</strong> クリアボディ（メガ前99.2%）→メガ後かたいツメ<br>
 <strong>性格:</strong> ようき（S↑ C↓）<br>
-<strong>EV:</strong> A8 S8（A8-S8系）<br>
+<strong>EV:</strong> A32 S32（採用率40.1%）<br>
 <strong>持ち物:</strong> メタグロスナイト（96.7%）
 </div>
 <div>
@@ -282,17 +282,17 @@ draft: true
 
 **強み:**
 
-ようきS8振りでS実数値178に達し、耐久寄り型（S振りなしでS実数値128）が後手を踏むガブリアス（最速S実数値169）・メガリザードンY（同167）・サザンドラ（同165）を上から叩けます。先手でれいとうパンチをガブリアス・カイリューに、サイコファングを通せる点がS最大振りの価値です。れいとうパンチはこおり技なので、ドラゴン/ひこうのカイリューには×4が入ります。
+ようきS32振りでS実数値178に達し、耐久寄り型（S振りなしでS実数値162）が後手を踏むガブリアス（最速S実数値169）・メガリザードンY（同167）を上から叩けます。先手でれいとうパンチをガブリアス・カイリューに、サイコファングを通せる点がS最大振りの価値です。れいとうパンチはこおり技なので、ドラゴン/ひこうのカイリューには×4が入ります。
 
 **弱み:**
 
-A8振りはようきで補正が乗らずA実数値197にとどまり、いじっぱり耐久寄り型のA実数値216より約9%低くなります。HP振りを切っているため、弱点4タイプを突かれた際の一撃耐性は耐久寄り型より低く、ガブリアスのじしんやメガリザードンYの炎技を先に受ける展開では一撃圏に入りやすくなります。
+A32振りはようきで補正が乗らずA実数値197にとどまり、いじっぱり耐久寄り型のA実数値216より約9%低くなります。HP振りを切っているため、弱点4タイプを突かれた際の一撃耐性は耐久寄り型より低く、ガブリアスのじしんやメガリザードンYの炎技を先に受ける展開では一撃圏に入りやすくなります。
 
 ---
 
 ### 型2: いじっぱり耐久寄り型（HA重視）
 
-**性格採用率: いじっぱり 35.0%**
+**性格採用率: いじっぱり 35.9%**
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -304,7 +304,7 @@ A8振りはようきで補正が乗らずA実数値197にとどまり、いじ�
 <div>
 <strong>特性:</strong> クリアボディ（メガ前99.2%）→メガ後かたいツメ<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
-<strong>EV:</strong> H8 A8（H8-A8系）<br>
+<strong>EV:</strong> H32 A32（S振りなし）<br>
 <strong>持ち物:</strong> メタグロスナイト（96.7%）
 </div>
 <div>
@@ -319,11 +319,11 @@ A8振りはようきで補正が乗らずA実数値197にとどまり、いじ�
 
 **強み:**
 
-いじっぱりA8振りでA実数値216に達し、ようきAS型のA実数値197より約9%高い火力を出せます。さらにHP振りでH実数値が上がるため、ぼうぎょ150と合わせて物理アタッカーの攻撃を受けながら殴り返す展開で安定します。S振りを切る代わりに、バレットパンチ（優先度+1）の先制打点をA216基準で最大化し、速い相手は先制技で削る設計です。
+いじっぱりA32振りでA実数値216に達し、ようきAS型のA実数値197より約9%高い火力を出せます。さらにHP振りでH実数値が上がるため、ぼうぎょ150と合わせて物理アタッカーの攻撃を受けながら殴り返す展開で安定します。S振りを切る代わりに、バレットパンチ（優先度+1）の先制打点をA216基準で最大化し、速い相手は先制技で削る設計です。
 
 **弱み:**
 
-S振りがないためS実数値は128前後にとどまり、ようきAS型が上から叩けるガブリアス・メガリザードンY・サザンドラに対して後手を踏みます。これらに先制でれいとうパンチや炎弱点を突けない分、弱点を持つ相手との撃ち合いではバレットパンチや味方の補助に頼る必要があります。
+S振りがないためS実数値は162にとどまり、ようきAS型が上から叩けるガブリアス（最速S169）・メガリザードンY（同167）に対して後手を踏みます。これらに先制でれいとうパンチや炎弱点を突けない分、弱点を持つ相手との撃ち合いではバレットパンチや味方の補助に頼る必要があります。
 
 ---
 
@@ -354,8 +354,8 @@ S振りがないためS実数値は128前後にとどまり、ようきAS型が�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（環境上位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 注意</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチがあく/ドラゴンに×2、ようきS178＞サザンドラ最速S165で先手。ただしサザンドラのあく技はこちらにあく×2弱点。先手れいとうパンチで削れるが、相手の襷・スカーフ個体には注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチがあく/ドラゴンに×2の打点。ただしこだわりスカーフ採用83.1%のためようきS178でも多数派に後手を踏み、先制であく技（こちらにあく×2弱点）を通される。サイコファングはあくに無効でれいとうパンチ以外の打点が乏しい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -452,10 +452,10 @@ S振りがないためS実数値は128前後にとどまり、ようきAS型が�
     <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンの受け・展開枠。メタグロスのじめん弱点を電気技持ちの相手にも対応させ、サイクルを支える</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ">
-    <div class="name">ライチュウ</div>
-    <div class="rate">同居率8位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速でんき枠。メタグロスが苦手なメガリザードンY・水枠に電気打点で対抗する補完アタッカー</div>
+    <img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン">
+    <div class="name">カバルドン</div>
+    <div class="rate">同居率6位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">じめん物理受け枠。あくび・ステルスロックで起点を作り、メタグロスが受けにくい物理アタッカーを受け止める</div>
   </div>
 </div>
 
@@ -489,7 +489,7 @@ S振りがないためS実数値は128前後にとどまり、ようきAS型が�
 
 ## まとめ：総評
 
-メガメタグロスは、はがね/エスパーの多耐性（半減9タイプ＋どく無効）と、メガ後こうげき145・ぼうぎょ150・すばやさ110の高水準な種族値、かたいツメによる接触技強化を備えた物理アタッカーです。ようきAS型はS実数値178でガブリアス・メガリザードンY・サザンドラを上から叩け、いじっぱり耐久寄り型はA実数値216の火力とHP振りの安定感を取ります。S振りの有無で抜ける相手が変わるため、構築の速度ラインに合わせて型を選びます。
+メガメタグロスは、はがね/エスパーの多耐性（半減9タイプ＋どく無効）と、メガ後こうげき145・ぼうぎょ150・すばやさ110の高水準な種族値、かたいツメによる接触技強化を備えた物理アタッカーです。ようきAS型はS実数値178でガブリアス・メガリザードンYを上から叩け、いじっぱり耐久寄り型はA実数値216の火力とHP振りの安定感を取ります。S振りの有無で抜ける相手が変わるため、構築の速度ラインに合わせて型を選びます。
 
 弱点のほのお・じめん・ゴースト・あくはいずれも環境上位のタイプ一致技に多く、ガブリアスのじしん・メガリザードンYの炎技・マスカーニャのあく技はパーティ単位でカバーが必要です。浮遊・ひこう・フェアリー技持ちを同伴して弱点3タイプを補完しつつ、メタグロス自身は弱点を突かない相手にれいとうパンチ・サイコファング・じしんで打点を通すのが基本戦術です。
 
