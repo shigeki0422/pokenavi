@@ -348,7 +348,7 @@ S振りがないためS実数値は162にとどまり、ようきAS型が上か�
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチがドラゴン/ひこうに×4。ようきS178＞カイリュー最速S145で先手を取れる。カイリューのじしんはひこうで自身も無効だが、こちらへのじしん採用個体でも先手れいとうパンチで圏内に入れやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチがドラゴン/ひこうに×4。ようきS178＞カイリュー最速S145で先手を取れ、圏内に入れやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -407,7 +407,7 @@ S振りがないためS実数値は162にとどまり、ようきAS型が上か�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（環境上位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく技がこちらにあく×2弱点。最速S192でようきS178より速く、先手であく技を通される。トリックフラワーの確定急所も脅威</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく技がこちらにあく×2弱点。こだわりスカーフ73.7%でS実数値288と高速帯に入り、ようきS178でも先手を取れない。トリックフラワーの確定急所も脅威</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ（優先度+1）で削るが、はがねはくさ/あくに等倍のため一撃にはならない。先制技持ちの後続や、くさ・あくを半減するはがね枠に引く</td>
 </tr>
 </tbody>
