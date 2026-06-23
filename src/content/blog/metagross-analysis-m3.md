@@ -394,7 +394,7 @@ S振りがないためS実数値は162にとどまり、ようきAS型が上か�
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99%超）がじめん×2でこちらの弱点を突く。ようきS178＞ガブS169で先手は取れるが、こちらのじしんはドラゴン/じめんに等倍止まりで一撃にならず、撃ち合いで負ける</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんを無効化するひこう・浮遊枠を同伴して受けに引く。先手でれいとうパンチ（ドラゴン/じめんに×2）を入れてから後続で詰める</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんを無効化するひこう・浮遊枠を同伴して受けに引く。先手でれいとうパンチ（ドラゴン/じめんに×4）を入れてから後続で詰める</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
