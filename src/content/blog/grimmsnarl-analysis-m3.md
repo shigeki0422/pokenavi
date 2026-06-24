@@ -1,9 +1,9 @@
 ---
-title: '【ポケモンチャンピオンズ】オーロンゲ考察 M-3 使用率18位 型別採用率と立ち回り'
-description: 'M-3シングルバトルで使用率18位のオーロンゲを徹底分析。いたずらごころ99.5%で変化技を先制発動し、リフレクター88.2%・ひかりのかべ81.3%を先手で展開。ひかりのねんど81.2%で壁8ターン継続。壁貼り役としての立ち回りと型別採用率を実データで解説します。'
-pubDate: '2026-06-20'
+title: '【ポケモンチャンピオンズ】オーロンゲ考察 M-3 使用率19位 型別採用率と立ち回り'
+description: 'M-3シングルバトルで使用率19位のオーロンゲを徹底分析。いたずらごころ99.4%で変化技を先制発動し、リフレクター79.1%・ひかりのかべ73.6%を先手で展開。ひかりのねんど73.3%で壁8ターン継続。壁貼り役としての立ち回りと型別採用率を実データで解説します。'
+pubDate: '2026-06-24'
 heroImage: '../../assets/hero-grimmsnarl-m3.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -27,30 +27,30 @@ draft: true
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">18位</strong>　特性: <strong>いたずらごころ 99.5%</strong>
+      使用率: <strong style="color:#e67e22">19位</strong>　特性: <strong>いたずらごころ 99.4%</strong>
     </div>
   </div>
 </div>
 
 > ⚠️ 本記事のデータはM-3シーズン（2026/06/20）時点の集計です
 
-シーズンM-3のシングルバトルで、オーロンゲは**使用率18位**を記録。特性いたずらごころで変化技の優先度を+1にし、**リフレクター88.2%・ひかりのかべ81.3%を先手で張る壁貼り役**として環境に定着しています。ひかりのねんど81.2%と合わせて壁を8ターン継続させ、後続のエースが動きやすい盤面を整えるのが主な役割です。
+シーズンM-3のシングルバトルで、オーロンゲは**使用率19位**を記録。特性いたずらごころで変化技の優先度を+1にし、**リフレクター79.1%・ひかりのかべ73.6%を先手で張る壁貼り役**として環境に定着しています。ひかりのねんど73.3%と合わせて壁を8ターン継続させ、後続のエースが動きやすい盤面を整えるのが主な役割です。
 
 ---
 
-## なぜ今オーロンゲが18位なのか
+## なぜ今オーロンゲが19位なのか
 
 ### 1. いたずらごころで壁を先手展開できる
 
-特性いたずらごころは変化技の優先度を+1にする。リフレクター・ひかりのかべをすばやさに関係なく先手で張れるため、**相手がどれだけ素早くても1ターン目から壁を展開できる**点が他の壁貼り役にない強みです。すばやさ60と遅い部類ですが、いたずらごころがある限りこの数値は壁展開の速度に影響しません。
+特性いたずらごころは変化技の優先度を+1にする。リフレクター・ひかりのかべをすばやさに関係なく先手で張れるため、**相手がどれだけ素早くても1ターン目から壁を展開できる**点が他の壁貼り役にない強みです。すばやさ60と遅い部類ですが、いたずらごころがある限りこの数値は壁展開の速度に影響しません。ただし、いたずらごころで優先度が上がった変化技は**あくタイプの相手には無効**になるため、すてゼリフ・ちょうはつでの先制妨害はドドゲザン（24位）などのあく相手には通りません。壁展開（リフレクター・ひかりのかべ）自体は自分にかける変化技なので、あく相手でも問題なく機能します。
 
 ### 2. ひかりのねんどで壁を8ターン継続させられる
 
-持ち物採用率1位はひかりのねんど81.2%。ひかりのねんどを持つことでリフレクター・ひかりのかべの効果ターンが通常5ターンから**8ターン**に延長されます。後続エースが8ターンの間、物理・特殊の両方を半減で受けられるため、攻撃技の起点を確実に作れます。
+持ち物採用率1位はひかりのねんど73.3%。ひかりのねんどを持つことでリフレクター・ひかりのかべの効果ターンが通常5ターンから**8ターン**に延長されます。後続エースが8ターンの間、物理・特殊の両方を半減で受けられるため、攻撃技の起点を確実に作れます。
 
 ### 3. すてゼリフで能力を下げながら後続へつなぐ
 
-すてゼリフ採用率74.9%は、相手のこうげきとくこうを1段階ずつ下げつつ自分が交代する技です。壁を張った後にすてゼリフを打つことで、**相手の打点を下げながら後続のエースを安全に出せる**流れを作れます。相手の能力低下と壁効果が重なり、後続が大幅に動きやすくなります。
+すてゼリフ採用率77.1%は、相手のこうげきとくこうを1段階ずつ下げつつ自分が交代する技です。壁を張った後にすてゼリフを打つことで、**相手の打点を下げながら後続のエースを安全に出せる**流れを作れます。相手の能力低下と壁効果が重なり、後続が大幅に動きやすくなります。
 
 ---
 
@@ -137,7 +137,6 @@ draft: true
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
       <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
     </div>
@@ -153,7 +152,7 @@ draft: true
 </table>
 </div>
 
-あく×フェアリーの複合タイプは、エスパーとドラゴンを無効化します。かくとうはあく×0.5・フェアリー×2で等倍になり、フェアリーが弱点のあくにとっての天敵であるかくとうを打ち消す形になっています。弱点はどく×2・はがね×2の2タイプのみで、この2タイプを持つ相手には注意が必要です。
+あく×フェアリーの複合タイプは、エスパーとドラゴンを無効化します。あく単体の弱点であるかくとうは等倍で受けられ、ゴースト・あくは半減です。弱点はどく・はがねの2タイプのみで、この2タイプを持つ相手には壁展開前の被弾に注意が必要です。
 
 ---
 
@@ -173,72 +172,72 @@ draft: true
 <tbody>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">1</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>リフレクター</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">88.2%</strong></td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ソウルクラッシュ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">84.0%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">80.4%</strong></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>リフレクター</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">79.1%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ひかりのかべ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">81.3%</strong></td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>すてゼリフ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">74.9%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">77.1%</strong></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ひかりのかべ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">73.6%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ちょうはつ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">33.0%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">30.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ねこだまし</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">13.9%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">21.9%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>イカサマ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">95</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">11.0%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">13.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ふいうち</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">70</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5.6%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">11.7%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>じゃれつく</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">1.9%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6.2%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>パワーウィップ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ビルドアップ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">0.6%</td>
 </tr>
 </tbody>
@@ -249,11 +248,11 @@ draft: true
 
 ## 主要型の解説
 
-性格分布はわんぱく63.1%・しんちょう16.1%が上位で、ぼうぎょに振るわんぱく型ととくぼうに振るしんちょう型に二分されます。どちらも役割は壁貼り＋すてゼリフの補助役で、EVの振り先（BかD）で受けやすい攻撃の方向が変わります。
+性格分布はわんぱく60.5%が突出し、いじっぱり15.9%・しんちょう14.5%が続きます。実際のEV配分を見ると上位はいずれもHにB寄りの振り分けで、ぼうぎょを固める運用が主流です。役割は壁貼り＋すてゼリフの補助役で固定されており、ここではB特化のわんぱく型を中心に解説します。
 
 ### 型1: わんぱくHB壁貼り型（最多採用）
 
-**性格採用率: わんぱく 63.1%**（B↑ A↓。物理方向の耐久を最大化する構成）
+**性格採用率: わんぱく 60.5%**（B↑ A↓。物理方向の耐久を最大化する構成）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -263,10 +262,10 @@ draft: true
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> いたずらごころ（99.5%）<br>
-<strong>性格:</strong> わんぱく（B↑ A↓）<br>
-<strong>EV:</strong> H32 B32（採用率28.7%。最多配分）<br>
-<strong>持ち物:</strong> ひかりのねんど（81.2%）
+<strong>特性:</strong> いたずらごころ（99.4%）<br>
+<strong>性格:</strong> わんぱく（B↑ C↓）<br>
+<strong>EV:</strong> H32 B32 C2（採用率26.1%。最多配分）<br>
+<strong>持ち物:</strong> ひかりのねんど（73.3%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -284,44 +283,7 @@ H32 B32振りでぼうぎょを最大化し、物理アタッカーからの先�
 
 **弱み:**
 
-ぼうぎょを伸ばしてもとくぼう75は据え置きのため、特殊アタッカーからの攻撃はひかりのかべを展開する前に大ダメージを受けるリスクがあります。また、どく・はがねタイプの攻撃は壁なしで×2弱点を通されます。こうげき120を持つにもかかわらずA下降性格のため、ソウルクラッシュの打点はわんぱく型より低くなります。
-
----
-
-### 型2: しんちょうHD壁貼り型
-
-**性格採用率: しんちょう 16.1%**（D↑ A↓。特殊方向の耐久を高める構成）
-
-<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
-<div class="build-header">
-  <img src="/images/pokemon/pokemon-0861-00.webp" alt="オーロンゲ" style="width:48px;height:48px">
-  <strong style="font-size:1.05em">HDしんちょう壁貼り型</strong>
-</div>
-
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
-<div>
-<strong>特性:</strong> いたずらごころ（99.5%）<br>
-<strong>性格:</strong> しんちょう（D↑ A↓）<br>
-<strong>EV:</strong> H31 B32 D3（採用率5.3%。次点配分）<br>
-<strong>持ち物:</strong> ひかりのねんど（81.2%）/ たべのこし（14.1%）
-</div>
-<div>
-<strong>技構成:</strong><br>
-・リフレクター<br>
-・ひかりのかべ<br>
-・すてゼリフ<br>
-・ちょうはつ / ソウルクラッシュ
-</div>
-</div>
-</div>
-
-**強み:**
-
-わんぱく型がぼうぎょを最大化するのに対し、しんちょう型はとくぼうを底上げして特殊アタッカーへの初動を耐えやすくします。特殊攻撃が多い環境ではひかりのかべを張る前に倒されるリスクが低下します。たべのこしを持つ個体は消耗を抑えながら場に居座り、ちょうはつで相手の補助技を封じる立ち回りが可能です。
-
-**弱み:**
-
-ぼうぎょ65はしんちょう型では補強されないため、物理アタッカーに対してはわんぱく型より脆く、リフレクター展開前に倒される可能性が高まります。たべのこし採用の場合はひかりのねんどを持てないため、壁の継続ターンが5ターンにとどまります。
+ぼうぎょを伸ばしてもとくぼう75は据え置きのため、特殊アタッカーからの攻撃はひかりのかべを展開する前に大ダメージを受けるリスクがあります。
 
 ---
 
@@ -341,24 +303,17 @@ H32 B32振りでぼうぎょを最大化し、物理アタッカーからの先�
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0282-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サーナイト
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 展開しやすい</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー技を無効化するため相手のエスパー打点を透かして壁を展開できる</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
+    <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 展開しやすい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン技を無効化するため、カイリューのドラゴン主力技を受けながら壁を張れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
+    <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メタグロス（7位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 苦手</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんが等倍で通りぼうぎょ65に対して大ダメージ。ドラゴン技はフェアリーで無効化できるが、じしん採用率が高く壁展開を妨害される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね技が×2弱点。メガ後の高いこうげきからのはがね技がぼうぎょ65に刺さる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -366,13 +321,6 @@ H32 B32振りでぼうぎょを最大化し、物理アタッカーからの先�
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 苦手</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね技が×2弱点。ぼうぎょ65に対して高火力はがね技が刺さる</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0454-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドラピオン
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 苦手</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく技が×2弱点。どくタイプのどく技がオーロンゲに刺さる</td>
 </tr>
 </tbody>
 </table>
@@ -388,32 +336,32 @@ H32 B32振りでぼうぎょを最大化し、物理アタッカーからの先�
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
-    <div class="rate">エース候補</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">壁下で安全に動けるじめん・ドラゴン物理アタッカー</div>
+    <div class="rate">同居率1位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">壁下でつるぎのまいを積むじめん・ドラゴン物理エース</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ">
-    <div class="name">ルカリオ</div>
-    <div class="rate">エース候補</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">壁下でつるぎのまいを積みやすくなる物理エース</div>
+    <img src="/images/pokemon/pokemon-0691-00.webp" alt="ドラミドロ">
+    <div class="name">ドラミドロ</div>
+    <div class="rate">同居率2位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">メガ後さいせいりょくでサイクル性能が高く、壁展開と組み合わせやすい</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン">
-    <div class="name">リザードン</div>
-    <div class="rate">エース候補</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">壁下で特殊技を叩き込む高火力特殊エース</div>
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
+    <div class="name">アーマーガア</div>
+    <div class="rate">同居率3位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">壁と並行して設置・受けを担うはがね・ひこうの物理受け</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ">
-    <div class="name">アシレーヌ</div>
-    <div class="rate">エース候補</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">壁下でみず・フェアリー特殊技を安全に打てる</div>
+    <img src="/images/pokemon/pokemon-0398-00.webp" alt="ムクホーク">
+    <div class="name">ムクホーク</div>
+    <div class="rate">同居率4位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">壁下で高火力ブレイブバードを叩き込む物理エース</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
-    <div class="name">マスカーニャ</div>
-    <div class="rate">エース候補</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速アタッカー。壁下でさらに先手が通りやすくなる</div>
+    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
+    <div class="name">ブリジュラス</div>
+    <div class="rate">同居率5位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">壁下でめいそうを積むはがね・ドラゴンの特殊エース</div>
   </div>
 </div>
 
@@ -434,64 +382,28 @@ H32 B32振りでぼうぎょを最大化し、物理アタッカーからの先�
 
 | 技 | 採用率 | 役割 |
 |---|---|---|
-| リフレクター | 88.2% | 物理壁展開 |
-| ソウルクラッシュ | 84.0% | 攻撃＋とくこうダウン |
-| ひかりのかべ | 81.3% | 特殊壁展開 |
-| すてゼリフ | 74.9% | 能力ダウン＋後続へ交代 |
+| ソウルクラッシュ | 80.4% | 攻撃＋とくこうダウン |
+| リフレクター | 79.1% | 物理壁展開 |
+| すてゼリフ | 77.1% | 能力ダウン＋後続へ交代 |
+| ひかりのかべ | 73.6% | 特殊壁展開 |
 
-リフレクター・ひかりのかべ・すてゼリフはいずれも70%以上の採用率で、**実質的に固定技の扱い**です。技4枠のうち3枠は上記3技でほぼ確定し、残り1枠にソウルクラッシュ（84.0%）かちょうはつ（33.0%）が入る構成になっています。
+ソウルクラッシュ・リフレクター・すてゼリフ・ひかりのかべの上位4技はいずれも70%以上の採用率で、**技4枠が実質これらで固定**されています。残り1枠の入れ替え候補がちょうはつ（30.5%）で、対面した相手はまずこの4技の流れを警戒する必要があります。
 
-ソウルクラッシュの採用率84.0%は壁貼り役の技構成としては高い数値で、**攻撃技をほぼ全個体が採用している**点が特徴的です。壁貼りだけでなく、ソウルクラッシュによる相手とくこうダウンを絡めてすてゼリフのAC両下げと組み合わせる動きが定石化していると読めます。壁を張り切った後にソウルクラッシュ→すてゼリフで相手のAとCを両方下げて後続に繋げば、壁効果と能力低下が重なって後続への圧力を最大化できます。
+ソウルクラッシュの採用率80.4%は壁貼り役の技構成としては高い数値で、**攻撃技をほぼ全個体が採用している**点が特徴的です。壁を張り切った後にソウルクラッシュ→すてゼリフで相手のAとCを両方下げて後続に繋げば、壁効果と能力低下が重なって後続への圧力を最大化できます。
 
-持ち物はひかりのねんど81.2%が支配的で、たべのこし14.1%と二択に近い分布です。ひかりのねんどが4/5の個体に採用されていることから、**壁の8ターン継続を前提とした後続エースの設計**が環境で主流と判断できます。
+持ち物はひかりのねんど73.3%が支配的で、たべのこし15.9%・たつじんのおび5.1%が続きます。ひかりのねんどが約7割の個体に採用されていることから、**壁の8ターン継続を前提とした後続エースの設計**が環境で主流と判断できます。
 
 ---
 
-## まとめ：型別比較
+## まとめ
 
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
-<thead>
-<tr style="background:#1e3a5f;color:#fff">
-  <th style="padding:10px 12px;border:1px solid #cbd5e1;text-align:left">型</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">採用率（指標）</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">性格</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">主な技</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">強み</th>
-  <th style="padding:10px 12px;border:1px solid #cbd5e1">弱み</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">HBわんぱく壁貼り型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">わんぱく 63.1%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">わんぱく</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">リフレクター・ひかりのかべ・すてゼリフ・ソウルクラッシュ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">ぼうぎょを最大化し物理を耐えながら壁を展開できる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">とくぼうは据え置きで特殊アタッカーへの初動が不安定</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">HDしんちょう壁貼り型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">しんちょう 16.1%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">しんちょう</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">リフレクター・ひかりのかべ・すてゼリフ・ちょうはつ</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">とくぼうを底上げし特殊アタッカーへの初動を安定させる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">ぼうぎょは据え置きで物理アタッカーへは脆い</td>
-</tr>
-</tbody>
-</table>
-</div>
+オーロンゲはいたずらごころによるすばやさ非依存の壁展開と、ひかりのねんどによる8ターン継続が強みの補助役です。ソウルクラッシュ80.4%・リフレクター79.1%・すてゼリフ77.1%・ひかりのかべ73.6%の4技が実質固定で、対面した相手はまずこの流れを警戒する必要があります。型はわんぱく（B特化）が60.5%と主流です。
 
-**総評:**
-
-オーロンゲはいたずらごころによるすばやさ非依存の壁展開と、ひかりのねんどによる8ターン継続が強みの補助役です。リフレクター88.2%・ひかりのかべ81.3%・すてゼリフ74.9%の3技が実質固定で、対面した相手はまずこの3技の流れを警戒する必要があります。
-
-弱点はどく・はがねの2タイプで、これらの攻撃で壁展開前に突破されると役割を果たせません。ちょうはつ33.0%の採用は相手の壁貼り・積み技・回復技を封じる逆妨害として機能し、壁合戦になる対面ではちょうはつを先手で打つことで相手の補助行動を止められます。
+弱点はどく・はがねの2タイプで、これらの攻撃で壁展開前に突破されると役割を果たせません。ちょうはつ30.5%の採用は相手の壁貼り・積み技・回復技を封じる逆妨害として機能し、壁合戦になる対面ではちょうはつを先手で打つことで相手の補助行動を止められます。ただしいたずらごころ由来の先制変化技はあくタイプには無効なので、ドドゲザン（24位）などあく相手にはちょうはつ・すてゼリフが通らない点に注意が必要です。
 
 ---
 
 ## 関連記事
 
-- [使用率1位 ガブリアスのM-3考察](/blog/garchomp-analysis-m3/)
-- [壁展開の天敵となるドドゲザンのM-3考察](/blog/dodonzo-analysis-m3/)
-- [オーロンゲの後続エースとして定番のルカリオのM-3考察](/blog/lucario-analysis-m3/)
+- [使用率上位 ムクホークのM-3考察](/blog/staraptor-analysis-m3/)
+- [後続エース候補 メガメタグロスのM-3考察](/blog/metagross-analysis-m3/)
