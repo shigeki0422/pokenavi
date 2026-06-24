@@ -18,7 +18,7 @@
   },
   "swampert-analysis-m3": {
     "name": "メガラグラージ",
-    "rank": 7,
+    "rank": 10,
     "types": ["みず", "じめん"],
     "matchKey": "ラグラージ",
     "dex": 260,
@@ -26,7 +26,7 @@
   },
   "metagross-analysis-m3": {
     "name": "メガメタグロス",
-    "rank": 10,
+    "rank": 7,
     "types": ["はがね", "エスパー"],
     "matchKey": "メタグロス",
     "dex": 376,
