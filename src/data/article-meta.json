@@ -1,4 +1,11 @@
 {
+  "mimikyu-analysis-m3": {
+    "name": "ミミッキュ",
+    "rank": 2,
+    "types": ["ゴースト", "フェアリー"],
+    "matchKey": "ミミッキュ",
+    "pokemonId": "0778"
+  },
   "raichu-y-analysis-m3": {
     "name": "メガライチュウY",
     "rank": 3,
