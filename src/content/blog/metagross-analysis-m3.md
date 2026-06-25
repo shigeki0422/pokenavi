@@ -1,9 +1,9 @@
 ---
 title: '【ポケモンチャンピオンズ】メガメタグロス考察 M-3 使用率7位 型別採用率と立ち回り'
 description: 'M-3シングルバトルで使用率7位のメガメタグロスを実データで分析。サイコファング84.2%・バレットパンチ79.1%の物理アタッカー型を解説。はがね/エスパーの多耐性と弱点4タイプ、メガ後S178の速度ライン、環境上位への相性とパーティ構成まで紹介します。'
-pubDate: '2026-06-20'
+pubDate: '2026-06-23'
 heroImage: '../../assets/hero-metagross-m3.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -345,6 +345,13 @@ S振りがないためS実数値は162にとどまり、ようきAS型が上か�
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようきS178＞ガブS169で先手。れいとうパンチ（×4）が無振りH183に対し確定1発（139〜163%）。じしん×2弱点を受ける前に処理できる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
@@ -389,14 +396,14 @@ S振りがないためS実数値は162にとどまり、ようきAS型が上か�
 </tr>
 </thead>
 <tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99%超）がじめん×2でこちらの弱点を突く。ようきS178＞ガブS169で先手は取れるが、こちらのじしんはドラゴン/じめんに等倍止まりで一撃にならず、撃ち合いで負ける</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんを無効化するひこう・浮遊枠を同伴して受けに引く。先手でれいとうパンチ（ドラゴン/じめんに×4）を入れてから後続で詰める</td>
-</tr>
 <tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガゲンガー（28位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">シャドーボール（採用率81.7%）がゴースト×2でこちらの弱点。ゲンガナイト58.9%でメガ後S165となり、ようきS178が先手を取れる。じしんとサイコファングがゴースト/どくに×2で有効打はあるが、メガ後特性かげふみで交代を封じられ、後続に引けない点が脅威</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">先手じしん・サイコファングで削る。かげふみで縛られる前に一撃で処理できるかを計算してから対面するかどうか判断する</td>
+</tr>
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガリザードンY（5位圏内）
   </td>
@@ -497,6 +504,6 @@ S振りがないためS実数値は162にとどまり、ようきAS型が上か�
 
 ## 関連記事
 
-- [使用率1位 ガブリアスのM-3考察](/blog/garchomp-analysis-m3/)
-- [天敵のリザードンのM-3考察](/blog/charizard-y-analysis-m3/)
-- [パートナー候補 カイリューのM-3考察](/blog/dragonite-analysis-m3/)
+- [使用率1位 ムクホークのM-3考察](/blog/staraptor-analysis-m3/)
+- [同居率上位 ラグラージのM-3考察](/blog/swampert-analysis-m3/)
+- [環境上位 ライチュウYのM-3考察](/blog/raichu-y-analysis-m3/)

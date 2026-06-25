@@ -211,6 +211,40 @@ def _priority_ko_action(me: BattlePokemon, opp: BattlePokemon,
     return Action(type="move", move=best_mv, move_idx=best_i, do_mega=do_mega)
 
 
+def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: BattleField):
+    """確定KO安全弁：先制（または優先度）で最低ロールでもOHKOできる攻撃技があれば、それを最優先。
+    任意AI(MCTS/ネット)の出力 act を受け、確実に倒せる手を逃している場合のみ上書きする。
+    積み・変化技で自滅する誤選択や、弱い攻撃技を選ぶミス(例トリックフラワー<はたきおとす)を防ぐ。"""
+    me = my_side.active; opp = opp_side.active
+    if me is None or opp is None or not me.is_alive or not opp.is_alive:
+        return act
+    if _forced_charging_action(me):                 # 溜め中などは介入しない
+        return act
+    full = opp.hp == opp.max_hp
+    if full and (opp.ability in ("マルチスケイル", "ファントムガード")
+                 or opp.item == "きあいのタスキ" or opp.ability == "がんじょう"):
+        return act                                  # 満タンで耐える系は確定KO不成立→介入しない
+    valid = [(i, mv) for i, mv in enumerate(me.moves) if mv is not None]
+    valid = _filter_by_pp(_filter_valid_by_lock(valid, me), me)
+    best = None; bestd = -1
+    for i, mv in valid:
+        if not mv.power or mv.category == "status":
+            continue
+        if get_type_effectiveness(mv.type, opp.type1, opp.type2) == 0:
+            continue
+        if not _goes_first(me, opp, mv.priority, field):
+            continue
+        d = calc_damage(me, opp, mv, field, critical=False, random_roll=0.85)   # 最低ロールでKO=確定
+        if d >= opp.hp and d > bestd:
+            bestd = d; best = (i, mv)
+    if best is None:
+        return act
+    if act and getattr(act, "type", None) == "move" and act.move is best[1]:
+        return act                                  # 既に同じ手を選んでいる
+    return Action(type="move", move=best[1], move_idx=best[0],
+                  do_mega=bool(act and getattr(act, "do_mega", False)))
+
+
 # 崩し（壁対策）用の積み技
 SETUP_MOVES = {
     "つるぎのまい", "りゅうのまい", "ちょうのまい", "めいそう", "わるだくみ",

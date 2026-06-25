@@ -3,6 +3,7 @@
 """
 import copy
 import math
+import os
 import random
 from dataclasses import dataclass, field
 from typing import Optional, List, Tuple
@@ -97,8 +98,11 @@ class Action:
 
 
 class BattleSide:
-    def __init__(self, party: List[BattlePokemon], viewer_label: str = ""):
+    def __init__(self, party: List[BattlePokemon], viewer_label: str = "",
+                 source6: "Optional[List[BattlePokemon]]" = None):
         self.party = party
+        # 見せ合いで公開する候補（隠れ選出時の6体ソース）。未指定なら選出=候補（従来＝選出公開）。
+        self.source6 = source6 if source6 is not None else party
         self.active_idx = 0
         self.fainted = []
         self.stealth_rock_set = False
@@ -159,6 +163,7 @@ class BattleSide:
         prev.type1 = prev.base_type1
         prev.type2 = prev.base_type2
         prev.confused = False
+        prev.yawn_count = 0
         prev.flinched = False
         prev.protecting = False
         prev.enduring = False
@@ -296,7 +301,8 @@ def _entry_effects(poke: BattlePokemon, side_idx: int, field: BattleField,
         logs = []
     poke.turns_out = 0
     poke.times_hit = 0
-    poke._switched_this_turn = False  # type: ignore
+    # _switched_this_turn は switch_to が True にし end_of_turn が False に戻す（=交代したターン中だけTrue）。
+    # ここで False に上書きすると switch_to の直後に打ち消され、はりこみ/ねこだまし判定が壊れる（出さない）。
     poke._pivot_out = False           # type: ignore
     poke._force_switch = False        # type: ignore
 
@@ -355,12 +361,40 @@ def _entry_effects(poke: BattlePokemon, side_idx: int, field: BattleField,
     logs.extend(entry_logs)
 
 
-def _best_faint_switch(side: BattleSide, opp: BattlePokemon) -> Optional[int]:
-    """倒れた後の最適交代先インデックスを返す（相手に最も有利な控えを選択）"""
+def _best_faint_switch(side: BattleSide, opp: BattlePokemon, field=None) -> Optional[int]:
+    """倒れた後の最適交代先インデックスを返す（相手に最も有利な控えを選択）。
+    反撃KO（相手より速く、現在HPを最大打点で削り切れる控え）が居れば最優先する。"""
     benched = [(i, p) for i, p in enumerate(side.party)
                if p.is_alive and i != side.active_idx]
     if not benched:
         return None
+    fld = field if field is not None else BattleField()
+
+    def _eff_spd(p: BattlePokemon) -> float:
+        s = float(p.speed)
+        if getattr(p, "item", None) == "こだわりスカーフ":
+            s *= 1.5
+        if p.status == "paralysis" and p.ability != "はやあし":
+            s *= 0.5
+        if field is not None:
+            w = effective_weather(fld, p); ab = getattr(p, "ability", None)
+            if (ab == "すいすい" and w == "rain") or (ab == "すなかき" and w == "sandstorm") \
+               or (ab == "ようりょくそ" and w == "sunny") or (ab == "ゆきかき" and w in ("hail", "snow")):
+                s *= 2
+        return s
+
+    def _can_revenge(p: BattlePokemon) -> bool:
+        # 相手より速く、最大打点で相手の現在HPを削り切れる（HPの減った相手を先制で倒す）
+        if _eff_spd(p) <= _eff_spd(opp):
+            return False
+        best = 0.0
+        for mv in p.moves:
+            if mv and mv.category != "status" and (mv.power or 0) > 0:
+                try:
+                    best = max(best, calc_damage(p, opp, mv, fld, False, 0.85))
+                except Exception:
+                    pass
+        return best >= opp.hp
 
     def score(p: BattlePokemon) -> float:
         has_se = any(
@@ -380,7 +414,8 @@ def _best_faint_switch(side: BattleSide, opp: BattlePokemon) -> Optional[int]:
             s += 1
         elif opp_max_eff >= 2.0:
             s -= 2
-        return s * 1000 + p.hp / max(1, p.max_hp) * 10
+        rev = 100000 if _can_revenge(p) else 0   # 反撃KOは最優先
+        return rev + s * 1000 + p.hp / max(1, p.max_hp) * 10
 
     return max(benched, key=lambda x: score(x[1]))[0]
 
@@ -526,6 +561,7 @@ def _execute_move(
             if move.name_jp in ("いびき", "ねごと"):
                 logs.append(f"{attacker.name} はねむりながら {move.name_jp} を使った！")
             else:
+                attacker.charging_move = None   # 眠ると溜め技(ソーラービーム等)は解除される
                 logs.append(f"{attacker.name} はねむっている…")
                 return logs
         else:
@@ -2978,9 +3014,18 @@ class Battle:
         ai: BattleSide, BattleField → Action を返す callable
         on_turn: 各ターン完了時に on_turn(self) を呼ぶフック（記録/リプレイ用）。
         """
-        # 対戦前の見せ合い：互いに相手の候補6体（種族・タイプ）を確認する
-        self.logs.extend(self.side1.opp_view.team_preview(self.side2.party))
-        self.logs.extend(self.side2.opp_view.team_preview(self.side1.party))
+        # 対戦前の見せ合い：互いに相手の候補（種族・タイプ）を確認する。
+        # 隠れ選出時(HIDDEN_SELECTION=1)は6体ソースを公開し、どの3体を選出したかは場に出るまで不明。
+        # フラグOFF時は従来通り選出パーティ(=3体)を公開＝本番不変。
+        # 実戦の瀕死交代は、各サイドのAIが持つ choose_faint_switch（価値ベースの交代選択）を使う。
+        # シミュ内(_advance_turn→resume)は run を通らないため未設定＝従来の高速ヒューリスティック。
+        self._faint_chooser1 = getattr(ai1, "choose_faint_switch", None)
+        self._faint_chooser2 = getattr(ai2, "choose_faint_switch", None)
+        _hidden = os.environ.get("HIDDEN_SELECTION") != "0"   # 既定ON。HIDDEN_SELECTION=0で従来(選出公開)
+        _pv1 = self.side2.source6 if (_hidden and len(self.side2.source6) > len(self.side2.party)) else self.side2.party
+        _pv2 = self.side1.source6 if (_hidden and len(self.side1.source6) > len(self.side1.party)) else self.side1.party
+        self.logs.extend(self.side1.opp_view.team_preview(_pv1))
+        self.logs.extend(self.side2.opp_view.team_preview(_pv2))
 
         # 入場時効果
         _entry_effects(self.side1.active, 0, self.field, self.side2.active, self.logs, self.side1.party)
@@ -3049,9 +3094,10 @@ class Battle:
             )
             second_chooser = chooser1 if second_side is self.side1 else chooser2
 
-            # 先攻行動
+            # 先攻行動（自滅瀕死の交代はターン終了まで保留）
             self._do_action(first_side, first_opp, first_action,
-                            ai2 if p1_first else ai1, opp_action=second_action)
+                            ai2 if p1_first else ai1, opp_action=second_action,
+                            defer_self_faint=True)
             if not first_opp.has_alive():
                 if on_turn:
                     on_turn(self)
@@ -3061,6 +3107,9 @@ class Battle:
             if second_side.active is not second_chooser:
                 # 行動者が先攻で倒されて交代済み → このターンは行動権を失う
                 pass
+            elif not second_opp.active.is_alive:
+                # 先攻が自滅(反動/自爆)で退場し場が空 → 後攻技は対象不在で失敗（瀕死交代はターン終了時）
+                self.logs.append(f"{second_side.active.name} は こうげきしようとしたが 相手がいない！")
             elif second_side.active.flinched:
                 self.logs.append(f"{second_side.active.name} はひるんで動けない！")
                 if second_side.active.ability == "ふくつのこころ":
@@ -3092,7 +3141,8 @@ class Battle:
         return 0
 
     def _do_action(self, my_side: BattleSide, opp_side: BattleSide,
-                   action: Action, opp_ai, opp_action: Optional[Action] = None):
+                   action: Action, opp_ai, opp_action: Optional[Action] = None,
+                   defer_self_faint: bool = False):
         if action.type == "switch":
             idx = action.switch_to
             if 0 <= idx < len(my_side.party) and my_side.party[idx].is_alive:
@@ -3134,7 +3184,10 @@ class Battle:
 
             # 倒れた場合の交代（ハザードで連続倒れも対応）
             self._faint_switch(opp_side, my_side)
-            self._faint_switch(my_side, opp_side)
+            # 先攻が自滅(反動/自爆)した時の交代はターン終了時まで保留（後攻技を空振りさせるため）。
+            # 保留分は _end_of_turn 末尾の _faint_switch が回収する。
+            if not defer_self_faint:
+                self._faint_switch(my_side, opp_side)
 
             # ピボット技（ボルトチェンジ・とんぼがえり・バトンタッチ等）：生存中に引っ込む
             # 交代先は戦略的に選ぶ（バトンは積みエースへ、通常は有利な受け先へ）
@@ -3179,9 +3232,18 @@ class Battle:
         """倒れたポケモンの交代。ハザードで連続倒れしても全員処理する。"""
         if getattr(fainted_side, '_manual_switch', False):
             return  # 手動バトル: P1の交代はプレイヤーが選択
+        chooser = (getattr(self, "_faint_chooser1", None) if fainted_side is self.side1
+                   else getattr(self, "_faint_chooser2", None))
         while not fainted_side.active.is_alive and fainted_side.has_alive():
             self.logs.append(f"{fainted_side.active.name} は倒れた！")
-            next_idx = _best_faint_switch(fainted_side, opp_side.active)
+            alive_bench = sum(1 for i, p in enumerate(fainted_side.party)
+                              if p.is_alive and i != fainted_side.active_idx)
+            if chooser is not None and alive_bench >= 2:   # 実戦：価値ベースで繰り出し選択
+                next_idx = chooser(fainted_side, opp_side, self.field)
+                if next_idx is None:
+                    next_idx = _best_faint_switch(fainted_side, opp_side.active, self.field)
+            else:
+                next_idx = _best_faint_switch(fainted_side, opp_side.active, self.field)
             if next_idx is None:
                 break
             fainted_side.switch_to(next_idx, self.logs, self.field)
@@ -3232,6 +3294,9 @@ class Battle:
                     self.logs.extend(my_side.opp_view.on_anticipation(opp.name))
 
     def _end_of_turn(self):
+        # ひるみはそのターン限り＝次ターンへ持ち越さない（後攻が当てたひるみは無意味）
+        self.side1.active.flinched = False
+        self.side2.active.flinched = False
         # ノーてんき無効化フラグを最新化（とんぼがえり等の交代後にも対応）
         self.field._weather_negated = "ノーてんき" in (self.side1.active.ability, self.side2.active.ability)
         # 天候カウントを先に更新（終了ターンはダメージなし）
@@ -3427,8 +3492,12 @@ class Battle:
             p._move_failed_last = getattr(p, '_move_failed_this_turn', False)  # type: ignore
             p._move_failed_this_turn = False  # type: ignore
 
-            p.turns_out += 1
-            p._switched_this_turn = False  # type: ignore
+            # 交代で出たターンは「場に出て行動できたターン」に数えない（次の行動ターンが最初＝
+            # ねこだまし/であいがしらが交代後の初手で打てる。1ターン目限定バグの修正）。
+            if getattr(p, '_switched_this_turn', False):
+                p._switched_this_turn = False  # type: ignore
+            else:
+                p.turns_out += 1
 
         # ものひろい：両者のきのみ処理後、道具未所持なら相手が消費したきのみを拾う
         for _ms, _os in ((self.side1, self.side2), (self.side2, self.side1)):

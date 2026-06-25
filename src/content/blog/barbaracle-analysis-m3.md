@@ -1,6 +1,6 @@
 ---
-title: '【ポケモンチャンピオンズ】ガメノデス考察 M-3 使用率65位 型別採用率と立ち回り'
-description: 'M-3シングルバトルで使用率65位のガメノデス。からをやぶる採用率98.7%、インファイト96.9%のメガ進化型アタッカー。いじっぱりメガ型・ようきメガ型の2パターンを型別採用率・技構成・環境ポケモンとの相性を交えて解説。'
+title: '【ポケモンチャンピオンズ】ガメノデス考察 M-3 使用率71位 型別採用率と立ち回り'
+description: 'M-3シングルバトルで使用率71位のガメノデス。からをやぶる採用率98.2%、インファイト96.8%のメガ進化型アタッカー。ようきメガ型・いじっぱりメガ型の2パターンを型別採用率・技構成・環境ポケモンとの相性を交えて解説。'
 pubDate: '2026-06-20'
 heroImage: '../../assets/hero-barbaracle-m3.png'
 draft: true
@@ -21,15 +21,17 @@ draft: true
 <div class="poke-header">
   <img src="/images/pokemon/pokemon-0689-00.webp" alt="ガメノデス" />
   <div>
-    <h2 style="margin:0 0 6px;">ガメノデス（メガガメノデス）</h2>
-    <div class="type-row">
-      <img src="/images/types/type-05-rock.png" alt="いわ" style="height:20px;" />
-      <img src="/images/types/type-10-water.png" alt="みず" style="height:20px;" />
-      <span style="font-size:0.8rem;color:#666;">→ メガ後</span>
-      <img src="/images/types/type-05-rock.png" alt="いわ" style="height:20px;" />
-      <img src="/images/types/type-01-fighting.png" alt="かくとう" style="height:20px;" />
+    <h2 style="margin:0 0 8px">ガメノデス（メガガメノデス）</h2>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:6px">
+      <img src="/images/types/type-05-rock.png" alt="いわ" style="width:44px;height:44px" />
+      <img src="/images/types/type-10-water.png" alt="みず" style="width:44px;height:44px" />
+      <span style="font-size:0.85rem;color:#666">→ メガ後</span>
+      <img src="/images/types/type-05-rock.png" alt="いわ" style="width:44px;height:44px" />
+      <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:44px;height:44px" />
     </div>
-    <p style="margin:4px 0;font-size:0.9rem;">M-3 シングルバトル使用率：<strong>65位</strong></p>
+    <div style="margin-top:8px;font-size:0.9em;color:#555">
+      使用率: <strong style="color:#e67e22">71位</strong>　特性: <strong>かたいツメ 92.5%（メガ後も継続）</strong>
+    </div>
   </div>
 </div>
 
@@ -37,67 +39,132 @@ draft: true
 
 ---
 
-## なぜ今ガメノデスが使用率65位なのか
+## なぜ今ガメノデスが使用率71位なのか
 
-### 理由① からをやぶる採用率98.7%が示す爆発力
+### 理由① からをやぶる採用率98.2%が示す爆発力
 
-ガメノデスの採用理由の最大の柱は、メガ進化と「からをやぶる」の組み合わせによる一撃突破力にある。メガ進化後のこうげき140・すばやさ88という水準は決して高くないが、からをやぶり後はこうげきが実質280相当、すばやさも2段階上昇する。特殊耐久が下がるリスクを負いつつも、相手のタスキやきのみを突破するロックブラスト（60.1%採用）と組み合わせることで、上振れ時の圧倒的な制圧力が環境に刺さっている。
+ガメノデスの採用理由の最大の柱は、メガ進化と「からをやぶる」の組み合わせによる一撃突破力にある。メガ進化後のこうげき140・すばやさ88という水準は決して高くないが、からをやぶり後はこうげきが実質280相当、すばやさも2段階上昇する。特殊耐久が下がるリスクを負いつつも、相手のタスキやきのみを突破するロックブラスト（63.6%採用）と組み合わせることで、上振れ時の圧倒的な制圧力が環境に刺さっている。
 
 ### 理由② メガ後かくとうタイプが生む技範囲の広さ
 
-通常時はいわ/みずタイプだが、メガ進化でいわ/かくとうに変化する。これによりインファイト（96.9%採用）がタイプ一致になり、はがね・いわ・こおり・あく・ノーマルを等倍以上で叩ける。じしん（48%）やアクアブレイク（30.8%）を組み合わせると、1体で幅広い範囲をカバーでき、選出段階から相手に多大な圧力をかけられる。
+通常時はいわ/みずタイプだが、メガ進化でいわ/かくとうに変化する。これによりインファイト（96.8%採用）がタイプ一致になり、はがね・いわ・こおり・あく・ノーマルを等倍以上で叩ける。じしん（45.8%）やアクアブレイク（30.9%）を組み合わせると、1体で幅広い範囲をカバーでき、選出段階から相手に多大な圧力をかけられる。
 
 ### 理由③ 特性かたいツメ×ガメノデスナイトほぼ固定の読みやすさと安定感
 
-持ち物はガメノデスナイト97.9%、特性はかたいツメ92.4%と採用率がほぼ集中している。型の読みやすさはデメリットにも見えるが、逆に言えばプレイヤーが迷わず最適択を選べる安定感の高さを示している。型が絞られているため立ち回りの再現性が高く、構築に組み込みやすいのがランクマッチで一定の使用率を確保する理由となっている。
+持ち物はガメノデスナイト97.6%、特性はかたいツメ92.5%と採用率がほぼ集中している。型の読みやすさはデメリットにも見えるが、逆に言えばプレイヤーが迷わず最適択を選べる安定感の高さを示している。型が絞られているため立ち回りの再現性が高く、構築に組み込みやすいのがランクマッチで一定の使用率を確保する理由となっている。
 
 ---
 
 ## 基本スペック
 
-### 種族値
+### 種族値（メガ進化後）
 
-#### 通常時（いわ/みず）
+<div style="max-width:420px;margin:16px 0;font-size:0.9em">
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">HP</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:36%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">72</span>
+    <span style="width:40px"></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">こうげき</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:70%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right"><strong style="color:#dc2626">140</strong></span>
+    <span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+35</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:65%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right"><strong style="color:#dc2626">130</strong></span>
+    <span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+15</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくこう</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:32%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">64</span>
+    <span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+10</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:53%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">106</span>
+    <span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+20</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:44%;background:linear-gradient(90deg,#34d399,#059669);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">88</span>
+    <span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+20</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
+    <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
+    <div style="flex:1"></div>
+    <span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">600</span>
+    <span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+100</span>
+  </div>
+</div>
 
-| ステータス | 数値 | バー |
-|---|---|---|
-| HP | 72 | <div style="background:#4ade80;height:12px;border-radius:4px;width:36.0%"></div> |
-| こうげき | 105 | <div style="background:#f87171;height:12px;border-radius:4px;width:52.5%"></div> |
-| ぼうぎょ | 115 | <div style="background:#fb923c;height:12px;border-radius:4px;width:57.5%"></div> |
-| とくこう | 54 | <div style="background:#60a5fa;height:12px;border-radius:4px;width:27.0%"></div> |
-| とくぼう | 86 | <div style="background:#a78bfa;height:12px;border-radius:4px;width:43.0%"></div> |
-| すばやさ | 68 | <div style="background:#facc15;height:12px;border-radius:4px;width:34.0%"></div> |
-| 合計 | 500 | |
+（メガ前: HP72 / A105 / B115 / C54 / D86 / S68 / 合計500）
 
-#### メガ進化後（いわ/かくとう）
+### タイプ・弱点（メガ進化後: いわ/かくとう）
 
-| ステータス | 数値 | バー |
-|---|---|---|
-| HP | 72 | <div style="background:#4ade80;height:12px;border-radius:4px;width:36.0%"></div> |
-| こうげき | 140 | <div style="background:#f87171;height:12px;border-radius:4px;width:70.0%"></div> |
-| ぼうぎょ | 130 | <div style="background:#fb923c;height:12px;border-radius:4px;width:65.0%"></div> |
-| とくこう | 64 | <div style="background:#60a5fa;height:12px;border-radius:4px;width:32.0%"></div> |
-| とくぼう | 106 | <div style="background:#a78bfa;height:12px;border-radius:4px;width:53.0%"></div> |
-| すばやさ | 88 | <div style="background:#facc15;height:12px;border-radius:4px;width:44.0%"></div> |
-| 合計 | 600 | |
+<div class="type-row">
+  <strong>タイプ（メガ後）：</strong>
+  <img src="/images/types/type-05-rock.png" alt="いわ" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="いわ" />
+  <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="かくとう" />
+</div>
 
-### タイプ弱点・耐性（メガ前）
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（×0.5以下）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
+      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
+      <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
+      <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
+      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
+    </div>
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
+      <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
+      <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
+      <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
+      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
+      <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
+      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
+    </div>
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">なし</td>
+</tr>
+</tbody>
+</table>
+</div>
 
-| 区分 | タイプ |
-|---|---|
-| 弱点（×4） | <img src="/images/types/type-11-grass.png" alt="くさ" style="height:18px;vertical-align:middle;" /> |
-| 弱点（×2） | <img src="/images/types/type-12-electric.png" alt="でんき" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-01-fighting.png" alt="かくとう" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-04-ground.png" alt="じめん" style="height:18px;vertical-align:middle;" /> |
-| 耐性（×0.5） | <img src="/images/types/type-09-fire.png" alt="ほのお" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-14-ice.png" alt="こおり" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-03-poison.png" alt="どく" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-02-flying.png" alt="ひこう" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-00-normal.png" alt="ノーマル" style="height:18px;vertical-align:middle;" /> |
-
-### タイプ弱点・耐性（メガ後: いわ/かくとう）
-
-メガ進化後はみずタイプがかくとうに変化するため耐性が一部変わる。
-
-| 区分 | タイプ |
-|---|---|
-| 弱点（×4） | <img src="/images/types/type-11-grass.png" alt="くさ" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-13-psychic.png" alt="エスパー" style="height:18px;vertical-align:middle;" /> |
-| 弱点（×2） | <img src="/images/types/type-10-water.png" alt="みず" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-04-ground.png" alt="じめん" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-02-flying.png" alt="ひこう" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="height:18px;vertical-align:middle;" /> |
-| 耐性（×0.5） | <img src="/images/types/type-00-normal.png" alt="ノーマル" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-05-rock.png" alt="いわ" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-16-dark.png" alt="あく" style="height:18px;vertical-align:middle;" /> <img src="/images/types/type-06-bug.png" alt="むし" style="height:18px;vertical-align:middle;" /> |
+メガ進化後はいわ/かくとうの複合となり弱点が7タイプと多い点が最大のネック。特にくさ（×2）・みず（×2）・じめん（×2）・エスパー（×2）・フェアリー（×2）は環境上位ポケモンが広く持つ技タイプで、からをやぶり前に削られると役割を果たせません。一方、ノーマル・いわ・あく・むし・ほのお・どくへの耐性は立ち回りで活かせる場面もあります。
 
 ---
 
@@ -120,70 +187,70 @@ draft: true
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>からをやぶる</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">98.7%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">98.2%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>インファイト</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">96.9%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">96.8%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ロックブラスト</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">25</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">60.1%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">63.6%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>じしん</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">100</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">48.0%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">45.8%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>アクアブレイク</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">85</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">30.8%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">30.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>いわなだれ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">14.1%</td>
-</tr>
-<tr>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ストーンエッジ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">100</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">12.5%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>どくづき</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10.9%</td>
-</tr>
-<tr>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>シャドークロー</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">70</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10.3%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">14.8%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>いわなだれ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">12.0%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ストーンエッジ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">100</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">11.6%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>どくづき</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9.8%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>つじぎり</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">70</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5.9%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4.9%</td>
 </tr>
 </tbody>
 </table>
@@ -193,132 +260,202 @@ draft: true
 
 ## 主要型の解説
 
-### 型① いじっぱりメガ型（採用率54.3%）
+### 型1: ようきメガ型（採用率52.8%）
 
+**性格採用率: ようき 52.8%**（S重視型の指標。性格分布で最多）
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
-  <img src="/images/types/type-05-rock.png" alt="いわ" style="height:20px;" />
-  <img src="/images/types/type-01-fighting.png" alt="かくとう" style="height:20px;" />
-  <strong>いじっぱりメガガメノデス</strong>
+  <img src="/images/pokemon/pokemon-0689-00.webp" alt="ガメノデス" style="width:48px;height:48px">
+  <strong style="font-size:1.05em">ようきメガガメノデス</strong>
 </div>
 
-- **性格**: いじっぱり（こうげき↑ とくこう↓）
-- **持ち物**: ガメノデスナイト
-- **特性**: かたいツメ → メガ後変化
-- **EV振り**: H2-A32-S32（主流：38.9%）
-- **技構成**: からをやぶる / インファイト / ロックブラスト / じしん
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
+<div>
+<strong>特性:</strong> かたいツメ（92.5%）※メガ後も継続<br>
+<strong>性格:</strong> ようき（S↑ C↓）<br>
+<strong>EV:</strong> H2-A32-S32（採用率41.0%）<br>
+<strong>持ち物:</strong> ガメノデスナイト
+</div>
+<div>
+<strong>技構成:</strong><br>
+・からをやぶる（98.2%）<br>
+・インファイト（96.8%）<br>
+・ロックブラスト（63.6%）<br>
+・じしん（45.8%）
+</div>
+</div>
+</div>
 
-**強み**  
-こうげきに全振りに近いEVを割くことで、からをやぶり後のインファイトの火力が最大限に引き出せる。H2振りで奇数HPを確保しつつ、S32振りでからをやぶり後に多くの相手を抜けるラインを確保する。ロックブラストはタスキやきのみを貫通し、上振れ時は一掃を狙える。
+**強み:**
 
-**弱み**  
-からをやぶり前は火力が控えめで、先手を取られると行動できないリスクがある。特殊耐久が低下するため、メガ進化後にエスパー・フェアリー技1発で倒されるケースもある。くさ4倍弱点は常に意識が必要で、マスカーナ等には選出を慎重にしなければならない。
+いじっぱり型と比べてからをやぶり前の素すばやさが高く、メガ進化時点で抜ける相手の範囲が広がる。からをやぶり前に行動を許される確率が下がるため、いじっぱり型では先に動かれて崩されるケースを減らせる。S32振りでからをやぶり後のすばやさ上昇を最大限活かし、環境上位の素早さラインを安定して超える。
+
+**弱み:**
+
+こうげき補正がないため、いじっぱり型と比較してインファイトの最大火力がやや落ちる。ぼうぎょの高い相手（ブリジュラス等のはがね）に対しては確定数がずれるケースがあり、からをやぶり1回では押し切れない場面が出る。
 
 ---
 
-### 型② ようきメガ型（採用率44.1%）
+### 型2: いじっぱりメガ型（採用率45.2%）
 
+**性格採用率: いじっぱり 45.2%**（火力重視型の指標）
+
+<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
-  <img src="/images/types/type-05-rock.png" alt="いわ" style="height:20px;" />
-  <img src="/images/types/type-01-fighting.png" alt="かくとう" style="height:20px;" />
-  <strong>ようきメガガメノデス</strong>
+  <img src="/images/pokemon/pokemon-0689-00.webp" alt="ガメノデス" style="width:48px;height:48px">
+  <strong style="font-size:1.05em">いじっぱりメガガメノデス</strong>
 </div>
 
-- **性格**: ようき（すばやさ↑ とくこう↓）
-- **持ち物**: ガメノデスナイト
-- **特性**: かたいツメ → メガ後変化
-- **EV振り**: H10-A32-S24（主流：20.0%）/ A32-S32（3.1%）
-- **技構成**: からをやぶる / インファイト / ロックブラスト / じしん（またはアクアブレイク）
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
+<div>
+<strong>特性:</strong> かたいツメ（92.5%）※メガ後も継続<br>
+<strong>性格:</strong> いじっぱり（A↑ C↓）<br>
+<strong>EV:</strong> H10-A32-S24（採用率19.5%）<br>
+<strong>持ち物:</strong> ガメノデスナイト
+</div>
+<div>
+<strong>技構成:</strong><br>
+・からをやぶる（98.2%）<br>
+・インファイト（96.8%）<br>
+・ロックブラスト（63.6%）<br>
+・<span style="color:#1d4ed8">じしん45.8% / アクアブレイク30.9%</span>
+</div>
+</div>
+</div>
 
-**強み**  
-いじっぱり型と比べてからをやぶり前の素すばやさが高く、メガ進化時点で抜ける相手の範囲が広がる。からをやぶり後は環境上位のほぼ全ての素早さラインを超えるため、先制で動きやすい。H10振りでやや耐久を伸ばしつつ、S24振りでからをやぶり後のすばやさ上昇を最大限活かす構成。
+**強み:**
 
-**弱み**  
-こうげき補正がないため、いじっぱり型と比較してインファイトの最大火力がやや落ちる。ぼうぎょの高い相手（はがねタイプ等）に対しては確定数がずれるケースがある。役割が攻め一辺倒なため、対面構築以外では使いにくい場面もある。
+ようき型よりこうげき実数値が約10%高く、ようき型では2発になる耐久ラインの相手をからをやぶり後の一致技で1発圏内に入れられる。ロックブラストはタスキやきのみを貫通し、上振れ時は一掃を狙える。S24止まりでもからをやぶり後の上昇で多くの相手を抜けるため、火力を取りつつ最低限の素早さを確保する構成。
+
+**弱み:**
+
+からをやぶり前の素早さがようき型より低いぶん、メガ進化直後に相手に先制される機会が増え、からをやぶりを通す前に削られるリスクが高い。
 
 ---
 
 ## 環境ポケモンへの相性分析
 
-| 相手 | 使用率順位 | 判定 | 理由 |
-|---|---|---|---|
-| ガブリアス | 1位 | 五分 | じしんでガブリアスに打点があるが、ガブリアス側もじしんで弱点を突ける。からをやぶり後のインファイトで上から倒せるラインだが、先にじしんを受けるリスクあり。対面性能は拮抗。 |
-| ブリジュラス | 2位 | 有利 | はがねタイプにインファイトが4倍弱点（かくとう×はがね）。じしんでも弱点を突ける。ブリジュラス側のでんき技はメガ後でも弱点だが、先にからをやぶりを決めれば上から倒せる。 |
-| マスカーニャ | 4位 | 不利 | くさタイプに対しメガ後でも4倍弱点。先制技のマジカルシャインや高い素早さで上から動かれるリスクが高く、選出を避けるのが基本。 |
-| ミミッキュ | 5位 | 不利 | フェアリータイプはメガ後に弱点（×2）。化けの皮でからをやぶりを無駄にされるケースが多く、インファイトが通っても等倍になる点も痛い。じゃれつくで強い打点を受ける。 |
-| ムクホーク | 6位 | 不利 | ひこうタイプはメガ後のかくとう技を半減。インティミデートでこうげきを1段階下げられたうえ、ブレイブバードで高い打点を受ける。からをやぶり後でも上を取られることが多い。 |
-| ラグラージ | 7位 | 五分 | みずタイプはメガ後に弱点だがアクアブレイクの採用率は30.8%止まり。ラグラージ側のサーフやじしんでそれぞれ弱点を突かれる。じしん採用型ならやや有利に動けるが、確実ではない。 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン（環境順位）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">相性</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンにインファイト・じしんがともに×2。からをやぶりを通せれば一致技で押し切れる。ぼうぎょが高いためいじっぱり型のほうが確定数で勝りやすい</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト・じしんともガブリアスに等倍。からをやぶり後なら上から押せるが、ガブリアス側のじしんはメガ後に×2弱点で、先に動かれると大ダメージ。対面性能は拮抗</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（3位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう技はゴースト/フェアリーに無効でインファイトが通らない。じゃれつく（94.8%）がメガ後の×2弱点を突き、化けの皮でからをやぶりも凌がれる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（4位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技がメガ後の×2弱点。トリックフラワー（98.2%）・トリプルアクセル（88.0%）を高い素早さから先に通され、からをやぶり前に崩されやすい</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0398-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ムクホーク（6位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いかく（97.2%）でこうげきを1段階下げられ、ブレイブバードで高い打点を受ける。かくとう技はノーマル/ひこうに等倍止まりで、有効打に欠ける</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0260-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ラグラージ（10位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイト・じしん・アクアブレイクいずれもみず/じめんに等倍止まりで決定打に乏しい。ラグラージのじしんはメガ後の×2弱点を突くため、撃ち合いで不利</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ---
 
 ## パーティ構成
 
-ガメノデスは「からをやぶる」を通す前提で動くため、展開サポートをしてくれるポケモンとの相性が特に重要となる。
+### 相性の良いポケモン
 
 <div class="partner-grid">
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" />
+    <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">同居率1位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ガメノデスが苦手なミミッキュ・マスカーニャにじしん・げきりんで対応でき、ガメノデスのくさ弱点を別軸で補完する。物理2枚で先発択を散らせる</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0861-00.webp" alt="オーロンゲ" />
+    <img src="/images/pokemon/pokemon-0861-00.webp" alt="オーロンゲ">
     <div class="name">オーロンゲ</div>
     <div class="rate">同居率2位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">いたずらごころによるおいかぜやでんじは等のサポートで、ガメノデスがからをやぶりを安全に展開できる状況を作れる。嘘泣き等のサポートも相性が良い</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0660-00.webp" alt="カバルドン" />
+    <img src="/images/pokemon/pokemon-0660-00.webp" alt="カバルドン">
     <div class="name">カバルドン</div>
     <div class="rate">同居率3位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">あくびや砂あらしでゲームテンポを落としながら展開する役割。砂ダメージで相手のきあいのタスキを削れるため、ガメノデスのからをやぶり後の攻撃が通りやすくなる</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0038-01.webp" alt="キュウコン" />
+    <img src="/images/pokemon/pokemon-0038-01.webp" alt="キュウコン">
     <div class="name">キュウコン</div>
     <div class="rate">同居率4位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">オーロラベールやおいかぜでガメノデスがからをやぶりを通しやすい状況を整える。こおり・フェアリー技でガメノデスが苦手なマスカーニャに圧力をかけられる</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0996-00.webp" alt="ブリジュラス" />
+    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率5位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき技でガメノデスが重いみず・ひこうを牽制し、はがねの高耐久で受け回しを担う。ガメノデスの×4弱点であるくさをブリジュラスは半減で受けられる補完関係</div>
   </div>
 </div>
 
-- **ガブリアス**: ガブリアスとのダブル選出で物理2枚を並べることができる。ガブリアスが電気・くさ弱点を補完しつつ、ガメノデスが苦手なムクホーク・ミミッキュに対してガブリアスで対応する形が定番。
-- **オーロンゲ**: いたずらごころによるおいかぜやでんじは等のサポートで、ガメノデスがからをやぶりを安全に展開できる状況を作れる。嘘泣き等のサポートも相性が良い。
-- **カバルドン**: あくびや砂あらしでゲームテンポを落としながら展開する役割。砂ダメージで相手のタスキを削れるため、ガメノデスのロックブラスト採用率が下がる構築でも圧力をかけられる。
-- **キュウコン**: にほんばれや天候操作で場の状況を整える役割。キュウコンのフェアリー技でミミッキュ・マスカーニャに圧力をかけつつ、ガメノデスが一掃を担う形。
-- **ブリジュラス**: ガメノデスが苦手なひこう・エスパー技への牽制や電磁砲でのサポートが可能。ブリジュラスへの弱点をガメノデスのインファイトが解消する相互補完関係でもある。
+**パーティ構成の基本方針:**
+
+ガメノデスは「からをやぶる」を通す前提で動くため、展開サポートをしてくれるポケモンとの相性が特に重要となる。
 
 ---
 
 ## データ分析①：からをやぶる採用率と性格分布から読む最適解
 
-M-3データでからをやぶる採用率は98.7%に達しており、実質ほぼ全ての個体で採用されている。性格はいじっぱり54.3%・ようき44.1%と拮抗しており、プレイヤーの間でも「火力重視か素早さ重視か」の議論が続いていることが数値にも表れている。
+M-3データでからをやぶる採用率は98.2%に達しており、実質ほぼ全ての個体で採用されている。性格はようき52.8%・いじっぱり45.2%と拮抗しつつもようきがわずかに多数派で、プレイヤーの間でも「素早さ重視か火力重視か」の議論が続いていることが数値にも表れている。
 
-EV振りで最も多い「H2-A32-S32」（38.9%）は、こうげきとすばやさに最大投資しながらHPを偶数調整するパターン。からをやぶり後の爆発力を最大限引き出す構成として、いじっぱり性格との組み合わせで採用される傾向がある。「H10-A32-S24」（20.0%）は、からをやぶり前のすばやさラインを若干下げてHP耐久を厚くしたようき型向けのパターンと考えられる。
+EV振りで最も多い「H2-A32-S32」（41.0%）は、こうげきとすばやさに最大投資しつつHPに2を割くパターン。からをやぶり前後の素早さラインを最大化する構成で、多数派のようき性格と組み合わせて採用される傾向がある。次点の「H10-A32-S24」（19.5%）は、すばやさを少し削ってHP耐久を厚くした配分で、火力を確保するいじっぱり型と相性が良い。
 
-特性かたいツメ（92.4%）の圧倒的な採用率は、ロックブラスト・インファイト等の接触技の火力を上乗せする目的が主で、スナイパー（5.4%）は連続技の急所狙いを重視する特殊構成として少数派にとどまる。
+特性かたいツメ（92.5%）の圧倒的な採用率は、ロックブラスト・インファイト等の接触技の火力を上乗せする目的が主で、スナイパー（5.3%）は連続技の急所狙いを重視する少数派にとどまる。
 
 ---
 
-## まとめ：型別比較表
+**総評:**
 
-| 比較項目 | いじっぱりメガ型 | ようきメガ型 |
-|---|---|---|
-| 性格 | いじっぱり | ようき |
-| 主流EV | H2-A32-S32 | H10-A32-S24 |
-| 採用率 | 54.3% | 44.1% |
-| インファイト火力 | 高い | やや低い |
-| からをやぶり前の素早さ | 低い | 高い |
-| からをやぶり後の制圧力 | 最大 | 安定 |
-| 向いている構築 | 対面・積みサイクル | 対面特化・展開パ |
-| リスク | からをやぶり前に倒される | 最大火力が出ないケース |
+ガメノデスはメガ進化後のからをやぶりを通せるかどうかがすべての鍵となる。多数派のようき型（52.8%）はからをやぶり前後の素早さを最大化して行動保証を優先し、いじっぱり型（45.2%）はこうげき実数値で約10%上回り、ようき型では2発の相手を1発圏内に入れる火力で勝負する。どちらも技構成はからをやぶる・インファイト・ロックブラストがほぼ固定で、4枠目のじしん（45.8%）かアクアブレイク（30.9%）の選択で対応範囲が変わる。
 
-ガメノデスはメガ進化後のからをやぶりを通せるかどうかがすべての鍵となる。いじっぱり型は爆発力で一点突破を狙い、ようき型は素早さを活かして安定した行動保証を重視する。M-3環境ではいじっぱり型がわずかに多いが、使用率1位ガブリアスへの対面処理性能を考えると、どちらの型でもじしんの採用は優先度が高い。パーティのサポート役（オーロンゲ・カバルドン）と組み合わせてからをやぶりを安全に展開できる構築に組み込むことで、使用率65位以上のポテンシャルを発揮できるポケモンといえる。
+苦手なミミッキュ（かくとう無効）・マスカーニャ（くさ×2）には選出段階で割り切り、ガブリアスやブリジュラスといった同居率上位のサポート役でからをやぶりを安全に展開できる構築に組み込むことで、使用率71位のポテンシャルを引き出せるポケモンといえる。
 
 ---
 
 ## 関連記事
 
-- [【ポケモンチャンピオンズ】ガブリアス考察 M-3 使用率1位](/blog/garchomp-analysis-m3/)
-- [【ポケモンチャンピオンズ】ブリジュラス考察 M-3 使用率2位](/blog/archaludon-analysis-m3/)
 - [【ポケモンチャンピオンズ】ムクホーク考察 M-3 使用率6位](/blog/staraptor-analysis-m3/)
+- [【ポケモンチャンピオンズ】メガメタグロス考察 M-3 使用率7位](/blog/metagross-analysis-m3/)

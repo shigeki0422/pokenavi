@@ -10,7 +10,7 @@ import urllib.request
 
 BASE = "http://localhost:8888"
 N = int(os.environ.get("PRECOMPUTE_N", "3"))   # 1カードの対戦数。env PRECOMPUTE_N で段階実行（1→3）
-AI_VER = "k4-megaeval-1mega-d2"  # sim_server.AI_VER と一致させる（再開判定用）
+AI_VER = "mcts-guardq800-1"  # sim_server.AI_VER と一致させる（再開判定用）
 BUDGET_SEC = 48 * 3600
 RESERVE_SEC = 20 * 60            # N=3は1体〜15分想定。20分未満なら次は開始しない
 CACHE_DIR = os.path.join(os.path.dirname(__file__), "f1_cache")

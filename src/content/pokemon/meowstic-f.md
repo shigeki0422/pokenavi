@@ -710,7 +710,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0571-00.webp" alt="ゾロアーク" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/zoroark/" style="color:inherit;text-decoration:none">ゾロアーク</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0571-01.webp" alt="ヒスイゾロアーク" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/zoroark-hisui/" style="color:inherit;text-decoration:none">ヒスイゾロアーク</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>10.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 </tbody>

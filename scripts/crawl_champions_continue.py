@@ -1,18 +1,25 @@
 """
-131位〜150位のクロール
-scroll_to_topしてから高速ナビゲーションで131位まで進み、その後詳細クロール
+Champions クロール（途中再開用）
+scroll_to_top → 高速ナビ(1〜START_RANK-1) → 詳細クロール(START_RANK〜END_RANK)
+
+【止まる原因と対策】
+- 高速ナビ中の画面ずれ: 各rankのタイムスタンプログで検出可能
+- adbサイレント失敗: stderr をログに出力
+- screencap空ファイル: サイズ検証＋リトライ
+- 詳細画面がずれた: 1rank完了ごとに経過秒をログ出力
 """
 
 import subprocess
 import time
 import os
 import hashlib
+import sys
 from datetime import date
 from PIL import Image
 
 OUTPUT_DIR    = f"/tmp/champ_crawl_{date.today().isoformat()}"
-START_RANK    = 131
-END_RANK      = 150
+START_RANK    = 29
+END_RANK      = 200
 
 LIST_X        = 1600
 LIST_ENTRY_Y  = [350, 482, 614, 746, 878]
@@ -25,31 +32,67 @@ BACK_BTN      = (308, 49)
 PANELS = ["move", "item", "partner", "nature", "ev", "ability"]
 PANEL_MAX_SCROLL = {"move": 1, "item": 1, "partner": 1, "nature": 1, "ev": 8, "ability": 0}
 
-def adb(cmd):
-    subprocess.run(f"adb {cmd}", shell=True, capture_output=True)
+PROGRESS_FILE = f"{OUTPUT_DIR}/last_rank.txt"
+
+
+def log(msg):
+    ts = time.strftime("%H:%M:%S")
+    print(f"[{ts}] {msg}", flush=True)
+
+
+def adb(cmd, check=False):
+    result = subprocess.run(f"adb {cmd}", shell=True, capture_output=True, text=True)
+    if result.returncode != 0 and check:
+        log(f"⚠️ adb失敗: adb {cmd}")
+        log(f"   stderr: {result.stderr.strip()}")
+    return result
+
+
+def check_adb():
+    result = adb("devices")
+    lines = [l for l in result.stdout.strip().splitlines() if "device" in l and "List" not in l]
+    if not lines:
+        log("❌ ADB接続なし。デバイスを確認してください。")
+        sys.exit(1)
+    log(f"ADB接続OK: {lines[0].split()[0]}")
+
 
 def tap(x, y, wait=1.0):
-    adb(f"shell input tap {x} {y}")
+    adb(f"shell input tap {x} {y}", check=True)
     time.sleep(wait)
+
 
 def swipe(x1, y1, x2, y2, dur=800, wait=1.0):
-    adb(f"shell input swipe {x1} {y1} {x2} {y2} {dur}")
+    adb(f"shell input swipe {x1} {y1} {x2} {y2} {dur}", check=True)
     time.sleep(wait)
 
-def screenshot(path):
+
+def screenshot(path, retries=3):
     os.makedirs(os.path.dirname(path), exist_ok=True)
-    subprocess.run(f"adb exec-out screencap -p > {path}", shell=True)
+    for attempt in range(retries):
+        subprocess.run(f"adb exec-out screencap -p > {path}", shell=True)
+        size = os.path.getsize(path) if os.path.exists(path) else 0
+        if size > 50_000:
+            return True
+        log(f"⚠️ screencap異常({size}bytes, attempt {attempt+1}/{retries}): {os.path.basename(path)}")
+        time.sleep(1.5)
+    log(f"❌ screencap失敗(3回リトライ後): {path}")
+    return False
+
 
 def img_hash(path):
     img = Image.open(path).crop((900, 200, 1600, 900))
     return hashlib.md5(img.tobytes()).hexdigest()
 
+
 def scroll_to_top():
     for _ in range(10):
         swipe(LIST_X, 400, LIST_X, 800, 600, wait=0.4)
 
+
 def slot_for_rank(rank):
     return rank - 1 if rank <= 4 else 4
+
 
 def capture_panel(save_dir, panel):
     max_s = PANEL_MAX_SCROLL.get(panel, 1)
@@ -57,7 +100,9 @@ def capture_panel(save_dir, panel):
     for page in range(max_s + 1):
         path = f"{save_dir}/{panel}_{page:02d}.png"
         time.sleep(0.8)
-        screenshot(path)
+        ok = screenshot(path)
+        if not ok:
+            break
         h = img_hash(path)
         if h in hashes:
             os.remove(path)
@@ -70,6 +115,7 @@ def capture_panel(save_dir, panel):
                 swipe(PANEL_X, PANEL_BOT, PANEL_X, PANEL_BOT - 400, 400, wait=0.5)
     return len(hashes)
 
+
 def crawl_detail(rank):
     save_dir = f"{OUTPUT_DIR}/detail/{rank:03d}"
     os.makedirs(save_dir, exist_ok=True)
@@ -81,35 +127,46 @@ def crawl_detail(rank):
             tap(*ARROW_RIGHT, wait=1.0)
     return counts
 
+
+def save_progress(rank):
+    with open(PROGRESS_FILE, "w") as f:
+        f.write(str(rank))
+
+
 def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
-    print(f"保存先: {OUTPUT_DIR}")
+    log(f"保存先: {OUTPUT_DIR}")
 
-    print("トップまでスクロール...")
+    check_adb()
+
+    log("トップまでスクロール...")
     scroll_to_top()
     time.sleep(1)
 
-    # 高速ナビゲーションで130位まで進める（詳細クロールなし）
-    print(f"高速ナビゲーション: 1位〜{START_RANK - 1}位を素通り...")
+    log(f"高速ナビゲーション: 1位〜{START_RANK - 1}位を素通り...")
     for rank in range(1, START_RANK):
         slot = slot_for_rank(rank)
         tap(LIST_X, LIST_ENTRY_Y[slot], wait=1.5)
         tap(*BACK_BTN, wait=1.5)
         if rank % 10 == 0:
-            print(f"  {rank}位通過...")
+            log(f"  {rank}位通過")
 
-    print(f"\n{START_RANK}位〜{END_RANK}位の詳細クロール開始")
+    log(f"{START_RANK}位〜{END_RANK}位の詳細クロール開始")
     for rank in range(START_RANK, END_RANK + 1):
         slot = slot_for_rank(rank)
-        print(f"[{rank:3d}位] slot={slot}", end=" ", flush=True)
+        t0 = time.time()
+        log(f"[{rank:3d}位] slot={slot} 開始")
         tap(LIST_X, LIST_ENTRY_Y[slot], wait=2.0)
 
         counts = crawl_detail(rank)
-        print({p: counts[p] for p in PANELS})
+        elapsed = time.time() - t0
+        log(f"[{rank:3d}位] 完了 {elapsed:.0f}s {counts}")
 
+        save_progress(rank)
         tap(*BACK_BTN, wait=2.0)
 
-    print(f"\n完了: {START_RANK}〜{END_RANK}位")
+    log(f"完了: {START_RANK}〜{END_RANK}位")
+
 
 if __name__ == "__main__":
     main()

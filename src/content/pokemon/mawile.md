@@ -794,31 +794,12 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><a href="/pokemon/rotom/" style="color:inherit;text-decoration:none">ロトム</a></div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>8.2位</strong></span><span style="font-size:0.82em;color:#16a34a">前回比 +1</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
-<line x1="8" y1="8" x2="232" y2="8" stroke="#e2e8f0" stroke-width="1"/>
-<text x="6" y="11" text-anchor="end" fill="#94a3b8" font-size="8">1</text>
-<line x1="8" y1="28" x2="232" y2="28" stroke="#e2e8f0" stroke-width="1"/>
-<text x="6" y="31" text-anchor="end" fill="#94a3b8" font-size="8">5</text>
-<line x1="8" y1="54" x2="232" y2="54" stroke="#e2e8f0" stroke-width="1"/>
-<text x="6" y="57" text-anchor="end" fill="#94a3b8" font-size="8">10</text>
-<text x="8" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/17</text>
-<text x="53" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/18</text>
-<text x="98" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/19</text>
-<text x="142" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/20</text>
-<text x="187" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/22</text>
-<text x="232" y="70" text-anchor="middle" fill="#64748b" font-size="9">6/25</text>
-<polyline points="8,28 98,49 187,54 232,49" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/>
-<circle cx="8" cy="28" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
-<circle cx="98" cy="49" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
-<circle cx="187" cy="54" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
-<circle cx="232" cy="49" r="3" fill="#8b5cf6" stroke="#fff" stroke-width="1.5"/>
-<text x="232" y="43" text-anchor="middle" fill="#8b5cf6" font-size="9" font-weight="bold">9位</text>
-</svg></div></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/rotom-wash/" style="color:inherit;text-decoration:none">ウォッシュロトム</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>9.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0038-00.webp" alt="キュウコン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/ninetales/" style="color:inherit;text-decoration:none">キュウコン</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0038-01.webp" alt="アローラキュウコン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/ninetales-alola/" style="color:inherit;text-decoration:none">アローラキュウコン</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>10.0位</strong></span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div></div></div></td>
 </tr>
 </tbody>

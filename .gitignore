@@ -31,6 +31,11 @@ public/sim-data/subjects/
 # exportが出すがフロント未使用＝コミット不要（saved=5.5MB, rankers）
 public/sim-data/saved.json
 public/sim-data/rankers.json
+# テーマ総当たり：subjects(計202MB)はR2配信＝コミットしない。META(index/icons/move_types)のみ追跡
+scripts/theme_f1_cache/
+public/sim-data-theme/subjects/
+public/sim-data-theme/saved.json
+public/sim-data-theme/rankers.json
 # Python キャッシュ・SQLite一時ファイル
 __pycache__/
 *.pyc
@@ -40,3 +45,5 @@ scripts/*.db-wal
 # Python仮想環境
 scripts/venv/
 scripts/build/
+ga4_client_secret.json
+.env.local

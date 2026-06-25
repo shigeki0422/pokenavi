@@ -9,6 +9,7 @@
 使い方: python -m simulator.az_loop [iters] [games_per] [n_sims]
 """
 import copy
+import os
 import random
 import sys
 from itertools import combinations
@@ -17,8 +18,9 @@ import numpy as np
 
 from .simulate import get_loader
 from .env import load_registered_parties, build_party, heuristic_selection
-from .battle import Battle, BattleSide, BattleField
-from .ai import HeuristicAI, _forced_charging_action
+from .battle import Battle, BattleSide, BattleField, is_trapped
+from .ai import HeuristicAI, _forced_charging_action, _effective_speed
+from .features import _expected_frac
 from .belief import OpponentBelief
 from .features import encode_state, feature_dim
 from .battle import Action
@@ -75,6 +77,9 @@ class _SelfPlayAI:
         self.opp_ai = NetGreedyAI(net); self._fallback = HeuristicAI()
         self._det = SearchAI(loader, season=season, seed=rng.randint(0, 1 << 30))
         self.records = []  # (features, pi_dict, legal_idxs)
+        self.switch_boost = float(os.environ.get("SWITCH_BOOST", "0.0"))   # 交代探索の底上げ
+        self.imitate_switch = os.environ.get("IMITATE_SWITCH") == "1"      # 生存考慮交代を教師に模倣
+        self.imitate_prob = float(os.environ.get("IMITATE_PROB", "1.0"))   # 模倣交代を適用する確率（過剰交代の抑制用）
         # teacher="new": 教師信号を新MCTS(同時手番DUCT/regret)で生成。旧mcts_searchは相手固定の単一エージェント探索。
         self.teacher = teacher
         if teacher == "new":
@@ -86,6 +91,27 @@ class _SelfPlayAI:
                            value_fn=vfn, policy_fn=pfn, policy_weight=0.15, rollout_ai=NetGreedyAI(net))
             tai.mcts = True; tai.mcts_sims = n_sims; tai.c_puct = c_puct; tai.mcts_select = select
             self._newai = tai
+
+    def _survival_switch(self, my, opp, field):
+        """生存考慮の交代教師: 不利対面で、控えが『速いなら1発/遅いなら2発』耐えて殴り返せる
+        有利対面があればそのスロットを返す（活かせないなら交代しない＝死に出し優先）。None=交代せず。"""
+        from .features import switch_wins_1v1
+        me = my.active; o = opp.active
+        if me is None or o is None or not me.is_alive or not o.is_alive: return None
+        if is_trapped(me, o): return None
+        my_in = _expected_frac(o, me, field, my, multi_hit=True)
+        if my_in < 0.45: return None
+        if _expected_frac(me, o, field, opp, multi_hit=True) >= 1.0 and _effective_speed(me, field) > _effective_speed(o, field):
+            return None
+        ospd = _effective_speed(o, field); best = None; bg = 0.0
+        for j, b in enumerate(my.party):
+            if j == my.active_idx or not b.is_alive: continue
+            in_f = _expected_frac(o, b, field, my, multi_hit=True); out_f = _expected_frac(b, o, field, opp, multi_hit=True)
+            hp = b.hp / max(1, b.max_hp); faster = _effective_speed(b, field) > ospd
+            # 真の有利交代＝交代先が1v1の撃ち合いに勝てる（着地1発＋速度考慮）
+            if in_f <= my_in - 0.2 and switch_wins_1v1(in_f, out_f, hp, faster) and (out_f - in_f) > bg:
+                bg = out_f - in_f; best = j
+        return best
 
     def __call__(self, my_side, opp_side, field):
         me = my_side.active
@@ -103,15 +129,25 @@ class _SelfPlayAI:
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             cs1, cs2, cfield = copy.deepcopy((s1, s2, field))
             copp = cs2 if my_is_s1 else cs1
-            cfg = self._det._sample_opp_config(opp_side, belief)
+            if os.environ.get("HIDDEN_SELECTION") != "0":
+                self._det._resample_hidden_bench(copp, my_side.opp_view)
+            cfg = self._det._sample_opp_config(copp, belief)
             for poke, c in zip(copp.party, cfg):
                 if c is not None:
                     self._det._determinize(poke, c)
             feat = encode_state(cs1, cs2, cfield) if my_is_s1 else encode_state(cs2, cs1, cfield)
+            legal = [ix for _, ix in legal_actions_indexed(my_side, opp_side, field)]
+            # 模倣交代：真の有利交代(1v1勝ち)があれば方策ターゲットをその交代に固定して実際に交代する。
+            # 現実選出下では交代に+8ptの価値があるため、強制探索でネットに交代価値を学ばせる。
+            if self.imitate_switch and (self.imitate_prob >= 1.0 or self.rng.random() < self.imitate_prob):
+                sw = self._survival_switch(my_side, opp_side, field)
+                if sw is not None and (8 + sw) in legal:
+                    if len(legal) > 1:
+                        self.records.append((feat, {8 + sw: 1.0}, legal))
+                    return Action(type="switch", switch_to=sw)
             act, pi = self._newai.mcts_policy(my_side, opp_side, field, temperature=self.temperature)
             if act is None:
                 return self._fallback(my_side, opp_side, field)
-            legal = [ix for _, ix in legal_actions_indexed(my_side, opp_side, field)]
             if pi and len(legal) > 1:
                 self.records.append((feat, pi, legal))
             return act
@@ -130,9 +166,15 @@ class _SelfPlayAI:
         b = Battle(cs1, cs2, cfield)
         act, pi = mcts_search(b, my_is_s1, self.net, self.opp_ai, n_sims=self.n_sims,
                               dir_eps=self.dir_eps, temperature=self.temperature,
-                              return_pi=True, rng=self.rng)
+                              return_pi=True, rng=self.rng, switch_boost=self.switch_boost)
         if act is None:
             return self._fallback(my_side, opp_side, field)
+        # 模倣: 生存考慮の交代教師が交代を指示したら、その手に上書きし方策ターゲットも交代へ
+        if self.imitate_switch and getattr(act, "type", None) != "switch":
+            sw = self._survival_switch(my_side, opp_side, field)
+            if sw is not None:
+                act = Action(type="switch", switch_to=sw)
+                pi = {8 + sw: 1.0}
         if pi and len(legal) > 1:
             self.records.append((feat, pi, legal))
         return act

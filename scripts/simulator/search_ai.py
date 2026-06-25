@@ -13,12 +13,13 @@
 """
 import copy
 import math
+import os
 import random
 from typing import List, Optional
 
 from .battle import Action, Battle, BattleSide, BattleField, is_trapped
 from .data import DataLoader, NATURE_MODS, get_type_effectiveness
-from .pokemon import calc_hp, calc_stat
+from .pokemon import calc_hp, calc_stat, build_from_template
 from .belief import OpponentBelief
 from .ai import (HeuristicAI, _forced_charging_action, _filter_valid_by_lock,
                  _filter_by_pp, _get_struggle, should_mega_evolve,
@@ -114,6 +115,19 @@ class SearchAI:
         #   決定化ツリーで平均化して隠れ情報のロバスト性を保つ。挙動が変わるので強さは要A/B検証。
         self.mcts_cache = False
         self.mcts_ensemble = 16
+        # collapse_mega=True: メガ可能時は常にメガ前提（メガ無し技を列挙しない＝分岐半減・無駄探索削減）
+        self.collapse_mega = os.environ.get("MCTS_COLLAPSE_MEGA", "1") == "1"
+        # qselect=True: 最終手を「訪問数」でなく「十分訪問された手の中でQ最大」で選ぶ（@少simでも正しいQを拾う）
+        self.qselect = os.environ.get("MCTS_QSELECT", "1") == "1"
+        self.qselect_frac = float(os.environ.get("MCTS_QSELECT_FRAC", "0.1"))  # maxNのこの割合以上を信頼対象
+        self.qselect_min = int(os.environ.get("MCTS_QSELECT_MIN", "10"))      # 最低訪問数（Qの信頼性確保）
+        # 下方ガード：相手型をK個サンプルし各型で相手最善応手の価値を求め、その「最悪型」値で評価。
+        # MCTSの手より最悪型値が大きく勝る控え交代があれば、そこへ上書き（破滅的downsideの回避）。
+        self.downside_guard = os.environ.get("MCTS_DOWNSIDE_GUARD", "1") == "1"
+        self.downside_k = int(os.environ.get("MCTS_DOWNSIDE_K", "8"))          # サンプルする相手型数
+        self.downside_margin = float(os.environ.get("MCTS_DOWNSIDE_MARGIN", "0.20"))  # この差以上で交代へ上書き
+        self._track_depth = False      # Trueで各シミュの到達深さを _depth_hist に記録（計測用）
+        self._depth_hist = []
 
     # ── 公開API（AIコールバック） ──────────────────────────────────
     def __call__(self, my_side: BattleSide, opp_side: BattleSide, field: BattleField) -> Action:
@@ -200,11 +214,14 @@ class SearchAI:
             except Exception:
                 priors = {}
         agg = [0.0] * len(my_cands); nconf = 0
+        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
         for _ in range(self.K):
-            cfg = self._sample_opp_config(opp_side, belief)
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             bs1, bs2, bfield = copy.deepcopy((s1, s2, field))
             dopp = bs2 if my_is_s1 else bs1; dme = bs1 if my_is_s1 else bs2
+            if hidden:
+                self._resample_hidden_bench(dopp, my_side.opp_view)
+            cfg = self._sample_opp_config(dopp, belief)
             for poke, c in zip(dopp.party, cfg):
                 if c is not None:
                     self._determinize(poke, c)
@@ -285,11 +302,14 @@ class SearchAI:
         from .selection import solve_zero_sum
         my_is_s1 = (my_side.field_idx == 0)
         agg = {}; wst = {}; cnt = 0
+        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
         for _ in range(self.tree_det):
-            cfg = self._sample_opp_config(opp_side, belief)
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             bs1, bs2, bfield = copy.deepcopy((s1, s2, field))
             dopp = bs2 if my_is_s1 else bs1; dme = bs1 if my_is_s1 else bs2
+            if hidden:
+                self._resample_hidden_bench(dopp, my_side.opp_view)
+            cfg = self._sample_opp_config(dopp, belief)
             for poke, c in zip(dopp.party, cfg):
                 if c is not None:
                     self._determinize(poke, c)
@@ -396,17 +416,99 @@ class SearchAI:
     # ── IS-MCTS + Decoupled PUCT（深さの指数爆発を回避する選択的探索） ──────
     def _mcts_choose(self, my_side, opp_side, field, cands) -> Action:
         """mcts_sims 回のシミュレーションで根の手を選ぶ。最多訪問手を採用（AlphaZero流）。"""
-        scored = self.score_actions_mcts(my_side, opp_side, field, cands)
+        root, root_my, _ = self._build_mcts_root(my_side, opp_side, field, cands)
         self._last_worst = {}
-        best_a, best_v = max(scored, key=lambda x: x[1])   # x[1]=訪問数（同点はQでタイブレーク済）
-        # メガ優越タイブレーク：最良が素技で同一技のメガ版が拮抗(訪問近い)ならメガ版
-        if (best_a.type == "move" and best_a.move_idx is not None and best_a.move_idx >= 0
-                and not getattr(best_a, "do_mega", False)):
-            for a, v in scored:
-                if (a.type == "move" and a.move_idx == best_a.move_idx
-                        and getattr(a, "do_mega", False) and v >= best_v * 0.9):
-                    return a
-        return best_a
+        if not root_my:
+            return Action(type="pass")
+        if len(root_my) == 1:
+            return root_my[0]
+        meN = root["N"][0]; meW = root["W"][0]
+        stats = []
+        for a in root_my:
+            ix = self._action_index(a); n = meN.get(ix, 0)
+            q = (meW.get(ix, 0.0) / n) if n else -1.0
+            stats.append((a, n, q))
+        if self.qselect:
+            # 十分訪問された手の中でQ最大（少simでも“正しいQ”を拾う）
+            maxN = max(n for _, n, _ in stats) or 1
+            thr = max(self.qselect_min, int(self.qselect_frac * maxN))
+            elig = [(a, n, q) for a, n, q in stats if n >= thr] or stats
+            chosen = max(elig, key=lambda x: x[2])[0]
+        else:
+            # 従来：最多訪問（同一技の素/メガ拮抗時はメガ版へ）
+            best_a, best_n, _ = max(stats, key=lambda x: x[1])
+            chosen = best_a
+            if (best_a.type == "move" and best_a.move_idx is not None and best_a.move_idx >= 0
+                    and not getattr(best_a, "do_mega", False)):
+                for a, n, q in stats:
+                    if (a.type == "move" and a.move_idx == best_a.move_idx
+                            and getattr(a, "do_mega", False) and n >= best_n * 0.9):
+                        chosen = a; break
+        if self.downside_guard:
+            chosen = self._apply_downside_guard(my_side, opp_side, field, root_my, chosen)
+        return chosen
+
+    def _downside_value(self, my_side, opp_side, field, a) -> float:
+        """行動a の「最悪型」価値：相手型をK個サンプルし、各型で相手最善応手(自分価値最小)を取り、
+        その最小値（最も不利な型）を返す。サンプリングに頼らず破滅的downsideを検出する。"""
+        my_is_s1 = (my_side.field_idx == 0)
+        belief = my_side.belief if my_side.belief is not None else OpponentBelief(self.loader, self.season)
+        belief.observe_disclosure(my_side.opp_view)
+        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
+        worst = 1.0
+        for _k in range(self.downside_k):
+            s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
+            b1, b2, bf = self._clone_state(s1, s2, field)
+            dopp = b2 if my_is_s1 else b1
+            dme = b1 if my_is_s1 else b2
+            if hidden:
+                self._resample_hidden_bench(dopp, my_side.opp_view)
+            for poke, c in zip(dopp.party, self._sample_opp_config(dopp, belief)):
+                if c is not None:
+                    self._determinize(poke, c)
+            opp_cands = [oc for oc in self._candidate_actions(dopp, dme, bf) if oc.type == "move"] \
+                or self._candidate_actions(dopp, dme, bf)
+            v_type = 1.0
+            for oa in opp_cands:
+                c1, c2, cf = self._clone_state(b1, b2, bf)
+                winner = self._advance_turn(c1, c2, cf, a, oa, my_is_s1)
+                v = (1.0 if ((winner == 1) == my_is_s1) else 0.0) if winner != 0 \
+                    else self._mcts_leaf_value(c1, c2, cf, my_is_s1)
+                v_type = min(v_type, v)
+            worst = min(worst, v_type)
+        return worst
+
+    def _apply_downside_guard(self, my_side, opp_side, field, root_my, chosen) -> Action:
+        """chosen と各控え交代の「最悪型」価値を比べ、交代が margin 以上勝るなら最良の交代へ上書き。"""
+        switches = [a for a in root_my if a.type == "switch"]
+        if not switches:
+            return chosen
+        cand = ([chosen] if chosen not in switches else []) + switches
+        ds = {id(a): self._downside_value(my_side, opp_side, field, a) for a in cand}
+        best_sw = max(switches, key=lambda a: ds[id(a)])
+        base = ds.get(id(chosen))
+        if base is None:
+            base = self._downside_value(my_side, opp_side, field, chosen)
+        if ds[id(best_sw)] - base >= self.downside_margin:
+            return best_sw
+        return chosen
+
+    def choose_faint_switch(self, fainted_side, opp_side, field):
+        """瀕死後の繰り出し先を価値ベースで選ぶ（＝交代のみ候補の通常選択）。
+        各控えを『繰り出し→相手最善応手』で価値ネット評価し最良を返す。控え1匹なら自明・0なら None。
+        Battle がこのAIを持つ実戦の繰り出しでのみ使用（シミュ内は高速ヒューリスティック）。"""
+        benched = [i for i, p in enumerate(fainted_side.party)
+                   if p.is_alive and i != fainted_side.active_idx]
+        if not benched:
+            return None
+        if len(benched) == 1:
+            return benched[0]
+        best_idx, best_v = benched[0], -1.0
+        for idx in benched:
+            v = self._downside_value(fainted_side, opp_side, field, Action(type="switch", switch_to=idx))
+            if v > best_v:
+                best_v, best_idx = v, idx
+        return best_idx
 
     def _clone_state(self, s1, s2, field):
         """MCTSシミュ用の独立コピー。fast_clone時は belief を deepcopy せず分離（シミュ中不使用）。"""
@@ -431,11 +533,14 @@ class SearchAI:
         root = self._new_node()
         if len(root_my) <= 1:
             return root, root_my, my_is_s1
+        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
         for t in range(self.mcts_sims):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             cs1, cs2, cfield = self._clone_state(s1, s2, field)
-            cfg = self._sample_opp_config(opp_side, belief)
             dopp = cs2 if my_is_s1 else cs1
+            if hidden:
+                self._resample_hidden_bench(dopp, my_side.opp_view)
+            cfg = self._sample_opp_config(dopp, belief)
             for poke, c in zip(dopp.party, cfg):
                 if c is not None:
                     self._determinize(poke, c)
@@ -455,11 +560,14 @@ class SearchAI:
             return {"N": [aggN, {}], "W": [aggW, {}]}, root_my, my_is_s1
         E = max(1, self.mcts_ensemble)
         per = max(1, self.mcts_sims // E)
+        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
         for _e in range(E):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             cs1, cs2, cfield = self._clone_state(s1, s2, field)
-            cfg = self._sample_opp_config(opp_side, belief)
             dopp = cs2 if my_is_s1 else cs1
+            if hidden:
+                self._resample_hidden_bench(dopp, my_side.opp_view)
+            cfg = self._sample_opp_config(dopp, belief)
             for poke, c in zip(dopp.party, cfg):
                 if c is not None:
                     self._determinize(poke, c)
@@ -517,6 +625,8 @@ class SearchAI:
             node = child; depth += 1
             if depth >= self.mcts_max_depth:
                 v = self._leaf_value_state(node, my_is_s1); break
+        if self._track_depth:
+            self._depth_hist.append(depth)
         exp3 = (self.mcts_select == "exp3")
         for (nd, im, io, sm, so) in path:
             nd["total"] += 1
@@ -741,6 +851,8 @@ class SearchAI:
             node = child
             if depth >= self.mcts_max_depth:
                 v = self._mcts_leaf_value(cs1, cs2, cfield, my_is_s1); break
+        if self._track_depth:
+            self._depth_hist.append(depth)
         exp3 = (self.mcts_select == "exp3")
         for (nd, im, io, sm, so) in path:
             nd["total"] += 1
@@ -804,6 +916,33 @@ class SearchAI:
         if name not in self._tpl_cache:
             self._tpl_cache[name] = self.loader.get_pokemon_template(name, self.season)
         return self._tpl_cache[name]
+
+    def _resample_hidden_bench(self, dopp, opp_view) -> None:
+        """隠れ選出：相手のまだ場に出ていない控えスロットの『種族』を見せ合い6体から
+        サンプリングして差し替える（IS-MCTSを選出不確実性まで拡張）。
+        seen済み(=場に出て確認済み)の種族はそのまま固定。activeは常にseen扱い。"""
+        if len(getattr(dopp, "source6", dopp.party)) <= len(dopp.party):
+            return                                         # 6体ソース未指定＝隠す控えなし(従来＝選出公開)
+        seen = set()
+        if opp_view is not None:
+            seen = {n for n, k in opp_view.pokemon.items() if getattr(k, "seen", False)}
+        seen.add(dopp.active.name)
+        pool = [p.name for p in dopp.source6 if p.name not in seen]
+        self._rng.shuffle(pool)
+        pi = 0
+        for i, p in enumerate(dopp.party):
+            if i == dopp.active_idx:
+                continue
+            if p.name in seen or not p.is_alive:
+                continue                                   # 確認済み or 倒れている→確定
+            if pi >= len(pool):
+                continue
+            name = pool[pi]; pi += 1
+            tpl = self._tpl(name)
+            if tpl is None:
+                continue
+            nb = build_from_template(tpl, self.loader, randomize=True)
+            dopp.party[i] = nb                             # 未登場控え＝無傷・満タンで差し替え
 
     def _sample_opp_config(self, opp_side, belief) -> List[Optional[dict]]:
         cfg = []

@@ -260,8 +260,10 @@ def _step_one_turn(b, my_action, opp_ai, my_is_s1):
 
 
 def mcts_search(root_battle, my_is_s1, net, opp_ai, n_sims=30, c_puct=1.4, depth_cap=10,
-                dir_eps=0.0, dir_alpha=0.3, temperature=0.0, return_pi=False, rng=None):
+                dir_eps=0.0, dir_alpha=0.3, temperature=0.0, return_pi=False, rng=None,
+                switch_boost=0.0):
     """PUCT-MCTS。dir_eps>0 で根にDirichletノイズ（探索）、temperature>0 で訪問数比例サンプリング。
+    switch_boost>0 で根の交代手(8-10)のpriorを底上げ＝交代探索を強める（positional学習用）。
     return_pi=True で (action, 訪問分布dict over ACTION_DIM) を返す（AlphaZero学習ターゲット用）。"""
     rng = rng or random
     root = _Node()
@@ -304,6 +306,15 @@ def mcts_search(root_battle, my_is_s1, net, opp_ai, n_sims=30, c_puct=1.4, depth
                     ns = sum(noise) or 1.0
                     for ix, nz in zip(idxs, noise):
                         node.P[ix] = (1 - dir_eps) * node.P[ix] + dir_eps * (nz / ns)
+                # 交代手のprior底上げ＝交代探索を強める（交代の過小評価を破る）
+                if node is root and switch_boost > 0 and len(idxs) > 1:
+                    sw = [ix for ix in idxs if 8 <= ix <= 10]
+                    if sw and len(sw) < len(idxs):
+                        for ix in sw:
+                            node.P[ix] = node.P.get(ix, 0.0) + switch_boost
+                        tot = sum(node.P.get(ix, 0.0) for ix in idxs) or 1.0
+                        for ix in idxs:
+                            node.P[ix] = node.P.get(ix, 0.0) / tot
         for nd, a in path:
             nd.N[a] += 1; nd.W[a] += v
     if not root.expanded or not root.N:

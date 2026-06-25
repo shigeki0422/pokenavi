@@ -55,8 +55,11 @@ def side_snapshot(side, field) -> dict:
     }
 
 
-def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0) -> dict:
-    """1戦を tree d2 で実行し、ターン毎記録（turns）＋勝敗＋最終状態を返す。"""
+def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, mcts_sims=None) -> dict:
+    """1戦を実行し、ターン毎記録（turns）＋勝敗＋最終状態を返す。
+    mcts_sims未指定(None)＝本番既定MCTS(env F1_MCTS_SIMS, 既定400)。>0でMCTS@N、明示0でtree d2。"""
+    if mcts_sims is None:
+        mcts_sims = int(os.environ.get("F1_MCTS_SIMS", "400"))
     random.seed(seed)
     from simulator.pokemon import build_from_spec, parse_pokemon_spec
     from simulator.learned_selection import learned_select_party  # MCTS教師の学習選出(無効時はheuristicに自動フォールバック)
@@ -67,12 +70,18 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0) -
     P2 = [build_from_spec(parse_pokemon_spec(sp), L, season=season, randomize=True) for sp in specs2]
     sel1 = learned_select_party(P1, P2, L, n=min(3, len(P1)), temperature=sel_temp)
     sel2 = learned_select_party(P2, P1, L, n=min(3, len(P2)), temperature=sel_temp)
-    s1 = BattleSide(sel1, viewer_label="P1"); s2 = BattleSide(sel2, viewer_label="P2")
+    s1 = BattleSide(sel1, viewer_label="P1", source6=P1); s2 = BattleSide(sel2, viewer_label="P2", source6=P2)
     s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
     field = BattleField(); battle = Battle(s1, s2, field)
-    # 戦略AIは tree d2・温度0（policyサンプリングなし＝最良手）。tree_k=4＝高採用率＋抜群を両立
-    ai1 = _net_ai(net, L, 0, 12, seed, tree=True, tree_depth=2, tree_k=4, tree_det=det)
-    ai2 = _net_ai(net, L, 0, 12, seed ^ 0x5bd1e995, tree=True, tree_depth=2, tree_k=4, tree_det=det)
+    if mcts_sims > 0:   # 最新エンジン（MCTS@N）。テーマ総当たり用
+        _a1 = _net_ai(net, L, 0, 12, seed, mcts=True, mcts_sims=mcts_sims, mcts_select="regret", mcts_fast=True)
+        _a2 = _net_ai(net, L, 0, 12, seed ^ 0x5bd1e995, mcts=True, mcts_sims=mcts_sims, mcts_select="regret", mcts_fast=True)
+    else:               # tree d2・温度0（policyサンプリングなし＝最良手）。tree_k=4＝高採用率＋抜群を両立
+        _a1 = _net_ai(net, L, 0, 12, seed, tree=True, tree_depth=2, tree_k=4, tree_det=det)
+        _a2 = _net_ai(net, L, 0, 12, seed ^ 0x5bd1e995, tree=True, tree_depth=2, tree_k=4, tree_det=det)
+    from simulator.ai import certain_ko_override   # 確定KO安全弁でラップ
+    def ai1(my, opp, f): return certain_ko_override(_a1(my, opp, f), my, opp, f)
+    def ai2(my, opp, f): return certain_ko_override(_a2(my, opp, f), my, opp, f)
     # run() 相当の前処理（見せ合い＋入場時効果）→ turn0 を記録
     battle.logs.extend(s1.opp_view.team_preview(s2.party))
     battle.logs.extend(s2.opp_view.team_preview(s1.party))
@@ -116,8 +125,8 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0) -
 
 
 def _worker(args):
-    ci, specs1, specs2, season, det, sel_temp, seed = args
-    return ci, play_and_record(specs1, specs2, season, det, sel_temp, seed)
+    ci, specs1, specs2, season, det, sel_temp, seed, mcts_sims = args
+    return ci, play_and_record(specs1, specs2, season, det, sel_temp, seed, mcts_sims)
 
 
 def _card_summary(label, specs, recs, n):
@@ -136,11 +145,14 @@ def _battle_seed(label: str, bi: int) -> int:
 
 
 def run_roundrobin(my_specs, ranker_cards, n=3, season="M-2", det=8, sel_temp=0.6,
-                   on_battle=None, on_card=None, existing=None) -> list:
-    """ranker_cards=[(label, specs6),...]。各カードを n 戦まで tree d2 で並列実行し記録保存。
+                   on_battle=None, on_card=None, existing=None, mcts_sims=None) -> list:
+    """ranker_cards=[(label, specs6),...]。各カードを n 戦まで並列実行し記録保存。
+    mcts_sims未指定(None)＝本番既定MCTS(env F1_MCTS_SIMS, 既定400)。明示0でtree d2。
     existing={label: [record,...]} を渡すと既存戦を再利用し、不足分(bi=len..n-1)だけ実行＝
     対戦数の段階拡張（3→10→20）に対応。シードは _battle_seed(label,bi) で安定。
     on_battle(done,total): 新規1戦完了毎。 on_card(card_idx,card): カード完成毎（保存用）。"""
+    if mcts_sims is None:
+        mcts_sims = int(os.environ.get("F1_MCTS_SIMS", "400"))
     _ensure_loaded(season, det)
     existing = existing or {}
     per_card = {ci: list(existing.get(label, []))[:n] for ci, (label, _) in enumerate(ranker_cards)}
@@ -154,7 +166,7 @@ def run_roundrobin(my_specs, ranker_cards, n=3, season="M-2", det=8, sel_temp=0.
                 on_card(ci, cards[ci])
             continue
         for bi in range(have, n):
-            jobs.append((ci, my_specs, specs, season, det, sel_temp, _battle_seed(label, bi)))
+            jobs.append((ci, my_specs, specs, season, det, sel_temp, _battle_seed(label, bi), mcts_sims))
     if not jobs:
         return cards
     workers = min(len(jobs), max(1, (os.cpu_count() or 2) - 2))

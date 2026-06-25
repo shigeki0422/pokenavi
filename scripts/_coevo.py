@@ -44,6 +44,20 @@ def _fresh_species(rng, exclude):
     uw = {p: 1.0 / rk for p, rk in D["usage"] if p not in exclude}
     return G._wchoice(uw, rng)
 
+def _best_stone(D, name, moves, stones, rng):
+    """X/Y等の複数メガ石から、技構成の物理/特殊に合う石を選ぶ（メガライチュウ特殊型→Y等）。"""
+    stones = list(stones)
+    if len(stones) <= 1:
+        return stones[0] if stones else None
+    cat = D["move_cat"]; moves = moves or []
+    nph = sum(1 for m in moves if cat.get(m) == "physical" and m not in G._ROLE_ATK)
+    nsp = sum(1 for m in moves if cat.get(m) == "special" and m not in G._ROLE_ATK)
+    want = "phys" if nph > nsp else ("spec" if nsp > nph else None)
+    if want:
+        match = [s for s in stones if G.mega_orient(D, s) == want]
+        if match: stones = match
+    return G._wchoice({s: 1 for s in stones}, rng)
+
 def repair(mons, rng):
     # 1) 種族重複除去（図鑑番号ベース＝リージョン違い同種も同居不可）
     dexmap = D.get("dex", {})
@@ -61,21 +75,64 @@ def repair(mons, rng):
             alt = {k: v for k, v in D["items"].get(m["name"], {}).items() if k not in used}
             m["item"] = G._wchoice(alt, rng) if alt else None
         if m["item"]: used.add(m["item"])
-    # 3) メガ 1〜2
+    # 3-pre) 外来メガ石（種に対応しない石＝クロール誤り由来）を剥がす
+    for m in mons:
+        if m["item"] in D["megastones"] and not G.valid_megastone(D, m["name"], m["item"]):
+            used.discard(m["item"]); m["item"] = None
+    # 3) メガ 1〜2。超過分はメガ依存種なら丸ごと非メガ有効種へ置換（石を剥がして弱い非メガ個体を作らない）。
     megas = [i for i, m in enumerate(mons) if m["item"] in D["megastones"]]
     while len(megas) > 2:
-        i = megas.pop(); m = mons[i]
+        # メガ依存度が最も低い石持ち＝非メガでも機能する個体から石を外す（必要な個体に石を残す）
+        i = min(megas, key=lambda k: G.mega_usage_rate(D, mons[k]["name"])); megas.remove(i); m = mons[i]
         if m["item"]: used.discard(m["item"])
-        alt = {k: v for k, v in D["items"].get(m["name"], {}).items() if k not in used and k not in D["megastones"]}
-        m["item"] = G._wchoice(alt, rng) if alt else None
-        if m["item"]: used.add(m["item"])
-    if not megas:
-        for m in mons:
-            stones = {k: D["items"][m["name"]][k] for k in D["items"].get(m["name"], {})
-                      if k in D["megastones"] and k not in used}
+        if G.mega_usage_rate(D, m["name"]) >= 0.85:   # 残り全員メガ依存＝外すと弱い→種ごと置換
+            exclude = {x["name"] for x in mons}
+            dexset = {D["dex"].get(x["name"], x["name"]) for j, x in enumerate(mons) if j != i}
+            cw = {p: 1.0 / rk for p, rk in D["usage"]
+                  if p not in exclude and D["dex"].get(p, p) not in dexset
+                  and G.mega_usage_rate(D, p) < 0.85}
+            ns = G._wchoice(cw, rng)
+            if ns:
+                m.clear(); m.update(_gen_mon(ns, rng))
+                if m["item"] in D["megastones"]:       # 置換先が石を引いたら非メガへ
+                    m["item"] = G.fallback_item(D, m["name"], used)
+        else:                                          # 非メガでも使える種→石だけ非メガアイテムへ
+            alt = {k: v for k, v in D["items"].get(m["name"], {}).items() if k not in used and k not in D["megastones"]}
+            m["item"] = G._wchoice(alt, rng) if alt else None
+        if m["item"] and m["item"] not in D["megastones"]: used.add(m["item"])
+    # 3b) ほぼ常時メガの種(>=90%)が石を持たず枠が空いていれば石を持たせる（非メガで運用しない種）
+    nmega = sum(1 for m in mons if m["item"] in D["megastones"])
+    for m in mons:
+        if nmega >= 2: break
+        if m["item"] in D["megastones"]: continue
+        if G.mega_usage_rate(D, m["name"]) >= 0.90:
+            stones = {k for k in D["items"].get(m["name"], {})
+                      if k in D["megastones"] and k not in used and G.valid_megastone(D, m["name"], k)}
             if stones:
                 if m["item"]: used.discard(m["item"])
-                m["item"] = G._wchoice(stones, rng); used.add(m["item"]); break
+                m["item"] = _best_stone(D, m["name"], m["moves"], stones, rng); used.add(m["item"]); nmega += 1
+    if nmega == 0:
+        for m in mons:
+            stones = {k for k in D["items"].get(m["name"], {})
+                      if k in D["megastones"] and k not in used and G.valid_megastone(D, m["name"], k)}
+            if stones:
+                if m["item"]: used.discard(m["item"])
+                m["item"] = _best_stone(D, m["name"], m["moves"], stones, rng); used.add(m["item"]); break
+    # 3c) メガ石のX/Y変種を技構成の向きに合わせ直す（特殊型がメガXを持つ等の不一致を是正）
+    for m in mons:
+        if m["item"] in D["megastones"]:
+            variants = {k for k in D["items"].get(m["name"], {})
+                        if k in D["megastones"] and G.valid_megastone(D, m["name"], k)
+                        and (k == m["item"] or k not in used)}
+            best = _best_stone(D, m["name"], m["moves"], variants, rng)
+            if best and best != m["item"]:
+                used.discard(m["item"]); m["item"] = best; used.add(best)
+    # 4) アイテム無しを防ぐ＋シナジーアイテム不整合を是正
+    for m in mons:
+        if not m["item"]:
+            m["item"] = G.fallback_item(D, m["name"], used)
+        m["item"] = G.coherent_item(D, m["name"], m["item"], m.get("moves"), m.get("ability"), used)
+        if m["item"] and m["item"] not in D["megastones"]: used.add(m["item"])
     return mons
 
 def mutate(specs, rng):

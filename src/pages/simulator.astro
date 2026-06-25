@@ -253,9 +253,11 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
     <script is:inline>
       const API = (location.port === '8888') ? '' : 'http://localhost:8888';
       // 本番＝静的配信モード（localhost/8888以外、または ?static=1 で強制）。dev＝従来のローカルAPI。
-      const STATIC = location.search.includes('static=1') || !(location.hostname==='localhost'||location.hostname==='127.0.0.1'||location.port==='8888');
-      const R2_BASE = (location.hostname.endsWith('pokenavi.jp')) ? 'https://sim.pokenavi.jp' : '';   // 本番はR2 / ローカル検証は同梱(/sim-data)
-      const META = '/sim-data';      // 同梱メタ（index/icons/move_types）
+      const THEME = location.search.includes('theme=1');     // ?theme=1 でテーマ総当たり(/sim-data-theme)
+      const VERIFY = location.search.includes('verify=1');   // ?verify=1 で上位環境・検証用総当たり(/sim-data-verify)
+      const STATIC = THEME || VERIFY || location.search.includes('static=1') || !(location.hostname==='localhost'||location.hostname==='127.0.0.1'||location.port==='8888');
+      const R2_BASE = (!THEME && !VERIFY && location.hostname.endsWith('pokenavi.jp')) ? 'https://sim.pokenavi.jp' : '';   // 本番はR2 / ローカル検証は同梱
+      const META = THEME ? '/sim-data-theme' : (VERIFY ? '/sim-data-verify' : '/sim-data');      // 同梱メタ（index/icons/move_types）
       const R2 = R2_BASE || META;    // 主役別JSONの取得元（本番=R2 / ローカル検証=同梱）
       let RANKERS = [], SAVED = {}, ICONS = {}, SUBJECT = null, AID = null, CARDS = {}, TAB = 'ranker', SORT = 'num', NUMDIR = 'asc', WRDIR = 'asc';
       let SUBJDATA = null, SAVEDWR = {};

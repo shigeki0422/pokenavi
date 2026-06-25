@@ -95,6 +95,16 @@ def main():
             F.append(f"[mega]{nm}: 種族値0あり")
         elif not ab or ab not in ab_master:
             F.append(f"[mega]{nm}: 特性 '{ab}' がmaster外")
+
+    # G. 他種メガ石保持（pokemon_items でその種族の正規石でないナイト＝クロール誤り）
+    dexmap = {norm(r[0]): r[1] for r in c.execute("SELECT pokemon_name, dex_number FROM pokemon_base_stats")}
+    stone_dex = {r[0]: r[1] for r in c.execute("SELECT mega_stone, base_dex FROM pokemon_mega_stats") if r[0] and r[1] is not None}
+    G = []
+    for pk, it in c.execute(
+            "SELECT DISTINCT pokemon, item FROM pokemon_items WHERE item LIKE '%ナイト%' AND season=? AND rule=?", (SEASON, RULE)):
+        pd = dexmap.get(norm(pk))
+        if it in stone_dex and pd is not None and pd != stone_dex[it]:
+            G.append(f"{pk} が {it}（他種メガ石）を保持")
     c.close()
 
     secs = [("A. 環境出現だがbase_stats欠落", A),
@@ -102,7 +112,8 @@ def main():
             ("C. 使用技がlearnsetに無い", C),
             ("D. move_masterに無い技", D),
             ("E. ability_masterに無い特性", E),
-            ("F. base/mega値異常", F)]
+            ("F. base/mega値異常", F),
+            ("G. 他種メガ石保持(クロール誤り)", G)]
     total = sum(len(s) for _, s in secs)
     print(f"=== ポケモンデータ整合監査（環境{len(env)}種 / base_stats {len(base_raw)}姿 / mega {len(mega_stones)}）===\n")
     for title, items in secs:

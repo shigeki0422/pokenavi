@@ -149,6 +149,8 @@ def run_single_battle(loader, p1_specs, p2_specs, step=False, season="M-2"):
 
         action1 = ai(side1, side2, field)
         action2 = ai(side2, side1, field)
+        # 行動を選んだ本体を記録（先攻で倒され交代した場合、後攻の行動権を失わせる）
+        chooser1, chooser2 = side1.active, side2.active
 
         # メガ進化（行動前）
         for _side, _action in [(side1, action1), (side2, action2)]:
@@ -169,6 +171,7 @@ def run_single_battle(loader, p1_specs, p2_specs, step=False, season="M-2"):
         second_side, second_action, second_opp = (
             (side2, action2, side1) if p1_first else (side1, action1, side2)
         )
+        second_chooser = chooser1 if second_side is side1 else chooser2
 
         battle._do_action(first_side, first_opp, first_action, ai)
         new_logs = battle.logs[prev_log_len:]
@@ -179,7 +182,7 @@ def run_single_battle(loader, p1_specs, p2_specs, step=False, season="M-2"):
             _print_turn(turn, side1, side2, new_logs)
             break
 
-        if not second_side.active.flinched:
+        if second_side.active is second_chooser and not second_side.active.flinched:
             battle._do_action(second_side, second_opp, second_action, ai)
         new_logs2 = battle.logs[prev_log_len:]
         prev_log_len = len(battle.logs)

@@ -11,6 +11,20 @@ SEASON = os.environ.get("COEVO_SEASON", "M-2")
 NET_TMP = "/tmp/coevo_net.json"
 ANCHOR_TMP = "/tmp/coevo_anchor.json"
 
+def _mega_plus_random(party6, rng, n=3):
+    """メガ1体＋非メガをランダムでn-1体（メガ+受け+攻め補完の現実的な選出）。メガ無しなら全ランダム。"""
+    if len(party6) <= n:
+        return list(party6)
+    megas = [p for p in party6 if getattr(p, "mega_data", None) is not None]
+    sel = [rng.choice(megas)] if megas else []
+    pool = [p for p in party6 if p not in sel and getattr(p, "mega_data", None) is None]
+    rng.shuffle(pool)
+    sel += pool[:n - len(sel)]
+    if len(sel) < n:
+        rest = [p for p in party6 if p not in sel]
+        rng.shuffle(rest); sel += rest[:n - len(sel)]
+    return sel[:n]
+
 # ---- 自己対戦ワーカー（MCTS・π記録） ----
 _W = {}
 def _winit():
@@ -32,9 +46,13 @@ def _selfplay_batch(args):
         a, b = rng.sample(pool_specs, 2)
         try:
             A = team(a); B = team(b)
-            _eps = float(os.environ.get("SEL_EPS", "0.3"))   # 選出探索度(1.0=全探索でsynergy 3体組も経験)
-            sa = explore_selection(A, B, L, rng, _eps); sb = explore_selection(B, A, L, rng, _eps)
-            s1 = BattleSide(sa); s2 = BattleSide(sb); s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
+            if os.environ.get("SELECT_MODE") == "mega1":   # 現実的選出（メガ1+非メガ2ランダム）で交代の効く盤面を経験
+                sa = _mega_plus_random(A, rng); sb = _mega_plus_random(B, rng)
+            else:
+                _eps = float(os.environ.get("SEL_EPS", "0.3"))   # 選出探索度(1.0=全探索でsynergy 3体組も経験)
+                sa = explore_selection(A, B, L, rng, _eps); sb = explore_selection(B, A, L, rng, _eps)
+            s1 = BattleSide(sa, source6=A); s2 = BattleSide(sb, source6=B)   # 隠れ選出時は6体ソースから控え推定
+            s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
             tch = os.environ.get("TEACHER", "old"); sel = os.environ.get("TEACHER_SELECT", "duct")
             ai1 = _SelfPlayAI(L, net, n_sims, 0.25, 1.0, rng, teacher=tch, select=sel)
             ai2 = _SelfPlayAI(L, net, n_sims, 0.25, 1.0, rng, teacher=tch, select=sel)
@@ -71,8 +89,11 @@ def _ng_batch(args):
         a, b = rng.sample(pool_specs, 2)
         try:
             A = team(a); B = team(b)
-            sa = select_party(A, B, L, n=3, temperature=0.3, rng=rng); sb = select_party(B, A, L, n=3, temperature=0.3, rng=rng)
-            s1 = BattleSide(sa); s2 = BattleSide(sb); s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
+            if os.environ.get("SELECT_MODE") == "mega1":
+                sa = _mega_plus_random(A, rng); sb = _mega_plus_random(B, rng)
+            else:
+                sa = select_party(A, B, L, n=3, temperature=0.3, rng=rng); sb = select_party(B, A, L, n=3, temperature=0.3, rng=rng)
+            s1 = BattleSide(sa, source6=A); s2 = BattleSide(sb, source6=B); s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
             Aon1 = (g % 2 == 0)
             ai1 = mkA() if Aon1 else mkB(); ai2 = mkB() if Aon1 else mkA()
             w = Battle(s1, s2).run(ai1, ai2)

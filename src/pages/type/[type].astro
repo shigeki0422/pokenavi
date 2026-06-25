@@ -19,7 +19,7 @@ const SLUG: Record<string, string> = {
 const typeImg = (jp: string) => `/images/types/type-${TYPE_NUM[jp]}-${SLUG[TYPE_NUM[jp]]}.png`;
 const SLUG_TO_JP = Object.fromEntries(Object.entries(TYPE_NUM).map(([jp, n]) => [SLUG[n], jp]));
 
-type Meta = Record<string, { name: string; rank: number; types: string[]; dex?: number; form?: string }>;
+type Meta = Record<string, { name: string; rank: number; types: string[]; dex?: number; form?: string; pokemonId?: string | null }>;
 
 export function getStaticPaths() {
 	const num: Record<string, string> = {
@@ -46,8 +46,8 @@ const entries = Object.entries(articleMeta as Meta)
 	.filter((e) => e.types.includes(jp))
 	.sort((a, b) => a.rank - b.rank);
 
-const pageTitle = `【ポケモンチャンピオンズ】${jp}タイプ 考察まとめ｜M-2 使用率`;
-const pageDesc = `ポケモンチャンピオンズ M-2シーズンで使用率上位の${jp}タイプポケモンの考察記事まとめ。型・採用率・立ち回りを実データで分析しています。`;
+const pageTitle = `【ポケモンチャンピオンズ】${jp}タイプ ポケモン情報まとめ`;
+const pageDesc = `ポケモンチャンピオンズで使用率上位の${jp}タイプポケモンの考察記事まとめ。型・採用率・立ち回りを実データで分析しています。`;
 ---
 
 <!doctype html>
@@ -75,12 +75,12 @@ const pageDesc = `ポケモンチャンピオンズ M-2シーズンで使用率�
 		<main>
 			<section class="t-hero">
 				<h1><img src={typeImg(jp)} alt={jp} />{jp}タイプ 考察まとめ</h1>
-				<p>M-2シーズン使用率上位の{jp}タイプ（全{entries.length}件）</p>
+				<p>使用率上位の{jp}タイプ（全{entries.length}件）</p>
 			</section>
 			<ol class="t-list">
 				{entries.map((e) => (
 					<li>
-						<a class="t-row" href={`/blog/${e.slug}/`}>
+						<a class="t-row" href={e.pokemonId ? `/pokemon/${e.pokemonId}/` : `/blog/${e.slug}/`}>
 							<span class="t-num">{e.rank}位</span>
 							{e.dex
 								? <img class="t-icon" src={`/images/pokemon/pokemon-${String(e.dex).padStart(4,'0')}-${e.form ?? '00'}.webp`} alt={e.name} loading="lazy" />

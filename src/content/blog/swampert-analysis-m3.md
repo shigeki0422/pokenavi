@@ -458,5 +458,5 @@ draft: false
 
 ## 関連記事
 
-- [使用率1位 ガブリアスのM-3考察](/blog/garchomp-analysis-m3/)
-- [メガラグラージの弱点くさを突くマスカーニャのM-3考察](/blog/meowscarada-analysis-m3/)
+- [使用率上位 ムクホークのM-3考察](/blog/staraptor-analysis-m3/)
+- [くさタイプのメガジュカインのM-3考察](/blog/sceptile-analysis-m3/)

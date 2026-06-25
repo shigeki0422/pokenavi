@@ -14,7 +14,7 @@ import numpy as np
 
 _MODEL = None
 _LOADED = False
-_PATH = os.path.join(os.path.dirname(__file__), "selector_m2.json")
+_PATH = os.environ.get("SELECTOR_PATH") or os.path.join(os.path.dirname(__file__), "selector_m2.json")
 
 
 def _load():
@@ -38,11 +38,30 @@ def _predict(model, X):
     return 1.0 / (1.0 + np.exp(-(H @ model["W2"] + model["b2"])))
 
 
+def _mega_plus_random(party6, rng, n=3):
+    """メガ1体＋非メガをランダムでn-1体（メガ+受け+攻め補完の現実的な選出）。メガ無しなら全ランダム。
+    交代が機能する多様な対面を作るための選出（攻撃偏重を避ける）。"""
+    rng = rng or random
+    if len(party6) <= n:
+        return list(party6)
+    megas = [p for p in party6 if getattr(p, "mega_data", None) is not None]
+    sel = [rng.choice(megas)] if megas else []
+    pool = [p for p in party6 if p not in sel and getattr(p, "mega_data", None) is None]
+    rng.shuffle(pool)
+    sel += pool[:n - len(sel)]
+    if len(sel) < n:
+        rest = [p for p in party6 if p not in sel]
+        rng.shuffle(rest); sel += rest[:n - len(sel)]
+    return sel[:n]
+
+
 def learned_select_party(party6, opp6, loader, n=3, temperature=0.0, rng=None):
     """学習選出。temperature=0 で最良の3体(リード順)、>0 で softmax(score/temp) サンプリング。
     select_party と同一シグネチャ。モデル未ロード/3体以下は heuristic にフォールバック。
-    SELECT_MODE=mcts のときはMCTS選出(探索ベース・ヒューリスティック比+6〜9pt)へ委譲する。"""
+    SELECT_MODE=mcts のときはMCTS選出へ、=mega1 のとき現実的選出(メガ1+多様控え)へ委譲する。"""
     from .ai import select_party
+    if os.environ.get("SELECT_MODE") == "mega1":   # 現実的選出（交代が機能する多様な対面）
+        return _mega_plus_random(party6, rng, n)
     if os.environ.get("SELECT_MODE") == "mcts":
         from .mcts_selection import mcts_select_party
         return mcts_select_party(party6, opp6, loader, n=n, temperature=temperature, rng=rng)
@@ -58,11 +77,17 @@ def learned_select_party(party6, opp6, loader, n=3, temperature=0.0, rng=None):
     for _ in range(2):
         opp_sels.append(select_party(opp6, party6, loader, n=min(n, len(opp6)), temperature=1.0, rng=rng))
 
-    _max_mega = int(os.environ.get("MAX_MEGA", "2"))   # メガ石2枚保持は合法(進化は1戦1体)。2メガ選出は基本的に強い
+    # 現実的なメガ選出制約：進化は1戦1体なので、メガ石持ちがいれば必ず「ちょうど1体」だけ選ぶ
+    # （2メガ＝石が遊ぶ/0メガ＝メガ軸を置いてくる、はどちらも不自然。env で上限/下限を緩められる）
+    avail_mega = sum(1 for p in party6 if getattr(p, "mega_data", None) is not None)
+    _target = 1 if avail_mega >= 1 else 0
+    _max_mega = int(os.environ.get("MAX_MEGA", str(_target)))
+    _min_mega = int(os.environ.get("MIN_MEGA", str(_target)))
     cands = []  # (ordered_selection, score)
     for combo in combinations(range(len(party6)), n):
         sub = [party6[i] for i in combo]
-        if sum(1 for p in sub if getattr(p, "mega_data", None) is not None) > _max_mega:
+        nmega = sum(1 for p in sub if getattr(p, "mega_data", None) is not None)
+        if nmega < _min_mega or nmega > _max_mega:
             continue
         for li in range(n):
             order = [sub[li]] + [sub[j] for j in range(n) if j != li]

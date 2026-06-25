@@ -196,6 +196,18 @@ _unresolved = [r[0] for r in _con.execute(
     "AND item NOT IN (SELECT mega_stone FROM pokemon_mega_stats)").fetchall()]
 _con.close()
 check("全メガストーンがmega_statsで解決", not _unresolved, f"未解決={_unresolved}")
+# メガ後タイプは交代時の型リセット(type=base_type)で巻き戻らない＝do_mega が base_type も更新する
+from simulator.simulate import get_loader as _glx
+from simulator.pokemon import build_from_spec as _bfs, parse_pokemon_spec as _pps
+import _pop_gen as _pg
+_Lx = _glx()
+_liz = _bfs(_pps(_pg._spec("リザードン", "リザードナイトX", "いじっぱり", ["フレアドライブ"], (0, 32, 0, 0, 0, 32), "もうか")), _Lx, season="M-3", randomize=False)
+_liz.do_mega_evolve()
+check("メガリザードンX 進化後タイプ ほのお/ドラゴン", (_liz.type1, _liz.type2) == ("ほのお", "ドラゴン"))
+_liz.type1, _liz.type2 = _liz.base_type1, _liz.base_type2   # 交代時リセット相当
+check("メガ後タイプは交代リセットで巻き戻らない", (_liz.type1, _liz.type2) == ("ほのお", "ドラゴン"))
+# メガ進化後もメガストーンは持ち物として残る（実機仕様）。消すとポルターガイストが「持ち物なし」で失敗する不整合。
+check("メガ進化後もメガストーンを保持", _liz.item == "リザードナイトX", f"item={_liz.item}")
 # データ整合：全環境ポケモン（姿・フォルム）がローダーで種族値解決できること
 from simulator.data import DataLoader as _DL_pk
 _dlpk = _DL_pk("scripts/pokenavi.db")
@@ -1507,6 +1519,44 @@ _pfk_n = make_poke(type1="ノーマル", ability="ふくつのこころ", hp_b=2
 execute(make_poke(atk_b=30), _pfk_n, "たいあたり")
 check("ふくつのこころ ひるまなければ上がらない", _pfk_n.stage_speed == 0, f"spd={_pfk_n.stage_speed}")
 
+# ねこだまし：交代で場を離れ再び出すと初手で再使用できる（turns_outは交代でリセット・交代ターンは加算しない）
+import simulator.battle as _SBn
+_mae = make_poke(type1="ノーマル", spd_b=200, atk_b=80, hp_b=220, def_b=220, moves=["ねこだまし", "たいあたり"])
+_subn = make_poke(type1="はがね", hp_b=220, def_b=220, moves=["たいあたり"])
+_tgtn = make_poke(type1="ノーマル", atk_b=10, hp_b=255, def_b=255, moves=["たいあたり"])
+_tn = [0]
+def _ai_neko(s, o, f):
+    t = _tn[0]
+    if t == 1: return Action(type="switch", switch_to=1)
+    if t == 2: return Action(type="switch", switch_to=0)
+    return Action(type="move", move=dl.get_move("ねこだまし"), move_idx=0)
+_mtn = _SBn.MAX_TURNS; _SBn.MAX_TURNS = 5
+_bN = _SBn.Battle(BattleSide([_mae, _subn]), BattleSide([_tgtn]))
+_bN.run(_ai_neko, lambda s, o, f: Action(type="move", move=dl.get_move("たいあたり"), move_idx=0),
+        on_turn=lambda b: _tn.__setitem__(0, _tn[0] + 1))
+_SBn.MAX_TURNS = _mtn
+_neko_ok = sum(1 for l in _bN.logs if "ねこだまし" in l and "ダメ" in l)
+check("ねこだまし 交代で出し直すと初手で再使用可(1ターン目限定バグ修正)", _neko_ok >= 2, f"成功={_neko_ok}回")
+
+# ミミロップ実機シナリオ: T1ねこだまし→T2交代→T3戻る→T4ねこだまし（交代後も初手で打てる）
+_mim = _bfs(_pps("ミミロップ@ミミロップナイト:ようき:ねこだまし|とびひざげり|アイアンテール|はたきおとす:0/32/0/0/0/32"), _Lx, season="M-3", randomize=False)
+_mpar = _bfs(_pps("ハッサム:いじっぱり:バレットパンチ|とんぼがえり|つるぎのまい|インファイト:0/32/0/0/0/0"), _Lx, season="M-3", randomize=False)
+_mfoe = _bfs(_pps("カバルドン:わんぱく:なまける|あくび|ステルスロック|まもる:32/0/32/0/0/0"), _Lx, season="M-3", randomize=False)
+_mtn = [0]
+def _ai_mim(s, o, f):
+    t = _mtn[0]
+    if t == 1: return Action(type="switch", switch_to=1)   # T2: ハッサムへ交代
+    if t == 2: return Action(type="switch", switch_to=0)   # T3: ミミロップへ戻す
+    return Action(type="move", move=_mim.moves[0], move_idx=0)  # T1/T4: ねこだまし
+_mtsav = _SBn.MAX_TURNS; _SBn.MAX_TURNS = 5
+_bM = _SBn.Battle(BattleSide([_mim, _mpar]), BattleSide([_mfoe]))
+_bM.run(_ai_mim, lambda s, o, f: Action(type="move", move=_mfoe.moves[2], move_idx=2),  # 相手はステロ(ねこだましを妨げない)
+        on_turn=lambda b: _mtn.__setitem__(0, _mtn[0] + 1))
+_SBn.MAX_TURNS = _mtsav
+_mim_neko = sum(1 for l in _bM.logs if "ミミロップ" in l and "ねこだまし" in l and "ダメ" in l)
+check("ミミロップ T1ねこだまし→交代→戻る→T4ねこだまし 両方成功", _mim_neko >= 2,
+      f"成功={_mim_neko}回 / {[l for l in _bM.logs if 'ねこだまし' in l]}")
+
 # アナライズ：後攻時1.3倍
 _paz = make_poke(atk_b=100, ability="アナライズ"); _paz._acts_second = True
 _paz0 = make_poke(atk_b=100); _daz = make_poke(def_b=100)
@@ -1980,9 +2030,15 @@ check("メガ非所持は即メガしない", _sme(make_poke(type1="ノーマル
 _mz=build_from_template(dl.get_pokemon_template("スターミー"), dl, randomize=False,
     override_item="スターミナイト", override_moves=["なみのり","れいとうビーム"])
 _moz=build_from_template(dl.get_pokemon_template("ガブリアス"), dl, randomize=False, override_moves=["じしん"])
-_mc=SearchAI(dl, rollouts=2, depth=4)._candidate_actions(BattleSide([_mz]), BattleSide([_moz]), BattleField())
+_msa=SearchAI(dl, rollouts=2, depth=4)
+_mc=_msa._candidate_actions(BattleSide([_mz]), BattleSide([_moz]), BattleField())
 check("SearchAI メガあり候補を持つ", any(c.type=="move" and c.do_mega for c in _mc))
-check("SearchAI メガなし候補も持つ", any(c.type=="move" and not c.do_mega for c in _mc))
+# 既定 collapse_mega=ON：メガ可能時はメガ前提のみ（メガなし技候補を列挙しない＝分岐半減）
+check("SearchAI 既定でメガなし技候補は持たない(collapse_mega)",
+      not any(c.type=="move" and c.move_idx is not None and c.move_idx>=0 and not c.do_mega for c in _mc))
+_msa.collapse_mega=False
+_mc2=_msa._candidate_actions(BattleSide([_mz]), BattleSide([_moz]), BattleField())
+check("collapse_mega=Falseならメガなし候補も持つ", any(c.type=="move" and not c.do_mega for c in _mc2))
 # 選出：2メガ以上持ちパーティでも最有力選出はメガ1体以下（実際にメガできるのは1体）
 from simulator.selection import candidate_selections
 for _pp in _parties:
@@ -3631,6 +3687,62 @@ check("トリックルーム: 再使用で解除", not _ftr.trick_room, f"trick_
 _d12 = make_poke(type1="でんき", hp_b=255, spdef_b=255); _rng.seed(0)
 for _ in range(60): execute(make_poke(type1="でんき", atk_b=20), _d12, "10まんボルト")
 check("でんきタイプ: まひ追加効果も無効", _d12.status is None, f"status={_d12.status}")
+
+# 13. あくび(ねむけ)は交代でキャンセルされる
+_sy = BattleSide([make_poke(type1="ノーマル", hp_b=200, moves=["たいあたり"]),
+                  make_poke(name="控え", moves=["たいあたり"])])
+_sy.active.yawn_count = 2
+_sy.switch_to(1)
+check("あくび: 交代でねむけ解除", _sy.party[0].yawn_count == 0, f"yawn={_sy.party[0].yawn_count}")
+
+# 14. 眠ると溜め技(ソーラービーム)は解除され、起床後に発火しない
+_sbz = make_poke(type1="くさ", spatk_b=120, hp_b=200, moves=["ソーラービーム"])
+_sbd = make_poke(type1="ノーマル", hp_b=255, spdef_b=80, moves=["たいあたり"])
+execute(_sbz, _sbd, "ソーラービーム")   # 1ターン目＝溜め（ダメージなし）
+check("溜め技: 1ターン目は溜め(ダメージなし)",
+      _sbz.charging_move == "ソーラービーム" and _sbd.hp == _sbd.max_hp,
+      f"charging={_sbz.charging_move} hp={_sbd.hp}/{_sbd.max_hp}")
+_sbz.status = "sleep"; _sbz.sleep_count = 2
+_hp_b14 = _sbd.hp
+execute(_sbz, _sbd, "ソーラービーム")   # 睡眠中は発火せず溜め解除
+check("溜め技: 眠ると発火せず溜め解除",
+      _sbz.charging_move is None and _sbd.hp == _hp_b14,
+      f"charging={_sbz.charging_move} hp={_sbd.hp}/{_hp_b14}")
+
+# 15. 先攻の自滅(反動)瀕死 → 後攻技は対象不在で失敗、交代先はターン終了時に無傷で着地
+_fl15 = make_poke(name="自滅役", type1="フェアリー", spatk_b=150, spd_b=200, hp_b=80, moves=["はめつのひかり"])
+_fl15.hp = 1                       # 反動で確実に瀕死
+_bn15 = make_poke(name="控え15", type1="ノーマル", def_b=100, hp_b=120, moves=["たいあたり"])
+_fo15 = make_poke(name="相手15", type1="じめん", atk_b=120, spd_b=50, hp_b=160, spdef_b=70, moves=["じしん"])
+_s115 = BattleSide([_fl15, _bn15]); _s215 = BattleSide([_fo15])
+Battle(_s115, _s215, BattleField()).resume(_Force("はめつのひかり"), _Force("じしん"), max_turns=1)
+check("自滅瀕死: 先攻自滅役は瀕死", not _fl15.is_alive, f"alive={_fl15.is_alive}")
+check("自滅瀕死: 先攻技は相手に当たっている", _fo15.hp < _fo15.max_hp, f"foe={_fo15.hp}/{_fo15.max_hp}")
+check("自滅瀕死: 控えがターン終了時に着地", _s115.active.name == "控え15", f"active={_s115.active.name}")
+check("自滅瀕死: 後攻技は対象不在で失敗(控え無傷)", _s115.active.hp == _s115.active.max_hp,
+      f"hp={_s115.active.hp}/{_s115.active.max_hp}")
+
+# 16. ひるみはターンをまたいで持ち越さない（後攻が当てたひるみは次ターン無効）
+_pf16 = make_poke(name="ひるみ持越", type1="ノーマル", hp_b=200, moves=["たいあたり"])
+_pf16.flinched = True
+Battle(BattleSide([_pf16]), BattleSide([make_poke(moves=["なまける"])]))._end_of_turn()
+check("ひるみ: ターン終了でクリア(持ち越さない)", not _pf16.flinched, f"flinched={_pf16.flinched}")
+
+# 17. 瀕死交代先：HPの減った相手を先制で倒せる控え(反撃KO)を最優先
+from simulator.battle import _best_faint_switch as _bfs17
+_opp17 = make_poke(name="相手17", type1="ほのお", hp_b=100, spd_b=50, def_b=100)
+_rev17 = make_poke(name="速攻17", type1="ノーマル", atk_b=120, spd_b=120, moves=["たいあたり"])   # 速い・KO可だがタイプ等倍
+_adv17 = make_poke(name="水鈍17", type1="みず", atk_b=120, spd_b=20, moves=["みずでっぽう"])      # 遅い・タイプ有利
+_side17 = BattleSide([make_poke(name="死17", moves=["たいあたり"]), _rev17, _adv17]); _side17.active_idx = 0
+_side17.party[0].is_alive = False
+_opp17.hp = 10   # 瀕死寸前 → 速攻が先制で倒せる
+check("瀕死交代: HP減の相手は反撃KOできる速い控えを選ぶ",
+      _bfs17(_side17, _opp17).__class__ is int and _side17.party[_bfs17(_side17, _opp17)].name == "速攻17",
+      f"choice={_side17.party[_bfs17(_side17, _opp17)].name}")
+_opp17.hp = _opp17.max_hp   # 満タン → 反撃KO不可 → タイプ有利な控えにフォールバック
+check("瀕死交代: 反撃不可ならタイプ有利な控え",
+      _side17.party[_bfs17(_side17, _opp17)].name == "水鈍17",
+      f"choice={_side17.party[_bfs17(_side17, _opp17)].name}")
 
 
 # ════════════════════════════════════════════════════════════════

@@ -87,46 +87,58 @@ def themes(D, rng):
     tw = move_species(D, "おいかぜ"); sr = move_species(D, "ステルスロック"); spikes = move_species(D, "どくびし")
     pivot = move_species(D, "とんぼがえり") + move_species(D, "ボルトチェンジ")
     setup = move_species(D, "つるぎのまい") + move_species(D, "りゅうのまい") + move_species(D, "わるだくみ")
-    # --- メガ軸: 使用率に出る各メガ石1つ ---
+    # --- メガ軸: 各種族の正規メガ石すべて(X/Y両方含む)を軸に1つずつ ---
+    mega_by_dex = {}
+    for stone, dx in D.get("mega_stone_dex", {}).items():
+        mega_by_dex.setdefault(dx, []).append(stone)
     seen_dex = set()
     for p, _ in D["usage"]:
-        for it in D["items"].get(p, {}):
-            if it in D["megastones"]:
-                key = (D["dex"].get(p, p), it)
-                if key in seen_dex: continue
-                seen_dex.add(key)
-                out.append((f"メガ軸:{p}", [(p, it, None, None)], set(D.get("partners", {}).get(p, {}) and [x for x, _ in D["partners"][p]])))
+        pdx = D["dex"].get(p)
+        for it in sorted(mega_by_dex.get(pdx, [])):
+            key = (pdx, it)
+            if key in seen_dex: continue
+            seen_dex.add(key)
+            suf = "X" if it.endswith("X") else ("Y" if it.endswith("Y") else "")
+            label = f"メガ軸:{p}{('('+suf+')') if suf else ''}"
+            out.append((label, [(p, it, None, None)], set(x for x, _ in D["partners"].get(p, []))))
     # --- 戦略テーマ ---
     def pick(lst, k=1):
         lst = [x for x in lst if x]; rng.shuffle(lst); return lst[:k]
     def add(label, core, prefer):
         out.append((label, core, set(prefer)))
     for setter in pick(rain_ab, 2):
-        for ab2 in pick(swift, 2):
+        for ab2 in pick(swift, 3):
             add(f"雨:{setter}+{ab2}", [(setter, "しめったいわ", "あめふらし", ["あまごい"] if setter not in rain_ab else None), (ab2, "auto", "すいすい", None)], swift + ["ラグラージ"])
     for setter in pick(sun_ab, 2):
-        for ab2 in pick(chloro, 2):
+        for ab2 in pick(chloro, 3):
             add(f"晴:{setter}+{ab2}", [(setter, "auto", "ひでり", None), (ab2, "auto", "ようりょくそ", None)], chloro)
     for setter in pick(sand_ab, 2):
-        add(f"砂:{setter}", [(setter, "auto", "すなおこし", None)] + [(x, "auto", "すなかき", None) for x in pick(sandr, 1)], sandr)
-    for setter in pick(snow_ab, 2):
-        for v in pick(veil, 1):
-            add(f"雪:{setter}+ベール", [(setter, "auto", "ゆきふらし", None), (v, "ひかりのねんど", None, ["オーロラベール"])], snow_ab + veil)
-    for s in pick([p for p in prank if p in (move_species(D, "リフレクター"))], 3):
+        for ab2 in pick(sandr, 2):
+            add(f"砂:{setter}+{ab2}", [(setter, "auto", "すなおこし", None), (ab2, "auto", "すなかき", None)], sandr)
+    # 雪は実環境で希少＋ゆきふらし重複で不自然になりがちのため無効化。
+    if os.environ.get("ENABLE_SNOW") == "1":
+        for setter in pick(snow_ab, 3):
+            for v in pick(veil, 2):
+                add(f"雪:{setter}+ベール", [(setter, "auto", "ゆきふらし", None), (v, "ひかりのねんど", None, ["オーロラベール"])], snow_ab + veil)
+    for s in pick([p for p in prank if p in (move_species(D, "リフレクター"))], 5):
         add(f"壁:{s}", [(s, "ひかりのねんど", "いたずらごころ", ["リフレクター", "ひかりのかべ"])], setup)
-    for s in pick(baton, 4):
-        add(f"バトン:{s}", [(s, "auto", None, ["バトンタッチ"])], setup + ["エルフーン"])
-    for s in pick(tr, 4):
-        slow = [p for p, _ in D["usage"] if p not in (s,)]
-        add(f"トリル:{s}", [(s, "auto", None, ["トリックルーム"])] + [(x, "auto", None, None) for x in pick(["ドドゲザン", "ハリーマン", "バンギラス", "メタグロス"], 1)], ["ドドゲザン", "ハリーマン"])
-    for s in pick(tw, 4):
+    # トリル・バトンは相方ロジックが未最適(テーマ風味の強チーム止まり)のため一旦無効化。
+    # 相方ロジック(トリル=鈍足高火力/バトン=積み受け手)を強化したら再有効化する。
+    if os.environ.get("ENABLE_TR_BATON") == "1":
+        for s in pick(baton, 6):
+            add(f"バトン:{s}", [(s, "auto", None, ["バトンタッチ"])], setup + ["エルフーン"])
+        for s in pick(tr, 6):
+            add(f"トリル:{s}", [(s, "auto", None, ["トリックルーム"])] + [(x, "auto", None, None) for x in pick(["ドドゲザン", "ハリーマン", "バンギラス", "メタグロス"], 1)], ["ドドゲザン", "ハリーマン"])
+    for s in pick(tw, 6):
         add(f"おいかぜ:{s}", [(s, "auto", None, ["おいかぜ"])], setup)
-    for s in pick(sr, 3):
-        for sp in pick(spikes, 1):
-            add(f"設置:{s}+{sp}", [(s, "auto", None, ["ステルスロック"]), (sp, "auto", None, ["どくびし"])], [])
-    for s in pick(setup, 5):
-        add(f"積み:{s}", [(s, "auto", None, None)], setup)
-    for s in pick(list(set(pivot)), 4):
+    # 設置・積みは汎用的すぎてテーマとして弱い(他テーマ/強構築に内包される)ため無効化。
+    if os.environ.get("ENABLE_HAZARD_SETUP") == "1":
+        for s in pick(sr, 4):
+            for sp in pick(spikes, 2):
+                add(f"設置:{s}+{sp}", [(s, "auto", None, ["ステルスロック"]), (sp, "auto", None, ["どくびし"])], [])
+        for s in pick(setup, 8):
+            add(f"積み:{s}", [(s, "auto", None, None)], setup)
+    for s in pick(list(set(pivot)), 7):
         add(f"サイクル:{s}", [(s, "auto", None, None)] + [(x, "auto", None, None) for x in pick(list(set(pivot)), 1)], pivot)
     return out
 
@@ -203,7 +215,10 @@ def main():
             specs = build_party(D, rng, core, prefer)
         except Exception:
             continue
-        key = tuple(sorted(s.split("@")[0].split(":")[0] for s in specs))
+        species = tuple(sorted(s.split("@")[0].split(":")[0] for s in specs))
+        stones = tuple(sorted(s.split("@")[1].split(":")[0] for s in specs
+                              if "@" in s and s.split("@")[1].split(":")[0] in D["megastones"]))
+        key = (species, stones)   # メガ石も鍵に含める＝同種でもX/Y別構築は別物として残す
         if key in seen: continue
         seen.add(key)
         parties.append({"theme": label, "specs": specs})
@@ -214,7 +229,10 @@ def main():
     with Pool(12, initializer=_winit) as p:
         wrs = p.map(_screen, [(700 + i, parties[i]["specs"], gauntlet) for i in range(len(parties))])
     for pt, wr in zip(parties, wrs): pt["screen_wr"] = wr
-    kept = [pt for pt in parties if pt["screen_wr"] >= bar]
+    # メガ軸は「各メガの軸構築」showcaseとして強さバーで切らず必ず残す(強さは強生き残り234が担保)。
+    # ただしビルド失敗(-1)は除外。戦略テーマはバー適用。
+    kept = [pt for pt in parties
+            if (pt["theme"].startswith("メガ軸") and pt["screen_wr"] >= 0) or pt["screen_wr"] >= bar]
     kept.sort(key=lambda x: -x["screen_wr"])
     out = f"func1_themed_{SEASON}.json"
     json.dump({"season": SEASON, "bar": bar, "screen": f"MCTS@{PLAY_SIMS}/sel@{SEL_SIMS}+synergy", "parties": kept},

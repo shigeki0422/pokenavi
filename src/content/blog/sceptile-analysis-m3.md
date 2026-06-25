@@ -1,6 +1,6 @@
 ---
-title: '【ポケモンチャンピオンズ】ジュカイン考察 M-3 使用率69位 型別採用率と立ち回り'
-description: 'M-3シングルバトルで使用率69位のジュカイン考察。メガジュカインへの進化でくさ/ドラゴンタイプとなりS145の超高速アタッカーに変貌。だいちのちから85.1%・りゅうのはどう79.6%・リーフストーム70.6%の技採用率と主要2型を詳細解説。'
+title: '【ポケモンチャンピオンズ】ジュカイン考察 M-3 使用率68位 型別採用率と立ち回り'
+description: 'M-3シングルバトルで使用率68位のジュカイン考察。メガジュカインへの進化でくさ/ドラゴンタイプとなりS145・S実数値216の高速アタッカーに変貌。だいちのちから84.6%・りゅうのはどう76.4%・リーフストーム72.2%の技採用率と主要2型を詳細解説。'
 pubDate: '2026-06-20'
 heroImage: '../../assets/hero-sceptile-m3.png'
 draft: true
@@ -28,19 +28,19 @@ draft: true
       <img src="/images/types/type-11-grass.png" alt="くさ" height="20" />
       <img src="/images/types/type-15-dragon.png" alt="ドラゴン" height="20" />
     </div>
-    <div>M-3 使用率: <strong>69位</strong></div>
+    <div>M-3 使用率: <strong>68位</strong></div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-3シーズン（2026/06/20）時点の集計です
+> ⚠️ 本記事のデータはM-3シーズン（2026/06/22）時点の集計です
 
 ---
 
-## なぜ今ジュカインが使用率69位なのか
+## なぜ今ジュカインが使用率68位なのか
 
-### 理由1: メガ進化でS145の超高速アタッカーへ変貌
+### 理由1: メガ進化でS145の高速アタッカーへ変貌
 
-通常時でもS120と高水準だが、メガジュカインになるとS145という環境最高峰の素早さを獲得する。おくびょう採用率69.4%が示すとおり、ほぼ全ての環境ポケモンを抜ける速さが最大の武器だ。ジュカインナイト採用率79.5%と合わせると、メガ進化前提の運用が主流となっている。
+通常時でもS120と高水準だが、メガジュカインになるとS145・おくびょうでS実数値216に達する。最速ガブリアス（S実数値169）やマスカーニャを上から殴れる速さが武器だ。おくびょう採用率70.0%が示すとおり素早さに振る型が主流で、ジュカインナイト採用率77.1%からメガ進化前提の運用が定着している。
 
 ### 理由2: くさ/ドラゴンの複合タイプによる広い範囲
 
@@ -48,7 +48,7 @@ draft: true
 
 ### 理由3: しんくうはによる先制打点の確保
 
-S145を誇りながらもしんくうは（かくとう、先制技）を採用率42.4%で搭載することで、タスキ持ちやさらに素早いポケモンへの対処が可能。高速アタッカーでありながら先制技も持てるという柔軟性が、パーティ内での汎用性を高めている。
+S145を誇りながらもしんくうは（かくとう、先制技）を採用率34.9%で搭載することで、タスキ持ちやさらに素早いポケモンへの対処が可能。高速アタッカーでありながら先制技も持てるという柔軟性が、パーティ内での汎用性を高めている。
 
 ---
 
@@ -83,12 +83,12 @@ S145を誇りながらもしんくうは（かくとう、先制技）を採用�
 #### 弱点
 
 <div class="type-row">
-  <img src="/images/types/type-02-flying.png" alt="ひこう" height="20" />
-  <span><strong>ひこう ×4</strong></span>
-</div>
-<div class="type-row">
   <img src="/images/types/type-14-ice.png" alt="こおり" height="20" />
   <span><strong>こおり ×4</strong></span>
+</div>
+<div class="type-row">
+  <img src="/images/types/type-02-flying.png" alt="ひこう" height="20" />
+  <span>ひこう ×2</span>
 </div>
 <div class="type-row">
   <img src="/images/types/type-06-bug.png" alt="むし" height="20" />
@@ -107,16 +107,16 @@ S145を誇りながらもしんくうは（かくとう、先制技）を採用�
 
 <div class="type-row">
   <img src="/images/types/type-10-water.png" alt="みず" height="20" />
-  <span>みず ×0.5</span>
+  <span>みず ×0.25</span>
   <img src="/images/types/type-12-electric.png" alt="でんき" height="20" />
-  <span>でんき ×0.5</span>
+  <span>でんき ×0.25</span>
   <img src="/images/types/type-11-grass.png" alt="くさ" height="20" />
-  <span>くさ ×0.5</span>
+  <span>くさ ×0.25</span>
   <img src="/images/types/type-04-ground.png" alt="じめん" height="20" />
   <span>じめん ×0.5</span>
 </div>
 
-ひこうとこおりが4倍弱点という点は常に意識が必要だ。ムクホーク（ひこう）やこおり技持ちポケモンには一撃で落とされるリスクがある。一方、じめんとでんきへの耐性は対ガブリアス・ブリジュラスとの対面で活きる場面がある。
+こおりが4倍弱点という点は常に意識が必要で、こおり技持ちポケモンには一撃で落とされるリスクがある。ひこう・むし・ドラゴン・フェアリーも×2弱点で、耐久HP70/B75のためタイプ一致のこれらの技で容易に落とされる。一方、みず・でんき・くさへの×0.25耐性は対ブリジュラス・ラグラージとの対面で活きる場面がある。
 
 ---
 
@@ -139,70 +139,70 @@ S145を誇りながらもしんくうは（かくとう、先制技）を採用�
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>だいちのちから</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">85.1%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">84.6%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>りゅうのはどう</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">85</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">79.6%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">76.4%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>リーフストーム</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">130</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">70.6%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">72.2%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>しんくうは</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">42.4%</td>
-</tr>
-<tr>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>しっぽきり</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">32.9%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40.1%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>しんくうは</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">34.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>エナジーボール</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">25.0%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">24.6%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>きあいだま</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">12.1%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">11.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>がむしゃら</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8.0%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8.7%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ギガドレイン</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6.8%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7.1%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>いわなだれ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4.1%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4.4%</td>
 </tr>
 </tbody>
 </table>
@@ -218,18 +218,18 @@ S145を誇りながらもしんくうは（かくとう、先制技）を採用�
 
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0254-00.webp" alt="メガジュカイン" width="48" height="48" />
-  <strong>おくびょうメガジュカイン（H2-C32-S32）— 採用率54.6%</strong>
+  <strong>おくびょうメガジュカイン（H2-C32-S32）— 採用率55.9%</strong>
 </div>
 
 - **性格**: おくびょう（S↑ A↓）
 - **持ち物**: ジュカインナイト
-- **特性**: しんりょく → ひでり（メガ後）
-- **EV**: H2 / C32（252相当） / S32（252相当）
+- **特性**: しんりょく（70.2%）※メガ後ひらいしん
+- **EV**: H2 / C32 / S32
 - **技構成例**: リーフストーム / りゅうのはどう / だいちのちから / しんくうは
 
-**強み**: S実数値が最高クラスとなり、環境上位のほぼ全ポケモンを上から殴れる。C145×おくびょうによる火力は絶大で、リーフストームの一撃で多くのポケモンを落とせる。しんくうはでタスキ持ちの処理も可能なため、詰めの場面での信頼性が高い。
+**強み**: S実数値216に達し、最速ガブリアス（169）を上から殴れる。ひかえめ型（197）に対しても先手を確保できるため、ジュカインミラーでの安定感が高い。しんくうはでタスキ持ちの処理も可能で、詰めの場面での信頼性が増す。
 
-**弱み**: ぼうぎょ75とHPが70と耐久が低く、ひこう・こおり4倍弱点のため一撃で落とされるリスクが常にある。リーフストームのC2段階低下により、複数回の打ち合いは不向き。交代読みのりゅうのはどうや第2打でだいちのちからを打つ立ち回りが求められる。
+**弱み**: ぼうぎょ75とHPが70と耐久が低く、こおり4倍弱点・ひこう/むし/ドラゴン/フェアリー×2弱点のため一撃で落とされるリスクが常にある。リーフストームのC2段階低下により、複数回の打ち合いは不向き。交代読みのりゅうのはどうや第2打でだいちのちからを打つ立ち回りが求められる。
 
 ---
 
@@ -237,18 +237,18 @@ S145を誇りながらもしんくうは（かくとう、先制技）を採用�
 
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0254-00.webp" alt="メガジュカイン" width="48" height="48" />
-  <strong>ひかえめメガジュカイン（B2-C32-S32）— 採用率9.1%</strong>
+  <strong>ひかえめメガジュカイン（B2-C32-S32）— 採用率8.8%</strong>
 </div>
 
 - **性格**: ひかえめ（C↑ A↓）
 - **持ち物**: ジュカインナイト
-- **特性**: しんりょく → ひでり（メガ後）
-- **EV**: B2 / C32（252相当） / S32（252相当）
+- **特性**: しんりょく（70.2%）※メガ後ひらいしん
+- **EV**: B2 / C32 / S32
 - **技構成例**: リーフストーム / りゅうのはどう / だいちのちから / しっぽきり
 
-**強み**: おくびょう型に比べてCがさらに高くなり、耐久振りポケモンを確定で落とせるラインが広がる。メガジュカインのS145はひかえめでも環境の多くを抜けるため、速さを落としてもアドバンテージが得られる場面が多い。しっぽきりと組み合わせることで、倒しきれない相手に後続を通す選択肢が生まれる。
+**強み**: おくびょう型に比べCが約10%高くなり、耐久振りポケモンを確定で落とせるラインが広がる。S実数値はおくびょう216に対し197と落ちるが、それでも多くの相手を抜けるため火力を優先する選択になる。しっぽきりと組み合わせ、倒しきれない相手に後続を通す動きも取れる。
 
-**弱み**: おくびょう型には素早さで劣るため、同速以上のポケモンへの対処が難しくなる。環境にS145前後の速いポケモンが増えると活躍の場が狭まる。タスキ潰しができないため、しんくうはを採用しない場合はタスキ持ちの処理手段を別途パーティに用意する必要がある。
+**弱み**: S実数値197とおくびょう型（216）に劣り、ジュカインミラーや同速圏の相手に先手を譲る。タスキ潰しのしんくうはを採用しない構成が多く、タスキ持ちの処理手段を別途パーティに用意する必要がある。
 
 ---
 
@@ -256,18 +256,18 @@ S145を誇りながらもしんくうは（かくとう、先制技）を採用�
 
 | ポケモン | 使用率 | 判定 | 理由 |
 |---------|--------|------|------|
-| ガブリアス | 1位 | **五分** | だいちのちからはじめん技のため自分自身に通らず、りゅうのはどうの撃ち合いはメガジュカインのC145が勝るが、ガブリアスのじしんでこちらが半減のためダメージレースは五分。りゅうのはどうを先に打てるが一撃で落とせるかはギリギリのライン |
-| ブリジュラス | 2位 | **有利** | でんき半減・じめん半減の恩恵があり、だいちのちからでじめんタイプ一致ではないがブリジュラスのはがねタイプに等倍以上。リーフストームの火力で上から大ダメージを与えられる。ブリジュラスのドラゴン技は等倍だが後手になる |
-| マスカーニャ | 4位 | **不利** | マスカーニャのひこう技（とびひざげり等）やくさ技が刺さりやすく、こちらのりゅうのはどうがフェアリータイプに無効化されるケースは少ないが、マスカーニャ自身のフェアリータイプ技でこちらが弱点をつかれる。先制技しんくうはでダメージを入れるか交代が無難 |
-| ミミッキュ | 5位 | **不利** | フェアリータイプのためりゅうのはどうが等倍止まりで、ばけのかわによる1回の攻撃無効化が厳しい。こちらのリーフストームは等倍だが、ミミッキュのじゃれつくでフェアリー弱点をつかれる。バトン型との対面は特に苦手 |
-| ムクホーク | 6位 | **不利** | ひこう4倍弱点により、ブレイブバードで確定1発を取られる。S145のメガジュカインでも先手が取れない場合もあり、対面を避けるのが基本。しんくうはで先制できても削り程度にしかならないため引き安定 |
-| ラグラージ | 7位 | **有利** | リーフストームがくさ一致でラグラージのみず/じめんに4倍ではないが、ラグラージのとくぼうが低いため高火力のリーフストームで大ダメージ。ラグラージのじしんはじめん半減のためダメージが抑えられる。上から攻撃できるのも大きい |
+| ガブリアス | 1位 | **不利** | S216で最速ガブリアス（169）に先手を取り、りゅうのはどうを先に通せるが一撃では落とせない。ガブリアスのげきりんはドラゴン×2弱点を突き、HP70/B75では確定で大ダメージを受ける。先手を取れても対面維持はできず、引きが基本 |
+| ブリジュラス | 2位 | **有利** | でんき×0.25・じめん半減でブリジュラスの攻撃を受けにくく、だいちのちからがはがね/ドラゴンに×2で通る。S216で先手を取れるため、上から大ダメージを与えられる |
+| マスカーニャ | 4位 | **不利** | マスカーニャのトリプルアクセル（採用率88.0%）がこおり4倍弱点を突き、確定で落とされる。S実数値はこちらが上だが、被弾すれば一撃のため対面維持はできない。引きが基本 |
+| ミミッキュ | 5位 | **不利** | りゅうのはどうがゴースト/フェアリーに無効化され、リーフストームも等倍止まりで決定打に欠ける。一方ミミッキュのじゃれつく（94.8%）はフェアリー×2弱点を突き、ばけのかわで一撃を無効化されるため打ち負ける |
+| ムクホーク | 6位 | **不利** | ひこう×2弱点をブレイブバードで突かれ、HP70/B75では大ダメージを受ける。メガムクホークはS実数値178でこちらの216より遅いため先手は取れるが、こちらの攻撃で落としきれず被弾すれば致命傷のため対面を避ける |
+| ラグラージ | 8位 | **有利** | リーフストームがくさ一致でラグラージのみず/じめんに×4で通り、とくぼうの低さもあって高火力で大ダメージ。ラグラージのじしんはじめん半減のためダメージが抑えられ、S216で先手も取れる |
 
 ---
 
 ## パーティ構成
 
-メガジュカインはひこう・こおり・フェアリーへの対策をパーティで補う必要がある。高速アタッカーとして機能する一方、耐久が低いため後続のサポートが重要となる。
+メガジュカインはこおり4倍弱点に加え、ひこう・むし・ドラゴン・フェアリー×2弱点への対策をパーティで補う必要がある。高速アタッカーとして機能する一方、耐久が低いため後続のサポートが重要となる。
 
 <div class="partner-grid">
   <div class="partner-card">
@@ -276,13 +276,8 @@ S145を誇りながらもしんくうは（かくとう、先制技）を採用�
     <div class="rate">同居率 1位</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0398-00.webp" alt="ムクホーク" />
-    <div class="name">ムクホーク</div>
-    <div class="rate">同居率 2位</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0257-01.webp" alt="バシャーモ" />
-    <div class="name">バシャーモ</div>
+    <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" />
+    <div class="name">ミミッキュ</div>
     <div class="rate">同居率 3位</div>
   </div>
   <div class="partner-card">
@@ -291,45 +286,45 @@ S145を誇りながらもしんくうは（かくとう、先制技）を採用�
     <div class="rate">同居率 4位</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0260-01.webp" alt="ラグラージ" />
-    <div class="name">ラグラージ</div>
-    <div class="rate">同居率 5位</div>
+    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" />
+    <div class="name">アーマーガア</div>
+    <div class="rate">同居率 7位</div>
   </div>
 </div>
 
-**ガブリアス**との組み合わせは最も多く、ジュカインが苦手なはがね・フェアリーにガブリアスのじしんやがんせきふうじで対処できる。**ムクホーク**はジュカインが苦手なかくとう・むし対策としての物理エースを務め、ジュカインが切り開いた穴をムクホークで詰める動きが強力だ。**バシャーモ**はこおり弱点への回答となり、しんそくによる先制打点でジュカインが落とされた後の詰めを担う。**ブリジュラス**は特殊耐久役として機能し、ジュカインが特殊攻撃で削られた後の後続として組み込まれる。**ラグラージ**はみずタイプとしてジュカインの弱点を補いつつ、物理アタッカーとして役割分担が明確な組み合わせだ。
+同居率2位バシャーモ・5位メタグロス・6位ムクホークも上位に並ぶが、バシャーモナイト72.8%・メタグロスナイト96.7%とメガ運用が主流で、メガ枠が競合するジュカインとは同時採用しづらい。ここでは非メガで併用できる相手を挙げる。
+
+**ガブリアス**との組み合わせは最も多い。物理アタッカーとステルスロックによる設置を担い、特殊のジュカインと攻撃面を二分する役割分担が明確だ。**ミミッキュ**はジュカインの苦手なフェアリーへのじゃれつき手段になるうえ、ばけのかわとつるぎのまいで自ら積む隙を作れる。**ブリジュラス**はジュカインのこおり弱点を持たないはがね/ドラゴンの特殊受けとして、削られた後の後続を担う。**アーマーガア**はジュカインの×2弱点であるひこう・むしを半減で受けられ、はがね/ひこうの高い物理耐久を活かしてはねやすめで居座りながら立て直せる。
 
 ---
 
 ## データ分析①: 技採用率から読む立ち回りの傾向
 
-だいちのちから85.1%という数字は、メガジュカインがでんき無効のタイプになる関係でじめん補完を最重視していることを示している。特にはがね・どくタイプの多い環境において、くさ技だけでは対処できない相手をだいちのちからでカバーする構成が定着した。
+だいちのちから84.6%という数字は、タイプ一致のくさ・ドラゴン2技だけでは等倍以下に留まるはがね・どくタイプへの補完を最重視していることを示す。くさ技を半減するはがねに対しだいちのちからが×2で通るため、ブリジュラスやメタグロスなど環境上位のはがねへの打点として定着した。
 
-りゅうのはどう79.6%の高採用率は、メガ後のドラゴンタイプ一致技として命中安定（95%）が評価されている。りゅうせいぐんのような命中100%のドラゴン技が存在しない環境においては、りゅうのはどうの安定感が重宝される。
+りゅうのはどう76.4%の高採用率は、メガ後のドラゴンタイプ一致技として命中安定（95%）が評価されている。りゅうせいぐんのような命中100%のドラゴン技が存在しない環境においては、りゅうのはどうの安定感が重宝される。
 
-リーフストーム70.6%は採用率が高いが、100%ではない点が興味深い。C2段階低下のデメリットにより、特に複数体を相手にする展開では使いどころを選ぶ必要があるため、一部のプレイヤーはより安定したくさ技（エナジーボール等）を選択している可能性がある。
+リーフストーム72.2%は採用率が高いが、100%ではない点が興味深い。C2段階低下のデメリットにより、特に複数体を相手にする展開では使いどころを選ぶ必要があるため、一部のプレイヤーはより安定したくさ技（エナジーボール等）を選択している可能性がある。
 
-しんくうは42.4%対しっぽきり32.9%という数字は、対戦環境がタスキ潰し重視（しんくうは）とバトン戦術対策（しっぽきり）に二分されていることを示す。自身がエースとして完結する構成ではしんくうは、後続を活かすサポート型構成ではしっぽきりが選ばれる傾向だ。
+しっぽきり40.1%対しんくうは34.9%という数字は、4枠目の選択が後続サポート（しっぽきり）とタスキ潰し（しんくうは）に二分されていることを示す。後続を活かすサポート型構成ではしっぽきり、自身がエースとして完結する構成ではしんくうはが選ばれる傾向だ。
 
 ---
 
 ## まとめ: 型別比較表
 
-| 比較項目 | おくびょう型（54.6%） | ひかえめ型（17.4%） |
+| 比較項目 | おくびょう型（55.9%） | ひかえめ型（8.8%） |
 |---------|-------------------|--------------------|
-| 性格 | おくびょう | ひかえめ |
-| 強み | 最高速度での制圧 | 最大火力での一撃必殺 |
-| 弱み | 火力がわずかに落ちる | 同速・超速ポケモンに脆弱 |
+| S実数値 | 216 | 197 |
+| 強み | 最速ガブリアス・同速圏に先手 | C約10%増で確定数を1つ縮める |
+| 弱み | 火力がひかえめ型に劣る | ジュカインミラー・同速圏に後手 |
 | 4枠目 | しんくうは推奨 | しっぽきり推奨 |
-| 適正環境 | 高速ポケモン多数 | 耐久振りポケモン多数 |
-| プレイスタイル | 先手での完結型 | 後続サポート型 |
+| 適正 | 速い相手を上から殴る | 耐久振りを確定で落とす |
 
-メガジュカインはS145・C145という突出したスペックを持つ超高速特殊アタッカーだ。だいちのちから・りゅうのはどう・リーフストームの3ウェポンで広範囲をカバーしつつ、4枠目でパーティのニーズに合わせた選択ができる柔軟性も魅力。ひこう・こおり4倍弱点という明確な弱点はパーティで補い、上から一撃を叩き込む爽快なゲームプランを実現できるポケモンだ。
+メガジュカインはS実数値216・C145の高速特殊アタッカーだ。だいちのちから・りゅうのはどう・リーフストームの3ウェポンで広範囲をカバーしつつ、4枠目でパーティのニーズに合わせた選択ができる柔軟性も魅力。こおり4倍弱点とひこう/むし/ドラゴン/フェアリー×2弱点という低耐久ゆえの脆さはパーティで補い、相手より先に高火力を通すゲームプランを軸とするポケモンだ。
 
 ---
 
 ## 関連記事
 
-- [【ポケモンチャンピオンズ】ガブリアス考察 M-3 使用率1位 型別採用率と立ち回り](/blog/garchomp-analysis-m3/)
 - [【ポケモンチャンピオンズ】ムクホーク考察 M-3 使用率6位 型別採用率と立ち回り](/blog/staraptor-analysis-m3/)
 - [【ポケモンチャンピオンズ】ラグラージ考察 M-3 使用率7位 型別採用率と立ち回り](/blog/swampert-analysis-m3/)

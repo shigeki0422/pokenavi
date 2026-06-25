@@ -487,6 +487,6 @@ draft: false
 
 ## 関連記事
 
-- [天敵となる使用率1位 ガブリアスのM-3考察](/blog/garchomp-analysis-m3/)
-- [でんじほうで弱点を突けるギャラドスのM-3考察](/blog/gyarados-analysis-m3/)
-- [使用率2位 ブリジュラスのM-3考察](/blog/archaludon-analysis-m3/)
+- [じめん技で天敵となるメガメタグロスのM-3考察](/blog/metagross-analysis-m3/)
+- [みず枠パートナー ラグラージのM-3考察](/blog/swampert-analysis-m3/)
+- [はがねタイプ エースのゴールデンゴーのM-3考察](/blog/gholdengo-analysis-m3/)

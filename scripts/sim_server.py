@@ -63,12 +63,19 @@ if _AZ_NET is not None:
         if not legal:
             return {}
         return _AZ_NET.evaluate(encode_state(s1, s2, field), legal)[0]
-    # tree探索(深さ2)：各手番で自分手×相手手を展開し結果状態を価値ネットで直接採点、各手番をゼロ和(maximin)で解く。
-    # 検証でロールアウト式(plain)を明確に上回る（直接61% / ペアCRN +20.8pt）。約0.8〜1.3秒/手。
+    # MCTS(IS-MCTS + regret-matching)：本番統一エンジン。隠れ選出（相手の未登場控えを6体ソースから推定）に対応。
+    # tree d2より高速（約5倍）かつ同等以上の強さ。sims は env MCTS_SIMS（既定400）。
+    _MCTS_SIMS = int(os.environ.get("MCTS_SIMS", "400"))
     LEARNED_AI = SearchAI(loader, depth=12, seed=0,
                           value_fn=_value_fn, policy_fn=_policy_fn, policy_weight=0.15,
-                          rollout_ai=NetGreedyAI(_AZ_NET),
-                          tree_search=True, tree_depth=2, tree_k=4, tree_det=8)
+                          rollout_ai=NetGreedyAI(_AZ_NET))
+    LEARNED_AI.mcts = True; LEARNED_AI.mcts_sims = _MCTS_SIMS
+    LEARNED_AI.mcts_select = "regret"; LEARNED_AI.fast_clone = True
+    def _net_eval(s1, s2, field):
+        legal = [ix for _, ix in _legal_idx(s1, s2, field)]
+        pol, val = _AZ_NET.evaluate(encode_state(s1, s2, field), legal if legal else [0])
+        return pol, val
+    LEARNED_AI.net_eval = _net_eval
     # リプレイ/観戦用は高速なネット方策（温度付き＝総当たりと同系・毎回少し変化）。tree d2は遅く15秒制限を超えるため。
     REPLAY_AI = NetGreedyAI(_AZ_NET, temperature=0.4)
 else:
@@ -251,8 +258,8 @@ def run_battle_data(specs1, specs2, season="M-2"):
     selected1 = learned_select(party1_6, party2_6, specs1, specs2)
     selected2 = learned_select(party2_6, party1_6, specs2, specs1)
 
-    side1 = BattleSide(selected1, viewer_label="P1")
-    side2 = BattleSide(selected2, viewer_label="P2")
+    side1 = BattleSide(selected1, viewer_label="P1", source6=party1_6)
+    side2 = BattleSide(selected2, viewer_label="P2", source6=party2_6)
     # 学習AIのEV/性格推定を有効化（被ダメージ割合から相手型をオンライン推定）
     side1.belief = OpponentBelief(loader)
     side2.belief = OpponentBelief(loader)
@@ -817,8 +824,8 @@ def manual_start(req: ManualStartRequest):
     # P2（AI側）は学習済みナッシュ均衡で選出（ランダム相手は select_party 相当にフォールバック）
     selected2 = learned_select(party2_6, party1_6, req.p2, req.p1)
 
-    side1 = BattleSide(selected1, viewer_label="P1")
-    side2 = BattleSide(selected2, viewer_label="P2")
+    side1 = BattleSide(selected1, viewer_label="P1", source6=party1_6)
+    side2 = BattleSide(selected2, viewer_label="P2", source6=party2_6)
     # AI側(P2)に belief を付与：人間(P1)の被ダメージ割合からEV/性格を推定
     side2.belief = OpponentBelief(loader)
     field = BattleField()
@@ -1062,7 +1069,7 @@ def _f1_store_put(aid, label, card):
 _F1_CACHE_DIR = os.path.join(os.path.dirname(__file__), "f1_cache")
 _F1_SAVED = {}   # subject_label -> {analysis_id, cards(サマリ)}
 # AIバージョン：探索/評価を変えたら更新。記録の再利用（対戦数の段階拡張）は同一バージョン間のみ。
-AI_VER = "k4-megaeval-1mega-d2"
+AI_VER = "mcts-guardq800-1"
 
 
 def _f1_safe(name):

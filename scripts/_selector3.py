@@ -9,7 +9,7 @@ from multiprocessing import Pool
 import _pop_gen as G
 from _selector import ValMLP, _rand_sel_specs
 
-SEASON = "M-2"
+SEASON = os.environ.get("SEASON", "M-2")
 ROLL = 0.85   # 固定ダメージロール(分散低減)。MCTS探索自体は確率的。
 
 _W = {}

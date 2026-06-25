@@ -239,11 +239,15 @@ class BattlePokemon:
         self.speed      = calc_stat(md.speed,      evs.get('S', 0), 31, nat('speed'))
         self.type1 = md.type1
         self.type2 = md.type2
+        self.base_type1 = md.type1   # メガ後タイプを基本タイプにも反映(交代時の型リセットで巻き戻らないように)
+        self.base_type2 = md.type2
         if md.ability:
             self.ability = md.ability
         if getattr(md, "weight_kg", None):
             self.weight_kg = md.weight_kg
-        self.item = None
+        # メガストーンはメガ進化後も持ち物として残る（実機仕様）。消去するとポルターガイストが
+        # 「持ち物なし」で失敗する等の不整合。はたきおとす/トリック/なげつける等は _is_megastone で
+        # メガストーンを保護済みなので剥奪・1.5倍補正は乗らない。効果アイテムでもないのでEOT効果も出ない。
         self.mega_evolved = True
 
     def take_damage(self, dmg: int):
