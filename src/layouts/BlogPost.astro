@@ -155,6 +155,31 @@ const breadcrumbJsonLd = {
 		</main>
 		<Footer />
 		<script>
+			// タイプアイコン横のテキスト名を削除 → タップでツールチップ
+			(function () {
+				const tip = document.createElement('div');
+				tip.style.cssText = 'position:fixed;background:#1e293b;color:#fff;padding:3px 10px;border-radius:6px;font-size:0.78rem;font-weight:600;z-index:300;pointer-events:none;opacity:0;transition:opacity 0.15s;transform:translateX(-50%);white-space:nowrap;';
+				document.body.appendChild(tip);
+				let tipTimer;
+
+				document.querySelectorAll('span > img[src*="/images/types/"]').forEach(img => {
+					const span = img.parentElement;
+					[...span.childNodes].filter(n => n.nodeType === 3).forEach(n => n.remove());
+					img.style.cursor = 'pointer';
+					img.addEventListener('click', e => {
+						e.stopPropagation();
+						clearTimeout(tipTimer);
+						const r = img.getBoundingClientRect();
+						tip.textContent = img.alt;
+						tip.style.left = (r.left + r.width / 2) + 'px';
+						tip.style.top = Math.max(4, r.top - 30) + 'px';
+						tip.style.opacity = '1';
+						tipTimer = setTimeout(() => tip.style.opacity = '0', 1800);
+					});
+				});
+				document.addEventListener('click', () => { clearTimeout(tipTimer); tip.style.opacity = '0'; });
+			})();
+
 			(async function () {
 				const res = await fetch('/pokemon-map.json');
 				if (!res.ok) return;
