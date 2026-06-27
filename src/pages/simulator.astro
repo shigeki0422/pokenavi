@@ -744,16 +744,20 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
         if(sd.aurora_veil) h.push('オーロラベール');
         return `<div class="rp-haz">${h.map(x=>`<span class="hazchip">${x}</span>`).join('')}</div>`;
       }
-      const EXPL_REASON={qselect:'十分読んだ中で最も勝率が高い手',visit:'最も多く探索した手',downside_guard:'最悪ケースを避けて交代に変更'};
-      function renderExplain(t){
+      const EXPL_REASON={qselect:'十分読んだ中で最も勝率が高い手',visit:'最も多く探索した手',downside_guard:'最悪ケースを避けて交代に変更',certain_ko:'相手を確定で倒せる手'};
+      function renderExplain(t, played){
         const e1=t.expl1; if(!e1) return '';        // 相手の評価は非表示（自分のみ）
         const pc=x=>x==null?'—':Math.round(x*100)+'%';
         const cands=e1.cands.slice();
         let hon=null,mv=-1; for(const c of cands){ if(c.v>mv){ mv=c.v; hon=c.a; } }   // 本命＝最多探索
         const thr=0.1*mv;                                                             // qselectの足切り相当(最多探索の10%)
+        // ▶は「実際に打った手」(played=ログ由来)に合わせる。確定KO安全弁等でMCTS選択とズレるため。
+        const norm=s=>(s||'').replace('メガ+','');
+        let chosen=e1.chosen;
+        if(played){ const h=cands.find(c=>norm(c.a)===played); if(h) chosen=h.a; }
         cands.sort((a,b)=>(b.q==null?-1:b.q)-(a.q==null?-1:a.q));                      // 勝率順
-        const rows=cands.map(c=>{ const weak=(c.v||0)<thr && c.a!==e1.chosen;          // 探索不足＝勝率が当てにならない
-          return `<tr class="${c.a===e1.chosen?'chosen':''}${weak?' weak':''}"><td>${c.a===e1.chosen?'▶ ':''}${c.a}${c.a===hon?'<span class="honmei">本命</span>':''}${weak?'<span class="lowconf">自信×</span>':''}</td><td>${pc(c.q)}</td></tr>`;
+        const rows=cands.map(c=>{ const weak=(c.v||0)<thr && c.a!==chosen;            // 探索不足＝勝率が当てにならない
+          return `<tr class="${c.a===chosen?'chosen':''}${weak?' weak':''}"><td>${c.a===chosen?'▶ ':''}${c.a}${c.a===hon?'<span class="honmei">本命</span>':''}${weak?'<span class="lowconf">自信×</span>':''}</td><td>${pc(c.q)}</td></tr>`;
         }).join('');
         return `<div class="expl"><div class="expl-h">🧠 この手番のAIの読み</div>
           <div class="expl-side"><table class="expl-tbl"><tr><th>候補手</th><th>勝率</th></tr>${rows}</table></div></div>`;
@@ -768,7 +772,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
         const banner=(wx||tr)?`<div class="rp-banner">${wx}${tr}</div>`:'';
         const seenOpp=new Set(); for(let k=0;k<=RTURN;k++){ const ai=RBATTLE.turns[k].side2.active_idx; if(ai!=null)seenOpp.add(ai); }
         $('replay-sides').innerHTML=`${banner}<div class="rp-grid">${renderColumn(t.side1,true,ACT[1])}${renderColumn(t.side2,false,ACT[2],seenOpp)}</div>`;
-        $('replay-expl').innerHTML = renderExplain(t);
+        $('replay-expl').innerHTML = renderExplain(t, (a1 && ACT[1] && ACT[1][a1.name]) ? ACT[1][a1.name].move : null);
         const simple=summarizeTurn(t.logs, acn);
         $('replay-log').innerHTML =
           `<div class="expl-h" style="margin-bottom:.35em">📜 バトルログ</div>`
