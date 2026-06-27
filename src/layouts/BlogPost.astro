@@ -153,5 +153,55 @@ const breadcrumbJsonLd = {
 			</article>
 		</main>
 		<Footer />
+		<script>
+			(async function () {
+				const res = await fetch('/pokemon-map.json');
+				if (!res.ok) return;
+				const map = await res.json();
+
+				function dexKeyFromImg(img) {
+					const m = img.src.match(/pokemon-(\d{4}-\d{2})\.webp/);
+					return m ? m[1] : null;
+				}
+
+				// poke-header の h2 をリンク化
+				const header = document.querySelector('.poke-header');
+				if (header) {
+					const img = header.querySelector('img:not([src*="/images/types/"])');
+					const h2 = header.querySelector('h2');
+					if (img && h2) {
+						const key = dexKeyFromImg(img);
+						const url = key && map[key];
+						if (url && !h2.querySelector('a')) {
+							const a = document.createElement('a');
+							a.href = url;
+							a.style.cssText = 'color:inherit;text-decoration:underline;text-decoration-color:#cbd5e1;';
+							a.innerHTML = h2.innerHTML;
+							h2.innerHTML = '';
+							h2.appendChild(a);
+						}
+					}
+				}
+
+				// partner-card をリンク化
+				document.querySelectorAll('.partner-card').forEach(card => {
+					if (card.closest('a') || card.tagName === 'A') return;
+					const img = card.querySelector('img');
+					if (!img) return;
+					const key = dexKeyFromImg(img);
+					const url = key && map[key];
+					if (!url) return;
+					const a = document.createElement('a');
+					a.href = url;
+					a.style.cssText = 'text-decoration:none;color:inherit;display:contents;';
+					// card を a で包む
+					card.parentNode.insertBefore(a, card);
+					a.appendChild(card);
+					card.style.cursor = 'pointer';
+					card.addEventListener('mouseenter', () => card.style.borderColor = '#f97316');
+					card.addEventListener('mouseleave', () => card.style.borderColor = '');
+				});
+			})();
+		</script>
 	</body>
 </html>
