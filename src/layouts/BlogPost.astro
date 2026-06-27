@@ -53,6 +53,7 @@ const breadcrumbJsonLd = {
 				width: calc(100% - 2em);
 				max-width: 100%;
 				margin: 0;
+				padding: 0;
 			}
 			.hero-image {
 				width: 100%;
@@ -60,31 +61,64 @@ const breadcrumbJsonLd = {
 			.hero-image img {
 				display: block;
 				margin: 0 auto;
-				border-radius: 12px;
+				border-radius: 8px;
 				box-shadow: var(--box-shadow);
 			}
 			.prose {
 				width: 780px;
 				max-width: calc(100% - 2em);
 				margin: auto;
-				padding: 1em;
+				padding: 0.5em 1em 2em;
 				color: rgb(var(--gray-dark));
+				font-size: 15px;
+				line-height: 1.6;
 			}
 			.title {
-				margin-bottom: 1em;
-				padding: 1em 0;
-				text-align: center;
+				margin-bottom: 0.6em;
+				padding: 0.5em 0 0.25em;
 				line-height: 1;
 			}
 			.title h1 {
-				margin: 0 0 0.5em 0;
+				margin: 0 0 0.4em;
+				font-size: 1.3rem;
+				line-height: 1.35;
+				text-align: left;
+				color: rgb(var(--black));
 			}
 			.date {
-				margin-bottom: 0.5em;
+				margin-bottom: 0.4em;
 				color: rgb(var(--gray));
+				font-size: 0.82rem;
 			}
 			.last-updated-on {
 				font-style: italic;
+			}
+			/* グローバルCSS の過剰スペースを記事ページに限り圧縮 */
+			:global(.prose p) { margin-bottom: 0.75em; }
+			:global(.prose hr) { margin: 0.4rem 0; border-color: #f1f5f9; }
+			:global(.prose h2) {
+				font-size: 1rem;
+				font-weight: 700;
+				color: rgb(var(--black));
+				margin: 1.5rem 0 0.6rem;
+				padding: 0.45rem 0.9rem;
+				background: #f8fafc;
+				border-left: 3px solid var(--accent, #f97316);
+				border-radius: 0 6px 6px 0;
+			}
+			:global(.prose h3) {
+				font-size: 0.95rem;
+				font-weight: 700;
+				margin: 1rem 0 0.4rem;
+				color: rgb(var(--black));
+			}
+			:global(.prose h1) { font-size: 1.3rem; }
+			@media (max-width: 720px) {
+				.prose { font-size: 14px; padding: 0.5em 0.75em 2em; }
+				/* 記事内ポケモン画像をモバイルで縮小 */
+				:global(.poke-header img) { width: 64px !important; height: 64px !important; }
+				:global(.partner-card img) { width: 44px !important; height: 44px !important; }
+				:global(.partner-grid) { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important; gap: 8px !important; }
 			}
 		</style>
 	</head>
