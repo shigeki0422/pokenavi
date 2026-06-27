@@ -1,9 +1,9 @@
 ---
-title: '【ポケモンチャンピオンズ】ハリーマン考察 M-3 使用率97位 型別採用率と立ち回り'
-description: 'M-3シングルバトルで使用率97位のハリーマンを徹底分析。たべのこし47.0%の耐久型が主流で、どくばりセンボン62.2%・どくびし38.7%の毒まき構成と、ちいさくなる32.3%の回避積み型まで実データで解説。エスパー無効のあく/どく複合の活かし方を考察。'
+title: '【ポケモンチャンピオンズ】ハリーマン考察 M-3 使用率105位 型別採用率と立ち回り'
+description: 'M-3シングルバトルで使用率105位のハリーマンを徹底分析。たべのこし46.5%の耐久型が主流で、どくばりセンボン62.8%・どくびし35.0%の毒まき構成と、ちいさくなる34.6%の回避積み型まで実データで解説。エスパー無効のあく/どく複合の活かし方を考察。'
 pubDate: '2026-06-20'
 heroImage: '../../assets/hero-overqwil-m3.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -27,32 +27,32 @@ draft: true
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">97位</strong>　特性: <strong>いかく 77.2%</strong>
+      使用率: <strong style="color:#e67e22">105位</strong>　特性: <strong>いかく 76.7%</strong>
     </div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-3シーズン（2026/06/20）時点の集計です
+> ⚠️ 本記事のデータはM-3シーズン（2026/06/25）時点の集計です
 
-シーズンM-3のシングルバトルで、ハリーマンは**使用率97位**を記録。あく/どくの複合タイプはエスパーを無効化しゴースト技も半減し、特性いかく（77.2%）で相手のこうげきを1段階下げる能力を持ちます。どくびし（38.7%）で毒を撒きながらどくばりセンボン（62.2%）で削るサポート兼アタッカーとして、またちいさくなる（32.3%）で回避率を積む型まで複数の構成が採用されています。
+シーズンM-3のシングルバトルで、ハリーマンは**使用率105位**を記録。あく/どくの複合タイプはエスパーを無効化しゴースト技も半減し、特性いかく（76.7%）で相手のこうげきを1段階下げる能力を持ちます。どくびし（35.0%）で毒を撒きながらどくばりセンボン（62.8%）で削るサポート兼アタッカーとして、またちいさくなる（34.6%）で回避率を積む型まで複数の構成が採用されています。
 
-特性は**いかく77.2%**が最多で、繰り出し時に相手のこうげきを1段階下げます。すいすい（19.7%）は雨下でのすばやさ2倍を活かす型です。
+特性は**いかく76.7%**が最多で、繰り出し時に相手のこうげきを1段階下げます。すいすい（19.5%）は雨下でのすばやさ2倍を活かす型です。
 
 ---
 
-## なぜ今ハリーマンが使用率97位なのか
+## なぜ今ハリーマンが使用率105位なのか
 
 ### 1. いかく＋あく/どくで物理受けと毒まきを同時にこなせる
 
-特性いかく（77.2%）は繰り出し時に相手のこうげきを1段階下げます。あく/どくの複合により**エスパー技を無効化**し、ゴースト技も半減するため、これらを主力とする特殊アタッカーへの繰り出し成功率が高くなります。繰り出した後にどくびし（38.7%）を撒ければ、後続に毒ダメージを蓄積させながら有利な展開を作れます。
+特性いかく（76.7%）は繰り出し時に相手のこうげきを1段階下げます。あく/どくの複合により**エスパー技を無効化**し、ゴースト技も半減するため、これらを主力とする特殊アタッカーへの繰り出し成功率が高くなります。繰り出した後にどくびし（35.0%）を撒ければ、後続に毒ダメージを蓄積させながら有利な展開を作れます。
 
 ### 2. どくびし＋どくばりセンボンで毒サイクルを完結させられる
 
-どくびし（38.7%）は設置後に地に足のついた相手が場に出るたびどく状態にします。どくばりセンボン（62.2%）はどく技・20回固定連続技で、命中した回数に関係なく合計ダメージは一定ですが、**タスキ・オボンのみを1回ヒットで消費させる**効果があります。どくびしで毒を蓄積させながら、センボンで回復アイテムを剥がす構成は、たべのこし耐久型と組み合わさることで相手のリソースを削り切る設計になっています。
+どくびし（35.0%）は設置後に地に足のついた相手が場に出るたびどく状態にします。どくばりセンボン（62.8%）はどく技・威力60の単発技で、**50%の確率で相手をどく状態にする**追加効果があります。また、相手がすでにどく状態・もうどく状態の場合は威力が2倍（実質120）になります。どくびしで後続を毒状態にしておけば、センボンの威力が2倍で通るため、撒き＋削りの二段構えが成立します。
 
-### 3. かみくだく（44.8%）でぼうぎょダウンを狙いながらあくタイプ一致打点を通せる
+### 3. かみくだく（46.0%）でぼうぎょダウンを狙いながらあくタイプ一致打点を通せる
 
-かみくだく（44.8%）はあく技・タイプ一致で、20%の確率で相手のぼうぎょを1段階下げます。いかくで相手のこうげきを下げつつ、かみくだくで相手のぼうぎょを下げる両方向の能力操作が、ハリーマンの場持ちと崩し性能を同時に高めています。
+かみくだく（46.0%）はあく技・タイプ一致で、20%の確率で相手のぼうぎょを1段階下げます。いかくで相手のこうげきを下げつつ、かみくだくで相手のぼうぎょを下げる両方向の能力操作が、ハリーマンの場持ちと崩し性能を同時に高めています。
 
 ---
 
@@ -176,86 +176,86 @@ draft: true
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>どくばりセンボン</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">60</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">62.2%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">62.8%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>かみくだく</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">44.8%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">46.0%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>どくびし</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">38.7%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">35.0%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ちいさくなる</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">32.3%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">34.6%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>じごくづき</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">28.0%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">27.3%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>みちづれ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">26.0%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">25.4%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>みがわり</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">22.1%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">22.4%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>どくどく</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">19.7%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">21.0%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ちょうはつ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">17.3%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">15.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>つるぎのまい</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">14.6%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">15.0%</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-特性は**いかく77.2%・すいすい19.7%**の二択。いかくは繰り出し時に相手のこうげきを1段階下げる防御的な選択で、すいすいは雨下でのすばやさ2倍を活かすアタッカー向けの選択です。いかく個体が大多数を占めており、雨パーティ以外ではいかくが基本です。
+特性は**いかく76.7%・すいすい19.5%**の二択。いかくは繰り出し時に相手のこうげきを1段階下げる防御的な選択で、すいすいは雨下でのすばやさ2倍を活かすアタッカー向けの選択です。いかく個体が大多数を占めており、雨パーティ以外ではいかくが基本です。
 
 ---
 
 ## 主要型の解説
 
-性格分布はわんぱく36.8%・ようき22.7%・いじっぱり18.5%の3択が中心です。わんぱく（A↓B↑）はぼうぎょを最大化する耐久型、ようきはすばやさを上げる先手確保型、いじっぱりはこうげきを最大化するアタッカー型です。
+性格分布はわんぱく37.4%・ようき22.9%・いじっぱり18.8%の3択が中心です。わんぱく（A↓B↑）はぼうぎょを最大化する耐久型、ようきはすばやさを上げる先手確保型、いじっぱりはこうげきを最大化するアタッカー型です。
 
 ### 型1: わんぱく耐久毒まき型（最多採用）
 
-**性格採用率: わんぱく 36.8%**（ぼうぎょ最大化の耐久型。EV最多分布 H32-B32-D2 13.5%）
+**性格採用率: わんぱく 37.4%**（ぼうぎょ最大化の耐久型。EV最多分布 H32-B32-D2 14.2%）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -265,10 +265,10 @@ draft: true
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> いかく（77.2%）<br>
+<strong>特性:</strong> いかく（76.7%）<br>
 <strong>性格:</strong> わんぱく（A↓ B↑）<br>
-<strong>EV:</strong> H32 B32 D2（採用率13.5%。HPとぼうぎょを最大化）<br>
-<strong>持ち物:</strong> たべのこし（47.0%）
+<strong>EV:</strong> H32 B32 D2（採用率14.2%。HPとぼうぎょを最大化）<br>
+<strong>持ち物:</strong> たべのこし（46.5%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -282,7 +282,7 @@ draft: true
 
 **強み:**
 
-わんぱくでぼうぎょを底上げしつつ、いかくで相手のこうげきをさらに下げることで、物理攻撃への実質耐久が大きく上がります。たべのこし（47.0%）の毎ターン回復と組み合わせることで、物理アタッカーと対面しながらどくびしを撒く余裕を作れます。どくびしを1枚撒いた後は、後続にどく状態を押し付けながら有利なサイクルを展開できます。どくばりセンボンはタスキ・オボンのみを1発目で消費させるため、相手のアイテムを剥がしながら削れる点が毒蓄積との相性に優れています。
+わんぱくでぼうぎょを底上げしつつ、いかくで相手のこうげきをさらに下げることで、物理攻撃への実質耐久が大きく上がります。たべのこし（46.5%）の毎ターン回復と組み合わせることで、物理アタッカーと対面しながらどくびしを撒く余裕を作れます。どくびしを1枚撒いた後は、後続にどく状態を押し付けながら有利なサイクルを展開できます。どくばりセンボンは50%の確率でどく状態を付与でき、どくびしで後続を毒状態にしてあれば威力が2倍になるため、撒き後の打点として設計上の役割が一致しています。
 
 **弱み:**
 
@@ -292,7 +292,7 @@ draft: true
 
 ### 型2: ようき先手確保型（2番目に多い構成）
 
-**性格採用率: ようき 22.7%**（素早さ確保の型。EV最多分布 H2-A32-S32 6.4%）
+**性格採用率: ようき 22.9%**（素早さ確保の型。EV最多分布 H2-A32-S32 7.0%）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -302,10 +302,10 @@ draft: true
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> いかく（77.2%）<br>
+<strong>特性:</strong> いかく（76.7%）<br>
 <strong>性格:</strong> ようき（S↑ C↓）<br>
-<strong>EV:</strong> H2 A32 S32（採用率6.4%。こうげきとすばやさを最大化）<br>
-<strong>持ち物:</strong> たべのこし（47.0%）/ きあいのタスキ（5.4%）
+<strong>EV:</strong> H2 A32 S32（採用率7.0%。こうげきとすばやさを最大化）<br>
+<strong>持ち物:</strong> たべのこし（46.5%）/ きあいのタスキ（5.3%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -319,17 +319,17 @@ draft: true
 
 **強み:**
 
-ようき+S32振りによりS実数値を150まで引き上げ、わんぱく型（S無振りでS実数値105）では後手になるS実数値106〜149の中速帯に先手を取れるようになります。こうげきをA32まで振ることでどくばりセンボン・かみくだくの火力が高まり、削り役としての効率が向上します。先手でどくびしを撒いてから動けるため、設置前に相手を行動させるリスクを下げられます。ただしコノヨザル（最速S実数値161）やガブリアス（最速S実数値169）など環境上位の高速勢には依然として先手を取れません。
+ようき+S32振りによりS実数値を150まで引き上げ、わんぱく型（S無振りでS実数値105）では後手になるS実数値106〜149の中速帯に先手を取れるようになります。こうげきをA32まで振ることでどくばりセンボン・かみくだくの火力が高まり、削り役としての効率が向上します。先手でどくびしを撒いてから動けるため、設置前に相手を行動させるリスクを下げられます。ただしコノヨザル（最速S実数値156）やガブリアス（最速S実数値169）など環境上位の高速勢には依然として先手を取れません。
 
 **弱み:**
 
-わんぱく型と比べてぼうぎょに振らないため、物理耐久が低下します。いかくで相手のこうげきを下げても、ぼうぎょ実数値がわんぱく型より低い分、物理技での削りがより大きくなります。きあいのタスキ（5.4%）採用の場合はたべのこしの継続回復を放棄するため、場持ちが1回限りになります。
+わんぱく型と比べてぼうぎょに振らないため、物理耐久が低下します。いかくで相手のこうげきを下げても、ぼうぎょ実数値がわんぱく型より低い分、物理技での削りがより大きくなります。きあいのタスキ（5.3%）採用の場合はたべのこしの継続回復を放棄するため、場持ちが1回限りになります。
 
 ---
 
 ### 型3: ちいさくなる回避積み型
 
-**性格: いじっぱり 18.5%**（こうげき最大化の積み型。EV最多分布 H32-B2-D32 5.3%）
+**性格: いじっぱり 18.8%**（こうげき最大化の積み型。EV最多分布 H32-B2-D32 5.6%）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -339,10 +339,10 @@ draft: true
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> いかく（77.2%）<br>
+<strong>特性:</strong> いかく（76.7%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
-<strong>EV:</strong> H32 B2 D32（採用率5.3%。HPと特防を最大化）<br>
-<strong>持ち物:</strong> たべのこし（47.0%）/ オボンのみ（17.1%）
+<strong>EV:</strong> H32 B2 D32（採用率5.6%。HPと特防を最大化）<br>
+<strong>持ち物:</strong> たべのこし（46.5%）/ オボンのみ（16.7%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -356,7 +356,7 @@ draft: true
 
 **強み:**
 
-ちいさくなる（32.3%）で回避率を2段階上げ、相手の攻撃を外させながら戦う型です。D32振りにより特殊耐久を補強し、特殊アタッカーからのちいさくなる積みの隙を広げます。いかくで物理耐久を補助しつつ、ちいさくなるを複数回積めば実質的な被弾頻度を下げて場持ちを延ばせます。たべのこし・オボンのみとの組み合わせで回避ループが成立した際の崩し性能は高くなります。
+ちいさくなる（34.6%）で回避率を2段階上げ、相手の攻撃を外させながら戦う型です。D32振りにより特殊耐久を補強し、特殊アタッカーからのちいさくなる積みの隙を広げます。いかくで物理耐久を補助しつつ、ちいさくなるを複数回積めば実質的な被弾頻度を下げて場持ちを延ばせます。たべのこし・オボンのみとの組み合わせで回避ループが成立した際の崩し性能は高くなります。
 
 **弱み:**
 
@@ -382,24 +382,24 @@ draft: true
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（28位）
+    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（30位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のシャドーボール（ゴースト81.7%）・ヘドロウェーブ（どく80.6%）がともに半減。こちらのかみくだくはゴースト複合に×2で刺さる。S110で上は取られるが主力技が通らないため繰り出し先として有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゲンガナイト採用率58.3%が最多のためメガゲンガー前提。メガ後もタイプはゴースト/どくで変化なく、主力のシャドーボール（ゴースト82.8%）・ヘドロウェーブ（どく79.3%）がともに半減。こちらのかみくだくはゴースト複合に×2で刺さる。メガゲンガーS130のようきS実数値200でこちら（S85）より速く先手は取られるが、特性かげふみで交代不可になるため繰り出し後は主力技が半減のまま削り切れる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-1000-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サーフゴー（21位）
+    <img src="/images/pokemon/pokemon-1000-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サーフゴー（23位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のシャドーボール（ゴースト97.5%）が半減。かみくだくがはがね/ゴースト複合に×2で通る。S84でこちらが上を取れる個体も多く、繰り出して削れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#d97706;font-weight:bold">△ 条件付き有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のシャドーボール（ゴースト97.4%）が半減。かみくだくがはがね/ゴースト複合に×2で通る。ただしこだわりスカーフ採用率が42.0%と最多で、スカーフ個体には最多性格ひかえめでS実数値204、おくびょうなら223（ハリーマン最速150を大きく上回る）となり先手を取られる。スカーフなし個体（ひかえめS136、おくびょうS149）には先手を取れるが、スカーフ有無を見極めるまでは△有利止まり</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0080-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ヤドラン（85位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/エスパー複合で主力技（ねっとう・れいとうビーム・ボディプレス）がいずれも等倍止まり。かみくだくがエスパー複合に×2で通り、S30と遅くこちらが先手を取れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#d97706;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヤドランナイト採用率61.3%が最多のためメガヤドラン前提（B180/D80）。タイプはみず/エスパーで変化なく、かみくだくがエスパー複合に×2で通る。なまける84.6%・ボディプレス・てっぺき・めいそう24.9%の高耐久受け型が主流で、物理方面（B180）はてっぺきでさらに固められると処理が困難になる。特殊方面はD80と低水準のため、特殊技であれば削りやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -410,21 +410,21 @@ draft: true
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0398-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ムクホーク（6位）
+    <img src="/images/pokemon/pokemon-0398-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ムクホーク（7位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ やや不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ムクホークのブレイブバード（ひこう）は等倍で通り、S100でこちらより速い。ただしいかくで相手のこうげきを下げた後の物理耐久はある程度確保できる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0260-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ラグラージ（10位）
+    <img src="/images/pokemon/pokemon-0260-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ラグラージ（12位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（じめん）が×2弱点。ラグラージはS60と遅いが、こちらが上から動けてもじめん技の一撃で落ちるリスクがある</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
+    <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（4位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴン複合でどく技が無効。こちらのどくびしも無効（はがねタイプはどくびしの影響を受けない）。かみくだくは等倍止まりで決定打に欠ける。ただしじめん技を持たない個体には安定して行動できる</td>
@@ -454,7 +454,7 @@ draft: true
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0260-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ラグラージ（10位）
+    <img src="/images/pokemon/pokemon-0260-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ラグラージ（12位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（じめん×2弱点）を持ち、高いHPと物理耐久でこちらの削りを耐えながら一撃で落とすリスクがある</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技（ラグラージに×4）を持つアタッカーで弱点を突いてから展開する。ラグラージへの直接対面は避ける</td>
@@ -486,7 +486,7 @@ draft: true
     <img src="/images/pokemon/pokemon-0260-00.webp" alt="ラグラージ">
     <div class="name">ラグラージ</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/じめん複合で炎・どく技を半減。ハリーマンが苦手な炎枠への対策になる</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ウェーブタックル（みず）でほのおタイプ、れいとうパンチでドラゴンタイプへの打点を確保。クイックターンで対面操作しハリーマンの繰り出し機会を作る</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ">
@@ -513,21 +513,21 @@ draft: true
 
 ---
 
-## データ分析①：どくびし38.7%が示す「毒まきサイクル」設計の実態
+## データ分析①：どくびし35.0%が示す「毒まきサイクル」設計の実態
 
-ハリーマンの技採用率を並べると、どくばりセンボン（62.2%）が最多ですが、どくびし（38.7%）との同時採用が多いことが特徴的です。
+ハリーマンの技採用率を並べると、どくばりセンボン（62.8%）が最多ですが、どくびし（35.0%）との同時採用が多いことが特徴的です。
 
 | 技 | 分類 | 採用率 | 役割 |
 |---|---|---|---|
-| どくばりセンボン | 攻撃 | 62.2% | 連続技・アイテム消費 |
-| かみくだく | 攻撃 | 44.8% | タイプ一致打点・B低下 |
-| どくびし | 変化 | 38.7% | 後続への毒蓄積 |
-| ちいさくなる | 変化 | 32.3% | 回避積み |
-| じごくづき | 攻撃 | 28.0% | 音技封じ |
+| どくばりセンボン | 攻撃 | 62.8% | どく付与50%・どく状態時威力2倍 |
+| かみくだく | 攻撃 | 46.0% | タイプ一致打点・B低下 |
+| どくびし | 変化 | 35.0% | 後続への毒蓄積 |
+| ちいさくなる | 変化 | 34.6% | 回避積み |
+| じごくづき | 攻撃 | 27.3% | 音技封じ |
 
-どくびし（38.7%）とどくばりセンボン（62.2%）の両方を採用している割合が高いと推定されることは、「センボンで目の前の相手を削りながら、どくびしで後続も毒状態にする」二段構えの設計思想を示しています。特に注目に値するのはちいさくなる（32.3%）の採用率です。毒まきサポートとしての役割と、回避積みによる自己完結した崩し役の役割が約3割の個体で両立されており、**単純な設置サポート役だけでなく、積み型としての運用も一定数存在**していることが採用率から読み取れます。
+どくびし（35.0%）とどくばりセンボン（62.8%）の両方を採用している割合が高いと推定されることは、「センボンで目の前の相手を削りながら、どくびしで後続も毒状態にする」二段構えの設計思想を示しています。特に注目に値するのはちいさくなる（34.6%）の採用率です。毒まきサポートとしての役割と、回避積みによる自己完結した崩し役の役割が約3割の個体で両立されており、**単純な設置サポート役だけでなく、積み型としての運用も一定数存在**していることが採用率から読み取れます。
 
-持ち物はたべのこし（47.0%）が突出して最多で、オボンのみ（17.1%）と合わせると64.1%が回復アイテム採用です。いのちのたま（7.8%）の採用はごくわずかで、**攻撃寄りの瞬間火力より継続戦闘を重視する運用**が主流です。じごくづき（28.0%）の採用は、特定の音技（エスパーきのみを使う相手等）への対策というよりも、あくタイプ一致打点としてかみくだくとの択の一つとして機能していると考えられます。
+持ち物はたべのこし（46.5%）が突出して最多で、オボンのみ（16.7%）と合わせると63.2%が回復アイテム採用です。**攻撃寄りの瞬間火力より継続戦闘を重視する運用**が主流です。じごくづき（27.3%）の採用は、特定の音技（エスパーきのみを使う相手等）への対策というよりも、あくタイプ一致打点としてかみくだくとの択の一つとして機能していると考えられます。
 
 ---
 
@@ -548,7 +548,7 @@ draft: true
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">HBわんぱく耐久毒まき型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">わんぱく 36.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">わんぱく 37.4%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">わんぱく</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">どくばりセンボン・かみくだく・どくびし・じごくづき</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">いかく+B振りで物理耐久が高く、どくびし撒きの場持ちが安定</td>
@@ -556,7 +556,7 @@ draft: true
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ASようき先手型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき 22.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき 22.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">どくばりセンボン・かみくだく・じごくづき・どくびし</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S実数値150までの中速帯への先手圏を確保しつつA32で火力も維持</td>
@@ -564,7 +564,7 @@ draft: true
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">HDいじっぱり回避積み型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり 18.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり 18.8%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">ちいさくなる・どくばりセンボン・かみくだく・どくびし</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">回避積みが決まれば場持ちが大幅に伸び崩し性能が高まる</td>
@@ -576,7 +576,7 @@ draft: true
 
 **総評:**
 
-ハリーマンはいかく（77.2%）による物理サポートとどくびし（38.7%）の毒まきを組み合わせた前衛サポート役が主流です。弱点はじめんの1タイプのみと少なく、エスパーを無効化しゴーストを半減するタイプ複合がエスパー系特殊アタッカーへの繰り出しを可能にします。
+ハリーマンはいかく（76.7%）による物理サポートとどくびし（35.0%）の毒まきを組み合わせた前衛サポート役が主流です。弱点はじめんの1タイプのみと少なく、エスパーを無効化しゴーストを半減するタイプ複合がエスパー系特殊アタッカーへの繰り出しを可能にします。
 
 遭遇時はいかく発動を前提に、たべのこし耐久型のどくびし撒き構成（わんぱく HB振り）を第一に警戒します。どくびしを撒かれた後はひこう・はがねタイプで無効化するか、すばやく倒してどくびしの展開を止めることが対策の軸になります。じめん技（ガブリアスのじしん等）が刺さる対面では、積極的にじめん技を通しにいくことでハリーマンの場持ちを削れます。
 

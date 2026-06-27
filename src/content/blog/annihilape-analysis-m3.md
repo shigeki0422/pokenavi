@@ -1,9 +1,9 @@
 ---
 title: '【ポケモンチャンピオンズ】コノヨザル考察 M-3 使用率45位 型別採用率と立ち回り'
-description: 'M-3シングルバトルで使用率45位のコノヨザルを徹底分析。ふんどのこぶし採用率98.0%・ビルドアップ77.8%の積み全抜き型と、まけんき60.3%でいかく反転を活かす構成を実データで解説。環境上位への相性とパーティ構成まで紹介します。'
-pubDate: '2026-06-19'
+description: 'M-3シングルバトルで使用率45位のコノヨザルを徹底分析。ふんどのこぶし採用率98.3%・ビルドアップ80.7%の積み全抜き型と、まけんき67.1%でいかく反転を活かす構成を実データで解説。環境上位への相性とパーティ構成まで紹介します。'
+pubDate: '2026-06-26'
 heroImage: '../../assets/hero-annihilape-m3.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -27,32 +27,32 @@ draft: true
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">45位</strong>　特性: <strong>まけんき 60.3%</strong>
+      使用率: <strong style="color:#e67e22">45位</strong>　特性: <strong>まけんき 67.1%</strong>
     </div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-3シーズン（2026/06/19時点）の集計です
+> ⚠️ 本記事のデータはM-3シーズン（2026/06/25時点）の集計です
 
-シーズンM-3のシングルバトルで、コノヨザルは**使用率45位**を記録。かくとう/ゴーストというタイプ複合は、**ノーマル技とかくとう技を両方無効化する唯一の組み合わせ**であり、ビルドアップで積みながらドレインパンチで回復しつつ全抜きを狙える耐久積みアタッカーとして環境に定着しています。
+シーズンM-3のシングルバトルで、コノヨザルは**使用率45位**を記録。かくとう/ゴーストというタイプ複合は、**ノーマル技とかくとう技を両方無効化**しており、ビルドアップで積みながらドレインパンチで回復しつつ全抜きを狙える耐久積みアタッカーとして環境に定着しています。
 
-特性は**まけんき**が60.3%と最多で、いかくや能力低下技を受けるとこうげきが2段階上昇します。能力低下を逆用して積みの起点にできる点が、ドレインパンチ・ビルドアップと組み合わさった際の脅威の核心です。
+特性は**まけんき**が67.1%と最多で、いかくや能力低下技を受けるとこうげきが2段階上昇します。能力低下を逆用して積みの起点にできる点が、ドレインパンチ・ビルドアップと組み合わさった際の脅威の核心です。
 
 ---
 
 ## なぜ今コノヨザルが使用率45位なのか
 
-### 1. ノーマル・かくとうを両方無効化する唯一のタイプ複合
+### 1. かくとうアタッカーでありながらかくとう・ノーマル技が通らない非対称性
 
-かくとう/ゴーストの複合は、かくとう技がゴーストタイプに無効（×0）、ノーマル技もゴーストタイプに無効（×0）となることで、**ノーマルとかくとうの両タイプを同時に無効化する唯一の組み合わせ**です。環境上位に多いノーマル技（すてみタックル・ねこだまし等）やかくとう技（インファイト・ドレインパンチ等）が通らないため、これらを主力とする物理アタッカーに対して受け出しやすい立ち位置を取れます。
+かくとう/ゴーストの複合により、相手のかくとう技・ノーマル技はゴーストタイプで無効化できます。一方、コノヨザル自身はドレインパンチ・ふんどのこぶしといったかくとう一致技を相手に通せるため、**かくとう技を受け付けない対面で一方的に打点を通せる**非対称の構図が生まれます。環境上位のかくとうアタッカー（バシャーモ・ローブシン等）に対してかくとう技を透かしながら殴り返せる点が、他のゴーストタイプには出せないコノヨザル固有の動きです。
 
 ### 2. ふんどのこぶし＋ビルドアップ＋ドレインパンチで自己完結した全抜き構成
 
-ふんどのこぶし（採用率98.0%）は受けたダメージ量に応じて威力が増加するタイプ一致技で、ビルドアップ（77.8%）でこうげき・ぼうぎょを同時に積みながら、ドレインパンチ（89.0%）でHPを回復することで、積んだ後の場持ちを高められます。回復しながら積み続けることで、後続の物理アタッカーを順次突破する全抜き展開が成立します。
+ふんどのこぶし（採用率98.3%）は受けたダメージ量に応じて威力が増加するタイプ一致技で、ビルドアップ（80.7%）でこうげき・ぼうぎょを同時に積みながら、ドレインパンチ（90.3%）でHPを回復することで、積んだ後の場持ちを高められます。回復しながら積み続けることで、後続の物理アタッカーを順次突破する全抜き展開が成立します。
 
 ### 3. まけんきでいかく等の能力低下を逆用できる
 
-特性まけんき（60.3%）は、いかくや能力低下技を受けるとこうげきが2段階上昇します。いかく持ちのギャラドスやムクホークが繰り出してきたターンを逆用してA+2の状態を作り、そのまま積みの起点に転じられます。
+特性まけんき（67.1%）は、いかくや能力低下技を受けるとこうげきが2段階上昇します。いかく持ちのギャラドスやムクホークが繰り出してきたターンを逆用してA+2の状態を作り、そのまま積みの起点に転じられます。
 
 ---
 
@@ -180,86 +180,86 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ふんどのこぶし</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">50</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">98.0%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">98.3%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ドレインパンチ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">89.0%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">90.3%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ビルドアップ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">77.8%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">80.7%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ちょうはつ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">58.4%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">61.9%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ステルスロック</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">16.1%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">12.6%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>アンコール</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8.6%</td>
-</tr>
-<tr>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>れいとうパンチ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10.5%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10.4%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>アンコール</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7.0%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>インファイト</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4.9%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4.3%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>がんせきふうじ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">60</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4.1%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>じしん</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">100</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3.3%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>かみなりパンチ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">75</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3.3%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>がんせきふうじ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">60</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3.1%</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-特性は**まけんき60.3%・やるき34.5%**の二択。まけんきはいかく等の能力低下を逆用してこうげきを2段階上げられる攻撃的な択で、やるきはねむり状態を完全無効化する安定性重視の択です。環境にいかく持ちが多い場合はまけんきが積む機会を増やし、催眠技を多用する相手が多い場合はやるきが安定します。
+特性は**まけんき67.1%・やるき28.3%**の二択。まけんきはいかく等の能力低下を逆用してこうげきを2段階上げられる攻撃的な択で、やるきはねむり状態を完全無効化する安定性重視の択です。環境にいかく持ちが多い場合はまけんきが積む機会を増やし、催眠技を多用する相手が多い場合はやるきが安定します。
 
 ---
 
 ## 主要型の解説
 
-性格分布はいじっぱり42.1%・ようき33.3%の2択が中心で、こうげきを最大化するいじっぱりと素早さを確保するようきに二分されます。
+性格分布はいじっぱり45.3%・ようき28.9%が中心で、こうげきを最大化するいじっぱりと素早さを確保するようきに二分されます。わんぱく14.8%も一定数おり、ぼうぎょに振って物理受けの安定性を高める構成も存在します。
 
 ### 型1: いじっぱり積み全抜き型（最多採用）
 
-**性格採用率: いじっぱり 42.1%**（こうげき最大化の積み型。EV分布 H32-A32-S2 5.8%）
+**性格採用率: いじっぱり 45.3%**（こうげき最大化の積み型。EV最多分布 H32-A32-B2 11.1%）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -269,10 +269,10 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> まけんき（60.3%）<br>
+<strong>特性:</strong> まけんき（67.1%）<br>
 <strong>性格:</strong> いじっぱり（A↑ C↓）<br>
-<strong>EV:</strong> H32 A32（HPと火力を同時に最大化）<br>
-<strong>持ち物:</strong> たべのこし（50.6%）/ オボンのみ（28.9%）
+<strong>EV:</strong> H32 A32 B2（H32-A32-B2 11.1%。HPと火力を最大化し余りをBへ）<br>
+<strong>持ち物:</strong> たべのこし（55.0%）/ オボンのみ（25.7%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -290,13 +290,13 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
 
 **弱み:**
 
-ようき型と比べてすばやさに振らないため、S90超の相手（カイリュー・リザードン等）に先手を取られます。ビルドアップを積む前のぼうぎょ80は高くなく、上から弱点技（ひこう・フェアリー等）を受けると積みの隙を作れません。また、ふんどのこぶしはHP満タン状態での1発目は威力35と低く、積む前に動ける場面を見極める必要があります。
+ようき型と比べてすばやさに振らないため、S90超の相手（カイリュー・リザードン等）に先手を取られます。ビルドアップを積む前のぼうぎょ80は高くなく、上から弱点技（ひこう・フェアリー等）を受けると積みの隙を作れません。
 
 ---
 
 ### 型2: ようき先手確保型（2番目に多い構成）
 
-**性格採用率: ようき 33.3%**（素早さ確保の積み型。EV最多分布 H32-S32 8.4%）
+**性格採用率: ようき 28.9%**（素早さ確保の積み型。EV最多分布 H32-A2-S32 7.3%）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -306,10 +306,10 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> まけんき（60.3%）/ やるき（34.5%）<br>
+<strong>特性:</strong> まけんき（67.1%）/ やるき（28.3%）<br>
 <strong>性格:</strong> ようき（S↑ D↓）<br>
-<strong>EV:</strong> H32 S32（採用率8.4%。HPと素早さを同時に最大化）<br>
-<strong>持ち物:</strong> たべのこし（50.6%）/ オボンのみ（28.9%）
+<strong>EV:</strong> H32 S32（H32-A2-S32 7.3%。HPと素早さを最大化）<br>
+<strong>持ち物:</strong> たべのこし（55.0%）/ オボンのみ（25.7%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -323,7 +323,7 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
 
 **強み:**
 
-ようきはS実数値156で、いじっぱり型（無補正142）では先手を取れない使用率3位のミミッキュ（採用率77.4%のいじっぱりでS実数値148）を通常攻撃では上から動けます。ただしミミッキュは先制技かげうち（ゴーストでコノヨザルに弱点を突く）とばけのかわを持つため、この素早さ差で対面を制せるわけではなく、化けの皮を消費させた後にかげうち以外で打ち合う局面で活きる差です。それでも、いじっぱり型がまったく先手を取れないのに対し、ようき型なら積み技や交代読みで先に動く選択肢を確保できる点が実数値差として効きます。また、ステルスロック（16.1%）との組み合わせでは、相手の交代をより安全に誘えるため、設置技の展開役としての動きも取りやすくなります。やるき個体ではねむり技を完全無効化し、催眠展開から守れます。
+ようきはS実数値156で、いじっぱり型（S実数値126）では抜けないいじっぱりミミッキュ（S実数値132）はもちろん、ようきミミッキュ（S実数値145）も上から動けます。先にばけのかわを消費させてから打ち合える一方、かげうち（ゴースト×2）で削られるためHP管理は必要です。ステルスロック（12.6%）との組み合わせでは設置技の展開役としても機能し、やるき個体ではねむり技を無効化して催眠展開から守れます。
 
 **弱み:**
 
@@ -356,17 +356,24 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0257-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">バシャーモ（上位）
+    <img src="/images/pokemon/pokemon-0534-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ローブシン（環境上位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のインファイト（65.0%）・とびひざげり（19.7%）といったかくとう技をゴーストタイプで無効化できる。フレアドライブ（ほのお）は等倍止まりで、S80のバシャーモにはこちらが先手を取れるため、かくとう技を透かしながら殴り合える</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドレインパンチ・インファイト等のかくとう技をゴーストタイプで無効化しながら、こちらのドレインパンチがかくとう一致でローブシン（かくとう単タイプ）に通る。どくどく・ヘドロウェーブ（どく）はコノヨザルに等倍止まりで有効打に欠ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（上位）
+    <img src="/images/pokemon/pokemon-0257-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">バシャーモ（上位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のインファイト（63.2%）・とびひざげり（22.9%）といったかくとう技をゴーストタイプで無効化できる。一方、バシャーモナイト採用率76.1%でメガ後S100（実数値167）はこちらようき型（S実数値156）より速く先手を取られる。かくとう技を透かして打点は通せるが、速度劣勢を踏まえると対面有利とは言い切れない</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0448-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ルカリオ（46位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手のインファイト（かくとう）はゴーストタイプで無効化できる。こちらはドレインパンチが×2で刺さるが（ふんどのこぶしは等倍）、メガ後の最速個体でS実数値180に達しこちらより速く、積む前に上から削られ、加えて優先度技のバレットパンチでも削られるため対面では押し負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手のインファイト（かくとう）はゴーストタイプで無効化できる。こちらはドレインパンチが×2で刺さるが（ふんどのこぶしは等倍）、メガ後の最速個体でS実数値162に達しこちらより速く、積む前に上から削られ、加えて優先度技のバレットパンチでも削られるため対面では押し負ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -380,7 +387,7 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（上位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこうタイプを持ちこちらの弱点を突けるブレイブバード（ひこう×2）を受けやすく、こちらのタイプ一致技も等倍〜半減止まりで有効打に欠ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこうタイプを持ちこちらの弱点を突けるエアスラッシュ（ひこう×2、採用率45.5%）を受けやすく、こちらのタイプ一致技も等倍〜半減止まりで有効打に欠ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -409,8 +416,8 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（上位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこうタイプを持ち、こちらの弱点を突くブレイブバード（ひこう×2）が刺さる。S80でこちらより遅いため先手は取れるが、マルチスケイルで弱点でない技1発を耐えてから反撃される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">こおり×4が刺さるため、れいとうパンチ（採用率10.5%）採用個体ならマルチスケイル解除後に縛れる。非採用なら同居率上位ライチュウのでんき技で対面前に削る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこうタイプを持ち、こちらの弱点を突くエアスラッシュ（ひこう×2、採用率35.2%）が刺さる。S80でこちらより遅いため先手は取れるが、マルチスケイルで弱点でない技1発を耐えてから反撃される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こおり×4が刺さるため、れいとうパンチ（採用率10.4%）採用個体ならマルチスケイル解除後に縛れる。非採用なら同居率上位ライチュウのでんき技で対面前に削る</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -423,12 +430,12 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（上位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S123でこちら（S90）より速く、とんぼがえり（先制で対面操作）・はたきおとし（オボンのみ等の持ち物剥奪）でこちらの積み展開を崩しながら主導権を握られる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふんどのこぶしがマスカーニャ（くさ/あく）に×2で刺さるため対面の打ち合いは互角以上だが、とんぼがえりで安定して逃げられる。引き先を読んでビルドアップを積む隙を作るか、後続のアタッカーで縛って交代を許さない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S123でこちら（S90）より速く、とんぼがえり（上から対面操作）・はたきおとし（オボンのみ等の持ち物剥奪）でこちらの積み展開を崩しながら主導権を握られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドレインパンチがマスカーニャ（くさ/あく）に×2で刺さるため対面の打ち合いは可能だが（ふんどのこぶしはゴースト技で×0.5止まり）、とんぼがえりで安定して逃げられる。引き先を読んでビルドアップを積む隙を作るか、後続のアタッカーで縛って交代を許さない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（使用率3位）
+    <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（使用率2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつく（フェアリー×2）・かげうち（ゴースト×2の先制技）で弱点を突かれる。ばけのかわで攻撃1回を無効化されるうえ、ドレインパンチ（かくとう）は無効化されるため、積む前に削られやすい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ふんどのこぶし（ゴースト×2）で殴り返せるが、ばけのかわを剥がす1手が必要。同居率上位のメタグロス（はがね/エスパー）でフェアリー技を半減しつつコメットパンチで処理する</td>
@@ -451,28 +458,28 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
     <div style="font-size:0.65rem;color:#888;margin-top:2px">高速地面枠。コノヨザルが苦手なひこう・フェアリー弱点をサポートするアタッカーを添えるパターン</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
-    <div class="name">ブリジュラス</div>
-    <div class="rate">同居率6位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">でんき・ドラゴン・はがねの広い打点。アシレーヌ（みず）・ギャラドスへでんき技で弱点を突ける補完枠</div>
+    <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス">
+    <div class="name">メタグロス</div>
+    <div class="rate">同居率2位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/エスパーでフェアリーに弱点を突く枠。コノヨザルが苦手なアシレーヌ・ハバタクカミへ打点を持てる</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0038-01.webp" alt="アローラキュウコン">
+    <div class="name">アローラキュウコン</div>
+    <div class="rate">同居率3位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">こおり/フェアリーの高速枠。ゆきふらしの霰やオーロラベールで耐久を補助し、こおり技でカイリュー・ガブリアスを削れる</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ">
     <div class="name">ライチュウ</div>
-    <div class="rate">同居率2位</div>
+    <div class="rate">同居率4位</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">でんきの高速アタッカー。コノヨザルが苦手なアシレーヌ（みず）・ひこう系にでんき技で弱点を突ける</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0398-00.webp" alt="ムクホーク">
     <div class="name">ムクホーク</div>
-    <div class="rate">同居率5位</div>
+    <div class="rate">同居率7位</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこうの高速物理枠。コノヨザルが処理しにくいくさ・むし・かくとう系に上から打点を入れる</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス">
-    <div class="name">メタグロス</div>
-    <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/エスパーでフェアリーに弱点を突く枠。コノヨザルが苦手なアシレーヌ・ハバタクカミへ打点を持てる</div>
   </div>
 </div>
 
@@ -487,23 +494,19 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
 
 ---
 
-## データ分析①：ふんどのこぶし98.0%が示す「受けてから崩す」設計
+## データ分析①：ふんどのこぶし98.3%が示す「受けてから崩す」設計
 
-コノヨザルの技採用率を並べると、ふんどのこぶし（98.0%）の採用率が突出しています。
+技採用率を見ると、ふんどのこぶし（98.3%）・ドレインパンチ（90.3%）・ビルドアップ（80.7%）の3技は採用率が揃って高く、実質固定枠として機能しています。
 
-| 技 | 分類 | 採用率 | 役割 |
-|---|---|---|---|
-| ふんどのこぶし | 攻撃 | 98.0% | 受けるほど威力が上がるメイン技 |
-| ドレインパンチ | 攻撃 | 89.0% | 回復しながら削るサブ技 |
-| ビルドアップ | 変化 | 77.8% | A・B同時積み |
-| ちょうはつ | 変化 | 58.4% | 相手の変化技封じ |
-| ステルスロック | 変化 | 16.1% | 設置技 |
+| 技 | 採用率 | 固定/選択 |
+|---|---|---|
+| ふんどのこぶし | 98.3% | ほぼ固定 |
+| ドレインパンチ | 90.3% | ほぼ固定 |
+| ビルドアップ | 80.7% | ほぼ固定 |
+| ちょうはつ | 61.9% | 選択（多数派） |
+| ステルスロック | 12.6% | 選択（少数派） |
 
-ふんどのこぶしとドレインパンチの両採用率がともに89%超であることは、「受けてHP減少→ふんどのこぶしの威力増加→ドレインパンチで回復」というサイクルが構成の核心であることを示しています。ビルドアップ77.8%と合わせると、**受け出し→積み→回復の自己完結ループが主流型の設計思想**であることが採用率から読み取れます。
-
-一方、ちょうはつ58.4%の採用は注目に値します。コノヨザルは積んだ後の突破が難しいため、相手が回復技や積み返し技でカウンターしてくることを想定しており、ちょうはつで3ターン変化技を封じることで積みの安全圏を確保しようとしています。
-
-持ち物はたべのこし50.6%・オボンのみ28.9%が合わせて79.5%を占め、回復実の運用が主流です。攻撃的な持ち物（きあいのタスキ3.9%）の採用率はごくわずかで、**長期戦・持久戦を前提とした耐久運用**が実態に即しています。遭遇時はまず回復実を持つ積み型を疑い、ふんどのこぶし・ビルドアップ・ドレインパンチ・ちょうはつの4技構成を前提に対策を立てるのが確率的に妥当です。
+3技が固定に近い一方、4技目はちょうはつ61.9%とステルスロック12.6%に分散しており、プレイヤーが「積み後の安全圏確保（ちょうはつ）」か「設置展開（ステルスロック）」かで構築方針を明確に使い分けていることが読み取れます。ちょうはつを採る構成はコノヨザル単体での全抜きを前提に相手の回復・積み返しを封じる設計、ステルスロックを採る構成は自身を露払い役として後続のアタッカーにつなぐ設計です。持ち物もたべのこし55.0%・オボンのみ25.7%と回復系が80%超を占め、**長期戦で場に居座る耐久運用が共通の基盤**になっています。
 
 ---
 
@@ -524,7 +527,7 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">HAいじっぱり積み型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">いじっぱり 42.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">いじっぱり 45.3%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">ふんどのこぶし・ドレインパンチ・ビルドアップ・ちょうはつ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">こうげきを最大化し積み後の一撃が重い</td>
@@ -532,10 +535,10 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">HSようき先手型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき 33.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき 28.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">ふんどのこぶし・ドレインパンチ・ビルドアップ・ちょうはつ/ステルスロック</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S実数値156でいじっぱりミミッキュ（148）を抜ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S実数値156でようきミミッキュ（145）を含むミミッキュ全般を抜ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">いじっぱり型より積み後の火力が劣る</td>
 </tr>
 </tbody>
@@ -544,7 +547,7 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
 
 **総評:**
 
-コノヨザルはかくとう/ゴーストという唯一のタイプ複合でノーマル・かくとうを無効化し、ビルドアップ＋ドレインパンチ＋たべのこしによる自己完結した積み全抜き構成が主流です。まけんき（60.3%）によりいかく等の能力低下を逆用できる点が戦略の幅を広げており、ふんどのこぶし（98.0%）の採用率の高さは「受けてから崩す」設計の徹底を示しています。
+コノヨザルはかくとう/ゴーストという唯一のタイプ複合でノーマル・かくとうを無効化し、ビルドアップ＋ドレインパンチ＋たべのこしによる自己完結した積み全抜き構成が主流です。まけんき（67.1%）によりいかく等の能力低下を逆用できる点が戦略の幅を広げており、ふんどのこぶし（98.3%）の採用率の高さは「受けてから崩す」設計の徹底を示しています。
 
 弱点はひこう・エスパー・ゴースト・フェアリーの4タイプで、特にフェアリー技を持つアシレーヌや高速ゴーストタイプとの対面は不利です。積む隙を与えられるかどうかが使用判断の軸となるため、パーティではコノヨザルが苦手とするひこう・フェアリー枠を別途カバーする枠を用意することが前提となります。
 

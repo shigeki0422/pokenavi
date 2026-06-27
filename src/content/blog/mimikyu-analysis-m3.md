@@ -3,7 +3,7 @@ title: '【ポケモンチャンピオンズ】ミミッキュ考察 M-3 使用�
 description: 'M-3シングルバトルで使用率2位に急上昇したミミッキュを分析。M-2（19位）からの大幅躍進の理由、いのちのたま83%への持ち物シフト、ウッドハンマー新採用によるラグラージ・ガブリアスへの対応を解説。'
 pubDate: '2026-06-25'
 heroImage: '../../assets/hero-mimikyu-m3.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -42,7 +42,7 @@ draft: true
 
 ### 1. ウッドハンマー新採用で環境上位のじめん複合に刺さる
 
-ミミッキュの一致技はゴースト（かげうち・シャドークロー）とフェアリー（じゃれつく）ですが、これらはみず/じめんのラグラージやドラゴン/じめんのガブリアスに等倍以下しか通りません。M-3で新たに登場したウッドハンマー（くさ、威力120、採用率11.9%）は、**メガラグラージ（みず/じめん、ラグラージナイト採用率79.3%）にくさ×4、ガブリアスにじめん側を突いて等倍以上**を確保する補完技です。
+ミミッキュの一致技はゴースト（かげうち・シャドークロー）とフェアリー（じゃれつく）ですが、これらはみず/じめんのラグラージやドラゴン/じめんのガブリアスに等倍以下しか通りません。M-3で新たに登場したウッドハンマー（くさ、威力120、採用率11.9%）は、**メガラグラージ（みず/じめん、ラグラージナイト採用率74.8%）にくさ×4、ガブリアスにじめん側を突いて等倍以上**を確保する補完技です。
 
 M-3環境ではガブリアスが使用率1位、ラグラージが12位と上位に多く、一致技だけでは打点が足りないこれらに対しウッドハンマーが解決策として機能しています。M-2では採用率0%だったこの技が11.9%まで伸びたこと自体が、環境のじめん複合への対応を迫られた結果です。
 
@@ -52,7 +52,7 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
 
 ### 3. ばけのかわ＋かげうちで上から取れない相手も処理できる
 
-ばけのかわで1発耐える性質は、相手の先制行動を1回無視してつるぎのまいを通す保険になります。さらにかげうち（ゴースト、威力70の先制技、採用率95.9%）を持つため、ミミッキュのS実数値161（ようき）を上回る相手にも先制で削りを入れられます。耐えて積み、上から取れない相手は先制技で処理する一貫性が、使用率2位の安定感につながっています。
+ばけのかわで1発耐える性質は、相手の先制行動を1回無視してつるぎのまいを通す保険になります。さらにかげうち（ゴースト、威力40の先制技、採用率95.9%）を持つため、ミミッキュのS実数値162（ようき）を上回る相手にも先制で削りを入れられます。耐えて積み、上から取れない相手は先制技で処理する一貫性が、使用率2位の安定感につながっています。
 
 ---
 
@@ -64,30 +64,30 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">HP</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:22.5%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
-    </div>
-    <span style="width:32px;text-align:right">45</span>
-  </div>
-  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
-    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">こうげき</span>
-    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:32.5%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
-    </div>
-    <span style="width:32px;text-align:right">65</span>
-  </div>
-  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
-    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
-    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:27.5%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
     </div>
     <span style="width:32px;text-align:right">55</span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">こうげき</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:45%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right"><strong style="color:#dc2626">90</strong></span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
+    <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
+      <div style="width:40%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    </div>
+    <span style="width:32px;text-align:right">80</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくこう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:15%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
+      <div style="width:25%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">30</span>
+    <span style="width:32px;text-align:right">50</span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
@@ -99,18 +99,18 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:47.5%;background:linear-gradient(90deg,#34d399,#059669);height:12px;border-radius:4px"></div>
+      <div style="width:48%;background:linear-gradient(90deg,#34d399,#059669);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right"><strong style="color:#059669">95</strong></span>
+    <span style="width:32px;text-align:right"><strong style="color:#059669">96</strong></span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">395</span>
+    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">476</span>
   </div>
 </div>
 
-合計395と種族値そのものは控えめで、こうげき65も高くありません。ミミッキュの火力はつるぎのまいの2倍補正といのちのたまの1.3倍補正で底上げして初めて成立します。すばやさ95はようき補正でS実数値161となり、つるぎのまいを積めば多くの相手の上から行動できます。とくぼう105が高く、特殊主体の相手にばけのかわ解除後も一定の場持ちが残ります。
+合計476と種族値そのものは控えめです。ミミッキュの火力はつるぎのまいの2倍補正といのちのたまの1.3倍補正で底上げして初めて成立します。すばやさ96はようき補正でS実数値162となり、つるぎのまいを積めば多くの相手の上から行動できます。とくぼう105が高く、特殊主体の相手にばけのかわ解除後も一定の場持ちが残ります。
 
 ### タイプ・弱点（ゴースト/フェアリー）
 
@@ -176,7 +176,7 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">1</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>かげうち</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">70</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">40</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">95.9%</strong></td>
 </tr>
 <tr style="background:#fafafa">
@@ -246,7 +246,7 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
 </table>
 </div>
 
-かげうち95.9%・じゃれつく95.4%・つるぎのまい79.1%の3技がほぼ確定枠で、4枠目をシャドークロー61.0%・ドレインパンチ13.0%・ウッドハンマー11.9%で争う構図です。シャドークローはかげうちより威力が同じで先制が付かない代わりに通常打点として使い分けられ、ウッドハンマーはみず/じめんへの補完として新登場しました。
+かげうち95.9%・じゃれつく95.4%・つるぎのまい79.1%の3技がほぼ確定枠で、4枠目をシャドークロー61.0%・ドレインパンチ13.0%・ウッドハンマー11.9%で争う構図です。シャドークローは威力70（かげうちの1.75倍）ですが先制が付かない通常技で、つるぎのまい後の通常打点として使い分けられ、ウッドハンマーはみず/じめんへの補完として新登場しました。
 
 ---
 
@@ -283,19 +283,13 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
 
 **強み:**
 
-ばけのかわで1発耐えてつるぎのまいを確実に1積みできるため、いじっぱり型ではA実数値128（補正あり）が積み後256相当となり、いのちのたまの1.3倍補正と合わせて低い種族値を補って高い打点を出せます。ようき型はS実数値161といじっぱり型のS147より14高く、ガブリアス（最速S169）には届かないものの、S150〜160帯の相手につるぎのまい前から先手を取れる点が差別点です。火力を取るいじっぱりが多数派ですが、ようき型は同速・準速帯への先手で選出択を広げます。
+ばけのかわで1発耐えてつるぎのまいを確実に1積みできるため、いじっぱり型ではA実数値156（補正あり）が積み後312相当となり、いのちのたまの1.3倍補正と合わせて高い打点を出せます。ようき型はS実数値162といじっぱり型のS148より14高く、ガブリアス（最速S169）には届かないものの、S149〜161帯の相手につるぎのまい前から先手を取れる点が差別点です。火力を取るいじっぱりが多数派ですが、ようき型は同速・準速帯への先手で選出択を広げます。
 
 **弱み:**
 
-いじっぱり型はS147で、S148〜161の相手（ようき型ミミッキュ自身を含む）に対し後手に回ります。ようき型はA補正がない分、いじっぱり型なら積み1回で落とせる耐久ラインの相手を取りこぼし、つるぎのまいの追加積みやかげうちの追撃が必要になる場面が増えます。
+いじっぱり型はS148で、S149〜162の相手（ようき型ミミッキュ自身を含む）に対し後手に回ります。ようき型はA補正がない分、いじっぱり型なら積み1回で落とせる耐久ラインの相手を取りこぼし、つるぎのまいの追加積みやかげうちの追撃が必要になる場面が増えます。
 
 ---
-
-### 型2: ゆうかんトリル型（少数）
-
-**性格採用率: ゆうかん 3.0%**
-
-ゆうかん（A↑ S↓）でS個体値を下げ、トリックルーム下で相手の上を取る型です。EVはH29 A32 B5 S0（採用率4.7%）でHを厚く取り、トリル始動役と同居して鈍足アタッカーとして振る舞います。AS型がS161で速さを活かすのに対し、こちらはトリル前提でSを捨てる構成のため、トリル軸のパーティでのみ機能する点が大きな違いです。採用率3.0%と少数で、主流はあくまでAS型です。
 
 ---
 
@@ -303,7 +297,7 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
 
 ### 有利・不利がはっきり出る主要ポケモン
 
-ゴースト/フェアリーはかくとう・ノーマル・ドラゴンを無効化するため、これらを主力技に持つ相手へ強く出られます。一方、一致技がみず/じめん複合に通りにくいため、ウッドハンマーの有無で相性が変わります。下表のミミッキュはようき型（S161）を基準とします。
+ゴースト/フェアリーはかくとう・ノーマル・ドラゴンを無効化するため、これらを主力技に持つ相手へ強く出られます。一方、一致技がみず/じめん複合に通りにくいため、ウッドハンマーの有無で相性が変わります。下表のミミッキュはようき型（S162）を基準とします。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -320,30 +314,37 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">げきりん（ドラゴン、49.1%）をフェアリーで無効化。じゃれつくはドラゴン×2で抜群。S169に先手は取れないが、ばけのかわでじしんを1回耐えてつるぎのまいを積める</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">げきりん（ドラゴン、49.1%）をフェアリーで無効化。じゃれつくはドラゴン×2で抜群。S169に先手は取れないが、ばけのかわでじしんを1回耐えてつるぎのまいを積める。いのちのたまならかげうち+じゃれつく2ターンコンボで積みなしでも無振り型（HP185/B115）を確定処理</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0902-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">イダイトウ（9位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/ゴーストタイプのためかげうち（ゴースト）が×2で抜群。いのちのたまのかげうち2発で無振り型（HP195/B85）を確定処理（224〜264）。ゴースト技はこちらにも等倍で通るが、ばけのかわで1回耐えてからの2ターンで完結できる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0260-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガラグラージ（12位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利（ウッドハンマー所持時）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ウッドハンマーがみず/じめんにくさ×4で抜群。メガラグラージのS70（最速123）にS161で先手。ただしウッドハンマー非所持個体（採用率11.9%）は一致技が等倍以下で打点不足</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ウッドハンマーがみず/じめんにくさ×4で抜群。メガラグラージのS70（最速134）にS162で先手。ただしウッドハンマー所持は11.9%にとどまり、非所持の多数派（88.1%）には一致技が等倍以下で打点不足</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（あく、15.4%）がフェアリーに無効。じゃれつくがあく側に抜群。スカーフ採用率72.8%でS192に先手は取れないが、かげうち（くさ/あく複合に等倍）で削りつつばけのかわで1発耐える</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつく（フェアリー）がくさ/あくに×2で抜群。ふいうち（あく、15.4%）はゴースト/フェアリー複合に等倍（無効ではない）。スカーフ採用率72.9%でS288（素S192にスカーフ×1.5）となり先手は取れず、かげうちも×0.5半減で削りが薄い。ばけのかわで1発耐えてじゃれつくで反撃する形で、先手は取れない</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（4位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ドラゴンにはじゃれつくが等倍、ゴースト技も等倍止まりで決定打が乏しい。相手のはがね技はこちらの弱点×2を突くため、ばけのかわ解除後に大ダメージを受ける</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メタグロス（6位）
   </td>
@@ -422,7 +423,7 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
     <div class="name">マスカーニャ</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">スカーフでS192の高速アタッカー。とんぼがえりで対面操作し、ミミッキュの積みターンを作る</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">スカーフ込みS288（素S192）の高速アタッカー。とんぼがえりで対面操作し、ミミッキュの積みターンを作る</div>
   </div>
 </div>
 
@@ -451,6 +452,38 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
 M-2では持ち物がのろいのおふだ・ラムのみ・ピントレンズ・ようせいのハネに分散し、のろいで相手を削る耐久寄りの運用が一定数ありました。M-3ではいのちのたま83.0%に一極集中し、のろいのおふだは2.7%まで激減。これは「積んで一撃で押し切るアタッカー」へ運用思想が振り切ったことを示します。
 
 技面ではドレインパンチが24.8%→13.0%に減り、入れ替わるようにウッドハンマーが0%→11.9%で新登場しました。ドレインパンチはあく・はがねへの打点でしたが、M-3環境ではみず/じめんのメガラグラージ（くさ×4）やじめん複合への対応の方が優先され、4枠目の補完技がくさ技へ移行したと読み取れます。環境のじめん複合に合わせて打点を組み替えた結果が、使用率2位という数字に反映されています。
+
+### いのちのたまが2つの役割を1つに統合
+
+M-2でのろいのおふだ30.4%とようせいのハネが並立していた背景には、それぞれが対処できる相手が異なっていたことがあります。検証は、ばけのかわが残った状態でつるぎのまいなしに動く2ターンコンボ（ミミッキュはいじっぱりA実数値156）で行います。
+
+**①ガブリアス（使用率1位・ドラゴン/じめん／H2-A32-S32 ようき・HP185・B115）** へはかげうちが等倍、じゃれつくがドラゴン弱点で×2です。
+
+<table>
+<thead><tr><th>持ち物</th><th>かげうち</th><th>じゃれつく</th><th>合計</th><th>判定（HP185）</th></tr></thead>
+<tbody>
+<tr><td>ようせいのハネ（フェアリー×1.2）</td><td>31〜37</td><td>168〜197</td><td>199〜234</td><td>最低199&gt;185＝<strong>確定</strong></td></tr>
+<tr><td>のろいのおふだ（ゴースト×1.2）</td><td>37〜44</td><td>140〜165</td><td>177〜209</td><td>最低177&lt;185＝非確定</td></tr>
+<tr><td>いのちのたま（全技×1.3）</td><td>40〜48</td><td>182〜214</td><td>222〜262</td><td>最低222&gt;185＝<strong>確定</strong></td></tr>
+</tbody>
+</table>
+
+のろいのおふだはゴースト技のかげうちを強化しますが、じゃれつく（フェアリー技）が強化されないためガブリアスへの合計ダメージが伸びず、低乱数で届きません。ようせいのハネならじゃれつく強化でガブリアスを確定で仕留められます。
+
+**②イダイトウ（みず/ゴースト・HP195・B85）** へはかげうちがゴースト弱点で×2のため、かげうち2発で処理するシナリオです。
+
+<table>
+<thead><tr><th>持ち物</th><th>かげうち単発</th><th>2発合計</th><th>判定（HP195）</th></tr></thead>
+<tbody>
+<tr><td>ようせいのハネ（フェアリー×1.2）</td><td>86〜102</td><td>172〜204</td><td>最低172&lt;195＝非確定</td></tr>
+<tr><td>のろいのおふだ（ゴースト×1.2）</td><td>104〜122</td><td>208〜244</td><td>最低208&gt;195＝<strong>確定</strong></td></tr>
+<tr><td>いのちのたま（全技×1.3）</td><td>112〜132</td><td>224〜264</td><td>最低224&gt;195＝<strong>確定</strong></td></tr>
+</tbody>
+</table>
+
+ようせいのハネはフェアリー技のみ強化するためゴースト技のかげうちには効かず、イダイトウを2発で倒せません。のろいのおふだならかげうちを強化できるため2発確定になります。
+
+M-2の構図は「ようせいのハネ持ちはガブを確定で仕留めるがイダイトウは仕留められない」「のろいのおふだ持ちはイダイトウを確定で仕留めるがガブは仕留められない」という役割分担でした。M-3で実装されたいのちのたまは全技1.3倍でこの2役を1つに統合し、ガブリアスもイダイトウも同一の持ち物で確定処理できるようになりました。これが83.0%への一極集中の実質的な理由です。
 
 ---
 

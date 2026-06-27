@@ -1,7 +1,7 @@
 ---
-title: '【ポケモンチャンピオンズ】カエンジシ考察 M-3 使用率90位 型別採用率と立ち回り'
-description: 'M-3シングルバトルで使用率90位のメガカエンジシを徹底分析。メガ後ほのおのたてがみ・C129/S126の特殊アタッカーとして、おくびょう74.2%・かえんほうしゃ89.7%を軸にした実データで解説。ねっさのだいちでじめん/はがね補完も可能。環境での立ち回りまで紹介します。'
-pubDate: '2026-06-20'
+title: '【ポケモンチャンピオンズ】カエンジシ考察 M-3 使用率92位 型別採用率と立ち回り'
+description: 'M-3シングルバトルで使用率92位のメガカエンジシを徹底分析。メガ後ほのおのたてがみ・C129/S126の特殊アタッカーとして、おくびょう75.2%・かえんほうしゃ89.0%を軸にした実データで解説。ねっさのだいちでじめん/はがね補完も可能。環境での立ち回りまで紹介します。'
+pubDate: '2026-06-26'
 heroImage: '../../assets/hero-pyroar-m3.png'
 draft: true
 ---
@@ -27,16 +27,16 @@ draft: true
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">90位</strong>　特性: <strong>メガ後ほのおのたてがみ</strong>（メガ前きんちょうかん 67.3%）
+      使用率: <strong style="color:#e67e22">92位</strong>　特性: <strong>メガ後ほのおのたてがみ</strong>（メガ前きんちょうかん 68.2%）
     </div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-3シーズン（2026/06/20）時点の集計です
+> ⚠️ 本記事のデータはM-3シーズン（2026/06/25）時点の集計です
 
-シーズンM-3のシングルバトルで、カエンジシは**使用率90位**を記録。メガ進化後はC129・S126と特殊アタッカーとして十分な数値を持ち、**ほのお/ノーマルのタイプ一致技にハイパーボイス（みがわり貫通）を加えた打点構成**が特徴です。
+シーズンM-3のシングルバトルで、カエンジシは**使用率92位**を記録。メガ進化後はC129・S126と特殊アタッカーとして十分な数値を持ち、**ほのお/ノーマルのタイプ一致技にハイパーボイス（みがわり貫通）を加えた打点構成**が特徴です。
 
-メガ後の特性は**ほのおのたてがみ**で固定され、ほのおタイプ技を受けても素早さが下がらず、こおりタイプによる「こおり」状態にもならない（凍りつかない）耐性を得ます。メガ前の特性はきんちょうかん67.3%が最多ですが、メガ進化した時点でほのおのたてがみへ上書きされる点に注意が必要です。
+メガ後の特性は**ほのおのたてがみ**で固定され、ほのおタイプの技の威力が1.5倍になります。タイプ一致補正と合わせると、かえんほうしゃ（威力90）は実質135相当、オーバーヒート（威力130）は実質195相当の出力になり、特殊アタッカーとしての打点を大きく底上げします。メガ前の特性はきんちょうかん68.2%が最多ですが、メガ進化した時点でほのおのたてがみへ上書きされる点に注意が必要です。
 
 ---
 
@@ -44,15 +44,15 @@ draft: true
 
 ### 1. メガ後S126で環境中速帯を大きく上回る
 
-メガ後S126（おくびょうS32の場合S実数値195）は環境の多くのポケモンを上回ります。おくびょう採用率74.2%はこの素早さを最大化する意図を反映しており、上から動いてほのお技を通す展開を主軸とします。
+メガ後S126（おくびょうS32の場合S実数値195）は環境の多くのポケモンを上回ります。おくびょう採用率75.2%はこの素早さを最大化する意図を反映しており、上から動いてほのお技を通す展開を主軸とします。
 
-### 2. メガ後ほのおのたてがみでほのお技・凍結に強い
+### 2. メガ後ほのおのたてがみでほのお技の火力が1.5倍
 
-メガ後の特性ほのおのたてがみは、ほのおタイプ技を受けても素早さが低下せず、こおりによる凍り状態にもならない耐性を与えます。S195の素早さを維持したまま、ミラー対面のほのお技や相手のこおり技による足止めを受けにくく、上から殴る展開を崩されにくい点に寄与します。
+メガ後の特性ほのおのたてがみは、ほのおタイプの技の威力を1.5倍にします。C129のタイプ一致補正（1.5倍）にさらに1.5倍が乗るため、かえんほうしゃ（威力90）は実質135相当、オーバーヒート（威力130）は実質195相当、ねっさのだいち以外の主力ほのお技がすべて強化されます。種族値C129という中程度の特攻でも、この補正によって等倍相手を1発圏に押し込む打点が出る点が、特殊アタッカーとして機能する核になります。一方でハイパーボイス（ノーマル技）やねっさのだいち（じめん技）には補正が乗らないため、ほのお技を主軸に据えるほど火力効率が高まります。
 
 ### 3. ハイパーボイス（音技）でみがわりを貫通する
 
-ハイパーボイス（採用率51.6%）はノーマルタイプ一致の音技で、みがわりを貫通する特性があります。みがわりを張って様子見する相手に対し、みがわりごと削れるため消耗戦でのアドバンテージを取りやすい点が通常の技と異なります。
+ハイパーボイス（採用率49.3%）はノーマルタイプ一致の音技で、みがわりを貫通する特性があります。みがわりを張って様子見する相手に対し、みがわりごと削れるため消耗戦でのアドバンテージを取りやすい点が通常の技と異なります。
 
 ---
 
@@ -117,7 +117,7 @@ draft: true
   </div>
 </div>
 
-C129・S126はメガ進化後の特殊アタッカーとして高い水準です。おくびょうS32でS実数値195、ひかえめC32でC実数値199となり、どちらの性格を選んでも攻撃面の一方は高いレベルを維持できます。HP86・B92・D86の耐久は並みで、上から弱点技を受けると大きなダメージになります。
+C129・S126はメガ進化後の特殊アタッカーとして高い水準です。おくびょうS32でS実数値195・C実数値181、ひかえめC32でC実数値199・S実数値178となり、おくびょうは素早さ、ひかえめは火力に寄せた配分になります。主軸型（H2-C32-S32）ではHP実数値163・B112・D106と耐久は低く、上から弱点技を受けると大きなダメージになります。耐久に頼らずSで先制して削るのが前提の型です。
 
 ### タイプ・弱点
 
@@ -188,86 +188,86 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>かえんほうしゃ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">89.7%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">89.0%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>オーバーヒート</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">130</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">63.6%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">63.7%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ハイパーボイス</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">90</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">51.6%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">49.3%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ねっさのだいち</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">70</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">36.0%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">36.7%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ニトロチャージ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">50</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">35.7%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">32.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>にほんばれ</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">16.3%</td>
-</tr>
-<tr>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>おにび</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">16.2%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ソーラービーム</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">15.6%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">17.5%</td>
+</tr>
+<tr>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>にほんばれ</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">16.9%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>おにび</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">14.7%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>あくび</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">14.0%</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>あくのはどう</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">13.6%</td>
 </tr>
-<tr style="background:#fafafa">
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>あくび</strong></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">12.4%</td>
-</tr>
 </tbody>
 </table>
 </div>
 
-かえんほうしゃ（89.7%）が事実上の確定技で、オーバーヒート（63.6%）との2枚採用が主流です。オーバーヒートはC2段階低下というデメリットがあるため、倒し切れる相手に使い切る運用が基本で、かえんほうしゃとの使い分けが技選択の軸となります。
+かえんほうしゃ（89.0%）が事実上の確定技で、オーバーヒート（63.7%）との2枚採用が主流です。オーバーヒートはC2段階低下というデメリットがあるため、倒し切れる相手に使い切る運用が基本で、かえんほうしゃとの使い分けが技選択の軸となります。
 
 ---
 
 ## 主要型の解説
 
-性格分布はおくびょう74.2%・ひかえめ22.6%の2択が中心で、S最大化のおくびょうが圧倒的多数を占めます。
+性格分布はおくびょう75.2%・ひかえめ21.5%の2択が中心で、S最大化のおくびょうが圧倒的多数を占めます。
 
 ### 型1: おくびょうCS型（最多採用）
 
-**性格採用率: おくびょう 74.2%**（S最大化。EV最多分布 H2-C32-S32 55.2%）
+**性格採用率: おくびょう 75.2%**（S最大化。EV最多分布 H2-C32-S32 55.2%）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -277,8 +277,8 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> きんちょうかん（67.3%）※メガ後ほのおのたてがみ<br>
-<strong>性格:</strong> おくびょう（S↑ C↓）<br>
+<strong>特性:</strong> きんちょうかん（68.2%）※メガ後ほのおのたてがみ<br>
+<strong>性格:</strong> おくびょう（S↑ A↓）<br>
 <strong>EV:</strong> H2-C32-S32（採用率55.2%）<br>
 <strong>持ち物:</strong> カエンジシナイト
 </div>
@@ -294,17 +294,17 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
 
 **強み:**
 
-おくびょうS32でメガ後S実数値195となり、環境の多くのポケモンを上から殴れます（メガゲンガーのメガ後S実数値200など高速メガ勢には先手を取られます）。ひかえめ型（S実数値178）が先手を取れないS120前後の相手——最速マスカーニャ（S実数値192）など——にも上から動けるのが、おくびょう型を選ぶ最大の理由です。ほのお技が×2で通る相手を上から削れるため、被弾前に試合の主導権を握れます。
+おくびょうS32でメガ後S実数値195となり、環境の多くのポケモンを上から殴れます（メガゲンガーのメガ後S実数値200など高速メガ勢には先手を取られます）。ひかえめ型（S実数値178）が先手を取れないS実数値179〜189帯の相手——ようきオオニューラ（採用率36%、S実数値189）など——にも上から動けるのが、おくびょう型を選ぶ理由です。なお多数派のいじっぱりオオニューラ（採用率54.1%、S実数値172）にはひかえめ型でも先手を取れます。オオニューラはこだわりスカーフ採用率が低く（3.3%）、素の素早さで抜き合う相手のため、おくびょう型の速度優位が実際に機能します。ほのお技が×2で通る相手を上から削れるため、被弾前に試合の主導権を握れます。
 
 **弱み:**
 
-おくびょう（C↓）によりとくこうが低下するため、ひかえめ型と比べてC実数値が約1割低くなります。ひかえめ型では1発で倒せる相手を2発必要とする場面が生じ、上から殴れる代わりに削り切る速度で劣ります。
+おくびょうはとくこう無補正のため、C実数値は181にとどまり、ひかえめ型（C実数値199）と比べて火力が約9%低くなります。ひかえめ型では1発で倒せる相手を2発必要とする場面が生じ、上から殴れる代わりに削り切る速度で劣ります。
 
 ---
 
 ### 型2: ひかえめ火力型（2番目に多い構成）
 
-**性格採用率: ひかえめ 22.6%**（C最大化。EV最多分布 B2-C32-S32 8.1%）
+**性格採用率: ひかえめ 21.5%**（C最大化。EV最多分布 B2-C32-S32 8.1%）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -314,7 +314,7 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> きんちょうかん（67.3%）※メガ後ほのおのたてがみ<br>
+<strong>特性:</strong> きんちょうかん（68.2%）※メガ後ほのおのたてがみ<br>
 <strong>性格:</strong> ひかえめ（C↑ A↓）<br>
 <strong>EV:</strong> B2-C32-S32（採用率8.1%）<br>
 <strong>持ち物:</strong> カエンジシナイト
@@ -331,11 +331,11 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
 
 **強み:**
 
-ひかえめC32でC実数値199となり、おくびょう型（C162）より約23%高い火力が出ます。この火力差により、おくびょう型では2発必要な相手を1発で倒せる場面が生じます。
+ひかえめC32でC実数値199となり、おくびょう型（C181）より高い火力が出ます。この火力差により、おくびょう型では2発必要な相手を1発で倒せる場面が生じます。
 
 **弱み:**
 
-おくびょう型（S実数値195）と比べてS実数値が178と低く、おくびょう型が抜ける最速マスカーニャ（S実数値192）に先手を取れなくなります。上から動ける範囲がおくびょう型より狭まる分、被弾してから動く場面が増えます。
+おくびょう型（S実数値195）と比べてS実数値が178と低く、おくびょう型が抜けるスカーフ非採用のようきマスカーニャ（S実数値192）に先手を取れなくなります。ただしマスカーニャはこだわりスカーフ72.9%が多数派で、おくびょう型のS195でもスカーフようき個体（S実数値288）には後手になるため、この差が活きるのはスカーフ非採用個体に限られます。上から動ける範囲がおくびょう型より狭まる分、被弾してから動く場面が増えます。
 
 ---
 
@@ -355,45 +355,38 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0227-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（上位）
+    <img src="/images/pokemon/pokemon-0227-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（9位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこう複合だがほのお技が×2で通る。かえんほうしゃ・オーバーヒートのどちらも大きなダメージになります</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（上位）
+    <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ/あく複合で、ほのお技×2で通る。メガ後S195は最速マスカーニャ（S実数値192）を上回り、上から処理できます</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ/あく複合で、ほのお技×2で通る。ただしようき59.4%・こだわりスカーフ72.9%が主流で、スカーフようき個体（S実数値288）にはメガ後S195でも後手になります</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガハッサム（31位）
+    <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガハッサム（32位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/はがね複合でほのお技が×4で通る。メガ後S実数値127に対しS195で先手を取れ、かえんほうしゃ1発で大きく削れます</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/はがね複合でほのお技が×4で通る。最速個体（メガ後S実数値139）でもS195から確実に先手を取れ、かえんほうしゃ1発で大きく削れます</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガメタグロス（7位）
-  </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/エスパー複合でほのお技が×2で通る。メガ後S実数値162に対しS195で先手を取れます（ただしかくとう技を持つ個体には弱点を突かれるため注意）</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0979-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">コノヨザル（上位）
+    <img src="/images/pokemon/pokemon-0979-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">コノヨザル（45位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう×2弱点でドレインパンチ・ふんどのこぶしが刺さる。カエンジシのほのおはゴーストタイプのコノヨザルには等倍で通るが、ノーマルタイプのハイパーボイスはゴーストに無効（×0）です</td>
 </tr>
-<tr>
+<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（上位）
+    <img src="/images/pokemon/pokemon-0094-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ゲンガー（30位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴーストタイプには当方ノーマル技が無効。ほのお技は等倍で通る。相手のシャドーボールはノーマルタイプ無効で通らないが、メガゲンガー（メガストーン採用率58.9%）はメガ後S実数値200でカエンジシのS195を上回り先手を取られる。ヘドロウェーブ（採用率80.6%）等の別打点を持つ個体には注意が必要です</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技は等倍で通るがノーマル技は無効。メガゲンガー（採用率58.3%）はメガ後S実数値200で先手を取られます</td>
 </tr>
 </tbody>
 </table>
@@ -413,10 +406,10 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0260-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガラグラージ（上位）
+    <img src="/images/pokemon/pokemon-0260-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガラグラージ（12位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率92.7%）・ウェーブタックル（同75.1%）の高火力物理で押され、こちらのほのお技はメガラグラージ（みず/じめん）に半減されます</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんきは無効化されるため、くさ×4で刺さるマスカーニャ（4位）・メガニウム（37位）のくさ技で処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率92.9%）・ウェーブタックル（同74.3%）の高火力物理で押され、こちらのほのお技はメガラグラージ（みず/じめん）に半減されます</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんきは無効化されるため、くさ×4で刺さるマスカーニャ（3位）・メガニウム（40位）のくさ技で処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -429,8 +422,15 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（16位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず×2弱点でたきのぼり（採用率89.5%）が刺さり、こちらのほのお技はみず/ひこう複合に半減される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき×4で刺さるライチュウ（5位）・ウォッシュロトム（23位）のでんき技で上から処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず×2弱点でたきのぼり（採用率89.6%）が刺さり、こちらのほのお技はみず/ひこう複合に半減される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき×4で刺さるライチュウ（5位）・ウォッシュロトム（21位）のでんき技で上から処理する</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガメタグロス（6位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん×2弱点でじしん（採用率75.6%）が刺さる。S195で先手は取れるがほのお技1発で倒し切れず、返しのじしんでHP実数値163・B112の低耐久を貫かれる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこうタイプや浮遊持ちでじしんを無効化してから処理する</td>
 </tr>
 </tbody>
 </table>
@@ -447,19 +447,19 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">カエンジシが苦手なみず・いわへの打点を別枠でカバーしつつ、じめん技でカエンジシのはがね・でんき弱点を補完</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0398-00.webp" alt="ムクホーク">
-    <div class="name">ムクホーク</div>
-    <div class="rate">同居率2位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこう/ノーマルでじめん無効。カエンジシのじめん弱点をひこうタイプで補完する物理枠</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">じめん技でカエンジシが苦手ないわ勢への打点を補完</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ">
     <div class="name">ミミッキュ</div>
-    <div class="rate">同居率3位</div>
+    <div class="rate">同居率2位</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">ばけのかわでワンクッション。カエンジシが苦手な対面でじゃれつく・かげうちで圧力をかける</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0398-00.webp" alt="ムクホーク">
+    <div class="name">ムクホーク</div>
+    <div class="rate">同居率3位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこう/ノーマルでじめん無効。カエンジシのじめん弱点をひこうタイプで補完する物理枠</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
@@ -491,15 +491,15 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
 
 | 技 | タイプ | 採用率 | 役割 |
 |---|---|---|---|
-| かえんほうしゃ | ほのお | 89.7% | 安定技・持続火力（やけど10%）|
-| オーバーヒート | ほのお | 63.6% | 一撃最大火力（C2段階低下）|
-| ハイパーボイス | ノーマル | 51.6% | みがわり貫通・補完打点 |
-| ねっさのだいち | じめん | 36.0% | はがね・でんき補完 |
-| ニトロチャージ | ほのお | 35.7% | S上昇技 |
+| かえんほうしゃ | ほのお | 89.0% | 安定技・持続火力（やけど10%）|
+| オーバーヒート | ほのお | 63.7% | 一撃最大火力（C2段階低下）|
+| ハイパーボイス | ノーマル | 49.3% | みがわり貫通・補完打点 |
+| ねっさのだいち | じめん | 36.7% | はがね・でんき補完 |
+| ニトロチャージ | ほのお | 32.5% | S上昇技 |
 
-かえんほうしゃ（89.7%）とオーバーヒート（63.6%）の同時採用率が高いことは、「倒し切りたい相手にオーバーヒート・それ以外にかえんほうしゃ」という使い分け運用が主流であることを示しています。オーバーヒートのC2段階低下デメリットを許容してでも最大火力を持つ判断が、約6割のプレイヤーが取る択となっています。
+かえんほうしゃ（89.0%）とオーバーヒート（63.7%）の同時採用率が高いことは、「倒し切りたい相手にオーバーヒート・それ以外にかえんほうしゃ」という使い分け運用が主流であることを示しています。オーバーヒートのC2段階低下デメリットを許容してでも最大火力を持つ判断が、約6割のプレイヤーが取る択となっています。
 
-ねっさのだいち（36.0%）とニトロチャージ（35.7%）の採用率がほぼ拮抗していることは、第4の技枠を「はがね/でんき補完打点」か「S上昇」かで選択している実態を数値で示しています。メガ後S195でも上を取れない相手やこだわりスカーフ持ちを意識してSを積むか、ほのお技が通りにくいはがねへの打点を確保するかで、構築の方向性が二分されていると読めます。
+ねっさのだいち（36.7%）とニトロチャージ（32.5%）の採用率に差が出ていることは、第4の技枠を「はがね/でんき補完打点」か「S上昇」かで選択している実態を数値で示しています。メガ後S195でも上を取れない相手やこだわりスカーフ持ちを意識してSを積むか、ほのお技が通りにくいはがねへの打点を確保するかで、構築の方向性が二分されていると読めます。
 
 ---
 
@@ -520,19 +520,19 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">CSおくびょう型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">おくびょう 74.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">おくびょう 75.2%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">かえんほうしゃ・オーバーヒート・ハイパーボイス・ねっさのだいち/ニトロチャージ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S実数値195で多くの相手に先手を取れる（メガゲンガー200等の高速メガ勢には届かない）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">C↓でひかえめ型より火力が約1割低い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">C無補正でひかえめ型（C199）より火力が約9%低い（C181）</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">CSひかえめ型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかえめ 22.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかえめ 21.5%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかえめ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">かえんほうしゃ・オーバーヒート・ハイパーボイス・ねっさのだいち/ニトロチャージ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">C実数値199で一発で倒せる範囲が広がる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S実数値178でおくびょう型が抜けるマスカーニャ等のS120前後の相手に先手を取れない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">S実数値178でおくびょう型が抜けるS179〜189帯（ようきオオニューラS189、採用率36%等）に先手を取れない。いじっぱりオオニューラ（S172、採用率54.1%）にはひかえめ型でも先手を取れる</td>
 </tr>
 </tbody>
 </table>
@@ -540,9 +540,9 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
 
 **総評:**
 
-カエンジシはメガ後C129・S126という特殊アタッカーとして機能し、ほのお/ノーマルのタイプ一致技にハイパーボイスのみがわり貫通を組み合わせた打点構成が軸です。メガ後ほのおのたてがみでほのお技・凍結に強く、おくびょうS32でのS195先手展開が主流の動きとなります。
+カエンジシはメガ後C129・S126という特殊アタッカーとして機能し、ほのお/ノーマルのタイプ一致技にハイパーボイスのみがわり貫通を組み合わせた打点構成が軸です。メガ後ほのおのたてがみでほのお技の威力が1.5倍になり、おくびょうS32でのS195先手展開が主流の動きとなります。
 
-弱点はみず・かくとう・いわ・じめんの4タイプに及ぶため、パーティ単位でのカバーが必要です。使用率90位というポジションは、火力・素早さは環境水準を満たすものの弱点タイプの多さから採用コストが生じていることを反映しています。
+弱点はみず・かくとう・いわ・じめんの4タイプに及ぶため、パーティ単位でのカバーが必要です。使用率92位というポジションは、火力・素早さは環境水準を満たすものの弱点タイプの多さから採用コストが生じていることを反映しています。
 
 ---
 

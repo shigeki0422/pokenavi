@@ -1,9 +1,9 @@
 ---
-title: '【ポケモンチャンピオンズ】ペンドラー考察 M-3 使用率77位 型別採用率と立ち回り'
-description: 'M-3シングルバトルで使用率77位のペンドラーを徹底分析。かそく特性でS+1を積みながら、つるぎのまい72.0%・バトンタッチ59.4%で後続エースにS+A段階をそのまま引き継ぐバトン型と、メガ進化後のB149を活かす耐久型の採用実態を実データで解説します。'
-pubDate: '2026-06-22'
+title: '【ポケモンチャンピオンズ】ペンドラー考察 M-3 使用率78位 型別採用率と立ち回り'
+description: 'M-3シングルバトルで使用率78位のペンドラーを徹底分析。かそく特性でS+1を積みながら、つるぎのまい72.2%・バトンタッチ61.9%で後続エースにS+A段階をそのまま引き継ぐバトン型と、メガ進化後のB149を活かす耐久型の採用実態を実データで解説します。'
+pubDate: '2026-06-26'
 heroImage: '../../assets/hero-scolipede-m3.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -27,30 +27,30 @@ draft: true
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">77位</strong>　特性: <strong>かそく 99.1%</strong>
+      使用率: <strong style="color:#e67e22">78位</strong>　特性: <strong>かそく 98.9%</strong>
     </div>
   </div>
 </div>
 
-> ⚠️ 本記事のデータはM-3シーズン（2026/06/22）時点の集計です
+> ⚠️ 本記事のデータはM-3シーズン（2026/06/25）時点の集計です
 
-シーズンM-3のシングルバトルで、ペンドラーは**使用率77位**を記録。特性かそくで毎ターンS+1を積みながら、つるぎのまい（72.0%）でA+2を乗せてバトンタッチ（59.4%）で後続に引き継ぐ**積みバトン型**が主流です。メガ進化（ペンドラナイト34.5%）ではS112→62と大幅に下がる一方B149になり、まもる（56.5%）でかそくを安全に積んでから強引に押す耐久物理型としての運用もあります。なおメガ後の特性はシェルアーマー（急所無効）に変わり、かそくが働かない点に注意が必要です。
+シーズンM-3のシングルバトルで、ペンドラーは**使用率78位**を記録。特性かそくで毎ターンS+1を積みながら、つるぎのまい（72.2%）でA+2を乗せてバトンタッチ（61.9%）で後続に引き継ぐ**積みバトン型**が主流です。メガ進化（ペンドラナイト32.0%）ではS112→62と大幅に下がる一方B149になり、まもる（58.9%）でかそくを安全に積んでから強引に押す耐久物理型としての運用もあります。なおメガ後の特性はシェルアーマー（急所無効）に変わり、かそくが働かない点に注意が必要です。
 
 ---
 
-## なぜ今ペンドラーが使用率77位なのか
+## なぜ今ペンドラーが使用率78位なのか
 
 ### 1. かそく×バトンタッチで後続エースに積み状態を丸ごと渡せる
 
-特性かそく（99.1%）は毎ターンS+1を積む。ペンドラー自身がつるぎのまいでA+2まで積んだ後にバトンタッチを使うと、**S上昇段階とA+2を後続に引き継げる**。受け取ったエースは積み済みの状態から攻撃を開始できるため、単体で積んで全抜きを狙うより受け渡し先の選択肢が広く、相手が耐性を合わせて対応しにくい。
+特性かそく（98.9%）は毎ターンS+1を積みます。ペンドラー自身がつるぎのまいでA+2まで積んだ後にバトンタッチを使うと、**S上昇段階とA+2を後続に引き継げます**。受け取ったエースは積み済みの状態から攻撃を開始できるため、単体で積んで全抜きを狙うより受け渡し先の選択肢が広く、相手が耐性を合わせて対応しにくくなります。
 
 ### 2. まもるでかそくを安全に重ねながら積める
 
-まもる（56.5%）はダメージを受けずに1ターンをやり過ごせる技で、ペンドラーは使用ターンにもかそくが発動してS+1を得る。つるぎのまい・まもるを組み合わせれば相手が有効打を持つポケモンを繰り出すターンを稼ぎながら積み段階を増やせる。
+まもる（58.9%）はダメージを受けずに1ターンをやり過ごせる技で、ペンドラーは使用ターンにもかそくが発動してS+1を得られます。つるぎのまい・まもるを組み合わせれば相手が有効打を持つポケモンを繰り出すターンを稼ぎながら積み段階を増やせます。
 
 ### 3. きゅうけつ採用でHP補填しながら場に留まれる
 
-きゅうけつ（32.6%）はむしタイプの吸収技で、与えたダメージの一部を回復できる。タスキやオボンのみと組み合わせることで、相手の削りに対してHP補填しながら積みターンを伸ばせる。
+きゅうけつ（31.4%）はむしタイプの吸収技で、与えたダメージの一部を回復できます。タスキやオボンのみと組み合わせることで、相手の削りに対してHP補填しながら積みターンを伸ばせます。
 
 ---
 
@@ -121,7 +121,7 @@ draft: true
   </div>
 </div>
 
-通常時はS112と高速で、かそくとの組み合わせで積みながら先手を広げられます。一方、メガ進化するとS62と低速帯になり、特性もシェルアーマーに変わるためかそくでS+1を積めなくなりますが、A140・B149と物理火力・物理耐久が大幅に上がります。メガ後はS不利を受け入れ、B149の耐久を活かしながらじしん（47.7%）・まもる（56.5%）で場持ちする戦い方になります。
+通常時はS112と高速で、かそくとの組み合わせで積みながら先手を広げられます。一方、メガ進化するとS62と低速帯になり、特性もシェルアーマーに変わるためかそくでS+1を積めなくなりますが、A140・B149と物理火力・物理耐久が大幅に上がります。メガ後はS不利を受け入れ、B149の耐久を活かしながらじしん（45.5%）・まもる（58.9%）で場持ちする戦い方になります。
 
 ### タイプ・弱点
 
@@ -187,99 +187,99 @@ draft: true
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>つるぎのまい</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">72.0%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">72.2%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">2</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>バトンタッチ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">59.4%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">61.9%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">3</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>まもる</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">56.5%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">58.9%</strong></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">4</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>じしん</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">100</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">47.7%</strong></td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><strong style="color:#dc2626">45.5%</strong></td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">5</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>てっぺき</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">34.9%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">34.3%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">6</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>きゅうけつ</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">32.6%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">31.4%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">7</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>どくづき</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">80</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">26.2%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">26.9%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">8</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>ダストシュート</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">16.0%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">14.6%</td>
 </tr>
 <tr>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>みがわり</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">—</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">15.2%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">13.5%</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10</td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0"><strong>メガホーン</strong></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle"></td>
   <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">120</td>
-  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">9.5%</td>
+  <td style="padding:6px 10px;border:1px solid #e2e8f0;text-align:center">10.3%</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-技採用率を見ると、バトンタッチ型（バトン＋つるぎのまい＋まもる）とメガ進化後の物理押し型（じしん＋つるぎのまい＋まもる）の2系統が混在しています。バトンタッチ59.4%が過半数を占める一方、じしんも47.7%採用されており、対面した段階ではどちらの系統か即座に読みにくい状態が生まれています。
+技採用率を見ると、バトンタッチ型（バトン＋つるぎのまい＋まもる）とメガ進化後の物理押し型（じしん＋つるぎのまい＋まもる）の2系統が混在しています。バトンタッチ61.9%が過半数を占める一方、じしんも45.5%採用されており、対面した段階ではどちらの系統か即座に読みにくい状態が生まれています。
 
 ---
 
 ## 主要型の解説
 
-性格分布はいじっぱり31.8%・ようき31.8%が同率トップで並び、わんぱく18.5%が続きます。バトン型はいじっぱり/ようき、メガ後耐久型はわんぱくに分かれます。
+性格分布はようき31.9%・いじっぱり30.4%が拮抗し、わんぱく18.4%が続きます。バトン型はようき/いじっぱり、メガ後耐久型はわんぱくに分かれます。
 
-### 型1: いじっぱり/ようきかそくバトン型（最多採用）
+### 型1: ようき/いじっぱりかそくバトン型（最多採用）
 
-**性格採用率: いじっぱり 31.8%・ようき 31.8%**（バトン軸の2択。EV最多分布 H2-A32-S32 14.6%）
+**性格採用率: ようき 31.9%・いじっぱり 30.4%**（バトン軸の2択。EV最多分布 H2-A32-S32 13.4%）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
   <img src="/images/pokemon/pokemon-0545-00.webp" alt="ペンドラー" style="width:48px;height:48px">
-  <strong style="font-size:1.05em">ASいじっぱり/ようきバトン型</strong>
+  <strong style="font-size:1.05em">ASようき/いじっぱりバトン型</strong>
 </div>
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> かそく（99.1%）<br>
-<strong>性格:</strong> いじっぱり（A↑ C↓）/ ようき（S↑ C↓）<br>
-<strong>EV:</strong> H2 A32 S32（採用率14.6%）<br>
-<strong>持ち物:</strong> きあいのタスキ（23.1%）/ たべのこし（13.7%）/ オボンのみ（13.2%）
+<strong>特性:</strong> かそく（98.9%）<br>
+<strong>性格:</strong> ようき（S↑ C↓）/ いじっぱり（A↑ C↓）<br>
+<strong>EV:</strong> H2 A32 S32（採用率13.4%）<br>
+<strong>持ち物:</strong> きあいのタスキ（24.3%）/ たべのこし（14.0%）/ オボンのみ（14.1%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -293,17 +293,17 @@ draft: true
 
 **強み:**
 
-かそくで毎ターンSを積みながら、つるぎのまいでA+2を乗せてバトンタッチで後続エースに引き継ぐ型です。ようき型はS実数値180となり、ガブリアス（最速S169）など環境上位の一部より速くバトンを準備できます。ただしムクホーク・リザードン・フーディンといった弱点を突ける高速勢には届かないため、先手範囲は限定的です。いじっぱり型はようき型より積む前のA実数値が高く、バトンを渡す前に攻撃で削る択も取りやすくなります。まもるを挟むことで安全にかそくのS+1を積み、バトンを渡す準備ができます。きゅうけつでHPを補填しながら場に留まることで、積みターンをさらに確保できます。
+かそくで毎ターンSを積みながら、つるぎのまいでA+2を乗せてバトンタッチで後続エースに引き継ぐ型です。ようき型はS実数値180となり、ガブリアス（最速S169）など環境上位の一部より速くバトンを準備できます。ただしムクホーク・リザードンといった弱点を突ける高速勢には届かないため、先手範囲は限定的です。いじっぱり型はようき型より積む前のA実数値が高く、バトンを渡す前に攻撃で削る択も取りやすくなります。まもるを挟むことで安全にかそくのS+1を積み、バトンを渡す準備ができます。きゅうけつでHPを補填しながら場に留まることで、積みターンをさらに確保できます。
 
 **弱み:**
 
-ひこう・ほのお・いわ・エスパーの弱点を突かれると積み始める前に致命打を受ける危険があります。ようき型はいじっぱり型よりA実数値が下がるため、積む前の攻撃力は低い。バトンタッチで引き継いでも、後続が弱点を持つ場合は引き継いだ積みが活きないケースがあります。きあいのタスキ採用個体は弱点技を1発まで耐えられますが、まもる・かそくのS+1で保険は使い切れません。
+ひこう・ほのお・いわ・エスパーの弱点を突かれると積み始める前に致命打を受ける危険があります。ようき型はいじっぱり型よりA実数値が下がるため、積む前の攻撃力は低くなります。バトンタッチで引き継いでも、後続が弱点を持つ場合は引き継いだ積みが活きないケースがあります。きあいのタスキ採用個体は弱点技を1発まで耐えられますが、まもる・かそくのS+1で保険は使い切れません。
 
 ---
 
 ### 型2: わんぱくメガ進化耐久型
 
-**性格採用率: わんぱく 18.5%**（B強化でメガ後B149をさらに伸ばす。EV H32-B32-D2 5.9%等）
+**性格採用率: わんぱく 18.4%**（B強化でメガ後B149をさらに伸ばす。EV H32-B2-S32 4.7%等）
 
 <div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:16px;margin:16px 0">
 <div class="build-header">
@@ -313,10 +313,10 @@ draft: true
 
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:0.92em">
 <div>
-<strong>特性:</strong> かそく（99.1%）※メガ後はシェルアーマー<br>
+<strong>特性:</strong> かそく（98.9%）※メガ後はシェルアーマー<br>
 <strong>性格:</strong> わんぱく（B↑ C↓）<br>
-<strong>EV:</strong> H32 B32 D2（採用率5.9%）<br>
-<strong>持ち物:</strong> ペンドラナイト（34.5%）
+<strong>EV:</strong> H32 B2 S32（採用率4.7%）<br>
+<strong>持ち物:</strong> ペンドラナイト（32.0%）
 </div>
 <div>
 <strong>技構成:</strong><br>
@@ -370,15 +370,15 @@ draft: true
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0026-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ライチュウ（上位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだま（95.4%）・くさむすび（74.8%）は¼だが、最多採用のでんじほう（96.0%）が等倍で通り、まひも撒かれる。弱点は突かれないが一方的に有利とは言えない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ライチュウナイトY採用率96.4%でメガ前提。メガ後はC160・S実数値200（おくびょう）となり、積み前のペンドラー（ようきS実数値180）はもちろんS112勢を抜けず先手を取られる。最多採用のでんじほう（でんき）はむし/どくに等倍で、C160の高火力が刺さりまひも撒かれる。特性ノーガードでかくとう技（きあいだま）が必中になるが、むし/どくには¼で軽い</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（上位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（98.1%）はこちらに等倍止まりで弱点を突かれず、S47と遅いため積み始めやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（97.9%）はこちらに等倍止まりで弱点を突かれず、S47と遅いため積み始めやすい</td>
 </tr>
 </tbody>
 </table>
@@ -412,10 +412,10 @@ draft: true
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0065-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">フーディン（上位）
+    <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メタグロス（使用率6位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー技がむし/どくどちらにも×2弱点で刺さる。高Sで先手をほぼ奪われる</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく・ゴースト技を持つ枠でフーディンを優先処理してからペンドラーを投入する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">採用率87.7%のサイコファング（エスパー）がむし/どくどちらにも×2弱点で刺さり、A135の高火力で一撃が重い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく・ゴースト技を持つ枠でメタグロスを処理してからペンドラーを展開する</td>
 </tr>
 </tbody>
 </table>
@@ -444,19 +444,25 @@ draft: true
     <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ">
     <div class="name">ライチュウ</div>
     <div class="rate">パートナー3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ペンドラーが苦手なひこうタイプに対してでんき打点を持てるサポート枠</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">メガライチュウY（C160・S実数値200）でひこうタイプを高速でんきで処理するエース。メガ枠を使うためメガ型ペンドラーとは併用不可、バトン型と組ませる</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス">
+    <div class="name">メタグロス</div>
+    <div class="rate">パートナー4位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/エスパーでペンドラーが弱いほのお・いわ技を半減し、高耐久で受け回す枠</div>
+  </div>
+  <div class="partner-card">
+    <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ">
+    <div class="name">ミミッキュ</div>
+    <div class="rate">パートナー5位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ばけのかわで一撃を防ぎつつつるぎのまいで積み、バトンを受けるエース候補</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
-    <div class="rate">パートナー4位</div>
+    <div class="rate">パートナー6位</div>
     <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでひこう技を半減し、ペンドラーの弱点を補完する受け枠</div>
-  </div>
-  <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0861-00.webp" alt="オーロンゲ">
-    <div class="name">オーロンゲ</div>
-    <div class="rate">パートナー5位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">リフレクター・ひかりのかべで先制ダメージを軽減し積みターンを作る補助枠</div>
   </div>
 </div>
 
@@ -466,7 +472,7 @@ draft: true
 
 1. **バトン受け取りエース**: ガブリアス・ムクホークなど物理アタッカーで、S上昇込みの速度とA+2の火力で全抜きできるポケモン
 2. **ひこう・ほのお対策**: ペンドラーの弱点4タイプ（ひこう・ほのお・いわ・エスパー）に対して打点を持つ枠をパーティに置く
-3. **壁サポート**: オーロンゲ等でリフレクター・ひかりのかべを張り、ペンドラーの積みターンを確保する
+3. **壁サポート**: オーロンゲ（同居率8位）等でリフレクター・ひかりのかべを張り、ペンドラーの積みターンを確保する
 
 ---
 
@@ -476,15 +482,15 @@ draft: true
 
 | 技 | 採用率 | 役割 |
 |---|---|---|
-| つるぎのまい | 72.0% | A+2積み（バトン型・メガ型共通） |
-| バトンタッチ | 59.4% | 積み状態を後続に渡す（バトン型専用） |
-| まもる | 56.5% | 安全に1ターン稼ぐ（両型共通） |
-| じしん | 47.7% | 補完打点（メガ型・一部バトン型） |
-| きゅうけつ | 32.6% | HP補填（両型共通） |
+| つるぎのまい | 72.2% | A+2積み（バトン型・メガ型共通） |
+| バトンタッチ | 61.9% | 積み状態を後続に渡す（バトン型専用） |
+| まもる | 58.9% | 安全に1ターン稼ぐ（両型共通） |
+| じしん | 45.5% | 補完打点（メガ型・一部バトン型） |
+| きゅうけつ | 31.4% | HP補填（両型共通） |
 
-バトン型専用のバトンタッチが59.4%、メガ型に寄るじしんが47.7%で、**バトン渡し型が過半数を占めつつメガ押し込み型も半数近く存在する**ことを数値が示しています。型の判別は持ち物が手がかりになり、ペンドラナイト（34.5%）がメガ型、きあいのタスキ（23.1%）・たべのこし（13.7%）・オボンのみ（13.2%）はバトン型に多く採用されます。
+バトン型専用のバトンタッチが61.9%、メガ型に寄るじしんが45.5%で、**バトン渡し型が過半数を占めつつメガ押し込み型も半数近く存在する**ことを数値が示しています。型の判別は持ち物が手がかりになり、ペンドラナイト（32.0%）がメガ型、きあいのタスキ（24.3%）・オボンのみ（14.1%）・たべのこし（14.0%）はバトン型に多く採用されます。
 
-持ち物分布を見ると、ペンドラナイト（34.5%）が最多ではあるものの、残り65.5%は非メガ石であり、過半数がバトン型または非メガ物理型です。対面した際には「ペンドラナイト＝メガ型」「タスキ/たべのこし/オボン＝バトン型」と持ち物から判断するのが現実的な読み筋になります。
+持ち物分布を見ると、ペンドラナイト（32.0%）が最多ではあるものの、残り68.0%は非メガ石であり、過半数がバトン型または非メガ物理型です。対面した際には「ペンドラナイト＝メガ型」「タスキ/たべのこし/オボン＝バトン型」と持ち物から判断するのが現実的な読み筋になります。
 
 ---
 
@@ -504,16 +510,16 @@ draft: true
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">いじっぱり/ようきバトン型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">いじっぱり 31.8% / ようき 31.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり / ようき</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ようき/いじっぱりバトン型</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong style="color:#dc2626">ようき 31.9% / いじっぱり 30.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき / いじっぱり</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">つるぎのまい・バトンタッチ・まもる・きゅうけつ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">ようきはS実数値180で最速ガブ（169）に先攻、いじっぱりは積む前のAが約10%高い</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">弱点4タイプの高速勢に先手を取られると積めない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-weight:600">ABわんぱくメガ型</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">わんぱく 18.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">わんぱく 18.4%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">わんぱく</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">つるぎのまい・じしん・まもる・きゅうけつ</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;font-size:0.85em">B149の物理耐久で物理技を受けながら積める</td>
@@ -525,7 +531,7 @@ draft: true
 
 **総評:**
 
-ペンドラーはかそく特性でSを積みながらつるぎのまいでA+2を乗せてバトンタッチで後続に渡す積みバトン型が最多構成です。いじっぱり（31.8%）・ようき（31.8%）の同率2択でバトン型、わんぱく（18.5%）でメガ進化耐久型に分かれ、持ち物（ペンドラナイト34.5%・タスキ23.1%等）で型を判断できます。メガ型は特性がシェルアーマーに変わりかそくが働かない点に注意が必要です。弱点はひこう・ほのお・いわ・エスパーの4タイプで、特にひこう技を持つムクホークや高速ほのおタイプへの対処はパーティで用意する必要があります。
+ペンドラーはかそく特性でSを積みながらつるぎのまいでA+2を乗せてバトンタッチで後続に渡す積みバトン型が最多構成です。ようき（31.9%）・いじっぱり（30.4%）の2択でバトン型、わんぱく（18.4%）でメガ進化耐久型に分かれ、持ち物（ペンドラナイト32.0%・タスキ24.3%等）で型を判断できます。メガ型は特性がシェルアーマーに変わりかそくが働かない点に注意が必要です。弱点はひこう・ほのお・いわ・エスパーの4タイプで、特にひこう技を持つムクホークや高速ほのおタイプへの対処はパーティで用意する必要があります。
 
 ---
 
