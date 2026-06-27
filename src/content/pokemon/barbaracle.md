@@ -832,6 +832,4 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 ## 考察記事
 
-import ArticleCard from '../../components/ArticleCard.astro';
-
 <ArticleCard slug="barbaracle-analysis-m3" />
