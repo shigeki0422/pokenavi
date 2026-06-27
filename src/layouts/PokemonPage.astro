@@ -242,7 +242,13 @@ const breadcrumbJsonLd = {
 					navLinks.forEach(a => {
 						const active = a.getAttribute('href') === `#${currentId}`;
 						a.classList.toggle('active', active);
-						if (active) a.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+						if (active) {
+							// 横スクロールのみ（ページ縦スクロールは触らない）
+							const r = a.getBoundingClientRect();
+							const nr = navInner.getBoundingClientRect();
+							if (r.left < nr.left) navInner.scrollLeft -= nr.left - r.left + 8;
+							else if (r.right > nr.right) navInner.scrollLeft += r.right - nr.right + 8;
+						}
 					});
 				}
 				window.addEventListener('scroll', updateActive, { passive: true });
