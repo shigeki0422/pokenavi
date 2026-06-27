@@ -183,6 +183,21 @@ const breadcrumbJsonLd = {
 					}
 				}
 
+				// 有利・不利テーブルのポケモンセルをリンク化
+				document.querySelectorAll('td img[src*="/images/pokemon/pokemon-"]').forEach(img => {
+					const td = img.closest('td');
+					if (!td || td.querySelector('a')) return;
+					const key = dexKeyFromImg(img);
+					const url = key && map[key];
+					if (!url) return;
+					const a = document.createElement('a');
+					a.href = url;
+					a.style.cssText = 'color:inherit;text-decoration:none;display:flex;align-items:center;gap:6px;';
+					while (td.firstChild) a.appendChild(td.firstChild);
+					td.appendChild(a);
+					td.style.cursor = 'pointer';
+				});
+
 				// partner-card をリンク化
 				document.querySelectorAll('.partner-card').forEach(card => {
 					if (card.closest('a') || card.tagName === 'A') return;
