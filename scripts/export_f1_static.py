@@ -22,7 +22,7 @@ from simulator.simulate import get_loader
 from simulator.matchup_explain import explain_matchup
 from simulator.pokemon import parse_pokemon_spec
 
-CACHE_DIR = os.path.join(os.path.dirname(__file__), "f1_cache")
+CACHE_DIR = os.environ.get("F1_CACHE_DIR", os.path.join(os.path.dirname(__file__), "f1_cache"))
 # META（index/icons/move_types）はサイトに同梱＝public/sim-data/。subjects はR2へ上げるためステージング。
 META_DIR = os.path.join(os.path.dirname(__file__), "..", "public", "sim-data")
 SUBJ_DIR = os.path.join(os.path.dirname(__file__), "sim_export", "subjects")
