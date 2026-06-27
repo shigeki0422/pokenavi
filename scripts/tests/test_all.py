@@ -1496,6 +1496,11 @@ check("わるいてぐせ 非接触では盗まない", _abg_n.item == "たべ�
 _ssh_d = BattleSide([make_poke(type1="いわ", ability="すなはき", hp_b=255, def_b=200)]); _fsh = BattleField()
 _execute_move(BattleSide([make_poke(atk_b=60)]), _ssh_d, Action(type="move", move=dl.get_move("たいあたり")), _fsh)
 check("すなはき 被弾で砂嵐", _fsh.weather == "sandstorm", f"weather={_fsh.weather}")
+# 気絶しても発動（技で倒されても砂嵐）
+_ssh_d2 = BattleSide([make_poke(type1="いわ", ability="すなはき", hp_b=1, def_b=1)]); _fsh2 = BattleField()
+_execute_move(BattleSide([make_poke(atk_b=200)]), _ssh_d2, Action(type="move", move=dl.get_move("たいあたり")), _fsh2)
+check("すなはき 気絶しても砂嵐", (not _ssh_d2.active.is_alive) and _fsh2.weather == "sandstorm",
+      f"alive={_ssh_d2.active.is_alive} weather={_fsh2.weather}")
 # どくげしょう：物理被弾で相手側にどくびし
 _sdg_a = BattleSide([make_poke(atk_b=60)]); _sdg_d = BattleSide([make_poke(type1="ノーマル", ability="どくげしょう", hp_b=255, def_b=200)]); _fdg = BattleField()
 _execute_move(_sdg_a, _sdg_d, Action(type="move", move=dl.get_move("たいあたり")), _fdg)
@@ -1504,6 +1509,11 @@ check("どくげしょう 物理被弾でどくびし設置", _fdg.toxic_spikes[
 _sdg_a2 = BattleSide([make_poke(spatk_b=60)]); _sdg_d2 = BattleSide([make_poke(type1="ノーマル", ability="どくげしょう", hp_b=255, spdef_b=200)]); _fdg2 = BattleField()
 _execute_move(_sdg_a2, _sdg_d2, Action(type="move", move=dl.get_move("なみのり")), _fdg2)
 check("どくげしょう 特殊技では設置しない", _fdg2.toxic_spikes[_sdg_a2.field_idx] == 0)
+# 気絶しても発動（物理技で倒されてもどくびしを設置）
+_sdg_a3 = BattleSide([make_poke(atk_b=200)]); _sdg_d3 = BattleSide([make_poke(type1="ノーマル", ability="どくげしょう", hp_b=1, def_b=1)]); _fdg3 = BattleField()
+_execute_move(_sdg_a3, _sdg_d3, Action(type="move", move=dl.get_move("たいあたり")), _fdg3)
+check("どくげしょう 気絶してもどくびし設置", (not _sdg_d3.active.is_alive) and _fdg3.toxic_spikes[_sdg_a3.field_idx] >= 1,
+      f"alive={_sdg_d3.active.is_alive} ts={_fdg3.toxic_spikes[_sdg_a3.field_idx]}")
 # ふくつのこころ：ひるむと素早さ+1（ねこだましでひるませて確認）
 from simulator.battle import Battle as _Bfk
 _pfk = make_poke(type1="ノーマル", spd_b=10, ability="ふくつのこころ", hp_b=255, def_b=200, moves=["たいあたり"])

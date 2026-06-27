@@ -1241,12 +1241,12 @@ def _execute_move(
             logs.append(f"{defender.name} の のろわれボディ！ {attacker.name} の {move.name_jp} が封じられた！")
 
     # すなはき：技のダメージを受けると5ターン砂嵐
-    if defender.is_alive and defender.ability == "すなはき" and total_dmg > 0 and field.weather != "sandstorm":
+    if defender.ability == "すなはき" and total_dmg > 0 and field.weather != "sandstorm":
         field.weather = "sandstorm"; field.weather_count = 5
         logs.append(f"{defender.name} の すなはき！ すなあらしが５ターン続く！")
 
     # どくげしょう：物理技のダメージを受けると相手の場をどくびし状態にする
-    if defender.is_alive and defender.ability == "どくげしょう" and move.category == "physical" and total_dmg > 0:
+    if defender.ability == "どくげしょう" and move.category == "physical" and total_dmg > 0:
         if field.toxic_spikes[attacker_side.field_idx] < 2:
             field.toxic_spikes[attacker_side.field_idx] += 1
             logs.append(f"{defender.name} の どくげしょう！ {attacker.name} の足元にどくびしがまかれた！")
