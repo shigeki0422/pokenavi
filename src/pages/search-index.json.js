@@ -14,6 +14,7 @@ export async function GET() {
 
   const blogs = (await getCollection('blog'))
     .filter(p => !p.data.draft)
+    .sort((a, b) => (b.data.pubDate?.getTime() ?? 0) - (a.data.pubDate?.getTime() ?? 0))
     .map(p => {
       const display = p.data.title
         .replace(/^【[^】]+】\s*/, '')
