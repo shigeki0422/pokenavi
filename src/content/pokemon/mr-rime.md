@@ -2,7 +2,7 @@
 title: 'ブリムオン | ポケモンチャンピオンズ 使用率・基礎データ'
 description: 'ポケモンチャンピオンズのブリムオン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率81位。'
 pokemonName: 'ブリムオン'
-dexNumber: 866
+dexNumber: 858
 usageRank: 81
 pubDate: '2026-06-25'
 draft: false
@@ -10,7 +10,7 @@ draft: false
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
-  <img src="/images/pokemon/pokemon-0866-00.webp" alt="ブリムオン" style="width:96px;height:96px" loading="eager" />
+  <img src="/images/pokemon/pokemon-0858-00.webp" alt="ブリムオン" style="width:96px;height:96px" loading="eager" />
   <div>
     <h1 style="margin:0 0 6px;font-size:1.6rem">ブリムオン</h1>
     <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px">

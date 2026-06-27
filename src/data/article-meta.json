@@ -1064,5 +1064,48 @@
 		"matchKey": "ガブリアス",
 		"dex": 445,
 		"form": "00"
+	},
+	"mr-rime": {
+		"name": "ブリムオン",
+		"rank": 81,
+		"types": [
+			"エスパー",
+			"フェアリー"
+		],
+		"matchKey": "ブリムオン",
+		"dex": 858,
+		"form": "00"
+	},
+	"barbaracle": {
+		"name": "ガメノデス",
+		"rank": 79,
+		"types": [
+			"いわ",
+			"みず"
+		],
+		"matchKey": "ガメノデス",
+		"dex": 689,
+		"form": "00"
+	},
+	"malamar": {
+		"name": "カラマネロ",
+		"rank": 141,
+		"types": [
+			"あく",
+			"エスパー"
+		],
+		"matchKey": "カラマネロ",
+		"dex": 687,
+		"form": "00"
+	},
+	"musharna": {
+		"name": "ムシャーナ",
+		"rank": 169,
+		"types": [
+			"エスパー"
+		],
+		"matchKey": "ムシャーナ",
+		"dex": 518,
+		"form": "00"
 	}
 }
