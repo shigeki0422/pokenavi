@@ -51,6 +51,7 @@ const breadcrumbJsonLd = {
 		<style>
 			main {
 				width: 100%;
+				max-width: none;
 				margin: 0;
 				padding: 0;
 			}
@@ -192,7 +193,7 @@ const breadcrumbJsonLd = {
 					if (!url) return;
 					const a = document.createElement('a');
 					a.href = url;
-					a.style.cssText = 'color:inherit;text-decoration:none;display:flex;align-items:center;gap:6px;';
+					a.style.cssText = 'color:inherit;text-decoration:none;';
 					while (td.firstChild) a.appendChild(td.firstChild);
 					td.appendChild(a);
 					td.style.cursor = 'pointer';
