@@ -42,6 +42,25 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       .pitem:first-child{border-top:none}
       .pitem:hover{background:#f8fafc}
       .pitem.active{background:#eef2ff;border-left-color:var(--accent);font-weight:700}
+      .pitem.s-m1{box-shadow:inset 3px 0 0 #93c5fd}
+      .pitem.s-m2{box-shadow:inset 3px 0 0 #fcd34d}
+      .seasonbar{display:flex;align-items:center;gap:.5em;padding:.25em .15em .4em;font-size:.78rem;flex-wrap:wrap}
+      .seasonbar .schk{display:inline-flex;align-items:center;gap:.3em;cursor:pointer;user-select:none}
+      .sbadge{font-size:.62rem;font-weight:800;padding:.08em .4em;border-radius:5px;flex-shrink:0;letter-spacing:-.02em}
+      .sbadge.m1{background:#dbeafe;color:#1d4ed8}
+      .sbadge.m2{background:#fef3c7;color:#b45309}
+      .expl{margin:.5em 0;padding:.5em .7em;background:#f8fafc;border:1px solid rgb(var(--gray-light));border-radius:8px;font-size:.8rem}
+      .expl-h{font-weight:800;margin-bottom:.35em}
+      .expl-side{margin-bottom:.35em}
+      .expl-side.opp2{color:rgb(var(--gray));font-size:.76rem}
+      .expl-tbl{border-collapse:collapse;margin-top:.25em;width:100%;max-width:360px}
+      .expl-tbl th,.expl-tbl td{border:1px solid rgb(var(--gray-light));padding:.12em .5em;text-align:left;font-size:.76rem}
+      .expl-tbl th{background:#eef2f7;font-weight:700}
+      .expl-tbl td:nth-child(2),.expl-tbl td:nth-child(3),.expl-tbl th:nth-child(2),.expl-tbl th:nth-child(3){text-align:right}
+      .expl-tbl tr.chosen td{background:#eef2ff;font-weight:700}
+      .honmei{display:inline-block;margin-left:.4em;font-size:.6rem;font-weight:800;padding:.05em .35em;border-radius:5px;background:#fee2e2;color:#b91c1c;vertical-align:middle}
+      .expl-tbl tr.weak td{color:#9aa3af}
+      .lowconf{display:inline-block;margin-left:.4em;font-size:.6rem;font-weight:800;padding:.05em .35em;border-radius:5px;background:#e5e7eb;color:#6b7280;vertical-align:middle}
       .pitem .nm{flex:1;font-weight:700}
       .pitem .wr{font-weight:700;font-size:.85rem}
       .bvrow{padding:.45em .1em;border-bottom:1px solid #f1f5f9}
@@ -175,6 +194,8 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       .rp-mon.act{border-color:var(--accent);background:#fff;box-shadow:0 1px 7px rgba(35,55,255,.2)}
       .rp-col.opp .rp-mon.act{border-color:#ef4444;box-shadow:0 1px 7px rgba(239,68,68,.2)}
       .rp-mon.dead{opacity:.5}
+      .rp-mon.unknown{opacity:.85;border-style:dashed;border-color:rgb(var(--gray-light));background:rgba(0,0,0,.02)}
+      .rp-unknown-q{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.6rem;font-weight:800;color:rgb(var(--gray));background:rgba(0,0,0,.05);border-radius:6px}
       .rp-mon-ico{position:relative;width:44px;height:44px;flex-shrink:0}
       .rp-mon-ico img{width:44px;height:44px;object-fit:contain}
       .rp-mon.dead .rp-mon-ico img{filter:grayscale(1)}
@@ -213,7 +234,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       <div class="seclabel">パーティ選択</div>
       <section class="card mb" style="padding:.9em 1em">
         <div class="split">
-          <div class="pl-wrap"><div class="picklist" id="subject-list"></div></div>
+          <div class="pl-wrap"><div class="seasonbar"><span class="muted">表示:</span><label class="schk"><input type="checkbox" checked onchange="toggleSubjSeason('M-1',this)"><span class="sbadge m1">M-1</span></label><label class="schk"><input type="checkbox" checked onchange="toggleSubjSeason('M-2',this)"><span class="sbadge m2">M-2</span></label></div><div class="picklist" id="subject-list"></div></div>
           <div class="comp" id="subject-comp"><div class="muted">パーティを選択してください</div></div>
         </div>
         <div class="row" style="margin-top:.7em">
@@ -242,7 +263,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       <!-- ③ 相手一覧＋構成＋詳細 -->
       <section class="card" style="padding:.9em 1em">
         <div class="split">
-          <div class="pl-wrap"><div class="picklist" id="opp-list" style="max-height:300px"></div></div>
+          <div class="pl-wrap"><div class="seasonbar" id="opp-seasonbar"><span class="muted">表示:</span><label class="schk"><input type="checkbox" checked onchange="toggleOppSeason('M-1',this)"><span class="sbadge m1">M-1</span></label><label class="schk"><input type="checkbox" checked onchange="toggleOppSeason('M-2',this)"><span class="sbadge m2">M-2</span></label></div><div class="picklist" id="opp-list" style="max-height:300px"></div></div>
           <div class="comp" id="opp-comp"><div class="muted">左の一覧から対戦相手を選択</div></div>
         </div>
         <div id="detail" style="margin-top:.9em"></div>
@@ -260,6 +281,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       const META = THEME ? '/sim-data-theme' : (VERIFY ? '/sim-data-verify' : '/sim-data');      // 同梱メタ（index/icons/move_types）
       const R2 = R2_BASE || META;    // 主役別JSONの取得元（本番=R2 / ローカル検証=同梱）
       let RANKERS = [], SAVED = {}, ICONS = {}, SUBJECT = null, AID = null, CARDS = {}, TAB = 'ranker', SORT = 'num', NUMDIR = 'asc', WRDIR = 'asc';
+      let SUBJ_SEASONS = {'M-1':true,'M-2':true}, OPP_SEASONS = {'M-1':true,'M-2':true};
       let SUBJDATA = null, SAVEDWR = {};
       let OPP = null, POKES = [], VSPOKE = {}, RBATTLE = null, RTURN = 0, autoTimer = null;
       let PSORT = 'num', PNDIR = 'desc', PWDIR = 'asc';   // VSポケモン用ソート（既定=対戦数の降順）
@@ -405,12 +427,15 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       }
 
       const rankNo=l=>{const mm=(l||'').match(/#(\d+)/);return mm?+mm[1]:99999;};  // 「M-1#100」の100を数値で抽出（番号順ソート用）
+      const seasonOf=l=>{const m=(l||'').match(/^(M-\d)/);return m?m[1]:'';};       // ラベル先頭の「M-1」「M-2」
+      const seasonOrd=l=>{const s=seasonOf(l);return s==='M-1'?0:s==='M-2'?1:2;};   // M-1→M-2の順
+      const cmpLabel=(a,b)=>{const d=seasonOrd(a.label)-seasonOrd(b.label);return d||rankNo(a.label)-rankNo(b.label);};
       if(STATIC){
         Promise.all([
           fetch(META+'/index.json').then(r=>r.json()),
           fetch(META+'/icons.json').then(r=>r.json()),
           fetch(META+'/move_types.json').then(r=>r.json())
-        ]).then(([idx,ic,mt])=>{ RANKERS=(idx.subjects||[]).slice().sort((a,b)=>rankNo(a.label)-rankNo(b.label)); ICONS=ic; Object.assign(MOVET,mt);
+        ]).then(([idx,ic,mt])=>{ RANKERS=(idx.subjects||[]).slice().sort(cmpLabel); ICONS=ic; Object.assign(MOVET,mt);
           RANKERS.forEach(s=>SAVEDWR[s.label]=s.win_rate); renderSubjectList();
           if(RANKERS.length) selectSubject(RANKERS[0]); });
       } else {
@@ -419,19 +444,24 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           fetch(API+'/api/f1/saved').then(r=>r.json()),
           fetch(API+'/api/f1/icons').then(r=>r.json()),
           fetch(API+'/api/f1/move_types').then(r=>r.json())
-        ]).then(([rs,sv,ic,mt])=>{ RANKERS=rs.slice().sort((a,b)=>rankNo(a.label)-rankNo(b.label)); SAVED=sv; ICONS=ic; Object.assign(MOVET,mt); renderSubjectList();
+        ]).then(([rs,sv,ic,mt])=>{ RANKERS=rs.slice().sort(cmpLabel); SAVED=sv; ICONS=ic; Object.assign(MOVET,mt); renderSubjectList();
           const first = RANKERS.findIndex(r=>sv[r.label]); selectSubject(RANKERS[first>=0?first:0]); });
       }
 
       function subjectWR(label){ if(STATIC) return (label in SAVEDWR)?SAVEDWR[label]:null;
         const s=SAVED[label]; if(!s) return null;
         const a=s.cards; return a.length? a.reduce((t,c)=>t+c.win_rate,0)/a.length : null; }
+      function seasonBadge(label){ const s=seasonOf(label); return s?`<span class="sbadge ${s==='M-1'?'m1':'m2'}">${s}</span>`:''; }
+      const nameNoSeason=l=>(l||'').replace(/^M-\d\s*/,'');   // バッジと重複する先頭「M-1/M-2」を名称から除去
       function renderSubjectList(){
-        $('subject-list').innerHTML = RANKERS.map((r,i)=>{ const wr=subjectWR(r.label);
+        $('subject-list').innerHTML = RANKERS.map((r,i)=>({r,i})).filter(({r})=>SUBJ_SEASONS[seasonOf(r.label)]!==false).map(({r,i})=>{ const wr=subjectWR(r.label);
           const wrs = wr!=null? `<span class="wr ${wr>=0.55?'g':wr<=0.45?'r':'n'}">${Math.round(wr*100)}%</span>` : `<span class="muted">未</span>`;
-          return `<div class="pitem" data-i="${i}" onclick="selectSubjectIdx(${i})"><span class="nm">${r.label}</span>${wrs}</div>`;
-        }).join('');
+          const sc=seasonOf(r.label)==='M-1'?'s-m1':seasonOf(r.label)==='M-2'?'s-m2':'';
+          return `<div class="pitem ${sc}" data-i="${i}" onclick="selectSubjectIdx(${i})">${seasonBadge(r.label)}<span class="nm">${nameNoSeason(r.label)}</span>${wrs}</div>`;
+        }).join('') || '<div class="muted" style="padding:.6em">表示するシーズンを選択してください</div>';
       }
+      function toggleSubjSeason(s,el){ SUBJ_SEASONS[s]=el.checked; renderSubjectList(); }
+      function toggleOppSeason(s,el){ OPP_SEASONS[s]=el.checked; if(TAB==='ranker') renderRankerTab(); }
       function selectSubjectIdx(i){ selectSubject(RANKERS[i]); }
       async function selectSubject(r){
         SUBJECT=r; OPP=null;
@@ -474,6 +504,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       }
 
       function switchTab(t){ TAB=t; $('tab-ranker').classList.toggle('active',t==='ranker'); $('tab-pokemon').classList.toggle('active',t==='pokemon');
+        const osb=$('opp-seasonbar'); if(osb) osb.style.display = (t==='ranker')?'flex':'none';
         OPP=null; $('opp-comp').innerHTML='<div class="muted">左の一覧から選択</div>'; $('detail').innerHTML=''; renderTab(); }
       function renderTab(){ $('sortbar').style.display = 'flex'; if(TAB==='ranker') renderRankerTab(); else renderPokemonTab(); }
       function setSort(s){
@@ -495,16 +526,16 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
         $('sort-num').textContent = SORT==='num' ? (NUMDIR==='asc' ? '番号順 ↑' : '番号順 ↓') : '番号順';
         $('sort-wr').textContent = SORT==='wr' ? (WRDIR==='asc' ? '勝率順 ↑（苦手→得意）' : '勝率順 ↓（得意→苦手）') : '勝率順';
         const rn = l => { const m=l.match(/#(\d+)/); return m?+m[1]:9999; };
-        const cards = Object.values(CARDS).sort((a,b)=>
-          SORT==='num' ? (NUMDIR==='asc'?rn(a.label)-rn(b.label):rn(b.label)-rn(a.label))
+        const cards = Object.values(CARDS).filter(c=>OPP_SEASONS[seasonOf(c.label)]!==false).sort((a,b)=>
+          SORT==='num' ? ((seasonOrd(a.label)-seasonOrd(b.label)) || (NUMDIR==='asc'?rn(a.label)-rn(b.label):rn(b.label)-rn(a.label)))
                        : (WRDIR==='asc'?a.win_rate-b.win_rate:b.win_rate-a.win_rate));
-        if(!cards.length){ $('opp-list').innerHTML='<div class="muted" style="padding:.6em">データなし</div>'; $('summary').textContent=''; return; }
+        if(!cards.length){ const all=Object.keys(CARDS).length; $('opp-list').innerHTML=`<div class="muted" style="padding:.6em">${all?'表示するシーズンを選択してください':'データなし'}</div>`; $('summary').textContent=''; return; }
         const s=cards.filter(c=>c.win_rate>=0.6).length,w=cards.filter(c=>c.win_rate<=0.4).length;
         $('summary').textContent=`${SUBJECT.label} vs 全${cards.length}ランカー ｜ 得意 ${s}・五分 ${cards.length-s-w}・苦手 ${w}`;
-        $('opp-list').innerHTML = cards.map(c=>{ const wr=Math.round(c.win_rate*100),cls=c.win_rate>=0.6?'g':c.win_rate<=0.4?'r':'n';
-          return `<div class="pitem" data-label="${encodeURIComponent(c.label)}" onclick="selectOppRanker('${c.label.replace(/'/g,"\\'")}')"><span class="nm">${c.label}</span><span class="muted">${c.wins}-${c.losses}-${c.draws}</span><span class="wr ${cls}">${wr}%</span></div>`;
+        $('opp-list').innerHTML = cards.map(c=>{ const wr=Math.round(c.win_rate*100),cls=c.win_rate>=0.6?'g':c.win_rate<=0.4?'r':'n'; const sc=seasonOf(c.label)==='M-1'?'s-m1':seasonOf(c.label)==='M-2'?'s-m2':'';
+          return `<div class="pitem ${sc}" data-label="${encodeURIComponent(c.label)}" onclick="selectOppRanker('${c.label.replace(/'/g,"\\'")}')">${seasonBadge(c.label)}<span class="nm">${nameNoSeason(c.label)}</span><span class="muted">${c.wins}-${c.losses}-${c.draws}</span><span class="wr ${cls}">${wr}%</span></div>`;
         }).join('');
-        if(!OPP || !CARDS[OPP]) selectOppRanker(cards[0].label);
+        if(!OPP || !cards.some(c=>c.label===OPP)) selectOppRanker(cards[0].label);
         else document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.label||'')===OPP));
       }
       function selectOppRanker(label){ OPP=label; const c=CARDS[label];
@@ -572,6 +603,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
                 <span id="replay-result" class="wr-tag"></span>
               </div>
               <div id="replay-sides"></div>
+              <div id="replay-expl"></div>
               <div id="replay-log" class="log"></div>
             </div>
           </div>
@@ -683,7 +715,11 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
         RBATTLE=d; RTURN=0; renderReplay(0); if(!noscroll) box&&box.scrollIntoView({behavior:'smooth',block:'nearest'}); }
       function closeReplay(){ stopAuto(); const b=$('rp-box'); if(b)b.classList.add('hidden'); RBATTLE=null; document.querySelectorAll('.rtab').forEach(e=>e.classList.remove('act')); }
       const hpColor=f=>f>0.5?'#22c55e':f>0.2?'#eab308':'#ef4444';
-      function renderMon(p,active,mine,action){
+      function renderMon(p,active,mine,action,hidden){
+        if(hidden){ return `<div class="rp-mon unknown">
+          <div class="rp-mon-ico"><span class="rp-unknown-q">？</span></div>
+          <div class="rp-mon-body"><div class="rp-mon-name muted">Unknown</div>
+          <div class="muted" style="font-size:.68rem">未登場</div></div></div>`; }
         const f=p.max_hp?p.hp/p.max_hp:0; const u=iconUrl(p.name);
         const boosts=Object.entries(p.stages||{}).filter(([,v])=>v).map(([k,v])=>`<span class="${v>0?'bup':'bdn'}">${k}${v>0?'▲':'▼'}${Math.abs(v)}</span>`).join(' ');
         return `<div class="rp-mon ${active?'act':''} ${p.alive?'':'dead'}">
@@ -707,15 +743,31 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
         if(sd.aurora_veil) h.push('オーロラベール');
         return `<div class="rp-haz">${h.map(x=>`<span class="hazchip">${x}</span>`).join('')}</div>`;
       }
-      function renderColumn(sd,mine,act){
+      const EXPL_REASON={qselect:'十分読んだ中で最も勝率が高い手',visit:'最も多く探索した手',downside_guard:'最悪ケースを避けて交代に変更'};
+      function renderExplain(t){
+        const e1=t.expl1; if(!e1) return '';        // 相手の評価は非表示（自分のみ）
+        const pc=x=>x==null?'—':Math.round(x*100)+'%';
+        const cands=e1.cands.slice();
+        let hon=null,mv=-1; for(const c of cands){ if(c.v>mv){ mv=c.v; hon=c.a; } }   // 本命＝最多探索
+        const thr=0.1*mv;                                                             // qselectの足切り相当(最多探索の10%)
+        cands.sort((a,b)=>(b.q==null?-1:b.q)-(a.q==null?-1:a.q));                      // 勝率順
+        const rows=cands.map(c=>{ const weak=(c.v||0)<thr && c.a!==e1.chosen;          // 探索不足＝勝率が当てにならない
+          return `<tr class="${c.a===e1.chosen?'chosen':''}${weak?' weak':''}"><td>${c.a===e1.chosen?'▶ ':''}${c.a}${c.a===hon?'<span class="honmei">本命</span>':''}${weak?'<span class="lowconf">自信×</span>':''}</td><td>${pc(c.q)}</td></tr>`;
+        }).join('');
+        return `<div class="expl"><div class="expl-h">🧠 この手番のAIの読み</div>
+          <div class="expl-side"><table class="expl-tbl"><tr><th>候補手</th><th>勝率</th></tr>${rows}</table></div></div>`;
+      }
+      function renderColumn(sd,mine,act,revealed){
         return `<div class="rp-col ${mine?'mine':'opp'}"><div class="rp-label">${mine?'自分':'相手'}</div>${hazardBar(sd)}
-          ${sd.party.map((p,i)=>renderMon(p,i===sd.active_idx,mine,(act||{})[p.name])).join('')}</div>`;
+          ${sd.party.map((p,i)=>renderMon(p,i===sd.active_idx,mine,(act||{})[p.name],revealed&&!revealed.has(i))).join('')}</div>`;
       }
       function renderReplay(idx){ if(!RBATTLE)return; RTURN=Math.max(0,Math.min(idx,RBATTLE.turns.length-1)); const t=RBATTLE.turns[RTURN];
         const acn={}; const a1=t.side1.party[t.side1.active_idx], a2=t.side2.party[t.side2.active_idx]; if(a1&&a2&&a1.name!==a2.name){ acn[a1.name]=1; acn[a2.name]=2; }
         const wc=t.weather_count?`（あと${t.weather_count}）`:''; const wx=(t.weather&&WEATHER[t.weather])?`${WEATHER[t.weather]}${wc}　`:''; const trc=t.trick_room_count?`（あと${t.trick_room_count}）`:''; const tr=t.trick_room?`🌀 トリックルーム${trc}`:''; const ACT=parseActions(t.logs, acn);
         const banner=(wx||tr)?`<div class="rp-banner">${wx}${tr}</div>`:'';
-        $('replay-sides').innerHTML=`${banner}<div class="rp-grid">${renderColumn(t.side1,true,ACT[1])}${renderColumn(t.side2,false,ACT[2])}</div>`;
+        const seenOpp=new Set(); for(let k=0;k<=RTURN;k++){ const ai=RBATTLE.turns[k].side2.active_idx; if(ai!=null)seenOpp.add(ai); }
+        $('replay-sides').innerHTML=`${banner}<div class="rp-grid">${renderColumn(t.side1,true,ACT[1])}${renderColumn(t.side2,false,ACT[2],seenOpp)}</div>`;
+        $('replay-expl').innerHTML = renderExplain(t);
         const simple=summarizeTurn(t.logs, acn);
         $('replay-log').innerHTML =
           `<div class="rlog-simple">${simple.length?simple.map(s=>`<div>${s}</div>`).join(''):'<div class="muted">行動なし</div>'}</div>`

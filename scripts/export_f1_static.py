@@ -181,6 +181,10 @@ def _slim_turn(t):
         o["weather"] = t["weather"]; o["weather_count"] = t.get("weather_count", 0)
     if t.get("trick_room"):
         o["trick_room"] = True; o["trick_room_count"] = t.get("trick_room_count", 0)
+    if t.get("expl1"):
+        o["expl1"] = t["expl1"]
+    if t.get("expl2"):
+        o["expl2"] = t["expl2"]
     return o
 
 

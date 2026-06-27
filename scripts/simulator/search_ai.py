@@ -126,8 +126,14 @@ class SearchAI:
         self.downside_guard = os.environ.get("MCTS_DOWNSIDE_GUARD", "1") == "1"
         self.downside_k = int(os.environ.get("MCTS_DOWNSIDE_K", "8"))          # サンプルする相手型数
         self.downside_margin = float(os.environ.get("MCTS_DOWNSIDE_MARGIN", "0.20"))  # この差以上で交代へ上書き
+        # 次ターン価値ブレンド：ルート手の評価を「末端Q(深い読み)」と「次ターンの状態価値(1手先)」の混合に。
+        # root_Q = (1-λ)·末端 + λ·次ターン。直後に明らかに損な手（無償死・反動相打ち）を避ける基礎力を付与。λ=0で従来。
+        self.nextturn_lambda = float(os.environ.get("MCTS_NEXTTURN_LAMBDA", "0"))
         self._track_depth = False      # Trueで各シミュの到達深さを _depth_hist に記録（計測用）
         self._depth_hist = []
+        # 解説用：各手番の意思決定内訳を last_decision に記録（再生の「なぜこの手か」表示用）。既定OFF。
+        self.explain = os.environ.get("MCTS_EXPLAIN", "0") == "1"
+        self.last_decision = None
 
     # ── 公開API（AIコールバック） ──────────────────────────────────
     def __call__(self, my_side: BattleSide, opp_side: BattleSide, field: BattleField) -> Action:
@@ -428,6 +434,7 @@ class SearchAI:
             ix = self._action_index(a); n = meN.get(ix, 0)
             q = (meW.get(ix, 0.0) / n) if n else -1.0
             stats.append((a, n, q))
+        reason = "qselect" if self.qselect else "visit"
         if self.qselect:
             # 十分訪問された手の中でQ最大（少simでも“正しいQ”を拾う）
             maxN = max(n for _, n, _ in stats) or 1
@@ -445,8 +452,33 @@ class SearchAI:
                             and getattr(a, "do_mega", False) and n >= best_n * 0.9):
                         chosen = a; break
         if self.downside_guard:
+            pre = chosen
             chosen = self._apply_downside_guard(my_side, opp_side, field, root_my, chosen)
+            if chosen is not pre:
+                reason = "downside_guard"
+        if self.explain:
+            tot = sum(n for _, n, _ in stats) or 1
+            rootV = sum(meW.get(self._action_index(a), 0.0) for a, _, _ in stats) / tot
+            top = sorted(stats, key=lambda x: -x[1])[:4]
+            self.last_decision = {
+                "value": round(rootV, 3),
+                "chosen": self._action_label(chosen, my_side),
+                "reason": reason,
+                "cands": [{"a": self._action_label(a, my_side), "v": round(n / tot, 3),
+                           "q": (round(q, 3) if q >= 0 else None)} for a, n, q in top],
+            }
         return chosen
+
+    def _action_label(self, a, side) -> str:
+        """行動を人間可読ラベルへ（解説表示用）。"""
+        if a.type == "switch":
+            tgt = side.party[a.switch_to].name if 0 <= a.switch_to < len(side.party) else "?"
+            return f"{tgt}に交代"
+        if a.type == "move" and a.move_idx is not None and a.move_idx >= 0:
+            mv = side.active.moves[a.move_idx] if a.move_idx < len(side.active.moves) else None
+            nm = mv.name_jp if mv else "?"
+            return ("メガ+" if getattr(a, "do_mega", False) else "") + nm
+        return "様子見"
 
     def _downside_value(self, my_side, opp_side, field, a) -> float:
         """行動a の「最悪型」価値：相手型をK個サンプルし、各型で相手最善応手(自分価値最小)を取り、
@@ -822,6 +854,7 @@ class SearchAI:
         path = []   # [(node, idx_me, idx_op)]
         depth = 0
         v = None
+        first_v = None   # 深さ1（=次ターン後）の状態価値（自分視点P(勝)）
         while True:
             me_s = cs1 if my_is_s1 else cs2
             op_s = cs2 if my_is_s1 else cs1
@@ -836,6 +869,7 @@ class SearchAI:
             depth += 1
             if winner != 0:
                 v = 1.0 if ((winner == 1) == my_is_s1) else 0.0
+                if depth == 1: first_v = v
                 break
             key = (idx_me, idx_op)
             child = node["children"].get(key)
@@ -847,17 +881,25 @@ class SearchAI:
                 else:
                     self._expand_node(child, cs1, cs2, cfield, my_is_s1)
                     v = self._mcts_leaf_value(cs1, cs2, cfield, my_is_s1)
+                child["v"] = v
+                if depth == 1: first_v = v
                 break
             node = child
+            if depth == 1: first_v = child.get("v", None)
             if depth >= self.mcts_max_depth:
                 v = self._mcts_leaf_value(cs1, cs2, cfield, my_is_s1); break
         if self._track_depth:
             self._depth_hist.append(depth)
+        # 次ターン価値ブレンド：ルートの自分手の評価のみ「末端Qと次ターン価値の混合」にする（相手側・深い節は従来）。
+        # 直後に大きく価値を落とす手（無償死・反動相打ち等）はλ分だけ減点され、基礎的な違和感を回避する。
+        lam = self.nextturn_lambda
+        fv = first_v if first_v is not None else v
+        v_root = (1.0 - lam) * v + lam * fv if lam > 0 else v
         exp3 = (self.mcts_select == "exp3")
-        for (nd, im, io, sm, so) in path:
+        for k, (nd, im, io, sm, so) in enumerate(path):
             nd["total"] += 1
             nd["N"][0][im] = nd["N"][0].get(im, 0) + 1
-            nd["W"][0][im] = nd["W"][0].get(im, 0.0) + v
+            nd["W"][0][im] = nd["W"][0].get(im, 0.0) + (v_root if k == 0 else v)
             nd["N"][1][io] = nd["N"][1].get(io, 0) + 1
             nd["W"][1][io] = nd["W"][1].get(io, 0.0) + (1.0 - v)
             if exp3:   # 重要度重み付き推定報酬を累積: S(a)+=報酬/選択確率

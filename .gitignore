@@ -47,3 +47,6 @@ scripts/venv/
 scripts/build/
 ga4_client_secret.json
 .env.local
+
+# ローカル検証専用（Pages除外・R2不使用）
+public/sim-data-verify/
