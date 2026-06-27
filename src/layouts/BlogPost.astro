@@ -113,6 +113,8 @@ const breadcrumbJsonLd = {
 				color: rgb(var(--black));
 			}
 			:global(.prose h1) { font-size: 1.3rem; }
+			:global(.prose th) { white-space: nowrap; }
+			:global(.prose table) { display: block; overflow-x: auto; max-width: 100%; }
 			@media (max-width: 720px) {
 				.prose { font-size: 14px; padding: 0.5em 0.75em 2em; }
 				/* 記事内ポケモン画像をモバイルで縮小 */
@@ -162,9 +164,14 @@ const breadcrumbJsonLd = {
 				document.body.appendChild(tip);
 				let tipTimer;
 
-				document.querySelectorAll('span > img[src*="/images/types/"]').forEach(img => {
-					const span = img.parentElement;
-					[...span.childNodes].filter(n => n.nodeType === 3).forEach(n => n.remove());
+				document.querySelectorAll('img[src*="/images/types/"]').forEach(img => {
+					// 直後のテキストノードがalt名と一致する場合に削除
+					let next = img.nextSibling;
+					while (next && next.nodeType === 3) {
+						const n = next;
+						next = n.nextSibling;
+						if (n.textContent.trim() === img.alt) n.remove();
+					}
 					img.style.cursor = 'pointer';
 					img.addEventListener('click', e => {
 						e.stopPropagation();
