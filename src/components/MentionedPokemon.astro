@@ -17,6 +17,7 @@ const mentioned = Object.entries(m)
 	.filter(([slug, v]) => slug !== currentSlug && body.includes(v.matchKey))
 	.map(([slug, v]) => ({ slug, ...v }))
 	.sort((a, b) => a.rank - b.rank)
+	.filter((e, i, arr) => arr.findIndex(x => x.name === e.name) === i)
 	.slice(0, max);
 ---
 
