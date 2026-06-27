@@ -3,12 +3,11 @@ import type { CollectionEntry } from 'astro:content';
 import AdUnit from '../components/AdUnit.astro';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 
 type Props = CollectionEntry<'pokemon'>['data'];
 
-const { title, description, pubDate, updatedDate, pokemonName, dexNumber, imageForm } = Astro.props;
+const { title, description, pokemonName, dexNumber, imageForm } = Astro.props;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
@@ -45,17 +44,37 @@ const breadcrumbJsonLd = {
 				width: 100%;
 				max-width: 100%;
 				margin: 0;
+				padding: 0;
 			}
 			.prose {
 				width: min(1100px, calc(100% - 2em));
 				margin: auto;
-				padding: 1em;
+				padding: 0.75em 1em 2em;
 				color: rgb(var(--gray-dark));
+				font-size: 15px;
+				line-height: 1.6;
 			}
 			.prose :global(table) {
 				display: block;
 				overflow-x: auto;
 				max-width: 100%;
+			}
+			/* global.css の過剰スペースをポケモンページに限り圧縮 */
+			:global(.prose p) { margin-bottom: 0.75em; }
+			:global(.prose hr) { margin: 0.35rem 0; border-color: #f1f5f9; }
+			:global(.prose h3) {
+				font-size: 0.95rem;
+				font-weight: 700;
+				margin: 0.75rem 0 0.4rem;
+				color: rgb(var(--black));
+			}
+			:global(.prose h1) {
+				font-size: 1.3rem;
+				margin: 0 0 0.4rem;
+			}
+			@media (max-width: 720px) {
+				.prose { font-size: 14px; padding: 0.5em 0.75em 2em; }
+				.page-meta { display: none; }
 			}
 			.page-meta {
 				display: flex;
@@ -74,10 +93,66 @@ const breadcrumbJsonLd = {
 				padding: 2px 8px;
 				border-radius: 4px;
 			}
+
+			/* ① スティッキー目次ナビ */
+			.poke-nav {
+				background: white;
+				border-bottom: 1px solid #f1f5f9;
+				overflow-x: auto;
+				scrollbar-width: none;
+				z-index: 30;
+			}
+			.poke-nav::-webkit-scrollbar { display: none; }
+			.poke-nav-inner {
+				display: flex;
+				gap: 2px;
+				padding: 4px 1rem;
+				max-width: min(1100px, 100%);
+				margin: 0 auto;
+				min-height: 36px;
+				align-items: center;
+			}
+			:global(.poke-nav a) {
+				font-size: 0.79rem;
+				font-weight: 600;
+				color: rgb(var(--gray));
+				text-decoration: none;
+				padding: 5px 10px;
+				border-radius: 6px;
+				white-space: nowrap;
+				transition: background 0.15s, color 0.15s;
+				flex-shrink: 0;
+			}
+			:global(.poke-nav a:hover) { background: #f8fafc; color: rgb(var(--black)); }
+			:global(.poke-nav a.active) {
+				background: #fff7ed;
+				color: var(--accent);
+			}
+			@media (min-width: 1024px) {
+				.poke-nav {
+					position: sticky;
+					top: 0;
+				}
+			}
+
+			/* ③ セクションヘッダー色分け */
+			:global(.prose h2) {
+				font-size: 1rem;
+				font-weight: 700;
+				color: rgb(var(--black));
+				margin: 1.25rem 0 0.6rem;
+				padding: 0.45rem 0.9rem;
+				background: #f8fafc;
+				border-left: 3px solid var(--accent, #f97316);
+				border-radius: 0 6px 6px 0;
+			}
 		</style>
 	</head>
 	<body>
 		<Header />
+		<nav class="poke-nav" id="poke-nav" aria-label="セクションナビゲーション">
+			<div class="poke-nav-inner" id="poke-nav-inner"></div>
+		</nav>
 		<main>
 			<article>
 				<div class="prose">
@@ -90,5 +165,89 @@ const breadcrumbJsonLd = {
 			</article>
 		</main>
 		<Footer />
+
+		<script>
+			(function () {
+				const prose = document.querySelector('.prose');
+				const navInner = document.getElementById('poke-nav-inner');
+				const nav = document.getElementById('poke-nav');
+				if (!prose || !navInner || !nav) return;
+
+				// h2 を収集してナビリンクを生成
+				const headings = [...prose.querySelectorAll('h2')];
+				if (headings.length === 0) {
+					nav.style.display = 'none';
+					return;
+				}
+				headings.forEach((h, i) => {
+					if (!h.id) h.id = `sec-${i}`;
+					const a = document.createElement('a');
+					a.href = `#${h.id}`;
+					a.textContent = h.textContent.trim();
+					navInner.appendChild(a);
+				});
+
+				// ② ヒーローカードを強化（page-meta を除いた最初の div = マークダウンのヒーロー div）
+				const heroDiv = prose.querySelector(':scope > div:not(.page-meta)');
+				if (heroDiv) {
+					const mobile = window.matchMedia('(max-width: 720px)').matches;
+					heroDiv.style.background = '#f8fafc';
+					heroDiv.style.border = '1px solid #e2e8f0';
+					heroDiv.style.borderRadius = '14px';
+					heroDiv.style.padding = mobile ? '10px 12px' : '20px 24px';
+					heroDiv.style.gap = mobile ? '10px' : '16px';
+					heroDiv.style.marginBottom = '8px';
+					heroDiv.style.marginTop = '0';
+					heroDiv.style.boxSizing = 'border-box';
+					if (mobile) {
+						const pkImg = heroDiv.querySelector('img:not([src*="/images/types/"])');
+						if (pkImg) { pkImg.style.width = '58px'; pkImg.style.height = '58px'; }
+						heroDiv.querySelectorAll('img[src*="/images/types/"]').forEach(img => {
+							img.style.width = '24px'; img.style.height = '24px';
+						});
+						const h1 = heroDiv.querySelector('h1');
+						if (h1) { h1.style.fontSize = '1.05rem'; h1.style.marginBottom = '3px'; }
+					}
+				}
+
+				// モバイル: ヘッダーの高さ分だけ sticky top を下げる
+				const headerEl = document.querySelector('header');
+				if (headerEl && headerEl.offsetHeight > 0) {
+					nav.style.position = 'sticky';
+					nav.style.top = `${headerEl.offsetHeight}px`;
+				}
+
+				// scroll-margin-top をナビ高さに合わせて動的に設定
+				function applyScrollMargin() {
+					const headerH = headerEl ? headerEl.offsetHeight : 0;
+					const navH = nav.offsetHeight;
+					const offset = `${headerH + navH + 8}px`;
+					headings.forEach(h => (h.style.scrollMarginTop = offset));
+				}
+				applyScrollMargin();
+				window.addEventListener('resize', applyScrollMargin, { passive: true });
+
+				// スクロール追従でアクティブリンクを更新
+				const navLinks = [...navInner.querySelectorAll('a')];
+				function updateActive() {
+					const headerH = headerEl ? headerEl.offsetHeight : 0;
+					const navH = nav.offsetHeight;
+					const threshold = headerH + navH + 20;
+					let currentId = '';
+					headings.forEach(h => {
+						if (h.getBoundingClientRect().top + window.scrollY - threshold <= window.scrollY) {
+							currentId = h.id;
+						}
+					});
+					navLinks.forEach(a => {
+						const active = a.getAttribute('href') === `#${currentId}`;
+						a.classList.toggle('active', active);
+						if (active) a.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+					});
+				}
+				window.addEventListener('scroll', updateActive, { passive: true });
+				updateActive();
+			})();
+		</script>
 	</body>
 </html>

@@ -1,6 +1,6 @@
 ---
 import { SITE_TITLE } from '../consts';
-import HeaderLink from './HeaderLink.astro';
+import GlobalSearch from './GlobalSearch.astro';
 import Sidebar from './Sidebar.astro';
 ---
 
@@ -17,6 +17,9 @@ import Sidebar from './Sidebar.astro';
 			<span></span><span></span><span></span>
 		</button>
 	</nav>
+	<div class="header-search">
+		<GlobalSearch variant="sidebar" />
+	</div>
 </header>
 <style>
 	header {
@@ -86,6 +89,9 @@ import Sidebar from './Sidebar.astro';
 	}
 	.hamburger[aria-expanded="true"] span:nth-child(3) {
 		transform: translateY(-7px) rotate(-45deg);
+	}
+	.header-search {
+		padding-bottom: 6px;
 	}
 	/* PCではサイドバーがナビを担うのでヘッダー自体を隠す */
 	@media (min-width: 1024px) {

@@ -1,5 +1,6 @@
 ---
 import { SITE_TITLE } from '../consts';
+import GlobalSearch from './GlobalSearch.astro';
 
 const TYPES: [string, string][] = [
 	['ノーマル', 'normal'], ['ほのお', 'fire'], ['みず', 'water'], ['でんき', 'electric'],
@@ -26,6 +27,7 @@ const isM2Active = path.startsWith('/blog/m2') || (path.startsWith('/blog/') && 
 		<img class="sb-logo" src="/logo-mark.png" alt="ポケナビ ロゴ" width="36" height="36" />
 		<span class="sb-brand-text">{SITE_TITLE}</span>
 	</a>
+	<GlobalSearch variant="sidebar" />
 	<nav class="sb-nav">
 		<a href="/" class:list={['sb-link', { active: path === '/' }]}>ホーム</a>
 

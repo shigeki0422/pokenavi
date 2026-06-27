@@ -1,0 +1,284 @@
+---
+interface Props {
+  variant?: 'sidebar' | 'hero';
+}
+const { variant = 'sidebar' } = Astro.props;
+---
+
+<div class:list={['gs', `gs--${variant}`]} data-global-search>
+  <div class="gs-field">
+    <svg class="gs-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+    </svg>
+    <input class="gs-input" type="text" placeholder="ポケモン・記事を検索..." autocomplete="off" spellcheck="false" enterkeyhint="go" aria-label="検索" />
+    <button class="gs-clear" type="button" hidden aria-label="クリア">
+      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
+        <path d="M18 6 6 18M6 6l12 12"/>
+      </svg>
+    </button>
+  </div>
+  <div class="gs-results" hidden role="listbox" aria-label="検索結果"></div>
+</div>
+
+<style>
+  .gs {
+    position: relative;
+    z-index: 100;
+  }
+  .gs--sidebar {
+    padding: 0.55rem 0.75rem 0.65rem;
+    border-bottom: 1px solid #f1f5f9;
+  }
+  .gs--hero {
+    max-width: 520px;
+    margin: 1.5rem auto 0;
+    padding: 0 1rem;
+  }
+  .gs-field {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f8fafc;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 0 10px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .gs--hero .gs-field {
+    border-radius: 12px;
+    padding: 0 16px;
+    background: white;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    border-color: #e2e8f0;
+  }
+  .gs-field:focus-within {
+    border-color: var(--accent, #f97316);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+  }
+  .gs-icon {
+    color: #94a3b8;
+    flex-shrink: 0;
+  }
+  .gs-input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 0.83rem;
+    height: 34px;
+    outline: none;
+    color: rgb(var(--black, 0 0 0));
+    min-width: 0;
+  }
+  .gs--hero .gs-input {
+    font-size: 1rem;
+    height: 50px;
+  }
+  .gs-input::placeholder { color: #94a3b8; }
+  .gs-clear {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 3px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    line-height: 1;
+  }
+  .gs-clear:hover { color: #475569; background: #f1f5f9; }
+  :global(.gs-results) {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.13);
+    z-index: 200;
+    overflow: hidden;
+    max-height: 380px;
+    overflow-y: auto;
+  }
+  .gs--sidebar :global(.gs-results) {
+    left: 0;
+    right: auto;
+    width: 280px;
+  }
+  .gs--hero :global(.gs-results) {
+    left: 1rem;
+    right: 1rem;
+  }
+  :global(.gs-item) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    text-decoration: none;
+    color: #1e293b;
+    font-size: 0.82rem;
+    border-bottom: 1px solid #f8fafc;
+    transition: background 0.1s;
+    cursor: pointer;
+    min-width: 0;
+  }
+  :global(.gs-item:last-child) { border-bottom: none; }
+  :global(.gs-item:hover), :global(.gs-item--active) { background: #fff7ed; }
+  :global(.gs-sprite) {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+  :global(.gs-blog-icon) {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eff6ff;
+    border-radius: 5px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #3b82f6;
+    flex-shrink: 0;
+    letter-spacing: -0.02em;
+  }
+  :global(.gs-name) {
+    flex: 1;
+    min-width: 0;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  :global(.gs-name--blog) { font-weight: 400; font-size: 0.78rem; }
+  :global(.gs-name mark) {
+    background: #fef9c3;
+    color: inherit;
+    border-radius: 2px;
+    padding: 0 1px;
+  }
+  :global(.gs-badge) {
+    font-size: 0.63rem;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 2px 8px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+  :global(.gs-badge--rank) { background: #fff7ed; color: #ea580c; }
+  :global(.gs-badge--blog) { background: #eff6ff; color: #2563eb; }
+  :global(.gs-empty) {
+    padding: 1.2rem;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.84rem;
+  }
+</style>
+
+<script>
+  let _idx = null;
+
+  async function loadIdx() {
+    if (_idx) return _idx;
+    try {
+      _idx = await fetch('/search-index.json').then(r => r.json());
+    } catch {
+      _idx = [];
+    }
+    return _idx;
+  }
+
+  function toKatakana(str) {
+    return str.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+  }
+
+  function hl(text, q) {
+    const qk = toKatakana(q);
+    const target = qk !== q ? qk : q;
+    const i = text.indexOf(target);
+    if (i < 0) return text;
+    return (
+      text.slice(0, i) +
+      '<mark>' + text.slice(i, i + target.length) + '</mark>' +
+      text.slice(i + target.length)
+    );
+  }
+
+  document.querySelectorAll('[data-global-search]').forEach(el => {
+    const input = el.querySelector('.gs-input');
+    const results = el.querySelector('.gs-results');
+    const clearBtn = el.querySelector('.gs-clear');
+    let active = -1;
+
+    input.addEventListener('input', async () => {
+      const q = input.value.trim();
+      clearBtn.hidden = !q;
+      if (!q) { results.hidden = true; return; }
+
+      const qk = toKatakana(q);
+      const data = await loadIdx();
+      const hits = data.filter(item => item.n.includes(q) || item.n.includes(qk)).slice(0, 8);
+
+      if (!hits.length) {
+        results.innerHTML = '<div class="gs-empty">見つかりませんでした</div>';
+        results.hidden = false;
+        active = -1;
+        return;
+      }
+
+      results.innerHTML = hits.map(item => {
+        if (item.t === 'p') {
+          return `<a class="gs-item" href="${item.u}" role="option">
+            <img src="${item.i}" alt="" width="34" height="34" class="gs-sprite" loading="lazy">
+            <span class="gs-name">${hl(item.n, q)}</span>
+            <span class="gs-badge gs-badge--rank">${item.r}位</span>
+          </a>`;
+        } else {
+          return `<a class="gs-item" href="${item.u}" role="option">
+            <span class="gs-blog-icon">考察</span>
+            <span class="gs-name gs-name--blog">${hl(item.n, q)}</span>
+            <span class="gs-badge gs-badge--blog">${item.s || '記事'}</span>
+          </a>`;
+        }
+      }).join('');
+      results.hidden = false;
+      active = -1;
+    });
+
+    input.addEventListener('keydown', e => {
+      const items = [...results.querySelectorAll('.gs-item')];
+      if (!items.length) return;
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        active = Math.min(active + 1, items.length - 1);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        active = Math.max(active - 1, -1);
+      } else if (e.key === 'Enter' && active >= 0) {
+        items[active].click(); return;
+      } else if (e.key === 'Escape') {
+        results.hidden = true;
+        input.value = '';
+        clearBtn.hidden = true;
+        active = -1;
+        return;
+      } else { return; }
+      items.forEach((el, i) => el.classList.toggle('gs-item--active', i === active));
+      items[active]?.scrollIntoView({ block: 'nearest' });
+    });
+
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      clearBtn.hidden = true;
+      results.hidden = true;
+      input.focus();
+    });
+
+    document.addEventListener('click', e => {
+      if (!el.contains(e.target)) results.hidden = true;
+    });
+  });
+</script>

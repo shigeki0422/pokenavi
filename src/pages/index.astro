@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
+import GlobalSearch from '../components/GlobalSearch.astro';
 import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
@@ -142,6 +143,7 @@ const organizationJsonLd = {
 			<section class="hero">
 				<h1>データで読み解くポケモン対戦</h1>
 				<p>対戦シミュレーション・使用率・パーティ構成をデータの観点で分析します</p>
+				<GlobalSearch variant="hero" />
 			</section>
 
 			<section style="margin-bottom:3rem">
