@@ -783,3 +783,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </div>
 
 ---
+
+## 考察記事
+
+<ArticleCard slug="scrafty-analysis-m3" />

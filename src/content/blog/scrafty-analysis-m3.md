@@ -3,7 +3,7 @@ title: '【ポケモンチャンピオンズ】ズルズキン考察 M-3 使用�
 description: 'M-3シングルバトルで使用率77位のズルズキンを徹底分析。メガズルズキンはドレインパンチ86.4%・はたきおとす72.3%のメインウェポン2本に、りゅうのまい50.0%の全抜き型とビルドアップ28.5%の耐久積み型が混在。いかく97.5%の特性も詳しく解説。'
 pubDate: '2026-06-26'
 heroImage: '../../assets/hero-scrafty-m3.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -49,6 +49,8 @@ draft: true
 ### 2. いかくで積む隙を自ら作り出す
 
 特性いかく（97.5%）は場に出た瞬間に相手のこうげきを1段階下げるため、物理アタッカーへの後出しから積み技に繋ぐ流れが成立します。ビルドアップ（28.5%）ならぼうぎょも同時に上げて耐久を底上げしながら積め、りゅうのまい（50.0%）なら素早さも確保して全抜き態勢に入れます。相手の物理攻撃を受けても、いかく発動済みの状態で積み始めれば実質的な被ダメを抑えながら攻撃力を蓄積できます。
+
+なお、メガ前のズルズキンも特性いかくを持てるため、メガ進化ターンにいかくが2回発動する「ダブルいかく」が成立します。相手の物理こうげきを合計2段階下げてからメガ進化後の積みに入れるため、積み展開の成功率をさらに高められます。
 
 ### 3. ドレインパンチで積みながら回復できる自己完結構成
 
@@ -297,7 +299,7 @@ draft: true
 
 **弱み:**
 
-りゅうのまいを積む前のすばやさ68は環境の大半のポケモンより遅く、積む前に上から弱点技（かくとう×2・ひこう×2・フェアリー×4）を受けると動く隙がありません。かくとう・ひこうの×2弱点は環境上位のポケモン多数から突かれるリスクがあり、対面で積む機会は限られます。
+すばやさ68は環境の大半のポケモンより遅く、りゅうのまいを積む前に上から弱点技（かくとう×2・ひこう×2・フェアリー×4）を受けると動く隙がありません。かくとう・ひこうの×2弱点は環境上位のポケモン多数から突かれるリスクがあり、対面で積む機会は限られます。
 
 ---
 
@@ -377,7 +379,7 @@ draft: true
 
 ## 環境ポケモンへの相性分析
 
-### 有利・不利がはっきり出る主要ポケモン
+### 環境ポケモンとの相性
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -391,17 +393,31 @@ draft: true
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（2位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト/フェアリーにドレインパンチは無効ですが、はたきおとす（あく）がフェアリーに等倍で通り、ばけのかわを剥いだ後はあく技で押せます。ミミッキュのじゃれつく（フェアリー）はズルズキンの×4弱点ですが、いかくでこうげきを下げてから積めば耐久力も増します</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1000-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サーフゴー（23位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ドレインパンチ（かくとう）はサーフゴー（はがね/ゴースト）に×0で完全無効。有効打ははたきおとす（あく）の×2のみ。一方、サーフゴーはきあいだま（かくとう）を11.9%採用しており、ズルズキンのかくとう×2弱点を突かれる個体が約12%存在する</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メタグロス（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドレインパンチ（かくとう）ははがね/エスパーに等倍止まりで決定打にならず、はたきおとす（あく）はエスパーに×2で通る。メタグロスはメガ石96.9%でメガ後S110（実数値178、ようき補正）。りゅうのまい未積みのズルズキンS68（実数値120）には先手を取られやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドレインパンチ（かくとう）ははがね/エスパーに等倍止まりで決定打にならず、はたきおとす（あく）はエスパーに×2で通る。メタグロスはメガ石96.9%でメガ後S110（実数値178、ようき補正）。りゅうのまい未積みのズルズキンS68（無振り実数値88、S32振りでも120）には先手を取られやすい</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき最速でS実数値169（スカーフ26.7%）で積み前に先手を取られ、じしん（じめん×2弱点）で大ダメージ。れいとうパンチで×4の有効打はあるが、スカーフ個体には積み後でも後手を踏むリスクがある</td>
 </tr>
 </tbody>
 </table>
@@ -459,14 +475,14 @@ draft: true
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ">
     <div class="name">ライチュウ</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速でんき枠。S68のズルズキンが先手を取れない高速アタッカーをでんじほう（でんき）で削り、消耗させてから後続のズルズキンを通す</div>
+    <div class="rate">同居率8位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">高速でんき枠。ズルズキンが苦手な高速アタッカーをでんじほうで削り、消耗させてから後続のズルズキンを通す役割。ただしライチュウ自身はズルズキンにとって苦手な相手でもあるため、同じ構築に入れる場合は選出を分散させる</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
-    <div class="name">アーマーガア</div>
-    <div class="rate">同居率上位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ひこう。ズルズキンのフェアリー×4弱点をはがね複合（フェアリー半減）で受け、てっぺき＋はねやすめで物理を起点にしにくい受け枠を担う</div>
+    <img src="/images/pokemon/pokemon-0038-01.webp" alt="アローラキュウコン">
+    <div class="name">アローラキュウコン</div>
+    <div class="rate">同居率5位</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">こおり/フェアリー。オーロラベールでズルズキンの積み展開をサポートし、フェアリー技でズルズキンが苦手なかくとう無効のゴースト勢に打点を出せる</div>
   </div>
 </div>
 
@@ -474,8 +490,8 @@ draft: true
 
 ズルズキンはいかく＋積み技＋ドレインパンチで物理アタッカーへの受け出しから全抜きを狙える一方、かくとう×2・ひこう×2・フェアリー×4の弱点をパーティ単位でカバーする必要があります。
 
-1. **かくとう×2対策**: かくとうを無効化するゴーストタイプや、かくとうを半減するひこう単タイプで受ける枠を用意する（アーマーガアははがね複合のためかくとうは等倍で受けに不向き）
-2. **ひこう・フェアリー対策**: でんき技・はがね技を持つ枠でひこう・フェアリー弱点に打点を入れる。アーマーガア（はがね複合）はフェアリー半減で×4弱点を肩代わりできる
+1. **かくとう×2対策**: かくとうを無効化するゴーストタイプや、かくとうを半減するひこう単タイプで受ける枠を用意する
+2. **ひこう・フェアリー対策**: でんき技・はがね技・こおり技を持つ枠でひこう・フェアリー弱点に打点を入れる。アローラキュウコン（こおり/フェアリー）はオーロラベールで積みをサポートしつつフェアリー技を持てる補完枠
 3. **速度補完**: S68という低速を補うため、高速アタッカーで相手を消耗させてからズルズキンを通す
 4. **いかく連携**: いかくを活かして物理アタッカーに後出しし、積む隙を確保してから全抜きに繋ぐ
 

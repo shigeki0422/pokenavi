@@ -3,7 +3,7 @@ title: '【ポケモンチャンピオンズ】カエンジシ考察 M-3 使用�
 description: 'M-3シングルバトルで使用率92位のメガカエンジシを徹底分析。メガ後ほのおのたてがみ・C129/S126の特殊アタッカーとして、おくびょう75.2%・かえんほうしゃ89.0%を軸にした実データで解説。ねっさのだいちでじめん/はがね補完も可能。環境での立ち回りまで紹介します。'
 pubDate: '2026-06-26'
 heroImage: '../../assets/hero-pyroar-m3.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -117,7 +117,7 @@ draft: true
   </div>
 </div>
 
-C129・S126はメガ進化後の特殊アタッカーとして高い水準です。おくびょうS32でS実数値195・C実数値181、ひかえめC32でC実数値199・S実数値178となり、おくびょうは素早さ、ひかえめは火力に寄せた配分になります。主軸型（H2-C32-S32）ではHP実数値163・B112・D106と耐久は低く、上から弱点技を受けると大きなダメージになります。耐久に頼らずSで先制して削るのが前提の型です。
+C129・S126はメガ進化後の特殊アタッカーとして高い水準です。おくびょうS32でS実数値195・C実数値181、ひかえめC32でC実数値199・S実数値178となり、おくびょうは素早さ、ひかえめは火力に寄せた配分になります。主軸型（H2-C32-S32）ではHP実数値162・B112・D106と耐久は低く、上から弱点技を受けると大きなダメージになります。耐久に頼らずSで先制して削るのが前提の型です。
 
 ### タイプ・弱点
 
@@ -374,7 +374,7 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/はがね複合でほのお技が×4で通る。最速個体（メガ後S実数値139）でもS195から確実に先手を取れ、かえんほうしゃ1発で大きく削れます</td>
 </tr>
-<tr style="background:#fafafa">
+<tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0979-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">コノヨザル（45位）
   </td>
@@ -429,12 +429,84 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガメタグロス（6位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん×2弱点でじしん（採用率75.6%）が刺さる。S195で先手は取れるがほのお技1発で倒し切れず、返しのじしんでHP実数値163・B112の低耐久を貫かれる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん×2弱点でじしん（採用率75.6%）が刺さる。S195で先手は取れるがほのお技1発で倒し切れず、返しのじしんでHP実数値162・B112の低耐久を貫かれる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこうタイプや浮遊持ちでじしんを無効化してから処理する</td>
 </tr>
 </tbody>
 </table>
 </div>
+
+---
+
+## メガリザードンYとの差別化
+
+M-3使用率8位のリザードンはリザードナイトY採用率77.5%・リザードナイトX採用率21.1%で、以下はY型を想定した比較です。メガリザードンYは、ほのお/ひこうタイプに特性ひでり（メガ後）を持つ特殊アタッカーで、カエンジシと同じほのお特殊枠として競合します。採用を判断する際に両者の差異が問われる場面では、以下の4点が決め手になります。
+
+### タイプ差による耐性・弱点の分岐
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left">攻撃タイプ</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1">カエンジシ<br><small>ほのお/ノーマル</small></th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1">メガリザードンY<br><small>ほのお/ひこう</small></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:left"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">じめん</td>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;color:#dc2626;font-weight:bold">×2</td>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;color:#16a34a;font-weight:bold">×0（無効）</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:left"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">いわ</td>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;color:#dc2626;font-weight:bold">×2</td>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;color:#dc2626;font-weight:bold">×4</td>
+</tr>
+<tr>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:left"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">かくとう</td>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;color:#dc2626;font-weight:bold">×2</td>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;color:#16a34a;font-weight:bold">×0.5</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:left"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">でんき</td>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0">×1</td>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;color:#dc2626;font-weight:bold">×2</td>
+</tr>
+<tr>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;text-align:left"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:22px;height:22px;vertical-align:middle;margin-right:4px">ゴースト</td>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0;color:#16a34a;font-weight:bold">×0（無効）</td>
+  <td style="padding:7px 10px;border:1px solid #e2e8f0">×1</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+**カエンジシの優位点：** ゴースト無効によりシャドーボール系の技を受け流せます。リザードンYはじめん無効ですが、カエンジシはじめんが等倍で通るため、ガブリアスやメタグロスのじしんにはリザードンYより弱い点は把握しておく必要があります。
+
+**リザードンYの優位点：** じめんを完全無効化するためガブリアスのじしんが通らず、かくとう半減でコノヨザル（45位）のかくとう技を受けやすい構造です。ただしいわ×4が致命的で、環境にいわ技持ちが増えると採用コストが上がります。
+
+### 火力：リザードンYがC実数値で大きく上回る
+
+リザードンY（C種族値159）はひかえめH2-C32-S32でC実数値232、おくびょう同EVでC実数値211です。カエンジシ（C種族値129）のひかえめC実数値199・おくびょうC実数値181と比べると、**ひかえめ同士でC実数値が33差（約17%高い）** あります。メガ後の特性ひでりはソーラービーム即時発動と合わせて多彩な打点を付与し、最多採用技ソーラービーム（76.5%）・かえんほうしゃ（47.5%）・エアスラッシュ（45.5%）の3択がある点でカバレッジの広さも異なります。カエンジシが持つほのおのたてがみ（ほのお技×1.5）はほのお技に絞った補正であり、ひでり補正（ほのお×1.5）も実質同等ですが、ひでり側はソーラービーム・エアスラッシュ・ウェザーボール（24.8%）といった非ほのお技にもダメージを確保できる分、等倍カバーの幅が広くなります。
+
+### 素早さ：カエンジシがS実数値で優位
+
+カエンジシ（S種族値126）おくびょうS32でS実数値195に対し、リザードンY（S種族値100）おくびょうS32はS実数値167・ひかえめS32は152です。採用率最多のひかえめ（42.8%）・EV分布H2-C32-S32構成（39.1%）のリザードンY（S152）に対し、カエンジシはおくびょう・ひかえめいずれの型でも先手を取れます。スカーフ採用率0.2%とほぼ0に近いため、リザードンYはスカーフ補正を考慮する必要がなく、S差は実際に機能します。
+
+### 採用の判断基準
+
+| 採用を優先する状況 | カエンジシ | メガリザードンY |
+|---|---|---|
+| じめん・じしんを受け流したい | ▲（×2だが無効でない） | ◎（完全無効） |
+| かくとう勢を受け止めたい | ✕（×2弱点） | ○（半減） |
+| 素早さで先手を確保したい | ◎（S実数値195） | △（S実数値152-167） |
+| 最大火力の特殊打点が欲しい | △（C実数値181-199） | ◎（C実数値211-232） |
+| ゴースト技を受け流したい | ◎（無効） | ✕（等倍） |
+| いわ技を安全に受けたい | ○（×2止まり） | ✕（×4） |
+
+ほのお特殊枠の選択として、**素早さと弱点の被害軽減を重視するならカエンジシ、火力と物理受け（かくとう・じめん）の耐性を重視するならメガリザードンY**が機能する場面が多くなります。
 
 ---
 
