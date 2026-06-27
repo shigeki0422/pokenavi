@@ -842,3 +842,9 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </div>
 
 ---
+
+## 考察記事
+
+import ArticleCard from '../../components/ArticleCard.astro';
+
+<ArticleCard slug="sceptile-analysis-m3" />
