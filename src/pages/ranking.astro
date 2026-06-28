@@ -402,9 +402,9 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
             const lastDate = dates[dates.length - 1];
             const lastRank = p.ranksByDate[lastDate];
             if (lastRank && lastRank <= ROWS) {
-              ctx.globalAlpha = dim ? 0.1 : isHover ? 1 : 0.6;
+              ctx.globalAlpha = dim ? 0.1 : isHover ? 1 : 0.85;
               ctx.font = `${isHover ? 800 : 600} ${isHover ? 11 : 10}px -apple-system,sans-serif`;
-              ctx.fillStyle = isHover ? '#f97316' : '#64748b';
+              ctx.fillStyle = isHover ? '#f97316' : '#334155';
               ctx.textAlign = 'left';
               ctx.fillText(p.name, cx(dates.length - 1) + SPRITE_R + 3, cy(lastRank) + 4);
             }
