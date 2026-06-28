@@ -432,29 +432,39 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
         });
 
         // タッチ操作（スマホ）
-        let touchStartY = 0;
+        let touchStart = null;
         canvas.addEventListener('touchstart', e => {
-          touchStartY = e.touches[0].clientY;
           const touch = e.touches[0];
           const rect = canvas.getBoundingClientRect();
-          const mx = touch.clientX - rect.left, my = touch.clientY - rect.top;
-          const found = findNearest(mx, my, 28);
+          touchStart = {
+            clientX: touch.clientX, clientY: touch.clientY,
+            mx: touch.clientX - rect.left, my: touch.clientY - rect.top,
+          };
+        }, { passive: true });
 
+        canvas.addEventListener('touchend', e => {
+          if (!touchStart) return;
+          const t = e.changedTouches[0];
+          const dy = Math.abs(t.clientY - touchStart.clientY);
+          const dx = Math.abs(t.clientX - touchStart.clientX);
+          if (dy > 10 || dx > 10) { touchStart = null; return; } // スクロール判定
+          const { mx, my, clientX, clientY } = touchStart;
+          touchStart = null;
+          const found = findNearest(mx, my, 28);
           if (found >= 0) {
-            e.preventDefault();
             if (found === pinnedIdx) {
               if (pokemon[found].url) location.href = pokemon[found].url;
               pinnedIdx = -1; hoveredIdx = -1; draw();
               tooltip.style.display = 'none';
             } else {
               pinnedIdx = found; hoveredIdx = found; draw();
-              showTooltip(pokemon[found], mx, my, touch.clientX, touch.clientY);
+              showTooltip(pokemon[found], mx, my, clientX, clientY);
             }
           } else {
             pinnedIdx = -1; hoveredIdx = -1; draw();
             tooltip.style.display = 'none';
           }
-        }, { passive: false });
+        }, { passive: true });
       })();
       </script>
 
