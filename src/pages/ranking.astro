@@ -240,7 +240,7 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
 
         const ROWS_KEY = 'ranking-chart-rows';
         let ROWS = parseInt(localStorage.getItem(ROWS_KEY) || '15');
-        let W = 0, hoveredIdx = -1;
+        let W = 0, hoveredIdx = -1, pinnedIdx = -1;
         const imgs = {};
 
         // スプライト画像をプリロード
@@ -462,8 +462,6 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
 
           ctx.restore();
         }
-
-        let pinnedIdx = -1; // タッチでピン留めされたポケモン
 
         function findNearest(mx, my, threshold) {
           let found = -1, minDist = threshold;
