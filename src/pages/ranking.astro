@@ -286,19 +286,26 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
           const badgeW = ROWS > 99 ? 26 : 22;
           const badgeH = 14;
           const labelStep = ROWS > 100 ? 10 : ROWS > 50 ? 5 : 1;
+          // ハイライト中ポケモンの最新日順位
+          const activeIdx = pinnedIdx >= 0 ? pinnedIdx : hoveredIdx;
+          const activeRank = activeIdx >= 0
+            ? pokemon[activeIdx].ranksByDate[dates[dates.length - 1]]
+            : null;
           for (let r = 1; r <= ROWS; r++) {
             if (r !== 1 && r % labelStep !== 0) continue;
             const ly = cy(r);
+            const isHighlight = r === activeRank;
             const isTop3 = r <= 3;
-            const bgColor = r === 1 ? '#fbbf24' : r === 2 ? '#94a3b8' : r === 3 ? '#b45309' : '#e2e8f0';
-            const fgColor = r <= 3 ? '#fff' : '#64748b';
+            const bgColor = isHighlight ? '#f97316'
+              : r === 1 ? '#fbbf24' : r === 2 ? '#94a3b8' : r === 3 ? '#b45309' : '#e2e8f0';
+            const fgColor = (isHighlight || isTop3) ? '#fff' : '#64748b';
             const lx = RANK_W - badgeW - 2;
             rCtx.fillStyle = bgColor;
             rCtx.beginPath();
             rCtx.roundRect(lx, ly - badgeH/2, badgeW, badgeH, 3);
             rCtx.fill();
             rCtx.fillStyle = fgColor;
-            rCtx.font = `${isTop3 ? 800 : 700} ${isTop3 ? 10 : 9}px -apple-system,sans-serif`;
+            rCtx.font = `${isHighlight || isTop3 ? 800 : 700} ${isHighlight || isTop3 ? 10 : 9}px -apple-system,sans-serif`;
             rCtx.textAlign = 'center';
             rCtx.fillText(r, lx + badgeW/2, ly + 3);
           }
