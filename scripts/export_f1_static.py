@@ -231,7 +231,8 @@ def main():
         saved[subj] = {"cards": summary}
         wr = (sum(c["win_rate"] for c in cards) / len(cards)) if cards else None
         index_subjects.append({"label": subj, "file": _safe(subj) + ".json",
-                               "win_rate": wr, "n": cards[0]["n"] if cards else 0})
+                               "win_rate": wr, "n": cards[0]["n"] if cards else 0,
+                               "party": party})
         # per-subject 詳細
         opp = {}
         for c in cards:

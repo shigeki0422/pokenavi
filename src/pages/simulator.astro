@@ -652,7 +652,6 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       async function selectSubject(r){
         SUBJECT=r; OPP=null;
         document.querySelectorAll('#subject-list .pitem').forEach(e=>e.classList.toggle('active', RANKERS[+e.dataset.i]===r));
-        document.querySelector('#subject-list .pitem.active')?.scrollIntoView({block:'nearest'});
         $('opp-comp').innerHTML = '<div class="muted">左の一覧から対戦相手を選択</div>';
         $('detail').innerHTML = ''; $('progress-wrap').classList.add('hidden');
         CARDS = {}; SUBJDATA = null;
@@ -729,11 +728,10 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           return `<div class="pitem ${sc} ${wrc}" data-label="${encodeURIComponent(c.label)}" onclick="selectOppRanker('${c.label.replace(/'/g,"\\'")}')">${seasonBadge(c.label)}<span class="nm">${nameNoSeason(c.label)}</span>${specsIconsHtml(c.specs,oppFilterBases)}</div>`;
         }).join('');
         if(!OPP || !cards.some(c=>c.label===OPP)) selectOppRanker(cards[0].label);
-        else{ document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.label||'')===OPP)); document.querySelector('#opp-list .pitem.active')?.scrollIntoView({block:'nearest'}); }
+        else document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.label||'')===OPP));
       }
       function selectOppRanker(label){ OPP=label; const c=CARDS[label];
         document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.label||'')===label));
-        document.querySelector('#opp-list .pitem.active')?.scrollIntoView({block:'nearest'});
         renderComp('opp-comp', c.specs, `${label} の構成`);
         renderRankerDetail(label, c);
         saveUrlState();
