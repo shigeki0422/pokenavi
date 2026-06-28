@@ -30,9 +30,16 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       .g{color:#16a34a}.r{color:#dc2626}.n{color:rgb(var(--gray-dark))}
       .bg-g{background:#dcfce7;color:#15803d}.bg-r{background:#fee2e2;color:#b91c1c}.bg-n{background:rgb(var(--gray-light));color:rgb(var(--gray))}
       /* 上下2分割（一覧＋構成） */
-      .split{display:grid;grid-template-columns:240px 1fr;gap:.8rem;align-items:start}
+      .split{display:grid;grid-template-columns:300px 1fr;gap:.8rem;align-items:start}
       @media(max-width:760px){.split{grid-template-columns:1fr}}
       .pl-wrap{position:relative}
+      .filter-chips{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
+      .filter-chip{display:inline-flex;align-items:center;gap:1px;padding:1px 3px 1px 1px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:999px}
+      .filter-chip img{width:22px;height:22px;object-fit:contain;flex-shrink:0}
+      .filter-chip-x{background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.65rem;line-height:1;padding:0 1px;display:flex;align-items:center}
+      .filter-chip-x:hover{color:#dc2626}
+      .filter-inp{width:100%;box-sizing:border-box;padding:.35em .65em;border:1px solid rgb(var(--gray-light));border-radius:8px;font-size:.82rem;margin:.15em 0 .35em;outline:none;font-family:var(--font-atkinson)}
+      .filter-inp:focus{border-color:var(--accent)}
       .picklist{border:1px solid rgb(var(--gray));border-radius:10px;overflow-y:scroll;max-height:250px;min-height:0;background:#fff}
       /* スクロールバーを常時表示（標準scrollbar-widthは付けない＝webkit指定を有効化し、macOSのオーバーレイを無効化） */
       .picklist::-webkit-scrollbar{-webkit-appearance:none;width:13px}
@@ -62,8 +69,31 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       .honmei{display:inline-block;margin-left:.4em;font-size:.6rem;font-weight:800;padding:.05em .35em;border-radius:5px;background:#fee2e2;color:#b91c1c;vertical-align:middle}
       .expl-tbl tr.weak td{color:#9aa3af}
       .lowconf{display:inline-block;margin-left:.4em;font-size:.6rem;font-weight:800;padding:.05em .35em;border-radius:5px;background:#e5e7eb;color:#6b7280;vertical-align:middle}
-      .pitem .nm{flex:1;font-weight:700}
+      .pitem .nm{flex:1;font-weight:700;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .pitem .wr{font-weight:700;font-size:.85rem}
+      .pitem.opp-g{border-right:3px solid #4ade80}
+      .pitem.opp-r{border-right:3px solid #f87171}
+      .pitem-icons{display:flex;gap:1px;flex-shrink:0}
+      .pitem-icons img{width:20px;height:20px;object-fit:contain}
+      .filter-active .pitem-icons img{opacity:.3}
+      .filter-active .pitem-icons img.matched{opacity:1;outline:2px solid #6366f1;border-radius:3px}
+      .wr-summary{display:flex;align-items:center;gap:.6em;flex-wrap:wrap;font-size:.8rem;margin-bottom:.4em}
+      .wr-bar{display:flex;height:7px;border-radius:4px;overflow:hidden;flex:1;min-width:80px;gap:1px;align-self:center}
+      .wr-bar-g{background:#4ade80}.wr-bar-n{background:#cbd5e1}.wr-bar-r{background:#f87171}
+      .wr-cnt-g{color:#15803d;font-weight:700}.wr-cnt-r{color:#b91c1c;font-weight:700}
+      @media(max-width:760px){
+        .split{grid-template-columns:1fr}
+        .picklist{max-height:160px !important}
+        .comp{font-size:.8rem}
+      }
+      .filter-wrap{position:relative}
+      .filter-sug{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.12);z-index:200;overflow:hidden;max-height:240px;overflow-y:auto}
+      .sug-item{display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;font-size:.82rem;border-bottom:1px solid #f8fafc}
+      .sug-item:last-child{border-bottom:none}
+      .sug-item:hover,.sug-item.act{background:#fff7ed}
+      .sug-item img{width:28px;height:28px;object-fit:contain;flex-shrink:0}
+      .sug-item mark{background:#fef9c3;color:inherit;border-radius:2px;padding:0 1px}
+      .sug-item.added{opacity:.4;pointer-events:none}
       .bvrow{padding:.45em .1em;border-bottom:1px solid #f1f5f9}
       .bvrow:last-child{border-bottom:none}
       .bvhd{display:flex;align-items:center;gap:.5em;flex-wrap:wrap;font-size:.85rem}
@@ -235,7 +265,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       <div class="seclabel">パーティ選択</div>
       <section class="card mb" style="padding:.9em 1em">
         <div class="split">
-          <div class="pl-wrap"><div class="seasonbar"><span class="muted">表示:</span><label class="schk"><input type="checkbox" checked onchange="toggleSubjSeason('M-1',this)"><span class="sbadge m1">M-1</span></label><label class="schk"><input type="checkbox" checked onchange="toggleSubjSeason('M-2',this)"><span class="sbadge m2">M-2</span></label></div><div class="picklist" id="subject-list"></div></div>
+          <div class="pl-wrap"><div class="seasonbar"><span class="muted">表示:</span><label class="schk"><input type="checkbox" checked onchange="toggleSubjSeason('M-1',this)"><span class="sbadge m1">M-1</span></label><label class="schk"><input type="checkbox" checked onchange="toggleSubjSeason('M-2',this)"><span class="sbadge m2">M-2</span></label><div id="filter-chips" class="filter-chips"></div></div><div class="filter-wrap"><input type="text" id="subj-filter" class="filter-inp" placeholder="ポケモン名で絞り込み" autocomplete="off" oninput="onSubjFilterInput(this.value)" onkeydown="onSubjFilterKey(event)"><div class="filter-sug" id="subj-sug" style="display:none"></div></div><div class="picklist" id="subject-list"></div></div>
           <div class="comp" id="subject-comp"><div class="muted">パーティを選択してください</div></div>
         </div>
         <div class="row" style="margin-top:.7em">
@@ -264,7 +294,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       <!-- ③ 相手一覧＋構成＋詳細 -->
       <section class="card" style="padding:.9em 1em">
         <div class="split">
-          <div class="pl-wrap"><div class="seasonbar" id="opp-seasonbar"><span class="muted">表示:</span><label class="schk"><input type="checkbox" checked onchange="toggleOppSeason('M-1',this)"><span class="sbadge m1">M-1</span></label><label class="schk"><input type="checkbox" checked onchange="toggleOppSeason('M-2',this)"><span class="sbadge m2">M-2</span></label></div><div class="picklist" id="opp-list" style="max-height:300px"></div></div>
+          <div class="pl-wrap"><div class="seasonbar" id="opp-seasonbar"><span class="muted">表示:</span><label class="schk"><input type="checkbox" checked onchange="toggleOppSeason('M-1',this)"><span class="sbadge m1">M-1</span></label><label class="schk"><input type="checkbox" checked onchange="toggleOppSeason('M-2',this)"><span class="sbadge m2">M-2</span></label><div id="opp-filter-chips" class="filter-chips"></div></div><div class="filter-wrap"><input type="text" id="opp-filter" class="filter-inp" placeholder="ポケモン名で絞り込み" autocomplete="off" oninput="onOppFilterInput(this.value)" onkeydown="onOppFilterKey(event)"><div class="filter-sug" id="opp-sug" style="display:none"></div></div><div class="picklist" id="opp-list" style="max-height:300px"></div></div>
           <div class="comp" id="opp-comp"><div class="muted">左の一覧から対戦相手を選択</div></div>
         </div>
         <div id="detail" style="margin-top:.9em"></div>
@@ -283,6 +313,8 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       const R2 = R2_BASE || META;    // 主役別JSONの取得元（本番=R2 / ローカル検証=同梱）
       let RANKERS = [], SAVED = {}, ICONS = {}, SUBJECT = null, AID = null, CARDS = {}, TAB = 'ranker', SORT = 'num', NUMDIR = 'asc', WRDIR = 'asc';
       let SUBJ_SEASONS = {'M-1':true,'M-2':true}, OPP_SEASONS = {'M-1':true,'M-2':true};
+      let SUBJ_FILTER_POKES = [], OPP_FILTER_POKES = [];  // [{name, icon}]
+      let _prefetchStarted = false;
       let SUBJDATA = null, SAVEDWR = {};
       let OPP = null, POKES = [], VSPOKE = {}, RBATTLE = null, RTURN = 0, autoTimer = null;
       let PSORT = 'num', PNDIR = 'desc', PWDIR = 'asc';   // VSポケモン用ソート（既定=対戦数の降順）
@@ -427,6 +459,129 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
            <div class="cdrow mvrow"><span class="cdlabel ev">EV</span><span class="mvwrap">${ev||'—'}</span></div>`;
       }
 
+      const toKatakana = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
+
+      const basePoName = n => n.split('（')[0].split('(')[0].trim();
+      function partyMatches(r){
+        if(!SUBJ_FILTER_POKES.length) return true;
+        if(!r.party) return false;
+        const names = r.party.map(s => basePoName(parseSpec(s).name));
+        return SUBJ_FILTER_POKES.every(p => {
+          const fb = basePoName(p.name);
+          return names.includes(fb);
+        });
+      }
+      function specsIconsHtml(specs, filterBases){
+        if(!specs||!specs.length) return '';
+        const imgs = specs.slice(0,6).map(s=>{
+          const n=parseSpec(s).name; const u=iconUrl(n);
+          const hit=filterBases&&filterBases.length&&filterBases.includes(basePoName(n));
+          return u?`<img src="${u}" alt="" class="${hit?'matched':''}">`:''
+        }).join('');
+        return imgs ? `<div class="pitem-icons">${imgs}</div>` : '';
+      }
+      function partyIconsHtml(r){
+        if(!r.party) return '';
+        return specsIconsHtml(r.party, SUBJ_FILTER_POKES.map(p=>basePoName(p.name)));
+      }
+
+      function renderFilterChips(){
+        const el=$('filter-chips'); if(!el) return;
+        el.innerHTML = SUBJ_FILTER_POKES.map(p=>`<span class="filter-chip" title="${p.name}">${p.icon?`<img src="${p.icon}" alt="${p.name}">`:''}<button class="filter-chip-x" onclick="removeFilterPoke('${p.name.replace(/'/g,"\\'")}')">✕</button></span>`).join('');
+        $('subj-filter').placeholder = SUBJ_FILTER_POKES.length ? 'さらに追加...' : 'ポケモン名で絞り込み';
+      }
+      function removeFilterPoke(name){
+        SUBJ_FILTER_POKES = SUBJ_FILTER_POKES.filter(p=>p.name!==name);
+        renderFilterChips(); renderSubjectList(); saveUrlState();
+      }
+
+      // STATICモードで全パーティをバックグラウンドプリフェッチ（フィルター追加時に1回だけ）
+      async function prefetchAllParties(){
+        if(_prefetchStarted||!STATIC) return; _prefetchStarted=true;
+        const unloaded=RANKERS.filter(r=>!r.party&&r.file);
+        await Promise.all(unloaded.map(async r=>{
+          try{ const d=await fetch(`${R2}/subjects/${r.file}`).then(x=>x.json()); if(d) r.party=d.subject.party; }catch{}
+        }));
+        renderSubjectList();
+      }
+
+      // フィルター入力サジェスト
+      let _searchIdx = null;
+      let _sugActive = -1;
+      async function loadSearchIdx(){ if(_searchIdx) return _searchIdx; try{ _searchIdx=await fetch('/search-index.json').then(r=>r.json()); }catch{ _searchIdx=[]; } return _searchIdx; }
+      function hlSug(text, q){ const qk=toKatakana(q); const t=qk!==q?qk:q; const i=text.indexOf(t); if(i<0)return text; return text.slice(0,i)+'<mark>'+text.slice(i,i+t.length)+'</mark>'+text.slice(i+t.length); }
+      async function onSubjFilterInput(val){
+        const sug=$('subj-sug'); _sugActive=-1;
+        if(!val.trim()){ sug.style.display='none'; return; }
+        const q=val.trim(), qk=toKatakana(q);
+        const idx=await loadSearchIdx();
+        const hits=idx.filter(x=>x.t==='p'&&(x.n.includes(q)||x.n.includes(qk))).slice(0,8);
+        if(!hits.length){ sug.style.display='none'; return; }
+        sug.innerHTML=hits.map((x,i)=>{
+          const already=SUBJ_FILTER_POKES.some(p=>p.name===x.n);
+          return `<div class="sug-item${already?' added':''}" data-name="${x.n}" data-icon="${x.i}" data-idx="${i}" onclick="applySug('${x.n.replace(/'/g,"\\'")}','${x.i}')"><img src="${x.i}" alt=""><span>${hlSug(x.n,q)}</span></div>`;
+        }).join('');
+        sug.style.display='block';
+      }
+      function applySug(name, icon){
+        if(!SUBJ_FILTER_POKES.some(p=>p.name===name)){
+          SUBJ_FILTER_POKES.push({name, icon});
+          prefetchAllParties();
+        }
+        $('subj-filter').value=''; $('subj-sug').style.display='none'; _sugActive=-1;
+        renderFilterChips(); renderSubjectList(); saveUrlState();
+      }
+      function onSubjFilterKey(e){
+        const sug=$('subj-sug'); const items=[...sug.querySelectorAll('.sug-item:not(.added)')];
+        if(!items.length||sug.style.display==='none') return;
+        if(e.key==='ArrowDown'){ e.preventDefault(); _sugActive=Math.min(_sugActive+1,items.length-1); items.forEach((el,i)=>el.classList.toggle('act',i===_sugActive)); }
+        else if(e.key==='ArrowUp'){ e.preventDefault(); _sugActive=Math.max(_sugActive-1,0); items.forEach((el,i)=>el.classList.toggle('act',i===_sugActive)); }
+        else if(e.key==='Enter'&&_sugActive>=0){ const it=items[_sugActive]; applySug(it.dataset.name, it.dataset.icon); }
+        else if(e.key==='Escape'){ sug.style.display='none'; _sugActive=-1; }
+      }
+      document.addEventListener('click', e=>{ if(!e.target.closest('.filter-wrap')){ $('subj-sug').style.display='none'; $('opp-sug').style.display='none'; } });
+      let _oppSugActive = -1;
+      function renderOppFilterChips(){
+        const el=$('opp-filter-chips'); if(!el) return;
+        el.innerHTML = OPP_FILTER_POKES.map(p=>`<span class="filter-chip" title="${p.name}">${p.icon?`<img src="${p.icon}" alt="${p.name}">`:''}<button class="filter-chip-x" onclick="removeOppFilterPoke('${p.name.replace(/'/g,"\\'")}')">✕</button></span>`).join('');
+        $('opp-filter').placeholder = OPP_FILTER_POKES.length ? 'さらに追加...' : 'ポケモン名で絞り込み';
+      }
+      function removeOppFilterPoke(name){
+        OPP_FILTER_POKES = OPP_FILTER_POKES.filter(p=>p.name!==name);
+        renderOppFilterChips(); if(TAB==='ranker') renderRankerTab(); saveUrlState();
+      }
+      function oppCardMatches(c){
+        if(!OPP_FILTER_POKES.length) return true;
+        if(!c.specs||!c.specs.length) return false;
+        const names = c.specs.map(s=>basePoName(parseSpec(s).name));
+        return OPP_FILTER_POKES.every(p=>names.includes(basePoName(p.name)));
+      }
+      async function onOppFilterInput(val){
+        const sug=$('opp-sug'); _oppSugActive=-1;
+        if(!val.trim()){ sug.style.display='none'; return; }
+        const q=val.trim(), qk=toKatakana(q);
+        const idx=await loadSearchIdx();
+        const hits=idx.filter(x=>x.t==='p'&&(x.n.includes(q)||x.n.includes(qk))).slice(0,8);
+        if(!hits.length){ sug.style.display='none'; return; }
+        sug.innerHTML=hits.map((x,i)=>{
+          const already=OPP_FILTER_POKES.some(p=>p.name===x.n);
+          return `<div class="sug-item${already?' added':''}" data-name="${x.n}" data-icon="${x.i}" data-idx="${i}" onclick="applyOppSug('${x.n.replace(/'/g,"\\'")}','${x.i}')"><img src="${x.i}" alt=""><span>${hlSug(x.n,q)}</span></div>`;
+        }).join('');
+        sug.style.display='block';
+      }
+      function applyOppSug(name, icon){
+        if(!OPP_FILTER_POKES.some(p=>p.name===name)) OPP_FILTER_POKES.push({name, icon});
+        $('opp-filter').value=''; $('opp-sug').style.display='none'; _oppSugActive=-1;
+        renderOppFilterChips(); if(TAB==='ranker') renderRankerTab(); saveUrlState();
+      }
+      function onOppFilterKey(e){
+        const sug=$('opp-sug'); const items=[...sug.querySelectorAll('.sug-item:not(.added)')];
+        if(!items.length||sug.style.display==='none') return;
+        if(e.key==='ArrowDown'){ e.preventDefault(); _oppSugActive=Math.min(_oppSugActive+1,items.length-1); items.forEach((el,i)=>el.classList.toggle('act',i===_oppSugActive)); }
+        else if(e.key==='ArrowUp'){ e.preventDefault(); _oppSugActive=Math.max(_oppSugActive-1,0); items.forEach((el,i)=>el.classList.toggle('act',i===_oppSugActive)); }
+        else if(e.key==='Enter'&&_oppSugActive>=0){ const it=items[_oppSugActive]; applyOppSug(it.dataset.name, it.dataset.icon); }
+        else if(e.key==='Escape'){ sug.style.display='none'; _oppSugActive=-1; }
+      }
       const rankNo=l=>{const mm=(l||'').match(/#(\d+)/);return mm?+mm[1]:99999;};  // 「M-1#100」の100を数値で抽出（番号順ソート用）
       const seasonOf=l=>{const m=(l||'').match(/^(M-\d)/);return m?m[1]:'';};       // ラベル先頭の「M-1」「M-2」
       const seasonOrd=l=>{const s=seasonOf(l);return s==='M-1'?0:s==='M-2'?1:2;};   // M-1→M-2の順
@@ -438,7 +593,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           fetch(META+'/move_types.json').then(r=>r.json())
         ]).then(([idx,ic,mt])=>{ RANKERS=(idx.subjects||[]).slice().sort(cmpLabel); ICONS=ic; Object.assign(MOVET,mt);
           RANKERS.forEach(s=>SAVEDWR[s.label]=s.win_rate); renderSubjectList();
-          if(RANKERS.length) selectSubject(RANKERS[0]); });
+          if(RANKERS.length) restoreUrlState(RANKERS[0]); });
       } else {
         Promise.all([
           fetch(API+'/api/f1/rankers').then(r=>r.json()),
@@ -446,7 +601,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           fetch(API+'/api/f1/icons').then(r=>r.json()),
           fetch(API+'/api/f1/move_types').then(r=>r.json())
         ]).then(([rs,sv,ic,mt])=>{ RANKERS=rs.slice().sort(cmpLabel); SAVED=sv; ICONS=ic; Object.assign(MOVET,mt); renderSubjectList();
-          const first = RANKERS.findIndex(r=>sv[r.label]); selectSubject(RANKERS[first>=0?first:0]); });
+          const first=RANKERS.findIndex(r=>sv[r.label]); restoreUrlState(RANKERS[first>=0?first:0]); });
       }
 
       function subjectWR(label){ if(STATIC) return (label in SAVEDWR)?SAVEDWR[label]:null;
@@ -455,11 +610,41 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       function seasonBadge(label){ const s=seasonOf(label); return s?`<span class="sbadge ${s==='M-1'?'m1':'m2'}">${s}</span>`:''; }
       const nameNoSeason=l=>(l||'').replace(/^M-\d\s*/,'');   // バッジと重複する先頭「M-1/M-2」を名称から除去
       function renderSubjectList(){
-        $('subject-list').innerHTML = RANKERS.map((r,i)=>({r,i})).filter(({r})=>SUBJ_SEASONS[seasonOf(r.label)]!==false).map(({r,i})=>{ const wr=subjectWR(r.label);
-          const wrs = wr!=null? `<span class="wr ${wr>=0.55?'g':wr<=0.45?'r':'n'}">${Math.round(wr*100)}%</span>` : `<span class="muted">未</span>`;
+        const items = RANKERS.map((r,i)=>({r,i}))
+          .filter(({r})=>SUBJ_SEASONS[seasonOf(r.label)]!==false)
+          .filter(({r})=>partyMatches(r));
+        const sl=$('subject-list');
+        sl.classList.toggle('filter-active', SUBJ_FILTER_POKES.length>0);
+        sl.innerHTML = items.map(({r,i})=>{
           const sc=seasonOf(r.label)==='M-1'?'s-m1':seasonOf(r.label)==='M-2'?'s-m2':'';
-          return `<div class="pitem ${sc}" data-i="${i}" onclick="selectSubjectIdx(${i})">${seasonBadge(r.label)}<span class="nm">${nameNoSeason(r.label)}</span>${wrs}</div>`;
-        }).join('') || '<div class="muted" style="padding:.6em">表示するシーズンを選択してください</div>';
+          return `<div class="pitem ${sc}" data-i="${i}" onclick="selectSubjectIdx(${i})">${seasonBadge(r.label)}<span class="nm">${nameNoSeason(r.label)}</span>${partyIconsHtml(r)}</div>`;
+        }).join('') || `<div class="muted" style="padding:.6em">${SUBJ_FILTER_POKES.length?'一致するパーティなし':'表示するシーズンを選択してください'}</div>`;
+      }
+      function saveUrlState(){
+        const p=new URLSearchParams();
+        if(SUBJECT) p.set('subj',SUBJECT.label);
+        if(OPP) p.set('opp',OPP);
+        if(SUBJ_FILTER_POKES.length) p.set('sf',SUBJ_FILTER_POKES.map(x=>x.name).join(','));
+        if(OPP_FILTER_POKES.length) p.set('of',OPP_FILTER_POKES.map(x=>x.name).join(','));
+        ['static','theme','verify'].forEach(k=>{const v=new URLSearchParams(location.search).get(k);if(v!==null)p.set(k,v);});
+        history.replaceState(null,'',location.pathname+(p.toString()?'?'+p.toString():''));
+      }
+      async function restoreUrlState(defaultSubj){
+        const p=new URLSearchParams(location.search);
+        const sfNames=(p.get('sf')||'').split(',').filter(Boolean);
+        const ofNames=(p.get('of')||'').split(',').filter(Boolean);
+        if(sfNames.length||ofNames.length){
+          const idx=await loadSearchIdx();
+          sfNames.forEach(n=>{if(!SUBJ_FILTER_POKES.some(x=>x.name===n)){const f=idx.find(x=>x.n===n);SUBJ_FILTER_POKES.push({name:n,icon:f?.i||''});}});
+          ofNames.forEach(n=>{if(!OPP_FILTER_POKES.some(x=>x.name===n)){const f=idx.find(x=>x.n===n);OPP_FILTER_POKES.push({name:n,icon:f?.i||''});}});
+          renderFilterChips(); renderOppFilterChips();
+          if(STATIC) prefetchAllParties();
+        }
+        const subjLabel=p.get('subj');
+        const target=subjLabel?RANKERS.find(r=>r.label===subjLabel):null;
+        await selectSubject(target||defaultSubj);
+        const oppLabel=p.get('opp');
+        if(oppLabel&&CARDS[oppLabel]) selectOppRanker(oppLabel);
       }
       function toggleSubjSeason(s,el){ SUBJ_SEASONS[s]=el.checked; renderSubjectList(); }
       function toggleOppSeason(s,el){ OPP_SEASONS[s]=el.checked; if(TAB==='ranker') renderRankerTab(); }
@@ -467,6 +652,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       async function selectSubject(r){
         SUBJECT=r; OPP=null;
         document.querySelectorAll('#subject-list .pitem').forEach(e=>e.classList.toggle('active', RANKERS[+e.dataset.i]===r));
+        document.querySelector('#subject-list .pitem.active')?.scrollIntoView({block:'nearest'});
         $('opp-comp').innerHTML = '<div class="muted">左の一覧から対戦相手を選択</div>';
         $('detail').innerHTML = ''; $('progress-wrap').classList.add('hidden');
         CARDS = {}; SUBJDATA = null;
@@ -477,8 +663,9 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           if(!SUBJECT || SUBJECT!==r) return;   // 連打時の取り違え防止
           if(!d){ setStatus('データ取得に失敗しました','#dc2626'); return; }
           SUBJDATA=d; SUBJECT={label:r.label, party:d.subject.party, file:r.file}; AID=r.label;
+          r.party = d.subject.party;
           renderComp('subject-comp', d.subject.party, `${r.label} の構成`);
-          d.cards.forEach(c=>CARDS[c.label]=c); setStatus('',''); renderTab();
+          d.cards.forEach(c=>CARDS[c.label]=c); setStatus('',''); renderTab(); renderSubjectList(); saveUrlState();
           return;
         }
         renderComp('subject-comp', r.party, `${r.label} の構成`);
@@ -486,6 +673,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           SAVED[r.label].cards.forEach(c=>CARDS[c.label]=c); renderTab();
         } else { AID=null; $('btn-analyze').classList.remove('hidden'); setStatus('未計算','');
           $('opp-list').innerHTML='<div class="muted" style="padding:.6em">「このパーティで総当たり」を実行してください</div>'; $('summary').textContent=''; }
+        saveUrlState();
       }
 
       $('btn-analyze').onclick = async ()=>{
@@ -527,22 +715,28 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
         $('sort-num').textContent = SORT==='num' ? (NUMDIR==='asc' ? '番号順 ↑' : '番号順 ↓') : '番号順';
         $('sort-wr').textContent = SORT==='wr' ? (WRDIR==='asc' ? '勝率順 ↑（苦手→得意）' : '勝率順 ↓（得意→苦手）') : '勝率順';
         const rn = l => { const m=l.match(/#(\d+)/); return m?+m[1]:9999; };
-        const cards = Object.values(CARDS).filter(c=>OPP_SEASONS[seasonOf(c.label)]!==false).sort((a,b)=>
+        const allCards = Object.values(CARDS).filter(c=>OPP_SEASONS[seasonOf(c.label)]!==false).sort((a,b)=>
           SORT==='num' ? ((seasonOrd(a.label)-seasonOrd(b.label)) || (NUMDIR==='asc'?rn(a.label)-rn(b.label):rn(b.label)-rn(a.label)))
                        : (WRDIR==='asc'?a.win_rate-b.win_rate:b.win_rate-a.win_rate));
-        if(!cards.length){ const all=Object.keys(CARDS).length; $('opp-list').innerHTML=`<div class="muted" style="padding:.6em">${all?'表示するシーズンを選択してください':'データなし'}</div>`; $('summary').textContent=''; return; }
-        const s=cards.filter(c=>c.win_rate>=0.6).length,w=cards.filter(c=>c.win_rate<=0.4).length;
-        $('summary').textContent=`${SUBJECT.label} vs 全${cards.length}ランカー ｜ 得意 ${s}・五分 ${cards.length-s-w}・苦手 ${w}`;
-        $('opp-list').innerHTML = cards.map(c=>{ const wr=Math.round(c.win_rate*100),cls=c.win_rate>=0.6?'g':c.win_rate<=0.4?'r':'n'; const sc=seasonOf(c.label)==='M-1'?'s-m1':seasonOf(c.label)==='M-2'?'s-m2':'';
-          return `<div class="pitem ${sc}" data-label="${encodeURIComponent(c.label)}" onclick="selectOppRanker('${c.label.replace(/'/g,"\\'")}')">${seasonBadge(c.label)}<span class="nm">${nameNoSeason(c.label)}</span><span class="muted">${c.wins}-${c.losses}-${c.draws}</span><span class="wr ${cls}">${wr}%</span></div>`;
+        const cards = allCards.filter(c=>oppCardMatches(c));
+        const ol=$('opp-list');
+        ol.classList.toggle('filter-active', OPP_FILTER_POKES.length>0);
+        if(!cards.length){ const all=Object.keys(CARDS).length; ol.innerHTML=`<div class="muted" style="padding:.6em">${OPP_FILTER_POKES.length?'一致するパーティなし':all?'表示するシーズンを選択してください':'データなし'}</div>`; $('summary').textContent=''; return; }
+        const ng=cards.filter(c=>c.win_rate>=0.6).length, nb=cards.filter(c=>c.win_rate<=0.4).length, nm=cards.length-ng-nb;
+        $('summary').innerHTML=`<div class="wr-summary"><span>${SUBJECT.label} vs ${cards.length}ランカー</span><div class="wr-bar"><div class="wr-bar-g" style="flex:${ng}"></div><div class="wr-bar-n" style="flex:${nm}"></div><div class="wr-bar-r" style="flex:${nb}"></div></div><span><span class="wr-cnt-g">得意${ng}</span>・五分${nm}・<span class="wr-cnt-r">苦手${nb}</span></span></div>`;
+        const oppFilterBases = OPP_FILTER_POKES.map(p=>basePoName(p.name));
+        ol.innerHTML = cards.map(c=>{ const wr=c.win_rate, sc=seasonOf(c.label)==='M-1'?'s-m1':seasonOf(c.label)==='M-2'?'s-m2':'', wrc=wr>=0.6?'opp-g':wr<=0.4?'opp-r':'';
+          return `<div class="pitem ${sc} ${wrc}" data-label="${encodeURIComponent(c.label)}" onclick="selectOppRanker('${c.label.replace(/'/g,"\\'")}')">${seasonBadge(c.label)}<span class="nm">${nameNoSeason(c.label)}</span>${specsIconsHtml(c.specs,oppFilterBases)}</div>`;
         }).join('');
         if(!OPP || !cards.some(c=>c.label===OPP)) selectOppRanker(cards[0].label);
-        else document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.label||'')===OPP));
+        else{ document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.label||'')===OPP)); document.querySelector('#opp-list .pitem.active')?.scrollIntoView({block:'nearest'}); }
       }
       function selectOppRanker(label){ OPP=label; const c=CARDS[label];
         document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.label||'')===label));
+        document.querySelector('#opp-list .pitem.active')?.scrollIntoView({block:'nearest'});
         renderComp('opp-comp', c.specs, `${label} の構成`);
         renderRankerDetail(label, c);
+        saveUrlState();
       }
       function verdict(wr){
         if(wr>=1) return {t:'完勝（全勝）',c:'#15803d',bg:'#dcfce7',i:'🏆'};
