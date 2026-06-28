@@ -367,6 +367,19 @@ print(m.group(1) if m else 'NOT FOUND')
 
 新しいアイテムのスプライト位置が必要な場合は、アイテム番号をCSSから調べて × 0.375 で換算する。
 
+### ステップ6: FAQ JSON-LDの更新（必須）
+
+ポケモン情報ページを新規作成・使用率データ更新した際は、必ず以下を実行してFAQ構造化データを最新化する。
+
+```bash
+python3 scripts/inject_faq_frontmatter.py
+```
+
+- M-3データ優先、なければM-2にフォールバック
+- DBにデータがないポケモン（マイナー等）はスキップされる
+- 実行後は `git add src/content/pokemon/` をコミットに含めること
+- 実行しないとGoogleのFAQリッチリザルトの内容が古いままになる
+
 ### ステップ5: 名前表記ゆれへの注意
 
 `pokemon_partners` と `pokemon_usage` で名前が一致しないケースがある（例：フラエッテ(えいえん)↔フラエッテ:永遠）。
