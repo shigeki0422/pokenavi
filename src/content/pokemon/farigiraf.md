@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのリキキリン基礎データ
 pokemonName: 'リキキリン'
 dexNumber: 981
 usageRank: 179
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

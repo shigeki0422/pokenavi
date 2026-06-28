@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのオオニューラ基礎デー
 pokemonName: 'オオニューラ'
 dexNumber: 903
 usageRank: 42
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'sneasler-analysis-m2'

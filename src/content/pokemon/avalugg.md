@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのクレベース基礎データ
 pokemonName: 'クレベース'
 dexNumber: 713
 usageRank: 182
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

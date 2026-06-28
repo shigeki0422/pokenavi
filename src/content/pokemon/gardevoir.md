@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのサーナイト基礎データ
 pokemonName: 'サーナイト'
 dexNumber: 282
 usageRank: 64
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'gardevoir-analysis-m2'

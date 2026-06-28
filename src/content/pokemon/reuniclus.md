@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのランクルス基礎データ
 pokemonName: 'ランクルス'
 dexNumber: 579
 usageRank: 128
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

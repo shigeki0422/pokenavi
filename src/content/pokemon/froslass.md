@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのユキメノコ基礎データ
 pokemonName: 'ユキメノコ'
 dexNumber: 478
 usageRank: 58
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'froslass-analysis-m2'

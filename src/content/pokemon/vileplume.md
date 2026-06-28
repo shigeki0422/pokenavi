@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのラフレシア基礎データ
 pokemonName: 'ラフレシア'
 dexNumber: 45
 usageRank: 118
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

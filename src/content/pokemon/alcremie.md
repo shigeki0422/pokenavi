@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのマホイップ基礎データ
 pokemonName: 'マホイップ'
 dexNumber: 869
 usageRank: 190
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

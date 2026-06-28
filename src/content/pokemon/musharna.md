@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのムシャーナ基礎データ
 pokemonName: 'ムシャーナ'
 dexNumber: 518
 usageRank: 169
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

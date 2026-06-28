@@ -2,9 +2,11 @@
 """
 pokemon/*.md のフロントマターに faq セクションを追加/更新する。
 M-3データ優先、なければM-2にフォールバック。
+updatedDate も同時に今日の日付で更新する。
 """
 import sqlite3
 import re
+from datetime import date
 from pathlib import Path
 
 DB = Path(__file__).parent / "pokenavi.db"
@@ -78,13 +80,14 @@ def build_faq_yaml(data):
 
 
 FAQ_RE = re.compile(r"\nfaq:\n(?:  [^\n]*\n)*", re.MULTILINE)
+UPDATED_DATE_RE = re.compile(r"^updatedDate:.*$", re.MULTILINE)
+TODAY = date.today().isoformat()
 
 updated = skipped = no_data = 0
 
 for md_path in sorted(CONTENT_DIR.glob("*.md")):
     text = md_path.read_text(encoding="utf-8")
 
-    # frontmatter から pokemonName を抽出
     m = re.search(r"^pokemonName:\s*'([^']+)'", text, re.MULTILINE)
     if not m:
         skipped += 1
@@ -98,11 +101,17 @@ for md_path in sorted(CONTENT_DIR.glob("*.md")):
 
     faq_yaml = build_faq_yaml(data)
 
-    # 既存の faq ブロックを置換、なければ closing --- の直前に挿入
+    # faq ブロックを置換、なければ closing --- の直前に挿入
     if FAQ_RE.search(text):
         new_text = FAQ_RE.sub("\n" + faq_yaml + "\n", text)
     else:
         new_text = text.replace("\n---\n", f"\n{faq_yaml}\n---\n", 1)
+
+    # updatedDate を今日の日付で更新/追加
+    if UPDATED_DATE_RE.search(new_text):
+        new_text = UPDATED_DATE_RE.sub(f"updatedDate: '{TODAY}'", new_text)
+    else:
+        new_text = new_text.replace("\npubDate:", f"\nupdatedDate: '{TODAY}'\npubDate:", 1)
 
     if new_text != text:
         md_path.write_text(new_text, encoding="utf-8")

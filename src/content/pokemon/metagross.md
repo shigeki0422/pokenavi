@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのメタグロス基礎データ
 pokemonName: 'メタグロス'
 dexNumber: 376
 usageRank: 6
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'metagross-analysis-m3'

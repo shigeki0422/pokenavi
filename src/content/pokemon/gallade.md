@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのエルレイド基礎データ
 pokemonName: 'エルレイド'
 dexNumber: 475
 usageRank: 69
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'gallade-analysis-m2'

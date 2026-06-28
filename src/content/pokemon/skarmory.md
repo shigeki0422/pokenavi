@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのエアームド基礎データ
 pokemonName: 'エアームド'
 dexNumber: 227
 usageRank: 62
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'skarmory-analysis-m2'

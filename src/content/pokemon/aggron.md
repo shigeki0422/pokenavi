@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのボスゴドラ基礎データ
 pokemonName: 'ボスゴドラ'
 dexNumber: 306
 usageRank: 107
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

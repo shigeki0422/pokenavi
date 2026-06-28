@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのガオガエン基礎データ
 pokemonName: 'ガオガエン'
 dexNumber: 727
 usageRank: 75
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

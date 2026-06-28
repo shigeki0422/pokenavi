@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのエンペルト基礎データ
 pokemonName: 'エンペルト'
 dexNumber: 395
 usageRank: 88
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'empoleon-analysis-m2'

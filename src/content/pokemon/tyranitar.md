@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのバンギラス基礎データ
 pokemonName: 'バンギラス'
 dexNumber: 248
 usageRank: 52
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'tyranitar-analysis-m2'

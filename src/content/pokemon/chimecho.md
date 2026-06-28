@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのチリーン基礎データ。
 pokemonName: 'チリーン'
 dexNumber: 358
 usageRank: 145
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

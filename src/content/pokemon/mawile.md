@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのクチート基礎データ。
 pokemonName: 'クチート'
 dexNumber: 303
 usageRank: 25
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'mawile-analysis-m3'

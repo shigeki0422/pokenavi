@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのズルズキン基礎データ
 pokemonName: 'ズルズキン'
 dexNumber: 560
 usageRank: 77
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

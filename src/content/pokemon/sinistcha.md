@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのヤバソチャ基礎データ
 pokemonName: 'ヤバソチャ'
 dexNumber: 1013
 usageRank: 71
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

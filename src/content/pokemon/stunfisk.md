@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのマッギョ基礎データ。
 pokemonName: 'マッギョ'
 dexNumber: 618
 usageRank: 175
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのガチゴラス基礎データ
 pokemonName: 'ガチゴラス'
 dexNumber: 697
 usageRank: 193
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

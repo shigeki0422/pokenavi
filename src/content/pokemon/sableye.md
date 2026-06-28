@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのヤミラミ基礎データ。
 pokemonName: 'ヤミラミ'
 dexNumber: 302
 usageRank: 74
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

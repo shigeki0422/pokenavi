@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのイッカネズミ基礎デー
 pokemonName: 'イッカネズミ'
 dexNumber: 925
 usageRank: 87
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 

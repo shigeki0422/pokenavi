@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのブリジュラス基礎デー
 pokemonName: 'ブリジュラス'
 dexNumber: 1018
 usageRank: 4
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'archaludon-analysis-m3'

@@ -4,6 +4,7 @@ description: 'ポケモンチャンピオンズのジュカイン基礎データ
 pokemonName: 'ジュカイン'
 dexNumber: 254
 usageRank: 67
+updatedDate: '2026-06-28'
 pubDate: '2026-06-25'
 draft: false
 
