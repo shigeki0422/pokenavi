@@ -17,7 +17,8 @@ const STR = {
   data-rank-prefix={STR.rankPrefix}
   data-rank-suffix={STR.rankSuffix}
   data-label-analysis={STR.analysis}
-  data-label-article={STR.article}>
+  data-label-article={STR.article}
+  data-lang={lang}>
   <div class="gs-field">
     <svg class="gs-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
@@ -228,6 +229,7 @@ const STR = {
     const rankSuffix = el.dataset.rankSuffix;
     const labelAnalysis = el.dataset.labelAnalysis;
     const labelArticle = el.dataset.labelArticle;
+    const lang = el.dataset.lang || 'ja';
     let active = -1;
 
     input.addEventListener('input', async () => {
@@ -236,8 +238,14 @@ const STR = {
       if (!q) { results.hidden = true; return; }
 
       const qk = toKatakana(q);
+      const ql = q.toLowerCase();
       const data = await loadIdx();
-      const hits = data.filter(item => item.n.includes(q) || item.n.includes(qk)).slice(0, 8);
+      const hits = data.filter(item => {
+        if (item.n.includes(q) || item.n.includes(qk)) return true;
+        if (lang === 'en' && item.e && item.e.toLowerCase().includes(ql)) return true;
+        if (lang === 'ko' && item.k && item.k.includes(q)) return true;
+        return false;
+      }).slice(0, 8);
 
       if (!hits.length) {
         results.innerHTML = `<div class="gs-empty">${noResults}</div>`;
@@ -248,9 +256,10 @@ const STR = {
 
       results.innerHTML = hits.map(item => {
         if (item.t === 'p') {
+          const displayName = lang === 'en' ? (item.e || item.n) : lang === 'ko' ? (item.k || item.n) : item.n;
           return `<a class="gs-item" href="${item.u}" role="option">
             <img src="${item.i}" alt="" width="34" height="34" class="gs-sprite" loading="lazy">
-            <span class="gs-name">${hl(item.n, q)}</span>
+            <span class="gs-name">${hl(displayName, q)}</span>
             <span class="gs-badge gs-badge--rank">${rankPrefix}${item.r}${rankSuffix}</span>
           </a>`;
         } else {

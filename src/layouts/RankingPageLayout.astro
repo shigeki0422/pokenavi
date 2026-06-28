@@ -5,6 +5,7 @@ import Header from '../components/Header.astro';
 import rankingData from '../data/ranking.json';
 import { getCollection } from 'astro:content';
 import { ui, type Lang } from '../i18n/ui';
+import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 
 interface Props { lang?: Lang; }
 const { lang = 'ja' } = Astro.props;
@@ -282,6 +283,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         rankSuffix: T.rankSuffix,
         rankPrefix: T.rankPrefix,
         outOfRanking: T.outOfRanking,
+        names: lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {},
       } }}>
       (function() {
         const data = JSON.parse(chartJson);
@@ -503,7 +505,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
               ctx.font = `${isHover ? 800 : 600} ${isHover ? 11 : 10}px -apple-system,sans-serif`;
               ctx.fillStyle = isHover ? '#f97316' : '#334155';
               ctx.textAlign = 'left';
-              ctx.fillText(p.name, cx(dates.length - 1) + SPRITE_R + 3, cy(lastRank) + 4);
+              ctx.fillText(T_JS.names[p.name] ?? p.name, cx(dates.length - 1) + SPRITE_R + 3, cy(lastRank) + 4);
             }
 
             ctx.globalAlpha = 1;
@@ -565,7 +567,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           tooltip.style.display = 'block';
           tooltip.style.left = (clientX + 12) + 'px';
           tooltip.style.top = Math.max(8, clientY - 36) + 'px';
-          tooltip.textContent = `${p.name}　${parseInt(m)}/${parseInt(day)}　${rankTxt}`;
+          tooltip.textContent = `${T_JS.names[p.name] ?? p.name}　${parseInt(m)}/${parseInt(day)}　${rankTxt}`;
         }
 
         canvas.addEventListener('mousemove', e => {
@@ -644,7 +646,10 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           if (!query) { candidatesList.classList.remove('open'); return; }
           const q = hiraToKata(query);
           const matches = pokemon
-            .filter(p => p.name.includes(q) || p.name.toLowerCase().includes(query.toLowerCase()))
+            .filter(p => {
+              const tn = T_JS.names[p.name] ?? '';
+              return p.name.includes(q) || p.name.toLowerCase().includes(query.toLowerCase()) || tn.toLowerCase().includes(query.toLowerCase());
+            })
             .sort((a, b) => {
               const ra = a.ranksByDate[dates[dates.length - 1]] || 9999;
               const rb = b.ranksByDate[dates[dates.length - 1]] || 9999;
@@ -664,7 +669,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
               li.appendChild(img);
             }
             const span = document.createElement('span');
-            span.textContent = p.name;
+            span.textContent = T_JS.names[p.name] ?? p.name;
             li.appendChild(span);
             const rank = p.ranksByDate[dates[dates.length - 1]];
             const r = document.createElement('span');
@@ -681,7 +686,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         }
 
         function selectPokemon(p) {
-          searchInput.value = p.name;
+          searchInput.value = T_JS.names[p.name] ?? p.name;
           searchClear.style.display = 'inline';
           candidatesList.classList.remove('open');
           searchInput.blur();

@@ -4,6 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import GlobalSearch from '../../components/GlobalSearch.astro';
 import rankingData from '../../data/ranking.json';
+import { POKEMON_NAME_EN as NAME_EN } from '../../i18n/pokemon-names';
 
 const { dates, pokemon } = rankingData as {
   dates: string[];
@@ -18,25 +19,6 @@ const top10 = [...pokemon]
 
 const fmtDate = (d: string) => { const [, m, day] = d.split('-'); return `${parseInt(m)}/${parseInt(day)}`; };
 
-const NAME_EN: Record<string, string> = {
-  'ガブリアス': 'Garchomp', 'ミミッキュ': 'Mimikyu', 'マスカーニャ': 'Meowscarada',
-  'ブリジュラス': 'Baxcalibur', 'メタグロス': 'Metagross', 'ライチュウ': 'Raichu',
-  'リザードン': 'Charizard', 'ムクホーク': 'Staraptor', 'アーマーガア': 'Corviknight',
-  'カバルドン': 'Hippowdon', 'アローラキュウコン': 'A-Ninetales', 'バシャーモ': 'Blaziken',
-  'アシレーヌ': 'Primarina', 'サザンドラ': 'Hydreigon', 'ラグラージ': 'Swampert',
-  'イダイトウ(オス)': 'Basculegion', 'ギャラドス': 'Gyarados', 'キラフロル': 'Grafaiai',
-  'ウォッシュロトム': 'Rotom-W', 'マフォクシー': 'Delphox', 'カイリュー': 'Dragonite',
-  'オーロンゲ': 'Grimmsnarl', 'ペリッパー': 'Pelipper', 'サーフゴー': 'Gholdengo',
-  'クチート': 'Mawile', 'ドドゲザン': 'Annihilape', 'ラウドボーン': 'Skeledirge',
-  'ゲンガー': 'Gengar', 'ゲッコウガ': 'Greninja', 'ドラミドロ': 'Dragalge',
-  'ガルーラ': 'Kangaskhan', 'エーフィ': 'Espeon', 'ウルガモス': 'Volcarona',
-  'メガライチュウY': 'Mega Raichu-Y', 'イエッサン': 'Indeedee', 'ハバタクカミ': 'Flutter Mane',
-  'ドドゲザン': 'Kingambit', 'スコヴィラン': 'Scovillain', 'キョジオーン': 'Clodsire',
-  'ニンフィア': 'Sylveon', 'ブラッキー': 'Umbreon', 'ヤレユータン': 'Oranguru',
-  'エルフーン': 'Whimsicott', 'グライオン': 'Gliscor', 'ヘルガー': 'Houndoom',
-  'カプ・レヒレ': 'Tapu Fini', 'カプ・テテフ': 'Tapu Lele', 'ワタッコ': 'Jumpluff',
-  'ナットレイ': 'Ferrothorn', 'ランドロス': 'Landorus', 'ドリュウズ': 'Excadrill',
-};
 
 const siteUrl = 'https://pokenavi.jp';
 const alternates = [

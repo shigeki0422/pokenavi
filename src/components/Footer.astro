@@ -1,5 +1,12 @@
 ---
-const today = new Date();
+const path = Astro.url.pathname;
+const lang = path.startsWith('/en') ? 'en' : path.startsWith('/ko') ? 'ko' : 'ja';
+const pfx = lang === 'ja' ? '' : `/${lang}`;
+const FOOT = {
+  ja: { about: '運営者情報', privacy: 'プライバシーポリシー', siteName: 'ポケナビ' },
+  en: { about: 'About', privacy: 'Privacy Policy', siteName: 'PokeNavi' },
+  ko: { about: '운영자 정보', privacy: '개인정보 처리방침', siteName: '포케나비' },
+}[lang];
 ---
 
 <footer>
@@ -10,11 +17,11 @@ const today = new Date();
 		</a>
 	</div>
 	<div class="links">
-		<a href="/about">運営者情報</a>
+		<a href={`${pfx}/about/`}>{FOOT.about}</a>
 		<span class="sep">|</span>
-		<a href="/privacy">プライバシーポリシー</a>
+		<a href={`${pfx}/privacy/`}>{FOOT.privacy}</a>
 	</div>
-	&copy; 2026 ポケナビ
+	&copy; 2026 {FOOT.siteName}
 </footer>
 <style>
 	footer {

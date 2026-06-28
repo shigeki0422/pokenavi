@@ -4,6 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import GlobalSearch from '../../components/GlobalSearch.astro';
 import rankingData from '../../data/ranking.json';
+import { POKEMON_NAME_KO as NAME_KO } from '../../i18n/pokemon-names';
 
 const { dates, pokemon } = rankingData as {
   dates: string[];
@@ -18,23 +19,6 @@ const top10 = [...pokemon]
 
 const fmtDate = (d: string) => { const [, m, day] = d.split('-'); return `${parseInt(m)}/${parseInt(day)}`; };
 
-const NAME_KO: Record<string, string> = {
-  'ガブリアス': '한카리아스', 'ミミッキュ': '따라큐', 'マスカーニャ': '마스카냐',
-  'ブリジュラス': '브리지벨라스', 'メタグロス': '메타그로스', 'ライチュウ': '라이츄',
-  'リザードン': '리자몽', 'ムクホーク': '찌르호크', 'アーマーガア': '아머까오',
-  'カバルドン': '하마돈', 'アローラキュウコン': '알로라나인테일', 'バシャーモ': '번치코',
-  'アシレーヌ': '어시레느', 'サザンドラ': '삼삼드래', 'ラグラージ': '대짱이',
-  'イダイトウ(オス)': '이나하', 'ギャラドス': '갸라도스', 'キラフロル': '키라플로르',
-  'ウォッシュロトム': '워시로토무', 'マフォクシー': '마폭시', 'カイリュー': '망나뇽',
-  'オーロンゲ': '어둠대기리', 'ペリッパー': '왕큰부리', 'サーフゴー': '서프고',
-  'クチート': '입치트', 'ドドゲザン': '도도게자', 'ラウドボーン': '라우드본',
-  'ゲンガー': '팬텀', 'ゲッコウガ': '개굴닌자', 'ドラミドロ': '드래캄',
-  'ガルーラ': '캥카', 'エーフィ': '에브이', 'ウルガモス': '볼케니온',
-  'メガライチュウY': '메가라이츄Y', 'スコヴィラン': '스코비라', 'ドドゲザン': '킹드라',
-  'ニンフィア': '님피아', 'ブラッキー': '블래키', 'グライオン': '글라이온',
-  'ヘルガー': '헬가', 'カプ・レヒレ': '카푸느지느', 'カプ・テテフ': '카푸나비나',
-  'ナットレイ': '나시', 'ランドロス': '랜드로스', 'ドリュウズ': '몰드류',
-};
 
 const siteUrl = 'https://pokenavi.jp';
 const alternates = [
