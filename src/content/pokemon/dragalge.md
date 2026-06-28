@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'dragalge-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['クイックターン', 'りゅうせいぐん', 'どくどく', 'どくびし']
+  topMovePct: [92.1, 89.7, 60.1, 43.6]
+  topItems: ['ドラミドナイト', 'いのちのたま', 'たべのこし']
+  topItemPct: [98.3, 0.4, 0.2]
+  topAbility: 'てきおうりょく'
+  topAbilityPct: 64.0
+  topNature: 'なまいき'
+  topNaturePct: 42.9
+  topNature2: 'おだやか'
+  topNaturePct2: 20.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

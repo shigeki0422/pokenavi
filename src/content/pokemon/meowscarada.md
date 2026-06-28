@@ -7,6 +7,18 @@ usageRank: 3
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'meowscarada-analysis-m3'
+faq:
+  season: 'M-3'
+  topMoves: ['トリックフラワー', 'トリプルアクセル', 'とんぼがえり', 'はたきおとす']
+  topMovePct: [98.2, 89.4, 71.8, 68.7]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [72.1, 18.5, 4.4]
+  topAbility: 'へんげんじざい'
+  topAbilityPct: 95.5
+  topNature: 'ようき'
+  topNaturePct: 59.6
+  topNature2: 'いじっぱり'
+  topNaturePct2: 33.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

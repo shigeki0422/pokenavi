@@ -7,6 +7,18 @@ usageRank: 39
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'ceruledge-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['かげうち', 'ポルターガイスト', 'むねんのつるぎ', 'つるぎのまい']
+  topMovePct: [92.9, 82.7, 80.7, 80.3]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'オボンのみ']
+  topItemPct: [86.8, 2.8, 2.0]
+  topAbility: 'くだけるよろい'
+  topAbilityPct: 87.9
+  topNature: 'いじっぱり'
+  topNaturePct: 78.5
+  topNature2: 'ようき'
+  topNaturePct2: 16.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

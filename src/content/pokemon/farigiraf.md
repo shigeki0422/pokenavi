@@ -7,6 +7,18 @@ usageRank: 179
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['トリックルーム', 'サイコキネシス', '10まんボルト', 'ツインビーム']
+  topMovePct: [62.8, 40.0, 33.8, 29.7]
+  topItems: ['オボンのみ', 'きあいのタスキ', 'たべのこし']
+  topItemPct: [44.6, 9.3, 8.6]
+  topAbility: 'テイルアーマー'
+  topAbilityPct: 74.9
+  topNature: 'ひかえめ'
+  topNaturePct: 28.8
+  topNature2: 'れいせい'
+  topNaturePct2: 21.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

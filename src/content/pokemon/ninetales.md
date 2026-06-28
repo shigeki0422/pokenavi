@@ -7,6 +7,18 @@ usageRank: 168
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ソーラービーム', 'おにび', 'かえんほうしゃ', 'アンコール']
+  topMovePct: [62.3, 45.1, 34.6, 34.4]
+  topItems: ['あついいわ', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [36.4, 16.7, 8.5]
+  topAbility: 'ひでり'
+  topAbilityPct: 93.7
+  topNature: 'おくびょう'
+  topNaturePct: 58.7
+  topNature2: 'ひかえめ'
+  topNaturePct2: 24.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

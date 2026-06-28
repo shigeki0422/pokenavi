@@ -7,6 +7,18 @@ usageRank: 186
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ボルトチェンジ', '10まんボルト', 'オーバーヒート', 'バークアウト']
+  topMovePct: [89.4, 88.1, 71.3, 48.0]
+  topItems: ['ライボルトナイト', 'こだわりスカーフ', 'きあいのタスキ']
+  topItemPct: [79.0, 8.6, 3.8]
+  topAbility: 'ひらいしん'
+  topAbilityPct: 85.7
+  topNature: 'おくびょう'
+  topNaturePct: 80.9
+  topNature2: 'ひかえめ'
+  topNaturePct2: 12.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

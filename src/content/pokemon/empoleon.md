@@ -7,6 +7,18 @@ usageRank: 88
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'empoleon-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['なみのり', 'れいとうビーム', 'ステルスロック', 'あくび']
+  topMovePct: [70.2, 61.0, 52.4, 50.7]
+  topItems: ['シュカのみ', 'オボンのみ', 'たべのこし']
+  topItemPct: [36.5, 23.5, 19.5]
+  topAbility: 'かちき'
+  topAbilityPct: 78.4
+  topNature: 'ひかえめ'
+  topNaturePct: 46.3
+  topNature2: 'なまいき'
+  topNaturePct2: 13.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

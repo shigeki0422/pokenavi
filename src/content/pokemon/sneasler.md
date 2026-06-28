@@ -7,6 +7,18 @@ usageRank: 42
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'sneasler-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['フェイタルクロー', 'インファイト', 'ねこだまし', 'じごくづき']
+  topMovePct: [96.7, 96.3, 54.0, 35.3]
+  topItems: ['しろいハーブ', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [50.6, 27.5, 8.8]
+  topAbility: 'かるわざ'
+  topAbilityPct: 78.3
+  topNature: 'いじっぱり'
+  topNaturePct: 53.9
+  topNature2: 'ようき'
+  topNaturePct2: 36.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 69
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'gallade-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['せいなるつるぎ', 'サイコカッター', 'リーフブレード', 'かげうち']
+  topMovePct: [93.8, 77.6, 77.3, 51.0]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'エルレイドナイト']
+  topItemPct: [44.1, 25.0, 12.9]
+  topAbility: 'きれあじ'
+  topAbilityPct: 95.0
+  topNature: 'いじっぱり'
+  topNaturePct: 51.4
+  topNature2: 'ようき'
+  topNaturePct2: 44.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

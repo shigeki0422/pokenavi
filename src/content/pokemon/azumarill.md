@@ -7,6 +7,18 @@ usageRank: 54
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'azumarill-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['アクアジェット', 'じゃれつく', 'はらだいこ', 'ばかぢから']
+  topMovePct: [95.0, 94.3, 64.9, 47.4]
+  topItems: ['オボンのみ', 'いのちのたま', 'ラムのみ']
+  topItemPct: [72.5, 7.0, 4.5]
+  topAbility: 'ちからもち'
+  topAbilityPct: 94.5
+  topNature: 'いじっぱり'
+  topNaturePct: 90.8
+  topNature2: 'わんぱく'
+  topNaturePct2: 1.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

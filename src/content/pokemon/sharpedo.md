@@ -7,6 +7,18 @@ usageRank: 112
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['まもる', 'かみくだく', 'みちづれ', 'こおりのキバ']
+  topMovePct: [81.3, 70.7, 68.3, 33.6]
+  topItems: ['きあいのタスキ', 'サメハダナイト', 'いのちのたま']
+  topItemPct: [45.8, 39.8, 8.5]
+  topAbility: 'かそく'
+  topAbilityPct: 98.9
+  topNature: 'いじっぱり'
+  topNaturePct: 55.6
+  topNature2: 'ようき'
+  topNaturePct2: 20.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

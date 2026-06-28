@@ -7,6 +7,18 @@ usageRank: 185
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ヘドロばくだん', 'マジカルシャイン', 'シャドーボール', 'ギガドレイン']
+  topMovePct: [83.9, 43.7, 39.4, 35.3]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'たべのこし']
+  topItemPct: [21.0, 19.2, 15.3]
+  topAbility: 'しぜんかいふく'
+  topAbilityPct: 47.0
+  topNature: 'おくびょう'
+  topNaturePct: 38.4
+  topNature2: 'ひかえめ'
+  topNaturePct2: 31.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

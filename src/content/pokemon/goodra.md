@@ -7,6 +7,18 @@ usageRank: 148
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ラスターカノン', 'りゅうせいぐん', 'たてこもる', '10まんボルト']
+  topMovePct: [60.1, 43.0, 41.0, 38.9]
+  topItems: ['たべのこし', 'オボンのみ', 'カゴのみ']
+  topItemPct: [43.5, 18.4, 6.1]
+  topAbility: 'シェルアーマー'
+  topAbilityPct: 38.9
+  topNature: 'ひかえめ'
+  topNaturePct: 35.1
+  topNature2: 'ずぶとい'
+  topNaturePct2: 22.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

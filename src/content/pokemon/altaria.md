@@ -7,6 +7,18 @@ usageRank: 133
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['はねやすめ', 'コットンガード', 'ハイパーボイス', 'かえんほうしゃ']
+  topMovePct: [88.1, 73.0, 63.5, 35.8]
+  topItems: ['チルタリスナイト', 'たべのこし', 'オボンのみ']
+  topItemPct: [93.6, 1.8, 1.7]
+  topAbility: 'ノーてんき'
+  topAbilityPct: 65.1
+  topNature: 'ひかえめ'
+  topNaturePct: 34.0
+  topNature2: 'おだやか'
+  topNaturePct2: 22.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

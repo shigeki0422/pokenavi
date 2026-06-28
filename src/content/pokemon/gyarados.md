@@ -7,6 +7,18 @@ usageRank: 16
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'gyarados-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['たきのぼり', 'りゅうのまい', 'じしん', 'パワーウィップ']
+  topMovePct: [90.0, 66.7, 63.2, 52.5]
+  topItems: ['ギャラドスナイト', 'たべのこし', 'オボンのみ']
+  topItemPct: [50.2, 27.7, 11.0]
+  topAbility: 'いかく'
+  topAbilityPct: 98.6
+  topNature: 'いじっぱり'
+  topNaturePct: 40.7
+  topNature2: 'ようき'
+  topNaturePct2: 40.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

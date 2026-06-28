@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'grimmsnarl-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['ソウルクラッシュ', 'すてゼリフ', 'リフレクター', 'ひかりのかべ']
+  topMovePct: [79.4, 77.7, 74.1, 69.7]
+  topItems: ['ひかりのねんど', 'たべのこし', 'たつじんのおび']
+  topItemPct: [69.3, 17.1, 5.5]
+  topAbility: 'いたずらごころ'
+  topAbilityPct: 99.2
+  topNature: 'わんぱく'
+  topNaturePct: 58.9
+  topNature2: 'いじっぱり'
+  topNaturePct2: 17.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 90
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['シャドーボール', 'エナジーボール', 'かえんほうしゃ', 'オーバーヒート']
+  topMovePct: [93.0, 60.7, 60.4, 34.4]
+  topItems: ['こだわりスカーフ', 'シャンデラナイト', 'きあいのタスキ']
+  topItemPct: [35.9, 30.1, 16.3]
+  topAbility: 'もらいび'
+  topAbilityPct: 57.3
+  topNature: 'おくびょう'
+  topNaturePct: 47.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 39.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

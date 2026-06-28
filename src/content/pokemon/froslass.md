@@ -7,6 +7,18 @@ usageRank: 58
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'froslass-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ふぶき', 'シャドーボール', 'オーロラベール', '10まんボルト']
+  topMovePct: [95.7, 81.5, 66.4, 50.9]
+  topItems: ['ユキメノコナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [95.1, 2.3, 0.6]
+  topAbility: 'のろわれボディ'
+  topAbilityPct: 77.4
+  topNature: 'おくびょう'
+  topNaturePct: 76.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 19.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 113
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['フレアドライブ', 'しんそく', 'おにび', 'あさのひざし']
+  topMovePct: [62.7, 62.3, 53.5, 46.9]
+  topItems: ['オボンのみ', 'たべのこし', 'いのちのたま']
+  topItemPct: [39.2, 25.9, 10.5]
+  topAbility: 'いかく'
+  topAbilityPct: 96.4
+  topNature: 'いじっぱり'
+  topNaturePct: 45.8
+  topNature2: 'ずぶとい'
+  topNaturePct2: 20.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

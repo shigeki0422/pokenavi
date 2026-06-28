@@ -7,6 +7,18 @@ usageRank: 188
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ふんか', 'ねっさのだいち', 'かえんほうしゃ', 'シャドーボール']
+  topMovePct: [80.1, 57.3, 41.9, 41.0]
+  topItems: ['こだわりスカーフ', 'もくたん', 'きあいのタスキ']
+  topItemPct: [61.1, 14.7, 8.5]
+  topAbility: 'もらいび'
+  topAbilityPct: 66.8
+  topNature: 'ひかえめ'
+  topNaturePct: 52.4
+  topNature2: 'おくびょう'
+  topNaturePct2: 33.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

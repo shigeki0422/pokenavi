@@ -7,6 +7,18 @@ usageRank: 74
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['おにび', 'イカサマ', 'じこさいせい', 'アンコール']
+  topMovePct: [80.6, 60.3, 52.8, 52.0]
+  topItems: ['ヤミラミナイト', 'ひかりのねんど', 'たべのこし']
+  topItemPct: [32.3, 26.8, 15.8]
+  topAbility: 'いたずらごころ'
+  topAbilityPct: 99.1
+  topNature: 'ずぶとい'
+  topNaturePct: 40.9
+  topNature2: 'わんぱく'
+  topNaturePct2: 25.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

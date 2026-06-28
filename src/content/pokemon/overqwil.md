@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'overqwil-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['どくばりセンボン', 'かみくだく', 'ちいさくなる', 'どくびし']
+  topMovePct: [63.4, 46.0, 36.5, 33.6]
+  topItems: ['たべのこし', 'オボンのみ', 'いのちのたま']
+  topItemPct: [47.0, 16.7, 7.7]
+  topAbility: 'いかく'
+  topAbilityPct: 76.6
+  topNature: 'わんぱく'
+  topNaturePct: 38.6
+  topNature2: 'ようき'
+  topNaturePct2: 22.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

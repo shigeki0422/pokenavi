@@ -7,6 +7,18 @@ usageRank: 28
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'aegislash-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['かげうち', 'キングシールド', 'ポルターガイスト', 'せいなるつるぎ']
+  topMovePct: [94.6, 82.7, 68.8, 42.3]
+  topItems: ['たべのこし', 'のろいのおふだ', 'いのちのたま']
+  topItemPct: [49.5, 24.5, 13.1]
+  topAbility: 'バトルスイッチ'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 55.9
+  topNature2: 'ゆうかん'
+  topNaturePct2: 18.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

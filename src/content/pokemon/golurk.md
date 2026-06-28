@@ -7,6 +7,18 @@ usageRank: 166
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ポルターガイスト', 'ぶちかまし', 'れいとうパンチ', 'じしん']
+  topMovePct: [73.8, 56.2, 55.5, 41.8]
+  topItems: ['ゴルーグナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [48.9, 10.4, 7.0]
+  topAbility: 'てつのこぶし'
+  topAbilityPct: 62.1
+  topNature: 'いじっぱり'
+  topNaturePct: 52.8
+  topNature2: 'ゆうかん'
+  topNaturePct2: 28.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

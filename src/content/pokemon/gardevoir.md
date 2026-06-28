@@ -7,6 +7,18 @@ usageRank: 64
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'gardevoir-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['しんくうは', 'ムーンフォース', 'ハイパーボイス', '10まんボルト']
+  topMovePct: [59.5, 51.8, 45.8, 44.3]
+  topItems: ['サーナイトナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [56.8, 19.1, 10.0]
+  topAbility: 'トレース'
+  topAbilityPct: 93.3
+  topNature: 'ひかえめ'
+  topNaturePct: 62.0
+  topNature2: 'おくびょう'
+  topNaturePct2: 32.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

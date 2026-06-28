@@ -7,6 +7,18 @@ usageRank: 120
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['サイコキネシス', 'きあいだま', 'シャドーボール', 'エナジーボール']
+  topMovePct: [85.9, 59.8, 58.3, 48.9]
+  topItems: ['フーディナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [72.3, 14.0, 6.8]
+  topAbility: 'マジックガード'
+  topAbilityPct: 79.4
+  topNature: 'おくびょう'
+  topNaturePct: 73.7
+  topNature2: 'ひかえめ'
+  topNaturePct2: 21.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

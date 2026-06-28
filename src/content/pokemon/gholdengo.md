@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'gholdengo-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['シャドーボール', 'ゴールドラッシュ', 'わるだくみ', 'じこさいせい']
+  topMovePct: [97.3, 84.9, 50.7, 49.0]
+  topItems: ['こだわりスカーフ', 'たべのこし', 'いのちのたま']
+  topItemPct: [39.8, 28.9, 8.0]
+  topAbility: 'おうごんのからだ'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 47.1
+  topNature2: 'おくびょう'
+  topNaturePct2: 33.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

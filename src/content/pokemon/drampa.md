@@ -7,6 +7,18 @@ usageRank: 155
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['りゅうせいぐん', 'かえんほうしゃ', '10まんボルト', 'ハイパーボイス']
+  topMovePct: [63.3, 60.4, 56.8, 48.8]
+  topItems: ['ジジーロナイト', 'せんせいのツメ', 'オボンのみ']
+  topItemPct: [58.8, 8.2, 7.5]
+  topAbility: 'ぎゃくじょう'
+  topAbilityPct: 72.1
+  topNature: 'ひかえめ'
+  topNaturePct: 55.2
+  topNature2: 'れいせい'
+  topNaturePct2: 36.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

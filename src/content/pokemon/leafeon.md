@@ -7,6 +7,18 @@ usageRank: 187
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['リーフブレード', 'はたきおとす', 'つるぎのまい', 'やどりぎのタネ']
+  topMovePct: [68.1, 54.7, 36.8, 35.4]
+  topItems: ['たべのこし', 'いのちのたま', 'オボンのみ']
+  topItemPct: [27.2, 17.0, 14.7]
+  topAbility: 'ようりょくそ'
+  topAbilityPct: 89.5
+  topNature: 'わんぱく'
+  topNaturePct: 40.7
+  topNature2: 'いじっぱり'
+  topNaturePct2: 36.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

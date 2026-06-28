@@ -7,6 +7,18 @@ usageRank: 26
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'delphox-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['かえんほうしゃ', 'わるだくみ', 'サイコキネシス', 'サイコショック']
+  topMovePct: [79.5, 55.2, 50.8, 46.0]
+  topItems: ['マフォクシナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [98.6, 0.3, 0.2]
+  topAbility: 'もうか'
+  topAbilityPct: 89.9
+  topNature: 'おくびょう'
+  topNaturePct: 88.0
+  topNature2: 'ひかえめ'
+  topNaturePct2: 10.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

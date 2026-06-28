@@ -7,6 +7,18 @@ usageRank: 82
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'greedent-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'れいとうパンチ', 'でんこうせっか', 'かみなりパンチ']
+  topMovePct: [99.7, 78.1, 74.4, 46.8]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'いのちのたま']
+  topItemPct: [67.6, 22.8, 4.0]
+  topAbility: 'ちからもち'
+  topAbilityPct: 99.5
+  topNature: 'いじっぱり'
+  topNaturePct: 71.0
+  topNature2: 'ようき'
+  topNaturePct2: 26.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

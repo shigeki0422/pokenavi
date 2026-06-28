@@ -7,6 +7,18 @@ usageRank: 197
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['フレアドライブ', 'ばかぢから', 'でんこうせっか', 'ニトロチャージ']
+  topMovePct: [86.4, 52.0, 51.3, 25.5]
+  topItems: ['もくたん', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [22.2, 19.9, 14.6]
+  topAbility: 'もらいび'
+  topAbilityPct: 87.7
+  topNature: 'いじっぱり'
+  topNaturePct: 37.3
+  topNature2: 'ようき'
+  topNaturePct2: 20.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

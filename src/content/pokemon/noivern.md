@@ -7,6 +7,18 @@ usageRank: 156
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['りゅうせいぐん', 'エアスラッシュ', 'かえんほうしゃ', 'とんぼがえり']
+  topMovePct: [86.3, 58.2, 54.1, 40.2]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [38.0, 19.4, 18.7]
+  topAbility: 'おみとおし'
+  topAbilityPct: 54.6
+  topNature: 'おくびょう'
+  topNaturePct: 57.2
+  topNature2: 'ひかえめ'
+  topNaturePct2: 36.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

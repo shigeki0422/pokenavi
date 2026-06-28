@@ -7,6 +7,18 @@ usageRank: 122
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['アクアブレイク', 'りゅうのまい', 'れいとうパンチ', 'アクアジェット']
+  topMovePct: [81.8, 65.7, 51.2, 44.8]
+  topItems: ['オーダイルナイト', 'いのちのたま', 'オボンのみ']
+  topItemPct: [58.0, 34.3, 2.0]
+  topAbility: 'ちからずく'
+  topAbilityPct: 84.5
+  topNature: 'いじっぱり'
+  topNaturePct: 51.3
+  topNature2: 'ようき'
+  topNaturePct2: 41.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

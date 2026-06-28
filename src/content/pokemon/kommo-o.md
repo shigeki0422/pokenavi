@@ -7,6 +7,18 @@ usageRank: 152
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['スケイルノイズ', 'ソウルビート', 'はどうだん', 'かえんほうしゃ']
+  topMovePct: [58.7, 53.4, 30.7, 30.5]
+  topItems: ['オボンのみ', 'きあいのタスキ', 'たべのこし']
+  topItemPct: [32.0, 12.3, 12.2]
+  topAbility: 'ぼうだん'
+  topAbilityPct: 66.3
+  topNature: 'ひかえめ'
+  topNaturePct: 35.1
+  topNature2: 'おくびょう'
+  topNaturePct2: 16.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

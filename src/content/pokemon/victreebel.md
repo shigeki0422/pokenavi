@@ -7,6 +7,18 @@ usageRank: 104
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'victreebel-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ちからをすいとる', 'ギガドレイン', 'ふいうち', 'アンコール']
+  topMovePct: [95.3, 53.2, 47.9, 32.4]
+  topItems: ['ウツボットナイト', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [93.4, 1.1, 1.0]
+  topAbility: 'ようりょくそ'
+  topAbilityPct: 85.2
+  topNature: 'ひかえめ'
+  topNaturePct: 27.4
+  topNature2: 'いじっぱり'
+  topNaturePct2: 21.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

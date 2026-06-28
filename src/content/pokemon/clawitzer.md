@@ -7,6 +7,18 @@ usageRank: 158
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['はどうだん', 'みずのはどう', 'あくのはどう', 'アクアジェット']
+  topMovePct: [92.7, 90.6, 70.0, 48.6]
+  topItems: ['いのちのたま', 'オボンのみ', 'たつじんのおび']
+  topItemPct: [27.6, 19.0, 10.1]
+  topAbility: 'メガランチャー'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 67.4
+  topNature2: 'れいせい'
+  topNaturePct2: 15.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

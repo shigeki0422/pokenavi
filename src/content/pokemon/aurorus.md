@@ -7,6 +7,18 @@ usageRank: 162
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['オーロラベール', 'ステルスロック', 'フリーズドライ', 'ふぶき']
+  topMovePct: [87.7, 65.5, 64.9, 63.3]
+  topItems: ['ひかりのねんど', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [59.1, 20.9, 3.5]
+  topAbility: 'ゆきふらし'
+  topAbilityPct: 95.6
+  topNature: 'ずぶとい'
+  topNaturePct: 31.1
+  topNature2: 'ひかえめ'
+  topNaturePct2: 29.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

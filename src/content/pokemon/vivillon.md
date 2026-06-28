@@ -8,6 +8,18 @@ imageForm: '18'
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ねむりごな', 'ちょうのまい', 'ぼうふう', 'みがわり']
+  topMovePct: [99.5, 96.4, 95.4, 84.7]
+  topItems: ['たべのこし', 'きあいのタスキ', 'こうかくレンズ']
+  topItemPct: [77.6, 14.9, 2.0]
+  topAbility: 'ふくがん'
+  topAbilityPct: 99.3
+  topNature: 'おくびょう'
+  topNaturePct: 93.0
+  topNature2: 'ひかえめ'
+  topNaturePct2: 4.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

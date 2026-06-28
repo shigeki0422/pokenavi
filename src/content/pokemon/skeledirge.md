@@ -7,6 +7,18 @@ usageRank: 27
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'skeledirge-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['フレアソング', 'なまける', 'おにび', 'シャドーボール']
+  topMovePct: [99.3, 95.2, 85.6, 47.3]
+  topItems: ['たべのこし', 'オボンのみ', 'カシブのみ']
+  topItemPct: [47.0, 29.9, 6.6]
+  topAbility: 'てんねん'
+  topAbilityPct: 98.3
+  topNature: 'ずぶとい'
+  topNaturePct: 76.4
+  topNature2: 'おだやか'
+  topNaturePct2: 11.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

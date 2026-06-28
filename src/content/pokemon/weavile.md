@@ -7,6 +7,18 @@ usageRank: 114
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['はたきおとす', 'トリプルアクセル', 'こおりのつぶて', 'ねこだまし']
+  topMovePct: [77.3, 71.5, 59.6, 30.2]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'こだわりスカーフ']
+  topItemPct: [55.8, 17.5, 11.3]
+  topAbility: 'プレッシャー'
+  topAbilityPct: 56.1
+  topNature: 'ようき'
+  topNaturePct: 70.4
+  topNature2: 'いじっぱり'
+  topNaturePct2: 23.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

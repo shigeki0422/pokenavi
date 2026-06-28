@@ -8,6 +8,18 @@ imageForm: '03'
 pubDate: '2026-06-22'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ふぶき', 'ボルトチェンジ', '10まんボルト', 'おにび']
+  topMovePct: [93.7, 70.2, 59.3, 48.0]
+  topItems: ['こだわりスカーフ', 'オボンのみ', 'たべのこし']
+  topItemPct: [43.5, 19.2, 7.5]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 42.0
+  topNature2: 'おくびょう'
+  topNaturePct2: 31.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

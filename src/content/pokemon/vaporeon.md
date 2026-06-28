@@ -7,6 +7,18 @@ usageRank: 99
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ねがいごと', 'ねっとう', 'まもる', 'あくび']
+  topMovePct: [67.8, 64.1, 52.8, 48.9]
+  topItems: ['たべのこし', 'オボンのみ', 'カゴのみ']
+  topItemPct: [70.8, 16.1, 4.9]
+  topAbility: 'ちょすい'
+  topAbilityPct: 97.7
+  topNature: 'ずぶとい'
+  topNaturePct: 51.3
+  topNature2: 'のんき'
+  topNaturePct2: 24.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

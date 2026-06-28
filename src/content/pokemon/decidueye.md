@@ -7,6 +7,18 @@ usageRank: 130
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['3ぼんのや', 'リーフブレード', 'ふいうち', 'とんぼがえり']
+  topMovePct: [99.5, 90.0, 62.1, 27.8]
+  topItems: ['ピントレンズ', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [33.6, 22.5, 15.0]
+  topAbility: 'きもったま'
+  topAbilityPct: 97.3
+  topNature: 'いじっぱり'
+  topNaturePct: 65.0
+  topNature2: 'ようき'
+  topNaturePct2: 22.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

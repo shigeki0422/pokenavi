@@ -28,6 +28,19 @@ const pokemon = defineCollection({
 		updatedDate: z.coerce.date().optional(),
 		draft: z.boolean().optional().default(false),
 		analysisSlug: z.string().optional(),
+		faq: z.object({
+			season: z.string(),
+			topMoves: z.array(z.string()),
+			topMovePct: z.array(z.number()),
+			topItems: z.array(z.string()),
+			topItemPct: z.array(z.number()),
+			topAbility: z.string(),
+			topAbilityPct: z.number(),
+			topNature: z.string(),
+			topNaturePct: z.number(),
+			topNature2: z.string().optional(),
+			topNaturePct2: z.number().optional(),
+		}).optional(),
 	}),
 });
 

@@ -7,6 +7,18 @@ usageRank: 89
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'polteageist-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['からをやぶる', 'シャドーボール', 'バトンタッチ', 'ちからをすいとる']
+  topMovePct: [97.8, 85.2, 75.3, 55.5]
+  topItems: ['しろいハーブ', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [75.2, 21.8, 0.5]
+  topAbility: 'のろわれボディ'
+  topAbilityPct: 71.8
+  topNature: 'ずぶとい'
+  topNaturePct: 46.8
+  topNature2: 'おくびょう'
+  topNaturePct2: 27.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

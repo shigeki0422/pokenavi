@@ -7,6 +7,18 @@ usageRank: 31
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'greninja-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['れいとうビーム', 'あくのはどう', 'ヘドロウェーブ', 'みずしゅりけん']
+  topMovePct: [88.3, 79.3, 55.7, 51.0]
+  topItems: ['ゲッコウガナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [39.8, 38.3, 10.7]
+  topAbility: 'へんげんじざい'
+  topAbilityPct: 75.8
+  topNature: 'おくびょう'
+  topNaturePct: 49.9
+  topNature2: 'ひかえめ'
+  topNaturePct2: 40.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

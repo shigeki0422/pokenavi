@@ -7,6 +7,18 @@ usageRank: 167
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['インファイト', 'バレットパンチ', 'ねこだまし', 'しねんのずつき']
+  topMovePct: [63.0, 58.1, 54.4, 47.2]
+  topItems: ['チャーレムナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [72.9, 14.8, 6.7]
+  topAbility: 'ヨガパワー'
+  topAbilityPct: 98.6
+  topNature: 'いじっぱり'
+  topNaturePct: 57.5
+  topNature2: 'ようき'
+  topNaturePct2: 35.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

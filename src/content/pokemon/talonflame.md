@@ -7,6 +7,18 @@ usageRank: 124
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['フレアドライブ', 'ブレイブバード', 'おにび', 'はねやすめ']
+  topMovePct: [62.2, 59.3, 40.5, 35.5]
+  topItems: ['するどいくちばし', 'いのちのたま', 'オボンのみ']
+  topItemPct: [17.4, 14.5, 11.0]
+  topAbility: 'はやてのつばさ'
+  topAbilityPct: 73.1
+  topNature: 'いじっぱり'
+  topNaturePct: 38.3
+  topNature2: 'ようき'
+  topNaturePct2: 32.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

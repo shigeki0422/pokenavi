@@ -7,6 +7,18 @@ usageRank: 174
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'れいとうパンチ', 'ロックブラスト', 'メタルバースト']
+  topMovePct: [93.3, 40.0, 30.6, 26.3]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'せんせいのツメ']
+  topItemPct: [24.6, 14.0, 12.3]
+  topAbility: 'ハードロック'
+  topAbilityPct: 91.4
+  topNature: 'いじっぱり'
+  topNaturePct: 46.1
+  topNature2: 'ゆうかん'
+  topNaturePct2: 23.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

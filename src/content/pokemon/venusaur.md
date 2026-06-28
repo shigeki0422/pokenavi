@@ -7,6 +7,18 @@ usageRank: 43
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'venusaur-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['だいちのちから', 'ギガドレイン', 'こうごうせい', 'ヘドロばくだん']
+  topMovePct: [83.6, 73.4, 64.3, 56.5]
+  topItems: ['フシギバナイト', 'いのちのたま', 'たべのこし']
+  topItemPct: [84.1, 4.8, 3.5]
+  topAbility: 'ようりょくそ'
+  topAbilityPct: 67.5
+  topNature: 'ずぶとい'
+  topNaturePct: 37.0
+  topNature2: 'おだやか'
+  topNaturePct2: 30.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

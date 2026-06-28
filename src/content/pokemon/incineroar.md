@@ -7,6 +7,18 @@ usageRank: 75
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['すてゼリフ', 'フレアドライブ', 'DDラリアット', 'ねこだまし']
+  topMovePct: [84.1, 78.6, 66.8, 54.0]
+  topItems: ['オボンのみ', 'たべのこし', 'ヨプのみ']
+  topItemPct: [57.0, 17.2, 3.6]
+  topAbility: 'いかく'
+  topAbilityPct: 97.8
+  topNature: 'いじっぱり'
+  topNaturePct: 31.6
+  topNature2: 'わんぱく'
+  topNaturePct2: 26.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

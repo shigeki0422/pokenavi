@@ -7,6 +7,18 @@ usageRank: 118
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ちからをすいとる', 'やどりぎのタネ', 'ギガドレイン', 'アシッドボム']
+  topMovePct: [95.1, 85.7, 74.5, 42.3]
+  topItems: ['たべのこし', 'おおきなねっこ', 'オボンのみ']
+  topItemPct: [62.3, 18.9, 8.3]
+  topAbility: 'ほうし'
+  topAbilityPct: 93.8
+  topNature: 'すなおい'
+  topNaturePct: 82.0
+  topNature2: 'おだやか'
+  topNaturePct2: 7.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 999
 pubDate: '2026-06-22'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['こおりのキバ', 'サンダーダイブ', 'ボルトチェンジ', 'ばかぢから']
+  topMovePct: [65.1, 60.8, 46.0, 33.7]
+  topItems: ['オボンのみ', 'シュカのみ', 'いのちのたま']
+  topItemPct: [31.2, 19.6, 11.1]
+  topAbility: 'いかく'
+  topAbilityPct: 91.6
+  topNature: 'いじっぱり'
+  topNaturePct: 47.9
+  topNature2: 'わんぱく'
+  topNaturePct2: 14.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

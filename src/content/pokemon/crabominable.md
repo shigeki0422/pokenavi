@@ -7,6 +7,18 @@ usageRank: 140
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['アイスハンマー', 'マッハパンチ', 'ドレインパンチ', 'かみなりパンチ']
+  topMovePct: [87.6, 84.6, 79.0, 69.3]
+  topItems: ['ケケンカニナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [91.9, 3.4, 1.2]
+  topAbility: 'かいりきバサミ'
+  topAbilityPct: 51.1
+  topNature: 'ゆうかん'
+  topNaturePct: 61.8
+  topNature2: 'いじっぱり'
+  topNaturePct2: 34.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 145
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['じこさいせい', 'アシストパワー', 'コスモパワー', 'めいそう']
+  topMovePct: [83.1, 47.9, 45.8, 37.5]
+  topItems: ['チリーンナイト', 'オボンのみ', 'たべのこし']
+  topItemPct: [91.6, 2.5, 1.4]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ずぶとい'
+  topNaturePct: 50.1
+  topNature2: 'ひかえめ'
+  topNaturePct2: 30.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

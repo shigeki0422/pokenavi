@@ -7,6 +7,18 @@ usageRank: 160
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['かえんほうしゃ', 'なまける', 'さむいギャグ', 'どくどく']
+  topMovePct: [51.3, 50.8, 47.9, 38.4]
+  topItems: ['たべのこし', 'オボンのみ', 'シュカのみ']
+  topItemPct: [37.8, 28.7, 12.4]
+  topAbility: 'さいせいりょく'
+  topAbilityPct: 99.0
+  topNature: 'おだやか'
+  topNaturePct: 54.8
+  topNature2: 'なまいき'
+  topNaturePct2: 17.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

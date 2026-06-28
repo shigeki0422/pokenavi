@@ -7,6 +7,18 @@ usageRank: 1
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'garchomp-analysis-m3'
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'ステルスロック', 'げきりん', 'がんせきふうじ']
+  topMovePct: [99.5, 47.9, 47.5, 35.3]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'オボンのみ']
+  topItemPct: [38.2, 25.2, 21.4]
+  topAbility: 'さめはだ'
+  topAbilityPct: 99.1
+  topNature: 'ようき'
+  topNaturePct: 58.2
+  topNature2: 'いじっぱり'
+  topNaturePct2: 23.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

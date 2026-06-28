@@ -7,6 +7,18 @@ usageRank: 96
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ボディプレス', 'こうごうせい', 'てっぺき', 'やどりぎのタネ']
+  topMovePct: [83.5, 63.1, 62.8, 42.5]
+  topItems: ['ブリガロナイト', 'たべのこし', 'オボンのみ']
+  topItemPct: [78.5, 10.8, 3.5]
+  topAbility: 'ぼうだん'
+  topAbilityPct: 93.7
+  topNature: 'わんぱく'
+  topNaturePct: 74.2
+  topNature2: 'いじっぱり'
+  topNaturePct2: 11.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

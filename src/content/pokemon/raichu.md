@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'raichu-y-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['でんじほう', 'きあいだま', 'くさむすび', 'ボルトチェンジ']
+  topMovePct: [95.9, 95.2, 73.8, 28.7]
+  topItems: ['ライチュウナイトY', 'ライチュウナイトX', 'きあいのタスキ']
+  topItemPct: [96.4, 2.8, 0.3]
+  topAbility: 'ひらいしん'
+  topAbilityPct: 87.1
+  topNature: 'おくびょう'
+  topNaturePct: 76.6
+  topNature2: 'ひかえめ'
+  topNaturePct2: 16.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

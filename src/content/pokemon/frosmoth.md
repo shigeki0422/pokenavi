@@ -7,6 +7,18 @@ usageRank: 181
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['フリーズドライ', 'サイコキネシス', 'こおりのつぶて', 'ミラーコート']
+  topMovePct: [84.5, 46.0, 29.7, 25.8]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'オボンのみ']
+  topItemPct: [40.3, 13.0, 9.0]
+  topAbility: 'バリアフリー'
+  topAbilityPct: 88.4
+  topNature: 'ひかえめ'
+  topNaturePct: 37.1
+  topNature2: 'おくびょう'
+  topNaturePct2: 25.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

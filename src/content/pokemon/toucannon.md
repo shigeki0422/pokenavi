@@ -7,6 +7,18 @@ usageRank: 94
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['くちばしキャノン', 'タネマシンガン', 'ロックブラスト', 'はねやすめ']
+  topMovePct: [99.0, 81.9, 66.2, 59.4]
+  topItems: ['オボンのみ', 'たべのこし', 'きあいのタスキ']
+  topItemPct: [56.9, 8.8, 8.6]
+  topAbility: 'スキルリンク'
+  topAbilityPct: 91.4
+  topNature: 'いじっぱり'
+  topNaturePct: 52.2
+  topNature2: 'わんぱく'
+  topNaturePct2: 36.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

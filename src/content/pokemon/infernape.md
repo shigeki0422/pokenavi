@@ -7,6 +7,18 @@ usageRank: 129
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['インファイト', 'かみなりパンチ', 'フレアドライブ', 'マッハパンチ']
+  topMovePct: [47.8, 35.1, 34.9, 34.4]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'こだわりスカーフ']
+  topItemPct: [51.6, 16.3, 12.4]
+  topAbility: 'もうか'
+  topAbilityPct: 52.0
+  topNature: 'ようき'
+  topNaturePct: 45.1
+  topNature2: 'いじっぱり'
+  topNaturePct2: 16.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

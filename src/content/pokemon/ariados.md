@@ -7,6 +7,18 @@ usageRank: 151
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ねばねばネット', 'どくのいと', 'であいがしら', 'ふいうち']
+  topMovePct: [90.9, 84.3, 61.0, 44.8]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'ぎんのこな']
+  topItemPct: [79.6, 4.9, 3.2]
+  topAbility: 'ふみん'
+  topAbilityPct: 69.1
+  topNature: 'ようき'
+  topNaturePct: 46.1
+  topNature2: 'いじっぱり'
+  topNaturePct2: 35.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

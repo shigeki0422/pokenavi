@@ -7,6 +7,18 @@ usageRank: 132
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'ボディプレス', 'ヘビーボンバー', 'ステルスロック']
+  topMovePct: [82.4, 73.5, 62.6, 56.1]
+  topItems: ['たべのこし', 'ハガネールナイト', 'せんせいのツメ']
+  topItemPct: [31.5, 26.6, 14.7]
+  topAbility: 'がんじょう'
+  topAbilityPct: 87.5
+  topNature: 'いじっぱり'
+  topNaturePct: 49.2
+  topNature2: 'わんぱく'
+  topNaturePct2: 23.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

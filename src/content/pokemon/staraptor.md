@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'staraptor-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['インファイト', 'ブレイブバード', 'はねやすめ', 'ブレイズキック']
+  topMovePct: [98.3, 91.4, 90.4, 53.7]
+  topItems: ['ムクホークナイト', 'こだわりスカーフ', 'いのちのたま']
+  topItemPct: [94.9, 4.2, 0.1]
+  topAbility: 'いかく'
+  topAbilityPct: 96.4
+  topNature: 'ようき'
+  topNaturePct: 77.8
+  topNature2: 'いじっぱり'
+  topNaturePct2: 17.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

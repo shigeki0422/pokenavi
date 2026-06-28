@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'metagross-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['サイコファング', 'バレットパンチ', 'じしん', 'れいとうパンチ']
+  topMovePct: [89.6, 84.8, 75.9, 59.0]
+  topItems: ['メタグロスナイト', 'いのちのたま', 'オボンのみ']
+  topItemPct: [97.2, 0.6, 0.4]
+  topAbility: 'クリアボディ'
+  topAbilityPct: 99.1
+  topNature: 'ようき'
+  topNaturePct: 56.5
+  topNature2: 'いじっぱり'
+  topNaturePct2: 40.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

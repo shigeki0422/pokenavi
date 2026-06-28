@@ -7,6 +7,18 @@ usageRank: 111
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ダブルウイング', 'じしん', 'いわなだれ', 'こおりのキバ']
+  topMovePct: [76.2, 62.2, 54.8, 49.0]
+  topItems: ['プテラナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [69.2, 14.3, 3.7]
+  topAbility: 'きんちょうかん'
+  topAbilityPct: 70.0
+  topNature: 'ようき'
+  topNaturePct: 63.9
+  topNature2: 'いじっぱり'
+  topNaturePct2: 29.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

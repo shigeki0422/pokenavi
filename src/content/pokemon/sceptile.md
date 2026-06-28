@@ -7,6 +7,18 @@ usageRank: 67
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['だいちのちから', 'りゅうのはどう', 'リーフストーム', 'しっぽきり']
+  topMovePct: [86.2, 78.7, 75.1, 49.3]
+  topItems: ['ジュカインナイト', 'きあいのタスキ', 'しろいハーブ']
+  topItemPct: [78.4, 7.3, 4.7]
+  topAbility: 'しんりょく'
+  topAbilityPct: 71.8
+  topNature: 'おくびょう'
+  topNaturePct: 71.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 15.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

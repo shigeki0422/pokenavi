@@ -7,6 +7,18 @@ usageRank: 195
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['インファイト', 'ふいうち', 'ダストシュート', 'どくづき']
+  topMovePct: [66.9, 63.2, 39.8, 39.0]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'こだわりスカーフ']
+  topItemPct: [56.9, 10.6, 6.1]
+  topAbility: 'かんそうはだ'
+  topAbilityPct: 79.2
+  topNature: 'いじっぱり'
+  topNaturePct: 60.0
+  topNature2: 'ようき'
+  topNaturePct2: 21.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

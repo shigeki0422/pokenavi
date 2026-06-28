@@ -7,6 +7,18 @@ usageRank: 57
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'clefable-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['つきのひかり', 'ムーンフォース', 'コスモパワー', 'アシストパワー']
+  topMovePct: [85.8, 80.9, 67.1, 45.1]
+  topItems: ['ピクシナイト', 'たべのこし', 'オボンのみ']
+  topItemPct: [71.9, 14.5, 7.5]
+  topAbility: 'てんねん'
+  topAbilityPct: 84.9
+  topNature: 'ずぶとい'
+  topNaturePct: 68.4
+  topNature2: 'おだやか'
+  topNaturePct2: 17.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

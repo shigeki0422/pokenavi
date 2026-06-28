@@ -7,6 +7,18 @@ usageRank: 15
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'primarina-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ムーンフォース', 'うたかたのアリア', 'アクアジェット', 'アンコール']
+  topMovePct: [96.9, 85.1, 68.3, 41.1]
+  topItems: ['オボンのみ', 'たべのこし', 'しんぴのしずく']
+  topItemPct: [58.2, 15.5, 9.5]
+  topAbility: 'げきりゅう'
+  topAbilityPct: 92.4
+  topNature: 'ひかえめ'
+  topNaturePct: 70.7
+  topNature2: 'れいせい'
+  topNaturePct2: 10.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

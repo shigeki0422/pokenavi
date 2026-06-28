@@ -7,6 +7,18 @@ usageRank: 36
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'starmie-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['アクアブレイク', 'アクアジェット', 'アイススピナー', 'クイックターン']
+  topMovePct: [87.5, 87.0, 68.7, 56.2]
+  topItems: ['スターミナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [94.7, 1.1, 0.9]
+  topAbility: 'しぜんかいふく'
+  topAbilityPct: 91.4
+  topNature: 'いじっぱり'
+  topNaturePct: 64.2
+  topNature2: 'ようき'
+  topNaturePct2: 25.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

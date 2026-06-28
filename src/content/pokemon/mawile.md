@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'mawile-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['じゃれつく', 'ふいうち', 'つるぎのまい', 'アイアンヘッド']
+  topMovePct: [98.8, 98.7, 87.4, 31.2]
+  topItems: ['クチートナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [99.6, 0.1, 0.1]
+  topAbility: 'いかく'
+  topAbilityPct: 96.7
+  topNature: 'いじっぱり'
+  topNaturePct: 86.0
+  topNature2: 'ゆうかん'
+  topNaturePct2: 11.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

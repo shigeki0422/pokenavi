@@ -7,6 +7,18 @@ usageRank: 149
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ねばねばネット', 'あくび', 'がむしゃら', 'ミストバースト']
+  topMovePct: [88.3, 71.8, 59.1, 38.9]
+  topItems: ['オボンのみ', 'きあいのタスキ', 'オレンのみ']
+  topItemPct: [44.0, 38.3, 5.2]
+  topAbility: 'かるわざ'
+  topAbilityPct: 89.1
+  topNature: 'おくびょう'
+  topNaturePct: 36.0
+  topNature2: 'ずぶとい'
+  topNaturePct2: 22.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

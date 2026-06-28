@@ -7,6 +7,18 @@ usageRank: 48
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'sylveon-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ハイパーボイス', 'あくび', 'でんこうせっか', 'マジカルフレイム']
+  topMovePct: [95.3, 65.6, 61.5, 49.7]
+  topItems: ['ようせいのハネ', 'たべのこし', 'オボンのみ']
+  topItemPct: [40.6, 30.1, 14.0]
+  topAbility: 'フェアリースキン'
+  topAbilityPct: 98.2
+  topNature: 'ひかえめ'
+  topNaturePct: 63.4
+  topNature2: 'ずぶとい'
+  topNaturePct2: 18.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

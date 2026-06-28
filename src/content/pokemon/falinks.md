@@ -7,6 +7,18 @@ usageRank: 159
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['はいすいのじん', 'インファイト', 'はたきおとす', 'アイアンヘッド']
+  topMovePct: [90.9, 85.4, 52.9, 36.9]
+  topItems: ['タイレーツナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [90.3, 2.3, 0.8]
+  topAbility: 'まけんき'
+  topAbilityPct: 89.0
+  topNature: 'いじっぱり'
+  topNaturePct: 61.0
+  topNature2: 'ようき'
+  topNaturePct2: 30.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

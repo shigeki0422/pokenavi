@@ -7,6 +7,18 @@ usageRank: 70
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['リーフストーム', 'へびにらみ', 'りゅうのはどう', 'ちょうはつ']
+  topMovePct: [99.7, 63.1, 49.4, 31.8]
+  topItems: ['たべのこし', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [25.5, 14.4, 13.3]
+  topAbility: 'あまのじゃく'
+  topAbilityPct: 99.4
+  topNature: 'おくびょう'
+  topNaturePct: 68.9
+  topNature2: 'ひかえめ'
+  topNaturePct2: 17.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

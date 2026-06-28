@@ -7,6 +7,18 @@ usageRank: 30
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'gengar-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['シャドーボール', 'ヘドロウェーブ', 'みちづれ', 'こごえるかぜ']
+  topMovePct: [82.7, 78.8, 55.5, 40.8]
+  topItems: ['ゲンガナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [59.4, 34.3, 2.1]
+  topAbility: 'のろわれボディ'
+  topAbilityPct: 100.0
+  topNature: 'おくびょう'
+  topNaturePct: 82.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 15.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

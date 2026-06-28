@@ -7,6 +7,18 @@ usageRank: 171
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ステルスロック', 'ボディプレス', 'こうそくスピン', 'ボルトチェンジ']
+  topMovePct: [69.1, 38.3, 36.5, 33.0]
+  topItems: ['たべのこし', 'オボンのみ', 'メンタルハーブ']
+  topItemPct: [27.2, 17.5, 9.7]
+  topAbility: 'がんじょう'
+  topAbilityPct: 94.0
+  topNature: 'のんき'
+  topNaturePct: 34.8
+  topNature2: 'わんぱく'
+  topNaturePct2: 21.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

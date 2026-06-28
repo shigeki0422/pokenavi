@@ -7,6 +7,18 @@ usageRank: 106
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['デカハンマー', 'じゃれつく', 'ステルスロック', 'アンコール']
+  topMovePct: [96.5, 57.0, 49.1, 42.2]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'シュカのみ']
+  topItemPct: [21.7, 19.1, 12.7]
+  topAbility: 'かたやぶり'
+  topAbilityPct: 88.1
+  topNature: 'ようき'
+  topNaturePct: 42.7
+  topNature2: 'いじっぱり'
+  topNaturePct2: 36.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 47
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'whimsicott-analysis-m3'
+faq:
+  season: 'M-3'
+  topMoves: ['ムーンフォース', 'アンコール', 'おいかぜ', 'やどりぎのタネ']
+  topMovePct: [85.9, 59.4, 50.8, 43.7]
+  topItems: ['きあいのタスキ', 'たべのこし', 'オボンのみ']
+  topItemPct: [50.3, 28.4, 4.6]
+  topAbility: 'いたずらごころ'
+  topAbilityPct: 97.9
+  topNature: 'おくびょう'
+  topNaturePct: 46.6
+  topNature2: 'ずぶとい'
+  topNaturePct2: 25.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

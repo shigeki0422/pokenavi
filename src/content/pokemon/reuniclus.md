@@ -7,6 +7,18 @@ usageRank: 128
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['きあいだま', 'トリックルーム', 'サイコキネシス', 'じこさいせい']
+  topMovePct: [57.7, 54.8, 49.9, 44.9]
+  topItems: ['いのちのたま', 'たべのこし', 'オボンのみ']
+  topItemPct: [51.0, 17.5, 9.5]
+  topAbility: 'マジックガード'
+  topAbilityPct: 85.8
+  topNature: 'れいせい'
+  topNaturePct: 34.6
+  topNature2: 'ずぶとい'
+  topNaturePct2: 27.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

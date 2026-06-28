@@ -7,6 +7,18 @@ usageRank: 98
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'conkeldurr-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['マッハパンチ', 'ドレインパンチ', 'れいとうパンチ', 'かみなりパンチ']
+  topMovePct: [93.3, 82.3, 73.1, 40.8]
+  topItems: ['いのちのたま', 'くろおび', 'オボンのみ']
+  topItemPct: [36.2, 17.8, 14.4]
+  topAbility: 'てつのこぶし'
+  topAbilityPct: 71.2
+  topNature: 'いじっぱり'
+  topNaturePct: 83.8
+  topNature2: 'ゆうかん'
+  topNaturePct2: 10.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

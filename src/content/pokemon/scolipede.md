@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'scolipede-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['つるぎのまい', 'バトンタッチ', 'まもる', 'じしん']
+  topMovePct: [72.0, 63.2, 59.1, 43.9]
+  topItems: ['ペンドラナイト', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [30.1, 25.2, 14.8]
+  topAbility: 'かそく'
+  topAbilityPct: 98.9
+  topNature: 'ようき'
+  topNaturePct: 32.0
+  topNature2: 'いじっぱり'
+  topNaturePct2: 29.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 173
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['オーラぐるま', 'まもる', 'がむしゃら', 'ねこだまし']
+  topMovePct: [99.9, 47.2, 43.2, 36.4]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'こだわりスカーフ']
+  topItemPct: [85.1, 3.5, 2.9]
+  topAbility: 'はらぺこスイッチ'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 50.3
+  topNature2: 'ようき'
+  topNaturePct2: 38.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

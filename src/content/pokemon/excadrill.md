@@ -7,6 +7,18 @@ usageRank: 55
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'excadrill-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'アイアンヘッド', 'いわなだれ', 'つのドリル']
+  topMovePct: [98.7, 96.4, 64.2, 30.2]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [40.2, 29.8, 15.7]
+  topAbility: 'かたやぶり'
+  topAbilityPct: 76.8
+  topNature: 'ようき'
+  topNaturePct: 53.1
+  topNature2: 'いじっぱり'
+  topNaturePct2: 43.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

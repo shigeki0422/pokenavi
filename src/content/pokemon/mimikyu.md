@@ -7,6 +7,18 @@ usageRank: 2
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'mimikyu-analysis-m3'
+faq:
+  season: 'M-3'
+  topMoves: ['かげうち', 'じゃれつく', 'つるぎのまい', 'シャドークロー']
+  topMovePct: [96.0, 95.9, 80.3, 62.3]
+  topItems: ['いのちのたま', 'ラムのみ', 'ピントレンズ']
+  topItemPct: [84.0, 4.2, 2.8]
+  topAbility: 'ばけのかわ'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 76.8
+  topNature2: 'ようき'
+  topNaturePct2: 17.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

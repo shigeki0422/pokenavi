@@ -7,6 +7,18 @@ usageRank: 144
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['どくづき', 'ドリルライナー', 'とんぼがえり', 'とどめばり']
+  topMovePct: [93.6, 82.0, 79.7, 52.7]
+  topItems: ['スピアナイト', 'きあいのタスキ', 'せんせいのツメ']
+  topItemPct: [97.9, 0.6, 0.4]
+  topAbility: 'むしのしらせ'
+  topAbilityPct: 59.4
+  topNature: 'ようき'
+  topNaturePct: 85.3
+  topNature2: 'いじっぱり'
+  topNaturePct2: 11.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

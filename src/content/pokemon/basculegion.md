@@ -7,6 +7,18 @@ usageRank: 14
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'basculegion-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['アクアジェット', 'おはかまいり', 'クイックターン', 'ウェーブタックル']
+  topMovePct: [69.0, 65.2, 54.9, 54.1]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [54.0, 12.3, 11.6]
+  topAbility: 'てきおうりょく'
+  topAbilityPct: 87.3
+  topNature: 'ようき'
+  topNaturePct: 38.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 22.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

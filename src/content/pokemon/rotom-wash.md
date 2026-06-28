@@ -8,6 +8,18 @@ imageForm: '02'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'rotom-wash-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ハイドロポンプ', 'ボルトチェンジ', 'おにび', '10まんボルト']
+  topMovePct: [98.8, 91.0, 87.6, 52.7]
+  topItems: ['オボンのみ', 'たべのこし', 'こだわりスカーフ']
+  topItemPct: [44.8, 31.1, 15.0]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ずぶとい'
+  topNaturePct: 50.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 22.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 65
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'milotic-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ねっとう', 'じこさいせい', 'れいとうビーム', 'ミラーコート']
+  topMovePct: [94.2, 91.3, 68.6, 61.5]
+  topItems: ['たべのこし', 'オボンのみ', 'ラムのみ']
+  topItemPct: [65.5, 19.8, 5.0]
+  topAbility: 'かちき'
+  topAbilityPct: 63.5
+  topNature: 'ずぶとい'
+  topNaturePct: 60.2
+  topNature2: 'おだやか'
+  topNaturePct2: 18.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

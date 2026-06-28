@@ -7,6 +7,18 @@ usageRank: 71
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['シャカシャカほう', 'ちからをすいとる', 'シャドーボール', 'めいそう']
+  topMovePct: [96.6, 92.6, 73.1, 62.9]
+  topItems: ['たべのこし', 'オボンのみ', 'おおきなねっこ']
+  topItemPct: [43.8, 19.6, 12.3]
+  topAbility: 'たいねつ'
+  topAbilityPct: 92.8
+  topNature: 'ずぶとい'
+  topNaturePct: 71.9
+  topNature2: 'ひかえめ'
+  topNaturePct2: 11.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

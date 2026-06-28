@@ -7,6 +7,18 @@ usageRank: 109
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'heracross-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['インファイト', 'ロックブラスト', 'タネマシンガン', 'ミサイルばり']
+  topMovePct: [87.6, 86.8, 78.6, 52.7]
+  topItems: ['ヘラクロスナイト', 'こだわりスカーフ', 'きあいのタスキ']
+  topItemPct: [91.6, 4.0, 1.7]
+  topAbility: 'じしんかじょう'
+  topAbilityPct: 69.9
+  topNature: 'いじっぱり'
+  topNaturePct: 64.1
+  topNature2: 'ようき'
+  topNaturePct2: 24.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

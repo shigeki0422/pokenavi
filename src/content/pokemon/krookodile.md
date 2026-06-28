@@ -7,6 +7,18 @@ usageRank: 138
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'はたきおとす', 'インファイト', 'ステルスロック']
+  topMovePct: [95.5, 58.6, 41.2, 28.2]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [47.5, 22.5, 8.0]
+  topAbility: 'いかく'
+  topAbilityPct: 62.2
+  topNature: 'いじっぱり'
+  topNaturePct: 56.1
+  topNature2: 'ようき'
+  topNaturePct2: 32.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 72
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'kleavor-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['がんせきアックス', 'シザークロス', 'インファイト', 'つじぎり']
+  topMovePct: [99.8, 66.0, 52.2, 43.8]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'いのちのたま']
+  topItemPct: [61.3, 25.7, 2.7]
+  topAbility: 'きれあじ'
+  topAbilityPct: 97.9
+  topNature: 'いじっぱり'
+  topNaturePct: 49.7
+  topNature2: 'ようき'
+  topNaturePct2: 43.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

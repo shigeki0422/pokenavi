@@ -7,6 +7,18 @@ usageRank: 136
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['フリーズドライ', 'こおりのつぶて', 'ミラーコート', 'あくび']
+  topMovePct: [95.7, 70.5, 51.5, 32.2]
+  topItems: ['きあいのタスキ', 'とけないこおり', 'ひかりのこな']
+  topItemPct: [42.9, 22.1, 7.8]
+  topAbility: 'ゆきがくれ'
+  topAbilityPct: 80.3
+  topNature: 'ひかえめ'
+  topNaturePct: 67.0
+  topNature2: 'ずぶとい'
+  topNaturePct2: 7.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

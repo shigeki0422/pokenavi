@@ -7,6 +7,18 @@ usageRank: 79
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['からをやぶる', 'インファイト', 'ロックブラスト', 'じしん']
+  topMovePct: [97.9, 95.6, 68.1, 46.2]
+  topItems: ['ガメノデスナイト', 'きあいのタスキ', 'しろいハーブ']
+  topItemPct: [96.2, 1.7, 0.8]
+  topAbility: 'かたいツメ'
+  topAbilityPct: 92.8
+  topNature: 'ようき'
+  topNaturePct: 53.6
+  topNature2: 'いじっぱり'
+  topNaturePct2: 44.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

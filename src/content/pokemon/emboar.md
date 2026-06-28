@@ -7,6 +7,18 @@ usageRank: 178
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['フレアドライブ', 'ふいうち', 'インファイト', 'じしん']
+  topMovePct: [87.7, 60.1, 42.3, 33.0]
+  topItems: ['エンブオナイト', 'いのちのたま', 'こだわりスカーフ']
+  topItemPct: [72.9, 6.6, 6.6]
+  topAbility: 'すてみ'
+  topAbilityPct: 68.0
+  topNature: 'いじっぱり'
+  topNaturePct: 69.1
+  topNature2: 'ゆうかん'
+  topNaturePct2: 10.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 73
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'kangaskhan-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ねこだまし', 'じしん', 'れいとうパンチ', 'ふいうち']
+  topMovePct: [67.2, 63.3, 62.3, 60.6]
+  topItems: ['ガルーラナイト', 'シルクのスカーフ', 'いのちのたま']
+  topItemPct: [89.8, 4.7, 1.3]
+  topAbility: 'きもったま'
+  topAbilityPct: 87.6
+  topNature: 'いじっぱり'
+  topNaturePct: 84.9
+  topNature2: 'ようき'
+  topNaturePct2: 9.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

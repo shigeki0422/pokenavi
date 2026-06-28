@@ -7,6 +7,18 @@ usageRank: 46
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'lucario-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['インファイト', 'バレットパンチ', 'つるぎのまい', 'コメットパンチ']
+  topMovePct: [64.4, 49.2, 46.1, 39.1]
+  topItems: ['ルカリオナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [91.1, 4.4, 1.3]
+  topAbility: 'せいしんりょく'
+  topAbilityPct: 84.1
+  topNature: 'ようき'
+  topNaturePct: 53.9
+  topNature2: 'おくびょう'
+  topNaturePct2: 24.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 119
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['アクアステップ', 'インファイト', 'トリプルアクセル', 'アクアジェット']
+  topMovePct: [96.4, 80.2, 50.3, 38.1]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'ラムのみ']
+  topItemPct: [44.0, 13.8, 9.8]
+  topAbility: 'じしんかじょう'
+  topAbilityPct: 94.6
+  topNature: 'ようき'
+  topNaturePct: 49.8
+  topNature2: 'いじっぱり'
+  topNaturePct2: 42.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 131
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['リフレクター', 'ひかりのかべ', 'てっていこうせん', 'でんじは']
+  topMovePct: [80.8, 79.8, 58.8, 43.5]
+  topItems: ['ひかりのねんど', 'たべのこし', 'きあいのタスキ']
+  topItemPct: [73.0, 8.6, 3.6]
+  topAbility: 'いたずらごころ'
+  topAbilityPct: 99.0
+  topNature: 'ずぶとい'
+  topNaturePct: 52.2
+  topNature2: 'おだやか'
+  topNaturePct2: 19.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

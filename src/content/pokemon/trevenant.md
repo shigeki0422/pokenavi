@@ -7,6 +7,18 @@ usageRank: 172
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['やどりぎのタネ', 'まもる', 'ウッドホーン', 'おにび']
+  topMovePct: [79.8, 62.6, 57.3, 53.5]
+  topItems: ['オボンのみ', 'ラムのみ', 'カゴのみ']
+  topItemPct: [86.7, 2.9, 2.0]
+  topAbility: 'しゅうかく'
+  topAbilityPct: 92.4
+  topNature: 'わんぱく'
+  topNaturePct: 46.8
+  topNature2: 'しんちょう'
+  topNaturePct2: 21.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

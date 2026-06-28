@@ -7,6 +7,18 @@ usageRank: 85
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'slowbro-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['なまける', 'ねっとう', 'てっぺき', 'ボディプレス']
+  topMovePct: [84.4, 81.3, 49.1, 35.9]
+  topItems: ['ヤドランナイト', 'たべのこし', 'オボンのみ']
+  topItemPct: [62.9, 14.8, 9.7]
+  topAbility: 'さいせいりょく'
+  topAbilityPct: 90.0
+  topNature: 'ずぶとい'
+  topNaturePct: 66.9
+  topNature2: 'おだやか'
+  topNaturePct2: 11.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 189
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['アンコール', 'ほっぺすりすり', 'エアスラッシュ', 'ボルトチェンジ']
+  topMovePct: [65.2, 64.5, 41.3, 36.6]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'たべのこし']
+  topItemPct: [50.3, 9.1, 6.1]
+  topAbility: 'でんきエンジン'
+  topAbilityPct: 83.8
+  topNature: 'おくびょう'
+  topNaturePct: 55.8
+  topNature2: 'ようき'
+  topNaturePct2: 15.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

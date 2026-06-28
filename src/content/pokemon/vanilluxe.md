@@ -7,6 +7,18 @@ usageRank: 35
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'vanilluxe-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['フリーズドライ', 'ふぶき', 'こおりのつぶて', 'オーロラベール']
+  topMovePct: [97.6, 90.2, 73.0, 60.5]
+  topItems: ['とけないこおり', 'ひかりのねんど', 'こだわりスカーフ']
+  topItemPct: [43.2, 30.3, 12.5]
+  topAbility: 'ゆきふらし'
+  topAbilityPct: 99.0
+  topNature: 'ひかえめ'
+  topNaturePct: 60.9
+  topNature2: 'おくびょう'
+  topNaturePct2: 20.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

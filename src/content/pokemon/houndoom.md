@@ -7,6 +7,18 @@ usageRank: 184
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['あくのはどう', 'かえんほうしゃ', 'みちづれ', 'ふいうち']
+  topMovePct: [77.9, 59.9, 51.3, 33.0]
+  topItems: ['ヘルガナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [46.0, 39.4, 4.0]
+  topAbility: 'もらいび'
+  topAbilityPct: 88.0
+  topNature: 'おくびょう'
+  topNaturePct: 59.1
+  topNature2: 'ひかえめ'
+  topNaturePct2: 14.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

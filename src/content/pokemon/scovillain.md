@@ -7,6 +7,18 @@ usageRank: 76
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'scovillain-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['やどりぎのタネ', 'まもる', 'ギガドレイン', 'かえんほうしゃ']
+  topMovePct: [89.9, 86.1, 72.2, 69.5]
+  topItems: ['スコヴィラナイト', 'たべのこし', 'おおきなねっこ']
+  topItemPct: [81.9, 12.1, 1.1]
+  topAbility: 'ムラっけ'
+  topAbilityPct: 74.9
+  topNature: 'ずぶとい'
+  topNaturePct: 53.7
+  topNature2: 'ひかえめ'
+  topNaturePct2: 14.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

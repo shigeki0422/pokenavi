@@ -7,6 +7,18 @@ usageRank: 97
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'どくどく', 'ステルスロック', 'とんぼがえり']
+  topMovePct: [92.4, 38.9, 37.8, 24.6]
+  topItems: ['たべのこし', 'オボンのみ', 'きあいのタスキ']
+  topItemPct: [30.1, 18.9, 11.7]
+  topAbility: 'かいりきバサミ'
+  topAbilityPct: 46.3
+  topNature: 'いじっぱり'
+  topNaturePct: 33.3
+  topNature2: 'ようき'
+  topNaturePct2: 24.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

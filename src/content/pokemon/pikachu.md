@@ -7,6 +7,18 @@ usageRank: 180
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ボルテッカー', '10まんボルト', 'ねこだまし', 'くさむすび']
+  topMovePct: [39.5, 37.9, 37.6, 33.0]
+  topItems: ['でんきだま', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [73.6, 22.2, 0.6]
+  topAbility: 'ひらいしん'
+  topAbilityPct: 62.0
+  topNature: 'おくびょう'
+  topNaturePct: 32.1
+  topNature2: 'ようき'
+  topNaturePct2: 22.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

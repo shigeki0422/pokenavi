@@ -7,6 +7,18 @@ usageRank: 198
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['バレットパンチ', 'DDラリアット', 'インファイト', 'れいとうパンチ']
+  topMovePct: [73.6, 51.9, 46.2, 37.5]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'オボンのみ']
+  topItemPct: [38.7, 18.4, 8.2]
+  topAbility: 'きもったま'
+  topAbilityPct: 48.4
+  topNature: 'いじっぱり'
+  topNaturePct: 59.2
+  topNature2: 'ようき'
+  topNaturePct2: 18.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

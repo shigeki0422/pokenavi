@@ -7,6 +7,18 @@ usageRank: 80
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['アーマーキャノン', 'みちづれ', 'サイコキネシス', 'エナジーボール']
+  topMovePct: [96.0, 61.4, 53.0, 33.9]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'オボンのみ']
+  topItemPct: [75.7, 3.8, 2.9]
+  topAbility: 'くだけるよろい'
+  topAbilityPct: 80.6
+  topNature: 'ひかえめ'
+  topNaturePct: 75.7
+  topNature2: 'おくびょう'
+  topNaturePct2: 16.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

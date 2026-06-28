@@ -7,6 +7,18 @@ usageRank: 32
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'scizor-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['バレットパンチ', 'つるぎのまい', 'インファイト', 'はたきおとす']
+  topMovePct: [99.7, 83.9, 59.8, 47.3]
+  topItems: ['ハッサムナイト', 'いのちのたま', 'オボンのみ']
+  topItemPct: [61.8, 13.7, 6.4]
+  topAbility: 'テクニシャン'
+  topAbilityPct: 97.2
+  topNature: 'いじっぱり'
+  topNaturePct: 88.6
+  topNature2: 'わんぱく'
+  topNaturePct2: 4.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

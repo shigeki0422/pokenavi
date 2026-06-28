@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'eelektross-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['サンダーダイブ', 'ドレインパンチ', 'とぐろをまく', '10まんボルト']
+  topMovePct: [56.6, 53.9, 50.2, 34.4]
+  topItems: ['シビルドナイト', 'オボンのみ', 'たべのこし']
+  topItemPct: [94.5, 1.7, 0.7]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 29.6
+  topNature2: 'ひかえめ'
+  topNaturePct2: 24.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

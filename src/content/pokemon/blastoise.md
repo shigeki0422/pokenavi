@@ -7,6 +7,18 @@ usageRank: 44
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'blastoise-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['はどうだん', 'からをやぶる', 'みずのはどう', 'あくのはどう']
+  topMovePct: [87.9, 87.1, 83.4, 79.9]
+  topItems: ['カメックスナイト', 'しろいハーブ', 'オボンのみ']
+  topItemPct: [91.6, 5.3, 0.6]
+  topAbility: 'げきりゅう'
+  topAbilityPct: 70.8
+  topNature: 'ひかえめ'
+  topNaturePct: 72.8
+  topNature2: 'おくびょう'
+  topNaturePct2: 22.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

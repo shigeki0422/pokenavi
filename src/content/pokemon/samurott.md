@@ -7,6 +7,18 @@ usageRank: 37
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ひけん・ちえなみ', 'せいなるつるぎ', 'シェルブレード', 'ふいうち']
+  topMovePct: [99.2, 84.7, 72.0, 70.1]
+  topItems: ['きあいのタスキ', 'くろいメガネ', 'こだわりスカーフ']
+  topItemPct: [33.3, 30.8, 18.4]
+  topAbility: 'きれあじ'
+  topAbilityPct: 98.5
+  topNature: 'いじっぱり'
+  topNaturePct: 67.8
+  topNature2: 'ようき'
+  topNaturePct2: 19.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

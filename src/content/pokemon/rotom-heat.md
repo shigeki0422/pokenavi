@@ -8,6 +8,18 @@ imageForm: '01'
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'rotom-heat-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['オーバーヒート', 'ボルトチェンジ', 'おにび', '10まんボルト']
+  topMovePct: [97.8, 84.5, 74.7, 52.4]
+  topItems: ['こだわりスカーフ', 'オボンのみ', 'たべのこし']
+  topItemPct: [33.0, 31.7, 18.4]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 43.8
+  topNature2: 'おくびょう'
+  topNaturePct2: 25.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

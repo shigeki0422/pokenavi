@@ -7,6 +7,18 @@ usageRank: 17
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['パワージェム', 'だいちのちから', 'ステルスロック', 'ヘドロウェーブ']
+  topMovePct: [86.4, 59.7, 55.2, 52.8]
+  topItems: ['きあいのタスキ', 'キラフロルナイト', 'たべのこし']
+  topItemPct: [71.3, 21.8, 3.0]
+  topAbility: 'どくげしょう'
+  topAbilityPct: 94.4
+  topNature: 'おくびょう'
+  topNaturePct: 54.7
+  topNature2: 'ひかえめ'
+  topNaturePct2: 36.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 142
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ブレイブバード', 'とびひざげり', 'つるぎのまい', 'ストーンエッジ']
+  topMovePct: [53.2, 50.7, 47.5, 36.1]
+  topItems: ['ルチャブルナイト', 'オボンのみ', 'きあいのタスキ']
+  topItemPct: [42.5, 16.6, 13.4]
+  topAbility: 'かるわざ'
+  topAbilityPct: 47.4
+  topNature: 'いじっぱり'
+  topNaturePct: 49.1
+  topNature2: 'ようき'
+  topNaturePct2: 43.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

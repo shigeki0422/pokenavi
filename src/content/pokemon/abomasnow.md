@@ -7,6 +7,18 @@ usageRank: 83
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ふぶき', 'こおりのつぶて', 'ギガドレイン', 'だいちのちから']
+  topMovePct: [94.5, 57.2, 54.4, 49.6]
+  topItems: ['ユキノオナイト', 'ひかりのねんど', 'きあいのタスキ']
+  topItemPct: [53.2, 23.0, 7.6]
+  topAbility: 'ゆきふらし'
+  topAbilityPct: 98.3
+  topNature: 'れいせい'
+  topNaturePct: 48.4
+  topNature2: 'ひかえめ'
+  topNaturePct2: 25.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

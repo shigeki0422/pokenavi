@@ -7,6 +7,18 @@ usageRank: 150
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['10まんボルト', 'ボルトチェンジ', 'みわくのボイス', 'シャドーボール']
+  topMovePct: [77.6, 59.6, 58.7, 45.2]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'じしゃく']
+  topItemPct: [31.5, 19.7, 14.2]
+  topAbility: 'ちくでん'
+  topAbilityPct: 88.3
+  topNature: 'おくびょう'
+  topNaturePct: 66.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 23.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

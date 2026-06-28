@@ -7,6 +7,18 @@ usageRank: 107
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ボディプレス', 'てっぺき', 'ヘビーボンバー', 'メタルバースト']
+  topMovePct: [74.4, 58.7, 56.9, 34.6]
+  topItems: ['ボスゴドラナイト', 'たべのこし', 'せんせいのツメ']
+  topItemPct: [76.4, 5.6, 4.0]
+  topAbility: 'がんじょう'
+  topAbilityPct: 82.3
+  topNature: 'わんぱく'
+  topNaturePct: 48.1
+  topNature2: 'いじっぱり'
+  topNaturePct2: 19.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

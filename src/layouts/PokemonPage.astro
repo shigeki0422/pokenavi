@@ -8,7 +8,7 @@ import SimPartyCard from '../components/SimPartyCard.astro';
 
 type Props = CollectionEntry<'pokemon'>['data'];
 
-const { title, description, pokemonName, dexNumber, imageForm, usageRank } = Astro.props;
+const { title, description, pokemonName, dexNumber, imageForm, usageRank, faq } = Astro.props;
 
 const metaDescription = pokemonName && usageRank
   ? `M-2・M-3環境で使用率${usageRank}位の${pokemonName}。技・持ち物・特性・性格の採用率データと、上位ランカーの実戦パーティを掲載。バトルシミュレーションで対戦成績も確認できます。`
@@ -28,6 +28,45 @@ const pokemonJsonLd = pokemonName ? {
 	image: pokemonImageUrl,
 } : null;
 
+const faqJsonLd = faq ? {
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: [
+		{
+			'@type': 'Question',
+			name: `${pokemonName}の最も使われている技は？`,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: `${faq.season}環境では${faq.topMoves[0]}（採用率${faq.topMovePct[0]}%）が最多です。次いで${faq.topMoves.slice(1).map((m, i) => `${m}（${faq.topMovePct[i+1]}%）`).join('、')}の順です。`,
+			},
+		},
+		{
+			'@type': 'Question',
+			name: `${pokemonName}の最も使われている持ち物は？`,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: `${faq.season}環境では${faq.topItems[0]}（採用率${faq.topItemPct[0]}%）が最多です。次いで${faq.topItems.slice(1).map((it, i) => `${it}（${faq.topItemPct[i+1]}%）`).join('、')}の順です。`,
+			},
+		},
+		{
+			'@type': 'Question',
+			name: `${pokemonName}の特性は何が使われている？`,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: `${faq.season}環境では${faq.topAbility}（採用率${faq.topAbilityPct}%）が主流です。`,
+			},
+		},
+		{
+			'@type': 'Question',
+			name: `${pokemonName}の性格は何が使われている？`,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: `${faq.season}環境では${faq.topNature}（採用率${faq.topNaturePct}%）が最多です。${faq.topNature2 ? `次いで${faq.topNature2}（${faq.topNaturePct2}%）です。` : ''}`,
+			},
+		},
+	],
+} : null;
+
 const breadcrumbJsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'BreadcrumbList',
@@ -44,6 +83,7 @@ const breadcrumbJsonLd = {
 		<BaseHead title={title} description={metaDescription} imageUrl={pokemonImageUrl} />
 		{pokemonJsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(pokemonJsonLd)} />}
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+		{faqJsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
 		<style>
 			main {
 				width: 100%;

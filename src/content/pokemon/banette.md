@@ -7,6 +7,18 @@ usageRank: 84
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'banette-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['みちづれ', 'ポルターガイスト', 'アンコール', 'かげうち']
+  topMovePct: [97.5, 95.4, 75.2, 57.2]
+  topItems: ['ジュペッタナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [98.6, 0.8, 0.3]
+  topAbility: 'おみとおし'
+  topAbilityPct: 85.0
+  topNature: 'いじっぱり'
+  topNaturePct: 71.5
+  topNature2: 'ゆうかん'
+  topNaturePct2: 21.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

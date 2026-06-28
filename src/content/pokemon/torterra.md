@@ -7,6 +7,18 @@ usageRank: 135
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['からをやぶる', 'じしん', 'ぶちかまし', 'ウッドハンマー']
+  topMovePct: [78.5, 52.0, 43.7, 39.3]
+  topItems: ['しろいハーブ', 'きあいのタスキ', 'たべのこし']
+  topItemPct: [49.0, 18.3, 5.9]
+  topAbility: 'シェルアーマー'
+  topAbilityPct: 61.9
+  topNature: 'いじっぱり'
+  topNaturePct: 47.1
+  topNature2: 'ようき'
+  topNaturePct2: 28.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

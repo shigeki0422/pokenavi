@@ -7,6 +7,18 @@ usageRank: 62
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'skarmory-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['はねやすめ', 'ステルスロック', 'ボディプレス', 'ふきとばし']
+  topMovePct: [76.2, 65.8, 48.5, 44.0]
+  topItems: ['オボンのみ', 'たべのこし', 'エアームドナイト']
+  topItemPct: [36.9, 28.1, 19.7]
+  topAbility: 'がんじょう'
+  topAbilityPct: 84.7
+  topNature: 'わんぱく'
+  topNaturePct: 57.8
+  topNature2: 'ようき'
+  topNaturePct2: 13.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

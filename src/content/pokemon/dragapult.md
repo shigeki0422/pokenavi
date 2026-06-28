@@ -7,6 +7,18 @@ usageRank: 38
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'dragapult-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ドラゴンアロー', 'とんぼがえり', 'ゴーストダイブ', 'ふいうち']
+  topMovePct: [64.8, 45.2, 39.1, 34.7]
+  topItems: ['いのちのたま', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [43.7, 19.7, 15.0]
+  topAbility: 'すりぬけ'
+  topAbilityPct: 70.7
+  topNature: 'ようき'
+  topNaturePct: 29.2
+  topNature2: 'おくびょう'
+  topNaturePct2: 19.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

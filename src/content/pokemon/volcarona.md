@@ -7,6 +7,18 @@ usageRank: 34
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'volcarona-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ちょうのまい', 'ほのおのまい', 'ギガドレイン', 'あさのひざし']
+  topMovePct: [96.7, 85.3, 72.2, 54.4]
+  topItems: ['オボンのみ', 'たべのこし', 'ラムのみ']
+  topItemPct: [45.3, 19.7, 12.8]
+  topAbility: 'ほのおのからだ'
+  topAbilityPct: 91.6
+  topNature: 'ひかえめ'
+  topNaturePct: 38.9
+  topNature2: 'ずぶとい'
+  topNaturePct2: 34.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

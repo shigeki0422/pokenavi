@@ -7,6 +7,18 @@ usageRank: 61
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'espathra-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ルミナコリジョン', 'まもる', 'バトンタッチ', 'めいそう']
+  topMovePct: [82.4, 80.8, 76.9, 68.5]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'たべのこし']
+  topItemPct: [36.0, 29.0, 14.0]
+  topAbility: 'かそく'
+  topAbilityPct: 99.1
+  topNature: 'ずぶとい'
+  topNaturePct: 35.3
+  topNature2: 'おくびょう'
+  topNaturePct2: 31.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

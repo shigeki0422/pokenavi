@@ -7,6 +7,18 @@ usageRank: 51
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'bellibolt-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['パラボラチャージ', 'なまける', 'みずびたし', 'どくどく']
+  topMovePct: [92.3, 84.4, 72.8, 63.1]
+  topItems: ['たべのこし', 'オボンのみ', 'シュカのみ']
+  topItemPct: [53.6, 30.0, 6.7]
+  topAbility: 'でんきにかえる'
+  topAbilityPct: 98.7
+  topNature: 'おだやか'
+  topNaturePct: 53.0
+  topNature2: 'なまいき'
+  topNaturePct2: 19.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 18
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'pelipper-analysis-m3'
+faq:
+  season: 'M-3'
+  topMoves: ['ぼうふう', 'とんぼがえり', 'れいとうビーム', 'なみのり']
+  topMovePct: [98.3, 91.9, 63.7, 48.6]
+  topItems: ['しめったいわ', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [73.6, 12.3, 7.5]
+  topAbility: 'あめふらし'
+  topAbilityPct: 99.5
+  topNature: 'のんき'
+  topNaturePct: 35.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 28.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

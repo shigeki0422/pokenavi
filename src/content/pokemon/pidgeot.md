@@ -7,6 +7,18 @@ usageRank: 153
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ぼうふう', 'ねっぷう', 'はかいこうせん', 'みがわり']
+  topMovePct: [98.7, 95.5, 67.0, 26.9]
+  topItems: ['ピジョットナイト', 'きあいのハチマキ', 'こだわりスカーフ']
+  topItemPct: [97.6, 0.3, 0.2]
+  topAbility: 'はとむね'
+  topAbilityPct: 61.1
+  topNature: 'おくびょう'
+  topNaturePct: 65.1
+  topNature2: 'ひかえめ'
+  topNaturePct2: 31.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

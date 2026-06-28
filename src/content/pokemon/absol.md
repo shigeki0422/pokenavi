@@ -7,6 +7,18 @@ usageRank: 177
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ふいうち', 'インファイト', 'はたきおとす', 'つるぎのまい']
+  topMovePct: [87.2, 57.7, 50.1, 45.4]
+  topItems: ['アブソルナイト', 'ピントレンズ', 'きあいのタスキ']
+  topItemPct: [67.2, 13.0, 11.2]
+  topAbility: 'きょううん'
+  topAbilityPct: 70.9
+  topNature: 'いじっぱり'
+  topNaturePct: 38.8
+  topNature2: 'ようき'
+  topNaturePct2: 35.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

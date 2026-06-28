@@ -7,6 +7,18 @@ usageRank: 24
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'kingambit-analysis-m3'
+faq:
+  season: 'M-3'
+  topMoves: ['ふいうち', 'ドゲザン', 'アイアンヘッド', 'つるぎのまい']
+  topMovePct: [99.1, 94.8, 90.8, 77.0]
+  topItems: ['くろいメガネ', 'いのちのたま', 'きあいのタスキ']
+  topItemPct: [53.7, 14.8, 7.7]
+  topAbility: 'そうだいしょう'
+  topAbilityPct: 86.4
+  topNature: 'いじっぱり'
+  topNaturePct: 92.3
+  topNature2: 'ゆうかん'
+  topNaturePct2: 3.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

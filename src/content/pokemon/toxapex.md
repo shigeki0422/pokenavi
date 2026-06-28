@@ -7,6 +7,18 @@ usageRank: 56
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'toxapex-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['じこさいせい', 'どくどく', 'トーチカ', 'まとわりつく']
+  topMovePct: [94.6, 91.7, 68.8, 57.2]
+  topItems: ['たべのこし', 'オボンのみ', 'メンタルハーブ']
+  topItemPct: [70.3, 12.4, 4.5]
+  topAbility: 'さいせいりょく'
+  topAbilityPct: 94.8
+  topNature: 'ずぶとい'
+  topNaturePct: 37.5
+  topNature2: 'おだやか'
+  topNaturePct2: 21.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

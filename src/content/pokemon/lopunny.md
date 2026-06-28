@@ -7,6 +7,18 @@ usageRank: 33
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'lopunny-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ねこだまし', 'インファイト', 'トリプルアクセル', 'とびひざげり']
+  topMovePct: [76.0, 61.3, 61.0, 34.8]
+  topItems: ['ミミロップナイト', 'オボンのみ', 'メンタルハーブ']
+  topItemPct: [97.1, 0.8, 0.5]
+  topAbility: 'じゅうなん'
+  topAbilityPct: 73.0
+  topNature: 'ようき'
+  topNaturePct: 73.3
+  topNature2: 'いじっぱり'
+  topNaturePct2: 24.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

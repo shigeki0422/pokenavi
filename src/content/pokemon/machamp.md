@@ -7,6 +7,18 @@ usageRank: 154
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ばくれつパンチ', 'バレットパンチ', 'ストーンエッジ', 'れいとうパンチ']
+  topMovePct: [86.0, 80.0, 70.0, 65.8]
+  topItems: ['せんせいのツメ', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [27.9, 14.3, 11.8]
+  topAbility: 'ノーガード'
+  topAbilityPct: 91.2
+  topNature: 'いじっぱり'
+  topNaturePct: 83.9
+  topNature2: 'ようき'
+  topNaturePct2: 6.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

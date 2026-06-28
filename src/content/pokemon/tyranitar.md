@@ -7,6 +7,18 @@ usageRank: 52
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'tyranitar-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['はたきおとす', 'ストーンエッジ', 'じしん', 'りゅうのまい']
+  topMovePct: [73.8, 55.6, 54.6, 35.2]
+  topItems: ['バンギラスナイト', 'オボンのみ', 'たべのこし']
+  topItemPct: [45.8, 12.6, 8.6]
+  topAbility: 'すなおこし'
+  topAbilityPct: 99.0
+  topNature: 'いじっぱり'
+  topNaturePct: 43.7
+  topNature2: 'ようき'
+  topNaturePct2: 22.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

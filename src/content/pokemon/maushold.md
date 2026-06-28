@@ -7,6 +7,18 @@ usageRank: 87
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ネズミざん', 'おかたづけ', 'アンコール', 'かみつく']
+  topMovePct: [95.2, 83.7, 57.7, 41.5]
+  topItems: ['こうかくレンズ', 'おうじゃのしるし', 'オボンのみ']
+  topItemPct: [60.0, 21.2, 8.1]
+  topAbility: 'テクニシャン'
+  topAbilityPct: 89.5
+  topNature: 'ようき'
+  topNaturePct: 71.4
+  topNature2: 'いじっぱり'
+  topNaturePct2: 16.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 92
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['かえんほうしゃ', 'オーバーヒート', 'ハイパーボイス', 'ねっさのだいち']
+  topMovePct: [89.3, 64.2, 48.8, 36.1]
+  topItems: ['カエンジシナイト', 'きあいのタスキ', 'たべのこし']
+  topItemPct: [98.0, 0.3, 0.2]
+  topAbility: 'きんちょうかん'
+  topAbilityPct: 68.5
+  topNature: 'おくびょう'
+  topNaturePct: 75.2
+  topNature2: 'ひかえめ'
+  topNaturePct2: 21.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

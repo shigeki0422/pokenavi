@@ -7,6 +7,18 @@ usageRank: 40
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'meganium-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ソーラービーム', 'ウェザーボール', 'マジカルシャイン', 'こうごうせい']
+  topMovePct: [97.8, 95.2, 75.2, 72.8]
+  topItems: ['メガニウムナイト', 'オボンのみ', 'たべのこし']
+  topItemPct: [99.0, 0.1, 0.1]
+  topAbility: 'しんりょく'
+  topAbilityPct: 66.3
+  topNature: 'ひかえめ'
+  topNaturePct: 86.4
+  topNature2: 'おくびょう'
+  topNaturePct2: 6.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

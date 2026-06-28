@@ -7,6 +7,18 @@ usageRank: 60
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'araquanid-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ねばねばネット', 'アクアブレイク', 'ミラーコート', 'とびかかる']
+  topMovePct: [92.8, 86.5, 75.6, 30.9]
+  topItems: ['オボンのみ', 'しんぴのしずく', 'きあいのタスキ']
+  topItemPct: [52.1, 11.3, 9.8]
+  topAbility: 'すいほう'
+  topAbilityPct: 97.0
+  topNature: 'いじっぱり'
+  topNaturePct: 42.4
+  topNature2: 'わんぱく'
+  topNaturePct2: 21.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

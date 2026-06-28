@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'blaziken-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['フレアドライブ', 'インファイト', 'つるぎのまい', 'まもる']
+  topMovePct: [84.7, 63.3, 56.8, 51.3]
+  topItems: ['バシャーモナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [76.9, 14.1, 3.9]
+  topAbility: 'かそく'
+  topAbilityPct: 97.6
+  topNature: 'いじっぱり'
+  topNaturePct: 75.1
+  topNature2: 'ようき'
+  topNaturePct2: 17.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

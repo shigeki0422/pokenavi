@@ -7,6 +7,18 @@ usageRank: 125
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['おはかまいり', 'かげうち', 'おにび', 'いたみわけ']
+  topMovePct: [77.3, 64.4, 41.2, 34.7]
+  topItems: ['たべのこし', 'のろいのおふだ', 'いのちのたま']
+  topItemPct: [44.4, 16.9, 12.2]
+  topAbility: 'もふもふ'
+  topAbilityPct: 71.0
+  topNature: 'わんぱく'
+  topNaturePct: 48.5
+  topNature2: 'いじっぱり'
+  topNaturePct2: 35.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

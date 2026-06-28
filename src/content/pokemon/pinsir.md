@@ -7,6 +7,18 @@ usageRank: 134
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['でんこうせっか', 'つるぎのまい', 'やまあらし', 'のしかかり']
+  topMovePct: [83.5, 75.6, 60.5, 54.1]
+  topItems: ['カイロスナイト', 'こだわりスカーフ', 'きあいのタスキ']
+  topItemPct: [95.6, 2.1, 0.7]
+  topAbility: 'じしんかじょう'
+  topAbilityPct: 57.8
+  topNature: 'ようき'
+  topNaturePct: 78.3
+  topNature2: 'いじっぱり'
+  topNaturePct2: 18.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

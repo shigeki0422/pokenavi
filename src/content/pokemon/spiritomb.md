@@ -7,6 +7,18 @@ usageRank: 147
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['トリックルーム', 'おにび', 'イカサマ', 'のろい']
+  topMovePct: [54.8, 51.7, 49.9, 35.6]
+  topItems: ['オボンのみ', 'たべのこし', 'メンタルハーブ']
+  topItemPct: [26.0, 22.0, 17.3]
+  topAbility: 'すりぬけ'
+  topAbilityPct: 64.9
+  topNature: 'のんき'
+  topNaturePct: 36.6
+  topNature2: 'なまいき'
+  topNaturePct2: 15.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

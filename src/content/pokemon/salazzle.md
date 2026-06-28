@@ -7,6 +7,18 @@ usageRank: 143
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['どくどく', 'アンコール', 'かえんほうしゃ', 'がむしゃら']
+  topMovePct: [84.3, 51.3, 44.3, 34.6]
+  topItems: ['きあいのタスキ', 'たべのこし', 'いのちのたま']
+  topItemPct: [70.0, 11.4, 3.1]
+  topAbility: 'ふしょく'
+  topAbilityPct: 90.5
+  topNature: 'おくびょう'
+  topNaturePct: 86.0
+  topNature2: 'ひかえめ'
+  topNaturePct2: 6.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

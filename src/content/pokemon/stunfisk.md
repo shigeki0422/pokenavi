@@ -7,6 +7,18 @@ usageRank: 175
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ステルスロック', 'だいちのちから', 'あくび', '10まんボルト']
+  topMovePct: [71.8, 68.2, 60.3, 59.5]
+  topItems: ['オボンのみ', 'たべのこし', 'せんせいのツメ']
+  topItemPct: [44.9, 26.2, 6.1]
+  topAbility: 'せいでんき'
+  topAbilityPct: 88.0
+  topNature: 'おだやか'
+  topNaturePct: 48.8
+  topNature2: 'ずぶとい'
+  topNaturePct2: 14.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

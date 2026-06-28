@@ -7,6 +7,18 @@ usageRank: 157
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['トリプルアクセル', 'とびひざげり', 'トロピカルキック', 'こうそくスピン']
+  topMovePct: [87.7, 75.0, 70.1, 36.5]
+  topItems: ['オボンのみ', 'こだわりスカーフ', 'こうかくレンズ']
+  topItemPct: [24.4, 16.3, 12.6]
+  topAbility: 'じょおうのいげん'
+  topAbilityPct: 89.1
+  topNature: 'いじっぱり'
+  topNaturePct: 56.8
+  topNature2: 'ようき'
+  topNaturePct2: 31.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

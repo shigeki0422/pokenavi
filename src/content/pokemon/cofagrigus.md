@@ -7,6 +7,18 @@ usageRank: 127
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['おにび', 'ボディプレス', 'たたりめ', 'トリックルーム']
+  topMovePct: [77.1, 53.7, 43.7, 40.4]
+  topItems: ['たべのこし', 'オボンのみ', 'カゴのみ']
+  topItemPct: [46.9, 23.8, 6.1]
+  topAbility: 'ミイラ'
+  topAbilityPct: 100.0
+  topNature: 'ずぶとい'
+  topNaturePct: 54.9
+  topNature2: 'のんき'
+  topNaturePct2: 19.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

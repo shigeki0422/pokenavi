@@ -7,6 +7,18 @@ usageRank: 141
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ばかぢから', 'はたきおとす', 'ひっくりかえす', 'バトンタッチ']
+  topMovePct: [94.0, 62.5, 38.1, 38.0]
+  topItems: ['カラマネナイト', 'オボンのみ', 'たべのこし']
+  topItemPct: [55.3, 14.6, 10.4]
+  topAbility: 'あまのじゃく'
+  topAbilityPct: 86.3
+  topNature: 'いじっぱり'
+  topNaturePct: 31.6
+  topNature2: 'しんちょう'
+  topNaturePct2: 18.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

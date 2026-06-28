@@ -7,6 +7,18 @@ usageRank: 8
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ソーラービーム', 'かえんほうしゃ', 'エアスラッシュ', 'オーバーヒート']
+  topMovePct: [76.0, 47.2, 45.1, 31.3]
+  topItems: ['リザードナイトY', 'リザードナイトX', 'こだわりスカーフ']
+  topItemPct: [77.0, 21.6, 0.1]
+  topAbility: 'もうか'
+  topAbilityPct: 84.1
+  topNature: 'ひかえめ'
+  topNaturePct: 43.0
+  topNature2: 'おくびょう'
+  topNaturePct2: 32.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

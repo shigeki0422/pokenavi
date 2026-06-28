@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'annihilape-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['ふんどのこぶし', 'ドレインパンチ', 'ビルドアップ', 'ちょうはつ']
+  topMovePct: [98.4, 90.5, 81.6, 62.2]
+  topItems: ['たべのこし', 'オボンのみ', 'ラムのみ']
+  topItemPct: [56.0, 25.3, 3.2]
+  topAbility: 'まけんき'
+  topAbilityPct: 69.6
+  topNature: 'いじっぱり'
+  topNaturePct: 46.4
+  topNature2: 'ようき'
+  topNaturePct2: 28.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

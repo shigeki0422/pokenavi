@@ -7,6 +7,18 @@ usageRank: 115
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ステルスロック', 'あくび', 'ソーラービーム', 'ふんか']
+  topMovePct: [61.1, 58.6, 43.9, 28.3]
+  topItems: ['もくたん', 'オボンのみ', 'たべのこし']
+  topItemPct: [15.2, 14.7, 8.9]
+  topAbility: 'ひでり'
+  topAbilityPct: 96.8
+  topNature: 'れいせい'
+  topNaturePct: 27.9
+  topNature2: 'ずぶとい'
+  topNaturePct2: 20.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

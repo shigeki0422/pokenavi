@@ -7,6 +7,18 @@ usageRank: 22
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'dragonite-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['しんそく', 'りゅうせいぐん', 'エアスラッシュ', '10まんボルト']
+  topMovePct: [61.9, 59.4, 34.4, 33.8]
+  topItems: ['カイリュナイト', 'ラムのみ', 'たべのこし']
+  topItemPct: [65.5, 13.2, 3.8]
+  topAbility: 'マルチスケイル'
+  topAbilityPct: 98.1
+  topNature: 'ひかえめ'
+  topNaturePct: 61.3
+  topNature2: 'いじっぱり'
+  topNaturePct2: 16.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

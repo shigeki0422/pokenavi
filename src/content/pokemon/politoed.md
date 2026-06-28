@@ -7,6 +7,18 @@ usageRank: 121
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ウェザーボール', 'れいとうビーム', 'アンコール', 'ほろびのうた']
+  topMovePct: [62.8, 61.4, 51.2, 38.1]
+  topItems: ['しめったいわ', 'オボンのみ', 'しんぴのしずく']
+  topItemPct: [61.0, 11.2, 4.4]
+  topAbility: 'あめふらし'
+  topAbilityPct: 96.3
+  topNature: 'ひかえめ'
+  topNaturePct: 41.7
+  topNature2: 'ずぶとい'
+  topNaturePct2: 20.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 19
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'hydreigon-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['あくのはどう', 'りゅうせいぐん', 'とんぼがえり', 'かえんほうしゃ']
+  topMovePct: [99.1, 95.3, 74.1, 54.5]
+  topItems: ['こだわりスカーフ', 'いのちのたま', 'きあいのタスキ']
+  topItemPct: [84.1, 6.7, 3.0]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 67.6
+  topNature2: 'おくびょう'
+  topNaturePct2: 30.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

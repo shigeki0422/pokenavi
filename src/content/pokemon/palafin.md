@@ -7,6 +7,18 @@ usageRank: 102
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ジェットパンチ', 'クイックターン', 'ウェーブタックル', 'インファイト']
+  topMovePct: [83.5, 80.1, 73.9, 54.9]
+  topItems: ['こだわりスカーフ', 'しんぴのしずく', 'いのちのたま']
+  topItemPct: [33.0, 27.5, 13.0]
+  topAbility: 'マイティチェンジ'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 79.4
+  topNature2: 'ようき'
+  topNaturePct2: 15.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

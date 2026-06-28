@@ -7,6 +7,18 @@ usageRank: 49
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'mamoswine-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'こおりのつぶて', 'つららばり', 'ステルスロック']
+  topMovePct: [98.8, 94.9, 45.5, 31.6]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'いのちのたま']
+  topItemPct: [83.5, 4.4, 3.3]
+  topAbility: 'あついしぼう'
+  topAbilityPct: 58.0
+  topNature: 'いじっぱり'
+  topNaturePct: 59.7
+  topNature2: 'やんちゃ'
+  topNaturePct2: 16.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

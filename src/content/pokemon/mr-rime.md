@@ -7,6 +7,18 @@ usageRank: 81
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['トリックルーム', 'マジカルフレイム', 'サイコキネシス', 'ミストバースト']
+  topMovePct: [78.5, 54.1, 49.9, 48.7]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'たべのこし']
+  topItemPct: [42.7, 20.8, 12.1]
+  topAbility: 'マジックミラー'
+  topAbilityPct: 98.5
+  topNature: 'れいせい'
+  topNaturePct: 42.3
+  topNature2: 'ずぶとい'
+  topNaturePct2: 20.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

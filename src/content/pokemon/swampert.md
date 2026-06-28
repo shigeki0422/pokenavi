@@ -8,6 +8,18 @@ pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'swampert-analysis-m3'
 
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'ウェーブタックル', 'れいとうパンチ', 'クイックターン']
+  topMovePct: [93.1, 72.9, 70.4, 64.8]
+  topItems: ['ラグラージナイト', 'オボンのみ', 'たべのこし']
+  topItemPct: [73.4, 14.5, 4.8]
+  topAbility: 'げきりゅう'
+  topAbilityPct: 77.7
+  topNature: 'いじっぱり'
+  topNaturePct: 58.0
+  topNature2: 'ようき'
+  topNaturePct2: 18.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

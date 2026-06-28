@@ -7,6 +7,18 @@ usageRank: 68
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'snorlax-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'あくび', 'れいとうパンチ', 'じわれ']
+  topMovePct: [61.3, 46.0, 33.7, 29.8]
+  topItems: ['たべのこし', 'オボンのみ', 'ヨプのみ']
+  topItemPct: [42.7, 15.9, 13.2]
+  topAbility: 'あついしぼう'
+  topAbilityPct: 90.1
+  topNature: 'しんちょう'
+  topNaturePct: 44.7
+  topNature2: 'いじっぱり'
+  topNaturePct2: 24.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 165
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ナイトバースト', 'かえんほうしゃ', 'ヘドロばくだん', 'カウンター']
+  topMovePct: [83.5, 43.3, 33.0, 32.3]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'いのちのたま']
+  topItemPct: [61.6, 14.4, 8.5]
+  topAbility: 'イリュージョン'
+  topAbilityPct: 100.0
+  topNature: 'おくびょう'
+  topNaturePct: 49.2
+  topNature2: 'ひかえめ'
+  topNaturePct2: 19.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

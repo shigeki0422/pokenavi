@@ -7,6 +7,18 @@ usageRank: 110
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'ステルスロック', 'おにび', 'トリックルーム']
+  topMovePct: [66.7, 60.2, 52.3, 39.0]
+  topItems: ['オボンのみ', 'たべのこし', 'きあいのタスキ']
+  topItemPct: [38.1, 22.7, 8.1]
+  topAbility: 'さまようたましい'
+  topAbilityPct: 100.0
+  topNature: 'わんぱく'
+  topNaturePct: 37.3
+  topNature2: 'しんちょう'
+  topNaturePct2: 19.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

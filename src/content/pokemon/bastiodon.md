@@ -7,6 +7,18 @@ usageRank: 199
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['メタルバースト', 'ステルスロック', 'ボディプレス', 'じわれ']
+  topMovePct: [72.5, 58.4, 57.8, 36.2]
+  topItems: ['たべのこし', 'オボンのみ', 'せんせいのツメ']
+  topItemPct: [45.3, 18.8, 5.0]
+  topAbility: 'がんじょう'
+  topAbilityPct: 85.6
+  topNature: 'わんぱく'
+  topNaturePct: 32.8
+  topNature2: 'しんちょう'
+  topNaturePct2: 18.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

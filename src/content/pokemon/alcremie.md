@@ -7,6 +7,18 @@ usageRank: 190
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['めいそう', 'とける', 'じこさいせい', 'みわくのボイス']
+  topMovePct: [87.5, 82.0, 74.8, 47.6]
+  topItems: ['たべのこし', 'オボンのみ', 'ひかりのこな']
+  topItemPct: [66.8, 13.7, 3.4]
+  topAbility: 'アロマベール'
+  topAbilityPct: 81.7
+  topNature: 'ずぶとい'
+  topNaturePct: 55.2
+  topNature2: 'おだやか'
+  topNaturePct2: 29.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

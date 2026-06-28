@@ -7,6 +7,18 @@ usageRank: 63
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'ditto-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['へんしん']
+  topMovePct: [100.0]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'せんせいのツメ']
+  topItemPct: [79.6, 8.4, 6.6]
+  topAbility: 'かわりもの'
+  topAbilityPct: 98.8
+  topNature: 'のんき'
+  topNaturePct: 23.6
+  topNature2: 'なまいき'
+  topNaturePct2: 8.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

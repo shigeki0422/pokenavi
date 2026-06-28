@@ -7,6 +7,18 @@ usageRank: 9
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'corviknight-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['はねやすめ', 'ボディプレス', 'てっぺき', 'とんぼがえり']
+  topMovePct: [98.1, 86.4, 81.7, 64.9]
+  topItems: ['たべのこし', 'オボンのみ', 'ひかりのこな']
+  topItemPct: [68.2, 27.3, 1.2]
+  topAbility: 'プレッシャー'
+  topAbilityPct: 59.0
+  topNature: 'わんぱく'
+  topNaturePct: 65.2
+  topNature2: 'のんき'
+  topNaturePct2: 23.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 194
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['だいちのちから', 'げんしのちから', 'かえんほうしゃ', 'ふんか']
+  topMovePct: [92.2, 59.1, 50.4, 49.4]
+  topItems: ['バクーダナイト', 'オボンのみ', 'もくたん']
+  topItemPct: [83.2, 3.0, 1.9]
+  topAbility: 'ハードロック'
+  topAbilityPct: 90.3
+  topNature: 'れいせい'
+  topNaturePct: 65.6
+  topNature2: 'ひかえめ'
+  topNaturePct2: 21.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

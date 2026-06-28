@@ -7,6 +7,18 @@ usageRank: 4
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'archaludon-analysis-m3'
+faq:
+  season: 'M-3'
+  topMoves: ['ラスターカノン', 'りゅうせいぐん', '10まんボルト', 'ステルスロック']
+  topMovePct: [74.8, 71.6, 48.8, 38.4]
+  topItems: ['オボンのみ', 'たべのこし', 'しろいハーブ']
+  topItemPct: [30.7, 29.5, 18.8]
+  topAbility: 'じきゅうりょく'
+  topAbilityPct: 76.6
+  topNature: 'ひかえめ'
+  topNaturePct: 49.2
+  topNature2: 'ずぶとい'
+  topNaturePct2: 16.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -7,6 +7,18 @@ usageRank: 146
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['しおづけ', 'じこさいせい', 'てっぺき', 'ボディプレス']
+  topMovePct: [92.6, 84.8, 50.2, 44.5]
+  topItems: ['たべのこし', 'オボンのみ', 'せんせいのツメ']
+  topItemPct: [63.1, 16.9, 4.5]
+  topAbility: 'きよめのしお'
+  topAbilityPct: 85.2
+  topNature: 'わんぱく'
+  topNaturePct: 45.7
+  topNature2: 'しんちょう'
+  topNaturePct2: 26.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

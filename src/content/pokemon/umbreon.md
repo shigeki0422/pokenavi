@@ -7,6 +7,18 @@ usageRank: 41
 pubDate: '2026-06-25'
 draft: false
 analysisSlug: 'umbreon-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['イカサマ', 'まもる', 'ねがいごと', 'あくび']
+  topMovePct: [95.3, 82.8, 79.9, 51.3]
+  topItems: ['たべのこし', 'オボンのみ', 'ラムのみ']
+  topItemPct: [88.5, 6.4, 1.1]
+  topAbility: 'せいしんりょく'
+  topAbilityPct: 60.2
+  topNature: 'ずぶとい'
+  topNaturePct: 52.3
+  topNature2: 'わんぱく'
+  topNaturePct2: 21.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

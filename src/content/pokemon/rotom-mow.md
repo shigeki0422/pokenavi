@@ -8,6 +8,18 @@ imageForm: '05'
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['リーフストーム', 'ボルトチェンジ', 'おにび', '10まんボルト']
+  topMovePct: [98.1, 83.1, 63.1, 57.3]
+  topItems: ['オボンのみ', 'こだわりスカーフ', 'たべのこし']
+  topItemPct: [30.1, 27.9, 11.5]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 43.0
+  topNature2: 'ずぶとい'
+  topNaturePct2: 24.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

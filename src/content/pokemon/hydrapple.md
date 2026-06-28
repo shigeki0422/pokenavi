@@ -7,6 +7,18 @@ usageRank: 164
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['きまぐレーザー', 'だいちのちから', 'ギガドレイン', 'じこさいせい']
+  topMovePct: [81.5, 70.7, 55.0, 31.5]
+  topItems: ['たべのこし', 'ヤチェのみ', 'オボンのみ']
+  topItemPct: [17.6, 14.8, 13.3]
+  topAbility: 'さいせいりょく'
+  topAbilityPct: 92.1
+  topNature: 'ひかえめ'
+  topNaturePct: 45.6
+  topNature2: 'ずぶとい'
+  topNaturePct2: 18.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

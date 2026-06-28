@@ -7,6 +7,18 @@ usageRank: 77
 pubDate: '2026-06-25'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ドレインパンチ', 'はたきおとす', 'りゅうのまい', 'れいとうパンチ']
+  topMovePct: [85.5, 72.5, 51.4, 32.6]
+  topItems: ['ズルズキナイト', 'たべのこし', 'オボンのみ']
+  topItemPct: [95.9, 1.2, 0.8]
+  topAbility: 'いかく'
+  topAbilityPct: 97.5
+  topNature: 'いじっぱり'
+  topNaturePct: 59.7
+  topNature2: 'ようき'
+  topNaturePct2: 20.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
