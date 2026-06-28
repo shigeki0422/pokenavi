@@ -166,12 +166,18 @@ const breadcrumbJsonLd = {
 				let tipTimer;
 
 				document.querySelectorAll('img[src*="/images/types/"]').forEach(img => {
-					// 直後のテキストノードがalt名と一致する場合に削除
+					// 直後のテキストノードがalt名（または「alt名・」区切り）に一致する場合に削除
 					let next = img.nextSibling;
 					while (next && next.nodeType === 3) {
 						const n = next;
 						next = n.nextSibling;
-						if (n.textContent.trim() === img.alt) n.remove();
+						const t = n.textContent.trim();
+						if (
+							t === img.alt ||
+							t === img.alt + '・' ||
+							t.startsWith(img.alt + '（×') ||
+							t.startsWith(img.alt + '(×')
+						) n.remove();
 					}
 					img.style.cursor = 'pointer';
 					img.addEventListener('click', e => {
