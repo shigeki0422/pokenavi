@@ -638,7 +638,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           const idx=await loadSearchIdx();
           sfNames.forEach(n=>{if(!SUBJ_FILTER_POKES.some(x=>x.name===n)){const f=idx.find(x=>x.n===n);SUBJ_FILTER_POKES.push({name:n,icon:f?.i||''});}});
           ofNames.forEach(n=>{if(!OPP_FILTER_POKES.some(x=>x.name===n)){const f=idx.find(x=>x.n===n);OPP_FILTER_POKES.push({name:n,icon:f?.i||''});}});
-          renderFilterChips(); renderOppFilterChips();
+          renderFilterChips(); renderOppFilterChips(); renderSubjectList();
           if(STATIC) prefetchAllParties();
         }
         const subjLabel=p.get('subj');
