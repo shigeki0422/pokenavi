@@ -7,82 +7,196 @@ import Header from '../../components/Header.astro';
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const pages = (await getCollection('pokemon'))
 	.filter((p) => showDrafts || !p.data.draft)
-	.sort((a, b) => (a.data.usageRank ?? 999) - (b.data.usageRank ?? 999));
+	.sort((a, b) => (a.data.usageRank ?? 9999) - (b.data.usageRank ?? 9999));
+
+const top10 = pages.filter((p) => p.data.usageRank && p.data.usageRank <= 10);
+const siteUrl = 'https://pokenavi.jp';
+
+const breadcrumbJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'BreadcrumbList',
+	itemListElement: [
+		{ '@type': 'ListItem', position: 1, name: 'ホーム', item: siteUrl + '/' },
+		{ '@type': 'ListItem', position: 2, name: 'ポケモン情報', item: siteUrl + '/pokemon/' },
+	],
+};
+
+const itemListJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'ItemList',
+	name: 'ポケモンチャンピオンズ 使用率ランキング',
+	url: siteUrl + '/pokemon/',
+	numberOfItems: top10.length,
+	itemListElement: top10.map((p, i) => ({
+		'@type': 'ListItem',
+		position: i + 1,
+		url: `${siteUrl}/pokemon/${p.id}/`,
+		name: p.data.pokemonName,
+	})),
+};
 ---
 
 <!doctype html>
 <html lang="ja">
 	<head>
 		<BaseHead
-			title="ポケモン図鑑 | ポケナビ"
-			description="ポケモンチャンピオンズのポケモン別使用率・種族値・タイプ相性データ一覧"
+			title="ポケモンチャンピオンズ 使用率ランキング一覧 | ポケナビ"
+			description="M-3・M-2環境のポケモンチャンピオンズ 使用率ランキング。ガブリアス・キングガンビット等、各ポケモンの技・持ち物・特性・性格の採用率データを掲載。"
 		/>
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
 		<style>
 			main { max-width: 960px; margin: auto; padding: 1em 2em; box-sizing: border-box; width: 100%; overflow-x: hidden; }
-			@media (max-width: 600px) {
-				main { padding: 0.8em; }
+			@media (max-width: 600px) { main { padding: 0.8em; } }
+
+			.breadcrumb ol { display: flex; flex-wrap: wrap; list-style: none; margin: 0 0 .6em; padding: 0; font-size: .75rem; color: rgb(var(--gray)); }
+			.breadcrumb li + li::before { content: '›'; padding: 0 .35em; }
+			.breadcrumb a { color: rgb(var(--gray)); text-decoration: none; }
+			.breadcrumb a:hover { text-decoration: underline; }
+			.breadcrumb [aria-current] { color: rgb(var(--gray-dark)); font-weight: 600; }
+
+			h1 { font-size: 1.5rem; margin: 0 0 0.25rem; }
+			.subtitle { color: rgb(var(--gray)); font-size: 0.875rem; margin-bottom: 1.25rem; }
+
+			/* TOP10 セクション */
+			.top10-section { margin-bottom: 2rem; }
+			.section-title {
+				font-size: 1rem;
+				font-weight: 700;
+				color: rgb(var(--black));
+				padding: 0.45rem 0.9rem;
+				background: #fff7ed;
+				border-left: 3px solid var(--accent, #f97316);
+				border-radius: 0 6px 6px 0;
+				margin-bottom: 0.75rem;
 			}
-			h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
-			.subtitle { color: rgb(var(--gray)); font-size: 0.9rem; margin-bottom: 1rem; }
+			.top10-grid {
+				display: grid;
+				grid-template-columns: repeat(5, 1fr);
+				gap: 10px;
+			}
+			@media (max-width: 600px) { .top10-grid { grid-template-columns: repeat(3, 1fr); } }
+			.top-card {
+				display: block;
+				text-decoration: none;
+				border: 1.5px solid #94a3b8;
+				border-radius: 10px;
+				padding: 10px 8px 8px;
+				text-align: center;
+				background: #fff;
+				box-shadow: 0 1px 6px rgba(0,0,0,.07);
+				transition: box-shadow 0.2s, border-color 0.2s;
+			}
+			.top-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.13); border-color: #64748b; }
+			.top-card img { width: 64px; height: 64px; display: block; margin: 0 auto 4px; }
+			.top-card .rank-badge {
+				display: inline-block;
+				background: #dc2626;
+				color: #fff;
+				font-size: 0.65rem;
+				font-weight: 700;
+				padding: 1px 6px;
+				border-radius: 4px;
+				margin-bottom: 3px;
+			}
+			.top-card .rank-badge.gold { background: #d97706; }
+			.top-card .rank-badge.silver { background: #64748b; }
+			.top-card .rank-badge.bronze { background: #92400e; }
+			.top-card .name { font-size: 0.85rem; font-weight: 700; color: rgb(var(--black)); }
+
+			/* 検索・全一覧 */
+			.all-section .section-title { background: #f8fafc; border-color: #94a3b8; }
 			.search-bar {
 				width: 100%;
 				padding: 8px 12px;
 				font-size: 1rem;
 				border: 1px solid #cbd5e1;
 				border-radius: 8px;
-				margin-bottom: 1.2rem;
+				margin-bottom: 1rem;
 				box-sizing: border-box;
 				outline: none;
 			}
 			.search-bar:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
 			.grid {
 				display: grid;
-				grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-				gap: 10px;
+				grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+				gap: 8px;
 			}
 			.card {
 				display: block;
 				text-decoration: none;
 				border: 1px solid #e2e8f0;
 				border-radius: 8px;
-				padding: 8px 6px;
+				padding: 7px 5px;
 				text-align: center;
 				transition: box-shadow 0.2s;
+				background: #fff;
 			}
 			.card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-			.card img { width: 52px; height: 52px; display: block; margin: 0 auto 4px; }
-			.card .rank { font-size: 0.65rem; font-weight: 700; color: #dc2626; margin-bottom: 1px; }
-			.card .dex { font-size: 0.65rem; color: rgb(var(--gray)); }
-			.card .name { font-size: 0.8rem; font-weight: 700; color: rgb(var(--black)); }
+			.card img { width: 48px; height: 48px; display: block; margin: 0 auto 3px; }
+			.card .rank { font-size: 0.62rem; font-weight: 700; color: #dc2626; margin-bottom: 1px; }
+			.card .name { font-size: 0.78rem; font-weight: 700; color: rgb(var(--black)); }
 			.card.hidden { display: none; }
 		</style>
 	</head>
 	<body>
 		<Header />
 		<main>
-			<h1>ポケモン情報</h1>
-			<p class="subtitle">使用率・種族値・採用率データ</p>
-			<input
-				type="search"
-				id="pokemon-search"
-				class="search-bar"
-				placeholder="ポケモン名で絞り込み..."
-				autocomplete="off"
-			/>
-			<div class="grid" id="pokemon-grid">
-				{pages.map((p, i) => (
-					<a class="card" href={`/pokemon/${p.id}/`} data-name={p.data.pokemonName}>
-						<img
-							src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
-							alt={p.data.pokemonName}
-							loading={i < 20 ? 'eager' : 'lazy'}
-						/>
-						{p.data.usageRank && <div class="rank">使用率 {p.data.usageRank > 200 ? '圏外' : `${p.data.usageRank}位`}</div>}
-						<div class="dex">No.{p.data.dexNumber}</div>
-						<div class="name">{p.data.pokemonName}</div>
-					</a>
-				))}
-			</div>
+			<nav class="breadcrumb" aria-label="パンくずリスト">
+				<ol>
+					<li><a href="/">ホーム</a></li>
+					<li aria-current="page">ポケモン情報</li>
+				</ol>
+			</nav>
+			<h1>使用率ランキング</h1>
+			<p class="subtitle">ポケモンチャンピオンズ M-3・M-2環境 · {pages.length}体掲載</p>
+
+			{top10.length > 0 && (
+				<section class="top10-section">
+					<div class="section-title">使用率 TOP10</div>
+					<div class="top10-grid">
+						{top10.map((p) => {
+							const r = p.data.usageRank!;
+							const badgeClass = r === 1 ? 'rank-badge gold' : r === 2 ? 'rank-badge silver' : r === 3 ? 'rank-badge bronze' : 'rank-badge';
+							return (
+								<a class="top-card" href={`/pokemon/${p.id}/`}>
+									<img
+										src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
+										alt={p.data.pokemonName}
+										loading="eager"
+									/>
+									<div class={badgeClass}>{r}位</div>
+									<div class="name">{p.data.pokemonName}</div>
+								</a>
+							);
+						})}
+					</div>
+				</section>
+			)}
+
+			<section class="all-section">
+				<div class="section-title">全ポケモン一覧</div>
+				<input
+					type="search"
+					id="pokemon-search"
+					class="search-bar"
+					placeholder="ポケモン名で絞り込み..."
+					autocomplete="off"
+				/>
+				<div class="grid" id="pokemon-grid">
+					{pages.map((p, i) => (
+						<a class="card" href={`/pokemon/${p.id}/`} data-name={p.data.pokemonName}>
+							<img
+								src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
+								alt={p.data.pokemonName}
+								loading={i < 30 ? 'eager' : 'lazy'}
+							/>
+							{p.data.usageRank && <div class="rank">{p.data.usageRank > 200 ? '圏外' : `${p.data.usageRank}位`}</div>}
+							<div class="name">{p.data.pokemonName}</div>
+						</a>
+					))}
+				</div>
+			</section>
 		</main>
 		<Footer />
 		<script>
