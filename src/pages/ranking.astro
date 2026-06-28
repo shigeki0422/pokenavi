@@ -617,12 +617,10 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
             span.textContent = p.name;
             li.appendChild(span);
             const rank = p.ranksByDate[dates[dates.length - 1]];
-            if (rank) {
-              const r = document.createElement('span');
-              r.style.cssText = 'font-size:11px;color:#94a3b8;margin-left:auto;';
-              r.textContent = `${rank}位`;
-              li.appendChild(r);
-            }
+            const r = document.createElement('span');
+            r.style.cssText = `font-size:11px;margin-left:auto;color:${rank ? '#94a3b8' : '#f97316'};`;
+            r.textContent = rank ? `${rank}位` : '圏外';
+            li.appendChild(r);
             li.addEventListener('mouseover', () => li.style.background = '#f1f5f9');
             li.addEventListener('mouseout', () => li.style.background = '');
             li.addEventListener('mousedown', e => { e.preventDefault(); selectPokemon(p); });
