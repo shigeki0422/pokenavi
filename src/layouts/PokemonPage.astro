@@ -181,11 +181,18 @@ const breadcrumbJsonLd = {
 					nav.style.display = 'none';
 					return;
 				}
+				const NAV_SHORT: Record<string, string> = {
+					'メガシンカ': 'メガ',
+					'タイプ相性': '相性',
+					'使用率データ': '使用率',
+					'考察記事': '考察',
+				};
 				headings.forEach((h, i) => {
 					if (!h.id) h.id = `sec-${i}`;
 					const a = document.createElement('a');
 					a.href = `#${h.id}`;
-					a.textContent = h.textContent.trim();
+					const text = h.textContent.trim();
+					a.textContent = NAV_SHORT[text] ?? text;
 					navInner.appendChild(a);
 				});
 
