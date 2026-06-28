@@ -527,7 +527,7 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
           const mx = e.clientX - rect.left, my = e.clientY - rect.top;
           let found = findNearest(mx, my, 18);
           if (found < 0) found = findNearestByName(mx, my);
-          if (found !== hoveredIdx) { hoveredIdx = found; draw(); }
+          if (found !== hoveredIdx) { hoveredIdx = found; draw(); drawRanks(); }
           if (found >= 0) {
             showTooltip(pokemon[found], mx, my, e.clientX, e.clientY);
             canvas.style.cursor = pokemon[found].url ? 'pointer' : 'default';
@@ -539,7 +539,7 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
 
         canvas.addEventListener('mouseleave', () => {
           if (pinnedIdx >= 0) return;
-          hoveredIdx = -1; draw();
+          hoveredIdx = -1; draw(); drawRanks();
           tooltip.style.display = 'none';
         });
 
