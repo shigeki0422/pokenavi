@@ -1,0 +1,341 @@
+---
+import indexData from '../../public/sim-data/index.json';
+import iconsData from '../../public/sim-data/icons.json';
+
+interface Props {
+  pokemonName: string;
+}
+const { pokemonName } = Astro.props;
+
+function parseSpec(s: string) {
+  const name = s.split('@')[0].split(':')[0];
+  const after = s.includes('@') ? s.split('@').slice(1).join('@') : '';
+  const parts = after.split(':');
+  return {
+    name,
+    item: parts[0] || '',
+    nature: parts[1] || '',
+    moves: (parts[2] || '').split('|').filter(Boolean),
+    evs: (parts[3] || '').split('/'),
+    ability: parts[4] || '',
+  };
+}
+
+const regionalPrefix: [string, number][] = [['ヒスイ', 3], ['ガラル', 3], ['アローラ', 4]];
+function iconUrl(name: string): string | null {
+  const n = name.replace(' (', '(');
+  const icons = iconsData as Record<string, string>;
+  let id = icons[n] || icons[n.split('(')[0].trim()];
+  if (!id) {
+    for (const [p, l] of regionalPrefix) {
+      if (n.startsWith(p)) { id = icons[n.slice(l) + '(' + p + ')']; if (id) break; }
+    }
+  }
+  return id ? `/images/pokemon/pokemon-${id}.webp` : null;
+}
+
+function baseName(n: string) { return n.split('（')[0].split('(')[0].trim(); }
+
+const bn = baseName(pokemonName);
+const subjects = (indexData as any).subjects as any[];
+const match = subjects
+  .filter((s: any) => s.party && s.party.some((spec: string) => {
+    const n = parseSpec(spec).name; return n === pokemonName || baseName(n) === bn;
+  }))
+  .sort((a: any, b: any) => (b.win_rate || 0) - (a.win_rate || 0))[0];
+
+if (!match) return null;
+
+const EV_LABELS = ['H', 'A', 'B', 'C', 'D', 'S'];
+
+const party = match.party.map((s: string) => {
+  const p = parseSpec(s);
+  const nonZeroEvs = p.evs.map((v: string, i: number) => (+v > 0 ? EV_LABELS[i] + v : '')).filter(Boolean).join(' ');
+  return { ...p, iconUrl: iconUrl(p.name), evStr: nonZeroEvs };
+});
+
+const targetIdx = party.findIndex((p: any) => p.name === pokemonName || baseName(p.name) === bn);
+const simulatorUrl = `/simulator/?sf=${encodeURIComponent(pokemonName)}`;
+const partyJson = JSON.stringify(party);
+const uid = `spc-${Math.random().toString(36).slice(2, 7)}`;
+---
+
+<section class="spc-section">
+  <h2 class="spc-h2">構築例</h2>
+  <div class="spc-card" id={uid} data-party={partyJson} data-target={targetIdx}>
+    <div class="spc-label-row">
+      <span class="spc-party-label">{match.label}</span>
+    </div>
+    <div class="spc-icons" role="list">
+      {party.map((p: any, i: number) => (
+        <button class:list={['spc-mon', i === targetIdx && 'spc-selected']} data-idx={i} aria-label={p.name} role="listitem">
+          {p.iconUrl && <img src={p.iconUrl} alt={p.name} width="44" height="44" />}
+          <span class="spc-mon-name">{p.name}</span>
+          <span class="spc-mon-item">{p.item || '—'}</span>
+        </button>
+      ))}
+    </div>
+    <div class="spc-detail">
+      <div class="spc-detail-head">
+        <div class="spc-detail-icon-wrap">
+          <img class="spc-detail-icon" src={party[targetIdx]?.iconUrl ?? ''} alt={party[targetIdx]?.name} width="64" height="64" />
+        </div>
+        <div class="spc-detail-title">
+          <div class="spc-detail-name">{party[targetIdx]?.name}</div>
+          <div class="spc-detail-item">{party[targetIdx]?.item || '—'}</div>
+        </div>
+      </div>
+      <div class="spc-detail-rows">
+        <div class="spc-detail-row"><span class="spc-dl">特性</span><span class="spc-dv">{party[targetIdx]?.ability || '—'}</span></div>
+        <div class="spc-detail-row"><span class="spc-dl">性格</span><span class="spc-dv">{party[targetIdx]?.nature || '—'}</span></div>
+        <div class="spc-detail-row spc-moves-row">
+          <span class="spc-dl">技</span>
+          <span class="spc-moves">
+            {(party[targetIdx]?.moves ?? []).map((m: string) => <span class="spc-move">{m}</span>)}
+          </span>
+        </div>
+        {party[targetIdx]?.evStr && (
+          <div class="spc-detail-row"><span class="spc-dl">EV</span><span class="spc-dv spc-evstr">{party[targetIdx]?.evStr}</span></div>
+        )}
+      </div>
+    </div>
+  </div>
+  <a class="spc-cta" href={simulatorUrl}>
+    その他の構築や対戦での動きを確認
+    <span class="spc-cta-arrow">→</span>
+  </a>
+</section>
+
+<script>
+  document.querySelectorAll('[data-party]').forEach(card => {
+    const party = JSON.parse(card.getAttribute('data-party') ?? '[]');
+    const buttons = card.querySelectorAll('.spc-mon');
+    const detailIcon = card.querySelector('.spc-detail-icon') as HTMLImageElement | null;
+    const detailName = card.querySelector('.spc-detail-name');
+    const detailItem = card.querySelector('.spc-detail-item');
+    const detailAbility = card.querySelectorAll('.spc-dv')[0];
+    const detailNature = card.querySelectorAll('.spc-dv')[1];
+    const movesWrap = card.querySelector('.spc-moves');
+    const evRow = card.querySelector('.spc-evstr');
+
+    function select(idx: number) {
+      buttons.forEach((b, i) => b.classList.toggle('spc-selected', i === idx));
+      const p = party[idx];
+      if (!p) return;
+      if (detailIcon) { detailIcon.src = p.iconUrl ?? ''; detailIcon.alt = p.name; }
+      if (detailName) detailName.textContent = p.name;
+      if (detailItem) detailItem.textContent = p.item || '—';
+      if (detailAbility) detailAbility.textContent = p.ability || '—';
+      if (detailNature) detailNature.textContent = p.nature || '—';
+      if (movesWrap) {
+        movesWrap.innerHTML = '';
+        (p.moves ?? []).forEach((m: string) => {
+          const span = document.createElement('span');
+          span.className = 'spc-move';
+          span.textContent = m;
+          movesWrap.appendChild(span);
+        });
+      }
+      if (evRow) evRow.textContent = p.evStr || '';
+    }
+
+    buttons.forEach((btn, i) => {
+      btn.addEventListener('click', () => select(i));
+    });
+  });
+</script>
+
+<style>
+  .spc-section {
+    margin: 1.8em 0 0.5em;
+  }
+  .spc-h2 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: rgb(var(--black));
+    margin: 0 0 0.6rem;
+    padding: 0.45rem 0.9rem;
+    background: #f8fafc;
+    border-left: 3px solid var(--accent, #f97316);
+    border-radius: 0 6px 6px 0;
+  }
+  .spc-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #fff;
+    overflow: hidden;
+    font-size: 0.84rem;
+  }
+  .spc-label-row {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 5px 12px;
+  }
+  .spc-party-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: rgb(var(--gray));
+  }
+  .spc-icons {
+    display: flex;
+    gap: 2px;
+    padding: 8px 8px 0;
+    flex-wrap: wrap;
+  }
+  .spc-mon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 5px 6px 6px;
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background: #f8fafc;
+    cursor: pointer;
+    min-width: 60px;
+    max-width: 72px;
+    flex: 1;
+    transition: border-color 0.12s, background 0.12s;
+  }
+  .spc-mon:hover {
+    border-color: #cbd5e1;
+    background: #f1f5f9;
+  }
+  .spc-mon.spc-selected {
+    border-color: var(--accent, #f97316);
+    background: #fff7ed;
+  }
+  .spc-mon img {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+  }
+  .spc-mon-name {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-align: center;
+    color: rgb(var(--gray-dark));
+    line-height: 1.2;
+    word-break: break-all;
+  }
+  .spc-mon-item {
+    font-size: 0.58rem;
+    color: rgb(var(--gray));
+    text-align: center;
+    line-height: 1.2;
+  }
+  .spc-detail {
+    padding: 10px 12px 12px;
+    border-top: 1px solid #f1f5f9;
+    margin-top: 6px;
+  }
+  .spc-detail-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .spc-detail-icon-wrap {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    background: #f8fafc;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #e2e8f0;
+  }
+  .spc-detail-icon {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+  }
+  .spc-detail-title {
+    flex: 1;
+    min-width: 0;
+  }
+  .spc-detail-name {
+    font-size: 1rem;
+    font-weight: 800;
+    color: rgb(var(--gray-dark));
+    line-height: 1.2;
+  }
+  .spc-detail-item {
+    font-size: 0.8rem;
+    color: rgb(var(--gray));
+    margin-top: 2px;
+  }
+  .spc-detail-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .spc-detail-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.82rem;
+  }
+  .spc-dl {
+    color: rgb(var(--gray));
+    min-width: 2.6em;
+    flex-shrink: 0;
+    font-size: 0.78rem;
+    padding-top: 1px;
+  }
+  .spc-dv {
+    color: rgb(var(--gray-dark));
+    font-weight: 600;
+  }
+  .spc-moves {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .spc-move {
+    background: #f1f5f9;
+    border-radius: 5px;
+    padding: 2px 8px;
+    font-size: 0.78rem;
+    color: rgb(var(--gray-dark));
+    font-weight: 600;
+  }
+  .spc-evstr {
+    font-family: monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    color: #0369a1;
+    font-weight: 700;
+  }
+  .spc-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    padding: 13px 16px;
+    background: var(--accent, #f97316);
+    color: #fff;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 0.9rem;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .spc-cta:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  .spc-cta-arrow {
+    font-size: 1.1em;
+    font-weight: 900;
+  }
+  @media (max-width: 480px) {
+    .spc-mon { min-width: 48px; padding: 4px 3px 5px; }
+    .spc-mon img { width: 36px; height: 36px; }
+    .spc-mon-name { font-size: 0.56rem; }
+    .spc-mon-item { font-size: 0.52rem; }
+    .spc-cta { font-size: 0.84rem; padding: 12px 14px; }
+  }
+</style>

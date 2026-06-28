@@ -9,10 +9,13 @@ import FormattedDate from '../components/FormattedDate.astro';
 import Header from '../components/Header.astro';
 import MentionedPokemon from '../components/MentionedPokemon.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
+import SimPartyCard from '../components/SimPartyCard.astro';
+import articleMeta from '../data/article-meta.json';
 
 type Props = CollectionEntry<'blog'>['data'] & { slug?: string; body?: string };
 
 const { title, description, pubDate, updatedDate, heroImage, slug, body } = Astro.props;
+const blogPokemonName = slug ? (articleMeta as Record<string, { name: string }>)[slug]?.name : undefined;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
 const articleUrl = new URL(Astro.url.pathname, Astro.site).toString();
@@ -149,6 +152,7 @@ const breadcrumbJsonLd = {
 						<hr />
 					</div>
 					<slot />
+					{blogPokemonName && <SimPartyCard pokemonName={blogPokemonName} />}
 					<AdUnit />
 					<AffiliateProducts category="pokemon" />
 					{body && <MentionedPokemon currentSlug={slug ?? ''} body={body} />}
