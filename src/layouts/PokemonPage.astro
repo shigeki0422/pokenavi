@@ -8,7 +8,11 @@ import SimPartyCard from '../components/SimPartyCard.astro';
 
 type Props = CollectionEntry<'pokemon'>['data'];
 
-const { title, description, pokemonName, dexNumber, imageForm } = Astro.props;
+const { title, description, pokemonName, dexNumber, imageForm, usageRank } = Astro.props;
+
+const metaDescription = pokemonName && usageRank
+  ? `M-2・M-3環境で使用率${usageRank}位の${pokemonName}。技・持ち物・特性・性格の採用率データと、上位ランカーの実戦パーティを掲載。バトルシミュレーションで対戦成績も確認できます。`
+  : description;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
@@ -37,7 +41,7 @@ const breadcrumbJsonLd = {
 
 <html lang="ja">
 	<head>
-		<BaseHead title={title} description={description} imageUrl={pokemonImageUrl} />
+		<BaseHead title={title} description={metaDescription} imageUrl={pokemonImageUrl} />
 		{pokemonJsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(pokemonJsonLd)} />}
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 		<style>
@@ -77,6 +81,11 @@ const breadcrumbJsonLd = {
 				.prose { font-size: 14px; padding: 0.5em 0.75em 2em; }
 				.page-meta { display: none; }
 			}
+			.breadcrumb ol { display: flex; flex-wrap: wrap; list-style: none; margin: 0 0 .4em; padding: 0; font-size: .75rem; color: rgb(var(--gray)); }
+			.breadcrumb li + li::before { content: '›'; padding: 0 .35em; }
+			.breadcrumb a { color: rgb(var(--gray)); text-decoration: none; }
+			.breadcrumb a:hover { text-decoration: underline; }
+			.breadcrumb [aria-current] { color: rgb(var(--gray-dark)); font-weight: 600; }
 			.page-meta {
 				display: flex;
 				align-items: center;
@@ -157,6 +166,13 @@ const breadcrumbJsonLd = {
 		<main>
 			<article>
 				<div class="prose">
+					<nav class="breadcrumb" aria-label="パンくずリスト">
+						<ol>
+							<li><a href="/">ホーム</a></li>
+							<li><a href="/pokemon/">ポケモン情報</a></li>
+							{pokemonName && <li aria-current="page">{pokemonName}</li>}
+						</ol>
+					</nav>
 					<div class="page-meta">
 						<span class="badge">ポケモン情報</span>
 					</div>
