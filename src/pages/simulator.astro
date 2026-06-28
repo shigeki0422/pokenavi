@@ -75,8 +75,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       .pitem.opp-r{border-right:3px solid #f87171}
       .pitem-icons{display:flex;gap:1px;flex-shrink:0}
       .pitem-icons img{width:20px;height:20px;object-fit:contain}
-      .filter-active .pitem-icons img{opacity:.3}
-      .filter-active .pitem-icons img.matched{opacity:1;outline:2px solid #6366f1;border-radius:3px}
+      .filter-active .pitem-icons img.matched{outline:2px solid #6366f1;border-radius:3px}
       .wr-summary{display:flex;align-items:center;gap:.6em;flex-wrap:wrap;font-size:.8rem;margin-bottom:.4em}
       .wr-bar{display:flex;height:7px;border-radius:4px;overflow:hidden;flex:1;min-width:80px;gap:1px;align-self:center}
       .wr-bar-g{background:#4ade80}.wr-bar-n{background:#cbd5e1}.wr-bar-r{background:#f87171}
@@ -267,7 +266,7 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       <div class="seclabel">パーティ選択</div>
       <section class="card mb" style="padding:.9em 1em">
         <div class="split">
-          <div class="pl-wrap"><div class="seasonbar"><span class="muted">表示:</span><label class="schk"><input type="checkbox" checked onchange="toggleSubjSeason('M-1',this)"><span class="sbadge m1">M-1</span></label><label class="schk"><input type="checkbox" checked onchange="toggleSubjSeason('M-2',this)"><span class="sbadge m2">M-2</span></label><div id="filter-chips" class="filter-chips"></div></div><div class="filter-wrap"><input type="text" id="subj-filter" class="filter-inp" placeholder="ポケモン名で絞り込み" autocomplete="off" oninput="onSubjFilterInput(this.value)" onkeydown="onSubjFilterKey(event)"><div class="filter-sug" id="subj-sug" style="display:none"></div></div><div class="picklist" id="subject-list"></div></div>
+          <div class="pl-wrap"><div class="seasonbar"><span class="muted">表示:</span><label class="schk"><input type="checkbox" checked onchange="toggleSubjSeason('M-1',this)"><span class="sbadge m1">M-1</span></label><label class="schk"><input type="checkbox" checked onchange="toggleSubjSeason('M-2',this)"><span class="sbadge m2">M-2</span></label><div id="filter-chips" class="filter-chips"></div><button class="btn btn-ghost" id="subj-clear-btn" onclick="clearSubjFilter()" style="margin-left:auto;padding:2px 8px;font-size:.75rem;white-space:nowrap;display:none">クリア</button></div><div class="filter-wrap"><input type="text" id="subj-filter" class="filter-inp" placeholder="ポケモン名で絞り込み" autocomplete="off" oninput="onSubjFilterInput(this.value)" onkeydown="onSubjFilterKey(event)"><div class="filter-sug" id="subj-sug" style="display:none"></div></div><div class="picklist" id="subject-list"></div></div>
           <div class="comp" id="subject-comp"><div class="muted">パーティを選択してください</div></div>
         </div>
         <div class="row" style="margin-top:.7em">
@@ -495,9 +494,16 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
         const el=$('filter-chips'); if(!el) return;
         el.innerHTML = SUBJ_FILTER_POKES.map(p=>`<span class="filter-chip" title="${p.name}">${p.icon?`<img src="${p.icon}" alt="${p.name}">`:''}<button class="filter-chip-x" onclick="removeFilterPoke('${p.name.replace(/'/g,"\\'")}')">✕</button></span>`).join('');
         $('subj-filter').placeholder = SUBJ_FILTER_POKES.length ? 'さらに追加...' : 'ポケモン名で絞り込み';
+        const btn=$('subj-clear-btn'); if(btn) btn.style.display = SUBJ_FILTER_POKES.length ? '' : 'none';
       }
       function removeFilterPoke(name){
         SUBJ_FILTER_POKES = SUBJ_FILTER_POKES.filter(p=>p.name!==name);
+        renderFilterChips(); renderSubjectList(); saveUrlState();
+      }
+      function clearSubjFilter(){
+        SUBJ_FILTER_POKES = [];
+        SUBJ_SEASONS = {'M-1':true,'M-2':true};
+        document.querySelectorAll('.seasonbar input[type=checkbox]').forEach(cb=>{ cb.checked=true; });
         renderFilterChips(); renderSubjectList(); saveUrlState();
       }
 
