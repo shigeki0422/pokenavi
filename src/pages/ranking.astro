@@ -50,6 +50,21 @@ const fmtDate = (d: string) => {
 
 const pageTitle = 'ポケモンチャンピオンズ 使用率ランキング';
 const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使用率ランキング推移。日付ごとの順位変動をまとめて確認できます。';
+
+const CHART_ROWS = 200;
+// TOP200以内に登場したことがあるポケモンだけ抽出してチャートデータを構築
+const chartPokemon = pokemon
+  .filter(p => Object.values(p.dates).some(d => d.rank <= CHART_ROWS))
+  .map(p => {
+    const lookupName = NAME_MAP[p.name] ?? p.name;
+    const url = pageById[lookupName] ? `/pokemon/${pageById[lookupName]}/` : null;
+    const ranksByDate: Record<string, number> = {};
+    for (const [d, info] of Object.entries(p.dates)) {
+      ranksByDate[d] = info.rank;
+    }
+    return { name: p.name, id: p.id, url, ranksByDate };
+  });
+const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
 ---
 
 <!doctype html>
@@ -61,51 +76,49 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
       h1 { font-size: 1.5rem; margin-bottom: 0.3rem; }
       .subtitle { color: #64748b; font-size: 0.88rem; margin-bottom: 1.2rem; }
 
-      .table-wrap { overflow-x: auto; }
-      table { border-collapse: collapse; width: 100%; font-size: 0.88rem; white-space: nowrap; }
-      th { background: #f1f5f9; padding: 8px 10px; border: 1px solid #cbd5e1; text-align: center; font-weight: 600; color: #475569; }
-      th.col-pokemon { text-align: left; min-width: 140px; }
-      td { border: 1px solid #e2e8f0; padding: 6px 10px; text-align: center; vertical-align: middle; }
-      td.col-rank { font-weight: 700; color: #dc2626; width: 44px; }
-      td.col-pokemon { text-align: left; }
-      tr:hover td { background: #f8fafc; }
-      tr:nth-child(1) td.col-rank { color: #b45309; }
-      tr:nth-child(2) td.col-rank { color: #6b7280; }
-      tr:nth-child(3) td.col-rank { color: #92400e; }
-
-      .poke-cell { display: flex; align-items: center; gap: 8px; text-decoration: none; color: inherit; }
-      .poke-cell:hover .poke-name { text-decoration: underline; }
-      .poke-cell img { width: 36px; height: 36px; flex-shrink: 0; }
-      .poke-name { font-weight: 600; }
-
-      .rate-cell { position: relative; }
-      .rate-bar-bg { position: absolute; left: 0; top: 0; bottom: 0; background: #dbeafe; z-index: 0; }
-      .rate-val { position: relative; z-index: 1; font-weight: 600; }
-      .rank-val { color: #374151; }
-
-      .delta-up { color: #16a34a; font-size: 0.75em; }
-      .delta-down { color: #dc2626; font-size: 0.75em; }
-      .delta-same { color: #94a3b8; font-size: 0.75em; }
-
-      .new-badge { font-size: 0.65em; background: #fef08a; color: #854d0e; padding: 1px 5px; border-radius: 4px; font-weight: 700; }
-
-      .pager { margin: 12px 0; }
-      .pager-inner { display: flex; flex-wrap: wrap; gap: 6px; }
-      .pager-btn { padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; cursor: pointer; font-size: 0.85rem; color: #374151; }
-      .pager-btn:hover { background: #f1f5f9; }
-      .pager-btn.active { background: #3b82f6; color: #fff; border-color: #3b82f6; font-weight: 700; }
+      /* バンプチャート */
+      .chart-section { margin-bottom: 2rem; }
+      .chart-section h2 { font-size: 1rem; font-weight: 700; padding: .4rem .9rem; background: #f8fafc; border-left: 3px solid var(--accent,#f97316); border-radius: 0 6px 6px 0; margin-bottom: .75rem; }
+      .chart-hint { font-size: 0.78rem; color: #94a3b8; margin-bottom: 0.5rem; }
+      .hint-pc { display: inline; }
+      .hint-sp { display: none; }
+      @media (hover: none) and (pointer: coarse) {
+        .hint-pc { display: none; }
+        .hint-sp { display: inline; }
+      }
+      .range-btns { display: flex; gap: 6px; margin-bottom: 8px; }
+      .rbtn {
+        padding: 3px 12px; border: 1px solid #e2e8f0; border-radius: 6px;
+        font-size: 0.78rem; font-weight: 700; cursor: pointer;
+        background: #f8fafc; color: #64748b;
+      }
+      .rbtn.active { background: var(--accent,#f97316); color: #fff; border-color: var(--accent,#f97316); }
+      .chart-date-bar {
+        position: relative; height: 28px;
+        background: #fff; border: 1px solid #e2e8f0;
+        border-bottom: 2px solid #e2e8f0; border-radius: 8px 8px 0 0;
+        overflow: hidden;
+      }
+      .chart-date-bar span {
+        position: absolute; font-size: 10px; font-weight: 700; color: #94a3b8;
+        transform: translateX(-50%); white-space: nowrap; top: 50%; margin-top: -7px;
+      }
+      .chart-scroll {
+        max-height: 640px; overflow-y: auto;
+        border: 1px solid #e2e8f0; border-top: none;
+        border-radius: 0 0 8px 8px;
+      }
+      #bump-canvas { display: block; width: 100%; cursor: default; }
+      .chart-tooltip {
+        position: fixed; background: #1e293b; color: #fff;
+        font-size: 11px; font-weight: 700; padding: 4px 10px;
+        border-radius: 6px; pointer-events: none; display: none;
+        white-space: nowrap; z-index: 200;
+      }
 
       @media (max-width: 600px) {
         html, body { overflow-x: hidden; }
         main { padding: 0.5em; width: 100%; box-sizing: border-box; }
-        .pager-inner { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; max-width: 100%; }
-        .pager-btn { flex-shrink: 0; padding: 6px 8px; font-size: 0.78rem; white-space: nowrap; }
-        table, table th, table td { white-space: normal !important; }
-        .poke-cell img { width: 28px; height: 28px; }
-        th, td { padding: 5px 6px; font-size: 0.85rem; }
-        th.col-pokemon { min-width: 0; }
-        .poke-name { font-size: 0.85rem; }
-        .col-date-old { display: none; }
       }
     </style>
   </head>
@@ -115,114 +128,336 @@ const pageDesc = 'ポケモンチャンピオンズ シングルバトルの使�
       <h1>使用率ランキング</h1>
       <p class="subtitle">シングルバトル　最終更新：{fmtDate(dates[dates.length - 1])}　全{pokemon.length}件</p>
 
-      <div class="pager" id="pager"></div>
+      <section class="chart-section">
+        <h2 id="chart-title">ランキング変動チャート（TOP15）</h2>
+        <p class="chart-hint">
+          <span class="hint-pc">ポケモンにカーソルを当てると軌跡が強調されます。クリックで個別ページへ。</span>
+          <span class="hint-sp">ポケモンをタップすると軌跡が強調されます。もう一度タップで個別ページへ。</span>
+        </p>
+        <div class="range-btns">
+          <button class="rbtn active" data-rows="15">TOP15</button>
+          <button class="rbtn" data-rows="30">TOP30</button>
+          <button class="rbtn" data-rows="50">TOP50</button>
+          <button class="rbtn" data-rows="100">TOP100</button>
+          <button class="rbtn" data-rows="200">TOP200</button>
+        </div>
+        <div class="chart-date-bar" id="chart-date-bar"></div>
+        <div class="chart-scroll" id="chart-scroll">
+          <canvas id="bump-canvas"></canvas>
+        </div>
+        <div class="chart-tooltip" id="chart-tooltip"></div>
+      </section>
+      <script define:vars={{ chartJson, CHART_ROWS }}>
+      (function() {
+        const data = JSON.parse(chartJson);
+        const { dates, pokemon } = data;
+        const canvas = document.getElementById('bump-canvas');
+        const tooltip = document.getElementById('chart-tooltip');
+        const scrollWrap = document.getElementById('chart-scroll');
+        const dateBar = document.getElementById('chart-date-bar');
+        const dpr = window.devicePixelRatio || 1;
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th style="width:44px">順位</th>
-              <th class="col-pokemon">ポケモン</th>
-              {dates.map((d, i) => (
-                <th class={i < dates.length - 1 ? 'col-date-old' : ''}>{fmtDate(d)}{i === dates.length - 1 ? ' 最新' : ''}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody id="ranking-tbody">
-            {pokemon.map((p) => {
-              const latestDate = dates[dates.length - 1];
-              const latestData = p.dates[latestDate];
-              const currentRank = latestData?.rank ?? '–';
-              const imgSrc = p.id ? `/images/pokemon/pokemon-${p.id}.webp` : null;
-              const lookupName = NAME_MAP[p.name] ?? p.name;
-              const pokemonUrl = pageById[lookupName] ? `/pokemon/${pageById[lookupName]}/` : null;
+        const PAD_T = 20, PAD_B = 16, PAD_L = 52, PAD_R = 110;
+        const ROW_H = 32, SPRITE = 22, SPRITE_R = 11;
 
-              return (
-                <tr>
-                  <td class="col-rank">{currentRank}</td>
-                  <td class="col-pokemon">
-                    {pokemonUrl ? (
-                      <a class="poke-cell" href={pokemonUrl}>
-                        {imgSrc && <img src={imgSrc} alt={p.name} loading="lazy" />}
-                        <span class="poke-name">{p.name}</span>
-                      </a>
-                    ) : (
-                      <div class="poke-cell">
-                        {imgSrc && <img src={imgSrc} alt={p.name} loading="lazy" />}
-                        <span class="poke-name">{p.name}</span>
-                      </div>
-                    )}
-                  </td>
-                  {dates.map((d, di) => {
-                    const data = p.dates[d];
-                    const isOld = di < dates.length - 1;
-                    if (!data) return <td class={isOld ? 'col-date-old' : ''}>–</td>;
+        let ROWS = 15; // 現在の表示行数
+        let W = 0, hoveredIdx = -1;
+        const imgs = {};
 
-                    const prevDate = di > 0 ? dates[di - 1] : null;
-                    const prevData = prevDate ? p.dates[prevDate] : null;
-                    const rankDelta = prevData ? prevData.rank - data.rank : null;
-
-                    let deltaEl = null;
-                    if (rankDelta !== null) {
-                      if (rankDelta > 0) deltaEl = <span class="delta-up">▲{rankDelta}</span>;
-                      else if (rankDelta < 0) deltaEl = <span class="delta-down">▼{Math.abs(rankDelta)}</span>;
-                      else deltaEl = <span class="delta-same">–</span>;
-                    }
-
-                    return (
-                      <td class={isOld ? 'col-date-old' : ''}>
-                        <span class="rank-val">{data.rank}位</span>{' '}
-                        {deltaEl}
-                      </td>
-                    );
-                  })}
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      <div class="pager" id="pager-bottom"></div>
-    </main>
-    <Footer />
-    <script>
-      const PAGE_SIZE = 50;
-      const rows = Array.from(document.querySelectorAll<HTMLElement>('#ranking-tbody tr'));
-      let currentPage = 1;
-      const totalPages = Math.ceil(rows.length / PAGE_SIZE);
-
-      function renderPage(page: number) {
-        currentPage = page;
-        rows.forEach((row, i) => {
-          row.style.display = (i >= (page - 1) * PAGE_SIZE && i < page * PAGE_SIZE) ? '' : 'none';
+        // スプライト画像をプリロード
+        let loaded = 0;
+        const total = pokemon.filter(p => p.id).length;
+        pokemon.forEach(p => {
+          if (!p.id) { checkDraw(); return; }
+          const img = new Image();
+          img.onload = img.onerror = () => { loaded++; checkDraw(); };
+          img.src = `/images/pokemon/pokemon-${p.id}.webp`;
+          imgs[p.name] = img;
         });
-        renderPagers();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
+        function checkDraw() { if (loaded >= total) draw(); }
 
-      function renderPagers() {
-        const html = buildPagerHtml();
-        document.getElementById('pager')!.innerHTML = html;
-        document.getElementById('pager-bottom')!.innerHTML = html;
-        document.querySelectorAll('.pager-btn').forEach(btn => {
+        function getH() { return PAD_T + (ROWS - 1) * ROW_H + PAD_B; }
+
+        function updateDateBar() {
+          dateBar.innerHTML = '';
+          const totalW = W - PAD_L - PAD_R;
+          dates.forEach((d, i) => {
+            const [, m, day] = d.split('-');
+            const span = document.createElement('span');
+            span.textContent = `${parseInt(m)}/${parseInt(day)}`;
+            const lx = PAD_L + i * totalW / Math.max(dates.length - 1, 1);
+            span.style.cssText = `position:absolute;left:${lx}px;top:50%;transform:translate(-50%,-50%);font-size:10px;font-weight:700;color:#94a3b8;white-space:nowrap;`;
+            dateBar.appendChild(span);
+          });
+        }
+
+        function resize() {
+          W = canvas.parentElement.clientWidth;
+          const H = getH();
+          canvas.width = W * dpr;
+          canvas.height = H * dpr;
+          canvas.style.width = W + 'px';
+          canvas.style.height = H + 'px';
+          updateDateBar();
+          draw();
+        }
+        window.addEventListener('resize', resize, { passive: true });
+        resize();
+
+        // 表示行数切替ボタン
+        document.querySelectorAll('.rbtn').forEach(btn => {
           btn.addEventListener('click', () => {
-            const p = parseInt((btn as HTMLElement).dataset.page!);
-            if (!isNaN(p)) renderPage(p);
+            document.querySelector('.rbtn.active').classList.remove('active');
+            btn.classList.add('active');
+            ROWS = parseInt(btn.dataset.rows);
+            document.getElementById('chart-title').textContent = `ランキング変動チャート（TOP${ROWS}）`;
+            scrollWrap.scrollTop = 0;
+            resize();
           });
         });
-      }
 
-      function buildPagerHtml(): string {
-        const pages: string[] = [];
-        for (let p = 1; p <= totalPages; p++) {
-          const active = p === currentPage;
-          pages.push(`<button class="pager-btn${active ? ' active' : ''}" data-page="${p}">${(p-1)*PAGE_SIZE+1}–${Math.min(p*PAGE_SIZE, rows.length)}位</button>`);
+        function cx(di) { return PAD_L + di * (W - PAD_L - PAD_R) / Math.max(dates.length - 1, 1); }
+        function cy(rank) { return PAD_T + (rank - 1) * ROW_H; }
+
+        function draw() {
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          ctx.save();
+          ctx.scale(dpr, dpr);
+
+          // 交互の帯
+          for (let r = 1; r <= ROWS; r++) {
+            if (r % 2 === 0) {
+              ctx.fillStyle = 'rgba(0,0,0,0.025)';
+              ctx.fillRect(PAD_L, cy(r) - ROW_H/2, W - PAD_L - PAD_R, ROW_H);
+            }
+          }
+
+          // TOP3 帯
+          const top3Colors = ['rgba(251,191,36,0.10)','rgba(148,163,184,0.10)','rgba(180,105,56,0.10)'];
+          for (let r = 1; r <= 3; r++) {
+            ctx.fillStyle = top3Colors[r-1];
+            ctx.fillRect(PAD_L, cy(r) - ROW_H/2, W - PAD_L - PAD_R, ROW_H);
+          }
+
+          // グリッド横線（TOP50超は5行おき、TOP100超は10行おき）
+          ctx.strokeStyle = '#e2e8f0';
+          ctx.lineWidth = 1;
+          const gridStep = ROWS > 100 ? 10 : ROWS > 50 ? 5 : 1;
+          for (let r = 1; r <= ROWS; r++) {
+            if (r !== 1 && r % gridStep !== 0) continue;
+            ctx.beginPath(); ctx.moveTo(PAD_L, cy(r) - ROW_H/2); ctx.lineTo(W - PAD_R, cy(r) - ROW_H/2); ctx.stroke();
+          }
+
+          // 順位ラベル（角丸バッジ）
+          const badgeW = ROWS > 99 ? 26 : 22;
+          const badgeH = 14;
+          const lxBase = PAD_L - SPRITE_R - 4; // スプライト左端から4px隙間
+          const labelStep = ROWS > 100 ? 10 : ROWS > 50 ? 5 : 1;
+          for (let r = 1; r <= ROWS; r++) {
+            if (r !== 1 && r % labelStep !== 0) continue;
+            const ly = cy(r);
+            const isTop3 = r <= 3;
+            const bgColor = r === 1 ? '#fbbf24' : r === 2 ? '#94a3b8' : r === 3 ? '#b45309' : '#e2e8f0';
+            const fgColor = r <= 3 ? '#fff' : '#64748b';
+            ctx.fillStyle = bgColor;
+            ctx.beginPath();
+            ctx.roundRect(lxBase - badgeW, ly - badgeH/2, badgeW, badgeH, 3);
+            ctx.fill();
+            ctx.fillStyle = fgColor;
+            ctx.font = `${isTop3 ? 800 : 700} ${isTop3 ? 10 : 9}px -apple-system,sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.fillText(r, lxBase - badgeW/2, ly + 3);
+          }
+
+          // ライン描画（ホバー対象を最後に描く）
+          const CLAMP_Y = cy(ROWS) + ROW_H * 0.45;
+
+          const order = pokemon.map((_, i) => i).filter(i => i !== hoveredIdx);
+          if (hoveredIdx >= 0) order.push(hoveredIdx);
+
+          order.forEach(pi => {
+            const p = pokemon[pi];
+            const isHover = pi === hoveredIdx;
+            const dim = hoveredIdx >= 0 && !isHover;
+
+            ctx.globalAlpha = dim ? 0.08 : isHover ? 1 : 0.4;
+            ctx.strokeStyle = isHover ? '#f97316' : '#94a3b8';
+            ctx.lineWidth = isHover ? 2.5 : ROWS > 50 ? 1 : 1.5;
+            ctx.lineJoin = 'round';
+
+            // 折れ線（チャート外はクランプしてダッシュ線）
+            let prevPt = null;
+            dates.forEach((d, di) => {
+              const rank = p.ranksByDate[d];
+              if (!rank) { prevPt = null; return; }
+              const visible = rank <= ROWS;
+              const x = cx(di);
+              const y = visible ? cy(rank) : CLAMP_Y;
+              if (prevPt !== null) {
+                const bothVis = prevPt.visible && visible;
+                ctx.beginPath();
+                ctx.setLineDash(bothVis ? [] : [4, 3]);
+                ctx.moveTo(prevPt.x, prevPt.y);
+                ctx.lineTo(x, y);
+                ctx.stroke();
+              }
+              prevPt = { x, y, visible };
+            });
+            ctx.setLineDash([]);
+
+            // スプライト（可視ポイントのみ）
+            dates.forEach((d, di) => {
+              const rank = p.ranksByDate[d];
+              if (!rank || rank > ROWS) return;
+              const x = cx(di), y = cy(rank);
+              const img = imgs[p.name];
+              ctx.globalAlpha = dim ? 0.08 : 1;
+              if (img && img.complete && img.naturalWidth > 0) {
+                ctx.drawImage(img, x - SPRITE_R, y - SPRITE_R, SPRITE, SPRITE);
+              } else {
+                ctx.beginPath();
+                ctx.arc(x, y, SPRITE_R - 1, 0, Math.PI * 2);
+                ctx.fillStyle = isHover ? '#f97316' : '#94a3b8';
+                ctx.fill();
+              }
+            });
+
+            // 名前ラベル（常時表示）
+            const lastDate = dates[dates.length - 1];
+            const lastRank = p.ranksByDate[lastDate];
+            if (lastRank && lastRank <= ROWS) {
+              ctx.globalAlpha = dim ? 0.1 : isHover ? 1 : 0.6;
+              ctx.font = `${isHover ? 800 : 600} ${isHover ? 11 : 10}px -apple-system,sans-serif`;
+              ctx.fillStyle = isHover ? '#f97316' : '#64748b';
+              ctx.textAlign = 'left';
+              ctx.fillText(p.name, cx(dates.length - 1) + SPRITE_R + 3, cy(lastRank) + 4);
+            }
+
+            ctx.globalAlpha = 1;
+          });
+
+          ctx.restore();
         }
-        return `<div class="pager-inner">${pages.join('')}</div>`;
-      }
 
-      renderPage(1);
-    </script>
+        let pinnedIdx = -1; // タッチでピン留めされたポケモン
+
+        function findNearest(mx, my, threshold) {
+          let found = -1, minDist = threshold;
+          pokemon.forEach((p, pi) => {
+            dates.forEach((d, di) => {
+              const rank = p.ranksByDate[d];
+              if (!rank || rank > ROWS) return;
+              const dx = mx - cx(di), dy = my - cy(rank);
+              if (Math.sqrt(dx*dx + dy*dy) < minDist) { minDist = Math.sqrt(dx*dx + dy*dy); found = pi; }
+            });
+          });
+          if (found < 0) {
+            pokemon.forEach((p, pi) => {
+              dates.forEach((d, di) => {
+                if (di === 0) return;
+                const r0 = p.ranksByDate[dates[di-1]], r1 = p.ranksByDate[d];
+                if (!r0 || !r1 || r0 > ROWS || r1 > ROWS) return;
+                const x0 = cx(di-1), y0 = cy(r0), x1 = cx(di), y1 = cy(r1);
+                const len2 = (x1-x0)**2 + (y1-y0)**2;
+                if (len2 === 0) return;
+                const t = Math.max(0, Math.min(1, ((mx-x0)*(x1-x0) + (my-y0)*(y1-y0)) / len2));
+                const dx = mx - (x0 + t*(x1-x0)), dy = my - (y0 + t*(y1-y0));
+                if (Math.sqrt(dx*dx + dy*dy) < ROW_H / 2) found = pi;
+              });
+            });
+          }
+          return found;
+        }
+
+        // 右端の名前ラベルエリアのヒット判定
+        function findNearestByName(mx, my) {
+          const rightX = cx(dates.length - 1);
+          if (mx < rightX + SPRITE_R) return -1;
+          let found = -1;
+          pokemon.forEach((p, pi) => {
+            const lastRank = p.ranksByDate[dates[dates.length - 1]];
+            if (!lastRank || lastRank > ROWS) return;
+            const lx = rightX + SPRITE_R + 3;
+            const ly = cy(lastRank);
+            const approxW = p.name.length * 6.5;
+            if (mx >= lx && mx <= lx + approxW && Math.abs(my - ly) <= ROW_H / 2) found = pi;
+          });
+          return found;
+        }
+
+        function showTooltip(p, mx, my, clientX, clientY) {
+          const di = Math.max(0, Math.min(dates.length - 1,
+            Math.round((mx - PAD_L) / ((W - PAD_L - PAD_R) / Math.max(dates.length - 1, 1)))));
+          const dateStr = dates[di];
+          const [, m, day] = dateStr.split('-');
+          const rank = p.ranksByDate[dateStr];
+          const rankTxt = rank && rank <= ROWS ? `${rank}位` : '圏外';
+          tooltip.style.display = 'block';
+          tooltip.style.left = (clientX + 12) + 'px';
+          tooltip.style.top = Math.max(8, clientY - 36) + 'px';
+          tooltip.textContent = `${p.name}　${parseInt(m)}/${parseInt(day)}　${rankTxt}`;
+        }
+
+        // マウス操作（PC）
+        canvas.addEventListener('mousemove', e => {
+          if (pinnedIdx >= 0) return;
+          const rect = canvas.getBoundingClientRect();
+          const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+          let found = findNearest(mx, my, 18);
+          if (found < 0) found = findNearestByName(mx, my);
+          if (found !== hoveredIdx) { hoveredIdx = found; draw(); }
+          if (found >= 0) {
+            showTooltip(pokemon[found], mx, my, e.clientX, e.clientY);
+            canvas.style.cursor = pokemon[found].url ? 'pointer' : 'default';
+          } else {
+            tooltip.style.display = 'none';
+            canvas.style.cursor = 'default';
+          }
+        });
+
+        canvas.addEventListener('mouseleave', () => {
+          if (pinnedIdx >= 0) return;
+          hoveredIdx = -1; draw();
+          tooltip.style.display = 'none';
+        });
+
+        canvas.addEventListener('click', e => {
+          const rect = canvas.getBoundingClientRect();
+          const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+          const target = hoveredIdx >= 0 ? hoveredIdx : findNearestByName(mx, my);
+          if (pinnedIdx < 0 && target >= 0 && pokemon[target].url) {
+            location.href = pokemon[target].url;
+          }
+        });
+
+        // タッチ操作（スマホ）
+        canvas.addEventListener('touchstart', e => {
+          e.preventDefault();
+          const touch = e.touches[0];
+          const rect = canvas.getBoundingClientRect();
+          const mx = touch.clientX - rect.left, my = touch.clientY - rect.top;
+          const found = findNearest(mx, my, 28); // スマホは判定範囲を広げる
+
+          if (found >= 0 && found === pinnedIdx) {
+            // 同じポケモンを再タップ → 解除してページ遷移
+            if (pokemon[found].url) location.href = pokemon[found].url;
+            pinnedIdx = -1; hoveredIdx = -1; draw();
+            tooltip.style.display = 'none';
+          } else if (found >= 0) {
+            // 別のポケモンをタップ → ピン留め強調
+            pinnedIdx = found; hoveredIdx = found; draw();
+            showTooltip(pokemon[found], mx, my, touch.clientX, touch.clientY);
+          } else {
+            // 空白タップ → 解除
+            pinnedIdx = -1; hoveredIdx = -1; draw();
+            tooltip.style.display = 'none';
+          }
+        }, { passive: false });
+      })();
+      </script>
+
+    </main>
+    <Footer />
   </body>
 </html>
