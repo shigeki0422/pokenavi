@@ -93,10 +93,31 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
         background: #f8fafc; color: #64748b;
       }
       .rbtn.active { background: var(--accent,#f97316); color: #fff; border-color: var(--accent,#f97316); }
+      /* 2ペイン構成: 左=順位固定, 右=横スクロール可能なチャート */
+      .chart-wrap { display: flex; position: relative; }
+      .rank-pane {
+        flex-shrink: 0; width: 46px; z-index: 2; background: #fff;
+      }
+      .rank-date-spacer {
+        height: 28px;
+        border: 1px solid #e2e8f0; border-right: none; border-bottom: 2px solid #e2e8f0;
+        background: #fff; border-radius: 8px 0 0 0;
+      }
+      .rank-scroll-wrap {
+        overflow: hidden; max-height: 640px;
+        border: 1px solid #e2e8f0; border-top: none; border-right: none;
+        border-radius: 0 0 0 8px;
+      }
+      #rank-canvas { display: block; }
+      .chart-outer {
+        flex: 1; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
+      }
+      .chart-inner { min-width: 500px; width: 100%; }
       .chart-date-bar {
         position: relative; height: 28px;
         background: #fff; border: 1px solid #e2e8f0;
-        border-bottom: 2px solid #e2e8f0; border-radius: 8px 8px 0 0;
+        border-left: none;
+        border-bottom: 2px solid #e2e8f0; border-radius: 0 8px 0 0;
         overflow: hidden;
       }
       .chart-date-bar span {
@@ -105,10 +126,16 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
       }
       .chart-scroll {
         max-height: 640px; overflow-y: auto;
-        border: 1px solid #e2e8f0; border-top: none;
-        border-radius: 0 0 8px 8px;
+        border: 1px solid #e2e8f0; border-top: none; border-left: none;
+        border-radius: 0 0 8px 0;
       }
       #bump-canvas { display: block; width: 100%; cursor: default; }
+      /* 左スクロール可能ヒント（グラデーション） */
+      .chart-left-hint {
+        position: absolute; left: 46px; top: 0; bottom: 0; width: 28px;
+        background: linear-gradient(to right, rgba(248,250,252,0.92), transparent);
+        pointer-events: none; z-index: 3; transition: opacity 0.2s; opacity: 0;
+      }
       .chart-tooltip {
         position: fixed; background: #1e293b; color: #fff;
         font-size: 11px; font-weight: 700; padding: 4px 10px;
@@ -117,7 +144,6 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
       }
 
       @media (max-width: 600px) {
-        html, body { overflow-x: hidden; }
         main { padding: 0.5em; width: 100%; box-sizing: border-box; }
       }
     </style>
@@ -141,9 +167,22 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
           <button class="rbtn" data-rows="100">TOP100</button>
           <button class="rbtn" data-rows="200">TOP200</button>
         </div>
-        <div class="chart-date-bar" id="chart-date-bar"></div>
-        <div class="chart-scroll" id="chart-scroll">
-          <canvas id="bump-canvas"></canvas>
+        <div class="chart-wrap">
+          <div class="rank-pane">
+            <div class="rank-date-spacer"></div>
+            <div class="rank-scroll-wrap" id="rank-scroll-wrap">
+              <canvas id="rank-canvas"></canvas>
+            </div>
+          </div>
+          <div class="chart-outer" id="chart-outer">
+            <div class="chart-inner">
+              <div class="chart-date-bar" id="chart-date-bar"></div>
+              <div class="chart-scroll" id="chart-scroll">
+                <canvas id="bump-canvas"></canvas>
+              </div>
+            </div>
+          </div>
+          <div class="chart-left-hint" id="chart-left-hint"></div>
         </div>
         <div class="chart-tooltip" id="chart-tooltip"></div>
       </section>
@@ -152,12 +191,17 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
         const data = JSON.parse(chartJson);
         const { dates, pokemon } = data;
         const canvas = document.getElementById('bump-canvas');
+        const rankCanvas = document.getElementById('rank-canvas');
+        const rankScrollWrap = document.getElementById('rank-scroll-wrap');
+        const chartOuter = document.getElementById('chart-outer');
+        const chartLeftHint = document.getElementById('chart-left-hint');
         const tooltip = document.getElementById('chart-tooltip');
         const scrollWrap = document.getElementById('chart-scroll');
         const dateBar = document.getElementById('chart-date-bar');
         const dpr = window.devicePixelRatio || 1;
 
-        const PAD_T = 20, PAD_B = 16, PAD_L = 52, PAD_R = 110;
+        const PAD_T = 20, PAD_B = 16, PAD_L = 8, PAD_R = 110;
+        const RANK_W = 46;
         const ROW_H = 32, SPRITE = 22, SPRITE_R = 11;
 
         let ROWS = 15; // 現在の表示行数
@@ -191,6 +235,46 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
           });
         }
 
+        function resizeRankCanvas() {
+          const H = getH();
+          rankCanvas.width = RANK_W * dpr;
+          rankCanvas.height = H * dpr;
+          rankCanvas.style.width = RANK_W + 'px';
+          rankCanvas.style.height = H + 'px';
+        }
+
+        function drawRanks() {
+          const rCtx = rankCanvas.getContext('2d');
+          rCtx.clearRect(0, 0, rankCanvas.width, rankCanvas.height);
+          rCtx.save();
+          rCtx.scale(dpr, dpr);
+          const badgeW = ROWS > 99 ? 26 : 22;
+          const badgeH = 14;
+          const labelStep = ROWS > 100 ? 10 : ROWS > 50 ? 5 : 1;
+          for (let r = 1; r <= ROWS; r++) {
+            if (r !== 1 && r % labelStep !== 0) continue;
+            const ly = cy(r);
+            const isTop3 = r <= 3;
+            const bgColor = r === 1 ? '#fbbf24' : r === 2 ? '#94a3b8' : r === 3 ? '#b45309' : '#e2e8f0';
+            const fgColor = r <= 3 ? '#fff' : '#64748b';
+            const lx = RANK_W - badgeW - 2;
+            rCtx.fillStyle = bgColor;
+            rCtx.beginPath();
+            rCtx.roundRect(lx, ly - badgeH/2, badgeW, badgeH, 3);
+            rCtx.fill();
+            rCtx.fillStyle = fgColor;
+            rCtx.font = `${isTop3 ? 800 : 700} ${isTop3 ? 10 : 9}px -apple-system,sans-serif`;
+            rCtx.textAlign = 'center';
+            rCtx.fillText(r, lx + badgeW/2, ly + 3);
+          }
+          rCtx.restore();
+        }
+
+        function updateHint() {
+          chartLeftHint.style.opacity = chartOuter.scrollLeft > 10 ? '1' : '0';
+        }
+        chartOuter.addEventListener('scroll', updateHint, { passive: true });
+
         function resize() {
           W = canvas.parentElement.clientWidth;
           const H = getH();
@@ -198,11 +282,23 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
           canvas.height = H * dpr;
           canvas.style.width = W + 'px';
           canvas.style.height = H + 'px';
+          resizeRankCanvas();
           updateDateBar();
           draw();
+          drawRanks();
         }
         window.addEventListener('resize', resize, { passive: true });
         resize();
+        // デフォルトで右端（最新日）にスクロール
+        requestAnimationFrame(() => {
+          chartOuter.scrollLeft = chartOuter.scrollWidth;
+          updateHint();
+        });
+
+        // y方向スクロールを rank-canvas に同期
+        scrollWrap.addEventListener('scroll', () => {
+          rankScrollWrap.scrollTop = scrollWrap.scrollTop;
+        }, { passive: true });
 
         // 表示行数切替ボタン
         document.querySelectorAll('.rbtn').forEach(btn => {
@@ -247,27 +343,6 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
           for (let r = 1; r <= ROWS; r++) {
             if (r !== 1 && r % gridStep !== 0) continue;
             ctx.beginPath(); ctx.moveTo(PAD_L, cy(r) - ROW_H/2); ctx.lineTo(W - PAD_R, cy(r) - ROW_H/2); ctx.stroke();
-          }
-
-          // 順位ラベル（角丸バッジ）
-          const badgeW = ROWS > 99 ? 26 : 22;
-          const badgeH = 14;
-          const lxBase = PAD_L - SPRITE_R - 4; // スプライト左端から4px隙間
-          const labelStep = ROWS > 100 ? 10 : ROWS > 50 ? 5 : 1;
-          for (let r = 1; r <= ROWS; r++) {
-            if (r !== 1 && r % labelStep !== 0) continue;
-            const ly = cy(r);
-            const isTop3 = r <= 3;
-            const bgColor = r === 1 ? '#fbbf24' : r === 2 ? '#94a3b8' : r === 3 ? '#b45309' : '#e2e8f0';
-            const fgColor = r <= 3 ? '#fff' : '#64748b';
-            ctx.fillStyle = bgColor;
-            ctx.beginPath();
-            ctx.roundRect(lxBase - badgeW, ly - badgeH/2, badgeW, badgeH, 3);
-            ctx.fill();
-            ctx.fillStyle = fgColor;
-            ctx.font = `${isTop3 ? 800 : 700} ${isTop3 ? 10 : 9}px -apple-system,sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.fillText(r, lxBase - badgeW/2, ly + 3);
           }
 
           // ライン描画（ホバー対象を最後に描く）
