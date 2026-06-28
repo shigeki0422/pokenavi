@@ -965,7 +965,11 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
           + `<details class="rlog-detail"><summary>詳細ログを見る</summary><div class="rlog-full">${reorderLogs(t.logs||[]).map(l=>`<div>${l}</div>`).join('')||'—'}</div></details>`;
         $('replay-turn').textContent=`ターン ${t.turn} / ${RBATTLE.turns.length-1}`;
         const rb=$('replay-result'); if(RTURN===RBATTLE.turns.length-1){rb.textContent='🏆 '+RBATTLE.winner;rb.className='wr-tag '+(RBATTLE.result===1?'g':RBATTLE.result===2?'r':'n');}else rb.textContent=''; }
-      function stepTurn(d){stopAuto();renderReplay(RTURN+d);}
+      function stepTurn(d){
+        stopAuto(); renderReplay(RTURN+d);
+        const log=$('replay-log');
+        if(log){const r=log.getBoundingClientRect();if(r.bottom>window.innerHeight)log.scrollIntoView({behavior:'smooth',block:'end'});}
+      }
       function toggleAuto(){if(autoTimer)stopAuto();else{$('btn-auto').textContent='停止';autoTimer=setInterval(()=>{if(RTURN>=RBATTLE.turns.length-1){stopAuto();return;}renderReplay(RTURN+1);},1170);}}
       function stopAuto(){if(autoTimer){clearInterval(autoTimer);autoTimer=null;}const b=$('btn-auto');if(b)b.textContent='自動再生';}
     </script>
