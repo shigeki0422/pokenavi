@@ -2,9 +2,8 @@
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import GlobalSearch from '../../components/GlobalSearch.astro';
 import rankingData from '../../data/ranking.json';
-import articleMeta from '../../data/article-meta.json';
-import { getCollection } from 'astro:content';
 
 const { dates, pokemon } = rankingData as {
   dates: string[];
@@ -17,13 +16,25 @@ const top10 = [...pokemon]
   .sort((a, b) => (a.dates[lastDate]?.rank ?? 999) - (b.dates[lastDate]?.rank ?? 999))
   .slice(0, 10);
 
-const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
-const m3Posts = (await getCollection('blog'))
-  .filter(p => (showDrafts || !p.data.draft) && p.id.includes('-m3'))
-  .sort((a, b) => ((articleMeta as any)[a.id]?.rank ?? 999) - ((articleMeta as any)[b.id]?.rank ?? 999))
-  .slice(0, 6);
-
 const fmtDate = (d: string) => { const [, m, day] = d.split('-'); return `${parseInt(m)}/${parseInt(day)}`; };
+
+const NAME_KO: Record<string, string> = {
+  'ガブリアス': '한카리아스', 'ミミッキュ': '따라큐', 'マスカーニャ': '마스카냐',
+  'ブリジュラス': '브리지벨라스', 'メタグロス': '메타그로스', 'ライチュウ': '라이츄',
+  'リザードン': '리자몽', 'ムクホーク': '찌르호크', 'アーマーガア': '아머까오',
+  'カバルドン': '하마돈', 'アローラキュウコン': '알로라나인테일', 'バシャーモ': '번치코',
+  'アシレーヌ': '어시레느', 'サザンドラ': '삼삼드래', 'ラグラージ': '대짱이',
+  'イダイトウ(オス)': '이나하', 'ギャラドス': '갸라도스', 'キラフロル': '키라플로르',
+  'ウォッシュロトム': '워시로토무', 'マフォクシー': '마폭시', 'カイリュー': '망나뇽',
+  'オーロンゲ': '어둠대기리', 'ペリッパー': '왕큰부리', 'サーフゴー': '서프고',
+  'クチート': '입치트', 'ドドゲザン': '도도게자', 'ラウドボーン': '라우드본',
+  'ゲンガー': '팬텀', 'ゲッコウガ': '개굴닌자', 'ドラミドロ': '드래캄',
+  'ガルーラ': '캥카', 'エーフィ': '에브이', 'ウルガモス': '볼케니온',
+  'メガライチュウY': '메가라이츄Y', 'スコヴィラン': '스코비라', 'ドドゲザン': '킹드라',
+  'ニンフィア': '님피아', 'ブラッキー': '블래키', 'グライオン': '글라이온',
+  'ヘルガー': '헬가', 'カプ・レヒレ': '카푸느지느', 'カプ・テテフ': '카푸나비나',
+  'ナットレイ': '나시', 'ランドロス': '랜드로스', 'ドリュウズ': '몰드류',
+};
 
 const siteUrl = 'https://pokenavi.jp';
 const alternates = [
@@ -39,109 +50,78 @@ const alternates = [
   <head>
     <BaseHead
       title="포켓몬 챔피언스 데이터 분석 | 포케나비"
-      description="포켓몬 챔피언스 사용률 랭킹, 배틀 시뮬레이터, 공략 기사. 데이터 기반 대전 공략 사이트."
+      description="포켓몬 챔피언스 사용률 랭킹, 배틀 시뮬레이터, 데이터 기반 대전 공략 사이트."
       imageUrl="/og-image.png"
       alternates={alternates}
       ogLocale="ko_KR"
     />
     <style>
-      main { max-width: 1100px; margin: auto; padding: 1.5em 1.5em 4em; }
-      .hero { text-align: center; padding: 2.5em 1em 2em; }
-      .hero h1 { font-size: 1.8rem; margin-bottom: 0.4em; }
-      .hero p { font-size: 0.95rem; color: #64748b; max-width: 600px; margin: 0 auto 1.5em; }
-      .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 3em; }
-      .feature-card { display: block; padding: 1.2em 1.4em; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; background: #fff; transition: box-shadow 0.2s, transform 0.15s; }
-      .feature-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
-      .feature-card .icon { font-size: 1.8rem; margin-bottom: 0.5em; }
-      .feature-card h2 { font-size: 1rem; font-weight: 800; margin-bottom: 0.3em; color: #1e293b; }
-      .feature-card p { font-size: 0.82rem; color: #64748b; margin: 0; line-height: 1.5; }
-      .feature-card .cta { display: inline-block; margin-top: 0.8em; font-size: 0.78rem; font-weight: 700; color: var(--accent, #f97316); }
-      .section-title { font-size: 1rem; font-weight: 700; margin: 0 0 1em; padding: 0.4em 0.9em; background: #f8fafc; border-left: 3px solid var(--accent, #f97316); border-radius: 0 6px 6px 0; }
-      .ranking-list { list-style: none; margin: 0 0 2em; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
-      .ranking-list li { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #f1f5f9; border-radius: 8px; font-size: 0.82rem; font-weight: 600; }
-      .ranking-list li img { width: 32px; height: 32px; object-fit: contain; }
-      .rank-num { font-size: 0.7rem; color: #94a3b8; min-width: 18px; }
-      .rank-num.top1 { color: #f59e0b; font-weight: 800; }
-      .rank-num.top3 { color: #78716c; font-weight: 800; }
-      .article-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-bottom: 2em; }
-      .article-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: inherit; background: #fff; }
-      .article-card:hover { background: #f8fafc; }
-      .article-card img { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }
-      .article-card .art-body { flex: 1; min-width: 0; }
-      .article-card .art-rank { font-size: 0.68rem; color: #dc2626; font-weight: 700; }
-      .article-card .art-title { font-size: 0.8rem; font-weight: 700; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-      .view-all { display: inline-block; font-size: 0.82rem; font-weight: 700; color: var(--accent, #f97316); text-decoration: none; margin-top: 0.5em; }
-      .view-all:hover { text-decoration: underline; }
-      @media (max-width: 600px) { main { padding: 1em 0.75em 3em; } .hero h1 { font-size: 1.4rem; } }
+      .hero { text-align: center; padding: 3rem 1rem 2.5rem; border-bottom: 1px solid rgb(var(--gray-light)); margin-bottom: 2.5rem; }
+      .hero h1 { font-size: 2.5rem; margin: 0 0 0.75rem; line-height: 1.2; }
+      .hero p { font-size: 1.1rem; color: rgb(var(--gray)); margin: 0; }
+      .section-title { font-size: 1.25rem; font-weight: 700; margin: 0 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgb(var(--accent)); color: rgb(var(--black)); }
+      .bs-feature { border: 1px solid rgb(var(--gray-light)); border-radius: 14px; padding: 1.6rem 1.8rem; background: linear-gradient(135deg, #f5f7ff, #ffffff); box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+      .bs-feature h3 { margin: 0 0 0.5rem; font-size: 1.2rem; color: rgb(var(--black)); }
+      .bs-feature p { margin: 0 0 1.1rem; color: rgb(var(--gray)); font-size: 0.95rem; line-height: 1.7; }
+      .bs-points { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.2rem; padding: 0; list-style: none; }
+      .bs-points li { background: #eef2ff; color: var(--accent-dark); font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 9999px; }
+      .bs-cta-row { display: flex; gap: 0.7rem; flex-wrap: wrap; }
+      .bs-cta { display: inline-block; padding: 0.6rem 1.3rem; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+      .bs-cta.primary { background: var(--accent); color: #fff; }
+      .bs-cta.primary:hover { background: var(--accent-dark); }
+      .bs-cta.ghost { background: #fff; border: 1px solid var(--accent); color: var(--accent); }
+      .bs-cta.ghost:hover { background: #eef2ff; }
+      @media (max-width: 720px) { .hero h1 { font-size: 1.75rem; } }
     </style>
   </head>
   <body>
     <Header />
     <main>
-      <div class="hero">
+      <section class="hero">
         <h1>포켓몬 챔피언스<br />데이터 분석</h1>
-        <p>포켓몬 챔피언스 랭크 배틀의 사용률 랭킹, AI 배틀 시뮬레이터, 데이터 기반 공략 기사를 제공합니다.</p>
-      </div>
+        <p>포켓몬 챔피언스 랭크 배틀의 사용률 랭킹, AI 배틀 시뮬레이터, 데이터 기반 공략</p>
+        <GlobalSearch variant="hero" lang="ko" />
+      </section>
 
-      <div class="feature-grid">
-        <a class="feature-card" href="/ko/ranking/">
-          <div class="icon">📊</div>
-          <h2>사용률 랭킹</h2>
-          <p>TOP200 포켓몬 사용률 순위. 매일 업데이트. 범프 차트로 순위 변동을 인터랙티브하게 확인.</p>
-          <span class="cta">랭킹 보기 →</span>
-        </a>
-        <a class="feature-card" href="/simulator/">
-          <div class="icon">⚔️</div>
-          <h2>배틀 시뮬레이터</h2>
-          <p>내 파티를 전체 상위 랭커와 리그전으로 대결. AI가 승률·선발·1v1 상성을 진단합니다.</p>
-          <span class="cta">시뮬레이터 사용 →</span>
-        </a>
-        <a class="feature-card" href="/ko/blog/m3/">
-          <div class="icon">📝</div>
-          <h2>공략 기사</h2>
-          <p>상위 포켓몬의 기술 배치·전략·파티 구성을 실제 사용률 데이터를 기반으로 심층 분석.</p>
-          <span class="cta">기사 읽기 →</span>
-        </a>
-      </div>
-
-      <h2 class="section-title">현재 랭킹 — {fmtDate(lastDate)} 업데이트</h2>
-      <ul class="ranking-list">
-        {top10.map((p, i) => {
-          const rank = p.dates[lastDate]?.rank ?? i + 1;
-          return (
-            <li>
-              <span class={`rank-num${rank === 1 ? ' top1' : rank <= 3 ? ' top3' : ''}`}>{rank}위</span>
-              {p.id && <img src={`/images/pokemon/pokemon-${p.id}.webp`} alt={p.name} loading="lazy" />}
-              <span>{p.name}</span>
-            </li>
-          );
-        })}
-      </ul>
-      <a class="view-all" href="/ko/ranking/">전체 랭킹 보기 (TOP200) →</a>
-
-      {m3Posts.length > 0 && (
-        <>
-          <h2 class="section-title" style="margin-top:2em">M-3 시즌 공략</h2>
-          <div class="article-grid">
-            {m3Posts.map((post, i) => {
-              const meta = (articleMeta as any)[post.id];
-              const dex = meta?.dex;
-              const form = meta?.form ?? '00';
-              const imgSrc = dex ? `/images/pokemon/pokemon-${String(dex).padStart(4,'0')}-${form}.webp` : null;
-              return (
-                <a class="article-card" href={`/blog/${post.id}/`}>
-                  {imgSrc && <img src={imgSrc} alt={meta?.name ?? ''} loading={i < 3 ? 'eager' : 'lazy'} />}
-                  <div class="art-body">
-                    {meta?.rank && <div class="art-rank">사용률 {meta.rank}위</div>}
-                    <div class="art-title">{post.data.title}</div>
-                  </div>
-                </a>
-              );
-            })}
+      <section style="margin-bottom:3rem">
+        <h2 class="section-title">배틀 시뮬레이터 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:6px">주목 기능</span></h2>
+        <div class="bs-feature">
+          <h3>학습 AI 리그전으로 내 파티의 강함을 데이터 진단</h3>
+          <p>자체 학습 배틀 AI와 선읽기 탐색을 조합해, 선택한 파티를 전체 랭커와 총전. 승률·선발·1v1 상성·실전 리플레이를 「감각」이 아닌 「대전 데이터」로 확인할 수 있습니다.</p>
+          <ul class="bs-points">
+            <li>전체 랭커 총전</li>
+            <li>승패 루트 분석</li>
+            <li>1v1 상성표</li>
+            <li>대전 리플레이</li>
+          </ul>
+          <div class="bs-cta-row">
+            <a class="bs-cta primary" href="/simulator">상위 환경 시뮬레이션 →</a>
+            <a class="bs-cta ghost" href="/battle-simulator">배틀 시뮬레이터란? →</a>
           </div>
-          <a class="view-all" href="/ko/blog/m3/">M-3 기사 전체 보기 →</a>
-        </>
-      )}
+        </div>
+      </section>
+
+      <section style="margin-bottom:3rem">
+        <h2 class="section-title">사용률 랭킹 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">TOP10 — {fmtDate(lastDate)} 업데이트</span></h2>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px">
+          {top10.map((p, i) => {
+            const rank = p.dates[lastDate]?.rank ?? i + 1;
+            const name = NAME_KO[p.name] ?? p.name;
+            return (
+              <a href="/ko/ranking/" style="display:block;text-decoration:none;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+                {p.id && <img src={`/images/pokemon/pokemon-${p.id}.webp`} alt={name} style="width:64px;height:64px;display:block;margin:0 auto 4px" loading={i < 4 ? 'eager' : 'lazy'} width="64" height="64" />}
+                <div style="font-size:0.72rem;font-weight:bold;color:rgb(var(--gray));margin-bottom:1px">{rank}위</div>
+                <div style="font-size:0.75rem;font-weight:bold;color:rgb(var(--black))">{name}</div>
+              </a>
+            );
+          })}
+        </div>
+        <div style="text-align:center;margin-top:12px">
+          <a href="/ko/ranking/" style="display:inline-block;padding:10px 28px;background:var(--accent);color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:700;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+            전체 랭킹 보기 (TOP200) →
+          </a>
+        </div>
+      </section>
     </main>
     <Footer />
   </body>
