@@ -94,12 +94,17 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
       .sug-item img{width:28px;height:28px;object-fit:contain;flex-shrink:0}
       .sug-item mark{background:#fef9c3;color:inherit;border-radius:2px;padding:0 1px}
       .sug-item.added{opacity:.4;pointer-events:none}
-      .bvrow{padding:.45em .1em;border-bottom:1px solid #f1f5f9}
+      .bvrow{border-bottom:1px solid #f1f5f9;cursor:pointer;user-select:none}
       .bvrow:last-child{border-bottom:none}
-      .bvhd{display:flex;align-items:center;gap:.5em;flex-wrap:wrap;font-size:.85rem}
-      .bvhd .wr{font-weight:700}
-      .bvrow .mv{font-size:.76rem;color:rgb(var(--gray));margin:.15em 0}
-      .bvrow .use{font-size:.7rem;color:rgb(var(--gray))}
+      .bvhd{display:flex;align-items:center;gap:.45em;padding:.45em .1em;font-size:.82rem;flex-wrap:wrap}
+      .bvhd .wr{font-weight:700;flex-shrink:0}
+      .bv-item{display:inline-flex;align-items:center;gap:.15em;color:rgb(var(--gray-dark));font-weight:600;flex-shrink:0}
+      .bv-moves{color:rgb(var(--gray));font-size:.76rem;flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+      .bv-toggle{margin-left:auto;font-size:.65rem;color:rgb(var(--gray));flex-shrink:0;transition:transform .15s}
+      .bvrow.open .bv-toggle{transform:rotate(180deg)}
+      .bvbody{display:none;padding:.1em .1em .5em}
+      .bvrow.open .bvbody{display:block}
+      .bvrow .use{font-size:.7rem;color:rgb(var(--gray));margin-top:.25em}
       .comp{border:1px solid rgb(var(--gray-light));border-radius:10px;padding:.7em .8em;background:#fcfcfd}
       .comp .ctitle{font-size:.82rem;font-weight:700;margin-bottom:.4em}
       .iconrow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:.3rem}
@@ -870,21 +875,29 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
             const ma=(a.moves||[]).slice().sort().join('/'),mb=(b.moves||[]).slice().sort().join('/'); if(ma!==mb) return ma<mb?-1:1;
             for(const k of _evk){const d=((a.evs||{})[k]||0)-((b.evs||{})[k]||0); if(d) return d;}
             return s(a.ability,b.ability);
-          }).forEach(b=>{const wr=Math.round(b.win_rate*100),cls=b.win_rate>=0.6?'g':b.win_rate<=0.4?'r':'n';
+          }).forEach((b,bi)=>{const wr=Math.round(b.win_rate*100),cls=b.win_rate>=0.6?'g':b.win_rate<=0.4?'r':'n';
             const nat=b.nature?`${b.nature}${NATURE[b.nature]?` (${NATURE[b.nature]})`:''}`:'—';
             const moves=(b.moves&&b.moves.length)?b.moves.map(m=>`<span class="mvchip">${typeIcon(m)}${m}</span>`).join(''):'—';
+            const movesTxt=(b.moves&&b.moves.length)?b.moves.join(' / '):'—';
             const ev=b.evs?['H','A','B','C','D','S'].map(l=>b.evs[l]?`<span class="evchip ev-${l}">${l}<b>${b.evs[l]}</b></span>`:null).filter(Boolean).join(''):'';
             const evx=b.ev_variants>1?` <span class="muted" style="font-size:.7rem">ほかEV${b.ev_variants-1}種</span>`:'';
-            h+=`<div class="bvrow">
-              <div class="bvhd"><span class="wr ${cls}">${wr}%</span><span class="muted">${b.wins}勝 ${b.losses}敗 ${b.draws}分</span></div>
-              <div class="cdgrid">
-                <div class="cdcell"><span class="cdlabel item">持ち物</span><span class="cdval">${itemIcon(b.item)}${b.item||'—'}</span></div>
-                <div class="cdcell"><span class="cdlabel abil">特性</span><span class="cdval">${b.ability||'—'}</span></div>
-                <div class="cdcell"><span class="cdlabel nat">性格</span><span class="cdval">${nat}</span></div>
+            h+=`<div class="bvrow${bi===0?' open':''}" onclick="this.classList.toggle('open')">
+              <div class="bvhd">
+                <span class="wr ${cls}">${wr}%</span>
+                <span class="bv-item">${itemIcon(b.item)}${b.item||'—'}</span>
+                <span class="bv-moves">${movesTxt}</span>
+                <span class="bv-toggle">▼</span>
               </div>
-              <div class="cdrow mvrow"><span class="cdlabel mv">技</span><span class="mvwrap">${moves}</span></div>
-              <div class="cdrow mvrow"><span class="cdlabel ev">EV</span><span class="mvwrap">${ev||'—'}${evx}</span></div>
-              <div class="use">使用ランカー: ${(b.labels||[]).join('・')}</div></div>`;});
+              <div class="bvbody">
+                <div class="muted" style="font-size:.78rem;margin-bottom:.3em">${b.wins}勝 ${b.losses}敗 ${b.draws}分</div>
+                <div class="cdgrid">
+                  <div class="cdcell"><span class="cdlabel abil">特性</span><span class="cdval">${b.ability||'—'}</span></div>
+                  <div class="cdcell"><span class="cdlabel nat">性格</span><span class="cdval">${nat}</span></div>
+                </div>
+                <div class="cdrow mvrow"><span class="cdlabel mv">技</span><span class="mvwrap">${moves}</span></div>
+                <div class="cdrow mvrow"><span class="cdlabel ev">EV</span><span class="mvwrap">${ev||'—'}${evx}</span></div>
+                <div class="use">使用ランカー: ${(b.labels||[]).join('・')}</div>
+              </div></div>`;});
           h+=`</div></div>`;
         }
         // 代表型（最多使用）に対する1v1相性表
