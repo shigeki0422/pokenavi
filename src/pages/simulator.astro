@@ -326,7 +326,11 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
                  moves: (parts[2]||'').split('|').filter(Boolean),
                  evs: (parts[3]||'').split('/'), ability: parts[4]||'' };
       }
-      const iconUrl = name => { const n = name.replace(' (','('); const id = ICONS[n] || ICONS[n.split('(')[0].trim()];
+      const _regionalPrefix = [['ヒスイ',3],['ガラル',3],['アローラ',4]];
+      const iconUrl = name => {
+        const n = name.replace(' (','(');
+        let id = ICONS[n] || ICONS[n.split('(')[0].trim()];
+        if(!id){ for(const [p,l] of _regionalPrefix){ if(n.startsWith(p)){ id=ICONS[n.slice(l)+'('+p+')']; if(id)break; } } }
         return id ? `/images/pokemon/pokemon-${id}.webp` : null; };
       // 構成パネル：ポケモンアイコン＝タブ ＋ 下に詳細（持ち物/特性/性格/技/EV）
       function renderComp(containerId, specs, title){
