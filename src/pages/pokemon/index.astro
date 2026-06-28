@@ -40,8 +40,8 @@ const itemListJsonLd = {
 <html lang="ja">
 	<head>
 		<BaseHead
-			title="ポケモンチャンピオンズ 使用率ランキング一覧 | ポケナビ"
-			description="M-3・M-2環境のポケモンチャンピオンズ 使用率ランキング。ガブリアス・キングガンビット等、各ポケモンの技・持ち物・特性・性格の採用率データを掲載。"
+			title="ポケモン情報一覧 | ポケナビ"
+			description="ポケモンチャンピオンズの全ポケモン情報まとめ。M-3・M-2環境の技・持ち物・特性・性格の採用率データ、上位ランカーの実戦パーティを掲載。"
 		/>
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
@@ -148,8 +148,8 @@ const itemListJsonLd = {
 					<li aria-current="page">ポケモン情報</li>
 				</ol>
 			</nav>
-			<h1>使用率ランキング</h1>
-			<p class="subtitle">ポケモンチャンピオンズ M-3・M-2環境 · {pages.length}体掲載</p>
+			<h1>ポケモン情報一覧</h1>
+			<p class="subtitle">ポケモンチャンピオンズ M-3・M-2環境 · 技／持ち物／特性データ · {pages.length}体掲載</p>
 
 			{top10.length > 0 && (
 				<section class="top10-section">
