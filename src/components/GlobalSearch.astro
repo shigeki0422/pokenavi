@@ -1,23 +1,35 @@
 ---
 interface Props {
   variant?: 'sidebar' | 'hero';
+  lang?: 'ja' | 'en' | 'ko';
 }
-const { variant = 'sidebar' } = Astro.props;
+const { variant = 'sidebar', lang = 'ja' } = Astro.props;
+
+const STR = {
+  ja: { placeholder: 'ポケモン・記事を検索...', ariaLabel: '検索', clearLabel: 'クリア', resultsLabel: '検索結果', noResults: '見つかりませんでした', rankPrefix: '', rankSuffix: '位', analysis: '考察', article: '記事' },
+  en: { placeholder: 'Search Pokémon or articles...', ariaLabel: 'Search', clearLabel: 'Clear', resultsLabel: 'Search results', noResults: 'No results found', rankPrefix: '#', rankSuffix: '', analysis: 'Analysis', article: 'Article' },
+  ko: { placeholder: '포켓몬·기사 검색...', ariaLabel: '검색', clearLabel: '지우기', resultsLabel: '검색 결과', noResults: '결과가 없습니다', rankPrefix: '', rankSuffix: '위', analysis: '공략', article: '기사' },
+}[lang];
 ---
 
-<div class:list={['gs', `gs--${variant}`]} data-global-search>
+<div class:list={['gs', `gs--${variant}`]} data-global-search
+  data-no-results={STR.noResults}
+  data-rank-prefix={STR.rankPrefix}
+  data-rank-suffix={STR.rankSuffix}
+  data-label-analysis={STR.analysis}
+  data-label-article={STR.article}>
   <div class="gs-field">
     <svg class="gs-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
       <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
     </svg>
-    <input class="gs-input" type="text" placeholder="ポケモン・記事を検索..." autocomplete="off" spellcheck="false" enterkeyhint="go" aria-label="検索" />
-    <button class="gs-clear" type="button" hidden aria-label="クリア">
+    <input class="gs-input" type="text" placeholder={STR.placeholder} autocomplete="off" spellcheck="false" enterkeyhint="go" aria-label={STR.ariaLabel} />
+    <button class="gs-clear" type="button" hidden aria-label={STR.clearLabel}>
       <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true">
         <path d="M18 6 6 18M6 6l12 12"/>
       </svg>
     </button>
   </div>
-  <div class="gs-results" hidden role="listbox" aria-label="検索結果"></div>
+  <div class="gs-results" hidden role="listbox" aria-label={STR.resultsLabel}></div>
 </div>
 
 <style>
@@ -211,6 +223,11 @@ const { variant = 'sidebar' } = Astro.props;
     const input = el.querySelector('.gs-input');
     const results = el.querySelector('.gs-results');
     const clearBtn = el.querySelector('.gs-clear');
+    const noResults = el.dataset.noResults;
+    const rankPrefix = el.dataset.rankPrefix;
+    const rankSuffix = el.dataset.rankSuffix;
+    const labelAnalysis = el.dataset.labelAnalysis;
+    const labelArticle = el.dataset.labelArticle;
     let active = -1;
 
     input.addEventListener('input', async () => {
@@ -223,7 +240,7 @@ const { variant = 'sidebar' } = Astro.props;
       const hits = data.filter(item => item.n.includes(q) || item.n.includes(qk)).slice(0, 8);
 
       if (!hits.length) {
-        results.innerHTML = '<div class="gs-empty">見つかりませんでした</div>';
+        results.innerHTML = `<div class="gs-empty">${noResults}</div>`;
         results.hidden = false;
         active = -1;
         return;
@@ -234,13 +251,13 @@ const { variant = 'sidebar' } = Astro.props;
           return `<a class="gs-item" href="${item.u}" role="option">
             <img src="${item.i}" alt="" width="34" height="34" class="gs-sprite" loading="lazy">
             <span class="gs-name">${hl(item.n, q)}</span>
-            <span class="gs-badge gs-badge--rank">${item.r}位</span>
+            <span class="gs-badge gs-badge--rank">${rankPrefix}${item.r}${rankSuffix}</span>
           </a>`;
         } else {
           return `<a class="gs-item" href="${item.u}" role="option">
-            <span class="gs-blog-icon">考察</span>
+            <span class="gs-blog-icon">${labelAnalysis}</span>
             <span class="gs-name gs-name--blog">${hl(item.n, q)}</span>
-            <span class="gs-badge gs-badge--blog">${item.s || '記事'}</span>
+            <span class="gs-badge gs-badge--blog">${item.s || labelArticle}</span>
           </a>`;
         }
       }).join('');
