@@ -204,7 +204,8 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
         const RANK_W = 46;
         const ROW_H = 32, SPRITE = 22, SPRITE_R = 11;
 
-        let ROWS = 15; // 現在の表示行数
+        const ROWS_KEY = 'ranking-chart-rows';
+        let ROWS = parseInt(localStorage.getItem(ROWS_KEY) || '15');
         let W = 0, hoveredIdx = -1;
         const imgs = {};
 
@@ -300,12 +301,18 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
           rankScrollWrap.scrollTop = scrollWrap.scrollTop;
         }, { passive: true });
 
+        // 初期ボタン状態を復元
+        document.querySelectorAll('.rbtn').forEach(b => b.classList.remove('active'));
+        document.querySelector(`.rbtn[data-rows="${ROWS}"]`)?.classList.add('active');
+        document.getElementById('chart-title').textContent = `ランキング変動チャート（TOP${ROWS}）`;
+
         // 表示行数切替ボタン
         document.querySelectorAll('.rbtn').forEach(btn => {
           btn.addEventListener('click', () => {
             document.querySelector('.rbtn.active').classList.remove('active');
             btn.classList.add('active');
             ROWS = parseInt(btn.dataset.rows);
+            localStorage.setItem(ROWS_KEY, ROWS);
             document.getElementById('chart-title').textContent = `ランキング変動チャート（TOP${ROWS}）`;
             scrollWrap.scrollTop = 0;
             resize();
