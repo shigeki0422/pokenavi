@@ -290,7 +290,7 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
             let prevPt = null;
             dates.forEach((d, di) => {
               const rank = p.ranksByDate[d];
-              if (!rank) { prevPt = null; return; }
+              if (!rank) { return; } // データなし日はスキップ（prevPtは維持して線を繋ぐ）
               const visible = rank <= ROWS;
               const x = cx(di);
               const y = visible ? cy(rank) : CLAMP_Y;

@@ -46,38 +46,40 @@ for k, v in ALIASES.items():
     if (IMGDIR / f"pokemon-{v}.webp").exists():
         id_map[k] = v
 
-dates = [r[0] for r in conn.execute(
+dates_db = [r[0] for r in conn.execute(
     "SELECT DISTINCT crawled_date FROM pokemon_usage WHERE season=? AND rule='single' ORDER BY crawled_date",
     (SEASON,)
 )]
+# クロール失敗日も日付軸には含める（データなし＝折れ線は直線で繋がる）
+MISSING_DATES = ["2026-06-21", "2026-06-26"]
+dates = sorted(set(dates_db) | set(MISSING_DATES))
 
 rows = conn.execute(
     "SELECT pokemon, pokemon_id, crawled_date, rank, usage_rate FROM pokemon_usage WHERE season=? AND rule='single' ORDER BY crawled_date, rank",
     (SEASON,)
 ).fetchall()
 
-# 最新日のrank順エントリをキーにする（同名ポケモンが複数rankに存在する場合も全件表示）
-latest = dates[-1]
-latest_rows = [(name, pid, rank, rate) for name, pid, date, rank, rate in rows
-               if date == latest and rank <= LIMIT]
-latest_rows.sort(key=lambda r: r[2])
-
-# 過去日付のデータ: (pokemon, date) → rank。同名が複数ある場合は最小rankを採用
-past_map = {}
+# 全日付に登場したポケモンをユニオンで収集
+# (pokemon, date) → {rank, rate}
+all_map = {}
 for name, pid, date, rank, rate in rows:
-    if date == latest:
-        continue
     key = (name, date)
-    if key not in past_map or rank < past_map[key]["rank"]:
-        past_map[key] = {"rank": rank, "rate": rate}
+    if key not in all_map or rank < all_map[key]["rank"]:
+        all_map[key] = {"rank": rank, "rate": rate}
+
+# 全期間に登場したポケモンのユニーク集合
+all_pokemon = sorted(set(name for name, date in all_map), key=lambda n: (
+    all_map.get((n, dates[-1]), {}).get("rank", 9999),  # 最新日順位優先
+    min(all_map[(n, d)]["rank"] for d in dates if (n, d) in all_map)  # 次点: 最小順位
+))
 
 poke_list = []
-for name, pid, rank, rate in latest_rows:
-    entry = {"name": name, "id": id_map.get(name), "dates": {latest: {"rank": rank, "rate": rate}}}
-    for d in dates[:-1]:
-        if (name, d) in past_map:
-            entry["dates"][d] = past_map[(name, d)]
+for name in all_pokemon:
+    entry = {"name": name, "id": id_map.get(name), "dates": {}}
+    for d in dates:
+        if (name, d) in all_map:
+            entry["dates"][d] = all_map[(name, d)]
     poke_list.append(entry)
 
 OUT_PATH.write_text(json.dumps({"dates": dates, "pokemon": poke_list}, ensure_ascii=False, indent=2), encoding="utf-8")
-print(f"完了: {len(poke_list)}件, 最新日={latest}")
+print(f"完了: {len(poke_list)}件, 最新日={dates[-1]}")

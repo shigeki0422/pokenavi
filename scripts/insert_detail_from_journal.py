@@ -9,7 +9,7 @@ from pathlib import Path
 DB = Path(__file__).parent / "pokenavi.db"
 
 WF_DIRS = [
-    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_e7531760-6e3",
+    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_02d68588-c0c",
 ]
 
 OCR_MOVES = {
@@ -89,6 +89,9 @@ OCR_MOVES = {
     "クロスボイズン": "クロスポイズン",
     "コトンガード": "コットンガード",
     "ふちかまし": "ぶちかまし",
+    "かげふんしん": "かげぶんしん",
+    "つらら おとし": "つららおとし",
+    "サンダータイブ": "サンダーダイブ",
 }
 OCR_ITEMS = {
     "のりのおふだ": "のろいのおふだ",
@@ -141,6 +144,7 @@ OCR_ABILITIES = {
     "メロメロボティ": "メロメロボディ",
     "きようせい": "きょうせい",
     "ボイゾンヒール": "ポイズンヒール",
+    "ボイズンヒール": "ポイズンヒール",
 }
 OCR_NATURES = {
     "すぶとい": "ずぶとい", "すばとい": "ずぶとい", "すぼとい": "ずぶとい", "ずぼとい": "ずぶとい",
@@ -272,9 +276,10 @@ OCR_POKEMON = {
     "マツギョ": "マッギョ",
     "ウインデイ": "ウインディ",
     "ドヒドイア": "ドヒドイデ",
+    "テカヌチャン": "デカヌチャン",
 }
 
-CRAWLED_DATE = "2026-06-25"
+CRAWLED_DATE = "2026-06-26"
 
 # ランク番号で確定したフォーム名（OCR_POKEMONより優先）、日付別に管理
 #
@@ -342,6 +347,59 @@ RANK_OVERRIDES_BY_DATE = {
         192: "パンプジン(ちゅうだましゅ)",  # No.711 ゴースト/くさ、ふみん52.6%
         196: "ヒスイクレベース",     # No.713 こおり/ノーマル、がんじょう91%
         200: "ニャオニクス(メス)",   # No.678 エスパー、白スプライット、かちき82%
+    },
+    "2026-06-27": {
+        11: "アローラキュウコン",    # No.38 こおり/フェアリー
+        15: "イダイトウ(オス)",      # No.901 みず/かくとう、赤スプライット
+        19: "ウォッシュロトム",      # No.479 でんき/みず
+        49: "ヒートロトム",          # No.479 でんき/ほのお
+        58: "ヒスイゾロアーク",      # No.571 ノーマル/ゴースト
+        96: "ヒスイウインディ",      # No.59 ほのお/ノーマル（OCR=ウインテイ）、いしあたま91.9%
+        113: "カットロトム",         # No.479 でんき/くさ
+        114: "ウインディ",           # No.59 ほのお（OCR=ウインテイ）、いかく96.4%
+        117: "ガラルヤドラン",       # No.80 エスパー/はがね、クイックドロウ88.1%
+        125: "ヒスイバクフーン",     # No.157 ほのお/ゴースト
+        126: "ケンタロス:炎",        # No.128 かくとう/ほのお
+        137: "ルガルガン(昼)",       # No.745 ノーマル、かたいツメ100%
+        172: "ニャオニクス(オス)",   # No.678 エスパー、青スプライット、いたずらごころ91.4%
+        184: "ケンタロス:水",        # No.128 かくとう/みず
+        191: "フロストロトム",       # No.479 でんき/こおり
+        194: "パンプジン(ちゅうだましゅ)", # No.711 ゴースト/くさ、ふみん53.0%
+        196: "ヒスイクレベース",     # No.713 こおり/ノーマル
+    },
+    "2026-06-26": {
+        61: "ガラルヤドキング",      # No.199 みず/エスパー, スプライット紫（さいせいりょくは通常ヤドキングの特性表示バグ）
+        143: "ヤドキング",            # No.199 ピンクスプライット, 通常形
+        20: "ウォッシュロトム",      # No.479 でんき/みず, ふゆう100%
+        35: "ヒートロトム",          # No.479 でんき/ほのお, ふゆう100%
+        56: "アローラキュウコン",    # No.38 こおり/フェアリー, ゆきふらし99.1%
+        59: "ヒスイヌメルゴン",      # No.706 はがね/ドラゴン（OCR=フェアリー/ドラゴン誤読）, シェルアーマー31.6%
+        62: "ヒスイゾロアーク",      # No.571 ノーマル/ゴースト, イリュージョン100%
+        73: "ヒスイウインディ",      # No.59 ほのお/ノーマル（OCR=ウインデイ）, いしあたま90.9%
+        89: "ウインディ",            # No.59 ほのお単（OCR=ウインデイ）, いかく96.2%
+        105: "ガラルヤドラン",       # No.80 みず/はがね（OCR=みず/エスパー誤読）, クイックドロウ87.5%
+        113: "ルガルガン(昼)",       # No.745 いわ, かたいツメ100%
+        119: "ケンタロス:炎",        # No.128 かくとう/ほのお, いかく91.4%
+        123: "カットロトム",         # No.479 でんき/くさ, ふゆう100%
+        158: "ヒスイクレベース",     # No.713 こおり/ノーマル, がんじょう94.7%
+        161: "ケンタロス:水",        # No.128 かくとう/みず, いかく86.8%
+        162: "フロストロトム",       # No.479 でんき/こおり, ふゆう100%
+        163: "ニャオニクス(オス)",   # No.678 エスパー, いたずらごころ89%
+        169: "トリデプス",            # OCR=トリテブス
+        179: "アローラライチュウ",   # No.26 でんき/エスパー, サーフテール100%
+        181: "パンプジン(ちゅうだましゅ)", # No.711 ゴースト/くさ, ふみん52.2%
+        182: "ライチュウ",           # No.26 でんき, ひらいしん61.9%（rank=179はアローラ形）
+        183: "ニャオニクス(メス)",   # No.678 エスパー, かちき79.3%
+        185: "ルガルガン(まよなか)", # No.745 いわ, すなかき43.3%
+        191: "スピンロトム",         # No.479 でんき/ひこう, ふゆう100%
+        198: "ルガルガン(たそがれ)", # No.745 いわ, ノーガード79.8%
+        100: "イダイトウ(メス)",     # みず/ゴースト, てきおうりょく91.8%（rank=10オスと別種）
+        106: "ヒスイバクフーン",     # ほのお/ゴースト, おみとおし73.0%
+        117: "ヒスイジュナイパー",   # くさ/かくとう, きもったま98.1%
+        168: "バクフーン",           # ほのお, もらいび68.9%（rank=106ヒスイと別種）
+        172: "マッギョ",             # じめん/でんき, せいでんき86.7%
+        178: "ジュナイパー",         # くさ/ゴースト, えんかく73.1%（rank=117ヒスイと別種）
+        189: "ガラルマッギョ",       # じめん/みず, ぎたい100%（rank=172通常と別種）
     },
     "2026-06-22": {
         17: "アローラキュウコン",   # OCR=キュウコン（ゆきふらし+オーロラベール）
@@ -425,52 +483,51 @@ def main():
         print(f"🚨 [GATE0] Journalにデータなし（OCR欠落）: rank={gate0_missing}")
         print("  → クロール画像を再OCRするか手動登録が必要")
 
-    # GATE1: 補正後pokemon名の重複チェック（同一crawled_dateで同名が複数rankに出る場合はスキップ）
+    # GATE1: 200匹ユニーク必須（重複・マスター不一致があれば全件投入中止）
     pokemon_to_first_rank = {}
-    usage_skip_ranks = set()
+    candidates = []
+    gate1_errors = []
     master_miss_ranks = []
     for rank in sorted(all_data.keys()):
         if rank > MAX_RANK:
-            usage_skip_ranks.add(rank)
             continue
         rec = all_data[rank]
         pokemon_raw = rec["pokemon"]
         pokemon = RANK_OVERRIDES.get(rank) or OCR_POKEMON.get(pokemon_raw, pokemon_raw)
         if pokemon not in pokemon_master:
             master_miss_ranks.append((rank, pokemon_raw, pokemon))
-            usage_skip_ranks.add(rank)
             continue
         if pokemon in pokemon_to_first_rank:
             first = pokemon_to_first_rank[pokemon]
             crawl_dir = f"/tmp/champ_crawl_{CRAWLED_DATE}"
-            print(f"🚨 [GATE1] 重複ポケモン: {pokemon} が rank={first} と rank={rank} に存在 → rank={rank}をスキップ")
+            gate1_errors.append((rank, pokemon, first))
+            print(f"🚨 [GATE1] 重複ポケモン: {pokemon} が rank={first} と rank={rank} に存在")
             print(f"   画像を開いてNo./名前/スプライット色/タイプアイコンを確認すること（テキスト判断禁止）:")
             print(f"     rank={first:3d}: {crawl_dir}/detail/{str(first).zfill(3)}/_c_ability_00.png")
             print(f"     rank={rank:3d}: {crawl_dir}/detail/{str(rank).zfill(3)}/_c_ability_00.png")
             print(f"   別種なら RANK_OVERRIDES_BY_DATE['{CRAWLED_DATE}'][{rank}] に正しい名前を設定して再実行。")
-            usage_skip_ranks.add(rank)
         else:
             pokemon_to_first_rank[pokemon] = rank
+            candidates.append((rank, pokemon, rec))
 
     if master_miss_ranks:
-        print(f"🚨 [GATE_MISS] ポケモンマスター不一致（スキップ・要対処）:")
+        print(f"🚨 [GATE_MISS] ポケモンマスター不一致（要対処）:")
         for rank, raw, fixed in master_miss_ranks:
             print(f"  rank={rank}: OCR='{raw}' → 補正後='{fixed}' ← RANK_OVERRIDESかOCR_POKEMONに追加必要")
 
-    # pokemon_usage 投入（journalのrank+pokemon名から）
+    if len(candidates) < MAX_RANK or gate1_errors or master_miss_ranks:
+        conn.close()
+        print(f"\n🚫 投入中止: {len(candidates)}件（{MAX_RANK}件必須・重複{len(gate1_errors)}件・マスター不一致{len(master_miss_ranks)}件）")
+        return
+
+    # pokemon_usage 投入
     usage_inserted = 0
-    for rank in sorted(all_data.keys()):
-        if rank in usage_skip_ranks:
-            continue
-        rec = all_data[rank]
-        pokemon_raw = rec["pokemon"]
-        pokemon = RANK_OVERRIDES.get(rank) or OCR_POKEMON.get(pokemon_raw, pokemon_raw)
-        if pokemon in pokemon_master:
-            conn.execute(
-                "INSERT OR IGNORE INTO pokemon_usage(season,rule,rank,pokemon,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?)",
-                ("M-3","single",rank,pokemon,"champions_adb",CRAWLED_DATE,now)
-            )
-            usage_inserted += conn.execute("SELECT changes()").fetchone()[0]
+    for rank, pokemon, rec in candidates:
+        conn.execute(
+            "INSERT OR IGNORE INTO pokemon_usage(season,rule,rank,pokemon,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?)",
+            ("M-3","single",rank,pokemon,"champions_adb",CRAWLED_DATE,now)
+        )
+        usage_inserted += conn.execute("SELECT changes()").fetchone()[0]
     conn.commit()
     print(f"pokemon_usage: {usage_inserted}件投入")
 
@@ -489,8 +546,9 @@ def main():
     inserted = {t: 0 for t in ["moves","items","abilities","natures","evs","partners"]}
     skipped_pokemon = []
 
+    candidate_ranks = {rank for rank, _, _ in candidates}
     for rank in sorted(all_data.keys()):
-        if rank in usage_skip_ranks:
+        if rank not in candidate_ranks:
             continue
         rec = all_data[rank]
         pokemon_raw = rec["pokemon"]
