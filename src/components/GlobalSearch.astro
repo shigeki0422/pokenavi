@@ -241,10 +241,15 @@ const STR = {
       const ql = q.toLowerCase();
       const data = await loadIdx();
       const hits = data.filter(item => {
-        if (item.n.includes(q) || item.n.includes(qk)) return true;
-        if (lang === 'en' && item.e && item.e.toLowerCase().includes(ql)) return true;
-        if (lang === 'ko' && item.k && item.k.includes(q)) return true;
-        return false;
+        if (lang === 'en') {
+          const en = (item.e || '').toLowerCase();
+          return en ? en.includes(ql) : (item.n.includes(q) || item.n.includes(qk));
+        }
+        if (lang === 'ko') {
+          const ko = item.k || '';
+          return ko ? ko.includes(q) : (item.n.includes(q) || item.n.includes(qk));
+        }
+        return item.n.includes(q) || item.n.includes(qk);
       }).slice(0, 8);
 
       if (!hits.length) {
