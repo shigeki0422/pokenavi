@@ -1,0 +1,66 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const siteUrl = 'https://pokenavi.jp';
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/privacy/' },
+  { lang: 'en', url: siteUrl + '/en/privacy/' },
+  { lang: 'ko', url: siteUrl + '/ko/privacy/' },
+  { lang: 'x-default', url: siteUrl + '/privacy/' },
+];
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Privacy Policy | PokeNavi"
+      description="PokeNavi privacy policy. Details on advertising, analytics, and cookie usage."
+      imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="en_US"
+    />
+    <style>
+      main { max-width: 720px; margin: 0 auto; padding: 2em 1.5em 4em; color: rgb(var(--gray-dark)); line-height: 1.8; }
+      h1 { font-size: 1.6rem; margin-bottom: 0.4em; }
+      h2 { font-size: 1.15rem; margin: 2em 0 0.5em; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3em; }
+      p, li { font-size: 0.95rem; }
+      ul { padding-left: 1.4em; }
+      .updated { font-size: 0.82rem; color: rgb(var(--gray)); margin-bottom: 2em; }
+      a { color: rgb(var(--accent)); }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: June 2026</p>
+
+      <h2>Analytics</h2>
+      <p>This site uses Google Analytics 4 to collect anonymous usage data (pages visited, session duration, device type, etc.). This data is used solely to improve the site. No personally identifiable information is collected. For details, see <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>.</p>
+
+      <h2>Advertising</h2>
+      <p>This site displays ads via Google AdSense. Google may use cookies to serve ads based on prior visits to this site and other sites on the web. You can opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener">Google's Ads Settings</a>.</p>
+
+      <h2>Cookies</h2>
+      <p>This site uses cookies for:</p>
+      <ul>
+        <li>Remembering your chart display preferences (e.g., TOP15 / TOP200 setting)</li>
+        <li>Analytics (Google Analytics)</li>
+        <li>Advertising (Google AdSense)</li>
+      </ul>
+      <p>You can disable cookies in your browser settings, though some features may not work correctly.</p>
+
+      <h2>External Links</h2>
+      <p>This site may link to external websites. We are not responsible for the privacy practices or content of those sites.</p>
+
+      <h2>Changes to This Policy</h2>
+      <p>This policy may be updated without notice. Please check this page periodically for the latest version.</p>
+
+      <h2>Contact</h2>
+      <p>For privacy-related inquiries, please contact us via <a href="https://x.com/pokenavi_jp" target="_blank" rel="noopener noreferrer">X: @pokenavi_jp</a>.</p>
+    </main>
+    <Footer />
+  </body>
+</html>

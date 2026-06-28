@@ -15,11 +15,13 @@ interface Props {
 	type?: 'website' | 'article';
 	pubDate?: Date;
 	updatedDate?: Date;
+	alternates?: { lang: string; url: string }[];
+	ogLocale?: string;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, imageUrl, type = 'website', pubDate, updatedDate } = Astro.props;
+const { title, description, image = FallbackImage, imageUrl, type = 'website', pubDate, updatedDate, alternates, ogLocale = 'ja_JP' } = Astro.props;
 const ogImageUrl = imageUrl ? new URL(imageUrl, Astro.site) : new URL(image.src, Astro.url);
 
 // 個別ページは「ページ名｜サイト名」、トップはサイト名のみ（重複回避）
@@ -49,6 +51,7 @@ const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
+{alternates?.map(a => <link rel="alternate" hreflang={a.lang} href={a.url} />)}
 
 <!-- Primary Meta Tags -->
 <title>{pageTitle}</title>
@@ -64,7 +67,7 @@ const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 {!imageUrl && <meta property="og:image:width" content={String(image.width)} />}
 {!imageUrl && <meta property="og:image:height" content={String(image.height)} />}
 <meta property="og:image:alt" content={title} />
-<meta property="og:locale" content="ja_JP" />
+<meta property="og:locale" content={ogLocale} />
 <meta property="og:site_name" content={SITE_TITLE} />
 {type === 'article' && pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
 {type === 'article' && updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}

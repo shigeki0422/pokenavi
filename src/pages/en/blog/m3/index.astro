@@ -1,0 +1,123 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../../../components/BaseHead.astro';
+import Footer from '../../../../components/Footer.astro';
+import Header from '../../../../components/Header.astro';
+import articleMeta from '../../../../data/article-meta.json';
+
+const TYPE_COLOR: Record<string, string> = {
+  'ノーマル':'#9da0aa','ほのお':'#f87c3f','みず':'#4fa4e0','くさ':'#5abf5a',
+  'でんき':'#f5c344','こおり':'#70cdd8','かくとう':'#c44d4d','どく':'#a55fa5',
+  'じめん':'#c9a84c','ひこう':'#8899ee','エスパー':'#f75587','むし':'#a4b700',
+  'いわ':'#b8a038','ゴースト':'#7b6fbe','ドラゴン':'#7766ee','あく':'#6e5f5c',
+  'はがね':'#aaaac0','フェアリー':'#f4a8c6',
+};
+
+const TYPE_EN: Record<string, string> = {
+  'ノーマル':'Normal','ほのお':'Fire','みず':'Water','くさ':'Grass',
+  'でんき':'Electric','こおり':'Ice','かくとう':'Fighting','どく':'Poison',
+  'じめん':'Ground','ひこう':'Flying','エスパー':'Psychic','むし':'Bug',
+  'いわ':'Rock','ゴースト':'Ghost','ドラゴン':'Dragon','あく':'Dark',
+  'はがね':'Steel','フェアリー':'Fairy',
+};
+
+const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
+const posts = (await getCollection('blog'))
+  .filter((post) => (showDrafts || !post.data.draft) && post.id.includes('-m3'))
+  .sort((a, b) => {
+    const ma = (articleMeta as any)[a.id];
+    const mb = (articleMeta as any)[b.id];
+    return (ma?.rank ?? 999) - (mb?.rank ?? 999);
+  });
+
+const siteUrl = 'https://pokenavi.jp';
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/blog/m3/' },
+  { lang: 'en', url: siteUrl + '/en/blog/m3/' },
+  { lang: 'ko', url: siteUrl + '/ko/blog/m3/' },
+  { lang: 'x-default', url: siteUrl + '/blog/m3/' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title="M-3 Season Analysis Articles | PokeNavi"
+      description="Pokémon Champions M-3 season analysis articles. Data-driven breakdowns of top Pokémon builds, strategies, and team compositions."
+      imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="en_US"
+    />
+    <style>
+      main { max-width: 960px; margin: auto; padding: 1.5em 1em; }
+      h1 { font-size: 1.5rem; margin-bottom: 0.25rem; }
+      .subtitle { color: rgb(var(--gray)); font-size: 0.875rem; margin-bottom: 1.5rem; }
+      .breadcrumb { font-size: 0.8rem; color: rgb(var(--gray)); margin-bottom: 1rem; }
+      .breadcrumb a { color: rgb(var(--gray)); text-decoration: none; }
+      .breadcrumb a:hover { color: var(--accent); }
+      .season-banner {
+        display: flex; align-items: center; gap: 10px;
+        background: linear-gradient(135deg, #1e3a5f, #2563eb);
+        color: white; padding: 12px 16px; border-radius: 10px; margin-bottom: 1.5rem;
+      }
+      .season-banner .label { font-size: 0.75rem; opacity: 0.8; }
+      .season-banner .name { font-size: 1.1rem; font-weight: 800; }
+      .season-banner .badge { background: #fbbf24; color: #78350f; font-size: 0.7rem; font-weight: 800; padding: 2px 8px; border-radius: 9999px; margin-left: auto; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+      .card { display: flex; align-items: center; gap: 12px; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; text-decoration: none; background: white; transition: box-shadow 0.2s; }
+      .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+      .card-img { width: 64px; height: 64px; flex-shrink: 0; }
+      .card-body { flex: 1; min-width: 0; }
+      .card-rank { font-size: 0.7rem; color: #dc2626; font-weight: 700; margin-bottom: 2px; }
+      .card-title { font-size: 0.82rem; font-weight: 700; color: rgb(var(--black)); line-height: 1.35; margin-bottom: 4px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+      .types { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 3px; }
+      .type-badge { font-size: 0.65rem; padding: 1px 5px; border-radius: 3px; color: white; font-weight: 700; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="breadcrumb">
+        <a href="/en/">Home</a> &rsaquo; Analysis &rsaquo; M-3 Season
+      </div>
+      <div class="season-banner">
+        <div>
+          <div class="label">Season</div>
+          <div class="name">M-3</div>
+        </div>
+        <span class="badge">Latest Season</span>
+      </div>
+      <h1>M-3 Season Analysis</h1>
+      <p class="subtitle">Top Pokémon analysis ({posts.length} articles) — articles are in Japanese</p>
+      <div class="grid">
+        {posts.map((post, i) => {
+          const meta = (articleMeta as any)[post.id];
+          const dex = meta?.dex;
+          const form = meta?.form ?? '00';
+          const types: string[] = meta?.types ?? [];
+          const rank: number | null = meta?.rank ?? null;
+          const imgSrc = dex ? `/images/pokemon/pokemon-${String(dex).padStart(4,'0')}-${form}.webp` : null;
+          return (
+            <a class="card" href={`/blog/${post.id}/`}>
+              {imgSrc
+                ? <img class="card-img" src={imgSrc} alt={meta?.name ?? ''} loading={i < 10 ? 'eager' : 'lazy'} />
+                : <div class="card-img" style="background:#f1f5f9;border-radius:8px" />
+              }
+              <div class="card-body">
+                {rank && <div class="card-rank">Rank #{rank}</div>}
+                <div class="card-title">{post.data.title}</div>
+                <div class="types">
+                  {types.map((t) => (
+                    <span class="type-badge" style={`background:${TYPE_COLOR[t] ?? '#999'}`}>{TYPE_EN[t] ?? t}</span>
+                  ))}
+                </div>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>

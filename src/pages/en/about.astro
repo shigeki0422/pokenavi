@@ -1,0 +1,80 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const siteUrl = 'https://pokenavi.jp';
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/about/' },
+  { lang: 'en', url: siteUrl + '/en/about/' },
+  { lang: 'ko', url: siteUrl + '/ko/about/' },
+  { lang: 'x-default', url: siteUrl + '/about/' },
+];
+---
+
+<html lang="en">
+  <head>
+    <BaseHead
+      title="About | PokeNavi"
+      description="About PokeNavi — our editorial policy, data methodology, and team behind Pokémon Champions battle analysis."
+      imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="en_US"
+    />
+    <style>
+      main { max-width: 720px; margin: 0 auto; padding: 2em 1.5em 4em; color: rgb(var(--gray-dark)); line-height: 1.8; }
+      h1 { font-size: 1.6rem; margin-bottom: 0.4em; }
+      h2 { font-size: 1.15rem; margin: 2em 0 0.5em; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3em; }
+      p, li { font-size: 0.95rem; }
+      ul { padding-left: 1.4em; }
+      .updated { font-size: 0.82rem; color: rgb(var(--gray)); margin-bottom: 2em; }
+      a { color: rgb(var(--accent)); }
+      .profile-table { width: 100%; border-collapse: collapse; margin: 1em 0; font-size: 0.92rem; }
+      .profile-table th, .profile-table td { padding: 0.6em 0.8em; border: 1px solid #e2e8f0; text-align: left; }
+      .profile-table th { background: #f8fafc; width: 10em; white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>About PokeNavi</h1>
+      <p class="updated">Last updated: June 2026</p>
+
+      <h2>Site Overview</h2>
+      <table class="profile-table">
+        <tr><th>Site Name</th><td>PokeNavi</td></tr>
+        <tr><th>URL</th><td>https://pokenavi.jp</td></tr>
+        <tr><th>Launched</th><td>May 2026</td></tr>
+        <tr><th>Scope</th><td>Pokémon Champions (Ranked Battle)</td></tr>
+        <tr><th>Operated by</th><td>PokeNavi Team</td></tr>
+      </table>
+
+      <h2>Our Mission</h2>
+      <p>PokeNavi is a data-driven resource to help competitive Pokémon players make better decisions. Rather than relying solely on intuition, we ground our analysis in usage rates, move adoption rates, co-usage statistics, and <strong>AI-based battle simulation</strong> to visualize party strength and matchup compatibility.</p>
+
+      <h2>Features</h2>
+      <ul>
+        <li><strong>Battle Simulator</strong>: An AI trained through self-play, augmented with search algorithms, runs your chosen party against all top-ranked trainers in a round-robin to diagnose win rates, lead picks, 1v1 matchups, and actual battle replays.</li>
+        <li><strong>Pokémon Data</strong>: Usage rates, popular builds, held items, natures, and analysis for each Pokémon.</li>
+        <li><strong>Analysis Articles</strong>: Data-backed breakdowns of meta trends and individual Pokémon.</li>
+      </ul>
+      <p>The battle AI targets roughly "intermediate-level competitive" strength — not perfect play. Use it as a reference for understanding tendencies, not as a definitive verdict.</p>
+
+      <h2>Editorial Policy</h2>
+      <ul>
+        <li><strong>Evidence-based</strong>: Evaluations of "strong" or "weak" are always grounded in concrete numbers such as usage rates, damage multipliers, or adoption percentages.</li>
+        <li><strong>Balanced coverage</strong>: We present both favorable and unfavorable matchups comprehensively, without cherry-picking data to support a predetermined conclusion.</li>
+        <li><strong>Accuracy checks</strong>: Dual-type interactions are always calculated by multiplying both type multipliers; move and ability effects are described based on official game mechanics.</li>
+        <li><strong>Independent review</strong>: Every article is verified against 20+ criteria before publication to catch factual errors and bias.</li>
+      </ul>
+
+      <h2>Disclaimer</h2>
+      <p>While we strive for accuracy, we make no guarantee of completeness or usefulness. PokeNavi is not affiliated with Nintendo, The Pokémon Company, or any related entity. Pokémon names, characters, and images are the property of their respective owners.</p>
+
+      <h2>Contact</h2>
+      <p>For corrections, feedback, or inquiries, please reach us on X (formerly Twitter).</p>
+      <p><a href="https://x.com/pokenavi_jp" target="_blank" rel="noopener noreferrer">X: @pokenavi_jp</a></p>
+    </main>
+    <Footer />
+  </body>
+</html>

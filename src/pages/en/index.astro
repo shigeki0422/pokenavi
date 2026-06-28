@@ -1,0 +1,152 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import rankingData from '../../data/ranking.json';
+import articleMeta from '../../data/article-meta.json';
+import { getCollection } from 'astro:content';
+
+const { dates, pokemon } = rankingData as {
+  dates: string[];
+  pokemon: { name: string; id: string | null; dates: Record<string, { rank: number; rate: number | null }> }[];
+};
+
+const lastDate = dates[dates.length - 1];
+const top10 = [...pokemon]
+  .filter(p => p.dates[lastDate]?.rank)
+  .sort((a, b) => (a.dates[lastDate]?.rank ?? 999) - (b.dates[lastDate]?.rank ?? 999))
+  .slice(0, 10);
+
+const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
+const m3Posts = (await getCollection('blog'))
+  .filter(p => (showDrafts || !p.data.draft) && p.id.includes('-m3'))
+  .sort((a, b) => ((articleMeta as any)[a.id]?.rank ?? 999) - ((articleMeta as any)[b.id]?.rank ?? 999))
+  .slice(0, 6);
+
+const fmtDate = (d: string) => { const [, m, day] = d.split('-'); return `${parseInt(m)}/${parseInt(day)}`; };
+
+const siteUrl = 'https://pokenavi.jp';
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/' },
+  { lang: 'en', url: siteUrl + '/en/' },
+  { lang: 'ko', url: siteUrl + '/ko/' },
+  { lang: 'x-default', url: siteUrl + '/' },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead
+      title="Pokémon Champions Data Analysis | PokeNavi"
+      description="Usage rate ranking, battle simulator, and analysis articles for Pokémon Champions. Data-driven competitive strategy."
+      imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="en_US"
+    />
+    <style>
+      main { max-width: 1100px; margin: auto; padding: 1.5em 1.5em 4em; }
+      .hero { text-align: center; padding: 2.5em 1em 2em; }
+      .hero h1 { font-size: 1.8rem; margin-bottom: 0.4em; }
+      .hero p { font-size: 0.95rem; color: #64748b; max-width: 600px; margin: 0 auto 1.5em; }
+      .feature-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-bottom: 3em; }
+      .feature-card {
+        display: block; padding: 1.2em 1.4em; border: 1px solid #e2e8f0; border-radius: 12px;
+        text-decoration: none; color: inherit; background: #fff;
+        transition: box-shadow 0.2s, transform 0.15s;
+      }
+      .feature-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); transform: translateY(-2px); }
+      .feature-card .icon { font-size: 1.8rem; margin-bottom: 0.5em; }
+      .feature-card h2 { font-size: 1rem; font-weight: 800; margin-bottom: 0.3em; color: #1e293b; }
+      .feature-card p { font-size: 0.82rem; color: #64748b; margin: 0; line-height: 1.5; }
+      .feature-card .cta { display: inline-block; margin-top: 0.8em; font-size: 0.78rem; font-weight: 700; color: var(--accent, #f97316); }
+      .section-title { font-size: 1rem; font-weight: 700; margin: 0 0 1em; padding: 0.4em 0.9em; background: #f8fafc; border-left: 3px solid var(--accent, #f97316); border-radius: 0 6px 6px 0; }
+      .ranking-list { list-style: none; margin: 0 0 2em; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px; }
+      .ranking-list li { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #f1f5f9; border-radius: 8px; font-size: 0.82rem; font-weight: 600; }
+      .ranking-list li img { width: 32px; height: 32px; object-fit: contain; }
+      .rank-num { font-size: 0.7rem; color: #94a3b8; min-width: 18px; }
+      .rank-num.top1 { color: #f59e0b; font-weight: 800; }
+      .rank-num.top3 { color: #78716c; font-weight: 800; }
+      .article-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 10px; margin-bottom: 2em; }
+      .article-card { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: inherit; background: #fff; }
+      .article-card:hover { background: #f8fafc; }
+      .article-card img { width: 48px; height: 48px; object-fit: contain; flex-shrink: 0; }
+      .article-card .art-body { flex: 1; min-width: 0; }
+      .article-card .art-rank { font-size: 0.68rem; color: #dc2626; font-weight: 700; }
+      .article-card .art-title { font-size: 0.8rem; font-weight: 700; line-height: 1.35; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .view-all { display: inline-block; font-size: 0.82rem; font-weight: 700; color: var(--accent, #f97316); text-decoration: none; margin-top: 0.5em; }
+      .view-all:hover { text-decoration: underline; }
+      @media (max-width: 600px) { main { padding: 1em 0.75em 3em; } .hero h1 { font-size: 1.4rem; } }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="hero">
+        <h1>Pokémon Champions<br />Data Analysis</h1>
+        <p>Usage rate rankings, AI-powered battle simulation, and data-backed analysis for Pokémon Champions ranked battles.</p>
+      </div>
+
+      <div class="feature-grid">
+        <a class="feature-card" href="/en/ranking/">
+          <div class="icon">📊</div>
+          <h2>Usage Rate Ranking</h2>
+          <p>Track the top 200 Pokémon by usage rate. Daily updates with an interactive bump chart to visualize rank changes over time.</p>
+          <span class="cta">View Ranking →</span>
+        </a>
+        <a class="feature-card" href="/simulator/">
+          <div class="icon">⚔️</div>
+          <h2>Battle Simulator</h2>
+          <p>Run your party against all top-ranked trainers in a round-robin. Diagnose win rates, lead picks, and 1v1 matchups with AI.</p>
+          <span class="cta">Try Simulator →</span>
+        </a>
+        <a class="feature-card" href="/en/blog/m3/">
+          <div class="icon">📝</div>
+          <h2>Analysis Articles</h2>
+          <p>In-depth breakdowns of top Pokémon builds, strategies, and team compositions. Based on real usage data.</p>
+          <span class="cta">Read Analysis →</span>
+        </a>
+      </div>
+
+      <h2 class="section-title">Current Rankings — Updated {fmtDate(lastDate)}</h2>
+      <ul class="ranking-list">
+        {top10.map((p, i) => {
+          const rank = p.dates[lastDate]?.rank ?? i + 1;
+          return (
+            <li>
+              <span class={`rank-num${rank === 1 ? ' top1' : rank <= 3 ? ' top3' : ''}`}>#{rank}</span>
+              {p.id && <img src={`/images/pokemon/pokemon-${p.id}.webp`} alt={p.name} loading="lazy" />}
+              <span>{p.name}</span>
+            </li>
+          );
+        })}
+      </ul>
+      <a class="view-all" href="/en/ranking/">View full ranking (TOP200) →</a>
+
+      {m3Posts.length > 0 && (
+        <>
+          <h2 class="section-title" style="margin-top:2em">M-3 Season Analysis</h2>
+          <div class="article-grid">
+            {m3Posts.map((post, i) => {
+              const meta = (articleMeta as any)[post.id];
+              const dex = meta?.dex;
+              const form = meta?.form ?? '00';
+              const imgSrc = dex ? `/images/pokemon/pokemon-${String(dex).padStart(4,'0')}-${form}.webp` : null;
+              return (
+                <a class="article-card" href={`/blog/${post.id}/`}>
+                  {imgSrc && <img src={imgSrc} alt={meta?.name ?? ''} loading={i < 3 ? 'eager' : 'lazy'} />}
+                  <div class="art-body">
+                    {meta?.rank && <div class="art-rank">Rank #{meta.rank}</div>}
+                    <div class="art-title">{post.data.title}</div>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
+          <a class="view-all" href="/en/blog/m3/">View all M-3 articles →</a>
+        </>
+      )}
+    </main>
+    <Footer />
+  </body>
+</html>
