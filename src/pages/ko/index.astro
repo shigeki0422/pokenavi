@@ -4,6 +4,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import GlobalSearch from '../../components/GlobalSearch.astro';
 import rankingData from '../../data/ranking.json';
+import { getCollection } from 'astro:content';
 import { POKEMON_NAME_KO as NAME_KO } from '../../i18n/pokemon-names';
 
 const { dates, pokemon } = rankingData as {
@@ -12,13 +13,15 @@ const { dates, pokemon } = rankingData as {
 };
 
 const lastDate = dates[dates.length - 1];
-const top10 = [...pokemon]
-  .filter(p => p.dates[lastDate]?.rank)
-  .sort((a, b) => (a.dates[lastDate]?.rank ?? 999) - (b.dates[lastDate]?.rank ?? 999))
-  .slice(0, 10);
+
+const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
+const allPokemonPages = (await getCollection('pokemon'))
+  .filter(p => showDrafts || !p.data.draft)
+  .sort((a, b) => (a.data.usageRank ?? 999) - (b.data.usageRank ?? 999));
+const pokemonPages = allPokemonPages.slice(0, 10);
+const pokemonTotal = allPokemonPages.length;
 
 const fmtDate = (d: string) => { const [, m, day] = d.split('-'); return `${parseInt(m)}/${parseInt(day)}`; };
-
 
 const siteUrl = 'https://pokenavi.jp';
 const alternates = [
@@ -27,6 +30,10 @@ const alternates = [
   { lang: 'ko', url: siteUrl + '/ko/' },
   { lang: 'x-default', url: siteUrl + '/' },
 ];
+
+const btnPrimary = 'display:inline-block;padding:0.6rem 1.3rem;border-radius:8px;text-decoration:none;font-weight:700;font-size:0.9rem;background:#f97316;color:#fff;';
+const btnGhost = 'display:inline-block;padding:0.6rem 1.3rem;border-radius:8px;text-decoration:none;font-weight:700;font-size:0.9rem;background:#fff;border:1.5px solid #f97316;color:#f97316;';
+const btnOrange = 'display:inline-block;padding:10px 28px;background:#f97316;color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:700;';
 ---
 
 <!doctype html>
@@ -43,18 +50,13 @@ const alternates = [
       .hero { text-align: center; padding: 3rem 1rem 2.5rem; border-bottom: 1px solid rgb(var(--gray-light)); margin-bottom: 2.5rem; }
       .hero h1 { font-size: 2.5rem; margin: 0 0 0.75rem; line-height: 1.2; }
       .hero p { font-size: 1.1rem; color: rgb(var(--gray)); margin: 0; }
-      .section-title { font-size: 1.25rem; font-weight: 700; margin: 0 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid rgb(var(--accent)); color: rgb(var(--black)); }
-      .bs-feature { border: 1px solid rgb(var(--gray-light)); border-radius: 14px; padding: 1.6rem 1.8rem; background: linear-gradient(135deg, #f5f7ff, #ffffff); box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+      .section-title { font-size: 1.25rem; font-weight: 700; margin: 0 0 1.5rem; padding-bottom: 0.5rem; border-bottom: 2px solid #f97316; color: rgb(var(--black)); }
+      .bs-feature { border: 1px solid rgb(var(--gray-light)); border-radius: 14px; padding: 1.6rem 1.8rem; background: linear-gradient(135deg,#f5f7ff,#fff); box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
       .bs-feature h3 { margin: 0 0 0.5rem; font-size: 1.2rem; color: rgb(var(--black)); }
       .bs-feature p { margin: 0 0 1.1rem; color: rgb(var(--gray)); font-size: 0.95rem; line-height: 1.7; }
       .bs-points { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0 0 1.2rem; padding: 0; list-style: none; }
-      .bs-points li { background: #eef2ff; color: var(--accent-dark); font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 9999px; }
+      .bs-points li { background: #eef2ff; color: #000d8a; font-size: 0.8rem; font-weight: 700; padding: 0.25rem 0.7rem; border-radius: 9999px; }
       .bs-cta-row { display: flex; gap: 0.7rem; flex-wrap: wrap; }
-      .bs-cta { display: inline-block; padding: 0.6rem 1.3rem; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
-      .bs-cta.primary { background: var(--accent); color: #fff; }
-      .bs-cta.primary:hover { background: var(--accent-dark); }
-      .bs-cta.ghost { background: #fff; border: 1px solid var(--accent); color: var(--accent); }
-      .bs-cta.ghost:hover { background: #eef2ff; }
       @media (max-width: 720px) { .hero h1 { font-size: 1.75rem; } }
     </style>
   </head>
@@ -68,7 +70,7 @@ const alternates = [
       </section>
 
       <section style="margin-bottom:3rem">
-        <h2 class="section-title">배틀 시뮬레이터 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:6px">주목 기능</span></h2>
+        <h2 class="section-title">배틀 시뮬레이터 <span style="font-size:0.8rem;font-weight:400;color:#f97316;margin-left:6px">주목 기능</span></h2>
         <div class="bs-feature">
           <h3>학습 AI 리그전으로 내 파티의 강함을 데이터 진단</h3>
           <p>자체 학습 배틀 AI와 선읽기 탐색을 조합해, 선택한 파티를 전체 랭커와 총전. 승률·선발·1v1 상성·실전 리플레이를 「감각」이 아닌 「대전 데이터」로 확인할 수 있습니다.</p>
@@ -79,30 +81,38 @@ const alternates = [
             <li>대전 리플레이</li>
           </ul>
           <div class="bs-cta-row">
-            <a class="bs-cta primary" href="/simulator">상위 환경 시뮬레이션 →</a>
-            <a class="bs-cta ghost" href="/battle-simulator">배틀 시뮬레이터란? →</a>
+            <a style={btnPrimary} href="/simulator">상위 환경 시뮬레이션 →</a>
+            <a style={btnGhost} href="/battle-simulator">배틀 시뮬레이터란? →</a>
           </div>
         </div>
       </section>
 
       <section style="margin-bottom:3rem">
-        <h2 class="section-title">사용률 랭킹 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">TOP10 — {fmtDate(lastDate)} 업데이트</span></h2>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px">
-          {top10.map((p, i) => {
-            const rank = p.dates[lastDate]?.rank ?? i + 1;
-            const name = NAME_KO[p.name] ?? p.name;
-            return (
-              <a href="/ko/ranking/" style="display:block;text-decoration:none;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
-                {p.id && <img src={`/images/pokemon/pokemon-${p.id}.webp`} alt={name} style="width:64px;height:64px;display:block;margin:0 auto 4px" loading={i < 4 ? 'eager' : 'lazy'} width="64" height="64" />}
-                <div style="font-size:0.72rem;font-weight:bold;color:rgb(var(--gray));margin-bottom:1px">{rank}위</div>
-                <div style="font-size:0.75rem;font-weight:bold;color:rgb(var(--black))">{name}</div>
-              </a>
-            );
-          })}
+        <h2 class="section-title">포켓몬 정보 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">사용률 TOP10 — {fmtDate(lastDate)} 업데이트</span></h2>
+        <div style="position:relative">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px">
+            {pokemonPages.map((p, i) => {
+              const koName = NAME_KO[p.data.pokemonName] ?? p.data.pokemonName;
+              return (
+                <a href={`/pokemon/${p.id}/`} style="display:block;text-decoration:none;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+                  <img
+                    src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
+                    alt={koName}
+                    style="width:64px;height:64px;display:block;margin:0 auto 4px"
+                    loading={i < 4 ? 'eager' : 'lazy'}
+                    width="64" height="64"
+                  />
+                  <div style="font-size:0.72rem;font-weight:bold;color:rgb(var(--gray));margin-bottom:1px">{p.data.usageRank}위</div>
+                  <div style="font-size:0.75rem;font-weight:bold;color:rgb(var(--black))">{koName}</div>
+                </a>
+              );
+            })}
+          </div>
+          <div style="position:absolute;bottom:0;left:0;right:0;height:80px;background:linear-gradient(to bottom,transparent,white);pointer-events:none"></div>
         </div>
-        <div style="text-align:center;margin-top:12px">
-          <a href="/ko/ranking/" style="display:inline-block;padding:10px 28px;background:var(--accent);color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:700;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-            전체 랭킹 보기 (TOP200) →
+        <div style="text-align:center;margin-top:8px">
+          <a style={btnOrange} href="/pokemon/" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+            포켓몬 정보 전체 보기 ({pokemonTotal}건) →
           </a>
         </div>
       </section>
