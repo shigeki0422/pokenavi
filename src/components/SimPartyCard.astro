@@ -51,65 +51,100 @@ function itemIconHtml(item: string) {
   return '';
 }
 
+function seasonLabel(label: string): string {
+  const m = label?.match(/^(M-\d+)/);
+  return m ? `${m[1]} シーズン` : '';
+}
+
 const EV_LABELS = ['H','A','B','C','D','S'];
 
 const bn = baseName(pokemonName);
 const subjects = (indexData as any).subjects as any[];
-const match = subjects
-  .filter((s: any) => s.party && s.party.some((spec: string) => {
-    const n = parseSpec(spec).name; return n === pokemonName || baseName(n) === bn;
-  }))
-  .sort((a: any, b: any) => (b.win_rate || 0) - (a.win_rate || 0))[0];
 
-if (!match) return null;
+const candidates = subjects.filter((s: any) => s.party && s.party.some((spec: string) => {
+  const n = parseSpec(spec).name; return n === pokemonName || baseName(n) === bn;
+}));
 
-const party = match.party.map((s: string) => {
-  const p = parseSpec(s);
-  const natStr = p.nature ? `${p.nature}${NATURE[p.nature] ? ` (${NATURE[p.nature]})` : ''}` : '—';
-  const evHtml = p.evs.map((v: string, i: number) => (+v > 0 ? `<span class="spc-evchip spc-ev-${EV_LABELS[i]}">${EV_LABELS[i]}<b>${v}</b></span>` : '')).join('');
-  const movesHtml = p.moves.map((m: string) => `<span class="spc-mvchip">${typeIconHtml(m)}${m}</span>`).join('');
-  return {
-    ...p,
-    iconUrl: iconUrl(p.name),
-    natStr,
-    evHtml,
-    movesHtml,
-    itemIconHtml: itemIconHtml(p.item),
-  };
+// シーズン番号を抽出（M-2 → 2）
+function seasonNum(label: string): number {
+  const m = label?.match(/^M-(\d+)/); return m ? +m[1] : 0;
+}
+const allSeasons = [...new Set(candidates.map((s: any) => seasonNum(s.label ?? '')))].sort((a, b) => b - a);
+
+// 最新シーズンを優先して2件取得。足りなければ次のシーズンで補完
+const matches: any[] = [];
+for (const season of allSeasons) {
+  if (matches.length >= 2) break;
+  const byWin = candidates
+    .filter((s: any) => seasonNum(s.label ?? '') === season)
+    .sort((a: any, b: any) => (b.win_rate || 0) - (a.win_rate || 0));
+  for (const entry of byWin) {
+    if (matches.length >= 2) break;
+    matches.push(entry);
+  }
+}
+
+if (matches.length === 0) return null;
+
+function buildParty(match: any) {
+  return match.party.map((s: string) => {
+    const p = parseSpec(s);
+    const natStr = p.nature ? `${p.nature}${NATURE[p.nature] ? ` (${NATURE[p.nature]})` : ''}` : '—';
+    const evHtml = p.evs.map((v: string, i: number) => (+v > 0 ? `<span class="spc-evchip spc-ev-${EV_LABELS[i]}">${EV_LABELS[i]}<b>${v}</b></span>` : '')).join('');
+    const movesHtml = p.moves.map((m: string) => `<span class="spc-mvchip">${typeIconHtml(m)}${m}</span>`).join('');
+    return {
+      ...p,
+      iconUrl: iconUrl(p.name),
+      natStr,
+      evHtml,
+      movesHtml,
+      itemIconHtml: itemIconHtml(p.item),
+    };
+  });
+}
+
+const cards = matches.map((match: any, ci: number) => {
+  const party = buildParty(match);
+  const targetIdx = party.findIndex((p: any) => p.name === pokemonName || baseName(p.name) === bn);
+  const t = party[targetIdx] ?? party[0];
+  const uid = `spc-${ci}-${Math.random().toString(36).slice(2, 7)}`;
+  const season = seasonLabel(match.label ?? '');
+  const partyJson = JSON.stringify(party.map((p: any) => ({
+    name: p.name, iconUrl: p.iconUrl, item: p.item, nature: p.natStr,
+    ability: p.ability, movesHtml: p.movesHtml, evHtml: p.evHtml, itemIconHtml: p.itemIconHtml,
+  })));
+  return { party, targetIdx, t, uid, season, partyJson };
 });
 
-const targetIdx = party.findIndex((p: any) => p.name === pokemonName || baseName(p.name) === bn);
-const t = party[targetIdx] ?? party[0];
 const simulatorUrl = `/simulator/?sf=${encodeURIComponent(pokemonName)}`;
-
-const partyJson = JSON.stringify(party.map((p: any) => ({
-  name: p.name, iconUrl: p.iconUrl, item: p.item, nature: p.natStr,
-  ability: p.ability, movesHtml: p.movesHtml, evHtml: p.evHtml, itemIconHtml: p.itemIconHtml,
-})));
-const uid = `spc-${Math.random().toString(36).slice(2, 7)}`;
 ---
 
 <section class="spc-section">
   <h2 class="spc-h2">構築例</h2>
-  <div class="spc-card" id={uid} data-party={partyJson} data-target={targetIdx}>
-    <div class="spc-iconrow">
-      {party.map((p: any, i: number) => (
-        <button class:list={['spc-montab', i === targetIdx && 'spc-active']} data-idx={i} aria-label={p.name}>
-          {p.iconUrl && <img class="spc-monicon" src={p.iconUrl} alt={p.name} />}
-          <span class="spc-mname">{p.name}</span>
-          <span class="spc-mitem">{p.item || '—'}</span>
-        </button>
-      ))}
-    </div>
-    <div class="spc-compdetail">
-      <div class="spc-cdgrid">
-        <div class="spc-cdcell"><span class="spc-cdlabel spc-item">持ち物</span><span class="spc-cdval" set:html={`${t.itemIconHtml}${t.item || '—'}`} /></div>
-        <div class="spc-cdcell"><span class="spc-cdlabel spc-abil">特性</span><span class="spc-cdval">{t.ability || '—'}</span></div>
-        <div class="spc-cdcell"><span class="spc-cdlabel spc-nat">性格</span><span class="spc-cdval">{t.natStr}</span></div>
+  <div class="spc-grid">
+    {cards.map((card) => (
+      <div class="spc-card" id={card.uid} data-party={card.partyJson} data-target={card.targetIdx}>
+        {card.season && <div class="spc-season">{card.season}</div>}
+        <div class="spc-iconrow">
+          {card.party.map((p: any, i: number) => (
+            <button class:list={['spc-montab', i === card.targetIdx && 'spc-active']} data-idx={i} aria-label={p.name}>
+              {p.iconUrl && <img class="spc-monicon" src={p.iconUrl} alt={p.name} />}
+              <span class="spc-mname">{p.name}</span>
+              <span class="spc-mitem">{p.item || '—'}</span>
+            </button>
+          ))}
+        </div>
+        <div class="spc-compdetail">
+          <div class="spc-cdgrid">
+            <div class="spc-cdcell"><span class="spc-cdlabel spc-item">持ち物</span><span class="spc-cdval" set:html={`${card.t.itemIconHtml}${card.t.item || '—'}`} /></div>
+            <div class="spc-cdcell"><span class="spc-cdlabel spc-abil">特性</span><span class="spc-cdval">{card.t.ability || '—'}</span></div>
+            <div class="spc-cdcell"><span class="spc-cdlabel spc-nat">性格</span><span class="spc-cdval">{card.t.natStr}</span></div>
+          </div>
+          <div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-mv">技</span><span class="spc-mvwrap" set:html={card.t.movesHtml || '—'} /></div>
+          <div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-ev">EV</span><span class="spc-mvwrap spc-evwrap" set:html={card.t.evHtml || '—'} /></div>
+        </div>
       </div>
-      <div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-mv">技</span><span class="spc-mvwrap" set:html={t.movesHtml || '—'} /></div>
-      <div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-ev">EV</span><span class="spc-mvwrap spc-evwrap" set:html={t.evHtml || '—'} /></div>
-    </div>
+    ))}
   </div>
   <a class="spc-cta" href={simulatorUrl}>
     その他の構築や対戦での動きを確認
@@ -144,7 +179,7 @@ const uid = `spc-${Math.random().toString(36).slice(2, 7)}`;
   });
 </script>
 
-<style>
+<style is:global>
   .spc-section { margin: 1.8em 0 0.5em; }
   .spc-h2 {
     font-size: 1rem; font-weight: 700; color: rgb(var(--black));
@@ -152,34 +187,41 @@ const uid = `spc-${Math.random().toString(36).slice(2, 7)}`;
     background: #f8fafc; border-left: 3px solid var(--accent, #f97316);
     border-radius: 0 6px 6px 0;
   }
+  .spc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
   .spc-card {
     border: 1px solid rgb(var(--gray-light)); border-radius: 10px;
     background: #fff; overflow: hidden; padding: .5em .4em .6em;
   }
-  /* アイコン行 — simulatorの .iconrow/.montab と同等 */
+  .spc-season {
+    font-size: .68rem; font-weight: 800; color: var(--accent, #f97316);
+    margin-bottom: .3em; letter-spacing: .03em;
+  }
   .spc-iconrow { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: .4em; }
   .spc-montab {
     display: flex; flex-direction: column; align-items: center;
-    flex: 1; min-width: 52px; max-width: 72px;
-    padding: .25em .15em; border: 1px solid rgb(var(--gray-light));
+    flex: 1; min-width: 40px; max-width: 60px;
+    padding: .2em .1em; border: 1px solid rgb(var(--gray-light));
     border-radius: 8px; background: #fff; cursor: pointer;
     font-family: var(--font-atkinson); overflow: hidden;
     transition: border-color .12s, background .12s;
   }
   .spc-montab:hover { border-color: #94a3b8; background: #f8fafc; }
   .spc-montab.spc-active { border-color: var(--accent); background: #eef2ff; }
-  .spc-monicon { width: 44px; height: 44px; object-fit: contain; }
-  .spc-mname { font-size: .6rem; font-weight: 700; text-align: center; color: rgb(var(--gray-dark)); line-height: 1.2; word-break: break-all; }
-  .spc-mitem { font-size: .56rem; color: rgb(var(--gray)); text-align: center; line-height: 1.2; }
-  /* 詳細パネル — simulatorの .compdetail/.cdgrid 等と同等 */
+  .spc-monicon { width: 36px; height: 36px; object-fit: contain; }
+  .spc-mname { font-size: .55rem; font-weight: 700; text-align: center; color: rgb(var(--gray-dark)); line-height: 1.2; word-break: break-all; }
+  .spc-mitem { font-size: .5rem; color: rgb(var(--gray)); text-align: center; line-height: 1.2; }
   .spc-compdetail { border-top: 1px solid rgb(var(--gray-light)); padding-top: .45em; }
-  .spc-cdgrid { display: flex; flex-wrap: wrap; gap: .35em .9em; margin-bottom: .35em; }
-  .spc-cdcell { font-size: .8rem; }
-  .spc-cdrow.spc-mvrow { display: flex; align-items: flex-start; gap: .35em; margin: .35em 0; }
+  .spc-cdgrid { display: flex; flex-wrap: wrap; gap: .3em .7em; margin-bottom: .3em; }
+  .spc-cdcell { font-size: .78rem; }
+  .spc-cdrow.spc-mvrow { display: flex; align-items: flex-start; gap: .3em; margin: .3em 0; }
   .spc-cdlabel {
-    display: inline-block; font-size: .64rem; font-weight: 800;
-    padding: .08em .45em; border-radius: 5px; margin-right: .35em;
-    color: #fff; vertical-align: 1px;
+    display: inline-block; font-size: .62rem; font-weight: 800;
+    padding: .07em .4em; border-radius: 5px; margin-right: .3em;
+    color: #fff; vertical-align: 1px; flex-shrink: 0;
   }
   .spc-item { background: #0ea5e9; }
   .spc-abil { background: #8b5cf6; }
@@ -187,17 +229,17 @@ const uid = `spc-${Math.random().toString(36).slice(2, 7)}`;
   .spc-mv   { background: #10b981; }
   .spc-ev   { background: #64748b; }
   .spc-cdval { font-weight: 600; color: rgb(var(--gray-dark)); }
-  .spc-mvwrap { display: inline-flex; flex-wrap: wrap; gap: .25em; align-items: center; }
+  .spc-mvwrap { display: inline-flex; flex-wrap: wrap; gap: .2em; align-items: center; }
   .spc-mvchip {
-    display: inline-flex; align-items: center; gap: .15em;
+    display: inline-flex; align-items: center; gap: .12em;
     background: #f1f5f9; border: 1px solid #e2e8f0;
-    border-radius: 9999px; padding: .08em .55em;
-    font-size: .75rem; font-weight: 600;
+    border-radius: 9999px; padding: .06em .45em;
+    font-size: .7rem; font-weight: 600;
   }
   .spc-evchip {
-    display: inline-flex; align-items: center; gap: .12em;
-    color: #fff; font-size: .7rem; font-weight: 700;
-    padding: .06em .5em; border-radius: 5px;
+    display: inline-flex; align-items: center; gap: .1em;
+    color: #fff; font-size: .66rem; font-weight: 700;
+    padding: .05em .45em; border-radius: 5px;
   }
   .spc-evchip b { font-weight: 800; }
   .spc-ev-H { background: #16a34a; }
@@ -206,9 +248,8 @@ const uid = `spc-${Math.random().toString(36).slice(2, 7)}`;
   .spc-ev-C { background: #7c3aed; }
   .spc-ev-D { background: #0d9488; }
   .spc-ev-S { background: #db2777; }
-  .spc-tic { width: 15px; height: 15px; vertical-align: -2px; }
-  .spc-iic { width: 24px; height: 24px; object-fit: contain; vertical-align: -7px; margin-right: 2px; }
-  /* CTA */
+  .spc-tic { width: 14px; height: 14px; vertical-align: -2px; }
+  .spc-iic { width: 22px; height: 22px; object-fit: contain; vertical-align: -6px; margin-right: 2px; }
   .spc-cta {
     display: flex; align-items: center; justify-content: center; gap: 8px;
     margin-top: 10px; padding: 13px 16px;
@@ -219,11 +260,12 @@ const uid = `spc-${Math.random().toString(36).slice(2, 7)}`;
   }
   .spc-cta:hover { opacity: .9; transform: translateY(-1px); }
   .spc-cta-arrow { font-size: 1.1em; font-weight: 900; }
-  @media (max-width: 480px) {
-    .spc-montab { min-width: 44px; }
-    .spc-monicon { width: 36px; height: 36px; }
-    .spc-mname { font-size: .56rem; }
-    .spc-mitem { font-size: .5rem; }
+  @media (max-width: 600px) {
+    .spc-grid { grid-template-columns: 1fr; }
+    .spc-montab { min-width: 36px; max-width: 52px; }
+    .spc-monicon { width: 32px; height: 32px; }
+    .spc-mname { font-size: .52rem; }
+    .spc-mitem { font-size: .48rem; }
     .spc-cta { font-size: .84rem; padding: 12px 14px; }
   }
 </style>
