@@ -432,24 +432,25 @@ const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
         });
 
         // タッチ操作（スマホ）
+        let touchStartY = 0;
         canvas.addEventListener('touchstart', e => {
-          e.preventDefault();
+          touchStartY = e.touches[0].clientY;
           const touch = e.touches[0];
           const rect = canvas.getBoundingClientRect();
           const mx = touch.clientX - rect.left, my = touch.clientY - rect.top;
-          const found = findNearest(mx, my, 28); // スマホは判定範囲を広げる
+          const found = findNearest(mx, my, 28);
 
-          if (found >= 0 && found === pinnedIdx) {
-            // 同じポケモンを再タップ → 解除してページ遷移
-            if (pokemon[found].url) location.href = pokemon[found].url;
-            pinnedIdx = -1; hoveredIdx = -1; draw();
-            tooltip.style.display = 'none';
-          } else if (found >= 0) {
-            // 別のポケモンをタップ → ピン留め強調
-            pinnedIdx = found; hoveredIdx = found; draw();
-            showTooltip(pokemon[found], mx, my, touch.clientX, touch.clientY);
+          if (found >= 0) {
+            e.preventDefault();
+            if (found === pinnedIdx) {
+              if (pokemon[found].url) location.href = pokemon[found].url;
+              pinnedIdx = -1; hoveredIdx = -1; draw();
+              tooltip.style.display = 'none';
+            } else {
+              pinnedIdx = found; hoveredIdx = found; draw();
+              showTooltip(pokemon[found], mx, my, touch.clientX, touch.clientY);
+            }
           } else {
-            // 空白タップ → 解除
             pinnedIdx = -1; hoveredIdx = -1; draw();
             tooltip.style.display = 'none';
           }
