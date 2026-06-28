@@ -843,8 +843,8 @@ const description = 'ランカー同士の総当たり対戦シミュレーシ�
                         : (PWDIR==='asc'?a.win_rate-b.win_rate:b.win_rate-a.win_rate));
         if(!arr.length){ $('opp-list').innerHTML='<div class="muted" style="padding:.6em">選出データなし</div>'; $('summary').textContent=''; return; }
         $('summary').textContent=`相手に選出された ${arr.length}種のポケモンに対する ${SUBJECT.label} の戦績（選出された対戦のみ集計）`;
-        $('opp-list').innerHTML = arr.map(p=>{const wr=Math.round(p.win_rate*100),cls=p.win_rate>=0.6?'g':p.win_rate<=0.4?'r':'n';
-          return `<div class="pitem" data-pk="${encodeURIComponent(p.name)}" onclick="selectOppPoke('${p.name.replace(/'/g,"\\'")}')"><span class="nm">${p.name}</span><span class="muted">${p.wins}-${p.losses}-${p.draws}</span><span class="wr ${cls}">${wr}%</span></div>`;}).join('');
+        $('opp-list').innerHTML = arr.map(p=>{const wr=Math.round(p.win_rate*100),cls=p.win_rate>=0.6?'g':p.win_rate<=0.4?'r':'n';const u=iconUrl(p.name);
+          return `<div class="pitem" data-pk="${encodeURIComponent(p.name)}" onclick="selectOppPoke('${p.name.replace(/'/g,"\\'")}')"><div class="pitem-icons">${u?`<img src="${u}" alt="">`:''}</div><span class="nm">${p.name}</span><span class="muted">${p.wins}-${p.losses}-${p.draws}</span><span class="wr ${cls}">${wr}%</span></div>`;}).join('');
         if(OPP&&VSPOKE[OPP]) document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.pk||'')===OPP));
         else selectOppPoke(arr[0].name);
       }
