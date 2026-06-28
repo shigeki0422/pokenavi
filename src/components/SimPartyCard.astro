@@ -200,10 +200,9 @@ const simulatorUrl = `/simulator/?sf=${encodeURIComponent(pokemonName)}`;
     font-size: .68rem; font-weight: 800; color: var(--accent, #f97316);
     margin-bottom: .3em; letter-spacing: .03em;
   }
-  .spc-iconrow { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: .4em; }
+  .spc-iconrow { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; margin-bottom: .4em; }
   .spc-montab {
     display: flex; flex-direction: column; align-items: center;
-    flex: 1; min-width: 40px; max-width: 60px;
     padding: .2em .1em; border: 1px solid rgb(var(--gray-light));
     border-radius: 8px; background: #fff; cursor: pointer;
     font-family: var(--font-atkinson); overflow: hidden;
@@ -262,7 +261,6 @@ const simulatorUrl = `/simulator/?sf=${encodeURIComponent(pokemonName)}`;
   .spc-cta-arrow { font-size: 1.1em; font-weight: 900; }
   @media (max-width: 600px) {
     .spc-grid { grid-template-columns: 1fr; }
-    .spc-montab { min-width: 36px; max-width: 52px; }
     .spc-monicon { width: 32px; height: 32px; }
     .spc-mname { font-size: .52rem; }
     .spc-mitem { font-size: .48rem; }
