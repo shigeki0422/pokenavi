@@ -124,6 +124,15 @@ const breadcrumbJsonLd = {
 			:global(.prose h1) { font-size: 1.3rem; }
 			:global(.prose th) { white-space: nowrap; }
 			:global(.prose table) { display: block; overflow-x: auto; max-width: 100%; }
+			.share-row { display: flex; gap: 8px; margin: 1.5em 0 0.5em; }
+			.share-x {
+				display: inline-flex; align-items: center; gap: 6px;
+				padding: 7px 16px; border-radius: 8px;
+				background: #000; color: #fff;
+				font-size: 0.82rem; font-weight: 700; text-decoration: none;
+				transition: opacity 0.15s;
+			}
+			.share-x:hover { opacity: 0.8; color: #fff; }
 			@media (max-width: 720px) {
 				.prose { font-size: 14px; padding: 0.5em 0.75em 2em; }
 				/* 記事内ポケモン画像をモバイルで縮小 */
@@ -166,6 +175,17 @@ const breadcrumbJsonLd = {
 					</div>
 					<slot />
 					{blogPokemonName && <SimPartyCard pokemonName={blogPokemonName} />}
+					<div class="share-row">
+						<a
+							class="share-x"
+							href={`https://x.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(articleUrl)}`}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.402 6.231H2.746l7.73-8.835L2.195 2.25H8.48l4.264 5.633 5.5-5.633Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+							Xでシェア
+						</a>
+					</div>
 					<AdUnit />
 					<AffiliateProducts category="pokemon" />
 					{body && <MentionedPokemon currentSlug={slug ?? ''} body={body} />}

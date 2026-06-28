@@ -44,6 +44,18 @@ const organizationJsonLd = {
 	logo: { '@type': 'ImageObject', url: siteUrl + '/logo-mark.png' },
 	description: SITE_DESCRIPTION,
 };
+
+const websiteJsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'WebSite',
+	name: SITE_TITLE,
+	url: siteUrl,
+	potentialAction: {
+		'@type': 'SearchAction',
+		target: { '@type': 'EntryPoint', urlTemplate: siteUrl + '/pokemon/?q={search_term_string}' },
+		'query-input': 'required name=search_term_string',
+	},
+};
 ---
 
 <!doctype html>
@@ -51,6 +63,7 @@ const organizationJsonLd = {
 	<head>
 		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} imageUrl="/og-image.png" />
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(organizationJsonLd)} />
+		<script is:inline type="application/ld+json" set:html={JSON.stringify(websiteJsonLd)} />
 		<style>
 			.hero {
 				text-align: center;
