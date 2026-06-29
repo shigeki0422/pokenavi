@@ -5,17 +5,43 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import SimPartyCard from '../components/SimPartyCard.astro';
+import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
+import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 
-type Props = CollectionEntry<'pokemon'>['data'];
+type Props = CollectionEntry<'pokemon'>['data'] & { lang?: 'ja' | 'en' | 'ko' };
 
-const { title, description, pokemonName, dexNumber, imageForm, usageRank, faq } = Astro.props;
+const { title, description, pokemonName, dexNumber, imageForm, usageRank, faq, lang = 'ja' } = Astro.props;
 
-const metaDescription = pokemonName && usageRank
-  ? `M-2・M-3環境で使用率${usageRank}位の${pokemonName}。技・持ち物・特性・性格の採用率データと、上位ランカーの実戦パーティを掲載。バトルシミュレーションで対戦成績も確認できます。`
-  : description;
+const metaDescription = pokemonName && usageRank ? (
+  lang === 'en'
+    ? `Pokémon Champions data for ${pokemonName}. Usage rank #${usageRank}. Moves, held items, abilities, and natures usage rates. Data-driven competitive battle analysis.`
+    : lang === 'ko'
+    ? `포켓몬 챔피언스 ${pokemonName} 데이터. 사용률 ${usageRank}위. 기술·지닌물건·특성·성격 채용률과 대전 데이터.`
+    : `M-2・M-3環境で使用率${usageRank}位の${pokemonName}。技・持ち物・特性・性格の採用率データと、上位ランカーの実戦パーティを掲載。バトルシミュレーションで対戦成績も確認できます。`
+) : description;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
+const pathParts = Astro.url.pathname.split('/').filter(Boolean);
+const pokemonSlugIdx = pathParts.findIndex(p => p === 'pokemon');
+const pokemonSlug = pokemonSlugIdx >= 0 ? pathParts[pokemonSlugIdx + 1] : '';
+const pfx = lang === 'en' ? '/en' : lang === 'ko' ? '/ko' : '';
+const MOVE_MAP = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
+const ABILITY_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
+const ITEM_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
+const NATURE_MAP = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
+const POKEMON_MAP = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
+const T = {
+  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト' },
+  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb' },
+  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로' },
+}[lang];
+const hreflangAlternates = pokemonSlug ? [
+  { lang: 'ja', url: `${siteUrl}/pokemon/${pokemonSlug}/` },
+  { lang: 'en', url: `${siteUrl}/en/pokemon/${pokemonSlug}/` },
+  { lang: 'ko', url: `${siteUrl}/ko/pokemon/${pokemonSlug}/` },
+  { lang: 'x-default', url: `${siteUrl}/pokemon/${pokemonSlug}/` },
+] : undefined;
 const dexPad = String(dexNumber ?? 0).padStart(4, '0');
 const pokemonImageUrl = `${siteUrl}/images/pokemon/pokemon-${dexPad}-${imageForm ?? '00'}.webp`;
 
@@ -71,16 +97,16 @@ const breadcrumbJsonLd = {
 	'@context': 'https://schema.org',
 	'@type': 'BreadcrumbList',
 	itemListElement: [
-		{ '@type': 'ListItem', position: 1, name: 'ホーム', item: siteUrl + '/' },
-		{ '@type': 'ListItem', position: 2, name: 'ポケモン情報', item: siteUrl + '/pokemon/' },
+		{ '@type': 'ListItem', position: 1, name: T.home, item: siteUrl + `${pfx}/` },
+		{ '@type': 'ListItem', position: 2, name: T.pokemonInfo, item: siteUrl + `${pfx}/pokemon/` },
 		{ '@type': 'ListItem', position: 3, name: pokemonName ?? title, item: pageUrl },
 	],
 };
 ---
 
-<html lang="ja">
+<html lang={lang}>
 	<head>
-		<BaseHead title={title} description={metaDescription} imageUrl={pokemonImageUrl} />
+		<BaseHead title={title} description={metaDescription} imageUrl={pokemonImageUrl} alternates={hreflangAlternates} />
 		{pokemonJsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(pokemonJsonLd)} />}
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 		{faqJsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
@@ -200,21 +226,21 @@ const breadcrumbJsonLd = {
 	</head>
 	<body>
 		<Header />
-		<nav class="poke-nav" id="poke-nav" aria-label="セクションナビゲーション">
+		<nav class="poke-nav" id="poke-nav" aria-label={T.navAria}>
 			<div class="poke-nav-inner" id="poke-nav-inner"></div>
 		</nav>
 		<main>
 			<article>
 				<div class="prose">
-					<nav class="breadcrumb" aria-label="パンくずリスト">
+					<nav class="breadcrumb" aria-label={T.breadAria}>
 						<ol>
-							<li><a href="/">ホーム</a></li>
-							<li><a href="/pokemon/">ポケモン情報</a></li>
+							<li><a href={`${pfx}/`}>{T.home}</a></li>
+							<li><a href={`${pfx}/pokemon/`}>{T.pokemonInfo}</a></li>
 							{pokemonName && <li aria-current="page">{pokemonName}</li>}
 						</ol>
 					</nav>
 					<div class="page-meta">
-						<span class="badge">ポケモン情報</span>
+						<span class="badge">{T.badge}</span>
 					</div>
 					<slot />
 					{pokemonName && <SimPartyCard pokemonName={pokemonName} />}
@@ -223,6 +249,47 @@ const breadcrumbJsonLd = {
 			</article>
 		</main>
 		<Footer />
+
+		{lang !== 'ja' && <script is:inline define:vars={{ POKENAVI_LANG: lang, POKENAVI_MOVE: MOVE_MAP, POKENAVI_ABILITY: ABILITY_MAP, POKENAVI_ITEM: ITEM_MAP, POKENAVI_NATURE: NATURE_MAP, POKENAVI_POKEMON: POKEMON_MAP }}>(function(){
+var L=POKENAVI_LANG;
+var H2={en:{'種族値':'Base Stats','メガシンカ':'Mega Evolution','タイプ相性':'Type Matchup','特性':'Abilities','使用率データ':'Usage Data','性格':'Natures','チームメイト':'Partners','考察記事':'Analysis Articles','構築例':'Team Examples'},ko:{'種族値':'종족값','メガシンカ':'메가진화','タイプ相性':'타입 상성','特性':'특성','使用率データ':'사용률 데이터','性格':'성격','チームメイト':'파트너','考察記事':'분석 기사','構築例':'구성 예시'}}[L]||{};
+var STAT={en:{'こうげき':'Attack','ぼうぎょ':'Defense','とくこう':'Sp. Atk','とくぼう':'Sp. Def','すばやさ':'Speed','合計':'Total'},ko:{'こうげき':'공격','ぼうぎょ':'방어','とくこう':'특공','とくぼう':'특방','すばやさ':'스피드','合計':'합계'}}[L]||{};
+var TH={en:{'順位':'Rank','特性名':'Ability','採用率':'Usage','持ち物':'Held Item','技名':'Move','性格名':'Nature','チームメイト名':'Partner','×4 弱点':'×4 Weak','×2 弱点':'×2 Weak','×½ 耐性':'×½ Resist','×0 無効':'×0 Immune'},ko:{'順位':'순위','特性名':'특성명','採用率':'채용률','持ち物':'지닌물건','技名':'기술명','性格名':'성격명','チームメイト名':'파트너명','×4 弱点':'×4 약점','×2 弱点':'×2 약점','×½ 耐性':'×½ 저항','×0 無効':'×0 무효'}}[L]||{};
+var TYPE_L={en:{'物理':'Physical','特殊':'Special','変化':'Status'},ko:{'物理':'물리','特殊':'특수','変化':'변화'}}[L]||{};
+var FIELD={en:{'威力':'Power','命中':'Accuracy','採用率の推移':'Usage Trend'},ko:{'威力':'위력','命中':'명중','採用率の推移':'채용률 추이'}}[L]||{};
+var MISC=L==='en'?{'技':'Moves','持ち物':'Held Items'}:L==='ko'?{'技':'기술','持ち物':'지닌물건'}:{};
+var ALL=Object.assign({},H2,STAT,TH,TYPE_L,FIELD,MISC,POKENAVI_MOVE,POKENAVI_ABILITY,POKENAVI_ITEM,POKENAVI_NATURE,POKENAVI_POKEMON);
+var SUBS=L==='en'?[
+  [/全国図鑑/g,'Pokédex'],[/使用率/g,'Usage Rank'],[/データ集計日：/g,'Data as of '],[/(\d+)位/g,'#$1']
+]:L==='ko'?[
+  [/全国図鑑/g,'전국도감'],[/使用率/g,'사용률'],[/データ集計日：/g,'데이터 집계일：'],[/(\d+)位/g,'$1위']
+]:[];
+function megastone(tr){
+  if(L!=='en')return null;
+  var mX=/^(.+)ナイトX$/.exec(tr),mY=/^(.+)ナイトY$/.exec(tr),m=/^(.+)ナイト$/.exec(tr);
+  var base=mX||mY||m;if(!base)return null;
+  var jp=base[1];
+  var en=POKENAVI_POKEMON[jp]||POKENAVI_POKEMON[jp+'ー'];
+  if(!en)return null;
+  return en+(mX?' X':mY?' Y':'')+'ite';
+}
+function rep(container){
+  var w=document.createTreeWalker(container,NodeFilter.SHOW_TEXT);
+  var nodes=[];var n;
+  while(n=w.nextNode())nodes.push(n);
+  nodes.forEach(function(node){
+    var t=node.textContent,tr=t.trim();
+    if(!tr)return;
+    if(ALL[tr]){node.textContent=t.replace(tr,ALL[tr]);return;}
+    var ms=megastone(tr);
+    if(ms){node.textContent=t.replace(tr,ms);return;}
+    SUBS.forEach(function(p){t=t.replace(p[0],p[1]);});
+    node.textContent=t;
+  });
+}
+var prose=document.querySelector('.prose');
+if(prose)rep(prose);
+})()</script>}
 
 		<script>
 			(function () {
@@ -237,11 +304,17 @@ const breadcrumbJsonLd = {
 					nav.style.display = 'none';
 					return;
 				}
-				const NAV_SHORT: Record<string, string> = {
-					'メガシンカ': 'メガ',
-					'タイプ相性': '相性',
-					'使用率データ': '使用率',
-					'考察記事': '考察',
+				const NAV_SHORT: Record<string, string> = (document.documentElement.lang === 'en') ? {
+					'Base Stats': 'Stats', 'Mega Evolution': 'Mega', 'Type Matchup': 'Type',
+					'Abilities': 'Ability', 'Usage Data': 'Usage', 'Natures': 'Nature',
+					'Partners': 'Partners', 'Analysis Articles': 'Analysis',
+				} : (document.documentElement.lang === 'ko') ? {
+					'종족값': '종족값', '메가진화': '메가', '타입 상성': '상성',
+					'특성': '특성', '사용률 데이터': '사용률', '성격': '성격',
+					'파트너': '파트너', '분석 기사': '분석',
+				} : {
+					'メガシンカ': 'メガ', 'タイプ相性': '相性',
+					'使用率データ': '使用率', '考察記事': '考察',
 				};
 				headings.forEach((h, i) => {
 					if (!h.id) h.id = `sec-${i}`;
