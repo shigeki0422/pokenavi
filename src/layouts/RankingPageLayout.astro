@@ -154,13 +154,20 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         object-fit: contain; flex-shrink: 0;
       }
       #poke-candidates li .cand-rank { font-size: 11px; color: #94a3b8; margin-left: auto; }
-      .range-btns { display: flex; gap: 6px; margin-bottom: 8px; }
+      .range-btns { display: flex; gap: 6px; margin-bottom: 8px; align-items: center; }
       .rbtn {
         padding: 3px 12px; border: 1px solid #e2e8f0; border-radius: 6px;
         font-size: 0.78rem; font-weight: 700; cursor: pointer;
         background: #f8fafc; color: #64748b;
       }
       .rbtn.active { background: var(--accent,#f97316); color: #fff; border-color: var(--accent,#f97316); }
+      .share-btn {
+        margin-left: auto; display: inline-flex; align-items: center; gap: 5px;
+        padding: 3px 11px; border: 1px solid #1d9bf0; border-radius: 6px;
+        font-size: 0.78rem; font-weight: 700; cursor: pointer;
+        background: #fff; color: #1d9bf0;
+      }
+      .share-btn:hover { background: #e8f5fe; }
       .chart-wrap { display: flex; position: relative; }
       .rank-pane {
         flex-shrink: 0; width: 46px; z-index: 2; background: #fff;
@@ -247,6 +254,10 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           <button class="rbtn" data-rows="50">TOP50</button>
           <button class="rbtn" data-rows="100">TOP100</button>
           <button class="rbtn" data-rows="200">TOP200</button>
+          <button class="share-btn" id="share-chart-btn" title="Xにシェア">
+            <svg width="14" height="14" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.163 519.284ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.828Z"/></svg>
+            シェア
+          </button>
         </div>
         <div class="chart-wrap">
           <div class="rank-pane">
@@ -728,6 +739,79 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         });
         searchInput.addEventListener('focus', e => { if (e.target.value) showCandidates(e.target.value); });
         searchInput.addEventListener('blur', () => { setTimeout(() => candidatesList.classList.remove('open'), 150); });
+
+        document.getElementById('share-chart-btn').addEventListener('click', () => {
+          const HEADER_H = 48, FOOTER_H = 28;
+          const chartLogW = canvas.width / dpr;
+          const chartLogH = canvas.height / dpr;
+          const outW = RANK_W + chartLogW;
+          const outH = HEADER_H + chartLogH + FOOTER_H;
+
+          const off = document.createElement('canvas');
+          off.width = Math.round(outW * dpr);
+          off.height = Math.round(outH * dpr);
+          const ctx = off.getContext('2d');
+          ctx.scale(dpr, dpr);
+
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, outW, outH);
+
+          ctx.fillStyle = '#f8fafc';
+          ctx.fillRect(0, 0, outW, HEADER_H);
+          ctx.fillRect(0, HEADER_H + chartLogH, outW, FOOTER_H);
+
+          ctx.strokeStyle = '#e2e8f0';
+          ctx.lineWidth = 1;
+          ctx.beginPath(); ctx.moveTo(0, HEADER_H); ctx.lineTo(outW, HEADER_H); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0, HEADER_H + chartLogH); ctx.lineTo(outW, HEADER_H + chartLogH); ctx.stroke();
+
+          ctx.fillStyle = '#1e293b';
+          ctx.font = 'bold 14px sans-serif';
+          ctx.textBaseline = 'middle';
+          ctx.textAlign = 'left';
+          const latestDate = dates[dates.length - 1] || '';
+          let headerLeft = 'M-3 使用率ランキング';
+          if (pinnedIdx >= 0) {
+            const p = pokemon[pinnedIdx];
+            const name = T_JS.names[p.name] ?? p.name;
+            const rank = p.dates[latestDate]?.rank;
+            headerLeft = `${name}${rank ? '　' + rank + '位' : ''}　｜　M-3 使用率ランキング`;
+          }
+          ctx.fillText(headerLeft, 10, HEADER_H / 2);
+
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '11px sans-serif';
+          ctx.textAlign = 'right';
+          ctx.fillText(latestDate.replace(/-/g, '/'), outW - 10, HEADER_H / 2);
+
+          ctx.drawImage(rankCanvas, 0, HEADER_H, RANK_W, chartLogH);
+          ctx.drawImage(canvas, RANK_W, HEADER_H, chartLogW, chartLogH);
+
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '11px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText('pokenavi.jp/ranking', outW / 2, HEADER_H + chartLogH + FOOTER_H / 2);
+
+          let shareText = `M-3 使用率ランキング（${latestDate.replace(/-/g, '/')}）`;
+          if (pinnedIdx >= 0) {
+            const p = pokemon[pinnedIdx];
+            const name = T_JS.names[p.name] ?? p.name;
+            const rank = p.dates[latestDate]?.rank;
+            shareText = `${name}${rank ? ' ' + rank + '位' : ''} | ` + shareText;
+          }
+
+          off.toBlob(async (blob) => {
+            const file = new File([blob], 'pokenavi-ranking.png', { type: 'image/png' });
+            const url = 'https://pokenavi.jp/ranking';
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+              try { await navigator.share({ files: [file], text: shareText + '\n' + url }); return; }
+              catch(e) { if (e.name === 'AbortError') return; }
+            }
+            const tweetText = encodeURIComponent(shareText + '\n' + url);
+            window.open('https://twitter.com/intent/tweet?text=' + tweetText, '_blank');
+          }, 'image/png');
+        });
 
         searchClear.addEventListener('click', () => {
           searchInput.value = '';
