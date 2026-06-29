@@ -154,7 +154,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         object-fit: contain; flex-shrink: 0;
       }
       #poke-candidates li .cand-rank { font-size: 11px; color: #94a3b8; margin-left: auto; }
-      .range-btns { display: flex; gap: 6px; margin-bottom: 8px; align-items: center; }
+      .range-btns { display: flex; gap: 6px; margin-bottom: 8px; align-items: center; flex-wrap: nowrap; overflow-x: auto; }
       .rbtn {
         padding: 3px 12px; border: 1px solid #e2e8f0; border-radius: 6px;
         font-size: 0.78rem; font-weight: 700; cursor: pointer;
@@ -165,9 +165,13 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         margin-left: auto; display: inline-flex; align-items: center; gap: 5px;
         padding: 3px 11px; border: 1px solid #1d9bf0; border-radius: 6px;
         font-size: 0.78rem; font-weight: 700; cursor: pointer;
-        background: #fff; color: #1d9bf0;
+        background: #fff; color: #1d9bf0; flex-shrink: 0;
       }
       .share-btn:hover { background: #e8f5fe; }
+      @media (max-width: 480px) {
+        .share-btn-label { display: none; }
+        .share-btn { padding: 3px 8px; }
+      }
       .share-toast {
         position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(20px);
         background: #1e293b; color: #fff; padding: 12px 18px; border-radius: 10px;
@@ -260,13 +264,12 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         </div>
         <div class="range-btns">
           <button class="rbtn active" data-rows="15">TOP15</button>
-          <button class="rbtn" data-rows="30">TOP30</button>
           <button class="rbtn" data-rows="50">TOP50</button>
           <button class="rbtn" data-rows="100">TOP100</button>
           <button class="rbtn" data-rows="200">TOP200</button>
           <button class="share-btn" id="share-chart-btn" title="Xにシェア">
             <svg width="14" height="14" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.163 519.284ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.828Z"/></svg>
-            シェア
+            <span class="share-btn-label">シェア</span>
           </button>
         </div>
         <div class="share-toast" id="share-toast"></div>
@@ -761,11 +764,11 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         searchInput.addEventListener('blur', () => { setTimeout(() => candidatesList.classList.remove('open'), 150); });
 
         document.getElementById('share-chart-btn').addEventListener('click', () => {
-          const HEADER_H = 48, FOOTER_H = 28;
+          const HEADER_H = 48, DATE_H = 22, FOOTER_H = 28;
           const chartLogW = canvas.width / dpr;
           const chartLogH = canvas.height / dpr;
           const outW = RANK_W + chartLogW;
-          const outH = HEADER_H + chartLogH + FOOTER_H;
+          const outH = HEADER_H + DATE_H + chartLogH + FOOTER_H;
 
           const off = document.createElement('canvas');
           off.width = Math.round(outW * dpr);
@@ -778,12 +781,24 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
 
           ctx.fillStyle = '#f8fafc';
           ctx.fillRect(0, 0, outW, HEADER_H);
-          ctx.fillRect(0, HEADER_H + chartLogH, outW, FOOTER_H);
+          ctx.fillRect(0, HEADER_H, outW, DATE_H);
+          ctx.fillRect(0, HEADER_H + DATE_H + chartLogH, outW, FOOTER_H);
 
           ctx.strokeStyle = '#e2e8f0';
           ctx.lineWidth = 1;
           ctx.beginPath(); ctx.moveTo(0, HEADER_H); ctx.lineTo(outW, HEADER_H); ctx.stroke();
-          ctx.beginPath(); ctx.moveTo(0, HEADER_H + chartLogH); ctx.lineTo(outW, HEADER_H + chartLogH); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0, HEADER_H + DATE_H); ctx.lineTo(outW, HEADER_H + DATE_H); ctx.stroke();
+          ctx.beginPath(); ctx.moveTo(0, HEADER_H + DATE_H + chartLogH); ctx.lineTo(outW, HEADER_H + DATE_H + chartLogH); ctx.stroke();
+
+          ctx.fillStyle = '#94a3b8';
+          ctx.font = '10px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          const dateCx = di => RANK_W + PAD_L + di * (chartLogW - PAD_L - PAD_R) / Math.max(dates.length - 1, 1);
+          dates.forEach((d, di) => {
+            const [,m,day] = d.split('-');
+            ctx.fillText(`${parseInt(m)}/${parseInt(day)}`, dateCx(di), HEADER_H + DATE_H / 2);
+          });
 
           ctx.fillStyle = '#1e293b';
           ctx.font = 'bold 14px sans-serif';
@@ -804,14 +819,14 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           ctx.textAlign = 'right';
           ctx.fillText(latestDate.replace(/-/g, '/'), outW - 10, HEADER_H / 2);
 
-          ctx.drawImage(rankCanvas, 0, HEADER_H, RANK_W, chartLogH);
-          ctx.drawImage(canvas, RANK_W, HEADER_H, chartLogW, chartLogH);
+          ctx.drawImage(rankCanvas, 0, HEADER_H + DATE_H, RANK_W, chartLogH);
+          ctx.drawImage(canvas, RANK_W, HEADER_H + DATE_H, chartLogW, chartLogH);
 
           ctx.fillStyle = '#94a3b8';
           ctx.font = '11px sans-serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText('pokenavi.jp/ranking', outW / 2, HEADER_H + chartLogH + FOOTER_H / 2);
+          ctx.fillText('pokenavi.jp/ranking', outW / 2, HEADER_H + DATE_H + chartLogH + FOOTER_H / 2);
 
           let shareText = `M-3 使用率ランキング（${latestDate.replace(/-/g, '/')}）`;
           if (pinnedIdx >= 0) {
