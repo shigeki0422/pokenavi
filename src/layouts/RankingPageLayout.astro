@@ -209,7 +209,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         overflow: hidden;
       }
       .chart-date-bar span {
-        position: absolute; font-size: 10px; font-weight: 700; color: #94a3b8;
+        position: absolute; font-size: 10px; font-weight: 700; color: #334155;
         transform: translateX(-50%); white-space: nowrap; top: 50%; margin-top: -7px;
       }
       .chart-scroll {
@@ -790,8 +790,8 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           ctx.beginPath(); ctx.moveTo(0, HEADER_H + DATE_H); ctx.lineTo(outW, HEADER_H + DATE_H); ctx.stroke();
           ctx.beginPath(); ctx.moveTo(0, HEADER_H + DATE_H + chartLogH); ctx.lineTo(outW, HEADER_H + DATE_H + chartLogH); ctx.stroke();
 
-          ctx.fillStyle = '#94a3b8';
-          ctx.font = '10px sans-serif';
+          ctx.fillStyle = '#334155';
+          ctx.font = 'bold 10px sans-serif';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           const dateCx = di => RANK_W + PAD_L + di * (chartLogW - PAD_L - PAD_R) / Math.max(dates.length - 1, 1);
