@@ -620,17 +620,19 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           const { mx, my, clientX, clientY } = touchStart;
           touchStart = null;
           const found = findNearest(mx, my, 28);
-          if (found >= 0) {
-            if (found === pinnedIdx) {
-              if (pokemon[found].url) location.href = pokemon[found].url;
-              pinnedIdx = -1; hoveredIdx = -1; draw();
-              tooltip.style.display = 'none';
-            } else {
-              pinnedIdx = found; hoveredIdx = found; draw();
-              showTooltip(pokemon[found], mx, my, clientX, clientY);
-            }
+          if (found >= 0 && found === pinnedIdx) {
+            // 同じポケモンを再タップ → ページ遷移
+            if (pokemon[found].url) location.href = pokemon[found].url;
+          } else if (pinnedIdx >= 0) {
+            // 強調中に別の場所をタップ → 強調解除のみ
+            pinnedIdx = -1; hoveredIdx = -1; draw(); drawRanks();
+            tooltip.style.display = 'none';
+          } else if (found >= 0) {
+            // 強調なし状態でポケモンをタップ → 強調
+            pinnedIdx = found; hoveredIdx = found; draw(); drawRanks();
+            showTooltip(pokemon[found], mx, my, clientX, clientY);
           } else {
-            pinnedIdx = -1; hoveredIdx = -1; draw();
+            pinnedIdx = -1; hoveredIdx = -1; draw(); drawRanks();
             tooltip.style.display = 'none';
           }
         }, { passive: true });
