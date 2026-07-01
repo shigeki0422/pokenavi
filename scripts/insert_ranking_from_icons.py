@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 DB = Path(__file__).parent / "pokenavi.db"
 CROP = (240, 10, 390, 135)
 
-TEMPLATE_DATE = "2026-06-25"
+TEMPLATE_DATE = "2026-06-29"
 TEMPLATE_DIR  = Path(f"/tmp/champ_crawl_{TEMPLATE_DATE}/detail")
 
 SEASON = "M-3"
@@ -34,9 +34,11 @@ TARGETS = {
     },
     "2026-06-29": {
     },
+    "2026-06-30": {
+    },
 }
 
-CRAWLED_DATE = "2026-06-29"  # ← 実行時に変更
+CRAWLED_DATE = "2026-06-30"  # ← 実行時に変更
 
 
 REF_SIZE = (960, 965)  # 6/25の基準サイズ (w, h)
