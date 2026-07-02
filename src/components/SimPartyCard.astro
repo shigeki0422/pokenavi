@@ -2,11 +2,39 @@
 import indexData from '../../public/sim-data/index.json';
 import iconsData from '../../public/sim-data/icons.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
+import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
+import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 
 interface Props {
   pokemonName: string;
 }
 const { pokemonName } = Astro.props;
+
+const path = Astro.url.pathname;
+const lang = path.startsWith('/en') ? 'en' : path.startsWith('/ko') ? 'ko' : 'ja';
+
+const POKE_MAP: Record<string, string> = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
+const ITEM_MAP: Record<string, string> = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
+const ABIL_MAP: Record<string, string> = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
+const NAT_MAP: Record<string, string>  = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
+const MOVE_MAP: Record<string, string> = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
+
+function tPoke(jp: string): string { return POKE_MAP[jp] ?? jp; }
+function tAbil(jp: string): string { return ABIL_MAP[jp] ?? jp; }
+function tItem(jp: string): string {
+  if (!jp) return jp;
+  if (ITEM_MAP[jp]) return ITEM_MAP[jp];
+  // Mega stone: strip ナイト/ナイトX/ナイトY suffix, look up pokemon base name
+  let base = jp, sfx = '';
+  if (jp.endsWith('ナイトX') || jp.endsWith('ナイトＸ')) { base = jp.slice(0, -4); sfx = lang === 'en' ? 'ite X' : lang === 'ko' ? '나이트X' : 'ナイトX'; }
+  else if (jp.endsWith('ナイトY') || jp.endsWith('ナイトＹ')) { base = jp.slice(0, -4); sfx = lang === 'en' ? 'ite Y' : lang === 'ko' ? '나이트Y' : 'ナイトY'; }
+  else if (jp.endsWith('ナイト')) { base = jp.slice(0, -3); sfx = lang === 'en' ? 'ite' : lang === 'ko' ? '나이트' : 'ナイト'; }
+  if (sfx) {
+    const en = POKE_MAP[base] ?? POKE_MAP[base + 'ー'] ?? POKE_MAP[base + 'ン'];
+    if (en) return lang === 'ko' ? en + sfx : en + sfx;
+  }
+  return jp;
+}
 
 function parseSpec(s: string) {
   const name = s.split('@')[0].split(':')[0];
@@ -41,6 +69,12 @@ const TYPEICON: Record<string, [string,string]> = {ノーマル:['00','normal'],
 const MOVET = moveTypesData as Record<string, string>;
 const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuki.png',こだわりスカーフ:'item-0287-scarf.png',オボンのみ:'item-0158-obon.png',ラムのみ:'item-0157-ram.png',ヤチェのみ:'item-0188-yache.png',ハバンのみ:'item-0197-haban.png'};
 
+const I18N = {
+  ja: { h2: '構築例', item: '持ち物', abil: '特性', nat: '性格', mv: '技', cta: 'その他の構築や対戦での動きを確認', season: (s: string) => s + ' シーズン' },
+  en: { h2: 'Team Examples', item: 'Item', abil: 'Ability', nat: 'Nature', mv: 'Moves', cta: 'See more team examples', season: (s: string) => s + ' Season' },
+  ko: { h2: '구성 예시', item: '지닌물건', abil: '특성', nat: '성격', mv: '기술', cta: '다른 파티 구성 보기', season: (s: string) => s + ' 시즌' },
+}[lang];
+
 function typeIconHtml(move: string) {
   const t = MOVET[move];
   const e = t ? TYPEICON[t] : null;
@@ -53,7 +87,7 @@ function itemIconHtml(item: string) {
 
 function seasonLabel(label: string): string {
   const m = label?.match(/^(M-\d+)/);
-  return m ? `${m[1]} シーズン` : '';
+  return m ? I18N.season(m[1]) : '';
 }
 
 const EV_LABELS = ['H','A','B','C','D','S'];
@@ -65,13 +99,11 @@ const candidates = subjects.filter((s: any) => s.party && s.party.some((spec: st
   const n = parseSpec(spec).name; return n === pokemonName || baseName(n) === bn;
 }));
 
-// シーズン番号を抽出（M-2 → 2）
 function seasonNum(label: string): number {
   const m = label?.match(/^M-(\d+)/); return m ? +m[1] : 0;
 }
 const allSeasons = [...new Set(candidates.map((s: any) => seasonNum(s.label ?? '')))].sort((a, b) => b - a);
 
-// 最新シーズンを優先して2件取得。足りなければ次のシーズンで補完
 const matches: any[] = [];
 for (const season of allSeasons) {
   if (matches.length >= 2) break;
@@ -89,13 +121,19 @@ if (matches.length === 0) return null;
 function buildParty(match: any) {
   return match.party.map((s: string) => {
     const p = parseSpec(s);
-    const natStr = p.nature ? `${p.nature}${NATURE[p.nature] ? ` (${NATURE[p.nature]})` : ''}` : '—';
+    const natJp = p.nature;
+    const natDisp = natJp
+      ? `${NAT_MAP[natJp] ?? natJp}${NATURE[natJp] ? ` (${NATURE[natJp]})` : ''}`
+      : '—';
     const evHtml = p.evs.map((v: string, i: number) => (+v > 0 ? `<span class="spc-evchip spc-ev-${EV_LABELS[i]}">${EV_LABELS[i]}<b>${v}</b></span>` : '')).join('');
-    const movesHtml = p.moves.map((m: string) => `<span class="spc-mvchip">${typeIconHtml(m)}${m}</span>`).join('');
+    const movesHtml = p.moves.filter((m: string) => m && m !== 'なし').map((m: string) => `<span class="spc-mvchip">${typeIconHtml(m)}${MOVE_MAP[m] ?? m}</span>`).join('');
     return {
       ...p,
+      dispName: tPoke(p.name),
+      dispItem: tItem(p.item),
+      dispAbil: tAbil(p.ability),
       iconUrl: iconUrl(p.name),
-      natStr,
+      natStr: natDisp,
       evHtml,
       movesHtml,
       itemIconHtml: itemIconHtml(p.item),
@@ -110,69 +148,70 @@ const cards = matches.map((match: any, ci: number) => {
   const uid = `spc-${ci}-${Math.random().toString(36).slice(2, 7)}`;
   const season = seasonLabel(match.label ?? '');
   const partyJson = JSON.stringify(party.map((p: any) => ({
-    name: p.name, iconUrl: p.iconUrl, item: p.item, nature: p.natStr,
-    ability: p.ability, movesHtml: p.movesHtml, evHtml: p.evHtml, itemIconHtml: p.itemIconHtml,
+    name: p.dispName, iconUrl: p.iconUrl, item: p.dispItem, nature: p.natStr,
+    ability: p.dispAbil, movesHtml: p.movesHtml, evHtml: p.evHtml, itemIconHtml: p.itemIconHtml,
   })));
   return { party, targetIdx, t, uid, season, partyJson };
 });
 
-const simulatorUrl = `/simulator/?sf=${encodeURIComponent(pokemonName)}`;
+const pfx = lang === 'ja' ? '' : `/${lang}`;
+const simulatorUrl = `${pfx}/simulator/?sf=${encodeURIComponent(pokemonName)}`;
 ---
 
 <section class="spc-section">
-  <h2 class="spc-h2">構築例</h2>
+  <h2 class="spc-h2">{I18N.h2}</h2>
   <div class="spc-grid">
     {cards.map((card) => (
       <div class="spc-card" id={card.uid} data-party={card.partyJson} data-target={card.targetIdx}>
         {card.season && <div class="spc-season">{card.season}</div>}
         <div class="spc-iconrow">
           {card.party.map((p: any, i: number) => (
-            <button class:list={['spc-montab', i === card.targetIdx && 'spc-active']} data-idx={i} aria-label={p.name}>
-              {p.iconUrl && <img class="spc-monicon" src={p.iconUrl} alt={p.name} />}
-              <span class="spc-mname">{p.name}</span>
-              <span class="spc-mitem">{p.item || '—'}</span>
+            <button class:list={['spc-montab', i === card.targetIdx && 'spc-active']} data-idx={i} aria-label={p.dispName}>
+              {p.iconUrl && <img class="spc-monicon" src={p.iconUrl} alt={p.dispName} />}
+              <span class="spc-mname">{p.dispName}</span>
+              <span class="spc-mitem">{p.dispItem || '—'}</span>
             </button>
           ))}
         </div>
         <div class="spc-compdetail">
           <div class="spc-cdgrid">
-            <div class="spc-cdcell"><span class="spc-cdlabel spc-item">持ち物</span><span class="spc-cdval" set:html={`${card.t.itemIconHtml}${card.t.item || '—'}`} /></div>
-            <div class="spc-cdcell"><span class="spc-cdlabel spc-abil">特性</span><span class="spc-cdval">{card.t.ability || '—'}</span></div>
-            <div class="spc-cdcell"><span class="spc-cdlabel spc-nat">性格</span><span class="spc-cdval">{card.t.natStr}</span></div>
+            <div class="spc-cdcell"><span class="spc-cdlabel spc-item">{I18N.item}</span><span class="spc-cdval" set:html={`${card.t.itemIconHtml}${card.t.dispItem || '—'}`} /></div>
+            <div class="spc-cdcell"><span class="spc-cdlabel spc-abil">{I18N.abil}</span><span class="spc-cdval">{card.t.dispAbil || '—'}</span></div>
+            <div class="spc-cdcell"><span class="spc-cdlabel spc-nat">{I18N.nat}</span><span class="spc-cdval">{card.t.natStr}</span></div>
           </div>
-          <div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-mv">技</span><span class="spc-mvwrap" set:html={card.t.movesHtml || '—'} /></div>
+          <div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-mv">{I18N.mv}</span><span class="spc-mvwrap" set:html={card.t.movesHtml || '—'} /></div>
           <div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-ev">EV</span><span class="spc-mvwrap spc-evwrap" set:html={card.t.evHtml || '—'} /></div>
         </div>
       </div>
     ))}
   </div>
   <a class="spc-cta" href={simulatorUrl}>
-    その他の構築や対戦での動きを確認
+    {I18N.cta}
     <span class="spc-cta-arrow">→</span>
   </a>
 </section>
 
-<script>
-  document.querySelectorAll('[data-party]').forEach(card => {
-    const party = JSON.parse(card.getAttribute('data-party') ?? '[]');
-    const buttons = card.querySelectorAll('.spc-montab');
-    const detail = card.querySelector('.spc-compdetail');
+<script is:inline define:vars={{ SPC_I18N: I18N }}>
+  document.querySelectorAll('[data-party]').forEach(function(card) {
+    var party = JSON.parse(card.getAttribute('data-party') ?? '[]');
+    var buttons = card.querySelectorAll('.spc-montab');
+    var detail = card.querySelector('.spc-compdetail');
 
-    function renderDetail(p: any) {
+    function renderDetail(p) {
       if (!detail || !p) return;
-      detail.innerHTML = `
-        <div class="spc-cdgrid">
-          <div class="spc-cdcell"><span class="spc-cdlabel spc-item">持ち物</span><span class="spc-cdval">${p.itemIconHtml}${p.item || '—'}</span></div>
-          <div class="spc-cdcell"><span class="spc-cdlabel spc-abil">特性</span><span class="spc-cdval">${p.ability || '—'}</span></div>
-          <div class="spc-cdcell"><span class="spc-cdlabel spc-nat">性格</span><span class="spc-cdval">${p.nature || '—'}</span></div>
-        </div>
-        <div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-mv">技</span><span class="spc-mvwrap">${p.movesHtml || '—'}</span></div>
-        <div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-ev">EV</span><span class="spc-mvwrap spc-evwrap">${p.evHtml || '—'}</span></div>`;
+      detail.innerHTML =
+        '<div class="spc-cdgrid">' +
+        '<div class="spc-cdcell"><span class="spc-cdlabel spc-item">' + SPC_I18N.item + '</span><span class="spc-cdval">' + (p.itemIconHtml || '') + (p.item || '—') + '</span></div>' +
+        '<div class="spc-cdcell"><span class="spc-cdlabel spc-abil">' + SPC_I18N.abil + '</span><span class="spc-cdval">' + (p.ability || '—') + '</span></div>' +
+        '<div class="spc-cdcell"><span class="spc-cdlabel spc-nat">' + SPC_I18N.nat + '</span><span class="spc-cdval">' + (p.nature || '—') + '</span></div>' +
+        '</div>' +
+        '<div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-mv">' + SPC_I18N.mv + '</span><span class="spc-mvwrap">' + (p.movesHtml || '—') + '</span></div>' +
+        '<div class="spc-cdrow spc-mvrow"><span class="spc-cdlabel spc-ev">EV</span><span class="spc-mvwrap spc-evwrap">' + (p.evHtml || '—') + '</span></div>';
     }
 
-    buttons.forEach((btn, i) => {
-      btn.addEventListener('click', () => {
-        buttons.forEach((b, j) => b.classList.toggle('spc-active', j === i));
+    buttons.forEach(function(btn, i) {
+      btn.addEventListener('click', function() {
+        buttons.forEach(function(b, j) { b.classList.toggle('spc-active', j === i); });
         renderDetail(party[i]);
       });
     });
