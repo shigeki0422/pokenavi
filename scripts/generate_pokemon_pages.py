@@ -255,20 +255,26 @@ MEGA_DATA = {
 }
 
 # ---- 各ポケモンの静的データ ----
+# ⚠️ 考察記事リンク管理ルール（必ず守ること）:
+# "analysis" リストに新シーズン記事を追加する際は【最新記事を先頭】に置く。
+# 例: ["garchomp-analysis-m3", "garchomp-analysis-m2"]
+# このスクリプトでページを再生成すると src/content/pokemon/*.md が上書きされる。
+# 新しい考察記事を公開したら、必ずここの "analysis" を更新してから再生成すること。
+# 更新を忘れると公開済みのM-3リンクが消える（実際に発生）。
 POKEMON_DATA = {
     "ガブリアス": {
         "file": "garchomp", "dex": 445, "id": "0445-00",
         "types": ["ドラゴン", "じめん"],
         "stats": [108, 130, 95, 80, 85, 102],
-        "analysis": ["garchomp-analysis-m2"],
+        "analysis": ["garchomp-analysis-m3", "garchomp-analysis-m2"],
     },
     "ブリジュラス": {
-        "file": "archaludon", "analysis": ["archaludon-analysis-m2"], "dex": 1018, "id": "1018-00",
+        "file": "archaludon", "analysis": ["archaludon-analysis-m3", "archaludon-analysis-m2"], "dex": 1018, "id": "1018-00",
         "types": ["ドラゴン", "はがね"],
         "stats": [90, 105, 130, 125, 65, 85],
     },
     "マスカーニャ": {
-        "file": "meowscarada", "analysis": ["meowscarada-analysis-m2"], "dex": 908, "id": "0908-00",
+        "file": "meowscarada", "analysis": ["meowscarada-analysis-m3", "meowscarada-analysis-m2"], "dex": 908, "id": "0908-00",
         "types": ["くさ", "あく"],
         "stats": [76, 110, 70, 70, 70, 123],
     },
@@ -281,9 +287,9 @@ POKEMON_DATA = {
         "file": "charizard", "dex": 6, "id": "0006-00",
         "types": ["ほのお", "ひこう"],
         "stats": [78, 84, 78, 109, 85, 100],
-    },
+    , "analysis": ["charizard-analysis-m3"]},
     "アーマーガア": {
-        "file": "corviknight", "analysis": ["corviknight-analysis-m2"], "dex": 823, "id": "0823-00",
+        "file": "corviknight", "analysis": ["corviknight-analysis-m3", "corviknight-analysis-m2"], "dex": 823, "id": "0823-00",
         "types": ["はがね", "ひこう"],
         "stats": [98, 87, 105, 53, 85, 72],
     },
@@ -353,7 +359,7 @@ POKEMON_DATA = {
         "stats": [85, 60, 65, 135, 105, 100],
     },
     "ミミッキュ": {
-        "file": "mimikyu", "analysis": ["mimikyu-analysis-m2"], "dex": 778, "id": "0778-00",
+        "file": "mimikyu", "analysis": ["mimikyu-analysis-m3", "mimikyu-analysis-m2"], "dex": 778, "id": "0778-00",
         "types": ["ゴースト", "フェアリー"],
         "stats": [55, 90, 80, 50, 105, 96],
     },
@@ -364,7 +370,7 @@ POKEMON_DATA = {
         "analysis": ["starmie-analysis-m2"],
     },
     "サザンドラ": {
-        "file": "hydreigon", "analysis": ["hydreigon-analysis-m2"], "dex": 635, "id": "0635-00",
+        "file": "hydreigon", "analysis": ["hydreigon-analysis-m3", "hydreigon-analysis-m2"], "dex": 635, "id": "0635-00",
         "types": ["あく", "ドラゴン"],
         "stats": [92, 105, 90, 125, 90, 98],
     },
@@ -380,12 +386,12 @@ POKEMON_DATA = {
         "stats": [110, 135, 70, 65, 80, 55],
     },
     "ドドゲザン": {
-        "file": "kingambit", "analysis": ["kingambit-analysis-m2"], "dex": 983, "id": "0983-00",
+        "file": "kingambit", "analysis": ["kingambit-analysis-m3", "kingambit-analysis-m2"], "dex": 983, "id": "0983-00",
         "types": ["あく", "はがね"],
         "stats": [100, 135, 120, 60, 85, 50],
     },
     "マフォクシー": {
-        "file": "delphox", "analysis": ["delphox-analysis-m2"], "dex": 655, "id": "0655-00",
+        "file": "delphox", "analysis": ["delphox-analysis-m3", "delphox-analysis-m2"], "dex": 655, "id": "0655-00",
         "types": ["ほのお", "エスパー"],
         "stats": [75, 69, 72, 114, 100, 104],
     },
@@ -471,12 +477,12 @@ POKEMON_DATA = {
         "stats": [95, 65, 65, 110, 130, 60],
     },
     "ペリッパー": {
-        "file": "pelipper", "analysis": ["pelipper-analysis-m2"], "dex": 279, "id": "0279-00",
+        "file": "pelipper", "analysis": ["pelipper-analysis-m3", "pelipper-analysis-m2"], "dex": 279, "id": "0279-00",
         "types": ["みず", "ひこう"],
         "stats": [60, 50, 100, 85, 70, 65],
     },
     "エルフーン": {
-        "file": "whimsicott", "analysis": ["whimsicott-analysis-m2"], "dex": 547, "id": "0547-00",
+        "file": "whimsicott", "analysis": ["whimsicott-analysis-m3", "whimsicott-analysis-m2"], "dex": 547, "id": "0547-00",
         "types": ["くさ", "フェアリー"],
         "stats": [60, 67, 85, 77, 75, 116],
     },
@@ -653,7 +659,7 @@ POKEMON_DATA = {
         "file": "barbaracle", "dex": 689, "id": "0689-00",
         "types": ["いわ", "みず"],
         "stats": [72, 105, 115, 54, 86, 68],
-    },
+    , "analysis": ["barbaracle-analysis-m3"]},
     "カラマネロ": {
         "file": "malamar", "dex": 687, "id": "0687-00",
         "types": ["あく", "エスパー"],
@@ -1251,7 +1257,7 @@ POKEMON_DATA = {
         "file": "raichu", "dex": 26, "id": "0026-00",
         "types": ["でんき"],
         "stats": [60, 90, 55, 90, 80, 110],
-    },
+    , "analysis": ["raichu-y-analysis-m3"]},
     "デデンネ": {
         "file": "dedenne", "dex": 702, "id": "0702-00",
         "types": ["でんき", "フェアリー"],
@@ -1390,22 +1396,22 @@ POKEMON_DATA = {
         "stats": [75, 110, 105, 30, 70, 100],
     },
     # --- M-3新規ポケモン ---
-    "ラグラージ": {"file": "swampert", "dex": 260, "id": "0260-00", "types": ["みず", "じめん"], "stats": [100, 110, 90, 85, 90, 60]},
-    "ムクホーク": {"file": "staraptor", "dex": 398, "id": "0398-00", "types": ["ノーマル", "ひこう"], "stats": [85, 120, 70, 50, 60, 100]},
-    "メタグロス": {"file": "metagross", "dex": 376, "id": "0376-00", "types": ["はがね", "エスパー"], "stats": [80, 135, 130, 95, 90, 70]},
-    "サーフゴー": {"file": "gholdengo", "dex": 1000, "id": "1000-00", "types": ["はがね", "ゴースト"], "stats": [87, 60, 95, 133, 91, 84]},
-    "バシャーモ": {"file": "blaziken", "dex": 257, "id": "0257-00", "types": ["ほのお", "かくとう"], "stats": [80, 120, 70, 110, 70, 80]},
-    "クチート": {"file": "mawile", "dex": 303, "id": "0303-00", "types": ["はがね", "フェアリー"], "stats": [50, 85, 85, 55, 55, 50]},
-    "オーロンゲ": {"file": "grimmsnarl", "dex": 861, "id": "0861-00", "types": ["あく", "フェアリー"], "stats": [95, 120, 65, 95, 75, 60]},
-    "コノヨザル": {"file": "annihilape", "dex": 979, "id": "0979-00", "types": ["かくとう", "ゴースト"], "stats": [110, 115, 80, 50, 90, 90]},
+    "ラグラージ": {"file": "swampert", "dex": 260, "id": "0260-00", "types": ["みず", "じめん"], "stats": [100, 110, 90, 85, 90, 60], "analysis": ["swampert-analysis-m3"]},
+    "ムクホーク": {"file": "staraptor", "dex": 398, "id": "0398-00", "types": ["ノーマル", "ひこう"], "stats": [85, 120, 70, 50, 60, 100], "analysis": ["staraptor-analysis-m3"]},
+    "メタグロス": {"file": "metagross", "dex": 376, "id": "0376-00", "types": ["はがね", "エスパー"], "stats": [80, 135, 130, 95, 90, 70], "analysis": ["metagross-analysis-m3"]},
+    "サーフゴー": {"file": "gholdengo", "dex": 1000, "id": "1000-00", "types": ["はがね", "ゴースト"], "stats": [87, 60, 95, 133, 91, 84], "analysis": ["gholdengo-analysis-m3"]},
+    "バシャーモ": {"file": "blaziken", "dex": 257, "id": "0257-00", "types": ["ほのお", "かくとう"], "stats": [80, 120, 70, 110, 70, 80], "analysis": ["blaziken-analysis-m3"]},
+    "クチート": {"file": "mawile", "dex": 303, "id": "0303-00", "types": ["はがね", "フェアリー"], "stats": [50, 85, 85, 55, 55, 50], "analysis": ["mawile-analysis-m3"]},
+    "オーロンゲ": {"file": "grimmsnarl", "dex": 861, "id": "0861-00", "types": ["あく", "フェアリー"], "stats": [95, 120, 65, 95, 75, 60], "analysis": ["grimmsnarl-analysis-m3"]},
+    "コノヨザル": {"file": "annihilape", "dex": 979, "id": "0979-00", "types": ["かくとう", "ゴースト"], "stats": [110, 115, 80, 50, 90, 90], "analysis": ["annihilape-analysis-m3"]},
     "ハカドッグ": {"file": "houndstone", "dex": 972, "id": "0972-00", "types": ["ゴースト"], "stats": [72, 101, 100, 50, 97, 68]},
-    "ハリーマン": {"file": "overqwil", "dex": 904, "id": "0904-00", "types": ["あく", "どく"], "stats": [85, 115, 95, 65, 65, 85]},
-    "ドラミドロ": {"file": "dragalge", "dex": 691, "id": "0691-00", "types": ["どく", "ドラゴン"], "stats": [65, 75, 90, 97, 123, 44]},
-    "シビルドン": {"file": "eelektross", "dex": 604, "id": "0604-00", "types": ["でんき"], "stats": [85, 115, 80, 105, 80, 50]},
-    "ジュカイン": {"file": "sceptile", "dex": 254, "id": "0254-00", "types": ["くさ"], "stats": [70, 85, 65, 105, 85, 120]},
-    "ズルズキン": {"file": "scrafty", "dex": 560, "id": "0560-00", "types": ["あく", "かくとう"], "stats": [65, 90, 115, 45, 115, 58]},
-    "ペンドラー": {"file": "scolipede", "dex": 545, "id": "0545-00", "types": ["むし", "どく"], "stats": [60, 100, 89, 55, 69, 112]},
-    "カエンジシ": {"file": "pyroar", "dex": 668, "id": "0668-00", "types": ["ほのお", "ノーマル"], "stats": [86, 68, 72, 109, 66, 106]},
+    "ハリーマン": {"file": "overqwil", "dex": 904, "id": "0904-00", "types": ["あく", "どく"], "stats": [85, 115, 95, 65, 65, 85], "analysis": ["overqwil-analysis-m3"]},
+    "ドラミドロ": {"file": "dragalge", "dex": 691, "id": "0691-00", "types": ["どく", "ドラゴン"], "stats": [65, 75, 90, 97, 123, 44], "analysis": ["dragalge-analysis-m3"]},
+    "シビルドン": {"file": "eelektross", "dex": 604, "id": "0604-00", "types": ["でんき"], "stats": [85, 115, 80, 105, 80, 50], "analysis": ["eelektross-analysis-m3"]},
+    "ジュカイン": {"file": "sceptile", "dex": 254, "id": "0254-00", "types": ["くさ"], "stats": [70, 85, 65, 105, 85, 120], "analysis": ["sceptile-analysis-m3"]},
+    "ズルズキン": {"file": "scrafty", "dex": 560, "id": "0560-00", "types": ["あく", "かくとう"], "stats": [65, 90, 115, 45, 115, 58], "analysis": ["scrafty-analysis-m3"]},
+    "ペンドラー": {"file": "scolipede", "dex": 545, "id": "0545-00", "types": ["むし", "どく"], "stats": [60, 100, 89, 55, 69, 112], "analysis": ["scolipede-analysis-m3"]},
+    "カエンジシ": {"file": "pyroar", "dex": 668, "id": "0668-00", "types": ["ほのお", "ノーマル"], "stats": [86, 68, 72, 109, 66, 106], "analysis": ["pyroar-analysis-m3"]},
     "タイレーツ": {"file": "falinks", "dex": 870, "id": "0870-00", "types": ["かくとう"], "stats": [65, 100, 100, 70, 60, 75]},
     "ラフレシア": {"file": "vileplume", "dex": 45, "id": "0045-00", "types": ["くさ", "どく"], "stats": [75, 80, 85, 110, 90, 50]},
     "ハリーセン": {"file": "qwilfish", "dex": 211, "id": "0211-00", "types": ["みず", "どく"], "stats": [65, 95, 85, 55, 55, 85]},
