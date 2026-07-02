@@ -1,25 +1,12 @@
 ---
 title: 'ピクシー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのピクシー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率54位。'
+description: 'ポケモンチャンピオンズのピクシー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率55位。'
 pokemonName: 'ピクシー'
 dexNumber: 36
-usageRank: 54
-updatedDate: '2026-07-02'
+usageRank: 55
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'clefable-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['つきのひかり', 'ムーンフォース', 'コスモパワー', 'アシストパワー']
-  topMovePct: [86.1, 80.8, 69.4, 45.3]
-  topItems: ['ピクシナイト', 'たべのこし', 'オボンのみ']
-  topItemPct: [72.9, 13.9, 7.3]
-  topAbility: 'てんねん'
-  topAbilityPct: 84.5
-  topNature: 'ずぶとい'
-  topNaturePct: 89.6
-  topNature2: 'おだやか'
-  topNaturePct2: 18.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.36</strong>　／　使用率 <strong style="color:#dc2626">54位</strong>
+      全国図鑑 <strong>No.36</strong>　／　使用率 <strong style="color:#dc2626">55位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

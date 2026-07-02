@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのメタグロス基礎データ
 pokemonName: 'メタグロス'
 dexNumber: 376
 usageRank: 4
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['サイコファング', 'バレットパンチ', 'れいとうパンチ', 'かみなりパンチ']
-  topMovePct: [91.1, 87.5, 60.0, 32.4]
-  topItems: ['メタグロスナイト', 'いのちのたま', 'オボンのみ']
-  topItemPct: [97.4, 0.5, 0.4]
-  topAbility: 'クリアボディ'
-  topAbilityPct: 99.1
-  topNature: 'ようき'
-  topNaturePct: 56.5
-  topNature2: 'いじっぱり'
-  topNaturePct2: 41.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

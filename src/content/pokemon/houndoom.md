@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのヘルガー基礎データ。
 pokemonName: 'ヘルガー'
 dexNumber: 229
 usageRank: 177
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['あくのはどう', 'かえんほうしゃ', 'みちづれ', 'ふいうち']
-  topMovePct: [79.5, 60.4, 52.5, 32.2]
-  topItems: ['ヘルガナイト', 'きあいのタスキ', 'こだわりスカーフ']
-  topItemPct: [47.3, 38.9, 3.5]
-  topAbility: 'もらいび'
-  topAbilityPct: 87.5
-  topNature: 'おくびょう'
-  topNaturePct: 60.9
-  topNature2: 'ひかえめ'
-  topNaturePct2: 13.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

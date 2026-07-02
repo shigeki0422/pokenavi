@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのバンギラス基礎データ
 pokemonName: 'バンギラス'
 dexNumber: 248
 usageRank: 53
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'tyranitar-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['はたきおとす', 'ストーンエッジ', 'りゅうのまい', 'ステルスロック']
-  topMovePct: [73.9, 55.4, 35.0, 31.1]
-  topItems: ['オボンのみ', 'たべのこし', 'ヨプのみ']
-  topItemPct: [12.3, 8.3, 6.5]
-  topAbility: 'すなおこし'
-  topAbilityPct: 99.0
-  topNature: 'いじっぱり'
-  topNaturePct: 43.5
-  topNature2: 'ようき'
-  topNaturePct2: 22.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

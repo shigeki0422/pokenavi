@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのエンニュート基礎デー
 pokemonName: 'エンニュート'
 dexNumber: 758
 usageRank: 132
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['どくどく', 'アンコール', 'かえんほうしゃ', 'オーバーヒート']
-  topMovePct: [84.7, 49.6, 45.1, 29.9]
-  topItems: ['きあいのタスキ', 'たべのこし', 'いのちのたま']
-  topItemPct: [69.2, 11.5, 3.6]
-  topAbility: 'ふしょく'
-  topAbilityPct: 92.1
-  topNature: 'おくびょう'
-  topNaturePct: 86.5
-  topNature2: 'ひかえめ'
-  topNaturePct2: 7.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

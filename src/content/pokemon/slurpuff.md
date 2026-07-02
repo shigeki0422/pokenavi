@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのペロリーム基礎データ
 pokemonName: 'ペロリーム'
 dexNumber: 685
 usageRank: 154
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ねばねばネット', 'あくび', 'ミストバースト', 'マジカルシャイン']
-  topMovePct: [86.7, 71.1, 36.8, 30.6]
-  topItems: ['オボンのみ', 'きあいのタスキ', 'オレンのみ']
-  topItemPct: [45.5, 37.5, 4.8]
-  topAbility: 'かるわざ'
-  topAbilityPct: 89.5
-  topNature: 'おくびょう'
-  topNaturePct: 36.6
-  topNature2: 'ずぶとい'
-  topNaturePct2: 21.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

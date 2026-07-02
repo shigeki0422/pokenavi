@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのイッカネズミ基礎デー
 pokemonName: 'イッカネズミ'
 dexNumber: 925
 usageRank: 78
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['おかたづけ', 'アンコール', 'かみつく', 'タネマシンガン']
-  topMovePct: [81.7, 56.7, 41.7, 29.7]
-  topItems: ['こうかくレンズ', 'オボンのみ', 'きあいのタスキ']
-  topItemPct: [59.0, 7.0, 3.7]
-  topAbility: 'テクニシャン'
-  topAbilityPct: 90.2
-  topNature: 'ようき'
-  topNaturePct: 71.5
-  topNature2: 'いじっぱり'
-  topNaturePct2: 18.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのマリルリ基礎データ。
 pokemonName: 'マリルリ'
 dexNumber: 184
 usageRank: 56
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'azumarill-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['アクアジェット', 'じゃれつく', 'アクアブレイク', 'かわらわり']
-  topMovePct: [94.6, 93.9, 49.7, 8.1]
-  topItems: ['オボンのみ', 'いのちのたま', 'ラムのみ']
-  topItemPct: [71.7, 7.2, 4.5]
-  topAbility: 'ちからもち'
-  topAbilityPct: 94.2
-  topNature: 'いじっぱり'
-  topNaturePct: 90.3
-  topNature2: 'ゆうかん'
-  topNaturePct2: 1.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのガオガエン基礎データ
 pokemonName: 'ガオガエン'
 dexNumber: 727
 usageRank: 73
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['すてゼリフ', 'フレアドライブ', 'DDラリアット', 'ねこだまし']
-  topMovePct: [83.7, 78.2, 67.0, 53.8]
-  topItems: ['オボンのみ', 'たべのこし', 'せんせいのツメ']
-  topItemPct: [56.8, 17.2, 3.5]
-  topAbility: 'いかく'
-  topAbilityPct: 97.6
-  topNature: 'いじっぱり'
-  topNaturePct: 32.0
-  topNature2: 'わんぱく'
-  topNaturePct2: 28.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

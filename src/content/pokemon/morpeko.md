@@ -1,25 +1,12 @@
 ---
 title: 'モルペコ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのモルペコ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率171位。'
+description: 'ポケモンチャンピオンズのモルペコ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率170位。'
 pokemonName: 'モルペコ'
 dexNumber: 877
-usageRank: 171
-updatedDate: '2026-07-02'
+usageRank: 170
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['オーラぐるま', 'まもる', 'ねこだまし', 'すてゼリフ']
-  topMovePct: [99.8, 45.2, 39.9, 27.6]
-  topItems: ['きあいのタスキ', 'いのちのたま', 'こだわりスカーフ']
-  topItemPct: [84.3, 3.2, 2.7]
-  topAbility: 'はらぺこスイッチ'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 52.3
-  topNature2: 'ようき'
-  topNaturePct2: 38.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.877</strong>　／　使用率 <strong style="color:#dc2626">171位</strong>
+      全国図鑑 <strong>No.877</strong>　／　使用率 <strong style="color:#dc2626">170位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

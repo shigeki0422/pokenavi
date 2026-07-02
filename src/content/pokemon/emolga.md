@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのエモンガ基礎データ。
 pokemonName: 'エモンガ'
 dexNumber: 587
 usageRank: 189
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ほっぺすりすり', 'アンコール', 'エアスラッシュ', 'ボルトチェンジ']
-  topMovePct: [67.3, 63.0, 42.7, 35.5]
-  topItems: ['きあいのタスキ', 'オボンのみ', 'たべのこし']
-  topItemPct: [50.0, 9.8, 5.1]
-  topAbility: 'でんきエンジン'
-  topAbilityPct: 82.4
-  topNature: 'ずぶとい'
-  topNaturePct: 19.4
-  topNature2: 'ようき'
-  topNaturePct2: 18.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

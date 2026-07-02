@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのロズレイド基礎データ
 pokemonName: 'ロズレイド'
 dexNumber: 407
 usageRank: 187
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ヘドロばくだん', 'シャドーボール', 'マジカルシャイン', 'ギガドレイン']
-  topMovePct: [83.5, 41.7, 41.1, 35.1]
-  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'たべのこし']
-  topItemPct: [22.7, 18.7, 14.5]
-  topAbility: 'どくのトゲ'
-  topAbilityPct: 46.0
-  topNature: 'おくびょう'
-  topNaturePct: 40.7
-  topNature2: 'ひかえめ'
-  topNaturePct2: 31.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

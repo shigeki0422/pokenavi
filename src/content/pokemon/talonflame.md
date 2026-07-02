@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのファイアロー基礎デー
 pokemonName: 'ファイアロー'
 dexNumber: 663
 usageRank: 122
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['フレアドライブ', 'おにび', 'はねやすめ', 'おいかぜ']
-  topMovePct: [61.0, 39.3, 36.2, 27.5]
-  topItems: ['いのちのたま', 'オボンのみ', 'きあいのタスキ']
-  topItemPct: [13.9, 10.8, 9.2]
-  topAbility: 'はやてのつばさ'
-  topAbilityPct: 72.4
-  topNature: 'いじっぱり'
-  topNaturePct: 38.1
-  topNature2: 'ようき'
-  topNaturePct2: 32.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのルチャブル基礎データ
 pokemonName: 'ルチャブル'
 dexNumber: 701
 usageRank: 138
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['とびひざげり', 'つるぎのまい', 'ストーンエッジ', 'インファイト']
-  topMovePct: [50.2, 44.6, 36.7, 30.0]
-  topItems: ['ルチャブルナイト', 'オボンのみ', 'きあいのタスキ']
-  topItemPct: [42.5, 16.4, 13.3]
-  topAbility: 'かるわざ'
-  topAbilityPct: 46.9
-  topNature: 'ようき'
-  topNaturePct: 42.5
-  topNature2: 'さみしがり'
-  topNaturePct2: 42.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

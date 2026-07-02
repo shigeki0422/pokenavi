@@ -1,25 +1,12 @@
 ---
 title: 'マフォクシー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのマフォクシー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率18位。'
+description: 'ポケモンチャンピオンズのマフォクシー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率17位。'
 pokemonName: 'マフォクシー'
 dexNumber: 655
-usageRank: 18
-updatedDate: '2026-07-02'
+usageRank: 17
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'delphox-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['かえんほうしゃ', 'サイコキネシス', 'わるだくみ', 'サイコショック']
-  topMovePct: [81.4, 52.5, 51.4, 44.8]
-  topItems: ['マフォクシナイト', 'きあいのタスキ', 'こだわりスカーフ']
-  topItemPct: [98.7, 0.3, 0.1]
-  topAbility: 'もうか'
-  topAbilityPct: 90.2
-  topNature: 'おくびょう'
-  topNaturePct: 87.8
-  topNature2: 'ひかえめ'
-  topNaturePct2: 11.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.655</strong>　／　使用率 <strong style="color:#dc2626">18位</strong>
+      全国図鑑 <strong>No.655</strong>　／　使用率 <strong style="color:#dc2626">17位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

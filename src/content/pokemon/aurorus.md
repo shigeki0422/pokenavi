@@ -1,25 +1,12 @@
 ---
 title: 'アマルルガ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのアマルルガ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率164位。'
+description: 'ポケモンチャンピオンズのアマルルガ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率165位。'
 pokemonName: 'アマルルガ'
 dexNumber: 699
-usageRank: 164
-updatedDate: '2026-07-02'
+usageRank: 165
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['オーロラベール', 'フリーズドライ', 'ステルスロック', 'ふぶき']
-  topMovePct: [85.7, 63.8, 63.1, 62.7]
-  topItems: ['ひかりのねんど', 'きあいのタスキ', 'オボンのみ']
-  topItemPct: [57.2, 19.9, 4.4]
-  topAbility: 'ゆきふらし'
-  topAbilityPct: 94.5
-  topNature: 'ずぶとい'
-  topNaturePct: 32.0
-  topNature2: 'ひかえめ'
-  topNaturePct2: 28.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-14-ice.png" alt="こおり" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.699</strong>　／　使用率 <strong style="color:#dc2626">164位</strong>
+      全国図鑑 <strong>No.699</strong>　／　使用率 <strong style="color:#dc2626">165位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

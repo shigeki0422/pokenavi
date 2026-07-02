@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのデンリュウ基礎データ
 pokemonName: 'デンリュウ'
 dexNumber: 181
 usageRank: 155
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['りゅうのはどう', 'コットンガード', 'パラボラチャージ', '10まんボルト']
-  topMovePct: [82.0, 59.0, 53.7, 48.8]
-  topItems: ['デンリュウナイト', 'たべのこし', 'オボンのみ']
-  topItemPct: [78.8, 4.5, 3.2]
-  topAbility: 'せいでんき'
-  topAbilityPct: 97.9
-  topNature: 'ひかえめ'
-  topNaturePct: 58.0
-  topNature2: 'れいせい'
-  topNaturePct2: 22.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

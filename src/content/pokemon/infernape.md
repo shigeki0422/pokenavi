@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのゴウカザル基礎データ
 pokemonName: 'ゴウカザル'
 dexNumber: 392
 usageRank: 127
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['インファイト', 'かみなりパンチ', 'マッハパンチ', 'フレアドライブ']
-  topMovePct: [45.8, 34.0, 33.8, 33.6]
-  topItems: ['きあいのタスキ', 'いのちのたま', 'こだわりスカーフ']
-  topItemPct: [52.6, 15.2, 11.1]
-  topAbility: 'てつのこぶし'
-  topAbilityPct: 46.9
-  topNature: 'ようき'
-  topNaturePct: 46.7
-  topNature2: 'いじっぱり'
-  topNaturePct2: 18.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

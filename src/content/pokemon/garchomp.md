@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのガブリアス基礎データ
 pokemonName: 'ガブリアス'
 dexNumber: 445
 usageRank: 1
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'garchomp-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['じしん', 'ステルスロック', 'げきりん', 'スケイルショット']
-  topMovePct: [99.5, 48.8, 45.5, 30.5]
-  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'オボンのみ']
-  topItemPct: [37.7, 23.5, 23.1]
-  topAbility: 'さめはだ'
-  topAbilityPct: 99.1
-  topNature: 'ようき'
-  topNaturePct: 57.1
-  topNature2: 'いじっぱり'
-  topNaturePct2: 23.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

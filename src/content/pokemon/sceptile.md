@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのジュカイン基礎データ
 pokemonName: 'ジュカイン'
 dexNumber: 254
 usageRank: 67
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['だいちのちから', 'りゅうのはどう', 'リーフストーム', 'しんくうは']
-  topMovePct: [86.2, 78.8, 75.1, 26.4]
-  topItems: ['きあいのタスキ', 'オボンのみ', 'しろいハーブ']
-  topItemPct: [7.4, 4.6, 4.5]
-  topAbility: 'しんりょく'
-  topAbilityPct: 71.4
-  topNature: 'ひかえめ'
-  topNaturePct: 16.3
-  topNature2: 'むじゃき'
-  topNaturePct2: 5.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

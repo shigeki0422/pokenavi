@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのエンペルト基礎データ
 pokemonName: 'エンペルト'
 dexNumber: 395
 usageRank: 86
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'empoleon-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['なみのり', 'れいとうビーム', 'ステルスロック', 'あくび']
-  topMovePct: [70.7, 61.9, 50.8, 48.6]
-  topItems: ['シュカのみ', 'オボンのみ', 'たべのこし']
-  topItemPct: [36.7, 22.2, 19.9]
-  topAbility: 'かちき'
-  topAbilityPct: 79.3
-  topNature: 'ひかえめ'
-  topNaturePct: 47.4
-  topNature2: 'ほまれ'
-  topNaturePct2: 13.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのギルガルド基礎データ
 pokemonName: 'ギルガルド'
 dexNumber: 681
 usageRank: 31
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'aegislash-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['キングシールド', 'ポルターガイスト', 'つるぎのまい', 'アイアンヘッド']
-  topMovePct: [83.0, 68.5, 29.9, 28.1]
-  topItems: ['たべのこし', 'のろいのおふだ', 'いのちのたま']
-  topItemPct: [48.6, 24.7, 13.1]
-  topAbility: 'バトルスイッチ'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 50.9
-  topNature2: 'ゆうかん'
-  topNaturePct2: 17.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

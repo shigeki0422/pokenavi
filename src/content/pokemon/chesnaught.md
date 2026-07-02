@@ -1,25 +1,12 @@
 ---
 title: 'ブリガロン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのブリガロン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率100位。'
+description: 'ポケモンチャンピオンズのブリガロン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率101位。'
 pokemonName: 'ブリガロン'
 dexNumber: 652
-usageRank: 100
-updatedDate: '2026-07-02'
+usageRank: 101
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ボディプレス', 'てっぺき', 'こうごうせい', 'やどりぎのタネ']
-  topMovePct: [83.6, 64.0, 63.6, 42.2]
-  topItems: ['ブリガロナイト', 'たべのこし', 'オボンのみ']
-  topItemPct: [79.6, 10.7, 3.2]
-  topAbility: 'ぼうだん'
-  topAbilityPct: 93.5
-  topNature: 'わんぱく'
-  topNaturePct: 74.7
-  topNature2: 'いじっぱり'
-  topNaturePct2: 10.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.652</strong>　／　使用率 <strong style="color:#dc2626">100位</strong>
+      全国図鑑 <strong>No.652</strong>　／　使用率 <strong style="color:#dc2626">101位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

@@ -1,25 +1,12 @@
 ---
 title: 'ペリッパー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのペリッパー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率23位。'
+description: 'ポケモンチャンピオンズのペリッパー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率24位。'
 pokemonName: 'ペリッパー'
 dexNumber: 279
-usageRank: 23
-updatedDate: '2026-07-02'
+usageRank: 24
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'pelipper-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['ぼうふう', 'とんぼがえり', 'れいとうビーム', 'なみのり']
-  topMovePct: [98.1, 91.0, 61.7, 47.1]
-  topItems: ['きあいのタスキ', 'オボンのみ', 'こだわりスカーフ']
-  topItemPct: [12.6, 6.9, 1.7]
-  topAbility: 'あめふらし'
-  topAbilityPct: 99.5
-  topNature: 'のんき'
-  topNaturePct: 36.0
-  topNature2: 'ひかえめ'
-  topNaturePct2: 28.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.279</strong>　／　使用率 <strong style="color:#dc2626">23位</strong>
+      全国図鑑 <strong>No.279</strong>　／　使用率 <strong style="color:#dc2626">24位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

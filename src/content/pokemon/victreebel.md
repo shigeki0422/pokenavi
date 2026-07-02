@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのウツボット基礎データ
 pokemonName: 'ウツボット'
 dexNumber: 71
 usageRank: 104
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'victreebel-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['ふいうち', 'アンコール', 'ヘドロウェーブ', 'ヘドロばくだん']
-  topMovePct: [46.3, 34.1, 24.5, 16.5]
-  topItems: ['ウツボットナイト', 'きあいのタスキ', 'オボンのみ']
-  topItemPct: [93.7, 1.1, 1.0]
-  topAbility: 'くいしんぼう'
-  topAbilityPct: 14.1
-  topNature: 'ひかえめ'
-  topNaturePct: 26.9
-  topNature2: 'いじっぱり'
-  topNaturePct2: 20.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

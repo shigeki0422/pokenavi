@@ -1,25 +1,12 @@
 ---
 title: 'ズルズキン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのズルズキン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率81位。'
+description: 'ポケモンチャンピオンズのズルズキン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率82位。'
 pokemonName: 'ズルズキン'
 dexNumber: 560
-usageRank: 81
-updatedDate: '2026-07-02'
+usageRank: 82
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ドレインパンチ', 'はたきおとす', 'りゅうのまい', 'れいとうパンチ']
-  topMovePct: [85.6, 73.3, 48.6, 32.3]
-  topItems: ['たべのこし', 'オボンのみ', 'きあいのタスキ']
-  topItemPct: [1.2, 0.8, 0.3]
-  topAbility: 'いかく'
-  topAbilityPct: 97.5
-  topNature: 'いじっぱり'
-  topNaturePct: 56.9
-  topNature2: 'ようき'
-  topNaturePct2: 20.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.560</strong>　／　使用率 <strong style="color:#dc2626">81位</strong>
+      全国図鑑 <strong>No.560</strong>　／　使用率 <strong style="color:#dc2626">82位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

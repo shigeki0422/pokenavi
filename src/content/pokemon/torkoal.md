@@ -1,25 +1,12 @@
 ---
 title: 'コータス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのコータス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率121位。'
+description: 'ポケモンチャンピオンズのコータス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率120位。'
 pokemonName: 'コータス'
 dexNumber: 324
-usageRank: 121
-updatedDate: '2026-07-02'
+usageRank: 120
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ステルスロック', 'あくび', 'ソーラービーム', 'ふんか']
-  topMovePct: [59.4, 57.3, 43.3, 30.0]
-  topItems: ['あついいわ', 'もくたん', 'オボンのみ']
-  topItemPct: [42.1, 15.0, 14.5]
-  topAbility: 'ひでり'
-  topAbilityPct: 96.7
-  topNature: 'れいせい'
-  topNaturePct: 28.0
-  topNature2: 'ずぶとい'
-  topNaturePct2: 19.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.324</strong>　／　使用率 <strong style="color:#dc2626">121位</strong>
+      全国図鑑 <strong>No.324</strong>　／　使用率 <strong style="color:#dc2626">120位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

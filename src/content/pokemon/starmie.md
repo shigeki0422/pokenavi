@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのスターミー基礎データ
 pokemonName: 'スターミー'
 dexNumber: 121
 usageRank: 38
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'starmie-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['アクアブレイク', 'アクアジェット', 'アイススピナー', 'クイックターン']
-  topMovePct: [86.6, 86.2, 68.3, 56.0]
-  topItems: ['スターミナイト', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [94.2, 1.2, 1.0]
-  topAbility: 'アナライズ'
-  topAbilityPct: 5.0
-  topNature: 'いじっぱり'
-  topNaturePct: 83.6
-  topNature2: 'ようき'
-  topNaturePct2: 28.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのコノヨザル基礎データ
 pokemonName: 'コノヨザル'
 dexNumber: 979
 usageRank: 45
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ふんどのこぶし', 'ドレインパンチ', 'ビルドアップ', 'ちょうはつ']
-  topMovePct: [98.4, 90.7, 81.2, 62.6]
-  topItems: ['たべのこし', 'オボンのみ', 'きあいのタスキ']
-  topItemPct: [54.1, 26.5, 3.1]
-  topAbility: 'まけんき'
-  topAbilityPct: 71.9
-  topNature: 'いじっぱり'
-  topNaturePct: 47.5
-  topNature2: 'ようき'
-  topNaturePct2: 27.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

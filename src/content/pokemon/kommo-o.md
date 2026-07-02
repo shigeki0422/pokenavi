@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのジャラランガ基礎デー
 pokemonName: 'ジャラランガ'
 dexNumber: 784
 usageRank: 153
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['スケイルノイズ', 'ソウルビート', 'はどうだん', 'かえんほうしゃ']
-  topMovePct: [58.9, 52.9, 29.7, 29.4]
-  topItems: ['オボンのみ', 'たべのこし', 'きあいのタスキ']
-  topItemPct: [31.9, 13.3, 11.7]
-  topAbility: 'ぼうだん'
-  topAbilityPct: 64.1
-  topNature: 'ひかえめ'
-  topNaturePct: 36.6
-  topNature2: 'いじっぱり'
-  topNaturePct2: 14.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

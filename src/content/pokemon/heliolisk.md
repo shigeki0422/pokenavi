@@ -1,25 +1,12 @@
 ---
 title: 'エレザード | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエレザード基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率106位。'
+description: 'ポケモンチャンピオンズのエレザード基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率107位。'
 pokemonName: 'エレザード'
 dexNumber: 695
-usageRank: 106
-updatedDate: '2026-07-02'
+usageRank: 107
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['10まんボルト', 'くさむすび', 'しっぽきり', 'ボルトチェンジ']
-  topMovePct: [75.0, 53.5, 53.2, 40.3]
-  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'オボンのみ']
-  topItemPct: [39.2, 22.1, 13.7]
-  topAbility: 'かんそうはだ'
-  topAbilityPct: 92.6
-  topNature: 'おくびょう'
-  topNaturePct: 74.5
-  topNature2: 'ひかえめ'
-  topNaturePct2: 20.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.695</strong>　／　使用率 <strong style="color:#dc2626">106位</strong>
+      全国図鑑 <strong>No.695</strong>　／　使用率 <strong style="color:#dc2626">107位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

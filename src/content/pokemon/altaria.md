@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのチルタリス基礎データ
 pokemonName: 'チルタリス'
 dexNumber: 334
 usageRank: 129
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['はねやすめ', 'コットンガード', 'ハイパーボイス', 'かえんほうしゃ']
-  topMovePct: [87.1, 72.6, 62.0, 35.9]
-  topItems: ['たべのこし', 'オボンのみ', 'ラムのみ']
-  topItemPct: [1.9, 1.7, 0.5]
-  topAbility: 'しぜんかいふく'
-  topAbilityPct: 34.4
-  topNature: 'ひかえめ'
-  topNaturePct: 33.3
-  topNature2: 'おだやか'
-  topNaturePct2: 21.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

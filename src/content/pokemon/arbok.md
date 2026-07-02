@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのアーボック基礎データ
 pokemonName: 'アーボック'
 dexNumber: 24
 usageRank: 199
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['へびにらみ', 'どくびし', 'ドラゴンテール', 'いたみわけ']
-  topMovePct: [79.2, 66.7, 55.0, 46.9]
-  topItems: ['きあいのタスキ', 'オボンのみ', 'たべのこし']
-  topItemPct: [49.5, 12.4, 8.9]
-  topAbility: 'いかく'
-  topAbilityPct: 97.4
-  topNature: 'ようき'
-  topNaturePct: 91.4
-  topNature2: 'わんぱく'
-  topNaturePct2: 23.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

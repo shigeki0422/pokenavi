@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのドサイドン基礎データ
 pokemonName: 'ドサイドン'
 dexNumber: 464
 usageRank: 173
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['じしん', 'れいとうパンチ', 'ロックブラスト', 'メタルバースト']
-  topMovePct: [93.5, 39.0, 31.1, 24.9]
-  topItems: ['オボンのみ', 'せんせいのツメ', 'いのちのたま']
-  topItemPct: [14.7, 13.7, 11.8]
-  topAbility: 'ハードロック'
-  topAbilityPct: 91.2
-  topNature: 'いじっぱり'
-  topNaturePct: 46.3
-  topNature2: 'ゆうかん'
-  topNaturePct2: 23.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのグレンアルマ基礎デー
 pokemonName: 'グレンアルマ'
 dexNumber: 936
 usageRank: 77
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['アーマーキャノン', 'みちづれ', 'サイコキネシス', 'エナジーボール']
-  topMovePct: [95.7, 62.2, 54.9, 33.3]
-  topItems: ['きあいのタスキ', 'いのちのたま', 'オボンのみ']
-  topItemPct: [74.8, 3.9, 3.1]
-  topAbility: 'もらいび'
-  topAbilityPct: 22.2
-  topNature: 'ひかえめ'
-  topNaturePct: 78.5
-  topNature2: 'おくびょう'
-  topNaturePct2: 18.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

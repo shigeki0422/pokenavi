@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのニョロトノ基礎データ
 pokemonName: 'ニョロトノ'
 dexNumber: 186
 usageRank: 125
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ウェザーボール', 'れいとうビーム', 'アンコール', 'ほろびのうた']
-  topMovePct: [63.1, 61.8, 49.4, 37.3]
-  topItems: ['しめったいわ', 'オボンのみ', 'たべのこし']
-  topItemPct: [59.2, 12.0, 4.4]
-  topAbility: 'あめふらし'
-  topAbilityPct: 96.5
-  topNature: 'ひかえめ'
-  topNaturePct: 39.9
-  topNature2: 'ずぶとい'
-  topNaturePct2: 20.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

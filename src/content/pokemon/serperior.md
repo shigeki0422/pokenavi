@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのジャローダ基礎データ
 pokemonName: 'ジャローダ'
 dexNumber: 497
 usageRank: 70
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['リーフストーム', 'へびにらみ', 'りゅうのはどう', 'ちょうはつ']
-  topMovePct: [99.6, 61.9, 49.9, 31.9]
-  topItems: ['たべのこし', 'きあいのタスキ', 'こだわりスカーフ']
-  topItemPct: [25.0, 14.5, 13.2]
-  topAbility: 'あまのじゃく'
-  topAbilityPct: 99.3
-  topNature: 'おくびょう'
-  topNaturePct: 68.8
-  topNature2: 'ひかえめ'
-  topNaturePct2: 18.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

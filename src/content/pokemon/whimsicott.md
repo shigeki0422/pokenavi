@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのエルフーン基礎データ
 pokemonName: 'エルフーン'
 dexNumber: 547
 usageRank: 49
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'whimsicott-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['ムーンフォース', 'アンコール', 'おいかぜ', 'やどりぎのタネ']
-  topMovePct: [85.7, 58.9, 49.8, 45.1]
-  topItems: ['きあいのタスキ', 'たべのこし', 'オボンのみ']
-  topItemPct: [48.8, 29.5, 4.7]
-  topAbility: 'いたずらごころ'
-  topAbilityPct: 97.6
-  topNature: 'おくびょう'
-  topNaturePct: 47.0
-  topNature2: 'すばやさ'
-  topNaturePct2: 29.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのアシレーヌ基礎データ
 pokemonName: 'アシレーヌ'
 dexNumber: 730
 usageRank: 14
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'primarina-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['ムーンフォース', 'うたかたのアリア', 'アクアジェット', 'アンコール']
-  topMovePct: [96.9, 84.4, 69.2, 41.0]
-  topItems: ['オボンのみ', 'たべのこし', 'しんぴのしずく']
-  topItemPct: [58.0, 15.9, 10.0]
-  topAbility: 'げきりゅう'
-  topAbilityPct: 92.6
-  topNature: 'ひかえめ'
-  topNaturePct: 70.3
-  topNature2: 'ずぶとい'
-  topNaturePct2: 10.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

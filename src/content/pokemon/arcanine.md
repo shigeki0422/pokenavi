@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのウインディ基礎データ
 pokemonName: 'ウインディ'
 dexNumber: 59
 usageRank: 116
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['フレアドライブ', 'しんそく', 'おにび', 'あさのひざし']
-  topMovePct: [62.2, 62.1, 53.8, 47.1]
-  topItems: ['オボンのみ', 'たべのこし', 'いのちのたま']
-  topItemPct: [37.6, 25.8, 10.0]
-  topAbility: 'いかく'
-  topAbilityPct: 95.6
-  topNature: 'いじっぱり'
-  topNaturePct: 46.9
-  topNature2: 'おくびょう'
-  topNaturePct2: 20.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

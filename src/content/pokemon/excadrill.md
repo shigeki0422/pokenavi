@@ -1,25 +1,12 @@
 ---
 title: 'ドリュウズ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのドリュウズ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率55位。'
+description: 'ポケモンチャンピオンズのドリュウズ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率54位。'
 pokemonName: 'ドリュウズ'
 dexNumber: 530
-usageRank: 55
-updatedDate: '2026-07-02'
+usageRank: 54
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'excadrill-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['じしん', 'アイアンヘッド', 'いわなだれ', 'つのドリル']
-  topMovePct: [98.6, 96.7, 64.3, 30.7]
-  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [42.3, 28.7, 14.8]
-  topAbility: 'かたやぶり'
-  topAbilityPct: 78.0
-  topNature: 'ようき'
-  topNaturePct: 52.9
-  topNature2: 'いじっぱり'
-  topNaturePct2: 44.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.530</strong>　／　使用率 <strong style="color:#dc2626">55位</strong>
+      全国図鑑 <strong>No.530</strong>　／　使用率 <strong style="color:#dc2626">54位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのヤドキング基礎データ
 pokemonName: 'ヤドキング'
 dexNumber: 199
 usageRank: 162
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ねっとう', 'トリックルーム', 'あくび', 'サイコキネシス']
-  topMovePct: [61.4, 44.5, 32.9, 27.0]
-  topItems: ['オボンのみ', 'たべのこし', 'ひかりのこな']
-  topItemPct: [37.1, 29.9, 3.5]
-  topAbility: 'さいせいりょく'
-  topAbilityPct: 91.3
-  topNature: 'ずぶとい'
-  topNaturePct: 28.6
-  topNature2: 'おだやか'
-  topNaturePct2: 21.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

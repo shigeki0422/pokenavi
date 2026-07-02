@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのドヒドイデ基礎データ
 pokemonName: 'ドヒドイデ'
 dexNumber: 748
 usageRank: 52
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'toxapex-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['どくどく', 'トーチカ', 'まとわりつく', 'くろいきり']
-  topMovePct: [91.6, 69.0, 57.3, 32.3]
-  topItems: ['たべのこし', 'オボンのみ', 'メンタルハーブ']
-  topItemPct: [70.1, 12.6, 4.9]
-  topAbility: 'さいせいりょく'
-  topAbilityPct: 94.1
-  topNature: 'ずぶとい'
-  topNaturePct: 37.5
-  topNature2: 'おだやか'
-  topNaturePct2: 21.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

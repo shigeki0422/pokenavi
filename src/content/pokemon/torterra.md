@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのドダイトス基礎データ
 pokemonName: 'ドダイトス'
 dexNumber: 389
 usageRank: 143
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['からをやぶる', 'じしん', 'ぶちかまし', 'ウッドハンマー']
-  topMovePct: [76.8, 51.1, 43.7, 38.1]
-  topItems: ['しろいハーブ', 'きあいのタスキ', 'たべのこし']
-  topItemPct: [47.1, 19.2, 6.4]
-  topAbility: 'シェルアーマー'
-  topAbilityPct: 61.6
-  topNature: 'いじっぱり'
-  topNaturePct: 48.0
-  topNature2: 'ようき'
-  topNaturePct2: 27.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

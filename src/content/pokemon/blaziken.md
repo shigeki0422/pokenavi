@@ -1,25 +1,12 @@
 ---
 title: 'バシャーモ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのバシャーモ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率11位。'
+description: 'ポケモンチャンピオンズのバシャーモ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率10位。'
 pokemonName: 'バシャーモ'
 dexNumber: 257
-usageRank: 11
-updatedDate: '2026-07-02'
+usageRank: 10
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['フレアドライブ', 'インファイト', 'つるぎのまい', 'まもる']
-  topMovePct: [85.0, 64.4, 56.3, 50.4]
-  topItems: ['きあいのタスキ', 'いのちのたま', 'オボンのみ']
-  topItemPct: [13.7, 4.4, 1.7]
-  topAbility: 'かそく'
-  topAbilityPct: 97.6
-  topNature: 'いじっぱり'
-  topNaturePct: 78.5
-  topNature2: 'ようき'
-  topNaturePct2: 17.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.257</strong>　／　使用率 <strong style="color:#dc2626">11位</strong>
+      全国図鑑 <strong>No.257</strong>　／　使用率 <strong style="color:#dc2626">10位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

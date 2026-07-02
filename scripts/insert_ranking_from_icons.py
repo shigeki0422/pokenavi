@@ -40,9 +40,12 @@ TARGETS = {
         199: "アーボック",
         200: "ゴロンダ",
     },
+    "2026-07-02": {
+        199: "アーボック",
+    },
 }
 
-CRAWLED_DATE = "2026-07-01"  # ← 実行時に変更
+CRAWLED_DATE = "2026-07-02"  # ← 実行時に変更
 
 
 REF_SIZE = (960, 965)  # 6/25の基準サイズ (w, h)
@@ -195,13 +198,18 @@ def main():
         conn.close()
         return
 
+    # POKEMON_DATAからpokemon_idを引く
+    from generate_pokemon_pages import POKEMON_DATA
+    id_map = {name: data.get("id") for name, data in POKEMON_DATA.items()}
+
     print(f"\n✅ 重複なし・200件確認 → 投入開始")
     now = datetime.now(timezone.utc).isoformat()
     inserted = 0
     for rank, name in candidates:
+        pid = id_map.get(name)
         conn.execute(
-            "INSERT OR IGNORE INTO pokemon_usage(season,rule,rank,pokemon,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?)",
-            (SEASON, RULE, rank, name, "champions_adb", CRAWLED_DATE, now)
+            "INSERT OR IGNORE INTO pokemon_usage(season,rule,rank,pokemon,pokemon_id,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?)",
+            (SEASON, RULE, rank, name, pid, "champions_adb", CRAWLED_DATE, now)
         )
         inserted += conn.execute("SELECT changes()").fetchone()[0]
     conn.commit()

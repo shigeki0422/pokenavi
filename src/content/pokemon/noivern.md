@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのオンバーン基礎データ
 pokemonName: 'オンバーン'
 dexNumber: 715
 usageRank: 150
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['りゅうせいぐん', 'エアスラッシュ', 'かえんほうしゃ', 'とんぼがえり']
-  topMovePct: [87.0, 56.2, 52.8, 41.0]
-  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [37.9, 18.8, 16.7]
-  topAbility: 'おみとおし'
-  topAbilityPct: 51.5
-  topNature: 'おくびょう'
-  topNaturePct: 56.5
-  topNature2: 'ひかえめ'
-  topNaturePct2: 38.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

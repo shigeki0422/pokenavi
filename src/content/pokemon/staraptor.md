@@ -1,25 +1,12 @@
 ---
 title: 'ムクホーク | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのムクホーク基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率10位。'
+description: 'ポケモンチャンピオンズのムクホーク基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率12位。'
 pokemonName: 'ムクホーク'
 dexNumber: 398
-usageRank: 10
-updatedDate: '2026-07-02'
+usageRank: 12
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['インファイト', 'はねやすめ', 'ブレイズキック', 'ふきとばし']
-  topMovePct: [98.1, 89.5, 53.3, 16.1]
-  topItems: ['ムクホークナイト', 'いのちのたま', 'きあいのタスキ']
-  topItemPct: [94.2, 0.1, 0.1]
-  topAbility: 'いかく'
-  topAbilityPct: 95.9
-  topNature: 'ようき'
-  topNaturePct: 79.9
-  topNature2: 'いじっぱり'
-  topNaturePct2: 17.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.398</strong>　／　使用率 <strong style="color:#dc2626">10位</strong>
+      全国図鑑 <strong>No.398</strong>　／　使用率 <strong style="color:#dc2626">12位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

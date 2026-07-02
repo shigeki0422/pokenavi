@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのリキキリン基礎データ
 pokemonName: 'リキキリン'
 dexNumber: 981
 usageRank: 175
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['トリックルーム', 'サイコキネシス', '10まんボルト', 'マジカルシャイン']
-  topMovePct: [63.4, 44.3, 34.8, 29.0]
-  topItems: ['オボンのみ', 'きあいのタスキ', 'たべのこし']
-  topItemPct: [47.0, 8.9, 8.3]
-  topAbility: 'はんすう'
-  topAbilityPct: 17.9
-  topNature: 'ひかえめ'
-  topNaturePct: 31.7
-  topNature2: 'わいわい'
-  topNaturePct2: 21.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのスコヴィラン基礎デー
 pokemonName: 'スコヴィラン'
 dexNumber: 952
 usageRank: 75
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'scovillain-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['やどりぎのタネ', 'まもる', 'かえんほうしゃ', 'ギガドレイン']
-  topMovePct: [89.7, 86.4, 70.3, 70.2]
-  topItems: ['スコヴィラナイト', 'たべのこし', 'おおきなねっこ']
-  topItemPct: [80.7, 13.5, 1.1]
-  topAbility: 'ふみん'
-  topAbilityPct: 21.4
-  topNature: 'ずぶとい'
-  topNaturePct: 52.3
-  topNature2: 'ひかえめ'
-  topNaturePct2: 18.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

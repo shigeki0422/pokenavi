@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのドクロッグ基礎データ
 pokemonName: 'ドクロッグ'
 dexNumber: 454
 usageRank: 196
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['インファイト', 'ふいうち', 'ダストシュート', 'どくづき']
-  topMovePct: [69.0, 64.2, 40.2, 39.5]
-  topItems: ['きあいのタスキ', 'いのちのたま', 'こだわりスカーフ']
-  topItemPct: [57.5, 10.7, 5.2]
-  topAbility: 'かんそうはだ'
-  topAbilityPct: 78.1
-  topNature: 'いじっぱり'
-  topNaturePct: 60.5
-  topNature2: 'ようき'
-  topNaturePct2: 20.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのギャラドス基礎データ
 pokemonName: 'ギャラドス'
 dexNumber: 130
 usageRank: 15
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'gyarados-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['たきのぼり', 'りゅうのまい', 'パワーウィップ', 'ちょうはつ']
-  topMovePct: [90.7, 70.5, 47.8, 28.9]
-  topItems: ['ギャラドスナイト', 'たべのこし', 'オボンのみ']
-  topItemPct: [56.5, 23.2, 10.0]
-  topAbility: 'いかく'
-  topAbilityPct: 98.5
-  topNature: 'ようき'
-  topNaturePct: 44.0
-  topNature2: 'いじっぱり'
-  topNaturePct2: 39.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

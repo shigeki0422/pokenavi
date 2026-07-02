@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのドラパルト基礎データ
 pokemonName: 'ドラパルト'
 dexNumber: 887
 usageRank: 32
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'dragapult-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['ドラゴンアロー', 'とんぼがえり', 'ゴーストダイブ', 'シャドーボール']
-  topMovePct: [63.9, 43.5, 37.9, 34.9]
-  topItems: ['いのちのたま', 'きあいのタスキ', 'こだわりスカーフ']
-  topItemPct: [47.5, 18.2, 13.9]
-  topAbility: 'すりぬけ'
-  topAbilityPct: 73.1
-  topNature: 'ようき'
-  topNaturePct: 28.6
-  topNature2: 'おくびょう'
-  topNaturePct2: 18.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

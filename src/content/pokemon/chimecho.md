@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのチリーン基礎データ。
 pokemonName: 'チリーン'
 dexNumber: 358
 usageRank: 142
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['じこさいせい', 'アシストパワー', 'コスモパワー', 'めいそう']
-  topMovePct: [83.1, 49.0, 47.7, 36.7]
-  topItems: ['チリーンナイト', 'オボンのみ', 'たべのこし']
-  topItemPct: [92.0, 2.2, 1.2]
-  topAbility: 'ふゆう'
-  topAbilityPct: 100.0
-  topNature: 'ずぶとい'
-  topNaturePct: 50.5
-  topNature2: 'ひかえめ'
-  topNaturePct2: 29.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

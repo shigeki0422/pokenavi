@@ -1,25 +1,12 @@
 ---
 title: 'タイレーツ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのタイレーツ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率170位。'
+description: 'ポケモンチャンピオンズのタイレーツ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率171位。'
 pokemonName: 'タイレーツ'
 dexNumber: 870
-usageRank: 170
-updatedDate: '2026-07-02'
+usageRank: 171
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['インファイト', 'はたきおとす', 'アイアンヘッド', 'いわなだれ']
-  topMovePct: [84.3, 52.5, 36.3, 17.6]
-  topItems: ['タイレーツナイト', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [89.6, 2.8, 0.8]
-  topAbility: 'まけんき'
-  topAbilityPct: 89.4
-  topNature: 'いじっぱり'
-  topNaturePct: 60.5
-  topNature2: 'ようき'
-  topNaturePct2: 29.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.870</strong>　／　使用率 <strong style="color:#dc2626">170位</strong>
+      全国図鑑 <strong>No.870</strong>　／　使用率 <strong style="color:#dc2626">171位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

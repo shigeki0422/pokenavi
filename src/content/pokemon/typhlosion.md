@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのバクフーン基礎データ
 pokemonName: 'バクフーン'
 dexNumber: 157
 usageRank: 193
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ふんか', 'ねっさのだいち', 'シャドーボール', 'かえんほうしゃ']
-  topMovePct: [78.8, 58.2, 43.2, 40.9]
-  topItems: ['こだわりスカーフ', 'もくたん', 'きあいのタスキ']
-  topItemPct: [60.4, 12.2, 10.2]
-  topAbility: 'もうか'
-  topAbilityPct: 32.7
-  topNature: 'ひかえめ'
-  topNaturePct: 53.1
-  topNature2: 'あくどい'
-  topNaturePct2: 31.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

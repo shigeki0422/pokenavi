@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのリザードン基礎データ
 pokemonName: 'リザードン'
 dexNumber: 6
 usageRank: 7
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ソーラービーム', 'かえんほうしゃ', 'エアスラッシュ', 'オーバーヒート']
-  topMovePct: [79.0, 46.3, 44.2, 31.5]
-  topItems: ['リザードナイトY', 'リザードナイトX', 'こだわりスカーフ']
-  topItemPct: [75.9, 22.6, 0.1]
-  topAbility: 'もうか'
-  topAbilityPct: 84.0
-  topNature: 'ひかえめ'
-  topNaturePct: 46.6
-  topNature2: 'おくびょう'
-  topNaturePct2: 31.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

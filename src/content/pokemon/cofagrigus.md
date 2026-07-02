@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのデスカーン基礎データ
 pokemonName: 'デスカーン'
 dexNumber: 563
 usageRank: 128
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['おにび', 'ボディプレス', 'たたりめ', 'トリックルーム']
-  topMovePct: [76.6, 53.5, 42.9, 40.0]
-  topItems: ['たべのこし', 'オボンのみ', 'メンタルハーブ']
-  topItemPct: [48.0, 22.6, 5.5]
-  topAbility: 'ミイラ'
-  topAbilityPct: 100.0
-  topNature: 'ずぶとい'
-  topNaturePct: 53.3
-  topNature2: 'のんき'
-  topNaturePct2: 20.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

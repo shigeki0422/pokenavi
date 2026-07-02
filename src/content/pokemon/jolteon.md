@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのサンダース基礎データ
 pokemonName: 'サンダース'
 dexNumber: 135
 usageRank: 147
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['10まんボルト', 'みわくのボイス', 'ボルトチェンジ', 'シャドーボール']
-  topMovePct: [76.5, 59.4, 58.4, 46.3]
-  topItems: ['きあいのタスキ', 'いのちのたま', 'じしゃく']
-  topItemPct: [32.1, 19.5, 13.9]
-  topAbility: 'ちくでん'
-  topAbilityPct: 87.0
-  topNature: 'ひかえめ'
-  topNaturePct: 22.6
-  topNature2: 'せっかち'
-  topNaturePct2: 8.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

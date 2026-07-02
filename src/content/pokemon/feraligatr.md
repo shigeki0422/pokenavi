@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのオーダイル基礎データ
 pokemonName: 'オーダイル'
 dexNumber: 160
 usageRank: 124
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['アクアブレイク', 'りゅうのまい', 'れいとうパンチ', 'アクアジェット']
-  topMovePct: [80.3, 65.2, 49.2, 45.4]
-  topItems: ['オーダイルナイト', 'いのちのたま', 'オボンのみ']
-  topItemPct: [59.5, 31.9, 2.0]
-  topAbility: 'ちからずく'
-  topAbilityPct: 83.3
-  topNature: 'いじっぱり'
-  topNaturePct: 52.5
-  topNature2: 'ようき'
-  topNaturePct2: 40.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

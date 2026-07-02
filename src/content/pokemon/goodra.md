@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのヌメルゴン基礎データ
 pokemonName: 'ヌメルゴン'
 dexNumber: 706
 usageRank: 149
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['10まんボルト', 'かえんほうしゃ', 'ギガドレイン', 'ねむる']
-  topMovePct: [38.2, 32.9, 31.8, 22.9]
-  topItems: ['たべのこし', 'オボンのみ', 'しろいハーブ']
-  topItemPct: [28.1, 20.7, 8.3]
-  topAbility: 'ぬめぬめ'
-  topAbilityPct: 46.7
-  topNature: 'ひかえめ'
-  topNaturePct: 42.1
-  topNature2: 'おだやか'
-  topNaturePct2: 29.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

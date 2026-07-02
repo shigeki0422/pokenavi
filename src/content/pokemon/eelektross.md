@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのシビルドン基礎データ
 pokemonName: 'シビルドン'
 dexNumber: 604
 usageRank: 69
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['サンダーダイブ', 'ドレインパンチ', '10まんボルト', 'かえんほうしゃ']
-  topMovePct: [56.7, 53.2, 33.6, 30.4]
-  topItems: ['シビルドナイト', 'オボンのみ', 'たべのこし']
-  topItemPct: [93.5, 1.8, 0.8]
-  topAbility: 'ふゆう'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 30.8
-  topNature2: 'ひかえめ'
-  topNaturePct2: 24.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

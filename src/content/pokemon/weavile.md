@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのマニューラ基礎データ
 pokemonName: 'マニューラ'
 dexNumber: 461
 usageRank: 114
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['はたきおとす', 'トリプルアクセル', 'こおりのつぶて', 'ねこだまし']
-  topMovePct: [75.9, 73.5, 58.6, 33.8]
-  topItems: ['きあいのタスキ', 'いのちのたま', 'こだわりスカーフ']
-  topItemPct: [54.5, 18.4, 10.9]
-  topAbility: 'プレッシャー'
-  topAbilityPct: 57.7
-  topNature: 'ようき'
-  topNaturePct: 69.6
-  topNature2: 'いじっぱり'
-  topNaturePct2: 23.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

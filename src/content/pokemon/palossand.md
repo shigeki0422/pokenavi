@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのデスバーン基礎データ
 pokemonName: 'デスバーン'
 dexNumber: 867
 usageRank: 113
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['じしん', 'ステルスロック', 'おにび', 'トリックルーム']
-  topMovePct: [67.4, 59.8, 52.3, 39.8]
-  topItems: ['オボンのみ', 'たべのこし', 'きあいのタスキ']
-  topItemPct: [38.6, 23.1, 7.9]
-  topAbility: 'さまようたましい'
-  topAbilityPct: 100.0
-  topNature: 'わんぱく'
-  topNaturePct: 39.6
-  topNature2: 'しんちょう'
-  topNaturePct2: 18.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのドラミドロ基礎データ
 pokemonName: 'ドラミドロ'
 dexNumber: 691
 usageRank: 30
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['クイックターン', 'りゅうせいぐん', 'どくどく', 'どくびし']
-  topMovePct: [92.0, 89.9, 62.2, 42.0]
-  topItems: ['ドラミドナイト', 'いのちのたま', 'たべのこし']
-  topItemPct: [98.1, 0.4, 0.2]
-  topAbility: 'てきおうりょく'
-  topAbilityPct: 63.0
-  topNature: 'なまいき'
-  topNaturePct: 43.7
-  topNature2: 'おだやか'
-  topNaturePct2: 19.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

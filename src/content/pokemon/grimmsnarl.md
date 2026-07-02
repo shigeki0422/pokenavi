@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのオーロンゲ基礎データ
 pokemonName: 'オーロンゲ'
 dexNumber: 861
 usageRank: 22
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ソウルクラッシュ', 'すてゼリフ', 'リフレクター', 'ひかりのかべ']
-  topMovePct: [79.4, 77.3, 73.7, 69.7]
-  topItems: ['ひかりのねんど', 'たべのこし', 'オボンのみ']
-  topItemPct: [69.1, 17.0, 2.8]
-  topAbility: 'おみとおし'
-  topAbilityPct: 0.5
-  topNature: 'わんぱく'
-  topNaturePct: 59.0
-  topNature2: 'いじっぱり'
-  topNaturePct2: 17.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

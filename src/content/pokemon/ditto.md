@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのメタモン基礎データ。
 pokemonName: 'メタモン'
 dexNumber: 132
 usageRank: 62
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'ditto-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['へんしん']
-  topMovePct: [100.0]
-  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'せんせいのツメ']
-  topItemPct: [79.1, 8.2, 6.7]
-  topAbility: 'かわりもの'
-  topAbilityPct: 98.7
-  topNature: 'のんき'
-  topNaturePct: 23.7
-  topNature2: 'なまいき'
-  topNaturePct2: 8.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

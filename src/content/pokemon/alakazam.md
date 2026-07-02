@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのフーディン基礎データ
 pokemonName: 'フーディン'
 dexNumber: 65
 usageRank: 119
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['サイコキネシス', 'シャドーボール', 'エナジーボール', 'マジカルシャイン']
-  topMovePct: [85.9, 60.7, 48.4, 43.0]
-  topItems: ['フーディナイト', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [71.1, 14.6, 6.9]
-  topAbility: 'マジックガード'
-  topAbilityPct: 78.5
-  topNature: 'おくびょう'
-  topNaturePct: 72.0
-  topNature2: 'ひかえめ'
-  topNaturePct2: 22.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

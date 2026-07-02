@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのサザンドラ基礎データ
 pokemonName: 'サザンドラ'
 dexNumber: 635
 usageRank: 13
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'hydreigon-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['だいもんじ', 'ラスターカノン', 'だいちのちから', 'ステルスロック']
-  topMovePct: [28.5, 15.1, 9.5, 5.4]
-  topItems: ['こだわりスカーフ', 'いのちのたま', 'きあいのタスキ']
-  topItemPct: [85.4, 5.9, 2.8]
-  topAbility: 'ふゆう'
-  topAbilityPct: 100.0
-  topNature: 'ひかえめ'
-  topNaturePct: 87.4
-  topNature2: 'おくびょう'
-  topNaturePct2: 30.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

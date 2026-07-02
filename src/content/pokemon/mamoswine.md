@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのマンムー基礎データ。
 pokemonName: 'マンムー'
 dexNumber: 473
 usageRank: 48
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'mamoswine-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['じしん', 'こおりのつぶて', 'ステルスロック', 'フリーズドライ']
-  topMovePct: [98.9, 94.8, 30.5, 20.5]
-  topItems: ['きあいのタスキ', 'いのちのたま', 'オボンのみ']
-  topItemPct: [82.9, 3.3, 3.0]
-  topAbility: 'どんかん'
-  topAbilityPct: 40.4
-  topNature: 'いじっぱり'
-  topNaturePct: 62.3
-  topNature2: 'やんちゃ'
-  topNaturePct2: 14.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

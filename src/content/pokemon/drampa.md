@@ -1,25 +1,12 @@
 ---
 title: 'ジジーロン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのジジーロン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率159位。'
+description: 'ポケモンチャンピオンズのジジーロン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率160位。'
 pokemonName: 'ジジーロン'
 dexNumber: 780
-usageRank: 159
-updatedDate: '2026-07-02'
+usageRank: 160
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['かえんほうしゃ', '10まんボルト', 'ハイパーボイス', 'エナジーボール']
-  topMovePct: [60.2, 57.8, 49.0, 27.2]
-  topItems: ['ジジーロナイト', 'せんせいのツメ', 'オボンのみ']
-  topItemPct: [59.6, 7.6, 7.6]
-  topAbility: 'ぎゃくじょう'
-  topAbilityPct: 70.3
-  topNature: 'ひかえめ'
-  topNaturePct: 58.1
-  topNature2: 'れいせい'
-  topNaturePct2: 43.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.780</strong>　／　使用率 <strong style="color:#dc2626">159位</strong>
+      全国図鑑 <strong>No.780</strong>　／　使用率 <strong style="color:#dc2626">160位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

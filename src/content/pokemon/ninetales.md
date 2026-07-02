@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのキュウコン基礎データ
 pokemonName: 'キュウコン'
 dexNumber: 38
 usageRank: 168
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['ソーラービーム', 'おにび', 'かえんほうしゃ', 'アンコール']
-  topMovePct: [64.4, 44.2, 35.1, 33.6]
-  topItems: ['あついいわ', 'きあいのタスキ', 'こだわりスカーフ']
-  topItemPct: [37.8, 15.6, 8.1]
-  topAbility: 'ひでり'
-  topAbilityPct: 94.0
-  topNature: 'おくびょう'
-  topNaturePct: 58.2
-  topNature2: 'ひかえめ'
-  topNaturePct2: 25.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

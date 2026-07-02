@@ -1,25 +1,12 @@
 ---
 title: 'デカヌチャン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのデカヌチャン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率101位。'
+description: 'ポケモンチャンピオンズのデカヌチャン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率100位。'
 pokemonName: 'デカヌチャン'
 dexNumber: 959
-usageRank: 101
-updatedDate: '2026-07-02'
+usageRank: 100
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['デカハンマー', 'じゃれつく', 'ステルスロック', 'アンコール']
-  topMovePct: [96.8, 58.5, 47.7, 40.7]
-  topItems: ['きあいのタスキ', 'オボンのみ', 'シュカのみ']
-  topItemPct: [21.6, 18.2, 13.1]
-  topAbility: 'かたやぶり'
-  topAbilityPct: 87.6
-  topNature: 'ようき'
-  topNaturePct: 42.0
-  topNature2: 'いじっぱり'
-  topNaturePct2: 38.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.959</strong>　／　使用率 <strong style="color:#dc2626">101位</strong>
+      全国図鑑 <strong>No.959</strong>　／　使用率 <strong style="color:#dc2626">100位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

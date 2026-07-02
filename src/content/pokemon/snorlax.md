@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのカビゴン基礎データ。
 pokemonName: 'カビゴン'
 dexNumber: 143
 usageRank: 65
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'snorlax-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['あくび', 'れいとうパンチ', 'じわれ', 'ねむる']
-  topMovePct: [45.4, 32.0, 30.0, 29.9]
-  topItems: ['たべのこし', 'オボンのみ', 'カゴのみ']
-  topItemPct: [43.1, 16.0, 11.4]
-  topAbility: 'あついしぼう'
-  topAbilityPct: 89.4
-  topNature: 'しんちょう'
-  topNaturePct: 46.3
-  topNature2: 'いじっぱり'
-  topNaturePct2: 23.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのライチュウ基礎データ
 pokemonName: 'ライチュウ'
 dexNumber: 26
 usageRank: 6
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 
-faq:
-  season: 'M-3'
-  topMoves: ['きあいだま', 'くさむすび', 'ボルトチェンジ', 'みがわり']
-  topMovePct: [95.0, 73.2, 29.2, 20.4]
-  topItems: ['ライチュウナイトY', 'ライチュウナイトX', 'きあいのタスキ']
-  topItemPct: [96.2, 2.8, 0.3]
-  topAbility: 'ひらいしん'
-  topAbilityPct: 86.8
-  topNature: 'おくびょう'
-  topNaturePct: 76.5
-  topNature2: 'ひかえめ'
-  topNaturePct2: 16.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

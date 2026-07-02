@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのミミッキュ基礎データ
 pokemonName: 'ミミッキュ'
 dexNumber: 778
 usageRank: 2
-updatedDate: '2026-07-02'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'mimikyu-analysis-m2'
-faq:
-  season: 'M-3'
-  topMoves: ['じゃれつく', 'かげうち', 'つるぎのまい', 'シャドークロー']
-  topMovePct: [96.4, 96.2, 80.8, 62.6]
-  topItems: ['いのちのたま', 'ラムのみ', 'ピントレンズ']
-  topItemPct: [84.6, 3.8, 2.7]
-  topAbility: 'ばけのかわ'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 76.5
-  topNature2: 'ようき'
-  topNaturePct2: 17.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
