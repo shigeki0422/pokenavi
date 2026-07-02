@@ -3,7 +3,10 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
+import FormattedDate from '../../../components/FormattedDate.astro';
 import articleMeta from '../../../data/article-meta.json';
+
+const ITEMS_PER_PAGE = 20;
 
 const TYPE_COLOR: Record<string, string> = {
 	'ノーマル':'#9da0aa','ほのお':'#f87c3f','みず':'#4fa4e0','くさ':'#5abf5a',
@@ -14,13 +17,16 @@ const TYPE_COLOR: Record<string, string> = {
 };
 
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
-const posts = (await getCollection('blog'))
+const allPosts = (await getCollection('blog'))
 	.filter((post) => (showDrafts || !post.data.draft) && post.id.includes('-m3'))
 	.sort((a, b) => {
 		const ma = (articleMeta as any)[a.id];
 		const mb = (articleMeta as any)[b.id];
 		return (ma?.rank ?? 999) - (mb?.rank ?? 999);
 	});
+
+const totalPages = Math.ceil(allPosts.length / ITEMS_PER_PAGE);
+const posts = allPosts;
 ---
 
 <!doctype html>
@@ -77,6 +83,16 @@ const posts = (await getCollection('blog'))
 			}
 			.types { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 3px; }
 			.type-badge { font-size: 0.65rem; padding: 1px 5px; border-radius: 3px; color: white; font-weight: 700; }
+			.card-date { font-size: 0.7rem; color: rgb(var(--gray)); }
+			.pagination {
+				display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 2rem;
+			}
+			.pagination a, .pagination span {
+				padding: 6px 14px; border: 1px solid #e2e8f0; border-radius: 6px;
+				text-decoration: none; font-size: 0.875rem; color: rgb(var(--black));
+			}
+			.pagination .current { background: var(--accent); color: white; border-color: var(--accent); }
+			.pagination a:hover { background: #f1f5f9; }
 		</style>
 	</head>
 	<body>
@@ -93,8 +109,8 @@ const posts = (await getCollection('blog'))
 				<span class="badge">最新シーズン</span>
 			</div>
 			<h1>M-3 シーズン 考察記事</h1>
-			<p class="subtitle">使用率上位ポケモン考察（{posts.length}件）</p>
-			<div class="grid">
+			<p class="subtitle">使用率上位ポケモン考察（{allPosts.length}件）</p>
+			<div class="grid" id="post-grid">
 				{posts.map((post, i) => {
 					const meta = (articleMeta as any)[post.id];
 					const dex = meta?.dex;
@@ -105,7 +121,7 @@ const posts = (await getCollection('blog'))
 						? `/images/pokemon/pokemon-${String(dex).padStart(4,'0')}-${form}.webp`
 						: null;
 					return (
-						<a class="card" href={`/blog/${post.id}/`}>
+						<a class="card" data-index={i} href={`/blog/${post.id}/`}>
 							{imgSrc
 								? <img class="card-img" src={imgSrc} alt={meta?.name ?? ''} loading={i < 10 ? 'eager' : 'lazy'} />
 								: <div class="card-img" style="background:#f1f5f9;border-radius:8px" />
@@ -123,6 +139,34 @@ const posts = (await getCollection('blog'))
 					);
 				})}
 			</div>
+			{totalPages > 1 && <div class="pagination" id="pagination"></div>}
+			<script define:vars={{ totalPages, ITEMS_PER_PAGE }}>
+				(function() {
+					function getPage() {
+						return Math.max(1, parseInt(new URLSearchParams(location.search).get('page') || '1') || 1);
+					}
+					function render() {
+						const page = getPage();
+						const cards = document.querySelectorAll('#post-grid .card');
+						cards.forEach((card) => {
+							const idx = parseInt(card.getAttribute('data-index'));
+							card.style.display = (idx >= (page - 1) * ITEMS_PER_PAGE && idx < page * ITEMS_PER_PAGE) ? '' : 'none';
+						});
+						const nav = document.getElementById('pagination');
+						if (!nav) return;
+						let html = '';
+						if (page > 1) html += `<a href="?page=${page - 1}">← 前へ</a>`;
+						for (let p = 1; p <= totalPages; p++) {
+							html += p === page
+								? `<span class="current">${p}</span>`
+								: `<a href="?page=${p}">${p}</a>`;
+						}
+						if (page < totalPages) html += `<a href="?page=${page + 1}">次へ →</a>`;
+						nav.innerHTML = html;
+					}
+					document.addEventListener('DOMContentLoaded', render);
+				})();
+			</script>
 		</main>
 		<Footer />
 	</body>
