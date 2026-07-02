@@ -305,7 +305,7 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
       <!-- ③ 相手一覧＋構成＋詳細 -->
       <section class="card" style="padding:.9em 1em">
         <div class="split">
-          <div class="pl-wrap"><div class="seasonbar" id="opp-seasonbar"><span class="muted">表示:</span><label class="schk"><input type="checkbox" checked onchange="toggleOppSeason('M-1',this)"><span class="sbadge m1">M-1</span></label><label class="schk"><input type="checkbox" checked onchange="toggleOppSeason('M-2',this)"><span class="sbadge m2">M-2</span></label><div id="opp-filter-chips" class="filter-chips"></div></div><div class="filter-wrap"><input type="text" id="opp-filter" class="filter-inp" placeholder={I18N.filterPh} autocomplete="off" oninput="onOppFilterInput(this.value)" onkeydown="onOppFilterKey(event)"><div class="filter-sug" id="opp-sug" style="display:none"></div></div><div class="picklist" id="opp-list" style="max-height:300px"></div></div>
+          <div class="pl-wrap"><div class="seasonbar" id="opp-seasonbar">{I18N.showLabel}<label class="schk"><input type="checkbox" checked onchange="toggleOppSeason('M-1',this)"><span class="sbadge m1">M-1</span></label><label class="schk"><input type="checkbox" checked onchange="toggleOppSeason('M-2',this)"><span class="sbadge m2">M-2</span></label><div id="opp-filter-chips" class="filter-chips"></div></div><div class="filter-wrap"><input type="text" id="opp-filter" class="filter-inp" placeholder={I18N.filterPh} autocomplete="off" oninput="onOppFilterInput(this.value)" onkeydown="onOppFilterKey(event)"><div class="filter-sug" id="opp-sug" style="display:none"></div></div><div class="picklist" id="opp-list" style="max-height:300px"></div></div>
           <div class="comp" id="opp-comp"><div class="muted">{I18N.oppSelectMsg}</div></div>
         </div>
         <div id="detail" style="margin-top:.9em"></div>
@@ -313,7 +313,11 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
     </main>
     <Footer />
 
-    <script is:inline define:vars={{ I18N, NATURE_NAME_MAP }}>
+    <div id="sim-i18n" data-i={JSON.stringify(I18N)} data-n={JSON.stringify(NATURE_NAME_MAP)} hidden></div>
+    <script is:inline>
+      const {I18N, NATURE_NAME_MAP} = (d=>{
+        return {I18N:JSON.parse(d.dataset.i), NATURE_NAME_MAP:JSON.parse(d.dataset.n)};
+      })(document.getElementById('sim-i18n'));
       const API = (location.port === '8888') ? '' : 'http://localhost:8888';
       // 本番＝静的配信モード（localhost/8888以外、または ?static=1 で強制）。dev＝従来のローカルAPI。
       const THEME = location.search.includes('theme=1');     // ?theme=1 でテーマ総当たり(/sim-data-theme)
@@ -466,11 +470,11 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
         const moves = p.moves.length ? p.moves.map(m=>`<span class="mvchip">${typeIcon(m)}${m}</span>`).join('') : '—';
         $(containerId+'-d').innerHTML =
           `<div class="cdgrid">
-             <div class="cdcell"><span class="cdlabel item">持ち物</span><span class="cdval">${itemIcon(p.item)}${p.item||'—'}</span></div>
+             <div class="cdcell">${I18N.labelItem}<span class="cdval">${itemIcon(p.item)}${p.item||'—'}</span></div>
              <div class="cdcell"><span class="cdlabel abil">${I18N.labelAbil}</span><span class="cdval">${p.ability||'—'}</span></div>
              <div class="cdcell"><span class="cdlabel nat">${I18N.labelNat}</span><span class="cdval">${nat}</span></div>
            </div>
-           <div class="cdrow mvrow"><span class="cdlabel mv">技</span><span class="mvwrap">${moves}</span></div>
+           <div class="cdrow mvrow"><span class="cdlabel mv">${I18N.labelMv}</span><span class="mvwrap">${moves}</span></div>
            <div class="cdrow mvrow"><span class="cdlabel ev">EV</span><span class="mvwrap">${ev||'—'}</span></div>`;
       }
 
@@ -901,10 +905,10 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
               <div class="bvbody">
                 <div class="muted" style="font-size:.78rem;margin-bottom:.3em">${b.wins}勝 ${b.losses}敗 ${b.draws}分</div>
                 <div class="cdgrid">
-                  <div class="cdcell"><span class="cdlabel abil">特性</span><span class="cdval">${b.ability||'—'}</span></div>
-                  <div class="cdcell"><span class="cdlabel nat">性格</span><span class="cdval">${nat}</span></div>
+                  <div class="cdcell">${I18N.labelAbil}<span class="cdval">${b.ability||'—'}</span></div>
+                  <div class="cdcell">${I18N.labelNat}<span class="cdval">${nat}</span></div>
                 </div>
-                <div class="cdrow mvrow"><span class="cdlabel mv">技</span><span class="mvwrap">${moves}</span></div>
+                <div class="cdrow mvrow"><span class="cdlabel mv">${I18N.labelMv}</span><span class="mvwrap">${moves}</span></div>
                 <div class="cdrow mvrow"><span class="cdlabel ev">EV</span><span class="mvwrap">${ev||'—'}${evx}</span></div>
                 <div class="use">${I18N.usedBy}${(b.labels||[]).join('・')}</div>
               </div></div>`;});
