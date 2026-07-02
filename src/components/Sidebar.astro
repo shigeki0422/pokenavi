@@ -33,6 +33,17 @@ const isM2Active = path.startsWith('/blog/m2') || (path.startsWith('/blog/') && 
 const isBlogActive = (path === '/blog' || path === '/blog/') || (path.startsWith('/blog/') && !path.startsWith('/blog/m3') && !path.startsWith('/blog/m2'));
 const brandHref = pfx ? `${pfx}/` : '/';
 const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : SITE_TITLE;
+
+const basePath = path.startsWith('/en/') ? path.slice(3)
+               : path.startsWith('/ko/') ? path.slice(3)
+               : path === '/en' || path === '/en/' ? '/'
+               : path === '/ko' || path === '/ko/' ? '/'
+               : path;
+const langUrls = {
+  ja: basePath || '/',
+  en: basePath === '/' ? '/en/' : `/en${basePath}`,
+  ko: basePath === '/' ? '/ko/' : `/ko${basePath}`,
+};
 ---
 
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
@@ -59,6 +70,11 @@ const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : S
 		</>}
 	</nav>
 	<div class="sb-foot">
+		<div class="lang-switcher">
+			<a href={langUrls.ja} class:list={['lang-btn', { 'lang-active': lang === 'ja' }]}>JA</a>
+			<a href={langUrls.en} class:list={['lang-btn', { 'lang-active': lang === 'en' }]}>EN</a>
+			<a href={langUrls.ko} class:list={['lang-btn', { 'lang-active': lang === 'ko' }]}>KO</a>
+		</div>
 		<a href={`${pfx}/about/`}>{NAV.about}</a>
 		<a href={`${pfx}/privacy/`}>{NAV.privacy}</a>
 	</div>
@@ -272,6 +288,29 @@ const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : S
 	}
 	.sb-foot a:hover {
 		color: var(--accent);
+	}
+	.lang-switcher {
+		display: flex;
+		gap: 4px;
+		margin-bottom: 6px;
+	}
+	.lang-btn {
+		font-size: 0.72rem;
+		font-weight: 700;
+		padding: 3px 8px;
+		border-radius: 4px;
+		text-decoration: none;
+		color: rgb(var(--gray));
+		background: #f1f5f9;
+		letter-spacing: 0.03em;
+	}
+	.lang-btn:hover {
+		background: #e2e8f0;
+		color: rgb(var(--gray-dark));
+	}
+	.lang-btn.lang-active {
+		background: var(--accent);
+		color: #fff;
 	}
 </style>
 
