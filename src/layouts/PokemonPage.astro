@@ -252,17 +252,23 @@ const breadcrumbJsonLd = {
 
 		{lang !== 'ja' && <script is:inline define:vars={{ POKENAVI_LANG: lang, POKENAVI_MOVE: MOVE_MAP, POKENAVI_ABILITY: ABILITY_MAP, POKENAVI_ITEM: ITEM_MAP, POKENAVI_NATURE: NATURE_MAP, POKENAVI_POKEMON: POKEMON_MAP }}>(function(){
 var L=POKENAVI_LANG;
-var H2={en:{'種族値':'Base Stats','メガシンカ':'Mega Evolution','タイプ相性':'Type Matchup','特性':'Abilities','使用率データ':'Usage Data','性格':'Natures','チームメイト':'Partners','考察記事':'Analysis Articles','構築例':'Team Examples'},ko:{'種族値':'종족값','メガシンカ':'메가진화','タイプ相性':'타입 상성','特性':'특성','使用率データ':'사용률 데이터','性格':'성격','チームメイト':'파트너','考察記事':'분석 기사','構築例':'구성 예시'}}[L]||{};
+var H2={en:{'種族値':'Base Stats','メガシンカ':'Mega Evolution','タイプ相性':'Type Matchup','特性':'Abilities','使用率データ':'Usage Data','性格':'Natures','チームメイト':'Partners','考察記事':'Analysis Articles','構築例':'Team Examples','同じチーム':'Partners'},ko:{'種族値':'종족값','メガシンカ':'메가진화','タイプ相性':'타입 상성','特性':'특성','使用率データ':'사용률 데이터','性格':'성격','チームメイト':'파트너','考察記事':'분석 기사','構築例':'구성 예시','同じチーム':'파트너'}}[L]||{};
 var STAT={en:{'こうげき':'Attack','ぼうぎょ':'Defense','とくこう':'Sp. Atk','とくぼう':'Sp. Def','すばやさ':'Speed','合計':'Total'},ko:{'こうげき':'공격','ぼうぎょ':'방어','とくこう':'특공','とくぼう':'특방','すばやさ':'스피드','合計':'합계'}}[L]||{};
-var TH={en:{'順位':'Rank','特性名':'Ability','採用率':'Usage','持ち物':'Held Item','技名':'Move','性格名':'Nature','チームメイト名':'Partner','×4 弱点':'×4 Weak','×2 弱点':'×2 Weak','×½ 耐性':'×½ Resist','×0 無効':'×0 Immune'},ko:{'順位':'순위','特性名':'특성명','採用率':'채용률','持ち物':'지닌물건','技名':'기술명','性格名':'성격명','チームメイト名':'파트너명','×4 弱点':'×4 약점','×2 弱点':'×2 약점','×½ 耐性':'×½ 저항','×0 無効':'×0 무효'}}[L]||{};
+var TH={en:{'順位':'Rank','特性名':'Ability','採用率':'Usage','持ち物':'Held Item','技名':'Move','性格名':'Nature','チームメイト名':'Partner','×4 弱点':'×4 Weak','×2 弱点':'×2 Weak','×½ 耐性':'×½ Resist','×0 無効':'×0 Immune','ポケモン':'Pokémon','平均順位・前回比':'Avg. Rank・vs Prev.'},ko:{'順位':'순위','特性名':'특성명','採用率':'채용률','持ち物':'지닌물건','技名':'기술명','性格名':'성격명','チームメイト名':'파트너명','×4 弱点':'×4 약점','×2 弱点':'×2 약점','×½ 耐性':'×½ 저항','×0 無効':'×0 무효','ポケモン':'포켓몬','平均順位・前回比':'평균 순위・전회 대비'}}[L]||{};
 var TYPE_L={en:{'物理':'Physical','特殊':'Special','変化':'Status'},ko:{'物理':'물리','特殊':'특수','変化':'변화'}}[L]||{};
 var FIELD={en:{'威力':'Power','命中':'Accuracy','採用率の推移':'Usage Trend'},ko:{'威力':'위력','命中':'명중','採用率の推移':'채용률 추이'}}[L]||{};
-var MISC=L==='en'?{'技':'Moves','持ち物':'Held Items'}:L==='ko'?{'技':'기술','持ち物':'지닌물건'}:{};
+var MISC=L==='en'?{'技':'Moves','持ち物':'Held Items','特性：':'Ability: ','効果・推移':'Effect・Trend','詳細':'Details','ステータス振り':'EV Spread','その他の構築や対戦での動きを確認':'See more team examples'}:L==='ko'?{'技':'기술','持ち物':'지닌물건','特性：':'특성: ','効果・推移':'효과・추이','詳細':'상세','ステータス振り':'스탯 배분','その他の構築や対戦での動きを確認':'다른 파티 구성 보기'}:{};
 var ALL=Object.assign({},H2,STAT,TH,TYPE_L,FIELD,MISC,POKENAVI_MOVE,POKENAVI_ABILITY,POKENAVI_ITEM,POKENAVI_NATURE,POKENAVI_POKEMON);
 var SUBS=L==='en'?[
-  [/全国図鑑/g,'Pokédex'],[/使用率/g,'Usage Rank'],[/データ集計日：/g,'Data as of '],[/(\d+)位/g,'#$1']
+  [/全国図鑑/g,'Pokédex'],[/使用率/g,'Usage Rank'],[/データ集計日：/g,'Data as of '],
+  [/(\d+\.\d+)位/g,'$1'],[/(\d+)位/g,'#$1'],
+  [/平均\s*/g,'Avg. '],[/前回比/g,'vs Prev.'],[/シーズン/g,'Season'],[/推移/g,'Trend'],
+  [/効果・推移/g,'Effect・Trend'],[/詳細/g,'Details']
 ]:L==='ko'?[
-  [/全国図鑑/g,'전국도감'],[/使用率/g,'사용률'],[/データ集計日：/g,'데이터 집계일：'],[/(\d+)位/g,'$1위']
+  [/全国図鑑/g,'전국도감'],[/使用率/g,'사용률'],[/データ集計日：/g,'데이터 집계일：'],
+  [/(\d+\.\d+)位/g,'$1위'],[/(\d+)位/g,'$1위'],
+  [/平均\s*/g,'평균 '],[/前回比/g,'전회비'],[/シーズン/g,'시즌'],[/推移/g,'추이'],
+  [/効果・推移/g,'효과・추이'],[/詳細/g,'상세']
 ]:[];
 function megastone(tr){
   if(L!=='en')return null;
@@ -273,6 +279,13 @@ function megastone(tr){
   if(!en)return null;
   return en+(mX?' X':mY?' Y':'')+'ite';
 }
+function megapoke(tr){
+  var m=/^メガ(.+)$/.exec(tr);if(!m)return null;
+  var jp=m[1];
+  var en=POKENAVI_POKEMON[jp]||POKENAVI_POKEMON[jp+'ー'];
+  if(!en)return null;
+  return L==='en'?'Mega '+en:L==='ko'?'메가'+en:null;
+}
 function rep(container){
   var w=document.createTreeWalker(container,NodeFilter.SHOW_TEXT);
   var nodes=[];var n;
@@ -281,14 +294,28 @@ function rep(container){
     var t=node.textContent,tr=t.trim();
     if(!tr)return;
     if(ALL[tr]){node.textContent=t.replace(tr,ALL[tr]);return;}
-    var ms=megastone(tr);
+    var ms=megastone(tr)||megapoke(tr);
     if(ms){node.textContent=t.replace(tr,ms);return;}
+    var am=/^特性：(.+)$/.exec(tr);
+    if(am&&ALL[am[1]]){node.textContent=t.replace(tr,(L==='en'?'Ability: ':L==='ko'?'특성: ':'')+ALL[am[1]]);return;}
+    var nm=/^(.+)(\s+\([A-Z↑↓±\+\-\s]+\))$/.exec(tr);
+    if(nm&&ALL[nm[1]]){node.textContent=t.replace(tr,ALL[nm[1]]+nm[2]);return;}
     SUBS.forEach(function(p){t=t.replace(p[0],p[1]);});
+    if(/[ぁ-ん]/.test(t)&&t.trim().length>20){node.textContent='';return;}
     node.textContent=t;
   });
 }
 var prose=document.querySelector('.prose');
-if(prose)rep(prose);
+if(prose){
+  rep(prose);
+  var h2s=prose.querySelectorAll('h2');
+  h2s.forEach(function(h2){
+    if(h2.textContent.trim()==='考察記事'){
+      var el=h2;
+      while(el){var nx=el.nextElementSibling;el.remove();el=nx;if(el&&el.tagName==='H2')break;}
+    }
+  });
+}
 })()</script>}
 
 		<script>
