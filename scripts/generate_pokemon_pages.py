@@ -92,7 +92,14 @@ def get_move_type(move_name: str):
     conn.close()
     return row[0] if row else None
 
-# ---- 性格 効果 ----
+# ---- 性格 ----
+VALID_NATURES = {
+    "がんばりや","さみしがり","ゆうかん","いじっぱり","やんちゃ",
+    "ずぶとい","すなお","のんき","わんぱく","のうてんき",
+    "おくびょう","せっかち","ようき","むじゃき","おてんば",
+    "ひかえめ","おっとり","れいせい","うっかりや","てれや",
+    "おだやか","おとなしい","しんちょう","なまいき","まじめ",
+}
 NATURE_EFFECTS = {
     "ようき": ("S↑", "C↓"), "いじっぱり": ("A↑", "C↓"), "おくびょう": ("S↑", "A↓"),
     "ひかえめ": ("C↑", "A↓"), "わんぱく": ("B↑", "C↓"), "しんちょう": ("D↑", "C↓"),
@@ -169,39 +176,32 @@ ITEM_SPRITE = {
     "カシブのみ": (-432, -144),# 196
     "ナモのみ": (0, -168),     # 198
     "ロゼルのみ": (-360, -408),# 686
-    # メガストーン (pokedb.tokyo item_key確認済み)
-    "フシギバナイト": (-192, -384),  # 659
-    "リザードナイトＸ": (-216, -384),# 660
-    "リザードナイトＹ": (-168, -408),# 678
-    "カメックスナイト": (-240, -384),# 661
-    "ゲンガナイト": (-120, -384),    # 656
-    "サーナイトナイト": (-144, -384),# 657
-    "バシャーモナイト": (-312, -384),# 664
-    "バンギラスナイト": (-432, -384),# 669
-    "ハッサムナイト": (-456, -384),  # 670
-    "ギャラドスナイト": (-120, -408),# 676
-    "クチートナイト": (-240, -408),  # 681
-    "ライボルトナイト": (-264, -408),# 682
-    "メタグロスナイト": (-168, -432),# 758
-    "ヤドランナイト": (-216, -432),  # 760
-    "アブソルナイト": (-144, -408),  # 677
-    "フーディナイト": (-192, -408),  # 679
-    "チルタリスナイト": (-96, -432), # 755
-    "ピジョットナイト": (-264, -432),# 762
-    "ミミロップナイト": (-360, -432),# 768
-    "ヘルガナイト": (-360, -384),    # 666
-    "ジュペッタナイト": (-408, -384),# 668
-    "プテラナイト": (-24, -408),     # 672
-    "ルカリオナイト": (-48, -408),   # 673
-    "ガルーラナイト": (-96, -408),   # 675
-    "ヘラクロスナイト": (-216, -408),# 680
-    "エルレイドナイト": (-120, -432),# 756
-    "サメハダナイト": (-192, -432),  # 759
-    "オニゴーリナイト": (-288, -432),# 763
-    "カイリュナイト": (-216, -600),  # 3006
-    "メガニウムナイト": (-120, -600),# 3002
-    "ルチャブルナイト": (-264, -600),# 3008
-    "ゴルーグナイト": (-96, -624),   # 3021
+    # メガストーン (item-sprite.css座標から 24/64=0.375倍で算出)
+    "フシギバナイト": (-192, -72),   # id=84
+    "リザードナイトＸ": (0, -96),    # id=108
+    "リザードナイトＹ": (-24, -96),  # id=109
+    "ゲンガナイト": (-192, -48),     # id=50
+    "サーナイトナイト": (-264, -48), # id=53
+    "バシャーモナイト": (-456, -192),# id=241
+    "ギャラドスナイト": (-120, -48), # id=47
+    "クチートナイト": (-192, -192),  # id=230
+    "ライボルトナイト": (-432, -72), # id=106
+    "メタグロスナイト": (-384, -192),# id=238
+    "アブソルナイト": (-192, -24),   # id=27
+    "フーディナイト": (-240, -72),   # id=86
+    "ピジョットナイト": (-144, -72), # id=82
+    "ミミロップナイト": (-408, -72), # id=94
+    "ヘルガナイト": (-336, -72),     # id=90
+    "ジュペッタナイト": (-360, -48), # id=58
+    "プテラナイト": (-288, -72),     # id=88
+    "ルカリオナイト": (-96, -96),    # id=112
+    "ガルーラナイト": (-72, -48),    # id=45
+    "ヘラクロスナイト": (-312, -72), # id=89
+    "エルレイドナイト": (-312, -24), # id=32
+    "サメハダナイト": (-240, -48),   # id=52
+    "オニゴーリナイト": (-384, -24), # id=35
+    "カイリュナイト": (0, -48),      # id=39
+    "ゴルーグナイト": (-216, -48),   # id=51
 }
 
 # ---- メガシンカデータ ----
@@ -2038,7 +2038,8 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
     moves = query_db(conn, "pokemon_moves", pokemon_name, "move")
     items = query_db(conn, "pokemon_items", pokemon_name, "item")
     abilities = query_db(conn, "pokemon_abilities", pokemon_name, "ability")
-    natures = query_db(conn, "pokemon_natures", pokemon_name, "nature")
+    _natures_raw = query_db(conn, "pokemon_natures", pokemon_name, "nature")
+    natures = [r for r in _natures_raw if r["nature"] in VALID_NATURES]
 
     ev_date = latest(conn, "pokemon_evs", pokemon_name)
     evs = conn.execute(
@@ -2459,8 +2460,9 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
         bg = ' style="background:#fef9c3"' if rank == 1 else (' style="background:#fafafa"' if rank % 2 == 0 else "")
         partner_file = POKEMON_DATA.get(partner, {}).get("file")
         partner_url = f'/pokemon/{partner_file}/' if partner_file else None
-        if pid:
-            img_html = f'<img src="/images/pokemon/pokemon-{pid}.webp" alt="{partner}" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy">'
+        effective_pid = pid or POKEMON_DATA.get(partner, {}).get("id")
+        if effective_pid:
+            img_html = f'<img src="/images/pokemon/pokemon-{effective_pid}.webp" alt="{partner}" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy">'
         else:
             img_html = ""
 
