@@ -52,9 +52,11 @@ const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : S
 
 		<a href={`${pfx}/pokemon`} class:list={['sb-link', { active: isActive(`${pfx}/pokemon`) }]}>{NAV.pokemon}</a>
 		<a href={`${pfx}/ranking/`} class:list={['sb-sublink', { active: isActive(`${pfx}/ranking`) }]}>{NAV.ranking}</a>
-		<a href="/blog" class:list={['sb-link', { active: isBlogActive }]}>{NAV.blog}</a>
-		<a href={`${pfx}/blog/m3/`} class:list={['sb-sublink', { active: isM3Active }]}>{NAV.m3}<span class="season-badge new">NEW</span></a>
-		{lang === 'ja' && <a href="/blog/m2/" class:list={['sb-sublink', { active: isM2Active }]}>{NAV.m2}</a>}
+		{lang === 'ja' && <>
+			<a href="/blog" class:list={['sb-link', { active: isBlogActive }]}>{NAV.blog}</a>
+			<a href="/blog/m3/" class:list={['sb-sublink', { active: isM3Active }]}>{NAV.m3}<span class="season-badge new">NEW</span></a>
+			<a href="/blog/m2/" class:list={['sb-sublink', { active: isM2Active }]}>{NAV.m2}</a>
+		</>}
 	</nav>
 	<div class="sb-foot">
 		<a href={`${pfx}/about/`}>{NAV.about}</a>

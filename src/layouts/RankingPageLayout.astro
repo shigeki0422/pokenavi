@@ -59,7 +59,8 @@ const chartPokemon = pokemon
   .filter(p => Object.values(p.dates).some(d => d.rank <= CHART_ROWS))
   .map(p => {
     const lookupName = NAME_MAP[p.name] ?? p.name;
-    const url = pageById[lookupName] ? `/pokemon/${pageById[lookupName]}/` : null;
+    const pfxRanking = lang === 'ja' ? '' : `/${lang}`;
+    const url = pageById[lookupName] ? `${pfxRanking}/pokemon/${pageById[lookupName]}/` : null;
     const ranksByDate: Record<string, number> = {};
     for (const [d, info] of Object.entries(p.dates)) {
       ranksByDate[d] = info.rank;

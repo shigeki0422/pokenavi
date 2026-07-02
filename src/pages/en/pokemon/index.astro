@@ -4,6 +4,7 @@ import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
 import Sidebar from '../../../components/Sidebar.astro';
+import { POKEMON_NAME_EN } from '../../../i18n/pokemon-names';
 
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const pages = (await getCollection('pokemon'))
@@ -142,11 +143,11 @@ const top10 = pages.filter((p) => p.data.usageRank && p.data.usageRank <= 10);
 										<a class="top-card" href={`/en/pokemon/${p.id}/`}>
 											<img
 												src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
-												alt={p.data.pokemonName}
+												alt={POKEMON_NAME_EN[p.data.pokemonName] ?? p.data.pokemonName}
 												loading="eager"
 											/>
 											<div class={badgeClass}>#{r}</div>
-											<div class="name">{p.data.pokemonName}</div>
+											<div class="name">{POKEMON_NAME_EN[p.data.pokemonName] ?? p.data.pokemonName}</div>
 										</a>
 									);
 								})}
@@ -165,14 +166,14 @@ const top10 = pages.filter((p) => p.data.usageRank && p.data.usageRank <= 10);
 						/>
 						<div class="grid" id="pokemon-grid">
 							{pages.map((p, i) => (
-								<a class="card" href={`/en/pokemon/${p.id}/`} data-name={p.data.pokemonName}>
+								<a class="card" href={`/en/pokemon/${p.id}/`} data-name={POKEMON_NAME_EN[p.data.pokemonName] ?? p.data.pokemonName}>
 									<img
 										src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
-										alt={p.data.pokemonName}
+										alt={POKEMON_NAME_EN[p.data.pokemonName] ?? p.data.pokemonName}
 										loading={i < 30 ? 'eager' : 'lazy'}
 									/>
 									{p.data.usageRank && <div class="rank">{p.data.usageRank > 200 ? 'N/A' : `#${p.data.usageRank}`}</div>}
-									<div class="name">{p.data.pokemonName}</div>
+									<div class="name">{POKEMON_NAME_EN[p.data.pokemonName] ?? p.data.pokemonName}</div>
 								</a>
 							))}
 						</div>
