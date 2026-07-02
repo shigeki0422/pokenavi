@@ -15,22 +15,20 @@ const TYPE_COLOR: Record<string, string> = {
 };
 
 const ITEMS_PER_PAGE = 20;
-
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const allPosts = (await getCollection('blog'))
 	.filter((post) => showDrafts || !post.data.draft)
 	.sort((a, b) => {
 		const ma = (articleMeta as any)[a.id];
 		const mb = (articleMeta as any)[b.id];
-		const rankA = ma?.rank ?? 999;
-		const rankB = mb?.rank ?? 999;
-		return rankA - rankB;
+		return (ma?.rank ?? 999) - (mb?.rank ?? 999);
 	});
 
-const pageParam = Astro.url.searchParams.get('page');
-const currentPage = Math.max(1, parseInt(pageParam ?? '1') || 1);
-const totalPages = Math.ceil(allPosts.length / ITEMS_PER_PAGE);
-const posts = allPosts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE);
+const seasons = ['m3', 'm2'] as const;
+const postsBySeason = Object.fromEntries(
+	seasons.map((s) => [s, allPosts.filter((p) => p.id.includes(`-${s}`))])
+) as Record<string, typeof allPosts>;
+const seasonLabels: Record<string, string> = { m3: 'M-3（最新）', m2: 'M-2' };
 ---
 
 <!doctype html>
@@ -148,47 +146,55 @@ const posts = allPosts.slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * I
 			</nav>
 			<h1>考察記事</h1>
 			<p class="subtitle">使用率上位ポケモン考察（{allPosts.length}件）</p>
-			<div class="grid">
-				{posts.map((post, i) => {
-					const meta = (articleMeta as any)[post.id];
-					const dex = meta?.dex;
-					const form = meta?.form ?? '00';
-					const types: string[] = meta?.types ?? [];
-					const rank: number | null = meta?.rank ?? null;
-					const imgSrc = dex
-						? `/images/pokemon/pokemon-${String(dex).padStart(4,'0')}-${form}.webp`
-						: null;
-					return (
-						<a class="card" href={`/blog/${post.id}/`}>
-							{imgSrc
-								? <img class="card-img" src={imgSrc} alt={meta?.name ?? ''} loading={i < 10 ? 'eager' : 'lazy'} />
-								: <div class="card-img" style="background:#f1f5f9;border-radius:8px" />
-							}
-							<div class="card-body">
-								{rank && <div class="card-rank">使用率 {rank}位</div>}
-								<div class="card-title">{post.data.title}</div>
-								<div class="types">
-									{types.map((t) => (
-										<span class="type-badge" style={`background:${TYPE_COLOR[t] ?? '#999'}`}>{t}</span>
-									))}
-								</div>
-								<div class="card-date"><FormattedDate date={post.data.pubDate} /></div>
+			{seasons.map((s) => {
+				const sposts = postsBySeason[s];
+				if (!sposts.length) return null;
+				return (
+					<section style="margin-bottom: 2.5rem">
+						<div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem">
+							<h2 style="font-size:1.1rem;margin:0">{seasonLabels[s]} シーズン</h2>
+							<a href={`/blog/${s}/`} style="font-size:0.8rem;color:var(--accent);text-decoration:none">一覧を見る →</a>
+						</div>
+						<div class="grid">
+							{sposts.slice(0, ITEMS_PER_PAGE).map((post, i) => {
+								const meta = (articleMeta as any)[post.id];
+								const dex = meta?.dex;
+								const form = meta?.form ?? '00';
+								const types: string[] = meta?.types ?? [];
+								const rank: number | null = meta?.rank ?? null;
+								const imgSrc = dex
+									? `/images/pokemon/pokemon-${String(dex).padStart(4,'0')}-${form}.webp`
+									: null;
+								return (
+									<a class="card" href={`/blog/${post.id}/`}>
+										{imgSrc
+											? <img class="card-img" src={imgSrc} alt={meta?.name ?? ''} loading={i < 6 ? 'eager' : 'lazy'} />
+											: <div class="card-img" style="background:#f1f5f9;border-radius:8px" />
+										}
+										<div class="card-body">
+											{rank && <div class="card-rank">使用率 {rank}位</div>}
+											<div class="card-title">{post.data.title}</div>
+											<div class="types">
+												{types.map((t) => (
+													<span class="type-badge" style={`background:${TYPE_COLOR[t] ?? '#999'}`}>{t}</span>
+												))}
+											</div>
+											<div class="card-date"><FormattedDate date={post.data.pubDate} /></div>
+										</div>
+									</a>
+								);
+							})}
+						</div>
+						{sposts.length > ITEMS_PER_PAGE && (
+							<div style="text-align:center;margin-top:1rem">
+								<a href={`/blog/${s}/`} style="font-size:0.875rem;color:var(--accent);text-decoration:none">
+									残り {sposts.length - ITEMS_PER_PAGE} 件を見る →
+								</a>
 							</div>
-						</a>
-					);
-				})}
-			</div>
-			{totalPages > 1 && (
-				<div class="pagination">
-					{currentPage > 1 && <a href={`/blog/?page=${currentPage - 1}`}>← 前へ</a>}
-					{Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-						p === currentPage
-							? <span class="current">{p}</span>
-							: <a href={`/blog/?page=${p}`}>{p}</a>
-					))}
-					{currentPage < totalPages && <a href={`/blog/?page=${currentPage + 1}`}>次へ →</a>}
-				</div>
-			)}
+						)}
+					</section>
+				);
+			})}
 		</main>
 		<Footer />
 	</body>
