@@ -45,12 +45,12 @@ const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : S
 	<nav class="sb-nav">
 		<a href={brandHref} class:list={['sb-link', { active: path === `${pfx}/` || path === `${pfx}` }]}>{NAV.home}</a>
 
-		<a href="/battle-simulator" class:list={['sb-cat-link', { active: path === '/battle-simulator' }]}>{NAV.simulator}</a>
-		<a href="/battle-simulator" class:list={['sb-sublink', { active: path === '/battle-simulator' }]}>{NAV.simWhat}</a>
-		<a href="/simulator" class:list={['sb-sublink', { active: isActive('/simulator') }]}>{NAV.simTop}</a>
+		<a href={`${pfx}/battle-simulator`} class:list={['sb-cat-link', { active: path === `${pfx}/battle-simulator` }]}>{NAV.simulator}</a>
+		<a href={`${pfx}/battle-simulator`} class:list={['sb-sublink', { active: path === `${pfx}/battle-simulator` }]}>{NAV.simWhat}</a>
+		<a href={`${pfx}/simulator`} class:list={['sb-sublink', { active: isActive(`${pfx}/simulator`) }]}>{NAV.simTop}</a>
 		<span class="sb-sublink sb-soon" aria-disabled="true" title={NAV.soonTitle}>{NAV.simSoon}<span class="soon-badge">Coming soon</span></span>
 
-		<a href="/pokemon" class:list={['sb-link', { active: isActive('/pokemon') }]}>{NAV.pokemon}</a>
+		<a href={`${pfx}/pokemon`} class:list={['sb-link', { active: isActive(`${pfx}/pokemon`) }]}>{NAV.pokemon}</a>
 		<a href={`${pfx}/ranking/`} class:list={['sb-sublink', { active: isActive(`${pfx}/ranking`) }]}>{NAV.ranking}</a>
 		<a href="/blog" class:list={['sb-link', { active: isBlogActive }]}>{NAV.blog}</a>
 		<a href={`${pfx}/blog/m3/`} class:list={['sb-sublink', { active: isM3Active }]}>{NAV.m3}<span class="season-badge new">NEW</span></a>
