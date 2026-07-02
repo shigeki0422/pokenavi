@@ -1,0 +1,23 @@
+---
+import { type CollectionEntry, getCollection, render } from 'astro:content';
+import PokemonPage from '../../../layouts/PokemonPage.astro';
+
+export async function getStaticPaths() {
+	const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
+	const pages = (await getCollection('pokemon')).filter(
+		(p) => showDrafts || !p.data.draft,
+	);
+	return pages.map((p) => ({
+		params: { slug: p.id },
+		props: p,
+	}));
+}
+type Props = CollectionEntry<'pokemon'>;
+
+const page = Astro.props;
+const { Content } = await render(page);
+---
+
+<PokemonPage {...page.data} lang="en">
+	<Content />
+</PokemonPage>

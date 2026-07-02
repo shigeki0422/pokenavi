@@ -1,0 +1,91 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const title = 'About the Battle Simulator | PokeNavi';
+const description = 'Learn how the PokeNavi battle simulator works, the AI battle level, and what it can and cannot do.';
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <style>
+      main { max-width: 780px; margin: 0 auto; padding: 2em 1.2em 4em; color: rgb(var(--gray-dark)); line-height: 1.85; }
+      h1 { font-size: 1.6rem; margin: 0 0 .4em; }
+      h2 { font-size: 1.15rem; margin: 1.8em 0 .5em; border-bottom: 1px solid #e2e8f0; padding-bottom: .3em; }
+      h3 { font-size: 1.02rem; margin: 1.2em 0 .4em; color: rgb(var(--gray-dark)); }
+      p, li { font-size: .95rem; }
+      ul { padding-left: 1.3em; }
+      .lead { color: rgb(var(--gray)); font-size: .92rem; }
+      a { color: var(--accent); }
+      .cta { display:inline-block; margin-top:1em; padding:.55em 1.3em; background:var(--accent); color:#fff; border-radius:8px; text-decoration:none; font-weight:700; font-size:.9rem; }
+      .note { background:#fffbeb; border:1px solid #fde68a; border-radius:8px; padding:.8em 1em; font-size:.88rem; margin:1em 0; }
+      table { width:100%; border-collapse:collapse; font-size:.88rem; margin:.8em 0; }
+      th,td { border:1px solid #e2e8f0; padding:.45em .7em; text-align:left; }
+      th { background:#f8fafc; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>About the Battle Simulator</h1>
+      <p>The battle simulator reproduces Pokémon battles in a simulator environment, predicting outcomes between various teams through AI-vs-AI battles — <strong>designed to discover your team's strengths and weaknesses, track meta trends, and suggest better team compositions.</strong></p>
+      <p class="lead">Target format: Pokémon Champions Singles. Trained battle AIs fight each other and results are analyzed, letting you verify win rates and matchups with "battle data" rather than "gut feeling."</p>
+
+      <h2>AI Battle Level</h2>
+      <p>The battle AI uses a <strong>neural network (policy + value) trained through self-play (AlphaZero-style), combined with Monte Carlo Tree Search (MCTS)</strong>. It reads promising moves deeply through many simulations and selects the <strong>move with the highest predicted win rate</strong>. The opponent's build and actions are not hardcoded — they are probabilistically estimated from usage data.</p>
+      <ul>
+        <li><strong>Opponent build estimated from usage rates</strong>: Items, natures, moves, and EVs are probabilistically assumed from usage data, then narrowed down based on damage received during battle (treats battle as imperfect information).</li>
+        <li><strong>Strength benchmark</strong>: Clearly outperforms simple rule-based AIs (beginner level). The goal is "roughly equal to or slightly above intermediate players" — advanced tactics like bluffing and cycling are still in development.</li>
+        <li><strong>Moves are deterministic</strong>: Always selects the move it considers best in a given position (in top-tier simulations, battle content varies due to randomness in team selection and builds).</li>
+        <li><strong>Strategies not yet mastered</strong>: Advanced strategies involving Baton Pass ability inheritance and Illusion (disguise) are still being learned.</li>
+      </ul>
+      <p class="lead">※ This is not a perfect optimal solver. Please treat results as "battle data from strong AI matchups" and use them to identify trends.</p>
+
+      <h2>Top Tier Simulation (Round-Robin)</h2>
+      <p>The target is <strong>top-environment players' teams whose builds have been publicly shared</strong>. Your selected team is matched against each of those players' teams in a round-robin format, and all battle records are saved. From the results you can check:</p>
+      <ul>
+        <li><strong>Win rate & favorable/unfavorable matchups</strong>: Win rate against each opponent player.</li>
+        <li><strong>Team selection</strong>: The frequency of which 3 Pokémon were actually selected (yours and the opponent's).</li>
+        <li><strong>1v1 matchup table</strong>: Damage dealt/received and win/loss across all 6×6 combinations.</li>
+        <li><strong>In-game loss causes</strong>: Unkillable cores, frequently knocked-out members, setup sweep tendencies.</li>
+        <li><strong>Replays</strong>: All saved battles can be reviewed and replayed afterward.</li>
+      </ul>
+
+      <h2>How It Works</h2>
+      <table>
+        <tr><th>Item</th><th>Details</th></tr>
+        <tr><td>Target</td><td>Pokémon Champions Singles (Lv50, 32-scale EVs)</td></tr>
+        <tr><td>AI</td><td>Policy+Value network + Monte Carlo Tree Search (MCTS)</td></tr>
+        <tr><td>Battles per card</td><td>Multiple battles (reflects variation in team selection, builds, and RNG)</td></tr>
+        <tr><td>Draw</td><td>Draw if unresolved after 30 turns</td></tr>
+      </table>
+
+      <h2>Notes & Limitations</h2>
+      <div class="note">
+        <ul style="margin:0">
+          <li><strong>Win rate granularity</strong>: Win rate is shown per number of battles; more battles = finer granularity.</li>
+          <li><strong>Team selection perspective</strong>: Even if your 6 members have good matchups overall, the selected 3 may vary and affect the outcome. Current analysis includes selection data, but optimizing across all selection patterns is a future goal.</li>
+          <li><strong>AI strength</strong>: May not match expert-level play involving advanced reads. Use the data as a reference for trends.</li>
+        </ul>
+      </div>
+
+      <h2>Roadmap</h2>
+      <p>Building on the current <strong>top-tier simulation (battle evaluation)</strong> as a foundation, we will continue adding features and improving existing ones.</p>
+      <h3>Feature Addition: Team Suggestion & Improvement Analysis</h3>
+      <ul>
+        <li><strong>Improvement suggestions</strong>: AI analyzes your 6 members and suggests move/item/nature/EV/member changes to improve your win rate.</li>
+        <li><strong>Partial team proposal</strong>: Fix some members and have the AI suggest the remaining slots based on the current meta.</li>
+        <li><strong>Win rate re-evaluation</strong>: Re-simulate with the proposed team and compare win rates before and after the changes.</li>
+      </ul>
+      <h3>Improvements</h3>
+      <ul>
+        <li><strong>Season adaptation</strong>: Update battle AI and target teams for new season usage and build data, and add simulator support for newly available Pokémon and items.</li>
+      </ul>
+
+      <a class="cta" href="/en/simulator">Launch Top Tier Simulation →</a>
+    </main>
+    <Footer />
+  </body>
+</html>
