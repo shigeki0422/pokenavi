@@ -327,6 +327,49 @@ const ABILITY_NAME_MAP: Record<string,string> = lang === 'en' ? ABILITY_NAME_EN 
       function tMove(m){ return MOVE_NAME_MAP[m]||m; }
       function tItem(it){ if(!it||it==='—') return it; if(ITEM_NAME_MAP[it]) return ITEM_NAME_MAP[it]; var mX=/^(.+)ナイトX$/.exec(it),mY=/^(.+)ナイトY$/.exec(it),m0=/^(.+)ナイト$/.exec(it),base=mX||mY||m0; if(base){var en=POKEMON_NAME_MAP[base[1]]||POKEMON_NAME_MAP[base[1]+'ー'];if(en)return en+(mX?' X':mY?' Y':'')+'ite';} return it; }
       function tAbil(a){ return ABILITY_NAME_MAP[a]||a; }
+      const _IS_JA = document.documentElement.lang === 'ja';
+      let _tlPairs = null;
+      function _buildTLPairs() {
+        const s = (map) => Object.entries(map).sort((a,b)=>b[0].length-a[0].length).filter(([k,v])=>k!==v);
+        return [...s(POKEMON_NAME_MAP),...s(MOVE_NAME_MAP),...s(ABILITY_NAME_MAP),...s(ITEM_NAME_MAP)];
+      }
+      function translateLogText(text) {
+        if(_IS_JA||!text) return text;
+        if(!_tlPairs) _tlPairs=_buildTLPairs();
+        let t=text;
+        for(const [jp,tr] of _tlPairs){ if(t.includes(jp)) t=t.split(jp).join(tr); }
+        t=t
+          .replace(/こんらん（あばれ終了）/g,'Confusion (end)')
+          .replace(/こんらんで自傷/g,'Confusion self-hit')
+          .replace(/こんらんになった/g,'Confused')
+          .replace(/反動/g,'Recoil')
+          .replace(/ は (.+?) に無効（効果なし）/g,' → $1 (immune)')
+          .replace(/に無効（効果なし）/g,'(immune)')
+          .replace(/ の (.+?) を落とした/g,' knocked off $1')
+          .replace(/が強制交代/g,' forced out')
+          .replace(/繰り出し（瀕死後）/g,'sent out (after KO)')
+          .replace(/繰り出し/g,'sent out')
+          .replace(/が破れた/g,' broken')
+          .replace(/回復/g,' healed')
+          .replace(/ に(\d)/g,' $1')
+          .replace(/：/g,': ')
+          .replace(/ は /g,' ');
+        return t;
+      }
+      const _TAGS_EN = {外し:'Miss',効果抜群:'Super eff.',いまひとつ:'Resisted',急所:'Crit',相手耐え:'Endured',展開:'Setup',設置:'Hazard',ばけのかわ:'Disguise',防がれた:'Blocked',ひるみで動けない:'Flinch',守り:'Protect'};
+      function translateTag(t) {
+        if(_IS_JA) return t;
+        const ko=t.match(/^(.+?)を倒した$/); if(ko) return `KO'd ${tPoke(ko[1])}`;
+        const st=t.match(/^(こうげき|ぼうぎょ|とくこう|とくぼう|すばやさ)([↑↓])$/);
+        if(st){const S={こうげき:'Atk',ぼうぎょ:'Def',とくこう:'SpAtk',とくぼう:'SpDef',すばやさ:'Spd'};return `${S[st[1]]}${st[2]}`;}
+        return _TAGS_EN[t]||t;
+      }
+      function translateCandAction(a) {
+        if(_IS_JA||!a) return a;
+        const hasMega=a.startsWith('メガ+'); const base=hasMega?a.slice(3):a;
+        const sw=base.match(/^(.+?)に交代$/); if(sw) return (hasMega?'Mega+':'')+'Switch → '+tPoke(sw[1]);
+        return (hasMega?'Mega+':'')+tMove(base);
+      }
       const API = (location.port === '8888') ? '' : 'http://localhost:8888';
       // 本番＝静的配信モード（localhost/8888以外、または ?static=1 で強制）。dev＝従来のローカルAPI。
       const THEME = location.search.includes('theme=1');     // ?theme=1 でテーマ総当たり(/sim-data-theme)
@@ -463,11 +506,13 @@ const ABILITY_NAME_MAP: Record<string,string> = lang === 'en' ? ABILITY_NAME_EN 
         if(actives) events.forEach(e=>{ if(e.kind==='act'&&!e.side&&actives[e.name]) e.side=actives[e.name]; });
         const circ=['①','②','③','④']; let an=0;
         return events.sort((a,b)=>a.order-b.order).map(e=>{
-          if(e.kind==='sw') return `<span class="rlog-sw">${I18N.swBadge}</span> ${e.text}`;
-          if(e.kind==='dmg') return `<span class="rlog-dmg">↳ ${e.text}</span>`;
-          an++; const sl=e.side?`<span class="rlog-side s${e.side}">${SIDEJP[e.side]}</span> `:''; let s=`${circ[an-1]||an} ${sl}${megaed.has(e.name)?'<span class="rlog-mega">メガ</span> ':''}${e.name}：${e.move||'—'}`;
-          if(e.dmg!=null) s+=` → ${e.target} に ${e.dmg}${e.pb?'+'+e.pb:''}`;
-          if(e.tags.length) s+=`（${e.tags.join('・')}）`;
+          if(e.kind==='sw') return `<span class="rlog-sw">${I18N.swBadge}</span> ${translateLogText(e.text)}`;
+          if(e.kind==='dmg') return `<span class="rlog-dmg">↳ ${translateLogText(e.text)}</span>`;
+          an++; const sl=e.side?`<span class="rlog-side s${e.side}">${SIDEJP[e.side]}</span> `:'';
+          const sep=_IS_JA?'：':': '; const megaBadge=_IS_JA?'<span class="rlog-mega">メガ</span> ':'<span class="rlog-mega">Mega</span> ';
+          let s=`${circ[an-1]||an} ${sl}${megaed.has(e.name)?megaBadge:''}${tPoke(e.name)}${sep}${tMove(e.move)||'—'}`;
+          if(e.dmg!=null) s+=_IS_JA?` → ${e.target} に ${e.dmg}${e.pb?'+'+e.pb:''}`:` → ${tPoke(e.target)} ${e.dmg}${e.pb?'+'+e.pb:''}`;
+          if(e.tags.length) s+=_IS_JA?`（${e.tags.join('・')}）`:` (${e.tags.map(translateTag).join(' · ')})`;
           return s;
         });
       }
@@ -979,7 +1024,7 @@ const ABILITY_NAME_MAP: Record<string,string> = lang === 'en' ? ABILITY_NAME_EN 
         if(played){ const h=cands.find(c=>norm(c.a)===played); if(h) chosen=h.a; }
         cands.sort((a,b)=>(b.q==null?-1:b.q)-(a.q==null?-1:a.q));                      // 勝率順
         const rows=cands.map(c=>{ const weak=(c.v||0)<thr && c.a!==chosen;            // 探索不足＝勝率が当てにならない
-          return `<tr class="${c.a===chosen?'chosen':''}${weak?' weak':''}"><td>${c.a===chosen?'▶ ':''}${c.a}${c.a===hon?`<span class="honmei">${I18N.honmei}</span>`:''}${weak?`<span class="lowconf">${I18N.lowconf}</span>`:''}</td><td>${pc(c.q)}</td></tr>`;
+          return `<tr class="${c.a===chosen?'chosen':''}${weak?' weak':''}"><td>${c.a===chosen?'▶ ':''}${translateCandAction(c.a)}${c.a===hon?`<span class="honmei">${I18N.honmei}</span>`:''}${weak?`<span class="lowconf">${I18N.lowconf}</span>`:''}</td><td>${pc(c.q)}</td></tr>`;
         }).join('');
         return `<div class="expl"><div class="expl-h">${I18N.aiTitle}</div><div class="expl-side"><table class="expl-tbl"><tr><th>${I18N.candidateMove}</th><th>${I18N.winRateLabel}</th></tr>${rows}</table></div></div>`;
       }
