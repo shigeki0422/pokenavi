@@ -337,20 +337,21 @@ const ABILITY_NAME_MAP: Record<string,string> = lang === 'en' ? ABILITY_NAME_EN 
         if(_IS_JA||!text) return text;
         if(!_tlPairs) _tlPairs=_buildTLPairs();
         let t=text;
-        for(const [jp,tr] of _tlPairs){ if(t.includes(jp)) t=t.split(jp).join(tr); }
         t=t
           .replace(/こんらん（あばれ終了）/g,'Confusion (end)')
           .replace(/こんらんで自傷/g,'Confusion self-hit')
           .replace(/こんらんになった/g,'Confused')
           .replace(/反動/g,'Recoil')
-          .replace(/ は (.+?) に無効（効果なし）/g,' → $1 (immune)')
-          .replace(/に無効（効果なし）/g,'(immune)')
-          .replace(/ の (.+?) を落とした/g,' knocked off $1')
-          .replace(/が強制交代/g,' forced out')
           .replace(/繰り出し（瀕死後）/g,'sent out (after KO)')
           .replace(/繰り出し/g,'sent out')
+          .replace(/が強制交代/g,' forced out')
           .replace(/が破れた/g,' broken')
           .replace(/回復/g,' healed')
+          .replace(/（効果なし）/g,'(immune)')
+          .replace(/に無効/g,'→ (immune)');
+        for(const [jp,tr] of _tlPairs){ if(t.includes(jp)) t=t.split(jp).join(tr); }
+        t=t
+          .replace(/ の (.+?) を落とした/g,' knocked off $1')
           .replace(/ に(\d)/g,' $1')
           .replace(/：/g,': ')
           .replace(/ は /g,' ');
@@ -835,7 +836,7 @@ const ABILITY_NAME_MAP: Record<string,string> = lang === 'en' ? ABILITY_NAME_EN 
         const selMe=new Map((b.sel_me||[]).map(x=>[x[0],x[1]])), selOpp=new Map((b.sel_opp||[]).map(x=>[x[0],x[1]]));
         const wrp=Math.round(b.win_rate*100), v=verdict(b.win_rate);
         let h='';
-        const pchip=(x,good)=>{const u=iconUrl(x.name);return `<span class="pchip ${good?'good':'bad'}">${u?`<img src="${u}" onerror="this.style.display='none'">`:''}${x.name} ${Math.round(x.rate*100)}%</span>`;};
+        const pchip=(x,good)=>{const u=iconUrl(x.name);const dn=tPoke(x.name);return `<span class="pchip ${good?'good':'bad'}">${u?`<img src="${u}" onerror="this.style.display='none'">`:''}${dn} ${Math.round(x.rate*100)}%</span>`;};
         const carry=b.own_carry_on_win||[], ko=b.opp_ko_on_win||[];
         h+=`<div class="sect"><div class="sect-head">${I18N.sumTitle}</div><div class="sect-body">
           <div class="row" style="margin-bottom:.5em">
