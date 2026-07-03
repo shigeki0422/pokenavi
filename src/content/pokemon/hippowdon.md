@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのカバルドン基礎データ
 pokemonName: 'カバルドン'
 dexNumber: 450
 usageRank: 8
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
-analysisSlug: 'hippowdon-analysis-m2'
+analysisSlug: 'hippowdon-analysis-m3'
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'あくび', 'ステルスロック', 'なまける']
+  topMovePct: [97.8, 93.9, 84.7, 60.9]
+  topItems: ['オボンのみ', 'たべのこし', 'さらさらいわ']
+  topItemPct: [59.3, 36.5, 1.4]
+  topAbility: 'すなおこし'
+  topAbilityPct: 99.5
+  topNature: 'わんぱく'
+  topNaturePct: 69.5
+  topNature2: 'しんちょう'
+  topNaturePct2: 16.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -795,5 +808,13 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
     <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】カバルドン考察 M-2</div>
+  </div>
+</a>
+
+<a href="/blog/hippowdon-analysis-m3/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】カバルドン考察 M-3</div>
   </div>
 </a>

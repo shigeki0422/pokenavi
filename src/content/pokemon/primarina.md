@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのアシレーヌ基礎データ
 pokemonName: 'アシレーヌ'
 dexNumber: 730
 usageRank: 14
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
-analysisSlug: 'primarina-analysis-m2'
+analysisSlug: 'primarina-analysis-m3'
+faq:
+  season: 'M-3'
+  topMoves: ['ムーンフォース', 'うたかたのアリア', 'アクアジェット', 'アンコール']
+  topMovePct: [96.9, 84.4, 69.2, 41.0]
+  topItems: ['オボンのみ', 'たべのこし', 'しんぴのしずく']
+  topItemPct: [58.0, 15.9, 10.0]
+  topAbility: 'げきりゅう'
+  topAbilityPct: 92.6
+  topNature: 'ひかえめ'
+  topNaturePct: 70.3
+  topNature2: 'ずぶとい'
+  topNaturePct2: 10.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -760,5 +773,13 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
     <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】アシレーヌ考察 M-2</div>
+  </div>
+</a>
+
+<a href="/blog/primarina-analysis-m3/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】アシレーヌ考察 M-3</div>
   </div>
 </a>
