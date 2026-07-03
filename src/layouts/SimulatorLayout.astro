@@ -2,7 +2,8 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
+import { NATURE_NAME_EN, NATURE_NAME_KO, MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO } from '../i18n/game-terms';
+import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 
 interface Props { lang?: 'ja' | 'en' | 'ko'; }
 const { lang = 'ja' } = Astro.props;
@@ -15,6 +16,10 @@ const I18N_ALL = {
 
 const I18N = I18N_ALL[lang];
 const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
+const POKEMON_NAME_MAP: Record<string,string> = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
+const MOVE_NAME_MAP: Record<string,string> = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
+const ITEM_NAME_MAP: Record<string,string> = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
+const ABILITY_NAME_MAP: Record<string,string> = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
 ---
 
 <html lang={I18N.htmlLang}>
@@ -313,11 +318,15 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
     </main>
     <Footer />
 
-    <div id="sim-i18n" data-i={JSON.stringify(I18N)} data-n={JSON.stringify(NATURE_NAME_MAP)} hidden></div>
+    <div id="sim-i18n" data-i={JSON.stringify(I18N)} data-n={JSON.stringify(NATURE_NAME_MAP)} data-p={JSON.stringify(POKEMON_NAME_MAP)} data-m={JSON.stringify(MOVE_NAME_MAP)} data-it={JSON.stringify(ITEM_NAME_MAP)} data-ab={JSON.stringify(ABILITY_NAME_MAP)} hidden></div>
     <script is:inline>
-      const {I18N, NATURE_NAME_MAP} = (d=>{
-        return {I18N:JSON.parse(d.dataset.i), NATURE_NAME_MAP:JSON.parse(d.dataset.n)};
+      const {I18N, NATURE_NAME_MAP, POKEMON_NAME_MAP, MOVE_NAME_MAP, ITEM_NAME_MAP, ABILITY_NAME_MAP} = (d=>{
+        return {I18N:JSON.parse(d.dataset.i), NATURE_NAME_MAP:JSON.parse(d.dataset.n), POKEMON_NAME_MAP:JSON.parse(d.dataset.p||'{}'), MOVE_NAME_MAP:JSON.parse(d.dataset.m||'{}'), ITEM_NAME_MAP:JSON.parse(d.dataset.it||'{}'), ABILITY_NAME_MAP:JSON.parse(d.dataset.ab||'{}')};
       })(document.getElementById('sim-i18n'));
+      function tPoke(n){ return POKEMON_NAME_MAP[n]||n; }
+      function tMove(m){ return MOVE_NAME_MAP[m]||m; }
+      function tItem(it){ if(!it||it==='—') return it; if(ITEM_NAME_MAP[it]) return ITEM_NAME_MAP[it]; var mX=/^(.+)ナイトX$/.exec(it),mY=/^(.+)ナイトY$/.exec(it),m0=/^(.+)ナイト$/.exec(it),base=mX||mY||m0; if(base){var en=POKEMON_NAME_MAP[base[1]]||POKEMON_NAME_MAP[base[1]+'ー'];if(en)return en+(mX?' X':mY?' Y':'')+'ite';} return it; }
+      function tAbil(a){ return ABILITY_NAME_MAP[a]||a; }
       const API = (location.port === '8888') ? '' : 'http://localhost:8888';
       // 本番＝静的配信モード（localhost/8888以外、または ?static=1 で強制）。dev＝従来のローカルAPI。
       const THEME = location.search.includes('theme=1');     // ?theme=1 でテーマ総当たり(/sim-data-theme)
@@ -355,9 +364,9 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
         const c = $(containerId); c._specs = specs;
         c.innerHTML = `<div class="ctitle">${title}</div>
           <div class="iconrow">${specs.map((s,i)=>{const p=parseSpec(s); const u=iconUrl(p.name);
-            return `<button class="montab" onclick="selComp('${containerId}',${i})" title="${p.name}">
-              ${u?`<img class="monicon" src="${u}" alt="${p.name}" onerror="this.style.display='none'">`:''}
-              <span class="mname">${p.name}</span><span class="mitem">${p.item||'—'}</span></button>`;}).join('')}</div>
+            return `<button class="montab" onclick="selComp('${containerId}',${i})" title="${tPoke(p.name)}">
+              ${u?`<img class="monicon" src="${u}" alt="${tPoke(p.name)}" onerror="this.style.display='none'">`:''}
+              <span class="mname">${tPoke(p.name)}</span><span class="mitem">${tItem(p.item)||'—'}</span></button>`;}).join('')}</div>
           <div class="compdetail" id="${containerId}-d"></div>`;
         selComp(containerId, 0);
       }
@@ -467,11 +476,11 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
         c.querySelectorAll('.montab').forEach((e,j)=>e.classList.toggle('active', j===i));
         const ev = p.evs.length===6 ? ['H','A','B','C','D','S'].map((l,k)=>(p.evs[k]&&p.evs[k]!=='0')?`<span class="evchip ev-${l}">${l}<b>${p.evs[k]}</b></span>`:null).filter(Boolean).join('') : '';
         const _natNm = NATURE_NAME_MAP[p.nature] || p.nature; const nat = p.nature ? `${_natNm}${NATURE[p.nature]?` (${NATURE[p.nature]})`:''}` : '—';
-        const moves = p.moves.length ? p.moves.map(m=>`<span class="mvchip">${typeIcon(m)}${m}</span>`).join('') : '—';
+        const moves = p.moves.filter(m=>m&&m!=='なし').length ? p.moves.filter(m=>m&&m!=='なし').map(m=>`<span class="mvchip">${typeIcon(m)}${tMove(m)}</span>`).join('') : '—';
         $(containerId+'-d').innerHTML =
           `<div class="cdgrid">
-             <div class="cdcell">${I18N.labelItem}<span class="cdval">${itemIcon(p.item)}${p.item||'—'}</span></div>
-             <div class="cdcell"><span class="cdlabel abil">${I18N.labelAbil}</span><span class="cdval">${p.ability||'—'}</span></div>
+             <div class="cdcell">${I18N.labelItem}<span class="cdval">${itemIcon(p.item)}${tItem(p.item)||'—'}</span></div>
+             <div class="cdcell"><span class="cdlabel abil">${I18N.labelAbil}</span><span class="cdval">${tAbil(p.ability)||'—'}</span></div>
              <div class="cdcell"><span class="cdlabel nat">${I18N.labelNat}</span><span class="cdval">${nat}</span></div>
            </div>
            <div class="cdrow mvrow"><span class="cdlabel mv">${I18N.labelMv}</span><span class="mvwrap">${moves}</span></div>
@@ -829,7 +838,7 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
       }
       function matrixHTML(d, selMe, selOpp){
         const cell=v=>v==='A'?'bg-g':v==='B'?'bg-r':'bg-n';
-        const hdr=n=>{const u=iconUrl(n); return `${u?`<img class="mtx-ico" src="${u}" title="${n}" alt="${n}" onerror="this.style.display='none'">`:''}<div class="mtx-name">${n}</div>`;};
+        const hdr=n=>{const u=iconUrl(n); const dn=tPoke(n); return `${u?`<img class="mtx-ico" src="${u}" title="${dn}" alt="${dn}" onerror="this.style.display='none'">`:''}<div class="mtx-name">${dn}</div>`;};
         let mt=`<div class="muted" style="margin-bottom:.4em"><span class="bg-g" style="padding:0 .3em;border-radius:3px">${I18N.mtxWin}</span> <span class="bg-r" style="padding:0 .3em;border-radius:3px">${I18N.mtxLose}</span> ｜ ${I18N.mtxDmgNote}${selMe?' ｜ '+I18N.mtxNote:''}</div><div style="overflow-x:auto"><table class="mtx"><tr><th class="mtx-corner">${I18N.mtxCornerMe}<br>${I18N.mtxCornerOpp}</th>`;
         d.namesB.forEach(n=>{const sd=selOpp&&selOpp.get(n);mt+=`<th class="${!selOpp||sd?'':'dim'} ${sd?'mtx-sel':''}">${hdr(n)}</th>`;}); mt+='</tr>';
         d.cells.forEach((row,i)=>{ const nm=d.namesA[i], rsel=selMe&&selMe.get(nm), rdim=(!selMe||rsel)?'':'dim';
@@ -840,7 +849,7 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
         return `<div class="sect"><div class="sect-head">${I18N.t1v1Pfx}${d.a_win}${I18N.t1v1Mid}${d.b_win}${I18N.t1v1Sfx}</div><div class="sect-body">${help}${mt}</div></div>`;
       }
       function buildsHTML(d){ const bt=arr=>{let t='<table class="bt"><tbody>';
-        (arr||[]).forEach(x=>t+=`<tr><td style="font-weight:700">${x.name}</td><td class="muted">${x.type}</td><td>${x.item}</td><td class="muted">${x.ability}</td><td class="muted">S${x.speed}</td><td class="muted" style="white-space:normal">${(x.moves||[]).join('・')}</td></tr>`);
+        (arr||[]).forEach(x=>t+=`<tr><td style="font-weight:700">${tPoke(x.name)}</td><td class="muted">${x.type}</td><td>${tItem(x.item)}</td><td class="muted">${tAbil(x.ability)}</td><td class="muted">S${x.speed}</td><td class="muted" style="white-space:normal">${(x.moves||[]).map(tMove).join('・')}</td></tr>`);
         return t+'</tbody></table>';};
         return `<div class="sect"><div class="sect-head">${I18N.buildTitle}</div><div class="sect-body">${I18N.buildsOpp}${bt(d.buildsB)}${I18N.buildsMe}${bt(d.buildsA)}</div></div>`;
       }
@@ -867,7 +876,7 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
         if(!arr.length){ $('opp-list').innerHTML=`<div class="muted" style="padding:.6em">${I18N.noSelectData}</div>`; $('summary').textContent=''; return; }
         $('summary').textContent=I18N.sumPokePfx+arr.length+I18N.sumPokeMid+SUBJECT.label+I18N.sumPokeSfx;
         $('opp-list').innerHTML = arr.map(p=>{const wr=Math.round(p.win_rate*100),cls=p.win_rate>=0.6?'g':p.win_rate<=0.4?'r':'n';const u=iconUrl(p.name);
-          return `<div class="pitem" data-pk="${encodeURIComponent(p.name)}" onclick="selectOppPoke('${p.name.replace(/'/g,"\\'")}')"><div class="pitem-icons">${u?`<img src="${u}" alt="">`:''}</div><span class="nm">${p.name}</span><span class="muted">${p.wins}-${p.losses}-${p.draws}</span><span class="wr ${cls}">${wr}%</span></div>`;}).join('');
+          return `<div class="pitem" data-pk="${encodeURIComponent(p.name)}" onclick="selectOppPoke('${p.name.replace(/'/g,"\\'")}')"><div class="pitem-icons">${u?`<img src="${u}" alt="">`:''}</div><span class="nm">${tPoke(p.name)}</span><span class="muted">${p.wins}-${p.losses}-${p.draws}</span><span class="wr ${cls}">${wr}%</span></div>`;}).join('');
         if(OPP&&VSPOKE[OPP]) document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.pk||'')===OPP));
         else selectOppPoke(arr[0].name);
       }
@@ -939,11 +948,11 @@ const NATURE_NAME_MAP: Record<string,string> = lang === 'en' ? NATURE_NAME_EN : 
         return `<div class="rp-mon ${active?'act':''} ${p.alive?'':'dead'}">
           <div class="rp-mon-ico">${u?`<img src="${u}" alt="${p.name}" onerror="this.style.display='none'">`:''}${active?`<span class="rp-active-badge">${mine?'🔵':'🔴'}</span>`:''}${p.alive?'':'<span class="rp-x">×</span>'}</div>
           <div class="rp-mon-body">
-            <div class="rp-mon-name">${p.name}${typeIconName(p.type1)}${p.type2?typeIconName(p.type2):''}</div>
+            <div class="rp-mon-name">${tPoke(p.name)}${typeIconName(p.type1)}${p.type2?typeIconName(p.type2):''}</div>
             ${(()=>{const b=`${p.mega?I18N.steMega:''}${p.blade_forme?I18N.steBlade:''}${p.hero?I18N.steHero:''}${p.status?`<span class="rp-status">${STATUS_JP[p.status]||p.status}</span>`:''}${p.disguise_broken?I18N.steDisg:''}${p.electro_charged?I18N.steCharge:''}${p.confused?I18N.steConfused:''}${p.seeded?I18N.steSeeded:''}${p.taunt?I18N.steTaunt:''}${p.encore?I18N.steEncore:''}${p.salted?I18N.steSalted:''}${p.transformed?I18N.steTrans:''}${p.substitute_hp?I18N.steSubPfx+p.substitute_hp+I18N.steSubSfx:''}${p.illusion_name?I18N.steIlluPfx+p.illusion_name+I18N.steIlluSfx:''}`;return b?`<div class="rp-badges">${b}</div>`:'';})()}
             <div class="row" style="gap:.3rem"><div class="hpbar"><div class="hpfill" style="width:${Math.round(f*100)}%;background:${hpColor(f)}"></div></div><span class="rp-hp">${p.hp}/${p.max_hp}</span></div>
             ${boosts?`<div class="rp-boost">${boosts}</div>`:''}
-            ${action?`<div class="rp-move"><span class="rp-order ${action.order===1?'first':''}" title="${action.order===1?'先攻':'後攻'}">${action.order}</span>${typeIcon(action.move)||'➤'} ${action.move}</div>`:''}
+            ${action?`<div class="rp-move"><span class="rp-order ${action.order===1?'first':''}">${action.order}</span>${typeIcon(action.move)||'➤'} ${tMove(action.move)}</div>`:''}
           </div>
         </div>`;
       }

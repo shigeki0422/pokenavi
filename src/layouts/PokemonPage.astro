@@ -307,12 +307,18 @@ function rep(container){
 }
 var prose=document.querySelector('.prose');
 if(prose){
-  rep(prose);
   var h2s=prose.querySelectorAll('h2');
   h2s.forEach(function(h2){
     if(h2.textContent.trim()==='考察記事'){
       var el=h2;
       while(el){var nx=el.nextElementSibling;el.remove();el=nx;if(el&&el.tagName==='H2')break;}
+    }
+  });
+  rep(prose);
+  prose.querySelectorAll('a[href]').forEach(function(a){
+    var h=a.getAttribute('href');
+    if(h&&h.startsWith('/')&&!h.startsWith('/en/')&&!h.startsWith('/ko/')&&!h.startsWith('/ja/')){
+      a.setAttribute('href','/'+L+h);
     }
   });
 }
