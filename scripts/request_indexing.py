@@ -76,6 +76,12 @@ def get_published_blog_urls():
     return urls
 
 
+def get_pokemon_urls():
+    r = requests.get(f"{SITE_BASE}/sitemap-0.xml", headers={"User-Agent": "Mozilla/5.0"}, timeout=15)
+    all_urls = re.findall(r"<loc>(https?://[^<]+)</loc>", r.text)
+    return [u for u in all_urls if re.match(rf"https://pokenavi\.jp/pokemon/[^/]+/$", u)]
+
+
 def get_sitemap_urls():
     sitemap_url = f"{SITE_BASE}/sitemap-0.xml"
     try:
@@ -90,12 +96,16 @@ def get_sitemap_urls():
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("urls", nargs="*", help="送信するURL")
-    parser.add_argument("--all-posts", action="store_true", help="公開済みブログ記事を全件送信")
-    parser.add_argument("--sitemap",   action="store_true", help="サイトマップ全URLを送信")
+    parser.add_argument("--all-posts",  action="store_true", help="公開済みブログ記事を全件送信")
+    parser.add_argument("--pokemon",    action="store_true", help="/pokemon/個別ページを送信")
+    parser.add_argument("--sitemap",    action="store_true", help="サイトマップ全URLを送信")
+    parser.add_argument("--offset",     type=int, default=0, help="開始インデックス（分割送信用）")
     args = parser.parse_args()
 
     if args.all_posts:
         urls = get_published_blog_urls()
+    elif args.pokemon:
+        urls = get_pokemon_urls()
     elif args.sitemap:
         urls = get_sitemap_urls()
     else:
@@ -106,7 +116,7 @@ def main():
         parser.print_help()
         sys.exit(1)
 
-    urls = urls[:DAILY_LIMIT]
+    urls = urls[args.offset:args.offset + DAILY_LIMIT]
     access_token = get_access_token()
 
     ok, ng = 0, 0
