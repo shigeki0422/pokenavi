@@ -26,3 +26,12 @@ jobs:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy dist --project-name pokenavi --branch ${{ github.ref_name }} --commit-dirty=true --commit-message="deploy"
+
+      - name: Request Google Indexing (main only)
+        if: github.ref_name == 'main'
+        run: |
+          pip install requests --quiet
+          echo '${{ secrets.GA4_CLIENT_SECRET }}' > scripts/ga4_client_secret.json
+          python3 scripts/request_indexing.py --all-posts
+        env:
+          GA4_REFRESH_TOKEN: ${{ secrets.GA4_REFRESH_TOKEN }}

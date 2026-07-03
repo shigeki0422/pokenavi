@@ -7,11 +7,15 @@ import os
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 CLIENT_SECRET_FILE = os.path.join(os.path.dirname(__file__), "ga4_client_secret.json")
-SCOPES = ["https://www.googleapis.com/auth/analytics.readonly"]
+SCOPES = [
+    "https://www.googleapis.com/auth/analytics.readonly",
+    "https://www.googleapis.com/auth/webmasters.readonly",
+    "https://www.googleapis.com/auth/indexing",
+]
 
 def main():
     flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, scopes=SCOPES)
-    creds = flow.run_local_server(port=8080, open_browser=True)
+    creds = flow.run_local_server(port=0, open_browser=True)
 
     print("\n認証成功！")
     print(f"Refresh Token: {creds.refresh_token[:30]}...")
