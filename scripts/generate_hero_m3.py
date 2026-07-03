@@ -44,6 +44,7 @@ TYPE_PALETTE = {
 # 記事スラッグ → DBポケモン名（名前差異の吸収）
 SLUG_TO_DBNAME = {
     "raichu-y": "ライチュウ",
+    "ninetales-alola": "アローラキュウコン",
 }
 
 def get_font(size, bold=False):
@@ -154,9 +155,17 @@ def main():
     conn = sqlite3.connect(str(DB))
     cur  = conn.cursor()
 
+    FORM_OVERRIDE = {
+        "アローラキュウコン": "0038-01",
+        "アローラロコン":     "0037-01",
+        "アローラナッシー":   "0103-01",
+        "アローラガラガラ":   "0105-01",
+    }
+
     dexmap = {}
     for r in cur.execute("SELECT pokemon_name, dex_number, form_index FROM pokemon_base_stats"):
         dexmap[r[0]] = f"{int(r[1]):04d}-{int(r[2]):02d}"
+    dexmap.update(FORM_OVERRIDE)
 
     latest = cur.execute(
         "SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule='single'", (SEASON,)
