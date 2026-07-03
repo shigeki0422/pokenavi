@@ -1,4 +1,15 @@
 {
+    "rotom-wash-analysis-m3": {
+        "name": "ウォッシュロトム",
+        "rank": 20,
+        "types": [
+            "みず",
+            "でんき"
+        ],
+        "matchKey": "ウォッシュロトム",
+        "dex": 479,
+        "form": "02"
+    },
     "archaludon-analysis-m3": {
         "name": "ブリジュラス",
         "rank": 4,
@@ -771,6 +782,17 @@
         "form": "00",
         "pokemonId": "polteageist"
     },
+    "primarina-analysis-m3": {
+        "name": "アシレーヌ",
+        "rank": 14,
+        "types": [
+            "みず",
+            "フェアリー"
+        ],
+        "matchKey": "アシレーヌ",
+        "dex": 730,
+        "form": "00"
+    },
     "primarina-analysis-m2": {
         "name": "アシレーヌ",
         "rank": 4,
@@ -1065,6 +1087,17 @@
         "dex": 547,
         "form": "00"
     },
+    "ninetales-alola-analysis-m3": {
+        "name": "アローラキュウコン",
+        "rank": 9,
+        "types": [
+            "こおり",
+            "フェアリー"
+        ],
+        "matchKey": "アローラキュウコン",
+        "dex": 38,
+        "form": "01"
+    },
     "garchomp-analysis-m3": {
         "name": "ガブリアス",
         "rank": 1,
@@ -1074,6 +1107,17 @@
         ],
         "matchKey": "ガブリアス",
         "dex": 445,
+        "form": "00"
+    },
+    "hippowdon-analysis-m3": {
+        "name": "カバルドン",
+        "rank": 8,
+        "types": [
+            "じめん",
+            "いわ"
+        ],
+        "matchKey": "カバルドン",
+        "dex": 450,
         "form": "00"
     },
     "mr-rime": {
@@ -1172,6 +1216,63 @@
         ],
         "matchKey": "マスカーニャ",
         "dex": 908,
+        "form": "00"
+    },
+    "delphox-analysis-m3": {
+        "name": "メガマフォクシー",
+        "rank": 17,
+        "types": [
+            "ほのお",
+            "エスパー"
+        ],
+        "matchKey": "マフォクシー",
+        "dex": 655,
+        "form": "00"
+    },
+    "hydreigon-analysis-m3": {
+        "name": "サザンドラ",
+        "rank": 13,
+        "types": [
+            "あく",
+            "ドラゴン"
+        ],
+        "matchKey": "サザンドラ",
+        "dex": 635,
+        "form": "00"
+    },
+    "gyarados-analysis-m3": {
+        "name": "ギャラドス",
+        "rank": 15,
+        "types": [
+            "みず",
+            "ひこう"
+        ],
+        "matchKey": "ギャラドス",
+        "dex": 130,
+        "form": "00"
+    },
+    "basculegion-m-analysis-m3": {
+        "name": "イダイトウ(オス)",
+        "rank": 16,
+        "types": ["みず", "ゴースト"],
+        "matchKey": "イダイトウ",
+        "dex": 902,
+        "form": "00"
+    },
+    "kirafurou-analysis-m3": {
+        "name": "キラフロル",
+        "rank": 19,
+        "types": ["いわ", "どく"],
+        "matchKey": "キラフロル",
+        "dex": 970,
+        "form": "00"
+    },
+    "kangaskhan-analysis-m3": {
+        "name": "メガガルーラ",
+        "rank": 71,
+        "types": ["ノーマル"],
+        "matchKey": "ガルーラ",
+        "dex": 115,
         "form": "00"
     }
 }
