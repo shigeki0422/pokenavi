@@ -1,0 +1,20 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import SimulatorApp from '../components/SimulatorApp.astro';
+
+const title = 'シミュレーション：M-B（バトルシミュレータ）| ポケナビ';
+const description = 'M-B環境（M-3）でAIが生成した上位パーティ同士の総当たり対戦シミュレーション。パーティを選び、各ランカー・各ポケモンとの勝率・選出・1v1相性・実戦リプレイをデータで診断します。';
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+  </head>
+  <body>
+    <Header />
+    <SimulatorApp mode="MB" />
+    <Footer />
+  </body>
+</html>
