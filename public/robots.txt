@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
+Disallow: /sim-data-verify
+Disallow: /sim-data-theme
+Disallow: /index.json
+Disallow: /type/
 
 Sitemap: https://pokenavi.jp/sitemap-index.xml
