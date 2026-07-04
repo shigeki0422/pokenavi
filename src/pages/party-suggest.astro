@@ -23,6 +23,12 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
       h1{font-size:1.5rem;margin:0 0 .2em}
       .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 .5em}
       .note{font-size:.8rem;color:rgb(var(--gray));background:#fff8e6;border:1px solid #f0d888;border-radius:8px;padding:.55em .8em;margin:0 0 1.1em}
+      .ps-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7em;padding:3.2em 1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px}
+      .ps-spinner{width:38px;height:38px;border:4px solid rgb(var(--gray-light));border-top-color:rgb(var(--accent));border-radius:50%;animation:ps-spin .8s linear infinite}
+      @keyframes ps-spin{to{transform:rotate(360deg)}}
+      .ps-lmsg{font-weight:700;color:rgb(var(--gray-dark));font-size:.95rem}
+      .ps-lsub{font-size:.8rem;color:rgb(var(--gray))}
+      #go.loading{opacity:.6;cursor:progress}
       .card{background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px;box-shadow:0 1px 3px rgba(var(--black),.05);padding:1em;margin-bottom:1.1em}
       .muted{font-size:.8rem;color:rgb(var(--gray))}
       .row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
@@ -583,20 +589,23 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
 
       async function run(){
         const core = CORE.map(p=>({sp:p.sp, mega:p.mega}));
-        const go = document.getElementById('go'); go.disabled = true;
-        document.getElementById('status').textContent = '生成・評価中…（10〜20秒）';
-        document.getElementById('out').innerHTML = '';
+        const go = document.getElementById('go'); go.disabled = true; go.classList.add('loading');
+        const out = document.getElementById('out');
+        document.getElementById('status').textContent = '';
+        const msgs = ['軸を元にパーティを生成中…','対戦相手との想定勝率を評価中…','攻撃・防御・素早さ相性を計算中…','仕上げ中…'];
+        out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg" id="ps-lmsg">${msgs[0]}</div><div class="ps-lsub">初回や複雑な軸は10〜20秒ほどかかることがあります</div></div>`;
+        let mi = 0; const timer = setInterval(()=>{ mi=(mi+1)%msgs.length; const el=document.getElementById('ps-lmsg'); if(el) el.textContent=msgs[mi]; }, 2500);
         try{
           const r = await fetch(API + '/suggest', {method:'POST', headers:{'Content-Type':'application/json'},
             body: JSON.stringify({core, ncand:100, top:5})});
           const d = await r.json();
-          if(d.error){ document.getElementById('status').textContent = 'エラー: ' + d.error; go.disabled=false; return; }
+          if(d.error){ out.innerHTML=''; document.getElementById('status').textContent = 'エラー: ' + d.error; return; }
           LAST = d.results;
           document.getElementById('status').textContent = (d.fixed.length? '固定軸: ' + d.fixed.join(' + ') + ' / ' : '') + d.results.length + '件';
-          document.getElementById('out').innerHTML = d.results.map((res,i)=>sugHtml(res,i)).join('');
+          out.innerHTML = d.results.map((res,i)=>sugHtml(res,i)).join('');
           bindTabs();
-        }catch(e){ document.getElementById('status').textContent = '提案サーバに接続できません（scripts/product3_server.py を起動してください）'; }
-        go.disabled = false;
+        }catch(e){ out.innerHTML=''; document.getElementById('status').textContent = '提案サーバに接続できませんでした。時間をおいて再度お試しください。'; }
+        finally{ clearInterval(timer); go.disabled = false; go.classList.remove('loading'); }
       }
       document.getElementById('go').addEventListener('click', run);
     </script>
