@@ -60,7 +60,7 @@ const langUrls = {
 		<a href={`${pfx}/battle-simulator`} class:list={['sb-sublink', { active: path === `${pfx}/battle-simulator` }]}>{NAV.simWhat}</a>
 		<a href={`${pfx}/simulator`} class:list={['sb-sublink', { active: path === `${pfx}/simulator` || path === `${pfx}/simulator/` }]}>{NAV.simTop}</a>
 		<a href={`${pfx}/simulator-mb`} class:list={['sb-sublink', { active: isActive(`${pfx}/simulator-mb`) }]}>{NAV.simTopB}<span class="season-badge new">NEW</span></a>
-		{import.meta.env.DEV && <a href={`${pfx}/party-suggest`} class:list={['sb-sublink', { active: isActive(`${pfx}/party-suggest`) }]}>{NAV.simSoon}<span class="season-badge new">NEW</span></a>}
+		<a href={`${pfx}/party-suggest`} class:list={['sb-sublink', { active: isActive(`${pfx}/party-suggest`) }]}>{NAV.simSoon}<span class="season-badge new">NEW</span></a>
 
 		<a href={`${pfx}/pokemon`} class:list={['sb-link', { active: isActive(`${pfx}/pokemon`) }]}>{NAV.pokemon}</a>
 		<a href={`${pfx}/ranking/`} class:list={['sb-sublink', { active: isActive(`${pfx}/ranking`) }]}>{NAV.ranking}</a>
