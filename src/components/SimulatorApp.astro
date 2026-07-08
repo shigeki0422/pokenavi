@@ -4,7 +4,7 @@ const { mode = 'MA' } = Astro.props;
 const isMB = mode === 'MB';
 const heading = isMB ? 'シミュレーション：M-B' : 'シミュレーション：M-A';
 const lead = isMB
-  ? 'M-B環境（M-3）でAIが生成した上位パーティ同士の総当たり対戦（対戦AI同士）。パーティを選び、VSパーティ／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>'
+  ? '構築記事を公開されている環境トッププレイヤー同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>'
   : '構築記事を公開されている環境トッププレイヤー同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>';
 ---
 
@@ -311,7 +311,7 @@ const lead = isMB
         for(let i=0;i<names.length && parts.length<2;i++){ if(!/ナイト/.test(items[i])) parts.push(names[i]); }
         return parts.slice(0,2).join('・');
       }
-      function labelName(label, party){ return (IS_MB && party) ? partyName(party) : nameNoSeason(label); }
+      function labelName(label, party){ return nameNoSeason(label); }   // M-A/M-B とも登録ラベル（実プレイヤー名）を表示
       const API = (location.port === '8888') ? '' : 'http://localhost:8888';
       // 本番＝静的配信モード（localhost/8888以外、または ?static=1 で強制）。dev＝従来のローカルAPI。
       const THEME = location.search.includes('theme=1');     // ?theme=1 でテーマ総当たり(/sim-data-theme)
