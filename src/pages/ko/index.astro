@@ -7,10 +7,9 @@ import rankingData from '../../data/ranking.json';
 import { getCollection } from 'astro:content';
 import { POKEMON_NAME_KO as NAME_KO } from '../../i18n/pokemon-names';
 
-const { dates, pokemon } = rankingData as {
-  dates: string[];
-  pokemon: { name: string; id: string | null; dates: Record<string, { rank: number; rate: number | null }> }[];
-};
+const { seasons: _seasons } = rankingData as { seasons: Record<string, { dates: string[]; pokemon: { name: string; id: string | null; dates: Record<string, { rank: number; rate: number | null }> }[] }> };
+const _latestSeason = Object.keys(_seasons).sort().slice(-1)[0];
+const { dates, pokemon } = _seasons[_latestSeason];
 
 const lastDate = dates[dates.length - 1];
 
@@ -81,8 +80,8 @@ const btnOrange = 'display:inline-block;padding:10px 28px;background:#f97316;col
             <li>대전 리플레이</li>
           </ul>
           <div class="bs-cta-row">
-            <a style={btnPrimary} href="/simulator">상위 환경 시뮬레이션 →</a>
-            <a style={btnGhost} href="/battle-simulator">배틀 시뮬레이터란? →</a>
+            <a style={btnPrimary} href="/ko/simulator">상위 환경 시뮬레이션 →</a>
+            <a style={btnGhost} href="/ko/battle-simulator">배틀 시뮬레이터란? →</a>
           </div>
         </div>
       </section>
@@ -94,7 +93,7 @@ const btnOrange = 'display:inline-block;padding:10px 28px;background:#f97316;col
             {pokemonPages.map((p, i) => {
               const koName = NAME_KO[p.data.pokemonName] ?? p.data.pokemonName;
               return (
-                <a href={`/pokemon/${p.id}/`} style="display:block;text-decoration:none;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+                <a href={`/ko/pokemon/${p.id}/`} style="display:block;text-decoration:none;border:1px solid #e2e8f0;border-radius:8px;padding:10px 6px;text-align:center;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
                   <img
                     src={`/images/pokemon/pokemon-${String(p.data.dexNumber).padStart(4,'0')}-${p.data.imageForm ?? '00'}.webp`}
                     alt={koName}

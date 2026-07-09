@@ -44,10 +44,12 @@ for (const p of pokemonPages) {
   pageById[p.data.pokemonName] = p.id;
 }
 
-const { dates, pokemon } = rankingData as {
-  dates: string[];
-  pokemon: { name: string; id: string | null; dates: Record<string, { rank: number; rate: number | null }> }[];
-};
+type PokemonEntry = { name: string; id: string | null; dates: Record<string, { rank: number; rate: number | null }> };
+type SeasonData = { dates: string[]; pokemon: PokemonEntry[] };
+const { seasons } = rankingData as { seasons: Record<string, SeasonData> };
+const seasonKeys = Object.keys(seasons).sort();
+const latestSeason = seasonKeys[seasonKeys.length - 1];
+const { dates, pokemon } = seasons[latestSeason];
 
 const fmtDate = (d: string) => {
   const [, m, day] = d.split('-');
@@ -55,18 +57,27 @@ const fmtDate = (d: string) => {
 };
 
 const CHART_ROWS = 200;
-const chartPokemon = pokemon
-  .filter(p => Object.values(p.dates).some(d => d.rank <= CHART_ROWS))
-  .map(p => {
-    const lookupName = NAME_MAP[p.name] ?? p.name;
-    const pfxRanking = lang === 'ja' ? '' : `/${lang}`;
-    const url = pageById[lookupName] ? `${pfxRanking}/pokemon/${pageById[lookupName]}/` : null;
-    const ranksByDate: Record<string, number> = {};
-    for (const [d, info] of Object.entries(p.dates)) {
-      ranksByDate[d] = info.rank;
-    }
-    return { name: p.name, id: p.id, url, ranksByDate };
-  });
+
+function buildChartSeason(sd: SeasonData) {
+  const pfxRanking = lang === 'ja' ? '' : `/${lang}`;
+  const cp = sd.pokemon
+    .filter(p => Object.values(p.dates).some(d => d.rank <= CHART_ROWS))
+    .map(p => {
+      const lookupName = NAME_MAP[p.name] ?? p.name;
+      const url = pageById[lookupName] ? `${pfxRanking}/pokemon/${pageById[lookupName]}/` : null;
+      const ranksByDate: Record<string, number> = {};
+      for (const [d, info] of Object.entries(p.dates)) {
+        ranksByDate[d] = info.rank;
+      }
+      return { name: p.name, id: p.id, url, ranksByDate };
+    });
+  return { dates: sd.dates, pokemon: cp };
+}
+
+const chartPokemon = buildChartSeason(seasons[latestSeason]).pokemon;
+const allSeasonsChartJson = JSON.stringify(
+  Object.fromEntries(seasonKeys.map(s => [s, buildChartSeason(seasons[s])]))
+);
 const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
 
 // SEO: top 50 for ItemList structured data
@@ -230,6 +241,14 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         border-radius: 6px; pointer-events: none; display: none;
         white-space: nowrap; z-index: 200;
       }
+      /* シーズンタブ */
+      .season-tabs { display: flex; gap: 6px; margin-bottom: 1rem; }
+      .stab {
+        padding: 5px 16px; border: 1px solid #e2e8f0; border-radius: 20px;
+        font-size: 0.82rem; font-weight: 700; cursor: pointer;
+        background: #f8fafc; color: #64748b;
+      }
+      .stab.active { background: var(--accent,#f97316); color: #fff; border-color: var(--accent,#f97316); }
       /* SEOテキストブロック */
       .seo-ranking-list {
         margin-top: 2rem; padding: 1rem 1.5rem;
@@ -248,6 +267,11 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
     <Header />
     <main>
       <h1>{T.rankingH1}</h1>
+      <div class="season-tabs" id="season-tabs">
+        {seasonKeys.map(s => (
+          <button class={`stab${s === latestSeason ? ' active' : ''}`} data-season={s}>{s}</button>
+        ))}
+      </div>
       <p class="subtitle">
         {T.rankingSubtitle}　<time datetime={lastDate}>{T.rankingUpdated}：{fmtDate(lastDate)}</time>　{T.rankingCountPrefix}{pokemon.length}{T.rankingCountSuffix}
       </p>
@@ -304,7 +328,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         </ol>
       </section>
 
-      <script define:vars={{ chartJson, CHART_ROWS, T_JS: {
+      <script define:vars={{ chartJson, allSeasonsChartJson, latestSeason, CHART_ROWS, T_JS: {
         chartTitleBase: T.rankingChartTitleBase,
         rankSuffix: T.rankSuffix,
         rankPrefix: T.rankPrefix,
@@ -312,8 +336,10 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         names: lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {},
       } }}>
       (function() {
-        const data = JSON.parse(chartJson);
-        const { dates, pokemon } = data;
+        const allSeasons = JSON.parse(allSeasonsChartJson);
+        let currentSeason = latestSeason;
+        let data = JSON.parse(chartJson);
+        let { dates, pokemon } = data;
         const canvas = document.getElementById('bump-canvas');
         const rankCanvas = document.getElementById('rank-canvas');
         const rankScrollWrap = document.getElementById('rank-scroll-wrap');
@@ -806,12 +832,12 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           ctx.textBaseline = 'middle';
           ctx.textAlign = 'left';
           const latestDate = dates[dates.length - 1] || '';
-          let headerLeft = 'M-3 使用率ランキング';
+          let headerLeft = currentSeason + ' 使用率ランキング';
           if (pinnedIdx >= 0) {
             const p = pokemon[pinnedIdx];
             const name = T_JS.names[p.name] ?? p.name;
             const rank = p.ranksByDate[latestDate];
-            headerLeft = `${name}${rank ? '　' + rank + '位' : ''}　｜　M-3 使用率ランキング`;
+            headerLeft = `${name}${rank ? '　' + rank + '位' : ''}　｜　${currentSeason} 使用率ランキング`;
           }
           ctx.fillText(headerLeft, 10, HEADER_H / 2);
 
@@ -829,7 +855,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           ctx.textBaseline = 'middle';
           ctx.fillText('pokenavi.jp/ranking', outW / 2, HEADER_H + DATE_H + chartLogH + FOOTER_H / 2);
 
-          let shareText = `M-3 使用率ランキング（${latestDate.replace(/-/g, '/')}）`;
+          let shareText = `${currentSeason} 使用率ランキング（${latestDate.replace(/-/g, '/')}）`;
           if (pinnedIdx >= 0) {
             const p = pokemon[pinnedIdx];
             const name = T_JS.names[p.name] ?? p.name;
@@ -887,6 +913,35 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           candidatesList.classList.remove('open');
           pinnedIdx = -1; hoveredIdx = -1;
           draw(); drawRanks();
+        });
+
+        document.getElementById('season-tabs')?.addEventListener('click', e => {
+          const btn = e.target.closest('.stab');
+          if (!btn) return;
+          const s = btn.dataset.season;
+          if (!s || s === currentSeason) return;
+          currentSeason = s;
+          const sd = allSeasons[s];
+          dates.length = 0; sd.dates.forEach(d => dates.push(d));
+          pokemon.length = 0; sd.pokemon.forEach(p => pokemon.push(p));
+          document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          loaded = 0;
+          const newTotal = pokemon.filter(p => p.id).length;
+          pokemon.forEach(p => {
+            if (!p.id || imgs[p.name]) { if (!p.id) checkDraw2(newTotal); return; }
+            const img = new Image();
+            img.onload = img.onerror = () => { loaded++; checkDraw2(newTotal); };
+            img.src = `/images/pokemon/pokemon-${p.id}.webp`;
+            imgs[p.name] = img;
+          });
+          function checkDraw2(t) { if (loaded >= t || t === 0) { pinnedIdx = -1; hoveredIdx = -1; resize(); } }
+          if (pokemon.filter(p => p.id).every(p => imgs[p.name])) {
+            pinnedIdx = -1; hoveredIdx = -1; resize();
+          }
+          searchInput.value = '';
+          searchClear.style.display = 'none';
+          candidatesList.classList.remove('open');
         });
       })();
       </script>
