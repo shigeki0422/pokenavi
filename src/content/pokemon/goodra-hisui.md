@@ -3,7 +3,7 @@ title: 'ヌメルゴン（ヒスイ） | ポケモンチャンピオンズ 使�
 description: 'ポケモンチャンピオンズのヌメルゴン（ヒスイ）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率84位。'
 pokemonName: 'ヌメルゴン（ヒスイ）'
 dexNumber: 706
-usageRank: 9999
+usageRank: 71
 imageForm: '01'
 pubDate: '2026-07-01'
 draft: false

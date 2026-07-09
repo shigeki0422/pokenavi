@@ -3,7 +3,7 @@ title: 'ケンタロス（水） | ポケモンチャンピオンズ 使用率�
 description: 'ポケモンチャンピオンズのケンタロス（水）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率186位。'
 pokemonName: 'ケンタロス（水）'
 dexNumber: 128
-usageRank: 9999
+usageRank: 174
 imageForm: '03'
 pubDate: '2026-07-01'
 draft: false

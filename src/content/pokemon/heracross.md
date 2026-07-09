@@ -3,7 +3,7 @@ title: 'ヘラクロス | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのヘラクロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率110位。'
 pokemonName: 'ヘラクロス'
 dexNumber: 214
-usageRank: 9999
+usageRank: 102
 updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false

@@ -3,7 +3,7 @@ title: 'ワルビアル | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのワルビアル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率144位。'
 pokemonName: 'ワルビアル'
 dexNumber: 553
-usageRank: 9999
+usageRank: 142
 updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false

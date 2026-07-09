@@ -3,7 +3,7 @@ title: 'バクフーン（ヒスイ） | ポケモンチャンピオンズ 使�
 description: 'ポケモンチャンピオンズのバクフーン（ヒスイ）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率123位。'
 pokemonName: 'バクフーン（ヒスイ）'
 dexNumber: 157
-usageRank: 9999
+usageRank: 154
 imageForm: '01'
 pubDate: '2026-07-01'
 draft: false

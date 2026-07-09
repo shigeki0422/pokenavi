@@ -3,7 +3,7 @@ title: 'ヤドキング（ガラル） | ポケモンチャンピオンズ 使�
 description: 'ポケモンチャンピオンズのヤドキング（ガラル）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率162位。'
 pokemonName: 'ヤドキング（ガラル）'
 dexNumber: 199
-usageRank: 9999
+usageRank: 95
 imageForm: '01'
 pubDate: '2026-07-01'
 draft: false

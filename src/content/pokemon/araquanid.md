@@ -3,7 +3,7 @@ title: 'オニシズクモ | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズのオニシズクモ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率64位。'
 pokemonName: 'オニシズクモ'
 dexNumber: 752
-usageRank: 9999
+usageRank: 76
 updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false

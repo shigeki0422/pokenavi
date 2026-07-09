@@ -3,7 +3,7 @@ title: 'カットロトム | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズのカットロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率121位。'
 pokemonName: 'カットロトム'
 dexNumber: 479
-usageRank: 9999
+usageRank: 135
 imageForm: '05'
 updatedDate: '2026-07-03'
 pubDate: '2026-07-01'

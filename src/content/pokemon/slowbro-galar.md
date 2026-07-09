@@ -3,7 +3,7 @@ title: 'ヤドラン（ガラル） | ポケモンチャンピオンズ 使用�
 description: 'ポケモンチャンピオンズのヤドラン（ガラル）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率116位。'
 pokemonName: 'ヤドラン（ガラル）'
 dexNumber: 80
-usageRank: 9999
+usageRank: 119
 imageForm: '02'
 pubDate: '2026-07-01'
 draft: false

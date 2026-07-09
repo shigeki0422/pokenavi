@@ -3,7 +3,7 @@ title: 'イダイトウ(オス) | ポケモンチャンピオンズ 使用率・
 description: 'ポケモンチャンピオンズのイダイトウ(オス)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率16位。'
 pokemonName: 'イダイトウ(オス)'
 dexNumber: 902
-usageRank: 9999
+usageRank: 19
 updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
