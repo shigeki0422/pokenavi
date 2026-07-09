@@ -3,7 +3,7 @@ title: 'フラージェス | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズのフラージェス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
 pokemonName: 'フラージェス'
 dexNumber: 671
-usageRank: 999
+usageRank: 9999
 pubDate: '2026-06-26'
 draft: false
 

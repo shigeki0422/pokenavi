@@ -3,10 +3,23 @@ title: 'ロズレイド | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのロズレイド基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率187位。'
 pokemonName: 'ロズレイド'
 dexNumber: 407
-usageRank: 187
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ヘドロばくだん', 'シャドーボール', 'マジカルシャイン', 'ギガドレイン']
+  topMovePct: [83.5, 41.7, 41.1, 35.1]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'たべのこし']
+  topItemPct: [22.7, 18.7, 14.5]
+  topAbility: 'どくのトゲ'
+  topAbilityPct: 46.0
+  topNature: 'おくびょう'
+  topNaturePct: 40.7
+  topNature2: 'ひかえめ'
+  topNaturePct2: 31.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

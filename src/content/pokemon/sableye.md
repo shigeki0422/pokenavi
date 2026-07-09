@@ -3,10 +3,23 @@ title: 'ヤミラミ | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのヤミラミ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率76位。'
 pokemonName: 'ヤミラミ'
 dexNumber: 302
-usageRank: 76
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['おにび', 'イカサマ', 'アンコール', 'ひかりのかべ']
+  topMovePct: [80.3, 61.3, 51.8, 31.0]
+  topItems: ['ヤミラミナイト', 'ひかりのねんど', 'たべのこし']
+  topItemPct: [33.4, 25.7, 16.0]
+  topAbility: 'いたずらごころ'
+  topAbilityPct: 99.1
+  topNature: 'ずぶとい'
+  topNaturePct: 41.1
+  topNature2: 'わんぱく'
+  topNaturePct2: 29.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

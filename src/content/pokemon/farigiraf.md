@@ -3,10 +3,23 @@ title: 'リキキリン | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのリキキリン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率175位。'
 pokemonName: 'リキキリン'
 dexNumber: 981
-usageRank: 175
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['トリックルーム', 'サイコキネシス', '10まんボルト', 'マジカルシャイン']
+  topMovePct: [63.4, 44.3, 34.8, 29.0]
+  topItems: ['オボンのみ', 'きあいのタスキ', 'たべのこし']
+  topItemPct: [47.0, 8.9, 8.3]
+  topAbility: 'はんすう'
+  topAbilityPct: 17.9
+  topNature: 'ひかえめ'
+  topNaturePct: 31.7
+  topNature2: 'わいわい'
+  topNaturePct2: 21.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

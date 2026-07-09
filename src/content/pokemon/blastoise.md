@@ -3,10 +3,23 @@ title: 'カメックス | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのカメックス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率44位。'
 pokemonName: 'カメックス'
 dexNumber: 9
-usageRank: 44
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'blastoise-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['からをやぶる', 'はどうだん', 'みずのはどう', 'あくのはどう']
+  topMovePct: [86.9, 86.8, 82.7, 79.5]
+  topItems: ['カメックスナイト', 'しろいハーブ', 'オボンのみ']
+  topItemPct: [91.0, 5.7, 0.6]
+  topAbility: 'げきりゅう'
+  topAbilityPct: 70.1
+  topNature: 'ひかえめ'
+  topNaturePct: 71.4
+  topNature2: 'おくびょう'
+  topNaturePct2: 23.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

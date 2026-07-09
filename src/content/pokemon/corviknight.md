@@ -3,10 +3,23 @@ title: 'アーマーガア | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズのアーマーガア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率11位。'
 pokemonName: 'アーマーガア'
 dexNumber: 823
-usageRank: 11
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
-analysisSlug: 'corviknight-analysis-m3'
+
+faq:
+  season: 'M-3'
+  topMoves: ['はねやすめ', 'ボディプレス', 'アイアンヘッド', 'きりばらい']
+  topMovePct: [98.1, 86.4, 26.5, 7.8]
+  topItems: ['たべのこし', 'オボンのみ', 'ひかりのこな']
+  topItemPct: [68.0, 27.1, 1.3]
+  topAbility: 'プレッシャー'
+  topAbilityPct: 57.5
+  topNature: 'わんぱく'
+  topNaturePct: 48.1
+  topNature2: 'のんき'
+  topNaturePct2: 22.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -779,10 +792,9 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】アーマーガア考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】アーマーガア考察 M-2</div>
   </div>
 </a>
-
 <a href="/blog/corviknight-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>

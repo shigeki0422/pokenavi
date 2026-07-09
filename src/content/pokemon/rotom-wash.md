@@ -3,11 +3,24 @@ title: 'ウォッシュロトム | ポケモンチャンピオンズ 使用率�
 description: 'ポケモンチャンピオンズのウォッシュロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率20位。'
 pokemonName: 'ウォッシュロトム'
 dexNumber: 479
-usageRank: 20
+usageRank: 9999
 imageForm: '02'
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'rotom-wash-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ボルトチェンジ', 'おにび', '10まんボルト', 'いたみわけ']
+  topMovePct: [90.1, 87.2, 54.0, 29.2]
+  topItems: ['オボンのみ', 'たべのこし', 'こだわりスカーフ']
+  topItemPct: [45.1, 30.7, 14.5]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ずぶとい'
+  topNaturePct: 51.1
+  topNature2: 'ひかえめ'
+  topNaturePct2: 22.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -3,11 +3,23 @@ title: 'バシャーモ | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのバシャーモ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率10位。'
 pokemonName: 'バシャーモ'
 dexNumber: 257
-usageRank: 10
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'blaziken-analysis-m3'
-
+faq:
+  season: 'M-3'
+  topMoves: ['フレアドライブ', 'インファイト', 'つるぎのまい', 'まもる']
+  topMovePct: [85.0, 64.4, 56.3, 50.4]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'オボンのみ']
+  topItemPct: [13.7, 4.4, 1.7]
+  topAbility: 'かそく'
+  topAbilityPct: 97.6
+  topNature: 'いじっぱり'
+  topNaturePct: 78.5
+  topNature2: 'ようき'
+  topNaturePct2: 17.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -854,6 +866,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0257-00.webp" alt="バシャーモ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガバシャーモ考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】バシャーモ考察 M-2</div>
   </div>
 </a>

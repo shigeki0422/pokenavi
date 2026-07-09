@@ -1,12 +1,25 @@
 ---
 title: 'ウツボット | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのウツボット基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率104位。'
+description: 'ポケモンチャンピオンズのウツボット基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率103位。'
 pokemonName: 'ウツボット'
 dexNumber: 71
-usageRank: 104
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'victreebel-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ふいうち', 'アンコール', 'ヘドロウェーブ', 'ヘドロばくだん']
+  topMovePct: [46.3, 34.1, 24.5, 16.5]
+  topItems: ['ウツボットナイト', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [93.7, 1.1, 1.0]
+  topAbility: 'くいしんぼう'
+  topAbilityPct: 14.1
+  topNature: 'ひかえめ'
+  topNaturePct: 26.9
+  topNature2: 'いじっぱり'
+  topNaturePct2: 20.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ analysisSlug: 'victreebel-analysis-m2'
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.71</strong>　／　使用率 <strong style="color:#dc2626">104位</strong>
+      全国図鑑 <strong>No.71</strong>　／　使用率 <strong style="color:#dc2626">103位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

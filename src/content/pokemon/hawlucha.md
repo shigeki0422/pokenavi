@@ -1,12 +1,25 @@
 ---
 title: 'ルチャブル | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのルチャブル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率138位。'
+description: 'ポケモンチャンピオンズのルチャブル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率137位。'
 pokemonName: 'ルチャブル'
 dexNumber: 701
-usageRank: 138
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['とびひざげり', 'つるぎのまい', 'ストーンエッジ', 'インファイト']
+  topMovePct: [50.2, 44.6, 36.7, 30.0]
+  topItems: ['ルチャブルナイト', 'オボンのみ', 'きあいのタスキ']
+  topItemPct: [42.5, 16.4, 13.3]
+  topAbility: 'かるわざ'
+  topAbilityPct: 46.9
+  topNature: 'ようき'
+  topNaturePct: 42.5
+  topNature2: 'さみしがり'
+  topNaturePct2: 42.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ draft: false
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.701</strong>　／　使用率 <strong style="color:#dc2626">138位</strong>
+      全国図鑑 <strong>No.701</strong>　／　使用率 <strong style="color:#dc2626">137位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

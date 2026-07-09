@@ -3,7 +3,7 @@ title: 'イダイトウ（メス） | ポケモンチャンピオンズ 使用�
 description: 'ポケモンチャンピオンズのイダイトウ（メス）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率105位。'
 pokemonName: 'イダイトウ（メス）'
 dexNumber: 902
-usageRank: 105
+usageRank: 9999
 imageForm: '01'
 pubDate: '2026-07-01'
 draft: false

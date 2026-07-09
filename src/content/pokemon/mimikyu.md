@@ -3,10 +3,23 @@ title: 'ミミッキュ | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのミミッキュ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率2位。'
 pokemonName: 'ミミッキュ'
 dexNumber: 778
-usageRank: 2
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
-analysisSlug: 'mimikyu-analysis-m3'
+
+faq:
+  season: 'M-3'
+  topMoves: ['じゃれつく', 'かげうち', 'つるぎのまい', 'シャドークロー']
+  topMovePct: [96.4, 96.2, 80.8, 62.6]
+  topItems: ['いのちのたま', 'ラムのみ', 'ピントレンズ']
+  topItemPct: [84.6, 3.8, 2.7]
+  topAbility: 'ばけのかわ'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 76.5
+  topNature2: 'ようき'
+  topNaturePct2: 17.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -786,7 +799,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ミミッキュ考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ミミッキュ考察 M-2</div>
   </div>
 </a>
 <a href="/blog/mimikyu-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">

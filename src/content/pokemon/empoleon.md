@@ -3,10 +3,23 @@ title: 'エンペルト | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのエンペルト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率86位。'
 pokemonName: 'エンペルト'
 dexNumber: 395
-usageRank: 86
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'empoleon-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['なみのり', 'れいとうビーム', 'ステルスロック', 'あくび']
+  topMovePct: [70.7, 61.9, 50.8, 48.6]
+  topItems: ['シュカのみ', 'オボンのみ', 'たべのこし']
+  topItemPct: [36.7, 22.2, 19.9]
+  topAbility: 'かちき'
+  topAbilityPct: 79.3
+  topNature: 'ひかえめ'
+  topNaturePct: 47.4
+  topNature2: 'ほまれ'
+  topNaturePct2: 13.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

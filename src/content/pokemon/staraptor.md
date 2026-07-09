@@ -3,11 +3,23 @@ title: 'ムクホーク | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのムクホーク基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率12位。'
 pokemonName: 'ムクホーク'
 dexNumber: 398
-usageRank: 12
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'staraptor-analysis-m3'
-
+faq:
+  season: 'M-3'
+  topMoves: ['インファイト', 'はねやすめ', 'ブレイズキック', 'ふきとばし']
+  topMovePct: [98.1, 89.5, 53.3, 16.1]
+  topItems: ['ムクホークナイト', 'いのちのたま', 'きあいのタスキ']
+  topItemPct: [94.2, 0.1, 0.1]
+  topAbility: 'いかく'
+  topAbilityPct: 95.9
+  topNature: 'ようき'
+  topNaturePct: 79.9
+  topNature2: 'いじっぱり'
+  topNaturePct2: 17.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -834,6 +846,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0398-00.webp" alt="ムクホーク" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガムクホーク考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ムクホーク考察 M-2</div>
   </div>
 </a>

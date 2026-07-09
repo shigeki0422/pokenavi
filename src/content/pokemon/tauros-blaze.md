@@ -1,9 +1,9 @@
 ---
 title: 'ケンタロス（炎） | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのケンタロス（炎）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率126位。'
+description: 'ポケモンチャンピオンズのケンタロス（炎）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
 pokemonName: 'ケンタロス（炎）'
 dexNumber: 128
-usageRank: 126
+usageRank: 9999
 imageForm: '02'
 pubDate: '2026-07-01'
 draft: false
@@ -19,7 +19,7 @@ draft: false
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.128</strong>　／　使用率 <strong style="color:#dc2626">126位</strong>
+      全国図鑑 <strong>No.128</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

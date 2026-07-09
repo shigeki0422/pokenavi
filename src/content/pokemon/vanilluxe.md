@@ -1,12 +1,25 @@
 ---
 title: 'バイバニラ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのバイバニラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率39位。'
+description: 'ポケモンチャンピオンズのバイバニラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率40位。'
 pokemonName: 'バイバニラ'
 dexNumber: 584
-usageRank: 39
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'vanilluxe-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['フリーズドライ', 'ふぶき', 'こおりのつぶて', 'オーロラベール']
+  topMovePct: [97.2, 89.5, 71.7, 62.0]
+  topItems: ['ひかりのねんど', 'こだわりスカーフ', 'きあいのタスキ']
+  topItemPct: [30.5, 13.2, 5.4]
+  topAbility: 'ゆきふらし'
+  topAbilityPct: 98.7
+  topNature: 'ひかえめ'
+  topNaturePct: 59.7
+  topNature2: 'おくびょう'
+  topNaturePct2: 7.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -17,7 +30,7 @@ analysisSlug: 'vanilluxe-analysis-m2'
       <img src="/images/types/type-14-ice.png" alt="こおり" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.584</strong>　／　使用率 <strong style="color:#dc2626">39位</strong>
+      全国図鑑 <strong>No.584</strong>　／　使用率 <strong style="color:#dc2626">40位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

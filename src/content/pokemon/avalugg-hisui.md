@@ -3,7 +3,7 @@ title: 'クレベース（ヒスイ） | ポケモンチャンピオンズ 使�
 description: 'ポケモンチャンピオンズのクレベース（ヒスイ）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率194位。'
 pokemonName: 'クレベース（ヒスイ）'
 dexNumber: 713
-usageRank: 194
+usageRank: 9999
 imageForm: '01'
 pubDate: '2026-07-01'
 draft: false

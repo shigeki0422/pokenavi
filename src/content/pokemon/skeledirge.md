@@ -3,10 +3,23 @@ title: 'ラウドボーン | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズのラウドボーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率27位。'
 pokemonName: 'ラウドボーン'
 dexNumber: 911
-usageRank: 27
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'skeledirge-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['フレアソング', 'なまける', 'おにび', 'シャドーボール']
+  topMovePct: [99.1, 95.1, 85.1, 48.3]
+  topItems: ['たべのこし', 'オボンのみ', 'カシブのみ']
+  topItemPct: [47.0, 29.8, 6.7]
+  topAbility: 'てんねん'
+  topAbilityPct: 98.3
+  topNature: 'ずぶといすなおをはずむ'
+  topNaturePct: 78.6
+  topNature2: 'くじけないが'
+  topNaturePct2: 11.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

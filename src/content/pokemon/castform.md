@@ -3,7 +3,7 @@ title: 'ポワルン | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのポワルン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
 pokemonName: 'ポワルン'
 dexNumber: 351
-usageRank: 999
+usageRank: 9999
 pubDate: '2026-06-18'
 draft: false
 

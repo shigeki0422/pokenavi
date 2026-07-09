@@ -3,10 +3,23 @@ title: 'フシギバナ | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのフシギバナ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率42位。'
 pokemonName: 'フシギバナ'
 dexNumber: 3
-usageRank: 42
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'venusaur-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['だいちのちから', 'こうごうせい', 'ヘドロばくだん', 'やどりぎのタネ']
+  topMovePct: [82.9, 64.3, 57.5, 48.8]
+  topItems: ['フシギバナイト', 'いのちのたま', 'たべのこし']
+  topItemPct: [83.6, 4.7, 3.7]
+  topAbility: 'しんりょく'
+  topAbilityPct: 32.2
+  topNature: 'ずぶとい'
+  topNaturePct: 37.4
+  topNature2: 'おだやか'
+  topNaturePct2: 29.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

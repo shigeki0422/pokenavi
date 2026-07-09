@@ -3,10 +3,23 @@ title: 'サメハダー | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのサメハダー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率112位。'
 pokemonName: 'サメハダー'
 dexNumber: 319
-usageRank: 112
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['まもる', 'かみくだく', 'インファイト', 'アクアブレイク']
+  topMovePct: [82.0, 73.0, 29.8, 18.9]
+  topItems: ['きあいのタスキ', 'サメハダナイト', 'いのちのたま']
+  topItemPct: [43.8, 42.2, 7.3]
+  topAbility: 'かそく'
+  topAbilityPct: 98.9
+  topNature: 'いじっぱり'
+  topNaturePct: 56.5
+  topNature2: 'ようき'
+  topNaturePct2: 21.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

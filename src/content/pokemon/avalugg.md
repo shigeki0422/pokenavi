@@ -3,10 +3,23 @@ title: 'クレベース | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのクレベース基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率179位。'
 pokemonName: 'クレベース'
 dexNumber: 713
-usageRank: 179
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ボディプレス', 'じこさいせい', 'てっぺき', 'ミラーコート']
+  topMovePct: [84.9, 76.4, 66.1, 42.7]
+  topItems: ['たべのこし', 'オボンのみ', 'せんせいのツメ']
+  topItemPct: [46.4, 26.8, 6.6]
+  topAbility: 'がんじょう'
+  topAbilityPct: 84.3
+  topNature: 'わんぱく'
+  topNaturePct: 56.9
+  topNature2: 'のんき'
+  topNaturePct2: 21.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

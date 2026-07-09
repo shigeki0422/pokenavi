@@ -3,7 +3,7 @@ title: 'ライチュウ（アローラ） | ポケモンチャンピオンズ �
 description: 'ポケモンチャンピオンズのライチュウ（アローラ）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
 pokemonName: 'ライチュウ（アローラ）'
 dexNumber: 26
-usageRank: 999
+usageRank: 9999
 imageForm: '01'
 pubDate: '2026-06-26'
 draft: false

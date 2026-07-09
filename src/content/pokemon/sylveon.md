@@ -3,10 +3,23 @@ title: 'ニンフィア | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのニンフィア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率47位。'
 pokemonName: 'ニンフィア'
 dexNumber: 700
-usageRank: 47
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'sylveon-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ハイパーボイス', 'あくび', 'マジカルフレイム', 'まもる']
+  topMovePct: [95.0, 65.0, 49.5, 24.7]
+  topItems: ['ようせいのハネ', 'たべのこし', 'オボンのみ']
+  topItemPct: [42.2, 28.9, 13.6]
+  topAbility: 'フェアリースキン'
+  topAbilityPct: 98.2
+  topNature: 'ひかえめ'
+  topNaturePct: 63.9
+  topNature2: 'ずぶとい'
+  topNaturePct2: 18.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

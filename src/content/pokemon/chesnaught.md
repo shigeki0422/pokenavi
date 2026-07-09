@@ -3,10 +3,23 @@ title: 'ブリガロン | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのブリガロン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率101位。'
 pokemonName: 'ブリガロン'
 dexNumber: 652
-usageRank: 101
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ボディプレス', 'てっぺき', 'こうごうせい', 'やどりぎのタネ']
+  topMovePct: [83.6, 64.0, 63.6, 42.2]
+  topItems: ['ブリガロナイト', 'たべのこし', 'オボンのみ']
+  topItemPct: [79.6, 10.7, 3.2]
+  topAbility: 'ぼうだん'
+  topAbilityPct: 93.5
+  topNature: 'わんぱく'
+  topNaturePct: 74.7
+  topNature2: 'いじっぱり'
+  topNaturePct2: 10.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

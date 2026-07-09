@@ -3,10 +3,23 @@ title: 'ゲンガー | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのゲンガー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率29位。'
 pokemonName: 'ゲンガー'
 dexNumber: 94
-usageRank: 29
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'gengar-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['シャドーボール', 'みちづれ', 'きあいだま', 'おにび']
+  topMovePct: [82.6, 55.8, 21.5, 17.2]
+  topItems: ['ゲンガナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [59.9, 33.6, 2.1]
+  topAbility: 'のろわれボディ'
+  topAbilityPct: 100.0
+  topNature: 'おくびょう'
+  topNaturePct: 82.3
+  topNature2: 'ひかえめ'
+  topNaturePct2: 15.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

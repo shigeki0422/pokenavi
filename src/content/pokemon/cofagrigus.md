@@ -3,10 +3,23 @@ title: 'デスカーン | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのデスカーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率128位。'
 pokemonName: 'デスカーン'
 dexNumber: 563
-usageRank: 128
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['おにび', 'ボディプレス', 'たたりめ', 'トリックルーム']
+  topMovePct: [76.6, 53.5, 42.9, 40.0]
+  topItems: ['たべのこし', 'オボンのみ', 'メンタルハーブ']
+  topItemPct: [48.0, 22.6, 5.5]
+  topAbility: 'ミイラ'
+  topAbilityPct: 100.0
+  topNature: 'ずぶとい'
+  topNaturePct: 53.3
+  topNature2: 'のんき'
+  topNaturePct2: 20.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

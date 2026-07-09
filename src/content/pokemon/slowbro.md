@@ -3,10 +3,23 @@ title: 'ヤドラン | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのヤドラン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率81位。'
 pokemonName: 'ヤドラン'
 dexNumber: 80
-usageRank: 81
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'slowbro-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['なまける', 'ねっとう', 'てっぺき', 'ボディプレス']
+  topMovePct: [83.9, 81.1, 49.3, 35.6]
+  topItems: ['ヤドランナイト', 'たべのこし', 'オボンのみ']
+  topItemPct: [64.4, 13.8, 9.4]
+  topAbility: 'さいせいりょく'
+  topAbilityPct: 89.4
+  topNature: 'ずぶとい'
+  topNaturePct: 66.3
+  topNature2: 'おだやか'
+  topNaturePct2: 11.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

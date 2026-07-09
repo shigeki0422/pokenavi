@@ -3,7 +3,7 @@ title: 'パンプジン（おおきい） | ポケモンチャンピオンズ �
 description: 'ポケモンチャンピオンズのパンプジン（おおきい）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
 pokemonName: 'パンプジン（おおきい）'
 dexNumber: 711
-usageRank: 999
+usageRank: 9999
 imageForm: '02'
 pubDate: '2026-06-18'
 draft: false

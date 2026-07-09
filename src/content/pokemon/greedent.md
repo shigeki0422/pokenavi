@@ -3,10 +3,23 @@ title: 'ホルード | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのホルード基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率87位。'
 pokemonName: 'ホルード'
 dexNumber: 660
-usageRank: 87
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'greedent-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'れいとうパンチ', 'でんこうせっか', 'かみなりパンチ']
+  topMovePct: [99.7, 78.4, 74.7, 47.3]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'いのちのたま']
+  topItemPct: [67.5, 22.4, 4.1]
+  topAbility: 'ちからもち'
+  topAbilityPct: 99.5
+  topNature: 'いじっぱり'
+  topNaturePct: 71.7
+  topNature2: 'ようき'
+  topNaturePct2: 28.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

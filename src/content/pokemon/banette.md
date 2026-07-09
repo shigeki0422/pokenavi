@@ -3,10 +3,23 @@ title: 'ジュペッタ | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのジュペッタ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率83位。'
 pokemonName: 'ジュペッタ'
 dexNumber: 354
-usageRank: 83
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'banette-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['アンコール', 'かげうち', 'おにび', 'ちょうはつ']
+  topMovePct: [75.1, 57.9, 22.3, 12.9]
+  topItems: ['ジュペッタナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [98.5, 0.8, 0.1]
+  topAbility: 'おみとおし'
+  topAbilityPct: 84.2
+  topNature: 'いじっぱり'
+  topNaturePct: 71.0
+  topNature2: 'ゆうかん'
+  topNaturePct2: 21.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

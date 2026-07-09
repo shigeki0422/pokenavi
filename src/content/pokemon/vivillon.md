@@ -3,11 +3,24 @@ title: 'ビビヨン | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのビビヨン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率89位。'
 pokemonName: 'ビビヨン'
 dexNumber: 666
-usageRank: 89
+usageRank: 9999
 imageForm: '18'
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ちょうのまい', 'ほうふく', 'みがわり', 'むしのさざめき']
+  topMovePct: [95.9, 95.1, 83.3, 7.9]
+  topItems: ['たべのこし', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [75.4, 16.1, 1.6]
+  topAbility: 'ふくがん'
+  topAbilityPct: 99.3
+  topNature: 'おくびょう'
+  topNaturePct: 82.8
+  topNature2: 'ひかえめ'
+  topNaturePct2: 4.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

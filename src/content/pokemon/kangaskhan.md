@@ -3,10 +3,23 @@ title: 'ガルーラ | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのガルーラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率71位。'
 pokemonName: 'ガルーラ'
 dexNumber: 115
-usageRank: 71
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'kangaskhan-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ねこだまし', 'じしん', 'れいとうパンチ', 'ふいうち']
+  topMovePct: [68.2, 62.1, 61.1, 60.5]
+  topItems: ['ガルーラナイト', 'シルクのスカーフ', 'いのちのたま']
+  topItemPct: [89.3, 4.8, 1.2]
+  topAbility: 'きもったま'
+  topAbilityPct: 87.7
+  topNature: 'いじっぱり'
+  topNaturePct: 83.9
+  topNature2: 'ようき'
+  topNaturePct2: 9.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

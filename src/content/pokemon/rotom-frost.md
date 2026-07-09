@@ -3,11 +3,24 @@ title: 'フロストロトム | ポケモンチャンピオンズ 使用率・�
 description: 'ポケモンチャンピオンズのフロストロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率190位。'
 pokemonName: 'フロストロトム'
 dexNumber: 479
-usageRank: 190
+usageRank: 9999
 imageForm: '03'
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ふぶき', 'ボルトチェンジ', '10まんボルト', 'おにび']
+  topMovePct: [92.5, 69.8, 60.0, 47.3]
+  topItems: ['こだわりスカーフ', 'オボンのみ', 'たべのこし']
+  topItemPct: [42.8, 17.8, 8.2]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 42.8
+  topNature2: 'おくびょう'
+  topNaturePct2: 31.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

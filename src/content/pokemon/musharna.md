@@ -1,12 +1,25 @@
 ---
 title: 'ムシャーナ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのムシャーナ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率161位。'
+description: 'ポケモンチャンピオンズのムシャーナ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率160位。'
 pokemonName: 'ムシャーナ'
 dexNumber: 518
-usageRank: 161
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['トリックルーム', 'いやしのねがい', 'あくび', 'サイコキネシス']
+  topMovePct: [85.8, 78.1, 68.1, 41.6]
+  topItems: ['メンタルハーブ', 'オボンのみ', 'たべのこし']
+  topItemPct: [36.4, 32.2, 12.3]
+  topAbility: 'よちむ'
+  topAbilityPct: 59.3
+  topNature: 'のんき'
+  topNaturePct: 46.5
+  topNature2: 'ずぶとい'
+  topNaturePct2: 8.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -17,7 +30,7 @@ draft: false
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.518</strong>　／　使用率 <strong style="color:#dc2626">161位</strong>
+      全国図鑑 <strong>No.518</strong>　／　使用率 <strong style="color:#dc2626">160位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

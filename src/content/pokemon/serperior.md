@@ -1,12 +1,25 @@
 ---
 title: 'ジャローダ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのジャローダ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率70位。'
+description: 'ポケモンチャンピオンズのジャローダ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率69位。'
 pokemonName: 'ジャローダ'
 dexNumber: 497
-usageRank: 70
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['リーフストーム', 'へびにらみ', 'りゅうのはどう', 'ちょうはつ']
+  topMovePct: [99.6, 61.9, 49.9, 31.9]
+  topItems: ['たべのこし', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [25.0, 14.5, 13.2]
+  topAbility: 'あまのじゃく'
+  topAbilityPct: 99.3
+  topNature: 'おくびょう'
+  topNaturePct: 68.8
+  topNature2: 'ひかえめ'
+  topNaturePct2: 18.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -17,7 +30,7 @@ draft: false
       <img src="/images/types/type-11-grass.png" alt="くさ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.497</strong>　／　使用率 <strong style="color:#dc2626">70位</strong>
+      全国図鑑 <strong>No.497</strong>　／　使用率 <strong style="color:#dc2626">69位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

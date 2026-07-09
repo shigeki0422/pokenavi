@@ -3,10 +3,23 @@ title: 'グライオン | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのグライオン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率98位。'
 pokemonName: 'グライオン'
 dexNumber: 472
-usageRank: 98
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'ステルスロック', 'とんぼがえり', 'ダブルウイング']
+  topMovePct: [92.1, 37.4, 24.2, 21.9]
+  topItems: ['たべのこし', 'オボンのみ', 'きあいのタスキ']
+  topItemPct: [29.2, 18.9, 11.9]
+  topAbility: 'かいりきバサミ'
+  topAbilityPct: 46.4
+  topNature: 'いじっぱり'
+  topNaturePct: 39.5
+  topNature2: 'ようき'
+  topNaturePct2: 24.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

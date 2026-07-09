@@ -1,13 +1,25 @@
 ---
 title: 'シビルドン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのシビルドン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率69位。'
+description: 'ポケモンチャンピオンズのシビルドン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率70位。'
 pokemonName: 'シビルドン'
 dexNumber: 604
-usageRank: 69
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'eelektross-analysis-m3'
-
+faq:
+  season: 'M-3'
+  topMoves: ['サンダーダイブ', 'ドレインパンチ', '10まんボルト', 'かえんほうしゃ']
+  topMovePct: [56.7, 53.2, 33.6, 30.4]
+  topItems: ['シビルドナイト', 'オボンのみ', 'たべのこし']
+  topItemPct: [93.5, 1.8, 0.8]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 30.8
+  topNature2: 'ひかえめ'
+  topNaturePct2: 24.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +30,7 @@ analysisSlug: 'eelektross-analysis-m3'
       <img src="/images/types/type-12-electric.png" alt="でんき" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.604</strong>　／　使用率 <strong style="color:#dc2626">69位</strong>
+      全国図鑑 <strong>No.604</strong>　／　使用率 <strong style="color:#dc2626">70位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>
@@ -794,6 +806,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0604-00.webp" alt="シビルドン" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】シビルドン考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】シビルドン考察 M-2</div>
   </div>
 </a>

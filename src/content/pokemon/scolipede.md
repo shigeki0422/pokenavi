@@ -1,13 +1,25 @@
 ---
 title: 'ペンドラー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのペンドラー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率80位。'
+description: 'ポケモンチャンピオンズのペンドラー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率79位。'
 pokemonName: 'ペンドラー'
 dexNumber: 545
-usageRank: 80
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'scolipede-analysis-m3'
-
+faq:
+  season: 'M-3'
+  topMoves: ['つるぎのまい', 'バトンタッチ', 'まもる', 'きゅうけつ']
+  topMovePct: [71.7, 62.0, 58.7, 33.5]
+  topItems: ['ベンドラナイト', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [29.2, 26.7, 14.3]
+  topAbility: 'かそく'
+  topAbilityPct: 98.9
+  topNature: 'ようき'
+  topNaturePct: 32.3
+  topNature2: 'いじっぱり'
+  topNaturePct2: 29.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -19,7 +31,7 @@ analysisSlug: 'scolipede-analysis-m3'
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.545</strong>　／　使用率 <strong style="color:#dc2626">80位</strong>
+      全国図鑑 <strong>No.545</strong>　／　使用率 <strong style="color:#dc2626">79位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>
@@ -826,6 +838,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0545-00.webp" alt="ペンドラー" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ペンドラー考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ペンドラー考察 M-2</div>
   </div>
 </a>

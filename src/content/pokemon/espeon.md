@@ -3,10 +3,23 @@ title: 'エーフィ | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのエーフィ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率115位。'
 pokemonName: 'エーフィ'
 dexNumber: 196
-usageRank: 115
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['サイコキネシス', 'みわくのボイス', 'パワージェム', 'トリック']
+  topMovePct: [72.8, 42.3, 35.6, 30.0]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'ひかりのねんど']
+  topItemPct: [34.3, 18.2, 13.9]
+  topAbility: 'マジックミラー'
+  topAbilityPct: 97.8
+  topNature: 'おくびょう'
+  topNaturePct: 81.1
+  topNature2: 'ひかえめ'
+  topNaturePct2: 23.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

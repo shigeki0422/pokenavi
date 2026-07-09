@@ -3,10 +3,23 @@ title: 'ウルガモス | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのウルガモス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率36位。'
 pokemonName: 'ウルガモス'
 dexNumber: 637
-usageRank: 36
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'volcarona-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ちょうのまい', 'ほのおのまい', 'ギガドレイン', 'あさのひざし']
+  topMovePct: [96.4, 85.4, 71.2, 54.1]
+  topItems: ['オボンのみ', 'たべのこし', 'ラムのみ']
+  topItemPct: [45.5, 19.6, 12.5]
+  topAbility: 'ほのおのからだ'
+  topAbilityPct: 91.8
+  topNature: 'ひかえめ'
+  topNaturePct: 38.4
+  topNature2: 'ずぶとい'
+  topNaturePct2: 34.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

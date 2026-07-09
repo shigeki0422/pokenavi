@@ -3,10 +3,23 @@ title: 'ワルビアル | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのワルビアル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率144位。'
 pokemonName: 'ワルビアル'
 dexNumber: 553
-usageRank: 144
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['はたきおとす', 'インファイト', 'ステルスロック', 'ダストシュート']
+  topMovePct: [58.2, 39.1, 28.5, 19.5]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [44.6, 22.3, 8.5]
+  topAbility: 'いかく'
+  topAbilityPct: 61.9
+  topNature: 'いじっぱり'
+  topNaturePct: 54.1
+  topNature2: 'ようき'
+  topNaturePct2: 32.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

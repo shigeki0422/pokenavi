@@ -3,11 +3,23 @@ title: 'メタグロス | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのメタグロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率4位。'
 pokemonName: 'メタグロス'
 dexNumber: 376
-usageRank: 4
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'metagross-analysis-m3'
-
+faq:
+  season: 'M-3'
+  topMoves: ['サイコファング', 'バレットパンチ', 'れいとうパンチ', 'かみなりパンチ']
+  topMovePct: [91.1, 87.5, 60.0, 32.4]
+  topItems: ['メタグロスナイト', 'いのちのたま', 'オボンのみ']
+  topItemPct: [97.4, 0.5, 0.4]
+  topAbility: 'クリアボディ'
+  topAbilityPct: 99.1
+  topNature: 'ようき'
+  topNaturePct: 56.5
+  topNature2: 'いじっぱり'
+  topNaturePct2: 41.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -832,6 +844,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガメタグロス考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メタグロス考察 M-2</div>
   </div>
 </a>

@@ -3,10 +3,23 @@ title: 'バリコオル | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのバリコオル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率182位。'
 pokemonName: 'バリコオル'
 dexNumber: 866
-usageRank: 182
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['フリーズドライ', 'サイコキネシス', 'こおりのつぶて', 'ミラーコート']
+  topMovePct: [82.9, 48.7, 26.0, 22.9]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'オボンのみ']
+  topItemPct: [35.9, 15.9, 9.9]
+  topAbility: 'バリアフリー'
+  topAbilityPct: 87.8
+  topNature: 'ひかえめ'
+  topNaturePct: 36.9
+  topNature2: 'おくびょう'
+  topNaturePct2: 28.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

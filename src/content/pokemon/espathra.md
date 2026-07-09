@@ -3,10 +3,23 @@ title: 'クエスパトラ | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズのクエスパトラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率61位。'
 pokemonName: 'クエスパトラ'
 dexNumber: 956
-usageRank: 61
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'espathra-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ルミナコリジョン', 'まもる', 'バトンタッチ', 'めいそう']
+  topMovePct: [81.0, 80.8, 77.4, 69.2]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'たべのこし']
+  topItemPct: [35.2, 28.1, 15.1]
+  topAbility: 'かそく'
+  topAbilityPct: 99.1
+  topNature: 'ずっこい'
+  topNaturePct: 39.3
+  topNature2: 'おくびょう'
+  topNaturePct2: 32.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

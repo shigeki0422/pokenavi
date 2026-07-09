@@ -3,10 +3,23 @@ title: 'ダイケンキ | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのダイケンキ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率34位。'
 pokemonName: 'ダイケンキ'
 dexNumber: 503
-usageRank: 34
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ひけん・ちえなみ', 'せいなるつるぎ', 'シェルブレード', 'ふいうち']
+  topMovePct: [99.2, 84.6, 70.5, 70.4]
+  topItems: ['きあいのタスキ', 'くろいメガネ', 'こだわりスカーフ']
+  topItemPct: [34.0, 31.3, 17.3]
+  topAbility: 'きれあじ'
+  topAbilityPct: 98.4
+  topNature: 'いじっぱり'
+  topNaturePct: 67.9
+  topNature2: 'ようき'
+  topNaturePct2: 19.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

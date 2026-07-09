@@ -3,10 +3,23 @@ title: 'イルカマン | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのイルカマン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率102位。'
 pokemonName: 'イルカマン'
 dexNumber: 964
-usageRank: 102
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['クイックターン', 'ウェーブタックル', 'インファイト', 'れいとうパンチ']
+  topMovePct: [80.0, 72.1, 53.8, 46.6]
+  topItems: ['こだわりスカーフ', 'いのちのたま', 'オボンのみ']
+  topItemPct: [32.5, 12.7, 8.3]
+  topAbility: 'マイティチェンジ'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 78.6
+  topNature2: 'ようき'
+  topNaturePct2: 13.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

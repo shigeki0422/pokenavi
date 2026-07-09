@@ -3,10 +3,23 @@ title: 'ドドゲザン | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのドドゲザン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率28位。'
 pokemonName: 'ドドゲザン'
 dexNumber: 983
-usageRank: 28
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
-analysisSlug: 'kingambit-analysis-m3'
+
+faq:
+  season: 'M-3'
+  topMoves: ['ふいうち', 'ドゲザン', 'アイアンヘッド', 'つるぎのまい']
+  topMovePct: [99.1, 94.9, 90.9, 76.4]
+  topItems: ['くろいメガネ', 'いのちのたま', 'きあいのタスキ']
+  topItemPct: [54.5, 14.1, 7.7]
+  topAbility: 'まけんき'
+  topAbilityPct: 13.4
+  topNature: 'いじっぱり'
+  topNaturePct: 81.9
+  topNature2: 'ゆうかんな'
+  topNaturePct2: 3.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -779,7 +792,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0983-00.webp" alt="ドドゲザン" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ドドゲザン考察 M-3 くろいメガネ分散・つるぎのまい採用率上昇の変化点</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ドドゲザン考察 M-2</div>
   </div>
 </a>
 <a href="/blog/kingambit-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">

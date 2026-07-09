@@ -1,12 +1,25 @@
 ---
 title: 'ペロリーム | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのペロリーム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率154位。'
+description: 'ポケモンチャンピオンズのペロリーム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率155位。'
 pokemonName: 'ペロリーム'
 dexNumber: 685
-usageRank: 154
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ねばねばネット', 'あくび', 'ミストバースト', 'マジカルシャイン']
+  topMovePct: [86.7, 71.1, 36.8, 30.6]
+  topItems: ['オボンのみ', 'きあいのタスキ', 'オレンのみ']
+  topItemPct: [45.5, 37.5, 4.8]
+  topAbility: 'かるわざ'
+  topAbilityPct: 89.5
+  topNature: 'おくびょう'
+  topNaturePct: 36.6
+  topNature2: 'ずぶとい'
+  topNaturePct2: 21.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -17,7 +30,7 @@ draft: false
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.685</strong>　／　使用率 <strong style="color:#dc2626">154位</strong>
+      全国図鑑 <strong>No.685</strong>　／　使用率 <strong style="color:#dc2626">155位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

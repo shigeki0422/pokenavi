@@ -3,10 +3,23 @@ title: 'マリルリ | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのマリルリ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率56位。'
 pokemonName: 'マリルリ'
 dexNumber: 184
-usageRank: 56
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'azumarill-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['アクアジェット', 'じゃれつく', 'アクアブレイク', 'かわらわり']
+  topMovePct: [94.6, 93.9, 49.7, 8.1]
+  topItems: ['オボンのみ', 'いのちのたま', 'ラムのみ']
+  topItemPct: [71.7, 7.2, 4.5]
+  topAbility: 'ちからもち'
+  topAbilityPct: 94.2
+  topNature: 'いじっぱり'
+  topNaturePct: 90.3
+  topNature2: 'ゆうかん'
+  topNaturePct2: 1.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

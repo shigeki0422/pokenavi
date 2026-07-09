@@ -1,12 +1,25 @@
 ---
 title: 'エルフーン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエルフーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率49位。'
+description: 'ポケモンチャンピオンズのエルフーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率50位。'
 pokemonName: 'エルフーン'
 dexNumber: 547
-usageRank: 49
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
-analysisSlug: 'whimsicott-analysis-m3'
+
+faq:
+  season: 'M-3'
+  topMoves: ['ムーンフォース', 'アンコール', 'おいかぜ', 'やどりぎのタネ']
+  topMovePct: [85.7, 58.9, 49.8, 45.1]
+  topItems: ['きあいのタスキ', 'たべのこし', 'オボンのみ']
+  topItemPct: [48.8, 29.5, 4.7]
+  topAbility: 'いたずらごころ'
+  topAbilityPct: 97.6
+  topNature: 'おくびょう'
+  topNaturePct: 47.0
+  topNature2: 'すばやさ'
+  topNaturePct2: 29.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ analysisSlug: 'whimsicott-analysis-m3'
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.547</strong>　／　使用率 <strong style="color:#dc2626">49位</strong>
+      全国図鑑 <strong>No.547</strong>　／　使用率 <strong style="color:#dc2626">50位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>
@@ -789,7 +802,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0547-00.webp" alt="エルフーン" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】エルフーン考察 M-3 やどりぎ消耗型へシフトした採用率変化と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】エルフーン考察 M-2</div>
   </div>
 </a>
 <a href="/blog/whimsicott-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">

@@ -1,12 +1,25 @@
 ---
 title: 'ペリッパー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのペリッパー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率24位。'
+description: 'ポケモンチャンピオンズのペリッパー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率26位。'
 pokemonName: 'ペリッパー'
 dexNumber: 279
-usageRank: 24
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
-analysisSlug: 'pelipper-analysis-m3'
+
+faq:
+  season: 'M-3'
+  topMoves: ['ぼうふう', 'とんぼがえり', 'れいとうビーム', 'なみのり']
+  topMovePct: [98.1, 91.0, 61.7, 47.1]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'こだわりスカーフ']
+  topItemPct: [12.6, 6.9, 1.7]
+  topAbility: 'あめふらし'
+  topAbilityPct: 99.5
+  topNature: 'のんき'
+  topNaturePct: 36.0
+  topNature2: 'ひかえめ'
+  topNaturePct2: 28.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ analysisSlug: 'pelipper-analysis-m3'
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.279</strong>　／　使用率 <strong style="color:#dc2626">24位</strong>
+      全国図鑑 <strong>No.279</strong>　／　使用率 <strong style="color:#dc2626">26位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>
@@ -792,10 +805,9 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0279-00.webp" alt="ペリッパー" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ペリッパー考察 M-3 あめふらし軸の立ち回りと型別採用率</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ペリッパー考察 M-2</div>
   </div>
 </a>
-
 <a href="/blog/pelipper-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0279-00.webp" alt="ペリッパー" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>

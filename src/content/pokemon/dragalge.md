@@ -1,13 +1,25 @@
 ---
 title: 'ドラミドロ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのドラミドロ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率30位。'
+description: 'ポケモンチャンピオンズのドラミドロ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率31位。'
 pokemonName: 'ドラミドロ'
 dexNumber: 691
-usageRank: 30
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'dragalge-analysis-m3'
-
+faq:
+  season: 'M-3'
+  topMoves: ['クイックターン', 'りゅうせいぐん', 'どくどく', 'どくびし']
+  topMovePct: [92.0, 89.9, 62.2, 42.0]
+  topItems: ['ドラミドナイト', 'いのちのたま', 'たべのこし']
+  topItemPct: [98.1, 0.4, 0.2]
+  topAbility: 'てきおうりょく'
+  topAbilityPct: 63.0
+  topNature: 'なまいき'
+  topNaturePct: 43.7
+  topNature2: 'おだやか'
+  topNaturePct2: 19.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -19,7 +31,7 @@ analysisSlug: 'dragalge-analysis-m3'
       <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.691</strong>　／　使用率 <strong style="color:#dc2626">30位</strong>
+      全国図鑑 <strong>No.691</strong>　／　使用率 <strong style="color:#dc2626">31位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>
@@ -825,6 +837,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0691-00.webp" alt="ドラミドロ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガドラミドロ考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ドラミドロ考察 M-2</div>
   </div>
 </a>

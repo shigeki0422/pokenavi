@@ -1,12 +1,25 @@
 ---
 title: 'ゲッコウガ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのゲッコウガ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率26位。'
+description: 'ポケモンチャンピオンズのゲッコウガ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率23位。'
 pokemonName: 'ゲッコウガ'
 dexNumber: 658
-usageRank: 26
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'greninja-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['れいとうビーム', 'あくのはどう', 'ヘドロウェーブ', 'みずしゅりけん']
+  topMovePct: [86.6, 79.8, 56.8, 55.9]
+  topItems: ['きあいのタスキ', 'ゲッコウガナイト', 'こだわりスカーフ']
+  topItemPct: [45.6, 36.2, 8.6]
+  topAbility: 'へんげんじざい'
+  topAbilityPct: 71.1
+  topNature: 'おくびょう'
+  topNaturePct: 50.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 40.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ analysisSlug: 'greninja-analysis-m2'
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.658</strong>　／　使用率 <strong style="color:#dc2626">26位</strong>
+      全国図鑑 <strong>No.658</strong>　／　使用率 <strong style="color:#dc2626">23位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

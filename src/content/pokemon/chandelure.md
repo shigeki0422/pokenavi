@@ -3,10 +3,23 @@ title: 'シャンデラ | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのシャンデラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率88位。'
 pokemonName: 'シャンデラ'
 dexNumber: 609
-usageRank: 88
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['シャドーボール', 'エナジーボール', 'かえんほうしゃ', 'オーバーヒート']
+  topMovePct: [92.2, 61.3, 60.7, 33.8]
+  topItems: ['こだわりスカーフ', 'シャンデラナイト', 'きあいのタスキ']
+  topItemPct: [34.3, 32.9, 14.7]
+  topAbility: 'すりぬけ'
+  topAbilityPct: 33.2
+  topNature: 'おくびょう'
+  topNaturePct: 46.6
+  topNature2: 'ひかえめ'
+  topNaturePct2: 40.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

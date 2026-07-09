@@ -3,10 +3,23 @@ title: 'ガブリアス | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのガブリアス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率1位。'
 pokemonName: 'ガブリアス'
 dexNumber: 445
-usageRank: 1
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
-analysisSlug: 'garchomp-analysis-m3'
+
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'ステルスロック', 'げきりん', 'スケイルショット']
+  topMovePct: [99.5, 48.8, 45.5, 30.5]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'オボンのみ']
+  topItemPct: [37.7, 23.5, 23.1]
+  topAbility: 'さめはだ'
+  topAbilityPct: 99.1
+  topNature: 'ようき'
+  topNaturePct: 57.1
+  topNature2: 'いじっぱり'
+  topNaturePct2: 23.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -851,7 +864,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ガブリアス考察 M-3 まきびし台頭・スカーフ減少の変化点を解説</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ガブリアス考察 M-2</div>
   </div>
 </a>
 <a href="/blog/garchomp-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">

@@ -3,10 +3,23 @@ title: 'ジュナイパー | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズのジュナイパー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率130位。'
 pokemonName: 'ジュナイパー'
 dexNumber: 724
-usageRank: 130
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['3ぼんのや', 'リーフブレード', 'ふいうち', 'かげうち']
+  topMovePct: [99.3, 89.3, 60.6, 17.9]
+  topItems: ['ピントレンズ', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [33.8, 20.9, 16.2]
+  topAbility: 'きもったま'
+  topAbilityPct: 97.4
+  topNature: 'いじっぱり'
+  topNaturePct: 64.3
+  topNature2: 'ようき'
+  topNaturePct2: 24.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

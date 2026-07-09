@@ -3,10 +3,23 @@ title: 'ヌメルゴン | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのヌメルゴン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率149位。'
 pokemonName: 'ヌメルゴン'
 dexNumber: 706
-usageRank: 149
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['10まんボルト', 'かえんほうしゃ', 'ギガドレイン', 'ねむる']
+  topMovePct: [38.2, 32.9, 31.8, 22.9]
+  topItems: ['たべのこし', 'オボンのみ', 'しろいハーブ']
+  topItemPct: [28.1, 20.7, 8.3]
+  topAbility: 'ぬめぬめ'
+  topAbilityPct: 46.7
+  topNature: 'ひかえめ'
+  topNaturePct: 42.1
+  topNature2: 'おだやか'
+  topNaturePct2: 29.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

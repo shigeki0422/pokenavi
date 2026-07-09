@@ -3,10 +3,23 @@ title: 'ガオガエン | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのガオガエン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率73位。'
 pokemonName: 'ガオガエン'
 dexNumber: 727
-usageRank: 73
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['すてゼリフ', 'フレアドライブ', 'DDラリアット', 'ねこだまし']
+  topMovePct: [83.7, 78.2, 67.0, 53.8]
+  topItems: ['オボンのみ', 'たべのこし', 'せんせいのツメ']
+  topItemPct: [56.8, 17.2, 3.5]
+  topAbility: 'いかく'
+  topAbilityPct: 97.6
+  topNature: 'いじっぱり'
+  topNaturePct: 32.0
+  topNature2: 'わんぱく'
+  topNaturePct2: 28.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

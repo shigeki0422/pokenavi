@@ -3,10 +3,23 @@ title: 'ケケンカニ | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのケケンカニ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率145位。'
 pokemonName: 'ケケンカニ'
 dexNumber: 740
-usageRank: 145
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['アイスハンマー', 'マッハパンチ', 'かみなりパンチ', 'じしん']
+  topMovePct: [86.2, 85.1, 68.1, 17.0]
+  topItems: ['いのちのたま', 'たつじんのおび', 'せんせいのツメ']
+  topItemPct: [1.5, 0.6, 0.5]
+  topAbility: 'かいりきバサミ'
+  topAbilityPct: 50.0
+  topNature: 'ゆうかん'
+  topNaturePct: 60.3
+  topNature2: 'いじっぱり'
+  topNaturePct2: 39.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -3,10 +3,23 @@ title: 'ラフレシア | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのラフレシア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率85位。'
 pokemonName: 'ラフレシア'
 dexNumber: 45
-usageRank: 85
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['やどりぎのタネ', 'ギガドレイン', 'アシッドボム', 'どくどく']
+  topMovePct: [88.3, 79.8, 51.4, 23.4]
+  topItems: ['たべのこし', 'おおきなねっこ', 'オボンのみ']
+  topItemPct: [67.6, 16.2, 7.4]
+  topAbility: 'ほうし'
+  topAbilityPct: 95.3
+  topNature: 'ずぶとい'
+  topNaturePct: 86.0
+  topNature2: 'おだやか'
+  topNaturePct2: 6.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

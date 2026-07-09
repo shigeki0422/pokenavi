@@ -3,10 +3,23 @@ title: 'プテラ | ポケモンチャンピオンズ 使用率・基礎デー�
 description: 'ポケモンチャンピオンズのプテラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率108位。'
 pokemonName: 'プテラ'
 dexNumber: 142
-usageRank: 108
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ダブルウイング', 'じしん', 'いわなだれ', 'ストーンエッジ']
+  topMovePct: [76.3, 61.0, 56.0, 20.2]
+  topItems: ['プテラナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [68.4, 14.6, 3.5]
+  topAbility: 'きんちょうかん'
+  topAbilityPct: 70.3
+  topNature: 'ようき'
+  topNaturePct: 64.1
+  topNature2: 'いじっぱり'
+  topNaturePct2: 28.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

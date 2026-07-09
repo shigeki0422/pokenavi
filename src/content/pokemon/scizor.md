@@ -3,10 +3,23 @@ title: 'ハッサム | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのハッサム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率33位。'
 pokemonName: 'ハッサム'
 dexNumber: 212
-usageRank: 33
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'scizor-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['バレットパンチ', 'つるぎのまい', 'インファイト', 'はたきおとす']
+  topMovePct: [99.7, 83.7, 58.4, 45.6]
+  topItems: ['ハッサムナイト', 'いのちのたま', 'オボンのみ']
+  topItemPct: [60.2, 15.1, 6.9]
+  topAbility: 'テクニシャン'
+  topAbilityPct: 97.3
+  topNature: 'いじっぱり'
+  topNaturePct: 88.5
+  topNature2: 'わんぱく'
+  topNaturePct2: 4.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

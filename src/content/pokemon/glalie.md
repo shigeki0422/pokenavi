@@ -3,10 +3,23 @@ title: 'オニゴーリ | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのオニゴーリ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率159位。'
 pokemonName: 'オニゴーリ'
 dexNumber: 362
-usageRank: 159
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['まもる', 'みがわり', 'フリーズドライ', 'ぜったいれいど']
+  topMovePct: [85.9, 69.1, 69.1, 52.1]
+  topItems: ['たべのこし', 'ひかりのこな', 'オボンのみ']
+  topItemPct: [63.4, 2.8, 2.0]
+  topAbility: 'ムラっけ'
+  topAbilityPct: 91.0
+  topNature: 'おくびょう'
+  topNaturePct: 40.4
+  topNature2: 'ようき'
+  topNaturePct2: 11.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

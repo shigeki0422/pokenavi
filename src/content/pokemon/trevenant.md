@@ -3,10 +3,23 @@ title: 'オーロット | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのオーロット基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率172位。'
 pokemonName: 'オーロット'
 dexNumber: 709
-usageRank: 172
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['やどりぎのタネ', 'まもる', 'ウッドホーン', 'おにび']
+  topMovePct: [79.8, 61.5, 57.8, 54.1]
+  topItems: ['オボンのみ', 'ラムのみ', 'カゴのみ']
+  topItemPct: [84.9, 3.7, 2.6]
+  topAbility: 'しゅうかく'
+  topAbilityPct: 92.4
+  topNature: 'わんぱく'
+  topNaturePct: 47.3
+  topNature2: 'しんちょう'
+  topNaturePct2: 20.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

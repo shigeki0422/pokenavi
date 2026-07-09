@@ -1,12 +1,25 @@
 ---
 title: 'ドヒドイデ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのドヒドイデ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率52位。'
+description: 'ポケモンチャンピオンズのドヒドイデ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率51位。'
 pokemonName: 'ドヒドイデ'
 dexNumber: 748
-usageRank: 52
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'toxapex-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['どくどく', 'トーチカ', 'まとわりつく', 'くろいきり']
+  topMovePct: [91.6, 69.0, 57.3, 32.3]
+  topItems: ['たべのこし', 'オボンのみ', 'メンタルハーブ']
+  topItemPct: [70.1, 12.6, 4.9]
+  topAbility: 'さいせいりょく'
+  topAbilityPct: 94.1
+  topNature: 'ずぶとい'
+  topNaturePct: 37.5
+  topNature2: 'おだやか'
+  topNaturePct2: 21.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ analysisSlug: 'toxapex-analysis-m2'
       <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.748</strong>　／　使用率 <strong style="color:#dc2626">52位</strong>
+      全国図鑑 <strong>No.748</strong>　／　使用率 <strong style="color:#dc2626">51位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

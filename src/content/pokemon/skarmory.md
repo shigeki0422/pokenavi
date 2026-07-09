@@ -1,12 +1,25 @@
 ---
 title: 'エアームド | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエアームド基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率64位。'
+description: 'ポケモンチャンピオンズのエアームド基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率65位。'
 pokemonName: 'エアームド'
 dexNumber: 227
-usageRank: 64
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'skarmory-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['はねやすめ', 'ステルスロック', 'ボディプレス', 'ふきとばし']
+  topMovePct: [75.4, 64.5, 48.0, 43.5]
+  topItems: ['オボンのみ', 'たべのこし', 'エアームドナイト']
+  topItemPct: [36.1, 27.9, 20.3]
+  topAbility: 'がんじょう'
+  topAbilityPct: 83.9
+  topNature: 'わんぱく'
+  topNaturePct: 57.6
+  topNature2: 'ようき'
+  topNaturePct2: 13.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ analysisSlug: 'skarmory-analysis-m2'
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.227</strong>　／　使用率 <strong style="color:#dc2626">64位</strong>
+      全国図鑑 <strong>No.227</strong>　／　使用率 <strong style="color:#dc2626">65位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

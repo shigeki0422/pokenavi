@@ -3,10 +3,23 @@ title: 'コータス | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのコータス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率120位。'
 pokemonName: 'コータス'
 dexNumber: 324
-usageRank: 120
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ステルスロック', 'あくび', 'ソーラービーム', 'ふんか']
+  topMovePct: [59.4, 57.3, 43.3, 30.0]
+  topItems: ['あついいわ', 'もくたん', 'オボンのみ']
+  topItemPct: [42.1, 15.0, 14.5]
+  topAbility: 'ひでり'
+  topAbilityPct: 96.7
+  topNature: 'れいせい'
+  topNaturePct: 28.0
+  topNature2: 'ずぶとい'
+  topNaturePct2: 19.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

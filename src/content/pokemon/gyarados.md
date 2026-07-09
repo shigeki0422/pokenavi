@@ -3,10 +3,23 @@ title: 'ギャラドス | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのギャラドス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率15位。'
 pokemonName: 'ギャラドス'
 dexNumber: 130
-usageRank: 15
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'gyarados-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['たきのぼり', 'りゅうのまい', 'パワーウィップ', 'ちょうはつ']
+  topMovePct: [90.7, 70.5, 47.8, 28.9]
+  topItems: ['ギャラドスナイト', 'たべのこし', 'オボンのみ']
+  topItemPct: [56.5, 23.2, 10.0]
+  topAbility: 'いかく'
+  topAbilityPct: 98.5
+  topNature: 'ようき'
+  topNaturePct: 44.0
+  topNature2: 'いじっぱり'
+  topNaturePct2: 39.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

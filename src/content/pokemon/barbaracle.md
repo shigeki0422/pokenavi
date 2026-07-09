@@ -1,13 +1,25 @@
 ---
 title: 'ガメノデス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのガメノデス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率92位。'
+description: 'ポケモンチャンピオンズのガメノデス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率93位。'
 pokemonName: 'ガメノデス'
 dexNumber: 689
-usageRank: 92
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'barbaracle-analysis-m3'
-
+faq:
+  season: 'M-3'
+  topMoves: ['からをやぶる', 'インファイト', 'ロックブラスト', 'アクアブレイク']
+  topMovePct: [97.5, 94.8, 68.7, 30.0]
+  topItems: ['きあいのタスキ', 'しろいハーブ', 'ピントレンズ']
+  topItemPct: [2.0, 1.0, 0.6]
+  topAbility: 'かたいツメ'
+  topAbilityPct: 92.3
+  topNature: 'ようき'
+  topNaturePct: 53.3
+  topNature2: 'いじっぱり'
+  topNaturePct2: 44.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -19,7 +31,7 @@ analysisSlug: 'barbaracle-analysis-m3'
       <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.689</strong>　／　使用率 <strong style="color:#dc2626">92位</strong>
+      全国図鑑 <strong>No.689</strong>　／　使用率 <strong style="color:#dc2626">93位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>
@@ -817,6 +829,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0689-00.webp" alt="ガメノデス" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ガメノデス考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ガメノデス考察 M-2</div>
   </div>
 </a>

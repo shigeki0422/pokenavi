@@ -3,10 +3,23 @@ title: 'アブソル | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのアブソル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率176位。'
 pokemonName: 'アブソル'
 dexNumber: 359
-usageRank: 176
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ふいうち', 'インファイト', 'はたきおとす', 'つるぎのまい']
+  topMovePct: [86.2, 56.2, 48.2, 44.8]
+  topItems: ['アブソルナイト', 'ピントレンズ', 'きあいのタスキ']
+  topItemPct: [66.4, 13.7, 10.5]
+  topAbility: 'きょううん'
+  topAbilityPct: 71.2
+  topNature: 'いじっぱり'
+  topNaturePct: 40.6
+  topNature2: 'ようき'
+  topNaturePct2: 33.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -1,12 +1,25 @@
 ---
 title: 'ルカリオ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのルカリオ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率46位。'
+description: 'ポケモンチャンピオンズのルカリオ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率45位。'
 pokemonName: 'ルカリオ'
 dexNumber: 448
-usageRank: 46
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'lucario-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['インファイト', 'バレットパンチ', 'つるぎのまい', 'コメットパンチ']
+  topMovePct: [62.8, 48.3, 44.4, 38.2]
+  topItems: ['ルカリオナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [90.9, 4.6, 1.3]
+  topAbility: 'せいしんりょく'
+  topAbilityPct: 83.9
+  topNature: 'ようき'
+  topNaturePct: 52.1
+  topNature2: 'おくびょう'
+  topNaturePct2: 25.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ analysisSlug: 'lucario-analysis-m2'
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.448</strong>　／　使用率 <strong style="color:#dc2626">46位</strong>
+      全国図鑑 <strong>No.448</strong>　／　使用率 <strong style="color:#dc2626">45位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

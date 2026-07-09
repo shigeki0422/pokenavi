@@ -1,12 +1,25 @@
 ---
 title: 'バクフーン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのバクフーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率193位。'
+description: 'ポケモンチャンピオンズのバクフーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率192位。'
 pokemonName: 'バクフーン'
 dexNumber: 157
-usageRank: 193
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ふんか', 'ねっさのだいち', 'シャドーボール', 'かえんほうしゃ']
+  topMovePct: [78.8, 58.2, 43.2, 40.9]
+  topItems: ['こだわりスカーフ', 'もくたん', 'きあいのタスキ']
+  topItemPct: [60.4, 12.2, 10.2]
+  topAbility: 'もうか'
+  topAbilityPct: 32.7
+  topNature: 'ひかえめ'
+  topNaturePct: 53.1
+  topNature2: 'あくどい'
+  topNaturePct2: 31.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -17,7 +30,7 @@ draft: false
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.157</strong>　／　使用率 <strong style="color:#dc2626">193位</strong>
+      全国図鑑 <strong>No.157</strong>　／　使用率 <strong style="color:#dc2626">192位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

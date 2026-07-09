@@ -3,7 +3,7 @@ title: 'ケンタロス（格） | ポケモンチャンピオンズ 使用率�
 description: 'ポケモンチャンピオンズのケンタロス（格）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
 pokemonName: 'ケンタロス（格）'
 dexNumber: 128
-usageRank: 999
+usageRank: 9999
 imageForm: '01'
 pubDate: '2026-05-24'
 draft: false

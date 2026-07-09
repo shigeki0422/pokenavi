@@ -1,12 +1,25 @@
 ---
 title: 'アリアドス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのアリアドス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率152位。'
+description: 'ポケモンチャンピオンズのアリアドス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率153位。'
 pokemonName: 'アリアドス'
 dexNumber: 168
-usageRank: 152
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ねばねばネット', 'どくのいと', 'ふいうち', 'はたきおとす']
+  topMovePct: [90.0, 82.2, 44.5, 15.9]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'ぎんのこな']
+  topItemPct: [78.1, 4.8, 3.4]
+  topAbility: 'ふみん'
+  topAbilityPct: 69.5
+  topNature: 'ようき'
+  topNaturePct: 44.8
+  topNature2: 'いじっぱり'
+  topNaturePct2: 39.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ draft: false
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.168</strong>　／　使用率 <strong style="color:#dc2626">152位</strong>
+      全国図鑑 <strong>No.168</strong>　／　使用率 <strong style="color:#dc2626">153位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

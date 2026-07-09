@@ -3,10 +3,23 @@ title: 'エモンガ | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのエモンガ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率189位。'
 pokemonName: 'エモンガ'
 dexNumber: 587
-usageRank: 189
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ほっぺすりすり', 'アンコール', 'エアスラッシュ', 'ボルトチェンジ']
+  topMovePct: [67.3, 63.0, 42.7, 35.5]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'たべのこし']
+  topItemPct: [50.0, 9.8, 5.1]
+  topAbility: 'でんきエンジン'
+  topAbilityPct: 82.4
+  topNature: 'ずぶとい'
+  topNaturePct: 19.4
+  topNature2: 'ようき'
+  topNaturePct2: 18.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

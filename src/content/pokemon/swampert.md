@@ -3,11 +3,23 @@ title: 'ラグラージ | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのラグラージ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率18位。'
 pokemonName: 'ラグラージ'
 dexNumber: 260
-usageRank: 18
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'swampert-analysis-m3'
-
+faq:
+  season: 'M-3'
+  topMoves: ['じしん', 'ウェーブタックル', 'れいとうパンチ', 'クイックターン']
+  topMovePct: [93.2, 72.4, 69.9, 64.8]
+  topItems: ['オボンのみ', 'たべのこし', 'リンドのみ']
+  topItemPct: [14.6, 4.9, 3.7]
+  topAbility: 'げきりゅう'
+  topAbilityPct: 78.3
+  topNature: 'いじっぱり'
+  topNaturePct: 39.7
+  topNature2: 'ようき'
+  topNaturePct2: 17.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -815,6 +827,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0260-00.webp" alt="ラグラージ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガラグラージ考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ラグラージ考察 M-2</div>
   </div>
 </a>

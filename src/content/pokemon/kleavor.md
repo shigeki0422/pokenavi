@@ -3,10 +3,23 @@ title: 'バサギリ | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのバサギリ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率74位。'
 pokemonName: 'バサギリ'
 dexNumber: 900
-usageRank: 74
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'kleavor-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['シザークロス', 'インファイト', 'つじぎり', 'とんぼがえり']
+  topMovePct: [66.9, 49.7, 44.9, 28.6]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'いのちのたま']
+  topItemPct: [59.8, 26.2, 2.8]
+  topAbility: 'きれあじ'
+  topAbilityPct: 97.8
+  topNature: 'いじっぱり'
+  topNaturePct: 48.7
+  topNature2: 'ようき'
+  topNaturePct2: 43.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

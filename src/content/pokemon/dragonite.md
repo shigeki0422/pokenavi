@@ -3,10 +3,23 @@ title: 'カイリュー | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのカイリュー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率21位。'
 pokemonName: 'カイリュー'
 dexNumber: 149
-usageRank: 21
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'dragonite-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['しんそく', 'りゅうせいぐん', 'かえんほうしゃ', 'エアスラッシュ']
+  topMovePct: [61.0, 59.7, 33.7, 33.3]
+  topItems: ['ラムのみ', 'たべのこし', 'しろいハーブ']
+  topItemPct: [12.7, 3.8, 3.7]
+  topAbility: 'マルチスケイル'
+  topAbilityPct: 98.1
+  topNature: 'ひかえめ'
+  topNaturePct: 81.7
+  topNature2: 'いじっぱり'
+  topNaturePct2: 7.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

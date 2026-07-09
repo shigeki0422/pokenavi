@@ -1,12 +1,25 @@
 ---
 title: 'チャーレム | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのチャーレム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率169位。'
+description: 'ポケモンチャンピオンズのチャーレム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率170位。'
 pokemonName: 'チャーレム'
 dexNumber: 308
-usageRank: 169
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['インファイト', 'バレットパンチ', 'ねこだまし', 'しねんのずつき']
+  topMovePct: [59.6, 57.8, 52.4, 47.5]
+  topItems: ['チャーレムナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [72.3, 14.3, 6.9]
+  topAbility: 'ヨガパワー'
+  topAbilityPct: 98.6
+  topNature: 'いじっぱり'
+  topNaturePct: 57.8
+  topNature2: 'ようき'
+  topNaturePct2: 34.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ draft: false
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.308</strong>　／　使用率 <strong style="color:#dc2626">169位</strong>
+      全国図鑑 <strong>No.308</strong>　／　使用率 <strong style="color:#dc2626">170位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-01</div>
   </div>

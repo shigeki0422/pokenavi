@@ -3,11 +3,24 @@ title: 'カットロトム | ポケモンチャンピオンズ 使用率・基�
 description: 'ポケモンチャンピオンズのカットロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率121位。'
 pokemonName: 'カットロトム'
 dexNumber: 479
-usageRank: 121
+usageRank: 9999
 imageForm: '05'
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['リーフストーム', 'ボルトチェンジ', 'おにび', '10まんボルト']
+  topMovePct: [98.1, 83.0, 61.4, 57.4]
+  topItems: ['こだわりスカーフ', 'オボンのみ', 'しろいハーブ']
+  topItemPct: [29.6, 28.9, 7.8]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 43.9
+  topNature2: 'ずぶとい'
+  topNaturePct2: 23.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

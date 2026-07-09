@@ -3,10 +3,23 @@ title: 'ピクシー | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのピクシー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率55位。'
 pokemonName: 'ピクシー'
 dexNumber: 36
-usageRank: 55
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'clefable-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['つきのひかり', 'ムーンフォース', 'コスモパワー', 'アシストパワー']
+  topMovePct: [86.1, 80.8, 69.4, 45.3]
+  topItems: ['ピクシナイト', 'たべのこし', 'オボンのみ']
+  topItemPct: [72.9, 13.9, 7.3]
+  topAbility: 'てんねん'
+  topAbilityPct: 84.5
+  topNature: 'ずぶとい'
+  topNaturePct: 89.6
+  topNature2: 'おだやか'
+  topNaturePct2: 18.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

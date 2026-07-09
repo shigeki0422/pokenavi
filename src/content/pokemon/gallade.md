@@ -3,10 +3,23 @@ title: 'エルレイド | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのエルレイド基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率72位。'
 pokemonName: 'エルレイド'
 dexNumber: 475
-usageRank: 72
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'gallade-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['せいなるつるぎ', 'サイコカッター', 'リーフブレード', 'かげうち']
+  topMovePct: [93.3, 78.3, 75.4, 49.0]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'エルレイドナイト']
+  topItemPct: [40.4, 25.8, 14.2]
+  topAbility: 'きれあじ'
+  topAbilityPct: 94.6
+  topNature: 'いじっぱり'
+  topNaturePct: 49.9
+  topNature2: 'ようき'
+  topNaturePct2: 13.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

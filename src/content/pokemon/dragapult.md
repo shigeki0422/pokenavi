@@ -3,10 +3,23 @@ title: 'ドラパルト | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのドラパルト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率32位。'
 pokemonName: 'ドラパルト'
 dexNumber: 887
-usageRank: 32
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'dragapult-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['ドラゴンアロー', 'とんぼがえり', 'ゴーストダイブ', 'シャドーボール']
+  topMovePct: [63.9, 43.5, 37.9, 34.9]
+  topItems: ['いのちのたま', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [47.5, 18.2, 13.9]
+  topAbility: 'すりぬけ'
+  topAbilityPct: 73.1
+  topNature: 'ようき'
+  topNaturePct: 28.6
+  topNature2: 'おくびょう'
+  topNaturePct2: 18.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

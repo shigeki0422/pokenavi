@@ -3,10 +3,23 @@ title: 'ポットデス | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのポットデス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率91位。'
 pokemonName: 'ポットデス'
 dexNumber: 855
-usageRank: 91
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'polteageist-analysis-m2'
+faq:
+  season: 'M-3'
+  topMoves: ['からをやぶる', 'シャドーボール', 'ちからをすいとる', 'アシストパワー']
+  topMovePct: [97.4, 84.5, 53.8, 44.5]
+  topItems: ['しろいハーブ', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [74.1, 22.3, 0.7]
+  topAbility: 'のろわれボディ'
+  topAbilityPct: 69.7
+  topNature: 'ずぶとい'
+  topNaturePct: 46.9
+  topNature2: 'おくびょう'
+  topNaturePct2: 27.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

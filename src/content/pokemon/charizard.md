@@ -3,22 +3,24 @@ title: 'リザードン | ポケモンチャンピオンズ 使用率・基礎�
 description: 'ポケモンチャンピオンズのリザードン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率7位。'
 pokemonName: 'リザードン'
 dexNumber: 6
-usageRank: 7
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 analysisSlug: 'charizard-analysis-m3'
-
+faq:
+  season: 'M-3'
+  topMoves: ['ソーラービーム', 'かえんほうしゃ', 'エアスラッシュ', 'オーバーヒート']
+  topMovePct: [79.0, 46.3, 44.2, 31.5]
+  topItems: ['リザードナイトY', 'リザードナイトX', 'こだわりスカーフ']
+  topItemPct: [75.9, 22.6, 0.1]
+  topAbility: 'もうか'
+  topAbilityPct: 84.0
+  topNature: 'ひかえめ'
+  topNaturePct: 46.6
+  topNature2: 'おくびょう'
+  topNaturePct2: 31.5
 ---
-
-## 考察記事
-
-<a href="/blog/charizard-analysis-m3/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
-  <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
-  <div>
-    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガリザードン考察 M-3</div>
-  </div>
-</a>
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
   <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:96px;height:96px" loading="eager" />
@@ -935,3 +937,13 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </div>
 
 ---
+
+## 考察記事
+
+<a href="/blog/charizard-analysis-m3/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】リザードン考察 M-2</div>
+  </div>
+</a>

@@ -3,10 +3,23 @@ title: 'ミカルゲ | ポケモンチャンピオンズ 使用率・基礎デ�
 description: 'ポケモンチャンピオンズのミカルゲ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率148位。'
 pokemonName: 'ミカルゲ'
 dexNumber: 442
-usageRank: 148
+usageRank: 9999
+updatedDate: '2026-07-03'
 pubDate: '2026-07-01'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['トリックルーム', 'おにび', 'イカサマ', 'のろい']
+  topMovePct: [56.0, 51.0, 49.2, 35.6]
+  topItems: ['オボンのみ', 'たべのこし', 'メンタルハーブ']
+  topItemPct: [25.4, 21.3, 17.3]
+  topAbility: 'すりぬけ'
+  topAbilityPct: 66.6
+  topNature: 'のんき'
+  topNaturePct: 37.0
+  topNature2: 'なまいき'
+  topNaturePct2: 13.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
