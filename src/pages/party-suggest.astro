@@ -5,7 +5,7 @@ import Footer from '../components/Footer.astro';
 import iconsData from '../../public/sim-data/icons.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
 
-const title = 'M-3 パーティ提案 | ポケナビ';
+const title = 'M-4 パーティ提案 | ポケナビ';
 const description = '軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案。各ポケの役割・パーティ統計・使用率上位との1v1相性を表示します。';
 
 const ICONS = iconsData as Record<string, string>;
@@ -151,6 +151,27 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
       table.dtl.arch td{vertical-align:middle}
       .arch-lb{font-weight:700;font-size:.82rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:.4em}
       .advbar{width:100px;height:12px;border-radius:6px;background:#eef2f7;overflow:hidden;display:inline-flex;vertical-align:middle}
+      /* 選出ガイド */
+      .gd-req{margin-top:.7em;padding:.45em 1em;border:1.5px solid var(--accent);border-radius:8px;background:#eef2ff;color:var(--accent-dark,#3730a3);font-weight:700;font-size:.82rem;cursor:pointer;font-family:var(--font-atkinson)}
+      .gd-req:hover{background:#e0e7ff}
+      .gd-req:disabled{opacity:.5;cursor:wait}
+      .gd-req-done{margin-top:.6em;font-size:.8rem;color:#15803d !important}
+      .gd-strategy{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:.6em .8em;margin:.6em 0 .2em}
+      .gd-st-hd{font-size:.72rem;font-weight:800;color:#0369a1;margin-bottom:.3em}
+      .gd-st-line{font-size:.8rem;line-height:1.55;color:#0c4a6e}
+      .gd-names{font-size:.72rem;color:rgb(var(--gray));margin-top:2px}
+      .gd-det{margin-top:4px;font-size:.74rem}
+      .gd-det summary{cursor:pointer;color:#2563eb;font-size:.72rem}
+      .cnt-row{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding:.2em 0;border-bottom:1px dashed #f1f5f9}
+      .cnt-ico{width:20px;height:20px;object-fit:contain;vertical-align:-5px}
+      .cnt-share{font-size:.68rem;color:rgb(var(--gray));margin-right:2px}
+      .cnt-wr{font-size:.7rem;font-weight:700;color:#334155}
+      .gd-band{font-size:.72rem;font-weight:800;padding:.1em .45em;border-radius:6px}
+      .gd-b-good{background:#dcfce7;color:#15803d}
+      .gd-b-ok{background:#ecfccb;color:#4d7c0f}
+      .gd-b-mid{background:#fef9c3;color:#a16207}
+      .gd-b-bad{background:#fee2e2;color:#b91c1c}
+      .gd-alt{flex-basis:100%;font-size:.72rem;color:#b45309;padding-left:1.2em}
       .advfill.sp-maybe{background:#a7f3d0}
       .sp-maybe-t{color:#0d9488;font-weight:700}
       table.mtx td.sp-win{background:#dcfce7;color:#15803d}
@@ -220,7 +241,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
   <body>
     <Header />
     <main>
-      <h1>M-3 パーティ提案</h1>
+      <h1>M-4 パーティ提案</h1>
       <p class="lead">軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案します。各ポケの役割・パーティ統計・使用率上位との1v1相性つき。</p>
       <p class="note">※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にしたパーティ提案は未対応で、今後追加予定です。</p>
 
@@ -351,6 +372,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
             <button class="tb" data-i="${i}" data-t="mu">ポケモン相性</button>
             <button class="tb" data-i="${i}" data-t="speed">素早さ</button>
             <button class="tb" data-i="${i}" data-t="arch">想定パーティ相性</button>
+            <button class="tb" data-i="${i}" data-t="guide">選出ガイド${(res.guide&&res.guide.length)?'':'<span class="soon-tag">準備中</span>'}</button>
             <button class="tb" data-i="${i}" data-t="sim">実戦テスト<span class="soon-tag">準備中</span></button>
           </div>`;
         return `<div class="card sug" data-sug="${i}">
@@ -374,6 +396,33 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
         }).join('');
         return `<div class="mtx-legend"><span>いくつかの構築に対してAI同士の対戦シミュレーションから想定勝率を算出。</span></div>
           <table class="dtl arch"><tr><th>対戦相手</th><th>想定勝率</th></tr>${rows}</table>`;
+      }
+      function guideHtml(res){
+        const g = res.guide;
+        if(!g||!g.length) return `<div class="soon-box"><div class="soon-badge">準備中</div><div class="muted">この軸の選出ガイド（相手構築ごとのおすすめ3匹）はまだ計算されていません。</div>
+          <button class="gd-req">この軸のガイド計算をリクエスト</button>
+          <div class="gd-req-done muted" style="display:none">リクエストを受け付けました。数日以内に追加される予定です。</div></div>`;
+        const rows = g.slice().sort((x,y)=>y.wr-x.wr).map(x=>{
+          const pct = Math.round(x.wr*100);
+          const cls = pct>=55?'adv-good':pct<45?'adv-bad':'adv-mid';
+          const opp = (x.opp||[]).map(n=>icoImg(n,'dtl-ico')).join('');
+          const rec = (x.recommend||[]).map(n=>icoImg(n,'dtl-ico')).join('');
+          const recNames = (x.recommend||[]).map(n=>esc(n)).join(' / ');
+          const band = w => w>=0.75?['◎ 有利','gd-b-good']:w>=0.6?['○ やや有利','gd-b-ok']:w>=0.4?['△ 五分','gd-b-mid']:['× 危険','gd-b-bad'];
+          const vsRows = (x.vs||[]).map(v=>{
+            const [bl,bc]=band(v.wr??1);
+            const alt = v.alt?`<div class="gd-alt">↳ 読み切れるなら ${(v.alt.my3||[]).map(n=>icoImg(n,'cnt-ico')).join('')} が有効</div>`:'';
+            return `<div class="cnt-row">相手が ${(v.opp3||[]).map(n=>icoImg(n,'cnt-ico')).join('')}<span class="cnt-share">${Math.round((v.share||0)*100)}%の頻度</span> → この選出で <span class="gd-band ${bc}">${bl}</span>${alt}</div>`;
+          }).join('');
+          return `<tr>
+            <td><div class="arch-lb">${esc(x.label)}</div><div class="dtl-mem">${opp}</div></td>
+            <td><div class="dtl-mem">${rec}</div><div class="gd-names">${recNames}</div>${vsRows?`<details class="gd-det"><summary>この選出は相手のどの出し方に強い？</summary>${vsRows}</details>`:''}</td>
+            <td><div class="advbar"><div class="advfill ${cls}" style="width:${pct}%"></div></div><div class="advtxt ${cls}">${pct}%</div></td></tr>`;
+        }).join('');
+        const strat = (res.strategy&&res.strategy.length)
+          ? `<div class="gd-strategy"><div class="gd-st-hd">選出戦略</div>${res.strategy.map(s=>`<div class="gd-st-line">・${esc(s)}</div>`).join('')}</div>` : '';
+        return `${strat}<div class="mtx-legend"><span><b>おすすめ選出</b>＝相手がどの3匹を出すか分からない前提で、期待勝率が最も高い3匹（AI対戦シミュレーション）。行を開くと、<b>その選出が相手のどの出し方に強く、どの出し方だと危ないか</b>を確認できます。勝率は参考値です。</span></div>
+          <table class="dtl arch gd"><tr><th>対戦相手</th><th>おすすめ選出</th><th>想定勝率</th></tr>${rows}</table>`;
       }
       function firepowerHtml(res){
         const fp = res.firepower; if(!fp) return '';
@@ -436,6 +485,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
         if(t==='mu') return matchupHtml(res);
         if(t==='speed') return speedHtml(res);
         if(t==='arch') return archetypeHtml(res);
+        if(t==='guide') return guideHtml(res);
         if(t==='sim') return `<div class="soon-box"><div class="soon-badge">Coming Soon</div><div class="muted">より深い対戦をシミュレーションし、動かし方などを提案する機能は現在準備中です。</div></div>`;
         return attackTypeHtml(res);
       }
@@ -514,7 +564,17 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
         const sc=e.target.closest('.sp-cell'); if(sc){ openDetail(sc,'speed_detail'); return; }
         const mc=e.target.closest('.mu-cell'); if(mc){ openDetail(mc,'matchup_detail'); return; }
         const ac=e.target.closest('.at-cell'); if(ac){ openAtkDetail(ac); return; }
+        const gr=e.target.closest('.gd-req'); if(gr){ requestGuide(gr); return; }
       });
+      async function requestGuide(btn){
+        btn.disabled = true;
+        try{
+          const core = CORE.map(p=>({sp:p.sp, mega:p.mega}));
+          await fetch(API+'/guide_request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({core})});
+          btn.style.display='none';
+          const d = btn.parentElement.querySelector('.gd-req-done'); if(d) d.style.display='block';
+        }catch(_){ btn.disabled=false; }
+      }
 
       let LAST = [];
       function bindTabs(){
