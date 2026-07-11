@@ -141,6 +141,10 @@ const breadcrumbJsonLd = {
 				:global(.partner-card img) { width: 44px !important; height: 44px !important; }
 				:global(.partner-grid) { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important; gap: 8px !important; }
 			}
+			.sim-cta { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin: 2rem 0 0; padding: 1rem 1.25rem; background: #f0f4ff; border-left: 4px solid var(--accent); border-radius: 4px; text-decoration: none; flex-wrap: wrap; }
+			.sim-cta span { font-size: .88rem; color: #1e293b; }
+			.sim-cta-arrow { font-weight: 700; color: var(--accent); white-space: nowrap; }
+			.sim-cta:hover { background: #e0e8ff; }
 		</style>
 	</head>
 
@@ -190,6 +194,12 @@ const breadcrumbJsonLd = {
 					<AffiliateProducts category="pokemon" />
 					{body && <MentionedPokemon currentSlug={slug ?? ''} body={body} />}
 					<RelatedPosts currentSlug={slug ?? ''} />
+					{blogPokemonName && (
+						<a class="sim-cta" href={`/simulator-mb/?sf=${encodeURIComponent(blogPokemonName)}`}>
+							<span>{blogPokemonName}入りの上位構築で対戦シミュレーション</span>
+							<span class="sim-cta-arrow">M-Bシミュレーターで試す →</span>
+						</a>
+					)}
 				</div>
 			</article>
 		</main>
