@@ -5,8 +5,20 @@ import Footer from '../components/Footer.astro';
 import iconsData from '../../public/sim-data/icons.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
 
-const title = 'M-4 パーティ提案 | ポケナビ';
-const description = '軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案。各ポケの役割・パーティ統計・使用率上位との1v1相性を表示します。';
+const title = 'ポケモンチャンピオンズM-4 パーティ提案 | 軸から最適構築を自動生成 | ポケナビ';
+const description = 'ポケモンチャンピオンズM-4対応。軸にしたいポケモンを指定するだけで環境に合った6匹を自動提案。各ポケの役割・選出ガイド・使用率TOP30との1v1相性をAIシミュレーション結果から診断。';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'ポケナビ パーティ提案',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: siteUrl + '/party-suggest/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+};
 
 const ICONS = iconsData as Record<string, string>;
 const MOVET = moveTypesData as Record<string, string>;
@@ -18,6 +30,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
 <html lang="ja">
   <head>
     <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <style is:global>
       main{width:auto;max-width:1040px;margin:0 auto;padding:1.4em 1em 4em;color:rgb(var(--gray-dark));overflow-x:clip}
       h1{font-size:1.5rem;margin:0 0 .2em}
@@ -156,15 +169,82 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
       .gd-req:hover{background:#e0e7ff}
       .gd-req:disabled{opacity:.5;cursor:wait}
       .gd-req-done{margin-top:.6em;font-size:.8rem;color:#15803d !important}
-      .gd-strategy{background:#f0f9ff;border:1px solid #bae6fd;border-radius:8px;padding:.6em .8em;margin:.6em 0 .2em}
-      .gd-st-hd{font-size:.72rem;font-weight:800;color:#0369a1;margin-bottom:.3em}
-      .gd-st-line{font-size:.8rem;line-height:1.55;color:#0c4a6e}
+      /* 選出戦略の図 */
+      .sc-wrap{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:.8em .9em;margin:.6em 0 .8em}
+      .sc-hd{font-size:.75rem;font-weight:800;color:#0369a1;margin-bottom:.6em;letter-spacing:.03em}
+      .sc-trio{display:inline-flex;gap:2px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:2px 4px}
+      .sc-trio.sc-opp{background:#fff7ed;border-color:#fed7aa}
+      .sc-ico{width:34px;height:34px;object-fit:contain}
+      .sc-big .sc-ico{width:44px;height:44px}
+      .sc-mini .sc-ico{width:22px;height:22px}
+      .sc-ico-s{width:24px;height:24px;object-fit:contain;vertical-align:-6px}
+      .sc-base{display:flex;align-items:center;gap:.7em;flex-wrap:wrap;background:#eef2ff;border:1.5px solid var(--accent);border-radius:10px;padding:.55em .7em}
+      .sc-tag{font-size:.68rem;font-weight:800;color:#fff;background:var(--accent);border-radius:9999px;padding:.15em .7em;white-space:nowrap}
+      .sc-meta{font-size:.82rem;color:#0f172a}
+      .sc-sub{font-size:.7rem;color:rgb(var(--gray));margin-top:1px}
+      .sc-branch-hd{font-size:.7rem;font-weight:800;color:rgb(var(--gray));margin:.8em 0 .35em}
+      .sc-concept{font-size:.85rem;line-height:1.6;color:#0f172a;background:#fff;border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:.5em .7em;margin-bottom:.6em}
+      .sc-rule{display:flex;align-items:center;gap:.6em;border:1px solid #e2e8f0;border-radius:8px;padding:.45em .6em;margin-bottom:.35em;background:#fff}
+      .sc-rule-cond{min-width:74px;text-align:center}
+      .sc-teams{display:flex;flex-direction:column;gap:3px}
+      .sc-team-ico{display:flex;gap:1px;background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:1px 2px}
+      .sc-ico-t{width:20px;height:20px;object-fit:contain}
+      .sc-rule2{border:1px solid #e2e8f0;border-radius:8px;padding:.5em .6em;margin-bottom:.4em;background:#fff}
+      .sc-summary{font-size:.85rem;font-weight:700;color:#0f172a;background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:.4em .6em;margin-bottom:.5em}
+      .sc-rule-body{display:flex;align-items:center;gap:.6em;flex-wrap:wrap}
+      .sc-watch{font-size:.72rem;font-weight:800;color:#b91c1c;margin-bottom:.4em;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+      .sc-w{display:inline-flex;align-items:center;gap:2px;background:#fee2e2;border-radius:6px;padding:0 .35em;margin-left:2px;font-weight:700}
+      .sc-hi{display:inline-block;border:2px solid #ef4444;border-radius:5px;background:#fff;line-height:0}
+      .sc-dim{opacity:.32;line-height:0}
+      .sc-chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px;align-items:center}
+      .sc-watch-n{color:#64748b;font-weight:700}
+      .sc-mode{font-size:.62rem;font-weight:700;border-radius:5px;padding:0 .3em;margin-left:3px;white-space:nowrap}
+      .sc-m-sp{background:#fee2e2;color:#b91c1c}
+      .sc-m-di{background:#fef3c7;color:#92400e}
+      .sc-evb{font-weight:800;color:#0f172a;background:#f1f5f9;border-radius:5px;padding:0 .35em}
+      .sc-cmp{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:4px;font-size:.72rem;font-weight:400;color:#0f172a}
+      .sc-note{font-size:.66rem;color:#64748b;font-weight:400;margin-top:2px}
+      .sc-mtrio{display:inline-flex;gap:1px;background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:1px 2px;vertical-align:middle}
+      .sc-m-nt{background:#f1f5f9;color:#64748b}
+      .sc-rule-act{flex:1;min-width:0}
+      .sc-rule-meta{text-align:right;font-size:.82rem;display:flex;flex-direction:column;gap:2px;align-items:flex-end}
+      .sc-typechip{display:inline-block;font-size:.7rem;font-weight:800;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;padding:.25em .5em;line-height:1.3}
+      .sc-cov{font-size:.65rem;color:#0369a1;background:#e0f2fe;border-radius:6px;padding:0 .4em;white-space:nowrap}
+      table.sc-roles{width:100%;border-collapse:collapse;font-size:.78rem;background:#fff;border-radius:8px;overflow:hidden}
+      table.sc-roles th{font-size:.65rem;color:rgb(var(--gray));text-align:left;padding:.25em .5em;background:#f1f5f9}
+      table.sc-roles td{padding:.3em .5em;border-top:1px solid #f1f5f9;vertical-align:middle}
+      .sc-stbadge{font-size:.65rem;font-weight:800;border-radius:6px;padding:.1em .45em}
+      .sc-stb-core{background:#eef2ff;color:#3730a3}
+      .sc-stb-flex{background:#ecfccb;color:#4d7c0f}
+      .sc-stb-spot{background:#fef3c7;color:#92400e}
+      .sc-stb-bench{background:#f1f5f9;color:#64748b}
+      .sc-ex{margin-top:.6em}
+      .sc-ex summary{cursor:pointer;font-size:.75rem;color:#2563eb;font-weight:700}
+      .sc-branch{display:flex;align-items:center;gap:.6em;flex-wrap:wrap;border:1px solid #e2e8f0;border-radius:8px;padding:.5em .6em;margin-bottom:.4em;background:#fff}
+      .sc-col{display:flex;flex-direction:column;gap:2px}
+      .sc-lbl{font-size:.65rem;color:rgb(var(--gray));font-weight:700}
+      .sc-arr{color:var(--accent);font-weight:800;font-size:1rem}
+      .sc-arr2{color:#b45309;font-weight:800;margin:0 3px}
+      .sc-swap{font-size:.72rem;color:#b45309;margin-top:2px}
+      .sc-alt{font-size:.7rem;color:rgb(var(--gray));margin-top:2px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+      .sc-gain{background:#dcfce7;color:#15803d;font-weight:800;border-radius:6px;padding:0 .35em;font-size:.7rem}
+      .sc-spot{display:flex;align-items:center;gap:.55em;border:1px dashed #f59e0b;border-radius:8px;padding:.45em .6em;margin-bottom:.35em;background:#fffbeb;font-size:.82rem}
+      .sc-role{font-size:.68rem;color:#92400e;background:#fef3c7;border-radius:6px;padding:0 .35em;margin-left:.4em}
+      .sc-bench{margin-top:.5em;font-size:.78rem;color:rgb(var(--gray));display:flex;align-items:center;gap:4px;flex-wrap:wrap}
+      .sc-caution{margin-top:.6em;font-size:.78rem;color:#b91c1c;background:#fef2f2;border-radius:8px;padding:.4em .6em;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+      .sc-hard{background:#fff;border:1px solid #fecaca;border-radius:8px;padding:.5em .6em}
+      .sc-hard-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:.3em}
+      .sc-hard-lb{font-size:.68rem;font-weight:800;color:#b91c1c;min-width:96px}
+      .sc-bw{margin-top:.5em;display:flex;gap:.5em;flex-wrap:wrap;font-size:.75rem;font-weight:700}
+      .sc-good{background:#dcfce7;color:#15803d;border-radius:6px;padding:.15em .6em}
+      .sc-bad{background:#fee2e2;color:#b91c1c;border-radius:6px;padding:.15em .6em}
+      .gd-detail-wrap{margin-top:.5em}
+      .gd-detail-wrap summary{cursor:pointer;font-size:.78rem;color:#2563eb;font-weight:700}
       .gd-names{font-size:.72rem;color:rgb(var(--gray));margin-top:2px}
       .gd-det{margin-top:4px;font-size:.74rem}
       .gd-det summary{cursor:pointer;color:#2563eb;font-size:.72rem}
       .cnt-row{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding:.2em 0;border-bottom:1px dashed #f1f5f9}
       .cnt-ico{width:20px;height:20px;object-fit:contain;vertical-align:-5px}
-      .cnt-share{font-size:.68rem;color:rgb(var(--gray));margin-right:2px}
       .cnt-wr{font-size:.7rem;font-weight:700;color:#334155}
       .gd-band{font-size:.72rem;font-weight:800;padding:.1em .45em;border-radius:6px}
       .gd-b-good{background:#dcfce7;color:#15803d}
@@ -412,17 +492,140 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
           const vsRows = (x.vs||[]).map(v=>{
             const [bl,bc]=band(v.wr??1);
             const alt = v.alt?`<div class="gd-alt">↳ 読み切れるなら ${(v.alt.my3||[]).map(n=>icoImg(n,'cnt-ico')).join('')} が有効</div>`:'';
-            return `<div class="cnt-row">相手が ${(v.opp3||[]).map(n=>icoImg(n,'cnt-ico')).join('')}<span class="cnt-share">${Math.round((v.share||0)*100)}%の頻度</span> → この選出で <span class="gd-band ${bc}">${bl}</span>${alt}</div>`;
+            return `<div class="cnt-row">相手が ${(v.opp3||[]).map(n=>icoImg(n,'cnt-ico')).join('')} → この選出で <span class="gd-band ${bc}">${bl}</span>${alt}</div>`;
           }).join('');
           return `<tr>
             <td><div class="arch-lb">${esc(x.label)}</div><div class="dtl-mem">${opp}</div></td>
             <td><div class="dtl-mem">${rec}</div><div class="gd-names">${recNames}</div>${vsRows?`<details class="gd-det"><summary>この選出は相手のどの出し方に強い？</summary>${vsRows}</details>`:''}</td>
             <td><div class="advbar"><div class="advfill ${cls}" style="width:${pct}%"></div></div><div class="advtxt ${cls}">${pct}%</div></td></tr>`;
         }).join('');
-        const strat = (res.strategy&&res.strategy.length)
-          ? `<div class="gd-strategy"><div class="gd-st-hd">選出戦略</div>${res.strategy.map(s=>`<div class="gd-st-line">・${esc(s)}</div>`).join('')}</div>` : '';
-        return `${strat}<div class="mtx-legend"><span><b>おすすめ選出</b>＝相手がどの3匹を出すか分からない前提で、期待勝率が最も高い3匹（AI対戦シミュレーション）。行を開くと、<b>その選出が相手のどの出し方に強く、どの出し方だと危ないか</b>を確認できます。勝率は参考値です。</span></div>
-          <table class="dtl arch gd"><tr><th>対戦相手</th><th>おすすめ選出</th><th>想定勝率</th></tr>${rows}</table>`;
+        return `${strategyChart(res.strategy)}
+          <details class="gd-detail-wrap"><summary>対戦相手ごとの詳細（参考）</summary>
+          <div class="mtx-legend"><span><b>おすすめ選出</b>＝相手がどの3匹を出すか分からない前提で、期待勝率が最も高い3匹（AI対戦シミュレーション）。勝率は参考値です。</span></div>
+          <table class="dtl arch gd"><tr><th>対戦相手</th><th>おすすめ選出</th><th>想定勝率</th></tr>${rows}</table></details>`;
+      }
+      // 選出ガイド＝パーティの説明書：コンセプト → 基本形 → 見せ合い条件ルール → 役割表 → 実例
+      function strategyChart(s){
+        if(!s||!s.base) return '';
+        const trio = (arr,cls='')=>`<div class="sc-trio ${cls}">${(arr||[]).map(n=>`<span class="sc-mon" title="${esc(n)}">${icoImg(n,'sc-ico')}</span>`).join('')}</div>`;
+        const pct = w=>Math.round((w||0)*100)+'%';
+        const b = s.base;
+        let html = `<div class="sc-wrap"><div class="sc-hd">選出ガイド — このパーティの使い方</div>`;
+        // ① コンセプト
+        if(s.concept) html += `<div class="sc-concept">${esc(s.concept)}</div>`;
+        // ② 基本形
+        html += `<div class="sc-base"><div class="sc-tag">基本形</div>${trio(b.trio,'sc-big')}
+          <div class="sc-meta"><b>想定勝率 ${pct(b.wr)}</b><div class="sc-sub">迷ったらこの3匹（8構築中${(b.opps||[]).length}構築で最善）</div></div></div>`;
+        // ③ 相手チームを見て変えるルール
+        if((s.rules||[]).length){
+          html += `<div class="sc-branch-hd">相手のチーム（見せ合い）にこれが見えたら</div>`;
+          html += s.rules.map(ru=>{
+            // ①「なぜ入れ替えるか」＝AI対戦の実測（基本形/次点 vs 採用形）を相手の出す3匹ごとに比較して示す
+            const evd = ru.evidence;
+            const refName = e => (e && e.ref==='base') ? '基本形' : '次点候補';
+            const miniTrio = arr => `<span class="sc-mtrio">${(arr||[]).map(n=>icoImg(n,'sc-ico-s')).join('')}</span>`;
+            // AI対戦で実測比較した「2つの選出案」を明示（比較相手は基本形とは限らないので必ず図示）
+            const watchHd = evd
+              ? `<div class="sc-watch">決め手：<b>${esc(evd.opp)}</b> が ${(evd.opp3||[]).map(n=>`<span class="sc-w">${icoImg(n,'sc-ico-s')}${esc(n)}</span>`).join('')} を出す形
+                   <div class="sc-cmp">この並びでAI対戦した2案　${miniTrio(evd.ref_trio)}<b>${Math.round(evd.base*100)}%</b>（${refName(evd)}）
+                     <span class="sc-arr2">→</span> ${miniTrio(evd.trio)}<b>${Math.round(evd.pick*100)}%</b>（採用）
+                     <span class="sc-gain">+${Math.round(evd.gain*100)}pt</span></div>
+                   ${evd.ref!=='base' ? `<div class="sc-note">※基本形はこの相手では未測定のため、比較は候補2案どうし</div>` : ''}</div>`
+              : `<div class="sc-watch sc-watch-n">実測ではどの選出でも同等（無理に替えなくてよい）</div>`;
+            const teams = (ru.teams||[]).map(t=>{
+              const hi = new Set(t.hi||[]);
+              const dim = t.mode==='decisive';
+              const ev = t.ev;
+              const badge = ev
+                ? (ev.tie ? `<span class="sc-mode sc-m-nt">${refName(ev)}と同等</span>`
+                          : `<span class="sc-mode sc-m-sp">${refName(ev)}より ${ev.delta>0?'+':''}${Math.round(ev.delta*100)}pt</span>`)
+                : `<span class="sc-mode sc-m-nt">比較データなし</span>`;
+              return `<div class="sc-team"><div class="sc-team-ico">${(t.names||[]).map(n=>
+                `<span class="${hi.has(n)?'sc-hi':(dim?'sc-dim':'')}">${icoImg(n,'sc-ico-t')}</span>`).join('')}</div>
+                <div class="sc-sub">${esc(t.opp)} ${badge}</div></div>`;
+            }).join('');
+            // ②共通点が言語化できた場合は補足として添える
+            let condChip = '';
+            if(ru.cond && ru.cond.kind==='mon') condChip = `<span class="sc-typechip">${esc(ru.cond.value)}入り</span>`;
+            else if(ru.cond && ru.cond.kind==='type') condChip = `<span class="sc-typechip">${esc(ru.cond.value)}タイプ2体以上</span>`;
+            else if(ru.cond && ru.cond.kind==='trait') condChip = `<span class="sc-typechip">${esc(ru.cond.label)}</span>`;
+            const cov = (ru.coverage!=null) ? `<span class="sc-cov">環境の${Math.round(ru.coverage*100)}%が該当</span>` : '';
+            let reason = '';
+            if(evd){
+              // 比較した2案の「実際の差分」を語る（ru.mon とは限らない）
+              const rt = evd.ref_trio||[], tr = evd.trio||[];
+              const gained = tr.filter(n=>!rt.includes(n)), lost = rt.filter(n=>!tr.includes(n));
+              reason = (gained.length && lost.length)
+                ? `この並びには ${lost.map(esc).join('・')} より ${gained.map(esc).join('・')} が機能する（${Math.round(evd.base*100)}% → ${Math.round(evd.pick*100)}%）`
+                : `この並びには採用形の方が勝てる（${Math.round(evd.base*100)}% → ${Math.round(evd.pick*100)}%）`;
+              if(evd.cost) reason += `。ただし相手が${(evd.cost.opp3||[]).map(esc).join('・')}を出す形では逆に不利（${Math.round(evd.cost.base*100)}%→${Math.round(evd.cost.pick*100)}%）`;
+            } else if(ru.explain==='tie'){
+              reason = `AI対戦の実測では他の選出と差がつかない。無理に替える必要はない`;
+            } else if(ru.why) reason = ru.why;
+            reason = reason ? `<div class="sc-sub">${reason}</div>` : '';
+            const swap = ru.out ? `${icoImg(ru.out,'sc-ico-s')}<span class="sc-arr2">→</span>${icoImg(ru.mon,'sc-ico-s')}` : icoImg(ru.mon,'sc-ico-s');
+            return `<div class="sc-rule2">
+              ${ru.summary?`<div class="sc-summary">${esc(ru.summary)}</div>`:''}
+              ${watchHd}
+              <div class="sc-rule-body">
+                <div class="sc-teams">${teams}</div>
+                <div class="sc-arr">▶</div>
+                <div class="sc-rule-act"><div class="sc-swap">${swap} <b>${esc(ru.mon)}</b>${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(esc).join('・')}</span>`:''} を入れる</div>${reason}<div class="sc-chips">${condChip}${cov}</div></div>
+                <div class="sc-rule-meta"><b>${pct(ru.wr)}</b></div>
+              </div>
+            </div>`;
+          }).join('');
+        }
+        // ④ 役割表（6匹全員）
+        if((s.role_table||[]).length){
+          const stLbl = {core:'基本形', flex:'入替枠', spot:'刺し要員', bench:'控え'};
+          html += `<div class="sc-branch-hd">6匹の役割</div><table class="sc-roles"><tr><th></th><th>役割</th><th>出番</th></tr>` +
+            s.role_table.map(rt=>`<tr class="sc-st-${rt.status}">
+              <td>${icoImg(rt.mon,'sc-ico-s')} ${esc(rt.mon)}</td>
+              <td>${(rt.roles||[]).map(esc).join('・')||'-'}</td>
+              <td><span class="sc-stbadge sc-stb-${rt.status}">${stLbl[rt.status]||''}</span> <span class="sc-sub">選出率 ${Math.round(rt.n/rt.N*100)}%（${rt.n}/${rt.N}）</span></td>
+            </tr>`).join('') + `</table>`;
+        }
+        // ⑤ 実例（相手構築別の入れ替え例）＋注意＋得意/警戒
+        if((s.alts||[]).length){
+          html += `<details class="sc-ex"><summary>実例：相手構築別の入れ替え（${s.alts.length}件）</summary>` +
+            s.alts.map(a=>{
+              const gain = (a.delta!=null) ? `<span class="sc-gain">実測 +${Math.round(a.delta*100)}pt</span>` : '';
+              const swap = (a.out&&a.in&&a.out.length&&a.in.length)
+                ? `<div class="sc-swap">${a.out.map(n=>icoImg(n,'sc-ico-s')).join('')}<span class="sc-arr2">→</span>${a.in.map(n=>icoImg(n,'sc-ico-s')).join('')} に入れ替え</div>` : '';
+              const altline = a.alt_trio ? `<div class="sc-alt">次点 ${trio(a.alt_trio,'sc-mini')} は ${pct(a.alt_wr)} ${gain}</div>` : '';
+              return `<div class="sc-branch">
+                <div class="sc-col"><div class="sc-lbl">相手チーム ${esc(a.opp)}</div>${trio(a.team&&a.team.length?a.team:a.opp3,'sc-opp sc-mini')}<div class="sc-sub">よく出すのは ${(a.opp3||[]).map(esc).join('・')}</div></div>
+                <div class="sc-arr">▶</div>
+                <div class="sc-col"><div class="sc-lbl">この3匹</div>${trio(a.trio)}<div class="sc-meta"><b>${pct(a.wr)}</b></div>${swap}${altline}</div>
+              </div>`;
+            }).join('') + `</details>`;
+        }
+        if(s.caution){
+          const alt = s.caution.alt?` ／ 読み切れるなら ${trio(s.caution.alt,'sc-mini')}`:'';
+          html += `<div class="sc-caution">⚠ ${esc(s.caution.opp)} が ${trio(s.caution.opp3,'sc-mini')} と出す形は苦しい${alt}</div>`;
+        }
+        // 苦手な相手（構築記事の「重いポケモン」相当）
+        if(s.hard && ((s.hard.teams||[]).length || (s.hard.mons||[]).length)){
+          html += `<div class="sc-branch-hd">重い相手</div><div class="sc-hard">`;
+          if((s.hard.mons||[]).length){
+            html += `<div class="sc-hard-row"><span class="sc-hard-lb">苦手なポケモン</span>` +
+              s.hard.mons.map(m=>`<span class="sc-w">${icoImg(m.mon,'sc-ico-s')}${esc(m.mon)} <b>${pct(m.wr)}</b></span>`).join('') +
+              `<div class="sc-sub">この駒が相手の選出に入ると勝率が落ちる</div></div>`;
+          }
+          if((s.hard.teams||[]).length){
+            const whyRows = s.hard.teams.filter(t=>t.why&&t.why.length).map(t=>
+              `<div class="sc-sub">${esc(t.opp)}は ${t.why.map(n=>`<span class="sc-w">${icoImg(n,'sc-ico-s')}${esc(n)}</span>`).join('')} の並びが特に厳しい</div>`).join('');
+            html += `<div class="sc-hard-row"><span class="sc-hard-lb">苦手な構築</span>` +
+              s.hard.teams.map(t=>`<span class="sc-w">${esc(t.opp)} <b>${pct(t.wr)}</b></span>`).join('') +
+              `<div class="sc-sub">最善を尽くしても不利。${s.hard.teams[0]?`${esc(s.hard.teams[0].opp)}には ${trio(s.hard.teams[0].trio,'sc-mini')} が最善`:''}</div>${whyRows}</div>`;
+          }
+          html += `</div>`;
+        }
+        if(s.best&&s.worst){
+          html += `<div class="sc-bw"><span class="sc-good">得意 ${esc(s.best.opp)} ${pct(s.best.wr)}</span><span class="sc-bad">警戒 ${esc(s.worst.opp)} ${pct(s.worst.wr)}</span></div>`;
+        }
+        return html + `</div>`;
       }
       function firepowerHtml(res){
         const fp = res.firepower; if(!fp) return '';
