@@ -1,0 +1,70 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PartySuggestApp from '../../components/PartySuggestApp.astro';
+import rankingData from '../../data/ranking.json';
+
+export async function getStaticPaths() {
+  const pokemonPages = await getCollection('pokemon');
+
+  const spToSlug: Record<string, string> = {};
+  for (const p of pokemonPages) {
+    if (!p.data.draft) spToSlug[p.data.pokemonName] = p.id;
+  }
+
+  const m4 = (rankingData as any).seasons['M-4'];
+  const latestDate = [...m4.dates].sort().slice(-1)[0];
+  const rankMap: Record<string, number> = {};
+  for (const p of m4.pokemon) {
+    if (p.dates[latestDate]) rankMap[p.name] = p.dates[latestDate].rank;
+  }
+
+  const res = await fetch('https://pokenavi-suggest-799947701075.asia-northeast1.run.app/species');
+  const species: { label: string; sp: string; mega: string; rank: number }[] = await res.json();
+
+  const paths = [];
+  for (const s of species) {
+    const baseSlug = spToSlug[s.sp];
+    if (!baseSlug) continue;
+    const rank = rankMap[s.sp];
+
+    const slug = s.mega ? `mega-${baseSlug}` : baseSlug;
+    paths.push({
+      params: { slug },
+      props: { label: s.label, sp: s.sp, rank },
+    });
+  }
+  return paths;
+}
+
+const { label, sp, rank } = Astro.props;
+const siteUrl = 'https://pokenavi.jp';
+const title = `${label}軸 構築提案 M-4 | ポケモンチャンピオンズ パーティ提案`;
+const rankText = rank ? `使用率${rank}位の` : '';
+const description = `ポケモンチャンピオンズM-4 ${rankText}${label}を軸にしたパーティを自動提案。役割・選出ガイド・使用率TOP30との1v1相性をAIシミュレーション結果から診断。`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: `${label}軸パーティ提案 | ポケナビ`,
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: `${siteUrl}/party-suggest/${Astro.params.slug}/`,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+};
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <PartySuggestApp preCoreLabel={label} />
+    <Footer />
+  </body>
+</html>
