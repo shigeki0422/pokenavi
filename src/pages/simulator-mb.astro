@@ -4,13 +4,26 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import SimulatorApp from '../components/SimulatorApp.astro';
 
-const title = 'シミュレーション：M-B（バトルシミュレータ）| ポケナビ';
-const description = '構築記事を公開されている環境トッププレイヤー同士の総当たり対戦（対戦AI同士）。パーティを選び、各ランカー・各ポケモンとの勝率・選出・1v1相性・実戦リプレイをデータで診断します。';
+const title = 'M-B上位構築シミュレーター | 勝率・選出・1v1相性を診断 | ポケナビ';
+const description = 'ポケモンチャンピオンズM-Bシーズンの上位ランカー構築データで対戦シミュレーション。パーティを選ぶだけで勝率・選出率・ポケモン1v1相性をAI対戦結果から分析。';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'ポケナビ M-Bシミュレーター',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: siteUrl + '/simulator-mb/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+};
 ---
 
 <html lang="ja">
   <head>
     <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <Header />
