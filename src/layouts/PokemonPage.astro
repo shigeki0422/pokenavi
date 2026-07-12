@@ -7,6 +7,7 @@ import Header from '../components/Header.astro';
 import SimPartyCard from '../components/SimPartyCard.astro';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
+import partySuggestSlugs from '../data/party-suggest-slugs.json';
 
 type Props = CollectionEntry<'pokemon'>['data'] & { lang?: 'ja' | 'en' | 'ko' };
 
@@ -26,6 +27,9 @@ const pathParts = Astro.url.pathname.split('/').filter(Boolean);
 const pokemonSlugIdx = pathParts.findIndex(p => p === 'pokemon');
 const pokemonSlug = pokemonSlugIdx >= 0 ? pathParts[pokemonSlugIdx + 1] : '';
 const pfx = lang === 'en' ? '/en' : lang === 'ko' ? '/ko' : '';
+const psSlugSet = new Set(partySuggestSlugs as string[]);
+const hasPartySuggest = lang === 'ja' && !!pokemonSlug && psSlugSet.has(pokemonSlug);
+const hasMegaPartySuggest = lang === 'ja' && !!pokemonSlug && psSlugSet.has(`mega-${pokemonSlug}`);
 const MOVE_MAP = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
 const ABILITY_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
 const ITEM_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
@@ -243,6 +247,20 @@ const breadcrumbJsonLd = {
 						<span class="badge">{T.badge}</span>
 					</div>
 					<slot />
+					{hasPartySuggest && (
+						<div class="ps-cta-wrap">
+							<a href={`/party-suggest/${pokemonSlug}/`} class="ps-cta">
+								<span>{pokemonName}を軸にしたパーティ提案</span>
+								<span class="ps-cta-arrow">→</span>
+							</a>
+							{hasMegaPartySuggest && (
+								<a href={`/party-suggest/mega-${pokemonSlug}/`} class="ps-cta">
+									<span>メガ{pokemonName}を軸にしたパーティ提案</span>
+									<span class="ps-cta-arrow">→</span>
+								</a>
+							)}
+						</div>
+					)}
 					{pokemonName && <SimPartyCard pokemonName={pokemonName} />}
 					<AdUnit />
 				</div>
@@ -428,3 +446,15 @@ if(prose){
 		</script>
 	</body>
 </html>
+
+<style>
+.ps-cta-wrap { display: flex; flex-direction: column; gap: .5rem; margin: 1.5rem 0; }
+.ps-cta {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: .75rem 1rem; border-radius: 8px; text-decoration: none;
+  background: var(--accent); color: #fff; font-weight: 600; font-size: .95rem;
+  transition: opacity .15s;
+}
+.ps-cta:hover { opacity: .85; }
+.ps-cta-arrow { font-size: 1.1rem; margin-left: .5rem; flex-shrink: 0; }
+</style>
