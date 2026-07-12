@@ -4,8 +4,8 @@ const { mode = 'MA' } = Astro.props;
 const isMB = mode === 'MB';
 const heading = isMB ? 'シミュレーション：M-B' : 'シミュレーション：M-A';
 const lead = isMB
-  ? '構築記事を公開されている環境トッププレイヤー同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>　<a href="/simulator">M-A（過去シーズン）へ →</a>'
-  : '構築記事を公開されている環境トッププレイヤー同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>　<a href="/simulator-mb">M-B（最新シーズン）へ →</a>';
+  ? '構築記事で公開されている環境トップ構築同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>　<a href="/simulator">M-A（過去シーズン）へ →</a>'
+  : '構築記事で公開されている環境トップ構築同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>　<a href="/simulator-mb">M-B（最新シーズン）へ →</a>';
 ---
 
 <style is:global>
@@ -28,7 +28,7 @@ const lead = isMB
       .g{color:#16a34a}.r{color:#dc2626}.n{color:rgb(var(--gray-dark))}
       .bg-g{background:#dcfce7;color:#15803d}.bg-r{background:#fee2e2;color:#b91c1c}.bg-n{background:rgb(var(--gray-light));color:rgb(var(--gray))}
       /* 上下2分割（一覧＋構成） */
-      .split{display:grid;grid-template-columns:300px 1fr;gap:.8rem;align-items:start}
+      .split{display:grid;grid-template-columns:400px 1fr;gap:.8rem;align-items:start}
       @media(max-width:760px){.split{grid-template-columns:1fr}}
       .pl-wrap{position:relative}
       .filter-chips{display:flex;flex-wrap:wrap;gap:3px;align-items:center}
@@ -44,7 +44,7 @@ const lead = isMB
       .picklist::-webkit-scrollbar-track{background:#eef0f3;border-radius:0 10px 10px 0}
       .picklist::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:7px;border:3px solid #eef0f3;min-height:40px}
       .picklist::-webkit-scrollbar-thumb:hover{background:#64748b}
-      .pitem{display:flex;align-items:center;gap:.5rem;padding:.45em .7em;cursor:pointer;border-top:1px solid #f1f5f9;font-size:.84rem;border-left:3px solid transparent}
+      .pitem{display:flex;align-items:center;gap:.35rem;padding:.4em .5em;cursor:pointer;border-top:1px solid #f1f5f9;font-size:.8rem;border-left:3px solid transparent}
       .pitem:first-child{border-top:none}
       .pitem:hover{background:#f8fafc}
       .pitem.active{background:#eef2ff;border-left-color:var(--accent);font-weight:700}
@@ -72,7 +72,7 @@ const lead = isMB
       .pitem.opp-g{border-right:3px solid #4ade80}
       .pitem.opp-r{border-right:3px solid #f87171}
       .pitem-icons{display:flex;gap:1px;flex-shrink:0}
-      .pitem-icons img{width:20px;height:20px;object-fit:contain}
+      .pitem-icons img{width:16px;height:16px;object-fit:contain}
       .filter-active .pitem-icons img.matched{outline:2px solid #6366f1;border-radius:3px}
       .wr-summary{display:flex;align-items:center;gap:.6em;flex-wrap:wrap;font-size:.8rem;margin-bottom:.4em}
       .wr-bar{display:flex;height:7px;border-radius:4px;overflow:hidden;flex:1;min-width:80px;gap:1px;align-self:center}
@@ -301,17 +301,47 @@ const lead = isMB
     <script is:inline>
       const IS_MB = document.querySelector('main[data-simmode]')?.dataset.simmode === 'MB';
       const VSNOUN = IS_MB ? 'パーティ' : 'ランカー';
-      // M-Bは生成パーティなので、構築を表す名前（メガ軸＋主要ポケ2体）を表示名にする
-      function partyName(party){
-        if(!party||!party.length) return '';
+      // 構築を表す名前の材料（メガ軸を先頭に、以降は編成順）。「メガ」の文字は軸であることが自明なので付けない。
+      // 括弧書きの型注記（永遠/オス等）は表示幅の都合で省略（アイコンで判別可能・titleに全体名を残す）。
+      const _shortMonName = n => n.replace(/[（(][^）)]*[）)]$/,'');
+      function partyNameParts(party){
+        if(!party||!party.length) return [];
         const names = party.map(s=>s.split('@')[0].split(':')[0]);
         const items = party.map(s=>(s.split('@')[1]||'').split(':')[0]);
-        const parts = [];
-        names.forEach((n,i)=>{ if(/ナイト/.test(items[i])){ const xy=/[XＸ]$/.test(items[i])?'X':/[YＹ]$/.test(items[i])?'Y':''; parts.push('メガ'+n+xy); } });
-        for(let i=0;i<names.length && parts.length<2;i++){ if(!/ナイト/.test(items[i])) parts.push(names[i]); }
-        return parts.slice(0,2).join('・');
+        const megaIdx=[], restIdx=[];
+        items.forEach((it,i)=>{ (/ナイト/.test(it)?megaIdx:restIdx).push(i); });
+        return [...megaIdx,...restIdx].map(i=>{
+          const it=items[i]; const nm=_shortMonName(names[i]);
+          if(/ナイト/.test(it)){ const xy=/[XＸ]$/.test(it)?'X':/[YＹ]$/.test(it)?'Y':''; return nm+xy; }
+          return nm;
+        });
       }
-      function labelName(label, party){ return nameNoSeason(label); }   // M-A/M-B とも登録ラベル（実プレイヤー名）を表示
+      function partyName(party, n){ const s=partyNameParts(party).slice(0, n||2).join('・'); return s?s+'軸':''; }
+      function partyFullTitle(party){   // ホバー用：省略なしの全6体名
+        if(!party||!party.length) return '';
+        return party.map(s=>s.split('@')[0].split(':')[0]).join('・');
+      }
+      // 一覧内で名前が重複するパーティは、名前に含める体数を1体ずつ増やしてユニーク化を試みる。
+      // ただし2体（軸+1）までで打ち切り。絶対ユニークは保証しない。
+      const UNIQUE_NAME_MAX = 2;
+      function uniquePartyNames(parties){
+        const parts = parties.map(p=>partyNameParts(p));
+        const n = parts.map(()=>1);
+        for(let guard=0; guard<UNIQUE_NAME_MAX; guard++){
+          const count={};
+          parts.forEach((pp,i)=>{ const key=pp.slice(0,n[i]).join('・'); count[key]=(count[key]||0)+1; });
+          let changed=false;
+          parts.forEach((pp,i)=>{
+            const key=pp.slice(0,n[i]).join('・');
+            if(count[key]>1 && n[i]<Math.min(UNIQUE_NAME_MAX,pp.length)){ n[i]++; changed=true; }
+          });
+          if(!changed) break;
+        }
+        return parts.map((pp,i)=>{ const s=pp.slice(0,n[i]).join('・'); return s?s+'軸':'対戦相手のパーティ'; });
+      }
+      // 上位ユーザ名・順位は非表示（内部データとしてlabel/rankは保持するが表示には出さない）。
+      // 表示名はメガ軸から生成する構築名（partyName）に統一。単発表示は2体、一覧はuniquePartyNamesでユニーク化。
+      function labelName(label, party){ return partyName(party) || '対戦相手のパーティ'; }
       const API = (location.port === '8888') ? '' : 'http://localhost:8888';
       // 本番＝静的配信モード（localhost/8888以外、または ?static=1 で強制）。dev＝従来のローカルAPI。
       const THEME = location.search.includes('theme=1');     // ?theme=1 でテーマ総当たり(/sim-data-theme)
@@ -635,9 +665,10 @@ const lead = isMB
           .filter(({r})=>partyMatches(r));
         const sl=$('subject-list');
         sl.classList.toggle('filter-active', SUBJ_FILTER_POKES.length>0);
-        sl.innerHTML = items.map(({r,i})=>{
+        const uNames = uniquePartyNames(items.map(({r})=>r.party));
+        sl.innerHTML = items.map(({r,i},k)=>{
           const sc=seasonOf(r.label)==='M-1'?'s-m1':seasonOf(r.label)==='M-2'?'s-m2':'';
-          return `<div class="pitem ${sc}" data-i="${i}" onclick="selectSubjectIdx(${i})">${seasonBadge(r.label)}<span class="nm">${labelName(r.label, r.party)}</span>${partyIconsHtml(r)}</div>`;
+          return `<div class="pitem ${sc}" data-i="${i}" onclick="selectSubjectIdx(${i})">${seasonBadge(r.label)}<span class="nm" title="${partyFullTitle(r.party)}">${uNames[k]}</span>${partyIconsHtml(r)}</div>`;
         }).join('') || `<div class="muted" style="padding:.6em">${SUBJ_FILTER_POKES.length?'一致するパーティなし':'表示するシーズンを選択してください'}</div>`;
       }
       function saveUrlState(){
@@ -744,8 +775,9 @@ const lead = isMB
         const ng=cards.filter(c=>c.win_rate>=0.6).length, nb=cards.filter(c=>c.win_rate<=0.4).length, nm=cards.length-ng-nb;
         $('summary').innerHTML=`<div class="wr-summary"><span>${labelName(SUBJECT.label, SUBJECT.party)} vs ${cards.length}${VSNOUN}</span><div class="wr-bar"><div class="wr-bar-g" style="flex:${ng}"></div><div class="wr-bar-n" style="flex:${nm}"></div><div class="wr-bar-r" style="flex:${nb}"></div></div><span><span class="wr-cnt-g">得意${ng}</span>・五分${nm}・<span class="wr-cnt-r">苦手${nb}</span></span></div>`;
         const oppFilterBases = OPP_FILTER_POKES.map(p=>basePoName(p.name));
-        ol.innerHTML = cards.map(c=>{ const wr=c.win_rate, sc=seasonOf(c.label)==='M-1'?'s-m1':seasonOf(c.label)==='M-2'?'s-m2':'', wrc=wr>=0.6?'opp-g':wr<=0.4?'opp-r':'';
-          return `<div class="pitem ${sc} ${wrc}" data-label="${encodeURIComponent(c.label)}" onclick="selectOppRanker('${c.label.replace(/'/g,"\\'")}')">${seasonBadge(c.label)}<span class="nm">${labelName(c.label, c.specs)}</span>${specsIconsHtml(c.specs,oppFilterBases)}</div>`;
+        const uNames = uniquePartyNames(cards.map(c=>c.specs));
+        ol.innerHTML = cards.map((c,k)=>{ const wr=c.win_rate, sc=seasonOf(c.label)==='M-1'?'s-m1':seasonOf(c.label)==='M-2'?'s-m2':'', wrc=wr>=0.6?'opp-g':wr<=0.4?'opp-r':'';
+          return `<div class="pitem ${sc} ${wrc}" data-label="${encodeURIComponent(c.label)}" onclick="selectOppRanker('${c.label.replace(/'/g,"\\'")}')">${seasonBadge(c.label)}<span class="nm" title="${partyFullTitle(c.specs)}">${uNames[k]}</span>${specsIconsHtml(c.specs,oppFilterBases)}</div>`;
         }).join('');
         if(!OPP || !cards.some(c=>c.label===OPP)) selectOppRanker(cards[0].label);
         else document.querySelectorAll('#opp-list .pitem').forEach(e=>e.classList.toggle('active', decodeURIComponent(e.dataset.label||'')===OPP));
