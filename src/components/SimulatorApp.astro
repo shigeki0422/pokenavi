@@ -4,8 +4,8 @@ const { mode = 'MA' } = Astro.props;
 const isMB = mode === 'MB';
 const heading = isMB ? 'シミュレーション：M-B' : 'シミュレーション：M-A';
 const lead = isMB
-  ? '構築記事で公開されている環境トップ構築同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>　<a href="/simulator">M-A（過去シーズン）へ →</a>'
-  : '構築記事で公開されている環境トップ構築同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>　<a href="/simulator-mb">M-B（最新シーズン）へ →</a>';
+  ? '環境トップ構築同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>　<a href="/simulator">M-A（過去シーズン）へ →</a>'
+  : '環境トップ構築同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。<a href="/battle-simulator">バトルシミュレータとは →</a>　<a href="/simulator-mb">M-B（最新シーズン）へ →</a>';
 ---
 
 <style is:global>
