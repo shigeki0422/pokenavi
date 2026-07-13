@@ -207,6 +207,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
   .sc-watch-n{color:#64748b;font-weight:700}
   .sc-mode{font-size:.62rem;font-weight:700;border-radius:5px;padding:0 .3em;margin-left:3px;white-space:nowrap}
   .sc-m-sp{background:#fee2e2;color:#b91c1c}
+  .sc-m-top{background:#b91c1c;color:#fff;font-weight:800}
   .sc-m-di{background:#fef3c7;color:#92400e}
   .sc-evb{font-weight:800;color:#0f172a;background:#f1f5f9;border-radius:5px;padding:0 .35em}
   .sc-cmp{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:4px;font-size:.72rem;font-weight:400;color:#0f172a}
@@ -214,9 +215,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
   .sc-mtrio{display:inline-flex;gap:1px;background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:1px 2px;vertical-align:middle}
   .sc-m-nt{background:#f1f5f9;color:#64748b}
   .sc-rule-act{flex:1;min-width:0}
-  .sc-rule-meta{text-align:right;font-size:.82rem;display:flex;flex-direction:column;gap:2px;align-items:flex-end}
   .sc-typechip{display:inline-block;font-size:.7rem;font-weight:800;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;padding:.25em .5em;line-height:1.3}
-  .sc-cov{font-size:.65rem;color:#0369a1;background:#e0f2fe;border-radius:6px;padding:0 .4em;white-space:nowrap}
   table.sc-roles{width:100%;border-collapse:collapse;font-size:.78rem;background:#fff;border-radius:8px;overflow:hidden}
   table.sc-roles th{font-size:.65rem;color:rgb(var(--gray));text-align:left;padding:.25em .5em;background:#f1f5f9}
   table.sc-roles td{padding:.3em .5em;border-top:1px solid #f1f5f9;vertical-align:middle}
@@ -492,24 +491,42 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
     if((s.rules||[]).length){
       html += `<div class="sc-branch-hd">相手のチーム（見せ合い）にこれが見えたら</div>`;
       html += s.rules.map(ru=>{
+        // 軸ポケモン：勝率の微差検定（decisive/tie）ではなく、実測で選出された構築を直接示す。
+        // 8構築程度のサンプルでは勝率の細かい優劣より「活きる場」を示す方が頑健で誤解を招かない。
+        if(ru.core){
+          let condChip = '';
+          if(ru.cond && ru.cond.kind==='mon') condChip = `<span class="sc-typechip">${esc(ru.cond.value)}入り</span>`;
+          else if(ru.cond && ru.cond.kind==='type') condChip = `<span class="sc-typechip">${esc(ru.cond.value)}タイプ2体以上</span>`;
+          else if(ru.cond && ru.cond.kind==='trait') condChip = `<span class="sc-typechip">${esc(ru.cond.label)}</span>`;
+          const sel = (ru.selected||[]).map(a=>`<div class="sc-team"><div class="sc-team-ico">${(a.names||[]).map(n=>icoImg(n,'sc-ico-t')).join('')}</div>
+            <div class="sc-sub">${esc(a.opp)}</div></div>`).join('');
+          return `<div class="sc-rule2">
+            <div class="sc-summary">${esc(ru.summary)}</div>
+            <div class="sc-rule-body">
+              <div class="sc-teams">${sel || `<div class="sc-sub muted">実測ではどの相手にも選出されなかった</div>`}</div>
+              <div class="sc-arr">▶</div>
+              <div class="sc-rule-act"><div class="sc-swap">${icoImg(ru.mon,'sc-ico-s')} <b>${esc(ru.mon)}</b>${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(esc).join('・')}</span>`:''}（軸）</div><div class="sc-chips">${condChip}</div></div>
+            </div>
+          </div>`;
+        }
         const evd = ru.evidence;
         const refName = e => (e && e.ref==='base') ? '基本形' : '次点候補';
-        const miniTrio = arr => `<span class="sc-mtrio">${(arr||[]).map(n=>icoImg(n,'sc-ico-s')).join('')}</span>`;
-        const watchHd = evd
-          ? `<div class="sc-watch">決め手：<b>${esc(evd.opp)}</b> が ${(evd.opp3||[]).map(n=>`<span class="sc-w">${icoImg(n,'sc-ico-s')}${esc(n)}</span>`).join('')} を出す形
-               <div class="sc-cmp">この並びでAI対戦した2案　${miniTrio(evd.ref_trio)}<b>${Math.round(evd.base*100)}%</b>（${refName(evd)}）
-                 <span class="sc-arr2">→</span> ${miniTrio(evd.trio)}<b>${Math.round(evd.pick*100)}%</b>（採用）
-                 <span class="sc-gain">+${Math.round(evd.gain*100)}pt</span></div>
-               ${evd.ref!=='base' ? `<div class="sc-note">※基本形はこの相手では未測定のため、比較は候補2案どうし</div>` : ''}</div>`
-          : `<div class="sc-watch sc-watch-n">実測ではどの選出でも同等（無理に替えなくてよい）</div>`;
+        const watchHd = (!evd)
+          ? `<div class="sc-watch sc-watch-n">実測ではどの選出でも同等（無理に替えなくてよい）</div>` : '';
         const teams = (ru.teams||[]).map(t=>{
           const hi = new Set(t.hi||[]);
           const dim = t.mode==='decisive';
           const ev = t.ev;
-          const badge = ev
-            ? (ev.tie ? `<span class="sc-mode sc-m-nt">${refName(ev)}と同等</span>`
-                      : `<span class="sc-mode sc-m-sp">${refName(ev)}より ${ev.delta>0?'+':''}${Math.round(ev.delta*100)}pt</span>`)
-            : `<span class="sc-mode sc-m-nt">比較データなし</span>`;
+          const isTop = evd && t.opp===evd.opp && ev && ev.key;
+          let badge;
+          if(isTop){
+            badge = `<span class="sc-mode sc-m-top">決め手 ${Math.round(ev.key.base*100)}%→${Math.round(ev.key.pick*100)}%</span>`;
+          } else if(ev){
+            badge = ev.tie ? `<span class="sc-mode sc-m-nt">${refName(ev)}と同等</span>`
+                      : `<span class="sc-mode sc-m-sp">${refName(ev)}より ${ev.delta>0?'+':''}${Math.round(ev.delta*100)}pt</span>`;
+          } else {
+            badge = `<span class="sc-mode sc-m-nt">比較データなし</span>`;
+          }
           return `<div class="sc-team"><div class="sc-team-ico">${(t.names||[]).map(n=>
             `<span class="${hi.has(n)?'sc-hi':(dim?'sc-dim':'')}">${icoImg(n,'sc-ico-t')}</span>`).join('')}</div>
             <div class="sc-sub">${esc(t.opp)} ${badge}</div></div>`;
@@ -518,7 +535,6 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
         if(ru.cond && ru.cond.kind==='mon') condChip = `<span class="sc-typechip">${esc(ru.cond.value)}入り</span>`;
         else if(ru.cond && ru.cond.kind==='type') condChip = `<span class="sc-typechip">${esc(ru.cond.value)}タイプ2体以上</span>`;
         else if(ru.cond && ru.cond.kind==='trait') condChip = `<span class="sc-typechip">${esc(ru.cond.label)}</span>`;
-        const cov = (ru.coverage!=null) ? `<span class="sc-cov">環境の${Math.round(ru.coverage*100)}%が該当</span>` : '';
         let reason = '';
         if(evd){
           const rt = evd.ref_trio||[], tr = evd.trio||[];
@@ -538,8 +554,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
           <div class="sc-rule-body">
             <div class="sc-teams">${teams}</div>
             <div class="sc-arr">▶</div>
-            <div class="sc-rule-act"><div class="sc-swap">${swap} <b>${esc(ru.mon)}</b>${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(esc).join('・')}</span>`:''} を入れる</div>${reason}<div class="sc-chips">${condChip}${cov}</div></div>
-            <div class="sc-rule-meta"><b>${pct(ru.wr)}</b></div>
+            <div class="sc-rule-act"><div class="sc-swap">${swap} <b>${esc(ru.mon)}</b>${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(esc).join('・')}</span>`:''} を入れる</div>${reason}<div class="sc-chips">${condChip}</div></div>
           </div>
         </div>`;
       }).join('');
