@@ -157,6 +157,7 @@ heroImage: '../../assets/hero-aegislash-m2.png'
       <span><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ドラゴン</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
+      <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -171,7 +172,7 @@ heroImage: '../../assets/hero-aegislash-m2.png'
 </table>
 </div>
 
-はがね/ゴーストはノーマル・かくとう・どくを無効化し、8タイプ（むしは×0.25）を半減する優秀な耐性を持ちます。特に**かくとうを無効化**できる点は、環境のかくとう技（ルカリオのインファイト採用率71.5%等）を完全に受けられることを意味し、防御面でのギルガルドの価値を支えています。エスパー技もはがねで半減（×0.5）するため、スターミーのしねんのずつき等を受けやすい点も含め、シールドフォルムのぼうぎょ140・とくぼう140と組み合わせると半減・無効タイプの攻撃はほとんど通りません。
+はがね/ゴーストはノーマル・かくとう・どくを無効化し、9タイプ（むしは×0.25）を半減する優秀な耐性を持ちます。特に**かくとうを無効化**できる点は、環境のかくとう技（ルカリオのインファイト採用率71.5%等）を完全に受けられることを意味し、防御面でのギルガルドの価値を支えています。エスパー技もはがねで半減（×0.5）するため、スターミーのしねんのずつき等を受けやすい点も含め、シールドフォルムのぼうぎょ140・とくぼう140と組み合わせると半減・無効タイプの攻撃はほとんど通りません。
 
 ただし弱点のほのお・じめん・あく・ゴーストは×2で通り、これらの技を持つ相手には注意が必要です。
 

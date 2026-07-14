@@ -136,7 +136,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
-      <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ（×4）</span>
+      <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
     </div>
@@ -155,7 +155,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
 </table>
 </div>
 
-最大の弱点はいわで、みず2×むし2の×4です。でんき（みず2×むし1）・ひこう（みず1×むし2）も×2弱点です。くさ技はみず2×むし0.5で等倍に収まります。ほのお技はみず0.5×むし2でタイプ上は等倍ですが、すいほうの0.5倍補正がかかり実質0.5倍に抑えられます。みず（みず0.5×むし1）・かくとう（かくとう1×むし0.5）・じめん（じめん2×むし0.5）・こおり（こおり1×むし0.5）・はがね（はがね1×むし0.5）を半減し、やけど無効も合わせ、特殊受けとして安定したタイプ耐性を持ちます。
+いわ・でんき・ひこうがいずれも×2弱点です。くさ技はみず2×むし0.5で等倍に収まります。ほのお技はみず0.5×むし2でタイプ上は等倍ですが、すいほうの0.5倍補正がかかり実質0.5倍に抑えられます。みず（みず0.5×むし1）・かくとう（かくとう1×むし0.5）・じめん（じめん2×むし0.5）・こおり（こおり1×むし0.5）・はがね（はがね1×むし0.5）を半減し、やけど無効も合わせ、特殊受けとして安定したタイプ耐性を持ちます。
 
 ---
 
@@ -321,7 +321,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）は等倍でB92が受けられる。ただしアクアブレイクはドラゴン0.5×じめん2で等倍止まり（すいほう込みでようやく一致等倍）。A130・S102で先攻されるため、受け出して耐えてからの反撃前提で過信はできない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）は半減でB92が受けやすい。ただしアクアブレイクはドラゴン0.5×じめん2で等倍止まり（すいほう込みでようやく一致等倍）。A130・S102で先攻されるため、受け出して耐えてからの反撃前提で過信はできない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -394,7 +394,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0970-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">キラフロル（15位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ/どく。パワージェム（85.3%）がいわ2×むし2の×4弱点で、C130から急所込みでなくとも致命傷。S55はオニシズクモより速い。アクアブレイクは×2で通るが先に押し切られやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ/どく。パワージェム（85.3%）が×2弱点で、C130から急所込みでなくとも致命傷。S55はオニシズクモより速い。アクアブレイクは×2で通るが先に押し切られやすい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">受け出しは厳禁。じめん・はがね・かくとうタイプを後出ししていわ技を半減し、上から処理する</td>
 </tr>
 </tbody>

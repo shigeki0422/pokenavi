@@ -490,7 +490,7 @@ S167まで伸び、ひかえめ型（S152）では先手を取られる最速サ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（99.0%）・アイアンヘッド（86.9%）の先制・はがね技が脅威。はがねでフェアリーを半減し、こちらのエスパー打点は無効化される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（99.0%）・アイアンヘッド（86.9%）の先制・はがね技が脅威。フェアリーは等倍で通るがエスパー打点はあくで無効化される</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお・かくとう枠（リザードン・ルカリオ）ではがね弱点を突く。攻撃技を撃つとふいうちで先制されるため、後続で受けてから処理する</td>
 </tr>
 <tr>

@@ -444,7 +444,7 @@ S110はようき最大振りでS約178となり、ガブリアス（S169）・�
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー×2・採用率97.0%）がこちらの弱点を突く。せいなるつるぎはみず0.5×フェアリー2＝等倍止まりで高HPを抜けない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー×2・採用率97.0%）がこちらの弱点を突く。せいなるつるぎはみず0.5×フェアリー1＝半減止まりで高HPを抜けない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">どく・はがね・くさタイプ（キラフロル・フシギバナ等）でフェアリーを半減して受け、リーフブレード（みず×2）持ちなら別枠から弱点を突く</td>
 </tr>
 </tbody>

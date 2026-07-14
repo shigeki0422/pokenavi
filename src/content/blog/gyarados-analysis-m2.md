@@ -278,6 +278,7 @@ A155は環境トップクラスの攻撃力です。D130という高い特防と
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
       <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -290,7 +291,7 @@ A155は環境トップクラスの攻撃力です。D130という高い特防と
 
 **メガ前との弱点比較:**
 
-メガ前はでんき×2・いわ×2・氷×2の弱点を持っていましたが、メガ後は**いわ×2弱点がなくなり、かくとう・むし・くさ・フェアリー弱点が加わります**。また、メガ前はじめんが無効でしたが、**メガ後はじめんが等倍で通ります**。ガブリアスのじしんには特に注意してください。
+メガ前はでんき×4・いわ×2の弱点を持っていましたが（こおりは等倍で弱点ではありません）、メガ後は**いわ×2弱点がなくなり、かくとう・むし・くさ・フェアリー弱点が加わります**。また、メガ前はじめんが無効でしたが、**メガ後はじめんが等倍で通ります**。ガブリアスのじしんには特に注意してください。
 
 ---
 
@@ -646,7 +647,7 @@ S81は積み前では環境の主要アタッカーに先手を取られます�
 
 | 選択 | タイプ | A | じめん耐性 | 特徴 |
 |---|---|---|---|---|
-| 非メガ型（64.6%） | みず/ひこう | A125 | **無効**（ひこう） | でんき×2倍弱点 |
+| 非メガ型（64.6%） | みず/ひこう | A125 | **無効**（ひこう） | でんき×4倍弱点 |
 | メガ型（35.4%） | みず/あく | **A155** | **等倍**（じめん） | でんき半減 |
 
 メガ進化するとこうげきが30上昇する一方、**じめん無効が失われじめんが等倍で通るようになる**というタイプ変化が発生します。M-2環境ではガブリアス（使用率1位・じしん採用率99.2%）が最多使用ポケモンであるため、このじめん等倍化は無視できないリスクです。

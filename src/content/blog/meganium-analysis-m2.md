@@ -161,7 +161,7 @@ heroImage: '../../assets/hero-meganium-m2.png'
       <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
       <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
-      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ（0.25）</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ（0.5）</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -172,7 +172,7 @@ heroImage: '../../assets/hero-meganium-m2.png'
 </table>
 </div>
 
-くさ/フェアリーは**ドラゴン技を無効化**し、みず・でんき・じめん・かくとう・あくを半減、くさを4分の1に抑える優秀な耐性を持ちます。環境1位ガブリアスのげきりん（採用率47.9%）・スケイルショットを無効化でき、B115・D115の高耐久と合わせて受け出しの起点になります。一方、弱点はどく・ほのお・こおり・ひこう・はがねの5タイプ。とくにメガ前のくさ単では等倍だった**はがねが新たに×2弱点になり、もとから弱点のどくはくさ・フェアリーの2タイプとも×2で刺さる×4弱点**に跳ね上がる点に注意が必要です。
+くさ/フェアリーは**ドラゴン技を無効化**し、みず・でんき・じめん・かくとう・あく・くさを半減する優秀な耐性を持ちます。環境1位ガブリアスのげきりん（採用率47.9%）・スケイルショットを無効化でき、B115・D115の高耐久と合わせて受け出しの起点になります。一方、弱点はどく・ほのお・こおり・ひこう・はがねの5タイプ。とくにメガ前のくさ単では等倍だった**はがねが新たに×2弱点になり、もとから弱点のどくはくさ・フェアリーの2タイプとも×2で刺さる×4弱点**に跳ね上がる点に注意が必要です。
 
 ---
 

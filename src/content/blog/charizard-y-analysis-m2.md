@@ -570,7 +570,7 @@ H32 B20の物理耐久に厚く振り、HP実数値を185まで上げる型で�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">メガ石採用率97.7%、メガ後S189（おくびょう最速）でメガリザードンY（S167）を抜く。主力のアクアブレイク89.2%はひでり下で実質等倍まで軽減できるものの、しねんのずつき39.4%・サイコカッター24.7%採用のエスパー個体には先制でエスパー×2を突かれる。低耐久（H78/B78）のこちらは厳しい</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">メガ石採用率97.7%、メガ後S189（おくびょう最速）でメガリザードンY（S167）を抜く。主力のアクアブレイク89.2%はひでり下で実質等倍まで軽減できるものの、しねんのずつき39.4%・サイコカッター24.7%採用のエスパー個体でも、エスパー技は等倍止まりで弱点は突かれない。低耐久（H78/B78）のこちらは厳しい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #fca5a5"><img src="/images/pokemon/pokemon-0479-05.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウォッシュロトム（22位）</td>
@@ -714,7 +714,7 @@ H32 B20の物理耐久に厚く振り、HP実数値を185まで上げる型で�
 </tr>
 <tr>
   <td style="padding:8px 14px;border:1px solid #cbd5e1;text-align:left;font-weight:600">最大弱点</td>
-  <td style="padding:8px 14px;border:1px solid #cbd5e1">4倍弱点なし（5種2倍）</td>
+  <td style="padding:8px 14px;border:1px solid #cbd5e1">4倍弱点なし（3種2倍）</td>
   <td style="padding:8px 14px;border:1px solid #cbd5e1;background:#fee2e2"><strong>いわ4倍（ステルスロック1/2）</strong></td>
 </tr>
 <tr style="background:#fafafa">

@@ -353,7 +353,7 @@ S最小のため一致技の通りはAS型より遅く、つるぎのまいを�
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×4（あく2×ドラゴン2）。あくのはどう（98.5%）・りゅうせいぐん（90.2%）は等倍で、ばけのかわで1発受けてつるぎのまいを積みやすい。つるぎのまい後はじゃれつくで確定圏</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつくが×4（あく2×ドラゴン2）。あくのはどう（98.5%）は等倍だが、りゅうせいぐん（90.2%）はフェアリーで無効化できるため、ばけのかわで1発受けてつるぎのまいを積みやすい。つるぎのまい後はじゃれつくで確定圏</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

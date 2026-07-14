@@ -48,7 +48,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
 
 ウォッシュロトムはでんき/みずという複合タイプを、特性**ふゆう**でじめん無効と組み合わせています。でんき単体ならじめんが×2弱点ですが、ふゆうにより**じめん技を完全に無効化**します。環境1位ガブリアスのじしん（採用率99.2%）・7位カバルドンのじしん（98.0%）を受けてもダメージ0です。
 
-攻撃面はハイドロポンプ（みず）と10まんボルト／ボルトチェンジ（でんき）の2タイプで、この2つは多くの環境上位に等倍以上で通る一貫性の高い組み合わせです。みずはガブリアス・リザードン・カバルドンに×2、でんきはアシレーヌ・アーマーガア・ギャラドスに×2で刺さります。
+攻撃面はハイドロポンプ（みず）と10まんボルト／ボルトチェンジ（でんき）の2タイプで、この2つは多くの環境上位に等倍以上で通る一貫性の高い組み合わせです。みずはリザードン・カバルドンに×2（ガブリアスには等倍止まり）、でんきはアシレーヌ・アーマーガア・ギャラドスに×2で刺さります。
 
 ### 2. ボルトチェンジで対面操作しながら火力を出す
 
@@ -180,7 +180,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">110</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">98.5%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">命中率80。一致のメイン火力。ガブリアス・リザードン・カバルドンに×2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">命中率80。一致のメイン火力。リザードン・カバルドンに×2（ガブリアスには等倍止まり）</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ボルトチェンジ</strong></td>
@@ -336,7 +336,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）をふゆうで無効。ハイドロポンプが×2（じめん2×ドラゴン1）で刺さる。後出ししておにび／ハイドロポンプを通せる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）をふゆうで無効。ハイドロポンプは半減止まり（じめん1×ドラゴン0.5）だが、後出ししておにび／ハイドロポンプを通せる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -357,7 +357,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト／ボルトチェンジが×2（でんき1×ひこう2）で刺さる。ボディプレス・アイアンヘッドはこちら半減で受けられ、おにびでも起点化できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト／ボルトチェンジが×2（でんき1×ひこう2）で刺さる。ボディプレスは等倍だが、アイアンヘッドは¼で軽減して受けられ、おにびでも起点化できる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -391,7 +391,7 @@ heroImage: '../../assets/hero-rotom-wash-m2.png'
 </table>
 </div>
 
-アーマーガア戦は10まんボルト／ボルトチェンジ（でんき）がひこう複合に×2で通り、相手のボディプレス・アイアンヘッドはこちら半減で受けられます。みず技ははがね/ひこうに半減（みず0.5×ひこう1）なのででんき技で攻めます。決定力は高くないので削りきりは後続に任せます。
+アーマーガア戦は10まんボルト／ボルトチェンジ（でんき）がひこう複合に×2で通ります。相手のボディプレスは等倍で通りますが、アイアンヘッドは¼まで軽減して受けられるので、でんき技で攻めます。決定力は高くないので削りきりは後続に任せます。
 
 ### 苦手なポケモンと対策
 

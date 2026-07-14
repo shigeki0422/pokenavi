@@ -368,7 +368,7 @@ heroImage: '../../assets/hero-archaludon-m2.png'
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（16位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ やや有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（ドラゴン1×ひこう2＝×2）・りゅうせいぐん（×2）で弱点を突ける。ただしS100＞85で先手は取られる。じしん採用は15.2%と低くこちらの弱点は突かれにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルトは等倍止まりだが、りゅうせいぐん（×2）で弱点を突ける。ただしS100＞85で先手は取られる。じしん採用は15.2%と低くこちらの弱点は突かれにくい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

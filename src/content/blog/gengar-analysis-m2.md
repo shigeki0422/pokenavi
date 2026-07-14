@@ -156,7 +156,9 @@ M-2シーズンのシングルバトルで、ゲンガーは**使用率10位**�
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center">
-      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし（×0.5）</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ（×0.5）</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー（×0.5）</span>
+      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし（×0.25）</span>
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく（×0.25）</span>
     </div>
   </td>

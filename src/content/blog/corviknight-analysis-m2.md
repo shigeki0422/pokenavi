@@ -38,7 +38,7 @@ heroImage: '../../assets/hero-corviknight-m2.png'
 
 シーズンM-2（2026/5/13〜6/17）のシングルバトルで、アーマーガアは**使用率6位**を記録。アタッカーが上位を占める中、**はねやすめ採用率98.1%**が示す通り、受け回しを担う耐久ポケモンとして高い採用率を維持しています。
 
-アーマーガアの核は**はがね/ひこう**という複合タイプです。弱点はほのお・でんきの2つだけで、じめん・どくを無効化し、くさ・むしを×0.25、ドラゴン・フェアリー・エスパー・ノーマルを×0.5に抑えます。ぼうぎょ種族値105とはねやすめによる毎ターン回復を組み合わせ、環境上位の物理アタッカーを起点に詰みづらくさせる役割を持ちます。
+アーマーガアの核は**はがね/ひこう**という複合タイプです。弱点はほのお・でんきの2つだけで、じめん・どくを無効化し、くさ・むしを×0.25、ドラゴン・フェアリー・エスパー・ノーマル・はがね・ひこうを×0.5に抑えます。ぼうぎょ種族値105とはねやすめによる毎ターン回復を組み合わせ、環境上位の物理アタッカーを起点に詰みづらくさせる役割を持ちます。
 
 ---
 
@@ -50,7 +50,7 @@ heroImage: '../../assets/hero-corviknight-m2.png'
 
 - じめん（×0）・どく（×0）を無効化
 - くさ（×0.25）・むし（×0.25）を大幅軽減
-- ドラゴン・フェアリー・ノーマル・エスパー（各×0.5）を半減
+- ドラゴン・フェアリー・ノーマル・エスパー・はがね・ひこう（各×0.5）を半減
 
 使用率1位ガブリアスのじしん（採用率99.2%）を無効化できるのが象徴的で、環境最多の物理地面アタッカーに対する受け出し性能が、6位という使用率を支えています。
 
@@ -154,6 +154,7 @@ heroImage: '../../assets/hero-corviknight-m2.png'
       <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
       <span><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ドラゴン</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
+      <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

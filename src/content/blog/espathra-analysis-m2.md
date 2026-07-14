@@ -404,7 +404,7 @@ heroImage: '../../assets/hero-espathra-m2.png'
     <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ミミッキュ（19位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ばけのかわで1発耐え、かげうち（採用率93.6%・ゴースト×2）の先制技で削られる。つるぎのまい（86.7%）からの全抜きを許すと止まらない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドドゲザン（あく/はがね）でかげうち・シャドークロー（×0.5）とじゃれつく（×0.25）を受け、ばけのかわを剥がしてから倒す（ドレインパンチ採用24.8%の個体には×4なので注意）。まもるでばけのかわを消費させない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドドゲザン（あく/はがね）でかげうち・シャドークロー（×0.5）を半減で受け（じゃれつくは等倍）、ばけのかわを剥がしてから倒す（ドレインパンチ採用24.8%の個体には×4なので注意）。まもるでばけのかわを消費させない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

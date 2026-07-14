@@ -352,7 +352,7 @@ heroImage: '../../assets/hero-ninetales-alola-m2.png'
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライが×2（みず特効）。S177＞112で先手。ムーンフォース（97.0%）はフェアリーで×0.5、アクアジェット（66.6%）もみずで×0.5に軽減でき、被弾を抑えて削り合える。ただし低耐久ゆえ一撃で落としきれないと反撃で削られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライが×2（みず特効）。S177＞112で先手。ムーンフォース（97.0%）・アクアジェット（66.6%）はいずれも等倍で通る点には注意が必要。ただし低耐久ゆえ一撃で落としきれないと反撃で削られる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

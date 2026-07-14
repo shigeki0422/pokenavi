@@ -153,6 +153,7 @@ heroImage: '../../assets/hero-ceruledge-m2.png'
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
+      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし(×0.25)</span>
     </div>
   </td>
@@ -167,7 +168,7 @@ heroImage: '../../assets/hero-ceruledge-m2.png'
 </table>
 </div>
 
-弱点はみず・じめん・いわ・ゴースト・あくの5タイプ。いずれもタスキで一度は耐えますが、くだけるよろいはぼうぎょを下げるため、弱点の物理技を連打されると2発目以降が重くなります。ノーマル・かくとうの無効と、ほのお/くさ/こおり/はがね/フェアリーの半減・むし×0.25の耐性は受け出しの起点に使えます。
+弱点はみず・じめん・いわ・ゴースト・あくの5タイプ。いずれもタスキで一度は耐えますが、くだけるよろいはぼうぎょを下げるため、弱点の物理技を連打されると2発目以降が重くなります。ノーマル・かくとうの無効と、ほのお/くさ/こおり/はがね/フェアリー/どくの半減・むし×0.25の耐性は受け出しの起点に使えます。
 
 ---
 

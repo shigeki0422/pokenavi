@@ -438,7 +438,7 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ひこうでカバルドンの弱点くさ・こおりを半減。ちょうはつ持ちの起点作り役と役割分担</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ひこうでカバルドンの弱点くさを半減（こおりは等倍）。ちょうはつ持ちの起点作り役と役割分担</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)">
@@ -456,7 +456,7 @@ EVスプレッドはHB寄り（ぼうぎょ）かHD寄り（とくぼう）か�
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでカバルドンの弱点くさ・みず・こおりのうちみず以外を半減。受け回しの相方</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴンでカバルドンの弱点くさ・みずを半減（こおりは等倍）。受け回しの相方</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ">

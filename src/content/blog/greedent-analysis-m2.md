@@ -124,7 +124,7 @@ heroImage: '../../assets/hero-greedent-m2.png'
   <img src="/images/types/type-04-ground.png" alt="じめん" style="width:44px;height:44px;vertical-align:middle;margin:2px" title="じめん" />
 </div>
 
-ホルードは**ノーマル/じめんの複合タイプ**です。かくとうに加え、じめんが背負うみず・くさ・こおりが×2弱点で、低耐久のホルードには重い被弾になります。一方ででんき技を無効化（じめん）、ゴースト技も無効化（ノーマル）でき、無効タイプを2つ持つのが対戦上の特徴です。
+ホルードは**ノーマル/じめんの複合タイプ**です。かくとうに加え、じめんが背負うみず・くさ・こおりが×2弱点で、低耐久のホルードには重い被弾になります。一方ででんき技を無効化（じめん）、ゴースト技も無効化（ノーマル）でき、無効タイプを2つ持つのが対戦上の特徴です。どく・いわは半減で受けられます。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em;text-align:center">
@@ -147,7 +147,8 @@ heroImage: '../../assets/hero-greedent-m2.png'
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span style="color:#94a3b8">なし</span>
+      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
+      <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

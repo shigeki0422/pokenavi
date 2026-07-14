@@ -452,7 +452,7 @@ HD型に比べて特殊耐久の補強がB方向に分散するぶん、ウォ�
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">
     <div class="name">ブリジュラス</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴン。フェアリー・ノーマル・ほのお等を半減し特殊耐久を補完</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">はがね/ドラゴン。ノーマル・エスパー・むし等を半減し特殊耐久を補完</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">

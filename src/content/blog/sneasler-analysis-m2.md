@@ -146,12 +146,11 @@ heroImage: '../../assets/hero-sneasler-m2.png'
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
+      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">かくとう</span>
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
-      <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
-      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
     </div>
   </td>
 </tr>
@@ -159,7 +158,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
 </table>
 </div>
 
-エスパーが**×4の致命的な弱点**となる点が最大の注意点です。じめん・ひこうも×2で通り、いずれもオオニューラのぼうぎょ60では一撃で落とされかねません。一方でむしを¼、どく・いわ・ゴースト・くさ・あく・フェアリーを半減で受けられるため、マスカーニャのはたきおとす（あく0.5）・トリックフラワー（くさ0.5）やゲッコウガのあくのはどう（あく0.5）といった環境上位の高速勢の主力を軽減でき、被弾しても一撃で崩されにくくなります。
+エスパーが**×4の致命的な弱点**となる点が最大の注意点です。じめん・ひこうも×2で通り、いずれもオオニューラのぼうぎょ60では一撃で落とされかねません。一方でむしを¼、かくとう・どく・いわ・くさ・あくを半減で受けられるため、マスカーニャのはたきおとす（あく0.5）・トリックフラワー（くさ0.5）やゲッコウガのあくのはどう（あく0.5）といった環境上位の高速勢の主力を軽減でき、被弾しても一撃で崩されにくくなります。
 
 ---
 
@@ -406,7 +405,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のアクアブレイク（89.2%）・アイススピナー（64.9%）はこちらに等倍だが、しねんのずつき（39.4%）・サイコカッター（24.7%）のエスパー技を持つ個体はこちらに×4で一撃。最速個体のS183はいじっぱりS172を上回り、起動前は先手も取れない。インファイトはみず/エスパーに等倍で一撃にできず撃ち負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">主力のアクアブレイク（89.2%）・アイススピナー（64.9%）はこちらに等倍だが、しねんのずつき（39.4%）・サイコカッター（24.7%）のエスパー技を持つ個体はこちらに×4で一撃。最速個体のS183はいじっぱりS172を上回り、起動前は先手も取れない。インファイトはみず/エスパーに半減で一撃にできず撃ち負ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じごくづき（あく×2）なら大ダメージだが起動前は後攻。エスパー技を半減するはがね・あくタイプを同伴して後出しで処理する</td>
 </tr>
 <tr>

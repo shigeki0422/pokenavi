@@ -346,7 +346,7 @@ HC振りでとくこう126を活かしつつ、HP80に振ってオボンのみ�
     <img src="/images/pokemon/pokemon-0635-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">サザンドラ（21位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 超有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォースが×4（あく2×ドラゴン2）で確定圏。主力のあくのはどう（98.5%）・りゅうせいぐん（90.2%）・かえんほうしゃ（67.0%）はいずれもこちらが半減し、弱点を突く技を持たない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォースが×4（あく2×ドラゴン2）で確定圏。主力のあくのはどう（98.5%）・かえんほうしゃ（67.0%）は半減で受けられ、りゅうせいぐん（90.2%）はフェアリーで無効化でき、弱点を突く技を持たない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -381,7 +381,7 @@ HC振りでとくこう126を活かしつつ、HP80に振ってオボンのみ�
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">一致技がともに等倍で高耐久を抜けず、はねやすめ（98.1%）で回復される。決定打を欠き、てっぺき（63.5%）の起点にされやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォースははがねで半減され、うたかたのアリアは等倍止まりで高耐久を抜けず、はねやすめ（98.1%）で回復される。決定打を欠き、てっぺき（63.5%）の起点にされやすい</td>
 </tr>
 </tbody>
 </table>

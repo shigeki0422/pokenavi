@@ -395,14 +395,14 @@ HD型はとくぼう213で特殊アタッカーを受けやすく、HB型はぼ�
     <img src="/images/pokemon/pokemon-0479-02.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウォッシュロトム（22位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき・56.8%）が×2弱点。HD型でも継続的に削られ、おにび（80.6%）でこちらの打点も奪われる。どくどくは通るが、ハイドロポンプ（98.5%）も等倍で入り削り合いで押し負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき・56.8%）が×2弱点。HD型でも継続的に削られ、おにび（80.6%）でこちらの打点も奪われる。どくどくは通るが、ハイドロポンプ（98.5%）は半減で受けても削り合いで押し負ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき・66.9%）が×2弱点。はがねタイプでどくどくが入らず、こちらの削り手段が消える。りゅうせいぐん・ラスターカノンも等倍以上で通る</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき・66.9%）が×2弱点。はがねタイプでどくどくが入らず、こちらの削り手段が消える。りゅうせいぐんは等倍で通る（ラスターカノンは半減）</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

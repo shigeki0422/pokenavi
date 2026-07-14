@@ -88,7 +88,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-1018-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ブリジュラス</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
-  <td style="padding:6px;border:1px solid #cbd5e1;color:#3b82f6">¼</td>
+  <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
 </tr>
 <tr>
@@ -109,14 +109,14 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
-  <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
+  <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0448-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガルカリオ</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
-  <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+  <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#e67e22;font-weight:bold">◎</td>
 </tr>
 <tr>
@@ -144,7 +144,7 @@ heroImage: '../../assets/hero-dragonite-m2.png'
   <td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:left"><img src="/images/pokemon/pokemon-0212-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガハッサム</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
-  <td style="padding:6px;border:1px solid #cbd5e1;color:#60a5fa">△</td>
+  <td style="padding:6px;border:1px solid #cbd5e1;color:#94a3b8">○</td>
   <td style="padding:6px;border:1px solid #cbd5e1;color:#dc2626;font-weight:bold">◎×4</td>
 </tr>
 </tbody>
@@ -536,7 +536,7 @@ CSフルに振った型よりとくこうとすばやさが下がるため、火
     <small style="color:#94a3b8;display:block">はがね/ひこう</small>
   </td>
   <td style="padding:8px 12px;border:1px solid #fca5a5">りゅうせいぐん・エアスラッシュをともに0.5倍で受け、高い物理耐久とはねやすめで居座る。かえんほうしゃ非採用（採用率47.8%）の型では突破しづらい</td>
-  <td style="padding:8px 12px;border:1px solid #fca5a5">かえんほうしゃ（はがね弱点×2）を採用しておく。10まんボルトははがね0.5倍・ひこう2倍で等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #fca5a5">かえんほうしゃ（はがね弱点×2）を採用しておく。10まんボルトもひこう2倍で弱点を突ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #fca5a5">

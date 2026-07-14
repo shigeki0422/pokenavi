@@ -52,7 +52,7 @@ heroImage: '../../assets/hero-milotic-m2.png'
 
 ねっとう（採用率95.2%）はメインの攻撃技でありながら、30%でやけどを付与します。やけどは相手のこうげきを半減し、毎ターン定数ダメージを与えるため、本来は特殊耐久型のミロカロスが**物理アタッカー相手にも居座りの余地を作れる**のが大きい点です。
 
-タイプ一致のねっとうはみず半減でない相手に等倍以上で通り、ガブリアス（じめん/ドラゴン、みず×2弱点）には弱点を突けます。攻撃性能そのものは控えめですが、やけど分布で相手の物理エースを腐らせる役割を担います。
+タイプ一致のねっとうはみず半減でない相手に等倍以上で通ります。ガブリアス（じめん/ドラゴン）に対しては等倍止まりです。攻撃性能そのものは控えめですが、やけど分布で相手の物理エースを腐らせる役割を担います。
 
 ### 3. ミラーコート・くろいきりで起点回避
 
@@ -386,14 +386,14 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S102で先手を取られ、A130のじしん（99%・等倍）は重い。ねっとうがじめん/ドラゴンに×2弱点で、やけどを引ければ物理火力を削って受け返せる。スケイルショット後の高速化にも注意</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S102で先手を取られ、A130のじしん（99%・等倍）は重い。ねっとうはじめん/ドラゴンに等倍止まりだが、やけどを引ければ物理火力を削って受け返せる。スケイルショット後の高速化にも注意</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（99%）・ドゲザン等の物理技をねっとうのやけどで弱化できる。ねっとうははがね/あくに×0.5で打点は薄いが、やけどでA物理を腐らせて受け返す。つるぎのまい（72%）の積みにはくろいきりで対応</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふいうち（99%）・ドゲザン等の物理技をねっとうのやけどで弱化できる。ねっとうははがね/あくに等倍止まりで打点は薄いが、やけどでA物理を腐らせて受け返す。つるぎのまい（72%）の積みにはくろいきりで対応</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

@@ -352,13 +352,14 @@ Base = floor( floor(22 × 85 × 334 / B) / 50 + 2 )
     <img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">はがね
     <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">エスパー（0.5倍）
     <img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">こおり（0.5倍）
+    <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle;margin-left:8px;margin-right:3px">かくとう（0.5倍）
   </td>
 </tr>
 </tbody>
 </table>
 </div>
 
-弱点は**でんき・くさ・ゴースト・あく・むし**の5タイプと多めです。一方でほのお・みず・はがねへの耐性を持ち、エスパーは同タイプ補正により0.5倍と耐えます。M-2環境で多いゴーストタイプ（ゲンガー・ギルガルド）やあくタイプへは注意が必要です。
+弱点は**でんき・くさ・ゴースト・あく・むし**の5タイプと多めです。一方でほのお・みず・はがね・かくとうへの耐性を持ち、エスパーは同タイプ補正により0.5倍と耐えます。M-2環境で多いゴーストタイプ（ゲンガー・ギルガルド）やあくタイプへは注意が必要です。
 
 でんきタイプ（ブリジュラス等）への弱点は特に大きく、対戦序盤の出し順管理が重要です。
 

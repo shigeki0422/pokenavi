@@ -216,10 +216,9 @@ heroImage: '../../assets/hero-lucario-m2.png'
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
       <span><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ドラゴン</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
-      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
-      <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
-      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
+      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし（×0.25）</span>
+      <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ（×0.25）</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -230,7 +229,7 @@ heroImage: '../../assets/hero-lucario-m2.png'
 </table>
 </div>
 
-はがねタイプがどくを無効化し、さらに9タイプへの耐性を持つのが特徴です。フェアリー技・ドラゴン技を半減できる点は環境的に重要です。ただし、環境のドラゴン・フェアリータイプ（ガブリアス・カイリュー・リザードン等）はじしんやほのお技などルカリオの弱点を突く技を併せ持つことが多く、タイプ耐性があっても受け出しできるわけではありません。弱点はほのお・じめん・かくとうの3タイプで、いずれも×2で通ります（エスパーはかくとう×2×はがね½で等倍に収まります）。
+はがねタイプがどくを無効化し、さらに8タイプへの耐性を持つのが特徴です。ドラゴン技を半減できる点は環境的に重要です（フェアリー技は等倍で通ります）。ただし、環境のドラゴンタイプ（ガブリアス・カイリュー等）はじしんやほのお技などルカリオの弱点を突く技を併せ持つことが多く、タイプ耐性があっても受け出しできるわけではありません。弱点はほのお・じめん・かくとうの3タイプで、いずれも×2で通ります（エスパーはかくとう×2×はがね½で等倍に収まります）。
 
 ---
 

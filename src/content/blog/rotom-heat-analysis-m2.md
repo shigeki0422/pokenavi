@@ -347,7 +347,7 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">オーバーヒートが×2（ひこう1×はがね2）。アイアンヘッド（31.1%）はほのお側に×0.5、ブレイブバード（19.0%）も等倍止まりで、こちらへの有効打が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">オーバーヒートが×2（ひこう1×はがね2）。アイアンヘッド（31.1%）はほのお側に×0.5、ブレイブバード（19.0%）も半減で、こちらへの有効打が乏しい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -389,14 +389,14 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼり（85.9%）が×2弱点。S81に先手は取れるが、りゅうのまい（73.3%）後は上を取られ、でんき技は等倍止まりで一撃では落とせない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼり（85.9%）が×2弱点。S81に先手は取れるが、りゅうのまい（73.3%）後は上を取られ、でんき技は×4で刺さるが一撃では落とせない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S115で上を取られ、アクアブレイク（89.2%）が×2弱点。先制のアクアジェット（86.9%）でも削られ、でんき技は等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S115で上を取られ、アクアブレイク（89.2%）が×2弱点。先制のアクアジェット（86.9%）でも削られ、でんき技は×2で返せる</td>
 </tr>
 </tbody>
 </table>
@@ -420,7 +420,7 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0902-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">イダイトウ(オス)（8位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S78に先手は取れるが、ウェーブタックル（96.5%）が×2弱点でHP50の低耐久を一撃圏に入れられ、アクアジェット（91.1%）の先制でも削られる。でんき技は等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S78に先手は取れるが、ウェーブタックル（96.5%）が×2弱点でHP50の低耐久を一撃圏に入れられ、アクアジェット（91.1%）の先制でも削られる。でんき技は×2で返せる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">スカーフ型で上から10まんボルトを撃ちつつ、みず技を半減するみず受け（ミロカロス・カビゴン）へボルトチェンジで引く</td>
 </tr>
 <tr style="background:#fafafa">
@@ -434,21 +434,21 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">スターミー（20位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S115でこちらより速く、アクアブレイク（89.2%）が×2弱点。アクアジェット（86.9%）の先制もあり上から崩される。でんき技は等倍止まりで一撃にならない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S115でこちらより速く、アクアブレイク（89.2%）が×2弱点。アクアジェット（86.9%）の先制もあり上から崩される。でんき技は×2で返せるが一撃にはならない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">スカーフ型なら上から10まんボルトで縛れる。耐久型は受からないため、くさ・でんきを半減するみず受け（ウォッシュロトム等）に引いて後出しする</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼり（85.9%）が×2弱点。りゅうのまい（73.3%）1積みでS81→上を取られ、でんき技は等倍で受けに回しても崩されやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼり（85.9%）が×2弱点。りゅうのまい（73.3%）1積みでS81→上を取られ、でんき技は×4で刺さるが受けに回しても崩されやすい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">積む前にボルトチェンジで削りつつ、でんき・いわ技を持つ後続（弱点×2）へ繋ぐ。10まんボルト型なら積み前の対面で半分以上を奪える</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0009-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カメックス（30位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">からをやぶる（67.7%）でSとCを2段階上げて上を取り、みずのはどう（78.2%）が×2弱点。でんき技は等倍止まりで殻破後は一撃で落とせない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">からをやぶる（67.7%）でSとCを2段階上げて上を取り、みずのはどう（78.2%）が×2弱点。でんき技は×2で返せるが殻破後は一撃で落とせない</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">殻破の起点にされる前に10まんボルトで削る。みずを半減するみず・くさタイプ（フシギバナ等）を後続に置き、積み後は引いて受ける</td>
 </tr>
 <tr style="background:#fafafa">

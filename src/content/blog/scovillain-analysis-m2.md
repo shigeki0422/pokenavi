@@ -58,7 +58,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 
 **やどりぎのタネ（採用率93.6%）**はほぼ全個体が採用する主軸技です。相手の最大HPの1/8を毎ターン奪い、自分のHPを回復します。まもる・みがわりでターンを稼ぐ構成と噛み合い、相手のHPを削りながら自分は粘り続けます。ギガドレイン（63.6%）も回復を兼ねたくさ一致技で、やどりぎと合わせた回復ソースになります。
 
-くさ/ほのおは**みず0.25倍・くさ0.25倍**を持ち、環境に多いみず技・くさ技を強く軽減できます。やどりぎを撒いた相手のみず技を受けながら居座る動きが安定します。
+くさ/ほのおは**くさ0.25倍**の耐性を持ち、環境に多いくさ技を強く軽減できます（みず技は等倍で通ります）。やどりぎを撒いた相手を、耐性を活かして受けながら居座る動きが安定します。
 
 ### 4. かえんほうしゃでくさ受けを許さない
 
@@ -202,16 +202,15 @@ heroImage: '../../assets/hero-scovillain-m2.png'
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
-      <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
-      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
+      <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ（×0.25）</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;color:#94a3b8">なし</td>
@@ -220,7 +219,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 </table>
 </div>
 
-くさ単体の弱点だったほのお・こおり・むしが、ほのお複合により**いずれも等倍まで軽減**されているのが大きな特徴です。みず0.25倍・くさ0.25倍という二重半減を持ち、環境に多いみず・くさアタッカーに強く居座れます。一方で弱点はひこう・どく・じめん・いわの4タイプ。特にじめん（ガブリアスのじしん採用率99.2%）・いわ（キラフロルのパワージェム85.3%）は環境上位の主力技に多く、これらの前では受けが成立しません。
+くさ単体の弱点だったほのお・こおり・むしが、ほのお複合により**いずれも等倍まで軽減**されているのが大きな特徴です。くさ0.25倍という二重半減を持ち（みずは等倍で通ります）、環境に多いくさアタッカーに強く居座れます。一方で弱点はひこう・どく・いわの3タイプ（じめんは等倍で弱点ではありません）。特にいわ（キラフロルのパワージェム85.3%）は環境上位の主力技に多く、これの前では受けが成立しません。
 
 ---
 
@@ -330,7 +329,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 
 **弱み:**
 
-ムラっけは上昇する能力を選べないため、欲しい能力（耐久）が上がらず、かいひりつ・命中率といった戦闘に直結しない能力が上がるターンもあり、上昇が安定しません。すばやさ75のため上から弱点（ひこう・じめん・いわ）を突かれると、まもる・みがわりを挟む前に崩されます。やどりぎのタネは**くさ・はがねタイプに無効**で、ブリジュラス・アーマーガア・ハッサムなど環境上位のはがね勢にはやどりぎが入らず、消耗戦に持ち込めません。
+ムラっけは上昇する能力を選べないため、欲しい能力（耐久）が上がらず、かいひりつ・命中率といった戦闘に直結しない能力が上がるターンもあり、上昇が安定しません。すばやさ75のため上から弱点（ひこう・どく・いわ）を突かれると、まもる・みがわりを挟む前に崩されます。やどりぎのタネは**くさ・はがねタイプに無効**で、ブリジュラス・アーマーガア・ハッサムなど環境上位のはがね勢にはやどりぎが入らず、消耗戦に持ち込めません。
 
 ### 型2: ひかえめ特殊寄せ型（火力選択肢）
 
@@ -373,7 +372,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 
 ### 有利・不利がはっきり出る相手
 
-使用率TOP30のうち、スコヴィランと相性がはっきり出るポケモンを有利・不利の両面から挙げます。みず0.25倍・くさ0.25倍を活かせるみず・くさ枠には強く居座れる一方、すばやさ75と弱点4タイプ（ひこう・どく・じめん・いわ）を突く相手には受けが成立しない点に注意してください。
+使用率TOP30のうち、スコヴィランと相性がはっきり出るポケモンを有利・不利の両面から挙げます。くさ0.25倍を活かせるくさ枠には強く居座れる一方、すばやさ75と弱点3タイプ（ひこう・どく・いわ）を突く相手には受けが成立しない点に注意してください。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -390,14 +389,14 @@ heroImage: '../../assets/hero-scovillain-m2.png'
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（4位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリア（みず・採用率79.2%）を0.25倍に抑えられる。ムーンフォース（フェアリー・97.0%）は等倍だが、やどりぎ＋ギガドレインで居座り消耗させやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリア（みず・採用率79.2%）は等倍で通る。ムーンフォース（フェアリー・97.0%）は半減で抑えられ、やどりぎ＋ギガドレインで居座り消耗させやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0479-02.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウォッシュロトム（22位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・でんき技をともに半減できる（みず0.25・でんき0.5）。やどりぎを撒いて粘れる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき技を半減できる（×0.5）。みず技は等倍だが、やどりぎを撒いて粘れる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -411,7 +410,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 型次第</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率98.0%）が×2弱点で受けは不可。ただしふみん採用個体ならあくび（94.2%）を無効化でき、居座りやすさは変わる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率98.0%）は等倍止まりで受け出しは可能。ふみん採用個体ならあくび（94.2%）も無効化でき、居座りやすさが増す</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -424,8 +423,8 @@ heroImage: '../../assets/hero-scovillain-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）が×2弱点、S102で先手。受け出しできず崩される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 型次第</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（99.2%）は等倍止まりだが、S102で先手を取られる。げきりん等ドラゴン技を持つ個体には崩される</td>
 </tr>
 </tbody>
 </table>
@@ -433,7 +432,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 
 ### 苦手なポケモンと対策
 
-弱点（ひこう・どく・じめん・いわ）を突く技を高採用率で持つ相手、またははがね・くさタイプでやどりぎが無効化される相手を、使用率TOP30から選定しました。スコヴィランは受け・崩し役のため、これらの前では役割を遂行できません。
+弱点（ひこう・どく・いわ）を突く技を高採用率で持つ相手、またははがね・くさタイプでやどりぎが無効化される相手を、使用率TOP30から選定しました。スコヴィランは受け・崩し役のため、これらの前では役割を遂行できません。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -449,8 +448,8 @@ heroImage: '../../assets/hero-scovillain-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）が×2弱点。S102で先手を取られ、やどりぎ・みがわりを張る前に崩される</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんを無効化するひこうタイプ（アーマーガア等）やみず・こおり技持ちを同伴し、ガブリアスの前に引いて受けさせる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（採用率99.2%）は等倍止まりだが、S102で先手を取られ、げきりん等のドラゴン技でやどりぎ・みがわりを張る前に崩される</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン技を透かせるフェアリータイプや、みず・こおり技持ちを同伴し、ガブリアスの前に引いて受けさせる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -490,7 +489,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 
 ### 相性の良いポケモン
 
-同居率TOP10から、スコヴィランの弱点（じめん・いわ・ひこう）を補完できる枠を中心に紹介します。
+同居率TOP10から、スコヴィランの弱点（ひこう・どく・いわ）を補完できる枠を中心に紹介します。
 
 <div class="partner-grid">
   <div class="partner-card">
@@ -503,19 +502,19 @@ heroImage: '../../assets/hero-scovillain-m2.png'
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">同居率3位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">じめん枠。スコヴィランが苦手ないわ・どく・はがねにじしんで打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">じめん枠。スコヴィランが苦手ないわ・どく・はがねに広く打点を持つ</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)">
     <div class="name">イダイトウ(オス)</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/ゴースト。じめんに弱点を突かれず受け出しでき、みず打点でガブリアスなどじめん勢に反撃</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">みず/ゴースト。ひこう・どく・いわの弱点を受けにくく、みず打点でガブリアスなどじめん勢に反撃</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア">
     <div class="name">アーマーガア</div>
     <div class="rate">同居率6位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこう/はがね。スコヴィランの弱点じめんを無効化し、ガブリアスのじしんを受ける</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ひこう/はがね。スコヴィランの弱点ひこうを半減し、ガブリアスのじしんはひこうタイプで無効化する</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0143-00.webp" alt="カビゴン">
@@ -529,7 +528,7 @@ heroImage: '../../assets/hero-scovillain-m2.png'
 
 スコヴィランはやどりぎ＋まもる＋ムラっけで時間を稼ぐ消耗戦型のため、残り5体で以下の役割を補います。
 
-1. **じめん対策**: アーマーガア等のひこうタイプでじしんを無効化する枠
+1. **ひこう対策**: アーマーガア等のはがね複合でひこう技を半減する枠
 2. **いわ・はがね崩し**: ガブリアス・エルレイドなどでやどりぎが効かないはがね勢・いわ勢を倒す枠
 3. **後出しからの処理**: イダイトウなどで弱点を突く相手に受け出しして反撃する枠
 
@@ -593,9 +592,9 @@ TOP30の約4分の1が、やどりぎ無効か一致技半減のいずれかで�
 
 **総評:**
 
-スコヴィランはやどりぎのタネ・まもる・ムラっけを軸にした受け・崩し型のポケモンです。みず0.25倍・くさ0.25倍の二重半減を活かし、アシレーヌ・カメックス・ウォッシュロトムといったみず勢には強く居座れます。メガ進化後はぼうぎょ・とくぼうが上がり、とびだすハバネロで物理アタッカーの居座りも抑止できます。
+スコヴィランはやどりぎのタネ・まもる・ムラっけを軸にした受け・崩し型のポケモンです。くさ0.25倍の耐性を活かし、アシレーヌ・カメックス・ウォッシュロトムといったみず勢にも粘り強く居座れます。メガ進化後はぼうぎょ・とくぼうが上がり、とびだすハバネロで物理アタッカーの居座りも抑止できます。
 
-一方で、すばやさ75と弱点4タイプ（ひこう・どく・じめん・いわ）を抱え、環境上位のガブリアス（1位・じしん）・キラフロル（15位・いわ/どく）には受けが成立しません。さらに主軸のやどりぎはブリジュラス（2位）・マスカーニャ（3位）・アーマーガア（6位）などはがね・くさ勢に無効化され、TOP30の上位に苦手が集中しているのが使用率47位にとどまる理由です。採用するなら、これらを倒せる相方とセットで運用し、粘れる相手に役割を絞ることが前提になります。
+一方で、すばやさ75と弱点3タイプ（ひこう・どく・いわ）を抱え、環境上位のキラフロル（15位・いわ/どく）には受けが成立しません。さらに主軸のやどりぎはブリジュラス（2位）・マスカーニャ（3位）・アーマーガア（6位）などはがね・くさ勢に無効化され、TOP30の上位に苦手が集中しているのが使用率47位にとどまる理由です。採用するなら、これらを倒せる相方とセットで運用し、粘れる相手に役割を絞ることが前提になります。
 
 ---
 

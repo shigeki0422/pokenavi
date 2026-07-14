@@ -394,14 +394,14 @@ HP1/4を回復するオボンのみとドレインパンチの自己回復を組
     <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カバルドン（7位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドレインパンチが×2（じめん）。じしん（98.0%）は等倍で、B95の物理耐久とドレインの回復で殴り合える。ただしあくび（94.2%）で流されやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドレインパンチは等倍。じしん（98.0%）も等倍で、B95の物理耐久とドレインの回復で殴り合える。ただしあくび（94.2%）で流されやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ea580c;font-weight:bold">△ 火力不足</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドレインパンチが×2（はがね）だが、B130の高耐久で一撃には届かない。れいとうパンチ・かみなりパンチは半減され、長期戦になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドレインパンチが×2（はがね）だが、B130の高耐久で一撃には届かない。かみなりパンチは半減されるが、れいとうパンチは等倍で通り、長期戦になる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -451,7 +451,7 @@ HP1/4を回復するオボンのみとドレインパンチの自己回復を組
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0212-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ハッサム（14位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/はがねでドレインパンチ・インファイトが等倍、れいとうパンチ・はたきおとすは半減。バレットパンチ（先制）で削られ、こちらの打点が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">むし/はがねでドレインパンチ・インファイト・はたきおとすが等倍、れいとうパンチのみ半減。バレットパンチ（先制）で削られ、こちらの打点が乏しい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお枠（リザードン等）を合わせてはがね・むし弱点を突く。じしんは等倍止まりで決定打にならない点に注意</td>
 </tr>
 <tr>

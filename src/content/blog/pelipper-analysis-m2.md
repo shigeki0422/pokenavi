@@ -374,7 +374,7 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×4で致命傷。なみのりは×0.25（はがね・ドラゴンで半減）でほとんど通らない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×4で致命傷。なみのりは×0.5（ドラゴンで半減）でほとんど通らない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -403,7 +403,7 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×4。なみのりは×0.25で削れず、一方的に落とされる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（採用率66.9%）がでんき×4。なみのりは×0.5で削れず、一方的に落とされる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ペリッパーは引いて、じめん技を持つガブリアス（同居率6位）など、はがねに刺さる枠で受け回す</td>
 </tr>
 <tr style="background:#fafafa">

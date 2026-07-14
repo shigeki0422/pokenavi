@@ -415,21 +415,21 @@ HD型が特殊ほのお・みず・でんきの受け出しに強いのに対し
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ 五分</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギガドレインは等倍（くさ→ドラゴン0.5×じめん2）だが吸収で居座れる。じしん（99%）も等倍で耐え、いわなだれ・がんせきふうじも等倍。S102で先手を取られるため、HB型で受けつつ削る形になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギガドレインは等倍だが吸収で居座れる。じしん（99%）も等倍で耐え、いわなだれ・がんせきふうじも等倍。S102で先手を取られるため、HB型で受けつつ削る形になる</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0983-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ドドゲザン（24位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちからが×2（あく1×はがね2）。あく技は等倍、先制技ふいうち（99%）も等倍で大打撃にならず、低速のため受けやすい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちからが×2。あく技は等倍、先制技ふいうち（99%）も等倍で大打撃にならず、低速のため受けやすい</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0823-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アーマーガア（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちからはひこう無効で×0、ギガドレイン×0.5・ヘドロばくだん×0（はがね）と打点が皆無。ブレイブバード（ひこう・19%）は弱点×2。どくどくも入らず崩せない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちからはひこう無効で×0、ギガドレインも×0.25・ヘドロばくだんも×0（はがね）と打点が皆無。ブレイブバード（ひこう・19%）は弱点×2。どくどくも入らず崩せない</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

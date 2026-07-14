@@ -345,21 +345,21 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2弱点。メガリザードンY（63.6%）・X（34.9%）ともS167でこちらの131を上回り先手で焼かれる。こおり技はほのお/ひこう（Y）にも、ほのお/ドラゴン（X）にも×0.5×2＝等倍止まりで一撃に届かない</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2弱点。メガリザードンY（63.6%）・X（34.9%）ともS167でこちらの131を上回り先手で焼かれる。こおり技はほのお/ひこう（Y）にも、ほのお/ドラゴン（X）にも等倍止まりで一撃に届かない</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね技が×2弱点。こおり技ははがね/ドラゴンに×0.5×2＝等倍で、高耐久のため削り切れず撃ち合いで負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね技が×2弱点。こおり技ははがね/ドラゴンに等倍で、高耐久のため削り切れず撃ち合いで負ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0479-01.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ヒートロトム（49位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">オーバーヒート（97.4%）が×2弱点。こおり技はでんき/ほのおに×1×0.5＝×0.5で半減され、打点が薄く撃ち合いで押し負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">オーバーヒート（97.4%）が×2弱点。こおり技はでんき/ほのおに半減され、打点が薄く撃ち合いで押し負ける</td>
 </tr>
 </tbody>
 </table>
@@ -440,7 +440,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
     <img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン">
     <div class="name">リザードン</div>
     <div class="rate">同居率4位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ほのおでバイバニラの弱点はがねを大きく軽減（×0.25）。くさ・はがね受けに打点</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ほのおでバイバニラの弱点はがねを半減。くさ・はがね受けに打点</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス">

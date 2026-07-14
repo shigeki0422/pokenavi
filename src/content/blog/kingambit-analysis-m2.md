@@ -345,7 +345,7 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
     <img src="/images/pokemon/pokemon-0121-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メガスターミー（20位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー無効でしねんのずつき（39%）・サイコカッター（25%）を透かせる。主力のアクアブレイク（89%）ははがねで×0.5、アイススピナー（65%）も×0.5。ドゲザン（みず1×エスパー2＝×2）で大ダメージ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">エスパー無効でしねんのずつき（39%）・サイコカッター（25%）を透かせる。主力のアクアブレイク（89%）は等倍（×1）だが、アイススピナー（65%）は×0.5。ドゲザン（みず1×エスパー2＝×2）で大ダメージ</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -418,7 +418,7 @@ Hを削るぶんHA型より物理耐久が下がり、つるぎのまいを積�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2、S100で先手。こちらのあく技はメガY（ほのお/ひこう）に等倍・メガX（ほのお/ドラゴン）に×0.5、アイアンヘッドもメガYに×0.5・メガXに×0.25と打点が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技が×2、S100で先手。こちらのあく技はメガY（ほのお/ひこう）・メガX（ほのお/ドラゴン）ともに等倍、アイアンヘッドもどちらに対しても×0.5と打点が乏しい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・いわ・でんきタイプを同伴し、リザードンに後出しして弱点を突いて処理する</td>
 </tr>
 <tr>

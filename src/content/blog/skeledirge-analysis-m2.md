@@ -235,7 +235,7 @@ HP104・ぼうぎょ100の物理耐久が高く、おにびと合わせて物理
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.4%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技を半減するはがね・いわへの打点。採用率は低い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技を半減するいわへの打点。採用率は低い</td>
 </tr>
 </tbody>
 </table>

@@ -273,8 +273,6 @@ HA振りによってこの防御140が最大化されます。環境の多くの
       <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle">エスパー</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle">はがね</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle">むし</span>
-      <span><img src="/images/types/type-10-water.png" alt="みず" style="width:24px;height:24px;vertical-align:middle">みず</span>
-      <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:24px;height:24px;vertical-align:middle">でんき</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:24px;height:24px;vertical-align:middle">こおり</span>
       <span><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:24px;height:24px;vertical-align:middle">ドラゴン</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle">フェアリー</span>
@@ -534,7 +532,7 @@ HA振りによってこの防御140が最大化されます。環境の多くの
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうでバレットパンチ×0.25・むし技×0.5。インファイトもひこうに半減され等倍止まり。はねやすめ（98.1%）で居座られると突破不能。一方こちらへの打点も乏しく、受け出してつるぎのまいを積み始める余地はある</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/ひこうでバレットパンチ×0.25・むし技×0.25。インファイトもひこうに半減され等倍止まり。はねやすめ（98.1%）で居座られると突破不能。一方こちらへの打点も乏しく、受け出してつるぎのまいを積み始める余地はある</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0681-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ギルガルド</td>

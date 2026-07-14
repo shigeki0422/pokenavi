@@ -166,7 +166,6 @@ heroImage: '../../assets/hero-kiraflosure-m2.png'
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
       <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:24px;height:24px;vertical-align:middle">じめん<strong style="color:#dc2626">×4</strong></span>
-      <span><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:24px;height:24px;vertical-align:middle">かくとう×2</span>
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:24px;height:24px;vertical-align:middle">みず×2</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:24px;height:24px;vertical-align:middle">はがね×2</span>
       <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:24px;height:24px;vertical-align:middle">エスパー×2</span>
@@ -174,9 +173,9 @@ heroImage: '../../assets/hero-kiraflosure-m2.png'
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">
     <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle">どく</span>
+      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:24px;height:24px;vertical-align:middle">どく（×0.25）</span>
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:24px;height:24px;vertical-align:middle">ひこう</span>
-      <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:24px;height:24px;vertical-align:middle">いわ</span>
+      <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:24px;height:24px;vertical-align:middle">ノーマル</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:24px;height:24px;vertical-align:middle">むし</span>
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:24px;height:24px;vertical-align:middle">ほのお</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:24px;height:24px;vertical-align:middle">フェアリー</span>
@@ -332,7 +331,7 @@ C32振り時のS・Cは以下の通り。
 
 ### 苦手なポケモン
 
-じめん×4・みず×2・はがね×2・かくとう×2・エスパー×2を採用率20%以上で突いてくる相手、またはお互い有効打が乏しく長期戦で削り負ける相手をリストアップ。
+じめん×4・みず×2・はがね×2・エスパー×2を採用率20%以上で突いてくる相手、またはお互い有効打が乏しく長期戦で削り負ける相手をリストアップ。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -382,7 +381,7 @@ C32振り時のS・Cは以下の通り。
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0212-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ハッサム</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ99.7%が<strong>はがね×2</strong>で先制圏、インファイト72.4%も<strong>かくとう×2</strong>。こちらのヘドロウェーブははがね/むしに無効、パワージェム・だいちのちからも等倍止まりで決定打に欠ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">バレットパンチ99.7%が<strong>はがね×2</strong>で先制圏、インファイト72.4%は<strong>等倍</strong>止まり。こちらのヘドロウェーブははがね/むしに無効、パワージェム・だいちのちからも等倍止まりで決定打に欠ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア</td>

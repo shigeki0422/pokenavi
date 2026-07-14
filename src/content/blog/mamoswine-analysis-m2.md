@@ -302,7 +302,7 @@ heroImage: '../../assets/hero-mamoswine-m2.png'
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">◎ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン/じめんにこおり×4。S102でこちらより速いが、こおりのつぶてが先制で通り、タスキで耐えてから確定圏。ただし相手のじしんもこちらに×2なので一撃耐え前提</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン/じめんにこおり×4。S102でこちらより速いが、こおりのつぶてが先制で通り、タスキで耐えてから確定圏。相手のじしんは等倍止まりです</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -385,13 +385,13 @@ heroImage: '../../assets/hero-mamoswine-m2.png'
     <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ギャラドス（12位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼり（みず）×2弱点。いかくでこちらのAを下げられ、りゅうのまい1積みで上から殴られる。じしんはひこう複合で無効、こおりのつぶてもみず/ひこうに等倍止まり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき技を持つポケモン（ウォッシュロトム等、ギャラドスに×2）を合わせて受け、積む前に処理する</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき技を持つポケモン（ウォッシュロトム等、ギャラドスに×4）を合わせて受け、積む前に処理する</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0009-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カメックス（30位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はどうだん（かくとう・90%）が×2弱点。じしんは×2で通るがぼうぎょ・とくぼう100超の高耐久で一撃では落ちず、こおりのつぶては半減。からをやぶる（67.7%）で積まれると殴り負ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はどうだん（かくとう・90%）が×2弱点。じしんは等倍止まりで、ぼうぎょ・とくぼう100超の高耐久相手にはさらに落としにくく、こおりのつぶても半減。からをやぶる（67.7%）で積まれると殴り負ける</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ・でんきタイプ（ウォッシュロトム等）を同伴し、弱点を突いて処理する</td>
 </tr>
 </tbody>
