@@ -9,13 +9,18 @@ from datetime import datetime, timezone
 DB = Path(__file__).parent / "pokenavi.db"
 CROP = (240, 10, 390, 135)
 
-TEMPLATE_DATE = "2026-06-29"
-TEMPLATE_DIR  = Path(f"/tmp/champ_crawl_{TEMPLATE_DATE}/detail")
+TEMPLATE_DATE = "2026-07-03"
+TEMPLATE_DIR  = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{TEMPLATE_DATE}/detail")
 
-SEASON = "M-3"
+SEASON = "M-4"
 RULE   = "single"
 MATCH_THRESHOLD = 0.80  # 通常フォーマット用
 MATCH_THRESHOLD_GRAY = 0.20  # 横長フォーマット(6/28〜)用
+
+# _c_move_00.pngからメインアイコンを切り出す座標
+# MAIN_ICON_BOX(980,5,1070,110) - CROP_BOX.x1(720)
+ICON_BOX = (260, 5, 350, 110)
+ICON_SIZE = (64, 64)
 
 # 処理対象日とRANK_OVERRIDES
 TARGETS = {
@@ -43,9 +48,52 @@ TARGETS = {
     "2026-07-02": {
         199: "アーボック",
     },
+    "2026-07-03": {
+        57: "ヒスイゾロアーク",
+        92: "ガラルヤドキング",
+        162: "ヤドキング",
+        163: "ゾロアーク",
+        174: "ニャオニクス(オス)",
+        195: "トリデプス",
+        197: "アーボック",
+        198: "ブースター",
+    },
+    "2026-07-04": {
+        117: "ウェーニバル",
+        130: "ヒスイジュナイパー",
+        171: "タイレーツ",
+        175: "ニャオニクス(オス)",
+        178: "エンブオー",
+        179: "クレベース",
+        183: "マホイップ",
+        184: "リーフィア",
+        185: "サダイジャ",
+        186: "ケンタロス:水",
+        187: "ロズレイド",
+        189: "エモンガ",
+        190: "ガチゴラス",
+        193: "バクーダ",
+        194: "トリデプス",
+        195: "ヒスイクレベース",
+        196: "アーボック",
+        197: "ドクロッグ",
+        198: "ブースター",
+        199: "ゴロンダ",
+        200: "フラージェス",
+    },
 }
 
-CRAWLED_DATE = "2026-07-02"  # ← 実行時に変更
+CRAWLED_DATE = "2026-07-14"  # ← 実行時に変更
+
+TARGETS["2026-07-09"] = {
+    182: "パンプジン(ギガだましゅ)",
+}
+
+TARGETS["2026-07-14"] = {
+    1: "ガブリアス",
+    122: "ケンタロス:炎",
+    200: "ケンタロス",
+}
 
 
 REF_SIZE = (960, 965)  # 6/25の基準サイズ (w, h)
@@ -71,7 +119,34 @@ def crop_icon(img_path):
     return img[y1:y2, x1:x2]
 
 
+def extract_main_icon(rank_dir: Path) -> np.ndarray | None:
+    """_c_move_00.png からメインポケモンアイコンを切り出して64x64にリサイズ"""
+    img_path = rank_dir / "_c_move_00.png"
+    if not img_path.exists():
+        img_path = rank_dir / "move_00.png"
+    img = cv2.imread(str(img_path))
+    if img is None:
+        return None
+    x1, y1, x2, y2 = ICON_BOX
+    icon = img[y1:y2, x1:x2]
+    return cv2.resize(icon, ICON_SIZE)
+
+
+REF_DIR = Path(__file__).parent / "icon_refs"
+
 def build_templates(conn):
+    # icon_refs/ が存在する場合はそちらを優先（クロールデータが消えても使える）
+    if REF_DIR.exists() and any(REF_DIR.glob("*.png")):
+        templates = {}
+        for ref_path in REF_DIR.glob("*.png"):
+            pokemon = ref_path.stem
+            img = cv2.imread(str(ref_path))
+            if img is not None:
+                templates[pokemon] = img
+        print(f"icon_refs から {len(templates)} 件のテンプレートを構築")
+        return templates
+
+    # フォールバック: クロールデータから構築
     rows = conn.execute(
         "SELECT rank, pokemon FROM pokemon_usage WHERE crawled_date=? AND season=? AND rule=? ORDER BY rank",
         (TEMPLATE_DATE, SEASON, RULE)
@@ -88,14 +163,9 @@ def build_templates(conn):
 
 
 def match_icon(icon, templates, use_gray=False):
-    if use_gray and len(icon.shape) == 3:
-        icon = cv2.cvtColor(icon, cv2.COLOR_BGR2GRAY)
-
     best_name, best_score = None, 0.0
     for pokemon, template in templates.items():
         t = template
-        if use_gray and len(t.shape) == 3:
-            t = cv2.cvtColor(t, cv2.COLOR_BGR2GRAY)
         if t.shape != icon.shape:
             t = cv2.resize(t, (icon.shape[1], icon.shape[0]))
         res = cv2.matchTemplate(icon, t, cv2.TM_CCOEFF_NORMED)
@@ -112,9 +182,7 @@ LARGE_FORMAT_SINCE = _datetime.date(2026, 6, 28)
 
 def main():
     overrides = TARGETS.get(CRAWLED_DATE, {})
-    target_dir = Path(f"/tmp/champ_crawl_{CRAWLED_DATE}/detail")
-    use_gray = _datetime.date.fromisoformat(CRAWLED_DATE) >= LARGE_FORMAT_SINCE
-    match_threshold = MATCH_THRESHOLD_GRAY if use_gray else MATCH_THRESHOLD
+    target_dir = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{CRAWLED_DATE}/detail")
 
     conn = sqlite3.connect(DB)
     pokemon_master = set(r[0] for r in conn.execute("SELECT pokemon_name FROM pokemon_base_stats"))
@@ -130,26 +198,20 @@ def main():
 
     for rank in range(1, 201):
         rank_dir = target_dir / f"{rank:03d}"
-        img_path = rank_dir / "_c_ability_00.png"
-        if not img_path.exists():
-            img_path = rank_dir / "ability_00.png"
-        if not img_path.exists():
-            no_image.append(rank)
-            continue
 
         # RANK_OVERRIDESが設定されていればマッチングをスキップ
         if rank in overrides:
             matched[rank] = (overrides[rank], 1.0, "override")
             continue
 
-        icon = crop_icon(img_path)
+        icon = extract_main_icon(rank_dir)
         if icon is None:
             no_image.append(rank)
             continue
 
-        name, score = match_icon(icon, templates, use_gray=use_gray)
+        name, score = match_icon(icon, templates)
         matched[rank] = (name, score, "match")
-        if score < match_threshold:
+        if score < MATCH_THRESHOLD:
             low_score.append((rank, name, score))
 
     # 画像なし
