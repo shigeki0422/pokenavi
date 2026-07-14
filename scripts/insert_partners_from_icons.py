@@ -27,16 +27,13 @@ SOURCE = "champions_adb"
 
 ICON_SIZE = (80, 80)
 
-# _c_partner_*.png (960x965) での各行アイコンBOX (x1, y1, x2, y2)
-# 実測値：各行中心x≈306、y間隔≈125px
-# 5行 × 2ページ = 最大10パートナー
-PARTNER_ROWS = [
-    (266, 331, 346, 411),   # 1位
-    (265, 456, 345, 536),   # 2位
-    (266, 581, 346, 661),   # 3位
-    (266, 706, 346, 786),   # 4位
-    (266, 831, 346, 911),   # 5位
-]
+# _c_partner_*.png (960x965) 各行アイコンのtop-y（page=0実測値）
+# page=0とpage=1で最大+15pxのずれがある
+# → 各行を [top_y-10, top_y+100] (110px) で切り出せばpage=1のずれも吸収できる
+# x範囲: page=0実測266、±10pxで 256〜366
+ROW_TOP_Y = [331, 456, 583, 708, 834]  # page=0での各行アイコンtop-y
+ROW_Y_SLACK = 10   # top_y上方向の余裕px（window = top_y-SLACK 〜 top_y+80+SLACK+15）
+ROW_X1, ROW_X2 = 256, 366  # アイコンx範囲（80px + 余裕）
 
 
 def build_templates():
@@ -50,21 +47,11 @@ def build_templates():
     return templates
 
 
-def match_icon(icon, templates):
-    """最もスコアが高いポケモン名とスコアを返す"""
-    best_name, best_score = None, -1.0
-    icon_r = cv2.resize(icon, ICON_SIZE)
-    for name, tmpl in templates.items():
-        res = cv2.matchTemplate(icon_r, tmpl, cv2.TM_CCOEFF_NORMED)
-        score = float(res.max())
-        if score > best_score:
-            best_score = score
-            best_name = name
-    return best_name, best_score
+def identify_partners_from_image(img_path: Path, templates: dict) -> list:
+    """行ごとの局所ROIでパートナーを識別する（最大5件、順位=行番号）
 
-
-def extract_partner_icons(img_path: Path) -> list:
-    """_c_partner_*.png から各行のアイコンを切り出して返す（最大5件）"""
+    Returns: [(name, score), ...]  行順（1位〜5位）
+    """
     img = cv2.imread(str(img_path))
     if img is None:
         return []
@@ -72,7 +59,23 @@ def extract_partner_icons(img_path: Path) -> list:
     if (w, h) != (960, 965):
         print(f"  警告: 想定外サイズ {w}x{h} ({img_path.name})")
         return []
-    return [img[y1:y2, x1:x2] for x1, y1, x2, y2 in PARTNER_ROWS]
+
+    results = []
+    for top_y in ROW_TOP_Y:
+        y1 = max(0, top_y - ROW_Y_SLACK)
+        y2 = min(h, top_y + ICON_SIZE[1] + ROW_Y_SLACK + 15)  # +15でpage=1のずれを吸収
+        roi = img[y1:y2, ROW_X1:ROW_X2]
+
+        best_name, best_score = None, -1.0
+        for name, tmpl in templates.items():
+            res = cv2.matchTemplate(roi, tmpl, cv2.TM_CCOEFF_NORMED)
+            score = float(res.max())
+            if score > best_score:
+                best_score = score
+                best_name = name
+        results.append((best_name, best_score))
+
+    return results
 
 
 def process_day(crawled_date: str, templates: dict, conn: sqlite3.Connection):
@@ -119,12 +122,10 @@ def process_day(crawled_date: str, templates: dict, conn: sqlite3.Connection):
             img_path = rank_str / f"_c_partner_{page:02d}.png"
             if not img_path.exists():
                 break
-            icons = extract_partner_icons(img_path)
-            for icon in icons:
-                name, score = match_icon(icon, templates)
-                if score < 0.4:
-                    low_score.append((rank, pokemon, page, score, name))
-                partners.append((name, score))
+            results = identify_partners_from_image(img_path, templates)
+            if len(results) < 5:
+                low_score.append((rank, pokemon, page, len(results)))
+            partners.extend(results)
 
         for pos, (name, score) in enumerate(partners, 1):
             if name is None:
@@ -141,9 +142,9 @@ def process_day(crawled_date: str, templates: dict, conn: sqlite3.Connection):
     print(f"投入: {inserted}件")
 
     if low_score:
-        print(f"\n低スコア要確認 ({len(low_score)}件):")
-        for rank, pokemon, page, score, name in low_score[:20]:
-            print(f"  rank={rank} ({pokemon}) page={page}: score={score:.3f} → {name}")
+        print(f"\n識別数不足 ({len(low_score)}件):")
+        for rank, pokemon, page, cnt in low_score[:20]:
+            print(f"  rank={rank} ({pokemon}) page={page}: {cnt}件のみ識別")
 
 
 if __name__ == "__main__":
