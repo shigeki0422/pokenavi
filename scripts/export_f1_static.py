@@ -24,11 +24,23 @@ from simulator.pokemon import parse_pokemon_spec
 
 CACHE_DIR = os.environ.get("F1_CACHE_DIR", os.path.join(os.path.dirname(__file__), "f1_cache"))
 # META（index/icons/move_types）はサイトに同梱＝public/sim-data/。subjects はR2へ上げるためステージング。
-META_DIR = os.path.join(os.path.dirname(__file__), "..", "public", "sim-data")
-SUBJ_DIR = os.path.join(os.path.dirname(__file__), "sim_export", "subjects")
+META_DIR = os.environ.get("F1_META_DIR", os.path.join(os.path.dirname(__file__), "..", "public", "sim-data"))
+SUBJ_DIR = os.environ.get("F1_SUBJ_DIR", os.path.join(os.path.dirname(__file__), "sim_export", "subjects"))
 DB = os.path.join(os.path.dirname(__file__), "pokenavi.db")
-SEASON = "M-2"
+SEASON = os.environ.get("F1_SEASON", "M-2")
 EVK = ["H", "A", "B", "C", "D", "S"]
+
+# 複数シーズンをまとめて出力する場合は F1_CACHE_DIRS="M-2:f1_cache,M-3:f1_cache_m3" のように指定する。
+# 未指定時は従来どおり CACHE_DIR/SEASON 単一シーズンのみを出力する（後方互換）。
+_CACHE_DIRS_ENV = os.environ.get("F1_CACHE_DIRS", "")
+if _CACHE_DIRS_ENV:
+    SEASON_CACHE_PAIRS = []
+    for pair in _CACHE_DIRS_ENV.split(","):
+        season, _, cache_dir = pair.partition(":")
+        cache_dir = cache_dir if os.path.isabs(cache_dir) else os.path.join(os.path.dirname(__file__), cache_dir)
+        SEASON_CACHE_PAIRS.append((season.strip(), cache_dir.strip()))
+else:
+    SEASON_CACHE_PAIRS = [(SEASON, CACHE_DIR)]
 
 _loader = get_loader()
 
@@ -93,7 +105,7 @@ def compute_faults(card):
             "sel_opp": sorted(sel_opp.items(), key=lambda x: -x[1])}
 
 
-def compute_vs_pokemon(cards):
+def compute_vs_pokemon(cards, season=SEASON):
     """sim_server.f1_vs_pokemon と同一ロジック（相手ポケモン別の実戦勝敗＋型別内訳）。"""
     def outcome_key(res):
         return "wins" if res == 1 else ("losses" if res == 2 else "draws")
@@ -102,7 +114,7 @@ def compute_vs_pokemon(cards):
         name2build = {}
         for s in card.get("specs", []):
             p = parse_pokemon_spec(s); nm = p["name"]
-            tpl = _loader.get_pokemon_template(nm, SEASON)
+            tpl = _loader.get_pokemon_template(nm, season)
             if tpl is not None:
                 nm = tpl.name
             ev = p.get("evs") or {}
@@ -216,40 +228,41 @@ def main():
     os.makedirs(SUBJ_DIR, exist_ok=True)
     con = sqlite3.connect(DB); con.row_factory = sqlite3.Row
 
-    files = sorted(glob.glob(os.path.join(CACHE_DIR, "*.json")))
     rankers = {}; saved = {}; index_subjects = []; ai_ver = None
-    print(f"対象: {len(files)} 主役ファイル")
-    for i, fp in enumerate(files, 1):
-        with open(fp, encoding="utf-8") as f:
-            d = json.load(f)
-        subj = d["subject_label"]; party = d["subject_party"]; cards = d["cards"]
-        ai_ver = d.get("ai_ver")
-        rankers[subj] = party
-        # cards summary（recordsを除く）
-        summary = [{"label": c["label"], "specs": c["specs"], "win_rate": c["win_rate"],
-                    "wins": c["wins"], "losses": c["losses"], "draws": c["draws"], "n": c["n"]} for c in cards]
-        saved[subj] = {"cards": summary}
-        wr = (sum(c["win_rate"] for c in cards) / len(cards)) if cards else None
-        index_subjects.append({"label": subj, "file": _safe(subj) + ".json",
-                               "win_rate": wr, "n": cards[0]["n"] if cards else 0,
-                               "party": party})
-        # per-subject 詳細
-        opp = {}
-        for c in cards:
-            opp[c["label"]] = {
-                "faults": compute_faults(c),
-                "matchup": explain_matchup(party, c["specs"], _loader, SEASON),
-                "replays": [_replay(r) for r in c.get("records", [])],
-            }
-        vp = compute_vs_pokemon(cards)
-        for p in vp["pokemon"]:   # VSポケモン代表型の1v1表（静的配信で計算できないため事前生成）
-            if p["builds"]:
-                p["matchup"] = explain_matchup(party, [p["builds"][0]["spec"]], _loader, SEASON)
-        out = {"subject": {"label": subj, "party": party}, "cards": summary,
-               "opp": opp, "vs_pokemon": vp}
-        with open(os.path.join(SUBJ_DIR, _safe(subj) + ".json"), "w", encoding="utf-8") as f:
-            json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
-        print(f"  [{i}/{len(files)}] {subj}")
+    for season, cache_dir in SEASON_CACHE_PAIRS:
+        files = sorted(glob.glob(os.path.join(cache_dir, "*.json")))
+        print(f"[{season}] 対象: {len(files)} 主役ファイル ({cache_dir})")
+        for i, fp in enumerate(files, 1):
+            with open(fp, encoding="utf-8") as f:
+                d = json.load(f)
+            subj = d["subject_label"]; party = d["subject_party"]; cards = d["cards"]
+            ai_ver = d.get("ai_ver")
+            rankers[subj] = party
+            # cards summary（recordsを除く）
+            summary = [{"label": c["label"], "specs": c["specs"], "win_rate": c["win_rate"],
+                        "wins": c["wins"], "losses": c["losses"], "draws": c["draws"], "n": c["n"]} for c in cards]
+            saved[subj] = {"cards": summary}
+            wr = (sum(c["win_rate"] for c in cards) / len(cards)) if cards else None
+            index_subjects.append({"label": subj, "file": _safe(subj) + ".json",
+                                   "win_rate": wr, "n": cards[0]["n"] if cards else 0,
+                                   "party": party})
+            # per-subject 詳細
+            opp = {}
+            for c in cards:
+                opp[c["label"]] = {
+                    "faults": compute_faults(c),
+                    "matchup": explain_matchup(party, c["specs"], _loader, season),
+                    "replays": [_replay(r) for r in c.get("records", [])],
+                }
+            vp = compute_vs_pokemon(cards, season)
+            for p in vp["pokemon"]:   # VSポケモン代表型の1v1表（静的配信で計算できないため事前生成）
+                if p["builds"]:
+                    p["matchup"] = explain_matchup(party, [p["builds"][0]["spec"]], _loader, season)
+            out = {"subject": {"label": subj, "party": party}, "cards": summary,
+                   "opp": opp, "vs_pokemon": vp}
+            with open(os.path.join(SUBJ_DIR, _safe(subj) + ".json"), "w", encoding="utf-8") as f:
+                json.dump(out, f, ensure_ascii=False, separators=(",", ":"))
+            print(f"  [{i}/{len(files)}] {subj}")
 
     # rankers は全登録パーティ（相手の構成表示用）。cacheに無い主役も含めるため env から補完
     try:
