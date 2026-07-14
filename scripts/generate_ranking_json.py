@@ -81,5 +81,5 @@ for name in all_pokemon:
             entry["dates"][d] = all_map[(name, d)]
     poke_list.append(entry)
 
-OUT_PATH.write_text(json.dumps({"dates": dates, "pokemon": poke_list}, ensure_ascii=False, indent=2), encoding="utf-8")
+OUT_PATH.write_text(json.dumps({"seasons": {SEASON: {"dates": dates, "pokemon": poke_list}}}, ensure_ascii=False, indent=2), encoding="utf-8")
 print(f"完了: {len(poke_list)}件, 最新日={dates[-1]}")
