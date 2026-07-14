@@ -24,7 +24,10 @@ const allPosts = (await getCollection('blog'))
 		const mb = (articleMeta as any)[b.id];
 		return (ma?.rank ?? 999) - (mb?.rank ?? 999);
 	});
-const m3Posts = allPosts.filter((p) => p.id.includes('-m3')).slice(0, 6);
+const m4Posts = allPosts.filter((p) => p.id.includes('-m4')).slice(0, 6);
+const m3Posts = allPosts.filter((p) => p.id.includes('-m3'));
+const m3PostsTotal = m3Posts.length;
+const m3PostsPreview = m3Posts.slice(0, 3);
 const m2Posts = allPosts.filter((p) => p.id.includes('-m2'));
 const m2PostsTotal = m2Posts.length;
 const m2PostsPreview = m2Posts.slice(0, 3);
@@ -163,7 +166,7 @@ const websiteJsonLd = {
 			</section>
 
 			<section style="margin-bottom:3rem">
-				<h2 class="section-title">パーティ提案 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:6px">目玉機能</span></h2>
+				<h2 class="section-title">軸から簡単構築 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:6px">目玉機能</span></h2>
 				<div class="bs-feature">
 					<h3>軸を選ぶだけ、AIシミュレーションでパーティを自動提案</h3>
 					<p>軸にしたいポケモンを指定すると、シミュレーションで残り枠を補完し、バランスの良いパーティを複数提案。各ポケモンの役割、上位ポケモンとの攻撃・防御・素早さ・1v1相性、価値ネットによる想定勝率まで、データで確認できます。</p>
@@ -174,7 +177,7 @@ const websiteJsonLd = {
 						<li>想定パーティ相性</li>
 					</ul>
 					<div class="bs-cta-row">
-						<a class="bs-cta primary" href="/party-suggest">パーティ提案を使う →</a>
+						<a class="bs-cta primary" href="/party-suggest">軸から簡単構築を使う →</a>
 					</div>
 				</div>
 			</section>
@@ -226,9 +229,9 @@ const websiteJsonLd = {
 			</section>
 
 			<section style="margin-bottom:3rem">
-				<h2 class="section-title">考察記事 — M-3 シーズン <span style="font-size:0.75rem;font-weight:700;background:#fef3c7;color:#b45309;padding:2px 8px;border-radius:9999px;margin-left:8px">最新</span></h2>
+				<h2 class="section-title">考察記事 — M-4 シーズン <span style="font-size:0.75rem;font-weight:700;background:#fef3c7;color:#b45309;padding:2px 8px;border-radius:9999px;margin-left:8px">最新</span></h2>
 				<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
-					{m3Posts.map((post, i) => {
+					{m4Posts.map((post, i) => {
 						const meta = (articleMeta as any)[post.id];
 						const dex = meta?.dex;
 						const form = meta?.form ?? '00';
@@ -255,8 +258,44 @@ const websiteJsonLd = {
 					})}
 				</div>
 				<div style="text-align:center;margin-top:12px">
-					<a href="/blog/m3/" style="display:inline-block;padding:10px 28px;background:var(--accent);color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:700;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-						M-3 シーズン すべて見る →
+					<a href="/blog/m4/" style="display:inline-block;padding:10px 28px;background:var(--accent);color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:700;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+						M-4 シーズン すべて見る →
+					</a>
+				</div>
+			</section>
+
+			<section style="margin-bottom:3rem">
+				<h2 class="section-title">考察記事 — M-3 シーズン <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">{m3PostsTotal}件</span></h2>
+				<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
+					{m3PostsPreview.map((post, i) => {
+						const meta = (articleMeta as any)[post.id];
+						const dex = meta?.dex;
+						const form = meta?.form ?? '00';
+						const types: string[] = meta?.types ?? [];
+						const rank: number | null = meta?.rank ?? null;
+						const imgSrc = dex ? `/images/pokemon/pokemon-${String(dex).padStart(4,'0')}-${form}.webp` : null;
+						return (
+							<a href={`/blog/${post.id}/`} style="display:flex;align-items:center;gap:12px;padding:12px;border:1px solid #e2e8f0;border-radius:10px;text-decoration:none;background:white;transition:box-shadow 0.2s" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+								{imgSrc
+									? <img src={imgSrc} alt={meta?.name ?? ''} width="64" height="64" loading="lazy" style="width:64px;height:64px;flex-shrink:0" />
+									: <div style="width:64px;height:64px;background:#f1f5f9;border-radius:8px;flex-shrink:0" />
+								}
+								<div style="flex:1;min-width:0">
+									{rank && <div style="font-size:0.7rem;color:#dc2626;font-weight:700;margin-bottom:2px">使用率 {rank}位</div>}
+									<div style="font-size:0.82rem;font-weight:700;color:rgb(var(--black));line-height:1.35;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{post.data.title}</div>
+									<div style="display:flex;gap:3px;flex-wrap:wrap">
+										{types.map((t) => (
+											<span style={`font-size:0.65rem;padding:1px 5px;border-radius:3px;color:white;font-weight:700;background:${TYPE_COLOR[t] ?? '#999'}`}>{t}</span>
+										))}
+									</div>
+								</div>
+							</a>
+						);
+					})}
+				</div>
+				<div style="text-align:center;margin-top:12px">
+					<a href="/blog/m3/" style="display:inline-block;padding:10px 28px;background:#6b7280;color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:700;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+						M-3 シーズン すべて見る（{m3PostsTotal}件）→
 					</a>
 				</div>
 			</section>
