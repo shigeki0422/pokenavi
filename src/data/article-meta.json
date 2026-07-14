@@ -1254,7 +1254,10 @@
     "basculegion-m-analysis-m3": {
         "name": "イダイトウ(オス)",
         "rank": 16,
-        "types": ["みず", "ゴースト"],
+        "types": [
+            "みず",
+            "ゴースト"
+        ],
         "matchKey": "イダイトウ",
         "dex": 902,
         "form": "00"
@@ -1262,7 +1265,10 @@
     "kirafurou-analysis-m3": {
         "name": "キラフロル",
         "rank": 19,
-        "types": ["いわ", "どく"],
+        "types": [
+            "いわ",
+            "どく"
+        ],
         "matchKey": "キラフロル",
         "dex": 970,
         "form": "00"
@@ -1270,9 +1276,65 @@
     "kangaskhan-analysis-m3": {
         "name": "メガガルーラ",
         "rank": 71,
-        "types": ["ノーマル"],
+        "types": [
+            "ノーマル"
+        ],
         "matchKey": "ガルーラ",
         "dex": 115,
+        "form": "00"
+    },
+    "garchomp-analysis-m4": {
+        "name": "ガブリアス",
+        "rank": 1,
+        "types": [
+            "ドラゴン",
+            "じめん"
+        ],
+        "matchKey": "ガブリアス",
+        "dex": 445,
+        "form": "00"
+    },
+    "archaludon-analysis-m4": {
+        "name": "ブリジュラス",
+        "rank": 5,
+        "types": [
+            "はがね",
+            "ドラゴン"
+        ],
+        "matchKey": "ブリジュラス",
+        "dex": 1018,
+        "form": "00"
+    },
+    "hippowdon-analysis-m4": {
+        "name": "カバルドン",
+        "rank": 3,
+        "types": [
+            "じめん"
+        ],
+        "matchKey": "カバルドン",
+        "dex": 450,
+        "form": "00"
+    },
+    "metagross-analysis-m4": {
+        "name": "メガメタグロス",
+        "rank": 4,
+        "types": [
+            "はがね",
+            "エスパー"
+        ],
+        "matchKey": "メタグロス",
+        "dex": 376,
+        "form": "00"
+    },
+    "mimikyu-analysis-m4": {
+        "name": "ミミッキュ",
+        "rank": 2,
+        "types": [
+            "ゴースト",
+            "フェアリー"
+        ],
+        "matchKey": "ミミッキュ",
+        "dex": 778,
         "form": "00"
     }
 }
