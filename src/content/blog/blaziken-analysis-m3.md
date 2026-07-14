@@ -153,6 +153,7 @@ draft: false
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
+      <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし（¼）</span>
     </div>
   </td>
@@ -442,7 +443,7 @@ draft: false
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（15位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技が×2弱点。アシレーヌ最速S123はメガ後バシャS152より遅いが、アクアジェット（先制67.3%）でかそく加速後も先制で弱点を突かれる。こちらの一致技はいずれも等倍止まりで一撃を取りにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技が×2弱点。アシレーヌ最速S123はメガ後バシャS152より遅いが、アクアジェット（先制67.3%）でかそく加速後も先制で弱点を突かれる。こちらの一致技（フレアドライブ・インファイト）はいずれも半減で軽減され一撃を取りにくい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -487,7 +488,7 @@ draft: false
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ（15位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技が×2弱点。バシャS152＞アシレーヌS123なので素では先手を取れるが、アクアジェット（先制67.3%）で弱点を突かれる。こちらの一致技は等倍止まりで一撃を取りにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず技が×2弱点。バシャS152＞アシレーヌS123なので素では先手を取れるが、アクアジェット（先制67.3%）で弱点を突かれる。こちらの一致技は半減で軽減され一撃を取りにくい</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みず半減のくさ・はがね枠（サーフゴー等）でアシレーヌに打点を持ち牽制する枠を用意する</td>
 </tr>
 <tr style="background:#fafafa">

@@ -154,6 +154,7 @@ C129・S126はメガ進化後の特殊アタッカーとして高い水準です
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし×0.5</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね×0.5</span>
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお×0.5</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー×0.5</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

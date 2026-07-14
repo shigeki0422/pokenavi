@@ -157,6 +157,7 @@ draft: false
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ（×0.25）</span>
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく（×0.5）</span>
       <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし（×0.5）</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー（×0.5）</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
@@ -165,7 +166,7 @@ draft: false
 </table>
 </div>
 
-むし/どくの複合により、かくとう技・くさ技は**×0.25**、どく技・むし技は**×0.5**で受けられます。弱点はひこう・ほのお・いわ・エスパーの4タイプで、いずれも×2です。環境上位のムクホーク（ひこう技）など、弱点を突かれる機会は多い点に注意が必要です。
+むし/どくの複合により、かくとう技・くさ技は**×0.25**、どく技・むし技・フェアリー技は**×0.5**で受けられます。弱点はひこう・ほのお・いわ・エスパーの4タイプで、いずれも×2です。環境上位のムクホーク（ひこう技）など、弱点を突かれる機会は多い点に注意が必要です。
 
 ---
 

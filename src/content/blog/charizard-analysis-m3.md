@@ -541,7 +541,7 @@ Yと同じS100でよりSが確保しにくく、じめん×2弱点が増えま�
     <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">アシレーヌ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">Y型: かえんほうしゃ半減・ソーラービーム×2はあるがみず技でみず×2弱点を突き返される。X型: フレアドライブが半減でソーラービームの補完もなく打点が安定しない</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ブリジュラス（はがね技でフェアリー半減）や同居率1位のガブリアスで処理。両型ともリザードン自身での突破は困難</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ブリジュラス（はがね技がフェアリー複合に×2で通る）や同居率1位のガブリアスで処理。両型ともリザードン自身での突破は困難</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

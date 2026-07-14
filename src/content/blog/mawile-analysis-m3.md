@@ -53,7 +53,7 @@ draft: false
 
 ### 3. はがね/フェアリーで弱点がほのお・じめんの2タイプのみ
 
-はがね/フェアリーの複合タイプはどく・ドラゴン・あくを無効化し、ノーマル・くさ・こおり・エスパー・ひこう・いわ・フェアリー・むしを半減以下にします。弱点はほのお（×2）・じめん（×2）の2タイプのみで、環境上位の多くの打点を受け流せます。S実数値102（いじっぱりS無振り）と低速のため環境上位の大半に後攻となりますが、優先度+1のふいうちで先制打点を確保し、耐性で攻撃を受けてからつるぎのまいで積む立ち回りで速度の遅さを補います。
+はがね/フェアリーの複合タイプはどく・ドラゴンを無効化し、ノーマル・くさ・こおり・エスパー・ひこう・いわ・あく・フェアリーを半減、むしを¼まで軽減します。弱点はほのお（×2）・じめん（×2）の2タイプのみで、環境上位の多くの打点を受け流せます。S実数値102（いじっぱりS無振り）と低速のため環境上位の大半に後攻となりますが、優先度+1のふいうちで先制打点を確保し、耐性で攻撃を受けてからつるぎのまいで積む立ち回りで速度の遅さを補います。
 
 ---
 
@@ -134,6 +134,7 @@ draft: false
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（½）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（¼）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">無効</th>
 </tr>
 </thead>
@@ -150,18 +151,22 @@ draft: false
       <span><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ノーマル</span>
       <span><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ひこう</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
-      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
       <span><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">こおり</span>
+      <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
+    </div>
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
+      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
       <span><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ドラゴン</span>
-      <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
     </div>
   </td>
 </tr>
@@ -169,7 +174,7 @@ draft: false
 </table>
 </div>
 
-はがねがどく・ドラゴンを無効化し、フェアリーがあくを無効化します。弱点はほのお・じめんの2タイプのみで、ドラゴン・あく等の打点を半減以下に抑えられます。一方、ガブリアス（じしん採用率99.5%）やリザードンといったほのお・じめん枠は明確な天敵であり、パーティ単位でのケアが必要です。
+はがねがどくを、フェアリーがドラゴンを無効化します。弱点はほのお・じめんの2タイプのみで、あく等の打点を半減以下に抑えられます。一方、ガブリアス（じしん採用率99.5%）やリザードンといったほのお・じめん枠は明確な天敵であり、パーティ単位でのケアが必要です。
 
 ---
 

@@ -144,6 +144,8 @@ M-3でペリッパーと同居率1位のラグラージ（使用率10〜12位、
   <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
   <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
   <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
+  <img src="/images/types/type-06-bug.png" alt="むし" style="width:40px;height:40px;vertical-align:middle" />
+  <img src="/images/types/type-08-steel.png" alt="はがね" style="width:40px;height:40px;vertical-align:middle" />
 </td>
 <td style="padding:8px 12px;border:1px solid #e2e8f0">
   <img src="/images/types/type-04-ground.png" alt="じめん" style="width:40px;height:40px;vertical-align:middle" />

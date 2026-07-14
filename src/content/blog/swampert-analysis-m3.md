@@ -45,7 +45,7 @@ draft: false
 
 ### 1. 弱点がくさ1タイプに絞られる耐性（ただしくさ×4）
 
-みず/じめんの複合は、でんきを**完全無効（×0）**にしながら、ほのお・むし・はがねを半減（×0.5）で受けられます。みず技・こおり技はいずれも等倍止まりで、環境上位の物理アタッカーがよく採用するじめん・かくとう・ドラゴン・ほのお等の技をいずれも等倍以下に抑えられます。弱点タイプは**くさのみ**に絞られる一方、そのくさは**×4**と倍率が極端に高く、くさ技は受け出しが効かない点に注意が必要です。
+みず/じめんの複合は、でんきを**完全無効（×0）**にしながら、ほのお・どく・いわ・はがねを半減（×0.5）で受けられます。みず技・こおり技はいずれも等倍止まりで、環境上位の物理アタッカーがよく採用するじめん・かくとう・ドラゴン・ほのお等の技をいずれも等倍以下に抑えられます。弱点タイプは**くさのみ**に絞られる一方、そのくさは**×4**と倍率が極端に高く、くさ技は受け出しが効かない点に注意が必要です。
 
 ### 2. メガ後こうげき150で物理範囲が広い
 
@@ -139,7 +139,8 @@ draft: false
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
-      <span><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">むし</span>
+      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
+      <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
       <span><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ほのお</span>
     </div>
@@ -373,14 +374,14 @@ draft: false
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0637-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ウルガモス（32位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S100でこちら（S70）より速く、ちょうのまいで特攻・素早さを積まれると特殊技での削りが蓄積する。ほのおはこちらに等倍止まりだが、積んだ後の特殊打点が重い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S100でこちら（S70）より速く、ちょうのまいで特攻・素早さを積まれると特殊技での削りが蓄積する。ほのおはこちらに半減で軽減されるが、積んだ後の特殊打点が重い</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">じしんで×2の弱点を突ける。ただし先にちょうのまいを積まれると特殊耐久が追いつかないため、積む前にじしんで削るか、いわ技（×4）持ちの後続で処理する</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0149-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">カイリュー（19位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">S100でこちらより速く、でんきの弱点はじめんタイプで無効化されているためウェーブタックルが刺さりにくい（等倍）。れいとうパンチで対処したいが先手を取られる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S100でこちらより速く、でんきの弱点はじめんタイプで無効化されているためウェーブタックル（みず技）も半減で軽減される。れいとうパンチで対処したいが先手を取られる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチが×4で弱点を突ける。あめ下すいすいならS268でカイリューを抜ける。あめなしではひこう・こおり技持ちの後続に引いて対処する</td>
 </tr>
 </tbody>

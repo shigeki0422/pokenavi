@@ -134,12 +134,13 @@ draft: false
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
       <span><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">はがね</span>
+      <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
       <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
-      <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
+      <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく（¼）</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -153,7 +154,7 @@ draft: false
 </table>
 </div>
 
-あく×フェアリーの複合タイプは、エスパーとドラゴンを無効化します。あく単体の弱点であるかくとうは等倍で受けられ、ゴースト・あくは半減です。弱点はどく・はがねの2タイプのみで、この2タイプを持つ相手には壁展開前の被弾に注意が必要です。
+あく×フェアリーの複合タイプは、エスパーとドラゴンを無効化します。あく単体の弱点であるかくとうは等倍で受けられ、ゴーストは半減・あくは¼まで軽減されます。弱点はどく・はがね・フェアリーの3タイプで、これらのタイプを持つ相手には壁展開前の被弾に注意が必要です。
 
 ---
 
@@ -372,7 +373,7 @@ H32 B32振りでぼうぎょを最大化し、物理アタッカーからの先�
 
 1. **物理エース**: リフレクターで物理ダメージが半減するため、ツルギのまい等で積んだ物理アタッカーが壁下でさらに受けにくくなる
 2. **特殊エース**: ひかりのかべで特殊ダメージが半減するため、めいそう等を積んだ特殊アタッカーが壁下で安全に行動できる
-3. **どく・はがね対策**: オーロンゲが苦手などく・はがねタイプに対してサイクルを回せるポケモンを同伴する
+3. **どく・はがね・フェアリー対策**: オーロンゲが苦手などく・はがね・フェアリータイプに対してサイクルを回せるポケモンを同伴する
 4. **8ターンの活用**: ひかりのねんど8ターンの壁を最大限活用できるよう、エースが積んで全抜きを狙う構成が壁展開と噛み合う
 
 ---
@@ -400,7 +401,7 @@ H32 B32振りでぼうぎょを最大化し、物理アタッカーからの先�
 
 オーロンゲはいたずらごころによるすばやさ非依存の壁展開と、ひかりのねんどによる8ターン継続が強みの補助役です。ソウルクラッシュ80.4%・リフレクター79.1%・すてゼリフ77.1%・ひかりのかべ73.6%の4技が実質固定で、対面した相手はまずこの流れを警戒する必要があります。型はわんぱく（B特化）が60.5%と主流です。
 
-弱点はどく・はがねの2タイプで、これらの攻撃で壁展開前に突破されると役割を果たせません。ちょうはつ30.5%の採用は相手の壁貼り・積み技・回復技を封じる逆妨害として機能し、壁合戦になる対面ではちょうはつを先手で打つことで相手の補助行動を止められます。ただしいたずらごころ由来の先制変化技はあくタイプには無効なので、ドドゲザン（24位）などあく相手にはちょうはつ・すてゼリフが通らない点に注意が必要です。
+弱点はどく・はがね・フェアリーの3タイプで、これらの攻撃で壁展開前に突破されると役割を果たせません。ちょうはつ30.5%の採用は相手の壁貼り・積み技・回復技を封じる逆妨害として機能し、壁合戦になる対面ではちょうはつを先手で打つことで相手の補助行動を止められます。ただしいたずらごころ由来の先制変化技はあくタイプには無効なので、ドドゲザン（24位）などあく相手にはちょうはつ・すてゼリフが通らない点に注意が必要です。
 
 ---
 

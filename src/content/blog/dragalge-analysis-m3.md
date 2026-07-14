@@ -363,7 +363,7 @@ DにEVを振らないため、D実数値はおだやか補正込みで201にと�
     <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">マスカーニャ（くさ/あく）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">✕ 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技は0.5倍だが、トリプルアクセル89.1%（こおり×2）が弱点に刺さる。S123で先手を取られるため後出しもしにくい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ技は0.25倍だが、トリプルアクセル89.1%（こおり×2）が弱点に刺さる。S123で先手を取られるため後出しもしにくい</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">

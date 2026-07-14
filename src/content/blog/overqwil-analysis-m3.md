@@ -142,6 +142,7 @@ draft: false
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく</span>
       <span><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">くさ</span>
       <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
+      <span><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">どく</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -154,7 +155,7 @@ draft: false
 </table>
 </div>
 
-あく/どくの複合により**エスパー技を無効化**し、ゴースト・あく・くさは×0.5で半減します。弱点はじめん（×2）の1タイプのみと少なく、環境上位でじめん技を主力にするポケモン（ガブリアス等）への後出しは厳禁です。
+あく/どくの複合により**エスパー技を無効化**し、ゴースト・あく・くさ・どくは×0.5で半減します。弱点はじめん（×2）の1タイプのみと少なく、環境上位でじめん技を主力にするポケモン（ガブリアス等）への後出しは厳禁です。
 
 ---
 

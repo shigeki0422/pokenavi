@@ -154,12 +154,12 @@ draft: false
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px;font-size:0.85em">
       <span><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">あく（×0.25）</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ（×0.5）</span>
+      <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト（×0.5）</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
       <span><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">エスパー</span>
-      <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
     </div>
   </td>
 </tr>
@@ -418,7 +418,7 @@ draft: false
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき最速でS実数値169（スカーフ26.7%）で積み前に先手を取られ、じしん（じめん×2弱点）で大ダメージ。れいとうパンチで×4の有効打はあるが、スカーフ個体には積み後でも後手を踏むリスクがある</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき最速でS実数値169（スカーフ26.7%）で積み前に先手を取られ、じしん（等倍）で削られる。れいとうパンチで×4の有効打はあるが、スカーフ個体には積み後でも後手を踏むリスクがある</td>
 </tr>
 </tbody>
 </table>

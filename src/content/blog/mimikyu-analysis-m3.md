@@ -322,7 +322,7 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
     <img src="/images/pokemon/pokemon-0902-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">イダイトウ（9位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/ゴーストタイプのためかげうち（ゴースト）が×2で抜群。いのちのたまのかげうち2発で無振り型（HP195/B85）を確定処理（224〜264）。ゴースト技はこちらにも等倍で通るが、ばけのかわで1回耐えてからの2ターンで完結できる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/ゴーストタイプのためかげうち（ゴースト）が×2で抜群。いのちのたまのかげうち2発で無振り型（HP195/B85）を確定処理（224〜264）。ゴースト技はこちらの弱点を突いて×2で通るが、ばけのかわで1回耐えてからの2ターンで完結できる</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -350,7 +350,7 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
     <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メタグロス（6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがねタイプのため一致技が等倍止まり。メタグロスのはがね技はこちらに×2弱点。高耐久のはがね相手にミミッキュ側の有効打が乏しい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/エスパー複合で、ゴースト技はエスパーに×2で通るがフェアリー技は半減。メタグロスのはがね技はこちらに×2弱点。高耐久の相手にミミッキュ側の火力を安定させにくい</td>
 </tr>
 </tbody>
 </table>
@@ -381,7 +381,7 @@ M-2のミミッキュは持ち物がのろいのおふだ30.4%を最多に、ラ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">メタグロス（6位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/エスパーで一致技が等倍止まり。はがね技がこちらの×2弱点を突き、高い物理耐久で受けられる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね/エスパーで、ゴースト技は×2で通るがフェアリー技は半減。はがね技がこちらの×2弱点を突き、高い物理耐久で受けられる</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお技・じめん技を持つパートナーで対処。ミミッキュはばけのかわで1発耐えて引く動きに留める</td>
 </tr>
 <tr>

@@ -407,7 +407,7 @@ C種族値125を活かしきれず、C実数値はひかえめ型より16低く�
     <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ガブリアス（1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">× 不利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアスのじしん（じめん×2）が弱点。最速ガブ（S151）・スカーフ最速ガブ（S226）ともにブリジュラスS121を上回り先手を取られる。でんき技は無効（じめんタイプのため）ではなく等倍で、最大打点はりゅうせいぐん（ドラゴン×2）だが先手を取れないため交代を要する場面が多い</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアスのじしん（じめん×2）が弱点。最速ガブ（S151）・スカーフ最速ガブ（S226）ともにブリジュラスS121を上回り先手を取られる。ブリジュラスのでんき技はガブリアス（じめんタイプ）に無効。最大打点はりゅうせいぐん（ドラゴン×2）だが先手を取れないため交代を要する場面が多い</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -477,7 +477,7 @@ C種族値125を活かしきれず、C実数値はひかえめ型より16低く�
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス">
     <div class="name">ガブリアス</div>
     <div class="rate">同居率1位</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">ブリジュラスが苦手なメガラグラージへじしん（じめん×4）、ミミッキュへじゃれつく方向での補完</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">ブリジュラスが苦手なメガラグラージへじしん（等倍）、ミミッキュへじゃれつく方向での補完</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0260-00.webp" alt="ラグラージ">

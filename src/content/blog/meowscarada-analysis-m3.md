@@ -150,6 +150,7 @@ A110・S123が攻撃と速度の柱で、BDは70と低め。スカーフで先�
       <span><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">でんき（×0.5）</span>
       <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト（×0.5）</span>
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず（×0.5）</span>
+      <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん（×0.5）</span>
     </div>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -162,7 +163,7 @@ A110・S123が攻撃と速度の柱で、BDは70と低め。スカーフで先�
 </table>
 </div>
 
-弱点が7タイプあり、むし技には×4を受けます。特にほのお・こおり・かくとう・ひこう・フェアリーは環境に使い手が多く、被弾すると大ダメージになります。BDが70と低いため、スカーフで先手を確保して「攻撃より先に倒す」立ち回りがほぼ必須です。みず・でんき・あく・くさ・ゴーストへの耐性は持ちますが、先に倒しきれない場面での場持ちはあまり期待できません。
+弱点が7タイプあり、むし技には×4を受けます。特にほのお・こおり・かくとう・ひこう・フェアリーは環境に使い手が多く、被弾すると大ダメージになります。BDが70と低いため、スカーフで先手を確保して「攻撃より先に倒す」立ち回りがほぼ必須です。みず・でんき・あく・くさ・ゴースト・じめんへの耐性は持ちますが、先に倒しきれない場面での場持ちはあまり期待できません。
 
 ---
 

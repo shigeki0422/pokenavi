@@ -343,14 +343,14 @@ draft: false
     <img src="/images/pokemon/pokemon-0006-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">リザードン（ほのお/ひこう）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○ 有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんじほうが×2（メガY・非メガのほのお/ひこう対象。メガX採用23.1%はドラゴン/ほのおで等倍）。相手のほのお技はでんきに等倍止まり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんじほうが×2（メガY・非メガのほのお/ひこう対象。メガX採用23.1%はドラゴン/ほのおで半減）。相手のほのお技はでんきに等倍止まり</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px">ブリジュラス（はがね/ドラゴン）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#ca8a04;font-weight:bold">△ やや有利</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだまが×2。でんじほうははがね×0.5で半減されるが、きあいだまで弱点を突ける</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだまが×2。でんじほうはドラゴン複合により×0.5で半減されるが、きあいだまで弱点を突ける</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
