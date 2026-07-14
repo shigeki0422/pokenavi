@@ -50,9 +50,7 @@ dates_db = [r[0] for r in conn.execute(
     "SELECT DISTINCT crawled_date FROM pokemon_usage WHERE season=? AND rule='single' ORDER BY crawled_date",
     (SEASON,)
 )]
-# クロール失敗日も日付軸には含める（データなし＝折れ線は直線で繋がる）
-MISSING_DATES = ["2026-06-21", "2026-06-26"]
-dates = sorted(set(dates_db) | set(MISSING_DATES))
+dates = sorted(set(dates_db))
 
 rows = conn.execute(
     "SELECT pokemon, pokemon_id, crawled_date, rank, usage_rate FROM pokemon_usage WHERE season=? AND rule='single' ORDER BY crawled_date, rank",
