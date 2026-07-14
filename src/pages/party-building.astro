@@ -1,0 +1,146 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'ポケモンチャンピオンズ パーティ構築ツール | 軸から簡単構築・パーティ工房';
+const description = 'ポケモンチャンピオンズのパーティ構築を支援する2つのAIシミュレーションツール。軸ポケモンから残り5枠を自動提案する「軸から簡単構築」と、6匹の型を1ポイント単位で微調整できる「パーティ工房」を用途別に紹介します。';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'ポケナビ パーティ構築',
+  description,
+  url: siteUrl + '/party-building/',
+  isPartOf: { '@type': 'WebSite', name: 'ポケナビ', url: siteUrl },
+  hasPart: [
+    {
+      '@type': 'SoftwareApplication',
+      name: '軸から簡単構築',
+      url: siteUrl + '/party-suggest/',
+      applicationCategory: 'GameApplication',
+      operatingSystem: 'Web',
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: 'パーティ工房',
+      url: siteUrl + '/party-builder/',
+      applicationCategory: 'GameApplication',
+      operatingSystem: 'Web',
+    },
+  ],
+};
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <style>
+      main { max-width: 900px; margin: 0 auto; padding: 2em 1.2em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.7rem; margin: 0 0 .5em; }
+      .lead { color: rgb(var(--gray)); font-size: .96rem; line-height: 1.8; margin: 0 0 1.8em; max-width: 640px; }
+      .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+      }
+      @media (max-width: 720px) {
+        .cards { grid-template-columns: 1fr; }
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgb(var(--gray-light));
+        border-radius: 12px;
+        padding: 1.4rem 1.3rem;
+        background: #fff;
+        transition: box-shadow .15s, border-color .15s;
+      }
+      .card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-color: rgb(var(--gray)); }
+      .card-head { display: flex; align-items: center; gap: .5em; margin-bottom: .4em; flex-wrap: wrap; }
+      .card h2 { font-size: 1.15rem; margin: 0; color: rgb(var(--black)); }
+      .badge {
+        font-size: .62rem;
+        font-weight: 700;
+        background: #fef3c7;
+        color: #b45309;
+        border-radius: 9999px;
+        padding: .15em .6em;
+        letter-spacing: .02em;
+      }
+      .card .for-whom {
+        font-size: .82rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin: .2em 0 .6em;
+      }
+      .card p.desc { font-size: .9rem; line-height: 1.75; margin: 0 0 .6em; flex-grow: 1; }
+      .card ul { margin: 0 0 1em; padding-left: 1.2em; font-size: .85rem; line-height: 1.7; color: rgb(var(--gray-dark)); }
+      .cta {
+        display: inline-block;
+        text-align: center;
+        padding: .7em 1.4em;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: .92rem;
+        margin-top: auto;
+      }
+      .cta:hover { background: var(--accent-dark); }
+      .usage-tip {
+        margin-top: 1.8rem;
+        background: #eef2ff;
+        border-left: 3px solid var(--accent);
+        border-radius: 8px;
+        padding: .9em 1.1em;
+        font-size: .88rem;
+        line-height: 1.7;
+        color: rgb(var(--gray-dark));
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>パーティ構築</h1>
+      <p class="lead">ポケモンチャンピオンズのパーティ構築を支援する、AIシミュレーションに裏付けられた2つのツールです。目的に合わせて使い分けることで、たたき台づくりから細かな詰めまでをカバーできます。</p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-head">
+            <h2>軸から簡単構築</h2>
+          </div>
+          <p class="for-whom">まず全体像がほしい人向け</p>
+          <p class="desc">軸にしたいポケモンを1体決めるだけで、AIが環境に合った残り5枠を自動提案します。</p>
+          <ul>
+            <li>相性・素早さ関係を考慮した自動提案</li>
+            <li>選出ガイド付き</li>
+            <li>使用率TOP30との1v1相性を診断</li>
+          </ul>
+          <a class="cta" href="/party-suggest">軸から簡単構築を使う →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>パーティ工房</h2>
+            <span class="badge">NEW・ベータ</span>
+          </div>
+          <p class="for-whom">自分の構築を日々詰めたい人向け</p>
+          <p class="desc">6匹の型（もちもの・特性・性格・EV・技）を1ポイント単位で自由に微調整できます。</p>
+          <ul>
+            <li>仮想敵との素早さ比較・1v1判定</li>
+            <li>与ダメ・被ダメをリアルタイム表示</li>
+            <li>パーティ保存・提案・EV逆算</li>
+          </ul>
+          <a class="cta" href="/party-builder">パーティ工房を使う →</a>
+        </div>
+      </div>
+
+      <p class="usage-tip">まず「軸から簡単構築」でたたき台を作り、「パーティ工房」で仮想敵に合わせて詰めるのがおすすめです。</p>
+    </main>
+    <Footer />
+  </body>
+</html>

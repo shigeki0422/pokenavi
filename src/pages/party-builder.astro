@@ -1,0 +1,33 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PartyBuilderApp from '../components/PartyBuilderApp.astro';
+
+const title = 'ポケモンチャンピオンズ パーティ工房(ベータ) | 6匹の型をリアルタイム調整';
+const description = 'ポケモンチャンピオンズの6匹を自由に微調整できるパーティ構築ツール。もちもの・特性・性格・EVをリアルタイムに変更しながら、想定敵との素早さ比較や1v1判定、タイプ相性バランスを確認できます。パーティは複数保存可能。';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'ポケナビ パーティ工房',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: siteUrl + '/party-builder/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+};
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <PartyBuilderApp />
+    <Footer />
+  </body>
+</html>

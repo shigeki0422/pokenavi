@@ -88,9 +88,117 @@ const websiteJsonLd = {
 				font-size: 1.25rem;
 				font-weight: 700;
 				margin: 0 0 1.5rem;
-				padding-bottom: 0.5rem;
-				border-bottom: 2px solid rgb(var(--accent));
 				color: rgb(var(--black));
+			}
+			.category-block {
+				margin-bottom: 3.5rem;
+				scroll-margin-top: 76px;
+			}
+			.category-head {
+				display: flex;
+				align-items: baseline;
+				flex-wrap: wrap;
+				gap: 0.6rem 0.9rem;
+				margin-bottom: 1.6rem;
+				padding: 0.6rem 1rem 0.6rem 0.9rem;
+				border-bottom: none;
+				background: #eef2ff;
+				border-left: 3px solid var(--accent);
+				border-radius: 0 8px 8px 0;
+			}
+			.category-title {
+				font-size: 1.6rem;
+				font-weight: 800;
+				margin: 0;
+				color: rgb(var(--black));
+			}
+			.category-lead {
+				margin: 0;
+				font-size: 0.92rem;
+				color: rgb(var(--gray));
+			}
+			.beta-badge {
+				font-size: 0.75rem;
+				font-weight: 700;
+				background: #fef3c7;
+				color: #b45309;
+				padding: 2px 8px;
+				border-radius: 9999px;
+				margin-left: 8px;
+				vertical-align: middle;
+			}
+			.qn-wrap {
+				margin: 0 0 2.5rem;
+			}
+			.qn-grid {
+				display: grid;
+				grid-template-columns: repeat(4, 1fr);
+				gap: 0.9rem;
+				list-style: none;
+				padding: 0;
+			}
+			.qn-tile {
+				position: relative;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				text-align: center;
+				gap: 0.3rem;
+				width: auto;
+				padding: 1rem 0.6rem;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 14px;
+				background: #fff;
+				text-decoration: none;
+				box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+				transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
+			}
+			.qn-tile:hover {
+				box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+				border-color: var(--accent);
+				transform: translateY(-2px);
+			}
+			.qn-icon {
+				font-size: 1.6rem;
+				line-height: 1;
+			}
+			.qn-verb {
+				font-size: 1.15rem;
+				font-weight: 800;
+				color: rgb(var(--black));
+			}
+			.qn-lead {
+				font-size: 0.76rem;
+				color: rgb(var(--gray));
+				line-height: 1.4;
+			}
+			.qn-badge-new {
+				position: absolute;
+				top: 8px;
+				right: 8px;
+				font-size: 0.62rem;
+				font-weight: 800;
+				background: #fef3c7;
+				color: #b45309;
+				padding: 1px 6px;
+				border-radius: 9999px;
+			}
+			.cta-banner {
+				display: inline-flex;
+				align-items: center;
+				gap: 0.4rem;
+				padding: 0.75rem 1.8rem;
+				background: var(--accent);
+				color: #fff;
+				border-radius: 9999px;
+				text-decoration: none;
+				font-weight: 700;
+				font-size: 1rem;
+				box-shadow: 0 2px 8px rgba(99,102,241,0.3);
+				transition: opacity 0.2s;
+			}
+			.cta-banner:hover {
+				opacity: 0.88;
 			}
 			ul {
 				display: flex;
@@ -148,8 +256,18 @@ const websiteJsonLd = {
 			.bs-cta.ghost { background: #fff; border: 1px solid var(--accent); color: var(--accent); }
 			.bs-cta.ghost:hover { background: #eef2ff; }
 			@media (max-width: 720px) {
-				.hero h1 { font-size: 1.75rem; }
+				.hero { padding: 1.75rem 1rem 1.5rem; }
+				.hero h1 { font-size: 1.6rem; margin-bottom: 0.5rem; }
+				.hero p { font-size: 1rem; }
 				ul li { width: 100%; }
+				.qn-grid { grid-template-columns: repeat(2, 1fr); gap: 0.6rem; }
+				.qn-tile { padding: 0.8rem 0.5rem; }
+				.qn-icon { font-size: 1.4rem; }
+				.qn-verb { font-size: 1.02rem; }
+				.qn-lead { font-size: 0.7rem; }
+			}
+			html {
+				scroll-behavior: smooth;
 			}
 		</style>
 	</head>
@@ -159,49 +277,46 @@ const websiteJsonLd = {
 			<section class="hero">
 				<h1>データで読み解くポケモン対戦</h1>
 				<p>対戦シミュレーション・使用率・パーティ構成をデータの観点で分析します</p>
-				<div style="margin:1.2rem 0 0.8rem;display:flex;justify-content:center">
-					<a href="/ranking" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.75rem 1.8rem;background:var(--accent);color:#fff;border-radius:9999px;text-decoration:none;font-weight:700;font-size:1rem;box-shadow:0 2px 8px rgba(99,102,241,0.3);transition:opacity 0.2s" onmouseover="this.style.opacity='0.88'" onmouseout="this.style.opacity='1'">📊 M-4 使用率ランキングを見る →</a>
-				</div>
 				<GlobalSearch variant="hero" />
 			</section>
 
-			<section style="margin-bottom:3rem">
-				<h2 class="section-title">軸から簡単構築 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:6px">目玉機能</span></h2>
-				<div class="bs-feature">
-					<h3>軸を選ぶだけ、AIシミュレーションでパーティを自動提案</h3>
-					<p>軸にしたいポケモンを指定すると、シミュレーションで残り枠を補完し、バランスの良いパーティを複数提案。各ポケモンの役割、上位ポケモンとの攻撃・防御・素早さ・1v1相性、価値ネットによる想定勝率まで、データで確認できます。</p>
-					<ul class="bs-points">
-						<li>軸を指定して自動補完</li>
-						<li>攻撃・防御・素早さ相性</li>
-						<li>ポケモン単位の1v1相性</li>
-						<li>想定パーティ相性</li>
-					</ul>
-					<div class="bs-cta-row">
-						<a class="bs-cta primary" href="/party-suggest">軸から簡単構築を使う →</a>
-					</div>
+			<nav class="qn-wrap" aria-label="サイトの使い方クイックナビ">
+				<div class="qn-grid">
+					<a href="#sec-research" class="qn-tile">
+						<span class="qn-icon" aria-hidden="true">🔍</span>
+						<span class="qn-verb">調べる</span>
+						<span class="qn-lead">使用率データで現環境を把握</span>
+					</a>
+					<a href="#sec-read" class="qn-tile">
+						<span class="qn-icon" aria-hidden="true">📖</span>
+						<span class="qn-verb">読む</span>
+						<span class="qn-lead">考察記事で環境とポケモンを深掘り</span>
+					</a>
+					<a href="#sec-watch" class="qn-tile">
+						<span class="qn-icon" aria-hidden="true">🎬</span>
+						<span class="qn-verb">観る</span>
+						<span class="qn-lead">対戦AIで上位構築の動きを観戦</span>
+					</a>
+					<a href="#sec-battle" class="qn-tile">
+						<span class="qn-badge-new">NEW</span>
+						<span class="qn-icon" aria-hidden="true">⚔️</span>
+						<span class="qn-verb">戦う</span>
+						<span class="qn-lead">自分のパーティを構築して環境に挑む</span>
+					</a>
 				</div>
-			</section>
+			</nav>
 
-			<section style="margin-bottom:3rem">
-				<h2 class="section-title">バトルシミュレータ <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--accent));margin-left:6px">注目機能</span></h2>
-				<div class="bs-feature">
-					<h3>学習AI同士の対戦で、パーティの強さをデータ診断</h3>
-					<p>自己対戦で学習した対戦AIに先読み探索を組み合わせ、選んだパーティを全ランカーと総当たり。勝率・選出・1v1相性・実戦リプレイを「感覚」ではなく「対戦データ」で確認できます。</p>
-					<ul class="bs-points">
-						<li>全ランカー総当たり</li>
-						<li>勝ち筋・負け筋の分析</li>
-						<li>1v1相性表</li>
-						<li>対戦リプレイ</li>
-					</ul>
-					<div class="bs-cta-row">
-						<a class="bs-cta primary" href="/simulator-mb">上位環境シミュレーションを使う →</a>
-						<a class="bs-cta ghost" href="/battle-simulator">バトルシミュレータとは →</a>
-					</div>
+			<section class="category-block" id="sec-research">
+				<div class="category-head">
+					<h2 class="category-title">調べる</h2>
+					<p class="category-lead">使用率データで現環境を把握</p>
 				</div>
-			</section>
 
-			<section style="margin-bottom:3rem">
-				<h2 class="section-title">ポケモン情報 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">使用率 TOP10</span></h2>
+				<div style="margin-bottom:1.8rem;display:flex;justify-content:center">
+					<a href="/ranking" class="cta-banner">📊 M-4 使用率ランキングを見る →</a>
+				</div>
+
+				<h3 class="section-title">ポケモン情報 <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">使用率 TOP10</span></h3>
 				<div style="position:relative">
 					<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px">
 						{pokemonPages.map((p) => (
@@ -228,8 +343,14 @@ const websiteJsonLd = {
 				</div>
 			</section>
 
-			<section style="margin-bottom:3rem">
-				<h2 class="section-title">考察記事 — M-4 シーズン <span style="font-size:0.75rem;font-weight:700;background:#fef3c7;color:#b45309;padding:2px 8px;border-radius:9999px;margin-left:8px">最新</span></h2>
+			<section class="category-block" id="sec-read">
+				<div class="category-head">
+					<h2 class="category-title">読む</h2>
+					<p class="category-lead">考察記事で環境とポケモンを深掘り</p>
+				</div>
+
+				<section style="margin-bottom:3rem">
+				<h3 class="section-title">考察記事 — M-4 シーズン <span style="font-size:0.75rem;font-weight:700;background:#fef3c7;color:#b45309;padding:2px 8px;border-radius:9999px;margin-left:8px">最新</span></h3>
 				<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
 					{m4Posts.map((post, i) => {
 						const meta = (articleMeta as any)[post.id];
@@ -265,7 +386,7 @@ const websiteJsonLd = {
 			</section>
 
 			<section style="margin-bottom:3rem">
-				<h2 class="section-title">考察記事 — M-3 シーズン <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">{m3PostsTotal}件</span></h2>
+				<h3 class="section-title">考察記事 — M-3 シーズン <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">{m3PostsTotal}件</span></h3>
 				<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
 					{m3PostsPreview.map((post, i) => {
 						const meta = (articleMeta as any)[post.id];
@@ -301,7 +422,7 @@ const websiteJsonLd = {
 			</section>
 
 			<section>
-				<h2 class="section-title">考察記事 — M-2 シーズン <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">{m2PostsTotal}件</span></h2>
+				<h3 class="section-title">考察記事 — M-2 シーズン <span style="font-size:0.8rem;font-weight:400;color:rgb(var(--gray));margin-left:6px">{m2PostsTotal}件</span></h3>
 				<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">
 					{m2PostsPreview.map((post, i) => {
 						const meta = (articleMeta as any)[post.id];
@@ -333,6 +454,61 @@ const websiteJsonLd = {
 					<a href="/blog/m2/" style="display:inline-block;padding:10px 28px;background:#6b7280;color:white;border-radius:6px;text-decoration:none;font-size:0.9rem;font-weight:700;transition:opacity 0.2s" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
 						M-2 シーズン すべて見る（{m2PostsTotal}件）→
 					</a>
+				</div>
+			</section>
+			</section>
+
+			<section class="category-block" id="sec-watch">
+				<div class="category-head">
+					<h2 class="category-title">観る</h2>
+					<p class="category-lead">対戦AIで上位構築の動きを観戦</p>
+				</div>
+				<div class="bs-feature">
+					<h3>学習AI同士の対戦で、パーティの強さをデータ診断</h3>
+					<p>自己対戦で学習した対戦AIに先読み探索を組み合わせ、選んだパーティを全ランカーと総当たり。勝率・選出・1v1相性・実戦リプレイを「感覚」ではなく「対戦データ」で確認できます。</p>
+					<ul class="bs-points">
+						<li>全ランカー総当たり</li>
+						<li>勝ち筋・負け筋の分析</li>
+						<li>1v1相性表</li>
+						<li>対戦リプレイ</li>
+					</ul>
+					<div class="bs-cta-row">
+						<a class="bs-cta primary" href="/simulator-mb">上位環境シミュレーションを使う →</a>
+						<a class="bs-cta ghost" href="/battle-simulator">仮想バトル観戦とは（バトルシミュレータ） →</a>
+					</div>
+				</div>
+			</section>
+
+			<section class="category-block" id="sec-battle">
+				<div class="category-head">
+					<h2 class="category-title">戦う</h2>
+					<p class="category-lead">軸提案から詳細調整まで、自分のパーティを構築して環境に挑む</p>
+				</div>
+				<div class="bs-feature">
+					<h3>軸を選ぶだけ、AIシミュレーションでパーティを自動提案</h3>
+					<p>軸にしたいポケモンを指定すると、シミュレーションで残り枠を補完し、バランスの良いパーティを複数提案。各ポケモンの役割、上位ポケモンとの攻撃・防御・素早さ・1v1相性、価値ネットによる想定勝率まで、データで確認できます。</p>
+					<ul class="bs-points">
+						<li>軸を指定して自動補完</li>
+						<li>攻撃・防御・素早さ相性</li>
+						<li>ポケモン単位の1v1相性</li>
+						<li>想定パーティ相性</li>
+					</ul>
+					<div class="bs-cta-row">
+						<a class="bs-cta primary" href="/party-suggest">軸から簡単構築を使う →</a>
+					</div>
+				</div>
+				<div class="bs-feature" style="margin-top:1.2rem">
+					<h3>パーティ工房<span class="beta-badge">NEW・ベータ</span></h3>
+					<p>6匹を1体ずつ自由に微調整できるパーティ構築ツール。もちもの・特性・性格・EVをリアルタイムに変更しながら、想定敵との素早さ比較・1v1判定・タイプ相性バランスまで確認できます。パーティは複数保存可能。</p>
+					<ul class="bs-points">
+						<li>もちもの・特性・性格・EV編集</li>
+						<li>想定敵との素早さ比較</li>
+						<li>1v1判定</li>
+						<li>タイプ相性バランス</li>
+					</ul>
+					<div class="bs-cta-row">
+						<a class="bs-cta primary" href="/party-builder">パーティ工房を使う →</a>
+					</div>
 				</div>
 			</section>
 		</main>

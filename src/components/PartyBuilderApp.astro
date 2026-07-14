@@ -1,0 +1,2098 @@
+---
+---
+
+<main>
+  <h1>パーティ工房<span class="pb-beta">ベータ</span></h1>
+  <p class="lead">6匹の型を自由に微調整し、想定敵との素早さ比較・1v1判定をリアルタイムに確認できます。1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。</p>
+
+  <div class="card" id="pb-partybar"><div class="muted">読み込み中…</div></div>
+
+  <div id="pb-validate"></div>
+
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <h2 style="margin:0">6枠編成<span class="pb-dnd-hint muted">（ドラッグで並べ替え）</span></h2>
+      <button id="pb-fill-btn" class="btn">空き枠を提案で埋める</button>
+    </div>
+    <div class="iconrow" id="pb-tray"></div>
+    <div id="pb-empty-guide"></div>
+    <div id="pb-slot-search"></div>
+    <div id="pb-fill-out"></div>
+  </div>
+
+  <div class="pb-split">
+    <div class="card" id="pb-editor"><div class="muted">読み込み中…</div></div>
+    <div class="card" id="pb-targets"></div>
+  </div>
+
+  <div class="card" id="pb-balance"></div>
+</main>
+
+<div class="pop-overlay" id="pb-modal" style="display:none">
+  <div class="pop-card"><button class="pop-x" id="pb-modal-x" aria-label="閉じる">✕</button><div id="pb-modal-body"></div></div>
+</div>
+
+<div class="pb-minibar" id="pb-minibar"></div>
+<div class="pb-undo-toast" id="pb-undo-toast" style="display:none"></div>
+
+<style is:global>
+  main{width:auto;max-width:1040px;margin:0 auto;padding:1.4em 1em 4em;color:rgb(var(--gray-dark));overflow-x:clip}
+  h1{font-size:1.5rem;margin:0 0 .2em}
+  h2{font-size:1.05rem;margin:0 0 .5em}
+  .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 1.1em}
+  .card{background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px;box-shadow:0 1px 3px rgba(var(--black),.05);padding:1em;margin-bottom:1.1em}
+  .muted{font-size:.8rem;color:rgb(var(--gray))}
+  .row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
+  .btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.55em 1.2em;font-weight:700;font-size:.85rem;cursor:pointer;font-family:var(--font-atkinson)}
+  .btn:disabled{opacity:.5;cursor:default}
+  @media(hover:hover){.btn:hover{background:var(--accent-dark)}}
+  input,.inp,select.inp{font-size:.9rem;padding:.5em .6em;border:1px solid rgb(var(--gray-light));border-radius:8px;font-family:inherit}
+  .filter-wrap{position:relative}
+  .filter-inp{width:100%;box-sizing:border-box;padding:.5em .7em;border:1px solid rgb(var(--gray-light));border-radius:8px;font-size:.85rem;outline:none;font-family:var(--font-atkinson)}
+  .filter-inp:focus{border-color:var(--accent)}
+  .filter-sug{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.12);z-index:200;overflow:hidden;max-height:280px;overflow-y:auto}
+  .sug-item{display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;font-size:.85rem;border-bottom:1px solid #f8fafc}
+  .sug-item:last-child{border-bottom:none}
+  .sug-item:hover,.sug-item.act{background:#fff7ed}
+  .sug-item img{width:30px;height:30px;object-fit:contain;flex-shrink:0}
+  .sug-item .rk{margin-left:auto;font-size:.7rem;color:rgb(var(--gray))}
+  .sug-item mark{background:#fef9c3;color:inherit;border-radius:2px;padding:0 1px}
+  .sug-item.added{opacity:.4;pointer-events:none}
+  .filter-chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:.4em}
+  .filter-chip{display:inline-flex;align-items:center;gap:2px;padding:2px 4px 2px 3px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:999px;font-size:.74rem;font-weight:700;color:#3730a3}
+  .filter-chip img{width:26px;height:26px;object-fit:contain;flex-shrink:0}
+  .filter-chip-x{background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.75rem;line-height:1;padding:0 3px;display:flex;align-items:center}
+  .filter-chip-x:hover{color:#dc2626}
+  .pb-mu-tab{cursor:pointer;opacity:.5}
+  .pb-mu-tab:hover{opacity:.8}
+  .pb-mu-tab.act{opacity:1;box-shadow:0 0 0 2px var(--accent) inset}
+
+  /* 構成カード（SimPartyCard/PartySuggestApp準拠） */
+  .iconrow{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:.5em}
+  .montab{position:relative;display:flex;flex-direction:column;align-items:center;padding:.25em .1em;border:1.5px solid rgb(var(--gray-light));border-radius:8px;background:#fff;cursor:pointer;font-family:var(--font-atkinson);overflow:hidden;transition:border-color .12s,background .12s;min-height:84px}
+  .montab:hover{border-color:#94a3b8;background:#f8fafc}
+  .montab.active{border-color:var(--accent);background:#eef2ff}
+  .monicon{width:40px;height:40px;object-fit:contain}
+  .mname{font-size:.62rem;font-weight:700;text-align:center;color:rgb(var(--gray-dark));line-height:1.15;word-break:break-all}
+  .mitem{font-size:.54rem;color:rgb(var(--gray));text-align:center;line-height:1.15}
+  .dgrid{display:flex;flex-wrap:wrap;gap:.35em .8em;margin-bottom:.35em;align-items:center}
+  .dcell{font-size:.82rem;display:inline-flex;align-items:center;gap:.3em}
+  .drow{display:flex;align-items:flex-start;gap:.35em;margin:.35em 0}
+  .dval{font-weight:600;color:rgb(var(--gray-dark))}
+  .mvwrap{display:inline-flex;flex-wrap:wrap;gap:.25em;align-items:center}
+  .lbl{display:inline-block;font-size:.62rem;font-weight:800;padding:.1em .45em;border-radius:5px;color:#fff;flex-shrink:0}
+  .lbl.item{background:#0ea5e9}.lbl.abil{background:#8b5cf6}.lbl.nat{background:#f59e0b}.lbl.mv{background:#10b981}.lbl.ev{background:#64748b}
+  .tic{width:14px;height:14px;vertical-align:-2px}
+  .iic{width:20px;height:20px;object-fit:contain;vertical-align:-5px}
+  .mvchip{display:inline-flex;align-items:center;gap:.15em;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:9999px;padding:.08em .5em;font-size:.72rem;font-weight:600}
+  .evchip{display:inline-flex;align-items:center;gap:.1em;color:#fff;font-size:.68rem;font-weight:700;padding:.06em .5em;border-radius:5px}
+  .dtl-ico{width:24px;height:24px;object-fit:contain;vertical-align:-6px}
+  .ev-H{background:#16a34a}.ev-A{background:#dc2626}.ev-B{background:#2563eb}.ev-C{background:#7c3aed}.ev-D{background:#0d9488}.ev-S{background:#db2777}
+
+  /* 1v1グリッド（simulator mtx準拠） */
+  .bg-cc{background:#dcfce7;color:#15803d}.bg-cb{background:#d1fae5;color:#15803d}.bg-cn{background:rgb(var(--gray-light));color:rgb(var(--gray))}.bg-cw{background:#ffedd5;color:#c2410c}.bg-cx{background:#fee2e2;color:#b91c1c}
+  .mu-dep{color:#7c3aed;font-weight:900;font-size:.6rem;vertical-align:2px}
+  .mu-dep-leg{color:#7c3aed}
+  .mg{overflow-x:auto;margin-top:.4em}
+  table.mtx{font-size:.72rem;border-collapse:separate;border-spacing:2px}
+  table.mtx th{font-size:.7rem;font-weight:700;padding:.2em;vertical-align:bottom;text-align:center}
+  table.mtx td{text-align:center;border-radius:5px;font-weight:800;padding:.3em;min-width:34px;white-space:nowrap;font-size:.9rem}
+  .mtx-ico{width:30px;height:30px;object-fit:contain;display:block;margin:0 auto}
+  .mtx-name{font-size:.56rem;line-height:1.05;margin-top:1px;white-space:nowrap;color:rgb(var(--gray-dark));text-align:center}
+  .mtx-corner{font-size:.56rem;color:rgb(var(--gray));text-align:center;line-height:1.15;white-space:nowrap;font-weight:700}
+  .mtx-rowh{display:flex;align-items:center;gap:4px}
+  .mtx-rowh .mtx-ico{width:26px;height:26px;margin:0}
+  .mtx-rowh .mtx-name{margin-top:0;text-align:left}
+  table.mtx th.mtx-stick{position:sticky;left:0;background:#fff;z-index:2;box-shadow:2px 0 3px -1px rgba(0,0,0,.14);width:96px;min-width:96px;max-width:96px;overflow:hidden}
+  table.mtx th.mtx-stick .mtx-rowh{width:100%}
+  table.mtx th.mtx-stick .mtx-rowh .mtx-ico{flex-shrink:0}
+  table.mtx th.mtx-stick .mtx-name{white-space:normal;word-break:break-all;line-height:1.05;flex:1;min-width:0}
+  table.mtx th.mtx-corner.mtx-stick{z-index:3}
+  .sp-val{font-size:.56rem;font-weight:800;color:var(--accent);white-space:nowrap}
+  .mtx-legend{display:flex;flex-wrap:wrap;gap:.5em .9em;font-size:.72rem;color:rgb(var(--gray-dark));margin-bottom:.4em;align-items:center}
+  .mtx-legend b{padding:1px 5px;border-radius:4px}
+
+  /* タイプ相性マトリクス */
+  table.mtx td.ao-good{background:#bbf7d0;color:#15803d;font-weight:800}
+  table.mtx td.ao-neu{background:#fff;color:#cbd5e1}
+  table.mtx td.ao-bad{background:#f1f5f9;color:#94a3b8}
+  table.mtx td.ao-none{background:#f8fafc;color:#e2e8f0}
+  table.mtx td.df-imm{background:#99f6e4;color:#0f766e}
+  table.mtx td.df-r2{background:#bbf7d0;color:#15803d}
+  table.mtx td.df-r1{background:#dcfce7;color:#15803d}
+  table.mtx td.df-n{background:#fff;color:#cbd5e1}
+  table.mtx td.df-w1{background:#fee2e2;color:#b91c1c}
+  table.mtx td.df-w2{background:#fca5a5;color:#7f1d1d}
+
+  /* タブ */
+  .tabbar{display:flex;flex-wrap:wrap;gap:4px;border-bottom:2px solid rgb(var(--gray-light));margin-top:.7em}
+  .tb{border:none;background:none;padding:.5em .8em;font-size:.8rem;font-weight:700;color:rgb(var(--gray));cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--font-atkinson);border-radius:6px 6px 0 0}
+  .tb:hover{background:#f8fafc;color:rgb(var(--gray-dark))}
+  .tb.active{color:var(--accent);border-bottom-color:var(--accent)}
+  .pane{padding-top:.6em}
+  table.dtl{width:100%;border-collapse:collapse;font-size:.78rem}
+  table.dtl th{text-align:left;font-size:.68rem;font-weight:800;color:rgb(var(--gray));background:#f8fafc;padding:.35em .5em;border-bottom:1px solid rgb(var(--gray-light));white-space:nowrap}
+  table.dtl td{padding:.4em .5em;border-bottom:1px solid #f1f5f9;vertical-align:middle}
+  .dtl-tname{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-weight:700}
+  .lft{text-align:left}
+
+  /* 素早さ比較行 */
+  .spd-tag{font-size:.68rem;font-weight:800;border-radius:5px;padding:1px 6px;margin-left:6px}
+  .spd-tag.t-out{background:#dcfce7;color:#15803d}.spd-tag.t-in{background:#fee2e2;color:#b91c1c}.spd-tag.t-eq{background:#f1f5f9;color:#64748b}
+
+  .bd-strip{display:flex;flex-wrap:wrap;align-items:center;gap:.35em .9em;font-size:.76rem;color:rgb(var(--gray-dark));background:#f8fafc;border:1px solid rgb(var(--gray-light));border-radius:8px;padding:.35em .6em;margin:0 0 .6em}
+  .bd-lb{font-weight:800;color:rgb(var(--gray))}
+  .bd-seg{font-weight:700}
+
+  /* 詳細ポップアップ/モーダル */
+  .pop-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1em}
+  .pop-card{background:#fff;border-radius:14px;box-shadow:0 12px 48px rgba(0,0,0,.25);max-width:560px;width:100%;max-height:82vh;overflow:auto;padding:1.1em 1.2em;position:relative}
+  .pop-x{position:absolute;top:.6em;right:.7em;background:none;border:none;font-size:1.1rem;color:rgb(var(--gray));cursor:pointer;line-height:1}
+  .pop-x:hover{color:#dc2626}
+
+  /* pb- 新規クラス */
+  .pb-beta{font-size:.65rem;background:#fef3c7;color:#92400e;border-radius:9999px;padding:.15em .6em;margin-left:.5em;vertical-align:middle;font-weight:800}
+  .pb-beta-badge{display:inline-block;font-size:.6rem;font-weight:800;color:#7c3aed;background:#ede9fe;border-radius:4px;padding:0 .3em;margin-left:.3em;vertical-align:1px}
+  .pb-partybar-row{flex-wrap:wrap;gap:.4em}
+  .pb-partybar-row select.inp{flex:0 1 auto;min-width:0;max-width:11em}
+  .pb-partybar-row .pb-btn-sub{padding:.4em .7em;font-size:.74rem}
+  .pb-storage-note{margin-top:.6em}
+  .pb-btn-sub{background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;border-radius:8px;padding:.45em .9em;font-weight:700;font-size:.8rem;cursor:pointer;font-family:var(--font-atkinson)}
+  .pb-btn-sub:hover{background:#e0e7ff}
+  .pb-btn-sub:disabled{opacity:.45;cursor:default}
+  .pb-danger{background:#fee2e2;color:#b91c1c;border-color:#fecaca}
+  .pb-danger:hover{background:#fecaca}
+  .pb-slot-empty{display:flex;align-items:center;justify-content:center;border-style:dashed}
+  .pb-plus{font-size:1.6rem;color:rgb(var(--gray));font-weight:300}
+  .pb-slot-x{position:absolute;top:1px;right:3px;font-size:.65rem;color:rgb(var(--gray));cursor:pointer;line-height:1;z-index:2;padding:2px}
+  .pb-slot-x:hover{color:#dc2626}
+
+  /* 空き枠クリック時の検索カード（6枠編成カード内・トレイ直下に展開、選択枠と吹き出し矢印でつながる） */
+  .pb-slotsearch{position:relative;border:2px solid var(--accent);background:#eef2ff;border-radius:10px;padding:.7em .8em .8em;margin:10px 0 .5em}
+  .pb-slotsearch::before{content:'';position:absolute;top:-7px;left:var(--pb-arrow-left,50%);width:12px;height:12px;background:#eef2ff;border-left:2px solid var(--accent);border-top:2px solid var(--accent);transform:translateX(-50%) rotate(45deg);border-radius:2px 0 0 0}
+  .pb-slotsearch-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5em;gap:.5em}
+  .pb-slotsearch-title{font-weight:800;font-size:.82rem;color:#3730a3}
+  .pb-slotsearch-close{background:none;border:none;color:rgb(var(--gray));cursor:pointer;font-size:.8rem;padding:.2em .4em;flex-shrink:0}
+  .pb-slotsearch-close:hover{color:#dc2626}
+  .pb-editor-head{display:flex;align-items:center;gap:.6em;margin-bottom:.6em}
+  .pb-editor-head .monicon{width:48px;height:48px;object-fit:contain}
+  .pb-editor-name{font-weight:800;font-size:1rem}
+  .pb-editor-types img{width:20px;height:20px;margin-right:2px}
+  .mmega-tag{font-size:.6rem;background:#fde68a;color:#92400e;border-radius:5px;padding:0 .35em;margin-left:.3em;vertical-align:1px}
+  .pb-select-row{margin-bottom:.6em}
+  .pb-mega-note{font-size:.68rem;color:#92400e;margin-left:.3em}
+  .pb-ev-editor{margin:.6em 0}
+  .pb-ev-row{display:grid;grid-template-columns:26px 40px 1fr 40px 56px 48px;align-items:center;gap:.4em;margin-bottom:.3em}
+  .pb-ev-step{width:40px;height:40px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#f8fafc;color:rgb(var(--gray-dark));font-size:1.05rem;font-weight:800;cursor:pointer;font-family:var(--font-atkinson);padding:0}
+  .pb-ev-step:disabled{opacity:.4;cursor:default}
+  @media(hover:hover){.pb-ev-step:not(:disabled):hover{background:#eef2ff;border-color:var(--accent)}}
+  .pb-ev-lbl{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;color:#fff;font-weight:800;font-size:.72rem}
+  .pb-ev-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;margin:0;padding:0;border-radius:999px;background:rgb(var(--gray-light));cursor:pointer;vertical-align:middle}
+  .pb-ev-range::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:transparent}
+  .pb-ev-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-top:-5px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
+  .pb-ev-range::-moz-range-track{height:6px;border-radius:999px;background:rgb(var(--gray-light))}
+  .pb-ev-range::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
+  .pb-ev-num{width:100%;box-sizing:border-box;padding:.25em .3em;font-size:.8rem;text-align:center;-moz-appearance:textfield}
+  .pb-ev-num::-webkit-outer-spin-button,.pb-ev-num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+  .pb-ev-stat{font-weight:700;font-size:.85rem;text-align:right}
+  .pb-ev-remain{font-size:.8rem;font-weight:700;margin:.4em 0}
+  .pb-ev-over{color:#dc2626}
+  .pb-ev-presets{display:flex;flex-wrap:wrap;gap:.35em;margin-bottom:.6em;align-items:center}
+  .pb-chip{background:#f1f5f9;border:1px solid #e2e8f0;border-radius:9999px;padding:.3em .8em;font-size:.76rem;font-weight:700;cursor:pointer;font-family:var(--font-atkinson);color:rgb(var(--gray-dark))}
+  .pb-chip:hover{background:#e2e8f0}
+  .pb-moves{display:flex;flex-direction:column;gap:.4em;margin:.6em 0}
+  .pb-mv-wrap{display:flex;align-items:center;gap:.4em}
+  .pb-mv-ico{width:18px;display:inline-flex;flex-shrink:0}
+  .pb-mv-input{width:100%;box-sizing:border-box}
+  .pb-mv-clear{background:none;border:none;color:rgb(var(--gray));cursor:pointer;font-size:.85rem;padding:.2em .4em;flex-shrink:0}
+  .pb-mv-clear:hover{color:#dc2626}
+  .pb-presets{margin-top:.6em;display:flex;flex-wrap:wrap;gap:.4em;align-items:center}
+  .pb-presets-lbl{font-size:.75rem;font-weight:800;color:rgb(var(--gray))}
+  .pb-cand-card{display:flex;align-items:center;gap:.6em;border:1px solid rgb(var(--gray-light));border-radius:10px;padding:.5em .7em;margin-bottom:.5em;background:#fff;flex-wrap:wrap}
+  .pb-cand-sprites{display:flex;gap:2px;flex-wrap:wrap}
+  .pb-cand-sprites img{width:32px;height:32px;object-fit:contain}
+  .pb-fill-sprite{position:relative;display:inline-flex;align-items:center;justify-content:center;border:2px solid transparent;border-radius:8px;background:none;padding:1px;cursor:pointer;font-family:inherit}
+  .pb-fill-sprite img{width:32px;height:32px;object-fit:contain;display:block}
+  @media(hover:hover){.pb-fill-sprite:not(.pb-fill-disabled):hover{border-color:var(--accent);background:#eef2ff}}
+  .pb-fill-sprite:not(.pb-fill-disabled)::after{content:'＋';position:absolute;top:-5px;right:-5px;width:14px;height:14px;line-height:14px;border-radius:50%;background:var(--accent);color:#fff;font-size:.6rem;font-weight:800;text-align:center;opacity:0;transition:opacity .12s}
+  @media(hover:hover){.pb-fill-sprite:not(.pb-fill-disabled):hover::after{opacity:1}}
+  .pb-fill-sprite.pb-fill-disabled{cursor:default;opacity:.4}
+  .pb-fill-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5em}
+  .pb-valid-banner{background:#fef2f2;border:1px solid #fecaca;border-radius:10px;padding:.6em .9em;margin-bottom:1.1em;color:#b91c1c;font-size:.82rem}
+  .pb-valid-banner ul{margin:0;padding-left:1.15em}
+  .pb-valid-banner li{margin:.15em 0}
+  .pb-tune-item{display:flex;align-items:center;gap:.5em;flex-wrap:wrap;font-size:.82rem;border:1px solid #e2e8f0;border-radius:8px;padding:.5em .7em;margin-bottom:.4em;background:#f8fafc}
+  .pb-tune-head{font-size:.76rem;font-weight:800;color:rgb(var(--gray));margin:.6em 0 .3em;display:flex;align-items:center;gap:.3em}
+  .pb-tune-head:first-child{margin-top:0}
+  .pb-textarea{width:100%;box-sizing:border-box;min-height:140px;font-family:monospace;font-size:.8rem;padding:.6em;border:1px solid rgb(var(--gray-light));border-radius:8px}
+  .ps-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7em;padding:2.4em 1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px}
+  .ps-spinner{width:32px;height:32px;border:4px solid rgb(var(--gray-light));border-top-color:rgb(var(--accent));border-radius:50%;animation:ps-spin .8s linear infinite}
+  @keyframes ps-spin{to{transform:rotate(360deg)}}
+  .ps-lmsg{font-weight:700;color:rgb(var(--gray-dark));font-size:.9rem}
+  @media (max-width:640px){
+    .pb-ev-row{grid-template-columns:22px 40px 1fr 40px 48px 42px}
+    table.mtx td{min-width:28px}
+    .iconrow{grid-template-columns:repeat(3,1fr)}
+  }
+
+  /* 2カラムレイアウト（型エディタ／仮想敵） */
+  .pb-split{display:flex;flex-direction:column}
+  .pb-split > .card{min-width:0}
+  @media (min-width:1024px){
+    main{max-width:1220px}
+    .pb-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.1em;align-items:start}
+    .pb-split > .card{margin-bottom:0}
+  }
+
+  /* 仮想敵カード（縦リスト） */
+  .pb-mu-list{display:flex;flex-direction:column;gap:.5em;margin-top:.6em}
+  .pb-mu-card{border:1px solid rgb(var(--gray-light));border-radius:10px;padding:.55em .7em;background:#fff}
+  .pb-mu-head{display:flex;align-items:center;gap:.5em;flex-wrap:wrap}
+  .pb-mu-sub{font-size:.7rem;color:rgb(var(--gray));margin:.1em 0 .3em}
+  .pb-mu-row{display:flex;align-items:center;gap:.5em;flex-wrap:wrap;font-size:.82rem;margin-top:.15em}
+  .pb-mb-row{display:flex;flex-wrap:wrap;gap:.3em;margin-top:.4em}
+  .pb-mb-chip{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.25;font-size:.68rem;font-weight:700;background:#f1f5f9;border-radius:6px;padding:.15em .5em;color:rgb(var(--gray-dark));white-space:nowrap}
+  .pb-mb-chip.pb-mb-none{color:rgb(var(--gray));font-weight:400}
+  .pb-mb-top{white-space:nowrap}
+  .pb-mb-dmg{font-size:.62rem;font-weight:600;color:rgb(var(--gray));white-space:nowrap}
+  .pb-mu-hit{font-size:.76rem;color:rgb(var(--gray-dark));background:#fef2f2;border-radius:6px;padding:.2em .5em;margin-top:.4em}
+  .pb-mu-actions{margin-left:auto;display:flex;gap:.3em;flex-wrap:wrap}
+  .pb-mu-ev-grid{display:flex;flex-wrap:wrap;margin:.5em 0}
+  .pb-mu-ev-row{display:inline-flex;align-items:center;gap:.35em;margin:.15em .6em .15em 0}
+  .pb-mu-ev-num{width:58px;box-sizing:border-box;text-align:center}
+
+  /* トレイDnDの補足注釈（タッチ端末では非対応のため非表示） */
+  .pb-dnd-hint{font-size:.7rem;font-weight:400;color:rgb(var(--gray));margin-left:.5em}
+  @media(hover:none){.pb-dnd-hint{display:none}}
+
+  /* 技select */
+  .pb-mv-select{width:100%;box-sizing:border-box}
+
+  /* トレイDnD */
+  .montab[draggable="true"]{cursor:grab}
+  .montab.pb-dragging{opacity:.35}
+  .montab.pb-drop-target{outline:2px dashed var(--accent);outline-offset:-2px}
+
+  /* パーティの穴 */
+  .pb-hole-summary{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:8px;padding:.45em .7em;font-size:.8rem;font-weight:700;margin-bottom:.5em}
+  table.mtx th.mtx-hole{background:#fee2e2;border-radius:5px}
+  table.mtx th.mtx-gap{background:#fef3c7;border-radius:5px}
+  .pb-hole-seg{color:#b91c1c}
+  .pb-hole-ico{width:16px;height:16px;object-fit:contain;vertical-align:-3px;margin-right:1px}
+
+  /* 型エディタ ヘッダ */
+  .pb-editor-titlebar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5em;margin-bottom:.5em}
+  .pb-editor-titlebar h2{margin:0}
+
+  /* タップ可能なポップオーバー対象（マトリクスセル/技チップ） */
+  table.mtx td[data-mtx-pop]{cursor:pointer}
+  button.pb-mb-chip{border:none;font-family:inherit;font-size:.68rem;font-weight:700;color:inherit;text-align:left;cursor:pointer}
+
+  /* (1) モバイル固定判定ミニバー */
+  .pb-minibar{position:fixed;left:0;right:0;bottom:0;z-index:600;display:none;background:#fff;border-top:1px solid rgb(var(--gray-light));box-shadow:0 -2px 12px rgba(0,0,0,.1)}
+  @media (max-width:1023.98px){.pb-minibar.pb-minibar-show{display:block}}
+  body.pb-minibar-active main{padding-bottom:64px}
+  .pb-minibar-inner{display:flex;align-items:center;gap:.3em;max-width:1040px;margin:0 auto;padding:.35em .5em}
+  .pb-minibar-scroll{display:flex;gap:.35em;overflow-x:auto;flex:1;min-width:0}
+  .pb-minibar-item{display:flex;align-items:center;gap:.25em;flex-shrink:0;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:0 .55em;font-size:.72rem;font-weight:700;color:rgb(var(--gray-dark));font-family:var(--font-atkinson);white-space:nowrap;min-height:40px;box-sizing:border-box;cursor:pointer}
+  .pb-minibar-ico{width:20px;height:20px;object-fit:contain}
+  .pb-minibar-x{flex-shrink:0;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:rgb(var(--gray));font-size:1rem;cursor:pointer}
+  .pb-minibar-x:hover{color:#dc2626}
+
+  /* (7) 仮想敵タブの最悪判定バッジ */
+  .pb-mu-badge{display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;padding:0 3px;border-radius:999px;font-size:.62rem;font-weight:900;margin-left:2px;line-height:1}
+  .pb-mu-badge-x{background:#fee2e2;color:#b91c1c}
+  .pb-mu-badge-tri{background:#ffedd5;color:#c2410c}
+
+  /* (9) 枠✕のUndoトースト（モバイルではミニバーの上に重ならないよう表示） */
+  .pb-undo-toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:650;display:flex;align-items:center;gap:.8em;max-width:calc(100% - 2em);background:#1e293b;color:#fff;border-radius:10px;padding:.6em 1em;font-size:.82rem;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+  .pb-undo-toast-btn{background:none;border:none;color:#93c5fd;font-weight:800;cursor:pointer;font-family:inherit;font-size:.82rem;padding:0;flex-shrink:0;white-space:nowrap}
+  .pb-undo-toast-btn:hover{color:#bfdbfe}
+  body.pb-minibar-active .pb-undo-toast{bottom:76px}
+
+  /* (11) 空パーティ時の初見ガイド */
+  .pb-empty-guide{background:#f8fafc;border:1px dashed rgb(var(--gray-light));border-radius:10px;padding:.7em .9em;margin:.6em 0;display:flex;flex-direction:column;gap:.3em}
+  .pb-empty-guide-step{font-size:.82rem;color:rgb(var(--gray-dark))}
+  .pb-empty-guide-step b{color:var(--accent);margin-right:.35em}
+</style>
+
+<script>
+  import { loadCore, loadMon } from '../scripts/party-builder/data';
+  import { loadStore, saveStore, createParty, createPartyFromSlots, duplicateParty, renameParty, deleteParty, getEffectiveTargets } from '../scripts/party-builder/storage';
+  import { fromSpec, fromSuggestSpec, exportParty, importParty } from '../scripts/party-builder/spec';
+  import { ALL_NATURES, NEUTRAL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, effectiveSpeed, natureDisp } from '../scripts/party-builder/stats';
+  import { TYPES } from '../scripts/party-builder/typechart';
+  import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx } from '../scripts/party-builder/balance';
+  import { judge1v1, judgeVsBuilds, moveBreakdown } from '../scripts/party-builder/matchup';
+  import { bestMove, calcDamage } from '../scripts/party-builder/damage';
+  import { suggestFill, tuneForTargets } from '../scripts/party-builder/suggest';
+  import { validateParty } from '../scripts/party-builder/validate';
+
+  const EVK = ['H', 'A', 'B', 'C', 'D', 'S'];
+  // PartySuggestApp.astro の ITEM_PNG と同一(仮想敵カードの持ち物表示体裁を揃えるための小規模な固定表)。
+  const ITEM_PNG = {
+    きあいのタスキ: 'item-0275-tasuki.png', こだわりスカーフ: 'item-0287-scarf.png', オボンのみ: 'item-0158-obon.png',
+    ラムのみ: 'item-0157-ram.png', ヤチェのみ: 'item-0188-yache.png', ハバンのみ: 'item-0197-haban.png',
+  };
+  const TYPEICON = {
+    ノーマル: ['00', 'normal'], かくとう: ['01', 'fighting'], ひこう: ['02', 'flying'], どく: ['03', 'poison'],
+    じめん: ['04', 'ground'], いわ: ['05', 'rock'], むし: ['06', 'bug'], ゴースト: ['07', 'ghost'],
+    はがね: ['08', 'steel'], ほのお: ['09', 'fire'], みず: ['10', 'water'], くさ: ['11', 'grass'],
+    でんき: ['12', 'electric'], エスパー: ['13', 'psychic'], こおり: ['14', 'ice'], ドラゴン: ['15', 'dragon'],
+    あく: ['16', 'dark'], フェアリー: ['17', 'fairy'],
+  };
+
+  const esc = (s) => (s || '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const toKatakana = (s) => s.replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 0x60));
+  /** 与ダメレンジ表示: 「68〜80 (52〜61%)」。最小乱数=最大乱数の場合は単一値「80 (61%)」。 */
+  function dmgRangeTxt(lo, hi, pLo, pHi) {
+    const dmg = lo === hi ? `${lo}` : `${lo}〜${hi}`;
+    const pct = lo === hi ? `${Math.round(pLo)}%` : `${Math.round(pLo)}〜${Math.round(pHi)}%`;
+    return `${dmg} (${pct})`;
+  }
+  const sortJa = (arr) => [...arr].sort((a, b) => a.localeCompare(b, 'ja'));
+  function spriteUrl(icon) { return icon ? `/images/pokemon/pokemon-${icon}.webp` : null; }
+  function icoImg(icon, name, cls) {
+    const u = spriteUrl(icon);
+    return u ? `<img class="${cls || ''}" src="${u}" alt="${esc(name || '')}" title="${esc(name || '')}" loading="lazy" onerror="this.style.display='none'">` : '';
+  }
+  function typeIcoByName(t) {
+    const e = t ? TYPEICON[t] : null;
+    return e ? `<img class="tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${esc(t)}">` : '';
+  }
+  /** PartySuggestApp.astro の itemIco と同一体裁(持ち物スプライト。ITEM_PNGに無い持ち物はアイコン無し)。 */
+  function itemIco(item) {
+    return ITEM_PNG[item] ? `<img class="iic" src="/images/items/${ITEM_PNG[item]}" alt="">` : '';
+  }
+  /** PartySuggestApp.astro の evChips 相当(StatArray版)。EVチップ「H<b>4</b>」のように各stat色付きで表示。 */
+  function evChipsArr(evs) {
+    return EVK.map((k, i) => `<span class="evchip ev-${k}">${k}<b>${Number(evs[i]) || 0}</b></span>`).join('');
+  }
+  /** 仮想敵カードの型表示。PartySuggestApp.astro の detailHtml() と同じ体裁(dgrid+lblチップ・mvchip・evChips)に揃える。 */
+  function muDetailHtml(b) {
+    return `<div class="dgrid">
+        <div class="dcell"><span class="lbl item">持ち物</span><span class="dval">${itemIco(b.item)}${esc(b.item) || '—'}</span></div>
+        <div class="dcell"><span class="lbl abil">特性</span><span class="dval">${esc(b.ability) || '—'}</span></div>
+        <div class="dcell"><span class="lbl nat">性格</span><span class="dval">${esc(natureDisp(b.nature)) || '—'}</span></div>
+      </div>
+      <div class="drow"><span class="lbl mv">技</span><span class="mvwrap">${b.moves.filter(Boolean).map((x) => `<span class="mvchip">${typeIcoForMove(x)}${esc(x)}</span>`).join('') || '—'}</span></div>
+      <div class="drow"><span class="lbl ev">EV</span><span class="mvwrap">${evChipsArr(b.ev)}</span></div>`;
+  }
+  function hlSug(text, q) {
+    const qk = toKatakana(q);
+    const t = qk !== q ? qk : q;
+    const i = text.indexOf(t);
+    if (i < 0) return esc(text);
+    return esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + t.length)) + '</mark>' + esc(text.slice(i + t.length));
+  }
+  const DEFG = (x) => (x === 0 ? '0' : x <= 0.25 ? '¼' : x < 0.5 ? '½' : x < 1 ? '½' : x >= 4 ? '×4' : x > 1 ? '×2' : '');
+  const DEFC = (x) => (x === 0 ? 'df-imm' : x < 0.5 ? 'df-r2' : x < 1 ? 'df-r1' : x >= 4 ? 'df-w2' : x > 1 ? 'df-w1' : 'df-n');
+  const symCls = (c) => ({ '◎': 'bg-cc', '○': 'bg-cb', '△': 'bg-cn', '▲': 'bg-cw', '×': 'bg-cx' }[c] || 'bg-cn');
+
+  // ---- 状態 ----
+  let core = null;
+  let store = null;
+  let selectedIdx = null;
+  let currentMonDetail = null;
+  let balanceTab = 'atk';
+  let fillLoading = false;
+  let fillFailed = false;
+  let fillProposals = null;
+  let fillEmptyIdx = [];
+  let slotFillLoading = false;
+  let slotFillProposals = null;
+  let slotFillFailed = false;
+  let tuneResults = null;
+  let spSugActive = -1;
+  let targetSugActive = -1;
+  let dragSrcIdx = null;
+  let activeMuTab = null; // 仮想敵パネル: ポケモン単位タブの選択状態(描画状態のみ・保存不要)
+  let miniBarDismissed = false; // (1) モバイル判定ミニバーを✕で閉じた状態(このページセッション中は再表示しない)
+  let mtxPopData = []; // (5) ポケモン相性マトリクスのセル用ポップオーバー内容(renderのたびに作り直す)
+  let mbPopData = []; // (5) 仮想敵カードの技チップ用ポップオーバー内容(renderTargetsPanelのたびに作り直す)
+  let renamingParty = false; // (12b) パーティ名インライン編集中フラグ(renderPartyBarのみが参照)
+  let pendingUndo = null; // (9) 枠✕のUndoトースト。{ partyId, index, slotData, timer } または null(最後の1件のみ保持)
+  const mqMobileTray = window.matchMedia('(max-width:639.98px)'); // (4) トレイが3列グリッドになる幅の判定(空き枠検索の吹き出し矢印位置に使用)
+  /** 仮想敵の型 編集状態。{ label, bi: number|'new', draft: TargetBuild, detail: MonDetail|null, loading } または null。
+   * bi は effectiveTargets() 上の当該ラベルのbuilds配列インデックス('new'=追加中で未保存)。 */
+  let muEdit = null;
+
+  function activeParty() {
+    if (!store) return null;
+    return store.parties.find((p) => p.id === store.activeId) || null;
+  }
+  /** アクティブパーティ切替(新規/複製/削除/選択変更/インポート)時に選択枠・提案系の一時状態を破棄する。
+   * H1: fillProposals/fillEmptyIdxを持ち越すと、切替後の別パーティの空き枠を古いインデックスで
+   * 上書きしうるため必ずここでクリアする(採用ボタン自体もH1で現在の空き枠を再計算する方式に修正済み)。 */
+  function resetPartyUiState() {
+    selectedIdx = null;
+    fillLoading = false;
+    fillFailed = false;
+    fillProposals = null;
+    fillEmptyIdx = [];
+    slotFillLoading = false;
+    slotFillProposals = null;
+    slotFillFailed = false;
+    tuneResults = null;
+    activeMuTab = null;
+    muEdit = null;
+    renamingParty = false;
+    clearPendingUndo();
+  }
+  function resolveSlotSafe(slot) {
+    if (!slot || !core) return null;
+    try { return resolveSlot(slot, core.species, core.moves); } catch (e) { return null; }
+  }
+  function resolvedPartyList() {
+    const p = activeParty();
+    if (!p || !core) return [];
+    const out = [];
+    for (const slot of p.slots) {
+      const rb = resolveSlotSafe(slot);
+      if (rb) out.push(rb);
+    }
+    return out;
+  }
+  function moveType(name) {
+    if (!core || !name) return null;
+    const m = core.moves[name];
+    return m ? m[0] : null;
+  }
+  function typeIcoForMove(name) { return typeIcoByName(moveType(name)); }
+  /**
+   * マトリクスの相手列。相手1ラベルにつき想定型(≤3、targets.jsonのbuilds全部)を全てresolveTargetする。
+   * scripts/_explain.py matchup_grid() と同じく「代表型1固定」ではなく複数型を集約評価するための材料。
+   * ポケモン相性タブ・穴判定(findHoles)はこのbuilds配列をjudgeVsBuildsに渡して集約する。
+   * 素早さタブは従来どおり代表型1体(builds[0])のみを見るため、そちらはこの配列の先頭要素を使う。
+   */
+  /** buildOppCols()の計算結果キャッシュ。customTargets変更時(saveMuEdit/deleteMuBuild/resetMuDefault)にのみ
+   * invalidateOppColsCache()で無効化する(M3: EVスライダー連打時にrenderBalance毎回の再計算を避ける)。 */
+  let oppColsCache = null;
+  function invalidateOppColsCache() { oppColsCache = null; }
+  function buildOppCols() {
+    if (!core) return [];
+    if (oppColsCache) return oppColsCache;
+    oppColsCache = effectiveTargets()
+      .map((g) => ({
+        icon: g.icon,
+        label: g.label,
+        builds: (g.builds || [])
+          .map((b) => resolveTargetSafe(g.sp, g.label, g.icon, b, core.moves))
+          .filter((b) => b !== null),
+      }))
+      .filter((g) => g.builds.length);
+    return oppColsCache;
+  }
+
+  /** targets.json由来の仮想敵一覧を、store.customTargets(仮想敵の型のユーザー編集)で差し替えた「効果的builds」で返す。
+   * マトリクス・穴判定・仮想敵パネルはすべてこれ経由で仮想敵を参照する(core.targetsを直接見ない)。 */
+  function effectiveTargets() {
+    if (!core || !store) return [];
+    return getEffectiveTargets(store, core.targets);
+  }
+
+  const MU_SYM_RANK = { '◎': 4, '○': 3, '△': 2, '▲': 1, '×': 0 };
+  /** (7) 仮想敵タブ用の最悪判定バッジ。grpの全型(≤3)についてjudge1v1(rb, opp)を回し、
+   * 最も悪いsymが×/▲のときだけそのsymを返す(◎/○/△なら表示しない=null)。選択枠の仮想敵のみが
+   * 対象で型数も≤3のため、タブ描画のたびに回しても軽量。 */
+  function muTabBadge(rb, grp) {
+    if (!rb || !grp || !grp.builds.length || !core) return null;
+    let worst = null;
+    let worstRank = 99;
+    for (const b of grp.builds) {
+      const opp = resolveTargetSafe(grp.sp, grp.label, grp.icon, b, core.moves);
+      if (!opp) continue;
+      const v = judge1v1(rb, opp);
+      const r = MU_SYM_RANK[v.sym];
+      if (r < worstRank) { worstRank = r; worst = v.sym; }
+    }
+    return worst === '×' || worst === '▲' ? worst : null;
+  }
+
+  /** label(仮想敵ラベル)に対応する種のmon jsonをloadMonで取得する。sp→species.icon経由(メガ型ラベルのicon誤用を避ける)。 */
+  async function loadMonForTargetLabel(label) {
+    const grp = effectiveTargets().find((g) => g.label === label);
+    if (!grp) throw new Error(`target group not found: ${label}`);
+    const sm = core.species.find((s) => s.n === grp.sp);
+    if (!sm) throw new Error(`species not found for target: ${grp.sp}`);
+    return loadMon(sm.icon);
+  }
+
+  /** customTargets未編集のラベルを初回編集時にtargets.jsonのデフォルトでmaterializeする。 */
+  function materializeCustomTarget(label) {
+    if (!store.customTargets) store.customTargets = {};
+    if (!store.customTargets[label] || !store.customTargets[label].length) {
+      const grp = core.targets.find((g) => g.label === label);
+      store.customTargets[label] = grp ? JSON.parse(JSON.stringify(grp.builds)) : [];
+    }
+  }
+
+  function targetBuildSpec(sp, b) {
+    return `${sp}@${b.item || ''}:${b.nature || ''}:${(b.moves || []).filter(Boolean).join('|')}:${b.ev.join('/')}:${b.ability || ''}`;
+  }
+
+  // =========================================================
+  // 描画
+  // =========================================================
+  /** M3: EVスライダー連打時にrenderBalance()(マトリクス再計算)をtrailingデバウンスするためのタイマー。
+   * scheduleRenderBalance()で予約し、renderBalance()を直接呼ぶ経路(render()等)では即時実行に統一する
+   * ため、その際は保留中の予約をキャンセルする(二重計算防止)。 */
+  let balanceDebounceTimer = null;
+  function cancelScheduledRenderBalance() {
+    if (balanceDebounceTimer) { clearTimeout(balanceDebounceTimer); balanceDebounceTimer = null; }
+  }
+  function scheduleRenderBalance() {
+    cancelScheduledRenderBalance();
+    balanceDebounceTimer = setTimeout(() => {
+      balanceDebounceTimer = null;
+      renderBalance();
+    }, 80);
+  }
+  function render() {
+    cancelScheduledRenderBalance();
+    renderPartyBar();
+    renderValidate();
+    renderTray();
+    renderEmptyGuide();
+    updateFillBtnVisibility();
+    renderFillOut();
+    renderSlotSearch();
+    renderEditor();
+    renderTargetsPanel();
+    renderBalance();
+  }
+
+  // ---- (1) モバイル固定判定ミニバー ----
+  /** 選択中枠が仮想敵ありのとき、現在の仮想敵タブの型ごとの判定を画面下部に超コンパクト表示する。
+   * grp/rowsはrenderTargetsPanel()が算出済みのものをそのまま渡す(二重計算しない)。 */
+  function renderMiniBar(grp, rows) {
+    const el = document.getElementById('pb-minibar');
+    if (!el) return;
+    if (miniBarDismissed || !grp || !rows || !rows.length) {
+      el.classList.remove('pb-minibar-show');
+      el.innerHTML = '';
+      document.body.classList.remove('pb-minibar-active');
+      return;
+    }
+    const items = rows.slice(0, 3).map((r) => `<button type="button" class="pb-minibar-item">${icoImg(grp.icon, grp.label, 'pb-minibar-ico')}<span>S${r.mySpeed}vs${r.oppSpeed} ${r.verdict.sym}${r.myHitsTxt}/${r.oppHitsTxt}</span></button>`).join('');
+    el.innerHTML = `<div class="pb-minibar-inner">
+        <div class="pb-minibar-scroll">${items}</div>
+        <button type="button" class="pb-minibar-x" id="pb-minibar-x" aria-label="閉じる">✕</button>
+      </div>`;
+    el.classList.add('pb-minibar-show');
+    document.body.classList.add('pb-minibar-active');
+    const scrollDiv = el.querySelector('.pb-minibar-scroll');
+    if (scrollDiv) scrollDiv.addEventListener('click', scrollToTargetsPanel);
+    document.getElementById('pb-minibar-x').addEventListener('click', (e) => {
+      e.stopPropagation();
+      miniBarDismissed = true;
+      renderMiniBar(null, null);
+    });
+  }
+  function scrollToTargetsPanel() {
+    const el = document.getElementById('pb-targets');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /** (11) 0体(空パーティ)のときだけ6枠トレイ直下に3ステップの初見ガイドを表示する。1体追加で消える。 */
+  function renderEmptyGuide() {
+    const el = document.getElementById('pb-empty-guide');
+    if (!el) return;
+    const p = activeParty();
+    const filledCount = p ? p.slots.filter(Boolean).length : 0;
+    if (!p || filledCount > 0) { el.innerHTML = ''; return; }
+    el.innerHTML = `<div class="pb-empty-guide">
+        <div class="pb-empty-guide-step"><b>①</b>ポケモンを追加（＋をタップ）</div>
+        <div class="pb-empty-guide-step"><b>②</b>仮想敵を設定</div>
+        <div class="pb-empty-guide-step"><b>③</b>EVを微調整して判定を確認</div>
+      </div>`;
+  }
+
+  /** 空き枠がない(6匹満員)時は「空き枠を提案で埋める」ボタンを非表示にする。空きができたら再表示。 */
+  function updateFillBtnVisibility() {
+    const btn = document.getElementById('pb-fill-btn');
+    if (!btn) return;
+    const p = activeParty();
+    const hasEmpty = !!p && p.slots.some((s) => !s);
+    btn.style.display = hasEmpty ? '' : 'none';
+    if (!hasEmpty && (fillProposals || fillFailed)) {
+      fillProposals = null;
+      fillFailed = false;
+      renderFillOut();
+    }
+  }
+
+  // ---- 構成ルールエラーバナー ----
+  function renderValidate() {
+    const el = document.getElementById('pb-validate');
+    if (!el) return;
+    const p = activeParty();
+    if (!p || !core) { el.innerHTML = ''; return; }
+    const issues = validateParty(p, core.species);
+    if (!issues.length) { el.innerHTML = ''; return; }
+    el.innerHTML = `<div class="pb-valid-banner"><ul>${issues.map((i) => `<li>⚠ ${esc(i.message)}</li>`).join('')}</ul></div>`;
+  }
+
+  function renderPartyBar() {
+    const el = document.getElementById('pb-partybar');
+    const p = activeParty();
+    if (!p) renamingParty = false; // (12b) パーティが無いのに編集状態が残らないようにする
+    const options = store.parties.map((pp) => `<option value="${esc(pp.id)}" ${pp.id === store.activeId ? 'selected' : ''}>${esc(pp.name)}</option>`).join('');
+    const nameFieldHtml = renamingParty && p
+      ? `<input type="text" id="pb-party-rename-input" class="inp" value="${esc(p.name)}" style="max-width:11em">`
+      : `<select id="pb-party-select" class="inp">${options}</select>`;
+    el.innerHTML = `
+      <div class="row pb-partybar-row">
+        ${nameFieldHtml}
+        <button class="pb-btn-sub" id="pb-p-new" ${renamingParty ? 'disabled' : ''}>新規</button>
+        <button class="pb-btn-sub" id="pb-p-dup" ${p && !renamingParty ? '' : 'disabled'}>複製</button>
+        <button class="pb-btn-sub" id="pb-p-ren" ${p && !renamingParty ? '' : 'disabled'}>リネーム</button>
+        <button class="pb-btn-sub pb-danger" id="pb-p-del" ${p && !renamingParty ? '' : 'disabled'}>削除</button>
+        <button class="pb-btn-sub" id="pb-p-exp" ${p && !renamingParty ? '' : 'disabled'}>エクスポート</button>
+        <button class="pb-btn-sub" id="pb-p-imp" ${renamingParty ? 'disabled' : ''}>インポート</button>
+      </div>
+      <div class="muted pb-storage-note">パーティはこのブラウザ内に保存されます(端末間の同期はありません)。持ち出しはエクスポートをご利用ください。</div>`;
+    if (renamingParty && p) {
+      // (12b) prompt()の代わりにインライン編集。Enter/blurで確定・Escで取消(esc()はvalue属性側で適用済み)。
+      const input = document.getElementById('pb-party-rename-input');
+      let settled = false;
+      const commit = () => {
+        if (settled) return;
+        settled = true;
+        const name = input.value.trim();
+        if (name) renameParty(store, p.id, name);
+        renamingParty = false;
+        render();
+      };
+      const cancel = () => {
+        if (settled) return;
+        settled = true;
+        renamingParty = false;
+        renderPartyBar();
+      };
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); commit(); }
+        else if (e.key === 'Escape') { e.preventDefault(); cancel(); }
+      });
+      input.addEventListener('blur', () => commit());
+      input.focus();
+      input.select();
+    } else {
+      document.getElementById('pb-party-select').addEventListener('change', (e) => {
+        store.activeId = e.target.value;
+        resetPartyUiState();
+        saveStore(store);
+        render();
+      });
+    }
+    document.getElementById('pb-p-new').addEventListener('click', () => {
+      if (renamingParty) return;
+      createParty(store);
+      resetPartyUiState();
+      render();
+    });
+    document.getElementById('pb-p-dup').addEventListener('click', () => {
+      if (!p || renamingParty) return;
+      duplicateParty(store, p.id);
+      resetPartyUiState();
+      render();
+    });
+    document.getElementById('pb-p-ren').addEventListener('click', () => {
+      if (!p || renamingParty) return;
+      renamingParty = true;
+      renderPartyBar();
+    });
+    document.getElementById('pb-p-del').addEventListener('click', () => {
+      if (!p || renamingParty) return;
+      if (confirm(`「${p.name}」を削除しますか？`)) {
+        deleteParty(store, p.id);
+        resetPartyUiState();
+        render();
+      }
+    });
+    document.getElementById('pb-p-exp').addEventListener('click', () => { if (p && !renamingParty) openExportModal(p); });
+    document.getElementById('pb-p-imp').addEventListener('click', () => { if (!renamingParty) openImportModal(); });
+  }
+
+  function renderTray() {
+    const el = document.getElementById('pb-tray');
+    const p = activeParty();
+    if (!p) { el.innerHTML = ''; return; }
+    el.innerHTML = p.slots.map((slot, i) => {
+      const active = selectedIdx === i ? ' active' : '';
+      if (!slot) {
+        return `<button class="montab pb-slot-empty${active}" data-slot="${i}"><span class="pb-plus">＋</span></button>`;
+      }
+      const rb = resolveSlotSafe(slot);
+      const sm = core ? core.species.find((s) => s.n === slot.sp) : null;
+      const name = rb ? rb.label : slot.sp;
+      const icon = rb ? rb.icon : (sm ? sm.icon : null);
+      return `<button class="montab${active}" data-slot="${i}" draggable="true">
+          <span class="pb-slot-x" data-slot-x="${i}" title="外す">✕</span>
+          ${icoImg(icon, name, 'monicon')}
+          <span class="mname">${esc(name)}</span>
+          <span class="mitem">${esc(slot.item) || '—'}</span>
+        </button>`;
+    }).join('');
+    el.querySelectorAll('.montab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        selectedIdx = +btn.dataset.slot;
+        tuneResults = null;
+        slotFillProposals = null;
+        slotFillFailed = false;
+        activeMuTab = null;
+        muEdit = null;
+        document.querySelectorAll('#pb-tray .montab').forEach((b) => b.classList.toggle('active', +b.dataset.slot === selectedIdx));
+        renderSlotSearch();
+        renderEditor();
+        renderTargetsPanel();
+      });
+    });
+    el.querySelectorAll('.pb-slot-x').forEach((x) => {
+      x.addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeSlotAt(+x.dataset.slotX);
+      });
+    });
+    // DnD並べ替え（充填枠のみドラッグ可。モバイルタッチは対象外）
+    el.querySelectorAll('.montab[draggable="true"]').forEach((btn) => {
+      btn.addEventListener('dragstart', (e) => {
+        dragSrcIdx = +btn.dataset.slot;
+        e.dataTransfer.effectAllowed = 'move';
+        try { e.dataTransfer.setData('text/plain', String(dragSrcIdx)); } catch (err) { /* noop */ }
+        btn.classList.add('pb-dragging');
+      });
+      btn.addEventListener('dragend', () => {
+        btn.classList.remove('pb-dragging');
+        dragSrcIdx = null;
+        el.querySelectorAll('.montab').forEach((b) => b.classList.remove('pb-drop-target'));
+      });
+    });
+    el.querySelectorAll('.montab').forEach((btn) => {
+      btn.addEventListener('dragover', (e) => {
+        if (dragSrcIdx === null) return;
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        btn.classList.add('pb-drop-target');
+      });
+      btn.addEventListener('dragleave', () => btn.classList.remove('pb-drop-target'));
+      btn.addEventListener('drop', (e) => {
+        e.preventDefault();
+        btn.classList.remove('pb-drop-target');
+        const destIdx = +btn.dataset.slot;
+        if (dragSrcIdx === null || dragSrcIdx === destIdx) return;
+        reorderSlots(dragSrcIdx, destIdx);
+      });
+    });
+  }
+
+  /** ✕で外す: 左詰めを維持したまま該当枠を除去する(migrateと同じcompact方式)。(9) 除去前の枠オブジェクト
+   * (targets込み)をそのままpendingUndoに保持し、Undoトーストから完全復元できるようにする。 */
+  function removeSlotAt(i) {
+    const p = activeParty();
+    if (!p) return;
+    const selectedSlotObj = selectedIdx !== null ? p.slots[selectedIdx] : null;
+    const filled = p.slots.filter((s) => s !== null);
+    if (i >= filled.length) return;
+    const [removed] = filled.splice(i, 1);
+    const out = [...filled];
+    while (out.length < 6) out.push(null);
+    p.slots = out;
+    p.updatedAt = Date.now();
+    if (selectedSlotObj) {
+      const newIdx = p.slots.indexOf(selectedSlotObj);
+      selectedIdx = newIdx === -1 ? null : newIdx;
+    } else {
+      selectedIdx = null;
+    }
+    tuneResults = null;
+    slotFillProposals = null;
+    slotFillFailed = false;
+    saveStore(store);
+    const rb = resolveSlotSafe(removed);
+    showUndoToast(rb ? rb.label : removed.sp, p.id, i, removed);
+    render();
+  }
+
+  // ---- (9) 枠✕のUndoトースト ----
+  /** 新規除去のたびに前回分を上書きする(=最後の1件のみUndo可能)。5秒後に自動消滅する。 */
+  function showUndoToast(name, partyId, index, slotData) {
+    if (pendingUndo && pendingUndo.timer) clearTimeout(pendingUndo.timer);
+    const timer = setTimeout(() => { pendingUndo = null; renderUndoToast(); }, 5000);
+    pendingUndo = { name, partyId, index, slotData, timer };
+    renderUndoToast();
+  }
+  function clearPendingUndo() {
+    if (pendingUndo && pendingUndo.timer) clearTimeout(pendingUndo.timer);
+    pendingUndo = null;
+    renderUndoToast();
+  }
+  function renderUndoToast() {
+    const el = document.getElementById('pb-undo-toast');
+    if (!el) return;
+    if (!pendingUndo) { el.style.display = 'none'; el.innerHTML = ''; return; }
+    el.style.display = 'flex';
+    el.innerHTML = `<span>${esc(pendingUndo.name)}を外しました</span><button type="button" class="pb-undo-toast-btn" id="pb-undo-btn">元に戻す</button>`;
+    document.getElementById('pb-undo-btn').addEventListener('click', undoRemoveSlot);
+  }
+  /** 復元: 除去時の位置(左詰め後のインデックス)へSlot全体(targets込み)を挿入し直す。 */
+  function undoRemoveSlot() {
+    if (!pendingUndo) return;
+    const { partyId, index, slotData, timer } = pendingUndo;
+    clearTimeout(timer);
+    pendingUndo = null;
+    renderUndoToast();
+    const party = store.parties.find((pp) => pp.id === partyId);
+    if (!party) return;
+    const filled = party.slots.filter((s) => s !== null);
+    const insertAt = Math.min(index, filled.length);
+    filled.splice(insertAt, 0, slotData);
+    const out = [...filled];
+    while (out.length < 6) out.push(null);
+    party.slots = out.slice(0, 6);
+    party.updatedAt = Date.now();
+    saveStore(store);
+    if (activeParty() && activeParty().id === partyId) render();
+  }
+
+  /** DnD並べ替え: 充填枠だけを対象にした配列移動＋左詰め維持。選択中の枠はオブジェクト同一性で追従。 */
+  function reorderSlots(from, to) {
+    const p = activeParty();
+    if (!p) return;
+    const filled = p.slots.filter((s) => s !== null);
+    if (from >= filled.length) return;
+    const destIdx = Math.min(to, filled.length - 1);
+    const selectedSlotObj = selectedIdx !== null ? p.slots[selectedIdx] : null;
+    const [moving] = filled.splice(from, 1);
+    filled.splice(destIdx, 0, moving);
+    const out = [...filled];
+    while (out.length < 6) out.push(null);
+    p.slots = out;
+    p.updatedAt = Date.now();
+    if (selectedSlotObj) {
+      const newIdx = p.slots.indexOf(selectedSlotObj);
+      selectedIdx = newIdx === -1 ? null : newIdx;
+    }
+    saveStore(store);
+    render();
+  }
+
+  // ---- 型エディタ ----
+  let editorRenderToken = 0;
+  async function renderEditor() {
+    const el = document.getElementById('pb-editor');
+    const p = activeParty();
+    if (!p) { el.innerHTML = '<div class="muted">パーティを作成してください</div>'; return; }
+    if (selectedIdx === null) {
+      el.innerHTML = '<h2>型エディタ</h2><div class="muted">上の6枠から編集したい枠を選択してください</div>';
+      return;
+    }
+    const slot = p.slots[selectedIdx];
+    if (!slot) { el.innerHTML = '<h2>型エディタ</h2><div class="muted">ポケモンを追加すると型を編集できます</div>'; return; }
+    const sm = core.species.find((s) => s.n === slot.sp);
+    if (!sm) { el.innerHTML = '<div class="muted">種族データが見つかりません（データ不整合）</div>'; return; }
+    const token = ++editorRenderToken;
+    el.innerHTML = `<h2>型エディタ ー 枠${selectedIdx + 1}</h2><div class="muted">読み込み中…</div>`;
+    let detail = null;
+    try { detail = await loadMon(sm.icon); } catch (e) { detail = null; }
+    if (token !== editorRenderToken) return;
+    currentMonDetail = detail;
+    buildEditorFilledDom(el, slot, sm, detail || { items: [], abilities: [], natures: [], evs: [], moves: [], learnset: [], builds: [] });
+  }
+
+  /** (4) 空き枠検索カードの吹き出し矢印の左位置。トレイが3列(モバイル)か6列(PC)かに応じて列基準で算出する。 */
+  function computeArrowLeft(idx) {
+    const columns = mqMobileTray.matches ? 3 : 6;
+    const col = idx % columns;
+    return `calc((${col} + 0.5) / ${columns} * 100%)`;
+  }
+  mqMobileTray.addEventListener('change', () => { if (selectedIdx !== null) renderSlotSearch(); });
+
+  /** 空き枠選択時に「6枠編成」カード内・トレイ直下へ検索UIを展開する（枠外は空にする）。 */
+  function renderSlotSearch() {
+    const el = document.getElementById('pb-slot-search');
+    if (!el) return;
+    const p = activeParty();
+    if (!p || selectedIdx === null || p.slots[selectedIdx]) { el.innerHTML = ''; return; }
+    const idx = selectedIdx;
+    const arrowLeft = computeArrowLeft(idx);
+    el.innerHTML = `
+      <div class="pb-slotsearch" style="--pb-arrow-left:${arrowLeft}">
+        <div class="pb-slotsearch-head">
+          <span class="pb-slotsearch-title">枠${idx + 1}にポケモンを追加</span>
+          <button type="button" class="pb-slotsearch-close" id="pb-slotsearch-close" aria-label="閉じる">✕ 閉じる</button>
+        </div>
+        <div class="filter-wrap">
+          <input type="text" id="pb-sp-search" class="filter-inp" placeholder="追加するポケモンを検索（ひらがな可）" autocomplete="off">
+          <div class="filter-sug" id="pb-sp-sug" style="display:none"></div>
+        </div>
+        <div class="row" style="margin-top:.6em">
+          <button class="pb-btn-sub" id="pb-slot-fill-btn">この枠を提案で埋める</button>
+        </div>
+        <div id="pb-slot-fill-out"></div>
+      </div>`;
+    const input = el.querySelector('#pb-sp-search');
+    input.addEventListener('input', (e) => onSpSearchInput(e.target.value));
+    input.addEventListener('keydown', onSpSearchKey);
+    input.focus();
+    el.querySelector('#pb-slot-fill-btn').addEventListener('click', onSlotFillClick);
+    el.querySelector('#pb-slotsearch-close').addEventListener('click', () => {
+      selectedIdx = null;
+      document.querySelectorAll('#pb-tray .montab').forEach((b) => b.classList.remove('active'));
+      renderSlotSearch();
+      renderEditor();
+      renderTargetsPanel();
+    });
+    if (slotFillProposals) renderSlotFillArea();
+  }
+
+  function onSpSearchInput(val) {
+    const sug = document.getElementById('pb-sp-sug');
+    if (!sug || !core) return;
+    spSugActive = -1;
+    const q = val.trim();
+    if (!q) { sug.style.display = 'none'; return; }
+    const qk = toKatakana(q);
+    const hits = core.species.filter((s) => s.n.includes(q) || s.n.includes(qk)).slice(0, 12);
+    if (!hits.length) { sug.innerHTML = '<div class="sug-item added">該当なし</div>'; sug.style.display = 'block'; return; }
+    sug.innerHTML = hits.map((s) => `<div class="sug-item" data-sp="${esc(s.n)}">${icoImg(s.icon, s.n, '')}<span>${hlSug(s.n, q)}</span><span class="rk">使用${s.rank}位</span></div>`).join('');
+    sug.querySelectorAll('[data-sp]').forEach((it) => it.addEventListener('click', () => pickSpecies(it.dataset.sp)));
+    sug.style.display = 'block';
+  }
+  function onSpSearchKey(e) {
+    const sug = document.getElementById('pb-sp-sug');
+    if (!sug || sug.style.display === 'none') return;
+    const items = [...sug.querySelectorAll('[data-sp]')];
+    if (e.key === 'ArrowDown') { e.preventDefault(); spSugActive = Math.min(spSugActive + 1, items.length - 1); items.forEach((it, i) => it.classList.toggle('act', i === spSugActive)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); spSugActive = Math.max(spSugActive - 1, 0); items.forEach((it, i) => it.classList.toggle('act', i === spSugActive)); }
+    else if (e.key === 'Enter') { e.preventDefault(); if (spSugActive >= 0 && items[spSugActive]) pickSpecies(items[spSugActive].dataset.sp); else if (items.length === 1) pickSpecies(items[0].dataset.sp); }
+    else if (e.key === 'Escape') { sug.style.display = 'none'; spSugActive = -1; }
+  }
+  async function pickSpecies(name) {
+    if (!core) return;
+    const sm = core.species.find((s) => s.n === name);
+    const p = activeParty();
+    if (!sm || !p) return;
+    const idx = selectedIdx;
+    let newSlot = { sp: name, item: '', ability: '', nature: '', evs: [0, 0, 0, 0, 0, 0], moves: [], targets: [] };
+    try {
+      const detail = await loadMon(sm.icon);
+      if (detail.builds && detail.builds.length) {
+        const parsed = fromSpec(detail.builds[0]);
+        if (parsed) { parsed.targets = []; newSlot = parsed; }
+      } else {
+        newSlot.item = (detail.items[0] || {}).n || '';
+        newSlot.ability = (detail.abilities[0] || {}).n || '';
+        newSlot.nature = (detail.natures[0] || {}).n || '';
+        newSlot.evs = (detail.evs[0] || {}).ev || [0, 0, 0, 0, 0, 0];
+        newSlot.moves = detail.moves.slice(0, 4).map((m) => m.n);
+      }
+    } catch (e) { /* フェッチ失敗時は空の型のまま追加 */ }
+    if (idx !== selectedIdx) return;
+    p.slots[idx] = newSlot;
+    p.updatedAt = Date.now();
+    saveStore(store);
+    render();
+  }
+
+  async function onSlotFillClick() {
+    const p = activeParty();
+    if (!p || !core) return;
+    const idx = selectedIdx;
+    slotFillLoading = true;
+    slotFillFailed = false;
+    renderSlotFillArea();
+    let proposals = null;
+    try {
+      proposals = await suggestFill(p, [idx], { species: core.species, loadMon });
+    } catch (e) {
+      // M2: mon json取得失敗等でsuggestFillがrejectしてもスピナーが固まらないようにする
+      console.warn('[onSlotFillClick] 提案の取得に失敗しました', e);
+      if (idx !== selectedIdx) return;
+      slotFillLoading = false;
+      slotFillFailed = true;
+      renderSlotFillArea();
+      return;
+    }
+    if (idx !== selectedIdx) return;
+    slotFillLoading = false;
+    slotFillProposals = proposals;
+    renderSlotFillArea();
+  }
+  function renderSlotFillArea() {
+    const out = document.getElementById('pb-slot-fill-out');
+    if (!out) return;
+    if (slotFillLoading) { out.innerHTML = '<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">提案を計算中…</div></div>'; return; }
+    if (slotFillFailed) { out.innerHTML = '<div class="muted">提案の取得に失敗しました。時間をおいて再試行してください</div>'; return; }
+    if (!slotFillProposals || !slotFillProposals.length) { out.innerHTML = ''; return; }
+    out.innerHTML = slotFillProposals.map((cand, ci) => {
+      const slotCand = cand[0];
+      const sm = core.species.find((s) => s.n === slotCand.sp);
+      return `<div class="pb-cand-card">
+          ${icoImg(sm ? sm.icon : null, slotCand.sp, 'monicon')}
+          <span class="mname" style="font-size:.82rem">${esc(slotCand.sp)}</span>
+          <button class="pb-btn-sub" data-slot-cand="${ci}">この案を採用</button>
+        </div>`;
+    }).join('');
+    out.querySelectorAll('[data-slot-cand]').forEach((btn) => btn.addEventListener('click', () => {
+      const ci = +btn.dataset.slotCand;
+      const cand = slotFillProposals[ci][0];
+      const p = activeParty();
+      // H1: onFillSpriteClickと同じく採用時点の枠状態を再確認してから書き込む(提案表示後に
+      // 別経路で当該枠が埋まっていた場合の無警告上書きを防ぐ)。
+      if (!p || selectedIdx === null || p.slots[selectedIdx]) {
+        slotFillProposals = null;
+        renderSlotFillArea();
+        return;
+      }
+      p.slots[selectedIdx] = cand;
+      p.updatedAt = Date.now();
+      saveStore(store);
+      slotFillProposals = null;
+      render();
+    }));
+  }
+
+  function fieldOptions(entries, current, emptyLabel) {
+    const list = entries || [];
+    const names = new Set(list.map((x) => x.n));
+    let html = '';
+    if (emptyLabel !== undefined) html += `<option value="" ${!current ? 'selected' : ''}>${esc(emptyLabel)}</option>`;
+    if (current && !names.has(current)) html += `<option value="${esc(current)}" selected>${esc(current)}</option>`;
+    html += list.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(x.n)}${x.pct != null ? ` (${x.pct}%)` : ''}</option>`).join('');
+    return html;
+  }
+
+  /** 持ち物select: 「なし」+使用率つき(上段)+その他(下段・五十音順、items.json由来)の2段構成。 */
+  function itemSelectOptions(entries, current, allItems) {
+    const list = entries || [];
+    const topNames = new Set(list.map((x) => x.n));
+    const rest = (allItems || []).filter((n) => !topNames.has(n));
+    const known = new Set([...topNames, ...(allItems || [])]);
+    let html = `<option value="" ${!current ? 'selected' : ''}>なし</option>`;
+    if (current && !known.has(current)) html += `<option value="${esc(current)}" selected>${esc(current)}</option>`;
+    const topOpts = list.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(x.n)} (${x.pct}%)</option>`).join('');
+    html += `<optgroup label="使用率">${topOpts}</optgroup>`;
+    if (rest.length) {
+      const restOpts = rest.map((n) => `<option value="${esc(n)}" ${n === current ? 'selected' : ''}>${esc(n)}</option>`).join('');
+      html += `<optgroup label="その他">${restOpts}</optgroup>`;
+    }
+    return html;
+  }
+
+  /** 性格select: 使用率つき(上段・%付き)+残り(下段・その他)の2段構成。表示は natureDisp() で統一。
+   * 無補正5性格(まじめ/きまぐれ/てれや/がんばりや/すなお)は簡単化のため「がんばりや」のみ候補にする。
+   * ただし現在値が別の無補正性格(インポート・既存データ由来)の場合は壊さないようその値も選択肢に残す。
+   * stats.ts の NATURE_MODS/ALL_NATURES 自体はここでは変更しない(計算・fromSpec互換のため)。 */
+  function natureSelectOptions(entries, current) {
+    const keepNeutral = (n) => !NEUTRAL_NATURES.includes(n) || n === 'がんばりや' || n === current;
+    const list = (entries || []).filter((x) => keepNeutral(x.n));
+    const topNames = new Set(list.map((x) => x.n));
+    const restPool = ALL_NATURES.filter((n) => !topNames.has(n) && keepNeutral(n));
+    const rest = sortJa(restPool);
+    let html = '';
+    if (current && !topNames.has(current) && !restPool.includes(current)) html += `<option value="${esc(current)}" selected>${esc(natureDisp(current) || current)}</option>`;
+    const topOpts = list.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(natureDisp(x.n))} (${x.pct}%)</option>`).join('');
+    html += `<optgroup label="使用率">${topOpts}</optgroup>`;
+    const restOpts = rest.map((n) => `<option value="${esc(n)}" ${n === current ? 'selected' : ''}>${esc(natureDisp(n))}</option>`).join('');
+    html += `<optgroup label="その他">${restOpts}</optgroup>`;
+    return html;
+  }
+
+  /** 技select: 空(「—」)+使用率順(上段・%付き、mon.moves全件)+その他(下段・全習得技のうち使用率外、五十音順)の2段構成。 */
+  function moveSelectOptions(detail, current) {
+    const top = detail.moves || [];
+    const topNames = new Set(top.map((x) => x.n));
+    const learnset = detail.learnset || [];
+    const rest = sortJa(learnset.filter((n) => !topNames.has(n)));
+    const known = new Set([...topNames, ...learnset]);
+    let html = `<option value="" ${!current ? 'selected' : ''}>—</option>`;
+    if (current && !known.has(current)) html += `<option value="${esc(current)}" selected>${esc(current)}</option>`;
+    const topOpts = top.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(x.n)} (${x.pct}%)</option>`).join('');
+    html += `<optgroup label="使用率順">${topOpts}</optgroup>`;
+    if (rest.length) {
+      const restOpts = rest.map((n) => `<option value="${esc(n)}" ${n === current ? 'selected' : ''}>${esc(n)}</option>`).join('');
+      html += `<optgroup label="その他(全習得技)">${restOpts}</optgroup>`;
+    }
+    return html;
+  }
+
+
+  function buildEditorFilledDom(el, slot, sm, detail) {
+    const rb = resolveSlotSafe(slot);
+    const megaOpt = slot.item ? sm.mega.find((m) => m.stone === slot.item) : undefined;
+    const itemOpts = itemSelectOptions(detail.items, slot.item, core.items);
+    const abilityOpts = megaOpt
+      ? `<option value="${esc(megaOpt.ability)}" selected>${esc(megaOpt.ability)}</option>`
+      : fieldOptions(detail.abilities, slot.ability);
+    const natureOpts = natureSelectOptions(detail.natures, slot.nature);
+
+    const head = rb ? `<div class="pb-editor-head">
+        ${icoImg(rb.icon, rb.label, 'monicon')}
+        <div>
+          <div class="pb-editor-name">${esc(rb.label)}${rb.mega ? '<span class="mmega-tag">メガ</span>' : ''}</div>
+          <div class="pb-editor-types">${typeIcoByName(rb.t1)}${rb.t2 ? typeIcoByName(rb.t2) : ''}</div>
+        </div>
+      </div>` : '';
+
+    const evRows = EVK.map((label, si) => {
+      const v = Number(slot.evs[si]) || 0;
+      return `<div class="pb-ev-row" data-ev-i="${si}">
+        <span class="pb-ev-lbl ev-${label}">${label}</span>
+        <button type="button" class="pb-ev-step" data-ev-step="-1" data-ev-i="${si}" aria-label="${label}を1下げる" ${v <= 0 ? 'disabled' : ''}>−</button>
+        <input type="range" min="0" max="${EV_STAT_MAX}" value="${v}" class="pb-ev-range" data-ev-i="${si}">
+        <button type="button" class="pb-ev-step" data-ev-step="1" data-ev-i="${si}" aria-label="${label}を1上げる" ${v >= EV_STAT_MAX ? 'disabled' : ''}>＋</button>
+        <input type="number" min="0" max="${EV_STAT_MAX}" value="${v}" class="pb-ev-num" data-ev-i="${si}">
+        <span class="pb-ev-stat" data-ev-stat="${si}">${rb ? rb.stats[si] : '—'}</span>
+      </div>`;
+    }).join('');
+
+    const evPresets = (detail.evs || []).slice(0, 5).map((e) => `<button class="pb-chip" data-evpreset="${e.ev.join(',')}">${e.ev.join('/')} <b>${e.pct}%</b></button>`).join('');
+
+    const moveRows = [0, 1, 2, 3].map((mi) => {
+      const val = slot.moves[mi] || '';
+      return `<div class="pb-mv-wrap" data-mv-wrap="${mi}">
+          <span class="pb-mv-ico">${typeIcoForMove(val)}</span>
+          <select class="inp pb-mv-select" data-mv-i="${mi}">${moveSelectOptions(detail, val)}</select>
+        </div>`;
+    }).join('');
+
+    // 型テンプレ(まるごと適用)は型作りの起点になるようエディタ上部(持ち物等セレクトの直前)に置く。
+    // 個別チップの代わりに1ボタン+ポップアップ一覧にして省スペース化(内容確認→適用の安全設計は維持)。
+    const presetBtnHtml = (detail.builds || []).length
+      ? `<div class="pb-presets"><button type="button" class="pb-btn-sub" id="pb-preset-open">型テンプレから</button></div>`
+      : '';
+
+    el.innerHTML = `
+      <div class="pb-editor-titlebar">
+        <h2>型エディタ ー 枠${selectedIdx + 1}</h2>
+      </div>
+      ${head}
+      ${presetBtnHtml}
+      <div class="dgrid pb-select-row">
+        <div class="dcell"><span class="lbl item">持ち物</span><select class="inp" id="pb-f-item">${itemOpts}</select></div>
+        <div class="dcell"><span class="lbl abil">特性</span><select class="inp" id="pb-f-ability" ${megaOpt ? 'disabled' : ''}>${abilityOpts}</select>${megaOpt ? '<span class="pb-mega-note">（メガ進化で固定）</span>' : ''}</div>
+        <div class="dcell"><span class="lbl nat">性格</span><select class="inp" id="pb-f-nature">${natureOpts}</select></div>
+      </div>
+      <div class="pb-ev-editor">
+        ${evRows}
+        <div class="pb-ev-remain" id="pb-ev-remain">${evRemainText(slot.evs)}</div>
+        <div class="pb-ev-presets">${evPresets ? `<span class="pb-presets-lbl">EVプリセット:</span>${evPresets}` : ''}</div>
+      </div>
+      <div class="pb-moves">${moveRows}</div>
+    `;
+
+    el.querySelector('#pb-f-item').addEventListener('change', (e) => {
+      slot.item = e.target.value;
+      commitAndReflow();
+    });
+    if (!megaOpt) {
+      el.querySelector('#pb-f-ability').addEventListener('change', (e) => { slot.ability = e.target.value; commitAndReflow(); });
+    }
+    el.querySelector('#pb-f-nature').addEventListener('change', (e) => { slot.nature = e.target.value; commitAndReflow(); });
+
+    el.querySelectorAll('.pb-ev-range, .pb-ev-num').forEach((inp) => inp.addEventListener('input', onEvInput));
+    el.querySelectorAll('.pb-ev-num').forEach((inp) => inp.addEventListener('focus', (e) => e.target.select())); // (12a) フォーカスで全選択
+    el.querySelectorAll('.pb-ev-step').forEach((btn) => btn.addEventListener('click', () => onEvStepClick(+btn.dataset.evI, +btn.dataset.evStep)));
+    el.querySelectorAll('[data-evpreset]').forEach((btn) => btn.addEventListener('click', () => {
+      slot.evs = btn.dataset.evpreset.split(',').map(Number);
+      commitAndReflow();
+    }));
+
+    el.querySelectorAll('.pb-mv-select').forEach((sel) => {
+      const mi = +sel.dataset.mvI;
+      sel.addEventListener('change', (e) => onMoveSelect(mi, e.target.value));
+    });
+
+    // (5) 型テンプレはタップ即上書きせず、まずポップオーバーで候補一覧の内容を確認→
+    // 候補ごとの「この型を適用」で確定する
+    const presetOpenBtn = el.querySelector('#pb-preset-open');
+    if (presetOpenBtn) {
+      presetOpenBtn.addEventListener('click', () => {
+        openPresetListPopover(sm ? sm.n : slot.sp, (detail.builds || []).slice(0, 5), (parsed) => {
+          const targets = slot.targets;
+          slot.item = parsed.item; slot.ability = parsed.ability; slot.nature = parsed.nature; slot.evs = parsed.evs; slot.moves = parsed.moves;
+          slot.targets = targets;
+          commitAndReflow();
+        });
+      });
+    }
+
+    function persist() {
+      const p = activeParty();
+      if (p) p.updatedAt = Date.now();
+      saveStore(store);
+    }
+    function commitAndReflow() {
+      persist();
+      renderValidate();
+      renderEditor();
+      renderTray();
+      renderTargetsPanel();
+      renderBalance();
+    }
+  }
+
+  function evRemainText(evs) {
+    const sum = evs.reduce((a, b) => a + b, 0);
+    const remain = EV_TOTAL_MAX - sum;
+    return remain < 0 ? `<span class="pb-ev-over">残り ${remain}ポイント（上限超過）</span>` : `残り ${remain}ポイント`;
+  }
+  /** EV変更の共通処理(スライダー/数値入力/±ステッパーの3経路から呼ぶ)。値を[0,32]にクランプし、
+   * スライダー・数値入力・±ボタンのdisabled状態・実数値・残りポイント表示を同期する。 */
+  function applyEvChange(si, rawV, sourceEl) {
+    const p = activeParty();
+    if (!p || selectedIdx === null) return;
+    const slot = p.slots[selectedIdx];
+    if (!slot) return;
+    let v = Math.round(Number(rawV));
+    if (Number.isNaN(v)) v = 0;
+    v = Math.max(0, Math.min(EV_STAT_MAX, v));
+    slot.evs[si] = v;
+    p.updatedAt = Date.now();
+    saveStore(store);
+    const editorEl = document.getElementById('pb-editor');
+    if (editorEl) {
+      editorEl.querySelectorAll(`.pb-ev-range[data-ev-i="${si}"], .pb-ev-num[data-ev-i="${si}"]`).forEach((inp) => { if (inp !== sourceEl) inp.value = v; });
+      editorEl.querySelectorAll(`.pb-ev-step[data-ev-i="${si}"]`).forEach((btn) => {
+        const delta = +btn.dataset.evStep;
+        btn.disabled = delta < 0 ? v <= 0 : v >= EV_STAT_MAX;
+      });
+      const rb = resolveSlotSafe(slot);
+      const statEl = editorEl.querySelector(`[data-ev-stat="${si}"]`);
+      if (statEl) statEl.textContent = rb ? rb.stats[si] : '—';
+      const remainEl = document.getElementById('pb-ev-remain');
+      if (remainEl) remainEl.innerHTML = evRemainText(slot.evs);
+    }
+    renderValidate();
+    renderTargetsPanel();
+    scheduleRenderBalance();
+  }
+  function onEvInput(e) {
+    applyEvChange(+e.target.dataset.evI, e.target.value, e.target);
+  }
+  /** (2) EVステッパー「−」「＋」: タップで±1。0/32では該当ボタンをdisabledにしてある(再クランプもここで行う)。 */
+  function onEvStepClick(si, delta) {
+    const p = activeParty();
+    if (!p || selectedIdx === null) return;
+    const slot = p.slots[selectedIdx];
+    if (!slot) return;
+    const cur = Number(slot.evs[si]) || 0;
+    applyEvChange(si, cur + delta, null);
+  }
+
+  function onMoveSelect(mi, name) {
+    const p = activeParty();
+    if (!p || selectedIdx === null) return;
+    const slot = p.slots[selectedIdx];
+    if (!slot) return;
+    slot.moves[mi] = name;
+    p.updatedAt = Date.now();
+    saveStore(store);
+    const wrap = document.querySelector(`[data-mv-wrap="${mi}"]`);
+    if (wrap) { const ico = wrap.querySelector('.pb-mv-ico'); if (ico) ico.innerHTML = typeIcoForMove(name); }
+    renderTargetsPanel();
+    renderBalance();
+  }
+
+  // ---- 仮想敵パネル ----
+
+  /** 仮想敵の型 ミニエディタのHTML(読み込み中はプレースホルダ)。編集対象は持ち物/特性/性格/EV/技のみ(t1/t2/bs/idxは維持)。 */
+  function muEditorHtml(grp, draft, detail, loading) {
+    if (loading || !detail) {
+      return `<div class="pb-mu-card"><div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">読み込み中…</div></div></div>`;
+    }
+    const itemOpts = itemSelectOptions(detail.items, draft.item, core.items);
+    const abilityOpts = fieldOptions(detail.abilities, draft.ability);
+    const natureOpts = natureSelectOptions(detail.natures, draft.nature);
+    const evRows = EVK.map((label, si) => `<div class="pb-mu-ev-row" data-mu-ev-i="${si}">
+        <span class="pb-ev-lbl ev-${label}">${label}</span>
+        <input type="number" min="0" max="${EV_STAT_MAX}" value="${Number(draft.ev[si]) || 0}" class="inp pb-mu-ev-num" data-mu-ev-i="${si}">
+      </div>`).join('');
+    const moveRows = [0, 1, 2, 3].map((mi) => {
+      const val = draft.moves[mi] || '';
+      return `<div class="pb-mv-wrap" data-mu-mv-wrap="${mi}">
+          <span class="pb-mv-ico">${typeIcoForMove(val)}</span>
+          <select class="inp pb-mv-select" data-mu-mv-i="${mi}">${moveSelectOptions(detail, val)}</select>
+        </div>`;
+    }).join('');
+    return `<div class="pb-mu-card">
+        <div class="pb-mu-head"><b>${esc(grp.label)} 型編集</b></div>
+        <div class="dgrid pb-select-row">
+          <div class="dcell"><span class="lbl item">持ち物</span><select class="inp" id="pb-mu-e-item">${itemOpts}</select></div>
+          <div class="dcell"><span class="lbl abil">特性</span><select class="inp" id="pb-mu-e-ability">${abilityOpts}</select></div>
+          <div class="dcell"><span class="lbl nat">性格</span><select class="inp" id="pb-mu-e-nature">${natureOpts}</select></div>
+        </div>
+        <div class="pb-mu-ev-grid">${evRows}</div>
+        <div class="pb-ev-remain" id="pb-mu-ev-remain">${evRemainText(draft.ev)}</div>
+        <div class="pb-moves">${moveRows}</div>
+        <div class="row" style="margin-top:.5em">
+          <button class="btn" id="pb-mu-save">保存</button>
+          <button class="pb-btn-sub" id="pb-mu-cancel">キャンセル</button>
+        </div>
+      </div>`;
+  }
+
+  /** 「編集」「＋型を追加」開始。bi='new'は既定値=型1のコピー(idxは既存最大+1)。 */
+  async function startMuEdit(label, bi) {
+    const grp = effectiveTargets().find((g) => g.label === label);
+    if (!grp) return;
+    const src = bi === 'new' ? grp.builds[0] : grp.builds[bi];
+    if (!src) return;
+    const draft = JSON.parse(JSON.stringify(src));
+    if (bi === 'new') draft.idx = Math.max(0, ...grp.builds.map((b) => b.idx)) + 1;
+    muEdit = { label, bi, draft, detail: null, loading: true };
+    renderTargetsPanel();
+    try {
+      const detail = await loadMonForTargetLabel(label);
+      if (!muEdit || muEdit.label !== label || muEdit.bi !== bi) return;
+      muEdit.detail = detail;
+      muEdit.loading = false;
+      renderTargetsPanel();
+    } catch (e) {
+      if (!muEdit || muEdit.label !== label || muEdit.bi !== bi) return;
+      muEdit.detail = { items: [], abilities: [], natures: [], evs: [], moves: [], learnset: [], builds: [] };
+      muEdit.loading = false;
+      renderTargetsPanel();
+    }
+  }
+  function cancelMuEdit() {
+    muEdit = null;
+    renderTargetsPanel();
+  }
+  /** 保存: 初回編集時にtargets.jsonデフォルトをcustomTargetsへmaterializeしてから反映する。 */
+  function saveMuEdit() {
+    if (!muEdit) return;
+    const { label, bi, draft } = muEdit;
+    const grp = effectiveTargets().find((g) => g.label === label);
+    if (!grp) { muEdit = null; renderTargetsPanel(); return; }
+    materializeCustomTarget(label);
+    draft.spec = targetBuildSpec(grp.sp, draft);
+    if (bi === 'new') store.customTargets[label].push(draft);
+    else store.customTargets[label][bi] = draft;
+    saveStore(store);
+    invalidateOppColsCache();
+    muEdit = null;
+    tuneResults = null;
+    renderTargetsPanel();
+    renderBalance();
+  }
+  /** 型の削除。最後の1型は削除不可(呼び出し側でボタンをdisabledにして防ぐ)。 */
+  function deleteMuBuild(label, bi) {
+    const grp = effectiveTargets().find((g) => g.label === label);
+    if (!grp || grp.builds.length <= 1) return;
+    materializeCustomTarget(label);
+    store.customTargets[label].splice(bi, 1);
+    saveStore(store);
+    invalidateOppColsCache();
+    if (muEdit && muEdit.label === label) muEdit = null;
+    tuneResults = null;
+    renderTargetsPanel();
+    renderBalance();
+  }
+  /** 「デフォルトに戻す」: customTargetsのエントリを削除しtargets.json由来のデフォルトへ戻す。 */
+  function resetMuDefault(label) {
+    if (!store.customTargets || !store.customTargets[label]) return;
+    delete store.customTargets[label];
+    saveStore(store);
+    invalidateOppColsCache();
+    if (muEdit && muEdit.label === label) muEdit = null;
+    tuneResults = null;
+    renderTargetsPanel();
+    renderBalance();
+  }
+
+  function renderTargetsPanel() {
+    const el = document.getElementById('pb-targets');
+    const p = activeParty();
+    if (!p) { el.innerHTML = ''; muEdit = null; renderMiniBar(null, null); return; }
+    if (selectedIdx === null) { el.innerHTML = '<h2>仮想敵</h2><div class="muted">上の6枠から枠を選択してください</div>'; muEdit = null; renderMiniBar(null, null); return; }
+    const slot = p.slots[selectedIdx];
+    if (!slot) { el.innerHTML = '<h2>仮想敵</h2><div class="muted">型を設定すると仮想敵との比較ができます</div>'; muEdit = null; renderMiniBar(null, null); return; }
+    const rb = resolveSlotSafe(slot);
+    if (!rb) { el.innerHTML = '<h2>仮想敵</h2><div class="muted">データ不整合のため計算できません</div>'; muEdit = null; renderMiniBar(null, null); return; }
+
+    // ポケモン単位タブ: 選択中枠の仮想敵(追加済み種族)を切り替えて表示する。表示状態のみで保存はしない。
+    if (!slot.targets.length) activeMuTab = null;
+    else if (!activeMuTab || !slot.targets.includes(activeMuTab)) activeMuTab = slot.targets[0];
+    if (muEdit && muEdit.label !== activeMuTab) muEdit = null;
+
+    const targetsList = effectiveTargets();
+    const chips = slot.targets.map((label) => {
+      const grp = targetsList.find((g) => g.label === label);
+      const act = label === activeMuTab ? ' act' : '';
+      const badge = grp ? muTabBadge(rb, grp) : null;
+      const badgeHtml = badge ? `<span class="pb-mu-badge ${badge === '×' ? 'pb-mu-badge-x' : 'pb-mu-badge-tri'}" title="この仮想敵に対する最悪の型判定">${badge}</span>` : '';
+      return `<span class="filter-chip pb-mu-tab${act}" data-mu-tab="${esc(label)}">${grp ? icoImg(grp.icon, grp.label, '') : ''}${esc(label)}${badgeHtml}<button class="filter-chip-x" data-rm-target="${esc(label)}">✕</button></span>`;
+    }).join('');
+
+    const activeGrp = activeMuTab ? targetsList.find((g) => g.label === activeMuTab) : null;
+    const editingThis = !!(muEdit && activeGrp && muEdit.label === activeGrp.label);
+    const canDelete = !!(activeGrp && activeGrp.builds.length > 1);
+    const isCustomized = !!(activeGrp && store.customTargets && store.customTargets[activeGrp.label] && store.customTargets[activeGrp.label].length);
+    const rows = [];
+    if (activeGrp) {
+      activeGrp.builds.forEach((b, bi) => {
+        const opp = resolveTargetSafe(activeGrp.sp, activeGrp.label, activeGrp.icon, b, core.moves);
+        if (!opp) return; // H3: 不整合buildはスキップ(型データが壊れていてもパネル全体はクラッシュさせない)
+        const mySpeed = effectiveSpeed(rb.stats[5], rb.item);
+        const oppSpeed = effectiveSpeed(opp.stats[5], opp.item);
+        const speedTag = mySpeed > oppSpeed ? '<span class="spd-tag t-out">抜ける</span>' : mySpeed < oppSpeed ? '<span class="spd-tag t-in">抜かれる</span>' : '<span class="spd-tag t-eq">同速</span>';
+        const verdict = judge1v1(rb, opp);
+        const myHitsTxt = verdict.myHits == null ? '—' : `確${verdict.myHits}`;
+        const oppHitsTxt = verdict.oppHits == null ? '—' : `確${verdict.oppHits}`;
+        const mb = moveBreakdown(rb, opp);
+        // 被ダメ行: 相手の最大打点技(verdict.oppMoveと同一選定基準)の自分への与ダメレンジ・HP比
+        const oppBest = bestMove(opp, rb);
+        let oppDmg = null;
+        if (oppBest) {
+          const myHp = Math.max(1, rb.stats[0]);
+          const dLo = calcDamage(opp, rb, oppBest.move, { randomRoll: 0 });
+          const dHi = calcDamage(opp, rb, oppBest.move, { randomRoll: 1 });
+          oppDmg = { name: oppBest.move.n, dLo, dHi, pLo: (dLo / myHp) * 100, pHi: (dHi / myHp) * 100 };
+        }
+        rows.push({ grp: activeGrp, b, bi, opp, mySpeed, oppSpeed, speedTag, verdict, myHitsTxt, oppHitsTxt, mb, oppDmg });
+      });
+    }
+
+    mbPopData = [];
+    const cardsHtml = rows.map((r) => {
+      if (editingThis && muEdit.bi === r.bi) {
+        return muEditorHtml(r.grp, muEdit.draft, muEdit.detail, muEdit.loading);
+      }
+      const mbDamaging = r.mb.filter((m) => m.hits != null);
+      const mbChips = mbDamaging.length
+        ? mbDamaging.map((m) => {
+            const hitsTxt = m.certain ? `確${m.hits}` : `乱数${m.hits}発(${Math.round(m.prob)}%)`;
+            const dmgTxt = dmgRangeTxt(m.dmgLo, m.dmgHi, m.pctLo, m.pctHi);
+            const popIdx = mbPopData.push({ name: m.n, hitsTxt, dmgTxt }) - 1;
+            return `<button type="button" class="pb-mb-chip" data-mb-pop="${popIdx}" title="${esc(m.n)}：与ダメ${dmgTxt}">
+                <span class="pb-mb-top">${esc(m.n)} ${hitsTxt}</span>
+                <span class="pb-mb-dmg">${dmgTxt}</span>
+              </button>`;
+          }).join('')
+        : `<span class="muted">${r.mb.length ? '有効打なし(変化技・無効のみ)' : '技が未設定です'}</span>`;
+      const oppDmgHtml = r.oppDmg
+        ? `<div class="pb-mu-row pb-mu-hit">被ダメ: ${esc(r.oppDmg.name)} ${dmgRangeTxt(r.oppDmg.dLo, r.oppDmg.dHi, r.oppDmg.pLo, r.oppDmg.pHi)}</div>`
+        : '';
+      const actionsHtml = editingThis ? '' : `<div class="pb-mu-actions">
+          <button class="pb-btn-sub" data-mu-edit="${r.bi}">編集</button>
+          <button class="pb-btn-sub pb-danger" data-mu-del="${r.bi}" ${canDelete ? '' : 'disabled title="最後の1型は削除できません"'}>削除</button>
+        </div>`;
+      return `<div class="pb-mu-card">
+          <div class="pb-mu-head"><div class="dtl-tname">${icoImg(r.grp.icon, r.grp.label, 'dtl-ico')}${esc(r.grp.label)} 型${Number(r.b.idx) || 0}</div>${actionsHtml}</div>
+          <div class="pb-mu-sub">HP実数値 ${r.opp.stats[0]}</div>
+          ${muDetailHtml(r.b)}
+          <div class="pb-mu-row" title="自分の素早さ実数値 vs 相手の素早さ実数値(スカーフ込み)">S ${r.mySpeed} vs ${r.oppSpeed} ${r.speedTag}</div>
+          <div class="pb-mu-row"><b style="font-size:1.05em">${r.verdict.sym}</b> 自分${r.myHitsTxt}/相手${r.oppHitsTxt}${r.verdict.stub ? '<span class="pb-beta-badge">β</span>' : ''}</div>
+          <div class="pb-mb-row">${mbChips}</div>
+          ${oppDmgHtml}
+        </div>`;
+    }).join('') + (editingThis && muEdit.bi === 'new' ? muEditorHtml(activeGrp, muEdit.draft, muEdit.detail, muEdit.loading) : '');
+
+    const addResetRow = activeGrp && !editingThis
+      ? `<div class="row" style="margin-top:.5em">
+          <button class="pb-btn-sub" id="pb-mu-add-build">＋型を追加</button>
+          ${isCustomized ? `<button class="pb-btn-sub" id="pb-mu-reset-default">デフォルトに戻す</button>` : ''}
+        </div>`
+      : '';
+
+    el.innerHTML = `
+      <h2>仮想敵</h2>
+      <div class="filter-chips" id="pb-target-chips">${chips}</div>
+      <div class="filter-wrap">
+        <input type="text" id="pb-target-search" class="filter-inp" placeholder="仮想敵を検索して追加（ひらがな可）" autocomplete="off">
+        <div class="filter-sug" id="pb-target-sug" style="display:none"></div>
+      </div>
+      ${rows.length || editingThis ? `<div class="pb-mu-list">${cardsHtml}</div>` : slot.targets.length ? '' : '<div class="muted" style="margin-top:.6em">仮想敵を追加してください</div>'}
+      ${addResetRow}
+      <div class="row" style="margin-top:.7em">
+        <button class="pb-btn-sub" id="pb-tune-btn" ${slot.targets.length ? '' : 'disabled'}>EV逆算(素早さ・火力・耐久)</button>
+      </div>
+      <div id="pb-tune-out"></div>
+    `;
+
+    renderMiniBar(activeGrp, rows);
+    el.querySelectorAll('[data-mb-pop]').forEach((btn) => btn.addEventListener('click', () => {
+      const d = mbPopData[+btn.dataset.mbPop];
+      if (!d) return;
+      openInfoPopover(d.name, `<div class="mvwrap" style="margin-bottom:.6em">${typeIcoForMove(d.name)}<span class="mvchip">${esc(d.name)}</span></div><div>確定数: ${esc(d.hitsTxt)}</div><div>与ダメ: ${esc(d.dmgTxt)}</div>`);
+    }));
+
+    el.querySelectorAll('[data-mu-tab]').forEach((chip) => chip.addEventListener('click', (e) => {
+      if (e.target.closest('[data-rm-target]')) return;
+      activeMuTab = chip.dataset.muTab;
+      muEdit = null;
+      renderTargetsPanel();
+    }));
+    el.querySelectorAll('[data-rm-target]').forEach((btn) => btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const removed = btn.dataset.rmTarget;
+      slot.targets = slot.targets.filter((l) => l !== removed);
+      p.updatedAt = Date.now();
+      saveStore(store);
+      tuneResults = null;
+      if (activeMuTab === removed) activeMuTab = null;
+      if (muEdit && muEdit.label === removed) muEdit = null;
+      renderTargetsPanel();
+    }));
+
+    const searchInput = el.querySelector('#pb-target-search');
+    searchInput.addEventListener('input', (e) => onTargetSearchInput(e.target.value));
+    searchInput.addEventListener('keydown', onTargetSearchKey);
+
+    el.querySelector('#pb-tune-btn').addEventListener('click', onTuneClick);
+    if (tuneResults) renderTuneOut();
+
+    // 型の編集/追加/削除/デフォルトに戻す
+    el.querySelectorAll('[data-mu-edit]').forEach((btn) => btn.addEventListener('click', () => startMuEdit(activeGrp.label, +btn.dataset.muEdit)));
+    el.querySelectorAll('[data-mu-del]').forEach((btn) => btn.addEventListener('click', () => {
+      if (btn.disabled) return;
+      deleteMuBuild(activeGrp.label, +btn.dataset.muDel);
+    }));
+    const addBtn = el.querySelector('#pb-mu-add-build');
+    if (addBtn) addBtn.addEventListener('click', () => startMuEdit(activeGrp.label, 'new'));
+    const resetBtn = el.querySelector('#pb-mu-reset-default');
+    if (resetBtn) resetBtn.addEventListener('click', () => resetMuDefault(activeGrp.label));
+
+    if (editingThis && !muEdit.loading && muEdit.detail) {
+      const itemSel = el.querySelector('#pb-mu-e-item');
+      if (itemSel) itemSel.addEventListener('change', (e) => { muEdit.draft.item = e.target.value; });
+      const abilSel = el.querySelector('#pb-mu-e-ability');
+      if (abilSel) abilSel.addEventListener('change', (e) => { muEdit.draft.ability = e.target.value; });
+      const natSel = el.querySelector('#pb-mu-e-nature');
+      if (natSel) natSel.addEventListener('change', (e) => { muEdit.draft.nature = e.target.value; });
+      el.querySelectorAll('[data-mu-ev-i]').forEach((inp) => {
+        inp.addEventListener('input', (e) => {
+          const si = +e.target.dataset.muEvI;
+          let v = Math.round(Number(e.target.value));
+          if (Number.isNaN(v)) v = 0;
+          v = Math.max(0, Math.min(EV_STAT_MAX, v));
+          muEdit.draft.ev[si] = v;
+          const remainEl = el.querySelector('#pb-mu-ev-remain');
+          if (remainEl) remainEl.innerHTML = evRemainText(muEdit.draft.ev);
+        });
+        inp.addEventListener('focus', (e) => e.target.select()); // (12a) フォーカスで全選択
+      });
+      el.querySelectorAll('[data-mu-mv-i]').forEach((sel) => {
+        const mi = +sel.dataset.muMvI;
+        sel.addEventListener('change', (e) => {
+          muEdit.draft.moves[mi] = e.target.value;
+          const wrap = el.querySelector(`[data-mu-mv-wrap="${mi}"]`);
+          if (wrap) { const ico = wrap.querySelector('.pb-mv-ico'); if (ico) ico.innerHTML = typeIcoForMove(e.target.value); }
+        });
+      });
+      const saveBtn = el.querySelector('#pb-mu-save');
+      if (saveBtn) saveBtn.addEventListener('click', saveMuEdit);
+      const cancelBtn = el.querySelector('#pb-mu-cancel');
+      if (cancelBtn) cancelBtn.addEventListener('click', cancelMuEdit);
+    }
+  }
+
+  function onTargetSearchInput(val) {
+    const sug = document.getElementById('pb-target-sug');
+    if (!sug || !core) return;
+    targetSugActive = -1;
+    const q = val.trim();
+    if (!q) { sug.style.display = 'none'; return; }
+    const qk = toKatakana(q);
+    const hits = effectiveTargets().filter((g) => g.label.includes(q) || g.label.includes(qk)).slice(0, 12);
+    const p = activeParty();
+    const slot = p.slots[selectedIdx];
+    if (!hits.length) { sug.innerHTML = '<div class="sug-item added">該当なし</div>'; sug.style.display = 'block'; return; }
+    sug.innerHTML = hits.map((g) => {
+      const already = slot.targets.includes(g.label);
+      return `<div class="sug-item${already ? ' added' : ''}" data-target-pick="${esc(g.label)}">${icoImg(g.icon, g.label, '')}<span>${hlSug(g.label, q)}</span></div>`;
+    }).join('');
+    sug.querySelectorAll('[data-target-pick]:not(.added)').forEach((it) => it.addEventListener('click', () => pickTarget(it.dataset.targetPick)));
+    sug.style.display = 'block';
+  }
+  function pickTarget(label) {
+    const p = activeParty();
+    const slot = p.slots[selectedIdx];
+    if (!slot.targets.includes(label)) slot.targets.push(label);
+    p.updatedAt = Date.now();
+    saveStore(store);
+    const input = document.getElementById('pb-target-search');
+    if (input) { input.value = ''; input.focus(); }
+    targetSugActive = -1;
+    tuneResults = null;
+    activeMuTab = label;
+    renderTargetsPanel();
+  }
+  function onTargetSearchKey(e) {
+    const sug = document.getElementById('pb-target-sug');
+    if (!sug || sug.style.display === 'none') return;
+    const items = [...sug.querySelectorAll('[data-target-pick]:not(.added)')];
+    if (e.key === 'ArrowDown') { e.preventDefault(); targetSugActive = Math.min(targetSugActive + 1, items.length - 1); items.forEach((it, i) => it.classList.toggle('act', i === targetSugActive)); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); targetSugActive = Math.max(targetSugActive - 1, 0); items.forEach((it, i) => it.classList.toggle('act', i === targetSugActive)); }
+    else if (e.key === 'Enter') { e.preventDefault(); if (targetSugActive >= 0 && items[targetSugActive]) pickTarget(items[targetSugActive].dataset.targetPick); else if (items.length === 1) pickTarget(items[0].dataset.targetPick); }
+    else if (e.key === 'Escape') { sug.style.display = 'none'; }
+  }
+
+  function onTuneClick() {
+    const p = activeParty();
+    const slot = p.slots[selectedIdx];
+    const rb = resolveSlotSafe(slot);
+    if (!rb) return;
+    const oppResolved = [];
+    const targetsList = effectiveTargets();
+    slot.targets.forEach((label) => {
+      const grp = targetsList.find((g) => g.label === label);
+      if (!grp) return;
+      grp.builds.forEach((b) => {
+        const resolved = resolveTargetSafe(grp.sp, grp.label, grp.icon, b, core.moves);
+        if (resolved) oppResolved.push(resolved);
+      });
+    });
+    tuneResults = tuneForTargets(slot, rb, oppResolved);
+    renderTuneOut();
+  }
+  const TUNE_KIND_LABEL = { speed: '素早さ', ko: '火力', survive: '耐久' };
+  const TUNE_KIND_ICON = { speed: '⚡', ko: '⚔️', survive: '🛡️' };
+  function renderTuneOut() {
+    const out = document.getElementById('pb-tune-out');
+    if (!out) return;
+    if (!tuneResults || !tuneResults.length) { out.innerHTML = ''; return; }
+    let lastKind = null;
+    out.innerHTML = tuneResults.map((t, i) => {
+      const headHtml = t.kind !== lastKind
+        ? `<div class="pb-tune-head">${TUNE_KIND_ICON[t.kind] || ''} ${esc(TUNE_KIND_LABEL[t.kind] || t.kind)}</div>`
+        : '';
+      lastKind = t.kind;
+      return `${headHtml}<div class="pb-tune-item">
+        <span>${esc(t.text)}</span>${t.stub ? '<span class="pb-beta-badge">β</span>' : ''}
+        ${t.evs ? `<button class="pb-btn-sub" data-tune-apply="${i}">適用</button>` : ''}
+      </div>`;
+    }).join('');
+    out.querySelectorAll('[data-tune-apply]').forEach((btn) => btn.addEventListener('click', () => {
+      const i = +btn.dataset.tuneApply;
+      const sugg = tuneResults[i];
+      if (!sugg || !sugg.evs) return;
+      const p = activeParty();
+      const slot = p.slots[selectedIdx];
+      slot.evs = sugg.evs;
+      p.updatedAt = Date.now();
+      saveStore(store);
+      tuneResults = null;
+      renderValidate();
+      renderEditor();
+      renderTargetsPanel();
+      renderBalance();
+      renderTray();
+    }));
+  }
+
+  /** サマリー行「苦手」の内訳表示: 名前(＋小アイコン)を列挙。0体は「なし」、3体超は先頭3体+「…」でtitleに全列挙。 */
+  function holeNamesHtml(holeLabels) {
+    if (!holeLabels.length) return 'なし';
+    const withIcon = (label) => {
+      const grp = effectiveTargets().find((g) => g.label === label);
+      return `${grp ? icoImg(grp.icon, label, 'pb-hole-ico') : ''}${esc(label)}`;
+    };
+    if (holeLabels.length <= 3) return holeLabels.map(withIcon).join('、');
+    return `<span title="${esc(holeLabels.join('、'))}">${holeLabels.slice(0, 3).map(withIcon).join('、')}…</span>`;
+  }
+
+  // ---- パーティバランス ----
+  function renderBalance() {
+    const el = document.getElementById('pb-balance');
+    const resolvedParty = resolvedPartyList();
+    if (!resolvedParty.length) {
+      el.innerHTML = '<h2>パーティバランス</h2><div class="muted">ポケモンを追加してください</div>';
+      return;
+    }
+    const sum = partySummary(resolvedParty);
+    const holeInfo = findHoles(resolvedParty, buildOppCols());
+    el.innerHTML = `
+      <h2>パーティバランス</h2>
+      <div class="bd-strip">
+        <span class="bd-lb">物理アタッカー</span><span class="bd-seg">${sum.physical}</span>
+        <span class="bd-lb">特殊アタッカー</span><span class="bd-seg">${sum.special}</span>
+        <span class="bd-lb">メガ</span><span class="bd-seg">${sum.mega}</span>
+        <span class="bd-lb">スカーフ</span><span class="bd-seg">${sum.scarf}</span>
+        <span class="bd-lb">平均素早さ</span><span class="bd-seg">${Math.round(sum.avgSpeed)}</span>
+        <span class="bd-lb">弱点重複</span><span class="bd-seg">${esc(sum.weakOverlap.type)}×${sum.weakOverlap.count}</span>
+        <span class="bd-lb">苦手</span><span class="bd-seg${holeInfo.holeLabels.length ? ' pb-hole-seg' : ''}">${holeNamesHtml(holeInfo.holeLabels)}</span>
+      </div>
+      <div class="tabbar">
+        <button class="tb${balanceTab === 'atk' ? ' active' : ''}" data-t="atk">攻撃相性</button>
+        <button class="tb${balanceTab === 'def' ? ' active' : ''}" data-t="def">防御相性</button>
+        <button class="tb${balanceTab === 'speed' ? ' active' : ''}" data-t="speed">素早さ</button>
+        <button class="tb${balanceTab === 'mu' ? ' active' : ''}" data-t="mu">ポケモン相性</button>
+      </div>
+      <div class="pane" id="pb-balance-pane">${balancePaneHtml(resolvedParty, balanceTab)}</div>
+    `;
+    bindMtxPopovers(document.getElementById('pb-balance-pane'));
+    el.querySelectorAll('.tb').forEach((btn) => btn.addEventListener('click', () => {
+      balanceTab = btn.dataset.t;
+      el.querySelectorAll('.tb').forEach((b) => b.classList.toggle('active', b.dataset.t === balanceTab));
+      const pane = document.getElementById('pb-balance-pane');
+      pane.innerHTML = balancePaneHtml(resolvedParty, balanceTab);
+      bindMtxPopovers(pane);
+    }));
+  }
+  function balancePaneHtml(resolvedParty, tab) {
+    if (tab === 'def') return typeMatrixHtml(resolvedParty, 'def');
+    if (tab === 'speed') return speedMatrixHtml(resolvedParty);
+    if (tab === 'mu') return matchupMatrixHtml(resolvedParty);
+    return typeMatrixHtml(resolvedParty, 'atk');
+  }
+  function typeMatrixHtml(resolvedParty, kind) {
+    const am = attackMatrix(resolvedParty);
+    const dm = defenseMatrix(resolvedParty);
+    const gapIdx = kind === 'def' ? findWeakGapTypeIdx(resolvedParty) : null;
+    const corner = kind === 'atk' ? '自分 ＼ 攻撃' : '自分 ＼ 被弾';
+    const head = `<tr><th class="mtx-corner mtx-stick">${corner}</th>` + TYPES.map((t, ti) => `<th class="${gapIdx && gapIdx.has(ti) ? 'mtx-gap' : ''}" title="${esc(t)}">${typeIcoByName(t)}</th>`).join('') + `</tr>`;
+    const rows = resolvedParty.map((b, mi) => {
+      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b.icon, b.label, 'mtx-ico')}<div class="mtx-name">${esc(b.label)}</div></div></th>`;
+      const cells = TYPES.map((t, ti) => {
+        if (kind === 'atk') {
+          const mult = am.cells[mi][ti];
+          const inner = mult == null ? '–' : (DEFG(mult) || '・');
+          const cls = mult == null ? 'ao-none' : mult >= 2 ? 'ao-good' : mult === 1 ? 'ao-neu' : 'ao-bad';
+          return `<td class="${cls}">${inner}</td>`;
+        }
+        const mult = dm.cells[mi][ti];
+        return `<td class="${DEFC(mult)}">${DEFG(mult) || '・'}</td>`;
+      }).join('');
+      return `<tr>${hd}${cells}</tr>`;
+    }).join('');
+    const legend = kind === 'atk'
+      ? `<div class="mtx-legend"><span>各味方が<b>そのタイプを攻撃するときの最大倍率</b>。<b class="ao-good">×2</b>=抜群で通る <b class="ao-bad">½/0</b>=通りにくい。</span></div>`
+      : `<div class="mtx-legend"><span>各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。<b class="mtx-gap" style="padding:0 4px">薄黄</b>=パーティ内に半減以下の受け手がいないタイプ。</span></div>`;
+    return `${legend}<div class="mg"><table class="mtx">${head}${rows}</table></div>`;
+  }
+  function speedMatrixHtml(resolvedParty) {
+    const oppCols = buildOppCols();
+    const rows = speedOrder(resolvedParty);
+    const byLabel = new Map(resolvedParty.map((b) => [b.label, b]));
+    const head = `<tr><th class="mtx-corner mtx-stick">自分 ＼ 相手(代表型)</th>` + oppCols.map((o) => `<th>${icoImg(o.icon, o.label, 'mtx-ico')}<div class="mtx-name">${esc(o.label)}</div></th>`).join('') + `</tr>`;
+    const bodyRows = rows.map((r) => {
+      const b = byLabel.get(r.label);
+      const scarf = b && b.item === 'こだわりスカーフ';
+      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b ? b.icon : null, r.label, 'mtx-ico')}<div class="mtx-name">${esc(r.label)}<br><span class="sp-val">S${r.speed}${scarf ? '⚡' : ''}</span></div></div></th>`;
+      const cells = oppCols.map((o) => {
+        const rep = o.builds[0];
+        const oppSpeed = effectiveSpeed(rep.stats[5], rep.item);
+        const sym = r.speed > oppSpeed ? 'win' : r.speed < oppSpeed ? 'lose' : 'may';
+        const label2 = { win: '◎', may: '△', lose: '×' }[sym];
+        const cls = { win: 'bg-cc', may: 'bg-cn', lose: 'bg-cx' }[sym];
+        return `<td class="${cls}">${label2}</td>`;
+      }).join('');
+      return `<tr>${hd}${cells}</tr>`;
+    }).join('');
+    return `<div class="mtx-legend"><span>味方（左・素早さ順）が使用率上位30体の代表型より速いか（スカーフ込み）。<b>◎</b>＝速い <b>△</b>＝同速 <b>×</b>＝遅い。</span></div>
+      <div class="mg"><table class="mtx">${head}${bodyRows}</table></div>`;
+  }
+  /** 型ごとの内訳を1件ずつの配列で返す(タップポップオーバーはリスト表示、titleはこれをjoinした文字列を使う)。
+   * 移植元: scripts/_explain.py matchup_grid() の集約対象そのもの。 */
+  function muBreakdownLines(agg, builds) {
+    return agg.verdicts.map((v, vi) => {
+      const build = builds[vi];
+      const myTxt = v.myHits == null ? '—' : `自分確${v.myHits}`;
+      const oppTxt = v.oppHits == null ? '—' : `相手確${v.oppHits}`;
+      return `型${vi + 1}(${build.item || '道具なし'}): ${v.sym} ${myTxt}/${oppTxt}・${v.fast ? '先手' : '後手'}`;
+    });
+  }
+  function muBreakdownTitle(agg, builds) {
+    return muBreakdownLines(agg, builds).join(' / ');
+  }
+  function matchupMatrixHtml(resolvedParty) {
+    const oppCols = buildOppCols();
+    const holeInfo = findHoles(resolvedParty, oppCols);
+    const summary = holeInfo.holeLabels.length
+      ? `<div class="pb-hole-summary">⚠ 穴: ${holeInfo.holeLabels.map(esc).join('、')}</div>`
+      : '';
+    const head = `<tr><th class="mtx-corner mtx-stick">自分 ＼ 相手(型1〜3集約)</th>` + oppCols.map((o, ci) => `<th class="${holeInfo.holeIdx.has(ci) ? 'mtx-hole' : ''}">${icoImg(o.icon, o.label, 'mtx-ico')}<div class="mtx-name">${esc(o.label)}</div></th>`).join('') + `</tr>`;
+    mtxPopData = [];
+    const rows = resolvedParty.map((b) => {
+      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b.icon, b.label, 'mtx-ico')}<div class="mtx-name">${esc(b.label)}</div></div></th>`;
+      const cells = oppCols.map((o) => {
+        const agg = judgeVsBuilds(b, o.builds);
+        const lines = muBreakdownLines(agg, o.builds);
+        const title = lines.join(' / ');
+        const popIdx = mtxPopData.push({ title: `${b.label} vs ${o.label}`, lines, oppLabel: o.label }) - 1;
+        return `<td class="${symCls(agg.sym)}" title="${esc(title)}" data-mtx-pop="${popIdx}">${agg.sym}${agg.dep ? '<span class="mu-dep">*</span>' : ''}</td>`;
+      }).join('');
+      return `<tr>${hd}${cells}</tr>`;
+    }).join('');
+    return `${summary}<div class="mtx-legend"><span>各味方 vs 使用率上位30体の想定型（採用率上位≤3型）を集約した1v1判定。◎有利 ○やや有利 △五分 ▲やや不利 ×不利。<b class="mu-dep-leg">*</b>＝型により有利不利が変化。<b class="mtx-hole" style="padding:0 4px">赤</b>=誰も集約◎/○を取れない「穴」。セルをクリック(ホバー可のPCではマウスオーバーも)で型ごとの内訳（確定数・素早さ）を表示。</span></div>
+      <div class="mg"><table class="mtx">${head}${rows}</table></div>`;
+  }
+  /** (8) ポップオーバー内「この相手を枠Xの仮想敵に追加」ボタンのHTML。枠未選択・既追加はdisabled。 */
+  function addTargetButtonHtml(oppLabel) {
+    const p = activeParty();
+    const slot = p && selectedIdx !== null ? p.slots[selectedIdx] : null;
+    if (!slot) {
+      return `<div class="row" style="margin-top:.8em"><button class="pb-btn-sub" disabled title="先に上の6枠から枠を選択してください">この相手を仮想敵に追加</button></div>`;
+    }
+    const already = slot.targets.includes(oppLabel);
+    return `<div class="row" style="margin-top:.8em"><button type="button" class="pb-btn-sub" id="pb-mtx-add-target" ${already ? 'disabled' : ''}>この相手を枠${selectedIdx + 1}の仮想敵に追加${already ? '（追加済み）' : ''}</button></div>`;
+  }
+  /** (8) 追加確定: 選択中枠のtargetsにラベルを足し、仮想敵パネルを再描画してポップオーバーを閉じる。 */
+  function addTargetFromMatrix(label) {
+    const p = activeParty();
+    if (!p || selectedIdx === null) return;
+    const slot = p.slots[selectedIdx];
+    if (!slot || slot.targets.includes(label)) return;
+    slot.targets.push(label);
+    p.updatedAt = Date.now();
+    saveStore(store);
+    tuneResults = null;
+    activeMuTab = label;
+    hideModal();
+    renderTargetsPanel();
+  }
+  /** (5) ポケモン相性マトリクスのセルはタップ/クリックで内訳をポップオーバー表示する(titleはPCのホバー用に併存)。
+   * (8) ポップオーバー内に「この相手を枠Xの仮想敵に追加」ボタンを併設する。 */
+  function bindMtxPopovers(paneEl) {
+    if (!paneEl) return;
+    paneEl.querySelectorAll('[data-mtx-pop]').forEach((td) => td.addEventListener('click', () => {
+      const d = mtxPopData[+td.dataset.mtxPop];
+      if (!d) return;
+      const bodyHtml = `<ul style="margin:0;padding-left:1.2em">${d.lines.map((l) => `<li style="margin:.25em 0">${esc(l)}</li>`).join('')}</ul>${addTargetButtonHtml(d.oppLabel)}`;
+      openInfoPopover(d.title, bodyHtml);
+      const addBtn = document.getElementById('pb-mtx-add-target');
+      if (addBtn && !addBtn.disabled) addBtn.addEventListener('click', () => addTargetFromMatrix(d.oppLabel));
+    }));
+  }
+
+  // ---- 空き枠を提案で埋める ----
+  async function onFillClick() {
+    const p = activeParty();
+    if (!p || !core) return;
+    const emptyIdx = p.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
+    const out = document.getElementById('pb-fill-out');
+    if (!emptyIdx.length) { out.innerHTML = '<div class="muted">空き枠がありません</div>'; return; }
+    fillEmptyIdx = emptyIdx;
+    fillLoading = true;
+    fillFailed = false;
+    renderFillOut();
+    let proposals = null;
+    try {
+      proposals = await suggestFill(p, emptyIdx, { species: core.species, loadMon });
+    } catch (e) {
+      // M2: mon json取得失敗等でsuggestFillがrejectしてもスピナーが固まらないようにする
+      console.warn('[onFillClick] 提案の取得に失敗しました', e);
+      fillLoading = false;
+      fillFailed = true;
+      renderFillOut();
+      return;
+    }
+    fillLoading = false;
+    fillProposals = proposals;
+    renderFillOut();
+  }
+  function speciesInParty(party, spName) {
+    return party.slots.some((s) => s && s.sp === spName);
+  }
+  function firstEmptySlotIdx(party) {
+    return party.slots.findIndex((s) => !s);
+  }
+  function renderFillOut() {
+    const out = document.getElementById('pb-fill-out');
+    if (fillLoading) { out.innerHTML = '<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">空き枠の提案を計算中…</div></div>'; return; }
+    if (fillFailed) { out.innerHTML = '<div class="muted">提案の取得に失敗しました。時間をおいて再試行してください</div>'; return; }
+    if (!fillProposals || !fillProposals.length) { out.innerHTML = ''; return; }
+    const p = activeParty();
+    const head = `<div class="pb-fill-head"><span class="muted">${fillProposals.length}件の提案 ー ポケモンをクリックで1体だけ空き枠に追加できます</span><button class="pb-btn-sub" id="pb-fill-close">✕ 提案をクリア</button></div>`;
+    const cards = fillProposals.map((cand, ci) => {
+      const sprites = cand.map((slotCand, si) => {
+        const sm = core.species.find((s) => s.n === slotCand.sp);
+        const disabled = !p || speciesInParty(p, slotCand.sp) || firstEmptySlotIdx(p) === -1;
+        const title = !p ? '' : speciesInParty(p, slotCand.sp) ? '追加済み' : firstEmptySlotIdx(p) === -1 ? '空き枠がありません' : `${slotCand.sp}を空き枠に追加`;
+        return `<button type="button" class="pb-fill-sprite${disabled ? ' pb-fill-disabled' : ''}" data-fill-ci="${ci}" data-fill-si="${si}" ${disabled ? 'disabled' : ''} title="${esc(title)}">${icoImg(sm ? sm.icon : null, slotCand.sp, '')}</button>`;
+      }).join('');
+      return `<div class="pb-cand-card">
+          <div class="pb-cand-sprites">${sprites}</div>
+          <button class="pb-btn-sub" data-fill-cand="${ci}">この案を採用</button>
+        </div>`;
+    }).join('');
+    out.innerHTML = head + cards;
+    document.getElementById('pb-fill-close').addEventListener('click', () => {
+      fillProposals = null;
+      renderFillOut();
+    });
+    out.querySelectorAll('[data-fill-cand]').forEach((btn) => btn.addEventListener('click', () => {
+      const ci = +btn.dataset.fillCand;
+      const cand = fillProposals[ci];
+      const pp = activeParty();
+      if (!pp) return;
+      // H1: 提案生成時にキャプチャしたfillEmptyIdxは使わず、採用時点のアクティブパーティの空き枠を
+      // 再計算して埋める。提案表示後に手動追加・パーティ切替があっても古いインデックスで
+      // 無警告上書きしないようにするため。空きが提案数より少なければ入る分だけ入れ、過剰分は破棄する。
+      const emptyNow = pp.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
+      if (!emptyNow.length) { fillProposals = null; renderFillOut(); return; }
+      const n = Math.min(emptyNow.length, cand.length);
+      for (let i = 0; i < n; i++) pp.slots[emptyNow[i]] = cand[i];
+      pp.updatedAt = Date.now();
+      saveStore(store);
+      fillProposals = null;
+      render();
+    }));
+    out.querySelectorAll('.pb-fill-sprite:not(.pb-fill-disabled)').forEach((btn) => btn.addEventListener('click', () => {
+      const ci = +btn.dataset.fillCi;
+      const si = +btn.dataset.fillSi;
+      onFillSpriteClick(ci, si);
+    }));
+  }
+  function onFillSpriteClick(ci, si) {
+    const pp = activeParty();
+    if (!pp || !fillProposals) return;
+    const cand = fillProposals[ci] && fillProposals[ci][si];
+    if (!cand) return;
+    if (speciesInParty(pp, cand.sp)) return;
+    const idx = firstEmptySlotIdx(pp);
+    if (idx === -1) return;
+    pp.slots[idx] = { ...cand, evs: [...cand.evs], moves: [...cand.moves], targets: [] };
+    pp.updatedAt = Date.now();
+    saveStore(store);
+    render();
+    renderFillOut();
+  }
+  document.getElementById('pb-fill-btn').addEventListener('click', onFillClick);
+
+  // ---- エクスポート/インポート モーダル ----
+  function showModal() { document.getElementById('pb-modal').style.display = 'flex'; }
+  function hideModal() { document.getElementById('pb-modal').style.display = 'none'; }
+
+  /** (5) title属性の内容をタップでも見られるようにするための共通ポップオーバー(既存.pop-overlayを流用)。 */
+  function openInfoPopover(titleText, bodyHtml) {
+    const body = document.getElementById('pb-modal-body');
+    body.innerHTML = `<h3 style="margin-top:0">${esc(titleText)}</h3>${bodyHtml}`;
+    showModal();
+  }
+  /** (5) 型テンプレ用ポップオーバー。候補(≤5件)をカード一覧表示し、各カードの内容確認後に
+   * 「この型を適用」で個別に確定する(タップ即上書きの事故を防ぐ従来の安全設計を複数候補へ拡張)。 */
+  function openPresetListPopover(spName, specs, onApply) {
+    const parsedList = (specs || []).map((spec) => fromSpec(spec)).filter((p) => p !== null);
+    const cardsHtml = parsedList.length
+      ? parsedList.map((parsed, i) => {
+          const movesHtml = parsed.moves.filter(Boolean).map((x) => `<span class="mvchip">${typeIcoForMove(x)}${esc(x)}</span>`).join('') || '—';
+          return `<div class="pb-cand-card" style="flex-direction:column;align-items:stretch;gap:.4em">
+              <div class="dgrid">
+                <div class="dcell"><span class="lbl item">持ち物</span><span class="dval">${esc(parsed.item) || 'なし'}</span></div>
+                <div class="dcell"><span class="lbl nat">性格</span><span class="dval">${parsed.nature ? esc(natureDisp(parsed.nature)) : '—'}</span></div>
+              </div>
+              <div class="drow"><span class="lbl mv">技</span><span class="mvwrap">${movesHtml}</span></div>
+              <div class="drow"><span class="lbl ev">EV</span><span class="mvwrap">${evChipsArr(parsed.evs)}</span></div>
+              <button type="button" class="btn" data-preset-list-apply="${i}" style="align-self:flex-end">この型を適用</button>
+            </div>`;
+        }).join('')
+      : '<div class="muted">候補がありません</div>';
+    openInfoPopover(`${spName} 型テンプレ`, cardsHtml);
+    document.querySelectorAll('#pb-modal-body [data-preset-list-apply]').forEach((btn) => btn.addEventListener('click', () => {
+      const parsed = parsedList[+btn.dataset.presetListApply];
+      if (parsed) { onApply(parsed); hideModal(); }
+    }));
+  }
+  function openExportModal(p) {
+    const body = document.getElementById('pb-modal-body');
+    const text = exportParty(p);
+    body.innerHTML = `<h3>エクスポート ー ${esc(p.name)}</h3>
+      <textarea id="pb-export-ta" class="pb-textarea" readonly>${esc(text)}</textarea>
+      <div class="row" style="margin-top:.6em"><button class="btn" id="pb-export-copy">コピー</button></div>
+      <div class="muted" id="pb-export-msg" style="margin-top:.4em"></div>`;
+    document.getElementById('pb-export-copy').addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(text); document.getElementById('pb-export-msg').textContent = 'コピーしました'; }
+      catch (e) { document.getElementById('pb-export-msg').textContent = 'コピーに失敗しました。テキストを選択して手動でコピーしてください'; }
+    });
+    showModal();
+  }
+  function openImportModal() {
+    const body = document.getElementById('pb-modal-body');
+    body.innerHTML = `<h3>インポート</h3>
+      <div class="muted" style="margin-bottom:.4em">6行のspecテキストを貼り付けてください（エクスポートした形式）</div>
+      <textarea id="pb-import-ta" class="pb-textarea" placeholder="ここに貼り付け"></textarea>
+      <div class="row" style="margin-top:.6em"><button class="btn" id="pb-import-go">取り込む</button></div>
+      <div class="muted" id="pb-import-msg" style="margin-top:.4em;color:#dc2626"></div>`;
+    document.getElementById('pb-import-go').addEventListener('click', () => {
+      const text = document.getElementById('pb-import-ta').value;
+      const party = importParty(text);
+      if (!party) { document.getElementById('pb-import-msg').textContent = '取り込みに失敗しました。形式を確認してください（6行、spec形式）'; return; }
+      store.parties.push(party);
+      store.activeId = party.id;
+      saveStore(store);
+      hideModal();
+      resetPartyUiState();
+      render();
+    });
+    showModal();
+  }
+  document.getElementById('pb-modal-x').addEventListener('click', hideModal);
+  document.getElementById('pb-modal').addEventListener('click', (e) => { if (e.target.id === 'pb-modal') hideModal(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    hideModal();
+    const p = activeParty();
+    if (selectedIdx !== null && p && !p.slots[selectedIdx]) {
+      selectedIdx = null;
+      document.querySelectorAll('#pb-tray .montab').forEach((b) => b.classList.remove('active'));
+      renderSlotSearch();
+      renderEditor();
+      renderTargetsPanel();
+    }
+  });
+
+  // 検索サジェスト: 外側クリックで閉じる
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.filter-wrap')) {
+      document.querySelectorAll('.filter-sug').forEach((s) => { s.style.display = 'none'; });
+    }
+  });
+
+  // ---- 「軸から簡単構築」からの引き継ぎインポート ----
+  const SUGGEST_HANDOFF_KEY = 'pn-builder-import';
+  /** /party-suggest の「パーティ工房で保存・微調整」ボタンが localStorage 経由で渡す
+   * {name, specs} を新規パーティとして取り込み、アクティブ化する。キーはリロードでの
+   * 二重インポートを防ぐため、成否に関わらず読み取り直後に必ず削除する。全specが不正な
+   * 場合のみモーダルでエラー表示し、1件でも解決できればパーティは作成する(部分成功OK)。 */
+  function importFromSuggestHandoff() {
+    let raw;
+    try { raw = localStorage.getItem(SUGGEST_HANDOFF_KEY); } catch (e) { return; }
+    if (!raw) return;
+    try { localStorage.removeItem(SUGGEST_HANDOFF_KEY); } catch (e) { /* noop */ }
+    let data;
+    try { data = JSON.parse(raw); } catch (e) { data = null; }
+    const specs = data && Array.isArray(data.specs) ? data.specs : null;
+    if (!specs || !specs.length) return;
+    const slots = specs.map((s) => { try { return fromSuggestSpec(s); } catch (e) { return null; } }).filter((s) => s !== null);
+    if (!slots.length) {
+      openInfoPopover('パーティ工房への取り込み', '<div class="pb-valid-banner" style="margin:0"><ul><li>提案データを取り込めませんでした。型を解決できませんでした</li></ul></div>');
+      return;
+    }
+    const name = data && typeof data.name === 'string' && data.name.trim() ? data.name.trim() : undefined;
+    createPartyFromSlots(store, slots, name);
+    resetPartyUiState();
+  }
+
+  // ---- 初期化 ----
+  /** M1: loadCore()失敗時(fetch失敗・不正レスポンス等)に「読み込み中…」のまま止まらないよう、
+   * 「6枠編成」カード直上に失敗表示+再試行ボタンを出す。再試行はページ再読み込みで単純化する。 */
+  function renderInitError() {
+    const bar = document.getElementById('pb-partybar');
+    if (bar) {
+      bar.innerHTML = `<div class="pb-valid-banner">データの読み込みに失敗しました。再読み込みしてください
+        <button class="pb-btn-sub" id="pb-init-retry" style="margin-left:.6em">再試行</button></div>`;
+      const retryBtn = document.getElementById('pb-init-retry');
+      if (retryBtn) retryBtn.addEventListener('click', () => location.reload());
+    }
+    const editor = document.getElementById('pb-editor');
+    if (editor) editor.innerHTML = '';
+  }
+  async function init() {
+    store = loadStore();
+    importFromSuggestHandoff();
+    if (store.parties.length === 0) createParty(store);
+    try {
+      core = await loadCore();
+    } catch (e) {
+      console.warn('[init] loadCore()に失敗しました', e);
+      renderInitError();
+      return;
+    }
+    render();
+  }
+  init();
+</script>

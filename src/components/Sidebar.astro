@@ -8,21 +8,26 @@ const pfx = lang === 'ja' ? '' : `/${lang}`;
 
 const NAV = {
   ja: {
-    home: 'ホーム', simulator: 'バトルシミュレータ', simWhat: 'バトルシミュレータとは',
-    simTop: 'シミュレーション：M-A', simTopB: 'シミュレーション：M-B', simSoon: 'パーティ提案', soonTitle: '近日公開予定',
+    home: 'ホーム',
+    navResearch: '調べる', navRead: '読む', navWatch: '観る', navBuild: '戦う',
+    watchParent: '仮想バトル観戦', simA: 'M-A環境', simB: 'M-B環境', soonTitle: '近日公開予定',
+    buildParent: 'パーティ構築', quickBuild: '軸から簡単構築', detailBuild: 'パーティ工房',
     pokemon: 'ポケモン情報', ranking: '使用率ランキング', blog: '考察記事',
     m4: 'M-4 シーズン', m3: 'M-3 シーズン', m2: 'M-2 シーズン', about: '運営者情報', privacy: 'プライバシーポリシー',
-    partyBuilder: 'パーティ構築',
   },
   en: {
-    home: 'Home', simulator: 'Battle Simulator', simWhat: 'About Simulator',
-    simTop: 'Simulation: M-A', simTopB: 'Simulation: M-B', simSoon: 'Party Suggestion', soonTitle: 'Coming soon',
+    home: 'Home',
+    navResearch: 'Research', navRead: 'Read', navWatch: 'Watch', navBuild: 'Battle',
+    watchParent: 'AI Battle Replays', simA: 'M-A', simB: 'M-B', soonTitle: 'Coming soon',
+    buildParent: 'Team Building', quickBuild: 'Quick Build from Core',
     pokemon: 'Pokémon Data', ranking: 'Usage Ranking', blog: 'Analysis',
     m3: 'M-3 Season', m2: 'M-2 Season', about: 'About', privacy: 'Privacy Policy',
   },
   ko: {
-    home: '홈', simulator: '배틀 시뮬레이터', simWhat: '시뮬레이터란',
-    simTop: '시뮬레이션: M-A', simTopB: '시뮬레이션: M-B', simSoon: '파티 제안', soonTitle: '준비 중',
+    home: '홈',
+    navResearch: '알아보기', navRead: '읽기', navWatch: '보기', navBuild: '배틀',
+    watchParent: '가상 대전 관전', simA: 'M-A', simB: 'M-B', soonTitle: '준비 중',
+    buildParent: '파티 구성', quickBuild: '축으로 간단 구성',
     pokemon: '포켓몬 정보', ranking: '사용률 랭킹', blog: '공략 기사',
     m3: 'M-3 시즌', m2: 'M-2 시즌', about: '운영자 정보', privacy: '개인정보 처리방침',
   },
@@ -33,6 +38,14 @@ const isM4Active = path.startsWith('/blog/m4') || (path.startsWith('/blog/') && 
 const isM3Active = path.startsWith(`${pfx}/blog/m3`) || (path.startsWith('/blog/') && path.includes('-m3'));
 const isM2Active = path.startsWith('/blog/m2') || (path.startsWith('/blog/') && path.includes('-m2'));
 const isBlogActive = (path === '/blog' || path === '/blog/') || (path.startsWith('/blog/') && !path.startsWith('/blog/m4') && !path.startsWith('/blog/m3') && !path.startsWith('/blog/m2'));
+const isSimAActive = path === `${pfx}/simulator` || path === `${pfx}/simulator/`;
+const isSimBActive = isActive(`${pfx}/simulator-mb`);
+const isWatchParentActive = isActive(`${pfx}/battle-simulator`);
+const isQuickBuildActive = isActive(`${pfx}/party-suggest`);
+const isDetailBuildActive = isActive('/party-builder');
+const isPartyBuildingActive = isActive('/party-building');
+const isBuildParentActive = lang === 'ja' ? isPartyBuildingActive : isQuickBuildActive;
+const buildParentHref = lang === 'ja' ? '/party-building' : `${pfx}/party-suggest`;
 const brandHref = pfx ? `${pfx}/` : '/';
 const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : SITE_TITLE;
 
@@ -58,21 +71,27 @@ const langUrls = {
 	<nav class="sb-nav">
 		<a href={brandHref} class:list={['sb-link', { active: path === `${pfx}/` || path === `${pfx}` }]}>{NAV.home}</a>
 
-		<a href={`${pfx}/battle-simulator`} class:list={['sb-cat-link', { active: path === `${pfx}/battle-simulator` }]}>{NAV.simulator}</a>
-		<a href={`${pfx}/battle-simulator`} class:list={['sb-sublink', { active: path === `${pfx}/battle-simulator` }]}>{NAV.simWhat}</a>
-		<a href={`${pfx}/simulator`} class:list={['sb-sublink', { active: path === `${pfx}/simulator` || path === `${pfx}/simulator/` }]}>{NAV.simTop}</a>
-		<a href={`${pfx}/simulator-mb`} class:list={['sb-sublink', { active: isActive(`${pfx}/simulator-mb`) }]}>{NAV.simTopB}<span class="season-badge new">NEW</span></a>
-		<a href={`${pfx}/party-suggest`} class:list={['sb-sublink', { active: isActive(`${pfx}/party-suggest`) }]}>{NAV.simSoon}<span class="season-badge new">NEW</span></a>
-		{lang === 'ja' && <a href="/party-builder" class:list={['sb-sublink', { active: isActive('/party-builder') }]}>{NAV.partyBuilder}<span class="season-badge new">NEW</span></a>}
-
+		<div class="sb-verb-caption">🔍 {NAV.navResearch}</div>
 		<a href={`${pfx}/pokemon`} class:list={['sb-link', { active: isActive(`${pfx}/pokemon`) }]}>{NAV.pokemon}</a>
 		<a href={`${pfx}/ranking/`} class:list={['sb-sublink', { active: isActive(`${pfx}/ranking`) }]}>{NAV.ranking}</a>
+
 		{lang === 'ja' && <>
+			<div class="sb-verb-caption">📖 {NAV.navRead}</div>
 			<a href="/blog" class:list={['sb-link', { active: isBlogActive }]}>{NAV.blog}</a>
 			<a href="/blog/m4/" class:list={['sb-sublink', { active: isM4Active }]}>{NAV.m4}<span class="season-badge new">NEW</span></a>
 			<a href="/blog/m3/" class:list={['sb-sublink', { active: isM3Active }]}>{NAV.m3}</a>
 			<a href="/blog/m2/" class:list={['sb-sublink', { active: isM2Active }]}>{NAV.m2}</a>
 		</>}
+
+		<div class="sb-verb-caption">🎬 {NAV.navWatch}</div>
+		<a href={`${pfx}/battle-simulator`} class:list={['sb-link', { active: isWatchParentActive }]}>{NAV.watchParent}</a>
+		<a href={`${pfx}/simulator`} class:list={['sb-sublink', { active: isSimAActive }]}>{NAV.simA}</a>
+		<a href={`${pfx}/simulator-mb`} class:list={['sb-sublink', { active: isSimBActive }]}>{NAV.simB}<span class="season-badge new">NEW</span></a>
+
+		<div class="sb-verb-caption">⚔️ {NAV.navBuild}</div>
+		<a href={buildParentHref} class:list={['sb-link', { active: isBuildParentActive }]}>{NAV.buildParent}</a>
+		<a href={`${pfx}/party-suggest`} class:list={['sb-sublink', { active: isQuickBuildActive }]}>{NAV.quickBuild}<span class="season-badge new">NEW</span></a>
+		{lang === 'ja' && <a href="/party-builder" class:list={['sb-sublink', { active: isDetailBuildActive }]}>{NAV.detailBuild}<span class="season-badge new">NEW</span></a>}
 	</nav>
 	<div class="sb-foot">
 		<div class="lang-switcher">
@@ -153,12 +172,13 @@ const langUrls = {
 		flex-direction: column;
 	}
 	.sb-link {
-		padding: 0.6rem 1.2rem;
+		padding: 0.42rem 1.2rem;
 		color: rgb(var(--gray-dark));
 		text-decoration: none;
 		font-size: 0.92rem;
 		font-weight: 600;
 		border-left: 3px solid transparent;
+		line-height: 1.3;
 	}
 	.sb-link:hover {
 		background: #f8fafc;
@@ -169,12 +189,13 @@ const langUrls = {
 		background: #fff7ed;
 	}
 	.sb-sublink {
-		padding: 0.42rem 0.9rem 0.42rem 2.1rem;
+		padding: 0.3rem 0.9rem 0.3rem 2.1rem;
 		color: rgb(var(--gray-dark));
 		text-decoration: none;
 		font-size: 0.84rem;
 		border-left: 3px solid transparent;
 		white-space: nowrap;
+		line-height: 1.3;
 	}
 	.sb-sublink:hover { background: #f8fafc; }
 	.sb-soon {
@@ -219,6 +240,21 @@ const langUrls = {
 		color: rgb(var(--gray-dark));
 		padding: 0.7rem 1.2rem 0.25rem;
 		margin-top: 0.2rem;
+	}
+	.sb-verb-caption {
+		font-size: 0.68rem;
+		font-weight: 800;
+		color: var(--accent);
+		letter-spacing: 0.08em;
+		padding: 0.4rem 1.2rem 0.36rem;
+		margin-top: 0.25rem;
+		background: #eef2ff;
+		border-left: 3px solid var(--accent);
+		border-top: 1px solid #e0e7ff;
+	}
+	.sb-verb-caption:first-of-type {
+		border-top: none;
+		margin-top: 0.15rem;
 	}
 	.sb-cat-link {
 		display: block;

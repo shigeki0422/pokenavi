@@ -15,9 +15,9 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
 ---
 
 <main>
-  <h1>{preCoreLabel ? `${preCoreLabel}軸 M-4 パーティ提案` : 'M-4 パーティ提案'}</h1>
+  <h1>{preCoreLabel ? `${preCoreLabel}軸 M-4 軸から簡単構築` : 'M-4 軸から簡単構築'}</h1>
   <p class="lead">軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案します。各ポケの役割・パーティ統計・使用率上位との1v1相性つき。</p>
-  <p class="note">※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にしたパーティ提案は未対応で、今後追加予定です。</p>
+  <p class="note">※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。</p>
 
   <div class="card">
     <div class="corebox">
@@ -74,7 +74,11 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
   .sug-item .rk{margin-left:auto;font-size:.7rem;color:rgb(var(--gray))}
   .sug-item mark{background:#fef9c3;color:inherit;border-radius:2px;padding:0 1px}
   .sug-item.added{opacity:.4;pointer-events:none}
-  .sug .hd{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:.4em}
+  .sug .hd{display:flex;flex-wrap:wrap;gap:.5em;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:.4em}
+  /* パーティ工房への引き継ぎボタン(PartyBuilderApp.astro の .pb-btn-sub と同一体裁) */
+  .pb-btn-sub{background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;border-radius:8px;padding:.45em .9em;font-weight:700;font-size:.8rem;cursor:pointer;font-family:var(--font-atkinson);white-space:nowrap}
+  .pb-btn-sub:hover{background:#e0e7ff}
+  .pb-btn-sub:disabled{opacity:.45;cursor:default}
   .sc{color:var(--accent);font-weight:800}
   .role{display:inline-block;background:#eef2ff;color:#3730a3;border-radius:6px;padding:1px 6px;font-size:.7rem;margin:2px 3px 0 0}
   .stats{display:flex;flex-wrap:wrap;gap:6px;margin:.2em 0 .7em;font-size:.78rem}
@@ -431,7 +435,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
         <button class="tb" data-i="${i}" data-t="guide">選出ガイド${(res.guide&&res.guide.length)?'':'<span class="soon-tag">準備中</span>'}</button>
       </div>`;
     return `<div class="card sug" data-sug="${i}">
-      <div class="hd"><span>提案 ${i+1}</span></div>
+      <div class="hd"><span>提案 ${i+1}</span><button type="button" class="pb-btn-sub ps-import-btn">パーティ工房で保存・微調整</button></div>
       ${st}
       <div class="iconrow">${tabs}</div>
       <div class="detail" id="det-${i}">${detailHtml(res.mons[0])}</div>
@@ -715,7 +719,20 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
     const mc=e.target.closest('.mu-cell'); if(mc){ openDetail(mc,'matchup_detail'); return; }
     const ac=e.target.closest('.at-cell'); if(ac){ openAtkDetail(ac); return; }
     const gr=e.target.closest('.gd-req'); if(gr){ requestGuide(gr); return; }
+    const ib=e.target.closest('.ps-import-btn'); if(ib){ handleImportToBuilder(ib); return; }
   });
+
+  /** 「パーティ工房で保存・微調整」: 提案の6specをlocalStorage経由でパーティ工房へ引き継ぐ。
+   * res.specs は scripts/gen_party_pool.py が組んだ spec 文字列そのもの(fromSpec互換書式・
+   * H/A/B/C/D/S=32スケール)なので、mons配列から組み立て直さずそのまま渡す。 */
+  function handleImportToBuilder(el){
+    const res = suggOf(el); if(!res || !res.specs || !res.specs.length) return;
+    const label = LAST_FIXED.length ? LAST_FIXED.join('+') : (CORE.length ? CORE.map(p=>p.label).join('+') : 'おまかせ');
+    const name = `${label}軸 かんたん構築`;
+    try{ localStorage.setItem('pn-builder-import', JSON.stringify({name, specs: res.specs})); }
+    catch(e){ /* localStorage不可時は遷移のみ行う(工房側で無視される) */ }
+    location.href = '/party-builder';
+  }
   async function requestGuide(btn){
     btn.disabled = true;
     try{
@@ -727,6 +744,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
   }
 
   let LAST = [];
+  let LAST_FIXED = [];
   function bindTabs(){
     document.querySelectorAll('.montab').forEach(btn=>{
       btn.addEventListener('click', ()=>{
@@ -810,6 +828,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
       const d = await r.json();
       if(d.error){ out.innerHTML=''; document.getElementById('status').textContent = 'エラー: ' + d.error; return; }
       LAST = d.results;
+      LAST_FIXED = d.fixed || [];
       document.getElementById('status').textContent = (d.fixed.length? '固定軸: ' + d.fixed.join(' + ') + ' / ' : '') + d.results.length + '件';
       out.innerHTML = d.results.map((res,i)=>sugHtml(res,i)).join('');
       bindTabs();
