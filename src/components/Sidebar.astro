@@ -11,7 +11,8 @@ const NAV = {
     home: 'ホーム', simulator: 'バトルシミュレータ', simWhat: 'バトルシミュレータとは',
     simTop: 'シミュレーション：M-A', simTopB: 'シミュレーション：M-B', simSoon: 'パーティ提案', soonTitle: '近日公開予定',
     pokemon: 'ポケモン情報', ranking: '使用率ランキング', blog: '考察記事',
-    m3: 'M-3 シーズン', m2: 'M-2 シーズン', about: '運営者情報', privacy: 'プライバシーポリシー',
+    m4: 'M-4 シーズン', m3: 'M-3 シーズン', m2: 'M-2 シーズン', about: '運営者情報', privacy: 'プライバシーポリシー',
+    partyBuilder: 'パーティ構築',
   },
   en: {
     home: 'Home', simulator: 'Battle Simulator', simWhat: 'About Simulator',
@@ -28,9 +29,10 @@ const NAV = {
 }[lang];
 
 const isActive = (href: string) => (href === `${pfx}/` ? path === `${pfx}/` || path === `${pfx}` : path.startsWith(href));
+const isM4Active = path.startsWith('/blog/m4') || (path.startsWith('/blog/') && path.includes('-m4'));
 const isM3Active = path.startsWith(`${pfx}/blog/m3`) || (path.startsWith('/blog/') && path.includes('-m3'));
 const isM2Active = path.startsWith('/blog/m2') || (path.startsWith('/blog/') && path.includes('-m2'));
-const isBlogActive = (path === '/blog' || path === '/blog/') || (path.startsWith('/blog/') && !path.startsWith('/blog/m3') && !path.startsWith('/blog/m2'));
+const isBlogActive = (path === '/blog' || path === '/blog/') || (path.startsWith('/blog/') && !path.startsWith('/blog/m4') && !path.startsWith('/blog/m3') && !path.startsWith('/blog/m2'));
 const brandHref = pfx ? `${pfx}/` : '/';
 const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : SITE_TITLE;
 
@@ -61,12 +63,14 @@ const langUrls = {
 		<a href={`${pfx}/simulator`} class:list={['sb-sublink', { active: path === `${pfx}/simulator` || path === `${pfx}/simulator/` }]}>{NAV.simTop}</a>
 		<a href={`${pfx}/simulator-mb`} class:list={['sb-sublink', { active: isActive(`${pfx}/simulator-mb`) }]}>{NAV.simTopB}<span class="season-badge new">NEW</span></a>
 		<a href={`${pfx}/party-suggest`} class:list={['sb-sublink', { active: isActive(`${pfx}/party-suggest`) }]}>{NAV.simSoon}<span class="season-badge new">NEW</span></a>
+		{lang === 'ja' && <a href="/party-builder" class:list={['sb-sublink', { active: isActive('/party-builder') }]}>{NAV.partyBuilder}<span class="season-badge new">NEW</span></a>}
 
 		<a href={`${pfx}/pokemon`} class:list={['sb-link', { active: isActive(`${pfx}/pokemon`) }]}>{NAV.pokemon}</a>
 		<a href={`${pfx}/ranking/`} class:list={['sb-sublink', { active: isActive(`${pfx}/ranking`) }]}>{NAV.ranking}</a>
 		{lang === 'ja' && <>
 			<a href="/blog" class:list={['sb-link', { active: isBlogActive }]}>{NAV.blog}</a>
-			<a href="/blog/m3/" class:list={['sb-sublink', { active: isM3Active }]}>{NAV.m3}<span class="season-badge new">NEW</span></a>
+			<a href="/blog/m4/" class:list={['sb-sublink', { active: isM4Active }]}>{NAV.m4}<span class="season-badge new">NEW</span></a>
+			<a href="/blog/m3/" class:list={['sb-sublink', { active: isM3Active }]}>{NAV.m3}</a>
 			<a href="/blog/m2/" class:list={['sb-sublink', { active: isM2Active }]}>{NAV.m2}</a>
 		</>}
 	</nav>
