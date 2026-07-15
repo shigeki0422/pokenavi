@@ -207,6 +207,9 @@
   .pb-mv-clear{background:none;border:none;color:rgb(var(--gray));cursor:pointer;font-size:.85rem;padding:.2em .4em;flex-shrink:0}
   .pb-mv-clear:hover{color:#dc2626}
   .pb-presets{margin-top:.6em;display:flex;flex-wrap:wrap;gap:.4em;align-items:center}
+  .pb-head-tpl{margin-left:auto;align-self:center;white-space:nowrap}
+  .pb-ev-foot{display:flex;align-items:center;justify-content:space-between;gap:.6em;flex-wrap:wrap;margin-bottom:.6em}
+  .pb-ev-foot .pb-ev-remain{margin-bottom:0}
   .pb-presets-lbl{font-size:.75rem;font-weight:800;color:rgb(var(--gray))}
   .pb-cand-card{display:flex;align-items:center;gap:.6em;border:1px solid rgb(var(--gray-light));border-radius:10px;padding:.5em .7em;margin-bottom:.5em;background:#fff;flex-wrap:wrap}
   .pb-cand-sprites{display:flex;gap:2px;flex-wrap:wrap}
@@ -1127,12 +1130,16 @@
       : fieldOptions(detail.abilities, slot.ability);
     const natureOpts = natureSelectOptions(detail.natures, slot.nature);
 
+    const tplBtn = (detail.builds || []).length
+      ? `<button type="button" class="pb-btn-sub pb-head-tpl" id="pb-preset-open">型テンプレから</button>`
+      : '';
     const head = rb ? `<div class="pb-editor-head">
         ${icoImg(rb.icon, rb.label, 'monicon')}
         <div>
           <div class="pb-editor-name">${esc(rb.label)}${rb.mega ? '<span class="mmega-tag">メガ</span>' : ''}</div>
           <div class="pb-editor-types">${typeIcoByName(rb.t1)}${rb.t2 ? typeIcoByName(rb.t2) : ''}</div>
         </div>
+        ${tplBtn}
       </div>` : '';
 
     const evRows = EVK.map((label, si) => {
@@ -1147,7 +1154,9 @@
       </div>`;
     }).join('');
 
-    const evPresets = (detail.evs || []).slice(0, 5).map((e) => `<button class="pb-chip" data-evpreset="${e.ev.join(',')}">${e.ev.join('/')} <b>${e.pct}%</b></button>`).join('');
+    const evPresetBtn = (detail.evs || []).length
+      ? `<button type="button" class="pb-btn-sub" id="pb-evpreset-open">EVプリセットから</button>`
+      : '';
 
     const moveRows = [0, 1, 2, 3].map((mi) => {
       const val = slot.moves[mi] || '';
@@ -1157,18 +1166,11 @@
         </div>`;
     }).join('');
 
-    // 型テンプレ(まるごと適用)は型作りの起点になるようエディタ上部(持ち物等セレクトの直前)に置く。
-    // 個別チップの代わりに1ボタン+ポップアップ一覧にして省スペース化(内容確認→適用の安全設計は維持)。
-    const presetBtnHtml = (detail.builds || []).length
-      ? `<div class="pb-presets"><button type="button" class="pb-btn-sub" id="pb-preset-open">型テンプレから</button></div>`
-      : '';
-
     el.innerHTML = `
       <div class="pb-editor-titlebar">
         <h2>型エディタ ー 枠${selectedIdx + 1}</h2>
       </div>
       ${head}
-      ${presetBtnHtml}
       <div class="dgrid pb-select-row">
         <div class="dcell"><span class="lbl item">持ち物</span><select class="inp" id="pb-f-item">${itemOpts}</select></div>
         <div class="dcell"><span class="lbl abil">特性</span><select class="inp" id="pb-f-ability" ${megaOpt ? 'disabled' : ''}>${abilityOpts}</select>${megaOpt ? '<span class="pb-mega-note">（メガ進化で固定）</span>' : ''}</div>
@@ -1176,8 +1178,7 @@
       </div>
       <div class="pb-ev-editor">
         ${evRows}
-        <div class="pb-ev-remain" id="pb-ev-remain">${evRemainText(slot.evs)}</div>
-        <div class="pb-ev-presets">${evPresets ? `<span class="pb-presets-lbl">EVプリセット:</span>${evPresets}` : ''}</div>
+        <div class="pb-ev-foot"><div class="pb-ev-remain" id="pb-ev-remain">${evRemainText(slot.evs)}</div>${evPresetBtn}</div>
       </div>
       <div class="pb-moves">${moveRows}</div>
     `;
@@ -1194,10 +1195,15 @@
     el.querySelectorAll('.pb-ev-range, .pb-ev-num').forEach((inp) => inp.addEventListener('input', onEvInput));
     el.querySelectorAll('.pb-ev-num').forEach((inp) => inp.addEventListener('focus', (e) => e.target.select())); // (12a) フォーカスで全選択
     el.querySelectorAll('.pb-ev-step').forEach((btn) => btn.addEventListener('click', () => onEvStepClick(+btn.dataset.evI, +btn.dataset.evStep)));
-    el.querySelectorAll('[data-evpreset]').forEach((btn) => btn.addEventListener('click', () => {
-      slot.evs = btn.dataset.evpreset.split(',').map(Number);
-      commitAndReflow();
-    }));
+    const evPresetOpenBtn = el.querySelector('#pb-evpreset-open');
+    if (evPresetOpenBtn) {
+      evPresetOpenBtn.addEventListener('click', () => {
+        openEvPresetListPopover(sm ? sm.n : slot.sp, (detail.evs || []).slice(0, 5), (evs) => {
+          slot.evs = evs;
+          commitAndReflow();
+        });
+      });
+    }
 
     el.querySelectorAll('.pb-mv-select').forEach((sel) => {
       const mi = +sel.dataset.mvI;
@@ -1985,6 +1991,20 @@
     document.querySelectorAll('#pb-modal-body [data-preset-list-apply]').forEach((btn) => btn.addEventListener('click', () => {
       const parsed = parsedList[+btn.dataset.presetListApply];
       if (parsed) { onApply(parsed); hideModal(); }
+    }));
+  }
+  function openEvPresetListPopover(spName, evList, onApply) {
+    const cardsHtml = evList.length
+      ? evList.map((e, i) => `<div class="pb-cand-card" style="align-items:center;gap:.6em">
+            <span class="mvwrap">${evChipsArr(e.ev)}</span>
+            <b style="white-space:nowrap">${Number(e.pct) || 0}%</b>
+            <button type="button" class="btn" data-evpreset-apply="${i}" style="margin-left:auto">適用</button>
+          </div>`).join('')
+      : '<div class="muted">候補がありません</div>';
+    openInfoPopover(`${spName} EVプリセット（採用率順）`, cardsHtml);
+    document.querySelectorAll('#pb-modal-body [data-evpreset-apply]').forEach((btn) => btn.addEventListener('click', () => {
+      const e = evList[+btn.dataset.evpresetApply];
+      if (e) { onApply(e.ev.map(Number)); hideModal(); }
     }));
   }
   function openExportModal(p) {
