@@ -34,7 +34,7 @@ if __name__ == "__main__":
     crawl_dir = sys.argv[1] if len(sys.argv) > 1 else None
     if not crawl_dir:
         from datetime import date
-        crawl_dir = f"/tmp/champ_crawl_{date.today().isoformat()}"
+        crawl_dir = f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{date.today().isoformat()}"
     print(f"クロップ: {crawl_dir}")
     overwrite = "--overwrite" in sys.argv
     crop_all(crawl_dir, overwrite)

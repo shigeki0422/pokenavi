@@ -19,7 +19,7 @@ import sys
 from datetime import date
 from PIL import Image
 
-OUTPUT_DIR    = f"/tmp/champ_crawl_{date.today().isoformat()}"
+OUTPUT_DIR    = f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{date.today().isoformat()}"
 TOTAL_POKEMON = 200
 
 LIST_X        = 1600
@@ -30,7 +30,7 @@ PANEL_BOT     = 720
 ARROW_RIGHT   = (2330, 540)
 BACK_BTN      = (308, 49)
 
-PANELS = ["move", "item", "partner", "nature", "ev", "ability"]
+PANELS = ["ability"]
 PANEL_MAX_SCROLL = {"move": 1, "item": 1, "partner": 1, "nature": 1, "ev": 8, "ability": 0}
 
 PROGRESS_FILE = f"{OUTPUT_DIR}/last_rank.txt"

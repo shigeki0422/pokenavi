@@ -83,7 +83,7 @@ TARGETS = {
     },
 }
 
-CRAWLED_DATE = "2026-07-14"  # ← 実行時に変更
+CRAWLED_DATE = "2026-07-15"  # ← 実行時に変更
 
 TARGETS["2026-07-09"] = {
     182: "パンプジン(ギガだましゅ)",
@@ -92,6 +92,11 @@ TARGETS["2026-07-09"] = {
 TARGETS["2026-07-14"] = {
     1: "ガブリアス",
     122: "ケンタロス:炎",
+    200: "ケンタロス",
+}
+
+TARGETS["2026-07-15"] = {
+    123: "ケンタロス:炎",
     200: "ケンタロス",
 }
 
@@ -120,10 +125,13 @@ def crop_icon(img_path):
 
 
 def extract_main_icon(rank_dir: Path) -> np.ndarray | None:
-    """_c_move_00.png からメインポケモンアイコンを切り出して64x64にリサイズ"""
-    img_path = rank_dir / "_c_move_00.png"
-    if not img_path.exists():
-        img_path = rank_dir / "move_00.png"
+    """アイコン画像からメインポケモンアイコンを切り出して64x64にリサイズ"""
+    for fname in ["_c_move_00.png", "move_00.png", "_c_ability_00.png", "ability_00.png"]:
+        img_path = rank_dir / fname
+        if img_path.exists():
+            break
+    else:
+        img_path = rank_dir / "_c_move_00.png"
     img = cv2.imread(str(img_path))
     if img is None:
         return None
