@@ -21,7 +21,7 @@ function partyUsedNames(party: Party): Set<string> {
   return s;
 }
 
-const API_TIMEOUT_MS = 15000;
+const API_TIMEOUT_MS = 30000;
 
 /** PartySuggestApp.astro と同じ判定式(本番ドメインはCloud Run、それ以外はローカルAPI)。 */
 function apiBase(): string {
