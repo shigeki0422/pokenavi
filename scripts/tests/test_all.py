@@ -3755,6 +3755,66 @@ check("瀕死交代: 反撃不可ならタイプ有利な控え",
       f"choice={_side17.party[_bfs17(_side17, _opp17)].name}")
 
 
+# 18. encode_state ダメージメモ（features._DMG_MEMO）のビット一致ガード
+#   MCTS葉展開で3回 encode する間 calc_damage を共有する最適化。calc_damage は純粋関数でなく
+#   じゅうでん/エレクトロモーフ消費・半減きのみ消費・きまぐレーザーの乱数という副作用を持つため、
+#   memo は「副作用が起きうる組」を除外して初めてビット一致になる。この不変条件を固定する
+#   （将来 calc_damage に新たな副作用が加わり guard が漏れたら、ここが赤くなって気づける）。
+print("\n=== 18. encode_stateメモのビット一致 ===")
+from simulator import features as _feat18
+from simulator.features import encode_state as _enc18, dmg_memo_begin as _mb18, dmg_memo_end as _me18
+
+def _mk_side18(att_item=None, att_ab="しんりょく", att_charged=False, att_em=False,
+               def_item=None, att_moves=("10まんボルト", "たいあたり")):
+    a = make_poke(name="A18", type1="でんき", atk_b=120, spatk_b=130, spd_b=120,
+                  moves=list(att_moves), item=att_item, ability=att_ab)
+    a.charged = att_charged
+    if att_em:
+        a._electromorphosis_charged = True
+    d = make_poke(name="D18", type1="みず", type2="ひこう", def_b=90, spdef_b=90, spd_b=80,
+                  moves=["たいあたり"], item=def_item)
+    b = make_poke(name="B18", type1="くさ", spd_b=60, moves=["たいあたり"])
+    s1 = BattleSide([a, b]); s2 = BattleSide([d, make_poke(name="E18", moves=["たいあたり"])])
+    s1.field_idx = 0; s2.field_idx = 1
+    return s1, s2
+
+def _enc3_nomemo(s1, s2, f):
+    random.seed(18)   # きまぐレーザー等の乱数を memo有無で同一列に固定して比較する
+    return (list(_enc18(s1, s2, f)), list(_enc18(s2, s1, f)), list(_enc18(s1, s2, f)))
+
+def _enc3_memo(s1, s2, f):
+    random.seed(18)
+    _mb18()
+    try:
+        return (list(_enc18(s1, s2, f)), list(_enc18(s2, s1, f)), list(_enc18(s1, s2, f)))
+    finally:
+        _me18()
+
+def _state_sig18(s1, s2):
+    def ps(p):
+        return (p.item, getattr(p, "charged", False), getattr(p, "_electromorphosis_charged", False))
+    return tuple(ps(p) for p in s1.party) + tuple(ps(p) for p in s2.party)
+
+_CASES18 = [
+    ("通常", dict()),
+    ("じゅうでん(att)", dict(att_charged=True)),
+    ("エレクトロモーフ(att)", dict(att_em=True)),
+    ("半減きのみ(def=シュカのみ)", dict(def_item="シュカのみ")),
+    ("きまぐレーザー(att)", dict(att_moves=("きまぐレーザー", "たいあたり"))),
+]
+for _label, _kw in _CASES18:
+    s1, s2 = _mk_side18(**_kw); f18 = BattleField()
+    _no = _enc3_nomemo(*_mk_side18(**_kw), BattleField())   # 副作用検証用に別インスタンス
+    s1b, s2b = _mk_side18(**_kw)
+    _ye = _enc3_memo(s1b, s2b, BattleField())
+    check(f"memo特徴一致: {_label}", _no == _ye)
+    # memo有無で（消費フラグ・きのみ等）状態遷移も一致すること
+    s1c, s2c = _mk_side18(**_kw); _enc3_nomemo(s1c, s2c, BattleField())
+    sig_no = _state_sig18(s1c, s2c); sig_ye = _state_sig18(s1b, s2b)
+    check(f"memo状態遷移一致: {_label}", sig_no == sig_ye, f"{sig_no} vs {sig_ye}")
+check("memoは既定で無効(None)", _feat18._DMG_MEMO is None)
+
+
 # ════════════════════════════════════════════════════════════════
 # 集計
 # ════════════════════════════════════════════════════════════════

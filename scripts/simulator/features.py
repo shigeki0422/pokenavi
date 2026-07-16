@@ -168,12 +168,66 @@ def _switch_block(my_o, my_active, opp_active, field, my_side, opp_side) -> List
     return out
 
 
+# リーフ展開スコープの計算メモ（MCTSの1葉展開で encode_state を3回呼ぶ間、同一(att,deff,def_side)の
+# calc_damage / _real_speed を共有してビット一致のまま重複計算を排除する）。
+# None=無効（解析/テスト/学習の既定）。SearchAI が展開の直前に dmg_memo_begin()、直後に dmg_memo_end() で囲む。
+# ポケモンオブジェクトはターン間で変異し MCTS木のノード間でid再利用されるため、展開ごとに必ずクリアする。
+_DMG_MEMO = None
+
+
+def dmg_memo_begin():
+    """リーフ展開スコープのメモを有効化（新しい空dictにクリア）。"""
+    global _DMG_MEMO
+    _DMG_MEMO = {}
+
+
+def dmg_memo_end():
+    """メモを無効化（次の展開まで持ち越さない＝スタールヒット防止）。"""
+    global _DMG_MEMO
+    _DMG_MEMO = None
+
+
+def _att_memo_safe(att, memo) -> bool:
+    """att→任意deff の calc_damage に副作用（じゅうでん/エレクトロモーフ消費・きまぐレーザーの
+    乱数消費）が無いか。消費フラグは変化するため毎回live判定、きまぐレーザー有無はattごとにキャッシュ。
+    ※calc_damage の attacker 変異は charged/_electromorphosis_charged のみ（damage.py全走査で確認）。"""
+    if getattr(att, "charged", False):   # でんき技で消費されうる（副作用あり）
+        return False
+    if getattr(att, "_electromorphosis_charged", False):   # エレクトロモーフ帯電も消費される
+        return False
+    uk = ("kmg", id(att))
+    c = memo.get(uk)
+    if c is None:
+        c = not any(m is not None and m.name_jp == "きまぐレーザー" for m in att.moves)
+        memo[uk] = c
+    return c
+
+
 def _expected_frac(att, deff, field, def_side=None, multi_hit=False) -> float:
     """att→deff の最大与ダメージをHP割合で。相手側 def_side の画面で半減を反映。
     multi_hit=True で連続技(トリプルアクセル/タネマシンガン等)を合計ヒット分で見積もる
     （encode_stateの特徴量は既定False＝学習時と同じ初撃のみ＝ネット不変。解析/表示はTrue）。"""
     if att is None or deff is None or not att.is_alive or not deff.is_alive:
         return 0.0
+    # calc_damage は純粋関数ではない（じゅうでん消費/半減きのみ消費/きまぐレーザーの乱数）。
+    # 副作用が起きうる組では memo せず毎回実行し、ビット一致のまま副作用列を保つ。
+    # 消費されうるのは deff の半減きのみ(消費で item=None)＝「〜のみ」所持時のみ除外。
+    memo = _DMG_MEMO
+    use = (memo is not None and not multi_hit
+           and not (deff.item is not None and deff.item.endswith("のみ"))
+           and _att_memo_safe(att, memo))
+    if use:
+        mk = (id(att), id(deff), id(def_side))
+        cached = memo.get(mk)
+        if cached is not None:
+            return cached
+    _v = _expected_frac_calc(att, deff, field, def_side, multi_hit)
+    if use:
+        memo[mk] = _v
+    return _v
+
+
+def _expected_frac_calc(att, deff, field, def_side, multi_hit) -> float:
     if multi_hit:
         from .battle import MULTI_HIT_2, MULTI_HIT_3, MULTI_HIT_RANDOM_25
     best = 0.0
@@ -237,6 +291,19 @@ def _real_speed(p, side, field) -> float:
     """実効速度: 実数値+ランク+麻痺 に スカーフ/おいかぜ/天候加速 を反映。"""
     if p is None or not p.is_alive:
         return -1.0
+    memo = _DMG_MEMO
+    if memo is not None:
+        sk = ("spd", id(p), id(side))
+        c = memo.get(sk)
+        if c is not None:
+            return c
+        v = _real_speed_calc(p, side, field)
+        memo[sk] = v
+        return v
+    return _real_speed_calc(p, side, field)
+
+
+def _real_speed_calc(p, side, field) -> float:
     spd = p.get_effective_speed()
     if p.ability != "ぶきよう":
         spd = spd * get_speed_item_multiplier(p.item)

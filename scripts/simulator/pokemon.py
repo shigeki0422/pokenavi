@@ -137,15 +137,36 @@ class BattlePokemon:
     charged: bool = False            # じゅうでん（次の電気技×2）
     crit_stage: int = 0              # きあいだめ等による急所ランク加算
 
+    # 中身が「不変またはself-share要素のみ」で、要素をその場で書き換えず必ず
+    # コンテナごと再代入して更新するフィールド → 浅いコピー(list/dict/set constructor)で
+    # deepcopyと同一結果を得つつ汎用ディスパッチのオーバーヘッドを省く。
+    #   moves     : List[Optional[MoveData]]。MoveData.__deepcopy__はself返し(不変定義を共有)で、
+    #               poke.moves[i].<attr>を破壊的に書き換える箇所は無い（== 比較のみ）。
+    #   pp        : List[int]。pp[i]=... と要素を書き換えるが、intは不変なので浅いコピーで独立。
+    #   evs       : dict(str->int)。要素書き換え無し（丸ごと再代入のみ）、値はint。
+    #   used_moves: set(str)。.add()で更新するが浅いコピーで集合本体が独立、要素はstr。
+    # ⚠️ 新たにlist/dict/set型フィールドをBattlePokemonに足す時は、その中身が上記条件
+    #    （不変/self-share要素のみ・ネストした可変コンテナを持たない）を満たすか必ず再確認し、
+    #    満たすならこの集合へ追加、満たさないならデフォルト(copy.deepcopy)のままにすること。
+    #    例: 動的属性 _transform_backup は dict の中に moves/pp のネストlistを持ち、
+    #    復元後にpp[i]が破壊的更新されるため浅いコピー不可 → deepcopy経路に残す。
+    _SHALLOW_COPY_FIELDS = frozenset(("moves", "pp", "evs", "used_moves"))
+
     def __deepcopy__(self, memo):
-        """高速クローン: 可変コンテナ(list/dict/set)だけ複製し、不変(スカラ/文字列/
-        MoveData/MegaData)は共有。スカラは再代入で更新されるためクローン間で独立。
-        汎用なので可変フィールドの列挙漏れによる共有バグが起きない。"""
+        """高速クローン: 不変(スカラ/文字列/MoveData/MegaData)は共有し、可変コンテナは複製。
+        中身が不変/self-share要素のみのフィールド(_SHALLOW_COPY_FIELDS)は浅いコピーで済ませ、
+        それ以外の list/dict/set(ネストした可変を持ちうる動的属性等)は従来通り deepcopy する。
+        汎用フォールバックを残すので列挙漏れによる共有バグは起きない。"""
         new = self.__class__.__new__(self.__class__)
         memo[id(self)] = new
         nd = new.__dict__
+        shallow = self._SHALLOW_COPY_FIELDS
         for k, v in self.__dict__.items():
-            nd[k] = copy.deepcopy(v, memo) if type(v) in (list, dict, set) else v
+            t = type(v)
+            if t in (list, dict, set):
+                nd[k] = t(v) if k in shallow else copy.deepcopy(v, memo)
+            else:
+                nd[k] = v
         return new
 
     def get_effective_stat(self, stat_name: str) -> int:

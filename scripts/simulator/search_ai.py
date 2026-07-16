@@ -18,12 +18,50 @@ import random
 from typing import List, Optional
 
 from .battle import Action, Battle, BattleSide, BattleField, is_trapped
+from .features import dmg_memo_begin as _dmg_memo_begin, dmg_memo_end as _dmg_memo_end
 from .data import DataLoader, NATURE_MODS, get_type_effectiveness
 from .pokemon import calc_hp, calc_stat, build_from_template
 from .belief import OpponentBelief
 from .ai import (HeuristicAI, _forced_charging_action, _filter_valid_by_lock,
                  _filter_by_pp, _get_struggle, should_mega_evolve,
                  _hazard_value, HAZARD_MOVES)
+
+
+_SCALAR_T = (int, float, bool, str, bytes)
+
+
+def _fast_clone_field(field):
+    """BattleField を手書きクローン（generic _reconstruct/_deepcopy_dict を回避）。
+    属性はスカラ＋不変要素のlist(stealth_rock/spikes/toxic_spikes/sticky_web)のみ＝
+    スカラは直代入・listは浅いコピーで独立化する。"""
+    nf = BattleField.__new__(BattleField)
+    nd = nf.__dict__
+    for k, v in field.__dict__.items():
+        nd[k] = list(v) if type(v) is list else v
+    return nf
+
+
+def _fast_clone_side(side, memo):
+    """BattleSide を手書きクローン。スカラ/文字列/Noneは直代入、
+    それ以外(party/source6/fainted/opp_view等)は共有memo付きdeepcopyで元と完全同一の
+    参照共有(active・source6=party 等)を保つ。BattleSide自身の generic reconstruct を省く。"""
+    ns = BattleSide.__new__(BattleSide)
+    memo[id(side)] = ns
+    nd = ns.__dict__
+    for k, v in side.__dict__.items():
+        if v is None or type(v) in _SCALAR_T:
+            nd[k] = v
+        else:
+            nd[k] = copy.deepcopy(v, memo)
+    return ns
+
+
+def _fast_clone_state(s1, s2, field):
+    """(s1, s2, field) を単一の共有memoでクローン（元の deepcopy((s1,s2,field)) と同一意味）。"""
+    memo = {}
+    cs1 = _fast_clone_side(s1, memo)
+    cs2 = _fast_clone_side(s2, memo)
+    return cs1, cs2, _fast_clone_field(field)
 
 
 class _ForcedFirst:
@@ -549,7 +587,7 @@ class SearchAI:
         b1, b2 = getattr(s1, "belief", None), getattr(s2, "belief", None)
         s1.belief = None; s2.belief = None
         try:
-            cs1, cs2, cf = copy.deepcopy((s1, s2, field))
+            cs1, cs2, cf = _fast_clone_state(s1, s2, field)
         finally:
             s1.belief = b1; s2.belief = b2
         return cs1, cs2, cf
@@ -836,12 +874,18 @@ class SearchAI:
             return r
         me_s = cs1 if my_is_s1 else cs2
         op_s = cs2 if my_is_s1 else cs1
-        pol_me, _ = ev(me_s, op_s)
-        pol_op, _ = ev(op_s, me_s)
-        node["P"][0] = pol_me or {}
-        node["P"][1] = pol_op or {}
-        node["expanded"] = True
-        _, v1 = ev(cs1, cs2)   # side1視点の価値（どちらの視点でも上の2呼びのいずれかとメモ共有）
+        # この葉展開の3回encode間だけ calc_damage/_real_speed を共有（cfield固定・ポケモン不変）。
+        # 展開ごとにクリアし、木のノード間でid再利用されても跨いだヒットが起きないようにする。
+        _dmg_memo_begin()
+        try:
+            pol_me, _ = ev(me_s, op_s)
+            pol_op, _ = ev(op_s, me_s)
+            node["P"][0] = pol_me or {}
+            node["P"][1] = pol_op or {}
+            node["expanded"] = True
+            _, v1 = ev(cs1, cs2)   # side1視点の価値（どちらの視点でも上の2呼びのいずれかとメモ共有）
+        finally:
+            _dmg_memo_end()
         return v1 if my_is_s1 else (1.0 - v1)
 
     def _mcts_simulate(self, root, cs1, cs2, cfield, my_is_s1):
