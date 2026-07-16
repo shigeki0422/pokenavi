@@ -291,16 +291,25 @@
   table.mtx td[data-mtx-pop]{cursor:pointer}
   button.pb-mb-chip{border:none;font-family:inherit;font-size:.68rem;font-weight:700;color:inherit;text-align:left;cursor:pointer}
 
-  /* (1) モバイル固定判定ミニバー */
+  /* (1) モバイル固定判定ミニバー(タップでボトムシートに展開) */
   .pb-minibar{position:fixed;left:0;right:0;bottom:0;z-index:600;display:none;background:#fff;border-top:1px solid rgb(var(--gray-light));box-shadow:0 -2px 12px rgba(0,0,0,.1)}
-  @media (max-width:1023.98px){.pb-minibar.pb-minibar-show{display:block}}
-  body.pb-minibar-active main{padding-bottom:64px}
-  .pb-minibar-inner{display:flex;align-items:center;gap:.3em;max-width:1040px;margin:0 auto;padding:.35em .5em}
+  @media (max-width:1023.98px){
+    .pb-minibar.pb-minibar-show{display:block}
+    .pb-minibar.pb-minibar-show.pb-sheet-expanded{display:flex;flex-direction:column;height:45vh;max-height:50vh}
+    body.pb-minibar-active main{padding-bottom:64px}
+    body.pb-sheet-open main{padding-bottom:calc(45vh + 12px)}
+  }
+  .pb-minibar-inner{display:flex;align-items:center;gap:.3em;max-width:1040px;margin:0 auto;padding:.35em .5em;cursor:pointer}
   .pb-minibar-scroll{display:flex;gap:.35em;overflow-x:auto;flex:1;min-width:0}
-  .pb-minibar-item{display:flex;align-items:center;gap:.25em;flex-shrink:0;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:0 .55em;font-size:.72rem;font-weight:700;color:rgb(var(--gray-dark));font-family:var(--font-atkinson);white-space:nowrap;min-height:40px;box-sizing:border-box;cursor:pointer}
+  .pb-minibar-item{display:flex;align-items:center;gap:.25em;flex-shrink:0;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:0 .55em;font-size:.72rem;font-weight:700;color:rgb(var(--gray-dark));font-family:var(--font-atkinson);white-space:nowrap;min-height:40px;box-sizing:border-box}
   .pb-minibar-ico{width:20px;height:20px;object-fit:contain}
+  .pb-minibar-caret{flex-shrink:0;font-size:.7rem;font-weight:800;color:var(--accent);padding:0 .4em;white-space:nowrap}
   .pb-minibar-x{flex-shrink:0;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:rgb(var(--gray));font-size:1rem;cursor:pointer}
   .pb-minibar-x:hover{color:#dc2626}
+  /* ボトムシート展開時のヘッダ/本文(型カードは仮想敵パネルの描画をそのまま再利用) */
+  .pb-minibar-head{display:flex;align-items:center;justify-content:space-between;gap:.6em;min-height:44px;padding:.4em .7em;border-bottom:1px solid rgb(var(--gray-light));flex-shrink:0;max-width:1040px;margin:0 auto;width:100%;box-sizing:border-box}
+  .pb-minibar-title{display:flex;align-items:center;gap:.35em;font-weight:800;font-size:.85rem;min-width:0}
+  .pb-sheet-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.6em .8em 1em;max-width:1040px;margin:0 auto;box-sizing:border-box}
 
   /* (7) 仮想敵タブの最悪判定バッジ */
   .pb-mu-badge{display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;padding:0 3px;border-radius:999px;font-size:.62rem;font-weight:900;margin-left:2px;line-height:1}
@@ -311,7 +320,10 @@
   .pb-undo-toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:650;display:flex;align-items:center;gap:.8em;max-width:calc(100% - 2em);background:#1e293b;color:#fff;border-radius:10px;padding:.6em 1em;font-size:.82rem;box-shadow:0 4px 16px rgba(0,0,0,.25)}
   .pb-undo-toast-btn{background:none;border:none;color:#93c5fd;font-weight:800;cursor:pointer;font-family:inherit;font-size:.82rem;padding:0;flex-shrink:0;white-space:nowrap}
   .pb-undo-toast-btn:hover{color:#bfdbfe}
-  body.pb-minibar-active .pb-undo-toast{bottom:76px}
+  @media (max-width:1023.98px){
+    body.pb-minibar-active .pb-undo-toast{bottom:76px}
+    body.pb-sheet-open .pb-undo-toast{bottom:calc(45vh + 16px)}
+  }
 
   /* (11) 空パーティ時の初見ガイド */
   .pb-empty-guide{background:#f8fafc;border:1px dashed rgb(var(--gray-light));border-radius:10px;padding:.7em .9em;margin:.6em 0;display:flex;flex-direction:column;gap:.3em}
@@ -411,11 +423,16 @@
   let dragSrcIdx = null;
   let activeMuTab = null; // 仮想敵パネル: ポケモン単位タブの選択状態(描画状態のみ・保存不要)
   let miniBarDismissed = false; // (1) モバイル判定ミニバーを✕で閉じた状態(このページセッション中は再表示しない)
+  let sheetExpanded = false; // ミニバーのボトムシート展開状態(セッション中のみ保持・保存不要)。renderMiniBar()のみが読み書きする。
   let mtxPopData = []; // (5) ポケモン相性マトリクスのセル用ポップオーバー内容(renderのたびに作り直す)
   let mbPopData = []; // (5) 仮想敵カードの技チップ用ポップオーバー内容(renderTargetsPanelのたびに作り直す)
   let renamingParty = false; // (12b) パーティ名インライン編集中フラグ(renderPartyBarのみが参照)
   let pendingUndo = null; // (9) 枠✕のUndoトースト。{ partyId, index, slotData, timer } または null(最後の1件のみ保持)
   const mqMobileTray = window.matchMedia('(max-width:639.98px)'); // (4) トレイが3列グリッドになる幅の判定(空き枠検索の吹き出し矢印位置に使用)
+  const mqDesktopSplit = window.matchMedia('(min-width:1024px)'); // 2カラム幅に切り替わったらボトムシートを強制的に閉じる(padding-bottom残留防止)
+  mqDesktopSplit.addEventListener('change', (e) => {
+    if (e.matches && sheetExpanded) { sheetExpanded = false; renderTargetsPanel(); }
+  });
   /** 仮想敵の型 編集状態。{ label, bi: number|'new', draft: TargetBuild, detail: MonDetail|null, loading } または null。
    * bi は effectiveTargets() 上の当該ラベルのbuilds配列インデックス('new'=追加中で未保存)。 */
   let muEdit = null;
@@ -565,36 +582,64 @@
     renderBalance();
   }
 
-  // ---- (1) モバイル固定判定ミニバー ----
-  /** 選択中枠が仮想敵ありのとき、現在の仮想敵タブの型ごとの判定を画面下部に超コンパクト表示する。
-   * grp/rowsはrenderTargetsPanel()が算出済みのものをそのまま渡す(二重計算しない)。 */
-  function renderMiniBar(grp, rows) {
+  // ---- (1) モバイル固定判定ミニバー / ボトムシート ----
+  /** 選択中枠が仮想敵ありのとき、画面下部に固定表示する。collapsed(既定)は型ごとの判定を超コンパクト表示。
+   * タップ(✕以外のどこでも)でボトムシート(高さ約45vh・上限50vh)に展開し、仮想敵パネル(renderTargetsPanel)
+   * の型カード(chips/cardsBlockHtml/addResetRow)とそのイベント紐付け(bindMuSection)をsheetCtx経由で
+   * そのまま再利用する(二重実装を避けるため、シート専用のHTML生成/イベント処理は持たない)。
+   * grp/rows/sheetCtxはrenderTargetsPanel()が算出済みのものをそのまま渡す(二重計算しない)。 */
+  function renderMiniBar(grp, rows, sheetCtx) {
     const el = document.getElementById('pb-minibar');
     if (!el) return;
     if (miniBarDismissed || !grp || !rows || !rows.length) {
-      el.classList.remove('pb-minibar-show');
+      el.classList.remove('pb-minibar-show', 'pb-sheet-expanded');
       el.innerHTML = '';
-      document.body.classList.remove('pb-minibar-active');
+      document.body.classList.remove('pb-minibar-active', 'pb-sheet-open');
+      sheetExpanded = false;
       return;
     }
-    const items = rows.slice(0, 3).map((r) => `<button type="button" class="pb-minibar-item">${icoImg(grp.icon, grp.label, 'pb-minibar-ico')}<span>S${r.mySpeed}vs${r.oppSpeed} ${r.verdict.sym}${r.myHitsTxt}/${r.oppHitsTxt}</span></button>`).join('');
-    el.innerHTML = `<div class="pb-minibar-inner">
-        <div class="pb-minibar-scroll">${items}</div>
-        <button type="button" class="pb-minibar-x" id="pb-minibar-x" aria-label="閉じる">✕</button>
-      </div>`;
     el.classList.add('pb-minibar-show');
+    el.classList.toggle('pb-sheet-expanded', sheetExpanded);
     document.body.classList.add('pb-minibar-active');
-    const scrollDiv = el.querySelector('.pb-minibar-scroll');
-    if (scrollDiv) scrollDiv.addEventListener('click', scrollToTargetsPanel);
-    document.getElementById('pb-minibar-x').addEventListener('click', (e) => {
-      e.stopPropagation();
-      miniBarDismissed = true;
-      renderMiniBar(null, null);
-    });
-  }
-  function scrollToTargetsPanel() {
-    const el = document.getElementById('pb-targets');
-    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.body.classList.toggle('pb-sheet-open', sheetExpanded);
+
+    const collapse = () => { sheetExpanded = false; renderMiniBar(grp, rows, sheetCtx); };
+    const expand = () => { sheetExpanded = true; renderMiniBar(grp, rows, sheetCtx); };
+
+    if (!sheetExpanded) {
+      const items = rows.slice(0, 3).map((r) => `<button type="button" class="pb-minibar-item">${icoImg(grp.icon, grp.label, 'pb-minibar-ico')}<span>S${r.mySpeed}vs${r.oppSpeed} ${r.verdict.sym}${r.myHitsTxt}/${r.oppHitsTxt}</span></button>`).join('');
+      el.innerHTML = `<div class="pb-minibar-inner" id="pb-minibar-tap" role="button" tabindex="0" aria-expanded="false" aria-label="仮想敵の詳細を展開">
+          <div class="pb-minibar-scroll">${items}</div>
+          <span class="pb-minibar-caret">▲詳細</span>
+          <button type="button" class="pb-minibar-x" id="pb-minibar-x" aria-label="閉じる">✕</button>
+        </div>`;
+      const tapEl = document.getElementById('pb-minibar-tap');
+      tapEl.addEventListener('click', (e) => { if (e.target.closest('#pb-minibar-x')) return; expand(); });
+      tapEl.addEventListener('keydown', (e) => {
+        if (e.target.closest('#pb-minibar-x')) return;
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); expand(); }
+      });
+      document.getElementById('pb-minibar-x').addEventListener('click', (e) => {
+        e.stopPropagation();
+        miniBarDismissed = true;
+        renderMiniBar(null, null);
+      });
+      return;
+    }
+
+    el.innerHTML = `
+      <div class="pb-minibar-head">
+        <span class="pb-minibar-title">${icoImg(grp.icon, grp.label, 'pb-minibar-ico')}${esc(grp.label)}</span>
+        <button type="button" class="pb-btn-sub" id="pb-sheet-collapse" aria-expanded="true">▼閉じる</button>
+      </div>
+      <div class="pb-sheet-body" id="pb-sheet-body">
+        <div class="filter-chips">${sheetCtx.chips}</div>
+        ${sheetCtx.cardsBlockHtml}
+        ${sheetCtx.addResetRow}
+      </div>`;
+    document.getElementById('pb-sheet-collapse').addEventListener('click', collapse);
+    const sheetBodyEl = document.getElementById('pb-sheet-body');
+    if (sheetBodyEl) sheetCtx.bindMuSection(sheetBodyEl);
   }
 
   /** (11) 0体(空パーティ)のときだけ6枠トレイ直下に3ステップの初見ガイドを表示する。1体追加で消える。 */
@@ -1502,6 +1547,10 @@
           ${isCustomized ? `<button class="pb-btn-sub" id="pb-mu-reset-default">デフォルトに戻す</button>` : ''}
         </div>`
       : '';
+    // モバイルのボトムシート(renderMiniBar)にもそのまま渡す共通ブロック(型カード一覧+空メッセージ)。
+    const cardsBlockHtml = rows.length || editingThis
+      ? `<div class="pb-mu-list">${cardsHtml}</div>`
+      : slot.targets.length ? '' : '<div class="muted" style="margin-top:.6em">仮想敵を追加してください</div>';
 
     el.innerHTML = `
       <h2>仮想敵</h2>
@@ -1510,7 +1559,7 @@
         <input type="text" id="pb-target-search" class="filter-inp" placeholder="仮想敵を検索して追加（ひらがな可）" autocomplete="off">
         <div class="filter-sug" id="pb-target-sug" style="display:none"></div>
       </div>
-      ${rows.length || editingThis ? `<div class="pb-mu-list">${cardsHtml}</div>` : slot.targets.length ? '' : '<div class="muted" style="margin-top:.6em">仮想敵を追加してください</div>'}
+      ${cardsBlockHtml}
       ${addResetRow}
       <div class="row" style="margin-top:.7em">
         <button class="pb-btn-sub" id="pb-tune-btn" ${slot.targets.length ? '' : 'disabled'}>EV逆算(素早さ・火力・耐久)</button>
@@ -1518,30 +1567,83 @@
       <div id="pb-tune-out"></div>
     `;
 
-    renderMiniBar(activeGrp, rows);
-    el.querySelectorAll('[data-mb-pop]').forEach((btn) => btn.addEventListener('click', () => {
-      const d = mbPopData[+btn.dataset.mbPop];
-      if (!d) return;
-      openInfoPopover(d.name, `<div class="mvwrap" style="margin-bottom:.6em">${typeIcoForMove(d.name)}<span class="mvchip">${esc(d.name)}</span></div><div>確定数: ${esc(d.hitsTxt)}</div><div>与ダメ: ${esc(d.dmgTxt)}</div>`);
-    }));
+    /** chips/cardsBlockHtml/addResetRow(=型カード・タブ・編集フォーム一式)のイベント紐付け。
+     * 仮想敵パネル本体(el)とモバイルのボトムシート(#pb-sheet-body)の両方から同じ内容で呼ばれるため、
+     * ここを共通化することでシート側の二重実装(別のクリックハンドラ群)を避ける。rootはid付き要素を
+     * root.querySelector(...)で探すため、同じidを持つ2つのDOM(パネル/シート)が同時に存在していても
+     * 互いのイベントを誤って拾わない。 */
+    function bindMuSection(root) {
+      root.querySelectorAll('[data-mb-pop]').forEach((btn) => btn.addEventListener('click', () => {
+        const d = mbPopData[+btn.dataset.mbPop];
+        if (!d) return;
+        openInfoPopover(d.name, `<div class="mvwrap" style="margin-bottom:.6em">${typeIcoForMove(d.name)}<span class="mvchip">${esc(d.name)}</span></div><div>確定数: ${esc(d.hitsTxt)}</div><div>与ダメ: ${esc(d.dmgTxt)}</div>`);
+      }));
 
-    el.querySelectorAll('[data-mu-tab]').forEach((chip) => chip.addEventListener('click', (e) => {
-      if (e.target.closest('[data-rm-target]')) return;
-      activeMuTab = chip.dataset.muTab;
-      muEdit = null;
-      renderTargetsPanel();
-    }));
-    el.querySelectorAll('[data-rm-target]').forEach((btn) => btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      const removed = btn.dataset.rmTarget;
-      slot.targets = slot.targets.filter((l) => l !== removed);
-      p.updatedAt = Date.now();
-      saveStore(store);
-      tuneResults = null;
-      if (activeMuTab === removed) activeMuTab = null;
-      if (muEdit && muEdit.label === removed) muEdit = null;
-      renderTargetsPanel();
-    }));
+      root.querySelectorAll('[data-mu-tab]').forEach((chip) => chip.addEventListener('click', (e) => {
+        if (e.target.closest('[data-rm-target]')) return;
+        activeMuTab = chip.dataset.muTab;
+        muEdit = null;
+        renderTargetsPanel();
+      }));
+      root.querySelectorAll('[data-rm-target]').forEach((btn) => btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const removed = btn.dataset.rmTarget;
+        slot.targets = slot.targets.filter((l) => l !== removed);
+        p.updatedAt = Date.now();
+        saveStore(store);
+        tuneResults = null;
+        if (activeMuTab === removed) activeMuTab = null;
+        if (muEdit && muEdit.label === removed) muEdit = null;
+        renderTargetsPanel();
+      }));
+
+      // 型の編集/追加/削除/デフォルトに戻す
+      root.querySelectorAll('[data-mu-edit]').forEach((btn) => btn.addEventListener('click', () => startMuEdit(activeGrp.label, +btn.dataset.muEdit)));
+      root.querySelectorAll('[data-mu-del]').forEach((btn) => btn.addEventListener('click', () => {
+        if (btn.disabled) return;
+        deleteMuBuild(activeGrp.label, +btn.dataset.muDel);
+      }));
+      const addBtn = root.querySelector('#pb-mu-add-build');
+      if (addBtn) addBtn.addEventListener('click', () => startMuEdit(activeGrp.label, 'new'));
+      const resetBtn = root.querySelector('#pb-mu-reset-default');
+      if (resetBtn) resetBtn.addEventListener('click', () => resetMuDefault(activeGrp.label));
+
+      if (editingThis && !muEdit.loading && muEdit.detail) {
+        const itemSel = root.querySelector('#pb-mu-e-item');
+        if (itemSel) itemSel.addEventListener('change', (e) => { muEdit.draft.item = e.target.value; });
+        const abilSel = root.querySelector('#pb-mu-e-ability');
+        if (abilSel) abilSel.addEventListener('change', (e) => { muEdit.draft.ability = e.target.value; });
+        const natSel = root.querySelector('#pb-mu-e-nature');
+        if (natSel) natSel.addEventListener('change', (e) => { muEdit.draft.nature = e.target.value; });
+        root.querySelectorAll('[data-mu-ev-i]').forEach((inp) => {
+          inp.addEventListener('input', (e) => {
+            const si = +e.target.dataset.muEvI;
+            let v = Math.round(Number(e.target.value));
+            if (Number.isNaN(v)) v = 0;
+            v = Math.max(0, Math.min(EV_STAT_MAX, v));
+            muEdit.draft.ev[si] = v;
+            const remainEl = root.querySelector('#pb-mu-ev-remain');
+            if (remainEl) remainEl.innerHTML = evRemainText(muEdit.draft.ev);
+          });
+          inp.addEventListener('focus', (e) => e.target.select()); // (12a) フォーカスで全選択
+        });
+        root.querySelectorAll('[data-mu-mv-i]').forEach((sel) => {
+          const mi = +sel.dataset.muMvI;
+          sel.addEventListener('change', (e) => {
+            muEdit.draft.moves[mi] = e.target.value;
+            const wrap = root.querySelector(`[data-mu-mv-wrap="${mi}"]`);
+            if (wrap) { const ico = wrap.querySelector('.pb-mv-ico'); if (ico) ico.innerHTML = typeIcoForMove(e.target.value); }
+          });
+        });
+        const saveBtn = root.querySelector('#pb-mu-save');
+        if (saveBtn) saveBtn.addEventListener('click', saveMuEdit);
+        const cancelBtn = root.querySelector('#pb-mu-cancel');
+        if (cancelBtn) cancelBtn.addEventListener('click', cancelMuEdit);
+      }
+    }
+
+    bindMuSection(el);
+    renderMiniBar(activeGrp, rows, { chips, cardsBlockHtml, addResetRow, bindMuSection });
 
     const searchInput = el.querySelector('#pb-target-search');
     searchInput.addEventListener('input', (e) => onTargetSearchInput(e.target.value));
@@ -1549,50 +1651,6 @@
 
     el.querySelector('#pb-tune-btn').addEventListener('click', onTuneClick);
     if (tuneResults) renderTuneOut();
-
-    // 型の編集/追加/削除/デフォルトに戻す
-    el.querySelectorAll('[data-mu-edit]').forEach((btn) => btn.addEventListener('click', () => startMuEdit(activeGrp.label, +btn.dataset.muEdit)));
-    el.querySelectorAll('[data-mu-del]').forEach((btn) => btn.addEventListener('click', () => {
-      if (btn.disabled) return;
-      deleteMuBuild(activeGrp.label, +btn.dataset.muDel);
-    }));
-    const addBtn = el.querySelector('#pb-mu-add-build');
-    if (addBtn) addBtn.addEventListener('click', () => startMuEdit(activeGrp.label, 'new'));
-    const resetBtn = el.querySelector('#pb-mu-reset-default');
-    if (resetBtn) resetBtn.addEventListener('click', () => resetMuDefault(activeGrp.label));
-
-    if (editingThis && !muEdit.loading && muEdit.detail) {
-      const itemSel = el.querySelector('#pb-mu-e-item');
-      if (itemSel) itemSel.addEventListener('change', (e) => { muEdit.draft.item = e.target.value; });
-      const abilSel = el.querySelector('#pb-mu-e-ability');
-      if (abilSel) abilSel.addEventListener('change', (e) => { muEdit.draft.ability = e.target.value; });
-      const natSel = el.querySelector('#pb-mu-e-nature');
-      if (natSel) natSel.addEventListener('change', (e) => { muEdit.draft.nature = e.target.value; });
-      el.querySelectorAll('[data-mu-ev-i]').forEach((inp) => {
-        inp.addEventListener('input', (e) => {
-          const si = +e.target.dataset.muEvI;
-          let v = Math.round(Number(e.target.value));
-          if (Number.isNaN(v)) v = 0;
-          v = Math.max(0, Math.min(EV_STAT_MAX, v));
-          muEdit.draft.ev[si] = v;
-          const remainEl = el.querySelector('#pb-mu-ev-remain');
-          if (remainEl) remainEl.innerHTML = evRemainText(muEdit.draft.ev);
-        });
-        inp.addEventListener('focus', (e) => e.target.select()); // (12a) フォーカスで全選択
-      });
-      el.querySelectorAll('[data-mu-mv-i]').forEach((sel) => {
-        const mi = +sel.dataset.muMvI;
-        sel.addEventListener('change', (e) => {
-          muEdit.draft.moves[mi] = e.target.value;
-          const wrap = el.querySelector(`[data-mu-mv-wrap="${mi}"]`);
-          if (wrap) { const ico = wrap.querySelector('.pb-mv-ico'); if (ico) ico.innerHTML = typeIcoForMove(e.target.value); }
-        });
-      });
-      const saveBtn = el.querySelector('#pb-mu-save');
-      if (saveBtn) saveBtn.addEventListener('click', saveMuEdit);
-      const cancelBtn = el.querySelector('#pb-mu-cancel');
-      if (cancelBtn) cancelBtn.addEventListener('click', cancelMuEdit);
-    }
   }
 
   function onTargetSearchInput(val) {
