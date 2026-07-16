@@ -1,9 +1,9 @@
 ---
 title: 'ジュカイン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのジュカイン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率60位。'
+description: 'ポケモンチャンピオンズのジュカイン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率59位。'
 pokemonName: 'ジュカイン'
 dexNumber: 254
-usageRank: 60
+usageRank: 59
 pubDate: '2026-07-13'
 draft: false
 analysisSlug: 'sceptile-analysis-m3'
@@ -17,7 +17,7 @@ analysisSlug: 'sceptile-analysis-m3'
       <img src="/images/types/type-11-grass.png" alt="くさ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.254</strong>　／　使用率 <strong style="color:#dc2626">60位</strong>
+      全国図鑑 <strong>No.254</strong>　／　使用率 <strong style="color:#dc2626">59位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>
