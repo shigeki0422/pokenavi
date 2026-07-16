@@ -278,13 +278,50 @@ M-4の最大変化は**じしん（77.8%）・こおりのキバ（48.2%）の�
 
 ギャラドスは数少ない「メガ進化でタイプそのものが変わる」ポケモンです。通常時のみず/ひこうとメガ後のみず/あくで、対応できるタイプが大きく入れ替わります。
 
-| 環境上位ポケモン | 技（タイプ） | 通常時（みず/ひこう） | メガ後（みず/あく） |
-|:---|:---|:---:|:---:|
-| ガブリアス（1位） | じしん（じめん） | 無効 | 等倍 |
-| バシャーモ（10位・メガ後A233） | インファイト（かくとう） | 耐性（×0.5） | 弱点（×2） |
-| ミミッキュ（2位） | じゃれつく（フェアリー・A156） | 等倍 | 弱点（×2） |
-| メタグロス（4位・メガ後） | サイコファング（エスパー） | 等倍 | 無効 |
-| ブリジュラス（5位） | じしん（じめん） | 無効 | 等倍 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">環境上位ポケモン</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技（タイプ）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">通常時（みず/ひこう）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">メガ後（みず/あく）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ガブリアス（1位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">じしん（じめん）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">無効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">等倍</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">バシャーモ（10位・メガ後A233）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">インファイト（かくとう）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">耐性（×0.5）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ミミッキュ（2位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">じゃれつく（フェアリー・A156）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">等倍</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">メタグロス（4位・メガ後）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">サイコファング（エスパー）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">等倍</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">無効</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ブリジュラス（5位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">じしん（じめん）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">無効</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">等倍</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 じめん技を無効化できるのは通常時（メガ進化前）だけで、メガ進化した瞬間からガブリアス・ブリジュラス・カバルドン（3位）のじしんは等倍で通ります。一方でメガ後はメタグロスのサイコファング（エスパー）を無効化できるようになり、ゴースト・あく・こおりへの耐性も新たに得ます（はがね・みず・ほのおはメガ進化前から半減でした）。
 

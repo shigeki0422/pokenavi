@@ -340,14 +340,56 @@ S116と低速のため、積みエースとして先手を取る運用には向�
 
 ## データ分析①：M-3→M-4 採用率変化
 
-| 項目 | M-3 | M-4 | 方向 |
-|---|---|---|---|
-| シャドークロー | 62.6% | **68.0%** | +5.4pp |
-| トリックルーム | 12.8% | **7.0%** | -5.8pp |
-| つるぎのまい | 80.8% | **84.8%** | +4.0pp |
-| いのちのたま | 84.6% | **86.7%** | +2.1pp |
-| いじっぱり | 76.5% | **80.7%** | +4.2pp |
-| ゆうかん | 1.2% | 2.3% | 少数維持 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">項目</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">M-3</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">M-4</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">方向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">シャドークロー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">62.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>68.0%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">+5.4pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">トリックルーム</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">12.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>7.0%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">-5.8pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">つるぎのまい</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">80.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>84.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">+4.0pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">いのちのたま</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">84.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>86.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">+2.1pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">いじっぱり</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">76.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>80.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">+4.2pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ゆうかん</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">1.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">2.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">少数維持</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 トリックルームは7.0%・ゆうかんは2.3%まで落ちており、M-4でTR軸として運用されているミミッキュは少数派です。シャドークロー・つるぎのまい・いのちのたま・いじっぱりがすべて同方向に増加していることが、積みエース路線への収束を裏付けています。
 

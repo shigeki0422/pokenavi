@@ -312,13 +312,50 @@ M-4の最大変化は**マジカルシャインの+21.6pp（42.1%→63.7%）**�
 
 苦手なポケモンとして挙げたミミッキュ・ガブリアス・カバルドン・アシレーヌ・ギャラドスについて、実際の持ち物採用率とすばやさ種族値からスカーフ非採用時の最速実数値を確認しました。
 
-| ポケモン | すばやさ種族値 | こだわりスカーフ採用率 | 最速おくびょう想定S |
-|:---|:---:|:---:|:---:|
-| ミミッキュ | 96 | データ上ごく少数（上位5枠外） | 162 |
-| ガブリアス | 102 | 19.8% | 169 |
-| カバルドン | 47 | 0.6% | 108 |
-| アシレーヌ | 60 | データ上ごく少数（上位5枠外） | 123 |
-| ギャラドス | 81 | データ上ごく少数（上位5枠外） | 146 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">すばやさ種族値</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">こだわりスカーフ採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">最速おくびょう想定S</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ミミッキュ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">96</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">データ上ごく少数（上位5枠外）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">162</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ガブリアス</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">102</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">19.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">169</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">カバルドン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">47</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">0.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">108</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">アシレーヌ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">60</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">データ上ごく少数（上位5枠外）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">123</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ギャラドス</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">81</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">データ上ごく少数（上位5枠外）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">146</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ガブリアスのスカーフ採用率19.8%を除けば、いずれもスカーフ採用は少数派で、非スカーフの最速実数値はすべておくびょう型マフォクシーのS204を下回ります。つまりマフォクシーは「決定打を欠く」相手であっても、多数派の型に対しては先に動いてみがわりを張る、あるいは弱点を突かれる前に交代を選ぶ、といった主導権を握れる立場にあります。ただしガブリアスは約2割がスカーフを採用するため、この相手に限っては後手に回る可能性を常に考慮する必要があります。
 

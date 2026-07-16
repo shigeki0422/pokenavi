@@ -330,14 +330,56 @@ M-4の最大変化は**ボディプレス（+27.8%）・てっぺき（+27.1%）
 
 ボディプレス（かくとう・威力80）はこうげきではなくぼうぎょの実数値を攻撃値として使う物理技です。わんぱく（B↑）H32-B32のてっぺき・ボディプレス型の実数値は以下のとおりです。
 
-| ステータス | EV | 実数値（てっぺき前） | てっぺき1積み後 |
-|:---|:---:|:---:|:---:|
-| HP | 32 | 187 | — |
-| こうげき（無補正） | 0 | 165 | — |
-| ぼうぎょ（わんぱく↑） | 32 | **222** | **444**（実質） |
-| とくこう（わんぱく↓） | 0 | 112 | — |
-| とくぼう | 0 | 130 | — |
-| すばやさ | 0 | 130 | — |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ステータス</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">EV</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">実数値（てっぺき前）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">てっぺき1積み後</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">HP</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">32</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">187</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">こうげき（無補正）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">0</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">165</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ぼうぎょ（わんぱく↑）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">32</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>222</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>444</strong>（実質）</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">とくこう（わんぱく↓）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">0</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">112</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">とくぼう</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">0</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">130</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">すばやさ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">0</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">130</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 てっぺき1積み後にボディプレスはぼうぎょ444を攻撃値として使います。かたいツメ（×1.3）の補正込みで（かくとう技はじめん単タイプに等倍）、カバルドン（わんぱく H32-B32想定 H215/B187）への計算結果は以下のとおりです（メタグロスはかくとうタイプでないためSTABなし）。
 

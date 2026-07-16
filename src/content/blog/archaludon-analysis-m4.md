@@ -436,12 +436,44 @@ Cに補正・投資がなく（ずぶとい・おだやかはC無補正でEV0、
 
 M-3→M-4で最大の変化はでんき技選択です。
 
-| 指標 | M-3 | M-4 | 変化 |
-|---|---|---|---|
-| 10まんボルト | 49.6% | **60.6%** | **+11.0pp** |
-| エレクトロビーム | 36.2% | 16.9% | -19.3pp |
-| ペリッパー（同居率） | 4位 | 圏外 | 大幅低下 |
-| ラグラージ（同居率） | 3位 | 圏外 | 大幅低下 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">指標</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">M-3</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">M-4</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">変化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">10まんボルト</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">49.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>60.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>+11.0pp</strong></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">エレクトロビーム</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">36.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">16.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">-19.3pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ペリッパー（同居率）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">4位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">圏外</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">大幅低下</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ラグラージ（同居率）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">3位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">圏外</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">大幅低下</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 エレクトロビームは**通常2ターン**かかる溜め技で、雨下のみ1ターンで発動できます。M-3ではペリッパー（同居率4位）・ラグラージ（3位）との雨軸3体が組まれていた背景があります。M-4でペリッパー・ラグラージが同居率圏外に落ちたことで、雨展開なしでの単体運用が前提となり、溜めが必要なエレクトロビームより安定打点の10まんボルトへ需要がシフトしました。
 
@@ -453,13 +485,50 @@ M-3→M-4で最大の変化はでんき技選択です。
 
 3枠（ラスターカノン+りゅうせいぐん+10まんボルト）が固定化されるにつれ、4枠目の選択が型の個性を決める形になっています。
 
-| 4枠目候補 | M-3 | M-4 | 変化 |
-|---|---|---|---|
-| ステルスロック | 39.8% | 37.9% | -1.9pp |
-| はどうだん | 26.8% | 18.8% | -8.0pp |
-| あくのはどう | 圏外 | **19.2%** | — |
-| ミラーコート | 16.7% | 19.8% | +3.1pp |
-| ほえる | 13.5% | 16.2% | +2.7pp |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">4枠目候補</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">M-3</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">M-4</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">変化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ステルスロック</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">39.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">37.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">-1.9pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">はどうだん</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">26.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">18.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">-8.0pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">あくのはどう</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">圏外</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>19.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ミラーコート</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">16.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">19.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">+3.1pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ほえる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">13.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">16.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">+2.7pp</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 はどうだんはかくとうタイプ（威力80・命中100）でかくとう弱点への打点として採用されていましたが、M-4ではあくのはどう（あくタイプ・威力80・命中100・ひるみ20%）に8.0ppの需要が移っています。
 
@@ -632,14 +701,70 @@ M-3→M-4で最大の変化はでんき技選択です。
 
 本記事で使用した実数値（Lv50・個体値31・EV最大32スケール）：
 
-| 型 | H | B | C | D | S |
-|---|---|---|---|---|---|
-| ひかえめ H2 C32 S32 | 167 | 150 | 194 | — | 137 |
-| おくびょう C32 S32 | — | — | 177 | — | 150 |
-| おくびょうスカーフ S | — | — | — | — | 225 |
-| ひかえめスカーフ S | — | — | — | — | 205 |
-| ずぶとい H32 B2 D32 | 197 | 167 | 145 | 117 | — |
-| おだやか H32 D32 S2 | 197 | — | 145 | 128 | 107 |
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">型</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">H</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">B</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">C</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">D</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">S</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ひかえめ H2 C32 S32</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">167</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">150</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">194</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">137</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">おくびょう C32 S32</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">177</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">150</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">おくびょうスカーフ S</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">225</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ひかえめスカーフ S</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">205</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ずぶとい H32 B2 D32</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">197</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">167</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">145</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">117</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">おだやか H32 D32 S2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">197</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">145</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">128</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">107</td>
+</tr>
+</tbody>
+</table>
+</div>
 | ガブリアス最速 S32 | — | — | — | — | 169 |
 | ガブリアス最速スカーフ | — | — | — | — | 253 |
 | ミミッキュ ようき S32 | — | — | — | — | 162 |
