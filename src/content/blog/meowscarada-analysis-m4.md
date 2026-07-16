@@ -189,7 +189,7 @@ M-4シーズン、マスカーニャは使用率6位（M-3: 3位）で環境上�
 
 **弱み:**
 
-技が固定されるこだわりスカーフの制約で、最初に選んだ技のタイプ以外で打点を変えられません。相手の交代読みが外れると、とんぼがえりで引くか低打点の技を通すかの二択を迫られます。
+こだわりスカーフは最初に選んだ技に固定されるため、相手の交代読みが外れて選んだ技が通らない相手（半減以下）が出てくると、その技を撃ち続けるか自分から交代するかしか選べません。とんぼがえり以外の技を選んでいた場合は、対面操作の技すら選べず不利な打ち合いを強いられます。
 
 ---
 
@@ -310,7 +310,7 @@ S実数値は175で、ようき型のS192より17低い数値です。こだわ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">97.3% / 86.1%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">カイリュー（14位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">カイリュー（13位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">トリプルアクセル（こおり）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>×4</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">86.1%</td>
@@ -340,7 +340,7 @@ S実数値は175で、ようき型のS192より17低い数値です。こだわ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">97.3%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">リザードン（11位）／アーマーガア（13位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">リザードン（11位）／アーマーガア（14位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">かみなりパンチ（でんき）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14.3%</td>
@@ -475,7 +475,7 @@ M-4でマスカーニャと同じパーティに入る頻度が高いポケモ�
   </div>
 </div>
 
-**ガブリアス**（1位）はドラゴン/じめんで、マスカーニャのむし×4弱点をガブリアスは等倍で受けられる関係です。一方、マスカーニャのこおり弱点（×2）はこおり技を持つ相手を苦手にしますが、ガブリアス自身もこおり×4弱点を抱えるため、こおり技を撃たれる相手に対しては両者とも弱く、この組み合わせで解決される弱点ではありません。ガブリアスのじしんがマスカーニャの弱点であるほのおタイプの相手を処理し、マスカーニャのトリプルアクセルがガブリアスの弱点であるこおりタイプの相手を牽制します。
+**ガブリアス**（1位）はドラゴン/じめんで、マスカーニャのむし×4弱点をガブリアスは等倍で受けられる関係です。一方、マスカーニャのこおり弱点（×2）はこおり技を持つ相手を苦手にしますが、ガブリアス自身もこおり×4弱点を抱えるため、こおり技を撃たれる相手に対しては両者とも弱く、この組み合わせで解決される弱点ではありません。ガブリアスのじしんがマスカーニャの弱点であるほのおタイプの相手を処理する一方、マスカーニャの攻撃技はこおりタイプに抜群を取れないため、こおりタイプの相手はガブリアスのがんせきふうじ等、別の枠で対応する必要があります。
 
 **カバルドン**（2位）はじめん単タイプで、あくびとステルスロックのサポート役です。カバルドンのあくびで後続への引き先を確保し、相手の対面選択を狂わせたところにマスカーニャのスカーフ技を通しやすくします。
 

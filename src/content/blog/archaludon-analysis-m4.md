@@ -1,9 +1,10 @@
 ---
 title: '【ポケモンチャンピオンズ】ブリジュラス考察 M-4 使用率5位・型別採用率と立ち回り'
 description: 'M-4シングルバトルで使用率5位のブリジュラスを分析。10まんボルト+11.0pp・エレクトロビーム-19.3ppと雨パ離れが鮮明。こだわりスカーフ+おくびょうで速度補強する型が台頭。型ごとの採用率・実数値・同居パートナーをデータで解説。'
-pubDate: '2026-07-14'
+pubDate: '2026-07-16'
+updatedDate: '2026-07-16'
 heroImage: '../../assets/hero-archaludon-m4.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -34,7 +35,7 @@ draft: true
 
 > ⚠️ 本記事のデータはM-4シーズン時点の集計です
 
-M-4シングルバトルでブリジュラスは**使用率5位**。M-3と同順位を保ちつつも、内部の技構成は大きく変化しています。最大の変化は**10まんボルトが+11.0ppの60.6%に増加**し、**エレクトロビームが-19.3ppの16.9%に急減**したことです。M-3で同居率4位だったペリッパー・3位だったラグラージがM-4では圏外に落ち、雨展開前提のエレクトロビームを選ぶ理由が減ったことがデータに表れています。また**こだわりスカーフ+6.2pp・おくびょう+5.9pp**と速度補強型が台頭しています。
+M-4シングルバトルでブリジュラスは**使用率5位**。M-3と同順位を保ちつつも、内部の技構成は雨パ依存から脱却する方向へ大きく変化しています（詳細はデータ分析①）。また**こだわりスカーフ+6.2pp・おくびょう+5.9pp**と速度補強型が台頭しています。
 
 ---
 
@@ -310,11 +311,11 @@ M-4シングルバトルでブリジュラスは**使用率5位**。M-3と同順
 
 **強み:**
 
-ひかえめC32でC実数値194。ラスターカノン・りゅうせいぐん・10まんボルトの3枠がM-4ではほぼ固定になっており、4枠目で役割を追加します。M-3と比べてエレクトロビームの枠が10まんボルトに置き換わり、天候依存なしでの安定打点が確保されました。じきゅうりょくで物理被弾のたびにB上昇を積み、高B種族値（130）と合わせて物理アタッカーに対して場持ちします。
+ひかえめC32でC実数値194。ラスターカノン・りゅうせいぐん・10まんボルトの3枠がM-4ではほぼ固定になっており、4枠目のステルスロック・ほえる・あくのはどうのいずれかで役割を追加できる汎用性が型1の特徴です。M-3と比べてエレクトロビームの枠が10まんボルトに置き換わり、天候依存なしでの安定打点が確保されました。
 
 **弱み:**
 
-S137は環境速い側（マスカーニャようきS192・ガブリアス最速S169・メガメタグロス最速S178・ミミッキュようきS162）に後手となります。とくぼう65は低く、C125以上の特殊アタッカーからの特殊技は1発で大きなダメージを受けます。
+4枠目を1つしか選べないため、設置技（ステルスロック）・流し技（ほえる）・打点追加（あくのはどう）を同時には満たせません。型3（こだわりスカーフ）と違い持ち物を耐久・回復系（オボンのみ・たべのこし）に割いているため、対面ごとの最大火力では型3に譲ります。
 
 ---
 
@@ -468,13 +469,13 @@ M-3→M-4で最大の変化はでんき技選択です。
 
 ## 環境ポケモンへの相性
 
-以下の相性はひかえめH2 C32 S32型（H167・B150・C194・S137）を基準とします。
+以下の相性はひかえめH2 C32 S32型（H167・B150・C194・S137）を基準とします。**選定基準は使用率TOP10のうち、タイプ相性・速度関係から相性がはっきり示せる相手**です（使用率9位のマフォクシーは技構成のばらつきが大きく明確な差を示せないため除外）。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン（環境順位）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン（使用率順位）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">相性</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">理由</th>
 </tr>
@@ -482,52 +483,59 @@ M-3→M-4で最大の変化はでんき技選択です。
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="ミミッキュ">ミミッキュ（同居率1位）
+    <img src="/images/pokemon/pokemon-0778-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="ミミッキュ">ミミッキュ（使用率2位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ラスターカノン（はがね）がゴースト/フェアリーに×2。ようきS162に後手だがばけのかわを剥がしつつ大ダメージを与えられる。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ラスターカノン（はがね）はゴースト/フェアリーに×2です。ようきS162に後手ですが、ばけのかわを剥がしつつ大ダメージを与えられます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="ガブリアス">ガブリアス（環境1位）
+    <img src="/images/pokemon/pokemon-0445-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="ガブリアス">ガブリアス（使用率1位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">×</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（じめん×2弱点）を採用率39.2%のきあいのタスキ型・23.2%のオボン型問わず放てる。でんき技はじめん複合に無効。最速S169に後手で引く択が必要。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん（じめん×2弱点）を採用率39.2%のきあいのタスキ型・23.2%のオボン型問わず放てます。でんき技はじめん複合に無効です。最速S169に後手なので引く択が必要です。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="メタグロス">メガメタグロス（同居率4位）
+    <img src="/images/pokemon/pokemon-0376-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="メタグロス">メガメタグロス（使用率4位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#888;font-weight:bold">△</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ率98.4%でメガ後はがね/エスパー・S110（最速S178）。ブリジュラスS137は最速メガメタグロスS178に後手。りゅうせいぐんはドラゴン技ではがねに半減（×0.5）。有効打に乏しく先手も取れない。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ率98.4%でメガ後ははがね/エスパー・最速S178です。ブリジュラスS137は後手になります。りゅうせいぐんはドラゴン技がはがねに半減（×0.5）で、有効打に乏しく先手も取れません。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="カバルドン">カバルドン（同居率3位）
+    <img src="/images/pokemon/pokemon-0450-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="カバルドン">カバルドン（使用率3位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">×</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん単タイプのためでんき技（×0）が無効。最大打点はドラゴン・はがね技（いずれも等倍）。カバルドンのじしんがじめん×2弱点。有効打に乏しくじめん技を受けるリスクが高い。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん単タイプのためでんき技は無効です。最大打点はドラゴン・はがね技ですがいずれも等倍にとどまります。カバルドンのじしんはじめん×2弱点で、有効打に乏しくじめん技を受けるリスクが高い相手です。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="アシレーヌ">アシレーヌ（同居率5位）
+    <img src="/images/pokemon/pokemon-0730-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="アシレーヌ">アシレーヌ（使用率7位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a;font-weight:bold">○</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/フェアリー複合。10まんボルトがみず×2（フェアリーは等倍で合計×2）。S137でアシレーヌ（S実数値110）に先手を取れる。ムーンフォース（フェアリー）はブリジュラスに等倍。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/フェアリー複合に10まんボルトは×2です。速度種族値60のアシレーヌにはS137のブリジュラスが先手を取れます。ムーンフォース（フェアリー）はブリジュラスに等倍です。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="マスカーニャ">マスカーニャ（同居率6位）
+    <img src="/images/pokemon/pokemon-0908-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="マスカーニャ">マスカーニャ（使用率6位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#888;font-weight:bold">△</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ/あく複合。最速S123（実数値192）でブリジュラスS137を上回り先手を取られる。主力のトリプルアクセル（こおり）はこおり×2・はがね×0.5で合計等倍にとどまり、有効打には乏しいが先手で削られる点は負担になる。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさ/あく複合。最速S123（実数値192）でブリジュラスS137を上回り先手を取られます。ブリジュラスへの最大打点であるトリプルアクセル（こおり）はブリジュラスに等倍で、有効打には乏しいものの先手で削られる点は負担になります。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0257-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="バシャーモ">バシャーモ（環境10位）
+    <img src="/images/pokemon/pokemon-0130-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="ギャラドス">ギャラドス（使用率8位）
+  </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#888;font-weight:bold">△</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガ率80.5%でメガ後はみず/あく・最速S146です。ブリジュラスS137は後手になります。10まんボルトはみず/あく複合に×2で有効打ですが、ギャラドスの主力じしん（採用率77.8%）はブリジュラスに×2で通るため、先手を取られると大きく削られる五分の対面です。</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <img src="/images/pokemon/pokemon-0257-00.webp" style="width:32px;height:32px;vertical-align:middle;margin-right:4px" alt="バシャーモ">バシャーモ（使用率10位）
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626;font-weight:bold">×</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお/かくとう複合。かくとう技がはがね/ドラゴン複合に×2。ほのお技は等倍で通るためかくとう×2弱点が主な脅威。こだわりスカーフ型では先手を取られるリスクもある。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ほのお/かくとう複合。かくとう技がはがね/ドラゴン複合に×2です。ほのお技は等倍で通るため、かくとう×2弱点が主な脅威です。こだわりスカーフ型では先手を取られるリスクもあります。</td>
 </tr>
 </tbody>
 </table>
@@ -574,7 +582,7 @@ M-3→M-4で最大の変化はでんき技選択です。
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ">
     <div class="name">マスカーニャ</div>
     <div class="rate">同居率6位（M-3：5位）</div>
-    <div style="font-size:0.65rem;color:#888;margin-top:2px">物理アタッカー枠。スカーフによる対面操作でブリジュラスの起点を作る</div>
+    <div style="font-size:0.65rem;color:#888;margin-top:2px">物理アタッカー枠。スカーフによる対面操作でブリジュラスが動きやすい盤面を作る</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス">

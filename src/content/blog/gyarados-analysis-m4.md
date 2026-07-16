@@ -60,28 +60,28 @@ M-4シーズン、ギャラドスは使用率15位から8位へ順位を上げ�
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:78%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">125</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">155(+30)</span>
+    <span style="width:32px;text-align:right">125</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+30</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:55%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">79</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">109(+30)</span>
+    <span style="width:32px;text-align:right">79</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+30</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくこう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:35%;background:linear-gradient(90deg,#94a3b8,#64748b);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">60</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">70(+10)</span>
+    <span style="width:32px;text-align:right">60</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+10</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:65%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">100</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">130(+30)</span>
+    <span style="width:32px;text-align:right">100</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+30</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
@@ -93,7 +93,7 @@ M-4シーズン、ギャラドスは使用率15位から8位へ順位を上げ�
   <div style="display:flex;align-items:center;gap:4px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">540</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">640(+100)</span>
+    <span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">540</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+100</span>
   </div>
 </div>
 
