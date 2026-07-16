@@ -51,11 +51,18 @@ const pokemonImageUrl = `${siteUrl}/images/pokemon/pokemon-${dexPad}-${imageForm
 
 const pokemonJsonLd = pokemonName ? {
 	'@context': 'https://schema.org',
-	'@type': 'Thing',
-	name: pokemonName,
-	description,
+	'@type': 'WebPage',
+	name: title,
+	description: metaDescription ?? description,
 	url: pageUrl,
 	image: pokemonImageUrl,
+	about: {
+		'@type': 'Thing',
+		name: pokemonName,
+		image: pokemonImageUrl,
+	},
+	author: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+	publisher: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
 } : null;
 
 const faqJsonLd = faq ? {
