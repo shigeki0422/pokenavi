@@ -5,11 +5,22 @@ import Footer from '../components/Footer.astro';
 
 const title = '仮想バトル観戦(バトルシミュレータ)とは';
 const description = 'ポケナビの仮想バトル観戦（バトルシミュレータ）の仕組み・対戦AIのレベル・できること／できないことを解説します。';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  description,
+  url: `${siteUrl}/battle-simulator/`,
+  author: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+  publisher: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+};
 ---
 
 <html lang="ja">
   <head>
     <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <style>
       main { max-width: 780px; margin: 0 auto; padding: 2em 1.2em 4em; color: rgb(var(--gray-dark)); line-height: 1.85; }
       h1 { font-size: 1.6rem; margin: 0 0 .4em; }

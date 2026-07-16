@@ -6,11 +6,24 @@ import SimulatorApp from '../components/SimulatorApp.astro';
 
 const title = 'シミュレーション：M-A（バトルシミュレータ）';
 const description = 'M-A環境（M-1／M-2）のランカー同士の総当たり対戦シミュレーション。パーティを選び、各ランカー・各ポケモンとの勝率・選出・1v1相性・実戦リプレイをデータで診断します。';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'ポケナビ M-Aシミュレーター',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: `${siteUrl}/simulator/`,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+};
 ---
 
 <html lang="ja">
   <head>
     <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <Header />
