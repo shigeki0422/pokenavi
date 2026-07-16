@@ -46,11 +46,17 @@ async function suggestFillStub(party: Party, emptyIdx: number[], deps: SuggestDe
   const need = emptyIdx.length;
   const proposalCount = Math.min(3, Math.max(1, Math.ceil(candidates.length / need)));
   const proposals: Slot[][] = [];
+  // 案間で種名集合が重複しないためのガード。takenNamesで同じ種を別案に使い回さない
+  // (=別種で差し替え)、seenSetsで万一集合が一致した案自体をスキップする。
+  const takenNames = new Set<string>();
+  const seenSets = new Set<string>();
 
   let cursor = 0;
   for (let p = 0; p < proposalCount && proposals.length < 3; p++) {
     const slots: Slot[] = [];
+    const names: string[] = [];
     for (let i = 0; i < need; i++) {
+      while (cursor < candidates.length && takenNames.has(candidates[cursor].n)) cursor++;
       if (cursor >= candidates.length) break;
       const sp = candidates[cursor];
       cursor++;
@@ -67,8 +73,14 @@ async function suggestFillStub(party: Party, emptyIdx: number[], deps: SuggestDe
           targets: [],
         }
       );
+      names.push(sp.n);
     }
-    if (slots.length === need) proposals.push(slots);
+    if (slots.length !== need) continue;
+    const key = [...names].sort().join("|");
+    if (seenSets.has(key)) continue;
+    seenSets.add(key);
+    for (const n of names) takenNames.add(n);
+    proposals.push(slots);
   }
   return proposals;
 }

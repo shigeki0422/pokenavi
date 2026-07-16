@@ -213,7 +213,8 @@ COMPLETE_NCAND = int(os.environ.get("COMPLETE_NCAND", "50"))   # /complete の�
 
 def complete(specs, fill, top, ncand=None):
     """型(spec)固定メンバー(specs、型プール非所属可)から残りfill体を補完し、上位topを返す。
-    返却specsは追加分のみ（固定分は含まない）。決定的（固定シード）。"""
+    返却specsは追加分のみ（固定分は含まない）。決定的（固定シード）。
+    追加分の種名集合(frozenset)が同一の候補は、並び順違いの重複案として1つに統合（最高スコアのみ残す）。"""
     ncand = ncand or COMPLETE_NCAND
     fixed = list(specs)
     for s in fixed:
@@ -222,9 +223,17 @@ def complete(specs, fill, top, ncand=None):
     cands = complete_core_free(PG, L, TH, fixed, rng, ncand)
     if not cands:
         return {"results": []}
-    scored = sorted(_par_score(cands), key=lambda x: -x[0])[:top]
+    scored = sorted(_par_score(cands), key=lambda x: -x[0])
     nfixed = len(fixed)
-    out = [{"specs": p[nfixed:nfixed + fill], "score": round(sc, 3)} for sc, p in scored]
+    best_by_set = {}   # 種名集合(frozenset) -> (score, party)。scoredは降順なので初出のみ採用すればよい
+    for sc, p in scored:
+        key = frozenset(s.split("@", 1)[0] for s in p[nfixed:nfixed + fill])
+        if key not in best_by_set:
+            best_by_set[key] = (sc, p)
+        if len(best_by_set) >= top:
+            break
+    deduped = sorted(best_by_set.values(), key=lambda x: -x[0])[:top]
+    out = [{"specs": p[nfixed:nfixed + fill], "score": round(sc, 3)} for sc, p in deduped]
     return {"results": out}
 
 def simulate(specs, opp_idx, k):
