@@ -18,7 +18,7 @@ const metaDescription = pokemonName && usageRank ? (
     ? `Pokémon Champions data for ${pokemonName}. Usage rank #${usageRank}. Moves, held items, abilities, and natures usage rates. Data-driven competitive battle analysis.`
     : lang === 'ko'
     ? `포켓몬 챔피언스 ${pokemonName} 데이터. 사용률 ${usageRank}위. 기술·지닌물건·특성·성격 채용률과 대전 데이터.`
-    : `M-2・M-3環境で使用率${usageRank}位の${pokemonName}。技・持ち物・特性・性格の採用率データと、上位ランカーの実戦パーティを掲載。バトルシミュレーションで対戦成績も確認できます。`
+    : `チャンピオンズM-4使用率${usageRank}位${pokemonName}の対戦データ。技・持ち物・特性・性格の採用率TOP10と種族値・タイプ相性を掲載。`
 ) : description;
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
