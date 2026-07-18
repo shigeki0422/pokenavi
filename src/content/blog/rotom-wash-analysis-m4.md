@@ -1,9 +1,9 @@
 ---
-title: '【ポケモンチャンピオンズ】ウォッシュロトム 考察 M-4 シーズン ハイドロポンプ採用で変わる立ち回り'
-description: 'M-4シーズン使用率17位のウォッシュロトムを考察。M-3では未採用だったハイドロポンプが99.0%まで浸透し、こだわりスカーフ26.5%・おくびょう18.9%の攻撃型が台頭。耐久型とスカーフ型の実数値・カバレッジをデータで分析します。'
+title: '【ポケモンチャンピオンズ】ウォッシュロトム 考察 M-4 シーズン 耐久型が純化した理由'
+description: 'M-4シーズン使用率17位のウォッシュロトムを考察。M-3から確立していたハイドロポンプ主体の構成の中で、性格がひかえめからずぶといへ、持ち物がオボンのみからたべのこしへとシフトし耐久型が純化。耐久型とスカーフ型の実数値・カバレッジをデータで分析します。'
 pubDate: '2026-07-15'
 updatedDate: '2026-07-15'
-heroImage: '../../assets/hero-rotom-wash-m3.png'
+heroImage: '../../assets/hero-rotom-wash-m4.png'
 draft: true
 ---
 
@@ -33,7 +33,7 @@ draft: true
   </div>
 </div>
 
-M-4シーズン、ウォッシュロトムは使用率17位でM-3の20位から順位を上げました。でんき/みずの複合タイプに特性ふゆうを持ち、じめん技を無効化しながらはがね・ほのお・みず・こおり・ひこうに耐性を持つ耐久寄りのポケモンです。M-4最大の変化は、M-3では技採用データに登場すらしなかったハイドロポンプが99.0%まで一気に浸透したこと。でんき単打点では突破できなかったじめんタイプへの打点を手に入れたことが、順位上昇の背景にあります。
+M-4シーズン、ウォッシュロトムは使用率17位でM-3の20位から順位を上げました。でんき/みずの複合タイプに特性ふゆうを持ち、じめん技を無効化しながらはがね・ほのお・みず・こおり・ひこうに耐性を持つ耐久寄りのポケモンです。ハイドロポンプ（採用率99.0%）はM-3から既に98.7%で定着していた主力打点で、M-4での新規要素ではありません。M-4で実際に起きた変化は性格・持ち物の耐久寄りへのシフトで、ひかえめ（44.1%→20.7%）からずぶとい（30.7%→48.3%）へ性格の中心が移り、持ち物もオボンのみ（43.5%→32.1%）からたべのこし（14.2%→32.9%）へと継続回復志向が強まっています。
 
 ---
 
@@ -162,7 +162,7 @@ HP50は低めですが、ぼうぎょ107・とくぼう107とバランス良く�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">110</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">99.0%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず一致の最大打点。じめんタイプへの反撃手段としてM-4で新規標準化</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず一致の最大打点。じめんタイプへの反撃手段としてM-3から定着済みのコア技</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ボルトチェンジ</strong></td>
@@ -315,7 +315,7 @@ H157 / A76 / B174 / C125 / D127 / S106（ずぶとい・H32-B32）。ぼうぎ�
 
 ---
 
-## データ分析①：M-3→M-4 技・性格・持ち物の変化
+## データ分析①：M-3→M-4 性格・持ち物の耐久寄りシフト
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -329,54 +329,54 @@ H157 / A76 / B174 / C125 / D127 / S106（ずぶとい・H32-B32）。ぼうぎ�
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ハイドロポンプ</strong>（技）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">未採用</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">99.0%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">新台頭</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ずぶとい</strong>（性格）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">48.3%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+17.6pp</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ボルトチェンジ（技）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90.1%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#666">±0.5pp</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ひかえめ</strong>（性格）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">44.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-23.4pp</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">おにび（技）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">87.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75.5%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-11.7pp</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">トリック（技）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13.3%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">25.3%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+12.0pp</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">こだわりスカーフ（持ち物）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14.5%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>26.5%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+12.0pp</td>
-</tr>
-<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">おくびょう（性格）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">8.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>18.9%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+10.7pp</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#666">+2.4pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>たべのこし</strong>（持ち物）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">32.9%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+18.7pp</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ずぶとい（性格）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">51.1%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">48.3%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-2.8pp</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>オボンのみ</strong>（持ち物）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">43.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">32.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-11.4pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こだわりスカーフ（持ち物）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">28.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#666">-2.4pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いたみわけ（技）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>20.9%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">新規台頭</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-最大の変化はハイドロポンプの新規採用（0%→99.0%）です。M-3のロトムはでんき単打点（10まんボルト・ボルトチェンジ）にとどまっており、ふゆうでじめん技こそ無効化できても、じめんタイプに攻撃で反撃する手段を持っていませんでした。M-4でハイドロポンプがほぼ全個体標準となったことで、カバルドン（じめん単・使用率3位）にみず×2の実質打点を得ています。
+ハイドロポンプ（98.7%→99.0%）・ボルトチェンジ（90.4%→90.6%）はM-3から既に確立していた主力打点で、M-4で新規に浸透したものではありません。M-4で実際に起きた変化は、性格ではひかえめ（-23.4pp）からずぶとい（+17.6pp）へ、持ち物ではオボンのみ（-11.4pp）からたべのこし（+18.7pp）へという耐久寄りへの純化です。
 
-トリック採用率も13.3%→25.3%とほぼ倍増しており、こだわりスカーフ採用率の12.0pp増（14.5%→26.5%）・おくびょう採用率の10.7pp増と連動しています。攻撃技の拡充とスカーフ運用の広がりが同時に進んだシーズンです。一方でずぶとい（耐久型の主力性格）は51.1%→48.3%とわずかに減少しており、攻撃型の比率が相対的に増しています。
+注目すべきは、こだわりスカーフの採用率が28.9%→26.5%とほぼ横ばいであることです。つまり「攻撃型 vs 耐久型」という比率自体は大きく動いておらず、耐久型の中身がより耐久寄り（ずぶとい＋たべのこし）に純化したというのが実態です。オボンのみの緊急回復（HPが半分以下になった時点で1度だけ最大HPの1/4回復）からたべのこしの継続回復（毎ターン最大HPの1/16回復）へのシフトは、短期決戦より持久戦を志向する構成が増えたことを示しています。加えて、M-3では圏外だったいたみわけがM-4で20.9%まで台頭しており、耐久型の対面継続志向をさらに補強しています。
 
 ---
 
@@ -414,7 +414,7 @@ M-4使用率上位15体に対し、ハイドロポンプ（みず）・10まん�
 </table>
 </div>
 
-上位15体のうち7体（ギャラドス・アシレーヌ・アーマーガア・ゲッコウガ・リザードン・マフォクシー・バシャーモ）に×2以上の打点が通り、うちギャラドスには×4が刺さります。一方でブリジュラス・マスカーニャ・サザンドラの3体は両打点とも×0.5に抑えられ、ガブリアス・カイリューには等倍以下（ガブリアスはでんきが無効）にとどまります。ハイドロポンプの追加は「でんき無効のじめんタイプに手も足も出ない」状態を解消した一方、あく・ドラゴン複合の相手には依然として決定打を欠く構図です。
+上位15体のうち7体（ギャラドス・アシレーヌ・アーマーガア・ゲッコウガ・リザードン・マフォクシー・バシャーモ）に×2以上の打点が通り、うちギャラドスには×4が刺さります。一方でブリジュラス・マスカーニャ・サザンドラの3体は両打点とも×0.5に抑えられ、ガブリアス・カイリューには等倍以下（ガブリアスはでんきが無効）にとどまります。ハイドロポンプはM-3から定着していた打点で、「でんき無効のじめんタイプに手も足も出ない」状態は既に解消済みでしたが、あく・ドラゴン複合の相手には依然として決定打を欠く構図です。
 
 ---
 
@@ -525,10 +525,10 @@ M-4でウォッシュロトムと同じパーティに入る頻度が高いポ�
 
 ## まとめ
 
-M-4のウォッシュロトムは使用率17位（M-3: 20位）に上昇し、攻撃面の課題を解消したシーズンでした。
+M-4のウォッシュロトムは使用率17位（M-3: 20位）に上昇し、耐久型が純化したシーズンでした。
 
-- **ハイドロポンプが0%→99.0%で新規標準化**：M-3はでんき単打点でじめんタイプに反撃できませんでしたが、M-4でみず打点を得てカバルドンなどに×2が通るようになりました
-- **こだわりスカーフ型が26.5%まで拡大**（M-3: 14.5%）：おくびょう18.9%・ひかえめ20.7%の攻撃特化型が耐久型（ずぶとい48.3%）と並ぶ選択肢に
+- **性格はひかえめ（44.1%→20.7%）からずぶとい（30.7%→48.3%）へ中心が移動**：ハイドロポンプ・ボルトチェンジの主力打点自体はM-3から変わっておらず、耐久寄りの調整が進みました
+- **持ち物もオボンのみ（43.5%→32.1%）からたべのこし（14.2%→32.9%）へシフト**：一方でこだわりスカーフ（28.9%→26.5%）はほぼ横ばいで、攻撃型・耐久型の比率自体は大きく動いていません
 - **弱点はくさタイプのみ**（ふゆうでじめん無効）だが、マスカーニャ（6位・トリックフラワー97.3%）には打点のぶつけ合いで一方的に不利
 
 はがね×0.25を筆頭に広い耐性を持ちながら、ふゆうでじめんタイプの主力技を無効化できる点が基本的な強みです。耐久型・スカーフ型のどちらを選ぶかは、パーティ内でロトムに求める役割（受けて立て直すか、先制打点で崩すか）で判断する形になります。

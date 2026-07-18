@@ -326,33 +326,51 @@ A実数値180（いじっぱり）はようき型のA164より約10%高く、被
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アクアジェット採用率</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">86.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">86.7%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>89.7%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+3.6pp</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+3.0pp</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">クイックターン採用率</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">76.7%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">新台頭</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">83.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">76.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-6.4pp</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">こだわりスカーフ採用率</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">74.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">83.2%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70.3%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-3.8pp</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626"><strong>-12.9pp</strong></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">しんぴのしずく採用率</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>9.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+5.0pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いのちのたま採用率</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>8.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">新規台頭</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">いじっぱり採用率</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">27.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">27.0%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>31.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+4.5pp</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+4.8pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ようき採用率</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">71.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-6.2pp</td>
 </tr>
 </tbody>
 </table>
 </div>
 
-M-4最大の変化は**クイックターンの新台頭（76.7%）**です。M-3では技採用率の圏外（8位技構成に入らない水準）でしたが、M-4では4番目の技として定着しました。もろはのずつき・アクアブレイクといった選択技の採用率が押し下げられた形で、こだわりスカーフの技固定リスクを補うための交代技として選ばれるようになっています。一方で使用率は17位から20位に後退しており、こだわりスカーフ・ようき性格という基本の型自体は変わらないものの、環境内での相対的なポジションはやや低下しています。
+技構成（おはかまいり・ウェーブタックル・アクアジェット・クイックターン）自体はM-3から変わっていません。M-4最大の変化は**こだわりスカーフ採用率の-12.9pp（83.2%→70.3%）**で、代わりにしんぴのしずく（+5.0pp）といのちのたま（新規8.6%）という非スカーフの持ち物が伸びています。技固定のリスクを負うスカーフ一択から、火力アイテムを積んで技を選べる型へ一定数がシフトした形です。性格もようき（-6.2pp）からいじっぱり（+4.8pp）へやや寄っており、こだわりスカーフ以外の型では素早さより打点を優先する選択が増えています。使用率は17位から20位に後退しており、環境内での相対的なポジションはやや低下しています。
 
 ---
 

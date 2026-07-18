@@ -416,7 +416,64 @@ C・Sともに非メガ型を上回るため、メガストーンによる純粋
 
 メガストーン採用率は17.9%にとどまり、82%以上が非メガで運用しています。要因のひとつが持ち物の競合です。きあいのタスキ（74.5%）はメガ進化中は装備できないため、メガ運用を選ぶとタスキによる1発耐久を手放すことになります。
 
-M-3シーズンの技・性格データと比較すると、M-4でもおくびょう・ひかえめの2性格が合計91.7%を占める構図は変わっていません。EV分布もC32・S32を軸にした特殊アタッカー配分（H1-B1-C32-S32が41.8%）が最多で、素早さとタイプ一致打点を両立させる型が一貫して支持されていることがわかります。
+M-3シーズンの技・性格データと比較すると、おくびょう・ひかえめの2性格の合計はM-3の95.3%（おくびょう56.3%・ひかえめ39.0%）からM-4は91.7%（おくびょう54.8%・ひかえめ36.9%）とやや減っていますが、依然9割超を占める主流の組み合わせです。EV分布もC32・S32を軸にした特殊アタッカー配分（H1-B1-C32-S32が41.8%）が最多で、素早さとタイプ一致打点を両立させる型が一貫して支持されています。
+
+---
+
+## データ分析③：M-3→M-4 技採用率の変化
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">M-3</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">M-4</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">変化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>パワージェム</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">85.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">82.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-3.7pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>だいちのちから</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">58.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>62.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+4.2pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ヘドロウェーブ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">52.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">55.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+3.1pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ステルスロック</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">56.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">49.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-7.1pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>エナジーボール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">46.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">46.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#666">≒同</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">キラースピン</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">23.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-4.3pp</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+技構成自体に大きな入れ替わりはなく、上位6技の顔ぶれはM-3・M-4で共通しています。目立つ変化はステルスロック（-7.1pp）とキラースピン（-4.3pp）の減少で、代わりにだいちのちから（+4.2pp）・ヘドロウェーブ（+3.1pp）の一致打点2本を優先する配分へわずかに寄っています。持ち物はきあいのタスキが72.0%→74.5%（+2.5pp）とさらに定着し、キラフロルナイトは20.8%→17.9%（-2.9pp）で非メガ運用への依存がやや強まりました。
 
 ---
 
