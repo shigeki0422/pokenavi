@@ -201,7 +201,7 @@ M-4シーズン、カイリューは使用率12位につけています。ドラ
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>しんそく</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>42.4%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+2で必ず先制。物理先制型のフィニッシャー</td>
