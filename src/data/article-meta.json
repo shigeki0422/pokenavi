@@ -1262,6 +1262,17 @@
         "dex": 902,
         "form": "00"
     },
+    "basculegion-m-analysis-m4": {
+        "name": "イダイトウ(オス)",
+        "rank": 20,
+        "types": [
+            "みず",
+            "ゴースト"
+        ],
+        "matchKey": "イダイトウ",
+        "dex": 902,
+        "form": "00"
+    },
     "kirafurou-analysis-m3": {
         "name": "キラフロル",
         "rank": 19,
