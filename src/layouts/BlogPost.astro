@@ -59,12 +59,34 @@ const breadcrumbJsonLd = {
 			}
 			.hero-image {
 				width: 100%;
+				margin: 0.75em 0 0.5em;
 			}
 			.hero-image img {
 				display: block;
 				margin: 0 auto;
 				border-radius: 8px;
 				box-shadow: var(--box-shadow);
+				width: 100%;
+				height: auto;
+				aspect-ratio: 2 / 1;
+			}
+			.summary-box {
+				margin: 0.75em 0 1em;
+				padding: 0.75em 1em;
+				background: #f0f4ff;
+				border-left: 4px solid var(--accent, #f97316);
+				border-radius: 4px;
+				font-size: 0.88rem;
+				line-height: 1.65;
+				color: #1e293b;
+			}
+			.summary-box .summary-label {
+				display: block;
+				font-size: 0.72rem;
+				font-weight: 700;
+				color: #64748b;
+				letter-spacing: 0.05em;
+				margin-bottom: 0.25em;
 			}
 			.prose {
 				width: 780px;
@@ -75,8 +97,10 @@ const breadcrumbJsonLd = {
 				font-size: 15px;
 				line-height: 1.6;
 			}
-			.breadcrumb ol { display: flex; flex-wrap: wrap; list-style: none; margin: 0 0 .3em; padding: 0; font-size: .75rem; color: rgb(var(--gray)); }
+			.breadcrumb ol { display: flex; flex-wrap: nowrap; list-style: none; margin: 0 0 .3em; padding: 0; font-size: .75rem; color: rgb(var(--gray)); }
 			.breadcrumb { margin-top: .75em; }
+			.breadcrumb li { white-space: nowrap; }
+			.breadcrumb li[aria-current] { overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 			.breadcrumb li + li::before { content: '›'; padding: 0 .35em; }
 			.breadcrumb a { color: rgb(var(--gray)); text-decoration: none; }
 			.breadcrumb a:hover { text-decoration: underline; }
@@ -151,9 +175,6 @@ const breadcrumbJsonLd = {
 		<Header />
 		<main>
 			<article>
-				<div class="hero-image">
-					{heroImage && <Image width={1020} height={510} src={heroImage} alt={title} />}
-				</div>
 				<div class="prose">
 					<nav class="breadcrumb" aria-label="パンくずリスト">
 						<ol>
@@ -176,6 +197,15 @@ const breadcrumbJsonLd = {
 						<h1>{title}</h1>
 						<hr />
 					</div>
+					<div class="hero-image">
+						{heroImage && <Image width={1020} height={510} src={heroImage} alt={title} />}
+					</div>
+					{description && (
+						<div class="summary-box">
+							<span class="summary-label">この記事の要点</span>
+							{description}
+						</div>
+					)}
 					<slot />
 					{blogPokemonName && <SimPartyCard pokemonName={blogPokemonName} />}
 					<div class="share-row">
