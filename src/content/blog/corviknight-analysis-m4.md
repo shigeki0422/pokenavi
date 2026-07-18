@@ -343,50 +343,50 @@ H98・B105・D85と、物理・特殊の両面である程度の耐久を持つ�
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はねやすめ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">98.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">96.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>98.4%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#666">≒同</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ボディプレス</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">86.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">82.6%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>66.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626"><strong>-19.6pp</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626"><strong>-15.8pp</strong></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とんぼがえり</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">未採用</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">67.0%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a"><strong>新規定着</strong></td>
-</tr>
-<tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>てっぺき</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">未採用</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">64.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a"><strong>新規定着</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">72.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>64.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626"><strong>-8.6pp</strong></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とんぼがえり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>67.0%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+6.8pp</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アイアンヘッド</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">27.3%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>45.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a"><strong>+18.7pp</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a"><strong>+17.9pp</strong></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ビルドアップ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ビルドアップ</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5.6%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26.0%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a"><strong>+20.4pp</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">8.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>26.0%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a"><strong>+17.6pp</strong></td>
 </tr>
 </tbody>
 </table>
 </div>
 
-M-3のアーマーガアは「ボディプレス（86.4%）を主力に、控えめなアイアンヘッド（26.5%）を添える」単純な構成でした。M-4では**とんぼがえり（67.0%）・てっぺき（64.2%）がM-3から未採用の状態から一気に定着**し、ボディプレス採用率は86.4%→66.8%（-19.6pp）まで落としています。この変化はEV・性格分布にも表れており、性格はわんぱく採用率48.1%→72.7%（+24.6pp）へ大きく寄っています。M-3ではボディプレス1本足の構成に幅広い性格が混ざっていたのに対し、M-4は「てっぺきで積んでからボディプレス、隙があればとんぼがえりで対面操作」という型がわんぱく前提でほぼ統一されたことが読み取れます。アイアンヘッド（26.5%→45.2%、+18.7pp）とビルドアップ（5.6%→26.0%、+20.4pp）の伸びは、てっぺき型に代わる第2の型（ビルドアップ・アイアンヘッド型）が明確に定着したことを示しています。
+M-3の時点で既にてっぺき（72.8%）・とんぼがえり（60.2%）は主流技として定着しており、M-4で新たに現れた技ではありません。M-4での変化は「てっぺき・ボディプレスの受け型」の中の配分交代と、対抗型の台頭の2つです。ボディプレス（82.6%→66.8%、-15.8pp）とてっぺき（72.8%→64.2%、-8.6pp）がともに下げた一方、**アイアンヘッド（27.3%→45.2%、+17.9pp）とビルドアップ（8.4%→26.0%、+17.6pp）が大きく伸び**、てっぺき・ボディプレス型と並ぶビルドアップ・アイアンヘッド型（型2）が二番手として明確に定着しています。性格はわんぱく採用率66.0%→72.7%（+6.7pp）で、受け型としての方向性自体はM-3から変わっていません。
 
 ---
 
