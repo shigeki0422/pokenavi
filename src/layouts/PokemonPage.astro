@@ -254,6 +254,7 @@ const breadcrumbJsonLd = {
 						<span class="badge">{T.badge}</span>
 					</div>
 					<slot />
+					{pokemonName && <SimPartyCard pokemonName={pokemonName} />}
 					{(hasPartySuggest || hasMegaPartySuggest) && (
 						<div class="ps-cta-wrap">
 							{hasPartySuggest && (
@@ -270,7 +271,6 @@ const breadcrumbJsonLd = {
 							)}
 						</div>
 					)}
-					{pokemonName && <SimPartyCard pokemonName={pokemonName} />}
 					<AdUnit />
 				</div>
 			</article>
