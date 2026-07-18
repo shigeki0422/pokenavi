@@ -344,32 +344,32 @@ S182はロック型のS200より低く、マフォクシー（メガ後最速想
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">使用率順位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">29位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>17位</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>18位</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">上昇</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ゲンガナイト採用率</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">59.9%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>78.2%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+18.3pp</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">82.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">78.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-4.6pp</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいのタスキ採用率</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">33.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13.6%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">-14.4pp</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+5.6pp</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>まもる</strong>採用率</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16.1%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>49.9%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+39.9pp</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+33.8pp</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">みちづれ採用率</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">55.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">45.7%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>63.9%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+8.1pp</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+18.2pp</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ほろびのうた</strong>採用率</td>
@@ -378,24 +378,22 @@ S182はロック型のS200より低く、マフォクシー（メガ後最速想
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">新台頭</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ヘドロウェーブ</strong>採用率</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">55.7%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">新台頭</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ採用率</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">82.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">55.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626"><strong>-26.5pp</strong></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロばくだん採用率</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12.5%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">圏外</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">圏外化</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいだま採用率</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">38.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626"><strong>-28.0pp</strong></td>
 </tr>
 </tbody>
 </table>
 </div>
 
-M-4最大の変化は**まもる（+39.9pp）・ほろびのうた（新台頭41.6%）・ヘドロウェーブ（新台頭55.7%）**です。M-3時点ではみちづれ55.8%は既に高採用でしたが、まもるが10.0%にとどまり単発の道連れ運用が中心だったのに対し、M-4ではまもる49.9%・ほろびのうた41.6%が加わり、かげふみで交代封じした相手にほろびのうたを通してまもるでカウントを稼ぐロック型が明確な構築として確立しています。使用率が29位から17位へ上昇した時期と、このロック型の採用率上昇が重なっています。
-
-どく技はヘドロばくだん（威力90・毒30%）からヘドロウェーブ（威力95・毒10%）へ主力が入れ替わりました。ヘドロウェーブはヘドロばくだんより威力が高く追加効果の発動率は下がる代わりに、一致技として安定した打点を優先する構成にシフトしています。
+M-4最大の変化は**ほろびのうたの新規台頭（41.6%）**と、それに伴う**まもる（+33.8pp）・みちづれ（+18.2pp）**の伸びです。ヘドロウェーブはM-3時点で既に82.2%の主力技として確立していましたが、M-4ではほろびのうた・まもるに枠を譲る形で55.7%まで下がり、同様にきあいだま（38.2%→10.2%）も大きく採用を落としています。かげふみで交代封じした相手にほろびのうたを通し、まもるでカウントを稼ぐロック型が新たに確立したことで、既存の一致打点技（ヘドロウェーブ・きあいだま）の採用機会がその分削られた構図です。使用率が29位から18位へ上昇した時期と、このロック型の採用率上昇が重なっています。
 
 ---
 
@@ -513,9 +511,9 @@ M-4でゲンガーと同じパーティに入る頻度が高いポケモン（�
 
 **アーマーガア**（2位）ははがね/ひこうで、ゲンガーの弱点であるじめんタイプの技をひこう耐性で無効化できます。アーマーガアのてっぺき・ボディプレスで受け出しを担い、ゲンガーは相手の交代を封じてほろびのうたで詰める役割分担です。
 
-**アシレーヌ**（3位）はみず/フェアリーで、ゲンガーが苦手なみずタイプの相手をムーンフォース・うたかたのアリアで処理する役割分担です。
+**アシレーヌ**（3位）はみず/フェアリーで、ゲンガーの弱点であるあく・じめん・ゴーストへの打点は持ちませんが、ムーンフォース（フェアリー）で別方向の相手を処理する役割分担です。
 
-**ダイケンキ**（4位）はみず単タイプで、ゲンガーが苦手なみずタイプの相手をひけん・ちえなみで処理する役割分担です。
+**ダイケンキ**（4位）はみず単タイプで、ひけん・ちえなみでゲンガーとは異なる範囲の相手に打点を持ち、攻めの手数を分担します。
 
 **ハラバリー**（5位）はでんき単タイプで、みず・ひこうタイプの相手にでんき打点を持ちます。
 
@@ -525,10 +523,10 @@ M-4でゲンガーと同じパーティに入る頻度が高いポケモン（�
 
 ## まとめ
 
-M-4のゲンガーは使用率29位から17位へ順位を上げ、ゲンガナイト採用率78.2%とメガ運用がほぼ前提のシーズンです。
+M-4のゲンガーは使用率29位から18位へ順位を上げ、ゲンガナイト採用率78.2%とメガ運用がほぼ前提のシーズンです。
 
-- **まもる（+39.9pp）・ほろびのうた（新台頭41.6%）が採用率を伸ばした**：かげふみで相手を交代封じし、ほろびのうたのカウントをまもるで稼いで詰める「ロック型」がM-4で確立
-- **一致特殊技はヘドロばくだん（12.5%→圏外）からヘドロウェーブ（55.7%）へ交代**：追加効果より安定打点を優先する構成にシフト
+- **まもる（+33.8pp）・ほろびのうた（新台頭41.6%）が採用率を伸ばした**：かげふみで相手を交代封じし、ほろびのうたのカウントをまもるで稼いで詰める「ロック型」がM-4で確立
+- **既存の一致打点技はロック型に枠を譲り採用減**：ヘドロウェーブ（82.2%→55.7%）・きあいだま（38.2%→10.2%）がともに大きく採用を落とし、まもる・ほろびのうたに置き換わった
 - **弱点はじめん・エスパー・ゴースト・あくの4タイプ**：環境上位のガブリアス・サザンドラ・マフォクシーが該当タイプの技を高採用率で持つため、これらへの一貫した打点は乏しい
 
 かげふみによる交代封じは、ロック型・アタッカー型どちらの構成でも相手の逃げ道を断つ役割として機能します。型を選ぶ際は、まもる・ほろびのうたで詰めるロック型のS200か、被弾に強いH153の特殊アタッカー型かをパーティの役割に応じて判断する必要があります。
