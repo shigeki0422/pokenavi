@@ -15,9 +15,9 @@ const { title, description, pokemonName, dexNumber, imageForm, usageRank, faq, l
 
 const metaDescription = pokemonName && usageRank ? (
   lang === 'en'
-    ? `Pokémon Champions data for ${pokemonName}. Usage rank #${usageRank}. Moves, held items, abilities, and natures usage rates. Data-driven competitive battle analysis.`
+    ? `${pokemonName} — Pokémon Champions M-4, Usage Rank #${usageRank}. TOP10 usage rates for moves, held items, abilities & natures. Base stats and type matchup chart included.`
     : lang === 'ko'
-    ? `포켓몬 챔피언스 ${pokemonName} 데이터. 사용률 ${usageRank}위. 기술·지닌물건·특성·성격 채용률과 대전 데이터.`
+    ? `${pokemonName} 챔피언스M-4 사용률 ${usageRank}위 — 기술·지닌물건·특성·성격 채용률 TOP10과 종족값·타입 상성 수록.`
     : `チャンピオンズM-4使用率${usageRank}位${pokemonName}の対戦データ。技・持ち物・特性・性格の採用率TOP10と種族値・タイプ相性を掲載。`
 ) : description;
 

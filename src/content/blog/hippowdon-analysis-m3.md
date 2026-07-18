@@ -1,7 +1,7 @@
 ---
 title: 'カバルドン考察 M-3 使用率8位の採用理由と型別立ち回り'
 description: 'チャンピオンズM-3使用率8位カバルドンを徹底解説。オボン59.3%・たべのこし36.5%の2強持ち物構成・わんぱくH32-B2-D32型の実数値・あくび+ステロ+なまける耐久型の採用理由をDBデータで解説します。'
-updatedDate: '2026-07-03'
+updatedDate: '2026-07-18'
 pubDate: '2026-07-03'
 heroImage: '../../assets/hero-hippowdon-m3.png'
 draft: false

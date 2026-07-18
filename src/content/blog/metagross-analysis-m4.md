@@ -2,7 +2,7 @@
 title: 'メガメタグロス 考察 M-4 シーズン 採用型と立ち回り'
 description: 'チャンピオンズM-4使用率4位メガメタグロス考察。M-3から継続する攻撃型に加え、てっぺき・ボディプレス型がM-4で台頭。わんぱく型の採用率20.5%・ボディプレス27.8%のデータを分析します。'
 pubDate: '2026-07-14'
-updatedDate: '2026-07-14'
+updatedDate: '2026-07-18'
 heroImage: '../../assets/hero-metagross-m4.png'
 draft: false
 ---

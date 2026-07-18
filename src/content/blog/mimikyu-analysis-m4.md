@@ -1,7 +1,7 @@
 ---
 title: '【ポケモンチャンピオンズ】ミミッキュ考察 M-4 シャドークロー増加と積みエース完成形'
 description: 'M-4シングルバトルで使用率2位を維持したミミッキュを分析。シャドークロー+5.4pp・トリックルーム-5.8ppの変化が示す積みエース特化の完成形をデータで解説。'
-updatedDate: '2026-07-16'
+updatedDate: '2026-07-18'
 pubDate: '2026-07-16'
 heroImage: '../../assets/hero-mimikyu-m4.png'
 draft: false

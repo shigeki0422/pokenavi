@@ -1,7 +1,7 @@
 ---
 title: 'アーマーガア考察 M-3 型別採用率と立ち回り'
 description: 'チャンピオンズM-3使用率11位アーマーガアを解説。てっぺき+ボディプレス採用率急増、たべのこし68.4%集約の理由、ガブリアス・ライチュウとの同居率から見えるサイクル軸を解説。'
-updatedDate: '2026-07-02'
+updatedDate: '2026-07-18'
 pubDate: '2026-07-02'
 heroImage: '../../assets/hero-corviknight-m3.png'
 draft: false

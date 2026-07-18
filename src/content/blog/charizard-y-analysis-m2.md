@@ -1,7 +1,7 @@
 ---
 title: 'メガリザードンY M-2 使用率5位 ひでり構築と技構成'
 description: 'チャンピオンズM-2使用率5位メガリザードンY構築を徹底解説。C159×ひでりのトップクラス火力、ソーラービーム即発動で技構成の幅が広く、晴れ展開の組み方・いわ4倍弱点への対策まで実データをもとに解説します。'
-updatedDate: '2026-06-05'
+updatedDate: '2026-07-18'
 pubDate: '2026-06-05'
 draft: false
 heroImage: '../../assets/hero-charizard-y-m2.png'

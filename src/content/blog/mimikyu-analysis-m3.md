@@ -1,7 +1,7 @@
 ---
 title: 'ミミッキュ考察 M-3 型別採用率と立ち回り'
 description: 'チャンピオンズM-3使用率2位急上昇したミミッキュを解説。M-2（19位）からの大幅躍進の理由、いのちのたま83%への持ち物シフト、ウッドハンマー新採用によるラグラージ・ガブリアスへの対応を解説。'
-updatedDate: '2026-06-25'
+updatedDate: '2026-07-18'
 pubDate: '2026-06-25'
 heroImage: '../../assets/hero-mimikyu-m3.png'
 draft: false

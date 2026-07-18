@@ -1,7 +1,7 @@
 ---
 title: 'エルフーン考察 M-2 使用率43位 いたずらごころ補助型の採用率と立ち回り'
 description: 'チャンピオンズM-2エルフーンを徹底解説。いたずらごころで先制するおいかぜ・アンコール・おきみやげの補助性能、ムーンフォース91%の採用率データ、あくタイプへの弱点対策を実データで紹介。'
-updatedDate: '2026-06-11'
+updatedDate: '2026-07-18'
 pubDate: '2026-06-11'
 draft: false
 heroImage: '../../assets/hero-whimsicott-m2.png'

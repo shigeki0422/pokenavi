@@ -1,7 +1,7 @@
 ---
 title: 'ブリジュラス考察 M-3 型別採用率と立ち回り'
 description: 'チャンピオンズM-3使用率4位ブリジュラスを解説。特性じきゅうりょく75.7%・ひかえめ49.6%が最多構成。りゅうせいぐん＋しろいハーブでC無消費2連射を狙う型、ステルスロックで展開を作る補助型など役割の違いをデータで解説。'
-updatedDate: '2026-06-27'
+updatedDate: '2026-07-18'
 pubDate: '2026-06-27'
 heroImage: '../../assets/hero-archaludon-m3.png'
 draft: false

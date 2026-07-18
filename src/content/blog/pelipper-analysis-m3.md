@@ -1,7 +1,7 @@
 ---
 title: 'ペリッパー考察 M-3 あめふらし軸の立ち回りと型別採用率'
 description: 'チャンピオンズM-3使用率18位ペリッパーを解説。しめったいわ73.7%採用で雨8ターン固定、とんぼがえり92.6%による対面操作、のんき耐久型とひかえめ火力型の2軸を採用率データで解説します。'
-updatedDate: '2026-06-27'
+updatedDate: '2026-07-18'
 pubDate: '2026-06-27'
 heroImage: '../../assets/hero-pelipper-m3.png'
 draft: false

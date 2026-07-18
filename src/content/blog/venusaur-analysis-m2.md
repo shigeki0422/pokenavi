@@ -1,7 +1,7 @@
 ---
 title: 'メガフシギバナ M-2 技構成・構築と耐久立ち回り'
 description: 'チャンピオンズM-2メガフシギバナを徹底解説。あついしぼうでほのお・こおり等倍化、こうごうせい+ギガドレインで居座る耐久アタッカーの型と採用率、弱点への対策と同居構成を実データで紹介。'
-updatedDate: '2026-06-11'
+updatedDate: '2026-07-18'
 pubDate: '2026-06-11'
 draft: false
 heroImage: '../../assets/hero-venusaur-m2.png'

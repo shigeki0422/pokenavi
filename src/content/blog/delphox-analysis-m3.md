@@ -2,7 +2,7 @@
 title: 'メガマフォクシー考察 M-3 開幕42位から17位への急上昇とサザングロスへの強さ'
 description: 'チャンピオンズM-3使用率17位メガマフォクシーを解説。わるだくみ採用率急増（39.6%→51.4%）の背景、サザンドラ・メタグロス両方への優位性を実データで紹介。'
 pubDate: '2026-07-02'
-updatedDate: '2026-07-02'
+updatedDate: '2026-07-18'
 heroImage: '../../assets/hero-delphox-m3.png'
 draft: false
 ---

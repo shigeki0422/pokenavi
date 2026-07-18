@@ -1,7 +1,7 @@
 ---
 title: 'ガメノデス考察 M-3 型別採用率と立ち回り'
 description: 'チャンピオンズM-3使用率79位ガメノデス。からをやぶる採用率98.1%、インファイト96.0%のメガ進化型アタッカー。ようきメガ型・いじっぱりメガ型の2パターンを型別採用率・技構成・環境ポケモンとの相性を交えて解説。'
-updatedDate: '2026-06-20'
+updatedDate: '2026-07-18'
 pubDate: '2026-06-20'
 heroImage: '../../assets/hero-barbaracle-m3.png'
 draft: false

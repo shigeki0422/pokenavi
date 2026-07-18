@@ -1,7 +1,7 @@
 ---
 title: 'メガハッサム 考察 M-2シーズン 使用率と型別解説'
 description: 'チャンピオンズM-2使用率14位メガハッサムを徹底解説。テクニシャン+バレットパンチの高水準な先制技、つるぎのまい積みの破壊力、ほのお一点弱点の耐性と対策、いじっぱりHA振りの運用まで実データで解説します。'
-updatedDate: '2026-06-05'
+updatedDate: '2026-07-18'
 pubDate: '2026-06-05'
 draft: false
 heroImage: '../../assets/hero-scizor-m2.png'

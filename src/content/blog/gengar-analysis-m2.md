@@ -1,7 +1,7 @@
 ---
 title: 'メガゲンガー考察 M-2シーズン 使用率10位 かげふみ詰めと型別立ち回り'
 description: 'チャンピオンズM-2使用率10位メガゲンガーを徹底解説。かげふみで逃げ場をなくし、C170ヘドロウェーブの超火力で削る戦略を解説。おくびょうCS型とタスキ型の使い分けまで実データをもとに解説します。'
-updatedDate: '2026-05-23'
+updatedDate: '2026-07-18'
 pubDate: '2026-05-23'
 draft: false
 heroImage: '../../assets/hero-gengar-m2.png'

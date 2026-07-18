@@ -1,7 +1,7 @@
 ---
 title: 'メガルカリオ考察 M-2 使用率9位 型別採用率と立ち回り'
 description: 'チャンピオンズM-2使用率9位メガルカリオを徹底解説。てきおうりょくでインファイト実質240の破壊力、AS物理型・CS特殊型の使い分けと採用率、環境上位への相性を実データで紹介。'
-updatedDate: '2026-06-04'
+updatedDate: '2026-07-18'
 pubDate: '2026-06-04'
 draft: false
 heroImage: '../../assets/hero-lucario-m2.png'

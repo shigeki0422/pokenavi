@@ -1,7 +1,7 @@
 ---
 title: 'サザンドラ考察 M-3 サザングロス構築とM-2からの変化'
 description: 'チャンピオンズM-3使用率13位サザンドラを解説。こだわりスカーフ採用率85.4%、M-3でメタグロスが4位に台頭したことで生まれたサザングロス構築のタイプ補完、M-2との技・持ち物変化を解説。'
-updatedDate: '2026-07-02'
+updatedDate: '2026-07-18'
 pubDate: '2026-07-02'
 heroImage: '../../assets/hero-hydreigon-m3.png'
 draft: false

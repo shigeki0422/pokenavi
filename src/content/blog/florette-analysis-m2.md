@@ -1,7 +1,7 @@
 ---
 title: 'メガフラエッテ徹底考察 M-2シーズン・メガ進化の全て'
 description: 'チャンピオンズM-2使用率11位メガフラエッテを徹底解説。めいそう×ドレインキッスの崩し性能、ギャラドスとの6枠構成、パーティの組み方まで実データで紹介。'
-updatedDate: '2026-05-21'
+updatedDate: '2026-07-18'
 pubDate: '2026-05-21'
 heroImage: '../../assets/hero-florette-m2.png'
 ---
