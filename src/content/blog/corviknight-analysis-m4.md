@@ -326,59 +326,6 @@ H98・B105・D85と、物理・特殊の両面である程度の耐久を持つ�
 
 ---
 
-## データ分析①：てっぺきはD（特殊防御）を強化しない
-
-アーマーガアの弱点はほのお・でんきの2タイプで、いずれも環境上位では特殊技として採用される割合が高い技です。
-
-<div style="overflow-x:auto;margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.92em">
-<thead>
-<tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ポケモン（使用率）</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">分類</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メガリザードンY（11位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（ほのお）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">42.5%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0911-00.webp" alt="ラウドボーン" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ラウドボーン（28位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フレアソング（ほのお）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">99.1%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ライチュウ（22位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんじほう（でんき）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">96.6%</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ウォッシュロトム（17位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">55.3%</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0257-00.webp" alt="バシャーモ" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">バシャーモ（10位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フレアドライブ（ほのお）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">物理</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">84.7%</td>
-</tr>
-</tbody>
-</table>
-</div>
-
-てっぺきが強化するのはぼうぎょ（B）のみで、とくぼう（D）は種族値85のまま変化しません。表の5例中4例が特殊技であり、環境上位のほのお・でんき技持ちの多くはてっぺきを積んでも被ダメージが変わらない特殊アタッカーです。実際、メガリザードンY（Yナイト採用率65.3%・ひかえめ・EV C32想定・C実数値232）のかえんほうしゃはD107のアーマーガアに221〜261ダメ（H205の108〜127%）となり、てっぺきの有無に関わらず確定1発を取られます。てっぺき・ボディプレス型は物理アタッカーへの受けを厚くする型であり、特殊のほのお・でんき技への回答にはなりません。
-
----
-
 ## 苦手なポケモン
 
 <div style="overflow-x:auto;margin:12px 0">
