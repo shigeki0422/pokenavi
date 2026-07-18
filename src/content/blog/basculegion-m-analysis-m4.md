@@ -149,6 +149,82 @@ M-4で95.7%が採用する**てきおうりょく**は「自分と同じタイ�
 
 ---
 
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>おはかまいり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">50〜</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">99.9%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">手持ちが1匹瀕死になるたび威力+50。ゴースト一致でてきおうりょく2倍補正</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ウェーブタックル</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">96.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">与ダメージの1/3を自分も受ける反動技。みず一致でてきおうりょく2倍補正の主力打点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アクアジェット</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">89.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+1で必ず先制。こだわりスカーフの技固定下でも確実に先手を取れる打点</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>クイックターン</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">76.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代。こだわりスカーフの技固定を緩和し後続へ繋げる</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>こうそくいどう</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分の素早さを2段階上昇。こだわりスカーフ以外の型向けの選択技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>サイコファング</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">85</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の壁（リフレクター等）を解除して攻撃。かくとうタイプへのエスパー打点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>みがわり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分のHP1/4を消費して身代わりを出す。状態異常・追加効果技への保険</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>こおりのキバ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10%で相手を氷状態・10%でひるみ。ガブリアス等のドラゴン/じめんへの打点</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+---
+
 ## M-4の採用型
 
 ### 型1：こだわりスカーフ 物理アタッカー型（ようき 65.1%）
@@ -182,7 +258,7 @@ M-4で95.7%が採用する**てきおうりょく**は「自分と同じタイ�
 
 **強み:**
 
-こだわりスカーフでS実数値214（ようき・EV32）まで到達し、環境上位のガブリアス（スカーフ非採用時S169）より上から動けます。ウェーブタックルはほのお/ひこう複合のメガリザードンY（HP実数値155・EV2、Def実数値98）に対して304〜356ダメージとなり、乱数を問わず1発で戦闘不能にできる威力です。なお、でんじほう・シャドーボールでイダイトウの弱点（でんき・ゴースト）を一致技で突けるメガライチュウY・メガゲンガー（ともにS200）は、速度で上から動かれても弱点技で返り討ちに遭うリスクが高く、単純な速度優位が活きる相手ではありません（詳細は後述の「苦手なポケモン」参照）。
+こだわりスカーフでS実数値214（ようき・EV32）まで到達し、環境上位のガブリアス（スカーフ非採用時S169）より上から動けます。ウェーブタックルはほのお/ひこう複合のメガリザードンY（HP実数値155・EV2、Def実数値100）に対して304〜356ダメージとなり、乱数を問わず1発で戦闘不能にできる威力です。なお、でんじほう・シャドーボールでイダイトウの弱点（でんき・ゴースト）を一致技で突けるメガライチュウY・メガゲンガー（ともにS200）は、ようき型のS214であれば上から動けますが、1発で仕留めきれない場合は弱点技で返り討ちに遭うリスクが残ります（詳細は後述の「苦手なポケモン」参照）。
 
 **弱み:**
 
@@ -296,14 +372,14 @@ M-4最大の変化は**クイックターンの新台頭（76.7%）**です。M-
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" alt="サザンドラ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">サザンドラ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどう（あく・採用率99.3%）が×2弱点。持ち物こだわりスカーフ84.2%でS実数値も高く、耐久65/75の本種は先手を取られると大ダメージを受けます</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ライチュウ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">21位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんじほう（でんき・採用率96.6%）が×2弱点。メガライチュウY採用率96.9%でC160の高火力を持ち、でんき無効特性を持たない本種は等倍以上の被弾を強いられます</td>
 </tr>
 <tr>
@@ -317,7 +393,7 @@ M-4最大の変化は**クイックターンの新台頭（76.7%）**です。M-
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" alt="ゲンガー" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゲンガー
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">シャドーボール（ゴースト・採用率86.8%）が×2弱点。メガゲンガーはS130（実数値200）で本種のいじっぱり型（S195）より速く、みちづれ63.9%を絡めた対面も想定されます</td>
 </tr>
 <tr>
@@ -394,7 +470,7 @@ M-4でイダイトウと同じパーティに入る頻度が高いポケモン�
 
 **ガブリアス**（1位）はドラゴン/じめんで、じしんによるでんき技持ちへの牽制と、イダイトウのでんき弱点を分担する組み合わせです。ガブリアスのフェアリー・こおり弱点をイダイトウがそれぞれ等倍・半減で受けられる場面があり、弱点方向の違いがパーティ全体の受け先を分散させます。
 
-**ブリジュラス**（2位）ははがね/ドラゴンで、はがねタイプによりこおり・フェアリー技を半減できる耐性が特徴です。あく・ドラゴン技はブリジュラスに等倍で通るため、イダイトウのあく弱点を肩代わりする関係にはなりませんが、イダイトウが半減できるほのお技をブリジュラスは等倍で受けるなど、互いに得意な範囲が異なるパーティ構成になっています。
+**ブリジュラス**（2位）ははがね/ドラゴンで、ドラゴン技を等倍で受けつつ物理受けとして機能する特徴です。あく・ドラゴン技はブリジュラスに等倍で通るため、イダイトウのあく弱点を肩代わりする関係にはなりませんが、イダイトウが半減できるほのお技をブリジュラスは等倍で受けるなど、互いに得意な範囲が異なるパーティ構成になっています。
 
 **ミミッキュ**（3位）はゴースト/フェアリーで、ばけのかわによる安全な先制打点役です。イダイトウのでんき・くさ弱点をミミッキュのじゃれつく・かげうちで直接カバーすることはできませんが、ミミッキュがでんき等倍・くさ等倍で受けやすいため、弱点の重なりを避けた選出が組みやすくなっています。
 

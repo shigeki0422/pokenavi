@@ -1,9 +1,9 @@
 ---
 title: '【ポケモンチャンピオンズ】アーマーガア 考察 M-4 シーズン てっぺき・ボディプレス型の受け性能'
-description: 'M-4シーズン使用率13位のアーマーガア考察。てっぺき64.2%・ボディプレス66.8%の受け型を中心に、EV H32-B32わんぱく72.7%の実数値とほのお・でんき弱点への対策を分析します。'
+description: 'M-4シーズン使用率14位のアーマーガア考察。てっぺき64.2%・ボディプレス66.8%の受け型を中心に、EV H32-B32わんぱく72.7%の実数値とほのお・でんき弱点への対策を分析します。'
 pubDate: '2026-07-15'
 updatedDate: '2026-07-15'
-heroImage: '../../assets/hero-corviknight-m3.png'
+heroImage: '../../assets/hero-corviknight-m4.png'
 draft: true
 ---
 
@@ -28,12 +28,12 @@ draft: true
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">13位</strong>　特性: <strong>プレッシャー 66.8%</strong>
+      使用率: <strong style="color:#e67e22">14位</strong>　特性: <strong>プレッシャー 66.8%</strong>
     </div>
   </div>
 </div>
 
-M-4シーズン、アーマーガアは使用率13位につけています。ひこう/はがねの複合タイプで、B105・H98の耐久を土台にてっぺき（64.2%）とボディプレス（66.8%）を組み合わせた受け型が主流です。はねやすめ（98.4%）ととんぼがえり（67.0%）を軸に、長期戦での回復と対面操作を両立させる構築が中心になっています。
+M-4シーズン、アーマーガアは使用率14位につけています。ひこう/はがねの複合タイプで、B105・H98の耐久を土台にてっぺき（64.2%）とボディプレス（66.8%）を組み合わせた受け型が主流です。はねやすめ（98.4%）ととんぼがえり（67.0%）を軸に、長期戦での回復と対面操作を両立させる構築が中心になっています。
 
 ---
 
@@ -154,6 +154,96 @@ H98・B105・D85と、物理・特殊の両面である程度の耐久を持つ�
 
 ---
 
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はねやすめ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">98.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">最大HPの1/2回復。使用ターンはひこうタイプでなくなり、じめん技を受けられる点に注意</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とんぼがえり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">67.0%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代。対面操作しながら後続に負担をかける</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ボディプレス</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">66.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげきでなくぼうぎょ実数値でダメージ計算。てっぺきと組み合わせて打点にする物理技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>てっぺき</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">64.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分のぼうぎょを2段階上昇。ボディプレスの打点を伸ばす積み技。とくぼうは強化しない</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アイアンヘッド</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>45.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">20%でひるみ。ビルドアップ型のA基準打点。フェアリー・こおりへの一致技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ビルドアップ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分のこうげき・ぼうぎょを各1段階上昇。アイアンヘッドの物理打点を底上げ</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ブレイブバード</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">9.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">与ダメージの1/3を反動で受ける高火力ひこう技。かくとう・むしへの一致打点</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>きりばらい</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の回避率を下げつつ、リフレクター等の設置技を解除する補助技</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ちょうはつ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手を変化技封じ状態にする。てっぺき・積み技持ちの相手を機能停止させる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つけあがる</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20+</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分の能力上昇段階に応じて威力上昇。てっぺき後に撃つとあく一致の高火力技になる</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+---
+
 ## M-4の採用型
 
 ### 型1：てっぺき・ボディプレスの受け型（わんぱく 72.7%）
@@ -185,7 +275,7 @@ H98・B105・D85と、物理・特殊の両面である程度の耐久を持つ�
 
 てっぺき（はがね・積み技）でぼうぎょを2段階上げ、その実数値をそのまま攻撃値として使うボディプレス（かくとう・威力80）で打点に変換する型です。実数値はH205 / A107 / B172 / C65 / D107 / S87（EV H32-B32・わんぱく）で、てっぺき使用後のBは実質344まで伸びます。かくとうタイプはアーマーガアの一致技ではないため、ボディプレスに一致補正はかかりません。
 
-わんぱく（B↑C↓）のEV配分でもD105は種族値のまま強化されないため、ほのお・でんきの特殊技への耐性は変わりません。とんぼがえり（むし・威力70）で後続に負担をかけつつ交代し、はねやすめで積んだ耐久を維持する運用が中心です。
+わんぱく（B↑C↓）のEV配分でもD85は種族値のまま強化されないため、ほのお・でんきの特殊技への耐性は変わりません。とんぼがえり（むし・威力70）で後続に負担をかけつつ交代し、はねやすめで積んだ耐久を維持する運用が中心です。
 
 **強み:**
 
@@ -258,19 +348,19 @@ H98・B105・D85と、物理・特殊の両面である程度の耐久を持つ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">42.5%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0911-00.webp" alt="ラウドボーン" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ラウドボーン（26位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0911-00.webp" alt="ラウドボーン" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ラウドボーン（28位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フレアソング（ほのお）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">99.1%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ライチュウ（21位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ライチュウ（22位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんじほう（でんき）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">96.6%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ウォッシュロトム（18位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ウォッシュロトム（17位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">特殊</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">55.3%</td>
@@ -409,7 +499,7 @@ M-4でアーマーガアと同じパーティに入る頻度が高いポケモ�
 
 ## まとめ
 
-M-4のアーマーガアは使用率13位で、てっぺき・ボディプレスの受け型を中心に採用されています。
+M-4のアーマーガアは使用率14位で、てっぺき・ボディプレスの受け型を中心に採用されています。
 
 - **てっぺき（64.2%）・ボディプレス（66.8%）の組み合わせが主流です**：Bを2段階積み、その実数値をそのままボディプレスの攻撃値に変換する物理アタッカー兼受けの型です
 - **ビルドアップ（26.0%）・アイアンヘッド（45.2%）型も一定数存在します**：A・Bを同時に強化し、通常の物理技であるアイアンヘッドで打点を出す型です

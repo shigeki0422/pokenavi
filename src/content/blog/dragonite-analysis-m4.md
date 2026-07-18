@@ -3,7 +3,7 @@ title: '【ポケモンチャンピオンズ】メガカイリュー 考察 M-4 
 description: 'M-4シーズン使用率14位のメガカイリュー考察。M-3から続くひかえめ特殊型が59.3%と主流を保ちつつ、ようき・いじっぱりの物理先制型が計23.9%に伸長。カイリュナイト採用率71.8%のデータからマルチスケイル運用と技構成の変化を分析します。'
 pubDate: '2026-07-15'
 updatedDate: '2026-07-15'
-heroImage: '../../assets/hero-dragonite-m2.png'
+heroImage: '../../assets/hero-dragonite-m4.png'
 draft: true
 ---
 
@@ -28,12 +28,12 @@ draft: true
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">14位</strong>（M-3: 21位）　持ち物: <strong>カイリュナイト 71.8%</strong>
+      使用率: <strong style="color:#e67e22">12位</strong>（M-3: 22位）　持ち物: <strong>カイリュナイト 71.8%</strong>
     </div>
   </div>
 </div>
 
-M-4シーズン、カイリューは使用率14位につけています。ドラゴン/ひこうタイプはメガ進化してもタイプが変わらない数少ないメガシンカ枠で、りゅうせいぐん・エアスラッシュを主軸にしたひかえめ特殊型が59.3%と依然主流である一方、M-4ではしんそく・げきりんを軸にした物理先制型（ようき12.7%＋いじっぱり11.2%）が合計23.9%まで伸びています。
+M-4シーズン、カイリューは使用率12位につけています。ドラゴン/ひこうタイプはメガ進化してもタイプが変わらない数少ないメガシンカ枠で、りゅうせいぐん・エアスラッシュを主軸にしたひかえめ特殊型が59.3%と依然主流である一方、M-4ではしんそく・げきりんを軸にした物理先制型（ようき12.7%＋いじっぱり11.2%）が合計23.9%まで伸びています。
 
 ---
 
@@ -157,6 +157,96 @@ M-4シーズン、カイリューは使用率14位につけています。ドラ
 
 ---
 
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうせいぐん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">130</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">60.9%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン一致の最大打点。使用後にとくこうが2段階下がる反動あり</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かえんほうしゃ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">51.3%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがねタイプへの主力サブウェポン。メタグロス等に確定打点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>エアスラッシュ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">50.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひこう一致で30%ひるみ。かくとうタイプへの打点にもなる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はねやすめ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>49.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">HP1/2回復。マルチスケイル維持のため満タンHPを保つ手段</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>しんそく</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>42.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+2で必ず先制。物理先制型のフィニッシャー</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>10まんボルト</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">24.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず・ひこうタイプへの選択技</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>じしん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">100</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ブリジュラス等ドラゴン耐性を持たないはがね複合への打点</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうのまい</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">21.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげき・すばやさを同時に1段階上げる積み技</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>げきりん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">物理型のドラゴン一致高火力打点。使用後はあばれ状態になる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>れいとうビーム</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアス等ドラゴン・じめんタイプへの選択技</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+---
+
 ## M-4の採用型
 
 ### 型1：特殊アタッカー型（ひかえめ 59.3%）
@@ -186,11 +276,11 @@ M-4シーズン、カイリューは使用率14位につけています。ドラ
 </div>
 </div>
 
-りゅうせいぐん（ドラゴン・威力130・採用率60.9%）はタイプ一致の主力打点で、使用後にとくこうが1段階下がる反動があります。エアスラッシュ（ひこう・威力75・採用率50.8%）はタイプ一致でひるみ効果も狙え、かえんほうしゃ（ほのお・威力90・採用率51.3%）ははがねタイプへの打点になります。はねやすめ（採用率49.2%）でHPを回復し、マルチスケイルの発動条件（HP満タン）を維持する運用です。10まんボルト（でんき・採用率24.7%）はみず・ひこうタイプへの選択技として採用されます。
+りゅうせいぐん（ドラゴン・威力130・採用率60.9%）はタイプ一致の主力打点で、使用後にとくこうが2段階下がる反動があります。エアスラッシュ（ひこう・威力75・採用率50.8%）はタイプ一致でひるみ効果も狙え、かえんほうしゃ（ほのお・威力90・採用率51.3%）ははがねタイプへの打点になります。はねやすめ（採用率49.2%）でHPを回復し、マルチスケイルの発動条件（HP満タン）を維持する運用です。10まんボルト（でんき・採用率24.7%）はみず・ひこうタイプへの選択技として採用されます。
 
 **強み:**
 
-C216（ひかえめ・EV32）はりゅうせいぐんの一撃が重い一方、ドラゴン技はメタグロス（はがね/エスパー）に半減されるため通りません。メタグロスへの打点はサブウェポンのかえんほうしゃが担っており、確定1発を取れる計算はデータ分析②で示します。りゅうせいぐんは無振りの相手にも高い打点を出せるドラゴン・ひこうへの一致技として機能します。
+C216（ひかえめ・EV32）はりゅうせいぐんの一撃が重い一方、ドラゴン技はメタグロス（はがね/エスパー）に半減されるため通りません。メタグロスへの打点はサブウェポンのかえんほうしゃが担っており、半減止まりで確定2発になる計算はデータ分析②で示します。りゅうせいぐんは無振りの相手にも高い打点を出せるドラゴン・ひこうへの一致技として機能します。
 
 **弱み:**
 
@@ -334,10 +424,9 @@ M-3で81.7%を占めていたひかえめが59.3%まで減り、ようき・い�
 
 特殊アタッカー型のかえんほうしゃ（採用率51.3%）は、環境上位のはがねタイプに対する打点として機能します。メガメタグロス（使用率4位・はがね/エスパー）はほのお技を×2で受けるため、以下の計算結果になります。
 
-- メガカイリュー（ひかえめ・C実数値216）のかえんほうしゃ（威力90・タイプ一致なし・弱点2倍）→メタグロス（H157・D130、H2-A32-S32想定）へ**170〜200ダメージ（H157の108.3〜127.4%）**
-- 乱数を問わず確定1発
+- メガカイリュー（ひかえめ・C実数値216）のかえんほうしゃ（威力90・タイプ一致なし・弱点2倍）→メガメタグロス（H157・D170、メガ後種族値ベース）へ**89〜105ダメージ（H157の56.7〜66.9%）で確定2発**
 
-M-4使用率4位のメタグロスに対し確定1発を取れる技である点が、かえんほうしゃが51.3%まで採用率を伸ばした裏付けになります。一方でブリジュラス（はがね/ドラゴン・使用率5位）はドラゴン複合のためほのお技が等倍になり、じしん（じめん・威力100）の方がドラゴン耐性を持たない分刺さります。技の使い分けは相手のはがね複合タイプによって変わります。
+M-4使用率4位のメタグロスに対し確定2発で処理できる数少ない打点である点が、かえんほうしゃが51.3%まで採用率を伸ばした裏付けになります。一方でブリジュラス（はがね/ドラゴン・使用率6位）にはほのお技が等倍止まりですが、じしん（じめん・威力100）は×2で通ります。技の使い分けは相手のはがね複合タイプによって変わります。
 
 ---
 
@@ -355,17 +444,17 @@ M-4使用率4位のメタグロスに対し確定1発を取れる技である点
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0038-00.webp" alt="アローラキュウコン" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">アローラキュウコン
+    <img src="/images/pokemon/pokemon-0038-01.webp" alt="アローラキュウコン" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">アローラキュウコン
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライ（こおり・採用率84.4%）・ふぶき（こおり・採用率71.5%）が×4弱点。持ち物はひかりのねんど92.0%でオーロラベール展開が主体のため、被弾機会自体が多い相手です</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0937-00.webp" alt="ゲッコウガ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゲッコウガ
+    <img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゲッコウガ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビーム（こおり・採用率87.2%）が×4弱点。メガゲッコウガはS142（ゲッコウガナイト採用率49.5%）でメガカイリューのようき型S167より遅いものの、一致弱点技で高い打点を持ちます</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビーム（こおり・採用率87.2%）が×4弱点。メガゲッコウガ（ゲッコウガナイト採用率49.5%）はおくびょう最速でS実数値約213に達し、メガカイリューのようき型S167より速く、一致弱点技で上から高い打点を持ちます</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -459,13 +548,13 @@ M-4でカイリューと同じパーティに入る頻度が高いポケモン�
 
 **メタグロス**（4位）ははがね/エスパーで、カイリューのかえんほうしゃがはがねタイプ全般への打点として機能し、メタグロス自身がドラゴン・フェアリーへの耐性を持つため弱点タイプの分散に寄与します。
 
-**ブリジュラス**（5位）ははがね/ドラゴンで、カイリューと同じドラゴンタイプを共有するため弱点の分散にはなりませんが、ラスターカノン（はがね一致）とカイリューのりゅうせいぐん・エアスラッシュで打点方向が異なる相手を分担できます。
+**ブリジュラス**（6位）ははがね/ドラゴンで、カイリューと同じドラゴンタイプを共有するため弱点の分散にはなりませんが、ラスターカノン（はがね一致）とカイリューのりゅうせいぐん・エアスラッシュで打点方向が異なる相手を分担できます。
 
 ---
 
 ## まとめ
 
-M-4のカイリューは使用率14位（M-3: 21位）へ順位を上げ、特殊型と物理先制型の二極化が進んだシーズンです。
+M-4のカイリューは使用率12位（M-3: 22位）へ順位を上げ、特殊型と物理先制型の二極化が進んだシーズンです。
 
 - **ひかえめ特殊型が59.3%と依然主流**：りゅうせいぐん・エアスラッシュ・かえんほうしゃの3タイプ攻撃ではがね・むしタイプにも打点を持てる構成
 - **ようき・いじっぱりの物理先制型が合計23.9%へ伸長**（M-3合計9.7%から+14.2pp）：しんそく・げきりん・じしんを軸に、りゅうのまいで積む運用

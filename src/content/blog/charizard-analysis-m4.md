@@ -198,11 +198,101 @@ M-4シーズン、リザードンは使用率11位につけています。メガ
 </table>
 </div>
 
-メガXはひこうタイプでなくなるため、じめん技が無効から等倍（×2弱点）に転じます。一方ででんき技への耐性（×0.5）を新たに得るため、カイリュー（14位）の10まんボルトはメガXには半減で通ります。ただしみずタイプは等倍のまま耐性化はしないため、ギャラドス（8位）のたきのぼりはメガXにも等倍で通ります。どちらのメガ石を選ぶかで通る攻撃・通らない攻撃が入れ替わる点が、このポケモンの最大の特徴です。
+メガXはひこうタイプでなくなるため、じめん技が無効から等倍（×2弱点）に転じます。一方ででんき技への耐性（×0.5）を新たに得るため、カイリュー（12位）の10まんボルトはメガXには半減で通ります。ただしみずタイプは等倍のまま耐性化はしないため、ギャラドス（8位）のたきのぼりはメガXにも等倍で通ります。どちらのメガ石を選ぶかで通る攻撃・通らない攻撃が入れ替わる点が、このポケモンの最大の特徴です。
 
 ### 特性
 
 通常時は**もうか（86.1%）**が主流で、HPが1/3以下になるとほのお技の威力が1.5倍になります。控えは**サンパワー（13.9%）**で、にほんばれ下で特攻1.5倍になる代わり毎ターン最大HPの1/8を失います。ただしメガ進化するとメガYはひでりに、メガXはかたいツメに特性が固定で上書きされるため、通常時の特性はメガ進化前の場に出ているターンにのみ意味を持ちます。もうか・サンパワーいずれの場合も、メガ進化後は特性が入れ替わる点に注意が必要です。
+
+---
+
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ソーラービーム</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">64.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガY専用の主力技。ひでりでにほんばれにすれば溜めなしで即撃てる。ガブリアス・カバルドン等じめん複合に等倍以上</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かえんほうしゃ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">42.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガYの一致安定打点。10%でやけど付与。反動なしで運用しやすい</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>エアスラッシュ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">42.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガYの一致技。30%でひるみを狙える。かくとう技持ちへの反撃手段にもなる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>フレアドライブ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">32.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガXの一致最大打点。かたいツメで威力1.3倍。被ダメージ1/3の反動あり</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ニトロチャージ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">50</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">27.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガXの技。反動なしで火力を出しつつ自分のS1段階上昇。りゅうのまいと合わせて加速できる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>オーバーヒート</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">130</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">23.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガYの一撃重視の選択技。使用後は自分のC2段階down。連発できないため撃ち切り用</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうのまい</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガXの積み技。自分のA・Sを1段階上昇。フレアドライブ・ドラゴンクローの威力と行動速度を伸ばす</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ウェザーボール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">50→100</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガYのひでり下ではタイプがほのおに変わり威力2倍の100。かえんほうしゃと役割が重なるサブ打点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はねやすめ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガYの回復技。最大HPの1/2回復。使用ターン中はひこうタイプが外れ、じめん技を受けてしまう点に注意</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ドラゴンクロー</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メガXの技。ガブリアス（じめん/ドラゴン）に一致補正込みで×2で通る数少ない打点だが採用は少数派</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ---
 
@@ -235,7 +325,7 @@ M-4シーズン、リザードンは使用率11位につけています。メガ
 </div>
 </div>
 
-メガYの特性ひでりで自ら天候をにほんばれにすることで、本来2ターン技のソーラービーム（くさ・威力120）を1ターンで撃てるようにするのが型の骨子です。ソーラービームはくさタイプのため、じめん技を主力にするガブリアス（1位）やカバルドン（3位）に等倍以上で通る貴重な打点になります（対カバルドン：じめん/あく複合に×2）。かえんほうしゃ（ほのお・威力90）は一致技として安定打点になり、エアスラッシュ（ひこう・威力75）はひるみ30%を狙えます。オーバーヒート（ほのお・威力130、使用後特攻2段階down）は一撃の火力に、りゅうのまい（採用率22.2%、A・S1段階上昇）は積み技の選択肢です。
+メガYの特性ひでりで自ら天候をにほんばれにすることで、本来2ターン技のソーラービーム（くさ・威力120）を1ターンで撃てるようにするのが型の骨子です。ソーラービームはくさタイプのため、じめん技を主力にするガブリアス（1位）やカバルドン（3位）に等倍以上で通る貴重な打点になります（対カバルドン：じめん単タイプに×2）。かえんほうしゃ（ほのお・威力90）は一致技として安定打点になり、エアスラッシュ（ひこう・威力75）はひるみ30%を狙えます。オーバーヒート（ほのお・威力130、使用後特攻2段階down）は一撃の火力に、りゅうのまい（採用率22.2%、A・S1段階上昇）は積み技の選択肢です。
 
 **強み:**
 
@@ -274,7 +364,7 @@ M-4シーズン、リザードンは使用率11位につけています。メガ
 </div>
 </div>
 
-フレアドライブ（ほのお・威力120、被ダメージ1/3の反動）が一致最大打点。ニトロチャージ（ほのお・威力50、自分のS1段階上昇）は火力を出しながら素早さを補強でき、りゅうのまい（A・S1段階上昇）との相性が良い技です。ドラゴンクロー（ドラゴン・威力80、採用率18.7%）はガブリアス（じめん/ドラゴン）に一致補正なしでも×2で通る数少ない打点ですが、フレアドライブ・ニトロチャージはほのおタイプのためガブリアスには×0.5にとどまります。
+フレアドライブ（ほのお・威力120、被ダメージ1/3の反動）が一致最大打点。ニトロチャージ（ほのお・威力50、自分のS1段階上昇）は火力を出しながら素早さを補強でき、りゅうのまい（A・S1段階上昇）との相性が良い技です。ドラゴンクロー（ドラゴン・威力80、採用率18.7%）はガブリアス（じめん/ドラゴン）に一致補正込みで×2で通る数少ない打点ですが、フレアドライブ・ニトロチャージはほのおタイプのためガブリアスには×0.5にとどまります。
 
 **強み:**
 
@@ -306,7 +396,7 @@ M-4シーズン、リザードンは使用率11位につけています。メガ
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">ドラゴンクロー（ドラゴン）×2</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">カバルドン（じめん/あく）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">カバルドン（じめん）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">ソーラービーム（くさ）×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">フレアドライブ（ほのお）×1</td>
@@ -325,7 +415,7 @@ M-4シーズン、リザードンは使用率11位につけています。メガ
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ブリジュラス（はがね/ドラゴン）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">かえんほうしゃ（ほのお）×1</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">フレアドライブ（ほのお）×1</td>
 </tr>
@@ -333,7 +423,7 @@ M-4シーズン、リザードンは使用率11位につけています。メガ
 </table>
 </div>
 
-表の倍率は`get_type_effectiveness`で全件検算済みです。ソーラービーム（くさ）はガブリアスには等倍止まりですが、じめん複合でも「あく」を挟むカバルドンには×2で通ります。一方メガXのドラゴンクロー（採用率18.7%と低め）はガブリアスに刺さる貴重な打点ですが採用が少数派で、多くのメガX個体はフレアドライブ・ニトロチャージのほのお技のみでガブリアスに対しては×0.5にとどまります。ほのお一致技はギャラドス（みず/ひこう）には×0.5、ブリジュラス（はがね/ドラゴン）には×1と、相手のタイプ次第で通りが大きく変わる点も見落とせません。メガYはくさ技を持つことでメガXにはない地面複合への上積みがある一方、メガXはひこうタイプが外れることでいわ×4のような致命的な四倍弱点を持たないという、攻守で明確なトレードオフになっています。
+表の倍率は`get_type_effectiveness`で全件検算済みです。ソーラービーム（くさ）はガブリアスには等倍止まりですが、じめん単タイプのカバルドンには×2で通ります。一方メガXのドラゴンクロー（採用率18.7%と低め）はガブリアスに刺さる貴重な打点ですが採用が少数派で、多くのメガX個体はフレアドライブ・ニトロチャージのほのお技のみでガブリアスに対しては×0.5にとどまります。ほのお一致技はギャラドス（みず/ひこう）には×0.5、ブリジュラス（はがね/ドラゴン）には×1と、相手のタイプ次第で通りが大きく変わる点も見落とせません。メガYはくさ技を持つことでメガXにはない地面複合への上積みがある一方、メガXはひこうタイプが外れることでいわ×4のような致命的な四倍弱点を持たないという、攻守で明確なトレードオフになっています。
 
 ---
 
@@ -409,7 +499,7 @@ M-4シーズン、リザードンは使用率11位につけています。メガ
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" alt="サザンドラ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">サザンドラ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">りゅうせいぐん（ドラゴン・採用率93.3%）がメガXに×2弱点。C高水準のサザンドラの特殊打点は耐久の薄いメガXには大きな負担になります</td>
 </tr>
 <tr>
@@ -417,7 +507,7 @@ M-4シーズン、リザードンは使用率11位につけています。メガ
     <img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゲッコウガ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずしゅりけん（みず・採用率63.8%）・なみのり（みず・43.3%）がメガYに×2弱点。ゲッコウガのようき最速個体はS191に達し、メガY（S100）・メガX（S100）どちらよりも速く、先手を許しやすい相手です</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みずしゅりけん（みず・採用率63.8%）・なみのり（みず・43.3%）がメガYに×2弱点。ゲッコウガのようき最速個体はS191に達し、メガY・メガXともにS167（最速個体）を上回り、先手を許しやすい相手です</td>
 </tr>
 </tbody>
 </table>
@@ -427,7 +517,7 @@ M-4シーズン、リザードンは使用率11位につけています。メガ
 
 ## 同居率上位の分析
 
-M-4でリザードンと同じパーティに入る頻度が高いポケモン（同居率1〜10位）は以下のとおりです。
+M-4でリザードンと同じパーティに入る頻度が高いポケモン（同居率上位9体）は以下のとおりです。
 
 <div class="partner-grid">
   <div class="partner-card">

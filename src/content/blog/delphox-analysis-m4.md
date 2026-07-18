@@ -113,13 +113,13 @@ M-4シーズン、マフォクシーは使用率9位に浮上しました（M-3�
 <tr style="background:#f1f5f9">
   <th style="padding:8px 12px;border:1px solid #cbd5e1">弱点（×2）</th>
   <th style="padding:8px 12px;border:1px solid #cbd5e1">耐性（×0.5）</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1">特性による無効（メガ後・ふゆう）</th>
 </tr>
 </thead>
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px">
-      <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
       <span><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">いわ</span>
       <span><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">ゴースト</span>
       <span><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">みず</span>
@@ -137,6 +137,11 @@ M-4シーズン、マフォクシーは使用率9位に浮上しました（M-3�
       <span><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">フェアリー</span>
     </div>
   </td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">
+    <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:6px">
+      <span><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle;margin-right:3px">じめん</span>
+    </div>
+  </td>
 </tr>
 </tbody>
 </table>
@@ -147,6 +152,82 @@ M-4シーズン、マフォクシーは使用率9位に浮上しました（M-3�
 ### 特性
 
 メガ進化前は**もうか（90.3%）**が固定。HPが最大HPの1/3以下になるとほのおタイプの技の威力が1.5倍になります。もう一つの選択肢である**マジシャン（9.7%）**は道具を持っていない時に技を当てた相手の道具を奪う特性です。メガ進化後は**ふゆう**に変わり、じめん技・まきびし・どくびし・ねばねばネットが効かなくなります。マフォクシナイト採用率99.1%の環境では、実戦で機能するのはほぼ常にふゆうです。
+
+---
+
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かえんほうしゃ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">84.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">一致技のメインウェポン。10%でやけど付与。はがね・くさタイプに一致補正で通す（いわタイプには半減）</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>マジカルシャイン</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">63.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう・ドラゴンへの打点。カバルドン・ギャラドス等ほのお・エスパーが通らない相手を補完</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>サイコキネシス</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">56.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10%で相手の特防を1段階下げる。かくとう・どくへの一致打点</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>みがわり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>42.3%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分のHP1/4を消費し設置。先制技・状態異常を透かしながら安全にターンを進める</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>サイコショック</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>39.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手のぼうぎょ実数値で計算。とくぼうが高い受け寄りの相手に効果的</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>わるだくみ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>39.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自身のとくこうを2段階上昇。積んだ後の打点は大きく伸びるが隙を晒す</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アンコール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手を直前の技に固定。積み技・補助技を封じてみがわりを安全に張り直す起点になる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>マジカルフレイム</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の特攻を1段階下げる。かえんほうしゃより低威力だが特殊アタッカーの後続を弱体化できる</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ---
 
@@ -392,21 +473,21 @@ M-4の最大変化は**マジカルシャインの+21.6pp（42.1%→63.7%）**�
     <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">アシレーヌ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリア（みず・採用率88.2%）・先制のアクアジェット（みず・74.6%）がいずれも×2弱点。こちらのほのお・エスパー・フェアリー技もみず/フェアリー複合には等倍止まりで押し切れません</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリア（みず・採用率88.2%）・先制のアクアジェット（みず・74.6%）がいずれも×2弱点。こちらのほのお技はみず/フェアリー複合に半減、エスパー・フェアリー技は等倍止まりで押し切れません</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ギャラドス
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">8位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼり（みず・採用率80.1%）が×2弱点。じしん（77.8%）はふゆうで無効化できますが、りゅうのまい後のたきのぼりは一撃が重く、こちらの技もみず/ひこう複合に等倍止まりです</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">たきのぼり（みず・採用率80.1%）が×2弱点。じしん（77.8%）はふゆうで無効化できますが、りゅうのまい後のたきのぼりは一撃が重く、こちらのほのお技はみず/ひこう複合に半減で、決定打を欠きます</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ウォッシュロトム
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ハイドロポンプ（みず・採用率99.0%）が×2弱点。おにび（75.5%）でやけどを負うと物理方面の火力がさらに落ち、でんき/みず複合にこちらの技は等倍止まりです</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ハイドロポンプ（みず・採用率99.0%）が×2弱点。おにび（75.5%）でやけどを負うと物理方面の火力がさらに落ち、こちらのほのお技もでんき/みず複合には半減です</td>
 </tr>
 </tbody>
 </table>
@@ -475,11 +556,11 @@ M-4でマフォクシーと同じパーティに入る頻度が高いポケモ�
 
 **ミミッキュ**（2位）はゴースト/フェアリーで、つるぎのまいで積んだかげうちが、マフォクシーが決定打を欠く高耐久の相手を押し切る役割を担います。ただしマフォクシーのほのお・エスパー・フェアリー技はいずれもミミッキュに等倍止まりで、ミミッキュの弱点を突く打点はマフォクシー側にありません。役割分担は「ミミッキュの一致打点で押し切る／マフォクシーが別の相手を処理する」という住み分けです。
 
-**マスカーニャ**（3位）はくさ/あくで、マフォクシーのフェアリー技・ほのお技はいずれもマスカーニャの弱点タイプに抜群（×2）で刺さる一方、エスパー技は無効（×0）です。マスカーニャのどく技・あく技はマフォクシーの弱点であるあくを自ら担当し、互いに相手の弱点を突ける打点を持ち寄る組み合わせです。
+**マスカーニャ**（3位）はくさ/あくで、マフォクシーが苦手なあくタイプの相手をはたきおとす・ふいうちで処理できる役割分担です。
 
 **ブリジュラス**（4位）ははがね/ドラゴンで、マフォクシーのかえんほうしゃ・マジカルシャインはいずれもブリジュラスに等倍です。ブリジュラスのラスターカノン（はがね一致）・りゅうせいぐん（ドラゴン一致）がマフォクシーの打点範囲外の相手を処理する役割分担で、タイプ相性で互いを補い合う関係ではありません。
 
-**アシレーヌ**（5位）はみず/フェアリーで、マフォクシーの弱点であるみずタイプをアシレーヌ自身が引き受け、ムーンフォース（フェアリー一致）で打点を分担します。アシレーヌの弱点はでんき・くさ・どく（いずれも×2）ですが、マフォクシーの技はいずれもアシレーヌに等倍以下（かえんほうしゃは半減）で、この弱点を突く打点はマフォクシー側にありません。
+**アシレーヌ**（5位）はみず/フェアリーで、マフォクシーの弱点であるみずタイプの相手をアシレーヌが受け持つ役割分担です。
 
 ---
 

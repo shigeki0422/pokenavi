@@ -151,6 +151,82 @@ M-4シーズン、バシャーモは使用率10位につけています。特性
 
 ---
 
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>フレアドライブ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">84.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">一致補正込みのメインウェポン。反動でHP1/3を失う</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>インファイト</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">67.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">一致補正込みのもう1本のメインウェポン。反動でB・D低下</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">47.9%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげきを2段階上昇。フレアドライブ・インファイトの威力を底上げする積み技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かみなりパンチ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">45.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アシレーヌ・メガリザードンYなどフレアドライブ・インファイトが半減される相手への等倍以上の打点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>まもる</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">42.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の技を無効化しつつかそくを1段階溜める、様子見・時間稼ぎの1手</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>みきり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">33.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">まもる同様に相手の技を防ぎつつ急所率上昇。まもると使い分けて連続使用の失敗を回避</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とびひざげり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">130</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">21.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">インファイトより高威力だが外すと反動でHP半分を失う。4枠目の選択技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>バトンタッチ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまいで上げたこうげき・かそくで上がったSを後続へ引き継ぐ</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+---
+
 ## M-4の採用型
 
 ### 型1：メガ確定 物理アタッカー型（いじっぱり 72.6% / ようき 16.3%）
@@ -326,21 +402,21 @@ M-4で最も動いたのは**まもる（-10.0pp）・つるぎのまい（-8.2p
 <tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">ミミッキュ（2位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
 <tr><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">カバルドン（3位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0376-00.webp" alt="メガメタグロス" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">メガメタグロス（4位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td></tr>
-<tr><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">ブリジュラス（5位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td></tr>
-<tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">マスカーニャ（6位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td></tr>
+<tr><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">ブリジュラス（6位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td></tr>
+<tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">マスカーニャ（5位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td></tr>
 <tr><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">アシレーヌ（7位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0130-00.webp" alt="メガギャラドス" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">メガギャラドス（8位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
 <tr><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0655-00.webp" alt="マフォクシー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">マフォクシー（9位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンY" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">メガリザードンY（11位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0</td></tr>
-<tr><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0635-00.webp" alt="サザンドラ" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">サザンドラ（12位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
-<tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">アーマーガア（13位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0</td></tr>
-<tr><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">カイリュー（14位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0</td></tr>
+<tr><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0635-00.webp" alt="サザンドラ" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">サザンドラ（13位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">アーマーガア（14位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0</td></tr>
+<tr><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">カイリュー（12位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 10px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:24px;height:24px;vertical-align:middle;margin-right:4px">ゲッコウガ（15位）</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center"><strong>×2</strong></td><td style="padding:6px 10px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
 </tbody>
 </table>
 </div>
 
-上位14匹のうち10匹にはいずれか1技以上が×2で通りますが、**ガブリアス（1位）・ミミッキュ（2位）・カバルドン（3位）・カイリュー（14位）の計4匹には4技すべて×2が入りません**。特にガブリアス・ミミッキュ・カバルドンは環境上位1〜3位であり、バシャーモの主力4技だけでは上位受けの一角に決定打を持てない構図が浮かびます。ただし**じしん（採用率5.9%）が単独で×2を取れるのはマフォクシー・アーマーガアの2匹のみ**（メガメタグロス・ブリジュラスはフレアドライブ・インファイトと重複）で、他3技で代替が利くため低採用率にとどまっています。一方**かみなりパンチ（採用率45.7%）が真に唯一の×2打点になるのはアシレーヌ・メガリザードンYの2匹**です。メガギャラドス・ゲッコウガ（ともにみず/あく）に対してはインファイトがかくとう×2・タイプ一致1.5倍で上回るため、かみなりパンチは最大打点ではありません。実際、メガギャラドス（H171、EV1振り）に対してA233（いじっぱりメガ型）のかみなりパンチは104〜122ダメージ（H171の61〜71%）にとどまり確定1発になりませんが、同条件のインファイトは246〜290ダメージ（143〜170%）となり確定1発で沈められます。かみなりパンチの採用理由は、インファイト・フレアドライブがともに半減されるアシレーヌ・メガリザードンYへの数少ない等倍以上の打点を確保する点にあります。
+上位14匹のうち10匹にはいずれか1技以上が×2で通りますが、**ガブリアス（1位）・ミミッキュ（2位）・カバルドン（3位）・カイリュー（12位）の計4匹には4技すべて×2が入りません**。特にガブリアス・ミミッキュ・カバルドンは環境上位1〜3位であり、バシャーモの主力4技だけでは上位受けの一角に決定打を持てない構図が浮かびます。ただし**じしん（採用率5.9%）が単独で×2を取れるのはマフォクシー・アーマーガアの2匹のみ**（メガメタグロス・ブリジュラスはフレアドライブ・インファイトと重複）で、他3技で代替が利くため低採用率にとどまっています。一方**かみなりパンチ（採用率45.7%）が真に唯一の×2打点になるのはアシレーヌ・メガリザードンYの2匹**です。メガギャラドス・ゲッコウガ（ともにみず/あく）に対してはインファイトがかくとう×2・タイプ一致1.5倍で上回るため、かみなりパンチは最大打点ではありません。実際、メガギャラドス（H171、EV1振り）に対してA233（いじっぱりメガ型）のかみなりパンチは104〜122ダメージ（H171の61〜71%）にとどまり確定1発になりませんが、同条件のインファイトは246〜290ダメージ（143〜170%）となり確定1発で沈められます。かみなりパンチの採用理由は、インファイト・フレアドライブがともに半減されるアシレーヌ・メガリザードンYへの数少ない等倍以上の打点を確保する点にあります。
 
 ---
 
@@ -462,7 +538,7 @@ M-4でバシャーモと同じパーティに入る頻度が高いポケモン�
 
 **ギャラドス**（4位）はみず/ひこうで、バシャーモの弱点2つ（みず・ひこう）と同じタイプを持つため弱点は重なりますが、りゅうのまいで積んでからのたきのぼり・じしんが高打点を出せる別ルートのアタッカーとしてパーティ内で役割を分けられます。
 
-**マスカーニャ**（5位）はくさ/あくで、バシャーモの弱点であるエスパーを耐性（×0.5）で受けられます。はたきおとすで相手の持ち物を落とす起点作りが、バシャーモの後続としての通りやすさにつながります。
+**マスカーニャ**（5位）はくさ/あくで、バシャーモの弱点であるエスパーを無効（×0）で受けられます。はたきおとすで相手の持ち物を落とし、バシャーモの後続としての通りやすさを補助します。
 
 **カバルドン**（6位）はじめん単タイプで、あくびによる交代誘導とステルスロックの設置役です。バシャーモの弱点であるじめん・みずのうちじめんは同タイプで無効にできませんが、ステルスロックで削った後にバシャーモが一撃で処理する運用がしやすくなります。
 

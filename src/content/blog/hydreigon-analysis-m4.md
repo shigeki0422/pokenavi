@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】サザンドラ 考察 M-4 シーズン こだわりスカーフ型'
-description: 'M-4シーズン使用率12位のサザンドラ考察。こだわりスカーフ採用率84.2%・ひかえめ69.7%のデータをもとに、あくのはどう・りゅうせいぐんの一致技構成と苦手なポケモンを分析します。'
+description: 'M-4シーズン使用率13位のサザンドラ考察。こだわりスカーフ採用率84.2%・ひかえめ69.7%のデータをもとに、あくのはどう・りゅうせいぐんの一致技構成と苦手なポケモンを分析します。'
 pubDate: '2026-07-15'
 updatedDate: '2026-07-15'
 heroImage: '../../assets/hero-hydreigon-m3.png'
@@ -28,12 +28,12 @@ draft: true
       <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">12位</strong>（M-4）　持ち物: <strong>こだわりスカーフ 84.2%</strong>
+      使用率: <strong style="color:#e67e22">13位</strong>（M-4）　持ち物: <strong>こだわりスカーフ 84.2%</strong>
     </div>
   </div>
 </div>
 
-M-4シーズン、サザンドラは使用率12位につけています。あく/ドラゴンの複合タイプに種族値C125・S98を持つ特殊アタッカーで、環境ではこだわりスカーフを固定して先制からあくのはどう・りゅうせいぐんを撃ち抜く運用が84.2%を占めます。特性はふゆう（じめん技を無効化）が100%固定です。
+M-4シーズン、サザンドラは使用率13位につけています。あく/ドラゴンの複合タイプに種族値C125・S98を持つ特殊アタッカーで、環境ではこだわりスカーフを固定して先制からあくのはどう・りゅうせいぐんを撃ち抜く運用が84.2%を占めます。特性はふゆう（じめん技を無効化）が100%固定です。
 
 ---
 
@@ -142,11 +142,101 @@ C125は環境の特殊アタッカーの中でも高水準で、S98はスカー�
 </table>
 </div>
 
-フェアリー×4が最大の弱点です。環境ではミミッキュ（使用率2位）のじゃれつく98.2%が主な脅威で、アローラキュウコン（16位）もムーンフォース47.4%を採用しています。かくとう・むし・ドラゴン・こおりの×2弱点も幅広く、むし技は環境上位でほぼ採用がない一方、こおり技はマスカーニャ（6位）のトリプルアクセル86.1%・ゲッコウガ（15位）のれいとうビーム87.2%と高採用率で存在します。耐性はあく・ゴースト・ほのお・みず・くさ・でんきの6タイプ、エスパーは無効です。
+フェアリー×4が最大の弱点です。環境ではミミッキュ（使用率2位）のじゃれつく98.2%が主な脅威で、アローラキュウコン（16位）もムーンフォース47.4%を採用しています。かくとう・むし・ドラゴン・こおりの×2弱点も幅広く、むし技は環境上位でほぼ採用がない一方、こおり技はマスカーニャ（5位）のトリプルアクセル86.1%・ゲッコウガ（15位）のれいとうビーム87.2%と高採用率で存在します。耐性はあく・ゴースト・ほのお・みず・くさ・でんきの6タイプ、エスパーは無効です。
 
 ### 特性
 
 **ふゆう（100%）**が唯一の特性です。じめん技を無効化するため、環境使用率1位のガブリアスが持つじしん（採用率99.5%）を受けても行動不能になりません。ただし対象はじめん技のみで、ガブリアスのげきりん・スケイルショットなどドラゴン技は通常どおり×2弱点として通ります。
+
+---
+
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>あくのはどう</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">99.3%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく一致・20%でひるみ。ミミッキュ（ゴースト/フェアリー）には等倍止まりで決定打にならない</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうせいぐん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">130</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">93.3%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン一致の最大火力。使用後は自分の特攻が2段階下がる反動あり</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とんぼがえり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">75.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代。こだわりスカーフの技固定を緩和しつつ対面操作できる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かえんほうしゃ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>55.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10%でやけど。メタグロス（はがね/エスパー）に×2で刺さるはがね対策技</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>だいもんじ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">110</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">25.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">命中不安と引き換えにかえんほうしゃより高火力。はがね複合への打点を伸ばす選択技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ラスターカノン</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10%で相手の特防ダウン。ミミッキュ（ゴースト/フェアリー）に×2で刺さる打点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>だいちのちから</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">8.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10%で相手の特防ダウン。ブリジュラス（はがね/ドラゴン）に×2で通る補完技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>わるだくみ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分の特攻を2段階上げる積み技。こだわりスカーフとは併用できず、少数派のいのちのたま型でのみ採用される</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ちょうはつ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手を変化技封じにする補助技。設置技・回復技を持つ受けポケモンへの牽制</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>きあいだま</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10%で相手の特防ダウン。ブリジュラス（はがね/ドラゴン）に×2で通るが採用率は低い</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ---
 
@@ -179,7 +269,7 @@ C125は環境の特殊アタッカーの中でも高水準で、S98はスカー�
 </div>
 </div>
 
-あくのはどう（あく・威力80、採用率99.3%）とりゅうせいぐん（ドラゴン・威力130、採用率93.3%）の一致技2本が主軸。とんぼがえり（ノーマル・威力70、採用率75.4%）は攻撃しながら後続に控えるポケモンを出せる技で、こだわりスカーフで技を固定されても対面操作の手段として機能します。かえんほうしゃ（ほのお・威力90、採用率55.4%）ははがねタイプへの打点補完で、メタグロス（4位・はがね/エスパー）へ×2、ブリジュラス（5位・はがね/ドラゴン）へ等倍で通ります。だいもんじ（威力110、採用率25.4%）は命中不安と引き換えに火力を伸ばす選択技、ラスターカノン（はがね、採用率13.3%）はミミッキュへの打点として採用されています。
+あくのはどう（あく・威力80、採用率99.3%）とりゅうせいぐん（ドラゴン・威力130、採用率93.3%）の一致技2本が主軸。とんぼがえり（むし・威力70、採用率75.4%）は攻撃しながら後続に控えるポケモンを出せる技で、こだわりスカーフで技を固定されても対面操作の手段として機能します。かえんほうしゃ（ほのお・威力90、採用率55.4%）ははがねタイプへの打点補完で、メタグロス（4位・はがね/エスパー）へ×2、ブリジュラス（6位・はがね/ドラゴン）へ等倍で通ります。だいもんじ（威力110、採用率25.4%）は命中不安と引き換えに火力を伸ばす選択技、ラスターカノン（はがね、採用率13.3%）はミミッキュへの打点として採用されています。
 
 **性格の選び分け:**
 
@@ -223,7 +313,7 @@ M-4のサザンドラはこだわりスカーフ84.2%・EV H2-C32-S32が72.0%を
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">とんぼがえり</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65.0%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>75.4%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#16a34a">+10.4pp</td>
@@ -322,7 +412,7 @@ M-3・M-4を通じて、あくのはどう・りゅうせいぐんの一致2本�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0038-00.webp" alt="アローラキュウコン" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">アローラキュウコン
+    <img src="/images/pokemon/pokemon-0038-01.webp" alt="アローラキュウコン" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">アローラキュウコン
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ムーンフォース（フェアリー・採用率47.4%）が×4、フリーズドライ（こおり・採用率84.4%）が×2弱点と両面から攻められます。あくのはどうはアローラキュウコン（こおり/フェアリー）に半減（×0.5）で決定打になりません</td>
@@ -411,7 +501,7 @@ M-4でサザンドラと同じパーティに入る頻度が高いポケモン�
 
 ## まとめ
 
-M-4のサザンドラは使用率12位を維持し、こだわりスカーフ型（84.2%）・EV H2-C32-S32（72.0%）という単一の型に収束したシーズンでした。
+M-4のサザンドラは使用率13位を維持し、こだわりスカーフ型（84.2%）・EV H2-C32-S32（72.0%）という単一の型に収束したシーズンでした。
 
 - **こだわりスカーフ型がほぼ唯一の型**：いのちのたま＋わるだくみ型は合計でも1桁パーセント台にとどまり、環境で機能する型としては確立していません
 - **とんぼがえり採用率がM-3比+10.4ppで75.4%へ上昇**：一致技2本に加えて対面操作を重視する構築思想が強まっています

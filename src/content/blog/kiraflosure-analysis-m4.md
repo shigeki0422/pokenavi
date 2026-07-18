@@ -33,7 +33,7 @@ draft: true
   </div>
 </div>
 
-M-4シーズン、キラフロルは使用率19位につけています。いわ/どく複合と種族値C130（メガ後C150）を軸にした特殊アタッカーで、M-4はきあいのタスキを持たせた非メガ運用が74.5%と主流です。メガストーン（キラフロルナイト）採用は17.9%にとどまり、大多数はメガ進化せずに特性どくげしょうと引き換えの1発耐久を活かす選出が中心になっています。
+M-4シーズン、キラフロルは使用率19位につけています。いわ/どく複合と種族値C130（メガ後C150）を軸にした特殊アタッカーで、M-4はきあいのタスキを持たせた非メガ運用が74.5%と主流です。メガストーン（キラフロルナイト）採用は17.9%にとどまり、大多数はメガ進化せずに特性どくげしょうを維持しつつ、きあいのタスキによる1発耐久を活かす選出が中心になっています。
 
 ---
 
@@ -150,6 +150,96 @@ M-4シーズン、キラフロルは使用率19位につけています。いわ
 ### 特性
 
 非メガ時は**どくげしょう（92.8%）**が主流。「物理技のダメージを受けると相手の場をどくびし状態にする」効果で、接触の有無に関わらず物理攻撃を1回受けるたびに発動します。メガ進化すると特性は**てきおうりょく**に固定され、一致技の威力補正が1.5倍から2倍に上がります（対象は一致技のみで、全技が強化されるわけではありません）。もう一方のふしょく（7.2%）は、はがね・どくタイプの相手にもどく状態を与えられる特性です。
+
+---
+
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>パワージェム</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">82.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いわ一致のメインウェポン。ほのお・ひこう複合（リザードン等）に×4</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>だいちのちから</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">62.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね複合（メタグロス等）への打点。10%で相手の特防を下げる</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ヘドロウェーブ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">95</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">55.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく一致。くさ複合（マスカーニャ等）への打点。10%でどく状態</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ステルスロック</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>49.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の場に設置。きあいのタスキで1発耐えつつ確定行動できる型と相性が良い</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>エナジーボール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">46.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じめん複合（カバルドン等）への打点。10%で相手の特防を下げる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>マッドショット</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">55</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">24.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">威力は低いが必ず相手の素早さを下げ、次弾以降の上を取りやすくする</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>キラースピン</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">30</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">まきびし・ステルスロック等の設置物を除去しつつ相手をどく状態にする</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ニードルガード</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+4で相手の技を防ぎ、接触技には反撃ダメージ。連発すると成功率が低下</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>マジカルシャイン</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ドラゴン複合（ガブリアス等）への打点</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ヘドロばくだん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブより命中率は同等で威力控えめだが、30%の高確率でどく状態にできる</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ---
 

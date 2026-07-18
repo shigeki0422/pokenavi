@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】ウォッシュロトム 考察 M-4 シーズン ハイドロポンプ採用で変わる立ち回り'
-description: 'M-4シーズン使用率18位のウォッシュロトムを考察。M-3では未採用だったハイドロポンプが99.0%まで浸透し、こだわりスカーフ26.5%・おくびょう18.9%の攻撃型が台頭。耐久型とスカーフ型の実数値・カバレッジをデータで分析します。'
+description: 'M-4シーズン使用率17位のウォッシュロトムを考察。M-3では未採用だったハイドロポンプが99.0%まで浸透し、こだわりスカーフ26.5%・おくびょう18.9%の攻撃型が台頭。耐久型とスカーフ型の実数値・カバレッジをデータで分析します。'
 pubDate: '2026-07-15'
 updatedDate: '2026-07-15'
 heroImage: '../../assets/hero-rotom-wash-m3.png'
@@ -28,12 +28,12 @@ draft: true
       <img src="/images/types/type-10-water.png" alt="みず" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">18位</strong>（M-3: 20位）　特性: <strong>ふゆう（100%）</strong>
+      使用率: <strong style="color:#e67e22">17位</strong>（M-3: 20位）　特性: <strong>ふゆう（100%）</strong>
     </div>
   </div>
 </div>
 
-M-4シーズン、ウォッシュロトムは使用率18位でM-3の20位から順位を上げました。でんき/みずの複合タイプに特性ふゆうを持ち、じめん技を無効化しながらはがね・ほのお・みず・こおり・ひこうに耐性を持つ耐久寄りのポケモンです。M-4最大の変化は、M-3では技採用データに登場すらしなかったハイドロポンプが99.0%まで一気に浸透したこと。でんき単打点では突破できなかったじめんタイプへの打点を手に入れたことが、順位上昇の背景にあります。
+M-4シーズン、ウォッシュロトムは使用率17位でM-3の20位から順位を上げました。でんき/みずの複合タイプに特性ふゆうを持ち、じめん技を無効化しながらはがね・ほのお・みず・こおり・ひこうに耐性を持つ耐久寄りのポケモンです。M-4最大の変化は、M-3では技採用データに登場すらしなかったハイドロポンプが99.0%まで一気に浸透したこと。でんき単打点では突破できなかったじめんタイプへの打点を手に入れたことが、順位上昇の背景にあります。
 
 ---
 
@@ -140,6 +140,98 @@ HP50は低めですが、ぼうぎょ107・とくぼう107とバランス良く�
 ### 特性
 
 **ふゆう（100%）**は「地面にいないことになり、じめん技・まきびし・どくびし・ねばねばネットが効かない」効果です。でんき/みずタイプ単体でもじめん技（じしん・じならし等）を無効化でき、ガブリアス・カバルドンなど環境上位のじめんタイプが持つ主力技を受け出しの起点にできます。全個体がこの特性のため、型による特性の使い分けはありません。
+
+---
+
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ハイドロポンプ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">110</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">99.0%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず一致の最大打点。じめんタイプへの反撃手段としてM-4で新規標準化</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ボルトチェンジ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">90.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代。でんき一致で対面操作しつつ後続へ繋げる</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>おにび</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">75.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手をやけど状態にし物理アタッカーの攻撃を弱体化。耐久型の主力</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>10まんボルト</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">55.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">10%の確率でまひ付与。スカーフ型のでんき一致メインウェポン</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>トリック</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">25.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手と持ち物を入れ替える。こだわりスカーフを耐久型に押し付けて弱体化</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>いたみわけ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分と相手のHPを折半。耐久型の立て直し・対面継続用</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ひかりのかべ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">5ターン味方の特殊ダメージを軽減。耐久型のいたみわけ枠と選択</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ほうでん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">30%の確率でまひ付与。10まんボルトより低威力で採用は少数</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>でんじは</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手をまひ状態にする。じめんタイプには無効</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>イカサマ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">95</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">2.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手のこうげき種族値でダメージ計算。物理アタッカー相手の奇襲用</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+ハイドロポンプ99.0%・ボルトチェンジ90.6%・おにび75.5%の3技はほぼ全個体共通のコア技で、4枠目が耐久型のいたみわけ/ひかりのかべ、攻撃型の10まんボルト/トリックに分かれる構図です。10まんボルトの採用率55.3%は、耐久型・攻撃型の双方に一定数使われていることを示しています。
 
 ---
 
@@ -305,7 +397,7 @@ M-4使用率上位15体に対し、ハイドロポンプ（みず）・10まん�
 <tbody>
 <tr><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">ギャラドス（8位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×4</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">×4</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">アシレーヌ（7位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×2</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">×2</td></tr>
-<tr><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">アーマーガア（13位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×2</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">×2</td></tr>
+<tr><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">アーマーガア（14位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×2</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">×2</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">ゲッコウガ（15位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×2</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">×2</td></tr>
 <tr><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">リザードン（11位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×2</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×2</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">×2</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0655-00.webp" alt="マフォクシー" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">マフォクシー（9位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×2</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">×2</td></tr>
@@ -314,10 +406,10 @@ M-4使用率上位15体に対し、ハイドロポンプ（みず）・10まん�
 <tr><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">ガブリアス（1位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">無効</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">ミミッキュ（2位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
 <tr><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">メタグロス（4位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
-<tr style="background:#fafafa"><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">カイリュー（14位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
-<tr><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">ブリジュラス（5位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#2563eb">×0.5</td></tr>
-<tr style="background:#fafafa"><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">マスカーニャ（6位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#2563eb">×0.5</td></tr>
-<tr><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0635-00.webp" alt="サザンドラ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">サザンドラ（12位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#2563eb">×0.5</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">カイリュー（12位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×1</td></tr>
+<tr><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">ブリジュラス（6位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#2563eb">×0.5</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">マスカーニャ（5位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#2563eb">×0.5</td></tr>
+<tr><td style="padding:6px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0635-00.webp" alt="サザンドラ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px">サザンドラ（13位）</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center">×0.5</td><td style="padding:6px 12px;border:1px solid #cbd5e1;text-align:center;color:#2563eb">×0.5</td></tr>
 </tbody>
 </table>
 </div>
@@ -433,7 +525,7 @@ M-4でウォッシュロトムと同じパーティに入る頻度が高いポ�
 
 ## まとめ
 
-M-4のウォッシュロトムは使用率18位（M-3: 20位）に上昇し、攻撃面の課題を解消したシーズンでした。
+M-4のウォッシュロトムは使用率17位（M-3: 20位）に上昇し、攻撃面の課題を解消したシーズンでした。
 
 - **ハイドロポンプが0%→99.0%で新規標準化**：M-3はでんき単打点でじめんタイプに反撃できませんでしたが、M-4でみず打点を得てカバルドンなどに×2が通るようになりました
 - **こだわりスカーフ型が26.5%まで拡大**（M-3: 14.5%）：おくびょう18.9%・ひかえめ20.7%の攻撃特化型が耐久型（ずぶとい48.3%）と並ぶ選択肢に

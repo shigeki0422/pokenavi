@@ -3,7 +3,7 @@ title: '【ポケモンチャンピオンズ】アローラキュウコン 考�
 description: 'M-4シングルバトルで使用率16位のアローラキュウコンを考察。オーロラベール採用率97.5%・ひかりのねんど92.0%で壁展開の役割はM-3から継続する一方、9位から順位を落とす。アンコール採用率62.1%への上昇理由やはがね×4弱点、苦手な相手・パートナー構成までDBデータで解説します。'
 pubDate: '2026-07-15'
 updatedDate: '2026-07-15'
-heroImage: '../../assets/hero-ninetales-alola-m3.png'
+heroImage: '../../assets/hero-ninetales-alola-m4.png'
 draft: true
 ---
 
@@ -138,7 +138,7 @@ M-4シーズン、アローラキュウコンは使用率16位です。こおり
 </table>
 </div>
 
-はがね×4が最大の弱点。M-4使用率4位のメタグロスはバレットパンチ（はがね・採用率92.4%）を持ち、5位のブリジュラスもラスターカノン（はがね・採用率76.4%）を主力にしています。ほのお×2・いわ×2・どく×2も等倍以上の技を持つ相手が環境上位に複数おり、ドラゴン無効は1位のガブリアスのドラゴン技を完全に無効化できる数少ない耐性です。
+はがね×4が最大の弱点。M-4使用率4位のメタグロスはバレットパンチ（はがね・採用率92.4%）を持ち、6位のブリジュラスもラスターカノン（はがね・採用率76.4%）を主力にしています。ほのお×2・いわ×2・どく×2も等倍以上の技を持つ相手が環境上位に複数おり、ドラゴン無効は1位のガブリアスのドラゴン技を完全に無効化できる数少ない耐性です。
 
 ---
 
@@ -147,6 +147,84 @@ M-4シーズン、アローラキュウコンは使用率16位です。こおり
 M-4シーズンの特性クロールデータは未取得ですが、アローラキュウコンは実装済みの特性が**ゆきふらし**（場に出た時から5ターンあられ状態にする）と**ゆきがくれ**（あられ中に回避率1.25倍）の2種のみで、直近のM-3データでは**ゆきふらし99.6%**とほぼ固定です。
 
 ゆきふらしはふぶきの命中率を70%→100%に引き上げ、オーロラベールの発動条件（あられ状態）を自力で満たします。ゆきがくれの採用は0.4%にとどまり、実戦では想定しなくてよい水準です。
+
+---
+
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>オーロラベール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">97.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゆき状態限定の変化技。5ターン（ひかりのねんどで8ターン）味方の物理・特殊ダメージを軽減する壁の主軸</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>フリーズドライ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">84.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">命中100の一致技。みずタイプにも効果バツグン扱いで、ガブリアス等のドラゴンにも通る主力打点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ふぶき</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">110</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">71.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">通常命中70だがゆき状態下は必中。一致補正込みの高火力アタッカー技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アンコール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">62.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手を直前の技に固定する変化技。ドドゲザン・サーフゴー等の積み技を封じる</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ムーンフォース</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">95</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">47.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">一致フェアリー技。ガブリアス等のドラゴン、格闘・悪タイプへの打点</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>いたみわけ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分と相手の残りHPを折半。被弾後の立て直しに使う耐久サポート型の選択技</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ミストフィールド</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">5ターン味方の状態異常・急所を防ぐフィールド。オーロラベールとの併用は選択技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>わるだくみ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自身の特攻を2段階上げる積み技。壁展開後にアタッカーとして立ち回る少数派の選択</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+オーロラベール・フリーズドライ・ふぶきの3枠はほぼ固定で、4枠目をアンコール（62.1%）かムーンフォース（47.4%）で選ぶ構成が主流です。壁展開の役割自体はオーロラベール1本に集約されており、いたみわけ・ミストフィールド・わるだくみは特定の型でのみ採用される選択技です。
 
 ---
 
@@ -297,7 +375,7 @@ S139はS177の型1より38低く、S177なら上から取れるガブリアス�
 </table>
 </div>
 
-技構成の骨格（オーロラベール・フリーズドライ・ふぶき）はM-3からほぼ変わらず、ひかりのねんども92.0%と依然として実質固定です。最大の変化は**アンコール（+7.2pp）**で、M-4の使用率TOP30にはドドゲザン（30位・つるぎのまい採用率77.4%）、サーフゴー（28位・わるだくみ採用率53.7%）、ギルガルド（29位・つるぎのまい採用率31.6%）といった積み技を持つポケモンが新たに顔を出しています。壁展開だけでなく、これらの積み技を先手のアンコールで止める役割の比重が増したことが、採用率上昇の背景として考えられます。
+技構成の骨格（オーロラベール・フリーズドライ・ふぶき）はM-3からほぼ変わらず、ひかりのねんども92.0%と依然として実質固定です。最大の変化は**アンコール（+7.2pp）**で、M-4の使用率TOP30にはドドゲザン（30位・つるぎのまい採用率77.4%）、サーフゴー（29位・わるだくみ採用率53.7%）、ギルガルド（27位・つるぎのまい採用率31.6%）といった積み技を持つポケモンが新たに顔を出しています。壁展開だけでなく、これらの積み技を先手のアンコールで止める役割の比重が増したことが、採用率上昇の背景として考えられます。
 
 一方で使用率順位はM-3の9位からM-4の16位へ後退しました。技・持ち物の構成自体はほぼ変わっていないため、順位変動は環境全体のポケモン数・構築トレンドの変化によるもので、アローラキュウコン自体の型が崩れたわけではありません。
 
@@ -340,7 +418,7 @@ S139はS177の型1より38低く、S177なら上から取れるガブリアス�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0911-00.webp" alt="ラウドボーン" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ラウドボーン
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">28位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フレアソング（ほのお・採用率99.1%）がほのお×2。おにび（ほのお・採用率85.1%）で物理技の攻撃力を下げられると、こおり技での打点勝負も不利になります</td>
 </tr>
 <tr>
@@ -432,7 +510,7 @@ M-4のアローラキュウコンは使用率16位で、M-3の9位から順位�
 - **オーロラベール（97.5%）+ ひかりのねんど（92.0%）で壁展開の役割は継続**：M-3からほぼ横ばいで、あられ+壁展開というコンセプトは固定
 - **アンコール採用率が54.9%→62.1%（+7.2pp）に上昇**：M-4の使用率TOP30に積み技持ちのはがねタイプ（ドドゲザン・サーフゴー・ギルガルド）が新たに顔を出したことと符合
 - **S177（おくびょうS32・型1）はガブリアス最速個体（S169）を上から取れる**：こだわりスカーフ採用率19.8%を除く多数派（きあいのタスキ・オボンのみなど）に対して先手が取れる速度域
-- **はがね×4が最大の弱点**：メタグロス（4位）・ブリジュラス（5位）に加え、ハッサム（22位）・ドドゲザン（30位）もはがね一致技を高採用率で持つ
+- **はがね×4が最大の弱点**：メタグロス（4位）・ブリジュラス（6位）に加え、ハッサム（21位）・ドドゲザン（30位）もはがね一致技を高採用率で持つ
 
 はがね/ほのお/いわ/どくへの明確な弱点を抱えつつ、こおり技によるみずタイプへの通りやすさ（フリーズドライ）とドラゴン無効を武器に、壁展開特化のサポートとして起用する型が変わらず主流です。
 

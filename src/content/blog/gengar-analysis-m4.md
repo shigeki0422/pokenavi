@@ -1,9 +1,9 @@
 ---
 title: '【ポケモンチャンピオンズ】メガゲンガー 考察 M-4 シーズン かげふみ+ほろびのうたロック'
-description: 'M-4シーズン使用率17位のメガゲンガー考察。ゲンガナイト採用率78.2%でメガ運用が主流に。かげふみで交代を封じてほろびのうた・みちづれで詰ませる型と、シャドーボール・ヘドロウェーブの一致特殊型のデータを分析します。'
+description: 'M-4シーズン使用率18位のメガゲンガー考察。ゲンガナイト採用率78.2%でメガ運用が主流に。かげふみで交代を封じてほろびのうた・みちづれで詰ませる型と、シャドーボール・ヘドロウェーブの一致特殊型のデータを分析します。'
 pubDate: '2026-07-15'
 updatedDate: '2026-07-15'
-heroImage: '../../assets/hero-gengar-m2.png'
+heroImage: '../../assets/hero-gengar-m4.png'
 draft: true
 ---
 
@@ -28,12 +28,12 @@ draft: true
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">17位</strong>（M-3: 29位）　持ち物: <strong>ゲンガナイト 78.2%</strong>
+      使用率: <strong style="color:#e67e22">18位</strong>（M-3: 29位）　持ち物: <strong>ゲンガナイト 78.2%</strong>
     </div>
   </div>
 </div>
 
-M-4シーズン、ゲンガーは使用率17位につけています。ゲンガナイト採用率78.2%とメガ運用がほぼ前提で、メガ進化後は特性が**かげふみ**（ゴースト以外の相手を交代不可にする）に変わります。相手を交代封じした状態でほろびのうた・みちづれを絡めて詰ませる型と、シャドーボール・ヘドロウェーブの一致特殊技で殴る型の2系統が採用されています。
+M-4シーズン、ゲンガーは使用率18位につけています。ゲンガナイト採用率78.2%とメガ運用がほぼ前提で、メガ進化後は特性が**かげふみ**（ゴースト以外の相手を交代不可にする）に変わります。相手を交代封じした状態でほろびのうた・みちづれを絡めて詰ませる型と、シャドーボール・ヘドロウェーブの一致特殊技で殴る型の2系統が採用されています。
 
 ---
 
@@ -150,11 +150,101 @@ M-4シーズン、ゲンガーは使用率17位につけています。ゲンガ
 </table>
 </div>
 
-弱点はじめん・エスパー・ゴースト・あくの4タイプ（いずれも×2）。ノーマル・かくとう無効を含め、むし・どくを¼で受けられる耐性の広さが特徴です。ただし環境上位はこの4弱点タイプの技を高採用率で持つ相手が多く、1位ガブリアスのじしん（じめん）99.5%、2位ミミッキュのかげうち（ゴースト）97.5%、12位サザンドラのあくのはどう（あく）99.3%が代表的な脅威です。
+弱点はじめん・エスパー・ゴースト・あくの4タイプ（いずれも×2）。ノーマル・かくとう無効を含め、むし・どくを¼で受けられる耐性の広さが特徴です。ただし環境上位はこの4弱点タイプの技を高採用率で持つ相手が多く、1位ガブリアスのじしん（じめん）99.5%、2位ミミッキュのかげうち（ゴースト）97.5%、13位サザンドラのあくのはどう（あく）99.3%が代表的な脅威です。
 
 ### 特性
 
 メガ進化前は**のろわれボディ（100%）**が固定。相手の技を受けるたびに30%の確率で4ターンの間その技をわざふうじ状態にします。メガ進化後は**かげふみ**に変わり、ゴースト以外の相手を交代不可にします（ミミッキュ等ゴーストタイプの相手はこの効果を受けません）。かげふみは後述のほろびのうた・みちづれと組み合わせる型の前提になる特性です。
+
+---
+
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>シャドーボール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">86.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ゴースト一致。両型共通のメインウェポン</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>みちづれ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">63.9%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分が倒れた場合に相手も道連れ。ほろびのうたを通す前の保険</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ヘドロウェーブ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">95</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">55.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">どく一致。フェアリー・くさへの打点</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>まもる</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>49.9%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">1ターン攻撃を防ぐ。ほろびのうたのカウントを稼ぐロック型の要</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ほろびのうた</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>41.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">場の全員が3ターン後に瀕死。かげふみで交代を封じた相手に通す</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>こごえるかぜ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">55</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">23.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の素早さダウン。アタッカー型で後続の速度優位を作る</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>おにび</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">やけど付与で物理アタッカーを機能不全にする補助技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>きあいだま</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう打点。カバルドン等のあく/じめんへのカバー範囲拡大</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>たたりめ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">9.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">状態異常の相手に威力2倍。おにび併用個体で採用</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>10まんボルト</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">でんき打点。アーマーガア等のひこう複合への打点確保</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ---
 
@@ -346,7 +436,7 @@ M-4最大の変化は**まもる（+39.9pp）・ほろびのうた（新台頭41
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" alt="サザンドラ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">サザンドラ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">あくのはどう（あく・採用率99.3%）が×2弱点。こだわりスカーフ84.2%が主流で、EV最多分布のS32・ひかえめ採用時でもスカーフ込みでS225となりゲンガーのS200を上回るため、先制であくのはどうを受けます</td>
 </tr>
 <tr>
@@ -423,9 +513,9 @@ M-4でゲンガーと同じパーティに入る頻度が高いポケモン（�
 
 **アーマーガア**（2位）ははがね/ひこうで、ゲンガーの弱点であるじめんタイプの技をひこう耐性で無効化できます。アーマーガアのてっぺき・ボディプレスで受け出しを担い、ゲンガーは相手の交代を封じてほろびのうたで詰める役割分担です。
 
-**アシレーヌ**（3位）はみず/フェアリーで、フェアリー技を半減できるゲンガーとフェアリー技を等倍で受けるアシレーヌが打点方向を分担します。アシレーヌのどく弱点はゲンガー自身がどく無効特性を持たないためカバーにはなりませんが、みず打点でガブリアス以外の物理アタッカーに対応します。
+**アシレーヌ**（3位）はみず/フェアリーで、ゲンガーが苦手なみずタイプの相手をムーンフォース・うたかたのアリアで処理する役割分担です。
 
-**ダイケンキ**（4位）はみず単タイプで、ゲンガーの弱点であるエスパー・あくタイプの相手にみず打点で対応します。
+**ダイケンキ**（4位）はみず単タイプで、ゲンガーが苦手なみずタイプの相手をひけん・ちえなみで処理する役割分担です。
 
 **ハラバリー**（5位）はでんき単タイプで、みず・ひこうタイプの相手にでんき打点を持ちます。
 

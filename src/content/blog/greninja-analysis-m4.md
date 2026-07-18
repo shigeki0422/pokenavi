@@ -153,6 +153,96 @@ M-4シーズン、ゲッコウガは使用率15位でM-3の21位から順位を�
 
 ---
 
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>れいとうビーム</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">87.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアス・カイリューに×4。10%でこおり状態にする追加効果を持つ最多採用技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>あくのはどう</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">86.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく一致技。メタグロス・マフォクシーに×2。20%の確率でひるませる</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ヘドロウェーブ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">95</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">68.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">マスカーニャ・アシレーヌに×2。10%でどく状態にする追加効果</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>みずしゅりけん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15×2〜5</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">63.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+1で先制。特殊技なのでC依存。バシャーモ・リザードンに×2</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>なみのり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">43.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">きあいのタスキ型の主力。カバルドン・マフォクシー・バシャーモ・リザードンに×2</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>くさむすび</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20〜120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の体重が重いほど威力上昇。カバルドン等の重量級への補完技</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ハイドロポンプ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">110</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">命中80%となみのりより不安定だが高火力。採用は少数派</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>マッドショット</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">55</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">命中時に相手の素早さを1段階下げる。採用は少数派</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>どくびし</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の場に設置技を撒く変化技。攻撃技構成を圧迫するため採用は少数派</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>クイックターン</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">物理技で攻撃後に交代。C型のゲッコウガでは打点が伸びず採用は少数派</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+---
+
 ## M-4の採用型
 
 ### 型1：メガゲッコウガ型（おくびょう）
@@ -186,7 +276,7 @@ M-4シーズン、ゲッコウガは使用率15位でM-3の21位から順位を�
 
 **強み:**
 
-メガ進化でC133・S142まで強化され、初手のへんげんじざいで技のタイプに変化した瞬間からタイプ一致補正が乗った高火力を出せます。ガブリアス・カイリューへのこおり技×4は環境1位・14位への明確な打点です。
+メガ進化でC133・S142まで強化され、初手のへんげんじざいで技のタイプに変化した瞬間からタイプ一致補正が乗った高火力を出せます。ガブリアス・カイリューへのこおり技×4は環境1位・12位への明確な打点です。
 
 **弱み:**
 
@@ -280,7 +370,7 @@ M-4シーズン、ゲッコウガは使用率15位でM-3の21位から順位を�
 </table>
 </div>
 
-M-3の21位からM-4で15位へ上昇した背景には、ゲッコウガナイトの採用率が36.2%から49.5%へ+13.3pp伸びたことが挙げられます。M-3では二分に近かった「メガ型」と「きあいのタスキ型」の比率が、M-4ではメガ型優位（49.5% vs 40.1%）に寄っており、メガシンカによるS142・C133の高火力が評価を伸ばした形です。技面ではみずしゅりけんが55.9%から63.8%へ増加し、優先度+1の多段技としてタスキ型・メガ型双方での採用が広がっています。
+M-3の21位からM-4で15位へ上昇した背景には、ゲッコウガナイトの採用率が36.2%から49.5%へ+13.3pp伸びたことが挙げられます。M-3ではタスキ型がやや優勢だった「メガ型」と「きあいのタスキ型」の比率が、M-4ではメガ型優位（49.5% vs 40.1%）に反転しており、メガシンカによるS142・C133の高火力が評価を伸ばした形です。技面ではみずしゅりけんが55.9%から63.8%へ増加し、優先度+1の多段技としてタスキ型・メガ型双方での採用が広がっています。
 
 ---
 
@@ -304,21 +394,21 @@ M-3の21位からM-4で15位へ上昇した背景には、ゲッコウガナイ�
 <tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ミミッキュ（2位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">カバルドン（3位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">メタグロス（4位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ブリジュラス（5位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td></tr>
-<tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">マスカーニャ（6位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ブリジュラス（6位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">マスカーニャ（5位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">アシレーヌ（7位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ギャラドス（8位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">マフォクシー（9位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">バシャーモ（10位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">リザードン（11位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td></tr>
-<tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">サザンドラ（12位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">アーマーガア（13位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td></tr>
-<tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">カイリュー（14位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×4</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">サザンドラ（13位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×2</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">アーマーガア（14位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">カイリュー（12位）</td><td style="padding:6px 8px;border:1px solid #cbd5e1"><strong style="color:#dc2626">×4</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">×0.5</td></tr>
 </tbody>
 </table>
 </div>
 
-TOP14中10体に、4技のうち少なくとも1つが抜群（×2以上）の打点があります。特にれいとうビームはガブリアス・カイリューに×4、カバルドン・マスカーニャ・サザンドラに×2と5体に有効打点を持ち、単体で最もカバレッジが広い技です。一方でミミッキュ（2位）・ブリジュラス（5位）・ギャラドス（8位）には4技いずれも等倍以下にとどまり、これら3体には打点で優位を作れません。
+TOP14中10体に、4技のうち少なくとも1つが抜群（×2以上）の打点があります。特にれいとうビームはガブリアス・カイリューに×4、カバルドン・マスカーニャ・サザンドラに×2と5体に有効打点を持ち、単体で最もカバレッジが広い技です。一方でミミッキュ（2位）・ブリジュラス（6位）・ギャラドス（8位）には4技いずれも等倍以下にとどまり、これら3体には打点で優位を作れません。
 
 ---
 
@@ -366,7 +456,7 @@ TOP14中10体に、4技のうち少なくとも1つが抜群（×2以上）の�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ウォッシュロトム
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき・採用率55.3%）が×2弱点。ロトム自身もでんき/みずでゲッコウガのみず技を半減するため、みず技主体の型では攻めきれません</td>
 </tr>
 </tbody>
