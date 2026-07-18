@@ -88,6 +88,28 @@ const breadcrumbJsonLd = {
 				letter-spacing: 0.05em;
 				margin-bottom: 0.25em;
 			}
+			:global(.toc) {
+				margin: 0.75em 0 1.25em;
+				border: 1px solid #e2e8f0;
+				border-radius: 8px;
+				background: #f8fafc;
+				font-size: 0.85rem;
+			}
+			:global(.toc summary) {
+				padding: 0.55em 1em;
+				font-weight: 700;
+				color: #1e293b;
+				cursor: pointer;
+				user-select: none;
+			}
+			:global(.toc ol) {
+				margin: 0;
+				padding: 0 1.25em 0.75em 2.4em;
+			}
+			:global(.toc li) { padding: 0.15em 0; }
+			:global(.toc a) { color: #334155; text-decoration: none; }
+			:global(.toc a:hover) { color: var(--accent, #f97316); text-decoration: underline; }
+			:global(.prose h2) { scroll-margin-top: 80px; }
 			.prose {
 				width: 780px;
 				max-width: calc(100% - 2em);
@@ -233,6 +255,33 @@ const breadcrumbJsonLd = {
 		</main>
 		<Footer />
 		<script>
+			// h2から目次を自動生成（3見出し以上の記事のみ）
+			(function () {
+				const prose = document.querySelector('.prose');
+				if (!prose) return;
+				const h2s = [...prose.querySelectorAll('h2')].filter(h => h.textContent.trim() && !h.closest('.poke-header'));
+				if (h2s.length < 3) return;
+				h2s.forEach((h, i) => { if (!h.id) h.id = 'sec-' + i; });
+				const det = document.createElement('details');
+				det.className = 'toc';
+				det.open = window.matchMedia('(min-width: 721px)').matches;
+				const sum = document.createElement('summary');
+				sum.textContent = '目次';
+				det.appendChild(sum);
+				const ol = document.createElement('ol');
+				h2s.forEach(h => {
+					const li = document.createElement('li');
+					const a = document.createElement('a');
+					a.href = '#' + h.id;
+					a.textContent = h.textContent;
+					li.appendChild(a);
+					ol.appendChild(li);
+				});
+				det.appendChild(ol);
+				const anchor = document.querySelector('.summary-box') || document.querySelector('.title');
+				anchor.after(det);
+			})();
+
 			// タイプアイコン横のテキスト名を削除 → タップでツールチップ
 			(function () {
 				const tip = document.createElement('div');
