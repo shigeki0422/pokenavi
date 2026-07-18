@@ -1,9 +1,9 @@
 ---
 title: 'ガルーラ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのガルーラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率79位。'
+description: 'ポケモンチャンピオンズのガルーラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率77位。'
 pokemonName: 'ガルーラ'
 dexNumber: 115
-usageRank: 79
+usageRank: 77
 pubDate: '2026-07-13'
 draft: false
 analysisSlug: 'kangaskhan-analysis-m2'
@@ -17,7 +17,7 @@ analysisSlug: 'kangaskhan-analysis-m2'
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.115</strong>　／　使用率 <strong style="color:#dc2626">79位</strong>
+      全国図鑑 <strong>No.115</strong>　／　使用率 <strong style="color:#dc2626">77位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>
