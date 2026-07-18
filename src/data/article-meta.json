@@ -1336,5 +1336,159 @@
         "matchKey": "ミミッキュ",
         "dex": 778,
         "form": "00"
+    },
+    "blaziken-analysis-m4": {
+        "name": "メガバシャーモ",
+        "rank": 10,
+        "types": [
+            "ほのお",
+            "かくとう"
+        ],
+        "matchKey": "バシャーモ",
+        "dex": 257,
+        "form": "00"
+    },
+    "charizard-analysis-m4": {
+        "name": "メガリザードン",
+        "rank": 11,
+        "types": [
+            "ほのお",
+            "ひこう"
+        ],
+        "matchKey": "リザードン",
+        "dex": 6,
+        "form": "00"
+    },
+    "corviknight-analysis-m4": {
+        "name": "アーマーガア",
+        "rank": 13,
+        "types": [
+            "ひこう",
+            "はがね"
+        ],
+        "matchKey": "アーマーガア",
+        "dex": 823,
+        "form": "00"
+    },
+    "delphox-analysis-m4": {
+        "name": "メガマフォクシー",
+        "rank": 9,
+        "types": [
+            "ほのお",
+            "エスパー"
+        ],
+        "matchKey": "マフォクシー",
+        "dex": 655,
+        "form": "00"
+    },
+    "dragonite-analysis-m4": {
+        "name": "メガカイリュー",
+        "rank": 14,
+        "types": [
+            "ドラゴン",
+            "ひこう"
+        ],
+        "matchKey": "カイリュー",
+        "dex": 149,
+        "form": "00"
+    },
+    "gengar-analysis-m4": {
+        "name": "メガゲンガー",
+        "rank": 17,
+        "types": [
+            "ゴースト",
+            "どく"
+        ],
+        "matchKey": "ゲンガー",
+        "dex": 94,
+        "form": "00"
+    },
+    "greninja-analysis-m4": {
+        "name": "ゲッコウガ",
+        "rank": 15,
+        "types": [
+            "みず",
+            "あく"
+        ],
+        "matchKey": "ゲッコウガ",
+        "dex": 658,
+        "form": "00"
+    },
+    "gyarados-analysis-m4": {
+        "name": "メガギャラドス",
+        "rank": 8,
+        "types": [
+            "みず",
+            "ひこう"
+        ],
+        "matchKey": "ギャラドス",
+        "dex": 130,
+        "form": "00"
+    },
+    "hydreigon-analysis-m4": {
+        "name": "サザンドラ",
+        "rank": 12,
+        "types": [
+            "あく",
+            "ドラゴン"
+        ],
+        "matchKey": "サザンドラ",
+        "dex": 635,
+        "form": "00"
+    },
+    "kiraflosure-analysis-m4": {
+        "name": "キラフロル",
+        "rank": 19,
+        "types": [
+            "いわ",
+            "どく"
+        ],
+        "matchKey": "キラフロル",
+        "dex": 970,
+        "form": "00"
+    },
+    "meowscarada-analysis-m4": {
+        "name": "マスカーニャ",
+        "rank": 6,
+        "types": [
+            "くさ",
+            "あく"
+        ],
+        "matchKey": "マスカーニャ",
+        "dex": 908,
+        "form": "00"
+    },
+    "ninetales-alola-analysis-m4": {
+        "name": "アローラキュウコン",
+        "rank": 16,
+        "types": [
+            "こおり",
+            "フェアリー"
+        ],
+        "matchKey": "アローラキュウコン",
+        "dex": 38,
+        "form": "01"
+    },
+    "primarina-analysis-m4": {
+        "name": "アシレーヌ",
+        "rank": 7,
+        "types": [
+            "みず",
+            "フェアリー"
+        ],
+        "matchKey": "アシレーヌ",
+        "dex": 730,
+        "form": "00"
+    },
+    "rotom-wash-analysis-m4": {
+        "name": "ウォッシュロトム",
+        "rank": 18,
+        "types": [
+            "でんき",
+            "みず"
+        ],
+        "matchKey": "ウォッシュロトム",
+        "dex": 479,
+        "form": "02"
     }
 }
