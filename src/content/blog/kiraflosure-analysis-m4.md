@@ -1,10 +1,10 @@
 ---
 title: '【ポケモンチャンピオンズ】キラフロル 考察 M-4 シーズン きあいのタスキ特殊アタッカー'
 description: 'M-4シーズン使用率19位のキラフロル考察。きあいのタスキ採用率74.5%の特殊アタッカー型が主流で、メガ進化型は17.9%にとどまります。いわ/どく複合の弱点・耐性とパワージェム82.1%を中心とした技構成をデータで分析します。'
-pubDate: '2026-07-15'
-updatedDate: '2026-07-15'
-heroImage: '../../assets/hero-kiraflosure-m2.png'
-draft: true
+pubDate: '2026-07-18'
+updatedDate: '2026-07-18'
+heroImage: '../../assets/hero-kiraflosure-m4.png'
+draft: false
 ---
 
 <style>
@@ -368,7 +368,7 @@ C・Sともに非メガ型を上回るため、メガストーンによる純粋
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:32px;height:32px;vertical-align:middle;margin-right:6px">ブリジュラス
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">だいちのちから（じめん）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">×2</td>
 </tr>
@@ -376,7 +376,7 @@ C・Sともに非メガ型を上回るため、メガストーンによる純粋
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:32px;height:32px;vertical-align:middle;margin-right:6px">マスカーニャ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（どく）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">×2</td>
 </tr>
@@ -521,7 +521,7 @@ M-3シーズンの技・性格データと比較すると、おくびょう・�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ブリジュラス
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ラスターカノン（はがね・採用率76.4%）が×2弱点。特殊技のためどくげしょうは発動せず、ワンパン圏に入りやすい相手です</td>
 </tr>
 </tbody>

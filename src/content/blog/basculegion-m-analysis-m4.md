@@ -1,10 +1,10 @@
 ---
 title: '【ポケモンチャンピオンズ】イダイトウ 考察 M-4 シーズン てきおうりょく×おはかまいり'
 description: 'M-4シーズン使用率20位のイダイトウ(オス)を考察。こだわりスカーフ採用率70.3%、てきおうりょく95.7%が支える高火力の実態と、おはかまいり・ウェーブタックルの打点をデータで分析します。'
-pubDate: '2026-07-15'
-updatedDate: '2026-07-15'
-heroImage: '../../assets/hero-basculegion-m-m3.png'
-draft: true
+pubDate: '2026-07-18'
+updatedDate: '2026-07-18'
+heroImage: '../../assets/hero-basculegion-m-m4.png'
+draft: false
 ---
 
 <style>
