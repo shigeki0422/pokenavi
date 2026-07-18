@@ -1,10 +1,10 @@
 ---
 title: '【ポケモンチャンピオンズ】アーマーガア 考察 M-4 シーズン てっぺき・ボディプレス型の受け性能'
 description: 'M-4シーズン使用率14位のアーマーガア考察。てっぺき64.2%・ボディプレス66.8%の受け型を中心に、EV H32-B32わんぱく72.7%の実数値とほのお・でんき弱点への対策を分析します。'
-pubDate: '2026-07-15'
-updatedDate: '2026-07-15'
+pubDate: '2026-07-18'
+updatedDate: '2026-07-18'
 heroImage: '../../assets/hero-corviknight-m4.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -236,7 +236,7 @@ H98・B105・D85と、物理・特殊の両面である程度の耐久を持つ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20+</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3.0%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分の能力上昇段階に応じて威力上昇。てっぺき後に撃つとあく一致の高火力技になる</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分の能力上昇段階に応じて威力上昇。てっぺき後に撃つと威力が伸びる高火力技になる（アーマーガアはあくタイプを持たずタイプ一致は乗らない）</td>
 </tr>
 </tbody>
 </table>
@@ -342,7 +342,7 @@ H98・B105・D85と、物理・特殊の両面である程度の耐久を持つ�
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はねやすめ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-02-flying.png" alt="ひこう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">96.9%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>98.4%</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#666">≒同</td>
@@ -420,21 +420,21 @@ M-3の時点で既にてっぺき（72.8%）・とんぼがえり（60.2%）は�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ライチュウ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">21位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんじほう（でんき・特殊・威力120・採用率96.6%）が×2弱点。特殊技のためてっぺき・ビルドアップのどちらの積みも防御に寄与しません</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ウォッシュロトム
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき・特殊・採用率55.3%）が×2弱点。ボルトチェンジ（採用率90.6%）で打点を出しながら後続に交代できるため、対面で押し込まれやすい相手です</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0911-00.webp" alt="ラウドボーン" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ラウドボーン
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">28位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フレアソング（ほのお・特殊・採用率99.1%）が×2弱点でほぼ確定採用。おにび（採用率85.1%）でやけどを負わされると物理型の打点まで落ちます</td>
 </tr>
 </tbody>
