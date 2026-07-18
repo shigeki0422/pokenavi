@@ -158,6 +158,98 @@ M-4シーズン、メタグロスは使用率4位を維持しています。M-3�
 
 ---
 
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>サイコファング</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">85</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">94.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひかりのかべ・リフレクター・オーロラベールを解除して攻撃するメインウェポン</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>バレットパンチ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">92.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+1で必ず先制。ミミッキュ（ゴースト/フェアリー）へはがね×2打点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">じしん</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">100</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">46.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ブリジュラス（はがね/ドラゴン）へ×2。はがねタイプへの主力打点</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうパンチ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">41.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">カイリュー（ドラゴン/ひこう）へ×4。10%の確率でこおり状態にする追加効果</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ボディプレス</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">27.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげきではなくぼうぎょの実数値でダメージが決まる技。てっぺきで積んだB値をそのまま攻撃力に変換</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>てっぺき</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">27.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分のぼうぎょを2段階上昇。ボディプレスの攻撃値と被物理ダメージ半減を同時に得る積み技</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かみなりパンチ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">25.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギャラドス（みず/ひこう）等のみず・ひこう複合への打点。10%の確率でまひ状態にする追加効果</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アームハンマー</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">100</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">カバルドン（じめん単）等の高耐久へ高威力。自分のすばやさが1段階下がる代償あり</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くさむすび</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">重さ依存</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">カバルドン等の重い相手ほど高威力。じめん・みず複合の高耐久に対する採用</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アイアンヘッド</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">20%の確率でひるませる追加効果を持つバレットパンチの代替枠</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+サイコファング（94.7%）・バレットパンチ（92.4%）はほぼ確定枠で、この2技に加えてじしん・れいとうパンチをどう組み合わせるかが攻撃型の技構成の軸になります。てっぺき（27.1%）・ボディプレス（27.8%）はM-4で新たに台頭した組み合わせで、わんぱく型でのみ採用される専用パーツです。
+
+---
+
 ## M-4の採用型
 
 ### 型1：物理アタッカー型（いじっぱり 42.2% / ようき 35.4%）
@@ -429,7 +521,7 @@ M-4の最大変化は**ボディプレス（+27.8%）・てっぺき（+27.1%）
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">マスカーニャ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">はたきおとす（あく・採用率64.5%）・ふいうち（あく・採用率18.5%）があく×2弱点を突きます。サイコファングはマスカーニャ（くさ/あく）に無効です</td>
 </tr>
 <tr>

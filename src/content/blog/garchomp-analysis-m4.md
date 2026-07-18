@@ -168,6 +168,96 @@ draft: false
 
 ---
 
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>じしん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">100</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">99.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">一致技・命中100でほぼ全員が採用するメインウェポン。ひこうタイプには無効</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ステルスロック</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">49.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">場に設置し交代のたびにダメージ。タスキ型・わんぱく型の主力</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>スケイルショット</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">25×2〜5</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>39.9%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">連続ヒット技。最後にS+1・B-1がつき混乱リスクなし。M-3から+9.4pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>げきりん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>34.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">単発最高打点だが使用後に混乱が確定。M-3から-10.7pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>がんせきふうじ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>30.0%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">S-1効果。じしんが無効なひこうタイプ・アローラキュウコンへの打点としてM-4で新定着</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>29.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげき2段階上昇。いじっぱり増加と連動しM-3から+6.2pp</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ドラゴンテール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">28.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手を強制的に交代させる。設置技との併用でダメージを蓄積</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>まきびし</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">場に設置し相手の交代出しにダメージ。ステルスロックと併用されやすい</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>いわなだれ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16.2%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ひるみ判定つき。がんせきふうじ台頭でM-3から-2.0pp</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>どくづき</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず/フェアリーのアシレーヌに×2。M-4で新登場した少数派の打点</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+---
+
 ## 主な型
 
 ### 型1：きあいのタスキ型（39.2%）
@@ -664,7 +754,7 @@ M-4でガブリアスと同じパーティに入る頻度が高いポケモン�
 
 M-3からの変化として注目されるのは**アシレーヌがM-3圏外から2位へ新登場**、**マスカーニャが2位→4位に低下**という点です。メタグロスは3位→3位で変化なし。M-3上位だった**ライチュウ（7位）・アーマーガア（8位）・ムクホーク（9位）が圏外へ**去り、代わって**ギャラドス・マフォクシーが新たに6・7位へ**入りました。アローラキュウコン（5位→10位）・リザードン（6位→8位）は順位を落としつつも10位圏内を維持しています。
 
-**ミミッキュ（1位）**はゴースト/フェアリーで、フェアリー技を半減・ドラゴン技を無効化して受けられます。ガブリアスが弱点を突かれやすいドラゴンタイプの相手には、じゃれつくで×2の打点も持ちます。一方でミミッキュ自身が苦手なはがねタイプは、ガブリアスのじしんが処理する役割分担です。
+**ミミッキュ（1位）**はゴースト/フェアリーで、ガブリアスの弱点であるドラゴン技を無効化して受けられます（フェアリー技は等倍で通ります）。ガブリアスが弱点を突かれやすいドラゴンタイプの相手には、じゃれつくで×2の打点も持ちます。一方でミミッキュ自身が苦手なはがねタイプは、ガブリアスのじしんが処理する役割分担です。
 
 **アシレーヌ（2位）**はみず/フェアリーで、ガブリアスの弱点であるドラゴン技をタイプ相性で無効化でき、ムーンフォースでフェアリータイプの相手に打点を持ちます。アシレーヌが苦手などくタイプの相手（キラフロル等）は、ガブリアスのじしんが処理する役割分担です。
 

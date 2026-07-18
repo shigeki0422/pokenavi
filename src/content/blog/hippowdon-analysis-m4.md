@@ -162,6 +162,84 @@ HP108・ぼうぎょ118の高耐久が採用の根拠。すばやさ47（実数�
 
 ---
 
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>じしん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">100</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">98.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">一致技のメインウェポン。メタグロス（はがね/エスパー）に×2で刺さる主力打点</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>あくび</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">94.0%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">必中で相手を次ターン強制ねむり。交代を誘発し、ふきとばし・なまけるとの起点になる</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ステルスロック</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>76.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の場に設置。あくびで交代を誘発した後の継続ダメージ源</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>なまける</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>61.4%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">最大HPの1/2回復。高耐久と組み合わせた長期消耗戦の主軸</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ふきとばし</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">47.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度-6で相手をランダム交代。つるぎのまいで積んだガブリアス・ミミッキュのリセット役</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>まもる</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+4で1ターン攻撃を回避。連発で成功率が1/3に低下する点に注意</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ほえる</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふきとばしと同じ優先度-6の強制交代技。効果は同じだが採用は少数派</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>がんせきふうじ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">0.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手のすばやさを下げるサブウェポン。ひこう複合のギャラドス等への数少ない有効打だが少数派</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+じしん・あくびがほぼ固定採用（98.4%/94.0%）で、残り2枠を「ステルスロック＋なまける」の継戦重視か、「ふきとばし」による積みリセットかで選ぶ構成が主流です。
+
+---
+
 ## 主な型
 
 ### 型1：B32型（オボンのみ・たべのこし）
@@ -411,7 +489,7 @@ M-4で最も目立つ変化は**ふきとばし+12.9pp（34.8%→47.7%）**と�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HP・とくぼう全振り</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32-B22-D10</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">H32-B22-D10-S2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7.6%</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">HP全振り・B重視型</td>
@@ -491,7 +569,7 @@ M-3最多のH32-B2-D32（D全振り）からH32-B32-D2（B全振り）が逆転�
 
 メタグロス（使用率4位、メガストーン採用率ほぼ100%）の主力技採用率はサイコファング94.7%・バレットパンチ92.4%と物理技が主流です。D32型（B154）でも受けられますが、B32型（B187）はさらに33ポイント高い物理耐久を確保します。
 
-M-4環境でブリジュラス（使用率5位）・メタグロス（4位）と物理型の高使用率ポケモンが上位に並んでいることが、カバルドンの物理耐久重視化を後押しした構図です。
+M-4環境でメタグロス（4位）・ミミッキュ（1位）と物理型の高使用率ポケモンが上位に並んでいることが、カバルドンの物理耐久重視化を後押しした構図です。
 
 ---
 
@@ -509,9 +587,9 @@ M-4環境でブリジュラス（使用率5位）・メタグロス（4位）と
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">マスカーニャ（6位）
+    <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">マスカーニャ（5位）
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">トリックフラワー（97.3%）のくさ×2で大きくダメージを受ける。カバルドンのじしんはくさ/あく複合のマスカーニャに半減</td>
 </tr>
 <tr style="background:#fafafa">
@@ -593,9 +671,9 @@ M-4環境でブリジュラス（使用率5位）・メタグロス（4位）と
 
 **メタグロス（2位）**ははがねタイプのためマスカーニャのトリックフラワー（くさ）を半減でき、カバルドンが苦手なマスカーニャへの対抗手段を担える耐性が同居の軸です。
 
-**アシレーヌ（3位・M-3：8位）**は味方として同居率3位に入る一方、対戦相手としてのアシレーヌは苦手なポケモン（使用率7位）でもあります。カバルドンが対面できないひこう/ドラゴン複合やガブリアスへの対抗手段をパーティに加える意味で、選出時はアシレーヌを分けて採用し、カバルドン自身は他の役割を担う構成が中心です。なおアシレーヌはカバルドンが展開した砂嵐でダメージを受ける点も同居時の留意点です。
+**アシレーヌ（3位・M-3：8位）**はみず/フェアリー複合で、カバルドンが対面できないひこう/ドラゴン複合やガブリアスへの打点をパーティに加える役割分担です。アシレーヌ自身はカバルドンが展開した砂嵐でダメージを受けるため、選出タイミングは分けて運用します。
 
-**ブリジュラス（5位）**ははがねタイプのため砂嵐ダメージを受けません。カバルドンが不得意な特殊攻撃（りゅうせいぐん71.9%・ラスターカノン76.4%）をブリジュラスが担い、物理受けのカバルドンと特殊攻撃役のブリジュラスで役割を分担する構成です。
+**ブリジュラス（6位）**ははがねタイプのため砂嵐ダメージを受けません。カバルドンが不得意な特殊攻撃（りゅうせいぐん71.9%・ラスターカノン76.4%）をブリジュラスが担い、物理受けのカバルドンと特殊攻撃役のブリジュラスで役割を分担する構成です。
 
 ---
 

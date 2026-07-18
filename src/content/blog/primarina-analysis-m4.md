@@ -137,11 +137,101 @@ C126・D116の特殊耐久ラインが高く、A74・B74と物理面は平均的
 </table>
 </div>
 
-弱点はどく・くさ・でんきの3タイプ（いずれも×2）。耐性は6タイプに及び、あく・ほのおへの半減とドラゴン無効が持ち味です。M-4使用率6位のマスカーニャ（くさ/あく）はトリックフラワー（くさ・威力70）を97.3%採用しており、くさ×2弱点を突かれやすい相手として上位に存在します。
+弱点はどく・くさ・でんきの3タイプ（いずれも×2）。耐性は6タイプに及び、あく・ほのおへの半減とドラゴン無効が持ち味です。M-4使用率5位のマスカーニャ（くさ/あく）はトリックフラワー（くさ・威力70）を97.3%採用しており、くさ×2弱点を突かれやすい相手として上位に存在します。
 
 ### 特性
 
 **げきりゅう（95.8%）**が固定に近い水準で採用されています。HPが最大の1/3以下になると、みずタイプの技（うたかたのアリア・アクアジェット・なみのり）の威力が1.5倍になる特性です。フェアリータイプのムーンフォースは対象外のため、げきりゅう発動下でもムーンフォースの威力は変わりません。もう一方の**うるおいボイス**（4.2%）は音技をみずタイプに変える特性ですが、採用率は少数にとどまります。
+
+---
+
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ムーンフォース</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">95</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">98.0%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー一致のメインウェポン。10%で相手のとくこう低下</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>うたかたのアリア</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">88.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず一致。命中した相手のやけどを治す。げきりゅう発動下で威力1.5倍</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アクアジェット</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">74.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+1。S60の遅さを補い削り合いで先手を確保</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アンコール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>46.7%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手を直前の技に固定。積み技・補助技のターンを潰す</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>めいそう</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">とくこう・とくぼうを1段階ずつ上昇。火力と耐久を同時に強化</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>クイックターン</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20.0%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代。アンコールで縛った後の後続への引き継ぎに使う</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>なみのり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">9.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリアと同威力のみず技。やけど回復効果はない代わりの選択肢</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>れいとうビーム</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6.4%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアス等のドラゴン/じめん複合への打点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>エナジーボール</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">カバルドン等のじめんタイプへの打点</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ミストフィールド</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.7%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">5ターンの間、場にいる味方の状態異常を防ぐ。少数派の選択</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ---
 
@@ -310,28 +400,28 @@ C実数値は**150**（型1のC195より-45）で、めいそうによる火力�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">マスカーニャ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">トリックフラワー（くさ・威力70・採用率97.3%）がくさ×2弱点。物理技のため型2のB135でも大きく削られます</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ライチュウ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">21位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">でんじほう（でんき・威力120・採用率96.6%）がでんき×2弱点。命中不安はあるものの、通れば型1のD136でも一撃で崩されます</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0479-02.webp" alt="ウォッシュロトム" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ウォッシュロトム
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">10まんボルト（でんき・威力90・採用率55.3%）がでんき×2弱点。ボルトチェンジ（採用率90.6%）で打点を与えつつ後続に交代する構成が多く、対面を長く維持されにくい相手です</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" alt="ゲンガー" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゲンガー
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">ヘドロウェーブ（どく・威力95・採用率55.7%）がどく×2弱点。主力のシャドーボール（採用率86.8%）は等倍止まりですが、ヘドロウェーブのほうが実効打点は高くなります</td>
 </tr>
 <tr>

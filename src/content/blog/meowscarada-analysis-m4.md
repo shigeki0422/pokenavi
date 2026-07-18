@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】マスカーニャ 考察 M-4 シーズン こだわりスカーフ型の立ち回り'
-description: 'M-4シーズン使用率6位のマスカーニャを考察。こだわりスカーフ採用率70.9%・とんぼがえり71.1%・特性へんげんじざいで対面ごとにタイプを変えるスカーフアタッカーの型と、むし×4・フェアリー等6タイプの弱点、苦手なポケモンをデータで解説します。'
+description: 'M-4シーズン使用率5位のマスカーニャを考察。こだわりスカーフ採用率70.9%・とんぼがえり71.1%・特性へんげんじざいで対面ごとにタイプを変えるスカーフアタッカーの型と、むし×4・フェアリー等6タイプの弱点、苦手なポケモンをデータで解説します。'
 pubDate: '2026-07-16'
 updatedDate: '2026-07-18'
 heroImage: '../../assets/hero-meowscarada-m4.png'
@@ -28,12 +28,12 @@ draft: false
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">6位</strong>（M-3: 3位）　持ち物: <strong>こだわりスカーフ 70.9%</strong>
+      使用率: <strong style="color:#e67e22">5位</strong>（M-3: 3位）　持ち物: <strong>こだわりスカーフ 70.9%</strong>
     </div>
   </div>
 </div>
 
-M-4シーズン、マスカーニャは使用率6位（M-3: 3位）で環境上位に定着しています。特性**へんげんじざい**で最初に出す技のタイプに自分の身をタイプ変化させ、その技に一致技補正をかけられるのが最大の特徴で、こだわりスカーフを70.9%が採用し、S123の素早さを1.5倍にして対面の相手を上から動かすアタッカー運用が主流です。
+M-4シーズン、マスカーニャは使用率5位（M-3: 3位）で環境上位に定着しています。特性**へんげんじざい**で最初に出す技のタイプに自分の身をタイプ変化させ、その技に一致技補正をかけられるのが最大の特徴で、こだわりスカーフを70.9%が採用し、S123の素早さを1.5倍にして対面の相手を上から動かすアタッカー運用が主流です。
 
 ---
 
@@ -144,11 +144,94 @@ M-4シーズン、マスカーニャは使用率6位（M-3: 3位）で環境上�
 </table>
 </div>
 
-むし×4が最大の弱点で、耐性タイプは6つ確保しつつも×2弱点が6タイプと非常に広いのが特徴です。特にフェアリー弱点は環境1位のミミッキュ（じゃれつく採用率98.2%）、こおり弱点はアローラキュウコン（16位、フリーズドライ84.4%）と、上位ポケモンの主力技が直撃しやすい点は立ち回りの制約になります。
+むし×4が最大の弱点で、耐性タイプは6つ確保しつつも×2弱点が6タイプと非常に広いのが特徴です。特にフェアリー弱点は環境2位のミミッキュ（じゃれつく採用率98.2%）、こおり弱点はアローラキュウコン（16位、フリーズドライ84.4%）と、上位ポケモンの主力技が直撃しやすい点は立ち回りの制約になります。
 
 ### 特性
 
 **へんげんじざい（93.0%）**が固定に近い採用率です。場に出てから最初に技を選んだ瞬間、自分のタイプがその技のタイプに変化し、一致技補正（×1.5）がかかります。くさ/あく本来のタイプ以外の技（かみなりパンチ・じゃれつく等）を最初に選んでも一致技扱いになる点が、後述の型の技構成の広さにつながっています。この変化は登場するたびに1回だけで、2手目以降の技には適用されません。もう一つの**しんりょく（7.0%）**はHPが1/3以下になるとくさ技の威力が1.5倍になる特性です。
+
+---
+
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>トリックフラワー</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">97.3%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">必中・必ず急所。へんげんじざいで一致技化されるメインウェポン</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>トリプルアクセル</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">20/40/60</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">86.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">連続3回攻撃。ガブリアス・カイリュー等のドラゴンに×4</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とんぼがえり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">71.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代。こだわりスカーフの技固定を対面操作で補う</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>はたきおとす</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>64.5%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手が道具を持つと威力1.5倍。持ち物を失わせつつゴースト・エスパーへ打点</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ふいうち</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+1。相手が攻撃技を選んだ時のみ成功。きあいのタスキ型と相性が良い</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かみなりパンチ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">75</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギャラドス・アーマーガア等のみず・ひこう複合へ×2〜×4</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>じゃれつく</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7.5%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">サザンドラ等のドラゴンに×4。10%で相手のこうげきを1段階下げる</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>どくびし</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-03-poison.png" alt="どく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の場に設置。とんぼがえりでの対面操作と組み合わせて継続的に削る</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>パワージェム</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5.1%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">リザードン・ウルガモス等のほのお/むしへの打点</td>
+</tr>
+</tbody>
+</table>
+</div>
 
 ---
 
@@ -310,7 +393,7 @@ S実数値は175で、ようき型のS192より17低い数値です。こだわ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">97.3% / 86.1%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">カイリュー（13位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">カイリュー（12位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">トリプルアクセル（こおり）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>×4</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">86.1%</td>
@@ -322,7 +405,7 @@ S実数値は175で、ようき型のS192より17低い数値です。こだわ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14.3%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">サザンドラ（12位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">サザンドラ（13位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">じゃれつく（フェアリー）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>×4</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7.5%</td>
@@ -346,7 +429,7 @@ S実数値は175で、ようき型のS192より17低い数値です。こだわ�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14.3%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ブリジュラス（5位）／アローラキュウコン（16位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ブリジュラス（6位）／アローラキュウコン（16位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">（等倍が上限）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">×1</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
@@ -361,7 +444,7 @@ S実数値は175で、ようき型のS192より17低い数値です。こだわ�
 </table>
 </div>
 
-TOP15の中で×4が通る相手が4体（ガブリアス・カイリュー・ギャラドス・サザンドラ）ある一方、カバルドンには×2、ミミッキュ・バシャーモ・ブリジュラス・アローラキュウコンには等倍止まりです。かみなりパンチ・じゃれつくは高倍率が出る技ですが採用率14.3%・7.5%にとどまり、こだわりスカーフでこれらを選んでいない試合では、トリックフラワー・トリプルアクセル・はたきおとすの範囲で打点を選ぶことになり、相手読みを外すと威力を発揮しきれない点は運用上のトレードオフです。
+TOP15の中で×4が通る相手が4体（ガブリアス・カイリュー・ギャラドス・サザンドラ）ある一方、カバルドンには×2、ミミッキュ・バシャーモ・ブリジュラス・アローラキュウコンには等倍止まりです（採用率5.1%のパワージェムはリザードン×4・アローラキュウコン×2の打点を持ちますが、少数派のため対象から除外しています）。かみなりパンチ・じゃれつくは高倍率が出る技ですが採用率14.3%・7.5%にとどまり、こだわりスカーフでこれらを選んでいない試合では、トリックフラワー・トリプルアクセル・はたきおとすの範囲で打点を選ぶことになり、相手読みを外すと威力を発揮しきれない点は運用上のトレードオフです。
 
 ---
 
@@ -403,14 +486,14 @@ TOP15の中で×4が通る相手が4体（ガブリアス・カイリュー・�
     <img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゲッコウガ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビーム（こおり・採用率87.2%）とヘドロウェーブ（どく・採用率68.1%）がともに×2弱点。マスカーニャ側もトリックフラワー・とんぼがえり等が等倍止まりです</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビーム（こおり・採用率87.2%）とヘドロウェーブ（どく・採用率68.1%）がともに×2弱点。マスカーニャ側もトリックフラワー（くさ）・とんぼがえり（むし）がともに×2で通るため撃ち合いになりやすい相手です</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0038-01.webp" alt="アローラキュウコン" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">アローラキュウコン
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライ（こおり・採用率84.4%）とムーンフォース（フェアリー・採用率47.4%）がともに×2弱点。マスカーニャ側の技もこおり/フェアリー複合には等倍以下です</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フリーズドライ（こおり・採用率84.4%）とムーンフォース（フェアリー・採用率47.4%）がともに×2弱点。主力4技（トリックフラワー・トリプルアクセル・とんぼがえり・はたきおとす）は等倍止まりで、決定打を欠きます</td>
 </tr>
 </tbody>
 </table>
@@ -483,13 +566,13 @@ M-4でマスカーニャと同じパーティに入る頻度が高いポケモ�
 
 **ミミッキュ**（4位）はゴースト/フェアリーで、ばけのかわを盾に積み技（つるぎのまい84.8%）で後続を通す運用です。マスカーニャのとんぼがえりで相手の後出しを誘い、ミミッキュが安全に場に出るターンを作る組み合わせが機能します。
 
-**ブリジュラス**（5位）ははがね/ドラゴンで、マスカーニャのひこう弱点（×2）をブリジュラスが耐性（×0.5）でカバーします。ブリジュラスのラスターカノン・りゅうせいぐんが特殊方面の打点を担い、マスカーニャの物理打点と役割が分かれています。
+**ブリジュラス**（6位）ははがね/ドラゴンで、マスカーニャのひこう弱点（×2）をブリジュラスが耐性（×0.5）でカバーします。ブリジュラスのラスターカノン・りゅうせいぐんが特殊方面の打点を担い、マスカーニャの物理打点と役割が分かれています。
 
 ---
 
 ## まとめ
 
-M-4のマスカーニャは使用率6位（M-3: 3位）ながら、型の構築思想はM-3から大きく変わっていません。
+M-4のマスカーニャは使用率5位（M-3: 3位）ながら、型の構築思想はM-3から大きく変わっていません。
 
 - **こだわりスカーフ70.9%・トリックフラワー97.3%・トリプルアクセル86.1%・とんぼがえり71.1%というコア構成はM-3からほぼ横ばい**：使用率順位は下がったものの、主流の型自体は安定
 - **ようき型（S192・スカーフ込み288）といじっぱり型（A178）で速度と火力のトレードオフ**：EV配分は同一（H2-A32-S32）で、性格差だけで型が分かれる

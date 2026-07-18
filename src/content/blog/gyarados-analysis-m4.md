@@ -1,10 +1,10 @@
 ---
 title: '【ポケモンチャンピオンズ】メガギャラドス 考察 M-4 シーズン りゅうのまい型とタイプ変化の弱点'
 description: 'M-4シーズン使用率8位のメガギャラドスを考察。メガストーン採用率80.5%・りゅうのまい採用率84.6%のデータから主力型を分析し、メガ進化でじめん無効を失い新たな弱点が生まれる点を実数値付きで検証、ミミッキュなど苦手な相手も整理します。'
-pubDate: '2026-07-15'
-updatedDate: '2026-07-15'
-heroImage: '../../assets/hero-gyarados-m3.png'
-draft: true
+pubDate: '2026-07-18'
+updatedDate: '2026-07-18'
+heroImage: '../../assets/hero-gyarados-m4.png'
+draft: false
 ---
 
 <style>
@@ -153,6 +153,84 @@ M-4シーズン、ギャラドスは使用率15位から8位へ順位を上げ�
 
 ---
 
+## 主要な技と採用率
+
+<div style="overflow-x:auto;margin:12px 0">
+<table style="width:100%;border-collapse:collapse;font-size:0.92em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>りゅうのまい</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">84.6%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分の攻撃・素早さを1段階上昇。積みアタッカー型の起点技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>たきのぼり</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">80.1%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず一致のメインウェポン。20%の確率でひるみ</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>じしん</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">100</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">77.8%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">メタグロス・ブリジュラス等のはがね複合へ×2</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>こおりのキバ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>48.2%</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアス（1位）のドラゴン/じめんへ×4。10%でこおり状態</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>パワーウィップ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">43.8%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">カバルドン等のじめん複合へ打点。じしんと選択</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>かみくだく</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.6%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">あく一致でゴースト・エスパーへの打点。20%で相手の防御ダウン</td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ちょうはつ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">21.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手を変化技封じ。りゅうのまいを積む隙を作る補助技</td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ゆきなだれ</strong></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:28px;height:28px;vertical-align:middle"></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.3%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">被弾していれば威力2倍。こおりのキバと役割が重なる選択技</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+こおりのキバ（威力65）とたきのぼり（威力80）を比べると、ガブリアス（ドラゴン/じめん）へはこおりのキバが×4となり実質威力260相当で、たきのぼりの実質威力120（等倍）を大きく上回ります。じしん（77.8%）はメタグロス・ブリジュラスといったはがね複合の上位ポケモンをカバーする役割です。パワーウィップ（43.8%）・かみくだく（22.6%）は選択技として一部の枠と入れ替わります。
+
+---
+
 ## M-4の採用型
 
 ### 型1：りゅうのまい積みアタッカー型（ようき 49.9% / いじっぱり 43.1%）
@@ -182,11 +260,11 @@ M-4シーズン、ギャラドスは使用率15位から8位へ順位を上げ�
 </div>
 </div>
 
-りゅうのまい（採用率84.6%）で攻撃・素早さを1段階ずつ上げ、たきのぼり（みず・威力80、採用率80.1%）を主力に殴る型。じしん（じめん・威力100、採用率77.8%）はメタグロス（4位）やブリジュラス（5位）のはがね/ドラゴンへ×2、こおりのキバ（こおり・威力65、採用率48.2%）はガブリアス（1位）のドラゴン/じめんへ×4というカバー範囲を持ちます。パワーウィップ（くさ・威力120、採用率43.8%）やかみくだく（あく・威力80、採用率22.6%）は選択技として一部の枠と入れ替わります。
+りゅうのまい（採用率84.6%）で攻撃・素早さを1段階ずつ上げ、たきのぼり（みず・威力80、採用率80.1%）を主力に殴る型。じしん（じめん・威力100、採用率77.8%）はメタグロス（4位・はがね/エスパー）・ブリジュラス（6位・はがね/ドラゴン）といったはがね複合へ×2、こおりのキバ（こおり・威力65、採用率48.2%）はガブリアス（1位）のドラゴン/じめんへ×4というカバー範囲を持ちます。パワーウィップ（くさ・威力120、採用率43.8%）やかみくだく（あく・威力80、採用率22.6%）は選択技として一部の枠と入れ替わります。
 
 **強み:**
 
-ようきはH171/A207/B130/C81/D150/S146。りゅうのまいを1回積むと実数値でS219相当となり、メタグロスmega（S最速178）・メガリザードン（S167）・メガバシャーモ（S167）など環境上位の非スカーフ勢を素早さで上回ります。たきのぼり（威力120）は1積み後のA310で、メタグロス物理型（B170・H157）へ83〜98ダメージ（53〜62%）となり確定2発です。
+ようきはH171/A207/B130/C81/D150/S146。りゅうのまいを1回積むと実数値でS219相当となり、メガメタグロス（S最速178）・メガリザードン（S167）・メガバシャーモ（S167）など環境上位の非スカーフ勢を素早さで上回ります。たきのぼり（実質威力120）は1積み後のA310で、メタグロス物理型（B170・H157）へ83〜98ダメージ（53〜62%）となり確定2発です。
 
 **弱み:**
 
@@ -268,7 +346,7 @@ M-4シーズン、ギャラドスは使用率15位から8位へ順位を上げ�
 </table>
 </div>
 
-M-4の最大変化は**じしん（77.8%）・こおりのキバ（48.2%）の新台頭**です。M-3ではこの2技は上位技リストに掲載がありませんでしたが、M-4で一気に上位技へ入りました。こおりのキバ（威力65）はガブリアス（1位）に×4が入り、たきのぼり（実質威力120）より実質打点が高くなる技です。じしんはメタグロス（4位）・ブリジュラス（5位）といったはがね複合の上位ポケモンへの打点として機能します。
+M-4の最大変化は**じしん（77.8%）・こおりのキバ（48.2%）の新台頭**です。M-3ではこの2技は上位技リストに掲載がありませんでしたが、M-4で一気に上位技へ入りました。こおりのキバ（威力65）はガブリアス（1位）に×4が入り、たきのぼり（実質威力120）より実質打点が高くなる技です。じしんはメタグロス（4位）・ブリジュラス（6位）といったはがね複合の上位ポケモンへの打点として機能します。
 
 メガストーン採用率もM-3の56.5%からM-4は80.5%へ+24.0pp上昇し、りゅうのまいで積んで全抜きを狙う運用がより支配的になっています。
 
@@ -314,7 +392,7 @@ M-4の最大変化は**じしん（77.8%）・こおりのキバ（48.2%）の�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">無効</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ブリジュラス（5位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">ブリジュラス（6位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">じしん（じめん）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">無効</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">等倍</td>
@@ -361,7 +439,7 @@ M-4の最大変化は**じしん（77.8%）・こおりのキバ（48.2%）の�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">マスカーニャ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">とんぼがえり（むし・採用率71.1%）が×2弱点。こだわりスカーフ採用率70.9%と高く、りゅうのまいを1回積んでも上から動かれます</td>
 </tr>
 <tr style="background:#fafafa">
@@ -385,52 +463,52 @@ M-4でギャラドスと同じパーティに入る頻度が高いポケモン�
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" loading="lazy">
     <div class="name">ガブリアス</div>
-    <div class="rate">1位</div>
+    <div class="rate">同居率1位</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" loading="lazy">
     <div class="name">ミミッキュ</div>
-    <div class="rate">2位</div>
+    <div class="rate">同居率2位</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン" loading="lazy">
     <div class="name">カバルドン</div>
-    <div class="rate">3位</div>
+    <div class="rate">同居率3位</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" loading="lazy">
     <div class="name">ブリジュラス</div>
-    <div class="rate">4位</div>
+    <div class="rate">同居率4位</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0655-00.webp" alt="マフォクシー" loading="lazy">
     <div class="name">マフォクシー</div>
-    <div class="rate">5位</div>
+    <div class="rate">同居率5位</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" loading="lazy">
     <div class="name">マスカーニャ</div>
-    <div class="rate">6位</div>
+    <div class="rate">同居率6位</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0257-00.webp" alt="バシャーモ" loading="lazy">
     <div class="name">バシャーモ</div>
-    <div class="rate">7位</div>
+    <div class="rate">同居率7位</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" loading="lazy">
     <div class="name">メタグロス</div>
-    <div class="rate">8位</div>
+    <div class="rate">同居率8位</div>
   </div>
   <div class="partner-card">
-    <img src="/images/pokemon/pokemon-0038-00.webp" alt="アローラキュウコン" loading="lazy">
+    <img src="/images/pokemon/pokemon-0038-01.webp" alt="アローラキュウコン" loading="lazy">
     <div class="name">アローラキュウコン</div>
-    <div class="rate">9位</div>
+    <div class="rate">同居率9位</div>
   </div>
   <div class="partner-card">
     <img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" loading="lazy">
     <div class="name">アシレーヌ</div>
-    <div class="rate">10位</div>
+    <div class="rate">同居率10位</div>
   </div>
 </div>
 
