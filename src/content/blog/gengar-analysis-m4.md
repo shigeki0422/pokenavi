@@ -1,10 +1,10 @@
 ---
 title: '【ポケモンチャンピオンズ】メガゲンガー 考察 M-4 シーズン かげふみ+ほろびのうたロック'
 description: 'M-4シーズン使用率18位のメガゲンガー考察。ゲンガナイト採用率78.2%でメガ運用が主流に。かげふみで交代を封じてほろびのうた・みちづれで詰ませる型と、シャドーボール・ヘドロウェーブの一致特殊型のデータを分析します。'
-pubDate: '2026-07-15'
-updatedDate: '2026-07-15'
+pubDate: '2026-07-18'
+updatedDate: '2026-07-18'
 heroImage: '../../assets/hero-gengar-m4.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -226,7 +226,7 @@ M-4シーズン、ゲンガーは使用率18位につけています。ゲンガ
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう打点。カバルドン等のあく/じめんへのカバー範囲拡大</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かくとう打点。サザンドラ等のあくタイプへのカバー範囲拡大</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>たたりめ</strong></td>

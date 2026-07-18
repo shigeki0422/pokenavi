@@ -45,58 +45,58 @@ M-4シーズン、キラフロルは使用率19位につけています。いわ
   <div style="display:flex;align-items:center;gap:4px;padding:4px 0;font-size:0.8em;color:#666;border-bottom:2px solid #e2e8f0;margin-bottom:4px">
     <span style="width:72px;min-width:72px"></span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right">数値</span>
+    <span style="width:32px;text-align:right">通常</span><span style="width:40px;text-align:right">メガ差分</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">HP</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:41%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">83</span>
+    <span style="width:32px;text-align:right">83</span><span style="width:40px"></span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">こうげき</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:27%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">55</span>
+    <span style="width:32px;text-align:right">55</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+35</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:45%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">90</span>
+    <span style="width:32px;text-align:right">90</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+15</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくこう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:65%;background:linear-gradient(90deg,#94a3b8,#64748b);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">130</span>
+    <span style="width:32px;text-align:right">130</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+20</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:40%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">81</span>
+    <span style="width:32px;text-align:right">81</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+15</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:43%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">86</span>
+    <span style="width:32px;text-align:right">86</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+15</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">525</span>
+    <span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">525</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+100</span>
   </div>
 </div>
 
-種族値はC130が突出し、次点でB90・S86。物理方面のA55は低く、純粋な特殊アタッカーとしての配分です。メガ進化するとC150・A90・B105・D96・S101とHP以外の全ステータスが伸びます（後述）。
+種族値はC130が突出し、次点でB90・S86。物理方面のA55は低く、純粋な特殊アタッカーとしての配分です。メガ進化するとHP以外の全ステータスが伸び、C150・A90・B105・D96・S101になります（後述）。
 
 ### タイプ・弱点
 
