@@ -1,10 +1,10 @@
 ---
 title: '【ポケモンチャンピオンズ】メガバシャーモ 考察 M-4 シーズン かそく加速アタッカーの立ち回り'
 description: 'M-4シーズン使用率10位のメガバシャーモを考察。メガ石バシャーモナイト採用率72.9%の物理アタッカー型と、きあいのタスキ採用14.2%の非メガ型を比較し、フレアドライブ・インファイト・かみなりパンチのタイプ相性とダメージ計算をデータで詳しく分析します。'
-pubDate: '2026-07-15'
-updatedDate: '2026-07-15'
-heroImage: '../../assets/hero-blaziken-m3.png'
-draft: true
+pubDate: '2026-07-18'
+updatedDate: '2026-07-18'
+heroImage: '../../assets/hero-blaziken-m4.png'
+draft: false
 ---
 
 <style>
@@ -60,7 +60,7 @@ M-4シーズン、バシャーモは使用率10位につけています。特性
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
       <div style="width:80%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right"><strong style="color:#dc2626">160</strong></span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+40</span>
+    <span style="width:32px;text-align:right"><strong style="color:#dc2626">120</strong></span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+40</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
@@ -93,7 +93,7 @@ M-4シーズン、バシャーモは使用率10位につけています。特性
   <div style="display:flex;align-items:center;gap:4px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">480</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+120</span>
+    <span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">530</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+100</span>
   </div>
 </div>
 
@@ -416,7 +416,7 @@ M-4で最も動いたのは**まもる（-10.0pp）・つるぎのまい（-8.2p
 </table>
 </div>
 
-上位14匹のうち10匹にはいずれか1技以上が×2で通りますが、**ガブリアス（1位）・ミミッキュ（2位）・カバルドン（3位）・カイリュー（12位）の計4匹には4技すべて×2が入りません**。特にガブリアス・ミミッキュ・カバルドンは環境上位1〜3位であり、バシャーモの主力4技だけでは上位受けの一角に決定打を持てない構図が浮かびます。ただし**じしん（採用率5.9%）が単独で×2を取れるのはマフォクシー・アーマーガアの2匹のみ**（メガメタグロス・ブリジュラスはフレアドライブ・インファイトと重複）で、他3技で代替が利くため低採用率にとどまっています。一方**かみなりパンチ（採用率45.7%）が真に唯一の×2打点になるのはアシレーヌ・メガリザードンYの2匹**です。メガギャラドス・ゲッコウガ（ともにみず/あく）に対してはインファイトがかくとう×2・タイプ一致1.5倍で上回るため、かみなりパンチは最大打点ではありません。実際、メガギャラドス（H171、EV1振り）に対してA233（いじっぱりメガ型）のかみなりパンチは104〜122ダメージ（H171の61〜71%）にとどまり確定1発になりませんが、同条件のインファイトは246〜290ダメージ（143〜170%）となり確定1発で沈められます。かみなりパンチの採用理由は、インファイト・フレアドライブがともに半減されるアシレーヌ・メガリザードンYへの数少ない等倍以上の打点を確保する点にあります。
+上位14匹のうち10匹にはいずれか1技以上が×2で通りますが、**ガブリアス（1位）・ミミッキュ（2位）・カバルドン（3位）・カイリュー（12位）の計4匹には4技すべて×2が入りません**。特にガブリアス・ミミッキュ・カバルドンは環境上位1〜3位であり、バシャーモの主力4技だけでは上位受けの一角に決定打を持てない構図が浮かびます。ただし**じしん（採用率5.9%）が単独で×2を取れるのはマフォクシーの1匹のみ**（メガメタグロス・ブリジュラスはフレアドライブ・インファイトと重複、アーマーガアははがね/ひこうでじしんが無効）で、他3技で代替が利く相手が多いため低採用率にとどまっています。一方**かみなりパンチ（採用率45.7%）が真に唯一の×2打点になるのはアシレーヌ・メガリザードンYの2匹**です。メガギャラドス・ゲッコウガ（ともにみず/あく）に対してはインファイトがかくとう×2・タイプ一致1.5倍で上回るため、かみなりパンチは最大打点ではありません。実際、メガギャラドス（H171、EV1振り）に対してA233（いじっぱりメガ型）のかみなりパンチは104〜122ダメージ（H171の61〜71%）にとどまり確定1発になりませんが、同条件のインファイトは246〜290ダメージ（143〜170%）となり確定1発で沈められます。かみなりパンチの採用理由は、インファイト・フレアドライブがともに半減されるアシレーヌ・メガリザードンYへの数少ない等倍以上の打点を確保する点にあります。
 
 ---
 
