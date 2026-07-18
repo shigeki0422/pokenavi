@@ -1,10 +1,10 @@
 ---
 title: '【ポケモンチャンピオンズ】サザンドラ 考察 M-4 シーズン こだわりスカーフ型'
 description: 'M-4シーズン使用率13位のサザンドラ考察。こだわりスカーフ採用率84.2%・ひかえめ69.7%のデータをもとに、あくのはどう・りゅうせいぐんの一致技構成と苦手なポケモンを分析します。'
-pubDate: '2026-07-15'
-updatedDate: '2026-07-15'
-heroImage: '../../assets/hero-hydreigon-m3.png'
-draft: true
+pubDate: '2026-07-18'
+updatedDate: '2026-07-18'
+heroImage: '../../assets/hero-hydreigon-m4.png'
+draft: false
 ---
 
 <style>
@@ -398,7 +398,7 @@ M-3・M-4を通じて、あくのはどう・りゅうせいぐんの一致2本�
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">マスカーニャ
   </td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">トリプルアクセル（こおり・採用率86.1%）が×2弱点。マスカーニャ（くさ/あく）はあくのはどうを耐性（×0.5）で受けるため、りゅうせいぐん頼みの打点になります</td>
 </tr>
 <tr>
