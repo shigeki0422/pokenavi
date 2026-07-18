@@ -1,4 +1,6 @@
 ---
+import OnboardingGuide from './OnboardingGuide.astro';
+
 interface Props { mode?: 'MA' | 'MB'; }
 const { mode = 'MA' } = Astro.props;
 const isMB = mode === 'MB';
@@ -257,6 +259,14 @@ const lead = isMB
     <main data-simmode={mode}>
       <h1>{heading}</h1>
       <p class="lead" set:html={lead}></p>
+      <OnboardingGuide
+        storageKey="sim"
+        steps={[
+          { icon: '👥', title: 'パーティを選ぶ', desc: '一覧から気になる上位構築を選択（名前で絞り込み可）' },
+          { icon: '🎯', title: '対戦相手を選ぶ', desc: 'VSランカーで総当たり戦績、VSポケモンで特定の相手との相性を確認' },
+          { icon: '📊', title: '結果を読む', desc: '勝率・選出傾向・リプレイで上位構築の動きを学ぶ' },
+        ]}
+      />
 
       <!-- ① パーティ選択 -->
       <div class="seclabel">パーティ選択</div>

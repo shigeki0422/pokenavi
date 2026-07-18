@@ -14,7 +14,6 @@ const TYPE_COLOR: Record<string, string> = {
 	'はがね':'#aaaac0','フェアリー':'#f4a8c6',
 };
 
-const ITEMS_PER_PAGE = 20;
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const allPosts = (await getCollection('blog'))
 	.filter((post) => showDrafts || !post.data.draft)
@@ -133,6 +132,21 @@ const seasonLabels: Record<string, string> = { m4: 'M-4（最新）', m3: 'M-3',
 				border-color: var(--accent);
 			}
 			.pagination a:hover { background: #f1f5f9; }
+			.filter-bar { margin-bottom: 1.5rem; }
+			.filter-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; margin-bottom: 8px; }
+			.season-tabs, .sort-tabs { display: flex; gap: 6px; }
+			.ftab {
+				border: 1px solid #e2e8f0; border-radius: 9999px; background: #fff;
+				padding: 4px 12px; font-size: 0.78rem; font-weight: 700; color: #64748b; cursor: pointer;
+			}
+			.ftab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+			.type-chips { display: flex; gap: 5px; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
+			.tchip {
+				flex-shrink: 0; border: 1px solid var(--tc); border-radius: 9999px; background: #fff;
+				padding: 2px 10px; font-size: 0.72rem; font-weight: 700; color: var(--tc); cursor: pointer;
+			}
+			.tchip.active { background: var(--tc); color: #fff; }
+			.no-match { text-align: center; color: #94a3b8; font-size: 0.875rem; padding: 2rem 0; }
 		</style>
 	</head>
 	<body>
@@ -145,18 +159,39 @@ const seasonLabels: Record<string, string> = { m4: 'M-4（最新）', m3: 'M-3',
 				</ol>
 			</nav>
 			<h1>考察記事</h1>
-			<p class="subtitle">使用率上位ポケモン考察（{allPosts.length}件）</p>
+			<p class="subtitle">使用率上位ポケモン考察（<span id="visible-count">{allPosts.length}</span>件）</p>
+
+			<div class="filter-bar">
+				<div class="filter-row">
+					<div class="season-tabs" aria-label="シーズン絞り込み">
+						<button class="ftab active" data-season="all">すべて</button>
+						{seasons.map((s) => (
+							<button class="ftab" data-season={s}>{seasonLabels[s].replace('（最新）', '')}</button>
+						))}
+					</div>
+					<div class="sort-tabs" aria-label="並び順">
+						<button class="ftab active" data-sort="rank">使用率順</button>
+						<button class="ftab" data-sort="date">新着順</button>
+					</div>
+				</div>
+				<div class="type-chips" aria-label="タイプ絞り込み">
+					{Object.entries(TYPE_COLOR).map(([t, c]) => (
+						<button class="tchip" data-type={t} style={`--tc:${c}`}>{t}</button>
+					))}
+				</div>
+			</div>
+
 			{seasons.map((s) => {
 				const sposts = postsBySeason[s];
 				if (!sposts.length) return null;
 				return (
-					<section style="margin-bottom: 2.5rem">
+					<section style="margin-bottom: 2.5rem" data-season={s}>
 						<div style="display:flex;align-items:center;gap:12px;margin-bottom:1rem">
 							<h2 style="font-size:1.1rem;margin:0">{seasonLabels[s]} シーズン</h2>
 							<a href={`/blog/${s}/`} style="font-size:0.8rem;color:var(--accent);text-decoration:none">一覧を見る →</a>
 						</div>
 						<div class="grid">
-							{sposts.slice(0, ITEMS_PER_PAGE).map((post, i) => {
+							{sposts.map((post, i) => {
 								const meta = (articleMeta as any)[post.id];
 								const dex = meta?.dex;
 								const form = meta?.form ?? '00';
@@ -166,7 +201,7 @@ const seasonLabels: Record<string, string> = { m4: 'M-4（最新）', m3: 'M-3',
 									? `/images/pokemon/pokemon-${String(dex).padStart(4,'0')}-${form}.webp`
 									: null;
 								return (
-									<a class="card" href={`/blog/${post.id}/`}>
+									<a class="card" href={`/blog/${post.id}/`} data-types={types.join(',')} data-rank={rank ?? 999} data-date={post.data.pubDate.getTime()}>
 										{imgSrc
 											? <img class="card-img" src={imgSrc} alt={meta?.name ?? ''} loading={i < 6 ? 'eager' : 'lazy'} />
 											: <div class="card-img" style="background:#f1f5f9;border-radius:8px" />
@@ -185,17 +220,70 @@ const seasonLabels: Record<string, string> = { m4: 'M-4（最新）', m3: 'M-3',
 								);
 							})}
 						</div>
-						{sposts.length > ITEMS_PER_PAGE && (
-							<div style="text-align:center;margin-top:1rem">
-								<a href={`/blog/${s}/`} style="font-size:0.875rem;color:var(--accent);text-decoration:none">
-									残り {sposts.length - ITEMS_PER_PAGE} 件を見る →
-								</a>
-							</div>
-						)}
 					</section>
 				);
 			})}
+			<p class="no-match" id="no-match" hidden>条件に一致する記事がありません。</p>
 		</main>
 		<Footer />
+		<script>
+			const sections = [...document.querySelectorAll('section[data-season]')] as HTMLElement[];
+			const countEl = document.getElementById('visible-count')!;
+			const noMatch = document.getElementById('no-match')!;
+			let season = 'all';
+			let type = '';
+			let sort = 'rank';
+
+			function apply() {
+				let visible = 0;
+				sections.forEach(sec => {
+					const seasonOk = season === 'all' || sec.dataset.season === season;
+					let secVisible = 0;
+					sec.querySelectorAll<HTMLElement>('.card').forEach(card => {
+						const typeOk = !type || (card.dataset.types ?? '').split(',').includes(type);
+						const show = seasonOk && typeOk;
+						card.hidden = !show;
+						if (show) secVisible++;
+					});
+					sec.hidden = secVisible === 0;
+					visible += secVisible;
+				});
+				countEl.textContent = String(visible);
+				noMatch.hidden = visible > 0;
+			}
+
+			function applySort() {
+				sections.forEach(sec => {
+					const grid = sec.querySelector('.grid')!;
+					([...grid.children] as HTMLElement[])
+						.sort((a, b) => sort === 'date'
+							? Number(b.dataset.date) - Number(a.dataset.date)
+							: Number(a.dataset.rank) - Number(b.dataset.rank))
+						.forEach(el => grid.appendChild(el));
+				});
+			}
+
+			document.querySelectorAll<HTMLElement>('.ftab[data-season]').forEach(btn => {
+				btn.addEventListener('click', () => {
+					season = btn.dataset.season!;
+					document.querySelectorAll('.ftab[data-season]').forEach(b => b.classList.toggle('active', b === btn));
+					apply();
+				});
+			});
+			document.querySelectorAll<HTMLElement>('.ftab[data-sort]').forEach(btn => {
+				btn.addEventListener('click', () => {
+					sort = btn.dataset.sort!;
+					document.querySelectorAll('.ftab[data-sort]').forEach(b => b.classList.toggle('active', b === btn));
+					applySort();
+				});
+			});
+			document.querySelectorAll<HTMLElement>('.tchip').forEach(chip => {
+				chip.addEventListener('click', () => {
+					type = type === chip.dataset.type ? '' : chip.dataset.type!;
+					document.querySelectorAll('.tchip').forEach(c => c.classList.toggle('active', c.getAttribute('data-type') === type));
+					apply();
+				});
+			});
+		</script>
 	</body>
 </html>

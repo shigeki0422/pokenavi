@@ -131,6 +131,12 @@ hr {
 		box-sizing: border-box;
 	}
 }
+/* モバイルではボトムナビ分の余白を確保 */
+@media (max-width: 1023px) {
+	body {
+		padding-bottom: calc(56px + env(safe-area-inset-bottom));
+	}
+}
 /* PCでは左サイドバー(220px)分の余白を確保 */
 @media (min-width: 1024px) {
 	body {

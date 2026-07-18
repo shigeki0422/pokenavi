@@ -1,9 +1,18 @@
 ---
+import OnboardingGuide from './OnboardingGuide.astro';
 ---
 
 <main>
   <h1>パーティ工房</h1>
   <p class="lead">6匹の型を自由に微調整し、想定敵との素早さ比較・1v1判定をリアルタイムに確認できます。1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。</p>
+  <OnboardingGuide
+    storageKey="builder"
+    steps={[
+      { icon: '➕', title: 'ポケモンを追加', desc: '空き枠の＋から選ぶか、「空き枠を提案で埋める」で自動編成' },
+      { icon: '🔧', title: '型を調整', desc: 'もちもの・特性・性格・EVを変更すると実数値が即座に反映' },
+      { icon: '⚖️', title: '相性を確認', desc: '使用率上位30体との1v1判定・素早さ比較でパーティの穴を見つける' },
+    ]}
+  />
 
   <div class="card" id="pb-partybar"><div class="muted">読み込み中…</div></div>
 
@@ -318,6 +327,7 @@
 
   /* (9) 枠✕のUndoトースト（モバイルではミニバーの上に重ならないよう表示） */
   .pb-undo-toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:650;display:flex;align-items:center;gap:.8em;max-width:calc(100% - 2em);background:#1e293b;color:#fff;border-radius:10px;padding:.6em 1em;font-size:.82rem;box-shadow:0 4px 16px rgba(0,0,0,.25)}
+  @media (max-width:1023px){ .pb-undo-toast{bottom:calc(72px + env(safe-area-inset-bottom))} }
   .pb-undo-toast-btn{background:none;border:none;color:#93c5fd;font-weight:800;cursor:pointer;font-family:inherit;font-size:.82rem;padding:0;flex-shrink:0;white-space:nowrap}
   .pb-undo-toast-btn:hover{color:#bfdbfe}
   @media (max-width:1023.98px){

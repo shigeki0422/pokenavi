@@ -1,0 +1,55 @@
+---
+const path = Astro.url.pathname;
+const lang = path.startsWith('/en') ? 'en' : path.startsWith('/ko') ? 'ko' : 'ja';
+
+const isActive = (href: string) => path.startsWith(href);
+const tabs = [
+  { href: '/pokemon/', icon: '🔍', label: '調べる', active: isActive('/pokemon') || isActive('/ranking') },
+  { href: '/blog/', icon: '📖', label: '読む', active: isActive('/blog') },
+  { href: '/simulator-mb/', icon: '🎬', label: '観る', active: isActive('/simulator') || isActive('/battle-simulator') },
+  { href: '/party-builder/', icon: '⚔️', label: '戦う', active: isActive('/party-builder') || isActive('/party-suggest') || isActive('/party-building') },
+];
+---
+
+{lang === 'ja' && (
+  <nav class="bottom-nav" aria-label="モバイルナビゲーション">
+    {tabs.map(t => (
+      <a href={t.href} class={t.active ? 'bn-tab active' : 'bn-tab'} aria-current={t.active ? 'page' : undefined}>
+        <span class="bn-icon">{t.icon}</span>
+        <span class="bn-label">{t.label}</span>
+      </a>
+    ))}
+  </nav>
+)}
+
+<style>
+  .bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 60;
+    display: flex;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(8px);
+    border-top: 1px solid #e2e8f0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .bn-tab {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 7px 0 6px;
+    text-decoration: none;
+    color: #64748b;
+  }
+  .bn-icon { font-size: 1.05rem; line-height: 1.2; }
+  .bn-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 0.02em; }
+  .bn-tab.active { color: var(--accent, #f97316); }
+  .bn-tab.active .bn-label { color: var(--accent, #f97316); }
+  @media (min-width: 1024px) {
+    .bottom-nav { display: none; }
+  }
+</style>

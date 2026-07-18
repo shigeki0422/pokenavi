@@ -7,6 +7,7 @@ import Header from '../components/Header.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 import articleMeta from '../data/article-meta.json';
+import rankingData from '../data/ranking.json';
 
 const TYPE_COLOR: Record<string, string> = {
 	'ノーマル':'#9da0aa','ほのお':'#f87c3f','みず':'#4fa4e0','くさ':'#5abf5a',
@@ -37,6 +38,25 @@ const allPokemonPages = (await getCollection('pokemon'))
 	.sort((a, b) => (a.data.usageRank ?? 999) - (b.data.usageRank ?? 999));
 const pokemonPages = allPokemonPages.slice(0, 10);
 const pokemonTotal = allPokemonPages.length;
+
+const rSeasons = (rankingData as any).seasons as Record<string, { dates: string[]; pokemon: { name: string; id: string | null; dates: Record<string, { rank: number }> }[] }>;
+const rSeasonKey = Object.keys(rSeasons).sort().at(-1)!;
+const rSeason = rSeasons[rSeasonKey];
+const rFirstD = rSeason.dates[0];
+const rLastD = rSeason.dates[rSeason.dates.length - 1];
+const fmtMD = (d: string) => { const [, m, dd] = d.split('-'); return `${parseInt(m)}/${parseInt(dd)}`; };
+const pokeUrlByName: Record<string, string> = {};
+for (const p of allPokemonPages) {
+	if (p.data.pokemonName) pokeUrlByName[p.data.pokemonName] = `/pokemon/${p.id}/`;
+}
+const rMovers = rSeason.pokemon.flatMap((p) => {
+	const cur = p.dates[rLastD]?.rank;
+	const prev = p.dates[rFirstD]?.rank;
+	if (!cur || cur > 50 || !prev || prev === cur) return [];
+	return [{ name: p.name, id: p.id, cur, prev, diff: prev - cur, url: pokeUrlByName[p.name] ?? null }];
+});
+const risers = [...rMovers].sort((a, b) => b.diff - a.diff).slice(0, 3).filter(m => m.diff > 0);
+const fallers = [...rMovers].sort((a, b) => a.diff - b.diff).slice(0, 3).filter(m => m.diff < 0);
 
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
 const organizationJsonLd = {
@@ -270,6 +290,35 @@ const websiteJsonLd = {
 			html {
 				scroll-behavior: smooth;
 			}
+
+			/* 環境変動ウィジェット */
+			.trend-widget {
+				max-width: 900px;
+				margin: 0 auto 2rem;
+				padding: 0 1em;
+			}
+			.tw-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 0.6rem; flex-wrap: wrap; }
+			.tw-head h2 { font-size: 1rem; font-weight: 700; margin: 0; }
+			.tw-period { font-size: 0.75rem; font-weight: 600; color: #94a3b8; margin-left: 8px; }
+			.tw-more { font-size: 0.8rem; font-weight: 700; color: var(--accent, #f97316); text-decoration: none; white-space: nowrap; }
+			.tw-more:hover { text-decoration: underline; }
+			.tw-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+			.tw-col { border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; padding: 8px 10px; }
+			.tw-col-label { font-size: 0.72rem; font-weight: 700; margin-bottom: 4px; }
+			.tw-col-label.tw-up { color: #059669; }
+			.tw-col-label.tw-down { color: #dc2626; }
+			.tw-row { display: flex; align-items: center; gap: 8px; padding: 4px 2px; text-decoration: none; color: inherit; border-radius: 6px; }
+			a.tw-row:hover { background: #f8fafc; }
+			.tw-row img { width: 36px; height: 36px; object-fit: contain; flex-shrink: 0; }
+			.tw-name { font-size: 0.82rem; font-weight: 700; color: #1e293b; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+			.tw-rank { font-size: 0.75rem; color: #64748b; margin-left: auto; white-space: nowrap; }
+			.tw-rank strong { color: #1e293b; }
+			.tw-diff { font-size: 0.75rem; font-weight: 700; white-space: nowrap; }
+			.tw-diff.tw-up { color: #059669; }
+			.tw-diff.tw-down { color: #dc2626; }
+			@media (max-width: 720px) {
+				.tw-cols { grid-template-columns: 1fr; }
+			}
 		</style>
 	</head>
 	<body>
@@ -280,6 +329,49 @@ const websiteJsonLd = {
 				<p>対戦シミュレーション・使用率・パーティ構成をデータの観点で分析します</p>
 				<GlobalSearch variant="hero" />
 			</section>
+
+			{(risers.length > 0 || fallers.length > 0) && (
+				<section class="trend-widget" aria-label="環境変動">
+					<div class="tw-head">
+						<h2>📈 環境変動<span class="tw-period">{fmtMD(rFirstD)}→{fmtMD(rLastD)}・使用率TOP50</span></h2>
+						<a href="/ranking/" class="tw-more">ランキングを見る →</a>
+					</div>
+					<div class="tw-cols">
+						{risers.length > 0 && (
+							<div class="tw-col">
+								<div class="tw-col-label tw-up">急上昇</div>
+								{risers.map(m => {
+									const inner = (
+										<>
+											{m.id && <img src={`/images/pokemon/pokemon-${m.id}.webp`} alt={m.name} width="36" height="36" loading="lazy" />}
+											<span class="tw-name">{m.name}</span>
+											<span class="tw-rank">{m.prev}位→<strong>{m.cur}位</strong></span>
+											<span class="tw-diff tw-up">▲{m.diff}</span>
+										</>
+									);
+									return m.url ? <a href={m.url} class="tw-row">{inner}</a> : <div class="tw-row">{inner}</div>;
+								})}
+							</div>
+						)}
+						{fallers.length > 0 && (
+							<div class="tw-col">
+								<div class="tw-col-label tw-down">急落</div>
+								{fallers.map(m => {
+									const inner = (
+										<>
+											{m.id && <img src={`/images/pokemon/pokemon-${m.id}.webp`} alt={m.name} width="36" height="36" loading="lazy" />}
+											<span class="tw-name">{m.name}</span>
+											<span class="tw-rank">{m.prev}位→<strong>{m.cur}位</strong></span>
+											<span class="tw-diff tw-down">▼{-m.diff}</span>
+										</>
+									);
+									return m.url ? <a href={m.url} class="tw-row">{inner}</a> : <div class="tw-row">{inner}</div>;
+								})}
+							</div>
+						)}
+					</div>
+				</section>
+			)}
 
 			<nav class="qn-wrap" aria-label="サイトの使い方クイックナビ">
 				<div class="qn-grid">

@@ -184,11 +184,20 @@ const STR = {
   :global(.gs-badge--rank) { background: #fff7ed; color: #ea580c; }
   :global(.gs-badge--blog) { background: #eff6ff; color: #2563eb; }
   :global(.gs-empty) {
-    padding: 1.2rem;
+    padding: 1.2rem 1.2rem 0.6rem;
     text-align: center;
     color: #94a3b8;
     font-size: 0.84rem;
   }
+  :global(.gs-sub) {
+    display: block;
+    font-size: 0.68rem;
+    color: #94a3b8;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  :global(.gs-item--fallback) { border-top: 1px solid #f1f5f9; }
 </style>
 
 <script>
@@ -253,7 +262,11 @@ const STR = {
       }).slice(0, 8);
 
       if (!hits.length) {
-        results.innerHTML = `<div class="gs-empty">${noResults}</div>`;
+        const pfx = lang === 'ja' ? '' : `/${lang}`;
+        results.innerHTML = `<div class="gs-empty">${noResults}</div>
+          <a class="gs-item gs-item--fallback" href="${pfx}/ranking/" role="option"><span class="gs-blog-icon">📊</span><span class="gs-name gs-name--blog">${lang === 'en' ? 'Usage Ranking' : lang === 'ko' ? '사용률 랭킹' : '使用率ランキングを見る'}</span></a>
+          <a class="gs-item gs-item--fallback" href="${pfx}/pokemon/" role="option"><span class="gs-blog-icon">🔍</span><span class="gs-name gs-name--blog">${lang === 'en' ? 'All Pokémon' : lang === 'ko' ? '포켓몬 목록' : 'ポケモン一覧を見る'}</span></a>
+          ${lang === 'ja' ? `<a class="gs-item gs-item--fallback" href="/blog/" role="option"><span class="gs-blog-icon">📖</span><span class="gs-name gs-name--blog">考察記事一覧を見る</span></a>` : ''}`;
         results.hidden = false;
         active = -1;
         return;
@@ -262,10 +275,19 @@ const STR = {
       results.innerHTML = hits.map(item => {
         if (item.t === 'p') {
           const displayName = lang === 'en' ? (item.e || item.n) : lang === 'ko' ? (item.k || item.n) : item.n;
-          return `<a class="gs-item" href="${item.u}" role="option">
+          const url = lang === 'en' ? (item.ue || item.u) : lang === 'ko' ? (item.uk || item.u) : item.u;
+          return `<a class="gs-item" href="${url}" role="option">
             <img src="${item.i}" alt="" width="34" height="34" class="gs-sprite" loading="lazy">
             <span class="gs-name">${hl(displayName, q)}</span>
             <span class="gs-badge gs-badge--rank">${rankPrefix}${item.r}${rankSuffix}</span>
+          </a>`;
+        } else if (item.t === 'm' || item.t === 'i') {
+          const top = item.p[0];
+          const others = item.p.length > 1 ? ` ほか${item.p.length - 1}体` : '';
+          return `<a class="gs-item" href="${top.u}" role="option">
+            <span class="gs-blog-icon">${item.t === 'm' ? '⚔️' : '🎒'}</span>
+            <span class="gs-name gs-name--blog">${hl(item.n, q)}<span class="gs-sub">${top.n} ${top.pct}%採用${others}</span></span>
+            <span class="gs-badge gs-badge--blog">${item.t === 'm' ? '技' : '持ち物'}</span>
           </a>`;
         } else {
           return `<a class="gs-item" href="${item.u}" role="option">
