@@ -1,6 +1,9 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import { getCollection } from 'astro:content';
 import AdUnit from '../components/AdUnit.astro';
+import MatchupSection from '../components/MatchupSection.astro';
+import { getMatchups } from '../scripts/party-builder/matchup-static';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
@@ -48,6 +51,17 @@ const hreflangAlternates = pokemonSlug ? [
 ] : undefined;
 const dexPad = String(dexNumber ?? 0).padStart(4, '0');
 const pokemonImageUrl = `${siteUrl}/images/pokemon/pokemon-${dexPad}-${imageForm ?? '00'}.webp`;
+
+const ownIcon = `${dexPad}-${imageForm ?? '00'}`;
+const matchups = dexNumber ? getMatchups(ownIcon) : null;
+const iconToSlug: Record<string, string> = {};
+if (matchups) {
+	const allPokemonPages = await getCollection('pokemon', p => !p.data.draft);
+	for (const p of allPokemonPages) {
+		const key = `${String(p.data.dexNumber ?? 0).padStart(4, '0')}-${p.data.imageForm ?? '00'}`;
+		iconToSlug[key] = p.id;
+	}
+}
 
 const pokemonJsonLd = pokemonName ? {
 	'@context': 'https://schema.org',
@@ -293,6 +307,7 @@ const breadcrumbJsonLd = {
 						</div>
 					)}
 					<slot />
+					{matchups && <MatchupSection matchups={matchups} iconToSlug={iconToSlug} nameMap={POKEMON_MAP} lang={lang} />}
 					{pokemonName && <SimPartyCard pokemonName={pokemonName} />}
 					{(hasPartySuggest || hasMegaPartySuggest) && (
 						<div class="ps-cta-wrap">

@@ -1,0 +1,121 @@
+---
+import type { StaticMatchup } from '../scripts/party-builder/matchup-static';
+
+interface Props {
+  matchups: StaticMatchup[];
+  iconToSlug: Record<string, string>;
+  nameMap: Record<string, string>;
+  lang: 'ja' | 'en' | 'ko';
+}
+const { matchups, iconToSlug, nameMap, lang } = Astro.props;
+const pfx = lang === 'ja' ? '' : `/${lang}`;
+
+const T = {
+  ja: {
+    heading: '有利・不利な相手（使用率TOP30）',
+    fav: '有利な相手',
+    unfav: '不利な相手',
+    note: '使用率上位30体の主流型同士の1v1事前計算による目安です（交代・補助技は非考慮）。*は相手の型により評価が変わります。',
+    cta: '自分のパーティで詳しく判定 → パーティ工房',
+  },
+  en: {
+    heading: 'Favorable / Unfavorable Matchups (Top 30)',
+    fav: 'Favorable',
+    unfav: 'Unfavorable',
+    note: 'Estimated from precomputed 1v1s between the most common builds of the top 30 Pokémon (switching and status moves not considered). * = depends on the opponent’s build.',
+    cta: 'Judge with your own party → Party Builder',
+  },
+  ko: {
+    heading: '유리·불리한 상대 (사용률 TOP30)',
+    fav: '유리한 상대',
+    unfav: '불리한 상대',
+    note: '사용률 상위 30마리의 주류 빌드 간 1v1 사전 계산에 따른 참고치입니다 (교체·보조 기술 미고려). *는 상대의 빌드에 따라 평가가 달라집니다.',
+    cta: '내 파티로 자세히 판정 → 파티 공방',
+  },
+}[lang];
+
+const favorable = matchups.filter(m => m.sym === '◎' || m.sym === '○');
+const unfavorable = matchups.filter(m => m.sym === '▲' || m.sym === '×');
+const displayName = (n: string) => nameMap[n] ?? n;
+---
+
+{(favorable.length > 0 || unfavorable.length > 0) && (
+  <section class="mu-section">
+    <h2>{T.heading}</h2>
+    <div class="mu-groups">
+      {favorable.length > 0 && (
+        <div class="mu-group">
+          <div class="mu-label mu-fav">{T.fav}</div>
+          <div class="mu-grid">
+            {favorable.map(m => {
+              const slug = iconToSlug[m.icon];
+              const inner = (
+                <>
+                  <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={displayName(m.name)} width="44" height="44" loading="lazy" />
+                  <span class={`mu-sym ${m.sym === '◎' ? 'mu-best' : ''}`}>{m.sym}{m.dep && <span class="mu-dep">*</span>}</span>
+                  <span class="mu-name">{displayName(m.name)}</span>
+                </>
+              );
+              return slug
+                ? <a href={`${pfx}/pokemon/${slug}/`} class="mu-cell" title={displayName(m.name)}>{inner}</a>
+                : <div class="mu-cell" title={displayName(m.name)}>{inner}</div>;
+            })}
+          </div>
+        </div>
+      )}
+      {unfavorable.length > 0 && (
+        <div class="mu-group">
+          <div class="mu-label mu-unfav">{T.unfav}</div>
+          <div class="mu-grid">
+            {unfavorable.map(m => {
+              const slug = iconToSlug[m.icon];
+              const inner = (
+                <>
+                  <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={displayName(m.name)} width="44" height="44" loading="lazy" />
+                  <span class={`mu-sym mu-bad ${m.sym === '×' ? 'mu-worst' : ''}`}>{m.sym}{m.dep && <span class="mu-dep">*</span>}</span>
+                  <span class="mu-name">{displayName(m.name)}</span>
+                </>
+              );
+              return slug
+                ? <a href={`${pfx}/pokemon/${slug}/`} class="mu-cell" title={displayName(m.name)}>{inner}</a>
+                : <div class="mu-cell" title={displayName(m.name)}>{inner}</div>;
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+    <p class="mu-note">{T.note}</p>
+    {lang === 'ja' && <a class="mu-cta" href="/party-builder/">{T.cta}</a>}
+  </section>
+)}
+
+<style>
+  .mu-section { margin: 1.5rem 0; }
+  .mu-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mu-group { border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; background: #fff; }
+  .mu-label { font-size: 0.78rem; font-weight: 700; margin-bottom: 8px; }
+  .mu-fav { color: #059669; }
+  .mu-unfav { color: #dc2626; }
+  .mu-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+  .mu-cell {
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+    width: 62px; padding: 4px 0; border-radius: 8px; text-decoration: none;
+  }
+  a.mu-cell:hover { background: #f8fafc; }
+  .mu-cell img { width: 44px; height: 44px; object-fit: contain; }
+  .mu-sym { font-size: 0.8rem; font-weight: 700; color: #059669; line-height: 1.1; }
+  .mu-sym.mu-best { color: #047857; }
+  .mu-sym.mu-bad { color: #dc2626; }
+  .mu-sym.mu-worst { color: #b91c1c; }
+  .mu-dep { color: #f59e0b; font-weight: 700; }
+  .mu-name { font-size: 0.62rem; color: #475569; text-align: center; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 62px; }
+  .mu-note { font-size: 0.72rem; color: #94a3b8; margin: 10px 0 6px; line-height: 1.5; }
+  .mu-cta {
+    display: inline-block; font-size: 0.82rem; font-weight: 700; color: var(--accent, #f97316);
+    text-decoration: none;
+  }
+  .mu-cta:hover { text-decoration: underline; }
+  @media (max-width: 720px) {
+    .mu-groups { grid-template-columns: 1fr; }
+  }
+</style>
