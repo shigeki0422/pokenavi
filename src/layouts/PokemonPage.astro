@@ -39,9 +39,9 @@ const ITEM_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {
 const NATURE_MAP = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
 const POKEMON_MAP = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
 const T = {
-  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト' },
-  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb' },
-  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로' },
+  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる' },
+  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', },
+  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로', hubAnalysis: '📖 분석 기사 읽기', hubWatch: '🎬 상위 구성 대전 관전', hubBuild: '⚔️ 파티에 추가' },
 }[lang];
 const hreflangAlternates = pokemonSlug ? [
   { lang: 'ja', url: `${siteUrl}/pokemon/${pokemonSlug}/` },
@@ -295,17 +295,15 @@ const breadcrumbJsonLd = {
 					<div class="page-meta">
 						<span class="badge">{T.badge}</span>
 					</div>
-					{lang === 'ja' && (
-						<div class="action-hub">
-							{analysisSlug && (
-								<a href={`/blog/${analysisSlug}/`} class="hub-btn hub-primary">📖 考察記事を読む</a>
-							)}
-							{pokemonName && (
-								<a href={`/simulator-mb/?sf=${encodeURIComponent(pokemonName)}`} class="hub-btn">🎬 上位構築の対戦を観る</a>
-							)}
-							<a href="/party-builder/" class="hub-btn">⚔️ パーティに入れる</a>
-						</div>
-					)}
+					<div class="action-hub">
+						{lang === 'ja' && analysisSlug && (
+							<a href={`/blog/${analysisSlug}/`} class="hub-btn hub-primary">{T.hubAnalysis}</a>
+						)}
+						{pokemonName && (
+							<a href={`${pfx}/simulator-mb/?sf=${encodeURIComponent(pokemonName)}`} class="hub-btn">{T.hubWatch}</a>
+						)}
+						<a href={`${pfx}/party-builder/`} class="hub-btn">{T.hubBuild}</a>
+					</div>
 					<slot />
 					{matchups && <MatchupSection matchups={matchups} iconToSlug={iconToSlug} nameMap={POKEMON_MAP} lang={lang} />}
 					{pokemonName && <SimPartyCard pokemonName={pokemonName} />}

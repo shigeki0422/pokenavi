@@ -1,27 +1,277 @@
 ---
 import OnboardingGuide from './OnboardingGuide.astro';
+import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
+import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
+
+interface Props { lang?: 'ja' | 'en' | 'ko'; }
+const { lang = 'ja' } = Astro.props;
+const pfx = lang === 'ja' ? '' : `/${lang}`;
+
+const POKEMON_NAME_MAP = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
+const MOVE_NAME_MAP = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
+const ABILITY_NAME_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
+const ITEM_NAME_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
+const NATURE_NAME_MAP = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
+
+const I18N_ALL = {
+  ja: {
+    title: 'パーティ工房',
+    lead: '6匹の型を自由に微調整し、想定敵との素早さ比較・1v1判定をリアルタイムに確認できます。1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。',
+    obStep1Title: 'ポケモンを追加', obStep1Desc: '空き枠の＋から選ぶか、「空き枠を提案で埋める」で自動編成',
+    obStep2Title: '型を調整', obStep2Desc: 'もちもの・特性・性格・EVを変更すると実数値が即座に反映',
+    obStep3Title: '相性を確認', obStep3Desc: '使用率上位30体との1v1判定・素早さ比較でパーティの穴を見つける',
+    loading: '読み込み中…', close: '閉じる',
+    teamHead: '6枠編成', teamDndHint: '（ドラッグで並べ替え）', fillBtn: '空き枠を提案で埋める',
+    createPartyPrompt: 'パーティを作成してください',
+    editorTitle: '型エディタ', editorSelectPrompt: '上の6枠から編集したい枠を選択してください',
+    editorAddPrompt: 'ポケモンを追加すると型を編集できます',
+    speciesDataMissing: '種族データが見つかりません（データ不整合）', muCalcError: 'データ不整合のため計算できません',
+    editorHeading: n => `型エディタ ー 枠${n}`,
+    itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
+    templateBtn: '型テンプレから', megaTag: 'メガ', megaFixedNote: '（メガ進化で固定）',
+    evRemain: n => `残り ${n}ポイント`, evRemainOver: n => `残り ${n}ポイント（上限超過）`,
+    evPresetBtn: 'EVプリセットから',
+    noneOpt: 'なし', usageGroup: '使用率', otherGroup: 'その他', otherGroupMoves: 'その他(全習得技)',
+    usageRankGroup: '使用率順', dashOpt: '—',
+    evDownAria: label => `${label}を1下げる`, evUpAria: label => `${label}を1上げる`,
+    partyNew: '新規', partyDup: '複製', partyRen: 'リネーム', partyDel: '削除', partyExp: 'エクスポート', partyImp: 'インポート',
+    storageNote: 'パーティはこのブラウザ内に保存されます(端末間の同期はありません)。持ち出しはエクスポートをご利用ください。',
+    deleteConfirm: name => `「${name}」を削除しますか？`,
+    slotRemoveTitle: '外す', undoRemoved: name => `${name}を外しました`, undoBtn: '元に戻す',
+    emptyGuideStep1: '①ポケモンを追加（＋をタップ）', emptyGuideStep2: '②仮想敵を設定', emptyGuideStep3: '③EVを微調整して判定を確認',
+    slotSearchTitle: n => `枠${n}にポケモンを追加`, slotSearchClose: '✕ 閉じる',
+    slotSearchPlaceholder: '追加するポケモンを検索（ひらがな可）', slotFillBtn: 'この枠を提案で埋める',
+    noHit: '該当なし', rankLbl: n => `使用${n}位`, adoptBtn: 'この案を採用',
+    fillCalculating: '提案を計算中…', fillFailedMsg: '提案の取得に失敗しました。時間をおいて再試行してください',
+    targetsHeading: '仮想敵', targetsSelectPrompt: '上の6枠から枠を選択してください',
+    targetsSetPrompt: '型を設定すると仮想敵との比較ができます',
+    targetSearchPlaceholder: '仮想敵を検索して追加（ひらがな可）', addTargetsPrompt: '仮想敵を追加してください',
+    muEditHeading: label => `${label} 型編集`, muSaveBtn: '保存', muCancelBtn: 'キャンセル',
+    muEditBtn: '編集', muDeleteBtn: '削除', muDeleteLastTitle: '最後の1型は削除できません',
+    muAddBuildBtn: '＋型を追加', muResetDefaultBtn: 'デフォルトに戻す',
+    speedFaster: '抜ける', speedSlower: '抜かれる', speedEq: '同速',
+    buildLabel: n => `型${n}`, hpLbl: n => `HP実数値 ${n}`,
+    takenDmgLbl: (name, range) => `被ダメ: ${name} ${range}`,
+    noEffectiveMove: '有効打なし(変化技・無効のみ)', noMovesSet: '技が未設定です',
+    hitsSelfOpp: (my, opp) => `自分${my}/相手${opp}`, hitsFmt: n => `確${n}`,
+    randHitsFmt: (n, p) => `乱数${n}発(${p}%)`, muBadgeTitle: 'この仮想敵に対する最悪の型判定',
+    selfHitsFmt: n => `自分確${n}`, oppHitsFmt: n => `相手確${n}`,
+    popHitsLbl: t => `確定数: ${t}`, popDmgLbl: t => `与ダメ: ${t}`,
+    speedTipTitle: '自分の素早さ実数値 vs 相手の素早さ実数値(スカーフ込み)',
+    tuneBtn: 'EV逆算(素早さ・火力・耐久)', applyBtn: '適用',
+    tuneKindSpeed: '素早さ', tuneKindKo: '火力', tuneKindSurvive: '耐久',
+    holeNone: 'なし',
+    balanceHeading: 'パーティバランス', addPokemonPrompt: 'ポケモンを追加してください',
+    physAtk: '物理アタッカー', specAtk: '特殊アタッカー', megaLbl: 'メガ', scarfLbl: 'スカーフ',
+    avgSpeedLbl: '平均素早さ', weakOverlapLbl: '弱点重複', weakOverlapVal: (type, count) => `${type}×${count}`,
+    weakAgainstLbl: '苦手',
+    tabAtk: '攻撃相性', tabDef: '防御相性', tabSpeed: '素早さ', tabMu: 'ポケモン相性',
+    selfVsAtk: '自分 ＼ 攻撃', selfVsHit: '自分 ＼ 被弾',
+    selfVsOppRep: '自分 ＼ 相手(代表型)', selfVsOppAgg: '自分 ＼ 相手(型1〜3集約)',
+    atkLegend: '各味方が<b>そのタイプを攻撃するときの最大倍率</b>。<b class="ao-good">×2</b>=抜群で通る <b class="ao-bad">½/0</b>=通りにくい。',
+    defLegend: '各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。<b class="mtx-gap" style="padding:0 4px">薄黄</b>=パーティ内に半減以下の受け手がいないタイプ。',
+    speedMatrixLegend: '味方（左・素早さ順）が使用率上位30体の代表型より速いか（スカーフ込み）。<b>◎</b>＝速い <b>△</b>＝同速 <b>×</b>＝遅い。',
+    muMatrixLegend: '各味方 vs 使用率上位30体の想定型（採用率上位≤3型）を集約した1v1判定。◎有利 ○やや有利 △五分 ▲やや不利 ×不利。<b class="mu-dep-leg">*</b>＝型により有利不利が変化。<b class="mtx-hole" style="padding:0 4px">赤</b>=誰も集約◎/○を取れない「穴」。セルをクリック(ホバー可のPCではマウスオーバーも)で型ごとの内訳（確定数・素早さ）を表示。',
+    holeSummary: labels => `⚠ 穴: ${labels}`,
+    muBreakdownLine: (idx, item, sym, my, opp, turn) => `型${idx}(${item}): ${sym} ${my}/${opp}・${turn}`,
+    noItem: '道具なし', turnFirst: '先手', turnSecond: '後手',
+    addTargetDisabled: 'この相手を仮想敵に追加', addTargetDisabledTitle: '先に上の6枠から枠を選択してください',
+    addTargetToSlot: n => `この相手を枠${n}の仮想敵に追加`, addedSuffix: '（追加済み）',
+    noEmptySlots: '空き枠がありません', fillCalcAll: '空き枠の提案を計算中…',
+    fillResultHead: n => `${n}件の提案 ー ポケモンをクリックで1体だけ空き枠に追加できます`,
+    fillClearBtn: '✕ 提案をクリア', alreadyAdded: '追加済み', addToEmptySlot: sp => `${sp}を空き枠に追加`,
+    exportHeading: name => `エクスポート ー ${name}`, copyBtn: 'コピー', copiedMsg: 'コピーしました',
+    copyFailedMsg: 'コピーに失敗しました。テキストを選択して手動でコピーしてください',
+    importHeading: 'インポート', importHint: '6行のspecテキストを貼り付けてください（エクスポートした形式）',
+    importPlaceholder: 'ここに貼り付け', importBtn: '取り込む',
+    importFailedMsg: '取り込みに失敗しました。形式を確認してください（6行、spec形式）',
+    presetHeading: sp => `${sp} 型テンプレ`, noCandidates: '候補がありません', applyThisBuildBtn: 'この型を適用',
+    evPresetHeading: sp => `${sp} EVプリセット（採用率順）`,
+    handoffHeading: 'パーティ工房への取り込み',
+    handoffFailed: '提案データを取り込めませんでした。型を解決できませんでした',
+    initErrorMsg: 'データの読み込みに失敗しました。再読み込みしてください', retryBtn: '再試行',
+    miniBarExpandAria: '仮想敵の詳細を展開', sheetCollapseBtn: '▼閉じる', sheetExpandCaret: '▲詳細',
+  },
+  en: {
+    title: 'Party Workshop',
+    lead: 'Freely fine-tune the builds of all 6 Pokémon and check Speed comparisons and 1v1 verdicts against expected opponents in real time. The 1v1 verdict is a pre-calculation based on each side\'s strongest hit, Speed, and bulk checks like Focus Sash (switches and status moves aren\'t included).',
+    obStep1Title: 'Add a Pokémon', obStep1Desc: 'Pick from an empty slot\'s +, or auto-fill with "Fill empty slots with suggestions"',
+    obStep2Title: 'Adjust the build', obStep2Desc: 'Changing item, ability, nature, or EVs updates the real stats instantly',
+    obStep3Title: 'Check matchups', obStep3Desc: 'Find gaps in your party via 1v1 verdicts and Speed comparisons against the top 30 usage ranks',
+    loading: 'Loading…', close: 'Close',
+    teamHead: 'Your 6 Slots', teamDndHint: '(Drag to reorder)', fillBtn: 'Fill Empty Slots with Suggestions',
+    createPartyPrompt: 'Please create a party',
+    editorTitle: 'Build Editor', editorSelectPrompt: 'Select a slot above to edit its build',
+    editorAddPrompt: 'Add a Pokémon to edit its build',
+    speciesDataMissing: 'Species data not found (data inconsistency)', muCalcError: "Can't calculate due to a data inconsistency",
+    editorHeading: n => `Build Editor — Slot ${n}`,
+    itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
+    templateBtn: 'From set templates', megaTag: 'Mega', megaFixedNote: '(fixed by Mega Evolution)',
+    evRemain: n => `${n} points left`, evRemainOver: n => `${n} points left (over the limit)`,
+    evPresetBtn: 'From EV presets',
+    noneOpt: 'None', usageGroup: 'By usage', otherGroup: 'Other', otherGroupMoves: 'Other (full learnset)',
+    usageRankGroup: 'By usage', dashOpt: '—',
+    evDownAria: label => `Decrease ${label} by 1`, evUpAria: label => `Increase ${label} by 1`,
+    partyNew: 'New', partyDup: 'Duplicate', partyRen: 'Rename', partyDel: 'Delete', partyExp: 'Export', partyImp: 'Import',
+    storageNote: 'Parties are saved in this browser (not synced across devices). Use Export to take them with you.',
+    deleteConfirm: name => `Delete "${name}"?`,
+    slotRemoveTitle: 'Remove', undoRemoved: name => `Removed ${name}`, undoBtn: 'Undo',
+    emptyGuideStep1: '① Add a Pokémon (tap +)', emptyGuideStep2: '② Set a virtual opponent', emptyGuideStep3: '③ Fine-tune EVs and check the verdict',
+    slotSearchTitle: n => `Add a Pokémon to slot ${n}`, slotSearchClose: '✕ Close',
+    slotSearchPlaceholder: 'Search for a Pokémon to add', slotFillBtn: 'Fill this slot with a suggestion',
+    noHit: 'No matches', rankLbl: n => `Rank #${n}`, adoptBtn: 'Use this suggestion',
+    fillCalculating: 'Calculating suggestions…', fillFailedMsg: 'Failed to load suggestions. Please try again later',
+    targetsHeading: 'Virtual Opponents', targetsSelectPrompt: 'Select a slot above',
+    targetsSetPrompt: 'Set a build to compare against virtual opponents',
+    targetSearchPlaceholder: 'Search for a virtual opponent to add', addTargetsPrompt: 'Please add a virtual opponent',
+    muEditHeading: label => `Edit ${label}'s build`, muSaveBtn: 'Save', muCancelBtn: 'Cancel',
+    muEditBtn: 'Edit', muDeleteBtn: 'Delete', muDeleteLastTitle: "Can't delete the last remaining set",
+    muAddBuildBtn: '+ Add a set', muResetDefaultBtn: 'Reset to default',
+    speedFaster: 'outspeeds', speedSlower: 'outsped', speedEq: 'tied',
+    buildLabel: n => `Set ${n}`, hpLbl: n => `HP stat ${n}`,
+    takenDmgLbl: (name, range) => `Damage taken: ${name} ${range}`,
+    noEffectiveMove: 'No effective move (status moves/immune only)', noMovesSet: 'No moves set',
+    hitsSelfOpp: (my, opp) => `You ${my} / Opponent ${opp}`, hitsFmt: n => `${n}HKO`,
+    randHitsFmt: (n, p) => `${n}HKO by random rolls (${p}%)`, muBadgeTitle: 'Worst-case verdict against this virtual opponent',
+    selfHitsFmt: n => `You: ${n}HKO`, oppHitsFmt: n => `Opponent: ${n}HKO`,
+    popHitsLbl: t => `KO count: ${t}`, popDmgLbl: t => `Damage dealt: ${t}`,
+    speedTipTitle: 'Your Speed stat vs the opponent\'s Speed stat (Scarf included)',
+    tuneBtn: 'EV back-calc (Speed / Power / Bulk)', applyBtn: 'Apply',
+    tuneKindSpeed: 'Speed', tuneKindKo: 'Power', tuneKindSurvive: 'Bulk',
+    holeNone: 'None',
+    balanceHeading: 'Party Balance', addPokemonPrompt: 'Please add a Pokémon',
+    physAtk: 'Physical attackers', specAtk: 'Special attackers', megaLbl: 'Mega', scarfLbl: 'Choice Scarf',
+    avgSpeedLbl: 'Avg. Speed', weakOverlapLbl: 'Shared weakness', weakOverlapVal: (type, count) => `${type} ×${count}`,
+    weakAgainstLbl: 'Weak vs',
+    tabAtk: 'Attack Matchup', tabDef: 'Defense Matchup', tabSpeed: 'Speed', tabMu: 'Pokémon Matchup',
+    selfVsAtk: 'You ＼ Attacking', selfVsHit: 'You ＼ Taking hits',
+    selfVsOppRep: 'You ＼ Opponent (rep. set)', selfVsOppAgg: 'You ＼ Opponent (sets 1–3 combined)',
+    atkLegend: 'The <b>highest multiplier</b> each of your Pokémon gets when attacking that type. <b class="ao-good">×2</b> = super effective <b class="ao-bad">½/0</b> = doesn\'t hit well.',
+    defLegend: 'The multiplier each of your Pokémon takes from that type. <b class="df-w1">×2/×4</b> = weakness <b class="df-r1">½ or less</b> = resisted <b class="df-imm">0</b> = immune. <b class="mtx-gap" style="padding:0 4px">Light yellow</b> = a type with no team member resisting it or better.',
+    speedMatrixLegend: 'Whether your team (left, sorted by Speed) outspeeds the top 30\'s representative sets (Scarf included). <b>◎</b> = faster <b>△</b> = tied <b>×</b> = slower.',
+    muMatrixLegend: 'Aggregated 1v1 verdict for each ally vs the top 30 usage ranks\' assumed sets (top ≤3 sets by usage). ◎ favorable ○ slightly favorable △ even ▲ slightly unfavorable × unfavorable. <b class="mu-dep-leg">*</b> = favorability varies by set. <b class="mtx-hole" style="padding:0 4px">Red</b> = a "gap" no ally gets an aggregated ◎/○ against. Click a cell (hover also works on PC) for the per-set breakdown (KO count, Speed).',
+    holeSummary: labels => `⚠ Gaps: ${labels}`,
+    muBreakdownLine: (idx, item, sym, my, opp, turn) => `Set ${idx} (${item}): ${sym} ${my}/${opp} · ${turn}`,
+    noItem: 'no item', turnFirst: 'moves first', turnSecond: 'moves second',
+    addTargetDisabled: 'Add this opponent as a virtual opponent', addTargetDisabledTitle: 'Select a slot above first',
+    addTargetToSlot: n => `Add this opponent as slot ${n}'s virtual opponent`, addedSuffix: ' (already added)',
+    noEmptySlots: 'No empty slots', fillCalcAll: 'Calculating suggestions for empty slots…',
+    fillResultHead: n => `${n} suggestion(s) — click a Pokémon to add just that one to an empty slot`,
+    fillClearBtn: '✕ Clear suggestions', alreadyAdded: 'Already added', addToEmptySlot: sp => `Add ${sp} to an empty slot`,
+    exportHeading: name => `Export — ${name}`, copyBtn: 'Copy', copiedMsg: 'Copied',
+    copyFailedMsg: 'Copy failed. Please select the text and copy it manually',
+    importHeading: 'Import', importHint: 'Paste 6 lines of spec text (the exported format)',
+    importPlaceholder: 'Paste here', importBtn: 'Import',
+    importFailedMsg: 'Import failed. Please check the format (6 lines, spec format)',
+    presetHeading: sp => `${sp} set templates`, noCandidates: 'No candidates available', applyThisBuildBtn: 'Apply this set',
+    evPresetHeading: sp => `${sp} EV presets (by usage)`,
+    handoffHeading: 'Import into Party Workshop',
+    handoffFailed: "Couldn't import the suggestion data. The build couldn't be resolved",
+    initErrorMsg: 'Failed to load data. Please reload the page.', retryBtn: 'Retry',
+    miniBarExpandAria: 'Expand virtual opponent details', sheetCollapseBtn: '▼ Close', sheetExpandCaret: '▲ Details',
+  },
+  ko: {
+    title: '파티 공방',
+    lead: '6마리의 빌드를 자유롭게 미세 조정하고, 예상 상대와의 스피드 비교·1v1 판정을 실시간으로 확인할 수 있습니다. 1v1 판정은 서로의 최대 위력·스피드·기합의띠 등의 버티기를 고려한 사전 계산입니다(교체·보조기술은 포함되지 않습니다).',
+    obStep1Title: '포켓몬 추가', obStep1Desc: '빈 칸의 ＋에서 선택하거나, 「빈 칸을 제안으로 채우기」로 자동 편성',
+    obStep2Title: '빌드 조정', obStep2Desc: '지닌물건·특성·성격·EV를 변경하면 실수치가 즉시 반영',
+    obStep3Title: '상성 확인', obStep3Desc: '사용률 상위 30마리와의 1v1 판정・스피드 비교로 파티의 약점을 찾기',
+    loading: '불러오는 중…', close: '닫기',
+    teamHead: '6마리 편성', teamDndHint: '（드래그로 순서 변경）', fillBtn: '빈 칸을 제안으로 채우기',
+    createPartyPrompt: '파티를 생성해 주세요',
+    editorTitle: '빌드 에디터', editorSelectPrompt: '위의 6칸에서 편집할 칸을 선택해 주세요',
+    editorAddPrompt: '포켓몬을 추가하면 빌드를 편집할 수 있습니다',
+    speciesDataMissing: '종족 데이터를 찾을 수 없습니다（데이터 불일치）', muCalcError: '데이터 불일치로 계산할 수 없습니다',
+    editorHeading: n => `빌드 에디터 — 칸${n}`,
+    itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
+    templateBtn: '빌드 템플릿에서', megaTag: '메가', megaFixedNote: '（메가진화로 고정）',
+    evRemain: n => `남은 ${n}포인트`, evRemainOver: n => `남은 ${n}포인트（상한 초과）`,
+    evPresetBtn: 'EV 프리셋에서',
+    noneOpt: '없음', usageGroup: '사용률', otherGroup: '기타', otherGroupMoves: '기타(전체 습득기술)',
+    usageRankGroup: '사용률순', dashOpt: '—',
+    evDownAria: label => `${label} 1 감소`, evUpAria: label => `${label} 1 증가`,
+    partyNew: '신규', partyDup: '복제', partyRen: '이름변경', partyDel: '삭제', partyExp: '내보내기', partyImp: '가져오기',
+    storageNote: '파티는 이 브라우저 안에 저장됩니다(기기 간 동기화는 없습니다). 반출은 내보내기를 이용해 주세요.',
+    deleteConfirm: name => `「${name}」을(를) 삭제하시겠습니까?`,
+    slotRemoveTitle: '제거', undoRemoved: name => `${name}을(를) 제거했습니다`, undoBtn: '되돌리기',
+    emptyGuideStep1: '① 포켓몬 추가（＋를 탭）', emptyGuideStep2: '② 가상의 적 설정', emptyGuideStep3: '③ EV를 미세 조정하고 판정 확인',
+    slotSearchTitle: n => `칸${n}에 포켓몬 추가`, slotSearchClose: '✕ 닫기',
+    slotSearchPlaceholder: '추가할 포켓몬 검색', slotFillBtn: '이 칸을 제안으로 채우기',
+    noHit: '검색 결과 없음', rankLbl: n => `사용률 ${n}위`, adoptBtn: '이 안을 채택',
+    fillCalculating: '제안을 계산 중…', fillFailedMsg: '제안을 가져오지 못했습니다. 잠시 후 다시 시도해 주세요',
+    targetsHeading: '가상의 적', targetsSelectPrompt: '위의 6칸에서 칸을 선택해 주세요',
+    targetsSetPrompt: '빌드를 설정하면 가상의 적과 비교할 수 있습니다',
+    targetSearchPlaceholder: '추가할 가상의 적 검색', addTargetsPrompt: '가상의 적을 추가해 주세요',
+    muEditHeading: label => `${label} 빌드 편집`, muSaveBtn: '저장', muCancelBtn: '취소',
+    muEditBtn: '편집', muDeleteBtn: '삭제', muDeleteLastTitle: '마지막 남은 빌드는 삭제할 수 없습니다',
+    muAddBuildBtn: '＋ 빌드 추가', muResetDefaultBtn: '기본값으로 되돌리기',
+    speedFaster: '이김', speedSlower: '당함', speedEq: '동속',
+    buildLabel: n => `빌드${n}`, hpLbl: n => `HP 실수치 ${n}`,
+    takenDmgLbl: (name, range) => `받는 대미지: ${name} ${range}`,
+    noEffectiveMove: '유효타 없음(변화기・무효만 있음)', noMovesSet: '기술이 설정되지 않았습니다',
+    hitsSelfOpp: (my, opp) => `나 ${my}／상대 ${opp}`, hitsFmt: n => `확정${n}`,
+    randHitsFmt: (n, p) => `난수 ${n}발(${p}%)`, muBadgeTitle: '이 가상의 적에 대한 최악의 빌드 판정',
+    selfHitsFmt: n => `나 확정${n}`, oppHitsFmt: n => `상대 확정${n}`,
+    popHitsLbl: t => `확정타: ${t}`, popDmgLbl: t => `주는 대미지: ${t}`,
+    speedTipTitle: '나의 스피드 실수치 vs 상대의 스피드 실수치(스카프 포함)',
+    tuneBtn: 'EV 역산(스피드・화력・내구)', applyBtn: '적용',
+    tuneKindSpeed: '스피드', tuneKindKo: '화력', tuneKindSurvive: '내구',
+    holeNone: '없음',
+    balanceHeading: '파티 밸런스', addPokemonPrompt: '포켓몬을 추가해 주세요',
+    physAtk: '물리 어태커', specAtk: '특수 어태커', megaLbl: '메가', scarfLbl: '스카프',
+    avgSpeedLbl: '평균 스피드', weakOverlapLbl: '약점 중복', weakOverlapVal: (type, count) => `${type}×${count}`,
+    weakAgainstLbl: '약한 상대',
+    tabAtk: '공격 상성', tabDef: '방어 상성', tabSpeed: '스피드', tabMu: '포켓몬 상성',
+    selfVsAtk: '나 ＼ 공격', selfVsHit: '나 ＼ 피격',
+    selfVsOppRep: '나 ＼ 상대(대표 빌드)', selfVsOppAgg: '나 ＼ 상대(빌드1~3 종합)',
+    atkLegend: '각 아군이 <b>해당 타입을 공격할 때의 최대 배율</b>. <b class="ao-good">×2</b>=효과가 굉장함 <b class="ao-bad">½/0</b>=잘 통하지 않음.',
+    defLegend: '각 아군이 <b>해당 타입 기술을 받을 때의 피격 배율</b>. <b class="df-w1">×2/×4</b>=약점 <b class="df-r1">½ 이하</b>=반감 <b class="df-imm">0</b>=무효. <b class="mtx-gap" style="padding:0 4px">연노랑</b>=파티 내에 반감 이하로 받는 멤버가 없는 타입.',
+    speedMatrixLegend: '아군（왼쪽·스피드 순）이 사용률 상위 30마리의 대표 빌드보다 빠른지（스카프 포함）. <b>◎</b>＝빠름 <b>△</b>＝동속 <b>×</b>＝느림.',
+    muMatrixLegend: '각 아군 vs 사용률 상위 30마리의 예상 빌드（채용률 상위≤3빌드）을 종합한 1v1 판정. ◎유리 ○약간유리 △반반 ▲약간불리 ×불리. <b class="mu-dep-leg">*</b>＝빌드에 따라 유불리가 달라짐. <b class="mtx-hole" style="padding:0 4px">빨강</b>=아무도 종합 ◎/○를 얻지 못하는 「약점」. 셀 클릭(호버 가능한 PC에서는 마우스오버도)으로 빌드별 상세（확정타·스피드）를 확인할 수 있습니다.',
+    holeSummary: labels => `⚠ 약점: ${labels}`,
+    muBreakdownLine: (idx, item, sym, my, opp, turn) => `빌드${idx}(${item}): ${sym} ${my}/${opp}·${turn}`,
+    noItem: '도구 없음', turnFirst: '선공', turnSecond: '후공',
+    addTargetDisabled: '이 상대를 가상의 적에 추가', addTargetDisabledTitle: '먼저 위의 6칸에서 칸을 선택해 주세요',
+    addTargetToSlot: n => `이 상대를 칸${n}의 가상의 적에 추가`, addedSuffix: '（추가됨）',
+    noEmptySlots: '빈 칸이 없습니다', fillCalcAll: '빈 칸의 제안을 계산 중…',
+    fillResultHead: n => `${n}건의 제안 — 포켓몬을 클릭하면 1마리만 빈 칸에 추가할 수 있습니다`,
+    fillClearBtn: '✕ 제안 지우기', alreadyAdded: '추가됨', addToEmptySlot: sp => `${sp}을(를) 빈 칸에 추가`,
+    exportHeading: name => `내보내기 — ${name}`, copyBtn: '복사', copiedMsg: '복사했습니다',
+    copyFailedMsg: '복사에 실패했습니다. 텍스트를 선택하여 수동으로 복사해 주세요',
+    importHeading: '가져오기', importHint: '6줄의 spec 텍스트를 붙여넣어 주세요（내보내기 형식）',
+    importPlaceholder: '여기에 붙여넣기', importBtn: '가져오기',
+    importFailedMsg: '가져오기에 실패했습니다. 형식을 확인해 주세요（6줄, spec 형식）',
+    presetHeading: sp => `${sp} 빌드 템플릿`, noCandidates: '후보가 없습니다', applyThisBuildBtn: '이 빌드 적용',
+    evPresetHeading: sp => `${sp} EV 프리셋（사용률순）`,
+    handoffHeading: '파티 공방으로 가져오기',
+    handoffFailed: '제안 데이터를 가져오지 못했습니다. 빌드를 해석할 수 없었습니다',
+    initErrorMsg: '데이터를 불러오지 못했습니다. 다시 불러와 주세요.', retryBtn: '재시도',
+    miniBarExpandAria: '가상의 적 상세 펼치기', sheetCollapseBtn: '▼ 닫기', sheetExpandCaret: '▲ 상세',
+  },
+} as const;
+const I18N = I18N_ALL[lang];
 ---
 
 <main>
-  <h1>パーティ工房</h1>
-  <p class="lead">6匹の型を自由に微調整し、想定敵との素早さ比較・1v1判定をリアルタイムに確認できます。1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。</p>
+  <h1>{I18N.title}</h1>
+  <p class="lead">{I18N.lead}</p>
   <OnboardingGuide
     storageKey="builder"
     steps={[
-      { icon: '➕', title: 'ポケモンを追加', desc: '空き枠の＋から選ぶか、「空き枠を提案で埋める」で自動編成' },
-      { icon: '🔧', title: '型を調整', desc: 'もちもの・特性・性格・EVを変更すると実数値が即座に反映' },
-      { icon: '⚖️', title: '相性を確認', desc: '使用率上位30体との1v1判定・素早さ比較でパーティの穴を見つける' },
+      { icon: '➕', title: I18N.obStep1Title, desc: I18N.obStep1Desc },
+      { icon: '🔧', title: I18N.obStep2Title, desc: I18N.obStep2Desc },
+      { icon: '⚖️', title: I18N.obStep3Title, desc: I18N.obStep3Desc },
     ]}
   />
 
-  <div class="card" id="pb-partybar"><div class="muted">読み込み中…</div></div>
+  <div class="card" id="pb-partybar"><div class="muted">{I18N.loading}</div></div>
 
   <div id="pb-validate"></div>
 
   <div class="card">
     <div class="row" style="justify-content:space-between;align-items:center">
-      <h2 style="margin:0">6枠編成<span class="pb-dnd-hint muted">（ドラッグで並べ替え）</span></h2>
-      <button id="pb-fill-btn" class="btn">空き枠を提案で埋める</button>
+      <h2 style="margin:0">{I18N.teamHead}<span class="pb-dnd-hint muted">{I18N.teamDndHint}</span></h2>
+      <button id="pb-fill-btn" class="btn">{I18N.fillBtn}</button>
     </div>
     <div class="iconrow" id="pb-tray"></div>
     <div id="pb-empty-guide"></div>
@@ -30,7 +280,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
   </div>
 
   <div class="pb-split">
-    <div class="card" id="pb-editor"><div class="muted">読み込み中…</div></div>
+    <div class="card" id="pb-editor"><div class="muted">{I18N.loading}</div></div>
     <div class="card" id="pb-targets"></div>
   </div>
 
@@ -38,7 +288,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
 </main>
 
 <div class="pop-overlay" id="pb-modal" style="display:none">
-  <div class="pop-card"><button class="pop-x" id="pb-modal-x" aria-label="閉じる">✕</button><div id="pb-modal-body"></div></div>
+  <div class="pop-card"><button class="pop-x" id="pb-modal-x" aria-label={I18N.close}>✕</button><div id="pb-modal-body"></div></div>
 </div>
 
 <div class="pb-minibar" id="pb-minibar"></div>
@@ -341,6 +591,15 @@ import OnboardingGuide from './OnboardingGuide.astro';
   .pb-empty-guide-step b{color:var(--accent);margin-right:.35em}
 </style>
 
+<script is:inline define:vars={{ lang, I18N, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, pfx }}>
+  // define:vars only works on scripts without ES `import`; the module script below uses imports,
+  // so Astro props are bridged via window instead of passed directly.
+  Object.assign(window, {
+    __PB_LANG__: lang, __PB_I18N__: I18N, __PB_POKEMON_MAP__: POKEMON_NAME_MAP, __PB_MOVE_MAP__: MOVE_NAME_MAP,
+    __PB_ABIL_MAP__: ABILITY_NAME_MAP, __PB_ITEM_MAP__: ITEM_NAME_MAP, __PB_NATURE_MAP__: NATURE_NAME_MAP, __PB_PFX__: pfx,
+  });
+</script>
+
 <script>
   import { loadCore, loadMon } from '../scripts/party-builder/data';
   import { loadStore, saveStore, createParty, createPartyFromSlots, duplicateParty, renameParty, deleteParty, getEffectiveTargets } from '../scripts/party-builder/storage';
@@ -352,6 +611,21 @@ import OnboardingGuide from './OnboardingGuide.astro';
   import { bestMove, calcDamage } from '../scripts/party-builder/damage';
   import { suggestFill, tuneForTargets } from '../scripts/party-builder/suggest';
   import { validateParty } from '../scripts/party-builder/validate';
+
+  const I18N = window.__PB_I18N__;
+  const pfx = window.__PB_PFX__;
+  const tPoke = (n) => (n && window.__PB_POKEMON_MAP__[n]) || n;
+  const tMove = (n) => (n && window.__PB_MOVE_MAP__[n]) || n;
+  const tAbil = (n) => (n && window.__PB_ABIL_MAP__[n]) || n;
+  const tItem = (n) => (n && window.__PB_ITEM_MAP__[n]) || n;
+  const tNature = (n) => (n && window.__PB_NATURE_MAP__[n]) || n;
+  /** natureDisp(stats.ts)は「せっかち (S↑B↓)」のように和名を埋め込んで返すため、
+   * 和名部分だけをtNature()で置き換えて表示用に翻訳する(stats.ts自体は変更しない)。 */
+  function tNatureDisp(na) {
+    if (!na) return '';
+    const raw = natureDisp(na);
+    return raw.startsWith(na) ? tNature(na) + raw.slice(na.length) : tNature(na);
+  }
 
   const EVK = ['H', 'A', 'B', 'C', 'D', 'S'];
   // PartySuggestApp.astro の ITEM_PNG と同一(仮想敵カードの持ち物表示体裁を揃えるための小規模な固定表)。
@@ -379,13 +653,15 @@ import OnboardingGuide from './OnboardingGuide.astro';
   function spriteUrl(icon) { return icon ? `/images/pokemon/pokemon-${icon}.webp` : null; }
   function icoImg(icon, name, cls) {
     const u = spriteUrl(icon);
-    return u ? `<img class="${cls || ''}" src="${u}" alt="${esc(name || '')}" title="${esc(name || '')}" loading="lazy" onerror="this.style.display='none'">` : '';
+    const dn = tPoke(name);
+    return u ? `<img class="${cls || ''}" src="${u}" alt="${esc(dn || '')}" title="${esc(dn || '')}" loading="lazy" onerror="this.style.display='none'">` : '';
   }
   function typeIcoByName(t) {
     const e = t ? TYPEICON[t] : null;
     return e ? `<img class="tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${esc(t)}">` : '';
   }
-  /** PartySuggestApp.astro の itemIco と同一体裁(持ち物スプライト。ITEM_PNGに無い持ち物はアイコン無し)。 */
+  /** PartySuggestApp.astro の itemIco と同一体裁(持ち物スプライト。ITEM_PNGに無い持ち物はアイコン無し)。
+   * lookupは常にitemの生の(和名)値で行う(和名キーの固定表のため)。表示名の翻訳はesc(tItem(item))側で行う。 */
   function itemIco(item) {
     return ITEM_PNG[item] ? `<img class="iic" src="/images/items/${ITEM_PNG[item]}" alt="">` : '';
   }
@@ -396,18 +672,21 @@ import OnboardingGuide from './OnboardingGuide.astro';
   /** 仮想敵カードの型表示。PartySuggestApp.astro の detailHtml() と同じ体裁(dgrid+lblチップ・mvchip・evChips)に揃える。 */
   function muDetailHtml(b) {
     return `<div class="dgrid">
-        <div class="dcell"><span class="lbl item">持ち物</span><span class="dval">${itemIco(b.item)}${esc(b.item) || '—'}</span></div>
-        <div class="dcell"><span class="lbl abil">特性</span><span class="dval">${esc(b.ability) || '—'}</span></div>
-        <div class="dcell"><span class="lbl nat">性格</span><span class="dval">${esc(natureDisp(b.nature)) || '—'}</span></div>
+        <div class="dcell"><span class="lbl item">${I18N.itemLbl}</span><span class="dval">${itemIco(b.item)}${esc(tItem(b.item)) || '—'}</span></div>
+        <div class="dcell"><span class="lbl abil">${I18N.abilLbl}</span><span class="dval">${esc(tAbil(b.ability)) || '—'}</span></div>
+        <div class="dcell"><span class="lbl nat">${I18N.natLbl}</span><span class="dval">${esc(tNatureDisp(b.nature)) || '—'}</span></div>
       </div>
-      <div class="drow"><span class="lbl mv">技</span><span class="mvwrap">${b.moves.filter(Boolean).map((x) => `<span class="mvchip">${typeIcoForMove(x)}${esc(x)}</span>`).join('') || '—'}</span></div>
-      <div class="drow"><span class="lbl ev">EV</span><span class="mvwrap">${evChipsArr(b.ev)}</span></div>`;
+      <div class="drow"><span class="lbl mv">${I18N.moveLbl}</span><span class="mvwrap">${b.moves.filter(Boolean).map((x) => `<span class="mvchip">${typeIcoForMove(x)}${esc(tMove(x))}</span>`).join('') || '—'}</span></div>
+      <div class="drow"><span class="lbl ev">${I18N.evLbl}</span><span class="mvwrap">${evChipsArr(b.ev)}</span></div>`;
   }
+  /** 検索候補のハイライト表示。表示名は翻訳するが、ハイライトはja(無翻訳)時のみマッチ範囲を反映する
+   * (検索自体は常に和名に対して行うため、翻訳後は元のマッチ位置と表示文字列がずれるため)。 */
   function hlSug(text, q) {
+    const disp = tPoke(text);
     const qk = toKatakana(q);
     const t = qk !== q ? qk : q;
     const i = text.indexOf(t);
-    if (i < 0) return esc(text);
+    if (i < 0 || disp !== text) return esc(disp);
     return esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + t.length)) + '</mark>' + esc(text.slice(i + t.length));
   }
   const DEFG = (x) => (x === 0 ? '0' : x <= 0.25 ? '¼' : x < 0.5 ? '½' : x < 1 ? '½' : x >= 4 ? '×4' : x > 1 ? '×2' : '');
@@ -618,10 +897,10 @@ import OnboardingGuide from './OnboardingGuide.astro';
 
     if (!sheetExpanded) {
       const items = rows.slice(0, 3).map((r) => `<button type="button" class="pb-minibar-item">${icoImg(grp.icon, grp.label, 'pb-minibar-ico')}<span>S${r.mySpeed}vs${r.oppSpeed} ${r.verdict.sym}${r.myHitsTxt}/${r.oppHitsTxt}</span></button>`).join('');
-      el.innerHTML = `<div class="pb-minibar-inner" id="pb-minibar-tap" role="button" tabindex="0" aria-expanded="false" aria-label="仮想敵の詳細を展開">
+      el.innerHTML = `<div class="pb-minibar-inner" id="pb-minibar-tap" role="button" tabindex="0" aria-expanded="false" aria-label="${esc(I18N.miniBarExpandAria)}">
           <div class="pb-minibar-scroll">${items}</div>
-          <span class="pb-minibar-caret">▲詳細</span>
-          <button type="button" class="pb-minibar-x" id="pb-minibar-x" aria-label="閉じる">✕</button>
+          <span class="pb-minibar-caret">${esc(I18N.sheetExpandCaret)}</span>
+          <button type="button" class="pb-minibar-x" id="pb-minibar-x" aria-label="${esc(I18N.close)}">✕</button>
         </div>`;
       const tapEl = document.getElementById('pb-minibar-tap');
       tapEl.addEventListener('click', (e) => { if (e.target.closest('#pb-minibar-x')) return; expand(); });
@@ -639,8 +918,8 @@ import OnboardingGuide from './OnboardingGuide.astro';
 
     el.innerHTML = `
       <div class="pb-minibar-head">
-        <span class="pb-minibar-title">${icoImg(grp.icon, grp.label, 'pb-minibar-ico')}${esc(grp.label)}</span>
-        <button type="button" class="pb-btn-sub" id="pb-sheet-collapse" aria-expanded="true">▼閉じる</button>
+        <span class="pb-minibar-title">${icoImg(grp.icon, grp.label, 'pb-minibar-ico')}${esc(tPoke(grp.label))}</span>
+        <button type="button" class="pb-btn-sub" id="pb-sheet-collapse" aria-expanded="true">${esc(I18N.sheetCollapseBtn)}</button>
       </div>
       <div class="pb-sheet-body" id="pb-sheet-body">
         <div class="filter-chips">${sheetCtx.chips}</div>
@@ -660,9 +939,9 @@ import OnboardingGuide from './OnboardingGuide.astro';
     const filledCount = p ? p.slots.filter(Boolean).length : 0;
     if (!p || filledCount > 0) { el.innerHTML = ''; return; }
     el.innerHTML = `<div class="pb-empty-guide">
-        <div class="pb-empty-guide-step"><b>①</b>ポケモンを追加（＋をタップ）</div>
-        <div class="pb-empty-guide-step"><b>②</b>仮想敵を設定</div>
-        <div class="pb-empty-guide-step"><b>③</b>EVを微調整して判定を確認</div>
+        <div class="pb-empty-guide-step">${esc(I18N.emptyGuideStep1)}</div>
+        <div class="pb-empty-guide-step">${esc(I18N.emptyGuideStep2)}</div>
+        <div class="pb-empty-guide-step">${esc(I18N.emptyGuideStep3)}</div>
       </div>`;
   }
 
@@ -702,14 +981,14 @@ import OnboardingGuide from './OnboardingGuide.astro';
     el.innerHTML = `
       <div class="row pb-partybar-row">
         ${nameFieldHtml}
-        <button class="pb-btn-sub" id="pb-p-new" ${renamingParty ? 'disabled' : ''}>新規</button>
-        <button class="pb-btn-sub" id="pb-p-dup" ${p && !renamingParty ? '' : 'disabled'}>複製</button>
-        <button class="pb-btn-sub" id="pb-p-ren" ${p && !renamingParty ? '' : 'disabled'}>リネーム</button>
-        <button class="pb-btn-sub pb-danger" id="pb-p-del" ${p && !renamingParty ? '' : 'disabled'}>削除</button>
-        <button class="pb-btn-sub" id="pb-p-exp" ${p && !renamingParty ? '' : 'disabled'}>エクスポート</button>
-        <button class="pb-btn-sub" id="pb-p-imp" ${renamingParty ? 'disabled' : ''}>インポート</button>
+        <button class="pb-btn-sub" id="pb-p-new" ${renamingParty ? 'disabled' : ''}>${esc(I18N.partyNew)}</button>
+        <button class="pb-btn-sub" id="pb-p-dup" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.partyDup)}</button>
+        <button class="pb-btn-sub" id="pb-p-ren" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.partyRen)}</button>
+        <button class="pb-btn-sub pb-danger" id="pb-p-del" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.partyDel)}</button>
+        <button class="pb-btn-sub" id="pb-p-exp" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.partyExp)}</button>
+        <button class="pb-btn-sub" id="pb-p-imp" ${renamingParty ? 'disabled' : ''}>${esc(I18N.partyImp)}</button>
       </div>
-      <div class="muted pb-storage-note">パーティはこのブラウザ内に保存されます(端末間の同期はありません)。持ち出しはエクスポートをご利用ください。</div>`;
+      <div class="muted pb-storage-note">${esc(I18N.storageNote)}</div>`;
     if (renamingParty && p) {
       // (12b) prompt()の代わりにインライン編集。Enter/blurで確定・Escで取消(esc()はvalue属性側で適用済み)。
       const input = document.getElementById('pb-party-rename-input');
@@ -762,7 +1041,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
     });
     document.getElementById('pb-p-del').addEventListener('click', () => {
       if (!p || renamingParty) return;
-      if (confirm(`「${p.name}」を削除しますか？`)) {
+      if (confirm(I18N.deleteConfirm(p.name))) {
         deleteParty(store, p.id);
         resetPartyUiState();
         render();
@@ -786,10 +1065,10 @@ import OnboardingGuide from './OnboardingGuide.astro';
       const name = rb ? rb.label : slot.sp;
       const icon = rb ? rb.icon : (sm ? sm.icon : null);
       return `<button class="montab${active}" data-slot="${i}" draggable="true">
-          <span class="pb-slot-x" data-slot-x="${i}" title="外す">✕</span>
+          <span class="pb-slot-x" data-slot-x="${i}" title="${esc(I18N.slotRemoveTitle)}">✕</span>
           ${icoImg(icon, name, 'monicon')}
-          <span class="mname">${esc(name)}</span>
-          <span class="mitem">${esc(slot.item) || '—'}</span>
+          <span class="mname">${esc(tPoke(name))}</span>
+          <span class="mitem">${esc(tItem(slot.item)) || '—'}</span>
         </button>`;
     }).join('');
     el.querySelectorAll('.montab').forEach((btn) => {
@@ -868,7 +1147,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
     slotFillFailed = false;
     saveStore(store);
     const rb = resolveSlotSafe(removed);
-    showUndoToast(rb ? rb.label : removed.sp, p.id, i, removed);
+    showUndoToast(tPoke(rb ? rb.label : removed.sp), p.id, i, removed);
     render();
   }
 
@@ -890,7 +1169,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
     if (!el) return;
     if (!pendingUndo) { el.style.display = 'none'; el.innerHTML = ''; return; }
     el.style.display = 'flex';
-    el.innerHTML = `<span>${esc(pendingUndo.name)}を外しました</span><button type="button" class="pb-undo-toast-btn" id="pb-undo-btn">元に戻す</button>`;
+    el.innerHTML = `<span>${esc(I18N.undoRemoved(pendingUndo.name))}</span><button type="button" class="pb-undo-toast-btn" id="pb-undo-btn">${esc(I18N.undoBtn)}</button>`;
     document.getElementById('pb-undo-btn').addEventListener('click', undoRemoveSlot);
   }
   /** 復元: 除去時の位置(左詰め後のインデックス)へSlot全体(targets込み)を挿入し直す。 */
@@ -940,17 +1219,17 @@ import OnboardingGuide from './OnboardingGuide.astro';
   async function renderEditor() {
     const el = document.getElementById('pb-editor');
     const p = activeParty();
-    if (!p) { el.innerHTML = '<div class="muted">パーティを作成してください</div>'; return; }
+    if (!p) { el.innerHTML = `<div class="muted">${esc(I18N.createPartyPrompt)}</div>`; return; }
     if (selectedIdx === null) {
-      el.innerHTML = '<h2>型エディタ</h2><div class="muted">上の6枠から編集したい枠を選択してください</div>';
+      el.innerHTML = `<h2>${esc(I18N.editorTitle)}</h2><div class="muted">${esc(I18N.editorSelectPrompt)}</div>`;
       return;
     }
     const slot = p.slots[selectedIdx];
-    if (!slot) { el.innerHTML = '<h2>型エディタ</h2><div class="muted">ポケモンを追加すると型を編集できます</div>'; return; }
+    if (!slot) { el.innerHTML = `<h2>${esc(I18N.editorTitle)}</h2><div class="muted">${esc(I18N.editorAddPrompt)}</div>`; return; }
     const sm = core.species.find((s) => s.n === slot.sp);
-    if (!sm) { el.innerHTML = '<div class="muted">種族データが見つかりません（データ不整合）</div>'; return; }
+    if (!sm) { el.innerHTML = `<div class="muted">${esc(I18N.speciesDataMissing)}</div>`; return; }
     const token = ++editorRenderToken;
-    el.innerHTML = `<h2>型エディタ ー 枠${selectedIdx + 1}</h2><div class="muted">読み込み中…</div>`;
+    el.innerHTML = `<h2>${esc(I18N.editorHeading(selectedIdx + 1))}</h2><div class="muted">${esc(I18N.loading)}</div>`;
     let detail = null;
     try { detail = await loadMon(sm.icon); } catch (e) { detail = null; }
     if (token !== editorRenderToken) return;
@@ -977,15 +1256,15 @@ import OnboardingGuide from './OnboardingGuide.astro';
     el.innerHTML = `
       <div class="pb-slotsearch" style="--pb-arrow-left:${arrowLeft}">
         <div class="pb-slotsearch-head">
-          <span class="pb-slotsearch-title">枠${idx + 1}にポケモンを追加</span>
-          <button type="button" class="pb-slotsearch-close" id="pb-slotsearch-close" aria-label="閉じる">✕ 閉じる</button>
+          <span class="pb-slotsearch-title">${esc(I18N.slotSearchTitle(idx + 1))}</span>
+          <button type="button" class="pb-slotsearch-close" id="pb-slotsearch-close" aria-label="${esc(I18N.close)}">${esc(I18N.slotSearchClose)}</button>
         </div>
         <div class="filter-wrap">
-          <input type="text" id="pb-sp-search" class="filter-inp" placeholder="追加するポケモンを検索（ひらがな可）" autocomplete="off">
+          <input type="text" id="pb-sp-search" class="filter-inp" placeholder="${esc(I18N.slotSearchPlaceholder)}" autocomplete="off">
           <div class="filter-sug" id="pb-sp-sug" style="display:none"></div>
         </div>
         <div class="row" style="margin-top:.6em">
-          <button class="pb-btn-sub" id="pb-slot-fill-btn">この枠を提案で埋める</button>
+          <button class="pb-btn-sub" id="pb-slot-fill-btn">${esc(I18N.slotFillBtn)}</button>
         </div>
         <div id="pb-slot-fill-out"></div>
       </div>`;
@@ -1012,8 +1291,8 @@ import OnboardingGuide from './OnboardingGuide.astro';
     if (!q) { sug.style.display = 'none'; return; }
     const qk = toKatakana(q);
     const hits = core.species.filter((s) => s.n.includes(q) || s.n.includes(qk)).slice(0, 12);
-    if (!hits.length) { sug.innerHTML = '<div class="sug-item added">該当なし</div>'; sug.style.display = 'block'; return; }
-    sug.innerHTML = hits.map((s) => `<div class="sug-item" data-sp="${esc(s.n)}">${icoImg(s.icon, s.n, '')}<span>${hlSug(s.n, q)}</span><span class="rk">使用${s.rank}位</span></div>`).join('');
+    if (!hits.length) { sug.innerHTML = `<div class="sug-item added">${esc(I18N.noHit)}</div>`; sug.style.display = 'block'; return; }
+    sug.innerHTML = hits.map((s) => `<div class="sug-item" data-sp="${esc(s.n)}">${icoImg(s.icon, s.n, '')}<span>${hlSug(s.n, q)}</span><span class="rk">${esc(I18N.rankLbl(s.rank))}</span></div>`).join('');
     sug.querySelectorAll('[data-sp]').forEach((it) => it.addEventListener('click', () => pickSpecies(it.dataset.sp)));
     sug.style.display = 'block';
   }
@@ -1080,16 +1359,16 @@ import OnboardingGuide from './OnboardingGuide.astro';
   function renderSlotFillArea() {
     const out = document.getElementById('pb-slot-fill-out');
     if (!out) return;
-    if (slotFillLoading) { out.innerHTML = '<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">提案を計算中…</div></div>'; return; }
-    if (slotFillFailed) { out.innerHTML = '<div class="muted">提案の取得に失敗しました。時間をおいて再試行してください</div>'; return; }
+    if (slotFillLoading) { out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I18N.fillCalculating)}</div></div>`; return; }
+    if (slotFillFailed) { out.innerHTML = `<div class="muted">${esc(I18N.fillFailedMsg)}</div>`; return; }
     if (!slotFillProposals || !slotFillProposals.length) { out.innerHTML = ''; return; }
     out.innerHTML = slotFillProposals.map((cand, ci) => {
       const slotCand = cand[0];
       const sm = core.species.find((s) => s.n === slotCand.sp);
       return `<div class="pb-cand-card">
           ${icoImg(sm ? sm.icon : null, slotCand.sp, 'monicon')}
-          <span class="mname" style="font-size:.82rem">${esc(slotCand.sp)}</span>
-          <button class="pb-btn-sub" data-slot-cand="${ci}">この案を採用</button>
+          <span class="mname" style="font-size:.82rem">${esc(tPoke(slotCand.sp))}</span>
+          <button class="pb-btn-sub" data-slot-cand="${ci}">${esc(I18N.adoptBtn)}</button>
         </div>`;
     }).join('');
     out.querySelectorAll('[data-slot-cand]').forEach((btn) => btn.addEventListener('click', () => {
@@ -1111,29 +1390,31 @@ import OnboardingGuide from './OnboardingGuide.astro';
     }));
   }
 
+  /** value属性は常に和名(生データ)。表示テキストのみtAbil()で翻訳する。 */
   function fieldOptions(entries, current, emptyLabel) {
     const list = entries || [];
     const names = new Set(list.map((x) => x.n));
     let html = '';
     if (emptyLabel !== undefined) html += `<option value="" ${!current ? 'selected' : ''}>${esc(emptyLabel)}</option>`;
-    if (current && !names.has(current)) html += `<option value="${esc(current)}" selected>${esc(current)}</option>`;
-    html += list.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(x.n)}${x.pct != null ? ` (${x.pct}%)` : ''}</option>`).join('');
+    if (current && !names.has(current)) html += `<option value="${esc(current)}" selected>${esc(tAbil(current))}</option>`;
+    html += list.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(tAbil(x.n))}${x.pct != null ? ` (${x.pct}%)` : ''}</option>`).join('');
     return html;
   }
 
-  /** 持ち物select: 「なし」+使用率つき(上段)+その他(下段・五十音順、items.json由来)の2段構成。 */
+  /** 持ち物select: 「なし」+使用率つき(上段)+その他(下段・五十音順、items.json由来)の2段構成。
+   * value属性は常に和名(生データ)。表示テキストのみtItem()で翻訳する。 */
   function itemSelectOptions(entries, current, allItems) {
     const list = entries || [];
     const topNames = new Set(list.map((x) => x.n));
     const rest = (allItems || []).filter((n) => !topNames.has(n));
     const known = new Set([...topNames, ...(allItems || [])]);
-    let html = `<option value="" ${!current ? 'selected' : ''}>なし</option>`;
-    if (current && !known.has(current)) html += `<option value="${esc(current)}" selected>${esc(current)}</option>`;
-    const topOpts = list.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(x.n)} (${x.pct}%)</option>`).join('');
-    html += `<optgroup label="使用率">${topOpts}</optgroup>`;
+    let html = `<option value="" ${!current ? 'selected' : ''}>${esc(I18N.noneOpt)}</option>`;
+    if (current && !known.has(current)) html += `<option value="${esc(current)}" selected>${esc(tItem(current))}</option>`;
+    const topOpts = list.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(tItem(x.n))} (${x.pct}%)</option>`).join('');
+    html += `<optgroup label="${esc(I18N.usageGroup)}">${topOpts}</optgroup>`;
     if (rest.length) {
-      const restOpts = rest.map((n) => `<option value="${esc(n)}" ${n === current ? 'selected' : ''}>${esc(n)}</option>`).join('');
-      html += `<optgroup label="その他">${restOpts}</optgroup>`;
+      const restOpts = rest.map((n) => `<option value="${esc(n)}" ${n === current ? 'selected' : ''}>${esc(tItem(n))}</option>`).join('');
+      html += `<optgroup label="${esc(I18N.otherGroup)}">${restOpts}</optgroup>`;
     }
     return html;
   }
@@ -1141,7 +1422,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
   /** 性格select: 使用率つき(上段・%付き)+残り(下段・その他)の2段構成。表示は natureDisp() で統一。
    * 無補正5性格(まじめ/きまぐれ/てれや/がんばりや/すなお)は簡単化のため「がんばりや」のみ候補にする。
    * ただし現在値が別の無補正性格(インポート・既存データ由来)の場合は壊さないようその値も選択肢に残す。
-   * stats.ts の NATURE_MODS/ALL_NATURES 自体はここでは変更しない(計算・fromSpec互換のため)。 */
+   * stats.ts の NATURE_MODS/ALL_NATURES 自体はここでは変更しない(計算・fromSpec互換のため)。表示は tNatureDisp() で翻訳する。 */
   function natureSelectOptions(entries, current) {
     const keepNeutral = (n) => !NEUTRAL_NATURES.includes(n) || n === 'がんばりや' || n === current;
     const list = (entries || []).filter((x) => keepNeutral(x.n));
@@ -1149,28 +1430,29 @@ import OnboardingGuide from './OnboardingGuide.astro';
     const restPool = ALL_NATURES.filter((n) => !topNames.has(n) && keepNeutral(n));
     const rest = sortJa(restPool);
     let html = '';
-    if (current && !topNames.has(current) && !restPool.includes(current)) html += `<option value="${esc(current)}" selected>${esc(natureDisp(current) || current)}</option>`;
-    const topOpts = list.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(natureDisp(x.n))} (${x.pct}%)</option>`).join('');
-    html += `<optgroup label="使用率">${topOpts}</optgroup>`;
-    const restOpts = rest.map((n) => `<option value="${esc(n)}" ${n === current ? 'selected' : ''}>${esc(natureDisp(n))}</option>`).join('');
-    html += `<optgroup label="その他">${restOpts}</optgroup>`;
+    if (current && !topNames.has(current) && !restPool.includes(current)) html += `<option value="${esc(current)}" selected>${esc(tNatureDisp(current) || tNature(current))}</option>`;
+    const topOpts = list.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(tNatureDisp(x.n))} (${x.pct}%)</option>`).join('');
+    html += `<optgroup label="${esc(I18N.usageGroup)}">${topOpts}</optgroup>`;
+    const restOpts = rest.map((n) => `<option value="${esc(n)}" ${n === current ? 'selected' : ''}>${esc(tNatureDisp(n))}</option>`).join('');
+    html += `<optgroup label="${esc(I18N.otherGroup)}">${restOpts}</optgroup>`;
     return html;
   }
 
-  /** 技select: 空(「—」)+使用率順(上段・%付き、mon.moves全件)+その他(下段・全習得技のうち使用率外、五十音順)の2段構成。 */
+  /** 技select: 空(「—」)+使用率順(上段・%付き、mon.moves全件)+その他(下段・全習得技のうち使用率外、五十音順)の2段構成。
+   * value属性は常に和名(生データ)。表示テキストのみtMove()で翻訳する。 */
   function moveSelectOptions(detail, current) {
     const top = detail.moves || [];
     const topNames = new Set(top.map((x) => x.n));
     const learnset = detail.learnset || [];
     const rest = sortJa(learnset.filter((n) => !topNames.has(n)));
     const known = new Set([...topNames, ...learnset]);
-    let html = `<option value="" ${!current ? 'selected' : ''}>—</option>`;
-    if (current && !known.has(current)) html += `<option value="${esc(current)}" selected>${esc(current)}</option>`;
-    const topOpts = top.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(x.n)} (${x.pct}%)</option>`).join('');
-    html += `<optgroup label="使用率順">${topOpts}</optgroup>`;
+    let html = `<option value="" ${!current ? 'selected' : ''}>${esc(I18N.dashOpt)}</option>`;
+    if (current && !known.has(current)) html += `<option value="${esc(current)}" selected>${esc(tMove(current))}</option>`;
+    const topOpts = top.map((x) => `<option value="${esc(x.n)}" ${x.n === current ? 'selected' : ''}>${esc(tMove(x.n))} (${x.pct}%)</option>`).join('');
+    html += `<optgroup label="${esc(I18N.usageRankGroup)}">${topOpts}</optgroup>`;
     if (rest.length) {
-      const restOpts = rest.map((n) => `<option value="${esc(n)}" ${n === current ? 'selected' : ''}>${esc(n)}</option>`).join('');
-      html += `<optgroup label="その他(全習得技)">${restOpts}</optgroup>`;
+      const restOpts = rest.map((n) => `<option value="${esc(n)}" ${n === current ? 'selected' : ''}>${esc(tMove(n))}</option>`).join('');
+      html += `<optgroup label="${esc(I18N.otherGroupMoves)}">${restOpts}</optgroup>`;
     }
     return html;
   }
@@ -1181,17 +1463,17 @@ import OnboardingGuide from './OnboardingGuide.astro';
     const megaOpt = slot.item ? sm.mega.find((m) => m.stone === slot.item) : undefined;
     const itemOpts = itemSelectOptions(detail.items, slot.item, core.items);
     const abilityOpts = megaOpt
-      ? `<option value="${esc(megaOpt.ability)}" selected>${esc(megaOpt.ability)}</option>`
+      ? `<option value="${esc(megaOpt.ability)}" selected>${esc(tAbil(megaOpt.ability))}</option>`
       : fieldOptions(detail.abilities, slot.ability);
     const natureOpts = natureSelectOptions(detail.natures, slot.nature);
 
     const tplBtn = (detail.builds || []).length
-      ? `<button type="button" class="pb-btn-sub pb-head-tpl" id="pb-preset-open">型テンプレから</button>`
+      ? `<button type="button" class="pb-btn-sub pb-head-tpl" id="pb-preset-open">${esc(I18N.templateBtn)}</button>`
       : '';
     const head = rb ? `<div class="pb-editor-head">
         ${icoImg(rb.icon, rb.label, 'monicon')}
         <div>
-          <div class="pb-editor-name">${esc(rb.label)}${rb.mega ? '<span class="mmega-tag">メガ</span>' : ''}</div>
+          <div class="pb-editor-name">${esc(tPoke(rb.label))}${rb.mega ? `<span class="mmega-tag">${esc(I18N.megaTag)}</span>` : ''}</div>
           <div class="pb-editor-types">${typeIcoByName(rb.t1)}${rb.t2 ? typeIcoByName(rb.t2) : ''}</div>
         </div>
         ${tplBtn}
@@ -1201,16 +1483,16 @@ import OnboardingGuide from './OnboardingGuide.astro';
       const v = Number(slot.evs[si]) || 0;
       return `<div class="pb-ev-row" data-ev-i="${si}">
         <span class="pb-ev-lbl ev-${label}">${label}</span>
-        <button type="button" class="pb-ev-step" data-ev-step="-1" data-ev-i="${si}" aria-label="${label}を1下げる" ${v <= 0 ? 'disabled' : ''}>−</button>
+        <button type="button" class="pb-ev-step" data-ev-step="-1" data-ev-i="${si}" aria-label="${esc(I18N.evDownAria(label))}" ${v <= 0 ? 'disabled' : ''}>−</button>
         <input type="range" min="0" max="${EV_STAT_MAX}" value="${v}" class="pb-ev-range" data-ev-i="${si}">
-        <button type="button" class="pb-ev-step" data-ev-step="1" data-ev-i="${si}" aria-label="${label}を1上げる" ${v >= EV_STAT_MAX ? 'disabled' : ''}>＋</button>
+        <button type="button" class="pb-ev-step" data-ev-step="1" data-ev-i="${si}" aria-label="${esc(I18N.evUpAria(label))}" ${v >= EV_STAT_MAX ? 'disabled' : ''}>＋</button>
         <input type="number" min="0" max="${EV_STAT_MAX}" value="${v}" class="pb-ev-num" data-ev-i="${si}">
         <span class="pb-ev-stat" data-ev-stat="${si}">${rb ? rb.stats[si] : '—'}</span>
       </div>`;
     }).join('');
 
     const evPresetBtn = (detail.evs || []).length
-      ? `<button type="button" class="pb-btn-sub" id="pb-evpreset-open">EVプリセットから</button>`
+      ? `<button type="button" class="pb-btn-sub" id="pb-evpreset-open">${esc(I18N.evPresetBtn)}</button>`
       : '';
 
     const moveRows = [0, 1, 2, 3].map((mi) => {
@@ -1223,13 +1505,13 @@ import OnboardingGuide from './OnboardingGuide.astro';
 
     el.innerHTML = `
       <div class="pb-editor-titlebar">
-        <h2>型エディタ ー 枠${selectedIdx + 1}</h2>
+        <h2>${esc(I18N.editorHeading(selectedIdx + 1))}</h2>
       </div>
       ${head}
       <div class="dgrid pb-select-row">
-        <div class="dcell"><span class="lbl item">持ち物</span><select class="inp" id="pb-f-item">${itemOpts}</select></div>
-        <div class="dcell"><span class="lbl abil">特性</span><select class="inp" id="pb-f-ability" ${megaOpt ? 'disabled' : ''}>${abilityOpts}</select>${megaOpt ? '<span class="pb-mega-note">（メガ進化で固定）</span>' : ''}</div>
-        <div class="dcell"><span class="lbl nat">性格</span><select class="inp" id="pb-f-nature">${natureOpts}</select></div>
+        <div class="dcell"><span class="lbl item">${esc(I18N.itemLbl)}</span><select class="inp" id="pb-f-item">${itemOpts}</select></div>
+        <div class="dcell"><span class="lbl abil">${esc(I18N.abilLbl)}</span><select class="inp" id="pb-f-ability" ${megaOpt ? 'disabled' : ''}>${abilityOpts}</select>${megaOpt ? `<span class="pb-mega-note">${esc(I18N.megaFixedNote)}</span>` : ''}</div>
+        <div class="dcell"><span class="lbl nat">${esc(I18N.natLbl)}</span><select class="inp" id="pb-f-nature">${natureOpts}</select></div>
       </div>
       <div class="pb-ev-editor">
         ${evRows}
@@ -1297,7 +1579,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
   function evRemainText(evs) {
     const sum = evs.reduce((a, b) => a + b, 0);
     const remain = EV_TOTAL_MAX - sum;
-    return remain < 0 ? `<span class="pb-ev-over">残り ${remain}ポイント（上限超過）</span>` : `残り ${remain}ポイント`;
+    return remain < 0 ? `<span class="pb-ev-over">${esc(I18N.evRemainOver(remain))}</span>` : esc(I18N.evRemain(remain));
   }
   /** EV変更の共通処理(スライダー/数値入力/±ステッパーの3経路から呼ぶ)。値を[0,32]にクランプし、
    * スライダー・数値入力・±ボタンのdisabled状態・実数値・残りポイント表示を同期する。 */
@@ -1361,7 +1643,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
   /** 仮想敵の型 ミニエディタのHTML(読み込み中はプレースホルダ)。編集対象は持ち物/特性/性格/EV/技のみ(t1/t2/bs/idxは維持)。 */
   function muEditorHtml(grp, draft, detail, loading) {
     if (loading || !detail) {
-      return `<div class="pb-mu-card"><div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">読み込み中…</div></div></div>`;
+      return `<div class="pb-mu-card"><div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I18N.loading)}</div></div></div>`;
     }
     const itemOpts = itemSelectOptions(detail.items, draft.item, core.items);
     const abilityOpts = fieldOptions(detail.abilities, draft.ability);
@@ -1378,18 +1660,18 @@ import OnboardingGuide from './OnboardingGuide.astro';
         </div>`;
     }).join('');
     return `<div class="pb-mu-card">
-        <div class="pb-mu-head"><b>${esc(grp.label)} 型編集</b></div>
+        <div class="pb-mu-head"><b>${esc(I18N.muEditHeading(tPoke(grp.label)))}</b></div>
         <div class="dgrid pb-select-row">
-          <div class="dcell"><span class="lbl item">持ち物</span><select class="inp" id="pb-mu-e-item">${itemOpts}</select></div>
-          <div class="dcell"><span class="lbl abil">特性</span><select class="inp" id="pb-mu-e-ability">${abilityOpts}</select></div>
-          <div class="dcell"><span class="lbl nat">性格</span><select class="inp" id="pb-mu-e-nature">${natureOpts}</select></div>
+          <div class="dcell"><span class="lbl item">${esc(I18N.itemLbl)}</span><select class="inp" id="pb-mu-e-item">${itemOpts}</select></div>
+          <div class="dcell"><span class="lbl abil">${esc(I18N.abilLbl)}</span><select class="inp" id="pb-mu-e-ability">${abilityOpts}</select></div>
+          <div class="dcell"><span class="lbl nat">${esc(I18N.natLbl)}</span><select class="inp" id="pb-mu-e-nature">${natureOpts}</select></div>
         </div>
         <div class="pb-mu-ev-grid">${evRows}</div>
         <div class="pb-ev-remain" id="pb-mu-ev-remain">${evRemainText(draft.ev)}</div>
         <div class="pb-moves">${moveRows}</div>
         <div class="row" style="margin-top:.5em">
-          <button class="btn" id="pb-mu-save">保存</button>
-          <button class="pb-btn-sub" id="pb-mu-cancel">キャンセル</button>
+          <button class="btn" id="pb-mu-save">${esc(I18N.muSaveBtn)}</button>
+          <button class="pb-btn-sub" id="pb-mu-cancel">${esc(I18N.muCancelBtn)}</button>
         </div>
       </div>`;
   }
@@ -1467,11 +1749,11 @@ import OnboardingGuide from './OnboardingGuide.astro';
     const el = document.getElementById('pb-targets');
     const p = activeParty();
     if (!p) { el.innerHTML = ''; muEdit = null; renderMiniBar(null, null); return; }
-    if (selectedIdx === null) { el.innerHTML = '<h2>仮想敵</h2><div class="muted">上の6枠から枠を選択してください</div>'; muEdit = null; renderMiniBar(null, null); return; }
+    if (selectedIdx === null) { el.innerHTML = `<h2>${esc(I18N.targetsHeading)}</h2><div class="muted">${esc(I18N.targetsSelectPrompt)}</div>`; muEdit = null; renderMiniBar(null, null); return; }
     const slot = p.slots[selectedIdx];
-    if (!slot) { el.innerHTML = '<h2>仮想敵</h2><div class="muted">型を設定すると仮想敵との比較ができます</div>'; muEdit = null; renderMiniBar(null, null); return; }
+    if (!slot) { el.innerHTML = `<h2>${esc(I18N.targetsHeading)}</h2><div class="muted">${esc(I18N.targetsSetPrompt)}</div>`; muEdit = null; renderMiniBar(null, null); return; }
     const rb = resolveSlotSafe(slot);
-    if (!rb) { el.innerHTML = '<h2>仮想敵</h2><div class="muted">データ不整合のため計算できません</div>'; muEdit = null; renderMiniBar(null, null); return; }
+    if (!rb) { el.innerHTML = `<h2>${esc(I18N.targetsHeading)}</h2><div class="muted">${esc(I18N.muCalcError)}</div>`; muEdit = null; renderMiniBar(null, null); return; }
 
     // ポケモン単位タブ: 選択中枠の仮想敵(追加済み種族)を切り替えて表示する。表示状態のみで保存はしない。
     if (!slot.targets.length) activeMuTab = null;
@@ -1483,8 +1765,8 @@ import OnboardingGuide from './OnboardingGuide.astro';
       const grp = targetsList.find((g) => g.label === label);
       const act = label === activeMuTab ? ' act' : '';
       const badge = grp ? muTabBadge(rb, grp) : null;
-      const badgeHtml = badge ? `<span class="pb-mu-badge ${badge === '×' ? 'pb-mu-badge-x' : 'pb-mu-badge-tri'}" title="この仮想敵に対する最悪の型判定">${badge}</span>` : '';
-      return `<span class="filter-chip pb-mu-tab${act}" data-mu-tab="${esc(label)}">${grp ? icoImg(grp.icon, grp.label, '') : ''}${esc(label)}${badgeHtml}<button class="filter-chip-x" data-rm-target="${esc(label)}">✕</button></span>`;
+      const badgeHtml = badge ? `<span class="pb-mu-badge ${badge === '×' ? 'pb-mu-badge-x' : 'pb-mu-badge-tri'}" title="${esc(I18N.muBadgeTitle)}">${badge}</span>` : '';
+      return `<span class="filter-chip pb-mu-tab${act}" data-mu-tab="${esc(label)}">${grp ? icoImg(grp.icon, grp.label, '') : ''}${esc(tPoke(label))}${badgeHtml}<button class="filter-chip-x" data-rm-target="${esc(label)}">✕</button></span>`;
     }).join('');
 
     const activeGrp = activeMuTab ? targetsList.find((g) => g.label === activeMuTab) : null;
@@ -1498,10 +1780,10 @@ import OnboardingGuide from './OnboardingGuide.astro';
         if (!opp) return; // H3: 不整合buildはスキップ(型データが壊れていてもパネル全体はクラッシュさせない)
         const mySpeed = effectiveSpeed(rb.stats[5], rb.item);
         const oppSpeed = effectiveSpeed(opp.stats[5], opp.item);
-        const speedTag = mySpeed > oppSpeed ? '<span class="spd-tag t-out">抜ける</span>' : mySpeed < oppSpeed ? '<span class="spd-tag t-in">抜かれる</span>' : '<span class="spd-tag t-eq">同速</span>';
+        const speedTag = mySpeed > oppSpeed ? `<span class="spd-tag t-out">${esc(I18N.speedFaster)}</span>` : mySpeed < oppSpeed ? `<span class="spd-tag t-in">${esc(I18N.speedSlower)}</span>` : `<span class="spd-tag t-eq">${esc(I18N.speedEq)}</span>`;
         const verdict = judge1v1(rb, opp);
-        const myHitsTxt = verdict.myHits == null ? '—' : `確${verdict.myHits}`;
-        const oppHitsTxt = verdict.oppHits == null ? '—' : `確${verdict.oppHits}`;
+        const myHitsTxt = verdict.myHits == null ? '—' : I18N.hitsFmt(verdict.myHits);
+        const oppHitsTxt = verdict.oppHits == null ? '—' : I18N.hitsFmt(verdict.oppHits);
         const mb = moveBreakdown(rb, opp);
         // 被ダメ行: 相手の最大打点技(verdict.oppMoveと同一選定基準)の自分への与ダメレンジ・HP比
         const oppBest = bestMove(opp, rb);
@@ -1524,28 +1806,29 @@ import OnboardingGuide from './OnboardingGuide.astro';
       const mbDamaging = r.mb.filter((m) => m.hits != null);
       const mbChips = mbDamaging.length
         ? mbDamaging.map((m) => {
-            const hitsTxt = m.certain ? `確${m.hits}` : `乱数${m.hits}発(${Math.round(m.prob)}%)`;
+            const hitsTxt = m.certain ? I18N.hitsFmt(m.hits) : I18N.randHitsFmt(m.hits, Math.round(m.prob));
             const dmgTxt = dmgRangeTxt(m.dmgLo, m.dmgHi, m.pctLo, m.pctHi);
+            const mvName = tMove(m.n);
             const popIdx = mbPopData.push({ name: m.n, hitsTxt, dmgTxt }) - 1;
-            return `<button type="button" class="pb-mb-chip" data-mb-pop="${popIdx}" title="${esc(m.n)}：与ダメ${dmgTxt}">
-                <span class="pb-mb-top">${esc(m.n)} ${hitsTxt}</span>
+            return `<button type="button" class="pb-mb-chip" data-mb-pop="${popIdx}" title="${esc(mvName)}：${esc(I18N.popDmgLbl(dmgTxt))}">
+                <span class="pb-mb-top">${esc(mvName)} ${hitsTxt}</span>
                 <span class="pb-mb-dmg">${dmgTxt}</span>
               </button>`;
           }).join('')
-        : `<span class="muted">${r.mb.length ? '有効打なし(変化技・無効のみ)' : '技が未設定です'}</span>`;
+        : `<span class="muted">${r.mb.length ? esc(I18N.noEffectiveMove) : esc(I18N.noMovesSet)}</span>`;
       const oppDmgHtml = r.oppDmg
-        ? `<div class="pb-mu-row pb-mu-hit">被ダメ: ${esc(r.oppDmg.name)} ${dmgRangeTxt(r.oppDmg.dLo, r.oppDmg.dHi, r.oppDmg.pLo, r.oppDmg.pHi)}</div>`
+        ? `<div class="pb-mu-row pb-mu-hit">${esc(I18N.takenDmgLbl(tMove(r.oppDmg.name), dmgRangeTxt(r.oppDmg.dLo, r.oppDmg.dHi, r.oppDmg.pLo, r.oppDmg.pHi)))}</div>`
         : '';
       const actionsHtml = editingThis ? '' : `<div class="pb-mu-actions">
-          <button class="pb-btn-sub" data-mu-edit="${r.bi}">編集</button>
-          <button class="pb-btn-sub pb-danger" data-mu-del="${r.bi}" ${canDelete ? '' : 'disabled title="最後の1型は削除できません"'}>削除</button>
+          <button class="pb-btn-sub" data-mu-edit="${r.bi}">${esc(I18N.muEditBtn)}</button>
+          <button class="pb-btn-sub pb-danger" data-mu-del="${r.bi}" ${canDelete ? '' : `disabled title="${esc(I18N.muDeleteLastTitle)}"`}>${esc(I18N.muDeleteBtn)}</button>
         </div>`;
       return `<div class="pb-mu-card">
-          <div class="pb-mu-head"><div class="dtl-tname">${icoImg(r.grp.icon, r.grp.label, 'dtl-ico')}${esc(r.grp.label)} 型${Number(r.b.idx) || 0}</div>${actionsHtml}</div>
-          <div class="pb-mu-sub">HP実数値 ${r.opp.stats[0]}</div>
+          <div class="pb-mu-head"><div class="dtl-tname">${icoImg(r.grp.icon, r.grp.label, 'dtl-ico')}${esc(tPoke(r.grp.label))} ${esc(I18N.buildLabel(Number(r.b.idx) || 0))}</div>${actionsHtml}</div>
+          <div class="pb-mu-sub">${esc(I18N.hpLbl(r.opp.stats[0]))}</div>
           ${muDetailHtml(r.b)}
-          <div class="pb-mu-row" title="自分の素早さ実数値 vs 相手の素早さ実数値(スカーフ込み)">S ${r.mySpeed} vs ${r.oppSpeed} ${r.speedTag}</div>
-          <div class="pb-mu-row"><b style="font-size:1.05em">${r.verdict.sym}</b> 自分${r.myHitsTxt}/相手${r.oppHitsTxt}${r.verdict.stub ? '<span class="pb-beta-badge">β</span>' : ''}</div>
+          <div class="pb-mu-row" title="${esc(I18N.speedTipTitle)}">S ${r.mySpeed} vs ${r.oppSpeed} ${r.speedTag}</div>
+          <div class="pb-mu-row"><b style="font-size:1.05em">${r.verdict.sym}</b> ${esc(I18N.hitsSelfOpp(r.myHitsTxt, r.oppHitsTxt))}${r.verdict.stub ? '<span class="pb-beta-badge">β</span>' : ''}</div>
           <div class="pb-mb-row">${mbChips}</div>
           ${oppDmgHtml}
         </div>`;
@@ -1553,26 +1836,26 @@ import OnboardingGuide from './OnboardingGuide.astro';
 
     const addResetRow = activeGrp && !editingThis
       ? `<div class="row" style="margin-top:.5em">
-          <button class="pb-btn-sub" id="pb-mu-add-build">＋型を追加</button>
-          ${isCustomized ? `<button class="pb-btn-sub" id="pb-mu-reset-default">デフォルトに戻す</button>` : ''}
+          <button class="pb-btn-sub" id="pb-mu-add-build">${esc(I18N.muAddBuildBtn)}</button>
+          ${isCustomized ? `<button class="pb-btn-sub" id="pb-mu-reset-default">${esc(I18N.muResetDefaultBtn)}</button>` : ''}
         </div>`
       : '';
     // モバイルのボトムシート(renderMiniBar)にもそのまま渡す共通ブロック(型カード一覧+空メッセージ)。
     const cardsBlockHtml = rows.length || editingThis
       ? `<div class="pb-mu-list">${cardsHtml}</div>`
-      : slot.targets.length ? '' : '<div class="muted" style="margin-top:.6em">仮想敵を追加してください</div>';
+      : slot.targets.length ? '' : `<div class="muted" style="margin-top:.6em">${esc(I18N.addTargetsPrompt)}</div>`;
 
     el.innerHTML = `
-      <h2>仮想敵</h2>
+      <h2>${esc(I18N.targetsHeading)}</h2>
       <div class="filter-chips" id="pb-target-chips">${chips}</div>
       <div class="filter-wrap">
-        <input type="text" id="pb-target-search" class="filter-inp" placeholder="仮想敵を検索して追加（ひらがな可）" autocomplete="off">
+        <input type="text" id="pb-target-search" class="filter-inp" placeholder="${esc(I18N.targetSearchPlaceholder)}" autocomplete="off">
         <div class="filter-sug" id="pb-target-sug" style="display:none"></div>
       </div>
       ${cardsBlockHtml}
       ${addResetRow}
       <div class="row" style="margin-top:.7em">
-        <button class="pb-btn-sub" id="pb-tune-btn" ${slot.targets.length ? '' : 'disabled'}>EV逆算(素早さ・火力・耐久)</button>
+        <button class="pb-btn-sub" id="pb-tune-btn" ${slot.targets.length ? '' : 'disabled'}>${esc(I18N.tuneBtn)}</button>
       </div>
       <div id="pb-tune-out"></div>
     `;
@@ -1586,7 +1869,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
       root.querySelectorAll('[data-mb-pop]').forEach((btn) => btn.addEventListener('click', () => {
         const d = mbPopData[+btn.dataset.mbPop];
         if (!d) return;
-        openInfoPopover(d.name, `<div class="mvwrap" style="margin-bottom:.6em">${typeIcoForMove(d.name)}<span class="mvchip">${esc(d.name)}</span></div><div>確定数: ${esc(d.hitsTxt)}</div><div>与ダメ: ${esc(d.dmgTxt)}</div>`);
+        openInfoPopover(tMove(d.name), `<div class="mvwrap" style="margin-bottom:.6em">${typeIcoForMove(d.name)}<span class="mvchip">${esc(tMove(d.name))}</span></div><div>${esc(I18N.popHitsLbl(d.hitsTxt))}</div><div>${esc(I18N.popDmgLbl(d.dmgTxt))}</div>`);
       }));
 
       root.querySelectorAll('[data-mu-tab]').forEach((chip) => chip.addEventListener('click', (e) => {
@@ -1673,7 +1956,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
     const hits = effectiveTargets().filter((g) => g.label.includes(q) || g.label.includes(qk)).slice(0, 12);
     const p = activeParty();
     const slot = p.slots[selectedIdx];
-    if (!hits.length) { sug.innerHTML = '<div class="sug-item added">該当なし</div>'; sug.style.display = 'block'; return; }
+    if (!hits.length) { sug.innerHTML = `<div class="sug-item added">${esc(I18N.noHit)}</div>`; sug.style.display = 'block'; return; }
     sug.innerHTML = hits.map((g) => {
       const already = slot.targets.includes(g.label);
       return `<div class="sug-item${already ? ' added' : ''}" data-target-pick="${esc(g.label)}">${icoImg(g.icon, g.label, '')}<span>${hlSug(g.label, q)}</span></div>`;
@@ -1722,7 +2005,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
     tuneResults = tuneForTargets(slot, rb, oppResolved);
     renderTuneOut();
   }
-  const TUNE_KIND_LABEL = { speed: '素早さ', ko: '火力', survive: '耐久' };
+  const TUNE_KIND_LABEL = { speed: I18N.tuneKindSpeed, ko: I18N.tuneKindKo, survive: I18N.tuneKindSurvive };
   const TUNE_KIND_ICON = { speed: '⚡', ko: '⚔️', survive: '🛡️' };
   function renderTuneOut() {
     const out = document.getElementById('pb-tune-out');
@@ -1736,7 +2019,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
       lastKind = t.kind;
       return `${headHtml}<div class="pb-tune-item">
         <span>${esc(t.text)}</span>${t.stub ? '<span class="pb-beta-badge">β</span>' : ''}
-        ${t.evs ? `<button class="pb-btn-sub" data-tune-apply="${i}">適用</button>` : ''}
+        ${t.evs ? `<button class="pb-btn-sub" data-tune-apply="${i}">${esc(I18N.applyBtn)}</button>` : ''}
       </div>`;
     }).join('');
     out.querySelectorAll('[data-tune-apply]').forEach((btn) => btn.addEventListener('click', () => {
@@ -1759,13 +2042,13 @@ import OnboardingGuide from './OnboardingGuide.astro';
 
   /** サマリー行「苦手」の内訳表示: 名前(＋小アイコン)を列挙。0体は「なし」、3体超は先頭3体+「…」でtitleに全列挙。 */
   function holeNamesHtml(holeLabels) {
-    if (!holeLabels.length) return 'なし';
+    if (!holeLabels.length) return esc(I18N.holeNone);
     const withIcon = (label) => {
       const grp = effectiveTargets().find((g) => g.label === label);
-      return `${grp ? icoImg(grp.icon, label, 'pb-hole-ico') : ''}${esc(label)}`;
+      return `${grp ? icoImg(grp.icon, label, 'pb-hole-ico') : ''}${esc(tPoke(label))}`;
     };
     if (holeLabels.length <= 3) return holeLabels.map(withIcon).join('、');
-    return `<span title="${esc(holeLabels.join('、'))}">${holeLabels.slice(0, 3).map(withIcon).join('、')}…</span>`;
+    return `<span title="${esc(holeLabels.map(tPoke).join('、'))}">${holeLabels.slice(0, 3).map(withIcon).join('、')}…</span>`;
   }
 
   // ---- パーティバランス ----
@@ -1773,27 +2056,27 @@ import OnboardingGuide from './OnboardingGuide.astro';
     const el = document.getElementById('pb-balance');
     const resolvedParty = resolvedPartyList();
     if (!resolvedParty.length) {
-      el.innerHTML = '<h2>パーティバランス</h2><div class="muted">ポケモンを追加してください</div>';
+      el.innerHTML = `<h2>${esc(I18N.balanceHeading)}</h2><div class="muted">${esc(I18N.addPokemonPrompt)}</div>`;
       return;
     }
     const sum = partySummary(resolvedParty);
     const holeInfo = findHoles(resolvedParty, buildOppCols());
     el.innerHTML = `
-      <h2>パーティバランス</h2>
+      <h2>${esc(I18N.balanceHeading)}</h2>
       <div class="bd-strip">
-        <span class="bd-lb">物理アタッカー</span><span class="bd-seg">${sum.physical}</span>
-        <span class="bd-lb">特殊アタッカー</span><span class="bd-seg">${sum.special}</span>
-        <span class="bd-lb">メガ</span><span class="bd-seg">${sum.mega}</span>
-        <span class="bd-lb">スカーフ</span><span class="bd-seg">${sum.scarf}</span>
-        <span class="bd-lb">平均素早さ</span><span class="bd-seg">${Math.round(sum.avgSpeed)}</span>
-        <span class="bd-lb">弱点重複</span><span class="bd-seg">${esc(sum.weakOverlap.type)}×${sum.weakOverlap.count}</span>
-        <span class="bd-lb">苦手</span><span class="bd-seg${holeInfo.holeLabels.length ? ' pb-hole-seg' : ''}">${holeNamesHtml(holeInfo.holeLabels)}</span>
+        <span class="bd-lb">${esc(I18N.physAtk)}</span><span class="bd-seg">${sum.physical}</span>
+        <span class="bd-lb">${esc(I18N.specAtk)}</span><span class="bd-seg">${sum.special}</span>
+        <span class="bd-lb">${esc(I18N.megaLbl)}</span><span class="bd-seg">${sum.mega}</span>
+        <span class="bd-lb">${esc(I18N.scarfLbl)}</span><span class="bd-seg">${sum.scarf}</span>
+        <span class="bd-lb">${esc(I18N.avgSpeedLbl)}</span><span class="bd-seg">${Math.round(sum.avgSpeed)}</span>
+        <span class="bd-lb">${esc(I18N.weakOverlapLbl)}</span><span class="bd-seg">${esc(I18N.weakOverlapVal(sum.weakOverlap.type, sum.weakOverlap.count))}</span>
+        <span class="bd-lb">${esc(I18N.weakAgainstLbl)}</span><span class="bd-seg${holeInfo.holeLabels.length ? ' pb-hole-seg' : ''}">${holeNamesHtml(holeInfo.holeLabels)}</span>
       </div>
       <div class="tabbar">
-        <button class="tb${balanceTab === 'atk' ? ' active' : ''}" data-t="atk">攻撃相性</button>
-        <button class="tb${balanceTab === 'def' ? ' active' : ''}" data-t="def">防御相性</button>
-        <button class="tb${balanceTab === 'speed' ? ' active' : ''}" data-t="speed">素早さ</button>
-        <button class="tb${balanceTab === 'mu' ? ' active' : ''}" data-t="mu">ポケモン相性</button>
+        <button class="tb${balanceTab === 'atk' ? ' active' : ''}" data-t="atk">${esc(I18N.tabAtk)}</button>
+        <button class="tb${balanceTab === 'def' ? ' active' : ''}" data-t="def">${esc(I18N.tabDef)}</button>
+        <button class="tb${balanceTab === 'speed' ? ' active' : ''}" data-t="speed">${esc(I18N.tabSpeed)}</button>
+        <button class="tb${balanceTab === 'mu' ? ' active' : ''}" data-t="mu">${esc(I18N.tabMu)}</button>
       </div>
       <div class="pane" id="pb-balance-pane">${balancePaneHtml(resolvedParty, balanceTab)}</div>
     `;
@@ -1816,10 +2099,10 @@ import OnboardingGuide from './OnboardingGuide.astro';
     const am = attackMatrix(resolvedParty);
     const dm = defenseMatrix(resolvedParty);
     const gapIdx = kind === 'def' ? findWeakGapTypeIdx(resolvedParty) : null;
-    const corner = kind === 'atk' ? '自分 ＼ 攻撃' : '自分 ＼ 被弾';
-    const head = `<tr><th class="mtx-corner mtx-stick">${corner}</th>` + TYPES.map((t, ti) => `<th class="${gapIdx && gapIdx.has(ti) ? 'mtx-gap' : ''}" title="${esc(t)}">${typeIcoByName(t)}</th>`).join('') + `</tr>`;
+    const corner = kind === 'atk' ? I18N.selfVsAtk : I18N.selfVsHit;
+    const head = `<tr><th class="mtx-corner mtx-stick">${esc(corner)}</th>` + TYPES.map((t, ti) => `<th class="${gapIdx && gapIdx.has(ti) ? 'mtx-gap' : ''}" title="${esc(t)}">${typeIcoByName(t)}</th>`).join('') + `</tr>`;
     const rows = resolvedParty.map((b, mi) => {
-      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b.icon, b.label, 'mtx-ico')}<div class="mtx-name">${esc(b.label)}</div></div></th>`;
+      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b.icon, b.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(b.label))}</div></div></th>`;
       const cells = TYPES.map((t, ti) => {
         if (kind === 'atk') {
           const mult = am.cells[mi][ti];
@@ -1833,19 +2116,19 @@ import OnboardingGuide from './OnboardingGuide.astro';
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
     const legend = kind === 'atk'
-      ? `<div class="mtx-legend"><span>各味方が<b>そのタイプを攻撃するときの最大倍率</b>。<b class="ao-good">×2</b>=抜群で通る <b class="ao-bad">½/0</b>=通りにくい。</span></div>`
-      : `<div class="mtx-legend"><span>各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。<b class="mtx-gap" style="padding:0 4px">薄黄</b>=パーティ内に半減以下の受け手がいないタイプ。</span></div>`;
+      ? `<div class="mtx-legend"><span>${I18N.atkLegend}</span></div>`
+      : `<div class="mtx-legend"><span>${I18N.defLegend}</span></div>`;
     return `${legend}<div class="mg"><table class="mtx">${head}${rows}</table></div>`;
   }
   function speedMatrixHtml(resolvedParty) {
     const oppCols = buildOppCols();
     const rows = speedOrder(resolvedParty);
     const byLabel = new Map(resolvedParty.map((b) => [b.label, b]));
-    const head = `<tr><th class="mtx-corner mtx-stick">自分 ＼ 相手(代表型)</th>` + oppCols.map((o) => `<th>${icoImg(o.icon, o.label, 'mtx-ico')}<div class="mtx-name">${esc(o.label)}</div></th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${esc(I18N.selfVsOppRep)}</th>` + oppCols.map((o) => `<th>${icoImg(o.icon, o.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(o.label))}</div></th>`).join('') + `</tr>`;
     const bodyRows = rows.map((r) => {
       const b = byLabel.get(r.label);
       const scarf = b && b.item === 'こだわりスカーフ';
-      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b ? b.icon : null, r.label, 'mtx-ico')}<div class="mtx-name">${esc(r.label)}<br><span class="sp-val">S${r.speed}${scarf ? '⚡' : ''}</span></div></div></th>`;
+      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b ? b.icon : null, r.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(r.label))}<br><span class="sp-val">S${r.speed}${scarf ? '⚡' : ''}</span></div></div></th>`;
       const cells = oppCols.map((o) => {
         const rep = o.builds[0];
         const oppSpeed = effectiveSpeed(rep.stats[5], rep.item);
@@ -1856,7 +2139,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
       }).join('');
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
-    return `<div class="mtx-legend"><span>味方（左・素早さ順）が使用率上位30体の代表型より速いか（スカーフ込み）。<b>◎</b>＝速い <b>△</b>＝同速 <b>×</b>＝遅い。</span></div>
+    return `<div class="mtx-legend"><span>${I18N.speedMatrixLegend}</span></div>
       <div class="mg"><table class="mtx">${head}${bodyRows}</table></div>`;
   }
   /** 型ごとの内訳を1件ずつの配列で返す(タップポップオーバーはリスト表示、titleはこれをjoinした文字列を使う)。
@@ -1864,9 +2147,10 @@ import OnboardingGuide from './OnboardingGuide.astro';
   function muBreakdownLines(agg, builds) {
     return agg.verdicts.map((v, vi) => {
       const build = builds[vi];
-      const myTxt = v.myHits == null ? '—' : `自分確${v.myHits}`;
-      const oppTxt = v.oppHits == null ? '—' : `相手確${v.oppHits}`;
-      return `型${vi + 1}(${build.item || '道具なし'}): ${v.sym} ${myTxt}/${oppTxt}・${v.fast ? '先手' : '後手'}`;
+      const myTxt = v.myHits == null ? '—' : I18N.selfHitsFmt(v.myHits);
+      const oppTxt = v.oppHits == null ? '—' : I18N.oppHitsFmt(v.oppHits);
+      const item = build.item ? tItem(build.item) : I18N.noItem;
+      return I18N.muBreakdownLine(vi + 1, item, v.sym, myTxt, oppTxt, v.fast ? I18N.turnFirst : I18N.turnSecond);
     });
   }
   function muBreakdownTitle(agg, builds) {
@@ -1876,22 +2160,22 @@ import OnboardingGuide from './OnboardingGuide.astro';
     const oppCols = buildOppCols();
     const holeInfo = findHoles(resolvedParty, oppCols);
     const summary = holeInfo.holeLabels.length
-      ? `<div class="pb-hole-summary">⚠ 穴: ${holeInfo.holeLabels.map(esc).join('、')}</div>`
+      ? `<div class="pb-hole-summary">${esc(I18N.holeSummary(holeInfo.holeLabels.map(tPoke).join('、')))}</div>`
       : '';
-    const head = `<tr><th class="mtx-corner mtx-stick">自分 ＼ 相手(型1〜3集約)</th>` + oppCols.map((o, ci) => `<th class="${holeInfo.holeIdx.has(ci) ? 'mtx-hole' : ''}">${icoImg(o.icon, o.label, 'mtx-ico')}<div class="mtx-name">${esc(o.label)}</div></th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${esc(I18N.selfVsOppAgg)}</th>` + oppCols.map((o, ci) => `<th class="${holeInfo.holeIdx.has(ci) ? 'mtx-hole' : ''}">${icoImg(o.icon, o.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(o.label))}</div></th>`).join('') + `</tr>`;
     mtxPopData = [];
     const rows = resolvedParty.map((b) => {
-      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b.icon, b.label, 'mtx-ico')}<div class="mtx-name">${esc(b.label)}</div></div></th>`;
+      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b.icon, b.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(b.label))}</div></div></th>`;
       const cells = oppCols.map((o) => {
         const agg = judgeVsBuilds(b, o.builds);
         const lines = muBreakdownLines(agg, o.builds);
         const title = lines.join(' / ');
-        const popIdx = mtxPopData.push({ title: `${b.label} vs ${o.label}`, lines, oppLabel: o.label }) - 1;
+        const popIdx = mtxPopData.push({ title: `${tPoke(b.label)} vs ${tPoke(o.label)}`, lines, oppLabel: o.label }) - 1;
         return `<td class="${symCls(agg.sym)}" title="${esc(title)}" data-mtx-pop="${popIdx}">${agg.sym}${agg.dep ? '<span class="mu-dep">*</span>' : ''}</td>`;
       }).join('');
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
-    return `${summary}<div class="mtx-legend"><span>各味方 vs 使用率上位30体の想定型（採用率上位≤3型）を集約した1v1判定。◎有利 ○やや有利 △五分 ▲やや不利 ×不利。<b class="mu-dep-leg">*</b>＝型により有利不利が変化。<b class="mtx-hole" style="padding:0 4px">赤</b>=誰も集約◎/○を取れない「穴」。セルをクリック(ホバー可のPCではマウスオーバーも)で型ごとの内訳（確定数・素早さ）を表示。</span></div>
+    return `${summary}<div class="mtx-legend"><span>${I18N.muMatrixLegend}</span></div>
       <div class="mg"><table class="mtx">${head}${rows}</table></div>`;
   }
   /** (8) ポップオーバー内「この相手を枠Xの仮想敵に追加」ボタンのHTML。枠未選択・既追加はdisabled。 */
@@ -1899,10 +2183,10 @@ import OnboardingGuide from './OnboardingGuide.astro';
     const p = activeParty();
     const slot = p && selectedIdx !== null ? p.slots[selectedIdx] : null;
     if (!slot) {
-      return `<div class="row" style="margin-top:.8em"><button class="pb-btn-sub" disabled title="先に上の6枠から枠を選択してください">この相手を仮想敵に追加</button></div>`;
+      return `<div class="row" style="margin-top:.8em"><button class="pb-btn-sub" disabled title="${esc(I18N.addTargetDisabledTitle)}">${esc(I18N.addTargetDisabled)}</button></div>`;
     }
     const already = slot.targets.includes(oppLabel);
-    return `<div class="row" style="margin-top:.8em"><button type="button" class="pb-btn-sub" id="pb-mtx-add-target" ${already ? 'disabled' : ''}>この相手を枠${selectedIdx + 1}の仮想敵に追加${already ? '（追加済み）' : ''}</button></div>`;
+    return `<div class="row" style="margin-top:.8em"><button type="button" class="pb-btn-sub" id="pb-mtx-add-target" ${already ? 'disabled' : ''}>${esc(I18N.addTargetToSlot(selectedIdx + 1))}${already ? esc(I18N.addedSuffix) : ''}</button></div>`;
   }
   /** (8) 追加確定: 選択中枠のtargetsにラベルを足し、仮想敵パネルを再描画してポップオーバーを閉じる。 */
   function addTargetFromMatrix(label) {
@@ -1938,7 +2222,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
     if (!p || !core) return;
     const emptyIdx = p.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
     const out = document.getElementById('pb-fill-out');
-    if (!emptyIdx.length) { out.innerHTML = '<div class="muted">空き枠がありません</div>'; return; }
+    if (!emptyIdx.length) { out.innerHTML = `<div class="muted">${esc(I18N.noEmptySlots)}</div>`; return; }
     fillEmptyIdx = emptyIdx;
     fillLoading = true;
     fillFailed = false;
@@ -1966,21 +2250,21 @@ import OnboardingGuide from './OnboardingGuide.astro';
   }
   function renderFillOut() {
     const out = document.getElementById('pb-fill-out');
-    if (fillLoading) { out.innerHTML = '<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">空き枠の提案を計算中…</div></div>'; return; }
-    if (fillFailed) { out.innerHTML = '<div class="muted">提案の取得に失敗しました。時間をおいて再試行してください</div>'; return; }
+    if (fillLoading) { out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I18N.fillCalcAll)}</div></div>`; return; }
+    if (fillFailed) { out.innerHTML = `<div class="muted">${esc(I18N.fillFailedMsg)}</div>`; return; }
     if (!fillProposals || !fillProposals.length) { out.innerHTML = ''; return; }
     const p = activeParty();
-    const head = `<div class="pb-fill-head"><span class="muted">${fillProposals.length}件の提案 ー ポケモンをクリックで1体だけ空き枠に追加できます</span><button class="pb-btn-sub" id="pb-fill-close">✕ 提案をクリア</button></div>`;
+    const head = `<div class="pb-fill-head"><span class="muted">${esc(I18N.fillResultHead(fillProposals.length))}</span><button class="pb-btn-sub" id="pb-fill-close">${esc(I18N.fillClearBtn)}</button></div>`;
     const cards = fillProposals.map((cand, ci) => {
       const sprites = cand.map((slotCand, si) => {
         const sm = core.species.find((s) => s.n === slotCand.sp);
         const disabled = !p || speciesInParty(p, slotCand.sp) || firstEmptySlotIdx(p) === -1;
-        const title = !p ? '' : speciesInParty(p, slotCand.sp) ? '追加済み' : firstEmptySlotIdx(p) === -1 ? '空き枠がありません' : `${slotCand.sp}を空き枠に追加`;
+        const title = !p ? '' : speciesInParty(p, slotCand.sp) ? I18N.alreadyAdded : firstEmptySlotIdx(p) === -1 ? I18N.noEmptySlots : I18N.addToEmptySlot(tPoke(slotCand.sp));
         return `<button type="button" class="pb-fill-sprite${disabled ? ' pb-fill-disabled' : ''}" data-fill-ci="${ci}" data-fill-si="${si}" ${disabled ? 'disabled' : ''} title="${esc(title)}">${icoImg(sm ? sm.icon : null, slotCand.sp, '')}</button>`;
       }).join('');
       return `<div class="pb-cand-card">
           <div class="pb-cand-sprites">${sprites}</div>
-          <button class="pb-btn-sub" data-fill-cand="${ci}">この案を採用</button>
+          <button class="pb-btn-sub" data-fill-cand="${ci}">${esc(I18N.adoptBtn)}</button>
         </div>`;
     }).join('');
     out.innerHTML = head + cards;
@@ -2043,19 +2327,19 @@ import OnboardingGuide from './OnboardingGuide.astro';
     const parsedList = (specs || []).map((spec) => fromSpec(spec)).filter((p) => p !== null);
     const cardsHtml = parsedList.length
       ? parsedList.map((parsed, i) => {
-          const movesHtml = parsed.moves.filter(Boolean).map((x) => `<span class="mvchip">${typeIcoForMove(x)}${esc(x)}</span>`).join('') || '—';
+          const movesHtml = parsed.moves.filter(Boolean).map((x) => `<span class="mvchip">${typeIcoForMove(x)}${esc(tMove(x))}</span>`).join('') || '—';
           return `<div class="pb-cand-card" style="flex-direction:column;align-items:stretch;gap:.4em">
               <div class="dgrid">
-                <div class="dcell"><span class="lbl item">持ち物</span><span class="dval">${esc(parsed.item) || 'なし'}</span></div>
-                <div class="dcell"><span class="lbl nat">性格</span><span class="dval">${parsed.nature ? esc(natureDisp(parsed.nature)) : '—'}</span></div>
+                <div class="dcell"><span class="lbl item">${esc(I18N.itemLbl)}</span><span class="dval">${esc(tItem(parsed.item)) || esc(I18N.noneOpt)}</span></div>
+                <div class="dcell"><span class="lbl nat">${esc(I18N.natLbl)}</span><span class="dval">${parsed.nature ? esc(tNatureDisp(parsed.nature)) : '—'}</span></div>
               </div>
-              <div class="drow"><span class="lbl mv">技</span><span class="mvwrap">${movesHtml}</span></div>
-              <div class="drow"><span class="lbl ev">EV</span><span class="mvwrap">${evChipsArr(parsed.evs)}</span></div>
-              <button type="button" class="btn" data-preset-list-apply="${i}" style="align-self:flex-end">この型を適用</button>
+              <div class="drow"><span class="lbl mv">${esc(I18N.moveLbl)}</span><span class="mvwrap">${movesHtml}</span></div>
+              <div class="drow"><span class="lbl ev">${esc(I18N.evLbl)}</span><span class="mvwrap">${evChipsArr(parsed.evs)}</span></div>
+              <button type="button" class="btn" data-preset-list-apply="${i}" style="align-self:flex-end">${esc(I18N.applyThisBuildBtn)}</button>
             </div>`;
         }).join('')
-      : '<div class="muted">候補がありません</div>';
-    openInfoPopover(`${spName} 型テンプレ`, cardsHtml);
+      : `<div class="muted">${esc(I18N.noCandidates)}</div>`;
+    openInfoPopover(I18N.presetHeading(tPoke(spName)), cardsHtml);
     document.querySelectorAll('#pb-modal-body [data-preset-list-apply]').forEach((btn) => btn.addEventListener('click', () => {
       const parsed = parsedList[+btn.dataset.presetListApply];
       if (parsed) { onApply(parsed); hideModal(); }
@@ -2066,10 +2350,10 @@ import OnboardingGuide from './OnboardingGuide.astro';
       ? evList.map((e, i) => `<div class="pb-cand-card" style="align-items:center;gap:.6em">
             <span class="mvwrap">${evChipsArr(e.ev)}</span>
             <b style="white-space:nowrap">${Number(e.pct) || 0}%</b>
-            <button type="button" class="btn" data-evpreset-apply="${i}" style="margin-left:auto">適用</button>
+            <button type="button" class="btn" data-evpreset-apply="${i}" style="margin-left:auto">${esc(I18N.applyBtn)}</button>
           </div>`).join('')
-      : '<div class="muted">候補がありません</div>';
-    openInfoPopover(`${spName} EVプリセット（採用率順）`, cardsHtml);
+      : `<div class="muted">${esc(I18N.noCandidates)}</div>`;
+    openInfoPopover(I18N.evPresetHeading(tPoke(spName)), cardsHtml);
     document.querySelectorAll('#pb-modal-body [data-evpreset-apply]').forEach((btn) => btn.addEventListener('click', () => {
       const e = evList[+btn.dataset.evpresetApply];
       if (e) { onApply(e.ev.map(Number)); hideModal(); }
@@ -2078,27 +2362,27 @@ import OnboardingGuide from './OnboardingGuide.astro';
   function openExportModal(p) {
     const body = document.getElementById('pb-modal-body');
     const text = exportParty(p);
-    body.innerHTML = `<h3>エクスポート ー ${esc(p.name)}</h3>
+    body.innerHTML = `<h3>${esc(I18N.exportHeading(p.name))}</h3>
       <textarea id="pb-export-ta" class="pb-textarea" readonly>${esc(text)}</textarea>
-      <div class="row" style="margin-top:.6em"><button class="btn" id="pb-export-copy">コピー</button></div>
+      <div class="row" style="margin-top:.6em"><button class="btn" id="pb-export-copy">${esc(I18N.copyBtn)}</button></div>
       <div class="muted" id="pb-export-msg" style="margin-top:.4em"></div>`;
     document.getElementById('pb-export-copy').addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText(text); document.getElementById('pb-export-msg').textContent = 'コピーしました'; }
-      catch (e) { document.getElementById('pb-export-msg').textContent = 'コピーに失敗しました。テキストを選択して手動でコピーしてください'; }
+      try { await navigator.clipboard.writeText(text); document.getElementById('pb-export-msg').textContent = I18N.copiedMsg; }
+      catch (e) { document.getElementById('pb-export-msg').textContent = I18N.copyFailedMsg; }
     });
     showModal();
   }
   function openImportModal() {
     const body = document.getElementById('pb-modal-body');
-    body.innerHTML = `<h3>インポート</h3>
-      <div class="muted" style="margin-bottom:.4em">6行のspecテキストを貼り付けてください（エクスポートした形式）</div>
-      <textarea id="pb-import-ta" class="pb-textarea" placeholder="ここに貼り付け"></textarea>
-      <div class="row" style="margin-top:.6em"><button class="btn" id="pb-import-go">取り込む</button></div>
+    body.innerHTML = `<h3>${esc(I18N.importHeading)}</h3>
+      <div class="muted" style="margin-bottom:.4em">${esc(I18N.importHint)}</div>
+      <textarea id="pb-import-ta" class="pb-textarea" placeholder="${esc(I18N.importPlaceholder)}"></textarea>
+      <div class="row" style="margin-top:.6em"><button class="btn" id="pb-import-go">${esc(I18N.importBtn)}</button></div>
       <div class="muted" id="pb-import-msg" style="margin-top:.4em;color:#dc2626"></div>`;
     document.getElementById('pb-import-go').addEventListener('click', () => {
       const text = document.getElementById('pb-import-ta').value;
       const party = importParty(text);
-      if (!party) { document.getElementById('pb-import-msg').textContent = '取り込みに失敗しました。形式を確認してください（6行、spec形式）'; return; }
+      if (!party) { document.getElementById('pb-import-msg').textContent = I18N.importFailedMsg; return; }
       store.parties.push(party);
       store.activeId = party.id;
       saveStore(store);
@@ -2147,7 +2431,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
     if (!specs || !specs.length) return;
     const slots = specs.map((s) => { try { return fromSuggestSpec(s); } catch (e) { return null; } }).filter((s) => s !== null);
     if (!slots.length) {
-      openInfoPopover('パーティ工房への取り込み', '<div class="pb-valid-banner" style="margin:0"><ul><li>提案データを取り込めませんでした。型を解決できませんでした</li></ul></div>');
+      openInfoPopover(I18N.handoffHeading, `<div class="pb-valid-banner" style="margin:0"><ul><li>${esc(I18N.handoffFailed)}</li></ul></div>`);
       return;
     }
     const name = data && typeof data.name === 'string' && data.name.trim() ? data.name.trim() : undefined;
@@ -2161,8 +2445,8 @@ import OnboardingGuide from './OnboardingGuide.astro';
   function renderInitError() {
     const bar = document.getElementById('pb-partybar');
     if (bar) {
-      bar.innerHTML = `<div class="pb-valid-banner">データの読み込みに失敗しました。再読み込みしてください
-        <button class="pb-btn-sub" id="pb-init-retry" style="margin-left:.6em">再試行</button></div>`;
+      bar.innerHTML = `<div class="pb-valid-banner">${esc(I18N.initErrorMsg)}
+        <button class="pb-btn-sub" id="pb-init-retry" style="margin-left:.6em">${esc(I18N.retryBtn)}</button></div>`;
       const retryBtn = document.getElementById('pb-init-retry');
       if (retryBtn) retryBtn.addEventListener('click', () => location.reload());
     }

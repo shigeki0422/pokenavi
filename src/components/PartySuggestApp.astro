@@ -1,40 +1,246 @@
 ---
 import iconsData from '../../public/sim-data/icons.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
+import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
+import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 
 interface Props {
   preCoreLabel?: string;
+  lang?: 'ja' | 'en' | 'ko';
 }
-const { preCoreLabel } = Astro.props;
+const { preCoreLabel, lang = 'ja' } = Astro.props;
+const pfx = lang === 'ja' ? '' : `/${lang}`;
 
 const ICONS = iconsData as Record<string, string>;
 const MOVET = moveTypesData as Record<string, string>;
 const NATURE: Record<string, string> = {いじっぱり:'A↑C↓',さみしがり:'A↑B↓',ゆうかん:'A↑S↓',やんちゃ:'A↑D↓',ずぶとい:'B↑A↓',わんぱく:'B↑C↓',のんき:'B↑S↓',のうてんき:'B↑D↓',ひかえめ:'C↑A↓',おっとり:'C↑B↓',れいせい:'C↑S↓',うっかりや:'C↑D↓',おだやか:'D↑A↓',おとなしい:'D↑B↓',なまいき:'D↑S↓',しんちょう:'D↑C↓',おくびょう:'S↑A↓',せっかち:'S↑B↓',ようき:'S↑C↓',むじゃき:'S↑D↓'};
 const TYPEICON: Record<string, [string,string]> = {ノーマル:['00','normal'],かくとう:['01','fighting'],ひこう:['02','flying'],どく:['03','poison'],じめん:['04','ground'],いわ:['05','rock'],むし:['06','bug'],ゴースト:['07','ghost'],はがね:['08','steel'],ほのお:['09','fire'],みず:['10','water'],くさ:['11','grass'],でんき:['12','electric'],エスパー:['13','psychic'],こおり:['14','ice'],ドラゴン:['15','dragon'],あく:['16','dark'],フェアリー:['17','fairy']};
 const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuki.png',こだわりスカーフ:'item-0287-scarf.png',オボンのみ:'item-0158-obon.png',ラムのみ:'item-0157-ram.png',ヤチェのみ:'item-0188-yache.png',ハバンのみ:'item-0197-haban.png'};
+
+const POKEMON_NAME_MAP = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
+const MOVE_NAME_MAP = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
+const ABILITY_NAME_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
+const ITEM_NAME_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
+const NATURE_NAME_MAP = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
+
+const I18N_ALL = {
+  ja: {
+    title: preCoreLabel ? `${preCoreLabel}軸 M-4 軸から簡単構築` : 'M-4 軸から簡単構築',
+    lead: '軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案します。各ポケの役割・パーティ統計・使用率上位との1v1相性つき。',
+    note: '※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。',
+    corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
+    corePlaceholderMore: 'さらに追加…（ひらがな可）',
+    go: '提案する', close: '閉じる', noHit: '該当なし',
+    itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
+    selfVsOpp: '自分 ＼ 相手', selfVsAtk: '自分 ＼ 攻撃', selfVsHit: '自分 ＼ 被弾',
+    tabAtk: '攻撃相性', tabDef: '防御相性', tabMu: 'ポケモン相性', tabSpeed: '素早さ', tabArch: '想定パーティ相性', tabGuide: '選出ガイド', soon: '準備中',
+    suggestion: n => `提案 ${n}`, saveToBuilder: 'パーティ工房で保存・微調整',
+    muLegend: '複数の想定型を踏まえたポケモン単位の相性。◎有利 ○やや有利 △반반 ▲やや不利 ×不利。<b>*</b>＝型により有利不利が変化。<b>セルをクリックで判定根拠</b>（与被ダメ・確定数・素早さ）。',
+    atkLegend: '各味方が<b>そのタイプを攻撃するときの最大倍率</b>。<b class="ao-good">×2</b>=抜群で通る <b class="ao-bad">½/0</b>=通りにくい。<b>セルをクリックで技別の倍率</b>。',
+    defLegend: '各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。受けの穴が一目で分かります。',
+    fireLegend: n => `各味方の<b>最大打点技</b>で上位${n}体を落とす手数（実数値・持ち物込み）。<b class="ko1">確1</b>=確定1発 <b class="ko2">確2</b>。<b>確2〜確3</b>のような幅は<b>相手の型（耐久振り等）による差</b>。<b>*</b>=ばけのかわ/がんじょう/タスキ考慮。<b>セルをクリックで技×型の内訳</b>。`,
+    speedLegend: '味方（左・素早さ順）が上位30体より速いか（スカーフ込み）。<b class="bg-cc">◎</b>＝相手の全型より速い <b class="bg-cn">△</b>＝型次第で前後 <b class="bg-cx">×</b>＝全型より遅い。<b>セルをクリックで相手型別Sの内訳</b>。',
+    noArchData: '評価データがありません', archLegend: 'いくつかの構築に対してAI同士の対戦シミュレーションから想定勝率を算出。',
+    thOpp: '対戦相手', thWr: '想定勝率', thRec: 'おすすめ選出',
+    guideEmptyMsg: 'この軸の選出ガイド（相手構築ごとのおすすめ3匹）はまだ計算されていません。',
+    guideReqBtn: 'この軸のガイド計算をリクエスト', guideReqDone: 'リクエストを受け付けました。数日以内に追加される予定です。',
+    guideDetSummary: 'この選出は相手のどの出し方に強い？', guideDetailWrap: '対戦相手ごとの詳細（参考）',
+    guideLegend: '<b>おすすめ選出</b>＝相手がどの3匹を出すか分からない前提で、期待勝率が最も高い3匹（AI対戦シミュレーション）。勝率は参考値です。',
+    vsRow: '相手が {opp} → この選出で {band}', altReadable: '↳ 読み切れるなら {mons} が有効',
+    bandGood: '◎ 有利', bandOk: '○ やや有利', bandMid: '△ 반반', bandBad: '× 危険',
+    scHd: '選出ガイド — このパーティの使い方', scBaseTag: '基本形',
+    scBaseSub: n => `迷ったらこの3匹（8構築中${n}構築で最善）`,
+    scTeamCond: '相手のチーム（見せ合い）にこれが見えたら',
+    chipMonIn: n => `${n}入り`, chipType2: n => `${n}タイプ2体以上`,
+    swapAdd: name => `<b>${name}</b> を入れる`, unseenAny: '実測ではどの相手にも選出されなかった',
+    watchNone: '実測ではどの選出でも同等（無理に替えなくてよい）',
+    refBase: '基本形', refAlt: '次点候補',
+    modeTop: (a,b) => `決め手 ${a}%→${b}%`, modeTieWith: r => `${r}と同等`,
+    modeDelta: (r,d) => `${r}より ${d>0?'+':''}${d}pt`, modeNoData: '比較データなし',
+    reasonSwap: (lost,gained,base,pick) => `この並びには ${lost} より ${gained} が機能する（${base}% → ${pick}%）`,
+    reasonAdopt: (base,pick) => `この並びには採用形の方が勝てる（${base}% → ${pick}%）`,
+    reasonCost: (opp,base,pick) => `。ただし相手が${opp}を出す形では逆に不利（${base}%→${pick}%）`,
+    reasonTie: 'AI対戦の実測では他の選出と差がつかない。無理に替える必要はない',
+    roleTable: '6匹の役割', roleColRole: '役割', roleColTurn: '出番', roleCore: '基本形', roleFlex: '入替枠', roleSpot: '刺し要員', roleBench: '控え', coreTag: '軸',
+    selRate: (n,N) => `選出率 ${Math.round(n/N*100)}%（${n}/${N}）`,
+    altExDetails: n => `実例：相手構築別の入れ替え（${n}件）`,
+    measGain: p => `実測 +${p}pt`, oppTeamLbl: n => `相手チーム ${n}`, thisTrioLbl: 'この3匹',
+    oftenSends: mons => `よく出すのは ${mons}`, altSwap: '',
+    caution: (opp,opp3) => `⚠ ${opp} が ${opp3} と出す形は苦しい`, cautionAlt: alt => ` ／ 読み切れるなら ${alt}`,
+    hardOpp: '重い相手', hardMons: '苦手なポケモン', hardMonsSub: 'この駒が相手の選出に入ると勝率が落ちる',
+    hardTeams: '苦手な構築', hardTeamsSub: best => `最善を尽くしても不利。${best}`,
+    hardBestFor: (opp,trio) => `${opp}には ${trio} が最善`,
+    hardWhy: (opp,mons) => `${opp}は ${mons} の並びが特に厳しい`,
+    bwGood: (opp,pct) => `得意 ${opp} ${pct}`, bwBad: (opp,pct) => `警戒 ${opp} ${pct}`,
+    fireLegendNote: '', speedRebuild: '', speedTag: '', speedFaster: '抜ける', speedSlower: '抜かれる', speedEq: '同速',
+    speedYou: name => `あなた（${name}）`,
+    calculating: '計算中…', fetchFailed: '取得に失敗しました',
+    popFireSub: '自分の攻撃技（行）× 相手の想定型（列）の与ダメ％／確定数。★＝その型への最大打点。',
+    popSpeedSub: '相手の想定型のS実数値（速い順）。あなたの行より下＝抜ける／上＝抜かれる。',
+    popMuSub: '相手の想定型別に、互いの最大打点1発の確定数・素早さ・勝敗判定（タスキ/がんじょう/ばけのかわ考慮）。',
+    dmgSelf: '与ダメ（自→相）', dmgOpp: '被ダメ（相→自）', speedRow: '素早さ', judgeRow: '判定',
+    thMove: '技', thVariant: n => `型${n}`,
+    popAtkSub: (mon,type) => `${mon}の各技が ${type}タイプに対して何倍か（×2=抜群 ½=半減 無効=0倍）。`,
+    thAtkMult: type => `${type}への倍率`, changeMove: '変化技', cellTip: 'クリックで技×相手型の内訳', assumedMove: '想定',
+    loadMsgs: ['軸を元にパーティを生成中…','対戦相手との想定勝率を評価中…','攻撃・防御・素早さ相性を計算中…','仕上げ中…'],
+    loadSub: '初回や複雑な軸は10〜20秒ほどかかることがあります',
+    fixedLbl: s => `固定軸: ${s} / `, resultCount: n => `${n}件`, errPrefix: 'エラー: ',
+    connErr: '提案サーバに接続できませんでした。時間をおいて再度お試しください。',
+    omakase: 'おまかせ', importName: label => `${label}軸 かんたん構築`, rankLbl: n => `使用${n}位`,
+  },
+  en: {
+    title: preCoreLabel ? `Quick Build from ${preCoreLabel} — M-4` : 'M-4 Quick Build from Core',
+    lead: 'Specify a Pokémon (or Pokémon) to build around, and the simulator suggests a balanced party — with each member\'s role, team stats, and 1v1 matchups against the top usage ranks.',
+    note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
+    corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
+    corePlaceholderMore: 'Add more…',
+    go: 'Suggest', close: 'Close', noHit: 'No matches',
+    itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
+    selfVsOpp: 'You ＼ Opponent', selfVsAtk: 'You ＼ Attacking', selfVsHit: 'You ＼ Taking hits',
+    tabAtk: 'Attack Matchup', tabDef: 'Defense Matchup', tabMu: 'Pokémon Matchup', tabSpeed: 'Speed', tabArch: 'Team Matchup', tabGuide: 'Selection Guide', soon: 'Coming soon',
+    suggestion: n => `Suggestion ${n}`, saveToBuilder: 'Save & fine-tune in Party Workshop',
+    muLegend: 'Pokémon-level matchup across multiple assumed sets. ◎ favorable ○ slightly favorable △ even ▲ slightly unfavorable × unfavorable. <b>*</b> = favorability varies by set. <b>Click a cell for the reasoning</b> (damage dealt/taken, KO count, speed).',
+    atkLegend: 'The <b>highest multiplier</b> each of your Pokémon gets when attacking that type. <b class="ao-good">×2</b> = super effective <b class="ao-bad">½/0</b> = doesn\'t hit well. <b>Click a cell for the per-move breakdown</b>.',
+    defLegend: 'The multiplier each of your Pokémon takes from that type. <b class="df-w1">×2/×4</b> = weakness <b class="df-r1">½ or less</b> = resisted <b class="df-imm">0</b> = immune. Spot your defensive gaps at a glance.',
+    fireLegend: n => `Hits needed for each ally's <b>strongest move</b> to KO the top ${n} (using real stats and items). <b class="ko1">1HKO</b> <b class="ko2">2HKO</b>. A range like <b>2HKO–3HKO</b> reflects <b>differences in the opponent's set</b> (bulk investment etc). <b>*</b> = accounts for Disguise/Sturdy/Focus Sash. <b>Click a cell for the move × set breakdown</b>.`,
+    speedLegend: 'Whether your team (left, sorted by Speed) outspeeds the top 30 (Scarf included). <b class="bg-cc">◎</b> = faster than every set <b class="bg-cn">△</b> = varies by set <b class="bg-cx">×</b> = slower than every set. <b>Click a cell for the per-set Speed breakdown</b>.',
+    noArchData: 'No evaluation data available', archLegend: 'Estimated win rate from AI-vs-AI battle simulations against several team builds.',
+    thOpp: 'Opponent', thWr: 'Est. win rate', thRec: 'Recommended picks',
+    guideEmptyMsg: 'The selection guide for this core (recommended trio per opposing team) hasn\'t been calculated yet.',
+    guideReqBtn: 'Request a guide for this core', guideReqDone: 'Request received — it will be added within a few days.',
+    guideDetSummary: 'Which opposing leads is this pick strong against?', guideDetailWrap: 'Details per opponent (reference)',
+    guideLegend: '<b>Recommended pick</b> = the 3 Pokémon with the highest expected win rate assuming you don\'t know the opponent\'s trio (AI battle simulation). Win rates are for reference only.',
+    vsRow: 'If opponent leads {opp} → this pick is {band}', altReadable: '↳ if you can read it, {mons} works too',
+    bandGood: '◎ Favorable', bandOk: '○ Slightly favorable', bandMid: '△ Even', bandBad: '× Risky',
+    scHd: 'Selection Guide — how to use this party', scBaseTag: 'Default',
+    scBaseSub: n => `When in doubt, use this trio (best in ${n} of 8 builds)`,
+    scTeamCond: 'When you see this in Team Preview',
+    chipMonIn: n => `Has ${n}`, chipType2: n => `2+ ${n}-type`,
+    swapAdd: name => `Bring in <b>${name}</b>`, unseenAny: 'Never picked against any opponent in testing',
+    watchNone: 'Testing shows no difference between picks (no need to change)',
+    refBase: 'the default', refAlt: 'the runner-up',
+    modeTop: (a,b) => `Key factor ${a}%→${b}%`, modeTieWith: r => `tied with ${r}`,
+    modeDelta: (r,d) => `${d>0?'+':''}${d}pt vs ${r}`, modeNoData: 'No comparison data',
+    reasonSwap: (lost,gained,base,pick) => `${gained} works better here than ${lost} (${base}% → ${pick}%)`,
+    reasonAdopt: (base,pick) => `The adopted set wins more here (${base}% → ${pick}%)`,
+    reasonCost: (opp,base,pick) => `. However it's worse if the opponent leads ${opp} (${base}%→${pick}%)`,
+    reasonTie: 'AI battle testing shows no measurable difference from the alternative pick — no need to switch',
+    roleTable: 'Roles of all 6', roleColRole: 'Role', roleColTurn: 'Usage', roleCore: 'Default', roleFlex: 'Flex slot', roleSpot: 'Situational', roleBench: 'Bench', coreTag: 'core',
+    selRate: (n,N) => `Picked ${Math.round(n/N*100)}% (${n}/${N})`,
+    altExDetails: n => `Examples: swaps by opposing build (${n})`,
+    measGain: p => `measured +${p}pt`, oppTeamLbl: n => `Opponent team ${n}`, thisTrioLbl: 'This trio',
+    oftenSends: mons => `Often leads with ${mons}`, altSwap: '',
+    caution: (opp,opp3) => `⚠ Tough matchup vs ${opp} when they bring ${opp3}`, cautionAlt: alt => ` / If you can read it, ${alt} works`,
+    hardOpp: 'Tough opponents', hardMons: 'Tough Pokémon', hardMonsSub: 'Win rate drops when this Pokémon is in the opponent\'s pick',
+    hardTeams: 'Tough builds', hardTeamsSub: best => `Unfavorable even at your best. ${best}`,
+    hardBestFor: (opp,trio) => `Best pick vs ${opp} is ${trio}`,
+    hardWhy: (opp,mons) => `${opp}'s ${mons} lineup is especially tough`,
+    bwGood: (opp,pct) => `Strong vs ${opp} ${pct}`, bwBad: (opp,pct) => `Watch out for ${opp} ${pct}`,
+    fireLegendNote: '', speedRebuild: '', speedTag: '', speedFaster: 'outspeeds', speedSlower: 'outsped', speedEq: 'tied',
+    speedYou: name => `You (${name})`,
+    calculating: 'Calculating…', fetchFailed: 'Failed to load',
+    popFireSub: 'Damage %/KO count from your move (row) vs the opponent\'s assumed set (column). ★ = strongest hit vs that set.',
+    popSpeedSub: 'Opponent\'s assumed sets by Speed stat (fastest first). Below your row = you outspeed / above = they outspeed you.',
+    popMuSub: 'Per assumed opposing set: KO count and Speed for each side\'s strongest hit, plus the win/loss call (accounting for Focus Sash/Sturdy/Disguise).',
+    dmgSelf: 'Damage dealt (you→opp)', dmgOpp: 'Damage taken (opp→you)', speedRow: 'Speed', judgeRow: 'Verdict',
+    thMove: 'Move', thVariant: n => `Set ${n}`,
+    popAtkSub: (mon,type) => `${mon}'s multiplier for each move against the ${type} type (×2 = super effective, ½ = resisted, immune = ×0).`,
+    thAtkMult: type => `Multiplier vs ${type}`, changeMove: 'Status move', cellTip: 'Click for the move × set breakdown', assumedMove: 'assumed',
+    loadMsgs: ['Building a party around your core…','Evaluating win rates against opponents…','Calculating attack/defense/speed matchups…','Finishing up…'],
+    loadSub: 'First runs or complex cores can take 10–20 seconds',
+    fixedLbl: s => `Fixed core: ${s} / `, resultCount: n => `${n} result(s)`, errPrefix: 'Error: ',
+    connErr: 'Could not connect to the suggestion server. Please try again later.',
+    omakase: 'auto-pick', importName: label => `${label} core quick build`, rankLbl: n => `Rank #${n}`,
+  },
+  ko: {
+    title: preCoreLabel ? `${preCoreLabel} 축 M-4 축으로 간단 구성` : 'M-4 축으로 간단 구성',
+    lead: '축으로 삼고 싶은 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다. 각 포켓몬의 역할·파티 통계·사용률 상위와의 1v1 상성까지 확인할 수 있습니다.',
+    note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
+    corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
+    corePlaceholderMore: '추가로 검색…',
+    go: '제안받기', close: '닫기', noHit: '검색 결과 없음',
+    itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
+    selfVsOpp: '나 ＼ 상대', selfVsAtk: '나 ＼ 공격', selfVsHit: '나 ＼ 피격',
+    tabAtk: '공격 상성', tabDef: '방어 상성', tabMu: '포켓몬 상성', tabSpeed: '스피드', tabArch: '예상 파티 상성', tabGuide: '선출 가이드', soon: '준비 중',
+    suggestion: n => `제안 ${n}`, saveToBuilder: '파티 공방에서 저장·조정하기',
+    muLegend: '여러 예상 타입을 고려한 포켓몬 단위 상성. ◎유리 ○약간유리 △반반 ▲약간불리 ×불리. <b>*</b>＝타입에 따라 유불리가 달라짐. <b>셀 클릭 시 판정 근거</b>（주는/받는 대미지·확정타·스피드）를 확인할 수 있습니다.',
+    atkLegend: '각 아군이 <b>해당 타입을 공격할 때의 최대 배율</b>. <b class="ao-good">×2</b>=효과가 굉장함 <b class="ao-bad">½/0</b>=잘 통하지 않음. <b>셀 클릭 시 기술별 배율</b>을 확인할 수 있습니다.',
+    defLegend: '각 아군이 <b>해당 타입 기술을 받을 때의 피격 배율</b>. <b class="df-w1">×2/×4</b>=약점 <b class="df-r1">½ 이하</b>=반감 <b class="df-imm">0</b>=무효. 방어 취약점을 한눈에 확인할 수 있습니다.',
+    fireLegend: n => `각 아군의 <b>최대 위력 기술</b>로 상위 ${n}마리를 쓰러뜨리는 데 필요한 타수（실수치・지닌물건 반영）. <b class="ko1">확정1타</b>=1타 확정 <b class="ko2">확정2타</b>. <b>확정2~3타</b> 같은 범위는 <b>상대 타입（내구 분배 등）에 따른 차이</b>입니다. <b>*</b>=화신의 모습/옹골참/타슈 고려. <b>셀 클릭 시 기술×타입별 상세</b>를 확인할 수 있습니다.`,
+    speedLegend: '아군（왼쪽·스피드 순）이 상위 30마리보다 빠른지（스카프 포함）. <b class="bg-cc">◎</b>＝상대의 모든 타입보다 빠름 <b class="bg-cn">△</b>＝타입에 따라 달라짐 <b class="bg-cx">×</b>＝모든 타입보다 느림. <b>셀 클릭 시 상대 타입별 스피드 상세</b>를 확인할 수 있습니다.',
+    noArchData: '평가 데이터가 없습니다', archLegend: '여러 구성에 대해 AI 간 대전 시뮬레이션으로 예상 승률을 산출했습니다.',
+    thOpp: '상대', thWr: '예상 승률', thRec: '추천 선출',
+    guideEmptyMsg: '이 축의 선출 가이드（상대 구성별 추천 3마리）는 아직 계산되지 않았습니다.',
+    guideReqBtn: '이 축의 가이드 계산 요청하기', guideReqDone: '요청이 접수되었습니다. 며칠 내로 추가될 예정입니다.',
+    guideDetSummary: '이 선출은 상대의 어떤 리드에 강할까요?', guideDetailWrap: '상대별 상세（참고용）',
+    guideLegend: '<b>추천 선출</b>＝상대가 어떤 3마리를 낼지 모른다는 전제로 기대 승률이 가장 높은 3마리（AI 대전 시뮬레이션）. 승률은 참고값입니다.',
+    vsRow: '상대가 {opp}를 리드하면 → 이 선출은 {band}', altReadable: '↳ 읽어낼 수 있다면 {mons}도 유효',
+    bandGood: '◎ 유리', bandOk: '○ 약간 유리', bandMid: '△ 반반', bandBad: '× 위험',
+    scHd: '선출 가이드 — 이 파티 활용법', scBaseTag: '기본형',
+    scBaseSub: n => `망설여진다면 이 3마리（8개 구성 중 ${n}개 구성에서 최선）`,
+    scTeamCond: '상대 팀（팀 프리뷰）에서 이게 보이면',
+    chipMonIn: n => `${n} 포함`, chipType2: n => `${n}타입 2마리 이상`,
+    swapAdd: name => `<b>${name}</b>를 넣는다`, unseenAny: '실측에서는 어떤 상대에게도 선출되지 않았습니다',
+    watchNone: '실측 결과 어떤 선출도 동등（무리해서 바꾸지 않아도 됨）',
+    refBase: '기본형', refAlt: '차점 후보',
+    modeTop: (a,b) => `결정적 요인 ${a}%→${b}%`, modeTieWith: r => `${r}와 동등`,
+    modeDelta: (r,d) => `${r}보다 ${d>0?'+':''}${d}pt`, modeNoData: '비교 데이터 없음',
+    reasonSwap: (lost,gained,base,pick) => `이 구성에서는 ${lost}보다 ${gained}가 더 잘 기능함（${base}% → ${pick}%）`,
+    reasonAdopt: (base,pick) => `이 구성에서는 채용형이 더 승리함（${base}% → ${pick}%）`,
+    reasonCost: (opp,base,pick) => `. 다만 상대가 ${opp}를 내는 형태에서는 오히려 불리함（${base}%→${pick}%）`,
+    reasonTie: 'AI 대전 실측으로는 다른 선출과 차이가 없습니다. 무리해서 바꿀 필요는 없습니다',
+    roleTable: '6마리의 역할', roleColRole: '역할', roleColTurn: '출전', roleCore: '기본형', roleFlex: '교체 슬롯', roleSpot: '핀치 요원', roleBench: '후보', coreTag: '축',
+    selRate: (n,N) => `선출률 ${Math.round(n/N*100)}%（${n}/${N}）`,
+    altExDetails: n => `실례: 상대 구성별 교체（${n}건）`,
+    measGain: p => `실측 +${p}pt`, oppTeamLbl: n => `상대 팀 ${n}`, thisTrioLbl: '이 3마리',
+    oftenSends: mons => `자주 내는 것은 ${mons}`, altSwap: '',
+    caution: (opp,opp3) => `⚠ ${opp}가 ${opp3}를 내는 구성은 힘듭니다`, cautionAlt: alt => ` ／ 읽어낼 수 있다면 ${alt}`,
+    hardOpp: '까다로운 상대', hardMons: '까다로운 포켓몬', hardMonsSub: '이 포켓몬이 상대 선출에 들어가면 승률이 떨어짐',
+    hardTeams: '까다로운 구성', hardTeamsSub: best => `최선을 다해도 불리함. ${best}`,
+    hardBestFor: (opp,trio) => `${opp}에게는 ${trio}가 최선`,
+    hardWhy: (opp,mons) => `${opp}는 ${mons} 조합이 특히 까다로움`,
+    bwGood: (opp,pct) => `강한 상대 ${opp} ${pct}`, bwBad: (opp,pct) => `주의할 상대 ${opp} ${pct}`,
+    fireLegendNote: '', speedRebuild: '', speedTag: '', speedFaster: '이김', speedSlower: '당함', speedEq: '동속',
+    speedYou: name => `당신（${name}）`,
+    calculating: '계산 중…', fetchFailed: '가져오기에 실패했습니다',
+    popFireSub: '자신의 공격 기술（행）× 상대 예상 타입（열）의 대미지%／확정타. ★＝해당 타입에 대한 최대 위력.',
+    popSpeedSub: '상대 예상 타입의 스피드 실수치（빠른 순）. 내 행보다 아래＝이김／위＝당함.',
+    popMuSub: '상대 예상 타입별로 서로의 최대 위력 1발 확정타・스피드・승패 판정（타슈/옹골참/화신의 모습 고려）.',
+    dmgSelf: '주는 대미지（나→상대）', dmgOpp: '받는 대미지（상대→나）', speedRow: '스피드', judgeRow: '판정',
+    thMove: '기술', thVariant: n => `빌드${n}`,
+    popAtkSub: (mon,type) => `${mon}의 각 기술이 ${type}타입에 몇 배인지（×2=효과가 굉장함 ½=반감 무효=0배）.`,
+    thAtkMult: type => `${type}에 대한 배율`, changeMove: '변화기', cellTip: '클릭 시 기술×상대 타입별 상세', assumedMove: '예상',
+    loadMsgs: ['축을 바탕으로 파티 생성 중…','상대와의 예상 승률 평가 중…','공격・방어・스피드 상성 계산 중…','마무리 중…'],
+    loadSub: '처음이거나 복잡한 축은 10~20초 정도 걸릴 수 있습니다',
+    fixedLbl: s => `고정 축: ${s} / `, resultCount: n => `${n}건`, errPrefix: '오류: ',
+    connErr: '제안 서버에 연결할 수 없었습니다. 잠시 후 다시 시도해 주세요.',
+    omakase: '자동 선택', importName: label => `${label} 축 간단 구성`, rankLbl: n => `사용률 ${n}위`,
+  },
+} as const;
+const I18N = I18N_ALL[lang];
 ---
 
 <main>
-  <h1>{preCoreLabel ? `${preCoreLabel}軸 M-4 軸から簡単構築` : 'M-4 軸から簡単構築'}</h1>
-  <p class="lead">軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案します。各ポケの役割・パーティ統計・使用率上位との1v1相性つき。</p>
-  <p class="note">※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。</p>
+  <h1>{I18N.title}</h1>
+  <p class="lead">{I18N.lead}</p>
+  <p class="note">{I18N.note}</p>
 
   <div class="card">
     <div class="corebox">
       <div id="core-chips" class="filter-chips"></div>
       <div class="filter-wrap">
-        <input type="text" id="core-filter" class="filter-inp" placeholder="軸にするポケモンを検索（ひらがな可・空欄でおまかせ）" autocomplete="off" />
+        <input type="text" id="core-filter" class="filter-inp" placeholder={I18N.corePlaceholder} autocomplete="off" />
         <div class="filter-sug" id="core-sug" style="display:none"></div>
       </div>
     </div>
     <div class="row" style="margin-top:.6em">
-      <button id="go" class="btn">提案する</button>
+      <button id="go" class="btn">{I18N.go}</button>
     </div>
     <div id="status" class="muted" style="margin-top:.5em"></div>
   </div>
   <div id="out"></div>
   <div id="popup" class="pop-overlay" style="display:none">
-    <div class="pop-card"><button class="pop-x" id="pop-x" aria-label="閉じる">✕</button><div id="pop-body"></div></div>
+    <div class="pop-card"><button class="pop-x" id="pop-x" aria-label={I18N.close}>✕</button><div id="pop-body"></div></div>
   </div>
 </main>
 
@@ -325,12 +531,17 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
   .soon-badge{display:inline-block;background:#eef2ff;color:#3730a3;font-weight:800;font-size:.9rem;border-radius:9999px;padding:.35em 1.1em;margin-bottom:.6em}
 </style>
 
-<script is:inline define:vars={{ ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, preCoreLabel }}>
+<script is:inline define:vars={{ ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, preCoreLabel, lang, pfx, I18N, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP }}>
   const API = /(^|\.)pokenavi\.jp$/.test(location.hostname) ? 'https://pokenavi-suggest-799947701075.asia-northeast1.run.app' : 'http://localhost:8899';
   const EVK = ['H','A','B','C','D','S'];
   const esc = s => (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   const toKatakana = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
   const _regionalPrefix = [['ヒスイ',3],['ガラル',3],['アローラ',4]];
+  const tPoke = n => n && POKEMON_NAME_MAP[n] || n;
+  const tMove = n => n && MOVE_NAME_MAP[n] || n;
+  const tAbil = n => n && ABILITY_NAME_MAP[n] || n;
+  const tItem = n => n && ITEM_NAME_MAP[n] || n;
+  const tNature = n => n && NATURE_NAME_MAP[n] || n;
 
   function iconUrl(name){
     const n = (name||'').replace(' (','(');
@@ -342,7 +553,8 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
   }
   function icoImg(name, cls){
     const u = iconUrl(name);
-    return u ? `<img class="${cls}" src="${u}" alt="${esc(name)}" title="${esc(name)}" onerror="this.style.display='none'">` : '';
+    const dn = tPoke(name);
+    return u ? `<img class="${cls}" src="${u}" alt="${esc(dn)}" title="${esc(dn)}" onerror="this.style.display='none'">` : '';
   }
   function typeIco(move){
     const t = MOVET[move]; const e = t ? TYPEICON[t] : null;
@@ -357,36 +569,36 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
       return EVK.includes(k) ? `<span class="evchip ev-${k}">${k}<b>${v}</b></span>` : '';
     }).join('');
   }
-  function natDisp(na){ return na ? `${na}${NATURE[na] ? ` (${NATURE[na]})` : ''}` : '—'; }
+  function natDisp(na){ return na ? `${tNature(na)}${NATURE[na] ? ` (${NATURE[na]})` : ''}` : '—'; }
 
   function detailHtml(m){
     return `<div class="dgrid">
-        <div class="dcell"><span class="lbl item">持ち物</span><span class="dval">${itemIco(m.item)}${esc(m.item)||'—'}</span></div>
-        <div class="dcell"><span class="lbl abil">特性</span><span class="dval">${esc(m.ability)||'—'}</span></div>
-        <div class="dcell"><span class="lbl nat">性格</span><span class="dval">${esc(natDisp(m.nature))}</span></div>
+        <div class="dcell"><span class="lbl item">${I18N.itemLbl}</span><span class="dval">${itemIco(m.item)}${esc(tItem(m.item))||'—'}</span></div>
+        <div class="dcell"><span class="lbl abil">${I18N.abilLbl}</span><span class="dval">${esc(tAbil(m.ability))||'—'}</span></div>
+        <div class="dcell"><span class="lbl nat">${I18N.natLbl}</span><span class="dval">${esc(natDisp(m.nature))}</span></div>
       </div>
-      <div class="drow"><span class="lbl mv">技</span><span class="mvwrap">${m.moves.map(x=>`<span class="mvchip">${typeIco(x)}${esc(x)}</span>`).join('')||'—'}</span></div>
-      <div class="drow"><span class="lbl ev">EV</span><span class="mvwrap">${evChips(m.ev)||'—'}</span></div>
+      <div class="drow"><span class="lbl mv">${I18N.moveLbl}</span><span class="mvwrap">${m.moves.map(x=>`<span class="mvchip">${typeIco(x)}${esc(tMove(x))}</span>`).join('')||'—'}</span></div>
+      <div class="drow"><span class="lbl ev">${I18N.evLbl}</span><span class="mvwrap">${evChips(m.ev)||'—'}</span></div>
       ${(m.roles&&m.roles.length)?`<div style="margin-top:.35em">${m.roles.map(r=>`<span class="role">${esc(r)}</span>`).join('')}</div>`:''}`;
   }
 
   const col = c => ({'◎':'bg-cc','○':'bg-cb','△':'bg-cn','▲':'bg-cw','×':'bg-cx'}[c]||'bg-cn');
   function matchupHtml(res){
     const mu = res.matchup; if(!mu) return '';
-    const head = `<tr><th class="mtx-corner mtx-stick">自分 ＼ 相手</th>` + mu.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(t.label)}</div></th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + mu.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(t.label)}</div></th>`).join('') + `</tr>`;
     const rows = mu.rows.map(rw=>{
-      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(rw.mon,'mtx-ico')}<div class="mtx-name">${esc(rw.mon)}</div></div></th>`;
+      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(rw.mon,'mtx-ico')}<div class="mtx-name">${esc(tPoke(rw.mon))}</div></div></th>`;
       const cells = rw.cells.map((c,j)=>`<td class="${col(c.v)} mu-cell" data-mon="${esc(rw.mon)}" data-opp="${esc(mu.tops[j].sp)}">${c.v}${c.dep?'<span class="mu-dep">*</span>':''}</td>`).join('');
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
-    return `<div class="mtx-legend"><span>複数の想定型を踏まえたポケモン単位の相性。◎有利 ○やや有利 △五分 ▲やや不利 ×不利。<b>*</b>＝型により有利不利が変化。<b>セルをクリックで判定根拠</b>（与被ダメ・確定数・素早さ）。</span></div>
+    return `<div class="mtx-legend"><span>${I18N.muLegend}</span></div>
       <div class="mg"><table class="mtx">${head}${rows}</table></div>`;
   }
   function typeIcoByName(t){ const e=TYPEICON[t]; return e?`<img class="dtl-ico" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${esc(t)}">`:''; }
   function memIcons(list){ return list&&list.length ? `<span class="dtl-mem">${list.map(n=>icoImg(n,'')).join('')}</span>` : ''; }
 
   function memRowHead(m){
-    return `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(m.name,'mtx-ico')}<div class="mtx-name">${esc(m.name)}</div></div></th>`;
+    return `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(m.name,'mtx-ico')}<div class="mtx-name">${esc(tPoke(m.name))}</div></div></th>`;
   }
   const DEFG = x => x===0?'0':x<=0.25?'¼':x<0.5?'½':x<1?'½':x>=4?'×4':x>1?'×2':'';
   const DEFC = x => x===0?'df-imm':x<0.5?'df-r2':x<1?'df-r1':x>=4?'df-w2':x>1?'df-w1':'df-n';
@@ -404,21 +616,21 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
       const cls = mult==null?'ao-none':mult>=2?'ao-good':mult===1?'ao-neu':'ao-bad';
       return `<td class="${cls} at-cell" data-mon="${esc(mon.name)}" data-type="${esc(type)}">${inner}</td>`;
     };
-    return _typeMatrix(res, '自分 ＼ 攻撃', cell,
-      `<div class="mtx-legend"><span>各味方が<b>そのタイプを攻撃するときの最大倍率</b>。<b class="ao-good">×2</b>=抜群で通る <b class="ao-bad">½/0</b>=通りにくい。<b>セルをクリックで技別の倍率</b>。</span></div>`);
+    return _typeMatrix(res, I18N.selfVsAtk, cell,
+      `<div class="mtx-legend"><span>${I18N.atkLegend}</span></div>`);
   }
   function defenseTypeHtml(res){
     const cell = c=>`<td class="${DEFC(c.def)}">${DEFG(c.def)||'・'}</td>`;
-    return _typeMatrix(res, '自分 ＼ 被弾', cell,
-      `<div class="mtx-legend"><span>各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。受けの穴が一目で分かります。</span></div>`);
+    return _typeMatrix(res, I18N.selfVsHit, cell,
+      `<div class="mtx-legend"><span>${I18N.defLegend}</span></div>`);
   }
 
   function sugHtml(res, i){
     const tabs = res.mons.map((m,j)=>`<button class="montab${m.core?' core':''}${j===0?' active':''}" data-i="${i}" data-j="${j}">
         ${m.core?'<span class="mcore">◆</span>':''}${m.mega?'<span class="mmega">★</span>':''}
         ${icoImg(m.name,'monicon')}
-        <span class="mname">${esc(m.name)}</span>
-        <span class="mitem">${esc(m.item)||'—'}</span>
+        <span class="mname">${esc(tPoke(m.name))}</span>
+        <span class="mitem">${esc(tItem(m.item))||'—'}</span>
       </button>`).join('');
     const _skip = {'脅威対応率':1,'攻撃カバー':1,'防御相補':1};
     const st = res.stats ? `<div class="stats">${Object.entries(res.stats).filter(([k])=>!_skip[k]).map(([k,v])=>`<span><b>${esc(k)}</b> ${esc(String(v))}</span>`).join('')}</div>` : '';
@@ -427,15 +639,15 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
     const arch = res.archetypes;
     const avgAdv = arch&&arch.length ? Math.round(arch.reduce((s,x)=>s+x.adv,0)/arch.length*100) : null;
     const tbar = `<div class="tabbar">
-        <button class="tb active" data-i="${i}" data-t="atktype">攻撃相性</button>
-        <button class="tb" data-i="${i}" data-t="deftype">防御相性</button>
-        <button class="tb" data-i="${i}" data-t="mu">ポケモン相性</button>
-        <button class="tb" data-i="${i}" data-t="speed">素早さ</button>
-        <button class="tb" data-i="${i}" data-t="arch">想定パーティ相性</button>
-        <button class="tb" data-i="${i}" data-t="guide">選出ガイド${(res.guide&&res.guide.length)?'':'<span class="soon-tag">準備中</span>'}</button>
+        <button class="tb active" data-i="${i}" data-t="atktype">${I18N.tabAtk}</button>
+        <button class="tb" data-i="${i}" data-t="deftype">${I18N.tabDef}</button>
+        <button class="tb" data-i="${i}" data-t="mu">${I18N.tabMu}</button>
+        <button class="tb" data-i="${i}" data-t="speed">${I18N.tabSpeed}</button>
+        <button class="tb" data-i="${i}" data-t="arch">${I18N.tabArch}</button>
+        <button class="tb" data-i="${i}" data-t="guide">${I18N.tabGuide}${(res.guide&&res.guide.length)?'':`<span class="soon-tag">${I18N.soon}</span>`}</button>
       </div>`;
     return `<div class="card sug" data-sug="${i}">
-      <div class="hd"><span>提案 ${i+1}</span><button type="button" class="pb-btn-sub ps-import-btn">パーティ工房で保存・微調整</button></div>
+      <div class="hd"><span>${I18N.suggestion(i+1)}</span><button type="button" class="pb-btn-sub ps-import-btn">${I18N.saveToBuilder}</button></div>
       ${st}
       <div class="iconrow">${tabs}</div>
       <div class="detail" id="det-${i}">${detailHtml(res.mons[0])}</div>
@@ -444,7 +656,7 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
     </div>`;
   }
   function archetypeHtml(res){
-    const a = res.archetypes; if(!a||!a.length) return '<div class="muted">評価データがありません</div>';
+    const a = res.archetypes; if(!a||!a.length) return `<div class="muted">${I18N.noArchData}</div>`;
     const rows = a.slice().sort((x,y)=>y.adv-x.adv).map(x=>{
       const pct = Math.round(x.adv*100);
       const cls = pct>=55?'adv-good':pct<45?'adv-bad':'adv-mid';
@@ -453,70 +665,70 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
         <td><div class="arch-lb">${esc(x.label)}</div><div class="dtl-mem">${opp}</div></td>
         <td><div class="advbar"><div class="advfill ${cls}" style="width:${pct}%"></div></div><div class="advtxt ${cls}">${pct}%</div></td></tr>`;
     }).join('');
-    return `<div class="mtx-legend"><span>いくつかの構築に対してAI同士の対戦シミュレーションから想定勝率を算出。</span></div>
-      <table class="dtl arch"><tr><th>対戦相手</th><th>想定勝率</th></tr>${rows}</table>`;
+    return `<div class="mtx-legend"><span>${I18N.archLegend}</span></div>
+      <table class="dtl arch"><tr><th>${I18N.thOpp}</th><th>${I18N.thWr}</th></tr>${rows}</table>`;
   }
   function guideHtml(res){
     const g = res.guide;
-    if(!g||!g.length) return `<div class="soon-box"><div class="soon-badge">準備中</div><div class="muted">この軸の選出ガイド（相手構築ごとのおすすめ3匹）はまだ計算されていません。</div>
-      <button class="gd-req">この軸のガイド計算をリクエスト</button>
-      <div class="gd-req-done muted" style="display:none">リクエストを受け付けました。数日以内に追加される予定です。</div></div>`;
+    if(!g||!g.length) return `<div class="soon-box"><div class="soon-badge">${I18N.soon}</div><div class="muted">${I18N.guideEmptyMsg}</div>
+      <button class="gd-req">${I18N.guideReqBtn}</button>
+      <div class="gd-req-done muted" style="display:none">${I18N.guideReqDone}</div></div>`;
     const rows = g.slice().sort((x,y)=>y.wr-x.wr).map(x=>{
       const pct = Math.round(x.wr*100);
       const cls = pct>=55?'adv-good':pct<45?'adv-bad':'adv-mid';
       const opp = (x.opp||[]).map(n=>icoImg(n,'dtl-ico')).join('');
       const rec = (x.recommend||[]).map(n=>icoImg(n,'dtl-ico')).join('');
-      const recNames = (x.recommend||[]).map(n=>esc(n)).join(' / ');
-      const band = w => w>=0.75?['◎ 有利','gd-b-good']:w>=0.6?['○ やや有利','gd-b-ok']:w>=0.4?['△ 五分','gd-b-mid']:['× 危険','gd-b-bad'];
+      const recNames = (x.recommend||[]).map(n=>esc(tPoke(n))).join(' / ');
+      const band = w => w>=0.75?[I18N.bandGood,'gd-b-good']:w>=0.6?[I18N.bandOk,'gd-b-ok']:w>=0.4?[I18N.bandMid,'gd-b-mid']:[I18N.bandBad,'gd-b-bad'];
       const vsRows = (x.vs||[]).map(v=>{
         const [bl,bc]=band(v.wr??1);
-        const alt = v.alt?`<div class="gd-alt">↳ 読み切れるなら ${(v.alt.my3||[]).map(n=>icoImg(n,'cnt-ico')).join('')} が有効</div>`:'';
-        return `<div class="cnt-row">相手が ${(v.opp3||[]).map(n=>icoImg(n,'cnt-ico')).join('')} → この選出で <span class="gd-band ${bc}">${bl}</span>${alt}</div>`;
+        const alt = v.alt?`<div class="gd-alt">${I18N.altReadable.replace('{mons}',(v.alt.my3||[]).map(n=>icoImg(n,'cnt-ico')).join(''))}</div>`:'';
+        return `<div class="cnt-row">${I18N.vsRow.replace('{opp}',(v.opp3||[]).map(n=>icoImg(n,'cnt-ico')).join('')).replace('{band}',`<span class="gd-band ${bc}">${bl}</span>`)}${alt}</div>`;
       }).join('');
       return `<tr>
         <td><div class="arch-lb">${esc(x.label)}</div><div class="dtl-mem">${opp}</div></td>
-        <td><div class="dtl-mem">${rec}</div><div class="gd-names">${recNames}</div>${vsRows?`<details class="gd-det"><summary>この選出は相手のどの出し方に強い？</summary>${vsRows}</details>`:''}</td>
+        <td><div class="dtl-mem">${rec}</div><div class="gd-names">${recNames}</div>${vsRows?`<details class="gd-det"><summary>${I18N.guideDetSummary}</summary>${vsRows}</details>`:''}</td>
         <td><div class="advbar"><div class="advfill ${cls}" style="width:${pct}%"></div></div><div class="advtxt ${cls}">${pct}%</div></td></tr>`;
     }).join('');
     return `${strategyChart(res.strategy)}
-      <details class="gd-detail-wrap"><summary>対戦相手ごとの詳細（参考）</summary>
-      <div class="mtx-legend"><span><b>おすすめ選出</b>＝相手がどの3匹を出すか分からない前提で、期待勝率が最も高い3匹（AI対戦シミュレーション）。勝率は参考値です。</span></div>
-      <table class="dtl arch gd"><tr><th>対戦相手</th><th>おすすめ選出</th><th>想定勝率</th></tr>${rows}</table></details>`;
+      <details class="gd-detail-wrap"><summary>${I18N.guideDetailWrap}</summary>
+      <div class="mtx-legend"><span>${I18N.guideLegend}</span></div>
+      <table class="dtl arch gd"><tr><th>${I18N.thOpp}</th><th>${I18N.thRec}</th><th>${I18N.thWr}</th></tr>${rows}</table></details>`;
   }
   function strategyChart(s){
     if(!s||!s.base) return '';
-    const trio = (arr,cls='')=>`<div class="sc-trio ${cls}">${(arr||[]).map(n=>`<span class="sc-mon" title="${esc(n)}">${icoImg(n,'sc-ico')}</span>`).join('')}</div>`;
+    const trio = (arr,cls='')=>`<div class="sc-trio ${cls}">${(arr||[]).map(n=>`<span class="sc-mon" title="${esc(tPoke(n))}">${icoImg(n,'sc-ico')}</span>`).join('')}</div>`;
     const pct = w=>Math.round((w||0)*100)+'%';
     const b = s.base;
-    let html = `<div class="sc-wrap"><div class="sc-hd">選出ガイド — このパーティの使い方</div>`;
+    let html = `<div class="sc-wrap"><div class="sc-hd">${I18N.scHd}</div>`;
     if(s.concept) html += `<div class="sc-concept">${esc(s.concept)}</div>`;
-    html += `<div class="sc-base"><div class="sc-tag">基本形</div>${trio(b.trio,'sc-big')}
-      <div class="sc-meta"><b>想定勝率 ${pct(b.wr)}</b><div class="sc-sub">迷ったらこの3匹（8構築中${(b.opps||[]).length}構築で最善）</div></div></div>`;
+    html += `<div class="sc-base"><div class="sc-tag">${I18N.scBaseTag}</div>${trio(b.trio,'sc-big')}
+      <div class="sc-meta"><b>${I18N.thWr} ${pct(b.wr)}</b><div class="sc-sub">${I18N.scBaseSub((b.opps||[]).length)}</div></div></div>`;
     if((s.rules||[]).length){
-      html += `<div class="sc-branch-hd">相手のチーム（見せ合い）にこれが見えたら</div>`;
+      html += `<div class="sc-branch-hd">${I18N.scTeamCond}</div>`;
       html += s.rules.map(ru=>{
         // 軸ポケモン：勝率の微差検定（decisive/tie）ではなく、実測で選出された構築を直接示す。
         // 8構築程度のサンプルでは勝率の細かい優劣より「活きる場」を示す方が頑健で誤解を招かない。
         if(ru.core){
           let condChip = '';
-          if(ru.cond && ru.cond.kind==='mon') condChip = `<span class="sc-typechip">${esc(ru.cond.value)}入り</span>`;
-          else if(ru.cond && ru.cond.kind==='type') condChip = `<span class="sc-typechip">${esc(ru.cond.value)}タイプ2体以上</span>`;
+          if(ru.cond && ru.cond.kind==='mon') condChip = `<span class="sc-typechip">${I18N.chipMonIn(esc(tPoke(ru.cond.value)))}</span>`;
+          else if(ru.cond && ru.cond.kind==='type') condChip = `<span class="sc-typechip">${I18N.chipType2(esc(ru.cond.value))}</span>`;
           else if(ru.cond && ru.cond.kind==='trait') condChip = `<span class="sc-typechip">${esc(ru.cond.label)}</span>`;
           const sel = (ru.selected||[]).map(a=>`<div class="sc-team"><div class="sc-team-ico">${(a.names||[]).map(n=>icoImg(n,'sc-ico-t')).join('')}</div>
             <div class="sc-sub">${esc(a.opp)}</div></div>`).join('');
           return `<div class="sc-rule2">
             <div class="sc-summary">${esc(ru.summary)}</div>
             <div class="sc-rule-body">
-              <div class="sc-teams">${sel || `<div class="sc-sub muted">実測ではどの相手にも選出されなかった</div>`}</div>
+              <div class="sc-teams">${sel || `<div class="sc-sub muted">${I18N.unseenAny}</div>`}</div>
               <div class="sc-arr">▶</div>
-              <div class="sc-rule-act"><div class="sc-swap">${icoImg(ru.mon,'sc-ico-s')} <b>${esc(ru.mon)}</b>${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(esc).join('・')}</span>`:''}（軸）</div><div class="sc-chips">${condChip}</div></div>
+              <div class="sc-rule-act"><div class="sc-swap">${icoImg(ru.mon,'sc-ico-s')} <b>${esc(tPoke(ru.mon))}</b>${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(esc).join('・')}</span>`:''}（${I18N.coreTag}）</div><div class="sc-chips">${condChip}</div></div>
             </div>
           </div>`;
         }
         const evd = ru.evidence;
-        const refName = e => (e && e.ref==='base') ? '基本形' : '次点候補';
+        const refName = e => (e && e.ref==='base') ? I18N.refBase : I18N.refAlt;
         const watchHd = (!evd)
-          ? `<div class="sc-watch sc-watch-n">実測ではどの選出でも同等（無理に替えなくてよい）</div>` : '';
+          ? `<div class="sc-watch sc-watch-n">${I18N.watchNone}</div>` : '';
         const teams = (ru.teams||[]).map(t=>{
           const hi = new Set(t.hi||[]);
           const dim = t.mode==='decisive';
@@ -524,31 +736,31 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
           const isTop = evd && t.opp===evd.opp && ev && ev.key;
           let badge;
           if(isTop){
-            badge = `<span class="sc-mode sc-m-top">決め手 ${Math.round(ev.key.base*100)}%→${Math.round(ev.key.pick*100)}%</span>`;
+            badge = `<span class="sc-mode sc-m-top">${I18N.modeTop(Math.round(ev.key.base*100),Math.round(ev.key.pick*100))}</span>`;
           } else if(ev){
-            badge = ev.tie ? `<span class="sc-mode sc-m-nt">${refName(ev)}と同等</span>`
-                      : `<span class="sc-mode sc-m-sp">${refName(ev)}より ${ev.delta>0?'+':''}${Math.round(ev.delta*100)}pt</span>`;
+            badge = ev.tie ? `<span class="sc-mode sc-m-nt">${I18N.modeTieWith(refName(ev))}</span>`
+                      : `<span class="sc-mode sc-m-sp">${I18N.modeDelta(refName(ev),Math.round(ev.delta*100))}</span>`;
           } else {
-            badge = `<span class="sc-mode sc-m-nt">比較データなし</span>`;
+            badge = `<span class="sc-mode sc-m-nt">${I18N.modeNoData}</span>`;
           }
           return `<div class="sc-team"><div class="sc-team-ico">${(t.names||[]).map(n=>
             `<span class="${hi.has(n)?'sc-hi':(dim?'sc-dim':'')}">${icoImg(n,'sc-ico-t')}</span>`).join('')}</div>
             <div class="sc-sub">${esc(t.opp)} ${badge}</div></div>`;
         }).join('');
         let condChip = '';
-        if(ru.cond && ru.cond.kind==='mon') condChip = `<span class="sc-typechip">${esc(ru.cond.value)}入り</span>`;
-        else if(ru.cond && ru.cond.kind==='type') condChip = `<span class="sc-typechip">${esc(ru.cond.value)}タイプ2体以上</span>`;
+        if(ru.cond && ru.cond.kind==='mon') condChip = `<span class="sc-typechip">${I18N.chipMonIn(esc(tPoke(ru.cond.value)))}</span>`;
+        else if(ru.cond && ru.cond.kind==='type') condChip = `<span class="sc-typechip">${I18N.chipType2(esc(ru.cond.value))}</span>`;
         else if(ru.cond && ru.cond.kind==='trait') condChip = `<span class="sc-typechip">${esc(ru.cond.label)}</span>`;
         let reason = '';
         if(evd){
           const rt = evd.ref_trio||[], tr = evd.trio||[];
           const gained = tr.filter(n=>!rt.includes(n)), lost = rt.filter(n=>!tr.includes(n));
           reason = (gained.length && lost.length)
-            ? `この並びには ${lost.map(esc).join('・')} より ${gained.map(esc).join('・')} が機能する（${Math.round(evd.base*100)}% → ${Math.round(evd.pick*100)}%）`
-            : `この並びには採用形の方が勝てる（${Math.round(evd.base*100)}% → ${Math.round(evd.pick*100)}%）`;
-          if(evd.cost) reason += `。ただし相手が${(evd.cost.opp3||[]).map(esc).join('・')}を出す形では逆に不利（${Math.round(evd.cost.base*100)}%→${Math.round(evd.cost.pick*100)}%）`;
+            ? I18N.reasonSwap(lost.map(n=>esc(tPoke(n))).join('・'), gained.map(n=>esc(tPoke(n))).join('・'), Math.round(evd.base*100), Math.round(evd.pick*100))
+            : I18N.reasonAdopt(Math.round(evd.base*100), Math.round(evd.pick*100));
+          if(evd.cost) reason += I18N.reasonCost((evd.cost.opp3||[]).map(n=>esc(tPoke(n))).join('・'), Math.round(evd.cost.base*100), Math.round(evd.cost.pick*100));
         } else if(ru.explain==='tie'){
-          reason = `AI対戦の実測では他の選出と差がつかない。無理に替える必要はない`;
+          reason = I18N.reasonTie;
         } else if(ru.why) reason = ru.why;
         reason = reason ? `<div class="sc-sub">${reason}</div>` : '';
         const swap = ru.out ? `${icoImg(ru.out,'sc-ico-s')}<span class="sc-arr2">→</span>${icoImg(ru.mon,'sc-ico-s')}` : icoImg(ru.mon,'sc-ico-s');
@@ -558,82 +770,82 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
           <div class="sc-rule-body">
             <div class="sc-teams">${teams}</div>
             <div class="sc-arr">▶</div>
-            <div class="sc-rule-act"><div class="sc-swap">${swap} <b>${esc(ru.mon)}</b>${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(esc).join('・')}</span>`:''} を入れる</div>${reason}<div class="sc-chips">${condChip}</div></div>
+            <div class="sc-rule-act"><div class="sc-swap">${swap} ${I18N.swapAdd(esc(tPoke(ru.mon)))}${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(esc).join('・')}</span>`:''}</div>${reason}<div class="sc-chips">${condChip}</div></div>
           </div>
         </div>`;
       }).join('');
     }
     if((s.role_table||[]).length){
-      const stLbl = {core:'基本形', flex:'入替枠', spot:'刺し要員', bench:'控え'};
-      html += `<div class="sc-branch-hd">6匹の役割</div><table class="sc-roles"><tr><th></th><th>役割</th><th>出番</th></tr>` +
+      const stLbl = {core:I18N.roleCore, flex:I18N.roleFlex, spot:I18N.roleSpot, bench:I18N.roleBench};
+      html += `<div class="sc-branch-hd">${I18N.roleTable}</div><table class="sc-roles"><tr><th></th><th>${I18N.roleColRole}</th><th>${I18N.roleColTurn}</th></tr>` +
         s.role_table.map(rt=>`<tr class="sc-st-${rt.status}">
-          <td>${icoImg(rt.mon,'sc-ico-s')} ${esc(rt.mon)}</td>
+          <td>${icoImg(rt.mon,'sc-ico-s')} ${esc(tPoke(rt.mon))}</td>
           <td>${(rt.roles||[]).map(esc).join('・')||'-'}</td>
-          <td><span class="sc-stbadge sc-stb-${rt.status}">${stLbl[rt.status]||''}</span> <span class="sc-sub">選出率 ${Math.round(rt.n/rt.N*100)}%（${rt.n}/${rt.N}）</span></td>
+          <td><span class="sc-stbadge sc-stb-${rt.status}">${stLbl[rt.status]||''}</span> <span class="sc-sub">${I18N.selRate(rt.n,rt.N)}</span></td>
         </tr>`).join('') + `</table>`;
     }
     if((s.alts||[]).length){
-      html += `<details class="sc-ex"><summary>実例：相手構築別の入れ替え（${s.alts.length}件）</summary>` +
+      html += `<details class="sc-ex"><summary>${I18N.altExDetails(s.alts.length)}</summary>` +
         s.alts.map(a=>{
-          const gain = (a.delta!=null) ? `<span class="sc-gain">実測 +${Math.round(a.delta*100)}pt</span>` : '';
+          const gain = (a.delta!=null) ? `<span class="sc-gain">${I18N.measGain(Math.round(a.delta*100))}</span>` : '';
           const swap = (a.out&&a.in&&a.out.length&&a.in.length)
-            ? `<div class="sc-swap">${a.out.map(n=>icoImg(n,'sc-ico-s')).join('')}<span class="sc-arr2">→</span>${a.in.map(n=>icoImg(n,'sc-ico-s')).join('')} に入れ替え</div>` : '';
-          const altline = a.alt_trio ? `<div class="sc-alt">次点 ${trio(a.alt_trio,'sc-mini')} は ${pct(a.alt_wr)} ${gain}</div>` : '';
+            ? `<div class="sc-swap">${a.out.map(n=>icoImg(n,'sc-ico-s')).join('')}<span class="sc-arr2">→</span>${a.in.map(n=>icoImg(n,'sc-ico-s')).join('')}</div>` : '';
+          const altline = a.alt_trio ? `<div class="sc-alt">${I18N.refAlt} ${trio(a.alt_trio,'sc-mini')} ${pct(a.alt_wr)} ${gain}</div>` : '';
           return `<div class="sc-branch">
-            <div class="sc-col"><div class="sc-lbl">相手チーム ${esc(a.opp)}</div>${trio(a.team&&a.team.length?a.team:a.opp3,'sc-opp sc-mini')}<div class="sc-sub">よく出すのは ${(a.opp3||[]).map(esc).join('・')}</div></div>
+            <div class="sc-col"><div class="sc-lbl">${I18N.oppTeamLbl(esc(a.opp))}</div>${trio(a.team&&a.team.length?a.team:a.opp3,'sc-opp sc-mini')}<div class="sc-sub">${I18N.oftenSends((a.opp3||[]).map(n=>esc(tPoke(n))).join('・'))}</div></div>
             <div class="sc-arr">▶</div>
-            <div class="sc-col"><div class="sc-lbl">この3匹</div>${trio(a.trio)}<div class="sc-meta"><b>${pct(a.wr)}</b></div>${swap}${altline}</div>
+            <div class="sc-col"><div class="sc-lbl">${I18N.thisTrioLbl}</div>${trio(a.trio)}<div class="sc-meta"><b>${pct(a.wr)}</b></div>${swap}${altline}</div>
           </div>`;
         }).join('') + `</details>`;
     }
     if(s.caution){
-      const alt = s.caution.alt?` ／ 読み切れるなら ${trio(s.caution.alt,'sc-mini')}`:'';
-      html += `<div class="sc-caution">⚠ ${esc(s.caution.opp)} が ${trio(s.caution.opp3,'sc-mini')} と出す形は苦しい${alt}</div>`;
+      const alt = s.caution.alt?I18N.cautionAlt(trio(s.caution.alt,'sc-mini')):'';
+      html += `<div class="sc-caution">${I18N.caution(esc(s.caution.opp), trio(s.caution.opp3,'sc-mini'))}${alt}</div>`;
     }
     if(s.hard && ((s.hard.teams||[]).length || (s.hard.mons||[]).length)){
-      html += `<div class="sc-branch-hd">重い相手</div><div class="sc-hard">`;
+      html += `<div class="sc-branch-hd">${I18N.hardOpp}</div><div class="sc-hard">`;
       if((s.hard.mons||[]).length){
-        html += `<div class="sc-hard-row"><span class="sc-hard-lb">苦手なポケモン</span>` +
-          s.hard.mons.map(m=>`<span class="sc-w">${icoImg(m.mon,'sc-ico-s')}${esc(m.mon)} <b>${pct(m.wr)}</b></span>`).join('') +
-          `<div class="sc-sub">この駒が相手の選出に入ると勝率が落ちる</div></div>`;
+        html += `<div class="sc-hard-row"><span class="sc-hard-lb">${I18N.hardMons}</span>` +
+          s.hard.mons.map(m=>`<span class="sc-w">${icoImg(m.mon,'sc-ico-s')}${esc(tPoke(m.mon))} <b>${pct(m.wr)}</b></span>`).join('') +
+          `<div class="sc-sub">${I18N.hardMonsSub}</div></div>`;
       }
       if((s.hard.teams||[]).length){
         const whyRows = s.hard.teams.filter(t=>t.why&&t.why.length).map(t=>
-          `<div class="sc-sub">${esc(t.opp)}は ${t.why.map(n=>`<span class="sc-w">${icoImg(n,'sc-ico-s')}${esc(n)}</span>`).join('')} の並びが特に厳しい</div>`).join('');
-        html += `<div class="sc-hard-row"><span class="sc-hard-lb">苦手な構築</span>` +
+          `<div class="sc-sub">${I18N.hardWhy(esc(t.opp), t.why.map(n=>`<span class="sc-w">${icoImg(n,'sc-ico-s')}${esc(tPoke(n))}</span>`).join(''))}</div>`).join('');
+        html += `<div class="sc-hard-row"><span class="sc-hard-lb">${I18N.hardTeams}</span>` +
           s.hard.teams.map(t=>`<span class="sc-w">${esc(t.opp)} <b>${pct(t.wr)}</b></span>`).join('') +
-          `<div class="sc-sub">最善を尽くしても不利。${s.hard.teams[0]?`${esc(s.hard.teams[0].opp)}には ${trio(s.hard.teams[0].trio,'sc-mini')} が最善`:''}</div>${whyRows}</div>`;
+          `<div class="sc-sub">${I18N.hardTeamsSub(s.hard.teams[0]?I18N.hardBestFor(esc(s.hard.teams[0].opp), trio(s.hard.teams[0].trio,'sc-mini')):'')}</div>${whyRows}</div>`;
       }
       html += `</div>`;
     }
     if(s.best&&s.worst){
-      html += `<div class="sc-bw"><span class="sc-good">得意 ${esc(s.best.opp)} ${pct(s.best.wr)}</span><span class="sc-bad">警戒 ${esc(s.worst.opp)} ${pct(s.worst.wr)}</span></div>`;
+      html += `<div class="sc-bw"><span class="sc-good">${I18N.bwGood(esc(s.best.opp), pct(s.best.wr))}</span><span class="sc-bad">${I18N.bwBad(esc(s.worst.opp), pct(s.worst.wr))}</span></div>`;
     }
     return html + `</div>`;
   }
   function firepowerHtml(res){
     const fp = res.firepower; if(!fp) return '';
-    const head = `<tr><th class="mtx-corner mtx-stick">自分 ＼ 相手</th>` + fp.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(t.label)}</div></th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + fp.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(t.label)}</div></th>`).join('') + `</tr>`;
     const rows = fp.rows.map(r=>{
       const cells = r.cells.map((c,j)=>{
-        const tip = 'クリックで技×相手型の内訳' + (c.move?'（想定 '+c.move+'）':'');
+        const tip = I18N.cellTip + (c.move?` (${I18N.assumedMove} ${tMove(c.move)})`:'');
         return `<td class="${c.cls} fire-cell" data-mon="${esc(r.mon)}" data-opp="${esc(fp.tops[j].sp)}" title="${esc(tip)}">${c.lab}${c.note?'<span class="ko-note">*</span>':''}</td>`;
       }).join('');
       return `<tr>${memRowHead({name:r.mon})}${cells}</tr>`;
     }).join('');
-    return `<div class="mtx-legend"><span>各味方の<b>最大打点技</b>で上位30体を落とす手数（実数値・持ち物込み）。<b class="ko1">確1</b>=確定1発 <b class="ko2">確2</b>。<b>確2〜確3</b>のような幅は<b>相手の型（耐久振り等）による差</b>。<b>*</b>=ばけのかわ/がんじょう/タスキ考慮。<b>セルをクリックで技×型の内訳</b>。</span></div>
+    return `<div class="mtx-legend"><span>${I18N.fireLegend(30)}</span></div>
       <div class="mg"><table class="mtx">${head}${rows}</table></div>`;
   }
   const SPSYM = {win:'◎', may:'△', lose:'×'};
   function speedHtml(res){
     const sp = res.speed; if(!sp) return '';
-    const head = `<tr><th class="mtx-corner mtx-stick">自分 ＼ 相手</th>` + sp.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(t.label)}</div></th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + sp.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(t.label)}</div></th>`).join('') + `</tr>`;
     const rows = sp.rows.map(r=>{
-      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(r.mon,'mtx-ico')}<div class="mtx-name">${esc(r.mon)}<br><span class="sp-val">S${r.spd}${r.scarf?'⚡':''}</span></div></div></th>`;
+      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(r.mon,'mtx-ico')}<div class="mtx-name">${esc(tPoke(r.mon))}<br><span class="sp-val">S${r.spd}${r.scarf?'⚡':''}</span></div></div></th>`;
       const cells = r.cells.map((c,j)=>`<td class="${col(SPSYM[c])} sp-cell" data-mon="${esc(r.mon)}" data-opp="${esc(sp.tops[j].sp)}">${SPSYM[c]}</td>`).join('');
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
-    return `<div class="mtx-legend"><span>味方（左・素早さ順）が上位30体より速いか（スカーフ込み）。<b class="bg-cc">◎</b>＝相手の全型より速い <b class="bg-cn">△</b>＝型次第で前後 <b class="bg-cx">×</b>＝全型より遅い。<b>セルをクリックで相手型別Sの内訳</b>。</span></div>
+    return `<div class="mtx-legend"><span>${I18N.speedLegend}</span></div>
       <div class="mg"><table class="mtx">${head}${rows}</table></div>`;
   }
   function paneHtml(res, t, i){
@@ -649,66 +861,66 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
   function popHide(){ document.getElementById('popup').style.display='none'; }
   function suggOf(el){ const c=el.closest('.sug'); return c?LAST[+c.dataset.sug]:null; }
   function fireDetailHtml(d){
-    const cols = d.cols.map(c=>`<th>型${c.idx}<span class="pop-types">${typeIcoByName(c.t1)}${c.t2?typeIcoByName(c.t2):''}</span><span class="pop-col-sub">${esc(c.item)}<br>${esc(c.ev)}<br>${esc(c.ability)}</span></th>`).join('');
+    const cols = d.cols.map(c=>`<th>${I18N.thVariant(c.idx)}<span class="pop-types">${typeIcoByName(c.t1)}${c.t2?typeIcoByName(c.t2):''}</span><span class="pop-col-sub">${esc(tItem(c.item))}<br>${esc(c.ev)}<br>${esc(tAbil(c.ability))}</span></th>`).join('');
     const rows = d.rows.map(r=>{
       const cells = r.cells.map(c=>`<td class="${c.best?'best':''}">${c.best?'★':''}<span class="pop-pct">${esc(c.pct)}</span><br><span class="pop-ko">${esc(c.ko)}${c.note?'・'+esc(c.note):''}</span></td>`).join('');
-      return `<tr><td class="lft"><span class="mvchip-s">${typeIcoByName(r.type)}${esc(r.move)}</span></td>${cells}</tr>`;
+      return `<tr><td class="lft"><span class="mvchip-s">${typeIcoByName(r.type)}${esc(tMove(r.move))}</span></td>${cells}</tr>`;
     }).join('');
-    return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(d.mon)}<span class="arw">→</span>${icoImg(d.opp,'')}${esc(d.opp)}</div>
-      <div class="pop-sub">自分の攻撃技（行）× 相手の想定型（列）の与ダメ％／確定数。★＝その型への最大打点。</div>
-      <div style="overflow-x:auto"><table class="pop-t"><tr><th class="lft">技</th>${cols}</tr>${rows}</table></div>`;
+    return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">→</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
+      <div class="pop-sub">${I18N.popFireSub}</div>
+      <div style="overflow-x:auto"><table class="pop-t"><tr><th class="lft">${I18N.thMove}</th>${cols}</tr>${rows}</table></div>`;
   }
   function speedDetailHtml(d){
     const items = d.builds.map(b=>({s:b.s, mine:false, item:b.item, ev:b.ev, idx:b.idx, scarf:b.scarf}));
     items.push({s:d.my_s, mine:true, scarf:d.my_scarf});
     items.sort((a,b)=>b.s-a.s);
     const rows = items.map(it=>{
-      if(it.mine) return `<div class="spd-row me">${icoImg(d.mon,'')}<span class="spd-s">S${it.s}${it.scarf?'⚡':''}</span><span>あなた（${esc(d.mon)}）</span></div>`;
+      if(it.mine) return `<div class="spd-row me">${icoImg(d.mon,'')}<span class="spd-s">S${it.s}${it.scarf?'⚡':''}</span><span>${I18N.speedYou(esc(tPoke(d.mon)))}</span></div>`;
       const cmp = d.my_s>it.s?'out':(d.my_s<it.s?'in':'eq');
-      const tag = cmp==='out'?'<span class="spd-tag t-out">抜ける</span>':cmp==='in'?'<span class="spd-tag t-in">抜かれる</span>':'<span class="spd-tag t-eq">同速</span>';
+      const tag = cmp==='out'?`<span class="spd-tag t-out">${I18N.speedFaster}</span>`:cmp==='in'?`<span class="spd-tag t-in">${I18N.speedSlower}</span>`:`<span class="spd-tag t-eq">${I18N.speedEq}</span>`;
       const cls = cmp==='out'?'slower':(cmp==='in'?'faster':'');
-      return `<div class="spd-row ${cls}">${icoImg(d.opp,'')}<span class="spd-s">S${it.s}${it.scarf?'⚡':''}</span><span>型${it.idx} ${esc(it.item)} ${esc(it.ev)}</span>${tag}</div>`;
+      return `<div class="spd-row ${cls}">${icoImg(d.opp,'')}<span class="spd-s">S${it.s}${it.scarf?'⚡':''}</span><span>${I18N.thVariant(it.idx)} ${esc(tItem(it.item))} ${esc(it.ev)}</span>${tag}</div>`;
     }).join('');
-    return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(d.mon)}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(d.opp)}</div>
-      <div class="pop-sub">相手の想定型のS実数値（速い順）。あなたの行より下＝抜ける／上＝抜かれる。</div>${rows}`;
+    return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
+      <div class="pop-sub">${I18N.popSpeedSub}</div>${rows}`;
   }
   function matchupDetailHtml(d){
-    const cols = d.cols.map(c=>`<th>型${c.idx}<span class="pop-types">${typeIcoByName(c.t1)}${c.t2?typeIcoByName(c.t2):''}</span><span class="pop-col-sub">${esc(c.item)}<br>${esc(c.nature)}<br>${esc(c.ev)}</span></th>`).join('');
-    const dmgRow = (lab, arr) => `<tr><td class="lft">${lab}</td>${arr.map(c=>`<td><span class="pop-pct">${esc(c.pct)}</span> <span class="pop-ko">${esc(c.ko)}</span><br><span class="pop-ko">${esc(c.move)}</span></td>`).join('')}</tr>`;
-    const spRow = `<tr><td class="lft">素早さ</td>${d.spd.map(c=>`<td class="${c.fast?'sp-win':'sp-lose'}">${esc(c.txt)}</td>`).join('')}</tr>`;
-    const jRow = `<tr><td class="lft">判定</td>${d.judge.map(c=>`<td class="${col(c.v)}"><b style="font-size:1.05em">${c.v}</b><br><span class="pop-ko">${esc(c.txt)}</span></td>`).join('')}</tr>`;
-    return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(d.mon)}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(d.opp)}</div>
-      <div class="pop-sub">相手の想定型別に、互いの最大打点1発の確定数・素早さ・勝敗判定（タスキ/がんじょう/ばけのかわ考慮）。</div>
-      <div style="overflow-x:auto"><table class="pop-t"><tr><th class="lft"> </th>${cols}</tr>${dmgRow('与ダメ（自→相）',d.me)}${dmgRow('被ダメ（相→自）',d.op)}${spRow}${jRow}</table></div>`;
+    const cols = d.cols.map(c=>`<th>${I18N.thVariant(c.idx)}<span class="pop-types">${typeIcoByName(c.t1)}${c.t2?typeIcoByName(c.t2):''}</span><span class="pop-col-sub">${esc(tItem(c.item))}<br>${esc(tNature(c.nature))}<br>${esc(c.ev)}</span></th>`).join('');
+    const dmgRow = (lab, arr) => `<tr><td class="lft">${lab}</td>${arr.map(c=>`<td><span class="pop-pct">${esc(c.pct)}</span> <span class="pop-ko">${esc(c.ko)}</span><br><span class="pop-ko">${esc(tMove(c.move))}</span></td>`).join('')}</tr>`;
+    const spRow = `<tr><td class="lft">${I18N.speedRow}</td>${d.spd.map(c=>`<td class="${c.fast?'sp-win':'sp-lose'}">${esc(c.txt)}</td>`).join('')}</tr>`;
+    const jRow = `<tr><td class="lft">${I18N.judgeRow}</td>${d.judge.map(c=>`<td class="${col(c.v)}"><b style="font-size:1.05em">${c.v}</b><br><span class="pop-ko">${esc(c.txt)}</span></td>`).join('')}</tr>`;
+    return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
+      <div class="pop-sub">${I18N.popMuSub}</div>
+      <div style="overflow-x:auto"><table class="pop-t"><tr><th class="lft"> </th>${cols}</tr>${dmgRow(I18N.dmgSelf,d.me)}${dmgRow(I18N.dmgOpp,d.op)}${spRow}${jRow}</table></div>`;
   }
   function atkDetailHtml(d){
     const EFF = e=>e>=2?'×2':e===1?'×1':e===0?'無効':e<=0.25?'¼':'½';
     const CLR = e=>e>=2?'#15803d':e===1?'#64748b':'#dc2626';
     const rows = d.moves.map(m=>{
-      const val = m.atk ? `<span style="font-weight:800;color:${CLR(m.eff)}">${EFF(m.eff)}</span>` : '<span class="muted">変化技</span>';
-      return `<tr><td class="lft"><span class="mvchip-s">${typeIcoByName(m.type)}${esc(m.name)}</span></td><td>${val}</td></tr>`;
+      const val = m.atk ? `<span style="font-weight:800;color:${CLR(m.eff)}">${EFF(m.eff)}</span>` : `<span class="muted">${I18N.changeMove}</span>`;
+      return `<tr><td class="lft"><span class="mvchip-s">${typeIcoByName(m.type)}${esc(tMove(m.name))}</span></td><td>${val}</td></tr>`;
     }).join('');
-    return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(d.mon)}<span class="arw">→</span>${typeIcoByName(d.type)}${esc(d.type)}</div>
-      <div class="pop-sub">${esc(d.mon)}の各技が <b>${esc(d.type)}</b>タイプに対して何倍か（×2=抜群 ½=半減 無効=0倍）。</div>
-      <table class="pop-t"><tr><th class="lft">技</th><th>${esc(d.type)}への倍率</th></tr>${rows}</table>`;
+    return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">→</span>${typeIcoByName(d.type)}${esc(d.type)}</div>
+      <div class="pop-sub">${I18N.popAtkSub(esc(tPoke(d.mon)), esc(d.type))}</div>
+      <table class="pop-t"><tr><th class="lft">${I18N.thMove}</th><th>${I18N.thAtkMult(esc(d.type))}</th></tr>${rows}</table>`;
   }
   async function openAtkDetail(el){
     const res = suggOf(el); if(!res) return;
-    popShow('<div class="muted" style="padding:1em">計算中…</div>');
+    popShow(`<div class="muted" style="padding:1em">${I18N.calculating}</div>`);
     try{
       const d = await fetch(API+'/atk_detail', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({specs:res.specs, mon:el.dataset.mon, type:el.dataset.type})}).then(r=>r.json());
       popShow(atkDetailHtml(d));
-    }catch(e){ popShow('<div class="muted" style="padding:1em">取得に失敗しました</div>'); }
+    }catch(e){ popShow(`<div class="muted" style="padding:1em">${I18N.fetchFailed}</div>`); }
   }
   async function openDetail(el, kind){
     const res = suggOf(el); if(!res) return;
     const body = {specs:res.specs, mon:el.dataset.mon, opp:el.dataset.opp};
-    popShow('<div class="muted" style="padding:1em">計算中…</div>');
+    popShow(`<div class="muted" style="padding:1em">${I18N.calculating}</div>`);
     try{
       const d = await fetch(API+'/'+kind, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)}).then(r=>r.json());
       const render = {fire_detail:fireDetailHtml, speed_detail:speedDetailHtml, matchup_detail:matchupDetailHtml}[kind];
       popShow(render(d));
-    }catch(e){ popShow('<div class="muted" style="padding:1em">取得に失敗しました</div>'); }
+    }catch(e){ popShow(`<div class="muted" style="padding:1em">${I18N.fetchFailed}</div>`); }
   }
   document.getElementById('pop-x').addEventListener('click', popHide);
   document.getElementById('popup').addEventListener('click', e=>{ if(e.target.id==='popup') popHide(); });
@@ -727,11 +939,11 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
    * H/A/B/C/D/S=32スケール)なので、mons配列から組み立て直さずそのまま渡す。 */
   function handleImportToBuilder(el){
     const res = suggOf(el); if(!res || !res.specs || !res.specs.length) return;
-    const label = LAST_FIXED.length ? LAST_FIXED.join('+') : (CORE.length ? CORE.map(p=>p.label).join('+') : 'おまかせ');
-    const name = `${label}軸 かんたん構築`;
+    const label = LAST_FIXED.length ? LAST_FIXED.map(tPoke).join('+') : (CORE.length ? CORE.map(p=>tPoke(p.label)).join('+') : I18N.omakase);
+    const name = I18N.importName(label);
     try{ localStorage.setItem('pn-builder-import', JSON.stringify({name, specs: res.specs})); }
     catch(e){ /* localStorage不可時は遷移のみ行う(工房側で無視される) */ }
-    location.href = '/party-builder';
+    location.href = pfx + '/party-builder';
   }
   async function requestGuide(btn){
     btn.disabled = true;
@@ -773,9 +985,9 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
 
   function renderCoreChips(){
     const el = document.getElementById('core-chips');
-    el.innerHTML = CORE.map(p=>`<span class="filter-chip" title="${esc(p.label)}">${p.icon?`<img src="${p.icon}" alt="${esc(p.sp)}">`:''}${esc(p.label)}<button class="filter-chip-x" data-id="${esc(p.id)}">✕</button></span>`).join('');
+    el.innerHTML = CORE.map(p=>`<span class="filter-chip" title="${esc(tPoke(p.label))}">${p.icon?`<img src="${p.icon}" alt="${esc(p.sp)}">`:''}${esc(tPoke(p.label))}<button class="filter-chip-x" data-id="${esc(p.id)}">✕</button></span>`).join('');
     el.querySelectorAll('.filter-chip-x').forEach(b=>b.addEventListener('click',()=>removeCore(b.dataset.id)));
-    document.getElementById('core-filter').placeholder = CORE.length ? 'さらに追加…（ひらがな可）' : '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）';
+    document.getElementById('core-filter').placeholder = CORE.length ? I18N.corePlaceholderMore : I18N.corePlaceholder;
   }
   function addCore(id){
     const v = SPECIES.find(s=>s.id===id);
@@ -786,16 +998,16 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
   }
   function removeCore(id){ CORE = CORE.filter(p=>p.id!==id); renderCoreChips(); }
 
-  function hlSug(text, q){ const qk=toKatakana(q); const t=qk!==q?qk:q; const i=text.indexOf(t); if(i<0) return esc(text); return esc(text.slice(0,i))+'<mark>'+esc(text.slice(i,i+t.length))+'</mark>'+esc(text.slice(i+t.length)); }
+  function hlSug(text, q){ const disp = tPoke(text); const qk=toKatakana(q); const t=qk!==q?qk:q; const i=text.indexOf(t); if(i<0||disp!==text) return esc(disp); return esc(text.slice(0,i))+'<mark>'+esc(text.slice(i,i+t.length))+'</mark>'+esc(text.slice(i+t.length)); }
   function onFilterInput(val){
     const sug = document.getElementById('core-sug'); _sugActive=-1;
     const q = val.trim(); if(!q){ sug.style.display='none'; return; }
     const qk = toKatakana(q);
     const hits = SPECIES.filter(s=>s.label.includes(q)||s.label.includes(qk)).slice(0,12);
-    if(!hits.length){ sug.innerHTML='<div class="sug-item added">該当なし</div>'; sug.style.display='block'; return; }
+    if(!hits.length){ sug.innerHTML=`<div class="sug-item added">${I18N.noHit}</div>`; sug.style.display='block'; return; }
     sug.innerHTML = hits.map((s,i)=>{
       const already = CORE.some(p=>p.id===s.id);
-      const rk = (s.rank && s.rank<9999) ? `<span class="rk">使用${s.rank}位</span>` : '';
+      const rk = (s.rank && s.rank<9999) ? `<span class="rk">${I18N.rankLbl(s.rank)}</span>` : '';
       return `<div class="sug-item${already?' added':''}" data-id="${esc(s.id)}" data-idx="${i}">${s.icon?`<img src="${s.icon}" alt="">`:''}<span>${hlSug(s.label,q)}</span>${rk}</div>`;
     }).join('');
     sug.querySelectorAll('.sug-item[data-id]').forEach(el=>el.addEventListener('click',()=>{ if(!el.classList.contains('added')) addCore(el.dataset.id); }));
@@ -819,20 +1031,20 @@ const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuk
     const go = document.getElementById('go'); go.disabled = true; go.classList.add('loading');
     const out = document.getElementById('out');
     document.getElementById('status').textContent = '';
-    const msgs = ['軸を元にパーティを生成中…','対戦相手との想定勝率を評価中…','攻撃・防御・素早さ相性を計算中…','仕上げ中…'];
-    out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg" id="ps-lmsg">${msgs[0]}</div><div class="ps-lsub">初回や複雑な軸は10〜20秒ほどかかることがあります</div></div>`;
+    const msgs = I18N.loadMsgs;
+    out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg" id="ps-lmsg">${msgs[0]}</div><div class="ps-lsub">${I18N.loadSub}</div></div>`;
     let mi = 0; const timer = setInterval(()=>{ mi=(mi+1)%msgs.length; const el=document.getElementById('ps-lmsg'); if(el) el.textContent=msgs[mi]; }, 2500);
     try{
       const r = await fetch(API + '/suggest', {method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({core, ncand:100, top:5})});
       const d = await r.json();
-      if(d.error){ out.innerHTML=''; document.getElementById('status').textContent = 'エラー: ' + d.error; return; }
+      if(d.error){ out.innerHTML=''; document.getElementById('status').textContent = I18N.errPrefix + d.error; return; }
       LAST = d.results;
       LAST_FIXED = d.fixed || [];
-      document.getElementById('status').textContent = (d.fixed.length? '固定軸: ' + d.fixed.join(' + ') + ' / ' : '') + d.results.length + '件';
+      document.getElementById('status').textContent = (d.fixed.length? I18N.fixedLbl(d.fixed.map(tPoke).join(' + ')) : '') + I18N.resultCount(d.results.length);
       out.innerHTML = d.results.map((res,i)=>sugHtml(res,i)).join('');
       bindTabs();
-    }catch(e){ out.innerHTML=''; document.getElementById('status').textContent = '提案サーバに接続できませんでした。時間をおいて再度お試しください。'; }
+    }catch(e){ out.innerHTML=''; document.getElementById('status').textContent = I18N.connErr; }
     finally{ clearInterval(timer); go.disabled = false; go.classList.remove('loading'); }
   }
   document.getElementById('go').addEventListener('click', run);

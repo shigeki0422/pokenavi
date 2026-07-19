@@ -5,7 +5,7 @@ import Footer from '../../components/Footer.astro';
 import PartyBuilderApp from '../../components/PartyBuilderApp.astro';
 
 const title = '포켓몬 챔피언스 파티 공방 | 6마리 빌드를 실시간으로 조정';
-const description = '포켓몬 챔피언스의 6마리를 자유롭게 미세 조정할 수 있는 파티 구성 도구. 지닌 물건·특성·성격·EV를 실시간으로 변경하면서 예상 상대와의 스피드 비교, 1v1 판정, 타입 상성 밸런스를 확인할 수 있습니다. 파티는 여러 개 저장 가능합니다. (도구 화면은 일본어로 표시됩니다.)';
+const description = '포켓몬 챔피언스의 6마리를 자유롭게 미세 조정할 수 있는 파티 구성 도구. 지닌 물건·특성·성격·EV를 실시간으로 변경하면서 예상 상대와의 스피드 비교, 1v1 판정, 타입 상성 밸런스를 확인할 수 있습니다. 파티는 여러 개 저장 가능합니다.';
 const siteUrl = 'https://pokenavi.jp';
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -27,7 +27,7 @@ const jsonLd = {
   </head>
   <body>
     <Header />
-    <PartyBuilderApp />
+    <PartyBuilderApp lang="ko" />
     <Footer />
   </body>
 </html>
