@@ -679,15 +679,25 @@ const I18N = I18N_ALL[lang];
       <div class="drow"><span class="lbl mv">${I18N.moveLbl}</span><span class="mvwrap">${b.moves.filter(Boolean).map((x) => `<span class="mvchip">${typeIcoForMove(x)}${esc(tMove(x))}</span>`).join('') || '—'}</span></div>
       <div class="drow"><span class="lbl ev">${I18N.evLbl}</span><span class="mvwrap">${evChipsArr(b.ev)}</span></div>`;
   }
-  /** 検索候補のハイライト表示。表示名は翻訳するが、ハイライトはja(無翻訳)時のみマッチ範囲を反映する
-   * (検索自体は常に和名に対して行うため、翻訳後は元のマッチ位置と表示文字列がずれるため)。 */
+  /** 検索候補のハイライト表示。表示言語(en/ko)での一致はtPoke後の文字列に対してハイライトし、
+   * 和名一致時はそのまま元のマッチ位置でハイライトする。 */
   function hlSug(text, q) {
     const disp = tPoke(text);
+    if (disp !== text) {
+      const di = disp.toLowerCase().indexOf(q.toLowerCase());
+      if (di >= 0) return esc(disp.slice(0, di)) + '<mark>' + esc(disp.slice(di, di + q.length)) + '</mark>' + esc(disp.slice(di + q.length));
+      return esc(disp);
+    }
     const qk = toKatakana(q);
     const t = qk !== q ? qk : q;
     const i = text.indexOf(t);
-    if (i < 0 || disp !== text) return esc(disp);
+    if (i < 0) return esc(text);
     return esc(text.slice(0, i)) + '<mark>' + esc(text.slice(i, i + t.length)) + '</mark>' + esc(text.slice(i + t.length));
+  }
+  /** 和名・カタカナに加え、表示言語(en/ko)の翻訳名でも一致させる(でないとen/ko版でポケモン名を
+   * 入力してもヒットしない)。 */
+  function matchesQuery(name, q, qk) {
+    return name.includes(q) || name.includes(qk) || tPoke(name).toLowerCase().includes(q.toLowerCase());
   }
   const DEFG = (x) => (x === 0 ? '0' : x <= 0.25 ? '¼' : x < 0.5 ? '½' : x < 1 ? '½' : x >= 4 ? '×4' : x > 1 ? '×2' : '');
   const DEFC = (x) => (x === 0 ? 'df-imm' : x < 0.5 ? 'df-r2' : x < 1 ? 'df-r1' : x >= 4 ? 'df-w2' : x > 1 ? 'df-w1' : 'df-n');
@@ -1290,7 +1300,7 @@ const I18N = I18N_ALL[lang];
     const q = val.trim();
     if (!q) { sug.style.display = 'none'; return; }
     const qk = toKatakana(q);
-    const hits = core.species.filter((s) => s.n.includes(q) || s.n.includes(qk)).slice(0, 12);
+    const hits = core.species.filter((s) => matchesQuery(s.n, q, qk)).slice(0, 12);
     if (!hits.length) { sug.innerHTML = `<div class="sug-item added">${esc(I18N.noHit)}</div>`; sug.style.display = 'block'; return; }
     sug.innerHTML = hits.map((s) => `<div class="sug-item" data-sp="${esc(s.n)}">${icoImg(s.icon, s.n, '')}<span>${hlSug(s.n, q)}</span><span class="rk">${esc(I18N.rankLbl(s.rank))}</span></div>`).join('');
     sug.querySelectorAll('[data-sp]').forEach((it) => it.addEventListener('click', () => pickSpecies(it.dataset.sp)));
@@ -1953,7 +1963,7 @@ const I18N = I18N_ALL[lang];
     const q = val.trim();
     if (!q) { sug.style.display = 'none'; return; }
     const qk = toKatakana(q);
-    const hits = effectiveTargets().filter((g) => g.label.includes(q) || g.label.includes(qk)).slice(0, 12);
+    const hits = effectiveTargets().filter((g) => matchesQuery(g.label, q, qk)).slice(0, 12);
     const p = activeParty();
     const slot = p.slots[selectedIdx];
     if (!hits.length) { sug.innerHTML = `<div class="sug-item added">${esc(I18N.noHit)}</div>`; sug.style.display = 'block'; return; }

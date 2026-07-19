@@ -998,12 +998,23 @@ const I18N = I18N_ALL[lang];
   }
   function removeCore(id){ CORE = CORE.filter(p=>p.id!==id); renderCoreChips(); }
 
-  function hlSug(text, q){ const disp = tPoke(text); const qk=toKatakana(q); const t=qk!==q?qk:q; const i=text.indexOf(t); if(i<0||disp!==text) return esc(disp); return esc(text.slice(0,i))+'<mark>'+esc(text.slice(i,i+t.length))+'</mark>'+esc(text.slice(i+t.length)); }
+  function hlSug(text, q){
+    const disp = tPoke(text);
+    if(disp!==text){
+      const di = disp.toLowerCase().indexOf(q.toLowerCase());
+      if(di>=0) return esc(disp.slice(0,di))+'<mark>'+esc(disp.slice(di,di+q.length))+'</mark>'+esc(disp.slice(di+q.length));
+      return esc(disp);
+    }
+    const qk=toKatakana(q); const t=qk!==q?qk:q; const i=text.indexOf(t);
+    if(i<0) return esc(text);
+    return esc(text.slice(0,i))+'<mark>'+esc(text.slice(i,i+t.length))+'</mark>'+esc(text.slice(i+t.length));
+  }
   function onFilterInput(val){
     const sug = document.getElementById('core-sug'); _sugActive=-1;
     const q = val.trim(); if(!q){ sug.style.display='none'; return; }
     const qk = toKatakana(q);
-    const hits = SPECIES.filter(s=>s.label.includes(q)||s.label.includes(qk)).slice(0,12);
+    const ql = q.toLowerCase();
+    const hits = SPECIES.filter(s=>s.label.includes(q)||s.label.includes(qk)||tPoke(s.label).toLowerCase().includes(ql)).slice(0,12);
     if(!hits.length){ sug.innerHTML=`<div class="sug-item added">${I18N.noHit}</div>`; sug.style.display='block'; return; }
     sug.innerHTML = hits.map((s,i)=>{
       const already = CORE.some(p=>p.id===s.id);
