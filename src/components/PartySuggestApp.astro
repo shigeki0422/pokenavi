@@ -769,13 +769,23 @@ const I18N = I18N_ALL[lang];
   function tPoke(n){
     if(!n) return n;
     if(POKEMON_NAME_MAP[n]) return POKEMON_NAME_MAP[n];
-    if(n.startsWith('メガ')){
-      const rest = n.slice(2);
-      let base = POKEMON_NAME_MAP[rest], suf = '';
-      if(!base && (rest.endsWith('X')||rest.endsWith('Y'))){ suf = rest.slice(-1); base = POKEMON_NAME_MAP[rest.slice(0,-1)]; }
-      if(base) return lang==='ko' ? `메가${base}${suf}` : `Mega ${base}${suf?` ${suf}`:''}`;
+    let rest = n, prefix = '';
+    if(n.startsWith('メガ')){ prefix = 'メガ'; rest = n.slice(2); }
+    let base = POKEMON_NAME_MAP[rest], suf = '';
+    if(!base && (rest.endsWith('X')||rest.endsWith('Y'))){ suf = rest.slice(-1); base = POKEMON_NAME_MAP[rest.slice(0,-1)]; }
+    if(base){
+      if(prefix) return lang==='ko' ? `메가${base}${suf}` : `Mega ${base}${suf?` ${suf}`:''}`;
+      return `${base}${suf}`;
     }
     return n;
+  }
+  /** 想定パーティ相性/選出ガイドの対戦相手ラベルは「{ポケモン名}軸」「{名1}＋{名2}軸」の
+   * 固定パターン(scripts/_pick_archetypes*.py の label_of())。稀に手動命名の特殊ラベル
+   * (「サザングロス」等)が混じるが、パターンに一致しない場合はそのまま返す。 */
+  function tArchLabel(label){
+    if(!label || !label.endsWith('軸')) return label;
+    const names = label.slice(0,-1).split('＋').map(tPoke);
+    return lang==='ja' ? label : `${names.join('+')} ${I18N.coreTag}`;
   }
   const tMove = n => n && MOVE_NAME_MAP[n] || n;
   const tAbil = n => n && ABILITY_NAME_MAP[n] || n;
@@ -875,7 +885,7 @@ const I18N = I18N_ALL[lang];
   const col = c => ({'◎':'bg-cc','○':'bg-cb','△':'bg-cn','▲':'bg-cw','×':'bg-cx'}[c]||'bg-cn');
   function matchupHtml(res){
     const mu = res.matchup; if(!mu) return '';
-    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + mu.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(t.label)}</div></th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + mu.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(tPoke(t.label))}</div></th>`).join('') + `</tr>`;
     const rows = mu.rows.map(rw=>{
       const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(rw.mon,'mtx-ico')}<div class="mtx-name">${esc(tPoke(rw.mon))}</div></div></th>`;
       const cells = rw.cells.map((c,j)=>`<td class="${col(c.v)} mu-cell" data-mon="${esc(rw.mon)}" data-opp="${esc(mu.tops[j].sp)}">${c.v}${c.dep?'<span class="mu-dep">*</span>':''}</td>`).join('');
@@ -952,7 +962,7 @@ const I18N = I18N_ALL[lang];
       const cls = pct>=55?'adv-good':pct<45?'adv-bad':'adv-mid';
       const opp = x.opp.map(n=>icoImg(n,'dtl-ico')).join('');
       return `<tr>
-        <td><div class="arch-lb">${esc(x.label)}</div><div class="dtl-mem">${opp}</div></td>
+        <td><div class="arch-lb">${esc(tArchLabel(x.label))}</div><div class="dtl-mem">${opp}</div></td>
         <td><div class="advbar"><div class="advfill ${cls}" style="width:${pct}%"></div></div><div class="advtxt ${cls}">${pct}%</div></td></tr>`;
     }).join('');
     return `<div class="mtx-legend"><span>${I18N.archLegend}</span></div>
@@ -976,7 +986,7 @@ const I18N = I18N_ALL[lang];
         return `<div class="cnt-row">${I18N.vsRow.replace('{opp}',(v.opp3||[]).map(n=>icoImg(n,'cnt-ico')).join('')).replace('{band}',`<span class="gd-band ${bc}">${bl}</span>`)}${alt}</div>`;
       }).join('');
       return `<tr>
-        <td><div class="arch-lb">${esc(x.label)}</div><div class="dtl-mem">${opp}</div></td>
+        <td><div class="arch-lb">${esc(tArchLabel(x.label))}</div><div class="dtl-mem">${opp}</div></td>
         <td><div class="dtl-mem">${rec}</div><div class="gd-names">${recNames}</div>${vsRows?`<details class="gd-det"><summary>${I18N.guideDetSummary}</summary>${vsRows}</details>`:''}</td>
         <td><div class="advbar"><div class="advfill ${cls}" style="width:${pct}%"></div></div><div class="advtxt ${cls}">${pct}%</div></td></tr>`;
     }).join('');
@@ -1005,7 +1015,7 @@ const I18N = I18N_ALL[lang];
           else if(ru.cond && ru.cond.kind==='type') condChip = `<span class="sc-typechip">${I18N.chipType2(esc(ru.cond.value))}</span>`;
           else if(ru.cond && ru.cond.kind==='trait') condChip = `<span class="sc-typechip">${esc(ru.cond.label)}</span>`;
           const sel = (ru.selected||[]).map(a=>`<div class="sc-team"><div class="sc-team-ico">${(a.names||[]).map(n=>icoImg(n,'sc-ico-t')).join('')}</div>
-            <div class="sc-sub">${esc(a.opp)}</div></div>`).join('');
+            <div class="sc-sub">${esc(tArchLabel(a.opp))}</div></div>`).join('');
           return `<div class="sc-rule2">
             <div class="sc-summary">${esc(ru.summary)}</div>
             <div class="sc-rule-body">
@@ -1035,7 +1045,7 @@ const I18N = I18N_ALL[lang];
           }
           return `<div class="sc-team"><div class="sc-team-ico">${(t.names||[]).map(n=>
             `<span class="${hi.has(n)?'sc-hi':(dim?'sc-dim':'')}">${icoImg(n,'sc-ico-t')}</span>`).join('')}</div>
-            <div class="sc-sub">${esc(t.opp)} ${badge}</div></div>`;
+            <div class="sc-sub">${esc(tArchLabel(t.opp))} ${badge}</div></div>`;
         }).join('');
         let condChip = '';
         if(ru.cond && ru.cond.kind==='mon') condChip = `<span class="sc-typechip">${I18N.chipMonIn(esc(tPoke(ru.cond.value)))}</span>`;
@@ -1082,7 +1092,7 @@ const I18N = I18N_ALL[lang];
             ? `<div class="sc-swap">${a.out.map(n=>icoImg(n,'sc-ico-s')).join('')}<span class="sc-arr2">→</span>${a.in.map(n=>icoImg(n,'sc-ico-s')).join('')}</div>` : '';
           const altline = a.alt_trio ? `<div class="sc-alt">${I18N.refAlt} ${trio(a.alt_trio,'sc-mini')} ${pct(a.alt_wr)} ${gain}</div>` : '';
           return `<div class="sc-branch">
-            <div class="sc-col"><div class="sc-lbl">${I18N.oppTeamLbl(esc(a.opp))}</div>${trio(a.team&&a.team.length?a.team:a.opp3,'sc-opp sc-mini')}<div class="sc-sub">${I18N.oftenSends((a.opp3||[]).map(n=>esc(tPoke(n))).join('・'))}</div></div>
+            <div class="sc-col"><div class="sc-lbl">${I18N.oppTeamLbl(esc(tArchLabel(a.opp)))}</div>${trio(a.team&&a.team.length?a.team:a.opp3,'sc-opp sc-mini')}<div class="sc-sub">${I18N.oftenSends((a.opp3||[]).map(n=>esc(tPoke(n))).join('・'))}</div></div>
             <div class="sc-arr">▶</div>
             <div class="sc-col"><div class="sc-lbl">${I18N.thisTrioLbl}</div>${trio(a.trio)}<div class="sc-meta"><b>${pct(a.wr)}</b></div>${swap}${altline}</div>
           </div>`;
@@ -1090,7 +1100,7 @@ const I18N = I18N_ALL[lang];
     }
     if(s.caution){
       const alt = s.caution.alt?I18N.cautionAlt(trio(s.caution.alt,'sc-mini')):'';
-      html += `<div class="sc-caution">${I18N.caution(esc(s.caution.opp), trio(s.caution.opp3,'sc-mini'))}${alt}</div>`;
+      html += `<div class="sc-caution">${I18N.caution(esc(tArchLabel(s.caution.opp)), trio(s.caution.opp3,'sc-mini'))}${alt}</div>`;
     }
     if(s.hard && ((s.hard.teams||[]).length || (s.hard.mons||[]).length)){
       html += `<div class="sc-branch-hd">${I18N.hardOpp}</div><div class="sc-hard">`;
@@ -1101,21 +1111,21 @@ const I18N = I18N_ALL[lang];
       }
       if((s.hard.teams||[]).length){
         const whyRows = s.hard.teams.filter(t=>t.why&&t.why.length).map(t=>
-          `<div class="sc-sub">${I18N.hardWhy(esc(t.opp), t.why.map(n=>`<span class="sc-w">${icoImg(n,'sc-ico-s')}${esc(tPoke(n))}</span>`).join(''))}</div>`).join('');
+          `<div class="sc-sub">${I18N.hardWhy(esc(tArchLabel(t.opp)), t.why.map(n=>`<span class="sc-w">${icoImg(n,'sc-ico-s')}${esc(tPoke(n))}</span>`).join(''))}</div>`).join('');
         html += `<div class="sc-hard-row"><span class="sc-hard-lb">${I18N.hardTeams}</span>` +
-          s.hard.teams.map(t=>`<span class="sc-w">${esc(t.opp)} <b>${pct(t.wr)}</b></span>`).join('') +
-          `<div class="sc-sub">${I18N.hardTeamsSub(s.hard.teams[0]?I18N.hardBestFor(esc(s.hard.teams[0].opp), trio(s.hard.teams[0].trio,'sc-mini')):'')}</div>${whyRows}</div>`;
+          s.hard.teams.map(t=>`<span class="sc-w">${esc(tArchLabel(t.opp))} <b>${pct(t.wr)}</b></span>`).join('') +
+          `<div class="sc-sub">${I18N.hardTeamsSub(s.hard.teams[0]?I18N.hardBestFor(esc(tArchLabel(s.hard.teams[0].opp)), trio(s.hard.teams[0].trio,'sc-mini')):'')}</div>${whyRows}</div>`;
       }
       html += `</div>`;
     }
     if(s.best&&s.worst){
-      html += `<div class="sc-bw"><span class="sc-good">${I18N.bwGood(esc(s.best.opp), pct(s.best.wr))}</span><span class="sc-bad">${I18N.bwBad(esc(s.worst.opp), pct(s.worst.wr))}</span></div>`;
+      html += `<div class="sc-bw"><span class="sc-good">${I18N.bwGood(esc(tArchLabel(s.best.opp)), pct(s.best.wr))}</span><span class="sc-bad">${I18N.bwBad(esc(tArchLabel(s.worst.opp)), pct(s.worst.wr))}</span></div>`;
     }
     return html + `</div>`;
   }
   function firepowerHtml(res){
     const fp = res.firepower; if(!fp) return '';
-    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + fp.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(t.label)}</div></th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + fp.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(tPoke(t.label))}</div></th>`).join('') + `</tr>`;
     const rows = fp.rows.map(r=>{
       const cells = r.cells.map((c,j)=>{
         const tip = I18N.cellTip + (c.move?` (${I18N.assumedMove} ${tMove(c.move)})`:'');
@@ -1129,7 +1139,7 @@ const I18N = I18N_ALL[lang];
   const SPSYM = {win:'◎', may:'△', lose:'×'};
   function speedHtml(res){
     const sp = res.speed; if(!sp) return '';
-    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + sp.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(t.label)}</div></th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + sp.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(tPoke(t.label))}</div></th>`).join('') + `</tr>`;
     const rows = sp.rows.map(r=>{
       const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(r.mon,'mtx-ico')}<div class="mtx-name">${esc(tPoke(r.mon))}<br><span class="sp-val">S${r.spd}${r.scarf?'⚡':''}</span></div></div></th>`;
       const cells = r.cells.map((c,j)=>`<td class="${col(SPSYM[c])} sp-cell" data-mon="${esc(r.mon)}" data-opp="${esc(sp.tops[j].sp)}">${SPSYM[c]}</td>`).join('');
