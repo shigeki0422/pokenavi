@@ -38,7 +38,7 @@ export const POKEMON_NAME_EN: Record<string, string> = {
   // Common pokemon missing from party data
   'フシギバナ': 'Venusaur', 'カメックス': 'Blastoise', 'カビゴン': 'Snorlax',
   'プテラ': 'Aerodactyl', 'カイリュー': 'Dragonite', 'ヘラクロス': 'Heracross',
-  'ヤミラミ': 'Sableye', 'メタグロス': 'Metagross', 'フラエッテ': 'Floette',
+  'ヤミラミ': 'Sableye', 'メタグロス': 'Metagross', 'フラエッテ': 'Floette', 'ニャオニクス': 'Meowstic', 'ユキノオ': 'Abomasnow',
   'サーナイト': 'Gardevoir', 'エルレイド': 'Gallade', 'ミミロップ': 'Lopunny',
   'チャーレム': 'Medicham', 'ジャローダ': 'Serperior', 'エンペルト': 'Empoleon',
   'ゴウカザル': 'Infernape', 'ドダイトス': 'Torterra', 'メガニウム': 'Meganium',
@@ -115,7 +115,7 @@ export const POKEMON_NAME_KO: Record<string, string> = {
   // Common pokemon missing from party data
   'フシギバナ': '이상해꽃', 'カメックス': '거북왕', 'カビゴン': '잠만보',
   'プテラ': '프테라', 'カイリュー': '망나뇽', 'ヘラクロス': '헤라크로스',
-  'ヤミラミ': '깜놀', 'フラエッテ': '플라베베', 'サーナイト': '가디안',
+  'ヤミラミ': '깜놀', 'フラエッテ': '플라베베', 'サーナイト': '가디안', 'ニャオニクス': '냐오닉스', 'ユキノオ': '눈설왕',
   'エルレイド': '엘레이드', 'ミミロップ': '마릴리', 'チャーレム': '팬텀',
   'ジャローダ': '자로다', 'エンペルト': '엠페르트', 'ゴウカザル': '고우카자루',
   'ドダイトス': '토대부기', 'メガニウム': '메가니움', 'オーダイル': '오더일',

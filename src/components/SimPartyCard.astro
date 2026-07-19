@@ -19,7 +19,18 @@ const ABIL_MAP: Record<string, string> = lang === 'en' ? ABILITY_NAME_EN : lang 
 const NAT_MAP: Record<string, string>  = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
 const MOVE_MAP: Record<string, string> = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
 
-function tPoke(jp: string): string { return POKE_MAP[jp] ?? jp; }
+function tPoke(jp: string): string {
+  if (!jp) return jp;
+  if (POKE_MAP[jp]) return POKE_MAP[jp];
+  // メガ進化名は素体名+メガ接頭辞から動的に組み立てる(公式訳が存在しない独自メガ進化が大半のため)
+  if (jp.startsWith('メガ')) {
+    const rest = jp.slice(2);
+    let base = POKE_MAP[rest], suf = '';
+    if (!base && (rest.endsWith('X') || rest.endsWith('Y'))) { suf = rest.slice(-1); base = POKE_MAP[rest.slice(0, -1)]; }
+    if (base) return lang === 'ko' ? `메가${base}${suf}` : `Mega ${base}${suf ? ` ${suf}` : ''}`;
+  }
+  return jp;
+}
 function tAbil(jp: string): string { return ABIL_MAP[jp] ?? jp; }
 function tItem(jp: string): string {
   if (!jp) return jp;

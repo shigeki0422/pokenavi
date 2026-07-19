@@ -326,7 +326,19 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
     <script is:inline define:vars={{ I18N, NATURE_NAME_MAP, POKEMON_NAME_MAP, MOVE_NAME_MAP, ITEM_NAME_MAP, ABILITY_NAME_MAP, LANG: lang }}>
       const IS_MB = document.querySelector('main[data-simmode]')?.dataset.simmode === 'MB';
       const _IS_JA = LANG === 'ja';
-      function tPoke(n){ return POKEMON_NAME_MAP[n]||n; }
+      /** メガ進化名(「メガガブリアス」等)は辞書に個別登録せず、素体名+メガ接頭辞から動的に組み立てる
+       * (公式訳が存在しないポケモンチャンピオンズ独自メガ進化が大半のため)。 */
+      function tPoke(n){
+        if(!n) return n;
+        if(POKEMON_NAME_MAP[n]) return POKEMON_NAME_MAP[n];
+        if(n.startsWith('メガ')){
+          const rest = n.slice(2);
+          let base = POKEMON_NAME_MAP[rest], suf = '';
+          if(!base && (rest.endsWith('X')||rest.endsWith('Y'))){ suf = rest.slice(-1); base = POKEMON_NAME_MAP[rest.slice(0,-1)]; }
+          if(base) return LANG==='ko' ? `메가${base}${suf}` : `Mega ${base}${suf?` ${suf}`:''}`;
+        }
+        return n;
+      }
       function tMove(m){ return MOVE_NAME_MAP[m]||m; }
       function tItem(it){ if(!it||it==='—') return it; if(ITEM_NAME_MAP[it]) return ITEM_NAME_MAP[it]; var mX=/^(.+)ナイトX$/.exec(it),mY=/^(.+)ナイトY$/.exec(it),m0=/^(.+)ナイト$/.exec(it),base=mX||mY||m0; if(base){var en=POKEMON_NAME_MAP[base[1]]||POKEMON_NAME_MAP[base[1]+'ー'];if(en)return en+(mX?' X':mY?' Y':'')+'ite';} return it; }
       function tAbil(a){ return ABILITY_NAME_MAP[a]||a; }
