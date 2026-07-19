@@ -547,5 +547,3 @@ S10前後（S110）ではAS型（S121）が先手を取れていたS85前後の�
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [かくとう打点で対面有利を取れるメガルカリオのM-2考察](/blog/lucario-analysis-m2/)
 - [同じはがねアタッカー ハッサムのM-2考察](/blog/scizor-analysis-m2/)
-</content>
-</invoke>

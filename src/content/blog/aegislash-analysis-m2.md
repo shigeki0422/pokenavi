@@ -568,3 +568,7 @@ EVはHA振り（H32 A32）が主流で、HP・こうげきに厚く振ること�
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [同居率1位の高速ゴースト ゲンガーのM-2考察](/blog/gengar-analysis-m2/)
 - [同じはがねアタッカー ハッサムのM-2考察](/blog/scizor-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/aegislash/)**

@@ -535,5 +535,3 @@ HB型より物理一撃で落ちやすく、雨を撒く前に倒される展開
 - [雨下で火力が伸びるブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
 - [でんき技でペリッパーを縛るウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
 - [みずタイプの高速アタッカー スターミーのM-2考察](/blog/starmie-analysis-m2/)
-</content>
-</invoke>

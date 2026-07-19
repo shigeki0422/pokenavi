@@ -618,5 +618,3 @@ heroImage: '../../assets/hero-froslass-m2.png'
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [同速で上を取られる使用率3位 マスカーニャのM-2考察](/blog/meowscarada-analysis-m2/)
 - [はがね受けで撃ち合いに勝てない使用率2位 ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
-</content>
-</invoke>

@@ -777,4 +777,7 @@ M-4のガブリアスは使用率1位を維持しながら、以下の3点で技
 ---
 
 *関連記事：[ガブリアス考察 M-3](/blog/garchomp-analysis-m3/) / [メタグロス考察 M-4](/blog/metagross-analysis-m4/)*
-</content>
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/garchomp/)**

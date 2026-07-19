@@ -409,3 +409,7 @@ H32 B32振りでぼうぎょを最大化し、物理アタッカーからの先�
 
 - [使用率上位 ムクホークのM-3考察](/blog/staraptor-analysis-m3/)
 - [後続エース候補 メガメタグロスのM-3考察](/blog/metagross-analysis-m3/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/grimmsnarl/)**

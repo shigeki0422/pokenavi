@@ -523,3 +523,7 @@ S162以上の相手（ようき型メガムクホークS178等）に先手を取
 - [ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [ムクホークが苦手なライチュウ（Y）のM-3考察](/blog/raichu-y-analysis-m3/)
 - [使用率2位 ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-staraptor/)**

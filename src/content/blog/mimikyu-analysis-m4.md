@@ -507,4 +507,7 @@ HP計算: floor((種族値×2+31+EV×2)×50/100)+60
 ```
 
 </details>
-</content>
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mimikyu/)**

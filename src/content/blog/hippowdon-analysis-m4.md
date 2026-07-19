@@ -692,4 +692,7 @@ M-4のカバルドンは使用率3位に上昇し、M-3からの主な変化は�
 
 - [カバルドン考察 M-3](/blog/hippowdon-analysis-m3/)
 - [ガブリアス考察 M-3](/blog/garchomp-analysis-m3/)
-</content>
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/hippowdon/)**

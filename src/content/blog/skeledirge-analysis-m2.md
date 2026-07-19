@@ -569,3 +569,7 @@ HB型がルカリオ・ハッサム等の物理つるぎのまいエースを止
 - [てんねんで止められる側 ルカリオのM-2考察](/blog/lucario-analysis-m2/)
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [苦手なみず枠 ウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/skeledirge/)**

@@ -567,5 +567,3 @@ S110はようき最大振りでS約178となり、ガブリアス（S169）・�
 - [同じかくとうアタッカー メガルカリオのM-2考察](/blog/lucario-analysis-m2/)
 - [天敵となるゴースト枠 ゲンガーのM-2考察](/blog/gengar-analysis-m2/)
 - [弱点を突ける高速地面枠 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
-</content>
-</invoke>

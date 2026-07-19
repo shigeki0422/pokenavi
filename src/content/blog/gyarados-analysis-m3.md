@@ -659,3 +659,7 @@ M-3のギャラドスはM-2と技構成が大きく変化しており、じし�
 - [【ポケモンチャンピオンズ】メガギャラドス考察 M-2](/blog/gyarados-analysis-m2/)
 - [【ポケモンチャンピオンズ】ガブリアス考察 M-3](/blog/garchomp-analysis-m3/)
 - [【ポケモンチャンピオンズ】ミミッキュ考察 M-3](/blog/mimikyu-analysis-m3/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/gyarados/)**

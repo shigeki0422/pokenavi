@@ -555,3 +555,7 @@ CS振りでとくこう・すばやさを最大化し、積み前から火力と
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [いわ×4を突くキラフロルのM-2考察](/blog/kiraflosure-analysis-m2/)
 - [積み前に削られる相手 ギャラドスのM-2考察](/blog/gyarados-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/volcarona/)**

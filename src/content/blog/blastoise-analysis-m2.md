@@ -594,3 +594,7 @@ M-2環境では、波動3種がガブリアス・キラフロル・ドドゲザ�
 - [天敵となるくさアタッカー マスカーニャのM-2考察](/blog/meowscarada-analysis-m2/)
 - [でんきで弱点を突くウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
 - [同じみず特殊アタッカー アシレーヌのM-2考察](/blog/primarina-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-blastoise/)**

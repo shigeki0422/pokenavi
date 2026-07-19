@@ -610,5 +610,7 @@ HD型が特殊ほのお・みず・でんきの受け出しに強いのに対し
 - [天敵となる飛行はがね アーマーガアのM-2考察](/blog/corviknight-analysis-m2/)
 - [同じ高速水アタッカー ウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
 - [受けにくい使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
-</content>
-</invoke>
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-venusaur/)**

@@ -672,3 +672,7 @@ M-2環境では使用率2位のブリジュラス（はがね/ドラゴン）に
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [単体では受けにくいギャラドスのM-2考察](/blog/gyarados-analysis-m2/)
 - [同じはがねアタッカー ハッサムのM-2考察](/blog/scizor-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-lucario/)**

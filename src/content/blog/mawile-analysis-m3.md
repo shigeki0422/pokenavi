@@ -560,3 +560,7 @@ S実数値102（いじっぱりS無振り）で環境上位の高速枠（ガブ
 - [メガムクホークのM-3考察 使用率と立ち回り](/blog/staraptor-analysis-m3/)
 - [メガバシャーモのM-3考察 ほのお/かくとうの型別解説](/blog/blaziken-analysis-m3/)
 - [メガメタグロスのM-3考察 はがね枠の採用率と立ち回り](/blog/metagross-analysis-m3/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-mawile/)**

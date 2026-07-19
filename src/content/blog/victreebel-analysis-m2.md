@@ -629,5 +629,3 @@ heroImage: '../../assets/hero-victreebel-m2.png'
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [弱点ほのお・ひこうで上を取る リザードンのM-2考察](/blog/charizard-y-analysis-m2/)
 - [こおり技で上を取るマスカーニャのM-2考察](/blog/meowscarada-analysis-m2/)
-</content>
-</invoke>

@@ -536,3 +536,7 @@ HP120と高めの数値を持ちますが、ぼうぎょ65・とくぼう75と�
 - [同居率1位 カバルドンの相方として見るガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [同居率2位 ルカリオのM-2考察](/blog/lucario-analysis-m2/)
 - [同じみず軸アタッカー ギャラドスのM-2考察](/blog/gyarados-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/basculegion/)**

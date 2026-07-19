@@ -525,3 +525,7 @@ draft: false
 
 - [使用率上位 ムクホークのM-3考察](/blog/staraptor-analysis-m3/)
 - [使用率2位 ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/gholdengo/)**

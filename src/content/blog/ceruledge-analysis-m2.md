@@ -474,3 +474,7 @@ EV振りは「AS + hb」41.4%、「AS + h」20.5%、「AS + hd」11.1%と、い�
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [同じゴースト先制アタッカー ギルガルドのM-2考察](/blog/aegislash-analysis-m2/)
 - [起点を潰す砂・ステロ枠 カバルドンのM-2考察](/blog/hippowdon-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/ceruledge/)**

@@ -462,3 +462,7 @@ draft: false
 
 - [使用率上位 ムクホークのM-3考察](/blog/staraptor-analysis-m3/)
 - [くさタイプのメガジュカインのM-3考察](/blog/sceptile-analysis-m3/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-swampert/)**

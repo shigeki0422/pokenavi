@@ -617,3 +617,7 @@ M-4のメタグロスは使用率4位を維持しながら、わんぱく性格�
 ---
 
 *関連記事：[アシレーヌ考察 M-3](/blog/primarina-analysis-m3/)*
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-metagross/)**

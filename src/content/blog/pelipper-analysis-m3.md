@@ -386,3 +386,7 @@ M-2のペリッパーはオボンのみ54.0%で「自身が場に留まって雨
 - [ラグラージ考察 M-3](/blog/lagoon-analysis-m3/)（同居率1位のパートナー）
 - [ガブリアス考察 M-3](/blog/garchomp-analysis-m3/)
 - [ミミッキュ考察 M-3](/blog/mimikyu-analysis-m3/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/pelipper/)**

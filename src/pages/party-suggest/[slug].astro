@@ -5,6 +5,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PartySuggestApp from '../../components/PartySuggestApp.astro';
 import rankingData from '../../data/ranking.json';
+import articleMeta from '../../data/article-meta.json';
 
 export async function getStaticPaths() {
   const pokemonPages = await getCollection('pokemon');
@@ -21,6 +22,22 @@ export async function getStaticPaths() {
     if (p.dates[latestDate]) rankMap[p.name] = p.dates[latestDate].rank;
   }
 
+  // 種族名(和名)→ 最新シーズンの考察記事slug。下書き除外・シーズン番号最大を採用。
+  const blogPosts = await getCollection('blog', (p) => !p.data.draft);
+  const articleBySp: Record<string, string> = {};
+  const articleSeasonBySp: Record<string, number> = {};
+  for (const post of blogPosts) {
+    const meta = (articleMeta as any)[post.id];
+    const name = meta?.name;
+    if (!name) continue;
+    const m = /-m(\d+)$/.exec(post.id);
+    const season = m ? parseInt(m[1], 10) : 0;
+    if (!(name in articleSeasonBySp) || season > articleSeasonBySp[name]) {
+      articleSeasonBySp[name] = season;
+      articleBySp[name] = post.id;
+    }
+  }
+
   const res = await fetch('https://pokenavi-suggest-799947701075.asia-northeast1.run.app/species');
   const species: { label: string; sp: string; mega: string; rank: number }[] = await res.json();
 
@@ -33,13 +50,13 @@ export async function getStaticPaths() {
     const slug = s.mega ? `mega-${baseSlug}` : baseSlug;
     paths.push({
       params: { slug },
-      props: { label: s.label, sp: s.sp, rank },
+      props: { label: s.label, sp: s.sp, rank, baseSlug, isMega: !!s.mega, articleSlug: articleBySp[s.sp] ?? null },
     });
   }
   return paths;
 }
 
-const { label, sp, rank } = Astro.props;
+const { label, sp, rank, baseSlug, isMega, articleSlug } = Astro.props;
 const siteUrl = 'https://pokenavi.jp';
 const title = `${label}軸 構築提案 M-4 | ポケモンチャンピオンズ 軸から簡単構築(パーティ提案)`;
 const rankText = rank ? `使用率${rank}位の` : '';
@@ -55,15 +72,41 @@ const jsonLd = {
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
   author: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
 };
+
+/** ツール本体はJS実行後にAPIから提案を取得して描画するため、初期HTMLがほぼ空の
+ * まま(クローラー向けの評価材料が乏しい)問題があった。ビルド時に既に持っている
+ * 使用率順位・考察記事の有無から、その軸固有の静的な導入文を追加する。 */
+const introParts: string[] = [];
+introParts.push(
+  rank
+    ? `${label}は現環境で使用率${rank}位${isMega ? '（メガ進化枠）' : ''}のポケモンです。`
+    : `${label}を軸にしたパーティ構築です。`
+);
+introParts.push(`${label}を指定すると、シミュレーションが残り5枠を自動補完し、バランスの良いパーティを複数提案します。各ポケモンの役割、使用率上位30体との攻撃・防御・素早さ・1v1相性、想定勝率まで診断できます。`);
+const introText = introParts.join('');
 ---
 
 <html lang="ja">
   <head>
     <BaseHead title={title} description={description} imageUrl="/og-image.png" />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <style>
+      .ps-intro { max-width: 900px; margin: 1.2em auto 0; padding: 0 1em; }
+      .ps-intro p { font-size: .88rem; color: rgb(var(--gray-dark)); line-height: 1.75; margin: 0 0 .5em; }
+      .ps-intro .ps-links { display: flex; flex-wrap: wrap; gap: .6em; font-size: .84rem; }
+      .ps-intro .ps-links a { color: var(--accent); text-decoration: none; font-weight: 700; }
+      .ps-intro .ps-links a:hover { text-decoration: underline; }
+    </style>
   </head>
   <body>
     <Header />
+    <div class="ps-intro">
+      <p>{introText}</p>
+      <div class="ps-links">
+        {baseSlug && <a href={`/pokemon/${baseSlug}/`}>→ {label}の使用率・技採用率データを見る</a>}
+        {articleSlug && <a href={`/blog/${articleSlug}/`}>→ {label}の考察記事を読む</a>}
+      </div>
+    </div>
     <PartySuggestApp preCoreLabel={label} />
     <Footer />
   </body>

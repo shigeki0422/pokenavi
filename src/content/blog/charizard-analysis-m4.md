@@ -584,3 +584,7 @@ M-4のリザードンは使用率11位を維持しつつ、メガリザードナ
 ---
 
 *関連記事：[メガメタグロス考察 M-4](/blog/metagross-analysis-m4/)*
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-charizard/)**
