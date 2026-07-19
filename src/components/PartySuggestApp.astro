@@ -18,6 +18,22 @@ const TYPEICON: Record<string, [string,string]> = {ノーマル:['00','normal'],
 const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuki.png',こだわりスカーフ:'item-0287-scarf.png',オボンのみ:'item-0158-obon.png',ラムのみ:'item-0157-ram.png',ヤチェのみ:'item-0188-yache.png',ハバンのみ:'item-0197-haban.png'};
 
 const POKEMON_NAME_MAP = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
+/** preCoreLabel(軸ポケモン和名)はSPECIES一覧との照合に和名のまま必要なため、
+ * 表示専用の翻訳済みラベルを別途用意する(タイトル表示にのみ使う)。 */
+function tPokeLabel(n?: string) {
+  if (!n) return n;
+  if (POKEMON_NAME_MAP[n]) return POKEMON_NAME_MAP[n];
+  let rest = n, prefix = '';
+  if (n.startsWith('メガ')) { prefix = 'メガ'; rest = n.slice(2); }
+  let base = POKEMON_NAME_MAP[rest], suf = '';
+  if (!base && (rest.endsWith('X') || rest.endsWith('Y'))) { suf = rest.slice(-1); base = POKEMON_NAME_MAP[rest.slice(0, -1)]; }
+  if (base) {
+    if (prefix) return lang === 'ko' ? `메가${base}${suf}` : `Mega ${base}${suf ? ` ${suf}` : ''}`;
+    return `${base}${suf}`;
+  }
+  return n;
+}
+const preCoreLabelDisplay = tPokeLabel(preCoreLabel);
 const MOVE_NAME_MAP = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
 const ABILITY_NAME_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
 const ITEM_NAME_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
@@ -91,7 +107,7 @@ const I18N_ALL = {
     omakase: 'おまかせ', importName: label => `${label}軸 かんたん構築`, rankLbl: n => `使用${n}位`,
   },
   en: {
-    title: preCoreLabel ? `Quick Build from ${preCoreLabel} — M-4` : 'M-4 Quick Build from Core',
+    title: preCoreLabel ? `Quick Build from ${preCoreLabelDisplay} — M-4` : 'M-4 Quick Build from Core',
     lead: 'Specify a Pokémon (or Pokémon) to build around, and the simulator suggests a balanced party — with each member\'s role, team stats, and 1v1 matchups against the top usage ranks.',
     note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
     corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
@@ -155,7 +171,7 @@ const I18N_ALL = {
     omakase: 'auto-pick', importName: label => `${label} core quick build`, rankLbl: n => `Rank #${n}`,
   },
   ko: {
-    title: preCoreLabel ? `${preCoreLabel} 축 M-4 축으로 간단 구성` : 'M-4 축으로 간단 구성',
+    title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-4 축으로 간단 구성` : 'M-4 축으로 간단 구성',
     lead: '축으로 삼고 싶은 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다. 각 포켓몬의 역할·파티 통계·사용률 상위와의 1v1 상성까지 확인할 수 있습니다.',
     note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
     corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
@@ -533,7 +549,7 @@ const I18N = I18N_ALL[lang];
   .soon-badge{display:inline-block;background:#eef2ff;color:#3730a3;font-weight:800;font-size:.9rem;border-radius:9999px;padding:.35em 1.1em;margin-bottom:.6em}
 </style>
 
-<script is:inline define:vars={{ ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, preCoreLabel, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
+<script is:inline define:vars={{ ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, preCoreLabel, preCoreLabelDisplay, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
   /** I18N_ALL は関数(フォーマッタ)を値に含むため、Astroのdefine:varsはJSON化の過程で
    * 関数プロパティを黙って落としてしまう(define:varsはprops→スクリプトへJSON経由で注入される)。
    * そのためI18N_ALLはフロントマター側と同じ内容をスクリプト内に直接定義し、defineVars経由では渡さない。 */
@@ -612,7 +628,7 @@ const I18N = I18N_ALL[lang];
       yes: '有', no: '無',
     },
     en: {
-      title: preCoreLabel ? `Quick Build from ${preCoreLabel} — M-4` : 'M-4 Quick Build from Core',
+      title: preCoreLabel ? `Quick Build from ${preCoreLabelDisplay} — M-4` : 'M-4 Quick Build from Core',
       lead: 'Specify a Pokémon (or Pokémon) to build around, and the simulator suggests a balanced party — with each member\'s role, team stats, and 1v1 matchups against the top usage ranks.',
       note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
       corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
@@ -685,7 +701,7 @@ const I18N = I18N_ALL[lang];
       yes: 'Yes', no: 'No',
     },
     ko: {
-      title: preCoreLabel ? `${preCoreLabel} 축 M-4 축으로 간단 구성` : 'M-4 축으로 간단 구성',
+      title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-4 축으로 간단 구성` : 'M-4 축으로 간단 구성',
       lead: '축으로 삼고 싶은 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다. 각 포켓몬의 역할·파티 통계·사용률 상위와의 1v1 상성까지 확인할 수 있습니다.',
       note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
       corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
@@ -1359,11 +1375,15 @@ const I18N = I18N_ALL[lang];
     finally{ clearInterval(timer); go.disabled = false; go.classList.remove('loading'); }
   }
   document.getElementById('go').addEventListener('click', run);
-  if (preCoreLabel) {
+  /** en/ko版には軸ごとの静的プリセットページ(/party-suggest/{slug}/)が存在しないため、
+   * ポケモン情報ページのCTAは代わりに ?core=軸ポケモン和名 を付けてこの汎用ページへ誘導する。
+   * ja版は静的プリセットページ側のpreCoreLabelプロパティを優先する。 */
+  const _preCore = preCoreLabel || new URLSearchParams(location.search).get('core');
+  if (_preCore) {
     const _waitForSpecies = setInterval(() => {
       if (!SPECIES.length) return;
       clearInterval(_waitForSpecies);
-      const v = SPECIES.find(s => s.label === preCoreLabel);
+      const v = SPECIES.find(s => s.label === _preCore);
       if (v) { addCore(v.id); run(); }
     }, 100);
   }

@@ -85,7 +85,7 @@ const displayName = (n: string) => nameMap[n] ?? n;
       )}
     </div>
     <p class="mu-note">{T.note}</p>
-    {lang === 'ja' && <a class="mu-cta" href="/party-builder/">{T.cta}</a>}
+    <a class="mu-cta" href={`${pfx}/party-builder/`}>{T.cta}</a>
   </section>
 )}
 

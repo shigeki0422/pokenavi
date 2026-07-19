@@ -31,18 +31,21 @@ const pokemonSlugIdx = pathParts.findIndex(p => p === 'pokemon');
 const pokemonSlug = pokemonSlugIdx >= 0 ? pathParts[pokemonSlugIdx + 1] : '';
 const pfx = lang === 'en' ? '/en' : lang === 'ko' ? '/ko' : '';
 const psSlugSet = new Set(partySuggestSlugs as string[]);
-const hasPartySuggest = lang === 'ja' && !!pokemonSlug && psSlugSet.has(pokemonSlug);
-const hasMegaPartySuggest = lang === 'ja' && !!pokemonSlug && psSlugSet.has(`mega-${pokemonSlug}`);
+const hasPartySuggest = !!pokemonSlug && psSlugSet.has(pokemonSlug);
+const hasMegaPartySuggest = !!pokemonSlug && psSlugSet.has(`mega-${pokemonSlug}`);
 const MOVE_MAP = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
 const ABILITY_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
 const ITEM_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
 const NATURE_MAP = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
 const POKEMON_MAP = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
 const T = {
-  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる' },
-  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', },
-  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로', hubAnalysis: '📖 분석 기사 읽기', hubWatch: '🎬 상위 구성 대전 관전', hubBuild: '⚔️ 파티에 추가' },
+  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる', quickBuild: (n: string) => `${n}を軸にした簡単構築`, quickBuildMega: (n: string) => `メガ${n}を軸にした簡単構築` },
+  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', quickBuild: (n: string) => `Quick Build from ${n}`, quickBuildMega: (n: string) => `Quick Build from Mega ${n}` },
+  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로', hubAnalysis: '📖 분석 기사 읽기', hubWatch: '🎬 상위 구성 대전 관전', hubBuild: '⚔️ 파티에 추가', quickBuild: (n: string) => `${n} 축으로 간단 구성`, quickBuildMega: (n: string) => `메가${n} 축으로 간단 구성` },
 }[lang];
+const pokemonNameDisp = pokemonName ? (POKEMON_MAP[pokemonName] ?? pokemonName) : pokemonName;
+const quickBuildHref = lang === 'ja' ? `/party-suggest/${pokemonSlug}/` : `${pfx}/party-suggest/?core=${encodeURIComponent(pokemonName ?? '')}`;
+const quickBuildMegaHref = lang === 'ja' ? `/party-suggest/mega-${pokemonSlug}/` : `${pfx}/party-suggest/?core=${encodeURIComponent('メガ' + (pokemonName ?? ''))}`;
 const hreflangAlternates = pokemonSlug ? [
   { lang: 'ja', url: `${siteUrl}/pokemon/${pokemonSlug}/` },
   { lang: 'en', url: `${siteUrl}/en/pokemon/${pokemonSlug}/` },
@@ -310,14 +313,14 @@ const breadcrumbJsonLd = {
 					{(hasPartySuggest || hasMegaPartySuggest) && (
 						<div class="ps-cta-wrap">
 							{hasPartySuggest && (
-								<a href={`/party-suggest/${pokemonSlug}/`} class="ps-cta">
-									<span>{pokemonName}を軸にした簡単構築</span>
+								<a href={quickBuildHref} class="ps-cta">
+									<span>{T.quickBuild(pokemonNameDisp)}</span>
 									<span class="ps-cta-arrow">→</span>
 								</a>
 							)}
 							{hasMegaPartySuggest && (
-								<a href={`/party-suggest/mega-${pokemonSlug}/`} class="ps-cta">
-									<span>メガ{pokemonName}を軸にした簡単構築</span>
+								<a href={quickBuildMegaHref} class="ps-cta">
+									<span>{T.quickBuildMega(pokemonNameDisp)}</span>
 									<span class="ps-cta-arrow">→</span>
 								</a>
 							)}
