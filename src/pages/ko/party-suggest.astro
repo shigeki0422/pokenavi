@@ -1,0 +1,39 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PartySuggestApp from '../../components/PartySuggestApp.astro';
+
+const title = '포켓몬 챔피언스 M-4 축으로 간단 구성 | 축 포켓몬으로 팀을 자동 제안';
+const description = '포켓몬 챔피언스 M-4 시즌 대응. 축으로 삼고 싶은 포켓몬을 지정하기만 하면 현재 메타에 맞는 6마리를 자동으로 제안합니다. 각 포켓몬의 역할·선출 가이드·사용률 TOP30과의 1v1 상성을 AI 시뮬레이션 결과로 진단합니다. (도구 화면은 일본어로 표시됩니다.)';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: '포케나비 축으로 간단 구성',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: siteUrl + '/ko/party-suggest/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: '포케나비', url: siteUrl },
+};
+---
+
+<html lang="ko">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <PartySuggestApp />
+    <div style="max-width:860px;margin:0 auto;padding:0 1.2rem 3rem;text-align:center">
+      <p style="font-size:.85rem;color:rgb(var(--gray));margin-bottom:.6rem">6마리가 정해졌다면 세부 빌드를 조정해 보세요</p>
+      <a href="/ko/party-builder/" style="display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.4rem;background:rgb(var(--accent));color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem">
+        파티 공방에서 빌드 미세 조정하기 →
+      </a>
+    </div>
+    <Footer />
+  </body>
+</html>

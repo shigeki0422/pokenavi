@@ -1,0 +1,33 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SimulatorApp from '../../components/SimulatorApp.astro';
+
+const title = 'M-B Top-Build Simulator | Win Rate, Selection & 1v1 Matchups';
+const description = 'Battle simulation using top-ranker team data from Pokémon Champions Season M-B. Just pick a party to analyze win rate, selection rate, and Pokémon 1v1 matchups from AI battle results.';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'PokeNavi M-B Simulator',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: siteUrl + '/en/simulator-mb/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'PokeNavi', url: siteUrl },
+};
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <SimulatorApp mode="MB" />
+    <Footer />
+  </body>
+</html>

@@ -1,0 +1,146 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const title = '포켓몬 챔피언스 파티 구성 도구 | 축으로 간단 구성・파티 공방';
+const description = '포켓몬 챔피언스의 파티 구성을 지원하는 2가지 AI 시뮬레이션 도구. 축 포켓몬으로부터 나머지 5마리를 자동 제안하는 "축으로 간단 구성"과, 6마리의 빌드를 1포인트 단위로 미세 조정할 수 있는 "파티 공방"을 용도별로 소개합니다.';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: '포케나비 파티 구성',
+  description,
+  url: siteUrl + '/ko/party-building/',
+  isPartOf: { '@type': 'WebSite', name: '포케나비', url: siteUrl },
+  hasPart: [
+    {
+      '@type': 'SoftwareApplication',
+      name: '축으로 간단 구성',
+      url: siteUrl + '/ko/party-suggest/',
+      applicationCategory: 'GameApplication',
+      operatingSystem: 'Web',
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: '파티 공방',
+      url: siteUrl + '/ko/party-builder/',
+      applicationCategory: 'GameApplication',
+      operatingSystem: 'Web',
+    },
+  ],
+};
+---
+
+<html lang="ko">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <style>
+      main { max-width: 900px; margin: 0 auto; padding: 2em 1.2em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.7rem; margin: 0 0 .5em; }
+      .lead { color: rgb(var(--gray)); font-size: .96rem; line-height: 1.8; margin: 0 0 1.8em; max-width: 640px; }
+      .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+      }
+      @media (max-width: 720px) {
+        .cards { grid-template-columns: 1fr; }
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgb(var(--gray-light));
+        border-radius: 12px;
+        padding: 1.4rem 1.3rem;
+        background: #fff;
+        transition: box-shadow .15s, border-color .15s;
+      }
+      .card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-color: rgb(var(--gray)); }
+      .card-head { display: flex; align-items: center; gap: .5em; margin-bottom: .4em; flex-wrap: wrap; }
+      .card h2 { font-size: 1.15rem; margin: 0; color: rgb(var(--black)); }
+      .badge {
+        font-size: .62rem;
+        font-weight: 700;
+        background: #fef3c7;
+        color: #b45309;
+        border-radius: 9999px;
+        padding: .15em .6em;
+        letter-spacing: .02em;
+      }
+      .card .for-whom {
+        font-size: .82rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin: .2em 0 .6em;
+      }
+      .card p.desc { font-size: .9rem; line-height: 1.75; margin: 0 0 .6em; flex-grow: 1; }
+      .card ul { margin: 0 0 1em; padding-left: 1.2em; font-size: .85rem; line-height: 1.7; color: rgb(var(--gray-dark)); }
+      .cta {
+        display: inline-block;
+        text-align: center;
+        padding: .7em 1.4em;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: .92rem;
+        margin-top: auto;
+      }
+      .cta:hover { background: var(--accent-dark); }
+      .usage-tip {
+        margin-top: 1.8rem;
+        background: #eef2ff;
+        border-left: 3px solid var(--accent);
+        border-radius: 8px;
+        padding: .9em 1.1em;
+        font-size: .88rem;
+        line-height: 1.7;
+        color: rgb(var(--gray-dark));
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>파티 구성</h1>
+      <p class="lead">포켓몬 챔피언스의 파티 구성을 지원하는, AI 시뮬레이션 기반의 2가지 도구입니다. 목적에 맞게 사용하면 초안 작성부터 세부 조정까지 모두 커버할 수 있습니다.</p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-head">
+            <h2>축으로 간단 구성</h2>
+          </div>
+          <p class="for-whom">먼저 전체 그림을 원하는 분께</p>
+          <p class="desc">축으로 삼고 싶은 포켓몬을 1마리 정하기만 하면, AI가 메타에 맞는 나머지 5마리를 자동으로 제안합니다.</p>
+          <ul>
+            <li>상성・스피드 관계를 고려한 자동 제안</li>
+            <li>선출 가이드 포함</li>
+            <li>사용률 TOP30과의 1v1 상성 진단</li>
+          </ul>
+          <a class="cta" href="/ko/party-suggest">축으로 간단 구성 사용하기 →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>파티 공방</h2>
+            <span class="badge">NEW</span>
+          </div>
+          <p class="for-whom">자신의 구성을 매일 다듬고 싶은 분께</p>
+          <p class="desc">6마리의 빌드(지닌 물건・특성・성격・EV・기술)를 1포인트 단위로 자유롭게 미세 조정할 수 있습니다.</p>
+          <ul>
+            <li>가상 상대와의 스피드 비교・1v1 판정</li>
+            <li>주는 대미지・받는 대미지 실시간 표시</li>
+            <li>파티 저장・제안・EV 역산</li>
+          </ul>
+          <a class="cta" href="/ko/party-builder">파티 공방 사용하기 →</a>
+        </div>
+      </div>
+
+      <p class="usage-tip">먼저 "축으로 간단 구성"으로 초안을 만들고, "파티 공방"에서 가상 상대에 맞춰 다듬는 것을 추천합니다. 도구 화면 자체는 일본어로 표시됩니다.</p>
+    </main>
+    <Footer />
+  </body>
+</html>

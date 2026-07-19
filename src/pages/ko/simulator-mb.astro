@@ -1,0 +1,33 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SimulatorApp from '../../components/SimulatorApp.astro';
+
+const title = 'M-B 상위 구성 시뮬레이터 | 승률·선출·1v1 상성 진단';
+const description = '포켓몬 챔피언스 M-B 시즌 상위 랭커 구성 데이터로 대전 시뮬레이션. 파티를 선택하기만 하면 승률·선출률·포켓몬 1v1 상성을 AI 대전 결과로부터 분석합니다.';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: '포케나비 M-B 시뮬레이터',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: siteUrl + '/ko/simulator-mb/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: '포케나비', url: siteUrl },
+};
+---
+
+<html lang="ko">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <SimulatorApp mode="MB" />
+    <Footer />
+  </body>
+</html>

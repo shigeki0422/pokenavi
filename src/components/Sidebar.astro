@@ -19,7 +19,7 @@ const NAV = {
     home: 'Home',
     navResearch: 'Research', navRead: 'Read', navWatch: 'Watch', navBuild: 'Battle',
     watchParent: 'AI Battle Replays', simA: 'M-A', simB: 'M-B', soonTitle: 'Coming soon',
-    buildParent: 'Team Building', quickBuild: 'Quick Build from Core',
+    buildParent: 'Team Building', quickBuild: 'Quick Build from Core', detailBuild: 'Party Workshop',
     pokemon: 'Pokémon Data', ranking: 'Usage Ranking', blog: 'Analysis',
     m3: 'M-3 Season', m2: 'M-2 Season', about: 'About', privacy: 'Privacy Policy',
   },
@@ -27,7 +27,7 @@ const NAV = {
     home: '홈',
     navResearch: '알아보기', navRead: '읽기', navWatch: '보기', navBuild: '배틀',
     watchParent: '가상 대전 관전', simA: 'M-A', simB: 'M-B', soonTitle: '준비 중',
-    buildParent: '파티 구성', quickBuild: '축으로 간단 구성',
+    buildParent: '파티 구성', quickBuild: '축으로 간단 구성', detailBuild: '파티 공방',
     pokemon: '포켓몬 정보', ranking: '사용률 랭킹', blog: '공략 기사',
     m3: 'M-3 시즌', m2: 'M-2 시즌', about: '운영자 정보', privacy: '개인정보 처리방침',
   },
@@ -42,10 +42,10 @@ const isSimAActive = path === `${pfx}/simulator` || path === `${pfx}/simulator/`
 const isSimBActive = isActive(`${pfx}/simulator-mb`);
 const isWatchParentActive = isActive(`${pfx}/battle-simulator`);
 const isQuickBuildActive = isActive(`${pfx}/party-suggest`);
-const isDetailBuildActive = isActive('/party-builder');
-const isPartyBuildingActive = isActive('/party-building');
-const isBuildParentActive = lang === 'ja' ? isPartyBuildingActive : isQuickBuildActive;
-const buildParentHref = lang === 'ja' ? '/party-building' : `${pfx}/party-suggest`;
+const isDetailBuildActive = isActive(`${pfx}/party-builder`);
+const isPartyBuildingActive = isActive(`${pfx}/party-building`);
+const isBuildParentActive = isPartyBuildingActive;
+const buildParentHref = `${pfx}/party-building`;
 const brandHref = pfx ? `${pfx}/` : '/';
 const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : SITE_TITLE;
 
@@ -91,7 +91,7 @@ const langUrls = {
 		<div class="sb-verb-caption">⚔️ {NAV.navBuild}</div>
 		<a href={buildParentHref} class:list={['sb-link', { active: isBuildParentActive }]}>{NAV.buildParent}</a>
 		<a href={`${pfx}/party-suggest`} class:list={['sb-sublink', { active: isQuickBuildActive }]}>{NAV.quickBuild}<span class="season-badge new">NEW</span></a>
-		{lang === 'ja' && <a href="/party-builder" class:list={['sb-sublink', { active: isDetailBuildActive }]}>{NAV.detailBuild}<span class="season-badge new">NEW</span></a>}
+		<a href={`${pfx}/party-builder`} class:list={['sb-sublink', { active: isDetailBuildActive }]}>{NAV.detailBuild}<span class="season-badge new">NEW</span></a>
 	</nav>
 	<div class="sb-foot">
 		<div class="lang-switcher">

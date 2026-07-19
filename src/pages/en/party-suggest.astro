@@ -1,0 +1,39 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PartySuggestApp from '../../components/PartySuggestApp.astro';
+
+const title = 'Pokémon Champions M-4 Quick Build from Core | Auto-Generate a Team Around Your Core Pick';
+const description = 'For Pokémon Champions Season M-4. Just specify one core Pokémon and get an auto-suggested team of 6 suited to the current meta. Each Pokémon\'s role, selection guide, and 1v1 matchups against the Top 30 usage picks are diagnosed from AI simulation results. (Tool interface is in Japanese.)';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'PokeNavi Quick Build from Core',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: siteUrl + '/en/party-suggest/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'PokeNavi', url: siteUrl },
+};
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <PartySuggestApp />
+    <div style="max-width:860px;margin:0 auto;padding:0 1.2rem 3rem;text-align:center">
+      <p style="font-size:.85rem;color:rgb(var(--gray));margin-bottom:.6rem">Want to fine-tune the 6 picks once they're set?</p>
+      <a href="/en/party-builder/" style="display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.4rem;background:rgb(var(--accent));color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem">
+        Fine-tune builds in the Party Workshop →
+      </a>
+    </div>
+    <Footer />
+  </body>
+</html>

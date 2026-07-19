@@ -1,0 +1,146 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+const title = 'Pokémon Champions Team Building Tools | Quick Build from Core & Party Workshop';
+const description = 'Two AI-powered simulation tools for building teams in Pokémon Champions. "Quick Build from Core" auto-suggests the remaining 5 slots from a core Pokémon, while "Party Workshop" lets you fine-tune all 6 builds down to a single point. Introduced by use case.';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'PokeNavi Team Building',
+  description,
+  url: siteUrl + '/en/party-building/',
+  isPartOf: { '@type': 'WebSite', name: 'PokeNavi', url: siteUrl },
+  hasPart: [
+    {
+      '@type': 'SoftwareApplication',
+      name: 'Quick Build from Core',
+      url: siteUrl + '/en/party-suggest/',
+      applicationCategory: 'GameApplication',
+      operatingSystem: 'Web',
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: 'Party Workshop',
+      url: siteUrl + '/en/party-builder/',
+      applicationCategory: 'GameApplication',
+      operatingSystem: 'Web',
+    },
+  ],
+};
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <style>
+      main { max-width: 900px; margin: 0 auto; padding: 2em 1.2em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.7rem; margin: 0 0 .5em; }
+      .lead { color: rgb(var(--gray)); font-size: .96rem; line-height: 1.8; margin: 0 0 1.8em; max-width: 640px; }
+      .cards {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.2rem;
+      }
+      @media (max-width: 720px) {
+        .cards { grid-template-columns: 1fr; }
+      }
+      .card {
+        display: flex;
+        flex-direction: column;
+        border: 1px solid rgb(var(--gray-light));
+        border-radius: 12px;
+        padding: 1.4rem 1.3rem;
+        background: #fff;
+        transition: box-shadow .15s, border-color .15s;
+      }
+      .card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.08); border-color: rgb(var(--gray)); }
+      .card-head { display: flex; align-items: center; gap: .5em; margin-bottom: .4em; flex-wrap: wrap; }
+      .card h2 { font-size: 1.15rem; margin: 0; color: rgb(var(--black)); }
+      .badge {
+        font-size: .62rem;
+        font-weight: 700;
+        background: #fef3c7;
+        color: #b45309;
+        border-radius: 9999px;
+        padding: .15em .6em;
+        letter-spacing: .02em;
+      }
+      .card .for-whom {
+        font-size: .82rem;
+        font-weight: 700;
+        color: var(--accent);
+        margin: .2em 0 .6em;
+      }
+      .card p.desc { font-size: .9rem; line-height: 1.75; margin: 0 0 .6em; flex-grow: 1; }
+      .card ul { margin: 0 0 1em; padding-left: 1.2em; font-size: .85rem; line-height: 1.7; color: rgb(var(--gray-dark)); }
+      .cta {
+        display: inline-block;
+        text-align: center;
+        padding: .7em 1.4em;
+        background: var(--accent);
+        color: #fff;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: .92rem;
+        margin-top: auto;
+      }
+      .cta:hover { background: var(--accent-dark); }
+      .usage-tip {
+        margin-top: 1.8rem;
+        background: #eef2ff;
+        border-left: 3px solid var(--accent);
+        border-radius: 8px;
+        padding: .9em 1.1em;
+        font-size: .88rem;
+        line-height: 1.7;
+        color: rgb(var(--gray-dark));
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>Team Building</h1>
+      <p class="lead">Two tools backed by AI simulation to support team building in Pokémon Champions. Use them together to cover everything from a first draft to fine-grained tuning.</p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-head">
+            <h2>Quick Build from Core</h2>
+          </div>
+          <p class="for-whom">For those who want the big picture first</p>
+          <p class="desc">Just decide on one core Pokémon, and the AI auto-suggests the remaining 5 slots to fit the meta.</p>
+          <ul>
+            <li>Auto-suggestions accounting for type synergy and Speed</li>
+            <li>Includes a selection guide</li>
+            <li>Diagnoses 1v1 matchups against the Top 30 usage picks</li>
+          </ul>
+          <a class="cta" href="/en/party-suggest">Try Quick Build from Core →</a>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>Party Workshop</h2>
+            <span class="badge">NEW</span>
+          </div>
+          <p class="for-whom">For those who want to fine-tune their team every day</p>
+          <p class="desc">Freely fine-tune all 6 builds (held item, ability, nature, EVs, moves) down to a single point.</p>
+          <ul>
+            <li>Speed comparison and 1v1 verdicts against hypothetical opponents</li>
+            <li>Real-time damage dealt/taken display</li>
+            <li>Save parties, get suggestions, and back-calculate EVs</li>
+          </ul>
+          <a class="cta" href="/en/party-builder">Try Party Workshop →</a>
+        </div>
+      </div>
+
+      <p class="usage-tip">We recommend starting with "Quick Build from Core" for a first draft, then using "Party Workshop" to fine-tune against your expected opponents. Note: the tool interfaces themselves are in Japanese.</p>
+    </main>
+    <Footer />
+  </body>
+</html>

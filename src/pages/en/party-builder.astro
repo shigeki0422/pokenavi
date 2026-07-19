@@ -1,0 +1,33 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PartyBuilderApp from '../../components/PartyBuilderApp.astro';
+
+const title = 'Pokémon Champions Party Workshop | Fine-Tune All 6 Builds in Real Time';
+const description = 'A team-building tool for Pokémon Champions that lets you freely fine-tune all 6 Pokémon. Adjust held items, abilities, natures, and EVs in real time while checking Speed comparisons against expected opponents, 1v1 verdicts, and type-matchup balance. Multiple parties can be saved. (Tool interface is in Japanese.)';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'PokeNavi Party Workshop',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: siteUrl + '/en/party-builder/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'PokeNavi', url: siteUrl },
+};
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-party-builder.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <PartyBuilderApp />
+    <Footer />
+  </body>
+</html>
