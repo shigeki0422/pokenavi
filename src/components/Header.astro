@@ -3,6 +3,9 @@ import { SITE_TITLE } from '../consts';
 import BottomNav from './BottomNav.astro';
 import GlobalSearch from './GlobalSearch.astro';
 import Sidebar from './Sidebar.astro';
+
+const path = Astro.url.pathname;
+const lang = path.startsWith('/en') ? 'en' : path.startsWith('/ko') ? 'ko' : 'ja';
 ---
 
 <Sidebar />
@@ -20,7 +23,7 @@ import Sidebar from './Sidebar.astro';
 		</button>
 	</nav>
 	<div class="header-search">
-		<GlobalSearch variant="sidebar" />
+		<GlobalSearch variant="sidebar" lang={lang} />
 	</div>
 </header>
 <style>

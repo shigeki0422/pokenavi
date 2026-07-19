@@ -480,6 +480,22 @@ export const MOVE_NAME_EN: Record<string, string> = {
   "リーフブレード": "Leaf Blade",
   "ルミナコリジョン": "Lumina Crash",
   "ロックカット": "Rock Polish",
+  // M-B roster additions
+  "しおづけ": "Salt Cure", "しおふき": "Water Spout", "しっとのほのお": "Burning Jealousy", "しっぺがえし": "Payback",
+  "すてゼリフ": "Parting Shot", "だいばくはつ": "Explosion", "ちいさくなる": "Minimize", "つららばり": "Icicle Spear",
+  "であいがしら": "First Impression", "とぐろをまく": "Coil", "とどめばり": "Pin Missile", "どくばりセンボン": "Barb Barrage",
+  "どろかけ": "Mud-Slap", "なし": "—", "ねっさのだいち": "Scorching Sands", "はかいこうせん": "Hyper Beam",
+  "ばくおんぱ": "Boomburst", "ばくれつパンチ": "Dynamic Punch", "ひゃっきやこう": "Infernal Parade", "ひょうざんおろし": "Icicle Crash",
+  "ふんか": "Eruption", "ふんどのこぶし": "Rage Fist", "ほっぺすりすり": "Nuzzle", "みきり": "Detect",
+  "みわくのボイス": "Disarming Voice", "やまあらし": "Storm Throw", "ゆきげしき": "Snowscape",
+  "アイスハンマー": "Ice Hammer", "アクロバット": "Acrobatics", "アシッドボム": "Acid Spray", "アームハンマー": "Hammer Arm",
+  "ウッドホーン": "Wood Hammer", "オーラぐるま": "Aura Wheel", "ゲップ": "Belch", "コットンガード": "Cotton Guard",
+  "ゴーストダイブ": "Phantom Force", "ゴールドラッシュ": "Make It Rain", "シャカシャカほう": "Shell Trap", "スケイルノイズ": "Clanging Scales",
+  "ソウルクラッシュ": "Spirit Break", "ソーラーブレード": "Solar Blade", "ツインビーム": "Twin Beam", "トロピカルキック": "Trop Kick",
+  "トーチカ": "Baneful Bunker", "ドわすれ": "Amnesia", "ドラゴンアロー": "Dragon Darts", "ナイトバースト": "Night Daze",
+  "ネズミざん": "Population Bomb", "フェザーダンス": "Feather Dance", "ブレイズキック": "Blaze Kick", "ボルテッカー": "Volt Tackle",
+  "ミストバースト": "Misty Explosion", "ミストフィールド": "Misty Terrain", "レイジングブル": "Raging Bull", "ワイドフォース": "Expanding Force",
+  "ワイルドボルト": "Wild Charge",
 };
 
 export const MOVE_NAME_KO: Record<string, string> = {
@@ -944,6 +960,7 @@ export const ABILITY_NAME_EN: Record<string, string> = {
   "ヨガパワー": "Huge Power",
   "ライトメタル": "Light Metal",
   "リーフガード": "Leaf Guard",
+  "不明": "Unknown",
 };
 
 export const ABILITY_NAME_KO: Record<string, string> = {
@@ -1134,6 +1151,7 @@ export const ABILITY_NAME_KO: Record<string, string> = {
   "ヨガパワー": "요가파워",
   "ライトメタル": "라이트메탈",
   "リーフガード": "리프가드",
+  "不明": "알 수 없음",
 };
 
 // ---------------------------------------------------------------------------
