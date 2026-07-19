@@ -54,11 +54,15 @@ const basePath = path.startsWith('/en/') ? path.slice(3)
                : path === '/en' || path === '/en/' ? '/'
                : path === '/ko' || path === '/ko/' ? '/'
                : path;
-const langUrls = {
-  ja: basePath || '/',
-  en: basePath === '/' ? '/en/' : `/en${basePath}`,
-  ko: basePath === '/' ? '/ko/' : `/ko${basePath}`,
-};
+// 考察記事(/blog/)はen/koに翻訳ページが存在しないため、言語切り替え時はパスを引き継がずトップページへ
+const isBlogPath = basePath === '/blog' || basePath.startsWith('/blog/');
+const langUrls = isBlogPath
+  ? { ja: '/', en: '/en/', ko: '/ko/' }
+  : {
+      ja: basePath || '/',
+      en: basePath === '/' ? '/en/' : `/en${basePath}`,
+      ko: basePath === '/' ? '/ko/' : `/ko${basePath}`,
+    };
 ---
 
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
