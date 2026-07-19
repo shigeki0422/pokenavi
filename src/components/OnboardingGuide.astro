@@ -2,15 +2,21 @@
 interface Props {
   storageKey: string;
   steps: { icon: string; title: string; desc: string }[];
+  lang?: 'ja' | 'en' | 'ko';
 }
-const { storageKey, steps } = Astro.props;
+const { storageKey, steps, lang = 'ja' } = Astro.props;
+const T = {
+  ja: { title: 'はじめての方へ', close: '閉じる（次回から表示しない）', reopen: '？ 使い方' },
+  en: { title: 'First time here?', close: 'Close (don’t show again)', reopen: '? Help' },
+  ko: { title: '처음이신가요?', close: '닫기 (다음부터 표시 안 함)', reopen: '? 사용법' },
+}[lang];
 ---
 
 <div class="ob-wrap" data-ob-key={storageKey}>
   <div class="ob-guide" hidden>
     <div class="ob-head">
-      <span class="ob-title">はじめての方へ</span>
-      <button class="ob-close" type="button">閉じる（次回から表示しない）</button>
+      <span class="ob-title">{T.title}</span>
+      <button class="ob-close" type="button">{T.close}</button>
     </div>
     <ol class="ob-steps">
       {steps.map((s, i) => (
@@ -25,7 +31,7 @@ const { storageKey, steps } = Astro.props;
       ))}
     </ol>
   </div>
-  <button class="ob-reopen" type="button" hidden>？ 使い方</button>
+  <button class="ob-reopen" type="button" hidden>{T.reopen}</button>
 </div>
 
 <style>

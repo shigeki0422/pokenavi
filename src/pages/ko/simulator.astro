@@ -1,4 +1,33 @@
 ---
-import SimulatorLayout from '../../layouts/SimulatorLayout.astro';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SimulatorApp from '../../components/SimulatorApp.astro';
+
+const title = '시뮬레이션: M-A (배틀 시뮬레이터)';
+const description = 'M-A 환경(M-1/M-2) 상위 랭커끼리의 리그전 시뮬레이션. 파티를 선택하고 각 랭커·각 포켓몬과의 승률·선출·1v1 상성·실전 리플레이를 진단합니다.';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: '포케나비 M-A 시뮬레이터',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: `${siteUrl}/ko/simulator/`,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: '포케나비', url: siteUrl },
+};
 ---
-<SimulatorLayout lang="ko" />
+
+<html lang="ko">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <SimulatorApp mode="MA" lang="ko" />
+    <Footer />
+  </body>
+</html>

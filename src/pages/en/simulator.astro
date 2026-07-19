@@ -1,4 +1,33 @@
 ---
-import SimulatorLayout from '../../layouts/SimulatorLayout.astro';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SimulatorApp from '../../components/SimulatorApp.astro';
+
+const title = 'Simulation: M-A (Battle Simulator)';
+const description = 'Round-robin battle simulation between top rankers in the M-A environment (M-1/M-2). Select a party and diagnose win rate, selection, 1v1 matchups, and real battle replays vs each ranker and each Pokémon.';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'PokeNavi M-A Simulator',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: `${siteUrl}/en/simulator/`,
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'PokeNavi', url: siteUrl },
+};
 ---
-<SimulatorLayout lang="en" />
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <SimulatorApp mode="MA" lang="en" />
+    <Footer />
+  </body>
+</html>
