@@ -393,7 +393,11 @@ if(prose){
   h2s.forEach(function(h2){
     if(h2.textContent.trim()==='考察記事'){
       var el=h2;
-      while(el){var nx=el.nextElementSibling;el.remove();el=nx;if(el&&el.tagName==='H2')break;}
+      while(el){
+        if(el.tagName==='H2'&&el!==h2)break;
+        if(el.classList&&(el.classList.contains('mu-section')||el.classList.contains('spc-section')||el.classList.contains('ps-cta-wrap')))break;
+        var nx=el.nextElementSibling;el.remove();el=nx;
+      }
     }
   });
   rep(prose);
