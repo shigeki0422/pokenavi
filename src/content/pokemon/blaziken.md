@@ -1,12 +1,12 @@
 ---
 title: 'バシャーモ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのバシャーモ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率10位。'
+description: 'ポケモンチャンピオンズのバシャーモ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率11位。'
 pokemonName: 'バシャーモ'
 dexNumber: 257
-usageRank: 10
+usageRank: 11
 pubDate: '2026-07-13'
 draft: false
-analysisSlug: 'blaziken-analysis-m4'
+analysisSlug: 'blaziken-analysis-m3'
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +18,7 @@ analysisSlug: 'blaziken-analysis-m4'
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.257</strong>　／　使用率 <strong style="color:#dc2626">10位</strong>
+      全国図鑑 <strong>No.257</strong>　／　使用率 <strong style="color:#dc2626">11位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>
@@ -642,17 +642,10 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 ## 考察記事
 
-<a href="/blog/blaziken-analysis-m4/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
-  <img src="/images/pokemon/pokemon-0257-00.webp" alt="バシャーモ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
-  <div>
-    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガバシャーモ 考察 M-4 シーズン かそく加速アタッカーの立ち回り</div>
-  </div>
-</a>
 <a href="/blog/blaziken-analysis-m3/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0257-00.webp" alt="バシャーモ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">メガバシャーモ考察 M-3 型別採用率と立ち回り</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】バシャーモ考察 M-2</div>
   </div>
 </a>

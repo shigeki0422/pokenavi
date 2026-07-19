@@ -1,9 +1,9 @@
 ---
 title: 'ミミロップ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのミミロップ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率41位。'
+description: 'ポケモンチャンピオンズのミミロップ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率40位。'
 pokemonName: 'ミミロップ'
 dexNumber: 428
-usageRank: 41
+usageRank: 40
 pubDate: '2026-07-13'
 draft: false
 analysisSlug: 'lopunny-analysis-m2'
@@ -17,7 +17,7 @@ analysisSlug: 'lopunny-analysis-m2'
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.428</strong>　／　使用率 <strong style="color:#dc2626">41位</strong>
+      全国図鑑 <strong>No.428</strong>　／　使用率 <strong style="color:#dc2626">40位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>
