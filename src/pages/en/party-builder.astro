@@ -5,7 +5,7 @@ import Footer from '../../components/Footer.astro';
 import PartyBuilderApp from '../../components/PartyBuilderApp.astro';
 
 const title = 'Pokémon Champions Party Workshop | Fine-Tune All 6 Builds in Real Time';
-const description = 'A team-building tool for Pokémon Champions that lets you freely fine-tune all 6 Pokémon. Adjust held items, abilities, natures, and EVs in real time while checking Speed comparisons against expected opponents, 1v1 verdicts, and type-matchup balance. Multiple parties can be saved.';
+const description = 'A team-building tool for Pokémon Champions. Fine-tune all 6 builds in real time — items, abilities, natures, EVs, Speed checks, 1v1 verdicts, and type balance.';
 const siteUrl = 'https://pokenavi.jp';
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -18,11 +18,21 @@ const jsonLd = {
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
   author: { '@type': 'Organization', name: 'PokeNavi', url: siteUrl },
 };
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/party-builder/' },
+  { lang: 'en', url: siteUrl + '/en/party-builder/' },
+  { lang: 'ko', url: siteUrl + '/ko/party-builder/' },
+  { lang: 'x-default', url: siteUrl + '/party-builder/' },
+];
+
 ---
 
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} imageUrl="/og-party-builder.png" />
+    <BaseHead title={title} description={description} imageUrl="/og-party-builder.png"
+      alternates={alternates}
+      ogLocale="en_US"
+    />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>

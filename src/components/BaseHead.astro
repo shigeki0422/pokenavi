@@ -22,11 +22,20 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, imageUrl, noOgImage = false, type = 'website', pubDate, updatedDate, alternates, ogLocale = 'ja_JP' } = Astro.props;
+const { title, description, image = FallbackImage, imageUrl, noOgImage = false, type = 'website', pubDate, updatedDate, alternates, ogLocale } = Astro.props;
 const ogImageUrl = imageUrl ? new URL(imageUrl, Astro.site) : new URL(image.src, Astro.url);
 
-// 個別ページは「ページ名｜サイト名」、トップはサイト名のみ（重複回避）
-const pageTitle = title === SITE_TITLE ? title : `${title}｜${SITE_TITLE}`;
+// サイト名・og:localeはURLのプレフィックスから判定する(呼び出し元がlang propを
+// 渡さないページでも、en/ko版に日本語の「｜ポケナビ」やja_JPが付くのを防ぐ)。
+const pagePath = Astro.url.pathname;
+const pageLang = pagePath.startsWith('/en') ? 'en' : pagePath.startsWith('/ko') ? 'ko' : 'ja';
+const siteName = pageLang === 'en' ? 'PokeNavi' : pageLang === 'ko' ? '포케나비' : SITE_TITLE;
+const resolvedOgLocale = ogLocale ?? (pageLang === 'en' ? 'en_US' : pageLang === 'ko' ? 'ko_KR' : 'ja_JP');
+
+// 個別ページは「ページ名｜サイト名」、トップはサイト名のみ（重複回避）。
+// 呼び出し元が既にサイト名(現地語表記のいずれか)を含めている場合は二重に付けない。
+const alreadyBranded = title === SITE_TITLE || title.includes('PokeNavi') || title.includes('포케나비') || title.includes(SITE_TITLE);
+const pageTitle = alreadyBranded ? title : `${title}｜${siteName}`;
 
 const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 ---
@@ -68,11 +77,11 @@ const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 {!noOgImage && !imageUrl && <meta property="og:image:width" content={String(image.width)} />}
 {!noOgImage && !imageUrl && <meta property="og:image:height" content={String(image.height)} />}
 {!noOgImage && <meta property="og:image:alt" content={title} />}
-<meta property="og:locale" content={ogLocale} />
-<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:locale" content={resolvedOgLocale} />
+<meta property="og:site_name" content={siteName} />
 {type === 'article' && pubDate && <meta property="article:published_time" content={pubDate.toISOString()} />}
 {type === 'article' && updatedDate && <meta property="article:modified_time" content={updatedDate.toISOString()} />}
-{type === 'article' && <meta property="article:author" content={SITE_TITLE} />}
+{type === 'article' && <meta property="article:author" content={siteName} />}
 
 <!-- Twitter -->
 <meta property="twitter:card" content={noOgImage ? 'summary' : 'summary_large_image'} />

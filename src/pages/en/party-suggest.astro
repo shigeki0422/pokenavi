@@ -5,7 +5,7 @@ import Footer from '../../components/Footer.astro';
 import PartySuggestApp from '../../components/PartySuggestApp.astro';
 
 const title = 'Pokémon Champions M-4 Quick Build from Core | Auto-Generate a Team Around Your Core Pick';
-const description = 'For Pokémon Champions Season M-4. Just specify one core Pokémon and get an auto-suggested team of 6 suited to the current meta. Each Pokémon\'s role, selection guide, and 1v1 matchups against the Top 30 usage picks are diagnosed from AI simulation results.';
+const description = 'For Pokémon Champions M-4. Specify one core Pokémon for an auto-suggested team of 6, with roles, selection guide, and 1v1 matchups vs the Top 30 usage picks.';
 const siteUrl = 'https://pokenavi.jp';
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -18,11 +18,21 @@ const jsonLd = {
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
   author: { '@type': 'Organization', name: 'PokeNavi', url: siteUrl },
 };
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/party-suggest/' },
+  { lang: 'en', url: siteUrl + '/en/party-suggest/' },
+  { lang: 'ko', url: siteUrl + '/ko/party-suggest/' },
+  { lang: 'x-default', url: siteUrl + '/party-suggest/' },
+];
+
 ---
 
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <BaseHead title={title} description={description} imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="en_US"
+    />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>

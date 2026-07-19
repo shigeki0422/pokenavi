@@ -48,6 +48,7 @@ const isBuildParentActive = isPartyBuildingActive;
 const buildParentHref = `${pfx}/party-building`;
 const brandHref = pfx ? `${pfx}/` : '/';
 const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : SITE_TITLE;
+const logoAlt = lang === 'en' ? 'PokeNavi logo' : lang === 'ko' ? '포케나비 로고' : 'ポケナビ ロゴ';
 
 const basePath = path.startsWith('/en/') ? path.slice(3)
                : path.startsWith('/ko/') ? path.slice(3)
@@ -68,7 +69,7 @@ const langUrls = isBlogPath
 <div class="sidebar-overlay" id="sidebar-overlay"></div>
 <aside class="sidebar" id="sidebar">
 	<a class="sb-brand" href={brandHref}>
-		<img class="sb-logo" src="/logo-mark.png" alt="ポケナビ ロゴ" width="36" height="36" />
+		<img class="sb-logo" src="/logo-mark.png" alt={logoAlt} width="36" height="36" />
 		<span class="sb-brand-text">{siteName}</span>
 	</a>
 	<GlobalSearch variant="sidebar" lang={lang} />

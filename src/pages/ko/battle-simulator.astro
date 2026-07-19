@@ -5,11 +5,22 @@ import Footer from '../../components/Footer.astro';
 
 const title = '가상 대전 관전(배틀 시뮬레이터)이란? | 포케나비';
 const description = '포케나비 배틀 시뮬레이터의 작동 방식, AI 대전 수준, 가능한 것과 불가능한 것을 설명합니다.';
+const siteUrl = 'https://pokenavi.jp';
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/battle-simulator/' },
+  { lang: 'en', url: siteUrl + '/en/battle-simulator/' },
+  { lang: 'ko', url: siteUrl + '/ko/battle-simulator/' },
+  { lang: 'x-default', url: siteUrl + '/battle-simulator/' },
+];
+
 ---
 
 <html lang="ko">
   <head>
-    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <BaseHead title={title} description={description} imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="ko_KR"
+    />
     <style>
       main { max-width: 780px; margin: 0 auto; padding: 2em 1.2em 4em; color: rgb(var(--gray-dark)); line-height: 1.85; }
       h1 { font-size: 1.6rem; margin: 0 0 .4em; }

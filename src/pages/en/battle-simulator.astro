@@ -5,11 +5,22 @@ import Footer from '../../components/Footer.astro';
 
 const title = 'About AI Battle Replays (Battle Simulator) | PokeNavi';
 const description = 'Learn how the PokeNavi battle simulator works, the AI battle level, and what it can and cannot do.';
+const siteUrl = 'https://pokenavi.jp';
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/battle-simulator/' },
+  { lang: 'en', url: siteUrl + '/en/battle-simulator/' },
+  { lang: 'ko', url: siteUrl + '/ko/battle-simulator/' },
+  { lang: 'x-default', url: siteUrl + '/battle-simulator/' },
+];
+
 ---
 
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <BaseHead title={title} description={description} imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="en_US"
+    />
     <style>
       main { max-width: 780px; margin: 0 auto; padding: 2em 1.2em 4em; color: rgb(var(--gray-dark)); line-height: 1.85; }
       h1 { font-size: 1.6rem; margin: 0 0 .4em; }

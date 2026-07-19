@@ -18,11 +18,21 @@ const jsonLd = {
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
   author: { '@type': 'Organization', name: '포케나비', url: siteUrl },
 };
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/party-suggest/' },
+  { lang: 'en', url: siteUrl + '/en/party-suggest/' },
+  { lang: 'ko', url: siteUrl + '/ko/party-suggest/' },
+  { lang: 'x-default', url: siteUrl + '/party-suggest/' },
+];
+
 ---
 
 <html lang="ko">
   <head>
-    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <BaseHead title={title} description={description} imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="ko_KR"
+    />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>

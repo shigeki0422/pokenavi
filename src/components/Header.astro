@@ -10,6 +10,7 @@ const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : S
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 const brandHref = `${pfx}/`;
 const menuAria = lang === 'en' ? 'Open menu' : lang === 'ko' ? '메뉴 열기' : 'メニューを開く';
+const logoAlt = lang === 'en' ? 'PokeNavi logo' : lang === 'ko' ? '포케나비 로고' : 'ポケナビ ロゴ';
 ---
 
 <Sidebar />
@@ -18,7 +19,7 @@ const menuAria = lang === 'en' ? 'Open menu' : lang === 'ko' ? '메뉴 열기' :
 	<nav>
 		<h2>
 			<a href={brandHref} class="brand-link">
-				<img src="/logo-mark.png" alt="ポケナビ ロゴ" width="28" height="28" class="brand-logo" />
+				<img src="/logo-mark.png" alt={logoAlt} width="28" height="28" class="brand-logo" />
 				{siteName}
 			</a>
 		</h2>

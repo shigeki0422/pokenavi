@@ -16,14 +16,6 @@ type Props = CollectionEntry<'pokemon'>['data'] & { lang?: 'ja' | 'en' | 'ko' };
 
 const { title, description, pokemonName, dexNumber, imageForm, usageRank, faq, analysisSlug, lang = 'ja' } = Astro.props;
 
-const metaDescription = pokemonName && usageRank ? (
-  lang === 'en'
-    ? `${pokemonName} — Pokémon Champions M-4, Usage Rank #${usageRank}. TOP10 usage rates for moves, held items, abilities & natures. Base stats and type matchup chart included.`
-    : lang === 'ko'
-    ? `${pokemonName} 챔피언스M-4 사용률 ${usageRank}위 — 기술·지닌물건·특성·성격 채용률 TOP10과 종족값·타입 상성 수록.`
-    : `チャンピオンズM-4使用率${usageRank}位${pokemonName}の対戦データ。技・持ち物・特性・性格の採用率TOP10と種族値・タイプ相性を掲載。`
-) : description;
-
 const siteUrl = Astro.site?.toString().replace(/\/$/, '') ?? 'https://pokenavi.jp';
 const pageUrl = new URL(Astro.url.pathname, Astro.site).toString();
 const pathParts = Astro.url.pathname.split('/').filter(Boolean);
@@ -38,12 +30,29 @@ const ABILITY_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NA
 const ITEM_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
 const NATURE_MAP = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
 const POKEMON_MAP = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
+const pokemonNameDisp = pokemonName ? (POKEMON_MAP[pokemonName] ?? pokemonName) : pokemonName;
+const metaDescription = pokemonName && usageRank ? (
+  lang === 'en'
+    ? `${pokemonNameDisp} — Pokémon Champions M-4, Usage Rank #${usageRank}. TOP10 usage rates for moves, held items, abilities & natures. Base stats and type matchup chart included.`
+    : lang === 'ko'
+    ? `${pokemonNameDisp} 챔피언스M-4 사용률 ${usageRank}위 — 기술·지닌물건·특성·성격 채용률 TOP10과 종족값·타입 상성 수록.`
+    : `チャンピオンズM-4使用率${usageRank}位${pokemonName}の対戦データ。技・持ち物・特性・性格の採用率TOP10と種族値・タイプ相性を掲載。`
+) : description;
 const T = {
   ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる', quickBuild: (n: string) => `${n}を軸にした簡単構築`, quickBuildMega: (n: string) => `メガ${n}を軸にした簡単構築` },
   en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', quickBuild: (n: string) => `Quick Build from ${n}`, quickBuildMega: (n: string) => `Quick Build from Mega ${n}` },
   ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로', hubAnalysis: '📖 분석 기사 읽기', hubWatch: '🎬 상위 구성 대전 관전', hubBuild: '⚔️ 파티에 추가', quickBuild: (n: string) => `${n} 축으로 간단 구성`, quickBuildMega: (n: string) => `메가${n} 축으로 간단 구성` },
 }[lang];
-const pokemonNameDisp = pokemonName ? (POKEMON_MAP[pokemonName] ?? pokemonName) : pokemonName;
+/** contentコレクションのtitleは和名のみ(全言語共通データ)のため、en/koでは
+ * <title>・OGP・JSON-LD name にそのまま使うと日本語タイトルがSEOに露出してしまう。
+ * ここでlang別に組み立て直す。 */
+const pageTitle = pokemonNameDisp
+  ? (lang === 'en'
+      ? `${pokemonNameDisp} | Pokémon Champions Usage Rate & Base Stats`
+      : lang === 'ko'
+      ? `${pokemonNameDisp} | 포켓몬 챔피언스 사용률・기초 데이터`
+      : title)
+  : title;
 const quickBuildHref = lang === 'ja' ? `/party-suggest/${pokemonSlug}/` : `${pfx}/party-suggest/?core=${encodeURIComponent(pokemonName ?? '')}`;
 const quickBuildMegaHref = lang === 'ja' ? `/party-suggest/mega-${pokemonSlug}/` : `${pfx}/party-suggest/?core=${encodeURIComponent('メガ' + (pokemonName ?? ''))}`;
 const hreflangAlternates = pokemonSlug ? [
@@ -66,20 +75,21 @@ if (matchups) {
 	}
 }
 
+const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : 'ポケナビ';
 const pokemonJsonLd = pokemonName ? {
 	'@context': 'https://schema.org',
 	'@type': 'WebPage',
-	name: title,
+	name: pageTitle,
 	description: metaDescription ?? description,
 	url: pageUrl,
 	image: pokemonImageUrl,
 	about: {
 		'@type': 'Thing',
-		name: pokemonName,
+		name: pokemonNameDisp,
 		image: pokemonImageUrl,
 	},
-	author: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
-	publisher: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+	author: { '@type': 'Organization', name: siteName, url: siteUrl },
+	publisher: { '@type': 'Organization', name: siteName, url: siteUrl },
 } : null;
 
 const faqJsonLd = faq ? {
@@ -127,14 +137,14 @@ const breadcrumbJsonLd = {
 	itemListElement: [
 		{ '@type': 'ListItem', position: 1, name: T.home, item: siteUrl + `${pfx}/` },
 		{ '@type': 'ListItem', position: 2, name: T.pokemonInfo, item: siteUrl + `${pfx}/pokemon/` },
-		{ '@type': 'ListItem', position: 3, name: pokemonName ?? title, item: pageUrl },
+		{ '@type': 'ListItem', position: 3, name: pokemonNameDisp ?? pageTitle, item: pageUrl },
 	],
 };
 ---
 
 <html lang={lang}>
 	<head>
-		<BaseHead title={title} description={metaDescription} imageUrl={pokemonImageUrl} alternates={hreflangAlternates} />
+		<BaseHead title={pageTitle} description={metaDescription} imageUrl={pokemonImageUrl} alternates={hreflangAlternates} ogLocale={lang === 'en' ? 'en_US' : lang === 'ko' ? 'ko_KR' : 'ja_JP'} />
 		{pokemonJsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(pokemonJsonLd)} />}
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 		{faqJsonLd && <script is:inline type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}

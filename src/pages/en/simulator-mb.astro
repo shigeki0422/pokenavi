@@ -5,7 +5,7 @@ import Footer from '../../components/Footer.astro';
 import SimulatorApp from '../../components/SimulatorApp.astro';
 
 const title = 'M-B Top-Build Simulator | Win Rate, Selection & 1v1 Matchups';
-const description = 'Battle simulation using top-ranker team data from Pokémon Champions Season M-B. Just pick a party to analyze win rate, selection rate, and Pokémon 1v1 matchups from AI battle results.';
+const description = 'Battle simulation using top-ranker team data from Pokémon Champions M-B. Pick a party to analyze win rate, selection rate, and Pokémon 1v1 matchups from AI battles.';
 const siteUrl = 'https://pokenavi.jp';
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -18,11 +18,21 @@ const jsonLd = {
   offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
   author: { '@type': 'Organization', name: 'PokeNavi', url: siteUrl },
 };
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/simulator-mb/' },
+  { lang: 'en', url: siteUrl + '/en/simulator-mb/' },
+  { lang: 'ko', url: siteUrl + '/ko/simulator-mb/' },
+  { lang: 'x-default', url: siteUrl + '/simulator-mb/' },
+];
+
 ---
 
 <html lang="en">
   <head>
-    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <BaseHead title={title} description={description} imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="en_US"
+    />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>

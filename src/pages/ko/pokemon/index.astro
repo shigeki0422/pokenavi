@@ -12,6 +12,14 @@ const pages = (await getCollection('pokemon'))
 	.sort((a, b) => (a.data.usageRank ?? 9999) - (b.data.usageRank ?? 9999));
 
 const top10 = pages.filter((p) => p.data.usageRank && p.data.usageRank <= 10);
+
+const siteUrl = 'https://pokenavi.jp';
+const alternates = [
+	{ lang: 'ja', url: siteUrl + '/pokemon/' },
+	{ lang: 'en', url: siteUrl + '/en/pokemon/' },
+	{ lang: 'ko', url: siteUrl + '/ko/pokemon/' },
+	{ lang: 'x-default', url: siteUrl + '/pokemon/' },
+];
 ---
 
 <!doctype html>
@@ -21,6 +29,8 @@ const top10 = pages.filter((p) => p.data.usageRank && p.data.usageRank <= 10);
 			title="포켓몬 정보 | 포케나비"
 			description="포켓몬 챔피언스의 전 포켓몬 정보. M-3/M-2 환경의 기술·지닌물·특성·성격 채용률 데이터."
 			imageUrl="/og-image.png"
+			alternates={alternates}
+			ogLocale="ko_KR"
 		/>
 		<style>
 			.layout { display: flex; }

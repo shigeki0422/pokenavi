@@ -7,7 +7,15 @@ import { defineConfig, fontProviders } from 'astro/config';
 // https://astro.build/config
 export default defineConfig({
 	site: 'https://pokenavi.jp',
-	integrations: [mdx(), sitemap()],
+	integrations: [
+		mdx(),
+		sitemap({
+			i18n: {
+				defaultLocale: 'ja',
+				locales: { ja: 'ja', en: 'en', ko: 'ko' },
+			},
+		}),
+	],
 	fonts: [
 		{
 			provider: fontProviders.local(),

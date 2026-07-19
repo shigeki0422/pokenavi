@@ -1,26 +1,32 @@
 ---
 const path = Astro.url.pathname;
 const lang = path.startsWith('/en') ? 'en' : path.startsWith('/ko') ? 'ko' : 'ja';
+const pfx = lang === 'ja' ? '' : `/${lang}`;
+const navAria = lang === 'en' ? 'Mobile navigation' : lang === 'ko' ? '모바일 내비게이션' : 'モバイルナビゲーション';
 
 const isActive = (href: string) => path.startsWith(href);
+const LABELS = {
+  ja: { research: '調べる', read: '読む', watch: '観る', battle: '戦う' },
+  en: { research: 'Research', read: 'Read', watch: 'Watch', battle: 'Battle' },
+  ko: { research: '조사', read: '읽기', watch: '관전', battle: '대전' },
+}[lang];
 const tabs = [
-  { href: '/pokemon/', icon: '🔍', label: '調べる', active: isActive('/pokemon') || isActive('/ranking') },
-  { href: '/blog/', icon: '📖', label: '読む', active: isActive('/blog') },
-  { href: '/simulator-mb/', icon: '🎬', label: '観る', active: isActive('/simulator') || isActive('/battle-simulator') },
-  { href: '/party-builder/', icon: '⚔️', label: '戦う', active: isActive('/party-builder') || isActive('/party-suggest') || isActive('/party-building') },
+  { href: `${pfx}/pokemon/`, icon: '🔍', label: LABELS.research, active: isActive(`${pfx}/pokemon`) || isActive(`${pfx}/ranking`) },
+  // 考察記事(読む)はen/ko版の翻訳記事が存在しないためja版のみ表示する
+  ...(lang === 'ja' ? [{ href: '/blog/', icon: '📖', label: LABELS.read, active: isActive('/blog') }] : []),
+  { href: `${pfx}/simulator-mb/`, icon: '🎬', label: LABELS.watch, active: isActive(`${pfx}/simulator`) || isActive(`${pfx}/battle-simulator`) },
+  { href: `${pfx}/party-builder/`, icon: '⚔️', label: LABELS.battle, active: isActive(`${pfx}/party-builder`) || isActive(`${pfx}/party-suggest`) || isActive(`${pfx}/party-building`) },
 ];
 ---
 
-{lang === 'ja' && (
-  <nav class="bottom-nav" aria-label="モバイルナビゲーション">
-    {tabs.map(t => (
-      <a href={t.href} class={t.active ? 'bn-tab active' : 'bn-tab'} aria-current={t.active ? 'page' : undefined}>
-        <span class="bn-icon">{t.icon}</span>
-        <span class="bn-label">{t.label}</span>
-      </a>
-    ))}
-  </nav>
-)}
+<nav class="bottom-nav" aria-label={navAria}>
+  {tabs.map(t => (
+    <a href={t.href} class={t.active ? 'bn-tab active' : 'bn-tab'} aria-current={t.active ? 'page' : undefined}>
+      <span class="bn-icon">{t.icon}</span>
+      <span class="bn-label">{t.label}</span>
+    </a>
+  ))}
+</nav>
 
 <style>
   .bottom-nav {

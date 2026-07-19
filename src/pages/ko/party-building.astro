@@ -30,11 +30,21 @@ const jsonLd = {
     },
   ],
 };
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/party-building/' },
+  { lang: 'en', url: siteUrl + '/en/party-building/' },
+  { lang: 'ko', url: siteUrl + '/ko/party-building/' },
+  { lang: 'x-default', url: siteUrl + '/party-building/' },
+];
+
 ---
 
 <html lang="ko">
   <head>
-    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <BaseHead title={title} description={description} imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="ko_KR"
+    />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <style>
       main { max-width: 900px; margin: 0 auto; padding: 2em 1.2em 4em; color: rgb(var(--gray-dark)); }
