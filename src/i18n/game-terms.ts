@@ -1492,3 +1492,59 @@ export const NATURE_NAME_KO: Record<string, string> = {
   "すなお": "솔직",
   "きまぐれ": "변덕",
 };
+
+// ---------------------------------------------------------------------------
+// TYPE NAMES
+// ---------------------------------------------------------------------------
+
+export const TYPE_NAME_EN: Record<string, string> = {
+  "ノーマル": "Normal", "かくとう": "Fighting", "ひこう": "Flying", "どく": "Poison",
+  "じめん": "Ground", "いわ": "Rock", "むし": "Bug", "ゴースト": "Ghost",
+  "はがね": "Steel", "ほのお": "Fire", "みず": "Water", "くさ": "Grass",
+  "でんき": "Electric", "エスパー": "Psychic", "こおり": "Ice", "ドラゴン": "Dragon",
+  "あく": "Dark", "フェアリー": "Fairy",
+};
+
+export const TYPE_NAME_KO: Record<string, string> = {
+  "ノーマル": "노말", "かくとう": "격투", "ひこう": "비행", "どく": "독",
+  "じめん": "땅", "いわ": "바위", "むし": "벌레", "ゴースト": "고스트",
+  "はがね": "강철", "ほのお": "불꽃", "みず": "물", "くさ": "풀",
+  "でんき": "전기", "エスパー": "에스퍼", "こおり": "얼음", "ドラゴン": "드래곤",
+  "あく": "악", "フェアリー": "페어리",
+};
+
+// ---------------------------------------------------------------------------
+// PARTY-SUGGEST / PARTY-BUILDER ROLE TAGS (finite enum from scripts/_explain.py role_of())
+// ---------------------------------------------------------------------------
+
+export const ROLE_NAME_EN: Record<string, string> = {
+  "スカーフ掃除役": "Scarf Sweeper",
+  "積みエース": "Setup Sweeper",
+  "メガ積みエース": "Mega Setup Sweeper",
+  "メガエース": "Mega Ace",
+  "物理アタッカー": "Physical Attacker",
+  "特殊アタッカー": "Special Attacker",
+  "トリル始動": "Trick Room Setter",
+  "設置": "Hazard Setter",
+  "壁/サポート": "Wall/Support",
+  "対面操作": "Pivot",
+  "受け": "Wall",
+  "状態異常撒き": "Status Spreader",
+  "妨害": "Disruptor",
+};
+
+export const ROLE_NAME_KO: Record<string, string> = {
+  "スカーフ掃除役": "스카프 스위퍼",
+  "積みエース": "셋업 에이스",
+  "メガ積みエース": "메가 셋업 에이스",
+  "メガエース": "메가 에이스",
+  "物理アタッカー": "물리 어태커",
+  "特殊アタッカー": "특수 어태커",
+  "トリル始動": "트릭룸 시동",
+  "設置": "설치형",
+  "壁/サポート": "벽/서포트",
+  "対面操作": "대면 조작",
+  "受け": "받이",
+  "状態異常撒き": "상태이상 살포",
+  "妨害": "방해",
+};

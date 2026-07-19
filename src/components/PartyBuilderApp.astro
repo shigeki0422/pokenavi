@@ -1,7 +1,7 @@
 ---
 import OnboardingGuide from './OnboardingGuide.astro';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
-import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
+import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO, TYPE_NAME_EN, TYPE_NAME_KO } from '../i18n/game-terms';
 
 interface Props { lang?: 'ja' | 'en' | 'ko'; }
 const { lang = 'ja' } = Astro.props;
@@ -12,6 +12,7 @@ const MOVE_NAME_MAP = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_K
 const ABILITY_NAME_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
 const ITEM_NAME_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
 const NATURE_NAME_MAP = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
+const TYPE_NAME_MAP = lang === 'en' ? TYPE_NAME_EN : lang === 'ko' ? TYPE_NAME_KO : {};
 
 const I18N_ALL = {
   ja: {
@@ -592,12 +593,13 @@ const I18N = I18N_ALL[lang];
   .pb-empty-guide-step b{color:var(--accent);margin-right:.35em}
 </style>
 
-<script is:inline define:vars={{ lang, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, pfx }}>
+<script is:inline define:vars={{ lang, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, pfx }}>
   // define:vars only works on scripts without ES `import`; the module script below uses imports,
   // so Astro props are bridged via window instead of passed directly.
   Object.assign(window, {
     __PB_LANG__: lang, __PB_POKEMON_MAP__: POKEMON_NAME_MAP, __PB_MOVE_MAP__: MOVE_NAME_MAP,
-    __PB_ABIL_MAP__: ABILITY_NAME_MAP, __PB_ITEM_MAP__: ITEM_NAME_MAP, __PB_NATURE_MAP__: NATURE_NAME_MAP, __PB_PFX__: pfx,
+    __PB_ABIL_MAP__: ABILITY_NAME_MAP, __PB_ITEM_MAP__: ITEM_NAME_MAP, __PB_NATURE_MAP__: NATURE_NAME_MAP,
+    __PB_TYPE_MAP__: TYPE_NAME_MAP, __PB_PFX__: pfx,
   });
 </script>
 
@@ -872,8 +874,20 @@ const I18N = I18N_ALL[lang];
   }
   const tMove = (n) => (n && window.__PB_MOVE_MAP__[n]) || n;
   const tAbil = (n) => (n && window.__PB_ABIL_MAP__[n]) || n;
-  const tItem = (n) => (n && window.__PB_ITEM_MAP__[n]) || n;
   const tNature = (n) => (n && window.__PB_NATURE_MAP__[n]) || n;
+  const tType = (n) => (n && window.__PB_TYPE_MAP__[n]) || n;
+  /** メガストーン(「〜ナイト」)は辞書に個別登録せず、素体名+ナイト接尾辞から動的に組み立てる
+   * (ポケモン名同様、独自メガ進化が大半で公式訳が存在しないため)。 */
+  function tItem(n) {
+    if (!n) return n;
+    const map = window.__PB_ITEM_MAP__;
+    if (map[n]) return map[n];
+    if (n.endsWith('ナイト')) {
+      const base = window.__PB_POKEMON_MAP__[n.slice(0, -3)];
+      if (base) return lang === 'ko' ? `${base}나이트` : `${base}ite`;
+    }
+    return n;
+  }
   /** natureDisp(stats.ts)は「せっかち (S↑B↓)」のように和名を埋め込んで返すため、
    * 和名部分だけをtNature()で置き換えて表示用に翻訳する(stats.ts自体は変更しない)。 */
   function tNatureDisp(na) {
@@ -2334,7 +2348,7 @@ const I18N = I18N_ALL[lang];
         <span class="bd-lb">${esc(I18N.megaLbl)}</span><span class="bd-seg">${sum.mega}</span>
         <span class="bd-lb">${esc(I18N.scarfLbl)}</span><span class="bd-seg">${sum.scarf}</span>
         <span class="bd-lb">${esc(I18N.avgSpeedLbl)}</span><span class="bd-seg">${Math.round(sum.avgSpeed)}</span>
-        <span class="bd-lb">${esc(I18N.weakOverlapLbl)}</span><span class="bd-seg">${esc(I18N.weakOverlapVal(sum.weakOverlap.type, sum.weakOverlap.count))}</span>
+        <span class="bd-lb">${esc(I18N.weakOverlapLbl)}</span><span class="bd-seg">${esc(I18N.weakOverlapVal(tType(sum.weakOverlap.type), sum.weakOverlap.count))}</span>
         <span class="bd-lb">${esc(I18N.weakAgainstLbl)}</span><span class="bd-seg${holeInfo.holeLabels.length ? ' pb-hole-seg' : ''}">${holeNamesHtml(holeInfo.holeLabels)}</span>
       </div>
       <div class="tabbar">

@@ -2,7 +2,7 @@
 import iconsData from '../../public/sim-data/icons.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
-import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
+import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO, TYPE_NAME_EN, TYPE_NAME_KO, ROLE_NAME_EN, ROLE_NAME_KO } from '../i18n/game-terms';
 
 interface Props {
   preCoreLabel?: string;
@@ -22,6 +22,8 @@ const MOVE_NAME_MAP = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_K
 const ABILITY_NAME_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
 const ITEM_NAME_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
 const NATURE_NAME_MAP = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
+const TYPE_NAME_MAP = lang === 'en' ? TYPE_NAME_EN : lang === 'ko' ? TYPE_NAME_KO : {};
+const ROLE_NAME_MAP = lang === 'en' ? ROLE_NAME_EN : lang === 'ko' ? ROLE_NAME_KO : {};
 
 const I18N_ALL = {
   ja: {
@@ -531,7 +533,7 @@ const I18N = I18N_ALL[lang];
   .soon-badge{display:inline-block;background:#eef2ff;color:#3730a3;font-weight:800;font-size:.9rem;border-radius:9999px;padding:.35em 1.1em;margin-bottom:.6em}
 </style>
 
-<script is:inline define:vars={{ ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, preCoreLabel, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP }}>
+<script is:inline define:vars={{ ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, preCoreLabel, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
   /** I18N_ALL は関数(フォーマッタ)を値に含むため、Astroのdefine:varsはJSON化の過程で
    * 関数プロパティを黙って落としてしまう(define:varsはprops→スクリプトへJSON経由で注入される)。
    * そのためI18N_ALLはフロントマター側と同じ内容をスクリプト内に直接定義し、defineVars経由では渡さない。 */
@@ -599,6 +601,15 @@ const I18N = I18N_ALL[lang];
       fixedLbl: s => `固定軸: ${s} / `, resultCount: n => `${n}件`, errPrefix: 'エラー: ',
       connErr: '提案サーバに接続できませんでした。時間をおいて再度お試しください。',
       omakase: 'おまかせ', importName: label => `${label}軸 かんたん構築`, rankLbl: n => `使用${n}位`,
+      koOOR: '圏外', koRange: (a,b) => `確${a}〜${b}`, koFixed: n => `確${n}`, koRoll: n => `乱${n}`,
+      turnFirst: '先手', turnSecond: '後手',
+      spdTxt: (turn,my,opp) => `${turn}（自S${my} / 相S${opp}）`,
+      judgeWin: '勝ち', judgeLoss: '負け',
+      judgeTxt: (result,koA,koB,turn) => `${result}：${koA}で倒す / ${koB}で倒される・${turn}`,
+      statMaxWeakOverlap: '最大弱点重複', statMegaCount: 'メガ数', statHazards: '設置技', statWeather: '天候',
+      statScarf: 'スカーフ', statPhysSpec: '物理/特殊', statAvgSpeed: '平均素早さ',
+      statWeakOverlapVal: (type,n) => `${type} に${n}体`, statAvgSpeedVal: (avg,max) => `${avg}（最速${max}）`,
+      yes: '有', no: '無',
     },
     en: {
       title: preCoreLabel ? `Quick Build from ${preCoreLabel} — M-4` : 'M-4 Quick Build from Core',
@@ -663,6 +674,15 @@ const I18N = I18N_ALL[lang];
       fixedLbl: s => `Fixed core: ${s} / `, resultCount: n => `${n} result(s)`, errPrefix: 'Error: ',
       connErr: 'Could not connect to the suggestion server. Please try again later.',
       omakase: 'auto-pick', importName: label => `${label} core quick build`, rankLbl: n => `Rank #${n}`,
+      koOOR: 'Out of range', koRange: (a,b) => `${a}–${b}HKO`, koFixed: n => `${n}HKO`, koRoll: n => `${n}HKO (roll-dependent)`,
+      turnFirst: 'Moves first', turnSecond: 'Moves second',
+      spdTxt: (turn,my,opp) => `${turn} (You S${my} / Opp S${opp})`,
+      judgeWin: 'Win', judgeLoss: 'Loss',
+      judgeTxt: (result,koA,koB,turn) => `${result}: ${koA} KOes / ${koB} KO'd · ${turn}`,
+      statMaxWeakOverlap: 'Biggest shared weakness', statMegaCount: 'Mega count', statHazards: 'Hazards', statWeather: 'Weather',
+      statScarf: 'Scarf', statPhysSpec: 'Physical/Special', statAvgSpeed: 'Avg. Speed',
+      statWeakOverlapVal: (type,n) => `${type} on ${n}`, statAvgSpeedVal: (avg,max) => `${avg} (fastest ${max})`,
+      yes: 'Yes', no: 'No',
     },
     ko: {
       title: preCoreLabel ? `${preCoreLabel} 축 M-4 축으로 간단 구성` : 'M-4 축으로 간단 구성',
@@ -727,6 +747,15 @@ const I18N = I18N_ALL[lang];
       fixedLbl: s => `고정 축: ${s} / `, resultCount: n => `${n}건`, errPrefix: '오류: ',
       connErr: '제안 서버에 연결할 수 없었습니다. 잠시 후 다시 시도해 주세요.',
       omakase: '자동 선택', importName: label => `${label} 축 간단 구성`, rankLbl: n => `사용률 ${n}위`,
+      koOOR: '범위 밖', koRange: (a,b) => `확정${a}~${b}`, koFixed: n => `확정${n}`, koRoll: n => `난수${n}`,
+      turnFirst: '선공', turnSecond: '후공',
+      spdTxt: (turn,my,opp) => `${turn}（나 S${my} / 상대 S${opp}）`,
+      judgeWin: '승리', judgeLoss: '패배',
+      judgeTxt: (result,koA,koB,turn) => `${result}：${koA}로 쓰러뜨림 / ${koB}로 쓰러짐·${turn}`,
+      statMaxWeakOverlap: '최대 약점 중복', statMegaCount: '메가 수', statHazards: '설치기', statWeather: '날씨',
+      statScarf: '스카프', statPhysSpec: '물리/특수', statAvgSpeed: '평균 스피드',
+      statWeakOverlapVal: (type,n) => `${type} ${n}마리`, statAvgSpeedVal: (avg,max) => `${avg}（최속${max}）`,
+      yes: '있음', no: '없음',
     },
   };
   const I18N = I18N_ALL[lang];
@@ -750,8 +779,59 @@ const I18N = I18N_ALL[lang];
   }
   const tMove = n => n && MOVE_NAME_MAP[n] || n;
   const tAbil = n => n && ABILITY_NAME_MAP[n] || n;
-  const tItem = n => n && ITEM_NAME_MAP[n] || n;
   const tNature = n => n && NATURE_NAME_MAP[n] || n;
+  const tType = n => n && TYPE_NAME_MAP[n] || n;
+  const tRole = n => n && ROLE_NAME_MAP[n] || n;
+  /** メガストーン(「〜ナイト」)は辞書に個別登録せず、素体名+ナイト接尾辞から動的に組み立てる
+   * (ポケモン名同様、独自メガ進化が大半で公式訳が存在しないため)。 */
+  function tItem(n){
+    if(!n) return n;
+    if(ITEM_NAME_MAP[n]) return ITEM_NAME_MAP[n];
+    if(n.endsWith('ナイト')){
+      const base = POKEMON_NAME_MAP[n.slice(0,-3)];
+      if(base) return lang==='ko' ? `${base}나이트` : `${base}ite`;
+    }
+    return n;
+  }
+  /** バックエンド(scripts/_explain.py)が返す確定数・先攻/後攻・勝敗の定型文字列を解析して翻訳する。
+   * 固定パターン(確N/確N〜M/乱N/圏外、先手/後手、勝ち/負け)のみを対象にし、
+   * それ以外の自由記述テキストはそのまま返す。 */
+  /** _apply_survive()の注記(ばけのかわ/がんじょう/きあいのタスキ)は特性名・持ち物名そのものなので
+   * 各辞書を順に引いて翻訳する。 */
+  function tSurviveNote(note){
+    if(!note) return note;
+    return note.split('／').map(n => ABILITY_NAME_MAP[n] || ITEM_NAME_MAP[n] || n).join('/');
+  }
+  function tKo(ko){
+    if(ko==null) return ko;
+    if(ko==='圏外') return I18N.koOOR;
+    let m = /^確(\d+)〜(\d+)$/.exec(ko);
+    if(m) return I18N.koRange(m[1],m[2]);
+    m = /^確(\d+)$/.exec(ko);
+    if(m) return I18N.koFixed(m[1]);
+    m = /^乱(\d+)$/.exec(ko);
+    if(m) return I18N.koRoll(m[1]);
+    return ko;
+  }
+  function tSpdTxt(txt){
+    const m = /^(先手|後手)（自S(\d+) \/ 相S(\d+)）$/.exec(txt||'');
+    if(!m) return txt;
+    return I18N.spdTxt(m[1]==='先手'?I18N.turnFirst:I18N.turnSecond, m[2], m[3]);
+  }
+  function tJudgeTxt(txt){
+    const m = /^(勝ち|負け)：(.+?)で倒す \/ (.+?)で倒される・(先手|後手)$/.exec(txt||'');
+    if(!m) return txt;
+    return I18N.judgeTxt(m[1]==='勝ち'?I18N.judgeWin:I18N.judgeLoss, tKo(m[2]), tKo(m[3]), m[4]==='先手'?I18N.turnFirst:I18N.turnSecond);
+  }
+  const STAT_LABELS = {'最大弱点重複':'statMaxWeakOverlap','メガ数':'statMegaCount','設置技':'statHazards','天候':'statWeather','スカーフ':'statScarf','物理/特殊':'statPhysSpec','平均素早さ':'statAvgSpeed'};
+  function statLabel(k){ const key = STAT_LABELS[k]; return key ? I18N[key] : k; }
+  function statValue(k, v){
+    const s = String(v);
+    if(k==='最大弱点重複'){ const m=/^(.+?) に(\d+)体$/.exec(s); if(m) return I18N.statWeakOverlapVal(tType(m[1]), m[2]); }
+    if(k==='設置技'||k==='天候'){ return s==='有'?I18N.yes:s==='無'?I18N.no:s; }
+    if(k==='平均素早さ'){ const m=/^(\d+)（最速(\d+)）$/.exec(s); if(m) return I18N.statAvgSpeedVal(m[1],m[2]); }
+    return s;
+  }
 
   function iconUrl(name){
     const n = (name||'').replace(' (','(');
@@ -789,7 +869,7 @@ const I18N = I18N_ALL[lang];
       </div>
       <div class="drow"><span class="lbl mv">${I18N.moveLbl}</span><span class="mvwrap">${m.moves.map(x=>`<span class="mvchip">${typeIco(x)}${esc(tMove(x))}</span>`).join('')||'—'}</span></div>
       <div class="drow"><span class="lbl ev">${I18N.evLbl}</span><span class="mvwrap">${evChips(m.ev)||'—'}</span></div>
-      ${(m.roles&&m.roles.length)?`<div style="margin-top:.35em">${m.roles.map(r=>`<span class="role">${esc(r)}</span>`).join('')}</div>`:''}`;
+      ${(m.roles&&m.roles.length)?`<div style="margin-top:.35em">${m.roles.map(r=>`<span class="role">${esc(tRole(r))}</span>`).join('')}</div>`:''}`;
   }
 
   const col = c => ({'◎':'bg-cc','○':'bg-cb','△':'bg-cn','▲':'bg-cw','×':'bg-cx'}[c]||'bg-cn');
@@ -843,7 +923,7 @@ const I18N = I18N_ALL[lang];
         <span class="mitem">${esc(tItem(m.item))||'—'}</span>
       </button>`).join('');
     const _skip = {'脅威対応率':1,'攻撃カバー':1,'防御相補':1};
-    const st = res.stats ? `<div class="stats">${Object.entries(res.stats).filter(([k])=>!_skip[k]).map(([k,v])=>`<span><b>${esc(k)}</b> ${esc(String(v))}</span>`).join('')}</div>` : '';
+    const st = res.stats ? `<div class="stats">${Object.entries(res.stats).filter(([k])=>!_skip[k]).map(([k,v])=>`<span><b>${esc(statLabel(k))}</b> ${esc(statValue(k,v))}</span>`).join('')}</div>` : '';
     const dt = res.details || {};
     const tm = dt.typematrix;
     const arch = res.archetypes;
@@ -931,7 +1011,7 @@ const I18N = I18N_ALL[lang];
             <div class="sc-rule-body">
               <div class="sc-teams">${sel || `<div class="sc-sub muted">${I18N.unseenAny}</div>`}</div>
               <div class="sc-arr">▶</div>
-              <div class="sc-rule-act"><div class="sc-swap">${icoImg(ru.mon,'sc-ico-s')} <b>${esc(tPoke(ru.mon))}</b>${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(esc).join('・')}</span>`:''}（${I18N.coreTag}）</div><div class="sc-chips">${condChip}</div></div>
+              <div class="sc-rule-act"><div class="sc-swap">${icoImg(ru.mon,'sc-ico-s')} <b>${esc(tPoke(ru.mon))}</b>${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(r=>esc(tRole(r))).join('・')}</span>`:''}（${I18N.coreTag}）</div><div class="sc-chips">${condChip}</div></div>
             </div>
           </div>`;
         }
@@ -980,7 +1060,7 @@ const I18N = I18N_ALL[lang];
           <div class="sc-rule-body">
             <div class="sc-teams">${teams}</div>
             <div class="sc-arr">▶</div>
-            <div class="sc-rule-act"><div class="sc-swap">${swap} ${I18N.swapAdd(esc(tPoke(ru.mon)))}${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(esc).join('・')}</span>`:''}</div>${reason}<div class="sc-chips">${condChip}</div></div>
+            <div class="sc-rule-act"><div class="sc-swap">${swap} ${I18N.swapAdd(esc(tPoke(ru.mon)))}${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(r=>esc(tRole(r))).join('・')}</span>`:''}</div>${reason}<div class="sc-chips">${condChip}</div></div>
           </div>
         </div>`;
       }).join('');
@@ -990,7 +1070,7 @@ const I18N = I18N_ALL[lang];
       html += `<div class="sc-branch-hd">${I18N.roleTable}</div><table class="sc-roles"><tr><th></th><th>${I18N.roleColRole}</th><th>${I18N.roleColTurn}</th></tr>` +
         s.role_table.map(rt=>`<tr class="sc-st-${rt.status}">
           <td>${icoImg(rt.mon,'sc-ico-s')} ${esc(tPoke(rt.mon))}</td>
-          <td>${(rt.roles||[]).map(esc).join('・')||'-'}</td>
+          <td>${(rt.roles||[]).map(r=>esc(tRole(r))).join('・')||'-'}</td>
           <td><span class="sc-stbadge sc-stb-${rt.status}">${stLbl[rt.status]||''}</span> <span class="sc-sub">${I18N.selRate(rt.n,rt.N)}</span></td>
         </tr>`).join('') + `</table>`;
     }
@@ -1039,7 +1119,7 @@ const I18N = I18N_ALL[lang];
     const rows = fp.rows.map(r=>{
       const cells = r.cells.map((c,j)=>{
         const tip = I18N.cellTip + (c.move?` (${I18N.assumedMove} ${tMove(c.move)})`:'');
-        return `<td class="${c.cls} fire-cell" data-mon="${esc(r.mon)}" data-opp="${esc(fp.tops[j].sp)}" title="${esc(tip)}">${c.lab}${c.note?'<span class="ko-note">*</span>':''}</td>`;
+        return `<td class="${c.cls} fire-cell" data-mon="${esc(r.mon)}" data-opp="${esc(fp.tops[j].sp)}" title="${esc(tip)}">${esc(tKo(c.lab))}${c.note?'<span class="ko-note">*</span>':''}</td>`;
       }).join('');
       return `<tr>${memRowHead({name:r.mon})}${cells}</tr>`;
     }).join('');
@@ -1073,7 +1153,7 @@ const I18N = I18N_ALL[lang];
   function fireDetailHtml(d){
     const cols = d.cols.map(c=>`<th>${I18N.thVariant(c.idx)}<span class="pop-types">${typeIcoByName(c.t1)}${c.t2?typeIcoByName(c.t2):''}</span><span class="pop-col-sub">${esc(tItem(c.item))}<br>${esc(c.ev)}<br>${esc(tAbil(c.ability))}</span></th>`).join('');
     const rows = d.rows.map(r=>{
-      const cells = r.cells.map(c=>`<td class="${c.best?'best':''}">${c.best?'★':''}<span class="pop-pct">${esc(c.pct)}</span><br><span class="pop-ko">${esc(c.ko)}${c.note?'・'+esc(c.note):''}</span></td>`).join('');
+      const cells = r.cells.map(c=>`<td class="${c.best?'best':''}">${c.best?'★':''}<span class="pop-pct">${esc(c.pct)}</span><br><span class="pop-ko">${esc(tKo(c.ko))}${c.note?'・'+esc(tSurviveNote(c.note)):''}</span></td>`).join('');
       return `<tr><td class="lft"><span class="mvchip-s">${typeIcoByName(r.type)}${esc(tMove(r.move))}</span></td>${cells}</tr>`;
     }).join('');
     return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">→</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
@@ -1096,9 +1176,9 @@ const I18N = I18N_ALL[lang];
   }
   function matchupDetailHtml(d){
     const cols = d.cols.map(c=>`<th>${I18N.thVariant(c.idx)}<span class="pop-types">${typeIcoByName(c.t1)}${c.t2?typeIcoByName(c.t2):''}</span><span class="pop-col-sub">${esc(tItem(c.item))}<br>${esc(tNature(c.nature))}<br>${esc(c.ev)}</span></th>`).join('');
-    const dmgRow = (lab, arr) => `<tr><td class="lft">${lab}</td>${arr.map(c=>`<td><span class="pop-pct">${esc(c.pct)}</span> <span class="pop-ko">${esc(c.ko)}</span><br><span class="pop-ko">${esc(tMove(c.move))}</span></td>`).join('')}</tr>`;
-    const spRow = `<tr><td class="lft">${I18N.speedRow}</td>${d.spd.map(c=>`<td class="${c.fast?'sp-win':'sp-lose'}">${esc(c.txt)}</td>`).join('')}</tr>`;
-    const jRow = `<tr><td class="lft">${I18N.judgeRow}</td>${d.judge.map(c=>`<td class="${col(c.v)}"><b style="font-size:1.05em">${c.v}</b><br><span class="pop-ko">${esc(c.txt)}</span></td>`).join('')}</tr>`;
+    const dmgRow = (lab, arr) => `<tr><td class="lft">${lab}</td>${arr.map(c=>`<td><span class="pop-pct">${esc(c.pct)}</span> <span class="pop-ko">${esc(tKo(c.ko))}</span><br><span class="pop-ko">${esc(tMove(c.move))}</span></td>`).join('')}</tr>`;
+    const spRow = `<tr><td class="lft">${I18N.speedRow}</td>${d.spd.map(c=>`<td class="${c.fast?'sp-win':'sp-lose'}">${esc(tSpdTxt(c.txt))}</td>`).join('')}</tr>`;
+    const jRow = `<tr><td class="lft">${I18N.judgeRow}</td>${d.judge.map(c=>`<td class="${col(c.v)}"><b style="font-size:1.05em">${c.v}</b><br><span class="pop-ko">${esc(tJudgeTxt(c.txt))}</span></td>`).join('')}</tr>`;
     return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
       <div class="pop-sub">${I18N.popMuSub}</div>
       <div style="overflow-x:auto"><table class="pop-t"><tr><th class="lft"> </th>${cols}</tr>${dmgRow(I18N.dmgSelf,d.me)}${dmgRow(I18N.dmgOpp,d.op)}${spRow}${jRow}</table></div>`;
