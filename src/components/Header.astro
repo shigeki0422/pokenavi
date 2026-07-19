@@ -7,6 +7,9 @@ import Sidebar from './Sidebar.astro';
 const path = Astro.url.pathname;
 const lang = path.startsWith('/en') ? 'en' : path.startsWith('/ko') ? 'ko' : 'ja';
 const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : SITE_TITLE;
+const pfx = lang === 'ja' ? '' : `/${lang}`;
+const brandHref = `${pfx}/`;
+const menuAria = lang === 'en' ? 'Open menu' : lang === 'ko' ? '메뉴 열기' : 'メニューを開く';
 ---
 
 <Sidebar />
@@ -14,12 +17,12 @@ const siteName = lang === 'en' ? 'PokeNavi' : lang === 'ko' ? '포케나비' : S
 <header>
 	<nav>
 		<h2>
-			<a href="/" class="brand-link">
+			<a href={brandHref} class="brand-link">
 				<img src="/logo-mark.png" alt="ポケナビ ロゴ" width="28" height="28" class="brand-logo" />
 				{siteName}
 			</a>
 		</h2>
-		<button class="hamburger" id="menu-btn" aria-label="メニューを開く" aria-expanded="false">
+		<button class="hamburger" id="menu-btn" aria-label={menuAria} aria-expanded="false">
 			<span></span><span></span><span></span>
 		</button>
 	</nav>
