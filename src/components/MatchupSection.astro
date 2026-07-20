@@ -1,7 +1,7 @@
 ---
 import type { StaticMatchup } from '../scripts/party-builder/matchup-static';
 import { getMatchupBreakdown } from '../scripts/party-builder/matchup-static';
-import { MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
+import MatchupBreakdownPopup from './MatchupBreakdownPopup.astro';
 
 interface Props {
   matchups: StaticMatchup[];
@@ -15,81 +15,22 @@ const { matchups, iconToSlug, nameMap, lang, ownIcon, ownName } = Astro.props;
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 
 const T = {
-  ja: {
-    heading: '有利・不利な相手（使用率TOP30）',
-    fav: '有利な相手',
-    unfav: '不利な相手',
-    note: '使用率上位30体の主流型同士の1v1事前計算による目安です（交代・補助技は非考慮）。*は相手の型により評価が変わります。',
-    cta: '自分のパーティで詳しく判定 → パーティ工房',
-    hits: (n: number | null) => (n == null || n >= 999 ? '圏外' : `確定${n}発`),
-    basisHd: (myName: string, oppName: string, count: number) => `${myName}の主流型 vs ${oppName}の型プール（${count}種）:`,
-    thOpp: (n: string) => `${n}の型`,
-    thJudge: '判定',
-    thMy: (n: string) => `${n}→`,
-    thOppTo: (n: string) => `→${n}`,
-    linkSelf: (n: string) => `${n}のページを見る →`,
-  },
-  en: {
-    heading: 'Favorable / Unfavorable Matchups (Top 30)',
-    fav: 'Favorable',
-    unfav: 'Unfavorable',
-    note: 'Estimated from precomputed 1v1s between the most common builds of the top 30 Pokémon (switching and status moves not considered). * = depends on the opponent’s build.',
-    cta: 'Judge with your own party → Party Builder',
-    hits: (n: number | null) => (n == null || n >= 999 ? 'out of range' : `KO in ${n}`),
-    basisHd: (myName: string, oppName: string, count: number) => `${myName}'s main build vs ${oppName}'s build pool (${count}):`,
-    thOpp: (n: string) => `${n}'s build`,
-    thJudge: 'Verdict',
-    thMy: (n: string) => `${n}→`,
-    thOppTo: (n: string) => `→${n}`,
-    linkSelf: (n: string) => `View ${n}'s page →`,
-  },
-  ko: {
-    heading: '유리·불리한 상대 (사용률 TOP30)',
-    fav: '유리한 상대',
-    unfav: '불리한 상대',
-    note: '사용률 상위 30마리의 주류 빌드 간 1v1 사전 계산에 따른 참고치입니다 (교체·보조 기술 미고려). *는 상대의 빌드에 따라 평가가 달라집니다.',
-    cta: '내 파티로 자세히 판정 → 파티 공방',
-    hits: (n: number | null) => (n == null || n >= 999 ? '범위 밖' : `확정 ${n}발`),
-    basisHd: (myName: string, oppName: string, count: number) => `${myName}의 주류 빌드 vs ${oppName}의 빌드 풀(${count}종):`,
-    thOpp: (n: string) => `${n}의 빌드`,
-    thJudge: '판정',
-    thMy: (n: string) => `${n}→`,
-    thOppTo: (n: string) => `→${n}`,
-    linkSelf: (n: string) => `${n} 페이지 보기 →`,
-  },
+  ja: { heading: '有利・不利な相手（使用率TOP30）', fav: '有利な相手', unfav: '不利な相手', note: '使用率上位30体の主流型同士の1v1事前計算による目安です（交代・補助技は非考慮）。*は相手の型により評価が変わります。', cta: '自分のパーティで詳しく判定 → パーティ工房', linkSelf: (n: string) => `${n}のページを見る →` },
+  en: { heading: 'Favorable / Unfavorable Matchups (Top 30)', fav: 'Favorable', unfav: 'Unfavorable', note: 'Estimated from precomputed 1v1s between the most common builds of the top 30 Pokémon (switching and status moves not considered). * = depends on the opponent’s build.', cta: 'Judge with your own party → Party Builder', linkSelf: (n: string) => `View ${n}'s page →` },
+  ko: { heading: '유리·불리한 상대 (사용률 TOP30)', fav: '유리한 상대', unfav: '불리한 상대', note: '사용률 상위 30마리의 주류 빌드 간 1v1 사전 계산에 따른 참고치입니다 (교체·보조 기술 미고려). *는 상대의 빌드에 따라 평가가 달라집니다.', cta: '내 파티로 자세히 판정 → 파티 공방', linkSelf: (n: string) => `${n} 페이지 보기 →` },
 }[lang];
 
 const favorable = matchups.filter(m => m.sym === '◎' || m.sym === '○');
 const unfavorable = matchups.filter(m => m.sym === '▲' || m.sym === '×');
 const displayName = (n: string) => nameMap[n] ?? n;
-const displayMove = (n: string | null) => {
-  if (!n) return '—';
-  if (lang === 'en') return MOVE_NAME_EN[n] ?? n;
-  if (lang === 'ko') return MOVE_NAME_KO[n] ?? n;
-  return n;
-};
-const displayItem = (n: string) => (lang === 'en' ? ITEM_NAME_EN[n] ?? n : lang === 'ko' ? ITEM_NAME_KO[n] ?? n : n);
-const displayNature = (n: string) => (lang === 'en' ? NATURE_NAME_EN[n] ?? n : lang === 'ko' ? NATURE_NAME_KO[n] ?? n : n);
 
 /**
- * getMatchupBreakdown()——/counters/ページと共有する唯一の集計元——から
- * 相手の型プール(最大3種)を取り出し、型ごとの持ち物・技構成・判定を
- * ポップアップのテーブルに並べる。「相手の型として何を採用するか」の
- * ロジックはmatchup-static.tsに一本化されているため、ここを直せば
- * /counters/側の表示も同時に直る。
+ * /counters/ページと共有するMatchupBreakdownPopup.astroに渡すため、
+ * getMatchupBreakdown()(matchup-static.tsの唯一の集計元)をここでも呼ぶ。
+ * 「相手の型をどう集約するか」のロジックは1箇所(matchup-static.ts)にあるため、
+ * ここを直せば/counters/側も同時に直る。
  */
-const basisRows = (opponentIcon: string) => {
-  const breakdown = getMatchupBreakdown(ownIcon, opponentIcon);
-  if (!breakdown || !ownName) return null;
-  return breakdown.builds.map(({ build, verdict }) => ({
-    item: displayItem(build.item),
-    nature: displayNature(build.nature),
-    moves: build.moves.map((mv) => displayMove(mv.n)).join('/'),
-    sym: verdict.sym,
-    myHits: T.hits(verdict.myHits),
-    oppHits: T.hits(verdict.oppHits),
-  }));
-};
+const breakdownOf = (opponentIcon: string) => (ownName ? getMatchupBreakdown(ownIcon, opponentIcon) : null);
 ---
 
 {(favorable.length > 0 || unfavorable.length > 0) && (
@@ -103,7 +44,7 @@ const basisRows = (opponentIcon: string) => {
             {favorable.map(m => {
               const slug = iconToSlug[m.icon];
               const name = displayName(m.name);
-              const rows = ownName ? basisRows(m.icon) : null;
+              const breakdown = breakdownOf(m.icon);
               const inner = (
                 <>
                   <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={name} width="44" height="44" loading="lazy" />
@@ -111,23 +52,20 @@ const basisRows = (opponentIcon: string) => {
                   <span class="mu-name">{name}</span>
                 </>
               );
-              return rows ? (
+              return breakdown ? (
                 <details class="mu-cell mu-cell-pop">
                   <summary title={name}>{inner}</summary>
                   <div class="mu-pop">
-                    <p class="mu-basis-hd">{T.basisHd(ownName!, name, rows.length)}</p>
-                    <table class="mu-basis-table">
-                      <tr><th class="lft">{T.thOpp(name)}</th><th>{T.thJudge}</th><th>{T.thMy(ownName!)}</th><th>{T.thOppTo(ownName!)}</th></tr>
-                      {rows.map(r => (
-                        <tr>
-                          <td class="lft">{r.item}・{r.nature}<br />{r.moves}</td>
-                          <td class={r.sym === '◎' ? 'sym-best' : r.sym === '○' ? 'sym-ok' : (r.sym === '▲' || r.sym === '×') ? 'sym-bad' : ''}>{r.sym}</td>
-                          <td>{r.myHits}</td>
-                          <td>{r.oppHits}</td>
-                        </tr>
-                      ))}
-                    </table>
-                    {slug && <a href={`${pfx}/pokemon/${slug}/`}>{T.linkSelf(name)}</a>}
+                    <MatchupBreakdownPopup
+                      lang={lang}
+                      myName={ownName!}
+                      myIcon={ownIcon}
+                      oppName={name}
+                      oppIcon={m.icon}
+                      breakdown={breakdown}
+                      otherHref={slug ? `${pfx}/pokemon/${slug}/` : null}
+                      otherLabel={T.linkSelf(name)}
+                    />
                   </div>
                 </details>
               ) : slug ? (
@@ -146,7 +84,7 @@ const basisRows = (opponentIcon: string) => {
             {unfavorable.map(m => {
               const slug = iconToSlug[m.icon];
               const name = displayName(m.name);
-              const rows = ownName ? basisRows(m.icon) : null;
+              const breakdown = breakdownOf(m.icon);
               const inner = (
                 <>
                   <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={name} width="44" height="44" loading="lazy" />
@@ -154,23 +92,20 @@ const basisRows = (opponentIcon: string) => {
                   <span class="mu-name">{name}</span>
                 </>
               );
-              return rows ? (
+              return breakdown ? (
                 <details class="mu-cell mu-cell-pop">
                   <summary title={name}>{inner}</summary>
                   <div class="mu-pop">
-                    <p class="mu-basis-hd">{T.basisHd(ownName!, name, rows.length)}</p>
-                    <table class="mu-basis-table">
-                      <tr><th class="lft">{T.thOpp(name)}</th><th>{T.thJudge}</th><th>{T.thMy(ownName!)}</th><th>{T.thOppTo(ownName!)}</th></tr>
-                      {rows.map(r => (
-                        <tr>
-                          <td class="lft">{r.item}・{r.nature}<br />{r.moves}</td>
-                          <td class={r.sym === '◎' ? 'sym-best' : r.sym === '○' ? 'sym-ok' : (r.sym === '▲' || r.sym === '×') ? 'sym-bad' : ''}>{r.sym}</td>
-                          <td>{r.myHits}</td>
-                          <td>{r.oppHits}</td>
-                        </tr>
-                      ))}
-                    </table>
-                    {slug && <a href={`${pfx}/pokemon/${slug}/`}>{T.linkSelf(name)}</a>}
+                    <MatchupBreakdownPopup
+                      lang={lang}
+                      myName={ownName!}
+                      myIcon={ownIcon}
+                      oppName={name}
+                      oppIcon={m.icon}
+                      breakdown={breakdown}
+                      otherHref={slug ? `${pfx}/pokemon/${slug}/` : null}
+                      otherLabel={T.linkSelf(name)}
+                    />
                   </div>
                 </details>
               ) : slug ? (
@@ -202,7 +137,7 @@ const basisRows = (opponentIcon: string) => {
   }
   a.mu-cell:hover { background: #f8fafc; }
   .mu-cell img { width: 44px; height: 44px; object-fit: contain; }
-  details.mu-cell-pop { width: auto; padding: 0; }
+  details.mu-cell-pop { width: auto; padding: 0; position: relative; }
   details.mu-cell-pop > summary {
     display: flex; flex-direction: column; align-items: center; gap: 1px;
     width: 62px; padding: 4px 0; border-radius: 8px; cursor: pointer; list-style: none;
@@ -211,19 +146,10 @@ const basisRows = (opponentIcon: string) => {
   details.mu-cell-pop > summary:hover { background: #f8fafc; }
   details.mu-cell-pop[open] > summary { background: #f8fafc; }
   .mu-pop {
-    width: 260px; margin-top: 4px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 8px;
-    background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.08);
+    position: absolute; z-index: 20; top: 100%; left: 0; margin-top: 4px; padding: 10px 12px;
+    border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; box-shadow: 0 8px 24px rgba(0,0,0,.12);
+    width: max-content; max-width: 90vw;
   }
-  .mu-basis-hd { font-size: .66rem; color: #64748b; margin: 0 0 6px; }
-  .mu-basis-table { width: 100%; border-collapse: collapse; font-size: .62rem; margin-bottom: 6px; }
-  .mu-basis-table th, .mu-basis-table td { border: 1px solid #e2e8f0; padding: 3px 4px; text-align: center; }
-  .mu-basis-table th { background: #f8fafc; font-weight: 700; }
-  .mu-basis-table td.lft, .mu-basis-table th.lft { text-align: left; }
-  .mu-basis-table .sym-best { color: #15803d; font-weight: 800; }
-  .mu-basis-table .sym-ok { color: #4d7c0f; font-weight: 800; }
-  .mu-basis-table .sym-bad { color: #dc2626; font-weight: 800; }
-  .mu-pop a { font-size: .74rem; font-weight: 700; color: var(--accent, #f97316); text-decoration: none; }
-  .mu-pop a:hover { text-decoration: underline; }
   .mu-sym { font-size: 0.8rem; font-weight: 700; color: #059669; line-height: 1.1; }
   .mu-sym.mu-best { color: #047857; }
   .mu-sym.mu-bad { color: #dc2626; }
@@ -238,5 +164,6 @@ const basisRows = (opponentIcon: string) => {
   .mu-cta:hover { text-decoration: underline; }
   @media (max-width: 720px) {
     .mu-groups { grid-template-columns: 1fr; }
+    .mu-pop { position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); max-width: 92vw; max-height: 80vh; overflow-y: auto; }
   }
 </style>

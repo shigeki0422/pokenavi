@@ -4,6 +4,26 @@ import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./t
 import { effectiveSpeed } from "./stats";
 import { bestMove, calcDamage } from "./damage";
 
+/**
+ * 攻撃側の最大打点技(bestMove)による、相手HPに対する与ダメ割合(%)を乱数min/max
+ * (calcDamageのrandomRoll=0/1)で返す。ポップアップの「105〜108%」のような
+ * 表示に使う。judge1v1の確定数計算(乱数0.85固定)とは別に、UI表示専用に
+ * 実際のダメージ幅を出す。
+ */
+export interface MoveDamageRange {
+  move: string;
+  loPct: number;
+  hiPct: number;
+}
+export function bestMoveDamageRange(attacker: ResolvedBuild, defender: ResolvedBuild): MoveDamageRange | null {
+  const best = bestMove(attacker, defender);
+  if (!best) return null;
+  const lo = calcDamage(attacker, defender, best.move, { randomRoll: 0 });
+  const hi = calcDamage(attacker, defender, best.move, { randomRoll: 1 });
+  const hp = Math.max(1, defender.stats[0]);
+  return { move: best.move.n, loPct: Math.round((lo / hp) * 1000) / 10, hiPct: Math.round((hi / hp) * 1000) / 10 };
+}
+
 function _scoreSym(score: number): Verdict["sym"] {
   if (score >= 1.5) return "◎";
   if (score >= 0.5) return "○";

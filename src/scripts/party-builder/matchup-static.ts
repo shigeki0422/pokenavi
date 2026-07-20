@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { MoveDict, ResolvedBuild, SpeciesMaster, TargetGroup, Verdict } from "./types";
 import { resolveSlot, resolveTarget } from "./balance";
-import { judgeVsBuilds, judge1v1 } from "./matchup";
+import { judgeVsBuilds, judge1v1, bestMoveDamageRange } from "./matchup";
 import { fromSpec } from "./spec";
 
 export interface StaticMatchup {
@@ -92,9 +92,23 @@ export function getHeadToHead(iconA: string, iconB: string): HeadToHead | null {
  * myIconは主流型1つ固定(自分の型は確定しているという前提)、oppIconは使用率上位
  * プール内の種である必要がある(getMatchups()と同じ前提)。プール外ならnull。
  */
+const EV_LABELS = ["H", "A", "B", "C", "D", "S"] as const;
+/** EV配分を「H2 A32 S32」のように非ゼロ値のみ表示する共通フォーマット。 */
+function evLabel(evs: ResolvedBuild["evs"]): string {
+  return evs
+    .map((v, i) => (v > 0 ? `${EV_LABELS[i]}${v}` : null))
+    .filter((s): s is string => s !== null)
+    .join(" ");
+}
+
 export interface MatchupBuildRow {
   build: ResolvedBuild;
   verdict: Verdict;
+  evLabel: string;
+  /** 自分(me)がこの型に与える最大打点技のダメージ割合(%, 乱数min〜max)。 */
+  myDmg: ReturnType<typeof bestMoveDamageRange>;
+  /** この型が自分(me)に与える最大打点技のダメージ割合(%, 乱数min〜max)。 */
+  oppDmg: ReturnType<typeof bestMoveDamageRange>;
 }
 export interface MatchupBreakdown {
   me: ResolvedBuild;
@@ -109,6 +123,12 @@ export function getMatchupBreakdown(myIcon: string, oppIcon: string): MatchupBre
   const oppGroup = resolvedTargets.find((t) => t.icon === oppIcon);
   if (!oppGroup || !oppGroup.builds.length) return null;
   const agg = judgeVsBuilds(me, oppGroup.builds);
-  const builds = oppGroup.builds.map((build, i) => ({ build, verdict: agg.verdicts[i] }));
+  const builds = oppGroup.builds.map((build, i) => ({
+    build,
+    verdict: agg.verdicts[i],
+    evLabel: evLabel(build.evs),
+    myDmg: bestMoveDamageRange(me, build),
+    oppDmg: bestMoveDamageRange(build, me),
+  }));
   return { me, oppName: oppGroup.name, builds, sym: agg.sym, dep: agg.dep };
 }
