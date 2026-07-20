@@ -41,13 +41,34 @@ export async function getStaticPaths() {
   const res = await fetch('https://pokenavi-suggest-799947701075.asia-northeast1.run.app/species');
   const species: { label: string; sp: string; mega: string; rank: number }[] = await res.json();
 
+  // 種族によってはメガ進化が複数系統ある(リザードンX/Y、ライチュウX/Y等)。
+  // 同じsp(和名)に対しmegaを持つ候補が複数あると、単純な`mega-${baseSlug}`
+  // ではスラッグが衝突し片方のページが黙って消える(実際にライチュウX/Yで発生)。
+  // 複数ある場合のみlabel末尾のX/Yでスラッグを分ける(単一のメガ種は既存URLを
+  // 変えないよう`mega-${baseSlug}`のまま)。
+  const megaCountBySp: Record<string, number> = {};
+  for (const s of species) {
+    if (s.mega) megaCountBySp[s.sp] = (megaCountBySp[s.sp] ?? 0) + 1;
+  }
+
   const paths = [];
   for (const s of species) {
     const baseSlug = spToSlug[s.sp];
     if (!baseSlug) continue;
     const rank = rankMap[s.sp];
 
-    const slug = s.mega ? `mega-${baseSlug}` : baseSlug;
+    let slug: string;
+    if (s.mega) {
+      if ((megaCountBySp[s.sp] ?? 0) > 1) {
+        const variant = /([XY])$/.exec(s.label)?.[1]?.toLowerCase() ?? String(megaCountBySp[s.sp]);
+        slug = `mega-${baseSlug}-${variant}`;
+      } else {
+        slug = `mega-${baseSlug}`;
+      }
+    } else {
+      slug = baseSlug;
+    }
+
     paths.push({
       params: { slug },
       props: { label: s.label, sp: s.sp, rank, baseSlug, isMega: !!s.mega, articleSlug: articleBySp[s.sp] ?? null },

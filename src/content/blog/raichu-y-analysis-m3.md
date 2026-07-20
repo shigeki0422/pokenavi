@@ -494,4 +494,4 @@ draft: false
 
 ---
 
-**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-raichu/)**
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-raichu-y/)**

@@ -26,6 +26,13 @@ const pfx = lang === 'en' ? '/en' : lang === 'ko' ? '/ko' : '';
 const psSlugSet = new Set(partySuggestSlugs as string[]);
 const hasPartySuggest = !!pokemonSlug && psSlugSet.has(pokemonSlug);
 const hasMegaPartySuggest = !!pokemonSlug && psSlugSet.has(`mega-${pokemonSlug}`);
+/** メガリザードンX/Y、メガライチュウX/Yのように、種族によってはメガ進化が
+ * 複数系統ある。party-suggest/[slug].astroはこの場合スラッグをX/Yで分けて
+ * 生成する(mega-{slug}-x / mega-{slug}-y)ため、ここでも両方の有無を見て
+ * 別々のCTAリンクを出す(単一メガ種は従来通りmega-{slug}のまま)。 */
+const megaVariants = (['x', 'y'] as const)
+  .map((suffix) => ({ suffix, slug: `mega-${pokemonSlug}-${suffix}` }))
+  .filter((v) => !!pokemonSlug && psSlugSet.has(v.slug));
 /** 「○○対策」ページ(src/pages/counters/[slug].astro)は使用率上位30体
  * (targets.json、対戦相手として選出される側)のみプロトタイプ実装のため、
  * このポケモンがその対象かどうかで表示を切り替える。ja版のみ(en/ko展開は
@@ -46,9 +53,9 @@ const metaDescription = pokemonName && usageRank ? (
     : `チャンピオンズM-4使用率${usageRank}位${pokemonName}の対戦データ。技・持ち物・特性・性格の採用率TOP10と種族値・タイプ相性を掲載。`
 ) : description;
 const T = {
-  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる', quickBuild: (n: string) => `${n}を軸にした簡単構築`, quickBuildMega: (n: string) => `メガ${n}を軸にした簡単構築`, counters: (n: string) => `${n}対策 — 有利を取れるポケモンを見る` },
-  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', quickBuild: (n: string) => `Quick Build from ${n}`, quickBuildMega: (n: string) => `Quick Build from Mega ${n}`, counters: (n: string) => `Counters to ${n}` },
-  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로', hubAnalysis: '📖 분석 기사 읽기', hubWatch: '🎬 상위 구성 대전 관전', hubBuild: '⚔️ 파티에 추가', quickBuild: (n: string) => `${n} 축으로 간단 구성`, quickBuildMega: (n: string) => `메가${n} 축으로 간단 구성`, counters: (n: string) => `${n} 대책 포켓몬 보기` },
+  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる', quickBuild: (n: string) => `${n}を軸にした簡単構築`, quickBuildMega: (n: string) => `メガ${n}を軸にした簡単構築`, quickBuildMegaVariant: (n: string, v: string) => `メガ${n}${v}を軸にした簡単構築`, counters: (n: string) => `${n}対策 — 有利を取れるポケモンを見る` },
+  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', quickBuild: (n: string) => `Quick Build from ${n}`, quickBuildMega: (n: string) => `Quick Build from Mega ${n}`, quickBuildMegaVariant: (n: string, v: string) => `Quick Build from Mega ${n} ${v}`, counters: (n: string) => `Counters to ${n}` },
+  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로', hubAnalysis: '📖 분석 기사 읽기', hubWatch: '🎬 상위 구성 대전 관전', hubBuild: '⚔️ 파티에 추가', quickBuild: (n: string) => `${n} 축으로 간단 구성`, quickBuildMega: (n: string) => `메가${n} 축으로 간단 구성`, quickBuildMegaVariant: (n: string, v: string) => `메가${n}${v} 축으로 간단 구성`, counters: (n: string) => `${n} 대책 포켓몬 보기` },
 }[lang];
 /** contentコレクションのtitleは和名のみ(全言語共通データ)のため、en/koでは
  * <title>・OGP・JSON-LD name にそのまま使うと日本語タイトルがSEOに露出してしまう。
@@ -62,6 +69,10 @@ const pageTitle = pokemonNameDisp
   : title;
 const quickBuildHref = lang === 'ja' ? `/party-suggest/${pokemonSlug}/` : `${pfx}/party-suggest/?core=${encodeURIComponent(pokemonName ?? '')}`;
 const quickBuildMegaHref = lang === 'ja' ? `/party-suggest/mega-${pokemonSlug}/` : `${pfx}/party-suggest/?core=${encodeURIComponent('メガ' + (pokemonName ?? ''))}`;
+const quickBuildMegaVariantHref = (suffix: 'x' | 'y') =>
+  lang === 'ja'
+    ? `/party-suggest/mega-${pokemonSlug}-${suffix}/`
+    : `${pfx}/party-suggest/?core=${encodeURIComponent('メガ' + (pokemonName ?? '') + suffix.toUpperCase())}`;
 const hreflangAlternates = pokemonSlug ? [
   { lang: 'ja', url: `${siteUrl}/pokemon/${pokemonSlug}/` },
   { lang: 'en', url: `${siteUrl}/en/pokemon/${pokemonSlug}/` },
@@ -327,7 +338,7 @@ const breadcrumbJsonLd = {
 					<slot />
 					{matchups && <MatchupSection matchups={matchups} iconToSlug={iconToSlug} nameMap={POKEMON_MAP} lang={lang} ownIcon={ownIcon} ownName={pokemonNameDisp ?? pokemonName} />}
 					{pokemonName && <SimPartyCard pokemonName={pokemonName} />}
-					{(hasPartySuggest || hasMegaPartySuggest) && (
+					{(hasPartySuggest || hasMegaPartySuggest || megaVariants.length > 0) && (
 						<div class="ps-cta-wrap">
 							{hasPartySuggest && (
 								<a href={quickBuildHref} class="ps-cta">
@@ -341,6 +352,12 @@ const breadcrumbJsonLd = {
 									<span class="ps-cta-arrow">→</span>
 								</a>
 							)}
+							{megaVariants.map((v) => (
+								<a href={quickBuildMegaVariantHref(v.suffix)} class="ps-cta">
+									<span>{T.quickBuildMegaVariant(pokemonNameDisp, v.suffix.toUpperCase())}</span>
+									<span class="ps-cta-arrow">→</span>
+								</a>
+							))}
 						</div>
 					)}
 					{hasCounters && (

@@ -160,7 +160,17 @@ const jsonLd = {
       .ccard .sym.best { color: #15803d; }
       .ccard .sym.ok { color: #4d7c0f; }
       .ccard .dep { font-size: .65rem; color: #7c3aed; font-weight: 800; vertical-align: 3px; }
-      .ccard-pop { padding: 10px 12px 12px; border-top: 1px solid #e2e8f0; }
+      /* インライン展開だと画面下に長く伸びて見づらい・カード位置によって画面外に
+         はみ出す(モバイルで報告された不具合)ため、/pokemon/(MatchupSection.astro)
+         と同じく常時position:fixedで画面中央にポップアップ表示する。 */
+      details.ccard-wrap[open]::before {
+        content: ''; position: fixed; inset: 0; background: rgba(15, 23, 42, .35); z-index: 19;
+      }
+      .ccard-pop {
+        position: fixed; z-index: 20; left: 50%; top: 50%; transform: translate(-50%, -50%);
+        padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff;
+        box-shadow: 0 12px 32px rgba(0,0,0,.2); width: max-content; max-width: 92vw; max-height: 82vh; overflow-y: auto;
+      }
       .empty { font-size: .88rem; color: rgb(var(--gray)); padding: 1em; background: #f8fafc; border-radius: 8px; }
       .note { font-size: .78rem; color: rgb(var(--gray)); margin-top: 1.6em; line-height: 1.7; }
     </style>
