@@ -377,7 +377,7 @@ function applyDefenderAbility(dmg: number, defender: ResolvedBuild, move: Resolv
 // ── ダメージ計算本体（calc_damage 相当） ────────────────────────────────────────
 
 export interface DamageOptions {
-  /** 0(最低)〜1(最高)のダメージ乱数。省略時 0.85（_mu_score.best() が使う固定値と同じ）。 */
+  /** 0(最低)〜1(最高)のダメージ乱数(0=実際の乱数85%ロール、1=100%ロール)。省略時0(＝最低乱数、確定数計算の前提)。 */
   randomRoll?: number;
 }
 
@@ -502,13 +502,20 @@ function calcDamageDetail(
 
 /** calc_damage(attacker, defender, move, field, critical=False, random_roll) 相当の単発ダメージ計算。 */
 export function calcDamage(me: ResolvedBuild, opp: ResolvedBuild, move: ResolvedMove, opts: DamageOptions = {}): number {
-  return calcDamageDetail(me, opp, move, opp.item, opts.randomRoll ?? 0.85).dmg;
+  return calcDamageDetail(me, opp, move, opp.item, opts.randomRoll ?? 0).dmg;
 }
 
 /**
  * 攻撃側の技のうち相手への与ダメが最大の技を返す。移植元: scripts/_explain.py の best()（_mu_score内）。
  * 状態異常技・DB上威力NULLの技（可変威力技）は候補から除外する（best()と同じフィルタ）。
  * 相手の耐性きのみ消費は、同一ループ内で後続の技評価に反映する（Pythonのオブジェクト共有と同じ挙動）。
+ *
+ * 確定数計算は最低乱数(実際の85%ロール)を前提にする必要があるが、移植元のPython版
+ * (scripts/simulator/damage.py)がrandom_roll引数を「0(最低)〜1(最高)の正規化値」として
+ * 定義しているにもかかわらず、この値に実際の乱数値0.85をそのまま渡していたため、
+ * 内部で roll=0.85+0.85*0.15=97.75% とほぼ最大乱数で計算されてしまっていた
+ * (最低乱数85%では確定数に届かないのに「確定」と表示される実例で発覚)。
+ * 正しい最低乱数(0=実際の85%ロール)を渡すよう修正。
  */
 export function bestMove(me: ResolvedBuild, opp: ResolvedBuild): { move: ResolvedMove; dmg: number } | null {
   let bestDmg = 0;
@@ -516,7 +523,7 @@ export function bestMove(me: ResolvedBuild, opp: ResolvedBuild): { move: Resolve
   let oppItem = opp.item;
   for (const mv of me.moves) {
     if (mv.cat === "status" || !mv.power) continue;
-    const detail = calcDamageDetail(me, opp, mv, oppItem, 0.85);
+    const detail = calcDamageDetail(me, opp, mv, oppItem, 0);
     if (detail.defenderItemConsumed) oppItem = "";
     if (detail.dmg > bestDmg) {
       bestDmg = detail.dmg;
