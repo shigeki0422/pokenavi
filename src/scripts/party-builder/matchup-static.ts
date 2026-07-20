@@ -2,9 +2,9 @@
 // data.ts(loadCore)はfetch前提のブラウザ用のため、ここではnode:fsで直接読む。
 import fs from "node:fs";
 import path from "node:path";
-import type { MoveDict, ResolvedBuild, SpeciesMaster, TargetGroup } from "./types";
+import type { MoveDict, ResolvedBuild, SpeciesMaster, TargetGroup, Verdict } from "./types";
 import { resolveSlot, resolveTarget } from "./balance";
-import { judgeVsBuilds } from "./matchup";
+import { judgeVsBuilds, judge1v1 } from "./matchup";
 import { fromSpec } from "./spec";
 
 export interface StaticMatchup {
@@ -68,4 +68,18 @@ export function getMatchups(icon: string): StaticMatchup[] | null {
   }
   cache.set(icon, result);
   return result;
+}
+
+/** 「A vs B」直接比較ページ用: 2種の主流型同士の1v1詳細判定(getMatchupsの
+ * 集約結果ではなく、双方の技名・確定数・素早さまで含むVerdict全体)を返す。 */
+export interface HeadToHead {
+  verdict: Verdict;
+  me: ResolvedBuild;
+  opp: ResolvedBuild;
+}
+export function getHeadToHead(iconA: string, iconB: string): HeadToHead | null {
+  const me = mainBuild(iconA);
+  const opp = mainBuild(iconB);
+  if (!me || !opp) return null;
+  return { verdict: judge1v1(me, opp), me, opp };
 }

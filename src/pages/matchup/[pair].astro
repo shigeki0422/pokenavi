@@ -1,0 +1,158 @@
+---
+import { getCollection } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getHeadToHead } from '../../scripts/party-builder/matchup-static';
+import partySuggestSlugs from '../../data/party-suggest-slugs.json';
+
+/**
+ * 「A vs B」直接比較ページ: 使用率上位30体(targets.json)から2体を選ぶ全組み合わせ
+ * について、1v1事前計算(matchup-static.tsのgetHeadToHead、パーティ工房・
+ * ポケモン詳細ページと同一エンジン)の詳細(技名・確定数・素早さ)を表示する。
+ * URLの重複コンテンツを避けるため、使用率順位が高い(数字が小さい)方を先に
+ * 置いた組み合わせのみ1本生成する(逆順のURLは作らない。「A vs B」表記は
+ * どちらの語順で検索されてもタイトル・本文に両方の名前が含まれるため拾える)。
+ */
+export async function getStaticPaths() {
+  const targetsPath = path.join(process.cwd(), 'public', 'builder-data', 'targets.json');
+  const targets = JSON.parse(fs.readFileSync(targetsPath, 'utf8')) as { sp: string; icon: string }[];
+  const pokemonPages = await getCollection('pokemon', (p) => !p.data.draft);
+
+  const nameToPage: Record<string, (typeof pokemonPages)[number]> = {};
+  for (const p of pokemonPages) {
+    if (p.data.pokemonName) nameToPage[p.data.pokemonName] = p;
+  }
+
+  const entries = targets
+    .map((t) => {
+      const page = nameToPage[t.sp];
+      if (!page) return null;
+      return { name: t.sp, icon: t.icon, slug: page.id, rank: page.data.usageRank ?? 9999 };
+    })
+    .filter((e): e is NonNullable<typeof e> => !!e)
+    .sort((a, b) => a.rank - b.rank);
+
+  const paths = [];
+  for (let i = 0; i < entries.length; i++) {
+    for (let j = i + 1; j < entries.length; j++) {
+      const a = entries[i];
+      const b = entries[j];
+      paths.push({
+        params: { pair: `${a.slug}-vs-${b.slug}` },
+        props: { a, b },
+      });
+    }
+  }
+  return paths;
+}
+
+const { a, b } = Astro.props as {
+  a: { name: string; icon: string; slug: string; rank: number };
+  b: { name: string; icon: string; slug: string; rank: number };
+};
+
+const h2h = getHeadToHead(a.icon, b.icon);
+const psSlugSet = new Set(partySuggestSlugs as string[]);
+
+const siteUrl = 'https://pokenavi.jp';
+const title = `${a.name} vs ${b.name} 対面比較 M-4 | どちらが勝つ？1v1判定`;
+const description = `ポケモンチャンピオンズM-4 ${a.name}(使用率${a.rank}位) vs ${b.name}(使用率${b.rank}位)の1v1対面判定。互いの最大打点技・確定数・素早さを実数値で比較（きあいのタスキ/がんじょう考慮）。`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  name: title,
+  description,
+  url: `${siteUrl}/matchup/${a.slug}-vs-${b.slug}/`,
+};
+
+const HITS_LABEL = (n: number | null) => (n == null || n >= 999 ? '圏外' : `確定${n}発`);
+const verdict = h2h?.verdict;
+const winnerName = verdict ? (verdict.win ? a.name : b.name) : null;
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <style>
+      main { max-width: 760px; margin: 0 auto; padding: 1.4em 1em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.35rem; margin: 0 0 .3em; text-align: center; }
+      .lead { font-size: .88rem; color: rgb(var(--gray)); margin: 0 0 1.4em; line-height: 1.7; text-align: center; }
+      .vs-row { display: flex; align-items: center; justify-content: center; gap: 18px; margin-bottom: 1.6em; }
+      .vs-mon { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 130px; }
+      .vs-mon img { width: 72px; height: 72px; object-fit: contain; }
+      .vs-mon .nm { font-weight: 800; font-size: .95rem; text-align: center; }
+      .vs-mon .rk { font-size: .72rem; color: rgb(var(--gray)); }
+      .vs-mon.winner .nm { color: #15803d; }
+      .vs-x { font-size: 1.3rem; font-weight: 900; color: rgb(var(--gray)); }
+      .result-banner { text-align: center; font-weight: 800; font-size: 1.05rem; padding: .7em; border-radius: 10px; margin-bottom: 1.6em; }
+      .result-banner.a-win { background: #ecfdf5; color: #15803d; }
+      .result-banner.b-win { background: #fef2f2; color: #b91c1c; }
+      table.detail { width: 100%; border-collapse: collapse; font-size: .86rem; margin-bottom: 1.6em; }
+      table.detail th, table.detail td { border: 1px solid #e2e8f0; padding: .55em .7em; text-align: center; }
+      table.detail th { background: #f8fafc; font-weight: 700; }
+      table.detail td.lbl { text-align: left; font-weight: 700; background: #f8fafc; white-space: nowrap; }
+      .cta-row { display: flex; flex-wrap: wrap; gap: .6em; justify-content: center; margin: 1.6em 0; }
+      .cta { display: inline-flex; align-items: center; gap: 6px; padding: .6em 1.1em; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: .84rem; }
+      .cta.primary { background: var(--accent); color: #fff; }
+      .cta.ghost { background: #fff; border: 1.5px solid var(--accent); color: var(--accent); }
+      .note { font-size: .78rem; color: rgb(var(--gray)); line-height: 1.7; }
+      .empty { text-align: center; padding: 2em; color: rgb(var(--gray)); }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>{a.name} vs {b.name} — 1v1対面比較</h1>
+      <p class="lead">使用率{a.rank}位の{a.name}と使用率{b.rank}位の{b.name}、主流型同士が正面から当たった場合の1v1事前計算です（実数値・きあいのタスキ/がんじょう考慮、交代・補助技は含みません）。</p>
+
+      {h2h && verdict ? (
+        <>
+          <div class="vs-row">
+            <div class={`vs-mon ${verdict.win ? 'winner' : ''}`}>
+              <img src={`/images/pokemon/pokemon-${a.icon}.webp`} alt={a.name} />
+              <span class="nm">{a.name}</span>
+              <span class="rk">使用率{a.rank}位</span>
+            </div>
+            <span class="vs-x">VS</span>
+            <div class={`vs-mon ${!verdict.win ? 'winner' : ''}`}>
+              <img src={`/images/pokemon/pokemon-${b.icon}.webp`} alt={b.name} />
+              <span class="nm">{b.name}</span>
+              <span class="rk">使用率{b.rank}位</span>
+            </div>
+          </div>
+
+          <div class={`result-banner ${verdict.win ? 'a-win' : 'b-win'}`}>
+            判定: {winnerName}が有利（{verdict.fast ? a.name : b.name}が先手）
+          </div>
+
+          <table class="detail">
+            <tr><th></th><th>{a.name}</th><th>{b.name}</th></tr>
+            <tr><td class="lbl">素早さ実数値</td><td>{verdict.myS}{verdict.fast ? ' ⚡先手' : ''}</td><td>{verdict.oppS}{!verdict.fast ? ' ⚡先手' : ''}</td></tr>
+            <tr><td class="lbl">最大打点技</td><td>{verdict.myMove ?? '—'}</td><td>{verdict.oppMove ?? '—'}</td></tr>
+            <tr><td class="lbl">相手を倒すのに必要な回数</td><td>{HITS_LABEL(verdict.myHits)}</td><td>{HITS_LABEL(verdict.oppHits)}</td></tr>
+          </table>
+
+          <div class="cta-row">
+            <a class="cta primary" href={`/pokemon/${a.slug}/`}>{a.name}の詳細データ →</a>
+            <a class="cta primary" href={`/pokemon/${b.slug}/`}>{b.name}の詳細データ →</a>
+          </div>
+          <div class="cta-row">
+            {psSlugSet.has(a.slug) && <a class="cta ghost" href={`/party-suggest/${a.slug}/`}>{a.name}を軸にした簡単構築 →</a>}
+            {psSlugSet.has(b.slug) && <a class="cta ghost" href={`/party-suggest/${b.slug}/`}>{b.name}を軸にした簡単構築 →</a>}
+          </div>
+
+          <p class="note">
+            ※ 判定は互いの主流型（使用率最多の持ち物・技構成）同士による1v1事前計算に基づく目安です。相手の型（EV配分・持ち物違い等）によって結果が変わる場合があります。自分のパーティ構成での詳しい判定は<a href="/party-builder/">パーティ工房</a>でご確認ください。
+          </p>
+        </>
+      ) : (
+        <p class="empty">この組み合わせのデータを算出できませんでした。</p>
+      )}
+    </main>
+    <Footer />
+  </body>
+</html>
