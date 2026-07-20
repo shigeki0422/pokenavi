@@ -5,8 +5,7 @@ import path from 'node:path';
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { getHeadToHead } from '../../scripts/party-builder/matchup-static';
-import speciesData from '../../../public/builder-data/species.json';
+import { getMatchups, getMatchupBreakdown } from '../../scripts/party-builder/matchup-static';
 import partySuggestSlugs from '../../data/party-suggest-slugs.json';
 
 /**
@@ -14,14 +13,15 @@ import partySuggestSlugs from '../../data/party-suggest-slugs.json';
  * ポケモン)の各1体について、使用率上位200種の中から実際に有利(◎/○)を取れる
  * ポケモンを1v1事前計算(matchup-static.tsの既存エンジン)から抽出して並べる。
  * 新規データ収集ゼロ、既存の対戦データのみから生成できる。
- * プロトタイプ: 対象は現行のtargets.json(30体)に限定。効果を見てから拡張する。
  *
- * 判定基準: 候補・対象双方の「主流型(使用率最多の持ち物・技構成)」同士のgetHeadToHead
- * (/matchup/ページと同一エンジン)を使う。旧実装はgetMatchups(相手の型プール平均)を
- * 使っていたが、相手側の少数サンプル(型プールに免疫等で無力化される型が1つ混ざるだけ)
- * で平均値が極端に振れ、/pokemon/ページの主流型同士1v1判定と矛盾する表示が生じたため、
- * 双方とも主流型のみを比較する方式に統一した(例: ガブリアス対策でマフォクシーを◎表示
- * していたが、マフォクシー主流型はガブリアス主流型に実際は負けていた)。
+ * 判定基準: getMatchups()——/pokemon/{slug}/ページの「有利・不利な相手」
+ * (MatchupSection.astro)と全く同じ関数——を使う。「相手(対象)の型は最大3種の
+ * プールを集約評価し、自分(候補)の型は主流型1つに固定する」という前提を
+ * getMatchups()/getMatchupBreakdown()に一本化し、対策ページ・ポケモン詳細
+ * ページのどちらで見ても同じ判定になるようにする(将来この前提を直す時は
+ * matchup-static.tsだけを直せば両ページに反映される)。
+ * ポップアップでは対象の型プール(最大3種、型ごとの持ち物・技構成・判定)を
+ * そのまま表示し、型により判定が割れる(dep)場合の根拠を透明化する。
  */
 export async function getStaticPaths() {
   const targetsPath = path.join(process.cwd(), 'public', 'builder-data', 'targets.json');
@@ -53,19 +53,6 @@ export async function getStaticPaths() {
 
 const { defenderName, defenderIcon, defenderSlug, defenderRank, defenderAnalysisSlug } = Astro.props;
 
-const speciesByIcon: Record<string, { t1: string; t2?: string }> = {};
-for (const s of speciesData as { icon: string; t1: string; t2?: string }[]) {
-  speciesByIcon[s.icon] = { t1: s.t1, t2: s.t2 };
-}
-const TYPEICON: Record<string, [string, string]> = {
-  ノーマル: ['00', 'normal'], かくとう: ['01', 'fighting'], ひこう: ['02', 'flying'], どく: ['03', 'poison'],
-  じめん: ['04', 'ground'], いわ: ['05', 'rock'], むし: ['06', 'bug'], ゴースト: ['07', 'ghost'],
-  はがね: ['08', 'steel'], ほのお: ['09', 'fire'], みず: ['10', 'water'], くさ: ['11', 'grass'],
-  でんき: ['12', 'electric'], エスパー: ['13', 'psychic'], こおり: ['14', 'ice'], ドラゴン: ['15', 'dragon'],
-  あく: ['16', 'dark'], フェアリー: ['17', 'fairy'],
-};
-const typeIconUrl = (t?: string) => (t && TYPEICON[t] ? `/images/types/type-${TYPEICON[t][0]}-${TYPEICON[t][1]}.png` : null);
-
 const psSlugSet = new Set(partySuggestSlugs as string[]);
 
 const pokemonPages = await getCollection('pokemon', (p) => !p.data.draft);
@@ -94,32 +81,37 @@ type Counter = {
   name: string;
   icon: string;
   sym: '◎' | '○';
+  dep: boolean;
   rank: number | null;
   matchupHref: string | null;
-  myMove: string | null;
-  oppMove: string | null;
-  myHits: number | null;
-  oppHits: number | null;
-  myS: number;
-  oppS: number;
-  fast: boolean;
+  basisRows: { item: string; nature: string; moves: string; sym: string; myHits: string; oppHits: string }[];
 };
 const counters: Counter[] = [];
 for (const p of pokemonPages) {
   if (!p.data.pokemonName || p.data.dexNumber == null) continue;
   const icon = `${String(p.data.dexNumber).padStart(4, '0')}-${p.data.imageForm ?? '00'}`;
   if (icon === defenderIcon) continue;
-  const h2h = getHeadToHead(icon, defenderIcon);
-  if (!h2h) continue;
-  const { sym, myMove, oppMove, myHits, oppHits, myS, oppS, fast } = h2h.verdict;
-  if (sym === '◎' || sym === '○') {
-    const rank = p.data.usageRank ?? null;
-    const poolEntry = poolByName[p.data.pokemonName];
-    const matchupHref = poolEntry
-      ? `/matchup/${pairSlug(p.data.pokemonName, p.id, rank, defenderName, defenderSlug, defenderRank)}/`
-      : null;
-    counters.push({ slug: p.id, name: p.data.pokemonName, icon, sym, rank, matchupHref, myMove, oppMove, myHits, oppHits, myS, oppS, fast });
-  }
+  const matchups = getMatchups(icon);
+  if (!matchups) continue;
+  const m = matchups.find((x) => x.name === defenderName);
+  if (!m || (m.sym !== '◎' && m.sym !== '○')) continue;
+
+  const breakdown = getMatchupBreakdown(icon, defenderIcon);
+  const basisRows = (breakdown?.builds ?? []).map(({ build, verdict }) => ({
+    item: build.item,
+    nature: build.nature,
+    moves: build.moves.map((mv) => mv.n).join('/'),
+    sym: verdict.sym,
+    myHits: HITS_LABEL(verdict.myHits),
+    oppHits: HITS_LABEL(verdict.oppHits),
+  }));
+
+  const rank = p.data.usageRank ?? null;
+  const poolEntry = poolByName[p.data.pokemonName];
+  const matchupHref = poolEntry
+    ? `/matchup/${pairSlug(p.data.pokemonName, p.id, rank, defenderName, defenderSlug, defenderRank)}/`
+    : null;
+  counters.push({ slug: p.id, name: p.data.pokemonName, icon, sym: m.sym, dep: m.dep, rank, matchupHref, basisRows });
 }
 counters.sort((a, b) => {
   if (a.sym !== b.sym) return a.sym === '◎' ? -1 : 1;
@@ -174,8 +166,16 @@ const jsonLd = {
       .ccard .sym { font-size: 1.3rem; font-weight: 900; flex-shrink: 0; }
       .ccard .sym.best { color: #15803d; }
       .ccard .sym.ok { color: #4d7c0f; }
+      .ccard .dep { font-size: .65rem; color: #7c3aed; font-weight: 800; vertical-align: 3px; }
       .ccard-pop { padding: 0 12px 12px; border-top: 1px solid #e2e8f0; }
-      .ccard-basis { font-size: .76rem; color: rgb(var(--gray-dark)); line-height: 1.7; padding-top: 10px; margin: 0 0 8px; }
+      .ccard-basis-hd { font-size: .74rem; color: rgb(var(--gray)); padding-top: 10px; margin: 0 0 6px; }
+      .basis-table { width: 100%; border-collapse: collapse; font-size: .72rem; margin-bottom: 8px; }
+      .basis-table th, .basis-table td { border: 1px solid #e2e8f0; padding: 4px 6px; text-align: center; }
+      .basis-table th { background: #f8fafc; font-weight: 700; }
+      .basis-table td.lft { text-align: left; }
+      .basis-table .sym-best { color: #15803d; font-weight: 800; }
+      .basis-table .sym-ok { color: #4d7c0f; font-weight: 800; }
+      .basis-table .sym-bad { color: #dc2626; font-weight: 800; }
       .ccard-links { display: flex; flex-wrap: wrap; gap: 6px; }
       .ccard-links a { font-size: .74rem; font-weight: 700; text-decoration: none; color: #fff; background: var(--accent); padding: 5px 10px; border-radius: 6px; }
       .ccard-links a.ghost { color: var(--accent); background: #f8fafc; border: 1px solid var(--accent); }
@@ -189,7 +189,7 @@ const jsonLd = {
     <main>
       <h1><img src={`/images/pokemon/pokemon-${defenderIcon}.webp`} alt={defenderName} />{defenderName}対策 — 有利を取れるポケモンランキング</h1>
       <p class="lead">
-        ポケモンチャンピオンズM-4環境で{rankText}{defenderName}に対し、双方の主流型同士の1v1事前計算（実数値・きあいのタスキ/がんじょう考慮）で有利（◎・○）を取れる使用率上位のポケモンを{counters.length}体、判定順に並べました。
+        ポケモンチャンピオンズM-4環境で{rankText}{defenderName}に対し、{defenderName}の型プール（最大3種）を集約した1v1事前計算（実数値・きあいのタスキ/がんじょう考慮）で有利（◎・○）を取れる使用率上位のポケモンを{counters.length}体、判定順に並べました。タップすると型ごとの判定内訳を確認できます。
       </p>
       <div class="def-links">
         <a href={`/pokemon/${defenderSlug}/`}>→ {defenderName}自身の使用率・技採用率データを見る</a>
@@ -208,15 +208,24 @@ const jsonLd = {
                     <div class="name">{c.name}</div>
                     <div class="rank">{c.rank ? `使用率${c.rank}位` : ''}</div>
                   </div>
-                  <span class="sym best">◎</span>
+                  <span class="sym best">◎{c.dep && <span class="dep">*</span>}</span>
                 </summary>
                 <div class="ccard-pop">
-                  <p class="ccard-basis">
-                    双方の主流型同士の1v1事前計算：{c.name}の最大打点技「{c.myMove ?? '—'}」で{defenderName}を{HITS_LABEL(c.myHits)}。{defenderName}の最大打点技「{c.oppMove ?? '—'}」は{c.name}を{HITS_LABEL(c.oppHits)}。素早さ実数値は{c.name}{c.myS} vs {defenderName}{c.oppS}（{c.fast ? c.name : defenderName}が先手）。
-                  </p>
+                  <p class="ccard-basis-hd">{c.name}の主流型 vs {defenderName}の型プール（{c.basisRows.length}種）:</p>
+                  <table class="basis-table">
+                    <tr><th class="lft">{defenderName}の型</th><th>判定</th><th>{c.name}→</th><th>→{c.name}</th></tr>
+                    {c.basisRows.map((r) => (
+                      <tr>
+                        <td class="lft">{r.item}・{r.nature}<br />{r.moves}</td>
+                        <td class={r.sym === '◎' ? 'sym-best' : r.sym === '○' ? 'sym-ok' : (r.sym === '▲' || r.sym === '×') ? 'sym-bad' : ''}>{r.sym}</td>
+                        <td>{r.myHits}</td>
+                        <td>{r.oppHits}</td>
+                      </tr>
+                    ))}
+                  </table>
                   <div class="ccard-links">
                     <a href={`/pokemon/${c.slug}/`}>{c.name}のページを見る →</a>
-                    {c.matchupHref && <a href={c.matchupHref} class="ghost">⚔ {defenderName}と詳しく比較 →</a>}
+                    {c.matchupHref && <a href={c.matchupHref} class="ghost">⚔ {defenderName}と主流型同士で詳しく比較 →</a>}
                   </div>
                 </div>
               </details>
@@ -237,15 +246,24 @@ const jsonLd = {
                     <div class="name">{c.name}</div>
                     <div class="rank">{c.rank ? `使用率${c.rank}位` : ''}</div>
                   </div>
-                  <span class="sym ok">○</span>
+                  <span class="sym ok">○{c.dep && <span class="dep">*</span>}</span>
                 </summary>
                 <div class="ccard-pop">
-                  <p class="ccard-basis">
-                    双方の主流型同士の1v1事前計算：{c.name}の最大打点技「{c.myMove ?? '—'}」で{defenderName}を{HITS_LABEL(c.myHits)}。{defenderName}の最大打点技「{c.oppMove ?? '—'}」は{c.name}を{HITS_LABEL(c.oppHits)}。素早さ実数値は{c.name}{c.myS} vs {defenderName}{c.oppS}（{c.fast ? c.name : defenderName}が先手）。
-                  </p>
+                  <p class="ccard-basis-hd">{c.name}の主流型 vs {defenderName}の型プール（{c.basisRows.length}種）:</p>
+                  <table class="basis-table">
+                    <tr><th class="lft">{defenderName}の型</th><th>判定</th><th>{c.name}→</th><th>→{c.name}</th></tr>
+                    {c.basisRows.map((r) => (
+                      <tr>
+                        <td class="lft">{r.item}・{r.nature}<br />{r.moves}</td>
+                        <td class={r.sym === '◎' ? 'sym-best' : r.sym === '○' ? 'sym-ok' : (r.sym === '▲' || r.sym === '×') ? 'sym-bad' : ''}>{r.sym}</td>
+                        <td>{r.myHits}</td>
+                        <td>{r.oppHits}</td>
+                      </tr>
+                    ))}
+                  </table>
                   <div class="ccard-links">
                     <a href={`/pokemon/${c.slug}/`}>{c.name}のページを見る →</a>
-                    {c.matchupHref && <a href={c.matchupHref} class="ghost">⚔ {defenderName}と詳しく比較 →</a>}
+                    {c.matchupHref && <a href={c.matchupHref} class="ghost">⚔ {defenderName}と主流型同士で詳しく比較 →</a>}
                   </div>
                 </div>
               </details>
@@ -259,7 +277,7 @@ const jsonLd = {
       )}
 
       <p class="note">
-        ※ 判定は双方の主流型（使用率最多の持ち物・技構成）同士による1v1事前計算に基づく目安です（交代・補助技・積み技は考慮していません）。相手の型（持ち物・EV等）が異なれば結果が変わる場合があります。実際のパーティでの詳しい判定は
+        ※ 判定は{defenderName}の型プール（最大3種、使用率上位の持ち物・技構成）を集約した1v1事前計算に基づく目安です（交代・補助技・積み技は考慮していません）。<b>*</b>は型によって有利・不利の判定が割れることを示します（タップして内訳を確認できます）。実際のパーティでの詳しい判定は
         <a href="/party-builder/">パーティ工房</a>でご確認ください。
       </p>
     </main>

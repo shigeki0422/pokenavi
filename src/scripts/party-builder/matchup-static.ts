@@ -83,3 +83,32 @@ export function getHeadToHead(iconA: string, iconB: string): HeadToHead | null {
   if (!me || !opp) return null;
   return { verdict: judge1v1(me, opp), me, opp };
 }
+
+/**
+ * getMatchups()の集約(◎/○/△/▲/×とdep)の「内訳」を返す唯一の窓口。
+ * /counters/・/pokemon/(MatchupSection)双方のポップアップはこの関数だけを使い、
+ * 「相手の型として何を採用するか」のロジック(=targets.jsonの型プール、最大3種)を
+ * 一箇所に統一する。ここを直せば両ページの表示が同時に直る。
+ * myIconは主流型1つ固定(自分の型は確定しているという前提)、oppIconは使用率上位
+ * プール内の種である必要がある(getMatchups()と同じ前提)。プール外ならnull。
+ */
+export interface MatchupBuildRow {
+  build: ResolvedBuild;
+  verdict: Verdict;
+}
+export interface MatchupBreakdown {
+  me: ResolvedBuild;
+  oppName: string;
+  builds: MatchupBuildRow[];
+  sym: StaticMatchup["sym"];
+  dep: boolean;
+}
+export function getMatchupBreakdown(myIcon: string, oppIcon: string): MatchupBreakdown | null {
+  const me = mainBuild(myIcon);
+  if (!me) return null;
+  const oppGroup = resolvedTargets.find((t) => t.icon === oppIcon);
+  if (!oppGroup || !oppGroup.builds.length) return null;
+  const agg = judgeVsBuilds(me, oppGroup.builds);
+  const builds = oppGroup.builds.map((build, i) => ({ build, verdict: agg.verdicts[i] }));
+  return { me, oppName: oppGroup.name, builds, sym: agg.sym, dep: agg.dep };
+}
