@@ -1,0 +1,198 @@
+---
+import { getCollection } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getMatchups } from '../../scripts/party-builder/matchup-static';
+import speciesData from '../../../public/builder-data/species.json';
+import partySuggestSlugs from '../../data/party-suggest-slugs.json';
+
+/**
+ * 「○○対策」ページ: 使用率上位30体(targets.json、対戦相手として最も選出される
+ * ポケモン)の各1体について、使用率上位200種の中から実際に有利(◎/○)を取れる
+ * ポケモンを1v1事前計算(matchup-static.tsの既存エンジン)から抽出して並べる。
+ * 新規データ収集ゼロ、既存の対戦データのみから生成できる。
+ * プロトタイプ: 対象は現行のtargets.json(30体)に限定。効果を見てから拡張する。
+ */
+export async function getStaticPaths() {
+  const targetsPath = path.join(process.cwd(), 'public', 'builder-data', 'targets.json');
+  const targets = JSON.parse(fs.readFileSync(targetsPath, 'utf8')) as { sp: string; icon: string; label?: string }[];
+  const pokemonPages = await getCollection('pokemon', (p) => !p.data.draft);
+
+  const nameToPage: Record<string, (typeof pokemonPages)[number]> = {};
+  for (const p of pokemonPages) {
+    if (p.data.pokemonName) nameToPage[p.data.pokemonName] = p;
+  }
+
+  const paths = [];
+  for (const t of targets) {
+    const page = nameToPage[t.sp];
+    if (!page) continue;
+    paths.push({
+      params: { slug: page.id },
+      props: {
+        defenderName: t.sp,
+        defenderIcon: t.icon,
+        defenderSlug: page.id,
+        defenderRank: page.data.usageRank ?? null,
+        defenderAnalysisSlug: page.data.analysisSlug ?? null,
+      },
+    });
+  }
+  return paths;
+}
+
+const { defenderName, defenderIcon, defenderSlug, defenderRank, defenderAnalysisSlug } = Astro.props;
+
+const speciesByIcon: Record<string, { t1: string; t2?: string }> = {};
+for (const s of speciesData as { icon: string; t1: string; t2?: string }[]) {
+  speciesByIcon[s.icon] = { t1: s.t1, t2: s.t2 };
+}
+const TYPEICON: Record<string, [string, string]> = {
+  ノーマル: ['00', 'normal'], かくとう: ['01', 'fighting'], ひこう: ['02', 'flying'], どく: ['03', 'poison'],
+  じめん: ['04', 'ground'], いわ: ['05', 'rock'], むし: ['06', 'bug'], ゴースト: ['07', 'ghost'],
+  はがね: ['08', 'steel'], ほのお: ['09', 'fire'], みず: ['10', 'water'], くさ: ['11', 'grass'],
+  でんき: ['12', 'electric'], エスパー: ['13', 'psychic'], こおり: ['14', 'ice'], ドラゴン: ['15', 'dragon'],
+  あく: ['16', 'dark'], フェアリー: ['17', 'fairy'],
+};
+const typeIconUrl = (t?: string) => (t && TYPEICON[t] ? `/images/types/type-${TYPEICON[t][0]}-${TYPEICON[t][1]}.png` : null);
+
+const psSlugSet = new Set(partySuggestSlugs as string[]);
+
+const pokemonPages = await getCollection('pokemon', (p) => !p.data.draft);
+type Counter = { slug: string; name: string; icon: string; sym: '◎' | '○'; dep: boolean; rank: number | null };
+const counters: Counter[] = [];
+for (const p of pokemonPages) {
+  if (!p.data.pokemonName || p.data.dexNumber == null) continue;
+  const icon = `${String(p.data.dexNumber).padStart(4, '0')}-${p.data.imageForm ?? '00'}`;
+  if (icon === defenderIcon) continue;
+  const matchups = getMatchups(icon);
+  if (!matchups) continue;
+  const m = matchups.find((x) => x.name === defenderName);
+  if (!m) continue;
+  if (m.sym === '◎' || m.sym === '○') {
+    counters.push({ slug: p.id, name: p.data.pokemonName, icon, sym: m.sym, dep: m.dep, rank: p.data.usageRank ?? null });
+  }
+}
+counters.sort((a, b) => {
+  if (a.sym !== b.sym) return a.sym === '◎' ? -1 : 1;
+  return (a.rank ?? 999) - (b.rank ?? 999);
+});
+const bestCounters = counters.filter((c) => c.sym === '◎');
+const okCounters = counters.filter((c) => c.sym === '○');
+
+const siteUrl = 'https://pokenavi.jp';
+const rankText = defenderRank ? `使用率${defenderRank}位の` : '';
+const title = `${defenderName}対策 M-4 | ${rankText}${defenderName}に強いポケモンランキング`;
+const description = `ポケモンチャンピオンズM-4 ${rankText}${defenderName}への対策。1v1事前計算(実数値・タスキ/がんじょう考慮)で有利を取れるポケモンを${counters.length}体、使用率上位から抽出してランキング形式で紹介。`;
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: `${defenderName}対策ランキング`,
+  description,
+  url: `${siteUrl}/counters/${defenderSlug}/`,
+  numberOfItems: counters.length,
+  itemListElement: counters.slice(0, 20).map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.name,
+    url: `${siteUrl}/pokemon/${c.slug}/`,
+  })),
+};
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <style>
+      main { max-width: 900px; margin: 0 auto; padding: 1.4em 1em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.5rem; margin: 0 0 .3em; display: flex; align-items: center; gap: .5em; flex-wrap: wrap; }
+      h1 img { width: 40px; height: 40px; object-fit: contain; }
+      .lead { font-size: .9rem; color: rgb(var(--gray)); margin: 0 0 1.2em; line-height: 1.7; }
+      .def-links { display: flex; flex-wrap: wrap; gap: .6em; font-size: .84rem; margin: 0 0 1.6em; }
+      .def-links a { color: var(--accent); text-decoration: none; font-weight: 700; }
+      .def-links a:hover { text-decoration: underline; }
+      h2.sec { font-size: 1.05rem; font-weight: 800; margin: 1.6em 0 .7em; padding: .4em .8em; background: #f8fafc; border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; }
+      .cgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+      .ccard { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; text-decoration: none; color: inherit; transition: box-shadow .15s, border-color .15s; }
+      .ccard:hover { box-shadow: 0 4px 12px rgba(0,0,0,.08); border-color: var(--accent); }
+      .ccard img.icon { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
+      .ccard .info { min-width: 0; flex: 1; }
+      .ccard .name { font-weight: 700; font-size: .9rem; color: rgb(var(--black)); }
+      .ccard .rank { font-size: .72rem; color: rgb(var(--gray)); }
+      .ccard .sym { font-size: 1.3rem; font-weight: 900; flex-shrink: 0; }
+      .ccard .sym.best { color: #15803d; }
+      .ccard .sym.ok { color: #4d7c0f; }
+      .ccard .dep { font-size: .65rem; color: #7c3aed; font-weight: 800; }
+      .empty { font-size: .88rem; color: rgb(var(--gray)); padding: 1em; background: #f8fafc; border-radius: 8px; }
+      .note { font-size: .78rem; color: rgb(var(--gray)); margin-top: 1.6em; line-height: 1.7; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1><img src={`/images/pokemon/pokemon-${defenderIcon}.webp`} alt={defenderName} />{defenderName}対策 — 有利を取れるポケモンランキング</h1>
+      <p class="lead">
+        ポケモンチャンピオンズM-4環境で{rankText}{defenderName}に対し、1v1事前計算（実数値・きあいのタスキ/がんじょう考慮）で有利（◎・○）を取れる使用率上位のポケモンを{counters.length}体、判定順に並べました。
+      </p>
+      <div class="def-links">
+        <a href={`/pokemon/${defenderSlug}/`}>→ {defenderName}自身の使用率・技採用率データを見る</a>
+        {defenderAnalysisSlug && <a href={`/blog/${defenderAnalysisSlug}/`}>→ {defenderName}の考察記事を読む</a>}
+      </div>
+
+      {bestCounters.length > 0 && (
+        <>
+          <h2 class="sec">◎ 明確に有利を取れるポケモン（{bestCounters.length}体）</h2>
+          <div class="cgrid">
+            {bestCounters.map((c) => {
+              const t = speciesByIcon[c.icon];
+              return (
+                <a href={`/pokemon/${c.slug}/`} class="ccard">
+                  <img class="icon" src={`/images/pokemon/pokemon-${c.icon}.webp`} alt={c.name} loading="lazy" />
+                  <div class="info">
+                    <div class="name">{c.name}{c.dep && <span class="dep"> *</span>}</div>
+                    <div class="rank">{c.rank ? `使用率${c.rank}位` : ''}</div>
+                  </div>
+                  <span class="sym best">◎</span>
+                </a>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {okCounters.length > 0 && (
+        <>
+          <h2 class="sec">○ やや有利を取れるポケモン（{okCounters.length}体）</h2>
+          <div class="cgrid">
+            {okCounters.map((c) => {
+              return (
+                <a href={`/pokemon/${c.slug}/`} class="ccard">
+                  <img class="icon" src={`/images/pokemon/pokemon-${c.icon}.webp`} alt={c.name} loading="lazy" />
+                  <div class="info">
+                    <div class="name">{c.name}{c.dep && <span class="dep"> *</span>}</div>
+                    <div class="rank">{c.rank ? `使用率${c.rank}位` : ''}</div>
+                  </div>
+                  <span class="sym ok">○</span>
+                </a>
+              );
+            })}
+          </div>
+        </>
+      )}
+
+      {counters.length === 0 && (
+        <p class="empty">現在算出できる対策ポケモンのデータがありません。</p>
+      )}
+
+      <p class="note">
+        ※ 判定は使用率上位30体それぞれの主流型同士による1v1事前計算に基づく目安です（交代・補助技・積み技は考慮していません）。<b>*</b> は相手の型（持ち物・EV等）によって判定が変わる場合があることを示します。実際のパーティでの詳しい判定は
+        <a href="/party-builder/">パーティ工房</a>でご確認ください。
+      </p>
+    </main>
+    <Footer />
+  </body>
+</html>

@@ -11,6 +11,7 @@ import SimPartyCard from '../components/SimPartyCard.astro';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 import partySuggestSlugs from '../data/party-suggest-slugs.json';
+import targetsData from '../../public/builder-data/targets.json';
 
 type Props = CollectionEntry<'pokemon'>['data'] & { lang?: 'ja' | 'en' | 'ko' };
 
@@ -25,6 +26,12 @@ const pfx = lang === 'en' ? '/en' : lang === 'ko' ? '/ko' : '';
 const psSlugSet = new Set(partySuggestSlugs as string[]);
 const hasPartySuggest = !!pokemonSlug && psSlugSet.has(pokemonSlug);
 const hasMegaPartySuggest = !!pokemonSlug && psSlugSet.has(`mega-${pokemonSlug}`);
+/** 「○○対策」ページ(src/pages/counters/[slug].astro)は使用率上位30体
+ * (targets.json、対戦相手として選出される側)のみプロトタイプ実装のため、
+ * このポケモンがその対象かどうかで表示を切り替える。ja版のみ(en/ko展開は
+ * 効果を見てから)。 */
+const counterTargetNames = new Set((targetsData as { sp: string }[]).map((t) => t.sp));
+const hasCounters = lang === 'ja' && !!pokemonName && counterTargetNames.has(pokemonName);
 const MOVE_MAP = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
 const ABILITY_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
 const ITEM_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
@@ -39,9 +46,9 @@ const metaDescription = pokemonName && usageRank ? (
     : `チャンピオンズM-4使用率${usageRank}位${pokemonName}の対戦データ。技・持ち物・特性・性格の採用率TOP10と種族値・タイプ相性を掲載。`
 ) : description;
 const T = {
-  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる', quickBuild: (n: string) => `${n}を軸にした簡単構築`, quickBuildMega: (n: string) => `メガ${n}を軸にした簡単構築` },
-  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', quickBuild: (n: string) => `Quick Build from ${n}`, quickBuildMega: (n: string) => `Quick Build from Mega ${n}` },
-  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로', hubAnalysis: '📖 분석 기사 읽기', hubWatch: '🎬 상위 구성 대전 관전', hubBuild: '⚔️ 파티에 추가', quickBuild: (n: string) => `${n} 축으로 간단 구성`, quickBuildMega: (n: string) => `메가${n} 축으로 간단 구성` },
+  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる', quickBuild: (n: string) => `${n}を軸にした簡単構築`, quickBuildMega: (n: string) => `メガ${n}を軸にした簡単構築`, counters: (n: string) => `${n}対策 — 有利を取れるポケモンを見る` },
+  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', quickBuild: (n: string) => `Quick Build from ${n}`, quickBuildMega: (n: string) => `Quick Build from Mega ${n}`, counters: (n: string) => `Counters to ${n}` },
+  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로', hubAnalysis: '📖 분석 기사 읽기', hubWatch: '🎬 상위 구성 대전 관전', hubBuild: '⚔️ 파티에 추가', quickBuild: (n: string) => `${n} 축으로 간단 구성`, quickBuildMega: (n: string) => `메가${n} 축으로 간단 구성`, counters: (n: string) => `${n} 대책 포켓몬 보기` },
 }[lang];
 /** contentコレクションのtitleは和名のみ(全言語共通データ)のため、en/koでは
  * <title>・OGP・JSON-LD name にそのまま使うと日本語タイトルがSEOに露出してしまう。
@@ -336,6 +343,14 @@ const breadcrumbJsonLd = {
 							)}
 						</div>
 					)}
+					{hasCounters && (
+						<div class="ps-cta-wrap">
+							<a href={`/counters/${pokemonSlug}/`} class="ps-cta ps-cta-ghost">
+								<span>{T.counters(pokemonNameDisp)}</span>
+								<span class="ps-cta-arrow">→</span>
+							</a>
+						</div>
+					)}
 					<AdUnit />
 				</div>
 			</article>
@@ -534,6 +549,8 @@ if(prose){
   transition: opacity .15s, transform .1s;
 }
 .ps-cta:hover { opacity: .9; transform: translateY(-1px); color: #fff; }
+.ps-cta-ghost { background: #fff; border: 1.5px solid var(--accent); color: var(--accent); }
+.ps-cta-ghost:hover { background: #fff7ed; color: var(--accent); opacity: 1; }
 .ps-cta-arrow { font-size: 1.1em; font-weight: 900; }
 @media (max-width: 600px) {
   .ps-cta { font-size: .84rem; padding: 12px 14px; }
