@@ -138,9 +138,9 @@ const T = {
    * このロジックは1回だけ登録される。
    * - ✕ボタンクリック / 画面外タップ / Escapeキーで閉じる
    */
-  function closeAllMatchupPopups() {
+  function closeAllMatchupPopups(except?: Element | null) {
     document.querySelectorAll('details.mu-cell-pop[open], details.ccard-wrap[open]').forEach((d) => {
-      d.removeAttribute('open');
+      if (d !== except) d.removeAttribute('open');
     });
   }
   document.addEventListener('click', (e) => {
@@ -149,9 +149,18 @@ const T = {
       target.closest('details')?.removeAttribute('open');
       return;
     }
-    if (!target.closest('details.mu-cell-pop[open], details.ccard-wrap[open]')) {
-      closeAllMatchupPopups();
+    // ポップアップ本体(表・リンクなど)の中をクリックした場合は何もしない
+    // (中の要素を触っただけで意図せず閉じないようにする)。
+    if (target.closest('.mu-pop, .ccard-pop')) return;
+    // トリガー(summary)自体のクリックはネイティブのトグル動作に任せつつ、
+    // 他に開いているポップアップがあれば閉じる(同時に複数開かない)。
+    const summary = target.closest('details.mu-cell-pop > summary, details.ccard-wrap > summary');
+    if (summary) {
+      closeAllMatchupPopups(summary.closest('details'));
+      return;
     }
+    // それ以外(背景オーバーレイ・ページの他の場所)のクリックは全て閉じる。
+    closeAllMatchupPopups();
   });
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') closeAllMatchupPopups();
