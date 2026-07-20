@@ -66,11 +66,11 @@ const T = {
 <div class="mbp">
   <button type="button" class="mbp-close" aria-label="閉じる">✕</button>
   <div class="mbp-hd">
-    <img src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
-    <span class="mbp-name">{oppName}</span>
-    <span class="mbp-vs">vs</span>
     <img src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />
     <span class="mbp-name">{myName}</span>
+    <span class="mbp-vs">vs</span>
+    <img src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
+    <span class="mbp-name">{oppName}</span>
   </div>
   <p class="mbp-sub">{T.sub(breakdown.builds.length)}</p>
   <div class="mbp-scroll">
