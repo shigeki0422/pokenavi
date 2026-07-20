@@ -87,7 +87,23 @@ const pairSlug = (aName: string, aSlug: string, aRank: number | null, bName: str
   return ar <= br ? `${aSlug}-vs-${bSlug}` : `${bSlug}-vs-${aSlug}`;
 };
 
-type Counter = { slug: string; name: string; icon: string; sym: '◎' | '○'; rank: number | null; matchupHref: string | null };
+const HITS_LABEL = (n: number | null) => (n == null || n >= 999 ? '圏外' : `確定${n}発`);
+
+type Counter = {
+  slug: string;
+  name: string;
+  icon: string;
+  sym: '◎' | '○';
+  rank: number | null;
+  matchupHref: string | null;
+  myMove: string | null;
+  oppMove: string | null;
+  myHits: number | null;
+  oppHits: number | null;
+  myS: number;
+  oppS: number;
+  fast: boolean;
+};
 const counters: Counter[] = [];
 for (const p of pokemonPages) {
   if (!p.data.pokemonName || p.data.dexNumber == null) continue;
@@ -95,14 +111,14 @@ for (const p of pokemonPages) {
   if (icon === defenderIcon) continue;
   const h2h = getHeadToHead(icon, defenderIcon);
   if (!h2h) continue;
-  const sym = h2h.verdict.sym;
+  const { sym, myMove, oppMove, myHits, oppHits, myS, oppS, fast } = h2h.verdict;
   if (sym === '◎' || sym === '○') {
     const rank = p.data.usageRank ?? null;
     const poolEntry = poolByName[p.data.pokemonName];
     const matchupHref = poolEntry
       ? `/matchup/${pairSlug(p.data.pokemonName, p.id, rank, defenderName, defenderSlug, defenderRank)}/`
       : null;
-    counters.push({ slug: p.id, name: p.data.pokemonName, icon, sym, rank, matchupHref });
+    counters.push({ slug: p.id, name: p.data.pokemonName, icon, sym, rank, matchupHref, myMove, oppMove, myHits, oppHits, myS, oppS, fast });
   }
 }
 counters.sort((a, b) => {
@@ -146,9 +162,11 @@ const jsonLd = {
       .def-links a:hover { text-decoration: underline; }
       h2.sec { font-size: 1.05rem; font-weight: 800; margin: 1.6em 0 .7em; padding: .4em .8em; background: #f8fafc; border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; }
       .cgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
-      .ccard-wrap { display: flex; flex-direction: column; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; overflow: hidden; transition: box-shadow .15s, border-color .15s; }
+      .ccard-wrap { border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; overflow: hidden; transition: box-shadow .15s, border-color .15s; }
       .ccard-wrap:hover { box-shadow: 0 4px 12px rgba(0,0,0,.08); border-color: var(--accent); }
-      .ccard { display: flex; align-items: center; gap: 10px; padding: 10px 12px; text-decoration: none; color: inherit; }
+      .ccard-wrap[open] { border-color: var(--accent); }
+      .ccard { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; list-style: none; }
+      .ccard::-webkit-details-marker { display: none; }
       .ccard img.icon { width: 44px; height: 44px; object-fit: contain; flex-shrink: 0; }
       .ccard .info { min-width: 0; flex: 1; }
       .ccard .name { font-weight: 700; font-size: .9rem; color: rgb(var(--black)); }
@@ -156,8 +174,12 @@ const jsonLd = {
       .ccard .sym { font-size: 1.3rem; font-weight: 900; flex-shrink: 0; }
       .ccard .sym.best { color: #15803d; }
       .ccard .sym.ok { color: #4d7c0f; }
-      .ccard-vs { font-size: .72rem; font-weight: 700; text-align: center; padding: 5px; text-decoration: none; color: var(--accent); background: #f8fafc; border-top: 1px solid #e2e8f0; }
-      .ccard-vs:hover { background: #f1f5f9; }
+      .ccard-pop { padding: 0 12px 12px; border-top: 1px solid #e2e8f0; }
+      .ccard-basis { font-size: .76rem; color: rgb(var(--gray-dark)); line-height: 1.7; padding-top: 10px; margin: 0 0 8px; }
+      .ccard-links { display: flex; flex-wrap: wrap; gap: 6px; }
+      .ccard-links a { font-size: .74rem; font-weight: 700; text-decoration: none; color: #fff; background: var(--accent); padding: 5px 10px; border-radius: 6px; }
+      .ccard-links a.ghost { color: var(--accent); background: #f8fafc; border: 1px solid var(--accent); }
+      .ccard-links a:hover { opacity: .85; }
       .empty { font-size: .88rem; color: rgb(var(--gray)); padding: 1em; background: #f8fafc; border-radius: 8px; }
       .note { font-size: .78rem; color: rgb(var(--gray)); margin-top: 1.6em; line-height: 1.7; }
     </style>
@@ -178,22 +200,27 @@ const jsonLd = {
         <>
           <h2 class="sec">◎ 明確に有利を取れるポケモン（{bestCounters.length}体）</h2>
           <div class="cgrid">
-            {bestCounters.map((c) => {
-              const t = speciesByIcon[c.icon];
-              return (
-                <div class="ccard-wrap">
-                  <a href={`/pokemon/${c.slug}/`} class="ccard">
-                    <img class="icon" src={`/images/pokemon/pokemon-${c.icon}.webp`} alt={c.name} loading="lazy" />
-                    <div class="info">
-                      <div class="name">{c.name}</div>
-                      <div class="rank">{c.rank ? `使用率${c.rank}位` : ''}</div>
-                    </div>
-                    <span class="sym best">◎</span>
-                  </a>
-                  {c.matchupHref && <a href={c.matchupHref} class="ccard-vs">⚔ {c.name} vs {defenderName} を詳しく比較 →</a>}
+            {bestCounters.map((c) => (
+              <details class="ccard-wrap">
+                <summary class="ccard">
+                  <img class="icon" src={`/images/pokemon/pokemon-${c.icon}.webp`} alt={c.name} loading="lazy" />
+                  <div class="info">
+                    <div class="name">{c.name}</div>
+                    <div class="rank">{c.rank ? `使用率${c.rank}位` : ''}</div>
+                  </div>
+                  <span class="sym best">◎</span>
+                </summary>
+                <div class="ccard-pop">
+                  <p class="ccard-basis">
+                    双方の主流型同士の1v1事前計算：{c.name}の最大打点技「{c.myMove ?? '—'}」で{defenderName}を{HITS_LABEL(c.myHits)}。{defenderName}の最大打点技「{c.oppMove ?? '—'}」は{c.name}を{HITS_LABEL(c.oppHits)}。素早さ実数値は{c.name}{c.myS} vs {defenderName}{c.oppS}（{c.fast ? c.name : defenderName}が先手）。
+                  </p>
+                  <div class="ccard-links">
+                    <a href={`/pokemon/${c.slug}/`}>{c.name}のページを見る →</a>
+                    {c.matchupHref && <a href={c.matchupHref} class="ghost">⚔ {defenderName}と詳しく比較 →</a>}
+                  </div>
                 </div>
-              );
-            })}
+              </details>
+            ))}
           </div>
         </>
       )}
@@ -202,21 +229,27 @@ const jsonLd = {
         <>
           <h2 class="sec">○ やや有利を取れるポケモン（{okCounters.length}体）</h2>
           <div class="cgrid">
-            {okCounters.map((c) => {
-              return (
-                <div class="ccard-wrap">
-                  <a href={`/pokemon/${c.slug}/`} class="ccard">
-                    <img class="icon" src={`/images/pokemon/pokemon-${c.icon}.webp`} alt={c.name} loading="lazy" />
-                    <div class="info">
-                      <div class="name">{c.name}</div>
-                      <div class="rank">{c.rank ? `使用率${c.rank}位` : ''}</div>
-                    </div>
-                    <span class="sym ok">○</span>
-                  </a>
-                  {c.matchupHref && <a href={c.matchupHref} class="ccard-vs">⚔ {c.name} vs {defenderName} を詳しく比較 →</a>}
+            {okCounters.map((c) => (
+              <details class="ccard-wrap">
+                <summary class="ccard">
+                  <img class="icon" src={`/images/pokemon/pokemon-${c.icon}.webp`} alt={c.name} loading="lazy" />
+                  <div class="info">
+                    <div class="name">{c.name}</div>
+                    <div class="rank">{c.rank ? `使用率${c.rank}位` : ''}</div>
+                  </div>
+                  <span class="sym ok">○</span>
+                </summary>
+                <div class="ccard-pop">
+                  <p class="ccard-basis">
+                    双方の主流型同士の1v1事前計算：{c.name}の最大打点技「{c.myMove ?? '—'}」で{defenderName}を{HITS_LABEL(c.myHits)}。{defenderName}の最大打点技「{c.oppMove ?? '—'}」は{c.name}を{HITS_LABEL(c.oppHits)}。素早さ実数値は{c.name}{c.myS} vs {defenderName}{c.oppS}（{c.fast ? c.name : defenderName}が先手）。
+                  </p>
+                  <div class="ccard-links">
+                    <a href={`/pokemon/${c.slug}/`}>{c.name}のページを見る →</a>
+                    {c.matchupHref && <a href={c.matchupHref} class="ghost">⚔ {defenderName}と詳しく比較 →</a>}
+                  </div>
                 </div>
-              );
-            })}
+              </details>
+            ))}
           </div>
         </>
       )}
