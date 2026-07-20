@@ -33,36 +33,30 @@ const T = {
   ja: {
     sub: (n: number) => `${oppName}の想定型${n}種に対する、互いの最大打点1発の確定数・素早さ・勝敗判定（実数値・きあいのタスキ/がんじょう考慮）。`,
     buildLabel: (i: number) => `型${i}`,
-    rowMyDmg: '与ダメ（自→相）',
-    rowOppDmg: '被ダメ（相→自）',
     rowSpeed: '素早さ',
     rowJudge: '判定',
     hits: (n: number | null) => (n == null || n >= 999 ? '圏外' : `確定${n}`),
-    speedText: (fast: boolean, myS: number, oppS: number) => `${fast ? '先手' : '後手'}（自S${myS} / 相S${oppS}）`,
+    fastLabel: (fast: boolean) => (fast ? '先手' : '後手'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
       `${win ? '勝ち' : '負け'}：${myHits}で倒す/${oppHits}で倒される・${fast ? '先手' : '後手'}`,
   },
   en: {
     sub: (n: number) => `Hits-to-KO, Speed, and win/loss for each side's best move against ${n} known ${oppName} build(s) (actual stats, Focus Sash/Sturdy considered).`,
     buildLabel: (i: number) => `Build ${i}`,
-    rowMyDmg: 'Dmg (mine→opp)',
-    rowOppDmg: 'Dmg (opp→mine)',
     rowSpeed: 'Speed',
     rowJudge: 'Verdict',
     hits: (n: number | null) => (n == null || n >= 999 ? 'out of range' : `KO in ${n}`),
-    speedText: (fast: boolean, myS: number, oppS: number) => `${fast ? 'moves first' : 'moves second'} (${myS} vs ${oppS})`,
+    fastLabel: (fast: boolean) => (fast ? 'First' : 'Second'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
       `${win ? 'Win' : 'Lose'}: ${myHits} vs ${oppHits}, ${fast ? 'moves first' : 'moves second'}`,
   },
   ko: {
     sub: (n: number) => `${oppName}의 예상 빌드 ${n}종에 대한, 서로의 최대 위력기 1발 확정 수・스피드・승패 판정(실수치・기합의띠/옹골참 고려).`,
     buildLabel: (i: number) => `빌드${i}`,
-    rowMyDmg: '피해(나→상대)',
-    rowOppDmg: '피해(상대→나)',
     rowSpeed: '스피드',
     rowJudge: '판정',
     hits: (n: number | null) => (n == null || n >= 999 ? '범위 밖' : `확정 ${n}`),
-    speedText: (fast: boolean, myS: number, oppS: number) => `${fast ? '선공' : '후공'}(자신 S${myS} / 상대 S${oppS})`,
+    fastLabel: (fast: boolean) => (fast ? '선공' : '후공'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
       `${win ? '승리' : '패배'}: ${myHits} / ${oppHits}・${fast ? '선공' : '후공'}`,
   },
@@ -91,7 +85,9 @@ const T = {
         ))}
       </tr>
       <tr>
-        <td class="lft">{T.rowMyDmg}</td>
+        <td class="lft">
+          <img class="mbp-mini" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />→<img class="mbp-mini" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
+        </td>
         {breakdown.builds.map((r) => (
           <td>
             {r.myDmg && <span class="mbp-pct">{r.myDmg.loPct}〜{r.myDmg.hiPct}%</span>}
@@ -101,7 +97,9 @@ const T = {
         ))}
       </tr>
       <tr>
-        <td class="lft">{T.rowOppDmg}</td>
+        <td class="lft">
+          <img class="mbp-mini" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />→<img class="mbp-mini" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />
+        </td>
         {breakdown.builds.map((r) => (
           <td>
             {r.oppDmg && <span class="mbp-pct">{r.oppDmg.loPct}〜{r.oppDmg.hiPct}%</span>}
@@ -113,7 +111,9 @@ const T = {
       <tr>
         <td class="lft">{T.rowSpeed}</td>
         {breakdown.builds.map((r) => (
-          <td class={r.verdict.fast ? 'mbp-spd-win' : 'mbp-spd-lose'}>{T.speedText(r.verdict.fast, r.verdict.myS, r.verdict.oppS)}</td>
+          <td class={r.verdict.fast ? 'mbp-spd-win' : 'mbp-spd-lose'}>
+            {T.fastLabel(r.verdict.fast)}（<img class="mbp-mini" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />S{r.verdict.myS} / <img class="mbp-mini" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />S{r.verdict.oppS}）
+          </td>
         ))}
       </tr>
       <tr>
@@ -184,6 +184,7 @@ const T = {
   .mbp-table th, .mbp-table td { border: 1px solid #e2e8f0; padding: 5px 8px; text-align: center; vertical-align: top; }
   .mbp-table th { background: #f8fafc; font-weight: 800; }
   .mbp-table td.lft, .mbp-table th.lft { text-align: left; font-weight: 700; background: #f8fafc; white-space: normal; max-width: 92px; }
+  .mbp-mini { width: 18px; height: 18px; object-fit: contain; vertical-align: -4px; }
   .mbp-build-meta { font-weight: 400; font-size: .9em; color: #64748b; margin-top: 2px; }
   .mbp-pct { font-weight: 800; display: block; }
   .mbp-hits { color: #475569; display: block; }
