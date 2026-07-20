@@ -1,5 +1,6 @@
 ---
 import type { MatchupBreakdown } from '../scripts/party-builder/matchup-static';
+import type { MoveHitDetail } from '../scripts/party-builder/matchup';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 
 /**
@@ -36,6 +37,10 @@ const T = {
     rowSpeed: '素早さ',
     rowJudge: '判定',
     hits: (n: number | null) => (n == null || n >= 999 ? '圏外' : `確定${n}`),
+    hitsDetail: (d: MoveHitDetail | null) => {
+      if (!d || d.hits == null) return '圏外';
+      return d.certain ? `確定${d.hits}` : `乱数${d.hits}発（${Math.round(d.prob ?? 0)}%）`;
+    },
     fastLabel: (fast: boolean) => (fast ? '先手' : '後手'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
       `${win ? '勝ち' : '負け'}：${myHits}で倒す/${oppHits}で倒される・${fast ? '先手' : '後手'}`,
@@ -46,6 +51,10 @@ const T = {
     rowSpeed: 'Speed',
     rowJudge: 'Verdict',
     hits: (n: number | null) => (n == null || n >= 999 ? 'out of range' : `KO in ${n}`),
+    hitsDetail: (d: MoveHitDetail | null) => {
+      if (!d || d.hits == null) return 'out of range';
+      return d.certain ? `KO in ${d.hits}` : `${d.hits}-hit (${Math.round(d.prob ?? 0)}% chance)`;
+    },
     fastLabel: (fast: boolean) => (fast ? 'First' : 'Second'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
       `${win ? 'Win' : 'Lose'}: ${myHits} vs ${oppHits}, ${fast ? 'moves first' : 'moves second'}`,
@@ -56,6 +65,10 @@ const T = {
     rowSpeed: '스피드',
     rowJudge: '판정',
     hits: (n: number | null) => (n == null || n >= 999 ? '범위 밖' : `확정 ${n}`),
+    hitsDetail: (d: MoveHitDetail | null) => {
+      if (!d || d.hits == null) return '범위 밖';
+      return d.certain ? `확정 ${d.hits}` : `${d.hits}발 확률(${Math.round(d.prob ?? 0)}%)`;
+    },
     fastLabel: (fast: boolean) => (fast ? '선공' : '후공'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
       `${win ? '승리' : '패배'}: ${myHits} / ${oppHits}・${fast ? '선공' : '후공'}`,
@@ -94,9 +107,9 @@ const T = {
         </td>
         {breakdown.builds.map((r) => (
           <td>
-            {r.myDmg && <span class="mbp-pct">{r.myDmg.loPct}〜{r.myDmg.hiPct}%</span>}
-            <span class="mbp-hits">{T.hits(r.verdict.myHits)}</span>
-            <div class="mbp-move">{tMove(r.myDmg?.move ?? r.verdict.myMove)}</div>
+            {r.myDmg?.pctLo != null && <span class="mbp-pct">{r.myDmg.pctLo.toFixed(1)}〜{r.myDmg.pctHi?.toFixed(1)}%</span>}
+            <span class="mbp-hits">{T.hitsDetail(r.myDmg)}</span>
+            <div class="mbp-move">{tMove(r.myDmg?.n ?? r.verdict.myMove)}</div>
           </td>
         ))}
       </tr>
@@ -110,9 +123,9 @@ const T = {
         </td>
         {breakdown.builds.map((r) => (
           <td>
-            {r.oppDmg && <span class="mbp-pct">{r.oppDmg.loPct}〜{r.oppDmg.hiPct}%</span>}
-            <span class="mbp-hits">{T.hits(r.verdict.oppHits)}</span>
-            <div class="mbp-move">{tMove(r.oppDmg?.move ?? r.verdict.oppMove)}</div>
+            {r.oppDmg?.pctLo != null && <span class="mbp-pct">{r.oppDmg.pctLo.toFixed(1)}〜{r.oppDmg.pctHi?.toFixed(1)}%</span>}
+            <span class="mbp-hits">{T.hitsDetail(r.oppDmg)}</span>
+            <div class="mbp-move">{tMove(r.oppDmg?.n ?? r.verdict.oppMove)}</div>
           </td>
         ))}
       </tr>

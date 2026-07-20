@@ -5,23 +5,16 @@ import { effectiveSpeed } from "./stats";
 import { bestMove, calcDamage } from "./damage";
 
 /**
- * 攻撃側の最大打点技(bestMove)による、相手HPに対する与ダメ割合(%)を乱数min/max
- * (calcDamageのrandomRoll=0/1)で返す。ポップアップの「105〜108%」のような
- * 表示に使う。judge1v1の確定数計算(乱数0.85固定)とは別に、UI表示専用に
- * 実際のダメージ幅を出す。
+ * 攻撃側の最大打点技(bestMove)による、相手HPに対する与ダメ割合(%、乱数min/max)と
+ * 確定数/乱数n発(確率%)を返す。100%を跨ぐダメージ幅(例: 89.1〜105.1%)は
+ * 最低乱数では確定しないため、単純に切り上げた「確定N」ではなく
+ * 「乱数N発(確率P%)」として示す(_hitDetailForMoveの判定をそのまま利用)。
+ * ポップアップの「105〜108%」表示にはこの関数を使う。
  */
-export interface MoveDamageRange {
-  move: string;
-  loPct: number;
-  hiPct: number;
-}
-export function bestMoveDamageRange(attacker: ResolvedBuild, defender: ResolvedBuild): MoveDamageRange | null {
+export function bestMoveHitDetail(attacker: ResolvedBuild, defender: ResolvedBuild): MoveHitDetail | null {
   const best = bestMove(attacker, defender);
   if (!best) return null;
-  const lo = calcDamage(attacker, defender, best.move, { randomRoll: 0 });
-  const hi = calcDamage(attacker, defender, best.move, { randomRoll: 1 });
-  const hp = Math.max(1, defender.stats[0]);
-  return { move: best.move.n, loPct: Math.round((lo / hp) * 1000) / 10, hiPct: Math.round((hi / hp) * 1000) / 10 };
+  return _hitDetailForMove(attacker, best.move, defender);
 }
 
 function _scoreSym(score: number): Verdict["sym"] {

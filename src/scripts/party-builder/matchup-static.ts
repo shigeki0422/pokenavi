@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { MoveDict, ResolvedBuild, SpeciesMaster, TargetGroup, Verdict } from "./types";
 import { resolveSlot, resolveTarget } from "./balance";
-import { judgeVsBuilds, judge1v1, bestMoveDamageRange } from "./matchup";
+import { judgeVsBuilds, judge1v1, bestMoveHitDetail } from "./matchup";
 import { fromSpec } from "./spec";
 
 export interface StaticMatchup {
@@ -194,10 +194,10 @@ export interface MatchupBuildRow {
   build: ResolvedBuild;
   verdict: Verdict;
   evLabel: string;
-  /** 自分(me)がこの型に与える最大打点技のダメージ割合(%, 乱数min〜max)。 */
-  myDmg: ReturnType<typeof bestMoveDamageRange>;
-  /** この型が自分(me)に与える最大打点技のダメージ割合(%, 乱数min〜max)。 */
-  oppDmg: ReturnType<typeof bestMoveDamageRange>;
+  /** 自分(me)がこの型に与える最大打点技の詳細(ダメージ%・確定数/乱数n発+確率)。 */
+  myDmg: ReturnType<typeof bestMoveHitDetail>;
+  /** この型が自分(me)に与える最大打点技の詳細。 */
+  oppDmg: ReturnType<typeof bestMoveHitDetail>;
 }
 export interface MatchupBreakdown {
   me: ResolvedBuild;
@@ -221,8 +221,8 @@ export function getMatchupBreakdown(
     build,
     verdict: agg.verdicts[i],
     evLabel: evLabel(build.evs),
-    myDmg: bestMoveDamageRange(me, build),
-    oppDmg: bestMoveDamageRange(build, me),
+    myDmg: bestMoveHitDetail(me, build),
+    oppDmg: bestMoveHitDetail(build, me),
   }));
   return { me, oppName: oppGroup.name, builds, sym: agg.sym, dep: agg.dep };
 }
