@@ -30,8 +30,16 @@ const tMove = (n: string | null) => {
 const tItem = (n: string) => (lang === 'en' ? ITEM_NAME_EN[n] ?? n : lang === 'ko' ? ITEM_NAME_KO[n] ?? n : n);
 const tNature = (n: string) => (lang === 'en' ? NATURE_NAME_EN[n] ?? n : lang === 'ko' ? NATURE_NAME_KO[n] ?? n : n);
 
+const EV_LABELS = ['H', 'A', 'B', 'C', 'D', 'S'] as const;
+const meEvLabel = breakdown.me.evs
+  .map((v, i) => (v > 0 ? `${EV_LABELS[i]}${v}` : null))
+  .filter((s): s is string => s !== null)
+  .join(' ');
+const meMoves = breakdown.me.moves.map((m) => tMove(m.n)).join('/');
+
 const T = {
   ja: {
+    myBuild: (item: string, nature: string, ev: string, moves: string) => `${myName}の主流型：${item}・${nature}・${ev}（技: ${moves}）`,
     sub: (n: number) => `${oppName}の想定型${n}種に対する、互いの最大打点1発の確定数・素早さ・勝敗判定（実数値・きあいのタスキ/がんじょう考慮）。`,
     buildLabel: (i: number) => `型${i}`,
     rowSpeed: '素早さ',
@@ -46,6 +54,7 @@ const T = {
       `${win ? '勝ち' : '負け'}：${myHits}で倒す/${oppHits}で倒される・${fast ? '先手' : '後手'}`,
   },
   en: {
+    myBuild: (item: string, nature: string, ev: string, moves: string) => `${myName}'s main build: ${item}, ${nature}, ${ev} (moves: ${moves})`,
     sub: (n: number) => `Hits-to-KO, Speed, and win/loss for each side's best move against ${n} known ${oppName} build(s) (actual stats, Focus Sash/Sturdy considered).`,
     buildLabel: (i: number) => `Build ${i}`,
     rowSpeed: 'Speed',
@@ -60,6 +69,7 @@ const T = {
       `${win ? 'Win' : 'Lose'}: ${myHits} vs ${oppHits}, ${fast ? 'moves first' : 'moves second'}`,
   },
   ko: {
+    myBuild: (item: string, nature: string, ev: string, moves: string) => `${myName}의 주류 빌드: ${item}・${nature}・${ev}(기술: ${moves})`,
     sub: (n: number) => `${oppName}의 예상 빌드 ${n}종에 대한, 서로의 최대 위력기 1발 확정 수・스피드・승패 판정(실수치・기합의띠/옹골참 고려).`,
     buildLabel: (i: number) => `빌드${i}`,
     rowSpeed: '스피드',
@@ -85,6 +95,7 @@ const T = {
     <img src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
     <span class="mbp-name">{oppName}</span>
   </div>
+  <p class="mbp-my-build">{T.myBuild(tItem(breakdown.me.item), tNature(breakdown.me.nature), meEvLabel, meMoves)}</p>
   <p class="mbp-sub">{T.sub(breakdown.builds.length)}</p>
   <div class="mbp-scroll">
     <table class="mbp-table">
@@ -200,6 +211,7 @@ const T = {
   .mbp-hd { display: flex; align-items: center; gap: 6px; font-weight: 800; margin-bottom: 4px; padding-right: 22px; }
   .mbp-hd img { width: 28px; height: 28px; object-fit: contain; }
   .mbp-vs { color: #94a3b8; font-weight: 700; font-size: .74rem; }
+  .mbp-my-build { font-size: .7rem; font-weight: 700; color: rgb(var(--black)); background: #f8fafc; border-radius: 6px; padding: 5px 8px; margin: 0 0 6px; line-height: 1.6; }
   .mbp-sub { font-size: .68rem; color: #64748b; line-height: 1.6; margin: 0 0 8px; }
   .mbp-scroll { overflow-x: auto; margin-bottom: 8px; }
   .mbp-table { border-collapse: collapse; font-size: .68rem; white-space: nowrap; }
