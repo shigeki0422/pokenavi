@@ -1,9 +1,9 @@
 ---
 title: 'ピクシー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのピクシー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率47位。'
+description: 'ポケモンチャンピオンズのピクシー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率48位。'
 pokemonName: 'ピクシー'
 dexNumber: 36
-usageRank: 47
+usageRank: 48
 pubDate: '2026-07-13'
 draft: false
 analysisSlug: 'clefable-analysis-m2'
@@ -17,7 +17,7 @@ analysisSlug: 'clefable-analysis-m2'
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.36</strong>　／　使用率 <strong style="color:#dc2626">47位</strong>
+      全国図鑑 <strong>No.36</strong>　／　使用率 <strong style="color:#dc2626">48位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>

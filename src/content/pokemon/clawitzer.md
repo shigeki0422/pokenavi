@@ -1,9 +1,9 @@
 ---
 title: 'ブロスター | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのブロスター基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率151位。'
+description: 'ポケモンチャンピオンズのブロスター基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率149位。'
 pokemonName: 'ブロスター'
 dexNumber: 693
-usageRank: 151
+usageRank: 149
 pubDate: '2026-07-13'
 draft: false
 
@@ -17,7 +17,7 @@ draft: false
       <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.693</strong>　／　使用率 <strong style="color:#dc2626">151位</strong>
+      全国図鑑 <strong>No.693</strong>　／　使用率 <strong style="color:#dc2626">149位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>
