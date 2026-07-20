@@ -1,0 +1,159 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE } from '../consts';
+import rankingData from '../data/ranking.json';
+
+/**
+ * 「環境変動」ページ: ホームの3件のみのウィジェットを独立ページ化し、
+ * 急上昇・急落を最大20件ずつ表示する。ranking.json(直近日次スナップショット)
+ * から追加データ収集なしで生成できる。日次更新されるため鮮度の高いコンテンツ
+ * として機能し、Xシェア導線(SNS連動)を付ける。
+ */
+const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
+const allPokemonPages = (await getCollection('pokemon')).filter((p) => showDrafts || !p.data.draft);
+const pokeUrlByName: Record<string, string> = {};
+for (const p of allPokemonPages) {
+  if (p.data.pokemonName) pokeUrlByName[p.data.pokemonName] = `/pokemon/${p.id}/`;
+}
+
+const rSeasons = (rankingData as any).seasons as Record<
+  string,
+  { dates: string[]; pokemon: { name: string; id: string | null; dates: Record<string, { rank: number }> }[] }
+>;
+const rSeasonKey = Object.keys(rSeasons).sort().at(-1)!;
+const rSeason = rSeasons[rSeasonKey];
+const rFirstD = rSeason.dates[0];
+const rLastD = rSeason.dates[rSeason.dates.length - 1];
+const fmtMD = (d: string) => {
+  const [, m, dd] = d.split('-');
+  return `${parseInt(m)}/${parseInt(dd)}`;
+};
+
+const rMovers = rSeason.pokemon.flatMap((p) => {
+  const cur = p.dates[rLastD]?.rank;
+  const prev = p.dates[rFirstD]?.rank;
+  if (!cur || cur > 100 || !prev || prev === cur) return [];
+  return [{ name: p.name, id: p.id, cur, prev, diff: prev - cur, url: pokeUrlByName[p.name] ?? null }];
+});
+const risers = [...rMovers].sort((a, b) => b.diff - a.diff).filter((m) => m.diff > 0).slice(0, 20);
+const fallers = [...rMovers].sort((a, b) => a.diff - b.diff).filter((m) => m.diff < 0).slice(0, 20);
+
+const topRiser = risers[0];
+const topFaller = fallers[0];
+
+const siteUrl = 'https://pokenavi.jp';
+const title = `環境変動ランキング M-4 | 使用率 急上昇・急落ポケモン（${fmtMD(rFirstD)}→${fmtMD(rLastD)}）`;
+const description = `ポケモンチャンピオンズM-4環境の使用率変動を${fmtMD(rFirstD)}〜${fmtMD(rLastD)}のデータで追跡。急上昇${risers.length}体・急落${fallers.length}体をランキング形式で毎日更新。`;
+
+let shareText = `📈 ポケモンチャンピオンズ M-4 環境変動（${fmtMD(rFirstD)}→${fmtMD(rLastD)}）\n`;
+if (topRiser) shareText += `急上昇: ${topRiser.name} ${topRiser.prev}位→${topRiser.cur}位（+${topRiser.diff}）\n`;
+if (topFaller) shareText += `急落: ${topFaller.name} ${topFaller.prev}位→${topFaller.cur}位（${topFaller.diff}）\n`;
+const tweetUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText + `${siteUrl}/trends/`);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: '環境変動ランキング（急上昇）',
+  description,
+  url: `${siteUrl}/trends/`,
+  numberOfItems: risers.length,
+  itemListElement: risers.map((m, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: m.name,
+    url: m.url ? `${siteUrl}${m.url}` : undefined,
+  })),
+};
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <style>
+      main { max-width: 900px; margin: 0 auto; padding: 1.4em 1em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.5rem; margin: 0 0 .3em; }
+      .lead { font-size: .9rem; color: rgb(var(--gray)); margin: 0 0 1.2em; line-height: 1.7; }
+      .share-row { margin: 0 0 1.8em; }
+      .share-btn { display: inline-flex; align-items: center; gap: 6px; padding: .6em 1.1em; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: .84rem; background: #000; color: #fff; }
+      .share-btn:hover { opacity: .85; }
+      h2.sec { font-size: 1.05rem; font-weight: 800; margin: 1.6em 0 .7em; padding: .4em .8em; background: #f8fafc; border-radius: 0 6px 6px 0; }
+      h2.sec.up { border-left: 3px solid #059669; }
+      h2.sec.down { border-left: 3px solid #dc2626; }
+      .tgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 10px; }
+      .tcard { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; text-decoration: none; color: inherit; transition: box-shadow .15s, border-color .15s; }
+      .tcard:hover { box-shadow: 0 4px 12px rgba(0,0,0,.08); border-color: var(--accent); }
+      .tcard img { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0; }
+      .tcard .info { min-width: 0; flex: 1; }
+      .tcard .name { font-weight: 700; font-size: .88rem; color: rgb(var(--black)); }
+      .tcard .rank { font-size: .74rem; color: rgb(var(--gray)); }
+      .tcard .diff { font-size: .84rem; font-weight: 800; white-space: nowrap; }
+      .tcard .diff.up { color: #059669; }
+      .tcard .diff.down { color: #dc2626; }
+      .empty { font-size: .88rem; color: rgb(var(--gray)); padding: 1em; background: #f8fafc; border-radius: 8px; }
+      .note { font-size: .78rem; color: rgb(var(--gray)); margin-top: 1.8em; line-height: 1.7; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>📈 環境変動ランキング — 使用率 急上昇・急落</h1>
+      <p class="lead">
+        {fmtMD(rFirstD)}〜{fmtMD(rLastD)}の使用率TOP100の変動を追跡。前日以前と比べて順位が大きく動いたポケモンを急上昇・急落それぞれ最大20体まで表示します（毎日更新）。
+      </p>
+      <div class="share-row">
+        <a class="share-btn" href={tweetUrl} target="_blank" rel="noopener">𝕏 今日の環境変動をシェア</a>
+      </div>
+
+      <h2 class="sec up">🔺 急上昇（{risers.length}体）</h2>
+      {risers.length > 0 ? (
+        <div class="tgrid">
+          {risers.map((m) => {
+            const inner = (
+              <>
+                {m.id && <img src={`/images/pokemon/pokemon-${m.id}.webp`} alt={m.name} loading="lazy" />}
+                <div class="info">
+                  <div class="name">{m.name}</div>
+                  <div class="rank">{m.prev}位→{m.cur}位</div>
+                </div>
+                <span class="diff up">▲{m.diff}</span>
+              </>
+            );
+            return m.url ? <a href={m.url} class="tcard">{inner}</a> : <div class="tcard">{inner}</div>;
+          })}
+        </div>
+      ) : (
+        <p class="empty">対象期間中の急上昇データがありません。</p>
+      )}
+
+      <h2 class="sec down">🔻 急落（{fallers.length}体）</h2>
+      {fallers.length > 0 ? (
+        <div class="tgrid">
+          {fallers.map((m) => {
+            const inner = (
+              <>
+                {m.id && <img src={`/images/pokemon/pokemon-${m.id}.webp`} alt={m.name} loading="lazy" />}
+                <div class="info">
+                  <div class="name">{m.name}</div>
+                  <div class="rank">{m.prev}位→{m.cur}位</div>
+                </div>
+                <span class="diff down">▼{-m.diff}</span>
+              </>
+            );
+            return m.url ? <a href={m.url} class="tcard">{inner}</a> : <div class="tcard">{inner}</div>;
+          })}
+        </div>
+      ) : (
+        <p class="empty">対象期間中の急落データがありません。</p>
+      )}
+
+      <p class="note">
+        ※ 順位は使用率TOP100圏内のデータに基づきます。個別ポケモンの使用率推移・技/持ち物採用率は<a href="/ranking/">使用率ランキング</a>で詳しく確認できます。
+      </p>
+    </main>
+    <Footer />
+  </body>
+</html>

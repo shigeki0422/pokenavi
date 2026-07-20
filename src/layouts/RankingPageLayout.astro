@@ -324,6 +324,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
       </div>
       <p class="subtitle">
         {T.rankingSubtitle}　<time datetime={lastDate}>{T.rankingUpdated}：{fmtDate(lastDate)}</time>　{T.rankingCountPrefix}{pokemon.length}{T.rankingCountSuffix}
+        {lang === 'ja' && <>　<a href="/trends/">📈 急上昇・急落ランキングを見る →</a></>}
       </p>
 
       <section class="chart-section">
