@@ -82,7 +82,12 @@ export interface MainBuildVariant {
  */
 const mainBuildVariantsCache = new Map<string, MainBuildVariant[]>();
 export function mainBuildVariants(icon: string, defaultLabel: string): MainBuildVariant[] {
-  const cached = mainBuildVariantsCache.get(icon);
+  // defaultLabelは単一系統種の場合の表示名(ja/en/koで異なる)としてそのまま
+  // 結果に埋め込まれるため、iconだけでキャッシュすると同じ種のja/en/koページ間で
+  // ラベルが混線する(実際に発生: ニンフィアの日本語ページにSylveonという
+  // 英語名が出た)。defaultLabelもキーに含める。
+  const cacheKey = `${icon}::${defaultLabel}`;
+  const cached = mainBuildVariantsCache.get(cacheKey);
   if (cached) return cached;
   const mon = readMon(icon);
   const builds = mon?.builds ?? [];
@@ -103,7 +108,7 @@ export function mainBuildVariants(icon: string, defaultLabel: string): MainBuild
       }
     }
   }
-  mainBuildVariantsCache.set(icon, result);
+  mainBuildVariantsCache.set(cacheKey, result);
   return result;
 }
 
