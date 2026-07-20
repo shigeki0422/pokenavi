@@ -33,8 +33,8 @@ const T = {
   ja: {
     sub: (n: number) => `${oppName}の想定型${n}種に対する、互いの最大打点1発の確定数・素早さ・勝敗判定（実数値・きあいのタスキ/がんじょう考慮）。`,
     buildLabel: (i: number) => `型${i}`,
-    rowMyDmg: `与ダメ（${myName}→${oppName}）`,
-    rowOppDmg: `被ダメ（${oppName}→${myName}）`,
+    rowMyDmg: '与ダメ（自→相）',
+    rowOppDmg: '被ダメ（相→自）',
     rowSpeed: '素早さ',
     rowJudge: '判定',
     hits: (n: number | null) => (n == null || n >= 999 ? '圏外' : `確定${n}`),
@@ -45,8 +45,8 @@ const T = {
   en: {
     sub: (n: number) => `Hits-to-KO, Speed, and win/loss for each side's best move against ${n} known ${oppName} build(s) (actual stats, Focus Sash/Sturdy considered).`,
     buildLabel: (i: number) => `Build ${i}`,
-    rowMyDmg: `${myName} → ${oppName}`,
-    rowOppDmg: `${oppName} → ${myName}`,
+    rowMyDmg: 'Dmg (mine→opp)',
+    rowOppDmg: 'Dmg (opp→mine)',
     rowSpeed: 'Speed',
     rowJudge: 'Verdict',
     hits: (n: number | null) => (n == null || n >= 999 ? 'out of range' : `KO in ${n}`),
@@ -57,8 +57,8 @@ const T = {
   ko: {
     sub: (n: number) => `${oppName}의 예상 빌드 ${n}종에 대한, 서로의 최대 위력기 1발 확정 수・스피드・승패 판정(실수치・기합의띠/옹골참 고려).`,
     buildLabel: (i: number) => `빌드${i}`,
-    rowMyDmg: `${myName}→${oppName}`,
-    rowOppDmg: `${oppName}→${myName}`,
+    rowMyDmg: '피해(나→상대)',
+    rowOppDmg: '피해(상대→나)',
     rowSpeed: '스피드',
     rowJudge: '판정',
     hits: (n: number | null) => (n == null || n >= 999 ? '범위 밖' : `확정 ${n}`),
@@ -183,7 +183,7 @@ const T = {
   .mbp-table { border-collapse: collapse; font-size: .68rem; white-space: nowrap; }
   .mbp-table th, .mbp-table td { border: 1px solid #e2e8f0; padding: 5px 8px; text-align: center; vertical-align: top; }
   .mbp-table th { background: #f8fafc; font-weight: 800; }
-  .mbp-table td.lft, .mbp-table th.lft { text-align: left; font-weight: 700; background: #f8fafc; }
+  .mbp-table td.lft, .mbp-table th.lft { text-align: left; font-weight: 700; background: #f8fafc; white-space: normal; max-width: 92px; }
   .mbp-build-meta { font-weight: 400; font-size: .9em; color: #64748b; margin-top: 2px; }
   .mbp-pct { font-weight: 800; display: block; }
   .mbp-hits { color: #475569; display: block; }
