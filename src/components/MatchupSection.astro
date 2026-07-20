@@ -1,13 +1,17 @@
 ---
 import type { StaticMatchup } from '../scripts/party-builder/matchup-static';
+import { getHeadToHead } from '../scripts/party-builder/matchup-static';
+import { MOVE_NAME_EN, MOVE_NAME_KO } from '../i18n/game-terms';
 
 interface Props {
   matchups: StaticMatchup[];
   iconToSlug: Record<string, string>;
   nameMap: Record<string, string>;
   lang: 'ja' | 'en' | 'ko';
+  ownIcon: string;
+  ownName: string | null;
 }
-const { matchups, iconToSlug, nameMap, lang } = Astro.props;
+const { matchups, iconToSlug, nameMap, lang, ownIcon, ownName } = Astro.props;
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 
 const T = {
@@ -17,6 +21,10 @@ const T = {
     unfav: '不利な相手',
     note: '使用率上位30体の主流型同士の1v1事前計算による目安です（交代・補助技は非考慮）。*は相手の型により評価が変わります。',
     cta: '自分のパーティで詳しく判定 → パーティ工房',
+    hits: (n: number | null) => (n == null || n >= 999 ? '圏外' : `確定${n}発`),
+    basis: (myName: string, myMove: string, oppName: string, oppMove: string, myHits: string, oppHits: string, myS: number, oppS: number, fastName: string) =>
+      `双方の主流型同士の1v1事前計算：${myName}の最大打点技「${myMove}」で${oppName}を${myHits}。${oppName}の最大打点技「${oppMove}」は${myName}を${oppHits}。素早さ実数値は${myName}${myS} vs ${oppName}${oppS}（${fastName}が先手）。`,
+    linkSelf: (n: string) => `${n}のページを見る →`,
   },
   en: {
     heading: 'Favorable / Unfavorable Matchups (Top 30)',
@@ -24,6 +32,10 @@ const T = {
     unfav: 'Unfavorable',
     note: 'Estimated from precomputed 1v1s between the most common builds of the top 30 Pokémon (switching and status moves not considered). * = depends on the opponent’s build.',
     cta: 'Judge with your own party → Party Builder',
+    hits: (n: number | null) => (n == null || n >= 999 ? 'out of range' : `KO in ${n}`),
+    basis: (myName: string, myMove: string, oppName: string, oppMove: string, myHits: string, oppHits: string, myS: number, oppS: number, fastName: string) =>
+      `Based on each side's most-used build: ${myName}'s best move "${myMove}" ${myHits} ${oppName}. ${oppName}'s best move "${oppMove}" ${oppHits} ${myName}. Speed: ${myName} ${myS} vs ${oppName} ${oppS} (${fastName} moves first).`,
+    linkSelf: (n: string) => `View ${n}'s page →`,
   },
   ko: {
     heading: '유리·불리한 상대 (사용률 TOP30)',
@@ -31,12 +43,38 @@ const T = {
     unfav: '불리한 상대',
     note: '사용률 상위 30마리의 주류 빌드 간 1v1 사전 계산에 따른 참고치입니다 (교체·보조 기술 미고려). *는 상대의 빌드에 따라 평가가 달라집니다.',
     cta: '내 파티로 자세히 판정 → 파티 공방',
+    hits: (n: number | null) => (n == null || n >= 999 ? '범위 밖' : `확정 ${n}발`),
+    basis: (myName: string, myMove: string, oppName: string, oppMove: string, myHits: string, oppHits: string, myS: number, oppS: number, fastName: string) =>
+      `양쪽 주류 빌드끼리의 1v1 사전 계산: ${myName}의 최대 위력기 「${myMove}」로 ${oppName}을(를) ${myHits}. ${oppName}의 최대 위력기 「${oppMove}」는 ${myName}을(를) ${oppHits}. 실수치 스피드는 ${myName} ${myS} vs ${oppName} ${oppS}(${fastName}이(가) 선공).`,
+    linkSelf: (n: string) => `${n} 페이지 보기 →`,
   },
 }[lang];
 
 const favorable = matchups.filter(m => m.sym === '◎' || m.sym === '○');
 const unfavorable = matchups.filter(m => m.sym === '▲' || m.sym === '×');
 const displayName = (n: string) => nameMap[n] ?? n;
+const displayMove = (n: string | null) => {
+  if (!n) return '—';
+  if (lang === 'en') return MOVE_NAME_EN[n] ?? n;
+  if (lang === 'ko') return MOVE_NAME_KO[n] ?? n;
+  return n;
+};
+const basisText = (opponentIcon: string, opponentName: string) => {
+  const h2h = getHeadToHead(ownIcon, opponentIcon);
+  if (!h2h || !ownName) return null;
+  const v = h2h.verdict;
+  return T.basis(
+    ownName,
+    displayMove(v.myMove),
+    opponentName,
+    displayMove(v.oppMove),
+    T.hits(v.myHits),
+    T.hits(v.oppHits),
+    v.myS,
+    v.oppS,
+    v.fast ? ownName : opponentName,
+  );
+};
 ---
 
 {(favorable.length > 0 || unfavorable.length > 0) && (
@@ -49,16 +87,28 @@ const displayName = (n: string) => nameMap[n] ?? n;
           <div class="mu-grid">
             {favorable.map(m => {
               const slug = iconToSlug[m.icon];
+              const name = displayName(m.name);
+              const basis = basisText(m.icon, name);
               const inner = (
                 <>
-                  <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={displayName(m.name)} width="44" height="44" loading="lazy" />
+                  <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={name} width="44" height="44" loading="lazy" />
                   <span class={`mu-sym ${m.sym === '◎' ? 'mu-best' : ''}`}>{m.sym}{m.dep && <span class="mu-dep">*</span>}</span>
-                  <span class="mu-name">{displayName(m.name)}</span>
+                  <span class="mu-name">{name}</span>
                 </>
               );
-              return slug
-                ? <a href={`${pfx}/pokemon/${slug}/`} class="mu-cell" title={displayName(m.name)}>{inner}</a>
-                : <div class="mu-cell" title={displayName(m.name)}>{inner}</div>;
+              return basis ? (
+                <details class="mu-cell mu-cell-pop">
+                  <summary title={name}>{inner}</summary>
+                  <div class="mu-pop">
+                    <p class="mu-basis">{basis}</p>
+                    {slug && <a href={`${pfx}/pokemon/${slug}/`}>{T.linkSelf(name)}</a>}
+                  </div>
+                </details>
+              ) : slug ? (
+                <a href={`${pfx}/pokemon/${slug}/`} class="mu-cell" title={name}>{inner}</a>
+              ) : (
+                <div class="mu-cell" title={name}>{inner}</div>
+              );
             })}
           </div>
         </div>
@@ -69,16 +119,28 @@ const displayName = (n: string) => nameMap[n] ?? n;
           <div class="mu-grid">
             {unfavorable.map(m => {
               const slug = iconToSlug[m.icon];
+              const name = displayName(m.name);
+              const basis = basisText(m.icon, name);
               const inner = (
                 <>
-                  <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={displayName(m.name)} width="44" height="44" loading="lazy" />
+                  <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={name} width="44" height="44" loading="lazy" />
                   <span class={`mu-sym mu-bad ${m.sym === '×' ? 'mu-worst' : ''}`}>{m.sym}{m.dep && <span class="mu-dep">*</span>}</span>
-                  <span class="mu-name">{displayName(m.name)}</span>
+                  <span class="mu-name">{name}</span>
                 </>
               );
-              return slug
-                ? <a href={`${pfx}/pokemon/${slug}/`} class="mu-cell" title={displayName(m.name)}>{inner}</a>
-                : <div class="mu-cell" title={displayName(m.name)}>{inner}</div>;
+              return basis ? (
+                <details class="mu-cell mu-cell-pop">
+                  <summary title={name}>{inner}</summary>
+                  <div class="mu-pop">
+                    <p class="mu-basis">{basis}</p>
+                    {slug && <a href={`${pfx}/pokemon/${slug}/`}>{T.linkSelf(name)}</a>}
+                  </div>
+                </details>
+              ) : slug ? (
+                <a href={`${pfx}/pokemon/${slug}/`} class="mu-cell" title={name}>{inner}</a>
+              ) : (
+                <div class="mu-cell" title={name}>{inner}</div>
+              );
             })}
           </div>
         </div>
@@ -103,6 +165,21 @@ const displayName = (n: string) => nameMap[n] ?? n;
   }
   a.mu-cell:hover { background: #f8fafc; }
   .mu-cell img { width: 44px; height: 44px; object-fit: contain; }
+  details.mu-cell-pop { width: auto; padding: 0; }
+  details.mu-cell-pop > summary {
+    display: flex; flex-direction: column; align-items: center; gap: 1px;
+    width: 62px; padding: 4px 0; border-radius: 8px; cursor: pointer; list-style: none;
+  }
+  details.mu-cell-pop > summary::-webkit-details-marker { display: none; }
+  details.mu-cell-pop > summary:hover { background: #f8fafc; }
+  details.mu-cell-pop[open] > summary { background: #f8fafc; }
+  .mu-pop {
+    width: 220px; margin-top: 4px; padding: 8px 10px; border: 1px solid #e2e8f0; border-radius: 8px;
+    background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  }
+  .mu-basis { font-size: .68rem; line-height: 1.6; color: #475569; margin: 0 0 6px; }
+  .mu-pop a { font-size: .74rem; font-weight: 700; color: var(--accent, #f97316); text-decoration: none; }
+  .mu-pop a:hover { text-decoration: underline; }
   .mu-sym { font-size: 0.8rem; font-weight: 700; color: #059669; line-height: 1.1; }
   .mu-sym.mu-best { color: #047857; }
   .mu-sym.mu-bad { color: #dc2626; }

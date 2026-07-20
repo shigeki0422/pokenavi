@@ -325,7 +325,7 @@ const breadcrumbJsonLd = {
 						<a href={`${pfx}/party-builder/`} class="hub-btn">{T.hubBuild}</a>
 					</div>
 					<slot />
-					{matchups && <MatchupSection matchups={matchups} iconToSlug={iconToSlug} nameMap={POKEMON_MAP} lang={lang} />}
+					{matchups && <MatchupSection matchups={matchups} iconToSlug={iconToSlug} nameMap={POKEMON_MAP} lang={lang} ownIcon={ownIcon} ownName={pokemonNameDisp ?? pokemonName} />}
 					{pokemonName && <SimPartyCard pokemonName={pokemonName} />}
 					{(hasPartySuggest || hasMegaPartySuggest) && (
 						<div class="ps-cta-wrap">
