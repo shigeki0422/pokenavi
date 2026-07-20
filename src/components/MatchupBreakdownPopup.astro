@@ -70,6 +70,7 @@ const T = {
 ---
 
 <div class="mbp">
+  <button type="button" class="mbp-close" aria-label="閉じる">✕</button>
   <div class="mbp-hd">
     <img src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
     <span class="mbp-name">{oppName}</span>
@@ -129,9 +130,43 @@ const T = {
   {otherHref && <a class="mbp-link" href={otherHref}>{otherLabel}</a>}
 </div>
 
+<script>
+  /**
+   * /counters/・/pokemon/(有利・不利な相手)双方のポップアップ(details.ccard-wrap /
+   * details.mu-cell-pop)を閉じる共通スクリプト。Astroが同一内容の<script>を
+   * ページ内で自動的に1本へ重複排除するため、コンポーネントが何度使われても
+   * このロジックは1回だけ登録される。
+   * - ✕ボタンクリック / 画面外タップ / Escapeキーで閉じる
+   */
+  function closeAllMatchupPopups() {
+    document.querySelectorAll('details.mu-cell-pop[open], details.ccard-wrap[open]').forEach((d) => {
+      d.removeAttribute('open');
+    });
+  }
+  document.addEventListener('click', (e) => {
+    const target = e.target as Element;
+    if (target.closest('.mbp-close')) {
+      target.closest('details')?.removeAttribute('open');
+      return;
+    }
+    if (!target.closest('details.mu-cell-pop[open], details.ccard-wrap[open]')) {
+      closeAllMatchupPopups();
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeAllMatchupPopups();
+  });
+</script>
+
 <style>
-  .mbp { font-size: .78rem; }
-  .mbp-hd { display: flex; align-items: center; gap: 6px; font-weight: 800; margin-bottom: 4px; }
+  .mbp { position: relative; font-size: .78rem; }
+  .mbp-close {
+    position: absolute; top: -6px; right: -6px; width: 26px; height: 26px; border-radius: 999px;
+    border: none; background: #f1f5f9; color: #475569; font-size: .82rem; line-height: 1; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; z-index: 1;
+  }
+  .mbp-close:hover { background: #e2e8f0; }
+  .mbp-hd { display: flex; align-items: center; gap: 6px; font-weight: 800; margin-bottom: 4px; padding-right: 22px; }
   .mbp-hd img { width: 28px; height: 28px; object-fit: contain; }
   .mbp-vs { color: #94a3b8; font-weight: 700; font-size: .74rem; }
   .mbp-sub { font-size: .68rem; color: #64748b; line-height: 1.6; margin: 0 0 8px; }
