@@ -1,0 +1,87 @@
+---
+import { getCollection } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+/**
+ * /matchup/{a}-vs-{b}/ (直接比較)は406ページとも被リンクゼロの孤立ページ群だった。
+ * 使用率上位種ごとに「直接比較できる相手一覧」をまとめ、索引ページとして機能させる。
+ */
+const targets = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), 'public', 'builder-data', 'targets.json'), 'utf8'),
+) as { sp: string; icon: string }[];
+const pokemonPages = await getCollection('pokemon', (p) => !p.data.draft);
+const nameToPage: Record<string, (typeof pokemonPages)[number]> = {};
+for (const p of pokemonPages) {
+  if (p.data.pokemonName) nameToPage[p.data.pokemonName] = p;
+}
+const entries = targets
+  .map((t) => {
+    const page = nameToPage[t.sp];
+    if (!page) return null;
+    return { name: t.sp, icon: t.icon, slug: page.id, rank: page.data.usageRank ?? 9999 };
+  })
+  .filter((e): e is NonNullable<typeof e> => !!e)
+  .sort((a, b) => a.rank - b.rank);
+
+const pairSlug = (a: (typeof entries)[number], b: (typeof entries)[number]) =>
+  a.rank <= b.rank ? `${a.slug}-vs-${b.slug}` : `${b.slug}-vs-${a.slug}`;
+
+const groups = entries.map((e) => ({
+  ...e,
+  opponents: entries.filter((o) => o.slug !== e.slug).map((o) => ({ ...o, href: `/matchup/${pairSlug(e, o)}/` })),
+}));
+
+const siteUrl = 'https://pokenavi.jp';
+const title = `1v1直接比較ページ一覧 M-4 | 使用率上位ポケモン同士の対面判定`;
+const description = `ポケモンチャンピオンズM-4 使用率上位${entries.length}種同士の「A vs B」1v1直接比較ページの一覧。調べたいポケモンから比較したい相手を選べます。`;
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <style>
+      main { max-width: 900px; margin: 0 auto; padding: 1.4em 1em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.5rem; margin: 0 0 .3em; }
+      .lead { font-size: .9rem; color: rgb(var(--gray)); margin: 0 0 1.4em; line-height: 1.7; }
+      details { border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 8px; background: #fff; }
+      summary { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; font-weight: 700; font-size: .92rem; list-style: none; }
+      summary::-webkit-details-marker { display: none; }
+      summary img { width: 36px; height: 36px; object-fit: contain; }
+      summary .rank { font-weight: 400; font-size: .74rem; color: rgb(var(--gray)); }
+      .oplist { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 12px; }
+      .opitem { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border: 1px solid #e2e8f0; border-radius: 8px; text-decoration: none; color: inherit; font-size: .78rem; font-weight: 600; }
+      .opitem:hover { border-color: var(--accent); color: var(--accent); }
+      .opitem img { width: 22px; height: 22px; object-fit: contain; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>「A vs B」直接比較 ポケモン一覧</h1>
+      <p class="lead">
+        使用率上位{entries.length}種の中から、比較したい2体を選んで直接1v1判定を見られます。ポケモン名をクリックすると比較可能な相手の一覧が開きます。
+      </p>
+      {groups.map((g) => (
+        <details>
+          <summary>
+            <img src={`/images/pokemon/pokemon-${g.icon}.webp`} alt={g.name} loading="lazy" />
+            {g.name}<span class="rank">使用率{g.rank}位・比較可能{g.opponents.length}体</span>
+          </summary>
+          <div class="oplist">
+            {g.opponents.map((o) => (
+              <a href={o.href} class="opitem">
+                <img src={`/images/pokemon/pokemon-${o.icon}.webp`} alt={o.name} loading="lazy" />
+                {o.name}
+              </a>
+            ))}
+          </div>
+        </details>
+      ))}
+    </main>
+    <Footer />
+  </body>
+</html>

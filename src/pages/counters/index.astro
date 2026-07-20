@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import fs from 'node:fs';
+import path from 'node:path';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+
+/**
+ * /counters/{slug}/ (○○対策)は各ページから相互リンクせず、対象ポケモンの
+ * ページ以外から辿り着けなかった(索引ページが無い孤立ページ群)。
+ * ここで全対象種への一覧導線を作る。
+ */
+const targets = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), 'public', 'builder-data', 'targets.json'), 'utf8'),
+) as { sp: string; icon: string }[];
+const pokemonPages = await getCollection('pokemon', (p) => !p.data.draft);
+const nameToPage: Record<string, (typeof pokemonPages)[number]> = {};
+for (const p of pokemonPages) {
+  if (p.data.pokemonName) nameToPage[p.data.pokemonName] = p;
+}
+const entries = targets
+  .map((t) => {
+    const page = nameToPage[t.sp];
+    if (!page) return null;
+    return { name: t.sp, icon: t.icon, slug: page.id, rank: page.data.usageRank ?? 9999 };
+  })
+  .filter((e): e is NonNullable<typeof e> => !!e)
+  .sort((a, b) => a.rank - b.rank);
+
+const siteUrl = 'https://pokenavi.jp';
+const title = `対策ランキング一覧 M-4 | 使用率上位ポケモンへの対策を種別に見る`;
+const description = `ポケモンチャンピオンズM-4 使用率上位${entries.length}種それぞれについて、1v1事前計算で有利を取れる対策ポケモンをランキング形式で紹介するページの一覧。`;
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <style>
+      main { max-width: 900px; margin: 0 auto; padding: 1.4em 1em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.5rem; margin: 0 0 .3em; }
+      .lead { font-size: .9rem; color: rgb(var(--gray)); margin: 0 0 1.4em; line-height: 1.7; }
+      .egrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px; }
+      .ecard { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff; text-decoration: none; color: inherit; transition: box-shadow .15s, border-color .15s; }
+      .ecard:hover { box-shadow: 0 4px 12px rgba(0,0,0,.08); border-color: var(--accent); }
+      .ecard img { width: 40px; height: 40px; object-fit: contain; flex-shrink: 0; }
+      .ecard .name { font-weight: 700; font-size: .88rem; color: rgb(var(--black)); }
+      .ecard .rank { font-size: .72rem; color: rgb(var(--gray)); }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>ポケモン対策ランキング一覧</h1>
+      <p class="lead">
+        使用率上位{entries.length}種それぞれについて、1v1事前計算（実数値・きあいのタスキ/がんじょう考慮）で有利を取れる対策ポケモンをランキング形式で紹介しています。調べたいポケモンを選んでください。
+      </p>
+      <div class="egrid">
+        {entries.map((e) => (
+          <a href={`/counters/${e.slug}/`} class="ecard">
+            <img src={`/images/pokemon/pokemon-${e.icon}.webp`} alt={e.name} loading="lazy" />
+            <div>
+              <div class="name">{e.name}</div>
+              <div class="rank">使用率{e.rank}位</div>
+            </div>
+          </a>
+        ))}
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
