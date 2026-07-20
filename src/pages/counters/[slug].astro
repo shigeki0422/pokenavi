@@ -224,7 +224,7 @@ const jsonLd = {
                       myIcon={c.icon}
                       oppName={b.label}
                       oppIcon={defenderIcon}
-                      breakdown={b.breakdown}
+                      myBreakdowns={[{ label: '', breakdown: b.breakdown }]}
                       otherHref={i === c.breakdowns.length - 1 ? `/pokemon/${c.slug}/` : null}
                       otherLabel={`${c.name}のページを見る →`}
                     />
@@ -259,7 +259,7 @@ const jsonLd = {
                       myIcon={c.icon}
                       oppName={b.label}
                       oppIcon={defenderIcon}
-                      breakdown={b.breakdown}
+                      myBreakdowns={[{ label: '', breakdown: b.breakdown }]}
                       otherHref={i === c.breakdowns.length - 1 ? `/pokemon/${c.slug}/` : null}
                       otherLabel={`${c.name}のページを見る →`}
                     />

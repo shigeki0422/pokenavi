@@ -206,14 +206,13 @@ export interface MatchupBreakdown {
   sym: StaticMatchup["sym"];
   dep: boolean;
 }
-export function getMatchupBreakdown(
-  myIcon: string,
+/** 自分の型(ResolvedBuild)を直接指定する版。myBuildOptions()で得た複数候補
+ * それぞれについてポップアップの内訳を出す(自分の型タブ切り替え)ために使う。 */
+export function getMatchupBreakdownForBuild(
+  me: ResolvedBuild,
   oppIcon: string,
-  myPreferItem?: string,
   oppPreferItem?: string,
 ): MatchupBreakdown | null {
-  const me = mainBuild(myIcon, myPreferItem);
-  if (!me) return null;
   const oppGroup = resolvedTargetsExpanded.find((t) => t.icon === oppIcon && t.preferItem === oppPreferItem);
   if (!oppGroup || !oppGroup.builds.length) return null;
   const agg = judgeVsBuilds(me, oppGroup.builds);
@@ -225,4 +224,73 @@ export function getMatchupBreakdown(
     oppDmg: bestMoveHitDetail(build, me),
   }));
   return { me, oppName: oppGroup.name, builds, sym: agg.sym, dep: agg.dep };
+}
+export function getMatchupBreakdown(
+  myIcon: string,
+  oppIcon: string,
+  myPreferItem?: string,
+  oppPreferItem?: string,
+): MatchupBreakdown | null {
+  const me = mainBuild(myIcon, myPreferItem);
+  if (!me) return null;
+  return getMatchupBreakdownForBuild(me, oppIcon, oppPreferItem);
+}
+
+export interface MyBuildOption {
+  /** タブ表示用ラベル(持ち物・性格)。 */
+  label: string;
+  build: ResolvedBuild;
+}
+/**
+ * 自分側の主要な型を複数(最大count件)返す。相手側は既にtargets.json由来の
+ * 型プール(最大3種)を評価対象にしているのに対し、自分側はmainBuild()で
+ * 常に採用率最多の1型に固定されており「自分の型を変えたらどうなるか」が
+ * 見えない、という指摘を受けて追加。preferItem指定時(メガ進化が複数系統
+ * ある種)はその石を使う型の中から複数候補を探す。
+ */
+const myBuildOptionsCache = new Map<string, MyBuildOption[]>();
+export function myBuildOptions(icon: string, preferItem: string | undefined, count = 3): MyBuildOption[] {
+  const cacheKey = `${icon}::${preferItem ?? ""}::${count}`;
+  const cached = myBuildOptionsCache.get(cacheKey);
+  if (cached) return cached;
+
+  const mon = readMon(icon);
+  const builds = mon?.builds ?? [];
+  const resolve = (spec: string): ResolvedBuild | null => {
+    const slot = fromSpec(spec);
+    if (!slot) return null;
+    try {
+      return resolveSlot(slot, species, moves);
+    } catch {
+      return null;
+    }
+  };
+
+  let result: MyBuildOption[] = [];
+  if (builds.length) {
+    if (preferItem) {
+      const matching = builds.filter((s) => s.includes(`@${preferItem}:`)).slice(0, count);
+      result = matching
+        .map((spec) => {
+          const build = resolve(spec);
+          return build ? { label: `${build.item}・${build.nature}`, build } : null;
+        })
+        .filter((v): v is MyBuildOption => !!v);
+    } else {
+      const seenSpec = new Set<string>();
+      for (const it of (mon?.items ?? []).slice(0, count)) {
+        const spec = builds.find((s) => s.includes(`@${it.n}:`));
+        if (!spec || seenSpec.has(spec)) continue;
+        seenSpec.add(spec);
+        const build = resolve(spec);
+        if (build) result.push({ label: `${build.item}・${build.nature}`, build });
+      }
+    }
+    if (!result.length) {
+      const build = resolve(builds[0]);
+      if (build) result = [{ label: `${build.item}・${build.nature}`, build }];
+    }
+  }
+  myBuildOptionsCache.set(cacheKey, result);
+  return result;
 }

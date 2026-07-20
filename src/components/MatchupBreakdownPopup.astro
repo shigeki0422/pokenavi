@@ -8,6 +8,11 @@ import { MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN,
  * 簡単構築(PartySuggestApp)のmatchupDetailHtml(型を列に並べ、型ごとに与ダメ・被ダメ・
  * 素早さ・判定を通しで見せる)と同じ構造に合わせている。ここを直せば/counters/・
  * /pokemon/どちらの表示も同時に直る。
+ *
+ * 相手側は既にtargets.jsonの型プール(最大3種)を列で見せているのに、自分側は
+ * mainBuild()の1型固定で「自分の型を変えたらどうなるか」が見えない、という
+ * 指摘を受け、myBreakdowns(自分の主要な型ごとの内訳、最大3件)をタブ切り替えで
+ * 見られるようにした(自分の型が1件のみなら従来通りタブなしで1枚だけ表示)。
  */
 interface Props {
   lang: 'ja' | 'en' | 'ko';
@@ -15,11 +20,13 @@ interface Props {
   myIcon: string;
   oppName: string;
   oppIcon: string;
-  breakdown: MatchupBreakdown;
+  /** 自分の主要な型ごとの内訳(通常1〜3件)。label例: 「きあいのタスキ・ようき」。 */
+  myBreakdowns: { label: string; breakdown: MatchupBreakdown }[];
   otherHref: string | null;
   otherLabel: string;
 }
-const { lang, myName, myIcon, oppName, oppIcon, breakdown, otherHref, otherLabel } = Astro.props;
+const { lang, myName, myIcon, oppName, oppIcon, myBreakdowns, otherHref, otherLabel } = Astro.props;
+const uid = `${myIcon}-${oppIcon}-${myName}`.replace(/[^a-zA-Z0-9]/g, '');
 
 const tMove = (n: string | null) => {
   if (!n) return '—';
@@ -31,15 +38,17 @@ const tItem = (n: string) => (lang === 'en' ? ITEM_NAME_EN[n] ?? n : lang === 'k
 const tNature = (n: string) => (lang === 'en' ? NATURE_NAME_EN[n] ?? n : lang === 'ko' ? NATURE_NAME_KO[n] ?? n : n);
 
 const EV_LABELS = ['H', 'A', 'B', 'C', 'D', 'S'] as const;
-const meEvLabel = breakdown.me.evs
-  .map((v, i) => (v > 0 ? `${EV_LABELS[i]}${v}` : null))
-  .filter((s): s is string => s !== null)
-  .join(' ');
-const meMoves = breakdown.me.moves.map((m) => tMove(m.n)).join('/');
+const meEvLabel = (me: MatchupBreakdown['me']) =>
+  me.evs
+    .map((v, i) => (v > 0 ? `${EV_LABELS[i]}${v}` : null))
+    .filter((s): s is string => s !== null)
+    .join(' ');
+const meMoves = (me: MatchupBreakdown['me']) => me.moves.map((m) => tMove(m.n)).join('/');
 
 const T = {
   ja: {
-    myBuild: (item: string, nature: string, ev: string, moves: string) => `${myName}の主流型：${item}・${nature}・${ev}（技: ${moves}）`,
+    myTab: (i: number) => `自分の型${i}`,
+    myBuild: (item: string, nature: string, ev: string, moves: string) => `${myName}の型：${item}・${nature}・${ev}（技: ${moves}）`,
     sub: (n: number) => `${oppName}の想定型${n}種に対する、互いの最大打点1発の確定数・素早さ・勝敗判定（実数値・きあいのタスキ/がんじょう考慮）。`,
     buildLabel: (i: number) => `型${i}`,
     rowSpeed: '素早さ',
@@ -54,7 +63,8 @@ const T = {
       `${win ? '勝ち' : '負け'}：${myHits}で倒す/${oppHits}で倒される・${fast ? '先手' : '後手'}`,
   },
   en: {
-    myBuild: (item: string, nature: string, ev: string, moves: string) => `${myName}'s main build: ${item}, ${nature}, ${ev} (moves: ${moves})`,
+    myTab: (i: number) => `My build ${i}`,
+    myBuild: (item: string, nature: string, ev: string, moves: string) => `${myName}'s build: ${item}, ${nature}, ${ev} (moves: ${moves})`,
     sub: (n: number) => `Hits-to-KO, Speed, and win/loss for each side's best move against ${n} known ${oppName} build(s) (actual stats, Focus Sash/Sturdy considered).`,
     buildLabel: (i: number) => `Build ${i}`,
     rowSpeed: 'Speed',
@@ -69,7 +79,8 @@ const T = {
       `${win ? 'Win' : 'Lose'}: ${myHits} vs ${oppHits}, ${fast ? 'moves first' : 'moves second'}`,
   },
   ko: {
-    myBuild: (item: string, nature: string, ev: string, moves: string) => `${myName}의 주류 빌드: ${item}・${nature}・${ev}(기술: ${moves})`,
+    myTab: (i: number) => `내 빌드 ${i}`,
+    myBuild: (item: string, nature: string, ev: string, moves: string) => `${myName}의 빌드: ${item}・${nature}・${ev}(기술: ${moves})`,
     sub: (n: number) => `${oppName}의 예상 빌드 ${n}종에 대한, 서로의 최대 위력기 1발 확정 수・스피드・승패 판정(실수치・기합의띠/옹골참 고려).`,
     buildLabel: (i: number) => `빌드${i}`,
     rowSpeed: '스피드',
@@ -84,6 +95,8 @@ const T = {
       `${win ? '승리' : '패배'}: ${myHits} / ${oppHits}・${fast ? '선공' : '후공'}`,
   },
 }[lang];
+
+const multi = myBreakdowns.length > 1;
 ---
 
 <div class="mbp">
@@ -95,71 +108,93 @@ const T = {
     <img src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
     <span class="mbp-name">{oppName}</span>
   </div>
-  <p class="mbp-my-build">{T.myBuild(tItem(breakdown.me.item), tNature(breakdown.me.nature), meEvLabel, meMoves)}</p>
-  <p class="mbp-sub">{T.sub(breakdown.builds.length)}</p>
-  <div class="mbp-scroll">
-    <table class="mbp-table">
-      <tr>
-        <th class="lft"></th>
-        {breakdown.builds.map((r, i) => (
-          <th>
-            {T.buildLabel(i + 1)}
-            <div class="mbp-build-meta">{tItem(r.build.item)}<br />{tNature(r.build.nature)}<br />{r.evLabel}</div>
-          </th>
-        ))}
-      </tr>
-      <tr>
-        <td class="lft">
-          <div class="mbp-lbl-icons">
-            <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />
-            <span>↓</span>
-            <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
+
+  {multi && myBreakdowns.map((_, i) => (
+    <input type="radio" name={`mbp-tab-${uid}`} id={`mbp-tab-${uid}-${i}`} class="mbp-tab-radio" checked={i === 0} />
+  ))}
+  {multi && (
+    <div class="mbp-tab-labels">
+      {myBreakdowns.map((mb, i) => (
+        <label for={`mbp-tab-${uid}-${i}`} class="mbp-tab-label">{T.myTab(i + 1)}<span class="mbp-tab-sub">{mb.label}</span></label>
+      ))}
+    </div>
+  )}
+
+  <div class={`mbp-tab-panels ${multi ? '' : 'single'}`}>
+    {myBreakdowns.map((mb, i) => {
+      const breakdown = mb.breakdown;
+      return (
+        <div class="mbp-tab-panel">
+          <p class="mbp-my-build">{T.myBuild(tItem(breakdown.me.item), tNature(breakdown.me.nature), meEvLabel(breakdown.me), meMoves(breakdown.me))}</p>
+          <p class="mbp-sub">{T.sub(breakdown.builds.length)}</p>
+          <div class="mbp-scroll">
+            <table class="mbp-table">
+              <tr>
+                <th class="lft"></th>
+                {breakdown.builds.map((r, j) => (
+                  <th>
+                    {T.buildLabel(j + 1)}
+                    <div class="mbp-build-meta">{tItem(r.build.item)}<br />{tNature(r.build.nature)}<br />{r.evLabel}</div>
+                  </th>
+                ))}
+              </tr>
+              <tr>
+                <td class="lft">
+                  <div class="mbp-lbl-icons">
+                    <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />
+                    <span>↓</span>
+                    <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
+                  </div>
+                </td>
+                {breakdown.builds.map((r) => (
+                  <td>
+                    {r.myDmg?.pctLo != null && <span class="mbp-pct">{r.myDmg.pctLo.toFixed(1)}〜{r.myDmg.pctHi?.toFixed(1)}%</span>}
+                    <span class="mbp-hits">{T.hitsDetail(r.myDmg)}</span>
+                    <div class="mbp-move">{tMove(r.myDmg?.n ?? r.verdict.myMove)}</div>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td class="lft">
+                  <div class="mbp-lbl-icons">
+                    <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
+                    <span>↓</span>
+                    <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />
+                  </div>
+                </td>
+                {breakdown.builds.map((r) => (
+                  <td>
+                    {r.oppDmg?.pctLo != null && <span class="mbp-pct">{r.oppDmg.pctLo.toFixed(1)}〜{r.oppDmg.pctHi?.toFixed(1)}%</span>}
+                    <span class="mbp-hits">{T.hitsDetail(r.oppDmg)}</span>
+                    <div class="mbp-move">{tMove(r.oppDmg?.n ?? r.verdict.oppMove)}</div>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td class="lft">{T.rowSpeed}</td>
+                {breakdown.builds.map((r) => (
+                  <td class={`mbp-spd-cell ${r.verdict.fast ? 'mbp-spd-win' : 'mbp-spd-lose'}`}>
+                    <div>{T.fastLabel(r.verdict.fast)}</div>
+                    <div><img class="mbp-mini" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />S{r.verdict.myS} / <img class="mbp-mini" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />S{r.verdict.oppS}</div>
+                  </td>
+                ))}
+              </tr>
+              <tr>
+                <td class="lft">{T.rowJudge}</td>
+                {breakdown.builds.map((r) => (
+                  <td class={r.verdict.win ? 'mbp-judge-win' : 'mbp-judge-lose'}>
+                    <b class="mbp-sym">{r.verdict.sym}</b>
+                    <div class="mbp-judge-text">{T.judgeText(r.verdict.win, T.hits(r.verdict.myHits), T.hits(r.verdict.oppHits), r.verdict.fast)}</div>
+                  </td>
+                ))}
+              </tr>
+            </table>
           </div>
-        </td>
-        {breakdown.builds.map((r) => (
-          <td>
-            {r.myDmg?.pctLo != null && <span class="mbp-pct">{r.myDmg.pctLo.toFixed(1)}〜{r.myDmg.pctHi?.toFixed(1)}%</span>}
-            <span class="mbp-hits">{T.hitsDetail(r.myDmg)}</span>
-            <div class="mbp-move">{tMove(r.myDmg?.n ?? r.verdict.myMove)}</div>
-          </td>
-        ))}
-      </tr>
-      <tr>
-        <td class="lft">
-          <div class="mbp-lbl-icons">
-            <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
-            <span>↓</span>
-            <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />
-          </div>
-        </td>
-        {breakdown.builds.map((r) => (
-          <td>
-            {r.oppDmg?.pctLo != null && <span class="mbp-pct">{r.oppDmg.pctLo.toFixed(1)}〜{r.oppDmg.pctHi?.toFixed(1)}%</span>}
-            <span class="mbp-hits">{T.hitsDetail(r.oppDmg)}</span>
-            <div class="mbp-move">{tMove(r.oppDmg?.n ?? r.verdict.oppMove)}</div>
-          </td>
-        ))}
-      </tr>
-      <tr>
-        <td class="lft">{T.rowSpeed}</td>
-        {breakdown.builds.map((r) => (
-          <td class={`mbp-spd-cell ${r.verdict.fast ? 'mbp-spd-win' : 'mbp-spd-lose'}`}>
-            <div>{T.fastLabel(r.verdict.fast)}</div>
-            <div><img class="mbp-mini" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />S{r.verdict.myS} / <img class="mbp-mini" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />S{r.verdict.oppS}</div>
-          </td>
-        ))}
-      </tr>
-      <tr>
-        <td class="lft">{T.rowJudge}</td>
-        {breakdown.builds.map((r) => (
-          <td class={r.verdict.win ? 'mbp-judge-win' : 'mbp-judge-lose'}>
-            <b class="mbp-sym">{r.verdict.sym}</b>
-            <div class="mbp-judge-text">{T.judgeText(r.verdict.win, T.hits(r.verdict.myHits), T.hits(r.verdict.oppHits), r.verdict.fast)}</div>
-          </td>
-        ))}
-      </tr>
-    </table>
+        </div>
+      );
+    })}
   </div>
+
   {otherHref && <a class="mbp-link" href={otherHref}>{otherLabel}</a>}
 </div>
 
@@ -211,6 +246,29 @@ const T = {
   .mbp-hd { display: flex; align-items: center; gap: 6px; font-weight: 800; margin-bottom: 4px; padding-right: 22px; }
   .mbp-hd img { width: 28px; height: 28px; object-fit: contain; }
   .mbp-vs { color: #94a3b8; font-weight: 700; font-size: .74rem; }
+
+  .mbp-tab-radio { position: absolute; opacity: 0; pointer-events: none; }
+  .mbp-tab-labels { display: flex; gap: 4px; margin-bottom: 6px; flex-wrap: wrap; }
+  .mbp-tab-label {
+    display: flex; flex-direction: column; align-items: center; padding: 4px 8px; border-radius: 6px;
+    border: 1px solid #e2e8f0; background: #f8fafc; cursor: pointer; font-size: .68rem; font-weight: 700;
+    color: #64748b; line-height: 1.4;
+  }
+  .mbp-tab-sub { font-weight: 400; font-size: .9em; color: #94a3b8; }
+  .mbp-tab-panels .mbp-tab-panel { display: none; }
+  .mbp-tab-radio:nth-of-type(1):checked ~ .mbp-tab-labels label:nth-of-type(1),
+  .mbp-tab-radio:nth-of-type(2):checked ~ .mbp-tab-labels label:nth-of-type(2),
+  .mbp-tab-radio:nth-of-type(3):checked ~ .mbp-tab-labels label:nth-of-type(3) {
+    background: var(--accent, #f97316); border-color: var(--accent, #f97316); color: #fff;
+  }
+  .mbp-tab-radio:nth-of-type(1):checked ~ .mbp-tab-panels .mbp-tab-panel:nth-of-type(1),
+  .mbp-tab-radio:nth-of-type(2):checked ~ .mbp-tab-panels .mbp-tab-panel:nth-of-type(2),
+  .mbp-tab-radio:nth-of-type(3):checked ~ .mbp-tab-panels .mbp-tab-panel:nth-of-type(3) {
+    display: block;
+  }
+  /* タブなし(自分の型1件のみ)の場合は常に表示 */
+  .mbp-tab-panels.single .mbp-tab-panel { display: block; }
+
   .mbp-my-build { font-size: .7rem; font-weight: 700; color: rgb(var(--black)); background: #f8fafc; border-radius: 6px; padding: 5px 8px; margin: 0 0 6px; line-height: 1.6; }
   .mbp-sub { font-size: .68rem; color: #64748b; line-height: 1.6; margin: 0 0 8px; }
   .mbp-scroll { overflow-x: auto; margin-bottom: 8px; }

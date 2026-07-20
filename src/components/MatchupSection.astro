@@ -1,6 +1,6 @@
 ---
 import type { StaticMatchup } from '../scripts/party-builder/matchup-static';
-import { getMatchupBreakdown } from '../scripts/party-builder/matchup-static';
+import { getMatchupBreakdownForBuild, myBuildOptions } from '../scripts/party-builder/matchup-static';
 import MatchupBreakdownPopup from './MatchupBreakdownPopup.astro';
 
 interface Props {
@@ -31,13 +31,19 @@ const unfavorable = matchups.filter(m => m.sym === '▲' || m.sym === '×');
 const displayName = (n: string) => nameMap[n] ?? n;
 
 /**
- * /counters/ページと共有するMatchupBreakdownPopup.astroに渡すため、
- * getMatchupBreakdown()(matchup-static.tsの唯一の集計元)をここでも呼ぶ。
- * 「相手の型をどう集約するか」のロジックは1箇所(matchup-static.ts)にあるため、
- * ここを直せば/counters/側も同時に直る。
+ * 自分側もmainBuild()の1型固定ではなく、主要な型を複数(最大3)候補として
+ * ポップアップ内でタブ切り替えできるようにする(相手側は既に型プールを
+ * 複数見せているのに、自分側だけ1型固定なのは情報不足との指摘)。
+ * /counters/ページと共有するMatchupBreakdownPopup.astroに渡す。
  */
-const breakdownOf = (opponentIcon: string, opponentPreferItem?: string) =>
-  ownName ? getMatchupBreakdown(ownIcon, opponentIcon, ownPreferItem, opponentPreferItem) : null;
+const myOptions = ownName ? myBuildOptions(ownIcon, ownPreferItem, 3) : [];
+const breakdownsOf = (opponentIcon: string, opponentPreferItem?: string) =>
+  myOptions
+    .map((opt) => {
+      const breakdown = getMatchupBreakdownForBuild(opt.build, opponentIcon, opponentPreferItem);
+      return breakdown ? { label: opt.label, breakdown } : null;
+    })
+    .filter((v): v is { label: string; breakdown: NonNullable<ReturnType<typeof getMatchupBreakdownForBuild>> } => !!v);
 ---
 
 {(favorable.length > 0 || unfavorable.length > 0) && (
@@ -51,7 +57,7 @@ const breakdownOf = (opponentIcon: string, opponentPreferItem?: string) =>
             {favorable.map(m => {
               const slug = iconToSlug[m.icon];
               const name = displayName(m.name);
-              const breakdown = breakdownOf(m.icon, m.preferItem);
+              const myBreakdowns = breakdownsOf(m.icon, m.preferItem);
               const inner = (
                 <>
                   <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={name} width="44" height="44" loading="lazy" />
@@ -59,7 +65,7 @@ const breakdownOf = (opponentIcon: string, opponentPreferItem?: string) =>
                   <span class="mu-name">{name}</span>
                 </>
               );
-              return breakdown ? (
+              return myBreakdowns.length > 0 ? (
                 <details class="mu-cell mu-cell-pop">
                   <summary title={name}>{inner}</summary>
                   <div class="mu-pop">
@@ -69,7 +75,7 @@ const breakdownOf = (opponentIcon: string, opponentPreferItem?: string) =>
                       myIcon={ownIcon}
                       oppName={name}
                       oppIcon={m.icon}
-                      breakdown={breakdown}
+                      myBreakdowns={myBreakdowns}
                       otherHref={slug ? `${pfx}/pokemon/${slug}/` : null}
                       otherLabel={T.linkSelf(name)}
                     />
@@ -91,7 +97,7 @@ const breakdownOf = (opponentIcon: string, opponentPreferItem?: string) =>
             {unfavorable.map(m => {
               const slug = iconToSlug[m.icon];
               const name = displayName(m.name);
-              const breakdown = breakdownOf(m.icon, m.preferItem);
+              const myBreakdowns = breakdownsOf(m.icon, m.preferItem);
               const inner = (
                 <>
                   <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={name} width="44" height="44" loading="lazy" />
@@ -99,7 +105,7 @@ const breakdownOf = (opponentIcon: string, opponentPreferItem?: string) =>
                   <span class="mu-name">{name}</span>
                 </>
               );
-              return breakdown ? (
+              return myBreakdowns.length > 0 ? (
                 <details class="mu-cell mu-cell-pop">
                   <summary title={name}>{inner}</summary>
                   <div class="mu-pop">
@@ -109,7 +115,7 @@ const breakdownOf = (opponentIcon: string, opponentPreferItem?: string) =>
                       myIcon={ownIcon}
                       oppName={name}
                       oppIcon={m.icon}
-                      breakdown={breakdown}
+                      myBreakdowns={myBreakdowns}
                       otherHref={slug ? `${pfx}/pokemon/${slug}/` : null}
                       otherLabel={T.linkSelf(name)}
                     />
