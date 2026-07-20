@@ -5,7 +5,7 @@ import path from 'node:path';
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { getMatchups } from '../../scripts/party-builder/matchup-static';
+import { getHeadToHead } from '../../scripts/party-builder/matchup-static';
 import speciesData from '../../../public/builder-data/species.json';
 import partySuggestSlugs from '../../data/party-suggest-slugs.json';
 
@@ -15,6 +15,13 @@ import partySuggestSlugs from '../../data/party-suggest-slugs.json';
  * ポケモンを1v1事前計算(matchup-static.tsの既存エンジン)から抽出して並べる。
  * 新規データ収集ゼロ、既存の対戦データのみから生成できる。
  * プロトタイプ: 対象は現行のtargets.json(30体)に限定。効果を見てから拡張する。
+ *
+ * 判定基準: 候補・対象双方の「主流型(使用率最多の持ち物・技構成)」同士のgetHeadToHead
+ * (/matchup/ページと同一エンジン)を使う。旧実装はgetMatchups(相手の型プール平均)を
+ * 使っていたが、相手側の少数サンプル(型プールに免疫等で無力化される型が1つ混ざるだけ)
+ * で平均値が極端に振れ、/pokemon/ページの主流型同士1v1判定と矛盾する表示が生じたため、
+ * 双方とも主流型のみを比較する方式に統一した(例: ガブリアス対策でマフォクシーを◎表示
+ * していたが、マフォクシー主流型はガブリアス主流型に実際は負けていた)。
  */
 export async function getStaticPaths() {
   const targetsPath = path.join(process.cwd(), 'public', 'builder-data', 'targets.json');
@@ -62,18 +69,17 @@ const typeIconUrl = (t?: string) => (t && TYPEICON[t] ? `/images/types/type-${TY
 const psSlugSet = new Set(partySuggestSlugs as string[]);
 
 const pokemonPages = await getCollection('pokemon', (p) => !p.data.draft);
-type Counter = { slug: string; name: string; icon: string; sym: '◎' | '○'; dep: boolean; rank: number | null };
+type Counter = { slug: string; name: string; icon: string; sym: '◎' | '○'; rank: number | null };
 const counters: Counter[] = [];
 for (const p of pokemonPages) {
   if (!p.data.pokemonName || p.data.dexNumber == null) continue;
   const icon = `${String(p.data.dexNumber).padStart(4, '0')}-${p.data.imageForm ?? '00'}`;
   if (icon === defenderIcon) continue;
-  const matchups = getMatchups(icon);
-  if (!matchups) continue;
-  const m = matchups.find((x) => x.name === defenderName);
-  if (!m) continue;
-  if (m.sym === '◎' || m.sym === '○') {
-    counters.push({ slug: p.id, name: p.data.pokemonName, icon, sym: m.sym, dep: m.dep, rank: p.data.usageRank ?? null });
+  const h2h = getHeadToHead(icon, defenderIcon);
+  if (!h2h) continue;
+  const sym = h2h.verdict.sym;
+  if (sym === '◎' || sym === '○') {
+    counters.push({ slug: p.id, name: p.data.pokemonName, icon, sym, rank: p.data.usageRank ?? null });
   }
 }
 counters.sort((a, b) => {
@@ -126,7 +132,6 @@ const jsonLd = {
       .ccard .sym { font-size: 1.3rem; font-weight: 900; flex-shrink: 0; }
       .ccard .sym.best { color: #15803d; }
       .ccard .sym.ok { color: #4d7c0f; }
-      .ccard .dep { font-size: .65rem; color: #7c3aed; font-weight: 800; }
       .empty { font-size: .88rem; color: rgb(var(--gray)); padding: 1em; background: #f8fafc; border-radius: 8px; }
       .note { font-size: .78rem; color: rgb(var(--gray)); margin-top: 1.6em; line-height: 1.7; }
     </style>
@@ -136,7 +141,7 @@ const jsonLd = {
     <main>
       <h1><img src={`/images/pokemon/pokemon-${defenderIcon}.webp`} alt={defenderName} />{defenderName}対策 — 有利を取れるポケモンランキング</h1>
       <p class="lead">
-        ポケモンチャンピオンズM-4環境で{rankText}{defenderName}に対し、1v1事前計算（実数値・きあいのタスキ/がんじょう考慮）で有利（◎・○）を取れる使用率上位のポケモンを{counters.length}体、判定順に並べました。
+        ポケモンチャンピオンズM-4環境で{rankText}{defenderName}に対し、双方の主流型同士の1v1事前計算（実数値・きあいのタスキ/がんじょう考慮）で有利（◎・○）を取れる使用率上位のポケモンを{counters.length}体、判定順に並べました。
       </p>
       <div class="def-links">
         <a href={`/pokemon/${defenderSlug}/`}>→ {defenderName}自身の使用率・技採用率データを見る</a>
@@ -153,7 +158,7 @@ const jsonLd = {
                 <a href={`/pokemon/${c.slug}/`} class="ccard">
                   <img class="icon" src={`/images/pokemon/pokemon-${c.icon}.webp`} alt={c.name} loading="lazy" />
                   <div class="info">
-                    <div class="name">{c.name}{c.dep && <span class="dep"> *</span>}</div>
+                    <div class="name">{c.name}</div>
                     <div class="rank">{c.rank ? `使用率${c.rank}位` : ''}</div>
                   </div>
                   <span class="sym best">◎</span>
@@ -173,7 +178,7 @@ const jsonLd = {
                 <a href={`/pokemon/${c.slug}/`} class="ccard">
                   <img class="icon" src={`/images/pokemon/pokemon-${c.icon}.webp`} alt={c.name} loading="lazy" />
                   <div class="info">
-                    <div class="name">{c.name}{c.dep && <span class="dep"> *</span>}</div>
+                    <div class="name">{c.name}</div>
                     <div class="rank">{c.rank ? `使用率${c.rank}位` : ''}</div>
                   </div>
                   <span class="sym ok">○</span>
@@ -189,7 +194,7 @@ const jsonLd = {
       )}
 
       <p class="note">
-        ※ 判定は使用率上位30体それぞれの主流型同士による1v1事前計算に基づく目安です（交代・補助技・積み技は考慮していません）。<b>*</b> は相手の型（持ち物・EV等）によって判定が変わる場合があることを示します。実際のパーティでの詳しい判定は
+        ※ 判定は双方の主流型（使用率最多の持ち物・技構成）同士による1v1事前計算に基づく目安です（交代・補助技・積み技は考慮していません）。相手の型（持ち物・EV等）が異なれば結果が変わる場合があります。実際のパーティでの詳しい判定は
         <a href="/party-builder/">パーティ工房</a>でご確認ください。
       </p>
     </main>
