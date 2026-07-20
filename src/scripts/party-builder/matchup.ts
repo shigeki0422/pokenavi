@@ -17,11 +17,21 @@ export function bestMoveHitDetail(attacker: ResolvedBuild, defender: ResolvedBui
   return _hitDetailForMove(attacker, best.move, defender);
 }
 
+/**
+ * 旧式: score>=1.5→◎ … の閾値が0.5刻みだったため、素早さの±0.5補正だけで
+ * 「確定2 vs 確定1・先手」のような明確な負け(diff=-1、後述_scoreOf参照)が
+ * ちょうど△/▲境界(-0.5)に乗ってしまい、判定文は「負け」なのに記号は△という
+ * 矛盾が起きていた(ユーザー報告で発覚)。スコアの刻みを整数(1単位)にし、
+ * 「確定数の差で明確に決着が付いている場合は素早さに関わらずその勝敗方向の
+ * 記号になる」よう閾値も1刻みに変更。△は真に五分(確定数が同じ、かつ素早さも
+ * 同値で先後がランダムになる)場合、または複数の型を平均した結果が
+ * 割れている場合にのみ現れる。
+ */
 function _scoreSym(score: number): Verdict["sym"] {
-  if (score >= 1.5) return "◎";
-  if (score >= 0.5) return "○";
-  if (score >= -0.5) return "△";
-  if (score >= -1.5) return "▲";
+  if (score >= 2) return "◎";
+  if (score >= 1) return "○";
+  if (score > -1) return "△";
+  if (score > -2) return "▲";
   return "×";
 }
 
@@ -60,7 +70,7 @@ export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
   const myHits = _applySurvive(_hits(myr), opp);
   const oppHits = _applySurvive(_hits(thr), me);
 
-  const score = (oppHits - myHits) + (fast ? 0.5 : -0.5);
+  const score = _scoreOf(myHits, oppHits, myS, oppS, fast);
   const win = myHits < oppHits || (myHits === oppHits && fast);
 
   return {
@@ -78,14 +88,21 @@ export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
 }
 
 /**
- * judge1v1の内部score((oppHits-myHits)+(fast?0.5:-0.5))を返却済みのVerdictから再算出する。
- * judge1v1自体はscoreを返さない(Verdict形は不変)ため、集約(judgeVsBuilds)専用にここで復元する。
- * 移植元: scripts/_explain.py _mu_score() の `score` と同じ式。
+ * 判定スコア = 確定数の差(相手の確定数-自分の確定数)。差がある時点で勝敗は
+ * 確定数だけで決着しているため素早さは無関係(以前は±0.5の素早さ補正を
+ * 常に足していたため、diff=-1のような明確な負けが△/▲境界に乗る不具合が
+ * あった)。確定数が同数の場合のみ素早さが先後を決めるため、素早さが同値
+ * なら真の五分(0)、そうでなければ先手側の勝ち(±1)とする。
  */
-function _scoreOf(v: Verdict): number {
-  const myHits = v.myHits ?? 999;
-  const oppHits = v.oppHits ?? 999;
-  return (oppHits - myHits) + (v.fast ? 0.5 : -0.5);
+function _scoreOf(myHits: number, oppHits: number, myS: number, oppS: number, fast: boolean): number {
+  const diff = oppHits - myHits;
+  if (diff !== 0) return diff;
+  if (myS === oppS) return 0;
+  return fast ? 1 : -1;
+}
+/** Verdict(judge1v1の返却値)からスコアを再算出する(judgeVsBuildsの集約専用)。 */
+function _scoreOfVerdict(v: Verdict): number {
+  return _scoreOf(v.myHits ?? 999, v.oppHits ?? 999, v.myS, v.oppS, v.fast);
 }
 
 /**
@@ -97,7 +114,7 @@ function _scoreOf(v: Verdict): number {
  */
 export function judgeVsBuilds(me: ResolvedBuild, opps: ResolvedBuild[]): AggregateVerdict {
   const verdicts = opps.map((opp) => judge1v1(me, opp));
-  const scores = verdicts.map(_scoreOf);
+  const scores = verdicts.map(_scoreOfVerdict);
   const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
   const sym = _scoreSym(mean);
   const dep = _scoreSym(Math.min(...scores)) !== _scoreSym(Math.max(...scores));
