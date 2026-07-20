@@ -3,7 +3,7 @@ import type { CollectionEntry } from 'astro:content';
 import { getCollection } from 'astro:content';
 import AdUnit from '../components/AdUnit.astro';
 import MatchupSection from '../components/MatchupSection.astro';
-import { getMatchups } from '../scripts/party-builder/matchup-static';
+import { getMatchups, mainBuildVariants } from '../scripts/party-builder/matchup-static';
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
@@ -83,9 +83,18 @@ const dexPad = String(dexNumber ?? 0).padStart(4, '0');
 const pokemonImageUrl = `${siteUrl}/images/pokemon/pokemon-${dexPad}-${imageForm ?? '00'}.webp`;
 
 const ownIcon = `${dexPad}-${imageForm ?? '00'}`;
-const matchups = dexNumber ? getMatchups(ownIcon) : null;
+/** リザードンX/Y、ライチュウX/Yのように同じ種にメガ進化が複数系統ある場合、
+ * 採用率最多の型だけで有利・不利を判定すると片方の系統が無視される問題があった
+ * (実際にメガリザードンYの採用率が高いため、X型の有利不利が一切計算されて
+ * いなかった)。mainBuildVariants()で系統ごとに分け、複数あれば「有利・不利な
+ * 相手」を系統別に表示する(単一メガ/メガ無しの種は従来通り1セクションのまま)。 */
+const matchupVariants = dexNumber
+  ? mainBuildVariants(ownIcon, pokemonNameDisp ?? pokemonName ?? '')
+      .map((v) => ({ ...v, matchups: getMatchups(ownIcon, v.preferItem) }))
+      .filter((v): v is typeof v & { matchups: NonNullable<typeof v.matchups> } => !!v.matchups)
+  : [];
 const iconToSlug: Record<string, string> = {};
-if (matchups) {
+if (matchupVariants.length > 0) {
 	const allPokemonPages = await getCollection('pokemon', p => !p.data.draft);
 	for (const p of allPokemonPages) {
 		const key = `${String(p.data.dexNumber ?? 0).padStart(4, '0')}-${p.data.imageForm ?? '00'}`;
@@ -336,7 +345,18 @@ const breadcrumbJsonLd = {
 						<a href={`${pfx}/party-builder/`} class="hub-btn">{T.hubBuild}</a>
 					</div>
 					<slot />
-					{matchups && <MatchupSection matchups={matchups} iconToSlug={iconToSlug} nameMap={POKEMON_MAP} lang={lang} ownIcon={ownIcon} ownName={pokemonNameDisp ?? pokemonName} />}
+					{matchupVariants.map((v) => (
+						<MatchupSection
+							matchups={v.matchups}
+							iconToSlug={iconToSlug}
+							nameMap={POKEMON_MAP}
+							lang={lang}
+							ownIcon={ownIcon}
+							ownName={v.label}
+							ownPreferItem={v.preferItem}
+							headingSuffix={matchupVariants.length > 1 ? v.label : undefined}
+						/>
+					))}
 					{pokemonName && <SimPartyCard pokemonName={pokemonName} />}
 					{(hasPartySuggest || hasMegaPartySuggest || megaVariants.length > 0) && (
 						<div class="ps-cta-wrap">

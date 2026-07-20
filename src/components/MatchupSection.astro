@@ -10,8 +10,14 @@ interface Props {
   lang: 'ja' | 'en' | 'ko';
   ownIcon: string;
   ownName: string | null;
+  /** リザードンX/Yのように自分の型が複数系統ある場合、getMatchupBreakdown()の
+   * 「自分側」をどの型で解決するか(石の名前)を指定する。単一系統ならundefined。 */
+  ownPreferItem?: string;
+  /** 複数系統がある種でセクションを複数並べる時の見出し区別用(例: メガリザードンX)。
+   * 単一系統ならundefined(見出しは従来通り)。 */
+  headingSuffix?: string;
 }
-const { matchups, iconToSlug, nameMap, lang, ownIcon, ownName } = Astro.props;
+const { matchups, iconToSlug, nameMap, lang, ownIcon, ownName, ownPreferItem, headingSuffix } = Astro.props;
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 
 const T = {
@@ -30,12 +36,12 @@ const displayName = (n: string) => nameMap[n] ?? n;
  * 「相手の型をどう集約するか」のロジックは1箇所(matchup-static.ts)にあるため、
  * ここを直せば/counters/側も同時に直る。
  */
-const breakdownOf = (opponentIcon: string) => (ownName ? getMatchupBreakdown(ownIcon, opponentIcon) : null);
+const breakdownOf = (opponentIcon: string) => (ownName ? getMatchupBreakdown(ownIcon, opponentIcon, ownPreferItem) : null);
 ---
 
 {(favorable.length > 0 || unfavorable.length > 0) && (
   <section class="mu-section">
-    <h2>{T.heading}</h2>
+    <h2>{headingSuffix ? `${headingSuffix} ` : ''}{T.heading}</h2>
     <div class="mu-groups">
       {favorable.length > 0 && (
         <div class="mu-group">

@@ -30,18 +30,29 @@ const resolvedTargets = targetGroups.map((g) => ({
   builds: g.builds.map((b) => resolveTarget(g.sp, g.label ?? g.sp, g.icon, b, moves)),
 }));
 
-function mainBuild(icon: string): ResolvedBuild | null {
+function readMon(icon: string): { items?: { n: string }[]; builds?: string[] } | null {
   const monPath = path.join(DATA_DIR, "mon", `${icon}.json`);
   if (!fs.existsSync(monPath)) return null;
-  let mon: { items?: { n: string }[]; builds?: string[] };
   try {
-    mon = JSON.parse(fs.readFileSync(monPath, "utf8"));
+    return JSON.parse(fs.readFileSync(monPath, "utf8"));
   } catch {
     return null;
   }
-  const builds = mon.builds ?? [];
+}
+
+/**
+ * preferItem指定時はその持ち物(型プールのspec文字列内`@{item}:`)を含む型を優先して探す。
+ * リザードンのようにメガ進化が複数系統(X/Y)あり、かつ主流の持ち物(石)がどちらか一方に
+ * 偏っている種で、単純な「採用率最多の持ち物」だけを見ると、他方の系統(型)の型が
+ * 一切考慮されなくなる問題があった(例: メガリザードンYの採用率が高いため、
+ * mainBuild('0006-00')は常にY型を返し、X型の有利不利は計算されていなかった)。
+ * mainBuildVariants()と組み合わせて、複数メガ種は系統ごとに個別評価する。
+ */
+function mainBuild(icon: string, preferItem?: string): ResolvedBuild | null {
+  const mon = readMon(icon);
+  const builds = mon?.builds ?? [];
   if (!builds.length) return null;
-  const topItem = mon.items?.[0]?.n;
+  const topItem = preferItem ?? mon?.items?.[0]?.n;
   const spec = (topItem && builds.find((s) => s.includes(`@${topItem}:`))) || builds[0];
   const slot = fromSpec(spec);
   if (!slot) return null;
@@ -52,21 +63,54 @@ function mainBuild(icon: string): ResolvedBuild | null {
   }
 }
 
+export interface MainBuildVariant {
+  /** 表示名。メガ進化が単一(または無し)ならその種の代表名、複数ならメガ名(例: メガリザードンX)。 */
+  label: string;
+  /** mainBuild()に渡すpreferItem。複数メガ系統がある場合のみ設定(石の名前)。 */
+  preferItem: string | undefined;
+  build: ResolvedBuild;
+}
+/**
+ * その種にメガ進化が複数系統(石違い)ある場合(現状: リザードンX/Y、ライチュウX/Y)、
+ * 系統ごとに代表型を1つずつ返す。1系統以下ならmainBuild()相当の単一結果を返す。
+ * 「自分の型として何を採用するか」の唯一の窓口。ここを直せば有利・不利判定を
+ * 使う全ページ(/pokemon/・/counters/・/matchup/)に反映される。
+ */
+export function mainBuildVariants(icon: string, defaultLabel: string): MainBuildVariant[] {
+  const mon = readMon(icon);
+  const builds = mon?.builds ?? [];
+  if (!builds.length) return [];
+  const sp = species.find((s) => builds[0]?.startsWith(`${s.n}@`));
+  const megas = sp?.mega ?? [];
+  if (megas.length < 2) {
+    const build = mainBuild(icon);
+    return build ? [{ label: defaultLabel, preferItem: undefined, build }] : [];
+  }
+  const out: MainBuildVariant[] = [];
+  for (const m of megas) {
+    const build = mainBuild(icon, m.stone);
+    if (build) out.push({ label: m.name, preferItem: m.stone, build });
+  }
+  return out;
+}
+
 const cache = new Map<string, StaticMatchup[] | null>();
 
-export function getMatchups(icon: string): StaticMatchup[] | null {
-  if (cache.has(icon)) return cache.get(icon)!;
-  const me = mainBuild(icon);
-  let result: StaticMatchup[] | null = null;
-  if (me) {
-    result = resolvedTargets
-      .filter((t) => t.icon !== icon)
-      .map((t) => {
-        const v = judgeVsBuilds(me, t.builds);
-        return { icon: t.icon, name: t.name, sym: v.sym, dep: v.dep };
-      });
-  }
-  cache.set(icon, result);
+function judgeAgainstPool(me: ResolvedBuild, ownIcon: string): StaticMatchup[] {
+  return resolvedTargets
+    .filter((t) => t.icon !== ownIcon)
+    .map((t) => {
+      const v = judgeVsBuilds(me, t.builds);
+      return { icon: t.icon, name: t.name, sym: v.sym, dep: v.dep };
+    });
+}
+
+export function getMatchups(icon: string, preferItem?: string): StaticMatchup[] | null {
+  const cacheKey = preferItem ? `${icon}::${preferItem}` : icon;
+  if (cache.has(cacheKey)) return cache.get(cacheKey)!;
+  const me = mainBuild(icon, preferItem);
+  const result = me ? judgeAgainstPool(me, icon) : null;
+  cache.set(cacheKey, result);
   return result;
 }
 
@@ -77,8 +121,8 @@ export interface HeadToHead {
   me: ResolvedBuild;
   opp: ResolvedBuild;
 }
-export function getHeadToHead(iconA: string, iconB: string): HeadToHead | null {
-  const me = mainBuild(iconA);
+export function getHeadToHead(iconA: string, iconB: string, preferItemA?: string): HeadToHead | null {
+  const me = mainBuild(iconA, preferItemA);
   const opp = mainBuild(iconB);
   if (!me || !opp) return null;
   return { verdict: judge1v1(me, opp), me, opp };
@@ -117,8 +161,8 @@ export interface MatchupBreakdown {
   sym: StaticMatchup["sym"];
   dep: boolean;
 }
-export function getMatchupBreakdown(myIcon: string, oppIcon: string): MatchupBreakdown | null {
-  const me = mainBuild(myIcon);
+export function getMatchupBreakdown(myIcon: string, oppIcon: string, myPreferItem?: string): MatchupBreakdown | null {
+  const me = mainBuild(myIcon, myPreferItem);
   if (!me) return null;
   const oppGroup = resolvedTargets.find((t) => t.icon === oppIcon);
   if (!oppGroup || !oppGroup.builds.length) return null;
