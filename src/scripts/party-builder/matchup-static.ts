@@ -12,6 +12,10 @@ export interface StaticMatchup {
   name: string;
   sym: "◎" | "○" | "△" | "▲" | "×";
   dep: boolean;
+  /** 相手側がメガ進化複数系統(X/Y等)のうちどれかを指すエントリの場合、
+   * getMatchupBreakdown()呼び出し時に相手側の型を特定するための石の名前。
+   * 単一系統の相手ならundefined。 */
+  preferItem?: string;
 }
 
 const DATA_DIR = path.join(process.cwd(), "public", "builder-data");
@@ -76,32 +80,68 @@ export interface MainBuildVariant {
  * 「自分の型として何を採用するか」の唯一の窓口。ここを直せば有利・不利判定を
  * 使う全ページ(/pokemon/・/counters/・/matchup/)に反映される。
  */
+const mainBuildVariantsCache = new Map<string, MainBuildVariant[]>();
 export function mainBuildVariants(icon: string, defaultLabel: string): MainBuildVariant[] {
+  const cached = mainBuildVariantsCache.get(icon);
+  if (cached) return cached;
   const mon = readMon(icon);
   const builds = mon?.builds ?? [];
-  if (!builds.length) return [];
-  const sp = species.find((s) => builds[0]?.startsWith(`${s.n}@`));
-  const megas = sp?.mega ?? [];
-  if (megas.length < 2) {
-    const build = mainBuild(icon);
-    return build ? [{ label: defaultLabel, preferItem: undefined, build }] : [];
+  let result: MainBuildVariant[];
+  if (!builds.length) {
+    result = [];
+  } else {
+    const sp = species.find((s) => builds[0]?.startsWith(`${s.n}@`));
+    const megas = sp?.mega ?? [];
+    if (megas.length < 2) {
+      const build = mainBuild(icon);
+      result = build ? [{ label: defaultLabel, preferItem: undefined, build }] : [];
+    } else {
+      result = [];
+      for (const m of megas) {
+        const build = mainBuild(icon, m.stone);
+        if (build) result.push({ label: m.name, preferItem: m.stone, build });
+      }
+    }
   }
-  const out: MainBuildVariant[] = [];
-  for (const m of megas) {
-    const build = mainBuild(icon, m.stone);
-    if (build) out.push({ label: m.name, preferItem: m.stone, build });
+  mainBuildVariantsCache.set(icon, result);
+  return result;
+}
+
+/**
+ * 使用率上位プール(targets.json)の「対戦相手」表現。メガ進化が複数系統ある種
+ * (現状: リザードン、ライチュウ)は、他ポケモンの「有利・不利な相手」表に
+ * 「メガリザードンX」「メガリザードンY」として別々のエントリで出す(従来は
+ * targets.jsonの1エントリ=Y型のみで計算され、X型に対する有利不利が他の
+ * ポケモンのページに一切反映されていなかった)。単一系統の種はtargets.json
+ * そのままの型プール(複数の持ち物パターン等)を使い、挙動を変えない。
+ */
+interface OpponentGroup {
+  icon: string;
+  name: string;
+  builds: ResolvedBuild[];
+  preferItem?: string;
+}
+const resolvedTargetsExpanded: OpponentGroup[] = (() => {
+  const out: OpponentGroup[] = [];
+  for (const t of resolvedTargets) {
+    const variants = mainBuildVariants(t.icon, t.name);
+    if (variants.length > 1) {
+      for (const v of variants) out.push({ icon: t.icon, name: v.label, builds: [v.build], preferItem: v.preferItem });
+    } else {
+      out.push(t);
+    }
   }
   return out;
-}
+})();
 
 const cache = new Map<string, StaticMatchup[] | null>();
 
 function judgeAgainstPool(me: ResolvedBuild, ownIcon: string): StaticMatchup[] {
-  return resolvedTargets
+  return resolvedTargetsExpanded
     .filter((t) => t.icon !== ownIcon)
     .map((t) => {
       const v = judgeVsBuilds(me, t.builds);
-      return { icon: t.icon, name: t.name, sym: v.sym, dep: v.dep };
+      return { icon: t.icon, name: t.name, sym: v.sym, dep: v.dep, preferItem: t.preferItem };
     });
 }
 
@@ -161,10 +201,15 @@ export interface MatchupBreakdown {
   sym: StaticMatchup["sym"];
   dep: boolean;
 }
-export function getMatchupBreakdown(myIcon: string, oppIcon: string, myPreferItem?: string): MatchupBreakdown | null {
+export function getMatchupBreakdown(
+  myIcon: string,
+  oppIcon: string,
+  myPreferItem?: string,
+  oppPreferItem?: string,
+): MatchupBreakdown | null {
   const me = mainBuild(myIcon, myPreferItem);
   if (!me) return null;
-  const oppGroup = resolvedTargets.find((t) => t.icon === oppIcon);
+  const oppGroup = resolvedTargetsExpanded.find((t) => t.icon === oppIcon && t.preferItem === oppPreferItem);
   if (!oppGroup || !oppGroup.builds.length) return null;
   const agg = judgeVsBuilds(me, oppGroup.builds);
   const builds = oppGroup.builds.map((build, i) => ({

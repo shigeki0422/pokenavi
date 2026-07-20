@@ -84,7 +84,9 @@ type Counter = {
   dep: boolean;
   rank: number | null;
   matchupHref: string | null;
-  breakdown: NonNullable<ReturnType<typeof getMatchupBreakdown>>;
+  /** 対象(defender)にメガ進化の系統が複数ある場合(リザードンX/Y等)、
+   * 系統ごとの内訳を全て並べる(1件のみが通常ケース)。 */
+  breakdowns: { label: string; breakdown: NonNullable<ReturnType<typeof getMatchupBreakdown>> }[];
 };
 const counters: Counter[] = [];
 for (const p of pokemonPages) {
@@ -93,18 +95,31 @@ for (const p of pokemonPages) {
   if (icon === defenderIcon) continue;
   const matchups = getMatchups(icon);
   if (!matchups) continue;
-  const m = matchups.find((x) => x.name === defenderName);
-  if (!m || (m.sym !== '◎' && m.sym !== '○')) continue;
+  // defenderがメガ進化複数系統(リザードンX/Y等)の場合、getMatchups()は
+  // targets.jsonの和名(defenderName)ではなく系統名(メガリザードンX等)で
+  // 複数エントリを返すため、名前ではなくアイコンで一致させる。「対策」として
+  // 挙げるのは、全系統に対して有利(◎/○)な場合のみ(片方にしか勝てないなら
+  // 対策として不確実なため除外する)。
+  const matched = matchups.filter((x) => x.icon === defenderIcon);
+  if (!matched.length) continue;
+  if (!matched.every((x) => x.sym === '◎' || x.sym === '○')) continue;
+  const sym: '◎' | '○' = matched.some((x) => x.sym === '○') ? '○' : '◎';
+  const dep = matched.some((x) => x.dep) || new Set(matched.map((x) => x.sym)).size > 1;
 
-  const breakdown = getMatchupBreakdown(icon, defenderIcon);
-  if (!breakdown) continue;
+  const breakdowns = matched
+    .map((mm) => {
+      const breakdown = getMatchupBreakdown(icon, defenderIcon, undefined, mm.preferItem);
+      return breakdown ? { label: mm.name, breakdown } : null;
+    })
+    .filter((b): b is NonNullable<typeof b> => !!b);
+  if (!breakdowns.length) continue;
 
   const rank = p.data.usageRank ?? null;
   const poolEntry = poolByName[p.data.pokemonName];
   const matchupHref = poolEntry
     ? `/matchup/${pairSlug(p.data.pokemonName, p.id, rank, defenderName, defenderSlug, defenderRank)}/`
     : null;
-  counters.push({ slug: p.id, name: p.data.pokemonName, icon, sym: m.sym, dep: m.dep, rank, matchupHref, breakdown });
+  counters.push({ slug: p.id, name: p.data.pokemonName, icon, sym, dep, rank, matchupHref, breakdowns });
 }
 counters.sort((a, b) => {
   if (a.sym !== b.sym) return a.sym === '◎' ? -1 : 1;
@@ -202,16 +217,18 @@ const jsonLd = {
                   <span class="sym best">◎{c.dep && <span class="dep">*</span>}</span>
                 </summary>
                 <div class="ccard-pop">
-                  <MatchupBreakdownPopup
-                    lang="ja"
-                    myName={c.name}
-                    myIcon={c.icon}
-                    oppName={defenderName}
-                    oppIcon={defenderIcon}
-                    breakdown={c.breakdown}
-                    otherHref={`/pokemon/${c.slug}/`}
-                    otherLabel={`${c.name}のページを見る →`}
-                  />
+                  {c.breakdowns.map((b, i) => (
+                    <MatchupBreakdownPopup
+                      lang="ja"
+                      myName={c.name}
+                      myIcon={c.icon}
+                      oppName={b.label}
+                      oppIcon={defenderIcon}
+                      breakdown={b.breakdown}
+                      otherHref={i === c.breakdowns.length - 1 ? `/pokemon/${c.slug}/` : null}
+                      otherLabel={`${c.name}のページを見る →`}
+                    />
+                  ))}
                   {c.matchupHref && <a href={c.matchupHref} class="mbp-link" style="display:block;margin-top:6px">⚔ {defenderName}と主流型同士で詳しく比較 →</a>}
                 </div>
               </details>
@@ -235,16 +252,18 @@ const jsonLd = {
                   <span class="sym ok">○{c.dep && <span class="dep">*</span>}</span>
                 </summary>
                 <div class="ccard-pop">
-                  <MatchupBreakdownPopup
-                    lang="ja"
-                    myName={c.name}
-                    myIcon={c.icon}
-                    oppName={defenderName}
-                    oppIcon={defenderIcon}
-                    breakdown={c.breakdown}
-                    otherHref={`/pokemon/${c.slug}/`}
-                    otherLabel={`${c.name}のページを見る →`}
-                  />
+                  {c.breakdowns.map((b, i) => (
+                    <MatchupBreakdownPopup
+                      lang="ja"
+                      myName={c.name}
+                      myIcon={c.icon}
+                      oppName={b.label}
+                      oppIcon={defenderIcon}
+                      breakdown={b.breakdown}
+                      otherHref={i === c.breakdowns.length - 1 ? `/pokemon/${c.slug}/` : null}
+                      otherLabel={`${c.name}のページを見る →`}
+                    />
+                  ))}
                   {c.matchupHref && <a href={c.matchupHref} class="mbp-link" style="display:block;margin-top:6px">⚔ {defenderName}と主流型同士で詳しく比較 →</a>}
                 </div>
               </details>

@@ -36,7 +36,8 @@ const displayName = (n: string) => nameMap[n] ?? n;
  * 「相手の型をどう集約するか」のロジックは1箇所(matchup-static.ts)にあるため、
  * ここを直せば/counters/側も同時に直る。
  */
-const breakdownOf = (opponentIcon: string) => (ownName ? getMatchupBreakdown(ownIcon, opponentIcon, ownPreferItem) : null);
+const breakdownOf = (opponentIcon: string, opponentPreferItem?: string) =>
+  ownName ? getMatchupBreakdown(ownIcon, opponentIcon, ownPreferItem, opponentPreferItem) : null;
 ---
 
 {(favorable.length > 0 || unfavorable.length > 0) && (
@@ -50,7 +51,7 @@ const breakdownOf = (opponentIcon: string) => (ownName ? getMatchupBreakdown(own
             {favorable.map(m => {
               const slug = iconToSlug[m.icon];
               const name = displayName(m.name);
-              const breakdown = breakdownOf(m.icon);
+              const breakdown = breakdownOf(m.icon, m.preferItem);
               const inner = (
                 <>
                   <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={name} width="44" height="44" loading="lazy" />
@@ -90,7 +91,7 @@ const breakdownOf = (opponentIcon: string) => (ownName ? getMatchupBreakdown(own
             {unfavorable.map(m => {
               const slug = iconToSlug[m.icon];
               const name = displayName(m.name);
-              const breakdown = breakdownOf(m.icon);
+              const breakdown = breakdownOf(m.icon, m.preferItem);
               const inner = (
                 <>
                   <img src={`/images/pokemon/pokemon-${m.icon}.webp`} alt={name} width="44" height="44" loading="lazy" />
