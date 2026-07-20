@@ -168,13 +168,12 @@ export interface MoveHitDetail {
  *   - 異なる場合は baseHitsHi 発で相手の有効HPを超える確率を16段階乱数の畳み込みDPで算出 → 「乱数n発(p%)」
  *   - baseHitsHi が実用上限(PROB_HITS_CAP)を超える場合は畳み込みを省略し、保守的な baseHitsLo 側の
  *     「確n」表示にフォールドバックする(発数が多い場面では確率の精密表示より安全側の目安を優先)
- * 耐え(ばけのかわ/がんじょう/きあいのタスキ)は _applySurvive と同じ規約で「素の確定数に+1」を
- * 表示用の発数にのみ適用する(確率は素のHP閾値に対する値のまま据え置き)。
- * 例: 素のHPに対し乱数1発(50%)の技を持つ相手がきあいのタスキを持つ場合 → 表示は「乱数2発(50%)」。
- * これは1発目を必ず耐える(HP1で確定生存)ため実質2発必要になるが、2発目は残りHP1に対して
- * ほぼ確実に当たる(乱数最低でもダメージ>0なら止め刺せる)ため、真の合成確率は本来やや高くなる。
- * 本実装は _mu_score/_apply_survive が採用する「耐え=固定+1発、確率は素のまま」という単純化と
- * 矛盾しないよう、あえて確率を再計算せずhitsのみ+1する設計にしている(既存の判定ロジックとの整合を優先)。
+ * 耐え(ばけのかわ/がんじょう/きあいのタスキ)で発数が底上げされる場合(baseHitsHi=1が2に
+ * 底上げされる等)は、1発目を必ず耐える(HP1で確定生存)ことが確定しており、2発目は
+ * 残りHP1に対してほぼ確実に止め刺せるため、「確定」として扱う(乱数の効いた確率表示にしない)。
+ * 例: 素のHPに対し乱数1発(25%)の技を持つ相手がきあいのタスキを持つ場合 → 表示は「確定2」
+ * (「乱数2発(25%)」ではない。1発目の25%という確率はタスキ発動で無意味になり、2発目で
+ * 確実に仕留められるため)。
  */
 function _hitDetailForMove(attacker: ResolvedBuild, move: ResolvedMove, defender: ResolvedBuild): MoveHitDetail {
   const NONE: MoveHitDetail = { n: move.n, dmgLo: null, dmgHi: null, pctLo: null, pctHi: null, hits: null, prob: null, certain: true };
@@ -195,10 +194,14 @@ function _hitDetailForMove(attacker: ResolvedBuild, move: ResolvedMove, defender
     return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits, prob: null, certain: true };
   }
 
+  const survivedHits = _applySurvive(baseHitsHi, defender);
+  if (survivedHits !== baseHitsHi) {
+    return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits: survivedHits, prob: null, certain: true };
+  }
+
   const dist = _hitDamageDistribution(attacker, move, defender);
   const prob = _nHitKoProbability(dist, baseHitsHi, hp) * 100;
-  const hits = _applySurvive(baseHitsHi, defender);
-  return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits, prob, certain: false };
+  return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits: baseHitsHi, prob, certain: false };
 }
 
 /**
