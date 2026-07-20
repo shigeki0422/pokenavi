@@ -581,3 +581,7 @@ B107・D107の両受けを活かし、おにびで物理アタッカーのAを�
 - [同じロトムフォルムのウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [みず受け候補 アシレーヌのM-2考察](/blog/primarina-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/rotom-heat/)**

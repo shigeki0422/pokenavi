@@ -548,3 +548,7 @@ HB型と比べてぼうぎょが下がるため、ガブリアスのじしんな
 - [天敵となるかくとうアタッカー ルカリオのM-2考察](/blog/lucario-analysis-m2/)
 - [イカサマで受けやすい使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [同居率上位の崩し枠 ハッサムのM-2考察](/blog/scizor-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/umbreon/)**

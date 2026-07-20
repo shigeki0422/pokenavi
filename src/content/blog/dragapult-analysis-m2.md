@@ -626,3 +626,7 @@ heroImage: '../../assets/hero-dragapult-m2.png'
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [ゴースト同士で撃ち合う ゲンガーのM-2考察](/blog/gengar-analysis-m2/)
 - [弱点フェアリーで詰められる アシレーヌのM-2考察](/blog/primarina-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/dragapult/)**

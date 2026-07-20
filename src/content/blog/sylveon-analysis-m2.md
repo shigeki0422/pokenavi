@@ -565,3 +565,7 @@ HB型と比べてぼうぎょに振らないため物理を受けにくく、A65
 - [天敵となるはがね/ドラゴン ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
 - [同じフェアリーアタッカー フラエッテのM-2考察](/blog/florette-analysis-m2/)
 - [ドラゴン無効で受けやすい使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/sylveon/)**

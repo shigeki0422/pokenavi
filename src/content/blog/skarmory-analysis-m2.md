@@ -576,3 +576,7 @@ heroImage: '../../assets/hero-skarmory-m2.png'
 - [エアームドが苦手なほのお枠 リザードン(Y)のM-2考察](/blog/charizard-y-analysis-m2/)
 - [同じはがね/ひこうの物理受け アーマーガアのM-2考察](/blog/corviknight-analysis-m2/)
 - [起点化できる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/skarmory/)**

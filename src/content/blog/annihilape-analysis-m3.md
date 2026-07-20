@@ -559,3 +559,7 @@ HP110・こうげき115と物理攻撃に必要な耐久・火力は十分なラ
 - [使用率上位 ムクホークのM-3考察](/blog/staraptor-analysis-m3/)
 - [みず枠パートナー ラグラージのM-3考察](/blog/swampert-analysis-m3/)
 - [はがねタイプのメガメタグロスのM-3考察](/blog/metagross-analysis-m3/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/annihilape/)**

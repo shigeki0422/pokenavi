@@ -603,3 +603,7 @@ TOP30の約4分の1が、やどりぎ無効か一致技半減のいずれかで�
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [やどりぎが効かないいわ/どく枠 キラフロルのM-2考察](/blog/kiraflosure-analysis-m2/)
 - [じめんを無効化する補完枠 アーマーガアのM-2考察](/blog/corviknight-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/scovillain/)**

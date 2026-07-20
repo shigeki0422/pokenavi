@@ -599,3 +599,7 @@ HP1/4を回復するオボンのみとドレインパンチの自己回復を組
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [苦手なひこう枠の代表 リザードンのM-2考察](/blog/charizard-y-analysis-m2/)
 - [弱点フェアリーで上を取られる アシレーヌのM-2考察](/blog/primarina-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/conkeldurr/)**

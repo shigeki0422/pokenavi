@@ -638,3 +638,7 @@ HBずぶといで物理方面を厚くし、ガブリアスのじしん無効を
 - [天敵となるはがねアタッカー ハッサムのM-2考察](/blog/scizor-analysis-m2/)
 - [弱点でんき/はがねを撃つブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
 - [受け出して積み始めやすい使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-clefable/)**

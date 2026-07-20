@@ -512,3 +512,7 @@ HBずぶといで物理方向に厚くし、じめん以外の物理技を受け
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [じしんで上から崩すカバルドンのM-2考察](/blog/hippowdon-analysis-m2/)
 - [同じでんき受けのウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/bellibolt/)**

@@ -654,3 +654,7 @@ HD型のような特殊耐久補強がなく、積む前に上から殴られる
 - [天敵となる使用率9位 ルカリオのM-2考察](/blog/lucario-analysis-m2/)
 - [同居する高速地面枠 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [受け先候補 アーマーガアのM-2考察](/blog/corviknight-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/tyranitar/)**

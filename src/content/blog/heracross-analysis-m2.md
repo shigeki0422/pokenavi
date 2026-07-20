@@ -602,3 +602,7 @@ S127はようき型の139より遅く、ようき型なら同速以下に持ち�
 
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [ひこう×4で焼かれる相手 リザードンのM-2考察](/blog/charizard-y-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-heracross/)**

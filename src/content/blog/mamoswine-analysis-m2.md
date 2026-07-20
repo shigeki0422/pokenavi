@@ -507,3 +507,7 @@ heroImage: '../../assets/hero-mamoswine-m2.png'
 - [天敵の高速ドラゴン ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [こおり×4で刺さるカイリューのM-2考察](/blog/dragonite-analysis-m2/)
 - [受け回しの相方 ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mamoswine/)**

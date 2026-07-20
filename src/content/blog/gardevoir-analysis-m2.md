@@ -632,3 +632,7 @@ S167まで伸び、ひかえめ型（S152）では先手を取られる最速サ
 - [天敵となる先制はがね使い ハッサムのM-2考察](/blog/scizor-analysis-m2/)
 - [ドラゴン無効で透かせる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [速度で上を取られるゴースト ゲンガーのM-2考察](/blog/gengar-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/gardevoir/)**

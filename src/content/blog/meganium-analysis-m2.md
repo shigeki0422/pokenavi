@@ -458,3 +458,7 @@ EV振りで最も多いのはH32 C32の耐久＋とくこう特化（HC・37.3%�
 - [天敵となる高速ほのお リザードン（Y）のM-2考察](/blog/charizard-y-analysis-m2/)
 - [ドラゴンを無効化できる相手 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [くさ技が刺さる地面エース カバルドンのM-2考察](/blog/hippowdon-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-meganium/)**

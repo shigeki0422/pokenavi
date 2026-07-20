@@ -542,3 +542,7 @@ draft: false
 - [使用率上位 ムクホークのM-3考察](/blog/staraptor-analysis-m3/)
 - [ラグラージのM-3考察](/blog/swampert-analysis-m3/)
 - [オーロンゲのM-3考察](/blog/grimmsnarl-analysis-m3/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/scolipede/)**

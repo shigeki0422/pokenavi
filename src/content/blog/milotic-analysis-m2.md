@@ -571,3 +571,7 @@ EV振りはHB（H32 B32）が採用率39.3%で最多。性格ずぶとい（68.7
 - [天敵となる電気枠 ウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
 - [苦手な草枠 フシギバナのM-2考察](/blog/venusaur-analysis-m2/)
 - [同居率3位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/milotic/)**

@@ -504,3 +504,7 @@ M-3のエルフーンは**使用率47位**。いたずらごころで変化技�
 - [M-2シーズンのエルフーン考察](/blog/whimsicott-analysis-m2/)
 - [同居率1位 ガブリアスのM-3考察](/pokemon/garchomp/)
 - [同居率6位 メガムクホークのM-3考察](/blog/staraptor-analysis-m3/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/whimsicott/)**

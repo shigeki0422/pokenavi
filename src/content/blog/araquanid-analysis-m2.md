@@ -481,3 +481,7 @@ heroImage: '../../assets/hero-araquanid-m2.png'
 - [起点を活かす中速アタッカー ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
 - [ネット下で天敵となるウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
 - [同居率3位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/araquanid/)**

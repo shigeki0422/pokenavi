@@ -561,3 +561,7 @@ heroImage: '../../assets/hero-azumarill-m2.png'
 - [天敵となるでんき枠 ウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
 - [じゃれつくが刺さる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [苦手なくさ受けの天敵 フシギバナのM-2考察](/blog/venusaur-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/azumarill/)**

@@ -617,3 +617,7 @@ heroImage: '../../assets/hero-slowbro-m2.png'
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [弱点でんきで上を取る ウォッシュロトムのM-2考察](/blog/rotom-wash-analysis-m2/)
 - [ゴースト弱点を突く先制持ち イダイトウのM-2考察](/blog/basculegion-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/slowbro/)**

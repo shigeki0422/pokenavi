@@ -583,3 +583,7 @@ HD型に比べDが下がり（ひかえめ無補正でD153）、特殊耐久を�
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [同じみず複合の高速特殊アタッカー ゲッコウガのM-2考察](/blog/greninja-analysis-m2/)
 - [みず・はがね打点を半減する天敵 ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/empoleon/)**

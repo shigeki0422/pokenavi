@@ -529,3 +529,7 @@ M-2環境ではガブリアス（1位）・ブリジュラス（2位）といっ
 - [天敵となる先制技ふいうち持ち ドドゲザンのM-2考察](/blog/kingambit-analysis-m2/)
 - [バトンの受け先候補 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [弱点を突く高速あくアタッカー マスカーニャのM-2考察](/blog/meowscarada-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/espathra/)**

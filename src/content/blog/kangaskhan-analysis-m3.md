@@ -290,3 +290,7 @@ M-3同居率1位〜10位：ガブリアス、ミミッキュ、アシレーヌ�
 
 - [ガブリアス 考察 M-3](/blog/garchomp-analysis-m3/)
 - [マスカーニャ 考察 M-3](/blog/meowscarada-analysis-m3/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/mega-kangaskhan/)**

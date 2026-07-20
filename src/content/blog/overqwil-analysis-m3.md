@@ -589,3 +589,7 @@ draft: false
 - [ムクホークのM-3考察](/blog/staraptor-analysis-m3/)
 - [ラグラージのM-3考察](/blog/swampert-analysis-m3/)
 - [メガメタグロスのM-3考察](/blog/metagross-analysis-m3/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/overqwil/)**

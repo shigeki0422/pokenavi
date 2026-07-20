@@ -546,3 +546,7 @@ heroImage: '../../assets/hero-sneasler-m2.png'
 - [同じ高速かくとうアタッカー メガルカリオのM-2考察](/blog/lucario-analysis-m2/)
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [後出しで処理したいリザードン(Y)のM-2考察](/blog/charizard-y-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/sneasler/)**

@@ -547,3 +547,7 @@ C134の高い特攻を持ちながら、攻撃技はシャドーボール（90.3
 - [バトン先候補となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [天敵のゴースト枠 ゲンガーのM-2考察](/blog/gengar-analysis-m2/)
 - [あく技で弱点を突く高速アタッカー ゲッコウガのM-2考察](/blog/greninja-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/polteageist/)**

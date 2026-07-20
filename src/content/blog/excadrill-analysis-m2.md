@@ -687,3 +687,7 @@ heroImage: '../../assets/hero-excadrill-m2.png'
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [じしんを無効化する苦手枠 リザードンのM-2考察](/blog/charizard-y-analysis-m2/)
 - [砂を共有する同居枠 カバルドンのM-2考察](/blog/hippowdon-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/excadrill/)**

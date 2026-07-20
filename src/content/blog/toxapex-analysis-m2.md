@@ -575,3 +575,7 @@ HD型はとくぼう213で特殊アタッカーを受けやすく、HB型はぼ�
 - [じしんで弱点を突く天敵 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [フェアリー技を半減で受けられる アシレーヌのM-2考察](/blog/primarina-analysis-m2/)
 - [くさ受けに刺さる高速アタッカー リザードンのM-2考察](/blog/charizard-y-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/toxapex/)**

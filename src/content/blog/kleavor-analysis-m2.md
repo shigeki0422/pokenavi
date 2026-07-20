@@ -562,3 +562,7 @@ heroImage: '../../assets/hero-kleavor-m2.png'
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [みず弱点を突く使用率4位 アシレーヌのM-2考察](/blog/primarina-analysis-m2/)
 - [同居率上位の補完枠 ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/kleavor/)**

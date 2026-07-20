@@ -549,3 +549,7 @@ A56という種族値だけを見るとアタッカー適性は低く見えま�
 
 - [れいとうパンチが×4で刺さる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [じしんが無効で苦手 リザードンのM-2考察](/blog/charizard-y-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/greedent/)**

@@ -538,3 +538,7 @@ heroImage: '../../assets/hero-vanilluxe-m2.png'
 - [天敵となる使用率1位 ガブリアスのM-2考察](/blog/garchomp-analysis-m2/)
 - [弱点ほのおで上から焼かれる リザードンのM-2考察](/blog/charizard-y-analysis-m2/)
 - [はがね弱点を突かれる相手 ブリジュラスのM-2考察](/blog/archaludon-analysis-m2/)
+
+---
+
+**[この構成を軸にした簡単構築を試す →](/party-suggest/vanilluxe/)**
