@@ -297,6 +297,7 @@ const I18N = I18N_ALL[lang];
   .sug-item img{width:30px;height:30px;object-fit:contain;flex-shrink:0}
   .sug-item .rk{margin-left:auto;font-size:.7rem;color:rgb(var(--gray))}
   .sug-item mark{background:#fef9c3;color:inherit;border-radius:2px;padding:0 1px}
+  .exp-tag{font-size:.62rem;font-weight:800;color:#9333ea;background:#f3e8ff;border-radius:6px;padding:0 .4em;white-space:nowrap}
   .sug-item.added{opacity:.4;pointer-events:none}
   .sug .hd{display:flex;flex-wrap:wrap;gap:.5em;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:.4em}
   /* パーティ工房への引き継ぎボタン(PartyBuilderApp.astro の .pb-btn-sub と同一体裁) */
@@ -1296,7 +1297,7 @@ const I18N = I18N_ALL[lang];
   const vid = v => v.sp + '' + (v.mega==null?'*':v.mega);
 
   fetch(API + '/species').then(r=>r.json()).then(d=>{
-    SPECIES = d.map(v=>({label:v.label, sp:v.sp, mega:v.mega, id:vid(v), icon:iconUrl(v.sp), rank:v.rank}));
+    SPECIES = d.map(v=>({label:v.label, sp:v.sp, mega:v.mega, id:vid(v), icon:iconUrl(v.sp), rank:v.rank, exp:!!v.exp}));
   }).catch(()=>{});
 
   function renderCoreChips(){
@@ -1335,7 +1336,8 @@ const I18N = I18N_ALL[lang];
     sug.innerHTML = hits.map((s,i)=>{
       const already = CORE.some(p=>p.id===s.id);
       const rk = (s.rank && s.rank<9999) ? `<span class="rk">${I18N.rankLbl(s.rank)}</span>` : '';
-      return `<div class="sug-item${already?' added':''}" data-id="${esc(s.id)}" data-idx="${i}">${s.icon?`<img src="${s.icon}" alt="">`:''}<span>${hlSug(s.label,q)}</span>${rk}</div>`;
+      const ex = s.exp ? `<span class="exp-tag">実験的</span>` : '';
+      return `<div class="sug-item${already?' added':''}" data-id="${esc(s.id)}" data-idx="${i}">${s.icon?`<img src="${s.icon}" alt="">`:''}<span>${hlSug(s.label,q)}</span>${ex}${rk}</div>`;
     }).join('');
     sug.querySelectorAll('.sug-item[data-id]').forEach(el=>el.addEventListener('click',()=>{ if(!el.classList.contains('added')) addCore(el.dataset.id); }));
     sug.style.display='block';
