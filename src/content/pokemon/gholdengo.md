@@ -1,9 +1,9 @@
 ---
 title: 'サーフゴー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのサーフゴー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率29位。'
+description: 'ポケモンチャンピオンズのサーフゴー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率28位。'
 pokemonName: 'サーフゴー'
 dexNumber: 1000
-usageRank: 29
+usageRank: 28
 pubDate: '2026-07-13'
 draft: false
 analysisSlug: 'gholdengo-analysis-m3'
@@ -18,7 +18,7 @@ analysisSlug: 'gholdengo-analysis-m3'
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.1000</strong>　／　使用率 <strong style="color:#dc2626">29位</strong>
+      全国図鑑 <strong>No.1000</strong>　／　使用率 <strong style="color:#dc2626">28位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>
