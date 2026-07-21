@@ -1,9 +1,9 @@
 ---
 title: 'カエンジシ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのカエンジシ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率91位。'
+description: 'ポケモンチャンピオンズのカエンジシ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率93位。'
 pokemonName: 'カエンジシ'
 dexNumber: 668
-usageRank: 91
+usageRank: 93
 pubDate: '2026-07-13'
 draft: false
 analysisSlug: 'pyroar-analysis-m3'
@@ -18,7 +18,7 @@ analysisSlug: 'pyroar-analysis-m3'
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.668</strong>　／　使用率 <strong style="color:#dc2626">91位</strong>
+      全国図鑑 <strong>No.668</strong>　／　使用率 <strong style="color:#dc2626">93位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>
