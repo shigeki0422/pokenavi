@@ -79,9 +79,9 @@ export async function getStaticPaths() {
 
 const { label, sp, rank, baseSlug, isMega, articleSlug } = Astro.props;
 const siteUrl = 'https://pokenavi.jp';
-const title = `${label}軸 構築提案 M-4 | ポケモンチャンピオンズ 軸から簡単構築(パーティ提案)`;
+const title = `${label}構築 M-4 | ${label}軸のパーティ自動提案（軸から簡単構築）`;
 const rankText = rank ? `使用率${rank}位の` : '';
-const description = `ポケモンチャンピオンズM-4 ${rankText}${label}を軸にしたパーティを自動提案。役割・選出ガイド・使用率TOP30との1v1相性をAIシミュレーション結果から診断。`;
+const description = `${label}構築をAIで自動提案。ポケモンチャンピオンズM-4 ${rankText}${label}を軸にしたパーティを自動生成し、役割・選出ガイド・使用率TOP30との1v1相性まで診断。`;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
