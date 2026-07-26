@@ -1,9 +1,9 @@
 ---
 title: 'フシギバナ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのフシギバナ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率40位。'
+description: 'ポケモンチャンピオンズのフシギバナ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率39位。'
 pokemonName: 'フシギバナ'
 dexNumber: 3
-usageRank: 40
+usageRank: 39
 pubDate: '2026-07-13'
 draft: false
 analysisSlug: 'venusaur-analysis-m2'
@@ -18,7 +18,7 @@ analysisSlug: 'venusaur-analysis-m2'
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.3</strong>　／　使用率 <strong style="color:#dc2626">40位</strong>
+      全国図鑑 <strong>No.3</strong>　／　使用率 <strong style="color:#dc2626">39位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>
