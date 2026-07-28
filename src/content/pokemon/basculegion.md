@@ -1,9 +1,9 @@
 ---
 title: 'イダイトウ(オス) | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのイダイトウ(オス)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率17位。'
+description: 'ポケモンチャンピオンズのイダイトウ(オス)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率18位。'
 pokemonName: 'イダイトウ(オス)'
 dexNumber: 902
-usageRank: 17
+usageRank: 18
 pubDate: '2026-07-13'
 draft: false
 analysisSlug: 'basculegion-analysis-m2'
@@ -18,7 +18,7 @@ analysisSlug: 'basculegion-analysis-m2'
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.902</strong>　／　使用率 <strong style="color:#dc2626">17位</strong>
+      全国図鑑 <strong>No.902</strong>　／　使用率 <strong style="color:#dc2626">18位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>

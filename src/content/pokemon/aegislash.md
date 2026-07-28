@@ -1,9 +1,9 @@
 ---
 title: 'ギルガルド | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのギルガルド基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率18位。'
+description: 'ポケモンチャンピオンズのギルガルド基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率17位。'
 pokemonName: 'ギルガルド'
 dexNumber: 681
-usageRank: 18
+usageRank: 17
 pubDate: '2026-07-13'
 draft: false
 analysisSlug: 'aegislash-analysis-m2'
@@ -18,7 +18,7 @@ analysisSlug: 'aegislash-analysis-m2'
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.681</strong>　／　使用率 <strong style="color:#dc2626">18位</strong>
+      全国図鑑 <strong>No.681</strong>　／　使用率 <strong style="color:#dc2626">17位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-07-13</div>
   </div>
