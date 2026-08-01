@@ -5,7 +5,7 @@ export const ui = {
     siteName: 'ポケナビ',
     // Ranking
     rankingMetaTitle: 'ポケモンチャンピオンズ 使用率ランキング TOP200【最新シーズン】',
-    rankingMetaDesc: 'ポケモンチャンピオンズ シングルバトルの使用率ランキング。上位200位まで日次更新。ガブリアス・ミミッキュ・マスカーニャら上位の順位推移をバンプチャートで可視化。',
+    rankingMetaDesc: 'ポケモンチャンピオンズ シングルバトルの使用率ランキング TOP200を毎日更新。ガブリアス・マスカーニャ・ミミッキュなど上位ポケモンの順位変動をインタラクティブなチャートで確認できます。',
     rankingH1: '使用率ランキング',
     rankingSubtitle: 'シングルバトル',
     rankingUpdated: '最終更新',

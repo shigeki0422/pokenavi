@@ -130,8 +130,8 @@ const okCounters = counters.filter((c) => c.sym === '○');
 
 const siteUrl = 'https://pokenavi.jp';
 const rankText = defenderRank ? `使用率${defenderRank}位の` : '';
-const title = `${defenderName}対策 M-4 | ${rankText}${defenderName}に強いポケモンランキング`;
-const description = `ポケモンチャンピオンズM-4 ${rankText}${defenderName}への対策。1v1事前計算(実数値・タスキ/がんじょう考慮)で有利を取れるポケモンを${counters.length}体、使用率上位から抽出してランキング形式で紹介。`;
+const title = `${defenderName}に強いポケモン M-4【${rankText}対策ランキング】`;
+const description = `${rankText}${defenderName}に強いポケモン${counters.length}体を使用率上位から抽出。1v1事前計算（実数値・タスキ/がんじょう考慮）で確実に有利を取れる対策ポケモンをランキング形式で紹介。`;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
