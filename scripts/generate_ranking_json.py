@@ -12,7 +12,7 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent / "pokenavi.db"
 OUT_PATH = Path(__file__).parent.parent / "src/data/ranking.json"
 IMGDIR = Path(__file__).parent.parent / "public/images/pokemon"
-SEASON = "M-4"
+SEASONS = ["M-3", "M-4", "M-5"]
 LIMIT = 200
 
 ALIASES = {
@@ -46,38 +46,42 @@ for k, v in ALIASES.items():
     if (IMGDIR / f"pokemon-{v}.webp").exists():
         id_map[k] = v
 
-dates_db = [r[0] for r in conn.execute(
-    "SELECT DISTINCT crawled_date FROM pokemon_usage WHERE season=? AND rule='single' ORDER BY crawled_date",
-    (SEASON,)
-)]
-dates = sorted(set(dates_db))
+seasons_out = {}
+for SEASON in SEASONS:
+    dates_db = [r[0] for r in conn.execute(
+        "SELECT DISTINCT crawled_date FROM pokemon_usage WHERE season=? AND rule='single' ORDER BY crawled_date",
+        (SEASON,)
+    )]
+    dates = sorted(set(dates_db))
+    if not dates:
+        continue
 
-rows = conn.execute(
-    "SELECT pokemon, pokemon_id, crawled_date, rank, usage_rate FROM pokemon_usage WHERE season=? AND rule='single' ORDER BY crawled_date, rank",
-    (SEASON,)
-).fetchall()
+    rows = conn.execute(
+        "SELECT pokemon, pokemon_id, crawled_date, rank, usage_rate FROM pokemon_usage WHERE season=? AND rule='single' ORDER BY crawled_date, rank",
+        (SEASON,)
+    ).fetchall()
 
-# 全日付に登場したポケモンをユニオンで収集
-# (pokemon, date) → {rank, rate}
-all_map = {}
-for name, pid, date, rank, rate in rows:
-    key = (name, date)
-    if key not in all_map or rank < all_map[key]["rank"]:
-        all_map[key] = {"rank": rank, "rate": rate}
+    all_map = {}
+    for name, pid, date, rank, rate in rows:
+        key = (name, date)
+        if key not in all_map or rank < all_map[key]["rank"]:
+            all_map[key] = {"rank": rank, "rate": rate}
 
-# 全期間に登場したポケモンのユニーク集合
-all_pokemon = sorted(set(name for name, date in all_map), key=lambda n: (
-    all_map.get((n, dates[-1]), {}).get("rank", 9999),  # 最新日順位優先
-    min(all_map[(n, d)]["rank"] for d in dates if (n, d) in all_map)  # 次点: 最小順位
-))
+    all_pokemon = sorted(set(name for name, date in all_map), key=lambda n: (
+        all_map.get((n, dates[-1]), {}).get("rank", 9999),
+        min(all_map[(n, d)]["rank"] for d in dates if (n, d) in all_map)
+    ))
 
-poke_list = []
-for name in all_pokemon:
-    entry = {"name": name, "id": id_map.get(name), "dates": {}}
-    for d in dates:
-        if (name, d) in all_map:
-            entry["dates"][d] = all_map[(name, d)]
-    poke_list.append(entry)
+    poke_list = []
+    for name in all_pokemon:
+        entry = {"name": name, "id": id_map.get(name), "dates": {}}
+        for d in dates:
+            if (name, d) in all_map:
+                entry["dates"][d] = all_map[(name, d)]
+        poke_list.append(entry)
 
-OUT_PATH.write_text(json.dumps({"seasons": {SEASON: {"dates": dates, "pokemon": poke_list}}}, ensure_ascii=False, indent=2), encoding="utf-8")
-print(f"完了: {len(poke_list)}件, 最新日={dates[-1]}")
+    seasons_out[SEASON] = {"dates": dates, "pokemon": poke_list}
+    print(f"{SEASON}: {len(poke_list)}件, 最新日={dates[-1]}")
+
+OUT_PATH.write_text(json.dumps({"seasons": seasons_out}, ensure_ascii=False, indent=2), encoding="utf-8")
+print(f"完了: {len(seasons_out)}シーズン")
