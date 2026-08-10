@@ -9,10 +9,7 @@ from pathlib import Path
 DB = Path(__file__).parent / "pokenavi.db"
 
 WF_DIRS = [
-    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_066671b1-d07",
-    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_210e3c63-47e",
-    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_7ef53488-3f7",
-    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_ccce3d3c-787",
+    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_1ce039f7-0e7",
 ]
 
 OCR_MOVES = {
@@ -163,6 +160,7 @@ OCR_ABILITIES = {
     "ブレッシャー": "プレッシャー",
     "わろいてくせ": "わるいてぐせ",
     "わろいてぐせ": "わるいてぐせ",
+    "おうこんのからだ": "おうごんのからだ",
     "きれあし": "きれあじ",
     "きもつたま": "きもったま",
     "しんりよく": "しんりょく",
@@ -373,6 +371,22 @@ OCR_POKEMON = {
     "ドヒドイア": "ドヒドイデ",
     "テカヌチャン": "デカヌチャン",
     "サザンドー": "サザンドラ",
+    "リサードン": "リザードン",
+    "カメツクス": "カメックス",
+    "オーロンガ": "オーロンゲ",
+    "ジャロー**ダ**": "ジャローダ",
+    "ウエーニバル": "ウェーニバル",
+    "ゴウカサル": "ゴウカザル",
+    "テルタリス": "チルタリス",
+    "テリーン": "チリーン",
+    "テスバーシ": "デスバーン",
+    "デスカーニ": "デスカーン",
+    "フォルトス": "フォレトス",
+    "キョジオトーン": "キョジオーン",
+    "ゲンタロス": "ケンタロス",
+    "コルーグ": "ゴルーグ",
+    "レバルダス": "レパルダス",
+    "マツギヨ": "マッギョ",
 }
 
 # タイプの組み合わせ→フォーム名（ベース名が曖昧なポケモンに適用）
@@ -393,7 +407,8 @@ def resolve_partner_form(name, types):
     type_set = frozenset(types)
     return FORM_BY_TYPES[name].get(type_set, name)
 
-CRAWLED_DATE = "2026-07-01"
+CRAWLED_DATE = "2026-08-10"
+SEASON = "M-5"
 
 # ランク番号で確定したフォーム名（OCR_POKEMONより優先）、日付別に管理
 #
@@ -581,6 +596,25 @@ RANK_OVERRIDES_BY_DATE = {
         195: "スピンロトム",        # OCR=ドクロッグ
         198: "ヒスイクレベース",    # OCR=グレペース（rank=186がクレベース）
     },
+    "2026-08-10": {
+        15:  "イダイトウ(メス)",       # OCR=イダイトウ(オス)→赤スプライトはメス
+        27:  "ウォッシュロトム",       # OCR=ロトム（みず）
+        36:  "アローラキュウコン",     # OCR=キュウコン（こおり/フェアリー）
+        58:  "ヒートロトム",           # OCR=ロトム（ほのお）
+        59:  "ヒスイゾロアーク",       # OCR=ゾロアーク（ノーマル/ゴースト）
+        69:  "ヒスイヌメルゴン",       # OCR=ヌメルゴン（ドラゴン/エスパー）
+        89:  "ガラルヤドキング",       # OCR=ヤドキング（エスパー/フェアリー）
+        97:  "ヒスイウインディ",       # OCR=ウインディ（ほのお/ノーマル）
+        121: "ガラルヤドラン",         # OCR=ヤドラン（エスパー/フェアリー）
+        134: "カットロトム",           # OCR=ロトム（でんき/くさ）
+        142: "ヒスイバクフーン",       # OCR=バクフーン（ほのお/ゴースト）
+        112: "ケンタロス:炎",          # OCR=ケンタロス（かくとう/ほのお）
+        120: "ヒスイジュナイパー",     # OCR=ジュナイパー（くさ/ゴースト）
+        176: "ケンタロス:水",          # OCR=ゲンタロス（かくとう/みず）
+        192: "ヒスイクレベース",       # OCR=クレベース（こおり/ノーマル）
+        197: "パンプジン(ギガだましゅ)", # OCR=パンプジン
+        199: "ニャオニクス(オス)",     # OCR=ニャオニクス（青スプライト）
+    },
 }
 RANK_OVERRIDES = RANK_OVERRIDES_BY_DATE.get(CRAWLED_DATE, {})
 
@@ -655,7 +689,7 @@ def main():
             continue
         if pokemon in pokemon_to_first_rank:
             first = pokemon_to_first_rank[pokemon]
-            crawl_dir = f"/tmp/champ_crawl_{CRAWLED_DATE}"
+            crawl_dir = f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{CRAWLED_DATE}"
             gate1_errors.append((rank, pokemon, first))
             print(f"🚨 [GATE1] 重複ポケモン: {pokemon} が rank={first} と rank={rank} に存在")
             print(f"   画像を開いてNo./名前/スプライット色/タイプアイコンを確認すること（テキスト判断禁止）:")
@@ -681,7 +715,7 @@ def main():
     for rank, pokemon, rec in candidates:
         conn.execute(
             "INSERT OR IGNORE INTO pokemon_usage(season,rule,rank,pokemon,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?)",
-            ("M-3","single",rank,pokemon,"champions_adb",CRAWLED_DATE,now)
+            (SEASON,"single",rank,pokemon,"champions_adb",CRAWLED_DATE,now)
         )
         usage_inserted += conn.execute("SELECT changes()").fetchone()[0]
     conn.commit()
@@ -690,7 +724,7 @@ def main():
     # rankからpokemon_usageの正式名を引くルックアップ（フォーム違い対応）
     rank_to_pokemon = {}
     for row in conn.execute(
-        "SELECT rank, pokemon FROM pokemon_usage WHERE season='M-3' AND rule='single' AND crawled_date=?",
+        "SELECT rank, pokemon FROM pokemon_usage WHERE season=SEASON AND rule='single' AND crawled_date=?",
         (CRAWLED_DATE,)
     ):
         rank_to_pokemon[row[0]] = row[1]
@@ -767,7 +801,7 @@ def main():
                         continue
                     conn.execute(
                         "INSERT OR IGNORE INTO pokemon_moves(season,rule,pokemon,rank,move,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?)",
-                        ("M-3","single",pokemon,i,name,m["rate"],"champions_adb",CRAWLED_DATE,now)
+                        (SEASON,"single",pokemon,i,name,m["rate"],"champions_adb",CRAWLED_DATE,now)
                     )
                     inserted["moves"] += conn.execute("SELECT changes()").fetchone()[0]
 
@@ -787,7 +821,7 @@ def main():
                         continue
                     conn.execute(
                         "INSERT OR IGNORE INTO pokemon_items(season,rule,pokemon,rank,item,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?)",
-                        ("M-3","single",pokemon,i,name,it["rate"],"champions_adb",CRAWLED_DATE,now)
+                        (SEASON,"single",pokemon,i,name,it["rate"],"champions_adb",CRAWLED_DATE,now)
                     )
                     inserted["items"] += conn.execute("SELECT changes()").fetchone()[0]
 
@@ -807,7 +841,7 @@ def main():
                         continue
                     conn.execute(
                         "INSERT OR IGNORE INTO pokemon_abilities(season,rule,pokemon,rank,ability,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?)",
-                        ("M-3","single",pokemon,i,name,ab["rate"],"champions_adb",CRAWLED_DATE,now)
+                        (SEASON,"single",pokemon,i,name,ab["rate"],"champions_adb",CRAWLED_DATE,now)
                     )
                     inserted["abilities"] += conn.execute("SELECT changes()").fetchone()[0]
 
@@ -827,7 +861,7 @@ def main():
                         continue
                     conn.execute(
                         "INSERT OR IGNORE INTO pokemon_natures(season,rule,pokemon,rank,nature,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?)",
-                        ("M-3","single",pokemon,i,nat,na["rate"],"champions_adb",CRAWLED_DATE,now)
+                        (SEASON,"single",pokemon,i,nat,na["rate"],"champions_adb",CRAWLED_DATE,now)
                     )
                     inserted["natures"] += conn.execute("SELECT changes()").fetchone()[0]
 
@@ -856,7 +890,7 @@ def main():
                     spread = ev_spread(ev)
                     conn.execute(
                         "INSERT OR IGNORE INTO pokemon_evs(season,rule,pokemon,rank,ev_spread,ev_h,ev_a,ev_b,ev_c,ev_d,ev_s,usage_rate,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                        ("M-3","single",pokemon,i,spread,h,a,b,c,d,s,
+                        (SEASON,"single",pokemon,i,spread,h,a,b,c,d,s,
                          ev["rate"],"champions_adb",CRAWLED_DATE,now)
                     )
                     inserted["evs"] += conn.execute("SELECT changes()").fetchone()[0]
@@ -871,7 +905,7 @@ def main():
                 continue
             conn.execute(
                 "INSERT OR IGNORE INTO pokemon_partners(season,rule,pokemon,rank,partner,source,crawled_date,crawled_at) VALUES(?,?,?,?,?,?,?,?)",
-                ("M-3","single",pokemon,i,pname,"champions_adb",CRAWLED_DATE,now)
+                (SEASON,"single",pokemon,i,pname,"champions_adb",CRAWLED_DATE,now)
             )
             inserted["partners"] += conn.execute("SELECT changes()").fetchone()[0]
 
@@ -897,12 +931,12 @@ def main():
 
     # GATE4: usage投入後のランク欠落チェック
     db_ranks = set(r[0] for r in conn.execute(
-        "SELECT rank FROM pokemon_usage WHERE season='M-3' AND rule='single' AND crawled_date=? AND rank<=?",
+        "SELECT rank FROM pokemon_usage WHERE season=SEASON AND rule='single' AND crawled_date=? AND rank<=?",
         (CRAWLED_DATE, MAX_RANK)
     ))
     gate4_missing = [r for r in range(1, MAX_RANK + 1) if r not in db_ranks]
     db_over = [r[0] for r in conn.execute(
-        "SELECT rank FROM pokemon_usage WHERE season='M-3' AND rule='single' AND crawled_date=? AND rank>?",
+        "SELECT rank FROM pokemon_usage WHERE season=SEASON AND rule='single' AND crawled_date=? AND rank>?",
         (CRAWLED_DATE, MAX_RANK)
     )]
     print(f"\n=== GATE4: 使用率ランキング完全性チェック ===")
@@ -917,14 +951,14 @@ def main():
     print(f"\n=== GATE5: 詳細データ完全性チェック ===")
     gate5_issues = []
     for row in conn.execute(
-        "SELECT rank, pokemon FROM pokemon_usage WHERE season='M-3' AND rule='single' AND crawled_date=? AND rank<=? ORDER BY rank",
+        "SELECT rank, pokemon FROM pokemon_usage WHERE season=SEASON AND rule='single' AND crawled_date=? AND rank<=? ORDER BY rank",
         (CRAWLED_DATE, MAX_RANK)
     ):
         rank_u, poke = row[0], row[1]
-        n_moves = conn.execute("SELECT count(*) FROM pokemon_moves WHERE season='M-3' AND rule='single' AND pokemon=? AND crawled_date=?", (poke, CRAWLED_DATE)).fetchone()[0]
-        n_items = conn.execute("SELECT count(*) FROM pokemon_items WHERE season='M-3' AND rule='single' AND pokemon=? AND crawled_date=?", (poke, CRAWLED_DATE)).fetchone()[0]
-        n_ab    = conn.execute("SELECT count(*) FROM pokemon_abilities WHERE season='M-3' AND rule='single' AND pokemon=? AND crawled_date=?", (poke, CRAWLED_DATE)).fetchone()[0]
-        n_nat   = conn.execute("SELECT count(*) FROM pokemon_natures WHERE season='M-3' AND rule='single' AND pokemon=? AND crawled_date=?", (poke, CRAWLED_DATE)).fetchone()[0]
+        n_moves = conn.execute("SELECT count(*) FROM pokemon_moves WHERE season=SEASON AND rule='single' AND pokemon=? AND crawled_date=?", (poke, CRAWLED_DATE)).fetchone()[0]
+        n_items = conn.execute("SELECT count(*) FROM pokemon_items WHERE season=SEASON AND rule='single' AND pokemon=? AND crawled_date=?", (poke, CRAWLED_DATE)).fetchone()[0]
+        n_ab    = conn.execute("SELECT count(*) FROM pokemon_abilities WHERE season=SEASON AND rule='single' AND pokemon=? AND crawled_date=?", (poke, CRAWLED_DATE)).fetchone()[0]
+        n_nat   = conn.execute("SELECT count(*) FROM pokemon_natures WHERE season=SEASON AND rule='single' AND pokemon=? AND crawled_date=?", (poke, CRAWLED_DATE)).fetchone()[0]
         issues = []
         if n_moves == 0: issues.append("技0件")
         if n_items == 0: issues.append("持ち物0件")

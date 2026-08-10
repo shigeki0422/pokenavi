@@ -21,7 +21,7 @@ DB_PATH = Path(__file__).parent / "pokenavi.db"
 CRAWL_BASE = Path(__file__).parent.parent / "crawl_data"
 REF_DIR = Path(__file__).parent / "icon_refs"
 
-SEASON = "M-4"
+SEASON = "M-5"
 RULE = "single"
 SOURCE = "champions_adb"
 
