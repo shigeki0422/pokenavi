@@ -1,5 +1,6 @@
 ---
 import indexData from '../../public/sim-data/index.json';
+import verifyIndexData from '../../public/sim-data-verify-meta/index.json';
 import iconsData from '../../public/sim-data/icons.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
@@ -61,14 +62,18 @@ function parseSpec(s: string) {
   };
 }
 
-const regionalPrefix: [string, number][] = [['ヒスイ', 3], ['ガラル', 3], ['アローラ', 4]];
+const regionalPrefix: [string, number][] = [['ヒスイ', 3], ['ガラル', 3], ['アローラ', 4], ['パルデア', 4]];
 function iconUrl(name: string): string | null {
   const n = name.replace(' (', '(');
   const icons = iconsData as Record<string, string>;
   let id = icons[n] || icons[n.split('(')[0].trim()];
   if (!id) {
     for (const [p, l] of regionalPrefix) {
-      if (n.startsWith(p)) { id = icons[n.slice(l) + '(' + p + ')']; if (id) break; }
+      if (n.startsWith(p)) {
+        // 「ダイケンキ(ヒスイ)」形式と、「パルデアケンタロス(水)」→「ケンタロス(水)」形式の両方に対応
+        id = icons[n.slice(l) + '(' + p + ')'] || icons[n.slice(l)];
+        if (id) break;
+      }
     }
   }
   return id ? `/images/pokemon/pokemon-${id}.webp` : null;
@@ -104,7 +109,18 @@ function seasonLabel(label: string): string {
 const EV_LABELS = ['H','A','B','C','D','S'];
 
 const bn = baseName(pokemonName);
-const subjects = (indexData as any).subjects as any[];
+// M-A(sim-data: M-1〜M-3) と M-B(sim-data-verify-meta: M-3実構築/M-4) を統合。
+// 同一ラベルは先勝ちで重複排除し、後段の「新しいシーズン優先」でM-4が先に出る。
+const subjects = (() => {
+  const seen = new Set<string>();
+  const out: any[] = [];
+  for (const s of [...((verifyIndexData as any).subjects ?? []), ...((indexData as any).subjects ?? [])]) {
+    const key = s?.label ?? '';
+    if (!key || seen.has(key)) continue;
+    seen.add(key); out.push(s);
+  }
+  return out;
+})();
 
 const candidates = subjects.filter((s: any) => s.party && s.party.some((spec: string) => {
   const n = parseSpec(spec).name; return n === pokemonName || baseName(n) === bn;
