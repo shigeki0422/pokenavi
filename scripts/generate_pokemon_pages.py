@@ -12,7 +12,7 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent / "pokenavi.db"
 OUT_DIR = Path(__file__).parent.parent / "src/content/pokemon"
 
-SEASON = 'M-3'
+SEASON = 'M-5'
 
 # ---- 防御タイプ相性チャート（Gen 6+）----
 # DEFENSE[守備タイプ] = {攻撃タイプ: 倍率}
@@ -287,7 +287,7 @@ POKEMON_DATA = {
         "file": "charizard", "dex": 6, "id": "0006-00",
         "types": ["ほのお", "ひこう"],
         "stats": [78, 84, 78, 109, 85, 100],
-    , "analysis": ["charizard-analysis-m3"]},
+        "analysis": ["charizard-analysis-m3"]},
     "アーマーガア": {
         "file": "corviknight", "analysis": ["corviknight-analysis-m3", "corviknight-analysis-m2"], "dex": 823, "id": "0823-00",
         "types": ["はがね", "ひこう"],
@@ -659,7 +659,7 @@ POKEMON_DATA = {
         "file": "barbaracle", "dex": 689, "id": "0689-00",
         "types": ["いわ", "みず"],
         "stats": [72, 105, 115, 54, 86, 68],
-    , "analysis": ["barbaracle-analysis-m3"]},
+        "analysis": ["barbaracle-analysis-m3"]},
     "カラマネロ": {
         "file": "malamar", "dex": 687, "id": "0687-00",
         "types": ["あく", "エスパー"],
@@ -1257,7 +1257,7 @@ POKEMON_DATA = {
         "file": "raichu", "dex": 26, "id": "0026-00",
         "types": ["でんき"],
         "stats": [60, 90, 55, 90, 80, 110],
-    , "analysis": ["raichu-y-analysis-m3"]},
+        "analysis": ["raichu-y-analysis-m3"]},
     "デデンネ": {
         "file": "dedenne", "dex": 702, "id": "0702-00",
         "types": ["でんき", "フェアリー"],
