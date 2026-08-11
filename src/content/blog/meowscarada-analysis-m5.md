@@ -4,7 +4,7 @@ description: 'M-5シーズン使用率4位（M-4終盤:3位）のマスカーニ
 pubDate: '2026-08-10'
 updatedDate: '2026-08-10'
 heroImage: '../../assets/hero-meowscarada-m5.png'
-draft: true
+draft: false
 ---
 
 <style>
@@ -33,7 +33,7 @@ draft: true
   </div>
 </div>
 
-M-5シーズン、マスカーニャは使用率4位につけています。M-4終盤（2026-08-04時点）の3位からはほぼ横ばいで、順位自体に大きな動きはありません。一方で中身の型分布は変わっており、特性**へんげんじざい**で最初に出す技のタイプに自分の身をタイプ変化させ、その技に一致技補正をかけられるのが最大の特徴で、こだわりスカーフを軸にした対面操作アタッカーという基本コンセプトはM-4から継続しつつも、こだわりスカーフ採用率は55.2%まで下がり、きあいのタスキ・しんりょくを組み合わせた別の型が台頭しています。
+M-5シーズン、マスカーニャは使用率4位につけています。M-4終盤（2026-08-04時点）の3位からはほぼ横ばいで、順位自体に大きな動きはありません。特性**へんげんじざい**は最初に出す技のタイプに自分の身をタイプ変化させ、その技に一致技補正をかけるのが最大の特徴で、こだわりスカーフを軸にした対面操作アタッカーという基本コンセプトはM-4から継続しています。一方で中身の型分布は変わっており、こだわりスカーフ採用率は55.2%まで下がり、きあいのタスキ・しんりょくを組み合わせた別の型が台頭しています。
 
 ---
 
@@ -91,7 +91,7 @@ M-5シーズン、マスカーニャは使用率4位につけています。M-4�
   </div>
 </div>
 
-種族値合計530のうちS123が最大値で、こだわりスカーフ込みのS実数値は後述のとおり288に達します。A110は環境上位のアタッカーとしては中堅クラスですが、へんげんじざいによる一致技補正がこの数値を底上げします。
+種族値合計530のうちS123が最大値で、こだわりスカーフ込みのS実数値は後述のとおり288に達します。A110は使用率1位のガブリアス（A130）ほどではなく、物理アタッカーとして突出した数値ではありませんが、へんげんじざいによる一致技補正がこの数値を底上げします。
 
 ### タイプ・弱点
 
@@ -271,11 +271,11 @@ M-5シーズン、マスカーニャは使用率4位につけています。M-4�
 </div>
 </div>
 
-トリックフラワー（くさ・威力70・必中・必ず急所）とトリプルアクセル（こおり・連続3回攻撃で合計威力120）が主力技。とんぼがえり（むし・威力70）は攻撃後に交代でき、こだわりスカーフの技固定デメリットを対面操作で補います。はたきおとす（あく・威力65、相手が道具を持っていると1.5倍）は相手の持ち物を落とす効果も兼ねた打点です。
+トリックフラワー（くさ・威力70・必中・必ず急所）とトリプルアクセル（こおり・連続3回攻撃で合計威力120）が主力技です。とんぼがえり（むし・威力70）は攻撃後に交代でき、こだわりスカーフの技固定デメリットを対面操作で補います。はたきおとす（あく・威力65、相手が道具を持っていると1.5倍）は相手の持ち物を落とす効果も兼ねた打点です。
 
 **強み:**
 
-ようきのS実数値は192で、こだわりスカーフ込みだと288に達します。使用率1位のガブリアスは最速でもS実数値169、スカーフを持たせても253であり、マスカーニャのスカーフ型288が上回ります。最初に選ぶ技をへんげんじざいで一致技化しつつ、先制技を除けば多くの相手に対して後手に回らない立ち回りができます。ただしハッサムのバレットパンチ（優先度+1、採用率99.7%）のような先制技には無力な点は共通の弱点です。
+ようきのS実数値は192で、こだわりスカーフ込みだと288に達します。使用率1位のガブリアスは最速でもS実数値169、スカーフを持たせても253であり、マスカーニャのスカーフ型288が上回ります。最初に選ぶ技をへんげんじざいで一致技化しつつ、先制技を除けば多くの相手に対して後手に回らない立ち回りができます。
 
 **弱み:**
 
@@ -386,7 +386,7 @@ M-5シーズン、マスカーニャは使用率4位につけています。M-4�
 
 ## データ分析②：技タイプ別カバレッジ計算
 
-マスカーニャが採用する攻撃技（くさ・こおり・むし・あく・でんき・フェアリー・どく・いわ）が、M-5使用率TOP15の相手にどこまで通るかを整理しました（相手ごとに最大打点となる技のみ抜粋）。
+マスカーニャが採用する攻撃技（くさ・こおり・むし・あく・でんき・フェアリー・いわ）が、M-5使用率TOP15の相手にどこまで通るかを整理しました（相手ごとに最大打点となる技のみ抜粋）。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -400,61 +400,61 @@ M-5シーズン、マスカーニャは使用率4位につけています。M-4�
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ガブリアス（1位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ガブリアス（1位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">トリプルアクセル（こおり）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>×4</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">87.3%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">カイリュー（8位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">カイリュー（8位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">トリプルアクセル（こおり）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>×4</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">87.3%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">リザードン（10位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">リザードン（10位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">パワージェム（いわ）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>×4</strong>（M-5は持ち物データ欠損のためM-4（2026-07-13時点）の値を参照。メガY65.3%／メガX33.5%で、メガXの場合は×2）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>×4</strong>（メガX形態は×2、表下で詳述）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.2%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ギャラドス（7位）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">メガ後：トリックフラワー（くさ）／メガ前：かみなりパンチ（でんき）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">メガ後（みず/あく、77.8%）×2／メガ前（みず/ひこう、採用率13.5%のかみなりパンチなら）×4</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">96.9%</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ギャラドス（7位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">メガ後：トリックフラワー／メガ前：かみなりパンチ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">メガ後×2／メガ前×4（表下で詳述）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">96.9% / 13.5%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アシレーヌ（2位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アシレーヌ（2位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">トリックフラワー（くさ）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">96.9%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">カバルドン（6位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0450-00.webp" alt="カバルドン" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">カバルドン（6位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">トリックフラワー／トリプルアクセル</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">96.9% / 87.3%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">メタグロス（9位）／マフォクシー（11位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">メタグロス（9位）／<img src="/images/pokemon/pokemon-0655-00.webp" alt="マフォクシー" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">マフォクシー（11位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">はたきおとす（あく）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">65.1%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">イダイトウ（オス）（15位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ（オス）" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">イダイトウ（オス）（15位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">トリックフラワー（くさ）／はたきおとす（あく）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">96.9% / 65.1%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アーマーガア（13位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">アーマーガア（13位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">かみなりパンチ（でんき）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">×2</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13.5%</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">ブリジュラス（3位）／ミミッキュ（5位）／ハッサム（12位）／キラフロル（14位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ブリジュラス（3位）／<img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ミミッキュ（5位）／<img src="/images/pokemon/pokemon-0212-00.webp" alt="ハッサム" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">ハッサム（12位）／<img src="/images/pokemon/pokemon-0970-00.webp" alt="キラフロル" style="width:28px;height:28px;vertical-align:middle;margin-right:4px">キラフロル（14位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">（等倍が上限）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">×1</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
@@ -463,7 +463,7 @@ M-5シーズン、マスカーニャは使用率4位につけています。M-4�
 </table>
 </div>
 
-TOP15の中で×4が確実に通るのはガブリアス・カイリューの2体です。リザードンはメガY形態（採用率65.3%）かつパワージェム採用（4.2%）の場合のみ×4が通ります。一方、ギャラドス（メガ後みず/あく）にはトリックフラワーが×2止まり、ブリジュラス・ミミッキュ・ハッサム・キラフロルには等倍止まりです。パワージェム（採用率4.2%）は×4が出る技ですが採用率は低く、かみなりパンチ（採用率13.5%）も×2止まりの補完技にとどまります。こだわりスカーフでこれらを選んでいない試合ではトリックフラワー・トリプルアクセル・はたきおとすの範囲で打点を選ぶことになります。相手読みを外すと威力を発揮しきれない点は型1・型2共通の運用上のトレードオフです。
+TOP15の中で×4が確実に通るのはガブリアス・カイリューの2体です。リザードンへのパワージェム（いわ、採用率4.2%）は、非メガ・メガY形態（ほのお/ひこう）には×4で通りますが、メガX形態（ほのお/ドラゴン）には×2に半減します。M-5ではリザードンのメガストーン採用率データが欠損しており比率を出せないため、M-4時点（2026-07-13）の比率（メガY 65.3%・メガX 33.5%、非メガはごく少数）を参考値として付記します。ギャラドスへは、メガ後（みず/あく、採用率77.8%）にトリックフラワーが×2で通り、メガ前（みず/ひこう）にはかみなりパンチ（採用率13.5%）が×4で通ります。ブリジュラス・ミミッキュ・ハッサム・キラフロルには等倍止まりです。パワージェム・かみなりパンチはいずれも採用率が低く、こだわりスカーフでこれらを選んでいない試合ではトリックフラワー・トリプルアクセル・はたきおとすの範囲で打点を選ぶことになります。相手読みを外すと威力を発揮しきれない点は型1・型2共通の運用上のトレードオフです。なお、パワージェムは特殊技である一方、マスカーニャは物理寄り（攻撃110・特攻81、EV分布上位はC無振り）のため、実戦での主力打点にはなりにくい点も踏まえて読んでください。
 
 ---
 
@@ -484,7 +484,7 @@ TOP15の中で×4が確実に通るのはガブリアス・カイリューの2�
     <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ミミッキュ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">じゃれつく（フェアリー・採用率97.3%）が×2弱点。マスカーニャの技はゴースト/フェアリー複合にいずれも等倍が上限で、有効打が乏しい相手です</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ばけのかわで攻撃1発を無効化されるため、S実数値では上回っていても初手の攻撃が透かされます。返しのじゃれつく（フェアリー・採用率97.3%）で×2を受け、優先度+1のかげうち（採用率96.6%）もあり、S優位が機能しません。マスカーニャの技はゴースト/フェアリー複合にいずれも等倍が上限で、有効打も乏しい相手です</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -505,14 +505,14 @@ TOP15の中で×4が確実に通るのはガブリアス・カイリューの2�
     <img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゲッコウガ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビーム（こおり・採用率91.1%）とヘドロウェーブ（どく・採用率82.5%）がともに×2弱点。マスカーニャ側もトリックフラワー（くさ）が×2で通りますが、ゲッコウガナイト採用率65.4%でメガ後S実数値213に達するため、非スカーフのマスカーニャでは先手を取れません</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">れいとうビーム（こおり・採用率91.1%）とヘドロウェーブ（どく・採用率82.5%）がともに×2弱点。マスカーニャ側もトリックフラワー（くさ）が×2で通りますが、メガ個体（65.4%）はメガ後S実数値213に達するため非スカーフのマスカーニャでは先手を取れません（非メガ個体・計34.6%はS122でマスカーニャが上回ります）</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0635-00.webp" alt="サザンドラ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">サザンドラ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（ほのお・採用率60.4%）とだいもんじ（ほのお・採用率25.8%）を合わせるとほのお技の採用率は高く、×2弱点を突かれる場面が多い相手です。あくのはどう（99.2%）はマスカーニャに半減、りゅうせいぐん（93.0%）は等倍止まりで、この2つは脅威になりません。またサザンドラのこだわりスカーフ採用率82.9%でもS実数値225にとどまり、マスカーニャのスカーフ型(288)には後手を取ります。互いにスカーフを持つ場合はマスカーニャが先に動いてトリプルアクセル（こおり技、あく/ドラゴン複合に×2）を通せるため、脅威になるのは主にマスカーニャが非スカーフ（タスキ・いのちのたま等、合計44.8%）でほのお技を受けてしまう場面です</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">かえんほうしゃ（60.4%）・だいもんじ（25.8%）のほのお技が×2弱点を突く場面が多い相手です（詳細は表下）</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -524,6 +524,8 @@ TOP15の中で×4が確実に通るのはガブリアス・カイリューの2�
 </tbody>
 </table>
 </div>
+
+サザンドラのあくのはどう（採用率99.2%）はマスカーニャに半減、りゅうせいぐん（採用率93.0%）は等倍止まりで、この2つは脅威になりません。こだわりスカーフ採用率82.9%（ひかえめ76.1%が主流）ならS実数値225にとどまり、マスカーニャのスカーフ型（288）には後手を取ります。おくびょう（採用率22.5%）ならS実数値247まで伸びますが、それでも288には届きません。互いにスカーフを持つ場合はマスカーニャが先に動いてトリプルアクセル（こおり技、あく/ドラゴン複合に×2）を通せるため、脅威になるのは主にマスカーニャが非スカーフ（タスキ・いのちのたま等、合計44.8%）でほのお技を受けてしまう場面です。
 
 ---
 
@@ -584,13 +586,13 @@ M-5でマスカーニャと同じパーティに入る頻度が高いポケモ�
   </div>
 </div>
 
-**ガブリアス**（1位）はドラゴン/じめんで、マスカーニャのどく弱点（×2）・ほのお弱点（×2）をガブリアスは耐性（×0.5）で受けられます。一方でガブリアス自身もこおり×4・フェアリー×2の弱点を抱えており、この2タイプに対してはマスカーニャと弱点を共有します。ガブリアスのじしんがほのおタイプの相手を処理する一方、マスカーニャのはたきおとす（あく）がゴースト・エスパータイプの相手を分担します。
+**ガブリアス**（1位）はドラゴン/じめんで、マスカーニャのどく弱点（×2）・ほのお弱点（×2）を耐性（×0.5）で受けられます。一方でガブリアス自身もこおり×4・フェアリー×2の弱点を抱えており、この2タイプに対してはマスカーニャと弱点を共有します。ガブリアスのじしんがほのおタイプの相手を処理する一方、マスカーニャのはたきおとす（あく）がゴースト・エスパータイプの相手を分担します。
 
 **アシレーヌ**（2位）はみず/フェアリーで、マスカーニャのむし弱点（×4）・こおり弱点（×2）・かくとう弱点（×2）・ほのお弱点（×2）をいずれも耐性（×0.5）で受けられます。アシレーヌのフェアリー打点がドラゴン・あくタイプの相手を処理し、マスカーニャのトリプルアクセル（こおり）がドラゴンタイプの相手を分担します。
 
 **カイリュー**（3位）はドラゴン/ひこうで、マスカーニャのむし弱点（×4）・かくとう弱点（×2）・ほのお弱点（×2）を耐性（×0.5）で受けられます。ガブリアスと同様にこおり×4・フェアリー×2の弱点は共有しますが、カイリューはかえんほうしゃ（採用率66.7%）・りゅうせいぐん（採用率54.4%）で特殊方面を担い（物理技はしんそく採用率41.2%が中心）、マスカーニャの物理打点と役割が分かれています。
 
-**カバルドン**（4位）はじめん単タイプで、あくびとステルスロックのサポート役です。カバルドンのあくびで後続への引き先を確保し、相手の対面選択を狂わせたところにマスカーニャの攻撃技を通しやすくします。
+**カバルドン**（4位）はじめん単タイプで、あくびとステルスロックのサポート役です。あくびで相手に交代を強い、出てきた相手に対してマスカーニャの攻撃技を通しやすくします。
 
 **ブリジュラス**（5位）ははがね/ドラゴンで、マスカーニャのどく弱点（×2）を無効（×0）でカバーします。ブリジュラスのラスターカノン・りゅうせいぐんが特殊方面の打点を担い、マスカーニャの物理打点と役割が分かれています。
 
