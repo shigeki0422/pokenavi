@@ -451,36 +451,46 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0287-scarf.png" alt="こだわりスカーフ" style="width:24px;height:24px" loading="lazy">こだわりスカーフ</div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">素早さが1.5倍になるが、同じ技しか出せなくなる。</div></div></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">リザードナイトY</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:57.9%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">57.9%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">リザードナイトX</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:41.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">41.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0287-scarf.png" alt="こだわりスカーフ" style="width:24px;height:24px" loading="lazy">こだわりスカーフ</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">素早さが1.5倍になるが、同じ技しか出せなくなる。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0158-obon.png" alt="オボンのみ" style="width:24px;height:24px" loading="lazy">オボンのみ</div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">HPが最大HPの1/2以下になった時、最大HPの1/4回復する。1度使うと無くなる。</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0157-ram.png" alt="ラムのみ" style="width:24px;height:24px" loading="lazy">ラムのみ</div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.0%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.0%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">状態異常・こんらん状態を回復する。1度使うと無くなる。</div></div></div></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-72px -240px;flex-shrink:0"></span>いのちのたま</div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.0%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.0%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">攻撃技の威力が1.3倍になるが、攻撃のたびに最大HPの1/10の反動を受ける。</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0275-tasuki.png" alt="きあいのタスキ" style="width:24px;height:24px" loading="lazy">きあいのタスキ</div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.0%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.0%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">HPが満タンの時、一撃でひんしになる技のダメージを受けてもHPを1残して耐える。1度使うと無くなる。</div></div></div></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-288px -192px;flex-shrink:0"></span>たべのこし</div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.0%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.0%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">ターン終わりに最大HPの1/16回復する。</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-408px -168px;flex-shrink:0"></span>せんせいのツメ</div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.0%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.0%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">20%の確率で同じ優先度の技の中で先制できる。</div></div></div></td>
 </tr>
