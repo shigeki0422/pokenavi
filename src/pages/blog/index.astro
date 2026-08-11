@@ -23,11 +23,11 @@ const allPosts = (await getCollection('blog'))
 		return (ma?.rank ?? 999) - (mb?.rank ?? 999);
 	});
 
-const seasons = ['m4', 'm3', 'm2'] as const;
+const seasons = ['m5', 'm4', 'm3', 'm2'] as const;
 const postsBySeason = Object.fromEntries(
 	seasons.map((s) => [s, allPosts.filter((p) => p.id.includes(`-${s}`))])
 ) as Record<string, typeof allPosts>;
-const seasonLabels: Record<string, string> = { m4: 'M-4（最新）', m3: 'M-3', m2: 'M-2' };
+const seasonLabels: Record<string, string> = { m5: 'M-5（最新）', m4: 'M-4', m3: 'M-3', m2: 'M-2' };
 ---
 
 <!doctype html>
@@ -59,6 +59,7 @@ const seasonLabels: Record<string, string> = { m4: 'M-4（最新）', m3: 'M-3',
 				grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 				gap: 12px;
 			}
+			.card[hidden] { display: none; }
 			.card {
 				display: flex;
 				align-items: center;
