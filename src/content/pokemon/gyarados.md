@@ -6,7 +6,7 @@ dexNumber: 130
 usageRank: 7
 pubDate: '2026-08-10'
 draft: false
-analysisSlug: 'gyarados-analysis-m2'
+analysisSlug: 'gyarados-analysis-m5'
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -661,6 +661,20 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 ## 考察記事
 
+<a href="/blog/gyarados-analysis-m5/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ギャラドス 考察 M-5 シーズン パワーウィップ台頭とみずタイプ環境</div>
+  </div>
+</a>
+<a href="/blog/gyarados-analysis-m4/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガギャラドス 考察 M-4 シーズン りゅうのまい型とタイプ変化の弱点</div>
+  </div>
+</a>
 <a href="/blog/gyarados-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
