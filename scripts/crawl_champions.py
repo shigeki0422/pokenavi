@@ -28,9 +28,10 @@ LIST_ENTRY_Y  = [350, 482, 614, 746, 878]
 PANEL_X       = 1200
 PANEL_BOT     = 720
 ARROW_RIGHT   = (2330, 540)
+ARROW_LEFT    = (70, 540)
 BACK_BTN      = (308, 49)
 
-PANELS = ["ability"]
+PANELS = ["move", "item", "partner", "nature", "ev", "ability"]
 PANEL_MAX_SCROLL = {"move": 1, "item": 1, "partner": 1, "nature": 1, "ev": 8, "ability": 0}
 
 PROGRESS_FILE = f"{OUTPUT_DIR}/last_rank.txt"
