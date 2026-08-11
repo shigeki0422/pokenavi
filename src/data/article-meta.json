@@ -1273,6 +1273,17 @@
         "dex": 902,
         "form": "00"
     },
+    "basculegion-m-analysis-m5": {
+        "name": "イダイトウ(オス)",
+        "rank": 15,
+        "types": [
+            "みず",
+            "ゴースト"
+        ],
+        "matchKey": "イダイトウ",
+        "dex": 902,
+        "form": "00"
+    },
     "kirafurou-analysis-m3": {
         "name": "キラフロル",
         "rank": 19,
@@ -1362,6 +1373,17 @@
     "charizard-analysis-m4": {
         "name": "メガリザードン",
         "rank": 11,
+        "types": [
+            "ほのお",
+            "ひこう"
+        ],
+        "matchKey": "リザードン",
+        "dex": 6,
+        "form": "00"
+    },
+    "charizard-analysis-m5": {
+        "name": "リザードン",
+        "rank": 10,
         "types": [
             "ほのお",
             "ひこう"
@@ -1501,5 +1523,147 @@
         "matchKey": "ウォッシュロトム",
         "dex": 479,
         "form": "02"
+    },
+    "archaludon-analysis-m5": {
+        "name": "ブリジュラス",
+        "rank": 3,
+        "types": [
+            "はがね",
+            "ドラゴン"
+        ],
+        "matchKey": "ブリジュラス",
+        "dex": 1018,
+        "form": "00"
+    },
+    "corviknight-analysis-m5": {
+        "name": "アーマーガア",
+        "rank": 13,
+        "types": [
+            "ひこう",
+            "はがね"
+        ],
+        "matchKey": "アーマーガア",
+        "dex": 823,
+        "form": "00"
+    },
+    "delphox-analysis-m5": {
+        "name": "マフォクシー",
+        "rank": 11,
+        "types": [
+            "ほのお",
+            "エスパー"
+        ],
+        "matchKey": "マフォクシー",
+        "dex": 655,
+        "form": "00"
+    },
+    "dragonite-analysis-m5": {
+        "name": "カイリュー",
+        "rank": 8,
+        "types": [
+            "ドラゴン",
+            "ひこう"
+        ],
+        "matchKey": "カイリュー",
+        "dex": 149,
+        "form": "00"
+    },
+    "garchomp-analysis-m5": {
+        "name": "ガブリアス",
+        "rank": 1,
+        "types": [
+            "ドラゴン",
+            "じめん"
+        ],
+        "matchKey": "ガブリアス",
+        "dex": 445,
+        "form": "00"
+    },
+    "gyarados-analysis-m5": {
+        "name": "ギャラドス",
+        "rank": 7,
+        "types": [
+            "みず",
+            "ひこう"
+        ],
+        "matchKey": "ギャラドス",
+        "dex": 130,
+        "form": "00"
+    },
+    "hippowdon-analysis-m5": {
+        "name": "カバルドン",
+        "rank": 6,
+        "types": [
+            "じめん"
+        ],
+        "matchKey": "カバルドン",
+        "dex": 450,
+        "form": "00"
+    },
+    "kiraflosure-analysis-m5": {
+        "name": "キラフロル",
+        "rank": 14,
+        "types": [
+            "いわ",
+            "どく"
+        ],
+        "matchKey": "キラフロル",
+        "dex": 970,
+        "form": "00"
+    },
+    "meowscarada-analysis-m5": {
+        "name": "マスカーニャ",
+        "rank": 4,
+        "types": [
+            "くさ",
+            "あく"
+        ],
+        "matchKey": "マスカーニャ",
+        "dex": 908,
+        "form": "00"
+    },
+    "metagross-analysis-m5": {
+        "name": "メタグロス",
+        "rank": 9,
+        "types": [
+            "はがね",
+            "エスパー"
+        ],
+        "matchKey": "メタグロス",
+        "dex": 376,
+        "form": "00"
+    },
+    "mimikyu-analysis-m5": {
+        "name": "ミミッキュ",
+        "rank": 5,
+        "types": [
+            "ゴースト",
+            "フェアリー"
+        ],
+        "matchKey": "ミミッキュ",
+        "dex": 778,
+        "form": "00"
+    },
+    "primarina-analysis-m5": {
+        "name": "アシレーヌ",
+        "rank": 2,
+        "types": [
+            "みず",
+            "フェアリー"
+        ],
+        "matchKey": "アシレーヌ",
+        "dex": 730,
+        "form": "00"
+    },
+    "scizor-analysis-m5": {
+        "name": "ハッサム",
+        "rank": 12,
+        "types": [
+            "むし",
+            "はがね"
+        ],
+        "matchKey": "ハッサム",
+        "dex": 212,
+        "form": "00"
     }
 }
