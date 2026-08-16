@@ -6,7 +6,7 @@ dexNumber: 658
 usageRank: 17
 pubDate: '2026-08-10'
 draft: false
-analysisSlug: 'greninja-analysis-m2'
+analysisSlug: 'greninja-analysis-m5'
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -642,6 +642,13 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 ## 考察記事
 
+<a href="/blog/greninja-analysis-m5/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ゲッコウガ考察 M-5</div>
+  </div>
+</a>
 <a href="/blog/greninja-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
