@@ -3860,6 +3860,52 @@ check("memoは既定で無効(None)", _feat18._DMG_MEMO is None)
 
 
 # ════════════════════════════════════════════════════════════════
+# 19. gen_builder_data: 型の性格多様性
+#   耐久EVの特殊アタッカー(ニンフィア)が採る『ひかえめ』(周辺20.7%)のように、
+#   _nature_fits(上昇ステに投資あり)を通らない実在型が型1/2/3から消える不具合の回帰。
+# ════════════════════════════════════════════════════════════════
+import sqlite3 as _sq3
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+import gen_builder_data as _gbd
+
+_nat19 = [("ずぶとい", 68.6), ("ひかえめ", 20.7), ("おだやか", 5.1)]
+_ev19 = [32, 0, 32, 0, 2, 0]      # H32/B32 の耐久型（Cには投資なし）
+check("_nature_alt: 耐久EVでもひかえめを候補にする",
+      _gbd._nature_alt(_nat19, _ev19, {"ずぶとい"}) == "ひかえめ")
+check("_nature_alt: 下降ステに投資がある性格は採らない",
+      _gbd._nature_alt([("ひかえめ", 20.7)], [32, 32, 0, 0, 0, 0], set()) is None)
+check("_nature_alt: 周辺採用率が閾値未満なら採らない",
+      _gbd._nature_alt([("おだやか", 5.1)], _ev19, set()) is None)
+check("_nature_alt: 既出の性格は返さない",
+      _gbd._nature_alt(_nat19, _ev19, {"ずぶとい", "ひかえめ"}) is None)
+check("_pick_nature_joint: 実構築の裏付けがある場合はTrueを返す",
+      _gbd._pick_nature_joint({"natures": {("D", "ずぶとい"): 7}}, "D", _nat19, _ev19)
+      == ("ずぶとい", True))
+check("_pick_nature_joint: 観測なしは周辺分布＋backed=False",
+      _gbd._pick_nature_joint(None, "D", _nat19, _ev19) == ("ずぶとい", False))
+
+_con19 = _sq3.connect(_gbd.DB)
+from simulator.data import normalize_mega_stone as _nms19
+_rows19 = [r for r in _con19.execute(
+    "SELECT pokemon, rank, pokemon_id FROM pokemon_usage WHERE season=? AND rule=? "
+    "AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule=?) "
+    "ORDER BY rank", (_gbd.SEASON, _gbd.RULE, _gbd.SEASON, _gbd.RULE))]
+_sp19, _tpl19 = _gbd.build_species(_con19, dl, [(n, r, p or 1) for n, r, p in _rows19])
+_v19 = _gbd.build_variants(_con19, "ニンフィア", _tpl19, _nms19)
+check("ニンフィアの型にひかえめが含まれる", "ひかえめ" in [b["nature"] for b in _v19],
+      str([(b["item"], b["nature"]) for b in _v19]))
+_same19 = 0
+for _n19, _r19, _p19 in _rows19[:50]:
+    _b19 = _gbd.build_variants(_con19, _n19, _tpl19, _nms19)
+    _nt19 = {n for n, p in _gbd._natures_of(_con19, _n19) if p >= _gbd.NATURE_ALT_PCT}
+    if len(_b19) >= 2 and len(_nt19) >= 2 and len({b["nature"] for b in _b19}) == 1:
+        _same19 += 1
+check("TOP50: 有意な性格が2つ以上あるのに全型同性格な種が5体以下",
+      _same19 <= 5, f"{_same19}体")
+_con19.close()
+
+
+# ════════════════════════════════════════════════════════════════
 # 集計
 # ════════════════════════════════════════════════════════════════
 print(f"\n{'='*60}")

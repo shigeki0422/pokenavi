@@ -42,6 +42,7 @@ EV_INVEST = 16        # 「そのステに投資している」とみなすEV下
 AXIS_MIN_SHARE = 0.15 # 第2の攻撃軸を型として立てる最低シェア
 MIN_JOINT_N = 3       # templates の同時分布を「その持ち物の型の根拠」として信頼する最低件数
 MIN_JOINT_NATURE_PCT = 3.0 # 観測1件だけの性格を採る場合に要求する周辺採用率(%)（外れ値除け）
+NATURE_ALT_PCT = 15.0 # 型間で性格を分けるとき、第2の性格に要求する周辺採用率(%)
 MEGA_AXIS_GAP = 15    # メガ後のA/C差がこれ以上なら、その持ち物は物理/特殊のどちらか寄りと見なす
 
 # 性格 -> (上昇stat idx, 下降stat idx)。並びは H,A,B,C,D,S。src/scripts/party-builder/stats.ts と同一。
@@ -226,15 +227,34 @@ def _pick_nature(natures, ev):
 def _pick_nature_joint(g, axis, natures, ev):
     """性格は「その持ち物・その攻撃軸で実際に使われた性格」を最頻で採る。
     件数が少なくても「その軸で観測された」性格ならEV配分と矛盾しないので採用する
-    （軸を跨ぐ観測は使わない）。観測が無ければ従来通り周辺分布(採用率順)から選ぶ。"""
+    （軸を跨ぐ観測は使わない）。観測が無ければ従来通り周辺分布(採用率順)から選ぶ。
+    返り値: (性格, 実構築の観測に裏付けられているか)。裏付けの無い推定だけを
+    後段の「型間で性格を散らす」処理の対象にするためのフラグ。"""
     if g:
         pct = dict(natures)
         obs = [(c, nm) for (ax, nm), c in g["natures"].items()
                if ax == axis and _nature_fits(nm, ev)
                and (c >= 2 or pct.get(nm, 0.0) >= MIN_JOINT_NATURE_PCT)]
         if obs:
-            return max(obs)[1]
-    return _pick_nature(natures, ev)
+            return max(obs)[1], True
+    return _pick_nature(natures, ev), False
+
+
+def _nature_alt(natures, ev, used):
+    """既出の性格と重なったときの差し替え候補（周辺採用率 NATURE_ALT_PCT 以上の未使用性格）。
+
+    _nature_fits は「上昇ステに投資あり」を要求するため、耐久EV(H/B全振り)の特殊アタッカーが
+    採る『ひかえめ』のような性格（上げたいCには投資せず、不要なAを下げるだけ）を弾いてしまい、
+    採用率2割の実在型が型1/2/3から丸ごと消えていた（例: ニンフィア ひかえめ20.7%）。
+    ここでは条件を「下降ステに投資が無い」だけに緩め、周辺採用率が十分大きい性格に限って採る。
+    """
+    for nm, pct in natures:
+        if pct < NATURE_ALT_PCT or nm in used:
+            continue
+        m = NATURE_MODS.get(nm)
+        if m and ev[m[1]] < EV_INVEST:
+            return nm
+    return None
 
 
 def _joint_of(con, name):
@@ -360,6 +380,7 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
     out = []
     per_item = {}
     seen = set()
+    used_natures = set()
     while len(out) < max_variants:
         avail = [c for c in cands
                  if per_item.get(c["item"], 0) < MAX_PER_ITEM
@@ -384,7 +405,10 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
                   tpl.base_sp_attack, tpl.base_sp_defense, tpl.base_speed]
             ability = base_ability
             label = name
-        nature = _pick_nature_joint(joint.get(item), _ev_axis(ev), natures, ev)
+        nature, backed = _pick_nature_joint(joint.get(item), _ev_axis(ev), natures, ev)
+        if not backed and nature in used_natures:
+            nature = _nature_alt(natures, ev, used_natures) or nature
+        used_natures.add(nature)
         spec = (f"{name}@{item}:{nature}:{'|'.join(top_moves)}:"
                 f"{'/'.join(str(x) for x in ev)}:{ability}")
         out.append({
