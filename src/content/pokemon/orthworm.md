@@ -162,7 +162,12 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">すながくれ</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">どしょく</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:99.6%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">99.6%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">じめんタイプの技が効かず、最大HPの1/4回復する。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">すながくれ</td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">すなあらし状態の時、回避率が1.25倍になる。すなあらしのダメージを受けない。</div></div></div></td>
 </tr>
 </tbody>

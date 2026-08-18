@@ -162,7 +162,12 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 <tbody>
 <tr style="background:#fef9c3">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">こんじょう</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">もらいび</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:85.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">85.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">ほのおタイプの技が効かず、自分はもらいび状態になる。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">こんじょう</td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:14.9%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">14.9%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">状態異常の時、攻撃が1.5倍になる。やけどによる物理ダメージ半減は無視する。</div></div></div></td>
 </tr>
 </tbody>
