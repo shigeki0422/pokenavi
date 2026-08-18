@@ -26,7 +26,21 @@ interface Props {
   otherLabel: string;
 }
 const { lang, myName, myIcon, oppName, oppIcon, myBreakdowns, otherHref, otherLabel } = Astro.props;
-const uid = `${myIcon}-${oppIcon}-${myName}`.replace(/[^a-zA-Z0-9]/g, '');
+/**
+ * タブ用ラジオボタンのname属性に使う一意キー。
+ * 以前は `${myIcon}-${oppIcon}-${myName}` から英数字以外を除去していたため、
+ * (1)日本語名が丸ごと消える (2)メガリザードンX/Yのように「同じicon・同じ相手種で
+ * 石だけ違う」2つのポップアップが同一ページに並ぶ、の合わせ技でuidが完全に衝突し、
+ * 2つのポップアップのラジオが同じグループになって片方のチェックが外れ、
+ * どのパネルも表示されない(タブ見出しだけ出て表が空白)不具合が出た。
+ * 文字列全体をハッシュ化して衝突しないようにする。
+ */
+function hashKey(s: string): string {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h * 33) ^ s.charCodeAt(i)) >>> 0;
+  return h.toString(36);
+}
+const uid = hashKey(`${myIcon}|${oppIcon}|${myName}|${oppName}|${myBreakdowns.map((b) => b.label).join(',')}`);
 
 const tMove = (n: string | null) => {
   if (!n) return '—';
