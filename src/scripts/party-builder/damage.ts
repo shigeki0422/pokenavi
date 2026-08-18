@@ -913,6 +913,17 @@ export function simulateKO(
 /** bestMove の技選定で確定数シミュレーションを打ち切る発数（これを超える差は判定に影響しない）。 */
 const SELECT_HITS_CAP = 8;
 
+/**
+ * リチャージ技（使用後1ターン行動不能）。battle.py の RECHARGE_MOVES と一致させる。
+ * bestMove()は「毎ターン使える」前提でダメージ効率を比較するため、これらの技を
+ * 選ぶと実際の消費ターン数(使用回数の2倍)を過小評価してしまう。ターン消費を
+ * 正しく織り込むまでは候補から除外し、常用可能な技だけで比較する。
+ */
+const RECHARGE_MOVES = new Set([
+  "ギガインパクト", "ブラストバーン", "はかいこうせん",
+  "ハイドロカノン", "ハードプラント", "がんせきほう",
+]);
+
 export function bestMove(
   me: ResolvedBuild,
   opp: ResolvedBuild
@@ -931,6 +942,7 @@ export function bestMove(
   let bestHi = Infinity;
   for (const mv of candidates) {
     if (mv.cat === "status" || !mv.power) continue;
+    if (RECHARGE_MOVES.has(mv.n)) continue;
     const itemAtUse = oppItem;
     const detail = moveDamageDetail(me, opp, mv, oppItem, 0);
     if (detail.defenderItemConsumed) oppItem = "";
