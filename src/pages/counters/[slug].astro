@@ -8,6 +8,7 @@ import Footer from '../../components/Footer.astro';
 import MatchupBreakdownPopup from '../../components/MatchupBreakdownPopup.astro';
 import { getMatchups, getMatchupBreakdown } from '../../scripts/party-builder/matchup-static';
 import partySuggestSlugs from '../../data/party-suggest-slugs.json';
+import { MATCHUP_SEASON } from '../../consts';
 
 /**
  * 「○○対策」ページ: 使用率上位30体(targets.json、対戦相手として最も選出される
@@ -130,7 +131,7 @@ const okCounters = counters.filter((c) => c.sym === '○');
 
 const siteUrl = 'https://pokenavi.jp';
 const rankText = defenderRank ? `使用率${defenderRank}位の` : '';
-const title = `${defenderName}に強いポケモン M-4【${rankText}対策ランキング】`;
+const title = `${defenderName}に強いポケモン ${MATCHUP_SEASON}【${rankText}対策ランキング】`;
 const description = `${rankText}${defenderName}に強いポケモン${counters.length}体を使用率上位から抽出。1v1事前計算（実数値・タスキ/がんじょう考慮）で確実に有利を取れる対策ポケモンをランキング形式で紹介。`;
 const jsonLd = {
   '@context': 'https://schema.org',
@@ -195,7 +196,7 @@ const jsonLd = {
     <main>
       <h1><img src={`/images/pokemon/pokemon-${defenderIcon}.webp`} alt={defenderName} />{defenderName}対策 — 有利を取れるポケモンランキング</h1>
       <p class="lead">
-        ポケモンチャンピオンズM-4環境で{rankText}{defenderName}に対し、{defenderName}の型プール（最大3種）を集約した1v1事前計算（実数値・きあいのタスキ/がんじょう考慮）で有利（◎・○）を取れる使用率上位のポケモンを{counters.length}体、判定順に並べました。タップすると型ごとの判定内訳を確認できます。
+        ポケモンチャンピオンズ{MATCHUP_SEASON}環境で{rankText}{defenderName}に対し、{defenderName}の型プール（最大3種）を集約した1v1事前計算（実数値・きあいのタスキ/がんじょう考慮）で有利（◎・○）を取れる使用率上位のポケモンを{counters.length}体、判定順に並べました。タップすると型ごとの判定内訳を確認できます。
       </p>
       <div class="def-links">
         <a href={`/pokemon/${defenderSlug}/`}>→ {defenderName}自身の使用率・技採用率データを見る</a>

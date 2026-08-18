@@ -2,10 +2,9 @@
 // data.ts(loadCore)はfetch前提のブラウザ用のため、ここではnode:fsで直接読む。
 import fs from "node:fs";
 import path from "node:path";
-import type { MoveDict, ResolvedBuild, SpeciesMaster, TargetGroup, Verdict } from "./types";
-import { resolveSlot, resolveTarget } from "./balance";
-import { judgeVsBuilds, judge1v1, bestMoveHitDetail } from "./matchup";
-import { fromSpec } from "./spec";
+import type { MonDetail, MoveDict, ResolvedBuild, SpeciesMaster, TargetBuild, TargetGroup, Verdict } from "./types";
+import { resolveTarget } from "./balance";
+import { judgeVsBuildsMulti, judge1v1, bestMoveHitDetail } from "./matchup";
 
 export interface StaticMatchup {
   icon: string;
@@ -30,11 +29,12 @@ const targetGroups = readJson<TargetGroup[]>("targets.json");
 
 const resolvedTargets = targetGroups.map((g) => ({
   icon: g.icon,
-  name: g.sp,
+  name: g.label ?? g.sp,
+  preferItem: g.stone,
   builds: g.builds.map((b) => resolveTarget(g.sp, g.label ?? g.sp, g.icon, b, moves)),
 }));
 
-function readMon(icon: string): { items?: { n: string }[]; builds?: string[] } | null {
+function readMon(icon: string): MonDetail | null {
   const monPath = path.join(DATA_DIR, "mon", `${icon}.json`);
   if (!fs.existsSync(monPath)) return null;
   try {
@@ -45,34 +45,48 @@ function readMon(icon: string): { items?: { n: string }[]; builds?: string[] } |
 }
 
 /**
- * preferItem指定時はその持ち物(型プールのspec文字列内`@{item}:`)を含む型を優先して探す。
- * リザードンのようにメガ進化が複数系統(X/Y)あり、かつ主流の持ち物(石)がどちらか一方に
- * 偏っている種で、単純な「採用率最多の持ち物」だけを見ると、他方の系統(型)の型が
- * 一切考慮されなくなる問題があった(例: メガリザードンYの採用率が高いため、
- * mainBuild('0006-00')は常にY型を返し、X型の有利不利は計算されていなかった)。
- * mainBuildVariants()と組み合わせて、複数メガ種は系統ごとに個別評価する。
+ * 自分側の代表型(型1/2/3)。gen_builder_data.py が持ち物×攻撃軸(A/C/耐久)で合成した
+ * mon/*.json の `mu` をそのまま解決する。相手側(targets.json builds)と完全に同じ
+ * スキーマ・同じ生成ロジックなので、自分側だけ1型固定という非対称が無くなる。
+ * preferItem指定時はその持ち物(＝メガ石)の型だけに絞る。
+ * リザードンのようにメガ進化が複数系統(X/Y)ある種で、採用率最多の石だけを見ると
+ * 他方の系統が一切評価されない問題があったため、mainBuildVariants()と組み合わせて
+ * 系統ごとに個別評価する。
  */
-function mainBuild(icon: string, preferItem?: string): ResolvedBuild | null {
+const myVariantsCache = new Map<string, ResolvedBuild[]>();
+function myVariants(icon: string, preferItem?: string): ResolvedBuild[] {
+  const cacheKey = `${icon}::${preferItem ?? ""}`;
+  const cached = myVariantsCache.get(cacheKey);
+  if (cached) return cached;
   const mon = readMon(icon);
-  const builds = mon?.builds ?? [];
-  if (!builds.length) return null;
-  const topItem = preferItem ?? mon?.items?.[0]?.n;
-  const spec = (topItem && builds.find((s) => s.includes(`@${topItem}:`))) || builds[0];
-  const slot = fromSpec(spec);
-  if (!slot) return null;
-  try {
-    return resolveSlot(slot, species, moves);
-  } catch {
-    return null;
-  }
+  let mu: TargetBuild[] = mon?.mu ?? [];
+  if (preferItem) mu = mu.filter((b) => b.item === preferItem);
+  const sp = mon?.n ?? "";
+  const result = mu
+    .map((b) => {
+      try {
+        return resolveTarget(sp, b.label ?? sp, icon, b, moves);
+      } catch {
+        return null;
+      }
+    })
+    .filter((b): b is ResolvedBuild => !!b);
+  myVariantsCache.set(cacheKey, result);
+  return result;
+}
+
+/** 代表型のうち先頭(＝採用率最上位の型)。1体だけを示す用途(A vs B 比較ページ等)に使う。 */
+function mainBuild(icon: string, preferItem?: string): ResolvedBuild | null {
+  return myVariants(icon, preferItem)[0] ?? null;
 }
 
 export interface MainBuildVariant {
   /** 表示名。メガ進化が単一(または無し)ならその種の代表名、複数ならメガ名(例: メガリザードンX)。 */
   label: string;
-  /** mainBuild()に渡すpreferItem。複数メガ系統がある場合のみ設定(石の名前)。 */
+  /** getMatchups()に渡すpreferItem。複数メガ系統がある場合のみ設定(石の名前)。 */
   preferItem: string | undefined;
-  build: ResolvedBuild;
+  /** その系統に属する自分側の代表型(型1/2/3)。 */
+  builds: ResolvedBuild[];
 }
 /**
  * その種にメガ進化が複数系統(石違い)ある場合(現状: リザードンX/Y、ライチュウX/Y)、
@@ -89,23 +103,20 @@ export function mainBuildVariants(icon: string, defaultLabel: string): MainBuild
   const cacheKey = `${icon}::${defaultLabel}`;
   const cached = mainBuildVariantsCache.get(cacheKey);
   if (cached) return cached;
-  const mon = readMon(icon);
-  const builds = mon?.builds ?? [];
-  let result: MainBuildVariant[];
-  if (!builds.length) {
-    result = [];
-  } else {
-    const sp = species.find((s) => builds[0]?.startsWith(`${s.n}@`));
-    const megas = sp?.mega ?? [];
-    if (megas.length < 2) {
-      const build = mainBuild(icon);
-      result = build ? [{ label: defaultLabel, preferItem: undefined, build }] : [];
-    } else {
-      result = [];
-      for (const m of megas) {
-        const build = mainBuild(icon, m.stone);
-        if (build) result.push({ label: m.name, preferItem: m.stone, build });
+  const all = myVariants(icon);
+  let result: MainBuildVariant[] = [];
+  if (all.length) {
+    const sm = species.find((s) => s.n === all[0].sp);
+    // 実際に代表型として採用されているメガ石が2系統以上ある場合のみ分割する
+    // (種としてX/Yが存在しても、片方が使用率0なら型が作られないので1系統扱い)。
+    const usedStones = (sm?.mega ?? []).filter((m) => all.some((b) => b.item === m.stone));
+    if (usedStones.length >= 2) {
+      for (const m of usedStones) {
+        const builds = myVariants(icon, m.stone);
+        if (builds.length) result.push({ label: m.name, preferItem: m.stone, builds });
       }
+    } else {
+      result = [{ label: defaultLabel, preferItem: undefined, builds: all }];
     }
   }
   mainBuildVariantsCache.set(cacheKey, result);
@@ -115,10 +126,12 @@ export function mainBuildVariants(icon: string, defaultLabel: string): MainBuild
 /**
  * 使用率上位プール(targets.json)の「対戦相手」表現。メガ進化が複数系統ある種
  * (現状: リザードン、ライチュウ)は、他ポケモンの「有利・不利な相手」表に
- * 「メガリザードンX」「メガリザードンY」として別々のエントリで出す(従来は
+ * 「リザードンX」「リザードンY」として別々のエントリで出す(従来は
  * targets.jsonの1エントリ=Y型のみで計算され、X型に対する有利不利が他の
- * ポケモンのページに一切反映されていなかった)。単一系統の種はtargets.json
- * そのままの型プール(複数の持ち物パターン等)を使い、挙動を変えない。
+ * ポケモンのページに一切反映されていなかった)。
+ * この分割は gen_builder_data.py の build_targets() 側で済んでおり(stone フィールド)、
+ * ここでは targets.json をそのまま使う。以前はTS側でも再分割していたため、
+ * 同じ相手が2重に列挙されていた。
  */
 interface OpponentGroup {
   icon: string;
@@ -126,35 +139,25 @@ interface OpponentGroup {
   builds: ResolvedBuild[];
   preferItem?: string;
 }
-const resolvedTargetsExpanded: OpponentGroup[] = (() => {
-  const out: OpponentGroup[] = [];
-  for (const t of resolvedTargets) {
-    const variants = mainBuildVariants(t.icon, t.name);
-    if (variants.length > 1) {
-      for (const v of variants) out.push({ icon: t.icon, name: v.label, builds: [v.build], preferItem: v.preferItem });
-    } else {
-      out.push(t);
-    }
-  }
-  return out;
-})();
+const resolvedTargetsExpanded: OpponentGroup[] = resolvedTargets;
 
 const cache = new Map<string, StaticMatchup[] | null>();
 
-function judgeAgainstPool(me: ResolvedBuild, ownIcon: string): StaticMatchup[] {
+function judgeAgainstPool(mes: ResolvedBuild[], ownIcon: string): StaticMatchup[] {
   return resolvedTargetsExpanded
     .filter((t) => t.icon !== ownIcon)
     .map((t) => {
-      const v = judgeVsBuilds(me, t.builds);
+      const v = judgeVsBuildsMulti(mes, t.builds);
       return { icon: t.icon, name: t.name, sym: v.sym, dep: v.dep, preferItem: t.preferItem };
     });
 }
 
+/** 自分の代表型(最大3) × 相手の代表型(最大3)を総当たりで判定した集約結果。 */
 export function getMatchups(icon: string, preferItem?: string): StaticMatchup[] | null {
   const cacheKey = preferItem ? `${icon}::${preferItem}` : icon;
   if (cache.has(cacheKey)) return cache.get(cacheKey)!;
-  const me = mainBuild(icon, preferItem);
-  const result = me ? judgeAgainstPool(me, icon) : null;
+  const mes = myVariants(icon, preferItem);
+  const result = mes.length ? judgeAgainstPool(mes, icon) : null;
   cache.set(cacheKey, result);
   return result;
 }
@@ -215,7 +218,7 @@ export function getMatchupBreakdownForBuild(
 ): MatchupBreakdown | null {
   const oppGroup = resolvedTargetsExpanded.find((t) => t.icon === oppIcon && t.preferItem === oppPreferItem);
   if (!oppGroup || !oppGroup.builds.length) return null;
-  const agg = judgeVsBuilds(me, oppGroup.builds);
+  const agg = judgeVsBuildsMulti([me], oppGroup.builds);
   const builds = oppGroup.builds.map((build, i) => ({
     build,
     verdict: agg.verdicts[i],
@@ -248,49 +251,8 @@ export interface MyBuildOption {
  * 見えない、という指摘を受けて追加。preferItem指定時(メガ進化が複数系統
  * ある種)はその石を使う型の中から複数候補を探す。
  */
-const myBuildOptionsCache = new Map<string, MyBuildOption[]>();
 export function myBuildOptions(icon: string, preferItem: string | undefined, count = 3): MyBuildOption[] {
-  const cacheKey = `${icon}::${preferItem ?? ""}::${count}`;
-  const cached = myBuildOptionsCache.get(cacheKey);
-  if (cached) return cached;
-
-  const mon = readMon(icon);
-  const builds = mon?.builds ?? [];
-  const resolve = (spec: string): ResolvedBuild | null => {
-    const slot = fromSpec(spec);
-    if (!slot) return null;
-    try {
-      return resolveSlot(slot, species, moves);
-    } catch {
-      return null;
-    }
-  };
-
-  let result: MyBuildOption[] = [];
-  if (builds.length) {
-    if (preferItem) {
-      const matching = builds.filter((s) => s.includes(`@${preferItem}:`)).slice(0, count);
-      result = matching
-        .map((spec) => {
-          const build = resolve(spec);
-          return build ? { label: `${build.item}・${build.nature}`, build } : null;
-        })
-        .filter((v): v is MyBuildOption => !!v);
-    } else {
-      const seenSpec = new Set<string>();
-      for (const it of (mon?.items ?? []).slice(0, count)) {
-        const spec = builds.find((s) => s.includes(`@${it.n}:`));
-        if (!spec || seenSpec.has(spec)) continue;
-        seenSpec.add(spec);
-        const build = resolve(spec);
-        if (build) result.push({ label: `${build.item}・${build.nature}`, build });
-      }
-    }
-    if (!result.length) {
-      const build = resolve(builds[0]);
-      if (build) result = [{ label: `${build.item}・${build.nature}`, build }];
-    }
-  }
-  myBuildOptionsCache.set(cacheKey, result);
-  return result;
+  return myVariants(icon, preferItem)
+    .slice(0, count)
+    .map((build) => ({ label: `${build.item}・${build.nature}`, build }));
 }

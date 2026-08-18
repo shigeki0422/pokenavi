@@ -48,14 +48,20 @@ export function resolveSlot(slot: Slot, species: SpeciesMaster[], moves: MoveDic
 /** targets.json の1ビルドを ResolvedBuild 相当に解決する(bs/タイプは既に解決済みなのでメガ判定不要)。 */
 export function resolveTarget(sp: string, label: string, icon: string, build: TargetBuild, moves: MoveDict): ResolvedBuild {
   const stats = realStats(build.bs, build.ev, build.nature);
-  const resolvedMoves = build.moves
-    .map((n) => {
-      const md = moves[n];
-      if (!md) return null;
-      return { n, type: md[0], cat: md[1], power: md[2] };
-    })
-    .filter((m): m is NonNullable<typeof m> => m !== null);
+  const resolve = (names: string[]) =>
+    names
+      .map((n) => {
+        const md = moves[n];
+        if (!md) return null;
+        return { n, type: md[0], cat: md[1], power: md[2] };
+      })
+      .filter((m): m is NonNullable<typeof m> => m !== null);
+  const resolvedMoves = resolve(build.moves);
+  // mpool(採用率TOP10)があれば1v1判定用の技プールとして持たせる。工房でユーザーが
+  // 編集した仮想敵(customTargets)にはmpoolが無く、その場合は指定4技だけで判定される。
+  const pool = build.mpool && build.mpool.length ? resolve(build.mpool) : undefined;
   return {
+    pool,
     sp,
     label,
     t1: build.t1,

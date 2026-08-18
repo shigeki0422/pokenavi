@@ -7,6 +7,7 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { getHeadToHead } from '../../scripts/party-builder/matchup-static';
 import partySuggestSlugs from '../../data/party-suggest-slugs.json';
+import { MATCHUP_SEASON } from '../../consts';
 
 /**
  * 「A vs B」直接比較ページ: 使用率上位30体(targets.json)から2体を選ぶ全組み合わせ
@@ -58,7 +59,7 @@ const h2h = getHeadToHead(a.icon, b.icon);
 const psSlugSet = new Set(partySuggestSlugs as string[]);
 
 const siteUrl = 'https://pokenavi.jp';
-const title = `${a.name} vs ${b.name}【M-4 1v1判定】どちらが勝つ？対面比較`;
+const title = `${a.name} vs ${b.name}【${MATCHUP_SEASON} 1v1判定】どちらが勝つ？対面比較`;
 const description = `${a.name}(使用率${a.rank}位) vs ${b.name}(使用率${b.rank}位)の1v1対面判定。最大打点技・確定数・素早さを実数値で比較し、どちらが勝つか型別に解説（タスキ/がんじょう考慮）。`;
 const jsonLd = {
   '@context': 'https://schema.org',

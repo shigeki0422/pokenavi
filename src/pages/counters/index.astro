@@ -5,6 +5,7 @@ import path from 'node:path';
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
+import { MATCHUP_SEASON } from '../../consts';
 
 /**
  * /counters/{slug}/ (○○対策)は各ページから相互リンクせず、対象ポケモンの
@@ -29,8 +30,8 @@ const entries = targets
   .sort((a, b) => a.rank - b.rank);
 
 const siteUrl = 'https://pokenavi.jp';
-const title = `対策ランキング一覧 M-4 | 使用率上位ポケモンへの対策を種別に見る`;
-const description = `ポケモンチャンピオンズM-4 使用率上位${entries.length}種それぞれについて、1v1事前計算で有利を取れる対策ポケモンをランキング形式で紹介するページの一覧。`;
+const title = `対策ランキング一覧 ${MATCHUP_SEASON} | 使用率上位ポケモンへの対策を種別に見る`;
+const description = `ポケモンチャンピオンズ${MATCHUP_SEASON} 使用率上位${entries.length}種それぞれについて、1v1事前計算で有利を取れる対策ポケモンをランキング形式で紹介するページの一覧。`;
 ---
 
 <html lang="ja">

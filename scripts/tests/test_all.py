@@ -2520,6 +2520,50 @@ d_sv_boosted = dmg(p_sacred, p_def_boosted, "せいなるつるぎ", roll=0.5)
 d_sv_normal  = dmg(p_sacred, p_def_normal,  "せいなるつるぎ", roll=0.5)
 check("せいなるつるぎ 相手B+6ランクを無視", d_sv_boosted == d_sv_normal)
 
+# ── 天候の防御補正 × 「参照する防御能力を差し替える技」の適用順序 ──
+# 雪の氷B×1.5・砂の岩D×1.5 は「どの実数値を参照するか」が確定した後に掛ける。
+# 以前は防御実数値を選ぶ時点で掛けていたため、せいなるつるぎ/DDラリアット/サイコショック系が
+# dfs を上書きした瞬間に天候補正が消えていた（ランク変化の無視であって天候補正の無視ではない）。
+_f_hail_o = BattleField(); _f_hail_o.weather = "hail"; _f_hail_o.weather_count = 5
+_f_sand_o = BattleField(); _f_sand_o.weather = "sandstorm"; _f_sand_o.weather_count = 5
+_f_none_o = BattleField()
+
+
+def _dfs_boosted(base_poke_factory, stat, mult=1.5):
+    """天候補正後の防御実数値を手で作った対照ポケモン（天候なしで同じ値になるはず）。"""
+    p = base_poke_factory()
+    setattr(p, stat, math.floor(getattr(p, stat) * mult))
+    return p
+
+
+_atk_o = make_poke(type1="かくとう", atk_b=120)
+_atk_ps = make_poke(type1="エスパー", spatk_b=120)
+_mk_ice = lambda: make_poke(type1="こおり", def_b=100, spdef_b=100)
+_mk_rock = lambda: make_poke(type1="いわ", def_b=100, spdef_b=100)
+
+# せいなるつるぎ（相手Bランク無視技）でも雪の氷B×1.5は乗る。
+# 「天候ありの氷」と「防御実数値を手で1.5倍した氷・天候なし」が完全一致することで厳密に検証する。
+for _mv_o, _atkr_o in (("せいなるつるぎ", _atk_o), ("DDラリアット", _atk_o),
+                       ("サイコショック", _atk_ps), ("インファイト", _atk_o)):
+    _a = dmg(_atkr_o, _mk_ice(), _mv_o, roll=0.5, f=_f_hail_o)
+    _b = dmg(_atkr_o, _dfs_boosted(_mk_ice, "defense"), _mv_o, roll=0.5, f=_f_none_o)
+    check(f"雪 {_mv_o} に氷B1.5倍が乗る(実数値1.5倍と一致)", _a == _b and _a > 0, f"hail={_a} manual={_b}")
+    # 対照: 天候なしでは補正が乗らない（＝手動1.5倍版より必ずダメージが大きい）
+    _c = dmg(_atkr_o, _mk_ice(), _mv_o, roll=0.5, f=_f_none_o)
+    check(f"雪なし {_mv_o} は氷B1.5倍が乗らない", _c > _a, f"none={_c} hail={_a}")
+
+# 砂の岩D×1.5は「Dを参照する特殊技」にのみ乗る。B参照技（物理・サイコショック系）には乗らない。
+_d_sk_sand = dmg(_atk_ps, _mk_rock(), "サイコキネシス", roll=0.5, f=_f_sand_o)
+_d_sk_man = dmg(_atk_ps, _dfs_boosted(_mk_rock, "sp_defense"), "サイコキネシス", roll=0.5, f=_f_none_o)
+check("砂 特殊技に岩D1.5倍が乗る(実数値1.5倍と一致)", _d_sk_sand == _d_sk_man and _d_sk_sand > 0,
+      f"sand={_d_sk_sand} manual={_d_sk_man}")
+check("砂 物理技に岩D1.5倍は乗らない",
+      dmg(_atk_o, _mk_rock(), "インファイト", roll=0.5, f=_f_sand_o)
+      == dmg(_atk_o, _mk_rock(), "インファイト", roll=0.5, f=_f_none_o))
+check("砂 サイコショック(B参照)に岩D1.5倍は乗らない",
+      dmg(_atk_ps, _mk_rock(), "サイコショック", roll=0.5, f=_f_sand_o)
+      == dmg(_atk_ps, _mk_rock(), "サイコショック", roll=0.5, f=_f_none_o))
+
 # ── 反動技 ──
 for move_n, expected_rate, move_type in [
     ("すてみタックル", 1/3, "ノーマル"),

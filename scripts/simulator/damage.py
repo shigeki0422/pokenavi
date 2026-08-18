@@ -221,9 +221,6 @@ def calc_damage(
             dfs = min(defender.get_effective_stat("defense"), defender.defense)
         else:
             dfs = defender.get_effective_stat("defense")
-        # 雪: 氷タイプの防御×1.5
-        if effective_weather(field, defender) == "hail" and "こおり" in (defender.type1, defender.type2):
-            dfs = math.floor(dfs * 1.5)
     else:
         if def_ignores_atk_stage:
             atk = attacker.sp_attack  # 攻撃側の特攻ランク変化を無視
@@ -238,9 +235,6 @@ def calc_damage(
             dfs = min(defender.get_effective_stat("sp_defense"), defender.sp_defense)
         else:
             dfs = defender.get_effective_stat("sp_defense")
-        # 砂嵐: 岩タイプの特防×1.5
-        if effective_weather(field, defender) == "sandstorm" and "いわ" in (defender.type1, defender.type2):
-            dfs = math.floor(dfs * 1.5)
 
     # ボディプレス（自身のBをAとして使う）
     if move.name_jp == "ボディプレス":
@@ -261,9 +255,22 @@ def calc_damage(
     if move.name_jp in ("せいなるつるぎ", "DDラリアット"):
         dfs = defender.defense if not critical else min(defender.get_effective_stat("defense"), defender.defense)
 
-    # ふしぎなうろこ（状態異常時、防御実数値が1.5倍。防御参照技＝物理・サイコショック系のみ。特殊技には効かない）
+    # 参照する防御側能力が確定した後の補正。
+    # 「どの実数値を使うか」（サイコショック=相手のB／せいなるつるぎ・DDラリアット=ランク無視の素のB）
+    # の決定より後に掛ける必要がある。以前は防御実数値を選ぶ時点で天候補正を掛けていたため、
+    # せいなるつるぎ/DDラリアット/サイコショック系が dfs を上書きした瞬間に
+    # 雪の氷B×1.5・砂の岩D×1.5 が消えていた（ランク変化の無視であって天候補正の無視ではない）。
     _uses_defense = (_cat == "physical") or move.name_jp in (
         "サイコショック", "サイコブレイク", "シークレットソード", "せいなるつるぎ", "DDラリアット")
+    _def_weather = effective_weather(field, defender)
+    # 雪: 氷タイプの防御×1.5
+    if _uses_defense and _def_weather == "hail" and "こおり" in (defender.type1, defender.type2):
+        dfs = math.floor(dfs * 1.5)
+    # 砂嵐: 岩タイプの特防×1.5
+    if not _uses_defense and _def_weather == "sandstorm" and "いわ" in (defender.type1, defender.type2):
+        dfs = math.floor(dfs * 1.5)
+
+    # ふしぎなうろこ（状態異常時、防御実数値が1.5倍。防御参照技＝物理・サイコショック系のみ。特殊技には効かない）
     if defender.ability == "ふしぎなうろこ" and defender.status is not None and _uses_defense:
         dfs = math.floor(dfs * 1.5)
 

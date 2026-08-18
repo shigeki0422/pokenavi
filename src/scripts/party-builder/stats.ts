@@ -73,9 +73,13 @@ export function realStats(bs: StatArray, evs: StatArray, nature: string, level: 
   ];
 }
 
-/** こだわりスカーフ等を反映した有効素早さ。 */
+/** こだわりスカーフ等を反映した有効素早さ。
+ * 移植元: scripts/simulator/items.py get_speed_item_multiplier()。
+ * 天候依存の素早さ特性(すいすい/ようりょくそ/すながくれ)は相手側の情報が必要なため
+ * ここでは扱わない(既知の未対応。damage.ts末尾のコメント参照)。 */
 export function effectiveSpeed(speed: number, item: string): number {
   if (item === "こだわりスカーフ") return Math.floor(speed * 1.5);
+  if (item === "くろいてっきゅう") return Math.floor(speed * 0.5);
   return speed;
 }
 

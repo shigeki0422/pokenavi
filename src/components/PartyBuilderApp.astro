@@ -610,7 +610,7 @@ const I18N = I18N_ALL[lang];
   import { ALL_NATURES, NEUTRAL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, effectiveSpeed, natureDisp } from '../scripts/party-builder/stats';
   import { TYPES } from '../scripts/party-builder/typechart';
   import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx } from '../scripts/party-builder/balance';
-  import { judge1v1, judgeVsBuilds, moveBreakdown } from '../scripts/party-builder/matchup';
+  import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct } from '../scripts/party-builder/matchup';
   import { bestMove, calcDamage } from '../scripts/party-builder/damage';
   import { suggestFill, tuneForTargets } from '../scripts/party-builder/suggest';
   import { validateParty } from '../scripts/party-builder/validate';
@@ -1989,6 +1989,10 @@ const I18N = I18N_ALL[lang];
     const grp = effectiveTargets().find((g) => g.label === label);
     if (!grp) { muEdit = null; renderTargetsPanel(); return; }
     materializeCustomTarget(label);
+    // ユーザーが型を編集した場合、指定した4技を判定に使う（デフォルト型に付いている
+    // 採用率TOP10の技プールmpoolはここで捨てる）。捨てないと技を変えても判定が
+    // プール側の最大打点で決まってしまい、編集が反映されないように見える。
+    delete draft.mpool;
     draft.spec = targetBuildSpec(grp.sp, draft);
     if (bi === 'new') store.customTargets[label].push(draft);
     else store.customTargets[label][bi] = draft;
@@ -2085,7 +2089,7 @@ const I18N = I18N_ALL[lang];
       const mbDamaging = r.mb.filter((m) => m.hits != null);
       const mbChips = mbDamaging.length
         ? mbDamaging.map((m) => {
-            const hitsTxt = m.certain ? I18N.hitsFmt(m.hits) : I18N.randHitsFmt(m.hits, Math.round(m.prob));
+            const hitsTxt = m.certain ? I18N.hitsFmt(m.hits) : I18N.randHitsFmt(m.hits, fmtKoProbPct(m.prob));
             const dmgTxt = dmgRangeTxt(m.dmgLo, m.dmgHi, m.pctLo, m.pctHi);
             const mvName = tMove(m.n);
             const popIdx = mbPopData.push({ name: m.n, hitsTxt, dmgTxt }) - 1;
