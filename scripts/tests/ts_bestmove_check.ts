@@ -2,8 +2,8 @@
 // scripts/tests/test_ts_bestmove.py から esbuild + node で実行される。
 import fs from "node:fs";
 import path from "node:path";
-import { bestMove, calcDamage, simulateKO } from "../../src/scripts/party-builder/damage";
-import { bestMoveHitDetail, judge1v1 } from "../../src/scripts/party-builder/matchup";
+import { bestMove, calcDamage, fieldWeather, RECHARGE_MOVES, simulateKO } from "../../src/scripts/party-builder/damage";
+import { bestMoveHitDetail, judge1v1, moveBreakdown } from "../../src/scripts/party-builder/matchup";
 import { resolveTarget } from "../../src/scripts/party-builder/balance";
 import type { MoveDict, ResolvedBuild, TargetGroup } from "../../src/scripts/party-builder/types";
 
@@ -58,6 +58,9 @@ const push = (name: string, ok: boolean, detail = "") => results.push({ name, ok
       const koBest = simulateKO(x.b, best.move, y.b, hp, 0, { maxUses: 8 });
       for (const mv of (x.b.pool ?? x.b.moves)) {
         if (mv.cat === "status" || !mv.power) continue;
+        // リチャージ技(はかいこうせん等)は bestMove 側が候補から外している(使用後1ターン行動不能で
+        // 実消費ターンが倍になるため)。比較対象にすると常に「もっと確定数の少ない技がある」となる。
+        if (RECHARGE_MOVES.has(mv.n)) continue;
         const ko = simulateKO(x.b, mv, y.b, hp, 0, { maxUses: 8 });
         if (ko < koBest) {
           bad++;
@@ -101,6 +104,55 @@ const push = (name: string, ok: boolean, detail = "") => results.push({ name, ok
     const v = judge1v1(a, d);
     push("カイリュー→オボンアシレーヌの内訳が乱数表示(確定ではない)", det.certain === false, `hits=${det.hits} certain=${det.certain} prob=${det.prob}`);
     push("同ケースの判定行は確定3", v.myHits === 3, `myHits=${v.myHits}`);
+  }
+}
+
+// 5) 全ビルド総当たり: 技内訳が「確定n」と言うなら、画面に併記される最低乱数ダメージを
+//    n回当てれば相手HPに届いていなければならない（表示%と確定数の整合）。
+//    かつては防御側が自分の攻撃で受ける反動(ブレイブバードの与ダメ1/3・いのちのたま1/10)を
+//    毎ターンの残HP増減に混ぜていたため、「42.9〜51.2%なのに確定2」(相手が自分で削った分が
+//    こちらの技の確定数に化ける)という自己矛盾した表示になっていた。その回帰テスト。
+//    除外: マルチスケイル持ち(dmgLoは半減される1発目の値なので2発目以降は約2倍＝この不等式の
+//    対象外)、および残留ダメージで削れる側(砂・非どくのくろいヘドロ)。
+{
+  const SELF_LOWER = new Set(["りゅうせいぐん", "リーフストーム", "オーバーヒート", "サイコブースト", "ゴールドラッシュ", "ばかぢから"]);
+  let bad = 0;
+  let sample = "";
+  for (const x of builds) {
+    for (const y of builds) {
+      if (y.b.ability === "マルチスケイル") continue;
+      if (fieldWeather(x.b, y.b) === "sandstorm") continue;
+      if (y.b.item === "くろいヘドロ" && y.b.t1 !== "どく" && y.b.t2 !== "どく") continue;
+      for (const d of moveBreakdown(x.b, y.b)) {
+        if (!d.certain || d.hits == null || d.hits >= 999 || d.dmgLo == null) continue;
+        if (SELF_LOWER.has(d.n)) continue;
+        if (d.hits * d.dmgLo < Math.max(1, y.b.stats[0])) {
+          bad++;
+          if (!sample) sample = `${x.key}→${y.key}: ${d.n} ${d.dmgLo}×確定${d.hits} < HP${y.b.stats[0]}`;
+        }
+      }
+    }
+  }
+  push("「確定n」は最低乱数×n発で相手HPに届く(表示%と整合)", bad === 0, `矛盾=${bad} ${sample}`);
+}
+
+// 6) 具体例: メガミミロップ(いじっぱりA32)のとびひざげり vs アーマーガア(H205/たべのこし)。
+//    与ダメ88〜105(42.9〜51.2%)なので2発では最大でも届かない＝「確定2」になってはいけない。
+{
+  const g = targets.find((t) => t.sp === "ミミロップ");
+  const ag = targets.find((t) => t.sp === "アーマーガア");
+  if (!g || !ag) push("ミミロップ/アーマーガアのビルドが存在", false, "targets.jsonに見つからない");
+  else {
+    const mb = JSON.parse(JSON.stringify(g.builds[0]));
+    mb.moves = ["とびひざげり", "インファイト", "マッハパンチ", "ねこだまし"];
+    delete mb.mpool; // 自分の枠(ユーザーが4技を決めた側)には技プールが無い
+    const mimi = resolveTarget("ミミロップ", "メガミミロップ", g.icon, mb, moves);
+    const arma = resolveTarget("アーマーガア", "アーマーガア", ag.icon, ag.builds[0], moves);
+    const d = moveBreakdown(mimi, arma).find((m) => m.n === "とびひざげり")!;
+    const ok = d.dmgLo != null && d.hits != null && d.hits * d.dmgLo >= arma.stats[0];
+    push("メガミミロップのとびひざげりがアーマーガアに確定2にならない",
+      ok && !(d.certain && d.hits === 2),
+      `${d.dmgLo}〜${d.dmgHi} (${d.pctLo?.toFixed(1)}〜${d.pctHi?.toFixed(1)}%) ${d.certain ? "確定" : "乱数"}${d.hits} HP=${arma.stats[0]}`);
   }
 }
 

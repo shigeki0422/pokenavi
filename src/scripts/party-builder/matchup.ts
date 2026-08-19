@@ -36,20 +36,6 @@ function _scoreSym(score: number): Verdict["sym"] {
   return "×";
 }
 
-/** 反動技（与ダメの一定割合を自分が受ける）。battle.py _apply_recoil() の recoil_moves と同値。 */
-const RECOIL_FRAC: Record<string, number> = {
-  すてみタックル: 1 / 3,
-  フレアドライブ: 1 / 3,
-  ボルテッカー: 1 / 3,
-  ウェーブタックル: 1 / 3,
-  ブレイブバード: 1 / 3,
-  ウッドハンマー: 1 / 3,
-  もろはのずつき: 1 / 2,
-  ワイルドボルト: 1 / 4,
-  はめつのひかり: 1 / 2,
-};
-/** 使うと最大HPの半分を反動として受ける技。battle.py の max_hp_half_recoil と同値。 */
-const HALF_HP_RECOIL = new Set(["てっていこうせん"]);
 /** HP吸収技と吸収率。battle.py _execute_move() の DRAIN_RATES と同値。 */
 const DRAIN_RATES: Record<string, number> = {
   ギガドレイン: 0.5, メガドレイン: 0.5, すいとる: 0.5, ドレインパンチ: 0.5,
@@ -58,31 +44,30 @@ const DRAIN_RATES: Record<string, number> = {
 };
 
 /**
- * 「防御側が1ターンに自分の攻撃で受ける自傷ダメージ／吸収回復」。正=回復、負=ダメージ。
- * 1v1の打ち合いでは防御側も毎ターン最大打点技を撃ち返すため、いのちのたま反動(最大HP1/10)・
- * 反動技(与ダメの1/3等)・HP吸収技(与ダメの1/2回復)は「相手を倒すのに必要な発数」を実際に変える。
- * 例: いのちのたま持ちは3ターンで最大HPの30%を自分で削るため、確定4が確定3になり得る。
- * これらは技を撃った本人のHPに効くため _movesToKO(攻撃側→防御側) の局所情報だけでは出せず、
- * 「防御側が攻撃側に対して選ぶ最大打点技」(bestMove(defender, attacker)) から算出する。
+ * 「防御側が1ターンに自分の攻撃で得るHP吸収回復」。正=回復（0または正のみ）。
  *
- * battle.py の以下と対応: _execute_move() のいのちのたま反動／DRAIN_RATES、_apply_recoil()。
- * ただしいのちのたま反動は「1回の使用につき1回」とする（battle.py はヒットループ内にあるため
- * 連続技で回数分引かれるが、これは実ゲーム仕様と異なるPython側の既知の差異）。
- * マジックガードは反動・いのちのたま反動とも無効（実ゲーム仕様。battle.py の
- * いのちのたま処理にはマジックガード判定が無く、これもPython側の既知の差異）。
+ * 【自傷ダメージを入れない理由】かつてはここで防御側の反動技(ブレイブバード等の与ダメ1/3)・
+ * いのちのたま反動も差し引いていたが、これは技内訳ポップアップの表示を自己矛盾させていた。
+ * 例: メガミミロップ(A32)のとびひざげり vs アーマーガア(H205/たべのこし) は
+ *   与ダメ 88〜105 (42.9〜51.2%) なので2発では最大でも210-回復12=198<205 で倒せないのに、
+ *   アーマーガアが技プールから選ぶブレイブバードの反動42/ターンが毎ターン引かれるため
+ *   「確定2」と表示されていた（相手が自分で削った分が、こちらの技の確定数に化けていた）。
+ * ダメージ計算機の慣例（Showdown等）どおり、確定数に織り込む相手のHP増減は
+ * 「たべのこし/きのみ/天候などの受動的な残留効果」に限る。相手が自分の攻撃で受ける反動は、
+ * 相手がどの技を選ぶか（採用率プール由来で画面に出ない）に依存するうえ、
+ * 表示中の与ダメ%からは説明できない発数短縮を生むため対象外とする。
+ *
+ * 一方 HP吸収(ドレインパンチ等)の回復は残す。回復は確定数を「増やす」方向にしか働かないため
+ * 表示%と矛盾せず（%×発数が100%未満なのに確定、という状態を作らない）、
+ * これを無視すると吸収技持ちを倒す発数を過小評価するため。
+ * battle.py の _execute_move() DRAIN_RATES と対応。マジックガードは吸収には無関係だが、
+ * 反動を扱わなくなったので特別扱いは不要になった。
  */
 function _selfDeltaPerTurn(defender: ResolvedBuild, attacker: ResolvedBuild): number {
-  if (defender.ability === "マジックガード") return 0;
   const back = bestMove(defender, attacker);
   if (!back) return 0;
   const name = back.move.n;
   let delta = 0;
-  if (defender.item === "いのちのたま") delta -= Math.max(1, Math.floor(defender.stats[0] / 10));
-  const noRecoil = defender.ability === "いしあたま" || defender.ability === "ロックヘッド";
-  if (!noRecoil) {
-    if (HALF_HP_RECOIL.has(name)) delta -= Math.max(1, Math.floor(defender.stats[0] / 2));
-    else if (RECOIL_FRAC[name]) delta -= Math.max(1, Math.floor(back.dmg * RECOIL_FRAC[name]));
-  }
   if (DRAIN_RATES[name] && back.dmg > 0) {
     // 吸収量は「実際に与えたダメージ」に比例するため、相手の残HPを超えては吸収できない
     // （オーバーキル分は回復に乗らない）。これを入れないと、火力の高いきゅうけつ持ち等が
