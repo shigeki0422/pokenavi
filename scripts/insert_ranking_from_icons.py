@@ -9,7 +9,7 @@ from datetime import datetime, timezone
 DB = Path(__file__).parent / "pokenavi.db"
 CROP = (240, 10, 390, 135)
 
-TEMPLATE_DATE = "2026-07-03"
+TEMPLATE_DATE = "2026-08-18"
 TEMPLATE_DIR  = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{TEMPLATE_DATE}/detail")
 
 SEASON = "M-5"
@@ -83,7 +83,7 @@ TARGETS = {
     },
 }
 
-CRAWLED_DATE = "2026-08-12"  # ← 実行時に変更
+CRAWLED_DATE = "2026-08-19"  # ← 実行時に変更
 
 TARGETS["2026-07-09"] = {
     124: "ケンタロス:炎",
@@ -167,30 +167,22 @@ def extract_main_icon(rank_dir: Path) -> np.ndarray | None:
 REF_DIR = Path(__file__).parent / "icon_refs"
 
 def build_templates(conn):
-    # icon_refs/ が存在する場合はそちらを優先（クロールデータが消えても使える）
-    if REF_DIR.exists() and any(REF_DIR.glob("*.png")):
-        templates = {}
-        for ref_path in REF_DIR.glob("*.png"):
-            pokemon = ref_path.stem
-            img = cv2.imread(str(ref_path))
-            if img is not None:
-                templates[pokemon] = img
-        print(f"icon_refs から {len(templates)} 件のテンプレートを構築")
-        return templates
-
-    # フォールバック: クロールデータから構築
+    # フォールバック: クロールデータから構築（icon_refs/は2400x1080フォーマットと不一致のため使わない）
     rows = conn.execute(
         "SELECT rank, pokemon FROM pokemon_usage WHERE crawled_date=? AND season=? AND rule=? ORDER BY rank",
         (TEMPLATE_DATE, SEASON, RULE)
     ).fetchall()
     templates = {}
     for rank, pokemon in rows:
-        img_path = TEMPLATE_DIR / f"{rank:03d}" / "_c_ability_00.png"
-        if not img_path.exists():
+        for fname in ["_c_ability_00.png", "move_00.png", "_c_move_00.png"]:
+            img_path = TEMPLATE_DIR / f"{rank:03d}" / fname
+            if img_path.exists():
+                break
+        else:
             continue
         icon = crop_icon(img_path)
         if icon is not None:
-            templates[pokemon] = icon
+            templates[pokemon] = cv2.resize(icon, ICON_SIZE)
     return templates
 
 
@@ -732,6 +724,9 @@ TARGETS["2026-08-15"] = {
 TARGETS["2026-08-16"] = {}
 TARGETS["2026-08-17"] = {}
 TARGETS["2026-08-18"] = {}
+TARGETS["2026-08-19"] = {
+    200: "ツンベアー",
+}
 
 if __name__ == "__main__":
     main()
