@@ -9,8 +9,7 @@ from datetime import datetime, timezone
 DB = Path(__file__).parent / "pokenavi.db"
 CROP = (240, 10, 390, 135)
 
-TEMPLATE_DATE = "2026-08-18"
-TEMPLATE_DIR  = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{TEMPLATE_DATE}/detail")
+TEMPLATE_DATE = None  # build_templates() 内で自動決定
 
 SEASON = "M-5"
 RULE   = "single"
@@ -167,15 +166,26 @@ def extract_main_icon(rank_dir: Path) -> np.ndarray | None:
 REF_DIR = Path(__file__).parent / "icon_refs"
 
 def build_templates(conn):
-    # フォールバック: クロールデータから構築（icon_refs/は2400x1080フォーマットと不一致のため使わない）
+    # 直前の投入済み日付をDBから自動取得
+    row = conn.execute(
+        "SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule=? AND crawled_date<?",
+        (SEASON, RULE, CRAWLED_DATE)
+    ).fetchone()
+    template_date = row[0] if row and row[0] else None
+    if template_date is None:
+        print("⚠ テンプレート用の直前データなし")
+        return {}
+    template_dir = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{template_date}/detail")
+    print(f"テンプレート日付: {template_date}")
+
     rows = conn.execute(
         "SELECT rank, pokemon FROM pokemon_usage WHERE crawled_date=? AND season=? AND rule=? ORDER BY rank",
-        (TEMPLATE_DATE, SEASON, RULE)
+        (template_date, SEASON, RULE)
     ).fetchall()
     templates = {}
     for rank, pokemon in rows:
-        for fname in ["_c_ability_00.png", "move_00.png", "_c_move_00.png"]:
-            img_path = TEMPLATE_DIR / f"{rank:03d}" / fname
+        for fname in ["move_00.png", "_c_move_00.png", "_c_ability_00.png"]:
+            img_path = template_dir / f"{rank:03d}" / fname
             if img_path.exists():
                 break
         else:
