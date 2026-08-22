@@ -1,9 +1,9 @@
 ---
 title: 'ユキノオー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのユキノオー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率125位。'
+description: 'ポケモンチャンピオンズのユキノオー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率126位。'
 pokemonName: 'ユキノオー'
 dexNumber: 460
-usageRank: 125
+usageRank: 126
 pubDate: '2026-08-10'
 draft: false
 
@@ -18,7 +18,7 @@ draft: false
       <img src="/images/types/type-14-ice.png" alt="こおり" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.460</strong>　／　使用率 <strong style="color:#dc2626">125位</strong>
+      全国図鑑 <strong>No.460</strong>　／　使用率 <strong style="color:#dc2626">126位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-08-10</div>
   </div>
