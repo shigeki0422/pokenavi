@@ -1665,5 +1665,59 @@
         "matchKey": "ハッサム",
         "dex": 212,
         "form": "00"
+    },
+    "gengar-analysis-m5": {
+        "name": "ゲンガー",
+        "rank": 19,
+        "types": [
+            "ゴースト",
+            "どく"
+        ],
+        "matchKey": "ゲンガー",
+        "dex": 94,
+        "form": "00"
+    },
+    "greninja-analysis-m5": {
+        "name": "ゲッコウガ",
+        "rank": 18,
+        "types": [
+            "みず",
+            "あく"
+        ],
+        "matchKey": "ゲッコウガ",
+        "dex": 658,
+        "form": "00"
+    },
+    "hydreigon-analysis-m5": {
+        "name": "サザンドラ",
+        "rank": 15,
+        "types": [
+            "あく",
+            "ドラゴン"
+        ],
+        "matchKey": "サザンドラ",
+        "dex": 635,
+        "form": "00"
+    },
+    "raichu-analysis-m5": {
+        "name": "ライチュウ",
+        "rank": 16,
+        "types": [
+            "でんき"
+        ],
+        "matchKey": "ライチュウ",
+        "dex": 26,
+        "form": "00"
+    },
+    "samurott-analysis-m5": {
+        "name": "ヒスイダイケンキ",
+        "rank": null,
+        "types": [
+            "みず",
+            "あく"
+        ],
+        "matchKey": "ヒスイダイケンキ",
+        "dex": 503,
+        "form": "99"
     }
 }

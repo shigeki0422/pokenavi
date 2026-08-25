@@ -56,8 +56,10 @@ const I18N_ALL = {
     muLegend: '複数の想定型を踏まえたポケモン単位の相性。◎有利 ○やや有利 △반반 ▲やや不利 ×不利。<b>*</b>＝型により有利不利が変化。<b>セルをクリックで判定根拠</b>（与被ダメ・確定数・素早さ）。',
     atkLegend: '各味方が<b>そのタイプを攻撃するときの最大倍率</b>。<b class="ao-good">×2</b>=抜群で通る <b class="ao-bad">½/0</b>=通りにくい。<b>セルをクリックで技別の倍率</b>。',
     defLegend: '各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。受けの穴が一目で分かります。',
-    fireLegend: n => `各味方の<b>最大打点技</b>で上位${n}体を落とす手数（実数値・持ち物込み）。<b class="ko1">確1</b>=確定1発 <b class="ko2">確2</b>。<b>確2〜確3</b>のような幅は<b>相手の型（耐久振り等）による差</b>。<b>*</b>=ばけのかわ/がんじょう/タスキ考慮。<b>セルをクリックで技×型の内訳</b>。`,
     speedLegend: '味方（左・素早さ順）が上位30体より速いか（スカーフ込み）。<b class="bg-cc">◎</b>＝相手の全型より速い <b class="bg-cn">△</b>＝型次第で前後 <b class="bg-cx">×</b>＝全型より遅い。<b>セルをクリックで相手型別Sの内訳</b>。',
+    legendSummary: '表の見方',
+    multiAxisNotice: '⚠ 軸を2件以上指定すると必ずライブ計算になり、10〜20秒（他ユーザーの計算待ちも含む）かかります。',
+    elapsedSec: n => `経過 ${n}秒`,
     noArchData: '評価データがありません', archLegend: 'いくつかの構築に対してAI同士の対戦シミュレーションから想定勝率を算出。',
     thOpp: '対戦相手', thWr: '想定勝率', thRec: 'おすすめ選出',
     guideEmptyMsg: 'この軸の選出ガイド（相手構築ごとのおすすめ3匹）はまだ計算されていません。',
@@ -120,8 +122,10 @@ const I18N_ALL = {
     muLegend: 'Pokémon-level matchup across multiple assumed sets. ◎ favorable ○ slightly favorable △ even ▲ slightly unfavorable × unfavorable. <b>*</b> = favorability varies by set. <b>Click a cell for the reasoning</b> (damage dealt/taken, KO count, speed).',
     atkLegend: 'The <b>highest multiplier</b> each of your Pokémon gets when attacking that type. <b class="ao-good">×2</b> = super effective <b class="ao-bad">½/0</b> = doesn\'t hit well. <b>Click a cell for the per-move breakdown</b>.',
     defLegend: 'The multiplier each of your Pokémon takes from that type. <b class="df-w1">×2/×4</b> = weakness <b class="df-r1">½ or less</b> = resisted <b class="df-imm">0</b> = immune. Spot your defensive gaps at a glance.',
-    fireLegend: n => `Hits needed for each ally's <b>strongest move</b> to KO the top ${n} (using real stats and items). <b class="ko1">1HKO</b> <b class="ko2">2HKO</b>. A range like <b>2HKO–3HKO</b> reflects <b>differences in the opponent's set</b> (bulk investment etc). <b>*</b> = accounts for Disguise/Sturdy/Focus Sash. <b>Click a cell for the move × set breakdown</b>.`,
     speedLegend: 'Whether your team (left, sorted by Speed) outspeeds the top 30 (Scarf included). <b class="bg-cc">◎</b> = faster than every set <b class="bg-cn">△</b> = varies by set <b class="bg-cx">×</b> = slower than every set. <b>Click a cell for the per-set Speed breakdown</b>.',
+    legendSummary: 'How to read this table',
+    multiAxisNotice: '⚠ Two or more cores always trigger a live calculation, taking 10–20 seconds (including other users\' queued requests).',
+    elapsedSec: n => `Elapsed ${n}s`,
     noArchData: 'No evaluation data available', archLegend: 'Estimated win rate from AI-vs-AI battle simulations against several team builds.',
     thOpp: 'Opponent', thWr: 'Est. win rate', thRec: 'Recommended picks',
     guideEmptyMsg: 'The selection guide for this core (recommended trio per opposing team) hasn\'t been calculated yet.',
@@ -184,8 +188,10 @@ const I18N_ALL = {
     muLegend: '여러 예상 타입을 고려한 포켓몬 단위 상성. ◎유리 ○약간유리 △반반 ▲약간불리 ×불리. <b>*</b>＝타입에 따라 유불리가 달라짐. <b>셀 클릭 시 판정 근거</b>（주는/받는 대미지·확정타·스피드）를 확인할 수 있습니다.',
     atkLegend: '각 아군이 <b>해당 타입을 공격할 때의 최대 배율</b>. <b class="ao-good">×2</b>=효과가 굉장함 <b class="ao-bad">½/0</b>=잘 통하지 않음. <b>셀 클릭 시 기술별 배율</b>을 확인할 수 있습니다.',
     defLegend: '각 아군이 <b>해당 타입 기술을 받을 때의 피격 배율</b>. <b class="df-w1">×2/×4</b>=약점 <b class="df-r1">½ 이하</b>=반감 <b class="df-imm">0</b>=무효. 방어 취약점을 한눈에 확인할 수 있습니다.',
-    fireLegend: n => `각 아군의 <b>최대 위력 기술</b>로 상위 ${n}마리를 쓰러뜨리는 데 필요한 타수（실수치・지닌물건 반영）. <b class="ko1">확정1타</b>=1타 확정 <b class="ko2">확정2타</b>. <b>확정2~3타</b> 같은 범위는 <b>상대 타입（내구 분배 등）에 따른 차이</b>입니다. <b>*</b>=화신의 모습/옹골참/타슈 고려. <b>셀 클릭 시 기술×타입별 상세</b>를 확인할 수 있습니다.`,
     speedLegend: '아군（왼쪽·스피드 순）이 상위 30마리보다 빠른지（스카프 포함）. <b class="bg-cc">◎</b>＝상대의 모든 타입보다 빠름 <b class="bg-cn">△</b>＝타입에 따라 달라짐 <b class="bg-cx">×</b>＝모든 타입보다 느림. <b>셀 클릭 시 상대 타입별 스피드 상세</b>를 확인할 수 있습니다.',
+    legendSummary: '표 보는 법',
+    multiAxisNotice: '⚠ 축을 2개 이상 지정하면 반드시 라이브 계산이 되어 10~20초（다른 사용자의 대기 포함）가 걸립니다.',
+    elapsedSec: n => `경과 ${n}초`,
     noArchData: '평가 데이터가 없습니다', archLegend: '여러 구성에 대해 AI 간 대전 시뮬레이션으로 예상 승률을 산출했습니다.',
     thOpp: '상대', thWr: '예상 승률', thRec: '추천 선출',
     guideEmptyMsg: '이 축의 선출 가이드（상대 구성별 추천 3마리）는 아직 계산되지 않았습니다.',
@@ -254,6 +260,7 @@ const I18N = I18N_ALL[lang];
     <div class="row" style="margin-top:.6em">
       <button id="go" class="btn">{I18N.go}</button>
     </div>
+    <div id="ps-multi-notice" class="ps-notice" style="display:none">{I18N.multiAxisNotice}</div>
     <div id="status" class="muted" style="margin-top:.5em"></div>
   </div>
   <div id="out"></div>
@@ -348,8 +355,9 @@ const I18N = I18N_ALL[lang];
   .mtx-rowh .mtx-name{margin-top:0;text-align:left}
 
   /* 詳細タブ */
-  .tabbar{display:flex;flex-wrap:wrap;gap:4px;border-bottom:2px solid rgb(var(--gray-light));margin-top:.7em}
-  .tb{border:none;background:none;padding:.5em .8em;font-size:.8rem;font-weight:700;color:rgb(var(--gray));cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--font-atkinson);border-radius:6px 6px 0 0}
+  .tabbar{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:4px;border-bottom:2px solid rgb(var(--gray-light));margin-top:.7em;position:sticky;top:var(--ps-sticky-top,0px);background:#fff;z-index:5}
+  .tabbar::-webkit-scrollbar{display:none}
+  .tb{border:none;background:none;padding:.5em .8em;font-size:.8rem;font-weight:700;color:rgb(var(--gray));cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--font-atkinson);border-radius:6px 6px 0 0;white-space:nowrap;flex-shrink:0}
   .tb:hover{background:#f8fafc;color:rgb(var(--gray-dark))}
   .tb.active{color:var(--accent);border-bottom-color:var(--accent)}
   .tb b{color:inherit;font-weight:800}
@@ -395,7 +403,9 @@ const I18N = I18N_ALL[lang];
   table.mtx th.mtx-stick .mtx-rowh .mtx-ico{flex-shrink:0}
   table.mtx th.mtx-stick .mtx-name{white-space:normal;word-break:break-all;line-height:1.05;flex:1;min-width:0}
   table.mtx th.mtx-corner.mtx-stick{z-index:3}
+  table.mtx th.th-hole{background:#fee2e2;border-radius:5px}
   table.mtx th.th-hole .mtx-name{color:#dc2626}
+  .mtx-tname{font-size:.52rem;line-height:1.05;color:rgb(var(--gray-dark));white-space:nowrap;margin-top:1px;font-weight:600}
   table.dtl.arch td{vertical-align:middle}
   .arch-lb{font-weight:700;font-size:.82rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:.4em}
   .advbar{width:100px;height:12px;border-radius:6px;background:#eef2f7;overflow:hidden;display:inline-flex;vertical-align:middle}
@@ -488,20 +498,15 @@ const I18N = I18N_ALL[lang];
   .gd-alt{flex-basis:100%;font-size:.72rem;color:#b45309;padding-left:1.2em}
   .advfill.sp-maybe{background:#a7f3d0}
   .sp-maybe-t{color:#0d9488;font-weight:700}
-  table.mtx td.sp-win{background:#dcfce7;color:#15803d}
-  table.mtx td.sp-may{background:#fef9c3;color:#a16207}
-  table.mtx td.sp-lose{background:#f1f5f9;color:#94a3b8}
-  .mtx-legend b.sp-win{background:#dcfce7;color:#15803d}
-  .mtx-legend b.sp-may{background:#fef9c3;color:#a16207}
-  .mtx-legend b.sp-lose{background:#f1f5f9;color:#64748b}
   .sp-val{font-size:.56rem;font-weight:800;color:var(--accent);white-space:nowrap}
-  table.mtx td.fire-cell,table.mtx td.sp-cell,table.mtx td.mu-cell,table.mtx td.at-cell{cursor:pointer}
-  table.mtx td.fire-cell:hover,table.mtx td.sp-cell:hover,table.mtx td.mu-cell:hover,table.mtx td.at-cell:hover{outline:2px solid var(--accent);outline-offset:-2px}
+  table.mtx td.sp-cell,table.mtx td.mu-cell,table.mtx td.at-cell{cursor:pointer}
+  table.mtx td.sp-cell:hover,table.mtx td.mu-cell:hover,table.mtx td.at-cell:hover{outline:2px solid var(--accent);outline-offset:-2px}
   .mu-dep{color:#7c3aed;font-weight:900;font-size:.6rem;vertical-align:2px}
   /* 詳細ポップアップ */
   .pop-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1em}
   .pop-card{background:#fff;border-radius:14px;box-shadow:0 12px 48px rgba(0,0,0,.25);max-width:560px;width:100%;max-height:82vh;overflow:auto;padding:1.1em 1.2em;position:relative}
-  .pop-x{position:absolute;top:.6em;right:.7em;background:none;border:none;font-size:1.1rem;color:rgb(var(--gray));cursor:pointer;line-height:1}
+  .pop-x{position:absolute;top:.15em;right:.15em;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;font-size:1.1rem;color:rgb(var(--gray));cursor:pointer;line-height:1;padding:0}
+  html.ps-scroll-lock,html.ps-scroll-lock body{overflow:hidden}
   .pop-x:hover{color:#dc2626}
   .pop-hd{display:flex;align-items:center;gap:.4em;font-weight:800;font-size:.95rem;margin-bottom:.2em}
   .pop-hd img{width:30px;height:30px;object-fit:contain}
@@ -547,6 +552,32 @@ const I18N = I18N_ALL[lang];
   .soon-tag{display:inline-block;background:#e2e8f0;color:#64748b;font-size:.58rem;font-weight:800;border-radius:9999px;padding:.05em .5em;margin-left:.35em;vertical-align:1px}
   .soon-box{text-align:center;padding:2em 1em;color:rgb(var(--gray))}
   .soon-badge{display:inline-block;background:#eef2ff;color:#3730a3;font-weight:800;font-size:.9rem;border-radius:9999px;padding:.35em 1.1em;margin-bottom:.6em}
+
+  /* 複数軸の事前注意書き・エラー表示 */
+  .ps-notice{font-size:.78rem;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:.5em .7em;margin-top:.5em}
+  .ps-err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:.9em 1em;font-size:.85rem;font-weight:700}
+  .ps-elapsed{font-size:.72rem;color:rgb(var(--gray))}
+
+  /* (A1) 提案カードのアコーディオン */
+  .hd.sug-toggle{cursor:pointer}
+  .sug-chev{color:rgb(var(--gray));font-weight:800;margin-left:auto;margin-right:.4em}
+  .card.sug.collapsed .sug-body{display:none}
+
+  /* (A2/C7) 凡例の折りたたみ(details化。デスクトップは常時展開) */
+  .mtx-legend-sum{cursor:pointer;font-size:.72rem;font-weight:700;color:var(--accent);margin-bottom:.3em;list-style:revert}
+  @media (min-width:641px){ .mtx-legend-sum{display:none} }
+
+  /* (A4) 横スクロールヒント */
+  .mg-wrap{position:relative}
+  .mg-hint{position:absolute;top:.4em;right:0;bottom:2px;width:36px;pointer-events:none;background:linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,.96) 55%);display:flex;align-items:center;justify-content:flex-end;padding-right:2px;font-weight:900;color:var(--accent);font-size:.9rem;opacity:1;transition:opacity .25s}
+  .mg-wrap.mg-scrolled .mg-hint{opacity:0}
+
+  /* スマホ幅(パーティ工房のブレークポイントに合わせる) */
+  @media (max-width:640px){
+    .iconrow{grid-template-columns:repeat(3,1fr)}
+    .tb{padding:.75em .9em;min-height:40px;box-sizing:border-box;display:inline-flex;align-items:center}
+    table.mtx td{min-width:42px;padding:.4em .3em}
+  }
 </style>
 
 <script is:inline define:vars={{ ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, preCoreLabel, preCoreLabelDisplay, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
@@ -568,8 +599,10 @@ const I18N = I18N_ALL[lang];
       muLegend: '複数の想定型を踏まえたポケモン単位の相性。◎有利 ○やや有利 △반반 ▲やや不利 ×不利。<b>*</b>＝型により有利不利が変化。<b>セルをクリックで判定根拠</b>（与被ダメ・確定数・素早さ）。',
       atkLegend: '各味方が<b>そのタイプを攻撃するときの最大倍率</b>。<b class="ao-good">×2</b>=抜群で通る <b class="ao-bad">½/0</b>=通りにくい。<b>セルをクリックで技別の倍率</b>。',
       defLegend: '各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。受けの穴が一目で分かります。',
-      fireLegend: n => `各味方の<b>最大打点技</b>で上位${n}体を落とす手数（実数値・持ち物込み）。<b class="ko1">確1</b>=確定1発 <b class="ko2">確2</b>。<b>確2〜確3</b>のような幅は<b>相手の型（耐久振り等）による差</b>。<b>*</b>=ばけのかわ/がんじょう/タスキ考慮。<b>セルをクリックで技×型の内訳</b>。`,
       speedLegend: '味方（左・素早さ順）が上位30体より速いか（スカーフ込み）。<b class="bg-cc">◎</b>＝相手の全型より速い <b class="bg-cn">△</b>＝型次第で前後 <b class="bg-cx">×</b>＝全型より遅い。<b>セルをクリックで相手型別Sの内訳</b>。',
+      legendSummary: '表の見方',
+      multiAxisNotice: '⚠ 軸を2件以上指定すると必ずライブ計算になり、10〜20秒（他ユーザーの計算待ちも含む）かかります。',
+      elapsedSec: n => `経過 ${n}秒`,
       noArchData: '評価データがありません', archLegend: 'いくつかの構築に対してAI同士の対戦シミュレーションから想定勝率を算出。',
       thOpp: '対戦相手', thWr: '想定勝率', thRec: 'おすすめ選出',
       guideEmptyMsg: 'この軸の選出ガイド（相手構築ごとのおすすめ3匹）はまだ計算されていません。',
@@ -641,8 +674,10 @@ const I18N = I18N_ALL[lang];
       muLegend: 'Pokémon-level matchup across multiple assumed sets. ◎ favorable ○ slightly favorable △ even ▲ slightly unfavorable × unfavorable. <b>*</b> = favorability varies by set. <b>Click a cell for the reasoning</b> (damage dealt/taken, KO count, speed).',
       atkLegend: 'The <b>highest multiplier</b> each of your Pokémon gets when attacking that type. <b class="ao-good">×2</b> = super effective <b class="ao-bad">½/0</b> = doesn\'t hit well. <b>Click a cell for the per-move breakdown</b>.',
       defLegend: 'The multiplier each of your Pokémon takes from that type. <b class="df-w1">×2/×4</b> = weakness <b class="df-r1">½ or less</b> = resisted <b class="df-imm">0</b> = immune. Spot your defensive gaps at a glance.',
-      fireLegend: n => `Hits needed for each ally's <b>strongest move</b> to KO the top ${n} (using real stats and items). <b class="ko1">1HKO</b> <b class="ko2">2HKO</b>. A range like <b>2HKO–3HKO</b> reflects <b>differences in the opponent's set</b> (bulk investment etc). <b>*</b> = accounts for Disguise/Sturdy/Focus Sash. <b>Click a cell for the move × set breakdown</b>.`,
       speedLegend: 'Whether your team (left, sorted by Speed) outspeeds the top 30 (Scarf included). <b class="bg-cc">◎</b> = faster than every set <b class="bg-cn">△</b> = varies by set <b class="bg-cx">×</b> = slower than every set. <b>Click a cell for the per-set Speed breakdown</b>.',
+      legendSummary: 'How to read this table',
+      multiAxisNotice: '⚠ Two or more cores always trigger a live calculation, taking 10–20 seconds (including other users\' queued requests).',
+      elapsedSec: n => `Elapsed ${n}s`,
       noArchData: 'No evaluation data available', archLegend: 'Estimated win rate from AI-vs-AI battle simulations against several team builds.',
       thOpp: 'Opponent', thWr: 'Est. win rate', thRec: 'Recommended picks',
       guideEmptyMsg: 'The selection guide for this core (recommended trio per opposing team) hasn\'t been calculated yet.',
@@ -714,8 +749,10 @@ const I18N = I18N_ALL[lang];
       muLegend: '여러 예상 타입을 고려한 포켓몬 단위 상성. ◎유리 ○약간유리 △반반 ▲약간불리 ×불리. <b>*</b>＝타입에 따라 유불리가 달라짐. <b>셀 클릭 시 판정 근거</b>（주는/받는 대미지·확정타·스피드）를 확인할 수 있습니다.',
       atkLegend: '각 아군이 <b>해당 타입을 공격할 때의 최대 배율</b>. <b class="ao-good">×2</b>=효과가 굉장함 <b class="ao-bad">½/0</b>=잘 통하지 않음. <b>셀 클릭 시 기술별 배율</b>을 확인할 수 있습니다.',
       defLegend: '각 아군이 <b>해당 타입 기술을 받을 때의 피격 배율</b>. <b class="df-w1">×2/×4</b>=약점 <b class="df-r1">½ 이하</b>=반감 <b class="df-imm">0</b>=무효. 방어 취약점을 한눈에 확인할 수 있습니다.',
-      fireLegend: n => `각 아군의 <b>최대 위력 기술</b>로 상위 ${n}마리를 쓰러뜨리는 데 필요한 타수（실수치・지닌물건 반영）. <b class="ko1">확정1타</b>=1타 확정 <b class="ko2">확정2타</b>. <b>확정2~3타</b> 같은 범위는 <b>상대 타입（내구 분배 등）에 따른 차이</b>입니다. <b>*</b>=화신의 모습/옹골참/타슈 고려. <b>셀 클릭 시 기술×타입별 상세</b>를 확인할 수 있습니다.`,
       speedLegend: '아군（왼쪽·스피드 순）이 상위 30마리보다 빠른지（스카프 포함）. <b class="bg-cc">◎</b>＝상대의 모든 타입보다 빠름 <b class="bg-cn">△</b>＝타입에 따라 달라짐 <b class="bg-cx">×</b>＝모든 타입보다 느림. <b>셀 클릭 시 상대 타입별 스피드 상세</b>를 확인할 수 있습니다.',
+      legendSummary: '표 보는 법',
+      multiAxisNotice: '⚠ 축을 2개 이상 지정하면 반드시 라이브 계산이 되어 10~20초（다른 사용자의 대기 포함）가 걸립니다.',
+      elapsedSec: n => `경과 ${n}초`,
       noArchData: '평가 데이터가 없습니다', archLegend: '여러 구성에 대해 AI 간 대전 시뮬레이션으로 예상 승률을 산출했습니다.',
       thOpp: '상대', thWr: '예상 승률', thRec: '추천 선출',
       guideEmptyMsg: '이 축의 선출 가이드（상대 구성별 추천 3마리）는 아직 계산되지 않았습니다.',
@@ -899,16 +936,26 @@ const I18N = I18N_ALL[lang];
   }
 
   const col = c => ({'◎':'bg-cc','○':'bg-cb','△':'bg-cn','▲':'bg-cw','×':'bg-cx'}[c]||'bg-cn');
+  /** (A2) 長文凡例は<details>化してスマホでは折りたたむ(デスクトップはCSSで常時展開)。 */
+  function legendBox(text){
+    return `<details class="mtx-legend-det"><summary class="mtx-legend-sum">${esc(I18N.legendSummary)}</summary><div class="mtx-legend"><span>${text}</span></div></details>`;
+  }
+  /** (A4) 横スクロール可能な相性表をラップし、右端にフェード+矢印ヒントを付ける(初回スクロールで消える)。 */
+  function mgWrap(tableHtml){
+    return `<div class="mg-wrap"><div class="mg">${tableHtml}</div><div class="mg-hint" aria-hidden="true">→</div></div>`;
+  }
   function matchupHtml(res){
     const mu = res.matchup; if(!mu) return '';
-    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + mu.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(tPoke(t.label))}</div></th>`).join('') + `</tr>`;
+    // (A4) 味方の誰も◎/○を取れない相手列(穴)を強調する
+    const holeCols = mu.tops.map((t,j) => !mu.rows.some(rw => rw.cells[j] && (rw.cells[j].v==='◎'||rw.cells[j].v==='○')));
+    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + mu.tops.map((t,j)=>`<th class="${holeCols[j]?'th-hole':''}">${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(tPoke(t.label))}</div></th>`).join('') + `</tr>`;
     const rows = mu.rows.map(rw=>{
       const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(rw.mon,'mtx-ico')}<div class="mtx-name">${esc(tPoke(rw.mon))}</div></div></th>`;
       const cells = rw.cells.map((c,j)=>`<td class="${col(c.v)} mu-cell" data-mon="${esc(rw.mon)}" data-opp="${esc(mu.tops[j].sp)}">${c.v}${c.dep?'<span class="mu-dep">*</span>':''}</td>`).join('');
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
-    return `<div class="mtx-legend"><span>${I18N.muLegend}</span></div>
-      <div class="mg"><table class="mtx">${head}${rows}</table></div>`;
+    return `${legendBox(I18N.muLegend)}
+      ${mgWrap(`<table class="mtx">${head}${rows}</table>`)}`;
   }
   function typeIcoByName(t){ const e=TYPEICON[t]; return e?`<img class="dtl-ico" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${esc(t)}">`:''; }
   function memIcons(list){ return list&&list.length ? `<span class="dtl-mem">${list.map(n=>icoImg(n,'')).join('')}</span>` : ''; }
@@ -921,9 +968,10 @@ const I18N = I18N_ALL[lang];
   function _typeMatrix(res, corner, cellFn, legend){
     const tm = (res.details||{}).typematrix; if(!tm) return '';
     const mem = res.mons;
-    const head = `<tr><th class="mtx-corner mtx-stick">${corner}</th>` + tm.rows.map(r=>`<th title="${esc(r.type)}">${typeIcoByName(r.type)}</th>`).join('') + `</tr>`;
+    // (A2) titleだけに頼らず短いタイプ名を併記する(タッチ端末でも判別可能に)
+    const head = `<tr><th class="mtx-corner mtx-stick">${corner}</th>` + tm.rows.map(r=>`<th title="${esc(r.type)}">${typeIcoByName(r.type)}<div class="mtx-tname">${esc(tType(r.type))}</div></th>`).join('') + `</tr>`;
     const rows = mem.map((m,mi)=>`<tr>${memRowHead(m)}${tm.rows.map(r=>cellFn(r.cells[mi], m, r.type)).join('')}</tr>`).join('');
-    return `${legend}<div class="mg"><table class="mtx">${head}${rows}</table></div>`;
+    return `${legend}${mgWrap(`<table class="mtx">${head}${rows}</table>`)}`;
   }
   function attackTypeHtml(res){
     const cell = (c, mon, type)=>{
@@ -932,13 +980,11 @@ const I18N = I18N_ALL[lang];
       const cls = mult==null?'ao-none':mult>=2?'ao-good':mult===1?'ao-neu':'ao-bad';
       return `<td class="${cls} at-cell" data-mon="${esc(mon.name)}" data-type="${esc(type)}">${inner}</td>`;
     };
-    return _typeMatrix(res, I18N.selfVsAtk, cell,
-      `<div class="mtx-legend"><span>${I18N.atkLegend}</span></div>`);
+    return _typeMatrix(res, I18N.selfVsAtk, cell, legendBox(I18N.atkLegend));
   }
   function defenseTypeHtml(res){
     const cell = c=>`<td class="${DEFC(c.def)}">${DEFG(c.def)||'・'}</td>`;
-    return _typeMatrix(res, I18N.selfVsHit, cell,
-      `<div class="mtx-legend"><span>${I18N.defLegend}</span></div>`);
+    return _typeMatrix(res, I18N.selfVsHit, cell, legendBox(I18N.defLegend));
   }
 
   function sugHtml(res, i){
@@ -962,14 +1008,29 @@ const I18N = I18N_ALL[lang];
         <button class="tb" data-i="${i}" data-t="arch">${I18N.tabArch}</button>
         <button class="tb" data-i="${i}" data-t="guide">${I18N.tabGuide}${(res.guide&&res.guide.length)?'':`<span class="soon-tag">${I18N.soon}</span>`}</button>
       </div>`;
-    return `<div class="card sug" data-sug="${i}">
-      <div class="hd"><span>${I18N.suggestion(i+1)}</span><button type="button" class="pb-btn-sub ps-import-btn">${I18N.saveToBuilder}</button></div>
+    const collapsed = i !== 0;
+    return `<div class="card sug${collapsed?' collapsed':''}" data-sug="${i}">
+      <div class="hd sug-toggle" data-i="${i}"><span>${I18N.suggestion(i+1)}</span><span class="sug-chev" aria-hidden="true">${collapsed?'▾':'▴'}</span><button type="button" class="pb-btn-sub ps-import-btn">${I18N.saveToBuilder}</button></div>
       ${st}
       <div class="iconrow">${tabs}</div>
-      <div class="detail" id="det-${i}">${detailHtml(res.mons[0])}</div>
-      ${tbar}
-      <div class="pane" id="pane-${i}">${attackTypeHtml(res)}</div>
+      <div class="sug-body">
+        <div class="detail" id="det-${i}">${detailHtml(res.mons[0])}</div>
+        ${tbar}
+        <div class="pane" id="pane-${i}">${attackTypeHtml(res)}</div>
+      </div>
     </div>`;
+  }
+  function toggleSug(hd){
+    const card = hd.closest('.sug'); if(!card) return;
+    const collapsed = card.classList.toggle('collapsed');
+    const chev = hd.querySelector('.sug-chev'); if(chev) chev.textContent = collapsed?'▾':'▴';
+    if(!collapsed){
+      // 折りたたみ中はdisplay:noneでscrollWidth/clientWidthが0になり、
+      // 横スクロールヒントの判定(initMgHints)が不正確なまま済んでしまうため、
+      // 展開時に判定をやり直す。
+      card.querySelectorAll('.mg-wrap').forEach(w=>{ w.removeAttribute('data-mg-init'); w.classList.remove('mg-scrolled'); });
+      initMgHints();
+    }
   }
   function archetypeHtml(res){
     const a = res.archetypes; if(!a||!a.length) return `<div class="muted">${I18N.noArchData}</div>`;
@@ -1139,19 +1200,6 @@ const I18N = I18N_ALL[lang];
     }
     return html + `</div>`;
   }
-  function firepowerHtml(res){
-    const fp = res.firepower; if(!fp) return '';
-    const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + fp.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(tPoke(t.label))}</div></th>`).join('') + `</tr>`;
-    const rows = fp.rows.map(r=>{
-      const cells = r.cells.map((c,j)=>{
-        const tip = I18N.cellTip + (c.move?` (${I18N.assumedMove} ${tMove(c.move)})`:'');
-        return `<td class="${c.cls} fire-cell" data-mon="${esc(r.mon)}" data-opp="${esc(fp.tops[j].sp)}" title="${esc(tip)}">${esc(tKo(c.lab))}${c.note?'<span class="ko-note">*</span>':''}</td>`;
-      }).join('');
-      return `<tr>${memRowHead({name:r.mon})}${cells}</tr>`;
-    }).join('');
-    return `<div class="mtx-legend"><span>${I18N.fireLegend(30)}</span></div>
-      <div class="mg"><table class="mtx">${head}${rows}</table></div>`;
-  }
   const SPSYM = {win:'◎', may:'△', lose:'×'};
   function speedHtml(res){
     const sp = res.speed; if(!sp) return '';
@@ -1161,8 +1209,8 @@ const I18N = I18N_ALL[lang];
       const cells = r.cells.map((c,j)=>`<td class="${col(SPSYM[c])} sp-cell" data-mon="${esc(r.mon)}" data-opp="${esc(sp.tops[j].sp)}">${SPSYM[c]}</td>`).join('');
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
-    return `<div class="mtx-legend"><span>${I18N.speedLegend}</span></div>
-      <div class="mg"><table class="mtx">${head}${rows}</table></div>`;
+    return `${legendBox(I18N.speedLegend)}
+      ${mgWrap(`<table class="mtx">${head}${rows}</table>`)}`;
   }
   function paneHtml(res, t, i){
     if(t==='deftype') return defenseTypeHtml(res);
@@ -1173,9 +1221,13 @@ const I18N = I18N_ALL[lang];
     return attackTypeHtml(res);
   }
 
-  function popShow(html){ document.getElementById('pop-body').innerHTML=html; document.getElementById('popup').style.display='flex'; }
-  function popHide(){ document.getElementById('popup').style.display='none'; }
+  function popShow(html){ document.getElementById('pop-body').innerHTML=html; document.getElementById('popup').style.display='flex'; document.documentElement.classList.add('ps-scroll-lock'); }
+  function popHide(){ document.getElementById('popup').style.display='none'; document.documentElement.classList.remove('ps-scroll-lock'); }
   function suggOf(el){ const c=el.closest('.sug'); return c?LAST[+c.dataset.sug]:null; }
+  /** (C7) 同一セルの再タップは即座に再表示できるよう、種別+specs+対象で結果をキャッシュする。
+   * specsは提案ごとに固定なので同一提案内での再タップのみキーが一致する。 */
+  const _detailCache = new Map();
+  function _cacheKey(kind, specs, a, b){ return kind+'|'+(specs||[]).join(',')+'|'+a+'|'+(b||''); }
   function fireDetailHtml(d){
     const cols = d.cols.map(c=>`<th>${I18N.thVariant(c.idx)}<span class="pop-types">${typeIcoByName(c.t1)}${c.t2?typeIcoByName(c.t2):''}</span><span class="pop-col-sub">${esc(tItem(c.item))}<br>${esc(c.ev)}<br>${esc(tAbil(c.ability))}</span></th>`).join('');
     const rows = d.rows.map(r=>{
@@ -1222,19 +1274,25 @@ const I18N = I18N_ALL[lang];
   }
   async function openAtkDetail(el){
     const res = suggOf(el); if(!res) return;
+    const key = _cacheKey('atk_detail', res.specs, el.dataset.mon, el.dataset.type);
+    if(_detailCache.has(key)){ popShow(atkDetailHtml(_detailCache.get(key))); return; }
     popShow(`<div class="muted" style="padding:1em">${I18N.calculating}</div>`);
     try{
       const d = await fetch(API+'/atk_detail', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({specs:res.specs, mon:el.dataset.mon, type:el.dataset.type})}).then(r=>r.json());
+      _detailCache.set(key, d);
       popShow(atkDetailHtml(d));
     }catch(e){ popShow(`<div class="muted" style="padding:1em">${I18N.fetchFailed}</div>`); }
   }
   async function openDetail(el, kind){
     const res = suggOf(el); if(!res) return;
     const body = {specs:res.specs, mon:el.dataset.mon, opp:el.dataset.opp};
+    const render = {fire_detail:fireDetailHtml, speed_detail:speedDetailHtml, matchup_detail:matchupDetailHtml}[kind];
+    const key = _cacheKey(kind, res.specs, el.dataset.mon, el.dataset.opp);
+    if(_detailCache.has(key)){ popShow(render(_detailCache.get(key))); return; }
     popShow(`<div class="muted" style="padding:1em">${I18N.calculating}</div>`);
     try{
       const d = await fetch(API+'/'+kind, {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body)}).then(r=>r.json());
-      const render = {fire_detail:fireDetailHtml, speed_detail:speedDetailHtml, matchup_detail:matchupDetailHtml}[kind];
+      _detailCache.set(key, d);
       popShow(render(d));
     }catch(e){ popShow(`<div class="muted" style="padding:1em">${I18N.fetchFailed}</div>`); }
   }
@@ -1242,12 +1300,12 @@ const I18N = I18N_ALL[lang];
   document.getElementById('popup').addEventListener('click', e=>{ if(e.target.id==='popup') popHide(); });
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') popHide(); });
   document.addEventListener('click', e=>{
-    const fc=e.target.closest('.fire-cell'); if(fc){ openDetail(fc,'fire_detail'); return; }
     const sc=e.target.closest('.sp-cell'); if(sc){ openDetail(sc,'speed_detail'); return; }
     const mc=e.target.closest('.mu-cell'); if(mc){ openDetail(mc,'matchup_detail'); return; }
     const ac=e.target.closest('.at-cell'); if(ac){ openAtkDetail(ac); return; }
     const gr=e.target.closest('.gd-req'); if(gr){ requestGuide(gr); return; }
     const ib=e.target.closest('.ps-import-btn'); if(ib){ handleImportToBuilder(ib); return; }
+    const hd=e.target.closest('.sug-toggle'); if(hd){ toggleSug(hd); return; }
   });
 
   /** 「パーティ工房で保存・微調整」: 提案の6specをlocalStorage経由でパーティ工房へ引き継ぐ。
@@ -1273,6 +1331,33 @@ const I18N = I18N_ALL[lang];
 
   let LAST = [];
   let LAST_FIXED = [];
+  /** (A3) タブバーがsticky top:0で貼り付く際、グローバルヘッダー(モバイルではsticky)の
+   * 実高さ分だけ下にオフセットする(ヘッダーの内部構成が変わっても追従できるよう実測する)。 */
+  function updateStickyOffset(){
+    const header = document.querySelector('header');
+    let h = 0;
+    if(header){ const cs = getComputedStyle(header); if(cs.position==='sticky'||cs.position==='fixed') h = header.getBoundingClientRect().height; }
+    document.documentElement.style.setProperty('--ps-sticky-top', h+'px');
+  }
+  window.addEventListener('resize', updateStickyOffset);
+  updateStickyOffset();
+  /** (A2) 凡例<details>の開閉をブレークポイントに合わせて同期する(デスクトップは常時展開)。 */
+  function syncLegendOpen(){
+    const mobile = window.matchMedia('(max-width:640px)').matches;
+    document.querySelectorAll('details.mtx-legend-det').forEach(d=>{ d.open = !mobile; });
+  }
+  window.addEventListener('resize', syncLegendOpen);
+  /** (A4) 新しく描画された.mg-wrapに横スクロールヒントの表示/消去を仕込む(冪等)。 */
+  function initMgHints(){
+    document.querySelectorAll('.mg-wrap:not([data-mg-init])').forEach(wrap=>{
+      wrap.setAttribute('data-mg-init','1');
+      const mg = wrap.querySelector('.mg'); if(!mg) return;
+      const check = () => { if(mg.scrollWidth <= mg.clientWidth + 2) wrap.classList.add('mg-scrolled'); };
+      check();
+      mg.addEventListener('scroll', () => wrap.classList.add('mg-scrolled'), {once:true, passive:true});
+      window.addEventListener('resize', check);
+    });
+  }
   function bindTabs(){
     document.querySelectorAll('.montab').forEach(btn=>{
       btn.addEventListener('click', ()=>{
@@ -1286,8 +1371,12 @@ const I18N = I18N_ALL[lang];
         const i = +btn.dataset.i, t = btn.dataset.t;
         document.querySelectorAll(`.tb[data-i="${i}"]`).forEach(b=>b.classList.toggle('active', b.dataset.t===t));
         document.getElementById('pane-'+i).innerHTML = paneHtml(LAST[i], t, i);
+        syncLegendOpen();
+        initMgHints();
       });
     });
+    syncLegendOpen();
+    initMgHints();
   }
 
   let SPECIES = [];
@@ -1304,6 +1393,9 @@ const I18N = I18N_ALL[lang];
     el.innerHTML = CORE.map(p=>`<span class="filter-chip" title="${esc(tPoke(p.label))}">${p.icon?`<img src="${p.icon}" alt="${esc(p.sp)}">`:''}${esc(tPoke(p.label))}<button class="filter-chip-x" data-id="${esc(p.id)}">✕</button></span>`).join('');
     el.querySelectorAll('.filter-chip-x').forEach(b=>b.addEventListener('click',()=>removeCore(b.dataset.id)));
     document.getElementById('core-filter').placeholder = CORE.length ? I18N.corePlaceholderMore : I18N.corePlaceholder;
+    // (B5) 軸2件以上は必ずライブ計算(10〜20秒)になることを実行前に知らせる
+    const notice = document.getElementById('ps-multi-notice');
+    if(notice) notice.style.display = CORE.length>=2 ? 'block' : 'none';
   }
   function addCore(id){
     const v = SPECIES.find(s=>s.id===id);
@@ -1353,38 +1445,122 @@ const I18N = I18N_ALL[lang];
   document.getElementById('core-filter').addEventListener('keydown', onFilterKey);
   document.addEventListener('click', e=>{ if(!e.target.closest('.filter-wrap')) document.getElementById('core-sug').style.display='none'; });
 
+  /** (A1) 結果描画後は#out先頭へ自動スクロールする(モバイルではボタン操作位置から離れるため)。 */
+  function scrollToOut(){
+    const out = document.getElementById('out');
+    if(out && out.firstElementChild) out.scrollIntoView({behavior:'smooth', block:'start'});
+  }
+  function renderResults(d){
+    LAST = d.results;
+    LAST_FIXED = d.fixed || [];
+    document.getElementById('status').textContent = (d.fixed && d.fixed.length ? I18N.fixedLbl(d.fixed.map(tPoke).join(' + ')) : '') + I18N.resultCount(d.results.length);
+    document.getElementById('out').innerHTML = d.results.map((res,i)=>sugHtml(res,i)).join('');
+    bindTabs();
+    scrollToOut();
+  }
+  function currentCoreParam(){ return CORE.map(p=>p.label).join(','); }
+  /** (B6) 直前の提案結果をsessionStorageにキャッシュし、軸が完全一致する場合のみ
+   * APIを叩き直さず即復元する(bfcacheが効かないリロードでも軸2件以上の10〜20秒待ちを避けるため)。 */
+  const SS_KEY = 'ps-last-result';
+  function saveSessionResult(coreParam, d){
+    try{ sessionStorage.setItem(SS_KEY, JSON.stringify({core: coreParam, d})); }catch(e){}
+  }
+  function loadSessionResult(coreParam){
+    try{
+      const raw = sessionStorage.getItem(SS_KEY); if(!raw) return null;
+      const obj = JSON.parse(raw);
+      return obj.core === coreParam ? obj.d : null;
+    }catch(e){ return null; }
+  }
   async function run(){
     const core = CORE.map(p=>({sp:p.sp, mega:p.mega}));
+    const coreParam = currentCoreParam();
     const go = document.getElementById('go'); go.disabled = true; go.classList.add('loading');
     const out = document.getElementById('out');
-    document.getElementById('status').textContent = '';
+    const status = document.getElementById('status');
+    status.textContent = '';
+    // (B5) 軸2件以上は必ずライブ計算(10〜20秒)。軸1件以下はsuggest_cacheに事前計算済みで数百msなので
+    // 「10〜20秒」の表示は出さず、実態に合わせた短い表示にする。
+    const isLive = core.length >= 2;
     const msgs = I18N.loadMsgs;
-    out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg" id="ps-lmsg">${msgs[0]}</div><div class="ps-lsub">${I18N.loadSub}</div></div>`;
-    let mi = 0; const timer = setInterval(()=>{ mi=(mi+1)%msgs.length; const el=document.getElementById('ps-lmsg'); if(el) el.textContent=msgs[mi]; }, 2500);
+    let mi = 0, sec = 0, timer = null;
+    if(isLive){
+      out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg" id="ps-lmsg">${msgs[0]}</div><div class="ps-lsub">${I18N.loadSub}</div><div class="ps-elapsed" id="ps-elapsed">${I18N.elapsedSec(0)}</div></div>`;
+      timer = setInterval(()=>{
+        sec++;
+        const es = document.getElementById('ps-elapsed'); if(es) es.textContent = I18N.elapsedSec(sec);
+        if(sec % 3 === 0){ mi = (mi+1)%msgs.length; const el = document.getElementById('ps-lmsg'); if(el) el.textContent = msgs[mi]; }
+      }, 1000);
+    } else {
+      out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${I18N.calculating}</div></div>`;
+    }
     try{
       const r = await fetch(API + '/suggest', {method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({core, ncand:100, top:5})});
       const d = await r.json();
-      if(d.error){ out.innerHTML=''; document.getElementById('status').textContent = I18N.errPrefix + d.error; return; }
-      LAST = d.results;
-      LAST_FIXED = d.fixed || [];
-      document.getElementById('status').textContent = (d.fixed.length? I18N.fixedLbl(d.fixed.map(tPoke).join(' + ')) : '') + I18N.resultCount(d.results.length);
-      out.innerHTML = d.results.map((res,i)=>sugHtml(res,i)).join('');
-      bindTabs();
-    }catch(e){ out.innerHTML=''; document.getElementById('status').textContent = I18N.connErr; }
-    finally{ clearInterval(timer); go.disabled = false; go.classList.remove('loading'); }
+      if(d.error){
+        // (B5) エラーは#statusだけでなく#outにも表示する(#outが空のままだと気づけないため)
+        out.innerHTML = `<div class="ps-err">${I18N.errPrefix}${esc(d.error)}</div>`;
+        status.textContent = I18N.errPrefix + d.error;
+        return;
+      }
+      saveSessionResult(coreParam, d);
+      // (B6) ?core=軸1,軸2 をURLに反映し、リロード/共有で自動復元できるようにする
+      const url = new URL(location.href);
+      if(coreParam) url.searchParams.set('core', coreParam); else url.searchParams.delete('core');
+      history.replaceState(null, '', url.pathname + url.search);
+      renderResults(d);
+    }catch(e){
+      out.innerHTML = `<div class="ps-err">${I18N.connErr}</div>`;
+      status.textContent = I18N.connErr;
+    } finally {
+      if(timer) clearInterval(timer);
+      go.disabled = false; go.classList.remove('loading');
+    }
   }
   document.getElementById('go').addEventListener('click', run);
   /** en/ko版には軸ごとの静的プリセットページ(/party-suggest/{slug}/)が存在しないため、
-   * ポケモン情報ページのCTAは代わりに ?core=軸ポケモン和名 を付けてこの汎用ページへ誘導する。
-   * ja版は静的プリセットページ側のpreCoreLabelプロパティを優先する。 */
+   * ポケモン情報ページのCTAは代わりに ?core=軸ポケモン和名(複数はカンマ区切り) を付けてこの汎用ページへ
+   * 誘導する。ja版は静的プリセットページ側のpreCoreLabelプロパティを優先する。
+   * sessionStorageに軸が完全一致する結果があればAPIを叩き直さず即復元する。
+   * (C9) /species取得待ちのポーリングには上限を設け、失敗時に無限ループしないようにする。 */
   const _preCore = preCoreLabel || new URLSearchParams(location.search).get('core');
   if (_preCore) {
-    const _waitForSpecies = setInterval(() => {
-      if (!SPECIES.length) return;
-      clearInterval(_waitForSpecies);
-      const v = SPECIES.find(s => s.label === _preCore);
-      if (v) { addCore(v.id); run(); }
+    const _cached = loadSessionResult(_preCore);
+    if (_cached) {
+      renderResults(_cached);
+      // チップ表示は非同期にSPECIES待ちで反映(結果表示はブロックしない)
+      applyPreCoreChips(_preCore);
+    } else {
+      let _tries = 0;
+      const _waitForSpecies = setInterval(() => {
+        _tries++;
+        if (!SPECIES.length) {
+          if (_tries >= 50) { clearInterval(_waitForSpecies); document.getElementById('status').textContent = I18N.connErr; }
+          return;
+        }
+        clearInterval(_waitForSpecies);
+        applyPreCoreChipsNow(_preCore);
+        if (CORE.length) run();
+      }, 100);
+    }
+  }
+  // SPECIES取得済み前提の同期版。「チップ追加→CORE.length判定→run()」を同一tickで行うため
+  // 非同期版を挟むとCOREが空のままrun()判定が走り自動実行されない
+  function applyPreCoreChipsNow(param){
+    param.split(',').map(s => s.trim()).filter(Boolean).forEach(label => {
+      const v = SPECIES.find(s => s.label === label);
+      if (v && !CORE.some(p => p.id === v.id)) CORE.push(v);
+    });
+    renderCoreChips();
+  }
+  function applyPreCoreChips(param){
+    let tries = 0;
+    const t = setInterval(() => {
+      tries++;
+      if (!SPECIES.length) { if (tries >= 50) clearInterval(t); return; }
+      clearInterval(t);
+      applyPreCoreChipsNow(param);
     }, 100);
   }
 </script>
