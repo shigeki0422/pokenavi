@@ -82,7 +82,7 @@ TARGETS = {
     },
 }
 
-CRAWLED_DATE = "2026-08-27"  # ← 実行時に変更
+CRAWLED_DATE = "2026-08-28"  # ← 実行時に変更
 
 TARGETS["2026-07-09"] = {
     124: "ケンタロス:炎",
@@ -165,13 +165,38 @@ def extract_main_icon(rank_dir: Path) -> np.ndarray | None:
 
 REF_DIR = Path(__file__).parent / "icon_refs"
 
+def _find_icon(pokemon, conn, exclude_date):
+    """ポケモン名に対応するクロール画像を過去から探して返す"""
+    rows = conn.execute(
+        "SELECT crawled_date, rank FROM pokemon_usage WHERE pokemon=? AND season=? AND rule=? AND crawled_date<? ORDER BY crawled_date DESC",
+        (pokemon, SEASON, RULE, exclude_date)
+    ).fetchall()
+    for date, rank in rows:
+        d = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{date}/detail")
+        for fname in ["move_00.png", "_c_move_00.png", "_c_ability_00.png"]:
+            p = d / f"{rank:03d}" / fname
+            if p.exists():
+                icon = crop_icon(p)
+                if icon is not None:
+                    return cv2.resize(icon, ICON_SIZE)
+    return None
+
+
+# クロールずれが発生した日付はテンプレートとして使わない
+SKIP_TEMPLATE_DATES = {"2026-08-27"}
+
+
 def build_templates(conn):
-    # 直前の投入済み日付をDBから自動取得
-    row = conn.execute(
-        "SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule=? AND crawled_date<?",
+    # 直前の投入済み日付をDBから自動取得（SKIPリストを除く）
+    rows = conn.execute(
+        "SELECT DISTINCT crawled_date FROM pokemon_usage WHERE season=? AND rule=? AND crawled_date<? ORDER BY crawled_date DESC",
         (SEASON, RULE, CRAWLED_DATE)
-    ).fetchone()
-    template_date = row[0] if row and row[0] else None
+    ).fetchall()
+    template_date = None
+    for (d,) in rows:
+        if d not in SKIP_TEMPLATE_DATES:
+            template_date = d
+            break
     if template_date is None:
         print("⚠ テンプレート用の直前データなし")
         return {}
@@ -183,16 +208,26 @@ def build_templates(conn):
         (template_date, SEASON, RULE)
     ).fetchall()
     templates = {}
+    fallback = []
     for rank, pokemon in rows:
         for fname in ["move_00.png", "_c_move_00.png", "_c_ability_00.png"]:
             img_path = template_dir / f"{rank:03d}" / fname
             if img_path.exists():
                 break
         else:
+            fallback.append(pokemon)
             continue
         icon = crop_icon(img_path)
         if icon is not None:
             templates[pokemon] = cv2.resize(icon, ICON_SIZE)
+
+    # 画像がなかったポケモンは過去に遡って探す
+    for pokemon in fallback:
+        icon = _find_icon(pokemon, conn, template_date)
+        if icon is not None:
+            templates[pokemon] = icon
+        else:
+            print(f"  ⚠ テンプレート画像なし: {pokemon}")
     return templates
 
 
@@ -796,6 +831,20 @@ TARGETS["2026-08-27"] = {
     195: "フラージェス",
     196: "パンプジン(ギガだましゅ)",
     197: "バクフーン",
+    198: "バクーダ",
+    199: "タイレーツ",
+    200: "バリコオル",
+}
+
+TARGETS["2026-08-28"] = {
+    190: "ガチゴラス",
+    191: "ブースター",
+    192: "ドクロッグ",
+    193: "ニャオニクス(オス)",
+    194: "エモンガ",
+    195: "フラージェス",
+    196: "バクフーン",
+    197: "パンプジン(ギガだましゅ)",
     198: "バクーダ",
     199: "タイレーツ",
     200: "バリコオル",
