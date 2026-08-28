@@ -357,7 +357,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
             </div>
           </div>
           <div class="chart-outer" id="chart-outer">
-            <div class="chart-inner">
+            <div class="chart-inner" style={`min-width:${Math.max(500, 118 + (dates.length - 1) * 30)}px`}>
               <div class="chart-date-bar" id="chart-date-bar"></div>
               <div class="chart-scroll" id="chart-scroll">
                 <canvas id="bump-canvas"></canvas>
@@ -509,9 +509,8 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         chartOuter.addEventListener('scroll', updateHint, { passive: true });
 
         function resize() {
-          const minColW = Math.max(SPRITE + 8, 30);
-          const dynamicMinW = PAD_L + PAD_R + (dates.length - 1) * minColW;
-          canvas.parentElement.parentElement.style.minWidth = Math.max(500, dynamicMinW) + 'px';
+          const chartInner = canvas.parentElement.parentElement;
+          chartInner.style.minWidth = Math.max(500, 118 + (dates.length - 1) * 30) + 'px';
           W = canvas.parentElement.clientWidth;
           const H = getH();
           canvas.width = W * dpr;
