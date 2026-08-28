@@ -240,7 +240,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
       .chart-outer {
         flex: 1; min-width: 0; overflow-x: auto; -webkit-overflow-scrolling: touch;
       }
-      .chart-inner { min-width: 500px; width: 100%; }
+      .chart-inner { min-width: 500px; width: 100%; } /* JS で日付数×30pxに上書き */
       .chart-date-bar {
         position: relative; height: 28px;
         background: #fff; border: 1px solid #e2e8f0;
@@ -447,11 +447,16 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         function updateDateBar() {
           dateBar.innerHTML = '';
           const totalW = W - PAD_L - PAD_R;
+          const colW = totalW / Math.max(dates.length - 1, 1);
+          const minLabelGap = 28;
+          const step = Math.max(1, Math.ceil(minLabelGap / colW));
           dates.forEach((d, i) => {
+            const isFirst = i === 0, isLast = i === dates.length - 1;
+            if (!isFirst && !isLast && i % step !== 0) return;
             const [, m, day] = d.split('-');
             const span = document.createElement('span');
             span.textContent = `${parseInt(m)}/${parseInt(day)}`;
-            const lx = PAD_L + i * totalW / Math.max(dates.length - 1, 1);
+            const lx = PAD_L + i * colW;
             span.style.cssText = `position:absolute;left:${lx}px;top:50%;transform:translate(-50%,-50%);font-size:10px;font-weight:700;color:#334155;white-space:nowrap;`;
             dateBar.appendChild(span);
           });
@@ -504,6 +509,9 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         chartOuter.addEventListener('scroll', updateHint, { passive: true });
 
         function resize() {
+          const minColW = Math.max(SPRITE + 8, 30);
+          const dynamicMinW = PAD_L + PAD_R + (dates.length - 1) * minColW;
+          canvas.parentElement.parentElement.style.minWidth = Math.max(500, dynamicMinW) + 'px';
           W = canvas.parentElement.clientWidth;
           const H = getH();
           canvas.width = W * dpr;
