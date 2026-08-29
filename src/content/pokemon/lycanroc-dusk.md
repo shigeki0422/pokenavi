@@ -1,9 +1,9 @@
 ---
 title: 'ルガルガン（たそがれ） | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのルガルガン（たそがれ）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率126位。'
+description: 'ポケモンチャンピオンズのルガルガン（たそがれ）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率124位。'
 pokemonName: 'ルガルガン（たそがれ）'
 dexNumber: 745
-usageRank: 126
+usageRank: 124
 imageForm: '02'
 pubDate: '2026-08-10'
 draft: false
@@ -18,7 +18,7 @@ draft: false
       <img src="/images/types/type-05-rock.png" alt="いわ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.745</strong>　／　使用率 <strong style="color:#dc2626">126位</strong>
+      全国図鑑 <strong>No.745</strong>　／　使用率 <strong style="color:#dc2626">124位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-08-10</div>
   </div>
