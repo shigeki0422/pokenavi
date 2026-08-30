@@ -1,0 +1,32 @@
+---
+interface Props { current: 'suggest' | 'builder'; lang?: 'ja' | 'en' | 'ko' }
+const { current, lang = 'ja' } = Astro.props;
+const pfx = lang === 'ja' ? '' : `/${lang}`;
+const LABELS = {
+	ja: { suggest: '軸から簡単構築', builder: 'パーティ工房', start: 'はじめはこちら' },
+	en: { suggest: 'Quick Build from Core', builder: 'Party Workshop', start: 'Start here' },
+	ko: { suggest: '축으로 간단 구성', builder: '파티 공방', start: '처음이라면 여기' },
+}[lang];
+---
+<nav class="pt-nav" aria-label={LABELS.suggest + ' / ' + LABELS.builder}>
+	<a href={`${pfx}/party-suggest`} class:list={['pt-pill', { active: current === 'suggest' }]}>{LABELS.suggest}<span class="pt-start">{LABELS.start}</span></a>
+	<a href={`${pfx}/party-builder`} class:list={['pt-pill', { active: current === 'builder' }]}>{LABELS.builder}</a>
+</nav>
+<style>
+	.pt-nav { display: flex; gap: 0.5rem; margin: 0 0 0.9rem; flex-wrap: wrap; }
+	.pt-pill {
+		display: inline-flex; align-items: center;
+		padding: 0.45rem 0.95rem; border-radius: 9999px;
+		font-size: 0.85rem; font-weight: 700; text-decoration: none;
+		color: rgb(var(--gray-dark)); background: #f1f5f9; border: 1.5px solid transparent;
+	}
+	.pt-pill.active {
+		color: var(--accent); background: #eef2ff; border-color: var(--accent);
+	}
+	@media (hover: hover) { .pt-pill:not(.active):hover { background: #e2e8f0; } }
+	.pt-start {
+		margin-left: 0.4rem; padding: 0.1rem 0.45rem; border-radius: 9999px;
+		font-size: 0.65rem; font-weight: 800; white-space: nowrap;
+		background: #fef3c7; color: #b45309;
+	}
+</style>

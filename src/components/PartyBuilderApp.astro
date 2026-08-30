@@ -1,5 +1,6 @@
 ---
 import OnboardingGuide from './OnboardingGuide.astro';
+import PartyToolsNav from './PartyToolsNav.astro';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO, TYPE_NAME_EN, TYPE_NAME_KO } from '../i18n/game-terms';
 
@@ -255,6 +256,7 @@ const I18N = I18N_ALL[lang];
 
 <main>
   <h1>{I18N.title}</h1>
+  <PartyToolsNav current="builder" lang={lang} />
   <p class="lead">{I18N.lead}</p>
   <OnboardingGuide
     storageKey="builder"
@@ -410,6 +412,20 @@ const I18N = I18N_ALL[lang];
   .pop-card{background:#fff;border-radius:14px;box-shadow:0 12px 48px rgba(0,0,0,.25);max-width:560px;width:100%;max-height:82vh;overflow:auto;padding:1.1em 1.2em;position:relative}
   .pop-x{position:absolute;top:.6em;right:.7em;background:none;border:none;font-size:1.1rem;color:rgb(var(--gray));cursor:pointer;line-height:1}
   .pop-x:hover{color:#dc2626}
+
+  /* 相性マトリクスのセル詳細ポップオーバー（PartySuggestApp.astro matchupDetailHtml準拠、pb-名前空間で移植） */
+  .pb-pop-hd{display:flex;align-items:center;gap:.4em;font-weight:800;font-size:.95rem;margin-bottom:.2em}
+  .pb-pop-hd img{width:30px;height:30px;object-fit:contain}
+  .pb-arw{color:rgb(var(--gray));font-weight:900}
+  .pb-pop-sub{font-size:.76rem;color:rgb(var(--gray));margin-bottom:.7em}
+  table.pb-pop-t{width:100%;border-collapse:collapse;font-size:.8rem}
+  table.pb-pop-t th{font-size:.66rem;font-weight:800;color:rgb(var(--gray));background:#f8fafc;padding:.4em .5em;border-bottom:1px solid rgb(var(--gray-light));text-align:center;white-space:nowrap}
+  table.pb-pop-t td{padding:.4em .5em;border-bottom:1px solid #f1f5f9;text-align:center;white-space:nowrap}
+  .pb-pop-pct{font-weight:700}
+  .pb-pop-ko{font-size:.7rem;color:rgb(var(--gray))}
+  .pb-pop-col-sub{font-size:.6rem;color:rgb(var(--gray));font-weight:600;display:block}
+  .pb-pop-types{display:block;margin:2px 0}
+  .pb-pop-types img{width:18px;height:18px;vertical-align:middle}
 
   /* pb- 新規クラス */
   .pb-beta{font-size:.65rem;background:#fef3c7;color:#92400e;border-radius:9999px;padding:.15em .6em;margin-left:.5em;vertical-align:middle;font-weight:800}
@@ -610,7 +626,7 @@ const I18N = I18N_ALL[lang];
   import { ALL_NATURES, NEUTRAL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, effectiveSpeed, natureDisp } from '../scripts/party-builder/stats';
   import { TYPES } from '../scripts/party-builder/typechart';
   import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx } from '../scripts/party-builder/balance';
-  import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct } from '../scripts/party-builder/matchup';
+  import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct, bestMoveHitDetail } from '../scripts/party-builder/matchup';
   import { bestMove, calcDamage } from '../scripts/party-builder/damage';
   import { suggestFill, tuneForTargets } from '../scripts/party-builder/suggest';
   import { validateParty } from '../scripts/party-builder/validate';
@@ -683,6 +699,12 @@ const I18N = I18N_ALL[lang];
       holeSummary: labels => `⚠ 穴: ${labels}`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `型${idx}(${item}): ${sym} ${my}/${opp}・${turn}`,
       noItem: '道具なし', turnFirst: '先手', turnSecond: '後手',
+      muDetailSub: '相手の想定型別に、互いの最大打点1発の確定数・素早さ・勝敗判定（タスキ/がんじょう/ばけのかわ考慮）。',
+      muDmgSelfLbl: '与ダメ（自→相）', muDmgOppLbl: '被ダメ（相→自）', muSpeedRowLbl: '素早さ', muJudgeRowLbl: '判定',
+      muDetailKoOOR: '圏外', muDetailKoRoll: n => `乱${n}`,
+      muDetailSpdTxt: (turn, my, opp) => `${turn}（自S${my} / 相S${opp}）`,
+      muDetailJudgeWin: '勝ち', muDetailJudgeLoss: '負け',
+      muDetailJudgeTxt: (result, koA, koB, turn) => `${result}：${koA}で倒す / ${koB}で倒される・${turn}`,
       addTargetDisabled: 'この相手を仮想敵に追加', addTargetDisabledTitle: '先に上の6枠から枠を選択してください',
       addTargetToSlot: n => `この相手を枠${n}の仮想敵に追加`, addedSuffix: '（追加済み）',
       noEmptySlots: '空き枠がありません', fillCalcAll: '空き枠の提案を計算中…',
@@ -761,6 +783,12 @@ const I18N = I18N_ALL[lang];
       holeSummary: labels => `⚠ Gaps: ${labels}`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `Set ${idx} (${item}): ${sym} ${my}/${opp} · ${turn}`,
       noItem: 'no item', turnFirst: 'moves first', turnSecond: 'moves second',
+      muDetailSub: 'Per assumed opposing set: KO count and Speed for each side\'s strongest hit, plus the win/loss call (accounting for Focus Sash/Sturdy/Disguise).',
+      muDmgSelfLbl: 'Damage dealt (you→opp)', muDmgOppLbl: 'Damage taken (opp→you)', muSpeedRowLbl: 'Speed', muJudgeRowLbl: 'Verdict',
+      muDetailKoOOR: 'Out of range', muDetailKoRoll: n => `${n}HKO (roll-dependent)`,
+      muDetailSpdTxt: (turn, my, opp) => `${turn} (You S${my} / Opp S${opp})`,
+      muDetailJudgeWin: 'Win', muDetailJudgeLoss: 'Loss',
+      muDetailJudgeTxt: (result, koA, koB, turn) => `${result}: ${koA} KOes / ${koB} KO'd · ${turn}`,
       addTargetDisabled: 'Add this opponent as a virtual opponent', addTargetDisabledTitle: 'Select a slot above first',
       addTargetToSlot: n => `Add this opponent as slot ${n}'s virtual opponent`, addedSuffix: ' (already added)',
       noEmptySlots: 'No empty slots', fillCalcAll: 'Calculating suggestions for empty slots…',
@@ -839,6 +867,12 @@ const I18N = I18N_ALL[lang];
       holeSummary: labels => `⚠ 약점: ${labels}`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `빌드${idx}(${item}): ${sym} ${my}/${opp}·${turn}`,
       noItem: '도구 없음', turnFirst: '선공', turnSecond: '후공',
+      muDetailSub: '상대 예상 타입별로 서로의 최대 위력 1발 확정타・스피드・승패 판정（타슈/옹골참/화신의 모습 고려）.',
+      muDmgSelfLbl: '주는 대미지（나→상대）', muDmgOppLbl: '받는 대미지（상대→나）', muSpeedRowLbl: '스피드', muJudgeRowLbl: '판정',
+      muDetailKoOOR: '범위 밖', muDetailKoRoll: n => `난수${n}`,
+      muDetailSpdTxt: (turn, my, opp) => `${turn}（나 S${my} / 상대 S${opp}）`,
+      muDetailJudgeWin: '승리', muDetailJudgeLoss: '패배',
+      muDetailJudgeTxt: (result, koA, koB, turn) => `${result}：${koA}로 쓰러뜨림 / ${koB}로 쓰러짐·${turn}`,
       addTargetDisabled: '이 상대를 가상의 적에 추가', addTargetDisabledTitle: '먼저 위의 6칸에서 칸을 선택해 주세요',
       addTargetToSlot: n => `이 상대를 칸${n}의 가상의 적에 추가`, addedSuffix: '（추가됨）',
       noEmptySlots: '빈 칸이 없습니다', fillCalcAll: '빈 칸의 제안을 계산 중…',
@@ -2439,6 +2473,45 @@ const I18N = I18N_ALL[lang];
   function muBreakdownTitle(agg, builds) {
     return muBreakdownLines(agg, builds).join(' / ');
   }
+  /** EV文字列「H4 A28 ...」(0のstatは省略)。移植元: scripts/_explain.py _ev_str()。値は32スケールのまま(表示上の変換なし)。 */
+  function pbEvStr(evs) {
+    return EVK.map((k, i) => (Number(evs[i]) ? `${k}${evs[i]}` : null)).filter(Boolean).join(' ');
+  }
+  /** 相性マトリクスのセル詳細ポップオーバー用の確定数表示。「簡単構築」(PartySuggestApp.astro
+   * matchupDetailHtml/tKo)の表記(確N/乱N/圏外)に合わせる(工房本来の「乱数N発(P%)」形式とは別表記)。
+   * bestMoveHitDetail()のhitsは確定時=最低乱数の確定数・不確定時=最大乱数の発数を返すため、
+   * その値をそのまま閾値判定に使えば scripts/_explain.py _dmg_line() の「n_lo>=5→圏外」と一致する
+   * (詳細はmatchup.tsのbestMoveHitDetail/_hitDetailForMoveのコメント参照)。 */
+  function pbMuDetailKoTxt(d) {
+    if (!d || d.hits == null || d.hits >= 5) return I18N.muDetailKoOOR;
+    return d.certain ? I18N.hitsFmt(d.hits) : I18N.muDetailKoRoll(d.hits);
+  }
+  /** 与ダメ内訳1件。「簡単構築」のdmgRow相当(与ダメ%レンジ+確定数+技名)。attacker→defenderの最大打点技。 */
+  function pbMuDetailDmgLine(attacker, defender) {
+    const d = bestMoveHitDetail(attacker, defender);
+    if (!d) return { moveTxt: I18N.dashOpt, pctTxt: '0%', koTxt: I18N.muDetailKoOOR };
+    const pctTxt = `${Math.round(d.pctLo)}〜${Math.round(d.pctHi)}%`;
+    return { moveTxt: tMove(d.n), pctTxt, koTxt: pbMuDetailKoTxt(d) };
+  }
+  /** 相性マトリクスのセルをタップした時の詳細ポップオーバー本体。PartySuggestApp.astroの
+   * matchupDetailHtml()と同じ列構成(型ごとの列・与ダメ/被ダメ/素早さ/判定の4行)・体裁(pb-pop-*)で、
+   * クライアント計算値(bestMoveHitDetail/judge1v1)から生成する(APIは叩かない)。
+   * 数値は仮想敵パネルの技別チップ(moveBreakdown)・判定バッジ(judge1v1)と同一関数を使うため一致する。 */
+  function matchupCellDetailHtml(b, o) {
+    const builds = (o.builds || []).slice(0, 3);
+    const cols = builds.map((opp, i) => `<th>${esc(I18N.buildLabel(i + 1))}<span class="pb-pop-types">${typeIcoByName(opp.t1)}${opp.t2 ? typeIcoByName(opp.t2) : ''}</span><span class="pb-pop-col-sub">${esc(tItem(opp.item)) || esc(I18N.noItem)}<br>${esc(tNature(opp.nature))}<br>${esc(pbEvStr(opp.evs))}</span></th>`).join('');
+    const meLines = builds.map((opp) => pbMuDetailDmgLine(b, opp));
+    const opLines = builds.map((opp) => pbMuDetailDmgLine(opp, b));
+    const verdicts = builds.map((opp) => judge1v1(b, opp));
+    const dmgRow = (label, lines) => `<tr><td class="lft">${esc(label)}</td>${lines.map((c) => `<td><span class="pb-pop-pct">${esc(c.pctTxt)}</span> <span class="pb-pop-ko">${esc(c.koTxt)}</span><br><span class="pb-pop-ko">${esc(c.moveTxt)}</span></td>`).join('')}</tr>`;
+    const spRow = `<tr><td class="lft">${esc(I18N.muSpeedRowLbl)}</td>${verdicts.map((v) => `<td class="${v.fast ? 'sp-win' : 'sp-lose'}">${esc(I18N.muDetailSpdTxt(v.fast ? I18N.turnFirst : I18N.turnSecond, v.myS, v.oppS))}</td>`).join('')}</tr>`;
+    const jRow = `<tr><td class="lft">${esc(I18N.muJudgeRowLbl)}</td>${verdicts.map((v, i) => `<td class="${symCls(v.sym)}"><b style="font-size:1.05em">${v.sym}</b><br><span class="pb-pop-ko">${esc(I18N.muDetailJudgeTxt(v.win ? I18N.muDetailJudgeWin : I18N.muDetailJudgeLoss, meLines[i].koTxt, opLines[i].koTxt, v.fast ? I18N.turnFirst : I18N.turnSecond))}</span></td>`).join('')}</tr>`;
+    const table = `<div style="overflow-x:auto"><table class="pb-pop-t"><tr><th class="lft"> </th>${cols}</tr>${dmgRow(I18N.muDmgSelfLbl, meLines)}${dmgRow(I18N.muDmgOppLbl, opLines)}${spRow}${jRow}</table></div>`;
+    return `<div class="pb-pop-hd">${icoImg(b.icon, b.label, '')}${esc(tPoke(b.label))}<span class="pb-arw">vs</span>${icoImg(o.icon, o.label, '')}${esc(tPoke(o.label))}</div>
+      <div class="pb-pop-sub">${esc(I18N.muDetailSub)}</div>
+      ${table}
+      ${addTargetButtonHtml(o.label)}`;
+  }
   function matchupMatrixHtml(resolvedParty) {
     const oppCols = buildOppCols();
     const holeInfo = findHoles(resolvedParty, oppCols);
@@ -2453,7 +2526,7 @@ const I18N = I18N_ALL[lang];
         const agg = judgeVsBuilds(b, o.builds);
         const lines = muBreakdownLines(agg, o.builds);
         const title = lines.join(' / ');
-        const popIdx = mtxPopData.push({ title: `${tPoke(b.label)} vs ${tPoke(o.label)}`, lines, oppLabel: o.label }) - 1;
+        const popIdx = mtxPopData.push({ b, o }) - 1;
         return `<td class="${symCls(agg.sym)}" title="${esc(title)}" data-mtx-pop="${popIdx}">${agg.sym}${agg.dep ? '<span class="mu-dep">*</span>' : ''}</td>`;
       }).join('');
       return `<tr>${hd}${cells}</tr>`;
@@ -2492,10 +2565,9 @@ const I18N = I18N_ALL[lang];
     paneEl.querySelectorAll('[data-mtx-pop]').forEach((td) => td.addEventListener('click', () => {
       const d = mtxPopData[+td.dataset.mtxPop];
       if (!d) return;
-      const bodyHtml = `<ul style="margin:0;padding-left:1.2em">${d.lines.map((l) => `<li style="margin:.25em 0">${esc(l)}</li>`).join('')}</ul>${addTargetButtonHtml(d.oppLabel)}`;
-      openInfoPopover(d.title, bodyHtml);
+      openInfoPopover('', matchupCellDetailHtml(d.b, d.o));
       const addBtn = document.getElementById('pb-mtx-add-target');
-      if (addBtn && !addBtn.disabled) addBtn.addEventListener('click', () => addTargetFromMatrix(d.oppLabel));
+      if (addBtn && !addBtn.disabled) addBtn.addEventListener('click', () => addTargetFromMatrix(d.o.label));
     }));
   }
 
@@ -2601,7 +2673,8 @@ const I18N = I18N_ALL[lang];
   /** (5) title属性の内容をタップでも見られるようにするための共通ポップオーバー(既存.pop-overlayを流用)。 */
   function openInfoPopover(titleText, bodyHtml) {
     const body = document.getElementById('pb-modal-body');
-    body.innerHTML = `<h3 style="margin-top:0">${esc(titleText)}</h3>${bodyHtml}`;
+    const hd = titleText ? `<h3 style="margin-top:0">${esc(titleText)}</h3>` : '';
+    body.innerHTML = `${hd}${bodyHtml}`;
     showModal();
   }
   /** (5) 型テンプレ用ポップオーバー。候補(≤5件)をカード一覧表示し、各カードの内容確認後に
