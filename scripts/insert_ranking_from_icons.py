@@ -164,6 +164,21 @@ def extract_main_icon(rank_dir: Path) -> np.ndarray | None:
 
 
 REF_DIR = Path(__file__).parent / "icon_refs"
+ICON_CACHE_DIR = Path(__file__).parent / "icon_cache"
+
+def _load_cache(pokemon):
+    """キャッシュから読み込む"""
+    p = ICON_CACHE_DIR / f"{pokemon}.png"
+    if p.exists():
+        img = cv2.imread(str(p))
+        if img is not None:
+            return img
+    return None
+
+def _save_cache(pokemon, icon):
+    """アイコンをキャッシュに保存"""
+    ICON_CACHE_DIR.mkdir(exist_ok=True)
+    cv2.imwrite(str(ICON_CACHE_DIR / f"{pokemon}.png"), icon)
 
 def _find_icon(pokemon, conn, exclude_date):
     """ポケモン名に対応するクロール画像を過去から探して返す"""
@@ -221,13 +236,28 @@ def build_templates(conn):
         if icon is not None:
             templates[pokemon] = cv2.resize(icon, ICON_SIZE)
 
-    # 画像がなかったポケモンは過去に遡って探す
+    # 画像がなかったポケモンは過去に遡って探す → なければキャッシュ
     for pokemon in fallback:
         icon = _find_icon(pokemon, conn, template_date)
         if icon is not None:
             templates[pokemon] = icon
         else:
-            print(f"  ⚠ テンプレート画像なし: {pokemon}")
+            cached = _load_cache(pokemon)
+            if cached is not None:
+                templates[pokemon] = cached
+                print(f"  📦 キャッシュ使用: {pokemon}")
+            else:
+                print(f"  ⚠ テンプレート画像なし: {pokemon}")
+
+    # 前日データにないポケモン（今日新たに圏内に入ってきた可能性）もキャッシュで補完
+    # → DBにない = templates未登録 = マッチング対象外になるので、キャッシュ全件を追加
+    cached_names = [p.stem for p in ICON_CACHE_DIR.glob("*.png")] if ICON_CACHE_DIR.exists() else []
+    for pokemon in cached_names:
+        if pokemon not in templates:
+            cached = _load_cache(pokemon)
+            if cached is not None:
+                templates[pokemon] = cached
+
     return templates
 
 
@@ -346,6 +376,16 @@ def main():
     conn.commit()
     conn.close()
     print(f"pokemon_usage: {inserted}件投入")
+
+    # アイコンキャッシュを更新（override含む全200件）
+    rank_dir_base = target_dir
+    cache_updated = 0
+    for rank, name in candidates:
+        icon = extract_main_icon(rank_dir_base / f"{rank:03d}")
+        if icon is not None:
+            _save_cache(name, icon)
+            cache_updated += 1
+    print(f"icon_cache: {cache_updated}件更新")
 
 
 
