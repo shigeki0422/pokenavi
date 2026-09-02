@@ -15,6 +15,14 @@
 | とくせい | 180種（環境出現・全実装＋テスト済み） |
 | アイテム | 環境出現114種（メガストーン約60含む）。効果あり非メガ約50種を仕様化、うち8種が実装＋テスト未了 |
 
+### データベースの場所（`data.py: DB_PATH`）
+
+`DB_PATH` は既定で **`data.py` 自身の位置から `scripts/pokenavi.db` を相対解決**する（`os.path.dirname(os.path.dirname(os.path.abspath(__file__)))`）。
+環境変数 **`POKENAVI_DB`** を設定するとそちらを優先する。
+
+以前は開発機の絶対パス固定だったため、コンテナ（Cloud Run）にそのまま載せると起動時に
+`sqlite3.OperationalError: unable to open database file` で落ちた。デプロイ可能性のため相対解決が仕様。
+
 ---
 
 ## 1. わざ（技）

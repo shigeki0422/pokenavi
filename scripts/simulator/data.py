@@ -1,11 +1,16 @@
 """
 DBからポケモン・技データを読み込むデータアクセス層
 """
+import os
 import sqlite3
 from dataclasses import dataclass, field
 from typing import Optional
 
-DB_PATH = "/Users/shigeki/work/pokenavi/scripts/pokenavi.db"
+# DBの場所。既定は scripts/pokenavi.db（このファイルの親ディレクトリ）を自身の位置から解決する。
+# 絶対パス固定だとコンテナ（Cloud Run）で起動時にsqlite3.OperationalErrorになるため。
+# POKENAVI_DB で明示的に上書きできる。
+DB_PATH = os.environ.get("POKENAVI_DB") or os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "pokenavi.db")
 
 # 性格補正テーブル: 上げる/(下げる) → (上昇ステータス, 低下ステータス)
 NATURE_MODS = {

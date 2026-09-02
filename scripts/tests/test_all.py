@@ -3906,6 +3906,41 @@ _con19.close()
 
 
 # ════════════════════════════════════════════════════════════════
+# 20. DBパス解決（デプロイ可能性）
+#     絶対パス固定だとコンテナで起動できない（sqlite3.OperationalError）。
+#     data.py 自身の位置から scripts/pokenavi.db を相対解決し、POKENAVI_DB で上書きできること。
+# ════════════════════════════════════════════════════════════════
+print("\n=== 20. DBパス解決 ===")
+import os as _os20, importlib as _il20
+from simulator import data as _d20
+os = _os20
+
+_exp20 = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(_d20.__file__))), "pokenavi.db")
+# 解決後の値は当然この機では絶対パスになる。判定すべきは「ソースに絶対パスが直書きされていないか」。
+_src20 = open(_d20.__file__, encoding="utf-8").read()
+import re as _re20
+check("DB_PATHがソースに絶対パス直書きされていない",
+      _re20.search(r'^DB_PATH\s*=\s*[\'"]/', _src20, _re20.M) is None,
+      "data.py に DB_PATH = \"/...\" のリテラル代入がある")
+check("DB_PATHが data.py 位置からの相対解決と一致",
+      os.path.abspath(_d20.DB_PATH) == os.path.abspath(_exp20), f"{_d20.DB_PATH} != {_exp20}")
+check("解決したDBが実在し読める", os.path.isfile(_d20.DB_PATH), _d20.DB_PATH)
+
+_old20 = os.environ.get("POKENAVI_DB")
+try:
+    os.environ["POKENAVI_DB"] = "/tmp/_pokenavi_dbpath_probe.db"
+    _il20.reload(_d20)
+    check("POKENAVI_DB で上書きできる",
+          _d20.DB_PATH == "/tmp/_pokenavi_dbpath_probe.db", _d20.DB_PATH)
+finally:
+    if _old20 is None:
+        os.environ.pop("POKENAVI_DB", None)
+    else:
+        os.environ["POKENAVI_DB"] = _old20
+    _il20.reload(_d20)   # 後続テストのため既定へ戻す
+
+
+# ════════════════════════════════════════════════════════════════
 # 集計
 # ════════════════════════════════════════════════════════════════
 print(f"\n{'='*60}")
