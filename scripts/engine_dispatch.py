@@ -28,7 +28,11 @@ import os
 import re
 import sys
 
-ENGINE = os.environ.get("ENGINE", "python").lower()
+# 既定は rust（オフラインバッチの高速化。2026-09-03 に python から切替）。
+#   根拠: R0-R5 全パリティゲート乖離0＋V1統計等価（greedy n=24,000 完全一致 / MCTS n=10,400 Δ=-0.03pt p=0.95）。
+#   Rust が使えない状況（モジュール未導入・datapack stale・未対応 env・panic）は自動で Python に落ちる。
+#   Python 時代と厳密比較したい検証ジョブでは ENGINE=python を明示すること。
+ENGINE = os.environ.get("ENGINE", "rust").lower()
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _DATAPACK = os.environ.get(
     "POKENAVI_DATAPACK", os.path.join(_HERE, "_rust_engine", "datapack.json"))
@@ -57,14 +61,15 @@ _G_MCTS = [
     ("MCTS_DOWNSIDE_MARGIN", {None, "0.20", "0.2"}),
     ("MCTS_EXPLAIN", {None, "0"}),
 ]
+# 配線済み経路が内部で使う選出は simulator.ai.select_party（heuristic）であって
+# learned_select_party ではない（_o1_policy.py:24 が simulator.ai から直接importしている）。
+# ai.py が読む env は MEGA_PENALTY のみ（ai.py:663）で、LEARNED_SELECTION / SELECT_MODE /
+# SELECT_SIMS / SELECT_TOPK / MAX_MEGA / MIN_MEGA はすべて learned_selection.py スコープ＝
+# この経路の挙動を変えない。過剰にガードすると、_v3_final が import 時に
+# LEARNED_SELECTION=1 を立てる副作用（_v3_final.py:6）だけで mcts_vs_dist が
+# Python に落ちてしまい、11スクリプトが理由なく高速化を失う。
 _G_SELECT = [
     ("MEGA_PENALTY", {None, "50", "50.0"}),
-    ("LEARNED_SELECTION", {None, "0"}),
-    ("SELECT_MODE", {None}),
-    ("SELECT_SIMS", {None, "100"}),
-    ("SELECT_TOPK", {None, "6"}),
-    ("MAX_MEGA", {None}),
-    ("MIN_MEGA", {None}),
 ]
 # 関数ごとの適用範囲。選出(select_party)を内部で行うのは mcts_vs_dist のみ。
 _GUARDS = {
