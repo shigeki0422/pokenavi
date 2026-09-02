@@ -50,3 +50,9 @@ ga4_client_secret.json
 
 # ローカル検証専用（Pages除外・R2不使用）
 public/sim-data-verify/
+
+# Rustエンジン: 派生物（DBとaz_net_np.jsonから datapack_export.py で数秒で再生成可能）
+scripts/_rust_engine/datapack.json
+scripts/_rust_engine/datapack.json.sha256
+scripts/_rust_engine/cases/
+scripts/rust_engine/*/target/
