@@ -94,10 +94,36 @@ def complete_core(pg, L, th, fixed_specs, rng, N):
         if not rb: continue
         party = [fixed_map[k] if k in fixed_map else rb[i] for i, k in enumerate(picked)]
         if not pg.is_legal(party, megas_set=(1, 2)): continue
+        if not _synergy_ok(party): continue
         key = tuple(sorted(party))
         if key in seen: continue
         seen.add(key); results.append(party)
     return results
+
+
+# 天候始動役のうち「単体では弱く、シナジーがあって初めて価値が出る」ことを実測した種は、
+# 味方がその天候のペイオフを提供する党でのみ採用する。実測（_standalone/, MCTS採点 n=18文脈）:
+#   ペリッパー: シナジー無 -3.54pt[-5.03,-1.91] / 有 +1.75pt / 差 +5.29pt[+2.41,+8.13]
+# 一律に「天候始動役は受け手必須」とすると誤爆する（リザードンは晴れの有無で価値が変わらず +0.07pt、
+# カバルドン/バンギラスは砂の受け手がプールに0種）ため、対象は実測で条件を満たした種に限定する。
+# 特性による始動（あめふらし等）は _role_builds の payoff ゲート（技ベース）では捕まえられない
+# ＝全ての型が同じ特性を持つので型の選び直しでは回避できない。よってここ（党の合否）で判定する。
+SYNERGY_REQUIRED = {"ペリッパー": ("rain", 2)}   # 種 → (天候, 必要ペイオフ)
+SYNERGY_GATE = os.environ.get("SYNERGY_GATE", "0") == "1"
+
+
+def _synergy_ok(party):
+    if not SYNERGY_GATE: return True
+    try:
+        import _synergy_feat as _SF
+    except Exception:
+        return True          # 特徴モジュールが無い環境では素通し（生成を止めない）
+    for i, s in enumerate(party):
+        req = SYNERGY_REQUIRED.get(s.split("@")[0])
+        if not req: continue
+        w, need = req
+        if _SF.party_weather_payoff(party, w, exclude=i) < need: return False
+    return True
 
 _DEX_FULL = {}   # 種名→図鑑番号（型プール非所属の種もDB全体から解決。遅延ロード・プロセス内キャッシュ）
 
