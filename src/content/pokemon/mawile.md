@@ -1,9 +1,9 @@
 ---
 title: 'クチート | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのクチート基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率49位。'
+description: 'ポケモンチャンピオンズのクチート基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率50位。'
 pokemonName: 'クチート'
 dexNumber: 303
-usageRank: 49
+usageRank: 50
 pubDate: '2026-08-10'
 draft: false
 analysisSlug: 'mawile-analysis-m3'
@@ -18,7 +18,7 @@ analysisSlug: 'mawile-analysis-m3'
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.303</strong>　／　使用率 <strong style="color:#dc2626">49位</strong>
+      全国図鑑 <strong>No.303</strong>　／　使用率 <strong style="color:#dc2626">50位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-08-10</div>
   </div>
