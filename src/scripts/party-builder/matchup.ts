@@ -199,6 +199,9 @@ export interface MoveHitDetail {
 
 /** 発数が生ダメージから素直に計算した値より増えているときの要因名。 */
 function _reason(defender: ResolvedBuild, hp: number, dmg: number, hits: number): string | null {
+  // 圏外は「倒せない」だけで、耐え効果が理由とは限らない
+  // （ふいうちは相手が攻撃しない前提だと不発になる）。要因を挙げると誤った帰属になる。
+  if (hits >= OUT_OF_RANGE) return null;
   const raw = dmg > 0 ? Math.ceil(hp / dmg) : OUT_OF_RANGE;
   if (hits <= raw) return null;
   const causes: string[] = [];
@@ -223,7 +226,9 @@ function _detail(m: EngineMove & { idx: number }, p: Pair, att: number,
 
   // 最低乱数でも最高乱数でも同じ発数なら乱数の影響を受けない。実用上限を超える場合も、
   // 保証値である最低乱数側の「確n」を出す（判定行と食い違わせないため）。
-  if (lo === hi || hi > PROB_HITS_CAP || lo >= OUT_OF_RANGE) {
+  // 連続回数が乱数で変わる技（2〜5回・ネズミざん）は、確率計算に回数の分布を
+  // 畳み込めていないので「乱数n発(p%)」を出さず保証値の「確n」に寄せる。
+  if (lo === hi || hi > PROB_HITS_CAP || lo >= OUT_OF_RANGE || m.varHits) {
     return { ...base, hits: lo, prob: null, certain: true, reason: _reason(defender, hp, dmgLo, lo) };
   }
   const prob = koProb(p.specA, p.specB, att, m.idx, hi) * 100;

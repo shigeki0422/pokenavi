@@ -26,7 +26,26 @@ NCASE = int(os.environ.get("NCASE", "300"))
 OUT = os.environ.get("OUT", os.path.join(os.path.dirname(__file__), "cases", "wasm_1v1.jsonl"))
 
 
-def move_damage(A, B, mv, field, roll):
+def hits_minmax(mv, A):
+    """連続回数の下限・上限。engine の analysis::hit_range と対応。
+    上限は choices を末尾（5回）に、ネズミざんの継続判定を必ず通す値にして測る。"""
+    import random as _r
+    ME._enter_fixed(0.0)
+    try:
+        mn = _calc_hits(mv, A)
+    finally:
+        ME._exit_fixed()
+    o_ch, o_rd = _r.choices, _r.random
+    _r.choices = lambda pop, weights=None, k=1, **kw: [list(pop)[-1]] * k
+    _r.random = lambda: 0.0
+    try:
+        mx = _calc_hits(mv, A)
+    finally:
+        _r.choices, _r.random = o_ch, o_rd
+    return max(1, mn), max(1, mx)
+
+
+def move_damage(A, B, mv, field, roll, n):
     """技1回ぶんの与ダメージ（連続技は全ヒット合計）。engine の analysis::move_damage と対応。
 
     「1ターンで減ったHP」ではないので、ばけのかわの身代わり分・砂の削り・
@@ -38,11 +57,13 @@ def move_damage(A, B, mv, field, roll):
     呼び出し元のオブジェクトを汚さないよう、最後に元へ戻す。
     """
     ME._enter_fixed(roll)
-    save = (B.item, B.hp, A.item, getattr(A, "charged", None))
+    save = (B.item, B.hp, A.item, getattr(A, "charged", None), getattr(A, "_multi_hit_index", 0))
     try:
-        n = max(1, _calc_hits(mv, A))
         total = 0
-        for _ in range(n):
+        for hit_i in range(max(1, n)):
+            # トリプルアクセルのように「何発目か」で威力が変わる技があるので、
+            # 対戦本体（battle.py の _multi_hit_index）と同じく毎ヒット更新する
+            A._multi_hit_index = hit_i
             d = calc_damage(A, B, mv, field, False, roll)
             total += d
             B.hp = max(1, B.hp - d)
@@ -51,6 +72,7 @@ def move_damage(A, B, mv, field, roll):
         B.item, B.hp, A.item = save[0], save[1], save[2]
         if save[3] is not None:
             A.charged = save[3]
+        A._multi_hit_index = save[4]
         ME._exit_fixed()
 
 
@@ -64,10 +86,12 @@ def side(spec_0, spec_1, att, field, X, Y):
             continue
         hl, _ = ME._run(spec_0, spec_1, mv.name_jp, L, 0.0, att)
         hh, _ = ME._run(spec_0, spec_1, mv.name_jp, L, 1.0, att)
+        h_min, h_max = hits_minmax(mv, X)
         moves.append({
             "n": mv.name_jp,
-            "dmgLo": move_damage(X, Y, mv, field, 0.0),
-            "dmgHi": move_damage(X, Y, mv, field, 1.0),
+            # 幅は「最小回数×最低乱数 〜 最大回数×最高乱数」
+            "dmgLo": move_damage(X, Y, mv, field, 0.0, h_min),
+            "dmgHi": move_damage(X, Y, mv, field, 1.0, h_max),
             "hitsLo": hl, "hitsHi": hh,
         })
     return {"hp": X.max_hp, "speed": _effective_speed(X, field), "moves": moves}

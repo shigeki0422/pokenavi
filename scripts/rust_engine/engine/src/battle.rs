@@ -701,6 +701,40 @@ fn check_critical(pack: &Pack, attacker: &Poke, mv: &DMove, defender: &Poke, rng
     rng.random() < crit_chance(pack, attacker, mv, Some(defender))
 }
 
+/// 1発ごとに命中判定があり、外れるとそこで止まる技。
+/// 分析（1v1判定）は必中を仮定するので、これらは常に最大回数で当たる扱いになる。
+/// 回数そのものが乱数で決まる 2〜5回の技（みずしゅりけん等）とは別扱い。
+/// 「何発目か」を反映して1発ぶんのダメージを計算する。
+///
+/// multi_hit_index の更新を呼び出し側に任せると、対戦本体と分析側で
+/// 反映漏れが起きる（実際に分析側だけトリプルアクセルの威力が20固定になり、
+/// 「78〜97% なのに確定1」という食い違いを出した）。
+/// 対戦本体（execute_move）と分析（analysis::move_damage）はここを共有する。
+pub fn hit_damage(
+    pack: &Pack,
+    attacker: &mut Poke,
+    defender: &mut Poke,
+    mv: &DMove,
+    field: &mut Field,
+    hit_i: i64,
+    critical: bool,
+    roll_override: Option<f64>,
+    rng: &mut dyn BRng,
+) -> i64 {
+    attacker.multi_hit_index = hit_i;
+    calc_damage(pack, attacker, defender, mv, field, critical, None, roll_override, &mut |k| {
+        if k == 0 {
+            rng.random()
+        } else {
+            rng.choice(16) as f64
+        }
+    })
+}
+
+pub fn is_accuracy_chained(pack: &Pack, mv: &DMove) -> bool {
+    mv.name == pack.sy.l.トリプルアクセル || mv.name == pack.sy.l.ネズミざん
+}
+
 pub fn calc_hits(pack: &Pack, mv: &DMove, attacker: &Poke, rng: &mut dyn BRng) -> i64 {
     let l = &pack.sy.l;
     let n = mv.name;
@@ -739,7 +773,7 @@ pub fn calc_hits(pack: &Pack, mv: &DMove, attacker: &Poke, rng: &mut dyn BRng) -
             return 10;
         }
         let mut hits = 1;
-        while hits < 10 && rng.random() < 0.90 {
+        while hits < 10 && rng.hit_continue() < 0.90 {
             hits += 1;
         }
         return hits;
@@ -1367,17 +1401,10 @@ pub fn execute_move(
         if !D!().is_alive {
             break;
         }
-        A!().multi_hit_index = hit_i;
         let ro = field.roll_override;
         let mut dmg = {
             let (a, d) = two!();
-            calc_damage(pack, a, d, &mv, field, critical, None, ro, &mut |k| {
-                if k == 0 {
-                    rng.random()
-                } else {
-                    rng.choice(16) as f64
-                }
-            })
+            hit_damage(pack, a, d, &mv, field, hit_i, critical, ro, rng)
         };
         if screen_mult < 1.0 {
             dmg = std::cmp::max(1, ((dmg as f64) * screen_mult).floor() as i64);

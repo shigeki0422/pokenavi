@@ -136,6 +136,10 @@ def _enter_fixed(roll=0.0):
         _STATE["choices"] = _rnd.choices
         _DMG._ROLL_OVERRIDE = roll
         _BT.check_hit = lambda *a, **k: True
+        # 1発ごとの命中判定も必中扱い。外れて止まる技（ネズミざん）は最大回数まで当たる。
+        # そうしないと「1発しか当たらない前提」になり、イッカネズミの主力技が圏外になる。
+        _STATE["hitcont"] = _BT._HIT_CONTINUE
+        _BT._HIT_CONTINUE = lambda: 0.0
         # 1.0 ちょうど未満の最大値。判定は全て `random() < prob` なので、
         # prob<1 の追加効果は不発、prob=1 の確定効果（必中急所・りゅうせいぐんの特攻ダウン等）
         # だけが発動する。1.0 を入れると `1.0 < 1.0` が偽になり確定効果まで殺す（実際に殺していた）
@@ -154,6 +158,7 @@ def _exit_fixed():
     if _STATE["depth"] == 0:
         _DMG._ROLL_OVERRIDE = _STATE["roll"]
         _BT.check_hit = _STATE["hit"]
+        _BT._HIT_CONTINUE = _STATE["hitcont"]
         _rnd.random = _STATE["rand"]
         _rnd.randint = _STATE["randint"]
         _rnd.choice = _STATE["choice"]

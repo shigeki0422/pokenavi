@@ -2511,6 +2511,16 @@ MULTI_HIT_RANDOM_25 = {
 }
 
 
+# 1発ごとに命中判定があり、外れるとそこで止まる技。分析（1v1判定）は必中を仮定するので、
+# これらは常に最大回数まで当たる扱いになる。回数自体が乱数の2〜5回技とは別扱い。
+ACCURACY_CHAINED = {"トリプルアクセル", "ネズミざん"}
+
+# ネズミざんの「もう1発続くか」の判定に使う関数。None なら random.random()。
+# 分析側が必中を仮定するために差し替える差込口で、既定では対戦本体の挙動は変わらない
+# （damage._ROLL_OVERRIDE と同じ位置づけ）。
+_HIT_CONTINUE = None
+
+
 def _calc_hits(move: MoveData, attacker=None) -> int:
     n = move.name_jp
     skill_link = attacker is not None and getattr(attacker, 'ability', '') == "スキルリンク"
@@ -2528,7 +2538,8 @@ def _calc_hits(move: MoveData, attacker=None) -> int:
         if skill_link:
             return 10
         hits = 1
-        while hits < 10 and random.random() < 0.90:
+        _hc = _HIT_CONTINUE or random.random
+        while hits < 10 and _hc() < 0.90:
             hits += 1
         return hits
     return 1

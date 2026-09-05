@@ -8,6 +8,11 @@
 //!   random.choices(...) -> `choices` … 値そのもの（連続技のヒット数のみ）
 pub trait BRng {
     fn random(&mut self) -> f64;
+    /// ネズミざんの「もう1発続くか」の判定。既定は random() そのままなので
+    /// 対戦本体の挙動は変わらない。分析側だけが最小/最大回数を作るために差し替える。
+    fn hit_continue(&mut self) -> f64 {
+        self.random()
+    }
     fn choice(&mut self, n: usize) -> usize;
     fn randint(&mut self, a: i64, b: i64) -> i64;
     fn choices(&mut self) -> i64;

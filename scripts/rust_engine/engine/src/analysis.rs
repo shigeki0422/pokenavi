@@ -4,7 +4,7 @@
 //! 割合(%)・乱数n発の確率・記号(◎○△▲×)の閾値といった表示計算は呼び出し側に置く。
 //! ルールを持つ部分だけを一箇所に集めるのが目的で、表示計算を混ぜると
 //! 「同じ判定が二重実装される」という当初の問題がここに再発する。
-use crate::battle::{calc_hits, entry_effects, split2, ActKind, Action, Battle, Side};
+use crate::battle::{calc_hits, entry_effects, hit_damage, is_accuracy_chained, split2, ActKind, Action, Battle, Side};
 use crate::damage::Field;
 use crate::pack::Pack;
 use crate::poke::{build_poke, mega_evolve_poke, Poke};
@@ -23,9 +23,26 @@ pub const ROLLS: usize = 16;
 /// `1.0 < 1.0` が偽になり確定効果まで殺す（Python 側で実際に殺していた）。
 const ALMOST_ONE: f64 = f64::from_bits(0x3FEF_FFFF_FFFF_FFFF);
 
+/// 連続技の回数を最大にする乱数。表示するダメージ幅の上端に使う。
+/// calc_hits しか使わないので、急所や追加効果には影響しない。
+struct MaxHitRng;
+impl BRng for MaxHitRng {
+    // 急所・追加効果は FixedRng と同じ扱い（prob=1 のものだけ発動）にしたうえで、
+    // 連続技の回数だけを最大にする。
+    fn random(&mut self) -> f64 { ALMOST_ONE }
+    fn hit_continue(&mut self) -> f64 { 0.0 }   // ネズミざんを10回続ける
+    fn choice(&mut self, _n: usize) -> usize { 0 }
+    fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+    fn choices(&mut self) -> i64 { 5 }
+}
+
 struct FixedRng;
 impl BRng for FixedRng {
     fn random(&mut self) -> f64 { ALMOST_ONE }
+    // 1発ごとの命中判定は必中扱い（always_hit と同じ前提）。外れて止まる技は
+    // 常に最大回数まで当たる。ネズミざんが「1発しか当たらない前提」になって
+    // 圏外と出るのを避ける。
+    fn hit_continue(&mut self) -> f64 { 0.0 }
     fn choice(&mut self, _n: usize) -> usize { 0 }
     fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
     /// 連続技(2〜5発)の回数。確定数は保証値なので最小の2発。
@@ -105,9 +122,13 @@ fn setup(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, roll: f64) -
 /// 「後から出た側の天候が勝つ」規則により、評価する向きで場が変わってしまう。
 /// 場は対面ごとに1つなので、並び (spec_a, spec_b) は固定したまま攻撃側だけを指定する。
 fn drive(bt: &mut Battle, pack: &Pack, att: usize, move_idx: usize, max_turns: i64) -> i64 {
-    let mut rng = FixedRng;
+    drive_rng(bt, pack, att, move_idx, max_turns, &mut FixedRng)
+}
+
+fn drive_rng(bt: &mut Battle, pack: &Pack, att: usize, move_idx: usize, max_turns: i64,
+             rng: &mut dyn BRng) -> i64 {
     let mut turns = 0i64;
-    bt.run_loop_lim(pack, &mut rng, max_turns, |b2, _r| {
+    bt.run_loop_lim(pack, rng, max_turns, |b2, _r| {
         turns += 1;
         let mv = b2.sides[att].active().moves.get(move_idx).cloned();
         let act = Action { kind: ActKind::Move, mv, move_idx: move_idx as i64, ..Default::default() };
@@ -250,12 +271,14 @@ pub fn move_damage(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
     att: usize, move_idx: usize, roll: f64,
 ) -> i64 {
-    move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, roll, Suppress::None)
+    move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, roll, Suppress::None, false)
 }
 
+/// `hits_max` は連続技の回数を最大にするかどうか。表示するダメージ幅は
+/// 「最小回数×最低乱数 〜 最大回数×最高乱数」で出す（最小回数だけだと過小評価になる）。
 pub fn move_damage_sup(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
-    att: usize, move_idx: usize, roll: f64, sup: Suppress,
+    att: usize, move_idx: usize, roll: f64, sup: Suppress, hits_max: bool,
 ) -> i64 {
     let mut bt = setup_sup(pack, spec_a, spec_b, season, roll, sup);
     let packr: &Pack = pack;
@@ -263,19 +286,21 @@ pub fn move_damage_sup(
         Some(m) => m,
         None => return 0,
     };
-    let mut rng = FixedRng;
-    let n = calc_hits(packr, &mv, bt.sides[att].active(), &mut rng);
+    let n = if hits_max {
+        calc_hits(packr, &mv, bt.sides[att].active(), &mut MaxHitRng)
+    } else {
+        calc_hits(packr, &mv, bt.sides[att].active(), &mut FixedRng)
+    };
     let mut total = 0i64;
-    for _ in 0..n.max(1) {
+    for hit_i in 0..n.max(1) {
         let Battle { sides, field, .. } = &mut bt;
         let (sa, sd) = split2(sides, att);
         let att = &mut sa.party[0];
         let def = &mut sd.party[0];
+        // 1発ぶんの計算は対戦本体と同じ関数を使う（何発目かの反映を含む）。
+        // ここで自前に組み直すと、対戦本体の変更が分析側に伝わらなくなる。
         let mut r = FixedRng;
-        let d = crate::damage::calc_damage(
-            packr, att, def, &mv, field, false, None, Some(roll),
-            &mut |kind| crate::rng::DmgRng(&mut r).call(kind),
-        );
+        let d = hit_damage(packr, att, def, &mv, field, hit_i, false, Some(roll), &mut r);
         total += d;
         // マルチスケイル等「満タンのときだけ」の効果を2発目以降に持ち越さないよう、
         // 連続技の各ヒットは HP を減らしながら計算する。
@@ -324,7 +349,7 @@ pub fn relevant_conds(
         let Some(label) = label else { return };
         if label.is_empty() { return; }
         // 与ダメが変われば確定数も見るまでもない。安い方から確かめる。
-        let d = move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, 0.0, sup);
+        let d = move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, 0.0, sup, false);
         if d != base_dmg {
             out.push(label);
             return;
@@ -337,5 +362,31 @@ pub fn relevant_conds(
     if has_weather { check(pack, Suppress::Weather, weather_name); }
     if has_terrain { check(pack, Suppress::Terrain, terrain_name); }
     if has_stage { check(pack, Suppress::Stages, Some(stage_label)); }
+    // 1発ごとに命中判定がある技は、必中を仮定している以上「全部当たった場合」の値になる。
+    // 妥当ではあるが読み手を誤解させるので明示する。
+    {
+        let bt = setup(pack, spec_a, spec_b, season, 0.0);
+        if let Some(mv) = bt.sides[att].active().moves.get(move_idx) {
+            if is_accuracy_chained(pack, mv) {
+                out.push("最大ヒット時".to_string());
+            }
+        }
+    }
     out
+}
+
+
+/// この技の連続回数の下限・上限。乱数で変わる技（2〜5回のもの、ネズミざん）は
+/// 下限と上限が食い違う。表示するダメージ幅の両端に使う。
+pub fn hit_range(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, move_idx: usize,
+) -> (i64, i64) {
+    let bt = setup(pack, spec_a, spec_b, season, 0.0);
+    let packr: &Pack = pack;
+    let Some(mv) = bt.sides[att].active().moves.get(move_idx).cloned() else { return (1, 1) };
+    let p = bt.sides[att].active();
+    (
+        calc_hits(packr, &mv, p, &mut FixedRng).max(1),
+        calc_hits(packr, &mv, p, &mut MaxHitRng).max(1),
+    )
 }

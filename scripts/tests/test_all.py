@@ -4239,6 +4239,21 @@ try:
           _ME25._run(_MAS25, _MUK25, "トリックフラワー", _L25)[0] == 4,
           f"{_ME25._run(_MAS25, _MUK25, 'トリックフラワー', _L25)[0]}発")
 
+    # 1発ごとに命中判定がある技（ACCURACY_CHAINED）は、分析が必中を仮定する以上
+    # 最大回数まで当たる。既定（対戦本体）ではこの差し替えは効かない。
+    from simulator.battle import _calc_hits as _ch25, ACCURACY_CHAINED as _AC25
+    check("ACCURACY_CHAINED にトリプルアクセルとネズミざんが入る",
+          _AC25 == {"トリプルアクセル", "ネズミざん"}, f"{_AC25}")
+    check("_HIT_CONTINUE の既定は None（対戦本体の挙動を変えない）",
+          _BT25._HIT_CONTINUE is None, f"{_BT25._HIT_CONTINUE}")
+    _nz25 = _L24.get_move("ネズミざん") if False else _f25._W["loader"].get_move("ネズミざん")
+    _ME25._enter_fixed(0.0)
+    try:
+        check("固定文脈でネズミざんは10回", _ch25(_nz25, None) == 10, f"{_ch25(_nz25, None)}回")
+    finally:
+        _ME25._exit_fixed()
+    check("固定を抜けると _HIT_CONTINUE が戻る", _BT25._HIT_CONTINUE is None, "戻っていない")
+
     # 追加効果・連続技・ムラっけの乱数が固定されていること
     import random as _rnd25
     _before25 = (_rnd25.random, _rnd25.choice, _rnd25.choices, _rnd25.randint)
