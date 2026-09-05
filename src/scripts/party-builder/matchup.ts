@@ -341,6 +341,12 @@ export interface MoveHitDetail {
   prob: number | null;
   /** true=最小乱数でもhits発でKO(確定)。false=最大乱数ならhits発だが確率的(prob%)。 */
   certain: boolean;
+  /**
+   * 素のダメージだけで計算した発数より hits が増えている場合の要因（表示用）。
+   * 「51〜61%なのに確定3」のように、%（生ダメージ）と発数（回復・耐え効果込み）で
+   * 前提が違うことが読み手に伝わらない問題への対処。増えていなければ null。
+   */
+  reason: string | null;
 }
 
 /**
@@ -357,8 +363,28 @@ export interface MoveHitDetail {
  * 例: 素のHPに対し乱数1発(25%)の技を持つ相手がきあいのタスキを持つ場合、最低乱数でも最大乱数でも
  * 2発なので「確定2」になる。
  */
+/** 回復アイテム/耐え効果の「表示上の要因名」。素の発数より増えていなければ null。 */
+function _hitReason(attacker: ResolvedBuild, move: ResolvedMove, defender: ResolvedBuild,
+                    hp: number, hits: number, roll: number): string | null {
+  // 耐え効果を無視し eot(回復)も渡さない＝生ダメージだけの発数。
+  // roll は hits と揃える（確定表示は最低乱数、乱数表示は最高乱数の発数を出しているため）。
+  const raw = simulateKO(attacker, move, defender, hp, roll, { ignoreSurvive: true });
+  if (hits <= raw) return null;
+  const causes: string[] = [];
+  if (defender.ability === "ばけのかわ" || defender.ability === "がんじょう"
+      || defender.ability === "マルチスケイル" || defender.ability === "ファントムガード") {
+    causes.push(defender.ability);
+  }
+  if (defender.item === "きあいのタスキ" || defender.item === "たべのこし"
+      || defender.item === "オボンのみ" || defender.item === "オレンのみ") {
+    causes.push(defender.item);
+  }
+  return causes.length ? causes.join("・") : null;
+}
+
+
 function _hitDetailForMove(attacker: ResolvedBuild, move: ResolvedMove, defender: ResolvedBuild): MoveHitDetail {
-  const NONE: MoveHitDetail = { n: move.n, dmgLo: null, dmgHi: null, pctLo: null, pctHi: null, hits: null, prob: null, certain: true };
+  const NONE: MoveHitDetail = { n: move.n, dmgLo: null, dmgHi: null, pctLo: null, pctHi: null, hits: null, prob: null, certain: true, reason: null };
   if (move.cat === "status") return NONE;
 
   // 連続技(トリプルアクセル等)は1回分＝全ヒット合計で評価する(dmg/確定数とも)
@@ -375,7 +401,8 @@ function _hitDetailForMove(attacker: ResolvedBuild, move: ResolvedMove, defender
   const baseHitsHi = _movesToKO(attacker, move, defender, hp, 1);
 
   if (baseHitsLo === baseHitsHi || baseHitsHi > PROB_HITS_CAP) {
-    return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits: baseHitsLo, prob: null, certain: true };
+    return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits: baseHitsLo, prob: null, certain: true,
+             reason: _hitReason(attacker, move, defender, hp, baseHitsLo, 0) };
   }
 
   // 耐え効果(ばけのかわ/がんじょう/タスキ)で発数が底上げされている場合は、保守側
@@ -388,7 +415,8 @@ function _hitDetailForMove(attacker: ResolvedBuild, move: ResolvedMove, defender
   const hasSurvive =
     defender.ability === "ばけのかわ" || defender.ability === "がんじょう" || defender.item === "きあいのタスキ";
   if (hasSurvive) {
-    return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits: baseHitsLo, prob: null, certain: true };
+    return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits: baseHitsLo, prob: null, certain: true,
+             reason: _hitReason(attacker, move, defender, hp, baseHitsLo, 0) };
   }
 
   // 1回目は「相手HP満タン・自分ランク0」、2回目以降は「HP非満タン・自己ランク変化後」の分布を使う
@@ -403,8 +431,9 @@ function _hitDetailForMove(attacker: ResolvedBuild, move: ResolvedMove, defender
   const prob = _koProbabilityWithEot(distsByUse, baseHitsHi, hp, _makeEotStep(attacker, defender)) * 100;
   // baseHitsLo > baseHitsHi である以上、最低乱数の経路はbaseHitsHi発では倒せない＝確率は100%未満。
   // 万一丸め等で100%に達した場合は「乱数n発(100%)」という矛盾表示を避けて確定扱いにする。
-  if (prob >= 100) return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits: baseHitsHi, prob: null, certain: true };
-  return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits: baseHitsHi, prob, certain: false };
+  const _rsn = _hitReason(attacker, move, defender, hp, baseHitsHi, 1);
+  if (prob >= 100) return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits: baseHitsHi, prob: null, certain: true, reason: _rsn };
+  return { n: move.n, dmgLo, dmgHi, pctLo, pctHi, hits: baseHitsHi, prob, certain: false, reason: _rsn };
 }
 
 /**

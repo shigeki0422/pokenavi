@@ -69,7 +69,8 @@ const T = {
     hits: (n: number | null) => (n == null || n >= 999 ? '圏外' : `確定${n}`),
     hitsDetail: (d: MoveHitDetail | null) => {
       if (!d || d.hits == null) return '圏外';
-      return d.certain ? `確定${d.hits}` : `乱数${d.hits}発（${fmtKoProbPct(d.prob)}%）`;
+      const base = d.certain ? `確定${d.hits}` : `乱数${d.hits}発（${fmtKoProbPct(d.prob)}%）`;
+      return d.reason ? `${base}（${d.reason}込み）` : base;
     },
     fastLabel: (fast: boolean) => (fast ? '先手' : '後手'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
@@ -85,7 +86,8 @@ const T = {
     hits: (n: number | null) => (n == null || n >= 999 ? 'out of range' : `KO in ${n}`),
     hitsDetail: (d: MoveHitDetail | null) => {
       if (!d || d.hits == null) return 'out of range';
-      return d.certain ? `KO in ${d.hits}` : `${d.hits}-hit (${fmtKoProbPct(d.prob)}% chance)`;
+      const base = d.certain ? `KO in ${d.hits}` : `${d.hits}-hit (${fmtKoProbPct(d.prob)}% chance)`;
+      return d.reason ? `${base} (incl. ${d.reason})` : base;
     },
     fastLabel: (fast: boolean) => (fast ? 'First' : 'Second'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
@@ -101,7 +103,8 @@ const T = {
     hits: (n: number | null) => (n == null || n >= 999 ? '범위 밖' : `확정 ${n}`),
     hitsDetail: (d: MoveHitDetail | null) => {
       if (!d || d.hits == null) return '범위 밖';
-      return d.certain ? `확정 ${d.hits}` : `${d.hits}발 확률(${fmtKoProbPct(d.prob)}%)`;
+      const base = d.certain ? `확정 ${d.hits}` : `${d.hits}발 확률(${fmtKoProbPct(d.prob)}%)`;
+      return d.reason ? `${base}(${d.reason} 포함)` : base;
     },
     fastLabel: (fast: boolean) => (fast ? '선공' : '후공'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
