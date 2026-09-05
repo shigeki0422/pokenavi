@@ -56,3 +56,5 @@ scripts/_rust_engine/datapack.json
 scripts/_rust_engine/datapack.json.sha256
 scripts/_rust_engine/cases/
 scripts/rust_engine/*/target/
+# ワークスペース直下の target/ は上のパターンに一致しない（135MBの生成物が入る）
+scripts/rust_engine/target/

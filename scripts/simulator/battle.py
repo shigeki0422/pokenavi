@@ -387,11 +387,15 @@ def _best_faint_switch(side: BattleSide, opp: BattlePokemon, field=None) -> Opti
         # 相手より速く、最大打点で相手の現在HPを削り切れる（HPの減った相手を先制で倒す）
         if _eff_spd(p) <= _eff_spd(opp):
             return False
+        # ばけのかわ未破壊なら1発目は通らないので反撃KOは成立しない
+        if opp.ability == "ばけのかわ" and not getattr(opp, "_disguise_broken", False):
+            return False
         best = 0.0
         for mv in p.moves:
             if mv and mv.category != "status" and (mv.power or 0) > 0:
                 try:
-                    best = max(best, calc_damage(p, opp, mv, fld, False, 0.85))
+                    # 第6引数は正規化ロール。最低ロールは 0.0（0.85 は実効0.9775＝ほぼ最高値）
+                    best = max(best, calc_damage(p, opp, mv, fld, False, 0.0))
                 except Exception:
                     pass
         return best >= opp.hp
@@ -940,7 +944,9 @@ def _execute_move(
         if defender_side.future_sight_count > 0:
             logs.append(f"{attacker.name} の みらいよち は失敗した！")
             return logs
-        defender_side.future_sight_dmg = calc_damage(attacker, defender, move, field, random_roll=0.925)
+        # random_roll は正規化値（実ロール = 0.85 + x*0.15）。平均ロール0.925は 0.5 を渡す。
+        # 0.925 を渡すと実効0.98875＝ほぼ最高値になる。
+        defender_side.future_sight_dmg = calc_damage(attacker, defender, move, field, random_roll=0.5)
         defender_side.future_sight_count = 2
         defender_side.future_sight_name = attacker.name
         logs.append(f"{attacker.name} は みらいよち を放った！")

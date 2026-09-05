@@ -1,0 +1,16 @@
+# PyO3 モジュール `pokenavi_engine`。R5 で有効化する（それまでワークスペース非メンバー）。
+# 有効化手順: ルート Cargo.toml の members に "pyengine" を追加し、
+#   venv/bin/maturin develop -m rust_engine/pyengine/Cargo.toml --release
+[package]
+name = "pyengine"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "pokenavi_engine"
+crate-type = ["cdylib"]
+
+[dependencies]
+engine = { path = "../engine" }
+pyo3 = { version = "0.22", features = ["extension-module"] }
+serde_json = { version = "1", features = ["float_roundtrip"] }

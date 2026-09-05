@@ -5,6 +5,7 @@ import path from "node:path";
 import type { MonDetail, MoveDict, ResolvedBuild, SpeciesMaster, TargetBuild, TargetGroup, Verdict } from "./types";
 import { resolveTarget } from "./balance";
 import { judgeVsBuildsMulti, judge1v1, bestMoveHitDetail } from "./matchup";
+import { initEngineFrom } from "../engine/wasm";
 
 export interface StaticMatchup {
   icon: string;
@@ -18,6 +19,14 @@ export interface StaticMatchup {
 }
 
 const DATA_DIR = path.join(process.cwd(), "public", "builder-data");
+
+// 1v1 判定は対戦エンジン(wasm)が行う。ビルド時(Node)でもブラウザと同じ実装を使うため、
+// ここで同期的に読み込んでおく（このモジュールの初期化中に judge1v1 が呼ばれるため）。
+// 生成物が無い場合は scripts/build_engine_wasm.sh を先に実行する。
+await initEngineFrom(
+  fs.readFileSync(path.join(process.cwd(), "public", "engine", "engine_wasm.wasm")),
+  fs.readFileSync(path.join(DATA_DIR, "engine.pack.json"), "utf8"),
+);
 
 function readJson<T>(rel: string): T {
   return JSON.parse(fs.readFileSync(path.join(DATA_DIR, rel), "utf8"));

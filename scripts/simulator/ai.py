@@ -152,13 +152,21 @@ def _best_switch_target(my_side: BattleSide, opp_side: BattleSide,
 
 
 def _effective_speed(poke: BattlePokemon, field: BattleField) -> int:
+    """行動順の推定。倍率は battle.py:_speed_order（実際に行動順を決める側）に揃える。
+    以前は すなかき/ゆきかき が抜け、代わりに すながくれ（本来は回避率特性で速度に無関係）へ
+    ×1.5 を掛けていた。環境には ハカドッグ/ルガルガン(すなかき)・ツンベアー(ゆきかき)・
+    アローラライチュウ(サーフテール) が実在するため、推定と実挙動がずれていた。"""
     spd = math.floor(poke.get_effective_speed() * get_speed_item_multiplier(poke.item))
     if field.weather == "rain" and poke.ability == "すいすい":
         spd *= 2
     if field.weather == "sunny" and poke.ability == "ようりょくそ":
         spd *= 2
-    if field.weather in ("sandstorm", "hail") and poke.ability == "すながくれ":
-        spd = math.floor(spd * 1.5)
+    if field.weather == "sandstorm" and poke.ability == "すなかき":
+        spd *= 2
+    if field.weather == "hail" and poke.ability == "ゆきかき":
+        spd *= 2
+    if getattr(field, "electric_terrain", False) and poke.ability == "サーフテール":
+        spd *= 2
     return spd
 
 
@@ -224,6 +232,10 @@ def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: B
     if full and (opp.ability in ("マルチスケイル", "ファントムガード")
                  or opp.item == "きあいのタスキ" or opp.ability == "がんじょう"):
         return act                                  # 満タンで耐える系は確定KO不成立→介入しない
+    # ばけのかわは満タンかどうかに関係なく1発目のダメージを無効化する（battle.py:992）ので、
+    # 未破壊のうちは「この技で確定KO」が成立しない。full 条件では捕まらないため個別に除外する。
+    if opp.ability == "ばけのかわ" and not getattr(opp, "_disguise_broken", False):
+        return act
     valid = [(i, mv) for i, mv in enumerate(me.moves) if mv is not None]
     valid = _filter_by_pp(_filter_valid_by_lock(valid, me), me)
     best = None; bestd = -1
@@ -234,7 +246,9 @@ def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: B
             continue
         if not _goes_first(me, opp, mv.priority, field):
             continue
-        d = calc_damage(me, opp, mv, field, critical=False, random_roll=0.85)   # 最低ロールでKO=確定
+        # random_roll は正規化値で roll = 0.85 + x*0.15。最低ロールは 0.0（0.85 を渡すと実効0.9775＝
+        # ほぼ最高値になり、確定でないKOを確定と誤認する。実測: 介入の15.3%が該当）。
+        d = calc_damage(me, opp, mv, field, critical=False, random_roll=0.0)   # 最低ロールでKO=確定
         if d >= opp.hp and d > bestd:
             bestd = d; best = (i, mv)
     if best is None:

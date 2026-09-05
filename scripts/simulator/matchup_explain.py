@@ -23,6 +23,24 @@ _ENDURE_ITEMS = {"きあいのタスキ"}
 _ENDURE_ABILITIES = {"がんじょう", "ばけのかわ"}
 
 
+def _dmg_safe(att, deff, mv, field, critical=False, roll=None):
+    """副作用を持ち込まない calc_damage。
+    calc_damage は半減きのみ消費で defender.item=None、充電技で attacker.charged=False と
+    実体を書き換える（対戦本体では正しい）。分析側は同じオブジェクトを使い回すため、
+    1回目の計算で相手のきのみが消え、2回目以降が「きのみ無し」になる事故が起きる。
+    """
+    _di = deff.item; _ai = att.item
+    _c = getattr(att, "charged", None); _e = getattr(att, "_electromorphosis_charged", None)
+    try:
+        if roll is None:
+            return calc_damage(att, deff, mv, field, critical)
+        return calc_damage(att, deff, mv, field, critical, roll)
+    finally:
+        deff.item = _di; att.item = _ai
+        if _c is not None: att.charged = _c
+        if _e is not None: att._electromorphosis_charged = _e
+
+
 def _best_dmg(att, deff, fld, priority_only=False):
     """att→deff の最大与ダメージHP割合（priority_only=Trueで優先度技に限定）。"""
     if not att.is_alive or not deff.is_alive:
@@ -35,9 +53,9 @@ def _best_dmg(att, deff, fld, priority_only=False):
             try:
                 hp = max(1, deff.max_hp)
                 pc = crit_chance(att, mv, deff)
-                d0 = calc_damage(att, deff, mv, fld, critical=False, random_roll=0.925)
+                d0 = _dmg_safe(att, deff, mv, fld, False, 0.5)
                 if pc > 0:
-                    dc = calc_damage(att, deff, mv, fld, critical=True, random_roll=0.925)
+                    dc = _dmg_safe(att, deff, mv, fld, True, 0.5)
                     f = (d0 * (1 - pc) + dc * pc) / hp
                 else:
                     f = d0 / hp

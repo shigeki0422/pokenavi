@@ -649,7 +649,7 @@ const I18N = I18N_ALL[lang];
   import { TYPES } from '../scripts/party-builder/typechart';
   import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx, coverageSet, exposedOnRemoval, holesAfterSwap } from '../scripts/party-builder/balance';
   import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct, bestMoveHitDetail } from '../scripts/party-builder/matchup';
-  import { bestMove, calcDamage } from '../scripts/party-builder/damage';
+  import { initEngine } from '../scripts/engine/wasm';
   import { suggestFill, tuneForTargets } from '../scripts/party-builder/suggest';
   import { validateParty } from '../scripts/party-builder/validate';
 
@@ -2203,22 +2203,20 @@ const I18N = I18N_ALL[lang];
       activeGrp.builds.forEach((b, bi) => {
         const opp = resolveTargetSafe(activeGrp.sp, activeGrp.label, activeGrp.icon, b, core.moves);
         if (!opp) return; // H3: 不整合buildはスキップ(型データが壊れていてもパネル全体はクラッシュさせない)
-        const mySpeed = effectiveSpeed(rb.stats[5], rb.item);
-        const oppSpeed = effectiveSpeed(opp.stats[5], opp.item);
-        const speedTag = mySpeed > oppSpeed ? `<span class="spd-tag t-out">${esc(I18N.speedFaster)}</span>` : mySpeed < oppSpeed ? `<span class="spd-tag t-in">${esc(I18N.speedSlower)}</span>` : `<span class="spd-tag t-eq">${esc(I18N.speedEq)}</span>`;
         const verdict = judge1v1(rb, opp);
+        // 素早さは判定と同じ実効値(天候・エレキフィールド込み)を使う。ここだけ素の値にすると
+        // 「先手と表示されているのに判定は後手扱い」という食い違いが出る。
+        const mySpeed = verdict.myS;
+        const oppSpeed = verdict.oppS;
+        const speedTag = mySpeed > oppSpeed ? `<span class="spd-tag t-out">${esc(I18N.speedFaster)}</span>` : mySpeed < oppSpeed ? `<span class="spd-tag t-in">${esc(I18N.speedSlower)}</span>` : `<span class="spd-tag t-eq">${esc(I18N.speedEq)}</span>`;
         const myHitsTxt = verdict.myHits == null ? '—' : I18N.hitsFmt(verdict.myHits);
         const oppHitsTxt = verdict.oppHits == null ? '—' : I18N.hitsFmt(verdict.oppHits);
         const mb = moveBreakdown(rb, opp);
         // 被ダメ行: 相手の最大打点技(verdict.oppMoveと同一選定基準)の自分への与ダメレンジ・HP比
-        const oppBest = bestMove(opp, rb);
-        let oppDmg = null;
-        if (oppBest) {
-          const myHp = Math.max(1, rb.stats[0]);
-          const dLo = calcDamage(opp, rb, oppBest.move, { randomRoll: 0 });
-          const dHi = calcDamage(opp, rb, oppBest.move, { randomRoll: 1 });
-          oppDmg = { name: oppBest.move.n, dLo, dHi, pLo: (dLo / myHp) * 100, pHi: (dHi / myHp) * 100 };
-        }
+        const od = bestMoveHitDetail(opp, rb);
+        const oppDmg = od && od.dmgLo != null && od.dmgHi != null
+          ? { name: od.n, dLo: od.dmgLo, dHi: od.dmgHi, pLo: od.pctLo, pHi: od.pctHi }
+          : null;
         rows.push({ grp: activeGrp, b, bi, opp, mySpeed, oppSpeed, speedTag, verdict, myHitsTxt, oppHitsTxt, mb, oppDmg });
       });
     }
@@ -3179,9 +3177,13 @@ const I18N = I18N_ALL[lang];
     importFromSuggestHandoff();
     if (store.parties.length === 0) createParty(store);
     try {
-      core = await loadCore();
+      // 1v1判定は対戦エンジン(wasm)が行う。描画前に必ず読み込む
+      await Promise.all([
+        loadCore().then((c) => { core = c; }),
+        initEngine('/engine/engine_wasm.wasm', '/builder-data/engine.pack.json'),
+      ]);
     } catch (e) {
-      console.warn('[init] loadCore()に失敗しました', e);
+      console.warn('[init] 初期化に失敗しました', e);
       renderInitError();
       return;
     }
