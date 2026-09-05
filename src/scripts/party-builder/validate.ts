@@ -40,7 +40,7 @@ export function validateParty(party: Party, species: SpeciesMaster[]): Validatio
   }
   for (const [item, labels] of byItem) {
     if (labels.length >= 2) {
-      out.push({ type: "item-dup", message: `もちもの重複: ${item}(${labels.join("、")})` });
+      out.push({ type: "item-dup", message: `持ち物重複: ${item}(${labels.join("、")})` });
     }
   }
 

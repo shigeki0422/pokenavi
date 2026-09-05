@@ -20,7 +20,7 @@ const I18N_ALL = {
     title: 'パーティ工房',
     lead: '6匹の型を自由に微調整し、想定敵との素早さ比較・1v1判定をリアルタイムに確認できます。1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。',
     obStep1Title: 'ポケモンを追加', obStep1Desc: '空き枠の＋から選ぶか、「空き枠を提案で埋める」で自動編成',
-    obStep2Title: '型を調整', obStep2Desc: 'もちもの・特性・性格・EVを変更すると実数値が即座に反映',
+    obStep2Title: '型を調整', obStep2Desc: '持ち物・特性・性格・EVを変更すると実数値が即座に反映',
     obStep3Title: '相性を確認', obStep3Desc: '使用率上位30体との1v1判定・素早さ比較でパーティの穴を見つける',
     loading: '読み込み中…', close: '閉じる',
     teamHead: '6枠編成', teamDndHint: '（ドラッグで並べ替え）', fillBtn: '空き枠を提案で埋める',
@@ -554,9 +554,30 @@ const I18N = I18N_ALL[lang];
   .montab.pb-drop-target{outline:2px dashed var(--accent);outline-offset:-2px}
 
   /* パーティの穴 */
-  .pb-hole-summary{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:8px;padding:.45em .7em;font-size:.8rem;font-weight:700;margin-bottom:.5em}
+  .pb-hole-summary{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:8px;padding:.45em .7em;font-size:.8rem;font-weight:700;margin-bottom:.5em;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5em}
+  .pb-hole-summary .pb-holefill-btn{flex-shrink:0}
   table.mtx th.mtx-hole{background:#fee2e2;border-radius:5px}
   table.mtx th.mtx-gap{background:#fef3c7;border-radius:5px}
+
+  /* (1) 相性/素早さタブの相手ヘッダ: 紹介ページが存在する種はリンク化する */
+  a.mtx-opp-link{display:block;color:inherit;text-decoration:none}
+  a.mtx-opp-link .mtx-name{text-decoration:underline;text-decoration-color:#cbd5e1;text-underline-offset:2px}
+  a.mtx-opp-link:hover .mtx-name,a.mtx-opp-link:focus-visible .mtx-name{color:var(--accent);text-decoration-color:currentColor}
+
+  /* 「穴を埋める候補」ポップオーバー */
+  .pb-hf-section{margin-bottom:1em}
+  .pb-hf-section:last-child{margin-bottom:0}
+  .pb-hf-section h4{margin:0 0 .5em;font-size:.85rem}
+  .pb-hf-card{display:flex;align-items:center;gap:.6em;border:1px solid rgb(var(--gray-light));border-radius:10px;padding:.5em .7em;margin-bottom:.5em;background:#fff;flex-wrap:wrap}
+  .pb-hf-card img.mtx-ico{width:32px;height:32px}
+  .pb-hf-info{flex:1 1 120px;min-width:0}
+  .pb-hf-name{font-weight:700;font-size:.85rem}
+  .pb-hf-covers{font-size:.72rem;color:rgb(var(--gray))}
+  .pb-hf-filter{display:flex;align-items:center;gap:.45em;font-size:.78rem;font-weight:700;color:rgb(var(--gray-dark));margin:0 0 .7em;cursor:pointer}
+  .pb-hf-filter input{width:16px;height:16px}
+  .pb-hf-build{flex:0 0 100%;display:flex;flex-wrap:wrap;align-items:center;gap:.3em;margin:.1em 0 0;padding-top:.35em;border-top:1px dashed rgb(var(--gray-light))}
+  .pb-hf-bitem,.pb-hf-bnat,.pb-hf-bev{display:inline-flex;align-items:center;gap:.15em;font-size:.68rem;font-weight:700;background:#f1f5f9;border-radius:6px;padding:.1em .45em;color:rgb(var(--gray-dark))}
+  .pb-hf-swap-arrow{color:rgb(var(--gray));font-weight:900;flex-shrink:0}
   .pb-hole-seg{color:#b91c1c}
   .pb-hole-ico{width:16px;height:16px;object-fit:contain;vertical-align:-3px;margin-right:1px}
 
@@ -620,12 +641,12 @@ const I18N = I18N_ALL[lang];
 </script>
 
 <script>
-  import { loadCore, loadMon } from '../scripts/party-builder/data';
+  import { loadCore, loadMon, loadNameUrlMap, nameUrlMapSync } from '../scripts/party-builder/data';
   import { loadStore, saveStore, createParty, createPartyFromSlots, duplicateParty, renameParty, deleteParty, getEffectiveTargets } from '../scripts/party-builder/storage';
   import { fromSpec, fromSuggestSpec, exportParty, importParty } from '../scripts/party-builder/spec';
   import { ALL_NATURES, NEUTRAL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, effectiveSpeed, natureDisp } from '../scripts/party-builder/stats';
   import { TYPES } from '../scripts/party-builder/typechart';
-  import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx } from '../scripts/party-builder/balance';
+  import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx, coverageSet, exposedOnRemoval, holesAfterSwap } from '../scripts/party-builder/balance';
   import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct, bestMoveHitDetail } from '../scripts/party-builder/matchup';
   import { bestMove, calcDamage } from '../scripts/party-builder/damage';
   import { suggestFill, tuneForTargets } from '../scripts/party-builder/suggest';
@@ -642,7 +663,7 @@ const I18N = I18N_ALL[lang];
       title: 'パーティ工房',
       lead: '6匹の型を自由に微調整し、想定敵との素早さ比較・1v1判定をリアルタイムに確認できます。1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。',
       obStep1Title: 'ポケモンを追加', obStep1Desc: '空き枠の＋から選ぶか、「空き枠を提案で埋める」で自動編成',
-      obStep2Title: '型を調整', obStep2Desc: 'もちもの・特性・性格・EVを変更すると実数値が即座に反映',
+      obStep2Title: '型を調整', obStep2Desc: '持ち物・特性・性格・EVを変更すると実数値が即座に反映',
       obStep3Title: '相性を確認', obStep3Desc: '使用率上位30体との1v1判定・素早さ比較でパーティの穴を見つける',
       loading: '読み込み中…', close: '閉じる',
       teamHead: '6枠編成', teamDndHint: '（ドラッグで並べ替え）', fillBtn: '空き枠を提案で埋める',
@@ -697,6 +718,13 @@ const I18N = I18N_ALL[lang];
       speedMatrixLegend: '味方（左・素早さ順）が使用率上位30体の代表型より速いか（スカーフ込み）。<b>◎</b>＝速い <b>△</b>＝同速 <b>×</b>＝遅い。',
       muMatrixLegend: '各味方 vs 使用率上位30体の想定型（採用率上位≤3型）を集約した1v1判定。◎有利 ○やや有利 △五分 ▲やや不利 ×不利。<b class="mu-dep-leg">*</b>＝型により有利不利が変化。<b class="mtx-hole" style="padding:0 4px">赤</b>=誰も集約◎/○を取れない「穴」。セルをクリック(ホバー可のPCではマウスオーバーも)で型ごとの内訳（確定数・素早さ）を表示。',
       holeSummary: labels => `⚠ 穴: ${labels}`,
+      holeFillBtn: '穴を埋める候補', holeFillCalculating: '候補を計算中…',
+      holeFillAddHeading: '追加候補', holeFillAddNone: '追加できる候補が見つかりませんでした',
+      holeFillAllowDupLbl: '既存ポケモンと持ち物重複の提案を許可',
+      holeFillCoversLbl: labels => `穴${labels}を埋める`, holeFillAddBtn: '空き枠に追加',
+      holeFillSwapHeading: '入れ替え提案', holeFillSwapNone: '入れ替えで穴を減らせる候補が見つかりませんでした',
+      holeFillSwapLine: (removeName, addName, before, after) => `${removeName} → ${addName}: 穴${before}→${after}`,
+      holeFillSwappedMsg: (removeName, addName) => `${removeName}を${addName}に入れ替えました`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `型${idx}(${item}): ${sym} ${my}/${opp}・${turn}`,
       noItem: '道具なし', turnFirst: '先手', turnSecond: '後手',
       muDetailSub: '相手の想定型別に、互いの最大打点1発の確定数・素早さ・勝敗判定（タスキ/がんじょう/ばけのかわ考慮）。',
@@ -781,6 +809,13 @@ const I18N = I18N_ALL[lang];
       speedMatrixLegend: 'Whether your team (left, sorted by Speed) outspeeds the top 30\'s representative sets (Scarf included). <b>◎</b> = faster <b>△</b> = tied <b>×</b> = slower.',
       muMatrixLegend: 'Aggregated 1v1 verdict for each ally vs the top 30 usage ranks\' assumed sets (top ≤3 sets by usage). ◎ favorable ○ slightly favorable △ even ▲ slightly unfavorable × unfavorable. <b class="mu-dep-leg">*</b> = favorability varies by set. <b class="mtx-hole" style="padding:0 4px">Red</b> = a "gap" no ally gets an aggregated ◎/○ against. Click a cell (hover also works on PC) for the per-set breakdown (KO count, Speed).',
       holeSummary: labels => `⚠ Gaps: ${labels}`,
+      holeFillBtn: 'Suggest additions', holeFillCalculating: 'Calculating candidates…',
+      holeFillAddHeading: 'Additions', holeFillAddNone: 'No addable candidates found',
+      holeFillAllowDupLbl: 'Allow suggestions with items already used by the party',
+      holeFillCoversLbl: labels => `Fills gap(s): ${labels}`, holeFillAddBtn: 'Add to empty slot',
+      holeFillSwapHeading: 'Swap suggestions', holeFillSwapNone: 'No swap reduces the gaps',
+      holeFillSwapLine: (removeName, addName, before, after) => `${removeName} → ${addName}: Gaps ${before}→${after}`,
+      holeFillSwappedMsg: (removeName, addName) => `Swapped ${removeName} for ${addName}`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `Set ${idx} (${item}): ${sym} ${my}/${opp} · ${turn}`,
       noItem: 'no item', turnFirst: 'moves first', turnSecond: 'moves second',
       muDetailSub: 'Per assumed opposing set: KO count and Speed for each side\'s strongest hit, plus the win/loss call (accounting for Focus Sash/Sturdy/Disguise).',
@@ -865,6 +900,13 @@ const I18N = I18N_ALL[lang];
       speedMatrixLegend: '아군（왼쪽·스피드 순）이 사용률 상위 30마리의 대표 빌드보다 빠른지（스카프 포함）. <b>◎</b>＝빠름 <b>△</b>＝동속 <b>×</b>＝느림.',
       muMatrixLegend: '각 아군 vs 사용률 상위 30마리의 예상 빌드（채용률 상위≤3빌드）을 종합한 1v1 판정. ◎유리 ○약간유리 △반반 ▲약간불리 ×불리. <b class="mu-dep-leg">*</b>＝빌드에 따라 유불리가 달라짐. <b class="mtx-hole" style="padding:0 4px">빨강</b>=아무도 종합 ◎/○를 얻지 못하는 「약점」. 셀 클릭(호버 가능한 PC에서는 마우스오버도)으로 빌드별 상세（확정타·스피드）를 확인할 수 있습니다.',
       holeSummary: labels => `⚠ 약점: ${labels}`,
+      holeFillBtn: '약점을 메우는 후보', holeFillCalculating: '후보를 계산하는 중…',
+      holeFillAddHeading: '추가 후보', holeFillAddNone: '추가할 수 있는 후보를 찾지 못했습니다',
+      holeFillAllowDupLbl: '기존 포켓몬과 지닌 물건이 중복되는 제안 허용',
+      holeFillCoversLbl: labels => `약점 ${labels}을(를) 메움`, holeFillAddBtn: '빈 칸에 추가',
+      holeFillSwapHeading: '교체 제안', holeFillSwapNone: '교체로 약점을 줄일 후보를 찾지 못했습니다',
+      holeFillSwapLine: (removeName, addName, before, after) => `${removeName} → ${addName}: 약점 ${before}→${after}`,
+      holeFillSwappedMsg: (removeName, addName) => `${removeName}을(를) ${addName}(으)로 교체했습니다`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `빌드${idx}(${item}): ${sym} ${my}/${opp}·${turn}`,
       noItem: '도구 없음', turnFirst: '선공', turnSecond: '후공',
       muDetailSub: '상대 예상 타입별로 서로의 최대 위력 1발 확정타・스피드・승패 판정（타슈/옹골참/화신의 모습 고려）.',
@@ -982,6 +1024,16 @@ const I18N = I18N_ALL[lang];
       <div class="drow"><span class="lbl mv">${I18N.moveLbl}</span><span class="mvwrap">${b.moves.filter(Boolean).map((x) => `<span class="mvchip">${typeIcoForMove(x)}${esc(tMove(x))}</span>`).join('') || '—'}</span></div>
       <div class="drow"><span class="lbl ev">${I18N.evLbl}</span><span class="mvwrap">${evChipsArr(b.ev)}</span></div>`;
   }
+  /** 穴を埋める候補カードに出す型の要約(持ち物・性格・技・EV)。 */
+  function hfBuildHtml(slot) {
+    const moves = (slot.moves || []).filter(Boolean).map((x) => `<span class="mvchip">${typeIcoForMove(x)}${esc(tMove(x))}</span>`).join('');
+    return `<div class="pb-hf-build">
+        <span class="pb-hf-bitem">${itemIco(slot.item)}${esc(tItem(slot.item)) || '—'}</span>
+        <span class="pb-hf-bnat">${esc(tNatureDisp(slot.nature)) || '—'}</span>
+        ${moves}
+        <span class="pb-hf-bev">${esc(pbEvStr(slot.evs)) || 'EV—'}</span>
+      </div>`;
+  }
   /** 検索候補のハイライト表示。表示言語(en/ko)での一致はtPoke後の文字列に対してハイライトし、
    * 和名一致時はそのまま元のマッチ位置でハイライトする。 */
   function hlSug(text, q) {
@@ -1027,6 +1079,10 @@ const I18N = I18N_ALL[lang];
   let miniBarDismissed = false; // (1) モバイル判定ミニバーを✕で閉じた状態(このページセッション中は再表示しない)
   let sheetExpanded = false; // ミニバーのボトムシート展開状態(セッション中のみ保持・保存不要)。renderMiniBar()のみが読み書きする。
   let mtxPopData = []; // (5) ポケモン相性マトリクスのセル用ポップオーバー内容(renderのたびに作り直す)
+  let holeFillResult = null; // 「穴を埋める候補」の計算結果キャッシュ。{ sig, additions, swaps } または null(未計算)
+  let holeFillLoading = false; // 計算中フラグ(ポップオーバーのスピナー表示用)
+  let holeFillAllowDup = false; // もちもの重複を許可するか(既定は重複型を候補から除外)
+  let holeFillView = { additions: [], swaps: [] }; // いま描画中のリスト(適用ボタンの参照先)
   let mbPopData = []; // (5) 仮想敵カードの技チップ用ポップオーバー内容(renderTargetsPanelのたびに作り直す)
   let renamingParty = false; // (12b) パーティ名インライン編集中フラグ(renderPartyBarのみが参照)
   let pendingUndo = null; // (9) 枠✕のUndoトースト。{ partyId, index, slotData, timer } または null(最後の1件のみ保持)
@@ -1059,6 +1115,8 @@ const I18N = I18N_ALL[lang];
     activeMuTab = null;
     muEdit = null;
     renamingParty = false;
+    holeFillResult = null;
+    holeFillLoading = false;
     clearPendingUndo();
   }
   function resolveSlotSafe(slot) {
@@ -1093,17 +1151,54 @@ const I18N = I18N_ALL[lang];
   function invalidateOppColsCache() { oppColsCache = null; }
   function buildOppCols() {
     if (!core) return [];
+    ensureNameUrlMapLoaded();
     if (oppColsCache) return oppColsCache;
     oppColsCache = effectiveTargets()
       .map((g) => ({
         icon: g.icon,
         label: g.label,
+        sp: g.sp, // (1) 紹介ページリンク解決用(labelはメガ名の場合があるため、base種名のspで引く)
         builds: (g.builds || [])
           .map((b) => resolveTargetSafe(g.sp, g.label, g.icon, b, core.moves))
           .filter((b) => b !== null),
       }))
       .filter((g) => g.builds.length);
     return oppColsCache;
+  }
+
+  // ---- (1) ポケモン相性・素早さタブの相手ヘッダのリンク化 ----
+  /** search-index.json のロードは相性/素早さタブが初めて描画される(=buildOppCols初回呼び出し)時でよい。
+   * 完了後、その時点で相性/素早さタブを表示中ならリンクを反映するため再描画する。 */
+  let nameUrlMapLoadStarted = false;
+  function ensureNameUrlMapLoaded() {
+    if (nameUrlMapLoadStarted) return;
+    nameUrlMapLoadStarted = true;
+    loadNameUrlMap().then(() => {
+      if (balanceTab === 'mu' || balanceTab === 'speed') {
+        const pane = document.getElementById('pb-balance-pane');
+        if (!pane) return;
+        pane.innerHTML = balancePaneHtml(resolvedPartyList(), balanceTab);
+        bindMtxPopovers(pane);
+        bindHoleFillButton(pane);
+      }
+    }).catch((e) => console.warn('[ensureNameUrlMapLoaded] search-index.jsonの取得に失敗しました', e));
+  }
+  /** sp(種の和名)から紹介ページURLを引く。ページが存在しない種・未ロード時はnull。 */
+  function oppPageUrl(sp) {
+    if (!sp) return null;
+    const map = nameUrlMapSync();
+    if (!map) return null;
+    const e = map.get(sp);
+    if (!e) return null;
+    return lang === 'en' ? e.ue : lang === 'ko' ? e.uk : e.u;
+  }
+  /** 相手列ヘッダ(スプライト+名前)。紹介ページがあればaでリンク化し、無ければ従来通りの非リンク表示。
+   * ポケモン相性・素早さタブで共有する(セルのポップオーバーとは別要素のため誤爆しない)。 */
+  function oppHeaderCellHtml(o, extraCls) {
+    const inner = `${icoImg(o.icon, o.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(o.label))}</div>`;
+    const url = oppPageUrl(o.sp);
+    const body = url ? `<a class="mtx-opp-link" href="${esc(url)}">${inner}</a>` : inner;
+    return `<th class="${extraCls || ''}">${body}</th>`;
   }
 
   /** targets.json由来の仮想敵一覧を、store.customTargets(仮想敵の型のユーザー編集)で差し替えた「効果的builds」で返す。
@@ -1465,11 +1560,14 @@ const I18N = I18N_ALL[lang];
   }
 
   // ---- (9) 枠✕のUndoトースト ----
-  /** 新規除去のたびに前回分を上書きする(=最後の1件のみUndo可能)。5秒後に自動消滅する。 */
-  function showUndoToast(name, partyId, index, slotData) {
+  /** 新規除去のたびに前回分を上書きする(=最後の1件のみUndo可能)。5秒後に自動消滅する。
+   * mode='remove'(既定): 枠✕での除去。左詰め後のindexへslotDataを挿入し直す(既存挙動)。
+   * mode='replace': 「穴を埋める候補」の入れ替え適用。indexの枠へslotDataをそのまま戻す(左詰めしない)。
+   * msgを渡すとI18N.undoRemoved(name)の代わりにその文言をそのまま表示する(入れ替え用の文言を使うため)。 */
+  function showUndoToast(name, partyId, index, slotData, mode, msg) {
     if (pendingUndo && pendingUndo.timer) clearTimeout(pendingUndo.timer);
     const timer = setTimeout(() => { pendingUndo = null; renderUndoToast(); }, 5000);
-    pendingUndo = { name, partyId, index, slotData, timer };
+    pendingUndo = { name, partyId, index, slotData, timer, mode: mode || 'remove', msg };
     renderUndoToast();
   }
   function clearPendingUndo() {
@@ -1482,18 +1580,27 @@ const I18N = I18N_ALL[lang];
     if (!el) return;
     if (!pendingUndo) { el.style.display = 'none'; el.innerHTML = ''; return; }
     el.style.display = 'flex';
-    el.innerHTML = `<span>${esc(I18N.undoRemoved(pendingUndo.name))}</span><button type="button" class="pb-undo-toast-btn" id="pb-undo-btn">${esc(I18N.undoBtn)}</button>`;
+    const msg = pendingUndo.msg || I18N.undoRemoved(pendingUndo.name);
+    el.innerHTML = `<span>${esc(msg)}</span><button type="button" class="pb-undo-toast-btn" id="pb-undo-btn">${esc(I18N.undoBtn)}</button>`;
     document.getElementById('pb-undo-btn').addEventListener('click', undoRemoveSlot);
   }
-  /** 復元: 除去時の位置(左詰め後のインデックス)へSlot全体(targets込み)を挿入し直す。 */
+  /** 復元: mode='remove'は除去時の位置(左詰め後のインデックス)へSlot全体(targets込み)を挿入し直す。
+   * mode='replace'はindexの枠へslotDataをそのまま(左詰めせず)戻す。 */
   function undoRemoveSlot() {
     if (!pendingUndo) return;
-    const { partyId, index, slotData, timer } = pendingUndo;
+    const { partyId, index, slotData, timer, mode } = pendingUndo;
     clearTimeout(timer);
     pendingUndo = null;
     renderUndoToast();
     const party = store.parties.find((pp) => pp.id === partyId);
     if (!party) return;
+    if (mode === 'replace') {
+      party.slots[index] = slotData;
+      party.updatedAt = Date.now();
+      saveStore(store);
+      if (activeParty() && activeParty().id === partyId) render();
+      return;
+    }
     const filled = party.slots.filter((s) => s !== null);
     const insertAt = Math.min(index, filled.length);
     filled.splice(insertAt, 0, slotData);
@@ -2398,12 +2505,14 @@ const I18N = I18N_ALL[lang];
       <div class="pane" id="pb-balance-pane">${balancePaneHtml(resolvedParty, balanceTab)}</div>
     `;
     bindMtxPopovers(document.getElementById('pb-balance-pane'));
+    bindHoleFillButton(document.getElementById('pb-balance-pane'));
     el.querySelectorAll('.tb').forEach((btn) => btn.addEventListener('click', () => {
       balanceTab = btn.dataset.t;
       el.querySelectorAll('.tb').forEach((b) => b.classList.toggle('active', b.dataset.t === balanceTab));
       const pane = document.getElementById('pb-balance-pane');
       pane.innerHTML = balancePaneHtml(resolvedParty, balanceTab);
       bindMtxPopovers(pane);
+      bindHoleFillButton(pane);
     }));
   }
   function balancePaneHtml(resolvedParty, tab) {
@@ -2441,7 +2550,7 @@ const I18N = I18N_ALL[lang];
     const oppCols = buildOppCols();
     const rows = speedOrder(resolvedParty);
     const byLabel = new Map(resolvedParty.map((b) => [b.label, b]));
-    const head = `<tr><th class="mtx-corner mtx-stick">${esc(I18N.selfVsOppRep)}</th>` + oppCols.map((o) => `<th>${icoImg(o.icon, o.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(o.label))}</div></th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${esc(I18N.selfVsOppRep)}</th>` + oppCols.map((o) => oppHeaderCellHtml(o)).join('') + `</tr>`;
     const bodyRows = rows.map((r) => {
       const b = byLabel.get(r.label);
       const scarf = b && b.item === 'こだわりスカーフ';
@@ -2516,9 +2625,9 @@ const I18N = I18N_ALL[lang];
     const oppCols = buildOppCols();
     const holeInfo = findHoles(resolvedParty, oppCols);
     const summary = holeInfo.holeLabels.length
-      ? `<div class="pb-hole-summary">${esc(I18N.holeSummary(holeInfo.holeLabels.map(tPoke).join('、')))}</div>`
+      ? `<div class="pb-hole-summary"><span>${esc(I18N.holeSummary(holeInfo.holeLabels.map(tPoke).join('、')))}</span><button type="button" class="pb-btn-sub pb-holefill-btn" id="pb-holefill-btn">${esc(I18N.holeFillBtn)}</button></div>`
       : '';
-    const head = `<tr><th class="mtx-corner mtx-stick">${esc(I18N.selfVsOppAgg)}</th>` + oppCols.map((o, ci) => `<th class="${holeInfo.holeIdx.has(ci) ? 'mtx-hole' : ''}">${icoImg(o.icon, o.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(o.label))}</div></th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${esc(I18N.selfVsOppAgg)}</th>` + oppCols.map((o, ci) => oppHeaderCellHtml(o, holeInfo.holeIdx.has(ci) ? 'mtx-hole' : '')).join('') + `</tr>`;
     mtxPopData = [];
     const rows = resolvedParty.map((b) => {
       const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b.icon, b.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(b.label))}</div></div></th>`;
@@ -2569,6 +2678,262 @@ const I18N = I18N_ALL[lang];
       const addBtn = document.getElementById('pb-mtx-add-target');
       if (addBtn && !addBtn.disabled) addBtn.addEventListener('click', () => addTargetFromMatrix(d.o.label));
     }));
+  }
+
+  // ---- (2) 穴を埋める候補 ----
+  /** ポケモン相性タブの穴サマリー行のボタンをクリック可能にする(穴0の時はボタン自体が無い)。 */
+  function bindHoleFillButton(paneEl) {
+    if (!paneEl) return;
+    const btn = paneEl.querySelector('#pb-holefill-btn');
+    if (btn) btn.addEventListener('click', onHoleFillClick);
+  }
+  /** 候補の代表型Slotを組み立てる。mon/{icon}.json の builds[0](使用率最多の型spec)を優先し、
+   * builds が空(データ欠落)の種のみ items/abilities/natures/evs/moves それぞれの使用率最頻値から
+   * 組み立てるフォールバックを使う。 */
+  /** 候補種の型を採用率順で返す。メガ石持ちの型と非メガの型が両方あるとき、入れ替え相手の
+   * メガ有無に合わせて選べるようにするため単一の代表型ではなく候補列を返す。 */
+  function candidateSlotsForCandidate(spName, detail) {
+    const out = [];
+    if (detail && Array.isArray(detail.builds)) {
+      detail.builds.forEach((spec) => {
+        const slot = fromSpec(spec);
+        if (slot) out.push(slot);
+      });
+    }
+    out.push(representativeSlotForCandidate(spName, detail));
+    return out;
+  }
+  function representativeSlotForCandidate(spName, detail) {
+    const item = detail && detail.items && detail.items[0] ? detail.items[0].n : '';
+    const ability = detail && detail.abilities && detail.abilities[0] ? detail.abilities[0].n : '';
+    const nature = detail && detail.natures && detail.natures[0] ? detail.natures[0].n : '';
+    const evs = detail && detail.evs && detail.evs[0] ? [...detail.evs[0].ev] : [0, 0, 0, 0, 0, 0];
+    const moves = detail && Array.isArray(detail.moves) ? detail.moves.slice(0, 4).map((m) => m.n) : [];
+    return { sp: spName, item, ability, nature, evs, moves, targets: [] };
+  }
+  /** 現在のパーティ・仮想敵の状態を表す軽量な文字列。同じ状態ならholeFillResultを再利用する
+   * (「パーティ・仮想敵編集で無効化されるまでキャッシュ」の判定に、キャッシュ無効化フラグを
+   * 各所に仕込む代わりにこの署名比較を使う)。 */
+  function holeFillSignature(resolvedParty, oppCols) {
+    const buildSig = (b) => `${b.sp}|${b.item}|${b.ability}|${b.nature}|${b.evs.join(',')}|${b.moves.map((m) => m.n).join(',')}`;
+    const partySig = resolvedParty.map(buildSig).join(';');
+    const oppSig = oppCols.map((o) => `${o.label}:${o.builds.map(buildSig).join('/')}`).join(';');
+    return `${partySig}##${oppSig}`;
+  }
+  /**
+   * 穴を埋める候補の計算本体。候補プール(使用率上位~50種、パーティと図鑑番号重複除外)を
+   * mon/{icon}.json 並列fetchし、各候補×oppCols(≤30列)の集約判定(judgeVsBuilds)を1回だけ
+   * coverageSet()で計算してカバレッジ集合を作る(party各メンバーの被覆も同様)。
+   * 入れ替え探索(6メンバー×候補数)はholesAfterSwap()の集合演算のみで行い、
+   * judgeVsBuildsを6×候補数だけ追加で呼ぶことはしない。
+   */
+  async function computeHoleFillSuggestions(party, oppCols, holeInfo) {
+    const filledIdx = [];
+    const resolvedParty = [];
+    party.slots.forEach((slot, i) => {
+      const rb = resolveSlotSafe(slot);
+      if (rb) { filledIdx.push(i); resolvedParty.push(rb); }
+    });
+    const emptySlotIdx = party.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
+
+    const usedDex = new Set(resolvedParty.map((b) => (b.icon || '').split('-')[0]));
+    const pool = [...core.species]
+      .filter((s) => !usedDex.has((s.icon || '').split('-')[0]))
+      .sort((a, b) => a.rank - b.rank)
+      .slice(0, 50);
+
+    const monDetails = await Promise.all(pool.map((s) => loadMon(s.icon).catch(() => null)));
+
+    // メガは1体しか進化できないため、3体以上積むと選出パターンが減る。候補はメガ型・非メガ型を
+    // 最大1つずつ持ち、追加はメガ2体まで、入れ替えはメガ有無が一致する組み合わせのみに絞る。
+    // 同一種でもメガ型/非メガ型・持ち物違いを最大3型まで持つ(もちもの重複フィルタが効いたときに
+    // 同じ種の別の型へ落とせるように)。
+    const megaCount = resolvedParty.filter((b) => b.mega).length;
+    const candidates = [];
+    pool.forEach((sp, i) => {
+      const seen = new Set();
+      let nMega = 0, nPlain = 0;
+      candidateSlotsForCandidate(sp.n, monDetails[i]).forEach((slot) => {
+        if (nMega + nPlain >= 3) return;
+        const rb = resolveSlotSafe(slot);
+        if (!rb) return;
+        const key = `${rb.mega ? 'M' : 'P'}|${rb.item}`;
+        if (seen.has(key) || (rb.mega ? nMega >= 2 : nPlain >= 2)) return;
+        seen.add(key);
+        if (rb.mega) nMega++; else nPlain++;
+        candidates.push({ sp: sp.n, icon: sp.icon, slot, build: rb, mega: rb.mega, cov: coverageSet(rb, oppCols) });
+      });
+    });
+
+    const partyCoverage = resolvedParty.map((b) => coverageSet(b, oppCols));
+    return {
+      candidates,
+      members: resolvedParty.map((b, mi) => ({ label: b.label, icon: b.icon, mega: b.mega, item: b.item, slotIdx: filledIdx[mi] })),
+      holeIdx: holeInfo.holeIdx,
+      exposed: exposedOnRemoval(partyCoverage, oppCols.length),
+      megaCount,
+      emptySlotIdx,
+      oppCols,
+      poolSize: pool.length,
+    };
+  }
+  /** 計算済みの候補群から、表示用の追加候補・入れ替え提案を選ぶ。もちもの重複フィルタの
+   * 切り替えは再計算せずここだけ通し直す(coverageSetの計算はcomputeHoleFillSuggestions側で完了済み)。 */
+  function selectHoleFillLists(raw, allowDupItem) {
+    const MEGA_MAX = 2;
+    const { candidates, members, holeIdx, exposed, megaCount } = raw;
+    const dupNg = (item, forbidden) => !allowDupItem && item && forbidden.has(item);
+
+    const partyItems = new Set(members.map((m) => m.item).filter(Boolean));
+    const bestAdd = new Map();
+    candidates.forEach((c) => {
+      if (c.mega && megaCount >= MEGA_MAX) return;
+      if (dupNg(c.build.item, partyItems)) return;
+      const covered = [...c.cov].filter((ci) => holeIdx.has(ci));
+      if (!covered.length) return;
+      const cur = bestAdd.get(c.sp);
+      if (!cur || covered.length > cur.covered.length) bestAdd.set(c.sp, { cand: c, covered });
+    });
+    const additions = [...bestAdd.values()].sort((a, b) => b.covered.length - a.covered.length).slice(0, 8);
+
+    const swaps = [];
+    members.forEach((member, mi) => {
+      const others = new Set(members.filter((_, j) => j !== mi).map((m) => m.item).filter(Boolean));
+      const bestForMember = new Map();
+      candidates.forEach((c) => {
+        if (c.mega !== member.mega) return;
+        if (dupNg(c.build.item, others)) return;
+        const after = holesAfterSwap(holeIdx, exposed[mi], c.cov);
+        const decrease = holeIdx.size - after.size;
+        if (decrease <= 0) return;
+        const cur = bestForMember.get(c.sp);
+        if (!cur || decrease > cur.decrease) {
+          bestForMember.set(c.sp, { slotIdx: member.slotIdx, removeLabel: member.label, removeIcon: member.icon, cand: c, holesBefore: holeIdx.size, holesAfter: after.size, decrease });
+        }
+      });
+      bestForMember.forEach((v) => swaps.push(v));
+    });
+    swaps.sort((a, b) => b.decrease - a.decrease);
+
+    return { additions, swaps: swaps.slice(0, 5) };
+  }
+  async function onHoleFillClick() {
+    const p = activeParty();
+    if (!p || !core) return;
+    const resolvedParty = resolvedPartyList();
+    const oppCols = buildOppCols();
+    const holeInfo = findHoles(resolvedParty, oppCols);
+    if (!holeInfo.holeLabels.length) return;
+    const sig = holeFillSignature(resolvedParty, oppCols);
+    if (holeFillResult && holeFillResult.sig === sig) {
+      openHoleFillPopover();
+      return;
+    }
+    holeFillLoading = true;
+    openHoleFillPopover();
+    const t0 = performance.now();
+    let result;
+    try {
+      result = await computeHoleFillSuggestions(p, oppCols, holeInfo);
+    } catch (e) {
+      console.warn('[onHoleFillClick] 穴を埋める候補の計算に失敗しました', e);
+      holeFillLoading = false;
+      holeFillResult = { sig, candidates: [], members: [], holeIdx: new Set(), exposed: [], megaCount: 0, emptySlotIdx: [], oppCols };
+      renderHoleFillBody();
+      return;
+    }
+    const elapsed = Math.round(performance.now() - t0);
+    console.info(`[pb-holefill] 候補${result.poolSize}種 計算時間: ${elapsed}ms`);
+    holeFillResult = { sig, ...result };
+    holeFillLoading = false;
+    renderHoleFillBody();
+  }
+  function openHoleFillPopover() {
+    const body = document.getElementById('pb-modal-body');
+    body.innerHTML = `<h3 style="margin-top:0">${esc(I18N.holeFillBtn)}</h3><div id="pb-holefill-body"></div>`;
+    showModal();
+    renderHoleFillBody();
+  }
+  function renderHoleFillBody() {
+    const el = document.getElementById('pb-holefill-body');
+    if (!el) return;
+    if (holeFillLoading) {
+      el.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I18N.holeFillCalculating)}</div></div>`;
+      return;
+    }
+    if (!holeFillResult) { el.innerHTML = ''; return; }
+    const { emptySlotIdx, oppCols } = holeFillResult;
+    const { additions, swaps } = selectHoleFillLists(holeFillResult, holeFillAllowDup);
+    holeFillView = { additions, swaps };
+    const hasEmpty = emptySlotIdx.length > 0;
+    const coverLabels = (covered) => covered.map((ci) => tPoke(oppCols[ci].label)).join('、');
+    const addCards = additions.map((a, i) => `<div class="pb-hf-card">
+        ${icoImg(a.cand.icon, a.cand.build.label, 'mtx-ico')}
+        <div class="pb-hf-info">
+          <div class="pb-hf-name">${esc(tPoke(a.cand.build.label))}</div>
+          <div class="pb-hf-covers">${esc(I18N.holeFillCoversLbl(coverLabels(a.covered)))}</div>
+        </div>
+        <button type="button" class="pb-btn-sub" data-hf-add="${i}" ${hasEmpty ? '' : 'disabled'} title="${hasEmpty ? '' : esc(I18N.noEmptySlots)}">${esc(I18N.holeFillAddBtn)}</button>
+        ${hfBuildHtml(a.cand.slot)}
+      </div>`).join('');
+    const swapCards = swaps.map((s, i) => `<div class="pb-hf-card">
+        ${icoImg(s.removeIcon, s.removeLabel, 'mtx-ico')}
+        <span class="pb-hf-swap-arrow">→</span>
+        ${icoImg(s.cand.icon, s.cand.build.label, 'mtx-ico')}
+        <div class="pb-hf-info">
+          <div class="pb-hf-name">${esc(I18N.holeFillSwapLine(tPoke(s.removeLabel), tPoke(s.cand.build.label), s.holesBefore, s.holesAfter))}</div>
+        </div>
+        <button type="button" class="pb-btn-sub" data-hf-swap="${i}">${esc(I18N.applyBtn)}</button>
+        ${hfBuildHtml(s.cand.slot)}
+      </div>`).join('');
+    el.innerHTML = `
+      <label class="pb-hf-filter"><input type="checkbox" id="pb-hf-allowdup" ${holeFillAllowDup ? 'checked' : ''}>${esc(I18N.holeFillAllowDupLbl)}</label>
+      <div class="pb-hf-section">
+        <h4>${esc(I18N.holeFillAddHeading)}</h4>
+        ${addCards || `<div class="muted">${esc(I18N.holeFillAddNone)}</div>`}
+      </div>
+      <div class="pb-hf-section">
+        <h4>${esc(I18N.holeFillSwapHeading)}</h4>
+        ${swapCards || `<div class="muted">${esc(I18N.holeFillSwapNone)}</div>`}
+      </div>`;
+    const dupChk = el.querySelector('#pb-hf-allowdup');
+    if (dupChk) dupChk.addEventListener('change', (e) => { holeFillAllowDup = e.target.checked; renderHoleFillBody(); });
+    el.querySelectorAll('[data-hf-add]').forEach((btn) => { if (!btn.disabled) btn.addEventListener('click', () => applyHoleFillAdd(+btn.dataset.hfAdd)); });
+    el.querySelectorAll('[data-hf-swap]').forEach((btn) => btn.addEventListener('click', () => applyHoleFillSwap(+btn.dataset.hfSwap)));
+  }
+  /** 追加候補の適用: 先頭の空き枠に候補の代表型をそのまま追加する(空き枠が無ければ何もしない。
+   * ボタン自体がその場合disabledなので通常ここには来ない)。空き枠追加は失う情報が無いためUndo不要
+   * (onFillSpriteClickと同じ設計)。 */
+  function applyHoleFillAdd(i) {
+    if (!holeFillResult) return;
+    const a = holeFillView.additions[i];
+    if (!a) return;
+    const p = activeParty();
+    if (!p) return;
+    const idx = p.slots.findIndex((s) => !s);
+    if (idx === -1) return;
+    p.slots[idx] = { ...a.cand.slot, evs: [...a.cand.slot.evs], moves: [...a.cand.slot.moves], targets: [] };
+    p.updatedAt = Date.now();
+    saveStore(store);
+    hideModal();
+    render();
+  }
+  /** 入れ替え提案の適用: 対象枠を候補の代表型Slotに置換する。除去される元の枠はUndoトースト
+   * (既存の枠✕と同じ#pb-undo-toast、mode='replace')で5秒間だけ復元可能にする。 */
+  function applyHoleFillSwap(i) {
+    if (!holeFillResult) return;
+    const s = holeFillView.swaps[i];
+    if (!s) return;
+    const p = activeParty();
+    if (!p) return;
+    const prevSlot = p.slots[s.slotIdx];
+    if (!prevSlot) return;
+    p.slots[s.slotIdx] = { ...s.cand.slot, evs: [...s.cand.slot.evs], moves: [...s.cand.slot.moves], targets: [] };
+    p.updatedAt = Date.now();
+    saveStore(store);
+    hideModal();
+    showUndoToast(null, p.id, s.slotIdx, prevSlot, 'replace', I18N.holeFillSwappedMsg(tPoke(s.removeLabel), tPoke(s.cand.sp)));
+    render();
   }
 
   // ---- 空き枠を提案で埋める ----

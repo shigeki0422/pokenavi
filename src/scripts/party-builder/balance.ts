@@ -205,6 +205,48 @@ export function findHoles(party: ResolvedBuild[], oppCols: OppCol[]): HoleInfo {
   return { holeLabels, holeIdx };
 }
 
+/**
+ * 1体(味方 or 「穴を埋める候補」の候補種)が oppCols の何列目を集約◎/○で取れるかの集合。
+ * findHoles と同じ判定条件(judgeVsBuildsのsymが◎/○)を1体単位で返す版。「穴を埋める候補」機能で
+ * party各メンバー・候補種(最大50)双方に使う(judgeVsBuildsの呼び出しをこの1回に閉じ込め、
+ * 入れ替え探索側は集合演算のみで行う)。
+ */
+export function coverageSet(build: ResolvedBuild, oppCols: OppCol[]): Set<number> {
+  const s = new Set<number>();
+  oppCols.forEach((o, ci) => {
+    const agg = judgeVsBuilds(build, o.builds);
+    if (agg.sym === "◎" || agg.sym === "○") s.add(ci);
+  });
+  return s;
+}
+
+/**
+ * partyの各メンバー(coverageSets、findHolesと同じ並び)について、「そのメンバーを外すと
+ * 露出する列(=そのメンバー以外に誰も集約◎/○を取れていない列)」を求める。
+ * 「穴を埋める候補」の入れ替え探索(6×候補数)をjudgeVsBuilds再計算無しの集合演算だけで行うための前処理。
+ */
+export function exposedOnRemoval(coverageSets: Set<number>[], oppColsLen: number): Set<number>[] {
+  const coverCount = new Array(oppColsLen).fill(0);
+  coverageSets.forEach((s) => s.forEach((ci) => { coverCount[ci]++; }));
+  return coverageSets.map((s) => {
+    const exposed = new Set<number>();
+    s.forEach((ci) => { if (coverCount[ci] === 1) exposed.add(ci); });
+    return exposed;
+  });
+}
+
+/**
+ * 「現状の穴集合(holeIdx)」から、1体を外した際に露出する列(exposed)を穴に加え、
+ * 代わりに入れる候補のカバレッジ(candCov)で埋まる列を穴から除いた、入れ替え後の穴集合を返す。
+ * judgeVsBuildsを一切呼ばない純粋な集合演算(「穴を埋める候補」の入れ替え探索の中核)。
+ */
+export function holesAfterSwap(holeIdx: Set<number>, exposed: Set<number>, candCov: Set<number>): Set<number> {
+  const after = new Set<number>(holeIdx);
+  exposed.forEach((ci) => after.add(ci));
+  candCov.forEach((ci) => after.delete(ci));
+  return after;
+}
+
 /** 防御相性タブ用: 「全員が等倍以上で受ける(半減以下の受け手がいない)」タイプのインデックス集合。 */
 export function findWeakGapTypeIdx(party: ResolvedBuild[]): Set<number> {
   const dm = defenseMatrix(party);
