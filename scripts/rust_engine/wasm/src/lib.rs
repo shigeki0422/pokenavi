@@ -120,24 +120,19 @@ pub fn analyze_impl(a: &str, b: &str, season: &str) -> i32 {
             let (hits_hi, _) = analysis::run_move(pack, a, b, season, att, i, 1.0);
             let dmg_lo = analysis::move_damage(pack, a, b, season, att, i, 0.0);
             let dmg_hi = analysis::move_damage(pack, a, b, season, att, i, 1.0);
+            // 場に出ているものではなく、この技の数値に実際に効いた条件だけを返す
+            let conds = analysis::relevant_conds(pack, a, b, season, att, i);
             moves.push(json!({
                 "n": name, "dmgLo": dmg_lo, "dmgHi": dmg_hi,
-                "hitsLo": hits_lo, "hitsHi": hits_hi,
+                "hitsLo": hits_lo, "hitsHi": hits_hi, "conds": conds,
                 // 最大打点技の選定（発数が同じときのタイブレーク）に使う値。
                 // Python の _mu_engine._best_cached が 1ターン目のHP減少で比べているので、
                 // 表示用の dmgLo ではなくこちらを使う。両者は ばけのかわ・天候・回復で食い違う。
                 "firstLo": first_lo,
             }));
         }
-        out[key] = json!({
-            "hp": me.hp, "speed": me.speed, "moves": moves,
-            // ダメージ計算に効いた入場時の能力変化（いかく・ダウンロード等）
-            "atkStage": me.atk_stage, "spaStage": me.spa_stage,
-        });
+        out[key] = json!({"hp": me.hp, "speed": me.speed, "moves": moves});
     }
-    // 天候・フィールドはダメージに乗るので、表示側が明示できるよう返す
-    let f = analysis::field_info(pack, a, b, season);
-    out["field"] = json!({"weather": f.weather, "terrain": f.terrain});
     set_result(&out);
     0
 }

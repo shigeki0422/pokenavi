@@ -7,7 +7,7 @@
 // 半減きのみの消費・ロール引数の取り違えが順に表面化した）。ルールを一箇所に集約するため、
 // 判定本体は engine/wasm.ts 経由でエンジンを実走させる。
 import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./types";
-import { analyze, buildToSpec, koProb, type EngineField, type EngineMove } from "../engine/wasm";
+import { analyze, buildToSpec, koProb, type EngineMove } from "../engine/wasm";
 
 /**
  * 旧式: score>=1.5→◎ … の閾値が0.5刻みだったため、素早さの±0.5補正だけで
@@ -38,12 +38,7 @@ type Evaluated = {
 };
 
 /** 対面の評価結果。場は対面ごとに1つなので、両方向をまとめて1回で求める。 */
-type Pair = {
-  a: Evaluated; b: Evaluated;
-  specA: string; specB: string;
-  /** ダメージ計算に効いた条件（天候・フィールド・入場時の能力変化）の表示用。 */
-  condsA: string | null; condsB: string | null;
-};
+type Pair = { a: Evaluated; b: Evaluated; specA: string; specB: string };
 
 /** 天候の内部名を表示名にする。 */
 const WEATHER_JP: Record<string, string> = {
@@ -51,18 +46,15 @@ const WEATHER_JP: Record<string, string> = {
 };
 
 /**
- * ダメージ計算に効いた場の条件をまとめる。
- * 天候・フィールドは倍率としてダメージに乗り、いかく等の入場時能力変化も同様に効く。
- * 「%がどの前提で出た数字か」が読み手に分からないと、耐え効果の注記(reason)と同じ
- * 食い違いが起きるため、計算に入れたものは明示する。
+ * この技の数値に実際に効いた条件の表示文字列。
+ * エンジンが「その条件を打ち消して計算し直し、値が変わるか」で判定した結果を並べるだけ。
+ * 場に出ているものを無条件に並べると、無関係な計算にも注記が付く
+ * （ミミッキュのウッドハンマー→カバルドンに「すなあらし」と出た。カバルドンは
+ *  じめんで砂のダメージを受けず、砂は草技の威力にも効かない）。
  */
-function _conds(field: EngineField, atkStage: number, spaStage: number): string | null {
-  const out: string[] = [];
-  if (field.weather) out.push(WEATHER_JP[field.weather] ?? field.weather);
-  if (field.terrain) out.push(field.terrain);
-  if (atkStage) out.push(`攻撃${atkStage > 0 ? "+" : ""}${atkStage}`);
-  if (spaStage) out.push(`特攻${spaStage > 0 ? "+" : ""}${spaStage}`);
-  return out.length ? out.join("・") : null;
+function _conds(m: EngineMove): string | null {
+  const c = (m.conds ?? []).map((x) => WEATHER_JP[x] ?? x);
+  return c.length ? c.join("・") : null;
 }
 
 /**
@@ -83,11 +75,7 @@ function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
   const side = (x: typeof r.a): Evaluated => ({
     hp: x.hp, speed: x.speed, moves: x.moves.map((m, j) => ({ ...m, idx: j })),
   });
-  return {
-    a: side(r.a), b: side(r.b), specA, specB,
-    condsA: _conds(r.field, r.a.atkStage, r.a.spaStage),
-    condsB: _conds(r.field, r.b.atkStage, r.b.spaStage),
-  };
+  return { a: side(r.a), b: side(r.b), specA, specB };
 }
 
 /**
@@ -224,7 +212,8 @@ function _reason(defender: ResolvedBuild, hp: number, dmg: number, hits: number)
 }
 
 function _detail(m: EngineMove & { idx: number }, p: Pair, att: number,
-                 defender: ResolvedBuild, hp: number, conds: string | null): MoveHitDetail {
+                 defender: ResolvedBuild, hp: number): MoveHitDetail {
+  const conds = _conds(m);
   const NONE: MoveHitDetail = { n: m.n, dmgLo: null, dmgHi: null, pctLo: null, pctHi: null,
                                 hits: null, prob: null, certain: true, reason: null, conds };
   if (m.dmg === null || m.dmgHi === undefined || m.dmgHi <= 0) return NONE;
@@ -252,7 +241,7 @@ function _detail(m: EngineMove & { idx: number }, p: Pair, att: number,
  */
 export function moveBreakdown(me: ResolvedBuild, opp: ResolvedBuild): MoveHitDetail[] {
   const p = _pair(me, opp);
-  return p.a.moves.map((m) => _detail(m, p, 0, opp, p.b.hp, p.condsA));
+  return p.a.moves.map((m) => _detail(m, p, 0, opp, p.b.hp));
 }
 
 /**
@@ -264,8 +253,8 @@ export function pairHitDetails(me: ResolvedBuild, opp: ResolvedBuild):
   const p = _pair(me, opp);
   const bm = _best(p.a), bo = _best(p.b);
   return {
-    my: bm ? _detail(bm, p, 0, opp, p.b.hp, p.condsA) : null,
-    opp: bo ? _detail(bo, p, 1, me, p.a.hp, p.condsB) : null,
+    my: bm ? _detail(bm, p, 0, opp, p.b.hp) : null,
+    opp: bo ? _detail(bo, p, 1, me, p.a.hp) : null,
   };
 }
 

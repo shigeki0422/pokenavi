@@ -39,6 +39,47 @@ pub fn roll_of(step: usize) -> f64 {
     step as f64 / (ROLLS - 1) as f64
 }
 
+/// 表示する条件が「実際にその数値へ効いたか」を確かめるために、場や能力変化を打ち消す指定。
+#[derive(Clone, Copy, PartialEq)]
+pub enum Suppress {
+    None,
+    Weather,
+    Terrain,
+    Stages,
+}
+
+fn setup_sup(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, roll: f64, sup: Suppress,
+) -> Battle {
+    let mut bt = setup(pack, spec_a, spec_b, season, roll);
+    match sup {
+        Suppress::None => {}
+        Suppress::Weather => {
+            bt.field.weather = None;
+            bt.field.weather_count = 0;
+        }
+        Suppress::Terrain => {
+            bt.field.electric_terrain = false;
+            bt.field.grassy_terrain = false;
+            bt.field.psychic_terrain = false;
+            bt.field.misty_terrain = false;
+            bt.field.electric_terrain_count = 0;
+            bt.field.grassy_terrain_count = 0;
+            bt.field.psychic_terrain_count = 0;
+            bt.field.misty_terrain_count = 0;
+        }
+        Suppress::Stages => {
+            for i in 0..2 {
+                let p = &mut bt.sides[i].party[0];
+                for k in 0..7u8 {
+                    p.set_stage(k, 0);
+                }
+            }
+        }
+    }
+    bt
+}
+
 fn setup(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, roll: f64) -> Battle {
     let mut a: Poke = build_poke(pack, spec_a, season);
     let mut b: Poke = build_poke(pack, spec_b, season);
@@ -81,8 +122,15 @@ pub fn run_move(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
     att: usize, move_idx: usize, roll: f64,
 ) -> (i64, i64) {
+    run_move_sup(pack, spec_a, spec_b, season, att, move_idx, roll, Suppress::None)
+}
+
+pub fn run_move_sup(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
+    att: usize, move_idx: usize, roll: f64, sup: Suppress,
+) -> (i64, i64) {
     let def = 1 - att;
-    let mut bt = setup(pack, spec_a, spec_b, season, roll);
+    let mut bt = setup_sup(pack, spec_a, spec_b, season, roll, sup);
     let hp0 = bt.sides[def].active().max_hp;
     // 初撃ダメージは1ターンだけ進めた時点で測る（2発目以降は自己ランク変化等で変わる）
     let packr: &Pack = pack;
@@ -202,7 +250,14 @@ pub fn move_damage(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
     att: usize, move_idx: usize, roll: f64,
 ) -> i64 {
-    let mut bt = setup(pack, spec_a, spec_b, season, roll);
+    move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, roll, Suppress::None)
+}
+
+pub fn move_damage_sup(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
+    att: usize, move_idx: usize, roll: f64, sup: Suppress,
+) -> i64 {
+    let mut bt = setup_sup(pack, spec_a, spec_b, season, roll, sup);
     let packr: &Pack = pack;
     let mv = match bt.sides[att].active().moves.get(move_idx).cloned() {
         Some(m) => m,
@@ -227,4 +282,60 @@ pub fn move_damage(
         def.hp = (def.hp - d).max(1);
     }
     total
+}
+
+
+/// この技の表示値（与ダメ・確定数）に実際に効いた条件だけを返す。
+///
+/// 場に出ているものをそのまま並べると、無関係な計算にまで注記が付く。
+/// （ミミッキュのウッドハンマー→カバルドンに「すなあらし で計算」と出た。
+///   カバルドンは じめん で砂のダメージを受けず、砂は草技の威力にも効かない。）
+/// 判定は実測で行う——その条件を打ち消して計算し直し、与ダメか確定数が
+/// 変わったときだけ「効いた」とみなす。
+pub fn relevant_conds(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, move_idx: usize,
+) -> Vec<String> {
+    let base_bt = setup(pack, spec_a, spec_b, season, 0.0);
+    let has_weather = base_bt.field.weather.is_some();
+    let f = &base_bt.field;
+    let has_terrain = f.electric_terrain || f.grassy_terrain || f.psychic_terrain || f.misty_terrain;
+    let has_stage = (0..2).any(|i| (0..7u8).any(|k| base_bt.sides[i].party[0].stage(k) != 0));
+    let weather_name = base_bt.field.weather.map(|w| pack.intern.resolve(w).to_string());
+    let terrain_name = if f.electric_terrain { Some("エレキフィールド") }
+        else if f.grassy_terrain { Some("グラスフィールド") }
+        else if f.psychic_terrain { Some("サイコフィールド") }
+        else if f.misty_terrain { Some("ミストフィールド") }
+        else { None }.map(|x| x.to_string());
+    let stage_label = {
+        let p = &base_bt.sides[att].party[0];
+        let a = p.stage(0);
+        let c = p.stage(2);
+        let mut v = Vec::new();
+        if a != 0 { v.push(format!("攻撃{}{}", if a > 0 { "+" } else { "" }, a)); }
+        if c != 0 { v.push(format!("特攻{}{}", if c > 0 { "+" } else { "" }, c)); }
+        v.join("・")
+    };
+    drop(base_bt);
+
+    let base_dmg = move_damage(pack, spec_a, spec_b, season, att, move_idx, 0.0);
+    let (base_hits, _) = run_move(pack, spec_a, spec_b, season, att, move_idx, 0.0);
+    let mut out = Vec::new();
+    let mut check = |pack: &mut Pack, sup: Suppress, label: Option<String>| {
+        let Some(label) = label else { return };
+        if label.is_empty() { return; }
+        // 与ダメが変われば確定数も見るまでもない。安い方から確かめる。
+        let d = move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, 0.0, sup);
+        if d != base_dmg {
+            out.push(label);
+            return;
+        }
+        let (h, _) = run_move_sup(pack, spec_a, spec_b, season, att, move_idx, 0.0, sup);
+        if h != base_hits {
+            out.push(label);
+        }
+    };
+    if has_weather { check(pack, Suppress::Weather, weather_name); }
+    if has_terrain { check(pack, Suppress::Terrain, terrain_name); }
+    if has_stage { check(pack, Suppress::Stages, Some(stage_label)); }
+    out
 }

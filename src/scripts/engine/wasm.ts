@@ -113,6 +113,9 @@ export interface EngineMove {
    * Python の _mu_engine._best_cached と同じ基準で選ぶために必要で、
    * ばけのかわ・天候の削り・たべのこしの回復が入る点が dmgLo と異なる。 */
   firstLo?: number;
+  /** この技の与ダメ・確定数に実際に効いた条件（天候・フィールド・能力変化）。
+   * 場に出ているだけで効いていないものは入らない。 */
+  conds?: string[];
   dmg?: null;
 }
 
@@ -120,25 +123,16 @@ export interface EngineSide {
   hp: number;
   speed: number;
   moves: EngineMove[];
-  /** 入場時に変化した攻撃/特攻ランク（いかく・ダウンロード等）。0なら変化なし。 */
-  atkStage: number;
-  spaStage: number;
-}
-
-/** 対面開始時に成立している場。ダメージ計算に効くので表示で明示する。 */
-export interface EngineField {
-  weather: string | null;
-  terrain: string | null;
 }
 
 /** 1v1 の両側について HP・実効素早さ・各技の与ダメと確定数を得る。 */
-export function analyze(specA: string, specB: string): { a: EngineSide; b: EngineSide; field: EngineField } {
+export function analyze(specA: string, specB: string): { a: EngineSide; b: EngineSide } {
   const e = ex();
   try {
     if (e.analyze(...put(specA), ...put(specB), ...put(season)) !== 0) {
       throw new Error("analyze 失敗");
     }
-    return take() as { a: EngineSide; b: EngineSide; field: EngineField };
+    return take() as { a: EngineSide; b: EngineSide };
   } finally {
     release();
   }
