@@ -16,7 +16,7 @@ fn main() {
                 engine_wasm::analyze_impl(a, b, "M-3");
                 let n = a.split(':').nth(2).map(|m| m.split('|').count()).unwrap_or(0);
                 for mi in 0..n {
-                    engine_wasm::ko_prob_impl(a, b, "M-3", mi, 5);
+                    engine_wasm::ko_prob_impl(a, b, "M-3", 0, mi, 5);
                 }
             });
             if r.is_err() {

@@ -31,8 +31,27 @@ def ts_output() -> list:
     return json.loads(r.stdout)
 
 
+def check_named(named, bad):
+    """報告のあった表示バグの回帰確認。
+    カバルドンのじしん→ミミッキュ が「18〜18% 確3」と出ていた。18% の正体は
+    ばけのかわの身代わり(HPの1/8=16) ＋ すなあらしの削り(1/16=8) で、技のダメージではない。
+    乱数に依らない値なので下限と上限も同じになっていた。"""
+    d = (named or {}).get("kabaVsMimi")
+    if not d:
+        bad.append("カバルドンのじしん→ミミッキュ が取得できない")
+        return
+    hp = named["mimiHp"]
+    if d["dmgLo"] == d["dmgHi"]:
+        bad.append(f"じしんの与ダメに乱数幅が無い: {d['dmgLo']}〜{d['dmgHi']}")
+    if d["dmgLo"] <= hp // 8 + hp // 16:
+        bad.append(f"じしんの与ダメが小さすぎる（1ターンのHP減少を表示している疑い）: {d['dmgLo']}")
+    if d["hits"] and d["hits"] > 1 and not d["reason"]:
+        bad.append("ばけのかわで発数が増えているのに要因が注記されていない")
+
+
 def main() -> int:
-    recs = ts_output()
+    payload = ts_output()
+    recs = payload["pairs"]
     os.chdir(os.path.join(ROOT, "scripts"))
     import feature1 as _f1
 
@@ -45,10 +64,11 @@ def main() -> int:
     ME._LOADER[0] = L
 
     bad: list[str] = []
+    check_named(payload.get("named"), bad)
     for r in recs:
         sa, sb = r["specA"], r["specB"]
-        ah, _ar, am = ME._best_cached(sa, sb, id(L))
-        bh, _br, bm = ME._best_cached(sb, sa, id(L))
+        ah, _ar, am = ME._best_cached(sa, sb, 0, id(L))
+        bh, _br, bm = ME._best_cached(sa, sb, 1, id(L))
         field, A, B = E._enter(E._build(sa, L), E._build(sb, L))
         aspd, bspd = _effective_speed(A, field), _effective_speed(B, field)
         tag = f"{sa.split('@')[0]} vs {sb.split('@')[0]}"

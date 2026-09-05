@@ -52,58 +52,67 @@ def _pass(my, opp, field):
     return Action(type="pass")
 
 
-def _run(spec_a, spec_b, move_name, L, roll=0.0):
-    """spec_a が move_name を撃ち続けて spec_b を倒すまでのターン数と、1発目の被ダメ割合。
+def _run(spec_0, spec_1, move_name, L, roll=0.0, att=0):
+    """並び (spec_0, spec_1) の対面で、att 側が move_name を撃ち続けて
+    もう一方を倒すまでのターン数と、1発目の被ダメ割合。
+
+    攻撃側を常に先に入場させると、両者が天候特性を持つ対面（キュウコン vs ペリッパー等）で
+    「後から出た側の天候が勝つ」規則により、評価する向きで場が変わってしまう。
+    場は対面ごとに1つなので、並びは固定して攻撃側だけを指定する。
     確定数の前提（最低乱数・必中）はこの関数自身が確立する。外側の文脈に依存させると
     lru_cache が「乱数あり」で計算した値を保持してしまう（実際に汚染を確認した）。
     roll は正規化値（0.0=最低乱数 / 1.0=最高乱数）。既定は確定数の定義どおり最低乱数。"""
     _enter_fixed(roll)
     try:
-        return _run_inner(spec_a, spec_b, move_name, L)
+        return _run_inner(spec_0, spec_1, move_name, L, att)
     finally:
         _exit_fixed()
 
 
-def _run_inner(spec_a, spec_b, move_name, L):
-    A = _build(spec_a, L); B = _build(spec_b, L)
-    hp0 = B.max_hp
-    s1 = BattleSide([A], viewer_label="P1", source6=[A])
-    s2 = BattleSide([B], viewer_label="P2", source6=[B])
+def _run_inner(spec_0, spec_1, move_name, L, att=0):
+    """並び (spec_0, spec_1) で入場させ、att 側だけが move_name を撃ち続ける。
+    入場順は場（天候・フィールド）の成立に効くので、攻撃側がどちらでも変えない。"""
+    P = [_build(spec_0, L), _build(spec_1, L)]
+    D = P[1 - att]                      # 倒す相手
+    hp0 = D.max_hp
+    s1 = BattleSide([P[0]], viewer_label="P1", source6=[P[0]])
+    s2 = BattleSide([P[1]], viewer_label="P2", source6=[P[1]])
     b = Battle(s1, s2, BattleField())
     first = {"dmg": None}
     n = {"t": 0}
     ai = _Fixed(move_name)
 
-    def ai1(my, opp, field):
+    def attacker(my, opp, field):
         n["t"] += 1
         if first["dmg"] is None and n["t"] == 2:
-            first["dmg"] = hp0 - B.hp        # 1ターン目終了後の減少量
+            first["dmg"] = hp0 - D.hp        # 1ターン目終了後の減少量
         return ai(my, opp, field)
 
     # run() は max_turns を取らないので、_turn_loop に渡すため入場効果だけ run と同じ手順で実行する
     b._faint_chooser1 = None; b._faint_chooser2 = None
     from simulator.battle import _entry_effects as _ee
-    _ee(A, 0, b.field, B, b.logs, [A])
-    _ee(B, 1, b.field, A, b.logs, [B])
-    b._turn_loop(ai1, _pass, max_turns=CAP)
+    _ee(P[0], 0, b.field, P[1], b.logs, [P[0]])
+    _ee(P[1], 1, b.field, P[0], b.logs, [P[1]])
+    ai1, ai2 = (attacker, _pass) if att == 0 else (_pass, attacker)
+    b._turn_loop(ai1, ai2, max_turns=CAP)
     if first["dmg"] is None:
-        first["dmg"] = hp0 - B.hp
-    hits = n["t"] if not B.is_alive else 999
+        first["dmg"] = hp0 - D.hp
+    hits = n["t"] if not D.is_alive else 999
     return hits, max(0.0, first["dmg"] / max(1, hp0))
 
 
 @lru_cache(maxsize=200000)
-def _best_cached(spec_a, spec_b, _lid):
-    """spec_a の最大打点技と、その確定数・1発の被ダメ割合。
+def _best_cached(spec_0, spec_1, att, _lid):
+    """並び (spec_0, spec_1) の対面における att 側の最大打点技と、その確定数・被ダメ割合。
     「1発の火力」ではなく「同じ技を撃ち続けて何発で倒せるか」で選ぶ（りゅうせいぐん等、
     使用後に自分のランクが下がる技は1発目が最大でも実際は遅い）。"""
     L = _LOADER[0]
-    A = _build(spec_a, L)
+    A = _build(spec_0 if att == 0 else spec_1, L)
     best = (999, 0.0, "—")
     for mv in A.moves:
         if mv is None or mv.category == "status" or not (mv.power or 0):
             continue
-        h, r = _run(spec_a, spec_b, mv.name_jp, L)
+        h, r = _run(spec_0, spec_1, mv.name_jp, L, 0.0, att)
         if (h, -r) < (best[0], -best[1]):
             best = (h, r, mv.name_jp)
     return best
@@ -154,6 +163,7 @@ def _exit_fixed():
 def mu_engine(spec_a, spec_b, L):
     """(myh, myr, my_move, thh, thr, th_move) を対戦本体の実走で返す。"""
     _LOADER[0] = L
-    ah, ar, am = _best_cached(spec_a, spec_b, id(L))
-    bh, br, bm = _best_cached(spec_b, spec_a, id(L))
+    # 場は対面ごとに1つなので、並びを固定して攻撃側だけを切り替える
+    ah, ar, am = _best_cached(spec_a, spec_b, 0, id(L))
+    bh, br, bm = _best_cached(spec_a, spec_b, 1, id(L))
     return ah, ar, am, bh, br, bm

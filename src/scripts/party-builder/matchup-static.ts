@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { MonDetail, MoveDict, ResolvedBuild, SpeciesMaster, TargetBuild, TargetGroup, Verdict } from "./types";
 import { resolveTarget } from "./balance";
-import { judgeVsBuildsMulti, judge1v1, bestMoveHitDetail } from "./matchup";
+import { judgeVsBuildsMulti, judge1v1, bestMoveHitDetail, pairHitDetails } from "./matchup";
 import { initEngineFrom } from "../engine/wasm";
 
 export interface StaticMatchup {
@@ -232,8 +232,8 @@ export function getMatchupBreakdownForBuild(
     build,
     verdict: agg.verdicts[i],
     evLabel: evLabel(build.evs),
-    myDmg: bestMoveHitDetail(me, build),
-    oppDmg: bestMoveHitDetail(build, me),
+    // 与ダメ・被ダメは同じ場の前提で出す（向きごとに呼ぶと天候が食い違う）
+    ...(() => { const d = pairHitDetails(me, build); return { myDmg: d.my, oppDmg: d.opp }; })(),
   }));
   return { me, oppName: oppGroup.name, builds, sym: agg.sym, dep: agg.dep };
 }

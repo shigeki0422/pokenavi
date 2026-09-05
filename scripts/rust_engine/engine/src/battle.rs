@@ -701,7 +701,7 @@ fn check_critical(pack: &Pack, attacker: &Poke, mv: &DMove, defender: &Poke, rng
     rng.random() < crit_chance(pack, attacker, mv, Some(defender))
 }
 
-fn calc_hits(pack: &Pack, mv: &DMove, attacker: &Poke, rng: &mut dyn BRng) -> i64 {
+pub fn calc_hits(pack: &Pack, mv: &DMove, attacker: &Poke, rng: &mut dyn BRng) -> i64 {
     let l = &pack.sy.l;
     let n = mv.name;
     let skill_link = attacker.ability == l.スキルリンク;

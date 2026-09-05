@@ -13,10 +13,8 @@ type Exports = {
   alloc(n: number): number;
   init(p: number, n: number): number;
   analyze(ap: number, an: number, bp: number, bn: number, sp: number, sn: number): number;
-  dists(ap: number, an: number, bp: number, bn: number, sp: number, sn: number,
-        mi: number, uses: number): number;
   ko_prob(ap: number, an: number, bp: number, bn: number, sp: number, sn: number,
-          mi: number, hits: number): number;
+          att: number, mi: number, hits: number): number;
   name_aliases(): number;
   dealloc(p: number, n: number): void;
   result_ptr(): number;
@@ -111,6 +109,10 @@ export interface EngineMove {
   /** 確定数(999=圏外)。最低乱数と最高乱数のそれぞれ。 */
   hitsLo?: number;
   hitsHi?: number;
+  /** 最大打点技の選定に使う値（1ターン目の防御側HP減少）。表示には使わない。
+   * Python の _mu_engine._best_cached と同じ基準で選ぶために必要で、
+   * ばけのかわ・天候の削り・たべのこしの回復が入る点が dmgLo と異なる。 */
+  firstLo?: number;
   dmg?: null;
 }
 
@@ -118,29 +120,25 @@ export interface EngineSide {
   hp: number;
   speed: number;
   moves: EngineMove[];
+  /** 入場時に変化した攻撃/特攻ランク（いかく・ダウンロード等）。0なら変化なし。 */
+  atkStage: number;
+  spaStage: number;
+}
+
+/** 対面開始時に成立している場。ダメージ計算に効くので表示で明示する。 */
+export interface EngineField {
+  weather: string | null;
+  terrain: string | null;
 }
 
 /** 1v1 の両側について HP・実効素早さ・各技の与ダメと確定数を得る。 */
-export function analyze(specA: string, specB: string): { a: EngineSide; b: EngineSide } {
+export function analyze(specA: string, specB: string): { a: EngineSide; b: EngineSide; field: EngineField } {
   const e = ex();
   try {
     if (e.analyze(...put(specA), ...put(specB), ...put(season)) !== 0) {
       throw new Error("analyze 失敗");
     }
-    return take() as { a: EngineSide; b: EngineSide };
-  } finally {
-    release();
-  }
-}
-
-/** 乱数n発の確率計算に使う、使用 k 回目ごとの与ダメ分布(16段 × uses)。 */
-export function damageDists(specA: string, specB: string, moveIdx: number, uses: number): number[][] {
-  const e = ex();
-  try {
-    if (e.dists(...put(specA), ...put(specB), ...put(season), moveIdx, uses) !== 0) {
-      throw new Error("dists 失敗");
-    }
-    return take() as number[][];
+    return take() as { a: EngineSide; b: EngineSide; field: EngineField };
   } finally {
     release();
   }
@@ -148,10 +146,10 @@ export function damageDists(specA: string, specB: string, moveIdx: number, uses:
 
 /** hits 発以内に倒せる確率(0〜1)。ターン終了時の増減(たべのこし・オボン・砂)は
  * エンジンが対戦本体の処理をそのまま使うので、呼び出し側で再現しない。 */
-export function koProb(specA: string, specB: string, moveIdx: number, hits: number): number {
+export function koProb(spec0: string, spec1: string, att: number, moveIdx: number, hits: number): number {
   const e = ex();
   try {
-    if (e.ko_prob(...put(specA), ...put(specB), ...put(season), moveIdx, hits) !== 0) {
+    if (e.ko_prob(...put(spec0), ...put(spec1), ...put(season), att, moveIdx, hits) !== 0) {
       throw new Error("ko_prob 失敗");
     }
     return take() as number;

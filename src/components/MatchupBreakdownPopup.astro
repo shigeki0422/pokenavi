@@ -62,7 +62,7 @@ const T = {
   ja: {
     myTab: (i: number) => `自分の型${i}`,
     myBuild: (item: string, nature: string, ev: string) => `${myName}の型：${item}・${nature}・${ev}`,
-    sub: (n: number) => `${oppName}の想定型${n}種に対する、互いが採用率上位の技プールから選んだ最大打点1発の確定数・素早さ・勝敗判定（実数値考慮）。`,
+    sub: (n: number) => `${oppName}の想定型${n}種に対する、互いが採用率上位の技プールから選んだ最大打点1発の確定数・素早さ・勝敗判定（実数値・天候・フィールド・いかく等の入場時効果を考慮）。`,
     buildLabel: (i: number) => `型${i}`,
     rowSpeed: '素早さ',
     rowJudge: '判定',
@@ -72,6 +72,7 @@ const T = {
       const base = d.certain ? `確定${d.hits}` : `乱数${d.hits}発（${fmtKoProbPct(d.prob)}%）`;
       return d.reason ? `${base}（${d.reason}込み）` : base;
     },
+    condsLabel: (c: string) => `${c} 込みで計算`,
     fastLabel: (fast: boolean) => (fast ? '先手' : '後手'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
       `${win ? '勝ち' : '負け'}：${myHits}で倒す/${oppHits}で倒される・${fast ? '先手' : '後手'}`,
@@ -89,6 +90,7 @@ const T = {
       const base = d.certain ? `KO in ${d.hits}` : `${d.hits}-hit (${fmtKoProbPct(d.prob)}% chance)`;
       return d.reason ? `${base} (incl. ${d.reason})` : base;
     },
+    condsLabel: (c: string) => `calculated with ${c}`,
     fastLabel: (fast: boolean) => (fast ? 'First' : 'Second'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
       `${win ? 'Win' : 'Lose'}: ${myHits} vs ${oppHits}, ${fast ? 'moves first' : 'moves second'}`,
@@ -106,6 +108,7 @@ const T = {
       const base = d.certain ? `확정 ${d.hits}` : `${d.hits}발 확률(${fmtKoProbPct(d.prob)}%)`;
       return d.reason ? `${base}(${d.reason} 포함)` : base;
     },
+    condsLabel: (c: string) => `${c} 포함 계산`,
     fastLabel: (fast: boolean) => (fast ? '선공' : '후공'),
     judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
       `${win ? '승리' : '패배'}: ${myHits} / ${oppHits}・${fast ? '선공' : '후공'}`,
@@ -167,6 +170,7 @@ const multi = myBreakdowns.length > 1;
                     {r.myDmg?.pctLo != null && <span class="mbp-pct">{r.myDmg.pctLo.toFixed(1)}〜{r.myDmg.pctHi?.toFixed(1)}%</span>}
                     <span class="mbp-hits">{T.hitsDetail(r.myDmg)}</span>
                     <div class="mbp-move">{tMove(r.myDmg?.n ?? r.verdict.myMove)}</div>
+                    {r.myDmg?.conds && <div class="mbp-conds">{T.condsLabel(r.myDmg.conds)}</div>}
                   </td>
                 ))}
               </tr>
@@ -183,6 +187,7 @@ const multi = myBreakdowns.length > 1;
                     {r.oppDmg?.pctLo != null && <span class="mbp-pct">{r.oppDmg.pctLo.toFixed(1)}〜{r.oppDmg.pctHi?.toFixed(1)}%</span>}
                     <span class="mbp-hits">{T.hitsDetail(r.oppDmg)}</span>
                     <div class="mbp-move">{tMove(r.oppDmg?.n ?? r.verdict.oppMove)}</div>
+                    {r.oppDmg?.conds && <div class="mbp-conds">{T.condsLabel(r.oppDmg.conds)}</div>}
                   </td>
                 ))}
               </tr>
@@ -302,6 +307,8 @@ const multi = myBreakdowns.length > 1;
   .mbp-pct { font-weight: 800; display: block; }
   .mbp-hits { color: #475569; display: block; }
   .mbp-move { color: #94a3b8; font-size: .92em; margin-top: 2px; }
+  /* ダメージ計算に効いた条件（天候・フィールド・いかく等）。%がどの前提の値かを示す */
+  .mbp-conds { color: #b45309; font-size: .84em; margin-top: 1px; }
   .mbp-spd-win { color: #059669; font-weight: 700; }
   .mbp-spd-lose { color: #475569; }
   .mbp-judge-win { background: #ecfdf5; }

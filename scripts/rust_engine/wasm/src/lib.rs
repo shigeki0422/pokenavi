@@ -103,51 +103,56 @@ pub extern "C" fn analyze(ap: *const u8, an: usize, bp: *const u8, bn: usize,
 pub fn analyze_impl(a: &str, b: &str, season: &str) -> i32 {
     let pack = match unsafe { PACK.as_mut() } { Some(p) => p, None => return -1 };
     let mut out = json!({});
-    for (key, x, y) in [("a", a, b), ("b", b, a)] {
-        let (me, _opp) = analysis::side_info(pack, x, y, season);
+    // 場は対面ごとに1つ。並びは (a, b) に固定し、攻撃側だけを切り替える
+    // （攻撃側を常に先頭に置くと、両者が天候特性を持つ対面で天候が向きによって変わる）。
+    let (info_a, info_b) = analysis::side_info(pack, a, b, season);
+    for (key, att, me) in [("a", 0usize, &info_a), ("b", 1usize, &info_b)] {
         let mut moves = Vec::new();
         for (i, (name, is_dmg)) in me.moves.iter().enumerate() {
             if !*is_dmg {
                 moves.push(json!({"n": name, "dmg": Value::Null}));
                 continue;
             }
-            let (hits_lo, dmg_lo) = analysis::run_move(pack, x, y, season, i, 0.0);
-            let (hits_hi, dmg_hi) = analysis::run_move(pack, x, y, season, i, 1.0);
+            // 発数は実走（耐え効果・回復・天候が効く）、与ダメは技そのものの値。
+            // 与ダメに実走の1ターン目HP減少を使うと、ばけのかわの身代わり分や砂の削り・
+            // たべのこしの回復まで技のダメージとして表示されてしまう。
+            let (hits_lo, first_lo) = analysis::run_move(pack, a, b, season, att, i, 0.0);
+            let (hits_hi, _) = analysis::run_move(pack, a, b, season, att, i, 1.0);
+            let dmg_lo = analysis::move_damage(pack, a, b, season, att, i, 0.0);
+            let dmg_hi = analysis::move_damage(pack, a, b, season, att, i, 1.0);
             moves.push(json!({
                 "n": name, "dmgLo": dmg_lo, "dmgHi": dmg_hi,
                 "hitsLo": hits_lo, "hitsHi": hits_hi,
+                // 最大打点技の選定（発数が同じときのタイブレーク）に使う値。
+                // Python の _mu_engine._best_cached が 1ターン目のHP減少で比べているので、
+                // 表示用の dmgLo ではなくこちらを使う。両者は ばけのかわ・天候・回復で食い違う。
+                "firstLo": first_lo,
             }));
         }
-        out[key] = json!({"hp": me.hp, "speed": me.speed, "moves": moves});
+        out[key] = json!({
+            "hp": me.hp, "speed": me.speed, "moves": moves,
+            // ダメージ計算に効いた入場時の能力変化（いかく・ダウンロード等）
+            "atkStage": me.atk_stage, "spaStage": me.spa_stage,
+        });
     }
+    // 天候・フィールドはダメージに乗るので、表示側が明示できるよう返す
+    let f = analysis::field_info(pack, a, b, season);
+    out["field"] = json!({"weather": f.weather, "terrain": f.terrain});
     set_result(&out);
-    0
-}
-
-/// 乱数n発の確率計算に使う、使用 k 回目ごとの与ダメ分布（16段 × uses）。
-#[no_mangle]
-pub extern "C" fn dists(ap: *const u8, an: usize, bp: *const u8, bn: usize,
-                        sp: *const u8, sn: usize, move_idx: usize, uses: usize) -> i32 {
-    let (a, b, season) = unsafe { (s(ap, an), s(bp, bn), s(sp, sn)) };
-    let pack = match unsafe { PACK.as_mut() } { Some(p) => p, None => return -1 };
-    let rows: Vec<Vec<i64>> = (1..=uses)
-        .map(|k| analysis::damage_dist(pack, a, b, season, move_idx, k).to_vec())
-        .collect();
-    set_result(&json!(rows));
     0
 }
 
 /// `hits` 発以内に倒せる確率(0〜1)。内訳ポップアップの「乱数n発(p%)」に使う。
 #[no_mangle]
 pub extern "C" fn ko_prob(ap: *const u8, an: usize, bp: *const u8, bn: usize,
-                          sp: *const u8, sn: usize, move_idx: usize, hits: usize) -> i32 {
+                          sp: *const u8, sn: usize, att: usize, move_idx: usize, hits: usize) -> i32 {
     let (a, b, season) = unsafe { (s(ap, an), s(bp, bn), s(sp, sn)) };
-    ko_prob_impl(a, b, season, move_idx, hits)
+    ko_prob_impl(a, b, season, att, move_idx, hits)
 }
 
-pub fn ko_prob_impl(a: &str, b: &str, season: &str, move_idx: usize, hits: usize) -> i32 {
+pub fn ko_prob_impl(a: &str, b: &str, season: &str, att: usize, move_idx: usize, hits: usize) -> i32 {
     let pack = match unsafe { PACK.as_mut() } { Some(p) => p, None => return -1 };
-    let p = analysis::ko_probability(pack, a, b, season, move_idx, hits);
+    let p = analysis::ko_probability(pack, a, b, season, att, move_idx, hits);
     set_result(&json!(p));
     0
 }

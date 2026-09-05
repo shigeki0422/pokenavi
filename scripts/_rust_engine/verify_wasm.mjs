@@ -41,8 +41,7 @@ for (const c of cases) {
   if (E.analyze(...put(c.a), ...put(c.b), ...put("M-3")) !== 0) throw new Error("analyze 失敗");
   const got = take();
   let good = true;
-  // ratio は「相手の最大HP」に対する割合なので、実ダメージへの換算には相手側のHPを使う
-  for (const [key, want, foeHp] of [["a", c.sa, c.sb.hp], ["b", c.sb, c.sa.hp]]) {
+  for (const [key, want] of [["a", c.sa], ["b", c.sb]]) {
     const g = got[key];
     const lbl = `${c.a.split("@")[0]} vs ${c.b.split("@")[0]} (${key})`;
     if (g.hp !== want.hp) { note("HP", `${lbl}: py=${want.hp} wasm=${g.hp}`); good = false; }
@@ -53,18 +52,17 @@ for (const c of cases) {
       const w = want.moves[i], x = g.moves[i];
       if (w.dmg === null) continue;                 // 変化技・無効技は対象外
       if (!x || x.n !== w.n) { note("技の並び", `${lbl}: py=${w.n} wasm=${x?.n}`); good = false; continue; }
-      const wLo = Math.round(w.ratioLo * foeHp);
-      const wHi = Math.round(w.ratioHi * foeHp);
+      const wLo = w.dmgLo, wHi = w.dmgHi;
       if (x.hitsLo !== w.hitsLo) {
         note("確定数(最低乱数)", `${lbl} ${w.n}: py=${w.hitsLo} wasm=${x.hitsLo}`); good = false;
       }
       if (x.hitsHi !== w.hitsHi) {
         note("確定数(最高乱数)", `${lbl} ${w.n}: py=${w.hitsHi} wasm=${x.hitsHi}`); good = false;
       }
-      if (Math.abs(x.dmgLo - wLo) > 1) {
+      if (x.dmgLo !== wLo) {
         note("与ダメ(最低乱数)", `${lbl} ${w.n}: py=${wLo} wasm=${x.dmgLo}`); good = false;
       }
-      if (Math.abs(x.dmgHi - wHi) > 1) {
+      if (x.dmgHi !== wHi) {
         note("与ダメ(最高乱数)", `${lbl} ${w.n}: py=${wHi} wasm=${x.dmgHi}`); good = false;
       }
     }

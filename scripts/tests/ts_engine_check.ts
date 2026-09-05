@@ -46,4 +46,13 @@ for (let k = 0; k < N; k++) {
     })),
   });
 }
-process.stdout.write(JSON.stringify(out));
+// 報告のあった表示バグの回帰確認用に、名指しの対面も1件出す。
+// 「与ダメ」は技そのもののダメージであって、1ターンで減ったHPではない
+// （ばけのかわの身代わり分・すなあらしの削り・たべのこしの回復を含めてはいけない）。
+const byName = (sp: string) => builds.filter((b) => b.sp === sp);
+const kaba = byName("カバルドン")[0], mimi = byName("ミミッキュ")[0];
+const named = kaba && mimi
+  ? { kabaVsMimi: moveBreakdown(kaba, mimi).find((m) => m.n === "じしん") ?? null,
+      mimiHp: mimi.stats[0] }
+  : null;
+process.stdout.write(JSON.stringify({ pairs: out, named }));

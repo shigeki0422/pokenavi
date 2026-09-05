@@ -4,7 +4,7 @@
 //! 割合(%)・乱数n発の確率・記号(◎○△▲×)の閾値といった表示計算は呼び出し側に置く。
 //! ルールを持つ部分だけを一箇所に集めるのが目的で、表示計算を混ぜると
 //! 「同じ判定が二重実装される」という当初の問題がここに再発する。
-use crate::battle::{entry_effects, ActKind, Action, Battle, Side};
+use crate::battle::{calc_hits, entry_effects, split2, ActKind, Action, Battle, Side};
 use crate::damage::Field;
 use crate::pack::Pack;
 use crate::poke::{build_poke, mega_evolve_poke, Poke};
@@ -58,17 +58,19 @@ fn setup(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, roll: f64) -
     Battle::new(s1, s2, field)
 }
 
-/// 攻撃側が同じ技を撃ち続け、防御側は行動しない。`_mu_engine._run_inner` と同じ手順。
-fn drive(bt: &mut Battle, pack: &Pack, move_idx: usize, max_turns: i64) -> i64 {
+/// `att` 側が同じ技を撃ち続け、もう一方は行動しない。`_mu_engine._run_inner` と同じ手順。
+///
+/// 攻撃側を常に side0 に置くと、両者が天候特性を持つ対面（キュウコン vs ペリッパー等）で
+/// 「後から出た側の天候が勝つ」規則により、評価する向きで場が変わってしまう。
+/// 場は対面ごとに1つなので、並び (spec_a, spec_b) は固定したまま攻撃側だけを指定する。
+fn drive(bt: &mut Battle, pack: &Pack, att: usize, move_idx: usize, max_turns: i64) -> i64 {
     let mut rng = FixedRng;
     let mut turns = 0i64;
     bt.run_loop_lim(pack, &mut rng, max_turns, |b2, _r| {
         turns += 1;
-        let mv = b2.sides[0].active().moves.get(move_idx).cloned();
-        [
-            Action { kind: ActKind::Move, mv, move_idx: move_idx as i64, ..Default::default() },
-            Action::default(),
-        ]
+        let mv = b2.sides[att].active().moves.get(move_idx).cloned();
+        let act = Action { kind: ActKind::Move, mv, move_idx: move_idx as i64, ..Default::default() };
+        if att == 0 { [act, Action::default()] } else { [Action::default(), act] }
     }, |_| {});
     turns
 }
@@ -76,55 +78,58 @@ fn drive(bt: &mut Battle, pack: &Pack, move_idx: usize, max_turns: i64) -> i64 {
 /// `spec_a` が `move_idx` の技を撃ち続けて `spec_b` を倒すまでの発数と、初撃の与ダメージ。
 /// 倒しきれなければ発数は `OUT_OF_RANGE`。
 pub fn run_move(
-    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, move_idx: usize, roll: f64,
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
+    att: usize, move_idx: usize, roll: f64,
 ) -> (i64, i64) {
+    let def = 1 - att;
     let mut bt = setup(pack, spec_a, spec_b, season, roll);
-    let hp0 = bt.sides[1].active().max_hp;
+    let hp0 = bt.sides[def].active().max_hp;
     // 初撃ダメージは1ターンだけ進めた時点で測る（2発目以降は自己ランク変化等で変わる）
     let packr: &Pack = pack;
-    drive(&mut bt, packr, move_idx, 1);
-    let first = hp0 - bt.sides[1].active().hp;
+    drive(&mut bt, packr, att, move_idx, 1);
+    let first = hp0 - bt.sides[def].active().hp;
     let mut turns = 1i64;
-    if bt.sides[1].has_alive() {
-        turns += drive(&mut bt, packr, move_idx, CAP);
+    if bt.sides[def].has_alive() {
+        turns += drive(&mut bt, packr, att, move_idx, CAP);
     }
-    let hits = if bt.sides[1].has_alive() { OUT_OF_RANGE } else { turns };
+    let hits = if bt.sides[def].has_alive() { OUT_OF_RANGE } else { turns };
     (hits, first.max(0))
 }
 
-/// 使用 k 回目（1-origin）の与ダメージを、16段の乱数それぞれについて返す。
-/// k-1 回目までは最低乱数で進めた状態を基準にする（乱数n発の確率計算の入力）。
-pub fn damage_dist(
-    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, move_idx: usize, k: usize,
-) -> [i64; ROLLS] {
-    let mut base = setup(pack, spec_a, spec_b, season, 0.0);
-    let packr: &Pack = pack;
-    if k > 1 {
-        drive(&mut base, packr, move_idx, (k - 1) as i64);
-    }
-    let mut out = [0i64; ROLLS];
-    for (step, slot) in out.iter_mut().enumerate() {
-        let mut bt = base.clone();
-        bt.field.roll_override = Some(roll_of(step));
-        let before = bt.sides[1].active().hp;
-        let lim = bt.turn + 1;
-        drive(&mut bt, packr, move_idx, lim);
-        *slot = (before - bt.sides[1].active().hp).max(0);
-    }
-    out
-}
-
-/// 入場効果まで済ませた時点の、両者の実効素早さと最大HP・技名。
+/// 入場効果まで済ませた時点の、両者の実効素早さと最大HP・技名・能力変化。
 pub struct SideInfo {
     pub hp: i64,
     pub speed: i64,
     pub moves: Vec<(String, bool)>, // (技名, ダメージ技か)
+    /// 入場時に変化した攻撃/特攻ランク（いかく・ダウンロード等）。0なら変化なし。
+    pub atk_stage: i32,
+    pub spa_stage: i32,
+}
+
+/// 対面開始時に成立している場。ダメージ計算に効くので表示側で明示するために返す。
+pub struct FieldInfo {
+    pub weather: Option<String>,
+    pub terrain: Option<String>,
+}
+
+pub fn field_info(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str) -> FieldInfo {
+    let bt = setup(pack, spec_a, spec_b, season, 0.0);
+    let f = &bt.field;
+    let w = f.weather.map(|s| pack.intern.resolve(s).to_string());
+    let t = if f.electric_terrain { Some("エレキフィールド") }
+        else if f.grassy_terrain { Some("グラスフィールド") }
+        else if f.psychic_terrain { Some("サイコフィールド") }
+        else if f.misty_terrain { Some("ミストフィールド") }
+        else { None };
+    FieldInfo { weather: w, terrain: t.map(|x| x.to_string()) }
 }
 
 pub fn side_info(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str) -> (SideInfo, SideInfo) {
     let bt = setup(pack, spec_a, spec_b, season, 0.0);
     let packr: &Pack = pack;
     let one = |p: &Poke| SideInfo {
+        atk_stage: p.stage(0),
+        spa_stage: p.stage(2),
         hp: p.max_hp,
         speed: crate::ai::effective_speed(packr, p, &bt.field),
         moves: p
@@ -152,8 +157,10 @@ pub fn side_info(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str) -> (
 /// 枝は「防御側の残HPと持ち物」で畳む。攻撃側は同じ技を撃ち続けるため、
 /// 同じターン数・同じ残HP・同じ持ち物に至った枝はその後の展開も等しい。
 pub fn ko_probability(
-    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, move_idx: usize, hits: usize,
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
+    att: usize, move_idx: usize, hits: usize,
 ) -> f64 {
+    let def = 1 - att;
     let base = setup(pack, spec_a, spec_b, season, 0.0);
     let packr: &Pack = pack;
     let mut states: Vec<(Battle, f64)> = vec![(base, 1.0)];
@@ -166,12 +173,12 @@ pub fn ko_probability(
                 let mut c = bt.clone();
                 c.field.roll_override = Some(roll_of(step));
                 let lim = c.turn + 1;
-                drive(&mut c, packr, move_idx, lim);
-                if !c.sides[1].has_alive() {
+                drive(&mut c, packr, att, move_idx, lim);
+                if !c.sides[def].has_alive() {
                     ko += p;
                     continue;
                 }
-                let key = { let d = c.sides[1].active(); (d.hp, d.item) };
+                let key = { let d = c.sides[def].active(); (d.hp, d.item) };
                 next.entry(key).and_modify(|e| e.1 += p).or_insert((c, p));
             }
         }
@@ -181,4 +188,43 @@ pub fn ko_probability(
         }
     }
     ko
+}
+
+
+/// 技1回ぶんの与ダメージ（連続技は全ヒットの合計）。表示用。
+///
+/// 「1ターンで防御側の HP がいくら減ったか」ではなく「その技が与えるダメージ」を返す。
+/// 前者を表示に使うと、ばけのかわで直撃が無効化された分・すなあらしの削り・
+/// たべのこしの回復まで技のダメージとして出てしまう
+/// （カバルドンのじしん→ミミッキュが「18〜18%」と表示された。内訳は身代わり16＋砂8）。
+/// 発数の方は run_move（実走）で数えるので、耐え効果や回復はそちらに反映される。
+pub fn move_damage(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
+    att: usize, move_idx: usize, roll: f64,
+) -> i64 {
+    let mut bt = setup(pack, spec_a, spec_b, season, roll);
+    let packr: &Pack = pack;
+    let mv = match bt.sides[att].active().moves.get(move_idx).cloned() {
+        Some(m) => m,
+        None => return 0,
+    };
+    let mut rng = FixedRng;
+    let n = calc_hits(packr, &mv, bt.sides[att].active(), &mut rng);
+    let mut total = 0i64;
+    for _ in 0..n.max(1) {
+        let Battle { sides, field, .. } = &mut bt;
+        let (sa, sd) = split2(sides, att);
+        let att = &mut sa.party[0];
+        let def = &mut sd.party[0];
+        let mut r = FixedRng;
+        let d = crate::damage::calc_damage(
+            packr, att, def, &mv, field, false, None, Some(roll),
+            &mut |kind| crate::rng::DmgRng(&mut r).call(kind),
+        );
+        total += d;
+        // マルチスケイル等「満タンのときだけ」の効果を2発目以降に持ち越さないよう、
+        // 連続技の各ヒットは HP を減らしながら計算する。
+        def.hp = (def.hp - d).max(1);
+    }
+    total
 }

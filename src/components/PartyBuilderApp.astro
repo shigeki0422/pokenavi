@@ -648,7 +648,7 @@ const I18N = I18N_ALL[lang];
   import { ALL_NATURES, NEUTRAL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, effectiveSpeed, natureDisp } from '../scripts/party-builder/stats';
   import { TYPES } from '../scripts/party-builder/typechart';
   import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx, coverageSet, exposedOnRemoval, holesAfterSwap } from '../scripts/party-builder/balance';
-  import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct, bestMoveHitDetail } from '../scripts/party-builder/matchup';
+  import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct, pairHitDetails } from '../scripts/party-builder/matchup';
   import { initEngine } from '../scripts/engine/wasm';
   import { suggestFill, tuneForTargets } from '../scripts/party-builder/suggest';
   import { validateParty } from '../scripts/party-builder/validate';
@@ -2212,8 +2212,9 @@ const I18N = I18N_ALL[lang];
         const myHitsTxt = verdict.myHits == null ? '—' : I18N.hitsFmt(verdict.myHits);
         const oppHitsTxt = verdict.oppHits == null ? '—' : I18N.hitsFmt(verdict.oppHits);
         const mb = moveBreakdown(rb, opp);
-        // 被ダメ行: 相手の最大打点技(verdict.oppMoveと同一選定基準)の自分への与ダメレンジ・HP比
-        const od = bestMoveHitDetail(opp, rb);
+        // 被ダメ行: 相手の最大打点技(verdict.oppMoveと同一選定基準)の自分への与ダメレンジ・HP比。
+        // 与ダメ行と同じ場の前提で出すため、向きを入れ替えて呼ぶのではなく対で取る。
+        const od = pairHitDetails(rb, opp).opp;
         const oppDmg = od && od.dmgLo != null && od.dmgHi != null
           ? { name: od.n, dLo: od.dmgLo, dHi: od.dmgHi, pLo: od.pctLo, pHi: od.pctHi }
           : null;
@@ -2588,29 +2589,30 @@ const I18N = I18N_ALL[lang];
   }
   /** 相性マトリクスのセル詳細ポップオーバー用の確定数表示。「簡単構築」(PartySuggestApp.astro
    * matchupDetailHtml/tKo)の表記(確N/乱N/圏外)に合わせる(工房本来の「乱数N発(P%)」形式とは別表記)。
-   * bestMoveHitDetail()のhitsは確定時=最低乱数の確定数・不確定時=最大乱数の発数を返すため、
+   * pairHitDetails()のhitsは確定時=最低乱数の確定数・不確定時=最大乱数の発数を返すため、
    * その値をそのまま閾値判定に使えば scripts/_explain.py _dmg_line() の「n_lo>=5→圏外」と一致する
-   * (詳細はmatchup.tsのbestMoveHitDetail/_hitDetailForMoveのコメント参照)。 */
+   * (詳細はmatchup.tsの_detailのコメント参照)。 */
   function pbMuDetailKoTxt(d) {
     if (!d || d.hits == null || d.hits >= 5) return I18N.muDetailKoOOR;
     return d.certain ? I18N.hitsFmt(d.hits) : I18N.muDetailKoRoll(d.hits);
   }
-  /** 与ダメ内訳1件。「簡単構築」のdmgRow相当(与ダメ%レンジ+確定数+技名)。attacker→defenderの最大打点技。 */
-  function pbMuDetailDmgLine(attacker, defender) {
-    const d = bestMoveHitDetail(attacker, defender);
-    if (!d) return { moveTxt: I18N.dashOpt, pctTxt: '0%', koTxt: I18N.muDetailKoOOR };
+  /** 与ダメ内訳1件。「簡単構築」のdmgRow相当(与ダメ%レンジ+確定数+技名)。 */
+  function pbMuDetailLine(d) {
+    if (!d) return { moveTxt: I18N.dashOpt, pctTxt: '0%', koTxt: I18N.muDetailKoOOR, condsTxt: '' };
     const pctTxt = `${Math.round(d.pctLo)}〜${Math.round(d.pctHi)}%`;
-    return { moveTxt: tMove(d.n), pctTxt, koTxt: pbMuDetailKoTxt(d) };
+    return { moveTxt: tMove(d.n), pctTxt, koTxt: pbMuDetailKoTxt(d), condsTxt: d.conds || '' };
   }
   /** 相性マトリクスのセルをタップした時の詳細ポップオーバー本体。PartySuggestApp.astroの
    * matchupDetailHtml()と同じ列構成(型ごとの列・与ダメ/被ダメ/素早さ/判定の4行)・体裁(pb-pop-*)で、
-   * クライアント計算値(bestMoveHitDetail/judge1v1)から生成する(APIは叩かない)。
+   * クライアント計算値(pairHitDetails/judge1v1)から生成する(APIは叩かない)。
    * 数値は仮想敵パネルの技別チップ(moveBreakdown)・判定バッジ(judge1v1)と同一関数を使うため一致する。 */
   function matchupCellDetailHtml(b, o) {
     const builds = (o.builds || []).slice(0, 3);
     const cols = builds.map((opp, i) => `<th>${esc(I18N.buildLabel(i + 1))}<span class="pb-pop-types">${typeIcoByName(opp.t1)}${opp.t2 ? typeIcoByName(opp.t2) : ''}</span><span class="pb-pop-col-sub">${esc(tItem(opp.item)) || esc(I18N.noItem)}<br>${esc(tNature(opp.nature))}<br>${esc(pbEvStr(opp.evs))}</span></th>`).join('');
-    const meLines = builds.map((opp) => pbMuDetailDmgLine(b, opp));
-    const opLines = builds.map((opp) => pbMuDetailDmgLine(opp, b));
+    // 与ダメ・被ダメは同じ場の前提で出す（向きごとに呼ぶと天候が食い違う）
+    const pairs = builds.map((opp) => pairHitDetails(b, opp));
+    const meLines = pairs.map((d) => pbMuDetailLine(d.my));
+    const opLines = pairs.map((d) => pbMuDetailLine(d.opp));
     const verdicts = builds.map((opp) => judge1v1(b, opp));
     const dmgRow = (label, lines) => `<tr><td class="lft">${esc(label)}</td>${lines.map((c) => `<td><span class="pb-pop-pct">${esc(c.pctTxt)}</span> <span class="pb-pop-ko">${esc(c.koTxt)}</span><br><span class="pb-pop-ko">${esc(c.moveTxt)}</span></td>`).join('')}</tr>`;
     const spRow = `<tr><td class="lft">${esc(I18N.muSpeedRowLbl)}</td>${verdicts.map((v) => `<td class="${v.fast ? 'sp-win' : 'sp-lose'}">${esc(I18N.muDetailSpdTxt(v.fast ? I18N.turnFirst : I18N.turnSecond, v.myS, v.oppS))}</td>`).join('')}</tr>`;

@@ -7,7 +7,7 @@
 // 半減きのみの消費・ロール引数の取り違えが順に表面化した）。ルールを一箇所に集約するため、
 // 判定本体は engine/wasm.ts 経由でエンジンを実走させる。
 import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./types";
-import { analyze, buildToSpec, koProb, type EngineMove } from "../engine/wasm";
+import { analyze, buildToSpec, koProb, type EngineField, type EngineMove } from "../engine/wasm";
 
 /**
  * 旧式: score>=1.5→◎ … の閾値が0.5刻みだったため、素早さの±0.5補正だけで
@@ -32,31 +32,75 @@ const PROB_HITS_CAP = 5;
 /** エンジンが「倒せない」を表す発数。 */
 const OUT_OF_RANGE = 999;
 
-type Evaluated = { hp: number; speed: number; moves: (EngineMove & { idx: number; spec: string })[] };
+type Evaluated = {
+  hp: number; speed: number;
+  moves: (EngineMove & { idx: number })[];
+};
+
+/** 対面の評価結果。場は対面ごとに1つなので、両方向をまとめて1回で求める。 */
+type Pair = {
+  a: Evaluated; b: Evaluated;
+  specA: string; specB: string;
+  /** ダメージ計算に効いた条件（天候・フィールド・入場時の能力変化）の表示用。 */
+  condsA: string | null; condsB: string | null;
+};
+
+/** 天候の内部名を表示名にする。 */
+const WEATHER_JP: Record<string, string> = {
+  sunny: "晴れ", rain: "雨", sandstorm: "すなあらし", hail: "あられ",
+};
 
 /**
- * 自分の技プール(採用率TOP10)それぞれについて、エンジンで与ダメと確定数を求める。
- * spec の技欄は4本に切り詰められない（simulator/pokemon.py の override_moves と同じく
- * 指定ぶん全てが技として載る）ので、プールをそのまま1回で評価できる。
+ * ダメージ計算に効いた場の条件をまとめる。
+ * 天候・フィールドは倍率としてダメージに乗り、いかく等の入場時能力変化も同様に効く。
+ * 「%がどの前提で出た数字か」が読み手に分からないと、耐え効果の注記(reason)と同じ
+ * 食い違いが起きるため、計算に入れたものは明示する。
  */
-function _evalSide(me: ResolvedBuild, opp: ResolvedBuild): Evaluated {
-  const pool = (me.pool && me.pool.length ? me.pool : me.moves) ?? [];
-  const oppSpec = buildToSpec({ ...opp, moves: opp.moves });
-  const spec = buildToSpec({ ...me, moves: pool });
-  const r = analyze(spec, oppSpec);
+function _conds(field: EngineField, atkStage: number, spaStage: number): string | null {
+  const out: string[] = [];
+  if (field.weather) out.push(WEATHER_JP[field.weather] ?? field.weather);
+  if (field.terrain) out.push(field.terrain);
+  if (atkStage) out.push(`攻撃${atkStage > 0 ? "+" : ""}${atkStage}`);
+  if (spaStage) out.push(`特攻${spaStage > 0 ? "+" : ""}${spaStage}`);
+  return out.length ? out.join("・") : null;
+}
+
+/**
+ * 対面(me, opp)を1回だけエンジンに投げ、両方向の評価を得る。
+ *
+ * 向きごとに投げ分けると、両者が天候特性を持つ対面（キュウコン vs ペリッパー等）で
+ * 「後から出た側の天候が勝つ」規則により場が変わり、与ダメと被ダメで前提が食い違う
+ * （実測でPythonと4対面ずれた）。並びは常に (me, opp) に固定する。
+ *
+ * 技は採用率TOP10プールをそのまま渡す。spec の技欄は4本に切り詰められない
+ * （simulator/pokemon.py の override_moves と同じ）ので1回で全技を評価できる。
+ */
+function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
+  const pool = (b: ResolvedBuild) => (b.pool && b.pool.length ? b.pool : b.moves) ?? [];
+  const specA = buildToSpec({ ...me, moves: pool(me) });
+  const specB = buildToSpec({ ...opp, moves: pool(opp) });
+  const r = analyze(specA, specB);
+  const side = (x: typeof r.a): Evaluated => ({
+    hp: x.hp, speed: x.speed, moves: x.moves.map((m, j) => ({ ...m, idx: j })),
+  });
   return {
-    hp: r.a.hp,
-    speed: r.a.speed,
-    moves: r.a.moves.map((m, j) => ({ ...m, idx: j, spec })),
+    a: side(r.a), b: side(r.b), specA, specB,
+    condsA: _conds(r.field, r.a.atkStage, r.a.spaStage),
+    condsB: _conds(r.field, r.b.atkStage, r.b.spaStage),
   };
 }
 
-/** 最大打点技。Python の `_mu_engine._best_cached` と同じ「発数が少ない順、同数なら火力が高い順」。 */
-function _best(e: Evaluated): (EngineMove & { idx: number; spec: string }) | null {
-  let best: (EngineMove & { idx: number; spec: string }) | null = null;
+/**
+ * 最大打点技。Python の `_mu_engine._best_cached` と同じ「発数が少ない順、同数なら火力が高い順」。
+ * 同数のときの比較には firstLo（1ターン目のHP減少）を使う。表示用の dmgLo は技そのものの
+ * ダメージで、ばけのかわ・天候・回復のぶんだけ firstLo と食い違うため、ここで使うと
+ * 正本と違う技を選んでしまう（実測で 395対面中23件ずれた）。
+ */
+function _best(e: Evaluated): (EngineMove & { idx: number }) | null {
+  let best: (EngineMove & { idx: number }) | null = null;
   for (const m of e.moves) {
     if (m.dmg === null || m.hitsLo === undefined) continue;
-    if (!best || m.hitsLo < best.hitsLo! || (m.hitsLo === best.hitsLo && (m.dmgLo ?? 0) > (best.dmgLo ?? 0))) {
+    if (!best || m.hitsLo < best.hitsLo! || (m.hitsLo === best.hitsLo && (m.firstLo ?? 0) > (best.firstLo ?? 0))) {
       best = m;
     }
   }
@@ -64,8 +108,7 @@ function _best(e: Evaluated): (EngineMove & { idx: number; spec: string }) | nul
 }
 
 export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
-  const a = _evalSide(me, opp);
-  const b = _evalSide(opp, me);
+  const { a, b } = _pair(me, opp);
   const myBest = _best(a);
   const oppBest = _best(b);
 
@@ -159,6 +202,11 @@ export interface MoveHitDetail {
    * 前提が違うことが読み手に伝わらない問題への対処。増えていなければ null。
    */
   reason: string | null;
+  /**
+   * このダメージ計算に効いた場の条件（天候・フィールド・入場時の能力変化）。
+   * %がどの前提の数字かを示す。無ければ null。
+   */
+  conds: string | null;
 }
 
 /** 発数が生ダメージから素直に計算した値より増えているときの要因名。 */
@@ -175,21 +223,21 @@ function _reason(defender: ResolvedBuild, hp: number, dmg: number, hits: number)
   return causes.length ? causes.join("・") : null;
 }
 
-function _detail(m: EngineMove & { idx: number; spec: string }, oppSpec: string,
-                 defender: ResolvedBuild, hp: number): MoveHitDetail {
+function _detail(m: EngineMove & { idx: number }, p: Pair, att: number,
+                 defender: ResolvedBuild, hp: number, conds: string | null): MoveHitDetail {
   const NONE: MoveHitDetail = { n: m.n, dmgLo: null, dmgHi: null, pctLo: null, pctHi: null,
-                                hits: null, prob: null, certain: true, reason: null };
+                                hits: null, prob: null, certain: true, reason: null, conds };
   if (m.dmg === null || m.dmgHi === undefined || m.dmgHi <= 0) return NONE;
   const dmgLo = m.dmgLo!, dmgHi = m.dmgHi;
   const lo = m.hitsLo!, hi = m.hitsHi!;
-  const base = { n: m.n, dmgLo, dmgHi, pctLo: (dmgLo / hp) * 100, pctHi: (dmgHi / hp) * 100 };
+  const base = { n: m.n, dmgLo, dmgHi, pctLo: (dmgLo / hp) * 100, pctHi: (dmgHi / hp) * 100, conds };
 
   // 最低乱数でも最高乱数でも同じ発数なら乱数の影響を受けない。実用上限を超える場合も、
   // 保証値である最低乱数側の「確n」を出す（判定行と食い違わせないため）。
   if (lo === hi || hi > PROB_HITS_CAP || lo >= OUT_OF_RANGE) {
     return { ...base, hits: lo, prob: null, certain: true, reason: _reason(defender, hp, dmgLo, lo) };
   }
-  const prob = koProb(m.spec, oppSpec, m.idx, hi) * 100;
+  const prob = koProb(p.specA, p.specB, att, m.idx, hi) * 100;
   const reason = _reason(defender, hp, dmgHi, hi);
   // 発数 hi は最高乱数側の値なので確率は 100% 未満のはず。丸めで 100 に達した場合は
   // 「乱数n発(100%)」という矛盾表示を避けて確定扱いにする。
@@ -198,28 +246,32 @@ function _detail(m: EngineMove & { idx: number; spec: string }, oppSpec: string,
 }
 
 /**
- * 仮想敵カード用: 自分の技それぞれ(最大4)がoppに対し確定/乱数何発かの一覧。
+ * 仮想敵カード用: 自分の技それぞれがoppに対し確定/乱数何発かの一覧。
  * judge1v1と同じ確定数（耐え効果・ターン終了時の増減はエンジンが処理する）。
  * 変化技・無効(ダメージ0)はhits:null(UI側で「—」表示)。
  */
 export function moveBreakdown(me: ResolvedBuild, opp: ResolvedBuild): MoveHitDetail[] {
-  const oppSpec = buildToSpec({ ...opp, moves: opp.moves });
-  const spec = buildToSpec({ ...me, moves: me.moves });
-  const r = analyze(spec, oppSpec);
-  return r.a.moves.map((m, j) => _detail({ ...m, idx: j, spec }, oppSpec, opp, r.b.hp));
+  const p = _pair(me, opp);
+  return p.a.moves.map((m) => _detail(m, p, 0, opp, p.b.hp, p.condsA));
 }
 
 /**
- * 攻撃側の最大打点技による与ダメ割合と確定数/乱数n発(確率%)。
- * ポップアップの「105〜108%」表示にはこの関数を使う。
+ * 対面の与ダメ・被ダメを、同じ場の前提で同時に求める。
+ * 向きごとに別々に呼ぶと天候が食い違うため、表示する2行は必ずここから取る。
  */
+export function pairHitDetails(me: ResolvedBuild, opp: ResolvedBuild):
+    { my: MoveHitDetail | null; opp: MoveHitDetail | null } {
+  const p = _pair(me, opp);
+  const bm = _best(p.a), bo = _best(p.b);
+  return {
+    my: bm ? _detail(bm, p, 0, opp, p.b.hp, p.condsA) : null,
+    opp: bo ? _detail(bo, p, 1, me, p.a.hp, p.condsB) : null,
+  };
+}
+
+/** 攻撃側の最大打点技による与ダメ割合と確定数。被ダメ行は pairHitDetails を使うこと。 */
 export function bestMoveHitDetail(attacker: ResolvedBuild, defender: ResolvedBuild): MoveHitDetail | null {
-  const a = _evalSide(attacker, defender);
-  const best = _best(a);
-  if (!best) return null;
-  const defSpec = buildToSpec({ ...defender, moves: defender.moves });
-  const hp = analyze(best.spec, defSpec).b.hp;
-  return _detail(best, defSpec, defender, hp);
+  return pairHitDetails(attacker, defender).my;
 }
 
 /**

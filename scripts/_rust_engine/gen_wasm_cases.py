@@ -18,24 +18,56 @@ L = _f1._W["loader"]
 import _explain as E
 import _mu_engine as ME
 from simulator.ai import _effective_speed
+from simulator.battle import _calc_hits
+from simulator.damage import calc_damage
 
 ME._LOADER[0] = L
 NCASE = int(os.environ.get("NCASE", "300"))
 OUT = os.environ.get("OUT", os.path.join(os.path.dirname(__file__), "cases", "wasm_1v1.jsonl"))
 
 
-def side(spec_x, spec_y, field, X):
+def move_damage(A, B, mv, field, roll):
+    """技1回ぶんの与ダメージ（連続技は全ヒット合計）。engine の analysis::move_damage と対応。
+
+    「1ターンで減ったHP」ではないので、ばけのかわの身代わり分・砂の削り・
+    たべのこしの回復は含まれない（それらは発数の方に効く）。
+
+    連続技の途中では半減きのみの消費とHP減少を持ち越す。持ち越さないと
+    「1発目も2発目も半減」になり、対戦本体と食い違う
+    （ゲッコウガのみずしゅりけん→ゴウカザル@イトケのみ で 13+13=26 と出た。実際は 13+26=39）。
+    呼び出し元のオブジェクトを汚さないよう、最後に元へ戻す。
+    """
+    ME._enter_fixed(roll)
+    save = (B.item, B.hp, A.item, getattr(A, "charged", None))
+    try:
+        n = max(1, _calc_hits(mv, A))
+        total = 0
+        for _ in range(n):
+            d = calc_damage(A, B, mv, field, False, roll)
+            total += d
+            B.hp = max(1, B.hp - d)
+        return total
+    finally:
+        B.item, B.hp, A.item = save[0], save[1], save[2]
+        if save[3] is not None:
+            A.charged = save[3]
+        ME._exit_fixed()
+
+
+def side(spec_0, spec_1, att, field, X, Y):
+    """並び (spec_0, spec_1) の対面における att 側の評価。
+    場は対面ごとに1つなので、向きで並びを入れ替えない。"""
     moves = []
-    for i, mv in enumerate(X.moves):
+    for mv in X.moves:
         if mv is None or mv.category == "status" or not (mv.power or 0):
             moves.append({"n": mv.name_jp if mv is not None else None, "dmg": None})
             continue
-        hl, rl = ME._run(spec_x, spec_y, mv.name_jp, L, 0.0)
-        hh, rh = ME._run(spec_x, spec_y, mv.name_jp, L, 1.0)
-        hp = X._opp_hp if False else None  # 未使用
+        hl, _ = ME._run(spec_0, spec_1, mv.name_jp, L, 0.0, att)
+        hh, _ = ME._run(spec_0, spec_1, mv.name_jp, L, 1.0, att)
         moves.append({
             "n": mv.name_jp,
-            "ratioLo": rl, "ratioHi": rh,
+            "dmgLo": move_damage(X, Y, mv, field, 0.0),
+            "dmgHi": move_damage(X, Y, mv, field, 1.0),
             "hitsLo": hl, "hitsHi": hh,
         })
     return {"hp": X.max_hp, "speed": _effective_speed(X, field), "moves": moves}
@@ -60,7 +92,7 @@ def main():
             B = E._build(sb, L)
             field, A2, B2 = E._enter(A, B)
             rec = {"a": sa, "b": sb,
-                   "sa": side(sa, sb, field, A2), "sb": side(sb, sa, field, B2)}
+                   "sa": side(sa, sb, 0, field, A2, B2), "sb": side(sa, sb, 1, field, B2, A2)}
             f.write(json.dumps(rec, ensure_ascii=False) + "\n")
             n += 1
     print(f"{OUT}: {n}件")
