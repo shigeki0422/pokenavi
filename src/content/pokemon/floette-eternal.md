@@ -1,9 +1,9 @@
 ---
 title: 'フラエッテ（永遠） | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのフラエッテ（永遠）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率42位。'
+description: 'ポケモンチャンピオンズのフラエッテ（永遠）基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率41位。'
 pokemonName: 'フラエッテ（永遠）'
 dexNumber: 670
-usageRank: 42
+usageRank: 41
 imageForm: '05'
 pubDate: '2026-08-10'
 draft: false
@@ -18,7 +18,7 @@ analysisSlug: 'florette-analysis-m2'
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.670</strong>　／　使用率 <strong style="color:#dc2626">42位</strong>
+      全国図鑑 <strong>No.670</strong>　／　使用率 <strong style="color:#dc2626">41位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-08-10</div>
   </div>
