@@ -555,7 +555,8 @@ const I18N = I18N_ALL[lang];
 
   /* パーティの穴 */
   .pb-hole-summary{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:8px;padding:.45em .7em;font-size:.8rem;font-weight:700;margin-bottom:.5em;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5em}
-  .pb-hole-summary .pb-holefill-btn{flex-shrink:0}
+  .pb-hole-summary .pb-holefill-btn{flex-shrink:0;background:#b91c1c;color:#fff;border-color:#b91c1c;font-weight:800}
+  .pb-hole-ok{background:#f0fdf4;border-color:#bbf7d0;color:#15803d}
   table.mtx th.mtx-hole{background:#fee2e2;border-radius:5px}
   table.mtx th.mtx-gap{background:#fef3c7;border-radius:5px}
 
@@ -717,7 +718,7 @@ const I18N = I18N_ALL[lang];
       defLegend: '各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。<b class="mtx-gap" style="padding:0 4px">薄黄</b>=パーティ内に半減以下の受け手がいないタイプ。',
       speedMatrixLegend: '味方（左・素早さ順）が使用率上位30体の代表型より速いか（スカーフ込み）。<b>◎</b>＝速い <b>△</b>＝同速 <b>×</b>＝遅い。',
       muMatrixLegend: '各味方 vs 使用率上位30体の想定型（採用率上位≤3型）を集約した1v1判定。◎有利 ○やや有利 △五分 ▲やや不利 ×不利。<b class="mu-dep-leg">*</b>＝型により有利不利が変化。<b class="mtx-hole" style="padding:0 4px">赤</b>=誰も集約◎/○を取れない「穴」。セルをクリック(ホバー可のPCではマウスオーバーも)で型ごとの内訳（確定数・素早さ）を表示。',
-      holeSummary: labels => `⚠ 穴: ${labels}`,
+      holeSummary: labels => `⚠ 穴: ${labels}`, holeOkMsg: '✓ 使用率上位30体に穴なし',
       holeFillBtn: '穴を埋める候補', holeFillCalculating: '候補を計算中…',
       holeFillAddHeading: '追加候補', holeFillAddNone: '追加できる候補が見つかりませんでした',
       holeFillAllowDupLbl: '既存ポケモンと持ち物重複の提案を許可',
@@ -808,7 +809,7 @@ const I18N = I18N_ALL[lang];
       defLegend: 'The multiplier each of your Pokémon takes from that type. <b class="df-w1">×2/×4</b> = weakness <b class="df-r1">½ or less</b> = resisted <b class="df-imm">0</b> = immune. <b class="mtx-gap" style="padding:0 4px">Light yellow</b> = a type with no team member resisting it or better.',
       speedMatrixLegend: 'Whether your team (left, sorted by Speed) outspeeds the top 30\'s representative sets (Scarf included). <b>◎</b> = faster <b>△</b> = tied <b>×</b> = slower.',
       muMatrixLegend: 'Aggregated 1v1 verdict for each ally vs the top 30 usage ranks\' assumed sets (top ≤3 sets by usage). ◎ favorable ○ slightly favorable △ even ▲ slightly unfavorable × unfavorable. <b class="mu-dep-leg">*</b> = favorability varies by set. <b class="mtx-hole" style="padding:0 4px">Red</b> = a "gap" no ally gets an aggregated ◎/○ against. Click a cell (hover also works on PC) for the per-set breakdown (KO count, Speed).',
-      holeSummary: labels => `⚠ Gaps: ${labels}`,
+      holeSummary: labels => `⚠ Gaps: ${labels}`, holeOkMsg: '✓ No gaps against the top 30',
       holeFillBtn: 'Suggest additions', holeFillCalculating: 'Calculating candidates…',
       holeFillAddHeading: 'Additions', holeFillAddNone: 'No addable candidates found',
       holeFillAllowDupLbl: 'Allow suggestions with items already used by the party',
@@ -899,7 +900,7 @@ const I18N = I18N_ALL[lang];
       defLegend: '각 아군이 <b>해당 타입 기술을 받을 때의 피격 배율</b>. <b class="df-w1">×2/×4</b>=약점 <b class="df-r1">½ 이하</b>=반감 <b class="df-imm">0</b>=무효. <b class="mtx-gap" style="padding:0 4px">연노랑</b>=파티 내에 반감 이하로 받는 멤버가 없는 타입.',
       speedMatrixLegend: '아군（왼쪽·스피드 순）이 사용률 상위 30마리의 대표 빌드보다 빠른지（스카프 포함）. <b>◎</b>＝빠름 <b>△</b>＝동속 <b>×</b>＝느림.',
       muMatrixLegend: '각 아군 vs 사용률 상위 30마리의 예상 빌드（채용률 상위≤3빌드）을 종합한 1v1 판정. ◎유리 ○약간유리 △반반 ▲약간불리 ×불리. <b class="mu-dep-leg">*</b>＝빌드에 따라 유불리가 달라짐. <b class="mtx-hole" style="padding:0 4px">빨강</b>=아무도 종합 ◎/○를 얻지 못하는 「약점」. 셀 클릭(호버 가능한 PC에서는 마우스오버도)으로 빌드별 상세（확정타·스피드）를 확인할 수 있습니다.',
-      holeSummary: labels => `⚠ 약점: ${labels}`,
+      holeSummary: labels => `⚠ 약점: ${labels}`, holeOkMsg: '✓ 사용률 상위 30체에 약점 없음',
       holeFillBtn: '약점을 메우는 후보', holeFillCalculating: '후보를 계산하는 중…',
       holeFillAddHeading: '추가 후보', holeFillAddNone: '추가할 수 있는 후보를 찾지 못했습니다',
       holeFillAllowDupLbl: '기존 포켓몬과 지닌 물건이 중복되는 제안 허용',
@@ -2494,8 +2495,10 @@ const I18N = I18N_ALL[lang];
         <span class="bd-lb">${esc(I18N.scarfLbl)}</span><span class="bd-seg">${sum.scarf}</span>
         <span class="bd-lb">${esc(I18N.avgSpeedLbl)}</span><span class="bd-seg">${Math.round(sum.avgSpeed)}</span>
         <span class="bd-lb">${esc(I18N.weakOverlapLbl)}</span><span class="bd-seg">${esc(I18N.weakOverlapVal(tType(sum.weakOverlap.type), sum.weakOverlap.count))}</span>
-        <span class="bd-lb">${esc(I18N.weakAgainstLbl)}</span><span class="bd-seg${holeInfo.holeLabels.length ? ' pb-hole-seg' : ''}">${holeNamesHtml(holeInfo.holeLabels)}</span>
       </div>
+      ${holeInfo.holeLabels.length
+        ? `<div class="pb-hole-summary"><span>${esc(I18N.holeSummary(''))}${holeNamesHtml(holeInfo.holeLabels)}</span><button type="button" class="pb-btn-sub pb-holefill-btn" id="pb-holefill-btn">${esc(I18N.holeFillBtn)}</button></div>`
+        : `<div class="pb-hole-summary pb-hole-ok"><span>${esc(I18N.holeOkMsg)}</span></div>`}
       <div class="tabbar">
         <button class="tb${balanceTab === 'atk' ? ' active' : ''}" data-t="atk">${esc(I18N.tabAtk)}</button>
         <button class="tb${balanceTab === 'def' ? ' active' : ''}" data-t="def">${esc(I18N.tabDef)}</button>
@@ -2505,14 +2508,13 @@ const I18N = I18N_ALL[lang];
       <div class="pane" id="pb-balance-pane">${balancePaneHtml(resolvedParty, balanceTab)}</div>
     `;
     bindMtxPopovers(document.getElementById('pb-balance-pane'));
-    bindHoleFillButton(document.getElementById('pb-balance-pane'));
+    bindHoleFillButton(el);
     el.querySelectorAll('.tb').forEach((btn) => btn.addEventListener('click', () => {
       balanceTab = btn.dataset.t;
       el.querySelectorAll('.tb').forEach((b) => b.classList.toggle('active', b.dataset.t === balanceTab));
       const pane = document.getElementById('pb-balance-pane');
       pane.innerHTML = balancePaneHtml(resolvedParty, balanceTab);
       bindMtxPopovers(pane);
-      bindHoleFillButton(pane);
     }));
   }
   function balancePaneHtml(resolvedParty, tab) {
@@ -2624,9 +2626,7 @@ const I18N = I18N_ALL[lang];
   function matchupMatrixHtml(resolvedParty) {
     const oppCols = buildOppCols();
     const holeInfo = findHoles(resolvedParty, oppCols);
-    const summary = holeInfo.holeLabels.length
-      ? `<div class="pb-hole-summary"><span>${esc(I18N.holeSummary(holeInfo.holeLabels.map(tPoke).join('、')))}</span><button type="button" class="pb-btn-sub pb-holefill-btn" id="pb-holefill-btn">${esc(I18N.holeFillBtn)}</button></div>`
-      : '';
+    const summary = '';
     const head = `<tr><th class="mtx-corner mtx-stick">${esc(I18N.selfVsOppAgg)}</th>` + oppCols.map((o, ci) => oppHeaderCellHtml(o, holeInfo.holeIdx.has(ci) ? 'mtx-hole' : '')).join('') + `</tr>`;
     mtxPopData = [];
     const rows = resolvedParty.map((b) => {
