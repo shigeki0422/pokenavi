@@ -251,6 +251,26 @@ const WEATHER_ABILITY: Record<string, Exclude<Weather, null>> = {
  *   自分視点/相手視点で天候が食い違い判定が非対称になるため、対称なルールを採る。
  *   同速時は種族名の辞書順で固定（決定的にするための便宜）。
  */
+export type Terrain = "electric" | "grassy" | "psychic" | "misty" | null;
+
+const TERRAIN_ABILITY: Record<string, Exclude<Terrain, null>> = {
+  "エレキメイカー": "electric",
+  "グラスメイカー": "grassy",
+  "サイコメイカー": "psychic",
+  "ミストメイカー": "misty",
+};
+
+/**
+ * この1v1で成立している場のフィールド。天候と同じく、特性の持ち主が場に出た瞬間に張られる。
+ * 環境では メガライチュウX の エレキメイカー のみ（でんき技1.3倍・サーフテールの素早さ2倍）。
+ */
+export function fieldTerrain(a: ResolvedBuild, b: ResolvedBuild): Terrain {
+  const ta = TERRAIN_ABILITY[a.ability] ?? null;
+  const tb = TERRAIN_ABILITY[b.ability] ?? null;
+  if (ta && tb) return a.stats[5] <= b.stats[5] ? ta : tb;
+  return ta ?? tb;
+}
+
 export function fieldWeather(a: ResolvedBuild, b: ResolvedBuild): Weather {
   if (a.ability === "ノーてんき" || b.ability === "ノーてんき") return null;
   const wa = WEATHER_ABILITY[a.ability] ?? null;

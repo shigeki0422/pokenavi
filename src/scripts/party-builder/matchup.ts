@@ -3,7 +3,7 @@
 import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./types";
 import { effectiveSpeed } from "./stats";
 import type { AttackerStages } from "./damage";
-import { bestMove, calcHitDamages, calcMoveDetail, fieldWeather, simulateKO, stageAfterUse } from "./damage";
+import { bestMove, calcHitDamages, calcMoveDetail, fieldTerrain, fieldWeather, simulateKO, stageAfterUse } from "./damage";
 
 /**
  * 攻撃側の最大打点技(bestMove)による、相手HPに対する与ダメ割合(%、乱数min/max)と
@@ -171,12 +171,30 @@ function _movesToKO(
  * 1v1判定本体。移植元: scripts/_explain.py _mu_score()。
  * 互いの最大打点1発の確定数（乱数0.85固定）・素早さ先後から勝敗スコアを算出する。
  */
+/**
+ * 1v1での実効素早さ。天候依存の素早さ上昇（すいすい/ようりょくそ/すなかき/ゆきかき）と
+ * エレキフィールドのサーフテールを反映する。天候・フィールドは対面する2匹の特性から決まる
+ * （fieldWeather と同じ規則）ので、相手を受け取るこの関数でのみ判定できる。
+ * 倍率は scripts/simulator/battle.py `_speed_order`（実際に行動順を決める側）に一致させる。
+ * ※party全体の速度一覧（balance.ts / suggest.ts）は相手が定まらないため従来通り天候なし。
+ */
+function _speed1v1(me: ResolvedBuild, opp: ResolvedBuild): number {
+  let spd = effectiveSpeed(me.stats[5], me.item);
+  const w = fieldWeather(me, opp);
+  if (w === "rain" && me.ability === "すいすい") spd *= 2;
+  else if (w === "sunny" && me.ability === "ようりょくそ") spd *= 2;
+  else if (w === "sandstorm" && me.ability === "すなかき") spd *= 2;
+  else if (w === "hail" && me.ability === "ゆきかき") spd *= 2;
+  if (me.ability === "サーフテール" && fieldTerrain(me, opp) === "electric") spd *= 2;
+  return spd;
+}
+
 export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
   const myBest = bestMove(me, opp);
   const oppBest = bestMove(opp, me);
 
-  const myS = effectiveSpeed(me.stats[5], me.item);
-  const oppS = effectiveSpeed(opp.stats[5], opp.item);
+  const myS = _speed1v1(me, opp);
+  const oppS = _speed1v1(opp, me);
   const fast = myS > oppS;
 
   const myHits = myBest ? _movesToKO(me, myBest.move, opp, Math.max(1, opp.stats[0]), 0) : 999;
