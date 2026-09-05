@@ -701,18 +701,40 @@ fn check_critical(pack: &Pack, attacker: &Poke, mv: &DMove, defender: &Poke, rng
     rng.random() < crit_chance(pack, attacker, mv, Some(defender))
 }
 
-/// 相手が出した技の種類と威力で威力が決まる技（反射技）。
-/// 1v1判定は「互いの最大打点1発」を比べるものなので、成功前提で評価すると
-/// 過大になる（相手が物理を撃つか特殊を撃つか、その威力次第で0にも大打撃にもなる）。
-/// 分析の対象からは外す。
-pub fn is_counter_move(pack: &Pack, mv: &DMove) -> bool {
+/// 1v1判定の「最大打点1発」の候補から外す技。対戦本体では通常どおり動く。
+///   反射技  : 相手が出した技の種類と威力で威力が決まるので、成功前提だと過大評価になる
+///   HP依存技: 撃ち続けても倒しきれず（相手のHPを自分のHPまで／半分に削るだけ）、
+///             かつ双方の残HPに強く依存するので、最大打点の比較には向かない
+/// ちきゅうなげ・ナイトヘッドは固定ダメージで倒しきれるため対象外にしない。
+pub fn is_excluded_from_matchup(pack: &Pack, mv: &DMove) -> bool {
     let l = &pack.sy.l;
     mv.name == l.カウンター || mv.name == l.ミラーコート || mv.name == l.メタルバースト
+        || mv.name == l.がむしゃら || mv.name == l.いかりのまえば
 }
 
 /// 1発ごとに命中判定があり、外れるとそこで止まる技。
 /// 分析（1v1判定）は必中を仮定するので、これらは常に最大回数で当たる扱いになる。
 /// 回数そのものが乱数で決まる 2〜5回の技（みずしゅりけん等）とは別扱い。
+/// 技を撃つ直前に走る、攻撃側の姿・タイプの変化。
+/// ダメージ計算より前に効くので、分析側が calc_damage を直に呼ぶとここを取りこぼす
+/// （マスカーニャのへんげんじざいで全技にSTABが乗る分、ギルガルドのバトルスイッチで
+///  攻撃が50→150になる分が、表示ダメージにだけ反映されない事故が起きた）。
+/// 対戦本体（execute_move）と分析（analysis::move_damage）で共有する。
+pub fn apply_pre_move_forms(pack: &Pack, attacker: &mut Poke, mv: &DMove) {
+    let l = &pack.sy.l;
+    if attacker.ability == l.バトルスイッチ && mv.category != Cat::Status {
+        aegislash_to_blade(pack, attacker);
+    }
+    if attacker.ability == l.へんげんじざい && !attacker.protean_used {
+        let new_type = mv.ty;
+        if attacker.type1 != new_type || attacker.type2.is_some() {
+            attacker.type1 = new_type;
+            attacker.type2 = None;
+            attacker.protean_used = true;
+        }
+    }
+}
+
 /// 「何発目か」を反映して1発ぶんのダメージを計算する。
 ///
 /// multi_hit_index の更新を呼び出し側に任せると、対戦本体と分析側で
@@ -793,6 +815,10 @@ pub fn calc_hits(pack: &Pack, mv: &DMove, attacker: &Poke, rng: &mut dyn BRng) -
 // ══════════════════════════════════════════════════════════════════════════
 //  _execute_move
 // ══════════════════════════════════════════════════════════════════════════
+/// `dmg_out` にはこの技が与えた合計ダメージが入る（早期returnした場合は0のまま）。
+/// 分析側が「その技のダメージ」を知るための出力で、対戦の挙動には影響しない。
+/// 分析が calc_damage を直に呼ぶと、ここに至るまでの前処理
+/// （へんげんじざいのタイプ変更・バトルスイッチ・急所判定・連続回数）を取りこぼす。
 pub fn execute_move(
     pack: &Pack,
     sides: &mut [Side; 2],
@@ -801,6 +827,7 @@ pub fn execute_move(
     action: &Action,
     opp_action: Option<&Action>,
     rng: &mut dyn BRng,
+    dmg_out: &mut i64,
 ) {
     let l = &pack.sy.l;
     let st = &pack.sy.st;
@@ -871,7 +898,7 @@ pub fn execute_move(
         let saved_count = A!().sleep_count;
         A!().status = None;
         let fake = Action { kind: ActKind::Move, mv: Some(selected), ..Default::default() };
-        execute_move(pack, sides, field, aidx, &fake, opp_action, rng);
+        execute_move(pack, sides, field, aidx, &fake, opp_action, rng, &mut 0);
         if sides[aidx].party[ai].status.is_none() {
             sides[aidx].party[ai].status = saved_status;
             sides[aidx].party[ai].sleep_count = saved_count;
@@ -1121,17 +1148,7 @@ pub fn execute_move(
     {
         return;
     }
-    if A!().ability == l.バトルスイッチ && mv.category != Cat::Status {
-        aegislash_to_blade(pack, &mut A!());
-    }
-    if A!().ability == l.へんげんじざい && !A!().protean_used {
-        let new_type = mv.ty;
-        if A!().type1 != new_type || A!().type2.is_some() {
-            A!().type1 = new_type;
-            A!().type2 = None;
-            A!().protean_used = true;
-        }
-    }
+    apply_pre_move_forms(pack, &mut A!(), &mv);
 
     // 一撃必殺
     if n == l.ぜったいれいど || n == l.ハサミギロチン || n == l.つのドリル || n == l.じわれ {
@@ -1816,6 +1833,7 @@ pub fn execute_move(
             it::try_cure_berry(pack, &mut D!());
         }
     }
+    *dmg_out = total_dmg;
     if (n == l.アイススピナー || n == l.アイアンローラー) && total_dmg > 0 {
         if field.electric_terrain {
             field.electric_terrain = false;
@@ -2506,7 +2524,7 @@ pub fn apply_status_move(
                 || cn == l.わるあがき;
             if !uncopyable {
                 let act = Action { kind: ActKind::Move, mv: Some(cm), ..Default::default() };
-                execute_move(pack, sides, field, aidx, &act, None, rng);
+                execute_move(pack, sides, field, aidx, &act, None, rng, &mut 0);
             }
         }
         return;
@@ -2519,7 +2537,7 @@ pub fn apply_status_move(
                 let k = rng.choice(cands.len());
                 let chosen = A!().moves[cands[k]].clone();
                 let act = Action { kind: ActKind::Move, mv: Some(chosen), ..Default::default() };
-                execute_move(pack, sides, field, aidx, &act, None, rng);
+                execute_move(pack, sides, field, aidx, &act, None, rng, &mut 0);
             }
         }
         return;
@@ -3753,7 +3771,7 @@ impl Battle {
         if action.kind == ActKind::Move && action.mv.is_some() {
             {
                 let Battle { sides, field, .. } = self;
-                execute_move(pack, sides, field, mx, action, opp_action, rng);
+                execute_move(pack, sides, field, mx, action, opp_action, rng, &mut 0);
             }
             // PP消費
             let mi = action.move_idx;

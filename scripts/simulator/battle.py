@@ -476,11 +476,36 @@ def _aegislash_to_shield(poke: BattlePokemon, logs: List[str]) -> None:
     logs.append(f"{poke.name} は シールドフォルム に変化した！")
 
 
+def apply_pre_move_forms(attacker, move, logs=None) -> None:
+    """技を撃つ直前に走る、攻撃側の姿・タイプの変化（バトルスイッチ・へんげんじざい）。
+
+    ダメージ計算より前に効くので、分析側が calc_damage を直に呼ぶとここを取りこぼす。
+    実際にマスカーニャ（へんげんじざい95.5%）で全技のSTAB分、ギルガルドで攻撃50→150分が
+    表示ダメージにだけ反映されない事故が起きた。対戦本体と分析で共有する。
+    """
+    if logs is None:
+        logs = []
+    if attacker.ability == "バトルスイッチ" and move.category != "status":
+        _aegislash_to_blade(attacker, logs)
+    if attacker.ability == "へんげんじざい" and not getattr(attacker, "_protean_used", False):
+        new_type = move.type
+        if attacker.type1 != new_type or attacker.type2 is not None:
+            attacker.type1 = new_type
+            attacker.type2 = None
+            attacker._protean_used = True  # type: ignore
+            logs.append(f"{attacker.name} の へんげんじざい で {new_type} タイプになった！")
+
+
 def _execute_move(
     attacker_side: BattleSide, defender_side: BattleSide,
     action: Action, field: BattleField,
     opp_action: Optional[Action] = None,
+    dmg_out: Optional[list] = None,
 ) -> List[str]:
+    """dmg_out を渡すとこの技が与えた合計ダメージを append する（早期returnなら何も入らない）。
+    分析側が「その技のダメージ」を知るための出力で、対戦の挙動には影響しない。
+    分析が calc_damage を直に呼ぶと、ここに至るまでの前処理（へんげんじざいのタイプ変更・
+    バトルスイッチ・急所判定・連続回数）や、ヒットの合間に挟まる相手の特性を取りこぼす。"""
     logs = []
     attacker = attacker_side.active
     defender = defender_side.active
@@ -787,18 +812,7 @@ def _execute_move(
         logs.append(f"{attacker.name} は {move.name_jp} を使おうとしたが、しめりけ で出せなかった！")
         return logs
 
-    # バトルスイッチ（ギルガルド）：攻撃技使用前にブレードフォルムへ
-    if attacker.ability == "バトルスイッチ" and move.category != "status":
-        _aegislash_to_blade(attacker, logs)
-
-    # へんげんじざい：技使用前にその技のタイプへ変化。登場するたび1回だけ（交代でリセット）
-    if attacker.ability == "へんげんじざい" and not getattr(attacker, "_protean_used", False):
-        new_type = move.type
-        if attacker.type1 != new_type or attacker.type2 is not None:
-            attacker.type1 = new_type
-            attacker.type2 = None
-            attacker._protean_used = True  # type: ignore
-            logs.append(f"{attacker.name} の へんげんじざい で {new_type} タイプになった！")
+    apply_pre_move_forms(attacker, move, logs)
 
     # フリーズドライ：みず弱点に2倍（タイプ上書き処理は後で行う）
     # → effective_type_override フラグで処理
@@ -1188,6 +1202,8 @@ def _execute_move(
             on_defender_ko(attacker, defender, dmg, logs)
             on_ko(attacker, logs)
 
+    if dmg_out is not None:
+        dmg_out.append(total_dmg)
     if hits > 1:
         logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に {total_dmg}ダメ ({hits}回)")
     else:
@@ -2511,10 +2527,14 @@ MULTI_HIT_RANDOM_25 = {
 }
 
 
-# 相手が出した技の種類と威力で威力が決まる技（反射技）。1v1判定は「互いの最大打点1発」を
-# 比べるものなので、成功前提で評価すると過大になる（相手が物理か特殊か、その威力次第で
-# 0にも大打撃にもなる）。分析の対象からは外す。対戦本体では通常どおり動く。
+# 1v1判定の「最大打点1発」の候補から外す技。対戦本体では通常どおり動く。
+#   反射技  : 相手が出した技の種類と威力で威力が決まるので、成功前提だと過大評価になる
+#   HP依存技: 撃ち続けても倒しきれず（相手のHPを自分のHPまで／半分に削るだけ）、
+#             かつ双方の残HPに強く依存するので、最大打点の比較には向かない
+# ちきゅうなげ・ナイトヘッドは固定ダメージで倒しきれるため対象外にしない。
 COUNTER_MOVES = {"カウンター", "ミラーコート", "メタルバースト"}
+NO_KO_MOVES = {"がむしゃら", "いかりのまえば"}
+MATCHUP_EXCLUDED = COUNTER_MOVES | NO_KO_MOVES
 
 # 1発ごとに命中判定があり、外れるとそこで止まる技。分析（1v1判定）は必中を仮定するので、
 # これらは常に最大回数まで当たる扱いになる。回数自体が乱数の2〜5回技とは別扱い。

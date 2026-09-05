@@ -4,7 +4,7 @@
 //! 割合(%)・乱数n発の確率・記号(◎○△▲×)の閾値といった表示計算は呼び出し側に置く。
 //! ルールを持つ部分だけを一箇所に集めるのが目的で、表示計算を混ぜると
 //! 「同じ判定が二重実装される」という当初の問題がここに再発する。
-use crate::battle::{calc_hits, entry_effects, hit_damage, is_accuracy_chained, is_counter_move,
+use crate::battle::{calc_hits, entry_effects, hit_damage, is_accuracy_chained, is_excluded_from_matchup,
                     split2, ActKind, Action, Battle, Side};
 use crate::damage::Field;
 use crate::pack::Pack;
@@ -216,7 +216,7 @@ pub fn side_info(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str) -> (
                     packr.intern.resolve(m.name).to_string(),
                     m.category != crate::pack::Cat::Status
                         && m.power.unwrap_or(0) > 0
-                        && !is_counter_move(packr, m),
+                        && !is_excluded_from_matchup(packr, m),
                 )
             })
             .collect(),
@@ -276,40 +276,69 @@ pub fn ko_probability(
 /// たべのこしの回復まで技のダメージとして出てしまう
 /// （カバルドンのじしん→ミミッキュが「18〜18%」と表示された。内訳は身代わり16＋砂8）。
 /// 発数の方は run_move（実走）で数えるので、耐え効果や回復はそちらに反映される。
+/// 表示するダメージ。
+///
+/// 防御側が生き残り、かつ切り詰め（きあいのタスキ・がんじょう）も起きていない場合は、
+/// 対戦本体に実際に撃たせた値をそのまま使う。連続技の合間に相手の特性が挟まる場合
+/// （じきゅうりょくで2発目の防御が上がる等）は、本体の値だけが正しい。
+/// 倒れる場合は本体がヒットループを止めてしまうので、そのときだけ自前の計算に落とす
+/// （表示は「実際に与えた分」ではなく「その技の威力」なので、頭打ちにしない）。
 pub fn move_damage(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
     att: usize, move_idx: usize, roll: f64,
 ) -> i64 {
+    let (exec, alive, hp) = executed_damage(pack, spec_a, spec_b, season, att, move_idx, roll);
+    if exec > 0 && alive && hp > 1 {
+        return exec;
+    }
     move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, roll, Suppress::None)
 }
 
+/// 表示するダメージは「実際に与えた分」ではなく「その技の威力」。
+/// execute_move は相手が倒れた時点でループを止めるため、そちらの合計は使えない
+/// （トリプルアクセルが 199% → 101% と頭打ちになった）。ここでは対戦本体と同じ前処理を
+/// 通したうえで、全ヒットぶんを計算する。
 pub fn move_damage_sup(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
     att: usize, move_idx: usize, roll: f64, sup: Suppress,
 ) -> i64 {
     let mut bt = setup_sup(pack, spec_a, spec_b, season, roll, sup);
     let packr: &Pack = pack;
-    let mv = match bt.sides[att].active().moves.get(move_idx).cloned() {
-        Some(m) => m,
-        None => return 0,
-    };
+    let Some(mv) = bt.sides[att].active().moves.get(move_idx).cloned() else { return 0 };
+    // 技を撃つ直前の姿・タイプ変化（へんげんじざい・バトルスイッチ）。対戦本体と共有する
+    crate::battle::apply_pre_move_forms(packr, &mut bt.sides[att].party[0], &mv);
     let n = calc_hits(packr, &mv, bt.sides[att].active(), &mut FixedRng);
+    // 急所も対戦本体と同じ手順で決める。FixedRng なので crit_chance が 1.0 のものだけ
+    // 急所になる＝確定数の前提と一致する（必中急所を落とすと確定数と食い違う）。
+    let critical = {
+        let a = &bt.sides[att].party[0];
+        let d = &bt.sides[1 - att].party[0];
+        let c = crate::battle::crit_chance(packr, a, &mv, Some(d));
+        FixedRng.random() < c
+    };
     let mut total = 0i64;
     for hit_i in 0..n.max(1) {
         let Battle { sides, field, .. } = &mut bt;
         let (sa, sd) = split2(sides, att);
         let att = &mut sa.party[0];
         let def = &mut sd.party[0];
-        // 1発ぶんの計算は対戦本体と同じ関数を使う（何発目かの反映を含む）。
-        // ここで自前に組み直すと、対戦本体の変更が分析側に伝わらなくなる。
+        // 1発ぶんの計算は対戦本体と同じ関数を使う（何発目かの反映を含む）
         let mut r = FixedRng;
-        let d = hit_damage(packr, att, def, &mv, field, hit_i, false, Some(roll), &mut r);
+        let d = hit_damage(packr, att, def, &mv, field, hit_i, critical, Some(roll), &mut r);
         total += d;
         // マルチスケイル等「満タンのときだけ」の効果を2発目以降に持ち越さないよう、
-        // 連続技の各ヒットは HP を減らしながら計算する。
+        // 連続技の各ヒットは HP を減らしながら計算する。倒れても止めない（威力を出すため）。
         def.hp = (def.hp - d).max(1);
     }
+    if total == 0 && mv.power.is_none() {
+        // がむしゃらのように威力がDBに無く、対戦本体の中でHPから決まる技。
+        // calc_damage は 0 を返すので、実際に撃たせた値を使う。
+        // タイプ無効で0の技は威力を持つので、ここには来ない。
+        let (d, _, _) = executed_damage(pack, spec_a, spec_b, season, att, move_idx, roll);
+        return d;
+    }
     total
+
 }
 
 
@@ -389,3 +418,27 @@ pub fn relevant_conds(
 }
 
 
+
+
+/// 対戦本体に1回だけ技を撃たせ、(実際に与えたダメージ, 防御側の生存, 残HP) を返す。
+/// 表示には使わない（相手が倒れるとそこで止まるため）。move_damage が
+/// 対戦本体の前処理を取りこぼしていないかを機械的に確かめる監査用。
+pub fn executed_damage(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
+    att: usize, move_idx: usize, roll: f64,
+) -> (i64, bool, i64) {
+    let mut bt = setup(pack, spec_a, spec_b, season, roll);
+    let packr: &Pack = pack;
+    let Some(mv) = bt.sides[att].active().moves.get(move_idx).cloned() else { return (0, true, 0) };
+    let act = Action { kind: ActKind::Move, mv: Some(mv), move_idx: move_idx as i64, ..Default::default() };
+    let opp_mv = bt.sides[1 - att].active().moves.first().cloned();
+    let opp_act = Action { kind: ActKind::Move, mv: opp_mv, move_idx: 0, ..Default::default() };
+    let mut rng = FixedRng;
+    let mut d = 0i64;
+    {
+        let Battle { sides, field, .. } = &mut bt;
+        crate::battle::execute_move(packr, sides, field, att, &act, Some(&opp_act), &mut rng, &mut d);
+    }
+    let def = bt.sides[1 - att].active();
+    (d, def.is_alive, def.hp)
+}

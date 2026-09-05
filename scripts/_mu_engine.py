@@ -112,8 +112,8 @@ def _best_cached(spec_0, spec_1, att, _lid):
     for mv in A.moves:
         if mv is None or mv.category == "status" or not (mv.power or 0):
             continue
-        # 反射技は相手の技に依存しすぎるので最大打点の候補から外す
-        if mv.name_jp in _BT.COUNTER_MOVES:
+        # 相手依存で評価が歪む技（反射技・HP依存技）は最大打点の候補から外す
+        if mv.name_jp in _BT.MATCHUP_EXCLUDED:
             continue
         h, r = _run(spec_0, spec_1, mv.name_jp, L, 0.0, att)
         if (h, -r) < (best[0], -best[1]):
@@ -184,3 +184,87 @@ def mu_engine(spec_a, spec_b, L):
     ah, ar, am = _best_cached(spec_a, spec_b, 0, id(L))
     bh, br, bm = _best_cached(spec_a, spec_b, 1, id(L))
     return ah, ar, am, bh, br, bm
+
+
+def _run_one(spec_0, spec_1, move_name, L, roll=0.0, att=0):
+    """対戦本体に1回だけ技を撃たせ、(与ダメ, 防御側生存, 残HP) を返す。
+    engine の analysis::executed_damage と対応。表示には「実際に与えた分」ではなく
+    技の威力を使うが、防御側が生き残る場合はこの値が正しい
+    （じきゅうりょくのように連続技の合間に相手の特性が挟まる場合、本体の値だけが合う）。"""
+    _enter_fixed(roll)
+    try:
+        P = [_build(spec_0, L), _build(spec_1, L)]
+        D = P[1 - att]
+        s1 = BattleSide([P[0]], viewer_label="P1", source6=[P[0]])
+        s2 = BattleSide([P[1]], viewer_label="P2", source6=[P[1]])
+        b = Battle(s1, s2, BattleField())
+        from simulator.battle import _entry_effects as _ee, _execute_move as _em
+        _ee(P[0], 0, b.field, P[1], b.logs, [P[0]])
+        _ee(P[1], 1, b.field, P[0], b.logs, [P[1]])
+        A = P[att]
+        mv = next((m for m in A.moves if m is not None and m.name_jp == move_name), None)
+        if mv is None:
+            return 0, True, D.hp
+        act = Action(type="move", move=mv, move_idx=A.moves.index(mv))
+        opp_mv = next((m for m in D.moves if m is not None), None)
+        opp_act = Action(type="move", move=opp_mv, move_idx=0)
+        out = []
+        _em((s1, s2)[att], (s1, s2)[1 - att], act, b.field, opp_act, out)
+        return (out[0] if out else 0), D.is_alive, D.hp
+    finally:
+        _exit_fixed()
+
+
+def _hit_damage_loop(spec_0, spec_1, mv_name, L, roll, att, n_hits):
+    """技の威力ぶんのダメージ（全ヒット合計）。相手が倒れても止めない。
+    対戦本体は倒れるとヒットループを止めるので、表示用の威力はこちらで出す。"""
+    from simulator.battle import apply_pre_move_forms, _check_critical
+    from simulator.damage import calc_damage
+    P = [_build(spec_0, L), _build(spec_1, L)]
+    A, D = P[att], P[1 - att]
+    f = BattleField()
+    from simulator.battle import _entry_effects as _ee
+    _ee(P[0], 0, f, P[1], [], [P[0]])
+    _ee(P[1], 1, f, P[0], [], [P[1]])
+    mv = next((m for m in A.moves if m is not None and m.name_jp == mv_name), None)
+    if mv is None:
+        return 0
+    apply_pre_move_forms(A, mv)
+    crit = _check_critical(A, mv, D)
+    total = 0
+    for hit_i in range(max(1, n_hits)):
+        A._multi_hit_index = hit_i
+        d = calc_damage(A, D, mv, f, crit, roll)
+        total += d
+        D.hp = max(1, D.hp - d)      # マルチスケイル等を2発目以降に持ち越さない
+    return total
+
+
+def move_damage(spec_0, spec_1, mv_name, L, roll=0.0, att=0):
+    """表示するダメージ。engine の analysis::move_damage と対応。
+
+    防御側が生き残り、切り詰め（きあいのタスキ・がんじょう）も起きていないなら、
+    対戦本体に実際に撃たせた値をそのまま使う。連続技の合間に相手の特性が挟まる場合
+    （じきゅうりょくで2発目の防御が上がる等）は本体の値だけが正しい。
+    倒れる場合は本体がヒットループを止めるので、そのときだけ威力を自前で出す。
+    """
+    ex, alive, hp = _run_one(spec_0, spec_1, mv_name, L, roll, att)
+    if ex > 0 and alive and hp > 1:
+        return ex
+    _enter_fixed(roll)
+    try:
+        from simulator.battle import _calc_hits
+        A = _build(spec_0 if att == 0 else spec_1, L)
+        mv = next((m for m in A.moves if m is not None and m.name_jp == mv_name), None)
+        n = max(1, _calc_hits(mv, A)) if mv is not None else 1
+    finally:
+        _exit_fixed()
+    _enter_fixed(roll)
+    try:
+        d = _hit_damage_loop(spec_0, spec_1, mv_name, L, roll, att, n)
+    finally:
+        _exit_fixed()
+    if d == 0 and mv is not None and not (mv.power or 0):
+        # がむしゃら等、威力がDBに無く対戦本体の中でHPから決まる技
+        return ex
+    return d

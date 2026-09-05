@@ -4266,9 +4266,10 @@ try:
     check("固定を抜けると _MULTI_HIT_FIXED が戻る", _BT25._MULTI_HIT_FIXED is None, "戻っていない")
     check("_ASSUME_OPP_ATTACKS の既定は False", _BT25._ASSUME_OPP_ATTACKS is False, "既定が違う")
     # 反射技は最大打点の候補から外す（相手の技に依存しすぎるため）
-    from simulator.battle import COUNTER_MOVES as _CM25
-    check("COUNTER_MOVES はカウンター・ミラーコート・メタルバースト",
-          _CM25 == {"カウンター", "ミラーコート", "メタルバースト"}, f"{_CM25}")
+    from simulator.battle import MATCHUP_EXCLUDED as _CM25
+    check("MATCHUP_EXCLUDED は反射技3種＋HP依存技2種",
+          _CM25 == {"カウンター", "ミラーコート", "メタルバースト", "がむしゃら", "いかりのまえば"},
+          f"{_CM25}")
     _cnt25 = ("グレイシア@とつげきチョッキ:ひかえめ:ミラーコート|れいとうビーム|こごえるかぜ|あくび"
               ":32/0/0/32/0/0:ゆきがくれ")
     _gab25 = ("ガブリアス@きあいのタスキ:いじっぱり:じしん|げきりん|スケイルショット|つるぎのまい"
