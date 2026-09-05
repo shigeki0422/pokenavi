@@ -57,14 +57,20 @@ def _verdict(a, b, fld):
     da = _best_dmg(a, b, fld); db = _best_dmg(b, a, fld)
     da_pri = _best_dmg(a, b, fld, True); db_pri = _best_dmg(b, a, fld, True)
 
-    def turns(frac, endure):
+    def turns(frac, defender):
+        """defenderを落とすのに要する手数。
+        ばけのかわは満タンOHKOに限らず1発目を無効化し、代わりに最大HPの1/8を消費する
+        （battle.py:992と同仕様）。タスキ/がんじょうは満タンOHKOのみ1発耐える。"""
         if frac <= 0:
             return 99
-        n = math.ceil(1 / min(1.5, frac))
-        if endure and frac >= 1.0:   # 満タンOHKOをタスキ/がんじょうで耐える→+1手
+        f = min(1.5, frac)
+        if defender.ability == "ばけのかわ":
+            return 1 + math.ceil((1.0 - 1.0 / 8.0) / f)
+        n = math.ceil(1 / f)
+        if (defender.item in _ENDURE_ITEMS or defender.ability == "がんじょう") and frac >= 1.0:
             n += 1
         return n
-    ta = turns(da, _endures(b)); tb = turns(db, _endures(a))
+    ta = turns(da, b); tb = turns(db, a)
     af = _eff_speed(a) >= _eff_speed(b)
     # 先制権: 速い側が先。ただし遅い側が「優先度技でOHKO」できるなら先に動ける（相手がタスキ等で耐えない場合）
     a_first = af

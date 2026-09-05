@@ -860,7 +860,11 @@ export function simulateKO(
     if (!seq.length || seq.reduce((a, b) => a + b, 0) <= 0) return 999;
     for (const raw of seq) {
       if (disguise) {
+        // ばけのかわ: ダメージは無効化するが最大HPの1/8を消費する（battle.py:992 と同仕様）。
+        // 削りを数えないと1手多く見積もる（例: 1発44%なら確3のはずが確4になる）。
         disguise = false;
+        hpLeft -= Math.max(1, Math.floor(defender.stats[0] / 8));
+        if (hpLeft <= 0) return use;
         continue;
       }
       let d = raw;
