@@ -317,6 +317,26 @@ def _mega_of(tpl, item, normalize_mega_stone):
     return None
 
 
+CHOICE_ITEMS = {"こだわりスカーフ", "こだわりハチマキ", "こだわりメガネ"}
+# こだわり系は最初に使った技に固定されるため、積み技・補助技を入れると機能しない。
+# 相手に押し付けるトリック/すりかえと、変身後に固定が外れるへんしんだけは併用が成立する。
+CHOICE_OK_STATUS = {"トリック", "すりかえ", "へんしん"}
+_MOVE_CAT = {}
+
+
+def _move_cats(con):
+    if not _MOVE_CAT:
+        _MOVE_CAT.update({r[0]: r[1] for r in con.execute("SELECT name_jp, category FROM move_master")})
+    return _MOVE_CAT
+
+
+def _moves_for_item(item, mpool, cats):
+    if item not in CHOICE_ITEMS:
+        return mpool[:4]
+    ok = [m for m in mpool if cats.get(m) != "status" or m in CHOICE_OK_STATUS]
+    return (ok or mpool)[:4]
+
+
 def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VARIANTS):
     """種 name の代表型(最大 max_variants)を作る。自分側・相手側の共通の唯一の入口。
 
@@ -336,6 +356,7 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
 
     mpool = [m for m, _ in move_rows[:MOVE_POOL_N]]
     top_moves = mpool[:4]
+    cats = _move_cats(con)
     base_ability = abilities[0][0] if abilities else ""
 
     axes = _ev_axis_groups(evs)
@@ -409,11 +430,12 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
         if not backed and nature in used_natures:
             nature = _nature_alt(natures, ev, used_natures) or nature
         used_natures.add(nature)
-        spec = (f"{name}@{item}:{nature}:{'|'.join(top_moves)}:"
+        mv4 = _moves_for_item(item, mpool, cats)
+        spec = (f"{name}@{item}:{nature}:{'|'.join(mv4)}:"
                 f"{'/'.join(str(x) for x in ev)}:{ability}")
         out.append({
             "idx": len(out) + 1, "item": item, "nature": nature, "ability": ability,
-            "ev": list(ev), "moves": top_moves, "mpool": mpool,
+            "ev": list(ev), "moves": mv4, "mpool": mpool,
             "t1": t1, "t2": t2, "bs": bs, "mega": md is not None,
             "label": label, "spec": spec,
         })
