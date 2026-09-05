@@ -423,6 +423,8 @@ const I18N = I18N_ALL[lang];
   table.pb-pop-t td{padding:.4em .5em;border-bottom:1px solid #f1f5f9;text-align:center;white-space:nowrap}
   .pb-pop-pct{font-weight:700}
   .pb-pop-ko{font-size:.7rem;color:rgb(var(--gray))}
+  /* 発数の要因（ばけのかわ等）と、ダメージ計算に効いた条件（天候・いかく等） */
+  .pb-pop-note{font-size:.66rem;color:#b45309}
   .pb-pop-col-sub{font-size:.6rem;color:rgb(var(--gray));font-weight:600;display:block}
   .pb-pop-types{display:block;margin:2px 0}
   .pb-pop-types img{width:18px;height:18px;vertical-align:middle}
@@ -728,7 +730,9 @@ const I18N = I18N_ALL[lang];
       holeFillSwappedMsg: (removeName, addName) => `${removeName}を${addName}に入れ替えました`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `型${idx}(${item}): ${sym} ${my}/${opp}・${turn}`,
       noItem: '道具なし', turnFirst: '先手', turnSecond: '後手',
-      muDetailSub: '相手の想定型別に、互いの最大打点1発の確定数・素早さ・勝敗判定（タスキ/がんじょう/ばけのかわ・マルチスケイル・回復（たべのこし/オボンのみ）・天候を考慮）。',
+      muDetailSub: '相手の想定型別に、互いの最大打点1発の確定数・素早さ・勝敗判定。計算に効いた条件は各セルに表示します。',
+      muNoteHits: (c) => `${c} 込み`,
+      muNoteConds: (c) => `${c} で計算`,
       muDmgSelfLbl: '与ダメ（自→相）', muDmgOppLbl: '被ダメ（相→自）', muSpeedRowLbl: '素早さ', muJudgeRowLbl: '判定',
       muDetailKoOOR: '圏外', muDetailKoRoll: n => `乱${n}`,
       muDetailSpdTxt: (turn, my, opp) => `${turn}（自S${my} / 相S${opp}）`,
@@ -819,7 +823,9 @@ const I18N = I18N_ALL[lang];
       holeFillSwappedMsg: (removeName, addName) => `Swapped ${removeName} for ${addName}`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `Set ${idx} (${item}): ${sym} ${my}/${opp} · ${turn}`,
       noItem: 'no item', turnFirst: 'moves first', turnSecond: 'moves second',
-      muDetailSub: 'Per assumed opposing set: KO count and Speed for each side\'s strongest hit, plus the win/loss call (accounting for Focus Sash/Sturdy/Disguise/Multiscale, healing from Leftovers/Sitrus Berry, and weather).',
+      muDetailSub: 'Per assumed opposing set: KO count and Speed for each side\'s strongest hit, plus the win/loss call. Factors used in each calculation are shown in the cells.',
+      muNoteHits: (c) => `incl. ${c}`,
+      muNoteConds: (c) => `under ${c}`,
       muDmgSelfLbl: 'Damage dealt (you→opp)', muDmgOppLbl: 'Damage taken (opp→you)', muSpeedRowLbl: 'Speed', muJudgeRowLbl: 'Verdict',
       muDetailKoOOR: 'Out of range', muDetailKoRoll: n => `${n}HKO (roll-dependent)`,
       muDetailSpdTxt: (turn, my, opp) => `${turn} (You S${my} / Opp S${opp})`,
@@ -910,7 +916,9 @@ const I18N = I18N_ALL[lang];
       holeFillSwappedMsg: (removeName, addName) => `${removeName}을(를) ${addName}(으)로 교체했습니다`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `빌드${idx}(${item}): ${sym} ${my}/${opp}·${turn}`,
       noItem: '도구 없음', turnFirst: '선공', turnSecond: '후공',
-      muDetailSub: '상대 예상 타입별로 서로의 최대 위력 1발 확정타・스피드・승패 판정（기합의띠/옹골참/화신의 모습・멀티스케일・회복(먹다남은음식/자시의열매)・날씨 고려）.',
+      muDetailSub: '상대 예상 타입별로 서로의 최대 위력 1발 확정타・스피드・승패 판정. 계산에 반영된 조건은 각 칸에 표시됩니다.',
+      muNoteHits: (c) => `${c} 포함`,
+      muNoteConds: (c) => `${c} 기준`,
       muDmgSelfLbl: '주는 대미지（나→상대）', muDmgOppLbl: '받는 대미지（상대→나）', muSpeedRowLbl: '스피드', muJudgeRowLbl: '판정',
       muDetailKoOOR: '범위 밖', muDetailKoRoll: n => `난수${n}`,
       muDetailSpdTxt: (turn, my, opp) => `${turn}（나 S${my} / 상대 S${opp}）`,
@@ -2598,9 +2606,12 @@ const I18N = I18N_ALL[lang];
   }
   /** 与ダメ内訳1件。「簡単構築」のdmgRow相当(与ダメ%レンジ+確定数+技名)。 */
   function pbMuDetailLine(d) {
-    if (!d) return { moveTxt: I18N.dashOpt, pctTxt: '0%', koTxt: I18N.muDetailKoOOR, condsTxt: '' };
+    if (!d) return { moveTxt: I18N.dashOpt, pctTxt: '0%', koTxt: I18N.muDetailKoOOR, noteTxt: '' };
     const pctTxt = `${Math.round(d.pctLo)}〜${Math.round(d.pctHi)}%`;
-    return { moveTxt: tMove(d.n), pctTxt, koTxt: pbMuDetailKoTxt(d), condsTxt: d.conds || '' };
+    return { moveTxt: tMove(d.n), pctTxt, koTxt: pbMuDetailKoTxt(d),
+             // 発数が素の計算より増えた要因（ばけのかわ/タスキ/たべのこし等）と、
+             // ダメージ計算に効いた場の条件（天候・フィールド・いかく）。
+             noteTxt: [d.reason ? I18N.muNoteHits(d.reason) : '', d.conds ? I18N.muNoteConds(d.conds) : ''].filter(Boolean).join(' / ') };
   }
   /** 相性マトリクスのセルをタップした時の詳細ポップオーバー本体。PartySuggestApp.astroの
    * matchupDetailHtml()と同じ列構成(型ごとの列・与ダメ/被ダメ/素早さ/判定の4行)・体裁(pb-pop-*)で、
@@ -2614,7 +2625,7 @@ const I18N = I18N_ALL[lang];
     const meLines = pairs.map((d) => pbMuDetailLine(d.my));
     const opLines = pairs.map((d) => pbMuDetailLine(d.opp));
     const verdicts = builds.map((opp) => judge1v1(b, opp));
-    const dmgRow = (label, lines) => `<tr><td class="lft">${esc(label)}</td>${lines.map((c) => `<td><span class="pb-pop-pct">${esc(c.pctTxt)}</span> <span class="pb-pop-ko">${esc(c.koTxt)}</span><br><span class="pb-pop-ko">${esc(c.moveTxt)}</span></td>`).join('')}</tr>`;
+    const dmgRow = (label, lines) => `<tr><td class="lft">${esc(label)}</td>${lines.map((c) => `<td><span class="pb-pop-pct">${esc(c.pctTxt)}</span> <span class="pb-pop-ko">${esc(c.koTxt)}</span><br><span class="pb-pop-ko">${esc(c.moveTxt)}</span>${c.noteTxt ? `<br><span class="pb-pop-note">${esc(c.noteTxt)}</span>` : ''}</td>`).join('')}</tr>`;
     const spRow = `<tr><td class="lft">${esc(I18N.muSpeedRowLbl)}</td>${verdicts.map((v) => `<td class="${v.fast ? 'sp-win' : 'sp-lose'}">${esc(I18N.muDetailSpdTxt(v.fast ? I18N.turnFirst : I18N.turnSecond, v.myS, v.oppS))}</td>`).join('')}</tr>`;
     const jRow = `<tr><td class="lft">${esc(I18N.muJudgeRowLbl)}</td>${verdicts.map((v, i) => `<td class="${symCls(v.sym)}"><b style="font-size:1.05em">${v.sym}</b><br><span class="pb-pop-ko">${esc(I18N.muDetailJudgeTxt(v.win ? I18N.muDetailJudgeWin : I18N.muDetailJudgeLoss, meLines[i].koTxt, opLines[i].koTxt, v.fast ? I18N.turnFirst : I18N.turnSecond))}</span></td>`).join('')}</tr>`;
     const table = `<div style="overflow-x:auto"><table class="pb-pop-t"><tr><th class="lft"> </th>${cols}</tr>${dmgRow(I18N.muDmgSelfLbl, meLines)}${dmgRow(I18N.muDmgOppLbl, opLines)}${spRow}${jRow}</table></div>`;

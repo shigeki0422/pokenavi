@@ -62,7 +62,7 @@ const T = {
   ja: {
     myTab: (i: number) => `自分の型${i}`,
     myBuild: (item: string, nature: string, ev: string) => `${myName}の型：${item}・${nature}・${ev}`,
-    sub: (n: number) => `${oppName}の想定型${n}種に対する、互いが採用率上位の技プールから選んだ最大打点1発の確定数・素早さ・勝敗判定（実数値・天候・フィールド・いかく等の入場時効果を考慮）。`,
+    sub: (n: number) => `${oppName}の想定型${n}種に対する、互いが採用率上位の技プールから選んだ最大打点1発の確定数・素早さ・勝敗判定。計算に効いた条件は各セルに表示します。`,
     buildLabel: (i: number) => `型${i}`,
     rowSpeed: '素早さ',
     rowJudge: '判定',
@@ -80,7 +80,7 @@ const T = {
   en: {
     myTab: (i: number) => `My build ${i}`,
     myBuild: (item: string, nature: string, ev: string) => `${myName}'s build: ${item}, ${nature}, ${ev}`,
-    sub: (n: number) => `Hits-to-KO, Speed, and win/loss for each side's best move against ${n} known ${oppName} build(s) (actual stats).`,
+    sub: (n: number) => `Hits-to-KO, Speed, and win/loss for each side's best move against ${n} known ${oppName} build(s). Factors used in each calculation are shown in the cells.`,
     buildLabel: (i: number) => `Build ${i}`,
     rowSpeed: 'Speed',
     rowJudge: 'Verdict',
@@ -98,7 +98,7 @@ const T = {
   ko: {
     myTab: (i: number) => `내 빌드 ${i}`,
     myBuild: (item: string, nature: string, ev: string) => `${myName}의 빌드: ${item}・${nature}・${ev}`,
-    sub: (n: number) => `${oppName}의 예상 빌드 ${n}종에 대한, 서로의 최대 위력기 1발 확정 수・스피드・승패 판정(실수치 고려).`,
+    sub: (n: number) => `${oppName}의 예상 빌드 ${n}종에 대한, 서로의 최대 위력기 1발 확정 수・스피드・승패 판정. 계산에 반영된 조건은 각 칸에 표시됩니다.`,
     buildLabel: (i: number) => `빌드${i}`,
     rowSpeed: '스피드',
     rowJudge: '판정',
