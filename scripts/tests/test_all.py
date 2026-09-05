@@ -4253,6 +4253,29 @@ try:
     finally:
         _ME25._exit_fixed()
     check("固定を抜けると _HIT_CONTINUE が戻る", _BT25._HIT_CONTINUE is None, "戻っていない")
+    # 2〜5回の連続技は重み3:3:1:1で期待値ちょうど3.0。分析では3回に固定する
+    _ws25 = [3, 3, 1, 1]
+    check("2〜5回連続技の期待値が3.0",
+          sum(h * w for h, w in zip([2, 3, 4, 5], _ws25)) / sum(_ws25) == 3.0, "期待値が3でない")
+    _ss25 = _f25._W["loader"].get_move("みずしゅりけん")
+    _ME25._enter_fixed(0.0)
+    try:
+        check("固定文脈で2〜5回連続技は3回", _ch25(_ss25, None) == 3, f"{_ch25(_ss25, None)}回")
+    finally:
+        _ME25._exit_fixed()
+    check("固定を抜けると _MULTI_HIT_FIXED が戻る", _BT25._MULTI_HIT_FIXED is None, "戻っていない")
+    check("_ASSUME_OPP_ATTACKS の既定は False", _BT25._ASSUME_OPP_ATTACKS is False, "既定が違う")
+    # 反射技は最大打点の候補から外す（相手の技に依存しすぎるため）
+    from simulator.battle import COUNTER_MOVES as _CM25
+    check("COUNTER_MOVES はカウンター・ミラーコート・メタルバースト",
+          _CM25 == {"カウンター", "ミラーコート", "メタルバースト"}, f"{_CM25}")
+    _cnt25 = ("グレイシア@とつげきチョッキ:ひかえめ:ミラーコート|れいとうビーム|こごえるかぜ|あくび"
+              ":32/0/0/32/0/0:ゆきがくれ")
+    _gab25 = ("ガブリアス@きあいのタスキ:いじっぱり:じしん|げきりん|スケイルショット|つるぎのまい"
+              ":2/32/0/0/0/32:さめはだ")
+    check("反射技は最大打点技に選ばれない",
+          _ME25._best_cached(_cnt25, _gab25, 0, id(_L25))[2] != "ミラーコート",
+          f"{_ME25._best_cached(_cnt25, _gab25, 0, id(_L25))}")
 
     # 追加効果・連続技・ムラっけの乱数が固定されていること
     import random as _rnd25

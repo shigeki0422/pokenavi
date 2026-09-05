@@ -116,8 +116,6 @@ export interface EngineMove {
   /** この技の与ダメ・確定数に実際に効いた条件（天候・フィールド・能力変化）。
    * 場に出ているだけで効いていないものは入らない。 */
   conds?: string[];
-  /** 連続回数が乱数で変わる技か。dmgHi は最大回数、確定数は最小回数（保証値）で出している。 */
-  varHits?: boolean;
   dmg?: null;
 }
 

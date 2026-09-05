@@ -1,6 +1,7 @@
 ---
 import type { MatchupBreakdown } from '../scripts/party-builder/matchup-static';
 import { fmtKoProbPct, type MoveHitDetail } from '../scripts/party-builder/matchup';
+import { ASSUMPTIONS_LABEL, MATCHUP_ASSUMPTIONS, MATCHUP_LEAD } from '../scripts/party-builder/assumptions';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 
 /**
@@ -62,7 +63,7 @@ const T = {
   ja: {
     myTab: (i: number) => `自分の型${i}`,
     myBuild: (item: string, nature: string, ev: string) => `${myName}の型：${item}・${nature}・${ev}`,
-    sub: (n: number) => `${oppName}の想定型${n}種に対する、互いが採用率上位の技プールから選んだ最大打点1発の確定数・素早さ・勝敗判定。計算に効いた条件は各セルに表示します。`,
+    sub: (n: number) => `${oppName}の想定型${n}種に対する、互いが採用率上位の技プールから選んだ最大打点1発の確定数・素早さ・勝敗判定。`,
     buildLabel: (i: number) => `型${i}`,
     rowSpeed: '素早さ',
     rowJudge: '判定',
@@ -80,7 +81,7 @@ const T = {
   en: {
     myTab: (i: number) => `My build ${i}`,
     myBuild: (item: string, nature: string, ev: string) => `${myName}'s build: ${item}, ${nature}, ${ev}`,
-    sub: (n: number) => `Hits-to-KO, Speed, and win/loss for each side's best move against ${n} known ${oppName} build(s). Factors used in each calculation are shown in the cells.`,
+    sub: (n: number) => `Hits-to-KO, Speed, and win/loss for each side's best move against ${n} known ${oppName} build(s).`,
     buildLabel: (i: number) => `Build ${i}`,
     rowSpeed: 'Speed',
     rowJudge: 'Verdict',
@@ -98,7 +99,7 @@ const T = {
   ko: {
     myTab: (i: number) => `내 빌드 ${i}`,
     myBuild: (item: string, nature: string, ev: string) => `${myName}의 빌드: ${item}・${nature}・${ev}`,
-    sub: (n: number) => `${oppName}의 예상 빌드 ${n}종에 대한, 서로의 최대 위력기 1발 확정 수・스피드・승패 판정. 계산에 반영된 조건은 각 칸에 표시됩니다.`,
+    sub: (n: number) => `${oppName}의 예상 빌드 ${n}종에 대한, 서로의 최대 위력기 1발 확정 수・스피드・승패 판정.`,
     buildLabel: (i: number) => `빌드${i}`,
     rowSpeed: '스피드',
     rowJudge: '판정',
@@ -146,6 +147,12 @@ const multi = myBreakdowns.length > 1;
         <div class="mbp-tab-panel">
           <p class="mbp-my-build">{T.myBuild(tItem(breakdown.me.item), tNature(breakdown.me.nature), meEvLabel(breakdown.me))}</p>
           <p class="mbp-sub">{T.sub(breakdown.builds.length)}</p>
+          <details class="mbp-assume">
+            <summary>{ASSUMPTIONS_LABEL[lang] ?? ASSUMPTIONS_LABEL.ja}</summary>
+            <ul>
+              {(MATCHUP_ASSUMPTIONS[lang] ?? MATCHUP_ASSUMPTIONS.ja).map((a) => <li>{a}</li>)}
+            </ul>
+          </details>
           <div class="mbp-scroll">
             <table class="mbp-table">
               <tr>
@@ -309,6 +316,10 @@ const multi = myBreakdowns.length > 1;
   .mbp-move { color: #94a3b8; font-size: .92em; margin-top: 2px; }
   /* ダメージ計算に効いた条件（天候・フィールド・いかく等）。%がどの前提の値かを示す */
   .mbp-conds { color: #b45309; font-size: .84em; margin-top: 1px; }
+  /* 常に同じ前提は既定で畳んでおく。列挙を直書きすると増えるたびに見出しが伸びる */
+  .mbp-assume { margin: .2em 0 .6em; font-size: .86em; color: #64748b; }
+  .mbp-assume summary { cursor: pointer; color: #475569; }
+  .mbp-assume ul { margin: .4em 0 0; padding-left: 1.2em; line-height: 1.6; }
   .mbp-spd-win { color: #059669; font-weight: 700; }
   .mbp-spd-lose { color: #475569; }
   .mbp-judge-win { background: #ecfdf5; }

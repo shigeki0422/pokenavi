@@ -118,21 +118,15 @@ pub fn analyze_impl(a: &str, b: &str, season: &str) -> i32 {
             // たべのこしの回復まで技のダメージとして表示されてしまう。
             let (hits_lo, first_lo) = analysis::run_move(pack, a, b, season, att, i, 0.0);
             let (hits_hi, _) = analysis::run_move(pack, a, b, season, att, i, 1.0);
-            // 連続技は回数も乱数なので、幅は「最小回数×最低乱数 〜 最大回数×最高乱数」で出す。
-            // 最小回数だけで見ると過小評価になる（2〜5回の技は重み3:3:1:1で期待値3回）。
-            let (h_min, h_max) = analysis::hit_range(pack, a, b, season, att, i);
-            let dmg_lo = analysis::move_damage_sup(
-                pack, a, b, season, att, i, 0.0, analysis::Suppress::None, false);
-            let dmg_hi = analysis::move_damage_sup(
-                pack, a, b, season, att, i, 1.0, analysis::Suppress::None, true);
+            // 連続技の回数は決定的に決める（2〜5回は期待値の3回、スキルリンクは5回、
+            // 1発ごとに命中判定がある技は必中前提で最大回数）。幅はダメージ乱数のぶんだけ。
+            let dmg_lo = analysis::move_damage(pack, a, b, season, att, i, 0.0);
+            let dmg_hi = analysis::move_damage(pack, a, b, season, att, i, 1.0);
             // 場に出ているものではなく、この技の数値に実際に効いた条件だけを返す
             let conds = analysis::relevant_conds(pack, a, b, season, att, i);
             moves.push(json!({
                 "n": name, "dmgLo": dmg_lo, "dmgHi": dmg_hi,
                 "hitsLo": hits_lo, "hitsHi": hits_hi, "conds": conds,
-                // 回数が乱数で変わる技。確率(乱数n発)は回数の分布まで畳み込めないので
-                // 表示側で保証値の「確n」に寄せる
-                "varHits": h_min != h_max,
                 // 最大打点技の選定（発数が同じときのタイブレーク）に使う値。
                 // Python の _mu_engine._best_cached が 1ターン目のHP減少で比べているので、
                 // 表示用の dmgLo ではなくこちらを使う。両者は ばけのかわ・天候・回復で食い違う。

@@ -18,7 +18,7 @@ L = _f1._W["loader"]
 import _explain as E
 import _mu_engine as ME
 from simulator.ai import _effective_speed
-from simulator.battle import _calc_hits
+from simulator.battle import COUNTER_MOVES, _calc_hits
 from simulator.damage import calc_damage
 
 ME._LOADER[0] = L
@@ -26,23 +26,13 @@ NCASE = int(os.environ.get("NCASE", "300"))
 OUT = os.environ.get("OUT", os.path.join(os.path.dirname(__file__), "cases", "wasm_1v1.jsonl"))
 
 
-def hits_minmax(mv, A):
-    """連続回数の下限・上限。engine の analysis::hit_range と対応。
-    上限は choices を末尾（5回）に、ネズミざんの継続判定を必ず通す値にして測る。"""
-    import random as _r
+def fixed_hits(mv, A):
+    """分析での連続回数。engine の calc_hits(FixedRng) と対応。"""
     ME._enter_fixed(0.0)
     try:
-        mn = _calc_hits(mv, A)
+        return max(1, _calc_hits(mv, A))
     finally:
         ME._exit_fixed()
-    o_ch, o_rd = _r.choices, _r.random
-    _r.choices = lambda pop, weights=None, k=1, **kw: [list(pop)[-1]] * k
-    _r.random = lambda: 0.0
-    try:
-        mx = _calc_hits(mv, A)
-    finally:
-        _r.choices, _r.random = o_ch, o_rd
-    return max(1, mn), max(1, mx)
 
 
 def move_damage(A, B, mv, field, roll, n):
@@ -81,17 +71,17 @@ def side(spec_0, spec_1, att, field, X, Y):
     場は対面ごとに1つなので、向きで並びを入れ替えない。"""
     moves = []
     for mv in X.moves:
-        if mv is None or mv.category == "status" or not (mv.power or 0):
+        if (mv is None or mv.category == "status" or not (mv.power or 0)
+                or mv.name_jp in COUNTER_MOVES):
             moves.append({"n": mv.name_jp if mv is not None else None, "dmg": None})
             continue
         hl, _ = ME._run(spec_0, spec_1, mv.name_jp, L, 0.0, att)
         hh, _ = ME._run(spec_0, spec_1, mv.name_jp, L, 1.0, att)
-        h_min, h_max = hits_minmax(mv, X)
+        n_hits = fixed_hits(mv, X)
         moves.append({
             "n": mv.name_jp,
-            # 幅は「最小回数×最低乱数 〜 最大回数×最高乱数」
-            "dmgLo": move_damage(X, Y, mv, field, 0.0, h_min),
-            "dmgHi": move_damage(X, Y, mv, field, 1.0, h_max),
+            "dmgLo": move_damage(X, Y, mv, field, 0.0, n_hits),
+            "dmgHi": move_damage(X, Y, mv, field, 1.0, n_hits),
             "hitsLo": hl, "hitsHi": hh,
         })
     return {"hp": X.max_hp, "speed": _effective_speed(X, field), "moves": moves}

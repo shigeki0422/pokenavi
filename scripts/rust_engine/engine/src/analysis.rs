@@ -4,7 +4,8 @@
 //! 割合(%)・乱数n発の確率・記号(◎○△▲×)の閾値といった表示計算は呼び出し側に置く。
 //! ルールを持つ部分だけを一箇所に集めるのが目的で、表示計算を混ぜると
 //! 「同じ判定が二重実装される」という当初の問題がここに再発する。
-use crate::battle::{calc_hits, entry_effects, hit_damage, is_accuracy_chained, split2, ActKind, Action, Battle, Side};
+use crate::battle::{calc_hits, entry_effects, hit_damage, is_accuracy_chained, is_counter_move,
+                    split2, ActKind, Action, Battle, Side};
 use crate::damage::Field;
 use crate::pack::Pack;
 use crate::poke::{build_poke, mega_evolve_poke, Poke};
@@ -23,17 +24,14 @@ pub const ROLLS: usize = 16;
 /// `1.0 < 1.0` が偽になり確定効果まで殺す（Python 側で実際に殺していた）。
 const ALMOST_ONE: f64 = f64::from_bits(0x3FEF_FFFF_FFFF_FFFF);
 
-/// 連続技の回数を最大にする乱数。表示するダメージ幅の上端に使う。
-/// calc_hits しか使わないので、急所や追加効果には影響しない。
-struct MaxHitRng;
-impl BRng for MaxHitRng {
-    // 急所・追加効果は FixedRng と同じ扱い（prob=1 のものだけ発動）にしたうえで、
-    // 連続技の回数だけを最大にする。
+/// 連続回数だけ別の値を返す乱数。「回数が抽選で決まる技かどうか」を実測で見分けるために使う。
+struct ChoicesRng(i64);
+impl BRng for ChoicesRng {
     fn random(&mut self) -> f64 { ALMOST_ONE }
-    fn hit_continue(&mut self) -> f64 { 0.0 }   // ネズミざんを10回続ける
+    fn hit_continue(&mut self) -> f64 { 0.0 }
     fn choice(&mut self, _n: usize) -> usize { 0 }
     fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
-    fn choices(&mut self) -> i64 { 5 }
+    fn choices(&mut self) -> i64 { self.0 }
 }
 
 struct FixedRng;
@@ -45,9 +43,11 @@ impl BRng for FixedRng {
     fn hit_continue(&mut self) -> f64 { 0.0 }
     fn choice(&mut self, _n: usize) -> usize { 0 }
     fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
-    /// 連続技(2〜5発)の回数。確定数は保証値なので最小の2発。
-    /// Python の `random.choices([2,3,4,5], ...)` を先頭固定した値と同じ。
-    fn choices(&mut self) -> i64 { 2 }
+    /// 連続技(2〜5発)の回数。重みは 3:3:1:1 で期待値がちょうど 3.0 なので、
+    /// その期待値で固定する。最小の2発だと過小、最大の5発だと過大で、
+    /// どちらも幅で示すと分布の偏り（4発・5発は各12.5%）を誤解させる。
+    /// スキルリンクは calc_hits 側で先に5発と決まるのでここには来ない。
+    fn choices(&mut self) -> i64 { 3 }
 }
 
 /// 正規化ロール（0.0=最低乱数, 1.0=最高乱数）。`calc_damage` は `0.85 + r*0.15` で使う。
@@ -105,7 +105,14 @@ fn setup(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, roll: f64) -
         mega_evolve_poke(p, &mut a);
         mega_evolve_poke(p, &mut b);
     }
-    let mut field = Field { roll_override: Some(roll), always_hit: true, ..Default::default() };
+    let mut field = Field {
+        roll_override: Some(roll),
+        always_hit: true,
+        // 「相手も攻撃してくる対面」で互いの最大打点を比べるのが1v1判定なので、
+        // ふいうちのように相手の行動に依存する技も通る前提で評価する。
+        assume_opp_attacks: true,
+        ..Default::default()
+    };
     let mut s1 = Side { party: vec![a], active_idx: 0, ..Default::default() };
     let mut s2 = Side { party: vec![b], active_idx: 0, ..Default::default() };
     {
@@ -207,7 +214,9 @@ pub fn side_info(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str) -> (
             .map(|m| {
                 (
                     packr.intern.resolve(m.name).to_string(),
-                    m.category != crate::pack::Cat::Status && m.power.unwrap_or(0) > 0,
+                    m.category != crate::pack::Cat::Status
+                        && m.power.unwrap_or(0) > 0
+                        && !is_counter_move(packr, m),
                 )
             })
             .collect(),
@@ -271,14 +280,12 @@ pub fn move_damage(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
     att: usize, move_idx: usize, roll: f64,
 ) -> i64 {
-    move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, roll, Suppress::None, false)
+    move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, roll, Suppress::None)
 }
 
-/// `hits_max` は連続技の回数を最大にするかどうか。表示するダメージ幅は
-/// 「最小回数×最低乱数 〜 最大回数×最高乱数」で出す（最小回数だけだと過小評価になる）。
 pub fn move_damage_sup(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str,
-    att: usize, move_idx: usize, roll: f64, sup: Suppress, hits_max: bool,
+    att: usize, move_idx: usize, roll: f64, sup: Suppress,
 ) -> i64 {
     let mut bt = setup_sup(pack, spec_a, spec_b, season, roll, sup);
     let packr: &Pack = pack;
@@ -286,11 +293,7 @@ pub fn move_damage_sup(
         Some(m) => m,
         None => return 0,
     };
-    let n = if hits_max {
-        calc_hits(packr, &mv, bt.sides[att].active(), &mut MaxHitRng)
-    } else {
-        calc_hits(packr, &mv, bt.sides[att].active(), &mut FixedRng)
-    };
+    let n = calc_hits(packr, &mv, bt.sides[att].active(), &mut FixedRng);
     let mut total = 0i64;
     for hit_i in 0..n.max(1) {
         let Battle { sides, field, .. } = &mut bt;
@@ -349,7 +352,7 @@ pub fn relevant_conds(
         let Some(label) = label else { return };
         if label.is_empty() { return; }
         // 与ダメが変われば確定数も見るまでもない。安い方から確かめる。
-        let d = move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, 0.0, sup, false);
+        let d = move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, 0.0, sup);
         if d != base_dmg {
             out.push(label);
             return;
@@ -367,8 +370,18 @@ pub fn relevant_conds(
     {
         let bt = setup(pack, spec_a, spec_b, season, 0.0);
         if let Some(mv) = bt.sides[att].active().moves.get(move_idx) {
+            // 注記するのは「回数を仮定した技」だけ。仕様で回数が決まっている技
+            // （ダブルウイングの2回、スキルリンクの5回）は仮定が無いので出さない。
+            // 抽選で決まる技かどうかは、回数の抽選値だけ変えて結果が動くかで見分ける。
+            let p = bt.sides[att].active();
+            let hits = calc_hits(pack, mv, p, &mut FixedRng);
+            let hits_alt = calc_hits(pack, mv, p, &mut ChoicesRng(5));
             if is_accuracy_chained(pack, mv) {
-                out.push("最大ヒット時".to_string());
+                // 1発ごとに命中判定がある技。必中を仮定しているので最大回数になる
+                out.push(format!("最大{}ヒット時", hits));
+            } else if hits != hits_alt {
+                // 回数が抽選で決まる技。重み3:3:1:1の期待値3.0で見ている
+                out.push(format!("{}ヒット時", hits));
             }
         }
     }
@@ -376,17 +389,3 @@ pub fn relevant_conds(
 }
 
 
-/// この技の連続回数の下限・上限。乱数で変わる技（2〜5回のもの、ネズミざん）は
-/// 下限と上限が食い違う。表示するダメージ幅の両端に使う。
-pub fn hit_range(
-    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, move_idx: usize,
-) -> (i64, i64) {
-    let bt = setup(pack, spec_a, spec_b, season, 0.0);
-    let packr: &Pack = pack;
-    let Some(mv) = bt.sides[att].active().moves.get(move_idx).cloned() else { return (1, 1) };
-    let p = bt.sides[att].active();
-    (
-        calc_hits(packr, &mv, p, &mut FixedRng).max(1),
-        calc_hits(packr, &mv, p, &mut MaxHitRng).max(1),
-    )
-}

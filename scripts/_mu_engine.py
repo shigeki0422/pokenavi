@@ -112,6 +112,9 @@ def _best_cached(spec_0, spec_1, att, _lid):
     for mv in A.moves:
         if mv is None or mv.category == "status" or not (mv.power or 0):
             continue
+        # 反射技は相手の技に依存しすぎるので最大打点の候補から外す
+        if mv.name_jp in _BT.COUNTER_MOVES:
+            continue
         h, r = _run(spec_0, spec_1, mv.name_jp, L, 0.0, att)
         if (h, -r) < (best[0], -best[1]):
             best = (h, r, mv.name_jp)
@@ -140,6 +143,13 @@ def _enter_fixed(roll=0.0):
         # そうしないと「1発しか当たらない前提」になり、イッカネズミの主力技が圏外になる。
         _STATE["hitcont"] = _BT._HIT_CONTINUE
         _BT._HIT_CONTINUE = lambda: 0.0
+        # 2〜5回の連続技は重み3:3:1:1で期待値がちょうど3.0。最小の2回だと過小、
+        # 最大の5回だと過大なので期待値で固定する（スキルリンクは先に5回で決まる）。
+        _STATE["mhits"] = _BT._MULTI_HIT_FIXED
+        _BT._MULTI_HIT_FIXED = 3
+        # 1v1判定は互いに攻撃し合う対面なので、ふいうちも通る前提で評価する。
+        _STATE["oppatk"] = _BT._ASSUME_OPP_ATTACKS
+        _BT._ASSUME_OPP_ATTACKS = True
         # 1.0 ちょうど未満の最大値。判定は全て `random() < prob` なので、
         # prob<1 の追加効果は不発、prob=1 の確定効果（必中急所・りゅうせいぐんの特攻ダウン等）
         # だけが発動する。1.0 を入れると `1.0 < 1.0` が偽になり確定効果まで殺す（実際に殺していた）
@@ -159,6 +169,8 @@ def _exit_fixed():
         _DMG._ROLL_OVERRIDE = _STATE["roll"]
         _BT.check_hit = _STATE["hit"]
         _BT._HIT_CONTINUE = _STATE["hitcont"]
+        _BT._MULTI_HIT_FIXED = _STATE["mhits"]
+        _BT._ASSUME_OPP_ATTACKS = _STATE["oppatk"]
         _rnd.random = _STATE["rand"]
         _rnd.randint = _STATE["randint"]
         _rnd.choice = _STATE["choice"]

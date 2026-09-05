@@ -3,6 +3,7 @@ import PartyToolsNav from './PartyToolsNav.astro';
 import iconsData from '../../public/sim-data/icons.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
+import { ASSUMPTIONS_LABEL, MATCHUP_ASSUMPTIONS, MATCHUP_LEAD } from '../scripts/party-builder/assumptions';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO, TYPE_NAME_EN, TYPE_NAME_KO, ROLE_NAME_EN, ROLE_NAME_KO } from '../i18n/game-terms';
 
 interface Props {
@@ -11,6 +12,10 @@ interface Props {
 }
 const { preCoreLabel, lang = 'ja' } = Astro.props;
 const pfx = lang === 'ja' ? '' : `/${lang}`;
+// 1v1判定の前提文。is:inline スクリプトからは import できないので define:vars で渡す
+const assumeLead = MATCHUP_LEAD[lang] ?? MATCHUP_LEAD.ja;
+const assumeLabel = ASSUMPTIONS_LABEL[lang] ?? ASSUMPTIONS_LABEL.ja;
+const assumeItems = MATCHUP_ASSUMPTIONS[lang] ?? MATCHUP_ASSUMPTIONS.ja;
 
 const ICONS = iconsData as Record<string, string>;
 const MOVET = moveTypesData as Record<string, string>;
@@ -98,7 +103,6 @@ const I18N_ALL = {
     calculating: '計算中…', fetchFailed: '取得に失敗しました',
     popFireSub: '自分の攻撃技（行）× 相手の想定型（列）の与ダメ％／確定数。★＝その型への最大打点。',
     popSpeedSub: '相手の想定型のS実数値（速い順）。あなたの行より下＝抜ける／上＝抜かれる。',
-    popMuSub: '相手の想定型別に、互いの最大打点1発の確定数・素早さ・勝敗判定。計算に効いた条件は各セルに表示します。',
     dmgSelf: '与ダメ（自→相）', dmgOpp: '被ダメ（相→自）', speedRow: '素早さ', judgeRow: '判定',
     thMove: '技', thVariant: n => `型${n}`,
     popAtkSub: (mon,type) => `${mon}の各技が ${type}タイプに対して何倍か（×2=抜群 ½=半減 無効=0倍）。`,
@@ -164,7 +168,6 @@ const I18N_ALL = {
     calculating: 'Calculating…', fetchFailed: 'Failed to load',
     popFireSub: 'Damage %/KO count from your move (row) vs the opponent\'s assumed set (column). ★ = strongest hit vs that set.',
     popSpeedSub: 'Opponent\'s assumed sets by Speed stat (fastest first). Below your row = you outspeed / above = they outspeed you.',
-    popMuSub: 'Per assumed opposing set: KO count and Speed for each side\'s strongest hit, plus the win/loss call. Factors used in each calculation are shown in the cells.',
     dmgSelf: 'Damage dealt (you→opp)', dmgOpp: 'Damage taken (opp→you)', speedRow: 'Speed', judgeRow: 'Verdict',
     thMove: 'Move', thVariant: n => `Set ${n}`,
     popAtkSub: (mon,type) => `${mon}'s multiplier for each move against the ${type} type (×2 = super effective, ½ = resisted, immune = ×0).`,
@@ -230,7 +233,6 @@ const I18N_ALL = {
     calculating: '계산 중…', fetchFailed: '가져오기에 실패했습니다',
     popFireSub: '자신의 공격 기술（행）× 상대 예상 타입（열）의 대미지%／확정타. ★＝해당 타입에 대한 최대 위력.',
     popSpeedSub: '상대 예상 타입의 스피드 실수치（빠른 순）. 내 행보다 아래＝이김／위＝당함.',
-    popMuSub: '상대 예상 타입별로 서로의 최대 위력 1발 확정타・스피드・승패 판정. 계산에 반영된 조건은 각 칸에 표시됩니다.',
     dmgSelf: '주는 대미지（나→상대）', dmgOpp: '받는 대미지（상대→나）', speedRow: '스피드', judgeRow: '판정',
     thMove: '기술', thVariant: n => `빌드${n}`,
     popAtkSub: (mon,type) => `${mon}의 각 기술이 ${type}타입에 몇 배인지（×2=효과가 굉장함 ½=반감 무효=0배）.`,
@@ -513,7 +515,10 @@ const I18N = I18N_ALL[lang];
   .pop-hd{display:flex;align-items:center;gap:.4em;font-weight:800;font-size:.95rem;margin-bottom:.2em}
   .pop-hd img{width:30px;height:30px;object-fit:contain}
   .pop-hd .arw{color:rgb(var(--gray));font-weight:900}
-  .pop-sub{font-size:.76rem;color:rgb(var(--gray));margin-bottom:.7em}
+  .pop-sub{font-size:.76rem;color:rgb(var(--gray));margin-bottom:.35em}
+  .pop-assume{font-size:.74rem;color:rgb(var(--gray));margin-bottom:.7em}
+  .pop-assume summary{cursor:pointer}
+  .pop-assume ul{margin:.4em 0 0;padding-left:1.2em;line-height:1.6}
   table.pop-t{width:100%;border-collapse:collapse;font-size:.8rem}
   table.pop-t th{font-size:.66rem;font-weight:800;color:rgb(var(--gray));background:#f8fafc;padding:.4em .5em;border-bottom:1px solid rgb(var(--gray-light));text-align:center;white-space:nowrap}
   table.pop-t th.lft,table.pop-t td.lft{text-align:left}
@@ -582,7 +587,7 @@ const I18N = I18N_ALL[lang];
   }
 </style>
 
-<script is:inline define:vars={{ ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, preCoreLabel, preCoreLabelDisplay, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
+<script is:inline define:vars={{ assumeLead, assumeLabel, assumeItems, ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, preCoreLabel, preCoreLabelDisplay, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
   /** I18N_ALL は関数(フォーマッタ)を値に含むため、Astroのdefine:varsはJSON化の過程で
    * 関数プロパティを黙って落としてしまう(define:varsはprops→スクリプトへJSON経由で注入される)。
    * そのためI18N_ALLはフロントマター側と同じ内容をスクリプト内に直接定義し、defineVars経由では渡さない。 */
@@ -642,7 +647,6 @@ const I18N = I18N_ALL[lang];
       calculating: '計算中…', fetchFailed: '取得に失敗しました',
       popFireSub: '自分の攻撃技（行）× 相手の想定型（列）の与ダメ％／確定数。★＝その型への最大打点。',
       popSpeedSub: '相手の想定型のS実数値（速い順）。あなたの行より下＝抜ける／上＝抜かれる。',
-      popMuSub: '相手の想定型別に、互いの最大打点1発の確定数・素早さ・勝敗判定。計算に効いた条件は各セルに表示します。',
       dmgSelf: '与ダメ（自→相）', dmgOpp: '被ダメ（相→自）', speedRow: '素早さ', judgeRow: '判定',
       thMove: '技', thVariant: n => `型${n}`,
       popAtkSub: (mon,type) => `${mon}の各技が ${type}タイプに対して何倍か（×2=抜群 ½=半減 無効=0倍）。`,
@@ -717,7 +721,6 @@ const I18N = I18N_ALL[lang];
       calculating: 'Calculating…', fetchFailed: 'Failed to load',
       popFireSub: 'Damage %/KO count from your move (row) vs the opponent\'s assumed set (column). ★ = strongest hit vs that set.',
       popSpeedSub: 'Opponent\'s assumed sets by Speed stat (fastest first). Below your row = you outspeed / above = they outspeed you.',
-      popMuSub: 'Per assumed opposing set: KO count and Speed for each side\'s strongest hit, plus the win/loss call. Factors used in each calculation are shown in the cells.',
       dmgSelf: 'Damage dealt (you→opp)', dmgOpp: 'Damage taken (opp→you)', speedRow: 'Speed', judgeRow: 'Verdict',
       thMove: 'Move', thVariant: n => `Set ${n}`,
       popAtkSub: (mon,type) => `${mon}'s multiplier for each move against the ${type} type (×2 = super effective, ½ = resisted, immune = ×0).`,
@@ -792,7 +795,6 @@ const I18N = I18N_ALL[lang];
       calculating: '계산 중…', fetchFailed: '가져오기에 실패했습니다',
       popFireSub: '자신의 공격 기술（행）× 상대 예상 타입（열）의 대미지%／확정타. ★＝해당 타입에 대한 최대 위력.',
       popSpeedSub: '상대 예상 타입의 스피드 실수치（빠른 순）. 내 행보다 아래＝이김／위＝당함.',
-      popMuSub: '상대 예상 타입별로 서로의 최대 위력 1발 확정타・스피드・승패 판정. 계산에 반영된 조건은 각 칸에 표시됩니다.',
       dmgSelf: '주는 대미지（나→상대）', dmgOpp: '받는 대미지（상대→나）', speedRow: '스피드', judgeRow: '판정',
       thMove: '기술', thVariant: n => `빌드${n}`,
       popAtkSub: (mon,type) => `${mon}의 각 기술이 ${type}타입에 몇 배인지（×2=효과가 굉장함 ½=반감 무효=0배）.`,
@@ -817,6 +819,10 @@ const I18N = I18N_ALL[lang];
   const API = /(^|\.)pokenavi\.jp$/.test(location.hostname) ? 'https://pokenavi-suggest-799947701075.asia-northeast1.run.app' : 'http://localhost:8899';
   const EVK = ['H','A','B','C','D','S'];
   const esc = s => (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  /** 常に同じ前提は既定で畳んで出す（文言は assumptions.ts に1箇所で持つ）。 */
+  const assumptionsHtml = () =>
+    `<details class="pop-assume"><summary>${esc(assumeLabel)}</summary><ul>` +
+    assumeItems.map(a => `<li>${esc(a)}</li>`).join('') + `</ul></details>`;
   const toKatakana = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
   const _regionalPrefix = [['ヒスイ',3],['ガラル',3],['アローラ',4]];
   /** メガ進化名(「メガガブリアス」等)は辞書に個別登録せず、素体名+メガ接頭辞から動的に組み立てる
@@ -1260,7 +1266,8 @@ const I18N = I18N_ALL[lang];
     const spRow = `<tr><td class="lft">${I18N.speedRow}</td>${d.spd.map(c=>`<td class="${c.fast?'sp-win':'sp-lose'}">${esc(tSpdTxt(c.txt))}</td>`).join('')}</tr>`;
     const jRow = `<tr><td class="lft">${I18N.judgeRow}</td>${d.judge.map(c=>`<td class="${col(c.v)}"><b style="font-size:1.05em">${c.v}</b><br><span class="pop-ko">${esc(tJudgeTxt(c.txt))}</span></td>`).join('')}</tr>`;
     return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
-      <div class="pop-sub">${I18N.popMuSub}</div>
+      <div class="pop-sub">${esc(assumeLead)}</div>
+      ${assumptionsHtml()}
       <div style="overflow-x:auto"><table class="pop-t"><tr><th class="lft"> </th>${cols}</tr>${dmgRow(I18N.dmgSelf,d.me)}${dmgRow(I18N.dmgOpp,d.op)}${spRow}${jRow}</table></div>`;
   }
   function atkDetailHtml(d){

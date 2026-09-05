@@ -417,7 +417,10 @@ const I18N = I18N_ALL[lang];
   .pb-pop-hd{display:flex;align-items:center;gap:.4em;font-weight:800;font-size:.95rem;margin-bottom:.2em}
   .pb-pop-hd img{width:30px;height:30px;object-fit:contain}
   .pb-arw{color:rgb(var(--gray));font-weight:900}
-  .pb-pop-sub{font-size:.76rem;color:rgb(var(--gray));margin-bottom:.7em}
+  .pb-pop-sub{font-size:.76rem;color:rgb(var(--gray));margin-bottom:.35em}
+  .pb-pop-assume{font-size:.74rem;color:rgb(var(--gray));margin-bottom:.7em}
+  .pb-pop-assume summary{cursor:pointer}
+  .pb-pop-assume ul{margin:.4em 0 0;padding-left:1.2em;line-height:1.6}
   table.pb-pop-t{width:100%;border-collapse:collapse;font-size:.8rem}
   table.pb-pop-t th{font-size:.66rem;font-weight:800;color:rgb(var(--gray));background:#f8fafc;padding:.4em .5em;border-bottom:1px solid rgb(var(--gray-light));text-align:center;white-space:nowrap}
   table.pb-pop-t td{padding:.4em .5em;border-bottom:1px solid #f1f5f9;text-align:center;white-space:nowrap}
@@ -647,6 +650,7 @@ const I18N = I18N_ALL[lang];
   import { loadCore, loadMon, loadNameUrlMap, nameUrlMapSync } from '../scripts/party-builder/data';
   import { loadStore, saveStore, createParty, createPartyFromSlots, duplicateParty, renameParty, deleteParty, getEffectiveTargets } from '../scripts/party-builder/storage';
   import { fromSpec, fromSuggestSpec, exportParty, importParty } from '../scripts/party-builder/spec';
+  import { ASSUMPTIONS_LABEL, MATCHUP_ASSUMPTIONS, MATCHUP_LEAD } from '../scripts/party-builder/assumptions';
   import { ALL_NATURES, NEUTRAL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, effectiveSpeed, natureDisp } from '../scripts/party-builder/stats';
   import { TYPES } from '../scripts/party-builder/typechart';
   import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx, coverageSet, exposedOnRemoval, holesAfterSwap } from '../scripts/party-builder/balance';
@@ -730,7 +734,6 @@ const I18N = I18N_ALL[lang];
       holeFillSwappedMsg: (removeName, addName) => `${removeName}を${addName}に入れ替えました`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `型${idx}(${item}): ${sym} ${my}/${opp}・${turn}`,
       noItem: '道具なし', turnFirst: '先手', turnSecond: '後手',
-      muDetailSub: '相手の想定型別に、互いの最大打点1発の確定数・素早さ・勝敗判定。計算に効いた条件は各セルに表示します。',
       muNoteHits: (c) => `${c} 込み`,
       muNoteConds: (c) => `${c} で計算`,
       muDmgSelfLbl: '与ダメ（自→相）', muDmgOppLbl: '被ダメ（相→自）', muSpeedRowLbl: '素早さ', muJudgeRowLbl: '判定',
@@ -823,7 +826,6 @@ const I18N = I18N_ALL[lang];
       holeFillSwappedMsg: (removeName, addName) => `Swapped ${removeName} for ${addName}`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `Set ${idx} (${item}): ${sym} ${my}/${opp} · ${turn}`,
       noItem: 'no item', turnFirst: 'moves first', turnSecond: 'moves second',
-      muDetailSub: 'Per assumed opposing set: KO count and Speed for each side\'s strongest hit, plus the win/loss call. Factors used in each calculation are shown in the cells.',
       muNoteHits: (c) => `incl. ${c}`,
       muNoteConds: (c) => `under ${c}`,
       muDmgSelfLbl: 'Damage dealt (you→opp)', muDmgOppLbl: 'Damage taken (opp→you)', muSpeedRowLbl: 'Speed', muJudgeRowLbl: 'Verdict',
@@ -916,7 +918,6 @@ const I18N = I18N_ALL[lang];
       holeFillSwappedMsg: (removeName, addName) => `${removeName}을(를) ${addName}(으)로 교체했습니다`,
       muBreakdownLine: (idx, item, sym, my, opp, turn) => `빌드${idx}(${item}): ${sym} ${my}/${opp}·${turn}`,
       noItem: '도구 없음', turnFirst: '선공', turnSecond: '후공',
-      muDetailSub: '상대 예상 타입별로 서로의 최대 위력 1발 확정타・스피드・승패 판정. 계산에 반영된 조건은 각 칸에 표시됩니다.',
       muNoteHits: (c) => `${c} 포함`,
       muNoteConds: (c) => `${c} 기준`,
       muDmgSelfLbl: '주는 대미지（나→상대）', muDmgOppLbl: '받는 대미지（상대→나）', muSpeedRowLbl: '스피드', muJudgeRowLbl: '판정',
@@ -2604,6 +2605,12 @@ const I18N = I18N_ALL[lang];
     if (!d || d.hits == null || d.hits >= 5) return I18N.muDetailKoOOR;
     return d.certain ? I18N.hitsFmt(d.hits) : I18N.muDetailKoRoll(d.hits);
   }
+  /** 常に同じ前提は既定で畳んで出す。列挙をヘッダーに直書きすると増えるたびに伸びるため。
+   * 文言は assumptions.ts に1箇所で持つ（ポップアップが3実装あり、片方だけ直す事故が起きた）。 */
+  function assumptionsHtml() {
+    const items = (MATCHUP_ASSUMPTIONS[lang] || MATCHUP_ASSUMPTIONS.ja).map((a) => `<li>${esc(a)}</li>`).join('');
+    return `<details class="pb-pop-assume"><summary>${esc(ASSUMPTIONS_LABEL[lang] || ASSUMPTIONS_LABEL.ja)}</summary><ul>${items}</ul></details>`;
+  }
   /** 与ダメ内訳1件。「簡単構築」のdmgRow相当(与ダメ%レンジ+確定数+技名)。 */
   function pbMuDetailLine(d) {
     if (!d) return { moveTxt: I18N.dashOpt, pctTxt: '0%', koTxt: I18N.muDetailKoOOR, noteTxt: '' };
@@ -2630,7 +2637,8 @@ const I18N = I18N_ALL[lang];
     const jRow = `<tr><td class="lft">${esc(I18N.muJudgeRowLbl)}</td>${verdicts.map((v, i) => `<td class="${symCls(v.sym)}"><b style="font-size:1.05em">${v.sym}</b><br><span class="pb-pop-ko">${esc(I18N.muDetailJudgeTxt(v.win ? I18N.muDetailJudgeWin : I18N.muDetailJudgeLoss, meLines[i].koTxt, opLines[i].koTxt, v.fast ? I18N.turnFirst : I18N.turnSecond))}</span></td>`).join('')}</tr>`;
     const table = `<div style="overflow-x:auto"><table class="pb-pop-t"><tr><th class="lft"> </th>${cols}</tr>${dmgRow(I18N.muDmgSelfLbl, meLines)}${dmgRow(I18N.muDmgOppLbl, opLines)}${spRow}${jRow}</table></div>`;
     return `<div class="pb-pop-hd">${icoImg(b.icon, b.label, '')}${esc(tPoke(b.label))}<span class="pb-arw">vs</span>${icoImg(o.icon, o.label, '')}${esc(tPoke(o.label))}</div>
-      <div class="pb-pop-sub">${esc(I18N.muDetailSub)}</div>
+      <div class="pb-pop-sub">${esc(MATCHUP_LEAD[lang] || MATCHUP_LEAD.ja)}</div>
+      ${assumptionsHtml()}
       ${table}
       ${addTargetButtonHtml(o.label)}`;
   }

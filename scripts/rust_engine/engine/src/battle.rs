@@ -701,6 +701,15 @@ fn check_critical(pack: &Pack, attacker: &Poke, mv: &DMove, defender: &Poke, rng
     rng.random() < crit_chance(pack, attacker, mv, Some(defender))
 }
 
+/// 相手が出した技の種類と威力で威力が決まる技（反射技）。
+/// 1v1判定は「互いの最大打点1発」を比べるものなので、成功前提で評価すると
+/// 過大になる（相手が物理を撃つか特殊を撃つか、その威力次第で0にも大打撃にもなる）。
+/// 分析の対象からは外す。
+pub fn is_counter_move(pack: &Pack, mv: &DMove) -> bool {
+    let l = &pack.sy.l;
+    mv.name == l.カウンター || mv.name == l.ミラーコート || mv.name == l.メタルバースト
+}
+
 /// 1発ごとに命中判定があり、外れるとそこで止まる技。
 /// 分析（1v1判定）は必中を仮定するので、これらは常に最大回数で当たる扱いになる。
 /// 回数そのものが乱数で決まる 2〜5回の技（みずしゅりけん等）とは別扱い。
@@ -1080,7 +1089,7 @@ pub fn execute_move(
         return;
     }
     if n == l.ふいうち {
-        let opp_is_attacking = match opp_action {
+        let opp_is_attacking = field.assume_opp_attacks || match opp_action {
             Some(oa) => {
                 oa.kind == ActKind::Move
                     && oa.mv.as_ref().map(|m| m.category != Cat::Status).unwrap_or(false)

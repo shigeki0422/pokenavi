@@ -45,6 +45,10 @@ pub struct Field {
     /// 「追加効果は不発・命中は必ず成功」を単一の乱数値では表現できず、専用の旗が要る。
     /// 対戦本体は常に false（Default）で、挙動は一切変わらない。
     pub always_hit: bool,
+    /// 分析専用。1v1判定は「相手も攻撃してくる対面」を前提にするので、
+    /// ふいうちのように相手の行動に依存する技も通る扱いにする。
+    /// 対戦本体は常に false（Default）。
+    pub assume_opp_attacks: bool,
 }
 
 #[inline]

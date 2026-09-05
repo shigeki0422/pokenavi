@@ -747,7 +747,7 @@ def _execute_move(
 
     # ふいうち：相手が今ターン攻撃技を使わない場合は失敗
     if move.name_jp == "ふいうち":
-        opp_is_attacking = (
+        opp_is_attacking = _ASSUME_OPP_ATTACKS or (
             opp_action is not None
             and opp_action.type == "move"
             and opp_action.move is not None
@@ -2511,6 +2511,11 @@ MULTI_HIT_RANDOM_25 = {
 }
 
 
+# 相手が出した技の種類と威力で威力が決まる技（反射技）。1v1判定は「互いの最大打点1発」を
+# 比べるものなので、成功前提で評価すると過大になる（相手が物理か特殊か、その威力次第で
+# 0にも大打撃にもなる）。分析の対象からは外す。対戦本体では通常どおり動く。
+COUNTER_MOVES = {"カウンター", "ミラーコート", "メタルバースト"}
+
 # 1発ごとに命中判定があり、外れるとそこで止まる技。分析（1v1判定）は必中を仮定するので、
 # これらは常に最大回数まで当たる扱いになる。回数自体が乱数の2〜5回技とは別扱い。
 ACCURACY_CHAINED = {"トリプルアクセル", "ネズミざん"}
@@ -2519,6 +2524,13 @@ ACCURACY_CHAINED = {"トリプルアクセル", "ネズミざん"}
 # 分析側が必中を仮定するために差し替える差込口で、既定では対戦本体の挙動は変わらない
 # （damage._ROLL_OVERRIDE と同じ位置づけ）。
 _HIT_CONTINUE = None
+
+# 2〜5回の連続技の回数。None なら重み3:3:1:1の抽選。分析側は期待値の3回に固定する。
+_MULTI_HIT_FIXED = None
+
+# ふいうちのように「相手が攻撃してくる」ことが条件の技を、通る前提で扱うか。
+# 1v1判定は互いが攻撃し合う対面を前提にするので分析側だけ True にする。
+_ASSUME_OPP_ATTACKS = False
 
 
 def _calc_hits(move: MoveData, attacker=None) -> int:
@@ -2532,6 +2544,8 @@ def _calc_hits(move: MoveData, attacker=None) -> int:
     if n in MULTI_HIT_RANDOM_25:
         if skill_link:
             return 5
+        if _MULTI_HIT_FIXED is not None:
+            return _MULTI_HIT_FIXED
         return random.choices([2, 3, 4, 5], weights=[3, 3, 1, 1])[0]
     # ネズミざん：1〜10回連続（途中で外れると終わる＝各継続を確率判定）。スキルリンクで必ず10回
     if n == "ネズミざん":

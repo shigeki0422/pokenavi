@@ -226,9 +226,7 @@ function _detail(m: EngineMove & { idx: number }, p: Pair, att: number,
 
   // 最低乱数でも最高乱数でも同じ発数なら乱数の影響を受けない。実用上限を超える場合も、
   // 保証値である最低乱数側の「確n」を出す（判定行と食い違わせないため）。
-  // 連続回数が乱数で変わる技（2〜5回・ネズミざん）は、確率計算に回数の分布を
-  // 畳み込めていないので「乱数n発(p%)」を出さず保証値の「確n」に寄せる。
-  if (lo === hi || hi > PROB_HITS_CAP || lo >= OUT_OF_RANGE || m.varHits) {
+  if (lo === hi || hi > PROB_HITS_CAP || lo >= OUT_OF_RANGE) {
     return { ...base, hits: lo, prob: null, certain: true, reason: _reason(defender, hp, dmgLo, lo) };
   }
   const prob = koProb(p.specA, p.specB, att, m.idx, hi) * 100;
