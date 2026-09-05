@@ -318,22 +318,23 @@ def _mega_of(tpl, item, normalize_mega_stone):
 
 
 CHOICE_ITEMS = {"こだわりスカーフ", "こだわりハチマキ", "こだわりメガネ"}
-# こだわり系は最初に使った技に固定されるため、積み技・補助技を入れると機能しない。
-# 相手に押し付けるトリック/すりかえと、変身後に固定が外れるへんしんだけは併用が成立する。
-CHOICE_OK_STATUS = {"トリック", "すりかえ", "へんしん"}
-_MOVE_CAT = {}
+# こだわり系は最初に使った技に固定されるため、自分を強化する積み技は「積んでも攻撃技を
+# 出せない」ので機能しない。設置技・状態異常技などは撒いてから交代すれば固定が解けるので有効。
+_SETUP_MOVES = set()
 
 
-def _move_cats(con):
-    if not _MOVE_CAT:
-        _MOVE_CAT.update({r[0]: r[1] for r in con.execute("SELECT name_jp, category FROM move_master")})
-    return _MOVE_CAT
+def _setup_moves(con):
+    if not _SETUP_MOVES:
+        _SETUP_MOVES.update(r[0] for r in con.execute(
+            "SELECT name_jp FROM move_master WHERE category='status' "
+            "AND effect_text LIKE '%自分の%' AND effect_text LIKE '%段階上げ%'"))
+    return _SETUP_MOVES
 
 
-def _moves_for_item(item, mpool, cats):
+def _moves_for_item(item, mpool, setup):
     if item not in CHOICE_ITEMS:
         return mpool[:4]
-    ok = [m for m in mpool if cats.get(m) != "status" or m in CHOICE_OK_STATUS]
+    ok = [m for m in mpool if m not in setup]
     return (ok or mpool)[:4]
 
 
@@ -356,7 +357,7 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
 
     mpool = [m for m, _ in move_rows[:MOVE_POOL_N]]
     top_moves = mpool[:4]
-    cats = _move_cats(con)
+    setup = _setup_moves(con)
     base_ability = abilities[0][0] if abilities else ""
 
     axes = _ev_axis_groups(evs)
@@ -430,7 +431,7 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
         if not backed and nature in used_natures:
             nature = _nature_alt(natures, ev, used_natures) or nature
         used_natures.add(nature)
-        mv4 = _moves_for_item(item, mpool, cats)
+        mv4 = _moves_for_item(item, mpool, setup)
         spec = (f"{name}@{item}:{nature}:{'|'.join(mv4)}:"
                 f"{'/'.join(str(x) for x in ev)}:{ability}")
         out.append({
