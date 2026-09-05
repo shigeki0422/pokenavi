@@ -3,7 +3,7 @@
 import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./types";
 import { effectiveSpeed } from "./stats";
 import type { AttackerStages } from "./damage";
-import { bestMove, calcHitDamages, calcMoveDetail, fieldTerrain, fieldWeather, simulateKO, stageAfterUse } from "./damage";
+import { bestMove, calcHitDamages, calcMoveDetail, entryAbility, entryAtkStage, fieldTerrain, fieldWeather, simulateKO, stageAfterUse } from "./damage";
 
 /**
  * 攻撃側の最大打点技(bestMove)による、相手HPに対する与ダメ割合(%、乱数min/max)と
@@ -406,8 +406,10 @@ function _hitDetailForMove(attacker: ResolvedBuild, move: ResolvedMove, defender
   if (move.cat === "status") return NONE;
 
   // 連続技(トリプルアクセル等)は1回分＝全ヒット合計で評価する(dmg/確定数とも)
-  const hitsLoArr = calcHitDamages(attacker, defender, move, { randomRoll: 0 });
-  const hitsHiArr = calcHitDamages(attacker, defender, move, { randomRoll: 1 });
+  // 表示する%も入場時のいかくを反映する（発数だけ反映して%が素のままだと食い違う）
+  const _st0: AttackerStages = { atk: entryAtkStage(attacker, defender), spa: 0 };
+  const hitsLoArr = calcHitDamages(attacker, defender, move, { randomRoll: 0, attackerStages: _st0 });
+  const hitsHiArr = calcHitDamages(attacker, defender, move, { randomRoll: 1, attackerStages: _st0 });
   const dmgLo = hitsLoArr.reduce((a, b) => a + b, 0);
   const dmgHi = hitsHiArr.reduce((a, b) => a + b, 0);
   if (dmgHi <= 0) return NONE;
@@ -439,7 +441,7 @@ function _hitDetailForMove(attacker: ResolvedBuild, move: ResolvedMove, defender
 
   // 1回目は「相手HP満タン・自分ランク0」、2回目以降は「HP非満タン・自己ランク変化後」の分布を使う
   const distsByUse: number[][] = [];
-  let stages: AttackerStages = { atk: 0, spa: 0 };
+  let stages: AttackerStages = { atk: entryAtkStage(attacker, defender), spa: 0 };
   for (let use = 1; use <= baseHitsHi; use++) {
     distsByUse.push(_hitDamageDistribution(attacker, move, defender, use === 1, stages));
     stages = stageAfterUse(stages, move, attacker.ability);

@@ -251,6 +251,35 @@ const WEATHER_ABILITY: Record<string, Exclude<Weather, null>> = {
  *   自分視点/相手視点で天候が食い違い判定が非対称になるため、対称なルールを採る。
  *   同速時は種族名の辞書順で固定（決定的にするための便宜）。
  */
+// ── 入場時効果（対面した瞬間に必ず起きる） ─────────────────────────────
+// 移植元: scripts/simulator/abilities.py entry_ability()。
+// これを見ていないと「対戦開始時に必ず起きること」を無視した評価になる。
+// 実測でも いかく未考慮により物理技のダメージが34%過大に出ていた
+// （サイコファング→ギャラドス 71%(確2) → 47%(確3)）。
+const INTIMIDATE_IMMUNE = new Set([
+  "クリアボディ", "しろいけむり", "かがくへんかガス",
+  "マイペース", "どんかん", "きもったま", "せいしんりょく",
+]);
+const UNCOPYABLE = new Set(["トレース", "かわりもの", "イリュージョン", "ばけのかわ", "かがくへんかガス"]);
+
+/** 入場時にトレースを解決した後の実効特性。 */
+export function entryAbility(me: ResolvedBuild, opp: ResolvedBuild): string {
+  if (me.ability === "トレース" && !UNCOPYABLE.has(opp.ability)) return opp.ability;
+  return me.ability;
+}
+
+/**
+ * 相手のいかくを受けた後の自分の攻撃ランク。
+ * あまのじゃく持ちは「自分への能力変化」が逆転するので +1 になる（abilities.py と同じ）。
+ */
+export function entryAtkStage(me: ResolvedBuild, opp: ResolvedBuild): number {
+  if (entryAbility(opp, me) !== "いかく") return 0;
+  const myAb = entryAbility(me, opp);
+  if (INTIMIDATE_IMMUNE.has(myAb)) return 0;
+  if (myAb === "あまのじゃく") return 1;
+  return -1;
+}
+
 export type Terrain = "electric" | "grassy" | "psychic" | "misty" | null;
 
 const TERRAIN_ABILITY: Record<string, Exclude<Terrain, null>> = {
@@ -265,21 +294,20 @@ const TERRAIN_ABILITY: Record<string, Exclude<Terrain, null>> = {
  * 環境では メガライチュウX の エレキメイカー のみ（でんき技1.3倍・サーフテールの素早さ2倍）。
  */
 export function fieldTerrain(a: ResolvedBuild, b: ResolvedBuild): Terrain {
-  const ta = TERRAIN_ABILITY[a.ability] ?? null;
-  const tb = TERRAIN_ABILITY[b.ability] ?? null;
-  if (ta && tb) return a.stats[5] <= b.stats[5] ? ta : tb;
-  return ta ?? tb;
+  const ta = TERRAIN_ABILITY[entryAbility(a, b)] ?? null;
+  const tb = TERRAIN_ABILITY[entryAbility(b, a)] ?? null;
+  // 対戦本体は side1 → side2 の順に入場処理するので、後入場(b)が上書きする
+  return tb ?? ta;
 }
 
 export function fieldWeather(a: ResolvedBuild, b: ResolvedBuild): Weather {
-  if (a.ability === "ノーてんき" || b.ability === "ノーてんき") return null;
-  const wa = WEATHER_ABILITY[a.ability] ?? null;
-  const wb = WEATHER_ABILITY[b.ability] ?? null;
-  if (wa && wb) {
-    if (a.stats[5] !== b.stats[5]) return a.stats[5] < b.stats[5] ? wa : wb;
-    return a.sp <= b.sp ? wa : wb;
-  }
-  return wa ?? wb;
+  const aa = entryAbility(a, b);
+  const ab = entryAbility(b, a);
+  if (aa === "ノーてんき" || ab === "ノーてんき") return null;
+  const wa = WEATHER_ABILITY[aa] ?? null;
+  const wb = WEATHER_ABILITY[ab] ?? null;
+  // 対戦本体は side1 → side2 の順に入場処理するので、後入場(b)が上書きする
+  return wb ?? wa;
 }
 
 /**
@@ -566,6 +594,7 @@ function calcDamageDetail(
 
   const ignoreAb = MOLD_BREAKER_ABILITIES.has(attacker.ability);
   const weather = fieldWeather(attacker, defender);
+  const terrain = fieldTerrain(attacker, defender);
   const effType = effectiveMoveType(attacker, move, weather);
   const power = effectivePower(attacker, defender, move, multiHitIndex, weather, effType);
   if (!power) return NO_DMG;
@@ -627,6 +656,19 @@ function calcDamageDetail(
   } else if (atkWeather === "rain") {
     if (effType === "みず") dmg = Math.floor(dmg * 1.5);
     else if (effType === "ほのお") dmg = Math.floor(dmg * 0.5);
+  }
+
+  // フィールド補正（damage.py と同じ。地に足が着いている攻撃側にのみ乗る）
+  const grounded = !(attacker.t1 === "ひこう" || attacker.t2 === "ひこう" || attacker.ability === "ふゆう");
+  if (grounded) {
+    if (terrain === "electric" && effType === "でんき") dmg = Math.floor(dmg * 1.3);
+    else if (terrain === "psychic" && effType === "エスパー") dmg = Math.floor(dmg * 1.3);
+    else if (terrain === "misty" && effType === "ドラゴン") dmg = Math.floor(dmg * 0.5);
+    else if (terrain === "grassy" && effType === "くさ") dmg = Math.floor(dmg * 1.3);
+  }
+  // グラスフィールド: じしん/じならし/マグニチュードは半減（地に足の有無を問わない）
+  if (terrain === "grassy" && (move.n === "じしん" || move.n === "じならし" || move.n === "マグニチュード")) {
+    dmg = Math.floor(dmg * 0.5);
   }
 
   const roll = 0.85 + randomRoll * 0.15;
@@ -818,7 +860,8 @@ export function stageAfterUse(cur: AttackerStages, move: ResolvedMove, ability: 
  */
 function makeSeqFn(attacker: ResolvedBuild, move: ResolvedMove, defender: ResolvedBuild, roll: number) {
   let item = defender.item;
-  let stages: AttackerStages = { atk: 0, spa: 0 };
+  // 入場時のいかくを初期ランクに反映する（対面した瞬間に必ず起きるため）
+  let stages: AttackerStages = { atk: entryAtkStage(attacker, defender), spa: 0 };
   return (_use: number, full: boolean): number[] => {
     const d = calcMoveDetail(attacker, defender, move, {
       randomRoll: roll,
