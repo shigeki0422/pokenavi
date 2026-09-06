@@ -13,6 +13,62 @@ WF_DIRS = [
 ]
 
 OCR_MOVES = {
+    "１０まんボルト": "10まんボルト",
+    "1０まんボルト": "10まんボルト",
+    "てんこうせっか": "でんこうせっか",
+    "ただりめ": "たたりめ",
+    "たもりめ": "たたりめ",
+    "はだきおとす": "はたきおとす",
+    "ブレイバード": "ブレイブバード",
+    "くきむすび": "くさむすび",
+    "とくろをまく": "とぐろをまく",
+    "ときろをまく": "とぐろをまく",
+    "ばかちから": "ばかぢから",
+    "じごくつき": "じごくづき",
+    "ねかいごと": "ねがいごと",
+    "ウイックターン": "クイックターン",
+    "てつぺき": "てっぺき",
+    "りゅうせいくん": "りゅうせいぐん",
+    "ぶぶき": "ふぶき",
+    "じこきいせい": "じこさいせい",
+    "じこぎいせい": "じこさいせい",
+    "じごさいせい": "じこさいせい",
+    "じごくいせい": "じこさいせい",
+    "かりげうち": "かげうち",
+    "かりゆうち": "かげうち",
+    "かりがうち": "かげうち",
+    "かいがらち": "かげうち",
+    "でありがしら": "であいがしら",
+    "ひやっきやこうら": "ひゃっきやこう",
+    "つちたばり": "つららばり",
+    "つらら": "つららばり",
+    "つらら鳥": "つららばり",
+    "つちあおし": "つららおとし",
+    "つちちあおし": "つららおとし",
+    "つちちおとし": "つららおとし",
+    "ヘドロぱくだん": "ヘドロばくだん",
+    "ヘドろぱくだん": "ヘドロばくだん",
+    "しんびのまもり": "しんぴのまもり",
+    "うちみつつみ": "うらみつらみ",
+    "あさきのひざし": "あさのひざし",
+    "じはく": "じばく",
+    "かわちわり": "かわらわり",
+    "たてここもる": "たてこもる",
+    "てってこうせん": "てっていこうせん",
+    "ドレインキッズ": "ドレインキッス",
+    "でんしふゆう": "でんじふゆう",
+    "ちかられをすいとる": "ちからをすいとる",
+    "すてセリフ": "すてゼリフ",
+    "はらだいに": "はらだいこ",
+    "へびにかみ": "へびにらみ",
+    "へびにちみ": "へびにらみ",
+    "おいかせ": "おいかぜ",
+    "いかりのまえは": "いかりのまえば",
+    "シャドウクロー": "シャドークロー",
+    "かんせきほう": "がんせきほう",
+    "ぜったいれいけいど": "ぜったいれいど",
+    "きむいギャップ": "さむいギャグ",
+    "きいみんじゅつ": "さいみんじゅつ",
     "れいとうバンチ": "れいとうパンチ",
     "けきりん": "げきりん",
     "しんぐうは": "しんくうは",
@@ -97,6 +153,19 @@ OCR_MOVES = {
     "サンダータイブ": "サンダーダイブ",
 }
 OCR_ITEMS = {
+    "だつじんのおび": "たつじんのおび",
+    "たつじんのおびび": "たつじんのおび",
+    "だつじんのおびび": "たつじんのおび",
+    "だつじんのおびき": "たつじんのおび",
+    "きらきらいわ": "さらさらいわ",
+    "もものしりメガネ": "ものしりメガネ",
+    "もののしりメガネ": "ものしりメガネ",
+    "もんしりメガネ": "ものしりメガネ",
+    "かいがらのすす": "かいがらのすず",
+    "くろいてきゅう": "くろいてっきゅう",
+    "ちかられのハチマキ": "ちからのハチマキ",
+    "ちかからのハチマキ": "ちからのハチマキ",
+    "バワーダナイト": "バクーダナイト",
     "リサードナイトX": "リザードナイトX",
     "リサードナイトY": "リザードナイトY",
     "のりのおふだ": "のろいのおふだ",
@@ -131,6 +200,25 @@ OCR_ITEMS = {
     "ビットレンズ": "ピントレンズ",
 }
 OCR_ABILITIES = {
+    "もちいび": "もらいび",
+    "もらいびで": "もらいび",
+    "もらいびー": "もらいび",
+    "もちびび": "もらいび",
+    "スウィートベール": "スイートベール",
+    "いたずらこころ": "いたずらごころ",
+    "わるいてくせ": "わるいてぐせ",
+    "わるいくせ": "わるいてぐせ",
+    "としょく": "どしょく",
+    "あつしぼう": "あついしぼう",
+    "ぼうしん": "ぼうじん",
+    "あめうけざち": "あめうけざら",
+    "ふきよう": "ぶきよう",
+    "ゆきふぶし": "ゆきふらし",
+    "マイパース": "マイペース",
+    "がんじょうあこ": "がんじょうあご",
+    "ティルアーマー": "テイルアーマー",
+    "きめはだ": "さめはだ",
+    "マルチスキル": "マルチスケイル",
     "ちょうすい": "ちょすい",
     "ふしよく": "ふしょく",
     "すなかくれ": "すながくれ",
@@ -172,11 +260,14 @@ OCR_ABILITIES = {
 VALID_NATURES = {
     "がんばりや","さみしがり","ゆうかん","いじっぱり","やんちゃ",
     "ずぶとい","すなお","のんき","わんぱく","のうてんき",
-    "おくびょう","せっかち","ようき","むじゃき","おてんば",
+    "おくびょう","せっかち","ようき","むじゃき","きまぐれ",
     "ひかえめ","おっとり","れいせい","うっかりや","てれや",
     "おだやか","おとなしい","しんちょう","なまいき","まじめ",
 }
 OCR_NATURES = {
+    "よういき": "ようき",
+    "よき": "ようき",
+    "やんちや": "やんちゃ",
     # ずぶとい系
     "すぶとい": "ずぶとい", "すばとい": "ずぶとい", "すぼとい": "ずぶとい", "ずぼとい": "ずぶとい",
     "ずぶといい": "ずぶとい", "ずぶとしい": "ずぶとい",
@@ -411,6 +502,15 @@ def resolve_partner_form(name, types):
     return FORM_BY_TYPES[name].get(type_set, name)
 
 CRAWLED_DATE = "2026-08-10"
+
+# 実在する別の技名に誤読され、マスター照合では検出できないケースの位置指定上書き。
+# GATE2（リスト内重複）で気付いたものを、必ずクロール画像で確認してから登録する。
+# {日付: {使用率ランク: {技リスト内の位置: 正しい技名}}}
+MOVE_FIX_BY_DATE = {
+    "2026-08-10": {
+        169: {3: "じこさいせい"},  # クレベース: 169/move_00.png で 3位72.6%=じこさいせい を確認
+    },
+}
 SEASON = "M-5"
 
 # ランク番号で確定したフォーム名（OCR_POKEMONより優先）、日付別に管理
@@ -708,9 +808,50 @@ def main():
         for rank, raw, fixed in master_miss_ranks:
             print(f"  rank={rank}: OCR='{raw}' → 補正後='{fixed}' ← RANK_OVERRIDESかOCR_POKEMONに追加必要")
 
-    if len(candidates) < MAX_RANK or gate1_errors or master_miss_ranks:
+    # GATE_NAME: 未知の技/持ち物/特性名は rank だけ消費して行が入らず順位に穴が空くため、投入前に中止する
+    import difflib
+    unknown_detail = []
+    for key, master, ocr, label in [
+        ("moves", move_master, OCR_MOVES, "技"),
+        ("items", item_master, OCR_ITEMS, "持ち物"),
+        ("abilities", ability_master, OCR_ABILITIES, "特性"),
+    ]:
+        seen = {}
+        for rank, pokemon, rec in candidates:
+            for i, e in enumerate(rec.get(key, []), 1):
+                name = ocr.get(e["name"], e["name"])
+                if name not in master:
+                    seen.setdefault(name, (label, rank, pokemon, i))
+        for name, (label, rank, pokemon, i) in seen.items():
+            cand = difflib.get_close_matches(name, list(master), n=2, cutoff=0.4)
+            unknown_detail.append(f"  [{label}] rank={rank} {pokemon} #{i} '{name}' 候補={cand}")
+
+    # GATE_DUP: 実在する別の技名に誤読された場合はマスター照合を素通りするため、リスト内重複で検出する
+    move_fix = MOVE_FIX_BY_DATE.get(CRAWLED_DATE, {})
+    dup_detail = []
+    for rank, pokemon, rec in candidates:
+        names = [move_fix.get(rank, {}).get(i) or OCR_MOVES.get(m["name"], m["name"])
+                 for i, m in enumerate(rec.get("moves", []), 1)]
+        seen_n = set()
+        for i, n in enumerate(names, 1):
+            if n in move_master and n in seen_n:
+                dup_detail.append(f"  rank={rank} {pokemon} #{i} '{n}' が重複")
+            seen_n.add(n)
+    if dup_detail:
+        print(f"🚨 [GATE_DUP] 技リスト内重複 {len(dup_detail)}件（誤読の可能性・投入中止）:")
+        for line in dup_detail:
+            print(line)
+        print(f"   → クロール画像で確認のうえ MOVE_FIX_BY_DATE['{CRAWLED_DATE}'] に位置指定で登録して再実行")
+
+    if unknown_detail:
+        print(f"🚨 [GATE_NAME] マスター不一致の詳細データ {len(unknown_detail)}件（順位に穴が空くため投入中止）:")
+        for line in unknown_detail:
+            print(line)
+        print(f"   → 画像で確認のうえ OCR_MOVES/OCR_ITEMS/OCR_ABILITIES に補正を追加して再実行")
+
+    if len(candidates) < MAX_RANK or gate1_errors or master_miss_ranks or unknown_detail or dup_detail:
         conn.close()
-        print(f"\n🚫 投入中止: {len(candidates)}件（{MAX_RANK}件必須・重複{len(gate1_errors)}件・マスター不一致{len(master_miss_ranks)}件）")
+        print(f"\n🚫 投入中止: {len(candidates)}件（{MAX_RANK}件必須・重複{len(gate1_errors)}件・マスター不一致{len(master_miss_ranks)}件・詳細名不一致{len(unknown_detail)}件・技重複{len(dup_detail)}件）")
         return
 
     # pokemon_usage 投入
@@ -765,12 +906,13 @@ def main():
             continue
 
         # ゲート2: 技リスト内重複チェック
-        move_names_corrected = [OCR_MOVES.get(m["name"], m["name"]) for m in moves_raw]
+        move_names_corrected = [move_fix.get(rank, {}).get(i) or OCR_MOVES.get(m["name"], m["name"])
+                                for i, m in enumerate(moves_raw, 1)]
         seen_moves_gate = set()
         for mn in move_names_corrected:
             if mn in move_master:
                 if mn in seen_moves_gate:
-                    print(f"⚠ [GATE2] rank={rank} {pokemon}: 技リスト内重複 '{mn}' → OCR_MOVESの補正が必要")
+                    print(f"⚠ [GATE2] rank={rank} {pokemon}: 技リスト内重複 '{mn}'")
                 seen_moves_gate.add(mn)
 
         # ゲート2: 持ち物リスト内重複チェック
@@ -798,7 +940,7 @@ def main():
                 print(f"  [GATE_RATE1] {pokemon} rank={rank}: 技1位={top_move_rate}%<10% スキップ")
             else:
                 for i, m in enumerate(moves, 1):
-                    name = OCR_MOVES.get(m["name"], m["name"])
+                    name = move_fix.get(rank, {}).get(i) or OCR_MOVES.get(m["name"], m["name"])
                     if name not in move_master:
                         move_unknown.add(name)
                         continue
