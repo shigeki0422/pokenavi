@@ -523,6 +523,12 @@ const I18N = I18N_ALL[lang];
   table.pop-t th{font-size:.66rem;font-weight:800;color:rgb(var(--gray));background:#f8fafc;padding:.4em .5em;border-bottom:1px solid rgb(var(--gray-light));text-align:center;white-space:nowrap}
   table.pop-t th.lft,table.pop-t td.lft{text-align:left}
   table.pop-t td{padding:.4em .5em;border-bottom:1px solid #f1f5f9;text-align:center;white-space:nowrap}
+  /* 型が横に並ぶので縦の区切りが要る。無いと隣の型の文がつながって読めない */
+  table.pop-t th+th,table.pop-t td+td{border-left:1px solid rgb(var(--gray-light))}
+  /* 横スクロールで行の見出しが流れないよう固定する */
+  table.pop-t th.lft,table.pop-t td.lft{position:sticky;left:0;z-index:1;background:#fff;
+    box-shadow:2px 0 3px -1px rgba(0,0,0,.12)}
+  table.pop-t th.lft{background:#f8fafc}
   table.pop-t td.best{background:#ecfdf5;font-weight:800}
   .pop-pct{font-weight:700}.pop-ko{font-size:.7rem;color:rgb(var(--gray))}
   .pop-col-sub{font-size:.6rem;color:rgb(var(--gray));font-weight:600;display:block}
@@ -1260,15 +1266,52 @@ const I18N = I18N_ALL[lang];
     return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
       <div class="pop-sub">${I18N.popSpeedSub}</div>${rows}`;
   }
+  /** 1v1判定の内訳。表そのものはポケモン情報ページ・工房と同じ共有レンダラで組む
+   * （scripts/party-builder/matchup-table.ts）。ここで独自に組むと罫線・行見出し・
+   * 桁数が食い違う。数値はサーバが対戦エンジンで出したものをそのまま渡す。 */
   function matchupDetailHtml(d){
-    const cols = d.cols.map(c=>`<th>${I18N.thVariant(c.idx)}<span class="pop-types">${typeIcoByName(c.t1)}${c.t2?typeIcoByName(c.t2):''}</span><span class="pop-col-sub">${esc(tItem(c.item))}<br>${esc(tNature(c.nature))}<br>${esc(c.ev)}</span></th>`).join('');
-    const dmgRow = (lab, arr) => `<tr><td class="lft">${lab}</td>${arr.map(c=>`<td><span class="pop-pct">${esc(c.pct)}</span> <span class="pop-ko">${esc(tKo(c.ko))}</span><br><span class="pop-ko">${esc(tMove(c.move))}</span></td>`).join('')}</tr>`;
-    const spRow = `<tr><td class="lft">${I18N.speedRow}</td>${d.spd.map(c=>`<td class="${c.fast?'sp-win':'sp-lose'}">${esc(tSpdTxt(c.txt))}</td>`).join('')}</tr>`;
-    const jRow = `<tr><td class="lft">${I18N.judgeRow}</td>${d.judge.map(c=>`<td class="${col(c.v)}"><b style="font-size:1.05em">${c.v}</b><br><span class="pop-ko">${esc(tJudgeTxt(c.txt))}</span></td>`).join('')}</tr>`;
+    // サーバが古い（数値フィールドを返さない）間は、整形済みの "45〜54%" から読み取る。
+    // これで配信順に依存しない（フロントを先に出してもサーバを先に出しても壊れない）。
+    const pctPair = (c) => {
+      if (c.pct_lo != null) return [c.pct_lo, c.pct_hi];
+      const m = /(-?[\d.]+)\s*〜\s*(-?[\d.]+)/.exec(c.pct || '');
+      return m ? [parseFloat(m[1]), parseFloat(m[2])] : null;
+    };
+    const cell = (c) => {
+      if (!c || !c.move || c.move === '—') return null;
+      const p = pctPair(c);
+      if (!p) return null;
+      return {
+        n: c.move, pctLo: p[0], pctHi: p[1],
+        hits: c.n_lo >= 999 ? null : (c.n_lo === c.n_hi ? c.n_lo : c.n_hi),
+        certain: c.n_lo === c.n_hi, prob: null, reason: null, conds: null,
+        dmgLo: null, dmgHi: null,
+      };
+    };
+    // 素早さも数値が無ければ "先手（自S169 / 相S84）" から読み取る
+    const spdNums = (sp) => {
+      if (sp.my_s != null) return [sp.my_s, sp.opp_s];
+      const m = /S(\d+)\D+S(\d+)/.exec(sp.txt || '');
+      return m ? [Number(m[1]), Number(m[2])] : [0, 0];
+    };
+    const vm = {
+      myName: tPoke(d.mon), oppName: tPoke(d.opp),
+      myIconUrl: iconUrl(d.mon) || '', oppIconUrl: iconUrl(d.opp) || '',
+      columns: d.cols.map((c, i) => ({
+        label: I18N.thVariant(c.idx),
+        meta: [tItem(c.item) || '', tNature(c.nature) || '', c.ev],
+        my: cell(d.me[i]), opp: cell(d.op[i]),
+        verdict: { sym: d.judge[i].v, win: d.judge[i].win, fast: d.spd[i].fast,
+                   myS: spdNums(d.spd[i])[0], oppS: spdNums(d.spd[i])[1],
+                   myHits: d.me[i].n_lo, oppHits: d.op[i].n_lo,
+                   myMove: d.me[i].move, oppMove: d.op[i].move, stub: false },
+        myMoveText: tMove(d.me[i].move), oppMoveText: tMove(d.op[i].move),
+      })),
+    };
     return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
       <div class="pop-sub">${esc(assumeLead)}</div>
       ${assumptionsHtml()}
-      <div style="overflow-x:auto"><table class="pop-t"><tr><th class="lft"> </th>${cols}</tr>${dmgRow(I18N.dmgSelf,d.me)}${dmgRow(I18N.dmgOpp,d.op)}${spRow}${jRow}</table></div>`;
+      ${window.__mtTable(vm, lang)}`;
   }
   function atkDetailHtml(d){
     const EFF = e=>e>=2?'×2':e===1?'×1':e===0?'無効':e<=0.25?'¼':'½';
@@ -1572,4 +1615,12 @@ const I18N = I18N_ALL[lang];
       applyPreCoreChipsNow(param);
     }, 100);
   }
+</script>
+
+<script>
+  // このページのメインスクリプトは define:vars のため is:inline で、import できない。
+  // 共有レンダラだけモジュール側で読み込んで window 経由で渡す。
+  import { renderMatchupTable } from '../scripts/party-builder/matchup-table';
+  import '../styles/matchup-table.css';
+  window.__mtTable = (vm, lang) => renderMatchupTable(vm, lang);
 </script>

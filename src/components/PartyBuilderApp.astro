@@ -3,6 +3,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
 import PartyToolsNav from './PartyToolsNav.astro';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO, TYPE_NAME_EN, TYPE_NAME_KO } from '../i18n/game-terms';
+import '../styles/matchup-table.css';
 
 interface Props { lang?: 'ja' | 'en' | 'ko'; }
 const { lang = 'ja' } = Astro.props;
@@ -428,6 +429,12 @@ const I18N = I18N_ALL[lang];
   table.pb-pop-t{width:100%;border-collapse:collapse;font-size:.8rem}
   table.pb-pop-t th{font-size:.66rem;font-weight:800;color:rgb(var(--gray));background:#f8fafc;padding:.4em .5em;border-bottom:1px solid rgb(var(--gray-light));text-align:center;white-space:nowrap}
   table.pb-pop-t td{padding:.4em .5em;border-bottom:1px solid #f1f5f9;text-align:center;white-space:nowrap}
+  /* 型が横に並ぶので縦の区切りが要る。無いと隣の型の文がつながって読めた（スマホで報告） */
+  table.pb-pop-t th+th,table.pb-pop-t td+td{border-left:1px solid rgb(var(--gray-light))}
+  /* 横スクロールすると行の見出し（与ダメ/被ダメ/素早さ/判定）が流れて何の行か分からなくなる */
+  table.pb-pop-t th.lft,table.pb-pop-t td.lft{position:sticky;left:0;z-index:1;background:#fff;
+    box-shadow:2px 0 3px -1px rgba(0,0,0,.12)}
+  table.pb-pop-t th.lft{background:#f8fafc}
   .pb-pop-pct{font-weight:700}
   .pb-pop-ko{font-size:.7rem;color:rgb(var(--gray))}
   /* 発数の要因（ばけのかわ等）と、ダメージ計算に効いた条件（天候・いかく等） */
@@ -654,7 +661,7 @@ const I18N = I18N_ALL[lang];
   import { loadCore, loadMon, loadNameUrlMap, nameUrlMapSync } from '../scripts/party-builder/data';
   import { loadStore, saveStore, createParty, createPartyFromSlots, duplicateParty, renameParty, deleteParty, getEffectiveTargets } from '../scripts/party-builder/storage';
   import { fromSpec, fromSuggestSpec, exportParty, importParty } from '../scripts/party-builder/spec';
-  import { ASSUMPTIONS_LABEL, MATCHUP_ASSUMPTIONS, MATCHUP_LEAD } from '../scripts/party-builder/assumptions';
+  import { matchupLead, renderAssumptions, renderMatchupTable } from '../scripts/party-builder/matchup-table';
   import { ALL_NATURES, NEUTRAL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, effectiveSpeed, natureDisp } from '../scripts/party-builder/stats';
   import { TYPES } from '../scripts/party-builder/typechart';
   import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx, coverageSet, exposedOnRemoval, holesAfterSwap } from '../scripts/party-builder/balance';
@@ -2609,12 +2616,6 @@ const I18N = I18N_ALL[lang];
     if (!d || d.hits == null || d.hits >= 5) return I18N.muDetailKoOOR;
     return d.certain ? I18N.hitsFmt(d.hits) : I18N.muDetailKoRoll(d.hits);
   }
-  /** 常に同じ前提は既定で畳んで出す。列挙をヘッダーに直書きすると増えるたびに伸びるため。
-   * 文言は assumptions.ts に1箇所で持つ（ポップアップが3実装あり、片方だけ直す事故が起きた）。 */
-  function assumptionsHtml() {
-    const items = (MATCHUP_ASSUMPTIONS[lang] || MATCHUP_ASSUMPTIONS.ja).map((a) => `<li>${esc(a)}</li>`).join('');
-    return `<details class="pb-pop-assume"><summary>${esc(ASSUMPTIONS_LABEL[lang] || ASSUMPTIONS_LABEL.ja)}</summary><ul>${items}</ul></details>`;
-  }
   /** 与ダメ内訳1件。「簡単構築」のdmgRow相当(与ダメ%レンジ+確定数+技名)。 */
   function pbMuDetailLine(d) {
     if (!d) return { moveTxt: I18N.dashOpt, pctTxt: '0%', koTxt: I18N.muDetailKoOOR, noteTxt: '' };
@@ -2630,20 +2631,26 @@ const I18N = I18N_ALL[lang];
    * 数値は仮想敵パネルの技別チップ(moveBreakdown)・判定バッジ(judge1v1)と同一関数を使うため一致する。 */
   function matchupCellDetailHtml(b, o) {
     const builds = (o.builds || []).slice(0, 3);
-    const cols = builds.map((opp, i) => `<th>${esc(I18N.buildLabel(i + 1))}<span class="pb-pop-types">${typeIcoByName(opp.t1)}${opp.t2 ? typeIcoByName(opp.t2) : ''}</span><span class="pb-pop-col-sub">${esc(tItem(opp.item)) || esc(I18N.noItem)}<br>${esc(tNature(opp.nature))}<br>${esc(pbEvStr(opp.evs))}</span></th>`).join('');
     // 与ダメ・被ダメは同じ場の前提で出す（向きごとに呼ぶと天候が食い違う）
     const pairs = builds.map((opp) => pairHitDetails(b, opp));
-    const meLines = pairs.map((d) => pbMuDetailLine(d.my));
-    const opLines = pairs.map((d) => pbMuDetailLine(d.opp));
     const verdicts = builds.map((opp) => judge1v1(b, opp));
-    const dmgRow = (label, lines) => `<tr><td class="lft">${esc(label)}</td>${lines.map((c) => `<td><span class="pb-pop-pct">${esc(c.pctTxt)}</span> <span class="pb-pop-ko">${esc(c.koTxt)}</span><br><span class="pb-pop-ko">${esc(c.moveTxt)}</span>${c.noteTxt ? `<br><span class="pb-pop-note">${esc(c.noteTxt)}</span>` : ''}</td>`).join('')}</tr>`;
-    const spRow = `<tr><td class="lft">${esc(I18N.muSpeedRowLbl)}</td>${verdicts.map((v) => `<td class="${v.fast ? 'sp-win' : 'sp-lose'}">${esc(I18N.muDetailSpdTxt(v.fast ? I18N.turnFirst : I18N.turnSecond, v.myS, v.oppS))}</td>`).join('')}</tr>`;
-    const jRow = `<tr><td class="lft">${esc(I18N.muJudgeRowLbl)}</td>${verdicts.map((v, i) => `<td class="${symCls(v.sym)}"><b style="font-size:1.05em">${v.sym}</b><br><span class="pb-pop-ko">${esc(I18N.muDetailJudgeTxt(v.win ? I18N.muDetailJudgeWin : I18N.muDetailJudgeLoss, meLines[i].koTxt, opLines[i].koTxt, v.fast ? I18N.turnFirst : I18N.turnSecond))}</span></td>`).join('')}</tr>`;
-    const table = `<div style="overflow-x:auto"><table class="pb-pop-t"><tr><th class="lft"> </th>${cols}</tr>${dmgRow(I18N.muDmgSelfLbl, meLines)}${dmgRow(I18N.muDmgOppLbl, opLines)}${spRow}${jRow}</table></div>`;
+    // 表そのものはポケモン情報ページ・簡単構築と同じ共有レンダラで組む。
+    // ここで独自に組むと罫線・行見出し・桁数が食い違う（実際に食い違った）。
+    const vm = {
+      myName: tPoke(b.label), oppName: tPoke(o.label),
+      myIconUrl: spriteUrl(b.icon) || '', oppIconUrl: spriteUrl(o.icon) || '',
+      columns: builds.map((opp, i) => ({
+        label: I18N.buildLabel(i + 1),
+        meta: [tItem(opp.item) || I18N.noItem, tNature(opp.nature), pbEvStr(opp.evs)],
+        my: pairs[i].my, opp: pairs[i].opp, verdict: verdicts[i],
+        myMoveText: tMove(pairs[i].my?.n ?? verdicts[i].myMove),
+        oppMoveText: tMove(pairs[i].opp?.n ?? verdicts[i].oppMove),
+      })),
+    };
     return `<div class="pb-pop-hd">${icoImg(b.icon, b.label, '')}${esc(tPoke(b.label))}<span class="pb-arw">vs</span>${icoImg(o.icon, o.label, '')}${esc(tPoke(o.label))}</div>
-      <div class="pb-pop-sub">${esc(MATCHUP_LEAD[lang] || MATCHUP_LEAD.ja)}</div>
-      ${assumptionsHtml()}
-      ${table}
+      <div class="pb-pop-sub">${esc(matchupLead(lang))}</div>
+      ${renderAssumptions(lang)}
+      ${renderMatchupTable(vm, lang)}
       ${addTargetButtonHtml(o.label)}`;
   }
   function matchupMatrixHtml(resolvedParty) {

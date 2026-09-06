@@ -1,7 +1,8 @@
 ---
 import type { MatchupBreakdown } from '../scripts/party-builder/matchup-static';
 import { fmtKoProbPct, type MoveHitDetail } from '../scripts/party-builder/matchup';
-import { ASSUMPTIONS_LABEL, MATCHUP_ASSUMPTIONS, MATCHUP_LEAD } from '../scripts/party-builder/assumptions';
+import { renderAssumptions, renderMatchupTable, type MatchupTableVM } from '../scripts/party-builder/matchup-table';
+import '../styles/matchup-table.css';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 
 /**
@@ -58,6 +59,23 @@ const meEvLabel = (me: MatchupBreakdown['me']) =>
     .map((v, i) => (v > 0 ? `${EV_LABELS[i]}${v}` : null))
     .filter((s): s is string => s !== null)
     .join(' ');
+
+/** 共有レンダラ（scripts/party-builder/matchup-table.ts）へ渡す形に詰め替える。
+ * 表そのものは工房・簡単構築と同じものを使う。ここでやるのは翻訳とアイコンURLの解決だけ。 */
+function toVM(breakdown: MatchupBreakdown): MatchupTableVM {
+  return {
+    myName, oppName,
+    myIconUrl: `/images/pokemon/pokemon-${myIcon}.webp`,
+    oppIconUrl: `/images/pokemon/pokemon-${oppIcon}.webp`,
+    columns: breakdown.builds.map((r, j) => ({
+      label: T.buildLabel(j + 1),
+      meta: [tItem(r.build.item), tNature(r.build.nature), r.evLabel],
+      my: r.myDmg, opp: r.oppDmg, verdict: r.verdict,
+      myMoveText: tMove(r.myDmg?.n ?? r.verdict.myMove),
+      oppMoveText: tMove(r.oppDmg?.n ?? r.verdict.oppMove),
+    })),
+  };
+}
 
 const T = {
   ja: {
@@ -147,77 +165,8 @@ const multi = myBreakdowns.length > 1;
         <div class="mbp-tab-panel">
           <p class="mbp-my-build">{T.myBuild(tItem(breakdown.me.item), tNature(breakdown.me.nature), meEvLabel(breakdown.me))}</p>
           <p class="mbp-sub">{T.sub(breakdown.builds.length)}</p>
-          <details class="mbp-assume">
-            <summary>{ASSUMPTIONS_LABEL[lang] ?? ASSUMPTIONS_LABEL.ja}</summary>
-            <ul>
-              {(MATCHUP_ASSUMPTIONS[lang] ?? MATCHUP_ASSUMPTIONS.ja).map((a) => <li>{a}</li>)}
-            </ul>
-          </details>
-          <div class="mbp-scroll">
-            <table class="mbp-table">
-              <tr>
-                <th class="lft"></th>
-                {breakdown.builds.map((r, j) => (
-                  <th>
-                    {T.buildLabel(j + 1)}
-                    <div class="mbp-build-meta">{tItem(r.build.item)}<br />{tNature(r.build.nature)}<br />{r.evLabel}</div>
-                  </th>
-                ))}
-              </tr>
-              <tr>
-                <td class="lft">
-                  <div class="mbp-lbl-icons">
-                    <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />
-                    <span>↓</span>
-                    <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
-                  </div>
-                </td>
-                {breakdown.builds.map((r) => (
-                  <td>
-                    {r.myDmg?.pctLo != null && <span class="mbp-pct">{r.myDmg.pctLo.toFixed(1)}〜{r.myDmg.pctHi?.toFixed(1)}%</span>}
-                    <span class="mbp-hits">{T.hitsDetail(r.myDmg)}</span>
-                    <div class="mbp-move">{tMove(r.myDmg?.n ?? r.verdict.myMove)}</div>
-                    {r.myDmg?.conds && <div class="mbp-conds">{T.condsLabel(r.myDmg.conds)}</div>}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td class="lft">
-                  <div class="mbp-lbl-icons">
-                    <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />
-                    <span>↓</span>
-                    <img class="mbp-mini-lbl" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />
-                  </div>
-                </td>
-                {breakdown.builds.map((r) => (
-                  <td>
-                    {r.oppDmg?.pctLo != null && <span class="mbp-pct">{r.oppDmg.pctLo.toFixed(1)}〜{r.oppDmg.pctHi?.toFixed(1)}%</span>}
-                    <span class="mbp-hits">{T.hitsDetail(r.oppDmg)}</span>
-                    <div class="mbp-move">{tMove(r.oppDmg?.n ?? r.verdict.oppMove)}</div>
-                    {r.oppDmg?.conds && <div class="mbp-conds">{T.condsLabel(r.oppDmg.conds)}</div>}
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td class="lft">{T.rowSpeed}</td>
-                {breakdown.builds.map((r) => (
-                  <td class={`mbp-spd-cell ${r.verdict.fast ? 'mbp-spd-win' : 'mbp-spd-lose'}`}>
-                    <div>{T.fastLabel(r.verdict.fast)}</div>
-                    <div><img class="mbp-mini" src={`/images/pokemon/pokemon-${myIcon}.webp`} alt={myName} />S{r.verdict.myS} / <img class="mbp-mini" src={`/images/pokemon/pokemon-${oppIcon}.webp`} alt={oppName} />S{r.verdict.oppS}</div>
-                  </td>
-                ))}
-              </tr>
-              <tr>
-                <td class="lft">{T.rowJudge}</td>
-                {breakdown.builds.map((r) => (
-                  <td class={r.verdict.win ? 'mbp-judge-win' : 'mbp-judge-lose'}>
-                    <b class="mbp-sym">{r.verdict.sym}</b>
-                    <div class="mbp-judge-text">{T.judgeText(r.verdict.win, T.hits(r.verdict.myHits), T.hits(r.verdict.oppHits), r.verdict.fast)}</div>
-                  </td>
-                ))}
-              </tr>
-            </table>
-          </div>
+          <Fragment set:html={renderAssumptions(lang)} />
+          <Fragment set:html={renderMatchupTable(toVM(breakdown), lang)} />
         </div>
       );
     })}
@@ -299,33 +248,7 @@ const multi = myBreakdowns.length > 1;
 
   .mbp-my-build { font-size: .7rem; font-weight: 700; color: rgb(var(--black)); background: #f8fafc; border-radius: 6px; padding: 5px 8px; margin: 0 0 6px; line-height: 1.6; }
   .mbp-sub { font-size: .68rem; color: #64748b; line-height: 1.6; margin: 0 0 8px; }
-  .mbp-scroll { overflow-x: auto; margin-bottom: 8px; }
-  .mbp-table { border-collapse: collapse; font-size: .68rem; white-space: nowrap; }
-  .mbp-table th, .mbp-table td { border: 1px solid #e2e8f0; padding: 5px 8px; text-align: center; vertical-align: top; }
-  .mbp-table th { background: #f8fafc; font-weight: 800; }
   .mbp-table td.lft, .mbp-table th.lft { text-align: left; font-weight: 700; background: #f8fafc; white-space: normal; max-width: 92px; }
-  .mbp-mini { width: 16px; height: 16px; object-fit: contain; vertical-align: -3px; }
-  .mbp-lbl-icons { display: flex; flex-direction: column; align-items: center; gap: 1px; }
-  .mbp-lbl-icons span { font-size: .7rem; color: #94a3b8; line-height: 1; }
-  .mbp-mini-lbl { width: 26px; height: 26px; object-fit: contain; }
-  .mbp-spd-cell { white-space: normal; }
-  .mbp-spd-cell div:first-child { font-weight: 700; margin-bottom: 2px; }
-  .mbp-build-meta { font-weight: 400; font-size: .9em; color: #64748b; margin-top: 2px; }
-  .mbp-pct { font-weight: 800; display: block; }
-  .mbp-hits { color: #475569; display: block; }
-  .mbp-move { color: #94a3b8; font-size: .92em; margin-top: 2px; }
-  /* ダメージ計算に効いた条件（天候・フィールド・いかく等）。%がどの前提の値かを示す */
-  .mbp-conds { color: #b45309; font-size: .84em; margin-top: 1px; }
-  /* 常に同じ前提は既定で畳んでおく。列挙を直書きすると増えるたびに見出しが伸びる */
-  .mbp-assume { margin: .2em 0 .6em; font-size: .86em; color: #64748b; }
-  .mbp-assume summary { cursor: pointer; color: #475569; }
-  .mbp-assume ul { margin: .4em 0 0; padding-left: 1.2em; line-height: 1.6; }
-  .mbp-spd-win { color: #059669; font-weight: 700; }
-  .mbp-spd-lose { color: #475569; }
-  .mbp-judge-win { background: #ecfdf5; }
-  .mbp-judge-lose { background: #f8fafc; }
-  .mbp-sym { font-size: 1.1em; }
-  .mbp-judge-text { white-space: normal; font-weight: 400; margin-top: 2px; font-size: .92em; }
   .mbp-link { display: inline-block; font-size: .8rem; font-weight: 700; color: var(--accent, #f97316); text-decoration: none; }
   .mbp-link:hover { text-decoration: underline; }
 </style>
