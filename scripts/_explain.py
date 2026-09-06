@@ -272,8 +272,10 @@ def _engine_lines(M, O):
         lo = ME.move_damage(sa, sb, mv, L, 0.0, att) / max(1, foe_hp)
         hi = ME.move_damage(sa, sb, mv, L, 1.0, att) / max(1, foe_hp)
         ko = "圏外" if n_lo >= 5 else (f"確{n_lo}" if n_lo == n_hi else f"乱{n_hi}")
+        # 数値も返す。表示は3画面（ポケモン情報・工房・簡単構築）で共有している
+        # レンダラが組み立てるので、整形済みの文字列だけだと体裁を揃えられない。
         return {"move": mv, "pct": f"{lo*100:.0f}〜{hi*100:.0f}%", "ko": ko,
-                "n_lo": n_lo, "n_hi": n_hi}
+                "n_lo": n_lo, "n_hi": n_hi, "pct_lo": lo * 100, "pct_hi": hi * 100}
 
     return (line(am, ah, 0, B2.max_hp), line(bm, bh, 1, A2.max_hp),
             _effective_speed(A2, field), _effective_speed(B2, field))
@@ -293,12 +295,17 @@ def matchup_detail(specs, mon_name, opp_name, L):
         myh, thh = ml["n_lo"], ol["n_lo"]                    # 確定手数（最低乱数）で勝敗判定
         win = (myh < thh) or (myh == thh and fast)
         score = (thh - myh) + (0.5 if fast else -0.5)
-        cols.append({"idx": i + 1, "item": v["item"], "nature": v["nature"], "ev": _ev_str(v["ev"]), "t1": O.type1, "t2": O.type2})
+        # spec も返す。クライアントは同じ対戦エンジン(wasm)でこの spec から計算し直すので、
+        # 表示の計算がサーバとクライアントで二重にならない（数値・体裁の食い違いを構造的に防ぐ）。
+        cols.append({"idx": i + 1, "item": v["item"], "nature": v["nature"], "ev": _ev_str(v["ev"]),
+                     "t1": O.type1, "t2": O.type2, "spec": getattr(O, "_spec", None)})
         me.append(ml); op.append(ol)
-        spd.append({"fast": fast, "txt": f"{'先手' if fast else '後手'}（自S{my_s} / 相S{op_s}）"})
+        spd.append({"fast": fast, "my_s": my_s, "opp_s": op_s,
+                    "txt": f"{'先手' if fast else '後手'}（自S{my_s} / 相S{op_s}）"})
         reason = f"{'勝ち' if win else '負け'}：{ml['ko']}で倒す / {ol['ko']}で倒される・{'先手' if fast else '後手'}"
         judge.append({"v": _score_sym(score), "win": win, "txt": reason})
-    return {"mon": mon_name, "opp": opp_name, "cols": cols, "me": me, "op": op, "spd": spd, "judge": judge}
+    return {"mon": mon_name, "opp": opp_name, "my_spec": getattr(M, "_spec", None),
+            "cols": cols, "me": me, "op": op, "spd": spd, "judge": judge}
 
 EVK6 = ["H", "A", "B", "C", "D", "S"]
 def _ev_str(ev):
@@ -352,13 +359,22 @@ def _best_move(M, O, field):
     return bm
 
 _TOPB = None
+# 相手パネル（相性表の相手列）を選ぶ使用率のシーズン。環境が変わったらここを更新する。
+# 型プール自体は build_pool_M-3.md（＋上位構築から抽出した実型）を使い続けるので、
+# ここで切り替わるのは「誰を相手に評価するか」だけ。
+USAGE_SEASON = os.environ.get("USAGE_SEASON", "M-5")
+
+
 def load_top_builds(L, n=30, k=3):
     """上位n体それぞれの『あり得る型』最大k個（採用率順・型区別＝持ち物/性格/特性/EV）。"""
     global _TOPB
     if _TOPB is not None: return _TOPB
     con = sqlite3.connect(DB)
-    cd = con.execute("SELECT MAX(crawled_date) FROM pokemon_usage WHERE season='M-3' AND rule='single'").fetchone()[0]
-    names = [r[0] for r in con.execute("SELECT pokemon FROM pokemon_usage WHERE season='M-3' AND rule='single' AND crawled_date=? ORDER BY rank LIMIT ?", (cd, n))]
+    cd = con.execute("SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule='single'",
+                     (USAGE_SEASON,)).fetchone()[0]
+    names = [r[0] for r in con.execute(
+        "SELECT pokemon FROM pokemon_usage WHERE season=? AND rule='single' AND crawled_date=? "
+        "ORDER BY rank LIMIT ?", (USAGE_SEASON, cd, n))]
     con.close()
     from gen_party_pool import PartyGen, _spec_mega
     pg = PartyGen()

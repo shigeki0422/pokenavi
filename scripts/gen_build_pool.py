@@ -4,7 +4,8 @@
 """
 import sqlite3, os, glob, json, collections
 
-SEASON = "M-3"
+import os
+SEASON = os.environ.get("SEASON", "M-3")   # 環境が変わったら SEASON=M-5 等で切り替える
 DB = os.path.join(os.path.dirname(__file__), "pokenavi.db")
 OUT = os.path.join(os.path.dirname(__file__), f"build_pool_{SEASON}.md")
 

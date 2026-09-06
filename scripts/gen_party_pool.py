@@ -49,13 +49,47 @@ def _moves_clean(mv_list, avail):
         return False                           # 使用率リスト外の技(≈0%=古いM-2技等)
     return True
 
+CHOICE_ITEMS = {"こだわりスカーフ", "こだわりハチマキ", "こだわりメガネ"}
+# こだわり系は最初に使った技に固定されるため、自分を強化する積み技は機能しない
+# (設置技・状態異常技は撒いてから交代すれば固定が解けるので有効)。
+_SETUP_MOVES = set()
+
+
+def _setup_moves():
+    if not _SETUP_MOVES:
+        con = sqlite3.connect(DBPATH)
+        _SETUP_MOVES.update(r[0] for r in con.execute(
+            "SELECT name_jp FROM move_master WHERE category='status' "
+            "AND effect_text LIKE '%自分の%' AND effect_text LIKE '%段階上げ%'"))
+        con.close()
+    return _SETUP_MOVES
+
+
+def _fix_choice_moves(item, moves, alt_moves):
+    """こだわり型から積み技を除き、その種の他の技で埋める。"""
+    if item not in CHOICE_ITEMS:
+        return moves
+    setup = _setup_moves()
+    kept = [m for m in moves if m not in setup]
+    if len(kept) == len(moves):
+        return moves
+    for m in alt_moves:
+        if len(kept) >= len(moves):
+            break
+        if m not in kept and m not in setup:
+            kept.append(m)
+    return kept
+
+
 def parse_pool(md=MD):
     """returns (pool {poke:[spec,...]}, rank {poke:int}, item_usage {poke:{item:pct}})。種名はFORM_FIX適用済み。"""
     pool = collections.defaultdict(list); rank = {}; item_usage = collections.defaultdict(dict)
     moves_pool = collections.defaultdict(list)
-    # 追加型ファイル（M-3上位構築から抽出したクリーン実型）を後続でマージ。rankは本体md優先。
-    _extra = os.path.join(os.path.dirname(md), "build_pool_M-3_extra.md")
-    sources = [md] + ([_extra] if os.path.exists(_extra) else [])
+    # 追加型ファイル（上位構築から抽出した実型）を後続でマージ。rankは本体md優先。
+    # 機械列挙のドラフト型は品質に難があるので増やさず、実際に使われた型だけを足す。
+    _extras = [os.path.join(os.path.dirname(md), f)
+               for f in ("build_pool_M-3_extra.md", "build_pool_M-4_extra.md")]
+    sources = [md] + [f for f in _extras if os.path.exists(f)]
     cur = None
     for _src in sources:
       for ln in open(_src, encoding="utf-8"):
@@ -78,7 +112,8 @@ def parse_pool(md=MD):
         m = TYPE_LINE.match(ln)
         if not m: continue
         item, nature, ability, evs, moves = (x.strip() for x in m.groups())
-        moves = "|".join(s.strip() for s in moves.split("/") if s.strip())
+        mv = _fix_choice_moves(item, [s.strip() for s in moves.split("/") if s.strip()], moves_pool[cur])
+        moves = "|".join(mv)
         sp = FORM_FIX.get(cur, cur)
         pool[cur].append(f"{sp}@{item}:{nature}:{moves}:{_ev_to_slash(evs)}:{ability}")
     def norm(s):
