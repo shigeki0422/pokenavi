@@ -69,7 +69,7 @@ const I18N_ALL = {
     weakAgainstLbl: '苦手',
     tabAtk: '攻撃相性', tabDef: '防御相性', tabSpeed: '素早さ', tabMu: 'ポケモン相性',
     selfVsAtk: '自分 ＼ 攻撃', selfVsHit: '自分 ＼ 被弾',
-    selfVsOppRep: '自分 ＼ 相手(代表型)', selfVsOppAgg: '自分 ＼ 相手(型1〜3集約)',
+    selfVsOppRep: '自分 ＼ 相手(代表型)', selfVsOppAgg: '自分 ＼ 相手(型1〜3集約)', selfVsOppShort: '自＼相',
     atkLegend: '各味方が<b>そのタイプを攻撃するときの最大倍率</b>。<b class="ao-good">×2</b>=抜群で通る <b class="ao-bad">½/0</b>=通りにくい。',
     defLegend: '各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。<b class="mtx-gap" style="padding:0 4px">薄黄</b>=パーティ内に半減以下の受け手がいないタイプ。',
     speedMatrixLegend: '味方（左・素早さ順）が使用率上位30体の代表型より速いか（スカーフ込み）。<b>◎</b>＝速い <b>△</b>＝同速 <b>×</b>＝遅い。',
@@ -147,7 +147,7 @@ const I18N_ALL = {
     weakAgainstLbl: 'Weak vs',
     tabAtk: 'Attack Matchup', tabDef: 'Defense Matchup', tabSpeed: 'Speed', tabMu: 'Pokémon Matchup',
     selfVsAtk: 'You ＼ Attacking', selfVsHit: 'You ＼ Taking hits',
-    selfVsOppRep: 'You ＼ Opponent (rep. set)', selfVsOppAgg: 'You ＼ Opponent (sets 1–3 combined)',
+    selfVsOppRep: 'You ＼ Opponent (rep. set)', selfVsOppAgg: 'You ＼ Opponent (sets 1–3 combined)', selfVsOppShort: 'Me＼Opp',
     atkLegend: 'The <b>highest multiplier</b> each of your Pokémon gets when attacking that type. <b class="ao-good">×2</b> = super effective <b class="ao-bad">½/0</b> = doesn\'t hit well.',
     defLegend: 'The multiplier each of your Pokémon takes from that type. <b class="df-w1">×2/×4</b> = weakness <b class="df-r1">½ or less</b> = resisted <b class="df-imm">0</b> = immune. <b class="mtx-gap" style="padding:0 4px">Light yellow</b> = a type with no team member resisting it or better.',
     speedMatrixLegend: 'Whether your team (left, sorted by Speed) outspeeds the top 30\'s representative sets (Scarf included). <b>◎</b> = faster <b>△</b> = tied <b>×</b> = slower.',
@@ -225,7 +225,7 @@ const I18N_ALL = {
     weakAgainstLbl: '약한 상대',
     tabAtk: '공격 상성', tabDef: '방어 상성', tabSpeed: '스피드', tabMu: '포켓몬 상성',
     selfVsAtk: '나 ＼ 공격', selfVsHit: '나 ＼ 피격',
-    selfVsOppRep: '나 ＼ 상대(대표 빌드)', selfVsOppAgg: '나 ＼ 상대(빌드1~3 종합)',
+    selfVsOppRep: '나 ＼ 상대(대표 빌드)', selfVsOppAgg: '나 ＼ 상대(빌드1~3 종합)', selfVsOppShort: '나＼상',
     atkLegend: '각 아군이 <b>해당 타입을 공격할 때의 최대 배율</b>. <b class="ao-good">×2</b>=효과가 굉장함 <b class="ao-bad">½/0</b>=잘 통하지 않음.',
     defLegend: '각 아군이 <b>해당 타입 기술을 받을 때의 피격 배율</b>. <b class="df-w1">×2/×4</b>=약점 <b class="df-r1">½ 이하</b>=반감 <b class="df-imm">0</b>=무효. <b class="mtx-gap" style="padding:0 4px">연노랑</b>=파티 내에 반감 이하로 받는 멤버가 없는 타입.',
     speedMatrixLegend: '아군（왼쪽·스피드 순）이 사용률 상위 30마리의 대표 빌드보다 빠른지（스카프 포함）. <b>◎</b>＝빠름 <b>△</b>＝동속 <b>×</b>＝느림.',
@@ -371,6 +371,10 @@ const I18N = I18N_ALL[lang];
   table.mtx th.mtx-stick .mtx-rowh .mtx-ico{flex-shrink:0}
   table.mtx th.mtx-stick .mtx-name{white-space:normal;word-break:break-all;line-height:1.05;flex:1;min-width:0}
   table.mtx th.mtx-corner.mtx-stick{z-index:3}
+  /* 1v1判定の行見出しはアイコンのみ。名前ぶんの幅を列に回す */
+  table.mtx th.mtx-stick-ico{width:38px;min-width:38px;max-width:38px;padding:2px}
+  table.mtx th.mtx-corner.mtx-stick-ico{font-size:.5rem;white-space:normal;line-height:1.1}
+  table.mtx th.mtx-stick-ico .mtx-ico{width:30px;height:30px;margin:0 auto}
   .sp-val{font-size:.56rem;font-weight:800;color:var(--accent);white-space:nowrap}
   .mtx-legend{display:flex;flex-wrap:wrap;gap:.5em .9em;font-size:.72rem;color:rgb(var(--gray-dark));margin-bottom:.4em;align-items:center}
   .mtx-legend b{padding:1px 5px;border-radius:4px}
@@ -719,7 +723,7 @@ const I18N = I18N_ALL[lang];
       weakAgainstLbl: '苦手',
       tabAtk: '攻撃相性', tabDef: '防御相性', tabSpeed: '素早さ', tabMu: 'ポケモン相性',
       selfVsAtk: '自分 ＼ 攻撃', selfVsHit: '自分 ＼ 被弾',
-      selfVsOppRep: '自分 ＼ 相手(代表型)', selfVsOppAgg: '自分 ＼ 相手(型1〜3集約)',
+      selfVsOppRep: '自分 ＼ 相手(代表型)', selfVsOppAgg: '自分 ＼ 相手(型1〜3集約)', selfVsOppShort: '自＼相',
       atkLegend: '各味方が<b>そのタイプを攻撃するときの最大倍率</b>。<b class="ao-good">×2</b>=抜群で通る <b class="ao-bad">½/0</b>=通りにくい。',
       defLegend: '各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。<b class="mtx-gap" style="padding:0 4px">薄黄</b>=パーティ内に半減以下の受け手がいないタイプ。',
       speedMatrixLegend: '味方（左・素早さ順）が使用率上位30体の代表型より速いか（スカーフ込み）。<b>◎</b>＝速い <b>△</b>＝同速 <b>×</b>＝遅い。',
@@ -811,7 +815,7 @@ const I18N = I18N_ALL[lang];
       weakAgainstLbl: 'Weak vs',
       tabAtk: 'Attack Matchup', tabDef: 'Defense Matchup', tabSpeed: 'Speed', tabMu: 'Pokémon Matchup',
       selfVsAtk: 'You ＼ Attacking', selfVsHit: 'You ＼ Taking hits',
-      selfVsOppRep: 'You ＼ Opponent (rep. set)', selfVsOppAgg: 'You ＼ Opponent (sets 1–3 combined)',
+      selfVsOppRep: 'You ＼ Opponent (rep. set)', selfVsOppAgg: 'You ＼ Opponent (sets 1–3 combined)', selfVsOppShort: 'Me＼Opp',
       atkLegend: 'The <b>highest multiplier</b> each of your Pokémon gets when attacking that type. <b class="ao-good">×2</b> = super effective <b class="ao-bad">½/0</b> = doesn\'t hit well.',
       defLegend: 'The multiplier each of your Pokémon takes from that type. <b class="df-w1">×2/×4</b> = weakness <b class="df-r1">½ or less</b> = resisted <b class="df-imm">0</b> = immune. <b class="mtx-gap" style="padding:0 4px">Light yellow</b> = a type with no team member resisting it or better.',
       speedMatrixLegend: 'Whether your team (left, sorted by Speed) outspeeds the top 30\'s representative sets (Scarf included). <b>◎</b> = faster <b>△</b> = tied <b>×</b> = slower.',
@@ -903,7 +907,7 @@ const I18N = I18N_ALL[lang];
       weakAgainstLbl: '약한 상대',
       tabAtk: '공격 상성', tabDef: '방어 상성', tabSpeed: '스피드', tabMu: '포켓몬 상성',
       selfVsAtk: '나 ＼ 공격', selfVsHit: '나 ＼ 피격',
-      selfVsOppRep: '나 ＼ 상대(대표 빌드)', selfVsOppAgg: '나 ＼ 상대(빌드1~3 종합)',
+      selfVsOppRep: '나 ＼ 상대(대표 빌드)', selfVsOppAgg: '나 ＼ 상대(빌드1~3 종합)', selfVsOppShort: '나＼상',
       atkLegend: '각 아군이 <b>해당 타입을 공격할 때의 최대 배율</b>. <b class="ao-good">×2</b>=효과가 굉장함 <b class="ao-bad">½/0</b>=잘 통하지 않음.',
       defLegend: '각 아군이 <b>해당 타입 기술을 받을 때의 피격 배율</b>. <b class="df-w1">×2/×4</b>=약점 <b class="df-r1">½ 이하</b>=반감 <b class="df-imm">0</b>=무효. <b class="mtx-gap" style="padding:0 4px">연노랑</b>=파티 내에 반감 이하로 받는 멤버가 없는 타입.',
       speedMatrixLegend: '아군（왼쪽·스피드 순）이 사용률 상위 30마리의 대표 빌드보다 빠른지（스카프 포함）. <b>◎</b>＝빠름 <b>△</b>＝동속 <b>×</b>＝느림.',
@@ -2646,10 +2650,14 @@ const I18N = I18N_ALL[lang];
     const oppCols = buildOppCols();
     const holeInfo = findHoles(resolvedParty, oppCols);
     const summary = '';
-    const head = `<tr><th class="mtx-corner mtx-stick">${esc(I18N.selfVsOppAgg)}</th>` + oppCols.map((o, ci) => oppHeaderCellHtml(o, holeInfo.holeIdx.has(ci) ? 'mtx-hole' : '')).join('') + `</tr>`;
+    // 行見出しをアイコンだけにしたぶん、コーナーも同じ幅に詰める。
+    // 軸の説明（各味方 vs 相手）は表の上の説明文にあるので、ここは短縮表記でよい。
+    const head = `<tr><th class="mtx-corner mtx-stick mtx-stick-ico" title="${esc(I18N.selfVsOppAgg)}">${esc(I18N.selfVsOppShort || '自＼相')}</th>` + oppCols.map((o, ci) => oppHeaderCellHtml(o, holeInfo.holeIdx.has(ci) ? 'mtx-hole' : '')).join('') + `</tr>`;
     mtxPopData = [];
     const rows = resolvedParty.map((b) => {
-      const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b.icon, b.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(b.label))}</div></div></th>`;
+      // 1v1判定は列が多く、スマホでは横幅が足りない。自分側はアイコンだけで判別できるので
+      // 名前を出さない（アイコンの alt/title に名前は残るのでホバー・読み上げでは分かる）。
+      const hd = `<th class="mtx-stick mtx-stick-ico">${icoImg(b.icon, b.label, 'mtx-ico')}</th>`;
       const cells = oppCols.map((o) => {
         const agg = judgeVsBuilds(b, o.builds);
         const lines = muBreakdownLines(agg, o.builds);
