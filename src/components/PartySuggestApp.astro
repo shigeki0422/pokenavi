@@ -1311,7 +1311,8 @@ const I18N = I18N_ALL[lang];
     return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
       <div class="pop-sub">${esc(assumeLead)}</div>
       ${assumptionsHtml()}
-      ${window.__mtTable(vm, lang)}`;
+      ${typeof window.__mtTable === 'function' ? window.__mtTable(vm, lang)
+          : `<div class="muted" style="padding:1em">${I18N.calculating}</div>`}`;
   }
   function atkDetailHtml(d){
     const EFF = e=>e>=2?'×2':e===1?'×1':e===0?'無効':e<=0.25?'¼':'½';
