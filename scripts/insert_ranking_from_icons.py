@@ -12,6 +12,9 @@ CROP = (240, 10, 390, 135)
 TEMPLATE_DATE = None  # build_templates() 内で自動決定
 
 SEASON = "M-6"
+# 取り込む順位の上限。通常は200。クロールが途中で止まった等で
+# 上位のみ扱う場合に下げる（M-6初日は端末スリープで101位以降が取れず100件）
+MAX_RANK = 100
 RULE   = "single"
 MATCH_THRESHOLD = 0.80  # 通常フォーマット用
 MATCH_THRESHOLD_GRAY = 0.20  # 横長フォーマット(6/28〜)用
@@ -303,7 +306,7 @@ def main():
     no_image = []
     low_score = []
 
-    for rank in range(1, 201):
+    for rank in range(1, MAX_RANK + 1):
         rank_dir = target_dir / f"{rank:03d}"
 
         # RANK_OVERRIDESが設定されていればマッチングをスキップ
@@ -362,8 +365,8 @@ def main():
         conn.close()
         return
 
-    if len(candidates) < 200:
-        print(f"\n🚫 投入中止: {len(candidates)}件（200件必須）")
+    if len(candidates) < MAX_RANK:
+        print(f"\n🚫 投入中止: {len(candidates)}件（{MAX_RANK}件必須）")
         conn.close()
         return
 
@@ -371,7 +374,7 @@ def main():
     from generate_pokemon_pages import POKEMON_DATA
     id_map = {name: data.get("id") for name, data in POKEMON_DATA.items()}
 
-    print(f"\n✅ 重複なし・200件確認 → 投入開始")
+    print(f"\n✅ 重複なし・{MAX_RANK}件確認 → 投入開始")
     now = datetime.now(timezone.utc).isoformat()
     inserted = 0
     for rank, name in candidates:
