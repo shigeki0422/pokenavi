@@ -9,7 +9,7 @@ from pathlib import Path
 DB = Path(__file__).parent / "pokenavi.db"
 
 WF_DIRS = [
-    "/Users/shigeki/.claude/projects/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/subagents/workflows/wf_1ce039f7-0e7",
+    "/private/tmp/claude-501/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/scratchpad/journal_0909",
 ]
 
 OCR_MOVES = {
@@ -501,7 +501,7 @@ def resolve_partner_form(name, types):
     type_set = frozenset(types)
     return FORM_BY_TYPES[name].get(type_set, name)
 
-CRAWLED_DATE = "2026-08-10"
+CRAWLED_DATE = "2026-09-09"
 
 # 実在する別の技名に誤読され、マスター照合では検出できないケースの位置指定上書き。
 # GATE2（リスト内重複）で気付いたものを、必ずクロール画像で確認してから登録する。
@@ -525,6 +525,30 @@ SEASON = "M-5"
 # 確認した根拠を # コメントに必ず書く。テキスト情報だけで判断した場合は設定しない。
 #
 RANK_OVERRIDES_BY_DATE = {
+    # アイコン照合（insert_ranking_from_icons.py・200件ユニーク確認済み）で確定したフォーム名。
+    # 同種複数フォームの rank 30/62/158(ロトム) と 117/175(ケンタロス) は
+    # _c_ability_00.png のNo./タイプアイコンを目視確認済み。
+    "2026-09-09": {
+        12: "イダイトウ(オス)",
+        30: "ウォッシュロトム",
+        33: "アローラキュウコン",
+        40: "フラエッテ(永遠)",
+        62: "ヒートロトム",
+        63: "ヒスイゾロアーク",
+        74: "ヒスイヌメルゴン",
+        94: "ガラルヤドキング",
+        97: "ヒスイウインディ",
+        106: "ガラルヤドラン",
+        115: "イダイトウ(メス)",
+        117: "ケンタロス:炎",
+        123: "ルガルガン(たそがれ)",
+        124: "ヒスイジュナイパー",
+        133: "ヒスイバクフーン",
+        158: "カットロトム",
+        175: "ケンタロス:水",
+        192: "ニャオニクス(オス)",
+        198: "パンプジン(ギガだましゅ)",
+    },
     "2026-06-19": {
         19: "アローラキュウコン",
         25: "ウォッシュロトム",
