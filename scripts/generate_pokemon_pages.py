@@ -120,6 +120,15 @@ ITEM_PNG = {
     "ヤチェのみ": "item-0188-yache.png",
     "ハバンのみ": "item-0197-haban.png",
     "ガブリアスナイト": "item-0683-garchompite.png",
+    # pokedbのスプライトが未更新でモンスターボールの代替画像になるため、
+    # クロール画像(2026-09-09 rank001 item_00.png)から切り出して差し替え
+    "ボーマンダナイト": "item-0769-salamencite.png",
+    # M-6の新メガストーン。pokedbのスプライトシートに未収録のため同様に切り出し
+    "アブソルナイトZ": "item-absolite-z.png",
+    "ガブリアスナイトZ": "item-garchompite-z.png",
+    "グソクムシャナイト": "item-golisopodite.png",
+    "セグレイブナイト": "item-baxcalibite.png",
+    "ルカリオナイトZ": "item-lucarionite-z.png",
 }
 # 持ち物アイコンは item_ids.json（pokedbのitem_key）と item-sprite.css（座標の正本）
 # から自動生成する。かつては座標を手書きしており、ゴツゴツメットにふうせんのID(541)を
