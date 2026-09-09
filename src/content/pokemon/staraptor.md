@@ -782,6 +782,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0398-00.webp" alt="ムクホーク" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ムクホーク考察 M-2</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">メガムクホーク 考察・対策【チャンピオンズ使用率12位】あまのじゃくの仕組みと採用率</div>
   </div>
 </a>

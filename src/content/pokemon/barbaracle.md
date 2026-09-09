@@ -735,6 +735,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0689-00.webp" alt="ガメノデス" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ガメノデス考察 M-2</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">ガメノデス考察 M-3 型別採用率と立ち回り</div>
   </div>
 </a>

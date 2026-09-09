@@ -750,6 +750,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0071-00.webp" alt="ウツボット" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ウツボット考察 M-2</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">ウツボット考察 M-2 使用率69位 メガ進化とちからをすいとるの粘り型</div>
   </div>
 </a>

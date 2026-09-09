@@ -254,6 +254,40 @@ MEGA_DATA = {
     ],
 }
 
+# ---- 考察記事の自動検出 ----
+# POKEMON_DATA["analysis"] の手書きリストは更新漏れが起きるため、
+# src/content/blog/ の公開済み記事を実体として突き合わせる。
+# タイトルは記事のfrontmatterから読む（シーズン表記の食い違いを構造的に防ぐ）。
+BLOG_DIR = Path(__file__).parent.parent / "src" / "content" / "blog"
+
+
+def load_published_articles():
+    arts = {}
+    for f in sorted(BLOG_DIR.glob("*.md")):
+        head = f.read_text()[:3000]
+        draft = re.search(r"^draft:\s*(\w+)", head, re.M)
+        if draft and draft.group(1).lower() != "false":
+            continue
+        m = re.search(r"^title:\s*['\"](.+?)['\"]\s*$", head, re.M)
+        arts[f.stem] = m.group(1) if m else f.stem
+    return arts
+
+
+PUBLISHED_ARTICLES = load_published_articles()
+
+
+def _season_key(slug):
+    m = re.search(r"-m(\d+)$", slug)
+    return int(m.group(1)) if m else -1
+
+
+def resolve_analysis_slugs(file_stem, manual):
+    """手書きリストと自動検出をマージし、公開済みのみを新しいシーズン順で返す"""
+    auto = [s for s in PUBLISHED_ARTICLES if s.startswith(f"{file_stem}-analysis")]
+    merged = list(dict.fromkeys(list(manual) + auto))
+    merged = [s for s in merged if s in PUBLISHED_ARTICLES]
+    return sorted(merged, key=_season_key, reverse=True)
+
 # ---- 各ポケモンの静的データ ----
 # ⚠️ 考察記事リンク管理ルール（必ず守ること）:
 # "analysis" リストに新シーズン記事を追加する際は【最新記事を先頭】に置く。
@@ -2033,7 +2067,7 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
     types = pdata["types"]
     stats = pdata["stats"]  # H A B C D S
     total = sum(stats)
-    analysis_slugs = pdata.get("analysis", [])
+    analysis_slugs = resolve_analysis_slugs(pdata["file"], pdata.get("analysis", []))
 
     conn = get_conn()
 
@@ -2534,22 +2568,10 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     if analysis_slugs:
         cards = ""
         for slug in analysis_slugs:
-            # 記事タイトルをslugから推定
-            title_map = {
-                "charizard-x-analysis-m2": "【ポケモンチャンピオンズ】リザードン（メガリザードンX）考察 M-2",
-                "charizard-y-analysis-m2": "【ポケモンチャンピオンズ】リザードン（メガリザードンY）考察 M-2",
-                "lucario-analysis-m2": "【ポケモンチャンピオンズ】ルカリオ考察 M-2 使用率9位",
-                "gengar-analysis-m2": "【ポケモンチャンピオンズ】ゲンガー考察 M-2 使用率10位",
-                "gyarados-analysis-m2": "【ポケモンチャンピオンズ】ギャラドス考察 M-2 使用率11位",
-                "florette-analysis-m2": "【ポケモンチャンピオンズ】フラエッテ（永遠）考察 M-2",
-                "kiraflosure-analysis-m2": "【ポケモンチャンピオンズ】キラフロル考察 M-2 使用率14位",
-                "lopunny-analysis-m2": "【ポケモンチャンピオンズ】ミミロップ考察 M-2 S135高速",
-                "dragonite-analysis-m2": "【ポケモンチャンピオンズ】カイリュー考察 M-2 使用率16位",
-                "scizor-analysis-m2": "【ポケモンチャンピオンズ】ハッサム考察 M-2 使用率17位",
-                "starmie-analysis-m2": "【ポケモンチャンピオンズ】スターミー考察 M-2 使用率20位",
-                "garchomp-analysis-m2": "【ポケモンチャンピオンズ】ガブリアス考察 M-2 使用率1位",
-            }
-            title = title_map.get(slug, f"【ポケモンチャンピオンズ】{display_name}考察 M-2")
+            # タイトルは記事本体のfrontmatterから取る（シーズン表記の食い違いを防ぐ）
+            season = _season_key(slug)
+            fallback = f"【ポケモンチャンピオンズ】{display_name}考察" + (f" M-{season}" if season > 0 else "")
+            title = PUBLISHED_ARTICLES.get(slug) or fallback
             cards += f'''<a href="/blog/{slug}/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-{file_id}.webp" alt="{display_name}" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>

@@ -6,7 +6,7 @@ dexNumber: 376
 usageRank: 10
 pubDate: '2026-09-09'
 draft: false
-analysisSlug: 'metagross-analysis-m3'
+
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -772,10 +772,24 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 ## 考察記事
 
+<a href="/blog/metagross-analysis-m5/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メタグロス 考察 M-5 シーズン バレットパンチが最多採用技に浮上</div>
+  </div>
+</a>
+<a href="/blog/metagross-analysis-m4/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">メガメタグロス 考察 M-4 シーズン 採用型と立ち回り</div>
+  </div>
+</a>
 <a href="/blog/metagross-analysis-m3/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メタグロス考察 M-2</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">メガメタグロス M-3【使用率7位】相性補完・構築と4タイプ弱点対策</div>
   </div>
 </a>

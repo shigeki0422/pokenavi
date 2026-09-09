@@ -705,6 +705,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0887-00.webp" alt="ドラパルト" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ドラパルト考察 M-2</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">ドラパルト考察 M-2 使用率51位 S142高速ドラゴンアローの型と立ち回り</div>
   </div>
 </a>

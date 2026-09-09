@@ -742,6 +742,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0080-00.webp" alt="ヤドラン" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ヤドラン考察 M-2</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">ヤドラン考察 M-2 使用率70位 メガ進化物理受けの型と立ち回り</div>
   </div>
 </a>

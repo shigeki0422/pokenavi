@@ -759,17 +759,31 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 ## 考察記事
 
+<a href="/blog/delphox-analysis-m5/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0655-00.webp" alt="マフォクシー" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】マフォクシー 考察 M-5 シーズン わるだくみ採用増と型の変化</div>
+  </div>
+</a>
+<a href="/blog/delphox-analysis-m4/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
+  <img src="/images/pokemon/pokemon-0655-00.webp" alt="マフォクシー" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
+  <div>
+    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】メガマフォクシー 考察 M-4 シーズン 特殊アタッカーの型と立ち回り</div>
+  </div>
+</a>
 <a href="/blog/delphox-analysis-m3/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0655-00.webp" alt="マフォクシー" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】マフォクシー考察 M-2</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">メガマフォクシー考察 M-3 開幕42位から17位への急上昇とサザングロスへの強さ</div>
   </div>
 </a>
 <a href="/blog/delphox-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0655-00.webp" alt="マフォクシー" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】マフォクシー考察 M-2</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">メガマフォクシー M-2【使用率25位】相性補完・有利不利とわるだくみ型採用率</div>
   </div>
 </a>

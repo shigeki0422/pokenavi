@@ -691,6 +691,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <img src="/images/pokemon/pokemon-0143-00.webp" alt="カビゴン" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
     <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】カビゴン考察 M-2</div>
+    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">カビゴン考察 M-2 使用率48位 型別採用率と耐久型の立ち回り</div>
   </div>
 </a>
