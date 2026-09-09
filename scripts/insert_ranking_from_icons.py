@@ -11,7 +11,7 @@ CROP = (240, 10, 390, 135)
 
 TEMPLATE_DATE = None  # build_templates() 内で自動決定
 
-SEASON = "M-5"
+SEASON = "M-6"
 RULE   = "single"
 MATCH_THRESHOLD = 0.80  # 通常フォーマット用
 MATCH_THRESHOLD_GRAY = 0.20  # 横長フォーマット(6/28〜)用
@@ -213,8 +213,16 @@ def build_templates(conn):
             template_date = d
             break
     if template_date is None:
-        print("⚠ テンプレート用の直前データなし")
-        return {}
+        # 新シーズン初日は同シーズンの前日データが無い。icon_cache は
+        # シーズン非依存の蓄積なので、これだけでテンプレートを構築する。
+        cached_names = [p.stem for p in ICON_CACHE_DIR.glob("*.png")] if ICON_CACHE_DIR.exists() else []
+        templates = {}
+        for pokemon in cached_names:
+            cached = _load_cache(pokemon)
+            if cached is not None:
+                templates[pokemon] = cached
+        print(f"⚠ 同シーズンの直前データなし → icon_cache のみで構築: {len(templates)}件")
+        return templates
     template_dir = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{template_date}/detail")
     print(f"テンプレート日付: {template_date}")
 

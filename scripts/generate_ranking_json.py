@@ -12,7 +12,7 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent / "pokenavi.db"
 OUT_PATH = Path(__file__).parent.parent / "src/data/ranking.json"
 IMGDIR = Path(__file__).parent.parent / "public/images/pokemon"
-SEASONS = ["M-3", "M-4", "M-5"]
+SEASONS = ["M-3", "M-4", "M-5", "M-6"]
 LIMIT = 200
 
 ALIASES = {

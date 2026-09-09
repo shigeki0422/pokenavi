@@ -12,7 +12,7 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent / "pokenavi.db"
 OUT_DIR = Path(__file__).parent.parent / "src/content/pokemon"
 
-SEASON = 'M-5'
+SEASON = 'M-6'
 
 # ---- 防御タイプ相性チャート（Gen 6+）----
 # DEFENSE[守備タイプ] = {攻撃タイプ: 倍率}
