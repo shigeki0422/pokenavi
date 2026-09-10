@@ -539,6 +539,16 @@ def main():
     if missing:
         print("WARN pokemon_id未解決:", ", ".join(missing))
     usage_rows = [r for r in usage_rows if r[2]]
+    # 最新日の200位圏だけに絞ると、順位が日々入れ替わる境界の種が消える。消えた種を保存済み
+    # パーティが参照していると種族値を引けず枠が壊れるため、シーズン内のどこかで圏内に入った
+    # 種は「最後に観測された順位」で残す。
+    seen = {n for n, _, _ in usage_rows}
+    carry = [(n, rk, pid or icon_fix.get(n)) for n, rk, pid, _d in con.execute(
+        "SELECT pokemon, rank, pokemon_id, MAX(crawled_date) FROM pokemon_usage "
+        "WHERE season=? AND rule=? GROUP BY pokemon", (SEASON, RULE)).fetchall()
+        if n not in seen]
+    usage_rows += [r for r in carry if r[2]]
+    usage_rows.sort(key=lambda r: (r[1], r[0]))
 
     from simulator.simulate import get_loader
     from simulator.data import normalize_mega_stone
