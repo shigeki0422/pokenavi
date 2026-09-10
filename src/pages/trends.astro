@@ -45,10 +45,10 @@ const topRiser = risers[0];
 const topFaller = fallers[0];
 
 const siteUrl = 'https://pokenavi.jp';
-const title = `環境変動ランキング M-4 | 使用率 急上昇・急落ポケモン（${fmtMD(rFirstD)}→${fmtMD(rLastD)}）`;
-const description = `ポケモンチャンピオンズM-4環境の使用率変動を${fmtMD(rFirstD)}〜${fmtMD(rLastD)}のデータで追跡。急上昇${risers.length}体・急落${fallers.length}体をランキング形式で毎日更新。`;
+const title = `環境変動ランキング ${rSeasonKey} | 使用率 急上昇・急落ポケモン（${fmtMD(rFirstD)}→${fmtMD(rLastD)}）`;
+const description = `ポケモンチャンピオンズ${rSeasonKey}環境の使用率変動を${fmtMD(rFirstD)}〜${fmtMD(rLastD)}のデータで追跡。急上昇${risers.length}体・急落${fallers.length}体をランキング形式で毎日更新。`;
 
-let shareText = `📈 ポケモンチャンピオンズ M-4 環境変動（${fmtMD(rFirstD)}→${fmtMD(rLastD)}）\n`;
+let shareText = `📈 ポケモンチャンピオンズ ${rSeasonKey} 環境変動（${fmtMD(rFirstD)}→${fmtMD(rLastD)}）\n`;
 if (topRiser) shareText += `急上昇: ${topRiser.name} ${topRiser.prev}位→${topRiser.cur}位（+${topRiser.diff}）\n`;
 if (topFaller) shareText += `急落: ${topFaller.name} ${topFaller.prev}位→${topFaller.cur}位（${topFaller.diff}）\n`;
 const tweetUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(shareText + `${siteUrl}/trends/`);
