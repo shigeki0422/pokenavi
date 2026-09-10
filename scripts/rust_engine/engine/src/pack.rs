@@ -170,6 +170,10 @@ pub struct Pack {
     pub net: Option<crate::net::NetW>,
     /// ダンプ時点の simulator/** ダイジェスト（ケースの刻印照合用。casehdr参照）
     pub sim_hash: String,
+    /// 直前に組み立てた1v1の両者（analysis::setup 用の1件キャッシュ）。
+    /// 同じ対面で技ごとに build_poke をやり直すと spec のパースが支配的になるため
+    /// （1対面で約70回・マトリクス全体で約28,000回）、組み立て済みを複製して使う。
+    pub prepared: Option<(String, String, String, crate::poke::Poke, crate::poke::Poke)>,
 }
 
 fn j_str(v: &Value) -> Option<String> {
@@ -495,6 +499,7 @@ impl Pack {
         move_flags.resize(intern.len(), MoveFlags::default());
 
         Pack {
+            prepared: None,
             intern,
             sy,
             tc: TyC::build(&tindex),

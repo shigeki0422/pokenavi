@@ -99,7 +99,17 @@ fn setup_sup(
     bt
 }
 
-fn setup(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, roll: f64) -> Battle {
+/// 組み立て済みの両者を返す。同じ対面なら spec のパースとメガ進化をやり直さない。
+///
+/// setup は技ごと・乱数ごとに呼ばれる（run_move×2・move_damage×2・relevant_conds で
+/// 1技あたり5回、1対面で約70回）。中身は乱数値以外まったく同じなので、
+/// build_poke のパースが 1v1 判定の実行時間の半分近くを占めていた。
+fn prepared(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str) -> (Poke, Poke) {
+    if let Some((ka, kb, ks, a, b)) = &pack.prepared {
+        if ka == spec_a && kb == spec_b && ks == season {
+            return (a.clone(), b.clone());
+        }
+    }
     let mut a: Poke = build_poke(pack, spec_a, season);
     let mut b: Poke = build_poke(pack, spec_b, season);
     {
@@ -107,6 +117,12 @@ fn setup(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, roll: f64) -
         mega_evolve_poke(p, &mut a);
         mega_evolve_poke(p, &mut b);
     }
+    pack.prepared = Some((spec_a.to_string(), spec_b.to_string(), season.to_string(), a.clone(), b.clone()));
+    (a, b)
+}
+
+fn setup(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, roll: f64) -> Battle {
+    let (a, b) = prepared(pack, spec_a, spec_b, season);
     let mut field = Field {
         roll_override: Some(roll),
         always_hit: true,
