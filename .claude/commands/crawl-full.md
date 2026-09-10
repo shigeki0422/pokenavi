@@ -51,6 +51,7 @@ python3 scripts/insert_detail_from_journal.py
 ```bash
 python3 scripts/generate_pokemon_pages.py
 python3 scripts/inject_faq_frontmatter.py
+python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成
 ```
 
 ### 8. ローカル確認

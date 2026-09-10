@@ -63,6 +63,7 @@ print(f'Done: {len(pokemon_list)} pokemon, latest={latest}')
 ### 7. ポケモンページ再生成
 ```bash
 python3 scripts/generate_pokemon_pages.py
+python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成
 python3 scripts/inject_faq_frontmatter.py
 ```
 

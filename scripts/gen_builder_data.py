@@ -20,6 +20,7 @@
    「採用率の合計が閾値以上の最新日」を採る（同一シーズン内の全日→過去シーズンの順）。
 """
 import os
+import re
 import sqlite3
 import json
 
@@ -28,11 +29,25 @@ ROOT = os.path.dirname(HERE)
 DB = os.path.join(HERE, "pokenavi.db")
 OUT_DIR = os.path.join(ROOT, "public", "builder-data")
 MON_DIR = os.path.join(OUT_DIR, "mon")
-SEASON = os.environ.get("BUILDER_SEASON", "M-6")
 RULE = "single"
 
+# 対象シーズンはDBの最新シーズンを自動採用する（固定値にすると新シーズン開始時に
+# 工房のデータだけ旧シーズンのまま取り残される）。BUILDER_SEASON で明示指定も可能。
+def _seasons_in_db():
+    con = sqlite3.connect(DB)
+    rows = [r[0] for r in con.execute("SELECT DISTINCT season FROM pokemon_usage")]
+    con.close()
+
+    def key(s):
+        m = re.match(r"M-(\d+)$", s or "")
+        return (1, int(m.group(1))) if m else (0, 0)
+
+    return sorted(rows, key=key, reverse=True)
+
+
 # 新しい順。SEASON が欠測の場合のみ、これより古いシーズンへ順に遡る。
-SEASON_ORDER = ["M-6", "M-5", "M-4", "M-3", "M-2"]
+SEASON_ORDER = _seasons_in_db()
+SEASON = os.environ.get("BUILDER_SEASON") or (SEASON_ORDER[0] if SEASON_ORDER else "M-6")
 
 MOVE_POOL_N = 10      # 技プールに入れる採用率上位の技数
 MAX_VARIANTS = 3      # 1種あたりの型数（型1/2/3）

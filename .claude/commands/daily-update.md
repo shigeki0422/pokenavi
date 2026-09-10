@@ -47,6 +47,7 @@ print(f'Done: {len(pokemon_list)} pokemon, dates={dates}')
 ### 4. 全ポケモン情報ページを再生成
 ```bash
 python3 scripts/generate_pokemon_pages.py
+python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成
 ```
 
 ### 5. localhost で確認（ユーザーが確認・承認するまで待機）
