@@ -36,5 +36,10 @@
 .mbp-assume summary { cursor: pointer; color: #475569; }
 .mbp-assume ul { margin: .4em 0 0; padding-left: 1.2em; line-height: 1.6; }
 
-.mbp-seq { font-size: .88em; line-height: 1.35; }
-.mbp-seq-none { color: var(--gray, #6b7280); }
+.mbp-seq .mbp-step { display: flex; align-items: baseline; gap: 4px; justify-content: center; }
+.mbp-seq .mbp-step-no {
+  flex: none; font-size: .72em; color: #6b7280;
+  border: 1px solid #d1d5db; border-radius: 999px; min-width: 1.15em; text-align: center;
+}
+.mbp-seq .mbp-move { display: inline; }
+.mbp-seq-note { font-size: .8em; color: #6b7280; margin-left: 3px; }

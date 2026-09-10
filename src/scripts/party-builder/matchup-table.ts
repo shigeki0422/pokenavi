@@ -5,7 +5,7 @@
 // 見た目は styles/matchup-table.css、組み立てはここ、の1箇所に集約する。
 // 呼び出し側は「表示に必要な値だけ」を詰めたビューモデルを渡す（翻訳済みの文字列と
 // 解決済みのアイコンURL）。計算・翻訳・アイコン解決の作法は呼び出し側ごとに違うため。
-import type { MoveHitDetail } from "./matchup";
+import type { MoveHitDetail, SeqStep } from "./matchup";
 import type { Verdict } from "./types";
 import { ASSUMPTIONS_LABEL, MATCHUP_ASSUMPTIONS, MATCHUP_LEAD, type Lang } from "./assumptions";
 
@@ -21,8 +21,10 @@ export interface MatchupColumnVM {
   /** 技名（翻訳済み）。detail が null のときのフォールバック */
   myMoveText: string;
   oppMoveText: string;
-  /** 同じ技を撃ち続けるより速い手順（翻訳済み技名）。無いときは空 */
-  seq?: string[];
+  /** 途中で技を切り替える手順。空でなければ与ダメ/被ダメのセルを手順表示にする。
+   * 技名は翻訳済みで渡すこと（このモジュールは翻訳を持たない）。 */
+  mySteps?: SeqStep[];
+  oppSteps?: SeqStep[];
 }
 
 export interface MatchupTableVM {
@@ -36,8 +38,7 @@ export interface MatchupTableVM {
 interface Labels {
   rowSpeed: string;
   rowJudge: string;
-  rowSeq: string;
-  noSeq: string;
+  seqNote: string;
   fast(f: boolean): string;
   hits(n: number | null): string;
   detail(d: MoveHitDetail | null, prob: string): string;
@@ -47,7 +48,7 @@ interface Labels {
 
 const T: Record<Lang, Labels> = {
   ja: {
-    rowSpeed: "素早さ", rowJudge: "判定", rowSeq: "最短手順", noSeq: "同じ技の連打",
+    rowSpeed: "素早さ", rowJudge: "判定", seqNote: "（手順）",
     fast: (f: boolean) => (f ? "先手" : "後手"),
     hits: (n: number | null) => (n == null || n >= 999 ? "圏外" : `確定${n}`),
     detail: (d: MoveHitDetail | null, prob: string) => {
@@ -60,7 +61,7 @@ const T: Record<Lang, Labels> = {
       `${win ? "勝ち" : "負け"}：${mine}で倒す/${theirs}で倒される・${fast ? "先手" : "後手"}`,
   },
   en: {
-    rowSpeed: "Speed", rowJudge: "Verdict", rowSeq: "Best line", noSeq: "same move repeated",
+    rowSpeed: "Speed", rowJudge: "Verdict", seqNote: " (line)",
     fast: (f: boolean) => (f ? "First" : "Second"),
     hits: (n: number | null) => (n == null || n >= 999 ? "n/a" : `${n}HKO`),
     detail: (d: MoveHitDetail | null, prob: string) => {
@@ -73,7 +74,7 @@ const T: Record<Lang, Labels> = {
       `${win ? "Win" : "Loss"}: ${mine} to KO / ${theirs} to be KOed, ${fast ? "faster" : "slower"}`,
   },
   ko: {
-    rowSpeed: "스피드", rowJudge: "판정", rowSeq: "최단 순서", noSeq: "같은 기술 연타",
+    rowSpeed: "스피드", rowJudge: "판정", seqNote: "（순서）",
     fast: (f: boolean) => (f ? "선공" : "후공"),
     hits: (n: number | null) => (n == null || n >= 999 ? "권외" : `확정${n}`),
     detail: (d: MoveHitDetail | null, prob: string) => {
@@ -98,12 +99,34 @@ export function fmtProb(prob: number | null | undefined): string {
   return String(Math.round(p));
 }
 
-function dmgCell(d: MoveHitDetail | null, moveText: string, t: Labels): string {
-  const pct = d && d.pctLo != null && d.pctHi != null
-    ? `<span class="mbp-pct">${d.pctLo.toFixed(1)}〜${d.pctHi.toFixed(1)}%</span>` : "";
+const pctText = (lo: number | null, hi: number | null): string =>
+  lo != null && hi != null ? `${lo.toFixed(1)}〜${hi.toFixed(1)}%` : "";
+
+/** 同じ技を撃ち続ける前提のセル。1行の%＋確定数＋技名。 */
+function singleCell(d: MoveHitDetail | null, moveText: string, t: Labels): string {
+  const p = pctText(d?.pctLo ?? null, d?.pctHi ?? null);
+  const pct = p ? `<span class="mbp-pct">${p}</span>` : "";
   const conds = d?.conds ? `<div class="mbp-conds">${esc(t.conds(d.conds))}</div>` : "";
   return `<td>${pct}<span class="mbp-hits">${esc(t.detail(d, fmtProb(d?.prob)))}</span>`
     + `<div class="mbp-move">${esc(moveText)}</div>${conds}</td>`;
+}
+
+/** 途中で技を切り替える手順のセル。手ごとに%と技名を並べ、確定数は手順全体で1つ。
+ * 手数は最低乱数で走らせた結果なので「確定n」でよい（乱数で伸びる線は出さない）。 */
+function seqCell(steps: SeqStep[], t: Labels): string {
+  const lines = steps.map((s, i) =>
+    `<div class="mbp-step"><span class="mbp-step-no">${i + 1}</span>`
+    + `<span class="mbp-pct">${esc(pctText(s.pctLo, s.pctHi))}</span>`
+    + `<span class="mbp-move">${esc(s.n)}</span></div>`).join("");
+  const cs = [...new Set(steps.map((s) => s.conds).filter(Boolean))] as string[];
+  const conds = cs.length ? `<div class="mbp-conds">${esc(t.conds(cs.join("・")))}</div>` : "";
+  return `<td class="mbp-seq">${lines}`
+    + `<span class="mbp-hits">${esc(t.hits(steps.length))}<span class="mbp-seq-note">${esc(t.seqNote)}</span></span>`
+    + `${conds}</td>`;
+}
+
+function dmgCell(d: MoveHitDetail | null, moveText: string, t: Labels, steps?: SeqStep[]): string {
+  return steps && steps.length > 1 ? seqCell(steps, t) : singleCell(d, moveText, t);
 }
 
 /** 常に同じ前提の折りたたみ。表と一緒に出す。 */
@@ -129,9 +152,9 @@ export function renderMatchupTable(vm: MatchupTableVM, lang: Lang): string {
   const head = `<tr><th class="lft"></th>` + vm.columns.map((c) =>
     `<th>${esc(c.label)}<div class="mbp-build-meta">${c.meta.map(esc).join("<br>")}</div></th>`).join("") + `</tr>`;
   const myRow = arrow(vm.myIconUrl, vm.myName, vm.oppIconUrl, vm.oppName)
-    + vm.columns.map((c) => dmgCell(c.my, c.myMoveText, t)).join("");
+    + vm.columns.map((c) => dmgCell(c.my, c.myMoveText, t, c.mySteps)).join("");
   const oppRow = arrow(vm.oppIconUrl, vm.oppName, vm.myIconUrl, vm.myName)
-    + vm.columns.map((c) => dmgCell(c.opp, c.oppMoveText, t)).join("");
+    + vm.columns.map((c) => dmgCell(c.opp, c.oppMoveText, t, c.oppSteps)).join("");
   const spdRow = `<td class="lft">${esc(t.rowSpeed)}</td>` + vm.columns.map((c) =>
     `<td class="mbp-spd-cell ${c.verdict.fast ? "mbp-spd-win" : "mbp-spd-lose"}">`
     + `<div>${esc(t.fast(c.verdict.fast))}</div>`
@@ -143,16 +166,6 @@ export function renderMatchupTable(vm: MatchupTableVM, lang: Lang): string {
     + `<div class="mbp-judge-text">${esc(t.judge(c.verdict.win,
         t.hits(c.verdict.myHits ?? null), t.hits(c.verdict.oppHits ?? null), c.verdict.fast))}</div></td>`).join("");
 
-  // 手順行は「同じ技の連打より速い線がある」型が1つでもあるときだけ出す。
-  // 常時出すと大半が「同じ技の連打」で埋まり、表が縦に伸びるだけになる。
-  const hasSeq = vm.columns.some((c) => (c.seq ?? []).length > 1);
-  const seqRow = hasSeq
-    ? `<tr><td class="lft">${esc(t.rowSeq)}</td>` + vm.columns.map((c) =>
-        `<td class="mbp-seq">${(c.seq ?? []).length > 1
-          ? esc((c.seq as string[]).join(" → "))
-          : `<span class="mbp-seq-none">${esc(t.noSeq)}</span>`}</td>`).join("") + `</tr>`
-    : "";
-
   return `<div class="mbp-scroll"><table class="mbp-table">${head}`
-    + `<tr>${myRow}</tr><tr>${oppRow}</tr><tr>${spdRow}</tr>${seqRow}<tr>${judgeRow}</tr></table></div>`;
+    + `<tr>${myRow}</tr><tr>${oppRow}</tr><tr>${spdRow}</tr><tr>${judgeRow}</tr></table></div>`;
 }

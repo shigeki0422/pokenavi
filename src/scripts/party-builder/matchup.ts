@@ -137,6 +137,15 @@ function _best(e: Evaluated): (EngineMove & { idx: number }) | null {
   return best;
 }
 
+/** 途中で技を切り替える手順。同じ技が並ぶだけ、または単発の最大打点より
+ * 遠回りな手順は情報にならない(判定の確定数とも食い違う)ので出さない。 */
+function _seqNames(e: Evaluated, best: (EngineMove & { idx: number }) | null): string[] {
+  const seq = e.seq ?? [];
+  if (new Set(seq).size < 2) return [];
+  if ((e.seqHits ?? OUT_OF_RANGE) > (best?.hitsLo ?? OUT_OF_RANGE)) return [];
+  return seq;
+}
+
 export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
   const { a, b } = _pair(me, opp);
   const myBest = _best(a);
@@ -155,7 +164,7 @@ export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
     win: myHits < oppHits || (myHits === oppHits && fast),
     // 途中で技を切り替える手順のときだけ出す（同じ技が並ぶだけなら情報にならない）。
     // 手数が単発と同じでも、初手限定技や先制技で決める線は実戦の手順として意味がある。
-    mySeq: new Set(a.seq ?? []).size > 1 ? (a.seq ?? []) : [],
+    mySeq: _seqNames(a, myBest),
     fast,
     myS: a.speed,
     oppS: b.speed,
@@ -245,6 +254,14 @@ export interface MoveHitDetail {
   conds: string | null;
 }
 
+/** 手順の各手。%は技そのものの値(単発行と同じ基準)で、確定数は手順全体で1つなので持たない。 */
+export interface SeqStep {
+  n: string;
+  pctLo: number | null;
+  pctHi: number | null;
+  conds: string | null;
+}
+
 /** 発数が生ダメージから素直に計算した値より増えているときの要因名。 */
 function _reason(defender: ResolvedBuild, hp: number, dmg: number, hits: number): string | null {
   // 圏外は「倒せない」だけで、耐え効果が理由とは限らない
@@ -295,17 +312,44 @@ export function moveBreakdown(me: ResolvedBuild, opp: ResolvedBuild): MoveHitDet
   return p.a.moves.map((m) => _detail(m, p, 0, opp, p.b.hp));
 }
 
+/** 手順の各手を表示用にする。%は同名の技の単発計算をそのまま使う
+ * (単発行と基準を揃える。実走のHP減少を使うと ばけのかわ・砂・回復まで技のダメージに見える)。 */
+function _steps(e: Evaluated, cmpHits: number | null, hpDef: number): SeqStep[] {
+  const seq = e.seq ?? [];
+  const hits = e.seqHits ?? OUT_OF_RANGE;
+  // 単発表示のほうが手数が少ないときは出さない。最大打点が乱数1発のとき手順に置き換えると
+  // 「乱数1発(63%)」という判断材料が消えてしまう。
+  if (new Set(seq).size < 2 || hits >= OUT_OF_RANGE || hits > (cmpHits ?? OUT_OF_RANGE)) return [];
+  const names = seq;
+  const byName = new Map(e.moves.map((m) => [m.n, m]));
+  return names.map((n) => {
+    const m = byName.get(n);
+    const lo = m?.dmgLo, hi = m?.dmgHi;
+    return {
+      n,
+      pctLo: lo == null ? null : (lo / hpDef) * 100,
+      pctHi: hi == null ? null : (hi / hpDef) * 100,
+      conds: m ? _conds(m) : null,
+    };
+  });
+}
+
 /**
  * 対面の与ダメ・被ダメを、同じ場の前提で同時に求める。
  * 向きごとに別々に呼ぶと天候が食い違うため、表示する2行は必ずここから取る。
  */
 export function pairHitDetails(me: ResolvedBuild, opp: ResolvedBuild):
-    { my: MoveHitDetail | null; opp: MoveHitDetail | null } {
+    { my: MoveHitDetail | null; opp: MoveHitDetail | null;
+      mySteps: SeqStep[]; oppSteps: SeqStep[] } {
   const p = _pair(me, opp);
   const bm = _best(p.a), bo = _best(p.b);
+  const my = bm ? _detail(bm, p, 0, opp, p.b.hp) : null;
+  const oppD = bo ? _detail(bo, p, 1, me, p.a.hp) : null;
   return {
-    my: bm ? _detail(bm, p, 0, opp, p.b.hp) : null,
-    opp: bo ? _detail(bo, p, 1, me, p.a.hp) : null,
+    my,
+    opp: oppD,
+    mySteps: _steps(p.a, my?.hits ?? null, p.b.hp),
+    oppSteps: _steps(p.b, oppD?.hits ?? null, p.a.hp),
   };
 }
 
