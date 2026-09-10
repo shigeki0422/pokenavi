@@ -35,3 +35,6 @@
 .mbp-assume { margin: .2em 0 .6em; font-size: .86em; color: #64748b; }
 .mbp-assume summary { cursor: pointer; color: #475569; }
 .mbp-assume ul { margin: .4em 0 0; padding-left: 1.2em; line-height: 1.6; }
+
+.mbp-seq { font-size: .88em; line-height: 1.35; }
+.mbp-seq-none { color: var(--gray, #6b7280); }

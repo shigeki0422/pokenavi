@@ -21,6 +21,8 @@ export interface MatchupColumnVM {
   /** 技名（翻訳済み）。detail が null のときのフォールバック */
   myMoveText: string;
   oppMoveText: string;
+  /** 同じ技を撃ち続けるより速い手順（翻訳済み技名）。無いときは空 */
+  seq?: string[];
 }
 
 export interface MatchupTableVM {
@@ -34,6 +36,8 @@ export interface MatchupTableVM {
 interface Labels {
   rowSpeed: string;
   rowJudge: string;
+  rowSeq: string;
+  noSeq: string;
   fast(f: boolean): string;
   hits(n: number | null): string;
   detail(d: MoveHitDetail | null, prob: string): string;
@@ -43,7 +47,7 @@ interface Labels {
 
 const T: Record<Lang, Labels> = {
   ja: {
-    rowSpeed: "素早さ", rowJudge: "判定",
+    rowSpeed: "素早さ", rowJudge: "判定", rowSeq: "最短手順", noSeq: "同じ技の連打",
     fast: (f: boolean) => (f ? "先手" : "後手"),
     hits: (n: number | null) => (n == null || n >= 999 ? "圏外" : `確定${n}`),
     detail: (d: MoveHitDetail | null, prob: string) => {
@@ -56,7 +60,7 @@ const T: Record<Lang, Labels> = {
       `${win ? "勝ち" : "負け"}：${mine}で倒す/${theirs}で倒される・${fast ? "先手" : "後手"}`,
   },
   en: {
-    rowSpeed: "Speed", rowJudge: "Verdict",
+    rowSpeed: "Speed", rowJudge: "Verdict", rowSeq: "Best line", noSeq: "same move repeated",
     fast: (f: boolean) => (f ? "First" : "Second"),
     hits: (n: number | null) => (n == null || n >= 999 ? "n/a" : `${n}HKO`),
     detail: (d: MoveHitDetail | null, prob: string) => {
@@ -69,7 +73,7 @@ const T: Record<Lang, Labels> = {
       `${win ? "Win" : "Loss"}: ${mine} to KO / ${theirs} to be KOed, ${fast ? "faster" : "slower"}`,
   },
   ko: {
-    rowSpeed: "스피드", rowJudge: "판정",
+    rowSpeed: "스피드", rowJudge: "판정", rowSeq: "최단 순서", noSeq: "같은 기술 연타",
     fast: (f: boolean) => (f ? "선공" : "후공"),
     hits: (n: number | null) => (n == null || n >= 999 ? "권외" : `확정${n}`),
     detail: (d: MoveHitDetail | null, prob: string) => {
@@ -139,6 +143,16 @@ export function renderMatchupTable(vm: MatchupTableVM, lang: Lang): string {
     + `<div class="mbp-judge-text">${esc(t.judge(c.verdict.win,
         t.hits(c.verdict.myHits ?? null), t.hits(c.verdict.oppHits ?? null), c.verdict.fast))}</div></td>`).join("");
 
+  // 手順行は「同じ技の連打より速い線がある」型が1つでもあるときだけ出す。
+  // 常時出すと大半が「同じ技の連打」で埋まり、表が縦に伸びるだけになる。
+  const hasSeq = vm.columns.some((c) => (c.seq ?? []).length > 1);
+  const seqRow = hasSeq
+    ? `<tr><td class="lft">${esc(t.rowSeq)}</td>` + vm.columns.map((c) =>
+        `<td class="mbp-seq">${(c.seq ?? []).length > 1
+          ? esc((c.seq as string[]).join(" → "))
+          : `<span class="mbp-seq-none">${esc(t.noSeq)}</span>`}</td>`).join("") + `</tr>`
+    : "";
+
   return `<div class="mbp-scroll"><table class="mbp-table">${head}`
-    + `<tr>${myRow}</tr><tr>${oppRow}</tr><tr>${spdRow}</tr><tr>${judgeRow}</tr></table></div>`;
+    + `<tr>${myRow}</tr><tr>${oppRow}</tr><tr>${spdRow}</tr>${seqRow}<tr>${judgeRow}</tr></table></div>`;
 }
