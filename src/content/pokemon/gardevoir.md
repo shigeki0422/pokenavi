@@ -1,25 +1,12 @@
 ---
 title: 'サーナイト | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのサーナイト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率82位。'
+description: 'ポケモンチャンピオンズのサーナイト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率87位。'
 pokemonName: 'サーナイト'
 dexNumber: 282
-usageRank: 82
-updatedDate: '2026-09-10'
+usageRank: 87
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'gardevoir-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['しんくうは', 'マジカルフレイム', 'ハイパーボイス', 'ムーンフォース']
-  topMovePct: [70.5, 61.6, 51.5, 48.0]
-  topItems: ['サーナイトナイト', 'きあいのタスキ', 'こだわりスカーフ']
-  topItemPct: [63.4, 26.3, 7.3]
-  topAbility: 'トレース'
-  topAbilityPct: 95.7
-  topNature: 'ひかえめ'
-  topNaturePct: 72.5
-  topNature2: 'おくびょう'
-  topNaturePct2: 22.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.282</strong>　／　使用率 <strong style="color:#dc2626">82位</strong>
+      全国図鑑 <strong>No.282</strong>　／　使用率 <strong style="color:#dc2626">87位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

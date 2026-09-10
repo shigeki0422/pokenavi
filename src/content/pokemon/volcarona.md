@@ -1,25 +1,12 @@
 ---
 title: 'ウルガモス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのウルガモス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率21位。'
+description: 'ポケモンチャンピオンズのウルガモス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率23位。'
 pokemonName: 'ウルガモス'
 dexNumber: 637
-usageRank: 21
-updatedDate: '2026-09-10'
+usageRank: 23
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'volcarona-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['ちょうのまい', 'ギガドレイン', 'ほのおのまい', 'あさのひざし']
-  topMovePct: [95.2, 77.6, 70.6, 53.8]
-  topItems: ['オボンのみ', 'たべのこし', 'ラムのみ']
-  topItemPct: [51.8, 13.9, 13.3]
-  topAbility: 'ほのおのからだ'
-  topAbilityPct: 94.5
-  topNature: 'ずぶとい'
-  topNaturePct: 43.0
-  topNature2: 'ひかえめ'
-  topNaturePct2: 39.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-06-bug.png" alt="むし" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.637</strong>　／　使用率 <strong style="color:#dc2626">21位</strong>
+      全国図鑑 <strong>No.637</strong>　／　使用率 <strong style="color:#dc2626">23位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

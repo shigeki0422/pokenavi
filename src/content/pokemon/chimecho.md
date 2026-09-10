@@ -1,25 +1,12 @@
 ---
 title: 'チリーン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのチリーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率135位。'
+description: 'ポケモンチャンピオンズのチリーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率146位。'
 pokemonName: 'チリーン'
 dexNumber: 358
-usageRank: 135
-updatedDate: '2026-09-10'
+usageRank: 146
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['じこさいせい', 'コスモパワー', 'ラスターカノン', 'サイコノイズ']
-  topMovePct: [91.0, 49.4, 47.2, 37.1]
-  topItems: ['チリーンナイト', 'オボンのみ', 'こだわりスカーフ']
-  topItemPct: [91.0, 3.4, 3.4]
-  topAbility: 'ふゆう'
-  topAbilityPct: 100.0
-  topNature: 'おだやか'
-  topNaturePct: 60.7
-  topNature2: 'ひかえめ'
-  topNaturePct2: 33.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.358</strong>　／　使用率 <strong style="color:#dc2626">135位</strong>
+      全国図鑑 <strong>No.358</strong>　／　使用率 <strong style="color:#dc2626">146位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

@@ -1,25 +1,12 @@
 ---
 title: 'ドサイドン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのドサイドン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率119位。'
+description: 'ポケモンチャンピオンズのドサイドン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率180位。'
 pokemonName: 'ドサイドン'
 dexNumber: 464
-usageRank: 119
-updatedDate: '2026-09-10'
+usageRank: 180
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['じしん', 'つのドリル', 'メタルバースト', 'ステルスロック']
-  topMovePct: [97.7, 75.4, 72.3, 51.5]
-  topItems: ['きあいのタスキ', 'シュカのみ', 'いのちのたま']
-  topItemPct: [70.0, 13.8, 7.7]
-  topAbility: 'すてみ'
-  topAbilityPct: 51.5
-  topNature: 'ようき'
-  topNaturePct: 51.5
-  topNature2: 'いじっぱり'
-  topNaturePct2: 26.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-05-rock.png" alt="いわ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.464</strong>　／　使用率 <strong style="color:#dc2626">119位</strong>
+      全国図鑑 <strong>No.464</strong>　／　使用率 <strong style="color:#dc2626">180位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

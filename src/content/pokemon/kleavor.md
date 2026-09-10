@@ -1,25 +1,12 @@
 ---
 title: 'バサギリ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのバサギリ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率88位。'
+description: 'ポケモンチャンピオンズのバサギリ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率83位。'
 pokemonName: 'バサギリ'
 dexNumber: 900
-usageRank: 88
-updatedDate: '2026-09-10'
+usageRank: 83
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'kleavor-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['がんせきアックス', 'インファイト', 'シザークロス', 'つじぎり']
-  topMovePct: [100.0, 79.2, 74.9, 37.6]
-  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'いのちのたま']
-  topItemPct: [66.8, 27.6, 4.9]
-  topAbility: 'きれあじ'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 57.6
-  topNature2: 'ようき'
-  topNaturePct2: 39.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-05-rock.png" alt="いわ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.900</strong>　／　使用率 <strong style="color:#dc2626">88位</strong>
+      全国図鑑 <strong>No.900</strong>　／　使用率 <strong style="color:#dc2626">83位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

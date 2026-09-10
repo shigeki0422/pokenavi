@@ -1,26 +1,13 @@
 ---
 title: 'アローラペルシアン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのアローラペルシアン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率123位。'
+description: 'ポケモンチャンピオンズのアローラペルシアン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率117位。'
 pokemonName: 'アローラペルシアン'
 dexNumber: 53
-usageRank: 123
+usageRank: 117
 imageForm: '01'
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['イカサマ', 'すてゼリフ', 'すりかえ', 'とんぼがえり']
-  topMovePct: [100.0, 98.4, 65.9, 30.2]
-  topItems: ['こだわりスカーフ', 'ゴツゴツメット', 'オボンのみ']
-  topItemPct: [65.9, 20.9, 7.0]
-  topAbility: 'ファーコート'
-  topAbilityPct: 100.0
-  topNature: 'わんぱく'
-  topNaturePct: 34.9
-  topNature2: 'おくびょう'
-  topNaturePct2: 27.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.53</strong>　／　使用率 <strong style="color:#dc2626">123位</strong>
+      全国図鑑 <strong>No.53</strong>　／　使用率 <strong style="color:#dc2626">117位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

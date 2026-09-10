@@ -1,23 +1,12 @@
 ---
 title: 'イキリンコ(グリーン) | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのイキリンコ(グリーン)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率154位。'
+description: 'ポケモンチャンピオンズのイキリンコ(グリーン)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率162位。'
 pokemonName: 'イキリンコ(グリーン)'
 dexNumber: 931
-usageRank: 154
-updatedDate: '2026-09-10'
+usageRank: 162
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['いのちがけ', 'ブレイブバード', 'とんぼがえり', 'すてゼリフ']
-  topMovePct: [100.0, 93.1, 86.2, 74.1]
-  topItems: ['こだわりスカーフ', 'せんせいのツメ', 'きあいのタスキ']
-  topItemPct: [93.1, 5.2, 1.7]
-  topAbility: 'いかく'
-  topAbilityPct: 100.0
-  topNature: 'ようき'
-  topNaturePct: 100.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -29,7 +18,7 @@ faq:
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.931</strong>　／　使用率 <strong style="color:#dc2626">154位</strong>
+      全国図鑑 <strong>No.931</strong>　／　使用率 <strong style="color:#dc2626">162位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

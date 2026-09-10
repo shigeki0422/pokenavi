@@ -1,25 +1,12 @@
 ---
 title: 'バンギラス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのバンギラス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率52位。'
+description: 'ポケモンチャンピオンズのバンギラス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率53位。'
 pokemonName: 'バンギラス'
 dexNumber: 248
-usageRank: 52
-updatedDate: '2026-09-10'
+usageRank: 53
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'tyranitar-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['はたきおとす', 'ステルスロック', 'れいとうパンチ', 'ストーンエッジ']
-  topMovePct: [80.9, 64.1, 42.5, 37.9]
-  topItems: ['バンギラスナイト', 'たべのこし', 'さらさらいわ']
-  topItemPct: [27.7, 19.1, 15.9]
-  topAbility: 'すなおこし'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 36.6
-  topNature2: 'しんちょう'
-  topNaturePct2: 32.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.248</strong>　／　使用率 <strong style="color:#dc2626">52位</strong>
+      全国図鑑 <strong>No.248</strong>　／　使用率 <strong style="color:#dc2626">53位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

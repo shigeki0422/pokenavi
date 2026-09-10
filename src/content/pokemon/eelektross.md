@@ -1,25 +1,12 @@
 ---
 title: 'シビルドン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのシビルドン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率151位。'
+description: 'ポケモンチャンピオンズのシビルドン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率147位。'
 pokemonName: 'シビルドン'
 dexNumber: 604
-usageRank: 151
-updatedDate: '2026-09-10'
+usageRank: 147
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'eelektross-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['とぐろをまく', 'サンダーダイブ', 'ドレインパンチ', 'ほのおのパンチ']
-  topMovePct: [71.7, 71.7, 67.4, 45.7]
-  topItems: ['シビルドナイト', 'ゴツゴツメット', 'たべのこし']
-  topItemPct: [89.1, 8.7, 2.2]
-  topAbility: 'ふゆう'
-  topAbilityPct: 100.0
-  topNature: 'わんぱく'
-  topNaturePct: 43.5
-  topNature2: 'いじっぱり'
-  topNaturePct2: 28.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-12-electric.png" alt="でんき" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.604</strong>　／　使用率 <strong style="color:#dc2626">151位</strong>
+      全国図鑑 <strong>No.604</strong>　／　使用率 <strong style="color:#dc2626">147位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

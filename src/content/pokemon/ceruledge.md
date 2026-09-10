@@ -1,25 +1,12 @@
 ---
 title: 'ソウブレイズ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのソウブレイズ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率48位。'
+description: 'ポケモンチャンピオンズのソウブレイズ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率45位。'
 pokemonName: 'ソウブレイズ'
 dexNumber: 937
-usageRank: 48
-updatedDate: '2026-09-10'
+usageRank: 45
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'ceruledge-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['かげうち', 'ポルターガイスト', 'むねんのつるぎ', 'つるぎのまい']
-  topMovePct: [94.9, 92.2, 91.1, 65.1]
-  topItems: ['きあいのタスキ', 'たべのこし', 'いのちのたま']
-  topItemPct: [66.0, 9.2, 8.6]
-  topAbility: 'くだけるよろい'
-  topAbilityPct: 61.8
-  topNature: 'いじっぱり'
-  topNaturePct: 76.5
-  topNature2: 'ようき'
-  topNaturePct2: 18.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.937</strong>　／　使用率 <strong style="color:#dc2626">48位</strong>
+      全国図鑑 <strong>No.937</strong>　／　使用率 <strong style="color:#dc2626">45位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

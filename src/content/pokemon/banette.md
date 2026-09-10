@@ -1,25 +1,12 @@
 ---
 title: 'ジュペッタ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのジュペッタ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率71位。'
+description: 'ポケモンチャンピオンズのジュペッタ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率62位。'
 pokemonName: 'ジュペッタ'
 dexNumber: 354
-usageRank: 71
-updatedDate: '2026-09-10'
+usageRank: 62
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'banette-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['ポルターガイスト', 'みちづれ', 'かげうち', 'アンコール']
-  topMovePct: [98.9, 98.0, 77.4, 58.8]
-  topItems: ['ジュペッタナイト']
-  topItemPct: [100.0]
-  topAbility: 'おみとおし'
-  topAbilityPct: 89.6
-  topNature: 'いじっぱり'
-  topNaturePct: 81.3
-  topNature2: 'ゆうかん'
-  topNaturePct2: 15.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.354</strong>　／　使用率 <strong style="color:#dc2626">71位</strong>
+      全国図鑑 <strong>No.354</strong>　／　使用率 <strong style="color:#dc2626">62位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

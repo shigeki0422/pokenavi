@@ -1,25 +1,12 @@
 ---
 title: 'マニューラ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのマニューラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率129位。'
+description: 'ポケモンチャンピオンズのマニューラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率131位。'
 pokemonName: 'マニューラ'
 dexNumber: 461
-usageRank: 129
-updatedDate: '2026-09-10'
+usageRank: 131
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['こおりのつぶて', 'トリプルアクセル', 'はたきおとす', 'カウンター']
-  topMovePct: [93.7, 63.2, 56.8, 51.6]
-  topItems: ['きあいのタスキ', 'いのちのたま']
-  topItemPct: [88.4, 11.6]
-  topAbility: 'わるいてぐせ'
-  topAbilityPct: 72.6
-  topNature: 'ようき'
-  topNaturePct: 98.9
-  topNature2: 'いじっぱり'
-  topNaturePct2: 1.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-14-ice.png" alt="こおり" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.461</strong>　／　使用率 <strong style="color:#dc2626">129位</strong>
+      全国図鑑 <strong>No.461</strong>　／　使用率 <strong style="color:#dc2626">131位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

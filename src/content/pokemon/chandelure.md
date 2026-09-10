@@ -1,25 +1,12 @@
 ---
 title: 'シャンデラ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのシャンデラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率97位。'
+description: 'ポケモンチャンピオンズのシャンデラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率103位。'
 pokemonName: 'シャンデラ'
 dexNumber: 609
-usageRank: 97
-updatedDate: '2026-09-10'
+usageRank: 103
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['シャドーボール', 'エナジーボール', 'オーバーヒート', 'かえんほうしゃ']
-  topMovePct: [97.5, 76.9, 66.4, 66.4]
-  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'シャンデラナイト']
-  topItemPct: [49.1, 32.9, 6.5]
-  topAbility: 'もらいび'
-  topAbilityPct: 83.8
-  topNature: 'ひかえめ'
-  topNaturePct: 62.8
-  topNature2: 'おくびょう'
-  topNaturePct2: 33.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.609</strong>　／　使用率 <strong style="color:#dc2626">97位</strong>
+      全国図鑑 <strong>No.609</strong>　／　使用率 <strong style="color:#dc2626">103位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのダストダス基礎データ
 pokemonName: 'ダストダス'
 dexNumber: 569
 usageRank: 999
-updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
-faq:
-  season: 'M-4'
-  topMoves: ['どくびし', 'だいばくはつ', 'いたみわけ', 'なげつける']
-  topMovePct: [81.8, 78.7, 71.7, 71.1]
-  topItems: ['でんきだま', 'オボンのみ', 'きあいのタスキ']
-  topItemPct: [70.9, 6.6, 6.1]
-  topAbility: 'くだけるよろい'
-  topAbilityPct: 84.0
-  topNature: 'わんぱく'
-  topNaturePct: 73.3
-  topNature2: 'いじっぱり'
-  topNaturePct2: 12.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

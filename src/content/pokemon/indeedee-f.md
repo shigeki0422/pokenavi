@@ -1,26 +1,13 @@
 ---
 title: 'イエッサン(メス) | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのイエッサン(メス)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率115位。'
+description: 'ポケモンチャンピオンズのイエッサン(メス)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率107位。'
 pokemonName: 'イエッサン(メス)'
 dexNumber: 876
-usageRank: 115
+usageRank: 107
 imageForm: '01'
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['マジカルフレイム', 'トリックルーム', 'いやしのねがい', 'サイコキネシス']
-  topMovePct: [78.2, 60.9, 58.6, 53.4]
-  topItems: ['グランドコート', 'きあいのタスキ', 'サイコシード']
-  topItemPct: [31.0, 28.7, 9.8]
-  topAbility: 'サイコメイカー'
-  topAbilityPct: 98.3
-  topNature: 'ずぶとい'
-  topNaturePct: 40.2
-  topNature2: 'ひかえめ'
-  topNaturePct2: 28.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -32,7 +19,7 @@ faq:
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.876</strong>　／　使用率 <strong style="color:#dc2626">115位</strong>
+      全国図鑑 <strong>No.876</strong>　／　使用率 <strong style="color:#dc2626">107位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

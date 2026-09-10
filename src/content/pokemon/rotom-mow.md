@@ -1,26 +1,13 @@
 ---
 title: 'カットロトム | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのカットロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率146位。'
+description: 'ポケモンチャンピオンズのカットロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率183位。'
 pokemonName: 'カットロトム'
 dexNumber: 479
-usageRank: 146
+usageRank: 183
 imageForm: '05'
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['リーフストーム', 'ボルトチェンジ', 'おにび', 'いたみわけ']
-  topMovePct: [100.0, 79.2, 66.0, 45.3]
-  topItems: ['オボンのみ', 'こだわりスカーフ', 'きせきのタネ']
-  topItemPct: [45.3, 28.3, 17.0]
-  topAbility: 'ふゆう'
-  topAbilityPct: 100.0
-  topNature: 'ひかえめ'
-  topNaturePct: 86.8
-  topNature2: 'おくびょう'
-  topNaturePct2: 7.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -32,7 +19,7 @@ faq:
       <img src="/images/types/type-11-grass.png" alt="くさ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.479</strong>　／　使用率 <strong style="color:#dc2626">146位</strong>
+      全国図鑑 <strong>No.479</strong>　／　使用率 <strong style="color:#dc2626">183位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

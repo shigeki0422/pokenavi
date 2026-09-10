@@ -1,26 +1,13 @@
 ---
 title: 'ヒートロトム | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのヒートロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率38位。'
+description: 'ポケモンチャンピオンズのヒートロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率34位。'
 pokemonName: 'ヒートロトム'
 dexNumber: 479
-usageRank: 38
+usageRank: 34
 imageForm: '01'
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'rotom-heat-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['オーバーヒート', 'ボルトチェンジ', 'おにび', '10まんボルト']
-  topMovePct: [97.3, 92.6, 74.1, 56.0]
-  topItems: ['こだわりスカーフ', 'オボンのみ', 'たべのこし']
-  topItemPct: [34.6, 26.7, 22.6]
-  topAbility: 'ふゆう'
-  topAbilityPct: 100.0
-  topNature: 'ひかえめ'
-  topNaturePct: 43.1
-  topNature2: 'ずぶとい'
-  topNaturePct2: 27.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -32,7 +19,7 @@ faq:
       <img src="/images/types/type-12-electric.png" alt="でんき" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.479</strong>　／　使用率 <strong style="color:#dc2626">38位</strong>
+      全国図鑑 <strong>No.479</strong>　／　使用率 <strong style="color:#dc2626">34位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

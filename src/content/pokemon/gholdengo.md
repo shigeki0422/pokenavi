@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのサーフゴー基礎データ
 pokemonName: 'サーフゴー'
 dexNumber: 1000
 usageRank: 9
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'gholdengo-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['シャドーボール', 'ゴールドラッシュ', 'わるだくみ', 'じこさいせい']
-  topMovePct: [99.9, 94.3, 83.3, 70.4]
-  topItems: ['ふうせん', 'たべのこし', 'こだわりスカーフ']
-  topItemPct: [50.0, 18.1, 13.4]
-  topAbility: 'おうごんのからだ'
-  topAbilityPct: 100.0
-  topNature: 'ひかえめ'
-  topNaturePct: 62.6
-  topNature2: 'ずぶとい'
-  topNaturePct2: 16.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

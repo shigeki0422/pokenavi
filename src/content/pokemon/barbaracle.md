@@ -1,25 +1,12 @@
 ---
 title: 'ガメノデス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのガメノデス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率152位。'
+description: 'ポケモンチャンピオンズのガメノデス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率173位。'
 pokemonName: 'ガメノデス'
 dexNumber: 689
-usageRank: 152
-updatedDate: '2026-09-10'
+usageRank: 173
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'barbaracle-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['インファイト', 'どくづき', 'からをやぶる', 'ロックブラスト']
-  topMovePct: [59.2, 59.2, 59.2, 42.9]
-  topItems: ['ガメノデスナイト']
-  topItemPct: [59.2]
-  topAbility: 'かたいツメ'
-  topAbilityPct: 79.6
-  topNature: 'いじっぱり'
-  topNaturePct: 65.3
-  topNature2: 'ようき'
-  topNaturePct2: 34.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.689</strong>　／　使用率 <strong style="color:#dc2626">152位</strong>
+      全国図鑑 <strong>No.689</strong>　／　使用率 <strong style="color:#dc2626">173位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

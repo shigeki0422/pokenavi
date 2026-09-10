@@ -1,26 +1,13 @@
 ---
 title: 'ウォッシュロトム | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのウォッシュロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率26位。'
+description: 'ポケモンチャンピオンズのウォッシュロトム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率22位。'
 pokemonName: 'ウォッシュロトム'
 dexNumber: 479
-usageRank: 26
+usageRank: 22
 imageForm: '02'
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ハイドロポンプ', 'ボルトチェンジ', 'おにび', '10まんボルト']
-  topMovePct: [97.1, 88.7, 83.3, 50.8]
-  topItems: ['オボンのみ', 'たべのこし', 'こだわりスカーフ']
-  topItemPct: [33.5, 32.9, 15.2]
-  topAbility: 'ふゆう'
-  topAbilityPct: 100.0
-  topNature: 'ずぶとい'
-  topNaturePct: 51.9
-  topNature2: 'ひかえめ'
-  topNaturePct2: 21.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -32,7 +19,7 @@ faq:
       <img src="/images/types/type-12-electric.png" alt="でんき" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.479</strong>　／　使用率 <strong style="color:#dc2626">26位</strong>
+      全国図鑑 <strong>No.479</strong>　／　使用率 <strong style="color:#dc2626">22位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

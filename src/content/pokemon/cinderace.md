@@ -1,25 +1,12 @@
 ---
 title: 'エースバーン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエースバーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率19位。'
+description: 'ポケモンチャンピオンズのエースバーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率20位。'
 pokemonName: 'エースバーン'
 dexNumber: 815
-usageRank: 19
-updatedDate: '2026-09-10'
+usageRank: 20
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['かえんボール', 'とびひざげり', 'ダストシュート', 'とんぼがえり']
-  topMovePct: [98.7, 89.0, 75.8, 56.2]
-  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [33.0, 31.2, 24.4]
-  topAbility: 'リベロ'
-  topAbilityPct: 98.6
-  topNature: 'いじっぱり'
-  topNaturePct: 51.4
-  topNature2: 'ようき'
-  topNaturePct2: 46.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.815</strong>　／　使用率 <strong style="color:#dc2626">19位</strong>
+      全国図鑑 <strong>No.815</strong>　／　使用率 <strong style="color:#dc2626">20位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

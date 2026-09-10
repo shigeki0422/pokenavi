@@ -1,25 +1,12 @@
 ---
 title: 'メタグロス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのメタグロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率30位。'
+description: 'ポケモンチャンピオンズのメタグロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率31位。'
 pokemonName: 'メタグロス'
 dexNumber: 376
-usageRank: 30
-updatedDate: '2026-09-10'
+usageRank: 31
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['バレットパンチ', 'サイコファング', 'れいとうパンチ', 'じしん']
-  topMovePct: [90.1, 78.2, 57.3, 43.5]
-  topItems: ['メタグロスナイト', 'いのちのたま', 'オボンのみ']
-  topItemPct: [98.2, 0.6, 0.5]
-  topAbility: 'クリアボディ'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 58.4
-  topNature2: 'ようき'
-  topNaturePct2: 26.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.376</strong>　／　使用率 <strong style="color:#dc2626">30位</strong>
+      全国図鑑 <strong>No.376</strong>　／　使用率 <strong style="color:#dc2626">31位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

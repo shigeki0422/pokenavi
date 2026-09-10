@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのゲンガー基礎データ。
 pokemonName: 'ゲンガー'
 dexNumber: 94
 usageRank: 32
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['シャドーボール', 'ヘドロウェーブ', 'まもる', 'みちづれ']
-  topMovePct: [85.4, 69.7, 54.7, 53.8]
-  topItems: ['ゲンガナイト', 'きあいのタスキ', 'こだわりスカーフ']
-  topItemPct: [79.4, 17.9, 1.0]
-  topAbility: 'のろわれボディ'
-  topAbilityPct: 100.0
-  topNature: 'おくびょう'
-  topNaturePct: 83.8
-  topNature2: 'ひかえめ'
-  topNaturePct2: 14.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

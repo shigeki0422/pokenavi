@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのタイレーツ基礎データ
 pokemonName: 'タイレーツ'
 dexNumber: 870
 usageRank: 999
-updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
-faq:
-  season: 'M-5'
-  topMoves: ['インファイト', 'はいすいのじん', 'はたきおとす', 'アイアンヘッド']
-  topMovePct: [84.2, 83.9, 48.2, 34.0]
-  topItems: ['タイレーツナイト', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [87.2, 4.9, 1.3]
-  topAbility: 'まけんき'
-  topAbilityPct: 86.3
-  topNature: 'いじっぱり'
-  topNaturePct: 61.8
-  topNature2: 'ようき'
-  topNaturePct2: 25.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

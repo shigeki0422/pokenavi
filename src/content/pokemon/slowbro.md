@@ -1,25 +1,12 @@
 ---
 title: 'ヤドラン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのヤドラン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率113位。'
+description: 'ポケモンチャンピオンズのヤドラン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率96位。'
 pokemonName: 'ヤドラン'
 dexNumber: 80
-usageRank: 113
-updatedDate: '2026-09-10'
+usageRank: 96
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'slowbro-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['なまける', 'ねっとう', 'れいとうビーム', 'てっぺき']
-  topMovePct: [89.5, 80.8, 61.6, 49.4]
-  topItems: ['ヤドランナイト', 'ゴツゴツメット', 'たべのこし']
-  topItemPct: [66.9, 19.8, 4.7]
-  topAbility: 'さいせいりょく'
-  topAbilityPct: 95.3
-  topNature: 'ずぶとい'
-  topNaturePct: 68.0
-  topNature2: 'おだやか'
-  topNaturePct2: 19.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.80</strong>　／　使用率 <strong style="color:#dc2626">113位</strong>
+      全国図鑑 <strong>No.80</strong>　／　使用率 <strong style="color:#dc2626">96位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

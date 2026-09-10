@@ -1,25 +1,12 @@
 ---
 title: 'ジュカイン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのジュカイン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率141位。'
+description: 'ポケモンチャンピオンズのジュカイン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率122位。'
 pokemonName: 'ジュカイン'
 dexNumber: 254
-usageRank: 141
-updatedDate: '2026-09-10'
+usageRank: 122
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'sceptile-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['だいちのちから', 'りゅうのはどう', 'リーフストーム', 'しっぽきり']
-  topMovePct: [93.1, 83.3, 79.2, 45.8]
-  topItems: ['ジュカインナイト', 'きあいのタスキ', 'レッドカード']
-  topItemPct: [86.1, 6.9, 5.6]
-  topAbility: 'しんりょく'
-  topAbilityPct: 73.6
-  topNature: 'おくびょう'
-  topNaturePct: 65.3
-  topNature2: 'ひかえめ'
-  topNaturePct2: 19.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-11-grass.png" alt="くさ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.254</strong>　／　使用率 <strong style="color:#dc2626">141位</strong>
+      全国図鑑 <strong>No.254</strong>　／　使用率 <strong style="color:#dc2626">122位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

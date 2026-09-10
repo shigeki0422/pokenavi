@@ -1,25 +1,12 @@
 ---
 title: 'ケケンカニ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのケケンカニ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率176位。'
+description: 'ポケモンチャンピオンズのケケンカニ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率192位。'
 pokemonName: 'ケケンカニ'
 dexNumber: 740
-usageRank: 176
-updatedDate: '2026-09-10'
+usageRank: 192
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['マッハパンチ', 'かみなりパンチ', 'アイスハンマー', 'ドレインパンチ']
-  topMovePct: [92.6, 88.9, 85.2, 81.5]
-  topItems: ['ケケンカニナイト', 'きあいのタスキ']
-  topItemPct: [92.6, 7.4]
-  topAbility: 'かいりきバサミ'
-  topAbilityPct: 70.4
-  topNature: 'いじっぱり'
-  topNaturePct: 77.8
-  topNature2: 'ゆうかん'
-  topNaturePct2: 22.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-14-ice.png" alt="こおり" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.740</strong>　／　使用率 <strong style="color:#dc2626">176位</strong>
+      全国図鑑 <strong>No.740</strong>　／　使用率 <strong style="color:#dc2626">192位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

@@ -1,25 +1,12 @@
 ---
 title: 'ニョロトノ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのニョロトノ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率76位。'
+description: 'ポケモンチャンピオンズのニョロトノ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率80位。'
 pokemonName: 'ニョロトノ'
 dexNumber: 186
-usageRank: 76
-updatedDate: '2026-09-10'
+usageRank: 80
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['アンコール', 'ほろびのうた', 'れいとうビーム', 'ウェザーボール']
-  topMovePct: [95.3, 86.2, 78.7, 73.6]
-  topItems: ['だっしゅつボタン', 'しめったいわ', 'しんぴのしずく']
-  topItemPct: [93.1, 5.1, 1.2]
-  topAbility: 'あめふらし'
-  topAbilityPct: 99.8
-  topNature: 'ひかえめ'
-  topNaturePct: 59.1
-  topNature2: 'ずぶとい'
-  topNaturePct2: 28.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.186</strong>　／　使用率 <strong style="color:#dc2626">76位</strong>
+      全国図鑑 <strong>No.186</strong>　／　使用率 <strong style="color:#dc2626">80位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

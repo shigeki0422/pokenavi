@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのボーマンダ基礎データ
 pokemonName: 'ボーマンダ'
 dexNumber: 373
 usageRank: 2
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['りゅうのまい', 'すてみタックル', 'じしん', 'はねやすめ']
-  topMovePct: [75.4, 73.4, 67.5, 64.5]
-  topItems: ['ボーマンダナイト', 'こだわりスカーフ', 'いのちのたま']
-  topItemPct: [98.0, 1.0, 0.4]
-  topAbility: 'いかく'
-  topAbilityPct: 99.4
-  topNature: 'いじっぱり'
-  topNaturePct: 53.2
-  topNature2: 'ようき'
-  topNaturePct2: 17.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

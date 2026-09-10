@@ -1,25 +1,12 @@
 ---
 title: 'ブラッキー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのブラッキー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率46位。'
+description: 'ポケモンチャンピオンズのブラッキー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率41位。'
 pokemonName: 'ブラッキー'
 dexNumber: 197
-usageRank: 46
-updatedDate: '2026-09-10'
+usageRank: 41
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'umbreon-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['イカサマ', 'まもる', 'ねがいごと', 'どくどく']
-  topMovePct: [98.5, 86.6, 85.0, 48.7]
-  topItems: ['たべのこし', 'ゴツゴツメット', 'オボンのみ']
-  topItemPct: [86.3, 7.1, 5.6]
-  topAbility: 'せいしんりょく'
-  topAbilityPct: 76.4
-  topNature: 'ずぶとい'
-  topNaturePct: 51.0
-  topNature2: 'わんぱく'
-  topNaturePct2: 29.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.197</strong>　／　使用率 <strong style="color:#dc2626">46位</strong>
+      全国図鑑 <strong>No.197</strong>　／　使用率 <strong style="color:#dc2626">41位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

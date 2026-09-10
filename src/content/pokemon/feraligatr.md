@@ -1,25 +1,12 @@
 ---
 title: 'オーダイル | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのオーダイル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率155位。'
+description: 'ポケモンチャンピオンズのオーダイル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率163位。'
 pokemonName: 'オーダイル'
 dexNumber: 160
-usageRank: 155
-updatedDate: '2026-09-10'
+usageRank: 163
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['れいとうパンチ', 'アクアブレイク', 'かみくだく', 'りゅうのまい']
-  topMovePct: [92.5, 75.0, 67.5, 67.5]
-  topItems: ['いのちのたま', 'オーダイルナイト']
-  topItemPct: [67.5, 32.5]
-  topAbility: 'ちからずく'
-  topAbilityPct: 100.0
-  topNature: 'ようき'
-  topNaturePct: 67.5
-  topNature2: 'しんちょう'
-  topNaturePct2: 22.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.160</strong>　／　使用率 <strong style="color:#dc2626">155位</strong>
+      全国図鑑 <strong>No.160</strong>　／　使用率 <strong style="color:#dc2626">163位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

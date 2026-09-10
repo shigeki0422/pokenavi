@@ -1,25 +1,12 @@
 ---
 title: 'ウェーニバル | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのウェーニバル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率165位。'
+description: 'ポケモンチャンピオンズのウェーニバル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率148位。'
 pokemonName: 'ウェーニバル'
 dexNumber: 914
-usageRank: 165
-updatedDate: '2026-09-10'
+usageRank: 148
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['アクアステップ', 'インファイト', 'アンコール', 'アイススピナー']
-  topMovePct: [100.0, 85.7, 42.9, 33.3]
-  topItems: ['ラムのみ', 'たべのこし', 'きあいのタスキ']
-  topItemPct: [42.9, 26.2, 26.2]
-  topAbility: 'じしんかじょう'
-  topAbilityPct: 100.0
-  topNature: 'ようき'
-  topNaturePct: 59.5
-  topNature2: 'わんぱく'
-  topNaturePct2: 38.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.914</strong>　／　使用率 <strong style="color:#dc2626">165位</strong>
+      全国図鑑 <strong>No.914</strong>　／　使用率 <strong style="color:#dc2626">148位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

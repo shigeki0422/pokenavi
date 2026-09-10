@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのアリアドス基礎データ
 pokemonName: 'アリアドス'
 dexNumber: 168
 usageRank: 999
-updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
-faq:
-  season: 'M-5'
-  topMoves: ['ねばねばネット', 'どくのいと', 'であいがしら', 'ふいうち']
-  topMovePct: [84.5, 79.9, 75.2, 41.1]
-  topItems: ['きあいのタスキ', 'オボンのみ', 'ピントレンズ']
-  topItemPct: [76.7, 4.9, 4.2]
-  topAbility: 'ふみん'
-  topAbilityPct: 72.0
-  topNature: 'いじっぱり'
-  topNaturePct: 50.7
-  topNature2: 'ようき'
-  topNaturePct2: 33.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

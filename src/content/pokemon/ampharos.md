@@ -1,25 +1,12 @@
 ---
 title: 'デンリュウ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのデンリュウ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率149位。'
+description: 'ポケモンチャンピオンズのデンリュウ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率168位。'
 pokemonName: 'デンリュウ'
 dexNumber: 181
-usageRank: 149
-updatedDate: '2026-09-10'
+usageRank: 168
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['りゅうのはどう', 'パワージェム', '10まんボルト', 'パラボラチャージ']
-  topMovePct: [100.0, 87.7, 63.2, 61.4]
-  topItems: ['デンリュウナイト', 'いのちのたま', 'ふうせん']
-  topItemPct: [96.5, 1.8, 1.8]
-  topAbility: 'せいでんき'
-  topAbilityPct: 100.0
-  topNature: 'ひかえめ'
-  topNaturePct: 61.4
-  topNature2: 'れいせい'
-  topNaturePct2: 38.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-12-electric.png" alt="でんき" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.181</strong>　／　使用率 <strong style="color:#dc2626">149位</strong>
+      全国図鑑 <strong>No.181</strong>　／　使用率 <strong style="color:#dc2626">168位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

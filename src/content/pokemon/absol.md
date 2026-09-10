@@ -1,25 +1,12 @@
 ---
 title: 'アブソル | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのアブソル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率31位。'
+description: 'ポケモンチャンピオンズのアブソル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率37位。'
 pokemonName: 'アブソル'
 dexNumber: 359
-usageRank: 31
-updatedDate: '2026-09-10'
+usageRank: 37
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['シャドークロー', 'ふいうち', 'インファイト', 'つるぎのまい']
-  topMovePct: [91.0, 69.7, 67.5, 63.0]
-  topItems: ['アブソルナイトZ', 'アブソルナイト']
-  topItemPct: [98.5, 1.0]
-  topAbility: 'せいぎのこころ'
-  topAbilityPct: 65.5
-  topNature: 'ようき'
-  topNaturePct: 61.3
-  topNature2: 'いじっぱり'
-  topNaturePct2: 35.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.359</strong>　／　使用率 <strong style="color:#dc2626">31位</strong>
+      全国図鑑 <strong>No.359</strong>　／　使用率 <strong style="color:#dc2626">37位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

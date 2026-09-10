@@ -1,25 +1,12 @@
 ---
 title: 'エンブオー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエンブオー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
+description: 'ポケモンチャンピオンズのエンブオー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率150位。'
 pokemonName: 'エンブオー'
 dexNumber: 500
-usageRank: 999
-updatedDate: '2026-09-10'
+usageRank: 150
 pubDate: '2026-05-24'
 draft: false
 
-faq:
-  season: 'M-5'
-  topMoves: ['フレアドライブ', 'ふいうち', 'インファイト', 'じしん']
-  topMovePct: [84.8, 62.4, 43.7, 34.8]
-  topItems: ['エンブオナイト', 'いのちのたま', 'こだわりスカーフ']
-  topItemPct: [79.9, 4.2, 3.7]
-  topAbility: 'すてみ'
-  topAbilityPct: 69.3
-  topNature: 'いじっぱり'
-  topNaturePct: 66.3
-  topNature2: 'ようき'
-  topNaturePct2: 12.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.500</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
+      全国図鑑 <strong>No.500</strong>　／　使用率 <strong style="color:#dc2626">150位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-05-24</div>
   </div>

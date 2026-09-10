@@ -1,25 +1,12 @@
 ---
 title: 'カイリキー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのカイリキー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
+description: 'ポケモンチャンピオンズのカイリキー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率196位。'
 pokemonName: 'カイリキー'
 dexNumber: 68
-usageRank: 999
-updatedDate: '2026-09-10'
+usageRank: 196
 pubDate: '2026-05-24'
 draft: false
 
-faq:
-  season: 'M-5'
-  topMoves: ['ばくれつパンチ', 'バレットパンチ', 'ストーンエッジ', 'れいとうパンチ']
-  topMovePct: [77.1, 71.8, 65.7, 54.4]
-  topItems: ['せんせいのツメ', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [25.5, 12.6, 11.3]
-  topAbility: 'ノーガード'
-  topAbilityPct: 82.9
-  topNature: 'いじっぱり'
-  topNaturePct: 74.3
-  topNature2: 'ようき'
-  topNaturePct2: 11.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.68</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
+      全国図鑑 <strong>No.68</strong>　／　使用率 <strong style="color:#dc2626">196位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-05-24</div>
   </div>

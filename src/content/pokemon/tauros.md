@@ -1,25 +1,12 @@
 ---
 title: 'ケンタロス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのケンタロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率102位。'
+description: 'ポケモンチャンピオンズのケンタロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率106位。'
 pokemonName: 'ケンタロス'
 dexNumber: 128
-usageRank: 102
-updatedDate: '2026-09-10'
+usageRank: 106
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['インファイト', 'レイジングブル', 'フレアドライブ', 'ストーンエッジ']
-  topMovePct: [95.2, 79.7, 62.6, 44.5]
-  topItems: ['こだわりスカーフ', 'たべのこし', 'たつじんのおび']
-  topItemPct: [29.5, 18.5, 15.4]
-  topAbility: 'いかく'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 69.6
-  topNature2: 'わんぱく'
-  topNaturePct2: 21.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.128</strong>　／　使用率 <strong style="color:#dc2626">102位</strong>
+      全国図鑑 <strong>No.128</strong>　／　使用率 <strong style="color:#dc2626">106位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

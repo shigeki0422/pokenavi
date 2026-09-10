@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのマホイップ基礎データ
 pokemonName: 'マホイップ'
 dexNumber: 869
 usageRank: 999
-updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
-faq:
-  season: 'M-5'
-  topMoves: ['めいそう', 'とける', 'じこさいせい', 'みわくのボイス']
-  topMovePct: [80.5, 70.2, 64.7, 47.5]
-  topItems: ['たべのこし', 'オボンのみ', 'おおきなねっこ']
-  topItemPct: [57.7, 14.0, 5.8]
-  topAbility: 'アロマベール'
-  topAbilityPct: 73.1
-  topNature: 'ずぶとい'
-  topNaturePct: 50.7
-  topNature2: 'おだやか'
-  topNaturePct2: 26.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

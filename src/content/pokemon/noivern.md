@@ -1,25 +1,12 @@
 ---
 title: 'オンバーン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのオンバーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率138位。'
+description: 'ポケモンチャンピオンズのオンバーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率143位。'
 pokemonName: 'オンバーン'
 dexNumber: 715
-usageRank: 138
-updatedDate: '2026-09-10'
+usageRank: 143
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['りゅうせいぐん', 'かえんほうしゃ', 'エアスラッシュ', 'すりかえ']
-  topMovePct: [76.2, 75.0, 73.8, 40.5]
-  topItems: ['こだわりスカーフ', 'いのちのたま', 'きあいのタスキ']
-  topItemPct: [44.0, 28.6, 23.8]
-  topAbility: 'すりぬけ'
-  topAbilityPct: 53.6
-  topNature: 'ひかえめ'
-  topNaturePct: 58.3
-  topNature2: 'おくびょう'
-  topNaturePct2: 41.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.715</strong>　／　使用率 <strong style="color:#dc2626">138位</strong>
+      全国図鑑 <strong>No.715</strong>　／　使用率 <strong style="color:#dc2626">143位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

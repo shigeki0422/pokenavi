@@ -1,25 +1,12 @@
 ---
 title: 'パーモット | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのパーモット基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率28位。'
+description: 'ポケモンチャンピオンズのパーモット基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率26位。'
 pokemonName: 'パーモット'
 dexNumber: 923
-usageRank: 28
-updatedDate: '2026-09-10'
+usageRank: 26
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['でんこうそうげき', 'さいきのいのり', 'インファイト', 'れいとうパンチ']
-  topMovePct: [85.1, 79.7, 77.5, 59.2]
-  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'いのちのたま']
-  topItemPct: [88.6, 3.6, 3.1]
-  topAbility: 'てつのこぶし'
-  topAbilityPct: 85.3
-  topNature: 'ようき'
-  topNaturePct: 75.6
-  topNature2: 'いじっぱり'
-  topNaturePct2: 23.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.923</strong>　／　使用率 <strong style="color:#dc2626">28位</strong>
+      全国図鑑 <strong>No.923</strong>　／　使用率 <strong style="color:#dc2626">26位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

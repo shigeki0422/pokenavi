@@ -1,23 +1,12 @@
 ---
 title: 'ゴロンダ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのゴロンダ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率166位。'
+description: 'ポケモンチャンピオンズのゴロンダ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率189位。'
 pokemonName: 'ゴロンダ'
 dexNumber: 675
-usageRank: 166
-updatedDate: '2026-09-10'
+usageRank: 189
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ダストシュート', 'インファイト', 'バレットパンチ', 'れいとうパンチ']
-  topMovePct: [88.1, 81.0, 78.6, 50.0]
-  topItems: ['きあいのタスキ', 'たつじんのおび', 'いのちのたま']
-  topItemPct: [85.7, 11.9, 2.4]
-  topAbility: 'きもったま'
-  topAbilityPct: 81.0
-  topNature: 'いじっぱり'
-  topNaturePct: 100.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -29,7 +18,7 @@ faq:
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.675</strong>　／　使用率 <strong style="color:#dc2626">166位</strong>
+      全国図鑑 <strong>No.675</strong>　／　使用率 <strong style="color:#dc2626">189位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

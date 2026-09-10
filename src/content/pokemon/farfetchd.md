@@ -1,25 +1,12 @@
 ---
 title: 'カモネギ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのカモネギ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率186位。'
+description: 'ポケモンチャンピオンズのカモネギ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
 pokemonName: 'カモネギ'
 dexNumber: 83
-usageRank: 186
-updatedDate: '2026-09-10'
+usageRank: 999
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['であいがしら', 'つじぎり', 'ブレイブバード', 'じたばた']
-  topMovePct: [76.5, 50.0, 47.1, 44.1]
-  topItems: ['ながねぎ', 'きあいのタスキ', 'ゴツゴツメット']
-  topItemPct: [55.9, 32.4, 11.8]
-  topAbility: 'まけんき'
-  topAbilityPct: 94.1
-  topNature: 'いじっぱり'
-  topNaturePct: 88.2
-  topNature2: 'せっかち'
-  topNaturePct2: 11.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.83</strong>　／　使用率 <strong style="color:#dc2626">186位</strong>
+      全国図鑑 <strong>No.83</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

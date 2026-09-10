@@ -1,26 +1,13 @@
 ---
 title: 'ビビヨン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのビビヨン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率118位。'
+description: 'ポケモンチャンピオンズのビビヨン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率110位。'
 pokemonName: 'ビビヨン'
 dexNumber: 666
-usageRank: 118
+usageRank: 110
 imageForm: '18'
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ちょうのまい', 'ねむりごな', 'ぼうふう', 'みがわり']
-  topMovePct: [100.0, 100.0, 89.7, 86.0]
-  topItems: ['たべのこし', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [80.9, 18.4, 0.7]
-  topAbility: 'ふくがん'
-  topAbilityPct: 100.0
-  topNature: 'おくびょう'
-  topNaturePct: 96.3
-  topNature2: 'せっかち'
-  topNaturePct2: 3.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -32,7 +19,7 @@ faq:
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.666</strong>　／　使用率 <strong style="color:#dc2626">118位</strong>
+      全国図鑑 <strong>No.666</strong>　／　使用率 <strong style="color:#dc2626">110位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

@@ -1,25 +1,12 @@
 ---
 title: 'ゴリランダー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのゴリランダー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率11位。'
+description: 'ポケモンチャンピオンズのゴリランダー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率12位。'
 pokemonName: 'ゴリランダー'
 dexNumber: 812
-usageRank: 11
-updatedDate: '2026-09-10'
+usageRank: 12
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['グラススライダー', 'はたきおとす', 'とんぼがえり', '10まんばりき']
-  topMovePct: [94.5, 66.5, 61.5, 50.3]
-  topItems: ['いのちのたま', 'きせきのタネ', 'グラスシード']
-  topItemPct: [24.8, 19.2, 17.5]
-  topAbility: 'グラスメイカー'
-  topAbilityPct: 99.7
-  topNature: 'いじっぱり'
-  topNaturePct: 86.8
-  topNature2: 'しんちょう'
-  topNaturePct2: 4.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-11-grass.png" alt="くさ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.812</strong>　／　使用率 <strong style="color:#dc2626">11位</strong>
+      全国図鑑 <strong>No.812</strong>　／　使用率 <strong style="color:#dc2626">12位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

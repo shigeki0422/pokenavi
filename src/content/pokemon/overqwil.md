@@ -1,25 +1,12 @@
 ---
 title: 'ハリーマン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのハリーマン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率107位。'
+description: 'ポケモンチャンピオンズのハリーマン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率109位。'
 pokemonName: 'ハリーマン'
 dexNumber: 904
-usageRank: 107
-updatedDate: '2026-09-10'
+usageRank: 109
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'overqwil-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['ちいさくなる', 'じごくづき', 'みがわり', 'つるぎのまい']
-  topMovePct: [65.8, 57.6, 56.0, 50.5]
-  topItems: ['たべのこし', 'オボンのみ', 'シュカのみ']
-  topItemPct: [77.7, 16.3, 3.3]
-  topAbility: 'いかく'
-  topAbilityPct: 100.0
-  topNature: 'ようき'
-  topNaturePct: 34.2
-  topNature2: 'しんちょう'
-  topNaturePct2: 30.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.904</strong>　／　使用率 <strong style="color:#dc2626">107位</strong>
+      全国図鑑 <strong>No.904</strong>　／　使用率 <strong style="color:#dc2626">109位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

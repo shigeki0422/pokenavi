@@ -1,25 +1,12 @@
 ---
 title: 'イルカマン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのイルカマン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率110位。'
+description: 'ポケモンチャンピオンズのイルカマン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率120位。'
 pokemonName: 'イルカマン'
 dexNumber: 964
-usageRank: 110
-updatedDate: '2026-09-10'
+usageRank: 120
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ジェットパンチ', 'ウェーブタックル', 'クイックターン', 'れいとうパンチ']
-  topMovePct: [82.1, 65.7, 57.0, 46.4]
-  topItems: ['オボンのみ', 'たべのこし', 'こだわりスカーフ']
-  topItemPct: [29.0, 26.1, 23.7]
-  topAbility: 'マイティチェンジ'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 93.7
-  topNature2: 'ようき'
-  topNaturePct2: 5.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.964</strong>　／　使用率 <strong style="color:#dc2626">110位</strong>
+      全国図鑑 <strong>No.964</strong>　／　使用率 <strong style="color:#dc2626">120位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

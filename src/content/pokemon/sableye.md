@@ -1,25 +1,12 @@
 ---
 title: 'ヤミラミ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのヤミラミ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率83位。'
+description: 'ポケモンチャンピオンズのヤミラミ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率82位。'
 pokemonName: 'ヤミラミ'
 dexNumber: 302
-usageRank: 83
-updatedDate: '2026-09-10'
+usageRank: 82
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ひかりのかべ', 'イカサマ', 'おにび', 'アンコール']
-  topMovePct: [71.6, 65.9, 64.1, 59.1]
-  topItems: ['ひかりのねんど', 'ヤミラミナイト', 'ゴツゴツメット']
-  topItemPct: [54.9, 24.2, 7.6]
-  topAbility: 'いたずらごころ'
-  topAbilityPct: 100.0
-  topNature: 'ずぶとい'
-  topNaturePct: 66.1
-  topNature2: 'わんぱく'
-  topNaturePct2: 17.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.302</strong>　／　使用率 <strong style="color:#dc2626">83位</strong>
+      全国図鑑 <strong>No.302</strong>　／　使用率 <strong style="color:#dc2626">82位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

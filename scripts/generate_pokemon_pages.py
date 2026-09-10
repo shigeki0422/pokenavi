@@ -263,6 +263,11 @@ def resolve_analysis_slugs(file_stem, manual):
 # 新しい考察記事を公開したら、必ずここの "analysis" を更新してから再生成すること。
 # 更新を忘れると公開済みのM-3リンクが消える（実際に発生）。
 POKEMON_DATA = {
+    "イキリンコ(イエロー)": {
+        "file": "squawkabilly-yellow", "dex": 931, "id": "0931-02",
+        "types": ['ノーマル', 'ひこう'],
+        "stats": [82, 96, 51, 45, 51, 92],
+    },
     "ストリンダー(ハイ)": {
         "file": "toxtricity", "dex": 849, "id": "0849-00",
         "types": ['でんき', 'どく'],
@@ -2900,6 +2905,7 @@ TARGET_POKEMON_ALL = [
     ("フォクスライ", 185),
     ("カモネギ", 186),
     ("オトスパス", 198),
+    ("イキリンコ(イエロー)", 174),
 ]
 TARGET_POKEMON = TARGET_POKEMON_ALL
 

@@ -1,25 +1,12 @@
 ---
 title: 'オニシズクモ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのオニシズクモ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率75位。'
+description: 'ポケモンチャンピオンズのオニシズクモ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率72位。'
 pokemonName: 'オニシズクモ'
 dexNumber: 752
-usageRank: 75
-updatedDate: '2026-09-10'
+usageRank: 72
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'araquanid-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['ねばねばネット', 'ミラーコート', 'アクアブレイク', 'なみのり']
-  topMovePct: [94.0, 82.0, 67.2, 27.6]
-  topItems: ['オボンのみ', 'しんぴのしずく', 'きあいのタスキ']
-  topItemPct: [38.8, 27.0, 13.3]
-  topAbility: 'すいほう'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 42.9
-  topNature2: 'ひかえめ'
-  topNaturePct2: 29.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-06-bug.png" alt="むし" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.752</strong>　／　使用率 <strong style="color:#dc2626">75位</strong>
+      全国図鑑 <strong>No.752</strong>　／　使用率 <strong style="color:#dc2626">72位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

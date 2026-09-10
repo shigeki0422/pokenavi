@@ -1,25 +1,12 @@
 ---
 title: 'ヤドキング | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのヤドキング基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率89位。'
+description: 'ポケモンチャンピオンズのヤドキング基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率98位。'
 pokemonName: 'ヤドキング'
 dexNumber: 199
-usageRank: 89
-updatedDate: '2026-09-10'
+usageRank: 98
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['さむいギャグ', 'あくび', 'ねっとう', 'なまける']
-  topMovePct: [98.5, 86.4, 84.2, 55.5]
-  topItems: ['たべのこし', 'オボンのみ', 'きあいのタスキ']
-  topItemPct: [63.3, 16.4, 15.2]
-  topAbility: 'さいせいりょく'
-  topAbilityPct: 99.7
-  topNature: 'おだやか'
-  topNaturePct: 47.0
-  topNature2: 'なまいき'
-  topNaturePct2: 24.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.199</strong>　／　使用率 <strong style="color:#dc2626">89位</strong>
+      全国図鑑 <strong>No.199</strong>　／　使用率 <strong style="color:#dc2626">98位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

@@ -1,25 +1,12 @@
 ---
 title: 'オニゴーリ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのオニゴーリ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率160位。'
+description: 'ポケモンチャンピオンズのオニゴーリ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率152位。'
 pokemonName: 'オニゴーリ'
 dexNumber: 362
-usageRank: 160
-updatedDate: '2026-09-10'
+usageRank: 152
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['まもる', 'みがわり', 'ぜったいれいど', 'フリーズドライ']
-  topMovePct: [78.4, 64.9, 64.9, 64.9]
-  topItems: ['たべのこし', 'オニゴーリナイト']
-  topItemPct: [64.9, 35.1]
-  topAbility: 'ムラっけ'
-  topAbilityPct: 91.9
-  topNature: 'おくびょう'
-  topNaturePct: 35.1
-  topNature2: 'ようき'
-  topNaturePct2: 35.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-14-ice.png" alt="こおり" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.362</strong>　／　使用率 <strong style="color:#dc2626">160位</strong>
+      全国図鑑 <strong>No.362</strong>　／　使用率 <strong style="color:#dc2626">152位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

@@ -1,25 +1,12 @@
 ---
 title: 'ネギガナイト | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのネギガナイト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率69位。'
+description: 'ポケモンチャンピオンズのネギガナイト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率71位。'
 pokemonName: 'ネギガナイト'
 dexNumber: 865
-usageRank: 69
-updatedDate: '2026-09-10'
+usageRank: 71
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['リーフブレード', 'スターアサルト', 'インファイト', 'であいがしら']
-  topMovePct: [87.6, 65.6, 50.6, 35.2]
-  topItems: ['ながねぎ', 'きあいのタスキ', 'くろおび']
-  topItemPct: [88.0, 8.4, 1.8]
-  topAbility: 'きもったま'
-  topAbilityPct: 99.5
-  topNature: 'いじっぱり'
-  topNaturePct: 94.3
-  topNature2: 'ようき'
-  topNaturePct2: 4.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.865</strong>　／　使用率 <strong style="color:#dc2626">69位</strong>
+      全国図鑑 <strong>No.865</strong>　／　使用率 <strong style="color:#dc2626">71位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

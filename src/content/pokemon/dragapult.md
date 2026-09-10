@@ -1,25 +1,12 @@
 ---
 title: 'ドラパルト | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのドラパルト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率60位。'
+description: 'ポケモンチャンピオンズのドラパルト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率58位。'
 pokemonName: 'ドラパルト'
 dexNumber: 887
-usageRank: 60
-updatedDate: '2026-09-10'
+usageRank: 58
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'dragapult-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['シャドーボール', 'りゅうせいぐん', 'おにび', 'ドラゴンアロー']
-  topMovePct: [46.4, 42.6, 39.7, 34.9]
-  topItems: ['いのちのたま', 'ひかりのねんど', 'こだわりスカーフ']
-  topItemPct: [32.4, 25.3, 19.0]
-  topAbility: 'すりぬけ'
-  topAbilityPct: 67.3
-  topNature: 'おくびょう'
-  topNaturePct: 37.6
-  topNature2: 'ひかえめ'
-  topNaturePct2: 16.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.887</strong>　／　使用率 <strong style="color:#dc2626">60位</strong>
+      全国図鑑 <strong>No.887</strong>　／　使用率 <strong style="color:#dc2626">58位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

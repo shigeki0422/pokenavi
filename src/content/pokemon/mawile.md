@@ -1,25 +1,12 @@
 ---
 title: 'クチート | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのクチート基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率55位。'
+description: 'ポケモンチャンピオンズのクチート基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率57位。'
 pokemonName: 'クチート'
 dexNumber: 303
-usageRank: 55
-updatedDate: '2026-09-10'
+usageRank: 57
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'mawile-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['じゃれつく', 'ふいうち', 'ほのおのキバ', 'つるぎのまい']
-  topMovePct: [97.7, 95.1, 71.3, 36.6]
-  topItems: ['クチートナイト']
-  topItemPct: [99.5]
-  topAbility: 'いかく'
-  topAbilityPct: 97.0
-  topNature: 'いじっぱり'
-  topNaturePct: 97.0
-  topNature2: 'ゆうかん'
-  topNaturePct2: 2.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.303</strong>　／　使用率 <strong style="color:#dc2626">55位</strong>
+      全国図鑑 <strong>No.303</strong>　／　使用率 <strong style="color:#dc2626">57位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

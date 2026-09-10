@@ -1,25 +1,12 @@
 ---
 title: 'バチンウニ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのバチンウニ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率124位。'
+description: 'ポケモンチャンピオンズのバチンウニ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率114位。'
 pokemonName: 'バチンウニ'
 dexNumber: 871
-usageRank: 124
-updatedDate: '2026-09-10'
+usageRank: 114
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['おきみやげ', 'ライジングボルト', 'まきびし', 'どくびし']
-  topMovePct: [78.0, 74.2, 73.5, 50.8]
-  topItems: ['グランドコート', 'エレキシード', 'きあいのタスキ']
-  topItemPct: [64.4, 13.6, 12.9]
-  topAbility: 'エレキメイカー'
-  topAbilityPct: 98.5
-  topNature: 'ずぶとい'
-  topNaturePct: 48.5
-  topNature2: 'おだやか'
-  topNaturePct2: 18.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-12-electric.png" alt="でんき" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.871</strong>　／　使用率 <strong style="color:#dc2626">124位</strong>
+      全国図鑑 <strong>No.871</strong>　／　使用率 <strong style="color:#dc2626">114位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

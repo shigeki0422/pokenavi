@@ -1,25 +1,12 @@
 ---
 title: 'リーフィア | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのリーフィア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率188位。'
+description: 'ポケモンチャンピオンズのリーフィア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率199位。'
 pokemonName: 'リーフィア'
 dexNumber: 470
-usageRank: 188
-updatedDate: '2026-09-10'
+usageRank: 199
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['やどりぎのタネ', 'こうごうせい', 'くさわけ', 'あまえる']
-  topMovePct: [94.1, 88.2, 82.4, 76.5]
-  topItems: ['ゴツゴツメット', 'たべのこし', 'いのちのたま']
-  topItemPct: [52.9, 41.2, 5.9]
-  topAbility: 'ようりょくそ'
-  topAbilityPct: 100.0
-  topNature: 'わんぱく'
-  topNaturePct: 94.1
-  topNature2: 'いじっぱり'
-  topNaturePct2: 5.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-11-grass.png" alt="くさ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.470</strong>　／　使用率 <strong style="color:#dc2626">188位</strong>
+      全国図鑑 <strong>No.470</strong>　／　使用率 <strong style="color:#dc2626">199位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

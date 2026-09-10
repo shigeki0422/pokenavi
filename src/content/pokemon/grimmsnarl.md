@@ -1,25 +1,12 @@
 ---
 title: 'オーロンゲ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのオーロンゲ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率50位。'
+description: 'ポケモンチャンピオンズのオーロンゲ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率47位。'
 pokemonName: 'オーロンゲ'
 dexNumber: 861
-usageRank: 50
-updatedDate: '2026-09-10'
+usageRank: 47
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'grimmsnarl-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['リフレクター', 'ひかりのかべ', 'ソウルクラッシュ', 'すてゼリフ']
-  topMovePct: [89.5, 88.9, 71.4, 57.5]
-  topItems: ['ひかりのねんど', 'たべのこし', 'オボンのみ']
-  topItemPct: [87.6, 10.2, 0.7]
-  topAbility: 'いたずらごころ'
-  topAbilityPct: 100.0
-  topNature: 'わんぱく'
-  topNaturePct: 60.7
-  topNature2: 'しんちょう'
-  topNaturePct2: 18.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.861</strong>　／　使用率 <strong style="color:#dc2626">50位</strong>
+      全国図鑑 <strong>No.861</strong>　／　使用率 <strong style="color:#dc2626">47位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

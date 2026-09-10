@@ -1,25 +1,12 @@
 ---
 title: 'スコヴィラン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのスコヴィラン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率66位。'
+description: 'ポケモンチャンピオンズのスコヴィラン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率64位。'
 pokemonName: 'スコヴィラン'
 dexNumber: 952
-usageRank: 66
-updatedDate: '2026-09-10'
+usageRank: 64
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'scovillain-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['まもる', 'ギガドレイン', 'やどりぎのタネ', 'かえんほうしゃ']
-  topMovePct: [87.2, 78.8, 67.9, 58.1]
-  topItems: ['スコヴィラナイト', 'たべのこし', 'オボンのみ']
-  topItemPct: [94.5, 4.5, 0.3]
-  topAbility: 'ふみん'
-  topAbilityPct: 51.6
-  topNature: 'ずぶとい'
-  topNaturePct: 43.9
-  topNature2: 'ひかえめ'
-  topNaturePct2: 32.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.952</strong>　／　使用率 <strong style="color:#dc2626">66位</strong>
+      全国図鑑 <strong>No.952</strong>　／　使用率 <strong style="color:#dc2626">64位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

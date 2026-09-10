@@ -1,25 +1,12 @@
 ---
 title: 'レントラー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのレントラー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率174位。'
+description: 'ポケモンチャンピオンズのレントラー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率194位。'
 pokemonName: 'レントラー'
 dexNumber: 405
-usageRank: 174
-updatedDate: '2026-09-10'
+usageRank: 194
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['こおりのキバ', 'ボルトチェンジ', 'ばかぢから', 'ワイルドボルト']
-  topMovePct: [100.0, 100.0, 69.7, 69.7]
-  topItems: ['オボンのみ', 'シュカのみ']
-  topItemPct: [69.7, 30.3]
-  topAbility: 'いかく'
-  topAbilityPct: 100.0
-  topNature: 'わんぱく'
-  topNaturePct: 69.7
-  topNature2: 'しんちょう'
-  topNaturePct2: 30.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-12-electric.png" alt="でんき" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.405</strong>　／　使用率 <strong style="color:#dc2626">174位</strong>
+      全国図鑑 <strong>No.405</strong>　／　使用率 <strong style="color:#dc2626">194位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

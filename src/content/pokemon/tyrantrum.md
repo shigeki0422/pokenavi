@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのガチゴラス基礎データ
 pokemonName: 'ガチゴラス'
 dexNumber: 697
 usageRank: 999
-updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
-faq:
-  season: 'M-5'
-  topMoves: ['もろはのずつき', 'じしん', 'げきりん', 'りゅうのまい']
-  topMovePct: [78.7, 46.6, 36.6, 30.3]
-  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [33.8, 19.0, 13.8]
-  topAbility: 'いしあたま'
-  topAbilityPct: 68.4
-  topNature: 'ようき'
-  topNaturePct: 45.2
-  topNature2: 'いじっぱり'
-  topNaturePct2: 40.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

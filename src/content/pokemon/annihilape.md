@@ -1,25 +1,12 @@
 ---
 title: 'コノヨザル | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのコノヨザル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率79位。'
+description: 'ポケモンチャンピオンズのコノヨザル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率76位。'
 pokemonName: 'コノヨザル'
 dexNumber: 979
-usageRank: 79
-updatedDate: '2026-09-10'
+usageRank: 76
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'annihilape-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['ふんどのこぶし', 'ドレインパンチ', 'ビルドアップ', 'ちょうはつ']
-  topMovePct: [90.1, 78.9, 73.6, 60.4]
-  topItems: ['たべのこし', 'オボンのみ', 'でんきだま']
-  topItemPct: [43.4, 36.5, 7.3]
-  topAbility: 'まけんき'
-  topAbilityPct: 61.5
-  topNature: 'いじっぱり'
-  topNaturePct: 42.0
-  topNature2: 'ようき'
-  topNaturePct2: 33.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.979</strong>　／　使用率 <strong style="color:#dc2626">79位</strong>
+      全国図鑑 <strong>No.979</strong>　／　使用率 <strong style="color:#dc2626">76位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

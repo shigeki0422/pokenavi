@@ -1,25 +1,12 @@
 ---
 title: 'カイリュー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのカイリュー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率27位。'
+description: 'ポケモンチャンピオンズのカイリュー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率29位。'
 pokemonName: 'カイリュー'
 dexNumber: 149
-usageRank: 27
-updatedDate: '2026-09-10'
+usageRank: 29
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['かえんほうしゃ', 'りゅうせいぐん', 'はねやすめ', 'エアスラッシュ']
-  topMovePct: [66.8, 50.8, 50.0, 45.2]
-  topItems: ['カイリュナイト', 'ゴツゴツメット', 'ラムのみ']
-  topItemPct: [75.2, 6.3, 4.3]
-  topAbility: 'マルチスケイル'
-  topAbilityPct: 100.0
-  topNature: 'ひかえめ'
-  topNaturePct: 46.2
-  topNature2: 'おくびょう'
-  topNaturePct2: 30.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.149</strong>　／　使用率 <strong style="color:#dc2626">27位</strong>
+      全国図鑑 <strong>No.149</strong>　／　使用率 <strong style="color:#dc2626">29位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

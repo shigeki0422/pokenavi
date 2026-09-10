@@ -1,25 +1,12 @@
 ---
 title: 'セグレイブ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのセグレイブ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率8位。'
+description: 'ポケモンチャンピオンズのセグレイブ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率7位。'
 pokemonName: 'セグレイブ'
 dexNumber: 998
-usageRank: 8
-updatedDate: '2026-09-10'
+usageRank: 7
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['じしん', 'こおりのつぶて', 'きょけんとつげき', 'りゅうのまい']
-  topMovePct: [87.6, 82.4, 79.8, 46.0]
-  topItems: ['セグレイブナイト', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [51.8, 21.1, 10.8]
-  topAbility: 'ねつこうかん'
-  topAbilityPct: 98.9
-  topNature: 'いじっぱり'
-  topNaturePct: 66.2
-  topNature2: 'ようき'
-  topNaturePct2: 32.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-14-ice.png" alt="こおり" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.998</strong>　／　使用率 <strong style="color:#dc2626">8位</strong>
+      全国図鑑 <strong>No.998</strong>　／　使用率 <strong style="color:#dc2626">7位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

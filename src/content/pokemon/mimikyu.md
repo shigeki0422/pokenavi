@@ -1,25 +1,12 @@
 ---
 title: 'ミミッキュ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのミミッキュ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率12位。'
+description: 'ポケモンチャンピオンズのミミッキュ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率11位。'
 pokemonName: 'ミミッキュ'
 dexNumber: 778
-usageRank: 12
-updatedDate: '2026-09-10'
+usageRank: 11
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['じゃれつく', 'かげうち', 'つるぎのまい', 'シャドークロー']
-  topMovePct: [98.1, 96.1, 79.8, 59.2]
-  topItems: ['いのちのたま', 'のろいのおふだ', 'ピントレンズ']
-  topItemPct: [76.4, 6.2, 5.1]
-  topAbility: 'ばけのかわ'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 83.0
-  topNature2: 'ようき'
-  topNaturePct2: 11.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.778</strong>　／　使用率 <strong style="color:#dc2626">12位</strong>
+      全国図鑑 <strong>No.778</strong>　／　使用率 <strong style="color:#dc2626">11位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

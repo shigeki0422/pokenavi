@@ -1,25 +1,12 @@
 ---
 title: 'エンペルト | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエンペルト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率54位。'
+description: 'ポケモンチャンピオンズのエンペルト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率52位。'
 pokemonName: 'エンペルト'
 dexNumber: 395
-usageRank: 54
-updatedDate: '2026-09-10'
+usageRank: 52
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'empoleon-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['れいとうビーム', 'なみのり', 'ラスターカノン', 'ステルスロック']
-  topMovePct: [72.0, 63.1, 51.7, 48.5]
-  topItems: ['シュカのみ', 'たべのこし', 'ふうせん']
-  topItemPct: [42.6, 21.3, 19.8]
-  topAbility: 'かちき'
-  topAbilityPct: 87.7
-  topNature: 'ひかえめ'
-  topNaturePct: 61.0
-  topNature2: 'なまいき'
-  topNaturePct2: 14.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.395</strong>　／　使用率 <strong style="color:#dc2626">54位</strong>
+      全国図鑑 <strong>No.395</strong>　／　使用率 <strong style="color:#dc2626">52位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

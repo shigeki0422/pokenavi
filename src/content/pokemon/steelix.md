@@ -1,25 +1,12 @@
 ---
 title: 'ハガネール | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのハガネール基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率175位。'
+description: 'ポケモンチャンピオンズのハガネール基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率170位。'
 pokemonName: 'ハガネール'
 dexNumber: 208
-usageRank: 175
-updatedDate: '2026-09-10'
+usageRank: 170
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['てっぺき', 'ボディプレス', 'じしん', 'ヘビーボンバー']
-  topMovePct: [100.0, 100.0, 100.0, 89.5]
-  topItems: ['ハガネールナイト', 'たべのこし']
-  topItemPct: [92.1, 7.9]
-  topAbility: 'がんじょう'
-  topAbilityPct: 100.0
-  topNature: 'わんぱく'
-  topNaturePct: 97.4
-  topNature2: 'ゆうかん'
-  topNaturePct2: 2.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-04-ground.png" alt="じめん" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.208</strong>　／　使用率 <strong style="color:#dc2626">175位</strong>
+      全国図鑑 <strong>No.208</strong>　／　使用率 <strong style="color:#dc2626">170位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

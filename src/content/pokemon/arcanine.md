@@ -1,25 +1,12 @@
 ---
 title: 'ウインディ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのウインディ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率121位。'
+description: 'ポケモンチャンピオンズのウインディ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率113位。'
 pokemonName: 'ウインディ'
 dexNumber: 59
-usageRank: 121
-updatedDate: '2026-09-10'
+usageRank: 113
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['あさのひざし', 'おにび', 'かえんほうしゃ', 'ほえる']
-  topMovePct: [94.8, 88.1, 72.4, 49.3]
-  topItems: ['ゴツゴツメット', 'たべのこし', 'いのちのたま']
-  topItemPct: [64.2, 16.4, 6.7]
-  topAbility: 'いかく'
-  topAbilityPct: 92.5
-  topNature: 'ずぶとい'
-  topNaturePct: 71.6
-  topNature2: 'いじっぱり'
-  topNaturePct2: 15.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.59</strong>　／　使用率 <strong style="color:#dc2626">121位</strong>
+      全国図鑑 <strong>No.59</strong>　／　使用率 <strong style="color:#dc2626">113位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

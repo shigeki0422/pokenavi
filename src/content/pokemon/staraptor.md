@@ -1,25 +1,12 @@
 ---
 title: 'ムクホーク | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのムクホーク基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率56位。'
+description: 'ポケモンチャンピオンズのムクホーク基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率55位。'
 pokemonName: 'ムクホーク'
 dexNumber: 398
-usageRank: 56
-updatedDate: '2026-09-10'
+usageRank: 55
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'staraptor-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['ブレイブバード', 'インファイト', 'はねやすめ', 'ブレイズキック']
-  topMovePct: [93.3, 91.3, 70.7, 43.3]
-  topItems: ['ムクホークナイト', 'こだわりスカーフ', 'しろいハーブ']
-  topItemPct: [70.6, 29.1, 0.1]
-  topAbility: 'いかく'
-  topAbilityPct: 82.9
-  topNature: 'ようき'
-  topNaturePct: 78.3
-  topNature2: 'いじっぱり'
-  topNaturePct2: 20.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.398</strong>　／　使用率 <strong style="color:#dc2626">56位</strong>
+      全国図鑑 <strong>No.398</strong>　／　使用率 <strong style="color:#dc2626">55位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

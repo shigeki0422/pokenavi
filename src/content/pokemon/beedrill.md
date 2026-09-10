@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのスピアー基礎データ。
 pokemonName: 'スピアー'
 dexNumber: 15
 usageRank: 999
-updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
-faq:
-  season: 'M-5'
-  topMoves: ['どくづき', 'ドリルライナー', 'とんぼがえり', 'とどめばり']
-  topMovePct: [92.9, 79.6, 76.8, 57.1]
-  topItems: ['スピアナイト', 'きあいのタスキ', 'ピントレンズ']
-  topItemPct: [97.2, 0.7, 0.6]
-  topAbility: 'むしのしらせ'
-  topAbilityPct: 52.6
-  topNature: 'ようき'
-  topNaturePct: 85.6
-  topNature2: 'いじっぱり'
-  topNaturePct2: 11.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -1,25 +1,12 @@
 ---
 title: 'グライオン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのグライオン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率126位。'
+description: 'ポケモンチャンピオンズのグライオン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率121位。'
 pokemonName: 'グライオン'
 dexNumber: 472
-usageRank: 126
-updatedDate: '2026-09-10'
+usageRank: 121
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['じしん', 'ステルスロック', 'ダブルウイング', 'がんせきふうじ']
-  topMovePct: [91.1, 32.3, 32.3, 28.2]
-  topItems: ['いのちのたま', 'こだわりスカーフ', 'でんきだま']
-  topItemPct: [25.0, 23.4, 19.4]
-  topAbility: 'ポイズンヒール'
-  topAbilityPct: 68.5
-  topNature: 'いじっぱり'
-  topNaturePct: 57.3
-  topNature2: 'ようき'
-  topNaturePct2: 22.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.472</strong>　／　使用率 <strong style="color:#dc2626">126位</strong>
+      全国図鑑 <strong>No.472</strong>　／　使用率 <strong style="color:#dc2626">121位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

@@ -1,25 +1,12 @@
 ---
 title: 'ブリムオン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのブリムオン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率95位。'
+description: 'ポケモンチャンピオンズのブリムオン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率84位。'
 pokemonName: 'ブリムオン'
 dexNumber: 858
-usageRank: 95
-updatedDate: '2026-09-10'
+usageRank: 84
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['トリックルーム', 'ドレインキッス', 'いやしのねがい', 'マジカルフレイム']
-  topMovePct: [74.0, 52.6, 42.9, 39.8]
-  topItems: ['オボンのみ', 'きあいのタスキ', 'たべのこし']
-  topItemPct: [44.6, 23.2, 14.5]
-  topAbility: 'マジックミラー'
-  topAbilityPct: 99.7
-  topNature: 'ずぶとい'
-  topNaturePct: 27.3
-  topNature2: 'のんき'
-  topNaturePct2: 24.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.858</strong>　／　使用率 <strong style="color:#dc2626">95位</strong>
+      全国図鑑 <strong>No.858</strong>　／　使用率 <strong style="color:#dc2626">84位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

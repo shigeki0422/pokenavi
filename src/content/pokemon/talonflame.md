@@ -1,25 +1,12 @@
 ---
 title: 'ファイアロー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのファイアロー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率133位。'
+description: 'ポケモンチャンピオンズのファイアロー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率127位。'
 pokemonName: 'ファイアロー'
 dexNumber: 663
-usageRank: 133
-updatedDate: '2026-09-10'
+usageRank: 127
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ちょうはつ', 'はねやすめ', 'おにび', 'ブレイブバード']
-  topMovePct: [98.9, 92.0, 90.8, 39.1]
-  topItems: ['ゴツゴツメット', 'ラムのみ', 'するどいくちばし']
-  topItemPct: [54.0, 35.6, 4.6]
-  topAbility: 'ほのおのからだ'
-  topAbilityPct: 90.8
-  topNature: 'ようき'
-  topNaturePct: 40.2
-  topNature2: 'おくびょう'
-  topNaturePct2: 37.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.663</strong>　／　使用率 <strong style="color:#dc2626">133位</strong>
+      全国図鑑 <strong>No.663</strong>　／　使用率 <strong style="color:#dc2626">127位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

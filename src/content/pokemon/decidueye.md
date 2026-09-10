@@ -1,25 +1,12 @@
 ---
 title: 'ジュナイパー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのジュナイパー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率157位。'
+description: 'ポケモンチャンピオンズのジュナイパー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率151位。'
 pokemonName: 'ジュナイパー'
 dexNumber: 724
-usageRank: 157
-updatedDate: '2026-09-10'
+usageRank: 151
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['リーフブレード', '3ぼんのや', 'かげうち', 'とんぼがえり']
-  topMovePct: [96.2, 96.2, 67.9, 34.0]
-  topItems: ['ピントレンズ', 'ひかりのこな', 'いのちのたま']
-  topItemPct: [34.0, 24.5, 18.9]
-  topAbility: 'きもったま'
-  topAbilityPct: 100.0
-  topNature: 'いじっぱり'
-  topNaturePct: 94.3
-  topNature2: 'ひかえめ'
-  topNaturePct2: 3.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.724</strong>　／　使用率 <strong style="color:#dc2626">157位</strong>
+      全国図鑑 <strong>No.724</strong>　／　使用率 <strong style="color:#dc2626">151位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのジジーロン基礎データ
 pokemonName: 'ジジーロン'
 dexNumber: 780
 usageRank: 999
-updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
-faq:
-  season: 'M-5'
-  topMoves: ['かえんほうしゃ', 'りゅうせいぐん', 'ハイパーボイス', 'はねやすめ']
-  topMovePct: [55.8, 54.7, 53.6, 40.7]
-  topItems: ['ジジーロナイト', 'オボンのみ', 'せんせいのツメ']
-  topItemPct: [70.4, 7.8, 7.7]
-  topAbility: 'ぎゃくじょう'
-  topAbilityPct: 68.0
-  topNature: 'ひかえめ'
-  topNaturePct: 54.2
-  topNature2: 'れいせい'
-  topNaturePct2: 24.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -1,25 +1,12 @@
 ---
 title: 'サメハダー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのサメハダー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率142位。'
+description: 'ポケモンチャンピオンズのサメハダー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率136位。'
 pokemonName: 'サメハダー'
 dexNumber: 319
-usageRank: 142
-updatedDate: '2026-09-10'
+usageRank: 136
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['かみくだく', 'まもる', 'みちづれ', 'こおりのキバ']
-  topMovePct: [94.3, 92.9, 80.0, 70.0]
-  topItems: ['サメハダナイト', 'きあいのタスキ', 'くろいメガネ']
-  topItemPct: [44.3, 28.6, 25.7]
-  topAbility: 'かそく'
-  topAbilityPct: 98.6
-  topNature: 'ようき'
-  topNaturePct: 57.1
-  topNature2: 'いじっぱり'
-  topNaturePct2: 37.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.319</strong>　／　使用率 <strong style="color:#dc2626">142位</strong>
+      全国図鑑 <strong>No.319</strong>　／　使用率 <strong style="color:#dc2626">136位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

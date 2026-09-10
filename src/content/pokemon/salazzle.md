@@ -1,25 +1,12 @@
 ---
 title: 'エンニュート | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエンニュート基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率167位。'
+description: 'ポケモンチャンピオンズのエンニュート基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率137位。'
 pokemonName: 'エンニュート'
 dexNumber: 758
-usageRank: 167
-updatedDate: '2026-09-10'
+usageRank: 137
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['どくどく', 'アンコール', 'がむしゃら', 'かえんほうしゃ']
-  topMovePct: [100.0, 84.6, 67.3, 55.8]
-  topItems: ['きあいのタスキ', 'たべのこし', 'オボンのみ']
-  topItemPct: [86.5, 9.6, 1.9]
-  topAbility: 'ふしょく'
-  topAbilityPct: 100.0
-  topNature: 'おくびょう'
-  topNaturePct: 96.2
-  topNature2: 'ひかえめ'
-  topNaturePct2: 3.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.758</strong>　／　使用率 <strong style="color:#dc2626">167位</strong>
+      全国図鑑 <strong>No.758</strong>　／　使用率 <strong style="color:#dc2626">137位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

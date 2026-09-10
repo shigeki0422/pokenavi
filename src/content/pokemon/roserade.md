@@ -1,25 +1,12 @@
 ---
 title: 'ロズレイド | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのロズレイド基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率164位。'
+description: 'ポケモンチャンピオンズのロズレイド基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率188位。'
 pokemonName: 'ロズレイド'
 dexNumber: 407
-usageRank: 164
-updatedDate: '2026-09-10'
+usageRank: 188
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ヘドロばくだん', 'こうごうせい', 'シャドーボール', 'リーフストーム']
-  topMovePct: [67.4, 55.8, 44.2, 41.9]
-  topItems: ['たべのこし', 'こだわりスカーフ', 'オボンのみ']
-  topItemPct: [58.1, 32.6, 4.7]
-  topAbility: 'しぜんかいふく'
-  topAbilityPct: 93.0
-  topNature: 'おだやか'
-  topNaturePct: 44.2
-  topNature2: 'おくびょう'
-  topNaturePct2: 39.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.407</strong>　／　使用率 <strong style="color:#dc2626">164位</strong>
+      全国図鑑 <strong>No.407</strong>　／　使用率 <strong style="color:#dc2626">188位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

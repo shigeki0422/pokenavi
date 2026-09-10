@@ -1,25 +1,12 @@
 ---
 title: 'カエンジシ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのカエンジシ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率94位。'
+description: 'ポケモンチャンピオンズのカエンジシ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率86位。'
 pokemonName: 'カエンジシ'
 dexNumber: 668
-usageRank: 94
-updatedDate: '2026-09-10'
+usageRank: 86
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'pyroar-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['かえんほうしゃ', 'オーバーヒート', 'あくび', 'ハイパーボイス']
-  topMovePct: [90.8, 74.3, 62.5, 45.4]
-  topItems: ['カエンジシナイト', 'ラムのみ', 'オボンのみ']
-  topItemPct: [88.5, 6.9, 3.3]
-  topAbility: 'きんちょうかん'
-  topAbilityPct: 83.9
-  topNature: 'ひかえめ'
-  topNaturePct: 49.7
-  topNature2: 'おくびょう'
-  topNaturePct2: 48.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.668</strong>　／　使用率 <strong style="color:#dc2626">94位</strong>
+      全国図鑑 <strong>No.668</strong>　／　使用率 <strong style="color:#dc2626">86位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

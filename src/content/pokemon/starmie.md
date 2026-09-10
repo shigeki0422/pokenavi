@@ -1,25 +1,12 @@
 ---
 title: 'スターミー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのスターミー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率62位。'
+description: 'ポケモンチャンピオンズのスターミー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率65位。'
 pokemonName: 'スターミー'
 dexNumber: 121
-usageRank: 62
-updatedDate: '2026-09-10'
+usageRank: 65
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'starmie-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['アクアジェット', 'アイススピナー', 'アクアブレイク', 'クイックターン']
-  topMovePct: [80.3, 76.1, 73.9, 66.0]
-  topItems: ['スターミナイト', 'いのちのたま', 'こだわりスカーフ']
-  topItemPct: [95.3, 3.7, 0.8]
-  topAbility: 'しぜんかいふく'
-  topAbilityPct: 84.4
-  topNature: 'いじっぱり'
-  topNaturePct: 51.0
-  topNature2: 'ようき'
-  topNaturePct2: 44.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.121</strong>　／　使用率 <strong style="color:#dc2626">62位</strong>
+      全国図鑑 <strong>No.121</strong>　／　使用率 <strong style="color:#dc2626">65位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

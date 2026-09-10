@@ -1,25 +1,12 @@
 ---
 title: 'ゴウカザル | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのゴウカザル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率144位。'
+description: 'ポケモンチャンピオンズのゴウカザル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率138位。'
 pokemonName: 'ゴウカザル'
 dexNumber: 392
-usageRank: 144
-updatedDate: '2026-09-10'
+usageRank: 138
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['アンコール', 'ステルスロック', 'かえんほうしゃ', 'おにび']
-  topMovePct: [72.5, 68.1, 47.8, 46.4]
-  topItems: ['きあいのタスキ', 'イトケのみ', 'レッドカード']
-  topItemPct: [59.4, 31.9, 4.3]
-  topAbility: 'もうか'
-  topAbilityPct: 62.3
-  topNature: 'おくびょう'
-  topNaturePct: 49.3
-  topNature2: 'ようき'
-  topNaturePct2: 47.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.392</strong>　／　使用率 <strong style="color:#dc2626">144位</strong>
+      全国図鑑 <strong>No.392</strong>　／　使用率 <strong style="color:#dc2626">138位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

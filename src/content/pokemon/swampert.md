@@ -1,25 +1,12 @@
 ---
 title: 'ラグラージ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのラグラージ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率41位。'
+description: 'ポケモンチャンピオンズのラグラージ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率36位。'
 pokemonName: 'ラグラージ'
 dexNumber: 260
-usageRank: 41
-updatedDate: '2026-09-10'
+usageRank: 36
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'swampert-analysis-m3'
-faq:
-  season: 'M-6'
-  topMoves: ['クイックターン', 'じしん', 'れいとうパンチ', 'ウェーブタックル']
-  topMovePct: [81.1, 77.2, 54.8, 47.9]
-  topItems: ['ラグラージナイト', 'オボンのみ', 'たべのこし']
-  topItemPct: [51.6, 23.0, 15.2]
-  topAbility: 'げきりゅう'
-  topAbilityPct: 75.5
-  topNature: 'いじっぱり'
-  topNaturePct: 46.4
-  topNature2: 'わんぱく'
-  topNaturePct2: 15.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-04-ground.png" alt="じめん" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.260</strong>　／　使用率 <strong style="color:#dc2626">41位</strong>
+      全国図鑑 <strong>No.260</strong>　／　使用率 <strong style="color:#dc2626">36位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

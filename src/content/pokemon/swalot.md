@@ -1,25 +1,12 @@
 ---
 title: 'マルノーム | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのマルノーム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率127位。'
+description: 'ポケモンチャンピオンズのマルノーム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率181位。'
 pokemonName: 'マルノーム'
 dexNumber: 317
-usageRank: 127
-updatedDate: '2026-09-10'
+usageRank: 181
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['どくびし', 'いたみわけ', 'れいとうビーム', 'ヘドロウェーブ']
-  topMovePct: [48.9, 47.9, 45.7, 44.7]
-  topItems: ['ゴツゴツメット', 'たべのこし', 'ふうせん']
-  topItemPct: [59.6, 35.1, 3.2]
-  topAbility: 'ねんちゃく'
-  topAbilityPct: 94.7
-  topNature: 'ひかえめ'
-  topNaturePct: 56.4
-  topNature2: 'おくびょう'
-  topNaturePct2: 34.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.317</strong>　／　使用率 <strong style="color:#dc2626">127位</strong>
+      全国図鑑 <strong>No.317</strong>　／　使用率 <strong style="color:#dc2626">181位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

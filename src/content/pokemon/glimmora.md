@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのキラフロル基礎データ
 pokemonName: 'キラフロル'
 dexNumber: 970
 usageRank: 16
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['パワージェム', 'ステルスロック', 'だいちのちから', 'ヘドロウェーブ']
-  topMovePct: [80.8, 59.8, 57.6, 56.0]
-  topItems: ['きあいのタスキ', 'ふうせん', 'キラフロルナイト']
-  topItemPct: [56.6, 14.2, 10.4]
-  topAbility: 'どくげしょう'
-  topAbilityPct: 95.2
-  topNature: 'おくびょう'
-  topNaturePct: 45.1
-  topNature2: 'ひかえめ'
-  topNaturePct2: 39.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

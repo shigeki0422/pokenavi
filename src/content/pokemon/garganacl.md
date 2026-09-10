@@ -1,25 +1,12 @@
 ---
 title: 'キョジオーン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのキョジオーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率170位。'
+description: 'ポケモンチャンピオンズのキョジオーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率177位。'
 pokemonName: 'キョジオーン'
 dexNumber: 934
-usageRank: 170
-updatedDate: '2026-09-10'
+usageRank: 177
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['じこさいせい', 'しおづけ', 'じわれ', 'てっぺき']
-  topMovePct: [100.0, 90.0, 53.3, 46.7]
-  topItems: ['たべのこし', 'オボンのみ', 'ゴツゴツメット']
-  topItemPct: [46.7, 43.3, 10.0]
-  topAbility: 'きよめのしお'
-  topAbilityPct: 100.0
-  topNature: 'しんちょう'
-  topNaturePct: 66.7
-  topNature2: 'わんぱく'
-  topNaturePct2: 33.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-05-rock.png" alt="いわ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.934</strong>　／　使用率 <strong style="color:#dc2626">170位</strong>
+      全国図鑑 <strong>No.934</strong>　／　使用率 <strong style="color:#dc2626">177位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

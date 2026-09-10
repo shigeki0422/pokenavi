@@ -1,25 +1,12 @@
 ---
 title: 'ワルビアル | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのワルビアル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率161位。'
+description: 'ポケモンチャンピオンズのワルビアル基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率165位。'
 pokemonName: 'ワルビアル'
 dexNumber: 553
-usageRank: 161
-updatedDate: '2026-09-10'
+usageRank: 165
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['じしん', 'ちょうはつ', 'はたきおとす', 'インファイト']
-  topMovePct: [96.0, 56.0, 42.0, 40.0]
-  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'オボンのみ']
-  topItemPct: [40.0, 40.0, 14.0]
-  topAbility: 'いかく'
-  topAbilityPct: 92.0
-  topNature: 'いじっぱり'
-  topNaturePct: 48.0
-  topNature2: 'ようき'
-  topNaturePct2: 38.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.553</strong>　／　使用率 <strong style="color:#dc2626">161位</strong>
+      全国図鑑 <strong>No.553</strong>　／　使用率 <strong style="color:#dc2626">165位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

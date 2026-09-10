@@ -1,25 +1,12 @@
 ---
 title: 'カイロス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのカイロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
+description: 'ポケモンチャンピオンズのカイロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率169位。'
 pokemonName: 'カイロス'
 dexNumber: 127
-usageRank: 999
-updatedDate: '2026-09-10'
+usageRank: 169
 pubDate: '2026-05-24'
 draft: false
 
-faq:
-  season: 'M-5'
-  topMoves: ['でんこうせっか', 'つるぎのまい', 'のしかかり', 'やまあらし']
-  topMovePct: [81.5, 69.1, 61.0, 57.3]
-  topItems: ['カイロスナイト', 'こだわりスカーフ', 'きあいのタスキ']
-  topItemPct: [96.0, 1.8, 0.4]
-  topAbility: 'じしんかじょう'
-  topAbilityPct: 53.5
-  topNature: 'ようき'
-  topNaturePct: 74.6
-  topNature2: 'いじっぱり'
-  topNaturePct2: 22.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-06-bug.png" alt="むし" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.127</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
+      全国図鑑 <strong>No.127</strong>　／　使用率 <strong style="color:#dc2626">169位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-05-24</div>
   </div>

@@ -1,25 +1,12 @@
 ---
 title: 'インテレオン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのインテレオン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率90位。'
+description: 'ポケモンチャンピオンズのインテレオン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率94位。'
 pokemonName: 'インテレオン'
 dexNumber: 818
-usageRank: 90
-updatedDate: '2026-09-10'
+usageRank: 94
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ねらいうち', 'れいとうビーム', 'きあいだめ', 'しんくうは']
-  topMovePct: [97.9, 83.3, 68.7, 48.0]
-  topItems: ['ピントレンズ', 'きあいのタスキ', 'いのちのたま']
-  topItemPct: [44.7, 37.7, 10.3]
-  topAbility: 'スナイパー'
-  topAbilityPct: 97.6
-  topNature: 'おくびょう'
-  topNaturePct: 63.8
-  topNature2: 'ひかえめ'
-  topNaturePct2: 32.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.818</strong>　／　使用率 <strong style="color:#dc2626">90位</strong>
+      全国図鑑 <strong>No.818</strong>　／　使用率 <strong style="color:#dc2626">94位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

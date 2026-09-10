@@ -1,25 +1,12 @@
 ---
 title: 'フォレトス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのフォレトス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率187位。'
+description: 'ポケモンチャンピオンズのフォレトス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率145位。'
 pokemonName: 'フォレトス'
 dexNumber: 205
-usageRank: 187
-updatedDate: '2026-09-10'
+usageRank: 145
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ステルスロック', 'ボルトチェンジ', 'まきびし', 'だいばくはつ']
-  topMovePct: [86.8, 69.8, 60.4, 58.5]
-  topItems: ['ゴツゴツメット', 'オボンのみ', 'メンタルハーブ']
-  topItemPct: [50.9, 22.6, 15.1]
-  topAbility: 'がんじょう'
-  topAbilityPct: 100.0
-  topNature: 'なまいき'
-  topNaturePct: 56.6
-  topNature2: 'わんぱく'
-  topNaturePct2: 26.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.205</strong>　／　使用率 <strong style="color:#dc2626">187位</strong>
+      全国図鑑 <strong>No.205</strong>　／　使用率 <strong style="color:#dc2626">145位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

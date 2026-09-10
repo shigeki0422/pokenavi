@@ -1,25 +1,12 @@
 ---
 title: 'ゾロアーク | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのゾロアーク基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率169位。'
+description: 'ポケモンチャンピオンズのゾロアーク基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
 pokemonName: 'ゾロアーク'
 dexNumber: 571
-usageRank: 169
-updatedDate: '2026-09-10'
+usageRank: 999
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ナイトバースト', 'かえんほうしゃ', 'とんぼがえり', 'きあいだま']
-  topMovePct: [100.0, 96.7, 93.3, 93.3]
-  topItems: ['こだわりスカーフ', 'オボンのみ', 'きあいのタスキ']
-  topItemPct: [93.3, 3.3, 3.3]
-  topAbility: 'イリュージョン'
-  topAbilityPct: 100.0
-  topNature: 'ひかえめ'
-  topNaturePct: 96.7
-  topNature2: 'せっかち'
-  topNaturePct2: 3.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.571</strong>　／　使用率 <strong style="color:#dc2626">169位</strong>
+      全国図鑑 <strong>No.571</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

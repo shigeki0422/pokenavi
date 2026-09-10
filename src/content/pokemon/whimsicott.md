@@ -1,25 +1,12 @@
 ---
 title: 'エルフーン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエルフーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率78位。'
+description: 'ポケモンチャンピオンズのエルフーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率75位。'
 pokemonName: 'エルフーン'
 dexNumber: 547
-usageRank: 78
-updatedDate: '2026-09-10'
+usageRank: 75
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ムーンフォース', 'アンコール', 'おいかぜ', 'がむしゃら']
-  topMovePct: [98.2, 74.1, 58.9, 48.5]
-  topItems: ['きあいのタスキ', 'たべのこし', 'いのちのたま']
-  topItemPct: [67.5, 28.5, 1.6]
-  topAbility: 'いたずらごころ'
-  topAbilityPct: 98.2
-  topNature: 'おくびょう'
-  topNaturePct: 39.7
-  topNature2: 'ひかえめ'
-  topNaturePct2: 30.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.547</strong>　／　使用率 <strong style="color:#dc2626">78位</strong>
+      全国図鑑 <strong>No.547</strong>　／　使用率 <strong style="color:#dc2626">75位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

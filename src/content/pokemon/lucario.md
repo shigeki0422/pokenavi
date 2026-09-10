@@ -4,22 +4,9 @@ description: 'ポケモンチャンピオンズのルカリオ基礎データ。
 pokemonName: 'ルカリオ'
 dexNumber: 448
 usageRank: 6
-updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'lucario-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['わるだくみ', 'ラスターカノン', 'はどうだん', 'あくのはどう']
-  topMovePct: [81.7, 78.8, 75.1, 59.6]
-  topItems: ['ルカリオナイトZ', 'ルカリオナイト', 'きあいのタスキ']
-  topItemPct: [93.7, 5.4, 0.5]
-  topAbility: 'せいしんりょく'
-  topAbilityPct: 82.3
-  topNature: 'おくびょう'
-  topNaturePct: 73.5
-  topNature2: 'ひかえめ'
-  topNaturePct2: 20.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

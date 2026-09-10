@@ -1,25 +1,12 @@
 ---
 title: 'ミロカロス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのミロカロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率72位。'
+description: 'ポケモンチャンピオンズのミロカロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率68位。'
 pokemonName: 'ミロカロス'
 dexNumber: 350
-usageRank: 72
-updatedDate: '2026-09-10'
+usageRank: 68
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'milotic-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['ねっとう', 'じこさいせい', 'れいとうビーム', 'ミラーコート']
-  topMovePct: [97.3, 96.4, 67.9, 67.2]
-  topItems: ['たべのこし', 'オボンのみ', 'ゴツゴツメット']
-  topItemPct: [44.0, 27.7, 14.4]
-  topAbility: 'かちき'
-  topAbilityPct: 80.5
-  topNature: 'ずぶとい'
-  topNaturePct: 67.0
-  topNature2: 'おだやか'
-  topNaturePct2: 18.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.350</strong>　／　使用率 <strong style="color:#dc2626">72位</strong>
+      全国図鑑 <strong>No.350</strong>　／　使用率 <strong style="color:#dc2626">68位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

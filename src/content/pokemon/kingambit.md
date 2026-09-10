@@ -1,25 +1,12 @@
 ---
 title: 'ドドゲザン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのドドゲザン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率34位。'
+description: 'ポケモンチャンピオンズのドドゲザン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率33位。'
 pokemonName: 'ドドゲザン'
 dexNumber: 983
-usageRank: 34
-updatedDate: '2026-09-10'
+usageRank: 33
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ふいうち', 'ドゲザン', 'アイアンヘッド', 'つるぎのまい']
-  topMovePct: [99.7, 97.3, 80.0, 66.6]
-  topItems: ['くろいメガネ', 'きあいのタスキ', 'ラムのみ']
-  topItemPct: [55.7, 22.3, 7.1]
-  topAbility: 'そうだいしょう'
-  topAbilityPct: 85.3
-  topNature: 'いじっぱり'
-  topNaturePct: 91.5
-  topNature2: 'ゆうかん'
-  topNaturePct2: 6.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.983</strong>　／　使用率 <strong style="color:#dc2626">34位</strong>
+      全国図鑑 <strong>No.983</strong>　／　使用率 <strong style="color:#dc2626">33位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

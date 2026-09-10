@@ -1,25 +1,12 @@
 ---
 title: 'ライボルト | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのライボルト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率191位。'
+description: 'ポケモンチャンピオンズのライボルト基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
 pokemonName: 'ライボルト'
 dexNumber: 310
-usageRank: 191
-updatedDate: '2026-09-10'
+usageRank: 999
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['オーバーヒート', 'ボルトチェンジ', '10まんボルト', 'まもる']
-  topMovePct: [100.0, 100.0, 94.7, 63.2]
-  topItems: ['ライボルトナイト', 'こだわりスカーフ']
-  topItemPct: [94.7, 5.3]
-  topAbility: 'ひらいしん'
-  topAbilityPct: 100.0
-  topNature: 'むじゃき'
-  topNaturePct: 52.6
-  topNature2: 'おくびょう'
-  topNaturePct2: 42.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-12-electric.png" alt="でんき" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.310</strong>　／　使用率 <strong style="color:#dc2626">191位</strong>
+      全国図鑑 <strong>No.310</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

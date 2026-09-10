@@ -1,25 +1,12 @@
 ---
 title: 'ミミズズ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのミミズズ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率85位。'
+description: 'ポケモンチャンピオンズのミミズズ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率93位。'
 pokemonName: 'ミミズズ'
 dexNumber: 968
-usageRank: 85
-updatedDate: '2026-09-10'
+usageRank: 93
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ボディプレス', 'しっぽきり', 'ヘビーボンバー', 'てっぺき']
-  topMovePct: [90.9, 80.9, 68.0, 56.3]
-  topItems: ['オボンのみ', 'たべのこし', 'メンタルハーブ']
-  topItemPct: [78.0, 16.6, 4.0]
-  topAbility: 'どしょく'
-  topAbilityPct: 100.0
-  topNature: 'わんぱく'
-  topNaturePct: 65.1
-  topNature2: 'のんき'
-  topNaturePct2: 13.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.968</strong>　／　使用率 <strong style="color:#dc2626">85位</strong>
+      全国図鑑 <strong>No.968</strong>　／　使用率 <strong style="color:#dc2626">93位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

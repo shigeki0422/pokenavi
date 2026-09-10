@@ -1,25 +1,12 @@
 ---
 title: 'フーディン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのフーディン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率145位。'
+description: 'ポケモンチャンピオンズのフーディン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率125位。'
 pokemonName: 'フーディン'
 dexNumber: 65
-usageRank: 145
-updatedDate: '2026-09-10'
+usageRank: 125
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ワイドフォース', 'きあいだま', 'シャドーボール', 'アンコール']
-  topMovePct: [93.8, 83.1, 76.9, 43.1]
-  topItems: ['フーディナイト', 'いのちのたま']
-  topItemPct: [93.8, 6.2]
-  topAbility: 'マジックガード'
-  topAbilityPct: 98.5
-  topNature: 'おくびょう'
-  topNaturePct: 60.0
-  topNature2: 'ひかえめ'
-  topNaturePct2: 40.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.65</strong>　／　使用率 <strong style="color:#dc2626">145位</strong>
+      全国図鑑 <strong>No.65</strong>　／　使用率 <strong style="color:#dc2626">125位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

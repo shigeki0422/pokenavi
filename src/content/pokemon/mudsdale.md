@@ -1,25 +1,12 @@
 ---
 title: 'バンバドロ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのバンバドロ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率184位。'
+description: 'ポケモンチャンピオンズのバンバドロ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率167位。'
 pokemonName: 'バンバドロ'
 dexNumber: 750
-usageRank: 184
-updatedDate: '2026-09-10'
+usageRank: 167
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['じしん', 'じわれ', 'ストーンエッジ', 'うちおとす']
-  topMovePct: [83.3, 58.3, 41.7, 41.7]
-  topItems: ['オボンのみ', 'せんせいのツメ', 'カゴのみ']
-  topItemPct: [33.3, 33.3, 20.8]
-  topAbility: 'じきゅうりょく'
-  topAbilityPct: 100.0
-  topNature: 'しんちょう'
-  topNaturePct: 58.3
-  topNature2: 'わんぱく'
-  topNaturePct2: 41.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-04-ground.png" alt="じめん" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.750</strong>　／　使用率 <strong style="color:#dc2626">184位</strong>
+      全国図鑑 <strong>No.750</strong>　／　使用率 <strong style="color:#dc2626">167位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

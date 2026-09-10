@@ -1,25 +1,12 @@
 ---
 title: 'ラフレシア | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのラフレシア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率139位。'
+description: 'ポケモンチャンピオンズのラフレシア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率124位。'
 pokemonName: 'ラフレシア'
 dexNumber: 45
-usageRank: 139
-updatedDate: '2026-09-10'
+usageRank: 124
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['ちからをすいとる', 'やどりぎのタネ', 'ヘドロばくだん', 'ねむりごな']
-  topMovePct: [98.6, 89.9, 69.6, 59.4]
-  topItems: ['フォーカスレンズ', 'たべのこし', 'オボンのみ']
-  topItemPct: [59.4, 13.0, 11.6]
-  topAbility: 'ほうし'
-  topAbilityPct: 100.0
-  topNature: 'ずぶとい'
-  topNaturePct: 88.4
-  topNature2: 'ひかえめ'
-  topNaturePct2: 5.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.45</strong>　／　使用率 <strong style="color:#dc2626">139位</strong>
+      全国図鑑 <strong>No.45</strong>　／　使用率 <strong style="color:#dc2626">124位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

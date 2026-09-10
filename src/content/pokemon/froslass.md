@@ -1,25 +1,12 @@
 ---
 title: 'ユキメノコ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのユキメノコ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率77位。'
+description: 'ポケモンチャンピオンズのユキメノコ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率85位。'
 pokemonName: 'ユキメノコ'
 dexNumber: 478
-usageRank: 77
-updatedDate: '2026-09-10'
+usageRank: 85
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'froslass-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['ふぶき', 'シャドーボール', '10まんボルト', 'オーロラベール']
-  topMovePct: [97.3, 78.1, 66.9, 46.2]
-  topItems: ['ユキメノコナイト', 'こだわりスカーフ']
-  topItemPct: [97.3, 0.2]
-  topAbility: 'のろわれボディ'
-  topAbilityPct: 89.2
-  topNature: 'おくびょう'
-  topNaturePct: 63.8
-  topNature2: 'ひかえめ'
-  topNaturePct2: 36.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.478</strong>　／　使用率 <strong style="color:#dc2626">77位</strong>
+      全国図鑑 <strong>No.478</strong>　／　使用率 <strong style="color:#dc2626">85位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

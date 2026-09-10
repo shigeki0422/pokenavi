@@ -1,25 +1,12 @@
 ---
 title: 'エルレイド | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエルレイド基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率68位。'
+description: 'ポケモンチャンピオンズのエルレイド基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率79位。'
 pokemonName: 'エルレイド'
 dexNumber: 475
-usageRank: 68
-updatedDate: '2026-09-10'
+usageRank: 79
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'gallade-analysis-m2'
-faq:
-  season: 'M-6'
-  topMoves: ['せいなるつるぎ', 'リーフブレード', 'サイコカッター', 'かげうち']
-  topMovePct: [87.7, 75.4, 75.4, 74.7]
-  topItems: ['いのちのたま', 'きあいのタスキ', 'こだわりスカーフ']
-  topItemPct: [27.3, 19.5, 15.3]
-  topAbility: 'きれあじ'
-  topAbilityPct: 94.6
-  topNature: 'いじっぱり'
-  topNaturePct: 73.2
-  topNature2: 'ようき'
-  topNaturePct2: 25.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -31,7 +18,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.475</strong>　／　使用率 <strong style="color:#dc2626">68位</strong>
+      全国図鑑 <strong>No.475</strong>　／　使用率 <strong style="color:#dc2626">79位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>

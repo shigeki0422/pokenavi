@@ -1,25 +1,12 @@
 ---
 title: 'ライチュウ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのライチュウ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率42位。'
+description: 'ポケモンチャンピオンズのライチュウ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率40位。'
 pokemonName: 'ライチュウ'
 dexNumber: 26
-usageRank: 42
-updatedDate: '2026-09-10'
+usageRank: 40
 pubDate: '2026-09-10'
 draft: false
 
-faq:
-  season: 'M-6'
-  topMoves: ['でんじほう', 'きあいだま', 'くさむすび', 'わるだくみ']
-  topMovePct: [96.5, 95.4, 79.5, 40.6]
-  topItems: ['ライチュウナイトY', 'ライチュウナイトX']
-  topItemPct: [96.5, 3.5]
-  topAbility: 'ひらいしん'
-  topAbilityPct: 88.9
-  topNature: 'おくびょう'
-  topNaturePct: 79.5
-  topNature2: 'ひかえめ'
-  topNaturePct2: 14.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -30,7 +17,7 @@ faq:
       <img src="/images/types/type-12-electric.png" alt="でんき" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.26</strong>　／　使用率 <strong style="color:#dc2626">42位</strong>
+      全国図鑑 <strong>No.26</strong>　／　使用率 <strong style="color:#dc2626">40位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-10</div>
   </div>
