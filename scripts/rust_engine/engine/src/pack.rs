@@ -168,6 +168,8 @@ pub struct Pack {
     pub registered_spreads: HashMap<String, Vec<(EvEntry, String)>>,
     /// R4: ネット重み
     pub net: Option<crate::net::NetW>,
+    /// ダンプ時点の simulator/** ダイジェスト（ケースの刻印照合用。casehdr参照）
+    pub sim_hash: String,
 }
 
 fn j_str(v: &Value) -> Option<String> {
@@ -516,6 +518,10 @@ impl Pack {
             n_abil_cats,
             registered_spreads,
             net,
+            sim_hash: v["header"]["source_hashes"]["simulator_py"]
+                .as_str()
+                .unwrap_or("")
+                .to_string(),
         }
     }
 

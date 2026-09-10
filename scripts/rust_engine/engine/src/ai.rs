@@ -44,6 +44,9 @@ pub fn is_setup_move(pack: &Pack, name: Sym) -> bool {
 /// battle.py:44 is_trapped。`_bound_turns` は BattlePokemon に存在しない属性のため
 /// getattr の既定 0 が常に使われる＝バインドでは交代不可にならない（Python の実挙動）。
 pub fn is_trapped(pack: &Pack, poke: &Poke, opponent: Option<&Poke>) -> bool {
+    if poke.ability == pack.sy.l.にげあし {
+        return false;
+    }
     if let Some(o) = opponent {
         if o.is_alive && o.ability == pack.sy.l.かげふみ && !poke.has_type(pack.tc.ゴースト) {
             return true;
@@ -1190,7 +1193,33 @@ fn order_by_lead(
 ///
 /// rng（グローバル `random` 相当・calc_damage が消費）と srng（`rng=` 引数のインスタンス乱数・
 /// 温度サンプリングが消費）は Python では別ストリームなので分離して受け取る。
+/// 呼び出し側のポケモンを壊さないための包み（Python: ai.select_party と同じ方針）。
+/// 採点は expected_damage→calc_damage を通るので、半減きのみの消費（defender.item=None）・
+/// かるわざ・溜め解除が「渡した個体そのもの」に残る。mcts_vs_dist は select_party の後に
+/// `b6[i].clone()` で側2のパーティを作るため、消費済みの状態がそのまま対戦に入っていた。
+/// 採点前を保存し、返す直前に必ず巻き戻す。
+#[allow(clippy::too_many_arguments)]
 pub fn select_party(
+    pack: &Pack,
+    party6: &mut Vec<Poke>,
+    opp6: &mut Vec<Poke>,
+    n: usize,
+    temperature: f64,
+    mega_penalty: f64,
+    rng: &mut dyn BRng,
+    srng: &mut dyn FnMut() -> f64,
+) -> Vec<usize> {
+    let snap_p = party6.clone();
+    let snap_o = opp6.clone();
+    let out =
+        select_party_inner(pack, party6, opp6, n, temperature, mega_penalty, rng, srng);
+    *party6 = snap_p;
+    *opp6 = snap_o;
+    out
+}
+
+#[allow(clippy::too_many_arguments)]
+fn select_party_inner(
     pack: &Pack,
     party6: &mut Vec<Poke>,
     opp6: &mut Vec<Poke>,

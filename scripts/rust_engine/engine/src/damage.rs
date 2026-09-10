@@ -105,8 +105,10 @@ pub fn effective_move_type(pack: &Pack, attacker: &Poke, mv: &DMove, field: &Fie
     }
     if mv.name == pack.sy.mv.だいちのはどう {
         let flying = pack.tc.ひこう;
-        let grounded =
-            !(attacker.has_type(flying) || ab == pack.sy.ab.ふゆう || attacker.magnet_rise);
+        let grounded = !(attacker.has_type(flying)
+            || ab == pack.sy.ab.ふゆう
+            || attacker.magnet_rise
+            || attacker.item == Some(pack.sy.it.ふうせん));
         if grounded {
             if field.grassy_terrain {
                 return pack.tc.くさ;
@@ -249,10 +251,17 @@ pub fn get_type_boost(pack: &Pack, item: Option<Sym>, move_type: Ty, attacker_pi
     1.0
 }
 
-pub fn get_crit_stage_bonus(pack: &Pack, item: Option<Sym>) -> i64 {
+/// 急所ランク加算。ながねぎは種族限定なので保持者名も受ける（Python: items.get_crit_stage_bonus）。
+pub fn get_crit_stage_bonus(pack: &Pack, item: Option<Sym>, holder: Option<&str>) -> i64 {
     match item {
         Some(i) if i == pack.sy.it.ピントレンズ || i == pack.sy.it.するどいツメ => 1,
         Some(i) if i == pack.sy.it.ラッキーパンチ => 2,
+        Some(i)
+            if i == pack.sy.it.ながねぎ
+                && matches!(holder, Some("カモネギ") | Some("ネギガナイト")) =>
+        {
+            2
+        }
         _ => 0,
     }
 }
@@ -402,7 +411,8 @@ pub fn effective_power(
     } else if n == s.mv.ミストバースト {
         let grounded = !(attacker.has_type(pack.tc.ひこう)
             || attacker.ability == s.ab.ふゆう
-            || attacker.magnet_rise);
+            || attacker.magnet_rise
+            || attacker.item == Some(s.it.ふうせん));
         if field.misty_terrain && grounded {
             power = fl(power as f64 * 1.5);
         }
@@ -530,7 +540,8 @@ pub fn effective_power(
     if n == s.mv.だいちのはどう {
         let grounded = !(attacker.has_type(pack.tc.ひこう)
             || attacker.ability == s.ab.ふゆう
-            || attacker.magnet_rise);
+            || attacker.magnet_rise
+            || attacker.item == Some(s.it.ふうせん));
         if grounded
             && (field.grassy_terrain
                 || field.electric_terrain
@@ -678,6 +689,8 @@ fn apply_defender_ability(pack: &Pack, dmg: i64, defender: &Poke, mv: &DMove) ->
         fl(d * 0.5)
     } else if ab == s.ファーコート && mv.category == Cat::Physical {
         fl(d * 0.5)
+    } else if ab == s.はどうのぼうご && is_contact_move(pack, mv) {
+        fl(d * 0.5)
     } else if ab == s.あついしぼう && (mv.ty == fire || mv.ty == pack.tc.こおり) {
         fl(d * 0.5)
     } else if ab == s.かんそうはだ && mv.ty == fire {
@@ -739,6 +752,12 @@ pub fn calc_damage(
         if !scrappy_override(pack, attacker, eff_type, defender) {
             return 0;
         }
+    }
+
+    // ふうせん: 地面にいない扱い。特性ではなくアイテムなので かたやぶり では無視されない
+    // （そのため check_move_immunity ではなくここに置く）。うちおとす接地中は解除。
+    if defender.item == Some(s.it.ふうせん) && eff_type == pack.tc.じめん && !defender.grounded {
+        return 0;
     }
 
     let atk_ignores_def_stage = !ignore_ab && attacker.ability == s.ab.てんねん;
@@ -837,6 +856,10 @@ pub fn calc_damage(
         dfs = fl(dfs as f64 * 1.5);
     }
 
+    if defender.ability == s.ab.くさのけがわ && uses_defense && field.grassy_terrain {
+        dfs = fl(dfs as f64 * 1.5);
+    }
+
     if mv.category == Cat::Physical
         && (attacker.ability == s.ab.ちからもち || attacker.ability == s.ab.ヨガパワー)
     {
@@ -882,8 +905,9 @@ pub fn calc_damage(
         attacker.charged = false;
     }
 
-    let grounded =
-        !(attacker.has_type(pack.tc.ひこう) || attacker.ability == s.ab.ふゆう);
+    let grounded = !(attacker.has_type(pack.tc.ひこう)
+        || attacker.ability == s.ab.ふゆう
+        || attacker.item == Some(s.it.ふうせん));
     if grounded {
         if field.electric_terrain && eff_type == pack.tc.でんき {
             dmg = fl(dmg as f64 * 1.3);
@@ -984,12 +1008,24 @@ pub fn calc_damage(
     if eff_type == pack.tc.ほのお && attacker.flash_fire_active {
         dmg = fl(dmg as f64 * 1.5);
     }
+    if pack.flags(mv.name).sound {
+        if attacker.ability == s.ab.パンクロック {
+            dmg = fl(dmg as f64 * 1.3);
+        }
+        if defender.ability == s.ab.パンクロック {
+            dmg = fl(dmg as f64 * 0.5);
+        }
+    }
     if eff_type == pack.tc.ほのお && attacker.ability == s.ab.ほのおのたてがみ {
         dmg = fl(dmg as f64 * 1.5);
     }
     if eff_type == pack.tc.でんき && attacker.electromorphosis_charged {
         dmg = fl(dmg as f64 * 1.5);
         attacker.electromorphosis_charged = false;
+    }
+
+    if defender.defenseless {
+        dmg = fl(dmg as f64 * 2.0);
     }
 
     if effectiveness > 0.0 {
@@ -1022,6 +1058,9 @@ pub fn check_hit(
         Some(a) => a,
     };
     if attacker.lock_on {
+        return true;
+    }
+    if defender.defenseless {
         return true;
     }
     if attacker.ability == s.ab.ノーガード || defender.ability == s.ab.ノーガード {

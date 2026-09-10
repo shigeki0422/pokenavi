@@ -618,6 +618,18 @@ def _temp_sample_indices(scores: List[float], n: int, temperature: float, rng) -
     return chosen
 
 
+def _state_snapshot(pokes):
+    """副作用の巻き戻し用に、各個体の属性辞書を浅くコピーして保存する。"""
+    return [(p, dict(p.__dict__)) for p in pokes if p is not None]
+
+
+def _state_restore(snap):
+    """_state_snapshot の状態へ完全に戻す（途中で増えた属性も落とすため clear してから復元）。"""
+    for p, d in snap:
+        p.__dict__.clear()
+        p.__dict__.update(d)
+
+
 def select_party(party6: List[BattlePokemon], opp6: List[BattlePokemon],
                  loader: DataLoader, n: int = 3,
                  temperature: float = 0.0, rng=None) -> List[BattlePokemon]:
@@ -628,7 +640,24 @@ def select_party(party6: List[BattlePokemon], opp6: List[BattlePokemon],
     - タイプ重複ペナルティ
     - 選出後、リード（先頭）は設置技持ち or 多数相手に有利なポケモンを優先
     temperature>0 で選出をスコアの softmax から確率的にサンプル（多様性付与）。0で従来の決定的選出。
+
+    ★呼び出し側のポケモンを壊さないこと。採点は expected_damage→calc_damage を通るため、
+      半減きのみの消費（defender.item=None）・かるわざ（stage_speed+2）・溜め解除といった
+      副作用が「渡された個体そのもの」に残る。呼び出し側が同じオブジェクトで対戦を始めると、
+      きのみを失った状態で戦うことになる（実際に _o1_policy._mcts_vs_dist で、選出評価中に
+      味方アシレーヌのソクノのみが消え、対戦開始時点で持ち物なしになっていた）。
+      採点前の状態を保存し、返す直前に必ず巻き戻す。
     """
+    _snap = _state_snapshot(list(party6) + list(opp6))
+    try:
+        return _select_party_inner(party6, opp6, loader, n, temperature, rng)
+    finally:
+        _state_restore(_snap)
+
+
+def _select_party_inner(party6: List[BattlePokemon], opp6: List[BattlePokemon],
+                        loader: DataLoader, n: int = 3,
+                        temperature: float = 0.0, rng=None) -> List[BattlePokemon]:
     if len(party6) <= n:
         return _order_by_lead(list(party6), opp6, temperature, rng or random)
 

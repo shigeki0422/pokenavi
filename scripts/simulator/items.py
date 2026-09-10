@@ -31,6 +31,7 @@ TYPE_BOOST_ITEMS: dict[str, tuple[str, float]] = {
     "かたいいし":       ("いわ",      1.2),
     "ぎんのこな":       ("むし",      1.2),
     "きせきのタネ":     ("くさ",      1.2),
+    "ノーマルジュエル": ("ノーマル", 1.3),   # 消費は battle._execute_move 側
     "ピントレンズ":     None,  # 急所ランク+1（別処理）
     "するどいツメ":     None,  # 急所ランク+1
     "せんせいのツメ":   None,  # 先制確率
@@ -51,11 +52,58 @@ def get_type_boost(item: Optional[str], move_type: str, attacker_name: str) -> f
     return 1.0
 
 
-def get_crit_stage_bonus(item: Optional[str]) -> int:
-    """急所ランク加算"""
+# ながねぎ: カモネギ/ネギガナイト専用（他の種が持っても効果なし）
+LEEK_SPECIES = ("カモネギ", "ネギガナイト")
+
+
+# フィールド発動アイテム: 道具名 → (fieldの属性, 上げる能力ランクの属性)
+TERRAIN_SEEDS = {
+    "エレキシード": ("electric_terrain", "stage_defense"),
+    "グラスシード": ("grassy_terrain", "stage_defense"),
+    "ミストシード": ("misty_terrain", "stage_sp_defense"),
+    "サイコシード": ("psychic_terrain", "stage_sp_defense"),
+}
+
+# グランドコート: 技・特性で張ったフィールドの継続を3ターン延長（5→8）
+TERRAIN_EXTEND_ITEM = "グランドコート"
+TERRAIN_TURNS = 5
+TERRAIN_TURNS_EXTENDED = 8
+
+
+def terrain_turns(setter_item: Optional[str]) -> int:
+    """フィールドの継続ターン数。天候の _wturns（あついいわ等）と同じ考え方。"""
+    return TERRAIN_TURNS_EXTENDED if setter_item == TERRAIN_EXTEND_ITEM else TERRAIN_TURNS
+
+
+def try_terrain_seed(poke, field, logs: list) -> bool:
+    """該当フィールドが張られていればシードを発動して消費する。発動でTrue。
+    フィールド設置時と、フィールド継続中の登場時の両方から呼ぶ。"""
+    # opponent に空リスト等を渡すテスト/呼び出しがあるので、ポケモンでなければ何もしない
+    if field is None or not getattr(poke, "is_alive", False):
+        return False
+    ent = TERRAIN_SEEDS.get(poke.item)
+    if ent is None:
+        return False
+    fattr, sattr = ent
+    if not getattr(field, fattr, False):
+        return False
+    if getattr(poke, sattr) >= 6:
+        return False
+    setattr(poke, sattr, min(6, getattr(poke, sattr) + 1))
+    name = poke.item
+    poke.item = None
+    on_item_consumed(poke, logs)
+    logs.append(f"{poke.name} の {name}！ 能力が上がった！")
+    return True
+
+
+def get_crit_stage_bonus(item: Optional[str], holder_name: Optional[str] = None) -> int:
+    """急所ランク加算。種族限定のアイテムがあるので保持者名も受ける。"""
     if item in ("ピントレンズ", "するどいツメ"):
         return 1
     if item == "ラッキーパンチ":
+        return 2
+    if item == "ながねぎ" and holder_name in LEEK_SPECIES:
         return 2
     return 0
 

@@ -3,7 +3,7 @@
 
 - 環境出現アイテム（pokemon_items の DISTINCT）を権威リストとする。
 - 効果文は gamewith ポケモンチャンピオンズ持ち物一覧 + REQUIREMENTS.md を真実源として seed。
-- メガストーン（〜ナイト/ナイトＸ/ナイトＹ）は一律機構（endswith判定）で実装されるため
+- メガストーン（〜ナイト/ナイトＸ/ナイトＹ/ナイトZ）は一律機構（endswith判定）で実装されるため
   カテゴリ MEGA としてまとめ、共通効果文を持たせる。
 - 実装状況は simulator/*.py のコード参照から判定（メガ石は機構実装済み＝True）。
 - item_master テーブル（name_jp/effect_text/implemented/category）に保存し appendix_c.md を生成。
@@ -20,7 +20,8 @@ MEGA_EFFECT = "対応するポケモンがバトル中にメガシンカでき�
 
 def is_mega(name: str) -> bool:
     return (name.endswith("ナイト") or name.endswith("ナイトＸ") or name.endswith("ナイトＹ")
-            or name.endswith("ナイトX") or name.endswith("ナイトY"))
+            or name.endswith("ナイトX") or name.endswith("ナイトY")
+            or name.endswith("ナイトＺ") or name.endswith("ナイトZ"))
 
 
 # 非メガ環境アイテムの効果文（真実源）
@@ -163,7 +164,7 @@ def main():
 
 ## メガストーン（{n_mega}種・共通効果）
 
-{MEGA_EFFECT}（endswith「ナイト/ナイトＸ/ナイトＹ」で一律判定。道具奪取・交換・はたきおとすは無効）
+{MEGA_EFFECT}（endswith「ナイト/ナイトＸ/ナイトＹ/ナイトZ」で一律判定。道具奪取・交換・はたきおとすは無効）
 
 {', '.join(mega_names)}
 """

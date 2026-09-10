@@ -4,6 +4,8 @@
 """
 import sqlite3, os, glob, json, collections
 
+from simulator.data import NATURE_MODS
+
 import os
 SEASON = os.environ.get("SEASON", "M-3")   # 環境が変わったら SEASON=M-5 等で切り替える
 DB = os.path.join(os.path.dirname(__file__), "pokenavi.db")
@@ -13,22 +15,42 @@ SETUP = {"つるぎのまい","りゅうのまい","めいそう","わるだく�
          "ロックカット","ビルドアップ","はらだいこ","コスモパワー","アシッドボム","てっていこうせん","ニトロチャージ",
          "アクアステップ","くさわけ","しんかのきせき","とぐろをまく","めざめるダンス","からにこもる","じこあんじ","バトンタッチ","みがわり"}
 HAZARD = {"ステルスロック","どくびし","まきびし","ねばねばネット"}
-RECOVERY = {"はねやすめ","じこさいせい","なまける","あさのひざし","つきのひかり","こうごうせい","タマゴうみ","ミルクのみ","ねむる","いやしのねがい","つきのひかり"}
+RECOVERY = {"はねやすめ","じこさいせい","なまける","あさのひざし","つきのひかり","こうごうせい","タマゴうみ","ミルクのみ","ねむる","いやしのねがい","つきのひかり","さいきのいのり"}
 PIVOT = {"とんぼがえり","ボルトチェンジ","クイックターン"}
 PROTECT = {"まもる","みきり","トーチカ","キングシールド","ニードルガード"}
 DISRUPT = {"おにび","でんじは","どくどく","どくのこな","しびれごな","ねむりごな","キノコのほうし","あくび","ちょうはつ",
            "アンコール","かなしばり","いばる","ちょうおんぱ","あやしいひかり","やどりぎのタネ","リフレクター","ひかりのかべ",
-           "おいかぜ","トリックルーム","あまごい","にほんばれ","すなあらし","ゆきげしき","でんじふゆう","おきみやげ","すてゼリフ"}
+           "おいかぜ","トリックルーム","あまごい","にほんばれ","すなあらし","ゆきげしき","でんじふゆう","おきみやげ","すてゼリフ","コートチェンジ"}
 
 OFFENSE_ITEMS = {"こだわりハチマキ","こだわりメガネ","いのちのたま","たつじんのおび","ちからのハチマキ","ものしりメガネ",
                  "もくたん","とけないこおり","しんぴのしずく","じしゃく","くろいメガネ","ようせいのハネ","どくバリ",
                  "やわらかいすな","するどいくちばし","シルクのスカーフ","りゅうのキバ","くろおび","まがったスプーン",
-                 "のろいのおふだ","メタルコート","かたいいし","ぎんのこな","ピントレンズ","でんきだま"}
+                 "のろいのおふだ","メタルコート","かたいいし","ぎんのこな","ピントレンズ","でんきだま",
+                 "ノーマルジュエル","ながねぎ"}
 SUPPORT_ITEMS = {"たべのこし","オボンのみ","オレンのみ","しろいハーブ","メンタルハーブ","あついいわ","しめったいわ",
-                 "ひかりのこな","おうじゃのしるし","せんせいのツメ","かいがらのすず","きせきのタネ"}
+                 "ひかりのこな","おうじゃのしるし","せんせいのツメ","かいがらのすず","きせきのタネ",
+                 "ゴツゴツメット","レッドカード","だっしゅつボタン","ふうせん","しめつけバンド",
+                 "エレキシード","グラスシード","ミストシード","サイコシード","グランドコート"}
 
 def is_stone(it):
-    return it.endswith("ナイト") or it.endswith("ナイトX") or it.endswith("ナイトY") or it.endswith("ナイトＸ") or it.endswith("ナイトＹ")
+    return any(it.endswith(sfx) for sfx in
+               ("ナイト", "ナイトX", "ナイトY", "ナイトZ", "ナイトＸ", "ナイトＹ", "ナイトＺ"))
+
+# 効果が特定の技に依存する持ち物。その技が無いと型として成立しないので必須枠に入れる
+BIND_MOVES = {"まとわりつく","まきつく","うずしお","すなじごく","ほのおのうず","マグマストーム","からではさむ"}
+ITEM_AFFINITY = {"しめつけバンド": BIND_MOVES, "ノーマルジュエル": None}
+
+
+def affinity_move(it, mv_roles):
+    """持ち物が要求する技のうち、その種が最も使う1本。無ければ None。"""
+    want = ITEM_AFFINITY.get(it)
+    if not want:
+        return None
+    for n, u, r, c in mv_roles:
+        if n in want:
+            return n
+    return None
+
 
 def item_role(it):
     if is_stone(it): return "メガ"
@@ -126,30 +148,119 @@ def main():
         out.append(f"- 攻撃技: " + " / ".join(f"{n}({u:.0f})" for n,u,r in atk))
         out.append(f"- 変化技: " + " / ".join(f"{n}({u:.0f}){r}" for n,u,r in sup) if sup else "- 変化技: —")
 
-        # ドラフト型（持ち物役割ごと）
+        # ドラフト型（持ち物役割 × 攻撃分類）
+        # 性格/EVを「使用率最上位の1組」で全型に流用すると、物理と特殊が混在する種で
+        # 特殊型が一切生成されない（ガブリアスの C32 22% / ミミッキュのようきが落ちた実例）。
+        # 型ごとに攻撃分類を決め、その分類と矛盾しない性格・EVを選ぶ。
         out.append("### ドラフト型（要修正）")
-        nat0 = na[0]["nature"] if na else "—"
-        ev0 = evfmt(ev[0]) if ev else "—"
         ab0 = ab[0]["ability"] if ab else "—"
-        seen_roles = set()
+        atk_ph = [(n, u) for n, u, r, c in mv_roles if r == "攻撃" and c == "physical"]
+        atk_sp = [(n, u) for n, u, r, c in mv_roles if r == "攻撃" and c == "special"]
+        sup_n = [(n, r) for n, u, r, c in mv_roles if r != "攻撃"]
+
+        def pick_nature(cat):
+            """その分類を下げない性格のうち、攻撃実数値か素早さを上げるものを優先する。"""
+            atk_stat = "attack" if cat == "physical" else "sp_attack"
+            ok = [(r["nature"], NATURE_MODS.get(r["nature"], (None, None))) for r in na]
+            ok = [(n, m) for n, m in ok if m[1] != atk_stat]
+            for want in (atk_stat, "speed"):
+                for n, (up, dn) in ok:
+                    if up == want:
+                        return n
+            return ok[0][0] if ok else (na[0]["nature"] if na else "—")
+
+        def pick_ev(cat):
+            key = "ev_a" if cat == "physical" else "ev_c"
+            for r in ev:
+                if r[key]:
+                    return evfmt(r)
+            if ev:
+                return evfmt(ev[0])
+            # 下位種はEVがクロールされないことがある。無印の「—」を吐くと spec が作れないので
+            # 分類に応じた標準振り（max32スケール）を置く。
+            return "H2 A32 S32" if cat == "physical" else "H2 C32 S32"
+
+        # 採用率50%以上の変化技（さいきのいのり・はねやすめ等）。型を定義するので必ず入れる
+        must = [n for n, u, r, c in mv_roles if r != "攻撃" and (u or 0) >= 50.0][:2]
+
+        def compose(role, cat):
+            prim = atk_ph if cat == "physical" else atk_sp
+            other = atk_sp if cat == "physical" else atk_ph
+            atk_n = [n for n, u in prim] + [n for n, u in other]
+            if role in ("メガ", "スカーフ", "アタッカー", "タスキ"):
+                # 分類内の攻撃技→高採用の変化技→積み/守る/ピボット→分類外の攻撃技 の順で埋める。
+                # 先に分類外で埋めると、特殊型に物理技が混ざって性格/EVと矛盾する。
+                own = [n for n, u in prim]
+                fill = must + [n for n, r in sup_n if r in ("積", "守", "ピボット", "設置")]
+                keep = max(0, 4 - len(must))
+                moves = must + own[:keep]
+                if len(moves) < 4:
+                    moves += [n for n in fill + [x for x, _ in other] if n not in moves]
+                moves = moves[:4]
+            else:
+                pri = must + [n for n, r in sup_n
+                              if r in ("設置", "回復", "妨害", "守", "積", "ピボット") and n not in must]
+                pri = pri[:3]
+                moves = pri + atk_n[:max(0, 4 - len(pri))]
+            return (moves + atk_n + [n for n, _ in sup_n])[:4]
+
+        # 主分類＝採用率合計が大きい側。副分類は攻撃技が2本以上あるときだけ型を立てる
+        u_ph = sum(u for _, u in atk_ph)
+        u_sp = sum(u for _, u in atk_sp)
+        main_cat = "physical" if u_ph >= u_sp else "special"
+        sub_cat = "special" if main_cat == "physical" else "physical"
+        # 副分類を立てるのは「攻撃技2本以上」かつ「EVか性格に裏付けがある」ときだけ。
+        # 技本数だけで立てると、特殊アタッカーに先制物理技2本があるだけで
+        # 物理型が生えてしまう（インテレオンのこおりのつぶて＋アクアジェット）。
+        _sub_key = "ev_c" if sub_cat == "special" else "ev_a"
+        _sub_stat = "sp_attack" if sub_cat == "special" else "attack"
+        _main_stat = "attack" if sub_cat == "special" else "sp_attack"
+        _ev_backs = any(r[_sub_key] and (r["usage_rate"] or 0) >= 8.0 for r in ev)
+        _na_backs = any((r["usage_rate"] or 0) >= 8.0
+                        and (NATURE_MODS.get(r["nature"], (None, None))[0] == _sub_stat
+                             or NATURE_MODS.get(r["nature"], (None, None))[1] == _main_stat)
+                        for r in na)
+        sub_ok = (len(atk_sp if sub_cat == "special" else atk_ph) >= 2
+                  and (_ev_backs or _na_backs))
+
+        seen = set()
         for i in it:
-            if (i["usage_rate"] or 0) < 5.0: continue
+            if (i["usage_rate"] or 0) < 3.0:
+                continue
             role = item_role(i["item"])
-            if role in seen_roles: continue
-            seen_roles.add(role)
-            atk_n = [n for n,u,r in atk]
-            sup_n = [(n,r) for n,u,r in sup]
-            if role in ("メガ","スカーフ","アタッカー","タスキ"):
-                moves = atk_n[:4]
-                # 高採用の積みがあれば4枠目を置換
-                setups = [n for n,r in sup_n if r == "積" ]
-                if setups and len(moves) >= 4:
-                    moves = atk_n[:3] + setups[:1]
-            else:  # 耐久/支援/壁
-                pri = [n for n,r in sup_n if r in ("設置","回復","妨害","守","積","ピボット")][:3]
-                moves = pri + atk_n[:max(0, 4-len(pri))]
-            moves = (moves + atk_n + [n for n,_ in sup_n])[:4]
-            out.append(f"- **{role}型** [{i['item']}/{nat0}/{ab0}/{ev0}] " + " / ".join(moves))
+            cats = [main_cat]
+            # 攻撃役の持ち物は物理/特殊で別型になるので両方立てる
+            if sub_ok and role in ("メガ", "スカーフ", "アタッカー", "タスキ"):
+                cats.append(sub_cat)
+            aff = affinity_move(i["item"], mv_roles)
+            for cat in cats:
+                if (i["item"], cat) in seen:
+                    continue
+                seen.add((i["item"], cat))
+                tag = "物理" if cat == "physical" else "特殊"
+                moves = compose(role, cat)
+                if aff and aff not in moves:
+                    moves = moves[:3] + [aff]
+                if not moves:
+                    continue
+                out.append(f"- **{role}型({tag})** [{i['item']}/{pick_nature(cat)}/{ab0}/{pick_ev(cat)}] "
+                           + " / ".join(moves))
+
+        # 採用率20%以上なのにどの型にも入らなかった技は、主分類アタッカー型の4枠目を
+        # 差し替えた変種で拾う（新技が上位4本の外に落ちて学習対象から消えるのを防ぐ）
+        drafted = set()
+        for line in out:
+            if isinstance(line, str) and line.startswith("- **"):
+                drafted.update(x.strip() for x in line.split("] ")[-1].split(" / "))
+        missing = [n for n, u, r, c in mv_roles if (u or 0) >= 20.0 and n not in drafted][:2]
+        if missing and it:
+            base_item = it[0]["item"]
+            base = compose(item_role(base_item), main_cat)
+            for mm in missing:
+                var = base[:3] + [mm] if mm not in base[:3] else base
+                out.append(f"- **変種({'物理' if main_cat=='physical' else '特殊'}/{mm})** "
+                           f"[{base_item}/{pick_nature(main_cat)}/{ab0}/{pick_ev(main_cat)}] "
+                           + " / ".join(var))
 
         out += m1_lines(poke)   # この種の M-1上位実型を項目末尾に追加
 

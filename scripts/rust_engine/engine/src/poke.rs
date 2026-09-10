@@ -156,6 +156,10 @@ pub struct Poke {
     pub encore_count: i64,
     pub taunt_count: i64,
     pub bound_count: i64,
+    /// しめつけバンド持ちに縛られたか（バインドの削りが1/8→1/6）
+    pub bound_by_band: bool,
+    /// きょけんとつげき使用後の無防備状態（次に自分が行動するまで被ダメ2倍・必中）
+    pub defenseless: bool,
     pub throat_chop_count: i64,
     pub stockpile_count: i64,
     pub infatuation: bool,
@@ -777,7 +781,7 @@ pub fn apply_status(pack: &Pack, p: &mut Poke, status: Sym, corrosion: bool) -> 
     if ab == l.マグマのよろい && status == st.freeze {
         return false;
     }
-    if ab == l.すいほう && status == st.burn {
+    if (ab == l.すいほう || ab == l.ねつこうかん) && status == st.burn {
         return false;
     }
     if (ab == l.ふみん || ab == l.やるき || ab == l.スイートベール) && status == st.sleep {

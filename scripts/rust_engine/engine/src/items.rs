@@ -1,6 +1,7 @@
 //! simulator/items.py の移植（ダメージ計算内の補正は damage.rs 側）。
 use crate::interner::Sym;
 use crate::pack::Pack;
+use crate::damage::Field;
 use crate::poke::Poke;
 use crate::rng::BRng;
 
@@ -152,6 +153,51 @@ pub fn try_leppa_berry(pack: &Pack, p: &mut Poke) {
             return;
         }
     }
+}
+
+/// フィールドの継続ターン数。グランドコートで5→8（天候の あついいわ 等と同じ考え方）。
+pub fn terrain_turns(pack: &Pack, setter_item: Option<crate::interner::Sym>) -> i64 {
+    if setter_item == Some(pack.sy.it.グランドコート) {
+        8
+    } else {
+        5
+    }
+}
+
+/// フィールド発動アイテム（シード）。該当フィールドが張られていれば能力+1して消費する。
+/// フィールド設置時と、継続中フィールドへの登場時の両方から呼ぶ（Python: items.try_terrain_seed）。
+pub fn try_terrain_seed(pack: &Pack, poke: &mut Poke, field: &Field) -> bool {
+    if !poke.is_alive {
+        return false;
+    }
+    let it = &pack.sy.it;
+    // (道具, フィールドが張られているか, 上げる能力: 1=防御 3=特防)
+    let ent = if poke.item == Some(it.エレキシード) {
+        (field.electric_terrain, 1u8)
+    } else if poke.item == Some(it.グラスシード) {
+        (field.grassy_terrain, 1u8)
+    } else if poke.item == Some(it.ミストシード) {
+        (field.misty_terrain, 3u8)
+    } else if poke.item == Some(it.サイコシード) {
+        (field.psychic_terrain, 3u8)
+    } else {
+        return false;
+    };
+    if !ent.0 {
+        return false;
+    }
+    let cur = if ent.1 == 1 { poke.stage_defense } else { poke.stage_sp_defense };
+    if cur >= 6 {
+        return false;
+    }
+    if ent.1 == 1 {
+        poke.stage_defense = std::cmp::min(6, poke.stage_defense + 1);
+    } else {
+        poke.stage_sp_defense = std::cmp::min(6, poke.stage_sp_defense + 1);
+    }
+    poke.item = None;
+    on_item_consumed(pack, poke);
+    true
 }
 
 pub fn on_item_consumed(pack: &Pack, p: &mut Poke) {

@@ -145,6 +145,7 @@ impl Side {
             prev.barrier_done = false;
             prev.info_done = false;
             prev.recharge = false;
+            prev.defenseless = false;
             prev.crit_stage = 0;
             prev.perish_count = 0;
             prev.destiny_bond = false;
@@ -660,6 +661,7 @@ fn is_high_crit(pack: &Pack, n: u16) -> bool {
         || n == l.ストーンエッジ || n == l.ブレイズキック || n == l.クラブハンマー
         || n == l.クロスチョップ || n == l.つじぎり || n == l.ドリルライナー
         || n == l.アクアカッター || n == l.エアカッター || n == l.ゴッドバード
+        || n == l.ねらいうち
 }
 
 pub fn crit_chance(pack: &Pack, attacker: &Poke, mv: &DMove, defender: Option<&Poke>) -> f64 {
@@ -687,7 +689,11 @@ pub fn crit_chance(pack: &Pack, attacker: &Poke, mv: &DMove, defender: Option<&P
     if attacker.ability == l.きょううん {
         stage += 1;
     }
-    stage += crate::damage::get_crit_stage_bonus(pack, attacker.item);
+    stage += crate::damage::get_crit_stage_bonus(
+        pack,
+        attacker.item,
+        Some(pack.intern.resolve(attacker.name)),
+    );
     stage += attacker.crit_stage;
     match std::cmp::min(stage, 3) {
         0 => 1.0 / 24.0,
@@ -725,7 +731,9 @@ pub fn apply_pre_move_forms(pack: &Pack, attacker: &mut Poke, mv: &DMove) {
     if attacker.ability == l.バトルスイッチ && mv.category != Cat::Status {
         aegislash_to_blade(pack, attacker);
     }
-    if attacker.ability == l.へんげんじざい && !attacker.protean_used {
+    if (attacker.ability == l.へんげんじざい || attacker.ability == pack.sy.ai.リベロ)
+        && !attacker.protean_used
+    {
         let new_type = mv.ty;
         if attacker.type1 != new_type || attacker.type2.is_some() {
             attacker.type1 = new_type;
@@ -861,6 +869,7 @@ pub fn execute_move(
         }};
     }
 
+    A!().defenseless = false;
     A!().flinched = false;
     A!().last_used_move = Some(n);
     A!().last_move_obj = Some(mv.clone());
@@ -945,7 +954,9 @@ pub fn execute_move(
     }
 
     if A!().status == Some(st.freeze) {
-        if n == l.もえつきる || n == l.ねっとう || n == l.ねっさのだいち || n == l.せいなるほのお {
+        if n == l.もえつきる || n == l.ねっとう || n == l.ねっさのだいち || n == l.せいなるほのお
+            || n == l.かえんボール
+        {
             A!().status = None;
         } else if rng.random() < 0.2 {
             A!().status = None;
@@ -1234,6 +1245,9 @@ pub fn execute_move(
     if n == l.もえつきる && !A!().has_type(pack.tc.ほのお) {
         return;
     }
+    if n == l.でんこうそうげき && !A!().has_type(pack.tc.でんき) {
+        return;
+    }
     if n == l.ゲップ && !A!().ate_berry {
         return;
     }
@@ -1265,6 +1279,16 @@ pub fn execute_move(
             _ => 0,
         };
         if opp_pri <= 0 {
+            return;
+        }
+    }
+    if field.psychic_terrain && mv.priority > 0 && mv.category != Cat::Status {
+        let d_grounded = !(D!().has_type(pack.tc.ひこう)
+            || D!().ability == l.ふゆう
+            || D!().magnet_rise
+            || D!().item == Some(pack.sy.it.ふうせん))
+            || D!().grounded;
+        if d_grounded {
             return;
         }
     }
@@ -1481,6 +1505,62 @@ pub fn execute_move(
         } else if mv.category == Cat::Special {
             D!().last_special_dmg_received += dmg;
         }
+        // ノーマルジュエル: ノーマル技を撃つと消費（威力補正は pack.type_boost）。
+        // 消費は実戦経路だけで行う。calc_damage の中でやるとAIの見積りを呼ぶだけで無くなる。
+        if A!().item == Some(pack.sy.it.ノーマルジュエル)
+            && mv.ty == pack.tc.ノーマル
+            && mv.category != Cat::Status
+        {
+            A!().item = None;
+            it::on_item_consumed(pack, &mut A!());
+        }
+
+        // レッドカード: ダメージを与えてきた相手を追い出す（消費）。持ち主は防御側。
+        // マジックミラーと同じ force_switch を使う＝処理タイミングも既存と揃える。
+        if D!().item == Some(pack.sy.it.レッドカード) && total_dmg > 0 && A!().is_alive {
+            let has_bench = (0..sides[aidx].party.len())
+                .any(|i| sides[aidx].party[i].is_alive && i != sides[aidx].active_idx);
+            if has_bench {
+                D!().item = None;
+                it::on_item_consumed(pack, &mut D!());
+                if A!().ability != l.ばんけん {
+                    A!().force_switch = true;
+                }
+            }
+        }
+
+        // ききかいひ: HPが1/2以下になると手持ちに戻る（この技で1/2を跨いだ時のみ）
+        if D!().ability == l.ききかいひ
+            && total_dmg > 0
+            && D!().is_alive
+            && D!().hp * 2 <= D!().max_hp
+            && (D!().hp + total_dmg) * 2 > D!().max_hp
+        {
+            let has_bench = (0..sides[didx].party.len())
+                .any(|i| sides[didx].party[i].is_alive && i != sides[didx].active_idx);
+            if has_bench {
+                D!().pivot_out = true;
+            }
+        }
+
+        // だっしゅつボタン: ダメージを受けた自分が手持ちに戻る（消費）。
+        // 交代先は選べる想定なので、ランダム交代ではなくピボット扱いにする。
+        if D!().item == Some(pack.sy.it.だっしゅつボタン) && total_dmg > 0 && D!().is_alive {
+            let has_bench = (0..sides[didx].party.len())
+                .any(|i| sides[didx].party[i].is_alive && i != sides[didx].active_idx);
+            if has_bench {
+                D!().item = None;
+                it::on_item_consumed(pack, &mut D!());
+                D!().pivot_out = true;
+            }
+        }
+
+        // ふうせん: 技のダメージを受けると割れて無くなる
+        if D!().item == Some(pack.sy.it.ふうせん) && total_dmg > 0 {
+            D!().item = None;
+            it::on_item_consumed(pack, &mut D!());
+        }
+
         if A!().item == Some(l.いのちのたま) && mv.category != Cat::Status {
             let recoil = std::cmp::max(1, ((A!().max_hp as f64) / 10.0).floor() as i64);
             A!().take_damage(recoil);
@@ -1599,7 +1679,10 @@ pub fn execute_move(
             None
         };
         if let Some(r) = rate {
-            if total_dmg > 0 && A!().is_alive {
+            if total_dmg > 0 && A!().is_alive && D!().ability == l.ヘドロえき {
+                let dm = std::cmp::max(1, ((total_dmg as f64) * r).floor() as i64);
+                A!().take_damage(dm);
+            } else if total_dmg > 0 && A!().is_alive {
                 let mut heal = std::cmp::max(1, ((total_dmg as f64) * r).floor() as i64);
                 if A!().item == Some(l.おおきなねっこ) {
                     heal = ((heal as f64) * 1.3).floor() as i64;
@@ -1615,6 +1698,16 @@ pub fn execute_move(
             A!().disabled_turns = 3;
         }
     }
+    if D!().ability == l.こぼれダネ && total_dmg > 0 && !field.grassy_terrain {
+        field.grassy_terrain = true;
+        field.grassy_terrain_count = 5;
+        {
+            let (dp, ap) = { let (x, y) = two!(); (y, x) };
+            crate::items::try_terrain_seed(pack, dp, field);
+            crate::items::try_terrain_seed(pack, ap, field);
+        }
+    }
+
     if D!().ability == l.すなはき && total_dmg > 0 && field.weather != Some(we.sandstorm) {
         field.weather = Some(we.sandstorm);
         field.weather_count = 5;
@@ -1748,6 +1841,10 @@ pub fn execute_move(
     if (n == l.ボルトチェンジ || n == l.とんぼがえり || n == l.クイックターン) && A!().is_alive {
         A!().pivot_out = true;
     }
+    if n == l.きょけんとつげき && A!().is_alive {
+        A!().defenseless = true;
+    }
+
     if (n == l.ドラゴンテール || n == l.ほえる || n == l.ふきとばし || n == l.ともえなげ)
         && D!().is_alive
     {
@@ -1788,7 +1885,8 @@ pub fn execute_move(
         || n == l.はかいこうせん
         || n == l.ハイドロカノン
         || n == l.ハードプラント
-        || n == l.がんせきほう)
+        || n == l.がんせきほう
+        || n == l.スターアサルト)
         && A!().is_alive
     {
         A!().recharge = true;
@@ -2496,7 +2594,9 @@ pub fn apply_status_move(
     }
     if n == l.グラスフィールド {
         field.grassy_terrain = true;
-        field.grassy_terrain_count = 5;
+        field.grassy_terrain_count = it::terrain_turns(pack, A!().item);
+        it::try_terrain_seed(pack, &mut A!(), field);
+        it::try_terrain_seed(pack, &mut D!(), field);
         return;
     }
     if n == l.リサイクル {
@@ -2692,7 +2792,7 @@ pub fn apply_status_move(
             }
         } else if dab == l.おうごんのからだ {
             blocked = true;
-        } else if dab == l.きゅうばん {
+        } else if dab == l.きゅうばん || dab == l.ばんけん {
             blocked = true;
         } else if n == l.ほえる && dab == l.ぼうおん {
             blocked = true;
@@ -2741,6 +2841,41 @@ pub fn apply_status_move(
             sides[aidx].wish_count = 2;
         }
         return;
+    }
+
+    if n == l.コートチェンジ {
+        let (ax, dx) = (sides[aidx].field_idx, sides[didx].field_idx);
+        field.stealth_rock.swap(ax, dx);
+        field.spikes.swap(ax, dx);
+        field.toxic_spikes.swap(ax, dx);
+        field.sticky_web.swap(ax, dx);
+        let (a, b) = sides.split_at_mut(1);
+        let (sa, sd) = if aidx == 0 { (&mut a[0], &mut b[0]) } else { (&mut b[0], &mut a[0]) };
+        std::mem::swap(&mut sa.reflect, &mut sd.reflect);
+        std::mem::swap(&mut sa.reflect_count, &mut sd.reflect_count);
+        std::mem::swap(&mut sa.light_screen, &mut sd.light_screen);
+        std::mem::swap(&mut sa.light_screen_count, &mut sd.light_screen_count);
+        std::mem::swap(&mut sa.aurora_veil, &mut sd.aurora_veil);
+        std::mem::swap(&mut sa.aurora_veil_count, &mut sd.aurora_veil_count);
+        std::mem::swap(&mut sa.tailwind, &mut sd.tailwind);
+        std::mem::swap(&mut sa.tailwind_count, &mut sd.tailwind_count);
+        std::mem::swap(&mut sa.safeguard, &mut sd.safeguard);
+        std::mem::swap(&mut sa.stealth_rock_set, &mut sd.stealth_rock_set);
+        return;
+    }
+
+    if n == l.さいきのいのり {
+        let tgt = (0..sides[aidx].party.len()).find(|&i| !sides[aidx].party[i].is_alive);
+        match tgt {
+            None => return,
+            Some(i) => {
+                let mhp = sides[aidx].party[i].max_hp;
+                sides[aidx].party[i].is_alive = true;
+                sides[aidx].party[i].hp = std::cmp::max(1, mhp / 2);
+                sides[aidx].party[i].status = None;
+                return;
+            }
+        }
     }
 
     if n == l.いやしのねがい {
@@ -2844,17 +2979,23 @@ pub fn apply_status_move(
     }
     if n == l.ミストフィールド {
         field.misty_terrain = true;
-        field.misty_terrain_count = 5;
+        field.misty_terrain_count = it::terrain_turns(pack, A!().item);
+        it::try_terrain_seed(pack, &mut A!(), field);
+        it::try_terrain_seed(pack, &mut D!(), field);
         return;
     }
     if n == l.エレキフィールド {
         field.electric_terrain = true;
-        field.electric_terrain_count = 5;
+        field.electric_terrain_count = it::terrain_turns(pack, A!().item);
+        it::try_terrain_seed(pack, &mut A!(), field);
+        it::try_terrain_seed(pack, &mut D!(), field);
         return;
     }
     if n == l.サイコフィールド {
         field.psychic_terrain = true;
-        field.psychic_terrain_count = 5;
+        field.psychic_terrain_count = it::terrain_turns(pack, A!().item);
+        it::try_terrain_seed(pack, &mut A!(), field);
+        it::try_terrain_seed(pack, &mut D!(), field);
         return;
     }
     if n == l.じゅうでん {
@@ -3008,6 +3149,8 @@ fn status_effects(pack: &Pack, n: u16) -> Option<(Option<u16>, f64)> {
         (Some(s.burn), 0.10)
     } else if n == l.ブレイズキック {
         (Some(s.burn), 0.10)
+    } else if n == l.かえんボール {
+        (Some(s.burn), 0.10)
     } else if n == l.ふんえん {
         (Some(s.burn), 0.30)
     } else if n == l.ねっぷう {
@@ -3074,6 +3217,8 @@ fn def_downs(pack: &Pack, n: u16) -> Option<(u8, i32, f64)> {
     } else if n == l.バークアウト {
         (2, -1, 1.00)
     } else if n == l.こごえるかぜ {
+        (4, -1, 1.00)
+    } else if n == l.ドラムアタック {
         (4, -1, 1.00)
     } else if n == l.がんせきふうじ {
         (4, -1, 1.00)
@@ -3327,6 +3472,8 @@ pub fn apply_secondary(
         || n == l.トラバサミ;
     if is_bind && dmg > 0 && defender.is_alive && defender.bound_count == 0 {
         defender.bound_count = rng.randint(4, 5);
+        // しめつけバンドを持つのは「縛った側」。EOTで相手を辿らずに済むよう束縛時に控える。
+        defender.bound_by_band = attacker.item == Some(pack.sy.it.しめつけバンド);
     }
 
     if n == l.なげつける && defender.is_alive && !force_no_secondary {
@@ -3513,10 +3660,23 @@ pub fn apply_secondary(
             defender.status = None;
         }
     }
-    if n == l.ねっとう || n == l.もえつきる || n == l.ねっさのだいち {
+    if n == l.ねっとう || n == l.もえつきる || n == l.ねっさのだいち || n == l.かえんボール {
         if attacker.status == Some(st.freeze) {
             attacker.status = None;
         }
+    }
+    if n == l.でんこうそうげき && attacker.has_type(pack.tc.でんき) {
+        let mut rem: Vec<Ty> = Vec::new();
+        if attacker.type1 != pack.tc.でんき {
+            rem.push(attacker.type1);
+        }
+        if let Some(t2) = attacker.type2 {
+            if t2 != pack.tc.でんき {
+                rem.push(t2);
+            }
+        }
+        attacker.type1 = if rem.is_empty() { pack.tc.ノーマル } else { rem[0] };
+        attacker.type2 = if rem.len() > 1 { Some(rem[1]) } else { None };
     }
     if n == l.もえつきる && attacker.has_type(pack.tc.ほのお) {
         let mut rem: Vec<Ty> = Vec::new();
@@ -3840,6 +4000,30 @@ impl Battle {
                 }
             }
 
+            // だっしゅつボタン: ダメージを受けた側（=相手）が引っ込む。交代先は戦略的に選ぶ。
+            // 攻撃側の pivot_out（とんぼがえり等）は上で処理済み。防御側に立つのは本アイテムのみ。
+            let opiv = self.sides[ox].active().is_alive && self.sides[ox].active().pivot_out;
+            if opiv {
+                self.sides[ox].active_mut().pivot_out = false;
+                let next_idx = {
+                    let Battle { sides, field, .. } = self;
+                    let (me, opp) = split2(sides, ox);
+                    let oi = opp.active_idx;
+                    choose_pivot_target(pack, me, &mut opp.party[oi], false, field, rng)
+                };
+                if let Some(ni) = next_idx {
+                    self.sides[ox].switch_to(pack, ni);
+                    {
+                        let Battle { sides, field, .. } = self;
+                        entry_effects_side(pack, sides, field, ox);
+                    }
+                    self.apply_healing_wish(ox);
+                    let nm = self.sides[ox].active().clone();
+                    self.sides[mx].opp_view.on_enter(&nm);
+                    self.faint_switch(pack, ox, rng);
+                }
+            }
+
             // 強制交代
             let fsw = self.sides[ox].active().is_alive && self.sides[ox].active().force_switch;
             if fsw {
@@ -4079,7 +4263,7 @@ impl Battle {
             {
                 let p = self.sides[sx].active_mut();
                 if p.bound_count > 0 && p.is_alive {
-                    let d = std::cmp::max(1, p.max_hp / 8);
+                    let d = std::cmp::max(1, p.max_hp / if p.bound_by_band { 6 } else { 8 });
                     p.take_damage(d);
                     p.bound_count -= 1;
                 }

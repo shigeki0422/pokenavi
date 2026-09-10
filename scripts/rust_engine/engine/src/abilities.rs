@@ -79,12 +79,30 @@ pub fn entry_ability(
 
     if ab == l.エレキメイカー && !field.electric_terrain {
         field.electric_terrain = true;
-        field.electric_terrain_count = 5;
+        field.electric_terrain_count = crate::items::terrain_turns(pack, poke.item);
+        crate::items::try_terrain_seed(pack, poke, field);
+        crate::items::try_terrain_seed(pack, opponent, field);
+    }
+    if ab == l.グラスメイカー && !field.grassy_terrain {
+        field.grassy_terrain = true;
+        field.grassy_terrain_count = crate::items::terrain_turns(pack, poke.item);
+        crate::items::try_terrain_seed(pack, poke, field);
+        crate::items::try_terrain_seed(pack, opponent, field);
+    }
+    if ab == l.サイコメイカー && !field.psychic_terrain {
+        field.psychic_terrain = true;
+        field.psychic_terrain_count = crate::items::terrain_turns(pack, poke.item);
+        crate::items::try_terrain_seed(pack, poke, field);
+        crate::items::try_terrain_seed(pack, opponent, field);
     }
 
     if ab == l.いかく {
         let oab = opponent.ability;
-        if oab == l.クリアボディ
+        if oab == l.ばんけん {
+            opponent.stage_attack = std::cmp::min(6, opponent.stage_attack + 1);
+        } else if oab == l.びびり {
+            opponent.stage_speed = std::cmp::min(6, opponent.stage_speed + 1);
+        } else if oab == l.クリアボディ
             || oab == l.しろいけむり
             || oab == l.かがくへんかガス
             || oab == l.マイペース
@@ -277,6 +295,18 @@ pub fn on_after_hit(
         defender.stage_attack = std::cmp::min(6, defender.stage_attack + 1);
     }
 
+    // びびり（あく・ゴースト・むし技のダメージで素早さ+1。いかくは entry_ability 側）
+    if ab == l.びびり
+        && (mv.ty == pack.tc.あく || mv.ty == pack.tc.ゴースト || mv.ty == pack.tc.むし)
+    {
+        defender.stage_speed = std::cmp::min(6, defender.stage_speed + 1);
+    }
+
+    // ねつこうかん（ほのお技を受けると攻撃+1。やけど免疫は poke.rs: apply_status 側）
+    if ab == l.ねつこうかん && mv.ty == pack.tc.ほのお {
+        defender.stage_attack = std::cmp::min(6, defender.stage_attack + 1);
+    }
+
     if contact && !mold && attacker.is_alive {
         if ab == l.ほのおのからだ && rng.random() < 0.30 {
             apply_status(pack, attacker, st.burn, false);
@@ -328,6 +358,12 @@ pub fn rough_skin_recoil(pack: &Pack, attacker: &mut Poke, defender: &mut Poke, 
             let recoil = std::cmp::max(1, attacker.max_hp / 8);
             attacker.take_damage(recoil);
         }
+    }
+
+    // ゴツゴツメット（アイテムなので かたやぶり では無効化されない。削りは1/6）
+    if defender.item == Some(pack.sy.it.ゴツゴツメット) && is_contact_move(pack, mv) && !enkaku {
+        let recoil = std::cmp::max(1, attacker.max_hp / 6);
+        attacker.take_damage(recoil);
     }
     if ab == l.ゆうばく
         && is_contact_move(pack, mv)

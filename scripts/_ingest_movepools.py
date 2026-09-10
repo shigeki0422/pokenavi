@@ -56,6 +56,24 @@ def main():
         per[name] = added - before
         if (i + 1) % 40 == 0:
             print(f"  {i+1}/{len(rows)} 処理 (+{added}技) {time.time()-t0:.0f}秒", flush=True)
+    # PokeAPI の movepool には Champions 独自技（ゴリランダーのグラススライダー等）や
+    # 版差分で落ちる技がある。使用実績＝合法なので、使用率側からも補完して
+    # learnset ⊇ 使用技 を成立させる（pokemon_audit の C を0に保つ条件）。
+    use_added = 0
+    for pk, mv in c.execute(
+            "SELECT DISTINCT u.pokemon, u.move FROM pokemon_moves u "
+            "JOIN move_master m ON m.name_jp = u.move").fetchall():
+        if not c.execute("SELECT 1 FROM pokemon_base_stats WHERE pokemon_name=?", (pk,)).fetchone():
+            continue
+        if dry:
+            if not c.execute("SELECT 1 FROM pokemon_learnsets WHERE pokemon_name=? AND move_jp=?",
+                             (pk, mv)).fetchone():
+                use_added += 1
+        else:
+            c.execute("INSERT OR IGNORE INTO pokemon_learnsets(pokemon_name, move_jp) VALUES(?,?)",
+                      (pk, mv))
+            use_added += c.execute("SELECT changes()").fetchone()[0]
+    print(f"{'[DRY]' if dry else ''} 使用率からの補完: +{use_added}件", flush=True)
     if not dry:
         c.commit()
     top = sorted(per.items(), key=lambda x: -x[1])[:10]

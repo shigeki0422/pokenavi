@@ -8749,6 +8749,167 @@ _dt.stage_attack = 2; _dt.stage_speed = 1; _dt.stage_defense = -1
 execute(_pt, _dt, "ひっくりかえす")
 check("相手能力変化が逆転: ひっくりかえす", _dt.stage_attack==-2 and _dt.stage_speed==-1 and _dt.stage_defense==1, f"A={_dt.stage_attack} S={_dt.stage_speed} B={_dt.stage_defense}")
 
+# ── きょけんとつげき ──
+check("DB: きょけんとつげき 取得可能", dl.get_move("きょけんとつげき") is not None)
+_mv_きょけんとつげき = dl.get_move("きょけんとつげき")
+if _mv_きょけんとつげき:
+    _pa_きょけんとつげき = make_poke(type1="ドラゴン", atk_b=100, spatk_b=100)
+    _pd_きょけんとつげき = make_poke(type1="ドラゴン", def_b=100, spdef_b=100)
+    _d_きょけんとつげき = dmg(_pa_きょけんとつげき, _pd_きょけんとつげき, "きょけんとつげき")
+    check("ダメージ計算: きょけんとつげき", _d_きょけんとつげき > 0, f"dmg={_d_きょけんとつげき}")
+# きょけんとつげき: 使用後は無防備状態（被ダメ2倍・必中）、次に自分が行動すると解除
+_pgv = make_poke(type1="ドラゴン", atk_b=120, hp_b=255, def_b=100)
+_dgv = make_poke(type1="ノーマル", hp_b=255, def_b=100, atk_b=100)
+execute(_pgv, _dgv, "きょけんとつげき")
+check("無防備状態付与: きょけんとつげき", getattr(_pgv, "_defenseless", False) is True)
+_pgv0 = make_poke(type1="ドラゴン", atk_b=120, hp_b=255, def_b=100)
+_dv_v = dmg(_dgv, _pgv, "たいあたり"); _dv_n = dmg(_dgv, _pgv0, "たいあたり")
+check("無防備で被ダメ2倍: きょけんとつげき", _dv_v == _dv_n * 2, f"vuln={_dv_v} normal={_dv_n}")
+from simulator.damage import check_hit as _chgv
+check("無防備で必中: きょけんとつげき", all(_chgv(_dgv, _pgv, dl.get_move("ふぶき"), BattleField()) for _ in range(20)))
+execute(_pgv, _dgv, "たいあたり")
+check("行動で無防備解除: きょけんとつげき", getattr(_pgv, "_defenseless", False) is False)
+
+# ── ドラムアタック ──
+check("DB: ドラムアタック 取得可能", dl.get_move("ドラムアタック") is not None)
+_mv_ドラムアタック = dl.get_move("ドラムアタック")
+if _mv_ドラムアタック:
+    _pa_ドラムアタック = make_poke(type1="くさ", atk_b=100, spatk_b=100)
+    _pd_ドラムアタック = make_poke(type1="みず", def_b=100, spdef_b=100)
+    _d_ドラムアタック = dmg(_pa_ドラムアタック, _pd_ドラムアタック, "ドラムアタック")
+    check("ダメージ計算: ドラムアタック", _d_ドラムアタック > 0, f"dmg={_d_ドラムアタック}")
+# ドラムアタック: 相手素早さ-1
+_mv_dd_ドラムアタック = dl.get_move("ドラムアタック")
+if _mv_dd_ドラムアタック:
+    _pa_dd = make_poke(type1="くさ", atk_b=30, spatk_b=30)
+    random.seed(0); _dd_val_ドラムアタック = 0; _dd_ok_ドラムアタック = False
+    for _ in range(60):
+        _pd_dd = make_poke(type1="みず", hp_b=255, def_b=255, spdef_b=255)
+        execute(_pa_dd, _pd_dd, "ドラムアタック")
+        if _pd_dd.stage_speed != 0: _dd_val_ドラムアタック = _pd_dd.stage_speed; _dd_ok_ドラムアタック = True; break
+    check("相手素早さ-1: ドラムアタック", _dd_ok_ドラムアタック and _dd_val_ドラムアタック == -1, f"1回適用={_dd_val_ドラムアタック} 期待=-1")
+
+# ── かえんボール ──
+check("DB: かえんボール 取得可能", dl.get_move("かえんボール") is not None)
+_mv_かえんボ_ル = dl.get_move("かえんボール")
+if _mv_かえんボ_ル:
+    _pa_かえんボ_ル = make_poke(type1="ほのお", atk_b=100, spatk_b=100)
+    _pd_かえんボ_ル = make_poke(type1="くさ", def_b=100, spdef_b=100)
+    _d_かえんボ_ル = dmg(_pa_かえんボ_ル, _pd_かえんボ_ル, "かえんボール")
+    check("ダメージ計算: かえんボール", _d_かえんボ_ル > 0, f"dmg={_d_かえんボ_ル}")
+# かえんボール: やけど10%
+_mv_s_かえんボ_ル = dl.get_move("かえんボール")
+if _mv_s_かえんボ_ル:
+    random.seed(0); _hit_かえんボ_ル = 0
+    for _ in range(300):
+        _pa2 = make_poke(type1="ほのお", atk_b=30, spatk_b=30); _pd2 = make_poke(type1="くさ", def_b=255, spdef_b=255, hp_b=255)
+        execute(_pa2, _pd2, "かえんボール")
+        _hit_かえんボ_ル += int((_pd2.status == "burn"))
+    check("追加効果(やけど10%): かえんボール", 9 <= _hit_かえんボ_ル <= 66, f"count={_hit_かえんボ_ル}/300")
+    random.seed(1); _immok_かえんボ_ル = True
+    for _ in range(60):
+        _pai = make_poke(type1="ほのお", atk_b=30, spatk_b=30); _pdi = make_poke(type1="ほのお", def_b=255, spdef_b=255, hp_b=255)
+        execute(_pai, _pdi, "かえんボール")
+        if _pdi.status == "burn": _immok_かえんボ_ル = False; break
+    check("やけど免疫(ほのお型には無効): かえんボール", _immok_かえんボ_ル, "免疫タイプに状態異常が付与されないこと")
+# かえんボール: 使うと自分のこおり状態を治す
+_pfb = make_poke(type1="ほのお", atk_b=100); _pfb.status = "freeze"
+execute(_pfb, make_poke(type1="くさ", hp_b=255, def_b=150), "かえんボール")
+check("自分こおり治癒: かえんボール", _pfb.status != "freeze", f"status={_pfb.status}")
+_pfb2 = make_poke(type1="ほのお", atk_b=100); _pfb2.status = "burn"
+execute(_pfb2, make_poke(type1="くさ", hp_b=255, def_b=150), "かえんボール")
+check("こおり以外は治らない(負例): かえんボール", _pfb2.status == "burn", f"status={_pfb2.status}")
+
+# ── コートチェンジ ──
+check("DB: コートチェンジ 取得可能", dl.get_move("コートチェンジ") is not None)
+# コートチェンジ: 自分側・相手側の場が双方向に入れ替わる（設置物を実際に踏ませて確認）
+from simulator.battle import _entry_effects as _eecc
+_fcc = BattleField()
+_pcc1 = make_poke(hp_b=255); _pcc2 = make_poke(hp_b=255)
+_scc1 = BattleSide([_pcc1]); _scc2 = BattleSide([_pcc2])
+_scc1.field_idx, _scc2.field_idx = 0, 1
+_fcc.stealth_rock[0] = True; _fcc.spikes[1] = 3
+_execute_move(_scc1, _scc2, Action(type='move', move=dl.get_move('コートチェンジ')), _fcc)
+_eecc(_pcc1, 0, _fcc, _pcc2); _eecc(_pcc2, 1, _fcc, _pcc1)
+_lcc1 = _pcc1.max_hp - _pcc1.hp; _lcc2 = _pcc2.max_hp - _pcc2.hp
+check("双方向入替(自分の場↔相手の場): コートチェンジ", _lcc1 == _pcc1.max_hp // 4 and _lcc2 == _pcc2.max_hp // 8, f"self_lost={_lcc1}(まきびし3段1/4期待) opp_lost={_lcc2}(ステロ1/8期待)")
+check("フラグも入れ替わる: コートチェンジ", _fcc.stealth_rock == [False, True] and _fcc.spikes == [3, 0], f"sr={_fcc.stealth_rock} spk={_fcc.spikes}")
+_fcc2 = BattleField(); _scd1 = BattleSide([make_poke()]); _scd2 = BattleSide([make_poke()])
+_scd1.field_idx, _scd2.field_idx = 0, 1
+_scd1.reflect = True; _scd1.reflect_count = 4; _scd2.tailwind = True; _scd2.tailwind_count = 3
+_execute_move(_scd1, _scd2, Action(type='move', move=dl.get_move('コートチェンジ')), _fcc2)
+check("壁・おいかぜも双方向: コートチェンジ", _scd1.reflect is False and _scd2.reflect is True and _scd2.reflect_count == 4 and _scd1.tailwind is True and _scd1.tailwind_count == 3 and _scd2.tailwind is False, f"refl={_scd1.reflect}/{_scd2.reflect} tw={_scd1.tailwind}/{_scd2.tailwind}")
+
+# ── でんこうそうげき ──
+check("DB: でんこうそうげき 取得可能", dl.get_move("でんこうそうげき") is not None)
+_mv_でんこうそうげき = dl.get_move("でんこうそうげき")
+if _mv_でんこうそうげき:
+    _pa_でんこうそうげき = make_poke(type1="でんき", atk_b=100, spatk_b=100)
+    _pd_でんこうそうげき = make_poke(type1="みず", def_b=100, spdef_b=100)
+    _d_でんこうそうげき = dmg(_pa_でんこうそうげき, _pd_でんこうそうげき, "でんこうそうげき")
+    check("ダメージ計算: でんこうそうげき", _d_でんこうそうげき > 0, f"dmg={_d_でんこうそうげき}")
+# でんこうそうげき: 非でんきは失敗、でんきなら攻撃後に自分のでんきが消える
+_pdf = make_poke(type1="ノーマル", atk_b=120); _ddf = make_poke(type1="ノーマル", hp_b=255, def_b=150)
+_hpd1 = _ddf.hp; execute(_pdf, _ddf, "でんこうそうげき")
+check("非でんき失敗: でんこうそうげき", _ddf.hp == _hpd1, f"hp={_ddf.hp}/{_hpd1}")
+_pds = make_poke(type1="でんき", type2="ひこう", atk_b=120); _dds = make_poke(type1="ノーマル", hp_b=255, def_b=150)
+_hpd2 = _dds.hp; execute(_pds, _dds, "でんこうそうげき")
+check("でんきなら成功: でんこうそうげき", _dds.hp < _hpd2, f"hp={_dds.hp}/{_hpd2}")
+check("でんきタイプ消失: でんこうそうげき", "でんき" not in (_pds.type1, _pds.type2), f"types={_pds.type1}/{_pds.type2}")
+
+# ── さいきのいのり ──
+check("DB: さいきのいのり 取得可能", dl.get_move("さいきのいのり") is not None)
+# さいきのいのり: ひんしを最大HPの1/2で復活。ひんしがいなければ失敗
+_prb = make_poke(type1="ノーマル"); _drb = make_poke(hp_b=100)
+_drb.hp = 0; _drb.is_alive = False
+_execute_move(BattleSide([_prb, _drb]), BattleSide([make_poke()]), Action(type='move', move=dl.get_move('さいきのいのり')), BattleField())
+check("ひんし復活: さいきのいのり", _drb.is_alive is True)
+check("復活HPは1/2: さいきのいのり", _drb.hp == _drb.max_hp // 2, f"hp={_drb.hp}/{_drb.max_hp}")
+_lrb = _execute_move(BattleSide([make_poke(type1='ノーマル'), make_poke()]), BattleSide([make_poke()]), Action(type='move', move=dl.get_move('さいきのいのり')), BattleField())
+check("ひんし無しは失敗(負例): さいきのいのり", any("失敗" in _l for _l in _lrb))
+
+# ── スターアサルト ──
+check("DB: スターアサルト 取得可能", dl.get_move("スターアサルト") is not None)
+_mv_スタ_アサルト = dl.get_move("スターアサルト")
+if _mv_スタ_アサルト:
+    _pa_スタ_アサルト = make_poke(type1="かくとう", atk_b=100, spatk_b=100)
+    _pd_スタ_アサルト = make_poke(type1="ノーマル", def_b=100, spdef_b=100)
+    _d_スタ_アサルト = dmg(_pa_スタ_アサルト, _pd_スタ_アサルト, "スターアサルト")
+    check("ダメージ計算: スターアサルト", _d_スタ_アサルト > 0, f"dmg={_d_スタ_アサルト}")
+# スターアサルト: 使用後リチャージ付与 + リチャージ中は行動不能
+random.seed(0); _rc_ok2 = False
+for _ in range(20):
+    _prc2 = make_poke(type1="かくとう", atk_b=120, spatk_b=120); _drc2 = make_poke(type1="ノーマル", hp_b=255, def_b=100, spdef_b=100)
+    execute(_prc2, _drc2, "スターアサルト")
+    if _prc2.recharge: _rc_ok2 = True; break
+check("リチャージ付与: スターアサルト", _rc_ok2)
+# リチャージ中は行動不能（相手にダメージが通らない）
+_prc3 = make_poke(type1="かくとう", atk_b=150, spatk_b=150); _prc3.recharge = True
+_drc3 = make_poke(type1="ノーマル", hp_b=255, def_b=100, spdef_b=100); _hprc3 = _drc3.hp
+execute(_prc3, _drc3, "スターアサルト")
+check("リチャージ中行動不能: スターアサルト", _drc3.hp == _hprc3, f"hp={_drc3.hp}/{_hprc3}")
+
+# ── ねらいうち ──
+check("DB: ねらいうち 取得可能", dl.get_move("ねらいうち") is not None)
+_mv_ねらいうち = dl.get_move("ねらいうち")
+if _mv_ねらいうち:
+    _pa_ねらいうち = make_poke(type1="みず", atk_b=100, spatk_b=100)
+    _pd_ねらいうち = make_poke(type1="ほのお", def_b=100, spdef_b=100)
+    _d_ねらいうち = dmg(_pa_ねらいうち, _pd_ねらいうち, "ねらいうち")
+    check("ダメージ計算: ねらいうち", _d_ねらいうち > 0, f"dmg={_d_ねらいうち}")
+# ねらいうち: 急所ランク+1（急所率が通常技より高い）
+from simulator.battle import _check_critical as _cc_ねらいうち
+random.seed(0); _hc_crit_ねらいうち = 0; _phc = make_poke(type1="みず")
+_mvhc_ねらいうち = dl.get_move("ねらいうち")
+for _ in range(800):
+    if _cc_ねらいうち(_phc, _mvhc_ねらいうち, make_poke(type1="ほのお")): _hc_crit_ねらいうち += 1
+# 1/8≈100回(800試行)。通常1/24なら≈33回。明確に区別
+check("急所ランク+1: ねらいうち", 60 <= _hc_crit_ねらいうち <= 150, f"crit={_hc_crit_ねらいうち}/800 (期待≈100, 通常1/24なら≈33)")
+# ねらいうち: 引き受け無視は1v1では効果なし（急所+1は急所テスト側で検証）
+_psn = make_poke(type1="みず", spatk_b=100); _dsn = make_poke(type1="ノーマル", hp_b=255, spdef_b=100)
+_hpsn = _dsn.hp; execute(_psn, _dsn, "ねらいうち")
+check("引き受け無視は1v1で無影響(通常通り命中): ねらいうち", _dsn.hp < _hpsn, f"hp={_dsn.hp}/{_hpsn}")
+
 
 print(f'\n全技テスト: {PASS}件PASS / {FAIL}件FAIL (計{PASS+FAIL}件)')
 if FAILURES:

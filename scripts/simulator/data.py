@@ -139,10 +139,10 @@ class MegaData:
 
 
 def normalize_mega_stone(name: Optional[str]) -> Optional[str]:
-    """メガ石名の全角Ｘ/Ｙを半角X/Yに統一（リザードナイトＸ↔X 等の表記ゆれ吸収）。"""
+    """メガ石名の全角Ｘ/Ｙ/Ｚを半角X/Y/Zに統一（リザードナイトＸ↔X 等の表記ゆれ吸収）。"""
     if not name:
         return name
-    return name.replace("Ｘ", "X").replace("Ｙ", "Y")
+    return name.replace("Ｘ", "X").replace("Ｙ", "Y").replace("Ｚ", "Z")
 
 
 class DataLoader:

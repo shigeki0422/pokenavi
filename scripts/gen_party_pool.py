@@ -8,9 +8,18 @@ M-3はusage_rate未格納のため種の重みは順位(rank)から算出（既�
 import os, re, sys, random, collections, sqlite3, math
 
 D = os.path.dirname(__file__)
-MD = os.path.join(D, "build_pool_M-3.md")
+# 型プールのシーズン。POOL_SEASON で切り替える（M-C投入時に M-6 へ）。
+POOL_SEASON = os.environ.get("POOL_SEASON", "M-3")
+MD = os.path.join(D, os.environ.get("POOL_MD", f"build_pool_{POOL_SEASON}.md"))
 DBPATH = os.path.join(D, "pokenavi.db")
-SEASON = "M-3"
+SEASON = POOL_SEASON    # 型プール（build_pool_{POOL_SEASON}.md ＋ 上位構築の追加型）のシーズン。
+# 「どの種を候補にするか・どう重み付けするか」は最新シーズンの実データに従う。
+# _live_rank/_load_cooc がここを見る。型プールのシーズン(SEASON)とは別物なので混同しないこと。
+# 以前は両方が 'M-3' 直書きで、M-4→M-5 と進んでも順位・同居率がM-3のまま止まっていた
+# （シビルドンはM-3で77位→M-5で114位なのに MAX_RANK=80 を通過し続けていた）。
+USAGE_SEASON = os.environ.get("USAGE_SEASON", "M-5")
+TYPEDUP_MAX = int(os.environ.get("TYPEDUP_MAX", "2"))
+PREFER_IU_KEEP = float(os.environ.get("PREFER_IU_KEEP", "5"))  # 技が同じでも別型として残す持ち物の実使用率(%)   # 同一タイプを持てる味方の上限（0で無効）
 EVK = ["H", "A", "B", "C", "D", "S"]
 RANK_EXP = float(os.environ.get("RANK_EXP", "1.0"))
 TYPE_LINE = re.compile(r"^- (?:\*\*.+?\*\*\s*)?\[([^/\]]+)/([^/\]]+)/([^/\]]+)/([^\]]+)\]\s*(.+)$")
@@ -32,9 +41,8 @@ def _ev_to_slash(evstr):
     return "/".join(str(d[k]) for k in EVK)
 
 def _is_mega(item):
-    return (item.endswith("ナイト")
-            or item.endswith("ナイトＸ") or item.endswith("ナイトＹ")
-            or item.endswith("ナイトX") or item.endswith("ナイトY"))
+    return any(item.endswith(sfx) for sfx in
+               ("ナイト", "ナイトX", "ナイトY", "ナイトZ", "ナイトＸ", "ナイトＹ", "ナイトＺ"))
 
 ITEMUSE = re.compile(r"([^\s/(]+)\((\d+)\)")
 
@@ -87,8 +95,15 @@ def parse_pool(md=MD):
     moves_pool = collections.defaultdict(list)
     # 追加型ファイル（上位構築から抽出した実型）を後続でマージ。rankは本体md優先。
     # 機械列挙のドラフト型は品質に難があるので増やさず、実際に使われた型だけを足す。
+    # 追加型（上位構築の実型）は「その型プールのシーズン系列」のものだけを足す。
+    # 旧シーズンの実型を新レギュレーションに混ぜると、没収された技を持つ型が復活する
+    # （ブリジュラスのミラーコート/メタルバーストがM-Cで没収された実例）。
+    _EXTRA_BY_SEASON = {
+        "M-3": ("build_pool_M-3_extra.md", "build_pool_M-4_extra.md"),
+        "M-6": ("build_pool_M-6_extra.md",),
+    }
     _extras = [os.path.join(os.path.dirname(md), f)
-               for f in ("build_pool_M-3_extra.md", "build_pool_M-4_extra.md")]
+               for f in _EXTRA_BY_SEASON.get(POOL_SEASON, ())]
     sources = [md] + [f for f in _extras if os.path.exists(f)]
     cur = None
     for _src in sources:
@@ -147,13 +162,22 @@ def _prefer_builds(builds, avail, item_usage=None):
     c = [s for s in builds if _ev_clean(s)]
     builds = c if c else builds
     if item_usage:
+        # 技構成が同じ型は持ち物使用率最大の1つに絞る。ただし実使用率が PREFER_IU_KEEP% 以上の
+        # 持ち物は「実際に選ばれている対等な選択肢」なので技が同じでも残す（絞ると受け型の
+        # レッドカード9.4%・しめつけバンド5.8%・エレキシード13.3%が丸ごとプールから消え、
+        # AIがその持ち物を一度も見ないまま学習することになる）。
         best = {}
+        keep = []
         for s in builds:
             key = tuple(sorted(_moves_of(s)))
             iu = item_usage.get(_item_of(s), 0)
+            if iu >= PREFER_IU_KEEP:
+                keep.append(s)
+                continue
             if key not in best or iu > item_usage.get(_item_of(best[key]), 0):
                 best[key] = s
-        builds = list(best.values()) or builds
+        merged = keep + [s for s in best.values() if s not in keep]
+        builds = merged or builds
     return builds
 
 def _spec_mega(s):
@@ -187,7 +211,7 @@ class PartyGen:
     def __init__(self):
         self.pool, self.rank, self.item_usage, self.moves_pool = parse_pool()
         self.pokes = [p for p in self.pool if self.pool[p]]
-        live = self._live_rank()                       # 最新クロール(7/1)の使用率順位を優先
+        live = self._live_rank()                       # USAGE_SEASON の最新クロールの順位を優先
         # プールのキーとDBの種名が食い違うフォーム（例: キー「キュウコン」＝実体アローラキュウコン）は
         # FORM_FIX で解決した実体名の順位を引く。素の名前で引くと別種の順位（通常キュウコン168位）を
         # 拾い、MAX_RANK の補完プールから実使用率9位の種が丸ごと脱落する。
@@ -265,8 +289,11 @@ class PartyGen:
     def _live_rank(self):
         try:
             con = sqlite3.connect(DBPATH)
-            cd = con.execute("SELECT MAX(crawled_date) FROM pokemon_usage WHERE season='M-3' AND rule='single'").fetchone()[0]
-            r = {p: rk for p, rk in con.execute("SELECT pokemon,rank FROM pokemon_usage WHERE season='M-3' AND rule='single' AND crawled_date=?", (cd,)) if rk}
+            cd = con.execute("SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule='single'",
+                             (USAGE_SEASON,)).fetchone()[0]
+            r = {p: rk for p, rk in con.execute(
+                "SELECT pokemon,rank FROM pokemon_usage WHERE season=? AND rule='single' AND crawled_date=?",
+                (USAGE_SEASON, cd)) if rk}
             con.close()
             return r
         except Exception:
@@ -276,8 +303,11 @@ class PartyGen:
         g = collections.defaultdict(dict)
         try:
             con = sqlite3.connect(DBPATH)
-            cd = con.execute("SELECT MAX(crawled_date) FROM pokemon_partners WHERE season='M-3' AND rule='single'").fetchone()[0]
-            for pk, pt, rk in con.execute("SELECT pokemon,partner,rank FROM pokemon_partners WHERE season='M-3' AND rule='single' AND crawled_date=?", (cd,)):
+            cd = con.execute("SELECT MAX(crawled_date) FROM pokemon_partners WHERE season=? AND rule='single'",
+                             (USAGE_SEASON,)).fetchone()[0]
+            for pk, pt, rk in con.execute(
+                    "SELECT pokemon,partner,rank FROM pokemon_partners "
+                    "WHERE season=? AND rule='single' AND crawled_date=?", (USAGE_SEASON, cd)):
                 if rk: g[pk][pt] = 1.0 / rk
             con.close()
         except Exception:
@@ -558,8 +588,47 @@ class PartyGen:
         holders = {picked[i] for i, s in enumerate(party) if _spec_mega(s)}
         return self._distinct_builds(picked, holders, rng)
 
+    def _types_of_spec(self, spec):
+        """specのタイプ（メガ石を持つならメガ後）。is_legalの中で呼ぶので種名+メガでキャッシュする。"""
+        name = spec.split("@")[0]
+        mega = bool(_spec_mega(spec))
+        cache = self.__dict__.setdefault("_types_cache", {})
+        k = (name, mega)
+        if k in cache: return cache[k]
+        if "_L" not in self.__dict__:
+            try:
+                from simulator.simulate import get_loader
+                self._L = get_loader()
+            except Exception:
+                self._L = None
+        out = ()
+        try:
+            t = self._L.get_pokemon_template(name)
+            t1, t2 = t.type1, t.type2
+            md = list((t.mega_data or {}).values())
+            if mega and md:
+                t1, t2 = md[0].type1, md[0].type2
+            out = tuple(x for x in (t1, t2) if x)
+        except Exception:
+            pass
+        cache[k] = out
+        return out
+
+    def type_dup_max(self, party):
+        """同一タイプを持つ味方の最大数（メガ後で判定）。"""
+        c = collections.Counter()
+        for s in party:
+            for t in self._types_of_spec(s):
+                c[t] += 1
+        return max(c.values()) if c else 0
+
     def is_legal(self, party, megas=2, megas_set=None):
-        """合法性: 6体・図鑑番号全相異(リージョン/性別違いも重複NG)・メガ数(既定ちょうど2, megas_setで許容集合指定)・持ち物全相異。"""
+        """合法性: 6体・図鑑番号全相異(リージョン/性別違いも重複NG)・メガ数(既定ちょうど2, megas_setで許容集合指定)・
+        持ち物全相異・同一タイプはTYPEDUP_MAX体まで。
+        タイプ被り上限は「メガ2体まで」と同じ前提ルール。人間の上位構築は最大被りが2体以下で
+        M-3実上位92%・M-4実上位95%（3体以上は5〜8%の例外）だが、こちらの生成物は18%が3体以上
+        ＝人間の3倍以上の頻度で被らせていた。実勝率との相関は弱い（実上位でr=-0.09〜-0.15）ので
+        勝率のための制約ではなく、構成の納得感を担保するためのもの。"""
         if len(party) != 6: return False
         if len({self.dexof(s) for s in party}) != 6: return False
         nmega = sum(_spec_mega(s) for s in party)
@@ -568,6 +637,7 @@ class PartyGen:
         elif nmega != megas:
             return False
         if len({_item_of(s) for s in party}) != 6: return False
+        if TYPEDUP_MAX and self.type_dup_max(party) > TYPEDUP_MAX: return False
         return True
 
 def main():

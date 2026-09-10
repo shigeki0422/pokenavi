@@ -54,15 +54,30 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
         field.weather_count = weather_duration
         logs.append(f"{poke.name} の {ab}！")
 
-    # エレキメイカー：登場時エレキフィールドを展開
-    if ab == "エレキメイカー" and not getattr(field, "electric_terrain", False):
-        field.electric_terrain = True
-        field.electric_terrain_count = 5
-        logs.append(f"{poke.name} の エレキメイカー！ 足元に電気が流れた！")
+    # メイカー系：登場時にフィールドを展開
+    TERRAIN_MAKERS = {
+        "エレキメイカー": ("electric_terrain", "足元に電気が流れた"),
+        "グラスメイカー": ("grassy_terrain", "足元に草が生い茂った"),
+        "サイコメイカー": ("psychic_terrain", "足元が不思議な感じになった"),
+    }
+    if ab in TERRAIN_MAKERS and not getattr(field, TERRAIN_MAKERS[ab][0], False):
+        from .items import terrain_turns, try_terrain_seed
+        _attr, _msg = TERRAIN_MAKERS[ab]
+        setattr(field, _attr, True)
+        setattr(field, _attr + "_count", terrain_turns(poke.item))
+        logs.append(f"{poke.name} の {ab}！ {_msg}！")
+        for _sp in (poke, opponent):
+            try_terrain_seed(_sp, field, logs)   # 設置時は両者のシードが発動する
 
     # いかく
     if ab == "いかく":
-        if opponent.ability in ("クリアボディ", "しろいけむり", "かがくへんかガス",
+        if opponent.ability == "ばんけん":
+            opponent.stage_attack = min(6, opponent.stage_attack + 1)
+            logs.append(f"{poke.name} の いかく！ しかし {opponent.name} の ばんけん で攻撃が上がった！")
+        elif opponent.ability == "びびり":
+            opponent.stage_speed = min(6, opponent.stage_speed + 1)
+            logs.append(f"{poke.name} の いかく！ {opponent.name} の びびり で素早さが上がった！")
+        elif opponent.ability in ("クリアボディ", "しろいけむり", "かがくへんかガス",
                                 "マイペース", "どんかん", "きもったま", "せいしんりょく"):
             logs.append(f"{poke.name} の いかく は {opponent.name} に効かなかった！")
         elif opponent.ability == "あまのじゃく":
@@ -235,6 +250,16 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
         defender.stage_attack = min(6, defender.stage_attack + 1)
         logs.append(f"{defender.name} の せいぎのこころ！ 攻撃が上がった！")
 
+    # びびり（あく・ゴースト・むし技のダメージで素早さ+1。いかくは entry_ability 側）
+    if ab == "びびり" and move.type in ("あく", "ゴースト", "むし"):
+        defender.stage_speed = min(6, defender.stage_speed + 1)
+        logs.append(f"{defender.name} の びびり！ 素早さが上がった！")
+
+    # ねつこうかん（ほのお技を受けると攻撃+1。やけど免疫は pokemon.apply_status 側）
+    if ab == "ねつこうかん" and move.type == "ほのお":
+        defender.stage_attack = min(6, defender.stage_attack + 1)
+        logs.append(f"{defender.name} の ねつこうかん！ 攻撃が上がった！")
+
     # 接触技を受けた時の防御側特性（かたやぶり系で無視される）
     if _contact and not _mold and attacker.is_alive:
         if ab == "ほのおのからだ" and random.random() < 0.30:
@@ -282,6 +307,12 @@ def _rough_skin_recoil(attacker: "BattlePokemon", defender: "BattlePokemon",
             recoil = max(1, attacker.max_hp // 8)
             attacker.take_damage(recoil)
             logs.append(f"{defender.name} の {ab}！ {attacker.name} に {recoil} のダメージ！")
+
+    # ゴツゴツメット（アイテムなので かたやぶり では無効化されない。削りは1/6）
+    if defender.item == "ゴツゴツメット" and is_contact_move(move) and not _enkaku:
+        recoil = max(1, attacker.max_hp // 6)
+        attacker.take_damage(recoil)
+        logs.append(f"{defender.name} の ゴツゴツメット！ {attacker.name} に {recoil} のダメージ！")
 
     # ゆうばく（接触技でひんしにされると相手に最大HP1/4ダメージ）
     if ab == "ゆうばく" and is_contact_move(move) and not _enkaku and not defender.is_alive and attacker.is_alive:

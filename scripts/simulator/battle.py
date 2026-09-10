@@ -20,6 +20,7 @@ from .items import (
     apply_hp_berry, on_item_consumed, has_quick_claw_trigger,
     is_choice_item, get_speed_item_multiplier,
     try_mental_herb, try_leppa_berry,
+    terrain_turns, try_terrain_seed,
 )
 
 
@@ -35,16 +36,19 @@ _GAG_BLOCK = frozenset({
 
 
 def _is_megastone(item: Optional[str]) -> bool:
-    """メガストーン（〜ナイト/ナイトＸ/ナイトＹ）かどうか判定。道具奪取・交換・はたき落としは失敗。"""
+    """メガストーン（〜ナイト/ナイトＸ/ナイトＹ/ナイトZ）かどうか判定。道具奪取・交換・はたき落としは失敗。"""
     return item is not None and (item.endswith("ナイト")
                                  or item.endswith("ナイトＸ") or item.endswith("ナイトＹ")
-                                 or item.endswith("ナイトX") or item.endswith("ナイトY"))
+                                 or item.endswith("ナイトX") or item.endswith("ナイトY")
+                                 or item.endswith("ナイトＺ") or item.endswith("ナイトZ"))
 
 
 def is_trapped(poke, opponent) -> bool:
     """poke が交代・逃走できない状態か。
     かげふみ：ゴーストタイプ以外の相手を交代不可にする（ゴースト/ふゆうは無関係に効かない）。
     その他、トラップ技(trapped)・バインドでも交代不可。"""
+    if poke.ability == "にげあし":
+        return False
     if opponent is not None and getattr(opponent, "is_alive", False) \
             and opponent.ability == "かげふみ" and "ゴースト" not in (poke.type1, poke.type2):
         return True
@@ -186,6 +190,7 @@ class BattleSide:
         prev._barrier_done = False  # type: ignore
         prev._info_done = False  # type: ignore
         prev.recharge = False
+        prev._defenseless = False  # type: ignore
         prev.crit_stage = 0
         prev.perish_count = 0
         prev.destiny_bond = False
@@ -306,7 +311,9 @@ def _entry_effects(poke: BattlePokemon, side_idx: int, field: BattleField,
     poke._pivot_out = False           # type: ignore
     poke._force_switch = False        # type: ignore
 
-    immune_to_ground = ("ひこう" in (poke.type1, poke.type2) or poke.ability in ("ふゆう", "うなぎのぼり"))
+    immune_to_ground = ("ひこう" in (poke.type1, poke.type2)
+                        or poke.ability in ("ふゆう", "うなぎのぼり")
+                        or poke.item == "ふうせん")
 
     # ステルスロック（マジックガード無効）
     if field.stealth_rock[side_idx] and poke.ability != "マジックガード":
@@ -359,6 +366,11 @@ def _entry_effects(poke: BattlePokemon, side_idx: int, field: BattleField,
     # 特性による入場効果（abilities.pyへ委譲）
     entry_logs = entry_ability(poke, opponent, field)
     logs.extend(entry_logs)
+
+    # フィールド発動アイテム（シード）: 継続中のフィールドに登場した場合もここで発動する。
+    # 設置時の発動は _execute_move のフィールド技側、特性設置は abilities.entry_ability 側。
+    # 相手側はここでは触らない（相手のシードは設置時か相手自身の登場時に発動している）。
+    try_terrain_seed(poke, field, logs)
 
 
 def _best_faint_switch(side: BattleSide, opp: BattlePokemon, field=None) -> Optional[int]:
@@ -487,13 +499,13 @@ def apply_pre_move_forms(attacker, move, logs=None) -> None:
         logs = []
     if attacker.ability == "バトルスイッチ" and move.category != "status":
         _aegislash_to_blade(attacker, logs)
-    if attacker.ability == "へんげんじざい" and not getattr(attacker, "_protean_used", False):
+    if attacker.ability in ("へんげんじざい", "リベロ") and not getattr(attacker, "_protean_used", False):
         new_type = move.type
         if attacker.type1 != new_type or attacker.type2 is not None:
             attacker.type1 = new_type
             attacker.type2 = None
             attacker._protean_used = True  # type: ignore
-            logs.append(f"{attacker.name} の へんげんじざい で {new_type} タイプになった！")
+            logs.append(f"{attacker.name} の {attacker.ability} で {new_type} タイプになった！")
 
 
 def _execute_move(
@@ -509,6 +521,7 @@ def _execute_move(
     logs = []
     attacker = attacker_side.active
     defender = defender_side.active
+    attacker._defenseless = False  # type: ignore
     move = action.move
 
     if move is None:
@@ -600,7 +613,7 @@ def _execute_move(
     # こおりチェック (20% で解除)
     if attacker.status == "freeze":
         # 解凍техн: 使うと自分のこおりを治して行動できる（もえつきる/ねっとう/ねっさのだいち等）
-        THAW_MOVES = {"もえつきる", "ねっとう", "ねっさのだいち", "せいなるほのお"}
+        THAW_MOVES = {"もえつきる", "ねっとう", "ねっさのだいち", "せいなるほのお", "かえんボール"}
         if move.name_jp in THAW_MOVES:
             attacker.status = None
             logs.append(f"{attacker.name} は {move.name_jp} でこおりがとけた！")
@@ -906,6 +919,11 @@ def _execute_move(
         logs.append(f"{attacker.name} は きあいパンチ に集中できなかった！")
         return logs
 
+    # でんこうそうげき：自分がでんきタイプでないと失敗
+    if move.name_jp == "でんこうそうげき" and "でんき" not in (attacker.type1, attacker.type2):
+        logs.append(f"{attacker.name} の でんこうそうげき は失敗した！（でんきタイプではない）")
+        return logs
+
     # もえつきる：自分がほのおタイプでないと失敗
     if move.name_jp == "もえつきる" and "ほのお" not in (attacker.type1, attacker.type2):
         logs.append(f"{attacker.name} の もえつきる は失敗した！（ほのおタイプではない）")
@@ -944,6 +962,17 @@ def _execute_move(
                    if opp_action and opp_action.type == "move" and opp_action.move else 0)
         if opp_pri <= 0:
             logs.append(f"{attacker.name} の はやてがえし は失敗した！（相手が先制技を使っていない）")
+            return logs
+
+    # サイコフィールド：地面にいる相手には先制技が当たらない
+    if field is not None and getattr(field, "psychic_terrain", False) and move.priority > 0 \
+            and move.category != "status":
+        _d_grounded = not ("ひこう" in (defender.type1, defender.type2)
+                           or defender.ability == "ふゆう"
+                           or getattr(defender, "magnet_rise", False)
+                           or defender.item == "ふうせん") or getattr(defender, "grounded", False)
+        if _d_grounded:
+            logs.append(f"{attacker.name} の {move.name_jp} は サイコフィールド に防がれた！")
             return logs
 
     # アイアンローラー：場にフィールドがないと失敗
@@ -1130,11 +1159,58 @@ def _execute_move(
         elif move.category == "special":
             defender._last_special_dmg_received = getattr(defender, '_last_special_dmg_received', 0) + dmg  # type: ignore
 
+        # ノーマルジュエル: ノーマル技を撃つと消費（威力補正は items.get_type_boost）。
+        # 消費は実戦経路だけで行う。calc_damage の中でやると、AIの見積り
+        # （expected_damage 等）が呼ばれるたびに手持ちのジュエルが消える。
+        if attacker.item == "ノーマルジュエル" and move.type == "ノーマル" \
+                and move.category != "status":
+            attacker.item = None
+            on_item_consumed(attacker, logs)
+            logs.append(f"{attacker.name} の ノーマルジュエル が消費された！")
+
         # いのちのたま反動
         if attacker.item == "いのちのたま" and move.category != "status":
             recoil = max(1, math.floor(attacker.max_hp / 10))
             attacker.take_damage(recoil)
             logs.extend(defender_side.opp_view.on_item(attacker.name, "いのちのたま", "反動ダメから判明"))
+
+        # レッドカード: ダメージを与えてきた相手を追い出す（消費）。持ち主は防御側。
+        # マジックミラーと同じ attacker._force_switch を使う＝処理タイミングも既存と揃える。
+        if defender.item == "レッドカード" and total_dmg > 0 and attacker.is_alive:
+            if any(p.is_alive for i, p in enumerate(attacker_side.party)
+                   if i != attacker_side.active_idx):
+                defender.item = None
+                on_item_consumed(defender, logs)
+                if attacker.ability == "ばんけん":
+                    logs.append(f"{defender.name} の レッドカード！ しかし {attacker.name} の ばんけん で効かなかった！")
+                else:
+                    attacker._force_switch = True  # type: ignore
+                    logs.append(f"{defender.name} の レッドカード！ {attacker.name} は追い出された！")
+
+        # だっしゅつボタン: ダメージを受けた自分が手持ちに戻る（消費）。
+        # 交代先は選べる想定なので、ランダム交代(_force_switch)ではなくピボット扱いにする。
+        if defender.item == "だっしゅつボタン" and total_dmg > 0 and defender.is_alive:
+            if any(p.is_alive for i, p in enumerate(defender_side.party)
+                   if i != defender_side.active_idx):
+                defender.item = None
+                on_item_consumed(defender, logs)
+                defender._pivot_out = True  # type: ignore
+                logs.append(f"{defender.name} の だっしゅつボタン！ 引っ込んだ！")
+
+        # ききかいひ: HPが1/2以下になると手持ちに戻る（この技で1/2を跨いだ時のみ）
+        if defender.ability == "ききかいひ" and total_dmg > 0 and defender.is_alive \
+                and defender.hp * 2 <= defender.max_hp \
+                and (defender.hp + total_dmg) * 2 > defender.max_hp:
+            if any(p.is_alive for i, p in enumerate(defender_side.party)
+                   if i != defender_side.active_idx):
+                defender._pivot_out = True  # type: ignore
+                logs.append(f"{defender.name} の ききかいひ！ 引っ込んだ！")
+
+        # ふうせん: 技のダメージを受けると割れて無くなる
+        if defender.item == "ふうせん" and total_dmg > 0:
+            defender.item = None
+            on_item_consumed(defender, logs)
+            logs.append(f"{defender.name} の ふうせん が割れた！")
 
         # さめはだ/てつのとげ: バッファに収集（ダメージログの後に出力）
         _rough_skin_recoil(attacker, defender, move, rough_skin_logs)
@@ -1245,7 +1321,12 @@ def _execute_move(
         "パラボラチャージ": 0.5, "むねんのつるぎ": 0.5, "ウッドホーン": 0.5,
         "シャカシャカほう": 0.5,
     }
-    if move.name_jp in DRAIN_RATES and total_dmg > 0 and attacker.is_alive:
+    if move.name_jp in DRAIN_RATES and total_dmg > 0 and attacker.is_alive \
+            and defender.ability == "ヘドロえき":
+        dm = max(1, math.floor(total_dmg * DRAIN_RATES[move.name_jp]))
+        attacker.take_damage(dm)
+        logs.append(f"{defender.name} の ヘドロえき！ {attacker.name} は {dm} ダメージを受けた！")
+    elif move.name_jp in DRAIN_RATES and total_dmg > 0 and attacker.is_alive:
         heal = max(1, math.floor(total_dmg * DRAIN_RATES[move.name_jp]))
         if attacker.item == "おおきなねっこ":
             heal = math.floor(heal * 1.3)
@@ -1266,6 +1347,15 @@ def _execute_move(
     if defender.ability == "すなはき" and total_dmg > 0 and field.weather != "sandstorm":
         field.weather = "sandstorm"; field.weather_count = 5
         logs.append(f"{defender.name} の すなはき！ すなあらしが５ターン続く！")
+
+    # こぼれダネ：技のダメージを受けると5ターン グラスフィールド
+    if defender.ability == "こぼれダネ" and total_dmg > 0 and not field.grassy_terrain:
+        from .items import try_terrain_seed
+        field.grassy_terrain = True
+        field.grassy_terrain_count = 5
+        logs.append(f"{defender.name} の こぼれダネ！ 足元に草が生い茂った！")
+        for _sp in (defender, attacker):
+            try_terrain_seed(_sp, field, logs)
 
     # どくげしょう：物理技のダメージを受けると相手の場をどくびし状態にする
     if defender.ability == "どくげしょう" and move.category == "physical" and total_dmg > 0:
@@ -1390,10 +1480,17 @@ def _execute_move(
     if move.name_jp in PIVOT_MOVES and attacker.is_alive:
         attacker._pivot_out = True  # type: ignore
 
+    # きょけんとつげき：次に自分が行動するまで無防備状態
+    if move.name_jp == "きょけんとつげき" and attacker.is_alive:
+        attacker._defenseless = True  # type: ignore
+
     # 強制交代技：相手をランダムに交代させる
     FORCE_SWITCH_MOVES = {"ドラゴンテール", "ほえる", "ふきとばし", "ともえなげ"}
     if move.name_jp in FORCE_SWITCH_MOVES and defender.is_alive:
-        defender._force_switch = True  # type: ignore
+        if defender.ability == "ばんけん":
+            logs.append(f"{defender.name} の ばんけん で追い出されなかった！")
+        else:
+            defender._force_switch = True  # type: ignore
 
     # 開示情報：相手HPの残り割合と、この技による被ダメージ割合を記録
     # （実数HPは不可視。割合からダメージ計算で相手のEV/性格を逆算する用）
@@ -1423,7 +1520,8 @@ def _execute_move(
 
     # リチャージ技（ギガインパクト・ブラストバーン）
     RECHARGE_MOVES = {"ギガインパクト", "ブラストバーン", "はかいこうせん",
-                      "ハイドロカノン", "ハードプラント", "がんせきほう"}
+                      "ハイドロカノン", "ハードプラント", "がんせきほう",
+                      "スターアサルト"}
     if move.name_jp in RECHARGE_MOVES and attacker.is_alive:
         attacker.recharge = True
 
@@ -1942,8 +2040,10 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
     # グラスフィールド
     if n == "グラスフィールド" and field is not None:
         field.grassy_terrain = True
-        field.grassy_terrain_count = 5
+        field.grassy_terrain_count = terrain_turns(attacker.item)
         logs.append("足元に草が生い茂った！")
+        for _sp in (attacker, defender):
+            try_terrain_seed(_sp, field, logs)
         return logs
     # リサイクル：消費した道具を復元
     if n == "リサイクル":
@@ -2157,8 +2257,8 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
         elif defender.ability == "おうごんのからだ":
             logs.append(f"{defender.name} の おうごんのからだ で防いだ！")
             blocked = True
-        elif defender.ability == "きゅうばん":
-            logs.append(f"{defender.name} の きゅうばん で踏ん張った！")
+        elif defender.ability in ("きゅうばん", "ばんけん"):
+            logs.append(f"{defender.name} の {defender.ability} で踏ん張った！")
             blocked = True
         elif n == "ほえる" and defender.ability == "ぼうおん":
             logs.append(f"{defender.name} の ぼうおん で防いだ！")
@@ -2207,6 +2307,35 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
             attacker_side.wish_hp = attacker.max_hp // 2
             attacker_side.wish_count = 2
             logs.append(f"{attacker.name} は ねがいごと をした！")
+        return logs
+
+    # コートチェンジ：味方と相手の場の状態を入れ替える
+    if n == "コートチェンジ" and attacker_side is not None and defender_side is not None:
+        ai, di = attacker_side.field_idx, defender_side.field_idx
+        for lst in (field.stealth_rock, field.spikes, field.toxic_spikes, field.sticky_web):
+            lst[ai], lst[di] = lst[di], lst[ai]
+        for attr in ("reflect", "reflect_count", "light_screen", "light_screen_count",
+                     "aurora_veil", "aurora_veil_count", "tailwind", "tailwind_count",
+                     "safeguard", "stealth_rock_set"):
+            a_v, d_v = getattr(attacker_side, attr), getattr(defender_side, attr)
+            setattr(attacker_side, attr, d_v)
+            setattr(defender_side, attr, a_v)
+        logs.append(f"{attacker.name} は コートチェンジ で場の状態を入れ替えた！")
+        return logs
+
+    # さいきのいのり：手持ちのひんしのポケモンを最大HPの1/2で復活させる
+    if n == "さいきのいのり" and attacker_side is not None:
+        cand = [p for p in attacker_side.party if not p.is_alive]
+        if not cand:
+            logs.append(f"{attacker.name} の さいきのいのり は失敗した！（ひんしのポケモンがいない）")
+            return logs
+        tgt = cand[0]
+        tgt.is_alive = True
+        tgt.hp = max(1, tgt.max_hp // 2)
+        tgt.status = None
+        if tgt in attacker_side.fainted:
+            attacker_side.fainted.remove(tgt)
+        logs.append(f"{tgt.name} は さいきのいのり で復活した！")
         return logs
 
     # いやしのねがい（自身が倒れ次のポケモンを全回復）
@@ -2322,22 +2451,28 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
     # ミストフィールド
     if n == "ミストフィールド" and field is not None:
         field.misty_terrain = True
-        field.misty_terrain_count = 5
+        field.misty_terrain_count = terrain_turns(attacker.item)
         logs.append("ミストフィールドが広がった！")
+        for _sp in (attacker, defender):
+            try_terrain_seed(_sp, field, logs)
         return logs
 
     # エレキフィールド
     if n == "エレキフィールド" and field is not None:
         field.electric_terrain = True
-        field.electric_terrain_count = 5
+        field.electric_terrain_count = terrain_turns(attacker.item)
         logs.append("エレキフィールドが広がった！")
+        for _sp in (attacker, defender):
+            try_terrain_seed(_sp, field, logs)
         return logs
 
     # サイコフィールド
     if n == "サイコフィールド" and field is not None:
         field.psychic_terrain = True
-        field.psychic_terrain_count = 5
+        field.psychic_terrain_count = terrain_turns(attacker.item)
         logs.append("サイコフィールドが広がった！")
+        for _sp in (attacker, defender):
+            try_terrain_seed(_sp, field, logs)
         return logs
 
     # じゅうでん（次の電気技威力×2 + とくぼう+1）
@@ -2483,7 +2618,7 @@ HIGH_CRIT_MOVES = {
     "シャドークロー","ナイトスラッシュ","クロスポイズン","サイコカッター","リーフブレード",
     "3ぼんのや","ストーンエッジ","ブレイズキック",
     "クラブハンマー","クロスチョップ","つじぎり","ドリルライナー",
-    "アクアカッター","エアカッター","ゴッドバード",
+    "アクアカッター","エアカッター","ゴッドバード","ねらいうち",
 }
 _CRIT_THRESHOLDS = {0: 1/24, 1: 1/8, 2: 1/2, 3: 1.0}
 
@@ -2505,7 +2640,7 @@ def crit_chance(attacker: BattlePokemon, move: MoveData,
     if attacker.ability in ("きょううん",):
         stage += 1
     from .items import get_crit_stage_bonus
-    stage += get_crit_stage_bonus(attacker.item)
+    stage += get_crit_stage_bonus(attacker.item, attacker.name)
     stage += getattr(attacker, 'crit_stage', 0)
     return _CRIT_THRESHOLDS.get(min(stage, 3), 1.0)
 
@@ -2628,6 +2763,8 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
     }
     if n in _BIND_MOVES and dmg > 0 and defender.is_alive and not defender.bound_count:
         defender.bound_count = random.randint(4, 5)
+        # しめつけバンドを持つのは「縛った側」。ターン終了時に相手を辿らずに済むよう束縛時に控える。
+        defender._bound_by_band = attacker.item == "しめつけバンド"   # type: ignore[attr-defined]
         logs.append(f"{defender.name} は バインド 状態になった！")
 
     # ── なげつける特殊効果 ──────────────────────────────
@@ -2662,7 +2799,7 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
         "だいもんじ":     ("burn", 0.10), "かえんぐるま":   ("burn", 0.10),
         "ねっとう":       ("burn", 0.30),
         "ほのおのキバ":   ("burn", 0.10), "ほのおのパンチ":  ("burn", 0.10),
-        "ブレイズキック": ("burn", 0.10),
+        "ブレイズキック": ("burn", 0.10), "かえんボール": ("burn", 0.10),
         "ふんえん":       ("burn", 0.30), "ねっぷう": ("burn", 0.10),
         "ねっさのだいち": ("burn", 0.30), "ひゃっきやこう": ("burn", 0.30),
         "れんごく":       ("burn", 1.00),
@@ -2740,6 +2877,7 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
         "クラッシュクロー": ("stage_defense",  -1, 0.50),
         "バークアウト":  ("stage_sp_attack",  -1, 1.00),
         "こごえるかぜ":  ("stage_speed",       -1, 1.00),
+        "ドラムアタック": ("stage_speed",      -1, 1.00),
         "がんせきふうじ": ("stage_speed",      -1, 1.00),
         "じならし":      ("stage_speed",       -1, 1.00),
         "バブルこうせん": ("stage_speed",      -1, 0.10),
@@ -2925,7 +3063,7 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
         if defender.is_alive and defender.status == "freeze":
             defender.status = None
             logs.append(f"{defender.name} の こおり が治った！")
-    if n in ("ねっとう", "もえつきる", "ねっさのだいち"):
+    if n in ("ねっとう", "もえつきる", "ねっさのだいち", "かえんボール"):
         if attacker.status == "freeze":
             attacker.status = None
             logs.append(f"{attacker.name} の こおり が治った！")
@@ -2935,6 +3073,13 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
         attacker.type1 = rem[0] if rem else "ノーマル"
         attacker.type2 = rem[1] if len(rem) > 1 else None
         logs.append(f"{attacker.name} は ほのお タイプでなくなった！")
+
+    # でんこうそうげき：攻撃後に自分のでんきタイプが消える
+    if n == "でんこうそうげき" and "でんき" in (attacker.type1, attacker.type2):
+        rem = [t for t in (attacker.type1, attacker.type2) if t and t != "でんき"]
+        attacker.type1 = rem[0] if rem else "ノーマル"
+        attacker.type2 = rem[1] if len(rem) > 1 else None
+        logs.append(f"{attacker.name} は でんき タイプでなくなった！")
 
     # しおづけ：ソルトキュア状態（ターン終了時に継続ダメ）
     if n == "しおづけ" and defender.is_alive and not force_no_secondary:
@@ -3257,6 +3402,22 @@ class Battle:
                         self.logs.extend(opp_side.opp_view.on_enter(my_side.active))
                         self._faint_switch(my_side, opp_side)
 
+            # だっしゅつボタン：ダメージを受けた側（=相手）が引っ込む。交代先は戦略的に選ぶ。
+            # 攻撃側の _pivot_out（とんぼがえり等）は上で処理済み。防御側に立つのは本アイテムのみ。
+            if opp_side.active.is_alive and getattr(opp_side.active, '_pivot_out', False):
+                if not getattr(opp_side, '_manual_switch', False):
+                    opp_side.active._pivot_out = False  # type: ignore
+                    next_idx = _choose_pivot_target(opp_side, my_side.active, False)
+                    if next_idx is not None:
+                        opp_side.switch_to(next_idx, self.logs, self.field)
+                        self.logs.append(f"{opp_side.active.name} が出てきた！")
+                        _entry_effects(opp_side.active,
+                                       opp_side.field_idx,
+                                       self.field, my_side.active, self.logs, opp_side.party)
+                        self._apply_healing_wish(opp_side)
+                        self.logs.extend(my_side.opp_view.on_enter(opp_side.active))
+                        self._faint_switch(opp_side, my_side)
+
             # 強制交代技（ドラゴンテール等）：相手をランダム交代
             if opp_side.active.is_alive and getattr(opp_side.active, '_force_switch', False):
                 opp_side.active._force_switch = False  # type: ignore
@@ -3501,7 +3662,7 @@ class Battle:
 
             # バインド継続ダメ・カウントダウン
             if p.bound_count > 0 and p.is_alive:
-                bind_dmg = max(1, p.max_hp // 8)
+                bind_dmg = max(1, p.max_hp // (6 if getattr(p, "_bound_by_band", False) else 8))
                 p.take_damage(bind_dmg)
                 self.logs.append(f"{p.name} は バインド のダメージを受けた！({bind_dmg})")
                 p.bound_count -= 1

@@ -196,7 +196,7 @@ class BattlePokemon:
             return False
         if _ab == "マグマのよろい" and status == "freeze":
             return False
-        if _ab == "すいほう" and status == "burn":
+        if _ab in ("すいほう", "ねつこうかん") and status == "burn":
             return False
         if _ab in ("ふみん", "やるき", "スイートベール") and status == "sleep":
             return False

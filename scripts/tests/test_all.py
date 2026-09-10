@@ -235,6 +235,198 @@ for _bp, (_st, _t1, _t2, _ab, _w, _stat) in _mega_exp.items():
         if _w:
             check(f"メガ{_bp} 重さ{_w}", _md.weight_kg == _w, f"weight={_md.weight_kg}")
 
+# M-C解禁分（2026/9/9〜）の静的データ。通常種はPokeAPI照合済み・Z系メガはgamewith個別ページが出典
+_mc_base = {
+    "ゴリランダー": ("くさ", None, (100,125,90,60,70,85), 90.0),
+    "セグレイブ": ("ドラゴン", "こおり", (115,145,92,75,86,87), 210.0),
+    "グソクムシャ": ("むし", "みず", (75,125,140,60,90,40), 108.0),
+    "ボーマンダ": ("ドラゴン", "ひこう", (95,135,80,110,80,100), 102.6),
+}
+for _n, (_t1, _t2, _stat, _w) in _mc_base.items():
+    _tp = _dlpk.get_pokemon_template(_n)
+    check(f"M-C {_n} 解決", _tp is not None)
+    if _tp:
+        check(f"M-C {_n} タイプ", (_tp.type1, _tp.type2) == (_t1, _t2), f"{_tp.type1}/{_tp.type2}")
+        check(f"M-C {_n} 種族値",
+              (_tp.base_hp,_tp.base_attack,_tp.base_defense,
+               _tp.base_sp_attack,_tp.base_sp_defense,_tp.base_speed) == _stat)
+        check(f"M-C {_n} 重さ{_w}", _tp.weight_kg == _w, f"weight={_tp.weight_kg}")
+_mc_mega = {
+    "ボーマンダ": ("ボーマンダナイト", "ドラゴン", "ひこう", "スカイスキン", 112.6, (95,145,130,120,90,120)),
+    "アブソル": ("アブソルナイトZ", "あく", "ゴースト", "きれあじ", 49.0, (65,154,60,75,60,151)),
+    "ガブリアス": ("ガブリアスナイトZ", "ドラゴン", None, "ふゆう", 99.0, (108,130,85,141,85,151)),
+    "ルカリオ": ("ルカリオナイトZ", "かくとう", "はがね", "はどうのぼうご", 49.4, (70,100,70,164,70,151)),
+}
+for _bp, (_st, _t1, _t2, _ab, _w, _stat) in _mc_mega.items():
+    _md = _dlpk.get_pokemon_template(_bp).mega_data.get(_st)
+    check(f"M-C メガ{_bp} 解決", _md is not None, f"{_bp}@{_st}")
+    if _md:
+        check(f"M-C メガ{_bp} タイプ/特性",
+              _md.type1 == _t1 and _md.type2 == _t2 and _md.ability == _ab,
+              f"{_md.type1}/{_md.type2} {_md.ability}")
+        check(f"M-C メガ{_bp} 種族値",
+              (_md.hp,_md.attack,_md.defense,_md.sp_attack,_md.sp_defense,_md.speed) == _stat)
+        check(f"M-C メガ{_bp} 重さ{_w}", _md.weight_kg == _w, f"weight={_md.weight_kg}")
+# Zサフィックスのメガ石がメガストーン判定に乗ること（はたきおとす・トリック等の失敗条件）
+from simulator.battle import _is_megastone as _ismst
+for _z in ("アブソルナイトZ", "ガブリアスナイトZ", "ルカリオナイトZ"):
+    check(f"{_z} はメガストーン判定", _ismst(_z) is True)
+check("ナイトZ 全角Ｚも判定", _ismst("ルカリオナイトＺ") is True)
+check("非メガ石はメガストーン判定でない(負例)", _ismst("たべのこし") is False)
+
+# M-C 9/9 正式公開分（通常種25・フォルム込み）。PokeAPI照合値をそのまま固定する。
+# フォルムのスラッグは species の varieties から取ったもの（toxtricity-amped /
+# squawkabilly-green-plumage 等。推測すると404になる）。
+_mc2 = [
+    ('プクリン', 'ノーマル', 'フェアリー', (140,70,45,85,50,45), 12.0),
+    ('ペルシアン', 'ノーマル', None, (65,70,60,65,65,115), 32.0),
+    ('アローラペルシアン', 'あく', None, (65,60,60,75,65,115), 33.0),
+    ('カモネギ', 'ノーマル', 'ひこう', (52,90,55,58,62,60), 15.0),
+    ('バリヤード', 'エスパー', 'フェアリー', (40,45,65,100,120,90), 54.5),
+    ('マルノーム', 'どく', None, (100,73,83,73,83,55), 80.0),
+    ('ゴーゴート', 'くさ', None, (123,100,62,97,81,68), 91.0),
+    ('エースバーン', 'ほのお', None, (80,116,75,65,75,119), 33.0),
+    ('インテレオン', 'みず', None, (70,85,65,125,65,120), 45.2),
+    ('フォクスライ', 'あく', None, (70,58,58,87,92,90), 19.9),
+    ('ストリンダー(ハイ)', 'でんき', 'どく', (75,98,70,114,70,75), 40.0),
+    ('ストリンダー(ロー)', 'でんき', 'どく', (75,98,70,114,70,75), 40.0),
+    ('オトスパス', 'かくとう', None, (80,118,90,70,80,42), 39.0),
+    ('ニャイキング', 'はがね', None, (70,110,100,50,60,50), 28.0),
+    ('ネギガナイト', 'かくとう', None, (62,135,95,68,82,65), 117.0),
+    ('バチンウニ', 'でんき', None, (48,101,95,91,85,15), 1.0),
+    ('イエッサン(オス)', 'エスパー', 'ノーマル', (60,65,55,105,95,95), 28.0),
+    ('イエッサン(メス)', 'エスパー', 'ノーマル', (70,55,65,95,105,85), 28.0),
+    ('パーモット', 'でんき', 'かくとう', (70,115,70,70,60,105), 41.0),
+    ('オリーヴァ', 'くさ', 'ノーマル', (78,69,90,125,109,39), 48.2),
+    ('イキリンコ(グリーン)', 'ノーマル', 'ひこう', (82,96,51,45,51,92), 2.4),
+    ('イキリンコ(ブルー)', 'ノーマル', 'ひこう', (82,96,51,45,51,92), 2.4),
+    ('イキリンコ(イエロー)', 'ノーマル', 'ひこう', (82,96,51,45,51,92), 2.4),
+    ('イキリンコ(ホワイト)', 'ノーマル', 'ひこう', (82,96,51,45,51,92), 2.4),
+    ('マフィティフ', 'あく', None, (80,120,90,60,70,85), 61.0),
+]
+for _n, _t1, _t2, _stat, _w in _mc2:
+    _tp = _dlpk.get_pokemon_template(_n)
+    check(f"M-C2 {_n} 解決", _tp is not None)
+    if _tp:
+        check(f"M-C2 {_n} タイプ", (_tp.type1, _tp.type2) == (_t1, _t2), f"{_tp.type1}/{_tp.type2}")
+        check(f"M-C2 {_n} 種族値",
+              (_tp.base_hp,_tp.base_attack,_tp.base_defense,
+               _tp.base_sp_attack,_tp.base_sp_defense,_tp.base_speed) == _stat)
+        check(f"M-C2 {_n} 重さ{_w}", _tp.weight_kg == _w, f"weight={_tp.weight_kg}")
+# 括弧のリージョン表記も既存の接頭辞ルールで解決すること
+check("M-C2 ペルシアン(アローラ)がアローラ形に解決",
+      (lambda t: t is not None and t.type1 == "あく")(_dlpk.get_pokemon_template("ペルシアン(アローラ)")))
+# 同一dexのフォルムが取り違えられないこと（イエッサンはオス/メスで種族値が違う）
+check("M-C2 イエッサン オス/メスの種族値が別",
+      _dlpk.get_pokemon_template("イエッサン(オス)").base_sp_attack == 105
+      and _dlpk.get_pokemon_template("イエッサン(メス)").base_sp_attack == 95)
+
+# M-C 9/9 公開のメガ2種（種族値/タイプ/重さは gamewith、特性はユーザー確認で確定）
+_mc2_mega = {
+    "グソクムシャ": ("グソクムシャナイト", "むし", "はがね", "かたいツメ", 148.0, (75,150,175,70,120,40)),
+    "セグレイブ": ("セグレイブナイト", "ドラゴン", "こおり", "ねつこうかん", 315.0, (115,175,117,105,101,87)),
+}
+for _bp, (_st, _t1, _t2, _ab, _w, _stat) in _mc2_mega.items():
+    _md = _dlpk.get_pokemon_template(_bp).mega_data.get(_st)
+    check(f"M-C2 メガ{_bp} 解決", _md is not None, f"{_bp}@{_st}")
+    if _md:
+        check(f"M-C2 メガ{_bp} タイプ/特性",
+              _md.type1 == _t1 and _md.type2 == _t2 and _md.ability == _ab,
+              f"{_md.type1}/{_md.type2} {_md.ability}")
+        check(f"M-C2 メガ{_bp} 種族値",
+              (_md.hp,_md.attack,_md.defense,_md.sp_attack,_md.sp_defense,_md.speed) == _stat)
+        check(f"M-C2 メガ{_bp} 重さ{_w}", _md.weight_kg == _w, f"weight={_md.weight_kg}")
+
+# select_party は呼び出し側のポケモンを壊してはいけない。
+# 採点は expected_damage→calc_damage を通るので、半減きのみの消費(item=None)・かるわざ(速度+2)・
+# 溜め解除が「渡した個体そのもの」に残る。呼び出し側は同じオブジェクトで対戦を始めるため、
+# 実際に _o1_policy._mcts_vs_dist で味方アシレーヌのソクノのみが選出評価中に消え、
+# 対戦開始時点で持ち物なしになっていた（Rust/Python間の乖離としてR4-vsdistで検出）。
+from simulator.ai import select_party as _sp_side
+_sp_my = [
+    make_poke(type1="みず", ability="げきりゅう", item="ソクノのみ", hp_b=190, spdef_b=120),
+    make_poke(type1="ノーマル", ability="てんねん", item="たべのこし", hp_b=200),
+    make_poke(type1="はがね", ability="がんじょう", item="オボンのみ", hp_b=180),
+    make_poke(type1="ドラゴン", ability="さめはだ", item="きあいのタスキ", atk_b=180),
+    make_poke(type1="ほのお", ability="もうか", item="いのちのたま", spatk_b=170),
+    make_poke(type1="くさ", ability="しんりょく", item="こだわりスカーフ", spd_b=160),
+]
+# でんき技持ち＝ソクノのみ(でんき半減)の消費条件を満たす相手
+_sp_opp = [make_poke(type1="でんき", ability="ちくでん", spatk_b=170, moves=["10まんボルト"])
+           for _ in range(6)]
+_sp_before = [(p.item, p.hp, p.stage_speed, p.status) for p in _sp_my + _sp_opp]
+_sp_out = _sp_side(_sp_my, _sp_opp, dl, 3, 0.0, None)
+_sp_after = [(p.item, p.hp, p.stage_speed, p.status) for p in _sp_my + _sp_opp]
+check("select_party が渡したポケモンを壊さない", _sp_before == _sp_after,
+      f"変化={[ (b,a) for b,a in zip(_sp_before,_sp_after) if b!=a ][:3]}")
+check("select_party の返り値は元オブジェクト", len(_sp_out) == 3
+      and all(any(x is p for p in _sp_my) for x in _sp_out))
+
+# ── M-C 追加アイテム（12件のうち実装済み10件） ──
+from simulator.items import try_terrain_seed as _tseed, terrain_turns as _tturns, \
+    get_crit_stage_bonus as _critbonus
+
+# ながねぎ: カモネギ/ネギガナイト限定で急所ランク+2（他種が持っても0）
+check("ながねぎ カモネギで急所+2", _critbonus("ながねぎ", "カモネギ") == 2)
+check("ながねぎ ネギガナイトで急所+2", _critbonus("ながねぎ", "ネギガナイト") == 2)
+check("ながねぎ 他種では効果なし(負例)", _critbonus("ながねぎ", "ガブリアス") == 0)
+check("ピントレンズは従来どおり+1", _critbonus("ピントレンズ", "ガブリアス") == 1)
+
+# グランドコート: フィールド継続 5 → 8
+check("グランドコート フィールド8ターン", _tturns("グランドコート") == 8)
+check("グランドコート無しは5ターン(負例)", _tturns("たべのこし") == 5)
+
+# シード4種: 該当フィールドで能力+1して消費／非該当フィールドでは何もしない
+for _it, _fattr, _sattr in (("エレキシード", "electric_terrain", "stage_defense"),
+                            ("グラスシード", "grassy_terrain", "stage_defense"),
+                            ("ミストシード", "misty_terrain", "stage_sp_defense"),
+                            ("サイコシード", "psychic_terrain", "stage_sp_defense")):
+    _sp = make_poke(item=_it); _fl = BattleField(); setattr(_fl, _fattr, True)
+    _ok = _tseed(_sp, _fl, [])
+    check(f"{_it} 該当フィールドで発動", _ok and getattr(_sp, _sattr) == 1 and _sp.item is None,
+          f"stage={getattr(_sp, _sattr)} item={_sp.item}")
+    _sp2 = make_poke(item=_it)
+    check(f"{_it} フィールド無しでは不発(負例)",
+          _tseed(_sp2, BattleField(), []) is False
+          and getattr(_sp2, _sattr) == 0 and _sp2.item == _it)
+
+# ゴツゴツメット: 接触技を受けると攻撃側に最大HPの1/6
+_hd = make_poke(type1="ノーマル", item="ゴツゴツメット", hp_b=255, def_b=200)
+_ha = make_poke(type1="ノーマル", atk_b=30, hp_b=255, moves=["のしかかり"])
+execute(_ha, _hd, "のしかかり")
+check("ゴツゴツメット 接触で1/6反動", _ha.max_hp - _ha.hp == max(1, _ha.max_hp // 6),
+      f"減少={_ha.max_hp - _ha.hp} 期待={_ha.max_hp // 6}")
+# 負例：非接触技では反動なし
+_hd2 = make_poke(type1="ノーマル", item="ゴツゴツメット", hp_b=255, def_b=200)
+_ha2 = make_poke(type1="じめん", atk_b=30, hp_b=255, moves=["じしん"])
+execute(_ha2, _hd2, "じしん")
+check("ゴツゴツメット 非接触では反動なし(負例)", _ha2.hp == _ha2.max_hp, f"hp={_ha2.hp}")
+# 負例：えんかく（攻撃側が接触扱いにならない）では反動なし
+_hd3 = make_poke(type1="ノーマル", item="ゴツゴツメット", hp_b=255, def_b=200)
+_ha3 = make_poke(type1="ノーマル", atk_b=30, hp_b=255, ability="えんかく", moves=["のしかかり"])
+execute(_ha3, _hd3, "のしかかり")
+check("ゴツゴツメット えんかくでは反動なし(負例)", _ha3.hp == _ha3.max_hp, f"hp={_ha3.hp}")
+
+# ノーマルジュエル: ノーマル技×1.3
+from simulator.items import get_type_boost as _tb
+check("ノーマルジュエル ノーマル技1.3倍", abs(_tb("ノーマルジュエル", "ノーマル", "ガブリアス") - 1.3) < 1e-9)
+check("ノーマルジュエル 他タイプは等倍(負例)", _tb("ノーマルジュエル", "みず", "ガブリアス") == 1.0)
+# 使用したら消費される
+_nj = make_poke(type1="ノーマル", atk_b=100, item="ノーマルジュエル", moves=["たいあたり"])
+execute(_nj, make_poke(type1="ノーマル", hp_b=250, def_b=200), "たいあたり")
+check("ノーマルジュエル 使用で消費", _nj.item is None, f"item={_nj.item}")
+
+# ふうせん: じめん技無効／技のダメージで割れる
+_bl = make_poke(type1="ノーマル", item="ふうせん", hp_b=200, def_b=150)
+check("ふうせん じめん技を無効化",
+      dmg(make_poke(type1="じめん", atk_b=150, moves=["じしん"]), _bl, "じしん", roll=0.5) == 0)
+# かたやぶりでも無効（アイテムなので特性無視の対象外）
+check("ふうせん かたやぶりでも無効化",
+      dmg(make_poke(type1="じめん", atk_b=150, ability="かたやぶり", moves=["じしん"]), _bl, "じしん", roll=0.5) == 0)
+_bl2 = make_poke(type1="ノーマル", item="ふうせん", hp_b=200, def_b=150)
+execute(make_poke(type1="ノーマル", atk_b=100, moves=["たいあたり"]), _bl2, "たいあたり")
+check("ふうせん 技を受けると割れる", _bl2.item is None, f"item={_bl2.item}")
+
 # ── かいがらのすず (Shell Bell) ──
 p_sb = make_poke(atk_b=100, item="かいがらのすず", moves=["たいあたり"])
 p_t2 = make_poke(def_b=50)
@@ -830,6 +1022,529 @@ d_no_fc = dmg(p_a, p_tgt3, "たいあたり", roll=0.5)
 check("ファーコート 物理0.5倍", near(d_fc / d_no_fc, 0.5))
 # 負例：特殊技は半減しない（物理限定）
 check("ファーコート 特殊技は等倍", near(dmg(make_poke(spatk_b=100), make_poke(type1="ノーマル", ability="ファーコート", spdef_b=100), "なみのり") / dmg(make_poke(spatk_b=100), make_poke(type1="ノーマル", spdef_b=100), "なみのり"), 1.0))
+
+# はどうのぼうご 接触技0.5倍（メガルカリオZ専用）
+p_aura = make_poke(type1="ノーマル", ability="はどうのぼうご", def_b=100, spdef_b=100)
+p_aura_b = make_poke(type1="ノーマル", def_b=100, spdef_b=100)
+check("はどうのぼうご 接触技0.5倍",
+      near(dmg(make_poke(atk_b=100), p_aura, "たいあたり", roll=0.5)
+           / dmg(make_poke(atk_b=100), p_aura_b, "たいあたり", roll=0.5), 0.5))
+# 負例：非接触の物理技は半減しない（接触限定）
+check("はどうのぼうご 非接触物理は等倍",
+      near(dmg(make_poke(atk_b=100), p_aura, "じしん", roll=0.5)
+           / dmg(make_poke(atk_b=100), p_aura_b, "じしん", roll=0.5), 1.0))
+# 負例：非接触の特殊技も半減しない
+check("はどうのぼうご 特殊技は等倍",
+      near(dmg(make_poke(spatk_b=100), p_aura, "なみのり", roll=0.5)
+           / dmg(make_poke(spatk_b=100), p_aura_b, "なみのり", roll=0.5), 1.0))
+
+# ── M-C 追加アイテムの不足していた検証（実効果・統合経路・負例） ──
+from simulator.battle import Battle as _Bit, _entry_effects as _ent_it
+
+# ふうせん: じめん以外は通常ダメージ（負例）／ハザードの扱い
+_bl_n = make_poke(type1="ノーマル", item="ふうせん", hp_b=200, def_b=150)
+_bl_p = make_poke(type1="ノーマル", item="たべのこし", hp_b=200, def_b=150)
+check("ふうせん じめん以外は等倍で通る(負例)",
+      dmg(make_poke(type1="ノーマル", atk_b=150, moves=["たいあたり"]), _bl_n, "たいあたり", roll=0.5)
+      == dmg(make_poke(type1="ノーマル", atk_b=150, moves=["たいあたり"]), _bl_p, "たいあたり", roll=0.5))
+# まきびし: ふうせん持ちは無効
+_fl_hz = BattleField(); _fl_hz.spikes[0] = 3
+_hz_bl = make_poke(type1="ノーマル", item="ふうせん", hp_b=200)
+_ent_it(_hz_bl, 0, _fl_hz, make_poke(), [], [_hz_bl])
+check("ふうせん まきびしを無効化", _hz_bl.hp == _hz_bl.max_hp, f"hp={_hz_bl.hp}")
+_hz_no = make_poke(type1="ノーマル", item="たべのこし", hp_b=200)
+_ent_it(_hz_no, 0, _fl_hz, make_poke(), [], [_hz_no])
+check("ふうせん無しはまきびしを受ける(対照)", _hz_no.hp < _hz_no.max_hp, f"hp={_hz_no.hp}")
+# ステルスロックは岩なので ふうせん でも受ける（負例）
+_fl_sr = BattleField(); _fl_sr.stealth_rock[0] = True
+_sr_bl = make_poke(type1="ノーマル", item="ふうせん", hp_b=200)
+_ent_it(_sr_bl, 0, _fl_sr, make_poke(), [], [_sr_bl])
+check("ふうせん ステルスロックは受ける(負例)", _sr_bl.hp < _sr_bl.max_hp, f"hp={_sr_bl.hp}")
+
+# ノーマルジュエル: 実ダメージが1.3倍
+_nj_a = make_poke(type1="ノーマル", atk_b=120, item="ノーマルジュエル", moves=["たいあたり"])
+_nj_b = make_poke(type1="ノーマル", atk_b=120, item="たべのこし", moves=["たいあたり"])
+_nj_t = make_poke(type1="ノーマル", hp_b=255, def_b=120)
+check("ノーマルジュエル 実ダメージ1.3倍",
+      near(dmg(_nj_a, _nj_t, "たいあたり", roll=0.5) / dmg(_nj_b, _nj_t, "たいあたり", roll=0.5), 1.3))
+
+# グランドコート: 技でフィールドを張ると実際に8ターンになる（統合経路）
+def _terrain_turns_via_move(item):
+    a = make_poke(type1="でんき", hp_b=200, spd_b=200, item=item, moves=["エレキフィールド"])
+    d = make_poke(type1="ノーマル", hp_b=200, moves=["つるぎのまい"])
+    b = _Bit(BattleSide([a]), BattleSide([d]), BattleField())
+    b._turn_loop(_Force("エレキフィールド"), _Force("つるぎのまい"), max_turns=1)
+    return b.field.electric_terrain_count
+check("グランドコート 技で張ると8ターン(統合)", _terrain_turns_via_move("グランドコート") >= 7,
+      f"count={_terrain_turns_via_move('グランドコート')}")
+check("グランドコート無しは5ターン(統合・負例)", _terrain_turns_via_move("たべのこし") <= 5,
+      f"count={_terrain_turns_via_move('たべのこし')}")
+
+# シード: 技でフィールドが張られた瞬間に相手側のシードも発動する（統合経路）
+_sd_a = make_poke(type1="でんき", hp_b=200, spd_b=200, moves=["エレキフィールド"])
+_sd_d = make_poke(type1="ノーマル", hp_b=200, item="エレキシード", moves=["つるぎのまい"])
+_Bit(BattleSide([_sd_a]), BattleSide([_sd_d]), BattleField())._turn_loop(
+    _Force("エレキフィールド"), _Force("つるぎのまい"), max_turns=1)
+check("エレキシード 技での設置時に発動(統合)",
+      _sd_d.stage_defense == 1 and _sd_d.item is None,
+      f"stage={_sd_d.stage_defense} item={_sd_d.item}")
+# シード: 継続中のフィールドへ登場したときも発動する（統合経路）
+_fl_on = BattleField(); _fl_on.electric_terrain = True; _fl_on.electric_terrain_count = 3
+_sd_in = make_poke(type1="ノーマル", hp_b=200, item="エレキシード")
+_ent_it(_sd_in, 0, _fl_on, make_poke(), [], [_sd_in])
+check("エレキシード 継続中フィールドへの登場で発動(統合)",
+      _sd_in.stage_defense == 1 and _sd_in.item is None,
+      f"stage={_sd_in.stage_defense} item={_sd_in.item}")
+# 負例: 別のフィールドでは発動しない
+_fl_ot = BattleField(); _fl_ot.grassy_terrain = True
+_sd_ot = make_poke(type1="ノーマル", hp_b=200, item="エレキシード")
+_ent_it(_sd_ot, 0, _fl_ot, make_poke(), [], [_sd_ot])
+check("エレキシード 別フィールドでは不発(負例)",
+      _sd_ot.stage_defense == 0 and _sd_ot.item == "エレキシード")
+
+# しめつけバンド: ターン終了時の削りが 1/8 → 1/6 になる（実ダメージで確認）
+def _bind_eot_loss(band):
+    a = make_poke(type1="ノーマル", hp_b=255, spd_b=200, moves=["つるぎのまい"])
+    d = make_poke(type1="ノーマル", hp_b=255, moves=["つるぎのまい"])
+    d.bound_count = 3
+    d._bound_by_band = band            # type: ignore
+    b = _Bit(BattleSide([a]), BattleSide([d]), BattleField())
+    b._turn_loop(_Force("つるぎのまい"), _Force("つるぎのまい"), max_turns=1)
+    return d.max_hp - d.hp, d.max_hp
+_loss_band, _mh = _bind_eot_loss(True)
+_loss_plain, _ = _bind_eot_loss(False)
+check("しめつけバンド 削りが1/6", _loss_band == max(1, _mh // 6), f"減少={_loss_band} 期待={_mh // 6}")
+check("しめつけバンド無しは1/8(負例)", _loss_plain == max(1, _mh // 8),
+      f"減少={_loss_plain} 期待={_mh // 8}")
+
+# レッドカード / だっしゅつボタン: 交代を伴うので Battle 経由で確認する
+from simulator.battle import Battle as _Bswi
+
+def _swap_case(def_item):
+    """相手(P2)が def_item を持ち、P1が接触技で殴る1ターンを回して交代の有無を返す。"""
+    # 殴る側を確実に先攻させる。レッドカードの追い出しは「相手の次の行動処理」で消化される
+    # （マジックミラーと同じ経路）ので、順番が逆だと同一ターン内には現れない。
+    a1 = make_poke(type1="ノーマル", atk_b=120, hp_b=255, spd_b=200, moves=["のしかかり"])
+    a1.name = "殴る側"
+    a2 = make_poke(type1="ノーマル", hp_b=255, moves=["まもる"]); a2.name = "殴る側控え"
+    # 防御側は自己強化技にする（まもるだとダメージが通らず、そもそも発動条件を満たさない）
+    d1 = make_poke(type1="ノーマル", hp_b=255, def_b=120, item=def_item,
+                   moves=["つるぎのまい"]); d1.name = "持ち主"
+    d2 = make_poke(type1="ノーマル", hp_b=255, moves=["つるぎのまい"]); d2.name = "持ち主控え"
+    s1 = BattleSide([a1, a2]); s2 = BattleSide([d1, d2])
+    b = _Bswi(s1, s2, BattleField())
+    b._turn_loop(_Force("のしかかり"), _Force("つるぎのまい"), max_turns=1)
+    return s1.active is not a1, s2.active is not d1, d1.item
+
+_rc_atk_out, _rc_def_out, _rc_item = _swap_case("レッドカード")
+check("レッドカード 殴った側が交代させられる", _rc_atk_out, "攻撃側が残っている")
+check("レッドカード 使用で消費", _rc_item is None, f"item={_rc_item}")
+_eb_atk_out, _eb_def_out, _eb_item = _swap_case("だっしゅつボタン")
+check("だっしゅつボタン 持ち主が引っ込む", _eb_def_out, "持ち主が残っている")
+check("だっしゅつボタン 使用で消費", _eb_item is None, f"item={_eb_item}")
+check("だっしゅつボタン 殴った側は交代しない(負例)", not _eb_atk_out)
+# 負例: 控えが居なければ発動しない（消費もしない）
+_lone_a = make_poke(type1="ノーマル", atk_b=120, hp_b=255, moves=["のしかかり"])
+_lone_d = make_poke(type1="ノーマル", hp_b=255, def_b=120, item="レッドカード", moves=["つるぎのまい"])
+_ls1 = BattleSide([_lone_a]); _ls2 = BattleSide([_lone_d])
+_Bswi(_ls1, _ls2, BattleField())._turn_loop(_Force("のしかかり"), _Force("つるぎのまい"), max_turns=1)
+check("レッドカード 控え無しでは不発・未消費(負例)", _lone_d.item == "レッドカード",
+      f"item={_lone_d.item}")
+
+# しめつけバンド: バインドの削りが 1/8 → 1/6
+_bb_d = make_poke(type1="ノーマル", hp_b=255, def_b=120, moves=["つるぎのまい"])
+_bb_a = make_poke(type1="ノーマル", atk_b=60, hp_b=255, spd_b=200,
+                  item="しめつけバンド", moves=["まとわりつく"])   # 命中100（まきつくは90で落ちる）
+_bs1 = BattleSide([_bb_a]); _bs2 = BattleSide([_bb_d, make_poke(hp_b=255)])
+_bb = _Bswi(_bs1, _bs2, BattleField())
+_bb._turn_loop(_Force("まとわりつく"), _Force("つるぎのまい"), max_turns=1)
+check("しめつけバンド 束縛時に印が付く", getattr(_bb_d, "_bound_by_band", False) is True)
+_nb_d = make_poke(type1="ノーマル", hp_b=255, def_b=120, moves=["つるぎのまい"])
+_nb_a = make_poke(type1="ノーマル", atk_b=60, hp_b=255, spd_b=200,
+                  item="たべのこし", moves=["まとわりつく"])
+_nb = _Bswi(BattleSide([_nb_a]), BattleSide([_nb_d, make_poke(hp_b=255)]), BattleField())
+_nb._turn_loop(_Force("まとわりつく"), _Force("つるぎのまい"), max_turns=1)
+check("しめつけバンド無しでは印が付かない(負例)", getattr(_nb_d, "_bound_by_band", False) is False)
+
+# ねつこうかん（M-C・メガセグレイブ）: ほのお技を受けると攻撃+1 / やけどにならない
+# 被弾後の特性なので execute() で撃たせる（dmg()はダメージ計算だけで on_after_hit を通らない）
+_nk_d = make_poke(type1="ノーマル", ability="ねつこうかん", hp_b=255, spdef_b=200)
+execute(make_poke(spatk_b=10, type1="ほのお"), _nk_d, "かえんほうしゃ")
+check("ねつこうかん ほのお技で攻撃+1", _nk_d.stage_attack == 1, f"stage_attack={_nk_d.stage_attack}")
+# 負例：ほのお以外では上がらない
+_nk_d2 = make_poke(type1="ノーマル", ability="ねつこうかん", hp_b=255, spdef_b=200)
+execute(make_poke(spatk_b=10, type1="みず", moves=["なみのり"]), _nk_d2, "なみのり")
+check("ねつこうかん みず技では攻撃が変動しない(負例)", _nk_d2.stage_attack == 0,
+      f"stage_attack={_nk_d2.stage_attack}")
+# やけど免疫（すいほうと同じ扱い）／負例として他の状態異常は通る
+check("ねつこうかん やけどにならない",
+      make_poke(ability="ねつこうかん").apply_status("burn") is False)
+check("ねつこうかん まひは通る(負例)",
+      make_poke(ability="ねつこうかん").apply_status("paralysis") is True)
+
+# ════════════════════════════════════════════════════════════════
+# M-C 新特性（グラスメイカー等13種）
+# ════════════════════════════════════════════════════════════════
+from simulator.battle import is_trapped
+from simulator.abilities import entry_ability
+from simulator.damage import is_contact_move, check_hit
+from simulator.battle import crit_chance
+
+# ── グラスメイカー / サイコメイカー: 登場時フィールド展開 ──
+for _ab, _attr, _cnt in (("グラスメイカー", "grassy_terrain", "grassy_terrain_count"),
+                         ("サイコメイカー", "psychic_terrain", "psychic_terrain_count")):
+    _f = BattleField()
+    entry_ability(make_poke(ability=_ab), make_poke(), _f)
+    check(f"{_ab} 登場でフィールド展開", getattr(_f, _attr) is True)
+    check(f"{_ab} 5ターン継続", getattr(_f, _cnt) == 5, f"count={getattr(_f, _cnt)}")
+    _f2 = BattleField()
+    entry_ability(make_poke(ability="しんりょく"), make_poke(), _f2)
+    check(f"{_ab} 非メイカーでは展開しない(負例)", getattr(_f2, _attr) is False)
+
+# サイコメイカーが展開したフィールドの効果（エスパー技1.3倍・先制技無効）
+_pm_f = BattleField()
+entry_ability(make_poke(ability="サイコメイカー"), make_poke(), _pm_f)
+_pm_a = make_poke(type1="ノーマル", spatk_b=100)
+_pm_d = make_poke(type1="ノーマル", spdef_b=100)
+check("サイコメイカー エスパー技1.3倍",
+      near(dmg(_pm_a, _pm_d, "サイコキネシス", f=_pm_f) / dmg(_pm_a, _pm_d, "サイコキネシス"), 1.3),
+      f"ratio={dmg(_pm_a, _pm_d, 'サイコキネシス', f=_pm_f) / dmg(_pm_a, _pm_d, 'サイコキネシス')}")
+check("サイコメイカー 非エスパー技は等倍(負例)",
+      dmg(_pm_a, _pm_d, "りゅうのいぶき", f=_pm_f) == dmg(_pm_a, _pm_d, "りゅうのいぶき"))
+_pm_pri_hp = _pm_d.hp
+_execute_move(BattleSide([make_poke(atk_b=100)]), BattleSide([_pm_d]),
+              Action(type="move", move=dl.get_move("でんこうせっか")), _pm_f)
+check("サイコメイカー 地面のポケモンは先制技を受けない", _pm_d.hp == _pm_pri_hp,
+      f"hp {_pm_pri_hp}→{_pm_d.hp}")
+_pm_fly = make_poke(type1="ひこう", spdef_b=100, def_b=100, hp_b=255)
+_pm_fly_hp = _pm_fly.hp
+_execute_move(BattleSide([make_poke(atk_b=100)]), BattleSide([_pm_fly]),
+              Action(type="move", move=dl.get_move("でんこうせっか")), _pm_f)
+check("サイコメイカー ひこうタイプには先制技が通る(負例)", _pm_fly.hp < _pm_fly_hp,
+      f"hp {_pm_fly_hp}→{_pm_fly.hp}")
+_pm_lev = make_poke(type1="ノーマル", ability="ふゆう", spdef_b=100, def_b=100, hp_b=255)
+_pm_lev_hp = _pm_lev.hp
+_execute_move(BattleSide([make_poke(atk_b=100)]), BattleSide([_pm_lev]),
+              Action(type="move", move=dl.get_move("でんこうせっか")), _pm_f)
+check("サイコメイカー ふゆうには先制技が通る(負例)", _pm_lev.hp < _pm_lev_hp,
+      f"hp {_pm_lev_hp}→{_pm_lev.hp}")
+_pm_pri0 = make_poke(type1="ノーマル", spdef_b=100, def_b=100, hp_b=255)
+_pm_pri0_hp = _pm_pri0.hp
+_execute_move(BattleSide([make_poke(atk_b=100)]), BattleSide([_pm_pri0]),
+              Action(type="move", move=dl.get_move("たいあたり")), _pm_f)
+check("サイコメイカー 優先度0の技は防がれない(負例)", _pm_pri0.hp < _pm_pri0_hp,
+      f"hp {_pm_pri0_hp}→{_pm_pri0.hp}")
+
+# ── グラスメイカーはグラスシードを発動させる（設置と同時） ──
+_f_seed = BattleField()
+_gs = make_poke(ability="しんりょく", item="グラスシード", def_b=100)
+entry_ability(make_poke(ability="グラスメイカー"), _gs, _f_seed)
+check("グラスメイカー グラスシードが発動して防御+1", _gs.stage_defense == 1,
+      f"stage_defense={_gs.stage_defense}")
+
+# ── くさのけがわ: グラスフィールド時 防御1.5倍（物理のみ） ──
+_f_gr = BattleField(); _f_gr.grassy_terrain = True
+_kk = make_poke(type1="ノーマル", ability="くさのけがわ", def_b=100, spdef_b=100)
+_kk_n = make_poke(type1="ノーマル", ability="しんりょく", def_b=100, spdef_b=100)
+_atk_kk = make_poke(atk_b=100, spatk_b=100)
+check("くさのけがわ グラスフィールドで物理被ダメ2/3",
+      near(dmg(_atk_kk, _kk, "たいあたり", f=_f_gr) / dmg(_atk_kk, _kk_n, "たいあたり", f=_f_gr), 1/1.5),
+      f"ratio={dmg(_atk_kk, _kk, 'たいあたり', f=_f_gr) / dmg(_atk_kk, _kk_n, 'たいあたり', f=_f_gr)}")
+check("くさのけがわ 非フィールドでは等倍(負例)",
+      dmg(_atk_kk, _kk, "たいあたり") == dmg(_atk_kk, _kk_n, "たいあたり"))
+check("くさのけがわ 特殊技は等倍(負例)",
+      dmg(_atk_kk, _kk, "りゅうのいぶき", f=_f_gr) == dmg(_atk_kk, _kk_n, "りゅうのいぶき", f=_f_gr))
+
+# ── こぼれダネ: 技のダメージを受けると5ターン グラスフィールド ──
+_f_kb = BattleField()
+_kb_d = make_poke(type1="ノーマル", ability="こぼれダネ", hp_b=255, def_b=200)
+execute(make_poke(atk_b=10), _kb_d, "たいあたり", f=_f_kb)
+check("こぼれダネ 被弾でグラスフィールド展開", _f_kb.grassy_terrain is True)
+check("こぼれダネ 5ターン継続", _f_kb.grassy_terrain_count == 5)
+_f_kb2 = BattleField()
+_kb_g = make_poke(type1="ゴースト", ability="こぼれダネ", hp_b=255, def_b=200)
+execute(make_poke(atk_b=10), _kb_g, "たいあたり", f=_f_kb2)
+check("こぼれダネ ダメージ0では展開しない(負例)", _f_kb2.grassy_terrain is False)
+
+# ── にげあし: 交代を邪魔する効果を無視 ──
+_shadow = make_poke(ability="かげふみ")
+check("にげあし かげふみ下でも交代できる", is_trapped(make_poke(ability="にげあし"), _shadow) is False)
+check("にげあし 通常特性はかげふみで交代不可(負例)",
+      is_trapped(make_poke(ability="しんりょく"), _shadow) is True)
+_bound = make_poke(ability="にげあし"); _bound.trapped = True
+check("にげあし トラップ技も無視", is_trapped(_bound, make_poke()) is False)
+_bound_n = make_poke(ability="しんりょく"); _bound_n.trapped = True
+check("にげあし 通常特性はトラップ技で交代不可(負例)",
+      is_trapped(_bound_n, make_poke()) is True)
+
+# ── はがねのせいしん: 自分のはがね技1.5倍 ──
+_hs = make_poke(type1="ノーマル", ability="はがねのせいしん", atk_b=100)
+_hs_n = make_poke(type1="ノーマル", ability="しんりょく", atk_b=100)
+_hs_t = make_poke(type1="ノーマル", def_b=100)
+check("はがねのせいしん はがね技1.5倍",
+      near(dmg(_hs, _hs_t, "アイアンヘッド") / dmg(_hs_n, _hs_t, "アイアンヘッド"), 1.5))
+check("はがねのせいしん 他タイプ技は等倍(負例)",
+      dmg(_hs, _hs_t, "たいあたり") == dmg(_hs_n, _hs_t, "たいあたり"))
+
+# ── はりこみ: 交代で出てきた相手に威力2倍 ──
+_hr = make_poke(type1="ノーマル", ability="はりこみ", atk_b=100)
+_hr_n = make_poke(type1="ノーマル", ability="しんりょく", atk_b=100)
+_hr_t = make_poke(type1="ノーマル", def_b=100)
+_hr_t._switched_in_this_turn = True
+check("はりこみ 交代で出てきた相手に2倍",
+      near(dmg(_hr, _hr_t, "たいあたり") / dmg(_hr_n, _hr_t, "たいあたり"), 2.0),
+      f"ratio={dmg(_hr, _hr_t, 'たいあたり') / dmg(_hr_n, _hr_t, 'たいあたり')}")
+_hr_t2 = make_poke(type1="ノーマル", def_b=100)
+check("はりこみ 交代していない相手には等倍(負例)",
+      dmg(_hr, _hr_t2, "たいあたり") == dmg(_hr_n, _hr_t2, "たいあたり"))
+
+# ── ばんけん: いかく無効＋攻撃+1 / 交代させる技・道具が効かない ──
+_bk = make_poke(ability="ばんけん")
+entry_ability(make_poke(ability="いかく"), _bk, BattleField())
+check("ばんけん いかくで攻撃+1", _bk.stage_attack == 1, f"stage_attack={_bk.stage_attack}")
+_bk_n = make_poke(ability="しんりょく")
+entry_ability(make_poke(ability="いかく"), _bk_n, BattleField())
+check("ばんけん 通常特性はいかくで攻撃-1(負例)", _bk_n.stage_attack == -1)
+_bk_d = make_poke(type1="ノーマル", ability="ばんけん", hp_b=255, def_b=200)
+execute(make_poke(atk_b=10), _bk_d, "ドラゴンテール")
+check("ばんけん ドラゴンテールで追い出されない", getattr(_bk_d, "_force_switch", False) is False)
+_bk_d2 = make_poke(type1="ノーマル", ability="しんりょく", hp_b=255, def_b=200)
+execute(make_poke(atk_b=10), _bk_d2, "ドラゴンテール")
+check("ばんけん 通常特性は追い出される(負例)", getattr(_bk_d2, "_force_switch", False) is True)
+_rc_a = make_poke(type1="ノーマル", ability="ばんけん", atk_b=10)
+_rc_d = make_poke(type1="ノーマル", hp_b=255, def_b=200, item="レッドカード")
+execute(_rc_a, _rc_d, "たいあたり")
+check("ばんけん レッドカードが効かない", getattr(_rc_a, "_force_switch", False) is False)
+
+# ── びびり: あく/ゴースト/むし技・いかくで素早さ+1 ──
+for _t, _mv in (("あく", "あくのはどう"), ("ゴースト", "シャドーボール"), ("むし", "むしのていこう")):
+    _bb = make_poke(type1="エスパー", ability="びびり", hp_b=255, spdef_b=200)
+    execute(make_poke(spatk_b=10, type1=_t), _bb, _mv)
+    check(f"びびり {_t}技で素早さ+1", _bb.stage_speed == 1, f"stage_speed={_bb.stage_speed}")
+_bb_n = make_poke(type1="ノーマル", ability="びびり", hp_b=255, def_b=200)
+execute(make_poke(atk_b=10), _bb_n, "たいあたり")
+check("びびり ノーマル技では素早さが変動しない(負例)", _bb_n.stage_speed == 0,
+      f"stage_speed={_bb_n.stage_speed}")
+_bb_i = make_poke(ability="びびり")
+entry_ability(make_poke(ability="いかく"), _bb_i, BattleField())
+check("びびり いかくで素早さ+1", _bb_i.stage_speed == 1 and _bb_i.stage_attack == 0,
+      f"S={_bb_i.stage_speed} A={_bb_i.stage_attack}")
+
+# ── パンクロック: 音技の威力1.3倍・音技被ダメ半減 ──
+_pr = make_poke(type1="ノーマル", ability="パンクロック", spatk_b=100)
+_pr_n = make_poke(type1="ノーマル", ability="しんりょく", spatk_b=100)
+_pr_t = make_poke(type1="ノーマル", spdef_b=100, def_b=100)
+check("パンクロック 音技1.3倍",
+      near(dmg(_pr, _pr_t, "ハイパーボイス") / dmg(_pr_n, _pr_t, "ハイパーボイス"), 1.3),
+      f"ratio={dmg(_pr, _pr_t, 'ハイパーボイス') / dmg(_pr_n, _pr_t, 'ハイパーボイス')}")
+check("パンクロック 非音技は等倍(負例)",
+      dmg(_pr, _pr_t, "たいあたり") == dmg(_pr_n, _pr_t, "たいあたり"))
+_pr_d = make_poke(type1="ノーマル", ability="パンクロック", spdef_b=100)
+_pr_dn = make_poke(type1="ノーマル", ability="しんりょく", spdef_b=100)
+check("パンクロック 音技被ダメ半減",
+      near(dmg(_pr_n, _pr_d, "ハイパーボイス") / dmg(_pr_n, _pr_dn, "ハイパーボイス"), 0.5),
+      f"ratio={dmg(_pr_n, _pr_d, 'ハイパーボイス') / dmg(_pr_n, _pr_dn, 'ハイパーボイス')}")
+check("パンクロック 非音技の被ダメは等倍(負例)",
+      dmg(_pr_n, _pr_d, "たいあたり") == dmg(_pr_n, _pr_dn, "たいあたり"))
+
+# ── ヘドロえき: HP吸収技を受けると相手を回復させずダメージ ──
+_hd_a = make_poke(type1="ノーマル", ability="しんりょく", spatk_b=100, hp_b=255)
+_hd_a.hp = _hd_a.max_hp // 2
+_hp0 = _hd_a.hp
+execute(_hd_a, make_poke(type1="ノーマル", ability="ヘドロえき", hp_b=255, spdef_b=100), "ギガドレイン")
+check("ヘドロえき 吸収技で攻撃側がダメージを受ける", _hd_a.hp < _hp0, f"hp {_hp0}→{_hd_a.hp}")
+_hd_a2 = make_poke(type1="ノーマル", ability="しんりょく", spatk_b=100, hp_b=255)
+_hd_a2.hp = _hd_a2.max_hp // 2
+_hp0b = _hd_a2.hp
+execute(_hd_a2, make_poke(type1="ノーマル", ability="しんりょく", hp_b=255, spdef_b=100), "ギガドレイン")
+check("ヘドロえき 通常特性なら吸収で回復する(負例)", _hd_a2.hp > _hp0b, f"hp {_hp0b}→{_hd_a2.hp}")
+
+# ── リベロ: 登場するたび1回だけ、出す技のタイプに変化 ──
+from simulator.battle import apply_pre_move_forms
+_lb = make_poke(type1="ほのお", ability="リベロ")
+apply_pre_move_forms(_lb, dl.get_move("たいあたり"))
+check("リベロ 技タイプに変化", (_lb.type1, _lb.type2) == ("ノーマル", None), f"{_lb.type1}/{_lb.type2}")
+apply_pre_move_forms(_lb, dl.get_move("なみのり"))
+check("リベロ 2回目は変化しない(負例)", _lb.type1 == "ノーマル", f"type1={_lb.type1}")
+
+# ── ききかいひ: HPが1/2以下になると手持ちに戻る ──
+_kk_d = make_poke(type1="ノーマル", ability="ききかいひ", hp_b=255, def_b=200)
+_kk_d.hp = _kk_d.max_hp // 2 + 1
+_kk_side = BattleSide([_kk_d, make_poke(name="控え")])
+_execute_move(BattleSide([make_poke(atk_b=10)]), _kk_side,
+              Action(type="move", move=dl.get_move("たいあたり")), BattleField())
+check("ききかいひ 1/2以下になると引っ込む",
+      _kk_d.hp * 2 <= _kk_d.max_hp and getattr(_kk_d, "_pivot_out", False) is True,
+      f"hp={_kk_d.hp}/{_kk_d.max_hp} pivot={getattr(_kk_d, '_pivot_out', False)}")
+_kk_d2 = make_poke(type1="ノーマル", ability="ききかいひ", hp_b=255, def_b=200)
+_kk_d2.hp = _kk_d2.max_hp // 4
+_execute_move(BattleSide([make_poke(atk_b=10)]), BattleSide([_kk_d2, make_poke(name="控え")]),
+              Action(type="move", move=dl.get_move("たいあたり")), BattleField())
+check("ききかいひ すでに1/2以下なら発動しない(負例)",
+      getattr(_kk_d2, "_pivot_out", False) is False)
+_kk_d3 = make_poke(type1="ノーマル", ability="ききかいひ", hp_b=255, def_b=200)
+_kk_d3.hp = _kk_d3.max_hp // 2 + 5
+_execute_move(BattleSide([make_poke(atk_b=10)]), BattleSide([_kk_d3]),
+              Action(type="move", move=dl.get_move("たいあたり")), BattleField())
+check("ききかいひ 控えがいなければ引っ込まない(負例)",
+      getattr(_kk_d3, "_pivot_out", False) is False)
+
+
+# ════════════════════════════════════════════════════════════════
+# M-C 新技8種（DB属性＋効果）
+# ════════════════════════════════════════════════════════════════
+MC_MOVES = [
+    ("きょけんとつげき", "ドラゴン", "physical", 120, 100, 8, True),
+    ("ドラムアタック",   "くさ",     "physical", 80,  100, 12, False),
+    ("かえんボール",     "ほのお",   "physical", 120, 90,  8, False),
+    ("コートチェンジ",   "ノーマル", "status",   None, 100, 12, False),
+    ("でんこうそうげき", "でんき",   "physical", 120, 100, 8, True),
+    ("さいきのいのり",   "ノーマル", "status",   None, None, 1, False),
+    ("スターアサルト",   "かくとう", "physical", 170, 100, 8, False),
+    ("ねらいうち",       "みず",     "special",  85,  100, 16, False),
+]
+for _n, _ty, _cat, _pw, _acc, _pp, _ctn in MC_MOVES:
+    _m = dl.get_move(_n)
+    check(f"{_n} DB登録あり", _m is not None)
+    if _m is None:
+        continue
+    check(f"{_n} タイプ/分類", (_m.type, _m.category) == (_ty, _cat), f"{_m.type}/{_m.category}")
+    check(f"{_n} 威力{_pw}/命中{_acc}/PP{_pp}",
+          (_m.power, _m.accuracy, _m.pp) == (_pw, _acc, _pp),
+          f"{_m.power}/{_m.accuracy}/{_m.pp}")
+    if _cat == "physical":
+        check(f"{_n} 接触={_ctn}", is_contact_move(_m) is _ctn)
+
+# ── きょけんとつげき: 使用後、次に自分が行動するまで無防備（被ダメ2倍・必中） ──
+_gr_a = make_poke(type1="ドラゴン", ability="しんりょく", atk_b=100, hp_b=255, def_b=100)
+_gr_d = make_poke(type1="ノーマル", hp_b=255, def_b=100, atk_b=100)
+execute(_gr_a, _gr_d, "きょけんとつげき")
+check("きょけんとつげき 使用後は無防備状態", getattr(_gr_a, "_defenseless", False) is True)
+_gr_plain = make_poke(type1="ドラゴン", ability="しんりょく", atk_b=100, hp_b=255, def_b=100)
+check("きょけんとつげき 無防備中の被ダメ2倍",
+      near(dmg(_gr_d, _gr_a, "たいあたり") / dmg(_gr_d, _gr_plain, "たいあたり"), 2.0),
+      f"ratio={dmg(_gr_d, _gr_a, 'たいあたり') / dmg(_gr_d, _gr_plain, 'たいあたり')}")
+check("きょけんとつげき 無防備中は必中",
+      all(check_hit(_gr_d, _gr_a, dl.get_move("ふぶき"), BattleField()) for _ in range(20)))
+check("きょけんとつげき 通常時は被ダメ等倍(負例)",
+      dmg(_gr_d, _gr_plain, "たいあたり") == dmg(_gr_d, make_poke(type1="ドラゴン", def_b=100, hp_b=255), "たいあたり"))
+execute(_gr_a, _gr_d, "たいあたり")
+check("きょけんとつげき 次に自分が行動すると解除",
+      getattr(_gr_a, "_defenseless", False) is False)
+
+# ── ドラムアタック: 100%で相手の素早さ-1 ──
+_da_d = make_poke(type1="ノーマル", hp_b=255, def_b=200)
+execute(make_poke(atk_b=10, type1="くさ"), _da_d, "ドラムアタック")
+check("ドラムアタック 相手の素早さ-1", _da_d.stage_speed == -1, f"stage_speed={_da_d.stage_speed}")
+_da_d2 = make_poke(type1="ノーマル", hp_b=255, def_b=200)
+execute(make_poke(atk_b=10, type1="くさ"), _da_d2, "リーフブレード")
+check("ドラムアタック 他のくさ技では下がらない(負例)", _da_d2.stage_speed == 0)
+
+# ── かえんボール: 弾技・10%やけど・自分のこおりを治す ──
+from simulator.damage import BALL_BOMB_MOVES
+check("かえんボール 弾技に分類", "かえんボール" in BALL_BOMB_MOVES)
+_pb_a = make_poke(type1="ほのお", atk_b=100)
+_pb_a.status = "freeze"
+execute(_pb_a, make_poke(type1="ノーマル", hp_b=255, def_b=200), "かえんボール")
+check("かえんボール 自分のこおりが治る", _pb_a.status is None, f"status={_pb_a.status}")
+random.seed(7)
+_burn = 0
+for _ in range(600):
+    _pb_d = make_poke(type1="ノーマル", hp_b=255, def_b=200)
+    execute(make_poke(type1="ほのお", atk_b=10), _pb_d, "かえんボール")
+    if _pb_d.status == "burn":
+        _burn += 1
+check("かえんボール やけど確率10%", 0.05 <= _burn / 600 <= 0.16, f"rate={_burn/600:.3f}")
+_pb_d3 = make_poke(type1="ほのお", hp_b=255, def_b=200)
+execute(make_poke(type1="ほのお", atk_b=10), _pb_d3, "かえんボール")
+check("かえんボール ほのおタイプはやけどにならない(負例)", _pb_d3.status is None)
+
+# ── でんこうそうげき: パンチ技・でんきタイプ消失・非でんきで失敗 ──
+from simulator.damage import PUNCH_MOVES
+check("でんこうそうげき パンチ技に分類", "でんこうそうげき" in PUNCH_MOVES)
+_ds_a = make_poke(type1="でんき", type2="ひこう", atk_b=100)
+execute(_ds_a, make_poke(type1="ノーマル", hp_b=255, def_b=200), "でんこうそうげき")
+check("でんこうそうげき 自分のでんきタイプが消える",
+      (_ds_a.type1, _ds_a.type2) == ("ひこう", None), f"{_ds_a.type1}/{_ds_a.type2}")
+_ds_a2 = make_poke(type1="ノーマル", atk_b=100)
+_ds_d2 = make_poke(type1="ノーマル", hp_b=255, def_b=200)
+_hp_before = _ds_d2.hp
+_logs_ds = execute(_ds_a2, _ds_d2, "でんこうそうげき")
+check("でんこうそうげき 非でんきタイプは失敗する(負例)",
+      _ds_d2.hp == _hp_before and any("失敗" in l for l in _logs_ds))
+
+# ── スターアサルト: 使った次のターン反動状態 ──
+_ma_a = make_poke(type1="かくとう", atk_b=100)
+execute(_ma_a, make_poke(type1="ノーマル", hp_b=255, def_b=200), "スターアサルト")
+check("スターアサルト 使用後は反動状態", _ma_a.recharge is True)
+_ma_a2 = make_poke(type1="かくとう", atk_b=100)
+execute(_ma_a2, make_poke(type1="ノーマル", hp_b=255, def_b=200), "インファイト")
+check("スターアサルト 他のかくとう技では反動しない(負例)", _ma_a2.recharge is False)
+
+# ── ねらいうち: 急所ランク+1 ──
+_ss_a = make_poke(type1="みず", spatk_b=100)
+_ss_d = make_poke(type1="ノーマル", spdef_b=100)
+check("ねらいうち 急所ランク+1(1/8)",
+      near(crit_chance(_ss_a, dl.get_move("ねらいうち"), _ss_d), 1/8, rel=0.01),
+      f"p={crit_chance(_ss_a, dl.get_move('ねらいうち'), _ss_d)}")
+check("ねらいうち 通常技は1/24(負例)",
+      near(crit_chance(_ss_a, dl.get_move("なみのり"), _ss_d), 1/24, rel=0.01))
+
+# ── コートチェンジ: 味方と相手の場の状態を入れ替える ──
+_cc_f = BattleField()
+_cc_a = make_poke(type1="ノーマル", moves=["コートチェンジ"])
+_cc_s1 = BattleSide([_cc_a]); _cc_s2 = BattleSide([make_poke()])
+_cc_s1.field_idx, _cc_s2.field_idx = 0, 1
+_cc_f.stealth_rock[0] = True
+_cc_f.spikes[1] = 2
+_cc_s1.reflect = True; _cc_s1.reflect_count = 4
+_cc_s2.tailwind = True; _cc_s2.tailwind_count = 3
+_execute_move(_cc_s1, _cc_s2, Action(type="move", move=dl.get_move("コートチェンジ")), _cc_f)
+check("コートチェンジ ステルスロックが入れ替わる",
+      _cc_f.stealth_rock == [False, True], f"{_cc_f.stealth_rock}")
+check("コートチェンジ まきびしが入れ替わる", _cc_f.spikes == [2, 0], f"{_cc_f.spikes}")
+check("コートチェンジ リフレクターが相手側へ移る",
+      _cc_s1.reflect is False and _cc_s2.reflect is True and _cc_s2.reflect_count == 4)
+check("コートチェンジ おいかぜが自分側へ移る",
+      _cc_s1.tailwind is True and _cc_s1.tailwind_count == 3 and _cc_s2.tailwind is False)
+# 負例: 全体の場（天候・フィールド・トリックルーム）は side を持たないので入れ替わらない
+_cc_g = BattleField()
+_cc_g.weather = "sunny"; _cc_g.weather_count = 5
+_cc_g.grassy_terrain = True; _cc_g.grassy_terrain_count = 5
+_cc_g.trick_room = True; _cc_g.trick_room_count = 5
+_cc_t1 = BattleSide([make_poke(moves=["コートチェンジ"])]); _cc_t2 = BattleSide([make_poke()])
+_cc_t1.field_idx, _cc_t2.field_idx = 0, 1
+_execute_move(_cc_t1, _cc_t2, Action(type="move", move=dl.get_move("コートチェンジ")), _cc_g)
+check("コートチェンジ 全体の場は入れ替え対象外(負例)",
+      _cc_g.weather == "sunny" and _cc_g.weather_count == 5
+      and _cc_g.grassy_terrain is True and _cc_g.grassy_terrain_count == 5
+      and _cc_g.trick_room is True and _cc_g.trick_room_count == 5,
+      f"weather={_cc_g.weather}/{_cc_g.weather_count} grass={_cc_g.grassy_terrain} tr={_cc_g.trick_room}")
+# 負例: 何も設置されていなければ入れ替えても両側とも変化なし
+_cc_e = BattleField()
+_cc_e1 = BattleSide([make_poke(moves=["コートチェンジ"])]); _cc_e2 = BattleSide([make_poke()])
+_cc_e1.field_idx, _cc_e2.field_idx = 0, 1
+_execute_move(_cc_e1, _cc_e2, Action(type="move", move=dl.get_move("コートチェンジ")), _cc_e)
+check("コートチェンジ 場が空なら双方とも無変化(負例)",
+      _cc_e.stealth_rock == [False, False] and _cc_e.spikes == [0, 0]
+      and _cc_e1.reflect is False and _cc_e2.reflect is False
+      and _cc_e1.tailwind is False and _cc_e2.tailwind is False)
+
+# ── さいきのいのり: ひんしの手持ちをHP1/2で復活 ──
+_rb_a = make_poke(type1="ノーマル", moves=["さいきのいのり"])
+_rb_dead = make_poke(name="ひんし", hp_b=100)
+_rb_dead.hp = 0; _rb_dead.is_alive = False
+_rb_s1 = BattleSide([_rb_a, _rb_dead])
+_execute_move(_rb_s1, BattleSide([make_poke()]),
+              Action(type="move", move=dl.get_move("さいきのいのり")), BattleField())
+check("さいきのいのり ひんしが復活する", _rb_dead.is_alive is True)
+check("さいきのいのり HPは最大の1/2", _rb_dead.hp == _rb_dead.max_hp // 2,
+      f"hp={_rb_dead.hp}/{_rb_dead.max_hp}")
+_rb_a2 = make_poke(type1="ノーマル", moves=["さいきのいのり"])
+_logs_rb = _execute_move(BattleSide([_rb_a2, make_poke(name="元気")]), BattleSide([make_poke()]),
+                         Action(type="move", move=dl.get_move("さいきのいのり")), BattleField())
+check("さいきのいのり ひんしがいなければ失敗する(負例)",
+      any("失敗" in l for l in _logs_rb))
 
 # あついしぼう ほのお/こおり0.5倍
 p_thickfat = make_poke(type1="ノーマル", ability="あついしぼう", spdef_b=100)
@@ -3961,8 +4676,21 @@ try:
                 _bad21.append((_k21, _s21.split("@")[0])); break
     check("FORM_FIXのプール型が実体種名で生成される", not _bad21, f"不一致={_bad21[:3]}")
 
+    # プールキー「キュウコン」の実体はアローラ形。素の名前で順位を引くと通常キュウコン
+    # （使用率が遥かに低い）を拾い、MAX_RANK=80 の補完プールから丸ごと脱落する。
+    # 閾値は季節で動く（M-3で9位・M-5で33位）ので、通常キュウコンとの差で判定する。
     _ak21 = _pg21.rank.get("キュウコン", 9999)
-    check("アローラキュウコンの順位が実体側(=一桁)で解決される", _ak21 <= 20, f"rank={_ak21}")
+    import sqlite3 as _sq21
+    _con21 = _sq21.connect("scripts/pokenavi.db")
+    _cd21 = _con21.execute("SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule='single'",
+                           (_pg21.__class__.__module__ and __import__("gen_party_pool").USAGE_SEASON,)).fetchone()[0]
+    _plain21 = _con21.execute("SELECT rank FROM pokemon_usage WHERE season=? AND rule='single' "
+                              "AND pokemon='キュウコン' AND crawled_date=?",
+                              (__import__("gen_party_pool").USAGE_SEASON, _cd21)).fetchone()
+    _con21.close()
+    _plain21 = _plain21[0] if _plain21 else 9999
+    check("アローラキュウコンの順位が実体側で解決される",
+          _ak21 <= 80 and _ak21 != _plain21, f"rank={_ak21} 通常キュウコン={_plain21}")
 
     _veil21 = any("オーロラベール" in _s21 for _s21 in _pg21.pool.get("キュウコン", []))
     check("アローラキュウコンの型にオーロラベール(実採用96%)が含まれる", _veil21, "壁型に未搭載")

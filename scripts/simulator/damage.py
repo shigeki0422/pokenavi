@@ -68,7 +68,7 @@ BALL_BOMB_MOVES = {
     "タマゴばくだん", "ウェザーボール", "アシッドボム", "アイスボール",
     "どろばくだん", "マグネットボム", "ポレンパフ", "ジャイロボール",
     "かふんだんご", "がんせきほう", "くちばしキャノン", "でんじほう",
-    "はどうだん", "みずあめボム", "タネマシンガン",
+    "はどうだん", "みずあめボム", "タネマシンガン", "かえんボール",
 }
 
 SOUND_MOVES = {
@@ -81,7 +81,8 @@ SOUND_MOVES = {
     "サイコノイズ", "ソウルビート", "ドラゴンエール", "フレアソング",
 }
 
-PUNCH_MOVES = {"アームハンマー", "スカイアッパー", "アイスハンマー", "ぶちかまし"}
+PUNCH_MOVES = {"アームハンマー", "スカイアッパー", "アイスハンマー", "ぶちかまし",
+               "でんこうそうげき"}
 
 # DB上 power=NULL だがダメージ計算を経由しない技（battle.pyで直接処理）
 BYPASS_DAMAGE_CALC = {
@@ -136,7 +137,8 @@ def _effective_move_type(attacker: "BattlePokemon", move: MoveData,
     if move.name_jp == "だいちのはどう":
         # 接地時、フィールドの種類でタイプが変わる
         grounded = not ("ひこう" in (attacker.type1, attacker.type2)
-                        or ab == "ふゆう" or getattr(attacker, "magnet_rise", False))
+                        or ab == "ふゆう" or getattr(attacker, "magnet_rise", False)
+                        or attacker.item == "ふうせん")
         if grounded:
             if getattr(field, "grassy_terrain", False):
                 return "くさ"
@@ -192,6 +194,12 @@ def calc_damage(
     else:
         # かたやぶりでもタイプ無効は残る（ふゆうは無視できるが、どくタイプのノーマル無効は無視できない）
         pass
+
+    # ふうせん: 地面にいない扱い。特性ではなくアイテムなので かたやぶり では無視されない
+    # （そのため check_move_immunity ではなくここに置く）。うちおとす接地中は解除。
+    if defender.item == "ふうせん" and eff_type == "じめん" \
+            and not getattr(defender, "grounded", False):
+        return 0
 
     # てんねん: 相手のランク変化を無視（自分のランク変化は有効、速度は無関係）
     # 攻撃側がてんねん → 相手の防御・特防ランク変化を無視
@@ -274,6 +282,11 @@ def calc_damage(
     if defender.ability == "ふしぎなうろこ" and defender.status is not None and _uses_defense:
         dfs = math.floor(dfs * 1.5)
 
+    # くさのけがわ（グラスフィールド時、防御が1.5倍）
+    if defender.ability == "くさのけがわ" and _uses_defense \
+            and field is not None and getattr(field, "grassy_terrain", False):
+        dfs = math.floor(dfs * 1.5)
+
     # ちからもち / ヨガパワー（物理攻撃×2）
     if move.category == "physical" and attacker.ability in ("ちからもち", "ヨガパワー"):
         atk = atk * 2
@@ -313,7 +326,8 @@ def calc_damage(
         attacker.charged = False
 
     # フィールド威力補正（地に足がついているポケモンのみ）
-    grounded = not ("ひこう" in (attacker.type1, attacker.type2) or attacker.ability == "ふゆう")
+    grounded = not ("ひこう" in (attacker.type1, attacker.type2) or attacker.ability == "ふゆう"
+                    or attacker.item == "ふうせん")
     if grounded:
         if field.electric_terrain and eff_type == "でんき":
             dmg = math.floor(dmg * 1.3)
@@ -409,6 +423,13 @@ def calc_damage(
     if eff_type == "ほのお" and getattr(attacker, "_flash_fire_active", False):
         dmg = math.floor(dmg * 1.5)
 
+    # パンクロック：音技の威力1.3倍／音技で受けるダメージ半減
+    if (move.name_jp or "") in SOUND_MOVES:
+        if attacker.ability == "パンクロック":
+            dmg = math.floor(dmg * 1.3)
+        if defender.ability == "パンクロック":
+            dmg = math.floor(dmg * 0.5)
+
     # ほのおのたてがみ：ほのお技の威力1.5倍
     if eff_type == "ほのお" and attacker.ability == "ほのおのたてがみ":
         dmg = math.floor(dmg * 1.5)
@@ -417,6 +438,10 @@ def calc_damage(
     if eff_type == "でんき" and getattr(attacker, "_electromorphosis_charged", False):
         dmg = math.floor(dmg * 1.5)
         attacker._electromorphosis_charged = False  # type: ignore
+
+    # 無防備状態（きょけんとつげき使用後）：受ける技のダメージ2倍
+    if getattr(defender, "_defenseless", False):
+        dmg = math.floor(dmg * 2.0)
 
     return max(1, dmg) if effectiveness > 0 else 0
 
@@ -439,6 +464,7 @@ _NON_CONTACT_PHYSICAL = {
     "ふくろだたき", "ゴッドバード",
     "じわれ", "なげつける", "メタルバースト",
     "どくばりセンボン",
+    "ドラムアタック", "かえんボール", "スターアサルト",
 }
 
 
@@ -499,7 +525,8 @@ def _effective_power(attacker, defender, move, field, eff_type: str = "") -> int
         _it = defender.item
         _is_mega = _it is not None and (_it.endswith("ナイト")
                                         or _it.endswith("ナイトＸ") or _it.endswith("ナイトＹ")
-                                        or _it.endswith("ナイトX") or _it.endswith("ナイトY"))
+                                        or _it.endswith("ナイトX") or _it.endswith("ナイトY")
+                                        or _it.endswith("ナイトＺ") or _it.endswith("ナイトZ"))
         if _it is not None and not _is_mega:
             power = math.floor(power * 1.5)
     elif move.name_jp == "たたりめ":
@@ -532,7 +559,8 @@ def _effective_power(attacker, defender, move, field, eff_type: str = "") -> int
             power = math.floor(power * 1.5)
     elif move.name_jp == "ミストバースト":
         _grounded = not ("ひこう" in (attacker.type1, attacker.type2)
-                         or attacker.ability == "ふゆう" or getattr(attacker, "magnet_rise", False))
+                         or attacker.ability == "ふゆう" or getattr(attacker, "magnet_rise", False)
+                         or attacker.item == "ふうせん")
         if getattr(field, "misty_terrain", False) and _grounded:
             power = math.floor(power * 1.5)
     elif move.name_jp == "ウェザーボール":
@@ -780,6 +808,8 @@ def _apply_defender_ability(dmg, attacker, defender, move, field) -> int:
         dmg = math.floor(dmg * 0.5)
     elif ab == "ファーコート" and move.category == "physical":
         dmg = math.floor(dmg * 0.5)
+    elif ab == "はどうのぼうご" and is_contact_move(move):
+        dmg = math.floor(dmg * 0.5)
     elif ab == "あついしぼう" and move.type in ("ほのお", "こおり"):
         dmg = math.floor(dmg * 0.5)
     elif ab == "かんそうはだ" and move.type == "ほのお":
@@ -812,6 +842,9 @@ def check_hit(attacker, defender, move, field) -> bool:
         return True
     # ノーガード: 両者必中
     if attacker.ability == "ノーガード" or defender.ability == "ノーガード":
+        return True
+    # 無防備状態（きょけんとつげき使用後）：受ける技は必ず命中する
+    if getattr(defender, "_defenseless", False):
         return True
     # どくどく: 毒タイプが使うと必中
     if move.name_jp == "どくどく" and "どく" in (attacker.type1, attacker.type2):
