@@ -175,6 +175,24 @@ fn drive_rng(bt: &mut Battle, pack: &Pack, att: usize, move_idx: usize, max_turn
 pub fn run_best_sequence(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, roll: f64,
 ) -> (i64, Vec<usize>) {
+    // 一番削れる手を選ぶだけだと、げきりん等でロックされて遠回りになることがある
+    // （ふうせんを割るのに げきりん を選ぶと2〜3ターン動けず、スケイルショットで割って
+    //   じしん を通す線を逃す）。暴れ技を避ける線も走らせて短い方を採る。
+    let (h1, s1) = greedy_sequence(pack, spec_a, spec_b, season, att, roll, false);
+    let (h2, s2) = greedy_sequence(pack, spec_a, spec_b, season, att, roll, true);
+    if h2 < h1 { (h2, s2) } else { (h1, s1) }
+}
+
+/// 暴れ技(げきりん等)は数ターン動けなくなるので、避けた線も比べられるようにする。
+fn is_rampage(pack: &Pack, mv: &crate::damage::DMove) -> bool {
+    let l = &pack.sy.l;
+    mv.name == l.げきりん || mv.name == l.あばれる || mv.name == l.はなびらのまい || mv.name == l.だいふんげき
+}
+
+fn greedy_sequence(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, roll: f64,
+    avoid_rampage: bool,
+) -> (i64, Vec<usize>) {
     let def = 1 - att;
     let mut bt = setup(pack, spec_a, spec_b, season, roll);
     let packr: &Pack = pack;
@@ -185,9 +203,21 @@ pub fn run_best_sequence(
             break;
         }
         let hp_before = bt.sides[def].active().hp;
+        // こだわり系(choice_locked_move)と げきりん等の暴れ技(locked_move)は技を変えられない。
+        // 対戦本体は「指定された行動」をそのまま実行するのでロックを見てくれない。
+        // ここで候補を絞らないと、スカーフで技を撃ち分ける成立しない手順が出る。
+        let locked = {
+            let p = bt.sides[att].active();
+            p.choice_locked_move.or(p.locked_move)
+        };
         let mut best: Option<(usize, i64, i64, bool)> = None; // (技, 削り, 優先度, 倒せた)
         for i in 0..n_moves {
             let Some(mv) = bt.sides[att].active().moves.get(i).cloned() else { continue };
+            if let Some(lk) = locked {
+                if mv.name != lk { continue; }
+            } else if avoid_rampage && is_rampage(packr, &mv) {
+                continue;
+            }
             if mv.category == crate::pack::Cat::Status || mv.power.unwrap_or(0) <= 0
                 || is_excluded_from_matchup(packr, &mv) {
                 continue;
