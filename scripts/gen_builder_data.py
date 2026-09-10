@@ -28,11 +28,11 @@ ROOT = os.path.dirname(HERE)
 DB = os.path.join(HERE, "pokenavi.db")
 OUT_DIR = os.path.join(ROOT, "public", "builder-data")
 MON_DIR = os.path.join(OUT_DIR, "mon")
-SEASON = os.environ.get("BUILDER_SEASON", "M-5")
+SEASON = os.environ.get("BUILDER_SEASON", "M-6")
 RULE = "single"
 
 # 新しい順。SEASON が欠測の場合のみ、これより古いシーズンへ順に遡る。
-SEASON_ORDER = ["M-5", "M-4", "M-3", "M-2"]
+SEASON_ORDER = ["M-6", "M-5", "M-4", "M-3", "M-2"]
 
 MOVE_POOL_N = 10      # 技プールに入れる採用率上位の技数
 MAX_VARIANTS = 3      # 1種あたりの型数（型1/2/3）
@@ -535,6 +535,24 @@ def main():
     usage_rows = [(n, rk, pid or icon_fix.get(n)) for n, rk, pid in con.execute(
         "SELECT pokemon, rank, pokemon_id FROM pokemon_usage WHERE season=? AND rule=? AND crawled_date=? ORDER BY rank",
         (SEASON, RULE, cd)).fetchall()]
+    # M-C追加勢など、使用率クロールに pokemon_id が一度も入っていない種は
+    # 種族値マスタの図鑑番号+フォルム番号からアイコンIDを組み立てる(スプライトのファイル名と同じ規則)。
+    img_dir = os.path.join(ROOT, "public", "images", "pokemon")
+    sprites = set(os.listdir(img_dir))
+
+    def _icon_for(dex, form):
+        cand = f"{dex:04d}-{form:02d}"
+        if f"pokemon-{cand}.webp" in sprites:
+            return cand
+        # 地方フォルムは form_index に 99 のセンチネルが入っておりスプライト番号と一致しない。
+        # その図鑑番号の通常フォルム以外が1つに定まるときだけ、それを採る。
+        alts = sorted(f[8:-5] for f in sprites
+                      if f.startswith(f"pokemon-{dex:04d}-") and not f.endswith("-00.webp"))
+        return alts[0] if len(alts) == 1 else None
+
+    dex_fix = {n: _icon_for(d, f) for n, d, f in con.execute(
+        "SELECT pokemon_name, dex_number, form_index FROM pokemon_base_stats")}
+    usage_rows = [(n, rk, pid or dex_fix.get(n)) for n, rk, pid in usage_rows]
     missing = [n for n, _, pid in usage_rows if not pid]
     if missing:
         print("WARN pokemon_id未解決:", ", ".join(missing))
