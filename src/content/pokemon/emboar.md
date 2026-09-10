@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのエンブオー基礎データ
 pokemonName: 'エンブオー'
 dexNumber: 500
 usageRank: 999
+updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['フレアドライブ', 'ふいうち', 'インファイト', 'じしん']
+  topMovePct: [84.8, 62.4, 43.7, 34.8]
+  topItems: ['エンブオナイト', 'いのちのたま', 'こだわりスカーフ']
+  topItemPct: [79.9, 4.2, 3.7]
+  topAbility: 'すてみ'
+  topAbilityPct: 69.3
+  topNature: 'いじっぱり'
+  topNaturePct: 66.3
+  topNature2: 'ようき'
+  topNaturePct2: 12.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

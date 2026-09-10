@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのイエッサン(オス)基礎�
 pokemonName: 'イエッサン(オス)'
 dexNumber: 876
 usageRank: 35
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ワイドフォース', 'マジカルシャイン', 'マジカルフレイム', 'トリック']
+  topMovePct: [99.4, 70.2, 60.3, 51.5]
+  topItems: ['こだわりスカーフ', 'グランドコート', 'きあいのタスキ']
+  topItemPct: [60.8, 19.3, 16.2]
+  topAbility: 'サイコメイカー'
+  topAbilityPct: 99.9
+  topNature: 'ひかえめ'
+  topNaturePct: 50.2
+  topNature2: 'おくびょう'
+  topNaturePct2: 48.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

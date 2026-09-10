@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのケンタロス基礎データ
 pokemonName: 'ケンタロス'
 dexNumber: 128
 usageRank: 102
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['インファイト', 'レイジングブル', 'フレアドライブ', 'ストーンエッジ']
+  topMovePct: [95.2, 79.7, 62.6, 44.5]
+  topItems: ['こだわりスカーフ', 'たべのこし', 'たつじんのおび']
+  topItemPct: [29.5, 18.5, 15.4]
+  topAbility: 'いかく'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 69.6
+  topNature2: 'わんぱく'
+  topNaturePct2: 21.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

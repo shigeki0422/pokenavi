@@ -4,9 +4,20 @@ description: 'ポケモンチャンピオンズのイキリンコ(グリーン)�
 pokemonName: 'イキリンコ(グリーン)'
 dexNumber: 931
 usageRank: 154
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['いのちがけ', 'ブレイブバード', 'とんぼがえり', 'すてゼリフ']
+  topMovePct: [100.0, 93.1, 86.2, 74.1]
+  topItems: ['こだわりスカーフ', 'せんせいのツメ', 'きあいのタスキ']
+  topItemPct: [93.1, 5.2, 1.7]
+  topAbility: 'いかく'
+  topAbilityPct: 100.0
+  topNature: 'ようき'
+  topNaturePct: 100.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

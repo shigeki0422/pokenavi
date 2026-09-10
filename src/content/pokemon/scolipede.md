@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのペンドラー基礎データ
 pokemonName: 'ペンドラー'
 dexNumber: 545
 usageRank: 86
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'scolipede-analysis-m3'
+faq:
+  season: 'M-6'
+  topMoves: ['つるぎのまい', 'じしん', 'きゅうけつ', 'どくづき']
+  topMovePct: [81.4, 76.3, 66.1, 35.6]
+  topItems: ['ペンドラナイト', 'きあいのタスキ', 'メンタルハーブ']
+  topItemPct: [55.6, 14.7, 13.8]
+  topAbility: 'かそく'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 67.2
+  topNature2: 'ようき'
+  topNaturePct2: 14.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

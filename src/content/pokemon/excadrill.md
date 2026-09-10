@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのドリュウズ基礎データ
 pokemonName: 'ドリュウズ'
 dexNumber: 530
 usageRank: 65
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'excadrill-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['アイアンヘッド', 'じしん', 'いわなだれ', 'つるぎのまい']
+  topMovePct: [98.3, 96.0, 63.7, 37.5]
+  topItems: ['こだわりスカーフ', 'いのちのたま', 'きあいのタスキ']
+  topItemPct: [33.1, 32.9, 26.6]
+  topAbility: 'かたやぶり'
+  topAbilityPct: 60.0
+  topNature: 'いじっぱり'
+  topNaturePct: 63.6
+  topNature2: 'ようき'
+  topNaturePct2: 35.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

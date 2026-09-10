@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのラフレシア基礎データ
 pokemonName: 'ラフレシア'
 dexNumber: 45
 usageRank: 139
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ちからをすいとる', 'やどりぎのタネ', 'ヘドロばくだん', 'ねむりごな']
+  topMovePct: [98.6, 89.9, 69.6, 59.4]
+  topItems: ['フォーカスレンズ', 'たべのこし', 'オボンのみ']
+  topItemPct: [59.4, 13.0, 11.6]
+  topAbility: 'ほうし'
+  topAbilityPct: 100.0
+  topNature: 'ずぶとい'
+  topNaturePct: 88.4
+  topNature2: 'ひかえめ'
+  topNaturePct2: 5.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

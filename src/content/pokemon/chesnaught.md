@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのブリガロン基礎データ
 pokemonName: 'ブリガロン'
 dexNumber: 652
 usageRank: 128
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ボディプレス', 'てっぺき', 'こうごうせい', 'ウッドハンマー']
+  topMovePct: [97.9, 94.7, 64.9, 38.3]
+  topItems: ['ブリガロナイト', 'たべのこし', 'ゴツゴツメット']
+  topItemPct: [67.0, 30.9, 1.1]
+  topAbility: 'ぼうだん'
+  topAbilityPct: 100.0
+  topNature: 'わんぱく'
+  topNaturePct: 93.6
+  topNature2: 'いじっぱり'
+  topNaturePct2: 4.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

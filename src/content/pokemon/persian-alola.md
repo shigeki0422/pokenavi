@@ -5,9 +5,22 @@ pokemonName: 'アローラペルシアン'
 dexNumber: 53
 usageRank: 123
 imageForm: '01'
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['イカサマ', 'すてゼリフ', 'すりかえ', 'とんぼがえり']
+  topMovePct: [100.0, 98.4, 65.9, 30.2]
+  topItems: ['こだわりスカーフ', 'ゴツゴツメット', 'オボンのみ']
+  topItemPct: [65.9, 20.9, 7.0]
+  topAbility: 'ファーコート'
+  topAbilityPct: 100.0
+  topNature: 'わんぱく'
+  topNaturePct: 34.9
+  topNature2: 'おくびょう'
+  topNaturePct2: 27.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

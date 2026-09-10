@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのミミロップ基礎データ
 pokemonName: 'ミミロップ'
 dexNumber: 428
 usageRank: 53
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'lopunny-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['インファイト', 'トリプルアクセル', 'ねこだまし', 'マッハパンチ']
+  topMovePct: [66.6, 63.1, 54.5, 54.0]
+  topItems: ['ミミロップナイト', 'オボンのみ', 'こだわりスカーフ']
+  topItemPct: [90.9, 6.2, 2.3]
+  topAbility: 'じゅうなん'
+  topAbilityPct: 78.7
+  topNature: 'ようき'
+  topNaturePct: 72.6
+  topNature2: 'いじっぱり'
+  topNaturePct2: 22.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

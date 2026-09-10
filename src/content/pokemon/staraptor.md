@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのムクホーク基礎データ
 pokemonName: 'ムクホーク'
 dexNumber: 398
 usageRank: 56
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'staraptor-analysis-m3'
+faq:
+  season: 'M-6'
+  topMoves: ['ブレイブバード', 'インファイト', 'はねやすめ', 'ブレイズキック']
+  topMovePct: [93.3, 91.3, 70.7, 43.3]
+  topItems: ['ムクホークナイト', 'こだわりスカーフ', 'しろいハーブ']
+  topItemPct: [70.6, 29.1, 0.1]
+  topAbility: 'いかく'
+  topAbilityPct: 82.9
+  topNature: 'ようき'
+  topNaturePct: 78.3
+  topNature2: 'いじっぱり'
+  topNaturePct2: 20.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

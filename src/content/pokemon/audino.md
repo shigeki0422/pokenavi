@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのタブンネ基礎データ。
 pokemonName: 'タブンネ'
 dexNumber: 531
 usageRank: 153
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['いやしのねがい', 'マジカルシャイン', 'トリックルーム', 'ひかりのかべ']
+  topMovePct: [80.4, 74.5, 41.2, 39.2]
+  topItems: ['ひかりのこな', 'たべのこし', 'タブンネナイト']
+  topItemPct: [41.2, 27.5, 23.5]
+  topAbility: 'さいせいりょく'
+  topAbilityPct: 60.8
+  topNature: 'わんぱく'
+  topNaturePct: 39.2
+  topNature2: 'のんき'
+  topNaturePct2: 37.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

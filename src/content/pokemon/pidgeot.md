@@ -4,9 +4,20 @@ description: 'ポケモンチャンピオンズのピジョット基礎データ
 pokemonName: 'ピジョット'
 dexNumber: 18
 usageRank: 196
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ねっぷう', 'ぼうふう', 'はかいこうせん', 'でんこうせっか']
+  topMovePct: [100.0, 100.0, 93.8, 93.8]
+  topItems: ['ピジョットナイト']
+  topItemPct: [100.0]
+  topAbility: 'はとむね'
+  topAbilityPct: 93.8
+  topNature: 'おくびょう'
+  topNaturePct: 100.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのラグラージ基礎データ
 pokemonName: 'ラグラージ'
 dexNumber: 260
 usageRank: 41
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'swampert-analysis-m3'
+faq:
+  season: 'M-6'
+  topMoves: ['クイックターン', 'じしん', 'れいとうパンチ', 'ウェーブタックル']
+  topMovePct: [81.1, 77.2, 54.8, 47.9]
+  topItems: ['ラグラージナイト', 'オボンのみ', 'たべのこし']
+  topItemPct: [51.6, 23.0, 15.2]
+  topAbility: 'げきりゅう'
+  topAbilityPct: 75.5
+  topNature: 'いじっぱり'
+  topNaturePct: 46.4
+  topNature2: 'わんぱく'
+  topNaturePct2: 15.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

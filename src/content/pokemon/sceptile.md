@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのジュカイン基礎データ
 pokemonName: 'ジュカイン'
 dexNumber: 254
 usageRank: 141
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'sceptile-analysis-m3'
+faq:
+  season: 'M-6'
+  topMoves: ['だいちのちから', 'りゅうのはどう', 'リーフストーム', 'しっぽきり']
+  topMovePct: [93.1, 83.3, 79.2, 45.8]
+  topItems: ['ジュカインナイト', 'きあいのタスキ', 'レッドカード']
+  topItemPct: [86.1, 6.9, 5.6]
+  topAbility: 'しんりょく'
+  topAbilityPct: 73.6
+  topNature: 'おくびょう'
+  topNaturePct: 65.3
+  topNature2: 'ひかえめ'
+  topNaturePct2: 19.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

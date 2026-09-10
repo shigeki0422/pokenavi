@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのエースバーン基礎デー
 pokemonName: 'エースバーン'
 dexNumber: 815
 usageRank: 19
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['かえんボール', 'とびひざげり', 'ダストシュート', 'とんぼがえり']
+  topMovePct: [98.7, 89.0, 75.8, 56.2]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [33.0, 31.2, 24.4]
+  topAbility: 'リベロ'
+  topAbilityPct: 98.6
+  topNature: 'いじっぱり'
+  topNaturePct: 51.4
+  topNature2: 'ようき'
+  topNaturePct2: 46.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

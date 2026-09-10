@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのピクシー基礎データ。
 pokemonName: 'ピクシー'
 dexNumber: 36
 usageRank: 59
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'clefable-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['ムーンフォース', 'つきのひかり', 'コスモパワー', 'かえんほうしゃ']
+  topMovePct: [82.2, 69.1, 48.7, 29.9]
+  topItems: ['ピクシナイト', 'いのちのたま', 'たべのこし']
+  topItemPct: [68.9, 11.2, 10.6]
+  topAbility: 'てんねん'
+  topAbilityPct: 80.3
+  topNature: 'ずぶとい'
+  topNaturePct: 63.2
+  topNature2: 'ひかえめ'
+  topNaturePct2: 17.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

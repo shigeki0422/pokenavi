@@ -37,27 +37,7 @@ python3 scripts/insert_ranking_from_icons.py
 
 ### 6. ranking.json 再生成
 ```bash
-python3 -c "
-import sqlite3, json
-conn = sqlite3.connect('scripts/pokenavi.db')
-conn.row_factory = sqlite3.Row
-SEASON, RULE = 'M-3', 'single'
-dates = [r[0] for r in conn.execute(f\"SELECT DISTINCT crawled_date FROM pokemon_usage WHERE season='{SEASON}' AND rule='{RULE}' ORDER BY crawled_date\").fetchall()]
-all_rows = conn.execute(f\"SELECT pokemon, rank, crawled_date, pokemon_id FROM pokemon_usage WHERE season='{SEASON}' AND rule='{RULE}' ORDER BY crawled_date, rank\").fetchall()
-pokemon_map = {}
-for row in all_rows:
-    name = row['pokemon']
-    if name not in pokemon_map:
-        pokemon_map[name] = {'name': name, 'id': row['pokemon_id'], 'dates': {}}
-    pokemon_map[name]['dates'][row['crawled_date']] = {'rank': row['rank'], 'rate': None}
-latest = dates[-1]
-# 過去に200位以内に入ったことがあるポケモンを対象に（最新日ランク外も含める）
-pokemon_list = [p for p in pokemon_map.values() if any(d.get('rank', 9999) <= 200 for d in p['dates'].values())]
-pokemon_list.sort(key=lambda p: p['dates'].get(latest, {}).get('rank', 9999))
-with open('src/data/ranking.json', 'w', encoding='utf-8') as f:
-    json.dump({'dates': dates, 'pokemon': pokemon_list}, f, ensure_ascii=False, indent=2)
-print(f'Done: {len(pokemon_list)} pokemon, latest={latest}')
-"
+python3 scripts/generate_ranking_json.py
 ```
 
 ### 7. ポケモンページ再生成

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのドデカバシ基礎データ
 pokemonName: 'ドデカバシ'
 dexNumber: 733
 usageRank: 112
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['くちばしキャノン', 'タネマシンガン', 'ロックブラスト', 'アンコール']
+  topMovePct: [100.0, 76.7, 75.5, 53.5]
+  topItems: ['オボンのみ', 'ラムのみ', 'せんせいのツメ']
+  topItemPct: [42.1, 19.5, 17.0]
+  topAbility: 'スキルリンク'
+  topAbilityPct: 93.1
+  topNature: 'いじっぱり'
+  topNaturePct: 69.8
+  topNature2: 'わんぱく'
+  topNaturePct2: 15.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

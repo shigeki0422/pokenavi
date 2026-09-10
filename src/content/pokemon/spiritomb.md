@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのミカルゲ基礎データ。
 pokemonName: 'ミカルゲ'
 dexNumber: 442
 usageRank: 197
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['おにび', 'イカサマ', 'ふいうち', 'のろい']
+  topMovePct: [92.3, 69.2, 61.5, 53.8]
+  topItems: ['オボンのみ', 'たべのこし', 'ゴツゴツメット']
+  topItemPct: [53.8, 30.8, 15.4]
+  topAbility: 'プレッシャー'
+  topAbilityPct: 76.9
+  topNature: 'わんぱく'
+  topNaturePct: 69.2
+  topNature2: 'なまいき'
+  topNaturePct2: 30.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

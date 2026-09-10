@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのフォクスライ基礎デー
 pokemonName: 'フォクスライ'
 dexNumber: 828
 usageRank: 185
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['イカサマ', 'あくのはどう', 'わるだくみ', 'はかいこうせん']
+  topMovePct: [94.7, 57.9, 52.6, 52.6]
+  topItems: ['きあいのタスキ', 'レッドカード']
+  topItemPct: [52.6, 47.4]
+  topAbility: 'かるわざ'
+  topAbilityPct: 52.6
+  topNature: 'ひかえめ'
+  topNaturePct: 52.6
+  topNature2: 'なまいき'
+  topNaturePct2: 26.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

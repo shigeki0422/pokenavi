@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのバイバニラ基礎データ
 pokemonName: 'バイバニラ'
 dexNumber: 584
 usageRank: 47
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'vanilluxe-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['ふぶき', 'フリーズドライ', 'こおりのつぶて', 'オーロラベール']
+  topMovePct: [94.7, 91.6, 88.3, 48.0]
+  topItems: ['とけないこおり', 'ひかりのねんど', 'きあいのタスキ']
+  topItemPct: [66.6, 24.4, 4.7]
+  topAbility: 'ゆきふらし'
+  topAbilityPct: 99.5
+  topNature: 'ひかえめ'
+  topNaturePct: 79.6
+  topNature2: 'ずぶとい'
+  topNaturePct2: 7.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

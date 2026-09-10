@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのグライオン基礎データ
 pokemonName: 'グライオン'
 dexNumber: 472
 usageRank: 126
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['じしん', 'ステルスロック', 'ダブルウイング', 'がんせきふうじ']
+  topMovePct: [91.1, 32.3, 32.3, 28.2]
+  topItems: ['いのちのたま', 'こだわりスカーフ', 'でんきだま']
+  topItemPct: [25.0, 23.4, 19.4]
+  topAbility: 'ポイズンヒール'
+  topAbilityPct: 68.5
+  topNature: 'いじっぱり'
+  topNaturePct: 57.3
+  topNature2: 'ようき'
+  topNaturePct2: 22.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

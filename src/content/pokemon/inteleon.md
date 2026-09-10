@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのインテレオン基礎デー
 pokemonName: 'インテレオン'
 dexNumber: 818
 usageRank: 90
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ねらいうち', 'れいとうビーム', 'きあいだめ', 'しんくうは']
+  topMovePct: [97.9, 83.3, 68.7, 48.0]
+  topItems: ['ピントレンズ', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [44.7, 37.7, 10.3]
+  topAbility: 'スナイパー'
+  topAbilityPct: 97.6
+  topNature: 'おくびょう'
+  topNaturePct: 63.8
+  topNature2: 'ひかえめ'
+  topNaturePct2: 32.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

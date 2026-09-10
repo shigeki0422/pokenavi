@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのマフォクシー基礎デー
 pokemonName: 'マフォクシー'
 dexNumber: 655
 usageRank: 25
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['わるだくみ', 'かえんほうしゃ', 'サイコショック', 'サイコキネシス']
+  topMovePct: [65.4, 54.5, 46.3, 43.3]
+  topItems: ['マフォクシナイト', 'こだわりスカーフ', 'もくたん']
+  topItemPct: [99.9, 0.1, 0.0]
+  topAbility: 'もうか'
+  topAbilityPct: 85.5
+  topNature: 'おくびょう'
+  topNaturePct: 73.0
+  topNature2: 'ひかえめ'
+  topNaturePct2: 25.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

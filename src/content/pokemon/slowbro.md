@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのヤドラン基礎データ。
 pokemonName: 'ヤドラン'
 dexNumber: 80
 usageRank: 113
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'slowbro-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['なまける', 'ねっとう', 'れいとうビーム', 'てっぺき']
+  topMovePct: [89.5, 80.8, 61.6, 49.4]
+  topItems: ['ヤドランナイト', 'ゴツゴツメット', 'たべのこし']
+  topItemPct: [66.9, 19.8, 4.7]
+  topAbility: 'さいせいりょく'
+  topAbilityPct: 95.3
+  topNature: 'ずぶとい'
+  topNaturePct: 68.0
+  topNature2: 'おだやか'
+  topNaturePct2: 19.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

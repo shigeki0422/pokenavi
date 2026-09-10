@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのパーモット基礎データ
 pokemonName: 'パーモット'
 dexNumber: 923
 usageRank: 28
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['でんこうそうげき', 'さいきのいのり', 'インファイト', 'れいとうパンチ']
+  topMovePct: [85.1, 79.7, 77.5, 59.2]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'いのちのたま']
+  topItemPct: [88.6, 3.6, 3.1]
+  topAbility: 'てつのこぶし'
+  topAbilityPct: 85.3
+  topNature: 'ようき'
+  topNaturePct: 75.6
+  topNature2: 'いじっぱり'
+  topNaturePct2: 23.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

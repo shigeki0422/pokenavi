@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのチャーレム基礎データ
 pokemonName: 'チャーレム'
 dexNumber: 308
 usageRank: 168
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['しねんのずつき', 'ねこだまし', 'れいとうパンチ', 'インファイト']
+  topMovePct: [85.4, 64.6, 56.3, 43.8]
+  topItems: ['チャーレムナイト', 'こだわりスカーフ', 'きあいのタスキ']
+  topItemPct: [68.8, 16.7, 14.6]
+  topAbility: 'ヨガパワー'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 83.3
+  topNature2: 'ようき'
+  topNaturePct2: 16.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

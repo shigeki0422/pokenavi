@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのエアームド基礎データ
 pokemonName: 'エアームド'
 dexNumber: 227
 usageRank: 67
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'skarmory-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['はねやすめ', 'ステルスロック', 'ふきとばし', 'ボディプレス']
+  topMovePct: [77.3, 70.2, 58.3, 43.2]
+  topItems: ['ゴツゴツメット', 'エアームドナイト', 'オボンのみ']
+  topItemPct: [71.5, 12.3, 5.2]
+  topAbility: 'がんじょう'
+  topAbilityPct: 96.2
+  topNature: 'わんぱく'
+  topNaturePct: 63.8
+  topNature2: 'ようき'
+  topNaturePct2: 13.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

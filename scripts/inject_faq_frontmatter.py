@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 pokemon/*.md のフロントマターに faq セクションを追加/更新する。
-M-3データ優先、なければM-2にフォールバック。
+新しいシーズンのデータを優先し、無ければ古いシーズンへ順に遡る。
 updatedDate も同時に今日の日付で更新する。
 """
 import sqlite3
@@ -14,8 +14,25 @@ CONTENT_DIR = Path(__file__).parent.parent / "src/content/pokemon"
 
 conn = sqlite3.connect(DB)
 
-DATE_M3 = conn.execute("SELECT MAX(crawled_date) FROM pokemon_moves WHERE season='M-3' AND rule='single'").fetchone()[0]
-DATE_M2 = conn.execute("SELECT MAX(crawled_date) FROM pokemon_moves WHERE season='M-2' AND rule='single'").fetchone()[0]
+def _season_dates():
+    """(シーズン, そのシーズンの最新クロール日) を新しい順に返す。固定シーズンにすると
+    シーズンが進んだときにFAQだけ古いデータのまま残る。"""
+    import re as _re
+    seasons = [r[0] for r in conn.execute("SELECT DISTINCT season FROM pokemon_moves WHERE rule='single'")]
+
+    def key(x):
+        m = _re.match(r"M-(\d+)$", x or "")
+        return (1, int(m.group(1))) if m else (0, 0)
+
+    out = []
+    for s in sorted(seasons, key=key, reverse=True):
+        d = conn.execute("SELECT MAX(crawled_date) FROM pokemon_moves WHERE season=? AND rule='single'", (s,)).fetchone()[0]
+        if d:
+            out.append((s, d))
+    return out
+
+
+SEASON_DATES = _season_dates()
 
 
 def fetch_usage(table, col, pokemon, season, date, limit=4):
@@ -26,7 +43,7 @@ def fetch_usage(table, col, pokemon, season, date, limit=4):
 
 
 def get_faq_data(pokemon_name):
-    for season, date in [("M-3", DATE_M3), ("M-2", DATE_M2)]:
+    for season, date in SEASON_DATES:
         moves = fetch_usage("pokemon_moves", "move", pokemon_name, season, date, 4)
         if not moves:
             continue

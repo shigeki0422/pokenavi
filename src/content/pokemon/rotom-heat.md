@@ -5,9 +5,22 @@ pokemonName: 'ヒートロトム'
 dexNumber: 479
 usageRank: 38
 imageForm: '01'
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'rotom-heat-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['オーバーヒート', 'ボルトチェンジ', 'おにび', '10まんボルト']
+  topMovePct: [97.3, 92.6, 74.1, 56.0]
+  topItems: ['こだわりスカーフ', 'オボンのみ', 'たべのこし']
+  topItemPct: [34.6, 26.7, 22.6]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 43.1
+  topNature2: 'ずぶとい'
+  topNaturePct2: 27.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのアブソル基礎データ。
 pokemonName: 'アブソル'
 dexNumber: 359
 usageRank: 31
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['シャドークロー', 'ふいうち', 'インファイト', 'つるぎのまい']
+  topMovePct: [91.0, 69.7, 67.5, 63.0]
+  topItems: ['アブソルナイトZ', 'アブソルナイト']
+  topItemPct: [98.5, 1.0]
+  topAbility: 'せいぎのこころ'
+  topAbilityPct: 65.5
+  topNature: 'ようき'
+  topNaturePct: 61.3
+  topNature2: 'いじっぱり'
+  topNaturePct2: 35.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

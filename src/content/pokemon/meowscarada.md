@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのマスカーニャ基礎デー
 pokemonName: 'マスカーニャ'
 dexNumber: 908
 usageRank: 13
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['トリックフラワー', 'トリプルアクセル', 'とんぼがえり', 'はたきおとす']
+  topMovePct: [96.1, 90.1, 64.2, 59.0]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [59.4, 27.5, 9.5]
+  topAbility: 'へんげんじざい'
+  topAbilityPct: 83.1
+  topNature: 'ようき'
+  topNaturePct: 55.4
+  topNature2: 'いじっぱり'
+  topNaturePct2: 39.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

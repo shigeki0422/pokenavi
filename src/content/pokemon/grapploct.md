@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのオトスパス基礎データ
 pokemonName: 'オトスパス'
 dexNumber: 853
 usageRank: 198
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['たこがため', 'マッハパンチ', 'やまあらし', 'ちょうはつ']
+  topMovePct: [72.7, 63.6, 54.5, 45.5]
+  topItems: ['くろおび', 'オボンのみ', 'メトロノーム']
+  topItemPct: [27.3, 18.2, 18.2]
+  topAbility: 'テクニシャン'
+  topAbilityPct: 86.4
+  topNature: 'いじっぱり'
+  topNaturePct: 59.1
+  topNature2: 'のんき'
+  topNaturePct2: 18.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

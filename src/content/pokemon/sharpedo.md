@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのサメハダー基礎データ
 pokemonName: 'サメハダー'
 dexNumber: 319
 usageRank: 142
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['かみくだく', 'まもる', 'みちづれ', 'こおりのキバ']
+  topMovePct: [94.3, 92.9, 80.0, 70.0]
+  topItems: ['サメハダナイト', 'きあいのタスキ', 'くろいメガネ']
+  topItemPct: [44.3, 28.6, 25.7]
+  topAbility: 'かそく'
+  topAbilityPct: 98.6
+  topNature: 'ようき'
+  topNaturePct: 57.1
+  topNature2: 'いじっぱり'
+  topNaturePct2: 37.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

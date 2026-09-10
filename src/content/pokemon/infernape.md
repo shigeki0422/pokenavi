@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのゴウカザル基礎データ
 pokemonName: 'ゴウカザル'
 dexNumber: 392
 usageRank: 144
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['アンコール', 'ステルスロック', 'かえんほうしゃ', 'おにび']
+  topMovePct: [72.5, 68.1, 47.8, 46.4]
+  topItems: ['きあいのタスキ', 'イトケのみ', 'レッドカード']
+  topItemPct: [59.4, 31.9, 4.3]
+  topAbility: 'もうか'
+  topAbilityPct: 62.3
+  topNature: 'おくびょう'
+  topNaturePct: 49.3
+  topNature2: 'ようき'
+  topNaturePct2: 47.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

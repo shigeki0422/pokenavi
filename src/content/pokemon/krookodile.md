@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのワルビアル基礎データ
 pokemonName: 'ワルビアル'
 dexNumber: 553
 usageRank: 161
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['じしん', 'ちょうはつ', 'はたきおとす', 'インファイト']
+  topMovePct: [96.0, 56.0, 42.0, 40.0]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'オボンのみ']
+  topItemPct: [40.0, 40.0, 14.0]
+  topAbility: 'いかく'
+  topAbilityPct: 92.0
+  topNature: 'いじっぱり'
+  topNaturePct: 48.0
+  topNature2: 'ようき'
+  topNaturePct2: 38.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

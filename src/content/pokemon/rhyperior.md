@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのドサイドン基礎データ
 pokemonName: 'ドサイドン'
 dexNumber: 464
 usageRank: 119
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['じしん', 'つのドリル', 'メタルバースト', 'ステルスロック']
+  topMovePct: [97.7, 75.4, 72.3, 51.5]
+  topItems: ['きあいのタスキ', 'シュカのみ', 'いのちのたま']
+  topItemPct: [70.0, 13.8, 7.7]
+  topAbility: 'すてみ'
+  topAbilityPct: 51.5
+  topNature: 'ようき'
+  topNaturePct: 51.5
+  topNature2: 'いじっぱり'
+  topNaturePct2: 26.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

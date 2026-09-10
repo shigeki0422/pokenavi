@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのクチート基礎データ。
 pokemonName: 'クチート'
 dexNumber: 303
 usageRank: 55
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'mawile-analysis-m3'
+faq:
+  season: 'M-6'
+  topMoves: ['じゃれつく', 'ふいうち', 'ほのおのキバ', 'つるぎのまい']
+  topMovePct: [97.7, 95.1, 71.3, 36.6]
+  topItems: ['クチートナイト']
+  topItemPct: [99.5]
+  topAbility: 'いかく'
+  topAbilityPct: 97.0
+  topNature: 'いじっぱり'
+  topNaturePct: 97.0
+  topNature2: 'ゆうかん'
+  topNaturePct2: 2.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

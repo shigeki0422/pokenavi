@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのペリッパー基礎データ
 pokemonName: 'ペリッパー'
 dexNumber: 279
 usageRank: 49
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ぼうふう', 'とんぼがえり', 'れいとうビーム', 'なみのり']
+  topMovePct: [98.4, 92.3, 69.5, 51.8]
+  topItems: ['しめったいわ', 'こだわりスカーフ', 'きあいのタスキ']
+  topItemPct: [56.9, 21.6, 12.0]
+  topAbility: 'あめふらし'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 39.0
+  topNature2: 'のんき'
+  topNaturePct2: 20.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのカラマネロ基礎データ
 pokemonName: 'カラマネロ'
 dexNumber: 687
 usageRank: 130
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ばかぢから', 'バトンタッチ', 'はたきおとす', 'めいそう']
+  topMovePct: [64.5, 49.5, 49.5, 44.1]
+  topItems: ['カラマネナイト', 'たべのこし', 'たつじんのおび']
+  topItemPct: [57.0, 31.2, 4.3]
+  topAbility: 'きゅうばん'
+  topAbilityPct: 55.9
+  topNature: 'わんぱく'
+  topNaturePct: 43.0
+  topNature2: 'ゆうかん'
+  topNaturePct2: 25.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

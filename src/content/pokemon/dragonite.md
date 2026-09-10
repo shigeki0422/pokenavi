@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのカイリュー基礎データ
 pokemonName: 'カイリュー'
 dexNumber: 149
 usageRank: 27
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['かえんほうしゃ', 'りゅうせいぐん', 'はねやすめ', 'エアスラッシュ']
+  topMovePct: [66.8, 50.8, 50.0, 45.2]
+  topItems: ['カイリュナイト', 'ゴツゴツメット', 'ラムのみ']
+  topItemPct: [75.2, 6.3, 4.3]
+  topAbility: 'マルチスケイル'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 46.2
+  topNature2: 'おくびょう'
+  topNaturePct2: 30.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

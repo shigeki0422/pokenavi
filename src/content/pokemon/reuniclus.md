@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのランクルス基礎データ
 pokemonName: 'ランクルス'
 dexNumber: 579
 usageRank: 122
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['トリックルーム', 'シャドーボール', 'サイコノイズ', 'くさむすび']
+  topMovePct: [97.6, 85.8, 81.1, 60.6]
+  topItems: ['いのちのたま', 'きあいのタスキ', 'たべのこし']
+  topItemPct: [85.0, 13.4, 0.8]
+  topAbility: 'マジックガード'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 90.6
+  topNature2: 'れいせい'
+  topNaturePct2: 7.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

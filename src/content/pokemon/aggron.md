@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのボスゴドラ基礎データ
 pokemonName: 'ボスゴドラ'
 dexNumber: 306
 usageRank: 159
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ヘビーボンバー', 'てっぺき', 'ボディプレス', 'メタルバースト']
+  topMovePct: [100.0, 78.0, 78.0, 55.9]
+  topItems: ['ボスゴドラナイト']
+  topItemPct: [100.0]
+  topAbility: 'がんじょう'
+  topAbilityPct: 100.0
+  topNature: 'わんぱく'
+  topNaturePct: 55.9
+  topNature2: 'いじっぱり'
+  topNaturePct2: 22.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

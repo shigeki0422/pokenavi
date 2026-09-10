@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのニンフィア基礎データ
 pokemonName: 'ニンフィア'
 dexNumber: 700
 usageRank: 29
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'sylveon-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['ハイパーボイス', 'あくび', 'ねがいごと', 'まもる']
+  topMovePct: [99.3, 82.5, 75.9, 68.1]
+  topItems: ['たべのこし', 'ようせいのハネ', 'いのちのたま']
+  topItemPct: [78.1, 10.4, 4.3]
+  topAbility: 'フェアリースキン'
+  topAbilityPct: 99.5
+  topNature: 'ずぶとい'
+  topNaturePct: 69.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 21.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

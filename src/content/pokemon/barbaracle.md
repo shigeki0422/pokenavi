@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのガメノデス基礎データ
 pokemonName: 'ガメノデス'
 dexNumber: 689
 usageRank: 152
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'barbaracle-analysis-m3'
+faq:
+  season: 'M-6'
+  topMoves: ['インファイト', 'どくづき', 'からをやぶる', 'ロックブラスト']
+  topMovePct: [59.2, 59.2, 59.2, 42.9]
+  topItems: ['ガメノデスナイト']
+  topItemPct: [59.2]
+  topAbility: 'かたいツメ'
+  topAbilityPct: 79.6
+  topNature: 'いじっぱり'
+  topNaturePct: 65.3
+  topNature2: 'ようき'
+  topNaturePct2: 34.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのヘラクロス基礎データ
 pokemonName: 'ヘラクロス'
 dexNumber: 214
 usageRank: 117
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'heracross-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['ロックブラスト', 'タネマシンガン', 'インファイト', 'ミサイルばり']
+  topMovePct: [99.3, 98.0, 93.3, 79.3]
+  topItems: ['ヘラクロスナイト']
+  topItemPct: [100.0]
+  topAbility: 'こんじょう'
+  topAbilityPct: 50.7
+  topNature: 'いじっぱり'
+  topNaturePct: 76.7
+  topNature2: 'ゆうかん'
+  topNaturePct2: 15.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

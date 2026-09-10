@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのフォレトス基礎データ
 pokemonName: 'フォレトス'
 dexNumber: 205
 usageRank: 187
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ステルスロック', 'ボルトチェンジ', 'まきびし', 'だいばくはつ']
+  topMovePct: [86.8, 69.8, 60.4, 58.5]
+  topItems: ['ゴツゴツメット', 'オボンのみ', 'メンタルハーブ']
+  topItemPct: [50.9, 22.6, 15.1]
+  topAbility: 'がんじょう'
+  topAbilityPct: 100.0
+  topNature: 'なまいき'
+  topNaturePct: 56.6
+  topNature2: 'わんぱく'
+  topNaturePct2: 26.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

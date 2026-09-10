@@ -4,9 +4,20 @@ description: 'ポケモンチャンピオンズのブロスター基礎データ
 pokemonName: 'ブロスター'
 dexNumber: 693
 usageRank: 147
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['はどうだん', 'れいとうビーム', 'みずのはどう', 'ヘドロウェーブ']
+  topMovePct: [98.1, 94.4, 83.3, 48.1]
+  topItems: ['いのちのたま', 'オボンのみ', 'リンドのみ']
+  topItemPct: [46.3, 16.7, 16.7]
+  topAbility: 'メガランチャー'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 100.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

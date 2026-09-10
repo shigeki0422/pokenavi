@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのバサギリ基礎データ。
 pokemonName: 'バサギリ'
 dexNumber: 900
 usageRank: 88
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'kleavor-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['がんせきアックス', 'インファイト', 'シザークロス', 'つじぎり']
+  topMovePct: [100.0, 79.2, 74.9, 37.6]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'いのちのたま']
+  topItemPct: [66.8, 27.6, 4.9]
+  topAbility: 'きれあじ'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 57.6
+  topNature2: 'ようき'
+  topNaturePct2: 39.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのモルペコ基礎データ。
 pokemonName: 'モルペコ'
 dexNumber: 877
 usageRank: 999
+updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['オーラぐるま', 'まもる', 'がむしゃら', 'でんこうせっか']
+  topMovePct: [99.7, 48.7, 42.0, 33.9]
+  topItems: ['きあいのタスキ', 'いのちのたま', 'こだわりスカーフ']
+  topItemPct: [81.6, 4.1, 1.8]
+  topAbility: 'はらぺこスイッチ'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 58.2
+  topNature2: 'ようき'
+  topNaturePct2: 33.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

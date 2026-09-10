@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのラウドボーン基礎デー
 pokemonName: 'ラウドボーン'
 dexNumber: 911
 usageRank: 24
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'skeledirge-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['フレアソング', 'なまける', 'おにび', 'シャドーボール']
+  topMovePct: [99.4, 91.6, 83.3, 52.9]
+  topItems: ['たべのこし', 'オボンのみ', 'シュカのみ']
+  topItemPct: [43.1, 35.7, 4.6]
+  topAbility: 'てんねん'
+  topAbilityPct: 99.8
+  topNature: 'ずぶとい'
+  topNaturePct: 83.3
+  topNature2: 'おだやか'
+  topNaturePct2: 12.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

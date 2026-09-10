@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのカエンジシ基礎データ
 pokemonName: 'カエンジシ'
 dexNumber: 668
 usageRank: 94
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'pyroar-analysis-m3'
+faq:
+  season: 'M-6'
+  topMoves: ['かえんほうしゃ', 'オーバーヒート', 'あくび', 'ハイパーボイス']
+  topMovePct: [90.8, 74.3, 62.5, 45.4]
+  topItems: ['カエンジシナイト', 'ラムのみ', 'オボンのみ']
+  topItemPct: [88.5, 6.9, 3.3]
+  topAbility: 'きんちょうかん'
+  topAbilityPct: 83.9
+  topNature: 'ひかえめ'
+  topNaturePct: 49.7
+  topNature2: 'おくびょう'
+  topNaturePct2: 48.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

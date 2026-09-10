@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのイルカマン基礎データ
 pokemonName: 'イルカマン'
 dexNumber: 964
 usageRank: 110
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ジェットパンチ', 'ウェーブタックル', 'クイックターン', 'れいとうパンチ']
+  topMovePct: [82.1, 65.7, 57.0, 46.4]
+  topItems: ['オボンのみ', 'たべのこし', 'こだわりスカーフ']
+  topItemPct: [29.0, 26.1, 23.7]
+  topAbility: 'マイティチェンジ'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 93.7
+  topNature2: 'ようき'
+  topNaturePct2: 5.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

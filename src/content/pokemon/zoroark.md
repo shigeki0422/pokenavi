@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのゾロアーク基礎データ
 pokemonName: 'ゾロアーク'
 dexNumber: 571
 usageRank: 169
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ナイトバースト', 'かえんほうしゃ', 'とんぼがえり', 'きあいだま']
+  topMovePct: [100.0, 96.7, 93.3, 93.3]
+  topItems: ['こだわりスカーフ', 'オボンのみ', 'きあいのタスキ']
+  topItemPct: [93.3, 3.3, 3.3]
+  topAbility: 'イリュージョン'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 96.7
+  topNature2: 'せっかち'
+  topNaturePct2: 3.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのウルガモス基礎データ
 pokemonName: 'ウルガモス'
 dexNumber: 637
 usageRank: 21
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'volcarona-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['ちょうのまい', 'ギガドレイン', 'ほのおのまい', 'あさのひざし']
+  topMovePct: [95.2, 77.6, 70.6, 53.8]
+  topItems: ['オボンのみ', 'たべのこし', 'ラムのみ']
+  topItemPct: [51.8, 13.9, 13.3]
+  topAbility: 'ほのおのからだ'
+  topAbilityPct: 94.5
+  topNature: 'ずぶとい'
+  topNaturePct: 43.0
+  topNature2: 'ひかえめ'
+  topNaturePct2: 39.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

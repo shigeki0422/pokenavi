@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのツンベアー基礎データ
 pokemonName: 'ツンベアー'
 dexNumber: 614
 usageRank: 999
+updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['つららおとし', 'じしん', 'インファイト', 'アクアジェット']
+  topMovePct: [72.9, 66.7, 58.1, 32.4]
+  topItems: ['いのちのたま', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [44.3, 13.2, 6.6]
+  topAbility: 'ゆきかき'
+  topAbilityPct: 57.9
+  topNature: 'いじっぱり'
+  topNaturePct: 56.1
+  topNature2: 'ようき'
+  topNaturePct2: 34.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのバシャーモ基礎データ
 pokemonName: 'バシャーモ'
 dexNumber: 257
 usageRank: 45
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['フレアドライブ', 'インファイト', 'かみなりパンチ', 'つるぎのまい']
+  topMovePct: [89.4, 70.1, 47.7, 44.0]
+  topItems: ['バシャーモナイト', 'いのちのたま', 'きあいのタスキ']
+  topItemPct: [63.1, 18.7, 9.7]
+  topAbility: 'かそく'
+  topAbilityPct: 98.7
+  topNature: 'いじっぱり'
+  topNaturePct: 72.8
+  topNature2: 'ようき'
+  topNaturePct2: 18.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

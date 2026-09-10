@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのハカドッグ基礎データ
 pokemonName: 'ハカドッグ'
 dexNumber: 972
 usageRank: 131
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['おはかまいり', 'かげうち', 'みがわり', 'おにび']
+  topMovePct: [91.6, 76.6, 56.1, 49.5]
+  topItems: ['のろいのおふだ', 'カゴのみ', 'たべのこし']
+  topItemPct: [72.9, 10.3, 8.4]
+  topAbility: 'すなかき'
+  topAbilityPct: 72.9
+  topNature: 'いじっぱり'
+  topNaturePct: 70.1
+  topNature2: 'わんぱく'
+  topNaturePct2: 13.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

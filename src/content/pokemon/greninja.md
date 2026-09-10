@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのゲッコウガ基礎データ
 pokemonName: 'ゲッコウガ'
 dexNumber: 658
 usageRank: 20
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['れいとうビーム', 'あくのはどう', 'ヘドロウェーブ', 'みずしゅりけん']
+  topMovePct: [92.9, 83.9, 73.5, 44.6]
+  topItems: ['きあいのタスキ', 'ゲッコウガナイト', 'こだわりスカーフ']
+  topItemPct: [42.0, 37.0, 12.4]
+  topAbility: 'へんげんじざい'
+  topAbilityPct: 78.9
+  topNature: 'おくびょう'
+  topNaturePct: 54.9
+  topNature2: 'ひかえめ'
+  topNaturePct2: 39.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

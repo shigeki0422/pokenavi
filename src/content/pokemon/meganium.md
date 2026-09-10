@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのメガニウム基礎データ
 pokemonName: 'メガニウム'
 dexNumber: 154
 usageRank: 51
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'meganium-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['ウェザーボール', 'マジカルシャイン', 'ソーラービーム', 'こうごうせい']
+  topMovePct: [99.1, 86.6, 82.4, 63.4]
+  topItems: ['メガニウムナイト']
+  topItemPct: [100.0]
+  topAbility: 'リーフガード'
+  topAbilityPct: 54.7
+  topNature: 'ひかえめ'
+  topNaturePct: 67.2
+  topNature2: 'ずぶとい'
+  topNaturePct2: 22.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

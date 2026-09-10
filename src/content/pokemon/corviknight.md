@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのアーマーガア基礎デー
 pokemonName: 'アーマーガア'
 dexNumber: 823
 usageRank: 14
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['はねやすめ', 'とんぼがえり', 'ボディプレス', 'てっぺき']
+  topMovePct: [99.1, 73.4, 54.3, 51.3]
+  topItems: ['ゴツゴツメット', 'たべのこし', 'オボンのみ']
+  topItemPct: [56.8, 28.3, 13.7]
+  topAbility: 'プレッシャー'
+  topAbilityPct: 67.5
+  topNature: 'わんぱく'
+  topNaturePct: 65.2
+  topNature2: 'のんき'
+  topNaturePct2: 24.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのハガネール基礎データ
 pokemonName: 'ハガネール'
 dexNumber: 208
 usageRank: 175
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['てっぺき', 'ボディプレス', 'じしん', 'ヘビーボンバー']
+  topMovePct: [100.0, 100.0, 100.0, 89.5]
+  topItems: ['ハガネールナイト', 'たべのこし']
+  topItemPct: [92.1, 7.9]
+  topAbility: 'がんじょう'
+  topAbilityPct: 100.0
+  topNature: 'わんぱく'
+  topNaturePct: 97.4
+  topNature2: 'ゆうかん'
+  topNaturePct2: 2.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

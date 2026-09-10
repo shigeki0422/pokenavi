@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのウェーニバル基礎デー
 pokemonName: 'ウェーニバル'
 dexNumber: 914
 usageRank: 165
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['アクアステップ', 'インファイト', 'アンコール', 'アイススピナー']
+  topMovePct: [100.0, 85.7, 42.9, 33.3]
+  topItems: ['ラムのみ', 'たべのこし', 'きあいのタスキ']
+  topItemPct: [42.9, 26.2, 26.2]
+  topAbility: 'じしんかじょう'
+  topAbilityPct: 100.0
+  topNature: 'ようき'
+  topNaturePct: 59.5
+  topNature2: 'わんぱく'
+  topNaturePct2: 38.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

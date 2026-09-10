@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのアマルルガ基礎データ
 pokemonName: 'アマルルガ'
 dexNumber: 699
 usageRank: 136
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ステルスロック', 'オーロラベール', 'ふぶき', 'フリーズドライ']
+  topMovePct: [100.0, 100.0, 69.6, 30.4]
+  topItems: ['ひかりのねんど', 'きあいのタスキ']
+  topItemPct: [95.7, 4.3]
+  topAbility: 'ゆきふらし'
+  topAbilityPct: 100.0
+  topNature: 'ずぶとい'
+  topNaturePct: 69.6
+  topNature2: 'ひかえめ'
+  topNaturePct2: 30.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

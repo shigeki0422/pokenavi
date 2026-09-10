@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのカバルドン基礎データ
 pokemonName: 'カバルドン'
 dexNumber: 450
 usageRank: 5
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['じしん', 'あくび', 'ステルスロック', 'ふきとばし']
+  topMovePct: [99.3, 96.5, 92.7, 64.4]
+  topItems: ['オボンのみ', 'たべのこし', 'ゴツゴツメット']
+  topItemPct: [72.5, 15.6, 10.8]
+  topAbility: 'すなおこし'
+  topAbilityPct: 99.9
+  topNature: 'わんぱく'
+  topNaturePct: 63.8
+  topNature2: 'しんちょう'
+  topNaturePct2: 28.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

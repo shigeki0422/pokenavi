@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのセグレイブ基礎データ
 pokemonName: 'セグレイブ'
 dexNumber: 998
 usageRank: 8
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['じしん', 'こおりのつぶて', 'きょけんとつげき', 'りゅうのまい']
+  topMovePct: [87.6, 82.4, 79.8, 46.0]
+  topItems: ['セグレイブナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [51.8, 21.1, 10.8]
+  topAbility: 'ねつこうかん'
+  topAbilityPct: 98.9
+  topNature: 'いじっぱり'
+  topNaturePct: 66.2
+  topNature2: 'ようき'
+  topNaturePct2: 32.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

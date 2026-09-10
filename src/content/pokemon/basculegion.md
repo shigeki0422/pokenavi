@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのイダイトウ(オス)基礎�
 pokemonName: 'イダイトウ(オス)'
 dexNumber: 902
 usageRank: 99
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'basculegion-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['シャドーボール', 'れいとうビーム', 'なみのり', 'アクアジェット']
+  topMovePct: [100.0, 94.9, 92.6, 76.7]
+  topItems: ['いのちのたま', 'しんぴのしずく', 'きあいのタスキ']
+  topItemPct: [42.0, 19.1, 12.5]
+  topAbility: 'てきおうりょく'
+  topAbilityPct: 94.9
+  topNature: 'ひかえめ'
+  topNaturePct: 73.5
+  topNature2: 'うっかりや'
+  topNaturePct2: 12.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -5,9 +5,22 @@ pokemonName: 'ビビヨン'
 dexNumber: 666
 usageRank: 118
 imageForm: '18'
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ちょうのまい', 'ねむりごな', 'ぼうふう', 'みがわり']
+  topMovePct: [100.0, 100.0, 89.7, 86.0]
+  topItems: ['たべのこし', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [80.9, 18.4, 0.7]
+  topAbility: 'ふくがん'
+  topAbilityPct: 100.0
+  topNature: 'おくびょう'
+  topNaturePct: 96.3
+  topNature2: 'せっかち'
+  topNaturePct2: 3.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

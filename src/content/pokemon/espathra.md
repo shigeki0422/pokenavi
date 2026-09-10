@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのクエスパトラ基礎デー
 pokemonName: 'クエスパトラ'
 dexNumber: 956
 usageRank: 73
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'espathra-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['まもる', 'ルミナコリジョン', 'バトンタッチ', 'マジカルシャイン']
+  topMovePct: [90.0, 89.4, 60.6, 50.7]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'ひかりのねんど']
+  topItemPct: [68.8, 13.1, 6.9]
+  topAbility: 'かそく'
+  topAbilityPct: 99.8
+  topNature: 'ひかえめ'
+  topNaturePct: 54.7
+  topNature2: 'おくびょう'
+  topNaturePct2: 23.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのコータス基礎データ。
 pokemonName: 'コータス'
 dexNumber: 324
 usageRank: 105
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ステルスロック', 'あくび', 'じばく', 'ふんえん']
+  topMovePct: [94.1, 91.6, 47.0, 30.2]
+  topItems: ['あついいわ', 'シュカのみ', 'せんせいのツメ']
+  topItemPct: [84.7, 5.4, 5.0]
+  topAbility: 'ひでり'
+  topAbilityPct: 94.6
+  topNature: 'のんき'
+  topNaturePct: 30.7
+  topNature2: 'れいせい'
+  topNaturePct2: 24.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

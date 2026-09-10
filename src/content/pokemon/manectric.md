@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのライボルト基礎データ
 pokemonName: 'ライボルト'
 dexNumber: 310
 usageRank: 191
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['オーバーヒート', 'ボルトチェンジ', '10まんボルト', 'まもる']
+  topMovePct: [100.0, 100.0, 94.7, 63.2]
+  topItems: ['ライボルトナイト', 'こだわりスカーフ']
+  topItemPct: [94.7, 5.3]
+  topAbility: 'ひらいしん'
+  topAbilityPct: 100.0
+  topNature: 'むじゃき'
+  topNaturePct: 52.6
+  topNature2: 'おくびょう'
+  topNaturePct2: 42.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

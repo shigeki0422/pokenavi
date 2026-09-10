@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのカイリキー基礎データ
 pokemonName: 'カイリキー'
 dexNumber: 68
 usageRank: 999
+updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['ばくれつパンチ', 'バレットパンチ', 'ストーンエッジ', 'れいとうパンチ']
+  topMovePct: [77.1, 71.8, 65.7, 54.4]
+  topItems: ['せんせいのツメ', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [25.5, 12.6, 11.3]
+  topAbility: 'ノーガード'
+  topAbilityPct: 82.9
+  topNature: 'いじっぱり'
+  topNaturePct: 74.3
+  topNature2: 'ようき'
+  topNaturePct2: 11.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

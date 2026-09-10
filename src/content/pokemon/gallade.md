@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのエルレイド基礎データ
 pokemonName: 'エルレイド'
 dexNumber: 475
 usageRank: 68
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'gallade-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['せいなるつるぎ', 'リーフブレード', 'サイコカッター', 'かげうち']
+  topMovePct: [87.7, 75.4, 75.4, 74.7]
+  topItems: ['いのちのたま', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [27.3, 19.5, 15.3]
+  topAbility: 'きれあじ'
+  topAbilityPct: 94.6
+  topNature: 'いじっぱり'
+  topNaturePct: 73.2
+  topNature2: 'ようき'
+  topNaturePct2: 25.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

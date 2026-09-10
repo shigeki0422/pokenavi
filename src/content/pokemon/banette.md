@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのジュペッタ基礎データ
 pokemonName: 'ジュペッタ'
 dexNumber: 354
 usageRank: 71
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'banette-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['ポルターガイスト', 'みちづれ', 'かげうち', 'アンコール']
+  topMovePct: [98.9, 98.0, 77.4, 58.8]
+  topItems: ['ジュペッタナイト']
+  topItemPct: [100.0]
+  topAbility: 'おみとおし'
+  topAbilityPct: 89.6
+  topNature: 'いじっぱり'
+  topNaturePct: 81.3
+  topNature2: 'ゆうかん'
+  topNaturePct2: 15.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -5,9 +5,22 @@ pokemonName: 'イエッサン(メス)'
 dexNumber: 876
 usageRank: 115
 imageForm: '01'
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['マジカルフレイム', 'トリックルーム', 'いやしのねがい', 'サイコキネシス']
+  topMovePct: [78.2, 60.9, 58.6, 53.4]
+  topItems: ['グランドコート', 'きあいのタスキ', 'サイコシード']
+  topItemPct: [31.0, 28.7, 9.8]
+  topAbility: 'サイコメイカー'
+  topAbilityPct: 98.3
+  topNature: 'ずぶとい'
+  topNaturePct: 40.2
+  topNature2: 'ひかえめ'
+  topNaturePct2: 28.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

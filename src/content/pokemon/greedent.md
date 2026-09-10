@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのホルード基礎データ。
 pokemonName: 'ホルード'
 dexNumber: 660
 usageRank: 98
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'greedent-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['じしん', 'でんこうせっか', 'れいとうパンチ', 'かみなりパンチ']
+  topMovePct: [100.0, 90.2, 75.6, 55.1]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'ヨプのみ']
+  topItemPct: [81.1, 9.4, 4.3]
+  topAbility: 'ちからもち'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 87.8
+  topNature2: 'ようき'
+  topNaturePct2: 12.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

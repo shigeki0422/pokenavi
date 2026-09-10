@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのネギガナイト基礎デー
 pokemonName: 'ネギガナイト'
 dexNumber: 865
 usageRank: 69
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['リーフブレード', 'スターアサルト', 'インファイト', 'であいがしら']
+  topMovePct: [87.6, 65.6, 50.6, 35.2]
+  topItems: ['ながねぎ', 'きあいのタスキ', 'くろおび']
+  topItemPct: [88.0, 8.4, 1.8]
+  topAbility: 'きもったま'
+  topAbilityPct: 99.5
+  topNature: 'いじっぱり'
+  topNaturePct: 94.3
+  topNature2: 'ようき'
+  topNaturePct2: 4.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

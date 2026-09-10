@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのグソクムシャ基礎デー
 pokemonName: 'グソクムシャ'
 dexNumber: 768
 usageRank: 4
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['であいがしら', 'アイアンヘッド', 'とんぼがえり', 'ふいうち']
+  topMovePct: [83.0, 76.0, 50.9, 49.3]
+  topItems: ['グソクムシャナイト', 'いのちのたま', 'ゴツゴツメット']
+  topItemPct: [98.9, 0.3, 0.2]
+  topAbility: 'ききかいひ'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 83.1
+  topNature2: 'ゆうかん'
+  topNaturePct2: 14.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

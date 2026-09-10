@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのオオニューラ基礎デー
 pokemonName: 'オオニューラ'
 dexNumber: 903
 usageRank: 23
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'sneasler-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['インファイト', 'フェイタルクロー', 'じごくづき', 'つるぎのまい']
+  topMovePct: [99.4, 94.7, 59.9, 57.3]
+  topItems: ['サイコシード', 'ノーマルジュエル', 'グラスシード']
+  topItemPct: [36.3, 27.7, 15.0]
+  topAbility: 'かるわざ'
+  topAbilityPct: 93.7
+  topNature: 'いじっぱり'
+  topNaturePct: 89.9
+  topNature2: 'ようき'
+  topNaturePct2: 8.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

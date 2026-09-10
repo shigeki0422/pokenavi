@@ -4,9 +4,20 @@ description: 'ポケモンチャンピオンズのローブシン基礎データ
 pokemonName: 'ローブシン'
 dexNumber: 534
 usageRank: 140
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'conkeldurr-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['マッハパンチ', 'れいとうパンチ', 'かみなりパンチ', 'ドレインパンチ']
+  topMovePct: [100.0, 75.0, 73.8, 63.1]
+  topItems: ['たつじんのおび', 'いのちのたま', 'オボンのみ']
+  topItemPct: [32.1, 29.8, 19.0]
+  topAbility: 'てつのこぶし'
+  topAbilityPct: 58.3
+  topNature: 'いじっぱり'
+  topNaturePct: 100.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

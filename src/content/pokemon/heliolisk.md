@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのエレザード基礎データ
 pokemonName: 'エレザード'
 dexNumber: 695
 usageRank: 189
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['くさむすび', 'かみなり', 'ボルトチェンジ', 'なみのり']
+  topMovePct: [84.0, 60.0, 52.0, 48.0]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'オボンのみ']
+  topItemPct: [56.0, 28.0, 12.0]
+  topAbility: 'かんそうはだ'
+  topAbilityPct: 96.0
+  topNature: 'おくびょう'
+  topNaturePct: 48.0
+  topNature2: 'せっかち'
+  topNaturePct2: 44.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

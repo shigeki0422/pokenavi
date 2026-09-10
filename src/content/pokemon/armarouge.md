@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのグレンアルマ基礎デー
 pokemonName: 'グレンアルマ'
 dexNumber: 936
 usageRank: 61
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['アーマーキャノン', 'みちづれ', 'ワイドフォース', 'こらえる']
+  topMovePct: [96.2, 80.2, 77.6, 29.0]
+  topItems: ['きあいのタスキ', 'シュカのみ', 'ものしりメガネ']
+  topItemPct: [83.5, 7.4, 2.3]
+  topAbility: 'くだけるよろい'
+  topAbilityPct: 89.0
+  topNature: 'ひかえめ'
+  topNaturePct: 82.9
+  topNature2: 'おくびょう'
+  topNaturePct2: 15.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

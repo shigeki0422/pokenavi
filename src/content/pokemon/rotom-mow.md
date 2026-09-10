@@ -5,9 +5,22 @@ pokemonName: 'カットロトム'
 dexNumber: 479
 usageRank: 146
 imageForm: '05'
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['リーフストーム', 'ボルトチェンジ', 'おにび', 'いたみわけ']
+  topMovePct: [100.0, 79.2, 66.0, 45.3]
+  topItems: ['オボンのみ', 'こだわりスカーフ', 'きせきのタネ']
+  topItemPct: [45.3, 28.3, 17.0]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 86.8
+  topNature2: 'おくびょう'
+  topNaturePct2: 7.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

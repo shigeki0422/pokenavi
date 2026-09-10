@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのブリジュラス基礎デー
 pokemonName: 'ブリジュラス'
 dexNumber: 1018
 usageRank: 7
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ラスターカノン', 'りゅうせいぐん', '10まんボルト', 'ステルスロック']
+  topMovePct: [75.1, 65.3, 63.1, 49.6]
+  topItems: ['オボンのみ', 'たべのこし', 'しろいハーブ']
+  topItemPct: [29.7, 22.2, 14.4]
+  topAbility: 'じきゅうりょく'
+  topAbilityPct: 75.2
+  topNature: 'ひかえめ'
+  topNaturePct: 36.7
+  topNature2: 'ずぶとい'
+  topNaturePct2: 24.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

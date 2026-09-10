@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのドドゲザン基礎データ
 pokemonName: 'ドドゲザン'
 dexNumber: 983
 usageRank: 34
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ふいうち', 'ドゲザン', 'アイアンヘッド', 'つるぎのまい']
+  topMovePct: [99.7, 97.3, 80.0, 66.6]
+  topItems: ['くろいメガネ', 'きあいのタスキ', 'ラムのみ']
+  topItemPct: [55.7, 22.3, 7.1]
+  topAbility: 'そうだいしょう'
+  topAbilityPct: 85.3
+  topNature: 'いじっぱり'
+  topNaturePct: 91.5
+  topNature2: 'ゆうかん'
+  topNaturePct2: 6.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

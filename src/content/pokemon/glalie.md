@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのオニゴーリ基礎データ
 pokemonName: 'オニゴーリ'
 dexNumber: 362
 usageRank: 160
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['まもる', 'みがわり', 'ぜったいれいど', 'フリーズドライ']
+  topMovePct: [78.4, 64.9, 64.9, 64.9]
+  topItems: ['たべのこし', 'オニゴーリナイト']
+  topItemPct: [64.9, 35.1]
+  topAbility: 'ムラっけ'
+  topAbilityPct: 91.9
+  topNature: 'おくびょう'
+  topNaturePct: 35.1
+  topNature2: 'ようき'
+  topNaturePct2: 35.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのゴリランダー基礎デー
 pokemonName: 'ゴリランダー'
 dexNumber: 812
 usageRank: 11
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['グラススライダー', 'はたきおとす', 'とんぼがえり', '10まんばりき']
+  topMovePct: [94.5, 66.5, 61.5, 50.3]
+  topItems: ['いのちのたま', 'きせきのタネ', 'グラスシード']
+  topItemPct: [24.8, 19.2, 17.5]
+  topAbility: 'グラスメイカー'
+  topAbilityPct: 99.7
+  topNature: 'いじっぱり'
+  topNaturePct: 86.8
+  topNature2: 'しんちょう'
+  topNaturePct2: 4.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

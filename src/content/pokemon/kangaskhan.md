@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのガルーラ基礎データ。
 pokemonName: 'ガルーラ'
 dexNumber: 115
 usageRank: 91
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'kangaskhan-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['じしん', 'れいとうパンチ', 'ふいうち', 'ねこだまし']
+  topMovePct: [64.0, 63.7, 52.3, 49.4]
+  topItems: ['ガルーラナイト', 'シルクのスカーフ']
+  topItemPct: [88.3, 11.7]
+  topAbility: 'きもったま'
+  topAbilityPct: 92.1
+  topNature: 'いじっぱり'
+  topNaturePct: 92.4
+  topNature2: 'ひかえめ'
+  topNaturePct2: 6.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

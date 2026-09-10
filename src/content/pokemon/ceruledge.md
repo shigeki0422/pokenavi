@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのソウブレイズ基礎デー
 pokemonName: 'ソウブレイズ'
 dexNumber: 937
 usageRank: 48
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'ceruledge-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['かげうち', 'ポルターガイスト', 'むねんのつるぎ', 'つるぎのまい']
+  topMovePct: [94.9, 92.2, 91.1, 65.1]
+  topItems: ['きあいのタスキ', 'たべのこし', 'いのちのたま']
+  topItemPct: [66.0, 9.2, 8.6]
+  topAbility: 'くだけるよろい'
+  topAbilityPct: 61.8
+  topNature: 'いじっぱり'
+  topNaturePct: 76.5
+  topNature2: 'ようき'
+  topNaturePct2: 18.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

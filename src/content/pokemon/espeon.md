@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのエーフィ基礎データ。
 pokemonName: 'エーフィ'
 dexNumber: 196
 usageRank: 111
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['リフレクター', 'あくび', 'サイコノイズ', 'パワージェム']
+  topMovePct: [67.1, 65.8, 52.2, 50.9]
+  topItems: ['ひかりのねんど', 'たべのこし', 'きあいのタスキ']
+  topItemPct: [67.1, 11.2, 10.6]
+  topAbility: 'マジックミラー'
+  topAbilityPct: 100.0
+  topNature: 'おくびょう'
+  topNaturePct: 87.6
+  topNature2: 'ひかえめ'
+  topNaturePct2: 8.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

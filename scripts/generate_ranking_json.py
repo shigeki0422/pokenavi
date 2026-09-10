@@ -4,6 +4,7 @@ M-3使用率ランキングJSON生成
 出力: src/data/ranking.json
 """
 
+import re
 import sqlite3
 import json
 import os
@@ -12,7 +13,21 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent / "pokenavi.db"
 OUT_PATH = Path(__file__).parent.parent / "src/data/ranking.json"
 IMGDIR = Path(__file__).parent.parent / "public/images/pokemon"
-SEASONS = ["M-3", "M-4", "M-5", "M-6"]
+
+def _seasons_in_db(db_path):
+    """DBに存在するシーズンを新しい順に返す。固定リストにすると新シーズン開始時に
+    生成物だけ旧シーズンのまま取り残される。"""
+    con = sqlite3.connect(db_path)
+    rows = [r[0] for r in con.execute("SELECT DISTINCT season FROM pokemon_usage")]
+    con.close()
+
+    def key(s):
+        m = re.match(r"M-(\d+)$", s or "")
+        return (1, int(m.group(1))) if m else (0, 0)
+
+    return sorted(rows, key=key, reverse=True)
+SEASON_TABS = 4  # ランキングページに出すシーズン数(新シーズンが増えたら最古が落ちる)
+SEASONS = list(reversed(_seasons_in_db(DB_PATH)[:SEASON_TABS]))  # 古い順(表示順)
 LIMIT = 200
 
 ALIASES = {

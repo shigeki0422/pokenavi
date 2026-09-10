@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのシャワーズ基礎データ
 pokemonName: 'シャワーズ'
 dexNumber: 134
 usageRank: 92
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ねがいごと', 'ねっとう', 'まもる', 'クイックターン']
+  topMovePct: [76.9, 67.1, 60.9, 44.6]
+  topItems: ['たべのこし', 'しんぴのしずく', 'オボンのみ']
+  topItemPct: [81.8, 10.7, 3.6]
+  topAbility: 'ちょすい'
+  topAbilityPct: 100.0
+  topNature: 'のんき'
+  topNaturePct: 41.7
+  topNature2: 'ずぶとい'
+  topNaturePct2: 30.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

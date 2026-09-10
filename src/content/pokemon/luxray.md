@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのレントラー基礎データ
 pokemonName: 'レントラー'
 dexNumber: 405
 usageRank: 174
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['こおりのキバ', 'ボルトチェンジ', 'ばかぢから', 'ワイルドボルト']
+  topMovePct: [100.0, 100.0, 69.7, 69.7]
+  topItems: ['オボンのみ', 'シュカのみ']
+  topItemPct: [69.7, 30.3]
+  topAbility: 'いかく'
+  topAbilityPct: 100.0
+  topNature: 'わんぱく'
+  topNaturePct: 69.7
+  topNature2: 'しんちょう'
+  topNaturePct2: 30.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

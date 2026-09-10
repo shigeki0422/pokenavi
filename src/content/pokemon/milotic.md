@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのミロカロス基礎データ
 pokemonName: 'ミロカロス'
 dexNumber: 350
 usageRank: 72
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'milotic-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['ねっとう', 'じこさいせい', 'れいとうビーム', 'ミラーコート']
+  topMovePct: [97.3, 96.4, 67.9, 67.2]
+  topItems: ['たべのこし', 'オボンのみ', 'ゴツゴツメット']
+  topItemPct: [44.0, 27.7, 14.4]
+  topAbility: 'かちき'
+  topAbilityPct: 80.5
+  topNature: 'ずぶとい'
+  topNaturePct: 67.0
+  topNature2: 'おだやか'
+  topNaturePct2: 18.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

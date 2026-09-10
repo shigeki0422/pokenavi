@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのオーロット基礎データ
 pokemonName: 'オーロット'
 dexNumber: 709
 usageRank: 999
+updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['やどりぎのタネ', 'ウッドホーン', 'まもる', 'おにび']
+  topMovePct: [77.3, 60.0, 55.8, 55.3]
+  topItems: ['オボンのみ', 'カゴのみ', 'ラムのみ']
+  topItemPct: [84.7, 4.6, 3.3]
+  topAbility: 'しゅうかく'
+  topAbilityPct: 94.0
+  topNature: 'わんぱく'
+  topNaturePct: 48.8
+  topNature2: 'しんちょう'
+  topNaturePct2: 18.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

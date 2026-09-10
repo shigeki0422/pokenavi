@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのユキノオー基礎データ
 pokemonName: 'ユキノオー'
 dexNumber: 460
 usageRank: 120
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ふぶき', 'だいちのちから', 'こおりのつぶて', 'リーフストーム']
+  topMovePct: [99.2, 82.5, 76.7, 48.3]
+  topItems: ['ユキノオナイト', 'きあいのタスキ', 'きせきのタネ']
+  topItemPct: [33.3, 19.2, 17.5]
+  topAbility: 'ゆきふらし'
+  topAbilityPct: 100.0
+  topNature: 'れいせい'
+  topNaturePct: 82.5
+  topNature2: 'おだやか'
+  topNaturePct2: 8.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

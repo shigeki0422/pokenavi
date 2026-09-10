@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのバリコオル基礎データ
 pokemonName: 'バリコオル'
 dexNumber: 866
 usageRank: 999
+updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['フリーズドライ', 'サイコキネシス', 'ぜったいれいど', 'こおりのつぶて']
+  topMovePct: [73.9, 52.2, 29.9, 21.2]
+  topItems: ['きあいのタスキ', 'こだわりスカーフ', 'オボンのみ']
+  topItemPct: [29.4, 13.3, 12.3]
+  topAbility: 'バリアフリー'
+  topAbilityPct: 76.3
+  topNature: 'ひかえめ'
+  topNaturePct: 42.1
+  topNature2: 'おくびょう'
+  topNaturePct2: 22.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

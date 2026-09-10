@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのフシギバナ基礎データ
 pokemonName: 'フシギバナ'
 dexNumber: 3
 usageRank: 57
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'venusaur-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['だいちのちから', 'ギガドレイン', 'ヘドロばくだん', 'こうごうせい']
+  topMovePct: [87.9, 69.0, 56.0, 51.8]
+  topItems: ['フシギバナイト', 'いのちのたま', 'たつじんのおび']
+  topItemPct: [73.6, 20.7, 3.0]
+  topAbility: 'ようりょくそ'
+  topAbilityPct: 88.6
+  topNature: 'ひかえめ'
+  topNaturePct: 46.1
+  topNature2: 'ずぶとい'
+  topNaturePct2: 30.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

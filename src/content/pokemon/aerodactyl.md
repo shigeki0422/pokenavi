@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのプテラ基礎データ。種
 pokemonName: 'プテラ'
 dexNumber: 142
 usageRank: 178
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ダブルウイング', 'じしん', 'こおりのキバ', 'いわなだれ']
+  topMovePct: [97.1, 82.9, 65.7, 42.9]
+  topItems: ['プテラナイト', 'きあいのタスキ', 'ゴツゴツメット']
+  topItemPct: [77.1, 17.1, 5.7]
+  topAbility: 'きんちょうかん'
+  topAbilityPct: 91.4
+  topNature: 'いじっぱり'
+  topNaturePct: 71.4
+  topNature2: 'ようき'
+  topNaturePct2: 28.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのヤバソチャ基礎データ
 pokemonName: 'ヤバソチャ'
 dexNumber: 1013
 usageRank: 114
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['シャドーボール', 'ちからをすいとる', 'シャカシャカほう', 'めいそう']
+  topMovePct: [94.1, 85.8, 85.8, 55.0]
+  topItems: ['たべのこし', 'オボンのみ', 'ゴツゴツメット']
+  topItemPct: [32.5, 26.0, 18.3]
+  topAbility: 'たいねつ'
+  topAbilityPct: 100.0
+  topNature: 'ずぶとい'
+  topNaturePct: 79.9
+  topNature2: 'ひかえめ'
+  topNaturePct2: 17.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

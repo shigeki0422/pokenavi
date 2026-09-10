@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのシャンデラ基礎データ
 pokemonName: 'シャンデラ'
 dexNumber: 609
 usageRank: 97
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['シャドーボール', 'エナジーボール', 'オーバーヒート', 'かえんほうしゃ']
+  topMovePct: [97.5, 76.9, 66.4, 66.4]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'シャンデラナイト']
+  topItemPct: [49.1, 32.9, 6.5]
+  topAbility: 'もらいび'
+  topAbilityPct: 83.8
+  topNature: 'ひかえめ'
+  topNaturePct: 62.8
+  topNature2: 'おくびょう'
+  topNaturePct2: 33.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

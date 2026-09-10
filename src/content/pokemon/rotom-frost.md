@@ -5,9 +5,22 @@ pokemonName: 'フロストロトム'
 dexNumber: 479
 usageRank: 999
 imageForm: '03'
+updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-3'
+  topMoves: ['ふぶき', 'ボルトチェンジ', '10まんボルト', 'おにび']
+  topMovePct: [92.5, 69.8, 60.0, 47.3]
+  topItems: ['こだわりスカーフ', 'オボンのみ', 'たべのこし']
+  topItemPct: [42.8, 17.8, 8.2]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 42.8
+  topNature2: 'おくびょう'
+  topNaturePct2: 31.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

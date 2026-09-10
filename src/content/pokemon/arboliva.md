@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのオリーヴァ基礎データ
 pokemonName: 'オリーヴァ'
 dexNumber: 930
 usageRank: 96
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ちからをすいとる', 'ギガドレイン', 'だいちのちから', 'やどりぎのタネ']
+  topMovePct: [67.4, 63.5, 49.7, 48.3]
+  topItems: ['オボンのみ', 'たべのこし', 'きあいのタスキ']
+  topItemPct: [19.8, 16.3, 14.2]
+  topAbility: 'こぼれダネ'
+  topAbilityPct: 84.4
+  topNature: 'ひかえめ'
+  topNaturePct: 48.3
+  topNature2: 'おだやか'
+  topNaturePct2: 29.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

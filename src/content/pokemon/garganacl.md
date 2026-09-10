@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのキョジオーン基礎デー
 pokemonName: 'キョジオーン'
 dexNumber: 934
 usageRank: 170
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['じこさいせい', 'しおづけ', 'じわれ', 'てっぺき']
+  topMovePct: [100.0, 90.0, 53.3, 46.7]
+  topItems: ['たべのこし', 'オボンのみ', 'ゴツゴツメット']
+  topItemPct: [46.7, 43.3, 10.0]
+  topAbility: 'きよめのしお'
+  topAbilityPct: 100.0
+  topNature: 'しんちょう'
+  topNaturePct: 66.7
+  topNature2: 'わんぱく'
+  topNaturePct2: 33.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

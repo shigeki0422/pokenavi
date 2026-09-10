@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのズルズキン基礎データ
 pokemonName: 'ズルズキン'
 dexNumber: 560
 usageRank: 143
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'scrafty-analysis-m3'
+faq:
+  season: 'M-6'
+  topMoves: ['はたきおとす', 'どくづき', 'ドレインパンチ', 'りゅうのまい']
+  topMovePct: [96.7, 51.7, 50.0, 43.3]
+  topItems: ['ズルズキナイト', 'ラムのみ']
+  topItemPct: [96.7, 3.3]
+  topAbility: 'いかく'
+  topAbilityPct: 96.7
+  topNature: 'いじっぱり'
+  topNaturePct: 85.0
+  topNature2: 'ようき'
+  topNaturePct2: 13.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

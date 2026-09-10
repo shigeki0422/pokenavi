@@ -13,7 +13,20 @@ from pathlib import Path
 DB_PATH = Path(__file__).parent / "pokenavi.db"
 OUT_DIR = Path(__file__).parent.parent / "src/content/pokemon"
 
-SEASON = 'M-6'
+def _seasons_in_db(db_path):
+    """DBに存在するシーズンを新しい順に返す。固定リストにすると新シーズン開始時に
+    生成物だけ旧シーズンのまま取り残される。"""
+    con = sqlite3.connect(db_path)
+    rows = [r[0] for r in con.execute("SELECT DISTINCT season FROM pokemon_usage")]
+    con.close()
+
+    def key(s):
+        m = re.match(r"M-(\d+)$", s or "")
+        return (1, int(m.group(1))) if m else (0, 0)
+
+    return sorted(rows, key=key, reverse=True)
+
+SEASON = os.environ.get('PAGES_SEASON') or (_seasons_in_db(DB_PATH)[0] if _seasons_in_db(DB_PATH) else 'M-6')
 
 # ---- 防御タイプ相性チャート（Gen 6+）----
 # DEFENSE[守備タイプ] = {攻撃タイプ: 倍率}

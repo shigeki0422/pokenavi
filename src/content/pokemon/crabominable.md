@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのケケンカニ基礎データ
 pokemonName: 'ケケンカニ'
 dexNumber: 740
 usageRank: 176
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['マッハパンチ', 'かみなりパンチ', 'アイスハンマー', 'ドレインパンチ']
+  topMovePct: [92.6, 88.9, 85.2, 81.5]
+  topItems: ['ケケンカニナイト', 'きあいのタスキ']
+  topItemPct: [92.6, 7.4]
+  topAbility: 'かいりきバサミ'
+  topAbilityPct: 70.4
+  topNature: 'いじっぱり'
+  topNaturePct: 77.8
+  topNature2: 'ゆうかん'
+  topNaturePct2: 22.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのサザンドラ基礎データ
 pokemonName: 'サザンドラ'
 dexNumber: 635
 usageRank: 33
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['あくのはどう', 'りゅうせいぐん', 'とんぼがえり', 'かえんほうしゃ']
+  topMovePct: [98.3, 95.7, 83.2, 73.3]
+  topItems: ['こだわりスカーフ', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [86.7, 5.9, 3.9]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 79.5
+  topNature2: 'おくびょう'
+  topNaturePct2: 20.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

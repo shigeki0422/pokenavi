@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのハッサム基礎データ。
 pokemonName: 'ハッサム'
 dexNumber: 212
 usageRank: 37
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'scizor-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['バレットパンチ', 'とんぼがえり', 'つるぎのまい', 'はねやすめ']
+  topMovePct: [99.8, 71.0, 59.3, 56.4]
+  topItems: ['ハッサムナイト', 'ゴツゴツメット', 'いのちのたま']
+  topItemPct: [31.5, 17.2, 15.6]
+  topAbility: 'テクニシャン'
+  topAbilityPct: 98.3
+  topNature: 'いじっぱり'
+  topNaturePct: 76.7
+  topNature2: 'わんぱく'
+  topNaturePct2: 14.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

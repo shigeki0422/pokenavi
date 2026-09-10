@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのチルタリス基礎データ
 pokemonName: 'チルタリス'
 dexNumber: 334
 usageRank: 106
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ハイパーボイス', 'はねやすめ', 'コットンガード', 'かえんほうしゃ']
+  topMovePct: [91.5, 83.0, 82.1, 64.7]
+  topItems: ['チルタリスナイト']
+  topItemPct: [100.0]
+  topAbility: 'ノーてんき'
+  topAbilityPct: 53.6
+  topNature: 'ひかえめ'
+  topNaturePct: 42.4
+  topNature2: 'ずぶとい'
+  topNaturePct2: 35.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

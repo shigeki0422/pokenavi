@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのジュナイパー基礎デー
 pokemonName: 'ジュナイパー'
 dexNumber: 724
 usageRank: 157
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['リーフブレード', '3ぼんのや', 'かげうち', 'とんぼがえり']
+  topMovePct: [96.2, 96.2, 67.9, 34.0]
+  topItems: ['ピントレンズ', 'ひかりのこな', 'いのちのたま']
+  topItemPct: [34.0, 24.5, 18.9]
+  topAbility: 'きもったま'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 94.3
+  topNature2: 'ひかえめ'
+  topNaturePct2: 3.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのフーディン基礎データ
 pokemonName: 'フーディン'
 dexNumber: 65
 usageRank: 145
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ワイドフォース', 'きあいだま', 'シャドーボール', 'アンコール']
+  topMovePct: [93.8, 83.1, 76.9, 43.1]
+  topItems: ['フーディナイト', 'いのちのたま']
+  topItemPct: [93.8, 6.2]
+  topAbility: 'マジックガード'
+  topAbilityPct: 98.5
+  topNature: 'おくびょう'
+  topNaturePct: 60.0
+  topNature2: 'ひかえめ'
+  topNaturePct2: 40.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

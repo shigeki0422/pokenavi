@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのシビルドン基礎データ
 pokemonName: 'シビルドン'
 dexNumber: 604
 usageRank: 151
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'eelektross-analysis-m3'
+faq:
+  season: 'M-6'
+  topMoves: ['とぐろをまく', 'サンダーダイブ', 'ドレインパンチ', 'ほのおのパンチ']
+  topMovePct: [71.7, 71.7, 67.4, 45.7]
+  topItems: ['シビルドナイト', 'ゴツゴツメット', 'たべのこし']
+  topItemPct: [89.1, 8.7, 2.2]
+  topAbility: 'ふゆう'
+  topAbilityPct: 100.0
+  topNature: 'わんぱく'
+  topNaturePct: 43.5
+  topNature2: 'いじっぱり'
+  topNaturePct2: 28.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

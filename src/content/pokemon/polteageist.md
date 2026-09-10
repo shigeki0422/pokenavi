@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのポットデス基礎データ
 pokemonName: 'ポットデス'
 dexNumber: 855
 usageRank: 109
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'polteageist-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['からをやぶる', 'シャドーボール', 'アシストパワー', 'ちからをすいとる']
+  topMovePct: [97.8, 92.4, 69.7, 64.3]
+  topItems: ['しろいハーブ', 'きあいのタスキ', 'ゴツゴツメット']
+  topItemPct: [75.7, 22.2, 1.6]
+  topAbility: 'のろわれボディ'
+  topAbilityPct: 76.2
+  topNature: 'ひかえめ'
+  topNaturePct: 44.9
+  topNature2: 'おくびょう'
+  topNaturePct2: 25.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

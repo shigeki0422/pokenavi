@@ -4,9 +4,20 @@ description: 'ポケモンチャンピオンズのゴロンダ基礎データ。
 pokemonName: 'ゴロンダ'
 dexNumber: 675
 usageRank: 166
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ダストシュート', 'インファイト', 'バレットパンチ', 'れいとうパンチ']
+  topMovePct: [88.1, 81.0, 78.6, 50.0]
+  topItems: ['きあいのタスキ', 'たつじんのおび', 'いのちのたま']
+  topItemPct: [85.7, 11.9, 2.4]
+  topAbility: 'きもったま'
+  topAbilityPct: 81.0
+  topNature: 'いじっぱり'
+  topNaturePct: 100.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

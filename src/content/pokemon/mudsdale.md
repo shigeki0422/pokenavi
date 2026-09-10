@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのバンバドロ基礎データ
 pokemonName: 'バンバドロ'
 dexNumber: 750
 usageRank: 184
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['じしん', 'じわれ', 'ストーンエッジ', 'うちおとす']
+  topMovePct: [83.3, 58.3, 41.7, 41.7]
+  topItems: ['オボンのみ', 'せんせいのツメ', 'カゴのみ']
+  topItemPct: [33.3, 33.3, 20.8]
+  topAbility: 'じきゅうりょく'
+  topAbilityPct: 100.0
+  topNature: 'しんちょう'
+  topNaturePct: 58.3
+  topNature2: 'わんぱく'
+  topNaturePct2: 41.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

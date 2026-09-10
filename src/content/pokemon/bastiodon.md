@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのトリデプス基礎データ
 pokemonName: 'トリデプス'
 dexNumber: 411
 usageRank: 177
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ステルスロック', 'メタルバースト', 'ほえる', 'じわれ']
+  topMovePct: [100.0, 96.4, 82.1, 82.1]
+  topItems: ['オボンのみ', 'たべのこし', 'カゴのみ']
+  topItemPct: [78.6, 17.9, 3.6]
+  topAbility: 'がんじょう'
+  topAbilityPct: 96.4
+  topNature: 'ずぶとい'
+  topNaturePct: 78.6
+  topNature2: 'わんぱく'
+  topNaturePct2: 17.9
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

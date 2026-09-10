@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのミミズズ基礎データ。
 pokemonName: 'ミミズズ'
 dexNumber: 968
 usageRank: 85
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ボディプレス', 'しっぽきり', 'ヘビーボンバー', 'てっぺき']
+  topMovePct: [90.9, 80.9, 68.0, 56.3]
+  topItems: ['オボンのみ', 'たべのこし', 'メンタルハーブ']
+  topItemPct: [78.0, 16.6, 4.0]
+  topAbility: 'どしょく'
+  topAbilityPct: 100.0
+  topNature: 'わんぱく'
+  topNaturePct: 65.1
+  topNature2: 'のんき'
+  topNaturePct2: 13.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

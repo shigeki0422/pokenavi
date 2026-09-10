@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのピカチュウ基礎データ
 pokemonName: 'ピカチュウ'
 dexNumber: 25
 usageRank: 190
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ねこだまし', 'ボルテッカー', 'なみのり', 'かみなり']
+  topMovePct: [77.8, 52.8, 47.2, 47.2]
+  topItems: ['でんきだま']
+  topItemPct: [100.0]
+  topAbility: 'せいでんき'
+  topAbilityPct: 52.8
+  topNature: 'いじっぱり'
+  topNaturePct: 41.7
+  topNature2: 'おくびょう'
+  topNaturePct2: 25.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

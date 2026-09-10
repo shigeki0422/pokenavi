@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのカイロス基礎データ。
 pokemonName: 'カイロス'
 dexNumber: 127
 usageRank: 999
+updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['でんこうせっか', 'つるぎのまい', 'のしかかり', 'やまあらし']
+  topMovePct: [81.5, 69.1, 61.0, 57.3]
+  topItems: ['カイロスナイト', 'こだわりスカーフ', 'きあいのタスキ']
+  topItemPct: [96.0, 1.8, 0.4]
+  topAbility: 'じしんかじょう'
+  topAbilityPct: 53.5
+  topNature: 'ようき'
+  topNaturePct: 74.6
+  topNature2: 'いじっぱり'
+  topNaturePct2: 22.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

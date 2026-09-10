@@ -5,9 +5,22 @@ pokemonName: 'ストリンダー(ロー)'
 dexNumber: 849
 usageRank: 100
 imageForm: '01'
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['オーバードライブ', 'ばくおんぱ', 'ボルトチェンジ', 'アンコール']
+  topMovePct: [94.0, 84.9, 32.3, 27.5]
+  topItems: ['ふうせん', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [35.9, 25.5, 17.9]
+  topAbility: 'パンクロック'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 68.9
+  topNature2: 'おくびょう'
+  topNaturePct2: 11.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

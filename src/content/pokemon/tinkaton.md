@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのデカヌチャン基礎デー
 pokemonName: 'デカヌチャン'
 dexNumber: 959
 usageRank: 104
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ステルスロック', 'デカハンマー', 'アンコール', 'はたきおとす']
+  topMovePct: [92.2, 77.6, 76.7, 46.1]
+  topItems: ['ふうせん', 'きあいのタスキ', 'シュカのみ']
+  topItemPct: [70.3, 16.4, 6.4]
+  topAbility: 'かたやぶり'
+  topAbilityPct: 96.8
+  topNature: 'ようき'
+  topNaturePct: 49.3
+  topNature2: 'しんちょう'
+  topNaturePct2: 25.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

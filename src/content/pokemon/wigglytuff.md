@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのプクリン基礎データ。
 pokemonName: 'プクリン'
 dexNumber: 40
 usageRank: 125
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ムーンフォース', 'れいとうビーム', 'ほろびのうた', 'かえんほうしゃ']
+  topMovePct: [50.5, 45.0, 40.5, 38.7]
+  topItems: ['ひかりのねんど', 'ふうせん', 'いのちのたま']
+  topItemPct: [32.4, 32.4, 9.0]
+  topAbility: 'おみとおし'
+  topAbilityPct: 60.4
+  topNature: 'ひかえめ'
+  topNaturePct: 47.7
+  topNature2: 'ずぶとい'
+  topNaturePct2: 46.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

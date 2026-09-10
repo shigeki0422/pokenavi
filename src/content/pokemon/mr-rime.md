@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのブリムオン基礎データ
 pokemonName: 'ブリムオン'
 dexNumber: 858
 usageRank: 95
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['トリックルーム', 'ドレインキッス', 'いやしのねがい', 'マジカルフレイム']
+  topMovePct: [74.0, 52.6, 42.9, 39.8]
+  topItems: ['オボンのみ', 'きあいのタスキ', 'たべのこし']
+  topItemPct: [44.6, 23.2, 14.5]
+  topAbility: 'マジックミラー'
+  topAbilityPct: 99.7
+  topNature: 'ずぶとい'
+  topNaturePct: 27.3
+  topNature2: 'のんき'
+  topNaturePct2: 24.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

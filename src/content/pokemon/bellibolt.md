@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのハラバリー基礎データ
 pokemonName: 'ハラバリー'
 dexNumber: 939
 usageRank: 40
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'bellibolt-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['みずびたし', 'なまける', 'ボルトチェンジ', 'どくどく']
+  topMovePct: [94.5, 93.7, 85.4, 78.9]
+  topItems: ['たべのこし', 'オボンのみ', 'シュカのみ']
+  topItemPct: [64.3, 25.4, 5.4]
+  topAbility: 'でんきにかえる'
+  topAbilityPct: 100.0
+  topNature: 'おだやか'
+  topNaturePct: 76.8
+  topNature2: 'ずぶとい'
+  topNaturePct2: 10.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

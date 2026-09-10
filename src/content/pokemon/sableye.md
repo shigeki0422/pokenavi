@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのヤミラミ基礎データ。
 pokemonName: 'ヤミラミ'
 dexNumber: 302
 usageRank: 83
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ひかりのかべ', 'イカサマ', 'おにび', 'アンコール']
+  topMovePct: [71.6, 65.9, 64.1, 59.1]
+  topItems: ['ひかりのねんど', 'ヤミラミナイト', 'ゴツゴツメット']
+  topItemPct: [54.9, 24.2, 7.6]
+  topAbility: 'いたずらごころ'
+  topAbilityPct: 100.0
+  topNature: 'ずぶとい'
+  topNaturePct: 66.1
+  topNature2: 'わんぱく'
+  topNaturePct2: 17.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

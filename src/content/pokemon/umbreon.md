@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのブラッキー基礎データ
 pokemonName: 'ブラッキー'
 dexNumber: 197
 usageRank: 46
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'umbreon-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['イカサマ', 'まもる', 'ねがいごと', 'どくどく']
+  topMovePct: [98.5, 86.6, 85.0, 48.7]
+  topItems: ['たべのこし', 'ゴツゴツメット', 'オボンのみ']
+  topItemPct: [86.3, 7.1, 5.6]
+  topAbility: 'せいしんりょく'
+  topAbilityPct: 76.4
+  topNature: 'ずぶとい'
+  topNaturePct: 51.0
+  topNature2: 'わんぱく'
+  topNaturePct2: 29.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

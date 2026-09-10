@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのオニシズクモ基礎デー
 pokemonName: 'オニシズクモ'
 dexNumber: 752
 usageRank: 75
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'araquanid-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['ねばねばネット', 'ミラーコート', 'アクアブレイク', 'なみのり']
+  topMovePct: [94.0, 82.0, 67.2, 27.6]
+  topItems: ['オボンのみ', 'しんぴのしずく', 'きあいのタスキ']
+  topItemPct: [38.8, 27.0, 13.3]
+  topAbility: 'すいほう'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 42.9
+  topNature2: 'ひかえめ'
+  topNaturePct2: 29.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

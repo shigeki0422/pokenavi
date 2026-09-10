@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのマルノーム基礎データ
 pokemonName: 'マルノーム'
 dexNumber: 317
 usageRank: 127
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['どくびし', 'いたみわけ', 'れいとうビーム', 'ヘドロウェーブ']
+  topMovePct: [48.9, 47.9, 45.7, 44.7]
+  topItems: ['ゴツゴツメット', 'たべのこし', 'ふうせん']
+  topItemPct: [59.6, 35.1, 3.2]
+  topAbility: 'ねんちゃく'
+  topAbilityPct: 94.7
+  topNature: 'ひかえめ'
+  topNaturePct: 56.4
+  topNature2: 'おくびょう'
+  topNaturePct2: 34.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

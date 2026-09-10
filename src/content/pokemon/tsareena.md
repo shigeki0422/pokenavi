@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのアマージョ基礎データ
 pokemonName: 'アマージョ'
 dexNumber: 763
 usageRank: 999
+updatedDate: '2026-09-10'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['トリプルアクセル', 'とびひざげり', 'トロピカルキック', 'こうそくスピン']
+  topMovePct: [86.3, 71.1, 64.9, 38.8]
+  topItems: ['こうかくレンズ', 'オボンのみ', 'こだわりスカーフ']
+  topItemPct: [30.7, 15.4, 11.9]
+  topAbility: 'じょおうのいげん'
+  topAbilityPct: 79.9
+  topNature: 'いじっぱり'
+  topNaturePct: 60.2
+  topNature2: 'ようき'
+  topNaturePct2: 26.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

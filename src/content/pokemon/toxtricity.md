@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのストリンダー(ハイ)基�
 pokemonName: 'ストリンダー(ハイ)'
 dexNumber: 849
 usageRank: 87
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['オーバードライブ', 'ばくおんぱ', 'ほっぺすりすり', 'ヘドロウェーブ']
+  topMovePct: [95.9, 92.0, 53.8, 41.4]
+  topItems: ['ふうせん', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [63.0, 14.8, 6.8]
+  topAbility: 'パンクロック'
+  topAbilityPct: 100.0
+  topNature: 'ひかえめ'
+  topNaturePct: 69.2
+  topNature2: 'おくびょう'
+  topNaturePct2: 25.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

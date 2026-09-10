@@ -4,9 +4,20 @@ description: 'ポケモンチャンピオンズのナゲツケサル基礎デー
 pokemonName: 'ナゲツケサル'
 dexNumber: 766
 usageRank: 192
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['じしん', 'いわなだれ', 'タネばくだん', 'ドレインパンチ']
+  topMovePct: [100.0, 93.3, 66.7, 66.7]
+  topItems: ['たつじんのおび', 'こだわりスカーフ']
+  topItemPct: [66.7, 33.3]
+  topAbility: 'まけんき'
+  topAbilityPct: 100.0
+  topNature: 'いじっぱり'
+  topNaturePct: 100.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのユキメノコ基礎データ
 pokemonName: 'ユキメノコ'
 dexNumber: 478
 usageRank: 77
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'froslass-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['ふぶき', 'シャドーボール', '10まんボルト', 'オーロラベール']
+  topMovePct: [97.3, 78.1, 66.9, 46.2]
+  topItems: ['ユキメノコナイト', 'こだわりスカーフ']
+  topItemPct: [97.3, 0.2]
+  topAbility: 'のろわれボディ'
+  topAbilityPct: 89.2
+  topNature: 'おくびょう'
+  topNaturePct: 63.8
+  topNature2: 'ひかえめ'
+  topNaturePct2: 36.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

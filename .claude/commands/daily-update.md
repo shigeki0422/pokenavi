@@ -22,31 +22,13 @@ sqlite3 scripts/pokenavi.db "SELECT MAX(ev_h), MAX(ev_a), MAX(ev_b), MAX(ev_c), 
 
 ### 3. ranking.json を再生成
 ```bash
-python3 -c "
-import sqlite3, json
-conn = sqlite3.connect('scripts/pokenavi.db')
-conn.row_factory = sqlite3.Row
-SEASON, RULE = 'M-3', 'single'
-dates = [r[0] for r in conn.execute(f\"SELECT DISTINCT crawled_date FROM pokemon_usage WHERE season='{SEASON}' AND rule='{RULE}' ORDER BY crawled_date\").fetchall()]
-all_rows = conn.execute(f\"SELECT pokemon, rank, crawled_date, pokemon_id FROM pokemon_usage WHERE season='{SEASON}' AND rule='{RULE}' ORDER BY crawled_date, rank\").fetchall()
-pokemon_map = {}
-for row in all_rows:
-    name = row['pokemon']
-    if name not in pokemon_map:
-        pokemon_map[name] = {'name': name, 'id': row['pokemon_id'], 'dates': {}}
-    pokemon_map[name]['dates'][row['crawled_date']] = {'rank': row['rank'], 'rate': None}
-latest = dates[-1]
-pokemon_list = sorted(pokemon_map.values(), key=lambda p: p['dates'].get(latest, {}).get('rank', 9999))
-pokemon_list = [p for p in pokemon_list if p['dates'].get(latest, {}).get('rank', 9999) <= 200]
-with open('src/data/ranking.json', 'w', encoding='utf-8') as f:
-    json.dump({'dates': dates, 'pokemon': pokemon_list}, f, ensure_ascii=False, indent=2)
-print(f'Done: {len(pokemon_list)} pokemon, dates={dates}')
-"
+python3 scripts/generate_ranking_json.py
 ```
 
 ### 4. 全ポケモン情報ページを再生成
 ```bash
 python3 scripts/generate_pokemon_pages.py
+python3 scripts/inject_faq_frontmatter.py   # FAQ(構造化データ)を再注入。ページ再生成で消えるため必須
 python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成
 ```
 

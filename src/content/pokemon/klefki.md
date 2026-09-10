@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのクレッフィ基礎データ
 pokemonName: 'クレッフィ'
 dexNumber: 707
 usageRank: 162
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['てっていこうせん', 'リフレクター', 'ひかりのかべ', 'でんじは']
+  topMovePct: [87.7, 67.7, 56.9, 56.9]
+  topItems: ['ひかりのねんど', 'しめったいわ', 'だっしゅつボタン']
+  topItemPct: [52.3, 29.2, 10.8]
+  topAbility: 'いたずらごころ'
+  topAbilityPct: 100.0
+  topNature: 'ずぶとい'
+  topNaturePct: 78.5
+  topNature2: 'ひかえめ'
+  topNaturePct2: 10.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

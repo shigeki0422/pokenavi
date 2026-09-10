@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのカメックス基礎データ
 pokemonName: 'カメックス'
 dexNumber: 9
 usageRank: 58
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'blastoise-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['はどうだん', 'あくのはどう', 'からをやぶる', 'れいとうビーム']
+  topMovePct: [87.6, 75.4, 61.6, 50.0]
+  topItems: ['カメックスナイト', 'きあいのタスキ', 'ラムのみ']
+  topItemPct: [96.1, 2.9, 0.5]
+  topAbility: 'げきりゅう'
+  topAbilityPct: 62.3
+  topNature: 'ひかえめ'
+  topNaturePct: 85.4
+  topNature2: 'おくびょう'
+  topNaturePct2: 9.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

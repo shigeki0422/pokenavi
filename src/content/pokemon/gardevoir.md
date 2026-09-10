@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのサーナイト基礎データ
 pokemonName: 'サーナイト'
 dexNumber: 282
 usageRank: 82
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'gardevoir-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['しんくうは', 'マジカルフレイム', 'ハイパーボイス', 'ムーンフォース']
+  topMovePct: [70.5, 61.6, 51.5, 48.0]
+  topItems: ['サーナイトナイト', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [63.4, 26.3, 7.3]
+  topAbility: 'トレース'
+  topAbilityPct: 95.7
+  topNature: 'ひかえめ'
+  topNaturePct: 72.5
+  topNature2: 'おくびょう'
+  topNaturePct2: 22.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

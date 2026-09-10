@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのスターミー基礎データ
 pokemonName: 'スターミー'
 dexNumber: 121
 usageRank: 62
+updatedDate: '2026-09-10'
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'starmie-analysis-m2'
+faq:
+  season: 'M-6'
+  topMoves: ['アクアジェット', 'アイススピナー', 'アクアブレイク', 'クイックターン']
+  topMovePct: [80.3, 76.1, 73.9, 66.0]
+  topItems: ['スターミナイト', 'いのちのたま', 'こだわりスカーフ']
+  topItemPct: [95.3, 3.7, 0.8]
+  topAbility: 'しぜんかいふく'
+  topAbilityPct: 84.4
+  topNature: 'いじっぱり'
+  topNaturePct: 51.0
+  topNature2: 'ようき'
+  topNaturePct2: 44.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
