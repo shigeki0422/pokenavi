@@ -9,7 +9,7 @@ from pathlib import Path
 DB = Path(__file__).parent / "pokenavi.db"
 
 WF_DIRS = [
-    "/private/tmp/claude-501/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/scratchpad/journal_m6",
+    "/private/tmp/claude-501/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/scratchpad/journal_0910",
 ]
 
 OCR_MOVES = {
@@ -339,6 +339,9 @@ OCR_NATURES = {
     "ヤんちゃ": "やんちゃ",
 }
 OCR_POKEMON = {
+    "ニャオニクス": "ニャオニクス(オス)",
+    "ストリンダー": "ストリンダー(ハイ)",
+    "イキリンコ": "イキリンコ(グリーン)",
     "オオニュウラ": "オオニューラ",
     "イエッサン": "イエッサン(オス)",
     "トクロッグ": "ドクロッグ",
@@ -504,7 +507,7 @@ def resolve_partner_form(name, types):
     type_set = frozenset(types)
     return FORM_BY_TYPES[name].get(type_set, name)
 
-CRAWLED_DATE = "2026-09-09"
+CRAWLED_DATE = "2026-09-10"
 
 # 実在する別の技名に誤読され、マスター照合では検出できないケースの位置指定上書き。
 # GATE2（リスト内重複）で気付いたものを、必ずクロール画像で確認してから登録する。
@@ -768,7 +771,7 @@ def main():
             for rec in extract_structured_outputs(jsonl):
                 rank = rec["rank"]
                 all_data[rank] = rec  # 後のWFで上書き（後が正しい）
-    MAX_RANK = 100
+    MAX_RANK = 200
 
     print(f"Journal から取得: {len(all_data)} ランク")
 
@@ -958,7 +961,9 @@ def main():
             items_sum = sum(it.get("rate", 0) for it in items)
             if top_item_rate < 10:
                 print(f"  [GATE_RATE1] {pokemon} rank={rank}: 持ち物1位={top_item_rate}%<10% スキップ")
-            elif items_sum < 70:
+            elif items_sum < 70 and len(items) > 1:
+                # 合計が低いのはパネル取りこぼしのサイン。ただしゲーム側の表示が
+                # 1件だけのときは合計が低くても正常（例: 2026-09-10 ガメノデス 59.2%のみ）
                 print(f"  [GATE_RATE_SUM] {pokemon} rank={rank}: 持ち物合計={items_sum:.1f}%<70% スキップ")
             else:
                 for i, it in enumerate(items, 1):

@@ -14,7 +14,7 @@ TEMPLATE_DATE = None  # build_templates() 内で自動決定
 SEASON = "M-6"
 # 取り込む順位の上限。通常は200。クロールが途中で止まった等で
 # 上位のみ扱う場合に下げる（M-6初日は端末スリープで101位以降が取れず100件）
-MAX_RANK = 100
+MAX_RANK = 200
 RULE   = "single"
 MATCH_THRESHOLD = 0.80  # 通常フォーマット用
 MATCH_THRESHOLD_GRAY = 0.20  # 横長フォーマット(6/28〜)用
@@ -85,7 +85,7 @@ TARGETS = {
     },
 }
 
-CRAWLED_DATE = "2026-09-09"  # ← 実行時に変更
+CRAWLED_DATE = "2026-09-10"  # ← 実行時に変更
 
 TARGETS["2026-07-09"] = {
     124: "ケンタロス:炎",
