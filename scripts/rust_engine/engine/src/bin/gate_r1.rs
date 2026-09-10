@@ -132,6 +132,7 @@ fn decode(pack: &mut Pack, v: &Value) -> Case {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let mut pack = Pack::load(&args[1]);
+    let mut stamp = engine::casehdr::StampCheck::new(&pack.sim_hash);
 
     let mut total = 0usize;
     let mut ok = 0usize;
@@ -149,6 +150,7 @@ fn main() {
         for (ln, line) in f.lines().enumerate() {
             let line = line.unwrap();
             if ln == 0 {
+                stamp.see(&serde_json::from_str::<Value>(&line).expect("header json"), path);
                 continue; // schema header
             }
             let v: Value = serde_json::from_str(&line).expect("case json");
@@ -238,6 +240,7 @@ fn main() {
     }
 
     println!("R1 GATE: {}/{} match ({} mismatches)", ok, total, fails);
+    stamp.report(fails as i64);
     println!(
         "calc_damage rust: {:.3}s for {} cases = {:.0} ns/case",
         calc_nanos as f64 / 1e9,

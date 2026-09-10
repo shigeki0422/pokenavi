@@ -261,6 +261,262 @@ pub fn mcts_vs_dist(
     run_two_mcts(packr, net, &mut b, &mut ai1, &mut ai2, &mut rng, |_, _| {})
 }
 
+/// mcts_vs_dist のパリティ調査用。結果に加えて「選出した3匹の添字」と
+/// 「各ターン終了時の状態ハッシュ」を返す。Python 側と同じ encode_battle/sv_hash なので
+/// 何ターン目から食い違うかを直接突き合わせられる。
+pub fn mcts_vs_dist_trace(
+    pack: &mut Pack,
+    net: &NetW,
+    pa: &[String],
+    sa: &[usize],
+    pb: &[String],
+    season_a: &str,
+    season_b: &str,
+    seed: i128,
+    sims: usize,
+) -> (i64, Vec<usize>, Vec<u64>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<f64>) {
+    let cell = std::cell::RefCell::new(CpyRandom::new(seed));
+    let f = Field::default();
+    let mut a6: Vec<Poke> = Vec::with_capacity(pa.len());
+    for s in pa {
+        let mut sr = SharedRng(&cell);
+        let mut r: Option<&mut dyn crate::rng::BRng> = Some(&mut sr);
+        a6.push(build_poke_rand(pack, s, season_a, &mut r));
+    }
+    let mut b6: Vec<Poke> = Vec::with_capacity(pb.len());
+    for s in pb {
+        let mut sr = SharedRng(&cell);
+        let mut r: Option<&mut dyn crate::rng::BRng> = Some(&mut sr);
+        b6.push(build_poke_rand(pack, s, season_b, &mut r));
+    }
+    let p1 = order(pack, &a6, sa, &f);
+    let idx2 = {
+        let packr: &Pack = pack;
+        let mut sr = SharedRng(&cell);
+        let mut srng = || cell.borrow_mut().random();
+        crate::ai::select_party(packr, &mut b6, &mut a6, 3, 0.3, 50.0, &mut sr, &mut srng)
+    };
+    let p2: Vec<Poke> = idx2.iter().map(|&i| b6[i].clone()).collect();
+    let pv1 = if b6.len() > p2.len() { preview_of(&b6) } else { preview_of(&p2) };
+    let pv2 = if a6.len() > p1.len() { preview_of(&a6) } else { preview_of(&p1) };
+    let n6a: Vec<Sym> = a6.iter().map(|p| p.name).collect();
+    let n6b: Vec<Sym> = b6.iter().map(|p| p.name).collect();
+    let s1 = Side { party: p1, active_idx: 0, source6_names: n6a, ..Default::default() };
+    let s2 = Side { party: p2, active_idx: 0, source6_names: n6b, ..Default::default() };
+    let mut b = Battle::new(s1, s2, Field::default());
+    {
+        let packr: &Pack = pack;
+        b.start(packr, &pv1, &pv2);
+    }
+    crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(BELIEF_SEASON));
+    crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(BELIEF_SEASON));
+    let packr: &Pack = pack;
+    let mut ai1 = SearchAI::new(packr, BELIEF_SEASON, seed, sims);
+    let mut ai2 = SearchAI::new(packr, BELIEF_SEASON, seed ^ 0x5bd1e995, sims);
+    let mut rng = cell.into_inner();
+    let hs = std::cell::RefCell::new(Vec::<u64>::new());
+    // ターン0（start直後・AIが動く前）の局面も記録する
+    {
+        let e0 = crate::statec::encode_battle(packr, &b, false);
+        hs.borrow_mut().push(crate::statec::sv_hash(&e0.vals));
+    }
+    let f_names = std::cell::RefCell::new(Vec::<String>::new());
+    let f_vals = std::cell::RefCell::new(Vec::<String>::new());
+    ACT_LOG.with(|l| *l.borrow_mut() = Some(Vec::new()));
+    ROOT_LOG.with(|l| *l.borrow_mut() = Some(Vec::new()));
+    CFG_LOG.with(|l| *l.borrow_mut() = Some(Vec::new()));
+    EVAL_LOG.with(|l| *l.borrow_mut() = Some(Vec::new()));
+    DET_LOG.with(|l| *l.borrow_mut() = Some(Vec::new()));
+    EVAL_X.with(|l| *l.borrow_mut() = Some(Vec::new()));
+    let res = run_two_mcts(packr, net, &mut b, &mut ai1, &mut ai2, &mut rng, |pk, bt| {
+        let named = f_vals.borrow().is_empty();
+        let e = crate::statec::encode_battle(pk, bt, named);
+        if named {
+            *f_vals.borrow_mut() = e.vals.iter().map(sv_str).collect();
+            if let Some(ns) = &e.names {
+                *f_names.borrow_mut() = ns.clone();
+            }
+        }
+        hs.borrow_mut().push(crate::statec::sv_hash(&e.vals));
+    });
+    let acts = ACT_LOG.with(|l| l.borrow_mut().take()).unwrap_or_default();
+    let roots = ROOT_LOG.with(|l| l.borrow_mut().take()).unwrap_or_default();
+    let cfgs = CFG_LOG.with(|l| l.borrow_mut().take()).unwrap_or_default();
+    let evals = EVAL_LOG.with(|l| l.borrow_mut().take()).unwrap_or_default();
+    let dets = DET_LOG.with(|l| l.borrow_mut().take()).unwrap_or_default();
+    let ex = EVAL_X.with(|l| l.borrow_mut().take()).unwrap_or_default();
+    (res, idx2, hs.into_inner(), f_names.into_inner(), f_vals.into_inner(), acts, roots, cfgs, evals, dets, ex)
+}
+
+/// パリティ調査用: 6匹の構築＋select_party まで進めて、
+/// 「選んだ添字」と「その直後に共有RNGから引く次の乱数」を返す。
+/// mcts_vs_dist は ai.choose に共有RNGを渡すので、ここで消費数がズレると
+/// 以降の探索・ダメージロールが全部ズレる（選出結果が一致していても起きる）。
+pub fn select_party_rng_probe(
+    pack: &mut Pack,
+    pa: &[String],
+    pb: &[String],
+    season: &str,
+    seed: i128,
+) -> (Vec<usize>, f64) {
+    let cell = std::cell::RefCell::new(CpyRandom::new(seed));
+    let mut a6: Vec<Poke> = Vec::new();
+    for s in pa {
+        let mut sr = SharedRng(&cell);
+        let mut r: Option<&mut dyn crate::rng::BRng> = Some(&mut sr);
+        a6.push(build_poke_rand(pack, s, season, &mut r));
+    }
+    let mut b6: Vec<Poke> = Vec::new();
+    for s in pb {
+        let mut sr = SharedRng(&cell);
+        let mut r: Option<&mut dyn crate::rng::BRng> = Some(&mut sr);
+        b6.push(build_poke_rand(pack, s, season, &mut r));
+    }
+    let idx2 = {
+        let packr: &Pack = pack;
+        let mut sr = SharedRng(&cell);
+        let mut srng = || cell.borrow_mut().random();
+        crate::ai::select_party(packr, &mut b6, &mut a6, 3, 0.3, 50.0, &mut sr, &mut srng)
+    };
+    let nxt = cell.borrow_mut().random();
+    (idx2, nxt)
+}
+
+fn sv_str(v: &crate::statec::SV) -> String {
+    use crate::statec::SV;
+    match v {
+        SV::N => "None".to_string(),
+        SV::I(x) => x.to_string(),
+        SV::F(x) => format!("{x}"),
+        SV::S(x) => x.clone(),
+        SV::B(x) => x.to_string(),
+    }
+}
+
+/// パリティ調査用の行動記録（`mcts_vs_dist_trace` からのみ使う）
+thread_local! {
+    static ACT_LOG: std::cell::RefCell<Option<Vec<String>>> = std::cell::RefCell::new(None);
+    static ROOT_LOG: std::cell::RefCell<Option<Vec<String>>> = std::cell::RefCell::new(None);
+    static CFG_LOG: std::cell::RefCell<Option<Vec<String>>> = std::cell::RefCell::new(None);
+    static EVAL_LOG: std::cell::RefCell<Option<Vec<String>>> = std::cell::RefCell::new(None);
+    static DET_LOG: std::cell::RefCell<Option<Vec<String>>> = std::cell::RefCell::new(None);
+    static EVAL_TAG: std::cell::RefCell<bool> = const { std::cell::RefCell::new(false) };
+    static EVAL_X: std::cell::RefCell<Option<Vec<f64>>> = std::cell::RefCell::new(None);
+}
+
+/// determinize 後の相手の実数値を記録する。既定では何もしない。
+#[allow(clippy::too_many_arguments)]
+pub fn det_log_push(
+    name: &str, max_hp: i64, hp: i64, a: i64, b: i64, c: i64, d: i64, sp: i64,
+) {
+    DET_LOG.with(|l| {
+        let mut bb = l.borrow_mut();
+        let Some(v) = bb.as_mut() else { return };
+        if v.len() < 24 {
+            v.push(format!("{name} HP{max_hp}({hp}) A{a} B{b} C{c} D{d} S{sp}"));
+        }
+    });
+}
+
+/// 葉のネット評価を記録する（入力xのハッシュと価値）。既定では何もしない。
+pub fn eval_log_push(xh: u64, v: f64) {
+    // 葉展開(expand_with_value)からの評価だけを拾う。downside_guard 等の呼び出しを
+    // 混ぜると両エンジンでログの系列が揃わず、比較そのものが無意味になる（実際に一度そうなった）。
+    if !EVAL_TAG.with(|t| *t.borrow()) {
+        return;
+    }
+    EVAL_LOG.with(|l| {
+        let mut b = l.borrow_mut();
+        let Some(vv) = b.as_mut() else { return };
+        if vv.len() < 60 {
+            vv.push(format!("{xh:016x} {v:.17}"));
+        }
+    });
+}
+
+pub fn eval_tag_set(on: bool) {
+    EVAL_TAG.with(|t| *t.borrow_mut() = on);
+}
+
+/// 葉展開の特徴ベクトル(905次元)を先頭から最大12本、連結して保存する。
+pub fn eval_x_push(x: &[f64]) {
+    if !EVAL_TAG.with(|t| *t.borrow()) {
+        return;
+    }
+    EVAL_X.with(|l| {
+        let mut b = l.borrow_mut();
+        let Some(v) = b.as_mut() else { return };
+        if v.len() < 12 * 905 {
+            v.extend_from_slice(x);
+        }
+    });
+}
+
+/// belief から引いた相手の型を記録する（search.rs から呼ばれる。既定では何もしない）。
+#[allow(clippy::too_many_arguments)]
+pub fn cfg_log_push(
+    pack: &Pack,
+    name: &str,
+    ev: &crate::pack::EvEntry,
+    nature: &str,
+    item: Option<&str>,
+    ability: &str,
+    moves: &[String],
+) {
+    CFG_LOG.with(|l| {
+        let mut b = l.borrow_mut();
+        let Some(v) = b.as_mut() else { return };
+        if v.len() >= 24 {
+            return;
+        }
+        let _ = pack;
+        v.push(format!(
+            "{name} ev={}/{}/{}/{}/{}/{} nat={nature} item={} abil={ability} moves={:?}",
+            ev.h, ev.a, ev.b, ev.c, ev.d, ev.s,
+            item.unwrap_or("None"),
+            moves
+        ));
+    });
+}
+
+/// MCTSのルート統計を記録する（search.rs から呼ばれる。既定では何もしない）。
+pub fn root_log_push(
+    pack: &Pack,
+    cands: &[crate::battle::Action],
+    stats: &[(usize, i64, f64)],
+    chosen_i: usize,
+) {
+    ROOT_LOG.with(|l| {
+        let mut b = l.borrow_mut();
+        let Some(v) = b.as_mut() else { return };
+        let mut parts: Vec<String> = Vec::with_capacity(stats.len());
+        for (ai_, n, q) in stats {
+            parts.push(format!(
+                "{}{}=n{} q{:.17}",
+                if *ai_ == chosen_i { "*" } else { "" },
+                act_str(pack, &cands[*ai_]),
+                n,
+                q
+            ));
+        }
+        v.push(parts.join("  "));
+    });
+}
+
+fn act_str(pack: &Pack, a: &crate::battle::Action) -> String {
+    use crate::battle::ActKind;
+    match a.kind {
+        ActKind::Move => format!(
+            "move {}{}",
+            a.mv.as_ref().map(|m| pack.intern.resolve(m.name).to_string()).unwrap_or_default(),
+            if a.do_mega { "+mega" } else { "" }
+        ),
+        ActKind::Switch => format!("switch->{}", a.switch_to),
+        ActKind::Mega => "mega".to_string(),
+        ActKind::Pass => "pass".to_string(),
+    }
+}
+
 /// 両者 SearchAI + certain_ko_override でターンループを回す共通部
 fn run_two_mcts(
     packr: &Pack,
@@ -284,6 +540,11 @@ fn run_two_mcts(
                 let (me, op) = crate::battle::split2(&mut bt.sides, sx);
                 out[sx] = certain_ko_override(packr, a, me, op, &mut bt.field, rng);
             }
+            ACT_LOG.with(|l| {
+                if let Some(v) = l.borrow_mut().as_mut() {
+                    v.push(format!("{} | {}", act_str(packr, &out[0]), act_str(packr, &out[1])));
+                }
+            });
             out
         },
         |bt| on_turn(packr, bt),

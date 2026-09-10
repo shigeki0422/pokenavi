@@ -98,6 +98,41 @@ fn mcts_vs_dist(
     Ok(engine::sim::mcts_vs_dist(pack, &net, &pa, &sa, &pb, season, season, seed, sims) as u8)
 }
 
+/// mcts_vs_dist のパリティ調査用: (結果, 選出3匹の添字, 各ターンの状態ハッシュ)。
+#[pyfunction]
+#[pyo3(signature = (pa, sa, pb, seed, sims, season="M-3"))]
+fn mcts_vs_dist_trace(
+    pa: Vec<String>,
+    sa: Vec<usize>,
+    pb: Vec<String>,
+    seed: i128,
+    sims: usize,
+    season: &str,
+) -> PyResult<(u8, Vec<usize>, Vec<u64>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<f64>)> {
+    let m = eng()?;
+    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let Eng { pack, net, .. } = &mut *g;
+    let net = net.clone();
+    let (r, idx, hs, nm, vs, ac, rt, cf, ev, dt, xx) =
+        engine::sim::mcts_vs_dist_trace(pack, &net, &pa, &sa, &pb, season, season, seed, sims);
+    Ok((r as u8, idx, hs, nm, vs, ac, rt, cf, ev, dt, xx))
+}
+
+/// パリティ調査用: select_party 直後の共有RNG位置を見る。
+#[pyfunction]
+#[pyo3(signature = (pa, pb, seed, season="M-3"))]
+fn select_party_rng_probe(
+    pa: Vec<String>,
+    pb: Vec<String>,
+    seed: i128,
+    season: &str,
+) -> PyResult<(Vec<usize>, f64)> {
+    let m = eng()?;
+    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let Eng { pack, .. } = &mut *g;
+    Ok(engine::sim::select_party_rng_probe(pack, &pa, &pb, season, seed))
+}
+
 /// ライブ提案経路のパネル初期化（`_ensemble_surrogate._setup_panel` 相当）。
 #[pyfunction]
 #[pyo3(signature = (panel_specs, season="M-3"))]
@@ -173,6 +208,8 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(greedy_3v3, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_vs_dist, m)?)?;
+    m.add_function(wrap_pyfunction!(mcts_vs_dist_trace, m)?)?;
+    m.add_function(wrap_pyfunction!(select_party_rng_probe, m)?)?;
     m.add_function(wrap_pyfunction!(live_setup, m)?)?;
     m.add_function(wrap_pyfunction!(live_feats, m)?)?;
     m.add_function(wrap_pyfunction!(datapack_hash, m)?)?;

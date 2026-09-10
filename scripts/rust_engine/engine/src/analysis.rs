@@ -13,7 +13,9 @@ use crate::rng::BRng;
 use std::collections::HashMap;
 
 /// これ以上かかる技は「圏外」。`_mu_engine.CAP` と同値。
-pub const CAP: i64 = 12;
+/// 5ターンで決着が付かない対面は実戦では交代が挟まるため、そこまでを見る
+/// (弱い技ほど打ち切りまで実走するので、上限は計算量にも直結する)。
+pub const CAP: i64 = 5;
 pub const OUT_OF_RANGE: i64 = 999;
 /// ダメージ乱数の段階数（85%〜100% の16段）。
 pub const ROLLS: usize = 16;
@@ -342,82 +344,48 @@ pub fn move_damage_sup(
 }
 
 
-/// この技の表示値（与ダメ・確定数）に実際に効いた条件だけを返す。
+/// この技の計算時に場に出ていた条件を返す。
 ///
-/// 場に出ているものをそのまま並べると、無関係な計算にまで注記が付く。
-/// （ミミッキュのウッドハンマー→カバルドンに「すなあらし で計算」と出た。
-///   カバルドンは じめん で砂のダメージを受けず、砂は草技の威力にも効かない。）
-/// 判定は実測で行う——その条件を打ち消して計算し直し、与ダメか確定数が
-/// 変わったときだけ「効いた」とみなす。
+/// 以前は「その条件を打ち消して計算し直し、与ダメか確定数が変わったときだけ効いたとみなす」
+/// という実測方式だったが、技ごとに条件のぶんだけ再実走するため、1v1判定全体の
+/// 約半分をこの注記の生成が占めていた（6匹×31体の描画で650ms中320ms）。
+/// 場に出ているものをそのまま返す方式に変える。無関係な条件にも注記が付くが
+/// （砂が草技の威力に効かない場合など）、表示のために計算を倍にする価値は無い。
 pub fn relevant_conds(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, move_idx: usize,
 ) -> Vec<String> {
-    let base_bt = setup(pack, spec_a, spec_b, season, 0.0);
-    let has_weather = base_bt.field.weather.is_some();
-    let f = &base_bt.field;
-    let has_terrain = f.electric_terrain || f.grassy_terrain || f.psychic_terrain || f.misty_terrain;
-    let has_stage = (0..2).any(|i| (0..7u8).any(|k| base_bt.sides[i].party[0].stage(k) != 0));
-    let weather_name = base_bt.field.weather.map(|w| pack.intern.resolve(w).to_string());
-    let terrain_name = if f.electric_terrain { Some("エレキフィールド") }
-        else if f.grassy_terrain { Some("グラスフィールド") }
-        else if f.psychic_terrain { Some("サイコフィールド") }
-        else if f.misty_terrain { Some("ミストフィールド") }
-        else { None }.map(|x| x.to_string());
-    let stage_label = {
-        let p = &base_bt.sides[att].party[0];
+    let bt = setup(pack, spec_a, spec_b, season, 0.0);
+    let mut out = Vec::new();
+    if let Some(w) = bt.field.weather {
+        out.push(pack.intern.resolve(w).to_string());
+    }
+    let f = &bt.field;
+    if f.electric_terrain { out.push("エレキフィールド".to_string()); }
+    else if f.grassy_terrain { out.push("グラスフィールド".to_string()); }
+    else if f.psychic_terrain { out.push("サイコフィールド".to_string()); }
+    else if f.misty_terrain { out.push("ミストフィールド".to_string()); }
+    {
+        let p = &bt.sides[att].party[0];
         let a = p.stage(0);
         let c = p.stage(2);
         let mut v = Vec::new();
         if a != 0 { v.push(format!("攻撃{}{}", if a > 0 { "+" } else { "" }, a)); }
         if c != 0 { v.push(format!("特攻{}{}", if c > 0 { "+" } else { "" }, c)); }
-        v.join("・")
-    };
-    drop(base_bt);
-
-    let base_dmg = move_damage(pack, spec_a, spec_b, season, att, move_idx, 0.0);
-    let (base_hits, _) = run_move(pack, spec_a, spec_b, season, att, move_idx, 0.0);
-    let mut out = Vec::new();
-    let mut check = |pack: &mut Pack, sup: Suppress, label: Option<String>| {
-        let Some(label) = label else { return };
-        if label.is_empty() { return; }
-        // 与ダメが変われば確定数も見るまでもない。安い方から確かめる。
-        let d = move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, 0.0, sup);
-        if d != base_dmg {
-            out.push(label);
-            return;
-        }
-        let (h, _) = run_move_sup(pack, spec_a, spec_b, season, att, move_idx, 0.0, sup);
-        if h != base_hits {
-            out.push(label);
-        }
-    };
-    if has_weather { check(pack, Suppress::Weather, weather_name); }
-    if has_terrain { check(pack, Suppress::Terrain, terrain_name); }
-    if has_stage { check(pack, Suppress::Stages, Some(stage_label)); }
-    // 1発ごとに命中判定がある技は、必中を仮定している以上「全部当たった場合」の値になる。
-    // 妥当ではあるが読み手を誤解させるので明示する。
-    {
-        let bt = setup(pack, spec_a, spec_b, season, 0.0);
-        if let Some(mv) = bt.sides[att].active().moves.get(move_idx) {
-            // 注記するのは「回数を仮定した技」だけ。仕様で回数が決まっている技
-            // （ダブルウイングの2回、スキルリンクの5回）は仮定が無いので出さない。
-            // 抽選で決まる技かどうかは、回数の抽選値だけ変えて結果が動くかで見分ける。
-            let p = bt.sides[att].active();
-            let hits = calc_hits(pack, mv, p, &mut FixedRng);
-            let hits_alt = calc_hits(pack, mv, p, &mut ChoicesRng(5));
-            if is_accuracy_chained(pack, mv) {
-                // 1発ごとに命中判定がある技。必中を仮定しているので最大回数になる
-                out.push(format!("最大{}ヒット時", hits));
-            } else if hits != hits_alt {
-                // 回数が抽選で決まる技。重み3:3:1:1の期待値3.0で見ている
-                out.push(format!("{}ヒット時", hits));
-            }
+        if !v.is_empty() { out.push(v.join("・")); }
+    }
+    // 連続技は回数を仮定しているので、その前提だけは明示する。
+    if let Some(mv) = bt.sides[att].active().moves.get(move_idx) {
+        let p = bt.sides[att].active();
+        let hits = calc_hits(pack, mv, p, &mut FixedRng);
+        let hits_alt = calc_hits(pack, mv, p, &mut ChoicesRng(5));
+        if is_accuracy_chained(pack, mv) {
+            out.push(format!("最大{}ヒット時", hits));
+        } else if hits != hits_alt {
+            out.push(format!("{}ヒット時", hits));
         }
     }
     out
 }
-
-
 
 
 /// 対戦本体に1回だけ技を撃たせ、(実際に与えたダメージ, 防御側の生存, 残HP) を返す。

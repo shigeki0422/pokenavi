@@ -18,6 +18,7 @@ fn ai_of(c: u8) -> Ai {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let mut pack = engine::pack::Pack::load(&args[1]);
+    let mut stamp = engine::casehdr::StampCheck::new(&pack.sim_hash);
     let bench = std::env::var("R3_BENCH").is_ok();
     let only: Option<i64> = std::env::var("R3_ONLY").ok().and_then(|x| x.parse().ok());
 
@@ -38,6 +39,7 @@ fn main() {
             let line = line.unwrap();
             let v: Value = serde_json::from_str(&line).expect("json");
             if ln == 0 {
+                stamp.see(&v, path);
                 parties = v["parties"]
                     .as_array()
                     .unwrap()
@@ -158,6 +160,7 @@ fn main() {
         div_turns,
         div_state
     );
+    stamp.report(div_result + div_turns + div_state);
     println!("rust total(JSON込): {:.2}s / battle-only: {:.3}s ({:.2} ms/battle)",
              secs, esec, esec * 1000.0 / (battles.max(1) as f64));
     if let Some(f) = first {

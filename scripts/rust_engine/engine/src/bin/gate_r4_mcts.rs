@@ -10,6 +10,7 @@ use std::io::{BufRead, BufReader};
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let mut pack = engine::pack::Pack::load(&args[1]);
+    let mut stamp = engine::casehdr::StampCheck::new(&pack.sim_hash);
     let net = pack.net.clone().expect("datapack に net が無い");
     let bench = std::env::var("R4_BENCH").is_ok();
 
@@ -27,6 +28,7 @@ fn main() {
             let line = line.unwrap();
             let v: Value = serde_json::from_str(&line).expect("json");
             if ln == 0 {
+                stamp.see(&v, path);
                 parties = v["parties"].as_array().unwrap().iter()
                     .map(|p| p.as_array().unwrap().iter().map(|s| s.as_str().unwrap().to_string()).collect())
                     .collect();
@@ -86,6 +88,7 @@ fn main() {
     println!("─────────────────────────────────────────");
     println!("R4 G3 GATE: battles={} turns={} divergences={} (result={} turns={} state={})",
              battles, turns, dr + dt + dsx, dr, dt, dsx);
+    stamp.report(dr + dt + dsx);
     println!("rust: {:.2}s total / {:.2} ms per battle",
              secs, (eng as f64) / 1e6 / (battles.max(1) as f64));
     if let Some(f) = first {

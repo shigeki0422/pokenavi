@@ -153,6 +153,8 @@ pub fn net_eval(
     encode_state_into(pack, &ctx.ft, sides, first, field, &mut ctx.memo, rng, &mut x);
     let l: Vec<usize> = if legal.is_empty() { vec![0] } else { legal.clone() };
     let (p, v) = net.evaluate(&x, &l, &mut ctx.scratch);
+    crate::sim::eval_log_push(crate::statec::f64_hash(&x), v);
+    crate::sim::eval_x_push(&x);
     ctx.x = x;
     let pol: Vec<(usize, f64)> = if legal.is_empty() {
         Vec::new()
@@ -357,6 +359,8 @@ impl SearchAI {
             }
             best.0
         };
+        // パリティ調査用: ルート直下の (行動, 訪問数, Q) を記録する（ROOT_LOG が Some のときだけ）。
+        crate::sim::root_log_push(pack, cands, &stats, chosen_i);
         let mut chosen = cands[chosen_i].clone();
         if self.downside_guard {
             chosen = self.apply_downside_guard(
@@ -480,6 +484,7 @@ impl SearchAI {
             let item = pb.sample_item(&mut self.rng);
             let ability = pb.sample_ability(&mut self.rng);
             let moves = pb.sample_moves(&mut self.rng, 4);
+            crate::sim::cfg_log_push(pack, &name, &ev, &nature, item.as_deref(), &ability, &moves);
             out.push(Some(SampledCfg { ev, nature, item, ability, moves }));
         }
         out
@@ -524,6 +529,11 @@ impl SearchAI {
                 0
             };
         }
+        crate::sim::det_log_push(
+            pack.intern.resolve(poke.name),
+            poke.max_hp, poke.hp, poke.attack, poke.defense,
+            poke.sp_attack, poke.sp_defense, poke.speed,
+        );
         if let Some(it) = &c.item {
             poke.item = pack.intern.get(it);
         }
@@ -641,8 +651,10 @@ impl SearchAI {
         // Python: ev(me,op) → ev(op,me) → ev(cs1,cs2)（3つ目はメモヒット）
         let (fa, fb) = if my_is_s1 { (0usize, 1usize) } else { (1usize, 0usize) };
         self.ctx.memo.begin();
+        crate::sim::eval_tag_set(true);
         let (pol_a, val_a) = net_eval(pack, net, &mut self.ctx, cs, fa, cfield, grng);
         let (pol_b, val_b) = net_eval(pack, net, &mut self.ctx, cs, fb, cfield, grng);
+        crate::sim::eval_tag_set(false);
         self.ctx.memo.end();
         let nd = &mut self.nodes[node];
         nd.p[0] = pol_a.iter().copied().collect();

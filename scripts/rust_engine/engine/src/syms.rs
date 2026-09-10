@@ -1152,6 +1152,9 @@ sym_struct!(LSyms {
     グラスメイカー => "グラスメイカー",
     サイコメイカー => "サイコメイカー",
     ヘドロえき => "ヘドロえき",
+    くらいつく => "くらいつく",
+    たこがため => "たこがため",
+    きりさく => "きりさく",
 });
 
 sym_struct!(AiSyms {
@@ -1237,6 +1240,7 @@ pub const SOUND_MOVES: &[&str] = &[
     "ハイパーボイス",
     "バークアウト",
     "フレアソング",
+    "オーバードライブ",
 ];
 pub const PUNCH_MOVES: &[&str] = &[
     "ぶちかまし",
@@ -1332,6 +1336,7 @@ pub const SLICING_MOVES: &[&str] = &[
     "フェイタルクロー",
     "ブレイククロー",
     "リーフブレード",
+    "きりさく",
 ];
 pub const BYPASS_DAMAGE_CALC: &[&str] = &[
     "いかりのまえば",
@@ -1376,6 +1381,7 @@ pub const STRONG_JAW_MOVES: &[&str] = &[
     "どくどくのキバ",
     "ほのおのキバ",
     "サイコファング",
+    "くらいつく",
 ];
 pub const MEGA_LAUNCHER_MOVES: &[&str] = &[
     "あくのはどう",

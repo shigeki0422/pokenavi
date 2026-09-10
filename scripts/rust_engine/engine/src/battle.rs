@@ -146,6 +146,7 @@ impl Side {
             prev.info_done = false;
             prev.recharge = false;
             prev.defenseless = false;
+            prev.octolocked = false;
             prev.crit_stage = 0;
             prev.perish_count = 0;
             prev.destiny_bond = false;
@@ -661,7 +662,7 @@ fn is_high_crit(pack: &Pack, n: u16) -> bool {
         || n == l.ストーンエッジ || n == l.ブレイズキック || n == l.クラブハンマー
         || n == l.クロスチョップ || n == l.つじぎり || n == l.ドリルライナー
         || n == l.アクアカッター || n == l.エアカッター || n == l.ゴッドバード
-        || n == l.ねらいうち
+        || n == l.ねらいうち || n == l.きりさく
 }
 
 pub fn crit_chance(pack: &Pack, attacker: &Poke, mv: &DMove, defender: Option<&Poke>) -> f64 {
@@ -1841,6 +1842,11 @@ pub fn execute_move(
     if (n == l.ボルトチェンジ || n == l.とんぼがえり || n == l.クイックターン) && A!().is_alive {
         A!().pivot_out = true;
     }
+    if n == l.くらいつく && total_dmg > 0 && D!().is_alive {
+        D!().trapped = true;
+        A!().trapped = true;
+    }
+
     if n == l.きょけんとつげき && A!().is_alive {
         A!().defenseless = true;
     }
@@ -2840,6 +2846,12 @@ pub fn apply_status_move(
             sides[aidx].wish_hp = A!().max_hp / 2;
             sides[aidx].wish_count = 2;
         }
+        return;
+    }
+
+    if n == l.たこがため {
+        D!().trapped = true;
+        D!().octolocked = true;
         return;
     }
 
@@ -4234,6 +4246,14 @@ impl Battle {
                     if o.is_alive {
                         o.hp = std::cmp::min(o.max_hp, o.hp + drain);
                     }
+                }
+            }
+            // たこがため（ターン終わりにB/D-1）
+            {
+                let p = self.sides[sx].active_mut();
+                if p.octolocked && p.is_alive {
+                    p.stage_defense = std::cmp::max(-6, p.stage_defense - 1);
+                    p.stage_sp_defense = std::cmp::max(-6, p.stage_sp_defense - 1);
                 }
             }
             // しおづけ

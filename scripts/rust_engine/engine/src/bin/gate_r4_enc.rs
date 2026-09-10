@@ -41,6 +41,7 @@ fn ai_of(c: u8) -> Ai {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let mut pack = engine::pack::Pack::load(&args[1]);
+    let mut stamp = engine::casehdr::StampCheck::new(&pack.sim_hash);
     let net = pack.net.clone().expect("datapack に net が無い");
     let mut ctx = NetCtx::new(&pack);
     let bench = std::env::var("R4_BENCH").is_ok();
@@ -60,6 +61,7 @@ fn main() {
             let line = line.unwrap();
             let v: Value = serde_json::from_str(&line).expect("json");
             if ln == 0 {
+                stamp.see(&v, path);
                 parties = v["parties"]
                     .as_array()
                     .unwrap()
@@ -222,6 +224,7 @@ fn main() {
         div_p,
         div_state
     );
+    stamp.report(div_x + div_v + div_p + div_state);
     println!(
         "rust: {:.2}s total / {:.4} ms per state (encode+forward込み)",
         secs,

@@ -6,6 +6,7 @@ pub mod ai;
 pub mod analysis;
 pub mod battle;
 pub mod belief;
+pub mod casehdr;
 pub mod cpyrng;
 pub mod damage;
 pub mod features;

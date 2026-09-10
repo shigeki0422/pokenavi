@@ -160,6 +160,8 @@ pub struct Poke {
     pub bound_by_band: bool,
     /// きょけんとつげき使用後の無防備状態（次に自分が行動するまで被ダメ2倍・必中）
     pub defenseless: bool,
+    /// たこがため状態（ターン終わりに防御・特防が1段階下がる）
+    pub octolocked: bool,
     pub throat_chop_count: i64,
     pub stockpile_count: i64,
     pub infatuation: bool,

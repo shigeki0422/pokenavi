@@ -26,7 +26,7 @@ from simulator.pokemon import build_from_spec, parse_pokemon_spec
 _NEXT_BELOW_ONE = math.nextafter(1.0, 0.0)
 
 SEASON = "M-3"
-CAP = int(os.environ.get("MU_ENGINE_CAP", "12"))   # これ以上かかる技は「圏外」扱い（表示上5以上は同じ）
+CAP = int(os.environ.get("MU_ENGINE_CAP", "5"))   # これ以上かかる技は「圏外」扱い（5ターンで決着しない対面は実戦では交代が挟まる）
 
 
 def _build(spec, L):

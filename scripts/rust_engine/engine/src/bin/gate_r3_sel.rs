@@ -10,6 +10,7 @@ use std::io::{BufRead, BufReader};
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let mut pack = engine::pack::Pack::load(&args[1]);
+    let mut stamp = engine::casehdr::StampCheck::new(&pack.sim_hash);
     let mut cases = 0i64;
     let mut bad_idx = 0i64;
     let mut bad_state = 0i64;
@@ -23,6 +24,7 @@ fn main() {
             let line = line.unwrap();
             let v: Value = serde_json::from_str(&line).unwrap();
             if ln == 0 {
+                stamp.see(&v, path);
                 parties = v["parties"]
                     .as_array()
                     .unwrap()
@@ -84,6 +86,7 @@ fn main() {
         bad_idx,
         bad_state
     );
+    stamp.report(bad_idx + bad_state);
     if let Some(f) = first {
         println!("最初の乖離: {}", f);
         std::process::exit(1);

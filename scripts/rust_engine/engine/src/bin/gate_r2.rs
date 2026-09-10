@@ -228,6 +228,7 @@ fn main() {
     let only: Option<i64> = std::env::var("R2_ONLY").ok().and_then(|x| x.parse().ok());
     let bench = std::env::var("R2_BENCH").is_ok();
     let mut pack = Pack::load(&args[1]);
+    let mut stamp = engine::casehdr::StampCheck::new(&pack.sim_hash);
 
     let mut battles = 0i64;
     let mut turns = 0i64;
@@ -248,6 +249,7 @@ fn main() {
         for (ln, line) in f.lines().enumerate() {
             let line = line.unwrap();
             if ln == 0 {
+                stamp.see(&serde_json::from_str::<Value>(&line).expect("header json"), path);
                 continue;
             }
             let v: Value = serde_json::from_str(&line).expect("trace json");
@@ -445,6 +447,7 @@ fn main() {
     let secs = t0.elapsed().as_secs_f64();
     println!("─────────────────────────────────────────");
     println!("R2 GATE: battles={} turns={} divergences={}", battles, turns, divergences);
+    stamp.report(divergences as i64);
     println!(
         "rust replay(JSON込): {:.2}s ({:.0} turns/s)",
         secs,
