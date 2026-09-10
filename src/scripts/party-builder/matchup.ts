@@ -100,11 +100,44 @@ function _poolEntries(attacker: ResolvedBuild, defender: ResolvedBuild) {
   }));
 }
 
+/**
+ * 対面の評価結果の使い回し。キーはエンジンに渡す spec そのものなので、
+ * 「いつ捨てるか」の判断が要らない(spec が違えば別のキーになる)。
+ * EV を1振り動かして変わるのは触った1匹の spec だけなので、6匹×31列のうち
+ * 再計算されるのはその1匹の31列だけになる。
+ */
+const PAIR_CACHE_MAX = 4000;
+const _pairCache = new Map<string, Pair>();
+
+/** キャッシュの当たり外れ。効いているかを画面から確認できるようにしておく
+ * (キャッシュは間違っていても速いので、動作確認の手掛かりが要る)。 */
+export const pairCacheStats = {
+  hit: 0, miss: 0,
+  size: () => _pairCache.size,
+  keys: (): string[] => [..._pairCache.keys()],
+  /** 計測用。空にして計算し直させる。 */
+  clear(): void {
+    _pairCache.clear();
+    pairCacheStats.hit = 0;
+    pairCacheStats.miss = 0;
+  },
+};
+
 function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
   const entA = _poolEntries(me, opp);
   const entB = _poolEntries(opp, me);
   const specA = buildToSpec({ ...me, moves: entA.filter((e) => !e.pruned).map((e) => e.m) });
   const specB = buildToSpec({ ...opp, moves: entB.filter((e) => !e.pruned).map((e) => e.m) });
+  const key = `${specA}\u0001${specB}`;
+  const hit = _pairCache.get(key);
+  if (hit) {
+    // 参照し直したものを末尾に送る(溢れたときに古いものから落とすため)
+    _pairCache.delete(key);
+    _pairCache.set(key, hit);
+    pairCacheStats.hit++;
+    return hit;
+  }
+  pairCacheStats.miss++;
   const r = analyze(specA, specB);
   // エンジンが返す並びは「落としたあと」の並び。idx は koProb がこの spec を再利用するため
   // 落としたあとの位置でなければならない。表示は元の並びに戻す。
@@ -117,7 +150,12 @@ function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
     }
     return { hp: x.hp, speed: x.speed, moves, seqHits: x.seqHits, seq: x.seq };
   };
-  return { a: side(r.a, entA), b: side(r.b, entB), specA, specB };
+  const pair: Pair = { a: side(r.a, entA), b: side(r.b, entB), specA, specB };
+  _pairCache.set(key, pair);
+  if (_pairCache.size > PAIR_CACHE_MAX) {
+    _pairCache.delete(_pairCache.keys().next().value as string);
+  }
+  return pair;
 }
 
 /**
@@ -146,6 +184,17 @@ function _seqNames(e: Evaluated, best: (EngineMove & { idx: number }) | null): s
   return seq;
 }
 
+/** 決着ターンに実際に撃つ技の優先度。手順が採用された場合は手順の最後の技。
+ * 素早さで負けていても、ふいうち・かげうちのような先制技で倒しきる線があれば
+ * 決着ターンには先に動ける(実測: メガグソクムシャがガブリアスをであいがしら→
+ * ふいうちで倒す対面が「後手だから負け」と出ていた)。 */
+function _koPrio(b: ResolvedBuild, seq: string[], bestName: string | null): number {
+  const name = seq.length ? seq[seq.length - 1] : bestName;
+  if (!name) return 0;
+  const src = (b.pool && b.pool.length ? b.pool : b.moves) ?? [];
+  return src.find((m) => m.n === name)?.prio ?? 0;
+}
+
 export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
   const { a, b } = _pair(me, opp);
   const myBest = _best(a);
@@ -157,14 +206,24 @@ export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
   const myHits = Math.min(myBest?.hitsLo ?? OUT_OF_RANGE, a.seqHits ?? OUT_OF_RANGE);
   const oppHits = Math.min(oppBest?.hitsLo ?? OUT_OF_RANGE, b.seqHits ?? OUT_OF_RANGE);
   const fast = a.speed > b.speed;
-  const score = _scoreOf(myHits, oppHits, a.speed, b.speed, fast);
+  // 決着ターンの先後。優先度が違えばそちらが先で、同じなら素早さで決まる。
+  const mySeq = _seqNames(a, myBest);
+  const oppSeq = _seqNames(b, oppBest);
+  const myP = _koPrio(me, mySeq, myBest?.n ?? null);
+  const oppP = _koPrio(opp, oppSeq, oppBest?.n ?? null);
+  // 先後が効くのは確定数が同じときだけ。差が付いている対面で「先制技で先手」と
+  // 出すと、決着に関係ない情報が勝敗理由のように見える。
+  const koFirst = myHits === oppHits && myP !== oppP ? myP > oppP : fast;
+  const score = _scoreOf(myHits, oppHits, a.speed, b.speed, koFirst);
 
   return {
     sym: _scoreSym(score),
-    win: myHits < oppHits || (myHits === oppHits && fast),
+    win: myHits < oppHits || (myHits === oppHits && koFirst),
+    koFirst,
+    koByPriority: koFirst !== fast,
     // 途中で技を切り替える手順のときだけ出す（同じ技が並ぶだけなら情報にならない）。
     // 手数が単発と同じでも、初手限定技や先制技で決める線は実戦の手順として意味がある。
-    mySeq: _seqNames(a, myBest),
+    mySeq,
     fast,
     myS: a.speed,
     oppS: b.speed,

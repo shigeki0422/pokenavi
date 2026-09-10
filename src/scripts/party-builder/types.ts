@@ -120,6 +120,8 @@ export interface ResolvedMove {
   type: string;
   cat: "physical" | "special" | "status";
   power: number | null;
+  /** 技の優先度。決着ターンにどちらが先に動くかの判定に使う(ふいうち・かげうち等)。 */
+  prio: number;
 }
 
 export interface ResolvedBuild {
@@ -149,7 +151,13 @@ export interface ResolvedBuild {
 export interface Verdict {
   sym: "◎" | "○" | "△" | "▲" | "×";
   win: boolean;
+  /** 素早さ実数値の比較。素早さ行の表示用。 */
   fast: boolean;
+  /** 決着ターンにどちらが先に動くか。先制技で倒しきる線があれば素早さで負けていても true。
+   * 勝敗・記号はこちらで決める。 */
+  koFirst: boolean;
+  /** 先後が素早さではなく技の優先度で決まった。表示で理由を出すために持つ。 */
+  koByPriority: boolean;
   myS: number;
   oppS: number;
   myHits: number | null;

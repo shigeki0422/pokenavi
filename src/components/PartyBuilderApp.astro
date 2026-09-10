@@ -666,7 +666,7 @@ const I18N = I18N_ALL[lang];
   import { ALL_NATURES, NEUTRAL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, effectiveSpeed, natureDisp } from '../scripts/party-builder/stats';
   import { TYPES } from '../scripts/party-builder/typechart';
   import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx, coverageSet, exposedOnRemoval, holesAfterSwap } from '../scripts/party-builder/balance';
-  import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct, pairHitDetails } from '../scripts/party-builder/matchup';
+  import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct, pairHitDetails, pairCacheStats } from '../scripts/party-builder/matchup';
   import { initEngine } from '../scripts/engine/wasm';
   import { suggestFill, tuneForTargets } from '../scripts/party-builder/suggest';
   import { validateParty } from '../scripts/party-builder/validate';
@@ -2547,7 +2547,16 @@ const I18N = I18N_ALL[lang];
   function balancePaneHtml(resolvedParty, tab) {
     if (tab === 'def') return typeMatrixHtml(resolvedParty, 'def');
     if (tab === 'speed') return speedMatrixHtml(resolvedParty);
-    if (tab === 'mu') return matchupMatrixHtml(resolvedParty);
+    if (tab === 'mu') {
+      // 1v1マトリクスだけ計算量が桁違いなので、所要時間とキャッシュの当たりを残す
+      const t0 = performance.now();
+      const h0 = pairCacheStats.hit, m0 = pairCacheStats.miss;
+      const html = matchupMatrixHtml(resolvedParty);
+      window.__pbPairCache = pairCacheStats;
+      console.info(`[pb-mu] ${Math.round(performance.now() - t0)}ms `
+        + `(キャッシュ ヒット${pairCacheStats.hit - h0} / 計算${pairCacheStats.miss - m0})`);
+      return html;
+    }
     return typeMatrixHtml(resolvedParty, 'atk');
   }
   function typeMatrixHtml(resolvedParty, kind) {
@@ -2605,7 +2614,7 @@ const I18N = I18N_ALL[lang];
       const myTxt = v.myHits == null ? '—' : I18N.selfHitsFmt(v.myHits);
       const oppTxt = v.oppHits == null ? '—' : I18N.oppHitsFmt(v.oppHits);
       const item = build.item ? tItem(build.item) : I18N.noItem;
-      return I18N.muBreakdownLine(vi + 1, item, v.sym, myTxt, oppTxt, v.fast ? I18N.turnFirst : I18N.turnSecond);
+      return I18N.muBreakdownLine(vi + 1, item, v.sym, myTxt, oppTxt, v.koFirst ? I18N.turnFirst : I18N.turnSecond);
     });
   }
   function muBreakdownTitle(agg, builds) {

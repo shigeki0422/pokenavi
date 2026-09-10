@@ -38,17 +38,16 @@ export interface MatchupTableVM {
 interface Labels {
   rowSpeed: string;
   rowJudge: string;
-  seqNote: string;
   fast(f: boolean): string;
   hits(n: number | null): string;
   detail(d: MoveHitDetail | null, prob: string): string;
   conds(c: string): string;
-  judge(win: boolean, mine: string, theirs: string, fast: boolean): string;
+  judge(win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean): string;
 }
 
 const T: Record<Lang, Labels> = {
   ja: {
-    rowSpeed: "素早さ", rowJudge: "判定", seqNote: "（手順）",
+    rowSpeed: "素早さ", rowJudge: "判定",
     fast: (f: boolean) => (f ? "先手" : "後手"),
     hits: (n: number | null) => (n == null || n >= 999 ? "圏外" : `確定${n}`),
     detail: (d: MoveHitDetail | null, prob: string) => {
@@ -57,11 +56,12 @@ const T: Record<Lang, Labels> = {
       return d.reason ? `${base}（${d.reason}込み）` : base;
     },
     conds: (c: string) => `${c} 込みで計算`,
-    judge: (win: boolean, mine: string, theirs: string, fast: boolean) =>
-      `${win ? "勝ち" : "負け"}：${mine}で倒す/${theirs}で倒される・${fast ? "先手" : "後手"}`,
+    judge: (win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean) =>
+      `${win ? "勝ち" : "負け"}：${mine}で倒す/${theirs}で倒される・`
+      + `${byPrio ? "先制技で" : ""}${first ? "先手" : "後手"}`,
   },
   en: {
-    rowSpeed: "Speed", rowJudge: "Verdict", seqNote: " (line)",
+    rowSpeed: "Speed", rowJudge: "Verdict",
     fast: (f: boolean) => (f ? "First" : "Second"),
     hits: (n: number | null) => (n == null || n >= 999 ? "n/a" : `${n}HKO`),
     detail: (d: MoveHitDetail | null, prob: string) => {
@@ -70,11 +70,12 @@ const T: Record<Lang, Labels> = {
       return d.reason ? `${base} (incl. ${d.reason})` : base;
     },
     conds: (c: string) => `calculated with ${c}`,
-    judge: (win: boolean, mine: string, theirs: string, fast: boolean) =>
-      `${win ? "Win" : "Loss"}: ${mine} to KO / ${theirs} to be KOed, ${fast ? "faster" : "slower"}`,
+    judge: (win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean) =>
+      `${win ? "Win" : "Loss"}: ${mine} to KO / ${theirs} to be KOed, `
+      + `${first ? "moves first" : "moves second"}${byPrio ? " (priority)" : ""}`,
   },
   ko: {
-    rowSpeed: "스피드", rowJudge: "판정", seqNote: "（순서）",
+    rowSpeed: "스피드", rowJudge: "판정",
     fast: (f: boolean) => (f ? "선공" : "후공"),
     hits: (n: number | null) => (n == null || n >= 999 ? "권외" : `확정${n}`),
     detail: (d: MoveHitDetail | null, prob: string) => {
@@ -83,8 +84,9 @@ const T: Record<Lang, Labels> = {
       return d.reason ? `${base}(${d.reason} 포함)` : base;
     },
     conds: (c: string) => `${c} 포함 계산`,
-    judge: (win: boolean, mine: string, theirs: string, fast: boolean) =>
-      `${win ? "승" : "패"}: ${mine}로 쓰러뜨림 / ${theirs}로 당함・${fast ? "선공" : "후공"}`,
+    judge: (win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean) =>
+      `${win ? "승" : "패"}: ${mine}로 쓰러뜨림 / ${theirs}로 당함・`
+      + `${byPrio ? "선제기로 " : ""}${first ? "선공" : "후공"}`,
   },
 };
 
@@ -107,8 +109,8 @@ function singleCell(d: MoveHitDetail | null, moveText: string, t: Labels): strin
   const p = pctText(d?.pctLo ?? null, d?.pctHi ?? null);
   const pct = p ? `<span class="mbp-pct">${p}</span>` : "";
   const conds = d?.conds ? `<div class="mbp-conds">${esc(t.conds(d.conds))}</div>` : "";
-  return `<td>${pct}<span class="mbp-hits">${esc(t.detail(d, fmtProb(d?.prob)))}</span>`
-    + `<div class="mbp-move">${esc(moveText)}</div>${conds}</td>`;
+  return `<td>${pct}<div class="mbp-move">${esc(moveText)}</div>`
+    + `<span class="mbp-hits">${esc(t.detail(d, fmtProb(d?.prob)))}</span>${conds}</td>`;
 }
 
 /** 途中で技を切り替える手順のセル。手ごとに%と技名を並べ、確定数は手順全体で1つ。
@@ -121,8 +123,7 @@ function seqCell(steps: SeqStep[], t: Labels): string {
   const cs = [...new Set(steps.map((s) => s.conds).filter(Boolean))] as string[];
   const conds = cs.length ? `<div class="mbp-conds">${esc(t.conds(cs.join("・")))}</div>` : "";
   return `<td class="mbp-seq">${lines}`
-    + `<span class="mbp-hits">${esc(t.hits(steps.length))}<span class="mbp-seq-note">${esc(t.seqNote)}</span></span>`
-    + `${conds}</td>`;
+    + `<span class="mbp-hits">${esc(t.hits(steps.length))}</span>${conds}</td>`;
 }
 
 function dmgCell(d: MoveHitDetail | null, moveText: string, t: Labels, steps?: SeqStep[]): string {
@@ -164,7 +165,8 @@ export function renderMatchupTable(vm: MatchupTableVM, lang: Lang): string {
     `<td class="${c.verdict.win ? "mbp-judge-win" : "mbp-judge-lose"}">`
     + `<b class="mbp-sym">${esc(c.verdict.sym)}</b>`
     + `<div class="mbp-judge-text">${esc(t.judge(c.verdict.win,
-        t.hits(c.verdict.myHits ?? null), t.hits(c.verdict.oppHits ?? null), c.verdict.fast))}</div></td>`).join("");
+        t.hits(c.verdict.myHits ?? null), t.hits(c.verdict.oppHits ?? null),
+        c.verdict.koFirst, c.verdict.koByPriority))}</div></td>`).join("");
 
   return `<div class="mbp-scroll"><table class="mbp-table">${head}`
     + `<tr>${myRow}</tr><tr>${oppRow}</tr><tr>${spdRow}</tr><tr>${judgeRow}</tr></table></div>`;

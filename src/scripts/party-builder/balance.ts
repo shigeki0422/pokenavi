@@ -25,7 +25,7 @@ export function resolveSlot(slot: Slot, species: SpeciesMaster[], moves: MoveDic
     .map((n) => {
       const md = moves[n];
       if (!md) return null;
-      return { n, type: md[0], cat: md[1], power: md[2] };
+      return { n, type: md[0], cat: md[1], power: md[2], prio: md[3] ?? 0 };
     })
     .filter((m): m is NonNullable<typeof m> => m !== null);
 
@@ -53,7 +53,7 @@ export function resolveTarget(sp: string, label: string, icon: string, build: Ta
       .map((n) => {
         const md = moves[n];
         if (!md) return null;
-        return { n, type: md[0], cat: md[1], power: md[2] };
+        return { n, type: md[0], cat: md[1], power: md[2], prio: md[3] ?? 0 };
       })
       .filter((m): m is NonNullable<typeof m> => m !== null);
   const resolvedMoves = resolve(build.moves);

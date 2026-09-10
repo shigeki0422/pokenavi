@@ -316,6 +316,19 @@ def _mega_axis(tpl, item, normalize_mega_stone):
     return None
 
 
+def _mega_axis_pref(tpl, item, normalize_mega_stone):
+    """メガ後の種族値が示す攻撃軸。差が小さくても必ずどちらかを返す。
+
+    実構築(templates)の裏付けが無いメガ石は、周辺分布の掛け合わせで物理型と特殊型が
+    両方できてしまう。メガ後の姿は1つなので、種族値の高い側に寄せる
+    （メガガブリアスZ は A130/C141 と差が11しかないが実態は特殊型で、
+     ようき物理型とおくびょう特殊型が並んでいた）。"""
+    md = _mega_of(tpl, item, normalize_mega_stone)
+    if md is None:
+        return None
+    return "A" if md.attack >= md.sp_attack else "C"
+
+
 def _item_ok(item, ev):
     ax = ITEM_AXIS.get(item)
     if ax and _ev_axis(ev) != ax:
@@ -399,7 +412,7 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
             if obs:
                 usable = obs
         else:
-            mx = _mega_axis(tpl, item, normalize_mega_stone)
+            mx = _mega_axis_pref(tpl, item, normalize_mega_stone)
             if mx:
                 obs = [a for a in usable if a[0] != ("C" if mx == "A" else "A")]
                 if obs:
