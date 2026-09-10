@@ -44,7 +44,7 @@ const I18N_ALL = {
     emptyGuideStep1: '①ポケモンを追加（＋をタップ）', emptyGuideStep2: '②仮想敵を設定', emptyGuideStep3: '③EVを微調整して判定を確認',
     slotSearchTitle: n => `枠${n}にポケモンを追加`, slotSearchClose: '✕ 閉じる',
     slotSearchPlaceholder: '追加するポケモンを検索（ひらがな可）', slotFillBtn: 'この枠を提案で埋める',
-    noHit: '該当なし', rankLbl: n => `使用${n}位`, adoptBtn: 'この案を採用',
+    noHit: '該当なし', rankLbl: n => `使用${n}位`, offRankLbl: '圏外', adoptBtn: 'この案を採用',
     fillCalculating: '提案を計算中…', fillFailedMsg: '提案の取得に失敗しました。時間をおいて再試行してください',
     targetsHeading: '仮想敵', targetsSelectPrompt: '上の6枠から枠を選択してください',
     targetsSetPrompt: '型を設定すると仮想敵との比較ができます',
@@ -122,7 +122,7 @@ const I18N_ALL = {
     emptyGuideStep1: '① Add a Pokémon (tap +)', emptyGuideStep2: '② Set a virtual opponent', emptyGuideStep3: '③ Fine-tune EVs and check the verdict',
     slotSearchTitle: n => `Add a Pokémon to slot ${n}`, slotSearchClose: '✕ Close',
     slotSearchPlaceholder: 'Search for a Pokémon to add', slotFillBtn: 'Fill this slot with a suggestion',
-    noHit: 'No matches', rankLbl: n => `Rank #${n}`, adoptBtn: 'Use this suggestion',
+    noHit: 'No matches', rankLbl: n => `Rank #${n}`, offRankLbl: 'Unranked', adoptBtn: 'Use this suggestion',
     fillCalculating: 'Calculating suggestions…', fillFailedMsg: 'Failed to load suggestions. Please try again later',
     targetsHeading: 'Virtual Opponents', targetsSelectPrompt: 'Select a slot above',
     targetsSetPrompt: 'Set a build to compare against virtual opponents',
@@ -200,7 +200,7 @@ const I18N_ALL = {
     emptyGuideStep1: '① 포켓몬 추가（＋를 탭）', emptyGuideStep2: '② 가상의 적 설정', emptyGuideStep3: '③ EV를 미세 조정하고 판정 확인',
     slotSearchTitle: n => `칸${n}에 포켓몬 추가`, slotSearchClose: '✕ 닫기',
     slotSearchPlaceholder: '추가할 포켓몬 검색', slotFillBtn: '이 칸을 제안으로 채우기',
-    noHit: '검색 결과 없음', rankLbl: n => `사용률 ${n}위`, adoptBtn: '이 안을 채택',
+    noHit: '검색 결과 없음', rankLbl: n => `사용률 ${n}위`, offRankLbl: '순위권 밖', adoptBtn: '이 안을 채택',
     fillCalculating: '제안을 계산 중…', fillFailedMsg: '제안을 가져오지 못했습니다. 잠시 후 다시 시도해 주세요',
     targetsHeading: '가상의 적', targetsSelectPrompt: '위의 6칸에서 칸을 선택해 주세요',
     targetsSetPrompt: '빌드를 설정하면 가상의 적과 비교할 수 있습니다',
@@ -704,7 +704,7 @@ const I18N = I18N_ALL[lang];
       emptyGuideStep1: '①ポケモンを追加（＋をタップ）', emptyGuideStep2: '②仮想敵を設定', emptyGuideStep3: '③EVを微調整して判定を確認',
       slotSearchTitle: n => `枠${n}にポケモンを追加`, slotSearchClose: '✕ 閉じる',
       slotSearchPlaceholder: '追加するポケモンを検索（ひらがな可）', slotFillBtn: 'この枠を提案で埋める',
-      noHit: '該当なし', rankLbl: n => `使用${n}位`, adoptBtn: 'この案を採用',
+      noHit: '該当なし', rankLbl: n => `使用${n}位`, offRankLbl: '圏外', adoptBtn: 'この案を採用',
       fillCalculating: '提案を計算中…', fillFailedMsg: '提案の取得に失敗しました。時間をおいて再試行してください',
       targetsHeading: '仮想敵', targetsSelectPrompt: '上の6枠から枠を選択してください',
       targetsSetPrompt: '型を設定すると仮想敵との比較ができます',
@@ -796,7 +796,7 @@ const I18N = I18N_ALL[lang];
       emptyGuideStep1: '① Add a Pokémon (tap +)', emptyGuideStep2: '② Set a virtual opponent', emptyGuideStep3: '③ Fine-tune EVs and check the verdict',
       slotSearchTitle: n => `Add a Pokémon to slot ${n}`, slotSearchClose: '✕ Close',
       slotSearchPlaceholder: 'Search for a Pokémon to add', slotFillBtn: 'Fill this slot with a suggestion',
-      noHit: 'No matches', rankLbl: n => `Rank #${n}`, adoptBtn: 'Use this suggestion',
+      noHit: 'No matches', rankLbl: n => `Rank #${n}`, offRankLbl: 'Unranked', adoptBtn: 'Use this suggestion',
       fillCalculating: 'Calculating suggestions…', fillFailedMsg: 'Failed to load suggestions. Please try again later',
       targetsHeading: 'Virtual Opponents', targetsSelectPrompt: 'Select a slot above',
       targetsSetPrompt: 'Set a build to compare against virtual opponents',
@@ -888,7 +888,7 @@ const I18N = I18N_ALL[lang];
       emptyGuideStep1: '① 포켓몬 추가（＋를 탭）', emptyGuideStep2: '② 가상의 적 설정', emptyGuideStep3: '③ EV를 미세 조정하고 판정 확인',
       slotSearchTitle: n => `칸${n}에 포켓몬 추가`, slotSearchClose: '✕ 닫기',
       slotSearchPlaceholder: '추가할 포켓몬 검색', slotFillBtn: '이 칸을 제안으로 채우기',
-      noHit: '검색 결과 없음', rankLbl: n => `사용률 ${n}위`, adoptBtn: '이 안을 채택',
+      noHit: '검색 결과 없음', rankLbl: n => `사용률 ${n}위`, offRankLbl: '순위권 밖', adoptBtn: '이 안을 채택',
       fillCalculating: '제안을 계산 중…', fillFailedMsg: '제안을 가져오지 못했습니다. 잠시 후 다시 시도해 주세요',
       targetsHeading: '가상의 적', targetsSelectPrompt: '위의 6칸에서 칸을 선택해 주세요',
       targetsSetPrompt: '빌드를 설정하면 가상의 적과 비교할 수 있습니다',
@@ -1733,7 +1733,7 @@ const I18N = I18N_ALL[lang];
     const qk = toKatakana(q);
     const hits = core.species.filter((s) => matchesQuery(s.n, q, qk)).slice(0, 12);
     if (!hits.length) { sug.innerHTML = `<div class="sug-item added">${esc(I18N.noHit)}</div>`; sug.style.display = 'block'; return; }
-    sug.innerHTML = hits.map((s) => `<div class="sug-item" data-sp="${esc(s.n)}">${icoImg(s.icon, s.n, '')}<span>${hlSug(s.n, q)}</span><span class="rk">${esc(I18N.rankLbl(s.rank))}</span></div>`).join('');
+    sug.innerHTML = hits.map((s) => `<div class="sug-item" data-sp="${esc(s.n)}">${icoImg(s.icon, s.n, '')}<span>${hlSug(s.n, q)}</span><span class="rk">${esc(s.off ? I18N.offRankLbl : I18N.rankLbl(s.rank))}</span></div>`).join('');
     sug.querySelectorAll('[data-sp]').forEach((it) => it.addEventListener('click', () => pickSpecies(it.dataset.sp)));
     sug.style.display = 'block';
   }
@@ -2773,7 +2773,7 @@ const I18N = I18N_ALL[lang];
     const usedDex = new Set(resolvedParty.map((b) => (b.icon || '').split('-')[0]));
     const pool = [...core.species]
       .filter((s) => !usedDex.has((s.icon || '').split('-')[0]))
-      .sort((a, b) => a.rank - b.rank)
+      .sort((a, b) => (a.off ? 1 : 0) - (b.off ? 1 : 0) || a.rank - b.rank)
       .slice(0, 50);
 
     const monDetails = await Promise.all(pool.map((s) => loadMon(s.icon).catch(() => null)));

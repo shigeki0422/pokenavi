@@ -143,6 +143,9 @@ def _evs_of(con, name):
     return [([int(x or 0) for x in r[:6]], r[6] or 0.0) for r in rows]
 
 
+OFF_NAMES = set()
+
+
 def build_species(con, L, usage_rows):
     tpl_of = {}
     species_list = []
@@ -160,7 +163,7 @@ def build_species(con, L, usage_rows):
                 "ability": md.ability,
             })
         species_list.append({
-            "n": name, "rank": rank, "icon": pid,
+            "n": name, "rank": rank, "icon": pid, **({"off": 1} if name in OFF_NAMES else {}),
             "t1": tpl.type1, "t2": tpl.type2,
             "bs": [tpl.base_hp, tpl.base_attack, tpl.base_defense,
                    tpl.base_sp_attack, tpl.base_sp_defense, tpl.base_speed],
@@ -581,14 +584,23 @@ def main():
         "WHERE season=? AND rule=? GROUP BY pokemon", (SEASON, RULE)).fetchall()
         if n not in seen]
     usage_rows += [r for r in carry if r[2]]
+    # 圏外種: 過去シーズンで使用率に出た種は、今の200位圏外でも選べるようにする。
+    # (ポケモン情報ページの1v1相性表もこのデータから作るため、圏外種のページだけ表が出なくなる)
+    # 型データは _robust_rows のシーズン遡りで過去シーズンのものが使われる。
+    seen2 = {n for n, _, _ in usage_rows}
+    off = [(n, rk, pid or icon_fix.get(n) or dex_fix.get(n)) for n, rk, pid, _d in con.execute(
+        "SELECT pokemon, rank, pokemon_id, MAX(crawled_date) FROM pokemon_usage "
+        "WHERE rule=? GROUP BY pokemon", (RULE,)).fetchall() if n not in seen2 and n in dex_fix]
+    off_names = {n for n, _, pid in off if pid}
     usage_rows.sort(key=lambda r: (r[1], r[0]))
+    usage_rows += sorted((r for r in off if r[2]), key=lambda r: (r[1], r[0]))
 
     from simulator.simulate import get_loader
     from simulator.data import normalize_mega_stone
     L = get_loader()
 
+    OFF_NAMES.update(off_names)
     species_list, tpl_of = build_species(con, L, usage_rows)
-    write_json(os.path.join(OUT_DIR, "species.json"), species_list)
 
     moves_out = build_moves(con)
     write_json(os.path.join(OUT_DIR, "moves.json"), moves_out)
@@ -599,6 +611,16 @@ def main():
     variants_of = {}
     for name, rank, pid in usage_rows:
         variants_of[name] = build_variants(con, name, tpl_of, normalize_mega_stone)
+    # 型を1つも作れない圏外種は持ち物・技の候補も空で編集できないため候補から除く
+    drop = {n for n in off_names if not variants_of.get(n)}
+    if drop:
+        print("圏外種のうち型データが無く除外:", ", ".join(sorted(drop)))
+        usage_rows = [r for r in usage_rows if r[0] not in drop]
+        OFF_NAMES.difference_update(drop)
+        species_list = [x for x in species_list if x["n"] not in drop]
+        for n in drop:
+            variants_of.pop(n, None)
+    write_json(os.path.join(OUT_DIR, "species.json"), species_list)
 
     targets_out = build_targets(con, usage_rows, tpl_of, variants_of)
     write_json(os.path.join(OUT_DIR, "targets.json"), targets_out)
