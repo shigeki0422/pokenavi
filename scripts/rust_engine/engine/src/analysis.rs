@@ -162,6 +162,65 @@ fn drive_rng(bt: &mut Battle, pack: &Pack, att: usize, move_idx: usize, max_turn
     turns
 }
 
+/// 毎ターン、その時点の局面で一番良い技を選び直して倒すまでの手数と、選んだ技の並び。
+///
+/// 「同じ技を撃ち続ける」前提だと実戦と食い違う対面がある。
+///   - であいがしら等の初手限定技は2ターン目以降失敗するので、単独では圏外になる
+///     （実際は であいがしら→ふいうち のように繋ぐ）
+///   - ふうせんは1発当てると割れるので、割ってから地面技が通る
+/// 選択は「今のターンに倒せる技があればそれ（同点なら優先度の高い方）、無ければ
+/// 一番削れる技」。倒しきれるなら先制技で先に倒す方が正しいため、優先度を火力より優先する。
+/// 各手の評価は局面を複製して1ターン実際に動かして測る（技の失敗条件・道具の消費・
+/// 能力変化まで対戦本体の規則がそのまま効く）。
+pub fn run_best_sequence(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, roll: f64,
+) -> (i64, Vec<usize>) {
+    let def = 1 - att;
+    let mut bt = setup(pack, spec_a, spec_b, season, roll);
+    let packr: &Pack = pack;
+    let n_moves = bt.sides[att].active().moves.len();
+    let mut seq: Vec<usize> = Vec::new();
+    for _ in 0..CAP {
+        if !bt.sides[def].active().is_alive {
+            break;
+        }
+        let hp_before = bt.sides[def].active().hp;
+        let mut best: Option<(usize, i64, i64, bool)> = None; // (技, 削り, 優先度, 倒せた)
+        for i in 0..n_moves {
+            let Some(mv) = bt.sides[att].active().moves.get(i).cloned() else { continue };
+            if mv.category == crate::pack::Cat::Status || mv.power.unwrap_or(0) <= 0
+                || is_excluded_from_matchup(packr, &mv) {
+                continue;
+            }
+            let mut probe = bt.clone();
+            let step = probe.turn + 1;   // run_loop_lim の上限は累積ターン数
+            drive(&mut probe, packr, att, i, step);
+            let dealt = hp_before - probe.sides[def].active().hp;
+            let ko = !probe.sides[def].active().is_alive;
+            let prio = mv.priority;
+            let better = match &best {
+                None => dealt > 0 || ko,
+                Some((_, bd, bp, bko)) => {
+                    if ko != *bko { ko }              // 倒せる手を最優先
+                    else if ko { prio > *bp || (prio == *bp && dealt > *bd) }  // 倒せるなら先制優先
+                    else { dealt > *bd }              // 倒せないなら一番削れる手
+                }
+            };
+            if better {
+                best = Some((i, dealt, prio, ko));
+            }
+        }
+        let Some((mi, _, _, _)) = best else { break };
+        seq.push(mi);
+        let step = bt.turn + 1;
+        drive(&mut bt, packr, att, mi, step);
+        if !bt.sides[def].active().is_alive {
+            return (seq.len() as i64, seq);
+        }
+    }
+    (OUT_OF_RANGE, seq)
+}
+
 /// `spec_a` が `move_idx` の技を撃ち続けて `spec_b` を倒すまでの発数と、初撃の与ダメージ。
 /// 倒しきれなければ発数は `OUT_OF_RANGE`。
 pub fn run_move(

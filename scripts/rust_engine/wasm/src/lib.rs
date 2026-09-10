@@ -133,7 +133,14 @@ pub fn analyze_impl(a: &str, b: &str, season: &str) -> i32 {
                 "firstLo": first_lo,
             }));
         }
-        out[key] = json!({"hp": me.hp, "speed": me.speed, "moves": moves});
+        // 手順考慮: 毎ターン最善手を選び直した場合の手数と並び（初手限定技・ふうせん等で
+        // 「同じ技を撃ち続ける」前提と食い違う対面のために出す）。
+        let (seq_hits, seq_idx) = analysis::run_best_sequence(pack, a, b, season, att, 0.0);
+        let seq_names: Vec<String> = seq_idx.iter()
+            .filter_map(|i| me.moves.get(*i).map(|(n, _)| n.clone()))
+            .collect();
+        out[key] = json!({"hp": me.hp, "speed": me.speed, "moves": moves,
+                          "seqHits": seq_hits, "seq": seq_names});
     }
     set_result(&out);
     0

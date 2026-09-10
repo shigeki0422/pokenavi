@@ -36,6 +36,9 @@ const OUT_OF_RANGE = 999;
 type Evaluated = {
   hp: number; speed: number;
   moves: (EngineMove & { idx: number })[];
+  /** 毎ターン最善手を選び直した場合の手数と技の並び。 */
+  seqHits: number;
+  seq: string[];
 };
 
 /** 対面の評価結果。場は対面ごとに1つなので、両方向をまとめて1回で求める。 */
@@ -112,7 +115,7 @@ function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
       if (e.pruned) moves.push({ n: e.m.n, dmg: null, idx: -1 } as EngineMove & { idx: number });
       else { moves.push({ ...x.moves[k], idx: k }); k++; }
     }
-    return { hp: x.hp, speed: x.speed, moves };
+    return { hp: x.hp, speed: x.speed, moves, seqHits: x.seqHits, seq: x.seq };
   };
   return { a: side(r.a, entA), b: side(r.b, entB), specA, specB };
 }
@@ -139,14 +142,20 @@ export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
   const myBest = _best(a);
   const oppBest = _best(b);
 
-  const myHits = myBest?.hitsLo ?? OUT_OF_RANGE;
-  const oppHits = oppBest?.hitsLo ?? OUT_OF_RANGE;
+  // 手順考慮の手数が単発の確定数より短ければそちらを採る。
+  // 初手限定技(であいがしら)やふうせんのように「同じ技を撃ち続ける」前提が
+  // 実戦と食い違う対面で、単独では圏外の技も繋げば通ることを反映する。
+  const myHits = Math.min(myBest?.hitsLo ?? OUT_OF_RANGE, a.seqHits ?? OUT_OF_RANGE);
+  const oppHits = Math.min(oppBest?.hitsLo ?? OUT_OF_RANGE, b.seqHits ?? OUT_OF_RANGE);
   const fast = a.speed > b.speed;
   const score = _scoreOf(myHits, oppHits, a.speed, b.speed, fast);
 
   return {
     sym: _scoreSym(score),
     win: myHits < oppHits || (myHits === oppHits && fast),
+    // 途中で技を切り替える手順のときだけ出す（同じ技が並ぶだけなら情報にならない）。
+    // 手数が単発と同じでも、初手限定技や先制技で決める線は実戦の手順として意味がある。
+    mySeq: new Set(a.seq ?? []).size > 1 ? (a.seq ?? []) : [],
     fast,
     myS: a.speed,
     oppS: b.speed,

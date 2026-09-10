@@ -123,6 +123,9 @@ export interface EngineSide {
   hp: number;
   speed: number;
   moves: EngineMove[];
+  /** 毎ターン最善手を選び直した場合の手数(999=CAP内で倒せない)と、その技の並び。 */
+  seqHits: number;
+  seq: string[];
 }
 
 /** 1v1 の両側について HP・実効素早さ・各技の与ダメと確定数を得る。 */

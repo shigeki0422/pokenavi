@@ -156,6 +156,8 @@ export interface Verdict {
   oppHits: number | null;
   myMove: string | null;
   oppMove: string | null;
+  /** 毎ターン最善手を選び直した場合の技の並び。同じ技の連打で最短なら空。 */
+  mySeq: string[];
   stub: boolean;
 }
 

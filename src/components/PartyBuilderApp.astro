@@ -589,6 +589,7 @@ const I18N = I18N_ALL[lang];
   .pb-hf-card img.mtx-ico{width:32px;height:32px}
   .pb-hf-info{flex:1 1 120px;min-width:0}
   .pb-hf-name{font-weight:700;font-size:.85rem}
+  .pb-mu-seq{font-size:.72rem;font-weight:700;color:var(--accent);background:#eef2ff;border-radius:6px;padding:.2em .5em;margin-top:.25em}
   .pb-hf-covers{font-size:.72rem;color:rgb(var(--gray))}
   .pb-hf-filter{display:flex;align-items:center;gap:.45em;font-size:.78rem;font-weight:700;color:rgb(var(--gray-dark));margin:0 0 .7em;cursor:pointer}
   .pb-hf-filter input{width:16px;height:16px}
@@ -715,6 +716,7 @@ const I18N = I18N_ALL[lang];
       speedFaster: '抜ける', speedSlower: '抜かれる', speedEq: '同速',
       buildLabel: n => `型${n}`, hpLbl: n => `HP実数値 ${n}`,
       takenDmgLbl: (name, range) => `被ダメ: ${name} ${range}`,
+      seqLbl: (seq, n) => `最短手順: ${seq}（${n}発）`,
       noEffectiveMove: '有効打なし(変化技・無効のみ)', noMovesSet: '技が未設定です',
       hitsSelfOpp: (my, opp) => `自分${my}/相手${opp}`, hitsFmt: n => `確${n}`,
       randHitsFmt: (n, p) => `乱数${n}発(${p}%)`, muBadgeTitle: 'この仮想敵に対する最悪の型判定',
@@ -839,6 +841,7 @@ const I18N = I18N_ALL[lang];
       noItem: 'no item', turnFirst: 'moves first', turnSecond: 'moves second',
       muNoteHits: (c) => `incl. ${c}`,
       muNoteConds: (c) => `under ${c}`,
+      seqLbl: (seq, n) => `Fastest line: ${seq} (${n} hits)`,
       muDmgSelfLbl: 'Damage dealt (you→opp)', muDmgOppLbl: 'Damage taken (opp→you)', muSpeedRowLbl: 'Speed', muJudgeRowLbl: 'Verdict',
       muDetailKoOOR: 'Out of range', muDetailKoRoll: n => `${n}HKO (roll-dependent)`,
       muDetailSpdTxt: (turn, my, opp) => `${turn} (You S${my} / Opp S${opp})`,
@@ -2260,6 +2263,11 @@ const I18N = I18N_ALL[lang];
               </button>`;
           }).join('')
         : `<span class="muted">${r.mb.length ? esc(I18N.noEffectiveMove) : esc(I18N.noMovesSet)}</span>`;
+      // 同じ技の連打では最短にならない対面(であいがしら等の初手限定技・ふうせん割り)で、
+      // 毎ターン選び直した場合の手順を出す。
+      const seqHtml = (r.verdict.mySeq || []).length
+        ? `<div class="pb-mu-row pb-mu-seq">${esc(I18N.seqLbl((r.verdict.mySeq || []).map(tMove).join(' → '), r.verdict.myHits))}</div>`
+        : '';
       const oppDmgHtml = r.oppDmg
         ? `<div class="pb-mu-row pb-mu-hit">${esc(I18N.takenDmgLbl(tMove(r.oppDmg.name), dmgRangeTxt(r.oppDmg.dLo, r.oppDmg.dHi, r.oppDmg.pLo, r.oppDmg.pHi)))}</div>`
         : '';
@@ -2274,7 +2282,7 @@ const I18N = I18N_ALL[lang];
           <div class="pb-mu-row" title="${esc(I18N.speedTipTitle)}">S ${r.mySpeed} vs ${r.oppSpeed} ${r.speedTag}</div>
           <div class="pb-mu-row"><b style="font-size:1.05em">${r.verdict.sym}</b> ${esc(I18N.hitsSelfOpp(r.myHitsTxt, r.oppHitsTxt))}${r.verdict.stub ? '<span class="pb-beta-badge">β</span>' : ''}</div>
           <div class="pb-mb-row">${mbChips}</div>
-          ${oppDmgHtml}
+          ${seqHtml}${oppDmgHtml}
         </div>`;
     }).join('') + (editingThis && muEdit.bi === 'new' ? muEditorHtml(activeGrp, muEdit.draft, muEdit.detail, muEdit.loading) : '');
 
