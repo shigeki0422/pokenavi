@@ -8,6 +8,7 @@
 // 判定本体は engine/wasm.ts 経由でエンジンを実走させる。
 import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./types";
 import { analyze, buildToSpec, koProb, type EngineMove } from "../engine/wasm";
+import { eff } from "./typechart";
 
 /**
  * 旧式: score>=1.5→◎ … の閾値が0.5刻みだったため、素早さの±0.5補正だけで
@@ -67,15 +68,53 @@ function _conds(m: EngineMove): string | null {
  * 技は採用率TOP10プールをそのまま渡す。spec の技欄は4本に切り詰められない
  * （simulator/pokemon.py の override_moves と同じ）ので1回で全技を評価できる。
  */
+/** 技のタイプを書き換える/無効を貫く特性。持っていると型だけでは無効を判定できない。 */
+const TYPE_BENDING_ABILITIES = new Set([
+  "スカイスキン", "フェアリースキン", "フリーズスキン", "エレキスキン", "ノーマルスキン", "きもったま",
+]);
+
+/** 使う状況でタイプが変わる技。マスタ上のタイプでは無効を判定できない。 */
+const TYPE_VARIABLE_MOVES = new Set([
+  "ウェザーボール", "めざめるダンス", "さばきのつぶて", "テクノバスター", "マルチアタック", "オーラぐるま",
+]);
+
+/**
+ * タイプ相性で0倍になる攻撃技をエンジンに渡す前に落とす。
+ *
+ * 倒せない技ほど打ち切りまで実走する（無効技は毎回上限ターンぶん回る）ので、
+ * 明らかに0と分かる技を送らないだけで実走回数が目に見えて減る。
+ * 落とした技は「—」として表示に戻すため、見た目は変わらない。
+ * 特性由来の無効（ふゆう・ちくでん等）は型では判定できないのでそのまま送る。
+ */
+function _poolEntries(attacker: ResolvedBuild, defender: ResolvedBuild) {
+  const src = (attacker.pool && attacker.pool.length ? attacker.pool : attacker.moves) ?? [];
+  const bend = TYPE_BENDING_ABILITIES.has(attacker.ability);
+  return src.map((m) => ({
+    m,
+    pruned: !bend && !TYPE_VARIABLE_MOVES.has(m.n)
+      && m.cat !== "status" && typeof m.power === "number" && (m.power as number) > 0
+      && eff(m.type, defender.t1, defender.t2) === 0,
+  }));
+}
+
 function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
-  const pool = (b: ResolvedBuild) => (b.pool && b.pool.length ? b.pool : b.moves) ?? [];
-  const specA = buildToSpec({ ...me, moves: pool(me) });
-  const specB = buildToSpec({ ...opp, moves: pool(opp) });
+  const entA = _poolEntries(me, opp);
+  const entB = _poolEntries(opp, me);
+  const specA = buildToSpec({ ...me, moves: entA.filter((e) => !e.pruned).map((e) => e.m) });
+  const specB = buildToSpec({ ...opp, moves: entB.filter((e) => !e.pruned).map((e) => e.m) });
   const r = analyze(specA, specB);
-  const side = (x: typeof r.a): Evaluated => ({
-    hp: x.hp, speed: x.speed, moves: x.moves.map((m, j) => ({ ...m, idx: j })),
-  });
-  return { a: side(r.a), b: side(r.b), specA, specB };
+  // エンジンが返す並びは「落としたあと」の並び。idx は koProb がこの spec を再利用するため
+  // 落としたあとの位置でなければならない。表示は元の並びに戻す。
+  const side = (x: typeof r.a, ent: ReturnType<typeof _poolEntries>): Evaluated => {
+    const moves: (EngineMove & { idx: number })[] = [];
+    let k = 0;
+    for (const e of ent) {
+      if (e.pruned) moves.push({ n: e.m.n, dmg: null, idx: -1 } as EngineMove & { idx: number });
+      else { moves.push({ ...x.moves[k], idx: k }); k++; }
+    }
+    return { hp: x.hp, speed: x.speed, moves };
+  };
+  return { a: side(r.a, entA), b: side(r.b, entB), specA, specB };
 }
 
 /**
