@@ -214,13 +214,16 @@ export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
   // 先後が効くのは確定数が同じときだけ。差が付いている対面で「先制技で先手」と
   // 出すと、決着に関係ない情報が勝敗理由のように見える。
   const koFirst = myHits === oppHits && myP !== oppP ? myP > oppP : fast;
-  const score = _scoreOf(myHits, oppHits, a.speed, b.speed, koFirst);
+  // 先後がランダムになるのは、素早さも決着ターンの優先度も同値のときだけ。
+  const even = a.speed === b.speed && myP === oppP;
+  const score = _scoreOf(myHits, oppHits, koFirst, even);
 
   return {
     sym: _scoreSym(score),
     win: myHits < oppHits || (myHits === oppHits && koFirst),
     koFirst,
     koByPriority: koFirst !== fast,
+    even,
     // 途中で技を切り替える手順のときだけ出す（同じ技が並ぶだけなら情報にならない）。
     // 手数が単発と同じでも、初手限定技や先制技で決める線は実戦の手順として意味がある。
     mySeq,
@@ -242,16 +245,23 @@ export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
  * あった)。確定数が同数の場合のみ素早さが先後を決めるため、素早さが同値
  * なら真の五分(0)、そうでなければ先手側の勝ち(±1)とする。
  */
-function _scoreOf(myHits: number, oppHits: number, myS: number, oppS: number, fast: boolean): number {
+function _scoreOf(myHits: number, oppHits: number, first: boolean, even: boolean): number {
   const diff = oppHits - myHits;
-  if (diff !== 0) return diff;
-  if (myS === oppS) return 0;
-  return fast ? 1 : -1;
+  // 確定数が同じで先後もランダム(素早さ同値・優先度も同じ)なら真の五分。
+  // ここを抜かすと「互いに確定1・素早さ同値」の五分が下の確定1ルールで×になる。
+  if (diff === 0 && even) return 0;
+  const base = diff !== 0 ? diff : (first ? 1 : -1);
+  const win = diff > 0 || (diff === 0 && first);
+  // 確定1で決着する側は、確定数の差が1しかなくても一方的（負ける側は1体を確実に失う）。
+  // 差だけで見ると「確定1で倒される/確定2で倒す」が接戦の▲になっていた。
+  if (win && myHits <= 1) return Math.max(base, 2);
+  if (!win && oppHits <= 1) return Math.min(base, -2);
+  return base;
 }
 
 /** Verdict(judge1v1の返却値)からスコアを再算出する(judgeVsBuildsの集約専用)。 */
 function _scoreOfVerdict(v: Verdict): number {
-  return _scoreOf(v.myHits ?? OUT_OF_RANGE, v.oppHits ?? OUT_OF_RANGE, v.myS, v.oppS, v.fast);
+  return _scoreOf(v.myHits ?? OUT_OF_RANGE, v.oppHits ?? OUT_OF_RANGE, v.koFirst, v.even);
 }
 
 /**

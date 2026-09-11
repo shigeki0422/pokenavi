@@ -158,6 +158,8 @@ export interface Verdict {
   koFirst: boolean;
   /** 先後が素早さではなく技の優先度で決まった。表示で理由を出すために持つ。 */
   koByPriority: boolean;
+  /** 素早さも決着ターンの優先度も同値で、先後がランダムになる。確定数も同じなら真の五分。 */
+  even: boolean;
   myS: number;
   oppS: number;
   myHits: number | null;
