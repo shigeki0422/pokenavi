@@ -8910,6 +8910,63 @@ _psn = make_poke(type1="みず", spatk_b=100); _dsn = make_poke(type1="ノーマ
 _hpsn = _dsn.hp; execute(_psn, _dsn, "ねらいうち")
 check("引き受け無視は1v1で無影響(通常通り命中): ねらいうち", _dsn.hp < _hpsn, f"hp={_dsn.hp}/{_hpsn}")
 
+# ── オーバードライブ ──
+check("DB: オーバードライブ 取得可能", dl.get_move("オーバードライブ") is not None)
+_mv_オ_バ_ドライブ = dl.get_move("オーバードライブ")
+if _mv_オ_バ_ドライブ:
+    _pa_オ_バ_ドライブ = make_poke(type1="でんき", atk_b=100, spatk_b=100)
+    _pd_オ_バ_ドライブ = make_poke(type1="みず", def_b=100, spdef_b=100)
+    _d_オ_バ_ドライブ = dmg(_pa_オ_バ_ドライブ, _pd_オ_バ_ドライブ, "オーバードライブ")
+    check("ダメージ計算: オーバードライブ", _d_オ_バ_ドライブ > 0, f"dmg={_d_オ_バ_ドライブ}")
+
+# ── くらいつく ──
+check("DB: くらいつく 取得可能", dl.get_move("くらいつく") is not None)
+_mv_くらいつく = dl.get_move("くらいつく")
+if _mv_くらいつく:
+    _pa_くらいつく = make_poke(type1="あく", atk_b=100, spatk_b=100)
+    _pd_くらいつく = make_poke(type1="エスパー", def_b=100, spdef_b=100)
+    _d_くらいつく = dmg(_pa_くらいつく, _pd_くらいつく, "くらいつく")
+    check("ダメージ計算: くらいつく", _d_くらいつく > 0, f"dmg={_d_くらいつく}")
+# くらいつく: 相手と自分の両方が交代不可(トラップ)になる
+_pjl = make_poke(type1="あく", atk_b=120); _djl = make_poke(type1="エスパー", hp_b=255, def_b=120)
+execute(_pjl, _djl, "くらいつく")
+check("相手が交代不可: くらいつく", _djl.trapped is True)
+check("自分も交代不可: くらいつく", _pjl.trapped is True)
+_pjl2 = make_poke(type1="あく", atk_b=120); _djl2 = make_poke(type1="エスパー", hp_b=255, def_b=120)
+execute(_pjl2, _djl2, "かみくだく")
+check("他の噛み技では交代不可にならない(負例): くらいつく", _djl2.trapped is False and _pjl2.trapped is False)
+
+# ── きりさく ──
+check("DB: きりさく 取得可能", dl.get_move("きりさく") is not None)
+_mv_きりさく = dl.get_move("きりさく")
+if _mv_きりさく:
+    _pa_きりさく = make_poke(type1="ノーマル", atk_b=100, spatk_b=100)
+    _pd_きりさく = make_poke(type1="ノーマル", def_b=100, spdef_b=100)
+    _d_きりさく = dmg(_pa_きりさく, _pd_きりさく, "きりさく")
+    check("ダメージ計算: きりさく", _d_きりさく > 0, f"dmg={_d_きりさく}")
+# きりさく: 急所ランク+1（急所率が通常技より高い）
+from simulator.battle import _check_critical as _cc_きりさく
+random.seed(0); _hc_crit_きりさく = 0; _phc = make_poke(type1="ノーマル")
+_mvhc_きりさく = dl.get_move("きりさく")
+for _ in range(800):
+    if _cc_きりさく(_phc, _mvhc_きりさく, make_poke(type1="ノーマル")): _hc_crit_きりさく += 1
+# 1/8≈100回(800試行)。通常1/24なら≈33回。明確に区別
+check("急所ランク+1: きりさく", 60 <= _hc_crit_きりさく <= 150, f"crit={_hc_crit_きりさく}/800 (期待≈100, 通常1/24なら≈33)")
+
+# ── たこがため ──
+check("DB: たこがため 取得可能", dl.get_move("たこがため") is not None)
+# たこがため: 相手が交代不可になり、ターン終わりにB/Dが1段階下がる
+from simulator.battle import Battle as _Bol
+_pol = make_poke(type1="かくとう"); _dol = make_poke(type1="ノーマル", hp_b=255)
+execute(_pol, _dol, "たこがため")
+check("相手が交代不可: たこがため", _dol.trapped is True)
+check("使用時点ではB/D不変: たこがため", _dol.stage_defense == 0 and _dol.stage_sp_defense == 0)
+_Bol(BattleSide([_dol]), BattleSide([make_poke()]))._end_of_turn()
+check("ターン終わりにB/D-1: たこがため", _dol.stage_defense == -1 and _dol.stage_sp_defense == -1, f"B={_dol.stage_defense} D={_dol.stage_sp_defense}")
+_dfree = make_poke(type1="ノーマル", hp_b=255)
+_Bol(BattleSide([_dfree]), BattleSide([make_poke()]))._end_of_turn()
+check("非たこがためは下がらない(負例): たこがため", _dfree.stage_defense == 0 and _dfree.stage_sp_defense == 0)
+
 
 print(f'\n全技テスト: {PASS}件PASS / {FAIL}件FAIL (計{PASS+FAIL}件)')
 if FAILURES:

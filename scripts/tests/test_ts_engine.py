@@ -85,6 +85,28 @@ def main() -> int:
         if r["oppS"] != bspd:
             bad.append(f"{tag}: 相手の実効素早さ py={bspd} ts={r['oppS']}")
 
+    # Z系メガ石（M-C解禁・使用率なし）を名指しで突き合わせる
+    zc = payload.get("zcases") or []
+    for r in zc:
+        sa, sb = r["specA"], r["specB"]
+        tag = f"{sa.split('@')[0]} vs {sb.split('@')[1].split(':')[0]}"
+        n_cmp = 0
+        for m in r["breakdown"]:
+            if m["dmgLo"] is None:   # 変化技・無効化（TS は表示しない）
+                continue
+            n_cmp += 1
+            pd = ME.move_damage(sa, sb, m["n"], L, 0.0, 0)
+            if pd != m["dmgLo"]:
+                bad.append(f"{tag}: {m['n']}の与ダメ py={pd} ts={m['dmgLo']}")
+        if n_cmp == 0:
+            bad.append(f"{tag}: 比較できる打点技が無い")
+        ah, _ar, _am = ME._best_cached(sa, sb, 0, id(L))
+        hs = [x["hits"] for x in r["breakdown"] if x["hits"] is not None]
+        if hs and min(hs) != ah:
+            bad.append(f"{tag}: 確定数 py={ah} ts={min(hs)}")
+    if not zc:
+        bad.append("Z系メガ石の検証ケースが空")
+
     print(f"\n=== TS(engine経由) vs Python(正本) ===")
     print(f"  一致 {len(recs) - len({b.split(':')[0] for b in bad})}/{len(recs)} 対面 "
           f"/ 不一致 {len(bad)}項目")

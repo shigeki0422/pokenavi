@@ -72,7 +72,7 @@ BALL_BOMB_MOVES = {
 }
 
 SOUND_MOVES = {
-    "むしのさざめき", "バークアウト", "ハイパーボイス",
+    "むしのさざめき", "バークアウト", "ハイパーボイス", "オーバードライブ",
     "なきごえ", "うたう", "ちょうおんぱ", "きんぞくおん",
     "ほえる", "スケイルノイズ", "すてゼリフ",
     "いびき", "いやしのすず", "いやなおと", "うたかたのアリア",
@@ -778,7 +778,7 @@ def _apply_attacker_ability(dmg, attacker, defender, move, field, critical,
         dmg = math.floor(dmg * 1.2)
     elif ab == "がんじょうあご" and move.name_jp in (
         "かみつく","かみくだく","かみなりのキバ","ほのおのキバ","こおりのキバ",
-        "どくどくのキバ","サイコファング",
+        "どくどくのキバ","サイコファング","くらいつく",
     ):
         dmg = math.floor(dmg * 1.5)
     elif ab == "メガランチャー" and move.name_jp in (

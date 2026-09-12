@@ -191,6 +191,7 @@ class BattleSide:
         prev._info_done = False  # type: ignore
         prev.recharge = False
         prev._defenseless = False  # type: ignore
+        prev._octolocked = False  # type: ignore
         prev.crit_stage = 0
         prev.perish_count = 0
         prev.destiny_bond = False
@@ -1480,6 +1481,11 @@ def _execute_move(
     if move.name_jp in PIVOT_MOVES and attacker.is_alive:
         attacker._pivot_out = True  # type: ignore
 
+    # くらいつく：相手と自分の両方が交代できなくなる
+    if move.name_jp == "くらいつく" and total_dmg > 0 and defender.is_alive:
+        defender.trapped = True
+        attacker.trapped = True
+
     # きょけんとつげき：次に自分が行動するまで無防備状態
     if move.name_jp == "きょけんとつげき" and attacker.is_alive:
         attacker._defenseless = True  # type: ignore
@@ -2309,6 +2315,13 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
             logs.append(f"{attacker.name} は ねがいごと をした！")
         return logs
 
+    # たこがため：相手をにげられない状態＋たこがため状態（ターン終了時にB/D-1）
+    if n == "たこがため":
+        defender.trapped = True
+        defender._octolocked = True  # type: ignore
+        logs.append(f"{defender.name} は たこがため にされた！")
+        return logs
+
     # コートチェンジ：味方と相手の場の状態を入れ替える
     if n == "コートチェンジ" and attacker_side is not None and defender_side is not None:
         ai, di = attacker_side.field_idx, defender_side.field_idx
@@ -2618,7 +2631,7 @@ HIGH_CRIT_MOVES = {
     "シャドークロー","ナイトスラッシュ","クロスポイズン","サイコカッター","リーフブレード",
     "3ぼんのや","ストーンエッジ","ブレイズキック",
     "クラブハンマー","クロスチョップ","つじぎり","ドリルライナー",
-    "アクアカッター","エアカッター","ゴッドバード","ねらいうち",
+    "アクアカッター","エアカッター","ゴッドバード","ねらいうち","きりさく",
 }
 _CRIT_THRESHOLDS = {0: 1/24, 1: 1/8, 2: 1/2, 3: 1.0}
 
@@ -3642,6 +3655,12 @@ class Battle:
                 if opp.is_alive:
                     opp.hp = min(opp.max_hp, opp.hp + drain)
                     self.logs.append(f"{opp.name} は やどりぎのタネ で {drain} 回復した！")
+
+            # たこがため：ターン終わりに防御・特防が1段階下がる
+            if getattr(p, '_octolocked', False) and p.is_alive:
+                p.stage_defense = max(-6, p.stage_defense - 1)
+                p.stage_sp_defense = max(-6, p.stage_sp_defense - 1)
+                self.logs.append(f"{p.name} は たこがため で防御・特防が下がった！")
 
             # しおづけ（ソルトキュア継続ダメ）はがね/みずは1/8、それ以外は1/16
             if getattr(p, '_salted', False) and p.is_alive:

@@ -55,4 +55,21 @@ const named = kaba && mimi
   ? { kabaVsMimi: moveBreakdown(kaba, mimi).find((m) => m.n === "じしん") ?? null,
       mimiHp: mimi.stats[0] }
   : null;
-process.stdout.write(JSON.stringify({ pairs: out, named }));
+
+// M-C で解禁されたZ系メガ石は使用率がまだ無く、上のペア抽出に載らない。
+// 新特性「はどうのぼうご」（接触技0.5倍）が wasm 側にも入っているかを名指しで見る。
+const spec = (b: ResolvedBuild) =>
+  buildToSpec({ ...b, moves: b.pool && b.pool.length ? b.pool : b.moves });
+const zcases: unknown[] = [];
+for (const [sp, stone] of [["ルカリオ", "ルカリオナイトZ"], ["ガブリアス", "ガブリアスナイトZ"],
+                           ["アブソル", "アブソルナイトZ"]] as [string, string][]) {
+  const base = byName(sp)[0];
+  const foe = byName("ガブリアス")[0];
+  if (!base || !foe) continue;
+  const z = { ...base, item: stone } as ResolvedBuild;
+  zcases.push({
+    specA: spec(foe), specB: spec(z),
+    breakdown: moveBreakdown(foe, z).map((m) => ({ n: m.n, hits: m.hits, dmgLo: m.dmgLo })),
+  });
+}
+process.stdout.write(JSON.stringify({ pairs: out, named, zcases }));

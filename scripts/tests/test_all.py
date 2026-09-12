@@ -1490,6 +1490,92 @@ check("ねらいうち 急所ランク+1(1/8)",
 check("ねらいうち 通常技は1/24(負例)",
       near(crit_chance(_ss_a, dl.get_move("なみのり"), _ss_d), 1/24, rel=0.01))
 
+# ════════════════════════════════════════════════════════════════
+# ランキング200位対応で追加した4技
+# ════════════════════════════════════════════════════════════════
+from simulator.abilities import SLICING_MOVES
+from simulator.damage import SOUND_MOVES
+
+MC2_MOVES = [
+    ("オーバードライブ", "でんき",   "special",  80,  100, 12, False),
+    ("くらいつく",       "あく",     "physical", 80,  100, 12, True),
+    ("きりさく",         "ノーマル", "physical", 80,  100, 20, True),
+    ("たこがため",       "かくとう", "status",   None, 100, 16, False),
+]
+for _n, _ty, _cat, _pw, _acc, _pp, _ctn in MC2_MOVES:
+    _m = dl.get_move(_n)
+    check(f"{_n} DB登録あり", _m is not None)
+    if _m is None:
+        continue
+    check(f"{_n} タイプ/分類", (_m.type, _m.category) == (_ty, _cat), f"{_m.type}/{_m.category}")
+    check(f"{_n} 威力{_pw}/命中{_acc}/PP{_pp}",
+          (_m.power, _m.accuracy, _m.pp) == (_pw, _acc, _pp), f"{_m.power}/{_m.accuracy}/{_m.pp}")
+    if _cat == "physical":
+        check(f"{_n} 接触={_ctn}", is_contact_move(_m) is _ctn)
+
+# ── オーバードライブ: 音技 ──
+check("オーバードライブ 音技に分類", "オーバードライブ" in SOUND_MOVES)
+_od_a = make_poke(type1="でんき", ability="パンクロック", spatk_b=100)
+_od_n = make_poke(type1="でんき", ability="しんりょく", spatk_b=100)
+_od_d = make_poke(type1="ノーマル", spdef_b=100)
+check("オーバードライブ パンクロックで1.3倍(音技の証跡)",
+      near(dmg(_od_a, _od_d, "オーバードライブ") / dmg(_od_n, _od_d, "オーバードライブ"), 1.3))
+check("オーバードライブ 非音技のでんき技は等倍(負例)",
+      dmg(_od_a, _od_d, "10まんボルト") == dmg(_od_n, _od_d, "10まんボルト"))
+
+# ── くらいつく: 噛み技 / 相手と自分の両方が交代不可 ──
+_jl_a = make_poke(type1="あく", ability="がんじょうあご", atk_b=100)
+_jl_n = make_poke(type1="あく", ability="しんりょく", atk_b=100)
+_jl_t = make_poke(type1="エスパー", def_b=100)
+check("くらいつく がんじょうあごで1.5倍(噛み技の証跡)",
+      near(dmg(_jl_a, _jl_t, "くらいつく") / dmg(_jl_n, _jl_t, "くらいつく"), 1.5))
+check("くらいつく 非噛み技のあく技は等倍(負例)",
+      dmg(_jl_a, _jl_t, "あくのはどう") == dmg(_jl_n, _jl_t, "あくのはどう"))
+_jl_atk = make_poke(type1="あく", atk_b=100)
+_jl_def = make_poke(type1="エスパー", hp_b=255, def_b=100)
+execute(_jl_atk, _jl_def, "くらいつく")
+check("くらいつく 相手が交代不可", _jl_def.trapped is True)
+check("くらいつく 自分も交代不可", _jl_atk.trapped is True)
+_jl_a2 = make_poke(type1="あく", atk_b=100)
+_jl_d2 = make_poke(type1="あく", hp_b=255, def_b=100)   # あくはあく等倍だが、ここは別技での負例
+execute(_jl_a2, _jl_d2, "かみくだく")
+check("くらいつく 他の噛み技では交代不可にならない(負例)",
+      _jl_d2.trapped is False and _jl_a2.trapped is False)
+
+# ── きりさく: 切り技 / 急所ランク+1 ──
+check("きりさく 切り技に分類", "きりさく" in SLICING_MOVES)
+_sl_a = make_poke(type1="ノーマル", ability="きれあじ", atk_b=100)
+_sl_n = make_poke(type1="ノーマル", ability="しんりょく", atk_b=100)
+_sl_t = make_poke(type1="ノーマル", def_b=100)
+check("きりさく きれあじで1.5倍(切り技の証跡)",
+      near(dmg(_sl_a, _sl_t, "きりさく") / dmg(_sl_n, _sl_t, "きりさく"), 1.5))
+check("きりさく 非切り技は等倍(負例)",
+      dmg(_sl_a, _sl_t, "たいあたり") == dmg(_sl_n, _sl_t, "たいあたり"))
+check("きりさく 急所ランク+1(1/8)",
+      near(crit_chance(_sl_n, dl.get_move("きりさく"), _sl_t), 1/8, rel=0.01))
+check("きりさく 通常技は1/24(負例)",
+      near(crit_chance(_sl_n, dl.get_move("たいあたり"), _sl_t), 1/24, rel=0.01))
+
+# ── たこがため: にげられない + ターン終了時にB/D-1 ──
+_ol_a = make_poke(type1="かくとう", moves=["たこがため"])
+_ol_d = make_poke(type1="ノーマル", hp_b=255)
+_execute_move(BattleSide([_ol_a]), BattleSide([_ol_d]),
+              Action(type="move", move=dl.get_move("たこがため")), BattleField())
+check("たこがため 相手が交代不可", _ol_d.trapped is True)
+check("たこがため たこがため状態になる", getattr(_ol_d, "_octolocked", False) is True)
+check("たこがため 使用時点ではB/Dは下がらない",
+      _ol_d.stage_defense == 0 and _ol_d.stage_sp_defense == 0)
+_ol_tgt = make_poke(name="A", type1="ノーマル", moves=["まもる"], hp_b=255)
+_ol_tgt._octolocked = True
+Battle(BattleSide([_ol_tgt]), BattleSide([make_poke(moves=["まもる"])]))._end_of_turn()
+check("たこがため ターン終了時にB/Dが1段階下がる",
+      _ol_tgt.stage_defense == -1 and _ol_tgt.stage_sp_defense == -1,
+      f"B={_ol_tgt.stage_defense} D={_ol_tgt.stage_sp_defense}")
+_ol_free = make_poke(name="A", type1="ノーマル", moves=["まもる"], hp_b=255)
+Battle(BattleSide([_ol_free]), BattleSide([make_poke(moves=["まもる"])]))._end_of_turn()
+check("たこがため 非たこがためは下がらない(負例)",
+      _ol_free.stage_defense == 0 and _ol_free.stage_sp_defense == 0)
+
 # ── コートチェンジ: 味方と相手の場の状態を入れ替える ──
 _cc_f = BattleField()
 _cc_a = make_poke(type1="ノーマル", moves=["コートチェンジ"])
