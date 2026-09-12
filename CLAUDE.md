@@ -37,6 +37,7 @@ src/
 | ポケモン情報ページの作成・更新 | `.claude/skills/pokemon-page/SKILL.md`（DBクエリ雛形・画像/スプライト・FAQ JSON-LD） |
 | シミュレータ開発（scripts/simulator・scripts/tests） | `.claude/rules/simulator.md`（3点セット・監査スクリプト・盲点ゲート） |
 | 公開前の記事レビュー | `.claude/commands/記事レビュー.md`（観点1〜20） |
+| 破壊的コマンドの禁止（git stash/reset/clean・共有ディレクトリのrm・kill・同時ビルド） | `.claude/hooks/destructive_guard.py`（`.claude/settings.json` で登録） |
 
 ## OGP画像ルール（必須）
 - **`src/pages/` に新規ページを作成する際は、必ず `BaseHead` に `imageUrl` または `image` を指定する**
