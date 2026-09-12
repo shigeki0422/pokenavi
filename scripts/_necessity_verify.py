@@ -126,12 +126,9 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
         return sp, {"dead": [], "holes": 0, "typedup": 0, "swapped": None, "ens": base_ens,
                     "pick": [round(float(r), 2) for r in rates]}
     free = [i for i in range(6) if keys[i] not in fixed_keys]
-    if dead:
-        victims = [min(dead, key=lambda i: rates[i])]
-    elif base_ex:
-        # 被り超過があるときは、超過タイプを持つ駒のうち最も選出されない枠を差し替える。
-        # 一致ペアは2体とも差し替え候補にする（NVER_VICTIM件まで試す）。pick_rateが同値のとき
-        # 先着だけ試して諦めていた（実測ボーマンダ軸: アシレーヌ0.33/マリルリ0.33で不成立）。
+
+    def _violation_slots():
+        """構成違反（タイプ被り上限超過・役割が重なる完全一致ペア）を構成する枠。"""
         import collections as _c
         cnt = _c.Counter(t for x in sp for t in pg._types_of_spec(x))
         over = {t for t, v in cnt.items() if v > TYPEDUP_MAX}
@@ -141,13 +138,29 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
             _g[tuple(sorted(pg._types_of_spec(_x)))].append(_x)
         dupsets = set()
         for _t, _mem in _g.items():
-            if len(_mem) < 2: continue
+            if len(_mem) < 2:
+                continue
             _r = [_role_bucket(_EX2.role_of(_x, L)) for _x in _mem]
             if any(_r[i] & _r[j] for i in range(len(_mem)) for j in range(i + 1, len(_mem))):
                 dupsets.add(_t)
-        cand = [i for i in free
+        return [i for i in free
                 if (set(pg._types_of_spec(sp[i])) & over)
                 or tuple(sorted(pg._types_of_spec(sp[i]))) in dupsets]
+
+    if dead and base_ex:
+        # 死に枠と構成違反が同居する提案では、死に枠だけを見て違反を放置していた
+        # （実測エースバーン軸: ウルガモス(死に枠)を差し替え、アーマーガア＋エアームドの
+        #  役割重複はそのまま残った）。両方を候補にし、目的関数(穴削減,違反削減,最小pick)で選ぶ。
+        _d = sorted(dead, key=lambda i: rates[i])[:1]
+        _v = sorted(_violation_slots(), key=lambda i: rates[i])[:NVER_VICTIM]
+        victims = list(dict.fromkeys(_d + _v))
+    elif dead:
+        victims = [min(dead, key=lambda i: rates[i])]
+    elif base_ex:
+        # 被り超過があるときは、超過タイプを持つ駒のうち最も選出されない枠を差し替える。
+        # 一致ペアは2体とも差し替え候補にする（NVER_VICTIM件まで試す）。pick_rateが同値のとき
+        # 先着だけ試して諦めていた（実測ボーマンダ軸: アシレーヌ0.33/マリルリ0.33で不成立）。
+        cand = _violation_slots()
         victims = sorted(cand or free, key=lambda i: rates[i])[:NVER_VICTIM]
     else:
         victims = [min(free, key=lambda i: rates[i])]

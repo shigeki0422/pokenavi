@@ -23,6 +23,27 @@ opp_panel = [a["party"] for a in S.ARCHES[:NOPP]]
 IN = os.environ.get("IN", "suggest_cache.json")
 OUT = os.environ.get("OUT", IN)
 SAVE_EVERY = int(os.environ.get("SAVE_EVERY", "10"))   # 途中保存の間隔（軸数）
+NVER_ROUNDS = int(os.environ.get("NVER_ROUNDS", "1"))   # 1提案あたりのリペア周回数
+
+
+def _has_violation(party):
+    """タイプ被り上限超過、または役割が重なる完全一致ペアがあるか（対戦不要の軽い判定）。"""
+    import collections, _explain as EX
+    from gen_party_pool import TYPEDUP_MAX
+    if TYPEDUP_MAX and PG.type_dup_max(party) > TYPEDUP_MAX:
+        return True
+    g = collections.defaultdict(list)
+    for x in party:
+        g[tuple(sorted(PG._types_of_spec(x)))].append(x)
+    ATK = {"スカーフ掃除役", "積みエース", "メガ積みエース", "メガエース",
+           "物理アタッカー", "特殊アタッカー"}
+    for _t, mem in g.items():
+        if len(mem) < 2:
+            continue
+        b = [{"攻" if r in ATK else "補" for r in EX.role_of(x, L)} for x in mem]
+        if any(b[i] & b[j] for i in range(len(mem)) for j in range(i + 1, len(mem))):
+            return True
+    return False
 
 
 def _core_keys(k):
@@ -74,6 +95,17 @@ if __name__ == "__main__":
             sp = r["specs"]; nchk += 1
             fixed = {PG.keyof(s) or s.split("@")[0] for s in sp if s.split("@")[0] in core_names}
             new, info = V.repair_party(sp, PG, L, TH, ens, pool, opp_panel, fixed, rng)
+            # repair_party は1周1枠しか触らない。死に枠と構成違反が同居する提案では
+            # 片方しか直らないので、違反が残っている提案だけ NVER_ROUNDS 周まで回す。
+            # pick_rates(対戦を伴う)が重いので、無条件の再実行はしない。
+            for _r2 in range(NVER_ROUNDS - 1):
+                if not info.get("swapped") or not _has_violation(new):
+                    break
+                n2, i2 = V.repair_party(new, PG, L, TH, ens, pool, opp_panel, fixed, rng)
+                if not i2.get("swapped"):
+                    break
+                new = n2
+                info = dict(info, swapped=info["swapped"] + "+" + i2["swapped"])
             if info.get("swapped"):
                 _ns = frozenset(x.split("@")[0] for x in new)
                 if any(_ns == t for j, t in enumerate(_spsets) if j != ri):
