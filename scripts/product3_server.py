@@ -1,14 +1,14 @@
 """Product3 ローカル製品：コア入力→残り枠補完→サロゲート提案。
 モデル常駐のHTTPサーバ＋簡易UI。 起動: venv/bin/python product3_server.py  → http://localhost:8899
 """
-import os, json, random, html, glob, threading, time
+import os, numpy as np, json, random, html, glob, threading, time
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("GA_SIMS", os.environ.get("SIM_SIMS", "150"))   # ライブ実戦テストのMCTS探索数（軽め）
 import multiprocessing as mp
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 import feature1 as _f1
 from gen_party_pool import PartyGen, _spec_mega, _item_of
-from _threat_coverage import load_threats, team_coverage
+from _threat_coverage import load_threats, team_coverage, team_depth
 import _product3 as P3
 from _product3_complete import complete_core, resolve_fixed, complete_core_free
 from _ensemble_surrogate import EnsembleScorer
@@ -19,7 +19,9 @@ PORT = int(os.environ.get("PORT", "8899"))
 EVK = ["H", "A", "B", "C", "D", "S"]
 
 print("モデル読込中...", flush=True)
-_f1._ensure_loaded("M-3", 8)
+# シーズンは POOL_SEASON に追従（M-6移行時にM-3固定だと種テンプレート・アーキタイプが旧環境のままになる）
+SEASON = os.environ.get("POOL_SEASON", "M-3")
+_f1._ensure_loaded(SEASON, 8)
 L = _f1._W["loader"]; NET = _f1._W["net"]
 PG = PartyGen(); TH = load_threats(L)
 ENS = EnsembleScorer(L, NET, PG, TH)   # アンサンブル(ネット+リッチ守備+構築, CV r≈0.69)
@@ -45,7 +47,9 @@ def calibrate(v):
             return ys[i - 1] + t * (ys[i] - ys[i - 1])
     return ys[-1]
 
-_ARCH_FILE = os.path.join(os.path.dirname(__file__), "archetypes_m3.json")
+_ARCH_FILE = os.path.join(os.path.dirname(__file__),
+                          os.environ.get("ARCH_FILE",
+                                         f"archetypes_{os.environ.get('POOL_SEASON','M-3').lower().replace('-','')}.json"))
 
 def _scan_archetypes(n=8):
     """総当たり実勝率(5.5GB)から、メガ軸が重複しない代表アーキタイプをn個抽出（devのみ）。"""
@@ -71,12 +75,16 @@ def _load_archetypes(n=8):
     """事前計算した小さなJSONを優先ロード。無ければ5.5GBを走査してキャッシュ生成（本番は前者のみ）。"""
     if os.path.exists(_ARCH_FILE):
         meta = json.load(open(_ARCH_FILE, encoding="utf-8"))[:n]
-    else:
+    elif SEASON == "M-3":
         meta = _scan_archetypes(n)
         json.dump(meta, open(_ARCH_FILE, "w", encoding="utf-8"), ensure_ascii=False)
         print(f"アーキタイプを {os.path.basename(_ARCH_FILE)} に事前計算保存", flush=True)
+    else:
+        # M-3以外は総当たり記録(f1_cache_m3)が無い。黙ってM-3盤面を使うと想定相手が
+        # 旧環境のままになり、pick_rates(必然性リペアの基準)まで狂う。
+        raise SystemExit(f"{os.path.basename(_ARCH_FILE)} が無い（{SEASON}用アーキタイプを先に作成）")
     for a in meta:
-        a["built"] = [build_from_spec(parse_pokemon_spec(s), L, season="M-3", randomize=False) for s in a["party"]]
+        a["built"] = [build_from_spec(parse_pokemon_spec(s), L, season=SEASON, randomize=False) for s in a["party"]]
     return meta
 
 ARCHES = _load_archetypes(8)
@@ -136,6 +144,79 @@ def _get_pool():
 def _score_one(spec):
     return (ENS.score(spec), spec)
 
+# 脅威カバーの「厚み」を選抜スコアに混ぜる仕組み。【実対戦A/Bで不採用・既定0のまま】
+# 観察上の相関は本物: ガイド勝率との相関は 厚み+0.257 > ENS+0.180 > 二値の対応率+0.134、
+# 同一軸5案内の順位相関でも 厚み+0.269 > ENS+0.166、両者の相関は+0.152で独立な情報だった。
+# しかし実対戦A/Bは再現しない: 1回目(パネル20/シード900M帯/n=38) +3.38pt(z=+2.87) に対し、
+# 2回目(パネル16/シード910M帯/n=30) は -0.26pt(z=-0.22)。「厚みのみ」で選ぶと -2.89pt(z=-2.10)と有意に悪化。
+# 解釈: 相関は「強いパーティはたまたま厚みも高い」という共変関係で、直接最適化すると
+# その外側（厚みは高いが弱い構成）を掴む。副作用として多様性も低下（異なり種数13.10→12.30）。
+# メガ数較正(2026-07-12)と同型の失敗。DEPTH_W>0 にする場合は必ず実対戦A/Bを再取得すること。
+DEPTH_W = float(os.environ.get("DEPTH_W", "0"))
+_ENS_B, _DEP_B = 0.144, 0.235
+
+def _mega_weak_shared(specs, fixnames=()):
+    """パーティの『固定の主力』同士が揃って苦手とするタイプ数（型相性のみ・軽い）。
+
+    当初はメガ2体同士の弱点重複だけを見ていたが、それだと
+    「非メガの軸種（例: 素のセグレイブ）とメガ1体（例: メガガブリアスZ）」の
+    ドラゴン被りを検出できなかった（両者ともドラゴンで弱点セットも大半が重なるのに、
+    軸種はmegaフラグが立たないため比較対象から漏れる）。
+    軸に固定された種はメガ以上に『動かせない枠』なので、主力＝mega=True の種 ∪
+    軸固定(core)の種として、その中の最大ペア重複を見る。"""
+    from _party_quality import mon_profile
+    anchors = [s for s in specs if _spec_mega(s) or s.split("@", 1)[0] in fixnames]
+    if len(anchors) < 2:
+        return 0
+    profs = [mon_profile(s, L)[1] for s in anchors]   # 弱点タイプ集合のみ
+    best = 0
+    for i in range(len(profs)):
+        for j in range(i + 1, len(profs)):
+            best = max(best, len(profs[i] & profs[j]))
+    return best
+
+# メガ2枚の弱点重複ペナルティ。共有弱点タイプ1つにつきENSスコアから引く。
+# 既定0＝無効（従来と完全に同一挙動）。深さ加重・メガ数較正と同じ形の実験的ノブなので、
+# 有効化する場合は必ず実対戦A/Bで確認してから既定を変える（このファイルの先例を踏襲）。
+MEGA_OVERLAP_W = float(os.environ.get("MEGA_OVERLAP_W", "0"))
+
+# 生成する候補パーティ数の下限。0＝無効（要求値をそのまま使う・従来と同一挙動）。
+SUGGEST_NCAND = int(os.environ.get("SUGGEST_NCAND", "0"))
+
+
+def _rerank(scored):
+    """(ENSスコア, party) の列を、厚みを混ぜた順に並べ替える。DEPTH_W=0 なら元の順序のまま。"""
+    if DEPTH_W <= 0 or len(scored) < 3:
+        return sorted(scored, key=lambda x: -x[0])
+    e = np.array([sc for sc, _ in scored], dtype=float)
+    dp = np.array([team_depth(p, L, TH)[0] for _, p in scored], dtype=float)
+    def _z(v):
+        sd = v.std()
+        return (v - v.mean()) / sd if sd > 1e-12 else np.zeros_like(v)
+    comb = _ENS_B * _z(e) + DEPTH_W * _DEP_B * _z(dp)
+    return [scored[i] for i in np.argsort(-comb)]
+
+
+def _mega_adjusted(scored, fixnames=()):
+    """{id(party): メガ弱点ペナルティ適用後スコア} を返す。表示用のスコアは生のまま保つ。
+
+    _apply_mega_overlap_penalty は「並べ替える」だけでタプル内のスコアは書き換えないため、
+    MMR選抜のように生スコアで再ランキングする経路ではペナルティが素通りしていた
+    （MEGA_OVERLAP_W を0.05〜0.20で振っても提案が1件も変わらない、という形で表面化した）。
+    順序ではなく値として渡す必要がある。"""
+    if MEGA_OVERLAP_W <= 0:
+        return {}
+    return {id(p): sc - MEGA_OVERLAP_W * _mega_weak_shared(p, fixnames) for sc, p in scored}
+
+
+def _apply_mega_overlap_penalty(scored, fixnames=()):
+    """MEGA_OVERLAP_W>0 のときだけ、共有弱点タイプ数×係数をENSスコアから引いて並べ替える。
+    _rerank の後・_cap_select の前に置く（並べ替え結果を最終選抜に反映させるため）。"""
+    if MEGA_OVERLAP_W <= 0:
+        return scored
+    return sorted(scored, key=lambda x: -(x[0] - MEGA_OVERLAP_W * _mega_weak_shared(x[1], fixnames)))
+
+
 def _par_score(cands):
     """候補のENSスコアをCPU並列で計算（fork継承でネットは共有・ピクル不要）。"""
     if len(cands) < 8:
@@ -188,9 +269,198 @@ try:
 except FileNotFoundError:
     pass
 
+# 提案多様性キャップ: top選択時に「非コア種が SUGGEST_CAP 提案を超えて出現する案」を飛ばす。
+# 既定0＝無効（従来と完全に同一挙動・キャッシュキーも不変）。1以上でキャップ有効＋キーに値を混ぜる
+# （＝キャップ有無のエントリがキャッシュ内で混ざらない）。実対戦A/Bの根拠は _divdiag/gate_run*.log。
+SUGGEST_CAP = int(os.environ.get("SUGGEST_CAP", "0"))
+
+# 5提案内の多様性を「提案どうしの似かた」で直接制御する選抜。0＝無効（従来のキャップ方式）。
+# キャップは種ごとの出現回数を数えるだけなので、上限に達した瞬間その種を含む候補を全部弾き、
+# 良い候補を大量に捨てる。MMRは提案間のメンバー重複率を見るので、同じ種が入っていても
+# 他が違えば許容でき、無駄に捨てない。
+# 全21軸の実測（同一候補で比較・M-6）:
+#   cap3(現行) 異なり13.6種/重複34%/score0.600
+#   cap2       異なり14.8種/重複29%/score0.582
+#   MMR 0.5    異なり16.7種/重複24%/score0.598  ← 多様性を上げてscoreはほぼ無傷
+#   MMR 0.7    異なり17.7種/重複19%/score0.574
+SUGGEST_MMR = float(os.environ.get("SUGGEST_MMR", "0"))
+# MMRで多様性のために拾う候補の下限。トップ案のスコアからこの割合まで落ちる案は採らない。
+# 下限なしだと、多様性を稼ぐために極端に弱い案（実測でトップ0.729に対し0.434）が混ざる。
+SUGGEST_MMR_FLOOR = float(os.environ.get("SUGGEST_MMR_FLOOR", "0.80"))
+
+
+def _mmr_select(scored, fixnames, top, lam, base=None):
+    """スコア −(λ×既選択との最大メンバー重複率) で貪欲に top 本選ぶ。
+    重複率は非軸メンバー集合のJaccard的な比（|共通|/|候補の非軸数|）。
+    base は {id(party): 補正済みスコア}（メガ弱点ペナルティ等）。省略時は生スコア。"""
+    base = base or {}
+    sel, sets, pool = [], [], list(scored)
+    # 足切り: トップ案のスコア×SUGGEST_MMR_FLOOR を下回る候補は多様性目的でも採らない。
+    # ただし足切り後に top 本に満たない場合は、足りない分だけ元の順で補充する。
+    top_sc = max((sc for sc, _ in scored), default=0.0)
+    floor = top_sc * SUGGEST_MMR_FLOOR if top_sc > 0 else float("-inf")
+    pool_ok = [(sc, p) for sc, p in pool if sc >= floor]
+    if len(pool_ok) >= top:
+        pool = pool_ok
+    while len(sel) < top and pool:
+        best = None
+        for i, (sc, p) in enumerate(pool):
+            nm = {x.split("@", 1)[0] for x in p if x.split("@", 1)[0] not in fixnames}
+            ov = max((len(nm & s) / max(1, len(nm)) for s in sets), default=0.0)
+            adj = base.get(id(p), sc) - lam * ov
+            if best is None or adj > best[0]:
+                best = (adj, i, sc, p, nm)
+        _, i, sc, p, nm = best
+        sel.append((sc, p)); sets.append(nm); pool.pop(i)
+    # 提示順はスコア降順に戻す。MMRの採用順のままだと「1位より下に高スコア案がある」
+    # 見た目になり（実測 0.729→0.545→0.434→0.632→0.728）、利用者を混乱させる。
+    return sorted(sel, key=lambda x: -x[0])
+
+# メガ枠だけを対象にした多様性キャップ。0＝無効。
+# 種キャップ(SUGGEST_CAP)/MMRはどちらも「取り巻き」の入れ替えに効いてしまい、
+# 5提案の相棒メガが同じペアで固定される偏り（実測: Mグソクムシャ軸で5本中3本が同一ペア）は
+# 崩せなかった。取り巻きの重複は許容してよいので、メガ種の出現回数だけを直接数える。
+SUGGEST_MEGA_CAP = int(os.environ.get("SUGGEST_MEGA_CAP", "0"))
+
+
+def _mega_cap_select(scored, fixnames, mcap, top):
+    """ENS降順に貪欲採用。非コアのメガ種の採用回数が mcap を超える案はスキップ。
+    top本に満たなければ制約を無視してスコア順に補充（必ず top 本返す）。"""
+    sel, cnt = [], {}
+    for sc, p in scored:
+        mg = [x.split("@", 1)[0] for x in p
+              if _spec_mega(x) and x.split("@", 1)[0] not in fixnames]
+        if any(cnt.get(n, 0) >= mcap for n in mg):
+            continue
+        sel.append((sc, p))
+        for n in mg:
+            cnt[n] = cnt.get(n, 0) + 1
+        if len(sel) == top:
+            break
+    if len(sel) < top:
+        chosen = {id(p) for _, p in sel}
+        for sc, p in scored:
+            if len(sel) == top:
+                break
+            if id(p) not in chosen:
+                sel.append((sc, p))
+    return sel[:top]
+
+# メガの「組み合わせ」キャップ。0＝無効。同一のメガ構成（非コアメガ種の集合）が
+# この回数を超えて現れる案をスキップする。
+# 種ごとの回数を数える SUGGEST_MEGA_CAP では、1提案がメガを2体消費する構造に対応できない。
+# 実測（パーモット軸・megacap=1）: #1がMガブ+Mグソク、#2がMボーマンダ+Mルカリオで上位4種を使い切り、
+# 残るMセグレイブを含む候補14件は全てMガブ/Mグソクと同居していたため全スキップ、
+# 結果 Mピクシー+Mキラフロル(0.437) まで落ちた。在庫は20種あったのに、である。
+# ペアで数えれば Mガブリアスが複数案に出てもよく、相方が毎回違えば要求を満たす。
+SUGGEST_MEGA_PAIR = int(os.environ.get("SUGGEST_MEGA_PAIR", "0"))
+
+
+# ペアキャップで多様性のために拾う候補の下限（トップ案のスコアに対する割合）。
+# メガ軸は空きメガ枠が1つしかないため「5案＝相棒メガ5種」となり、在庫の質が落ちる帯まで
+# 掘らされる（実測ボーマンダ軸: 上位3種0.61-0.64に対し4番手0.584・6番手Mライチュウ0.513）。
+# 下限を割るくらいならペアの重複を許す。
+SUGGEST_MEGA_PAIR_FLOOR = float(os.environ.get("SUGGEST_MEGA_PAIR_FLOOR", "0.90"))
+# 下限の絶対値。相対下限と「低いほう」を採る。0＝無効（相対下限のみ・従来と同一挙動）。
+# 相対下限だけだと、トップ1本が突出した軸で下限が跳ね上がり多様性が出せない
+# （実測エースバーン軸: top0.704で floor0.599、2位以下は0.59前後に固まり2種しか通らず
+#  メガ構成2/5。候補は600件82種あり生成の問題ではない）。
+SUGGEST_MEGA_PAIR_ABS = float(os.environ.get("SUGGEST_MEGA_PAIR_ABS", "0"))
+
+
+def _mega_pair_select(scored, fixnames, pcap, top, base=None):
+    """ENS降順に貪欲採用。非コアのメガ種の集合が pcap 回を超える案はスキップ。
+    SUGGEST_MEGA_CAP>0 なら「同一メガ種が何回出てよいか」も併せて制限する
+    （ペアだけだと Mグソクムシャのように共有弱点0で誰とでも組める種が
+    相方を替えながら5案中ほぼ全てに居座る。実測46%）。
+    ただし下限を割る案しか残らないときは、どちらの制約も緩めて強い案を採る。"""
+    # 補正済みスコアで下限判定・選抜する。_apply_mega_overlap_penalty は並べ替えるだけで
+    # タプル内のスコアを書き換えないため、生スコアで選ぶとメガ弱点ペナルティが素通りする
+    # （MEGA_OVERLAP_W を0.05〜0.20で振っても出力が1件も変わらない形で表面化。MMRと同じ不具合）。
+    # しかもペア制約は「他と違うメガ構成」を積極的に探すので、共有弱点の多いペアはむしろ
+    # 多様性要員として引き寄せられ、ペナルティが逆効果になっていた。
+    base = base or {}
+    def _adj(sc, p): return base.get(id(p), sc)
+    # 種構成が同一の提案は1本まで。メガ構成が違えばペア制約は通ってしまうため、
+    # 「6体が全く同じでガブリアスがメガか非メガかだけ違う」提案が並んでいた
+    # （実測インテレオン軸#1/#2、アローラペルシアン軸#1/#4）。利用者からは同じパーティに見える。
+    sel, cnt, scnt, used, spset = [], {}, {}, set(), set()
+    top_sc = max((_adj(sc, p) for sc, p in scored), default=0.0)
+    floor = top_sc * SUGGEST_MEGA_PAIR_FLOOR if top_sc > 0 else float("-inf")
+    if SUGGEST_MEGA_PAIR_ABS > 0:
+        floor = min(floor, SUGGEST_MEGA_PAIR_ABS)
+    def _mg(p):
+        return tuple(sorted(x.split("@", 1)[0] for x in p
+                            if _spec_mega(x) and x.split("@", 1)[0] not in fixnames))
+    def _sp(p):
+        return frozenset(x.split("@", 1)[0] for x in p)
+    while len(sel) < top:
+        pick = None
+        for sc, p in scored:                      # ペア制約を満たし、かつ下限以上
+            if id(p) in used or _adj(sc, p) < floor:
+                continue
+            if _sp(p) in spset:
+                continue
+            mg = _mg(p)
+            if SUGGEST_MEGA_CAP and any(scnt.get(n, 0) >= SUGGEST_MEGA_CAP for n in mg):
+                continue
+            if cnt.get(mg, 0) < pcap:
+                pick = (sc, p); break
+        if pick is None:                          # 下限以上ならペア重複を許す
+            for sc, p in scored:
+                if id(p) not in used and _sp(p) not in spset and _adj(sc, p) >= floor:
+                    pick = (sc, p); break
+        if pick is None:                          # それも尽きたらスコア順に補充
+            for sc, p in scored:
+                if id(p) not in used and _sp(p) not in spset:
+                    pick = (sc, p); break
+        if pick is None:                          # 種構成の重複を許してでも top 本埋める
+            for sc, p in scored:
+                if id(p) not in used:
+                    pick = (sc, p); break
+        if pick is None:
+            break
+        sc, p = pick
+        sel.append((sc, p)); used.add(id(p))
+        mg = _mg(p)
+        spset.add(_sp(p))
+        cnt[mg] = cnt.get(mg, 0) + 1
+        for n in mg:
+            scnt[n] = scnt.get(n, 0) + 1
+    return sel[:top]
+
+def _cap_select(scored, fixnames, cap, top):
+    """ENS降順に貪欲採用。各非コア種の採用回数が cap を超える案はスキップ。
+    top本に満たなければ制約を無視してスコア順に補充（必ず top 本返す）。"""
+    sel, cnt = [], {}
+    for sc, p in scored:
+        nm = [x.split("@", 1)[0] for x in p if x.split("@", 1)[0] not in fixnames]
+        if any(cnt.get(n, 0) >= cap for n in nm):
+            continue
+        sel.append((sc, p))
+        for n in nm:
+            cnt[n] = cnt.get(n, 0) + 1
+        if len(sel) == top:
+            break
+    if len(sel) < top:
+        chosen = {id(p) for _, p in sel}
+        for sc, p in scored:
+            if len(sel) == top:
+                break
+            if id(p) not in chosen:
+                sel.append((sc, p))
+    return sel[:top]
+
 def suggest(core_args, ncand, top):
     fixed = resolve_fixed(PG, core_args)
-    ck = json.dumps([fixed, ncand, top], ensure_ascii=False)   # 解決後specでキー化（入力形式に非依存）
+    key = [fixed, ncand, top] + ([SUGGEST_CAP] if SUGGEST_CAP else []) \
+                                  + ([f"dw{DEPTH_W}"] if DEPTH_W else []) \
+                                  + ([f"mo{MEGA_OVERLAP_W}"] if MEGA_OVERLAP_W else []) \
+                                  + ([f"mmr{SUGGEST_MMR}"] if SUGGEST_MMR else []) \
+                                  + ([f"mc{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_CAP else []) \
+                                  + ([f"mp{SUGGEST_MEGA_PAIR}_{SUGGEST_MEGA_PAIR_FLOOR}_{SUGGEST_MEGA_PAIR_ABS}"] if SUGGEST_MEGA_PAIR else []) \
+                                  + ([f"ms{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_PAIR and SUGGEST_MEGA_CAP else [])
+    ck = json.dumps(key, ensure_ascii=False)   # 解決後specでキー化（入力形式に非依存）
     hit = _SCACHE.get(ck)
     if hit is not None:
         return hit                      # 同一軸は即時返却（重い計算をスキップ）
@@ -199,9 +469,28 @@ def suggest(core_args, ncand, top):
     # Cloud Logging（標準stdout）に構造化ログを残すのみ（追加インフラ不要・$0）。
     print(f"CACHE_MISS {json.dumps({'fixed': fixed, 'ncand': ncand, 'top': top}, ensure_ascii=False)}", flush=True)
     rng = random.Random(0)
-    _t = time.time(); cands = complete_core(PG, L, TH, fixed, rng, ncand); tg = time.time() - _t
-    _t = time.time(); scored = sorted(_par_score(cands), key=lambda x: -x[0])[:top]; ts = time.time() - _t
+    # 候補生成数。キャッシュキーには入れない（本番フロントは ncand:100 固定送信のため、
+    # キーに混ぜるとオフライン生成したキャッシュが永久にヒットしなくなる）。
+    # ncand=100 では候補の8割が上位3メガに集中し、Mライチュウ/Mフラエッテのような
+    # 弱点の被らないメガが1件も生成されなかった（実測ボーマンダ軸: 下限超えメガ2種→600で7種）。
+    _nc = max(ncand, SUGGEST_NCAND)
+    _t = time.time(); cands = complete_core(PG, L, TH, fixed, rng, _nc); tg = time.time() - _t
     fixnames = [f.split("@")[0] for f in fixed]
+    _t = time.time()
+    _all = _apply_mega_overlap_penalty(_rerank(_par_score(cands)), fixnames)
+    if SUGGEST_MEGA_PAIR:
+        scored = _mega_pair_select(_all, set(fixnames), SUGGEST_MEGA_PAIR, top,
+                                   base=_mega_adjusted(_all, fixnames))
+    elif SUGGEST_MEGA_CAP:
+        scored = _mega_cap_select(_all, set(fixnames), SUGGEST_MEGA_CAP, top)
+    elif SUGGEST_MMR > 0:
+        scored = _mmr_select(_all, set(fixnames), top, SUGGEST_MMR,
+                             base=_mega_adjusted(_all, fixnames))
+    elif SUGGEST_CAP:
+        scored = _cap_select(_all, set(fixnames), SUGGEST_CAP, top)
+    else:
+        scored = _all[:top]
+    ts = time.time() - _t
     jobs = [(sc, p, fixnames) for sc, p in scored]
     _t = time.time(); out = _get_pool().map(_proposal_detail, jobs); td = time.time() - _t   # 提案ごとに並列（永続プール）
     print(f"[suggest] gen={tg:.2f}s score={ts:.2f}s detail={td:.2f}s workers={_WORKERS}", flush=True)

@@ -19,6 +19,7 @@ SEASON = POOL_SEASON    # 型プール（build_pool_{POOL_SEASON}.md ＋ 上位�
 # （シビルドンはM-3で77位→M-5で114位なのに MAX_RANK=80 を通過し続けていた）。
 USAGE_SEASON = os.environ.get("USAGE_SEASON", "M-5")
 TYPEDUP_MAX = int(os.environ.get("TYPEDUP_MAX", "2"))
+USAGE_DATE = os.environ.get("USAGE_DATE") or None   # 例 2026-09-11。未指定なら最新クロール
 PREFER_IU_KEEP = float(os.environ.get("PREFER_IU_KEEP", "5"))  # 技が同じでも別型として残す持ち物の実使用率(%)   # 同一タイプを持てる味方の上限（0で無効）
 EVK = ["H", "A", "B", "C", "D", "S"]
 RANK_EXP = float(os.environ.get("RANK_EXP", "1.0"))
@@ -289,8 +290,11 @@ class PartyGen:
     def _live_rank(self):
         try:
             con = sqlite3.connect(DBPATH)
-            cd = con.execute("SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule='single'",
-                             (USAGE_SEASON,)).fetchone()[0]
+            # USAGE_DATE で参照クロール日を固定できる。毎日の新クロールで順位が動くと
+            # resolve_fixed の結果＝キャッシュキーが変わり、作り置きのキャッシュが総ミスになる。
+            cd = USAGE_DATE or con.execute(
+                "SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule='single'",
+                (USAGE_SEASON,)).fetchone()[0]
             r = {p: rk for p, rk in con.execute(
                 "SELECT pokemon,rank FROM pokemon_usage WHERE season=? AND rule='single' AND crawled_date=?",
                 (USAGE_SEASON, cd)) if rk}

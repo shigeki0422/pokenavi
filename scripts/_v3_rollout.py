@@ -9,12 +9,19 @@ import feature1 as _f1
 from simulator.pokemon import build_from_spec, parse_pokemon_spec
 from simulator.ai import _effective_speed
 from simulator.battle import BattleField
-_f1._ensure_loaded("M-3", 8); L = _f1._W["loader"]; field = BattleField(); SEASON = "M-3"
+# pick_rates(必然性リペアの基準)がここを通る。M-3固定だとM-6の新種を評価できない。
+SEASON = os.environ.get("POOL_SEASON", "M-3")
+_f1._ensure_loaded(SEASON, 8); L = _f1._W["loader"]; field = BattleField()
+from engine_dispatch import call as _rust_call, ENGINE as _ENGINE
 m2 = [e["party"] for e in json.load(open("m2_parties.json"))]
 
 def _greedy_3v3(args):
     """両者3匹固定・両者GreedyAIプレイの高速対戦"""
     pa, sa, pb, sb, seed = args
+    if _ENGINE == "rust":   # R5: ネイティブ実装（失敗時は自動でPython経路へ）
+        _rv = _rust_call("greedy_3v3", list(pa), list(sa), list(pb), list(sb), seed, SEASON)
+        if _rv is not None:
+            return _rv
     import random as _r
     from simulator.pokemon import build_from_spec as bfs, parse_pokemon_spec as pps
     from simulator.ai import GreedyAI, certain_ko_override, _effective_speed as espd

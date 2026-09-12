@@ -8,12 +8,26 @@ from simulator.data import NATURE_MODS
 
 import os
 SEASON = os.environ.get("SEASON", "M-3")   # 環境が変わったら SEASON=M-5 等で切り替える
+# この率以上メガ石が使われている種は、非メガ型を型プールに入れない。0＝無効（従来と同一挙動）。
+MEGA_ONLY_RATE = float(os.environ.get("MEGA_ONLY_RATE", "0"))
+# 参照クロール日の上限。毎日の新クロールで型プールが動かないよう固定できる（例 2026-09-11）。
+USAGE_DATE = os.environ.get("USAGE_DATE") or None
 DB = os.path.join(os.path.dirname(__file__), "pokenavi.db")
 OUT = os.path.join(os.path.dirname(__file__), f"build_pool_{SEASON}.md")
 
-SETUP = {"つるぎのまい","りゅうのまい","めいそう","わるだくみ","ちょうのまい","てっぺき","からをやぶる","こうそくいどう",
-         "ロックカット","ビルドアップ","はらだいこ","コスモパワー","アシッドボム","てっていこうせん","ニトロチャージ",
-         "アクアステップ","くさわけ","しんかのきせき","とぐろをまく","めざめるダンス","からにこもる","じこあんじ","バトンタッチ","みがわり"}
+# 攻撃/特攻の**片方だけ**を上げる技は、その分類専属に絞る。両方(からをやぶる等)や
+# どちらも上げない技(てっぺき等)は無条件許可のまま。片方専属を分けずに型合成へ渡すと、
+# C型につるぎのまいが混ざる等、性格・EVと噛み合わない型が生まれる
+# （メガボーマンダ ひかえめ/C32振りに りゅうのまい を誤ってC専用扱いした等、実際に発生した）。
+# 実効果はDBのeffect_textが正なので、新規追加技はまずそちらを確認してから分類する。
+SETUP_A = {"つるぎのまい", "はらだいこ", "りゅうのまい", "とぐろをまく"}   # 攻撃を上げ特攻は上げない
+SETUP_C = {"わるだくみ"}                                          # 特攻のみ上げる
+SETUP = SETUP_A | SETUP_C | {
+    "からをやぶる", "めいそう", "ちょうのまい", "てっぺき",
+    "コスモパワー", "しんかのきせき", "めざめるダンス", "こうそくいどう", "ロックカット",
+    "てっていこうせん", "ニトロチャージ", "アクアステップ", "くさわけ", "からにこもる",
+    "じこあんじ", "バトンタッチ", "みがわり",
+}
 HAZARD = {"ステルスロック","どくびし","まきびし","ねばねばネット"}
 RECOVERY = {"はねやすめ","じこさいせい","なまける","あさのひざし","つきのひかり","こうごうせい","タマゴうみ","ミルクのみ","ねむる","いやしのねがい","つきのひかり","さいきのいのり"}
 PIVOT = {"とんぼがえり","ボルトチェンジ","クイックターン"}
@@ -82,8 +96,9 @@ def main():
 
     sp = [(r["rank"], r["pokemon"]) for r in con.execute(
         "SELECT rank,pokemon FROM pokemon_usage WHERE season=? AND rule='single' "
-        "AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule='single') "
-        "ORDER BY rank", (SEASON, SEASON))]
+        "AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule='single'"
+        + (" AND crawled_date<=?" if USAGE_DATE else "") + ") "
+        "ORDER BY rank", (SEASON, SEASON) + ((USAGE_DATE,) if USAGE_DATE else ()))]
 
     # M-1上位73構築の実採用型（種別）を収集
     M1_DIR = os.path.join(os.path.dirname(__file__), os.environ.get("M1_TEAMS_DIR", "f1_cache"))
@@ -101,19 +116,28 @@ def main():
         except Exception: continue
         for spec in set(party):
             m1[_parse_spec(spec)[0]][spec] += 1
-    def m1_lines(name):
+    def m1_lines(name, mega_only=False):
+        """M-1上位構築の実採用型。mega_only の種は非メガ型を落とす。
+        M-1当時は非メガ運用があった種でも、現シーズンでメガ石が支配的なら
+        その非メガ型は実質別ポケモン（実測カメックス: M-6の石96.1%だがM-1実型に
+        オボンのみ受け型が残り、メガ枠が埋まった提案で引かれていた）。"""
         if name not in m1: return []
         ls = ["### M-1上位実型"]
         for spec, cnt in m1[name].most_common():
             _, it_, na_, mv_, ev_, ab_ = _parse_spec(spec)
+            if mega_only and not is_stone(it_):
+                continue
             ls.append(f"- [{it_}/{na_}/{ab_}/{_ev_str(ev_)}] " + mv_.replace("|", " / ") + (f" ×{cnt}" if cnt > 1 else ""))
+        if len(ls) == 1: return []
         return ls
 
     def top(table, col, poke, lim, extra=""):
+        _lim = " AND crawled_date<=?" if USAGE_DATE else ""
         q = (f"SELECT {col} FROM {table} WHERE season=? AND rule='single' AND pokemon=? "
-             f"AND crawled_date=(SELECT MAX(crawled_date) FROM {table} WHERE season=? AND rule='single' AND pokemon=?) "
+             f"AND crawled_date=(SELECT MAX(crawled_date) FROM {table} WHERE season=? AND rule='single' AND pokemon=?{_lim}) "
              f"ORDER BY rank LIMIT {lim}")
-        return [dict(r) for r in con.execute(q, (SEASON, poke, SEASON, poke))]
+        args = (SEASON, poke, SEASON, poke) + ((USAGE_DATE,) if USAGE_DATE else ())
+        return [dict(r) for r in con.execute(q, args)]
 
     out = [f"# {SEASON} 型プール候補（使用率ベース・要加筆修正）\n",
            "各ポケモンの使用率から型を機械列挙したドラフト。技は役割で分類（攻=攻撃 / 設=設置 / 積=積み / 回=回復 / ピ=ピボット / 妨=妨害 / 守=守る / 変=その他変化）。\n",
@@ -181,28 +205,40 @@ def main():
             return "H2 A32 S32" if cat == "physical" else "H2 C32 S32"
 
         # 採用率50%以上の変化技（さいきのいのり・はねやすめ等）。型を定義するので必ず入れる
-        must = [n for n, u, r, c in mv_roles if r != "攻撃" and (u or 0) >= 50.0][:2]
+        _must_all = [n for n, u, r, c in mv_roles if r != "攻撃" and (u or 0) >= 50.0]
+
+        def _setup_ok(n, cat):
+            """その分類(物理/特殊)の積み技として噛み合うか。逆側の専用積み技は除外する。"""
+            if n in SETUP_A:
+                return cat == "physical"
+            if n in SETUP_C:
+                return cat == "special"
+            return True
 
         def compose(role, cat):
+            # must（採用率50%以上の変化技）も _setup_ok を通す。素通しすると、
+            # 採用率の高いC専属積み技（わるだくみ等）が物理型にまで無条件で混入する。
+            must = [n for n in _must_all if _setup_ok(n, cat)][:2]
             prim = atk_ph if cat == "physical" else atk_sp
             other = atk_sp if cat == "physical" else atk_ph
             atk_n = [n for n, u in prim] + [n for n, u in other]
+            sup_ok = [(n, r) for n, r in sup_n if _setup_ok(n, cat)]
             if role in ("メガ", "スカーフ", "アタッカー", "タスキ"):
                 # 分類内の攻撃技→高採用の変化技→積み/守る/ピボット→分類外の攻撃技 の順で埋める。
                 # 先に分類外で埋めると、特殊型に物理技が混ざって性格/EVと矛盾する。
                 own = [n for n, u in prim]
-                fill = must + [n for n, r in sup_n if r in ("積", "守", "ピボット", "設置")]
+                fill = must + [n for n, r in sup_ok if r in ("積", "守", "ピボット", "設置")]
                 keep = max(0, 4 - len(must))
                 moves = must + own[:keep]
                 if len(moves) < 4:
                     moves += [n for n in fill + [x for x, _ in other] if n not in moves]
                 moves = moves[:4]
             else:
-                pri = must + [n for n, r in sup_n
+                pri = must + [n for n, r in sup_ok
                               if r in ("設置", "回復", "妨害", "守", "積", "ピボット") and n not in must]
                 pri = pri[:3]
                 moves = pri + atk_n[:max(0, 4 - len(pri))]
-            return (moves + atk_n + [n for n, _ in sup_n])[:4]
+            return (moves + atk_n + [n for n, _ in sup_ok])[:4]
 
         # 主分類＝採用率合計が大きい側。副分類は攻撃技が2本以上あるときだけ型を立てる
         u_ph = sum(u for _, u in atk_ph)
@@ -224,8 +260,17 @@ def main():
                   and (_ev_backs or _na_backs))
 
         seen = set()
+        # メガ石がほぼ全採用の種は、非メガ型を落とす。メガ石を持たないその種は種族値もタイプも
+        # 特性も変わる実質別ポケモンで、3%下限だけでは「メガ枠を他に回したときの残り物」
+        # （実測ミミロップ@オボンのみ6.2%／石90.9%）が同列に残り、メガ2枠が埋まった提案で
+        # 引かれていた。閾値未満の種（ピクシー石68.9%等）は非メガ型も実戦的なので触らない。
+        _stone_rate = max((i["usage_rate"] or 0) for i in it if is_stone(i["item"])) if any(
+            is_stone(i["item"]) for i in it) else 0.0
+        _mega_only = MEGA_ONLY_RATE > 0 and _stone_rate >= MEGA_ONLY_RATE
         for i in it:
             if (i["usage_rate"] or 0) < 3.0:
+                continue
+            if _mega_only and not is_stone(i["item"]):
                 continue
             role = item_role(i["item"])
             cats = [main_cat]
@@ -262,7 +307,7 @@ def main():
                            f"[{base_item}/{pick_nature(main_cat)}/{ab0}/{pick_ev(main_cat)}] "
                            + " / ".join(var))
 
-        out += m1_lines(poke)   # この種の M-1上位実型を項目末尾に追加
+        out += m1_lines(poke, _mega_only)   # この種の M-1上位実型を項目末尾に追加
 
     covered = {p for _, p in sp}
     extra = sorted(n for n in m1 if n not in covered)
