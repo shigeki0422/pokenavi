@@ -88,6 +88,34 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
             b.add("攻" if r in _ATK_ROLES else "補")
         return b
 
+    def _role_dup_pairs(party):
+        """役割ラベルが完全一致し、タイプを共有し、弱点も2つ以上重なる組の数。
+        「ほのおの受けが2枚」のような実質同一の駒を検出する（ラウドボーン＋ウルガモス）。
+        タイプ完全一致だけでは、タイプが違うのに同じ仕事をする駒を拾えなかった。
+        判定基準は実上位307構築と生成物で比較して決めた:
+          役割ラベル一致のみ        実上位54% / 生成66%  → 広すぎる
+          ＋タイプ1つ共有          実上位 7% / 生成20%  → アシレーヌ+ミミッキュ(弱点共有0)まで拾う
+          ＋弱点共有2以上(採用)     実上位 3% / 生成 3%  → 実データと同水準
+        """
+        import itertools as _it
+        try:
+            import _explain as _EX3
+            from _party_quality import mon_profile as _mp
+        except Exception:
+            return 0
+        n = 0
+        for a, b in _it.combinations(party, 2):
+            try:
+                if tuple(sorted(_EX3.role_of(a, L))) != tuple(sorted(_EX3.role_of(b, L))):
+                    continue
+                if not (set(pg._types_of_spec(a)) & set(pg._types_of_spec(b))):
+                    continue
+                if len(_mp(a, L)[1] & _mp(b, L)[1]) >= 2:
+                    n += 1
+            except Exception:
+                pass
+        return n
+
     def _same_type_pairs(party):
         """タイプ構成が完全一致し、かつ役割も重なる味方の組の過剰数。
         TYPEDUP_MAX=2 では「みず2・フェアリー2」＝上限内となり、アシレーヌ＋マリルリのような
@@ -119,7 +147,7 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
     def _excess(party):
         """必然性上の構成違反数。タイプ被りの上限超過（gen_party_pool.TYPEDUP_MAX）＋完全一致ペア。"""
         ex = max(0, pg.type_dup_max(party) - TYPEDUP_MAX) if TYPEDUP_MAX else 0
-        return ex + _same_type_pairs(party)
+        return ex + _same_type_pairs(party) + _role_dup_pairs(party)
 
     base_ex = _excess(sp)
     if not dead and not base_holes and not base_ex:
@@ -143,9 +171,24 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
             _r = [_role_bucket(_EX2.role_of(_x, L)) for _x in _mem]
             if any(_r[i] & _r[j] for i in range(len(_mem)) for j in range(i + 1, len(_mem))):
                 dupsets.add(_t)
+        # 役割重複ペア（役割一致＋タイプ共有＋弱点2以上）を構成する枠も対象にする
+        import itertools as _it3
+        from _party_quality import mon_profile as _mp3
+        rd = set()
+        for _i, _j in _it3.combinations(range(6), 2):
+            try:
+                if tuple(sorted(_EX2.role_of(sp[_i], L))) != tuple(sorted(_EX2.role_of(sp[_j], L))):
+                    continue
+                if not (set(pg._types_of_spec(sp[_i])) & set(pg._types_of_spec(sp[_j]))):
+                    continue
+                if len(_mp3(sp[_i], L)[1] & _mp3(sp[_j], L)[1]) >= 2:
+                    rd.update((_i, _j))
+            except Exception:
+                pass
         return [i for i in free
                 if (set(pg._types_of_spec(sp[i])) & over)
-                or tuple(sorted(pg._types_of_spec(sp[i]))) in dupsets]
+                or tuple(sorted(pg._types_of_spec(sp[i]))) in dupsets
+                or i in rd]
 
     if dead and base_ex:
         # 死に枠と構成違反が同居する提案では、死に枠だけを見て違反を放置していた

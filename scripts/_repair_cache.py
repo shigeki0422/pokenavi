@@ -43,6 +43,15 @@ def _has_violation(party):
         b = [{"攻" if r in ATK else "補" for r in EX.role_of(x, L)} for x in mem]
         if any(b[i] & b[j] for i in range(len(mem)) for j in range(i + 1, len(mem))):
             return True
+    # 役割ラベル完全一致＋タイプ共有＋弱点2以上（D案）も違反として2周目に回す
+    import itertools as _it
+    from _party_quality import mon_profile as _mp
+    for a, b2 in _it.combinations(party, 2):
+        try:
+            if tuple(sorted(EX.role_of(a, L))) != tuple(sorted(EX.role_of(b2, L))): continue
+            if not (set(PG._types_of_spec(a)) & set(PG._types_of_spec(b2))): continue
+            if len(_mp(a, L)[1] & _mp(b2, L)[1]) >= 2: return True
+        except Exception: pass
     return False
 
 
