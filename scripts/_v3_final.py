@@ -15,7 +15,19 @@ from _v3_label import _battle_3v3
 SEASON = os.environ.get("V3_SEASON", os.environ.get("POOL_SEASON", "M-3"))
 _f1._ensure_loaded(SEASON, 8); L = _f1._W["loader"]; field = BattleField()
 from engine_dispatch import call as _rust_call, ENGINE as _ENGINE
-m2 = [e["party"] for e in json.load(open("m2_parties.json"))]
+# m2_parties.json は同ファイル内の分析関数(opp_leak/party/main)専用。提案経路が使う
+# _greedy_3v3 / _mcts_3v3 は参照しないので、import時に無い＝落ちる、では困る（M-6運用では不要）。
+class _LazyM2(list):
+    def _load(self):
+        if not len(self):
+            import json as _j
+            self.extend(e["party"] for e in _j.load(open("m2_parties.json")))
+        return self
+    def __getitem__(self, i): return list.__getitem__(self._load(), i)
+    def __len__(self):
+        try: return list.__len__(self._load())
+        except Exception: return 0
+m2 = _LazyM2()
 SIMS = int(os.environ.get("GA_SIMS", "120"))
 
 def _mcts_3v3(args):
