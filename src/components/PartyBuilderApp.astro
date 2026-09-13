@@ -480,7 +480,10 @@ const I18N = I18N_ALL[lang];
   .pb-ev-step:disabled{opacity:.4;cursor:default}
   @media(hover:hover){.pb-ev-step:not(:disabled):hover{background:#eef2ff;border-color:var(--accent)}}
   .pb-ev-lbl{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;color:#fff;font-weight:800;font-size:.72rem}
-  .pb-ev-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;margin:0;padding:0;border-radius:999px;background:rgb(var(--gray-light));cursor:pointer;vertical-align:middle}
+  /* スマホでスクロール中にEVバーへ指が触れると値が飛ぶ。pan-y で縦のパンはページに渡し、
+     スライダーが拾うのは横方向の操作だけにする。touch-action だけでは触れた瞬間の
+     ジャンプが残るので、スクロールに転じたら pointercancel で値を戻す(JS側)。 */
+  .pb-ev-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;margin:0;padding:0;border-radius:999px;background:rgb(var(--gray-light));cursor:pointer;vertical-align:middle;touch-action:pan-y}
   .pb-ev-range::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:transparent}
   .pb-ev-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-top:-5px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
   .pb-ev-range::-moz-range-track{height:6px;border-radius:999px;background:rgb(var(--gray-light))}
@@ -1974,6 +1977,20 @@ const I18N = I18N_ALL[lang];
     el.querySelector('#pb-f-nature').addEventListener('change', (e) => { slot.nature = e.target.value; commitAndReflow(); });
 
     el.querySelectorAll('.pb-ev-range, .pb-ev-num').forEach((inp) => inp.addEventListener('input', onEvInput));
+    el.querySelectorAll('.pb-ev-range').forEach((inp) => {
+      inp.addEventListener('pointerdown', (e) => {
+        if (e.pointerType === 'mouse') return;
+        inp.dataset.evBefore = inp.value;
+      });
+      // 縦スクロールに転じるとブラウザがポインタ列を取り消す。触れた瞬間に飛んだ値を戻す。
+      inp.addEventListener('pointercancel', () => {
+        const before = inp.dataset.evBefore;
+        if (before === undefined || before === inp.value) return;
+        inp.value = before;
+        applyEvChange(+inp.dataset.evI, before, inp);
+      });
+      inp.addEventListener('pointerup', () => { delete inp.dataset.evBefore; });
+    });
     el.querySelectorAll('.pb-ev-num').forEach((inp) => inp.addEventListener('focus', (e) => e.target.select())); // (12a) フォーカスで全選択
     el.querySelectorAll('.pb-ev-step').forEach((btn) => btn.addEventListener('click', () => onEvStepClick(+btn.dataset.evI, +btn.dataset.evStep)));
     const evPresetOpenBtn = el.querySelector('#pb-evpreset-open');
