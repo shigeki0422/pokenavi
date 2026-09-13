@@ -158,10 +158,21 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
                 continue
             if _EX is None:
                 n += len(mem) - 1; continue
+            try:
+                from _party_quality import mon_profile as _mpq
+            except Exception:
+                _mpq = None
             roles = [_role_bucket(_EX.role_of(x, L)) for x in mem]
             for i in range(len(mem)):
                 for j in range(i + 1, len(mem)):
-                    if roles[i] & roles[j]:
+                    # 役割の大分類が重なる、または弱点まで完全一致（役割が違っても代替が利く）
+                    same_w = False
+                    if _mpq is not None:
+                        try:
+                            same_w = _mpq(mem[i], L)[1] == _mpq(mem[j], L)[1]
+                        except Exception:
+                            pass
+                    if (roles[i] & roles[j]) or same_w:
                         n += 1
         return n
 
@@ -190,7 +201,12 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
             if len(_mem) < 2:
                 continue
             _r = [_role_bucket(_EX2.role_of(_x, L)) for _x in _mem]
-            if any(_r[i] & _r[j] for i in range(len(_mem)) for j in range(i + 1, len(_mem))):
+            from _party_quality import mon_profile as _mpq2
+            def _same_w(a, b):
+                try: return _mpq2(a, L)[1] == _mpq2(b, L)[1]
+                except Exception: return False
+            if any((_r[i] & _r[j]) or _same_w(_mem[i], _mem[j])
+                   for i in range(len(_mem)) for j in range(i + 1, len(_mem))):
                 dupsets.add(_t)
         # 役割重複ペア（役割一致＋タイプ共有＋弱点2以上）を構成する枠も対象にする
         import itertools as _it3

@@ -41,7 +41,12 @@ def _has_violation(party):
         if len(mem) < 2:
             continue
         b = [{"攻" if r in ATK else "補" for r in EX.role_of(x, L)} for x in mem]
-        if any(b[i] & b[j] for i in range(len(mem)) for j in range(i + 1, len(mem))):
+        from _party_quality import mon_profile as _mpq
+        def _sw(x, y):
+            try: return _mpq(x, L)[1] == _mpq(y, L)[1]
+            except Exception: return False
+        if any((b[i] & b[j]) or _sw(mem[i], mem[j])
+               for i in range(len(mem)) for j in range(i + 1, len(mem))):
             return True
     # 役割ラベル完全一致＋タイプ共有＋弱点2以上（D案）も違反として2周目に回す
     import itertools as _it
