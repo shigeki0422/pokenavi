@@ -1719,5 +1719,27 @@
         "matchKey": "ヒスイダイケンキ",
         "dex": 503,
         "form": "99"
+    },
+    "golisopod-analysis-m6": {
+        "name": "グソクムシャ",
+        "rank": 4,
+        "types": [
+            "むし",
+            "みず"
+        ],
+        "matchKey": "グソクムシャ",
+        "dex": 768,
+        "form": "00"
+    },
+    "salamence-analysis-m6": {
+        "name": "ボーマンダ",
+        "rank": 2,
+        "types": [
+            "ドラゴン",
+            "ひこう"
+        ],
+        "matchKey": "ボーマンダ",
+        "dex": 373,
+        "form": "00"
     }
 }
