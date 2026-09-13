@@ -1003,6 +1003,30 @@ class SearchAI:
             self._tpl_cache[name] = self.loader.get_pokemon_template(name, self.season)
         return self._tpl_cache[name]
 
+    # 使用率行のあるシーズンを新しい順に探す（種テンプレは season 引数で技/持ち物/特性を引く）。
+    _MOVE_SEASONS = ("M-6", "M-5", "M-4", "M-3", "M-2")
+
+    def _tpl_playable(self, name):
+        """技を持つテンプレート。self.season に使用率行が無い種で技0本の個体が
+        できるのを防ぐ（M-6の200種のうち53種はM-2に行が無く、控えの再サンプルが
+        技0本・特性''・持ち物None の「無害な相手」を木に入れていた）。"""
+        key = ("playable", name)
+        if key not in self._tpl_cache:
+            t = self._tpl(name)
+            if t is None or getattr(t, "top_moves", None):
+                self._tpl_cache[key] = t
+            else:
+                alt = None
+                for s in self._MOVE_SEASONS:
+                    if s == self.season:
+                        continue
+                    c = self.loader.get_pokemon_template(name, s)
+                    if c is not None and getattr(c, "top_moves", None):
+                        alt = c
+                        break
+                self._tpl_cache[key] = alt or t
+        return self._tpl_cache[key]
+
     def _resample_hidden_bench(self, dopp, opp_view) -> None:
         """隠れ選出：相手のまだ場に出ていない控えスロットの『種族』を見せ合い6体から
         サンプリングして差し替える（IS-MCTSを選出不確実性まで拡張）。
@@ -1024,10 +1048,12 @@ class SearchAI:
             if pi >= len(pool):
                 continue
             name = pool[pi]; pi += 1
-            tpl = self._tpl(name)
+            tpl = self._tpl_playable(name)
             if tpl is None:
                 continue
             nb = build_from_template(tpl, self.loader, randomize=True)
+            if not any(nb.moves or []):
+                continue                                   # 技0本の個体は木に入れない
             dopp.party[i] = nb                             # 未登場控え＝無傷・満タンで差し替え
 
     def _sample_opp_config(self, opp_side, belief) -> List[Optional[dict]]:

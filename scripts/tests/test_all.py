@@ -5102,6 +5102,29 @@ except Exception as _e25:
     check("1v1実走テストが実行できる", False, f"{type(_e25).__name__}: {_e25}")
 
 
+print("\n=== 26d. 隠れ控えの再サンプルが技0本にならない ===")
+# _resample_hidden_bench は self.season のテンプレで控えを作り直す。M-6の200種のうち
+# 53種は M-2 に使用率行が無く、技0本・特性''・持ち物None の「無害な相手」が木に入っていた。
+from simulator.search_ai import SearchAI as _SA26d
+from simulator.pokemon import build_from_template as _bft26d
+_ai26d = _SA26d(dl, season="M-2")
+for _sp26d in ("ボーマンダ", "グソクムシャ", "セグレイブ"):
+    _t26d = _ai26d._tpl_playable(_sp26d)
+    _nb26d = _bft26d(_t26d, dl, randomize=True) if _t26d else None
+    _mv26d = [m for m in (_nb26d.moves if _nb26d else []) if m]
+    check(f"season=M-2 でも {_sp26d} の控えが技を持つ", len(_mv26d) > 0,
+          f"技{len(_mv26d)}本")
+# 対照: 元の _tpl は M-2 のまま（フォールバックは _tpl_playable 限定）
+_t0 = _ai26d._tpl("グソクムシャ")
+check("_tpl 自体は season のテンプレのまま（フォールバックしない）",
+      _t0 is not None and not getattr(_t0, "top_moves", None),
+      f"top_moves={len(getattr(_t0,'top_moves',[]) or [])}")
+# 対照: 両シーズンにある種は挙動が変わらない
+_ai26d6 = _SA26d(dl, season="M-6")
+check("両シーズンにある種は _tpl と _tpl_playable が同じ",
+      _ai26d6._tpl("ガブリアス") is _ai26d6._tpl_playable("ガブリアス"))
+
+
 print("\n=== 26c. AI火力見積もりの姿変化・連続技 ===")
 # 対戦本体は battle.apply_pre_move_forms / _calc_hits を必ず通るのに、AIの見積もりは
 # calc_damage を直に呼ぶため取りこぼしていた。ギルガルド(M-6採用率100%)はシールド(攻50)
