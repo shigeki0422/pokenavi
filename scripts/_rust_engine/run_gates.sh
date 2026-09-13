@@ -11,6 +11,13 @@ export PATH="$HOME/.cargo/bin:$PATH"
 cd "$(dirname "$0")/.."
 WHICH="${1:-all}"
 
+# 2026-09-14: 必ず急所(やまあらし/こおりのいぶき)を実装したため、記録コーパスは
+# 「記録時点の Python」の期待値のままで古い。R1/R2 は緑だが R3(fb) と R4(enc/mcts) に
+# 数十件の乖離が出る（fb_00 で 22/6250戦、enc_00 で 21/21006状態）。これはエンジンの
+# 不一致ではなく仕様変更の反映漏れで、コーパス再生成が要る（dump_* スクリプトは消失・
+# pyc から復元可）。両実装が新仕様で一致していることは記録に依らない検証で確認済み:
+#   N=300 FN=greedy FILTER=やまあらし venv/bin/python _rust_engine/fresh_parity.py  → 300/300
+# 再生成するまで --stamp してはいけない（古さの証拠を消すため）。
 venv/bin/python _rust_engine/datapack_export.py
 (cd rust_engine && cargo build --release)
 
