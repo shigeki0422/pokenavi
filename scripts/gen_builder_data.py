@@ -362,14 +362,27 @@ def _setup_moves(con):
     return _SETUP_MOVES
 
 
-def _moves_for_item(item, mpool, setup):
-    if item not in CHOICE_ITEMS:
-        return mpool[:4]
-    ok = [m for m in mpool if m not in setup]
-    return (ok or mpool)[:4]
+def _moves_for_item(item, mpool, setup, axis=None, mmeta=None):
+    """表示・テンプレ用の4技。mpool(採用率TOP10)の順序は保ったまま、型と矛盾する技を落とす。
+
+    技を型に紐付けず採用率TOP4をそのまま出していたため、攻撃軸と食い違う技が並んでいた
+    （メガガブリアスZ: おくびょう/C32 なのに じしん・げきりん が入る）。使用率は非メガ勢と
+    メガ勢の混合なので、軸が決まった型では逆側の攻撃技は落とす。
+    落として4本に満たない場合は、落とした技で埋める（2技のテンプレを作らない）。"""
+    pool = mpool if item not in CHOICE_ITEMS else ([m for m in mpool if m not in setup] or mpool)
+    if axis in ("A", "C") and mmeta:
+        want = "physical" if axis == "A" else "special"
+        def _off(m):
+            cat = (mmeta.get(m) or [None, None])[1]
+            return cat in ("physical", "special") and cat != want
+        keep = [m for m in pool if not _off(m)]
+        if any((mmeta.get(m) or [None, None])[1] == want for m in keep):
+            pool = keep + [m for m in pool if m not in keep]
+    return pool[:4]
 
 
-def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VARIANTS):
+def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VARIANTS,
+                   moves_meta=None):
     """種 name の代表型(最大 max_variants)を作る。自分側・相手側の共通の唯一の入口。
 
     返す各型: {idx,item,nature,ability,ev,moves(表示用TOP4),mpool(技プールTOP10),
@@ -462,7 +475,7 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
         if not backed and nature in used_natures:
             nature = _nature_alt(natures, ev, used_natures) or nature
         used_natures.add(nature)
-        mv4 = _moves_for_item(item, mpool, setup)
+        mv4 = _moves_for_item(item, mpool, setup, c["axis"], moves_meta)
         spec = (f"{name}@{item}:{nature}:{'|'.join(mv4)}:"
                 f"{'/'.join(str(x) for x in ev)}:{ability}")
         out.append({
@@ -623,7 +636,8 @@ def main():
 
     variants_of = {}
     for name, rank, pid in usage_rows:
-        variants_of[name] = build_variants(con, name, tpl_of, normalize_mega_stone)
+        variants_of[name] = build_variants(con, name, tpl_of, normalize_mega_stone,
+                                           moves_meta=moves_out)
     # 型を1つも作れない圏外種は持ち物・技の候補も空で編集できないため候補から除く
     drop = {n for n in off_names if not variants_of.get(n)}
     if drop:
