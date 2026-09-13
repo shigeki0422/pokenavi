@@ -1,12 +1,25 @@
 """Phase C1: ブランダーベンチ。本番AI(@400)同士の実対戦から決定局面をサンプルし、
 審判=MCTS-regret@REF_SIMS のQで「最善よりequityを大きく落とす手」の頻度とパターンを測る。
 env: N_BATT(100) P_SAMPLE(0.12) REF_SIMS(3200) AI_SIMS(400) GAP(0.15)
+     POOL_SEASON(M-3) BELIEF_SEASON(未設定=M-2) PARTIES(パーティ供給元json) OUT(ai_blunder.json)
+
+パーティ供給元は PARTIES で切替。[{"party":[spec…]}…] か、提案キャッシュ
+(suggest_cache.json = {key: {"results":[{"specs":[spec…]}…]}}) のどちらでも読む。
+既定は m2_parties.json（消失済みのため実質 PARTIES 指定が必要）。
+
+ブランダーは審判との差(gap)だけでなく種類も記録する:
+  stay_losing   審判の最善が交代なのに居座って攻撃した
+  status_missed 審判の最善が変化技なのに攻撃した
+  bad_switch    どちらも交代だが交代先が違う
+  wrong_attack  どちらも攻撃だが技が違う
+  other         上記以外
 """
 import os, json, random, statistics
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 import multiprocessing as mp
 import feature1 as _f1
-_f1._ensure_loaded("M-3", 8); L = _f1._W["loader"]; SEASON = "M-3"
+SEASON = os.environ.get("POOL_SEASON", "M-3")
+_f1._ensure_loaded(SEASON, 8); L = _f1._W["loader"]
 REF_SIMS = int(os.environ.get("REF_SIMS", "3200")); AI_SIMS = int(os.environ.get("AI_SIMS", "400"))
 P_SAMPLE = float(os.environ.get("P_SAMPLE", "0.12")); GAP = float(os.environ.get("GAP", "0.15"))
 _REF = None
@@ -18,6 +31,32 @@ def _ref(net, seed):
         _REF = _net_ai(net, L, 0, 12, seed, mcts=True, mcts_sims=REF_SIMS, mcts_select="regret", mcts_fast=True)
     return _REF
 
+def _kind(chosen, best, my_side):
+    """ブランダーの種類。ユーザー基準「不利なのに交代しない」「変化技を使えない」に対応させる。"""
+    if chosen is None or best is None:
+        return "other"
+    ct, bt = chosen.type, best.type
+    if bt == "switch" and ct == "move":
+        return "stay_losing"
+    if bt == "move" and ct == "move":
+        bm = _move_of(best, my_side); cm = _move_of(chosen, my_side)
+        if bm is not None and bm.category == "status" and (cm is None or cm.category != "status"):
+            return "status_missed"
+        return "wrong_attack"
+    if bt == "switch" and ct == "switch":
+        return "bad_switch"
+    return "other"
+
+
+def _move_of(a, my_side):
+    if a is None or a.type != "move":
+        return None
+    if a.move is not None:
+        return a.move
+    mv = my_side.active.moves if my_side.active is not None else []
+    return mv[a.move_idx] if a.move_idx is not None and 0 <= a.move_idx < len(mv) else None
+
+
 def _desc(a, my_side):
     if a is None: return "None"
     if a.type == "move":
@@ -25,7 +64,7 @@ def _desc(a, my_side):
         return nm + ("(メガ)" if getattr(a, "do_mega", False) else "")
     if a.type == "switch":
         j = getattr(a, "switch_to", -1)
-        return "交代→" + (my_side.party[j].name_jp if 0 <= j < len(my_side.party) else f"#{j}")
+        return "交代→" + (my_side.party[j].name if 0 <= j < len(my_side.party) else f"#{j}")
     return a.type
 
 def _battle(args):
@@ -68,9 +107,10 @@ def _battle(args):
                     recs.append({
                         "gap": gap, "chosen": _desc(act, m), "best": _desc(ba, m),
                         "chosen_type": act.type, "best_type": ba.type,
-                        "my": m.active.name_jp, "my_hp": round(m.active.hp / max(1, m.active.max_hp), 2),
-                        "opp": o.active.name_jp, "opp_hp": round(o.active.hp / max(1, o.active.max_hp), 2),
-                        "unvisited_chosen": cq is None})
+                        "my": m.active.name, "my_hp": round(m.active.hp / max(1, m.active.max_hp), 2),
+                        "opp": o.active.name, "opp_hp": round(o.active.hp / max(1, o.active.max_hp), 2),
+                        "unvisited_chosen": cq is None,
+                        "kind": _kind(act, ba, m), "turn": getattr(f, "turn", None)})
             except Exception as e:
                 recs.append({"err": str(e)[:80]})
         return act
@@ -78,20 +118,45 @@ def _battle(args):
     Battle(s1, s2, BattleField()).run(ai1, ai2)
     return recs
 
+def _load_parties(path):
+    """[{"party":[...]}…] / [[spec…]…] / suggest_cache 形式のいずれも6体パーティ列にして返す。"""
+    d = json.load(open(path, encoding="utf-8"))
+    out = []
+    if isinstance(d, dict):          # suggest_cache.json
+        for k in sorted(d):
+            for r in d[k].get("results", []):
+                sp = r.get("specs")
+                if sp and len(sp) == 6:
+                    out.append(list(sp))
+    else:
+        for e in d:
+            sp = e["party"] if isinstance(e, dict) else e
+            if sp and len(sp) == 6:
+                out.append(list(sp))
+    # 同一6体構成は1つに畳む（キャッシュは軸ごとに似た党を持つため）
+    seen, uniq = set(), []
+    for sp in out:
+        k = tuple(sorted(sp))
+        if k not in seen:
+            seen.add(k); uniq.append(sp)
+    return uniq
+
+
 if __name__ == "__main__":
-    m2 = [e["party"] for e in json.load(open("m2_parties.json"))]
+    m2 = _load_parties(os.environ.get("PARTIES", "m2_parties.json"))
     N_BATT = int(os.environ.get("N_BATT", "100"))
     rng = random.Random(141)
     jobs = [(m2[a], m2[b], int(141000000 + i * 7717) & 2147483647)
             for i, (a, b) in enumerate(rng.sample(range(len(m2)), 2) for _ in range(N_BATT))]
-    print(f"■ ブランダーベンチ: AI@{AI_SIMS} 審判@{REF_SIMS} {N_BATT}戦 sample率{P_SAMPLE}", flush=True)
+    print(f"■ ブランダーベンチ: AI@{AI_SIMS} 審判@{REF_SIMS} {N_BATT}戦 sample率{P_SAMPLE} "
+          f"season={SEASON} belief={os.environ.get('BELIEF_SEASON', 'M-2')} パーティ{len(m2)}党", flush=True)
     pool = mp.get_context("fork").Pool(max(1, (os.cpu_count() or 2) - 1))
     out = pool.map(_battle, jobs, chunksize=1); pool.close()
     recs = [r for rs in out for r in rs if "err" not in r]
     errs = [r for rs in out for r in rs if "err" in r]
     gaps = [r["gap"] for r in recs if r["gap"] is not None]
     bl = [r for r in recs if r["gap"] is not None and r["gap"] >= GAP]
-    json.dump(recs, open("ai_blunder.json", "w"), ensure_ascii=False)
+    json.dump(recs, open(os.environ.get("OUT", "ai_blunder.json"), "w"), ensure_ascii=False)
     print(f"  サンプル決定 {len(recs)}件 (err{len(errs)})", flush=True)
     print(f"  ブランダー率(gap≥{GAP}): {len(bl)/max(1,len(gaps))*100:.1f}% ({len(bl)}/{len(gaps)})", flush=True)
     if gaps:
@@ -99,5 +164,10 @@ if __name__ == "__main__":
     from collections import Counter
     pat = Counter((r["chosen_type"], r["best_type"]) for r in bl)
     print("  パターン(選んだ型→最善の型):", dict(pat), flush=True)
+    kinds = Counter(r.get("kind", "other") for r in bl)
+    _n = max(1, len(gaps))
+    print("  種類別ブランダー率:", {k: f"{v}({v/_n*100:.1f}%)" for k, v in kinds.most_common()}, flush=True)
+    _sp = Counter(r["my"] for r in bl)
+    print("  ブランダーの多い自分側:", dict(_sp.most_common(8)), flush=True)
     for r in sorted(bl, key=lambda x: -x["gap"])[:10]:
         print(f"    gap{r['gap']*100:.0f}pt {r['my']}(HP{r['my_hp']}) vs {r['opp']}(HP{r['opp_hp']}): 選択={r['chosen']} 最善={r['best']}", flush=True)
