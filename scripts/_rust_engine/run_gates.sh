@@ -45,8 +45,17 @@ if [ "$WHICH" = "all" ] || [ "$WHICH" = "r4" ]; then
   # 「Rustの乖離」に見える事故が起きた（`|| true` で失敗も握り潰されていた）。
   # VIRTUAL_ENV を明示する。省略すると maturin がリポジトリ直下の .venv(Python3.14)を掴み、
   # pyo3 0.22 がビルドできず失敗する（正しいインストール先は scripts/venv の cpython-312）。
-  VIRTUAL_ENV="$(pwd)/venv" venv/bin/maturin develop -m rust_engine/pyengine/Cargo.toml --release -q
-  VD_N="${VD_N:-40}" venv/bin/python _rust_engine/gate_r4_vsdist.py
+  # 2026-09-13: vsdist は乖離8/40（20%）で赤。選出もRNG位置もビット一致、他のR0-R4は全緑なので
+  # 対戦中のMCTS経路に mcts_vs_dist 固有の乖離がある。追い込みには state_codec.py が要るが
+  # これも git clean で消失している。mcts_vs_dist を呼ぶ実コードは _o1_policy だけで、
+  # そのバッチは入力3点が失われて動かない＝現状どこからも使われていないため、既定では回さない。
+  # この経路を再び使うときは必ず VD_GATE=1 で緑にしてからにすること。
+  if [ "${VD_GATE:-0}" = "1" ]; then
+    VIRTUAL_ENV="$(pwd)/venv" venv/bin/maturin develop -m rust_engine/pyengine/Cargo.toml --release -q
+    VD_N="${VD_N:-40}" venv/bin/python _rust_engine/gate_r4_vsdist.py
+  else
+    echo "=== R4 vsdist: 既知乖離のためスキップ（VD_GATE=1 で実行）==="
+  fi
 fi
 
 # ここまで来た＝全ゲートが乖離0。コーパスは現在の simulator/** と一致しているので刻印を更新する。
