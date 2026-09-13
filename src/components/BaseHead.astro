@@ -28,6 +28,10 @@ const ogImageUrl = imageUrl ? new URL(imageUrl, Astro.site) : new URL(image.src,
 // サイト名・og:localeはURLのプレフィックスから判定する(呼び出し元がlang propを
 // 渡さないページでも、en/ko版に日本語の「｜ポケナビ」やja_JPが付くのを防ぐ)。
 const pagePath = Astro.url.pathname;
+/** 未翻訳のen/ko複製と、1v1計算のみで内容差が小さいmatchupは検索結果に出さない
+ * (followは残すのでリンク評価は流れる)。party-suggestは213件中195件が
+ * インデックス済みで、Googleが薄いと判断していないため対象外。 */
+const noindex = /^\/(en|ko)\//.test(pagePath) || /^\/matchup\//.test(pagePath);
 const pageLang = pagePath.startsWith('/en') ? 'en' : pagePath.startsWith('/ko') ? 'ko' : 'ja';
 const siteName = pageLang === 'en' ? 'PokeNavi' : pageLang === 'ko' ? '포케나비' : SITE_TITLE;
 const resolvedOgLocale = ogLocale ?? (pageLang === 'en' ? 'en_US' : pageLang === 'ko' ? 'ko_KR' : 'ja_JP');
@@ -61,7 +65,7 @@ const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
-{alternates?.map(a => <link rel="alternate" hreflang={a.lang} href={a.url} />)}
+{noindex && <meta name="robots" content="noindex, follow" />}
 
 <!-- Primary Meta Tags -->
 <title>{pageTitle}</title>

@@ -11,6 +11,7 @@ import SimPartyCard from '../components/SimPartyCard.astro';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 import partySuggestSlugs from '../data/party-suggest-slugs.json';
+import rankingData from '../data/ranking.json';
 import targetsData from '../../public/builder-data/targets.json';
 
 type Props = CollectionEntry<'pokemon'>['data'] & { lang?: 'ja' | 'en' | 'ko' };
@@ -45,12 +46,16 @@ const ITEM_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {
 const NATURE_MAP = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
 const POKEMON_MAP = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
 const pokemonNameDisp = pokemonName ? (POKEMON_MAP[pokemonName] ?? pokemonName) : pokemonName;
+/** meta descriptionのシーズン表記はranking.jsonの最新シーズンから引く
+ * (src/pages/index.astroと同じ導出)。固定値にするとシーズン更新のたびに
+ * 全ポケモンページの説明文が古いまま残るため。 */
+const seasonLabel = Object.keys((rankingData as any).seasons).sort().at(-1)!;
 const metaDescription = pokemonName && usageRank ? (
   lang === 'en'
-    ? `${pokemonNameDisp} — Pokémon Champions M-4, Usage Rank #${usageRank}. TOP10 usage rates for moves, held items, abilities & natures. Base stats and type matchup chart included.`
+    ? `${pokemonNameDisp} — Pokémon Champions ${seasonLabel}, Usage Rank #${usageRank}. TOP10 usage rates for moves, held items, abilities & natures. Base stats and type matchup chart included.`
     : lang === 'ko'
-    ? `${pokemonNameDisp} 챔피언스M-4 사용률 ${usageRank}위 — 기술·지닌물건·특성·성격 채용률 TOP10과 종족값·타입 상성 수록.`
-    : `チャンピオンズM-4使用率${usageRank}位${pokemonName}の対戦データ。技・持ち物・特性・性格の採用率TOP10と種族値・タイプ相性を掲載。`
+    ? `${pokemonNameDisp} 챔피언스${seasonLabel} 사용률 ${usageRank}위 — 기술·지닌물건·특성·성격 채용률 TOP10과 종족값·타입 상성 수록.`
+    : `チャンピオンズ${seasonLabel}使用率${usageRank}位${pokemonName}の対戦データ。技・持ち物・特性・性格の採用率TOP10と種族値・タイプ相性を掲載。`
 ) : description;
 const T = {
   ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる', quickBuild: (n: string) => `${n}を軸にした簡単構築`, quickBuildMega: (n: string) => `メガ${n}を軸にした簡単構築`, quickBuildMegaVariant: (n: string, v: string) => `メガ${n}${v}を軸にした簡単構築`, counters: (n: string) => `${n}対策 — 有利を取れるポケモンを見る` },

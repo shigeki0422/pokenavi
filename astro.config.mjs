@@ -10,10 +10,7 @@ export default defineConfig({
 	integrations: [
 		mdx(),
 		sitemap({
-			i18n: {
-				defaultLocale: 'ja',
-				locales: { ja: 'ja', en: 'en', ko: 'ko' },
-			},
+			filter: (page) => !/\/(en|ko|matchup)\//.test(page),
 		}),
 	],
 	fonts: [
