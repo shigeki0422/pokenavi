@@ -2633,6 +2633,8 @@ HIGH_CRIT_MOVES = {
     "クラブハンマー","クロスチョップ","つじぎり","ドリルライナー",
     "アクアカッター","エアカッター","ゴッドバード","ねらいうち","きりさく",
 }
+# 必ず急所に当たる技。トリックフラワーは「必中＋必ず急所」なので命中側にも別途入っている。
+ALWAYS_CRIT_MOVES = {"トリックフラワー", "やまあらし", "こおりのいぶき"}
 _CRIT_THRESHOLDS = {0: 1/24, 1: 1/8, 2: 1/2, 3: 1.0}
 
 
@@ -2645,7 +2647,7 @@ def crit_chance(attacker: BattlePokemon, move: MoveData,
     if attacker.ability == "ひとでなし" and defender is not None \
             and defender.status in ("poison", "badpoison"):
         return 1.0
-    if move.name_jp == "トリックフラワー":
+    if move.name_jp in ALWAYS_CRIT_MOVES:
         return 1.0
     stage = 0
     if move.name_jp in HIGH_CRIT_MOVES:

@@ -680,7 +680,8 @@ pub fn crit_chance(pack: &Pack, attacker: &Poke, mv: &DMove, defender: Option<&P
             }
         }
     }
-    if mv.name == l.トリックフラワー {
+    // 必ず急所に当たる技（正本: simulator/battle.py ALWAYS_CRIT_MOVES）
+    if mv.name == l.トリックフラワー || mv.name == l.やまあらし || mv.name == l.こおりのいぶき {
         return 1.0;
     }
     let mut stage = 0i64;

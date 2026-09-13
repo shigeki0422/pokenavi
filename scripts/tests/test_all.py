@@ -5102,6 +5102,34 @@ except Exception as _e25:
     check("1v1実走テストが実行できる", False, f"{type(_e25).__name__}: {_e25}")
 
 
+print("\n=== 26b. 必ず急所に当たる技 ===")
+# move_master の effect_text が「必ず急所に当たる。」なのに急所率が 1/24 のままだった。
+# deep_audit の検出器 (r'必ず急所', ['急所']) はテストのラベル文字列に一致するだけで
+# 実際の急所率を検証していなかったため素通りしていた。
+from simulator.battle import crit_chance as _cc26b, ALWAYS_CRIT_MOVES as _AC26b
+_att26b = BattlePokemon(name="オトスパス", dex=853, type1="みず", type2=None,
+                        max_hp=150, hp=150, attack=120, defense=100,
+                        sp_attack=80, sp_defense=100, speed=80, ability="", item=None)
+_def26b = BattlePokemon(name="ガブリアス", dex=445, type1="ドラゴン", type2="じめん",
+                        max_hp=180, hp=180, attack=150, defense=110,
+                        sp_attack=90, sp_defense=105, speed=130, ability="さめはだ", item=None)
+for _nm26b in ("やまあらし", "こおりのいぶき", "トリックフラワー"):
+    _mv26b = dl.get_move(_nm26b)
+    check(f"{_nm26b} は必ず急所(1.0)", _mv26b is not None and _cc26b(_att26b, _mv26b, _def26b) == 1.0,
+          f"{_cc26b(_att26b, _mv26b, _def26b) if _mv26b else 'move無し'}")
+    check(f"{_nm26b} が ALWAYS_CRIT_MOVES に入っている", _nm26b in _AC26b)
+# 負例: 急所アップ技(+1=1/8)と通常技(1/24)は 1.0 にならない
+for _nm26b, _want26b in (("きりさく", 1/8), ("じしん", 1/24)):
+    _mv26b = dl.get_move(_nm26b)
+    check(f"負例 {_nm26b} の急所率は {_want26b:.4f}",
+          _mv26b is not None and abs(_cc26b(_att26b, _mv26b, _def26b) - _want26b) < 1e-9,
+          f"{_cc26b(_att26b, _mv26b, _def26b) if _mv26b else 'move無し'}")
+# 負例: シェルアーマー/カブトアーマーは必ず急所も無効化する
+_def26b.ability = "シェルアーマー"
+check("シェルアーマーは必ず急所を無効化", _cc26b(_att26b, dl.get_move("やまあらし"), _def26b) == 0.0,
+      f"{_cc26b(_att26b, dl.get_move('やまあらし'), _def26b)}")
+
+
 print("\n=== 26. 信念モデルのシーズン（BELIEF_SEASON） ===")
 # M-2 の使用率しか引かないと、M-6 で追加された種は事前分布が空になる
 # （技prior 0・持ち物0・特性0・EV候補は無振り1件のみ）。探索の決定化がその空分布を使うため、
