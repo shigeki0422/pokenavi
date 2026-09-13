@@ -465,7 +465,7 @@ def suggest(core_args, ncand, top):
                                   + ([f"mmr{SUGGEST_MMR}"] if SUGGEST_MMR else []) \
                                   + ([f"mc{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_CAP else []) \
                                   + ([f"mp{SUGGEST_MEGA_PAIR}_{SUGGEST_MEGA_PAIR_FLOOR}_{SUGGEST_MEGA_PAIR_ABS}"] if SUGGEST_MEGA_PAIR else []) \
-                                  + ([f"ms{SUGGEST_MEGA_SHARED_MAX}"] if SUGGEST_MEGA_SHARED_MAX else []) \
+                                  + ([f"mw{SUGGEST_MEGA_SHARED_MAX}"] if SUGGEST_MEGA_SHARED_MAX else []) \
                                   + ([f"ms{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_PAIR and SUGGEST_MEGA_CAP else [])
     ck = json.dumps(key, ensure_ascii=False)   # 解決後specでキー化（入力形式に非依存）
     hit = _SCACHE.get(ck)
