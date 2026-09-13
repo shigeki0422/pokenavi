@@ -1741,5 +1741,40 @@
         "matchKey": "ボーマンダ",
         "dex": 373,
         "form": "00"
+    },
+    "garchomp-analysis-m6": {
+        "name": "ガブリアス",
+        "rank": 1,
+        "types": [
+            "ドラゴン",
+            "じめん"
+        ],
+        "matchKey": "ガブリアス",
+        "dex": 445,
+        "form": "00",
+        "pokemonId": "garchomp"
+    },
+    "primarina-analysis-m6": {
+        "name": "アシレーヌ",
+        "rank": 3,
+        "types": [
+            "みず",
+            "フェアリー"
+        ],
+        "matchKey": "アシレーヌ",
+        "dex": 730,
+        "form": "00",
+        "pokemonId": "primarina"
+    },
+    "hippowdon-analysis-m6": {
+        "name": "カバルドン",
+        "rank": 5,
+        "types": [
+            "じめん"
+        ],
+        "matchKey": "カバルドン",
+        "dex": 450,
+        "form": "00",
+        "pokemonId": "hippowdon"
     }
 }
