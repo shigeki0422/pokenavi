@@ -189,7 +189,7 @@ def _source_staleness():
     if want.get("simulator_py") != got.get("simulator_py"):
         _notice("simdrift",
                 "simulator/**.py がパリティ検証時点から変化している。"
-                "_rust_engine/verify_parity.sh（smoke 約5分）の再実行を強く推奨")
+                "_rust_engine/run_gates.sh の再実行を強く推奨")
     return None
 
 
