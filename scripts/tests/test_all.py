@@ -5102,6 +5102,63 @@ except Exception as _e25:
     check("1v1実走テストが実行できる", False, f"{type(_e25).__name__}: {_e25}")
 
 
+print("\n=== 26. 信念モデルのシーズン（BELIEF_SEASON） ===")
+# M-2 の使用率しか引かないと、M-6 で追加された種は事前分布が空になる
+# （技prior 0・持ち物0・特性0・EV候補は無振り1件のみ）。探索の決定化がその空分布を使うため、
+# 相手を「無振り・技なし」と見なして価値を誤る。env BELIEF_SEASON で引くシーズンを切り替える。
+import os as _os26
+from simulator.belief import OpponentBelief as _OB26
+_L26 = dl
+_M6_ONLY = "グソクムシャ"      # M-6 使用率にはあるが M-2 には無い種
+_M2_OK = "ガブリアス"          # 両シーズンにある種（対照）
+
+def _prior26(sp, season):
+    b = _OB26(_L26, season).ensure(sp)
+    return (0, 0, 0, 0) if b is None else (
+        len(b.move_prior), len(b.item_prior), len(b.ability_prior), len(b.cands))
+
+_p_m2 = _prior26(_M6_ONLY, "M-2")
+_p_m6 = _prior26(_M6_ONLY, "M-6")
+check(f"M-2 信念では {_M6_ONLY} の事前分布が空", _p_m2[0] == 0 and _p_m2[1] == 0, f"{_p_m2}")
+check(f"M-6 信念では {_M6_ONLY} に技/持ち物/特性の事前分布が付く",
+      _p_m6[0] > 0 and _p_m6[1] > 0 and _p_m6[2] > 0, f"{_p_m6}")
+check(f"M-6 信念では {_M6_ONLY} のEV/性格候補が2件以上", _p_m6[3] >= 2, f"候補{_p_m6[3]}件")
+_c_m2 = _prior26(_M2_OK, "M-2"); _c_m6 = _prior26(_M2_OK, "M-6")
+check(f"対照: {_M2_OK} はどちらのシーズンでも事前分布が付く",
+      _c_m2[0] > 0 and _c_m6[0] > 0, f"M-2={_c_m2} M-6={_c_m6}")
+
+# 既定シーズンは env BELIEF_SEASON（未設定なら M-2＝従来動作）
+_save26 = _os26.environ.get("BELIEF_SEASON")
+try:
+    _os26.environ.pop("BELIEF_SEASON", None)
+    check("BELIEF_SEASON 未設定なら既定は M-2（従来動作）", _OB26(_L26).season == "M-2",
+          f"{_OB26(_L26).season}")
+    _os26.environ["BELIEF_SEASON"] = "M-6"
+    check("BELIEF_SEASON=M-6 で既定シーズンが切り替わる", _OB26(_L26).season == "M-6",
+          f"{_OB26(_L26).season}")
+    check("明示引数は env より優先", _OB26(_L26, "M-3").season == "M-3", f"{_OB26(_L26, 'M-3').season}")
+finally:
+    _os26.environ.pop("BELIEF_SEASON", None)
+    if _save26 is not None:
+        _os26.environ["BELIEF_SEASON"] = _save26
+
+# Rust は sim.rs の BELIEF_SEASON="M-2" 定数を使うため、M-2 以外では Python 経路に落とす
+try:
+    import engine_dispatch as _ED26
+    _os26.environ["BELIEF_SEASON"] = "M-6"
+    check("BELIEF_SEASON=M-6 では Rust を使わない（パリティ保護）",
+          "BELIEF_SEASON=M-6" in _ED26.unsupported_config("mcts_3v3"),
+          f"{_ED26.unsupported_config('mcts_3v3')}")
+    _os26.environ.pop("BELIEF_SEASON", None)
+    check("BELIEF_SEASON 未設定なら Rust 可（従来どおり）",
+          not any(g.startswith("BELIEF_SEASON") for g in _ED26.unsupported_config("mcts_3v3")),
+          f"{_ED26.unsupported_config('mcts_3v3')}")
+finally:
+    _os26.environ.pop("BELIEF_SEASON", None)
+    if _save26 is not None:
+        _os26.environ["BELIEF_SEASON"] = _save26
+
+
 # ════════════════════════════════════════════════════════════════
 # 集計
 # ════════════════════════════════════════════════════════════════

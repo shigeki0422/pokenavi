@@ -17,7 +17,7 @@ SEASON = POOL_SEASON    # 型プール（build_pool_{POOL_SEASON}.md ＋ 上位�
 # _live_rank/_load_cooc がここを見る。型プールのシーズン(SEASON)とは別物なので混同しないこと。
 # 以前は両方が 'M-3' 直書きで、M-4→M-5 と進んでも順位・同居率がM-3のまま止まっていた
 # （シビルドンはM-3で77位→M-5で114位なのに MAX_RANK=80 を通過し続けていた）。
-USAGE_SEASON = os.environ.get("USAGE_SEASON", "M-5")
+USAGE_SEASON = os.environ.get("USAGE_SEASON") or os.environ.get("POOL_SEASON", "M-5")
 TYPEDUP_MAX = int(os.environ.get("TYPEDUP_MAX", "2"))
 USAGE_DATE = os.environ.get("USAGE_DATE") or None   # 例 2026-09-11。未指定なら最新クロール
 PREFER_IU_KEEP = float(os.environ.get("PREFER_IU_KEEP", "5"))  # 技が同じでも別型として残す持ち物の実使用率(%)   # 同一タイプを持てる味方の上限（0で無効）

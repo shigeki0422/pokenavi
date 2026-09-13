@@ -3,9 +3,10 @@
 合法性：6種別重複なし・メガ石は最大1。データが薄い項目は省略→build_from_spec のテンプレ既定にフォールバック。
 """
 import sqlite3, random
+import os
 from collections import defaultdict
 
-DB = "pokenavi.db"; SEASON = "M-2"; RULE = "single"
+DB = "pokenavi.db"; SEASON = os.environ.get("POOL_SEASON", "M-2"); RULE = "single"
 
 def canon(name):
     """DBの揺れた表記を colon-free の正規名へ。'X:Y'→'X(Y)'、'X (Y)'→'X(Y)'。

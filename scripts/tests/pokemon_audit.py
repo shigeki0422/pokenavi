@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT))
 from simulator.data import DataLoader
 DB = ROOT / "pokenavi.db"
 import os
-SEASON = os.environ.get("SEASON", "M-2")   # 新シーズン投入時は SEASON=M-6 等で監査する
+SEASON = os.environ.get("SEASON") or os.environ.get("POOL_SEASON", "M-2")   # 新シーズン投入時は POOL_SEASON=M-6 等で監査する
 RULE = "single"
 
 VALID_TYPES = {"ノーマル", "ほのお", "みず", "でんき", "くさ", "こおり", "かくとう",

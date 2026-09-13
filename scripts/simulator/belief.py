@@ -12,6 +12,7 @@
 - 攻撃側・場の状態は観測時点の実値を呼び出し側が渡す前提（battle.py の被ダメージ確定点で更新）。
 """
 import math
+import os
 from typing import List, Optional, Dict
 
 from .data import DataLoader
@@ -30,9 +31,10 @@ _MAX_NATS = 7
 class PokemonBelief:
     """相手1体の型・技・持ち物・特性の信念。"""
 
-    def __init__(self, tpl, loader: DataLoader, season: str = "M-2",
+    def __init__(self, tpl, loader: DataLoader, season: Optional[str] = None,
                  known_ability: Optional[str] = None, known_item: Optional[str] = None,
                  extra_spreads: Optional[list] = None):
+        season = season or os.environ.get("BELIEF_SEASON", "M-2")
         self.name = tpl.name
         self.tpl = tpl
 
@@ -231,9 +233,11 @@ def registered_spreads_by_species(loader: DataLoader) -> Dict[str, list]:
 class OpponentBelief:
     """一方のサイドが相手パーティ全体について持つ信念（種族名→PokemonBelief）。"""
 
-    def __init__(self, loader: DataLoader, season: str = "M-2", use_registered: bool = True):
+    def __init__(self, loader: DataLoader, season: Optional[str] = None, use_registered: bool = True):
         self.loader = loader
-        self.season = season
+        # 既定は env BELIEF_SEASON（未設定なら従来の M-2）。M-6 で M-2 の使用率を引くと
+        # 新規種の事前分布が空になる（技0/持物0/EV無振り）ため、A/B で切り替えられる形にする。
+        self.season = season or os.environ.get("BELIEF_SEASON", "M-2")
         self.species: Dict[str, PokemonBelief] = {}
         # このメタ（登録パーティ同士）では真の型を候補に含めて推定精度を上げる
         self._reg = registered_spreads_by_species(loader) if use_registered else {}

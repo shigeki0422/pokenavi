@@ -7,7 +7,7 @@ import sqlite3, os, glob, json, collections
 from simulator.data import NATURE_MODS
 
 import os
-SEASON = os.environ.get("SEASON", "M-3")   # 環境が変わったら SEASON=M-5 等で切り替える
+SEASON = os.environ.get("SEASON") or os.environ.get("POOL_SEASON", "M-3")   # 環境が変わったら POOL_SEASON=M-6 等で切り替える
 # この率以上メガ石が使われている種は、非メガ型を型プールに入れない。0＝無効（従来と同一挙動）。
 MEGA_ONLY_RATE = float(os.environ.get("MEGA_ONLY_RATE", "0"))
 # 参照クロール日の上限。毎日の新クロールで型プールが動かないよう固定できる（例 2026-09-11）。

@@ -44,6 +44,7 @@ _INIT = False
 # ─────────────────────────────────────────────────────────────
 # 未対応コンフィグのガード。(env名, 許容値集合) … None=未設定を許容
 _G_BASE = [
+    ("BELIEF_SEASON", {None, "M-2"}),      # Rust側 sim.rs BELIEF_SEASON="M-2" 定数（Phase 1 で引数化するまで）
     ("HIDDEN_SELECTION", {None, "1"}),      # Rustは hidden=on 固定
     ("SWITCH_BOOST", {None, "0.0", "0", "0.00"}),
     ("IMITATE_SWITCH", {None, "0"}),

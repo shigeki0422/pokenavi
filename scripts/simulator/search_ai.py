@@ -80,7 +80,7 @@ class _ForcedFirst:
 
 class SearchAI:
     def __init__(self, loader: DataLoader, rollouts: int = 16, depth: int = 50,
-                 season: str = "M-2", rollout_ai=None, seed: int = 0, value_fn=None,
+                 season: Optional[str] = None, rollout_ai=None, seed: int = 0, value_fn=None,
                  roll_pessimism=None, policy_fn=None, policy_weight=0.15,
                  adversarial: bool = False, opp_k: int = 6,
                  tree_search: bool = False, tree_depth: int = 1, tree_k: int = 3,
@@ -88,7 +88,7 @@ class SearchAI:
         self.loader = loader
         self.K = rollouts
         self.depth = depth
-        self.season = season
+        self.season = season or os.environ.get("BELIEF_SEASON", "M-2")
         # adversarial=True: 現手番を「同時手番ゼロ和ゲーム」として解く。
         #   自分の候補×相手の候補のペイオフ行列をロールアウトで作り、相手は最善応手(ナッシュ)を取る前提。
         #   ＝「相手は固定方策」を仮定する従来1手に対し、相手の択(読み合い)を評価に入れる。
