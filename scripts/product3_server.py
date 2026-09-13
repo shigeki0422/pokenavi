@@ -527,9 +527,10 @@ def _violates(party):
         return False
 
 
-# /complete の補完候補数。既定は SUGGEST_NCAND に追従（軸提案と工房で候補の広さを揃える）。
-# 50のままだとメガ多様性の制約に候補が足りず、fill=5でENSが0.595→0.573に落ちた。
-COMPLETE_NCAND = int(os.environ.get("COMPLETE_NCAND") or SUGGEST_NCAND or 300)
+# /complete の補完候補数。工房は連続操作するUIなので軸提案(SUGGEST_NCAND=300)には揃えず速度を取る。
+# 実測(3ワーカー) 100: fill=5で1.9s/ENS 0.573、300: 5.4s/ENS 0.595。
+# 50まで落とすとfill=1のメガ多様性が3案中1種に潰れるので100が下限。
+COMPLETE_NCAND = int(os.environ.get("COMPLETE_NCAND", "100"))
 
 def complete(specs, fill, top, ncand=None):
     """型(spec)固定メンバー(specs、型プール非所属可)から残りfill体を補完し、上位topを返す。
