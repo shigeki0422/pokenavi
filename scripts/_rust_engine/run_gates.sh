@@ -18,6 +18,16 @@ WHICH="${1:-all}"
 # pyc から復元可）。両実装が新仕様で一致していることは記録に依らない検証で確認済み:
 #   N=300 FN=greedy FILTER=やまあらし venv/bin/python _rust_engine/fresh_parity.py  → 300/300
 # 再生成するまで --stamp してはいけない（古さの証拠を消すため）。
+#
+# ただし r3fb / r4enc の生成元スクリプトはソースも pyc も完全に消失しており、
+# 現状のアセットでは再生成できない（r4mc のみ dump_mcts_battles の pyc から復元可）。
+# ゲートの資産価値を層で分けて扱うこと:
+#   ・AI の判断に依存しない層 = R1(ダメージ 1.78M ケース)・R2(ターンエンジン)・
+#     R3-rng・R3-sel。simulator の仕様変更が無い限り有効で、ai.py を変えても壊れない
+#     （R2 は AI 呼び出し中の記録を止めて「行動を与えた後のターン処理」だけを記録している）
+#   ・AI の判断を埋め込んだ層 = R3-fb・R4-enc・R4-mcts。対戦AIやダメージ見積もりを
+#     変えるたびに古くなる。ここは記録ゲートではなく fresh_parity.py（同一入力を
+#     python/rust で走らせて突き合わせ）と実対戦の統計等価で担保する
 venv/bin/python _rust_engine/datapack_export.py
 (cd rust_engine && cargo build --release)
 
