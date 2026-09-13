@@ -27,38 +27,9 @@ NVER_ROUNDS = int(os.environ.get("NVER_ROUNDS", "1"))   # 1提案あたりのリ
 
 
 def _has_violation(party):
-    """タイプ被り上限超過、または役割が重なる完全一致ペアがあるか（対戦不要の軽い判定）。"""
-    import collections, _explain as EX
-    from gen_party_pool import TYPEDUP_MAX
-    if TYPEDUP_MAX and PG.type_dup_max(party) > TYPEDUP_MAX:
-        return True
-    g = collections.defaultdict(list)
-    for x in party:
-        g[tuple(sorted(PG._types_of_spec(x)))].append(x)
-    ATK = {"スカーフ掃除役", "積みエース", "メガ積みエース", "メガエース",
-           "物理アタッカー", "特殊アタッカー"}
-    for _t, mem in g.items():
-        if len(mem) < 2:
-            continue
-        b = [{"攻" if r in ATK else "補" for r in EX.role_of(x, L)} for x in mem]
-        from _party_quality import mon_profile as _mpq
-        def _sw(x, y):
-            try: return _mpq(x, L)[1] == _mpq(y, L)[1]
-            except Exception: return False
-        if any((b[i] & b[j]) or _sw(mem[i], mem[j])
-               for i in range(len(mem)) for j in range(i + 1, len(mem))):
-            return True
-    # 役割ラベル完全一致＋タイプ共有＋弱点2以上（D案）も違反として2周目に回す
-    import itertools as _it
-    from _party_quality import mon_profile as _mp
-    for a, b2 in _it.combinations(party, 2):
-        try:
-            if tuple(sorted(EX.role_of(a, L))) != tuple(sorted(EX.role_of(b2, L))): continue
-            if not (set(PG._types_of_spec(a)) & set(PG._types_of_spec(b2))): continue
-            if len(_mp(a, L)[1] & _mp(b2, L)[1]) >= 2: return True
-        except Exception: pass
-    return False
-
+    """構成違反（タイプ被り上限超過・完全一致ペア・役割重複・メガ共有弱点）があるか。
+    判定は _necessity_verify に一本化（かつてここに同じ規則の写しがあり、片方だけ直す事故が起きた）。"""
+    return V.excess(party, PG, L) > 0
 
 def _core_keys(k):
     try:

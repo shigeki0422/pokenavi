@@ -485,19 +485,7 @@ def suggest(core_args, ncand, top):
     _t = time.time(); cands = complete_core(PG, L, TH, fixed, rng, _nc); tg = time.time() - _t
     fixnames = [f.split("@")[0] for f in fixed]
     _t = time.time()
-    _all = _apply_mega_overlap_penalty(_rerank(_par_score(cands)), fixnames)
-    if SUGGEST_MEGA_PAIR:
-        scored = _mega_pair_select(_all, set(fixnames), SUGGEST_MEGA_PAIR, top,
-                                   base=_mega_adjusted(_all, fixnames))
-    elif SUGGEST_MEGA_CAP:
-        scored = _mega_cap_select(_all, set(fixnames), SUGGEST_MEGA_CAP, top)
-    elif SUGGEST_MMR > 0:
-        scored = _mmr_select(_all, set(fixnames), top, SUGGEST_MMR,
-                             base=_mega_adjusted(_all, fixnames))
-    elif SUGGEST_CAP:
-        scored = _cap_select(_all, set(fixnames), SUGGEST_CAP, top)
-    else:
-        scored = _all[:top]
+    scored = _select_proposals(cands, fixnames, top)
     ts = time.time() - _t
     jobs = [(sc, p, fixnames) for sc, p in scored]
     _t = time.time(); out = _get_pool().map(_proposal_detail, jobs); td = time.time() - _t   # 提案ごとに並列（永続プール）
@@ -506,7 +494,42 @@ def suggest(core_args, ncand, top):
     _SCACHE[ck] = res
     return res
 
-COMPLETE_NCAND = int(os.environ.get("COMPLETE_NCAND", "50"))   # /complete の補完候補数（応答時間と品質のトレードオフ。fill=1/5実測: 総 4-9秒 <<20秒目標）
+def _select_proposals(cands, fixnames, top):
+    """候補列 → ENS採点 → 再ランク → メガ重複ペナルティ → 多様性選抜。
+    /suggest と /complete の共通経路。かつて /complete はこの層を丸ごと持たず、
+    パーティ工房の空き枠提案だけメガが偏り、タイプ完全一致ペアも素通りしていた。"""
+    _all = _apply_mega_overlap_penalty(_rerank(_par_score(cands)), fixnames)
+    if SELECT_NO_VIOLATION:
+        clean = [x for x in _all if not _violates(x[1])]
+        if len(clean) >= top:
+            _all = clean
+    fx = set(fixnames)
+    if SUGGEST_MEGA_PAIR:
+        return _mega_pair_select(_all, fx, SUGGEST_MEGA_PAIR, top, base=_mega_adjusted(_all, fixnames))
+    if SUGGEST_MEGA_CAP:
+        return _mega_cap_select(_all, fx, SUGGEST_MEGA_CAP, top)
+    if SUGGEST_MMR > 0:
+        return _mmr_select(_all, fx, top, SUGGEST_MMR, base=_mega_adjusted(_all, fixnames))
+    if SUGGEST_CAP:
+        return _cap_select(_all, fx, SUGGEST_CAP, top)
+    return _all[:top]
+
+
+SELECT_NO_VIOLATION = os.environ.get("SELECT_NO_VIOLATION", "1") == "1"
+
+def _violates(party):
+    """必然性リペアと同じ構成違反判定。オフラインリペアが効かないライブ経路
+    （未キャッシュ軸・パーティ工房）でも、同じ規則で違反案を落とす。"""
+    try:
+        import _necessity_verify as V
+        return V.excess(party, PG, L) > 0
+    except Exception:
+        return False
+
+
+# /complete の補完候補数。既定は SUGGEST_NCAND に追従（軸提案と工房で候補の広さを揃える）。
+# 50のままだとメガ多様性の制約に候補が足りず、fill=5でENSが0.595→0.573に落ちた。
+COMPLETE_NCAND = int(os.environ.get("COMPLETE_NCAND") or SUGGEST_NCAND or 300)
 
 def complete(specs, fill, top, ncand=None):
     """型(spec)固定メンバー(specs、型プール非所属可)から残りfill体を補完し、上位topを返す。
@@ -520,17 +543,10 @@ def complete(specs, fill, top, ncand=None):
     cands = complete_core_free(PG, L, TH, fixed, rng, ncand)
     if not cands:
         return {"results": []}
-    scored = sorted(_par_score(cands), key=lambda x: -x[0])
+    fixnames = [f.split("@")[0] for f in fixed]
+    scored = _select_proposals(cands, fixnames, top)
     nfixed = len(fixed)
-    best_by_set = {}   # 種名集合(frozenset) -> (score, party)。scoredは降順なので初出のみ採用すればよい
-    for sc, p in scored:
-        key = frozenset(s.split("@", 1)[0] for s in p[nfixed:nfixed + fill])
-        if key not in best_by_set:
-            best_by_set[key] = (sc, p)
-        if len(best_by_set) >= top:
-            break
-    deduped = sorted(best_by_set.values(), key=lambda x: -x[0])[:top]
-    out = [{"specs": p[nfixed:nfixed + fill], "score": round(sc, 3)} for sc, p in deduped]
+    out = [{"specs": p[nfixed:nfixed + fill], "score": round(sc, 3)} for sc, p in scored]
     return {"results": out}
 
 def simulate(specs, opp_idx, k):

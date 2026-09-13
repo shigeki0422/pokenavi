@@ -60,6 +60,113 @@ def pick_rates(pool, sp, opp_panel, seed0=142_000_000):
     return rates / len(opp_panel)
 
 
+_ATK_ROLES = {"スカーフ掃除役", "積みエース", "メガ積みエース", "メガエース",
+              "物理アタッカー", "特殊アタッカー"}
+
+def role_bucket(roles):
+    """役割を「攻め」「補助」の大分類にまとめる。role_of のラベルは粒度が細かく、
+    アシレーヌ(積みエース)とマリルリ(物理アタッカー)が別扱いになってしまうが、
+    両方ともみず/フェアリーの攻め駒で役割は重なる。逆にバチンウニ(設置)とMライチュウ(メガエース)は
+    フィールドを張る側と乗る側で噛み合うので分けたい。"""
+    b = set()
+    for r in roles:
+        b.add("攻" if r in _ATK_ROLES else "補")
+    return b
+
+def mega_shared_excess(party, pg, L):
+    """メガ2体の共有弱点が MEGA_SHARED_MAX を超えた分。1つの技で両方に抜群＝メガ2枚の意味が薄い。"""
+    import itertools as _it, os as _os
+    lim = int(_os.environ.get("SUGGEST_MEGA_SHARED_MAX", "0"))
+    if not lim:
+        return 0
+    try:
+        from _party_quality import mon_profile as _mp
+        from gen_party_pool import _spec_mega as _sm
+    except Exception:
+        return 0
+    ms = [x for x in party if _sm(x)]
+    n = 0
+    for a, b in _it.combinations(ms, 2):
+        try:
+            if len(_mp(a, L)[1] & _mp(b, L)[1]) > lim:
+                n += 1
+        except Exception:
+            pass
+    return n
+
+def role_dup_pairs(party, pg, L):
+    """役割ラベルが完全一致し、タイプを共有し、弱点も2つ以上重なる組の数。
+    「ほのおの受けが2枚」のような実質同一の駒を検出する（ラウドボーン＋ウルガモス）。
+    タイプ完全一致だけでは、タイプが違うのに同じ仕事をする駒を拾えなかった。
+    判定基準は実上位307構築と生成物で比較して決めた:
+      役割ラベル一致のみ        実上位54% / 生成66%  → 広すぎる
+      ＋タイプ1つ共有          実上位 7% / 生成20%  → アシレーヌ+ミミッキュ(弱点共有0)まで拾う
+      ＋弱点共有2以上(採用)     実上位 3% / 生成 3%  → 実データと同水準
+    """
+    import itertools as _it
+    try:
+        import _explain as _EX3
+        from _party_quality import mon_profile as _mp
+    except Exception:
+        return 0
+    n = 0
+    for a, b in _it.combinations(party, 2):
+        try:
+            if tuple(sorted(_EX3.role_of(a, L))) != tuple(sorted(_EX3.role_of(b, L))):
+                continue
+            if not (set(pg._types_of_spec(a)) & set(pg._types_of_spec(b))):
+                continue
+            if len(_mp(a, L)[1] & _mp(b, L)[1]) >= 2:
+                n += 1
+        except Exception:
+            pass
+    return n
+
+def same_type_pairs(party, pg, L):
+    """タイプ構成が完全一致し、かつ役割も重なる味方の組の過剰数。
+    TYPEDUP_MAX=2 では「みず2・フェアリー2」＝上限内となり、アシレーヌ＋マリルリのような
+    完全一致ペアを一切検出できなかった。
+    ただしタイプ一致だけでは粗い。バチンウニ(エレキメイカー・設置)＋Mライチュウ(メガエース)は
+    フィールドを張る側と乗る側でシナジーがあり問題ない。対してアーマーガア(受け)＋エアームド(受け)は
+    技も3/4一致で完全な役割重複。役割集合が交わる場合だけ違反と数える。"""
+    import collections as _c
+    try:
+        import _explain as _EX
+    except Exception:
+        _EX = None
+    groups = _c.defaultdict(list)
+    for x in party:
+        groups[tuple(sorted(pg._types_of_spec(x)))].append(x)
+    n = 0
+    for _t, mem in groups.items():
+        if len(mem) < 2:
+            continue
+        if _EX is None:
+            n += len(mem) - 1; continue
+        try:
+            from _party_quality import mon_profile as _mpq
+        except Exception:
+            _mpq = None
+        roles = [role_bucket(_EX.role_of(x, L)) for x in mem]
+        for i in range(len(mem)):
+            for j in range(i + 1, len(mem)):
+                # 役割の大分類が重なる、または弱点まで完全一致（役割が違っても代替が利く）
+                same_w = False
+                if _mpq is not None:
+                    try:
+                        same_w = _mpq(mem[i], L)[1] == _mpq(mem[j], L)[1]
+                    except Exception:
+                        pass
+                if (roles[i] & roles[j]) or same_w:
+                    n += 1
+    return n
+
+def excess(party, pg, L):
+    """必然性上の構成違反数。タイプ被りの上限超過（gen_party_pool.TYPEDUP_MAX）＋完全一致ペア。"""
+    from gen_party_pool import TYPEDUP_MAX
+    ex = max(0, pg.type_dup_max(party) - TYPEDUP_MAX) if TYPEDUP_MAX else 0
+    return ex + same_type_pairs(party, pg, L) + role_dup_pairs(party, pg, L) + mega_shared_excess(party, pg, L)
+
 def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
     """1党を検証・修復して返す (new_sp, info)。fixed_keys=差し替え禁止のコア種。
     2つの必然性課題を同一枠組みで修復（ENS非劣化かつ悪化させない範囲で）:
@@ -75,111 +182,11 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
     base_holes = hole_mons(sp, L)
     dead = [i for i in range(6) if rates[i] == 0 and keys[i] not in fixed_keys]
 
-    _ATK_ROLES = {"スカーフ掃除役", "積みエース", "メガ積みエース", "メガエース",
-                  "物理アタッカー", "特殊アタッカー"}
-
-    def _role_bucket(roles):
-        """役割を「攻め」「補助」の大分類にまとめる。role_of のラベルは粒度が細かく、
-        アシレーヌ(積みエース)とマリルリ(物理アタッカー)が別扱いになってしまうが、
-        両方ともみず/フェアリーの攻め駒で役割は重なる。逆にバチンウニ(設置)とMライチュウ(メガエース)は
-        フィールドを張る側と乗る側で噛み合うので分けたい。"""
-        b = set()
-        for r in roles:
-            b.add("攻" if r in _ATK_ROLES else "補")
-        return b
-
-    def _mega_shared_excess(party):
-        """メガ2体の共有弱点が MEGA_SHARED_MAX を超えた分。1つの技で両方に抜群＝メガ2枚の意味が薄い。"""
-        import itertools as _it, os as _os
-        lim = int(_os.environ.get("SUGGEST_MEGA_SHARED_MAX", "0"))
-        if not lim:
-            return 0
-        try:
-            from _party_quality import mon_profile as _mp
-            from gen_party_pool import _spec_mega as _sm
-        except Exception:
-            return 0
-        ms = [x for x in party if _sm(x)]
-        n = 0
-        for a, b in _it.combinations(ms, 2):
-            try:
-                if len(_mp(a, L)[1] & _mp(b, L)[1]) > lim:
-                    n += 1
-            except Exception:
-                pass
-        return n
-
-    def _role_dup_pairs(party):
-        """役割ラベルが完全一致し、タイプを共有し、弱点も2つ以上重なる組の数。
-        「ほのおの受けが2枚」のような実質同一の駒を検出する（ラウドボーン＋ウルガモス）。
-        タイプ完全一致だけでは、タイプが違うのに同じ仕事をする駒を拾えなかった。
-        判定基準は実上位307構築と生成物で比較して決めた:
-          役割ラベル一致のみ        実上位54% / 生成66%  → 広すぎる
-          ＋タイプ1つ共有          実上位 7% / 生成20%  → アシレーヌ+ミミッキュ(弱点共有0)まで拾う
-          ＋弱点共有2以上(採用)     実上位 3% / 生成 3%  → 実データと同水準
-        """
-        import itertools as _it
-        try:
-            import _explain as _EX3
-            from _party_quality import mon_profile as _mp
-        except Exception:
-            return 0
-        n = 0
-        for a, b in _it.combinations(party, 2):
-            try:
-                if tuple(sorted(_EX3.role_of(a, L))) != tuple(sorted(_EX3.role_of(b, L))):
-                    continue
-                if not (set(pg._types_of_spec(a)) & set(pg._types_of_spec(b))):
-                    continue
-                if len(_mp(a, L)[1] & _mp(b, L)[1]) >= 2:
-                    n += 1
-            except Exception:
-                pass
-        return n
-
-    def _same_type_pairs(party):
-        """タイプ構成が完全一致し、かつ役割も重なる味方の組の過剰数。
-        TYPEDUP_MAX=2 では「みず2・フェアリー2」＝上限内となり、アシレーヌ＋マリルリのような
-        完全一致ペアを一切検出できなかった。
-        ただしタイプ一致だけでは粗い。バチンウニ(エレキメイカー・設置)＋Mライチュウ(メガエース)は
-        フィールドを張る側と乗る側でシナジーがあり問題ない。対してアーマーガア(受け)＋エアームド(受け)は
-        技も3/4一致で完全な役割重複。役割集合が交わる場合だけ違反と数える。"""
-        import collections as _c
-        try:
-            import _explain as _EX
-        except Exception:
-            _EX = None
-        groups = _c.defaultdict(list)
-        for x in party:
-            groups[tuple(sorted(pg._types_of_spec(x)))].append(x)
-        n = 0
-        for _t, mem in groups.items():
-            if len(mem) < 2:
-                continue
-            if _EX is None:
-                n += len(mem) - 1; continue
-            try:
-                from _party_quality import mon_profile as _mpq
-            except Exception:
-                _mpq = None
-            roles = [_role_bucket(_EX.role_of(x, L)) for x in mem]
-            for i in range(len(mem)):
-                for j in range(i + 1, len(mem)):
-                    # 役割の大分類が重なる、または弱点まで完全一致（役割が違っても代替が利く）
-                    same_w = False
-                    if _mpq is not None:
-                        try:
-                            same_w = _mpq(mem[i], L)[1] == _mpq(mem[j], L)[1]
-                        except Exception:
-                            pass
-                    if (roles[i] & roles[j]) or same_w:
-                        n += 1
-        return n
-
-    def _excess(party):
-        """必然性上の構成違反数。タイプ被りの上限超過（gen_party_pool.TYPEDUP_MAX）＋完全一致ペア。"""
-        ex = max(0, pg.type_dup_max(party) - TYPEDUP_MAX) if TYPEDUP_MAX else 0
-        return ex + _same_type_pairs(party) + _role_dup_pairs(party) + _mega_shared_excess(party)
+    _role_bucket = role_bucket
+    def _mega_shared_excess(party): return mega_shared_excess(party, pg, L)
+    def _role_dup_pairs(party): return role_dup_pairs(party, pg, L)
+    def _same_type_pairs(party): return same_type_pairs(party, pg, L)
+    def _excess(party): return excess(party, pg, L)
 
     base_ex = _excess(sp)
     if not dead and not base_holes and not base_ex:
