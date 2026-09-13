@@ -91,8 +91,9 @@ ARCHES = _load_archetypes(8)
 print(f"アーキタイプ盤面 {len(ARCHES)}個: {[a['label'] for a in ARCHES]}", flush=True)
 
 def _xy_suffix(stone):
-    if stone.endswith(("X", "Ｘ")): return "X"
-    if stone.endswith(("Y", "Ｙ")): return "Y"
+    # M-6でZストーン（ルカリオナイトZ等）が追加された。Zを拾わないと同名2件が並ぶ。
+    for c in ("X", "Y", "Z"):
+        if stone.endswith((c, chr(ord(c) - ord("A") + ord("Ａ")))): return c
     return ""
 
 def _variants(sp):

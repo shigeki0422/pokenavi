@@ -49,7 +49,7 @@ const ROLE_NAME_MAP = lang === 'en' ? ROLE_NAME_EN : lang === 'ko' ? ROLE_NAME_K
 
 const I18N_ALL = {
   ja: {
-    title: preCoreLabel ? `${preCoreLabel}軸 M-4 軸から簡単構築` : 'M-4 軸から簡単構築',
+    title: preCoreLabel ? `${preCoreLabel}軸 M-6 軸から簡単構築` : 'M-6 軸から簡単構築',
     lead: '軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案します。各ポケの役割・パーティ統計・使用率上位との1v1相性つき。',
     note: '※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。',
     corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
@@ -114,7 +114,7 @@ const I18N_ALL = {
     omakase: 'おまかせ', importName: label => `${label}軸 かんたん構築`, rankLbl: n => `使用${n}位`,
   },
   en: {
-    title: preCoreLabel ? `Quick Build from ${preCoreLabelDisplay} — M-4` : 'M-4 Quick Build from Core',
+    title: preCoreLabel ? `Quick Build from ${preCoreLabelDisplay} — M-6` : 'M-6 Quick Build from Core',
     lead: 'Specify a Pokémon (or Pokémon) to build around, and the simulator suggests a balanced party — with each member\'s role, team stats, and 1v1 matchups against the top usage ranks.',
     note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
     corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
@@ -179,7 +179,7 @@ const I18N_ALL = {
     omakase: 'auto-pick', importName: label => `${label} core quick build`, rankLbl: n => `Rank #${n}`,
   },
   ko: {
-    title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-4 축으로 간단 구성` : 'M-4 축으로 간단 구성',
+    title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-6 축으로 간단 구성` : 'M-6 축으로 간단 구성',
     lead: '축으로 삼고 싶은 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다. 각 포켓몬의 역할·파티 통계·사용률 상위와의 1v1 상성까지 확인할 수 있습니다.',
     note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
     corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
@@ -599,7 +599,7 @@ const I18N = I18N_ALL[lang];
    * そのためI18N_ALLはフロントマター側と同じ内容をスクリプト内に直接定義し、defineVars経由では渡さない。 */
   const I18N_ALL = {
     ja: {
-      title: preCoreLabel ? `${preCoreLabel}軸 M-4 軸から簡単構築` : 'M-4 軸から簡単構築',
+      title: preCoreLabel ? `${preCoreLabel}軸 M-6 軸から簡単構築` : 'M-6 軸から簡単構築',
       lead: '軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案します。各ポケの役割・パーティ統計・使用率上位との1v1相性つき。',
       note: '※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。',
       corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
@@ -673,7 +673,7 @@ const I18N = I18N_ALL[lang];
       yes: '有', no: '無',
     },
     en: {
-      title: preCoreLabel ? `Quick Build from ${preCoreLabelDisplay} — M-4` : 'M-4 Quick Build from Core',
+      title: preCoreLabel ? `Quick Build from ${preCoreLabelDisplay} — M-6` : 'M-6 Quick Build from Core',
       lead: 'Specify a Pokémon (or Pokémon) to build around, and the simulator suggests a balanced party — with each member\'s role, team stats, and 1v1 matchups against the top usage ranks.',
       note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
       corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
@@ -747,7 +747,7 @@ const I18N = I18N_ALL[lang];
       yes: 'Yes', no: 'No',
     },
     ko: {
-      title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-4 축으로 간단 구성` : 'M-4 축으로 간단 구성',
+      title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-6 축으로 간단 구성` : 'M-6 축으로 간단 구성',
       lead: '축으로 삼고 싶은 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다. 각 포켓몬의 역할·파티 통계·사용률 상위와의 1v1 상성까지 확인할 수 있습니다.',
       note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
       corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
