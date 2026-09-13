@@ -247,14 +247,36 @@ class OpponentBelief:
         # Battle.clone()（決定化ロールアウト）には引き継がず、実信念の汚染も防ぐ。
         return None
 
+    # 使用率行のあるシーズンを新しい順に探す（事前分布が空だと型リークになるため）。
+    _FALLBACK_SEASONS = ("M-6", "M-5", "M-4", "M-3", "M-2")
+
+    def _tpl_with_prior(self, name: str):
+        """事前分布を持つテンプレート。self.season に使用率行が無い種は、行のある
+        最新シーズンへフォールバックする。
+
+        空の事前分布は「相手を弱いと見なす」のではなく **型リーク** を生む。
+        SearchAI._determinize は falsy を上書きしない実装（`if c.get("item") is not None:`）
+        なので、prior が空だと相手の真の持ち物・特性・技がそのまま探索に残ってしまう。
+        M-6の200種のうち53種、上位40種のうち14種が M-2 に行を持たない。"""
+        tpl = self.loader.get_pokemon_template(name, self.season)
+        if tpl is not None and (tpl.top_moves or tpl.top_items or tpl.top_abilities):
+            return tpl, self.season
+        for s in self._FALLBACK_SEASONS:
+            if s == self.season:
+                continue
+            alt = self.loader.get_pokemon_template(name, s)
+            if alt is not None and (alt.top_moves or alt.top_items or alt.top_abilities):
+                return alt, s
+        return tpl, self.season
+
     def ensure(self, name: str, known_ability: Optional[str] = None,
                known_item: Optional[str] = None) -> Optional[PokemonBelief]:
         if name not in self.species:
-            tpl = self.loader.get_pokemon_template(name, self.season)
+            tpl, season = self._tpl_with_prior(name)
             if tpl is None:
                 return None
             self.species[name] = PokemonBelief(
-                tpl, self.loader, self.season,
+                tpl, self.loader, season,
                 known_ability=known_ability, known_item=known_item,
                 extra_spreads=self._reg.get(name))
         return self.species[name]

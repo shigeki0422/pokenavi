@@ -970,7 +970,8 @@ AI（`ai.py`）は `my_side.opp_view` の既知情報のみを参照して意思
 - **EV/性格**: 使用率の `top_evs × top_natures` を候補スプレッドとして列挙（各候補は具体的な防御体を構築）。`observe_damage` で、攻撃側を既知としてダメージ式を逆算し、16段階の乱数ロールで観測割合を再現できる割合を尤度としてベイズ更新。再現不可な観測（マルチヒット・急所等のモデル外）は安全にスキップ。`map_spread`/`spread_posterior`/`expected_stat` で参照。
 - **登録スプレッド混入（発展②）**: `OpponentBelief(use_registered=True, 既定)` は `m1_party` の実スプレッド（種族別）を候補に追加する（`registered_spreads_by_species`、キャッシュ付）。このメタは登録パーティ同士のため真の型が候補に入り、ダメージ観測で尤度が集中する。耐久(防御/特防)推定の事後誤差が事前比 約65%改善（混入なしは約10%）。
 - **統合**: `BattleSide.belief`（任意）に `OpponentBelief` を付与すると、被ダメージ確定点（`on_hp_change` と同じ箇所）で自動的に `observe_damage` が呼ばれEV/性格を推定。`belief` は対戦状態ではなく意思決定者の知識のため `Battle.clone()`（ロールアウト）には引き継がれない（`__deepcopy__`→None）。
-- **参照シーズン（`BELIEF_SEASON`）**: 事前分布を引くシーズン。既定は env `BELIEF_SEASON`、未設定なら `"M-2"`（従来動作）。明示引数 `OpponentBelief(loader, season)` は env より優先。
+- **参照シーズン（`BELIEF_SEASON`）**: 事前分布を引くシーズン。既定は env `BELIEF_SEASON`、未設定なら `"M-2"`。明示引数 `OpponentBelief(loader, season)` は env より優先。
+- **欠損時フォールバック（型リーク防止・2026-09-14）**: 指定シーズンに使用率行が無い種は、行のある最新シーズンへ自動フォールバックする（`_tpl_with_prior`。Rust `belief.rs` も同一）。事前分布を空のままにすると `_determinize` が falsy を上書きしない実装のせいで**相手の真の持ち物・特性・技が探索に残る＝型リーク**になるため、空の事前分布は許さない。`test_all.py` 節26 が M-6 上位40種で不変条件を検査する。
   - シーズンが実環境とずれると、そのシーズンに使用率行が無い種は**事前分布が丸ごと空**になる（`top_moves`/`top_items`/`top_abilities` が空 → 技prior 0・持ち物0・特性0、EV/性格候補は「無振り・まじめ」1件のみ）。M-6 の200種のうち53種、上位40種のうち14種（ボーマンダ・グソクムシャ・セグレイブ・サーフゴー等）が M-2 に存在しない。
   - 影響は決定化に出る。ただし内訳は一様ではない（2026-09-14 実測）:
     - `_determinize` は `item`/`ability`/`moves` を falsy なら上書きしない（`if c.get("item") is not None:` 等）。事前分布が空だと相手の**真の持ち物・特性・技がそのまま残る**＝探索にとってはむしろ有利な情報漏れになる。

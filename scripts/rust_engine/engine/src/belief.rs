@@ -309,7 +309,32 @@ impl OpponentBelief {
         if let Some(i) = self.idx(name) {
             return Some(i);
         }
-        let tpl = get_pokemon_template(pack, name, &self.season)?;
+        // 使用率行のあるシーズンへフォールバックする（正本: simulator/belief.py _tpl_with_prior）。
+        // 事前分布が空だと determinize が falsy を上書きせず、相手の真の型が探索に残る＝型リーク。
+        let tpl = {
+            let t = get_pokemon_template(pack, name, &self.season);
+            let has_prior = |t: &Option<Template>| {
+                t.as_ref().map_or(false, |x| {
+                    !x.top_moves.is_empty() || !x.top_items.is_empty() || !x.top_abilities.is_empty()
+                })
+            };
+            if has_prior(&t) {
+                t
+            } else {
+                let mut alt = None;
+                for s in ["M-6", "M-5", "M-4", "M-3", "M-2"] {
+                    if s == self.season {
+                        continue;
+                    }
+                    let c = get_pokemon_template(pack, name, s);
+                    if has_prior(&c) {
+                        alt = c;
+                        break;
+                    }
+                }
+                alt.or(t)
+            }
+        }?;
         let extra = if self.use_registered {
             pack.registered_spreads.get(name).cloned()
         } else {

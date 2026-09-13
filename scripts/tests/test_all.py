@@ -5226,10 +5226,24 @@ def _prior26(sp, season):
 
 _p_m2 = _prior26(_M6_ONLY, "M-2")
 _p_m6 = _prior26(_M6_ONLY, "M-6")
-check(f"M-2 信念では {_M6_ONLY} の事前分布が空", _p_m2[0] == 0 and _p_m2[1] == 0, f"{_p_m2}")
+# 事前分布が空だと SearchAI._determinize が falsy を上書きせず、相手の真の持ち物・特性・技が
+# 探索に残る＝型リーク。使用率行の無いシーズンを指定しても空にならないことが不変条件。
+check(f"どのシーズン指定でも {_M6_ONLY} の事前分布が空にならない（型リーク防止）",
+      _p_m2[0] > 0 and _p_m2[1] > 0 and _p_m2[2] > 0, f"M-2={_p_m2}")
 check(f"M-6 信念では {_M6_ONLY} に技/持ち物/特性の事前分布が付く",
       _p_m6[0] > 0 and _p_m6[1] > 0 and _p_m6[2] > 0, f"{_p_m6}")
-check(f"M-6 信念では {_M6_ONLY} のEV/性格候補が2件以上", _p_m6[3] >= 2, f"候補{_p_m6[3]}件")
+check(f"{_M6_ONLY} のEV/性格候補が2件以上（無振り1件に潰れない）",
+      _p_m2[3] >= 2 and _p_m6[3] >= 2, f"M-2候補{_p_m2[3]} M-6候補{_p_m6[3]}")
+# 全 M-6 上位種で空の事前分布が無いこと
+_empties26 = []
+for _sp26 in [r[0] for r in dl.con.execute(
+        "SELECT pokemon FROM pokemon_usage WHERE season='M-6' AND rule='single' "
+        "AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_usage WHERE season='M-6') "
+        "ORDER BY rank LIMIT 40")]:
+    _b26 = _OB26(_L26, "M-2").ensure(_sp26)
+    if _b26 is not None and not _b26.move_prior:
+        _empties26.append(_sp26)
+check("M-6 上位40種すべてで技の事前分布が空でない", not _empties26, f"{_empties26}")
 _c_m2 = _prior26(_M2_OK, "M-2"); _c_m6 = _prior26(_M2_OK, "M-6")
 check(f"対照: {_M2_OK} はどちらのシーズンでも事前分布が付く",
       _c_m2[0] > 0 and _c_m6[0] > 0, f"M-2={_c_m2} M-6={_c_m6}")
