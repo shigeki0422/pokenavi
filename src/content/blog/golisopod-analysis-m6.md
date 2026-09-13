@@ -372,7 +372,7 @@ M-6シーズン、グソクムシャは使用率4位に入っています。通�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15.4%／14.1%／7.6%</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-1013-00.webp" alt="イエッサン(オス)" style="width:32px;height:32px;vertical-align:middle;margin-right:6px">イエッサン(オス)（30位）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1"><img src="/images/pokemon/pokemon-0876-00.webp" alt="イエッサン(オス)" style="width:32px;height:32px;vertical-align:middle;margin-right:6px">イエッサン(オス)（30位）</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">エスパー/ノーマル</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">マジカルフレイム</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60.3%</td>
