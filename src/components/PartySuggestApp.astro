@@ -1013,14 +1013,15 @@ const I18N = I18N_ALL[lang];
     const dt = res.details || {};
     const tm = dt.typematrix;
     const arch = res.archetypes;
-    const avgAdv = arch&&arch.length ? Math.round(arch.reduce((s,x)=>s+x.adv,0)/arch.length*100) : null;
+    // 「想定パーティ相性」「選出ガイド」は価値を出せていないので一旦タブから外す（2026-09-14）。
+    // 折りたたみ内の詳細は提案の約2.5%しか開かれておらず、ガイドは計算依頼ボタンが30日で115件。
+    // 描画関数(archetypeHtml/guideHtml)と paneHtml の分岐は残してあるので、
+    // 下の2行を戻せば復活する。再考のうえ設計し直す。
     const tbar = `<div class="tabbar">
         <button class="tb active" data-i="${i}" data-t="atktype">${I18N.tabAtk}</button>
         <button class="tb" data-i="${i}" data-t="deftype">${I18N.tabDef}</button>
         <button class="tb" data-i="${i}" data-t="mu">${I18N.tabMu}</button>
         <button class="tb" data-i="${i}" data-t="speed">${I18N.tabSpeed}</button>
-        <button class="tb" data-i="${i}" data-t="arch">${I18N.tabArch}</button>
-        <button class="tb" data-i="${i}" data-t="guide">${I18N.tabGuide}${(res.guide&&res.guide.length)?'':`<span class="soon-tag">${I18N.soon}</span>`}</button>
       </div>`;
     const collapsed = i !== 0;
     return `<div class="card sug${collapsed?' collapsed':''}" data-sug="${i}">
