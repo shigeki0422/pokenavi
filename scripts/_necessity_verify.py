@@ -88,6 +88,27 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
             b.add("攻" if r in _ATK_ROLES else "補")
         return b
 
+    def _mega_shared_excess(party):
+        """メガ2体の共有弱点が MEGA_SHARED_MAX を超えた分。1つの技で両方に抜群＝メガ2枚の意味が薄い。"""
+        import itertools as _it, os as _os
+        lim = int(_os.environ.get("SUGGEST_MEGA_SHARED_MAX", "0"))
+        if not lim:
+            return 0
+        try:
+            from _party_quality import mon_profile as _mp
+            from gen_party_pool import _spec_mega as _sm
+        except Exception:
+            return 0
+        ms = [x for x in party if _sm(x)]
+        n = 0
+        for a, b in _it.combinations(ms, 2):
+            try:
+                if len(_mp(a, L)[1] & _mp(b, L)[1]) > lim:
+                    n += 1
+            except Exception:
+                pass
+        return n
+
     def _role_dup_pairs(party):
         """役割ラベルが完全一致し、タイプを共有し、弱点も2つ以上重なる組の数。
         「ほのおの受けが2枚」のような実質同一の駒を検出する（ラウドボーン＋ウルガモス）。
@@ -147,7 +168,7 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
     def _excess(party):
         """必然性上の構成違反数。タイプ被りの上限超過（gen_party_pool.TYPEDUP_MAX）＋完全一致ペア。"""
         ex = max(0, pg.type_dup_max(party) - TYPEDUP_MAX) if TYPEDUP_MAX else 0
-        return ex + _same_type_pairs(party) + _role_dup_pairs(party)
+        return ex + _same_type_pairs(party) + _role_dup_pairs(party) + _mega_shared_excess(party)
 
     base_ex = _excess(sp)
     if not dead and not base_holes and not base_ex:
@@ -185,6 +206,18 @@ def repair_party(sp, pg, L, th, ens, pool, opp_panel, fixed_keys, rng):
                     rd.update((_i, _j))
             except Exception:
                 pass
+        # メガ共有弱点が上限超過ならメガ枠も差し替え対象にする
+        import os as _os4
+        _lim = int(_os4.environ.get("SUGGEST_MEGA_SHARED_MAX", "0"))
+        if _lim:
+            from gen_party_pool import _spec_mega as _sm4
+            _ms = [i for i in range(6) if _sm4(sp[i])]
+            for _i, _j in _it3.combinations(_ms, 2):
+                try:
+                    if len(_mp3(sp[_i], L)[1] & _mp3(sp[_j], L)[1]) > _lim:
+                        rd.update((_i, _j))
+                except Exception:
+                    pass
         return [i for i in free
                 if (set(pg._types_of_spec(sp[i])) & over)
                 or tuple(sorted(pg._types_of_spec(sp[i]))) in dupsets

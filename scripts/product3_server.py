@@ -366,6 +366,10 @@ SUGGEST_MEGA_PAIR_FLOOR = float(os.environ.get("SUGGEST_MEGA_PAIR_FLOOR", "0.90"
 # （実測エースバーン軸: top0.704で floor0.599、2位以下は0.59前後に固まり2種しか通らず
 #  メガ構成2/5。候補は600件82種あり生成の問題ではない）。
 SUGGEST_MEGA_PAIR_ABS = float(os.environ.get("SUGGEST_MEGA_PAIR_ABS", "0"))
+# メガ2体の共有弱点の上限。これを超える案は選抜から除外する（0＝無効）。
+# MEGA_OVERLAP_W は「引いて並べ替える」ペナルティなので、下限を通れば共有2でも採られる。
+# 共有2は「1つの技で両方に抜群」を意味し、メガ2枚を並べる意味が薄れるため上限で弾く。
+SUGGEST_MEGA_SHARED_MAX = int(os.environ.get("SUGGEST_MEGA_SHARED_MAX", "0"))
 
 
 def _mega_pair_select(scored, fixnames, pcap, top, base=None):
@@ -400,6 +404,8 @@ def _mega_pair_select(scored, fixnames, pcap, top, base=None):
             if id(p) in used or _adj(sc, p) < floor:
                 continue
             if _sp(p) in spset:
+                continue
+            if SUGGEST_MEGA_SHARED_MAX and _mega_weak_shared(p, fixnames) > SUGGEST_MEGA_SHARED_MAX:
                 continue
             mg = _mg(p)
             if SUGGEST_MEGA_CAP and any(scnt.get(n, 0) >= SUGGEST_MEGA_CAP for n in mg):
@@ -459,6 +465,7 @@ def suggest(core_args, ncand, top):
                                   + ([f"mmr{SUGGEST_MMR}"] if SUGGEST_MMR else []) \
                                   + ([f"mc{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_CAP else []) \
                                   + ([f"mp{SUGGEST_MEGA_PAIR}_{SUGGEST_MEGA_PAIR_FLOOR}_{SUGGEST_MEGA_PAIR_ABS}"] if SUGGEST_MEGA_PAIR else []) \
+                                  + ([f"ms{SUGGEST_MEGA_SHARED_MAX}"] if SUGGEST_MEGA_SHARED_MAX else []) \
                                   + ([f"ms{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_PAIR and SUGGEST_MEGA_CAP else [])
     ck = json.dumps(key, ensure_ascii=False)   # 解決後specでキー化（入力形式に非依存）
     hit = _SCACHE.get(ck)
