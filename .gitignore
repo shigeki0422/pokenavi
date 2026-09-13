@@ -55,6 +55,8 @@ public/sim-data-verify/
 scripts/_rust_engine/datapack.json
 scripts/_rust_engine/datapack.json.sha256
 scripts/_rust_engine/cases/
+# ゲート実行のたびに出るカバレッジ集計（検証の副産物で、成果物ではない）
+scripts/_rust_engine/coverage_r*.json
 scripts/rust_engine/*/target/
 # ワークスペース直下の target/ は上のパターンに一致しない（135MBの生成物が入る）
 scripts/rust_engine/target/
