@@ -16,6 +16,7 @@ matchup は simulator.matchup_explain.explain_matchup を再利用（メガ後�
 import glob
 import json
 import os
+import re
 import sqlite3
 
 from simulator.simulate import get_loader
@@ -211,11 +212,16 @@ def _normalize_poke_name(n):
 
 
 def export_icons(con):
+    # 同名に複数IDが紐づく行が実在する（M-5のエンブオーに0724-00＝ジュナイパーのID）。
+    # 新しいシーズンを優先して上書きしないと、クロール事故の古いIDが勝つ。
     rows = con.execute(
-        "SELECT DISTINCT pokemon, pokemon_id FROM pokemon_usage "
+        "SELECT DISTINCT pokemon, pokemon_id, season FROM pokemon_usage "
         "WHERE rule='single' AND pokemon_id GLOB '[0-9][0-9][0-9][0-9]-[0-9][0-9]'").fetchall()
+    def _sk(s):
+        m = re.match(r"M-(\d+)", s or "")
+        return int(m.group(1)) if m else -1
     out = {}
-    for r in rows:
+    for r in sorted(rows, key=lambda r: _sk(r["season"])):
         out[_normalize_poke_name(r["pokemon"])] = r["pokemon_id"]
         if ":" in r["pokemon"]:
             base, _, form = r["pokemon"].partition(":")
