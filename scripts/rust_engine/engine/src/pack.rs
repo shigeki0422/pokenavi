@@ -174,6 +174,10 @@ pub struct Pack {
     /// 同じ対面で技ごとに build_poke をやり直すと spec のパースが支配的になるため
     /// （1対面で約70回・マトリクス全体で約28,000回）、組み立て済みを複製して使う。
     pub prepared: Option<(String, String, String, crate::poke::Poke, crate::poke::Poke)>,
+    /// AI見積もりの補正（正本: simulator/ai.py の AI_BLADE_FORME / AI_MULTI_HIT）。
+    /// 既定ON。実対戦A/Bのために env で切れるようにしてある。
+    pub env_blade_forme: bool,
+    pub env_multi_hit: bool,
 }
 
 fn j_str(v: &Value) -> Option<String> {
@@ -500,6 +504,8 @@ impl Pack {
 
         Pack {
             prepared: None,
+            env_blade_forme: std::env::var("AI_BLADE_FORME").as_deref() != Ok("0"),
+            env_multi_hit: std::env::var("AI_MULTI_HIT").as_deref() != Ok("0"),
             intern,
             sy,
             tc: TyC::build(&tindex),

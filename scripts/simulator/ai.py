@@ -57,15 +57,83 @@ def _hazard_value(move_name: str, my_side: BattleSide, opp_side: BattleSide,
     return 0.0
 
 
+# 見積もりの姿変化・連続技補正。既定ON。実対戦A/Bで比較するため env で切れるようにする。
+_BLADE_ON = os.environ.get("AI_BLADE_FORME", "1") == "1"
+_MULTI_HIT_ON = os.environ.get("AI_MULTI_HIT", "1") == "1"
+
+
+def _expected_hits(move, attacker) -> float:
+    """連続技の期待ヒット数。正本は battle._calc_hits（2/3/2-5乱数/ネズミざん/スキルリンク）。
+    AI_MULTI_HIT=0 で従来どおり1発として見る（A/B用）。"""
+    if not _MULTI_HIT_ON:
+        return 1.0
+    from .battle import MULTI_HIT_2, MULTI_HIT_3, MULTI_HIT_RANDOM_25
+    n = move.name_jp
+    skill_link = getattr(attacker, "ability", "") == "スキルリンク"
+    if n in MULTI_HIT_2:
+        return 2.0
+    if n in MULTI_HIT_3:
+        return 3.0
+    if n in MULTI_HIT_RANDOM_25:
+        # random.choices([2,3,4,5], weights=[3,3,1,1]) の期待値 = 3.0
+        return 5.0 if skill_link else 3.0
+    if n == "ネズミざん":
+        # 1回目は確定、以降 0.9 で継続（上限10）。E = (1-0.9^10)/0.1
+        return 10.0 if skill_link else 6.513
+    return 1.0
+
+
+def _pre_move_forms_ctx(attacker, move):
+    """技を撃つ直前の姿変化（バトルスイッチ）を一時適用して元に戻すコンテキスト。
+
+    対戦本体は battle.apply_pre_move_forms で必ず通るのに、見積もり側は calc_damage を
+    直に呼ぶため取りこぼしていた。ギルガルド（M-6 採用率100%）はシールド(攻50)のまま
+    計算され、実際のブレード(攻150)に対して 1.8〜2.0倍の過小評価になっていた。
+    へんげんじざいは既存の×1.5補正で扱うのでここでは触らない。
+    """
+    import contextlib
+
+    @contextlib.contextmanager
+    def _noop():
+        yield
+
+    if not _BLADE_ON or move.category == "status" \
+            or getattr(attacker, "ability", "") != "バトルスイッチ" \
+            or getattr(attacker, "_in_blade_forme", False):
+        return _noop()
+
+    @contextlib.contextmanager
+    def _blade():
+        from .battle import _aegislash_to_blade
+        saved = (attacker.attack, attacker.defense, attacker.sp_attack, attacker.sp_defense)
+        _aegislash_to_blade(attacker, [])
+        try:
+            yield
+        finally:
+            (attacker.attack, attacker.defense,
+             attacker.sp_attack, attacker.sp_defense) = saved
+            for k in ("_shield_atk", "_shield_def", "_shield_spatk", "_shield_spdef"):
+                if hasattr(attacker, k):
+                    delattr(attacker, k)
+            attacker._in_blade_forme = False   # type: ignore
+
+    return _blade()
+
+
 def expected_damage(attacker: BattlePokemon, defender: BattlePokemon,
                     move, field: BattleField) -> float:
-    """ダメージ期待値（命中率考慮）"""
+    """ダメージ期待値（命中率・急所・姿変化・連続技を考慮）"""
     if move is None or move.category == "status" or move.power is None:
         return 0.0
     acc = (move.accuracy or 100) / 100
     eff = get_type_effectiveness(move.type, defender.type1, defender.type2)
     if eff == 0:
         return 0.0
+    with _pre_move_forms_ctx(attacker, move):
+        return _expected_damage_core(attacker, defender, move, field) * acc
+
+
+def _expected_damage_core(attacker, defender, move, field) -> float:
     dmg = calc_damage(attacker, defender, move, field, critical=False, random_roll=0.5)
     # 急所期待値（トリックフラワー等の必中急所はpc=1.0でcalc_damage(critical=True)になる）
     pc = crit_chance(attacker, move, defender)
@@ -78,7 +146,7 @@ def expected_damage(attacker: BattlePokemon, defender: BattlePokemon,
     if attacker.ability in ("へんげんじざい", "リベロ") \
             and move.type not in (attacker.type1, attacker.type2):
         dmg *= 1.5
-    return dmg * acc
+    return dmg * _expected_hits(move, attacker)
 
 
 def _best_expected_damage(poke: BattlePokemon, opp: BattlePokemon,

@@ -102,6 +102,19 @@ pub fn expected_damage(
     if pack.eff(mv.ty, def.type1, def.type2) == 0.0 {
         return 0.0;
     }
+    // 技を撃つ直前の姿変化（バトルスイッチ）。対戦本体は apply_pre_move_forms を必ず通るのに
+    // 見積もりは calc_damage を直に呼ぶため取りこぼしていた（ギルガルドで1.8〜2.0倍の過小評価）。
+    // 正本: simulator/ai.py _pre_move_forms_ctx
+    let blade_applied = if pack.env_blade_forme
+        && mv.category != Cat::Status
+        && atk.ability == pack.sy.l.バトルスイッチ
+        && !atk.in_blade_forme
+    {
+        crate::battle::aegislash_to_blade_pub(pack, atk);
+        true
+    } else {
+        false
+    };
     let mut dmg = {
         let mut f = dmg_rng(rng);
         calc_damage(pack, atk, def, mv, field, false, Some(0.5), None, &mut f) as f64
@@ -119,7 +132,42 @@ pub fn expected_damage(
     {
         dmg *= 1.5;
     }
+    // 連続技の期待ヒット数。正本: simulator/ai.py _expected_hits（battle.calc_hits と同じ表）
+    dmg *= expected_hits(pack, mv, atk);
+    if blade_applied {
+        crate::battle::revert_blade_pub(atk);
+    }
     dmg * acc
+}
+
+/// ai.py `_expected_hits`。battle::calc_hits の分岐と同じ表を期待値で返す。
+pub fn expected_hits(pack: &Pack, mv: &DMove, atk: &Poke) -> f64 {
+    if !pack.env_multi_hit {
+        return 1.0;
+    }
+    let l = &pack.sy.l;
+    let n = mv.name;
+    let skill_link = atk.ability == l.スキルリンク;
+    if n == l.ダブルキック || n == l.にどげり || n == l.ダブルウイング || n == l.ドラゴンアロー
+        || n == l.スパークリングアリア || n == l.ダブルパンツァー || n == l.ツインビーム
+        || n == l.ダブルアタック
+    {
+        return 2.0;
+    }
+    if n == l.トリプルアクセル {
+        return 3.0;
+    }
+    if n == l.スケイルショット || n == l.みずしゅりけん || n == l.ロックブラスト
+        || n == l.タネマシンガン || n == l.つららばり || n == l.ミサイルばり
+        || n == l.ボーンラッシュ || n == l.あわ || n == l.スイープビンタ
+    {
+        // random.choices([2,3,4,5], weights=[3,3,1,1]) の期待値 = 3.0
+        return if skill_link { 5.0 } else { 3.0 };
+    }
+    if n == l.ネズミざん {
+        return if skill_link { 10.0 } else { 6.513 };
+    }
+    1.0
 }
 
 /// ai.py `_best_expected_damage`

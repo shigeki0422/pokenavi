@@ -728,6 +728,23 @@ pub fn is_excluded_from_matchup(pack: &Pack, mv: &DMove) -> bool {
 /// （マスカーニャのへんげんじざいで全技にSTABが乗る分、ギルガルドのバトルスイッチで
 ///  攻撃が50→150になる分が、表示ダメージにだけ反映されない事故が起きた）。
 /// 対戦本体（execute_move）と分析（analysis::move_damage）で共有する。
+/// ai.rs の見積もりから姿変化を一時適用するための公開ラッパ（正本: simulator/ai.py）。
+pub fn aegislash_to_blade_pub(pack: &Pack, p: &mut Poke) {
+    aegislash_to_blade(pack, p);
+}
+
+/// 一時適用した姿変化を元に戻す。
+pub fn revert_blade_pub(p: &mut Poke) {
+    if !p.in_blade_forme {
+        return;
+    }
+    p.attack = p.shield_atk;
+    p.defense = p.shield_def;
+    p.sp_attack = p.shield_spatk;
+    p.sp_defense = p.shield_spdef;
+    p.in_blade_forme = false;
+}
+
 pub fn apply_pre_move_forms(pack: &Pack, attacker: &mut Poke, mv: &DMove) {
     let l = &pack.sy.l;
     if attacker.ability == l.バトルスイッチ && mv.category != Cat::Status {

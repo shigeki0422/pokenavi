@@ -5102,6 +5102,62 @@ except Exception as _e25:
     check("1v1実走テストが実行できる", False, f"{type(_e25).__name__}: {_e25}")
 
 
+print("\n=== 26c. AI火力見積もりの姿変化・連続技 ===")
+# 対戦本体は battle.apply_pre_move_forms / _calc_hits を必ず通るのに、AIの見積もりは
+# calc_damage を直に呼ぶため取りこぼしていた。ギルガルド(M-6採用率100%)はシールド(攻50)
+# のまま計算され1.8〜2.0倍の過小評価、連続技は1発ぶんだけ見ていた。
+import os as _os26c, importlib as _il26c
+from simulator.battle import BattleField as _BF26c
+from simulator.pokemon import build_from_spec as _bfs26c, parse_pokemon_spec as _pps26c
+import simulator.ai as _A26c
+
+_f26c = _BF26c()
+def _mk26c(spec):
+    return _bfs26c(_pps26c(spec), dl, season="M-6", randomize=False)
+
+_gil26c = _mk26c("ギルガルド@たべのこし:れいせい:シャドーボール|ラスターカノン|キングシールド|かげうち:32/0/2/32/0/0:バトルスイッチ")
+_gab26c = _mk26c("ガブリアス@こだわりスカーフ:ようき:じしん|ドラゴンクロー|スケイルショット|つるぎのまい:0/32/0/0/0/32:さめはだ")
+_seg26c = _mk26c("セグレイブ@きあいのタスキ:いじっぱり:つららおとし|きょけんとつげき|じしん|つららばり:1/32/1/0/0/32:ねつこうかん")
+
+def _ed26c(att, deff, name, **env):
+    _save = {k: _os26c.environ.get(k) for k in env}
+    try:
+        for k, v in env.items():
+            _os26c.environ[k] = v
+        _il26c.reload(_A26c)
+        mv = [m for m in att.moves if m and m.name_jp == name][0]
+        return _A26c.expected_damage(att, deff, mv, _f26c)
+    finally:
+        for k, v in _save.items():
+            if v is None: _os26c.environ.pop(k, None)
+            else: _os26c.environ[k] = v
+        _il26c.reload(_A26c)
+
+_off26c = _ed26c(_gil26c, _gab26c, "シャドーボール", AI_BLADE_FORME="0")
+_on26c = _ed26c(_gil26c, _gab26c, "シャドーボール", AI_BLADE_FORME="1")
+check("バトルスイッチ: 見積もりがブレードフォルムで1.5倍以上になる",
+      _on26c > _off26c * 1.5, f"旧{_off26c:.1f} 新{_on26c:.1f}")
+check("バトルスイッチ: 見積もり後に元のステータスへ戻る",
+      not getattr(_gil26c, "_in_blade_forme", False) and _gil26c.attack == _mk26c(
+          "ギルガルド@たべのこし:れいせい:シャドーボール|ラスターカノン|キングシールド|かげうち:32/0/2/32/0/0:バトルスイッチ").attack,
+      f"attack={_gil26c.attack} blade={getattr(_gil26c,'_in_blade_forme',None)}")
+_off26c = _ed26c(_seg26c, _gab26c, "つららばり", AI_MULTI_HIT="0")
+_on26c = _ed26c(_seg26c, _gab26c, "つららばり", AI_MULTI_HIT="1")
+check("連続技(つららばり 2-5発)の期待ヒット数3.0が乗る",
+      abs(_on26c / max(_off26c, 1e-9) - 3.0) < 0.01, f"旧{_off26c:.1f} 新{_on26c:.1f}")
+_off26c = _ed26c(_seg26c, _gab26c, "つららおとし", AI_MULTI_HIT="0")
+_on26c = _ed26c(_seg26c, _gab26c, "つららおとし", AI_MULTI_HIT="1")
+check("負例: 単発技(つららおとし)は倍率1.0のまま",
+      abs(_on26c - _off26c) < 1e-6, f"旧{_off26c:.1f} 新{_on26c:.1f}")
+_off26c = _ed26c(_gab26c, _gil26c, "じしん", AI_BLADE_FORME="0")
+_on26c = _ed26c(_gab26c, _gil26c, "じしん", AI_BLADE_FORME="1")
+check("負例: バトルスイッチでない攻撃側は見積もりが変わらない",
+      abs(_on26c - _off26c) < 1e-6, f"旧{_off26c:.1f} 新{_on26c:.1f}")
+check("期待ヒット数: スキルリンクは5発",
+      abs(_A26c._expected_hits(dl.get_move("つららばり"),
+                               type("X", (), {"ability": "スキルリンク"})()) - 5.0) < 1e-9)
+
+
 print("\n=== 26b. 必ず急所に当たる技 ===")
 # move_master の effect_text が「必ず急所に当たる。」なのに急所率が 1/24 のままだった。
 # deep_audit の検出器 (r'必ず急所', ['急所']) はテストのラベル文字列に一致するだけで
