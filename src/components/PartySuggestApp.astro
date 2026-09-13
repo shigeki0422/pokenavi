@@ -1,6 +1,7 @@
 ---
 import PartyToolsNav from './PartyToolsNav.astro';
 import iconsData from '../../public/sim-data/icons.json';
+import itemSpriteData from '../../public/sim-data/item_sprite.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 import { ASSUMPTIONS_LABEL, MATCHUP_ASSUMPTIONS, MATCHUP_LEAD } from '../scripts/party-builder/assumptions';
@@ -21,7 +22,9 @@ const ICONS = iconsData as Record<string, string>;
 const MOVET = moveTypesData as Record<string, string>;
 const NATURE: Record<string, string> = {いじっぱり:'A↑C↓',さみしがり:'A↑B↓',ゆうかん:'A↑S↓',やんちゃ:'A↑D↓',ずぶとい:'B↑A↓',わんぱく:'B↑C↓',のんき:'B↑S↓',のうてんき:'B↑D↓',ひかえめ:'C↑A↓',おっとり:'C↑B↓',れいせい:'C↑S↓',うっかりや:'C↑D↓',おだやか:'D↑A↓',おとなしい:'D↑B↓',なまいき:'D↑S↓',しんちょう:'D↑C↓',おくびょう:'S↑A↓',せっかち:'S↑B↓',ようき:'S↑C↓',むじゃき:'S↑D↓'};
 const TYPEICON: Record<string, [string,string]> = {ノーマル:['00','normal'],かくとう:['01','fighting'],ひこう:['02','flying'],どく:['03','poison'],じめん:['04','ground'],いわ:['05','rock'],むし:['06','bug'],ゴースト:['07','ghost'],はがね:['08','steel'],ほのお:['09','fire'],みず:['10','water'],くさ:['11','grass'],でんき:['12','electric'],エスパー:['13','psychic'],こおり:['14','ice'],ドラゴン:['15','dragon'],あく:['16','dark'],フェアリー:['17','fairy']};
-const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuki.png',こだわりスカーフ:'item-0287-scarf.png',オボンのみ:'item-0158-obon.png',ラムのみ:'item-0157-ram.png',ヤチェのみ:'item-0188-yache.png',ハバンのみ:'item-0197-haban.png'};
+const ITEM_PNG: Record<string, string> = {きあいのタスキ:'item-0275-tasuki.png',こだわりスカーフ:'item-0287-scarf.png',オボンのみ:'item-0158-obon.png',ラムのみ:'item-0157-ram.png',ヤチェのみ:'item-0188-yache.png',ハバンのみ:'item-0197-haban.png',ガブリアスナイト:'item-0683-garchompite.png',ボーマンダナイト:'item-0769-salamencite.png',ガブリアスナイトZ:'item-garchompite-z.png',アブソルナイトZ:'item-absolite-z.png',ルカリオナイトZ:'item-lucarionite-z.png',グソクムシャナイト:'item-golisopodite.png',セグレイブナイト:'item-baxcalibite.png'};
+// 持ち物名→item-sprite.png の座標（ポケモン個別ページから抽出。scripts/gen_item_sprite_map.py）
+const ITEM_SPRITE = itemSpriteData as Record<string, [number, number]>;
 
 const POKEMON_NAME_MAP = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
 /** preCoreLabel(軸ポケモン和名)はSPECIES一覧との照合に和名のまま必要なため、
@@ -342,6 +345,7 @@ const I18N = I18N_ALL[lang];
   .mvchip{display:inline-flex;align-items:center;gap:.15em;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:9999px;padding:.08em .5em;font-size:.72rem;font-weight:600}
   .tic{width:14px;height:14px;vertical-align:-2px}
   .iic{width:20px;height:20px;object-fit:contain;vertical-align:-5px}
+  .isp{display:inline-block;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;flex-shrink:0}
   .evchip{display:inline-flex;align-items:center;gap:.1em;color:#fff;font-size:.68rem;font-weight:700;padding:.06em .5em;border-radius:5px}
   .ev-H{background:#16a34a}.ev-A{background:#dc2626}.ev-B{background:#2563eb}.ev-C{background:#7c3aed}.ev-D{background:#0d9488}.ev-S{background:#db2777}
 
@@ -593,7 +597,7 @@ const I18N = I18N_ALL[lang];
   }
 </style>
 
-<script is:inline define:vars={{ assumeLead, assumeLabel, assumeItems, ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, preCoreLabel, preCoreLabelDisplay, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
+<script is:inline define:vars={{ assumeLead, assumeLabel, assumeItems, ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, ITEM_SPRITE, preCoreLabel, preCoreLabelDisplay, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
   /** I18N_ALL は関数(フォーマッタ)を値に含むため、Astroのdefine:varsはJSON化の過程で
    * 関数プロパティを黙って落としてしまう(define:varsはprops→スクリプトへJSON経由で注入される)。
    * そのためI18N_ALLはフロントマター側と同じ内容をスクリプト内に直接定義し、defineVars経由では渡さない。 */
@@ -928,7 +932,11 @@ const I18N = I18N_ALL[lang];
     return e ? `<img class="tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${esc(t)}">` : '';
   }
   function itemIco(item){
-    return ITEM_PNG[item] ? `<img class="iic" src="/images/items/${ITEM_PNG[item]}" alt="">` : '';
+    if(ITEM_PNG[item]) return `<img class="iic" src="/images/items/${ITEM_PNG[item]}" alt="">`;
+    // 専用PNGが無い持ち物はスプライトから切り出す（いのちのたま等、以前は無表示だった）
+    const sp = ITEM_SPRITE[item];
+    if(sp) return `<span class="iic isp" style="background-position:${sp[0]}px ${sp[1]}px" title="${esc(item)}"></span>`;
+    return '';
   }
   function evChips(ev){
     return (ev||'').split(/\s+/).filter(Boolean).map(tok=>{
