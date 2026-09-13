@@ -50,6 +50,45 @@ def is_stone(it):
     return any(it.endswith(sfx) for sfx in
                ("ナイト", "ナイトX", "ナイトY", "ナイトZ", "ナイトＸ", "ナイトＹ", "ナイトＺ"))
 
+# メガ後の種族値・タイプ・特性。メガ石の型は「メガ進化した実質別ポケモン」なので、
+# 種全体の使用率から決めた物理/特殊やタイア致をそのまま流用すると破綻する
+# （メガガブリアスZ=ドラゴン単/C141 に、非メガ勢の A特化+じしん型が貼られていた）。
+A2_ABILITIES = {"ちからもち", "ヨガパワー"}   # 物理攻撃×2（damage.py:291）
+
+def _load_mega():
+    con = sqlite3.connect(DB); con.row_factory = sqlite3.Row
+    base = {r["pokemon_name"]: dict(r) for r in con.execute(
+        "SELECT pokemon_name,attack,sp_attack FROM pokemon_base_stats WHERE form_index=0")}
+    out = {}
+    for r in con.execute("SELECT mega_stone,base_pokemon_jp,type1,type2,attack,sp_attack,ability "
+                         "FROM pokemon_mega_stats"):
+        d = dict(r); d["base"] = base.get(r["base_pokemon_jp"])
+        out[r["mega_stone"]] = d
+    con.close()
+    return out
+
+MEGA_BY_STONE = _load_mega()
+
+def mega_profile(item):
+    """メガ石なら (実効攻撃, 実効特攻, タイプ集合, メガで伸びない分類の集合)。違えば None。
+    実効攻撃はちからもち/ヨガパワーの×2を織り込む（メガスターミー A100×2=200 > C130 で物理が正当）。
+    「伸びない分類」＝メガ後の攻撃側がベース以下。その型はメガを活かしておらず、
+    実体は石を持っただけのベース型になる（メガガブリアスZ A130→130 に A特化じしん型が出ていた）。"""
+    md = MEGA_BY_STONE.get(item)
+    if not md:
+        return None
+    a = md["attack"] * (2 if md["ability"] in A2_ABILITIES else 1)
+    t = {md["type1"]} | ({md["type2"]} if md["type2"] else set())
+    dead = set()
+    b = md.get("base")
+    if b:
+        if a <= b["attack"]:
+            dead.add("physical")
+        if md["sp_attack"] <= b["sp_attack"]:
+            dead.add("special")
+    return a, md["sp_attack"], t, dead
+
+
 # 効果が特定の技に依存する持ち物。その技が無いと型として成立しないので必須枠に入れる
 BIND_MOVES = {"まとわりつく","まきつく","うずしお","すなじごく","ほのおのうず","マグマストーム","からではさむ"}
 ITEM_AFFINITY = {"しめつけバンド": BIND_MOVES, "ノーマルジュエル": None}
@@ -215,12 +254,18 @@ def main():
                 return cat == "special"
             return True
 
-        def compose(role, cat):
+        def compose(role, cat, stab_types=None):
             # must（採用率50%以上の変化技）も _setup_ok を通す。素通しすると、
             # 採用率の高いC専属積み技（わるだくみ等）が物理型にまで無条件で混入する。
             must = [n for n in _must_all if _setup_ok(n, cat)][:2]
             prim = atk_ph if cat == "physical" else atk_sp
             other = atk_sp if cat == "physical" else atk_ph
+            if stab_types:
+                # メガ後のタイプで一致を取り直す。ベースのタイプで選ぶと、メガでタイプが
+                # 変わる種に一致しない技が主力として残る（メガガブリアスZ=ドラゴン単のじしん）。
+                _st = lambda t: (mtype.get(t[0], ("?",))[0] in stab_types)
+                prim = sorted(prim, key=lambda t: (not _st(t), -(t[1] or 0)))
+                other = sorted(other, key=lambda t: (not _st(t), -(t[1] or 0)))
             atk_n = [n for n, u in prim] + [n for n, u in other]
             sup_ok = [(n, r) for n, r in sup_n if _setup_ok(n, cat)]
             if role in ("メガ", "スカーフ", "アタッカー", "タスキ"):
@@ -239,6 +284,39 @@ def main():
                 pri = pri[:3]
                 moves = pri + atk_n[:max(0, 4 - len(pri))]
             return (moves + atk_n + [n for n, _ in sup_ok])[:4]
+
+        def mega_cats(item):
+            """メガ石なら (立てる分類リスト, メガ後タイプ集合)。メガ石でなければ None。
+            種全体の使用率は非メガ勢とメガ勢の混合で、メガが実質別ポケモンの種ほど当てにならない。
+            メガ後の実効攻撃 × その分類で出せる最大打点（威力×一致補正）で決め直す。"""
+            mp = mega_profile(item)
+            if not mp:
+                return None
+            ma, mc, stab, dead = mp
+
+            def score(cat_):
+                # 使用率最上位の1技で判定すると、ねこだまし(威力40)やソーラービーム(非一致)が
+                # 代表になって分類を取り違える。威力を見ないと補助技が主力に化ける。
+                lst = atk_ph if cat_ == "physical" else atk_sp
+                if not lst:
+                    return 0.0
+                stat = ma if cat_ == "physical" else mc
+                best = 0.0
+                for n, _u in lst:
+                    t, _c, pw = mtype.get(n, ("?", "?", None))
+                    best = max(best, (pw or 60) * (1.5 if t in stab else 1.0))
+                return stat * best
+
+            sc = {c: score(c) for c in ("physical", "special")}
+            win = "physical" if sc["physical"] >= sc["special"] else "special"
+            lose = "special" if win == "physical" else "physical"
+            out_ = [win]
+            # 僅差（8割以上）で技も2本以上あるなら逆側も両刀型として残す。
+            # ただしメガで伸びない分類は僅差でも作らない（石を持っただけのベース型になる）。
+            if sc[win] and sc[lose] / sc[win] >= 0.8 and lose not in dead \
+                    and len(atk_ph if lose == "physical" else atk_sp) >= 2:
+                out_.append(lose)
+            return out_, stab
 
         # 主分類＝採用率合計が大きい側。副分類は攻撃技が2本以上あるときだけ型を立てる
         u_ph = sum(u for _, u in atk_ph)
@@ -277,13 +355,17 @@ def main():
             # 攻撃役の持ち物は物理/特殊で別型になるので両方立てる
             if sub_ok and role in ("メガ", "スカーフ", "アタッカー", "タスキ"):
                 cats.append(sub_cat)
+            _mc2 = mega_cats(i["item"])
+            _stab = None
+            if _mc2:
+                cats, _stab = _mc2
             aff = affinity_move(i["item"], mv_roles)
             for cat in cats:
                 if (i["item"], cat) in seen:
                     continue
                 seen.add((i["item"], cat))
                 tag = "物理" if cat == "physical" else "特殊"
-                moves = compose(role, cat)
+                moves = compose(role, cat, _stab)
                 if aff and aff not in moves:
                     moves = moves[:3] + [aff]
                 if not moves:
@@ -300,11 +382,20 @@ def main():
         missing = [n for n, u, r, c in mv_roles if (u or 0) >= 20.0 and n not in drafted][:2]
         if missing and it:
             base_item = it[0]["item"]
-            base = compose(item_role(base_item), main_cat)
+            # 変種もメガ判定を通す。ここを素通りさせると、本体の型からは落とした分類が
+            # 変種として復活する（メガガブリアスZ の物理型がスケイルショット変種で残った）。
+            _vm = mega_cats(base_item)
+            var_cat = _vm[0][0] if _vm else main_cat
+            var_stab = _vm[1] if _vm else None
+            base = compose(item_role(base_item), var_cat, var_stab)
             for mm in missing:
+                # 分類と食い違う攻撃技は入れない（特殊型にスケイルショットが刺さる）
+                _mc3 = mtype.get(mm, ("?", "?", None))[1]
+                if _mc3 in ("physical", "special") and _mc3 != var_cat:
+                    continue
                 var = base[:3] + [mm] if mm not in base[:3] else base
-                out.append(f"- **変種({'物理' if main_cat=='physical' else '特殊'}/{mm})** "
-                           f"[{base_item}/{pick_nature(main_cat)}/{ab0}/{pick_ev(main_cat)}] "
+                out.append(f"- **変種({'物理' if var_cat=='physical' else '特殊'}/{mm})** "
+                           f"[{base_item}/{pick_nature(var_cat)}/{ab0}/{pick_ev(var_cat)}] "
                            + " / ".join(var))
 
         out += m1_lines(poke, _mega_only)   # この種の M-1上位実型を項目末尾に追加
