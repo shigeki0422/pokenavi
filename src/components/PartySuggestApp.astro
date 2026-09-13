@@ -1417,6 +1417,13 @@ const I18N = I18N_ALL[lang];
         const i = +btn.dataset.i, j = +btn.dataset.j;
         document.querySelectorAll(`.montab[data-i="${i}"]`).forEach(b=>b.classList.toggle('active', +b.dataset.j===j));
         document.getElementById('det-'+i).innerHTML = detailHtml(LAST[i].mons[j]);
+        // 提案2以降は畳まれた状態で出る。詳細は .sug-body 内にあるため、畳んだままポケモンを
+        // タップしても何も起きないように見える（スマホで顕著）。タップを「開く」操作として扱う。
+        const card = btn.closest('.card.sug');
+        if(card && card.classList.contains('collapsed')){
+          const hd = card.querySelector('.sug-toggle');
+          if(hd) toggleSug(hd);
+        }
       });
     });
     document.querySelectorAll('.tb').forEach(btn=>{
