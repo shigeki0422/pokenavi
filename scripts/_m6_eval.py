@@ -5,6 +5,12 @@ A/B の差は env で与える:
   NET_A / NET_B          価値ネットjson（未指定=本番 az_net_np.json）
   BELIEF_A / BELIEF_B    信念シーズン（未指定=M-2＝従来）
   SIMS_A / SIMS_B        MCTS sims（既定 SIMS=400）
+  EST_A / EST_B          火力見積もり補正 on|off（既定on＝姿変化・連続技あり）
+
+EST_* は env ではなく simulator.ai のモジュール変数を呼び出しの前後で切り替える。
+env はプロセス全体に効いてしまい片側だけ変えられないため。この経路は _net_ai＝Python
+MCTS を直接使う（engine_dispatch の greedy_3v3/mcts_3v3 は通らない）ので、
+Python 側のフラグだけで一貫する。
 env: N(戦数) WORKERS POOL_SEASON(M-6) PARTIES SIMS SEL_TEMP(0.3) SEED(400)
 
 先後は1戦ごとに入れ替える。BELIEF_* を使う側は Rust が使えない（sim.rs の
@@ -21,6 +27,7 @@ SIMS = int(os.environ.get("SIMS", "400"))
 SIMS_A = int(os.environ.get("SIMS_A", SIMS)); SIMS_B = int(os.environ.get("SIMS_B", SIMS))
 NET_A = os.environ.get("NET_A") or None; NET_B = os.environ.get("NET_B") or None
 BELIEF_A = os.environ.get("BELIEF_A") or None; BELIEF_B = os.environ.get("BELIEF_B") or None
+EST_A = os.environ.get("EST_A", "on") == "on"; EST_B = os.environ.get("EST_B", "on") == "on"
 SEL_TEMP = float(os.environ.get("SEL_TEMP", "0.3"))
 SEED = int(os.environ.get("SEED", "400"))
 _W = {}
@@ -80,16 +87,33 @@ def _batch(args):
     for g in range(n):
         a, b = rng.sample(P, 2)
         A = team(a); B = team(b)
+        import simulator.ai as _AI0
+        _sv = (_AI0._BLADE_ON, _AI0._MULTI_HIT_ON)
+        Aon1_pre = (g % 2 == 0)
+        _AI0._BLADE_ON = _AI0._MULTI_HIT_ON = (EST_A if Aon1_pre else EST_B)
         sa = select_party(A, B, L, n=3, temperature=SEL_TEMP, rng=rng)
+        _AI0._BLADE_ON = _AI0._MULTI_HIT_ON = (EST_B if Aon1_pre else EST_A)
         sb = select_party(B, A, L, n=3, temperature=SEL_TEMP, rng=rng)
+        _AI0._BLADE_ON, _AI0._MULTI_HIT_ON = _sv
         s1 = BattleSide(sa, viewer_label="P1", source6=A)
         s2 = BattleSide(sb, viewer_label="P2", source6=B)
         Aon1 = (g % 2 == 0)
         # 信念シーズンは「そのAIが持つ知識」なので側ごとに与える
         s1.belief = OpponentBelief(L, (BELIEF_A if Aon1 else BELIEF_B))
         s2.belief = OpponentBelief(L, (BELIEF_B if Aon1 else BELIEF_A))
-        f1 = (lambda m, o, f: certain_ko_override(aiA(m, o, f), m, o, f))
-        f2 = (lambda m, o, f: certain_ko_override(aiB(m, o, f), m, o, f))
+        import simulator.ai as _AI
+
+        def _wrap(inner, est):
+            def _f(m, o, f):
+                sb, sm = _AI._BLADE_ON, _AI._MULTI_HIT_ON
+                _AI._BLADE_ON = _AI._MULTI_HIT_ON = est
+                try:
+                    return certain_ko_override(inner(m, o, f), m, o, f)
+                finally:
+                    _AI._BLADE_ON, _AI._MULTI_HIT_ON = sb, sm
+            return _f
+
+        f1 = _wrap(aiA, EST_A); f2 = _wrap(aiB, EST_B)
         try:
             w = Battle(s1, s2, BattleField()).run(f1 if Aon1 else f2, f2 if Aon1 else f1)
         except Exception:
@@ -107,8 +131,8 @@ def main():
     N = int(os.environ.get("N", sys.argv[1] if len(sys.argv) > 1 else "500"))
     workers = int(os.environ.get("WORKERS", str(max(1, (os.cpu_count() or 2) - 1))))
     per = max(1, N // workers)
-    print(f"■ M-6 A/B: A(net={NET_A or '本番'} belief={BELIEF_A or 'M-2'} sims={SIMS_A}) vs "
-          f"B(net={NET_B or '本番'} belief={BELIEF_B or 'M-2'} sims={SIMS_B}) "
+    print(f"■ M-6 A/B: A(net={NET_A or '本番'} belief={BELIEF_A or 'M-2'} sims={SIMS_A} est={'on' if EST_A else 'off'}) vs "
+          f"B(net={NET_B or '本番'} belief={BELIEF_B or 'M-2'} sims={SIMS_B} est={'on' if EST_B else 'off'}) "
           f"{per*workers}戦 season={SEASON}", flush=True)
     with Pool(workers, initializer=_winit) as p:
         res = p.map(_batch, [(SEED + k * 97, per) for k in range(workers)])
