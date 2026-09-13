@@ -33,33 +33,12 @@ SEED = int(os.environ.get("SEED", "400"))
 _W = {}
 
 
-def _load_parties(path):
-    d = json.load(open(path, encoding="utf-8"))
-    out = []
-    if isinstance(d, dict):
-        for k in sorted(d):
-            for r in d[k].get("results", []):
-                sp = r.get("specs")
-                if sp and len(sp) == 6:
-                    out.append(list(sp))
-    else:
-        for e in d:
-            sp = e["party"] if isinstance(e, dict) else e
-            if sp and len(sp) == 6:
-                out.append(list(sp))
-    seen, uniq = set(), []
-    for sp in out:
-        k = tuple(sorted(sp))
-        if k not in seen:
-            seen.add(k); uniq.append(sp)
-    return uniq
-
-
 def _winit():
     os.environ.setdefault("OMP_NUM_THREADS", "1")
     from simulator.simulate import get_loader
     _W["L"] = get_loader()
-    _W["P"] = _load_parties(PARTIES)
+    import _m6_pool
+    _W["P"] = _m6_pool.load_parties(PARTIES)
 
 
 def _ai(net_path, sims, seed, L):

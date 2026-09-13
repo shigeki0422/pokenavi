@@ -202,7 +202,20 @@ def run(pop_size=64, gens=10, games_per=30, workers=12, season="M-2", seed=0, lo
     global D
     D = G.load(season=season)
     rng = random.Random(seed)
-    pop = [[s for s in G.gen_party(D, rng)] for _ in range(pop_size)]
+    # SEED_FILE: 初期集団の供給元。提案キャッシュ(suggest_cache.json)や過去の共進化結果を
+    # 種にできる。提案群は ENS で選抜され必然性リペアも通っているので、乱数生成より
+    # 強く・構造的（2メガ・タイプ被り上限・死に枠なし）な出発点になる。
+    # 足りない分は従来どおり生成器で埋める（多様性の供給源を残す）。
+    seed_file = os.environ.get("SEED_FILE")
+    pop = []
+    if seed_file:
+        import _m6_pool
+        uniq = _m6_pool.load_parties(seed_file)
+        rng.shuffle(uniq)
+        pop = uniq[:pop_size]
+        log(f"初期集団を {seed_file} から {len(pop)}/{len(uniq)} 件で種付け（{_m6_pool.describe(seed_file)}）")
+    while len(pop) < pop_size:
+        pop.append([s for s in G.gen_party(D, rng)])
     gen0 = [list(p) for p in pop]                       # 検証用に初期集団を保存
     elo = [1500.0] * pop_size
     pool = Pool(workers, initializer=_winit, initargs=(season,))
@@ -273,7 +286,7 @@ def run(pop_size=64, gens=10, games_per=30, workers=12, season="M-2", seed=0, lo
         names = [parse_my(s)["name"] for s in pop[r]]
         log(f"  Elo{elo[r]:.0f}: {' / '.join(names)}")
     log(f"\n最終ニッチ多様性: {len(set(niche(p) for p in pop))} 種類")
-    out = f"/tmp/coevo_parties_{season}.json"
+    out = os.environ.get("COEVO_OUT") or f"/tmp/coevo_parties_{season}.json"
     with open(out, "w", encoding="utf-8") as f:
         json.dump({"season": season, "winrate_vs_init": wr, "pval": pval,
                    "parties": [{"elo": elo[i], "specs": pop[i],

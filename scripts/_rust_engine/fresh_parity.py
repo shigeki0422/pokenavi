@@ -27,28 +27,6 @@ FN = os.environ.get("FN", "greedy")
 FILTER = os.environ.get("FILTER") or None
 
 
-def _load(path):
-    d = json.load(open(path, encoding="utf-8"))
-    out = []
-    if isinstance(d, dict):
-        for k in sorted(d):
-            for r in d[k].get("results", []):
-                sp = r.get("specs")
-                if sp and len(sp) == 6:
-                    out.append(list(sp))
-    else:
-        for e in d:
-            sp = e["party"] if isinstance(e, dict) else e
-            if sp and len(sp) == 6:
-                out.append(list(sp))
-    seen, uniq = set(), []
-    for sp in out:
-        k = tuple(sorted(sp))
-        if k not in seen:
-            seen.add(k); uniq.append(sp)
-    return uniq
-
-
 def _run(engine, fn, jobs):
     """子プロセスで ENGINE を固定して実行（engine_dispatch は import 時に ENGINE を読む）。"""
     import subprocess
@@ -73,7 +51,9 @@ def _run(engine, fn, jobs):
 
 
 def main():
-    P = _load(PARTIES)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + "/..")
+    import _m6_pool
+    P = _m6_pool.load_parties(PARTIES)
     if FILTER:
         P = [sp for sp in P if any(FILTER in s for s in sp)]
     if len(P) < 2:

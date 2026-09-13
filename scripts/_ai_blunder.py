@@ -3,9 +3,8 @@
 env: N_BATT(100) P_SAMPLE(0.12) REF_SIMS(3200) AI_SIMS(400) GAP(0.15)
      POOL_SEASON(M-3) BELIEF_SEASON(未設定=M-2) PARTIES(パーティ供給元json) OUT(ai_blunder.json)
 
-パーティ供給元は PARTIES で切替。[{"party":[spec…]}…] か、提案キャッシュ
-(suggest_cache.json = {key: {"results":[{"specs":[spec…]}…]}}) のどちらでも読む。
-既定は m2_parties.json（消失済みのため実質 PARTIES 指定が必要）。
+パーティ供給元は _m6_pool.load_parties()（env PARTIES / MAX_CORE_RANK）。
+既定は提案キャッシュの使用率50位以内の軸。
 
 ブランダーは審判との差(gap)だけでなく種類も記録する:
   stay_losing   審判の最善が交代なのに居座って攻撃した
@@ -118,38 +117,16 @@ def _battle(args):
     Battle(s1, s2, BattleField()).run(ai1, ai2)
     return recs
 
-def _load_parties(path):
-    """[{"party":[...]}…] / [[spec…]…] / suggest_cache 形式のいずれも6体パーティ列にして返す。"""
-    d = json.load(open(path, encoding="utf-8"))
-    out = []
-    if isinstance(d, dict):          # suggest_cache.json
-        for k in sorted(d):
-            for r in d[k].get("results", []):
-                sp = r.get("specs")
-                if sp and len(sp) == 6:
-                    out.append(list(sp))
-    else:
-        for e in d:
-            sp = e["party"] if isinstance(e, dict) else e
-            if sp and len(sp) == 6:
-                out.append(list(sp))
-    # 同一6体構成は1つに畳む（キャッシュは軸ごとに似た党を持つため）
-    seen, uniq = set(), []
-    for sp in out:
-        k = tuple(sorted(sp))
-        if k not in seen:
-            seen.add(k); uniq.append(sp)
-    return uniq
-
-
 if __name__ == "__main__":
-    m2 = _load_parties(os.environ.get("PARTIES", "m2_parties.json"))
+    import _m6_pool
+    m2 = _m6_pool.load_parties()
     N_BATT = int(os.environ.get("N_BATT", "100"))
     rng = random.Random(141)
     jobs = [(m2[a], m2[b], int(141000000 + i * 7717) & 2147483647)
             for i, (a, b) in enumerate(rng.sample(range(len(m2)), 2) for _ in range(N_BATT))]
     print(f"■ ブランダーベンチ: AI@{AI_SIMS} 審判@{REF_SIMS} {N_BATT}戦 sample率{P_SAMPLE} "
-          f"season={SEASON} belief={os.environ.get('BELIEF_SEASON', 'M-2')} パーティ{len(m2)}党", flush=True)
+          f"season={SEASON} belief={os.environ.get('BELIEF_SEASON', 'M-2')} "
+          f"{_m6_pool.describe()}", flush=True)
     pool = mp.get_context("fork").Pool(max(1, (os.cpu_count() or 2) - 1))
     out = pool.map(_battle, jobs, chunksize=1); pool.close()
     recs = [r for rs in out for r in rs if "err" not in r]
