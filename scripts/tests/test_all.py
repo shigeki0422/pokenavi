@@ -3012,21 +3012,27 @@ _vs2=BattleSide([make_poke(type1="でんき",spatk_b=100,moves=["10まんボル�
 _vs1.field_idx=0; _vs2.field_idx=1
 _vfeat=encode_state(_vs1,_vs2,BattleField())
 check("価値関数 特徴次元が一致", len(_vfeat)==feature_dim())
-# 特徴量v2（FEAT_V2）: 既定は905次元のまま＝本番ネット az_net_np.json と互換。
-# v2で持ち物カテゴリが8→18に増え、M-6上位の持ち物識別率が71%→99.7%になる。
+# 特徴量v2（FEAT_V2、既定ON）: 持ち物カテゴリ 8→18、全体965次元。
+# 旧8カテゴリでは M-6 上位50種の非メガ持ち物使用率の29%が1bitも立たず、ネットからは
+# 「無持ち物」と同じに見えていた（識別率 71%→99.7%）。本番ネットも965次元へ差し替え済み。
 import simulator.features as _FT
-check("特徴量 既定は905次元(本番ネット互換)", feature_dim()==905 and not _FT.FEAT_V2)
-check("特徴量 既定の持ち物カテゴリは8", len(_FT._ITEM_FLAGS)==8)
+check("特徴量 既定は965次元(v2)", feature_dim()==965 and _FT.FEAT_V2)
+check("特徴量 既定の持ち物カテゴリは18", len(_FT._ITEM_FLAGS)==18)
 check("特徴量v2 追加カテゴリは10・カテゴリ間で持ち物が重複しない",
       len(_FT._ITEM_FLAGS_V2)==10 and
       sum(len(f) for f in _FT._ITEM_FLAGS_V2)==len(set().union(*_FT._ITEM_FLAGS_V2)))
-# 実測で寄与の大きい未識別持ち物（いのちのたま266/ひかりのねんど205/ゴツゴツメット199 %pt）が
-# v1では1bitも立たない＝ネットからは「無持ち物」と同じに見えている、という欠陥の回帰テスト。
-_v2items = set().union(*_FT._ITEM_FLAGS_V2)
-check("特徴量v2 主要な未識別持ち物を全て被覆",
-      {"いのちのたま","ひかりのねんど","ゴツゴツメット","ふうせん","サイコシード"} <= _v2items)
-check("特徴量v1 主要持ち物は未識別のまま(既定の符号化は不変)",
-      not (set().union(*_FT._ITEM_FLAGS) & {"いのちのたま","ゴツゴツメット","ひかりのねんど"}))
+# 実測で寄与の大きかった持ち物（いのちのたま266/ひかりのねんど205/ゴツゴツメット199 %pt）が
+# 既定で識別できること。ここが落ちるとネットは「無持ち物」として見る。
+_v2items = set().union(*_FT._ITEM_FLAGS)
+check("特徴量 主要な持ち物を既定で識別できる",
+      {"いのちのたま","ひかりのねんど","ゴツゴツメット","ふうせん","サイコシード",
+       "たつじんのおび","しろいハーブ","レッドカード","ピントレンズ"} <= _v2items)
+# Rust 側(features.rs N_ITEM_FLAGS)と次元が食い違うと本番のネット評価が壊れる。
+# ここを変えるときは features.rs も必ず揃えること。
+import os as _os33, json as _js33
+_netp33 = _os33.path.join(_os33.path.dirname(_os33.path.dirname(_os33.path.abspath(__file__))), "az_net_np.json")
+check("特徴量 本番ネットの入力次元と一致",
+      _js33.load(open(_netp33, encoding="utf-8"))["dim"] == feature_dim())
 # 学習可能性: 線形分離データを高精度予測（決定的・高速）
 _vr=_vrnd.Random(0); _syn=[]
 for _ in range(320):

@@ -64,7 +64,9 @@ _HALF_BERRY_V2 = {"ヨプのみ", "リンドのみ", "カシブのみ", "リリ�
                   "イトケのみ", "オッカのみ", "ビアーのみ", "バンジのみ",
                   "ウタンのみ", "タンガのみ", "ナモのみ", "ホズのみ",
                   "ロゼルのみ", "シャンプのみ", "ヤチェのみ", "ヨプのみ"}   # →カテゴリ4(半減きのみ)
-FEAT_V2 = os.environ.get("FEAT_V2", "0") == "1"
+# v2 を既定ON（905→965次元）。本番ネットも965次元へ差し替え済み。
+# FEAT_V2=0 で旧905次元に戻せる（Rust 側 features.rs の N_ITEM_FLAGS も 8 に戻すこと）。
+FEAT_V2 = os.environ.get("FEAT_V2", "1") == "1"
 if FEAT_V2:
     _ITEM_FLAGS = [f | _TYPE_BOOST_V2 if "しんぴのしずく" in f else
                    f | _HALF_BERRY_V2 if "シュカのみ" in f else f
