@@ -75,6 +75,37 @@ const M_TRAP: &[&str] = &[
     "バインド", "まきつく", "しめつける", "かなしばり", "くろいまなざし", "ほのおのうず",
     "うずしお", "すなじごく", "マグマストーム", "とおせんぼう", "ありじごく",
 ];
+const M3_LOCK: &[&str] = &["ちょうはつ", "アンコール", "いちゃもん", "ふういん"];
+const M3_SCREEN: &[&str] = &["リフレクター", "ひかりのかべ", "オーロラベール"];
+const M3_SUBST: &[&str] = &["みがわり"];
+const M3_ITEMTRICK: &[&str] = &["トリック", "すりかえ", "どろぼう"];
+const M3_EXIT: &[&str] = &[
+    "みちづれ", "おきみやげ", "すてゼリフ", "さいきのいのり", "いやしのねがい",
+    "ほろびのうた", "バトンタッチ",
+];
+const M3_DELAY: &[&str] = &["ねがいごと", "いたみわけ"];
+const M3_RESET: &[&str] = &["くろいきり", "みずびたし", "ハロウィン", "もりののろい", "のろい"];
+const M3_FIELD: &[&str] = &[
+    "トリックルーム", "ミストフィールド", "エレキフィールド", "グラスフィールド", "サイコフィールド",
+];
+/// 最大威力技の性質（features.py の _M3_RECOIL / _M3_SELFDROP / _M3_HITS と 1:1）
+const M3_RECOIL: &[&str] = &[
+    "すてみタックル", "フレアドライブ", "ボルテッカー", "ウェーブタックル", "ブレイブバード",
+    "ウッドハンマー", "もろはのずつき", "ワイルドボルト", "はめつのひかり", "てっていこうせん",
+];
+const M3_SELFDROP: &[&str] = &[
+    "オーバーヒート", "リーフストーム", "りゅうせいぐん", "しんくうは", "インファイト",
+    "はかいこうせん", "ギガインパクト", "ばかぢから", "ブレイズキック", "きあいだま",
+    "サイコブースト", "だいばくはつ",
+];
+const M3_HITS: &[(&str, f64)] = &[
+    ("トリプルアクセル", 3.0), ("タネマシンガン", 3.0), ("ロックブラスト", 3.0),
+    ("つららばり", 3.0), ("ミサイルばり", 3.0), ("スケイルショット", 3.0),
+    ("ボーンラッシュ", 3.0), ("とげキャノン", 3.0), ("アームハンマー", 1.0),
+    ("ダブルアタック", 2.0), ("にどげり", 2.0), ("ダブルウイング", 2.0),
+    ("ゴッドバード", 1.0), ("ネズミざん", 6.513),
+];
+
 const M_STATUS: &[&str] = &[
     "でんじは", "おにび", "どくどく", "どくのこな", "しびれごな", "ねむりごな", "キノコのほうし",
     "さいみんじゅつ", "へびにらみ", "あくび", "ちょうおんぱ", "どくガス", "やどりぎのタネ", "あまえる",
@@ -90,18 +121,29 @@ const MULTI_HIT_25: &[&str] = &[
 ];
 
 /// 技sym → 能力フラグ（bit0=setup .. bit8=trap, bit9=status）＋連続技フラグ
-pub const F_SETUP: u16 = 1;
-pub const F_RECOVER: u16 = 1 << 1;
-pub const F_HAZARD: u16 = 1 << 2;
-pub const F_PHAZE: u16 = 1 << 3;
-pub const F_PIVOT: u16 = 1 << 4;
-pub const F_PROTECT: u16 = 1 << 5;
-pub const F_TWOTURN: u16 = 1 << 6;
-pub const F_TRAP: u16 = 1 << 7;
-pub const F_STATUS: u16 = 1 << 8;
-pub const F_MH2: u16 = 1 << 9;
-pub const F_MH3: u16 = 1 << 10;
-pub const F_MH25: u16 = 1 << 11;
+pub const F_SETUP: u32 = 1;
+pub const F_RECOVER: u32 = 1 << 1;
+pub const F_HAZARD: u32 = 1 << 2;
+pub const F_PHAZE: u32 = 1 << 3;
+pub const F_PIVOT: u32 = 1 << 4;
+pub const F_PROTECT: u32 = 1 << 5;
+pub const F_TWOTURN: u32 = 1 << 6;
+pub const F_TRAP: u32 = 1 << 7;
+pub const F_STATUS: u32 = 1 << 8;
+// v3: 変化技クラス（features.py の _M3_* と 1:1）。M-6 上位50種の変化技使用率のうち
+// 32% が既存クラスのどれにも入らず、ネットからは「持っていない」のと同じに見えていた。
+// 12以降から。F_MH2/F_MH3/F_MH25 が 9〜11 を使っているのでそれを避ける。
+pub const F3_LOCK: u32 = 1 << 12;
+pub const F3_SCREEN: u32 = 1 << 13;
+pub const F3_SUBST: u32 = 1 << 14;
+pub const F3_ITEMTRICK: u32 = 1 << 15;
+pub const F3_EXIT: u32 = 1 << 16;
+pub const F3_DELAY: u32 = 1 << 17;
+pub const F3_RESET: u32 = 1 << 18;
+pub const F3_FIELD: u32 = 1 << 19;
+pub const F_MH2: u32 = 1 << 9;
+pub const F_MH3: u32 = 1 << 10;
+pub const F_MH25: u32 = 1 << 11;
 
 pub struct FeatTables {
     /// pack の Ty → features.py の TYPES index（無ければ usize::MAX）
@@ -109,7 +151,7 @@ pub struct FeatTables {
     /// 道具 sym → 8bit
     pub item_bits: HashMap<Sym, u8>,
     /// 技 sym → フラグ
-    pub move_bits: HashMap<Sym, u16>,
+    pub move_bits: HashMap<Sym, u32>,
     pub kmg: Option<Sym>,
     pub skill_link: Option<Sym>,
     pub bukiyou: Option<Sym>,
@@ -143,8 +185,8 @@ impl FeatTables {
                 }
             }
         }
-        let mut move_bits: HashMap<Sym, u16> = HashMap::new();
-        let mut mark = |list: &[&str], f: u16, mb: &mut HashMap<Sym, u16>| {
+        let mut move_bits: HashMap<Sym, u32> = HashMap::new();
+        let mut mark = |list: &[&str], f: u32, mb: &mut HashMap<Sym, u32>| {
             for s in list.iter() {
                 if let Some(id) = pack.intern.get(s) {
                     *mb.entry(id).or_insert(0) |= f;
@@ -160,6 +202,14 @@ impl FeatTables {
         mark(M_TWOTURN, F_TWOTURN, &mut move_bits);
         mark(M_TRAP, F_TRAP, &mut move_bits);
         mark(M_STATUS, F_STATUS, &mut move_bits);
+        mark(M3_LOCK, F3_LOCK, &mut move_bits);
+        mark(M3_SCREEN, F3_SCREEN, &mut move_bits);
+        mark(M3_SUBST, F3_SUBST, &mut move_bits);
+        mark(M3_ITEMTRICK, F3_ITEMTRICK, &mut move_bits);
+        mark(M3_EXIT, F3_EXIT, &mut move_bits);
+        mark(M3_DELAY, F3_DELAY, &mut move_bits);
+        mark(M3_RESET, F3_RESET, &mut move_bits);
+        mark(M3_FIELD, F3_FIELD, &mut move_bits);
         mark(MULTI_HIT_2, F_MH2, &mut move_bits);
         mark(&["トリプルアクセル"], F_MH3, &mut move_bits);
         mark(MULTI_HIT_25, F_MH25, &mut move_bits);
@@ -185,7 +235,7 @@ impl FeatTables {
         }
     }
     #[inline]
-    fn mb(&self, s: Sym) -> u16 {
+    fn mb(&self, s: Sym) -> u32 {
         self.move_bits.get(&s).copied().unwrap_or(0)
     }
     #[inline]
@@ -282,6 +332,37 @@ fn move_features(pack: &Pack, ft: &FeatTables, p: &Poke, out: &mut Vec<f64>) {
     }
     out.extend_from_slice(&cover);
     out.extend_from_slice(&[pri, setup, recover, status, hazard, phaze, pivot, protect, twoturn, trap]);
+    // ── v3: 変化技クラス8 + 最大威力技の量的4（features.py と 1:1・順序も一致） ──
+    let mut c3 = [0.0f64; 8];
+    for mv in &p.moves {
+        let b = ft.mb(mv.name);
+        for (i, f) in [F3_LOCK, F3_SCREEN, F3_SUBST, F3_ITEMTRICK,
+                       F3_EXIT, F3_DELAY, F3_RESET, F3_FIELD].iter().enumerate()
+        {
+            if b & f != 0 {
+                c3[i] = 1.0;
+            }
+        }
+    }
+    out.extend_from_slice(&c3);
+    // タイプ別最大威力だけでは「命中90でC2段下がる130」と「命中100で下降なしの90」が
+    // 区別できない。最大威力技1本の性質を明示する。
+    let best = p
+        .moves
+        .iter()
+        .filter(|m| m.power.unwrap_or(0) != 0 && m.category != Cat::Status)
+        .max_by_key(|m| m.power.unwrap_or(0));
+    match best {
+        None => out.extend_from_slice(&[0.0, 0.0, 0.0, 0.0]),
+        Some(m) => {
+            let nm = pack.intern.resolve(m.name);
+            let acc = m.accuracy.unwrap_or(100) as f64 / 100.0;
+            let recoil = if M3_RECOIL.contains(&nm) { 1.0 } else { 0.0 };
+            let drop = if M3_SELFDROP.contains(&nm) { 1.0 } else { 0.0 };
+            let hits = M3_HITS.iter().find(|(k, _)| *k == nm).map_or(1.0, |(_, v)| *v);
+            out.extend_from_slice(&[acc, recoil, drop, (hits / 3.0).min(2.0)]);
+        }
+    }
 }
 
 fn volatile_block(p: Option<&Poke>, out: &mut Vec<f64>) {
@@ -305,7 +386,7 @@ fn volatile_block(p: Option<&Poke>, out: &mut Vec<f64>) {
 }
 
 pub fn poke_block_len(pack: &Pack) -> usize {
-    2 + N_TYPES + 5 + 6 + N_ITEM_FLAGS + pack.n_abil_cats + 1 + N_TYPES + 10 + 12
+    2 + N_TYPES + 5 + 6 + N_ITEM_FLAGS + pack.n_abil_cats + 1 + N_TYPES + 10 + 12 + 12
 }
 
 fn poke_block(pack: &Pack, ft: &FeatTables, p: Option<&Poke>, mega_used: bool, out: &mut Vec<f64>) {

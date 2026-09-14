@@ -95,7 +95,8 @@ _ABIL_FLAGS = [
 # わざ分類（能力フラグ用・代表例）
 _M_SETUP = {"つるぎのまい", "りゅうのまい", "ちょうのまい", "めいそう", "わるだくみ", "からをやぶる",
             "てっぺき", "ビルドアップ", "とぐろをまく", "こうそくいどう", "ロックカット", "アシッドボム",
-            "はらだいこ", "めざましビンタ", "つめとぎ", "コットンガード", "とける"}
+            "はらだいこ", "めざましビンタ", "つめとぎ", "コットンガード", "とける",
+            "コスモパワー", "せいちょう"}   # v3: 積み技の取りこぼし（次元は増えない）
 _M_RECOVER = {"はねやすめ", "じこさいせい", "なまける", "つきのひかり", "あさのひざし", "こうごうせい",
               "タマゴうみ", "ねむる", "じこあんじ", "ミルクのみ", "なかまづくり", "いのちがけ"}
 _M_HAZARD = {"ステルスロック", "まきびし", "どくびし", "ねばねばネット"}
@@ -108,6 +109,39 @@ _M_TRAP = {"バインド", "まきつく", "しめつける", "かなしばり",
            "うずしお", "すなじごく", "マグマストーム", "とおせんぼう", "ありじごく"}
 _M_STATUS = {"でんじは", "おにび", "どくどく", "どくのこな", "しびれごな", "ねむりごな", "キノコのほうし",
              "さいみんじゅつ", "へびにらみ", "あくび", "ちょうおんぱ", "どくガス", "やどりぎのタネ", "あまえる"}
+
+# ── 特徴量v3: 変化技クラスの追加（FEAT_V3、既定ON） ──
+# 実測: M-6 上位50種の変化技使用率のうち 32%(4,217%pt) が既存クラスのどれにも入らず、
+# ネットからは「持っていない」のと同じに見えていた（アンコール707 / ちょうはつ426 /
+# 壁3種600 / みちづれ298 / みがわり289 %pt ほか）。ユーザー評価軸の
+# 「変化技をうまく使えず単に殴るだけ」に直結する情報が入力に無い状態だった。
+_M3_LOCK = {"ちょうはつ", "アンコール", "いちゃもん", "ふういん"}          # 行動制限 1,133%pt
+_M3_SCREEN = {"リフレクター", "ひかりのかべ", "オーロラベール"}            # 壁 600
+_M3_SUBST = {"みがわり"}                                                  # 289
+_M3_ITEMTRICK = {"トリック", "すりかえ", "どろぼう"}                      # 持ち物干渉 242
+_M3_EXIT = {"みちづれ", "おきみやげ", "すてゼリフ", "さいきのいのり",
+            "いやしのねがい", "ほろびのうた", "バトンタッチ"}              # 退場支援 785
+_M3_DELAY = {"ねがいごと", "いたみわけ"}                                  # 遅延回復・分配 457
+_M3_RESET = {"くろいきり", "みずびたし", "ハロウィン", "もりののろい", "のろい"}  # リセット/タイプ改変 423
+_M3_FIELD = {"トリックルーム", "ミストフィールド", "エレキフィールド",
+             "グラスフィールド", "サイコフィールド"}                       # 場操作
+
+# ── 量的特徴（最大威力技の性質）──
+# タイプ別の最大威力しか入力に無いため、ネットからは オーバーヒート(130) が
+# かえんほうしゃ(90) より常に良く見える（C2段下降・命中90が見えない）。
+_M3_RECOIL = {"すてみタックル", "フレアドライブ", "ボルテッカー", "ウェーブタックル",
+              "ブレイブバード", "ウッドハンマー", "もろはのずつき", "ワイルドボルト",
+              "はめつのひかり", "てっていこうせん"}                        # battle._apply_recoil と同一
+_M3_SELFDROP = {"オーバーヒート", "リーフストーム", "りゅうせいぐん", "しんくうは",
+                "インファイト", "はかいこうせん", "ギガインパクト", "ばかぢから",
+                "ブレイズキック", "きあいだま", "サイコブースト", "だいばくはつ"}
+_M3_HITS = {"トリプルアクセル": 3.0, "タネマシンガン": 3.0, "ロックブラスト": 3.0,
+            "つららばり": 3.0, "ミサイルばり": 3.0, "スケイルショット": 3.0,
+            "ボーンラッシュ": 3.0, "とげキャノン": 3.0, "アームハンマー": 1.0,
+            "ダブルアタック": 2.0, "にどげり": 2.0, "ダブルウイング": 2.0,
+            "ゴッドバード": 1.0, "ネズミざん": 6.513}
+FEAT_V3 = os.environ.get("FEAT_V3", "1") == "1"
+_N_M3 = 12 if FEAT_V3 else 0     # 技クラス8 + 量的4
 
 
 def switch_wins_1v1_split(first_in, rest_in, out_f, hp_frac, faster) -> bool:
@@ -314,7 +348,26 @@ def _move_features(p) -> List[float]:
         if nm in _M_TWOTURN: twoturn = 1.0
         if nm in _M_TRAP: trap = 1.0
         if nm in _M_STATUS: status = 1.0
-    return cover + [pri, setup, recover, status, hazard, phaze, pivot, protect, twoturn, trap]
+    base = cover + [pri, setup, recover, status, hazard, phaze, pivot, protect, twoturn, trap]
+    if not FEAT_V3:
+        return base
+    mv = [m for m in (p.moves or []) if m]
+    names = {m.name_jp for m in mv}
+    cls = [1.0 if (names & g) else 0.0 for g in
+           (_M3_LOCK, _M3_SCREEN, _M3_SUBST, _M3_ITEMTRICK,
+            _M3_EXIT, _M3_DELAY, _M3_RESET, _M3_FIELD)]
+    # 量的: 最大威力の攻撃技1本の性質。タイプ別最大威力だけでは
+    # 「命中90でC2段下がる130」と「命中100で下降なしの90」が区別できない。
+    atk = [m for m in mv if m.power and m.category != "status"]
+    if atk:
+        best = max(atk, key=lambda m: (m.power or 0))
+        acc = (best.accuracy if best.accuracy else 100) / 100.0
+        recoil = 1.0 if best.name_jp in _M3_RECOIL else 0.0
+        drop = 1.0 if best.name_jp in _M3_SELFDROP else 0.0
+        hits = min(2.0, _M3_HITS.get(best.name_jp, 1.0) / 3.0)
+    else:
+        acc = recoil = drop = hits = 0.0
+    return base + cls + [acc, recoil, drop, hits]
 
 
 def _real_speed(p, side, field) -> float:
@@ -384,7 +437,8 @@ def _volatile_block(p) -> List[float]:
     ]
 
 
-_POKE = 2 + len(TYPES) + 5 + 6 + len(_ITEM_FLAGS) + _N_ABIL_CATS + 1 + len(TYPES) + 10 + _VOL  # 特性は54効果カテゴリ
+_POKE = (2 + len(TYPES) + 5 + 6 + len(_ITEM_FLAGS) + _N_ABIL_CATS + 1
+         + len(TYPES) + 10 + _N_M3 + _VOL)   # 特性は54効果カテゴリ / _N_M3 は v3の技特徴12
 _PER_SIDE = 3 * _POKE + 7 + 2   # 7=能力ランク(A/B/C/D/S+命中+回避)
 _MATRIX = 18   # 全対面期待ダメージ: 自分3×相手3 ＋ 相手3×自分3（交代の生存＋脅威判断用）
 _SPEEDMAT = 9

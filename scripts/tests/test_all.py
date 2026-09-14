@@ -3016,7 +3016,33 @@ check("価値関数 特徴次元が一致", len(_vfeat)==feature_dim())
 # 旧8カテゴリでは M-6 上位50種の非メガ持ち物使用率の29%が1bitも立たず、ネットからは
 # 「無持ち物」と同じに見えていた（識別率 71%→99.7%）。本番ネットも965次元へ差し替え済み。
 import simulator.features as _FT
-check("特徴量 既定は965次元(v2)", feature_dim()==965 and _FT.FEAT_V2)
+import os as _os33, json as _js33
+_netp33 = _os33.path.join(_os33.path.dirname(_os33.path.dirname(_os33.path.abspath(__file__))), "az_net_np.json")
+check("特徴量 既定は1037次元(v2+v3)", feature_dim()==1037 and _FT.FEAT_V2 and _FT.FEAT_V3)
+# v3: 変化技クラス8 + 最大威力技の量的4。既存クラスに入らない変化技が M-6 上位50種の
+# 使用率の32%を占めており、ネットからは「持っていない」のと同じに見えていた（被覆 68%→99.5%）。
+check("特徴量v3 変化技クラスが主要な未分類技を被覆",
+      {"アンコール","ちょうはつ"} <= _FT._M3_LOCK
+      and {"リフレクター","ひかりのかべ","オーロラベール"} <= _FT._M3_SCREEN
+      and "みがわり" in _FT._M3_SUBST and "トリック" in _FT._M3_ITEMTRICK
+      and {"みちづれ","バトンタッチ"} <= _FT._M3_EXIT
+      and "ねがいごと" in _FT._M3_DELAY and "くろいきり" in _FT._M3_RESET)
+# 反動・自分の能力下降は battle.py の実装と同じ集合でなければ、ネットが見る性質が実挙動とずれる
+check("特徴量v3 反動技は battle._apply_recoil と同じ集合",
+      {"すてみタックル","フレアドライブ","ブレイブバード","ウッドハンマー",
+       "もろはのずつき","ワイルドボルト","てっていこうせん"} <= _FT._M3_RECOIL)
+check("特徴量v3 能力下降技にオーバーヒート/りゅうせいぐん/インファイトが入る",
+      {"オーバーヒート","りゅうせいぐん","インファイト"} <= _FT._M3_SELFDROP)
+# 段階的に戻せること（v3だけ切る／両方切る）
+import subprocess as _sp33, sys as _sy33
+def _dim33(env):
+    e = dict(os.environ if False else __import__("os").environ); e.update(env)
+    r = _sp33.run([_sy33.executable, "-c",
+        "import sys;sys.path.insert(0,%r);from simulator.features import feature_dim;print(feature_dim())"
+        % _os33.path.dirname(_netp33)], capture_output=True, text=True, env=e)
+    return int(r.stdout.strip())
+check("特徴量 v3だけ切ると965次元に戻る", _dim33({"FEAT_V3": "0"}) == 965)
+check("特徴量 v2/v3とも切ると905次元に戻る", _dim33({"FEAT_V2": "0", "FEAT_V3": "0"}) == 905)
 check("特徴量 既定の持ち物カテゴリは18", len(_FT._ITEM_FLAGS)==18)
 check("特徴量v2 追加カテゴリは10・カテゴリ間で持ち物が重複しない",
       len(_FT._ITEM_FLAGS_V2)==10 and
@@ -3029,8 +3055,6 @@ check("特徴量 主要な持ち物を既定で識別できる",
        "たつじんのおび","しろいハーブ","レッドカード","ピントレンズ"} <= _v2items)
 # Rust 側(features.rs N_ITEM_FLAGS)と次元が食い違うと本番のネット評価が壊れる。
 # ここを変えるときは features.rs も必ず揃えること。
-import os as _os33, json as _js33
-_netp33 = _os33.path.join(_os33.path.dirname(_os33.path.dirname(_os33.path.abspath(__file__))), "az_net_np.json")
 check("特徴量 本番ネットの入力次元と一致",
       _js33.load(open(_netp33, encoding="utf-8"))["dim"] == feature_dim())
 # 学習可能性: 線形分離データを高精度予測（決定的・高速）
