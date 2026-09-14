@@ -23,11 +23,11 @@ const allPosts = (await getCollection('blog'))
 		return (ma?.rank ?? 999) - (mb?.rank ?? 999);
 	});
 
-const seasons = ['m5', 'm4', 'm3', 'm2'] as const;
+const seasons = ['m6', 'm5', 'm4', 'm3', 'm2'] as const;
 const postsBySeason = Object.fromEntries(
 	seasons.map((s) => [s, allPosts.filter((p) => p.id.includes(`-${s}`))])
 ) as Record<string, typeof allPosts>;
-const seasonLabels: Record<string, string> = { m5: 'M-5（最新）', m4: 'M-4', m3: 'M-3', m2: 'M-2' };
+const seasonLabels: Record<string, string> = { m6: 'M-6（最新）', m5: 'M-5', m4: 'M-4', m3: 'M-3', m2: 'M-2' };
 ---
 
 <!doctype html>

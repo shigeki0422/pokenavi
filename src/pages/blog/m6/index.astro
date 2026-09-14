@@ -17,7 +17,7 @@ const TYPE_COLOR: Record<string, string> = {
 
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const allPosts = (await getCollection('blog'))
-	.filter((post) => (showDrafts || !post.data.draft) && post.id.includes('-m5'))
+	.filter((post) => (showDrafts || !post.data.draft) && post.id.includes('-m6'))
 	.sort((a, b) => {
 		const ma = (articleMeta as any)[a.id];
 		const mb = (articleMeta as any)[b.id];
@@ -32,8 +32,8 @@ const posts = allPosts;
 <html lang="ja">
 	<head>
 		<BaseHead
-			title="M-5 シーズン 考察記事一覧 | ポケナビ"
-			description="ポケモンチャンピオンズ M-5 シーズンのポケモン別考察記事。使用率上位ポケモンの型・立ち回り・パーティ構成をデータで解説。"
+			title="M-6 シーズン 考察記事一覧 | ポケナビ"
+			description="ポケモンチャンピオンズ M-6 シーズンのポケモン別考察記事。使用率上位ポケモンの型・立ち回り・パーティ構成をデータで解説。"
 			imageUrl="/og-image.png"
 		/>
 		<style>
@@ -99,15 +99,16 @@ const posts = allPosts;
 		<Header />
 		<main>
 			<div class="breadcrumb">
-				<a href="/">ホーム</a> &rsaquo; <a href="/blog/">考察記事</a> &rsaquo; M-5 シーズン
+				<a href="/">ホーム</a> &rsaquo; <a href="/blog/">考察記事</a> &rsaquo; M-6 シーズン
 			</div>
 			<div class="season-banner">
 				<div>
 					<div class="label">シーズン</div>
-					<div class="name">M-5</div>
+					<div class="name">M-6</div>
 				</div>
+				<span class="badge">最新シーズン</span>
 			</div>
-			<h1>M-5 シーズン 考察記事</h1>
+			<h1>M-6 シーズン 考察記事</h1>
 			<p class="subtitle">使用率上位ポケモン考察（{allPosts.length}件）</p>
 			<div class="grid" id="post-grid">
 				{posts.map((post, i) => {
