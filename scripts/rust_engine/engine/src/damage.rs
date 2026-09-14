@@ -360,11 +360,16 @@ pub fn effective_power(
     } else if n == s.mv.はたきおとす {
         if let Some(it) = defender.item {
             let name = pack.intern.resolve(it);
+            // メガストーンは叩き落とせないので1.5倍は乗らない。
+            // M-6 で追加された Zメガ石（ナイトZ）が抜けており、Python(damage.py:524)と
+            // 1.5倍ぶん食い違っていた（マスカーニャのはたきおとす vs アブソルナイトZ: 81 と 120）。
             let is_mega = name.ends_with("ナイト")
                 || name.ends_with("ナイトＸ")
                 || name.ends_with("ナイトＹ")
                 || name.ends_with("ナイトX")
-                || name.ends_with("ナイトY");
+                || name.ends_with("ナイトY")
+                || name.ends_with("ナイトＺ")
+                || name.ends_with("ナイトZ");
             if !is_mega {
                 power = fl(power as f64 * 1.5);
             }

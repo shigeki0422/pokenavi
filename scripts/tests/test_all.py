@@ -5401,6 +5401,27 @@ _src28 = _in28.getsource(_pb28.observe_damage_dealt)
 check("与ダメージ観測は候補を攻撃側として使う（被ダメージ観測は耐久しか絞れない）",
       "calc_damage(a, defender" in _src28)
 
+print("\n=== 29. はたきおとす: メガストーンには1.5倍が乗らない ===")
+# メガストーンは叩き落とせないので威力1.5倍の対象外。Zメガ石(ナイトZ)は M-6 で追加された
+# ため Rust 側の判定から漏れており、同じ盤面で Python 81 / Rust 120 と食い違っていた。
+from simulator.damage import calc_damage as _cd29
+from simulator.simulate import get_loader as _gl29
+from simulator.pokemon import build_from_spec as _bfs29, parse_pokemon_spec as _pps29
+_L29 = _gl29()
+_atk29 = _bfs29(_pps29("マスカーニャ@きあいのタスキ:いじっぱり:はたきおとす|トリックフラワー|とんぼがえり|トリプルアクセル:1/32/1/0/0/32:へんげんじざい"), _L29, season="M-6", randomize=False)
+_ko29 = [m for m in _atk29.moves if m.name_jp == "はたきおとす"][0]
+_f29 = BattleField()
+
+def _dmg29(item):
+    d = _bfs29(_pps29("アブソル@きあいのタスキ:いじっぱり:つじぎり|シャドークロー|でんこうせっか|つるぎのまい:1/32/1/0/0/32:きれあじ"), _L29, season="M-6", randomize=False)
+    d.item = item
+    return _cd29(_atk29, d, _ko29, _f29, critical=False, random_roll=0.0)
+
+_plain29 = _dmg29("きあいのタスキ")
+check("はたきおとす: 通常の持ち物には1.5倍が乗る", _plain29 > _dmg29(None))
+for _st29 in ("アブソルナイトZ", "ガブリアスナイトZ", "リザードナイトX", "リザードナイトY", "ボーマンダナイト"):
+    check(f"はたきおとす: {_st29} には1.5倍が乗らない", _dmg29(_st29) == _dmg29(None))
+
 # 集計
 # ════════════════════════════════════════════════════════════════
 print(f"\n{'='*60}")
