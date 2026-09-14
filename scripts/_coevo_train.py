@@ -8,8 +8,11 @@ from multiprocessing import Pool
 import _pop_gen as G
 
 SEASON = os.environ.get("COEVO_SEASON", "M-2")
-NET_TMP = "/tmp/coevo_net.json"
-ANCHOR_TMP = "/tmp/coevo_anchor.json"
+# 一時ファイルは env で分けられるようにする。複数アームを並行させるとき既定名のままだと
+# 互いの学習ネット/アンカーを上書きして両方壊れる。
+NET_TMP = os.environ.get("NET_TMP", "/tmp/coevo_net.json")
+ANCHOR_TMP = os.environ.get("ANCHOR_TMP", "/tmp/coevo_anchor.json")
+FINAL_TMP = os.environ.get("FINAL_TMP", "/tmp/coevo_final.json")
 
 def _mega_plus_random(party6, rng, n=3):
     """メガ1体＋非メガをランダムでn-1体（メガ+受け+攻め補完の現実的な選出）。メガ無しなら全ランダム。"""
@@ -240,13 +243,13 @@ def main():
         print(f"[epoch{ep+1}/{epochs}] 自己対戦{per*workers}局 学習{len(samples)}サンプル "
               f"{gate_s}{rain_s} {time.time()-t0:.0f}秒", flush=True)
     # 最終評価: 学習ネット vs 凍結アンカー（大標本）
-    net.save("/tmp/coevo_final.json")
-    aw, al, dr, wr, pv = ng_eval(pool, "/tmp/coevo_final.json", ANCHOR_TMP, 600, workers, 99000)
+    net.save(FINAL_TMP)
+    aw, al, dr, wr, pv = ng_eval(pool, FINAL_TMP, ANCHOR_TMP, 600, workers, 99000)
     print(f"\n=== 最終: 学習ネット vs 現行ネット（多様集団・600戦・NetGreedy）===", flush=True)
     print(f"学習ネット: {aw}勝 {al}敗 {dr}分 → 勝率{wr*100:.1f}%  p={pv:.4f}  "
           f"{'有意に強化' if pv<0.05 and wr>0.5 else ('有意に弱化' if pv<0.05 else '有意差なし')}", flush=True)
     out = os.environ.get("OUT_NET") or ("az_net_coevo.json" if SEASON == "M-2" else f"az_net_coevo_{SEASON}.json")
-    import shutil; shutil.copy("/tmp/coevo_final.json", out)
+    import shutil; shutil.copy(FINAL_TMP, out)
     print(f"学習ネットを {out} に保存（本番az_net_np.jsonは不変）", flush=True)
 
 if __name__ == "__main__":
