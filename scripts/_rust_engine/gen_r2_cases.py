@@ -47,8 +47,11 @@ class RecRandom:
         i = self.rng.randrange(len(seq)); self.draws.append(["c", i]); return seq[i]
 
     def choices(self, population, weights=None, k=1):
-        i = self.rng.choices(range(len(population)), weights=weights, k=1)[0]
-        self.draws.append(["w", i]); return [population[i]]
+        # w は「選ばれた値」を記録する。gate_r2 の Adapter は choices() の戻り値を
+        # そのまま連続ヒット数として使うため、インデックスを記録すると回数が化ける
+        # （battle.py:2737 は [2,3,4,5] から回数を引く）。
+        v = self.rng.choices(list(population), weights=weights, k=1)[0]
+        self.draws.append(["w", v]); return [v]
 
 
 def _legal_actions(side):
@@ -69,7 +72,9 @@ def _enc_action(a):
     if a.type == "switch":
         return ["switch", 0, None, a.switch_to, bool(a.do_mega)]
     m = a.move
-    md = [m.name_jp, m.type, m.category, m.power or 0, m.accuracy or 0, m.priority or 0, m.pp or 0] if m else None
+    # power/accuracy/pp の None を 0 に潰してはいけない。gate_r2.decode_action は
+    # そのまま Some(0) として読むため、必中技(accuracy=None)が命中0%になって全て失敗する。
+    md = [m.name_jp, m.type, m.category, m.power, m.accuracy, (m.priority or 0), m.pp] if m else None
     return ["move", a.move_idx, md, -1, bool(a.do_mega)]
 
 
@@ -77,7 +82,7 @@ def generate(rec, seed):
     bt_rng = RecRandom(seed)
     pol = random.Random(seed ^ 0x5bd1e995)
     _orig_roll = _dmg._ROLL_OVERRIDE
-    _dmg._ROLL_OVERRIDE = rec.get("roll_override")
+    _dmg._ROLL_OVERRIDE = rec.get("roll_override") if os.environ.get("PY_ROLL_OVERRIDE") == "1" else None
     _orig = (random.random, random.randint, random.choice, random.choices)
     random.random, random.randint, random.choice, random.choices = (
         bt_rng.random, bt_rng.randint, bt_rng.choice, bt_rng.choices)
