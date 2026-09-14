@@ -5337,8 +5337,8 @@ check("確定KO安全弁が opp.item の真値を読まない", "opp.item" not i
 check("確定KO安全弁が opp.ability の真値を読まない", "opp.ability" not in _src27)
 
 from simulator.ai import _goes_first as _gf27, _opp_max_priority as _omp27
-check("確定KO安全弁の先制判定に my_side を渡している（相手の先制技を真値で読まない）",
-      "_goes_first(me, opp, mv.priority, field, my_side)" in _src27)
+check("確定KO安全弁の先制判定が開示ベースの最大優先度を使う（相手の先制技を真値で読まない）",
+      "_opp_max_priority(opp, my_side)" in _src27 and "opp_max=_opp_pri" in _src27)
 _omp_src27 = _insp27.getsource(_omp27)
 check("相手最大優先度は開示技＋使用率事前から推定する",
       "opp_view" in _omp_src27 and "move_prior" in _omp_src27)
@@ -5346,6 +5346,60 @@ check("相手最大優先度は開示技＋使用率事前から推定する",
 _su_src27 = _insp27.getsource(_su27)
 check("耐える系の判定は opp_view と事前分布で行う",
       "opp_view" in _su_src27 and "_opp_prior" in _su_src27)
+
+print("\n=== 28. 信念の観測チャネル（行動順/与ダメージ/否定的観測） ===")
+# 相手の型推定は「実機で見える情報」だけから更新すること。
+from simulator.belief import OpponentBelief as _OB28, _eff_speed_of as _spd28
+from simulator.simulate import get_loader as _gl28
+from simulator.pokemon import build_from_spec as _bfs28, parse_pokemon_spec as _pps28
+_L28 = _gl28()
+_SPEC28 = "ガブリアス@こだわりスカーフ:ようき:じしん|げきりん|がんせきふうじ|ステルスロック:2/32/0/0/0/32:さめはだ"
+_fld28 = BattleField()
+
+def _mkbel28():
+    b = _OB28(_L28, season="M-6")
+    b.ensure("ガブリアス")
+    return b
+
+# 交代をまたいで信念が残る（種名キーで保持し、場のポケモンには紐付かない）
+_b28 = _mkbel28()
+check("信念は種名キーで保持される（交代しても残る）",
+      _b28.get("ガブリアス") is not None and "ガブリアス" in _b28.species)
+# 探索へは持ち込まない（意思決定者の知識であって対戦状態ではない）
+import copy as _cp28
+check("信念は deepcopy で引き継がれない（決定化ロールアウトに持ち込まない）",
+      _cp28.deepcopy(_b28) is None)
+
+# observe_order: 自分より速ければ下限、遅ければ上限。スカーフでしか説明できなければ確定する。
+_pb28 = _mkbel28().get("ガブリアス")
+_before28 = len([p for p in _pb28.post if p > 0])
+_huge28 = max(_spd28(c["defender"], _fld28, 1.0) for c in _pb28.cands) + 1
+_upd28 = _pb28.observe_order(_huge28, True, _fld28)   # 素の最速を超える速度に先を越された
+check("行動順の観測: 素で説明できない速度ならスカーフを確定する",
+      _upd28 and _pb28.known_item == "こだわりスカーフ")
+
+# 遅かっただけではスカーフを否定しない（乱数ではなく下振れ＝低S個体の可能性が残る）
+_pb28b = _mkbel28().get("ガブリアス")
+_pb28b.observe_order(1, False, _fld28)                 # 自分が極端に遅くても相手が後攻
+check("行動順の観測: 遅いだけではスカーフを確定しない", _pb28b.known_item is None)
+
+# observe_absent_item: 回復しなかった＝回復持ち物ではない
+_pb28c = _mkbel28().get("ガブリアス")
+_pb28c.item_prior = {"たべのこし": 40.0, "こだわりスカーフ": 60.0}
+check("否定的観測: 発動しなかった持ち物を事前分布から落とす",
+      _pb28c.observe_absent_item(("たべのこし", "くろいヘドロ"))
+      and "たべのこし" not in _pb28c.item_prior)
+# 開示済みなら否定的観測は効かない（確定情報が優先）
+_pb28d = _mkbel28().get("ガブリアス")
+_pb28d.known_item = "たべのこし"
+check("否定的観測: 開示済みの持ち物は書き換えない",
+      not _pb28d.observe_absent_item(("たべのこし",)))
+
+# observe_damage_dealt は攻撃側候補でダメージ式を回す＝相手の A/C を絞る
+import inspect as _in28
+_src28 = _in28.getsource(_pb28.observe_damage_dealt)
+check("与ダメージ観測は候補を攻撃側として使う（被ダメージ観測は耐久しか絞れない）",
+      "calc_damage(a, defender" in _src28)
 
 # 集計
 # ════════════════════════════════════════════════════════════════

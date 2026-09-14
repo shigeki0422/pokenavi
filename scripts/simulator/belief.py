@@ -7,6 +7,15 @@
   逆算し、各候補スプレッドの尤度（16段階の乱数ロールで観測割合を再現できる割合）でベイズ更新。
   自己対戦では相手の真の型を我々が知っているため、推定精度を直接検証できる。
 
+観測チャネル（どれも「実機で見える情報」だけを使う）:
+- 被ダメージ割合 → 防御側の EV/性格（observe_damage）
+- 与ダメージ割合 → 攻撃側の EV/性格（observe_damage_dealt）。相手が自分を殴った量から
+  A/C を絞る。これが無いと「今のじしんで6割減った＝A全振り」が働かない。
+- 行動順 → 実効速度の上下限（observe_order）。こだわりスカーフは M-6 TOP50 で使用率
+  485%pt の3位で、最速の相手に抜かれたら人間は即座にスカーフを疑う。
+- 発動しなかったこと → 持ち物の否定（observe_absent_item）。ターン終了で回復しなければ
+  たべのこしではない、状態異常が治らなければラムのみではない。
+
 既知の制約（Phase 1）:
 - 候補防御体は ensure() 時点の開示特性/持ち物で1度だけ構築する（途中で持ち物が判明しても再構築しない）。
 - 攻撃側・場の状態は観測時点の実値を呼び出し側が渡す前提（battle.py の被ダメージ確定点で更新）。
@@ -26,6 +35,20 @@ _EPS = 1e-4  # 尤度の下限（モデル誤差で真の候補を完全消去�
 # 候補数の上限（暴走防止）
 _MAX_EVS = 14
 _MAX_NATS = 7
+
+
+def _eff_speed_of(p, field, item_mult: float) -> int:
+    """実効速度。倍率は battle._speed_order / ai._effective_speed に揃える。
+    持ち物は候補ごとに差し替えたいので、掛ける倍率を引数で受ける。"""
+    spd = math.floor(p.get_effective_speed() * item_mult)
+    w = getattr(field, "weather", None)
+    ab = p.ability
+    if (w == "rain" and ab == "すいすい") or (w == "sunny" and ab == "ようりょくそ") \
+            or (w == "sandstorm" and ab == "すなかき") or (w in ("hail", "snow") and ab == "ゆきかき"):
+        spd *= 2
+    if getattr(field, "electric_terrain", False) and ab == "サーフテール":
+        spd *= 2
+    return int(spd)
 
 
 class PokemonBelief:
@@ -120,6 +143,74 @@ class PokemonBelief:
         new = [p * (lik * (1 - _EPS) + _EPS) for p, lik in zip(self.post, liks)]
         s = sum(new) or 1.0
         self.post = [x / s for x in new]
+        return True
+
+    def observe_damage_dealt(self, defender, move, observed_fraction: float,
+                             field, critical: bool = False) -> bool:
+        """相手（この信念の主）が自分に与えたダメージ割合で事後確率を更新する。
+        観測できるのは自分のHPが減った割合＝実機で見える情報だけ。攻撃側の候補を
+        取り替えてダメージ式を回し、観測を再現できた候補の尤度でベイズ更新する。
+        被ダメージ(observe_damage)は相手の耐久を絞るが、こちらは相手の攻撃を絞る。"""
+        liks = []
+        for c in self.cands:
+            a = c["defender"]          # 同じ個体を攻撃側として使う（実数値は全ステ入っている）
+            hit = 0
+            for rr in _ROLLS:
+                dmg = calc_damage(a, defender, move, field, critical=critical, random_roll=rr)
+                if round(dmg / defender.max_hp, 3) == observed_fraction:
+                    hit += 1
+            liks.append(hit / len(_ROLLS))
+        if sum(liks) == 0:
+            return False
+        new = [p * (lik * (1 - _EPS) + _EPS) for p, lik in zip(self.post, liks)]
+        t = sum(new) or 1.0
+        self.post = [x / t for x in new]
+        return True
+
+    def observe_order(self, my_eff_speed: int, opp_first: bool, field) -> bool:
+        """行動順から相手の実効速度の上下限を絞る。優先度が同じ場合のみ呼ぶこと。
+        候補ごとに「持ち物なし」と「こだわりスカーフ」の両方を試し、観測と矛盾しない
+        組み合わせが1つも無い候補を落とす。スカーフでしか説明できなければスカーフを確定する。"""
+        from .items import get_speed_item_multiplier
+        scarf_p = self.item_prior.get("こだわりスカーフ", 0.0)
+        liks = []
+        need_scarf = True
+        for c in self.cands:
+            d = c["defender"]
+            base = _eff_speed_of(d, field, 1.0)
+            ok_plain = (base >= my_eff_speed) if opp_first else (base <= my_eff_speed)
+            ok_scarf = False
+            if scarf_p > 0 and self.known_item in (None, "こだわりスカーフ"):
+                sc = _eff_speed_of(d, field, get_speed_item_multiplier("こだわりスカーフ"))
+                ok_scarf = (sc >= my_eff_speed) if opp_first else (sc <= my_eff_speed)
+            if ok_plain:
+                need_scarf = False
+            liks.append(1.0 if (ok_plain or ok_scarf) else 0.0)
+        if sum(liks) == 0:
+            return False                      # どの候補でも説明できない＝モデル外（更新しない）
+        new = [p * (lik * (1 - _EPS) + _EPS) for p, lik in zip(self.post, liks)]
+        t = sum(new) or 1.0
+        self.post = [x / t for x in new]
+        if need_scarf and scarf_p > 0 and self.known_item is None:
+            self.known_item = "こだわりスカーフ"   # スカーフ以外では速度を説明できない
+            self.item_prior = {"こだわりスカーフ": 100.0}
+        elif not opp_first and self.known_item is None and scarf_p > 0:
+            pass                               # 遅かっただけではスカーフを否定できない
+        return True
+
+    def observe_absent_item(self, items) -> bool:
+        """「発動しなかった」ことから持ち物を否定する。
+        例: ターン終了で回復しなかった→たべのこし/くろいヘドロではない。
+        開示済みなら何もしない（確定情報が優先）。"""
+        if self.known_item is not None:
+            return False
+        drop = [i for i in items if i in self.item_prior]
+        if not drop:
+            return False
+        for i in drop:
+            self.item_prior.pop(i, None)
+        if not self.item_prior:
+            self.item_prior = {"": 100.0}      # 全否定は起こりうる（未収録持ち物）
         return True
 
     # ── クエリ ───────────────────────────────────────────────────────
@@ -298,3 +389,22 @@ class OpponentBelief:
         if b is None:
             return False
         return b.observe_damage(attacker, move, observed_fraction, field, critical)
+
+    def observe_damage_dealt(self, attacker_name: str, defender, move,
+                             observed_fraction: float, field, critical: bool = False) -> bool:
+        b = self.ensure(attacker_name)
+        if b is None:
+            return False
+        return b.observe_damage_dealt(defender, move, observed_fraction, field, critical)
+
+    def observe_order(self, opp_name: str, my_eff_speed: int, opp_first: bool, field) -> bool:
+        b = self.ensure(opp_name)
+        if b is None:
+            return False
+        return b.observe_order(my_eff_speed, opp_first, field)
+
+    def observe_absent_item(self, opp_name: str, items) -> bool:
+        b = self.ensure(opp_name)
+        if b is None:
+            return False
+        return b.observe_absent_item(items)

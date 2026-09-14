@@ -50,6 +50,25 @@ fn ev_key(e: &EvEntry) -> (i64, i64, i64, i64, i64, i64) {
     (e.h, e.a, e.b, e.c, e.d, e.s)
 }
 
+/// belief.py `_eff_speed_of`: 持ち物倍率を差し替えられる実効速度。
+/// 倍率は battle.rs の速度順 / ai::effective_speed に揃える。
+fn eff_speed_with(pack: &Pack, p: &Poke, field: &Field, item_mult: f64) -> i64 {
+    let l = &pack.sy.l;
+    let mut spd = ((p.eff_speed(pack) as f64) * item_mult).floor() as i64;
+    let w = field.weather;
+    if (w == Some(pack.sy.we.rain) && p.ability == l.すいすい)
+        || (w == Some(pack.sy.we.sunny) && p.ability == l.ようりょくそ)
+        || (w == Some(pack.sy.we.sandstorm) && p.ability == l.すなかき)
+        || (w == Some(pack.sy.we.hail) && p.ability == l.ゆきかき)
+    {
+        spd *= 2;
+    }
+    if field.electric_terrain && p.ability == l.サーフテール {
+        spd *= 2;
+    }
+    spd
+}
+
 impl PokemonBelief {
     pub fn new(
         pack: &Pack,
@@ -224,6 +243,123 @@ impl PokemonBelief {
         true
     }
 
+    /// observe_damage_dealt（belief.py と 1:1）
+    /// 殴られた側が「自分がどれだけ減ったか」から相手の攻撃側 EV/性格を絞る。
+    pub fn observe_damage_dealt(
+        &mut self,
+        pack: &Pack,
+        defender: &mut Poke,
+        mv: &DMove,
+        observed_fraction: f64,
+        field: &mut Field,
+        critical: bool,
+        rng: &mut dyn BRng,
+    ) -> bool {
+        let rs = rolls();
+        let mut liks: Vec<f64> = Vec::with_capacity(self.cands.len());
+        for c in self.cands.iter_mut() {
+            let mut hit = 0i64;
+            for rr in rs.iter() {
+                let mut cb = |kind: u8| match kind {
+                    0 => rng.random(),
+                    _ => rng.choice(16) as f64,
+                };
+                let dmg = calc_damage(
+                    pack,
+                    &mut c.defender,
+                    defender,
+                    mv,
+                    field,
+                    critical,
+                    Some(*rr),
+                    None,
+                    &mut cb,
+                );
+                if round3(dmg as f64 / defender.max_hp as f64) == observed_fraction {
+                    hit += 1;
+                }
+            }
+            liks.push(hit as f64 / 16.0);
+        }
+        if pysum(liks.iter().copied()) == 0.0 {
+            return false;
+        }
+        self.apply_liks(&liks);
+        true
+    }
+
+    /// observe_order（belief.py と 1:1）
+    /// 行動順から実効速度の上下限を絞る。優先度が同じときだけ呼ぶこと。
+    pub fn observe_order(
+        &mut self,
+        pack: &Pack,
+        my_eff_speed: i64,
+        opp_first: bool,
+        field: &Field,
+    ) -> bool {
+        let scarf = "こだわりスカーフ";
+        let scarf_p = self
+            .item_prior
+            .iter()
+            .find(|(n, _)| n == scarf)
+            .map_or(0.0, |(_, r)| *r);
+        let mut liks: Vec<f64> = Vec::with_capacity(self.cands.len());
+        let mut need_scarf = true;
+        let scarf_allowed =
+            self.known_item.is_none() || self.known_item.as_deref() == Some(scarf);
+        for c in self.cands.iter() {
+            let base = eff_speed_with(pack, &c.defender, field, 1.0);
+            let ok_plain = if opp_first { base >= my_eff_speed } else { base <= my_eff_speed };
+            let mut ok_scarf = false;
+            if scarf_p > 0.0 && scarf_allowed {
+                let sc = eff_speed_with(pack, &c.defender, field, 1.5);
+                ok_scarf = if opp_first { sc >= my_eff_speed } else { sc <= my_eff_speed };
+            }
+            if ok_plain {
+                need_scarf = false;
+            }
+            liks.push(if ok_plain || ok_scarf { 1.0 } else { 0.0 });
+        }
+        if pysum(liks.iter().copied()) == 0.0 {
+            return false;
+        }
+        self.apply_liks(&liks);
+        if need_scarf && scarf_p > 0.0 && self.known_item.is_none() {
+            self.known_item = Some(scarf.to_string());
+            self.item_prior = vec![(scarf.to_string(), 100.0)];
+        }
+        true
+    }
+
+    /// observe_absent_item（belief.py と 1:1）
+    /// 「発動しなかった」ことから持ち物を否定する。開示済みなら何もしない。
+    pub fn observe_absent_item(&mut self, items: &[&str]) -> bool {
+        if self.known_item.is_some() {
+            return false;
+        }
+        let before = self.item_prior.len();
+        self.item_prior.retain(|(n, _)| !items.contains(&n.as_str()));
+        if self.item_prior.len() == before {
+            return false;
+        }
+        if self.item_prior.is_empty() {
+            self.item_prior = vec![(String::new(), 100.0)];
+        }
+        true
+    }
+
+    fn apply_liks(&mut self, liks: &[f64]) {
+        let new: Vec<f64> = self
+            .post
+            .iter()
+            .zip(liks.iter())
+            .map(|(p, lik)| p * (lik * (1.0 - EPS) + EPS))
+            .collect();
+        let t = pysum(new.iter().copied());
+        let s = if t == 0.0 { 1.0 } else { t };
+        self.post = new.iter().map(|x| x / s).collect();
+    }
+
     /// `_weighted(rng, items)`: 重み>0 のみ、total は Neumaier 和
     fn weighted<'b, T: Clone>(rng: &mut dyn BRng, items: &'b [(T, f64)]) -> Option<T> {
         let f: Vec<&(T, f64)> = items.iter().filter(|x| x.1 > 0.0).collect();
@@ -374,6 +510,60 @@ impl OpponentBelief {
         };
         let mut b = std::mem::replace(&mut self.species[i].1, PokemonBelief::empty());
         let r = b.observe_damage(pack, attacker, mv, observed_fraction, field, critical, rng);
+        self.species[i].1 = b;
+        r
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    pub fn observe_damage_dealt(
+        &mut self,
+        pack: &Pack,
+        attacker_name: Sym,
+        defender: &mut Poke,
+        mv: &DMove,
+        observed_fraction: f64,
+        field: &mut Field,
+        critical: bool,
+        rng: &mut dyn BRng,
+    ) -> bool {
+        let name = pack.intern.resolve(attacker_name).to_string();
+        let i = match self.ensure(pack, &name, None, None) {
+            None => return false,
+            Some(i) => i,
+        };
+        let mut b = std::mem::replace(&mut self.species[i].1, PokemonBelief::empty());
+        let r = b.observe_damage_dealt(pack, defender, mv, observed_fraction, field, critical, rng);
+        self.species[i].1 = b;
+        r
+    }
+
+    pub fn observe_order(
+        &mut self,
+        pack: &Pack,
+        opp_name: Sym,
+        my_eff_speed: i64,
+        opp_first: bool,
+        field: &Field,
+    ) -> bool {
+        let name = pack.intern.resolve(opp_name).to_string();
+        let i = match self.ensure(pack, &name, None, None) {
+            None => return false,
+            Some(i) => i,
+        };
+        let mut b = std::mem::replace(&mut self.species[i].1, PokemonBelief::empty());
+        let r = b.observe_order(pack, my_eff_speed, opp_first, field);
+        self.species[i].1 = b;
+        r
+    }
+
+    pub fn observe_absent_item(&mut self, pack: &Pack, opp_name: Sym, items: &[&str]) -> bool {
+        let name = pack.intern.resolve(opp_name).to_string();
+        let i = match self.ensure(pack, &name, None, None) {
+            None => return false,
+            Some(i) => i,
+        };
+        let mut b = std::mem::replace(&mut self.species[i].1, PokemonBelief::empty());
+        let r = b.observe_absent_item(items);
         self.species[i].1 = b;
         r
     }

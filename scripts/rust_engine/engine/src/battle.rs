@@ -1908,6 +1908,16 @@ pub fn execute_move(
             sides[aidx].party[ai] = att;
             sides[aidx].belief.0 = Some(bl);
         }
+        // 与ダメージ観測（belief.py と 1:1）: 殴られた側は「自分がどれだけ減ったか」から
+        // 相手の攻撃側 EV/性格を絞る。被ダメージ観測は相手の耐久しか絞れない。
+        if sides[didx].belief.0.is_some() {
+            let frac = crate::oppview::round3(total_dmg as f64 / dmax as f64);
+            let mut bl = sides[didx].belief.0.take().unwrap();
+            let mut def = std::mem::take(&mut sides[didx].party[di]);
+            bl.observe_damage_dealt(pack, an, &mut def, &mv, frac, field, false, rng);
+            sides[didx].party[di] = def;
+            sides[didx].belief.0 = Some(bl);
+        }
     }
 
     if total_dmg > 0 {
@@ -4212,6 +4222,21 @@ impl Battle {
                 }
             }
 
+            // 否定的観測（belief.py と 1:1）: HPが満タンでないのにターン終了で回復しなかった
+            // ＝回復持ち物ではない。満タンだと回復が起きなくても何も分からないので除外する。
+            {
+                let (nm, hp, mx, alive, item) = {
+                    let p = self.sides[sx].active();
+                    (p.name, p.hp, p.max_hp, p.is_alive, p.item)
+                };
+                let not_recov = item != Some(l.たべのこし) && item != Some(l.くろいヘドロ);
+                if self.sides[ox].belief.0.is_some() && hp < mx && alive && not_recov {
+                    let mut bl = self.sides[ox].belief.0.take().unwrap();
+                    bl.observe_absent_item(pack, nm, &["たべのこし", "くろいヘドロ"]);
+                    self.sides[ox].belief.0 = Some(bl);
+                }
+            }
+
             let berry_blocked = self.sides[ox].active().is_alive
                 && self.sides[ox].active().ability == l.きんちょうかん;
 
@@ -4671,6 +4696,30 @@ impl Battle {
                 let (s1, s2) = (&sides[0], &sides[1]);
                 speed_order(pack, s1, &action1, s2, &action2, field, rng)
             };
+            // 行動順の観測（belief.py `_observe_order` と 1:1）。優先度が違うと速度の
+            // 情報にならないので見送る。交代は速度と無関係（先に処理される）ので対象外。
+            {
+                let pr = |a: &Action| a.mv.as_ref().map_or(0, |m| m.priority);
+                let both_move = action1.kind == ActKind::Move && action2.kind == ActKind::Move;
+                if both_move && pr(&action1) == pr(&action2) {
+                    for sx in 0..2usize {
+                        let me_first = if sx == 0 { p1_first } else { !p1_first };
+                        if self.sides[sx].belief.0.is_none() {
+                            continue;
+                        }
+                        let (my_spd, opp_name) = {
+                            let Battle { sides, field, .. } = self;
+                            (
+                                crate::ai::effective_speed(pack, sides[sx].active(), field),
+                                sides[1 - sx].active().name,
+                            )
+                        };
+                        let mut bl = self.sides[sx].belief.0.take().unwrap();
+                        bl.observe_order(pack, opp_name, my_spd, !me_first, &self.field);
+                        self.sides[sx].belief.0 = Some(bl);
+                    }
+                }
+            }
             let (fx, ox) = if p1_first { (0usize, 1usize) } else { (1usize, 0usize) };
             let (first_action, second_action) =
                 if p1_first { (&action1, &action2) } else { (&action2, &action1) };

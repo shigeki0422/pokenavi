@@ -1528,6 +1528,12 @@ def _execute_move(
             attacker_side.belief.observe_damage(
                 defender.name, attacker, move,
                 round(total_dmg / defender.max_hp, 3), field)
+        # 与ダメージ観測: 殴られた側は「自分がどれだけ減ったか」から相手の攻撃側EV/性格を絞る。
+        # 被ダメージ観測は相手の耐久しか絞れず、A/C は事前分布のままだった。
+        if defender_side.belief is not None:
+            defender_side.belief.observe_damage_dealt(
+                attacker.name, defender, move,
+                round(total_dmg / defender.max_hp, 3), field)
 
     # ひけん・ちえなみ / がんせきアックス：倒しても設置（ヒット時100%）
     if total_dmg > 0:
@@ -3210,6 +3216,26 @@ def _apply_recoil(attacker, defender, move, dmg, logs):
         logs.append(f"{attacker.name} は反動を受けた！({recoil})")
 
 
+def _observe_order(s1, a1, s2, a2, field, p1_first) -> None:
+    """行動順を両者の信念へ流す。優先度が違うときは速度の情報にならないので見送る。
+    交代は速度と無関係（先に処理される）ので対象外。
+    実機で見えるのは「どちらが先に動いたか」だけで、これは人間が真っ先に使う手掛かり。"""
+    from .ai import _effective_speed
+    if a1 is None or a2 is None:
+        return
+    if getattr(a1, "type", None) != "move" or getattr(a2, "type", None) != "move":
+        return
+    pr1 = getattr(getattr(a1, "move", None), "priority", 0) or 0
+    pr2 = getattr(getattr(a2, "move", None), "priority", 0) or 0
+    if pr1 != pr2:
+        return
+    for me, opp, me_first in ((s1, s2, p1_first), (s2, s1, not p1_first)):
+        if me.belief is None or me.active is None or opp.active is None:
+            continue
+        me.belief.observe_order(opp.active.name, _effective_speed(me.active, field),
+                                not me_first, field)
+
+
 class Battle:
     def __init__(self, side1: BattleSide, side2: BattleSide, field: Optional[BattleField] = None):
         self.side1 = side1
@@ -3316,6 +3342,7 @@ class Battle:
 
             # 先攻/後攻決定
             p1_first = _speed_order(self.side1, action1, self.side2, action2, self.field)
+            _observe_order(self.side1, action1, self.side2, action2, self.field, p1_first)
 
             first_side,  first_action,  first_opp  = (
                 (self.side1, action1, self.side2) if p1_first
@@ -3628,6 +3655,12 @@ class Battle:
                     dmg = max(1, p.max_hp // 16)
                     p.take_damage(dmg)
                     self.logs.append(f"{p.name} は くろいヘドロ のダメージを受けた！({dmg})")
+
+            # 否定的観測: HPが満タンでないのにターン終了で回復しなかった＝回復持ち物ではない。
+            # 満タンだと回復が起きなくても何も分からないので除外する。
+            if opp_side.belief is not None and p.hp < p.max_hp and p.is_alive:
+                if p.item not in ("たべのこし", "くろいヘドロ"):
+                    opp_side.belief.observe_absent_item(p.name, ("たべのこし", "くろいヘドロ"))
 
             # きんちょうかん：相手がいるとこのポケモンはきのみを食べられない
             _berry_blocked = opp_side.active.is_alive and opp_side.active.ability == "きんちょうかん"
