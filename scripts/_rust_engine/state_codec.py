@@ -188,15 +188,22 @@ def poke_fields(e: Enc, p, pfx: str):
     tb = _get(p, "transform_backup")
     e.b("has_transform_backup", tb is not None)
     def tbg(attr, d=0):
-        return getattr(tb, attr, d) if tb is not None else d
+        # battle.py:2607 の _transform_backup は dict（Rust 側は構造体）。
+        # getattr で引くと常に既定値になり tb_* が全部0になる。
+        if tb is None:
+            return d
+        if isinstance(tb, dict):
+            v = tb.get(attr, d)
+            return d if v is None else v
+        return getattr(tb, attr, d)
     e.i("tb_attack", tbg("attack"))
     e.i("tb_defense", tbg("defense"))
     e.i("tb_sp_attack", tbg("sp_attack"))
     e.i("tb_sp_defense", tbg("sp_defense"))
     e.i("tb_speed", tbg("speed"))
     e.sym("tb_ability", tbg("ability", None) if tb is not None else None)
-    tmv = (getattr(tb, "moves", []) or []) if tb is not None else []
-    tpp = (getattr(tb, "pp", []) or []) if tb is not None else []
+    tmv = tbg("moves", []) or []
+    tpp = tbg("pp", []) or []
     for i in range(4):
         m = tmv[i] if i < len(tmv) else None
         e.sym(f"tb_move{i}", getattr(m, "name_jp", None) if m is not None else None)

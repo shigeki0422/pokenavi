@@ -82,7 +82,8 @@ def generate(rec, seed):
     bt_rng = RecRandom(seed)
     pol = random.Random(seed ^ 0x5bd1e995)
     _orig_roll = _dmg._ROLL_OVERRIDE
-    _dmg._ROLL_OVERRIDE = rec.get("roll_override") if os.environ.get("PY_ROLL_OVERRIDE") == "1" else None
+    # Rust 側 Field.roll_override と等価。掛けないと Python だけがダメージ乱数を引いてずれる。
+    _dmg._ROLL_OVERRIDE = rec.get("roll_override")
     _orig = (random.random, random.randint, random.choice, random.choices)
     random.random, random.randint, random.choice, random.choices = (
         bt_rng.random, bt_rng.randint, bt_rng.choice, bt_rng.choices)
@@ -105,10 +106,13 @@ def generate(rec, seed):
 
         turns = []
         chosen = {}
-        # 方策: 既定は GreedyAI（元コーパスと同じ性格＝実戦で踏む分岐）。
-        # POLICY=random にすると合法手を一様抽選して分岐を広く踏むが、実戦では出ない
-        # 二次効果の経路まで入り、Python↔Rust の抽選順の差が表面化して replay できなくなる。
-        use_random = os.environ.get("POLICY") == "random"
+        # 方策: 既定は合法手の一様抽選（POLICY=random）。
+        # GreedyAI を使ってはいけない: AI の手評価は calc_damage を呼び、その副作用で
+        # 相手の半減きのみを消費してしまう（damage.py:745 defender.item = None）。
+        # ゲートは行動をリプレイするので Rust 側は AI を呼ばず消費しない＝再現不能になる。
+        # （Rust の ai.rs もこの副作用を意図的に再現しているが、replay 経路では走らない）
+        # 一様抽選は副作用が無く、かつエンジンの分岐を広く踏める。
+        use_random = os.environ.get("POLICY", "random") == "random"
         from simulator.ai import GreedyAI
         g1, g2 = GreedyAI(), GreedyAI()
 
