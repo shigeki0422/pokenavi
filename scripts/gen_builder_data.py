@@ -348,6 +348,7 @@ def _mega_of(tpl, item, normalize_mega_stone):
     return None
 
 
+HAZARD_MOVES = {"ステルスロック", "まきびし", "どくびし", "ねばねばネット"}
 CHOICE_ITEMS = {"こだわりスカーフ", "こだわりハチマキ", "こだわりメガネ"}
 # こだわり系は最初に使った技に固定されるため、自分を強化する積み技は「積んでも攻撃技を
 # 出せない」ので機能しない。設置技・状態異常技などは撒いてから交代すれば固定が解けるので有効。
@@ -362,22 +363,35 @@ def _setup_moves(con):
     return _SETUP_MOVES
 
 
-def _moves_for_item(item, mpool, setup, axis=None, mmeta=None):
+def _moves_for_item(item, mpool, setup, axis=None, mmeta=None, is_mega=False):
     """表示・テンプレ用の4技。mpool(採用率TOP10)の順序は保ったまま、型と矛盾する技を落とす。
 
     技を型に紐付けず採用率TOP4をそのまま出していたため、攻撃軸と食い違う技が並んでいた
     （メガガブリアスZ: おくびょう/C32 なのに じしん・げきりん が入る）。使用率は非メガ勢と
     メガ勢の混合なので、軸が決まった型では逆側の攻撃技は落とす。
-    落として4本に満たない場合は、落とした技で埋める（2技のテンプレを作らない）。"""
+    落として4本に満たない場合は、落とした技で埋める（2技のテンプレを作らない）。
+
+    さらに攻撃軸のメガは「設置技」を後回しにする。メガ枠はパーティに1つしかなく、その1枠を
+    設置に使う型は実戦で選ばれない。使用率は非メガ勢との混合なので、非メガが撒く
+    ステルスロック が上位に来て攻撃技を押し出していた
+    （メガガブリアスZ: ステルスロックが入り パワージェムが落ちていた）。
+    対象は設置技のみ。積み技(つるぎのまい/からをやぶる/わるだくみ)・回復(はねやすめ)・
+    妨害(アンコール/まもる)はメガ本体を強化する／延命するので落とさない。"""
     pool = mpool if item not in CHOICE_ITEMS else ([m for m in mpool if m not in setup] or mpool)
     if axis in ("A", "C") and mmeta:
         want = "physical" if axis == "A" else "special"
+        def _cat(m):
+            return (mmeta.get(m) or [None, None])[1]
         def _off(m):
-            cat = (mmeta.get(m) or [None, None])[1]
-            return cat in ("physical", "special") and cat != want
+            c = _cat(m)
+            return c in ("physical", "special") and c != want
         keep = [m for m in pool if not _off(m)]
-        if any((mmeta.get(m) or [None, None])[1] == want for m in keep):
+        if any(_cat(m) == want for m in keep):
             pool = keep + [m for m in pool if m not in keep]
+        if is_mega:
+            rest = [m for m in pool if m not in HAZARD_MOVES]
+            if len(rest) >= 4:                     # 設置を外しても4技そろう場合だけ後回しにする
+                pool = rest + [m for m in pool if m in HAZARD_MOVES]
     return pool[:4]
 
 
@@ -475,7 +489,7 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
         if not backed and nature in used_natures:
             nature = _nature_alt(natures, ev, used_natures) or nature
         used_natures.add(nature)
-        mv4 = _moves_for_item(item, mpool, setup, c["axis"], moves_meta)
+        mv4 = _moves_for_item(item, mpool, setup, c["axis"], moves_meta, md is not None)
         spec = (f"{name}@{item}:{nature}:{'|'.join(mv4)}:"
                 f"{'/'.join(str(x) for x in ev)}:{ability}")
         out.append({
