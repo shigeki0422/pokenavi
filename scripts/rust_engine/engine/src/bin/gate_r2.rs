@@ -222,6 +222,7 @@ fn compare(pack: &Pack, b: &Battle, exp: &[Value], bid: i64, turn: i64) -> Optio
 
 fn main() {
     let args: Vec<String> = std::env::args().collect();
+    let mut field_hist: std::collections::BTreeMap<String, usize> = Default::default();
     if std::env::var("R2_VERBOSE").is_ok() {
         VERBOSE.store(true, std::sync::atomic::Ordering::Relaxed);
     }
@@ -320,6 +321,7 @@ fn main() {
             let s0 = v["S0"].as_array().unwrap();
             if let Some(d) = (if bench { None } else { compare(&pack, &b, s0, bid, 0) }) {
                 divergences += 1;
+                *field_hist.entry(d.name.clone()).or_insert(0) += 1;
                 if first.is_none() {
                     first = Some(d);
                 }
@@ -403,15 +405,26 @@ fn main() {
                         .unwrap_or_else(|| "panic".into());
                     errors.push(format!("battle {}: panic: {}", bid, msg));
                     divergences += 1;
-                    if first.is_none() {
-                        first = Some(Div {
-                            battle: bid,
-                            turn: -1,
-                            idx: usize::MAX,
-                            name: "<panic>".into(),
-                            rust: msg,
-                            py: String::new(),
-                        });
+                    // panic より前に状態乖離が出ていたら、そちらが根本原因。
+                    // 行動リプレイ不足/RNG不足は「状態がずれた結果」であることが多く、
+                    // panic だけ報告すると原因が隠れる。
+                    if let Some(d) = local_div.take() {
+                        *field_hist.entry(d.name.clone()).or_insert(0) += 1;
+                        if first.is_none() {
+                            first = Some(d);
+                        }
+                    } else {
+                        *field_hist.entry("<panic>".to_string()).or_insert(0) += 1;
+                        if first.is_none() {
+                            first = Some(Div {
+                                battle: bid,
+                                turn: -1,
+                                idx: usize::MAX,
+                                name: "<panic>".into(),
+                                rust: msg,
+                                py: String::new(),
+                            });
+                        }
                     }
                     battles += 1;
                     continue;
@@ -432,6 +445,7 @@ fn main() {
             turns += nturn_done;
             if let Some(d) = local_div {
                 divergences += 1;
+                *field_hist.entry(d.name.clone()).or_insert(0) += 1;
                 if first.is_none() {
                     first = Some(d);
                 }
@@ -491,6 +505,19 @@ fn main() {
         });
         std::fs::write(&path, serde_json::to_string_pretty(&j).unwrap()).unwrap();
         println!("coverage -> {}", path);
+    }
+    if !field_hist.is_empty() {
+        // 乖離フィールドの内訳。view.* だけに偏っていれば「開示仕様の変更で記録が古い」、
+        // 盤面フィールドに散っていればエンジンの不一致。両者を取り違えないための集計。
+        let mut v: Vec<(&String, &usize)> = field_hist.iter().collect();
+        v.sort_by(|a, b| b.1.cmp(a.1));
+        println!("── 乖離フィールド内訳(上位10) ──");
+        for (k, n) in v.iter().take(10) {
+            println!("  {:6} {}", n, k);
+        }
+        let view: usize = field_hist.iter().filter(|(k, _)| k.contains(".view.")).map(|(_, n)| *n).sum();
+        let tot: usize = field_hist.values().sum();
+        println!("  view.* 由来 {}/{} ({:.0}%)", view, tot, view as f64 / tot as f64 * 100.0);
     }
     if let Some(d) = &first {
         println!("── 最初の乖離 ──");

@@ -28,6 +28,12 @@ WHICH="${1:-all}"
 #   ・AI の判断を埋め込んだ層 = R3-fb・R4-enc・R4-mcts。対戦AIやダメージ見積もりを
 #     変えるたびに古くなる。ここは記録ゲートではなく fresh_parity.py（同一入力を
 #     python/rust で走らせて突き合わせ）と実対戦の統計等価で担保する
+# 【落とし穴】Python が import するのは rust_engine/pyengine（モジュール名 pokenavi_engine）で、
+# rust_engine/engine はその依存ライブラリ。`cargo build` も `engine` 側の `maturin develop` も
+# venv の .so を更新しない。ai.rs/battle.rs を変えたら必ず pyengine 側で maturin develop すること。
+# その際 VIRTUAL_ENV を scripts/venv に明示しないと、maturin が別の venv
+# （pokenavi/.venv・Python 3.14）を掴んでビルドに失敗する。
+# 忘れると fresh_parity が「実装の不一致」に見える乖離を出す（2026-09-14 に 7/200 で発生）。
 venv/bin/python _rust_engine/datapack_export.py
 (cd rust_engine && cargo build --release)
 
