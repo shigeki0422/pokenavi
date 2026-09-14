@@ -509,6 +509,21 @@ def apply_pre_move_forms(attacker, move, logs=None) -> None:
             logs.append(f"{attacker.name} の {attacker.ability} で {new_type} タイプになった！")
 
 
+def _disclose_contact_reaction(attacker_side, attacker, defender, move) -> List[str]:
+    """接触技を当てて初めて分かる防御側の持ち物/特性を、攻撃側の観測に確定させる。
+    実機では反動ダメージと同時にメッセージが出る＝殴るまでは分からない情報。
+    条件は _rough_skin_recoil（abilities.py）の発動条件と一致させる。"""
+    if attacker.ability == "えんかく" or not is_contact_move(move):
+        return []
+    out: List[str] = []
+    if defender.item == "ゴツゴツメット":
+        out += attacker_side.opp_view.on_item(defender.name, "ゴツゴツメット", "接触ダメージで判明")
+    if (defender.ability in ("さめはだ", "てつのとげ")
+            and attacker.ability not in ("かたやぶり", "ターボブレイズ", "テラボルテージ")):
+        out += attacker_side.opp_view.on_ability(defender.name, defender.ability)
+    return out
+
+
 def _execute_move(
     attacker_side: BattleSide, defender_side: BattleSide,
     action: Action, field: BattleField,
@@ -1044,6 +1059,7 @@ def _execute_move(
         dmg_penalty = max(1, math.floor(defender.max_hp / 8))
         defender.take_damage(dmg_penalty)
         logs.append(f"{defender.name} の ばけのかわ が破れた！({dmg_penalty})")
+        logs.extend(attacker_side.opp_view.on_ability(defender.name, "ばけのかわ"))
         PIVOT_MOVES = {"ボルトチェンジ", "とんぼがえり", "クイックターン"}
         if move.name_jp in PIVOT_MOVES and attacker.is_alive:
             attacker._pivot_out = True  # type: ignore
@@ -1212,9 +1228,11 @@ def _execute_move(
             defender.item = None
             on_item_consumed(defender, logs)
             logs.append(f"{defender.name} の ふうせん が割れた！")
+            logs.extend(attacker_side.opp_view.on_item(defender.name, "ふうせん", "割れて判明"))
 
         # さめはだ/てつのとげ: バッファに収集（ダメージログの後に出力）
         _rough_skin_recoil(attacker, defender, move, rough_skin_logs)
+        rough_skin_logs.extend(_disclose_contact_reaction(attacker_side, attacker, defender, move))
 
         # くちばしキャノン：弾技を使う前(=このターンまだ行動前)に接触技で被弾→攻撃側やけど
         if getattr(defender, '_beak_primed', False) and is_contact_move(move) and attacker.is_alive:
@@ -3283,6 +3301,10 @@ class Battle:
                     _side.mega_used = True
                     self.logs.append(f"{poke.name} はメガ進化した！")
                     _opp_side = self.side2 if _side is self.side1 else self.side1
+                    # メガ進化は実機で形態が見える＝メガ石と進化後の特性がその場で確定する
+                    if poke.item:
+                        self.logs.extend(_opp_side.opp_view.on_item(poke.name, poke.item, "メガ進化で判明"))
+                    self.logs.extend(_opp_side.opp_view.on_ability(poke.name, poke.ability))
                     self.logs.extend(entry_ability(poke, _opp_side.active, self.field,
                                                    weather_duration=MAX_TURNS))
 

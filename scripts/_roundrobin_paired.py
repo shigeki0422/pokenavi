@@ -3,6 +3,8 @@ A対B記録とB対A記録(視点反転)を同時に得る＝計算量ほぼ半�
 P1/P2はペアごとに交互割当で先手有利の偏りを相殺。
 各subjectの全カード完成時に f1_cache/ へ逐次書き出し（メモリ抑制）。
 env F1_MCTS_SIMS で sims（本番=800）。引数: LIMIT(先頭何構築で試すか, 既定=全件)。
+env RR_SEASON でシーズン、RR_SOURCE=m6pool で党の供給元を _m6_pool（提案キャッシュの軸）に切替。
+env RR_WORKERS でワーカー数（既定=cpu-2。他の学習ジョブと同居させる時に絞る）。
 """
 import os, sys, json, time, zlib
 os.environ.setdefault("OMP_NUM_THREADS", "1")
@@ -11,8 +13,9 @@ import feature1 as _f1
 from feature1 import play_and_record_both, _card_summary
 from simulator.env import load_registered_parties, spec_to_string
 
-SEASON = "M-2"
-AI_VER = "mcts-guardq800-1"
+SEASON = os.environ.get("RR_SEASON", "M-2")
+SOURCE = os.environ.get("RR_SOURCE", "registered")
+AI_VER = os.environ.get("RR_AI_VER", f"mcts-guardq800-1" if SEASON == "M-2" else f"mcts{os.environ.get('F1_MCTS_SIMS','800')}-{SEASON}")
 SIMS = int(os.environ.get("F1_MCTS_SIMS", "800"))
 CACHE = os.environ.get("F1_CACHE_DIR", os.path.join(os.path.dirname(__file__), "f1_cache"))
 PARTIES = []   # [(label, specs6)]  fork継承でワーカー参照
@@ -34,11 +37,18 @@ def main():
     limit = int(sys.argv[1]) if len(sys.argv) > 1 else 0
     _f1._ensure_loaded(SEASON, 8)
     L = _f1._W["loader"]
-    parties = load_registered_parties(L, complete_only=True, season=SEASON)
-    if limit:
-        parties = parties[:limit]
     global PARTIES
-    PARTIES = [(p.label, [spec_to_string(s) for s in p.specs]) for p in parties]
+    if SOURCE == "m6pool":
+        import _m6_pool
+        ps = _m6_pool.load_parties()
+        if limit: ps = ps[:limit]
+        PARTIES = [(f"p{i:04d}_" + "_".join(s.split("@")[0] for s in sp[:2]), sp) for i, sp in enumerate(ps)]
+        print(f"党供給元: _m6_pool {_m6_pool.describe()}", flush=True)
+    else:
+        parties = load_registered_parties(L, complete_only=True, season=SEASON)
+        if limit:
+            parties = parties[:limit]
+        PARTIES = [(p.label, [spec_to_string(s) for s in p.specs]) for p in parties]
     N = len(PARTIES)
     os.makedirs(CACHE, exist_ok=True)
 
@@ -53,7 +63,7 @@ def main():
     acc = {k: {} for k in range(N)}          # subject_idx -> {opp_idx: card}
     remaining = {k: N - 1 for k in range(N)}
     written = 0; done = 0; t0 = time.time()
-    workers = max(1, (os.cpu_count() or 2) - 2)
+    workers = int(os.environ.get("RR_WORKERS", "0")) or max(1, (os.cpu_count() or 2) - 2)
     ctx = mp.get_context("fork")
 
     def emit(subj_idx, opp_idx, rec):
@@ -82,7 +92,7 @@ def main():
                 eta = (total - done) / max(1e-9, rate)
                 print(f"  {done}/{total}ペア  書込済subject {written}/{N}  "
                       f"{el/60:.1f}min  ETA {eta/60:.0f}min", flush=True)
-    print(f"完了: {written}構築を f1_cache/ に書き出し  {(time.time()-t0)/60:.1f}min", flush=True)
+    print(f"完了: {written}構築を {CACHE} に書き出し  {(time.time()-t0)/60:.1f}min", flush=True)
 
 if __name__ == "__main__":
     main()

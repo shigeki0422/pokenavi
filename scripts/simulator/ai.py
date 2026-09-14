@@ -238,10 +238,35 @@ def _effective_speed(poke: BattlePokemon, field: BattleField) -> int:
     return spd
 
 
+_MOVE_PRIOR_CERTAIN = 50.0   # 使用率がこれ以上の技は「種族から読める」＝人間も想定する
+
+
+def _opp_max_priority(opp, my_side) -> int:
+    """相手の最大優先度。my_side を渡すと、真値ではなく
+    「開示済みの技 ＋ 使用率が高く人間も想定する技」だけから推定する（リーク防止）。"""
+    if my_side is None:
+        return max((mv.priority for mv in opp.moves if mv), default=0)
+    view = getattr(my_side, "opp_view", None)
+    known = set(view.known_moves_of(opp.name)) if view is not None else set()
+    belief = getattr(my_side, "belief", None)
+    if belief is not None:
+        try:
+            pb = belief.ensure(opp.name)
+        except Exception:
+            pb = None
+        if pb is not None:
+            known |= {m for m, r in getattr(pb, "move_prior", {}).items()
+                      if r >= _MOVE_PRIOR_CERTAIN}
+    return max((mv.priority for mv in opp.moves if mv and mv.name_jp in known), default=0)
+
+
 def _goes_first(me: BattlePokemon, opp: BattlePokemon,
-                my_move_priority: int, field: BattleField) -> bool:
-    """自分が指定優先度の技を使った時に先制できるか推定"""
-    opp_max_priority = max((mv.priority for mv in opp.moves if mv), default=0)
+                my_move_priority: int, field: BattleField, my_side=None,
+                opp_max: Optional[int] = None) -> bool:
+    """自分が指定優先度の技を使った時に先制できるか推定。
+    opp_max（開示情報＋使用率事前から推定した相手の最大優先度）を渡すとそれを使う＝本番経路の
+    リーク防止。省略時は my_side から求め、my_side も無ければ真値（従来＝HeuristicAI用）。"""
+    opp_max_priority = opp_max if opp_max is not None else _opp_max_priority(opp, my_side)
     if my_move_priority != opp_max_priority:
         return my_move_priority > opp_max_priority
     my_spd = _effective_speed(me, field)
@@ -287,6 +312,72 @@ def _priority_ko_action(me: BattlePokemon, opp: BattlePokemon,
     return Action(type="move", move=best_mv, move_idx=best_i, do_mega=do_mega)
 
 
+# 「耐える系」を読むときの事前分布しきい値。見せ合いで種族は公開されるので、
+# 特性が使用率90%以上なら人間も事実上確定として扱う（ミミッキュ=ばけのかわ100%など）。
+# 逆に、きあいのタスキの採用率が10%未満なら人間も確定KOを狙いに行く。
+_ABIL_CERTAIN = 90.0
+_SASH_IGNORABLE = 10.0
+_SURVIVE_ABILITIES = ("マルチスケイル", "ファントムガード", "がんじょう")
+
+
+def _opp_prior(my_side, name):
+    """自分の信念から相手種の (特性事前, 持ち物事前) を返す。信念が無ければ (None, None)。"""
+    belief = getattr(my_side, "belief", None)
+    if belief is None:
+        return None, None
+    try:
+        pb = belief.ensure(name)
+    except Exception:
+        return None, None
+    if pb is None:
+        return None, None
+    return getattr(pb, "ability_prior", None), getattr(pb, "item_prior", None)
+
+
+def _survives_unknown(my_side, opp) -> bool:
+    """相手が満タンのとき『この一撃を耐える可能性を否定できない』か。
+    真値(opp.ability/opp.item)は読まない＝未開示情報のリークを作らない。
+    実機で見えるのは (1)開示済みの特性/持ち物 (2)見せ合いで分かる種族からの事前分布 の2つだけ。"""
+    view = getattr(my_side, "opp_view", None)
+    if view is None:
+        # 観測が無い経路（単体テスト・素のBattleSide）は従来どおり真値で判定する
+        return (opp.ability in _SURVIVE_ABILITIES or opp.item == "きあいのタスキ")
+    k = view.get(opp.name)
+    k_ab = getattr(k, "known_ability", None) if k is not None else None
+    k_it = getattr(k, "known_item", None) if k is not None else None
+    ab_prior, it_prior = _opp_prior(my_side, opp.name)
+    # 特性: 開示済みならそれ。未開示でも事前分布が支配的なら確定扱い。
+    if k_ab is None and ab_prior:
+        top = max(ab_prior.items(), key=lambda kv: kv[1])
+        if top[1] >= _ABIL_CERTAIN:
+            k_ab = top[0]
+    if k_ab in _SURVIVE_ABILITIES:
+        return True
+    if k_ab is None and ab_prior and any(ab_prior.get(a, 0.0) > 0 for a in _SURVIVE_ABILITIES):
+        return True                       # 耐える特性の可能性が残る
+    # 持ち物: 開示済みならそれ。未開示ならタスキ採用率で判断。
+    if k_it == "きあいのタスキ":
+        return True
+    if k_it is None:
+        if it_prior is None:
+            return True                   # 事前分布が無い＝何も分からない→保守的
+        if it_prior.get("きあいのタスキ", 0.0) >= _SASH_IGNORABLE:
+            return True
+    return False
+
+
+def _disguise_intact(my_side, opp) -> bool:
+    """ばけのかわが未破壊か。破れたかどうかは実機で見える情報で、種族からも特性が読める
+    （ミミッキュ=ばけのかわ100%）ので事前分布で確定扱いにしてよい。
+    信念が無い経路は従来どおり真値にフォールバックする。"""
+    if getattr(opp, "_disguise_broken", False):
+        return False
+    ab_prior, _ = _opp_prior(my_side, opp.name)
+    if ab_prior:
+        return ab_prior.get("ばけのかわ", 0.0) >= _ABIL_CERTAIN
+    return getattr(my_side, "opp_view", None) is None and opp.ability == "ばけのかわ"
+
+
 def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: BattleField):
     """確定KO安全弁：先制（または優先度）で最低ロールでもOHKOできる攻撃技があれば、それを最優先。
     任意AI(MCTS/ネット)の出力 act を受け、確実に倒せる手を逃している場合のみ上書きする。
@@ -296,23 +387,28 @@ def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: B
         return act
     if _forced_charging_action(me):                 # 溜め中などは介入しない
         return act
+    # 耐える系の判定は「相手の真値」ではなく opp_view（開示済み情報）で行う。
+    # 真値を読むと、未開示のタスキ/マルチスケイル/がんじょう/ばけのかわを常に知っている
+    # ことになり、人間が「タスキかもしれない」と迷う場面で迷わない＝情報リークになる。
+    # 未開示なら「耐えられるかもしれない」側に倒す＝満タン相手には介入しない（保守的）。
     full = opp.hp == opp.max_hp
-    if full and (opp.ability in ("マルチスケイル", "ファントムガード")
-                 or opp.item == "きあいのタスキ" or opp.ability == "がんじょう"):
-        return act                                  # 満タンで耐える系は確定KO不成立→介入しない
+    if full and _survives_unknown(my_side, opp):
+        return act                                  # 耐える系の可能性を否定できない→介入しない
     # ばけのかわは満タンかどうかに関係なく1発目のダメージを無効化する（battle.py:992）ので、
-    # 未破壊のうちは「この技で確定KO」が成立しない。full 条件では捕まらないため個別に除外する。
-    if opp.ability == "ばけのかわ" and not getattr(opp, "_disguise_broken", False):
+    # 未破壊のうちは「この技で確定KO」が成立しない。破壊済みかは実機で見えている。
+    if _disguise_intact(my_side, opp):
         return act
     valid = [(i, mv) for i, mv in enumerate(me.moves) if mv is not None]
     valid = _filter_by_pp(_filter_valid_by_lock(valid, me), me)
+    # 相手の最大優先度はループ前に1回だけ求める（Rust 実装と呼び出し回数を揃える）
+    _opp_pri = _opp_max_priority(opp, my_side)
     best = None; bestd = -1
     for i, mv in valid:
         if not mv.power or mv.category == "status":
             continue
         if get_type_effectiveness(mv.type, opp.type1, opp.type2) == 0:
             continue
-        if not _goes_first(me, opp, mv.priority, field):
+        if not _goes_first(me, opp, mv.priority, field, opp_max=_opp_pri):
             continue
         # random_roll は正規化値で roll = 0.85 + x*0.15。最低ロールは 0.0（0.85 を渡すと実効0.9775＝
         # ほぼ最高値になり、確定でないKOを確定と誤認する。実測: 介入の15.3%が該当）。

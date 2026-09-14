@@ -85,8 +85,12 @@ impl OppView {
         k.threat_alert = true;
     }
 
-    pub fn on_enter(&mut self, p: &Poke) {
+    /// 登場。実機で登場した瞬間にメッセージが出る特性・持ち物もここで確定させる
+    /// （opponent_view.py の ENTRY_VISIBLE_ABILITIES / ENTRY_VISIBLE_ITEMS と一致させること）。
+    /// 殴って初めて分かるもの（ゴツゴツメット等）をここに入れてはならない＝リークになる。
+    pub fn on_enter(&mut self, pack: &crate::pack::Pack, p: &Poke) {
         let (t1, t2) = (p.type1, p.type2);
+        let (ab, it) = (p.ability, p.item);
         let k = self.get(p.name);
         if k.seen {
             return;
@@ -94,6 +98,19 @@ impl OppView {
         k.seen = true;
         k.type1 = Some(t1);
         k.type2 = t2;
+        let l = &pack.sy.l;
+        let entry_ab = [
+            l.すなおこし, l.ひでり, l.あめふらし, l.ゆきふらし,
+            l.エレキメイカー, l.グラスメイカー, l.サイコメイカー,
+            l.いかく, l.ダウンロード, l.トレース, l.かんろなミツ, l.かわりもの,
+            l.プレッシャー,
+        ];
+        if entry_ab.contains(&ab) {
+            self.on_ability(p.name, ab);
+        }
+        if it == Some(pack.sy.it.ふうせん) {
+            self.on_item(p.name, pack.sy.it.ふうせん);
+        }
     }
 
     pub fn on_move(&mut self, poke_name: Sym, move_name: Sym) {

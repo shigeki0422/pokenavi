@@ -3012,6 +3012,21 @@ _vs2=BattleSide([make_poke(type1="でんき",spatk_b=100,moves=["10まんボル�
 _vs1.field_idx=0; _vs2.field_idx=1
 _vfeat=encode_state(_vs1,_vs2,BattleField())
 check("価値関数 特徴次元が一致", len(_vfeat)==feature_dim())
+# 特徴量v2（FEAT_V2）: 既定は905次元のまま＝本番ネット az_net_np.json と互換。
+# v2で持ち物カテゴリが8→18に増え、M-6上位の持ち物識別率が71%→99.7%になる。
+import simulator.features as _FT
+check("特徴量 既定は905次元(本番ネット互換)", feature_dim()==905 and not _FT.FEAT_V2)
+check("特徴量 既定の持ち物カテゴリは8", len(_FT._ITEM_FLAGS)==8)
+check("特徴量v2 追加カテゴリは10・カテゴリ間で持ち物が重複しない",
+      len(_FT._ITEM_FLAGS_V2)==10 and
+      sum(len(f) for f in _FT._ITEM_FLAGS_V2)==len(set().union(*_FT._ITEM_FLAGS_V2)))
+# 実測で寄与の大きい未識別持ち物（いのちのたま266/ひかりのねんど205/ゴツゴツメット199 %pt）が
+# v1では1bitも立たない＝ネットからは「無持ち物」と同じに見えている、という欠陥の回帰テスト。
+_v2items = set().union(*_FT._ITEM_FLAGS_V2)
+check("特徴量v2 主要な未識別持ち物を全て被覆",
+      {"いのちのたま","ひかりのねんど","ゴツゴツメット","ふうせん","サイコシード"} <= _v2items)
+check("特徴量v1 主要持ち物は未識別のまま(既定の符号化は不変)",
+      not (set().union(*_FT._ITEM_FLAGS) & {"いのちのたま","ゴツゴツメット","ひかりのねんど"}))
 # 学習可能性: 線形分離データを高精度予測（決定的・高速）
 _vr=_vrnd.Random(0); _syn=[]
 for _ in range(320):
@@ -5281,6 +5296,57 @@ finally:
 
 
 # ════════════════════════════════════════════════════════════════
+print("\n=== 27. 情報開示のタイミング（opp_view）と確定KOのリーク ===")
+# 実機で公開される情報は、公開される「瞬間」に opp_view へ入らなければならない。
+# 早すぎればリーク、遅すぎればAIが知っているべき情報を知らないまま戦うことになる。
+from simulator.opponent_view import OpponentView as _OV27, ENTRY_VISIBLE_ABILITIES as _EVA27, ENTRY_VISIBLE_ITEMS as _EVI27
+
+class _P27:
+    def __init__(self, name, ability, item, t1="みず", t2=None):
+        self.name = name; self.ability = ability; self.item = item
+        self.type1 = t1; self.type2 = t2
+
+_v27 = _OV27("P1")
+_v27.on_enter(_P27("ギャラドス", "いかく", "ふうせん", "みず", "ひこう"))
+_k27 = _v27.get("ギャラドス")
+check("登場時: いかく が判明する（実機で必ずメッセージが出る）", _k27.known_ability == "いかく")
+check("登場時: ふうせん が判明する（浮いていると表示される）", _k27.known_item == "ふうせん")
+
+_v27b = _OV27("P1")
+_v27b.on_enter(_P27("ギャラドス", "いかく", "ゴツゴツメット", "みず", "ひこう"))
+check("登場時: ゴツゴツメット は判明しない（殴るまで分からない）",
+      _v27b.get("ギャラドス").known_item is None)
+_v27b.on_item("ギャラドス", "ゴツゴツメット", "接触ダメージで判明")
+check("接触後: ゴツゴツメット が判明する", _v27b.get("ギャラドス").known_item == "ゴツゴツメット")
+
+# 「殴るまで分からない」持ち物が登場時公開に混ざっていないこと（リーク防止の回帰）
+check("登場時公開の持ち物は ふうせん のみ", _EVI27 == {"ふうせん"})
+check("登場時公開に 接触/発動系 が混ざっていない",
+      not (_EVI27 & {"ゴツゴツメット", "きあいのタスキ", "いのちのたま", "たべのこし", "ピントレンズ"}))
+check("登場時公開の特性に ばけのかわ/さめはだ が混ざっていない",
+      not (_EVA27 & {"ばけのかわ", "さめはだ", "てつのとげ", "マルチスケイル"}))
+check("登場時公開の特性に いかく・天候設置が入っている",
+      {"いかく", "あめふらし", "すなおこし", "ひでり", "ゆきふらし"} <= _EVA27)
+
+# 確定KO安全弁が相手の真値を読まないこと（リークの回帰テスト）。
+# 真値を読むと、未開示のタスキ等を常に知っている＝人間が迷う場面で迷わないAIになる。
+import inspect as _insp27
+from simulator.ai import certain_ko_override as _cko27, _survives_unknown as _su27
+_src27 = _insp27.getsource(_cko27)
+check("確定KO安全弁が opp.item の真値を読まない", "opp.item" not in _src27)
+check("確定KO安全弁が opp.ability の真値を読まない", "opp.ability" not in _src27)
+
+from simulator.ai import _goes_first as _gf27, _opp_max_priority as _omp27
+check("確定KO安全弁の先制判定に my_side を渡している（相手の先制技を真値で読まない）",
+      "_goes_first(me, opp, mv.priority, field, my_side)" in _src27)
+_omp_src27 = _insp27.getsource(_omp27)
+check("相手最大優先度は開示技＋使用率事前から推定する",
+      "opp_view" in _omp_src27 and "move_prior" in _omp_src27)
+
+_su_src27 = _insp27.getsource(_su27)
+check("耐える系の判定は opp_view と事前分布で行う",
+      "opp_view" in _su_src27 and "_opp_prior" in _su_src27)
+
 # 集計
 # ════════════════════════════════════════════════════════════════
 print(f"\n{'='*60}")

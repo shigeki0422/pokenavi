@@ -282,6 +282,13 @@ fn best_switch_target(pack: &Pack, my: &Side, opp: &Side) -> Option<usize> {
 /// ai.py `_goes_first`
 fn goes_first(pack: &Pack, me: &Poke, opp: &Poke, my_pri: i64, field: &Field) -> bool {
     let opp_max = opp.moves.iter().map(|m| m.priority).max().unwrap_or(0);
+    goes_first_pri(pack, me, opp, my_pri, field, opp_max)
+}
+
+/// 相手の最大優先度を外から与える版（本番経路は開示情報から推定した値を渡す）
+fn goes_first_pri(
+    pack: &Pack, me: &Poke, opp: &Poke, my_pri: i64, field: &Field, opp_max: i64,
+) -> bool {
     if my_pri != opp_max {
         return my_pri > opp_max;
     }
@@ -1016,6 +1023,131 @@ pub fn heuristic_ai(
 }
 
 /// ai.py `certain_ko_override`
+/// 事前分布のしきい値（ai.py `_ABIL_CERTAIN` / `_SASH_IGNORABLE` / `_MOVE_PRIOR_CERTAIN` と一致）
+const ABIL_CERTAIN: f64 = 90.0;
+const SASH_IGNORABLE: f64 = 10.0;
+const MOVE_PRIOR_CERTAIN: f64 = 50.0;
+
+/// my 側の観測（opp_view）と信念（belief）から、相手 op について読める特性/持ち物を返す。
+/// 真値（op.ability / op.item）は読まない＝未開示情報のリークを作らない（REQUIREMENTS §4-1b）。
+fn known_view(my: &mut Side, _pack: &Pack, op: &Poke) -> (Option<Sym>, Option<Sym>) {
+    let k = my.opp_view.pokemon.iter().find(|k| k.name == op.name);
+    (k.and_then(|k| k.known_ability), k.and_then(|k| k.known_item))
+}
+
+/// 相手種の事前分布を (特性, 持ち物, 技) で返す。信念が無ければ空。
+fn priors_of(my: &mut Side, pack: &Pack, op: &Poke)
+    -> (Vec<(String, f64)>, Vec<(String, f64)>, Vec<(String, f64)>) {
+    let name = pack.intern.resolve(op.name).to_string();
+    let mut bl = match my.belief.0.take() {
+        None => return (Vec::new(), Vec::new(), Vec::new()),
+        Some(b) => b,
+    };
+    let out = match bl.ensure(pack, &name, None, None) {
+        Some(i) => {
+            let pb = &bl.species[i].1;
+            (pb.ability_prior.clone(), pb.item_prior.clone(), pb.move_prior.clone())
+        }
+        None => (Vec::new(), Vec::new(), Vec::new()),
+    };
+    my.belief.0 = Some(bl);
+    out
+}
+
+/// ai.py `_survives_unknown`
+/// Python は文字列で比較するので、こちらも intern.get() を挟まず文字列で揃える
+/// （未 intern の名前が None に落ちると分岐が変わり Python と乖離する）。
+fn survives_unknown(pack: &Pack, my: &mut Side, op: &Poke) -> bool {
+    const SURVIVE: [&str; 3] = ["マルチスケイル", "ファントムガード", "がんじょう"];
+    let (k_ab_sy, k_it_sy) = known_view(my, pack, op);
+    let mut k_ab: Option<String> = k_ab_sy.map(|a| pack.intern.resolve(a).to_string());
+    let k_it: Option<String> = k_it_sy.map(|i| pack.intern.resolve(i).to_string());
+    let (ab_prior, it_prior, _) = priors_of(my, pack, op);
+    if k_ab.is_none() {
+        // Python の max() は同値なら「最初」を返す
+        let top = ab_prior.iter().fold(None::<&(String, f64)>, |acc, x| match acc {
+            Some(a) if a.1 >= x.1 => Some(a),
+            _ => Some(x),
+        });
+        if let Some((n, r)) = top {
+            if *r >= ABIL_CERTAIN {
+                k_ab = Some(n.clone());
+            }
+        }
+    }
+    match &k_ab {
+        Some(a) => {
+            if SURVIVE.contains(&a.as_str()) {
+                return true;
+            }
+        }
+        None => {
+            if ab_prior
+                .iter()
+                .any(|(n, r)| *r > 0.0 && SURVIVE.contains(&n.as_str()))
+            {
+                return true;
+            }
+        }
+    }
+    if k_it.as_deref() == Some("きあいのタスキ") {
+        return true;
+    }
+    if k_it.is_none() {
+        if it_prior.is_empty() {
+            return true;
+        }
+        let sash = it_prior
+            .iter()
+            .find(|(n, _)| n == "きあいのタスキ")
+            .map_or(0.0, |(_, r)| *r);
+        if sash >= SASH_IGNORABLE {
+            return true;
+        }
+    }
+    false
+}
+
+/// ai.py `_disguise_intact`
+fn disguise_intact(pack: &Pack, my: &mut Side, op: &Poke) -> bool {
+    if op.disguise_broken {
+        return false;
+    }
+    let (ab_prior, _, _) = priors_of(my, pack, op);
+    if ab_prior.is_empty() {
+        return false;
+    }
+    ab_prior
+        .iter()
+        .find(|(n, _)| n == "ばけのかわ")
+        .map_or(false, |(_, r)| *r >= ABIL_CERTAIN)
+}
+
+/// ai.py `_opp_max_priority`（開示技＋使用率50%以上の技だけから推定）
+fn opp_max_priority_known(pack: &Pack, my: &mut Side, op: &Poke) -> i64 {
+    let mut known: Vec<Sym> = my
+        .opp_view
+        .pokemon
+        .iter()
+        .find(|k| k.name == op.name)
+        .map(|k| k.known_moves.clone())
+        .unwrap_or_default();
+    let (_, _, mv_prior) = priors_of(my, pack, op);
+    let mut known_s: Vec<String> =
+        known.iter().map(|s| pack.intern.resolve(*s).to_string()).collect();
+    for (n, r) in &mv_prior {
+        if *r >= MOVE_PRIOR_CERTAIN {
+            known_s.push(n.clone());
+        }
+    }
+    op.moves
+        .iter()
+        .filter(|m| known_s.iter().any(|k| k == pack.intern.resolve(m.name)))
+        .map(|m| m.priority)
+        .max()
+        .unwrap_or(0)
+}
+
 pub fn certain_ko_override(
     pack: &Pack,
     act: Action,
@@ -1036,23 +1168,24 @@ pub fn certain_ko_override(
     if forced_charging_action(&mut my.party[mi]).is_some() {
         return act;
     }
+    // 耐える系の判定は相手の真値ではなく opp_view（開示済み）＋使用率事前分布で行う。
+    // 真値を読むと未開示のタスキ等を常に知っていることになり情報リーク（REQUIREMENTS §4-1b）。
     {
-        let op = &opp.party[oi];
+        let op = opp.party[oi].clone();
         let full = op.hp == op.max_hp;
-        if full
-            && (op.ability == l.マルチスケイル
-                || op.ability == pack.sy.ai.ファントムガード
-                || op.item == Some(l.きあいのタスキ)
-                || op.ability == l.がんじょう)
-        {
+        if full && survives_unknown(pack, my, &op) {
             return act;
         }
         // ばけのかわは満タンかどうかに関係なく1発目のダメージを無効化する（battle.rs:1294）ので、
-        // 未破壊のうちは確定KOが成立しない。full 条件では捕まらないため個別に除外する。
-        if op.ability == l.ばけのかわ && !op.disguise_broken {
+        // 未破壊のうちは確定KOが成立しない。破壊済みかは実機で見える。
+        if disguise_intact(pack, my, &op) {
             return act;
         }
     }
+    let opp_pri = {
+        let op = opp.party[oi].clone();
+        opp_max_priority_known(pack, my, &op)
+    };
     let me = &mut my.party[mi];
     let op = &mut opp.party[oi];
     let valid = filter_by_pp(&filter_valid_by_lock(me), me);
@@ -1065,7 +1198,7 @@ pub fn certain_ko_override(
         if pack.eff(mv.ty, op.type1, op.type2) == 0.0 {
             continue;
         }
-        if !goes_first(pack, me, op, mv.priority, field) {
+        if !goes_first_pri(pack, me, op, mv.priority, field, opp_pri) {
             continue;
         }
         let d = {

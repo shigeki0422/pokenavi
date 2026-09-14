@@ -32,6 +32,18 @@ class PokeKnowledge:
         return new
 
 
+# 登場した瞬間に相手へ公開される特性（実機で必ずメッセージが出るもの）。
+# ここに入れないと「登場時に分かるはずの情報」をAIが知らないまま戦うことになる。
+ENTRY_VISIBLE_ABILITIES = {
+    "すなおこし", "ひでり", "あめふらし", "ゆきふらし",          # 天候設置
+    "エレキメイカー", "グラスメイカー", "サイコメイカー",          # フィールド設置
+    "いかく", "ダウンロード", "トレース", "かんろなミツ", "かわりもの",
+    "プレッシャー",
+}
+# 登場した瞬間に公開される持ち物（ふうせんは「浮いている」と表示される）。
+ENTRY_VISIBLE_ITEMS = {"ふうせん"}
+
+
 class OpponentView:
     """一方のサイドが相手パーティについて持つ知識"""
 
@@ -71,7 +83,8 @@ class OpponentView:
         return [f"▷{self.viewer}: きけんよち — {opp_name} は危険な技を持っていると察知！"]
 
     def on_enter(self, poke) -> List[str]:
-        """ポケモンが場に出た（初見なら登場・タイプを記録）"""
+        """ポケモンが場に出た（初見なら登場・タイプを記録）。
+        登場時に実機で公開される特性・持ち物もここで確定させる（ふうせん/いかく/天候特性等）。"""
         k = self._get(poke.name)
         if k.seen:
             return []
@@ -79,7 +92,12 @@ class OpponentView:
         k.type1 = poke.type1
         k.type2 = poke.type2
         t = poke.type1 + (f"/{poke.type2}" if poke.type2 else "")
-        return [f"▷{self.viewer}: {poke.name} 登場（{t}タイプ）"]
+        out = [f"▷{self.viewer}: {poke.name} 登場（{t}タイプ）"]
+        if poke.ability in ENTRY_VISIBLE_ABILITIES:
+            out += self.on_ability(poke.name, poke.ability)
+        if poke.item in ENTRY_VISIBLE_ITEMS:
+            out += self.on_item(poke.name, poke.item, "登場時に判明")
+        return out
 
     def on_move(self, poke_name: str, move_name: str) -> List[str]:
         """技を使った（初見なら記録）"""

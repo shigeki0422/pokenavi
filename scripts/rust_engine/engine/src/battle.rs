@@ -1400,6 +1400,10 @@ pub fn execute_move(
     // ばけのかわ
     if D!().ability == l.ばけのかわ && !D!().disguise_broken {
         D!().disguise_broken = true;
+        {
+            let dn = D!().name;
+            sides[aidx].opp_view.on_ability(dn, l.ばけのかわ);
+        }
         let pen = std::cmp::max(1, ((D!().max_hp as f64) / 8.0).floor() as i64);
         D!().take_damage(pen);
         if (n == l.ボルトチェンジ || n == l.とんぼがえり || n == l.クイックターン) && A!().is_alive
@@ -1578,6 +1582,8 @@ pub fn execute_move(
         if D!().item == Some(pack.sy.it.ふうせん) && total_dmg > 0 {
             D!().item = None;
             it::on_item_consumed(pack, &mut D!());
+            let dn = D!().name;
+            sides[aidx].opp_view.on_item(dn, pack.sy.it.ふうせん);
         }
 
         if A!().item == Some(l.いのちのたま) && mv.category != Cat::Status {
@@ -1589,6 +1595,20 @@ pub fn execute_move(
         {
             let (a, d) = two!();
             ab::rough_skin_recoil(pack, a, d, &mv);
+        }
+        // 接触して初めて分かる防御側の持ち物/特性を開示（条件は rough_skin_recoil と一致）
+        if A!().ability != l.えんかく && is_contact_move(pack, &mv) {
+            let (dn, dit, dab, aab) = (D!().name, D!().item, D!().ability, A!().ability);
+            if dit == Some(l.ゴツゴツメット) {
+                sides[aidx].opp_view.on_item(dn, l.ゴツゴツメット);
+            }
+            if (dab == l.さめはだ || dab == l.てつのとげ)
+                && aab != l.かたやぶり
+                && aab != l.ターボブレイズ
+                && aab != l.テラボルテージ
+            {
+                sides[aidx].opp_view.on_ability(dn, dab);
+            }
         }
         if D!().beak_primed && is_contact_move(pack, &mv) && A!().is_alive {
             apply_status(pack, &mut A!(), st.burn, false);
@@ -3866,7 +3886,7 @@ impl Battle {
                 entry_effects_side(pack, sides, field, fx);
             }
             let nm = self.sides[fx].active().clone();
-            self.sides[ox].opp_view.on_enter(&nm);
+            self.sides[ox].opp_view.on_enter(pack, &nm);
         }
     }
 
@@ -3952,7 +3972,7 @@ impl Battle {
                 }
                 self.apply_healing_wish(mx);
                 let nm = self.sides[mx].active().clone();
-                self.sides[ox].opp_view.on_enter(&nm);
+                self.sides[ox].opp_view.on_enter(pack, &nm);
                 self.faint_switch(pack, mx, rng);
             }
             return;
@@ -4025,7 +4045,7 @@ impl Battle {
                     }
                     self.apply_healing_wish(mx);
                     let nm = self.sides[mx].active().clone();
-                    self.sides[ox].opp_view.on_enter(&nm);
+                    self.sides[ox].opp_view.on_enter(pack, &nm);
                     self.faint_switch(pack, mx, rng);
                 }
             }
@@ -4049,7 +4069,7 @@ impl Battle {
                     }
                     self.apply_healing_wish(ox);
                     let nm = self.sides[ox].active().clone();
-                    self.sides[mx].opp_view.on_enter(&nm);
+                    self.sides[mx].opp_view.on_enter(pack, &nm);
                     self.faint_switch(pack, ox, rng);
                 }
             }
@@ -4072,7 +4092,7 @@ impl Battle {
                         entry_effects_side(pack, sides, field, ox);
                     }
                     let nm = self.sides[ox].active().clone();
-                    self.sides[mx].opp_view.on_enter(&nm);
+                    self.sides[mx].opp_view.on_enter(pack, &nm);
                     self.faint_switch(pack, ox, rng);
                 }
             }
@@ -4611,6 +4631,18 @@ impl Battle {
                 if ok {
                     mega_evolve_poke(pack, self.sides[sx].active_mut());
                     self.sides[sx].mega_used = true;
+                    // メガ進化は実機で形態が見える＝メガ石と進化後の特性がその場で確定する
+                    {
+                        let ox = 1 - sx;
+                        let (mn, mit, mab) = {
+                            let p = self.sides[sx].active();
+                            (p.name, p.item, p.ability)
+                        };
+                        if let Some(itm) = mit {
+                            self.sides[ox].opp_view.on_item(mn, itm);
+                        }
+                        self.sides[ox].opp_view.on_ability(mn, mab);
+                    }
                     let Battle { sides, field, .. } = self;
                     let (me, opp) = split2(sides, sx);
                     let mi = me.active_idx;

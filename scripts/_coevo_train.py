@@ -169,7 +169,7 @@ def main():
     games = int(sys.argv[2]) if len(sys.argv) > 2 else 1500
     n_sims = int(sys.argv[3]) if len(sys.argv) > 3 else 32
     poolN = int(sys.argv[4]) if len(sys.argv) > 4 else 150
-    workers = 12
+    workers = int(os.environ.get("COEVO_WORKERS", "12"))   # 他ジョブと同居させる時に絞る
     from simulator.az_np import PVNetNP
     from simulator.az_loop import to_arrays
     D = G.load(season=SEASON); rng = random.Random(0)
