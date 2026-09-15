@@ -7,7 +7,6 @@ usageRank: 21
 pubDate: '2026-09-10'
 draft: false
 analysisSlug: 'cinderace-analysis-m6'
-
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -711,5 +710,3 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】エースバーン 考察 M-6 シーズン リベロと3型分散の解説</div>
   </div>
 </a>
-
----
