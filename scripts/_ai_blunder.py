@@ -2,6 +2,7 @@
 審判=MCTS-regret@REF_SIMS のQで「最善よりequityを大きく落とす手」の頻度とパターンを測る。
 env: N_BATT(100) P_SAMPLE(0.12) REF_SIMS(3200) AI_SIMS(400) GAP(0.15)
      POOL_SEASON(M-3) BELIEF_SEASON(未設定=M-2) PARTIES(パーティ供給元json) OUT(ai_blunder.json)
+     BL_WORKERS(並列数) AZNP_PATH(比較するネット)
 
 パーティ供給元は _m6_pool.load_parties()（env PARTIES / MAX_CORE_RANK）。
 既定は提案キャッシュの使用率50位以内の軸。
@@ -127,7 +128,9 @@ if __name__ == "__main__":
     print(f"■ ブランダーベンチ: AI@{AI_SIMS} 審判@{REF_SIMS} {N_BATT}戦 sample率{P_SAMPLE} "
           f"season={SEASON} belief={os.environ.get('BELIEF_SEASON', 'M-2')} "
           f"{_m6_pool.describe()}", flush=True)
-    pool = mp.get_context("fork").Pool(max(1, (os.cpu_count() or 2) - 1))
+    # 2本のネットを並行比較するときにワーカーを分けられるようにする（既定は従来どおり）
+    _w = int(os.environ.get("BL_WORKERS", "0")) or max(1, (os.cpu_count() or 2) - 1)
+    pool = mp.get_context("fork").Pool(_w)
     out = pool.map(_battle, jobs, chunksize=1); pool.close()
     recs = [r for rs in out for r in rs if "err" not in r]
     errs = [r for rs in out for r in rs if "err" in r]
