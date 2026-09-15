@@ -153,6 +153,10 @@ class SearchAI:
         #   決定化ツリーで平均化して隠れ情報のロバスト性を保つ。挙動が変わるので強さは要A/B検証。
         self.mcts_cache = False
         self.mcts_ensemble = 16
+        # MAPLE式（arXiv:2605.24139）: k個の決定化で1本の木を共有し、葉で policy/value を平均する。
+        # 現行の mcts_cache 経路は PIMC＝論文が strategy fusion として名指しした型。
+        # MAPLE_K>0 で有効。総ネット評価数を PIMC と揃えるため sims/k 回まわす。
+        self.maple_k = int(os.environ.get("MAPLE_K", "0"))
         # collapse_mega=True: メガ可能時は常にメガ前提（メガ無し技を列挙しない＝分岐半減・無駄探索削減）
         self.collapse_mega = os.environ.get("MCTS_COLLAPSE_MEGA", "1") == "1"
         # qselect=True: 最終手を「訪問数」でなく「十分訪問された手の中でQ最大」で選ぶ（@少simでも正しいQを拾う）
@@ -594,6 +598,8 @@ class SearchAI:
 
     def _build_mcts_root(self, my_side, opp_side, field, cands):
         """mcts_sims回シミュして根ノードを構築し (root, root_my, my_is_s1) を返す。"""
+        if self.maple_k > 0:
+            return self._build_mcts_root_maple(my_side, opp_side, field, cands)
         if self.mcts_cache:
             return self._build_mcts_root_cached(my_side, opp_side, field, cands)
         belief = my_side.belief if my_side.belief is not None else OpponentBelief(self.loader, self.season)
@@ -649,6 +655,136 @@ class SearchAI:
                 aggN[ix] = aggN.get(ix, 0) + n
                 aggW[ix] = aggW.get(ix, 0.0) + root["W"][0].get(ix, 0.0)
         return {"N": [aggN, {}], "W": [aggW, {}]}, root_my, my_is_s1
+
+    def _build_mcts_root_maple(self, my_side, opp_side, field, cands):
+        """MAPLE式（arXiv:2605.24139）: 情報集合から k 個の決定化を取り、**1本の木を共有**して探索する。
+
+        現行の _build_mcts_root_cached は PIMC（決定化ごとに別の木を立てて根で合算）で、
+        論文が strategy fusion として名指しした型。決定化ごとに別の最適戦略が立ち、それを
+        平均するので情報集合として一貫しない手が選ばれる。
+
+        MAPLE はノードに k 個の状態を持たせ、葉で各状態をネット評価して
+        **policy と value を平均**してから展開・逆伝播する（論文式(2)(3)）。
+        ある決定化で非合法な手はその状態を降下から外す（論文の「illegal は discard」）。
+
+        論文の Siamese 抽出（候補50から近い5を選ぶ）に相当する役割は、我々の信念モデルが
+        既に担っている（_sample_opp_config が使用率事前＋開示で重み付け抽出する）ので、
+        ここでは信念からの素直な k 抽出でよい。"""
+        belief = my_side.belief if my_side.belief is not None else OpponentBelief(self.loader, self.season)
+        belief.observe_disclosure(my_side.opp_view)
+        my_is_s1 = (my_side.field_idx == 0)
+        root_my = cands if cands is not None else self._candidate_actions(my_side, opp_side, field)
+        if len(root_my) <= 1:
+            return {"N": [{}, {}], "W": [{}, {}]}, root_my, my_is_s1
+        k = max(1, self.maple_k)
+        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
+        states = []
+        for _i in range(k):
+            s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
+            cs1, cs2, cfield = self._clone_state(s1, s2, field)
+            dopp = cs2 if my_is_s1 else cs1
+            if hidden:
+                self._resample_hidden_bench(dopp, my_side.opp_view)
+            cfg = self._sample_opp_config(dopp, belief)
+            for poke, c in zip(dopp.party, cfg):
+                if c is not None:
+                    self._determinize(poke, c)
+            states.append((cs1, cs2, cfield))
+        root = self._new_node(); root["states"] = states
+        self._expand_states_node(root, my_is_s1)
+        # 総ネット評価数を PIMC と揃える: PIMC は E木×(sims/E)=sims 回。
+        # MAPLE は 1回の展開で k 状態を評価するので sims/k 回まわす。
+        for _t in range(max(1, self.mcts_sims // k)):
+            self._maple_simulate(root, my_is_s1)
+        return root, root_my, my_is_s1
+
+    def _expand_states_node(self, node, my_is_s1):
+        """k個の状態をネット評価し、policy と value を平均して展開する（論文式(2)(3)）。
+        非合法な手しか無い状態は評価に含めない。"""
+        states = node["states"]
+        acc_me = {}; acc_op = {}; cnt_me = {}; cnt_op = {}
+        vs = []
+        for (cs1, cs2, cfield) in states:
+            tmp = self._new_node()
+            tmp["state"] = (cs1, cs2, cfield)
+            v = self._expand_state_node(tmp, my_is_s1)
+            vs.append(v)
+            for side, acc, cnt in ((0, acc_me, cnt_me), (1, acc_op, cnt_op)):
+                for ix, pr in (tmp["P"][side] or {}).items():
+                    acc[ix] = acc.get(ix, 0.0) + pr
+                    cnt[ix] = cnt.get(ix, 0) + 1
+        # 平均は「その手が合法だった状態数」で割る（論文: p̄(a)=Σp^i(a)/|W_a|）
+        node["P"][0] = {ix: acc_me[ix] / cnt_me[ix] for ix in acc_me}
+        node["P"][1] = {ix: acc_op[ix] / cnt_op[ix] for ix in acc_op}
+        node["expanded"] = True
+        return (sum(vs) / len(vs)) if vs else 0.5
+
+    def _maple_simulate(self, root, my_is_s1):
+        """1本の木を k 状態で共有して降下する。選んだ行動が非合法な状態はその場で脱落させる
+        （論文の discard）。全状態が脱落したら葉として打ち切る。"""
+        node = root; path = []; v = None; depth = 0
+        while True:
+            states = node["states"]
+            # 合法手は「いずれかの状態で合法」なものの和集合。降下では状態ごとに合否を見る。
+            cs1, cs2, cfield = states[0]
+            me_s = cs1 if my_is_s1 else cs2
+            op_s = cs2 if my_is_s1 else cs1
+            my_cands = self._candidate_actions(me_s, op_s, cfield)
+            opp_cands = self._candidate_actions(op_s, me_s, cfield)
+            if not my_cands or not opp_cands:
+                v = self._leaf_states_value(node, my_is_s1); break
+            idx_me, a_me, sg_me = self._select(node, 0, my_cands)
+            idx_op, a_op, sg_op = self._select(node, 1, opp_cands)
+            path.append((node, idx_me, idx_op, sg_me, sg_op))
+            key = (idx_me, idx_op)
+            child = node["children"].get(key)
+            if child is None:
+                nxt = []; term = []
+                for (p1, p2, pf) in states:
+                    c1, c2, cf = self._clone_state(p1, p2, pf)
+                    try:
+                        w = self._advance_turn(c1, c2, cf, a_me, a_op, my_is_s1)
+                    except Exception:
+                        continue          # この決定化では非合法/解決不能 → discard
+                    if w != 0:
+                        term.append(1.0 if ((w == 1) == my_is_s1) else 0.0)
+                    else:
+                        nxt.append((c1, c2, cf))
+                child = self._new_node()
+                node["children"][key] = child
+                if not nxt:
+                    child["terminal"] = True
+                    child["v_me"] = (sum(term) / len(term)) if term else 0.5
+                    v = child["v_me"]
+                else:
+                    child["states"] = nxt
+                    vexp = self._expand_states_node(child, my_is_s1)
+                    # 決着した決定化があれば、その勝敗も平均に混ぜる（情報集合としての期待値）
+                    v = ((vexp * len(nxt)) + sum(term)) / (len(nxt) + len(term))
+                break
+            if child.get("terminal"):
+                v = child["v_me"]; break
+            node = child; depth += 1
+            if depth >= self.mcts_max_depth:
+                v = self._leaf_states_value(node, my_is_s1); break
+        if self._track_depth:
+            self._depth_hist.append(depth)
+        exp3 = (self.mcts_select == "exp3")
+        for (nd, im, io, sm, so) in path:
+            nd["total"] += 1
+            nd["N"][0][im] = nd["N"][0].get(im, 0) + 1
+            nd["W"][0][im] = nd["W"][0].get(im, 0.0) + v
+            nd["N"][1][io] = nd["N"][1].get(io, 0) + 1
+            nd["W"][1][io] = nd["W"][1].get(io, 0.0) + (1.0 - v)
+            if exp3:
+                nd["S"][0][im] = nd["S"][0].get(im, 0.0) + v / max(sm, 1e-9)
+                nd["S"][1][io] = nd["S"][1].get(io, 0.0) + (1.0 - v) / max(so, 1e-9)
+
+    def _leaf_states_value(self, node, my_is_s1):
+        vs = []
+        for (cs1, cs2, cfield) in node["states"]:
+            vs.append(self._mcts_leaf_value(cs1, cs2, cfield, my_is_s1))
+        return (sum(vs) / len(vs)) if vs else 0.5
 
     def _expand_state_node(self, node, my_is_s1):
         """node["state"] から両者priorを設定し、葉価値(自分視点)を返す。net_eval優先。"""
