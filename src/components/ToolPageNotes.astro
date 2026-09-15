@@ -1,0 +1,95 @@
+---
+/** ツールページ下部の解説＋FAQ。本文はページごとにslotで渡し、体裁とFAQPage
+ * JSON-LDだけを共通化する(同じ文面を各ページに置くと複製ページになるため)。
+ * 毎日使うツールの邪魔をしないよう既定は折りたたみ。折りたたんだ内容も
+ * 検索エンジンは通常どおり読むため、隠しテキストにはあたらない。 */
+interface Props {
+  faqs: { q: string; a: string }[];
+  summary?: string;
+}
+const { faqs, summary = 'このツールについて — 使い方・データの根拠・よくある質問' } = Astro.props;
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+---
+
+<details class="tool-notes">
+  <summary>{summary}</summary>
+  <div class="tool-notes-body">
+    <slot />
+    <h2>よくある質問</h2>
+    {faqs.map((f) => (
+      <details class="faq-item">
+        <summary class="faq-q">{f.q}</summary>
+        <p class="faq-a">{f.a}</p>
+      </details>
+    ))}
+  </div>
+</details>
+<script is:inline type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+
+<style is:global>
+  .tool-notes {
+    max-width: 860px;
+    margin: 1.6rem auto 2.4rem;
+    padding: 0 1.2rem;
+    color: rgb(var(--gray-dark));
+  }
+  .tool-notes > summary {
+    cursor: pointer;
+    font-size: .84rem;
+    font-weight: 700;
+    color: rgb(var(--gray));
+    padding: .6em .2em;
+    border-top: 1px solid rgb(var(--gray-light));
+    list-style: none;
+  }
+  .tool-notes > summary::-webkit-details-marker { display: none; }
+  .tool-notes > summary::before { content: '▸ '; }
+  .tool-notes[open] > summary::before { content: '▾ '; }
+  .tool-notes > summary:hover { color: rgb(var(--gray-dark)); }
+  .tool-notes-body { padding-top: .4em; }
+  .tool-notes h2 {
+    font-size: 1.02rem;
+    margin: 1.6rem 0 .6em;
+    padding-bottom: .3em;
+    border-bottom: 1px solid rgb(var(--gray-light));
+    color: rgb(var(--black));
+  }
+  .tool-notes-body > h2:first-child { margin-top: .6rem; }
+  .tool-notes h3 { font-size: .93rem; margin: 1.2em 0 .4em; color: rgb(var(--black)); }
+  .tool-notes p { font-size: .86rem; line-height: 1.85; margin: 0 0 .9em; }
+  .tool-notes ol, .tool-notes ul { margin: 0 0 1em; padding-left: 1.3em; font-size: .85rem; line-height: 1.85; }
+  .tool-notes li { margin-bottom: .25em; }
+  .tool-notes table { width: 100%; border-collapse: collapse; font-size: .82rem; margin: 0 0 1em; }
+  .tool-notes th, .tool-notes td {
+    border: 1px solid rgb(var(--gray-light)); padding: .5em .7em; text-align: left; line-height: 1.65;
+  }
+  .tool-notes th { background: rgb(var(--gray-light)); font-weight: 700; }
+  .tool-notes td:first-child { white-space: nowrap; font-weight: 700; }
+  .faq-item { border-bottom: 1px solid rgb(var(--gray-light)); }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-q {
+    cursor: pointer;
+    font-weight: 700;
+    font-size: .86rem;
+    padding: .7em .2em;
+    color: rgb(var(--black));
+    list-style: none;
+  }
+  .faq-q::-webkit-details-marker { display: none; }
+  .faq-q::before { content: 'Q '; color: var(--accent); font-weight: 700; }
+  .faq-a {
+    font-size: .84rem !important;
+    line-height: 1.85;
+    margin: 0 0 .9em !important;
+    padding-left: 1.3em;
+    color: rgb(var(--gray-dark));
+  }
+</style>

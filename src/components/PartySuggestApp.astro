@@ -274,6 +274,7 @@ const I18N = I18N_ALL[lang];
   <div id="popup" class="pop-overlay" style="display:none">
     <div class="pop-card"><button class="pop-x" id="pop-x" aria-label={I18N.close}>✕</button><div id="pop-body"></div></div>
   </div>
+  <slot />
 </main>
 
 <style is:global>

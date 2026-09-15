@@ -2,10 +2,43 @@
 import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ToolPageNotes from '../components/ToolPageNotes.astro';
+import rankingData from '../data/ranking.json';
 
 const title = 'ポケモンチャンピオンズ AI構築ツール | 軸から自動生成・パーティ工房';
-const description = 'ポケモンチャンピオンズのAIパーティ構築ツール2種。軸ポケモンから残り5枠を自動生成する「軸から簡単構築」と、1v1相性を見ながら6匹の型を微調整できる「パーティ工房」。無料で使えます。';
+const description = 'ポケモンチャンピオンズのAIパーティ構築ツール2種。軸ポケモンから残り5枠を自動生成する「軸から簡単構築」と、1v1相性を見ながら6匹の型を微調整できる「パーティ工房」。';
 const siteUrl = 'https://pokenavi.jp';
+
+/** シーズン名・集計規模はranking.jsonから引く(固定値だと更新のたびに古くなる)。 */
+const seasons = (rankingData as any).seasons as Record<string, { dates: string[]; pokemon: unknown[] }>;
+const seasonKey = Object.keys(seasons).sort().at(-1)!;
+const season = seasons[seasonKey];
+const speciesCount = season.pokemon.length;
+const latestDate = [...season.dates].sort().at(-1)!;
+const fmtDate = (d: string) => { const [, m, dd] = d.split('-'); return `${parseInt(m)}月${parseInt(dd)}日`; };
+
+const faqs = [
+  {
+    q: 'どちらのツールを使えばいいですか。',
+    a: '軸にしたいポケモンだけ決まっていて残り5枠が白紙なら「軸から簡単構築」、6匹はすでに決まっていて型を詰めたいなら「パーティ工房」です。まず簡単構築でたたき台を作り、工房で仕上げる流れが基本になります。',
+  },
+  {
+    q: '提案や判定は何を根拠にしていますか。',
+    a: `ポケモンチャンピオンズの実際の対戦データ(シーズン${seasonKey}・${speciesCount}体)から集計した技・持ち物・特性・性格・EVの採用率と同居率をもとに、各ポケモンの主流型を再現し、対戦シミュレーションで評価しています。想像で組んだ型ではなく、実際に使われている型が基準です。`,
+  },
+  {
+    q: 'データはいつ更新されますか。',
+    a: `使用率ランキングは毎日更新しています(最新の集計日は${fmtDate(latestDate)})。シーズンが変わると提案の基準も新シーズンのデータに切り替わります。`,
+  },
+  {
+    q: '作ったパーティは保存されますか。',
+    a: 'パーティ工房で組んだパーティはお使いのブラウザ内に保存されます。端末間の同期はないため、別の端末で使う場合はエクスポート機能をお使いください。',
+  },
+  {
+    q: '提案されたパーティをそのまま使えば勝てますか。',
+    a: '提案は「環境全体に対してバランスが取れた構成」を示すものです。実際の勝敗は選出と立ち回りに大きく左右されるため、たたき台として使い、想定する相手に合わせてパーティ工房で調整することをおすすめします。',
+  },
+];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'CollectionPage',
@@ -140,6 +173,46 @@ const jsonLd = {
       </div>
 
       <p class="usage-tip">まず「軸から簡単構築」でたたき台を作り、「パーティ工房」で仮想敵に合わせて詰めるのがおすすめです。</p>
+
+    <ToolPageNotes faqs={faqs}>
+        <h2>どちらを使うか</h2>
+        <p>2つのツールは、構築のどの段階にいるかで使い分けます。迷ったら、いま手元に「何が決まっているか」で選んでください。</p>
+        <table>
+          <thead>
+            <tr><th>いまの状態</th><th>使うツール</th><th>できること</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>軸1体だけ決まっている</td>
+              <td>軸から簡単構築</td>
+              <td>残り5枠を自動で埋め、各ポケモンの役割と選出の指針まで提示します。</td>
+            </tr>
+            <tr>
+              <td>6匹は決まっている</td>
+              <td>パーティ工房</td>
+              <td>持ち物・特性・性格・EV・技を1ポイント単位で調整し、与ダメージと被ダメージの変化をその場で確認できます。</td>
+            </tr>
+            <tr>
+              <td>特定の相手に勝てない</td>
+              <td>パーティ工房</td>
+              <td>仮想敵を指定して素早さ実数値を比較し、1v1で有利を取れるかを判定します。</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2>提案と判定の根拠</h2>
+        <p>どちらのツールも、想像で組んだ型ではなく<strong>実際に使われている型</strong>を基準にしています。シーズン{seasonKey}の対戦データから{speciesCount}体分を集計し、次の項目をポケモンごとに保持しています。</p>
+        <ul>
+          <li><strong>技・持ち物・特性・性格・EV</strong> — それぞれの採用率を上位から集計。主流型の再現に使います</li>
+          <li><strong>同居率</strong> — どのポケモンと一緒に使われているか。提案時の並びの自然さに反映されます</li>
+          <li><strong>種族値・タイプ相性・メガシンカ後の数値</strong> — 実数値計算と1v1判定の土台です</li>
+        </ul>
+        <p>1v1判定は、両者の主流型の実数値をもとに、素早さの先後・最大打点技・相手を倒すのに必要な攻撃回数を計算しています。きあいのタスキやがんじょうも考慮します。交代や補助技は含まないため、あくまで「正面からぶつかった場合」の事前計算として使ってください。</p>
+
+        <h3>使う前に知っておくこと</h3>
+        <p>使用率ランキングは毎日更新しており、最新の集計日は{fmtDate(latestDate)}です。シーズンが変わると、提案の基準も自動的に新シーズンのデータへ切り替わります。</p>
+
+    </ToolPageNotes>
     </main>
     <Footer />
   </body>

@@ -3,10 +3,39 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PartySuggestApp from '../components/PartySuggestApp.astro';
+import ToolPageNotes from '../components/ToolPageNotes.astro';
+import rankingData from '../data/ranking.json';
 
 const title = 'ポケモンチャンピオンズM-6 軸から簡単構築(パーティ提案) | 軸から最適構築を自動生成';
 const description = 'ポケモンチャンピオンズM-6対応。軸にしたいポケモンを指定するだけで環境に合った6匹を自動提案。各ポケの役割・タイプ相性・素早さ・使用率TOP30との1v1相性をAIシミュレーション結果から診断。';
 const siteUrl = 'https://pokenavi.jp';
+
+const seasons = (rankingData as any).seasons as Record<string, { dates: string[]; pokemon: unknown[] }>;
+const seasonKey = Object.keys(seasons).sort().at(-1)!;
+const speciesCount = seasons[seasonKey].pokemon.length;
+
+const faqs = [
+  {
+    q: '軸にはどのポケモンを指定できますか。',
+    a: `シーズン${seasonKey}の使用率上位を中心に、ポケモン情報ページがある種族を軸に指定できます。メガシンカする種族は「メガ○○を軸にした構築」として別に提案できます。使用率が低い種族は対戦データが十分に集まらないため、順次対応を広げています。`,
+  },
+  {
+    q: '残り5枠はどう選ばれていますか。',
+    a: '軸のタイプ相性の穴を埋められるか、素早さの分布が偏っていないか、環境上位に対して受け役と攻め役が揃っているかを見て組み合わせを選んでいます。実際に一緒に使われている組み合わせ(同居率)も加味するため、極端に不自然な並びにはなりません。',
+  },
+  {
+    q: '同じ軸を指定すると毎回同じパーティが出ますか。',
+    a: '同じシーズンのデータで計算しているため、基本の提案は安定しています。使用率データが更新されると環境の評価が変わり、提案も少しずつ変化します。',
+  },
+  {
+    q: '提案されたパーティの型は変更できますか。',
+    a: 'ページ下部の「パーティ工房で型を微調整する」から、提案された6匹をそのまま工房へ持ち込めます。工房では持ち物・特性・性格・EV・技を1ポイント単位で変更できます。',
+  },
+  {
+    q: '「役割」や「選出ガイド」は何を見ていますか。',
+    a: '各ポケモンが攻め役か受け役か、どの相手に強いかを、主流型の実数値と技をもとに判定しています。選出ガイドは、環境上位のパーティと当たったときに誰を先発に置くべきかの目安です。',
+  },
+];
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
@@ -27,7 +56,28 @@ const jsonLd = {
   </head>
   <body>
     <Header />
-    <PartySuggestApp />
+    <PartySuggestApp>
+      <ToolPageNotes faqs={faqs}>
+        <h2>使い方</h2>
+        <ol>
+          <li><strong>軸を選ぶ</strong> — 使いたいポケモンを1体指定します。メガシンカ前提で組みたい場合は「メガ○○」を選びます。</li>
+          <li><strong>提案を受け取る</strong> — 残り5枠が自動で埋まり、6匹それぞれの役割と持ち物・技が表示されます。</li>
+          <li><strong>相性を確かめる</strong> — 使用率TOP30との1v1相性と選出ガイドで、環境のどこに強くどこが苦しいかを確認します。</li>
+        </ol>
+
+        <h2>提案の読み方</h2>
+        <p>提案は「この6匹が最強」という意味ではなく、<strong>環境全体に対して穴が少ない組み合わせ</strong>を示したものです。次の順で見ると判断しやすくなります。</p>
+        <ul>
+          <li><strong>役割</strong> — 攻め役と受け役のバランス。攻め役に偏っていると、こちらが先に崩れたときに巻き返せません</li>
+          <li><strong>1v1相性</strong> — 使用率TOP30のうち、不利が並ぶ相手がいないか。特定の1体に全員が負けるなら、その枠を差し替える判断材料になります</li>
+          <li><strong>選出ガイド</strong> — 実戦では6匹全員を使うわけではないため、誰を先発に置くかの目安として使います</li>
+        </ul>
+        <p>1v1相性は、両者の主流型の実数値をもとに素早さの先後と最大打点技から算出しています。きあいのタスキやがんじょうは考慮しますが、交代や補助技は含まないため、正面からぶつかった場合の事前計算として扱ってください。</p>
+
+        <h2>データの前提</h2>
+        <p>提案の土台はシーズン{seasonKey}の実際の対戦データ({speciesCount}体)です。技・持ち物・特性・性格・EVの採用率と同居率を集計し、各ポケモンの主流型を再現しています。想像で組んだ型ではありません。</p>
+      </ToolPageNotes>
+    </PartySuggestApp>
     <div style="max-width:860px;margin:0 auto;padding:0 1.2rem 3rem;text-align:center">
       <p style="font-size:.85rem;color:rgb(var(--gray));margin-bottom:.6rem">6匹が決まったら細かい型を調整したい方へ</p>
       <a href="/party-builder/" style="display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.4rem;background:rgb(var(--accent));color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem">

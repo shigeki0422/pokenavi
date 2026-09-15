@@ -329,6 +329,7 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
         </div>
         <div id="detail" style="margin-top:.9em"></div>
       </section>
+  <slot />
     </main>
 
     <script is:inline define:vars={{ I18N, NATURE_NAME_MAP, POKEMON_NAME_MAP, MOVE_NAME_MAP, ITEM_NAME_MAP, ABILITY_NAME_MAP, LANG: lang }}>
