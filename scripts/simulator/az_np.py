@@ -4,13 +4,17 @@
 PVMCTSAI/SearchAI からは evaluate(x, legal_idx)→(prior_dict, value) として使える。
 """
 import json
+import os
 from pathlib import Path
 
 import numpy as np
 
 from .alphazero import ACTION_DIM
 
-AZNP_PATH = Path(__file__).resolve().parent.parent / "az_net_np.json"
+# 既定は本番ネット。env AZNP_PATH で差し替えられる＝同じベンチで2つのネットを比較できる
+# （ブランダーベンチ等は PVNetNP.load() を引数なしで呼ぶため、これが無いと比較できない）。
+AZNP_PATH = Path(os.environ.get("AZNP_PATH")
+                 or (Path(__file__).resolve().parent.parent / "az_net_np.json"))
 
 
 class PVNetNP:

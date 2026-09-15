@@ -3055,6 +3055,12 @@ check("特徴量 主要な持ち物を既定で識別できる",
        "たつじんのおび","しろいハーブ","レッドカード","ピントレンズ"} <= _v2items)
 # Rust 側(features.rs N_ITEM_FLAGS)と次元が食い違うと本番のネット評価が壊れる。
 # ここを変えるときは features.rs も必ず揃えること。
+# ネットのパスは env AZNP_PATH で差し替えられること（同じベンチで2ネットを比較するため）。
+# 固定パスだと PVNetNP.load() を引数なしで呼ぶ経路（_ai_blunder 等）で比較ができない。
+import inspect as _in33, simulator.az_np as _az33
+check("ネットのパスが env AZNP_PATH で差し替えられる",
+      'os.environ.get("AZNP_PATH")' in _in33.getsource(_az33)[:1600])
+
 check("特徴量 本番ネットの入力次元と一致",
       _js33.load(open(_netp33, encoding="utf-8"))["dim"] == feature_dim())
 # 学習可能性: 線形分離データを高精度予測（決定的・高速）
