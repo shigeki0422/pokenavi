@@ -212,6 +212,13 @@ def main():
         net = PVNetNP.load(start) if start else copy.deepcopy(anchor)
         net.save(NET_TMP)
         print(f"アンカー(現行ネット)を凍結。学習ネット開始={'継続:'+start if start else '現行から'}。", flush=True)
+    # リプレイバッファ: 過去エポックのサンプルを貯めて実効データ量を増やす。
+    # 1エポック約18,000サンプルに対し W1 のパラメータだけで 265,472 個あり、
+    # データ/パラメータ比は 0.07 倍しかない。毎エポック使い捨てていたので
+    # 何を学習させても汎化しない状態だった（3アームとも50%で頭打ちの主因と見る）。
+    # 計算量を増やさずに実効データ量を数倍にできる。
+    buf_eps = int(os.environ.get("REPLAY_EPOCHS", "1"))   # 1=従来（使い捨て）
+    replay = []
     for ep in range(epochs):
         t0 = time.time()
         per = max(1, games // workers)
@@ -219,7 +226,11 @@ def main():
         samples = []
         with Pool(workers, initializer=_winit) as p:
             for s in p.map(_selfplay_batch, args): samples += s
-        X, PI, M, Y = to_arrays(samples)
+        replay.append(samples)
+        if len(replay) > buf_eps:
+            replay.pop(0)
+        train_samples = [x for chunk in replay for x in chunk]
+        X, PI, M, Y = to_arrays(train_samples)
         cand = copy.deepcopy(net); cand.train_pi(X, PI, M, Y, epochs=15, lr=0.05, batch=256)
         cand.save(NET_TMP + ".cand")
         no_gate = os.environ.get("NO_GATE") == "1"
@@ -240,7 +251,8 @@ def main():
         rain_s = ""
         if probe_L is not None:
             rain_s = f" 雨コア価値={_rain_value(NET_TMP, probe_L, D, random.Random(7)):.3f}"
-        print(f"[epoch{ep+1}/{epochs}] 自己対戦{per*workers}局 学習{len(samples)}サンプル "
+        print(f"[epoch{ep+1}/{epochs}] 自己対戦{per*workers}局 学習{len(train_samples)}サンプル"
+              + (f"(直近{len(replay)}ep分)" if buf_eps > 1 else "") + " "
               f"{gate_s}{rain_s} {time.time()-t0:.0f}秒", flush=True)
     # 最終評価: 学習ネット vs 凍結アンカー（大標本）
     net.save(FINAL_TMP)

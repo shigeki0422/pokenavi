@@ -13,6 +13,8 @@ from .alphazero import ACTION_DIM
 
 # 既定は本番ネット。env AZNP_PATH で差し替えられる＝同じベンチで2つのネットを比較できる
 # （ブランダーベンチ等は PVNetNP.load() を引数なしで呼ぶため、これが無いと比較できない）。
+# 価値ヘッドのビン数。0=従来のスカラー(sigmoid)。両方の重みを読めるので切替は非破壊。
+VALUE_BINS = int(os.environ.get("VALUE_BINS", "0"))
 AZNP_PATH = Path(os.environ.get("AZNP_PATH")
                  or (Path(__file__).resolve().parent.parent / "az_net_np.json"))
 
@@ -27,7 +29,18 @@ class PVNetNP:
         if hidden3:
             self.W3 = rng.normal(0, (1.0 / hidden2) ** 0.5, (hidden3, hidden2)); self.b3 = np.zeros(hidden3)
             top = hidden3
-        self.Wv = rng.normal(0, (1.0 / top) ** 0.5, top); self.bv = 0.0
+        # 価値ヘッド: 既定はスカラー(sigmoid)。VALUE_BINS>0 で two-hot 分類ヘッドにする。
+        # スカラー回帰は最終勝敗0/1に対する平均を当てにいくので、勝率0.5付近の局面で
+        # 勾配が潰れて「差がつかない」。分布で持つと接戦の局面でも形の違いを学習できる
+        # （Metamon が最終段の性能向上を得た手法）。
+        self.vbins = VALUE_BINS
+        if self.vbins:
+            self.Wv = rng.normal(0, (1.0 / top) ** 0.5, (self.vbins, top))
+            self.bv = np.zeros(self.vbins)
+            # ビン中心: [0,1] を等分した中点
+            self.vcent = (np.arange(self.vbins) + 0.5) / self.vbins
+        else:
+            self.Wv = rng.normal(0, (1.0 / top) ** 0.5, top); self.bv = 0.0
         self.Wp = rng.normal(0, (1.0 / top) ** 0.5, (ACTION_DIM, top)); self.bp = np.zeros(ACTION_DIM)
 
     def _top(self, X):
@@ -39,11 +52,33 @@ class PVNetNP:
             return H1, H2, H3, H3
         return H1, H2, None, H2
 
+    def _value_from_top(self, top):
+        """top表現 → 価値。two-hot のときは softmax の期待値を返す（下流はスカラーのまま）。"""
+        if not self.vbins:
+            return 1.0 / (1.0 + np.exp(-(top @ self.Wv + self.bv)))
+        z = top @ self.Wv.T + self.bv
+        z = z - z.max(axis=-1, keepdims=True)
+        e = np.exp(z)
+        pr = e / (e.sum(axis=-1, keepdims=True) + 1e-12)
+        return pr @ self.vcent
+
     def _forward(self, X):
         *_, top = self._top(X)
-        v = 1.0 / (1.0 + np.exp(-(top @ self.Wv + self.bv)))
+        v = self._value_from_top(top)
         logits = top @ self.Wp.T + self.bp
         return top, v, logits
+
+    def _two_hot(self, y):
+        """スカラー目標 y∈[0,1] を隣接2ビンに線形配分した分布にする。"""
+        n = self.vbins
+        pos = np.clip(np.asarray(y, float) * n - 0.5, 0.0, n - 1.0)
+        lo = np.floor(pos).astype(int); hi = np.minimum(lo + 1, n - 1)
+        frac = pos - lo
+        t = np.zeros((len(pos), n))
+        idx = np.arange(len(pos))
+        t[idx, lo] += 1.0 - frac
+        t[idx, hi] += frac
+        return t
 
     def evaluate(self, x, legal_idx):
         X = np.asarray(x, dtype=float).reshape(1, -1)
@@ -56,16 +91,29 @@ class PVNetNP:
         """1バッチの前向き＋逆伝播＋更新（2 or 3隠れ層）。value_weight=0で方策のみ学習。"""
         B = len(xb)
         H1, H2, H3, top = self._top(xb)
-        v = 1.0 / (1.0 + np.exp(-(top @ self.Wv + self.bv)))
+        if self.vbins:
+            zv = top @ self.Wv.T + self.bv
+            zv = zv - zv.max(axis=1, keepdims=True)
+            ev = np.exp(zv)
+            pv = ev / (ev.sum(axis=1, keepdims=True) + 1e-12)
+            v = pv @ self.vcent
+        else:
+            v = 1.0 / (1.0 + np.exp(-(top @ self.Wv + self.bv)))
         logits = np.where(mb > 0, top @ self.Wp.T + self.bp, -1e9)
         logits -= logits.max(1, keepdims=True)
         e = np.exp(logits) * mb
         P = e / (e.sum(1, keepdims=True) + 1e-12)
-        gv = value_weight * (v - yb) / B
         gp = (P - target) * mb / B
-        dWv = top.T @ gv; dbv = gv.sum()
         dWp = gp.T @ top; dbp = gp.sum(0)
-        dtop = np.outer(gv, self.Wv) + gp @ self.Wp
+        if self.vbins:
+            # 交差エントロピー: 勾配は (予測分布 - two-hot目標)
+            gv = value_weight * (pv - self._two_hot(yb)) / B
+            dWv = gv.T @ top; dbv = gv.sum(0)
+            dtop = gv @ self.Wv + gp @ self.Wp
+        else:
+            gv = value_weight * (v - yb) / B
+            dWv = top.T @ gv; dbv = gv.sum()
+            dtop = np.outer(gv, self.Wv) + gp @ self.Wp
         if self.hidden3:
             dpre3 = dtop * (1.0 - H3 * H3)
             dW3 = dpre3.T @ H2; db3 = dpre3.sum(0)
@@ -123,7 +171,9 @@ class PVNetNP:
         d = {"dim": self.dim, "hidden": self.hidden, "hidden2": self.hidden2, "hidden3": self.hidden3,
              "W1": self.W1.tolist(), "b1": self.b1.tolist(),
              "W2": self.W2.tolist(), "b2": self.b2.tolist(),
-             "Wv": self.Wv.tolist(), "bv": float(self.bv),
+             "vbins": self.vbins,
+             "Wv": self.Wv.tolist(),
+             "bv": (self.bv.tolist() if self.vbins else float(self.bv)),
              "Wp": self.Wp.tolist(), "bp": self.bp.tolist()}
         if self.hidden3:
             d["W3"] = self.W3.tolist(); d["b3"] = self.b3.tolist()
@@ -137,7 +187,12 @@ class PVNetNP:
         net = cls(d["dim"], d["hidden"], d.get("hidden2", 64), d.get("hidden3", 0))
         net.W1 = np.array(d["W1"]); net.b1 = np.array(d["b1"])
         net.W2 = np.array(d["W2"]); net.b2 = np.array(d["b2"])
-        net.Wv = np.array(d["Wv"]); net.bv = d["bv"]
+        # 価値ヘッドの形はファイル側に従う（env VALUE_BINS で作られた net と混ざらないように）
+        net.vbins = int(d.get("vbins", 0) or 0)
+        net.Wv = np.array(d["Wv"])
+        net.bv = np.array(d["bv"]) if net.vbins else d["bv"]
+        if net.vbins:
+            net.vcent = (np.arange(net.vbins) + 0.5) / net.vbins
         net.Wp = np.array(d["Wp"]); net.bp = np.array(d["bp"])
         if d.get("hidden3"):
             net.W3 = np.array(d["W3"]); net.b3 = np.array(d["b3"])
