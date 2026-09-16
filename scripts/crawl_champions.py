@@ -88,8 +88,12 @@ def img_hash(path):
 
 
 def scroll_to_top():
-    for _ in range(8):
-        swipe(LIST_X, 400, LIST_X, 800, 600, wait=0.4)
+    # リスト件数が増えると戻り切らず、途中の順位から始まって全体がずれる
+    # （2026-09-16に262件へ増えて発生。8回→40回でも262位から94位までしか
+    #  戻れなかった）。末尾からでも確実に先頭へ戻る回数にする。
+    for _ in range(140):
+        swipe(LIST_X, 400, LIST_X, 800, 600, wait=0.25)
+    time.sleep(1.0)
 
 
 def slot_for_rank(rank):
@@ -142,6 +146,29 @@ def main():
 
     scroll_to_top()
     time.sleep(1)
+
+    # 先頭に戻れているか確認する。戻れていないと全体が別の順位から始まり、
+    # 200件すべてが使えなくなる（2026-09-16に発生）。
+    # 判定はリスト一覧の1行目に出る順位数字で行う（詳細画面のヘッダーではない）。
+    ref_path = os.path.join(os.path.dirname(__file__), "list_top_reference.png")
+    probe = f"{OUTPUT_DIR}/_probe_top.png"
+    if os.path.exists(ref_path) and screenshot(probe):
+        import cv2, numpy as np
+        BOX = (1240, 290, 1330, 380)   # 一覧1行目の順位数字
+
+        def _mask(path):
+            g = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+            x1, y1, x2, y2 = BOX
+            sub = g[y1:y2, x1:x2]
+            return (sub < sub.mean() - 20).astype(np.uint8)
+
+        ref, cur = _mask(ref_path), _mask(probe)
+        iou = (ref & cur).sum() / max((ref | cur).sum(), 1)
+        if iou < 0.85:
+            log(f"❌ 先頭に戻れていない（1位との一致率={iou:.3f}）: {probe} を確認")
+            log("   リスト件数が増えたら scroll_to_top() の回数を増やすこと")
+            sys.exit(1)
+        log(f"先頭確認OK（1位との一致率={iou:.3f}）")
 
     for rank in range(1, TOTAL_POKEMON + 1):
         slot = slot_for_rank(rank)
