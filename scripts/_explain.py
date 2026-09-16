@@ -1,5 +1,5 @@
 """Product3提案の説明情報：役割・パーティ統計・使用率上位との1v1相性。"""
-import os, sqlite3, statistics, math
+import json, os, sqlite3, statistics, sys, math
 from simulator.pokemon import build_from_spec, parse_pokemon_spec
 from simulator.damage import calc_damage
 from simulator.ai import _effective_speed, SETUP_MOVES
@@ -175,8 +175,39 @@ def load_tops(L, n=12):
         if b: _TOPS.append((nm, _build(b[0], L)))
     return _TOPS
 
+# 1v1判定は Rust エンジン（工房・ポケモン情報ページが使う wasm と同じ analysis）に委ねる。
+# ここに判定式を持っていた頃は、score の刻み(0.5/1)・先制技での決着・最短手順・
+# 確定1の扱いが工房側だけ更新され、同じ対面で記号が食い違っていた。
+_RUST = None
+_RUST_WARNED = False
+
+
+def _season():
+    """判定に渡すシーズン。サーバの POOL_SEASON に追従する（型プールと揃える）。"""
+    return os.environ.get("POOL_SEASON", "M-3")
+
+
+def _rust():
+    """pokenavi_engine（PyO3）。未導入なら None を返し、呼び出し側が旧実装に落ちる。"""
+    global _RUST, _RUST_WARNED
+    if _RUST is None:
+        try:
+            import pokenavi_engine as _E
+            _RUST = _E
+        except Exception as e:                     # noqa: BLE001 (理由を問わず旧実装に落とす)
+            _RUST = False
+            if not _RUST_WARNED:
+                _RUST_WARNED = True
+                print(f"[_explain] pokenavi_engine を読めないため旧判定にフォールバック: {e}",
+                      file=sys.stderr)
+    return _RUST or None
+
+
 def _score_sym(s):
-    return "◎" if s >= 1.5 else "○" if s >= 0.5 else "△" if s >= -0.5 else "▲" if s >= -1.5 else "×"
+    r = _rust()
+    if r is not None:
+        return r.mu_sym(float(s))
+    return "◎" if s >= 2 else "○" if s >= 1 else "△" if s > -1 else "▲" if s > -2 else "×"
 
 # 1v1判定の実装切替。既定=engine（対戦本体で実走）。
 # 静的評価は「対戦本体では正しい仕様が分析側では抜ける」バグを繰り返し出した
@@ -190,9 +221,41 @@ def _mu_score(M, O, field):
     既定では対戦本体で1v1を実走して数える（追加効果・自己ランク低下・反動・回復・
     特性の発動など engine が実装している全てが反映される）。"""
     field, Me, Oe = _enter(M, O)
-    if MU_MODE == "engine" and getattr(M, "_spec", None) and getattr(O, "_spec", None):
+    sa, sb = getattr(M, "_spec", None), getattr(O, "_spec", None)
+    r = _rust()
+    if MU_MODE == "engine" and r is not None and sa and sb:
+        d = json.loads(r.mu_analyze(sa, sb, _season()))
+        v = d["verdict"]
+        # HP比は Rust の firstLo(1ターン目のHP減少)/相手の最大HP。
+        # _mu_engine を別に走らせても同値だが、同じ対面を2回実走することになる。
+        def _ratio(side, other, name):
+            m = next((x for x in d[side]["moves"] if x.get("n") == name), None)
+            f = m.get("firstLo") if m else None
+            return 0.0 if f is None else f / max(1, d[other]["hp"])
+        ar = _ratio("a", "b", v["myMove"])
+        br = _ratio("b", "a", v["oppMove"])
+
+        def _steps(side, other, names):
+            """手順の各手を表示用にする。%は技そのものの値（単発行と基準を揃える）。"""
+            out = []
+            for n in names:
+                m = next((x for x in d[side]["moves"] if x.get("n") == n), None)
+                hp = max(1, d[other]["hp"])
+                lo, hi = (m or {}).get("dmgLo"), (m or {}).get("dmgHi")
+                out.append({"n": n,
+                            "pctLo": None if lo is None else lo / hp * 100,
+                            "pctHi": None if hi is None else hi / hp * 100})
+            return out
+        return {"myh": v["myHits"], "thh": v["oppHits"], "myr": ar, "thr": br,
+                "fast": v["koFirst"], "my_s": v["myS"], "op_s": v["oppS"],
+                "my_move": v["myMove"], "th_move": v["oppMove"],
+                "my_seq": v["mySeq"], "ko_by_priority": v["koByPriority"],
+                "my_steps": _steps("a", "b", v["mySeq"]),
+                "opp_steps": _steps("b", "a", v.get("oppSeq") or []),
+                "sym": v["sym"], "score": v["score"], "win": v["win"]}
+    if MU_MODE == "engine" and sa and sb:
         import _mu_engine as _ME
-        ah, ar, am, bh, br, bm = _ME.mu_engine(M._spec, O._spec, L_REF[0])
+        ah, ar, am, bh, br, bm = _ME.mu_engine(sa, sb, L_REF[0])
         my_s = _effective_speed(Me, field); op_s = _effective_speed(Oe, field)
         fast = my_s > op_s
         score = (bh - ah) + (0.5 if fast else -0.5)
@@ -287,25 +350,35 @@ def matchup_detail(specs, mon_name, opp_name, L):
     mi = next((i for i, s in enumerate(specs) if s.split("@")[0] == mon_name), 0)
     M = _build(specs[mi], L)
     vs = _find_variants(opp_name, L)
-    cols, me, op, spd, judge = [], [], [], [], []
+    cols, me, op, spd, judge, seq = [], [], [], [], [], []
     for i, v in enumerate(vs):
         O = v["p"]
         ml, ol, my_s, op_s = _engine_lines(M, O)
-        fast = my_s > op_s
-        myh, thh = ml["n_lo"], ol["n_lo"]                    # 確定手数（最低乱数）で勝敗判定
-        win = (myh < thh) or (myh == thh and fast)
-        score = (thh - myh) + (0.5 if fast else -0.5)
+        # 判定はマトリクスと同じエンジンの結論を使う。ここで別に組み立てていた頃は
+        # 一覧が○なのに内訳は「負け・後手」と出る食い違いが起きた。
+        r = _mu_score(M, O, field)
+        fast = r["fast"]
+        myh, thh = r["myh"], r["thh"]
+        win = r["win"]
+        score = r["score"]
         # spec も返す。クライアントは同じ対戦エンジン(wasm)でこの spec から計算し直すので、
         # 表示の計算がサーバとクライアントで二重にならない（数値・体裁の食い違いを構造的に防ぐ）。
         cols.append({"idx": i + 1, "item": v["item"], "nature": v["nature"], "ev": _ev_str(v["ev"]),
                      "t1": O.type1, "t2": O.type2, "spec": getattr(O, "_spec", None)})
         me.append(ml); op.append(ol)
-        spd.append({"fast": fast, "my_s": my_s, "opp_s": op_s,
-                    "txt": f"{'先手' if fast else '後手'}（自S{my_s} / 相S{op_s}）"})
-        reason = f"{'勝ち' if win else '負け'}：{ml['ko']}で倒す / {ol['ko']}で倒される・{'先手' if fast else '後手'}"
-        judge.append({"v": _score_sym(score), "win": win, "txt": reason})
+        # 素早さ行は実数値の比較（先後の結論は judge 側が優先度込みで持つ）。
+        raw_fast = my_s > op_s
+        spd.append({"fast": raw_fast, "my_s": my_s, "opp_s": op_s,
+                    "txt": f"{'先手' if raw_fast else '後手'}（自S{my_s} / 相S{op_s}）"})
+        pri = "先制技で" if r.get("ko_by_priority") else ""
+        reason = (f"{'勝ち' if win else '負け'}：{ml['ko']}で倒す / {ol['ko']}で倒される・"
+                  f"{pri}{'先手' if fast else '後手'}")
+        judge.append({"v": r.get("sym") or _score_sym(score), "win": win, "txt": reason,
+                      "fast": fast, "by_prio": bool(r.get("ko_by_priority")),
+                      "my_hits": myh, "opp_hits": thh})
+        seq.append({"my": r.get("my_steps") or [], "opp": r.get("opp_steps") or []})
     return {"mon": mon_name, "opp": opp_name, "my_spec": getattr(M, "_spec", None),
-            "cols": cols, "me": me, "op": op, "spd": spd, "judge": judge}
+            "cols": cols, "me": me, "op": op, "spd": spd, "judge": judge, "seq": seq}
 
 EVK6 = ["H", "A", "B", "C", "D", "S"]
 def _ev_str(ev):

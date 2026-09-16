@@ -153,47 +153,9 @@ pub extern "C" fn analyze(ap: *const u8, an: usize, bp: *const u8, bn: usize,
 
 pub fn analyze_impl(a: &str, b: &str, season: &str) -> i32 {
     let pack = match unsafe { PACK.as_mut() } { Some(p) => p, None => return -1 };
-    let mut out = json!({});
-    // 場は対面ごとに1つ。並びは (a, b) に固定し、攻撃側だけを切り替える
-    // （攻撃側を常に先頭に置くと、両者が天候特性を持つ対面で天候が向きによって変わる）。
-    let (info_a, info_b) = analysis::side_info(pack, a, b, season);
-    for (key, att, me) in [("a", 0usize, &info_a), ("b", 1usize, &info_b)] {
-        let mut moves = Vec::new();
-        for (i, (name, is_dmg)) in me.moves.iter().enumerate() {
-            if !*is_dmg {
-                moves.push(json!({"n": name, "dmg": Value::Null}));
-                continue;
-            }
-            // 発数は実走（耐え効果・回復・天候が効く）、与ダメは技そのものの値。
-            // 与ダメに実走の1ターン目HP減少を使うと、ばけのかわの身代わり分や砂の削り・
-            // たべのこしの回復まで技のダメージとして表示されてしまう。
-            let (hits_lo, first_lo) = analysis::run_move(pack, a, b, season, att, i, 0.0);
-            let (hits_hi, _) = analysis::run_move(pack, a, b, season, att, i, 1.0);
-            // 連続技の回数は決定的に決める（2〜5回は期待値の3回、スキルリンクは5回、
-            // 1発ごとに命中判定がある技は必中前提で最大回数）。幅はダメージ乱数のぶんだけ。
-            let dmg_lo = analysis::move_damage(pack, a, b, season, att, i, 0.0);
-            let dmg_hi = analysis::move_damage(pack, a, b, season, att, i, 1.0);
-            // 場に出ているものではなく、この技の数値に実際に効いた条件だけを返す
-            let conds = analysis::relevant_conds(pack, a, b, season, att, i);
-            moves.push(json!({
-                "n": name, "dmgLo": dmg_lo, "dmgHi": dmg_hi,
-                "hitsLo": hits_lo, "hitsHi": hits_hi, "conds": conds,
-                // 最大打点技の選定（発数が同じときのタイブレーク）に使う値。
-                // Python の _mu_engine._best_cached が 1ターン目のHP減少で比べているので、
-                // 表示用の dmgLo ではなくこちらを使う。両者は ばけのかわ・天候・回復で食い違う。
-                "firstLo": first_lo,
-            }));
-        }
-        // 手順考慮: 毎ターン最善手を選び直した場合の手数と並び（初手限定技・ふうせん等で
-        // 「同じ技を撃ち続ける」前提と食い違う対面のために出す）。
-        let (seq_hits, seq_idx) = analysis::run_best_sequence(pack, a, b, season, att, 0.0);
-        let seq_names: Vec<String> = seq_idx.iter()
-            .filter_map(|i| me.moves.get(*i).map(|(n, _)| n.clone()))
-            .collect();
-        out[key] = json!({"hp": me.hp, "speed": me.speed, "moves": moves,
-                          "seqHits": seq_hits, "seq": seq_names});
-    }
-    set_result(&out);
+    // 組み立ても判定も engine 側（analysis::analyze_json）にある。
+    // ここに持つと提案API(PyO3)経路と食い違うため、受け渡しだけを行う。
+    set_result(&analysis::analyze_json(pack, a, b, season));
     0
 }
 

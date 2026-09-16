@@ -4,6 +4,8 @@
 //!   greedy_3v3(pa, sa, pb, sb, seed, season="M-3") -> u8
 //!   mcts_3v3(pa, sa, pb, sb, seed, sims, season="M-3") -> u8
 //!   mcts_vs_dist(pa, sa, pb, seed, sims, season="M-3") -> u8
+//!   mu_analyze(spec_a, spec_b, season) -> str(JSON)  1v1の与ダメ・確定数・手順・記号判定
+//!   mu_sym(score) -> str  スコア→記号（複数型の平均を集約するとき用）
 //!   datapack_hash() -> str / version() -> str
 //!
 //! データパックは環境変数 POKENAVI_DATAPACK（既定 `_rust_engine/datapack.json`）から1度だけロードする。
@@ -191,6 +193,27 @@ fn live_feats(
     ))
 }
 
+/// 1v1判定（各技の与ダメ・確定数・最短手順・記号）を JSON 文字列で返す。
+///
+/// 工房・ポケモン情報ページが使う wasm と同じ `analysis::analyze_json` を呼ぶ。
+/// 提案API側に判定式を持たせると、記号の刻みや先制技の扱いが片方だけ古くなる
+/// （実際に score の刻みが 0.5 と 1 で食い違い、同じ対面で結論が割れていた）。
+#[pyfunction]
+#[pyo3(signature = (spec_a, spec_b, season="M-3"))]
+fn mu_analyze(spec_a: &str, spec_b: &str, season: &str) -> PyResult<String> {
+    let m = eng()?;
+    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let v = engine::analysis::analyze_json(&mut g.pack, spec_a, spec_b, season);
+    Ok(v.to_string())
+}
+
+/// スコアから記号（◎○△▲×）へ。複数型の平均スコアを集約するときに使う。
+/// 閾値を Python 側に置くと、片方だけ刻みが古いまま残る。
+#[pyfunction]
+fn mu_sym(score: f64) -> String {
+    engine::analysis::score_sym(score).to_string()
+}
+
 #[pyfunction]
 fn datapack_hash() -> PyResult<String> {
     let m = eng()?;
@@ -212,6 +235,8 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(select_party_rng_probe, m)?)?;
     m.add_function(wrap_pyfunction!(live_setup, m)?)?;
     m.add_function(wrap_pyfunction!(live_feats, m)?)?;
+    m.add_function(wrap_pyfunction!(mu_analyze, m)?)?;
+    m.add_function(wrap_pyfunction!(mu_sym, m)?)?;
     m.add_function(wrap_pyfunction!(datapack_hash, m)?)?;
     m.add_function(wrap_pyfunction!(version, m)?)?;
     Ok(())

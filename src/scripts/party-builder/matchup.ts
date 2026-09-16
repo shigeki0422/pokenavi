@@ -7,12 +7,13 @@
 // 半減きのみの消費・ロール引数の取り違えが順に表面化した）。ルールを一箇所に集約するため、
 // 判定本体は engine/wasm.ts 経由でエンジンを実走させる。
 import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./types";
-import { analyze, buildToSpec, koProb, scenarioKey, typeDynamic, type EngineMove } from "../engine/wasm";
+import { analyze, buildToSpec, koProb, scenarioKey, typeDynamic,
+         type EngineMove, type EngineVerdict } from "../engine/wasm";
 import { eff } from "./typechart";
 
 /**
  * 旧式: score>=1.5→◎ … の閾値が0.5刻みだったため、素早さの±0.5補正だけで
- * 「確定2 vs 確定1・先手」のような明確な負け(diff=-1、後述_scoreOf参照)が
+ * 「確定2 vs 確定1・先手」のような明確な負けが
  * ちょうど△/▲境界(-0.5)に乗ってしまい、判定文は「負け」なのに記号は△という
  * 矛盾が起きていた(ユーザー報告で発覚)。スコアの刻みを整数(1単位)にし、
  * 「確定数の差で明確に決着が付いている場合は素早さに関わらずその勝敗方向の
@@ -42,7 +43,7 @@ type Evaluated = {
 };
 
 /** 対面の評価結果。場は対面ごとに1つなので、両方向をまとめて1回で求める。 */
-type Pair = { a: Evaluated; b: Evaluated; specA: string; specB: string };
+type Pair = { a: Evaluated; b: Evaluated; specA: string; specB: string; verdict: EngineVerdict };
 
 /** 天候の内部名を表示名にする。 */
 const WEATHER_JP: Record<string, string> = {
@@ -162,7 +163,7 @@ function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
     }
     return { hp: x.hp, speed: x.speed, moves, seqHits: x.seqHits, seq: x.seq };
   };
-  const pair: Pair = { a: side(r.a, entA), b: side(r.b, entB), specA, specB };
+  const pair: Pair = { a: side(r.a, entA), b: side(r.b, entB), specA, specB, verdict: r.verdict };
   _pairCache.set(key, pair);
   if (_pairCache.size > PAIR_CACHE_MAX) {
     _pairCache.delete(_pairCache.keys().next().value as string);
@@ -187,93 +188,17 @@ function _best(e: Evaluated): (EngineMove & { idx: number }) | null {
   return best;
 }
 
-/** 途中で技を切り替える手順。同じ技が並ぶだけ、または単発の最大打点より
- * 遠回りな手順は情報にならない(判定の確定数とも食い違う)ので出さない。 */
-function _seqNames(e: Evaluated, best: (EngineMove & { idx: number }) | null): string[] {
-  const seq = e.seq ?? [];
-  if (new Set(seq).size < 2) return [];
-  if ((e.seqHits ?? OUT_OF_RANGE) > (best?.hitsLo ?? OUT_OF_RANGE)) return [];
-  return seq;
-}
-
-/** 決着ターンに実際に撃つ技の優先度。手順が採用された場合は手順の最後の技。
- * 素早さで負けていても、ふいうち・かげうちのような先制技で倒しきる線があれば
- * 決着ターンには先に動ける(実測: メガグソクムシャがガブリアスをであいがしら→
- * ふいうちで倒す対面が「後手だから負け」と出ていた)。 */
-function _koPrio(b: ResolvedBuild, seq: string[], bestName: string | null): number {
-  const name = seq.length ? seq[seq.length - 1] : bestName;
-  if (!name) return 0;
-  const src = (b.pool && b.pool.length ? b.pool : b.moves) ?? [];
-  return src.find((m) => m.n === name)?.prio ?? 0;
-}
-
 export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
-  const { a, b } = _pair(me, opp);
-  const myBest = _best(a);
-  const oppBest = _best(b);
-
-  // 手順考慮の手数が単発の確定数より短ければそちらを採る。
-  // 初手限定技(であいがしら)やふうせんのように「同じ技を撃ち続ける」前提が
-  // 実戦と食い違う対面で、単独では圏外の技も繋げば通ることを反映する。
-  const myHits = Math.min(myBest?.hitsLo ?? OUT_OF_RANGE, a.seqHits ?? OUT_OF_RANGE);
-  const oppHits = Math.min(oppBest?.hitsLo ?? OUT_OF_RANGE, b.seqHits ?? OUT_OF_RANGE);
-  const fast = a.speed > b.speed;
-  // 決着ターンの先後。優先度が違えばそちらが先で、同じなら素早さで決まる。
-  const mySeq = _seqNames(a, myBest);
-  const oppSeq = _seqNames(b, oppBest);
-  const myP = _koPrio(me, mySeq, myBest?.n ?? null);
-  const oppP = _koPrio(opp, oppSeq, oppBest?.n ?? null);
-  // 先後が効くのは確定数が同じときだけ。差が付いている対面で「先制技で先手」と
-  // 出すと、決着に関係ない情報が勝敗理由のように見える。
-  const koFirst = myHits === oppHits && myP !== oppP ? myP > oppP : fast;
-  // 先後がランダムになるのは、素早さも決着ターンの優先度も同値のときだけ。
-  const even = a.speed === b.speed && myP === oppP;
-  const score = _scoreOf(myHits, oppHits, koFirst, even);
-
-  return {
-    sym: _scoreSym(score),
-    win: myHits < oppHits || (myHits === oppHits && koFirst),
-    koFirst,
-    koByPriority: koFirst !== fast,
-    even,
-    // 途中で技を切り替える手順のときだけ出す（同じ技が並ぶだけなら情報にならない）。
-    // 手数が単発と同じでも、初手限定技や先制技で決める線は実戦の手順として意味がある。
-    mySeq,
-    fast,
-    myS: a.speed,
-    oppS: b.speed,
-    myHits,
-    oppHits,
-    myMove: myBest?.n ?? null,
-    oppMove: oppBest?.n ?? null,
-    stub: false,
-  };
-}
-
-/**
- * 判定スコア = 確定数の差(相手の確定数-自分の確定数)。差がある時点で勝敗は
- * 確定数だけで決着しているため素早さは無関係(以前は±0.5の素早さ補正を
- * 常に足していたため、diff=-1のような明確な負けが△/▲境界に乗る不具合が
- * あった)。確定数が同数の場合のみ素早さが先後を決めるため、素早さが同値
- * なら真の五分(0)、そうでなければ先手側の勝ち(±1)とする。
- */
-function _scoreOf(myHits: number, oppHits: number, first: boolean, even: boolean): number {
-  const diff = oppHits - myHits;
-  // 確定数が同じで先後もランダム(素早さ同値・優先度も同じ)なら真の五分。
-  // ここを抜かすと「互いに確定1・素早さ同値」の五分が下の確定1ルールで×になる。
-  if (diff === 0 && even) return 0;
-  const base = diff !== 0 ? diff : (first ? 1 : -1);
-  const win = diff > 0 || (diff === 0 && first);
-  // 確定1で決着する側は、確定数の差が1しかなくても一方的（負ける側は1体を確実に失う）。
-  // 差だけで見ると「確定1で倒される/確定2で倒す」が接戦の▲になっていた。
-  if (win && myHits <= 1) return Math.max(base, 2);
-  if (!win && oppHits <= 1) return Math.min(base, -2);
-  return base;
+  // 記号・勝敗・確定数・先後の決め方はすべてエンジン(analysis::analyze_json)にある。
+  // ここで組み直すと、同じルールを提案API(Python)と工房(TS)で二重に持つことになり、
+  // 実際に提案側だけ判定式が古いまま取り残されて結論が食い違った。
+  const v = _pair(me, opp).verdict;
+  return { ...v, stub: false };
 }
 
 /** Verdict(judge1v1の返却値)からスコアを再算出する(judgeVsBuildsの集約専用)。 */
 function _scoreOfVerdict(v: Verdict): number {
-  return _scoreOf(v.myHits ?? OUT_OF_RANGE, v.oppHits ?? OUT_OF_RANGE, v.koFirst, v.even);
+  return v.score;
 }
 
 /**

@@ -176,14 +176,32 @@ export interface EngineSide {
   seq: string[];
 }
 
-/** 1v1 の両側について HP・実効素早さ・各技の与ダメと確定数を得る。 */
-export function analyze(specA: string, specB: string): { a: EngineSide; b: EngineSide } {
+/** エンジンが決める1v1の記号判定。刻み・先制技・手順・確定1の扱いを表示側に持たない。 */
+export interface EngineVerdict {
+  sym: "◎" | "○" | "△" | "▲" | "×";
+  win: boolean;
+  score: number;
+  myHits: number;
+  oppHits: number;
+  myS: number;
+  oppS: number;
+  fast: boolean;
+  koFirst: boolean;
+  koByPriority: boolean;
+  even: boolean;
+  myMove: string | null;
+  oppMove: string | null;
+  mySeq: string[];
+}
+
+/** 1v1 の両側について HP・実効素早さ・各技の与ダメと確定数、および記号判定を得る。 */
+export function analyze(specA: string, specB: string): { a: EngineSide; b: EngineSide; verdict: EngineVerdict } {
   const e = ex();
   try {
     if (e.analyze(...put(specA), ...put(specB), ...put(season)) !== 0) {
       throw new Error("analyze 失敗");
     }
-    return take() as { a: EngineSide; b: EngineSide };
+    return take() as { a: EngineSide; b: EngineSide; verdict: EngineVerdict };
   } finally {
     release();
   }

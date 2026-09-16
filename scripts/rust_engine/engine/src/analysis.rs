@@ -562,3 +562,152 @@ pub fn executed_damage(
     let def = bt.sides[1 - att].active();
     (d, def.is_alive, def.hp)
 }
+
+/// 1v1の全結果（各技の与ダメ・確定数・手順・記号判定）を JSON で返す。
+///
+/// 表示側は工房(wasm)・提案API(PyO3)・ポケモン情報ページ(ビルド時wasm)の3経路あるが、
+/// ルールも記号もここだけで決める。提案API側だけ判定式が古いまま取り残され、
+/// 同じ対面で工房と結論が食い違っていた（score の刻みが 0.5 と 1 で違う、
+/// 先制技での決着・手順・確定1の扱いが無い）。
+pub fn analyze_json(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_json::Value {
+    use serde_json::{json, Value};
+    let mut out = json!({});
+    // 場は対面ごとに1つ。並びは (a, b) に固定し、攻撃側だけを切り替える
+    // （攻撃側を常に先頭に置くと、両者が天候特性を持つ対面で天候が向きによって変わる）。
+    let (info_a, info_b) = side_info(pack, a, b, season);
+    let mut sides: Vec<SideVerdictInput> = Vec::new();
+    for (key, att, me) in [("a", 0usize, &info_a), ("b", 1usize, &info_b)] {
+        let mut moves = Vec::new();
+        let mut best: Option<(String, i64, i64, i64)> = None; // (技名, 確定数, 初撃, 優先度)
+        for (i, (name, is_dmg)) in me.moves.iter().enumerate() {
+            if !*is_dmg {
+                moves.push(json!({"n": name, "dmg": Value::Null}));
+                continue;
+            }
+            // 発数は実走（耐え効果・回復・天候が効く）、与ダメは技そのものの値。
+            // 与ダメに実走の1ターン目HP減少を使うと、ばけのかわの身代わり分や砂の削り・
+            // たべのこしの回復まで技のダメージとして表示されてしまう。
+            let (hits_lo, first_lo) = run_move(pack, a, b, season, att, i, 0.0);
+            let (hits_hi, _) = run_move(pack, a, b, season, att, i, 1.0);
+            // 連続技の回数は決定的に決める（2〜5回は期待値の3回、スキルリンクは5回、
+            // 1発ごとに命中判定がある技は必中前提で最大回数）。幅はダメージ乱数のぶんだけ。
+            let dmg_lo = move_damage(pack, a, b, season, att, i, 0.0);
+            let dmg_hi = move_damage(pack, a, b, season, att, i, 1.0);
+            // 場に出ているものではなく、この技の数値に実際に効いた条件だけを返す
+            let conds = relevant_conds(pack, a, b, season, att, i);
+            // 最大打点技は「発数が少ない順、同数なら初撃のHP減少が大きい順」。
+            let better = match &best {
+                None => true,
+                Some((_, bh, bf, _)) => hits_lo < *bh || (hits_lo == *bh && first_lo > *bf),
+            };
+            if better {
+                best = Some((name.clone(), hits_lo, first_lo, move_priority(pack, name)));
+            }
+            moves.push(json!({
+                "n": name, "dmgLo": dmg_lo, "dmgHi": dmg_hi,
+                "hitsLo": hits_lo, "hitsHi": hits_hi, "conds": conds,
+                // 最大打点技の選定（発数が同じときのタイブレーク）に使う値。
+                "firstLo": first_lo,
+            }));
+        }
+        // 手順考慮: 毎ターン最善手を選び直した場合の手数と並び（初手限定技・ふうせん等で
+        // 「同じ技を撃ち続ける」前提と食い違う対面のために出す）。
+        let (seq_hits, seq_idx) = run_best_sequence(pack, a, b, season, att, 0.0);
+        let seq_names: Vec<String> = seq_idx.iter()
+            .filter_map(|i| me.moves.get(*i).map(|(n, _)| n.clone()))
+            .collect();
+        out[key] = json!({"hp": me.hp, "speed": me.speed, "moves": moves,
+                          "seqHits": seq_hits, "seq": seq_names});
+        sides.push(SideVerdictInput {
+            speed: me.speed,
+            best_name: best.as_ref().map(|x| x.0.clone()),
+            best_hits: best.as_ref().map(|x| x.1).unwrap_or(OUT_OF_RANGE),
+            best_prio: best.as_ref().map(|x| x.3).unwrap_or(0),
+            seq_hits,
+            seq_names,
+        });
+    }
+    let v = verdict_of(pack, &sides[0], &sides[1]);
+    out["verdict"] = v;
+    out
+}
+
+struct SideVerdictInput {
+    speed: i64,
+    best_name: Option<String>,
+    best_hits: i64,
+    best_prio: i64,
+    seq_hits: i64,
+    seq_names: Vec<String>,
+}
+
+fn move_priority(pack: &Pack, name: &str) -> i64 {
+    pack.move_by_name.get(name).map(|i| pack.moves[*i].priority).unwrap_or(0)
+}
+
+/// 途中で技を切り替える手順。同じ技が並ぶだけ、または単発の最大打点より遠回りな
+/// 手順は情報にならない（判定の確定数とも食い違う）ので出さない。
+fn seq_for(side: &SideVerdictInput) -> Vec<String> {
+    let mut uniq: Vec<&String> = side.seq_names.iter().collect();
+    uniq.sort();
+    uniq.dedup();
+    if uniq.len() < 2 || side.seq_hits > side.best_hits {
+        return Vec::new();
+    }
+    side.seq_names.clone()
+}
+
+fn verdict_of(pack: &Pack, me: &SideVerdictInput, opp: &SideVerdictInput) -> serde_json::Value {
+    use serde_json::json;
+    let my_seq = seq_for(me);
+    let opp_seq = seq_for(opp);
+    let my_hits = me.best_hits.min(me.seq_hits);
+    let opp_hits = opp.best_hits.min(opp.seq_hits);
+    // 決着ターンに実際に撃つ技の優先度。手順が採用された場合はその最後の技。
+    let my_p = my_seq.last().map(|n| move_priority(pack, n)).unwrap_or(me.best_prio);
+    let opp_p = opp_seq.last().map(|n| move_priority(pack, n)).unwrap_or(opp.best_prio);
+    let fast = me.speed > opp.speed;
+    // 先後が効くのは確定数が同じときだけ。差が付いている対面で「先制技で先手」と
+    // 出すと、決着に関係ない情報が勝敗理由のように見える。
+    let ko_first = if my_hits == opp_hits && my_p != opp_p { my_p > opp_p } else { fast };
+    // 先後がランダムになるのは、素早さも決着ターンの優先度も同値のときだけ。
+    let even = me.speed == opp.speed && my_p == opp_p;
+    let score = score_of(my_hits, opp_hits, ko_first, even);
+    json!({
+        "sym": score_sym(score),
+        "win": my_hits < opp_hits || (my_hits == opp_hits && ko_first),
+        "score": score,
+        "myHits": my_hits, "oppHits": opp_hits,
+        "myS": me.speed, "oppS": opp.speed,
+        "fast": fast, "koFirst": ko_first, "koByPriority": ko_first != fast, "even": even,
+        "myMove": me.best_name, "oppMove": opp.best_name,
+        "mySeq": my_seq, "oppSeq": opp_seq,
+    })
+}
+
+/// 判定スコア = 確定数の差（相手の確定数 - 自分の確定数）。差がある時点で勝敗は
+/// 確定数だけで決着しているため素早さは無関係。確定数が同数の場合のみ先後が効く。
+pub fn score_of(my_hits: i64, opp_hits: i64, first: bool, even: bool) -> f64 {
+    let diff = (opp_hits - my_hits) as f64;
+    // 確定数が同じで先後もランダム（素早さ同値・優先度も同じ）なら真の五分。
+    if diff == 0.0 && even {
+        return 0.0;
+    }
+    let base = if diff != 0.0 { diff } else if first { 1.0 } else { -1.0 };
+    let win = diff > 0.0 || (diff == 0.0 && first);
+    // 確定1で決着する側は、確定数の差が1しかなくても一方的（負ける側は1体を確実に失う）。
+    if win && my_hits <= 1 {
+        return base.max(2.0);
+    }
+    if !win && opp_hits <= 1 {
+        return base.min(-2.0);
+    }
+    base
+}
+
+/// スコアから記号へ。刻みは整数1単位（0.5刻みだった頃は「確定2 vs 確定1・後手」の
+/// 明確な負けが△/▲の境界に乗り、判定文と記号が食い違っていた）。
+pub fn score_sym(score: f64) -> &'static str {
+    if score >= 2.0 { "◎" } else if score >= 1.0 { "○" }
+    else if score > -1.0 { "△" } else if score > -2.0 { "▲" } else { "×" }
+}
