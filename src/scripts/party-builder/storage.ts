@@ -1,5 +1,5 @@
 // localStorage CRUD + バージョニング。キー: pn-builder-v1
-import type { Party, Slot, StatArray, Store, TargetBuild, TargetGroup } from "./types";
+import type { Party, Slot, SlotScenario, StatArray, Store, TargetBuild, TargetGroup } from "./types";
 
 export const STORAGE_KEY = "pn-builder-v1";
 const SAVE_DEBOUNCE_MS = 300;
@@ -49,6 +49,21 @@ function toStrArray(x: any): string[] {
   return Array.isArray(x) ? x.filter((v): v is string => typeof v === "string") : [];
 }
 
+/** 仮想敵ごとの前提を矯正する。値は表示名の文字列と0〜6の整数だけで、
+ * エンジンに渡す前に照合されるので、ここでは型と範囲だけを揃える。 */
+function toScenarios(x: any): Record<string, SlotScenario> | undefined {
+  if (!x || typeof x !== "object") return undefined;
+  const out: Record<string, SlotScenario> = {};
+  for (const [k, v] of Object.entries(x as Record<string, any>)) {
+    if (!v || typeof v !== "object") continue;
+    let n = Number((v as any).n);
+    if (!Number.isFinite(n) || n < 0) n = 0;
+    const sc: SlotScenario = { w: toStr((v as any).w), t: toStr((v as any).t), n: Math.min(6, Math.round(n)) };
+    if (sc.w || sc.t || sc.n) out[k] = sc;
+  }
+  return Object.keys(out).length ? out : undefined;
+}
+
 /** localStorage(改竄可能)由来のSlotを深く検証・矯正する。sp が空/非文字列なら復元不能として null(=空枠)にする。 */
 function sanitizeSlot(x: any): Slot | null {
   if (!x || typeof x !== "object") return null;
@@ -62,6 +77,7 @@ function sanitizeSlot(x: any): Slot | null {
     evs: toNumArray6(x.evs, 0, 32) as StatArray,
     moves: toStrArray(x.moves),
     targets: toStrArray(x.targets),
+    scenarios: toScenarios(x.scenarios),
   };
 }
 

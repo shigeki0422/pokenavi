@@ -16,6 +16,9 @@ type Exports = {
   ko_prob(ap: number, an: number, bp: number, bn: number, sp: number, sn: number,
           att: number, mi: number, hits: number): number;
   name_aliases(): number;
+  set_scenario(w: number, t: number, n: number): number;
+  setup_move_names(): number;
+  type_dynamic(): number;
   dealloc(p: number, n: number): void;
   result_ptr(): number;
   result_len(): number;
@@ -76,6 +79,51 @@ export async function initEngine(wasmUrl: string, packUrl: string, s = "M-3"): P
     fetch(packUrl).then((r) => r.text()),
   ]);
   await initEngineFrom(bytes, pack, s);
+}
+
+/** 1v1判定を「この状況なら」に切り替える指定。既定(すべて0/未指定)は特性由来の天候のまま・積みなし。 */
+export interface Scenario {
+  /** 天候。未指定は特性任せ。 */
+  weather?: "晴れ" | "雨" | "すなあらし" | "あられ" | null;
+  /** フィールド。未指定は無し。 */
+  terrain?: "エレキフィールド" | "グラスフィールド" | "サイコフィールド" | "ミストフィールド" | null;
+  /** 自分側(specA)が積み技を使った回数。 */
+  boost?: number;
+}
+
+const WEATHER_CODE: Record<string, number> = { "晴れ": 1, "雨": 2, "すなあらし": 3, "あられ": 4 };
+const TERRAIN_CODE: Record<string, number> = {
+  "エレキフィールド": 1, "グラスフィールド": 2, "サイコフィールド": 3, "ミストフィールド": 4,
+};
+
+let scenarioKeyStr = "";
+
+/** 以降の analyze/koProb に効く前提を差し替える。エンジン側が状態を持つので、
+ * 呼び出し側は「設定 → 計算 → 戻す」の順で使うこと。 */
+export function setScenario(s: Scenario | null): void {
+  const w = s?.weather ? (WEATHER_CODE[s.weather] ?? 0) : 0;
+  const t = s?.terrain ? (TERRAIN_CODE[s.terrain] ?? 0) : 0;
+  const n = Math.max(0, Math.min(6, Math.round(s?.boost ?? 0)));
+  scenarioKeyStr = w || t || n ? `${w}.${t}.${n}` : "";
+  ex().set_scenario(w, t, n);
+}
+
+/** 現在の前提を表す短い文字列。計算結果を使い回す側のキーに混ぜる。 */
+export function scenarioKey(): string {
+  return scenarioKeyStr;
+}
+
+/** 積み技(自分の能力を上げる変化技)の名前一覧。判定に使う表そのものを返す。 */
+export function setupMoveNames(): string[] {
+  ex().setup_move_names();
+  return take() as string[];
+}
+
+/** 型だけでは無効(0倍)を判定できない技・特性。判定に使う条件そのものを返すので、
+ * 表示側の事前除外がエンジンの挙動と食い違わない。 */
+export function typeDynamic(): { moves: string[]; abilities: string[] } {
+  ex().type_dynamic();
+  return take() as { moves: string[]; abilities: string[] };
 }
 
 /** 初期化済みか。静的ビルドと実行時で分岐する呼び出し側の判定用。 */

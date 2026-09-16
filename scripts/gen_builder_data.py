@@ -430,9 +430,16 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
     joint = _joint_of(con, name)
 
     cands = []
+    limits = {}
     for item, ipct in cand_items:
         usable = [a for a in main_axes if _item_ok(item, a[1])]
         g = joint.get(item)
+        # 攻撃軸違いの2型を作ってよいのは、実構築でその持ち物が両軸に付いていると
+        # 分かる場合だけ。裏付けが無い持ち物に2枠取らせると、周辺分布の掛け合わせで
+        # 作った型が、実構築の多い持ち物を候補から押し出す
+        # （ギャラドス: 実構築0件のゴツゴツメットが物理・耐久の2型を占め、
+        #   実構築43件のギャラドスナイトが3型に入らなかった）。
+        limits[item] = MAX_PER_ITEM if (g and g["n"] >= MIN_JOINT_N) else 1
         if g and g["n"] >= MIN_JOINT_N:
             # 実構築でこの持ち物に付いた攻撃軸だけに絞る（周辺分布の掛け合わせによる偽の型を排除）
             obs = [a for a in usable if a[0] in g["axes"]]
@@ -446,9 +453,11 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
                     usable = obs
         if not usable:
             usable = main_axes[:1]           # 制約に合う軸が無くても持ち物自体は落とさない
-        for ax, ev, share in usable[:MAX_PER_ITEM]:
+        for i, (ax, ev, share) in enumerate(usable[:MAX_PER_ITEM]):
+            # extra=True は「裏付けが無いのに同じ持ち物から作った2型目」。
+            # 他に候補が無いときだけ使う（型が1つしか出せない種を減らさないため）。
             cands.append({"item": item, "ipct": ipct, "ev": ev, "share": share,
-                          "axis": ax, "score": ipct * share})
+                          "axis": ax, "score": ipct * share, "extra": i >= limits[item]})
     cands.sort(key=lambda c: -c["score"])
 
     # 攻撃軸のシェアは「使用者全体のうち何%がその軸か」なので、型を1つ採るたびに
@@ -462,9 +471,10 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
     seen = set()
     used_natures = set()
     while len(out) < max_variants:
-        avail = [c for c in cands
-                 if per_item.get(c["item"], 0) < MAX_PER_ITEM
-                 and (c["item"], tuple(c["ev"])) not in seen]
+        usable_now = [c for c in cands
+                      if per_item.get(c["item"], 0) < MAX_PER_ITEM
+                      and (c["item"], tuple(c["ev"])) not in seen]
+        avail = [c for c in usable_now if not c["extra"]] or usable_now
         if not avail:
             break
         c = max(avail, key=lambda c: c["ipct"] * max(axis_left.get(c["axis"], 0.0), 0.0))

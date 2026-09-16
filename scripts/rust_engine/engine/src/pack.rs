@@ -24,6 +24,18 @@ impl Cat {
     }
 }
 
+/// 1v1判定を「この状況なら」に切り替えるための指定。
+/// weather/terrain は 0=指定なし。boost は側0(自分)が積み技を使った回数。
+#[derive(Clone, Copy, Default, PartialEq)]
+pub struct Scenario {
+    /// 0=指定なし, 1=晴れ, 2=雨, 3=すなあらし, 4=あられ
+    pub weather: u8,
+    /// 0=指定なし, 1=エレキ, 2=グラス, 3=サイコ, 4=ミスト
+    pub terrain: u8,
+    /// 側0(自分)が積み技を使った回数
+    pub boost: i32,
+}
+
 #[derive(Clone, Debug)]
 pub struct MoveDef {
     pub name: Sym,
@@ -170,6 +182,9 @@ pub struct Pack {
     pub net: Option<crate::net::NetW>,
     /// ダンプ時点の simulator/** ダイジェスト（ケースの刻印照合用。casehdr参照）
     pub sim_hash: String,
+    /// 仮想敵カードの「この前提で見る」指定。setup() の最後で場と能力変化に反映する。
+    /// 既定(すべて0)なら何もしないので、指定しない呼び出し側の挙動は変わらない。
+    pub scenario: Scenario,
     /// 直前に組み立てた1v1の両者（analysis::setup 用の1件キャッシュ）。
     /// 同じ対面で技ごとに build_poke をやり直すと spec のパースが支配的になるため
     /// （1対面で約70回・マトリクス全体で約28,000回）、組み立て済みを複製して使う。
@@ -503,6 +518,7 @@ impl Pack {
         move_flags.resize(intern.len(), MoveFlags::default());
 
         Pack {
+            scenario: Scenario::default(),
             prepared: None,
             env_blade_forme: std::env::var("AI_BLADE_FORME").as_deref() != Ok("0"),
             env_multi_hit: std::env::var("AI_MULTI_HIT").as_deref() != Ok("0"),

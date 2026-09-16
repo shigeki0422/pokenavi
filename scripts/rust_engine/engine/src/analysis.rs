@@ -138,7 +138,54 @@ fn setup(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, roll: f64) -
         entry_effects(p, &mut s1, 0, &mut field, &mut s2.party[0]);
         entry_effects(p, &mut s2, 1, &mut field, &mut s1.party[0]);
     }
-    Battle::new(s1, s2, field)
+    let mut bt = Battle::new(s1, s2, field);
+    apply_scenario(pack, &mut bt);
+    bt
+}
+
+/// 「この状況なら」の指定を場と能力変化に反映する。
+///
+/// 天候・フィールドは特性由来のもの（すなおこし等）を上書きする。ユーザーが
+/// 明示した前提のほうが優先されるべきで、残りターン数は判定の上限(CAP)より
+/// 長く取って対面中は切れない扱いにする。
+fn apply_scenario(pack: &mut Pack, bt: &mut Battle) {
+    let sc = pack.scenario;
+    if sc == crate::pack::Scenario::default() {
+        return;
+    }
+    let we = &pack.sy.we;
+    let w = match sc.weather {
+        1 => Some(we.sunny), 2 => Some(we.rain), 3 => Some(we.sandstorm), 4 => Some(we.hail),
+        _ => None,
+    };
+    if let Some(w) = w {
+        bt.field.weather = Some(w);
+        bt.field.weather_count = 99;
+    }
+    if sc.terrain != 0 {
+        bt.field.electric_terrain = sc.terrain == 1;
+        bt.field.grassy_terrain = sc.terrain == 2;
+        bt.field.psychic_terrain = sc.terrain == 3;
+        bt.field.misty_terrain = sc.terrain == 4;
+        bt.field.electric_terrain_count = if sc.terrain == 1 { 99 } else { 0 };
+        bt.field.grassy_terrain_count = if sc.terrain == 2 { 99 } else { 0 };
+        bt.field.psychic_terrain_count = if sc.terrain == 3 { 99 } else { 0 };
+        bt.field.misty_terrain_count = if sc.terrain == 4 { 99 } else { 0 };
+    }
+    if sc.boost > 0 {
+        // 積む技が複数あることは稀なので、技欄の先頭にある積み技を使う。
+        let packr: &Pack = pack;
+        let p = &mut bt.sides[0].party[0];
+        let boosts = p.moves.iter()
+            .find_map(|m| crate::battle::self_boosts(packr, m.name)
+                .filter(|v| v.iter().any(|(_, d)| *d > 0)));
+        if let Some(v) = boosts {
+            for (k, d) in v {
+                let next = (p.stage(k) + d * sc.boost).clamp(-6, 6);
+                p.set_stage(k, next);
+            }
+        }
+    }
 }
 
 /// `att` 側が同じ技を撃ち続け、もう一方は行動しない。`_mu_engine._run_inner` と同じ手順。

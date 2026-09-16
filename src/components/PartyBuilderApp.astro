@@ -479,6 +479,13 @@ const I18N = I18N_ALL[lang];
   .pb-ev-row{display:grid;grid-template-columns:26px 40px 1fr 40px 56px 48px;align-items:center;gap:.4em;margin-bottom:.3em}
   .pb-ev-step{width:40px;height:40px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#f8fafc;color:rgb(var(--gray-dark));font-size:1.05rem;font-weight:800;cursor:pointer;font-family:var(--font-atkinson);padding:0}
   .pb-ev-step:disabled{opacity:.4;cursor:default}
+  /* 仮想敵ごとの前提(天候・フィールド・積み)。既定のときは目立たせない */
+  .pb-sc-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:.5em 0;padding:8px 10px;border:1px solid rgb(var(--gray-light));border-radius:10px;background:#f8fafc;font-size:.86rem}
+  .pb-sc-row.pb-sc-on{background:#eef2ff;border-color:var(--accent)}
+  .pb-sc-hd{font-weight:800;color:rgb(var(--gray-dark))}
+  .pb-sc-f{display:flex;align-items:center;gap:4px;color:rgb(var(--gray-dark))}
+  .pb-sc-sel{min-height:36px;padding:4px 6px;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#fff;font-family:var(--font-atkinson);font-size:.86rem;max-width:11em}
+  @media(max-width:640px){.pb-sc-row{gap:6px;padding:7px 8px}.pb-sc-sel{max-width:8.5em}}
   @media(hover:hover){.pb-ev-step:not(:disabled):hover{background:#eef2ff;border-color:var(--accent)}}
   .pb-ev-lbl{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;color:#fff;font-weight:800;font-size:.72rem}
   /* スマホでスクロール中にEVバーへ指が触れると値が飛ぶ。pan-y で縦のパンはページに渡し、
@@ -671,6 +678,7 @@ const I18N = I18N_ALL[lang];
   import { TYPES } from '../scripts/party-builder/typechart';
   import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx, coverageSet, exposedOnRemoval, holesAfterSwap } from '../scripts/party-builder/balance';
   import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct, pairHitDetails, pairCacheStats } from '../scripts/party-builder/matchup';
+  import { setScenario, setupMoveNames } from '../scripts/engine/wasm';
   import { initEngine } from '../scripts/engine/wasm';
   import { suggestFill, tuneForTargets } from '../scripts/party-builder/suggest';
   import { validateParty } from '../scripts/party-builder/validate';
@@ -723,6 +731,13 @@ const I18N = I18N_ALL[lang];
       seqLbl: (seq, n) => `最短手順: ${seq}（${n}発）`,
       noEffectiveMove: '有効打なし(変化技・無効のみ)', noMovesSet: '技が未設定です',
       hitsSelfOpp: (my, opp) => `自分${my}/相手${opp}`, hitsFmt: n => `確${n}`,
+      scHd: 'この状況で見る',
+      scWeather: '天候', scTerrain: 'フィールド', scBoost: '積み',
+      scNone: 'なし', scAuto: '特性任せ',
+      scBoostNoMove: '積み技なし',
+      scReset: '既定に戻す',
+      scOn: (parts) => `前提: ${parts}`,
+      scBoostTimes: (n) => `${n}回`,
       randHitsFmt: (n, p) => `乱数${n}発(${p}%)`, muBadgeTitle: 'この仮想敵に対する最悪の型判定',
       selfHitsFmt: n => `自分確${n}`, oppHitsFmt: n => `相手確${n}`,
       popHitsLbl: t => `確定数: ${t}`, popDmgLbl: t => `与ダメ: ${t}`,
@@ -815,6 +830,13 @@ const I18N = I18N_ALL[lang];
       takenDmgLbl: (name, range) => `Damage taken: ${name} ${range}`,
       noEffectiveMove: 'No effective move (status moves/immune only)', noMovesSet: 'No moves set',
       hitsSelfOpp: (my, opp) => `You ${my} / Opponent ${opp}`, hitsFmt: n => `${n}HKO`,
+      scHd: 'Assume this situation',
+      scWeather: 'Weather', scTerrain: 'Terrain', scBoost: 'Boosts',
+      scNone: 'None', scAuto: 'From abilities',
+      scBoostNoMove: 'No setup move',
+      scReset: 'Reset',
+      scOn: (parts) => `Assumed: ${parts}`,
+      scBoostTimes: (n) => `x${n}`,
       randHitsFmt: (n, p) => `${n}HKO by random rolls (${p}%)`, muBadgeTitle: 'Worst-case verdict against this virtual opponent',
       selfHitsFmt: n => `You: ${n}HKO`, oppHitsFmt: n => `Opponent: ${n}HKO`,
       popHitsLbl: t => `KO count: ${t}`, popDmgLbl: t => `Damage dealt: ${t}`,
@@ -908,6 +930,13 @@ const I18N = I18N_ALL[lang];
       takenDmgLbl: (name, range) => `받는 대미지: ${name} ${range}`,
       noEffectiveMove: '유효타 없음(변화기・무효만 있음)', noMovesSet: '기술이 설정되지 않았습니다',
       hitsSelfOpp: (my, opp) => `나 ${my}／상대 ${opp}`, hitsFmt: n => `확정${n}`,
+      scHd: '이 상황으로 보기',
+      scWeather: '날씨', scTerrain: '필드', scBoost: '랭크업',
+      scNone: '없음', scAuto: '특성에 맡김',
+      scBoostNoMove: '랭크업 기술 없음',
+      scReset: '기본값으로',
+      scOn: (parts) => `전제: ${parts}`,
+      scBoostTimes: (n) => `${n}회`,
       randHitsFmt: (n, p) => `난수 ${n}발(${p}%)`, muBadgeTitle: '이 가상의 적에 대한 최악의 빌드 판정',
       selfHitsFmt: n => `나 확정${n}`, oppHitsFmt: n => `상대 확정${n}`,
       popHitsLbl: t => `확정타: ${t}`, popDmgLbl: t => `주는 대미지: ${t}`,
@@ -1359,6 +1388,7 @@ const I18N = I18N_ALL[lang];
       </div>
       <div class="pb-sheet-body" id="pb-sheet-body">
         <div class="filter-chips">${sheetCtx.chips}</div>
+        ${sheetCtx.scenarioHtml}
         ${sheetCtx.cardsBlockHtml}
         ${sheetCtx.addResetRow}
       </div>`;
@@ -2211,6 +2241,75 @@ const I18N = I18N_ALL[lang];
     renderBalance();
   }
 
+  const WEATHER_OPTS = ['晴れ', '雨', 'すなあらし', 'あられ'];
+  const TERRAIN_OPTS = ['エレキフィールド', 'グラスフィールド', 'サイコフィールド', 'ミストフィールド'];
+  let setupMoveSet = null;
+  /** 積み技(自分の能力を上げる変化技)の一覧。判定に使う表をエンジンから取るので、
+   * 「積み回数を出したのに計算が動かない」技が混ざらない。 */
+  function setupMoves() {
+    if (!setupMoveSet) {
+      try { setupMoveSet = new Set(setupMoveNames()); } catch (e) { setupMoveSet = new Set(); }
+    }
+    return setupMoveSet;
+  }
+  /** この枠の技欄にある積み技(先頭の1つ)。エンジンが積みに使う技と同じ選び方。 */
+  function slotSetupMove(slot) {
+    const set = setupMoves();
+    return (slot.moves || []).find((m) => m && set.has(m)) || null;
+  }
+  function scenarioOf(slot, label) {
+    const sc = slot && slot.scenarios ? slot.scenarios[label] : null;
+    return { w: (sc && sc.w) || '', t: (sc && sc.t) || '', n: (sc && sc.n) || 0 };
+  }
+  function scenarioIsDefault(sc) {
+    return !sc.w && !sc.t && !sc.n;
+  }
+  /** エンジンへ渡す形。ラベル文字列はエンジン側の対応表と同じものだけ通す。 */
+  function applyScenario(sc) {
+    setScenario(scenarioIsDefault(sc) ? null : { weather: sc.w || null, terrain: sc.t || null, boost: sc.n });
+  }
+  function saveScenario(slot, label, patch) {
+    const cur = scenarioOf(slot, label);
+    const next = { ...cur, ...patch };
+    if (!slot.scenarios) slot.scenarios = {};
+    if (scenarioIsDefault(next)) delete slot.scenarios[label];
+    else slot.scenarios[label] = next;
+    if (!Object.keys(slot.scenarios).length) delete slot.scenarios;
+    const p = activeParty();
+    if (p) p.updatedAt = Date.now();
+    saveStore(store);
+    tuneResults = null;
+    renderTargetsPanel();
+  }
+  /** 仮想敵ごとの前提(天候・フィールド・積み)の操作列。 */
+  function scenarioRowHtml(slot, label) {
+    const sc = scenarioOf(slot, label);
+    const mv = slotSetupMove(slot);
+    const opt = (v, cur, txt) => `<option value="${esc(v)}"${v === cur ? ' selected' : ''}>${esc(txt)}</option>`;
+    const wSel = `<label class="pb-sc-f">${esc(I18N.scWeather)}
+        <select class="pb-sc-sel" id="pb-sc-w">${opt('', sc.w, I18N.scAuto)}${WEATHER_OPTS.map((o) => opt(o, sc.w, o)).join('')}</select></label>`;
+    const tSel = `<label class="pb-sc-f">${esc(I18N.scTerrain)}
+        <select class="pb-sc-sel" id="pb-sc-t">${opt('', sc.t, I18N.scNone)}${TERRAIN_OPTS.map((o) => opt(o, sc.t, o)).join('')}</select></label>`;
+    const nSel = mv
+      ? `<label class="pb-sc-f">${esc(I18N.scBoost)}
+          <select class="pb-sc-sel" id="pb-sc-n">${[0, 1, 2, 3, 4, 5, 6].map((n) => opt(String(n), String(sc.n), n === 0 ? I18N.scNone : `${tMove(mv)} ${I18N.scBoostTimes(n)}`)).join('')}</select></label>`
+      : `<span class="pb-sc-f muted">${esc(I18N.scBoost)} ${esc(I18N.scBoostNoMove)}</span>`;
+    const reset = scenarioIsDefault(sc) ? '' : `<button type="button" class="pb-btn-sub" id="pb-sc-reset">${esc(I18N.scReset)}</button>`;
+    return `<div class="pb-sc-row${scenarioIsDefault(sc) ? '' : ' pb-sc-on'}">
+        <span class="pb-sc-hd">${esc(I18N.scHd)}</span>${wSel}${tSel}${nSel}${reset}
+      </div>`;
+  }
+  function bindScenarioRow(el, slot, label) {
+    const w = el.querySelector('#pb-sc-w');
+    if (w) w.addEventListener('change', () => saveScenario(slot, label, { w: w.value }));
+    const t = el.querySelector('#pb-sc-t');
+    if (t) t.addEventListener('change', () => saveScenario(slot, label, { t: t.value }));
+    const n = el.querySelector('#pb-sc-n');
+    if (n) n.addEventListener('change', () => saveScenario(slot, label, { n: Number(n.value) || 0 }));
+    const r = el.querySelector('#pb-sc-reset');
+    if (r) r.addEventListener('click', () => saveScenario(slot, label, { w: '', t: '', n: 0 }));
+  }
+
   function renderTargetsPanel() {
     const el = document.getElementById('pb-targets');
     const p = activeParty();
@@ -2240,6 +2339,11 @@ const I18N = I18N_ALL[lang];
     const canDelete = !!(activeGrp && activeGrp.builds.length > 1);
     const isCustomized = !!(activeGrp && store.customTargets && store.customTargets[activeGrp.label] && store.customTargets[activeGrp.label].length);
     const rows = [];
+    // 仮想敵ごとの前提(天候・フィールド・積み)はこのカードの計算にだけ効かせる。
+    // 戻し忘れるとパーティバランス側まで同じ前提で計算されてしまう。
+    const scenario = activeGrp ? scenarioOf(slot, activeGrp.label) : null;
+    if (activeGrp) applyScenario(scenario);
+    try {
     if (activeGrp) {
       activeGrp.builds.forEach((b, bi) => {
         const opp = resolveTargetSafe(activeGrp.sp, activeGrp.label, activeGrp.icon, b, core.moves);
@@ -2261,6 +2365,9 @@ const I18N = I18N_ALL[lang];
           : null;
         rows.push({ grp: activeGrp, b, bi, opp, mySpeed, oppSpeed, speedTag, verdict, myHitsTxt, oppHitsTxt, mb, oppDmg });
       });
+    }
+    } finally {
+      if (activeGrp) setScenario(null);
     }
 
     mbPopData = [];
@@ -2310,6 +2417,7 @@ const I18N = I18N_ALL[lang];
           ${isCustomized ? `<button class="pb-btn-sub" id="pb-mu-reset-default">${esc(I18N.muResetDefaultBtn)}</button>` : ''}
         </div>`
       : '';
+    const scenarioHtml = activeGrp ? scenarioRowHtml(slot, activeGrp.label) : '';
     // モバイルのボトムシート(renderMiniBar)にもそのまま渡す共通ブロック(型カード一覧+空メッセージ)。
     const cardsBlockHtml = rows.length || editingThis
       ? `<div class="pb-mu-list">${cardsHtml}</div>`
@@ -2322,6 +2430,7 @@ const I18N = I18N_ALL[lang];
         <input type="text" id="pb-target-search" class="filter-inp" placeholder="${esc(I18N.targetSearchPlaceholder)}" autocomplete="off">
         <div class="filter-sug" id="pb-target-sug" style="display:none"></div>
       </div>
+      ${scenarioHtml}
       ${cardsBlockHtml}
       ${addResetRow}
       <div class="row" style="margin-top:.7em">
@@ -2336,6 +2445,7 @@ const I18N = I18N_ALL[lang];
      * root.querySelector(...)で探すため、同じidを持つ2つのDOM(パネル/シート)が同時に存在していても
      * 互いのイベントを誤って拾わない。 */
     function bindMuSection(root) {
+      if (activeGrp) bindScenarioRow(root, slot, activeGrp.label);
       root.querySelectorAll('[data-mb-pop]').forEach((btn) => btn.addEventListener('click', () => {
         const d = mbPopData[+btn.dataset.mbPop];
         if (!d) return;
@@ -2406,7 +2516,7 @@ const I18N = I18N_ALL[lang];
     }
 
     bindMuSection(el);
-    renderMiniBar(activeGrp, rows, { chips, cardsBlockHtml, addResetRow, bindMuSection });
+    renderMiniBar(activeGrp, rows, { chips, cardsBlockHtml, addResetRow, bindMuSection, scenarioHtml });
 
     const searchInput = el.querySelector('#pb-target-search');
     searchInput.addEventListener('input', (e) => onTargetSearchInput(e.target.value));
@@ -2463,16 +2573,19 @@ const I18N = I18N_ALL[lang];
     const rb = resolveSlotSafe(slot);
     if (!rb) return;
     const oppResolved = [];
+    // 逆算も仮想敵ごとの前提(天候・フィールド・積み)で行う。型ごとに1件ずつ並ぶので、
+    // 前提も同じ並びで渡す(ラベルはメガ型で別名になるため、添字で対応付ける)。
+    const oppScenarios = [];
     const targetsList = effectiveTargets();
     slot.targets.forEach((label) => {
       const grp = targetsList.find((g) => g.label === label);
       if (!grp) return;
       grp.builds.forEach((b) => {
         const resolved = resolveTargetSafe(grp.sp, grp.label, grp.icon, b, core.moves);
-        if (resolved) oppResolved.push(resolved);
+        if (resolved) { oppResolved.push(resolved); oppScenarios.push(scenarioOf(slot, label)); }
       });
     });
-    tuneResults = tuneForTargets(slot, rb, oppResolved);
+    tuneResults = tuneForTargets(slot, rb, oppResolved, oppScenarios);
     renderTuneOut();
   }
   const TUNE_KIND_LABEL = { speed: I18N.tuneKindSpeed, ko: I18N.tuneKindKo, survive: I18N.tuneKindSurvive };
@@ -2481,6 +2594,7 @@ const I18N = I18N_ALL[lang];
     const out = document.getElementById('pb-tune-out');
     if (!out) return;
     if (!tuneResults || !tuneResults.length) { out.innerHTML = ''; return; }
+
     let lastKind = null;
     out.innerHTML = tuneResults.map((t, i) => {
       const headHtml = t.kind !== lastKind

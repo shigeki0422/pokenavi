@@ -6,6 +6,16 @@ export type StatArray = [number, number, number, number, number, number];
 
 // ---- localStorage 永続データ (storage.ts) ----
 
+/** 仮想敵ごとの「この状況なら」の前提。未設定のキーは既定(特性任せ・積みなし)。 */
+export interface SlotScenario {
+  /** 天候(表示名)。空文字・未設定は指定なし。 */
+  w?: string;
+  /** フィールド(表示名)。空文字・未設定は無し。 */
+  t?: string;
+  /** 自分側の積み回数(0〜6)。 */
+  n?: number;
+}
+
 export interface Slot {
   sp: string;
   item: string;
@@ -14,6 +24,9 @@ export interface Slot {
   evs: StatArray; // 0-32
   moves: string[];
   targets: string[]; // 仮想敵ラベル(targets.jsonのlabel)、ポケモン毎に保存
+  /** 仮想敵ラベル -> 前提。相手ごとに「砂・1積み」等を残せるようにするため仮想敵単位で持つ。
+   * 既存Slotに対する後方互換の追加フィールド(無ければ既定の前提)。 */
+  scenarios?: Record<string, SlotScenario>;
 }
 
 export interface Party {

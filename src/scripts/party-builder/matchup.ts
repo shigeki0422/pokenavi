@@ -7,7 +7,7 @@
 // 半減きのみの消費・ロール引数の取り違えが順に表面化した）。ルールを一箇所に集約するため、
 // 判定本体は engine/wasm.ts 経由でエンジンを実走させる。
 import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./types";
-import { analyze, buildToSpec, koProb, type EngineMove } from "../engine/wasm";
+import { analyze, buildToSpec, koProb, scenarioKey, typeDynamic, type EngineMove } from "../engine/wasm";
 import { eff } from "./typechart";
 
 /**
@@ -71,15 +71,25 @@ function _conds(m: EngineMove): string | null {
  * 技は採用率TOP10プールをそのまま渡す。spec の技欄は4本に切り詰められない
  * （simulator/pokemon.py の override_moves と同じ）ので1回で全技を評価できる。
  */
-/** 技のタイプを書き換える/無効を貫く特性。持っていると型だけでは無効を判定できない。 */
-const TYPE_BENDING_ABILITIES = new Set([
-  "スカイスキン", "フェアリースキン", "フリーズスキン", "エレキスキン", "ノーマルスキン", "きもったま",
-]);
+/** 事前除外から外す技・特性。本体はエンジンが返す表で、ここに直書きしているのは
+ * 「エンジン側ではタイプ固定だが、持ち物や形態でタイプが変わりうる」技だけ。
+ * 手で並べた表だけにしていたとき だいちのはどう・レイジングブル・うるおいボイスが
+ * 抜けていて、サイコフィールドのだいちのはどうが計算前に落ちていた。 */
+const EXTRA_TYPE_VARIABLE_MOVES = [
+  "めざめるダンス", "さばきのつぶて", "テクノバスター", "マルチアタック", "オーラぐるま",
+];
 
-/** 使う状況でタイプが変わる技。マスタ上のタイプでは無効を判定できない。 */
-const TYPE_VARIABLE_MOVES = new Set([
-  "ウェザーボール", "めざめるダンス", "さばきのつぶて", "テクノバスター", "マルチアタック", "オーラぐるま",
-]);
+let typeDyn: { moves: Set<string>; abilities: Set<string> } | null = null;
+function typeDynSets(): { moves: Set<string>; abilities: Set<string> } {
+  if (!typeDyn) {
+    const t = typeDynamic();
+    typeDyn = {
+      moves: new Set([...t.moves, ...EXTRA_TYPE_VARIABLE_MOVES]),
+      abilities: new Set(t.abilities),
+    };
+  }
+  return typeDyn;
+}
 
 /**
  * タイプ相性で0倍になる攻撃技をエンジンに渡す前に落とす。
@@ -91,10 +101,11 @@ const TYPE_VARIABLE_MOVES = new Set([
  */
 function _poolEntries(attacker: ResolvedBuild, defender: ResolvedBuild) {
   const src = (attacker.pool && attacker.pool.length ? attacker.pool : attacker.moves) ?? [];
-  const bend = TYPE_BENDING_ABILITIES.has(attacker.ability);
+  const dyn = typeDynSets();
+  const bend = dyn.abilities.has(attacker.ability);
   return src.map((m) => ({
     m,
-    pruned: !bend && !TYPE_VARIABLE_MOVES.has(m.n)
+    pruned: !bend && !dyn.moves.has(m.n)
       && m.cat !== "status" && typeof m.power === "number" && (m.power as number) > 0
       && eff(m.type, defender.t1, defender.t2) === 0,
   }));
@@ -128,7 +139,8 @@ function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
   const entB = _poolEntries(opp, me);
   const specA = buildToSpec({ ...me, moves: entA.filter((e) => !e.pruned).map((e) => e.m) });
   const specB = buildToSpec({ ...opp, moves: entB.filter((e) => !e.pruned).map((e) => e.m) });
-  const key = `${specA}\u0001${specB}`;
+  // 前提(天候・フィールド・積み)が違えば別の計算なのでキーに混ぜる
+  const key = `${scenarioKey()}\u0001${specA}\u0001${specB}`;
   const hit = _pairCache.get(key);
   if (hit) {
     // 参照し直したものを末尾に送る(溢れたときに古いものから落とすため)

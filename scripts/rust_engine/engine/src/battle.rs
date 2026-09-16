@@ -2200,7 +2200,7 @@ fn opponent_debuffs(pack: &Pack, n: u16) -> Option<(Vec<Deb>,)> {
 }
 
 /// SELF_BOOSTS
-fn self_boosts(pack: &Pack, n: u16) -> Option<Vec<(u8, i32)>> {
+pub fn self_boosts(pack: &Pack, n: u16) -> Option<Vec<(u8, i32)>> {
     let l = &pack.sy.l;
     let v = if n == l.つるぎのまい {
         vec![(0u8, 2i32)]

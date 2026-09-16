@@ -2,11 +2,12 @@
 // suggestFill は product3_server.py の POST /complete {specs,fill,top} に接続し、
 // 接続不可・タイムアウト・パース失敗時のみ擬似遅延スタブにフォールバックする。
 // tuneForTargetsの素早さ逆算のみ現時点で本物（変更なし）。
-import type { MonDetail, Party, ResolvedBuild, Slot, SpeciesMaster, StatArray, TuneSuggestion } from "./types";
+import type { MonDetail, Party, ResolvedBuild, Slot, SlotScenario, SpeciesMaster, StatArray, TuneSuggestion } from "./types";
 import { fromSpec, toSpec } from "./spec";
 import { speciesByName } from "./data";
-import { EV_STAT_MAX, EV_TOTAL_MAX, calcStat, effectiveSpeed, natureMod, realStats } from "./stats";
+import { EV_STAT_MAX, EV_TOTAL_MAX, realStats } from "./stats";
 import { judge1v1 } from "./matchup";
+import { setScenario } from "../engine/wasm";
 
 export interface SuggestDeps {
   species: SpeciesMaster[];
@@ -147,17 +148,7 @@ const SPEED_NATURES = ["おくびょう", "ようき"];
  * 注(UI連携): これには data.ts の loadCore() で species キャッシュが populate 済みであることが前提。
  * ページ初期化で loadCore() を待ってから呼ぶこと。
  */
-function baseSpeedOf(slot: Slot, resolved: ResolvedBuild): number | null {
-  const sm = speciesByName(slot.sp);
-  if (!sm) return null;
-  if (resolved.mega) {
-    const mega = sm.mega.find((m) => m.stone === slot.item);
-    return mega ? mega.bs[5] : sm.bs[5];
-  }
-  return sm.bs[5];
-}
-
-/** slot/resolvedの元になった種族マスタから種族値6つ(メガ解決込み)を取得する。baseSpeedOfの汎化版。 */
+/** slot/resolvedの元になった種族マスタから種族値6つ(メガ解決込み)を取得する。 */
 function baseStatsOf(slot: Slot, resolved: ResolvedBuild): StatArray | null {
   const sm = speciesByName(slot.sp);
   if (!sm) return null;
@@ -168,10 +159,29 @@ function baseStatsOf(slot: Slot, resolved: ResolvedBuild): StatArray | null {
   return sm.bs;
 }
 
-function minEvForThreshold(baseSpeed: number, nature: string, threshold: number): number | null {
+/** 仮想敵ごとの前提をエンジンに反映する。判定側と同じ扱いにするため、
+ * 空の指定は「既定」に戻す。 */
+function useScenario(sc: SlotScenario | null | undefined): void {
+  const on = !!(sc && (sc.w || sc.t || sc.n));
+  setScenario(on ? { weather: (sc!.w as never) || null, terrain: (sc!.t as never) || null, boost: sc!.n ?? 0 } : null);
+}
+
+/**
+ * 素早さ実数値が threshold 以上になる最小のS努力値。
+ *
+ * 実数値ではなく判定と同じ実効素早さ（こだわりスカーフ・すなかき等の特性・積み込み）で
+ * 比べる。種族値から計算していた頃は、自分がスカーフを持っていてもその分を見ずに
+ * 過剰にSを振る提案が出ていた。ref は閾値の出どころになった相手（天候特性が絡むため、
+ * 同じ対面で測らないと前提が食い違う）。
+ */
+function minEvForThreshold(
+  resolved: ResolvedBuild, bs: StatArray, nature: string, threshold: number, ref: ResolvedBuild,
+): number | null {
   for (let ev = 0; ev <= EV_STAT_MAX; ev++) {
-    const s = calcStat(baseSpeed, ev, 31, natureMod(nature, 5));
-    if (s >= threshold) return ev;
+    const evs = [...resolved.evs] as StatArray;
+    evs[5] = ev;
+    const probe = withEvs(resolved, bs, nature, evs);
+    if (judge1v1(probe, ref).myS >= threshold) return ev;
   }
   return null;
 }
@@ -369,16 +379,42 @@ function summarizeFails(fails: { label: string; text: string }[], kind: "ko" | "
  *   被弾確定数(oppHits)が伸びる最小の追加EV合計を提案する(findSurviveSuggestion)。
  *   同様に逆側攻撃ステからの振り替えを試し、見つからない対象は理由を集約して表示する。
  */
-export function tuneForTargets(slot: Slot, resolved: ResolvedBuild, targets: ResolvedBuild[]): TuneSuggestion[] {
+export function tuneForTargets(
+  slot: Slot, resolved: ResolvedBuild, targets: ResolvedBuild[],
+  scenarios?: (SlotScenario | null | undefined)[],
+): TuneSuggestion[] {
   const out: TuneSuggestion[] = [];
   if (targets.length === 0) return out;
+  const scOf = (i: number) => (scenarios ? scenarios[i] : null);
+  try {
+    tuneInner(slot, resolved, targets, scOf, out);
+  } finally {
+    setScenario(null);
+  }
+  return out;
+}
 
-  const oppMaxS = Math.max(...targets.map((t) => effectiveSpeed(t.stats[5], t.item)));
+function tuneInner(
+  slot: Slot, resolved: ResolvedBuild, targets: ResolvedBuild[],
+  scOf: (i: number) => SlotScenario | null | undefined, out: TuneSuggestion[],
+): void {
+  const bs = baseStatsOf(slot, resolved);
+
+  // 想定敵の中で一番速い相手。天候特性(すなかき等)や仮想敵ごとの前提で変わるので、
+  // 実数値ではなく判定と同じ実効素早さで比べる。
+  let oppMaxS = -1;
+  let refIdx = -1;
+  targets.forEach((t, i) => {
+    useScenario(scOf(i));
+    const s = judge1v1(resolved, t).oppS;
+    if (s > oppMaxS) { oppMaxS = s; refIdx = i; }
+  });
   const threshold = oppMaxS + 1;
 
-  const baseSpeed = baseSpeedOf(slot, resolved);
-  if (baseSpeed !== null) {
-    const found = minEvForThreshold(baseSpeed, slot.nature, threshold);
+  if (bs !== null && refIdx >= 0) {
+    const ref = targets[refIdx];
+    useScenario(scOf(refIdx));
+    const found = minEvForThreshold(resolved, bs, slot.nature, threshold, ref);
     if (found !== null) {
       out.push({
         kind: "speed",
@@ -390,7 +426,7 @@ export function tuneForTargets(slot: Slot, resolved: ResolvedBuild, targets: Res
       let bestNature: string | null = null;
       let bestEv: number | null = null;
       for (const nat of SPEED_NATURES) {
-        const ev = minEvForThreshold(baseSpeed, nat, threshold);
+        const ev = minEvForThreshold(resolved, bs, nat, threshold, ref);
         if (ev !== null && (bestEv === null || ev < bestEv)) {
           bestEv = ev;
           bestNature = nat;
@@ -413,20 +449,24 @@ export function tuneForTargets(slot: Slot, resolved: ResolvedBuild, targets: Res
     }
   }
 
-  const bs = baseStatsOf(slot, resolved);
   if (bs !== null) {
-    const koAttempts = targets.map((t) => ({ label: t.label, attempt: findKoSuggestion(slot, resolved, bs, t) }));
+    // 確定数・耐久の逆算は judge1v1 を回すだけなので、その相手の前提を敷けばそのまま効く。
+    const koAttempts = targets.map((t, i) => {
+      useScenario(scOf(i));
+      return { label: t.label, attempt: findKoSuggestion(slot, resolved, bs, t) };
+    });
     const koOk = koAttempts.filter((a): a is { label: string; attempt: TuneOk } => a.attempt.ok);
     const koFail = koAttempts.filter((a): a is { label: string; attempt: TuneFail } => !a.attempt.ok);
     out.push(...koOk.map((a) => a.attempt.suggestion));
     out.push(...summarizeFails(koFail.map((a) => ({ label: a.label, text: a.attempt.text })), "ko"));
 
-    const surviveAttempts = targets.map((t) => ({ label: t.label, attempt: findSurviveSuggestion(slot, resolved, bs, t) }));
+    const surviveAttempts = targets.map((t, i) => {
+      useScenario(scOf(i));
+      return { label: t.label, attempt: findSurviveSuggestion(slot, resolved, bs, t) };
+    });
     const surviveOk = surviveAttempts.filter((a): a is { label: string; attempt: TuneOk } => a.attempt.ok);
     const surviveFail = surviveAttempts.filter((a): a is { label: string; attempt: TuneFail } => !a.attempt.ok);
     out.push(...surviveOk.map((a) => a.attempt.suggestion));
     out.push(...summarizeFails(surviveFail.map((a) => ({ label: a.label, text: a.attempt.text })), "survive"));
   }
-
-  return out;
 }

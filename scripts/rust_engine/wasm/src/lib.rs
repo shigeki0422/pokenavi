@@ -92,6 +92,57 @@ pub extern "C" fn dealloc(p: *mut u8, n: usize) {
     unsafe { drop(Vec::from_raw_parts(p, 0, n)) }
 }
 
+/// 以降の判定を「この状況なら」に切り替える。すべて0で既定（特性由来の天候のまま・積みなし）。
+/// weather: 0=指定なし 1=晴れ 2=雨 3=すなあらし 4=あられ
+/// terrain: 0=指定なし 1=エレキ 2=グラス 3=サイコ 4=ミスト
+/// boost:   側0(spec_a)が技欄の先頭にある積み技を使った回数
+#[no_mangle]
+pub extern "C" fn set_scenario(weather: i32, terrain: i32, boost: i32) -> i32 {
+    let pack = match unsafe { PACK.as_mut() } { Some(p) => p, None => return -1 };
+    pack.scenario = engine::pack::Scenario {
+        weather: weather.clamp(0, 4) as u8,
+        terrain: terrain.clamp(0, 4) as u8,
+        boost: boost.clamp(0, 6),
+    };
+    0
+}
+
+/// 積み技（自分の能力を上げる変化技）の名前一覧。
+/// 「積み回数」の指定を出すかどうかを表示側が決めるために使う。
+/// 判定に使う表と同じものを返すので、表示と計算がずれない。
+#[no_mangle]
+pub extern "C" fn setup_move_names() -> i32 {
+    let pack = match unsafe { PACK.as_ref() } { Some(p) => p, None => return -1 };
+    let names: Vec<String> = pack.moves.iter()
+        .filter(|m| engine::battle::self_boosts(pack, m.name)
+            .is_some_and(|v| v.iter().any(|(_, d)| *d > 0)))
+        .map(|m| m.name_jp.clone())
+        .collect();
+    set_result(&json!(names));
+    0
+}
+
+/// 型だけでは無効(0倍)を判定できない技と特性。
+///
+/// 表示側は「相性0倍と分かる技はエンジンに渡さない」事前除外をしている。
+/// 状況でタイプが変わる技(だいちのはどう等)や、技のタイプを書き換える・無効を貫く特性を
+/// 手で並べると取りこぼす(実際に だいちのはどう・レイジングブル・うるおいボイス が
+/// 抜けていた)ので、判定に使う条件そのものを返す。
+#[no_mangle]
+pub extern "C" fn type_dynamic() -> i32 {
+    let pack = match unsafe { PACK.as_ref() } { Some(p) => p, None => return -1 };
+    let sy = &pack.sy;
+    let moves: Vec<String> = [sy.mv.ウェザーボール, sy.mv.レイジングブル, sy.mv.だいちのはどう]
+        .iter().map(|m| pack.intern.resolve(*m).to_string()).collect();
+    let mut abilities: Vec<String> = pack.skin.keys()
+        .map(|a| pack.intern.resolve(*a).to_string()).collect();
+    abilities.push(pack.intern.resolve(sy.ab.うるおいボイス).to_string());
+    abilities.push(pack.intern.resolve(sy.ab.きもったま).to_string());
+    abilities.sort();
+    set_result(&json!({"moves": moves, "abilities": abilities}));
+    0
+}
+
 /// 1v1 の両側について、HP・実効素早さ・各技の与ダメと確定数を返す。
 #[no_mangle]
 pub extern "C" fn analyze(ap: *const u8, an: usize, bp: *const u8, bn: usize,
