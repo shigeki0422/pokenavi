@@ -157,6 +157,8 @@ class SearchAI:
         # 現行の mcts_cache 経路は PIMC＝論文が strategy fusion として名指しした型。
         # MAPLE_K>0 で有効。総ネット評価数を PIMC と揃えるため sims/k 回まわす。
         self.maple_k = int(os.environ.get("MAPLE_K", "0"))
+        # 実験用: 相手の隠れ情報を全て見える状態にする（決定化しない）
+        self.oracle = os.environ.get("ORACLE", "0") == "1"
         # collapse_mega=True: メガ可能時は常にメガ前提（メガ無し技を列挙しない＝分岐半減・無駄探索削減）
         self.collapse_mega = os.environ.get("MCTS_COLLAPSE_MEGA", "1") == "1"
         # qselect=True: 最終手を「訪問数」でなく「十分訪問された手の中でQ最大」で選ぶ（@少simでも正しいQを拾う）
@@ -173,6 +175,11 @@ class SearchAI:
         self.nextturn_lambda = float(os.environ.get("MCTS_NEXTTURN_LAMBDA", "0"))
         self._track_depth = False      # Trueで各シミュの到達深さを _depth_hist に記録（計測用）
         self._depth_hist = []
+        # 計測用：相手の実際の選択手を教える（行動オラクル）。分岐が 5x5→5x1 になり読める深さが倍になる。
+        self.opp_act_hint = None       # _action_index 値。None で無効
+        self.act_oracle_depth = 0      # 1=深さ0のみ / 99=全深さ（上限測定）
+        # 計測用：根より下で候補を prior 上位K手に刈り込む。分岐 5x5→KxK で深さが伸びる。
+        self.cand_topk = int(os.environ.get("CAND_TOPK", "0"))
         # 解説用：各手番の意思決定内訳を last_decision に記録（再生の「なぜこの手か」表示用）。既定OFF。
         self.explain = os.environ.get("MCTS_EXPLAIN", "0") == "1"
         self.last_decision = None
@@ -262,7 +269,7 @@ class SearchAI:
             except Exception:
                 priors = {}
         agg = [0.0] * len(my_cands); nconf = 0
-        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
+        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
         for _ in range(self.K):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             bs1, bs2, bfield = copy.deepcopy((s1, s2, field))
@@ -350,7 +357,7 @@ class SearchAI:
         from .selection import solve_zero_sum
         my_is_s1 = (my_side.field_idx == 0)
         agg = {}; wst = {}; cnt = 0
-        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
+        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
         for _ in range(self.tree_det):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             bs1, bs2, bfield = copy.deepcopy((s1, s2, field))
@@ -528,7 +535,7 @@ class SearchAI:
         my_is_s1 = (my_side.field_idx == 0)
         belief = my_side.belief if my_side.belief is not None else OpponentBelief(self.loader, self.season)
         belief.observe_disclosure(my_side.opp_view)
-        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
+        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
         worst = 1.0
         for _k in range(self.downside_k):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
@@ -609,7 +616,7 @@ class SearchAI:
         root = self._new_node()
         if len(root_my) <= 1:
             return root, root_my, my_is_s1
-        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
+        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
         for t in range(self.mcts_sims):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             cs1, cs2, cfield = self._clone_state(s1, s2, field)
@@ -636,7 +643,7 @@ class SearchAI:
             return {"N": [aggN, {}], "W": [aggW, {}]}, root_my, my_is_s1
         E = max(1, self.mcts_ensemble)
         per = max(1, self.mcts_sims // E)
-        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
+        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
         for _e in range(E):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             cs1, cs2, cfield = self._clone_state(s1, s2, field)
@@ -677,7 +684,7 @@ class SearchAI:
         if len(root_my) <= 1:
             return {"N": [{}, {}], "W": [{}, {}]}, root_my, my_is_s1
         k = max(1, self.maple_k)
-        hidden = os.environ.get("HIDDEN_SELECTION") != "0"
+        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
         states = []
         for _i in range(k):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
@@ -730,11 +737,11 @@ class SearchAI:
             me_s = cs1 if my_is_s1 else cs2
             op_s = cs2 if my_is_s1 else cs1
             my_cands = self._candidate_actions(me_s, op_s, cfield)
-            opp_cands = self._candidate_actions(op_s, me_s, cfield)
+            opp_cands = self._opp_candidates(op_s, me_s, cfield, depth)
             if not my_cands or not opp_cands:
                 v = self._leaf_states_value(node, my_is_s1); break
-            idx_me, a_me, sg_me = self._select(node, 0, my_cands)
-            idx_op, a_op, sg_op = self._select(node, 1, opp_cands)
+            idx_me, a_me, sg_me = self._select(node, 0, my_cands, depth)
+            idx_op, a_op, sg_op = self._select(node, 1, opp_cands, depth)
             path.append((node, idx_me, idx_op, sg_me, sg_op))
             key = (idx_me, idx_op)
             child = node["children"].get(key)
@@ -806,11 +813,11 @@ class SearchAI:
             me_s = cs1 if my_is_s1 else cs2
             op_s = cs2 if my_is_s1 else cs1
             my_cands = self._candidate_actions(me_s, op_s, cfield)
-            opp_cands = self._candidate_actions(op_s, me_s, cfield)
+            opp_cands = self._opp_candidates(op_s, me_s, cfield, depth)
             if not my_cands or not opp_cands:
                 v = self._leaf_value_state(node, my_is_s1); break
-            idx_me, a_me, sg_me = self._select(node, 0, my_cands)
-            idx_op, a_op, sg_op = self._select(node, 1, opp_cands)
+            idx_me, a_me, sg_me = self._select(node, 0, my_cands, depth)
+            idx_op, a_op, sg_op = self._select(node, 1, opp_cands, depth)
             path.append((node, idx_me, idx_op, sg_me, sg_op))
             key = (idx_me, idx_op)
             child = node["children"].get(key)
@@ -903,7 +910,7 @@ class SearchAI:
         node["P"][1] = self._policy_dict(op_s, me_s, cfield)
         node["expanded"] = True
 
-    def _select(self, node, side, cands):
+    def _select(self, node, side, cands, depth=None):
         """side(0=自分,1=相手)の手を選び (idx, action, 選択確率) を返す。
         mcts_select で選択則を切替: duct=独立PUCT / regret=regret-matching / exp3=Exp3。"""
         mode = self.mcts_select
@@ -919,6 +926,10 @@ class SearchAI:
             q = (W.get(ix, 0.0) / n) if n else self.mcts_fpu
             p = max(P.get(ix, self.mcts_p_floor), self.mcts_p_floor)
             items.append((ix, a, q, p))
+        if self.cand_topk and depth and len(items) > self.cand_topk:
+            keep = sorted(items, key=lambda t: (-t[3], t[0]))[:self.cand_topk]
+            visited = [t for t in items if N.get(t[0], 0) > 0 and t not in keep]
+            items = keep + visited
         psum = sum(p for _, _, _, p in items) or 1.0
         if mode == "regret":
             R = node["R"][side]
@@ -1039,11 +1050,11 @@ class SearchAI:
             me_s = cs1 if my_is_s1 else cs2
             op_s = cs2 if my_is_s1 else cs1
             my_cands = self._candidate_actions(me_s, op_s, cfield)
-            opp_cands = self._candidate_actions(op_s, me_s, cfield)
+            opp_cands = self._opp_candidates(op_s, me_s, cfield, depth)
             if not my_cands or not opp_cands:
                 v = self._mcts_leaf_value(cs1, cs2, cfield, my_is_s1); break
-            idx_me, a_me, sg_me = self._select(node, 0, my_cands)
-            idx_op, a_op, sg_op = self._select(node, 1, opp_cands)
+            idx_me, a_me, sg_me = self._select(node, 0, my_cands, depth)
+            idx_op, a_op, sg_op = self._select(node, 1, opp_cands, depth)
             path.append((node, idx_me, idx_op, sg_me, sg_op))
             winner = self._advance_turn(cs1, cs2, cfield, a_me, a_op, my_is_s1)
             depth += 1
@@ -1103,6 +1114,15 @@ class SearchAI:
         return 11
 
     # ── 候補行動 ─────────────────────────────────────────────────
+    def _opp_candidates(self, op_s, me_s, field, depth):
+        c = self._candidate_actions(op_s, me_s, field)
+        h = self.opp_act_hint
+        if h is not None and depth < self.act_oracle_depth:
+            f = [a for a in c if self._action_index(a) == h]
+            if f:
+                return f
+        return c
+
     def _candidate_actions(self, my_side, opp_side, field) -> List[Action]:
         me = my_side.active
         # メガ可能なら「メガする/しない」を独立した選択肢として探索（勝率で比較）
@@ -1193,6 +1213,11 @@ class SearchAI:
             dopp.party[i] = nb                             # 未登場控え＝無傷・満タンで差し替え
 
     def _sample_opp_config(self, opp_side, belief) -> List[Optional[dict]]:
+        # ORACLE=1: 決定化をやめ、相手の真の型をそのまま探索に使う（完全情報AI）。
+        # 「隠れ情報が全て見えたらどれだけ勝てるか」を測るための実験用スイッチ。
+        # 隠れ情報推論の伸び代と、局面理解そのものの不足を切り分ける。
+        if self.oracle:
+            return [None] * len(opp_side.party)
         cfg = []
         for p in opp_side.party:
             pb = belief.ensure(p.name)

@@ -5458,6 +5458,86 @@ check("はたきおとす: 通常の持ち物には1.5倍が乗る", _plain29 > 
 for _st29 in ("アブソルナイトZ", "ガブリアスナイトZ", "リザードナイトX", "リザードナイトY", "ボーマンダナイト"):
     check(f"はたきおとす: {_st29} には1.5倍が乗らない", _dmg29(_st29) == _dmg29(None))
 
+# ════════════════════════════════════════════════════════════════
+# SearchAI の計測用フック（既定OFFで本番挙動が変わらないこと）
+# ════════════════════════════════════════════════════════════════
+from simulator.search_ai import SearchAI as _SA31
+
+_ai31 = _SA31(dl)
+check("計測フック: 既定はすべてOFF",
+      _ai31.oracle is False and _ai31.act_oracle_depth == 0
+      and _ai31.cand_topk == 0 and _ai31.opp_act_hint is None
+      and _ai31._track_depth is False)
+
+
+class _FakeSide31:
+    pass
+
+
+_cands31 = ["a", "b", "c"]
+_ai31._candidate_actions = lambda *_a, **_k: list(_cands31)
+_SA31._action_index = staticmethod(lambda a: {"a": 0, "b": 1, "c": 2}[a])
+check("計測フック: ヒント未設定なら候補は絞られない",
+      _ai31._opp_candidates(None, None, None, 0) == _cands31)
+_ai31.opp_act_hint = 1
+check("計測フック: act_oracle_depth=0 ならヒントがあっても絞らない",
+      _ai31._opp_candidates(None, None, None, 0) == _cands31)
+_ai31.act_oracle_depth = 1
+check("計測フック: 深さ0のみヒントで1手に絞る",
+      _ai31._opp_candidates(None, None, None, 0) == ["b"]
+      and _ai31._opp_candidates(None, None, None, 1) == _cands31)
+_ai31.act_oracle_depth = 99
+check("計測フック: act_oracle_depth=99 は全深さで絞る",
+      _ai31._opp_candidates(None, None, None, 5) == ["b"])
+
+# ════════════════════════════════════════════════════════════════
+# PVNetNP: 活性・正規化・最適化の切替（既定は従来仕様と完全一致）
+# ════════════════════════════════════════════════════════════════
+import numpy as _np30
+from simulator.az_np import PVNetNP as _PV30
+
+_n30 = _PV30(24, 8, 6, seed=3)
+_X30 = _np30.random.default_rng(0).normal(0, 1, (7, 24))
+_H1 = _np30.tanh(_X30 @ _n30.W1.T + _n30.b1)
+_H2 = _np30.tanh(_H1 @ _n30.W2.T + _n30.b2)
+_lg30 = _H2 @ _n30.Wp.T + _n30.bp
+check("PVNetNP: 既定は tanh・正規化なしで従来と同一の前向き",
+      _np30.allclose(_n30._forward(_X30)[2], _lg30) and _n30.act == "tanh" and _n30.mu is None)
+
+_r30 = _PV30(24, 8, 6, seed=3, act="relu", norm=True)
+_r30.fit_norm(_X30)
+check("PVNetNP: norm=True は訓練データの平均分散で標準化する",
+      _np30.allclose(_r30.mu, _X30.mean(0)) and _np30.allclose(_r30._nz(_X30).mean(0), 0, atol=1e-9))
+check("PVNetNP: act=relu は負の活性を0にする", (_r30._top(_X30)[0] >= 0).all())
+
+# relu+norm+Adam は小さな教師集合に適合できる（tanh素SGDは適合できない＝回帰テストの要点）
+_M30 = _np30.ones((40, _PV30(4, 2, 2).Wp.shape[0]))
+_PI30 = _np30.zeros_like(_M30)
+_rng30 = _np30.random.default_rng(1)
+_Xt30 = _rng30.normal(0, 1, (40, 24))
+_tgt30 = _rng30.integers(0, _M30.shape[1], 40)
+_PI30[_np30.arange(40), _tgt30] = 1.0
+_Y30 = _np30.full(40, 0.5)
+
+
+def _top1_30(net):
+    _, _, P = net._forward(_Xt30)
+    return float((_np30.where(_M30 > 0, P, -1e9).argmax(1) == _tgt30).mean())
+
+
+_a30 = _PV30(24, 64, 32, seed=5, act="relu", norm=True)
+_a30.fit_norm(_Xt30)
+_a30.train_pi(_Xt30, _PI30, _M30, _Y30, epochs=400, lr=5e-3, batch=20, optimizer="adam",
+              value_weight=0.0)
+check("PVNetNP: relu+norm+Adam は方策ターゲットに適合できる", _top1_30(_a30) >= 0.95)
+check("PVNetNP: optimizer=adam で Adam の状態が作られる", _a30.opt == "adam" and _a30._adam["t"] > 0)
+
+_a30.save("/tmp/_test_az30.json")
+_l30 = _PV30.load("/tmp/_test_az30.json")
+check("PVNetNP: act/mu/sd を保存・復元して前向きが一致",
+      _l30.act == "relu" and _l30.mu is not None
+      and _np30.allclose(_l30._forward(_Xt30)[2], _a30._forward(_Xt30)[2]))
+
 # 集計
 # ════════════════════════════════════════════════════════════════
 print(f"\n{'='*60}")
