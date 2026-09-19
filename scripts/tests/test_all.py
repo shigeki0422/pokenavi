@@ -5532,6 +5532,13 @@ _a30.train_pi(_Xt30, _PI30, _M30, _Y30, epochs=400, lr=5e-3, batch=20, optimizer
 check("PVNetNP: relu+norm+Adam は方策ターゲットに適合できる", _top1_30(_a30) >= 0.95)
 check("PVNetNP: optimizer=adam で Adam の状態が作られる", _a30.opt == "adam" and _a30._adam["t"] > 0)
 
+_fd30 = _PV30(24, 8, 6, seed=7, act="relu", norm=True)
+_fd30.fit_norm(_Xt30)
+_before30 = _fd30._forward(_Xt30)[2].copy()
+_fd30.fold_norm()
+check("PVNetNP: fold_norm は正規化を第1層に畳み込んでも出力が等価",
+      _fd30.mu is None and _np30.allclose(_fd30._forward(_Xt30)[2], _before30, atol=1e-9))
+
 _a30.save("/tmp/_test_az30.json")
 _l30 = _PV30.load("/tmp/_test_az30.json")
 check("PVNetNP: act/mu/sd を保存・復元して前向きが一致",

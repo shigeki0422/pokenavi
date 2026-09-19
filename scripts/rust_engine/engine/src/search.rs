@@ -361,6 +361,23 @@ impl SearchAI {
         };
         // パリティ調査用: ルート直下の (行動, 訪問数, Q) を記録する（ROOT_LOG が Some のときだけ）。
         crate::sim::root_log_push(pack, cands, &stats, chosen_i);
+        // 学習用: 盤面と根の訪問分布を記録する（PI_TRACE が Some のときだけ）。
+        if crate::sim::pi_trace_enabled() {
+            let mut x: Vec<f64> = Vec::new();
+            crate::features::encode_state_into(
+                pack, &self.ctx.ft, sides, me_idx, field, &mut self.ctx.memo, grng, &mut x,
+            );
+            let pi: Vec<(usize, i64)> =
+                stats.iter().map(|(ai_, n, _)| (action_index(&cands[*ai_]), *n)).collect();
+            let ntot: i64 = stats.iter().map(|(_, n, _)| *n).sum();
+            let rq = if ntot > 0 {
+                stats.iter().filter(|(_, n, _)| *n > 0).map(|(_, n, q)| *n as f64 * q).sum::<f64>()
+                    / ntot as f64
+            } else {
+                0.5
+            };
+            crate::sim::pi_trace_push((me_idx, x, pi, rq));
+        }
         let mut chosen = cands[chosen_i].clone();
         if self.downside_guard {
             chosen = self.apply_downside_guard(

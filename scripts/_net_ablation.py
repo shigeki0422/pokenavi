@@ -59,6 +59,22 @@ def _battle(args):
         (ai2 if a_first else ai1).oracle = False
     # ACT_ORACLE: A側に「相手が今ターン実際に選ぶ手」を教える。分岐 5x5→5x1 で読める深さが倍になる。
     #   root=深さ0のみ / all=全深さ（上限測定）。battle は必ず ai1→ai2 の順に呼ぶ。
+    # NET_POL: A側の方策priorだけ別ネットから取る（どちらのヘッドが足を引っ張るかの切り分け）
+    _np_ = os.environ.get("NET_POL")
+    if _np_:
+        from simulator.az_np import PVNetNP as _PV
+        from simulator.features import encode_state as _enc
+        _pol_net = _PV.load(_np_)
+        _aiP = ai1 if a_first else ai2
+        _baseP = _aiP.net_eval
+        def _mix(A, B, f, _b=_baseP, _pn=_pol_net):
+            pol, val = _b(A, B, f)
+            p2, _ = _pn.evaluate(_enc(A, B, f), list(pol.keys())) if pol else ({}, 0)
+            return (p2 or pol), val
+        _aiP.net_eval = _mix
+    # COLLAPSE_MEGA=1: メガ石持ちはメガ前提で候補を出す（Rust本番と同じ＝教師πと条件を揃える）
+    if os.environ.get("COLLAPSE_MEGA") == "1":
+        ai1.collapse_mega = True; ai2.collapse_mega = True
     # VALUE_NOISE: A側の葉評価にガウス雑音を足す。雑音量→勝率の傾きから「評価誤差ゼロ」を外挿する。
     _vn = float(os.environ.get("VALUE_NOISE", "0") or 0)
     if _vn > 0:
@@ -102,19 +118,37 @@ def _battle(args):
     return 1 if ((res == 1) == a_first) else -1
 
 
+def _rust_battle(args):
+    """本番経路（Rust IS-MCTS）で A/B する。net パスを側1/側2に振り分け、a_first で左右を入れ替える。"""
+    import random as _r
+    import pokenavi_engine as E
+    pa, pb, seed, a_first = args
+    rng = _r.Random(seed)
+    sa = rng.sample(range(len(pa)), 3); sb = rng.sample(range(len(pb)), 3)
+    na = NET_A or ""
+    nb = NET_B or ""
+    p1, p2 = (na, nb) if a_first else (nb, na)
+    r = E.mcts_3v3_ab(list(pa), sa, list(pb), sb, seed, SIMS, p1, p2, SEASON)
+    if r == 0:
+        return 0
+    return 1 if ((r == 1) == a_first) else -1
+
+
 def main():
     N = int(os.environ.get("N", "200"))
     P = _m6_pool.load_parties()
     rng = random.Random(24680)
-    jobs = [(P[a], P[b], 80000 + i * 7717, i % 2 == 0)
+    _rust = os.environ.get("ENGINE") == "rust"
+    _six = _rust   # Rust は6体を渡して選出indexを別に指定する
+    jobs = [((P[a] if _six else P[a]), P[b], 80000 + i * 7717, i % 2 == 0)
             for i, (a, b) in enumerate(rng.sample(range(len(P)), 2) for _ in range(N))]
     la = os.path.basename(NET_A) if NET_A else "本番ネット"
-    lb = os.path.basename(NET_B) if NET_B else "ランダム初期化ネット"
+    lb = os.path.basename(NET_B) if NET_B else ("本番ネット" if _rust else "ランダム初期化ネット")
     sm = f"sims={SIMS}" + (f" vs {SIMS_B}" if SIMS_B != SIMS else "")
     print(f"■ {la} vs {lb}  {sm}  {N}戦  {_m6_pool.describe()}", flush=True)
     w = int(os.environ.get("AB_WORKERS", "0")) or max(1, (os.cpu_count() or 2) - 2)
     with mp.get_context("fork").Pool(w) as pool:
-        out = pool.map(_battle, jobs, chunksize=1)
+        out = pool.map(_rust_battle if _rust else _battle, jobs, chunksize=1)
     win = sum(1 for x in out if x > 0); lose = sum(1 for x in out if x < 0); draw = sum(1 for x in out if x == 0)
     dec = win + lose; wr = win / dec if dec else 0
     z = (win - dec * 0.5) / math.sqrt(dec * 0.25) if dec else 0

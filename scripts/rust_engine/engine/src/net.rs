@@ -17,6 +17,9 @@ pub struct NetW {
     pub bv: f64,
     pub wp: Vec<f64>, // ACTION_DIM x hidden2
     pub bp: Vec<f64>,
+    /// 隠れ層の活性。既定 tanh。JSON の "act":"relu" で ReLU。
+    /// 入力正規化は Python 側 fold_norm() で W1/b1 に畳み込まれている前提（ゼロスキップを壊さないため）。
+    pub relu: bool,
 }
 
 pub const ACTION_DIM: usize = 12;
@@ -62,6 +65,7 @@ impl NetW {
             bv: v["bv"].as_f64().unwrap(),
             wp,
             bp: vecf(&v["bp"]),
+            relu: v.get("act").and_then(|a| a.as_str()) == Some("relu"),
         })
     }
 
@@ -79,10 +83,10 @@ impl NetW {
                 nz.push((k, *v));
             }
         }
-        rows8_sparse(&self.w1, self.dim, self.hidden, nz, &self.b1, h1);
+        rows8_sparse(&self.w1, self.dim, self.hidden, nz, &self.b1, h1, self.relu);
         h2.clear();
         h2.resize(self.hidden2, 0.0);
-        rows8(&self.w2, self.hidden, self.hidden2, h1, &self.b2, h2);
+        rows8(&self.w2, self.hidden, self.hidden2, h1, &self.b2, h2, self.relu);
     }
 
     /// PVNetNP.evaluate(x, legal_idx) -> (prior[legal順], value)
@@ -129,7 +133,29 @@ impl NetW {
 
 /// 非ゼロ入力のみを左→右順にたどる版（rows8 とビット完全一致）
 #[inline]
-fn rows8_sparse(w: &[f64], dim: usize, rows: usize, nz: &[(usize, f64)], b: &[f64], out: &mut [f64]) {
+fn act1(z: f64, relu: bool) -> f64 {
+    if relu {
+        if z > 0.0 {
+            z
+        } else {
+            0.0
+        }
+    } else {
+        z.tanh()
+    }
+}
+
+#[inline]
+#[allow(clippy::too_many_arguments)]
+fn rows8_sparse(
+    w: &[f64],
+    dim: usize,
+    rows: usize,
+    nz: &[(usize, f64)],
+    b: &[f64],
+    out: &mut [f64],
+    relu: bool,
+) {
     const B: usize = 8;
     let mut j = 0usize;
     while j + B <= rows {
@@ -146,7 +172,7 @@ fn rows8_sparse(w: &[f64], dim: usize, rows: usize, nz: &[(usize, f64)], b: &[f6
             a[7] += xv * r0[7 * dim + k];
         }
         for t in 0..B {
-            out[j + t] = (a[t] + b[j + t]).tanh();
+            out[j + t] = act1(a[t] + b[j + t], relu);
         }
         j += B;
     }
@@ -156,14 +182,15 @@ fn rows8_sparse(w: &[f64], dim: usize, rows: usize, nz: &[(usize, f64)], b: &[f6
         for &(k, xv) in nz {
             acc += xv * row[k];
         }
-        out[j] = (acc + b[j]).tanh();
+        out[j] = act1(acc + b[j], relu);
         j += 1;
     }
 }
 
 /// 行ブロック8本の独立な逐次加算（各行内の順序は左→右のまま）
 #[inline]
-fn rows8(w: &[f64], dim: usize, rows: usize, x: &[f64], b: &[f64], out: &mut [f64]) {
+#[allow(clippy::too_many_arguments)]
+fn rows8(w: &[f64], dim: usize, rows: usize, x: &[f64], b: &[f64], out: &mut [f64], relu: bool) {
     const B: usize = 8;
     let mut j = 0usize;
     while j + B <= rows {
@@ -176,7 +203,7 @@ fn rows8(w: &[f64], dim: usize, rows: usize, x: &[f64], b: &[f64], out: &mut [f6
             }
         }
         for t in 0..B {
-            out[j + t] = (a[t] + b[j + t]).tanh();
+            out[j + t] = act1(a[t] + b[j + t], relu);
         }
         j += B;
     }
@@ -186,7 +213,7 @@ fn rows8(w: &[f64], dim: usize, rows: usize, x: &[f64], b: &[f64], out: &mut [f6
         for k in 0..dim {
             acc += x[k] * row[k];
         }
-        out[j] = (acc + b[j]).tanh();
+        out[j] = act1(acc + b[j], relu);
         j += 1;
     }
 }

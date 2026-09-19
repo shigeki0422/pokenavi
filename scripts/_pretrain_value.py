@@ -25,11 +25,109 @@ PHASE = os.environ.get("PHASE", "all")   # head=表現層を凍結し価値ヘ�
                                          # joint=価値を大量コーパスで学習した後、方策をMCTSπで再学習
 PI_CORPUS = os.environ.get("PI_CORPUS", "")   # _PI/_M を持つ方策ターゲットのコーパス接頭辞
 PI_EPOCHS = int(os.environ.get("PI_EPOCHS", "20"))
+ARCH = os.environ.get("ARCH", "512x256")   # PHASE=fresh の隠れ層
+LR = float(os.environ.get("LR", "1e-3"))
 
 from simulator.az_np import PVNetNP, ACTION_DIM
 
 
+def _load_pi(prefixes):
+    """カンマ区切りの複数コーパスを連結して (X, PI, M, Y) を返す。
+    VALUE_TARGET=q で価値ターゲットを探索の根の価値 Q にする（最終勝敗と違い局面ごとに値が変わる＝
+    同一対局内の相関が切れる）。mix:0.5 で Y と Q の加重平均。PER_GAME_PICK=k で対局ごとに k 件へ間引く。"""
+    parts = [p for p in prefixes.split(",") if p]
+
+    def cat(suf):
+        return np.concatenate([np.load(p + suf) for p in parts])
+
+    X, PI, M, Y = cat("_X.npy"), cat("_PI.npy"), cat("_M.npy"), cat("_Y.npy")
+    tgt = os.environ.get("VALUE_TARGET", "y")
+    if tgt != "y":
+        Q = cat("_Q.npy")
+        if tgt == "q":
+            Y = Q
+        elif tgt.startswith("mix:"):
+            w = float(tgt.split(":", 1)[1])
+            Y = (1.0 - w) * Y + w * Q
+    k = int(os.environ.get("PER_GAME_PICK", "0") or 0)
+    if k:
+        G = cat("_G.npy")
+        rng = np.random.default_rng(7)
+        keep = []
+        order = np.argsort(G, kind="stable")
+        gs = G[order]
+        bounds = np.flatnonzero(np.diff(gs)) + 1
+        for seg in np.split(order, bounds):
+            keep.append(seg if len(seg) <= k else rng.choice(seg, k, replace=False))
+        idx = np.sort(np.concatenate(keep))
+        X, PI, M, Y = X[idx], PI[idx], M[idx], Y[idx]
+        print(f"対局ごとに最大{k}件へ間引き: {len(G)} → {len(X)}件（対局数 {len(np.unique(G))}）", flush=True)
+    return X, PI, M, Y
+
+
+def _fresh():
+    """Adam+ReLU+入力正規化で新規ネットを学習する（既存ネットは tanh/素SGD なので転移できない）。"""
+    X, PI, M, Y = _load_pi(PI_CORPUS)
+    ntr_cap = int(os.environ.get("NTRAIN", "0") or 0)
+    if ntr_cap and ntr_cap < len(X):
+        # SUBSAMPLE=random: 全体から一様抽出＝1対局あたり平均1局面になり、局面間の相関が切れる。
+        # 既定（先頭から連続）は同じ対局の局面が固まって入る＝AlphaGo が過学習した条件。
+        if os.environ.get("SUBSAMPLE") == "random":
+            ix = np.random.default_rng(12345).choice(len(X), ntr_cap, replace=False)
+            ix.sort()
+        else:
+            ix = np.arange(ntr_cap)
+        X, PI, M, Y = X[ix], PI[ix], M[ix], Y[ix]
+    h1, h2 = (int(v) for v in ARCH.split("x"))
+    rng = np.random.default_rng(0); perm = rng.permutation(len(X))
+    X, PI, M, Y = X[perm], PI[perm], M[perm], Y[perm]
+    # 同一対戦の局面は価値ラベルを共有するので、ランダム分割だとリークして価値精度が水増しされる。
+    # PI_TEST に別生成のコーパスを渡して評価する。
+    PI_TEST = os.environ.get("PI_TEST", "")
+    if PI_TEST:
+        Xv, PIv, Mv, Yv = _load_pi(PI_TEST)
+        nte_cap = int(os.environ.get("NTEST", "0") or 0)
+        if nte_cap and nte_cap < len(Xv):
+            Xv, PIv, Mv, Yv = Xv[:nte_cap], PIv[:nte_cap], Mv[:nte_cap], Yv[:nte_cap]
+        ntr = len(X)
+        X = np.concatenate([X, Xv]); PI = np.concatenate([PI, PIv])
+        M = np.concatenate([M, Mv]); Y = np.concatenate([Y, Yv])
+        nte = len(Xv)
+    else:
+        nte = max(1, int(len(X) * 0.1)); ntr = len(X) - nte
+    net = PVNetNP(X.shape[1], hidden=h1, hidden2=h2, seed=1, act="relu", norm=True)
+    net.fit_norm(X[:ntr])
+    print(f"fresh {h1}x{h2} relu+norm+adam  訓練{ntr}件 / 検証{nte}件"
+          + ("（別コーパス）" if PI_TEST else "（同一コーパスの1割・価値はリークあり）"), flush=True)
+
+    def stat(a, b):
+        _, v, P = net._forward(X[a:b]); v = np.asarray(v).ravel()
+        P = np.where(M[a:b] > 0, np.asarray(P), -1e9)
+        return (float((P.argmax(1) == PI[a:b].argmax(1)).mean()),
+                float(((v >= 0.5) == (Y[a:b] >= 0.5)).mean()))
+
+    best = (0.0, None)
+    for ep in range(PI_EPOCHS):
+        lr = LR * (0.5 ** (ep / max(PI_EPOCHS / 3.0, 1.0)))
+        net.train_pi(X[:ntr], PI[:ntr], M[:ntr], Y[:ntr], epochs=1, lr=lr, batch=128,
+                     seed=ep, optimizer="adam")
+        if (ep + 1) % 5 == 0 or ep == PI_EPOCHS - 1:
+            p1, a1 = stat(ntr, ntr + nte)
+            ptr, _ = stat(0, min(ntr, 5000))
+            print(f"  ep{ep+1:3d} 訓練top1 {ptr*100:5.1f}%  検証top1 {p1*100:5.1f}%  価値 {a1*100:5.1f}%", flush=True)
+            if p1 > best[0]:
+                best = (p1, {k: (getattr(net, k).copy() if hasattr(getattr(net, k), "copy") else getattr(net, k))
+                             for k in ("W1", "b1", "W2", "b2", "Wv", "bv", "Wp", "bp")})
+    if best[1]:
+        for k, v in best[1].items():
+            setattr(net, k, v)
+    net.save(OUT)
+    print(f"保存: {OUT}  検証best top1 {best[0]*100:.1f}%", flush=True)
+
+
 def main():
+    if PHASE == "fresh":
+        return _fresh()
     X = np.load(CORPUS + "_X.npy"); Y = np.load(CORPUS + "_Y.npy")
     net = PVNetNP.load(IN)
     if net is None:

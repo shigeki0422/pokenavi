@@ -38,6 +38,37 @@ LABEL_SIMS = int(os.environ.get("LABEL_SIMS", "400"))
 BURN = os.environ.get("BURN", "0")
 SEED = int(os.environ.get("SEED", "7000"))
 RECORD_PI = os.environ.get("RECORD_PI", "0") == "1"   # 根の訪問分布も記録（方策ヘッド用）
+ENGINE = os.environ.get("ENGINE", "py")               # rust で Rust エンジン（BURN非対応）
+PER_GAME = int(os.environ.get("PER_GAME", "0"))       # 1対局から採る局面数（0=全部）。
+                                                      # 同一対局の局面は勝敗ラベルを共有＝強く相関し、
+                                                      # 価値ヘッドが過学習する（AlphaGo 2016 と同じ症状）
+
+
+def _batch_rust(args):
+    """Rust の mcts_3v3_trace で (盤面, 訪問分布, 勝敗) を集める。1コアで Python 13コア相当。"""
+    import random as _r
+    import pokenavi_engine as E
+    from simulator.az_np import ACTION_DIM
+    seed, parties, n = args
+    rng = _r.Random(seed)
+    out = []
+    for g in range(n):
+        gid = seed * 1000000 + g
+        ia, ib = rng.sample(range(len(parties)), 2)
+        pa = list(parties[ia][:6]); pb = list(parties[ib][:6])
+        sa = rng.sample(range(len(pa)), 3); sb = rng.sample(range(len(pb)), 3)
+        r, recs = E.mcts_3v3_trace(pa, sa, pb, sb, seed * 100003 + g, LABEL_SIMS, SEASON)
+        if r == 0:
+            continue
+        keep = [(me, x, pi, rq) for me, x, pi, rq in recs
+                if sum(c for _, c in pi) > 0 and len(pi) > 1]
+        if PER_GAME and len(keep) > PER_GAME:
+            keep = [keep[i] for i in sorted(rng.sample(range(len(keep)), PER_GAME))]
+        for k, (me, x, pi, rq) in enumerate(keep):
+            tot = sum(c for _, c in pi)
+            y = 1.0 if (r == 1) == (me == 0) else 0.0
+            out.append((x, y, {a: c / tot for a, c in pi}, [a for a, _ in pi], rq, gid))
+    return out
 
 
 def _batch(args):
@@ -125,7 +156,8 @@ if __name__ == "__main__":
     t0 = time.time()
     per = max(1, N_GAMES // W)
     with mp.get_context("fork").Pool(W) as pool:
-        res = pool.map(_batch, [(SEED + k, P, per) for k in range(W)])
+        fn = _batch_rust if ENGINE == "rust" else _batch
+        res = pool.map(fn, [(SEED + k, P, per) for k in range(W)])
     data = [x for r in res for x in r]
     X = np.array([d[0] for d in data], dtype=float)
     Y = np.array([d[1] for d in data], dtype=float)
@@ -142,5 +174,8 @@ if __name__ == "__main__":
     np.save(pref + "_X.npy", X); np.save(pref + "_Y.npy", Y)
     if RECORD_PI:
         np.save(pref + "_PI.npy", PI); np.save(pref + "_M.npy", M)
-    print(f"{POLICY}(sims={LABEL_SIMS},burn={BURN}) {per*W}局 → {len(X)}サンプル  {el:.0f}秒 → {pref}_X.npy "
+        if ENGINE == "rust":
+            np.save(pref + "_Q.npy", np.array([d[4] for d in data], dtype=float))
+            np.save(pref + "_G.npy", np.array([d[5] for d in data], dtype=np.int64))
+    print(f"{ENGINE}/{POLICY}(sims={LABEL_SIMS},burn={BURN}) {per*W}局 → {len(X)}サンプル  {el:.0f}秒 → {pref}_X.npy "
           f"({len(X)/el:.0f}サンプル/秒)  勝率ラベル平均={Y.mean():.3f}", flush=True)

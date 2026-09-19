@@ -79,8 +79,78 @@ fn mcts_3v3(
     let Eng { pack, net, .. } = &mut *g;
     let net = net.clone();
     let (r, _) =
-        engine::sim::mcts_3v3(pack, &net, &pa, &sa, &pb, &sb, season, season, seed, sims, |_, _| {});
+        engine::sim::mcts_3v3(pack, &net, None, &pa, &sa, &pb, &sb, season, season, seed, sims, |_, _| {});
     Ok(r as u8)
+}
+
+/// A/B用: 側1と側2で別のネットを使って mcts_3v3 を回す。net_b_path は JSON のパス（初回のみ読む）。
+static NET_CACHE: std::sync::Mutex<Vec<(String, engine::net::NetW)>> =
+    std::sync::Mutex::new(Vec::new());
+
+fn load_net_cached(path: &str) -> PyResult<engine::net::NetW> {
+    let mut c = NET_CACHE.lock().map_err(|_| PyRuntimeError::new_err("net cache lock"))?;
+    if let Some((_, n)) = c.iter().find(|(p, _)| p == path) {
+        return Ok(n.clone());
+    }
+    let txt = std::fs::read_to_string(path)
+        .map_err(|e| PyRuntimeError::new_err(format!("{path}: {e}")))?;
+    let v: serde_json::Value =
+        serde_json::from_str(&txt).map_err(|e| PyRuntimeError::new_err(format!("{path}: {e}")))?;
+    let n = engine::net::NetW::from_value(&v)
+        .ok_or_else(|| PyRuntimeError::new_err(format!("{path}: ネットとして読めない")))?;
+    c.push((path.to_string(), n.clone()));
+    Ok(n)
+}
+
+#[pyfunction]
+#[pyo3(signature = (pa, sa, pb, sb, seed, sims, net_a_path="", net_b_path="", season="M-6"))]
+#[allow(clippy::too_many_arguments)]
+fn mcts_3v3_ab(
+    pa: Vec<String>,
+    sa: Vec<usize>,
+    pb: Vec<String>,
+    sb: Vec<usize>,
+    seed: i128,
+    sims: usize,
+    net_a_path: &str,
+    net_b_path: &str,
+    season: &str,
+) -> PyResult<u8> {
+    let na = if net_a_path.is_empty() { None } else { Some(load_net_cached(net_a_path)?) };
+    let nb = if net_b_path.is_empty() { None } else { Some(load_net_cached(net_b_path)?) };
+    let m = eng()?;
+    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let Eng { pack, net, .. } = &mut *g;
+    let base = net.clone();
+    let side1 = na.as_ref().unwrap_or(&base);
+    let side2 = nb.as_ref().unwrap_or(&base);
+    let (r, _) = engine::sim::mcts_3v3(
+        pack, side1, Some(side2), &pa, &sa, &pb, &sb, season, season, seed, sims, |_, _| {},
+    );
+    Ok(r as u8)
+}
+
+/// 学習用: mcts_3v3 を回し、各手番の (手番側, 盤面1037次元, [(行動index, 訪問数)]) を返す。
+#[pyfunction]
+#[pyo3(signature = (pa, sa, pb, sb, seed, sims, season="M-6"))]
+#[allow(clippy::type_complexity)]
+fn mcts_3v3_trace(
+    pa: Vec<String>,
+    sa: Vec<usize>,
+    pb: Vec<String>,
+    sb: Vec<usize>,
+    seed: i128,
+    sims: usize,
+    season: &str,
+) -> PyResult<(u8, Vec<(usize, Vec<f64>, Vec<(usize, i64)>, f64)>)> {
+    let m = eng()?;
+    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let Eng { pack, net, .. } = &mut *g;
+    let net = net.clone();
+    let (r, recs) = engine::sim::mcts_3v3_trace(
+        pack, &net, &pa, &sa, &pb, &sb, season, season, seed, sims,
+    );
+    Ok((r as u8, recs))
 }
 
 #[pyfunction]
@@ -230,6 +300,8 @@ fn version() -> String {
 fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(greedy_3v3, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3, m)?)?;
+    m.add_function(wrap_pyfunction!(mcts_3v3_trace, m)?)?;
+    m.add_function(wrap_pyfunction!(mcts_3v3_ab, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_vs_dist, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_vs_dist_trace, m)?)?;
     m.add_function(wrap_pyfunction!(select_party_rng_probe, m)?)?;

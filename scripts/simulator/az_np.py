@@ -222,6 +222,17 @@ class PVNetNP:
         logits = np.where(np.asarray(M) > 0, logits, -1e9)
         return float((logits.argmax(1) == np.asarray(A)).mean())
 
+    def fold_norm(self):
+        """入力正規化を第1層に畳み込む（W1/σ, b1 - W1·(μ/σ)）。以後 mu/sd は不要になる。
+        第1層は線形なので出力は等価。入力のゼロがゼロのまま残るので、Rust 側の
+        ゼロスキップ最適化（rows8_sparse）がそのまま使える。"""
+        if self.mu is None:
+            return self
+        self.b1 = self.b1 - self.W1 @ (self.mu / self.sd)
+        self.W1 = self.W1 / self.sd
+        self.mu = None; self.sd = None
+        return self
+
     def save(self, path=AZNP_PATH):
         d = {"dim": self.dim, "hidden": self.hidden, "hidden2": self.hidden2, "hidden3": self.hidden3,
              "W1": self.W1.tolist(), "b1": self.b1.tolist(),

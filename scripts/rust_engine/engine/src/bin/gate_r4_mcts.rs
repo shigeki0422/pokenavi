@@ -48,7 +48,7 @@ fn main() {
 
             let mut got: Vec<u64> = Vec::with_capacity(exp_h.len());
             let te = std::time::Instant::now();
-            let (res, nturn) = mcts_3v3(&mut pack, &net, &parties[ia], &sa, &parties[ib], &sb,
+            let (res, nturn) = mcts_3v3(&mut pack, &net, None, &parties[ia], &sa, &parties[ib], &sb,
                                         &seasons[ia], &seasons[ib], seed, sims, |pk, bt| {
                 if !bench {
                     let e = encode_battle(pk, bt, false);

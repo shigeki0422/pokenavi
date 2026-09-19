@@ -141,6 +141,7 @@ pub const BELIEF_SEASON: &str = "M-2";
 pub fn mcts_3v3(
     pack: &mut Pack,
     net: &NetW,
+    net_b: Option<&NetW>,
     pa: &[String],
     sa: &[usize],
     pb: &[String],
@@ -183,7 +184,7 @@ pub fn mcts_3v3(
     let packr: &Pack = pack;
     let mut ai1 = SearchAI::new(packr, BELIEF_SEASON, seed, sims);
     let mut ai2 = SearchAI::new(packr, BELIEF_SEASON, seed ^ 0x5bd1e995, sims);
-    let result = run_two_mcts(packr, net, &mut b, &mut ai1, &mut ai2, &mut rng, on_turn);
+    let result = run_two_mcts(packr, [net, net_b.unwrap_or(net)], &mut b, &mut ai1, &mut ai2, &mut rng, on_turn);
     (result, b.turn)
 }
 
@@ -258,7 +259,7 @@ pub fn mcts_vs_dist(
     let mut ai1 = SearchAI::new(packr, BELIEF_SEASON, seed, sims);
     let mut ai2 = SearchAI::new(packr, BELIEF_SEASON, seed ^ 0x5bd1e995, sims);
     let mut rng = cell.into_inner();
-    run_two_mcts(packr, net, &mut b, &mut ai1, &mut ai2, &mut rng, |_, _| {})
+    run_two_mcts(packr, [net, net], &mut b, &mut ai1, &mut ai2, &mut rng, |_, _| {})
 }
 
 /// mcts_vs_dist のパリティ調査用。結果に加えて「選出した3匹の添字」と
@@ -328,7 +329,7 @@ pub fn mcts_vs_dist_trace(
     EVAL_LOG.with(|l| *l.borrow_mut() = Some(Vec::new()));
     DET_LOG.with(|l| *l.borrow_mut() = Some(Vec::new()));
     EVAL_X.with(|l| *l.borrow_mut() = Some(Vec::new()));
-    let res = run_two_mcts(packr, net, &mut b, &mut ai1, &mut ai2, &mut rng, |pk, bt| {
+    let res = run_two_mcts(packr, [net, net], &mut b, &mut ai1, &mut ai2, &mut rng, |pk, bt| {
         let named = f_vals.borrow().is_empty();
         let e = crate::statec::encode_battle(pk, bt, named);
         if named {
@@ -391,6 +392,48 @@ fn sv_str(v: &crate::statec::SV) -> String {
         SV::S(x) => x.clone(),
         SV::B(x) => x.to_string(),
     }
+}
+
+/// 学習用の教師記録: (手番側, 盤面1037次元, [(行動index, 訪問数)], 探索の根の価値)。
+/// ターン番号は Python 側が対局内の記録順から復元する。
+/// 根の価値＝訪問数で重み付けした Q。最終勝敗（0/1）より分散が小さい価値ターゲットになる。
+pub type PiRec = (usize, Vec<f64>, Vec<(usize, i64)>, f64);
+
+thread_local! {
+    static PI_TRACE: std::cell::RefCell<Option<Vec<PiRec>>> = std::cell::RefCell::new(None);
+}
+
+pub fn pi_trace_enabled() -> bool {
+    PI_TRACE.with(|l| l.borrow().is_some())
+}
+
+pub fn pi_trace_push(rec: PiRec) {
+    PI_TRACE.with(|l| {
+        if let Some(v) = l.borrow_mut().as_mut() {
+            v.push(rec);
+        }
+    });
+}
+
+/// mcts_3v3 を回しつつ、各手番の (盤面, 根の訪問分布) を集める＝価値・方策ヘッドの教師生成。
+#[allow(clippy::too_many_arguments)]
+pub fn mcts_3v3_trace(
+    pack: &mut Pack,
+    net: &NetW,
+    pa: &[String],
+    sa: &[usize],
+    pb: &[String],
+    sb: &[usize],
+    season_a: &str,
+    season_b: &str,
+    seed: i128,
+    sims: usize,
+) -> (i64, Vec<PiRec>) {
+    PI_TRACE.with(|l| *l.borrow_mut() = Some(Vec::new()));
+    let (r, _) =
+        mcts_3v3(pack, net, None, pa, sa, pb, sb, season_a, season_b, seed, sims, |_, _| {});
+    let t = PI_TRACE.with(|l| l.borrow_mut().take()).unwrap_or_default();
+    (r, t)
 }
 
 /// パリティ調査用の行動記録（`mcts_vs_dist_trace` からのみ使う）
@@ -520,7 +563,7 @@ fn act_str(pack: &Pack, a: &crate::battle::Action) -> String {
 /// 両者 SearchAI + certain_ko_override でターンループを回す共通部
 fn run_two_mcts(
     packr: &Pack,
-    net: &NetW,
+    nets: [&NetW; 2],
     b: &mut Battle,
     ai1: &mut SearchAI,
     ai2: &mut SearchAI,
@@ -535,7 +578,7 @@ fn run_two_mcts(
             for sx in 0..2usize {
                 let mut bl = bt.sides[sx].belief.0.take().unwrap();
                 let ai: &mut SearchAI = if sx == 0 { ai1 } else { ai2 };
-                let a = ai.choose(packr, net, &mut bt.sides, sx, &mut bt.field, &mut bl, rng);
+                let a = ai.choose(packr, nets[sx], &mut bt.sides, sx, &mut bt.field, &mut bl, rng);
                 bt.sides[sx].belief.0 = Some(bl);
                 let (me, op) = crate::battle::split2(&mut bt.sides, sx);
                 out[sx] = certain_ko_override(packr, a, me, op, &mut bt.field, rng);
