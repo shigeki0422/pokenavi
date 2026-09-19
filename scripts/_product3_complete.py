@@ -3,11 +3,11 @@
 使い方: venv/bin/python _product3_complete.py "サザンドラ@..." "メタグロス@..."   (specは簡略名でも可)
 env NCAND(150) TOP(5)
 """
-import os, sys, re, sqlite3, json, random, collections, statistics
+import os, sys, re, sqlite3, json, random, collections, statistics, time
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 import feature1 as _f1
 from gen_party_pool import (PartyGen, _spec_mega, _item_of, _ROLE_TARGET, _moves_of,
-                             sample_role_targets, ROLE_W, ITEM_USAGE_W, IU_FLOOR, DBPATH)
+                             sample_role_targets, ROLE_W, ITEM_USAGE_W, IU_FLOOR, DBPATH, TYPEDUP_MAX)
 from _threat_coverage import load_threats, team_coverage
 import _product3 as P3
 
@@ -59,6 +59,8 @@ def complete_core(pg, L, th, fixed_specs, rng, N):
     fixed_mega = sum(_spec_mega(s) for s in fixed_specs)
     results = []; seen = set()
     guard = 0
+    rej = collections.Counter()   # 棄却理由の内訳（費用のほぼ全額が本関数なので常時計測する）
+    t_rb = [0.0]; t_all = time.perf_counter()
     while len(results) < N and guard < N * 30:
         guard += 1
         picked = list(fixed_keys); used_dex = set(fixed_dex); ok = True
@@ -75,29 +77,52 @@ def complete_core(pg, L, th, fixed_specs, rng, N):
                 if not cand: ok = False; break
                 nxt = rng.choices(cand, weights=[pg.w[p] for p in cand], k=1)[0]
             picked.append(nxt); used_dex.add(pg.dex.get(nxt))
-        if not ok: continue
+        if not ok: rej['候補枯渇'] += 1; continue
         # 2メガをほぼ強制（前提ルール・2026-07-12）: 総当たり実勝率は1メガ/2メガでほぼ拮抗(0.502/0.495)だが、
         # これは両者フルインフォメーションの対戦AIによる測定＝「相手がどちらのメガ軸で来るか」という
         # チームプレビュー時の読み合い（1メガは相手に軸を確定させ対策を容易にする）を原理的に測れない。
         # 選出柔軟性＋読み合い優位（ユーザー判断）を前提ルールとして反映し、A/Bゲートは適用しない。
-        megas = max(fixed_mega, 2 if rng.random() < MEGA2_PROB else 1)
-        if megas > 2: continue
         holders = set(k for k in fixed_keys if _spec_mega(fixed_map[k]))
         nonfixed = [p for p in picked if p not in fixed_keys]
+        # 非メガ型がプールに無い種は、メガ担当に選ばれなければ党ごと捨てるしかない。
+        # かつては抽選任せで、外れるたびに棄却していた（実測で棄却の72%＝1722/2385回）。
+        # 最初からメガ担当に確定させれば同じ党を捨てずに済む。
+        holders |= {p for p in nonfixed if pg.mega.get(p) and not pg.nonm.get(p)}
+        if any(not pg.mega.get(p) and not pg.nonm.get(p) for p in nonfixed):
+            rej['型なし'] += 1; continue
+        megas = max(fixed_mega, len(holders), 2 if rng.random() < MEGA2_PROB else 1)
+        if megas > 2: rej['メガ3体以上'] += 1; continue
         need = megas - len(holders)
-        cap = [p for p in nonfixed if pg.mega.get(p)]
+        cap = [p for p in nonfixed if pg.mega.get(p) and p not in holders]
         if need > 0:
-            if len(cap) < need: continue
+            if len(cap) < need: rej['メガ石不足'] += 1; continue
             holders |= set(rng.sample(cap, need))
-        if any(p not in holders and not pg.nonm.get(p) for p in nonfixed): continue
-        rb = pg._role_builds(picked, holders, rng)
-        if not rb: continue
+        # タイプは「種＋メガ有無」で決まるため、型を割り当てる前に判定できる。
+        # _role_builds は gen 時間の96%を占める最重量処理なので、ここで先に弾く。
+        if TYPEDUP_MAX:
+            proto = [fixed_map[k] if k in fixed_map else (pg.mega[k][0] if k in holders else pg.nonm[k][0])
+                     for k in picked]
+            if pg.type_dup_max(proto) > TYPEDUP_MAX:
+                rej['タイプ被り(事前)'] += 1; continue
+        _t0 = time.perf_counter()
+        # 固定軸を渡さないと、その持ち物を知らないまま型を選んで後から差し込むことになり、
+        # 持ち物重複で党ごと捨てていた（実測225/1732回）。_role_builds 側で除外させる。
+        rb = pg._role_builds(picked, holders, rng, fixed=fixed_map)
+        t_rb[0] += time.perf_counter() - _t0
+        if not rb: rej['型割当失敗'] += 1; continue
         party = [fixed_map[k] if k in fixed_map else rb[i] for i, k in enumerate(picked)]
-        if not pg.is_legal(party, megas_set=(1, 2)): continue
-        if not _synergy_ok(party): continue
+        if not pg.is_legal(party, megas_set=(1, 2)):
+            if pg.type_dup_max(party) > 2: rej['非合法:タイプ被り'] += 1
+            elif len({_item_of(x) for x in party}) != 6: rej['非合法:持ち物重複'] += 1
+            else: rej['非合法:その他'] += 1
+            continue
+        if not _synergy_ok(party): rej['シナジー不足'] += 1; continue
         key = tuple(sorted(party))
-        if key in seen: continue
+        if key in seen: rej['重複'] += 1; continue
         seen.add(key); results.append(party)
+    print(f"[gen] fixed={len(fixed_specs)} N={N} got={len(results)} try={guard} "
+          f"total={time.perf_counter()-t_all:.1f}s role_builds={t_rb[0]:.1f}s "
+          f"rej={dict(rej.most_common())}", flush=True)
     return results
 
 
@@ -204,6 +229,7 @@ def complete_core_free(pg, L, th, fixed_specs, rng, N):
         return []   # 固定メンバー自体が既に非合法（種重複／メガ3体以上）
     results = []; seen = set()
     guard = 0
+    rej = collections.Counter()   # 棄却理由の内訳（費用のほぼ全額が本関数なので常時計測する）
     while len(results) < N and guard < N * 30:
         guard += 1
         picked = list(fixed_keys); used_dex = set(fixed_dex); ok = True
@@ -238,6 +264,8 @@ def complete_core_free(pg, L, th, fixed_specs, rng, N):
         key = tuple(sorted(party))
         if key in seen: continue
         seen.add(key); results.append(party)
+    print(f"[gen] fixed={len(fixed_specs)} N={N} got={len(results)} try={guard} "
+          f"rej={dict(rej.most_common())}", flush=True)
     return results
 
 def main():
