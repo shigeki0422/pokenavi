@@ -1,144 +1,16 @@
-// suggestFill()/tuneForTargets() — 提案・逆算層。
-// suggestFill は product3_server.py の POST /complete {specs,fill,top} に接続し、
-// 接続不可・タイムアウト・パース失敗時のみ擬似遅延スタブにフォールバックする。
+// tuneForTargets() — EV逆算層。
+//
+// 空き枠の候補出し(旧 suggestFill)はここから外した。Cloud Run の /complete を押すたびに
+// 呼んでいて日々課金が発生するうえ、返るのは6匹の並びだけで採用理由が分からなかった。
+// いまは「穴を埋める候補」と同じ材料でブラウザ内のエンジンだけを使って選ぶ
+// (PartyBuilderApp.astro の computeFillPicks)。
 // tuneForTargetsの素早さ逆算のみ現時点で本物（変更なし）。
-import type { MonDetail, Party, ResolvedBuild, Slot, SlotScenario, SpeciesMaster, StatArray, TuneSuggestion } from "./types";
-import { fromSpec, toSpec } from "./spec";
+import type { ResolvedBuild, Slot, SlotScenario, StatArray, TuneSuggestion } from "./types";
 import { speciesByName } from "./data";
 import { EV_STAT_MAX, EV_TOTAL_MAX, realStats } from "./stats";
 import { judge1v1 } from "./matchup";
 import { setScenario } from "../engine/wasm";
 
-export interface SuggestDeps {
-  species: SpeciesMaster[];
-  loadMon: (icon: string) => Promise<MonDetail>;
-}
-
-function partyUsedNames(party: Party): Set<string> {
-  const s = new Set<string>();
-  for (const slot of party.slots) {
-    if (slot && slot.sp) s.add(slot.sp);
-  }
-  return s;
-}
-
-const API_TIMEOUT_MS = 30000;
-
-/** PartySuggestApp.astro と同じ判定式(本番ドメインはCloud Run、それ以外はローカルAPI)。 */
-function apiBase(): string {
-  return /(^|\.)pokenavi\.jp$/.test(location.hostname)
-    ? "https://pokenavi-suggest-799947701075.asia-northeast1.run.app"
-    : "http://localhost:8899";
-}
-
-/**
- * 空き枠への提案スタブ(フォールバック用)。600msの擬似遅延の後、パーティ未使用の使用率上位種から
- * mon json の builds[0](使用率最多の型)を適用した案を2〜3件返す。
- * 各案は emptyIdx と同じ長さの配列(emptyIdx[i]に対応する枠のSlot)。
- */
-async function suggestFillStub(party: Party, emptyIdx: number[], deps: SuggestDeps): Promise<Slot[][]> {
-  await new Promise((resolve) => setTimeout(resolve, 600));
-
-  if (emptyIdx.length === 0) return [];
-
-  const used = partyUsedNames(party);
-  const candidates = [...deps.species].filter((s) => !used.has(s.n)).sort((a, b) => a.rank - b.rank);
-
-  const need = emptyIdx.length;
-  const proposalCount = Math.min(3, Math.max(1, Math.ceil(candidates.length / need)));
-  const proposals: Slot[][] = [];
-  // 案間で種名集合が重複しないためのガード。takenNamesで同じ種を別案に使い回さない
-  // (=別種で差し替え)、seenSetsで万一集合が一致した案自体をスキップする。
-  const takenNames = new Set<string>();
-  const seenSets = new Set<string>();
-
-  let cursor = 0;
-  for (let p = 0; p < proposalCount && proposals.length < 3; p++) {
-    const slots: Slot[] = [];
-    const names: string[] = [];
-    for (let i = 0; i < need; i++) {
-      while (cursor < candidates.length && takenNames.has(candidates[cursor].n)) cursor++;
-      if (cursor >= candidates.length) break;
-      const sp = candidates[cursor];
-      cursor++;
-      const detail = await deps.loadMon(sp.icon);
-      const built = detail.builds.length ? fromSpec(detail.builds[0]) : null;
-      slots.push(
-        built ?? {
-          sp: sp.n,
-          item: "",
-          ability: "",
-          nature: "",
-          evs: [0, 0, 0, 0, 0, 0],
-          moves: [],
-          targets: [],
-        }
-      );
-      names.push(sp.n);
-    }
-    if (slots.length !== need) continue;
-    const key = [...names].sort().join("|");
-    if (seenSets.has(key)) continue;
-    seenSets.add(key);
-    for (const n of names) takenNames.add(n);
-    proposals.push(slots);
-  }
-  return proposals;
-}
-
-/**
- * /complete への実API接続。1件でも整合した提案が取れれば結果を返し、
- * 接続不可・タイムアウト・不正レスポンスの場合は null を返す(呼び出し側でスタブにフォールバック)。
- */
-async function suggestFillApi(party: Party, emptyIdx: number[]): Promise<Slot[][] | null> {
-  const filled = party.slots.filter((s): s is Slot => !!s);
-  const fill = emptyIdx.length;
-  if (fill < 1 || filled.length > 5 || filled.length + fill > 6) return null;
-
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
-  try {
-    const res = await fetch(`${apiBase()}/complete`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ specs: filled.map(toSpec), fill, top: 3 }),
-      signal: controller.signal,
-    });
-    if (!res.ok) return null;
-    const data = await res.json();
-    if (!data || data.error || !Array.isArray(data.results)) return null;
-
-    const proposals: Slot[][] = [];
-    for (const r of data.results) {
-      if (!r || !Array.isArray(r.specs) || r.specs.length !== fill) continue;
-      const slots = r.specs.map((s: unknown) => (typeof s === "string" ? fromSpec(s) : null));
-      if (slots.some((s: Slot | null) => s === null)) continue;
-      proposals.push(slots as Slot[]);
-    }
-    return proposals.length ? proposals : null;
-  } catch {
-    return null;
-  } finally {
-    clearTimeout(timer);
-  }
-}
-
-/**
- * 空き枠への提案。実API(/complete)接続を優先し、接続不可・タイムアウト(15s)・パース失敗時は
- * 現行スタブ(suggestFillStub)にフォールバックする(UIは変更なし)。
- */
-export async function suggestFill(party: Party, emptyIdx: number[], deps: SuggestDeps): Promise<Slot[][]> {
-  if (emptyIdx.length === 0) return [];
-
-  try {
-    const apiResult = await suggestFillApi(party, emptyIdx);
-    if (apiResult) return apiResult;
-    console.warn("[suggestFill] API結果が空または不正のため、スタブ提案にフォールバックします");
-  } catch (e) {
-    console.warn("[suggestFill] API呼び出しに失敗したため、スタブ提案にフォールバックします", e);
-  }
-  return suggestFillStub(party, emptyIdx, deps);
-}
 
 /** 最速に振れる代表的な性格(攻撃系統の異なる2種から到達可能な方を提案) */
 const SPEED_NATURES = ["おくびょう", "ようき"];

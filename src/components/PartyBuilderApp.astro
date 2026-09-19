@@ -480,6 +480,10 @@ const I18N = I18N_ALL[lang];
   .pb-ev-step{width:40px;height:40px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#f8fafc;color:rgb(var(--gray-dark));font-size:1.05rem;font-weight:800;cursor:pointer;font-family:var(--font-atkinson);padding:0}
   .pb-ev-step:disabled{opacity:.4;cursor:default}
   /* 仮想敵ごとの前提(天候・フィールド・積み)。既定のときは目立たせない */
+  /* 前提つきでのみ結果が変わる対面。記号は素の判定のままで、印と枠線だけ足す */
+  .mu-cond{font-size:.72em;font-weight:800;color:#7c3aed;vertical-align:super;margin-left:1px}
+  td.mtx-cond{box-shadow:inset 0 0 0 1.5px #c4b5fd}
+  .pb-mu-badge-cond{outline:1.5px solid #c4b5fd;outline-offset:1px}
   .pb-sc-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:.5em 0;padding:8px 10px;border:1px solid rgb(var(--gray-light));border-radius:10px;background:#f8fafc;font-size:.86rem}
   .pb-sc-row.pb-sc-on{background:#eef2ff;border-color:var(--accent)}
   .pb-sc-hd{font-weight:800;color:rgb(var(--gray-dark))}
@@ -680,7 +684,7 @@ const I18N = I18N_ALL[lang];
   import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct, pairHitDetails, pairCacheStats } from '../scripts/party-builder/matchup';
   import { setScenario, setupMoveNames } from '../scripts/engine/wasm';
   import { initEngine } from '../scripts/engine/wasm';
-  import { suggestFill, tuneForTargets } from '../scripts/party-builder/suggest';
+  import { tuneForTargets } from '../scripts/party-builder/suggest';
   import { validateParty } from '../scripts/party-builder/validate';
 
   const lang = window.__PB_LANG__;
@@ -738,6 +742,11 @@ const I18N = I18N_ALL[lang];
       scReset: '既定に戻す',
       scOn: (parts) => `前提: ${parts}`,
       scBoostTimes: (n) => `${n}回`,
+      scCondMark: '条',
+      scCondTitle: (cond, base, now) => `前提(${cond})なら ${now}（素の判定は ${base}）`,
+      scCondNone: '素のまま',
+      scCondLegend: '「条」＝設定した前提でのみ結果が変わる対面（素の判定は記号のとおり）',
+      fieldNames: {},
       randHitsFmt: (n, p) => `乱数${n}発(${p}%)`, muBadgeTitle: 'この仮想敵に対する最悪の型判定',
       selfHitsFmt: n => `自分確${n}`, oppHitsFmt: n => `相手確${n}`,
       popHitsLbl: t => `確定数: ${t}`, popDmgLbl: t => `与ダメ: ${t}`,
@@ -776,7 +785,9 @@ const I18N = I18N_ALL[lang];
       addTargetDisabled: 'この相手を仮想敵に追加', addTargetDisabledTitle: '先に上の6枠から枠を選択してください',
       addTargetToSlot: n => `この相手を枠${n}の仮想敵に追加`, addedSuffix: '（追加済み）',
       noEmptySlots: '空き枠がありません', fillCalcAll: '空き枠の提案を計算中…',
-      fillResultHead: n => `${n}件の提案 ー ポケモンをクリックで1体だけ空き枠に追加できます`,
+      fillResultHead: (n, before, after) => `空き枠${n}件の候補（穴 ${before} → ${after}）ー 1件ずつ、またはまとめて追加できます`,
+      fillAdoptAllBtn: 'まとめて追加',
+      fillNoHoleReason: '埋まる穴は無し（使用率上位から）',
       fillClearBtn: '✕ 提案をクリア', alreadyAdded: '追加済み', addToEmptySlot: sp => `${sp}を空き枠に追加`,
       exportHeading: name => `エクスポート ー ${name}`, copyBtn: 'コピー', copiedMsg: 'コピーしました',
       copyFailedMsg: 'コピーに失敗しました。テキストを選択して手動でコピーしてください',
@@ -837,6 +848,13 @@ const I18N = I18N_ALL[lang];
       scReset: 'Reset',
       scOn: (parts) => `Assumed: ${parts}`,
       scBoostTimes: (n) => `x${n}`,
+      scCondMark: 'c',
+      scCondTitle: (cond, base, now) => `With ${cond}: ${now} (plain: ${base})`,
+      scCondNone: 'plain',
+      scCondLegend: '"c" = result changes only under the assumed situation (the symbol shows the plain result)',
+      fieldNames: { '晴れ': 'Sun', '雨': 'Rain', 'すなあらし': 'Sandstorm', 'あられ': 'Hail',
+                    'エレキフィールド': 'Electric Terrain', 'グラスフィールド': 'Grassy Terrain',
+                    'サイコフィールド': 'Psychic Terrain', 'ミストフィールド': 'Misty Terrain' },
       randHitsFmt: (n, p) => `${n}HKO by random rolls (${p}%)`, muBadgeTitle: 'Worst-case verdict against this virtual opponent',
       selfHitsFmt: n => `You: ${n}HKO`, oppHitsFmt: n => `Opponent: ${n}HKO`,
       popHitsLbl: t => `KO count: ${t}`, popDmgLbl: t => `Damage dealt: ${t}`,
@@ -876,7 +894,9 @@ const I18N = I18N_ALL[lang];
       addTargetDisabled: 'Add this opponent as a virtual opponent', addTargetDisabledTitle: 'Select a slot above first',
       addTargetToSlot: n => `Add this opponent as slot ${n}'s virtual opponent`, addedSuffix: ' (already added)',
       noEmptySlots: 'No empty slots', fillCalcAll: 'Calculating suggestions for empty slots…',
-      fillResultHead: n => `${n} suggestion(s) — click a Pokémon to add just that one to an empty slot`,
+      fillResultHead: (n, before, after) => `${n} candidate(s) for empty slots (holes ${before} → ${after}) — add one at a time or all at once`,
+      fillAdoptAllBtn: 'Add all',
+      fillNoHoleReason: 'Covers no current hole (picked by usage)',
       fillClearBtn: '✕ Clear suggestions', alreadyAdded: 'Already added', addToEmptySlot: sp => `Add ${sp} to an empty slot`,
       exportHeading: name => `Export — ${name}`, copyBtn: 'Copy', copiedMsg: 'Copied',
       copyFailedMsg: 'Copy failed. Please select the text and copy it manually',
@@ -937,6 +957,13 @@ const I18N = I18N_ALL[lang];
       scReset: '기본값으로',
       scOn: (parts) => `전제: ${parts}`,
       scBoostTimes: (n) => `${n}회`,
+      scCondMark: '조',
+      scCondTitle: (cond, base, now) => `전제(${cond})라면 ${now}（기본 판정은 ${base}）`,
+      scCondNone: '기본',
+      scCondLegend: '「조」＝설정한 전제에서만 결과가 달라지는 대면(기호는 기본 판정)',
+      fieldNames: { '晴れ': '쾌청', '雨': '비', 'すなあらし': '모래바람', 'あられ': '싸라기눈',
+                    'エレキフィールド': '일렉트릭필드', 'グラスフィールド': '그래스필드',
+                    'サイコフィールド': '사이코필드', 'ミストフィールド': '미스트필드' },
       randHitsFmt: (n, p) => `난수 ${n}발(${p}%)`, muBadgeTitle: '이 가상의 적에 대한 최악의 빌드 판정',
       selfHitsFmt: n => `나 확정${n}`, oppHitsFmt: n => `상대 확정${n}`,
       popHitsLbl: t => `확정타: ${t}`, popDmgLbl: t => `주는 대미지: ${t}`,
@@ -975,7 +1002,9 @@ const I18N = I18N_ALL[lang];
       addTargetDisabled: '이 상대를 가상의 적에 추가', addTargetDisabledTitle: '먼저 위의 6칸에서 칸을 선택해 주세요',
       addTargetToSlot: n => `이 상대를 칸${n}의 가상의 적에 추가`, addedSuffix: '（추가됨）',
       noEmptySlots: '빈 칸이 없습니다', fillCalcAll: '빈 칸의 제안을 계산 중…',
-      fillResultHead: n => `${n}건의 제안 — 포켓몬을 클릭하면 1마리만 빈 칸에 추가할 수 있습니다`,
+      fillResultHead: (n, before, after) => `빈 칸 ${n}건의 후보(구멍 ${before} → ${after}) — 하나씩 또는 한 번에 추가할 수 있습니다`,
+      fillAdoptAllBtn: '한 번에 추가',
+      fillNoHoleReason: '메우는 구멍 없음(사용률 상위에서)',
       fillClearBtn: '✕ 제안 지우기', alreadyAdded: '추가됨', addToEmptySlot: sp => `${sp}을(를) 빈 칸에 추가`,
       exportHeading: name => `내보내기 — ${name}`, copyBtn: '복사', copiedMsg: '복사했습니다',
       copyFailedMsg: '복사에 실패했습니다. 텍스트를 선택하여 수동으로 복사해 주세요',
@@ -1123,8 +1152,7 @@ const I18N = I18N_ALL[lang];
   let balanceTab = 'atk';
   let fillLoading = false;
   let fillFailed = false;
-  let fillProposals = null;
-  let fillEmptyIdx = [];
+  let fillResult = null; // 「空き枠を穴から埋める」の計算結果。{ picks, oppCols, holesAfter } または null
   let slotFillLoading = false;
   let slotFillProposals = null;
   let slotFillFailed = false;
@@ -1157,14 +1185,13 @@ const I18N = I18N_ALL[lang];
     return store.parties.find((p) => p.id === store.activeId) || null;
   }
   /** アクティブパーティ切替(新規/複製/削除/選択変更/インポート)時に選択枠・提案系の一時状態を破棄する。
-   * H1: fillProposals/fillEmptyIdxを持ち越すと、切替後の別パーティの空き枠を古いインデックスで
-   * 上書きしうるため必ずここでクリアする(採用ボタン自体もH1で現在の空き枠を再計算する方式に修正済み)。 */
+   * H1: 提案結果を持ち越すと、切替後の別パーティの空き枠を古いインデックスで上書きしうるため
+   * 必ずここでクリアする(採用ボタン自体もH1で現在の空き枠を再計算する方式に修正済み)。 */
   function resetPartyUiState() {
     selectedIdx = null;
     fillLoading = false;
     fillFailed = false;
-    fillProposals = null;
-    fillEmptyIdx = [];
+    fillResult = null;
     slotFillLoading = false;
     slotFillProposals = null;
     slotFillFailed = false;
@@ -1186,7 +1213,9 @@ const I18N = I18N_ALL[lang];
     const out = [];
     for (const slot of p.slots) {
       const rb = resolveSlotSafe(slot);
-      if (rb) out.push(rb);
+      // 仮想敵ごとの前提は枠に保存されている。相性表・タブで「前提つきなら勝てる」を
+      // 出すために、解決済みの型に添えて持ち回る（判定そのものには使わない）。
+      if (rb) { rb.sc = slot.scenarios || null; out.push(rb); }
     }
     return out;
   }
@@ -1269,18 +1298,30 @@ const I18N = I18N_ALL[lang];
   /** (7) 仮想敵タブ用の最悪判定バッジ。grpの全型(≤3)についてjudge1v1(rb, opp)を回し、
    * 最も悪いsymが×/▲のときだけそのsymを返す(◎/○/△なら表示しない=null)。選択枠の仮想敵のみが
    * 対象で型数も≤3のため、タブ描画のたびに回しても軽量。 */
-  function muTabBadge(rb, grp) {
+  function muTabBadge(rb, grp, sc) {
     if (!rb || !grp || !grp.builds.length || !core) return null;
-    let worst = null;
-    let worstRank = 99;
-    for (const b of grp.builds) {
-      const opp = resolveTargetSafe(grp.sp, grp.label, grp.icon, b, core.moves);
-      if (!opp) continue;
-      const v = judge1v1(rb, opp);
-      const r = MU_SYM_RANK[v.sym];
-      if (r < worstRank) { worstRank = r; worst = v.sym; }
+    const worstOf = () => {
+      let worst = null, worstRank = 99;
+      for (const b of grp.builds) {
+        const opp = resolveTargetSafe(grp.sp, grp.label, grp.icon, b, core.moves);
+        if (!opp) continue;
+        const r = MU_SYM_RANK[judge1v1(rb, opp).sym];
+        if (r < worstRank) { worstRank = r; worst = judge1v1(rb, opp).sym; }
+      }
+      return worst;
+    };
+    const base = worstOf();
+    if (base !== '×' && base !== '▲') return null;
+    // 前提つきなら勝てる対面は、素の記号を残したまま印だけ足す。
+    let cond = null;
+    if (sc && !scenarioIsDefault(sc)) {
+      applyScenario(sc);
+      try {
+        const w = worstOf();
+        if (w !== base) cond = { sym: w, text: scenarioText(sc, (rb.moves || []).map((m) => m.n)) };
+      } finally { setScenario(null); }
     }
-    return worst === '×' || worst === '▲' ? worst : null;
+    return { sym: base, cond };
   }
 
   /** label(仮想敵ラベル)に対応する種のmon jsonをloadMonで取得する。sp→species.icon経由(メガ型ラベルのicon誤用を避ける)。 */
@@ -1418,8 +1459,8 @@ const I18N = I18N_ALL[lang];
     const p = activeParty();
     const hasEmpty = !!p && p.slots.some((s) => !s);
     btn.style.display = hasEmpty ? '' : 'none';
-    if (!hasEmpty && (fillProposals || fillFailed)) {
-      fillProposals = null;
+    if (!hasEmpty && (fillResult || fillFailed)) {
+      fillResult = null;
       fillFailed = false;
       renderFillOut();
     }
@@ -1817,12 +1858,14 @@ const I18N = I18N_ALL[lang];
     slotFillLoading = true;
     slotFillFailed = false;
     renderSlotFillArea();
-    let proposals = null;
+    let picks = null;
     try {
-      proposals = await suggestFill(p, [idx], { species: core.species, loadMon });
+      // この枠1つぶんの候補。全体の「空き枠を埋める」と同じ穴ベースの選び方にする。
+      const r = await computeFillPicks({ slots: p.slots.map((sl, i) => (i === idx ? null : sl)) },
+                                       buildOppCols());
+      picks = (r.picks[0] && r.picks[0].alts) || [];
     } catch (e) {
-      // M2: mon json取得失敗等でsuggestFillがrejectしてもスピナーが固まらないようにする
-      console.warn('[onSlotFillClick] 提案の取得に失敗しました', e);
+      console.warn('[onSlotFillClick] 候補の計算に失敗しました', e);
       if (idx !== selectedIdx) return;
       slotFillLoading = false;
       slotFillFailed = true;
@@ -1831,7 +1874,7 @@ const I18N = I18N_ALL[lang];
     }
     if (idx !== selectedIdx) return;
     slotFillLoading = false;
-    slotFillProposals = proposals;
+    slotFillProposals = picks;
     renderSlotFillArea();
   }
   function renderSlotFillArea() {
@@ -1840,18 +1883,19 @@ const I18N = I18N_ALL[lang];
     if (slotFillLoading) { out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I18N.fillCalculating)}</div></div>`; return; }
     if (slotFillFailed) { out.innerHTML = `<div class="muted">${esc(I18N.fillFailedMsg)}</div>`; return; }
     if (!slotFillProposals || !slotFillProposals.length) { out.innerHTML = ''; return; }
-    out.innerHTML = slotFillProposals.map((cand, ci) => {
-      const slotCand = cand[0];
-      const sm = core.species.find((s) => s.n === slotCand.sp);
-      return `<div class="pb-cand-card">
-          ${icoImg(sm ? sm.icon : null, slotCand.sp, 'monicon')}
-          <span class="mname" style="font-size:.82rem">${esc(tPoke(slotCand.sp))}</span>
+    const cols = (fillResult && fillResult.oppCols) || buildOppCols();
+    out.innerHTML = slotFillProposals.map((pk, ci) => `<div class="pb-cand-card">
+          ${icoImg(pk.cand.icon, pk.cand.build.label, 'monicon')}
+          <span class="mname" style="font-size:.82rem">${esc(tPoke(pk.cand.build.label))}</span>
+          <span class="muted" style="font-size:.76rem">${esc(pk.covered.length
+            ? I18N.holeFillCoversLbl(pk.covered.map((ci2) => tPoke(cols[ci2].label)).join('、'))
+            : I18N.fillNoHoleReason)}</span>
           <button class="pb-btn-sub" data-slot-cand="${ci}">${esc(I18N.adoptBtn)}</button>
-        </div>`;
-    }).join('');
+        </div>`).join('');
     out.querySelectorAll('[data-slot-cand]').forEach((btn) => btn.addEventListener('click', () => {
       const ci = +btn.dataset.slotCand;
-      const cand = slotFillProposals[ci][0];
+      const pk = slotFillProposals[ci];
+      const cand = { ...pk.cand.slot, evs: [...pk.cand.slot.evs], moves: [...pk.cand.slot.moves], targets: [] };
       const p = activeParty();
       // H1: onFillSpriteClickと同じく採用時点の枠状態を再確認してから書き込む(提案表示後に
       // 別経路で当該枠が埋まっていた場合の無警告上書きを防ぐ)。
@@ -2281,15 +2325,48 @@ const I18N = I18N_ALL[lang];
     tuneResults = null;
     renderTargetsPanel();
   }
+  /** 前提を人が読める短い文字列にする（ツールチップ用）。積みは技名で書く。 */
+  function scenarioText(sc, moveNames) {
+    const parts = [];
+    if (sc.w) parts.push(tWeather(sc.w));
+    if (sc.t) parts.push(tWeather(sc.t));
+    if (sc.n) {
+      const set = setupMoves();
+      const mv = (moveNames || []).find((m) => m && set.has(m));
+      parts.push(`${mv ? tMove(mv) : I18N.scBoost}${I18N.scBoostTimes(sc.n)}`);
+    }
+    return parts.join('・');
+  }
+  /** 天候・フィールドの表示名。辞書に無ければ日本語のまま出す（判定には使わない文字列）。 */
+  function tWeather(name) {
+    return (I18N.fieldNames && I18N.fieldNames[name]) || name;
+  }
+  /** この味方×この相手に前提が設定されていれば、前提つきの集約判定も返す。
+   * 素の判定は必ず残す（前提で勝てても素で勝てるわけではない）。 */
+  function condAgg(b, label, builds, baseAgg) {
+    const sc = b && b.sc ? b.sc[label] : null;
+    if (!sc || scenarioIsDefault(sc)) return null;
+    applyScenario(sc);
+    let agg;
+    try { agg = judgeVsBuilds(b, builds); } finally { setScenario(null); }
+    if (agg.sym === baseAgg.sym) return null;
+    return { sym: agg.sym, text: scenarioText(sc, (b.moves || []).map((m) => m.n)) };
+  }
+  /** 前提つきで結果が変わる対面に付ける印。記号そのものは素の判定のまま。 */
+  function condMarkHtml(cond, baseSym) {
+    if (!cond) return '';
+    return `<span class="mu-cond" title="${esc(I18N.scCondTitle(cond.text, baseSym, cond.sym))}">${esc(I18N.scCondMark)}</span>`;
+  }
+
   /** 仮想敵ごとの前提(天候・フィールド・積み)の操作列。 */
   function scenarioRowHtml(slot, label) {
     const sc = scenarioOf(slot, label);
     const mv = slotSetupMove(slot);
     const opt = (v, cur, txt) => `<option value="${esc(v)}"${v === cur ? ' selected' : ''}>${esc(txt)}</option>`;
     const wSel = `<label class="pb-sc-f">${esc(I18N.scWeather)}
-        <select class="pb-sc-sel" id="pb-sc-w">${opt('', sc.w, I18N.scAuto)}${WEATHER_OPTS.map((o) => opt(o, sc.w, o)).join('')}</select></label>`;
+        <select class="pb-sc-sel" id="pb-sc-w">${opt('', sc.w, I18N.scAuto)}${WEATHER_OPTS.map((o) => opt(o, sc.w, tWeather(o))).join('')}</select></label>`;
     const tSel = `<label class="pb-sc-f">${esc(I18N.scTerrain)}
-        <select class="pb-sc-sel" id="pb-sc-t">${opt('', sc.t, I18N.scNone)}${TERRAIN_OPTS.map((o) => opt(o, sc.t, o)).join('')}</select></label>`;
+        <select class="pb-sc-sel" id="pb-sc-t">${opt('', sc.t, I18N.scNone)}${TERRAIN_OPTS.map((o) => opt(o, sc.t, tWeather(o))).join('')}</select></label>`;
     const nSel = mv
       ? `<label class="pb-sc-f">${esc(I18N.scBoost)}
           <select class="pb-sc-sel" id="pb-sc-n">${[0, 1, 2, 3, 4, 5, 6].map((n) => opt(String(n), String(sc.n), n === 0 ? I18N.scNone : `${tMove(mv)} ${I18N.scBoostTimes(n)}`)).join('')}</select></label>`
@@ -2329,8 +2406,13 @@ const I18N = I18N_ALL[lang];
     const chips = slot.targets.map((label) => {
       const grp = targetsList.find((g) => g.label === label);
       const act = label === activeMuTab ? ' act' : '';
-      const badge = grp ? muTabBadge(rb, grp) : null;
-      const badgeHtml = badge ? `<span class="pb-mu-badge ${badge === '×' ? 'pb-mu-badge-x' : 'pb-mu-badge-tri'}" title="${esc(I18N.muBadgeTitle)}">${badge}</span>` : '';
+      const badge = grp ? muTabBadge(rb, grp, scenarioOf(slot, label)) : null;
+      const badgeHtml = badge
+        ? `<span class="pb-mu-badge ${badge.sym === '×' ? 'pb-mu-badge-x' : 'pb-mu-badge-tri'}`
+          + `${badge.cond ? ' pb-mu-badge-cond' : ''}" title="${esc(badge.cond
+              ? I18N.scCondTitle(badge.cond.text, badge.sym, badge.cond.sym) : I18N.muBadgeTitle)}">`
+          + `${badge.sym}${badge.cond ? esc(I18N.scCondMark) : ''}</span>`
+        : '';
       return `<span class="filter-chip pb-mu-tab${act}" data-mu-tab="${esc(label)}">${grp ? icoImg(grp.icon, grp.label, '') : ''}${esc(tPoke(label))}${badgeHtml}<button class="filter-chip-x" data-rm-target="${esc(label)}">✕</button></span>`;
     }).join('');
 
@@ -2819,13 +2901,19 @@ const I18N = I18N_ALL[lang];
       const cells = oppCols.map((o) => {
         const agg = judgeVsBuilds(b, o.builds);
         const lines = muBreakdownLines(agg, o.builds);
-        const title = lines.join(' / ');
+        // 仮想敵に前提(天候・フィールド・積み)を設定していて結果が変わる対面は印を付ける。
+        // 記号は素の判定のままにする（前提つきで勝てても素で勝てるわけではない）。
+        const cond = condAgg(b, o.label, o.builds, agg);
+        const title = [...lines, cond ? I18N.scCondTitle(cond.text, agg.sym, cond.sym) : ''].filter(Boolean).join(' / ');
         const popIdx = mtxPopData.push({ b, o }) - 1;
-        return `<td class="${symCls(agg.sym)}" title="${esc(title)}" data-mtx-pop="${popIdx}">${agg.sym}${agg.dep ? '<span class="mu-dep">*</span>' : ''}</td>`;
+        return `<td class="${symCls(agg.sym)}${cond ? ' mtx-cond' : ''}" title="${esc(title)}" data-mtx-pop="${popIdx}">`
+          + `${agg.sym}${agg.dep ? '<span class="mu-dep">*</span>' : ''}${condMarkHtml(cond, agg.sym)}</td>`;
       }).join('');
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
-    return `${summary}<div class="mtx-legend"><span>${I18N.muMatrixLegend}</span></div>
+    const condLegend = resolvedParty.some((b) => b.sc && Object.keys(b.sc).length)
+      ? `<span>${esc(I18N.scCondLegend)}</span>` : '';
+    return `${summary}<div class="mtx-legend"><span>${I18N.muMatrixLegend}</span>${condLegend}</div>
       <div class="mg"><table class="mtx">${head}${rows}</table></div>`;
   }
   /** (8) ポップオーバー内「この相手を枠Xの仮想敵に追加」ボタンのHTML。枠未選択・既追加はdisabled。 */
@@ -2912,28 +3000,19 @@ const I18N = I18N_ALL[lang];
    * 入れ替え探索(6メンバー×候補数)はholesAfterSwap()の集合演算のみで行い、
    * judgeVsBuildsを6×候補数だけ追加で呼ぶことはしない。
    */
-  async function computeHoleFillSuggestions(party, oppCols, holeInfo) {
-    const filledIdx = [];
-    const resolvedParty = [];
-    party.slots.forEach((slot, i) => {
-      const rb = resolveSlotSafe(slot);
-      if (rb) { filledIdx.push(i); resolvedParty.push(rb); }
-    });
-    const emptySlotIdx = party.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
-
-    const usedDex = new Set(resolvedParty.map((b) => (b.icon || '').split('-')[0]));
+  /** 候補の型プールを作る。使用率上位50種について、メガ型・非メガ型を最大3型ずつ解決し、
+   * 相手列ごとの「◎/○を取れるか」(coverageSet)まで済ませて返す。
+   * 穴埋め提案と空き枠埋めの両方がこの同じプールを使う。 */
+  async function buildCandidatePool(usedDex, oppCols) {
     const pool = [...core.species]
       .filter((s) => !usedDex.has((s.icon || '').split('-')[0]))
       .sort((a, b) => (a.off ? 1 : 0) - (b.off ? 1 : 0) || a.rank - b.rank)
       .slice(0, 50);
-
     const monDetails = await Promise.all(pool.map((s) => loadMon(s.icon).catch(() => null)));
-
     // メガは1体しか進化できないため、3体以上積むと選出パターンが減る。候補はメガ型・非メガ型を
     // 最大1つずつ持ち、追加はメガ2体まで、入れ替えはメガ有無が一致する組み合わせのみに絞る。
     // 同一種でもメガ型/非メガ型・持ち物違いを最大3型まで持つ(もちもの重複フィルタが効いたときに
     // 同じ種の別の型へ落とせるように)。
-    const megaCount = resolvedParty.filter((b) => b.mega).length;
     const candidates = [];
     pool.forEach((sp, i) => {
       const seen = new Set();
@@ -2946,9 +3025,25 @@ const I18N = I18N_ALL[lang];
         if (seen.has(key) || (rb.mega ? nMega >= 2 : nPlain >= 2)) return;
         seen.add(key);
         if (rb.mega) nMega++; else nPlain++;
-        candidates.push({ sp: sp.n, icon: sp.icon, slot, build: rb, mega: rb.mega, cov: coverageSet(rb, oppCols) });
+        candidates.push({ sp: sp.n, icon: sp.icon, rank: sp.rank, slot, build: rb, mega: rb.mega,
+                          cov: coverageSet(rb, oppCols) });
       });
     });
+    return { pool, candidates };
+  }
+
+  async function computeHoleFillSuggestions(party, oppCols, holeInfo) {
+    const filledIdx = [];
+    const resolvedParty = [];
+    party.slots.forEach((slot, i) => {
+      const rb = resolveSlotSafe(slot);
+      if (rb) { filledIdx.push(i); resolvedParty.push(rb); }
+    });
+    const emptySlotIdx = party.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
+
+    const usedDex = new Set(resolvedParty.map((b) => (b.icon || '').split('-')[0]));
+    const megaCount = resolvedParty.filter((b) => b.mega).length;
+    const { pool, candidates } = await buildCandidatePool(usedDex, oppCols);
 
     const partyCoverage = resolvedParty.map((b) => coverageSet(b, oppCols));
     return {
@@ -3122,29 +3217,77 @@ const I18N = I18N_ALL[lang];
   }
 
   // ---- 空き枠を提案で埋める ----
+  /**
+   * 空き枠を「今の穴を一番埋める候補」から順に選ぶ。
+   *
+   * 以前はサーバ(Cloud Run /complete)に問い合わせていたが、押すたびに課金が発生するうえ、
+   * 返ってくるのは6匹の並びだけで採用理由が分からなかった。穴埋め提案と同じ材料
+   * （相手上位30体に対して◎/○を取れるか）を使い、1枠ごとに「どの穴が埋まるか」を
+   * 示しながら貪欲に埋める。計算はすべてブラウザ内のエンジンで完結する。
+   */
+  async function computeFillPicks(party, oppCols) {
+    const resolved = [];
+    party.slots.forEach((slot) => { const rb = resolveSlotSafe(slot); if (rb) resolved.push(rb); });
+    const emptyIdx = party.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
+    const usedDex = new Set(resolved.map((b) => (b.icon || '').split('-')[0]));
+    const usedItems = new Set(resolved.map((b) => b.item).filter(Boolean));
+    let megaCount = resolved.filter((b) => b.mega).length;
+    const { candidates } = await buildCandidatePool(usedDex, oppCols);
+
+    /** いまの穴に対する候補を「埋まる穴の数 → 使用率」の順に並べる。
+     * 同じ種は1型だけ（型違いが並ぶと選びにくい）。 */
+    const rank = (holeIdx) => {
+      const bySp = new Map();
+      for (const c of candidates) {
+        if (usedDex.has((c.icon || '').split('-')[0])) continue;
+        if (c.mega && megaCount >= 2) continue;           // メガ3体以上は選出が窮屈になる
+        if (c.build.item && usedItems.has(c.build.item)) continue;
+        const covered = [...c.cov].filter((ci) => holeIdx.has(ci));
+        const cur = bySp.get(c.sp);
+        if (!cur || covered.length > cur.covered.length) bySp.set(c.sp, { cand: c, covered });
+      }
+      return [...bySp.values()].sort((a, b) =>
+        b.covered.length - a.covered.length || a.cand.rank - b.cand.rank);
+    };
+
+    const picks = [];
+    for (const slotIdx of emptyIdx) {
+      const holeInfo = findHoles(resolved, oppCols);
+      const best = rank(holeInfo.holeIdx)[0];
+      if (!best) break;
+      picks.push({ slotIdx, cand: best.cand, covered: best.covered,
+                   holesBefore: holeInfo.holeIdx.size,
+                   alts: rank(holeInfo.holeIdx).slice(0, 5) });
+      usedDex.add((best.cand.icon || '').split('-')[0]);
+      if (best.cand.build.item) usedItems.add(best.cand.build.item);
+      if (best.cand.mega) megaCount++;
+      resolved.push(best.cand.build);
+    }
+    const after = findHoles(resolved, oppCols);
+    return { picks, oppCols, holesAfter: after.holeIdx.size };
+  }
+
   async function onFillClick() {
     const p = activeParty();
     if (!p || !core) return;
     const emptyIdx = p.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
     const out = document.getElementById('pb-fill-out');
     if (!emptyIdx.length) { out.innerHTML = `<div class="muted">${esc(I18N.noEmptySlots)}</div>`; return; }
-    fillEmptyIdx = emptyIdx;
     fillLoading = true;
     fillFailed = false;
     renderFillOut();
-    let proposals = null;
+    const t0 = performance.now();
     try {
-      proposals = await suggestFill(p, emptyIdx, { species: core.species, loadMon });
+      fillResult = await computeFillPicks(p, buildOppCols());
     } catch (e) {
-      // M2: mon json取得失敗等でsuggestFillがrejectしてもスピナーが固まらないようにする
-      console.warn('[onFillClick] 提案の取得に失敗しました', e);
+      console.warn('[onFillClick] 空き枠候補の計算に失敗しました', e);
       fillLoading = false;
       fillFailed = true;
       renderFillOut();
       return;
     }
+    console.info(`[pb-fill] ${fillResult.picks.length}枠 計算時間: ${Math.round(performance.now() - t0)}ms`);
     fillLoading = false;
-    fillProposals = proposals;
     renderFillOut();
   }
   function speciesInParty(party, spName) {
@@ -3157,62 +3300,54 @@ const I18N = I18N_ALL[lang];
     const out = document.getElementById('pb-fill-out');
     if (fillLoading) { out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I18N.fillCalcAll)}</div></div>`; return; }
     if (fillFailed) { out.innerHTML = `<div class="muted">${esc(I18N.fillFailedMsg)}</div>`; return; }
-    if (!fillProposals || !fillProposals.length) { out.innerHTML = ''; return; }
-    const p = activeParty();
-    const head = `<div class="pb-fill-head"><span class="muted">${esc(I18N.fillResultHead(fillProposals.length))}</span><button class="pb-btn-sub" id="pb-fill-close">${esc(I18N.fillClearBtn)}</button></div>`;
-    const cards = fillProposals.map((cand, ci) => {
-      const sprites = cand.map((slotCand, si) => {
-        const sm = core.species.find((s) => s.n === slotCand.sp);
-        const disabled = !p || speciesInParty(p, slotCand.sp) || firstEmptySlotIdx(p) === -1;
-        const title = !p ? '' : speciesInParty(p, slotCand.sp) ? I18N.alreadyAdded : firstEmptySlotIdx(p) === -1 ? I18N.noEmptySlots : I18N.addToEmptySlot(tPoke(slotCand.sp));
-        return `<button type="button" class="pb-fill-sprite${disabled ? ' pb-fill-disabled' : ''}" data-fill-ci="${ci}" data-fill-si="${si}" ${disabled ? 'disabled' : ''} title="${esc(title)}">${icoImg(sm ? sm.icon : null, slotCand.sp, '')}</button>`;
-      }).join('');
-      return `<div class="pb-cand-card">
-          <div class="pb-cand-sprites">${sprites}</div>
-          <button class="pb-btn-sub" data-fill-cand="${ci}">${esc(I18N.adoptBtn)}</button>
-        </div>`;
-    }).join('');
+    if (!fillResult || !fillResult.picks.length) { out.innerHTML = ''; return; }
+    const { picks, oppCols, holesAfter } = fillResult;
+    const coverLabels = (covered) => covered.map((ci) => tPoke(oppCols[ci].label)).join('、');
+    const head = `<div class="pb-fill-head">
+        <span class="muted">${esc(I18N.fillResultHead(picks.length, picks[0].holesBefore, holesAfter))}</span>
+        <span class="row" style="gap:6px">
+          <button class="pb-btn-sub" id="pb-fill-all">${esc(I18N.fillAdoptAllBtn)}</button>
+          <button class="pb-btn-sub" id="pb-fill-close">${esc(I18N.fillClearBtn)}</button>
+        </span>
+      </div>`;
+    const cards = picks.map((pk, i) => `<div class="pb-hf-card">
+        ${icoImg(pk.cand.icon, pk.cand.build.label, 'mtx-ico')}
+        <div class="pb-hf-info">
+          <div class="pb-hf-name">${esc(tPoke(pk.cand.build.label))}</div>
+          <div class="pb-hf-covers">${esc(pk.covered.length
+            ? I18N.holeFillCoversLbl(coverLabels(pk.covered))
+            : I18N.fillNoHoleReason)}</div>
+        </div>
+        <button type="button" class="pb-btn-sub" data-fill-add="${i}">${esc(I18N.holeFillAddBtn)}</button>
+        ${hfBuildHtml(pk.cand.slot)}
+      </div>`).join('');
     out.innerHTML = head + cards;
     document.getElementById('pb-fill-close').addEventListener('click', () => {
-      fillProposals = null;
+      fillResult = null;
       renderFillOut();
     });
-    out.querySelectorAll('[data-fill-cand]').forEach((btn) => btn.addEventListener('click', () => {
-      const ci = +btn.dataset.fillCand;
-      const cand = fillProposals[ci];
-      const pp = activeParty();
-      if (!pp) return;
-      // H1: 提案生成時にキャプチャしたfillEmptyIdxは使わず、採用時点のアクティブパーティの空き枠を
-      // 再計算して埋める。提案表示後に手動追加・パーティ切替があっても古いインデックスで
-      // 無警告上書きしないようにするため。空きが提案数より少なければ入る分だけ入れ、過剰分は破棄する。
-      const emptyNow = pp.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
-      if (!emptyNow.length) { fillProposals = null; renderFillOut(); return; }
-      const n = Math.min(emptyNow.length, cand.length);
-      for (let i = 0; i < n; i++) pp.slots[emptyNow[i]] = cand[i];
-      pp.updatedAt = Date.now();
-      saveStore(store);
-      fillProposals = null;
-      render();
-    }));
-    out.querySelectorAll('.pb-fill-sprite:not(.pb-fill-disabled)').forEach((btn) => btn.addEventListener('click', () => {
-      const ci = +btn.dataset.fillCi;
-      const si = +btn.dataset.fillSi;
-      onFillSpriteClick(ci, si);
-    }));
+    document.getElementById('pb-fill-all').addEventListener('click', () => adoptFillPicks(null));
+    out.querySelectorAll('[data-fill-add]').forEach((btn) =>
+      btn.addEventListener('click', () => adoptFillPicks(+btn.dataset.fillAdd)));
   }
-  function onFillSpriteClick(ci, si) {
-    const pp = activeParty();
-    if (!pp || !fillProposals) return;
-    const cand = fillProposals[ci] && fillProposals[ci][si];
-    if (!cand) return;
-    if (speciesInParty(pp, cand.sp)) return;
-    const idx = firstEmptySlotIdx(pp);
-    if (idx === -1) return;
-    pp.slots[idx] = { ...cand, evs: [...cand.evs], moves: [...cand.moves], targets: [] };
-    pp.updatedAt = Date.now();
+  /** 候補を空き枠へ入れる。only が数値ならその1件だけ。
+   * 提案表示後に手動追加やパーティ切替があっても壊れないよう、採用時点の空き枠を数え直す。 */
+  function adoptFillPicks(only) {
+    const p = activeParty();
+    if (!p || !fillResult) return;
+    const src = only === null ? fillResult.picks : [fillResult.picks[only]];
+    for (const pk of src) {
+      if (!pk) continue;
+      if (speciesInParty(p, pk.cand.sp)) continue;
+      const idx = firstEmptySlotIdx(p);
+      if (idx === -1) break;
+      const c = pk.cand.slot;
+      p.slots[idx] = { ...c, evs: [...c.evs], moves: [...c.moves], targets: [] };
+    }
+    p.updatedAt = Date.now();
     saveStore(store);
+    fillResult = null;
     render();
-    renderFillOut();
   }
   document.getElementById('pb-fill-btn').addEventListener('click', onFillClick);
 
