@@ -1776,5 +1776,144 @@
         "dex": 450,
         "form": "00",
         "pokemonId": "hippowdon"
+    },
+    "absol-analysis-m6": {
+        "name": "アブソル",
+        "rank": 43,
+        "types": [
+            "あく"
+        ],
+        "matchKey": "アブソル",
+        "dex": 359,
+        "form": "00"
+    },
+    "baxcalibur-analysis-m6": {
+        "name": "セグレイブ",
+        "rank": 6,
+        "types": [
+            "ドラゴン",
+            "こおり"
+        ],
+        "matchKey": "セグレイブ",
+        "dex": 998,
+        "form": "00"
+    },
+    "cinderace-analysis-m6": {
+        "name": "エースバーン",
+        "rank": 21,
+        "types": [
+            "ほのお"
+        ],
+        "matchKey": "エースバーン",
+        "dex": 815,
+        "form": "00"
+    },
+    "lucario-analysis-m6": {
+        "name": "ルカリオ",
+        "rank": 7,
+        "types": [
+            "かくとう",
+            "はがね"
+        ],
+        "matchKey": "ルカリオ",
+        "dex": 448,
+        "form": "00"
+    },
+    "rillaboom-analysis-m6": {
+        "name": "ゴリランダー",
+        "rank": 13,
+        "types": [
+            "くさ"
+        ],
+        "matchKey": "ゴリランダー",
+        "dex": 812,
+        "form": "00"
+    },
+    "mimikyu-analysis-m6": {
+        "name": "ミミッキュ",
+        "rank": 12,
+        "types": [
+            "ゴースト",
+            "フェアリー"
+        ],
+        "matchKey": "ミミッキュ",
+        "dex": 778,
+        "form": "00"
+    },
+    "aegislash-analysis-m6": {
+        "name": "ギルガルド",
+        "rank": 11,
+        "types": [
+            "はがね",
+            "ゴースト"
+        ],
+        "matchKey": "ギルガルド",
+        "dex": 681,
+        "form": "00"
+    },
+    "archaludon-analysis-m6": {
+        "name": "ブリジュラス",
+        "rank": 8,
+        "types": [
+            "はがね",
+            "ドラゴン"
+        ],
+        "matchKey": "ブリジュラス",
+        "dex": 1018,
+        "form": "00"
+    },
+    "corviknight-analysis-m6": {
+        "name": "アーマーガア",
+        "rank": 15,
+        "types": [
+            "ひこう",
+            "はがね"
+        ],
+        "matchKey": "アーマーガア",
+        "dex": 823,
+        "form": "00"
+    },
+    "gholdengo-analysis-m6": {
+        "name": "サーフゴー",
+        "rank": 9,
+        "types": [
+            "はがね",
+            "ゴースト"
+        ],
+        "matchKey": "サーフゴー",
+        "dex": 1000,
+        "form": "00"
+    },
+    "meowscarada-analysis-m6": {
+        "name": "マスカーニャ",
+        "rank": 13,
+        "types": [
+            "くさ",
+            "あく"
+        ],
+        "matchKey": "マスカーニャ",
+        "dex": 908,
+        "form": "00"
+    },
+    "pawmot-analysis-m6": {
+        "name": "パーモット",
+        "rank": 26,
+        "types": [
+            "でんき",
+            "かくとう"
+        ],
+        "matchKey": "パーモット",
+        "dex": 923,
+        "form": "00"
+    },
+    "sirfetchd-analysis-m6": {
+        "name": "ネギガナイト",
+        "rank": 72,
+        "types": [
+            "かくとう"
+        ],
+        "matchKey": "ネギガナイト",
+        "dex": 865,
+        "form": "00"
     }
 }
