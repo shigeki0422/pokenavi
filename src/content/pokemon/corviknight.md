@@ -1,9 +1,9 @@
 ---
 title: 'アーマーガア | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのアーマーガア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率16位。'
+description: 'ポケモンチャンピオンズのアーマーガア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率19位。'
 pokemonName: 'アーマーガア'
 dexNumber: 823
-usageRank: 16
+usageRank: 19
 pubDate: '2026-09-17'
 draft: false
 
@@ -18,7 +18,7 @@ draft: false
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.823</strong>　／　使用率 <strong style="color:#dc2626">16位</strong>
+      全国図鑑 <strong>No.823</strong>　／　使用率 <strong style="color:#dc2626">19位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-17</div>
   </div>
