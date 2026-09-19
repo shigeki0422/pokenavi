@@ -278,6 +278,7 @@ const I18N = I18N_ALL[lang];
       <h2 style="margin:0">{I18N.teamHead}<span class="pb-dnd-hint muted">{I18N.teamDndHint}</span></h2>
       <button id="pb-fill-btn" class="btn">{I18N.fillBtn}</button>
     </div>
+    <div id="pb-team-holes"></div>
     <div class="iconrow" id="pb-tray"></div>
     <div id="pb-empty-guide"></div>
     <div id="pb-slot-search"></div>
@@ -480,6 +481,14 @@ const I18N = I18N_ALL[lang];
   .pb-ev-step{width:40px;height:40px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#f8fafc;color:rgb(var(--gray-dark));font-size:1.05rem;font-weight:800;cursor:pointer;font-family:var(--font-atkinson);padding:0}
   .pb-ev-step:disabled{opacity:.4;cursor:default}
   /* 仮想敵ごとの前提(天候・フィールド・積み)。既定のときは目立たせない */
+  /* 6枠編成カードの穴サマリ。「空き枠を提案で埋める」の前提を同じ画面で見せる */
+  .pb-team-holes{display:flex;flex-wrap:wrap;align-items:center;gap:6px;width:100%;margin:.6em 0 0;padding:8px 10px;border:1px solid #fecaca;border-radius:10px;background:#fef2f2;font-size:.84rem;text-align:left;font-family:var(--font-atkinson);color:rgb(var(--gray-dark))}
+  .pb-team-holes.pb-hole-ok{border-color:#bbf7d0;background:#f0fdf4}
+  .pb-team-holes-btn{cursor:pointer}
+  @media(hover:hover){.pb-team-holes-btn:hover{border-color:#f87171;background:#fee2e2}}
+  .pb-th-lead{font-weight:800;color:#b91c1c;white-space:nowrap}
+  .pb-th-names{flex:1 1 auto;min-width:0;color:rgb(var(--gray-dark))}
+  .pb-th-hint{margin-left:auto;white-space:nowrap;color:var(--accent);font-weight:700}
   /* 前提つきでのみ結果が変わる対面。記号は素の判定のままで、印と枠線だけ足す */
   .mu-cond{font-size:.72em;font-weight:800;color:#7c3aed;vertical-align:super;margin-left:1px}
   td.mtx-cond{box-shadow:inset 0 0 0 1.5px #c4b5fd}
@@ -766,6 +775,7 @@ const I18N = I18N_ALL[lang];
       speedMatrixLegend: '味方（左・素早さ順）が使用率上位30体の代表型より速いか（スカーフ込み）。<b>◎</b>＝速い <b>△</b>＝同速 <b>×</b>＝遅い。',
       muMatrixLegend: '各味方 vs 使用率上位30体の想定型（採用率上位≤3型）を集約した1v1判定。◎有利 ○やや有利 △五分 ▲やや不利 ×不利。<b class="mu-dep-leg">*</b>＝型により有利不利が変化。<b class="mtx-hole" style="padding:0 4px">赤</b>=誰も集約◎/○を取れない「穴」。セルをクリック(ホバー可のPCではマウスオーバーも)で型ごとの内訳（確定数・素早さ）を表示。',
       holeSummary: labels => `⚠ 穴: ${labels}`, holeOkMsg: '✓ 使用率上位30体に穴なし',
+      holeJumpHint: 'タップで相性表へ', holeCountLbl: n => `${n}体`,
       holeFillBtn: '穴を埋める候補', holeFillCalculating: '候補を計算中…',
       holeFillAddHeading: '追加候補', holeFillAddNone: '追加できる候補が見つかりませんでした',
       holeFillAllowDupLbl: '既存ポケモンと持ち物重複の提案を許可',
@@ -874,6 +884,7 @@ const I18N = I18N_ALL[lang];
       speedMatrixLegend: 'Whether your team (left, sorted by Speed) outspeeds the top 30\'s representative sets (Scarf included). <b>◎</b> = faster <b>△</b> = tied <b>×</b> = slower.',
       muMatrixLegend: 'Aggregated 1v1 verdict for each ally vs the top 30 usage ranks\' assumed sets (top ≤3 sets by usage). ◎ favorable ○ slightly favorable △ even ▲ slightly unfavorable × unfavorable. <b class="mu-dep-leg">*</b> = favorability varies by set. <b class="mtx-hole" style="padding:0 4px">Red</b> = a "gap" no ally gets an aggregated ◎/○ against. Click a cell (hover also works on PC) for the per-set breakdown (KO count, Speed).',
       holeSummary: labels => `⚠ Gaps: ${labels}`, holeOkMsg: '✓ No gaps against the top 30',
+      holeJumpHint: 'Tap to open the matchup table', holeCountLbl: n => `${n}`,
       holeFillBtn: 'Suggest additions', holeFillCalculating: 'Calculating candidates…',
       holeFillAddHeading: 'Additions', holeFillAddNone: 'No addable candidates found',
       holeFillAllowDupLbl: 'Allow suggestions with items already used by the party',
@@ -983,6 +994,7 @@ const I18N = I18N_ALL[lang];
       speedMatrixLegend: '아군（왼쪽·스피드 순）이 사용률 상위 30마리의 대표 빌드보다 빠른지（스카프 포함）. <b>◎</b>＝빠름 <b>△</b>＝동속 <b>×</b>＝느림.',
       muMatrixLegend: '각 아군 vs 사용률 상위 30마리의 예상 빌드（채용률 상위≤3빌드）을 종합한 1v1 판정. ◎유리 ○약간유리 △반반 ▲약간불리 ×불리. <b class="mu-dep-leg">*</b>＝빌드에 따라 유불리가 달라짐. <b class="mtx-hole" style="padding:0 4px">빨강</b>=아무도 종합 ◎/○를 얻지 못하는 「약점」. 셀 클릭(호버 가능한 PC에서는 마우스오버도)으로 빌드별 상세（확정타·스피드）를 확인할 수 있습니다.',
       holeSummary: labels => `⚠ 약점: ${labels}`, holeOkMsg: '✓ 사용률 상위 30체에 약점 없음',
+      holeJumpHint: '탭하면 상성표로 이동', holeCountLbl: n => `${n}마리`,
       holeFillBtn: '약점을 메우는 후보', holeFillCalculating: '후보를 계산하는 중…',
       holeFillAddHeading: '추가 후보', holeFillAddNone: '추가할 수 있는 후보를 찾지 못했습니다',
       holeFillAllowDupLbl: '기존 포켓몬과 지닌 물건이 중복되는 제안 허용',
@@ -2718,11 +2730,57 @@ const I18N = I18N_ALL[lang];
   }
 
   // ---- パーティバランス ----
+  /**
+   * 6枠編成カードに「いまの穴」を出す。
+   *
+   * 「空き枠を提案で埋める」は穴を埋める順に候補を選ぶので、押す前に何が穴なのかが
+   * 同じ画面に無いと結果の理由が読めない。判定はパーティバランス側と同じ holeInfo を
+   * 使い回すので、2箇所で食い違わない。タップでその相性表まで飛ぶ。
+   */
+  function renderTeamHoles(holeInfo) {
+    const el = document.getElementById('pb-team-holes');
+    if (!el) return;
+    if (!holeInfo) { el.innerHTML = ''; return; }
+    if (!holeInfo.holeLabels.length) {
+      el.innerHTML = `<div class="pb-team-holes pb-hole-ok"><span>${esc(I18N.holeOkMsg)}</span></div>`;
+      return;
+    }
+    el.innerHTML = `<button type="button" class="pb-team-holes pb-team-holes-btn" id="pb-team-holes-btn">
+        <span class="pb-th-lead">${esc(I18N.holeSummary(''))}${esc(I18N.holeCountLbl(holeInfo.holeLabels.length))}</span>
+        <span class="pb-th-names">${holeNamesHtml(holeInfo.holeLabels)}</span>
+        <span class="pb-th-hint">${esc(I18N.holeJumpHint)} ›</span>
+      </button>`;
+    document.getElementById('pb-team-holes-btn').addEventListener('click', jumpToMatchupTab);
+  }
+  /** パーティバランスのポケモン相性タブを開いてそこまでスクロールする。 */
+  function jumpToMatchupTab() {
+    const card = document.getElementById('pb-balance');
+    if (!card) return;
+    if (balanceTab !== 'mu') {
+      balanceTab = 'mu';
+      renderBalance();
+    }
+    // 相性表の描画でカード内のDOMを丸ごと入れ替えるため、同じフレームで
+    // スクロールを始めると打ち消される。描画が済んでから動かす。
+    // requestAnimationFrame は非表示タブでは発火しないので setTimeout を使う。
+    setTimeout(() => {
+      const top = card.getBoundingClientRect().top + window.scrollY - 8;
+      const from = window.scrollY;
+      window.scrollTo({ top, behavior: 'smooth' });
+      // smooth を無視する環境（設定・埋め込みブラウザ）だと1pxも動かないので、
+      // 少し待って動いていなければ即時で飛ばす。
+      setTimeout(() => {
+        if (Math.abs(window.scrollY - from) < 2) window.scrollTo(0, top);
+      }, 350);
+    }, 0);
+  }
+
   function renderBalance() {
     const el = document.getElementById('pb-balance');
     const resolvedParty = resolvedPartyList();
     if (!resolvedParty.length) {
       el.innerHTML = `<h2>${esc(I18N.balanceHeading)}</h2><div class="muted">${esc(I18N.addPokemonPrompt)}</div>`;
+      renderTeamHoles(null);
       return;
     }
     const sum = partySummary(resolvedParty);
@@ -2748,6 +2806,7 @@ const I18N = I18N_ALL[lang];
       </div>
       <div class="pane" id="pb-balance-pane">${balancePaneHtml(resolvedParty, balanceTab)}</div>
     `;
+    renderTeamHoles(holeInfo);
     bindMtxPopovers(document.getElementById('pb-balance-pane'));
     bindHoleFillButton(el);
     el.querySelectorAll('.tb').forEach((btn) => btn.addEventListener('click', () => {
