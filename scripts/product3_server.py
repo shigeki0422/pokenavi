@@ -458,8 +458,26 @@ def _cap_select(scored, fixnames, cap, top):
                 sel.append((sc, p))
     return sel[:top]
 
-def suggest(core_args, ncand, top):
-    fixed = resolve_fixed(PG, core_args)
+# 軸を複数固定した提案（＝キャッシュに無いリクエスト）だけが実計算になり、Cloud Runの
+# CPU課金のほぼ全額を占めていた。2026-09-16の実計算357件の内訳は
+# gen=41.9s / score=3.1s / detail=1.6s で、候補生成が9割。ncandがそのまま費用になる。
+# 軸が多いほど空き枠が少なく候補の多様性も要らないので、生成数を軸数で絞る。
+_NCAND_BY_FIXED = {2: 150, 3: 100, 4: 60, 5: 40, 6: 20}
+
+def _ncand_for(n_fixed, ncand):
+    base = max(ncand, SUGGEST_NCAND)
+    cap = _NCAND_BY_FIXED.get(n_fixed)
+    return min(base, cap) if cap else base
+
+def suggest_cached(core_args, ncand, top):
+    """事前計算済みキャッシュのみを引く（重い計算は一切しない）。無ければ None。
+    ヒット判定を _HEAVY_LOCK の外で行うため、実計算の混雑が無料の1軸提案を巻き込まない。"""
+    try:
+        return _SCACHE.get(_suggest_key(resolve_fixed(PG, core_args), ncand, top))
+    except SystemExit:
+        return None
+
+def _suggest_key(fixed, ncand, top):
     key = [fixed, ncand, top] + ([SUGGEST_CAP] if SUGGEST_CAP else []) \
                                   + ([f"dw{DEPTH_W}"] if DEPTH_W else []) \
                                   + ([f"mo{MEGA_OVERLAP_W}"] if MEGA_OVERLAP_W else []) \
@@ -468,7 +486,11 @@ def suggest(core_args, ncand, top):
                                   + ([f"mp{SUGGEST_MEGA_PAIR}_{SUGGEST_MEGA_PAIR_FLOOR}_{SUGGEST_MEGA_PAIR_ABS}"] if SUGGEST_MEGA_PAIR else []) \
                                   + ([f"mw{SUGGEST_MEGA_SHARED_MAX}"] if SUGGEST_MEGA_SHARED_MAX else []) \
                                   + ([f"ms{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_PAIR and SUGGEST_MEGA_CAP else [])
-    ck = json.dumps(key, ensure_ascii=False)   # 解決後specでキー化（入力形式に非依存）
+    return json.dumps(key, ensure_ascii=False)   # 解決後specでキー化（入力形式に非依存）
+
+def suggest(core_args, ncand, top):
+    fixed = resolve_fixed(PG, core_args)
+    ck = _suggest_key(fixed, ncand, top)
     hit = _SCACHE.get(ck)
     if hit is not None:
         return hit                      # 同一軸は即時返却（重い計算をスキップ）
@@ -481,7 +503,7 @@ def suggest(core_args, ncand, top):
     # キーに混ぜるとオフライン生成したキャッシュが永久にヒットしなくなる）。
     # ncand=100 では候補の8割が上位3メガに集中し、Mライチュウ/Mフラエッテのような
     # 弱点の被らないメガが1件も生成されなかった（実測ボーマンダ軸: 下限超えメガ2種→600で7種）。
-    _nc = max(ncand, SUGGEST_NCAND)
+    _nc = _ncand_for(len(fixed), ncand)
     _t = time.time(); cands = complete_core(PG, L, TH, fixed, rng, _nc); tg = time.time() - _t
     fixnames = [f.split("@")[0] for f in fixed]
     _t = time.time()
@@ -626,6 +648,11 @@ async function run(){
 ALLOW_ORIGIN = os.environ.get("ALLOW_ORIGIN", "*")   # 本番は https://pokenavi.jp を推奨
 MIN_INTERVAL = float(os.environ.get("MIN_INTERVAL", "0"))  # 同一IPの重い処理の最短間隔(秒)。0で無効
 _HEAVY_LOCK = threading.Lock()                       # 重い計算の同時実行を1本に直列化（CPU保護）
+# ロックを待つ間もCloud Runは8vCPU分を課金し続ける。2026-09-16は/suggestのp90が21.8秒・
+# p99が120秒（タイムアウト）に張り付き、うち30件は72バイトのエラーしか返していなかった。
+# 待たせずに即429を返し、待ち時間の課金をなくす。
+HEAVY_WAIT = float(os.environ.get("HEAVY_WAIT", "3"))  # ロック取得の最大待ち秒。0で即諦める
+_BUSY = json.dumps({"error": "いま提案の計算が混み合っています。数十秒おいて再試行してください。"}, ensure_ascii=False)
 _LAST_HIT = {}                                       # ip -> 直近の重い処理時刻
 _HEAVY = ("/suggest", "/simulate", "/complete")
 MAX_BODY_BYTES = int(os.environ.get("MAX_BODY_BYTES", 16 * 1024))  # POSTボディ上限(既定16KB)。超過は413
@@ -637,6 +664,9 @@ class H(BaseHTTPRequestHandler):
         self.send_response(code); self.send_header("Content-Type", ctype + "; charset=utf-8")
         self.send_header("Access-Control-Allow-Origin", ALLOW_ORIGIN)
         self.send_header("Content-Length", str(len(b))); self.end_headers(); self.wfile.write(b)
+
+    def _acquire_heavy(self):
+        return _HEAVY_LOCK.acquire(timeout=HEAVY_WAIT) if HEAVY_WAIT > 0 else _HEAVY_LOCK.acquire(blocking=False)
 
     def _client_ip(self):
         xff = self.headers.get("Fly-Client-IP") or self.headers.get("X-Forwarded-For", "")
@@ -696,8 +726,12 @@ class H(BaseHTTPRequestHandler):
                 specs = req.get("specs") or []
                 opp_idx = int(req.get("opp_idx", 0))
                 k = min(20, max(2, int(req.get("k", 6))))
-                with _HEAVY_LOCK:
+                if not self._acquire_heavy():
+                    self._send(429, _BUSY); return
+                try:
                     self._send(200, json.dumps(simulate(specs, opp_idx, k), ensure_ascii=False))
+                finally:
+                    _HEAVY_LOCK.release()
                 return
             if self.path == "/complete":
                 specs = req.get("specs") or []
@@ -711,15 +745,26 @@ class H(BaseHTTPRequestHandler):
                 if not (1 <= fill <= 6 - len(specs)):
                     self._send(200, json.dumps({"error": "fillが不正です（1 <= fill <= 6-specs.length）"}, ensure_ascii=False)); return
                 top = min(3, max(1, int(req.get("top", 3))))
-                with _HEAVY_LOCK:
+                if not self._acquire_heavy():
+                    self._send(429, _BUSY); return
+                try:
                     res = complete(specs, fill, top)
+                finally:
+                    _HEAVY_LOCK.release()
                 self._send(200, json.dumps(res, ensure_ascii=False))
                 return
             core = req.get("core") or []
             nc = min(300, max(20, int(req.get("ncand", 120))))
             top = min(10, max(1, int(req.get("top", 5))))
-            with _HEAVY_LOCK:
+            hit = suggest_cached(core, nc, top)
+            if hit is not None:
+                self._send(200, json.dumps(hit, ensure_ascii=False)); return
+            if not self._acquire_heavy():
+                self._send(429, _BUSY); return
+            try:
                 res = suggest(core, nc, top)
+            finally:
+                _HEAVY_LOCK.release()
             self._send(200, json.dumps(res, ensure_ascii=False))
         except SystemExit as e:
             self._send(200, json.dumps({"error": str(e)}, ensure_ascii=False))
