@@ -126,6 +126,29 @@ def main():
         sessions = row["metricValues"][0]["value"]
         print(f"{device:<20} {sessions:>10}")
 
+    # 3b. モバイルのOS内訳（iOS/Android）
+    data3b = run_report(access_token, {
+        "dateRanges": [{"startDate": start_date, "endDate": "today"}],
+        "dimensions": [{"name": "operatingSystem"}],
+        "metrics": [{"name": "sessions"}, {"name": "activeUsers"}],
+        "dimensionFilter": {
+            "filter": {
+                "fieldName": "deviceCategory",
+                "stringFilter": {"value": "mobile"}
+            }
+        },
+        "orderBys": [{"metric": {"metricName": "sessions"}, "desc": True}]
+    })
+
+    print(f"\n【モバイルOS別（iOS/Android）】")
+    print(f"{'OS':<20} {'セッション':>10} {'アクティブユーザー':>14}")
+    print("-" * 46)
+    for row in data3b.get("rows", []):
+        os_name = row["dimensionValues"][0]["value"]
+        sessions = row["metricValues"][0]["value"]
+        users = row["metricValues"][1]["value"]
+        print(f"{os_name:<20} {sessions:>10} {users:>14}")
+
     # 4. 検索クエリ（Search Console連携がある場合）
     data4 = run_report(access_token, {
         "dateRanges": [{"startDate": start_date, "endDate": "today"}],
