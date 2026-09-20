@@ -4,8 +4,8 @@ export const ui = {
   ja: {
     siteName: 'ポケナビ',
     // Ranking
-    rankingMetaTitle: 'ポケモンチャンピオンズ 使用率ランキング TOP200【最新シーズン】',
-    rankingMetaDesc: 'ポケモンチャンピオンズ シングルバトルの使用率ランキング TOP200を毎日更新。ガブリアス・マスカーニャ・ミミッキュなど上位ポケモンの順位変動をインタラクティブなチャートで確認できます。',
+    rankingMetaTitle: 'ポケモンチャンピオンズ {season} 使用率ランキング TOP{count}【{date}更新】',
+    rankingMetaDesc: 'ポケモンチャンピオンズ シングルバトル {season} の使用率ランキング TOP{count}。{date}時点の1位は{top1}、2位{top2}、3位{top3}。毎日更新で順位変動をチャートで追えます。',
     rankingH1: '使用率ランキング',
     rankingSubtitle: 'シングルバトル',
     rankingUpdated: '最終更新',
@@ -43,8 +43,8 @@ export const ui = {
   },
   en: {
     siteName: 'PokeNavi',
-    rankingMetaTitle: 'Pokémon Champions Usage Rate Ranking TOP200 [Latest Season]',
-    rankingMetaDesc: 'Pokémon Champions Singles battle usage rate ranking. Daily updates up to top 200. Visualize rank trends with an interactive bump chart.',
+    rankingMetaTitle: 'Pokémon Champions {season} Usage Rate Ranking TOP{count} [Updated {date}]',
+    rankingMetaDesc: 'Pokémon Champions Singles usage rate ranking for {season}, top {count}. As of {date}: #1 {top1}, #2 {top2}, #3 {top3}. Updated daily with an interactive bump chart.',
     rankingH1: 'Usage Rate Ranking',
     rankingSubtitle: 'Singles Battle',
     rankingUpdated: 'Updated',
@@ -77,8 +77,8 @@ export const ui = {
   },
   ko: {
     siteName: '포케나비',
-    rankingMetaTitle: '포켓몬 챔피언스 사용률 랭킹 TOP200 [최신 시즌]',
-    rankingMetaDesc: '포켓몬 챔피언스 싱글 배틀 사용률 랭킹. TOP200 매일 업데이트. 범프 차트로 순위 변동을 시각화.',
+    rankingMetaTitle: '포켓몬 챔피언스 {season} 사용률 랭킹 TOP{count} [{date} 갱신]',
+    rankingMetaDesc: '포켓몬 챔피언스 싱글 배틀 {season} 사용률 랭킹 TOP{count}. {date} 기준 1위 {top1}, 2위 {top2}, 3위 {top3}. 매일 갱신되며 범프 차트로 순위 변동을 확인할 수 있습니다.',
     rankingH1: '사용률 랭킹',
     rankingSubtitle: '싱글 배틀',
     rankingUpdated: '최종 업데이트',

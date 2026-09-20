@@ -65,12 +65,15 @@ const T = {
 /** contentコレクションのtitleは和名のみ(全言語共通データ)のため、en/koでは
  * <title>・OGP・JSON-LD name にそのまま使うと日本語タイトルがSEOに露出してしまう。
  * ここでlang別に組み立て直す。 */
+/** contentのtitleは固定文のためシーズンも順位も入らず、「ポケモン名＋チャンピオンズ」
+ * のような検索意図に対して弱い。ここで最新シーズンと使用率順位を差し込む。 */
+const rankText = usageRank ? `使用率${usageRank}位` : '';
 const pageTitle = pokemonNameDisp
   ? (lang === 'en'
-      ? `${pokemonNameDisp} | Pokémon Champions Usage Rate & Base Stats`
+      ? `${pokemonNameDisp} | Pokémon Champions ${seasonLabel}${usageRank ? ` Usage Rank #${usageRank}` : ''} Usage & Base Stats`
       : lang === 'ko'
-      ? `${pokemonNameDisp} | 포켓몬 챔피언스 사용률・기초 데이터`
-      : title)
+      ? `${pokemonNameDisp} | 포켓몬 챔피언스 ${seasonLabel}${usageRank ? ` 사용률 ${usageRank}위` : ''}・기초 데이터`
+      : `${pokemonNameDisp} ポケモンチャンピオンズ${seasonLabel}${rankText ? ` ${rankText}` : ''}｜技・持ち物・特性の採用率と種族値`)
   : title;
 const quickBuildHref = lang === 'ja' ? `/party-suggest/${pokemonSlug}/` : `${pfx}/party-suggest/?core=${encodeURIComponent(pokemonName ?? '')}`;
 const quickBuildMegaHref = lang === 'ja' ? `/party-suggest/mega-${pokemonSlug}/` : `${pfx}/party-suggest/?core=${encodeURIComponent('メガ' + (pokemonName ?? ''))}`;

@@ -90,6 +90,21 @@ const top50 = [...pokemon]
 
 const top10 = top50.slice(0, 10);
 
+/** 検索スニペットに出すシーズン・集計日・上位3体は実データから差し込む。
+ * 固定文で旧環境のポケモン名を書いていたため、いまの環境と食い違っていた。 */
+const NAME_I18N: Record<string, string> = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {};
+const dispName = (n: string) => NAME_I18N[n] ?? n;
+const rankedCount = pokemon.filter(p => p.dates[lastDate]?.rank).length;
+const metaVars: Record<string, string> = {
+  season: latestSeason,
+  count: String(rankedCount),
+  date: fmtDate(lastDate),
+  top1: dispName(top50[0]?.name ?? ''),
+  top2: dispName(top50[1]?.name ?? ''),
+  top3: dispName(top50[2]?.name ?? ''),
+};
+const fillMeta = (tpl: string) => tpl.replace(/\{(\w+)\}/g, (_, k) => metaVars[k] ?? '');
+
 const blogPosts = lang === 'ja' ? await getCollection('blog', p => showDrafts || !p.data.draft) : [];
 const latestArticleByName: Record<string, { slug: string; title: string; pubDate: Date }> = {};
 for (const post of blogPosts) {
@@ -143,8 +158,8 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
 <html lang={htmlLang}>
   <head>
     <BaseHead
-      title={T.rankingMetaTitle}
-      description={T.rankingMetaDesc}
+      title={fillMeta(T.rankingMetaTitle)}
+      description={fillMeta(T.rankingMetaDesc)}
       noOgImage={true}
       alternates={alternates}
       ogLocale={T.ogLocale}
