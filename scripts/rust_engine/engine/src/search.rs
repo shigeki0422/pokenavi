@@ -237,6 +237,9 @@ pub struct SearchAI {
     pub downside_margin: f64,
     pub tree_roll: f64,
     pub hidden: bool,
+    /// 完全情報AI: 相手の型を決定化せず真値のまま読む（Python の SearchAI.oracle と同じ）。
+    /// 型推定のノイズを外してネット品質だけを測る/学ぶためのもの。
+    pub oracle: bool,
     pub ctx: NetCtx,
     tpl: TplCache,
     nodes: Vec<Node>,
@@ -261,6 +264,7 @@ impl SearchAI {
             downside_margin: 0.20,
             tree_roll: 0.85,
             hidden: true,
+            oracle: std::env::var("ORACLE").map(|v| v == "1").unwrap_or(false),
             ctx: NetCtx::new(pack),
             tpl: TplCache::default(),
             nodes: Vec::new(),
@@ -410,7 +414,7 @@ impl SearchAI {
             let mut cs: [Side; 2] = [sides[0].clone(), sides[1].clone()];
             let mut cfield = field.clone();
             let dopp = 1 - me_idx;
-            if self.hidden {
+            if self.hidden && !self.oracle {
                 self.resample_hidden_bench(pack, &mut cs, dopp, &sides[me_idx].opp_view, grng);
             }
             let cfg = self.sample_opp_config(pack, &cs[dopp], belief);
@@ -485,6 +489,10 @@ impl SearchAI {
         opp_side: &Side,
         belief: &mut OpponentBelief,
     ) -> Vec<Option<SampledCfg>> {
+        if self.oracle {
+            // 決定化しない＝真の型のまま。呼び出し側は None を「上書きしない」と解釈する
+            return vec![None; opp_side.party.len()];
+        }
         let mut out = Vec::with_capacity(opp_side.party.len());
         for p in &opp_side.party {
             let name = pack.intern.resolve(p.name).to_string();
@@ -851,7 +859,7 @@ impl SearchAI {
         for _k in 0..self.downside_k {
             let mut b: [Side; 2] = [sides[0].clone(), sides[1].clone()];
             let mut bf = field.clone();
-            if self.hidden {
+            if self.hidden && !self.oracle {
                 self.resample_hidden_bench(pack, &mut b, di, &sides[me_idx].opp_view, grng);
             }
             let cfg = self.sample_opp_config(pack, &b[di], belief);

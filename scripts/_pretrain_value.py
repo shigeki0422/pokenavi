@@ -31,6 +31,37 @@ LR = float(os.environ.get("LR", "1e-3"))
 from simulator.az_np import PVNetNP, ACTION_DIM
 
 
+def _lambda_return(G, Y, Q, lam):
+    """λ収益: 同じ手番側の n 手先の探索評価 Q を混ぜ、終端は最終勝敗 Y に接続する。
+
+    λ=0 なら Q そのもの（1ステップのブートストラップ＝探索の結論の丸写し・自己回帰）、
+    λ=1 なら最終勝敗そのもの（分散大・同一対局で共有）。中間は「決着に近い局面ほど 0/1 に寄る」
+    RL の標準的な価値になり、局面ごとに値が変わるので相関も切れる。
+
+    記録は対局内で時系列順。Y はその手番側が最終的に勝ったかなので、**手番側の識別子**として使える
+    （勝者側の記録は Y=1、敗者側は Y=0）。同じ Y を持つ記録を辿れば同一視点の系列になる。
+    """
+    out = np.array(Y, dtype=float)
+    order = np.argsort(G, kind="stable")
+    gs = G[order]
+    for seg in np.split(order, np.flatnonzero(np.diff(gs)) + 1):
+        for side in (0.0, 1.0):
+            idx = seg[Y[seg] == side]
+            if len(idx) == 0:
+                continue
+            q = Q[idx]
+            # 後ろから: g_k = (1-λ)·Q(k+1) + λ·g_{k+1}、終端は最終勝敗
+            g = float(side)
+            for k in range(len(idx) - 1, -1, -1):
+                out[idx[k]] = (1.0 - lam) * q[k] + lam * g if k < len(idx) - 1 else \
+                    (1.0 - lam) * q[k] + lam * float(side)
+                g = out[idx[k]]
+    return out
+
+
+_VALUE_W: list = []   # VALUE_PER_GAME 使用時のサンプルごとの価値重み（訓練コーパス分のみ）
+
+
 def _load_pi(prefixes):
     """カンマ区切りの複数コーパスを連結して (X, PI, M, Y) を返す。
     VALUE_TARGET=q で価値ターゲットを探索の根の価値 Q にする（最終勝敗と違い局面ごとに値が変わる＝
@@ -49,6 +80,23 @@ def _load_pi(prefixes):
         elif tgt.startswith("mix:"):
             w = float(tgt.split(":", 1)[1])
             Y = (1.0 - w) * Y + w * Q
+        elif tgt.startswith("lam:"):
+            Y = _lambda_return(cat("_G.npy"), Y, Q, float(tgt.split(":", 1)[1]))
+    vk = int(os.environ.get("VALUE_PER_GAME", "0") or 0)
+    if vk:
+        G = cat("_G.npy")
+        rng = np.random.default_rng(11)
+        w = np.zeros(len(X))
+        order = np.argsort(G, kind="stable"); gs = G[order]
+        ng = 0
+        for seg in np.split(order, np.flatnonzero(np.diff(gs)) + 1):
+            ng += 1
+            pick = seg if len(seg) <= vk else rng.choice(seg, vk, replace=False)
+            w[pick] = 1.0
+        # 学習量を保つため、選ばれた局面の重みを (全件/選択件) 倍にする
+        w *= len(X) / max(w.sum(), 1.0)
+        _VALUE_W.append(w)
+        print(f"価値は1対局{vk}局面のみ学習: {int((w>0).sum())}/{len(X)}件（対局数 {ng}）", flush=True)
     k = int(os.environ.get("PER_GAME_PICK", "0") or 0)
     if k:
         G = cat("_G.npy")
@@ -79,7 +127,8 @@ def _fresh():
             ix = np.arange(ntr_cap)
         X, PI, M, Y = X[ix], PI[ix], M[ix], Y[ix]
     h1, h2 = (int(v) for v in ARCH.split("x"))
-    rng = np.random.default_rng(0); perm = rng.permutation(len(X))
+    rng = np.random.default_rng(0)
+    perm = rng.permutation(len(X))
     X, PI, M, Y = X[perm], PI[perm], M[perm], Y[perm]
     # 同一対戦の局面は価値ラベルを共有するので、ランダム分割だとリークして価値精度が水増しされる。
     # PI_TEST に別生成のコーパスを渡して評価する。
@@ -97,6 +146,11 @@ def _fresh():
         nte = max(1, int(len(X) * 0.1)); ntr = len(X) - nte
     net = PVNetNP(X.shape[1], hidden=h1, hidden2=h2, seed=1, act="relu", norm=True)
     net.fit_norm(X[:ntr])
+    _VW = None
+    if _VALUE_W:
+        # 訓練コーパスの読み込み時に作った重みを、シャッフル後の並びに合わせる
+        w = np.concatenate([_VALUE_W[0], np.zeros(len(X) - len(_VALUE_W[0]))])
+        _VW = w[perm][:ntr]
     print(f"fresh {h1}x{h2} relu+norm+adam  訓練{ntr}件 / 検証{nte}件"
           + ("（別コーパス）" if PI_TEST else "（同一コーパスの1割・価値はリークあり）"), flush=True)
 
@@ -110,7 +164,7 @@ def _fresh():
     for ep in range(PI_EPOCHS):
         lr = LR * (0.5 ** (ep / max(PI_EPOCHS / 3.0, 1.0)))
         net.train_pi(X[:ntr], PI[:ntr], M[:ntr], Y[:ntr], epochs=1, lr=lr, batch=128,
-                     seed=ep, optimizer="adam")
+                     seed=ep, optimizer="adam", value_weight=_VW if _VW is not None else 1.0)
         if (ep + 1) % 5 == 0 or ep == PI_EPOCHS - 1:
             p1, a1 = stat(ntr, ntr + nte)
             ptr, _ = stat(0, min(ntr, 5000))

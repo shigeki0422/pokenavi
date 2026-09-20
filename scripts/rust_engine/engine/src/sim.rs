@@ -133,8 +133,17 @@ use crate::belief::OpponentBelief;
 use crate::net::NetW;
 use crate::search::SearchAI;
 
-/// belief のシーズン（`OpponentBelief(L)` の既定引数 season="M-2"）
-pub const BELIEF_SEASON: &str = "M-2";
+/// belief のシーズン。Python の `belief._default_belief_season()` と同じ解決順
+/// （BELIEF_SEASON > POOL_SEASON > M-6）。以前は "M-2" 固定で、M-6 の対戦でも
+/// M-2 の使用率分布から相手の型を決定化していた。
+pub fn belief_season() -> &'static str {
+    static S: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+    S.get_or_init(|| {
+        std::env::var("BELIEF_SEASON")
+            .or_else(|_| std::env::var("POOL_SEASON"))
+            .unwrap_or_else(|_| "M-6".to_string())
+    })
+}
 
 /// `_v3_final._mcts_3v3(pa, sa, pb, sb, seed)`（両者MCTS・certain_ko_override 付き）
 #[allow(clippy::too_many_arguments)]
@@ -178,12 +187,12 @@ pub fn mcts_3v3(
         b.start(packr, &pv1, &pv2);
     }
     // 実戦の belief（両サイド）は Battle 外に持ち、observe_damage 用に Side へ差し込む
-    crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(BELIEF_SEASON));
-    crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(BELIEF_SEASON));
+    crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(belief_season()));
+    crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(belief_season()));
 
     let packr: &Pack = pack;
-    let mut ai1 = SearchAI::new(packr, BELIEF_SEASON, seed, sims);
-    let mut ai2 = SearchAI::new(packr, BELIEF_SEASON, seed ^ 0x5bd1e995, sims);
+    let mut ai1 = SearchAI::new(packr, belief_season(), seed, sims);
+    let mut ai2 = SearchAI::new(packr, belief_season(), seed ^ 0x5bd1e995, sims);
     let result = run_two_mcts(packr, [net, net_b.unwrap_or(net)], &mut b, &mut ai1, &mut ai2, &mut rng, on_turn);
     (result, b.turn)
 }
@@ -253,11 +262,11 @@ pub fn mcts_vs_dist(
         let packr: &Pack = pack;
         b.start(packr, &pv1, &pv2);
     }
-    crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(BELIEF_SEASON));
-    crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(BELIEF_SEASON));
+    crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(belief_season()));
+    crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(belief_season()));
     let packr: &Pack = pack;
-    let mut ai1 = SearchAI::new(packr, BELIEF_SEASON, seed, sims);
-    let mut ai2 = SearchAI::new(packr, BELIEF_SEASON, seed ^ 0x5bd1e995, sims);
+    let mut ai1 = SearchAI::new(packr, belief_season(), seed, sims);
+    let mut ai2 = SearchAI::new(packr, belief_season(), seed ^ 0x5bd1e995, sims);
     let mut rng = cell.into_inner();
     run_two_mcts(packr, [net, net], &mut b, &mut ai1, &mut ai2, &mut rng, |_, _| {})
 }
@@ -309,11 +318,11 @@ pub fn mcts_vs_dist_trace(
         let packr: &Pack = pack;
         b.start(packr, &pv1, &pv2);
     }
-    crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(BELIEF_SEASON));
-    crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(BELIEF_SEASON));
+    crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(belief_season()));
+    crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(belief_season()));
     let packr: &Pack = pack;
-    let mut ai1 = SearchAI::new(packr, BELIEF_SEASON, seed, sims);
-    let mut ai2 = SearchAI::new(packr, BELIEF_SEASON, seed ^ 0x5bd1e995, sims);
+    let mut ai1 = SearchAI::new(packr, belief_season(), seed, sims);
+    let mut ai2 = SearchAI::new(packr, belief_season(), seed ^ 0x5bd1e995, sims);
     let mut rng = cell.into_inner();
     let hs = std::cell::RefCell::new(Vec::<u64>::new());
     // ターン0（start直後・AIが動く前）の局面も記録する

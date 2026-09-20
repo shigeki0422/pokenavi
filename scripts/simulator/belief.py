@@ -51,13 +51,21 @@ def _eff_speed_of(p, field, item_mult: float) -> int:
     return int(spd)
 
 
+def _default_belief_season() -> str:
+    """信念の既定シーズン。BELIEF_SEASON > POOL_SEASON > M-6 の順で解決する。
+    以前は M-2 固定で、M-6 の対戦でも M-2 の使用率分布から相手の型を引いていた。"""
+    return (os.environ.get("BELIEF_SEASON")
+            or os.environ.get("POOL_SEASON")
+            or "M-6")
+
+
 class PokemonBelief:
     """相手1体の型・技・持ち物・特性の信念。"""
 
     def __init__(self, tpl, loader: DataLoader, season: Optional[str] = None,
                  known_ability: Optional[str] = None, known_item: Optional[str] = None,
                  extra_spreads: Optional[list] = None):
-        season = season or os.environ.get("BELIEF_SEASON", "M-2")
+        season = season or _default_belief_season()
         self.name = tpl.name
         self.tpl = tpl
 
@@ -66,6 +74,10 @@ class PokemonBelief:
         self.item_prior: Dict[str, float] = {i: r for i, r in tpl.top_items}
         self.ability_prior: Dict[str, float] = {a: r for a, r in tpl.top_abilities}
         self.known_moves: set = set()
+        # 型まるごとの候補（登録テンプレート由来）。JOINT_BUILD=1 のとき決定化で使う
+        self.builds: list = []
+        # この確率で最尤型を返す（0=常にサンプリング・従来）
+        self.map_rate: float = float(os.environ.get("BUILD_MAP_RATE", "0") or 0)
         self.known_item: Optional[str] = known_item
         self.known_ability: Optional[str] = known_ability
 
@@ -250,6 +262,38 @@ class PokemonBelief:
                 return v
         return items[-1][0]
 
+    def sample_build(self, rng):
+        """型まるごとを1つ引く（技・持ち物・性格・努力値の同時性が保たれる）。
+        既知情報（判明した技・持ち物・特性）と矛盾する型は候補から外すので、
+        技が1本分かっただけで持ち物や努力値の候補まで絞れる。候補が無ければ None。"""
+        if not self.builds:
+            return None
+        ok = []
+        for b in self.builds:
+            if self.known_item is not None and b["item"] != self.known_item:
+                continue
+            if self.known_ability is not None and b.get("ability") and b["ability"] != self.known_ability:
+                continue
+            if not self.known_moves.issubset(set(b["moves"])):
+                continue
+            ok.append(b)
+        if not ok:
+            return None
+        w = [(b, max(self._build_weight(b), 1e-6)) for b in ok]
+        # 情報は超加法的（実測: 持ち物だけ/技だけの開示は +0〜1.7pt、全部揃うと +10.0pt）。
+        # 毎回ランダムに引くと「どれも少しずつ違う相手」ばかりになる。最尤型に寄せると
+        # 「完全に正しい相手」でのシミュレーションが一定割合生まれる。
+        if self.map_rate > 0.0 and rng.random() < self.map_rate:
+            return max(w, key=lambda x: x[1])[0]
+        return self._weighted(rng, w)
+
+    def _build_weight(self, b) -> float:
+        """型の重み＝持ち物と技の使用率の積（同時分布が無いので周辺で近似する）。"""
+        w = self.item_prior.get(b["item"], 0.01) if b["item"] else 0.01
+        for m in b["moves"]:
+            w *= max(self.move_prior.get(m, 0.01), 0.01)
+        return w
+
     def sample_spread(self, rng):
         """事後分布に従いEV/性格を1つサンプリング → (ev, nature)。"""
         i = self._weighted(rng, list(zip(range(len(self.cands)), self.post)))
@@ -321,17 +365,54 @@ def registered_spreads_by_species(loader: DataLoader) -> Dict[str, list]:
     return out
 
 
+_REG_BUILD_CACHE: Dict[int, Dict[str, list]] = {}
+
+
+def registered_builds_by_species(loader: DataLoader) -> Dict[str, list]:
+    """登録テンプレートから種族ごとの**型まるごと**の一覧を取得する。
+
+    `registered_spreads_by_species` は努力値と性格しか取らず、技・持ち物との同時性を捨てていた。
+    技4本を周辺分布から独立に引くと、実在しない組み合わせができる（実測: 事前のみで全一致7%）。
+    型単位で引けば組み合わせが保たれ、技が1本判明しただけで持ち物や努力値の候補まで絞れる。
+    """
+    ck = id(loader)
+    if ck in _REG_BUILD_CACHE:
+        return _REG_BUILD_CACHE[ck]
+    from .env import load_templates
+    out: Dict[str, list] = {}
+    seen: Dict[str, set] = {}
+    for party in load_templates():
+        for spec in party.specs:
+            moves = tuple(sorted(m for m in (spec.get("moves") or []) if m))
+            if not moves:
+                continue
+            ev = {k: spec["evs"].get(k, 0) for k in "HABCDS"}
+            ev["spread"] = "登録"
+            key = (spec.get("item"), spec["nature"], moves, spec.get("ability"))
+            st = seen.setdefault(spec["name"], set())
+            if key in st:
+                continue
+            st.add(key)
+            out.setdefault(spec["name"], []).append({
+                "item": spec.get("item"), "nature": spec["nature"], "ev": ev,
+                "ability": spec.get("ability"), "moves": list(moves),
+            })
+    _REG_BUILD_CACHE[ck] = out
+    return out
+
+
 class OpponentBelief:
     """一方のサイドが相手パーティ全体について持つ信念（種族名→PokemonBelief）。"""
 
     def __init__(self, loader: DataLoader, season: Optional[str] = None, use_registered: bool = True):
         self.loader = loader
-        # 既定は env BELIEF_SEASON（未設定なら従来の M-2）。M-6 で M-2 の使用率を引くと
-        # 新規種の事前分布が空になる（技0/持物0/EV無振り）ため、A/B で切り替えられる形にする。
-        self.season = season or os.environ.get("BELIEF_SEASON", "M-2")
+        self.season = season or _default_belief_season()
         self.species: Dict[str, PokemonBelief] = {}
         # このメタ（登録パーティ同士）では真の型を候補に含めて推定精度を上げる
         self._reg = registered_spreads_by_species(loader) if use_registered else {}
+        # 型まるごとの候補。JOINT_BUILD=1 で決定化が型単位のサンプリングになる
+        self.joint = os.environ.get("JOINT_BUILD", "0") == "1"
+        self._builds = registered_builds_by_species(loader) if (use_registered and self.joint) else {}
 
     def __deepcopy__(self, memo):
         # 信念は対戦状態の一部ではない（意思決定者の知識）。
@@ -366,10 +447,14 @@ class OpponentBelief:
             tpl, season = self._tpl_with_prior(name)
             if tpl is None:
                 return None
-            self.species[name] = PokemonBelief(
+            pb = PokemonBelief(
                 tpl, self.loader, season,
                 known_ability=known_ability, known_item=known_item,
                 extra_spreads=self._reg.get(name))
+            pb.builds = self._builds.get(name, [])
+            if getattr(self, "_map_rate", None) is not None:
+                pb.map_rate = self._map_rate
+            self.species[name] = pb
         return self.species[name]
 
     def get(self, name: str) -> Optional[PokemonBelief]:

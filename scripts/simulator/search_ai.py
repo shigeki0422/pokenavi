@@ -21,7 +21,7 @@ from .battle import Action, Battle, BattleSide, BattleField, is_trapped
 from .features import dmg_memo_begin as _dmg_memo_begin, dmg_memo_end as _dmg_memo_end
 from .data import DataLoader, NATURE_MODS, get_type_effectiveness
 from .pokemon import calc_hp, calc_stat, build_from_template
-from .belief import OpponentBelief
+from .belief import OpponentBelief, _default_belief_season
 from .ai import (HeuristicAI, _forced_charging_action, _filter_valid_by_lock,
                  _filter_by_pp, _get_struggle, should_mega_evolve,
                  _hazard_value, HAZARD_MOVES)
@@ -88,7 +88,7 @@ class SearchAI:
         self.loader = loader
         self.K = rollouts
         self.depth = depth
-        self.season = season or os.environ.get("BELIEF_SEASON", "M-2")
+        self.season = season or _default_belief_season()
         # adversarial=True: 現手番を「同時手番ゼロ和ゲーム」として解く。
         #   自分の候補×相手の候補のペイオフ行列をロールアウトで作り、相手は最善応手(ナッシュ)を取る前提。
         #   ＝「相手は固定方策」を仮定する従来1手に対し、相手の択(読み合い)を評価に入れる。
@@ -159,6 +159,9 @@ class SearchAI:
         self.maple_k = int(os.environ.get("MAPLE_K", "0"))
         # 実験用: 相手の隠れ情報を全て見える状態にする（決定化しない）
         self.oracle = os.environ.get("ORACLE", "0") == "1"
+        # 計測用: 型の一部だけを真値にする（伸び代の内訳を測る）。
+        # item / ability / moves / spread(性格+努力値) / bench(控えの再サンプルを止める)
+        self.oracle_reveal = {x for x in os.environ.get("ORACLE_REVEAL", "").split(",") if x}
         # collapse_mega=True: メガ可能時は常にメガ前提（メガ無し技を列挙しない＝分岐半減・無駄探索削減）
         self.collapse_mega = os.environ.get("MCTS_COLLAPSE_MEGA", "1") == "1"
         # qselect=True: 最終手を「訪問数」でなく「十分訪問された手の中でQ最大」で選ぶ（@少simでも正しいQを拾う）
@@ -269,7 +272,8 @@ class SearchAI:
             except Exception:
                 priors = {}
         agg = [0.0] * len(my_cands); nconf = 0
-        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+        hidden = ((os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+                  and "bench" not in self.oracle_reveal)
         for _ in range(self.K):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             bs1, bs2, bfield = copy.deepcopy((s1, s2, field))
@@ -357,7 +361,8 @@ class SearchAI:
         from .selection import solve_zero_sum
         my_is_s1 = (my_side.field_idx == 0)
         agg = {}; wst = {}; cnt = 0
-        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+        hidden = ((os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+                  and "bench" not in self.oracle_reveal)
         for _ in range(self.tree_det):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             bs1, bs2, bfield = copy.deepcopy((s1, s2, field))
@@ -535,7 +540,8 @@ class SearchAI:
         my_is_s1 = (my_side.field_idx == 0)
         belief = my_side.belief if my_side.belief is not None else OpponentBelief(self.loader, self.season)
         belief.observe_disclosure(my_side.opp_view)
-        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+        hidden = ((os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+                  and "bench" not in self.oracle_reveal)
         worst = 1.0
         for _k in range(self.downside_k):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
@@ -616,7 +622,8 @@ class SearchAI:
         root = self._new_node()
         if len(root_my) <= 1:
             return root, root_my, my_is_s1
-        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+        hidden = ((os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+                  and "bench" not in self.oracle_reveal)
         for t in range(self.mcts_sims):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             cs1, cs2, cfield = self._clone_state(s1, s2, field)
@@ -643,7 +650,8 @@ class SearchAI:
             return {"N": [aggN, {}], "W": [aggW, {}]}, root_my, my_is_s1
         E = max(1, self.mcts_ensemble)
         per = max(1, self.mcts_sims // E)
-        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+        hidden = ((os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+                  and "bench" not in self.oracle_reveal)
         for _e in range(E):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
             cs1, cs2, cfield = self._clone_state(s1, s2, field)
@@ -684,7 +692,8 @@ class SearchAI:
         if len(root_my) <= 1:
             return {"N": [{}, {}], "W": [{}, {}]}, root_my, my_is_s1
         k = max(1, self.maple_k)
-        hidden = (os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+        hidden = ((os.environ.get("HIDDEN_SELECTION") != "0") and not self.oracle
+                  and "bench" not in self.oracle_reveal)
         states = []
         for _i in range(k):
             s1, s2 = (my_side, opp_side) if my_is_s1 else (opp_side, my_side)
@@ -1224,6 +1233,16 @@ class SearchAI:
             if pb is None:
                 cfg.append(None)
                 continue
+            b = pb.sample_build(self._rng) if getattr(belief, "joint", False) else None
+            if b is not None:
+                # 型まるごと。既知技は型に含まれている（矛盾する型は候補から外れている）
+                cfg.append({
+                    "ev": b["ev"], "nature": b["nature"],
+                    "item": b["item"] if pb.known_item is None else pb.known_item,
+                    "ability": pb.known_ability or b.get("ability") or pb.sample_ability(self._rng),
+                    "moves": list(b["moves"]),
+                })
+                continue
             ev, nat = pb.sample_spread(self._rng)
             cfg.append({
                 "ev": ev, "nature": nat,
@@ -1231,7 +1250,24 @@ class SearchAI:
                 "ability": pb.sample_ability(self._rng),
                 "moves": pb.sample_moves(self._rng),
             })
+        if self.oracle_reveal:
+            self._reveal(cfg, opp_side)
         return cfg
+
+    def _reveal(self, cfg, opp_side) -> None:
+        """oracle_reveal に挙げた要素だけ真値で上書きする（部分的な完全情報）。"""
+        rv = self.oracle_reveal
+        for c, p in zip(cfg, opp_side.party):
+            if c is None:
+                continue
+            if "item" in rv:
+                c["item"] = p.item
+            if "ability" in rv:
+                c["ability"] = p.ability
+            if "moves" in rv:
+                c["moves"] = [m.name_jp for m in p.moves if m is not None]
+            if "spread" in rv:
+                c["ev"], c["nature"] = p.evs, p.nature
 
     def _determinize(self, poke, c: dict) -> None:
         tpl = self._tpl(poke.name)

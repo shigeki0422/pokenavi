@@ -462,15 +462,19 @@ def _aegislash_to_blade(poke: BattlePokemon, logs: List[str]) -> None:
     poke._shield_def   = poke.defense     # type: ignore
     poke._shield_spatk = poke.sp_attack   # type: ignore
     poke._shield_spdef = poke.sp_defense  # type: ignore
-    # ブレードフォルム種族値(Atk=150,Def=50,SpAtk=150,SpDef=50)で再計算
+    # ブレードフォルム種族値(Atk=140,Def=50,SpAtk=140,SpDef=50)で再計算。
+    # 150 は第8世代以前の値で、第9世代(SV)で 140 に下方修正された。
+    # DB の pokemon_base_stats はシールド側が 60/50/140/50/140/60 と第9世代の値で正しく、
+    # このフォルム変化の定数だけが旧世代のまま残っていた（Python/Rust 両方が同じ誤りで
+    # パリティゲートでは検出できない種類のバグ）。
     from .pokemon import calc_stat, NATURE_MODS
     ev = getattr(poke, 'evs', {}) or {}
     nature_up, nature_dn = NATURE_MODS.get(getattr(poke, 'nature', ''), (None, None))
     def _nat(key: str) -> float:
         return 1.1 if nature_up == key else (0.9 if nature_dn == key else 1.0)
-    poke.attack     = calc_stat(150, ev.get('A', 0), 31, _nat('attack'))
+    poke.attack     = calc_stat(140, ev.get('A', 0), 31, _nat('attack'))
     poke.defense    = calc_stat(50,  ev.get('B', 0), 31, _nat('defense'))
-    poke.sp_attack  = calc_stat(150, ev.get('C', 0), 31, _nat('sp_attack'))
+    poke.sp_attack  = calc_stat(140, ev.get('C', 0), 31, _nat('sp_attack'))
     poke.sp_defense = calc_stat(50,  ev.get('D', 0), 31, _nat('sp_defense'))
     if poke.ability == 'はりきり':
         poke.attack = math.floor(poke.attack * 1.5)

@@ -5299,18 +5299,27 @@ _c_m2 = _prior26(_M2_OK, "M-2"); _c_m6 = _prior26(_M2_OK, "M-6")
 check(f"対照: {_M2_OK} はどちらのシーズンでも事前分布が付く",
       _c_m2[0] > 0 and _c_m6[0] > 0, f"M-2={_c_m2} M-6={_c_m6}")
 
-# 既定シーズンは env BELIEF_SEASON（未設定なら M-2＝従来動作）
+# 既定シーズンは BELIEF_SEASON > POOL_SEASON > M-6（以前は M-2 固定で、M-6 の対戦でも
+# M-2 の使用率分布から相手の型を決定化していた）
 _save26 = _os26.environ.get("BELIEF_SEASON")
+_savep26 = _os26.environ.get("POOL_SEASON")
 try:
     _os26.environ.pop("BELIEF_SEASON", None)
-    check("BELIEF_SEASON 未設定なら既定は M-2（従来動作）", _OB26(_L26).season == "M-2",
+    _os26.environ.pop("POOL_SEASON", None)
+    check("BELIEF_SEASON も POOL_SEASON も無ければ既定は M-6", _OB26(_L26).season == "M-6",
           f"{_OB26(_L26).season}")
+    _os26.environ["POOL_SEASON"] = "M-3"
+    check("POOL_SEASON に追従する", _OB26(_L26).season == "M-3", f"{_OB26(_L26).season}")
+    _os26.environ.pop("POOL_SEASON", None)
     _os26.environ["BELIEF_SEASON"] = "M-6"
     check("BELIEF_SEASON=M-6 で既定シーズンが切り替わる", _OB26(_L26).season == "M-6",
           f"{_OB26(_L26).season}")
     check("明示引数は env より優先", _OB26(_L26, "M-3").season == "M-3", f"{_OB26(_L26, 'M-3').season}")
 finally:
     _os26.environ.pop("BELIEF_SEASON", None)
+    _os26.environ.pop("POOL_SEASON", None)
+    if _savep26 is not None:
+        _os26.environ["POOL_SEASON"] = _savep26
     if _save26 is not None:
         _os26.environ["BELIEF_SEASON"] = _save26
 
@@ -5459,6 +5468,47 @@ for _st29 in ("アブソルナイトZ", "ガブリアスナイトZ", "リザー�
     check(f"はたきおとす: {_st29} には1.5倍が乗らない", _dmg29(_st29) == _dmg29(None))
 
 # ════════════════════════════════════════════════════════════════
+# 相手の型の決定化: 型まるごとサンプリング（JOINT_BUILD）
+# ════════════════════════════════════════════════════════════════
+import random as _rnd32
+from simulator.belief import (OpponentBelief as _OB32, registered_builds_by_species as _rb32,
+                              _default_belief_season as _ds32)
+
+_b32 = _rb32(dl)
+check("型候補: 登録テンプレートから種ごとの型まるごとを取れる",
+      len(_b32) > 50 and all(("moves" in x and "item" in x and "nature" in x)
+                             for v in _b32.values() for x in v))
+
+_ob32 = _OB32(dl, season="M-6")
+_名32 = next(n for n, v in _b32.items() if len(v) >= 2)
+_pb32 = _ob32.ensure(_名32)
+_pb32.builds = _b32[_名32]
+_r32 = _rnd32.Random(0)
+check("型候補: sample_build は技・持ち物・性格が揃った型を返す",
+      all(k in (_pb32.sample_build(_r32) or {}) for k in ("moves", "item", "nature", "ev")))
+
+_pb32.map_rate = 1.0
+_map32 = {tuple(_pb32.sample_build(_r32)["moves"]) for _ in range(20)}
+check("型候補: map_rate=1.0 なら常に同じ最尤型を返す", len(_map32) == 1)
+_pb32.map_rate = 0.0
+
+_tgt32 = _b32[_名32][0]
+_pb32.known_moves = set(_tgt32["moves"][:2])
+_got32 = [_pb32.sample_build(_r32) for _ in range(30)]
+check("型候補: 既知技と矛盾する型は候補から外れる",
+      all(g is None or set(_pb32.known_moves).issubset(set(g["moves"])) for g in _got32))
+
+_pb32.known_moves = {"存在しない技ZZZ"}
+check("型候補: 候補が尽きたら None を返す（周辺分布へフォールバックする）",
+      _pb32.sample_build(_r32) is None)
+
+_ob32b = _OB32(dl, season="M-6")
+check("型候補: JOINT_BUILD 未設定なら型候補を読み込まない",
+      _ob32b.joint is False and _ob32b._builds == {})
+check("信念シーズン: BELIEF_SEASON > POOL_SEASON > M-6 の順で解決する",
+      _ds32() in ("M-2", "M-3", "M-4", "M-5", "M-6"))
+
+# ════════════════════════════════════════════════════════════════
 # SearchAI の計測用フック（既定OFFで本番挙動が変わらないこと）
 # ════════════════════════════════════════════════════════════════
 from simulator.search_ai import SearchAI as _SA31
@@ -5473,6 +5523,30 @@ check("計測フック: 既定はすべてOFF",
 class _FakeSide31:
     pass
 
+
+check("計測フック: ORACLE_REVEAL 未設定なら部分開示は無効", _ai31.oracle_reveal == set())
+_cfg31 = [{"item": "ダミー", "ability": "ダミー", "moves": ["ダミー技"],
+           "ev": {"H": 0}, "nature": "まじめ"}]
+
+
+class _FakePoke31:
+    item = "きあいのタスキ"
+    ability = "いかく"
+    nature = "ようき"
+    evs = {"S": 32}
+    moves = []
+
+
+class _FakeOpp31:
+    party = [_FakePoke31()]
+
+
+_ai31.oracle_reveal = {"item", "spread"}
+_ai31._reveal(_cfg31, _FakeOpp31())
+check("計測フック: 指定した要素だけ真値で上書きされる",
+      _cfg31[0]["item"] == "きあいのタスキ" and _cfg31[0]["nature"] == "ようき"
+      and _cfg31[0]["ability"] == "ダミー" and _cfg31[0]["moves"] == ["ダミー技"])
+_ai31.oracle_reveal = set()
 
 _cands31 = ["a", "b", "c"]
 _ai31._candidate_actions = lambda *_a, **_k: list(_cands31)
@@ -5539,11 +5613,64 @@ _fd30.fold_norm()
 check("PVNetNP: fold_norm は正規化を第1層に畳み込んでも出力が等価",
       _fd30.mu is None and _np30.allclose(_fd30._forward(_Xt30)[2], _before30, atol=1e-9))
 
+_vw30 = _PV30(24, 16, 8, seed=9, act="relu", norm=True)
+_vw30.fit_norm(_Xt30)
+_wv30 = _vw30.Wv.copy()
+_vw30.train_pi(_Xt30, _PI30, _M30, _Y30, epochs=5, lr=1e-3, l2=0.0, batch=20, optimizer="adam",
+               value_weight=_np30.zeros(len(_Xt30)))
+check("PVNetNP: value_weight が全0の配列なら価値ヘッドは更新されない（l2=0）",
+      _np30.allclose(_vw30.Wv, _wv30))
+_vw30.train_pi(_Xt30, _PI30, _M30, _Y30, epochs=5, lr=1e-3, l2=0.0, batch=20, optimizer="adam",
+               value_weight=_np30.ones(len(_Xt30)))
+check("PVNetNP: value_weight が1の配列なら価値ヘッドが更新される",
+      not _np30.allclose(_vw30.Wv, _wv30))
+
 _a30.save("/tmp/_test_az30.json")
 _l30 = _PV30.load("/tmp/_test_az30.json")
 check("PVNetNP: act/mu/sd を保存・復元して前向きが一致",
       _l30.act == "relu" and _l30.mu is not None
       and _np30.allclose(_l30._forward(_Xt30)[2], _a30._forward(_Xt30)[2]))
+
+# ════════════════════════════════════════════════════════════════
+# ギルガルド: ブレードフォルムの種族値は第9世代の 140（150 は第8世代以前）
+# ════════════════════════════════════════════════════════════════
+from simulator.battle import _aegislash_to_blade as _tb33, _aegislash_to_shield as _ts33
+from simulator.pokemon import calc_stat as _cs33, NATURE_MODS as _NM33
+
+_g33 = _bfs29(_pps29(
+    "ギルガルド@とつげきチョッキ:いじっぱり:シャドークロー|アイアンヘッド|かげうち|せいなるつるぎ"
+    ":0/32/0/0/0/0:バトルスイッチ"), _L29, season="M-6", randomize=False)
+_shield_a33, _shield_c33 = _g33.attack, _g33.sp_attack
+_ev33 = _g33.evs or {}
+_up33, _dn33 = _NM33.get(_g33.nature, (None, None))
+
+
+def _n33(key):
+    return 1.1 if _up33 == key else (0.9 if _dn33 == key else 1.0)
+
+
+def _exp33(base, k, stat):
+    return _cs33(base, _ev33.get(k, 0), 31, _n33(stat))
+
+
+check("ギルガルド: シールドの種族値は A=50 / B=140 / C=50 / D=140",
+      _g33.attack == _exp33(50, "A", "attack")
+      and _g33.defense == _exp33(140, "B", "defense")
+      and _g33.sp_attack == _exp33(50, "C", "sp_attack")
+      and _g33.sp_defense == _exp33(140, "D", "sp_defense"))
+
+_tb33(_g33, [])
+check("ギルガルド: ブレードの攻撃は種族値140で計算する（150ではない）",
+      _g33.attack == _exp33(140, "A", "attack"),
+      f"attack={_g33.attack} 期待={_exp33(140, 'A', 'attack')}")
+check("ギルガルド: ブレードの特攻は種族値140で計算する",
+      _g33.sp_attack == _exp33(140, "C", "sp_attack"))
+check("ギルガルド: ブレードの防御・特防は種族値50",
+      _g33.defense == _exp33(50, "B", "defense")
+      and _g33.sp_defense == _exp33(50, "D", "sp_defense"))
+_ts33(_g33, [])
+check("ギルガルド: シールドに戻ると元の実数値に復帰する",
+      _g33.attack == _shield_a33 and _g33.sp_attack == _shield_c33)
 
 # 集計
 # ════════════════════════════════════════════════════════════════

@@ -59,6 +59,22 @@ def _battle(args):
         (ai2 if a_first else ai1).oracle = False
     # ACT_ORACLE: A側に「相手が今ターン実際に選ぶ手」を教える。分岐 5x5→5x1 で読める深さが倍になる。
     #   root=深さ0のみ / all=全深さ（上限測定）。battle は必ず ai1→ai2 の順に呼ぶ。
+    # 型候補は ensure() 時に belief から引き継がれるので、map_rate も同じ経路で渡す
+    # ORACLE_REVEAL_A: A側だけ型の一部を真値にする（伸び代の内訳を測る）
+    _rv = os.environ.get("ORACLE_REVEAL_A")
+    if _rv:
+        _aiR = ai1 if a_first else ai2
+        _aiR.oracle_reveal = {x for x in _rv.split(",") if x}
+        if "bench" in _aiR.oracle_reveal:
+            _aiR.hidden = False
+    # JOINT_BUILD_A=1: A側だけ型まるごとサンプリングで決定化する（相手の型推定の改善をA/Bする）
+    if os.environ.get("JOINT_BUILD_A") == "1":
+        from simulator.belief import registered_builds_by_species
+        _bk = registered_builds_by_species(L)
+        _sA = s1 if a_first else s2
+        _sA.belief.joint = True
+        _sA.belief._builds = _bk
+        _sA.belief._map_rate = float(os.environ.get("BUILD_MAP_RATE_A", "0") or 0)
     # NET_POL: A側の方策priorだけ別ネットから取る（どちらのヘッドが足を引っ張るかの切り分け）
     _np_ = os.environ.get("NET_POL")
     if _np_:
@@ -72,6 +88,19 @@ def _battle(args):
             p2, _ = _pn.evaluate(_enc(A, B, f), list(pol.keys())) if pol else ({}, 0)
             return (p2 or pol), val
         _aiP.net_eval = _mix
+    # NET_ENS: A側の価値を「自ネットと NET_ENS の平均」にする（誤差が独立なら平均で減る）。方策は自ネット
+    _ne = os.environ.get("NET_ENS")
+    if _ne:
+        from simulator.az_np import PVNetNP as _PV2
+        from simulator.features import encode_state as _enc2
+        _ens_net = _PV2.load(_ne)
+        _aiE = ai1 if a_first else ai2
+        _baseE = _aiE.net_eval
+        def _avg(A, B, f, _b=_baseE, _en=_ens_net):
+            pol, val = _b(A, B, f)
+            _, v2 = _en.evaluate(_enc2(A, B, f), [0])
+            return pol, 0.5 * (val + v2)
+        _aiE.net_eval = _avg
     # COLLAPSE_MEGA=1: メガ石持ちはメガ前提で候補を出す（Rust本番と同じ＝教師πと条件を揃える）
     if os.environ.get("COLLAPSE_MEGA") == "1":
         ai1.collapse_mega = True; ai2.collapse_mega = True

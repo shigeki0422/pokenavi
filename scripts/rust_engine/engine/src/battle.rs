@@ -632,9 +632,10 @@ fn aegislash_to_blade(pack: &Pack, p: &mut Poke) {
             None => 1.0,
         }
     };
-    p.attack = calc_stat(150, p.evs[1], 31, nat(0));
+    // ブレードフォルムは第9世代(SV)で A/C=140（150 は第8世代以前の値）
+    p.attack = calc_stat(140, p.evs[1], 31, nat(0));
     p.defense = calc_stat(50, p.evs[2], 31, nat(1));
-    p.sp_attack = calc_stat(150, p.evs[3], 31, nat(2));
+    p.sp_attack = calc_stat(140, p.evs[3], 31, nat(2));
     p.sp_defense = calc_stat(50, p.evs[4], 31, nat(3));
     if p.ability == pack.sy.l.はりきり {
         p.attack = ((p.attack as f64) * 1.5).floor() as i64;
