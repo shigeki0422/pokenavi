@@ -6,7 +6,6 @@ dexNumber: 445
 usageRank: 2
 pubDate: '2026-09-17'
 draft: false
-analysisSlug: 'garchomp-analysis-m6'
 
 ---
 

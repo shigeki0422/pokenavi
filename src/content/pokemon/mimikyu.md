@@ -6,7 +6,6 @@ dexNumber: 778
 usageRank: 11
 pubDate: '2026-09-17'
 draft: false
-analysisSlug: 'mimikyu-analysis-m6'
 
 ---
 

@@ -46,9 +46,9 @@ analysisSlug: 'aegislash-analysis-m2'
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:77%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+      <div style="width:83%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right"><strong style="color:#dc2626">140</strong></span>
+    <span style="width:32px;text-align:right"><strong style="color:#dc2626">150</strong></span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくこう</span>
@@ -60,9 +60,9 @@ analysisSlug: 'aegislash-analysis-m2'
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:77%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+      <div style="width:83%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right"><strong style="color:#dc2626">140</strong></span>
+    <span style="width:32px;text-align:right"><strong style="color:#dc2626">150</strong></span>
   </div>
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
@@ -74,7 +74,7 @@ analysisSlug: 'aegislash-analysis-m2'
   <div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">500</span>
+    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">520</span>
   </div>
 </div>
 
