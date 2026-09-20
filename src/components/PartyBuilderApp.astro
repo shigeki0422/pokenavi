@@ -43,7 +43,7 @@ const I18N_ALL = {
     slotRemoveTitle: '外す', undoRemoved: name => `${name}を外しました`, undoBtn: '元に戻す',
     emptyGuideStep1: '①ポケモンを追加（＋をタップ）', emptyGuideStep2: '②仮想敵を設定', emptyGuideStep3: '③EVを微調整して判定を確認',
     slotSearchTitle: n => `枠${n}にポケモンを追加`, slotSearchClose: '✕ 閉じる',
-    slotSearchPlaceholder: '追加するポケモンを検索（ひらがな可）', slotFillBtn: 'この枠を提案で埋める',
+    slotSearchPlaceholder: '追加するポケモンを検索（ひらがな可）',
     noHit: '該当なし', rankLbl: n => `使用${n}位`, offRankLbl: '圏外', adoptBtn: 'この案を採用',
     fillCalculating: '提案を計算中…', fillFailedMsg: '提案の取得に失敗しました。時間をおいて再試行してください',
     targetsHeading: '仮想敵', targetsSelectPrompt: '上の6枠から枠を選択してください',
@@ -121,7 +121,7 @@ const I18N_ALL = {
     slotRemoveTitle: 'Remove', undoRemoved: name => `Removed ${name}`, undoBtn: 'Undo',
     emptyGuideStep1: '① Add a Pokémon (tap +)', emptyGuideStep2: '② Set a virtual opponent', emptyGuideStep3: '③ Fine-tune EVs and check the verdict',
     slotSearchTitle: n => `Add a Pokémon to slot ${n}`, slotSearchClose: '✕ Close',
-    slotSearchPlaceholder: 'Search for a Pokémon to add', slotFillBtn: 'Fill this slot with a suggestion',
+    slotSearchPlaceholder: 'Search for a Pokémon to add',
     noHit: 'No matches', rankLbl: n => `Rank #${n}`, offRankLbl: 'Unranked', adoptBtn: 'Use this suggestion',
     fillCalculating: 'Calculating suggestions…', fillFailedMsg: 'Failed to load suggestions. Please try again later',
     targetsHeading: 'Virtual Opponents', targetsSelectPrompt: 'Select a slot above',
@@ -199,7 +199,7 @@ const I18N_ALL = {
     slotRemoveTitle: '제거', undoRemoved: name => `${name}을(를) 제거했습니다`, undoBtn: '되돌리기',
     emptyGuideStep1: '① 포켓몬 추가（＋를 탭）', emptyGuideStep2: '② 가상의 적 설정', emptyGuideStep3: '③ EV를 미세 조정하고 판정 확인',
     slotSearchTitle: n => `칸${n}에 포켓몬 추가`, slotSearchClose: '✕ 닫기',
-    slotSearchPlaceholder: '추가할 포켓몬 검색', slotFillBtn: '이 칸을 제안으로 채우기',
+    slotSearchPlaceholder: '추가할 포켓몬 검색',
     noHit: '검색 결과 없음', rankLbl: n => `사용률 ${n}위`, offRankLbl: '순위권 밖', adoptBtn: '이 안을 채택',
     fillCalculating: '제안을 계산 중…', fillFailedMsg: '제안을 가져오지 못했습니다. 잠시 후 다시 시도해 주세요',
     targetsHeading: '가상의 적', targetsSelectPrompt: '위의 6칸에서 칸을 선택해 주세요',
@@ -282,7 +282,6 @@ const I18N = I18N_ALL[lang];
     <div class="iconrow" id="pb-tray"></div>
     <div id="pb-empty-guide"></div>
     <div id="pb-slot-search"></div>
-    <div id="pb-fill-out"></div>
   </div>
 
   <div class="pb-split">
@@ -609,6 +608,13 @@ const I18N = I18N_ALL[lang];
   .pb-hf-section{margin-bottom:1em}
   .pb-hf-section:last-child{margin-bottom:0}
   .pb-hf-section h4{margin:0 0 .5em;font-size:.85rem}
+  .pb-fill-alts{flex:1 1 100%;margin-top:.35em;font-size:.76rem}
+  .pb-fill-alts summary{cursor:pointer;color:var(--accent);font-weight:700}
+  .pb-fill-alt{display:flex;align-items:center;gap:.45em;width:100%;margin-top:.3em;padding:.3em .45em;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#fff;cursor:pointer;font-family:var(--font-atkinson);text-align:left}
+  .pb-fill-alt img{width:24px;height:24px;object-fit:contain}
+  .pb-fill-alt-n{font-weight:700}
+  .pb-fill-alt-c{color:rgb(var(--gray));min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  @media(hover:hover){.pb-fill-alt:hover{border-color:var(--accent);background:#eef2ff}}
   .pb-hf-card{display:flex;align-items:center;gap:.6em;border:1px solid rgb(var(--gray-light));border-radius:10px;padding:.5em .7em;margin-bottom:.5em;background:#fff;flex-wrap:wrap}
   .pb-hf-card img.mtx-ico{width:32px;height:32px}
   .pb-hf-info{flex:1 1 120px;min-width:0}
@@ -729,7 +735,7 @@ const I18N = I18N_ALL[lang];
       slotRemoveTitle: '外す', undoRemoved: name => `${name}を外しました`, undoBtn: '元に戻す',
       emptyGuideStep1: '①ポケモンを追加（＋をタップ）', emptyGuideStep2: '②仮想敵を設定', emptyGuideStep3: '③EVを微調整して判定を確認',
       slotSearchTitle: n => `枠${n}にポケモンを追加`, slotSearchClose: '✕ 閉じる',
-      slotSearchPlaceholder: '追加するポケモンを検索（ひらがな可）', slotFillBtn: 'この枠を提案で埋める',
+      slotSearchPlaceholder: '追加するポケモンを検索（ひらがな可）',
       noHit: '該当なし', rankLbl: n => `使用${n}位`, offRankLbl: '圏外', adoptBtn: 'この案を採用',
       fillCalculating: '提案を計算中…', fillFailedMsg: '提案の取得に失敗しました。時間をおいて再試行してください',
       targetsHeading: '仮想敵', targetsSelectPrompt: '上の6枠から枠を選択してください',
@@ -798,6 +804,7 @@ const I18N = I18N_ALL[lang];
       fillResultHead: (n, before, after) => `空き枠${n}件の候補（穴 ${before} → ${after}）ー 1件ずつ、またはまとめて追加できます`,
       fillAdoptAllBtn: 'まとめて追加',
       fillNoHoleReason: '埋まる穴は無し（使用率上位から）',
+      fillAltsLbl: n => `他の候補 ${n}件`,
       fillClearBtn: '✕ 提案をクリア', alreadyAdded: '追加済み', addToEmptySlot: sp => `${sp}を空き枠に追加`,
       exportHeading: name => `エクスポート ー ${name}`, copyBtn: 'コピー', copiedMsg: 'コピーしました',
       copyFailedMsg: 'コピーに失敗しました。テキストを選択して手動でコピーしてください',
@@ -837,7 +844,7 @@ const I18N = I18N_ALL[lang];
       slotRemoveTitle: 'Remove', undoRemoved: name => `Removed ${name}`, undoBtn: 'Undo',
       emptyGuideStep1: '① Add a Pokémon (tap +)', emptyGuideStep2: '② Set a virtual opponent', emptyGuideStep3: '③ Fine-tune EVs and check the verdict',
       slotSearchTitle: n => `Add a Pokémon to slot ${n}`, slotSearchClose: '✕ Close',
-      slotSearchPlaceholder: 'Search for a Pokémon to add', slotFillBtn: 'Fill this slot with a suggestion',
+      slotSearchPlaceholder: 'Search for a Pokémon to add',
       noHit: 'No matches', rankLbl: n => `Rank #${n}`, offRankLbl: 'Unranked', adoptBtn: 'Use this suggestion',
       fillCalculating: 'Calculating suggestions…', fillFailedMsg: 'Failed to load suggestions. Please try again later',
       targetsHeading: 'Virtual Opponents', targetsSelectPrompt: 'Select a slot above',
@@ -908,6 +915,7 @@ const I18N = I18N_ALL[lang];
       fillResultHead: (n, before, after) => `${n} candidate(s) for empty slots (holes ${before} → ${after}) — add one at a time or all at once`,
       fillAdoptAllBtn: 'Add all',
       fillNoHoleReason: 'Covers no current hole (picked by usage)',
+      fillAltsLbl: n => `${n} other candidate(s)`,
       fillClearBtn: '✕ Clear suggestions', alreadyAdded: 'Already added', addToEmptySlot: sp => `Add ${sp} to an empty slot`,
       exportHeading: name => `Export — ${name}`, copyBtn: 'Copy', copiedMsg: 'Copied',
       copyFailedMsg: 'Copy failed. Please select the text and copy it manually',
@@ -947,7 +955,7 @@ const I18N = I18N_ALL[lang];
       slotRemoveTitle: '제거', undoRemoved: name => `${name}을(를) 제거했습니다`, undoBtn: '되돌리기',
       emptyGuideStep1: '① 포켓몬 추가（＋를 탭）', emptyGuideStep2: '② 가상의 적 설정', emptyGuideStep3: '③ EV를 미세 조정하고 판정 확인',
       slotSearchTitle: n => `칸${n}에 포켓몬 추가`, slotSearchClose: '✕ 닫기',
-      slotSearchPlaceholder: '추가할 포켓몬 검색', slotFillBtn: '이 칸을 제안으로 채우기',
+      slotSearchPlaceholder: '추가할 포켓몬 검색',
       noHit: '검색 결과 없음', rankLbl: n => `사용률 ${n}위`, offRankLbl: '순위권 밖', adoptBtn: '이 안을 채택',
       fillCalculating: '제안을 계산 중…', fillFailedMsg: '제안을 가져오지 못했습니다. 잠시 후 다시 시도해 주세요',
       targetsHeading: '가상의 적', targetsSelectPrompt: '위의 6칸에서 칸을 선택해 주세요',
@@ -1017,6 +1025,7 @@ const I18N = I18N_ALL[lang];
       fillResultHead: (n, before, after) => `빈 칸 ${n}건의 후보(구멍 ${before} → ${after}) — 하나씩 또는 한 번에 추가할 수 있습니다`,
       fillAdoptAllBtn: '한 번에 추가',
       fillNoHoleReason: '메우는 구멍 없음(사용률 상위에서)',
+      fillAltsLbl: n => `다른 후보 ${n}건`,
       fillClearBtn: '✕ 제안 지우기', alreadyAdded: '추가됨', addToEmptySlot: sp => `${sp}을(를) 빈 칸에 추가`,
       exportHeading: name => `내보내기 — ${name}`, copyBtn: '복사', copiedMsg: '복사했습니다',
       copyFailedMsg: '복사에 실패했습니다. 텍스트를 선택하여 수동으로 복사해 주세요',
@@ -1164,10 +1173,9 @@ const I18N = I18N_ALL[lang];
   let balanceTab = 'atk';
   let fillLoading = false;
   let fillFailed = false;
-  let fillResult = null; // 「空き枠を穴から埋める」の計算結果。{ picks, oppCols, holesAfter } または null
-  let slotFillLoading = false;
-  let slotFillProposals = null;
-  let slotFillFailed = false;
+  let fillRaw = null;    // 「空き枠を穴から埋める」の候補プール(もちもの重複の切替で再計算しない)
+  let fillView = [];     // いま描画中の候補(採用ボタンの参照先)
+  let fillAllowDup = false; // もちもの重複を許可するか(穴埋め提案と同じ既定)
   let tuneResults = null;
   let spSugActive = -1;
   let targetSugActive = -1;
@@ -1203,10 +1211,8 @@ const I18N = I18N_ALL[lang];
     selectedIdx = null;
     fillLoading = false;
     fillFailed = false;
-    fillResult = null;
-    slotFillLoading = false;
-    slotFillProposals = null;
-    slotFillFailed = false;
+    fillRaw = null;
+    fillView = [];
     tuneResults = null;
     activeMuTab = null;
     muEdit = null;
@@ -1382,7 +1388,6 @@ const I18N = I18N_ALL[lang];
     renderTray();
     renderEmptyGuide();
     updateFillBtnVisibility();
-    renderFillOut();
     renderSlotSearch();
     renderEditor();
     renderTargetsPanel();
@@ -1471,10 +1476,10 @@ const I18N = I18N_ALL[lang];
     const p = activeParty();
     const hasEmpty = !!p && p.slots.some((s) => !s);
     btn.style.display = hasEmpty ? '' : 'none';
-    if (!hasEmpty && (fillResult || fillFailed)) {
-      fillResult = null;
+    if (!hasEmpty && (fillRaw || fillFailed)) {
+      fillRaw = null;
+      fillView = [];
       fillFailed = false;
-      renderFillOut();
     }
   }
 
@@ -1594,9 +1599,7 @@ const I18N = I18N_ALL[lang];
       btn.addEventListener('click', () => {
         selectedIdx = +btn.dataset.slot;
         tuneResults = null;
-        slotFillProposals = null;
-        slotFillFailed = false;
-        activeMuTab = null;
+                activeMuTab = null;
         muEdit = null;
         document.querySelectorAll('#pb-tray .montab').forEach((b) => b.classList.toggle('active', +b.dataset.slot === selectedIdx));
         renderSlotSearch();
@@ -1662,8 +1665,6 @@ const I18N = I18N_ALL[lang];
       selectedIdx = null;
     }
     tuneResults = null;
-    slotFillProposals = null;
-    slotFillFailed = false;
     saveStore(store);
     const rb = resolveSlotSafe(removed);
     showUndoToast(tPoke(rb ? rb.label : removed.sp), p.id, i, removed);
@@ -1794,16 +1795,11 @@ const I18N = I18N_ALL[lang];
           <input type="text" id="pb-sp-search" class="filter-inp" placeholder="${esc(I18N.slotSearchPlaceholder)}" autocomplete="off">
           <div class="filter-sug" id="pb-sp-sug" style="display:none"></div>
         </div>
-        <div class="row" style="margin-top:.6em">
-          <button class="pb-btn-sub" id="pb-slot-fill-btn">${esc(I18N.slotFillBtn)}</button>
-        </div>
-        <div id="pb-slot-fill-out"></div>
       </div>`;
     const input = el.querySelector('#pb-sp-search');
     input.addEventListener('input', (e) => onSpSearchInput(e.target.value));
     input.addEventListener('keydown', onSpSearchKey);
     input.focus();
-    el.querySelector('#pb-slot-fill-btn').addEventListener('click', onSlotFillClick);
     el.querySelector('#pb-slotsearch-close').addEventListener('click', () => {
       selectedIdx = null;
       document.querySelectorAll('#pb-tray .montab').forEach((b) => b.classList.remove('active'));
@@ -1811,7 +1807,6 @@ const I18N = I18N_ALL[lang];
       renderEditor();
       renderTargetsPanel();
     });
-    if (slotFillProposals) renderSlotFillArea();
   }
 
   function onSpSearchInput(val) {
@@ -1863,66 +1858,7 @@ const I18N = I18N_ALL[lang];
     render();
   }
 
-  async function onSlotFillClick() {
-    const p = activeParty();
-    if (!p || !core) return;
-    const idx = selectedIdx;
-    slotFillLoading = true;
-    slotFillFailed = false;
-    renderSlotFillArea();
-    let picks = null;
-    try {
-      // この枠1つぶんの候補。全体の「空き枠を埋める」と同じ穴ベースの選び方にする。
-      const r = await computeFillPicks({ slots: p.slots.map((sl, i) => (i === idx ? null : sl)) },
-                                       buildOppCols());
-      picks = (r.picks[0] && r.picks[0].alts) || [];
-    } catch (e) {
-      console.warn('[onSlotFillClick] 候補の計算に失敗しました', e);
-      if (idx !== selectedIdx) return;
-      slotFillLoading = false;
-      slotFillFailed = true;
-      renderSlotFillArea();
-      return;
-    }
-    if (idx !== selectedIdx) return;
-    slotFillLoading = false;
-    slotFillProposals = picks;
-    renderSlotFillArea();
-  }
-  function renderSlotFillArea() {
-    const out = document.getElementById('pb-slot-fill-out');
-    if (!out) return;
-    if (slotFillLoading) { out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I18N.fillCalculating)}</div></div>`; return; }
-    if (slotFillFailed) { out.innerHTML = `<div class="muted">${esc(I18N.fillFailedMsg)}</div>`; return; }
-    if (!slotFillProposals || !slotFillProposals.length) { out.innerHTML = ''; return; }
-    const cols = (fillResult && fillResult.oppCols) || buildOppCols();
-    out.innerHTML = slotFillProposals.map((pk, ci) => `<div class="pb-cand-card">
-          ${icoImg(pk.cand.icon, pk.cand.build.label, 'monicon')}
-          <span class="mname" style="font-size:.82rem">${esc(tPoke(pk.cand.build.label))}</span>
-          <span class="muted" style="font-size:.76rem">${esc(pk.covered.length
-            ? I18N.holeFillCoversLbl(pk.covered.map((ci2) => tPoke(cols[ci2].label)).join('、'))
-            : I18N.fillNoHoleReason)}</span>
-          <button class="pb-btn-sub" data-slot-cand="${ci}">${esc(I18N.adoptBtn)}</button>
-        </div>`).join('');
-    out.querySelectorAll('[data-slot-cand]').forEach((btn) => btn.addEventListener('click', () => {
-      const ci = +btn.dataset.slotCand;
-      const pk = slotFillProposals[ci];
-      const cand = { ...pk.cand.slot, evs: [...pk.cand.slot.evs], moves: [...pk.cand.slot.moves], targets: [] };
-      const p = activeParty();
-      // H1: onFillSpriteClickと同じく採用時点の枠状態を再確認してから書き込む(提案表示後に
-      // 別経路で当該枠が埋まっていた場合の無警告上書きを防ぐ)。
-      if (!p || selectedIdx === null || p.slots[selectedIdx]) {
-        slotFillProposals = null;
-        renderSlotFillArea();
-        return;
-      }
-      p.slots[selectedIdx] = cand;
-      p.updatedAt = Date.now();
-      saveStore(store);
-      slotFillProposals = null;
-      render();
-    }));
-  }
+
 
   /** value属性は常に和名(生データ)。表示テキストのみtAbil()で翻訳する。 */
   function fieldOptions(entries, current, emptyLabel) {
@@ -3284,23 +3220,37 @@ const I18N = I18N_ALL[lang];
    * （相手上位30体に対して◎/○を取れるか）を使い、1枠ごとに「どの穴が埋まるか」を
    * 示しながら貪欲に埋める。計算はすべてブラウザ内のエンジンで完結する。
    */
-  async function computeFillPicks(party, oppCols) {
+  async function computeFillRaw(party, oppCols) {
     const resolved = [];
     party.slots.forEach((slot) => { const rb = resolveSlotSafe(slot); if (rb) resolved.push(rb); });
     const emptyIdx = party.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
     const usedDex = new Set(resolved.map((b) => (b.icon || '').split('-')[0]));
-    const usedItems = new Set(resolved.map((b) => b.item).filter(Boolean));
-    let megaCount = resolved.filter((b) => b.mega).length;
     const { candidates } = await buildCandidatePool(usedDex, oppCols);
+    return { candidates, resolved, emptyIdx, oppCols,
+             megaCount: resolved.filter((b) => b.mega).length,
+             items: resolved.map((b) => b.item).filter(Boolean) };
+  }
 
-    /** いまの穴に対する候補を「埋まる穴の数 → 使用率」の順に並べる。
-     * 同じ種は1型だけ（型違いが並ぶと選びにくい）。 */
+  /**
+   * 空き枠を「今の穴を一番埋める候補」から順に選ぶ。
+   *
+   * 1枠ごとにその時点の穴を数え直し、選んだ体を仮想的に加えてから次の枠を選ぶ。
+   * もちもの重複の許可だけは計算し直さずここで通すので、穴埋め提案の
+   * selectHoleFillLists と同じ操作感になる。
+   */
+  function selectFillPicks(raw, allowDup) {
+    const { candidates, oppCols, emptyIdx } = raw;
+    const resolved = [...raw.resolved];
+    const usedDex = new Set(resolved.map((b) => (b.icon || '').split('-')[0]));
+    const usedItems = new Set(raw.items);
+    let megaCount = raw.megaCount;
+
     const rank = (holeIdx) => {
       const bySp = new Map();
       for (const c of candidates) {
         if (usedDex.has((c.icon || '').split('-')[0])) continue;
         if (c.mega && megaCount >= 2) continue;           // メガ3体以上は選出が窮屈になる
-        if (c.build.item && usedItems.has(c.build.item)) continue;
+        if (!allowDup && c.build.item && usedItems.has(c.build.item)) continue;
         const covered = [...c.cov].filter((ci) => holeIdx.has(ci));
         const cur = bySp.get(c.sp);
         if (!cur || covered.length > cur.covered.length) bySp.set(c.sp, { cand: c, covered });
@@ -3312,42 +3262,46 @@ const I18N = I18N_ALL[lang];
     const picks = [];
     for (const slotIdx of emptyIdx) {
       const holeInfo = findHoles(resolved, oppCols);
-      const best = rank(holeInfo.holeIdx)[0];
+      const ranked = rank(holeInfo.holeIdx);
+      const best = ranked[0];
       if (!best) break;
       picks.push({ slotIdx, cand: best.cand, covered: best.covered,
-                   holesBefore: holeInfo.holeIdx.size,
-                   alts: rank(holeInfo.holeIdx).slice(0, 5) });
+                   holesBefore: holeInfo.holeIdx.size, alts: ranked.slice(0, 5) });
       usedDex.add((best.cand.icon || '').split('-')[0]);
       if (best.cand.build.item) usedItems.add(best.cand.build.item);
       if (best.cand.mega) megaCount++;
       resolved.push(best.cand.build);
     }
-    const after = findHoles(resolved, oppCols);
-    return { picks, oppCols, holesAfter: after.holeIdx.size };
+    return { picks, oppCols, holesAfter: findHoles(resolved, oppCols).holeIdx.size };
   }
 
   async function onFillClick() {
     const p = activeParty();
     if (!p || !core) return;
-    const emptyIdx = p.slots.map((s, i) => (s ? null : i)).filter((i) => i !== null);
-    const out = document.getElementById('pb-fill-out');
-    if (!emptyIdx.length) { out.innerHTML = `<div class="muted">${esc(I18N.noEmptySlots)}</div>`; return; }
+    if (!p.slots.some((s) => !s)) return;
     fillLoading = true;
     fillFailed = false;
-    renderFillOut();
+    openFillPopover();
     const t0 = performance.now();
     try {
-      fillResult = await computeFillPicks(p, buildOppCols());
+      fillRaw = await computeFillRaw(p, buildOppCols());
     } catch (e) {
       console.warn('[onFillClick] 空き枠候補の計算に失敗しました', e);
       fillLoading = false;
       fillFailed = true;
-      renderFillOut();
+      renderFillBody();
       return;
     }
-    console.info(`[pb-fill] ${fillResult.picks.length}枠 計算時間: ${Math.round(performance.now() - t0)}ms`);
+    console.info(`[pb-fill] 候補${fillRaw.candidates.length}型 計算時間: ${Math.round(performance.now() - t0)}ms`);
     fillLoading = false;
-    renderFillOut();
+    renderFillBody();
+  }
+  /** 穴埋め提案と同じモーダルに出す（2つの提案で操作が食い違わないように揃える）。 */
+  function openFillPopover() {
+    const body = document.getElementById('pb-modal-body');
+    body.innerHTML = `<h3 style="margin-top:0">${esc(I18N.fillBtn)}</h3><div id="pb-fill-body"></div>`;
+    showModal();
+    renderFillBody();
   }
   function speciesInParty(party, spName) {
     return party.slots.some((s) => s && s.sp === spName);
@@ -3355,20 +3309,33 @@ const I18N = I18N_ALL[lang];
   function firstEmptySlotIdx(party) {
     return party.slots.findIndex((s) => !s);
   }
-  function renderFillOut() {
-    const out = document.getElementById('pb-fill-out');
-    if (fillLoading) { out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I18N.fillCalcAll)}</div></div>`; return; }
-    if (fillFailed) { out.innerHTML = `<div class="muted">${esc(I18N.fillFailedMsg)}</div>`; return; }
-    if (!fillResult || !fillResult.picks.length) { out.innerHTML = ''; return; }
-    const { picks, oppCols, holesAfter } = fillResult;
+  /** その枠の次点候補。枠ごとの提案ボタンを無くしたぶん、ここから選べるようにする。 */
+  function altsHtml(pk, pi, oppCols) {
+    const rest = (pk.alts || []).slice(1);
+    if (!rest.length) return '';
+    const rows = rest.map((a, ai) => `<button type="button" class="pb-fill-alt" data-fill-alt="${pi}.${ai + 1}">
+        ${icoImg(a.cand.icon, a.cand.build.label, '')}
+        <span class="pb-fill-alt-n">${esc(tPoke(a.cand.build.label))}</span>
+        <span class="pb-fill-alt-c">${esc(a.covered.length
+          ? I18N.holeFillCoversLbl(a.covered.map((ci) => tPoke(oppCols[ci].label)).join('、'))
+          : I18N.fillNoHoleReason)}</span>
+      </button>`).join('');
+    return `<details class="pb-fill-alts"><summary>${esc(I18N.fillAltsLbl(rest.length))}</summary>${rows}</details>`;
+  }
+
+  function renderFillBody() {
+    const el = document.getElementById('pb-fill-body');
+    if (!el) return;
+    if (fillLoading) {
+      el.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I18N.fillCalcAll)}</div></div>`;
+      return;
+    }
+    if (fillFailed) { el.innerHTML = `<div class="muted">${esc(I18N.fillFailedMsg)}</div>`; return; }
+    if (!fillRaw) { el.innerHTML = ''; return; }
+    const { picks, oppCols, holesAfter } = selectFillPicks(fillRaw, fillAllowDup);
+    fillView = picks;
+    if (!picks.length) { el.innerHTML = `<div class="muted">${esc(I18N.holeFillAddNone)}</div>`; return; }
     const coverLabels = (covered) => covered.map((ci) => tPoke(oppCols[ci].label)).join('、');
-    const head = `<div class="pb-fill-head">
-        <span class="muted">${esc(I18N.fillResultHead(picks.length, picks[0].holesBefore, holesAfter))}</span>
-        <span class="row" style="gap:6px">
-          <button class="pb-btn-sub" id="pb-fill-all">${esc(I18N.fillAdoptAllBtn)}</button>
-          <button class="pb-btn-sub" id="pb-fill-close">${esc(I18N.fillClearBtn)}</button>
-        </span>
-      </div>`;
     const cards = picks.map((pk, i) => `<div class="pb-hf-card">
         ${icoImg(pk.cand.icon, pk.cand.build.label, 'mtx-ico')}
         <div class="pb-hf-info">
@@ -3379,22 +3346,47 @@ const I18N = I18N_ALL[lang];
         </div>
         <button type="button" class="pb-btn-sub" data-fill-add="${i}">${esc(I18N.holeFillAddBtn)}</button>
         ${hfBuildHtml(pk.cand.slot)}
+        ${altsHtml(pk, i, oppCols)}
       </div>`).join('');
-    out.innerHTML = head + cards;
-    document.getElementById('pb-fill-close').addEventListener('click', () => {
-      fillResult = null;
-      renderFillOut();
-    });
-    document.getElementById('pb-fill-all').addEventListener('click', () => adoptFillPicks(null));
-    out.querySelectorAll('[data-fill-add]').forEach((btn) =>
+    el.innerHTML = `
+      <label class="pb-hf-filter"><input type="checkbox" id="pb-fill-allowdup" ${fillAllowDup ? 'checked' : ''}>${esc(I18N.holeFillAllowDupLbl)}</label>
+      <div class="pb-hf-section">
+        <h4>${esc(I18N.fillResultHead(picks.length, picks[0].holesBefore, holesAfter))}</h4>
+        ${cards}
+      </div>
+      <div class="row" style="margin-top:.6em"><button class="pb-btn-sub" id="pb-fill-all">${esc(I18N.fillAdoptAllBtn)}</button></div>`;
+    const dupChk = el.querySelector('#pb-fill-allowdup');
+    if (dupChk) dupChk.addEventListener('change', (e) => { fillAllowDup = e.target.checked; renderFillBody(); });
+    el.querySelector('#pb-fill-all').addEventListener('click', () => adoptFillPicks(null));
+    el.querySelectorAll('[data-fill-add]').forEach((btn) =>
       btn.addEventListener('click', () => adoptFillPicks(+btn.dataset.fillAdd)));
+    el.querySelectorAll('[data-fill-alt]').forEach((btn) => btn.addEventListener('click', () => {
+      const [pi, ai] = btn.dataset.fillAlt.split('.').map(Number);
+      adoptFillCand(fillView[pi] && fillView[pi].alts[ai]);
+    }));
   }
   /** 候補を空き枠へ入れる。only が数値ならその1件だけ。
    * 提案表示後に手動追加やパーティ切替があっても壊れないよう、採用時点の空き枠を数え直す。 */
+  /** 次点候補を1体だけ空き枠へ入れる。 */
+  function adoptFillCand(alt) {
+    const p = activeParty();
+    if (!p || !alt) return;
+    if (speciesInParty(p, alt.cand.sp)) return;
+    const idx = firstEmptySlotIdx(p);
+    if (idx === -1) return;
+    const c = alt.cand.slot;
+    p.slots[idx] = { ...c, evs: [...c.evs], moves: [...c.moves], targets: [] };
+    p.updatedAt = Date.now();
+    saveStore(store);
+    fillRaw = null;
+    fillView = [];
+    hideModal();
+    render();
+  }
   function adoptFillPicks(only) {
     const p = activeParty();
-    if (!p || !fillResult) return;
-    const src = only === null ? fillResult.picks : [fillResult.picks[only]];
+    if (!p || !fillView.length) return;
+    const src = only === null ? fillView : [fillView[only]];
     for (const pk of src) {
       if (!pk) continue;
       if (speciesInParty(p, pk.cand.sp)) continue;
@@ -3405,7 +3397,9 @@ const I18N = I18N_ALL[lang];
     }
     p.updatedAt = Date.now();
     saveStore(store);
-    fillResult = null;
+    fillRaw = null;
+    fillView = [];
+    hideModal();
     render();
   }
   document.getElementById('pb-fill-btn').addEventListener('click', onFillClick);
