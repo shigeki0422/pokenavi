@@ -4,7 +4,7 @@ description: 'M-6シーズン使用率15位のギャラドスを考察。ギャ�
 pubDate: '2026-09-20'
 updatedDate: '2026-09-20'
 heroImage: '../../assets/hero-gyarados-m6.png'
-draft: false
+draft: true
 ---
 
 <style>

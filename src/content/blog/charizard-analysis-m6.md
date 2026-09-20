@@ -4,7 +4,7 @@ description: 'M-6シーズン使用率18位のリザードン考察。メガリ�
 pubDate: '2026-09-20'
 updatedDate: '2026-09-20'
 heroImage: '../../assets/hero-charizard-m6.png'
-draft: false
+draft: true
 ---
 
 <style>

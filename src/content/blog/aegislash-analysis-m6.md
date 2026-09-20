@@ -4,7 +4,7 @@ description: 'M-6シーズン使用率10位のギルガルドを考察。はが�
 pubDate: '2026-09-20'
 updatedDate: '2026-09-20'
 heroImage: '../../assets/hero-aegislash-m6.png'
-draft: false
+draft: true
 ---
 
 <style>

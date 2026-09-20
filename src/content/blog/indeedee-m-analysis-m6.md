@@ -4,7 +4,7 @@ description: 'M-6シーズン使用率35位のイエッサン(オス)を考察�
 pubDate: '2026-09-20'
 updatedDate: '2026-09-20'
 heroImage: '../../assets/hero-indeedee-m-m6.png'
-draft: false
+draft: true
 ---
 
 <style>
