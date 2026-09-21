@@ -1592,23 +1592,25 @@ const I18N = I18N_ALL[lang];
   // で常にfalseになるため使わない。子ノードの有無で判定する。
   const HAS_LOADING_AD = !!(document.getElementById('ps-ad-embed-src')?.content?.childNodes?.length);
   let _adLoaded = false;
-  function _runEmbeddedScripts(container){
-    // template由来のscriptタグはinnerHTML/cloneNodeでは実行されないため、
-    // 同じ内容のscript要素を作り直して差し替える(標準的な回避策)。
-    container.querySelectorAll('script').forEach(old => {
-      const fresh = document.createElement('script');
-      for (const attr of old.attributes) fresh.setAttribute(attr.name, attr.value);
-      fresh.textContent = old.textContent;
-      old.replaceWith(fresh);
-    });
-  }
   function _ensureAdLoaded(){
     if (_adLoaded) return;
     const src = document.getElementById('ps-ad-embed-src');
     const slot = document.getElementById('ps-ad-slot');
     if (!src || !slot) return;
-    slot.appendChild(src.content.cloneNode(true));
-    _runEmbeddedScripts(slot);
+    // AdMaxのタグは内部でdocument.write()を使う旧来型で、動的に挿入した
+    // <script>から呼ぶとブラウザに拒否される(「it isn't possible to write
+    // into a document from an asynchronously-loaded external script」)。
+    // 独立したdocumentを持つiframeの中で開いて書き込む、document.write型
+    // 広告タグを動的領域へ埋め込む際の標準的な回避策をとる。
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'width:300px;max-width:100%;height:250px;border:0;display:block';
+    iframe.setAttribute('scrolling', 'no');
+    iframe.setAttribute('title', I18N.adLabel);
+    slot.appendChild(iframe);
+    const doc = iframe.contentWindow.document;
+    doc.open();
+    doc.write(`<!DOCTYPE html><html><head><base target="_blank"><style>body{margin:0;overflow:hidden}</style></head><body>${src.innerHTML}</body></html>`);
+    doc.close();
     _adLoaded = true;
   }
   function showAdDialog(){
