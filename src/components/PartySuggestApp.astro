@@ -1588,7 +1588,9 @@ const I18N = I18N_ALL[lang];
    * PUBLIC_ADMAX_SUGGEST_LOADING_EMBED が未設定ならテンプレートごと存在しないため
    * HAS_LOADING_AD は false になり、以下の分岐は完全に無効化される（既存動作のまま）。 */
   const AD_MIN_SECONDS = 6;
-  const HAS_LOADING_AD = !!((document.getElementById('ps-ad-embed-src')?.content?.textContent) || '').trim();
+  // textContentでの判定はsrc属性だけの外部読み込み型scriptタグ(中身のテキストが空)
+  // で常にfalseになるため使わない。子ノードの有無で判定する。
+  const HAS_LOADING_AD = !!(document.getElementById('ps-ad-embed-src')?.content?.childNodes?.length);
   let _adLoaded = false;
   function _runEmbeddedScripts(container){
     // template由来のscriptタグはinnerHTML/cloneNodeでは実行されないため、
