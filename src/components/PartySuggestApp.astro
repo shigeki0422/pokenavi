@@ -12,6 +12,10 @@ interface Props {
   lang?: 'ja' | 'en' | 'ko';
 }
 const { preCoreLabel, lang = 'ja' } = Astro.props;
+/** 軸2件以上は必ずライブ計算（cache miss）になりCloud Runの実CPU課金が発生する
+ * （suggest_cache.jsonは単軸221件のみで2軸以上のヒットは0件）。この待ち時間だけに
+ * 出す広告のHTMLを環境変数で受け取る。未設定なら従来どおり広告なしの待機表示のまま。 */
+const suggestLoadingAdHtml = import.meta.env.PUBLIC_ADMAX_SUGGEST_LOADING_EMBED || '';
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 // 1v1判定の前提文。is:inline スクリプトからは import できないので define:vars で渡す
 const assumeLead = MATCHUP_LEAD[lang] ?? MATCHUP_LEAD.ja;
@@ -114,6 +118,7 @@ const I18N_ALL = {
     loadSub: '初回や複雑な軸は10〜20秒ほどかかることがあります',
     fixedLbl: s => `固定軸: ${s} / `, resultCount: n => `${n}件`, errPrefix: 'エラー: ',
     connErr: '提案サーバに接続できませんでした。時間をおいて再度お試しください。',
+    adLabel: '広告', adSkipIn: n => `結果を見る（あと${n}秒）`, adReady: '結果を見る →',
     omakase: 'おまかせ', importName: label => `${label}軸 かんたん構築`, rankLbl: n => `使用${n}位`,
   },
   en: {
@@ -179,6 +184,7 @@ const I18N_ALL = {
     loadSub: 'First runs or complex cores can take 10–20 seconds',
     fixedLbl: s => `Fixed core: ${s} / `, resultCount: n => `${n} result(s)`, errPrefix: 'Error: ',
     connErr: 'Could not connect to the suggestion server. Please try again later.',
+    adLabel: 'Advertisement', adSkipIn: n => `View results (${n}s)`, adReady: 'View results →',
     omakase: 'auto-pick', importName: label => `${label} core quick build`, rankLbl: n => `Rank #${n}`,
   },
   ko: {
@@ -244,6 +250,7 @@ const I18N_ALL = {
     loadSub: '처음이거나 복잡한 축은 10~20초 정도 걸릴 수 있습니다',
     fixedLbl: s => `고정 축: ${s} / `, resultCount: n => `${n}건`, errPrefix: '오류: ',
     connErr: '제안 서버에 연결할 수 없었습니다. 잠시 후 다시 시도해 주세요.',
+    adLabel: '광고', adSkipIn: n => `결과 보기 (${n}초)`, adReady: '결과 보기 →',
     omakase: '자동 선택', importName: label => `${label} 축 간단 구성`, rankLbl: n => `사용률 ${n}위`,
   },
 } as const;
@@ -271,6 +278,18 @@ const I18N = I18N_ALL[lang];
     <div id="status" class="muted" style="margin-top:.5em"></div>
   </div>
   <div id="out"></div>
+  <!-- 広告未設定時も<template>自体は常に出力する(空のset:html)。
+     {cond && <template set:html>} という条件付きレンダリングは、このファイルの
+     規模でAstroコンパイラの変換を異常に遅くする(単体コンパイルが60秒超で終わらない、
+     無条件なら264ms)ため避ける。実害はJS側でtextContentの有無を見て判定している。 -->
+<template id="ps-ad-embed-src" set:html={suggestLoadingAdHtml} />
+  <div id="ps-ad-dialog" class="ps-ad-overlay" style="display:none" role="dialog" aria-modal="true" aria-label={I18N.adLabel}>
+    <div class="ps-ad-card">
+      <div class="ps-ad-label">{I18N.adLabel}</div>
+      <div id="ps-ad-slot" class="ps-ad-slot"></div>
+      <button id="ps-ad-close" class="ps-ad-close" disabled></button>
+    </div>
+  </div>
   <div id="popup" class="pop-overlay" style="display:none">
     <div class="pop-card"><button class="pop-x" id="pop-x" aria-label={I18N.close}>✕</button><div id="pop-body"></div></div>
   </div>
@@ -571,6 +590,16 @@ const I18N = I18N_ALL[lang];
   .soon-box{text-align:center;padding:2em 1em;color:rgb(var(--gray))}
   .soon-badge{display:inline-block;background:#eef2ff;color:#3730a3;font-weight:800;font-size:.9rem;border-radius:9999px;padding:.35em 1.1em;margin-bottom:.6em}
 
+  /* 軸2件以上のライブ計算（cache miss）中だけ出す全画面広告ダイアログ。
+   * pop-overlay(z-index:1000)より前面に出す必要があるため2000。 */
+  .ps-ad-overlay{position:fixed;inset:0;background:rgba(15,23,42,.72);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1em}
+  .ps-ad-card{background:#fff;border-radius:14px;max-width:420px;width:100%;padding:1.3em 1.2em;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.3)}
+  .ps-ad-label{font-size:.68rem;font-weight:800;color:rgb(var(--gray));letter-spacing:.05em;margin-bottom:.6em}
+  .ps-ad-slot{min-height:250px;display:flex;align-items:center;justify-content:center}
+  .ps-ad-slot:empty{display:none}
+  .ps-ad-close{margin-top:1em;width:100%;padding:.7em 1em;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:700;font-size:.9rem;cursor:pointer}
+  .ps-ad-close:disabled{background:rgb(var(--gray-light));color:rgb(var(--gray));cursor:not-allowed}
+
   /* 複数軸の事前注意書き・エラー表示 */
   .ps-notice{font-size:.78rem;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:.5em .7em;margin-top:.5em}
   .ps-err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:.9em 1em;font-size:.85rem;font-weight:700}
@@ -666,6 +695,7 @@ const I18N = I18N_ALL[lang];
       loadSub: '初回や複雑な軸は10〜20秒ほどかかることがあります',
       fixedLbl: s => `固定軸: ${s} / `, resultCount: n => `${n}件`, errPrefix: 'エラー: ',
       connErr: '提案サーバに接続できませんでした。時間をおいて再度お試しください。',
+      adLabel: '広告', adSkipIn: n => `結果を見る（あと${n}秒）`, adReady: '結果を見る →',
       omakase: 'おまかせ', importName: label => `${label}軸 かんたん構築`, rankLbl: n => `使用${n}位`,
       koOOR: '圏外', koRange: (a,b) => `確${a}〜${b}`, koFixed: n => `確${n}`, koRoll: n => `乱${n}`,
       turnFirst: '先手', turnSecond: '後手',
@@ -740,6 +770,7 @@ const I18N = I18N_ALL[lang];
       loadSub: 'First runs or complex cores can take 10–20 seconds',
       fixedLbl: s => `Fixed core: ${s} / `, resultCount: n => `${n} result(s)`, errPrefix: 'Error: ',
       connErr: 'Could not connect to the suggestion server. Please try again later.',
+      adLabel: 'Advertisement', adSkipIn: n => `View results (${n}s)`, adReady: 'View results →',
       omakase: 'auto-pick', importName: label => `${label} core quick build`, rankLbl: n => `Rank #${n}`,
       koOOR: 'Out of range', koRange: (a,b) => `${a}–${b}HKO`, koFixed: n => `${n}HKO`, koRoll: n => `${n}HKO (roll-dependent)`,
       turnFirst: 'Moves first', turnSecond: 'Moves second',
@@ -814,6 +845,7 @@ const I18N = I18N_ALL[lang];
       loadSub: '처음이거나 복잡한 축은 10~20초 정도 걸릴 수 있습니다',
       fixedLbl: s => `고정 축: ${s} / `, resultCount: n => `${n}건`, errPrefix: '오류: ',
       connErr: '제안 서버에 연결할 수 없었습니다. 잠시 후 다시 시도해 주세요.',
+      adLabel: '광고', adSkipIn: n => `결과 보기 (${n}초)`, adReady: '결과 보기 →',
       omakase: '자동 선택', importName: label => `${label} 축 간단 구성`, rankLbl: n => `사용률 ${n}위`,
       koOOR: '범위 밖', koRange: (a,b) => `확정${a}~${b}`, koFixed: n => `확정${n}`, koRoll: n => `난수${n}`,
       turnFirst: '선공', turnSecond: '후공',
@@ -1549,6 +1581,58 @@ const I18N = I18N_ALL[lang];
       return obj.core === coreParam ? obj.d : null;
     }catch(e){ return null; }
   }
+  /** 軸2件以上（cache miss）のライブ計算中だけ出す広告ダイアログ。
+   * PUBLIC_ADMAX_SUGGEST_LOADING_EMBED が未設定ならテンプレートごと存在しないため
+   * HAS_LOADING_AD は false になり、以下の分岐は完全に無効化される（既存動作のまま）。 */
+  const AD_MIN_SECONDS = 6;
+  const HAS_LOADING_AD = !!((document.getElementById('ps-ad-embed-src')?.content?.textContent) || '').trim();
+  let _adLoaded = false;
+  function _runEmbeddedScripts(container){
+    // template由来のscriptタグはinnerHTML/cloneNodeでは実行されないため、
+    // 同じ内容のscript要素を作り直して差し替える(標準的な回避策)。
+    container.querySelectorAll('script').forEach(old => {
+      const fresh = document.createElement('script');
+      for (const attr of old.attributes) fresh.setAttribute(attr.name, attr.value);
+      fresh.textContent = old.textContent;
+      old.replaceWith(fresh);
+    });
+  }
+  function _ensureAdLoaded(){
+    if (_adLoaded) return;
+    const src = document.getElementById('ps-ad-embed-src');
+    const slot = document.getElementById('ps-ad-slot');
+    if (!src || !slot) return;
+    slot.appendChild(src.content.cloneNode(true));
+    _runEmbeddedScripts(slot);
+    _adLoaded = true;
+  }
+  function showAdDialog(){
+    _ensureAdLoaded();
+    const dlg = document.getElementById('ps-ad-dialog');
+    const btn = document.getElementById('ps-ad-close');
+    dlg.style.display = 'flex';
+    let remain = AD_MIN_SECONDS, minDone = false, resultsDone = false;
+    btn.disabled = true;
+    btn.textContent = I18N.adSkipIn(remain);
+    const closeNow = () => { dlg.style.display = 'none'; };
+    const timer = setInterval(() => {
+      remain--;
+      if (remain <= 0) {
+        clearInterval(timer);
+        minDone = true;
+        btn.disabled = false;
+        btn.textContent = I18N.adReady;
+        if (resultsDone) closeNow();
+      } else {
+        btn.textContent = I18N.adSkipIn(remain);
+      }
+    }, 1000);
+    btn.onclick = () => { if (!btn.disabled) closeNow(); };
+    return {
+      markResultsDone(){ resultsDone = true; if (minDone) closeNow(); },
+      forceClose(){ clearInterval(timer); closeNow(); },
+    };
+  }
   async function run(){
     const core = CORE.map(p=>({sp:p.sp, mega:p.mega}));
     const coreParam = currentCoreParam();
@@ -1559,6 +1643,7 @@ const I18N = I18N_ALL[lang];
     // (B5) 軸2件以上は必ずライブ計算(10〜20秒)。軸1件以下はsuggest_cacheに事前計算済みで数百msなので
     // 「10〜20秒」の表示は出さず、実態に合わせた短い表示にする。
     const isLive = core.length >= 2;
+    const adHandle = (isLive && HAS_LOADING_AD) ? showAdDialog() : null;
     const msgs = I18N.loadMsgs;
     let mi = 0, sec = 0, timer = null;
     if(isLive){
@@ -1576,6 +1661,7 @@ const I18N = I18N_ALL[lang];
         body: JSON.stringify({core, ncand:100, top:5})});
       const d = await r.json();
       if(d.error){
+        if(adHandle) adHandle.forceClose();
         // (B5) エラーは#statusだけでなく#outにも表示する(#outが空のままだと気づけないため)
         out.innerHTML = `<div class="ps-err">${I18N.errPrefix}${esc(d.error)}</div>`;
         status.textContent = I18N.errPrefix + d.error;
@@ -1587,7 +1673,11 @@ const I18N = I18N_ALL[lang];
       if(coreParam) url.searchParams.set('core', coreParam); else url.searchParams.delete('core');
       history.replaceState(null, '', url.pathname + url.search);
       renderResults(d);
+      // 広告の最短表示秒数（AD_MIN_SECONDS）を消化していなければ、そこまでダイアログを維持する。
+      // 消化済みならここで即座に閉じる。
+      if(adHandle) adHandle.markResultsDone();
     }catch(e){
+      if(adHandle) adHandle.forceClose();
       out.innerHTML = `<div class="ps-err">${I18N.connErr}</div>`;
       status.textContent = I18N.connErr;
     } finally {
