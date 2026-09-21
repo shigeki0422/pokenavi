@@ -5744,6 +5744,65 @@ check("1v1: explain_matchup が入場効果を適用した数値を返す",
       abs(_r35["cells"][0][0]["dealt"] / 100.0 - _ent35) < 0.02,
       f'{_r35["cells"][0][0]["dealt"]} vs {_ent35*100:.1f}')
 
+# ════════════════════════════════════════════════════════════════
+# 一撃必殺技とがんじょう: 完全無効（HP満タンのまま）。かたやぶりは貫通
+# ════════════════════════════════════════════════════════════════
+import random as _r36
+
+_atk36 = ("カビゴン@たべのこし:わんぱく:じわれ|のしかかり|うたう|はらだいこ"
+          ":32/0/32/0/2/0:あついしぼう")
+_mb36 = ("ドリュウズ@いのちのたま:いじっぱり:じわれ|アイアンヘッド|じしん|つのドリル"
+         ":0/32/0/0/0/32:かたやぶり")
+_stu36 = ("フォレトス@ゴツゴツメット:わんぱく:ジャイロボール|ステルスロック|やどりぎのタネ|まきびし"
+          ":32/0/32/0/2/0:がんじょう")
+
+
+def _ohko36(atk_spec, def_spec, seed=3):
+    a = _bfs29(_pps29(atk_spec), _L29, season="M-6", randomize=False)
+    d = _bfs29(_pps29(def_spec), _L29, season="M-6", randomize=False)
+    s1 = BattleSide([a], viewer_label="P1"); s2 = BattleSide([d], viewer_label="P2")
+    s1.field_idx = 0; s2.field_idx = 1
+    bt = Battle(s1, s2, BattleField()); _r36.seed(seed)
+    bt._turn_loop(lambda m, o, f: Action(type="move", move=m.active.moves[0], move_idx=0),
+                  lambda m, o, f: Action(type="move", move=m.active.moves[1], move_idx=1),
+                  max_turns=1)
+    return d, bt.logs
+
+
+_d36, _lg36 = _ohko36(_atk36, _stu36)
+check("一撃必殺: がんじょうは完全無効でHPが満タンのまま残る",
+      _d36.is_alive and _d36.hp == _d36.max_hp,
+      f"hp={_d36.hp}/{_d36.max_hp}")
+check("一撃必殺: がんじょうで無効化したログが出る",
+      any("がんじょう" in x and "効かない" in x for x in _lg36))
+
+# じわれは命中30%なので当たり外れは乱数次第。「がんじょうで無効化されない」ことで判定する
+_d36b, _lg36b = _ohko36(_mb36, _stu36, seed=5)
+check("一撃必殺: かたやぶりはがんじょうの無効化を貫通する",
+      not any("がんじょう" in x and "効かない" in x for x in _lg36b),
+      str([x for x in _lg36b if "がんじょう" in x or "じわれ" in x][:3]))
+
+# まねっこ: 相手の直前技をコピーして実行する
+_cp36 = ("レパルダス@きあいのタスキ:おくびょう:まねっこ|ねこだまし|バークアウト|つじぎり"
+         ":0/0/0/32/0/32:いたずらごころ")
+_gb36 = ("ガブリアス@きあいのタスキ:いじっぱり:げきりん|じしん|がんせきふうじ|ステルスロック"
+         ":2/32/0/0/0/32:さめはだ")
+_a36 = _bfs29(_pps29(_cp36), _L29, season="M-6", randomize=False)
+_b36 = _bfs29(_pps29(_gb36), _L29, season="M-6", randomize=False)
+_s136 = BattleSide([_a36], viewer_label="P1"); _s236 = BattleSide([_b36], viewer_label="P2")
+_s136.field_idx = 0; _s236.field_idx = 1
+_bt36 = Battle(_s136, _s236, BattleField()); _r36.seed(7)
+_bt36._turn_loop(lambda m, o, f: Action(type="move", move=m.active.moves[2], move_idx=2),
+                 lambda m, o, f: Action(type="move", move=m.active.moves[1], move_idx=1),
+                 max_turns=1)
+_n36 = len(_bt36.logs)
+_bt36._turn_loop(lambda m, o, f: Action(type="move", move=m.active.moves[0], move_idx=0),
+                 lambda m, o, f: Action(type="move", move=m.active.moves[1], move_idx=1),
+                 max_turns=2)
+check("まねっこ: 相手の直前技をコピーして実行する",
+      any("じしん をコピー" in x for x in _bt36.logs[_n36:]),
+      str(_bt36.logs[_n36:_n36 + 4]))
+
 # 集計
 # ════════════════════════════════════════════════════════════════
 print(f"\n{'='*60}")

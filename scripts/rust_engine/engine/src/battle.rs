@@ -1192,6 +1192,15 @@ pub fn execute_move(
         if (n == l.つのドリル || n == l.ハサミギロチン) && D!().has_type(pack.tc.ゴースト) {
             return;
         }
+        // がんじょうは一撃必殺技を完全に無効化する（HP満タンのまま）。タスキのように1で耐えるのではない。
+        // かたやぶり系は貫通する。
+        if D!().ability == l.がんじょう
+            && A!().ability != l.かたやぶり
+            && A!().ability != l.ターボブレイズ
+            && A!().ability != l.テラボルテージ
+        {
+            return;
+        }
         let hit = {
             let (a, d) = two!();
             check_hit(pack, a, d, &mv, field, &mut || rng.random())
@@ -1202,8 +1211,6 @@ pub fn execute_move(
         if D!().item == Some(l.きあいのタスキ) && D!().hp == D!().max_hp {
             D!().item = None;
             it::on_item_consumed(pack, &mut D!());
-            D!().hp = 1;
-        } else if D!().ability == l.がんじょう && D!().hp == D!().max_hp {
             D!().hp = 1;
         } else if D!().item == Some(l.きあいのハチマキ) && rng.random() < 0.10 {
             D!().hp = 1;

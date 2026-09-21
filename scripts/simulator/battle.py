@@ -862,6 +862,12 @@ def _execute_move(
         if move.name_jp in ("つのドリル", "ハサミギロチン") and "ゴースト" in (defender.type1, defender.type2):
             logs.append(f"{move.name_jp} は {defender.name} に効かない…")
             return logs
+        # がんじょうは一撃必殺技を完全に無効化する（HP満タンのまま「効かない」）。
+        # タスキのように1で耐えるのではない。かたやぶり系は貫通する。
+        if (defender.ability == "がんじょう"
+                and attacker.ability not in ("かたやぶり", "ターボブレイズ", "テラボルテージ")):
+            logs.append(f"{defender.name} の がんじょう！ {move.name_jp} は効かない…")
+            return logs
         if not check_hit(attacker, defender, move, field):
             logs.append(f"{attacker.name} の {move.name_jp} は外れた！")
             return logs
@@ -869,9 +875,6 @@ def _execute_move(
             defender.item = None
             on_item_consumed(defender, logs)
             logs.append(f"{defender.name} のきあいのタスキ で耐えた！")
-            defender.hp = 1
-        elif defender.ability == "がんじょう" and defender.hp == defender.max_hp:
-            logs.append(f"{defender.name} の がんじょう で耐えた！")
             defender.hp = 1
         elif defender.item == "きあいのハチマキ" and random.random() < 0.10:
             logs.append(f"{defender.name} の きあいのハチマキ で耐えた！")
