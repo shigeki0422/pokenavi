@@ -1,9 +1,9 @@
 ---
 title: 'オリーヴァ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのオリーヴァ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率88位。'
+description: 'ポケモンチャンピオンズのオリーヴァ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率83位。'
 pokemonName: 'オリーヴァ'
 dexNumber: 930
-usageRank: 88
+usageRank: 83
 pubDate: '2026-09-17'
 draft: false
 
@@ -18,7 +18,7 @@ draft: false
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.930</strong>　／　使用率 <strong style="color:#dc2626">88位</strong>
+      全国図鑑 <strong>No.930</strong>　／　使用率 <strong style="color:#dc2626">83位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-17</div>
   </div>

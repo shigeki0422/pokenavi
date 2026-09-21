@@ -1,12 +1,11 @@
 ---
 title: 'イエッサン(オス) | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのイエッサン(オス)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率21位。'
+description: 'ポケモンチャンピオンズのイエッサン(オス)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率20位。'
 pokemonName: 'イエッサン(オス)'
 dexNumber: 876
-usageRank: 21
+usageRank: 20
 pubDate: '2026-09-17'
 draft: false
-analysisSlug: 'indeedee-m-analysis-m6'
 
 ---
 
@@ -19,7 +18,7 @@ analysisSlug: 'indeedee-m-analysis-m6'
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.876</strong>　／　使用率 <strong style="color:#dc2626">21位</strong>
+      全国図鑑 <strong>No.876</strong>　／　使用率 <strong style="color:#dc2626">20位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-17</div>
   </div>
@@ -716,13 +715,3 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </div>
 
 ---
-
-## 考察記事
-
-<a href="/blog/indeedee-m-analysis-m6/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
-  <img src="/images/pokemon/pokemon-0876-00.webp" alt="イエッサン(オス)" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
-  <div>
-    <div style="font-size:0.75rem;color:#0369a1;font-weight:700;margin-bottom:2px">考察記事</div>
-    <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】イエッサン(オス) 考察 M-6 シーズン 使用率21位の解説</div>
-  </div>
-</a>

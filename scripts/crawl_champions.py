@@ -31,8 +31,8 @@ ARROW_RIGHT   = (2330, 540)
 ARROW_LEFT    = (70, 540)
 BACK_BTN      = (308, 49)
 
-PANELS = ["move", "item", "partner", "nature", "ev", "ability"]
-PANEL_MAX_SCROLL = {"move": 1, "item": 1, "partner": 1, "nature": 1, "ev": 8, "ability": 0}
+PANELS = ["move"]
+PANEL_MAX_SCROLL = {"move": 0, "item": 1, "partner": 1, "nature": 1, "ev": 8, "ability": 0}
 
 PROGRESS_FILE = f"{OUTPUT_DIR}/last_rank.txt"
 
@@ -122,10 +122,49 @@ def capture_panel(save_dir, panel):
     return len(hashes)
 
 
+BOX_RANK = (690, 20, 1010, 95)   # 詳細ヘッダーの「N位」表示（verify_crawl_order.py と同じ領域）
+
+
+def _rank_mask(path):
+    """順位表示を二値化して返す。画面遷移中のコマは全体が暗くなるため輝度差では比較できない。"""
+    import cv2
+    import numpy as np
+    g = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
+    if g is None:
+        return None
+    x1, y1, x2, y2 = BOX_RANK
+    if g.shape[1] < x2 or g.shape[0] < y2:
+        return None
+    sub = g[y1:y2, x1:x2]
+    return (sub < sub.mean() - 20).astype(np.uint8)
+
+
+def same_rank_shown(path_a, path_b):
+    """2枚が同じ順位を表示しているか。実測 同一0.98 / 別表示0.60〜0.73。"""
+    a, b = _rank_mask(path_a), _rank_mask(path_b)
+    if a is None or b is None:
+        return False
+    return (a & b).sum() / max((a | b).sum(), 1) >= 0.93
+
+
 def crawl_detail(rank):
     save_dir = f"{OUTPUT_DIR}/detail/{rank:03d}"
     os.makedirs(save_dir, exist_ok=True)
     counts = {}
+    # 画面遷移が間に合わないと前の順位をもう一度撮り、以降が全部1つずれて最後が欠落する
+    # （2026-09-21に141位と129位で連続発生し、2回とも200件を捨てた）。
+    # 1枚目を撮った時点で直前のランクと見比べ、同じならタップし直して撮り直す。
+    prev = f"{OUTPUT_DIR}/detail/{rank - 1:03d}/{PANELS[0]}_00.png"
+    for attempt in range(4):
+        first = f"{save_dir}/{PANELS[0]}_00.png"
+        time.sleep(0.8)
+        if not screenshot(first):
+            continue
+        if rank == 1 or not os.path.exists(prev) or not same_rank_shown(first, prev):
+            break
+        log(f"[{rank:3d}位] 直前と同じ画面 → 撮り直し {attempt + 1}/4")
+        tap(*BACK_BTN, wait=2.5)
+        tap(LIST_X, LIST_ENTRY_Y[slot_for_rank(rank)], wait=2.5)
     for i, panel in enumerate(PANELS):
         n = capture_panel(save_dir, panel)
         counts[panel] = n
