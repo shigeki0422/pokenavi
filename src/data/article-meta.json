@@ -1829,6 +1829,17 @@
         "dex": 812,
         "form": "00"
     },
+    "gyarados-analysis-m6": {
+        "name": "ギャラドス",
+        "rank": 15,
+        "types": [
+            "みず",
+            "ひこう"
+        ],
+        "matchKey": "ギャラドス",
+        "dex": 130,
+        "form": "00"
+    },
     "mimikyu-analysis-m6": {
         "name": "ミミッキュ",
         "rank": 12,
@@ -1914,6 +1925,61 @@
         ],
         "matchKey": "ネギガナイト",
         "dex": 865,
+        "form": "00"
+    },
+    "charizard-analysis-m6": {
+        "name": "リザードン",
+        "rank": 18,
+        "types": [
+            "ほのお",
+            "ひこう"
+        ],
+        "matchKey": "リザードン",
+        "dex": 6,
+        "form": "00"
+    },
+    "glimmora-analysis-m6": {
+        "name": "キラフロル",
+        "rank": 18,
+        "types": [
+            "いわ",
+            "どく"
+        ],
+        "matchKey": "キラフロル",
+        "dex": 970,
+        "form": "00"
+    },
+    "indeedee-m-analysis-m6": {
+        "name": "イエッサン(オス)",
+        "rank": 21,
+        "types": [
+            "エスパー",
+            "ノーマル"
+        ],
+        "matchKey": "イエッサン(オス)",
+        "dex": 876,
+        "form": "00"
+    },
+    "blastoise-analysis-m6": {
+        "name": "メガカメックス",
+        "rank": 29,
+        "types": [
+            "みず"
+        ],
+        "matchKey": "カメックス",
+        "dex": 9,
+        "form": "00",
+        "pokemonId": "blastoise"
+    },
+    "sneasler-analysis-m6": {
+        "name": "オオニューラ",
+        "rank": 16,
+        "types": [
+            "かくとう",
+            "どく"
+        ],
+        "matchKey": "オオニューラ",
+        "dex": 903,
         "form": "00"
     }
 }
