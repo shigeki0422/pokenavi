@@ -21,6 +21,7 @@ jobs:
         env:
           INCLUDE_DRAFTS: ${{ github.ref_name == 'draft' && 'true' || 'false' }}
           PUBLIC_ADMAX_SUGGEST_LOADING_EMBED: ${{ secrets.PUBLIC_ADMAX_SUGGEST_LOADING_EMBED }}
+          PUBLIC_ADMAX_SUGGEST_LOADING_EMBED_MOBILE: ${{ secrets.PUBLIC_ADMAX_SUGGEST_LOADING_EMBED_MOBILE }}
 
       - uses: cloudflare/wrangler-action@v3
         with:

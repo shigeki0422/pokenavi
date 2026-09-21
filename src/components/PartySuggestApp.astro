@@ -14,8 +14,11 @@ interface Props {
 const { preCoreLabel, lang = 'ja' } = Astro.props;
 /** 軸2件以上は必ずライブ計算（cache miss）になりCloud Runの実CPU課金が発生する
  * （suggest_cache.jsonは単軸221件のみで2軸以上のヒットは0件）。この待ち時間だけに
- * 出す広告のHTMLを環境変数で受け取る。未設定なら従来どおり広告なしの待機表示のまま。 */
-const suggestLoadingAdHtml = import.meta.env.PUBLIC_ADMAX_SUGGEST_LOADING_EMBED || '';
+ * 出す広告のHTMLを環境変数で受け取る。未設定なら従来どおり広告なしの待機表示のまま。
+ * AdMaxはPC向け/スマホ向けで別の広告枠(別タグ)が必要なため2本持つ。表示時に
+ * ビューポート幅(既存のブレークポイント640pxに合わせる)でどちらを使うか選ぶ。 */
+const suggestLoadingAdHtmlPc = import.meta.env.PUBLIC_ADMAX_SUGGEST_LOADING_EMBED || '';
+const suggestLoadingAdHtmlMobile = import.meta.env.PUBLIC_ADMAX_SUGGEST_LOADING_EMBED_MOBILE || '';
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 // 1v1判定の前提文。is:inline スクリプトからは import できないので define:vars で渡す
 const assumeLead = MATCHUP_LEAD[lang] ?? MATCHUP_LEAD.ja;
@@ -285,7 +288,8 @@ const I18N = I18N_ALL[lang];
      <template>はvoid要素ではないため自己終了(/>)は無視され、閉じタグを省略すると
      後続のマークアップ全体(ps-ad-dialogやpopupを含む)が中身として飲み込まれる。
      必ず</template>で明示的に閉じる。 -->
-<template id="ps-ad-embed-src" set:html={suggestLoadingAdHtml}></template>
+<template id="ps-ad-embed-src-pc" set:html={suggestLoadingAdHtmlPc}></template>
+<template id="ps-ad-embed-src-mobile" set:html={suggestLoadingAdHtmlMobile}></template>
   <div id="ps-ad-dialog" class="ps-ad-overlay" style="display:none" role="dialog" aria-modal="true" aria-label={I18N.adLabel}>
     <div class="ps-ad-card">
       <div class="ps-ad-label">{I18N.adLabel}</div>
@@ -1585,18 +1589,24 @@ const I18N = I18N_ALL[lang];
     }catch(e){ return null; }
   }
   /** 軸2件以上（cache miss）のライブ計算中だけ出す広告ダイアログ。
-   * PUBLIC_ADMAX_SUGGEST_LOADING_EMBED が未設定ならテンプレートごと存在しないため
-   * HAS_LOADING_AD は false になり、以下の分岐は完全に無効化される（既存動作のまま）。 */
+   * PC/スマホでAdMaxの広告枠(タグ)が別物のため2本持ち、表示時のビューポート幅
+   * (既存のモバイル判定と同じ640px)でどちらを使うか選ぶ。どちらも未設定なら
+   * テンプレートごと空のままHAS_LOADING_ADがfalseになり、以下の分岐は完全に
+   * 無効化される（既存動作のまま）。 */
   const AD_MIN_SECONDS = 6;
+  function _adEmbedTemplate(){
+    const id = window.matchMedia('(max-width:640px)').matches ? 'ps-ad-embed-src-mobile' : 'ps-ad-embed-src-pc';
+    return document.getElementById(id);
+  }
   // textContentでの判定はsrc属性だけの外部読み込み型scriptタグ(中身のテキストが空)
   // で常にfalseになるため使わない。子ノードの有無で判定する。
-  const HAS_LOADING_AD = !!(document.getElementById('ps-ad-embed-src')?.content?.childNodes?.length);
+  const HAS_LOADING_AD = !!(_adEmbedTemplate()?.content?.childNodes?.length);
   let _adLoaded = false;
   function _ensureAdLoaded(){
     if (_adLoaded) return;
-    const src = document.getElementById('ps-ad-embed-src');
+    const src = _adEmbedTemplate();
     const slot = document.getElementById('ps-ad-slot');
-    if (!src || !slot) return;
+    if (!src || !slot || !src.content.childNodes.length) return;
     // AdMaxのタグは内部でdocument.write()を使う旧来型で、動的に挿入した
     // <script>から呼ぶとブラウザに拒否される(「it isn't possible to write
     // into a document from an asynchronously-loaded external script」)。
