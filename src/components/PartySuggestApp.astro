@@ -281,8 +281,11 @@ const I18N = I18N_ALL[lang];
   <!-- 広告未設定時も<template>自体は常に出力する(空のset:html)。
      {cond && <template set:html>} という条件付きレンダリングは、このファイルの
      規模でAstroコンパイラの変換を異常に遅くする(単体コンパイルが60秒超で終わらない、
-     無条件なら264ms)ため避ける。実害はJS側でtextContentの有無を見て判定している。 -->
-<template id="ps-ad-embed-src" set:html={suggestLoadingAdHtml} />
+     無条件なら264ms)ため避ける。実害はJS側でtextContentの有無を見て判定している。
+     <template>はvoid要素ではないため自己終了(/>)は無視され、閉じタグを省略すると
+     後続のマークアップ全体(ps-ad-dialogやpopupを含む)が中身として飲み込まれる。
+     必ず</template>で明示的に閉じる。 -->
+<template id="ps-ad-embed-src" set:html={suggestLoadingAdHtml}></template>
   <div id="ps-ad-dialog" class="ps-ad-overlay" style="display:none" role="dialog" aria-modal="true" aria-label={I18N.adLabel}>
     <div class="ps-ad-card">
       <div class="ps-ad-label">{I18N.adLabel}</div>
