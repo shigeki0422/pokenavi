@@ -39,6 +39,7 @@ BURN = os.environ.get("BURN", "0")
 SEED = int(os.environ.get("SEED", "7000"))
 RECORD_PI = os.environ.get("RECORD_PI", "0") == "1"   # 根の訪問分布も記録（方策ヘッド用）
 ENGINE = os.environ.get("ENGINE", "py")               # rust で Rust エンジン（BURN非対応）
+NODE_TRACE = os.environ.get("NODE_TRACE", "0")        # >0 で探索木の内部ノードも教師にする
 PER_GAME = int(os.environ.get("PER_GAME", "0"))       # 1対局から採る局面数（0=全部）。
                                                       # 同一対局の局面は勝敗ラベルを共有＝強く相関し、
                                                       # 価値ヘッドが過学習する（AlphaGo 2016 と同じ症状）
@@ -57,9 +58,17 @@ def _batch_rust(args):
         ia, ib = rng.sample(range(len(parties)), 2)
         pa = list(parties[ia][:6]); pb = list(parties[ib][:6])
         sa = rng.sample(range(len(pa)), 3); sb = rng.sample(range(len(pb)), 3)
-        r, recs = E.mcts_3v3_trace(pa, sa, pb, sb, seed * 100003 + g, LABEL_SIMS, SEASON)
+        r, recs, nodes = E.mcts_3v3_trace(pa, sa, pb, sb, seed * 100003 + g, LABEL_SIMS, SEASON)
         if r == 0:
             continue
+        # 探索木の内部ノード（= MCTS が実際に評価する分布・兄弟局面を含む）。
+        # MCTS はこのノードの下も探索しているので訪問分布も教師にできる。
+        # 価値ターゲットは逆伝播済みの値そのもの（λ収益の対象外）
+        for x, v, pi in nodes:
+            tot = sum(c for _, c in pi)
+            if tot <= 0:
+                continue
+            out.append((x, v, {a: c / tot for a, c in pi}, [a for a, _ in pi], v, gid))
         keep = [(me, x, pi, rq) for me, x, pi, rq in recs
                 if sum(c for _, c in pi) > 0 and len(pi) > 1]
         if PER_GAME and len(keep) > PER_GAME:

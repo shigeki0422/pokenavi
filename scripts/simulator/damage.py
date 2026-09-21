@@ -333,6 +333,9 @@ def calc_damage(
             dmg = math.floor(dmg * 1.3)
         elif field.psychic_terrain and eff_type == "エスパー":
             dmg = math.floor(dmg * 1.3)
+            # ワイドフォースはサイコフィールド中さらに1.5倍（実機は全体攻撃にもなるがシングルでは威力のみ）
+            if move.name_jp == "ワイドフォース":
+                dmg = math.floor(dmg * 1.5)
         elif field.misty_terrain and eff_type == "ドラゴン":
             dmg = math.floor(dmg * 0.5)
         elif getattr(field, "grassy_terrain", False) and eff_type == "くさ":

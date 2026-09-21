@@ -412,8 +412,49 @@ thread_local! {
     static PI_TRACE: std::cell::RefCell<Option<Vec<PiRec>>> = std::cell::RefCell::new(None);
 }
 
+/// VALUE_Q=max で価値ターゲットを「根の最善手の値」にする（既定は訪問数重み付き平均）。
+/// 訪問が極端に少ない手のノイズを拾わないよう、総訪問の1/50未満は除外する。
+/// 探索木の内部ノードを教師にする割合（env NODE_TRACE、0=無効）。
+/// 軌道上の局面だけだと「選ばれなかった手の先」＝MCTSが実際に評価する分布が学習データに入らず、
+/// 兄弟局面どうしの差も一度も見ないまま終わる。展開時の特徴ベクトルは葉の評価で計算済みなので、
+/// 記録するだけなら追加コストはほぼゼロ。
+/// 木ノードを教師として採用する最小訪問数（env NODE_MIN_VISITS、既定30）。
+pub fn node_min_visits() -> i64 {
+    static S: std::sync::OnceLock<i64> = std::sync::OnceLock::new();
+    *S.get_or_init(|| {
+        std::env::var("NODE_MIN_VISITS").ok().and_then(|v| v.parse().ok()).unwrap_or(30)
+    })
+}
+
+pub fn node_trace_rate() -> f64 {
+    static S: std::sync::OnceLock<f64> = std::sync::OnceLock::new();
+    *S.get_or_init(|| std::env::var("NODE_TRACE").ok().and_then(|v| v.parse().ok()).unwrap_or(0.0))
+}
+
+pub fn value_q_max() -> bool {
+    static S: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *S.get_or_init(|| std::env::var("VALUE_Q").map(|v| v == "max").unwrap_or(false))
+}
+
 pub fn pi_trace_enabled() -> bool {
     PI_TRACE.with(|l| l.borrow().is_some())
+}
+
+/// 探索木の内部ノードの教師: (盤面1037次元, 逆伝播済みの値, [(行動index, 訪問数)])。
+/// MCTS はこのノードの下も探索しているので**訪問分布も取れる**。
+/// 逆に、π を出せるだけ探索されていないノードは値も信用できないので、閾値は両者で共通にする。
+pub type NodeRec = (Vec<f64>, f64, Vec<(usize, i64)>);
+
+thread_local! {
+    static NODE_TRACE: std::cell::RefCell<Vec<NodeRec>> = const { std::cell::RefCell::new(Vec::new()) };
+}
+
+pub fn node_trace_push(rec: NodeRec) {
+    NODE_TRACE.with(|l| l.borrow_mut().push(rec));
+}
+
+pub fn node_trace_take() -> Vec<NodeRec> {
+    NODE_TRACE.with(|l| std::mem::take(&mut *l.borrow_mut()))
 }
 
 pub fn pi_trace_push(rec: PiRec) {
@@ -437,12 +478,13 @@ pub fn mcts_3v3_trace(
     season_b: &str,
     seed: i128,
     sims: usize,
-) -> (i64, Vec<PiRec>) {
+) -> (i64, Vec<PiRec>, Vec<NodeRec>) {
     PI_TRACE.with(|l| *l.borrow_mut() = Some(Vec::new()));
+    let _ = node_trace_take();
     let (r, _) =
         mcts_3v3(pack, net, None, pa, sa, pb, sb, season_a, season_b, seed, sims, |_, _| {});
     let t = PI_TRACE.with(|l| l.borrow_mut().take()).unwrap_or_default();
-    (r, t)
+    (r, t, node_trace_take())
 }
 
 /// パリティ調査用の行動記録（`mcts_vs_dist_trace` からのみ使う）

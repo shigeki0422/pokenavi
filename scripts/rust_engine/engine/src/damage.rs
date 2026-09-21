@@ -918,6 +918,10 @@ pub fn calc_damage(
             dmg = fl(dmg as f64 * 1.3);
         } else if field.psychic_terrain && eff_type == pack.tc.エスパー {
             dmg = fl(dmg as f64 * 1.3);
+            // ワイドフォースはサイコフィールド中さらに1.5倍
+            if mv.name == pack.sy.mv.ワイドフォース {
+                dmg = fl(dmg as f64 * 1.5);
+            }
         } else if field.misty_terrain && eff_type == pack.tc.ドラゴン {
             dmg = fl(dmg as f64 * 0.5);
         } else if field.grassy_terrain && eff_type == pack.tc.くさ {

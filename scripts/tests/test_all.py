@@ -5625,6 +5625,15 @@ _vw30.train_pi(_Xt30, _PI30, _M30, _Y30, epochs=5, lr=1e-3, l2=0.0, batch=20, op
 check("PVNetNP: value_weight が1の配列なら価値ヘッドが更新される",
       not _np30.allclose(_vw30.Wv, _wv30))
 
+_nm30 = _PV30(24, 16, 8, seed=11, act="relu", norm=True)
+_nm30.fit_norm(_Xt30)
+_wp30 = _nm30.Wp.copy()
+_zero30 = _np30.zeros((len(_Xt30), _M30.shape[1]))
+_nm30.train_pi(_Xt30, _zero30, _zero30, _Y30, epochs=5, lr=1e-3, l2=0.0, batch=20,
+               optimizer="adam")
+check("探索木ノード: 合法手マスクが全0なら方策ヘッドは更新されない（価値だけ学習）",
+      _np30.allclose(_nm30.Wp, _wp30))
+
 _a30.save("/tmp/_test_az30.json")
 _l30 = _PV30.load("/tmp/_test_az30.json")
 check("PVNetNP: act/mu/sd を保存・復元して前向きが一致",
@@ -5671,6 +5680,42 @@ check("ギルガルド: ブレードの防御・特防は種族値50",
 _ts33(_g33, [])
 check("ギルガルド: シールドに戻ると元の実数値に復帰する",
       _g33.attack == _shield_a33 and _g33.sp_attack == _shield_c33)
+
+# ════════════════════════════════════════════════════════════════
+# ワイドフォース: サイコフィールド中は 1.3（汎用）× 1.5（固有）
+# ════════════════════════════════════════════════════════════════
+_atk34 = _bfs29(_pps29(
+    "イエッサン(オス)@こだわりスカーフ:おくびょう:ワイドフォース|サイコキネシス|トリック|アンコール"
+    ":0/0/0/32/0/32:サイコメイカー"), _L29, season="M-6", randomize=False)
+_def34 = _bfs29(_pps29(
+    "ガブリアス@きあいのタスキ:いじっぱり:げきりん|じしん|がんせきふうじ|ステルスロック"
+    ":2/32/0/0/0/32:さめはだ"), _L29, season="M-6", randomize=False)
+_wf34 = [m for m in _atk34.moves if m.name_jp == "ワイドフォース"][0]
+_pk34 = [m for m in _atk34.moves if m.name_jp == "サイコキネシス"][0]
+
+_f34n = BattleField()
+_f34p = BattleField(); _f34p.psychic_terrain = True
+
+_wf_plain = _cd29(_atk34, _def34, _wf34, _f34n, critical=False, random_roll=1.0)
+_wf_psy = _cd29(_atk34, _def34, _wf34, _f34p, critical=False, random_roll=1.0)
+_pk_plain = _cd29(_atk34, _def34, _pk34, _f34n, critical=False, random_roll=1.0)
+_pk_psy = _cd29(_atk34, _def34, _pk34, _f34p, critical=False, random_roll=1.0)
+
+check("ワイドフォース: サイコフィールドで威力が上がる", _wf_psy > _wf_plain)
+check("ワイドフォース: 一般のエスパー技(×1.3)より伸びが大きい（固有×1.5）",
+      _wf_psy / _wf_plain > _pk_psy / _pk_plain + 0.3,
+      f"WF {_wf_psy}/{_wf_plain}={_wf_psy/_wf_plain:.2f} "
+      f"サイコキネシス {_pk_psy}/{_pk_plain}={_pk_psy/_pk_plain:.2f}")
+check("サイコキネシス: 汎用の地形補正は約1.3倍のまま",
+      1.25 < _pk_psy / _pk_plain < 1.35)
+
+_fly34 = _bfs29(_pps29(
+    "ボーマンダ@こだわりスカーフ:ようき:げきりん|じしん|とんぼがえり|りゅうのまい"
+    ":0/32/0/0/0/32:いかく"), _L29, season="M-6", randomize=False)
+_fly34.moves = [_wf34]
+_wf_fly_n = _cd29(_fly34, _def34, _wf34, _f34n, critical=False, random_roll=1.0)
+_wf_fly_p = _cd29(_fly34, _def34, _wf34, _f34p, critical=False, random_roll=1.0)
+check("ワイドフォース: 接地していない攻撃側には地形補正が乗らない", _wf_fly_p == _wf_fly_n)
 
 # 集計
 # ════════════════════════════════════════════════════════════════

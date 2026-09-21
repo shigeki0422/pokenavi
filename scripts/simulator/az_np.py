@@ -116,7 +116,9 @@ class PVNetNP:
         return {a: float(pi) for a, pi in zip(legal_idx, p)}, float(v[0])
 
     def _step(self, xb, yb, mb, target, lr_ep, l2, value_weight=1.0):
-        """1バッチの前向き＋逆伝播＋更新（2 or 3隠れ層）。value_weight=0で方策のみ学習。"""
+        """1バッチの前向き＋逆伝播＋更新（2 or 3隠れ層）。value_weight=0で方策のみ学習。
+        value_weight はサンプルごとの配列でもよい（価値だけ一部サンプルで学習する＝
+        同一対局の局面が共有する勝敗ラベルの相関を、方策の学習量を落とさずに断てる）。"""
         B = len(xb)
         xb = self._nz(xb)
         H1, H2, H3, top = self._top_raw(xb)
@@ -132,6 +134,8 @@ class PVNetNP:
         logits -= logits.max(1, keepdims=True)
         e = np.exp(logits) * mb
         P = e / (e.sum(1, keepdims=True) + 1e-12)
+        # 合法手マスクが全0のサンプル（探索木の内部ノード＝方策ターゲットが無い）は
+        # 方策の勾配を流さない。価値だけ学習する。
         gp = (P - target) * mb / B
         dWp = gp.T @ top; dbp = gp.sum(0)
         if self.vbins:
@@ -209,7 +213,8 @@ class PVNetNP:
             perm = rng.permutation(N)
             for s in range(0, N, batch):
                 bi = perm[s:s + batch]
-                self._step(X[bi], Y[bi], M[bi], PI[bi], lr_ep, l2, value_weight)
+                vw = value_weight[bi] if isinstance(value_weight, np.ndarray) else value_weight
+                self._step(X[bi], Y[bi], M[bi], PI[bi], lr_ep, l2, vw)
             if verbose:
                 print(f"  epoch {ep+1}/{epochs}  val_acc={self.value_acc(X,Y):.3f}", flush=True)
 

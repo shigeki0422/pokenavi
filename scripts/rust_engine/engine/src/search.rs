@@ -243,6 +243,9 @@ pub struct SearchAI {
     pub ctx: NetCtx,
     tpl: TplCache,
     nodes: Vec<Node>,
+    /// NODE_TRACE>0 のとき、展開したノードの (node_id, 特徴ベクトル) を溜める。
+    /// 探索終了後に逆伝播済みの値と組にして教師として吐く。
+    pending_nodes: Vec<(usize, Vec<f64>)>,
 }
 
 impl SearchAI {
@@ -268,6 +271,7 @@ impl SearchAI {
             ctx: NetCtx::new(pack),
             tpl: TplCache::default(),
             nodes: Vec::new(),
+            pending_nodes: Vec::new(),
         }
     }
 
@@ -363,6 +367,30 @@ impl SearchAI {
             }
             best.0
         };
+        // 探索木の内部ノードを教師として吐く。値は逆伝播済みの平均（探索側視点）。
+        // 訪問が少ないノードは値が不安定なので捨てる。
+        if !self.pending_nodes.is_empty() {
+            let pend = std::mem::take(&mut self.pending_nodes);
+            let minv = crate::sim::node_min_visits();
+            for (nid, x) in pend {
+                let nd = &self.nodes[nid];
+                if nd.total < minv {
+                    continue;
+                }
+                let s: f64 = nd.w[0].values().sum();
+                let n: i64 = nd.n[0].values().sum();
+                if n <= 0 {
+                    continue;
+                }
+                // 合法手は prior のキー（legal_actions_indexed 由来）。訪問0の手も 0 として出す
+                let mut pi: Vec<(usize, i64)> =
+                    nd.p[0].keys().map(|&ix| (ix, nd.n[0].get(&ix).copied().unwrap_or(0))).collect();
+                pi.sort_unstable();
+                if pi.len() > 1 {
+                    crate::sim::node_trace_push((x, s / n as f64, pi));
+                }
+            }
+        }
         // パリティ調査用: ルート直下の (行動, 訪問数, Q) を記録する（ROOT_LOG が Some のときだけ）。
         crate::sim::root_log_push(pack, cands, &stats, chosen_i);
         // 学習用: 盤面と根の訪問分布を記録する（PI_TRACE が Some のときだけ）。
@@ -373,13 +401,24 @@ impl SearchAI {
             );
             let pi: Vec<(usize, i64)> =
                 stats.iter().map(|(ai_, n, _)| (action_index(&cands[*ai_]), *n)).collect();
+            // 価値ターゲットの取り方。既定は訪問数で重み付けした平均＝「探索の混合戦略どおりに
+            // 指したときの期待値」。VALUE_Q=max にすると根の最善手の値になり、
+            // 自分の方策の弱さが価値に混入しにくくなる（V^π を V* 寄りにする）。
             let ntot: i64 = stats.iter().map(|(_, n, _)| *n).sum();
-            let rq = if ntot > 0 {
+            let rq = if ntot <= 0 {
+                0.5
+            } else if crate::sim::value_q_max() {
+                let thr = std::cmp::max(1, ntot / 50);
+                stats
+                    .iter()
+                    .filter(|(_, n, _)| *n >= thr)
+                    .map(|(_, _, q)| *q)
+                    .fold(f64::NEG_INFINITY, f64::max)
+            } else {
                 stats.iter().filter(|(_, n, _)| *n > 0).map(|(_, n, q)| *n as f64 * q).sum::<f64>()
                     / ntot as f64
-            } else {
-                0.5
             };
+            let rq = if rq.is_finite() { rq } else { 0.5 };
             crate::sim::pi_trace_push((me_idx, x, pi, rq));
         }
         let mut chosen = cands[chosen_i].clone();
@@ -678,6 +717,15 @@ impl SearchAI {
         self.ctx.memo.begin();
         crate::sim::eval_tag_set(true);
         let (pol_a, val_a) = net_eval(pack, net, &mut self.ctx, cs, fa, cfield, grng);
+        // 教師として残すのは探索側（fa）視点の特徴ベクトル。逆伝播される値と視点を揃える。
+        // 抽出は node_id のハッシュで決める（共有RNGを消費すると探索自体が変わりパリティが崩れる）。
+        let rate = crate::sim::node_trace_rate();
+        if rate > 0.0
+            && crate::sim::pi_trace_enabled()
+            && ((node as u64).wrapping_mul(2654435761) >> 8) % 1000 < (rate * 1000.0) as u64
+        {
+            self.pending_nodes.push((node, self.ctx.x.clone()));
+        }
         let (pol_b, val_b) = net_eval(pack, net, &mut self.ctx, cs, fb, cfield, grng);
         crate::sim::eval_tag_set(false);
         self.ctx.memo.end();

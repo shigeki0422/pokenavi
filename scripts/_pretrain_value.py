@@ -27,6 +27,9 @@ PI_CORPUS = os.environ.get("PI_CORPUS", "")   # _PI/_M を持つ方策ターゲ�
 PI_EPOCHS = int(os.environ.get("PI_EPOCHS", "20"))
 ARCH = os.environ.get("ARCH", "512x256")   # PHASE=fresh の隠れ層
 LR = float(os.environ.get("LR", "1e-3"))
+# 方策ヘッドは勝率にほぼ寄与しない（実測: 新方策+本番価値=50.6%）。胴体を共有しているので、
+# 価値の重みを上げると同じ容量とデータを価値の学習に振り向けられる。
+VALUE_WEIGHT = float(os.environ.get("VALUE_WEIGHT", "1.0"))
 
 from simulator.az_np import PVNetNP, ACTION_DIM
 
@@ -164,7 +167,8 @@ def _fresh():
     for ep in range(PI_EPOCHS):
         lr = LR * (0.5 ** (ep / max(PI_EPOCHS / 3.0, 1.0)))
         net.train_pi(X[:ntr], PI[:ntr], M[:ntr], Y[:ntr], epochs=1, lr=lr, batch=128,
-                     seed=ep, optimizer="adam", value_weight=_VW if _VW is not None else 1.0)
+                     seed=ep, optimizer="adam",
+                     value_weight=_VW if _VW is not None else VALUE_WEIGHT)
         if (ep + 1) % 5 == 0 or ep == PI_EPOCHS - 1:
             p1, a1 = stat(ntr, ntr + nte)
             ptr, _ = stat(0, min(ntr, 5000))

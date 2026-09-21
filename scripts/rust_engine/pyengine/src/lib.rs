@@ -142,15 +142,15 @@ fn mcts_3v3_trace(
     seed: i128,
     sims: usize,
     season: &str,
-) -> PyResult<(u8, Vec<(usize, Vec<f64>, Vec<(usize, i64)>, f64)>)> {
+) -> PyResult<(u8, Vec<(usize, Vec<f64>, Vec<(usize, i64)>, f64)>, Vec<(Vec<f64>, f64, Vec<(usize, i64)>)>)> {
     let m = eng()?;
     let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
     let Eng { pack, net, .. } = &mut *g;
     let net = net.clone();
-    let (r, recs) = engine::sim::mcts_3v3_trace(
+    let (r, recs, nodes) = engine::sim::mcts_3v3_trace(
         pack, &net, &pa, &sa, &pb, &sb, season, season, seed, sims,
     );
-    Ok((r as u8, recs))
+    Ok((r as u8, recs, nodes))
 }
 
 #[pyfunction]
