@@ -1600,17 +1600,18 @@ const I18N = I18N_ALL[lang];
     // AdMaxのタグは内部でdocument.write()を使う旧来型で、動的に挿入した
     // <script>から呼ぶとブラウザに拒否される(「it isn't possible to write
     // into a document from an asynchronously-loaded external script」)。
-    // 独立したdocumentを持つiframeの中で開いて書き込む、document.write型
-    // 広告タグを動的領域へ埋め込む際の標準的な回避策をとる。
+    // さらに最初のタグ自身が内部iframeと非同期スクリプト(st/s.js)をdocument.write
+    // し、そのスクリプトが読み込み完了後にもう一段document.writeを呼ぶ多段構成の
+    // ため、open/write/close(closeで即座にパース完了扱いになる)では2段目が
+    // 「閉じた後のdocument.write」として拒否される。srcdocなら独立した
+    // ナビゲーションとして最後まで通常のページ読み込みフローで扱われるため、
+    // 何段書き込みが連鎖しても安全。
     const iframe = document.createElement('iframe');
     iframe.style.cssText = 'width:300px;max-width:100%;height:250px;border:0;display:block';
     iframe.setAttribute('scrolling', 'no');
     iframe.setAttribute('title', I18N.adLabel);
+    iframe.srcdoc = `<!DOCTYPE html><html><head><base target="_blank"><style>body{margin:0;overflow:hidden}</style></head><body>${src.innerHTML}</body></html>`;
     slot.appendChild(iframe);
-    const doc = iframe.contentWindow.document;
-    doc.open();
-    doc.write(`<!DOCTYPE html><html><head><base target="_blank"><style>body{margin:0;overflow:hidden}</style></head><body>${src.innerHTML}</body></html>`);
-    doc.close();
     _adLoaded = true;
   }
   function showAdDialog(){
