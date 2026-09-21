@@ -294,6 +294,7 @@ const I18N = I18N_ALL[lang];
     <div class="ps-ad-card">
       <div class="ps-ad-label">{I18N.adLabel}</div>
       <div id="ps-ad-slot" class="ps-ad-slot"></div>
+      <div id="ps-ad-fallback" class="ps-ad-fallback" style="display:none"><div class="ps-spinner"></div></div>
       <button id="ps-ad-close" class="ps-ad-close" disabled></button>
     </div>
   </div>
@@ -604,6 +605,8 @@ const I18N = I18N_ALL[lang];
   .ps-ad-label{font-size:.68rem;font-weight:800;color:rgb(var(--gray));letter-spacing:.05em;margin-bottom:.6em}
   .ps-ad-slot{min-height:250px;display:flex;align-items:center;justify-content:center}
   .ps-ad-slot:empty{display:none}
+  .ps-ad-slot.ps-ad-nofill{display:none}
+  .ps-ad-fallback{min-height:90px;display:flex;align-items:center;justify-content:center}
   .ps-ad-close{margin-top:1em;width:100%;padding:.7em 1em;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:700;font-size:.9rem;cursor:pointer}
   .ps-ad-close:disabled{background:rgb(var(--gray-light));color:rgb(var(--gray));cursor:not-allowed}
 
@@ -1623,6 +1626,40 @@ const I18N = I18N_ALL[lang];
     iframe.srcdoc = `<!DOCTYPE html><html><head><base target="_blank"><style>body{margin:0;overflow:hidden}</style></head><body>${src.innerHTML}</body></html>`;
     slot.appendChild(iframe);
     _adLoaded = true;
+    // AdMax→Criteo→ad-stir等、複数の広告ネットワークをリレーした末にどこからも
+    // 広告主が見つからない(fillしない)ことがある。この場合、多段のdocument.write
+    // 自体は正常に完走し、非表示のプレースホルダー要素だけが残るため見た目は
+    // 単なる白い空白になる。中身を再帰的に見て、可視要素が一つも無ければ枠を
+    // 畳みスピナー表示にフォールバックする。判定不能(クロスオリジン等)な場合は
+    // 誤って本物の広告を消さないよう「fillした」扱いにする(安全側)。
+    setTimeout(() => {
+      let filled = true;
+      try { filled = _hasVisibleAdContent(iframe.contentWindow, 0); } catch(e) { filled = true; }
+      if (!filled) {
+        slot.classList.add('ps-ad-nofill');
+        const fb = document.getElementById('ps-ad-fallback');
+        if (fb) fb.style.display = 'flex';
+      }
+    }, 2500);
+  }
+  function _hasVisibleAdContent(win, depth){
+    if (depth > 6) return true; // 深すぎて追えない場合は安全側で「あり」扱い
+    let doc;
+    try { doc = win.document; } catch(e) { return true; } // クロスオリジンも安全側で「あり」扱い
+    if (!doc || !doc.body) return false;
+    for (const el of doc.body.querySelectorAll('*')){
+      const tag = el.tagName;
+      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'META' || tag === 'LINK') continue;
+      if (tag === 'IFRAME'){
+        if (_hasVisibleAdContent(el.contentWindow, depth + 1)) return true;
+        continue;
+      }
+      let cs;
+      try { cs = win.getComputedStyle(el); } catch(e) { continue; }
+      if (cs.display === 'none' || cs.visibility === 'hidden') continue;
+      if (el.offsetWidth > 2 && el.offsetHeight > 2) return true;
+    }
+    return false;
   }
   function showAdDialog(){
     _ensureAdLoaded();
