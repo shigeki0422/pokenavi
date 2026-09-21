@@ -1654,6 +1654,11 @@ const I18N = I18N_ALL[lang];
         if (_hasVisibleAdContent(el.contentWindow, depth + 1)) return true;
         continue;
       }
+      // AdMaxはまずサイズ確保用の空div(例: <div style="width:320px;height:50px">)
+      // だけを書き込み、実際のクリエイティブは後から中に挿入される。子要素を
+      // 持つ「箱」自体をサイズだけ見て判定すると常にtrueになってしまうため、
+      // 子要素を持たない末端要素だけをコンテンツ候補として見る。
+      if (el.children.length > 0) continue;
       let cs;
       try { cs = win.getComputedStyle(el); } catch(e) { continue; }
       if (cs.display === 'none' || cs.visibility === 'hidden') continue;
