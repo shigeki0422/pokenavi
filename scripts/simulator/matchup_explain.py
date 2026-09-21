@@ -4,11 +4,12 @@
 「自分の穴（多くに負ける個体）」「相手の脅威（多くに勝つ個体）」と敗因要約を返す。
 勝率だけでは分からない『なぜ苦手か』を提示する。
 """
+import copy
 import math
 from typing import List
 
 from .pokemon import parse_pokemon_spec, build_from_spec
-from .battle import BattleField, crit_chance
+from .battle import BattleField, _entry_effects, crit_chance
 from .features import _expected_frac
 from .damage import calc_damage
 from .items import get_speed_item_multiplier
@@ -131,7 +132,6 @@ def explain_matchup(specsA: List[str], specsB: List[str], loader, season: str = 
     for p in A + B:
         if getattr(p, "mega_data", None) is not None and not p.mega_evolved:
             p.do_mega_evolve()
-    fld = BattleField()
     cells = []
     a_lose = {i: 0 for i in range(len(A))}   # Aの各個体がBに負ける数
     b_win = {j: 0 for j in range(len(B))}     # Bの各個体がAに勝つ数
@@ -139,7 +139,14 @@ def explain_matchup(specsA: List[str], specsB: List[str], loader, season: str = 
     for i, a in enumerate(A):
         row = []
         for j, b in enumerate(B):
-            v, da, db, af = _verdict(a, b, fld)
+            # 1v1ごとに場を作り、入場時効果（天候・フィールド・いかく等）を適用する。
+            # 以前は素の BattleField() を全ペアで共有しており、サイコメイカー（イエッサン
+            # M-6採用率99.5%）やすなおこし・ひでりが効かず、ワイドフォースの地形補正も
+            # 乗らないまま相性表を出していた。入場効果はポケモンを書き換えるのでコピーする。
+            aa, bb, fld = copy.deepcopy((a, b, BattleField()))
+            _entry_effects(aa, 0, fld, bb)
+            _entry_effects(bb, 1, fld, aa)
+            v, da, db, af = _verdict(aa, bb, fld)
             row.append({"v": v, "dealt": da, "taken": db, "faster": af})
             if v == "A":
                 a_win_tot += 1

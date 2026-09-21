@@ -5450,6 +5450,7 @@ print("\n=== 29. はたきおとす: メガストーンには1.5倍が乗らな�
 # メガストーンは叩き落とせないので威力1.5倍の対象外。Zメガ石(ナイトZ)は M-6 で追加された
 # ため Rust 側の判定から漏れており、同じ盤面で Python 81 / Rust 120 と食い違っていた。
 from simulator.damage import calc_damage as _cd29
+from simulator.battle import _entry_effects as _ee35
 from simulator.simulate import get_loader as _gl29
 from simulator.pokemon import build_from_spec as _bfs29, parse_pokemon_spec as _pps29
 _L29 = _gl29()
@@ -5716,6 +5717,32 @@ _fly34.moves = [_wf34]
 _wf_fly_n = _cd29(_fly34, _def34, _wf34, _f34n, critical=False, random_roll=1.0)
 _wf_fly_p = _cd29(_fly34, _def34, _wf34, _f34p, critical=False, random_roll=1.0)
 check("ワイドフォース: 接地していない攻撃側には地形補正が乗らない", _wf_fly_p == _wf_fly_n)
+
+# ════════════════════════════════════════════════════════════════
+# 1v1相性表: 入場時効果（天候・フィールド・いかく）が適用される
+# ════════════════════════════════════════════════════════════════
+from simulator.matchup_explain import explain_matchup as _em35, _best_dmg as _bd35
+import copy as _cp35
+
+_ye35 = ("イエッサン(オス)@こだわりスカーフ:おくびょう:ワイドフォース|サイコキネシス|トリック|アンコール"
+         ":0/0/0/32/0/32:サイコメイカー")
+_gb35 = ("ガブリアス@きあいのタスキ:いじっぱり:げきりん|じしん|がんせきふうじ|ステルスロック"
+         ":2/32/0/0/0/32:さめはだ")
+_a35 = _bfs29(_pps29(_ye35), _L29, season="M-6", randomize=False)
+_b35 = _bfs29(_pps29(_gb35), _L29, season="M-6", randomize=False)
+_bare35 = _bd35(_cp35.deepcopy(_a35), _cp35.deepcopy(_b35), BattleField())
+_aa35, _bb35, _f35 = _cp35.deepcopy((_a35, _b35, BattleField()))
+_ee35(_aa35, 0, _f35, _bb35)
+_ee35(_bb35, 1, _f35, _aa35)
+_ent35 = _bd35(_aa35, _bb35, _f35)
+check("1v1: サイコメイカーの入場効果でフィールドが張られる", _f35.psychic_terrain is True)
+check("1v1: 入場効果ありのほうが与ダメージが大きい（ワイドフォース＋地形）",
+      _ent35 > _bare35 * 1.4, f"素の場 {_bare35:.3f} → 入場効果あり {_ent35:.3f}")
+
+_r35 = _em35([_ye35], [_gb35], dl, season="M-6")
+check("1v1: explain_matchup が入場効果を適用した数値を返す",
+      abs(_r35["cells"][0][0]["dealt"] / 100.0 - _ent35) < 0.02,
+      f'{_r35["cells"][0][0]["dealt"]} vs {_ent35*100:.1f}')
 
 # 集計
 # ════════════════════════════════════════════════════════════════
