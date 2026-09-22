@@ -6,7 +6,7 @@ dexNumber: 6
 usageRank: 15
 pubDate: '2026-09-17'
 draft: false
-analysisSlug: 'charizard-analysis-m6'
+
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

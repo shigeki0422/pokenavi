@@ -6,7 +6,6 @@ dexNumber: 130
 usageRank: 14
 pubDate: '2026-09-17'
 draft: false
-analysisSlug: 'gyarados-analysis-m6'
 
 ---
 

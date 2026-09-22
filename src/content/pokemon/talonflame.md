@@ -1,9 +1,9 @@
 ---
 title: 'ファイアロー | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのファイアロー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率134位。'
+description: 'ポケモンチャンピオンズのファイアロー基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率133位。'
 pokemonName: 'ファイアロー'
 dexNumber: 663
-usageRank: 134
+usageRank: 133
 pubDate: '2026-09-17'
 draft: false
 
@@ -18,7 +18,7 @@ draft: false
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.663</strong>　／　使用率 <strong style="color:#dc2626">134位</strong>
+      全国図鑑 <strong>No.663</strong>　／　使用率 <strong style="color:#dc2626">133位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-17</div>
   </div>
