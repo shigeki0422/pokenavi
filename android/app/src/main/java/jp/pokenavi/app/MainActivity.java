@@ -26,7 +26,17 @@ public class MainActivity extends BridgeActivity {
             startActivityForResult(intent, OVERLAY_PERMISSION_REQ_CODE);
         } else {
             startFloatingService();
+            moveTaskToBack(true);
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Settings.canDrawOverlays(this)) {
+            startFloatingService();
+        }
+        moveTaskToBack(true);
     }
 
     @Override
