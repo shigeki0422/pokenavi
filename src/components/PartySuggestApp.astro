@@ -121,7 +121,7 @@ const I18N_ALL = {
     loadSub: '初回や複雑な軸は10〜20秒ほどかかることがあります',
     fixedLbl: s => `固定軸: ${s} / `, resultCount: n => `${n}件`, errPrefix: 'エラー: ',
     connErr: '提案サーバに接続できませんでした。時間をおいて再度お試しください。',
-    adLabel: '広告', adSkipIn: n => `結果を見る（あと${n}秒）`, adReady: '結果を見る →',
+    adLabel: '広告',
     omakase: 'おまかせ', importName: label => `${label}軸 かんたん構築`, rankLbl: n => `使用${n}位`,
   },
   en: {
@@ -187,7 +187,7 @@ const I18N_ALL = {
     loadSub: 'First runs or complex cores can take 10–20 seconds',
     fixedLbl: s => `Fixed core: ${s} / `, resultCount: n => `${n} result(s)`, errPrefix: 'Error: ',
     connErr: 'Could not connect to the suggestion server. Please try again later.',
-    adLabel: 'Advertisement', adSkipIn: n => `View results (${n}s)`, adReady: 'View results →',
+    adLabel: 'Advertisement',
     omakase: 'auto-pick', importName: label => `${label} core quick build`, rankLbl: n => `Rank #${n}`,
   },
   ko: {
@@ -253,7 +253,7 @@ const I18N_ALL = {
     loadSub: '처음이거나 복잡한 축은 10~20초 정도 걸릴 수 있습니다',
     fixedLbl: s => `고정 축: ${s} / `, resultCount: n => `${n}건`, errPrefix: '오류: ',
     connErr: '제안 서버에 연결할 수 없었습니다. 잠시 후 다시 시도해 주세요.',
-    adLabel: '광고', adSkipIn: n => `결과 보기 (${n}초)`, adReady: '결과 보기 →',
+    adLabel: '광고',
     omakase: '자동 선택', importName: label => `${label} 축 간단 구성`, rankLbl: n => `사용률 ${n}위`,
   },
 } as const;
@@ -281,23 +281,21 @@ const I18N = I18N_ALL[lang];
     <div id="status" class="muted" style="margin-top:.5em"></div>
   </div>
   <div id="out"></div>
+  <!-- 計算待ちの間だけ表示する。AdMaxのt.jsは1ページ1回しか処理しないため、
+     #out(毎回innerHTMLで作り直す)の外に常駐させ表示/非表示だけ切り替える。 -->
+  <div id="ps-ad-inline" class="ps-ad-inline" style="display:none">
+    <div class="ps-ad-label">{I18N.adLabel}</div>
+    <div id="ps-ad-slot" class="ps-ad-slot"><div class="ps-ad-bg"><div class="ps-spinner"></div></div></div>
+  </div>
   <!-- 広告未設定時も<template>自体は常に出力する(空のset:html)。
      {cond && <template set:html>} という条件付きレンダリングは、このファイルの
      規模でAstroコンパイラの変換を異常に遅くする(単体コンパイルが60秒超で終わらない、
      無条件なら264ms)ため避ける。実害はJS側でtextContentの有無を見て判定している。
      <template>はvoid要素ではないため自己終了(/>)は無視され、閉じタグを省略すると
-     後続のマークアップ全体(ps-ad-dialogやpopupを含む)が中身として飲み込まれる。
+     後続のマークアップ全体(popupを含む)が中身として飲み込まれる。
      必ず</template>で明示的に閉じる。 -->
 <template id="ps-ad-embed-src-pc" set:html={suggestLoadingAdHtmlPc}></template>
 <template id="ps-ad-embed-src-mobile" set:html={suggestLoadingAdHtmlMobile}></template>
-  <div id="ps-ad-dialog" class="ps-ad-overlay" style="display:none" role="dialog" aria-modal="true" aria-label={I18N.adLabel}>
-    <div class="ps-ad-card">
-      <div class="ps-ad-label">{I18N.adLabel}</div>
-      <div id="ps-ad-slot" class="ps-ad-slot"></div>
-      <div id="ps-ad-fallback" class="ps-ad-fallback" style="display:none"><div class="ps-spinner"></div></div>
-      <button id="ps-ad-close" class="ps-ad-close" disabled></button>
-    </div>
-  </div>
   <div id="popup" class="pop-overlay" style="display:none">
     <div class="pop-card"><button class="pop-x" id="pop-x" aria-label={I18N.close}>✕</button><div id="pop-body"></div></div>
   </div>
@@ -600,15 +598,12 @@ const I18N = I18N_ALL[lang];
 
   /* 軸2件以上のライブ計算（cache miss）中だけ出す全画面広告ダイアログ。
    * pop-overlay(z-index:1000)より前面に出す必要があるため2000。 */
-  .ps-ad-overlay{position:fixed;inset:0;background:rgba(15,23,42,.72);z-index:2000;display:flex;align-items:center;justify-content:center;padding:1em}
-  .ps-ad-card{background:#fff;border-radius:14px;max-width:420px;width:100%;padding:1.3em 1.2em;text-align:center;box-shadow:0 12px 48px rgba(0,0,0,.3)}
+  .ps-ad-inline{margin-top:.8em;padding:.9em 0 1.1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px;text-align:center}
   .ps-ad-label{font-size:.68rem;font-weight:800;color:rgb(var(--gray));letter-spacing:.05em;margin-bottom:.6em}
-  .ps-ad-slot{min-height:250px;display:flex;align-items:center;justify-content:center}
-  .ps-ad-slot:empty{display:none}
-  .ps-ad-slot.ps-ad-nofill{display:none}
-  .ps-ad-fallback{min-height:90px;display:flex;align-items:center;justify-content:center}
-  .ps-ad-close{margin-top:1em;width:100%;padding:.7em 1em;border-radius:8px;border:none;background:var(--accent);color:#fff;font-weight:700;font-size:.9rem;cursor:pointer}
-  .ps-ad-close:disabled{background:rgb(var(--gray-light));color:rgb(var(--gray));cursor:not-allowed}
+  .ps-ad-slot{position:relative;width:300px;max-width:100%;height:250px;margin:0 auto;overflow:hidden}
+  /* 在庫なし(no-fill)でも真っ白にならないよう、広告の背面にスピナーを敷いておく */
+  .ps-ad-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
+  .ps-ad-unit{position:relative;display:block;width:300px;height:250px}
 
   /* 複数軸の事前注意書き・エラー表示 */
   .ps-notice{font-size:.78rem;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:.5em .7em;margin-top:.5em}
@@ -705,7 +700,7 @@ const I18N = I18N_ALL[lang];
       loadSub: '初回や複雑な軸は10〜20秒ほどかかることがあります',
       fixedLbl: s => `固定軸: ${s} / `, resultCount: n => `${n}件`, errPrefix: 'エラー: ',
       connErr: '提案サーバに接続できませんでした。時間をおいて再度お試しください。',
-      adLabel: '広告', adSkipIn: n => `結果を見る（あと${n}秒）`, adReady: '結果を見る →',
+      adLabel: '広告',
       omakase: 'おまかせ', importName: label => `${label}軸 かんたん構築`, rankLbl: n => `使用${n}位`,
       koOOR: '圏外', koRange: (a,b) => `確${a}〜${b}`, koFixed: n => `確${n}`, koRoll: n => `乱${n}`,
       turnFirst: '先手', turnSecond: '後手',
@@ -780,7 +775,7 @@ const I18N = I18N_ALL[lang];
       loadSub: 'First runs or complex cores can take 10–20 seconds',
       fixedLbl: s => `Fixed core: ${s} / `, resultCount: n => `${n} result(s)`, errPrefix: 'Error: ',
       connErr: 'Could not connect to the suggestion server. Please try again later.',
-      adLabel: 'Advertisement', adSkipIn: n => `View results (${n}s)`, adReady: 'View results →',
+      adLabel: 'Advertisement',
       omakase: 'auto-pick', importName: label => `${label} core quick build`, rankLbl: n => `Rank #${n}`,
       koOOR: 'Out of range', koRange: (a,b) => `${a}–${b}HKO`, koFixed: n => `${n}HKO`, koRoll: n => `${n}HKO (roll-dependent)`,
       turnFirst: 'Moves first', turnSecond: 'Moves second',
@@ -855,7 +850,7 @@ const I18N = I18N_ALL[lang];
       loadSub: '처음이거나 복잡한 축은 10~20초 정도 걸릴 수 있습니다',
       fixedLbl: s => `고정 축: ${s} / `, resultCount: n => `${n}건`, errPrefix: '오류: ',
       connErr: '제안 서버에 연결할 수 없었습니다. 잠시 후 다시 시도해 주세요.',
-      adLabel: '광고', adSkipIn: n => `결과 보기 (${n}초)`, adReady: '결과 보기 →',
+      adLabel: '광고',
       omakase: '자동 선택', importName: label => `${label} 축 간단 구성`, rankLbl: n => `사용률 ${n}위`,
       koOOR: '범위 밖', koRange: (a,b) => `확정${a}~${b}`, koFixed: n => `확정${n}`, koRoll: n => `난수${n}`,
       turnFirst: '선공', turnSecond: '후공',
@@ -1596,7 +1591,6 @@ const I18N = I18N_ALL[lang];
    * (既存のモバイル判定と同じ640px)でどちらを使うか選ぶ。どちらも未設定なら
    * テンプレートごと空のままHAS_LOADING_ADがfalseになり、以下の分岐は完全に
    * 無効化される（既存動作のまま）。 */
-  const AD_MIN_SECONDS = 6;
   function _adEmbedTemplate(){
     const id = window.matchMedia('(max-width:640px)').matches ? 'ps-ad-embed-src-mobile' : 'ps-ad-embed-src-pc';
     return document.getElementById(id);
@@ -1609,89 +1603,28 @@ const I18N = I18N_ALL[lang];
     if (_adLoaded) return;
     const src = _adEmbedTemplate();
     const slot = document.getElementById('ps-ad-slot');
-    if (!src || !slot || !src.content.childNodes.length) return;
-    // AdMaxのタグは内部でdocument.write()を使う旧来型で、動的に挿入した
-    // <script>から呼ぶとブラウザに拒否される(「it isn't possible to write
-    // into a document from an asynchronously-loaded external script」)。
-    // さらに最初のタグ自身が内部iframeと非同期スクリプト(st/s.js)をdocument.write
-    // し、そのスクリプトが読み込み完了後にもう一段document.writeを呼ぶ多段構成の
-    // ため、open/write/close(closeで即座にパース完了扱いになる)では2段目が
-    // 「閉じた後のdocument.write」として拒否される。srcdocなら独立した
-    // ナビゲーションとして最後まで通常のページ読み込みフローで扱われるため、
-    // 何段書き込みが連鎖しても安全。
-    const iframe = document.createElement('iframe');
-    iframe.style.cssText = 'width:300px;max-width:100%;height:250px;border:0;display:block';
-    iframe.setAttribute('scrolling', 'no');
-    iframe.setAttribute('title', I18N.adLabel);
-    iframe.srcdoc = `<!DOCTYPE html><html><head><base target="_blank"><style>body{margin:0;overflow:hidden}</style></head><body>${src.innerHTML}</body></html>`;
-    slot.appendChild(iframe);
+    const m = src?.innerHTML.match(/adm\.shinobi\.jp\/s\/([0-9a-f]{32})/);
+    if (!slot || !m) return;
+    // 管理画面の標準タグ(document.write型)はiframe(srcdoc)経由でしか動的に差し込めず、
+    // その場合AdMaxには「iframe内・非HTTPS(sc=0)・URL=about:srcdoc」と伝わって入札が
+    // 付きにくくなる。同じ枠IDで使える公式の非同期タグ(t.js)なら本体ページに直接置ける。
+    const unit = document.createElement('div');
+    unit.className = 'admax-ads ps-ad-unit';
+    unit.setAttribute('data-admax-id', m[1]);
+    slot.appendChild(unit);
+    (window.admaxads = window.admaxads || []).push({ admax_id: m[1], type: 'banner' });
+    const s = document.createElement('script');
+    s.src = 'https://adm.shinobi.jp/st/t.js';
+    s.async = true;
+    s.charset = 'utf-8';
+    document.body.appendChild(s);
     _adLoaded = true;
-    // AdMax→Criteo→ad-stir等、複数の広告ネットワークをリレーした末にどこからも
-    // 広告主が見つからない(fillしない)ことがある。この場合、多段のdocument.write
-    // 自体は正常に完走し、非表示のプレースホルダー要素だけが残るため見た目は
-    // 単なる白い空白になる。中身を再帰的に見て、可視要素が一つも無ければ枠を
-    // 畳みスピナー表示にフォールバックする。判定不能(クロスオリジン等)な場合は
-    // 誤って本物の広告を消さないよう「fillした」扱いにする(安全側)。
-    setTimeout(() => {
-      let filled = true;
-      try { filled = _hasVisibleAdContent(iframe.contentWindow, 0); } catch(e) { filled = true; }
-      if (!filled) {
-        slot.classList.add('ps-ad-nofill');
-        const fb = document.getElementById('ps-ad-fallback');
-        if (fb) fb.style.display = 'flex';
-      }
-    }, 2500);
   }
-  function _hasVisibleAdContent(win, depth){
-    if (depth > 6) return true; // 深すぎて追えない場合は安全側で「あり」扱い
-    let doc;
-    try { doc = win.document; } catch(e) { return true; } // クロスオリジンも安全側で「あり」扱い
-    if (!doc || !doc.body) return false;
-    for (const el of doc.body.querySelectorAll('*')){
-      const tag = el.tagName;
-      if (tag === 'SCRIPT' || tag === 'STYLE' || tag === 'META' || tag === 'LINK') continue;
-      if (tag === 'IFRAME'){
-        if (_hasVisibleAdContent(el.contentWindow, depth + 1)) return true;
-        continue;
-      }
-      // AdMaxはまずサイズ確保用の空div(例: <div style="width:320px;height:50px">)
-      // だけを書き込み、実際のクリエイティブは後から中に挿入される。子要素を
-      // 持つ「箱」自体をサイズだけ見て判定すると常にtrueになってしまうため、
-      // 子要素を持たない末端要素だけをコンテンツ候補として見る。
-      if (el.children.length > 0) continue;
-      let cs;
-      try { cs = win.getComputedStyle(el); } catch(e) { continue; }
-      if (cs.display === 'none' || cs.visibility === 'hidden') continue;
-      if (el.offsetWidth > 2 && el.offsetHeight > 2) return true;
-    }
-    return false;
-  }
-  function showAdDialog(){
-    _ensureAdLoaded();
-    const dlg = document.getElementById('ps-ad-dialog');
-    const btn = document.getElementById('ps-ad-close');
-    dlg.style.display = 'flex';
-    let remain = AD_MIN_SECONDS, minDone = false, resultsDone = false;
-    btn.disabled = true;
-    btn.textContent = I18N.adSkipIn(remain);
-    const closeNow = () => { dlg.style.display = 'none'; };
-    const timer = setInterval(() => {
-      remain--;
-      if (remain <= 0) {
-        clearInterval(timer);
-        minDone = true;
-        btn.disabled = false;
-        btn.textContent = I18N.adReady;
-        if (resultsDone) closeNow();
-      } else {
-        btn.textContent = I18N.adSkipIn(remain);
-      }
-    }, 1000);
-    btn.onclick = () => { if (!btn.disabled) closeNow(); };
-    return {
-      markResultsDone(){ resultsDone = true; if (minDone) closeNow(); },
-      forceClose(){ clearInterval(timer); closeNow(); },
-    };
+  function setAdVisible(on){
+    const el = document.getElementById('ps-ad-inline');
+    if (!el) return;
+    if (on) _ensureAdLoaded();
+    el.style.display = on ? '' : 'none';
   }
   async function run(){
     const core = CORE.map(p=>({sp:p.sp, mega:p.mega}));
@@ -1703,7 +1636,6 @@ const I18N = I18N_ALL[lang];
     // (B5) 軸2件以上は必ずライブ計算(10〜20秒)。軸1件以下はsuggest_cacheに事前計算済みで数百msなので
     // 「10〜20秒」の表示は出さず、実態に合わせた短い表示にする。
     const isLive = core.length >= 2;
-    const adHandle = (isLive && HAS_LOADING_AD) ? showAdDialog() : null;
     const msgs = I18N.loadMsgs;
     let mi = 0, sec = 0, timer = null;
     if(isLive){
@@ -1716,12 +1648,16 @@ const I18N = I18N_ALL[lang];
     } else {
       out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${I18N.calculating}</div></div>`;
     }
+    if(isLive && HAS_LOADING_AD){
+      setAdVisible(true);
+      // モバイルではボタン位置のままだと広告が画面外になるため、計算中表示ごと視界に入れる
+      out.scrollIntoView({block:'start'});
+    }
     try{
       const r = await fetch(API + '/suggest', {method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({core, ncand:100, top:5})});
       const d = await r.json();
       if(d.error){
-        if(adHandle) adHandle.forceClose();
         // (B5) エラーは#statusだけでなく#outにも表示する(#outが空のままだと気づけないため)
         out.innerHTML = `<div class="ps-err">${I18N.errPrefix}${esc(d.error)}</div>`;
         status.textContent = I18N.errPrefix + d.error;
@@ -1732,15 +1668,13 @@ const I18N = I18N_ALL[lang];
       const url = new URL(location.href);
       if(coreParam) url.searchParams.set('core', coreParam); else url.searchParams.delete('core');
       history.replaceState(null, '', url.pathname + url.search);
+      setAdVisible(false);
       renderResults(d);
-      // 広告の最短表示秒数（AD_MIN_SECONDS）を消化していなければ、そこまでダイアログを維持する。
-      // 消化済みならここで即座に閉じる。
-      if(adHandle) adHandle.markResultsDone();
     }catch(e){
-      if(adHandle) adHandle.forceClose();
       out.innerHTML = `<div class="ps-err">${I18N.connErr}</div>`;
       status.textContent = I18N.connErr;
     } finally {
+      setAdVisible(false);
       if(timer) clearInterval(timer);
       go.disabled = false; go.classList.remove('loading');
     }
