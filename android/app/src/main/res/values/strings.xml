@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ポケナビ</string>
+    <string name="title_activity_main">ポケナビ</string>
+    <string name="package_name">jp.pokenavi.app</string>
+    <string name="custom_url_scheme">jp.pokenavi.app</string>
+</resources>

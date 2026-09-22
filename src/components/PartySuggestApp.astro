@@ -280,13 +280,13 @@ const I18N = I18N_ALL[lang];
     <div id="ps-multi-notice" class="ps-notice" style="display:none">{I18N.multiAxisNotice}</div>
     <div id="status" class="muted" style="margin-top:.5em"></div>
   </div>
-  <div id="out"></div>
-  <!-- 計算待ちの間だけ表示する。AdMaxのt.jsは1ページ1回しか処理しないため、
-     #out(毎回innerHTMLで作り直す)の外に常駐させ表示/非表示だけ切り替える。 -->
+  <!-- 軸2件以上の実行で表示し、結果表示後も残す(クリックできるように)。AdMaxのt.jsは
+     1ページ1回しか処理しないため、#out(毎回innerHTMLで作り直す)の外に常駐させる。 -->
   <div id="ps-ad-inline" class="ps-ad-inline" style="display:none">
     <div class="ps-ad-label">{I18N.adLabel}</div>
     <div id="ps-ad-slot" class="ps-ad-slot"><div class="ps-ad-bg"><div class="ps-spinner"></div></div></div>
   </div>
+  <div id="out"></div>
   <!-- 広告未設定時も<template>自体は常に出力する(空のset:html)。
      {cond && <template set:html>} という条件付きレンダリングは、このファイルの
      規模でAstroコンパイラの変換を異常に遅くする(単体コンパイルが60秒超で終わらない、
@@ -598,7 +598,7 @@ const I18N = I18N_ALL[lang];
 
   /* 軸2件以上のライブ計算（cache miss）中だけ出す全画面広告ダイアログ。
    * pop-overlay(z-index:1000)より前面に出す必要があるため2000。 */
-  .ps-ad-inline{margin-top:.8em;padding:.9em 0 1.1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px;text-align:center}
+  .ps-ad-inline{margin:.8em 0;padding:.9em 0 1.1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px;text-align:center}
   .ps-ad-label{font-size:.68rem;font-weight:800;color:rgb(var(--gray));letter-spacing:.05em;margin-bottom:.6em}
   .ps-ad-slot{position:relative;width:300px;max-width:100%;height:250px;margin:0 auto;overflow:hidden}
   /* 在庫なし(no-fill)でも真っ白にならないよう、広告の背面にスピナーを敷いておく */
@@ -1562,7 +1562,9 @@ const I18N = I18N_ALL[lang];
   /** (A1) 結果描画後は#out先頭へ自動スクロールする(モバイルではボタン操作位置から離れるため)。 */
   function scrollToOut(){
     const out = document.getElementById('out');
-    if(out && out.firstElementChild) out.scrollIntoView({behavior:'smooth', block:'start'});
+    const ad = document.getElementById('ps-ad-inline');
+    const target = (ad && ad.style.display !== 'none') ? ad : out;
+    if(out && out.firstElementChild) target.scrollIntoView({behavior:'smooth', block:'start'});
   }
   function renderResults(d){
     LAST = d.results;
@@ -1620,12 +1622,11 @@ const I18N = I18N_ALL[lang];
     document.body.appendChild(s);
     _adLoaded = true;
   }
-  const AD_MIN_MS = 5000;
-  function setAdVisible(on){
+  function showInlineAd(){
     const el = document.getElementById('ps-ad-inline');
     if (!el) return;
-    if (on) _ensureAdLoaded();
-    el.style.display = on ? '' : 'none';
+    _ensureAdLoaded();
+    el.style.display = '';
   }
   async function run(){
     const core = CORE.map(p=>({sp:p.sp, mega:p.mega}));
@@ -1649,12 +1650,10 @@ const I18N = I18N_ALL[lang];
     } else {
       out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${I18N.calculating}</div></div>`;
     }
-    const showAd = isLive && HAS_LOADING_AD;
-    const adStart = Date.now();
-    if(showAd){
-      setAdVisible(true);
-      // モバイルではボタン位置のままだと広告が画面外になるため、計算中表示ごと視界に入れる
-      out.scrollIntoView({block:'start'});
+    if(isLive && HAS_LOADING_AD){
+      showInlineAd();
+      // モバイルではボタン位置のままだと広告が画面外になるため、広告+計算中表示を視界に入れる
+      document.getElementById('ps-ad-inline').scrollIntoView({block:'start'});
     }
     try{
       const r = await fetch(API + '/suggest', {method:'POST', headers:{'Content-Type':'application/json'},
@@ -1671,18 +1670,11 @@ const I18N = I18N_ALL[lang];
       const url = new URL(location.href);
       if(coreParam) url.searchParams.set('core', coreParam); else url.searchParams.delete('core');
       history.replaceState(null, '', url.pathname + url.search);
-      // 同じ軸の組み合わせはサーバー側キャッシュで即座に返り、広告が一瞬で消えてしまうため最短表示時間を確保する
-      if(showAd){
-        const rest = AD_MIN_MS - (Date.now() - adStart);
-        if(rest > 0) await new Promise(r => setTimeout(r, rest));
-      }
-      setAdVisible(false);
       renderResults(d);
     }catch(e){
       out.innerHTML = `<div class="ps-err">${I18N.connErr}</div>`;
       status.textContent = I18N.connErr;
     } finally {
-      setAdVisible(false);
       if(timer) clearInterval(timer);
       go.disabled = false; go.classList.remove('loading');
     }
