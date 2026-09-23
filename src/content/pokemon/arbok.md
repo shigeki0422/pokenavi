@@ -160,6 +160,21 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </tr>
 </thead>
 <tbody>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">1</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">いかく</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">登場した時、相手の攻撃を1段階下げる。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">だっぴ</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">ターン終わりに30%の確率で状態異常が治る。</div></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">きんちょうかん</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">相手のきのみを食べられなくさせる。</div></div></div></td>
+</tr>
 </tbody>
 </table>
 </div>

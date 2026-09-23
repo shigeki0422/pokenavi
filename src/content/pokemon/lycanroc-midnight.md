@@ -161,6 +161,21 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </tr>
 </thead>
 <tbody>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">1</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">すなかき</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">すなあらし状態の時、素早さが2倍になる。すなあらしのダメージを受けない。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">ふくつのこころ</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">ひるむと素早さが1段階上がる。</div></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">するどいめ</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">相手の回避率の変化を無視し、命中率も下げられない。</div></div></div></td>
+</tr>
 </tbody>
 </table>
 </div>

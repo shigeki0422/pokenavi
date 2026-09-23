@@ -160,6 +160,16 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </tr>
 </thead>
 <tbody>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">1</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">もうか</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">HPが最大HPの1/3以下になると、ほのおタイプの技の威力が1.5倍になる。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">くいしんぼう</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">HPが1/4以下で食べるきのみを、HPが1/2以下で食べる。</div></div></div></td>
+</tr>
 </tbody>
 </table>
 </div>

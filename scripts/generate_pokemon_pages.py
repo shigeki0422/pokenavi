@@ -2138,6 +2138,31 @@ def get_partner_rank_history(conn, pokemon: str, dates: list) -> dict:
     return result
 
 
+def known_abilities(conn, pokemon: str) -> list:
+    """当季の採用率が無い(圏外)ポケモン向けに、特性名だけを直近クロール日から拾う。
+    採用率は当季のものではないのでページ側ではハイフン表示にする。"""
+    d = conn.execute(
+        "SELECT MAX(crawled_date) FROM pokemon_abilities WHERE rule='single' AND pokemon=?",
+        (pokemon,)
+    ).fetchone()[0]
+    if not d:
+        return []
+    return [r[0] for r in conn.execute(
+        "SELECT ability FROM pokemon_abilities WHERE rule='single' AND pokemon=? AND crawled_date=? "
+        "ORDER BY usage_rate DESC", (pokemon, d)
+    )]
+
+
+def make_dash_cell(effect: str = "") -> str:
+    """採用率の数値が無いセル。効果説明のポップアップだけは出す。"""
+    dash = '<div style="padding:2px 0;color:#94a3b8">—</div>'
+    if not effect:
+        return dash
+    return (f'<div class="pn-rate-wrap">{dash}'
+            f'<div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">{effect}</div></div>'
+            f'</div>')
+
+
 def get_history(conn, table: str, pokemon: str, key_col: str, dates: list) -> dict:
     result = {}
     for d in dates:
@@ -2171,6 +2196,8 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
     moves = query_db(conn, "pokemon_moves", pokemon_name, "move")
     items = query_db(conn, "pokemon_items", pokemon_name, "item")
     abilities = query_db(conn, "pokemon_abilities", pokemon_name, "ability")
+    # 圏外ポケモンは当季の採用率が無いが、どの特性を持つかは分かっているので名前だけ並べる
+    ability_names_only = [] if abilities else known_abilities(conn, pokemon_name)
     _natures_raw = query_db(conn, "pokemon_natures", pokemon_name, "nature")
     natures = [r for r in _natures_raw if r["nature"] in VALID_NATURES]
 
@@ -2383,6 +2410,14 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{ab}</td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1">{rate_cell}</td>
+</tr>
+'''
+    for i, ab in enumerate(ability_names_only):
+        bg = ' style="background:#fafafa"' if i % 2 == 0 else ""
+        ability_rows += f'''<tr{bg}>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">{i+1}</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">{ab}</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1">{make_dash_cell(get_ability_desc(ab))}</td>
 </tr>
 '''
     section_ability = f"""

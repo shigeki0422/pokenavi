@@ -160,6 +160,16 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </tr>
 </thead>
 <tbody>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">1</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">もらいび</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">ほのおタイプの技が効かず、自分はもらいび状態になる。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">こんじょう</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">状態異常の時、攻撃が1.5倍になる。やけどによる物理ダメージ半減は無視する。</div></div></div></td>
+</tr>
 </tbody>
 </table>
 </div>
