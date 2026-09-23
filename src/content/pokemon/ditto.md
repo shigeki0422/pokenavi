@@ -1,9 +1,9 @@
 ---
 title: 'メタモン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのメタモン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率52位。'
+description: 'ポケモンチャンピオンズのメタモン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率51位。'
 pokemonName: 'メタモン'
 dexNumber: 132
-usageRank: 52
+usageRank: 51
 pubDate: '2026-09-23'
 draft: false
 analysisSlug: 'ditto-analysis-m2'
@@ -17,7 +17,7 @@ analysisSlug: 'ditto-analysis-m2'
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.132</strong>　／　使用率 <strong style="color:#dc2626">52位</strong>
+      全国図鑑 <strong>No.132</strong>　／　使用率 <strong style="color:#dc2626">51位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-23</div>
   </div>
