@@ -85,7 +85,7 @@ TARGETS = {
     },
 }
 
-CRAWLED_DATE = "2026-09-22"  # ← 実行時に変更
+CRAWLED_DATE = "2026-09-23"  # ← 実行時に変更
 
 TARGETS["2026-07-09"] = {
     124: "ケンタロス:炎",
@@ -181,7 +181,10 @@ def crop_icon(img_path):
 
 def extract_main_icon(rank_dir: Path) -> np.ndarray | None:
     """アイコン画像からメインポケモンアイコンを切り出して64x64にリサイズ"""
-    for fname in ["_c_move_00.png", "move_00.png", "_c_ability_00.png", "ability_00.png"]:
+    # build_templates と同じ順で探す。_c_(150x125) と フル(135x125) は切り出し範囲が
+    # 違い、64x64に伸ばすと絵の位置がずれてTM_CCOEFF_NORMEDが0.4台まで落ちる
+    # （2026-09-23にフルクロールで _c_ が先に出来て発覚）。
+    for fname in ["move_00.png", "_c_move_00.png", "_c_ability_00.png", "ability_00.png"]:
         img_path = rank_dir / fname
         if img_path.exists():
             break
@@ -961,6 +964,15 @@ TARGETS["2026-09-20"] = {}
 TARGETS["2026-09-21"] = {}
 
 TARGETS["2026-09-22"] = {}
+
+# タイプアイコンで目視確認して確定（アイコン照合は姿違いを基本種と取り違える）
+TARGETS["2026-09-23"] = {
+    56: "ヒスイダイケンキ",      # みず/あく（通常はみず単）
+    117: "アローラペルシアン",   # あく（通常はノーマル）
+    119: "ケンタロス:炎",        # かくとう/ほのお
+    145: "ヒスイバクフーン",     # ほのお/ゴースト（通常はほのお単）
+    156: "ヒスイジュナイパー",   # くさ/かくとう（通常はくさ/ひこう）
+}
 
 if __name__ == "__main__":
     main()
