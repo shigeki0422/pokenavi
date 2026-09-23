@@ -578,7 +578,7 @@ pub fn analyze_json(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_js
     let mut sides: Vec<SideVerdictInput> = Vec::new();
     for (key, att, me) in [("a", 0usize, &info_a), ("b", 1usize, &info_b)] {
         let mut moves = Vec::new();
-        let mut best: Option<(String, i64, i64, i64)> = None; // (技名, 確定数, 初撃, 優先度)
+        let mut best: Option<(String, i64, i64, i64, i64, usize)> = None; // (技名, 確定数, 初撃, 優先度, 最高乱数での発数, 技idx)
         for (i, (name, is_dmg)) in me.moves.iter().enumerate() {
             if !*is_dmg {
                 moves.push(json!({"n": name, "dmg": Value::Null}));
@@ -598,10 +598,10 @@ pub fn analyze_json(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_js
             // 最大打点技は「発数が少ない順、同数なら初撃のHP減少が大きい順」。
             let better = match &best {
                 None => true,
-                Some((_, bh, bf, _)) => hits_lo < *bh || (hits_lo == *bh && first_lo > *bf),
+                Some((_, bh, bf, _, _, _)) => hits_lo < *bh || (hits_lo == *bh && first_lo > *bf),
             };
             if better {
-                best = Some((name.clone(), hits_lo, first_lo, move_priority(pack, name)));
+                best = Some((name.clone(), hits_lo, first_lo, move_priority(pack, name), hits_hi, i));
             }
             moves.push(json!({
                 "n": name, "dmgLo": dmg_lo, "dmgHi": dmg_hi,
@@ -623,9 +623,25 @@ pub fn analyze_json(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_js
             best_name: best.as_ref().map(|x| x.0.clone()),
             best_hits: best.as_ref().map(|x| x.1).unwrap_or(OUT_OF_RANGE),
             best_prio: best.as_ref().map(|x| x.3).unwrap_or(0),
+            best_hits_hi: best.as_ref().map(|x| x.4).unwrap_or(OUT_OF_RANGE),
+            best_idx: best.as_ref().map(|x| x.5),
+            ohko_p: 0.0,
             seq_hits,
             seq_names,
         });
+    }
+    // 「乱数次第で1発入る」側の確率。記号を極端にしてよいかの判断に使う。
+    // 確定1なら1.0、最高乱数でも1発にならないなら0.0。それ以外だけ実際に確率を出す
+    // （1対面あたり最大2回で、条件に当たること自体が少ない）。
+    for (att, side) in [(0usize, 0usize), (1usize, 1usize)] {
+        let (hits, hits_hi, idx) = (sides[side].best_hits, sides[side].best_hits_hi, sides[side].best_idx);
+        sides[side].ohko_p = if hits <= 1 {
+            1.0
+        } else if hits_hi == 1 {
+            match idx { Some(i) => ko_probability(pack, a, b, season, att, i, 1), None => 0.0 }
+        } else {
+            0.0
+        };
     }
     let v = verdict_of(pack, &sides[0], &sides[1]);
     out["verdict"] = v;
@@ -637,8 +653,13 @@ struct SideVerdictInput {
     best_name: Option<String>,
     best_hits: i64,
     best_prio: i64,
-    seq_hits: i64,
+    /// 最高乱数での発数。1 なら「乱数次第で1発入る」。
+    best_hits_hi: i64,
+    best_idx: Option<usize>,
+    /// 1発で倒せる確率(0〜1)。確定1なら1.0。
+    ohko_p: f64,
     seq_names: Vec<String>,
+    seq_hits: i64,
 }
 
 fn move_priority(pack: &Pack, name: &str) -> i64 {
@@ -672,7 +693,7 @@ fn verdict_of(pack: &Pack, me: &SideVerdictInput, opp: &SideVerdictInput) -> ser
     let ko_first = if my_hits == opp_hits && my_p != opp_p { my_p > opp_p } else { fast };
     // 先後がランダムになるのは、素早さも決着ターンの優先度も同値のときだけ。
     let even = me.speed == opp.speed && my_p == opp_p;
-    let score = score_of(my_hits, opp_hits, ko_first, even);
+    let score = score_of(my_hits, opp_hits, ko_first, even, me.ohko_p, opp.ohko_p);
     json!({
         "sym": score_sym(score),
         "win": my_hits < opp_hits || (my_hits == opp_hits && ko_first),
@@ -687,7 +708,8 @@ fn verdict_of(pack: &Pack, me: &SideVerdictInput, opp: &SideVerdictInput) -> ser
 
 /// 判定スコア = 確定数の差（相手の確定数 - 自分の確定数）。差がある時点で勝敗は
 /// 確定数だけで決着しているため素早さは無関係。確定数が同数の場合のみ先後が効く。
-pub fn score_of(my_hits: i64, opp_hits: i64, first: bool, even: bool) -> f64 {
+pub fn score_of(my_hits: i64, opp_hits: i64, first: bool, even: bool,
+                my_ohko_p: f64, opp_ohko_p: f64) -> f64 {
     let diff = (opp_hits - my_hits) as f64;
     // 確定数が同じで先後もランダム（素早さ同値・優先度も同じ）なら真の五分。
     if diff == 0.0 && even {
@@ -695,11 +717,20 @@ pub fn score_of(my_hits: i64, opp_hits: i64, first: bool, even: bool) -> f64 {
     }
     let base = if diff != 0.0 { diff } else if first { 1.0 } else { -1.0 };
     let win = diff > 0.0 || (diff == 0.0 && first);
-    // 確定1で決着する側は、確定数の差が1しかなくても一方的（負ける側は1体を確実に失う）。
+    // 確定1で決着する対面は一方的に見えるが、「先に動ける側が乱数次第で1発入る」なら
+    // その乱数で勝負が決まるので極端な記号にしない。
+    // 例: マスカーニャ(S262・先手)の乱数1発56% vs メガカメックスの確定1。
+    //     56%で無償突破できる対面を × と出していた。
     if win && my_hits <= 1 {
+        // 相手が先手で、乱数次第で先に1発入れてくる
+        if !first && opp_ohko_p >= 0.5 { return 0.0; }
+        if !first && opp_ohko_p > 0.0 { return base; }
         return base.max(2.0);
     }
     if !win && opp_hits <= 1 {
+        // 自分が先手で、乱数次第で先に1発入れられる
+        if first && my_ohko_p >= 0.5 { return 0.0; }
+        if first && my_ohko_p > 0.0 { return base; }
         return base.min(-2.0);
     }
     base
