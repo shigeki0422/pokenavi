@@ -276,7 +276,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 ### ステータス振り
 
 <div class="pn-ev-scroll" style="margin:12px 0">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<table style="border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:36px">順位</th>
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">H</th>
