@@ -2177,7 +2177,8 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
     ev_date = latest(conn, "pokemon_evs", pokemon_name)
     evs = conn.execute(
         f"SELECT rank, ev_spread, ev_h, ev_a, ev_b, ev_c, ev_d, ev_s, usage_rate "
-        f"FROM pokemon_evs WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY usage_rate DESC LIMIT 10",
+        # ステータス振りは30件クロールしているので全件出す（表示側はスクロール）
+        f"FROM pokemon_evs WHERE season='{SEASON}' AND rule='single' AND pokemon=? AND crawled_date=? ORDER BY usage_rate DESC LIMIT 30",
         (pokemon_name, ev_date)
     ).fetchall() if ev_date else []
 
@@ -2562,7 +2563,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 ### ステータス振り
 
-<div style="margin:12px 0;overflow-x:auto">
+<div class="pn-ev-scroll" style="margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
 <thead><tr style="background:#f1f5f9">
   <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:36px">順位</th>

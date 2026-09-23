@@ -64,9 +64,14 @@ def main() -> int:
         if not moves:
             empty.append(f"{icon} ({name})")
             continue
-        # u: 使用率データ側(技の採用率TOP10)。一覧のどれが実戦で使われているかを
-        # 同じ表の中で示すため、ページ内で採用率バッジ・採用率順ソートに使う。
-        usage = {m["n"]: m["pct"] for m in (mon.get("moves") or []) if m.get("n") in set(moves)}
+        # u: 一覧のどれが実戦で使われているかを示す採用率バッジ・採用率順ソート用。
+        # mon/*.json ではなくDBの最新クロールから引く(mon/*.json は gen_builder_data.py を
+        # 回した時点で止まり、同じページの「使用率データ」と数字がずれるため)。
+        mset = set(moves)
+        usage = {mv: rate for mv, rate in con.execute(
+            "SELECT move, usage_rate FROM pokemon_moves WHERE pokemon=? AND rule='single' "
+            "AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_moves "
+            "WHERE pokemon=? AND rule='single')", (name, name)) if mv in mset}
         learnsets[icon] = {"m": moves, "u": usage}
         used.update(moves)
 

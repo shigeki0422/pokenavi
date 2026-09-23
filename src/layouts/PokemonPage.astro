@@ -214,6 +214,20 @@ const breadcrumbJsonLd = {
 				overflow-x: auto;
 				max-width: 100%;
 			}
+			/* ステータス振り(30件)は高さを据え置いて中だけスクロールさせる。
+			   上の table 既定が display:block + overflow-x:auto でテーブル自身が
+			   スクロールコンテナになってしまい、th の sticky が効かないため戻す。 */
+			:global(.prose .pn-ev-scroll) { max-height: 450px; overflow: auto; }
+			:global(.prose .pn-ev-scroll table) { display: table; overflow: visible; }
+			:global(.prose .pn-ev-scroll thead th) {
+				position: sticky;
+				top: 0;
+				/* 採用率バーのラベルが position:relative + z-index:1 を持つので、
+				   ヘッダはそれより上に重ねないと下の行が透けて見える。 */
+				z-index: 3;
+				background: #f1f5f9;
+				box-shadow: inset 0 0 0 1px #cbd5e1;
+			}
 			/* global.css の過剰スペースをポケモンページに限り圧縮 */
 			:global(.prose p) { margin-bottom: 0.75em; }
 			:global(.prose hr) { margin: 0.35rem 0; border-color: #f1f5f9; }
