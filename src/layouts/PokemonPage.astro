@@ -8,6 +8,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import SimPartyCard from '../components/SimPartyCard.astro';
+import LearnsetSection from '../components/LearnsetSection.astro';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 import partySuggestSlugs from '../data/party-suggest-slugs.json';
@@ -197,7 +198,17 @@ const breadcrumbJsonLd = {
 				color: rgb(var(--gray-dark));
 				font-size: 15px;
 				line-height: 1.6;
+				display: flex;
+				flex-direction: column;
 			}
+			/* 事実ベースの節（種族値〜使用率データ〜覚える技）を先に置き、
+			   考察記事・相性・構築例をその後ろに回す。マークダウン側で考察記事が
+			   最後に来るため、DOM順ではなく order で並べ替える。 */
+			:global(.prose > .pn-analysis) { order: 1; }
+			:global(.prose > .mu-section),
+			:global(.prose > .spc-section),
+			:global(.prose > .ps-cta-wrap),
+			:global(.prose > .ad-unit) { order: 2; }
 			.prose :global(table) {
 				display: block;
 				overflow-x: auto;
@@ -353,6 +364,7 @@ const breadcrumbJsonLd = {
 						<a href={`${pfx}/party-builder/`} class="hub-btn">{T.hubBuild}</a>
 					</div>
 					<slot />
+					<LearnsetSection icon={ownIcon} lang={lang} />
 					{matchupVariants.map((v) => (
 						<MatchupSection
 							matchups={v.matchups}
@@ -404,7 +416,7 @@ const breadcrumbJsonLd = {
 
 		{lang !== 'ja' && <script is:inline define:vars={{ POKENAVI_LANG: lang, POKENAVI_MOVE: MOVE_MAP, POKENAVI_ABILITY: ABILITY_MAP, POKENAVI_ITEM: ITEM_MAP, POKENAVI_NATURE: NATURE_MAP, POKENAVI_POKEMON: POKEMON_MAP }}>(function(){
 var L=POKENAVI_LANG;
-var H2={en:{'種族値':'Base Stats','メガシンカ':'Mega Evolution','タイプ相性':'Type Matchup','特性':'Abilities','使用率データ':'Usage Data','性格':'Natures','チームメイト':'Partners','考察記事':'Analysis Articles','構築例':'Team Examples','同じチーム':'Partners'},ko:{'種族値':'종족값','メガシンカ':'메가진화','タイプ相性':'타입 상성','特性':'특성','使用率データ':'사용률 데이터','性格':'성격','チームメイト':'파트너','考察記事':'분석 기사','構築例':'구성 예시','同じチーム':'파트너'}}[L]||{};
+var H2={en:{'種族値':'Base Stats','メガシンカ':'Mega Evolution','タイプ相性':'Type Matchup','特性':'Abilities','使用率データ':'Usage Data','覚える技':'Learnable Moves','性格':'Natures','チームメイト':'Partners','考察記事':'Analysis Articles','構築例':'Team Examples','同じチーム':'Partners'},ko:{'種族値':'종족값','メガシンカ':'메가진화','タイプ相性':'타입 상성','特性':'특성','使用率データ':'사용률 데이터','覚える技':'배우는 기술','性格':'성격','チームメイト':'파트너','考察記事':'분석 기사','構築例':'구성 예시','同じチーム':'파트너'}}[L]||{};
 var STAT={en:{'こうげき':'Attack','ぼうぎょ':'Defense','とくこう':'Sp. Atk','とくぼう':'Sp. Def','すばやさ':'Speed','合計':'Total'},ko:{'こうげき':'공격','ぼうぎょ':'방어','とくこう':'특공','とくぼう':'특방','すばやさ':'스피드','合計':'합계'}}[L]||{};
 var TH={en:{'順位':'Rank','特性名':'Ability','採用率':'Usage','持ち物':'Held Item','技名':'Move','性格名':'Nature','チームメイト名':'Partner','×4 弱点':'×4 Weak','×2 弱点':'×2 Weak','×½ 耐性':'×½ Resist','×0 無効':'×0 Immune','ポケモン':'Pokémon','平均順位・前回比':'Avg. Rank・vs Prev.'},ko:{'順位':'순위','特性名':'특성명','採用率':'채용률','持ち物':'지닌물건','技名':'기술명','性格名':'성격명','チームメイト名':'파트너명','×4 弱点':'×4 약점','×2 弱点':'×2 약점','×½ 耐性':'×½ 저항','×0 無効':'×0 무효','ポケモン':'포켓몬','平均順位・前回比':'평균 순위・전회 대비'}}[L]||{};
 var TYPE_L={en:{'物理':'Physical','特殊':'Special','変化':'Status'},ko:{'物理':'물리','特殊':'특수','変化':'변화'}}[L]||{};
@@ -459,17 +471,7 @@ function rep(container){
 }
 var prose=document.querySelector('.prose');
 if(prose){
-  var h2s=prose.querySelectorAll('h2');
-  h2s.forEach(function(h2){
-    if(h2.textContent.trim()==='考察記事'){
-      var el=h2;
-      while(el){
-        if(el.tagName==='H2'&&el!==h2)break;
-        if(el.classList&&(el.classList.contains('mu-section')||el.classList.contains('spc-section')||el.classList.contains('ps-cta-wrap')))break;
-        var nx=el.nextElementSibling;el.remove();el=nx;
-      }
-    }
-  });
+  prose.querySelectorAll('.pn-analysis').forEach(function(el){el.remove();});
   rep(prose);
   prose.querySelectorAll('a[href]').forEach(function(a){
     var h=a.getAttribute('href');
@@ -488,22 +490,24 @@ if(prose){
 				if (!prose || !navInner || !nav) return;
 
 				// h2 を収集してナビリンクを生成
-				const headings = [...prose.querySelectorAll('h2')];
+				// .prose は flex + order で並べ替えているため、DOM順ではなく表示位置順にする
+				const headings = [...prose.querySelectorAll('h2')]
+					.sort((a, b) => a.getBoundingClientRect().top - b.getBoundingClientRect().top);
 				if (headings.length === 0) {
 					nav.style.display = 'none';
 					return;
 				}
 				const NAV_SHORT: Record<string, string> = (document.documentElement.lang === 'en') ? {
 					'Base Stats': 'Stats', 'Mega Evolution': 'Mega', 'Type Matchup': 'Type',
-					'Abilities': 'Ability', 'Usage Data': 'Usage', 'Natures': 'Nature',
+					'Abilities': 'Ability', 'Usage Data': 'Usage', 'Learnable Moves': 'Moves', 'Natures': 'Nature',
 					'Partners': 'Partners', 'Analysis Articles': 'Analysis',
 				} : (document.documentElement.lang === 'ko') ? {
 					'종족값': '종족값', '메가진화': '메가', '타입 상성': '상성',
-					'특성': '특성', '사용률 데이터': '사용률', '성격': '성격',
+					'특성': '특성', '사용률 데이터': '사용률', '배우는 기술': '기술', '성격': '성격',
 					'파트너': '파트너', '분석 기사': '분석',
 				} : {
 					'メガシンカ': 'メガ', 'タイプ相性': '相性',
-					'使用率データ': '使用率', '考察記事': '考察',
+					'使用率データ': '使用率', '覚える技': '技', '考察記事': '考察',
 				};
 				headings.forEach((h, i) => {
 					if (!h.id) h.id = `sec-${i}`;

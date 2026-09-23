@@ -1,0 +1,421 @@
+---
+/**
+ * ポケモン情報ページの「覚える技」セクション。
+ *
+ * 1体あたり平均50技・最大85技あり、そのまま出すとページが倍近く伸びるので
+ * 既定では上位8行だけ見せて残りを折りたたむ（CSSの nth-child で初期表示から
+ * 畳んでおり、JS到達前に一瞬全件出てガタつくことはない）。絞り込み・並べ替えを
+ * 操作した時点で自動的に全件展開する。
+ *
+ * データは scripts/gen_learnset_data.py が DB から生成する src/data/*.json。
+ * キーはページ側の dexNumber/imageForm と同じアイコンID（例: 0681-00）。
+ */
+import learnsetData from '../data/learnsets.json';
+import moveDetailsData from '../data/move-details.json';
+import { MOVE_NAME_EN, MOVE_NAME_KO } from '../i18n/game-terms';
+
+interface Props {
+  /** dexNumber(4桁ゼロ埋め)-imageForm。例: 0681-00 */
+  icon: string;
+  lang: 'ja' | 'en' | 'ko';
+}
+const { icon, lang } = Astro.props;
+
+type Detail = { t: string; c: string; p?: number; a?: number; pp?: number; e?: string; en?: string };
+type Entry = { m: string[]; u: Record<string, number> };
+
+const entry = (learnsetData as Record<string, Entry>)[icon];
+const DETAILS = moveDetailsData as Record<string, Detail>;
+
+const TYPEICON: Record<string, [string, string]> = {
+  ノーマル: ['00', 'normal'], かくとう: ['01', 'fighting'], ひこう: ['02', 'flying'],
+  どく: ['03', 'poison'], じめん: ['04', 'ground'], いわ: ['05', 'rock'],
+  むし: ['06', 'bug'], ゴースト: ['07', 'ghost'], はがね: ['08', 'steel'],
+  ほのお: ['09', 'fire'], みず: ['10', 'water'], くさ: ['11', 'grass'],
+  でんき: ['12', 'electric'], エスパー: ['13', 'psychic'], こおり: ['14', 'ice'],
+  ドラゴン: ['15', 'dragon'], あく: ['16', 'dark'], フェアリー: ['17', 'fairy'],
+};
+const TYPE_LABEL: Record<'en' | 'ko', Record<string, string>> = {
+  en: { ノーマル: 'Normal', かくとう: 'Fighting', ひこう: 'Flying', どく: 'Poison', じめん: 'Ground', いわ: 'Rock', むし: 'Bug', ゴースト: 'Ghost', はがね: 'Steel', ほのお: 'Fire', みず: 'Water', くさ: 'Grass', でんき: 'Electric', エスパー: 'Psychic', こおり: 'Ice', ドラゴン: 'Dragon', あく: 'Dark', フェアリー: 'Fairy' },
+  ko: { ノーマル: '노말', かくとう: '격투', ひこう: '비행', どく: '독', じめん: '땅', いわ: '바위', むし: '벌레', ゴースト: '고스트', はがね: '강철', ほのお: '불꽃', みず: '물', くさ: '풀', でんき: '전기', エスパー: '에스퍼', こおり: '얼음', ドラゴン: '드래곤', あく: '악', フェアリー: '페어리' },
+};
+
+const T = {
+  ja: {
+    heading: '覚える技', all: 'すべて', physical: '物理', special: '特殊', status: '変化',
+    search: '技名で検索', sortUsage: '採用率順', sortKana: '50音順', sortPower: '威力順', sortAcc: '命中順',
+    move: '技名', type: 'タイプ', cat: '分類', power: '威力', acc: '命中', pp: 'PP', usage: '採用率',
+    count: (n: number) => `全${n}技`,
+    more: (n: number) => `残り${n}技を表示`, less: '折りたたむ', none: '該当する技がありません',
+    typeFilter: 'タイプで絞り込み',
+  },
+  en: {
+    heading: 'Learnable Moves', all: 'All', physical: 'Physical', special: 'Special', status: 'Status',
+    search: 'Search moves', sortUsage: 'By usage', sortKana: 'A–Z', sortPower: 'By power', sortAcc: 'By accuracy',
+    move: 'Move', type: 'Type', cat: 'Class', power: 'Power', acc: 'Acc.', pp: 'PP', usage: 'Usage',
+    count: (n: number) => `${n} moves`,
+    more: (n: number) => `Show ${n} more`, less: 'Collapse', none: 'No matching moves',
+    typeFilter: 'Filter by type',
+  },
+  ko: {
+    heading: '배우는 기술', all: '전체', physical: '물리', special: '특수', status: '변화',
+    search: '기술명 검색', sortUsage: '채용률순', sortKana: '가나다순', sortPower: '위력순', sortAcc: '명중순',
+    move: '기술명', type: '타입', cat: '분류', power: '위력', acc: '명중', pp: 'PP', usage: '채용률',
+    count: (n: number) => `총 ${n}기술`,
+    more: (n: number) => `나머지 ${n}기술 보기`, less: '접기', none: '해당하는 기술이 없습니다',
+    typeFilter: '타입으로 필터',
+  },
+}[lang];
+
+const MOVE_MAP: Record<string, string> = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
+/** 和名→表示名。i18n辞書 → DBの英名(PokeAPI由来) → 和名 の順にフォールバックする。 */
+function moveLabel(jp: string, d: Detail | undefined): string {
+  if (lang === 'ja') return jp;
+  return MOVE_MAP[jp] ?? d?.en ?? jp;
+}
+const catLabel: Record<string, string> = { physical: T.physical, special: T.special, status: T.status };
+/** 検索用キー。カタカナをひらがなに寄せて「しゃどー」で「シャドーボール」に当たるようにする。 */
+const searchKey = (s: string) =>
+  s.replace(/[\u30a1-\u30f6]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60)).toLowerCase();
+
+/** 既定の並びは「採用率の高い順 → 50音順」。m[]が50音順なので安定ソートで済む。
+ * kanaIdx は m[] での位置＝50音順の順位。並べ替えをJS側でやる際のタイブレークと
+ * 「50音順」ソートに使うので、採用率ソートの前に採番しておく。 */
+const rows = (entry?.m ?? []).map((jp, kanaIdx) => {
+  const d = DETAILS[jp];
+  return {
+    jp,
+    kanaIdx,
+    label: moveLabel(jp, d),
+    type: d?.t ?? '',
+    cat: d?.c ?? '',
+    power: d?.p ?? 0,
+    acc: d?.a ?? 0,
+    pp: d?.pp ?? 0,
+    effect: lang === 'ja' ? (d?.e ?? '') : '',
+    usage: entry?.u[jp] ?? 0,
+  };
+}).sort((a, b) => b.usage - a.usage);
+
+const COLLAPSE_ROWS = 8;
+const total = rows.length;
+const typesPresent = [...new Set(rows.map((r) => r.type).filter(Boolean))]
+  .sort((a, b) => (TYPEICON[a]?.[0] ?? '').localeCompare(TYPEICON[b]?.[0] ?? ''));
+const catCounts = {
+  physical: rows.filter((r) => r.cat === 'physical').length,
+  special: rows.filter((r) => r.cat === 'special').length,
+  status: rows.filter((r) => r.cat === 'status').length,
+};
+const typeText = (t: string) => (lang === 'ja' ? t : TYPE_LABEL[lang][t] ?? t);
+/** 折りたたみが要らない短さ(メタモンの「へんしん」1件など)では絞り込みUIも出さない。 */
+const needsControls = total > COLLAPSE_ROWS;
+---
+
+{total > 0 && (
+  <section class="lrn-section" data-collapsed={needsControls ? "true" : undefined} data-collapse-rows={COLLAPSE_ROWS}>
+    <h2>{T.heading}</h2>
+
+    {needsControls && (
+    <div class="lrn-bar">
+      <input type="search" class="lrn-search" placeholder={T.search} aria-label={T.search} />
+      <div class="lrn-chips" role="group" aria-label={T.cat}>
+        <button type="button" class="lrn-chip is-on" data-cat="all">{T.all} <b>{total}</b></button>
+        {catCounts.physical > 0 && <button type="button" class="lrn-chip lrn-c-physical" data-cat="physical">{T.physical} <b>{catCounts.physical}</b></button>}
+        {catCounts.special > 0 && <button type="button" class="lrn-chip lrn-c-special" data-cat="special">{T.special} <b>{catCounts.special}</b></button>}
+        {catCounts.status > 0 && <button type="button" class="lrn-chip lrn-c-status" data-cat="status">{T.status} <b>{catCounts.status}</b></button>}
+      </div>
+      <select class="lrn-sort" aria-label={T.sortUsage}>
+        <option value="usage">{T.sortUsage}</option>
+        <option value="kana">{T.sortKana}</option>
+        <option value="power">{T.sortPower}</option>
+        <option value="acc">{T.sortAcc}</option>
+      </select>
+    </div>
+    )}
+
+    {needsControls && (
+    <div class="lrn-types" role="group" aria-label={T.typeFilter}>
+      {typesPresent.map((t) => (
+        <button type="button" class="lrn-tbtn" data-type={t} title={typeText(t)} aria-label={typeText(t)} aria-pressed="false">
+          <img src={`/images/types/type-${TYPEICON[t][0]}-${TYPEICON[t][1]}.png`} alt={typeText(t)} width="22" height="22" loading="lazy" />
+        </button>
+      ))}
+    </div>
+    )}
+
+    <div class="lrn-wrap">
+      <table class="lrn-table">
+        <thead>
+          <tr>
+            <th class="lrn-th-name">{T.move}</th>
+            <th class="lrn-th-type">{T.type}</th>
+            <th class="lrn-th-cat">{T.cat}</th>
+            <th class="lrn-num">{T.power}</th>
+            <th class="lrn-num lrn-acc">{T.acc}</th>
+            <th class="lrn-num lrn-pp">{T.pp}</th>
+            <th class="lrn-num">{T.usage}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr
+              data-k={r.kanaIdx}
+              data-cat={r.cat}
+              data-type={r.type}
+              data-u={r.usage}
+              data-p={r.power}
+              data-a={r.acc}
+              data-q={searchKey(`${r.jp} ${r.label}`)}
+            >
+              <td class="lrn-name">
+                <span class="lrn-mv">{r.label}</span>
+                {r.effect && <span class="lrn-eff">{r.effect}</span>}
+              </td>
+              <td class="lrn-type">
+                {r.type && <img src={`/images/types/type-${TYPEICON[r.type][0]}-${TYPEICON[r.type][1]}.png`} alt={typeText(r.type)} width="22" height="22" loading="lazy" />}
+              </td>
+              <td>
+                {r.cat && <span class={`lrn-cat lrn-c-${r.cat}`}>{catLabel[r.cat] ?? r.cat}</span>}
+              </td>
+              <td class="lrn-num">{r.power || '—'}</td>
+              <td class="lrn-num lrn-acc">{r.acc || '—'}</td>
+              <td class="lrn-num lrn-pp">{r.pp || '—'}</td>
+              <td class="lrn-num">{r.usage ? <span class="lrn-use">{r.usage}%</span> : <span class="lrn-dash">—</span>}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="lrn-empty" hidden>{T.none}</p>
+      <div class="lrn-fade" aria-hidden="true"></div>
+    </div>
+
+    {needsControls && (
+    <button type="button" class="lrn-toggle" aria-expanded="false">
+      <span class="lrn-toggle-more">{T.more(Math.max(total - COLLAPSE_ROWS, 0))}</span>
+      <span class="lrn-toggle-less">{T.less}</span>
+    </button>
+    )}
+
+  </section>
+)}
+
+<style>
+  .lrn-section { margin: 1.5rem 0; }
+  .lrn-bar {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 8px;
+  }
+  .lrn-search {
+    flex: 1 1 150px; min-width: 0; padding: 6px 10px; font-size: 0.82rem;
+    border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; color: #0f172a;
+  }
+  .lrn-search:focus { outline: 2px solid #fdba74; outline-offset: -1px; border-color: #fdba74; }
+  .lrn-chips { display: flex; gap: 4px; flex-wrap: wrap; }
+  .lrn-chip {
+    padding: 5px 10px; font-size: 0.78rem; font-weight: 700; color: #475569;
+    background: #fff; border: 1px solid #e2e8f0; border-radius: 9999px; cursor: pointer;
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .lrn-chip b { font-weight: 700; color: #94a3b8; font-size: 0.92em; margin-left: 2px; }
+  .lrn-chip:hover { border-color: #cbd5e1; background: #f8fafc; }
+  .lrn-chip.is-on { background: #fff7ed; border-color: #fdba74; color: #c2410c; }
+  .lrn-chip.is-on b { color: #ea7c3c; }
+  .lrn-sort {
+    padding: 6px 8px; font-size: 0.78rem; font-weight: 600; color: #475569;
+    border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; cursor: pointer;
+  }
+  .lrn-types { display: flex; flex-wrap: wrap; gap: 3px; margin: 0 0 10px; }
+  .lrn-tbtn {
+    display: inline-flex; padding: 2px; border: 1px solid transparent; border-radius: 6px;
+    background: none; cursor: pointer; opacity: .55; transition: opacity .15s, border-color .15s, background .15s;
+  }
+  .lrn-tbtn:hover { opacity: .85; background: #f8fafc; }
+  .lrn-tbtn[aria-pressed='true'] { opacity: 1; border-color: #fdba74; background: #fff7ed; }
+  .lrn-tbtn img { display: block; width: 22px; height: 22px; }
+
+  .lrn-wrap { position: relative; overflow-x: auto; }
+  .lrn-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  .lrn-table th {
+    background: #f1f5f9; color: #475569; font-size: 0.75rem; font-weight: 700;
+    text-align: center; padding: 6px 8px; border: 1px solid #e2e8f0; white-space: nowrap;
+  }
+  .lrn-table th.lrn-th-name { text-align: left; }
+  .lrn-table td { padding: 5px 8px; border: 1px solid #e2e8f0; vertical-align: middle; }
+  .lrn-name { min-width: 8em; }
+  .lrn-mv { display: block; font-weight: 600; color: #0f172a; }
+  .lrn-eff {
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    font-size: 0.74rem; color: #64748b; line-height: 1.35; margin-top: 1px;
+  }
+  .lrn-type { text-align: center; width: 40px; }
+  .lrn-type img { display: inline-block; width: 22px; height: 22px; vertical-align: middle; }
+  .lrn-num { text-align: right; white-space: nowrap; width: 3.4em; color: #334155; }
+  .lrn-dash { color: #cbd5e1; }
+  .lrn-use { font-weight: 700; color: #c2410c; }
+  .lrn-cat {
+    display: inline-block; padding: 1px 6px; border-radius: 4px;
+    font-size: 0.7rem; font-weight: 700; color: #fff; white-space: nowrap;
+  }
+  .lrn-c-physical { background: #ef4444; }
+  .lrn-c-special { background: #3b82f6; }
+  .lrn-c-status { background: #10b981; }
+  .lrn-chip.lrn-c-physical, .lrn-chip.lrn-c-special, .lrn-chip.lrn-c-status {
+    background: #fff; color: #475569;
+  }
+  .lrn-chip.lrn-c-physical.is-on { background: #fef2f2; border-color: #fca5a5; color: #b91c1c; }
+  .lrn-chip.lrn-c-special.is-on { background: #eff6ff; border-color: #93c5fd; color: #1d4ed8; }
+  .lrn-chip.lrn-c-status.is-on { background: #ecfdf5; border-color: #6ee7b7; color: #047857; }
+  .lrn-chip.lrn-c-physical.is-on b { color: #ef4444; }
+  .lrn-chip.lrn-c-special.is-on b { color: #3b82f6; }
+  .lrn-chip.lrn-c-status.is-on b { color: #10b981; }
+
+  /* 折りたたみ: JS到達前からCSSだけで畳んでおく（ガタつき防止）。
+     n+9 は COLLAPSE_ROWS(8) + 1 と対応させること。 */
+  .lrn-section[data-collapsed] .lrn-table tbody tr:nth-child(n + 9) { display: none; }
+  .lrn-fade {
+    display: none; position: absolute; left: 0; right: 0; bottom: 0; height: 44px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), #fff 85%); pointer-events: none;
+  }
+  .lrn-section[data-collapsed] .lrn-fade { display: block; }
+
+  .lrn-toggle {
+    display: block; width: 100%; margin-top: 6px; padding: 9px 12px;
+    font-size: 0.82rem; font-weight: 700; color: #c2410c;
+    background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; cursor: pointer;
+    transition: background .15s, border-color .15s;
+  }
+  .lrn-toggle:hover { background: #ffedd5; border-color: #fdba74; }
+  .lrn-toggle::after { content: ' ▾'; }
+  .lrn-section:not([data-collapsed]) .lrn-toggle::after { content: ' ▴'; }
+  .lrn-toggle-less { display: none; }
+  .lrn-section:not([data-collapsed]) .lrn-toggle-more { display: none; }
+  .lrn-section:not([data-collapsed]) .lrn-toggle-less { display: inline; }
+
+  .lrn-empty { margin: 10px 0; font-size: 0.82rem; color: #94a3b8; text-align: center; }
+
+  /* 狭い画面では数値列を削って技名＋効果に幅を回す(PP・命中は情報量の割に
+     横幅を食うため。威力・タイプ・分類・採用率は残す)。 */
+  @media (max-width: 720px) {
+    .lrn-table { font-size: 0.8rem; }
+    .lrn-table td, .lrn-table th { padding: 4px 5px; }
+    .lrn-pp, .lrn-acc { display: none; }
+    .lrn-search { flex-basis: 100%; }
+    .lrn-num { width: 2.8em; }
+  }
+</style>
+
+<script>
+  (function () {
+    document.querySelectorAll('.lrn-section').forEach((sec) => {
+      const tbody = sec.querySelector('.lrn-table tbody');
+      const toggle = sec.querySelector('.lrn-toggle');
+      // 短い一覧では折りたたみ・絞り込みUIを出していないので、初期状態のまま何もしない
+      if (!toggle) { sec.removeAttribute('data-collapsed'); return; }
+      const search = sec.querySelector('.lrn-search');
+      const sortSel = sec.querySelector('.lrn-sort');
+      const empty = sec.querySelector('.lrn-empty');
+      if (!tbody) return;
+
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      /** 並べ替え後の表示順。折りたたみ時に「先頭limit件」を決めるのはDOM順なので、
+       * 初期配列のままだとソートしても畳まれる行が変わらない。 */
+      let ordered = rows.slice();
+      const limit = Number(sec.dataset.collapseRows || 8);
+      const moreLabel = sec.querySelector('.lrn-toggle-more');
+      const moreTpl = moreLabel ? moreLabel.textContent || '' : '';
+      let cat = 'all';
+      const types = new Set();
+
+      const num = (tr, key) => Number(tr.dataset[key] || 0);
+      const searchKey = (v) =>
+        v.replace(/[\u30a1-\u30f6]/g, (c) => String.fromCharCode(c.charCodeAt(0) - 0x60)).toLowerCase();
+
+      /** 絞り込み操作の直後だけ自動展開する。apply()の中でやると「絞り込み中は
+       * 折りたたみボタンが効かない」状態になるため、操作ハンドラ側に置く。 */
+      function filterChanged() {
+        const q = (search && search.value ? search.value : '').trim();
+        if (q || cat !== 'all' || types.size) {
+          sec.removeAttribute('data-collapsed');
+          toggle.setAttribute('aria-expanded', 'true');
+        }
+        apply();
+      }
+
+      function apply() {
+        const q = searchKey((search && search.value ? search.value : '').trim());
+        let shown = 0;
+        ordered.forEach((tr) => {
+          const ok =
+            (cat === 'all' || tr.dataset.cat === cat) &&
+            (types.size === 0 || types.has(tr.dataset.type)) &&
+            (!q || (tr.dataset.q || '').includes(q));
+          tr.hidden = !ok;
+          if (ok) shown++;
+        });
+        if (empty) empty.hidden = shown > 0;
+
+        const collapsed = sec.hasAttribute('data-collapsed');
+        // 折りたたみ中の nth-child はDOM順基準なので、hidden行がある間は使わず
+        // ここで明示的に「表示中の先頭limit件」だけ残す
+        if (collapsed) {
+          let n = 0;
+          ordered.forEach((tr) => {
+            if (tr.hidden) return;
+            n++;
+            if (n > limit) tr.hidden = true;
+          });
+        }
+        if (moreLabel) {
+          const rest = Math.max(shown - limit, 0);
+          moreLabel.textContent = moreTpl.replace(/\d+/, String(rest));
+        }
+        toggle.hidden = shown <= limit && sec.hasAttribute('data-collapsed');
+      }
+
+      function sortRows(mode) {
+        const cmp = {
+          usage: (a, b) => num(b, 'u') - num(a, 'u') || num(a, 'k') - num(b, 'k'),
+          kana: (a, b) => num(a, 'k') - num(b, 'k'),
+          power: (a, b) => num(b, 'p') - num(a, 'p') || num(a, 'k') - num(b, 'k'),
+          acc: (a, b) => num(b, 'a') - num(a, 'a') || num(a, 'k') - num(b, 'k'),
+        }[mode];
+        if (!cmp) return;
+        ordered = rows.slice().sort(cmp);
+        const frag = document.createDocumentFragment();
+        ordered.forEach((tr) => frag.appendChild(tr));
+        tbody.appendChild(frag);
+      }
+
+      toggle.addEventListener('click', () => {
+        const collapsed = sec.hasAttribute('data-collapsed');
+        if (collapsed) sec.removeAttribute('data-collapsed');
+        else sec.setAttribute('data-collapsed', 'true');
+        toggle.setAttribute('aria-expanded', String(collapsed));
+        apply();
+      });
+
+      sec.querySelectorAll('.lrn-chip').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          cat = btn.dataset.cat || 'all';
+          sec.querySelectorAll('.lrn-chip').forEach((b) => b.classList.toggle('is-on', b === btn));
+          filterChanged();
+        });
+      });
+
+      sec.querySelectorAll('.lrn-tbtn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const t = btn.dataset.type;
+          if (!t) return;
+          if (types.has(t)) types.delete(t);
+          else types.add(t);
+          btn.setAttribute('aria-pressed', String(types.has(t)));
+          filterChanged();
+        });
+      });
+
+      if (search) search.addEventListener('input', filterChanged);
+      if (sortSel) sortSel.addEventListener('change', () => { sortRows(sortSel.value); apply(); });
+
+      apply();
+    });
+  })();
+</script>

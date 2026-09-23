@@ -700,6 +700,8 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 ---
 
+<div class="pn-analysis">
+
 ## 考察記事
 
 <a href="/blog/azumarill-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
@@ -709,3 +711,4 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">マリルリ考察 M-2 使用率68位 はらだいことアクアジェットの先制全抜き</div>
   </div>
 </a>
+</div>

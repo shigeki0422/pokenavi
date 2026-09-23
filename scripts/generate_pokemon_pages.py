@@ -263,6 +263,12 @@ def resolve_analysis_slugs(file_stem, manual):
 # 新しい考察記事を公開したら、必ずここの "analysis" を更新してから再生成すること。
 # 更新を忘れると公開済みのM-3リンクが消える（実際に発生）。
 POKEMON_DATA = {
+    "オオニューラ": {
+        "file": "sneasler", "dex": 903, "id": "0903-00",
+        "types": ['かくとう', 'どく'],
+        "stats": [80, 130, 60, 40, 80, 120],
+        "analysis": ["sneasler-analysis-m6"],
+    },
     "イキリンコ(イエロー)": {
         "file": "squawkabilly-yellow", "dex": 931, "id": "0931-02",
         "types": ['ノーマル', 'ひこう'],
@@ -2667,10 +2673,14 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   </div>
 </a>
 '''
+        # ページ内の並び順（覚える技→考察記事）をCSSのorderで制御するための目印
         section_analysis = f"""
+<div class="pn-analysis">
+
 ## 考察記事
 
-{cards}"""
+{cards}
+</div>"""
 
     section_mega = generate_mega_section(pokemon_name, types, stats)
 
@@ -2906,6 +2916,7 @@ TARGET_POKEMON_ALL = [
     ("カモネギ", 186),
     ("オトスパス", 198),
     ("イキリンコ(イエロー)", 174),
+    ("オオニューラ", 19),
 ]
 TARGET_POKEMON = TARGET_POKEMON_ALL
 

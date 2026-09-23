@@ -52,6 +52,7 @@ python3 scripts/insert_detail_from_journal.py
 python3 scripts/generate_pokemon_pages.py
 python3 scripts/inject_faq_frontmatter.py
 python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成
+python3 scripts/gen_learnset_data.py  # ポケモン情報ページ「覚える技」用データ(gen_builder_data.py の後に実行)
 ```
 
 ### 8. ローカル確認

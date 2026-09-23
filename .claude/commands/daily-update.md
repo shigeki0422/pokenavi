@@ -30,6 +30,7 @@ python3 scripts/generate_ranking_json.py
 python3 scripts/generate_pokemon_pages.py
 python3 scripts/inject_faq_frontmatter.py   # FAQ(構造化データ)を再注入。ページ再生成で消えるため必須
 python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成
+python3 scripts/gen_learnset_data.py  # ポケモン情報ページ「覚える技」用データ(gen_builder_data.py の後に実行)
 ```
 
 ### 5. localhost で確認（ユーザーが確認・承認するまで待機）
@@ -45,7 +46,7 @@ npm run build
 
 ### 7. コミット＆デプロイ（ユーザーの承認後のみ実行）
 ```bash
-git add src/data/ranking.json src/content/pokemon/ && \
+git add src/data/ranking.json src/data/learnsets.json src/data/move-details.json src/content/pokemon/ && \
 git commit -m "feat: $(date +%m/%d)クロールデータ反映（使用率ランキング・ポケモン情報ページ更新）" && \
 git push origin main && \
 npx wrangler pages deploy dist --project-name pokenavi --branch main
