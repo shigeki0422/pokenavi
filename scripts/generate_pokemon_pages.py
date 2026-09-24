@@ -269,6 +269,31 @@ POKEMON_DATA = {
         "stats": [80, 130, 60, 40, 80, 120],
         "analysis": ["sneasler-analysis-m6"],
     },
+    "バリヤード": {
+        "file": "mr-mime", "dex": 122, "id": "0122-00",
+        "types": ['エスパー', 'フェアリー'],
+        "stats": [40, 45, 65, 100, 120, 90],
+    },
+    "ゴーゴート": {
+        "file": "gogoat", "dex": 673, "id": "0673-00",
+        "types": ['くさ'],
+        "stats": [123, 100, 62, 97, 81, 68],
+    },
+    "ニャイキング": {
+        "file": "perrserker", "dex": 863, "id": "0863-00",
+        "types": ['はがね'],
+        "stats": [70, 110, 100, 50, 60, 50],
+    },
+    "イキリンコ(ブルー)": {
+        "file": "squawkabilly-blue", "dex": 931, "id": "0931-01",
+        "types": ['ノーマル', 'ひこう'],
+        "stats": [82, 96, 51, 45, 51, 92],
+    },
+    "イキリンコ(ホワイト)": {
+        "file": "squawkabilly-white", "dex": 931, "id": "0931-03",
+        "types": ['ノーマル', 'ひこう'],
+        "stats": [82, 96, 51, 45, 51, 92],
+    },
     "イキリンコ(イエロー)": {
         "file": "squawkabilly-yellow", "dex": 931, "id": "0931-02",
         "types": ['ノーマル', 'ひこう'],
@@ -2139,17 +2164,23 @@ def get_partner_rank_history(conn, pokemon: str, dates: list) -> dict:
 
 
 def known_abilities(conn, pokemon: str) -> list:
-    """当季の採用率が無い(圏外)ポケモン向けに、特性名だけを直近クロール日から拾う。
-    採用率は当季のものではないのでページ側ではハイフン表示にする。"""
+    """当季の採用率が無い(圏外)ポケモン向けに特性名だけを拾う。
+    採用率は当季のものではないのでページ側ではハイフン表示にする。
+
+    まず過去のクロール実績を使う。チャンピオンズで実際に使われた特性が正であり、
+    PokeAPI由来の種族特性リストは一部のフォルム(ヒスイ種など)で本編の値になって
+    いるため。一度もランクインしていないポケモンだけ種族特性リストに落とす。"""
     d = conn.execute(
         "SELECT MAX(crawled_date) FROM pokemon_abilities WHERE rule='single' AND pokemon=?",
         (pokemon,)
     ).fetchone()[0]
-    if not d:
-        return []
+    if d:
+        return [r[0] for r in conn.execute(
+            "SELECT ability FROM pokemon_abilities WHERE rule='single' AND pokemon=? AND crawled_date=? "
+            "ORDER BY usage_rate DESC", (pokemon, d)
+        )]
     return [r[0] for r in conn.execute(
-        "SELECT ability FROM pokemon_abilities WHERE rule='single' AND pokemon=? AND crawled_date=? "
-        "ORDER BY usage_rate DESC", (pokemon, d)
+        "SELECT ability FROM pokemon_species_abilities WHERE pokemon_name=? ORDER BY slot", (pokemon,)
     )]
 
 
@@ -2189,8 +2220,11 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
 
     conn = get_conn()
 
-    # 集計日
-    date = latest(conn, "pokemon_moves", pokemon_name) or "2026-05-24"
+    # 集計日（採用率データが1件も無いポケモンは集計日自体が意味を持たないので出さない）
+    date = latest(conn, "pokemon_moves", pokemon_name)
+    date_line = (f'<div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：{date}</div>'
+                 if date else '')
+    date = date or "2026-05-24"
 
     # 各データ取得
     moves = query_db(conn, "pokemon_moves", pokemon_name, "move")
@@ -2260,7 +2294,11 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
     # ---- フロントマター ----
     type_str = "/".join(types)
     rank_str = "圏外" if usage_rank > 200 else f"{usage_rank}位"
-    desc = f"ポケモンチャンピオンズの{display_name}基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率{rank_str}。"
+    # 圏外(200位外)は技・持ち物などの採用率データ自体が無いので、あるものだけ書く
+    desc = (f"ポケモンチャンピオンズの{display_name}基礎データ。種族値・タイプ相性・特性と、"
+            f"技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率{rank_str}。"
+            if usage_rank <= 200 else
+            f"ポケモンチャンピオンズの{display_name}基礎データ。種族値・タイプ相性・特性・覚える技を掲載。使用率圏外。")
     id_form = pdata["id"].split("-")[1]
     image_form_line = f"\nimageForm: '{id_form}'" if id_form != "00" else ""
     front = f"""---
@@ -2289,7 +2327,7 @@ draft: false
     <div style="font-size:0.85rem;color:#555">
       全国図鑑 <strong>No.{pdata['dex']}</strong>　／　使用率 <strong style="color:#dc2626">{rank_str}</strong>
     </div>
-    <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：{date}</div>
+    {date_line}
   </div>
 </div>
 
@@ -2357,6 +2395,8 @@ draft: false
 
     RATE_CELL_STYLE = """<style>
 .pn-rate-wrap{position:relative;display:inline-block;width:100%}
+.pn-hover-name{cursor:help}
+.pn-hover-name:hover{background:#f8fafc}
 .pn-popup{display:none;position:fixed;z-index:200;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
 </style>
 <script>
@@ -2364,8 +2404,8 @@ document.addEventListener('DOMContentLoaded',function(){
 document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   var popup=wrap.querySelector('.pn-popup');
   if(!popup)return;
-  function adjust(){
-    var wr=wrap.getBoundingClientRect();
+  function adjust(anchor){
+    var wr=anchor.getBoundingClientRect();
     popup.style.left=wr.left+'px';
     popup.style.right='auto';
     popup.style.top=(wr.bottom+4)+'px';
@@ -2383,15 +2423,22 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     }
     popup.style.visibility='';
   }
-  wrap.addEventListener('mouseenter',function(){adjust();popup.style.display='block';});
-  wrap.addEventListener('mouseleave',function(){popup.style.display='';});
-  wrap.addEventListener('touchstart',function(e){
-    e.preventDefault();
-    adjust();
-    popup.style.display='block';
-    function hide(ev){if(!wrap.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
-    setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
-  });
+  function bind(el){
+    el.addEventListener('mouseenter',function(){adjust(el);popup.style.display='block';});
+    el.addEventListener('mouseleave',function(){popup.style.display='';});
+    el.addEventListener('touchstart',function(e){
+      e.preventDefault();
+      adjust(el);
+      popup.style.display='block';
+      function hide(ev){if(!el.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
+      setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
+    });
+  }
+  bind(wrap);
+  // 採用率セルだけでなく、同じ行の特性名・技名・持ち物セルからも同じ説明を開く
+  var row=wrap.closest('tr');
+  var name=row&&row.querySelector('.pn-hover-name');
+  if(name)bind(name);
 });
 });
 </script>"""
@@ -2408,7 +2455,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
         rate_cell = make_rate_bar_cell(rate, vals, all_ability_dates, effect=desc_text, prev_rate=prev)
         ability_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{ab}</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{ab}</td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1">{rate_cell}</td>
 </tr>
 '''
@@ -2416,7 +2463,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
         bg = ' style="background:#fafafa"' if i % 2 == 0 else ""
         ability_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">{i+1}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">{ab}</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1">{ab}</td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1">{make_dash_cell(get_ability_desc(ab))}</td>
 </tr>
 '''
@@ -2462,7 +2509,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
         rate_cell = make_rate_bar_cell(rate, vals, all_move_dates, effect=get_move_desc(mv), prev_rate=prev)
         move_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}"><div style="display:flex;align-items:center;gap:6px">{icon}{mv}</div></td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}"><div style="display:flex;align-items:center;gap:6px">{icon}{mv}</div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1">{rate_cell}</td>
 </tr>
 '''
@@ -2480,7 +2527,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
         rate_cell = make_rate_bar_cell(rate, vals, all_item_dates, effect=get_item_desc(it), prev_rate=prev)
         item_rows += f'''<tr{bg}>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;{'font-weight:bold' if i==0 else ''}">{i+1}</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{icon_wrap}</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;{'font-weight:bold' if i==0 else ''}">{icon_wrap}</td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1">{rate_cell}</td>
 </tr>
 '''
@@ -2718,6 +2765,12 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 {cards}
 </div>"""
 
+    # 一度もランクインしていないポケモンは採用率データが1件も無い。
+    # 空のテーブルだけが並ぶことになるので「使用率データ」ごと出さない。
+    if not any([moves, items, natures, evs, partners]):
+        section_data = ""
+        section_partners = ""
+
     section_mega = generate_mega_section(pokemon_name, types, stats)
 
     parts = [front, header, section_stats, section_mega, section_type, section_ability]
@@ -2953,6 +3006,12 @@ TARGET_POKEMON_ALL = [
     ("オトスパス", 198),
     ("イキリンコ(イエロー)", 174),
     ("オオニューラ", 19),
+    # 一度もランクインしていないため使用率データは無い(特性・種族値・覚える技のみ)
+    ("バリヤード", 999),
+    ("ゴーゴート", 999),
+    ("ニャイキング", 999),
+    ("イキリンコ(ブルー)", 999),
+    ("イキリンコ(ホワイト)", 999),
 ]
 TARGET_POKEMON = TARGET_POKEMON_ALL
 

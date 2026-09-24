@@ -51,13 +51,23 @@ const pokemonNameDisp = pokemonName ? (POKEMON_MAP[pokemonName] ?? pokemonName) 
  * (src/pages/index.astroと同じ導出)。固定値にするとシーズン更新のたびに
  * 全ポケモンページの説明文が古いまま残るため。 */
 const seasonLabel = Object.keys((rankingData as any).seasons).sort().at(-1)!;
-const metaDescription = pokemonName && usageRank ? (
+/** 圏外(クロール対象の200位外)は usageRank に 999 が入る。そのまま使うと
+ * <title> や meta に「使用率999位」と出てしまうので順位を出さない扱いにする。 */
+const ranked = !!usageRank && usageRank <= 200;
+const metaDescription = !pokemonName ? description : ranked ? (
   lang === 'en'
     ? `${pokemonNameDisp} — Pokémon Champions ${seasonLabel}, Usage Rank #${usageRank}. TOP10 usage rates for moves, held items, abilities & natures. Base stats and type matchup chart included.`
     : lang === 'ko'
     ? `${pokemonNameDisp} 챔피언스${seasonLabel} 사용률 ${usageRank}위 — 기술·지닌물건·특성·성격 채용률 TOP10과 종족값·타입 상성 수록.`
     : `チャンピオンズ${seasonLabel}使用率${usageRank}位${pokemonName}の対戦データ。技・持ち物・特性・性格の採用率TOP10と種族値・タイプ相性を掲載。`
-) : description;
+) : (
+  // 圏外は採用率データが無いので、実際に載っている項目だけを書く
+  lang === 'en'
+    ? `${pokemonNameDisp} — Pokémon Champions ${seasonLabel}. Base stats, type matchup chart, abilities and the full list of learnable moves.`
+    : lang === 'ko'
+    ? `${pokemonNameDisp} — 포켓몬 챔피언스 ${seasonLabel}. 종족값·타입 상성·특성과 배우는 기술 목록 수록.`
+    : `ポケモンチャンピオンズ${seasonLabel}の${pokemonName}の基礎データ。種族値・タイプ相性・特性と覚える技の一覧を掲載。`
+);
 const T = {
   ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる', quickBuild: (n: string) => `${n}を軸にした簡単構築`, quickBuildMega: (n: string) => `メガ${n}を軸にした簡単構築`, quickBuildMegaVariant: (n: string, v: string) => `メガ${n}${v}を軸にした簡単構築`, counters: (n: string) => `${n}対策 — 有利を取れるポケモンを見る` },
   en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', quickBuild: (n: string) => `Quick Build from ${n}`, quickBuildMega: (n: string) => `Quick Build from Mega ${n}`, quickBuildMegaVariant: (n: string, v: string) => `Quick Build from Mega ${n} ${v}`, counters: (n: string) => `Counters to ${n}` },
@@ -68,14 +78,18 @@ const T = {
  * ここでlang別に組み立て直す。 */
 /** contentのtitleは固定文のためシーズンも順位も入らず、「ポケモン名＋チャンピオンズ」
  * のような検索意図に対して弱い。ここで最新シーズンと使用率順位を差し込む。 */
-const rankText = usageRank ? `使用率${usageRank}位` : '';
-const pageTitle = pokemonNameDisp
+const rankText = ranked ? `使用率${usageRank}位` : '';
+const pageTitle = !pokemonNameDisp ? title : ranked
   ? (lang === 'en'
-      ? `${pokemonNameDisp} | Pokémon Champions ${seasonLabel}${usageRank ? ` Usage Rank #${usageRank}` : ''} Usage & Base Stats`
+      ? `${pokemonNameDisp} | Pokémon Champions ${seasonLabel} Usage Rank #${usageRank} Usage & Base Stats`
       : lang === 'ko'
-      ? `${pokemonNameDisp} | 포켓몬 챔피언스 ${seasonLabel}${usageRank ? ` 사용률 ${usageRank}위` : ''}・기초 데이터`
-      : `${pokemonNameDisp} ポケモンチャンピオンズ${seasonLabel}${rankText ? ` ${rankText}` : ''}｜技・持ち物・特性の採用率と種族値`)
-  : title;
+      ? `${pokemonNameDisp} | 포켓몬 챔피언스 ${seasonLabel} 사용률 ${usageRank}위・기초 데이터`
+      : `${pokemonNameDisp} ポケモンチャンピオンズ${seasonLabel} ${rankText}｜技・持ち物・特性の採用率と種族値`)
+  : (lang === 'en'
+      ? `${pokemonNameDisp} | Pokémon Champions ${seasonLabel} Base Stats & Learnable Moves`
+      : lang === 'ko'
+      ? `${pokemonNameDisp} | 포켓몬 챔피언스 ${seasonLabel} 종족값・배우는 기술`
+      : `${pokemonNameDisp} ポケモンチャンピオンズ${seasonLabel}｜種族値・タイプ相性・特性・覚える技`);
 const quickBuildHref = lang === 'ja' ? `/party-suggest/${pokemonSlug}/` : `${pfx}/party-suggest/?core=${encodeURIComponent(pokemonName ?? '')}`;
 const quickBuildMegaHref = lang === 'ja' ? `/party-suggest/mega-${pokemonSlug}/` : `${pfx}/party-suggest/?core=${encodeURIComponent('メガ' + (pokemonName ?? ''))}`;
 const quickBuildMegaVariantHref = (suffix: 'x' | 'y') =>

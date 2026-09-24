@@ -10,6 +10,7 @@ pokemon_learnsets テーブルは和名キーだが、フォーム表記がペ�
 public/builder-data/mon/*.json が持つ「アイコンID→DB和名」の対応を正本として使う
 (party-builderの技プールと同じ集合になるため、ページと工房で食い違わない)。
 """
+import importlib.util
 import json
 import os
 import sqlite3
@@ -50,12 +51,22 @@ def main() -> int:
     used: set[str] = set()
     empty: list[str] = []
 
+    # アイコンID→DB和名。工房データに無いポケモン(一度もランクインしていない種)は
+    # ページ生成側の POKEMON_DATA から補う。
+    icon_to_name: dict[str, str] = {}
     for path in sorted(MON_DIR.glob("*.json")):
         icon = path.stem
         if "-" not in icon:
             continue  # 旧形式の残骸(711.json 等)は無視
-        mon = json.loads(path.read_text(encoding="utf-8"))
-        name = NAME_ALIAS.get(icon) or mon.get("n")
+        icon_to_name[icon] = json.loads(path.read_text(encoding="utf-8")).get("n")
+    spec = importlib.util.spec_from_file_location("gp", ROOT / "scripts" / "generate_pokemon_pages.py")
+    gp = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(gp)
+    for jp, p in gp.POKEMON_DATA.items():
+        icon_to_name.setdefault(p["id"], jp)
+
+    for icon in sorted(icon_to_name):
+        name = NAME_ALIAS.get(icon) or icon_to_name[icon]
         moves = sorted(
             {r[0] for r in con.execute(
                 "SELECT move_jp FROM pokemon_learnsets WHERE pokemon_name=?", (name,))},

@@ -1,6 +1,6 @@
 ---
 title: 'ヤレユータン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのヤレユータン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率圏外。'
+description: 'ポケモンチャンピオンズのヤレユータン基礎データ。種族値・タイプ相性・特性・覚える技を掲載。使用率圏外。'
 pokemonName: 'ヤレユータン'
 dexNumber: 765
 usageRank: 999
@@ -20,7 +20,7 @@ draft: false
     <div style="font-size:0.85rem;color:#555">
       全国図鑑 <strong>No.765</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
     </div>
-    <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-05-24</div>
+    
   </div>
 </div>
 
@@ -112,6 +112,8 @@ draft: false
 
 <style>
 .pn-rate-wrap{position:relative;display:inline-block;width:100%}
+.pn-hover-name{cursor:help}
+.pn-hover-name:hover{background:#f8fafc}
 .pn-popup{display:none;position:fixed;z-index:200;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
 </style>
 <script>
@@ -119,8 +121,8 @@ document.addEventListener('DOMContentLoaded',function(){
 document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
   var popup=wrap.querySelector('.pn-popup');
   if(!popup)return;
-  function adjust(){
-    var wr=wrap.getBoundingClientRect();
+  function adjust(anchor){
+    var wr=anchor.getBoundingClientRect();
     popup.style.left=wr.left+'px';
     popup.style.right='auto';
     popup.style.top=(wr.bottom+4)+'px';
@@ -138,15 +140,22 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     }
     popup.style.visibility='';
   }
-  wrap.addEventListener('mouseenter',function(){adjust();popup.style.display='block';});
-  wrap.addEventListener('mouseleave',function(){popup.style.display='';});
-  wrap.addEventListener('touchstart',function(e){
-    e.preventDefault();
-    adjust();
-    popup.style.display='block';
-    function hide(ev){if(!wrap.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
-    setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
-  });
+  function bind(el){
+    el.addEventListener('mouseenter',function(){adjust(el);popup.style.display='block';});
+    el.addEventListener('mouseleave',function(){popup.style.display='';});
+    el.addEventListener('touchstart',function(e){
+      e.preventDefault();
+      adjust(el);
+      popup.style.display='block';
+      function hide(ev){if(!el.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
+      setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
+    });
+  }
+  bind(wrap);
+  // 採用率セルだけでなく、同じ行の特性名・技名・持ち物セルからも同じ説明を開く
+  var row=wrap.closest('tr');
+  var name=row&&row.querySelector('.pn-hover-name');
+  if(name)bind(name);
 });
 });
 </script>
@@ -163,17 +172,17 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 <tbody>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">1</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">せいしんりょく</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1">せいしんりょく</td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">相手の攻撃にひるまず、いかくも効かない。</div></div></div></td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">2</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">テレパシー</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1">テレパシー</td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">味方からの攻撃を回避する。</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">きょうせい</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1">きょうせい</td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">味方が道具を消費すると自分の持っている道具を味方に渡す。</div></div></div></td>
 </tr>
 </tbody>
@@ -182,152 +191,4 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 ---
 
-## 使用率データ
 
-<style>
-.pn-rate-wrap{position:relative;display:inline-block;width:100%}
-.pn-popup{display:none;position:fixed;z-index:200;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
-</style>
-<script>
-document.addEventListener('DOMContentLoaded',function(){
-document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
-  var popup=wrap.querySelector('.pn-popup');
-  if(!popup)return;
-  function adjust(){
-    var wr=wrap.getBoundingClientRect();
-    popup.style.left=wr.left+'px';
-    popup.style.right='auto';
-    popup.style.top=(wr.bottom+4)+'px';
-    popup.style.bottom='auto';
-    popup.style.visibility='hidden';
-    popup.style.display='block';
-    var r=popup.getBoundingClientRect();
-    if(r.right>window.innerWidth-8){
-      popup.style.left='auto';
-      popup.style.right=(window.innerWidth-wr.right)+'px';
-    }
-    if(r.bottom>window.innerHeight-8){
-      popup.style.top='auto';
-      popup.style.bottom=(window.innerHeight-wr.top+4)+'px';
-    }
-    popup.style.visibility='';
-  }
-  wrap.addEventListener('mouseenter',function(){adjust();popup.style.display='block';});
-  wrap.addEventListener('mouseleave',function(){popup.style.display='';});
-  wrap.addEventListener('touchstart',function(e){
-    e.preventDefault();
-    adjust();
-    popup.style.display='block';
-    function hide(ev){if(!wrap.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
-    setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
-  });
-});
-});
-</script>
-
-<style>
-@media(min-width:768px){
-  .pn-data-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
-}
-</style>
-
-<div class="pn-data-grid">
-
-<div>
-
-### 技
-
-<div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
-<thead><tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
-</tr></thead>
-<tbody>
-</tbody>
-</table>
-</div>
-
-</div>
-
-<div>
-
-### 持ち物
-
-<div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
-<thead><tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">持ち物</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
-</tr></thead>
-<tbody>
-</tbody>
-</table>
-</div>
-
-</div>
-
-<div>
-
-### 性格
-
-<div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
-<thead><tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">性格</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
-</tr></thead>
-<tbody>
-</tbody>
-</table>
-</div>
-
-</div>
-
-<div>
-
-### ステータス振り
-
-<div class="pn-ev-scroll" style="margin:12px 0">
-<table style="border-collapse:collapse;font-size:0.9em">
-<thead><tr style="background:#f1f5f9">
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:36px">順位</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">H</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">A</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">B</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">C</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">D</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">S</th>
-  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
-</tr></thead>
-<tbody>
-</tbody>
-</table>
-</div>
-<p style="font-size:0.8em;color:#666;margin:4px 0 0">H=HP A=こうげき B=ぼうぎょ C=とくこう D=とくぼう S=すばやさ</p>
-
-</div>
-
-</div>
-
-
-### 同じチーム
-
-<div style="margin:12px 0;overflow:visible">
-<table style="width:100%;border-collapse:collapse;font-size:0.9em">
-<thead>
-<tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:30%">ポケモン</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">平均順位・前回比 <span style="font-size:0.8em;color:#94a3b8;font-weight:400"></span></th>
-</tr>
-</thead>
-<tbody>
-</tbody>
-</table>
-</div>
-
----

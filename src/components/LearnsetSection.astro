@@ -99,6 +99,8 @@ const rows = (entry?.m ?? []).map((jp, kanaIdx) => {
 
 const COLLAPSE_ROWS = 8;
 const total = rows.length;
+/** 一度もランクインしていないポケモンは採用率が全て0。「—」だけの列とソート条件を出さない。 */
+const hasUsage = rows.some((r) => r.usage > 0);
 const typesPresent = [...new Set(rows.map((r) => r.type).filter(Boolean))]
   .sort((a, b) => (TYPEICON[a]?.[0] ?? '').localeCompare(TYPEICON[b]?.[0] ?? ''));
 const catCounts = {
@@ -124,8 +126,8 @@ const needsControls = total > COLLAPSE_ROWS;
         {catCounts.special > 0 && <button type="button" class="lrn-chip lrn-c-special" data-cat="special">{T.special} <b>{catCounts.special}</b></button>}
         {catCounts.status > 0 && <button type="button" class="lrn-chip lrn-c-status" data-cat="status">{T.status} <b>{catCounts.status}</b></button>}
       </div>
-      <select class="lrn-sort" aria-label={T.sortUsage}>
-        <option value="usage">{T.sortUsage}</option>
+      <select class="lrn-sort" aria-label={hasUsage ? T.sortUsage : T.sortKana}>
+        {hasUsage && <option value="usage">{T.sortUsage}</option>}
         <option value="kana">{T.sortKana}</option>
         <option value="power">{T.sortPower}</option>
         <option value="acc">{T.sortAcc}</option>
@@ -153,7 +155,7 @@ const needsControls = total > COLLAPSE_ROWS;
             <th class="lrn-num">{T.power}</th>
             <th class="lrn-num lrn-acc">{T.acc}</th>
             <th class="lrn-num lrn-pp">{T.pp}</th>
-            <th class="lrn-num">{T.usage}</th>
+            {hasUsage && <th class="lrn-num">{T.usage}</th>}
           </tr>
         </thead>
         <tbody>
@@ -180,7 +182,7 @@ const needsControls = total > COLLAPSE_ROWS;
               <td class="lrn-num">{r.power || '—'}</td>
               <td class="lrn-num lrn-acc">{r.acc || '—'}</td>
               <td class="lrn-num lrn-pp">{r.pp || '—'}</td>
-              <td class="lrn-num">{r.usage ? <span class="lrn-use">{r.usage}%</span> : <span class="lrn-dash">—</span>}</td>
+              {hasUsage && <td class="lrn-num">{r.usage ? <span class="lrn-use">{r.usage}%</span> : <span class="lrn-dash">—</span>}</td>}
             </tr>
           ))}
         </tbody>
