@@ -3136,8 +3136,10 @@ const I18N = I18N_ALL[lang];
       const h0 = pairCacheStats.hit, m0 = pairCacheStats.miss;
       const html = matchupMatrixHtml(resolvedParty);
       window.__pbPairCache = pairCacheStats;
-      console.info(`[pb-mu] ${Math.round(performance.now() - t0)}ms `
-        + `(キャッシュ ヒット${pairCacheStats.hit - h0} / 計算${pairCacheStats.miss - m0})`);
+      if (import.meta.env.DEV) {
+        console.info(`[pb-mu] ${Math.round(performance.now() - t0)}ms `
+          + `(キャッシュ ヒット${pairCacheStats.hit - h0} / 計算${pairCacheStats.miss - m0})`);
+      }
       return html;
     }
     return typeMatrixHtml(resolvedParty, 'atk');
@@ -3540,7 +3542,9 @@ const I18N = I18N_ALL[lang];
       return;
     }
     const elapsed = Math.round(performance.now() - t0);
-    console.info(`[pb-holefill] 候補${result.poolSize}種 計算時間: ${elapsed}ms`);
+    if (import.meta.env.DEV) {
+      console.info(`[pb-holefill] 候補${result.poolSize}種 計算時間: ${elapsed}ms`);
+    }
     holeFillResult = { sig, ...result };
     holeFillLoading = false;
     renderHoleFillBody();
@@ -3720,7 +3724,9 @@ const I18N = I18N_ALL[lang];
       renderFillBody();
       return;
     }
-    console.info(`[pb-fill] 候補${fillRaw.candidates.length}型 計算時間: ${Math.round(performance.now() - t0)}ms`);
+    if (import.meta.env.DEV) {
+      console.info(`[pb-fill] 候補${fillRaw.candidates.length}型 計算時間: ${Math.round(performance.now() - t0)}ms`);
+    }
     fillLoading = false;
     renderFillBody();
   }
