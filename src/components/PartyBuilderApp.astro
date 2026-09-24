@@ -20,6 +20,7 @@ const I18N_ALL = {
   ja: {
     title: 'パーティ工房',
     lead: '6匹の型を自由に微調整し、想定敵との素早さ比較・1v1判定をリアルタイムに確認できます。1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。',
+    leadShort: '6匹の型を自由に微調整し、想定敵との比較をリアルタイムに確認できます。', leadMoreLabel: '詳しく', leadDetail: '素早さ比較・1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。',
     obStep1Title: 'ポケモンを追加', obStep1Desc: '空き枠の＋から選ぶか、「空き枠を提案で埋める」で自動編成',
     obStep2Title: '型を調整', obStep2Desc: '持ち物・特性・性格・EVを変更すると実数値が即座に反映',
     obStep3Title: '相性を確認', obStep3Desc: '使用率上位30体との1v1判定・素早さ比較でパーティの穴を見つける',
@@ -30,6 +31,7 @@ const I18N_ALL = {
     editorAddPrompt: 'ポケモンを追加すると型を編集できます',
     speciesDataMissing: '種族データが見つかりません（データ不整合）', muCalcError: 'データ不整合のため計算できません',
     editorHeading: n => `型エディタ ー 枠${n}`,
+    slotHeading: n => `枠${n}`,
     itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
     templateBtn: '型テンプレから', megaTag: 'メガ', megaFixedNote: '（メガ進化で固定）',
     evRemain: n => `残り ${n}ポイント`, evRemainOver: n => `残り ${n}ポイント（上限超過）`,
@@ -98,6 +100,7 @@ const I18N_ALL = {
   en: {
     title: 'Party Workshop',
     lead: 'Freely fine-tune the builds of all 6 Pokémon and check Speed comparisons and 1v1 verdicts against expected opponents in real time. The 1v1 verdict is a pre-calculation based on each side\'s strongest hit, Speed, and bulk checks like Focus Sash (switches and status moves aren\'t included).',
+    leadShort: 'Freely fine-tune the builds of all 6 Pok\u00e9mon and compare them against expected opponents in real time.', leadMoreLabel: 'Details', leadDetail: "Speed comparisons and 1v1 verdicts are pre-calculated using each side's strongest hit, Speed, and bulk checks like Focus Sash (switches and status moves aren't included).",
     obStep1Title: 'Add a Pokémon', obStep1Desc: 'Pick from an empty slot\'s +, or auto-fill with "Fill empty slots with suggestions"',
     obStep2Title: 'Adjust the build', obStep2Desc: 'Changing item, ability, nature, or EVs updates the real stats instantly',
     obStep3Title: 'Check matchups', obStep3Desc: 'Find gaps in your party via 1v1 verdicts and Speed comparisons against the top 30 usage ranks',
@@ -108,6 +111,7 @@ const I18N_ALL = {
     editorAddPrompt: 'Add a Pokémon to edit its build',
     speciesDataMissing: 'Species data not found (data inconsistency)', muCalcError: "Can't calculate due to a data inconsistency",
     editorHeading: n => `Build Editor — Slot ${n}`,
+    slotHeading: n => `Slot ${n}`,
     itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
     templateBtn: 'From set templates', megaTag: 'Mega', megaFixedNote: '(fixed by Mega Evolution)',
     evRemain: n => `${n} points left`, evRemainOver: n => `${n} points left (over the limit)`,
@@ -176,6 +180,7 @@ const I18N_ALL = {
   ko: {
     title: '파티 공방',
     lead: '6마리의 빌드를 자유롭게 미세 조정하고, 예상 상대와의 스피드 비교·1v1 판정을 실시간으로 확인할 수 있습니다. 1v1 판정은 서로의 최대 위력·스피드·기합의띠 등의 버티기를 고려한 사전 계산입니다(교체·보조기술은 포함되지 않습니다).',
+    leadShort: '6마리의 빌드를 자유롭게 미세 조정하고, 예상 상대와 실시간으로 비교할 수 있습니다.', leadMoreLabel: '자세히', leadDetail: '스피드 비교·1v1 판정은 서로의 최대 위력·스피드·기합의띠 등의 버티기를 고려한 사전 계산입니다(교체·보조기술은 포함되지 않습니다).',
     obStep1Title: '포켓몬 추가', obStep1Desc: '빈 칸의 ＋에서 선택하거나, 「빈 칸을 제안으로 채우기」로 자동 편성',
     obStep2Title: '빌드 조정', obStep2Desc: '지닌물건·특성·성격·EV를 변경하면 실수치가 즉시 반영',
     obStep3Title: '상성 확인', obStep3Desc: '사용률 상위 30마리와의 1v1 판정・스피드 비교로 파티의 약점을 찾기',
@@ -186,6 +191,7 @@ const I18N_ALL = {
     editorAddPrompt: '포켓몬을 추가하면 빌드를 편집할 수 있습니다',
     speciesDataMissing: '종족 데이터를 찾을 수 없습니다（데이터 불일치）', muCalcError: '데이터 불일치로 계산할 수 없습니다',
     editorHeading: n => `빌드 에디터 — 칸${n}`,
+    slotHeading: n => `칸${n}`,
     itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
     templateBtn: '빌드 템플릿에서', megaTag: '메가', megaFixedNote: '（메가진화로 고정）',
     evRemain: n => `남은 ${n}포인트`, evRemainOver: n => `남은 ${n}포인트（상한 초과）`,
@@ -258,7 +264,11 @@ const I18N = I18N_ALL[lang];
 <main>
   <h1>{I18N.title}</h1>
   <PartyToolsNav current="builder" lang={lang} />
-  <p class="lead">{I18N.lead}</p>
+  <p class="lead">{I18N.leadShort}</p>
+  <details class="lead-details">
+    <summary>{I18N.leadMoreLabel}</summary>
+    <p>{I18N.leadDetail}</p>
+  </details>
   <OnboardingGuide
     storageKey="builder"
     lang={lang}
@@ -284,10 +294,13 @@ const I18N = I18N_ALL[lang];
     <div id="pb-slot-search"></div>
   </div>
 
-  <div class="pb-split">
-    <div class="card" id="pb-editor"><div class="muted">{I18N.loading}</div></div>
-    <div class="card" id="pb-targets"></div>
-  </div>
+  <section class="pb-selected">
+    <div class="pb-selected-head" id="pb-selected-head"></div>
+    <div class="pb-split">
+      <div class="card" id="pb-editor"><div class="muted">{I18N.loading}</div></div>
+      <div class="card" id="pb-targets"></div>
+    </div>
+  </section>
 
   <div class="card" id="pb-balance"></div>
   <slot />
@@ -307,7 +320,12 @@ const I18N = I18N_ALL[lang];
   @media (max-width:1023.98px){ main{padding-bottom:calc(4em + env(safe-area-inset-bottom))} }
   h1{font-size:1.5rem;margin:0 0 .2em}
   h2{font-size:1.05rem;margin:0 0 .5em}
-  .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 1.1em}
+  .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 .3em}
+  /* (C18) 説明文を1行+「詳しく」に圧縮。初期状態は閉じたまま(<details>既定) */
+  .lead-details{margin:0 0 1.1em;font-size:.82rem;color:rgb(var(--gray))}
+  .lead-details summary{cursor:pointer;color:var(--accent);font-weight:700;list-style:none}
+  .lead-details summary::-webkit-details-marker{display:none}
+  .lead-details p{margin:.4em 0 0}
   .card{background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px;box-shadow:0 1px 3px rgba(var(--black),.05);padding:1em;margin-bottom:1.1em}
   .muted{font-size:.8rem;color:rgb(var(--gray))}
   .row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
@@ -368,11 +386,17 @@ const I18N = I18N_ALL[lang];
   .mu-dep{color:#7c3aed;font-weight:900;font-size:.6rem;vertical-align:2px}
   .mu-dep-leg{color:#7c3aed}
   .mg{overflow-x:auto;margin-top:.4em;overscroll-behavior-x:contain}
+  /* (C03) 横スクロールヒント(簡単構築PartySuggestApp.astroと同じ見た目。ロジックはmg-hints.tsを共有) */
+  .mg-wrap{position:relative}
+  .mg-hint{position:absolute;top:.4em;right:0;bottom:2px;width:36px;pointer-events:none;background:linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,.96) 55%);display:flex;align-items:center;justify-content:flex-end;padding-right:2px;font-weight:900;color:var(--accent);font-size:.9rem;opacity:1;transition:opacity .25s}
+  .mg-wrap.mg-scrolled .mg-hint{opacity:0}
   table.mtx{font-size:.72rem;border-collapse:separate;border-spacing:2px}
   table.mtx th{font-size:.7rem;font-weight:700;padding:.2em;vertical-align:bottom;text-align:center}
   table.mtx td{text-align:center;border-radius:5px;font-weight:800;padding:.3em;min-width:34px;white-space:nowrap;font-size:.9rem}
   .mtx-ico{width:30px;height:30px;object-fit:contain;display:block;margin:0 auto}
   .mtx-name{font-size:.56rem;line-height:1.05;margin-top:1px;white-space:nowrap;color:rgb(var(--gray-dark));text-align:center}
+  /* (C11) 相手列ヘッダの名前は列幅が狭いと端で切れる。行見出し(.mtx-rowh内)は対象外にして2行までは許可する */
+  table.mtx th > .mtx-name{white-space:normal;overflow-wrap:anywhere;line-height:1.15}
   .mtx-corner{font-size:.56rem;color:rgb(var(--gray));text-align:center;line-height:1.15;white-space:nowrap;font-weight:700}
   .mtx-rowh{display:flex;align-items:center;gap:4px}
   .mtx-rowh .mtx-ico{width:26px;height:26px;margin:0}
@@ -389,6 +413,12 @@ const I18N = I18N_ALL[lang];
   .sp-val{font-size:.56rem;font-weight:800;color:var(--accent);white-space:nowrap}
   .mtx-legend{display:flex;flex-wrap:wrap;gap:.5em .9em;font-size:.72rem;color:rgb(var(--gray-dark));margin-bottom:.4em;align-items:center}
   .mtx-legend b{padding:1px 5px;border-radius:4px}
+  /* (C12) ポケモン相性表の「穴だけ表示」トグル */
+  .pb-mtx-toolbar{margin-bottom:.5em}
+  .pb-mtx-holes-toggle{display:inline-flex;align-items:center;gap:.4em;font-size:.8rem;font-weight:700;color:rgb(var(--gray-dark));cursor:pointer;min-height:32px}
+  .pb-mtx-holes-toggle input{width:18px;height:18px}
+  .pb-mtx-noholes{display:flex;flex-wrap:wrap;align-items:center;gap:.6em;font-size:.84rem;font-weight:700;color:#15803d;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:.6em .8em}
+  .pb-mtx-noholes a{color:var(--accent);font-weight:700}
 
   /* タイプ相性マトリクス */
   table.mtx td.ao-good{background:#bbf7d0;color:#15803d;font-weight:800}
@@ -585,6 +615,26 @@ const I18N = I18N_ALL[lang];
     .pb-split > .card{margin-bottom:0}
   }
 
+  /* (B15) ≤1023px: 「選択中のポケモン」の見出し＋2タブ（型エディタ／仮想敵）。
+     data-tab属性は枠選択時のみ付与される(renderSelectedHead)ため、未選択時は両カードとも
+     従来通り縦積みのプレースホルダーのまま。≥1024pxはこの見出しごと非表示にして
+     .pb-splitの2カラムグリッドと両カードdisplay:blockを常に保つ(デスクトップの見た目は不変)。 */
+  .pb-selected-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5em;margin-bottom:.6em}
+  .pb-selected-head:empty{display:none}
+  .pb-selected-title{display:flex;align-items:center;gap:.5em;font-weight:800;font-size:.92rem;min-width:0}
+  .pb-selected-title .monicon{width:32px;height:32px;flex-shrink:0}
+  .pb-selected-name{overflow-wrap:anywhere}
+  .pb-selected-tabs{display:flex;gap:2px;border:1px solid rgb(var(--gray-light));border-radius:9px;padding:2px;background:#f8fafc;flex-shrink:0}
+  .pb-sel-tab{border:none;background:none;padding:.5em .8em;font-size:.78rem;font-weight:700;color:rgb(var(--gray));cursor:pointer;border-radius:7px;font-family:var(--font-atkinson);min-height:40px;box-sizing:border-box}
+  .pb-sel-tab.active{background:#fff;color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  @media (max-width:1023.98px){
+    .pb-selected[data-tab="editor"] #pb-targets{display:none}
+    .pb-selected[data-tab="targets"] #pb-editor{display:none}
+  }
+  @media (min-width:1024px){
+    .pb-selected-head{display:none}
+  }
+
   /* 仮想敵カード（縦リスト） */
   .pb-mu-list{display:flex;flex-direction:column;gap:.5em;margin-top:.6em}
   .pb-mu-card{border:1px solid rgb(var(--gray-light));border-radius:10px;padding:.55em .7em;background:#fff}
@@ -702,6 +752,10 @@ const I18N = I18N_ALL[lang];
   .pb-empty-guide{background:#f8fafc;border:1px dashed rgb(var(--gray-light));border-radius:10px;padding:.7em .9em;margin:.6em 0;display:flex;flex-direction:column;gap:.3em}
   .pb-empty-guide-step{font-size:.82rem;color:rgb(var(--gray-dark))}
   .pb-empty-guide-step b{color:var(--accent);margin-right:.35em}
+  /* (B27) 達成済みステップ */
+  .pb-empty-guide-step.pb-eg-done{color:#15803d;text-decoration:line-through;opacity:.75}
+  /* (B28) 仮想敵0件の空状態 */
+  .pb-empty-targets{display:flex;flex-direction:column;align-items:flex-start;gap:.5em;margin-top:.6em}
 </style>
 
 <script is:inline define:vars={{ lang, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, pfx }}>
@@ -727,6 +781,7 @@ const I18N = I18N_ALL[lang];
   import { initEngine } from '../scripts/engine/wasm';
   import { tuneForTargets } from '../scripts/party-builder/suggest';
   import { validateParty } from '../scripts/party-builder/validate';
+  import { mgWrapHtml, initMgHints } from '../scripts/party-builder/mg-hints';
 
   const lang = window.__PB_LANG__;
   const pfx = window.__PB_PFX__;
@@ -748,6 +803,7 @@ const I18N = I18N_ALL[lang];
       editorAddPrompt: 'ポケモンを追加すると型を編集できます',
       speciesDataMissing: '種族データが見つかりません（データ不整合）', muCalcError: 'データ不整合のため計算できません',
       editorHeading: n => `型エディタ ー 枠${n}`,
+      slotHeading: n => `枠${n}`,
       itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
       templateBtn: '型テンプレから', megaTag: 'メガ', megaFixedNote: '（メガ進化で固定）',
       evRemain: n => `残り ${n}ポイント`, evRemainOver: n => `残り ${n}ポイント（上限超過）`,
@@ -767,6 +823,7 @@ const I18N = I18N_ALL[lang];
       targetsHeading: '仮想敵', targetsSelectPrompt: '上の6枠から枠を選択してください',
       targetsSetPrompt: '型を設定すると仮想敵との比較ができます',
       targetSearchPlaceholder: '仮想敵を検索して追加（ひらがな可）', addTargetsPrompt: '仮想敵を追加してください',
+      addTop5TargetsBtn: '使用率上位5体を追加',
       muEditHeading: label => `${label} 型編集`, muSaveBtn: '保存', muCancelBtn: 'キャンセル',
       muEditBtn: '編集', muDeleteBtn: '削除', muDeleteLastTitle: '最後の1型は削除できません',
       muAddBuildBtn: '＋型を追加', muResetDefaultBtn: 'デフォルトに戻す',
@@ -809,6 +866,7 @@ const I18N = I18N_ALL[lang];
       holeSummary: labels => `⚠ 穴: ${labels}`, holeOkMsg: '✓ 使用率上位30体に穴なし',
       holeJumpHint: 'タップで相性表へ', holeCountLbl: n => `${n}体`,
       holeFillBtn: '穴を埋める候補', holeFillCalculating: '候補を計算中…',
+      holesOnlyToggle: '穴だけ表示', matchupNoHolesMsg: '穴なし', showAllColumnsLink: '全列を見る',
       holeFillAddHeading: '追加候補', holeFillAddNone: '追加できる候補が見つかりませんでした',
       holeFillAllowDupLbl: '既存ポケモンと持ち物重複の提案を許可',
       holeFillCoversLbl: labels => `穴${labels}を埋める`, holeFillAddBtn: '空き枠に追加',
@@ -857,6 +915,7 @@ const I18N = I18N_ALL[lang];
       editorAddPrompt: 'Add a Pokémon to edit its build',
       speciesDataMissing: 'Species data not found (data inconsistency)', muCalcError: "Can't calculate due to a data inconsistency",
       editorHeading: n => `Build Editor — Slot ${n}`,
+      slotHeading: n => `Slot ${n}`,
       itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
       templateBtn: 'From set templates', megaTag: 'Mega', megaFixedNote: '(fixed by Mega Evolution)',
       evRemain: n => `${n} points left`, evRemainOver: n => `${n} points left (over the limit)`,
@@ -876,6 +935,7 @@ const I18N = I18N_ALL[lang];
       targetsHeading: 'Virtual Opponents', targetsSelectPrompt: 'Select a slot above',
       targetsSetPrompt: 'Set a build to compare against virtual opponents',
       targetSearchPlaceholder: 'Search for a virtual opponent to add', addTargetsPrompt: 'Please add a virtual opponent',
+      addTop5TargetsBtn: 'Add the top 5 by usage',
       muEditHeading: label => `Edit ${label}'s build`, muSaveBtn: 'Save', muCancelBtn: 'Cancel',
       muEditBtn: 'Edit', muDeleteBtn: 'Delete', muDeleteLastTitle: "Can't delete the last remaining set",
       muAddBuildBtn: '+ Add a set', muResetDefaultBtn: 'Reset to default',
@@ -919,6 +979,7 @@ const I18N = I18N_ALL[lang];
       holeSummary: labels => `⚠ Gaps: ${labels}`, holeOkMsg: '✓ No gaps against the top 30',
       holeJumpHint: 'Tap to open the matchup table', holeCountLbl: n => `${n}`,
       holeFillBtn: 'Suggest additions', holeFillCalculating: 'Calculating candidates…',
+      holesOnlyToggle: 'Weak spots only', matchupNoHolesMsg: 'No weak spots', showAllColumnsLink: 'Show all columns',
       holeFillAddHeading: 'Additions', holeFillAddNone: 'No addable candidates found',
       holeFillAllowDupLbl: 'Allow suggestions with items already used by the party',
       holeFillCoversLbl: labels => `Fills gap(s): ${labels}`, holeFillAddBtn: 'Add to empty slot',
@@ -968,6 +1029,7 @@ const I18N = I18N_ALL[lang];
       editorAddPrompt: '포켓몬을 추가하면 빌드를 편집할 수 있습니다',
       speciesDataMissing: '종족 데이터를 찾을 수 없습니다（데이터 불일치）', muCalcError: '데이터 불일치로 계산할 수 없습니다',
       editorHeading: n => `빌드 에디터 — 칸${n}`,
+      slotHeading: n => `칸${n}`,
       itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
       templateBtn: '빌드 템플릿에서', megaTag: '메가', megaFixedNote: '（메가진화로 고정）',
       evRemain: n => `남은 ${n}포인트`, evRemainOver: n => `남은 ${n}포인트（상한 초과）`,
@@ -987,6 +1049,7 @@ const I18N = I18N_ALL[lang];
       targetsHeading: '가상의 적', targetsSelectPrompt: '위의 6칸에서 칸을 선택해 주세요',
       targetsSetPrompt: '빌드를 설정하면 가상의 적과 비교할 수 있습니다',
       targetSearchPlaceholder: '추가할 가상의 적 검색', addTargetsPrompt: '가상의 적을 추가해 주세요',
+      addTop5TargetsBtn: '사용률 상위 5마리 추가',
       muEditHeading: label => `${label} 빌드 편집`, muSaveBtn: '저장', muCancelBtn: '취소',
       muEditBtn: '편집', muDeleteBtn: '삭제', muDeleteLastTitle: '마지막 남은 빌드는 삭제할 수 없습니다',
       muAddBuildBtn: '＋ 빌드 추가', muResetDefaultBtn: '기본값으로 되돌리기',
@@ -1030,6 +1093,7 @@ const I18N = I18N_ALL[lang];
       holeSummary: labels => `⚠ 약점: ${labels}`, holeOkMsg: '✓ 사용률 상위 30체에 약점 없음',
       holeJumpHint: '탭하면 상성표로 이동', holeCountLbl: n => `${n}마리`,
       holeFillBtn: '약점을 메우는 후보', holeFillCalculating: '후보를 계산하는 중…',
+      holesOnlyToggle: '구멍만 표시', matchupNoHolesMsg: '구멍 없음', showAllColumnsLink: '전체 열 보기',
       holeFillAddHeading: '추가 후보', holeFillAddNone: '추가할 수 있는 후보를 찾지 못했습니다',
       holeFillAllowDupLbl: '기존 포켓몬과 지닌 물건이 중복되는 제안 허용',
       holeFillCoversLbl: labels => `약점 ${labels}을(를) 메움`, holeFillAddBtn: '빈 칸에 추가',
@@ -1132,7 +1196,7 @@ const I18N = I18N_ALL[lang];
   function icoImg(icon, name, cls) {
     const u = spriteUrl(icon);
     const dn = tPoke(name);
-    return u ? `<img class="${cls || ''}" src="${u}" alt="${esc(dn || '')}" title="${esc(dn || '')}" loading="lazy" onerror="this.style.display='none'">` : '';
+    return u ? `<img class="${cls || ''}" src="${u}" alt="${esc(dn || '')}" title="${esc(dn || '')}" loading="lazy" decoding="async" onerror="this.style.display='none'">` : '';
   }
   function typeIcoByName(t) {
     const e = t ? TYPEICON[t] : null;
@@ -1195,8 +1259,14 @@ const I18N = I18N_ALL[lang];
   let core = null;
   let store = null;
   let selectedIdx = null;
+  // (B15) 「選択中のポケモン」セクション内の2タブ('editor'|'targets')。≤1023pxのみCSSで反映される
+  // (≥1024pxは.pb-selected-headごと非表示にして常に両カードをdisplay:blockのまま保つ)。
+  let selTab = 'editor';
   let currentMonDetail = null;
-  let balanceTab = 'atk';
+  // (B16) 初期タブはポケモン相性(計算が軽く、パーティの穴が最初に見えるタブ)。
+  let balanceTab = 'mu';
+  // (C12) ポケモン相性表の「穴だけ表示」トグル。モバイルは既定ON、PCは表の余白に余裕があるためOFF始まり。
+  let matchupHolesOnly = window.matchMedia('(max-width:1023.98px)').matches;
   let fillLoading = false;
   let fillFailed = false;
   let fillRaw = null;    // 「空き枠を穴から埋める」の候補プール(もちもの重複の切替で再計算しない)
@@ -1325,7 +1395,9 @@ const I18N = I18N_ALL[lang];
         if (!pane) return;
         pane.innerHTML = balancePaneHtml(resolvedPartyList(), balanceTab);
         bindMtxPopovers(pane);
+        bindMatchupHolesToggle(pane, resolvedPartyList());
         bindHoleFillButton(pane);
+        initMgHints();
       }
     }).catch((e) => console.warn('[ensureNameUrlMapLoaded] search-index.jsonの取得に失敗しました', e));
   }
@@ -1452,9 +1524,54 @@ const I18N = I18N_ALL[lang];
     renderEmptyGuide();
     updateFillBtnVisibility();
     renderSlotSearch();
+    renderSelectedHead();
     renderEditor();
     renderTargetsPanel();
     renderBalance();
+  }
+
+  /** (B01) 枠タップ後、≤1023pxでは「選択中のポケモン」セクションが画面外(トレイの下)にあることが
+   * 多いため、そこまでスクロールする。PCは2カラムがそのままトレイの下に見えているため不要。 */
+  function scrollToSelectedSection() {
+    if (mqDesktopSplit.matches) return;
+    const sec = document.querySelector('.pb-selected');
+    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  /** (B15) 「選択中のポケモン」セクションの見出し(枠番号+ポケモン名)と2タブ(型エディタ/仮想敵)。
+   * #pb-editor/#pb-targets自体のHTML生成(renderEditor/renderTargetsPanel)には手を入れず、
+   * .pb-selectedのdata-tab属性をCSSで見て≤1023pxのときだけ表示切替する(≥1024pxはこの見出しごと
+   * 非表示にして、常に両カードdisplay:blockの.pb-splitグリッドのまま=デスクトップの見た目は不変)。
+   * 未選択時はdata-tabを外し、両カードとも従来通りのプレースホルダーを縦積みで見せる。 */
+  function renderSelectedHead() {
+    const sec = document.querySelector('.pb-selected');
+    const el = document.getElementById('pb-selected-head');
+    const p = activeParty();
+    const slot = p && selectedIdx !== null ? p.slots[selectedIdx] : null;
+    if (!p || selectedIdx === null || !slot) {
+      if (sec) sec.removeAttribute('data-tab');
+      if (el) el.innerHTML = '';
+      return;
+    }
+    if (sec) sec.dataset.tab = selTab;
+    if (!el) return;
+    const rb = resolveSlotSafe(slot);
+    const name = rb ? rb.label : slot.sp;
+    const icon = rb ? rb.icon : null;
+    const targetsCount = slot.targets.length;
+    el.innerHTML = `
+      <div class="pb-selected-title">${icoImg(icon, name, 'monicon')}<span class="pb-selected-name">${esc(I18N.slotHeading(selectedIdx + 1))} ${esc(tPoke(name))}</span></div>
+      <div class="pb-selected-tabs" role="tablist">
+        <button type="button" class="pb-sel-tab${selTab === 'editor' ? ' active' : ''}" data-sel-tab="editor" role="tab" aria-selected="${selTab === 'editor'}">${esc(I18N.editorTitle)}</button>
+        <button type="button" class="pb-sel-tab${selTab === 'targets' ? ' active' : ''}" data-sel-tab="targets" role="tab" aria-selected="${selTab === 'targets'}">${esc(I18N.targetsHeading)}${targetsCount ? ` ${targetsCount}` : ''}</button>
+      </div>`;
+    el.querySelectorAll('[data-sel-tab]').forEach((btn) => btn.addEventListener('click', () => {
+      if (btn.dataset.selTab === selTab) return;
+      selTab = btn.dataset.selTab;
+      renderSelectedHead();
+      // ミニバーの表示条件にselTabが絡むため、直前の描画内容で出し直す(二重表示/消し忘れ防止)。
+      if (lastMiniBarArgs) renderMiniBar(lastMiniBarArgs.activeGrp, lastMiniBarArgs.allTabs, lastMiniBarArgs.sheetCtx);
+    }));
   }
 
   // ---- (1) モバイル固定判定ミニバー / ボトムシート ----
@@ -1480,6 +1597,8 @@ const I18N = I18N_ALL[lang];
     lastMiniBarArgs = { activeGrp, allTabs, sheetCtx };
     const hasContent = !!activeGrp && !!allTabs && allTabs.length > 0;
     if (!hasContent) { hideMiniBar(); if (reopenEl) reopenEl.classList.remove('pb-minibar-reopen-show'); return; }
+    // (B15) 仮想敵タブを見ている間は#pb-targets本体と内容が重複するため、ミニバーは型エディタタブのときだけ出す。
+    if (selTab !== 'editor') { sheetExpanded = false; hideMiniBar(); return; }
     if (miniBarMinimized) { hideMiniBar(); if (reopenEl) reopenEl.classList.add('pb-minibar-reopen-show'); return; }
     if (reopenEl) reopenEl.classList.remove('pb-minibar-reopen-show');
     // 展開中のシートは操作対象なので、#pb-targetsが見えてきても閉じない(折りたたみ表示だけが対象)。
@@ -1560,14 +1679,15 @@ const I18N = I18N_ALL[lang];
     const handleEl = document.getElementById('pb-sheet-handle');
     if (handleEl) bindSheetDrag(handleEl);
   }
-  /** ミニバー折りたたみ表示のチップタップ。activeMuTabを切り替えて仮想敵パネル本体へスクロールする
-   * (B15でセクション分割されるまでは#pb-targets自体へ。分割後は仮想敵セクションへ差し替える)。 */
+  /** ミニバー折りたたみ表示のチップタップ。activeMuTabを切り替え、(B15)仮想敵タブへ切替えて表示する。
+   * selTabを'targets'にするとミニバー自体は次の描画でCSS/JS両方の条件から消える(型エディタ専用のため)。 */
   function onMiniBarTabPick(label) {
     activeMuTab = label;
     muEdit = null;
+    selTab = 'targets';
+    renderSelectedHead();
     renderTargetsPanel();
-    const sec = document.getElementById('pb-targets');
-    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToSelectedSection();
   }
   /** (B34) ボトムシートの高さをドラッグハンドルで調整する。既定50vh・上限85vh・下限30vh(誤操作で
    * シートが消えてしまわない程度)。--pb-sheet-hはdocumentElementに持たせ、CSS側のheight/paddingが参照する。 */
@@ -1590,18 +1710,24 @@ const I18N = I18N_ALL[lang];
     handleEl.addEventListener('pointercancel', onPointerUp);
   }
 
-  /** (11) 0体(空パーティ)のときだけ6枠トレイ直下に3ステップの初見ガイドを表示する。1体追加で消える。 */
+  /** (11)(B27) 6枠トレイ直下の3ステップ初見ガイド。以前は1体追加した時点で消えていたが、
+   * 「①ポケモンを追加」だけ達成した状態でガイドが消えると②③に気付かれずに終わっていたため、
+   * 少なくとも仮想敵を1体設定するまでは達成チェック付きで残す。 */
   function renderEmptyGuide() {
     const el = document.getElementById('pb-empty-guide');
     if (!el) return;
     const p = activeParty();
     const filledCount = p ? p.slots.filter(Boolean).length : 0;
-    if (!p || filledCount > 0) { el.innerHTML = ''; return; }
-    el.innerHTML = `<div class="pb-empty-guide">
-        <div class="pb-empty-guide-step">${esc(I18N.emptyGuideStep1)}</div>
-        <div class="pb-empty-guide-step">${esc(I18N.emptyGuideStep2)}</div>
-        <div class="pb-empty-guide-step">${esc(I18N.emptyGuideStep3)}</div>
-      </div>`;
+    const hasTarget = !!p && p.slots.some((s) => s && s.targets && s.targets.length);
+    if (!p || hasTarget) { el.innerHTML = ''; return; }
+    const steps = [
+      { done: filledCount > 0, text: I18N.emptyGuideStep1 },
+      { done: hasTarget, text: I18N.emptyGuideStep2 },
+      { done: false, text: I18N.emptyGuideStep3 },
+    ];
+    el.innerHTML = `<div class="pb-empty-guide">${steps.map((s) =>
+      `<div class="pb-empty-guide-step${s.done ? ' pb-eg-done' : ''}">${s.done ? '✓ ' : ''}${esc(s.text)}</div>`
+    ).join('')}</div>`;
   }
 
   /** 空き枠がない(6匹満員)時は「空き枠を提案で埋める」ボタンを非表示にする。空きができたら再表示。 */
@@ -1734,12 +1860,15 @@ const I18N = I18N_ALL[lang];
       btn.addEventListener('click', () => {
         selectedIdx = +btn.dataset.slot;
         tuneResults = null;
-                activeMuTab = null;
+        activeMuTab = null;
         muEdit = null;
+        selTab = 'editor'; // (B15) 枠を選び直したら常に型エディタタブから開く
         document.querySelectorAll('#pb-tray .montab').forEach((b) => b.classList.toggle('active', +b.dataset.slot === selectedIdx));
         renderSlotSearch();
+        renderSelectedHead();
         renderEditor();
         renderTargetsPanel();
+        scrollToSelectedSection(); // (B01)
       });
     });
     el.querySelectorAll('.pb-slot-x').forEach((x) => {
@@ -1990,6 +2119,7 @@ const I18N = I18N_ALL[lang];
     p.slots[idx] = newSlot;
     p.updatedAt = Date.now();
     saveStore(store);
+    selTab = 'editor'; // (B15) ポケモン追加直後は型エディタから
     render();
   }
 
@@ -2592,9 +2722,14 @@ const I18N = I18N_ALL[lang];
       : '';
     const scenarioHtml = activeGrp ? scenarioRowHtml(slot, activeGrp.label) : '';
     // モバイルのボトムシート(renderMiniBar)にもそのまま渡す共通ブロック(型カード一覧+空メッセージ)。
+    // (B28) 仮想敵が1体も無い空状態は検索を促すだけだと離脱しやすいので、使用率上位5体を
+    // ワンタップで追加できるボタンを併設する(targetsListは使用率順=core.targets/customTargetsの並び)。
     const cardsBlockHtml = rows.length || editingThis
       ? `<div class="pb-mu-list">${cardsHtml}</div>`
-      : slot.targets.length ? '' : `<div class="muted" style="margin-top:.6em">${esc(I18N.addTargetsPrompt)}</div>`;
+      : slot.targets.length ? '' : `<div class="pb-empty-targets">
+          <div class="muted">${esc(I18N.addTargetsPrompt)}</div>
+          <button type="button" class="pb-btn-sub" id="pb-target-add-top5">${esc(I18N.addTop5TargetsBtn)}</button>
+        </div>`;
 
     el.innerHTML = `
       <h2>${esc(I18N.targetsHeading)}</h2>
@@ -2619,6 +2754,17 @@ const I18N = I18N_ALL[lang];
      * 互いのイベントを誤って拾わない。 */
     function bindMuSection(root) {
       if (activeGrp) bindScenarioRow(root, slot, activeGrp.label);
+      const addTop5Btn = root.querySelector('#pb-target-add-top5');
+      if (addTop5Btn) addTop5Btn.addEventListener('click', () => {
+        const top5 = targetsList.slice(0, 5).map((g) => g.label).filter((l) => !slot.targets.includes(l));
+        if (!top5.length) return;
+        slot.targets.push(...top5);
+        p.updatedAt = Date.now();
+        saveStore(store);
+        tuneResults = null;
+        activeMuTab = top5[0];
+        renderTargetsPanel();
+      });
       root.querySelectorAll('[data-mb-pop]').forEach((btn) => btn.addEventListener('click', () => {
         const d = mbPopData[+btn.dataset.mbPop];
         if (!d) return;
@@ -2831,19 +2977,23 @@ const I18N = I18N_ALL[lang];
       </button>`;
     document.getElementById('pb-team-holes-btn').addEventListener('click', jumpToMatchupTab);
   }
-  /** パーティバランスのポケモン相性タブを開いてそこまでスクロールする。 */
+  /** パーティバランスのポケモン相性タブを開いてそこまでスクロールする。
+   * (B17) 着地位置はカード先頭(bd-strip等)ではなく表の直上(#pb-balance-pane)。
+   * (C12) 穴サマリからの遷移は「この穴を見に行く」文脈なので、穴だけ表示を強制ONにして
+   * 32列の表がそのまま出ないようにする(すでにONならno-op、既にmuタブでもholesOnlyがOFFなら作り直す)。 */
   function jumpToMatchupTab() {
     const card = document.getElementById('pb-balance');
     if (!card) return;
-    if (balanceTab !== 'mu') {
-      balanceTab = 'mu';
-      renderBalance();
-    }
+    const needsRerender = balanceTab !== 'mu' || !matchupHolesOnly;
+    balanceTab = 'mu';
+    matchupHolesOnly = true;
+    if (needsRerender) renderBalance();
     // 相性表の描画でカード内のDOMを丸ごと入れ替えるため、同じフレームで
     // スクロールを始めると打ち消される。描画が済んでから動かす。
     // requestAnimationFrame は非表示タブでは発火しないので setTimeout を使う。
     setTimeout(() => {
-      const top = card.getBoundingClientRect().top + window.scrollY - 8;
+      const target = document.getElementById('pb-balance-pane') || card;
+      const top = target.getBoundingClientRect().top + window.scrollY - 8;
       const from = window.scrollY;
       window.scrollTo({ top, behavior: 'smooth' });
       // smooth を無視する環境（設定・埋め込みブラウザ）だと1pxも動かないので、
@@ -2887,13 +3037,17 @@ const I18N = I18N_ALL[lang];
     `;
     renderTeamHoles(holeInfo);
     bindMtxPopovers(document.getElementById('pb-balance-pane'));
+    bindMatchupHolesToggle(document.getElementById('pb-balance-pane'), resolvedParty);
     bindHoleFillButton(el);
+    initMgHints();
     el.querySelectorAll('.tb').forEach((btn) => btn.addEventListener('click', () => {
       balanceTab = btn.dataset.t;
       el.querySelectorAll('.tb').forEach((b) => b.classList.toggle('active', b.dataset.t === balanceTab));
       const pane = document.getElementById('pb-balance-pane');
       pane.innerHTML = balancePaneHtml(resolvedParty, balanceTab);
       bindMtxPopovers(pane);
+      bindMatchupHolesToggle(pane, resolvedParty);
+      initMgHints();
     }));
   }
   function balancePaneHtml(resolvedParty, tab) {
@@ -2934,7 +3088,7 @@ const I18N = I18N_ALL[lang];
     const legend = kind === 'atk'
       ? `<div class="mtx-legend"><span>${I18N.atkLegend}</span></div>`
       : `<div class="mtx-legend"><span>${I18N.defLegend}</span></div>`;
-    return `${legend}<div class="mg"><table class="mtx">${head}${rows}</table></div>`;
+    return `${legend}${mgWrapHtml(`<table class="mtx">${head}${rows}</table>`)}`;
   }
   function speedMatrixHtml(resolvedParty) {
     const oppCols = buildOppCols();
@@ -2956,7 +3110,7 @@ const I18N = I18N_ALL[lang];
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
     return `<div class="mtx-legend"><span>${I18N.speedMatrixLegend}</span></div>
-      <div class="mg"><table class="mtx">${head}${bodyRows}</table></div>`;
+      ${mgWrapHtml(`<table class="mtx">${head}${bodyRows}</table>`)}`;
   }
   /** 型ごとの内訳を1件ずつの配列で返す(タップポップオーバーはリスト表示、titleはこれをjoinした文字列を使う)。
    * 移植元: scripts/_explain.py matchup_grid() の集約対象そのもの。 */
@@ -3024,19 +3178,35 @@ const I18N = I18N_ALL[lang];
       ${renderMatchupTable(vm, lang)}
       ${addTargetButtonHtml(o.label)}`;
   }
+  /** (C12) 「穴だけ表示」トグルのHTML。checked状態はmatchupHolesOnlyをそのまま反映する
+   * (再描画のたびに作り直すため、チェック操作自体の反映はbindMatchupHolesToggle側で行う)。 */
+  function matchupHolesToggleHtml() {
+    return `<label class="pb-mtx-holes-toggle"><input type="checkbox" id="pb-mtx-holes-toggle" ${matchupHolesOnly ? 'checked' : ''}>${esc(I18N.holesOnlyToggle)}</label>`;
+  }
+  /** (B18/C12) 32列(使用率上位30体相当)の相性表は幅が広すぎるため、「穴だけ表示」ONのときは
+   * findHoles().holeIdx(誰も集合的に有利を取れていない列)だけに絞る。穴が0件のときは絞りようが
+   * ないので表自体を出さず、「穴なし」＋「全列を見る」(matchupHolesOnly解除)に差し替える。 */
   function matchupMatrixHtml(resolvedParty) {
     const oppCols = buildOppCols();
     const holeInfo = findHoles(resolvedParty, oppCols);
+    const toggleRow = `<div class="pb-mtx-toolbar">${matchupHolesToggleHtml()}</div>`;
+    if (matchupHolesOnly && !holeInfo.holeLabels.length) {
+      return `${toggleRow}<div class="pb-mtx-noholes"><span>✓ ${esc(I18N.matchupNoHolesMsg)}</span>`
+        + `<a href="#" id="pb-mtx-show-all">${esc(I18N.showAllColumnsLink)} ›</a></div>`;
+    }
+    const cols = oppCols.map((o, ci) => ({ o, hole: holeInfo.holeIdx.has(ci) }));
+    const visibleCols = matchupHolesOnly ? cols.filter((c) => c.hole) : cols;
     const summary = '';
     // 行見出しをアイコンだけにしたぶん、コーナーも同じ幅に詰める。
     // 軸の説明（各味方 vs 相手）は表の上の説明文にあるので、ここは短縮表記でよい。
-    const head = `<tr><th class="mtx-corner mtx-stick mtx-stick-ico" title="${esc(I18N.selfVsOppAgg)}">${esc(I18N.selfVsOppShort || '自＼相')}</th>` + oppCols.map((o, ci) => oppHeaderCellHtml(o, holeInfo.holeIdx.has(ci) ? 'mtx-hole' : '')).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick mtx-stick-ico" title="${esc(I18N.selfVsOppAgg)}">${esc(I18N.selfVsOppShort || '自＼相')}</th>` + visibleCols.map((c) => oppHeaderCellHtml(c.o, c.hole ? 'mtx-hole' : '')).join('') + `</tr>`;
     mtxPopData = [];
     const rows = resolvedParty.map((b) => {
       // 1v1判定は列が多く、スマホでは横幅が足りない。自分側はアイコンだけで判別できるので
       // 名前を出さない（アイコンの alt/title に名前は残るのでホバー・読み上げでは分かる）。
       const hd = `<th class="mtx-stick mtx-stick-ico">${icoImg(b.icon, b.label, 'mtx-ico')}</th>`;
-      const cells = oppCols.map((o) => {
+      const cells = visibleCols.map((c) => {
+        const o = c.o;
         const agg = judgeVsBuilds(b, o.builds);
         const lines = muBreakdownLines(agg, o.builds);
         // 仮想敵に前提(天候・フィールド・積み)を設定していて結果が変わる対面は印を付ける。
@@ -3051,8 +3221,23 @@ const I18N = I18N_ALL[lang];
     }).join('');
     const condLegend = resolvedParty.some((b) => b.sc && Object.keys(b.sc).length)
       ? `<span>${esc(I18N.scCondLegend)}</span>` : '';
-    return `${summary}<div class="mtx-legend"><span>${I18N.muMatrixLegend}</span>${condLegend}</div>
-      <div class="mg"><table class="mtx">${head}${rows}</table></div>`;
+    return `${toggleRow}${summary}<div class="mtx-legend"><span>${I18N.muMatrixLegend}</span>${condLegend}</div>
+      ${mgWrapHtml(`<table class="mtx">${head}${rows}</table>`)}`;
+  }
+  /** matchupMatrixHtml()内のトグル/「全列を見る」リンクのイベント紐付け。tab==='mu'描画のたびに
+   * bindMtxPopoversと並べて呼ぶ(該当要素が無いタブでは何もしない)。 */
+  function bindMatchupHolesToggle(paneEl, resolvedParty) {
+    if (!paneEl) return;
+    const rerender = () => {
+      paneEl.innerHTML = matchupMatrixHtml(resolvedParty);
+      bindMtxPopovers(paneEl);
+      bindMatchupHolesToggle(paneEl, resolvedParty);
+      initMgHints();
+    };
+    const cb = paneEl.querySelector('#pb-mtx-holes-toggle');
+    if (cb) cb.addEventListener('change', () => { matchupHolesOnly = cb.checked; rerender(); });
+    const showAll = paneEl.querySelector('#pb-mtx-show-all');
+    if (showAll) showAll.addEventListener('click', (e) => { e.preventDefault(); matchupHolesOnly = false; rerender(); });
   }
   /** (8) ポップオーバー内「この相手を枠Xの仮想敵に追加」ボタンのHTML。枠未選択・既追加はdisabled。 */
   function addTargetButtonHtml(oppLabel) {

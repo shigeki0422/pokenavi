@@ -62,6 +62,8 @@ const I18N_ALL = {
     title: preCoreLabel ? `${preCoreLabel}軸 M-6 軸から簡単構築` : 'M-6 軸から簡単構築',
     lead: '軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案します。各ポケの役割・パーティ統計・使用率上位との1v1相性つき。',
     note: '※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。',
+    leadShort: '軸ポケモンを指定すると、バランスの良いパーティをシミュレーションで提案します。', leadMoreLabel: '詳しく', leadDetail: '各ポケの役割・パーティ統計・使用率上位との1v1相性つきで提案します。',
+    blankAutoHelp: '空欄のまま実行すると、使用率上位から自動で軸を選びます。',
     corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
     corePlaceholderMore: 'さらに追加…（ひらがな可）',
     go: '提案する', close: '閉じる', noHit: '該当なし',
@@ -128,6 +130,8 @@ const I18N_ALL = {
     title: preCoreLabel ? `Quick Build from ${preCoreLabelDisplay} — M-6` : 'M-6 Quick Build from Core',
     lead: 'Specify a Pokémon (or Pokémon) to build around, and the simulator suggests a balanced party — with each member\'s role, team stats, and 1v1 matchups against the top usage ranks.',
     note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
+    leadShort: 'Specify a Pok\u00e9mon to build around, and the simulator suggests a balanced party.', leadMoreLabel: 'Details', leadDetail: "Each suggestion includes each member's role, team stats, and 1v1 matchups against the top usage ranks.",
+    blankAutoHelp: 'Leave the field blank to auto-pick a core from the top usage ranks.',
     corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
     corePlaceholderMore: 'Add more…',
     go: 'Suggest', close: 'Close', noHit: 'No matches',
@@ -194,6 +198,8 @@ const I18N_ALL = {
     title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-6 축으로 간단 구성` : 'M-6 축으로 간단 구성',
     lead: '축으로 삼고 싶은 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다. 각 포켓몬의 역할·파티 통계·사용률 상위와의 1v1 상성까지 확인할 수 있습니다.',
     note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
+    leadShort: '축으로 삼을 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다.', leadMoreLabel: '자세히', leadDetail: '각 포켓몬의 역할·파티 통계·사용률 상위와의 1v1 상성까지 함께 제안합니다.',
+    blankAutoHelp: '비워두고 실행하면 사용률 상위에서 자동으로 축을 선택합니다.',
     corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
     corePlaceholderMore: '추가로 검색…',
     go: '제안받기', close: '닫기', noHit: '검색 결과 없음',
@@ -263,8 +269,12 @@ const I18N = I18N_ALL[lang];
 <main>
   <h1>{I18N.title}</h1>
   <PartyToolsNav current="suggest" lang={lang} />
-  <p class="lead">{I18N.lead}</p>
-  <p class="note">{I18N.note}</p>
+  <!-- (C18/S15) 説明文を1行+「詳しく」に圧縮し、注意書き(note)は入力欄の下へ移す -->
+  <p class="lead">{I18N.leadShort}</p>
+  <details class="lead-details">
+    <summary>{I18N.leadMoreLabel}</summary>
+    <p>{I18N.leadDetail}</p>
+  </details>
 
   <div class="card">
     <div class="corebox">
@@ -273,10 +283,13 @@ const I18N = I18N_ALL[lang];
         <input type="text" id="core-filter" class="filter-inp" placeholder={I18N.corePlaceholder} autocomplete="off" />
         <div class="filter-sug" id="core-sug" style="display:none"></div>
       </div>
+      <!-- (S16) 「空欄でおまかせ」はplaceholderだけだと気付かれにくいため常設ヘルプにする -->
+      <div class="ps-help">{I18N.blankAutoHelp}</div>
     </div>
     <div class="row" style="margin-top:.6em">
       <button id="go" class="btn">{I18N.go}</button>
     </div>
+    <p class="note">{I18N.note}</p>
     <div id="ps-multi-notice" class="ps-notice" style="display:none">{I18N.multiAxisNotice}</div>
     <div id="status" class="muted" style="margin-top:.5em"></div>
   </div>
@@ -305,8 +318,16 @@ const I18N = I18N_ALL[lang];
 <style is:global>
   main{width:auto;max-width:1040px;margin:0 auto;padding:1.4em 1em 4em;color:rgb(var(--gray-dark));overflow-x:clip}
   h1{font-size:1.5rem;margin:0 0 .2em}
-  .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 .5em}
-  .note{font-size:.8rem;color:rgb(var(--gray));background:#fff8e6;border:1px solid #f0d888;border-radius:8px;padding:.55em .8em;margin:0 0 1.1em}
+  .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 .3em}
+  /* (C18) 説明文を1行+「詳しく」に圧縮。初期状態は閉じたまま(<details>既定) */
+  .lead-details{margin:0 0 1.1em;font-size:.82rem;color:rgb(var(--gray))}
+  .lead-details summary{cursor:pointer;color:var(--accent);font-weight:700;list-style:none}
+  .lead-details summary::-webkit-details-marker{display:none}
+  .lead-details p{margin:.4em 0 0}
+  /* (S15) 入力欄の下に移した注意書き */
+  .note{font-size:.8rem;color:rgb(var(--gray));background:#fff8e6;border:1px solid #f0d888;border-radius:8px;padding:.55em .8em;margin:.8em 0 0}
+  /* (S16) 「空欄でおまかせ」の常設ヘルプ(ps-noticeより控えめな色) */
+  .ps-help{font-size:.76rem;color:rgb(var(--gray));margin-top:.4em}
   .ps-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7em;padding:3.2em 1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px}
   .ps-spinner{width:38px;height:38px;border:4px solid rgb(var(--gray-light));border-top-color:rgb(var(--accent));border-radius:50%;animation:ps-spin .8s linear infinite}
   @keyframes ps-spin{to{transform:rotate(360deg)}}
@@ -621,6 +642,8 @@ const I18N = I18N_ALL[lang];
 
   /* (A1) 提案カードのアコーディオン */
   .hd.sug-toggle{cursor:pointer}
+  /* (S01) ヘッダ外・.sug-body末尾に移した「工房で保存」ボタン */
+  .sug-save-row{margin-top:.9em;padding-top:.7em;border-top:1px solid rgb(var(--gray-light))}
   .sug-chev{color:rgb(var(--gray));font-weight:800;margin-left:auto;margin-right:.4em}
   .card.sug.collapsed .sug-body{display:none}
 
@@ -1012,8 +1035,12 @@ const I18N = I18N_ALL[lang];
   function legendBox(text){
     return `<details class="mtx-legend-det"><summary class="mtx-legend-sum">${esc(I18N.legendSummary)}</summary><div class="mtx-legend"><span>${text}</span></div></details>`;
   }
-  /** (A4) 横スクロール可能な相性表をラップし、右端にフェード+矢印ヒントを付ける(初回スクロールで消える)。 */
+  /** (A4)(C03) 横スクロール可能な相性表をラップし、右端にフェード+矢印ヒントを付ける。
+   * 実装は工房(PartyBuilderApp.astro)と共有するsrc/scripts/party-builder/mg-hints.tsに切り出し済み。
+   * このスクリプトはdefine:varsのis:inlineでimportできないため、window.__mgWrapHtml経由で呼ぶ
+   * (window.__mtTableと同じ渡し方)。未ロードの場合に備え、フォールバックとして旧実装を残す。 */
   function mgWrap(tableHtml){
+    if (typeof window.__mgWrapHtml === 'function') return window.__mgWrapHtml(tableHtml);
     return `<div class="mg-wrap"><div class="mg">${tableHtml}</div><div class="mg-hint" aria-hidden="true">→</div></div>`;
   }
   function matchupHtml(res){
@@ -1075,29 +1102,48 @@ const I18N = I18N_ALL[lang];
     // 折りたたみ内の詳細は提案の約2.5%しか開かれておらず、ガイドは計算依頼ボタンが30日で115件。
     // 描画関数(archetypeHtml/guideHtml)と paneHtml の分岐は残してあるので、
     // 下の2行を戻せば復活する。再考のうえ設計し直す。
+    // (S18) 初期タブは攻撃相性→ポケモン相性。パーティの穴が最初に見えるタブを優先する(工房のB16と同じ判断)。
     const tbar = `<div class="tabbar">
-        <button class="tb active" data-i="${i}" data-t="atktype">${I18N.tabAtk}</button>
+        <button class="tb" data-i="${i}" data-t="atktype">${I18N.tabAtk}</button>
         <button class="tb" data-i="${i}" data-t="deftype">${I18N.tabDef}</button>
-        <button class="tb" data-i="${i}" data-t="mu">${I18N.tabMu}</button>
+        <button class="tb active" data-i="${i}" data-t="mu">${I18N.tabMu}</button>
         <button class="tb" data-i="${i}" data-t="speed">${I18N.tabSpeed}</button>
       </div>`;
     const collapsed = i !== 0;
+    // (S01) 「工房で保存・微調整」はアコーディオンの開閉トグル(.sug-toggle)の外、.sug-body末尾に置く。
+    // ヘッダ内に置いていた頃は、畳もうとタップした指がボタンにも重なりやすく、
+    // 畳むつもりが誤って工房へ遷移する事故があったため、当たり判定を完全に分離する。
     return `<div class="card sug${collapsed?' collapsed':''}" data-sug="${i}">
-      <div class="hd sug-toggle" data-i="${i}"><span>${I18N.suggestion(i+1)}</span><span class="sug-chev" aria-hidden="true">${collapsed?'▾':'▴'}</span><button type="button" class="pb-btn-sub ps-import-btn">${I18N.saveToBuilder}</button></div>
+      <div class="hd sug-toggle" data-i="${i}"><span>${I18N.suggestion(i+1)}</span><span class="sug-chev" aria-hidden="true">${collapsed?'▾':'▴'}</span></div>
       ${st}
       <div class="iconrow">${tabs}</div>
       <div class="sug-body">
-        <div class="detail" id="det-${i}">${detailHtml(res.mons[0])}</div>
+        <div class="detail" id="det-${i}">${collapsed ? '' : detailHtml(res.mons[0])}</div>
         ${tbar}
-        <div class="pane" id="pane-${i}">${attackTypeHtml(res)}</div>
+        <div class="pane" id="pane-${i}"${collapsed ? '' : ' data-rendered="1"'}>${collapsed ? '' : matchupHtml(res)}</div>
+        <div class="sug-save-row"><button type="button" class="pb-btn-sub ps-import-btn">${I18N.saveToBuilder}</button></div>
       </div>
     </div>`;
+  }
+  /** (S04) 折りたたみ状態(2〜5案目)は初期DOMに.detail/.paneの中身(攻撃相性表等の画像・セル)を
+   * 生成せず、初回展開時(toggleSugでcollapsedが外れた瞬間)にだけ生成する。初期DOMの画像数・
+   * セル数が案の数だけ膨らんでいたのを1/5程度に抑える狙い。pane側はdata-renderedで二重生成を防ぐ。 */
+  function ensureSugBodyRendered(i){
+    const paneEl = document.getElementById('pane-'+i);
+    if (!paneEl || paneEl.dataset.rendered || !LAST[i]) return;
+    paneEl.dataset.rendered = '1';
+    const detEl = document.getElementById('det-'+i);
+    if (detEl && !detEl.innerHTML) detEl.innerHTML = detailHtml(LAST[i].mons[0]);
+    const activeBtn = document.querySelector(`.tb.active[data-i="${i}"]`);
+    const t = activeBtn ? activeBtn.dataset.t : 'mu';
+    paneEl.innerHTML = paneHtml(LAST[i], t, i);
   }
   function toggleSug(hd){
     const card = hd.closest('.sug'); if(!card) return;
     const collapsed = card.classList.toggle('collapsed');
     const chev = hd.querySelector('.sug-chev'); if(chev) chev.textContent = collapsed?'▾':'▴';
     if(!collapsed){
+      ensureSugBodyRendered(+hd.dataset.i); // (S04) 初回展開時に遅延生成
       // 折りたたみ中はdisplay:noneでscrollWidth/clientWidthが0になり、
       // 横スクロールヒントの判定(initMgHints)が不正確なまま済んでしまうため、
       // 展開時に判定をやり直す。
@@ -1466,14 +1512,20 @@ const I18N = I18N_ALL[lang];
     document.querySelectorAll('details.mtx-legend-det').forEach(d=>{ d.open = !mobile; });
   }
   window.addEventListener('resize', syncLegendOpen);
-  /** (A4) 新しく描画された.mg-wrapに横スクロールヒントの表示/消去を仕込む(冪等)。 */
+  /** (A4)(C03) 新しく描画された.mg-wrapに横スクロールヒントの表示/消去を仕込む(冪等)。
+   * mgWrap()と同じ理由でwindow.__mgHints経由(未ロード時は旧実装にフォールバック)。
+   * (C05) フォールバック側も{once:true}をやめ、左端まで戻したら再表示する。 */
   function initMgHints(){
+    if (typeof window.__mgHints === 'function') { window.__mgHints(); return; }
     document.querySelectorAll('.mg-wrap:not([data-mg-init])').forEach(wrap=>{
       wrap.setAttribute('data-mg-init','1');
       const mg = wrap.querySelector('.mg'); if(!mg) return;
-      const check = () => { if(mg.scrollWidth <= mg.clientWidth + 2) wrap.classList.add('mg-scrolled'); };
+      const check = () => {
+        if (mg.scrollWidth <= mg.clientWidth + 2) { wrap.classList.add('mg-scrolled'); return; }
+        wrap.classList.toggle('mg-scrolled', mg.scrollLeft > 2);
+      };
       check();
-      mg.addEventListener('scroll', () => wrap.classList.add('mg-scrolled'), {once:true, passive:true});
+      mg.addEventListener('scroll', check, {passive:true});
       window.addEventListener('resize', check);
     });
   }
@@ -1744,4 +1796,8 @@ const I18N = I18N_ALL[lang];
   import { renderMatchupTable } from '../scripts/party-builder/matchup-table';
   import '../styles/matchup-table.css';
   window.__mtTable = (vm, lang) => renderMatchupTable(vm, lang);
+  // (C03) 横スクロールヒント(.mg-wrap)は工房(PartyBuilderApp.astro)と共有する実装に切り出した。
+  import { mgWrapHtml, initMgHints } from '../scripts/party-builder/mg-hints';
+  window.__mgWrapHtml = mgWrapHtml;
+  window.__mgHints = initMgHints;
 </script>
