@@ -93,6 +93,7 @@ const I18N_ALL = {
     handoffFailed: '提案データを取り込めませんでした。型を解決できませんでした',
     initErrorMsg: 'データの読み込みに失敗しました。再読み込みしてください', retryBtn: '再試行',
     miniBarExpandAria: '仮想敵の詳細を展開', sheetCollapseBtn: '▼閉じる', sheetExpandCaret: '▲詳細',
+    miniBarMinimizeAria: '最小化', miniBarReopenAria: 'ミニバーを再表示',
   },
   en: {
     title: 'Party Workshop',
@@ -170,6 +171,7 @@ const I18N_ALL = {
     handoffFailed: "Couldn't import the suggestion data. The build couldn't be resolved",
     initErrorMsg: 'Failed to load data. Please reload the page.', retryBtn: 'Retry',
     miniBarExpandAria: 'Expand virtual opponent details', sheetCollapseBtn: '▼ Close', sheetExpandCaret: '▲ Details',
+    miniBarMinimizeAria: 'Minimize', miniBarReopenAria: 'Show mini bar again',
   },
   ko: {
     title: '파티 공방',
@@ -247,6 +249,7 @@ const I18N_ALL = {
     handoffFailed: '제안 데이터를 가져오지 못했습니다. 빌드를 해석할 수 없었습니다',
     initErrorMsg: '데이터를 불러오지 못했습니다. 다시 불러와 주세요.', retryBtn: '재시도',
     miniBarExpandAria: '가상의 적 상세 펼치기', sheetCollapseBtn: '▼ 닫기', sheetExpandCaret: '▲ 상세',
+    miniBarMinimizeAria: '최소화', miniBarReopenAria: '미니바 다시 표시',
   },
 } as const;
 const I18N = I18N_ALL[lang];
@@ -295,6 +298,7 @@ const I18N = I18N_ALL[lang];
 </div>
 
 <div class="pb-minibar" id="pb-minibar"></div>
+<button type="button" class="pb-minibar-reopen" id="pb-minibar-reopen" aria-label={I18N.miniBarReopenAria}>▲</button>
 <div class="pb-undo-toast" id="pb-undo-toast" style="display:none"></div>
 
 <style is:global>
@@ -652,18 +656,29 @@ const I18N = I18N_ALL[lang];
   .pb-minibar{position:fixed;left:0;right:0;bottom:0;z-index:600;display:none;background:#fff;border-top:1px solid rgb(var(--gray-light));box-shadow:0 -2px 12px rgba(0,0,0,.1);padding-bottom:env(safe-area-inset-bottom)}
   @media (max-width:1023.98px){
     .pb-minibar.pb-minibar-show{display:block}
-    .pb-minibar.pb-minibar-show.pb-sheet-expanded{display:flex;flex-direction:column;height:45vh;max-height:50vh}
+    /* (B34) 既定50vh・ドラッグハンドルで最大85vhまで広げられる(--pb-sheet-hはbindSheetDragが書き換える) */
+    .pb-minibar.pb-minibar-show.pb-sheet-expanded{display:flex;flex-direction:column;height:var(--pb-sheet-h, 50vh);max-height:85vh}
     body.pb-minibar-active main{padding-bottom:64px}
-    body.pb-sheet-open main{padding-bottom:calc(45vh + 12px)}
+    body.pb-sheet-open main{padding-bottom:calc(var(--pb-sheet-h, 50vh) + 12px)}
+    /* (B11) ミニバー表示中はボトムナビと二重に固定表示させない */
+    body.pb-minibar-active .bottom-nav{display:none}
   }
   .pb-minibar-inner{display:flex;align-items:center;gap:.3em;max-width:1040px;margin:0 auto;padding:.35em .5em;cursor:pointer}
-  .pb-minibar-scroll{display:flex;gap:.35em;overflow-x:auto;flex:1;min-width:0}
-  .pb-minibar-item{display:flex;align-items:center;gap:.25em;flex-shrink:0;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:0 .55em;font-size:.72rem;font-weight:700;color:rgb(var(--gray-dark));font-family:var(--font-atkinson);white-space:nowrap;min-height:40px;box-sizing:border-box}
-  .pb-minibar-ico{width:20px;height:20px;object-fit:contain}
+  .pb-minibar-scroll{display:flex;gap:.35em;overflow-x:auto;overscroll-behavior-x:contain;flex:1;min-width:0}
+  .pb-minibar-item{display:flex;align-items:center;gap:.25em;flex-shrink:0;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:0 .5em;font-size:.72rem;font-weight:700;color:rgb(var(--gray-dark));font-family:var(--font-atkinson);white-space:nowrap;min-height:40px;box-sizing:border-box}
+  .pb-minibar-item.act{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+  .pb-minibar-name{overflow:hidden;text-overflow:ellipsis;max-width:5.2em}
+  .pb-minibar-sym{flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 3px;border-radius:999px;font-size:.68rem;font-weight:900;line-height:1}
+  .pb-minibar-ico{flex-shrink:0;width:20px;height:20px;object-fit:contain}
   .pb-minibar-caret{flex-shrink:0;font-size:.7rem;font-weight:800;color:var(--accent);padding:0 .4em;white-space:nowrap}
   .pb-minibar-x{flex-shrink:0;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:none;border:none;color:rgb(var(--gray));font-size:1rem;cursor:pointer}
   .pb-minibar-x:hover{color:#dc2626}
+  /* (B07) 最小化中の再展開ピル。ボトムナビは表示に戻るため、その上に重ねる位置に置く */
+  .pb-minibar-reopen{position:fixed;right:14px;bottom:calc(70px + env(safe-area-inset-bottom));z-index:600;width:44px;height:44px;border-radius:999px;background:var(--accent);color:#fff;border:none;box-shadow:0 2px 10px rgba(0,0,0,.25);font-size:1rem;display:none;align-items:center;justify-content:center;cursor:pointer;padding:0}
+  @media (max-width:1023.98px){ .pb-minibar-reopen.pb-minibar-reopen-show{display:flex} }
   /* ボトムシート展開時のヘッダ/本文(型カードは仮想敵パネルの描画をそのまま再利用) */
+  .pb-sheet-handle{flex-shrink:0;display:flex;justify-content:center;align-items:center;padding:.5em 0 .35em;cursor:grab;touch-action:none}
+  .pb-sheet-handle span{width:36px;height:4px;border-radius:999px;background:rgb(var(--gray-light))}
   .pb-minibar-head{display:flex;align-items:center;justify-content:space-between;gap:.6em;min-height:44px;padding:.4em .7em;border-bottom:1px solid rgb(var(--gray-light));flex-shrink:0;max-width:1040px;margin:0 auto;width:100%;box-sizing:border-box}
   .pb-minibar-title{display:flex;align-items:center;gap:.35em;font-weight:800;font-size:.85rem;min-width:0}
   .pb-sheet-body{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:.6em .8em 1em;max-width:1040px;margin:0 auto;box-sizing:border-box}
@@ -680,7 +695,7 @@ const I18N = I18N_ALL[lang];
   .pb-undo-toast-btn:hover{color:#bfdbfe}
   @media (max-width:1023.98px){
     body.pb-minibar-active .pb-undo-toast{bottom:76px}
-    body.pb-sheet-open .pb-undo-toast{bottom:calc(45vh + 16px)}
+    body.pb-sheet-open .pb-undo-toast{bottom:calc(var(--pb-sheet-h, 50vh) + 16px)}
   }
 
   /* (11) 空パーティ時の初見ガイド */
@@ -827,6 +842,7 @@ const I18N = I18N_ALL[lang];
       handoffFailed: '提案データを取り込めませんでした。型を解決できませんでした',
       initErrorMsg: 'データの読み込みに失敗しました。再読み込みしてください', retryBtn: '再試行',
       miniBarExpandAria: '仮想敵の詳細を展開', sheetCollapseBtn: '▼閉じる', sheetExpandCaret: '▲詳細',
+      miniBarMinimizeAria: '最小化', miniBarReopenAria: 'ミニバーを再表示',
     },
     en: {
       title: 'Party Workshop',
@@ -937,6 +953,7 @@ const I18N = I18N_ALL[lang];
       handoffFailed: "Couldn't import the suggestion data. The build couldn't be resolved",
       initErrorMsg: 'Failed to load data. Please reload the page.', retryBtn: 'Retry',
       miniBarExpandAria: 'Expand virtual opponent details', sheetCollapseBtn: '▼ Close', sheetExpandCaret: '▲ Details',
+      miniBarMinimizeAria: 'Minimize', miniBarReopenAria: 'Show mini bar again',
     },
     ko: {
       title: '파티 공방',
@@ -1046,6 +1063,7 @@ const I18N = I18N_ALL[lang];
       handoffFailed: '제안 데이터를 가져오지 못했습니다. 빌드를 해석할 수 없었습니다',
       initErrorMsg: '데이터를 불러오지 못했습니다. 다시 불러와 주세요.', retryBtn: '재시도',
       miniBarExpandAria: '가상의 적 상세 펼치기', sheetCollapseBtn: '▼ 닫기', sheetExpandCaret: '▲ 상세',
+      miniBarMinimizeAria: '최소화', miniBarReopenAria: '미니바 다시 표시',
     },
   };
   const I18N = I18N_ALL[lang];
@@ -1189,8 +1207,11 @@ const I18N = I18N_ALL[lang];
   let targetSugActive = -1;
   let dragSrcIdx = null;
   let activeMuTab = null; // 仮想敵パネル: ポケモン単位タブの選択状態(描画状態のみ・保存不要)
-  let miniBarDismissed = false; // (1) モバイル判定ミニバーを✕で閉じた状態(このページセッション中は再表示しない)
+  let miniBarMinimized = false; // (B07) ミニバーを✕で最小化した状態。再展開ピル(#pb-minibar-reopen)のタップで戻せる
   let sheetExpanded = false; // ミニバーのボトムシート展開状態(セッション中のみ保持・保存不要)。renderMiniBar()のみが読み書きする。
+  let targetsPanelVisible = false; // (B13) #pb-targetsが画面内に見えているかの近似(IntersectionObserverで更新・ミニバーとの二重表示回避に使う)
+  let lastMiniBarArgs = null; // (B07) 再展開ピル・IntersectionObserverから直前の描画内容でrenderMiniBar()を呼び直すためのキャッシュ
+  let lastMiniBarHtml = null; // (B12) renderMiniBar()が直前に描画したHTML文字列。同じならinnerHTMLに触れずscrollTop/フォーカスを保つ
   let mtxPopData = []; // (5) ポケモン相性マトリクスのセル用ポップオーバー内容(renderのたびに作り直す)
   let holeFillResult = null; // 「穴を埋める候補」の計算結果キャッシュ。{ sig, additions, swaps } または null(未計算)
   let holeFillLoading = false; // 計算中フラグ(ポップオーバーのスピナー表示用)
@@ -1204,6 +1225,19 @@ const I18N = I18N_ALL[lang];
   mqDesktopSplit.addEventListener('change', (e) => {
     if (e.matches && sheetExpanded) { sheetExpanded = false; renderTargetsPanel(); }
   });
+  // (B13) #pb-targetsが画面内にある程度見えている間は、ミニバー折りたたみ表示と内容が重複するため出さない。
+  // B15(セクション分割)未実装のため、可視範囲の近似としてIntersectionObserverで判定する。
+  {
+    const targetsPanelEl = document.getElementById('pb-targets');
+    if (targetsPanelEl && 'IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        const visible = entries[entries.length - 1].isIntersecting;
+        if (visible === targetsPanelVisible) return;
+        targetsPanelVisible = visible;
+        if (lastMiniBarArgs) renderMiniBar(lastMiniBarArgs.activeGrp, lastMiniBarArgs.allTabs, lastMiniBarArgs.sheetCtx);
+      }, { threshold: 0.25 }).observe(targetsPanelEl);
+    }
+  }
   /** 仮想敵の型 編集状態。{ label, bi: number|'new', draft: TargetBuild, detail: MonDetail|null, loading } または null。
    * bi は effectiveTargets() 上の当該ラベルのbuilds配列インデックス('new'=追加中で未保存)。 */
   let muEdit = null;
@@ -1321,10 +1355,10 @@ const I18N = I18N_ALL[lang];
   }
 
   const MU_SYM_RANK = { '◎': 4, '○': 3, '△': 2, '▲': 1, '×': 0 };
-  /** (7) 仮想敵タブ用の最悪判定バッジ。grpの全型(≤3)についてjudge1v1(rb, opp)を回し、
-   * 最も悪いsymが×/▲のときだけそのsymを返す(◎/○/△なら表示しない=null)。選択枠の仮想敵のみが
-   * 対象で型数も≤3のため、タブ描画のたびに回しても軽量。 */
-  function muTabBadge(rb, grp, sc) {
+  /** grpの全型(≤3)についてjudge1v1(rb, opp)を回し、最も悪い(判定ランクが最低の)symを返す。
+   * 仮想敵タブの警告バッジ(muTabBadge)とミニバー折りたたみ表示(B10)が共通して使う「最悪判定」ロジック。
+   * 選択枠の仮想敵のみが対象で型数も≤3のため、描画のたびに回しても軽量。 */
+  function worstMuSym(rb, grp, sc) {
     if (!rb || !grp || !grp.builds.length || !core) return null;
     const worstOf = () => {
       let worst = null, worstRank = 99;
@@ -1337,7 +1371,7 @@ const I18N = I18N_ALL[lang];
       return worst;
     };
     const base = worstOf();
-    if (base !== '×' && base !== '▲') return null;
+    if (base == null) return null;
     // 前提つきなら勝てる対面は、素の記号を残したまま印だけ足す。
     let cond = null;
     if (sc && !scenarioIsDefault(sc)) {
@@ -1348,6 +1382,12 @@ const I18N = I18N_ALL[lang];
       } finally { setScenario(null); }
     }
     return { sym: base, cond };
+  }
+  /** (7) 仮想敵タブ用の最悪判定バッジ。×/▲のときだけ表示する(◎/○/△は警告不要のため非表示)。 */
+  function muTabBadge(rb, grp, sc) {
+    const w = worstMuSym(rb, grp, sc);
+    if (!w || (w.sym !== '×' && w.sym !== '▲')) return null;
+    return w;
   }
 
   /** label(仮想敵ラベル)に対応する種のmon jsonをloadMonで取得する。sp→species.icon経由(メガ型ラベルのicon誤用を避ける)。 */
@@ -1389,8 +1429,23 @@ const I18N = I18N_ALL[lang];
       renderBalance();
     }, 80);
   }
+  /** (B12) EVスライダー/ステッパー連打時にrenderTargetsPanel()(仮想敵パネル+ミニバー再生成)をtrailing
+   * デバウンスするためのタイマー。実数値表示自体はapplyEvChange側で即時更新済みのため、ここを80ms遅らせても
+   * 数値の反映は遅延しない。scheduleRenderBalanceと同じ方式。 */
+  let targetsDebounceTimer = null;
+  function cancelScheduledRenderTargets() {
+    if (targetsDebounceTimer) { clearTimeout(targetsDebounceTimer); targetsDebounceTimer = null; }
+  }
+  function scheduleRenderTargets() {
+    cancelScheduledRenderTargets();
+    targetsDebounceTimer = setTimeout(() => {
+      targetsDebounceTimer = null;
+      renderTargetsPanel();
+    }, 80);
+  }
   function render() {
     cancelScheduledRenderBalance();
+    cancelScheduledRenderTargets();
     renderPartyBar();
     renderValidate();
     renderTray();
@@ -1403,64 +1458,136 @@ const I18N = I18N_ALL[lang];
   }
 
   // ---- (1) モバイル固定判定ミニバー / ボトムシート ----
-  /** 選択中枠が仮想敵ありのとき、画面下部に固定表示する。collapsed(既定)は型ごとの判定を超コンパクト表示。
-   * タップ(✕以外のどこでも)でボトムシート(高さ約45vh・上限50vh)に展開し、仮想敵パネル(renderTargetsPanel)
-   * の型カード(chips/cardsBlockHtml/addResetRow)とそのイベント紐付け(bindMuSection)をsheetCtx経由で
-   * そのまま再利用する(二重実装を避けるため、シート専用のHTML生成/イベント処理は持たない)。
-   * grp/rows/sheetCtxはrenderTargetsPanel()が算出済みのものをそのまま渡す(二重計算しない)。 */
-  function renderMiniBar(grp, rows, sheetCtx) {
+  /** 選択中枠が仮想敵ありのとき、画面下部に固定表示する。collapsed(既定)は「選択中の枠が持つ全仮想敵」
+   * の最悪判定を1体1チップで横スクロール表示する(worstMuSym()をmuTabBadgeと共有・確定数計算は書き直さない)。
+   * チップタップはactiveMuTabの切替+#pb-targetsへのスクロール、チップ以外の場所のタップでボトムシート
+   * (既定50vh・ドラッグハンドルで最大85vh)に展開する。展開後は仮想敵パネル(renderTargetsPanel)の型カード
+   * (chips/cardsBlockHtml/addResetRow)とそのイベント紐付け(bindMuSection)をsheetCtx経由でそのまま
+   * 再利用する(二重実装を避けるため、シート専用のHTML生成/イベント処理は持たない)。
+   * activeGrp/allTabs/sheetCtxはrenderTargetsPanel()が算出済みのものをそのまま渡す(二重計算しない)。
+   * (B13) #pb-targetsが画面内に見えている間は二重表示になるため折りたたみ表示を出さない(targetsPanelVisible)。 */
+  function hideMiniBar() {
     const el = document.getElementById('pb-minibar');
+    if (el) { el.classList.remove('pb-minibar-show', 'pb-sheet-expanded'); el.innerHTML = ''; }
+    lastMiniBarHtml = null;
+    document.body.classList.remove('pb-minibar-active', 'pb-sheet-open');
+    sheetExpanded = false;
+  }
+  function renderMiniBar(activeGrp, allTabs, sheetCtx) {
+    const el = document.getElementById('pb-minibar');
+    const reopenEl = document.getElementById('pb-minibar-reopen');
     if (!el) return;
-    if (miniBarDismissed || !grp || !rows || !rows.length) {
-      el.classList.remove('pb-minibar-show', 'pb-sheet-expanded');
-      el.innerHTML = '';
-      document.body.classList.remove('pb-minibar-active', 'pb-sheet-open');
-      sheetExpanded = false;
-      return;
-    }
+    lastMiniBarArgs = { activeGrp, allTabs, sheetCtx };
+    const hasContent = !!activeGrp && !!allTabs && allTabs.length > 0;
+    if (!hasContent) { hideMiniBar(); if (reopenEl) reopenEl.classList.remove('pb-minibar-reopen-show'); return; }
+    if (miniBarMinimized) { hideMiniBar(); if (reopenEl) reopenEl.classList.add('pb-minibar-reopen-show'); return; }
+    if (reopenEl) reopenEl.classList.remove('pb-minibar-reopen-show');
+    // 展開中のシートは操作対象なので、#pb-targetsが見えてきても閉じない(折りたたみ表示だけが対象)。
+    if (targetsPanelVisible && !sheetExpanded) { hideMiniBar(); return; }
+
     el.classList.add('pb-minibar-show');
     el.classList.toggle('pb-sheet-expanded', sheetExpanded);
     document.body.classList.add('pb-minibar-active');
     document.body.classList.toggle('pb-sheet-open', sheetExpanded);
 
-    const collapse = () => { sheetExpanded = false; renderMiniBar(grp, rows, sheetCtx); };
-    const expand = () => { sheetExpanded = true; renderMiniBar(grp, rows, sheetCtx); };
+    const collapse = () => { sheetExpanded = false; renderMiniBar(activeGrp, allTabs, sheetCtx); };
+    const expand = () => {
+      sheetExpanded = true;
+      document.documentElement.style.setProperty('--pb-sheet-h', '50vh'); // (B34) 展開のたびに既定50vhへ戻す
+      renderMiniBar(activeGrp, allTabs, sheetCtx);
+    };
 
+    let html;
     if (!sheetExpanded) {
-      const items = rows.slice(0, 3).map((r) => `<button type="button" class="pb-minibar-item">${icoImg(grp.icon, grp.label, 'pb-minibar-ico')}<span>S${r.mySpeed}vs${r.oppSpeed} ${r.verdict.sym}${r.myHitsTxt}/${r.oppHitsTxt}</span></button>`).join('');
-      el.innerHTML = `<div class="pb-minibar-inner" id="pb-minibar-tap" role="button" tabindex="0" aria-expanded="false" aria-label="${esc(I18N.miniBarExpandAria)}">
+      const items = allTabs.map((t) => {
+        const act = t.label === activeMuTab ? ' act' : '';
+        const symHtml = t.sym ? `<span class="pb-minibar-sym ${symCls(t.sym)}">${t.sym}</span>` : '';
+        return `<button type="button" class="pb-minibar-item${act}" data-mb-tab="${esc(t.label)}">${icoImg(t.icon, t.label, 'pb-minibar-ico')}<span class="pb-minibar-name">${esc(tPoke(t.label))}</span>${symHtml}</button>`;
+      }).join('');
+      html = `<div class="pb-minibar-inner" id="pb-minibar-tap" role="button" tabindex="0" aria-expanded="false" aria-label="${esc(I18N.miniBarExpandAria)}">
           <div class="pb-minibar-scroll">${items}</div>
           <span class="pb-minibar-caret">${esc(I18N.sheetExpandCaret)}</span>
-          <button type="button" class="pb-minibar-x" id="pb-minibar-x" aria-label="${esc(I18N.close)}">✕</button>
+          <button type="button" class="pb-minibar-x" id="pb-minibar-x" aria-label="${esc(I18N.miniBarMinimizeAria)}">✕</button>
         </div>`;
+    } else {
+      html = `
+        <div class="pb-sheet-handle" id="pb-sheet-handle" aria-hidden="true"><span></span></div>
+        <div class="pb-minibar-head">
+          <span class="pb-minibar-title">${icoImg(activeGrp.icon, activeGrp.label, 'pb-minibar-ico')}${esc(tPoke(activeGrp.label))}</span>
+          <button type="button" class="pb-btn-sub" id="pb-sheet-collapse" aria-expanded="true">${esc(I18N.sheetCollapseBtn)}</button>
+        </div>
+        <div class="pb-sheet-body" id="pb-sheet-body">
+          <div class="filter-chips">${sheetCtx.chips}</div>
+          ${sheetCtx.scenarioHtml}
+          ${sheetCtx.cardsBlockHtml}
+          ${sheetCtx.addResetRow}
+        </div>`;
+    }
+
+    // (B12) 直前と同じ内容ならinnerHTMLに触れない(EV連打のたびにシートのscrollTop/select開閉状態が
+    // リセットされるのを防ぐ)。内容が変わる場合のみ、シートのscrollTopを保存して復元する。
+    if (html === lastMiniBarHtml) return;
+    const prevScrollTop = sheetExpanded ? document.getElementById('pb-sheet-body')?.scrollTop : null;
+    lastMiniBarHtml = html;
+    el.innerHTML = html;
+
+    if (!sheetExpanded) {
       const tapEl = document.getElementById('pb-minibar-tap');
-      tapEl.addEventListener('click', (e) => { if (e.target.closest('#pb-minibar-x')) return; expand(); });
-      tapEl.addEventListener('keydown', (e) => {
+      tapEl.addEventListener('click', (e) => {
         if (e.target.closest('#pb-minibar-x')) return;
+        const chip = e.target.closest('[data-mb-tab]');
+        if (chip) { onMiniBarTabPick(chip.dataset.mbTab); return; }
+        expand();
+      });
+      tapEl.addEventListener('keydown', (e) => {
+        if (e.target.closest('#pb-minibar-x') || e.target.closest('[data-mb-tab]')) return;
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); expand(); }
       });
       document.getElementById('pb-minibar-x').addEventListener('click', (e) => {
         e.stopPropagation();
-        miniBarDismissed = true;
-        renderMiniBar(null, null);
+        miniBarMinimized = true;
+        renderMiniBar(activeGrp, allTabs, sheetCtx);
       });
       return;
     }
 
-    el.innerHTML = `
-      <div class="pb-minibar-head">
-        <span class="pb-minibar-title">${icoImg(grp.icon, grp.label, 'pb-minibar-ico')}${esc(tPoke(grp.label))}</span>
-        <button type="button" class="pb-btn-sub" id="pb-sheet-collapse" aria-expanded="true">${esc(I18N.sheetCollapseBtn)}</button>
-      </div>
-      <div class="pb-sheet-body" id="pb-sheet-body">
-        <div class="filter-chips">${sheetCtx.chips}</div>
-        ${sheetCtx.scenarioHtml}
-        ${sheetCtx.cardsBlockHtml}
-        ${sheetCtx.addResetRow}
-      </div>`;
     document.getElementById('pb-sheet-collapse').addEventListener('click', collapse);
     const sheetBodyEl = document.getElementById('pb-sheet-body');
-    if (sheetBodyEl) sheetCtx.bindMuSection(sheetBodyEl);
+    if (sheetBodyEl) {
+      sheetCtx.bindMuSection(sheetBodyEl);
+      if (prevScrollTop != null) sheetBodyEl.scrollTop = prevScrollTop;
+    }
+    const handleEl = document.getElementById('pb-sheet-handle');
+    if (handleEl) bindSheetDrag(handleEl);
+  }
+  /** ミニバー折りたたみ表示のチップタップ。activeMuTabを切り替えて仮想敵パネル本体へスクロールする
+   * (B15でセクション分割されるまでは#pb-targets自体へ。分割後は仮想敵セクションへ差し替える)。 */
+  function onMiniBarTabPick(label) {
+    activeMuTab = label;
+    muEdit = null;
+    renderTargetsPanel();
+    const sec = document.getElementById('pb-targets');
+    if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  /** (B34) ボトムシートの高さをドラッグハンドルで調整する。既定50vh・上限85vh・下限30vh(誤操作で
+   * シートが消えてしまわない程度)。--pb-sheet-hはdocumentElementに持たせ、CSS側のheight/paddingが参照する。 */
+  function bindSheetDrag(handleEl) {
+    let dragging = false, startY = 0, startVh = 50;
+    const currentVh = () => parseFloat(document.documentElement.style.getPropertyValue('--pb-sheet-h')) || 50;
+    const onPointerMove = (e) => {
+      if (!dragging) return;
+      const deltaVh = ((startY - e.clientY) / window.innerHeight) * 100;
+      const next = Math.max(30, Math.min(85, startVh + deltaVh));
+      document.documentElement.style.setProperty('--pb-sheet-h', `${next}vh`);
+    };
+    const onPointerUp = (e) => { dragging = false; try { handleEl.releasePointerCapture(e.pointerId); } catch (err) { /* noop */ } };
+    handleEl.addEventListener('pointerdown', (e) => {
+      dragging = true; startY = e.clientY; startVh = currentVh();
+      try { handleEl.setPointerCapture(e.pointerId); } catch (err) { /* noop */ }
+    });
+    handleEl.addEventListener('pointermove', onPointerMove);
+    handleEl.addEventListener('pointerup', onPointerUp);
+    handleEl.addEventListener('pointercancel', onPointerUp);
   }
 
   /** (11) 0体(空パーティ)のときだけ6枠トレイ直下に3ステップの初見ガイドを表示する。1体追加で消える。 */
@@ -2100,7 +2227,7 @@ const I18N = I18N_ALL[lang];
       if (remainEl) remainEl.innerHTML = evRemainText(slot.evs);
     }
     renderValidate();
-    renderTargetsPanel();
+    scheduleRenderTargets();
     scheduleRenderBalance();
   }
   function onEvInput(e) {
@@ -2371,6 +2498,14 @@ const I18N = I18N_ALL[lang];
         : '';
       return `<span class="filter-chip pb-mu-tab${act}" data-mu-tab="${esc(label)}">${grp ? icoImg(grp.icon, grp.label, '') : ''}${esc(tPoke(label))}${badgeHtml}<button class="filter-chip-x" data-rm-target="${esc(label)}">✕</button></span>`;
     }).join('');
+    // (B10) ミニバー折りたたみ時: 選択枠が持つ全仮想敵について、アクティブなタブに絞らず1体1チップで
+    // 最悪判定の記号を出す(worstMuSymはmuTabBadgeと同じ判定ロジックを共有・ここで確定数計算をやり直さない)。
+    const miniBarTabs = slot.targets.map((label) => {
+      const grp = targetsList.find((g) => g.label === label);
+      if (!grp) return null;
+      const w = worstMuSym(rb, grp, scenarioOf(slot, label));
+      return { label, icon: grp.icon, sym: w ? w.sym : null };
+    }).filter(Boolean);
 
     const activeGrp = activeMuTab ? targetsList.find((g) => g.label === activeMuTab) : null;
     const editingThis = !!(muEdit && activeGrp && muEdit.label === activeGrp.label);
@@ -2554,7 +2689,7 @@ const I18N = I18N_ALL[lang];
     }
 
     bindMuSection(el);
-    renderMiniBar(activeGrp, rows, { chips, cardsBlockHtml, addResetRow, bindMuSection, scenarioHtml });
+    renderMiniBar(activeGrp, miniBarTabs, { chips, cardsBlockHtml, addResetRow, bindMuSection, scenarioHtml });
 
     const searchInput = el.querySelector('#pb-target-search');
     searchInput.addEventListener('input', (e) => onTargetSearchInput(e.target.value));
@@ -3481,6 +3616,11 @@ const I18N = I18N_ALL[lang];
   }
   document.getElementById('pb-modal-x').addEventListener('click', hideModal);
   document.getElementById('pb-modal').addEventListener('click', (e) => { if (e.target.id === 'pb-modal') hideModal(); });
+  // (B07) 最小化中の再展開ピル。直前にrenderMiniBar()へ渡された内容をキャッシュ(lastMiniBarArgs)からそのまま再現する。
+  document.getElementById('pb-minibar-reopen').addEventListener('click', () => {
+    miniBarMinimized = false;
+    if (lastMiniBarArgs) renderMiniBar(lastMiniBarArgs.activeGrp, lastMiniBarArgs.allTabs, lastMiniBarArgs.sheetCtx);
+  });
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     hideModal();
