@@ -299,6 +299,8 @@ const I18N = I18N_ALL[lang];
 
 <style is:global>
   main{width:auto;max-width:1040px;margin:0 auto;padding:1.4em 1em 4em;color:rgb(var(--gray-dark));overflow-x:clip}
+  /* (B14) ボトムナビ分の余白に、notch端末のホームインジケータ分を追加 */
+  @media (max-width:1023.98px){ main{padding-bottom:calc(4em + env(safe-area-inset-bottom))} }
   h1{font-size:1.5rem;margin:0 0 .2em}
   h2{font-size:1.05rem;margin:0 0 .5em}
   .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 1.1em}
@@ -308,9 +310,13 @@ const I18N = I18N_ALL[lang];
   .btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:.55em 1.2em;font-weight:700;font-size:.85rem;cursor:pointer;font-family:var(--font-atkinson)}
   .btn:disabled{opacity:.5;cursor:default}
   @media(hover:hover){.btn:hover{background:var(--accent-dark)}}
-  input,.inp,select.inp{font-size:.9rem;padding:.5em .6em;border:1px solid rgb(var(--gray-light));border-radius:8px;font-family:inherit}
+  button{touch-action:manipulation}
+  /* (C01) iOSはinput/selectのfont-size<16pxでオートズームする */
+  input,.inp,select.inp{font-size:1rem;padding:.5em .6em;border:1px solid rgb(var(--gray-light));border-radius:8px;font-family:inherit}
+  /* (B04) selectはpadding+行高だけでは44pxに届かない */
+  select.inp{min-height:44px}
   .filter-wrap{position:relative}
-  .filter-inp{width:100%;box-sizing:border-box;padding:.5em .7em;border:1px solid rgb(var(--gray-light));border-radius:8px;font-size:.85rem;outline:none;font-family:var(--font-atkinson)}
+  .filter-inp{width:100%;box-sizing:border-box;min-height:44px;padding:.5em .7em;border:1px solid rgb(var(--gray-light));border-radius:8px;font-size:1rem;outline:none;font-family:var(--font-atkinson)}
   .filter-inp:focus{border-color:var(--accent)}
   .filter-sug{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#fff;border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.12);z-index:200;overflow:hidden;max-height:280px;overflow-y:auto}
   .sug-item{display:flex;align-items:center;gap:8px;padding:6px 12px;cursor:pointer;font-size:.85rem;border-bottom:1px solid #f8fafc}
@@ -323,7 +329,9 @@ const I18N = I18N_ALL[lang];
   .filter-chips{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:.4em}
   .filter-chip{display:inline-flex;align-items:center;gap:2px;padding:2px 4px 2px 3px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:999px;font-size:.74rem;font-weight:700;color:#3730a3}
   .filter-chip img{width:26px;height:26px;object-fit:contain;flex-shrink:0}
-  .filter-chip-x{background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.75rem;line-height:1;padding:0 3px;display:flex;align-items:center}
+  .filter-chip-x{position:relative;background:none;border:none;cursor:pointer;color:#94a3b8;font-size:.75rem;line-height:1;padding:0 3px;display:flex;align-items:center}
+  /* (C02) 見た目は変えずタップ領域だけ拡張 */
+  .filter-chip-x::before{content:'';position:absolute;inset:-8px}
   .filter-chip-x:hover{color:#dc2626}
   .pb-mu-tab{cursor:pointer;opacity:.5}
   .pb-mu-tab:hover{opacity:.8}
@@ -335,7 +343,7 @@ const I18N = I18N_ALL[lang];
   .montab:hover{border-color:#94a3b8;background:#f8fafc}
   .montab.active{border-color:var(--accent);background:#eef2ff}
   .monicon{width:40px;height:40px;object-fit:contain}
-  .mname{font-size:.62rem;font-weight:700;text-align:center;color:rgb(var(--gray-dark));line-height:1.15;word-break:break-all}
+  .mname{font-size:.62rem;font-weight:700;text-align:center;color:rgb(var(--gray-dark));line-height:1.15;overflow-wrap:anywhere}
   .mitem{font-size:.54rem;color:rgb(var(--gray));text-align:center;line-height:1.15}
   .dgrid{display:flex;flex-wrap:wrap;gap:.35em .8em;margin-bottom:.35em;align-items:center}
   .dcell{font-size:.82rem;display:inline-flex;align-items:center;gap:.3em}
@@ -355,7 +363,7 @@ const I18N = I18N_ALL[lang];
   .bg-cc{background:#dcfce7;color:#15803d}.bg-cb{background:#d1fae5;color:#15803d}.bg-cn{background:rgb(var(--gray-light));color:rgb(var(--gray))}.bg-cw{background:#ffedd5;color:#c2410c}.bg-cx{background:#fee2e2;color:#b91c1c}
   .mu-dep{color:#7c3aed;font-weight:900;font-size:.6rem;vertical-align:2px}
   .mu-dep-leg{color:#7c3aed}
-  .mg{overflow-x:auto;margin-top:.4em}
+  .mg{overflow-x:auto;margin-top:.4em;overscroll-behavior-x:contain}
   table.mtx{font-size:.72rem;border-collapse:separate;border-spacing:2px}
   table.mtx th{font-size:.7rem;font-weight:700;padding:.2em;vertical-align:bottom;text-align:center}
   table.mtx td{text-align:center;border-radius:5px;font-weight:800;padding:.3em;min-width:34px;white-space:nowrap;font-size:.9rem}
@@ -368,7 +376,7 @@ const I18N = I18N_ALL[lang];
   table.mtx th.mtx-stick{position:sticky;left:0;background:#fff;z-index:2;box-shadow:2px 0 3px -1px rgba(0,0,0,.14);width:96px;min-width:96px;max-width:96px;overflow:hidden}
   table.mtx th.mtx-stick .mtx-rowh{width:100%}
   table.mtx th.mtx-stick .mtx-rowh .mtx-ico{flex-shrink:0}
-  table.mtx th.mtx-stick .mtx-name{white-space:normal;word-break:break-all;line-height:1.05;flex:1;min-width:0}
+  table.mtx th.mtx-stick .mtx-name{white-space:normal;overflow-wrap:anywhere;line-height:1.05;flex:1;min-width:0}
   table.mtx th.mtx-corner.mtx-stick{z-index:3}
   /* 1v1判定の行見出しはアイコンのみ。名前ぶんの幅を列に回す */
   table.mtx th.mtx-stick-ico{width:38px;min-width:38px;max-width:38px;padding:2px}
@@ -390,9 +398,10 @@ const I18N = I18N_ALL[lang];
   table.mtx td.df-w1{background:#fee2e2;color:#b91c1c}
   table.mtx td.df-w2{background:#fca5a5;color:#7f1d1d}
 
-  /* タブ */
-  .tabbar{display:flex;flex-wrap:wrap;gap:4px;border-bottom:2px solid rgb(var(--gray-light));margin-top:.7em}
-  .tb{border:none;background:none;padding:.5em .8em;font-size:.8rem;font-weight:700;color:rgb(var(--gray));cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--font-atkinson);border-radius:6px 6px 0 0}
+  /* タブ（(C08)簡単構築の.tabbarを移植: nowrap+横スクロール+sticky。--ps-sticky-topは簡単構築側のみ設定するため工房ではtop:0のまま） */
+  .tabbar{display:flex;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:4px;border-bottom:2px solid rgb(var(--gray-light));margin-top:.7em;position:sticky;top:var(--ps-sticky-top,0px);background:#fff;z-index:5}
+  .tabbar::-webkit-scrollbar{display:none}
+  .tb{border:none;background:none;padding:.5em .8em;font-size:.8rem;font-weight:700;color:rgb(var(--gray));cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;font-family:var(--font-atkinson);border-radius:6px 6px 0 0;white-space:nowrap;flex-shrink:0}
   .tb:hover{background:#f8fafc;color:rgb(var(--gray-dark))}
   .tb.active{color:var(--accent);border-bottom-color:var(--accent)}
   .pane{padding-top:.6em}
@@ -412,8 +421,9 @@ const I18N = I18N_ALL[lang];
 
   /* 詳細ポップアップ/モーダル */
   .pop-overlay{position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1em}
-  .pop-card{background:#fff;border-radius:14px;box-shadow:0 12px 48px rgba(0,0,0,.25);max-width:560px;width:100%;max-height:82vh;overflow:auto;padding:1.1em 1.2em;position:relative}
-  .pop-x{position:absolute;top:.6em;right:.7em;background:none;border:none;font-size:1.1rem;color:rgb(var(--gray));cursor:pointer;line-height:1}
+  .pop-card{background:#fff;border-radius:14px;box-shadow:0 12px 48px rgba(0,0,0,.25);max-width:560px;width:100%;max-height:90dvh;overflow:auto;padding:1.1em 1.2em;position:relative}
+  /* (C02/C09) 44pxタップ域化＋スクロールしても隠れないようsticky化（マイナスmarginで初期位置は見た目そのまま） */
+  .pop-x{position:sticky;top:0;display:flex;align-items:center;justify-content:center;margin:-.6em -.7em -44px auto;width:44px;height:44px;background:none;border:none;font-size:1.1rem;color:rgb(var(--gray));cursor:pointer;line-height:1;z-index:5}
   .pop-x:hover{color:#dc2626}
 
   /* 相性マトリクスのセル詳細ポップオーバー（PartySuggestApp.astro matchupDetailHtml準拠、pb-名前空間で移植） */
@@ -448,7 +458,9 @@ const I18N = I18N_ALL[lang];
   .pb-partybar-row select.inp{flex:0 1 auto;min-width:0;max-width:11em}
   .pb-partybar-row .pb-btn-sub{padding:.4em .7em;font-size:.74rem}
   .pb-storage-note{margin-top:.6em}
-  .pb-btn-sub{background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;border-radius:8px;padding:.45em .9em;font-weight:700;font-size:.8rem;cursor:pointer;font-family:var(--font-atkinson)}
+  .pb-btn-sub{position:relative;min-height:40px;box-sizing:border-box;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;border-radius:8px;padding:.45em .9em;font-weight:700;font-size:.8rem;cursor:pointer;font-family:var(--font-atkinson)}
+  /* (C02) 実寸を40pxまで確保しつつ、隣接ボタンが多いため拡張ヒットは控えめに */
+  .pb-btn-sub::before{content:'';position:absolute;inset:-6px}
   .pb-btn-sub:hover{background:#e0e7ff}
   .pb-btn-sub:disabled{opacity:.45;cursor:default}
   .pb-danger{background:#fee2e2;color:#b91c1c;border-color:#fecaca}
@@ -456,6 +468,8 @@ const I18N = I18N_ALL[lang];
   .pb-slot-empty{display:flex;align-items:center;justify-content:center;border-style:dashed}
   .pb-plus{font-size:1.6rem;color:rgb(var(--gray));font-weight:300}
   .pb-slot-x{position:absolute;top:1px;right:3px;font-size:.65rem;color:rgb(var(--gray));cursor:pointer;line-height:1;z-index:2;padding:2px}
+  /* (B06) 12×14→拡張ヒットで約28px。枠が密集するためinsetは控えめ */
+  .pb-slot-x::before{content:'';position:absolute;inset:-8px}
   .pb-slot-x:hover{color:#dc2626}
 
   /* 空き枠クリック時の検索カード（6枠編成カード内・トレイ直下に展開、選択枠と吹き出し矢印でつながる） */
@@ -463,7 +477,8 @@ const I18N = I18N_ALL[lang];
   .pb-slotsearch::before{content:'';position:absolute;top:-7px;left:var(--pb-arrow-left,50%);width:12px;height:12px;background:#eef2ff;border-left:2px solid var(--accent);border-top:2px solid var(--accent);transform:translateX(-50%) rotate(45deg);border-radius:2px 0 0 0}
   .pb-slotsearch-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5em;gap:.5em}
   .pb-slotsearch-title{font-weight:800;font-size:.82rem;color:#3730a3}
-  .pb-slotsearch-close{background:none;border:none;color:rgb(var(--gray));cursor:pointer;font-size:.8rem;padding:.2em .4em;flex-shrink:0}
+  .pb-slotsearch-close{position:relative;background:none;border:none;color:rgb(var(--gray));cursor:pointer;font-size:.8rem;padding:.2em .4em;flex-shrink:0}
+  .pb-slotsearch-close::before{content:'';position:absolute;inset:-12px}
   .pb-slotsearch-close:hover{color:#dc2626}
   .pb-editor-head{display:flex;align-items:center;gap:.6em;margin-bottom:.6em}
   .pb-editor-head .monicon{width:48px;height:48px;object-fit:contain}
@@ -473,7 +488,7 @@ const I18N = I18N_ALL[lang];
   .pb-select-row{margin-bottom:.6em}
   .pb-mega-note{font-size:.68rem;color:#92400e;margin-left:.3em}
   .pb-ev-editor{margin:.6em 0}
-  .pb-ev-row{display:grid;grid-template-columns:26px 40px 1fr 40px 56px 48px;align-items:center;gap:.4em;margin-bottom:.3em}
+  .pb-ev-row{display:grid;grid-template-columns:26px 40px 1fr 40px 56px 48px;align-items:center;gap:.4em;margin-bottom:.3em;min-height:44px}
   .pb-ev-step{width:40px;height:40px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#f8fafc;color:rgb(var(--gray-dark));font-size:1.05rem;font-weight:800;cursor:pointer;font-family:var(--font-atkinson);padding:0}
   .pb-ev-step:disabled{opacity:.4;cursor:default}
   /* 仮想敵ごとの前提(天候・フィールド・積み)。既定のときは目立たせない */
@@ -493,19 +508,20 @@ const I18N = I18N_ALL[lang];
   .pb-sc-row.pb-sc-on{background:#eef2ff;border-color:var(--accent)}
   .pb-sc-hd{font-weight:800;color:rgb(var(--gray-dark))}
   .pb-sc-f{display:flex;align-items:center;gap:4px;color:rgb(var(--gray-dark))}
-  .pb-sc-sel{min-height:36px;padding:4px 6px;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#fff;font-family:var(--font-atkinson);font-size:.86rem;max-width:11em}
+  .pb-sc-sel{min-height:44px;padding:4px 6px;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#fff;font-family:var(--font-atkinson);font-size:1rem;max-width:11em}
   @media(max-width:640px){.pb-sc-row{gap:6px;padding:7px 8px}.pb-sc-sel{max-width:8.5em}}
   @media(hover:hover){.pb-ev-step:not(:disabled):hover{background:#eef2ff;border-color:var(--accent)}}
   .pb-ev-lbl{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;color:#fff;font-weight:800;font-size:.72rem}
   /* スマホでスクロール中にEVバーへ指が触れると値が飛ぶ。pan-y で縦のパンはページに渡し、
      スライダーが拾うのは横方向の操作だけにする。touch-action だけでは触れた瞬間の
      ジャンプが残るので、スクロールに転じたら pointercancel で値を戻す(JS側)。 */
-  .pb-ev-range{-webkit-appearance:none;appearance:none;width:100%;height:6px;margin:0;padding:0;border-radius:999px;background:rgb(var(--gray-light));cursor:pointer;vertical-align:middle;touch-action:pan-y}
-  .pb-ev-range::-webkit-slider-runnable-track{height:6px;border-radius:999px;background:transparent}
-  .pb-ev-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:16px;height:16px;margin-top:-5px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
-  .pb-ev-range::-moz-range-track{height:6px;border-radius:999px;background:rgb(var(--gray-light))}
-  .pb-ev-range::-moz-range-thumb{width:16px;height:16px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
-  .pb-ev-num{width:100%;box-sizing:border-box;padding:.25em .3em;font-size:.8rem;text-align:center;-moz-appearance:textfield}
+  /* (B02) 見た目のtrackは12pxのまま、当たり判定になる要素自体の高さを44pxにして掴みやすく */
+  .pb-ev-range{-webkit-appearance:none;appearance:none;width:100%;height:44px;margin:0;padding:0;background:transparent;cursor:pointer;vertical-align:middle;touch-action:pan-y}
+  .pb-ev-range::-webkit-slider-runnable-track{height:12px;border-radius:999px;background:rgb(var(--gray-light))}
+  .pb-ev-range::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:28px;height:28px;margin-top:-8px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
+  .pb-ev-range::-moz-range-track{height:12px;border-radius:999px;background:rgb(var(--gray-light))}
+  .pb-ev-range::-moz-range-thumb{width:28px;height:28px;border:none;border-radius:50%;background:var(--accent);cursor:pointer}
+  .pb-ev-num{width:100%;height:40px;box-sizing:border-box;padding:.25em .3em;font-size:1rem;text-align:center;-moz-appearance:textfield}
   .pb-ev-num::-webkit-outer-spin-button,.pb-ev-num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
   .pb-ev-stat{font-weight:700;font-size:.85rem;text-align:right}
   .pb-ev-remain{font-size:.8rem;font-weight:700;margin:.4em 0}
@@ -540,15 +556,20 @@ const I18N = I18N_ALL[lang];
   .pb-tune-item{display:flex;align-items:center;gap:.5em;flex-wrap:wrap;font-size:.82rem;border:1px solid #e2e8f0;border-radius:8px;padding:.5em .7em;margin-bottom:.4em;background:#f8fafc}
   .pb-tune-head{font-size:.76rem;font-weight:800;color:rgb(var(--gray));margin:.6em 0 .3em;display:flex;align-items:center;gap:.3em}
   .pb-tune-head:first-child{margin-top:0}
-  .pb-textarea{width:100%;box-sizing:border-box;min-height:140px;font-family:monospace;font-size:.8rem;padding:.6em;border:1px solid rgb(var(--gray-light));border-radius:8px}
+  .pb-textarea{width:100%;box-sizing:border-box;min-height:140px;font-family:monospace;font-size:1rem;padding:.6em;border:1px solid rgb(var(--gray-light));border-radius:8px}
   .ps-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7em;padding:2.4em 1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px}
   .ps-spinner{width:32px;height:32px;border:4px solid rgb(var(--gray-light));border-top-color:rgb(var(--accent));border-radius:50%;animation:ps-spin .8s linear infinite}
   @keyframes ps-spin{to{transform:rotate(360deg)}}
   .ps-lmsg{font-weight:700;color:rgb(var(--gray-dark));font-size:.9rem}
   @media (max-width:640px){
-    .pb-ev-row{grid-template-columns:22px 40px 1fr 40px 48px 42px}
+    .pb-ev-row{grid-template-columns:22px 40px 1fr 40px 56px 42px}
     table.mtx td{min-width:28px}
     .iconrow{grid-template-columns:repeat(3,1fr)}
+    /* (C02) タブのタップ領域を44pxに */
+    .tb{min-height:44px;box-sizing:border-box;display:inline-flex;align-items:center}
+    /* (C07) 相性表の行見出しをアイコンのみにして横幅を稼ぐ（1v1判定は既にアイコンのみ） */
+    table.mtx th.mtx-stick{width:44px;min-width:44px;max-width:44px}
+    table.mtx th.mtx-stick .mtx-name{display:none}
   }
 
   /* 2カラムレイアウト（型エディタ／仮想敵） */
@@ -628,7 +649,7 @@ const I18N = I18N_ALL[lang];
   button.pb-mb-chip{border:none;font-family:inherit;font-size:.68rem;font-weight:700;color:inherit;text-align:left;cursor:pointer}
 
   /* (1) モバイル固定判定ミニバー(タップでボトムシートに展開) */
-  .pb-minibar{position:fixed;left:0;right:0;bottom:0;z-index:600;display:none;background:#fff;border-top:1px solid rgb(var(--gray-light));box-shadow:0 -2px 12px rgba(0,0,0,.1)}
+  .pb-minibar{position:fixed;left:0;right:0;bottom:0;z-index:600;display:none;background:#fff;border-top:1px solid rgb(var(--gray-light));box-shadow:0 -2px 12px rgba(0,0,0,.1);padding-bottom:env(safe-area-inset-bottom)}
   @media (max-width:1023.98px){
     .pb-minibar.pb-minibar-show{display:block}
     .pb-minibar.pb-minibar-show.pb-sheet-expanded{display:flex;flex-direction:column;height:45vh;max-height:50vh}
