@@ -492,6 +492,7 @@ const I18N = I18N_ALL[lang];
   .pb-partybar-row select.inp{flex:0 1 auto;min-width:0;max-width:11em}
   .pb-partybar-row .pb-btn-sub{padding:.4em .7em;font-size:.74rem}
   .pb-storage-note{margin-top:.6em}
+  .pb-share-msg{margin-left:.6em}
   .pb-btn-sub{position:relative;min-height:40px;box-sizing:border-box;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;border-radius:8px;padding:.45em .9em;font-weight:700;font-size:.8rem;cursor:pointer;font-family:var(--font-atkinson)}
   /* (C02) 実寸を40pxまで確保しつつ、隣接ボタンが多いため拡張ヒットは控えめに */
   .pb-btn-sub::before{content:'';position:absolute;inset:-6px}
@@ -782,6 +783,7 @@ const I18N = I18N_ALL[lang];
   import { tuneForTargets } from '../scripts/party-builder/suggest';
   import { validateParty } from '../scripts/party-builder/validate';
   import { mgWrapHtml, initMgHints } from '../scripts/party-builder/mg-hints';
+  import { track } from '../scripts/track';
 
   const lang = window.__PB_LANG__;
   const pfx = window.__PB_PFX__;
@@ -801,6 +803,7 @@ const I18N = I18N_ALL[lang];
       createPartyPrompt: 'パーティを作成してください',
       editorTitle: '型エディタ', editorSelectPrompt: '上の6枠から編集したい枠を選択してください',
       editorAddPrompt: 'ポケモンを追加すると型を編集できます',
+      coreSuggestBtn: 'この枠を軸に簡単構築',
       speciesDataMissing: '種族データが見つかりません（データ不整合）', muCalcError: 'データ不整合のため計算できません',
       editorHeading: n => `型エディタ ー 枠${n}`,
       slotHeading: n => `枠${n}`,
@@ -890,6 +893,7 @@ const I18N = I18N_ALL[lang];
       fillNoHoleReason: '埋まる穴は無し（使用率上位から）',
       fillClearBtn: '✕ 提案をクリア', alreadyAdded: '追加済み', addToEmptySlot: sp => `${sp}を空き枠に追加`,
       exportHeading: name => `エクスポート ー ${name}`, copyBtn: 'コピー', copiedMsg: 'コピーしました',
+      shareLinkBtn: 'リンクをコピー',
       copyFailedMsg: 'コピーに失敗しました。テキストを選択して手動でコピーしてください',
       importHeading: 'インポート', importHint: '6行のspecテキストを貼り付けてください（エクスポートした形式）',
       importPlaceholder: 'ここに貼り付け', importBtn: '取り込む',
@@ -898,6 +902,7 @@ const I18N = I18N_ALL[lang];
       evPresetHeading: sp => `${sp} EVプリセット（採用率順）`,
       handoffHeading: 'パーティ工房への取り込み',
       handoffFailed: '提案データを取り込めませんでした。型を解決できませんでした',
+      handoffImportedMsg: '簡単構築の内容を取り込みました',
       initErrorMsg: 'データの読み込みに失敗しました。再読み込みしてください', retryBtn: '再試行',
       miniBarExpandAria: '仮想敵の詳細を展開', sheetCollapseBtn: '▼閉じる', sheetExpandCaret: '▲詳細',
       miniBarMinimizeAria: '最小化', miniBarReopenAria: 'ミニバーを再表示',
@@ -913,6 +918,7 @@ const I18N = I18N_ALL[lang];
       createPartyPrompt: 'Please create a party',
       editorTitle: 'Build Editor', editorSelectPrompt: 'Select a slot above to edit its build',
       editorAddPrompt: 'Add a Pokémon to edit its build',
+      coreSuggestBtn: 'Quick Build from this slot',
       speciesDataMissing: 'Species data not found (data inconsistency)', muCalcError: "Can't calculate due to a data inconsistency",
       editorHeading: n => `Build Editor — Slot ${n}`,
       slotHeading: n => `Slot ${n}`,
@@ -1004,6 +1010,7 @@ const I18N = I18N_ALL[lang];
       fillNoHoleReason: 'Covers no current hole (picked by usage)',
       fillClearBtn: '✕ Clear suggestions', alreadyAdded: 'Already added', addToEmptySlot: sp => `Add ${sp} to an empty slot`,
       exportHeading: name => `Export — ${name}`, copyBtn: 'Copy', copiedMsg: 'Copied',
+      shareLinkBtn: 'Copy Link',
       copyFailedMsg: 'Copy failed. Please select the text and copy it manually',
       importHeading: 'Import', importHint: 'Paste 6 lines of spec text (the exported format)',
       importPlaceholder: 'Paste here', importBtn: 'Import',
@@ -1012,6 +1019,7 @@ const I18N = I18N_ALL[lang];
       evPresetHeading: sp => `${sp} EV presets (by usage)`,
       handoffHeading: 'Import into Party Workshop',
       handoffFailed: "Couldn't import the suggestion data. The build couldn't be resolved",
+      handoffImportedMsg: 'Imported from Quick Build',
       initErrorMsg: 'Failed to load data. Please reload the page.', retryBtn: 'Retry',
       miniBarExpandAria: 'Expand virtual opponent details', sheetCollapseBtn: '▼ Close', sheetExpandCaret: '▲ Details',
       miniBarMinimizeAria: 'Minimize', miniBarReopenAria: 'Show mini bar again',
@@ -1027,6 +1035,7 @@ const I18N = I18N_ALL[lang];
       createPartyPrompt: '파티를 생성해 주세요',
       editorTitle: '빌드 에디터', editorSelectPrompt: '위의 6칸에서 편집할 칸을 선택해 주세요',
       editorAddPrompt: '포켓몬을 추가하면 빌드를 편집할 수 있습니다',
+      coreSuggestBtn: '이 칸을 축으로 간단 구성',
       speciesDataMissing: '종족 데이터를 찾을 수 없습니다（데이터 불일치）', muCalcError: '데이터 불일치로 계산할 수 없습니다',
       editorHeading: n => `빌드 에디터 — 칸${n}`,
       slotHeading: n => `칸${n}`,
@@ -1117,6 +1126,7 @@ const I18N = I18N_ALL[lang];
       fillNoHoleReason: '메우는 구멍 없음(사용률 상위에서)',
       fillClearBtn: '✕ 제안 지우기', alreadyAdded: '추가됨', addToEmptySlot: sp => `${sp}을(를) 빈 칸에 추가`,
       exportHeading: name => `내보내기 — ${name}`, copyBtn: '복사', copiedMsg: '복사했습니다',
+      shareLinkBtn: '링크 복사',
       copyFailedMsg: '복사에 실패했습니다. 텍스트를 선택하여 수동으로 복사해 주세요',
       importHeading: '가져오기', importHint: '6줄의 spec 텍스트를 붙여넣어 주세요（내보내기 형식）',
       importPlaceholder: '여기에 붙여넣기', importBtn: '가져오기',
@@ -1125,6 +1135,7 @@ const I18N = I18N_ALL[lang];
       evPresetHeading: sp => `${sp} EV 프리셋（사용률순）`,
       handoffHeading: '파티 공방으로 가져오기',
       handoffFailed: '제안 데이터를 가져오지 못했습니다. 빌드를 해석할 수 없었습니다',
+      handoffImportedMsg: '간단 구성 내용을 가져왔습니다',
       initErrorMsg: '데이터를 불러오지 못했습니다. 다시 불러와 주세요.', retryBtn: '재시도',
       miniBarExpandAria: '가상의 적 상세 펼치기', sheetCollapseBtn: '▼ 닫기', sheetExpandCaret: '▲ 상세',
       miniBarMinimizeAria: '최소화', miniBarReopenAria: '미니바 다시 표시',
@@ -1295,6 +1306,12 @@ const I18N = I18N_ALL[lang];
   mqDesktopSplit.addEventListener('change', (e) => {
     if (e.matches && sheetExpanded) { sheetExpanded = false; renderTargetsPanel(); }
   });
+  // (B20) スクロール位置だけは選択枠変更等のタイミングと無関係に動くため、専用にデバウンス保存する。
+  let scrollSaveTimer = null;
+  window.addEventListener('scroll', () => {
+    if (scrollSaveTimer) return;
+    scrollSaveTimer = setTimeout(() => { scrollSaveTimer = null; saveUiState(); }, 200);
+  }, { passive: true });
   // (B13) #pb-targetsが画面内にある程度見えている間は、ミニバー折りたたみ表示と内容が重複するため出さない。
   // B15(セクション分割)未実装のため、可視範囲の近似としてIntersectionObserverで判定する。
   {
@@ -1332,6 +1349,39 @@ const I18N = I18N_ALL[lang];
     holeFillResult = null;
     holeFillLoading = false;
     clearPendingUndo();
+    clearUiState(); // (B20) パーティ切替後は旧パーティの枠インデックスを引きずらないよう保存済みUI状態も捨てる
+  }
+
+  // ---- (B20/B21) 選択枠・タブ・スクロール位置の保存/復元 ----
+  // Storeのlocalstorage(pn-builder-v1)とは別キーにし、バージョニングに影響しないようにする。
+  const UI_SS_KEY = 'pn-builder-ui';
+  function saveUiState() {
+    try {
+      sessionStorage.setItem(UI_SS_KEY, JSON.stringify({ selectedIdx, balanceTab, activeMuTab, selTab, scrollY: window.scrollY }));
+    } catch (e) { /* noop */ }
+  }
+  function loadUiState() {
+    try {
+      const raw = sessionStorage.getItem(UI_SS_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) { return null; }
+  }
+  function clearUiState() {
+    try { sessionStorage.removeItem(UI_SS_KEY); } catch (e) { /* noop */ }
+  }
+  /** (B21) 簡単構築の?core=反映(history.replaceState)と同じ流儀で、選択枠とパーティ全体の
+   * バランスタブをURLに反映する。共有・リロード復元・戻る/進むボタンでの参照に使う。 */
+  function syncUrlFromState() {
+    const p = activeParty();
+    const url = new URL(location.href);
+    if (p) url.searchParams.set('party', p.id); else url.searchParams.delete('party');
+    if (selectedIdx !== null) url.searchParams.set('slot', String(selectedIdx)); else url.searchParams.delete('slot');
+    url.searchParams.set('tab', balanceTab);
+    history.replaceState(null, '', url.pathname + url.search + url.hash);
+  }
+  function persistUi() {
+    saveUiState();
+    syncUrlFromState();
   }
   function resolveSlotSafe(slot) {
     if (!slot || !core) return null;
@@ -1551,6 +1601,7 @@ const I18N = I18N_ALL[lang];
     if (!p || selectedIdx === null || !slot) {
       if (sec) sec.removeAttribute('data-tab');
       if (el) el.innerHTML = '';
+      persistUi(); // (B20/B21)
       return;
     }
     if (sec) sec.dataset.tab = selTab;
@@ -1560,7 +1611,8 @@ const I18N = I18N_ALL[lang];
     const icon = rb ? rb.icon : null;
     const targetsCount = slot.targets.length;
     el.innerHTML = `
-      <div class="pb-selected-title">${icoImg(icon, name, 'monicon')}<span class="pb-selected-name">${esc(I18N.slotHeading(selectedIdx + 1))} ${esc(tPoke(name))}</span></div>
+      <div class="pb-selected-title">${icoImg(icon, name, 'monicon')}<span class="pb-selected-name">${esc(I18N.slotHeading(selectedIdx + 1))} ${esc(tPoke(name))}</span>
+        <button type="button" class="pb-btn-sub" id="pb-core-suggest">${esc(I18N.coreSuggestBtn)}</button></div>
       <div class="pb-selected-tabs" role="tablist">
         <button type="button" class="pb-sel-tab${selTab === 'editor' ? ' active' : ''}" data-sel-tab="editor" role="tab" aria-selected="${selTab === 'editor'}">${esc(I18N.editorTitle)}</button>
         <button type="button" class="pb-sel-tab${selTab === 'targets' ? ' active' : ''}" data-sel-tab="targets" role="tab" aria-selected="${selTab === 'targets'}">${esc(I18N.targetsHeading)}${targetsCount ? ` ${targetsCount}` : ''}</button>
@@ -1572,6 +1624,12 @@ const I18N = I18N_ALL[lang];
       // ミニバーの表示条件にselTabが絡むため、直前の描画内容で出し直す(二重表示/消し忘れ防止)。
       if (lastMiniBarArgs) renderMiniBar(lastMiniBarArgs.activeGrp, lastMiniBarArgs.allTabs, lastMiniBarArgs.sheetCtx);
     }));
+    // (B29) 軸ポケモンの和名(=slot.spを解決した内部ラベル)をそのまま?core=に渡す。表示言語での
+    // 翻訳名(tPoke)ではなく、簡単構築側がSPECIES.labelと突き合わせる和名を使う必要がある。
+    document.getElementById('pb-core-suggest').addEventListener('click', () => {
+      location.href = `${pfx}/party-suggest?core=${encodeURIComponent(name)}`;
+    });
+    persistUi(); // (B20/B21)
   }
 
   // ---- (1) モバイル固定判定ミニバー / ボトムシート ----
@@ -1772,8 +1830,9 @@ const I18N = I18N_ALL[lang];
         <button class="pb-btn-sub pb-danger" id="pb-p-del" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.partyDel)}</button>
         <button class="pb-btn-sub" id="pb-p-exp" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.partyExp)}</button>
         <button class="pb-btn-sub" id="pb-p-imp" ${renamingParty ? 'disabled' : ''}>${esc(I18N.partyImp)}</button>
+        ${HAS_COMPRESSION ? `<button class="pb-btn-sub" id="pb-p-share" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.shareLinkBtn)}</button>` : ''}
       </div>
-      <div class="muted pb-storage-note">${esc(I18N.storageNote)}</div>`;
+      <div class="muted pb-storage-note">${esc(I18N.storageNote)}<span id="pb-share-msg" class="pb-share-msg"></span></div>`;
     if (renamingParty && p) {
       // (12b) prompt()の代わりにインライン編集。Enter/blurで確定・Escで取消(esc()はvalue属性側で適用済み)。
       const input = document.getElementById('pb-party-rename-input');
@@ -1834,6 +1893,7 @@ const I18N = I18N_ALL[lang];
     });
     document.getElementById('pb-p-exp').addEventListener('click', () => { if (p && !renamingParty) openExportModal(p); });
     document.getElementById('pb-p-imp').addEventListener('click', () => { if (!renamingParty) openImportModal(); });
+    document.getElementById('pb-p-share')?.addEventListener('click', () => { if (p && !renamingParty) shareCurrentParty(); });
   }
 
   function renderTray() {
@@ -1939,11 +1999,12 @@ const I18N = I18N_ALL[lang];
   /** 新規除去のたびに前回分を上書きする(=最後の1件のみUndo可能)。5秒後に自動消滅する。
    * mode='remove'(既定): 枠✕での除去。左詰め後のindexへslotDataを挿入し直す(既存挙動)。
    * mode='replace': 「穴を埋める候補」の入れ替え適用。indexの枠へslotDataをそのまま戻す(左詰めしない)。
-   * msgを渡すとI18N.undoRemoved(name)の代わりにその文言をそのまま表示する(入れ替え用の文言を使うため)。 */
-  function showUndoToast(name, partyId, index, slotData, mode, msg) {
+   * msgを渡すとI18N.undoRemoved(name)の代わりにその文言をそのまま表示する(入れ替え用の文言を使うため)。
+   * mode='custom'はslotData等を使わず、fn(復元処理)をそのまま呼ぶ(S02: 簡単構築からの取り込み取消用)。 */
+  function showUndoToast(name, partyId, index, slotData, mode, msg, fn) {
     if (pendingUndo && pendingUndo.timer) clearTimeout(pendingUndo.timer);
     const timer = setTimeout(() => { pendingUndo = null; renderUndoToast(); }, 5000);
-    pendingUndo = { name, partyId, index, slotData, timer, mode: mode || 'remove', msg };
+    pendingUndo = { name, partyId, index, slotData, timer, mode: mode || 'remove', msg, fn };
     renderUndoToast();
   }
   function clearPendingUndo() {
@@ -1964,10 +2025,11 @@ const I18N = I18N_ALL[lang];
    * mode='replace'はindexの枠へslotDataをそのまま(左詰めせず)戻す。 */
   function undoRemoveSlot() {
     if (!pendingUndo) return;
-    const { partyId, index, slotData, timer, mode } = pendingUndo;
+    const { partyId, index, slotData, timer, mode, fn } = pendingUndo;
     clearTimeout(timer);
     pendingUndo = null;
     renderUndoToast();
+    if (mode === 'custom') { fn(); return; }
     const party = store.parties.find((pp) => pp.id === partyId);
     if (!party) return;
     if (mode === 'replace') {
@@ -2603,12 +2665,12 @@ const I18N = I18N_ALL[lang];
   function renderTargetsPanel() {
     const el = document.getElementById('pb-targets');
     const p = activeParty();
-    if (!p) { el.innerHTML = ''; muEdit = null; renderMiniBar(null, null); return; }
-    if (selectedIdx === null) { el.innerHTML = `<h2>${esc(I18N.targetsHeading)}</h2><div class="muted">${esc(I18N.targetsSelectPrompt)}</div>`; muEdit = null; renderMiniBar(null, null); return; }
+    if (!p) { el.innerHTML = ''; muEdit = null; renderMiniBar(null, null); persistUi(); return; }
+    if (selectedIdx === null) { el.innerHTML = `<h2>${esc(I18N.targetsHeading)}</h2><div class="muted">${esc(I18N.targetsSelectPrompt)}</div>`; muEdit = null; renderMiniBar(null, null); persistUi(); return; }
     const slot = p.slots[selectedIdx];
-    if (!slot) { el.innerHTML = `<h2>${esc(I18N.targetsHeading)}</h2><div class="muted">${esc(I18N.targetsSetPrompt)}</div>`; muEdit = null; renderMiniBar(null, null); return; }
+    if (!slot) { el.innerHTML = `<h2>${esc(I18N.targetsHeading)}</h2><div class="muted">${esc(I18N.targetsSetPrompt)}</div>`; muEdit = null; renderMiniBar(null, null); persistUi(); return; }
     const rb = resolveSlotSafe(slot);
-    if (!rb) { el.innerHTML = `<h2>${esc(I18N.targetsHeading)}</h2><div class="muted">${esc(I18N.muCalcError)}</div>`; muEdit = null; renderMiniBar(null, null); return; }
+    if (!rb) { el.innerHTML = `<h2>${esc(I18N.targetsHeading)}</h2><div class="muted">${esc(I18N.muCalcError)}</div>`; muEdit = null; renderMiniBar(null, null); persistUi(); return; }
 
     // ポケモン単位タブ: 選択中枠の仮想敵(追加済み種族)を切り替えて表示する。表示状態のみで保存はしない。
     if (!slot.targets.length) activeMuTab = null;
@@ -2843,6 +2905,7 @@ const I18N = I18N_ALL[lang];
 
     el.querySelector('#pb-tune-btn').addEventListener('click', onTuneClick);
     if (tuneResults) renderTuneOut();
+    persistUi(); // (B20/B21)
   }
 
   function onTargetSearchInput(val) {
@@ -3048,6 +3111,7 @@ const I18N = I18N_ALL[lang];
       bindMtxPopovers(pane);
       bindMatchupHolesToggle(pane, resolvedParty);
       initMgHints();
+      persistUi(); // (B20/B21)
     }));
   }
   function balancePaneHtml(resolvedParty, tab) {
@@ -3847,8 +3911,131 @@ const I18N = I18N_ALL[lang];
       return;
     }
     const name = data && typeof data.name === 'string' && data.name.trim() ? data.name.trim() : undefined;
-    createPartyFromSlots(store, slots, name);
+    const prevActiveId = store.activeId;
+    const party = createPartyFromSlots(store, slots, name);
     resetPartyUiState();
+    // (S02) 取り込み直後にUndoトーストを出す。取り消すと新規パーティを削除し、直前のアクティブパーティに戻す。
+    // renderTray/renderEditor等はcore(種族データ)読み込み後でないと呼べないため、init()内のこの時点では
+    // まだcoreがnullのことがある。その場合は無理にrenderせず、init()自身の最後のrender()に任せる
+    // (storeは同じ参照を書き換えているため、直後のrender()で復元後の状態がそのまま反映される)。
+    showUndoToast(null, null, null, null, 'custom', I18N.handoffImportedMsg, () => {
+      store.parties = store.parties.filter((pp) => pp.id !== party.id);
+      if (!store.parties.length) createParty(store); // 唯一のパーティだった場合、空のまま(0件)にはしない
+      store.activeId = store.parties.some((pp) => pp.id === prevActiveId) ? prevActiveId : store.parties[0].id;
+      saveStore(store);
+      resetPartyUiState();
+      if (core) render();
+    });
+  }
+
+  // ---- (B22) 共有リンク ----
+  // CompressionStream/DecompressionStreamはSafari16.4+/Chrome80+で使用可能。未対応ブラウザでの
+  // 圧縮なしフォールバックは実装コストの割に対象が僅少なため、機能自体を非対応ブラウザでは
+  // 出さない(ボタンを描画しない)方を選ぶ。
+  const HAS_COMPRESSION = typeof CompressionStream !== 'undefined' && typeof DecompressionStream !== 'undefined';
+  async function compressToBase64Url(text) {
+    const stream = new Blob([text]).stream().pipeThrough(new CompressionStream('gzip'));
+    const buf = await new Response(stream).arrayBuffer();
+    let bin = '';
+    new Uint8Array(buf).forEach((b) => { bin += String.fromCharCode(b); });
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  async function decompressFromBase64Url(b64url) {
+    const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
+    const bin = atob(b64);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+    return new Response(stream).text();
+  }
+  let shareMsgTimer = null;
+  function showShareMsg(text) {
+    const el = document.getElementById('pb-share-msg');
+    if (!el) return;
+    el.textContent = text;
+    if (shareMsgTimer) clearTimeout(shareMsgTimer);
+    shareMsgTimer = setTimeout(() => { el.textContent = ''; }, 3000);
+  }
+  /** パーティのexportParty()文字列をgzip圧縮+base64urlにして#p=に載せ、共有用URLを作る。
+   * navigator.shareが使えればまず試し、使えない/失敗時はクリップボードコピー、それも失敗したらprompt()で
+   * URLを手動コピーできるようにする(既存のexportモーダルのコピー失敗時と同じフォールバック方針)。 */
+  async function shareCurrentParty() {
+    const p = activeParty();
+    if (!p || !HAS_COMPRESSION) return;
+    let url;
+    try {
+      const b64 = await compressToBase64Url(exportParty(p));
+      // ?party=&slot=&tab=(B21)はこの端末のパーティIDを指しており、共有先では無意味かつ
+      // 別ID衝突の恐れもあるため、共有URLは付けずに素のパス+#p=だけにする。
+      const u = new URL(location.pathname, location.href);
+      u.hash = `p=${b64}`;
+      url = u.toString();
+    } catch (e) { showShareMsg(I18N.copyFailedMsg); return; }
+    track('pb_share_create', { slots: p.slots.filter((s) => s !== null).length });
+    if (navigator.share) {
+      try { await navigator.share({ url, title: document.title }); return; }
+      catch (e) { /* キャンセル・未対応時はコピーにフォールバック */ }
+    }
+    try { await navigator.clipboard.writeText(url); showShareMsg(I18N.copiedMsg); }
+    catch (e) {
+      // prompt()自体が使えない環境(一部の埋め込みwebview等)もあるため、それも失敗したらメッセージ欄にURLを直接出す。
+      try { prompt(I18N.copyFailedMsg, url); }
+      catch (e2) { showShareMsg(`${I18N.copyFailedMsg} ${url}`); }
+    }
+  }
+  /** location.hashに#p=があれば解凍してパーティとして取り込み、アクティブ化する。取り込み後は
+   * hashを消して再読み込み時の二重取り込みを防ぐ(importFromSuggestHandoffのlocalStorage版と同じ考え方)。 */
+  async function importSharedPartyFromHash() {
+    if (!HAS_COMPRESSION) return false;
+    const h = location.hash;
+    if (!h.startsWith('#p=')) return false;
+    try {
+      const text = await decompressFromBase64Url(h.slice(3));
+      const party = importParty(text);
+      if (!party) return false;
+      store.parties.push(party);
+      store.activeId = party.id;
+      saveStore(store);
+      track('pb_share_open', { slots: party.slots.filter((s) => s !== null).length });
+      return true;
+    } catch (e) {
+      return false;
+    } finally {
+      const u = new URL(location.href);
+      u.hash = '';
+      history.replaceState(null, '', u.pathname + u.search);
+    }
+  }
+
+  // ---- (B20/B21) 選択枠・タブの復元 ----
+  /** ?party=&slot=&tab=(B21)があれば優先し、無ければsessionStorage(B20)から復元する。
+   * 簡単構築の?core=と同じくhistory.replaceStateで反映済みのURLを再読み込みしても崩れない。 */
+  function restoreUiState() {
+    const params = new URLSearchParams(location.search);
+    const partyParam = params.get('party');
+    const slotParam = params.get('slot');
+    const tabParam = params.get('tab');
+    const hasUrlState = partyParam || slotParam !== null || tabParam;
+    let restoredScrollY = null;
+    if (hasUrlState) {
+      if (partyParam && store.parties.some((pp) => pp.id === partyParam)) store.activeId = partyParam;
+      if (slotParam !== null && /^\d+$/.test(slotParam)) selectedIdx = +slotParam;
+      if (tabParam && ['atk', 'def', 'speed', 'mu'].includes(tabParam)) balanceTab = tabParam;
+    } else {
+      const ui = loadUiState();
+      if (ui) {
+        if (typeof ui.selectedIdx === 'number') selectedIdx = ui.selectedIdx;
+        if (typeof ui.balanceTab === 'string') balanceTab = ui.balanceTab;
+        if (typeof ui.activeMuTab === 'string') activeMuTab = ui.activeMuTab;
+        if (ui.selTab === 'editor' || ui.selTab === 'targets') selTab = ui.selTab;
+        if (typeof ui.scrollY === 'number') restoredScrollY = ui.scrollY;
+      }
+    }
+    // selectedIdxが埋まっていない枠を指す場合(パーティ切替・枠削除後の不整合)は無効化する
+    const p = activeParty();
+    if (selectedIdx !== null && (!p || !p.slots[selectedIdx])) selectedIdx = null;
+    if (selectedIdx === null) { activeMuTab = null; selTab = 'editor'; }
+    return restoredScrollY;
   }
 
   // ---- 初期化 ----
@@ -3868,7 +4055,12 @@ const I18N = I18N_ALL[lang];
   async function init() {
     store = loadStore();
     importFromSuggestHandoff();
+    // (B22) 共有リンクの取り込みは「保存パーティが0件なら空パーティを1つ作る」より先に行う。
+    // 先に空パーティを作ってしまうと、初めて開くユーザーが共有リンクを踏んだだけで
+    // 中身の無い「無題」パーティが1つ余分に残ってしまう。
+    await importSharedPartyFromHash();
     if (store.parties.length === 0) createParty(store);
+    const restoredScrollY = restoreUiState(); // (B20/B21)
     try {
       // 1v1判定は対戦エンジン(wasm)が行う。描画前に必ず読み込む
       await Promise.all([
@@ -3881,6 +4073,7 @@ const I18N = I18N_ALL[lang];
       return;
     }
     render();
+    if (restoredScrollY !== null) requestAnimationFrame(() => window.scrollTo(0, restoredScrollY));
   }
   init();
 </script>

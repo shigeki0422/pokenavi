@@ -66,7 +66,7 @@ const I18N_ALL = {
     blankAutoHelp: '空欄のまま実行すると、使用率上位から自動で軸を選びます。',
     corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
     corePlaceholderMore: 'さらに追加…（ひらがな可）',
-    go: '提案する', close: '閉じる', noHit: '該当なし',
+    go: '提案する', close: '閉じる', noHit: '該当なし', shareBtn: '共有', shareCopiedMsg: 'リンクをコピーしました', shareCopyFailedMsg: 'コピーに失敗しました。このURLを手動でコピーしてください',
     itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
     selfVsOpp: '自分 ＼ 相手', selfVsAtk: '自分 ＼ 攻撃', selfVsHit: '自分 ＼ 被弾',
     tabAtk: '攻撃相性', tabDef: '防御相性', tabMu: 'ポケモン相性', tabSpeed: '素早さ', tabArch: '想定パーティ相性', tabGuide: '選出ガイド', soon: '準備中',
@@ -134,7 +134,7 @@ const I18N_ALL = {
     blankAutoHelp: 'Leave the field blank to auto-pick a core from the top usage ranks.',
     corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
     corePlaceholderMore: 'Add more…',
-    go: 'Suggest', close: 'Close', noHit: 'No matches',
+    go: 'Suggest', close: 'Close', noHit: 'No matches', shareBtn: 'Share', shareCopiedMsg: 'Link copied', shareCopyFailedMsg: 'Copy failed. Please copy this URL manually',
     itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
     selfVsOpp: 'You ＼ Opponent', selfVsAtk: 'You ＼ Attacking', selfVsHit: 'You ＼ Taking hits',
     tabAtk: 'Attack Matchup', tabDef: 'Defense Matchup', tabMu: 'Pokémon Matchup', tabSpeed: 'Speed', tabArch: 'Team Matchup', tabGuide: 'Selection Guide', soon: 'Coming soon',
@@ -202,7 +202,7 @@ const I18N_ALL = {
     blankAutoHelp: '비워두고 실행하면 사용률 상위에서 자동으로 축을 선택합니다.',
     corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
     corePlaceholderMore: '추가로 검색…',
-    go: '제안받기', close: '닫기', noHit: '검색 결과 없음',
+    go: '제안받기', close: '닫기', noHit: '검색 결과 없음', shareBtn: '공유', shareCopiedMsg: '링크를 복사했습니다', shareCopyFailedMsg: '복사에 실패했습니다. 이 URL을 직접 복사해 주세요',
     itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
     selfVsOpp: '나 ＼ 상대', selfVsAtk: '나 ＼ 공격', selfVsHit: '나 ＼ 피격',
     tabAtk: '공격 상성', tabDef: '방어 상성', tabMu: '포켓몬 상성', tabSpeed: '스피드', tabArch: '예상 파티 상성', tabGuide: '선출 가이드', soon: '준비 중',
@@ -288,6 +288,7 @@ const I18N = I18N_ALL[lang];
     </div>
     <div class="row" style="margin-top:.6em">
       <button id="go" class="btn">{I18N.go}</button>
+      <button id="ps-share-btn" type="button" class="pb-btn-sub">{I18N.shareBtn}</button>
     </div>
     <p class="note">{I18N.note}</p>
     <div id="ps-multi-notice" class="ps-notice" style="display:none">{I18N.multiAxisNotice}</div>
@@ -678,7 +679,7 @@ const I18N = I18N_ALL[lang];
       note: '※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。',
       corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
       corePlaceholderMore: 'さらに追加…（ひらがな可）',
-      go: '提案する', close: '閉じる', noHit: '該当なし',
+      go: '提案する', close: '閉じる', noHit: '該当なし', shareBtn: '共有', shareCopiedMsg: 'リンクをコピーしました', shareCopyFailedMsg: 'コピーに失敗しました。このURLを手動でコピーしてください',
       itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
       selfVsOpp: '自分 ＼ 相手', selfVsAtk: '自分 ＼ 攻撃', selfVsHit: '自分 ＼ 被弾',
       tabAtk: '攻撃相性', tabDef: '防御相性', tabMu: 'ポケモン相性', tabSpeed: '素早さ', tabArch: '想定パーティ相性', tabGuide: '選出ガイド', soon: '準備中',
@@ -753,7 +754,7 @@ const I18N = I18N_ALL[lang];
       note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
       corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
       corePlaceholderMore: 'Add more…',
-      go: 'Suggest', close: 'Close', noHit: 'No matches',
+      go: 'Suggest', close: 'Close', noHit: 'No matches', shareBtn: 'Share', shareCopiedMsg: 'Link copied', shareCopyFailedMsg: 'Copy failed. Please copy this URL manually',
       itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
       selfVsOpp: 'You ＼ Opponent', selfVsAtk: 'You ＼ Attacking', selfVsHit: 'You ＼ Taking hits',
       tabAtk: 'Attack Matchup', tabDef: 'Defense Matchup', tabMu: 'Pokémon Matchup', tabSpeed: 'Speed', tabArch: 'Team Matchup', tabGuide: 'Selection Guide', soon: 'Coming soon',
@@ -828,7 +829,7 @@ const I18N = I18N_ALL[lang];
       note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
       corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
       corePlaceholderMore: '추가로 검색…',
-      go: '제안받기', close: '닫기', noHit: '검색 결과 없음',
+      go: '제안받기', close: '닫기', noHit: '검색 결과 없음', shareBtn: '공유', shareCopiedMsg: '링크를 복사했습니다', shareCopyFailedMsg: '복사에 실패했습니다. 이 URL을 직접 복사해 주세요',
       itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
       selfVsOpp: '나 ＼ 상대', selfVsAtk: '나 ＼ 공격', selfVsHit: '나 ＼ 피격',
       tabAtk: '공격 상성', tabDef: '방어 상성', tabMu: '포켓몬 상성', tabSpeed: '스피드', tabArch: '예상 파티 상성', tabGuide: '선출 가이드', soon: '준비 중',
@@ -1150,6 +1151,7 @@ const I18N = I18N_ALL[lang];
       card.querySelectorAll('.mg-wrap').forEach(w=>{ w.removeAttribute('data-mg-init'); w.classList.remove('mg-scrolled'); });
       initMgHints();
     }
+    saveCurrentUi(); // (S14)
   }
   function archetypeHtml(res){
     const a = res.archetypes; if(!a||!a.length) return `<div class="muted">${I18N.noArchData}</div>`;
@@ -1542,6 +1544,7 @@ const I18N = I18N_ALL[lang];
           const hd = card.querySelector('.sug-toggle');
           if(hd) toggleSug(hd);
         }
+        saveCurrentUi(); // (S14)
       });
     });
     document.querySelectorAll('.tb').forEach(btn=>{
@@ -1551,6 +1554,7 @@ const I18N = I18N_ALL[lang];
         document.getElementById('pane-'+i).innerHTML = paneHtml(LAST[i], t, i);
         syncLegendOpen();
         initMgHints();
+        saveCurrentUi(); // (S14)
       });
     });
     syncLegendOpen();
@@ -1639,18 +1643,75 @@ const I18N = I18N_ALL[lang];
     scrollToOut();
   }
   function currentCoreParam(){ return CORE.map(p=>p.label).join(','); }
-  /** (B6) 直前の提案結果をsessionStorageにキャッシュし、軸が完全一致する場合のみ
-   * APIを叩き直さず即復元する(bfcacheが効かないリロードでも軸2件以上の10〜20秒待ちを避けるため)。 */
-  const SS_KEY = 'ps-last-result';
+  /** (B6/S12) 直前の提案結果をsessionStorageにキャッシュし、軸が完全一致する場合のみ
+   * APIを叩き直さず即復元する(bfcacheが効かないリロードでも軸2件以上の10〜20秒待ちを避けるため)。
+   * A→B→Aのように軸を行き来しても再計算しないよう、直近5件までLRU保持する(古いものから捨てる)。 */
+  const SS_KEY = 'ps-last-results';
+  const SS_MAX = 5;
+  function loadAllSessionResults(){
+    try{
+      const raw = sessionStorage.getItem(SS_KEY); if(!raw) return [];
+      const arr = JSON.parse(raw);
+      return Array.isArray(arr) ? arr : [];
+    }catch(e){ return []; }
+  }
   function saveSessionResult(coreParam, d){
-    try{ sessionStorage.setItem(SS_KEY, JSON.stringify({core: coreParam, d})); }catch(e){}
+    try{
+      let arr = loadAllSessionResults().filter(e=>e.core!==coreParam);
+      arr.push({core: coreParam, d, ui: null});
+      if(arr.length > SS_MAX) arr = arr.slice(arr.length - SS_MAX);
+      sessionStorage.setItem(SS_KEY, JSON.stringify(arr));
+    }catch(e){}
   }
   function loadSessionResult(coreParam){
+    const hit = loadAllSessionResults().find(e=>e.core===coreParam);
+    return hit ? hit.d : null;
+  }
+  function loadSessionUi(coreParam){
+    const hit = loadAllSessionResults().find(e=>e.core===coreParam);
+    return hit ? hit.ui : null;
+  }
+  /** (S14) タブ・展開/折りたたみ・選択中ポケの状態を、同じ軸のキャッシュ結果に紐付けて保存する。
+   * 結果のfetch自体はしないため、該当軸のエントリが無い(=まだ結果が無い)場合は何もしない。 */
+  function captureCardUiState(){
+    return LAST.map((_, i)=>{
+      const card = document.querySelector(`.sug[data-sug="${i}"]`);
+      if(!card) return null;
+      const activeTb = card.querySelector('.tb.active');
+      const activeMontab = card.querySelector('.montab.active');
+      return { collapsed: card.classList.contains('collapsed'), tab: activeTb ? activeTb.dataset.t : 'mu', j: activeMontab ? +activeMontab.dataset.j : 0 };
+    });
+  }
+  function saveCurrentUi(){
+    const coreParam = currentCoreParam();
+    if(!coreParam) return;
     try{
-      const raw = sessionStorage.getItem(SS_KEY); if(!raw) return null;
-      const obj = JSON.parse(raw);
-      return obj.core === coreParam ? obj.d : null;
-    }catch(e){ return null; }
+      const arr = loadAllSessionResults();
+      const idx = arr.findIndex(e=>e.core===coreParam);
+      if(idx<0) return;
+      arr[idx].ui = captureCardUiState();
+      sessionStorage.setItem(SS_KEY, JSON.stringify(arr));
+    }catch(e){}
+  }
+  function applyCardUiState(ui){
+    if(!ui) return;
+    ui.forEach((st, i)=>{
+      if(!st) return;
+      const card = document.querySelector(`.sug[data-sug="${i}"]`);
+      if(!card) return;
+      if(st.collapsed !== card.classList.contains('collapsed')){
+        const hd = card.querySelector('.sug-toggle');
+        if(hd) toggleSug(hd);
+      }
+      if(st.j){
+        const montab = card.querySelector(`.montab[data-j="${st.j}"]`);
+        if(montab && !montab.classList.contains('active')) montab.click();
+      }
+      if(st.tab && st.tab!=='mu'){
+        const tb = card.querySelector(`.tb[data-t="${st.tab}"]`);
+        if(tb && !tb.classList.contains('active')) tb.click();
+      }
+    });
   }
   /** 軸2件以上（cache miss）のライブ計算中だけ出す広告ダイアログ。
    * PC/スマホでAdMaxの広告枠(タグ)が別物のため2本持ち、表示時のビューポート幅
@@ -1744,6 +1805,22 @@ const I18N = I18N_ALL[lang];
     }
   }
   document.getElementById('go').addEventListener('click', run);
+  /** (S13) 現在のURL(runで?core=を反映済み)をそのまま共有する。navigator.shareが使えれば
+   * まず試し、使えない/失敗時はクリップボードコピー、それも失敗したらprompt()でURLを手渡す。 */
+  document.getElementById('ps-share-btn').addEventListener('click', async () => {
+    const url = location.href;
+    window.track?.('ps_share', { core: currentCoreParam() });
+    if (navigator.share) {
+      try { await navigator.share({ url, title: document.title }); return; }
+      catch (e) { /* キャンセル・未対応時はコピーにフォールバック */ }
+    }
+    try { await navigator.clipboard.writeText(url); document.getElementById('status').textContent = I18N.shareCopiedMsg; }
+    catch (e) {
+      // prompt()自体が使えない環境(一部の埋め込みwebview等)もあるため、それも失敗したら#statusにURLを直接出す。
+      try { prompt(I18N.shareCopyFailedMsg, url); }
+      catch (e2) { document.getElementById('status').textContent = `${I18N.shareCopyFailedMsg} ${url}`; }
+    }
+  });
   /** en/ko版には軸ごとの静的プリセットページ(/party-suggest/{slug}/)が存在しないため、
    * ポケモン情報ページのCTAは代わりに ?core=軸ポケモン和名(複数はカンマ区切り) を付けてこの汎用ページへ
    * 誘導する。ja版は静的プリセットページ側のpreCoreLabelプロパティを優先する。
@@ -1754,6 +1831,7 @@ const I18N = I18N_ALL[lang];
     const _cached = loadSessionResult(_preCore);
     if (_cached) {
       renderResults(_cached);
+      applyCardUiState(loadSessionUi(_preCore)); // (S14) タブ・展開・選択ポケの状態も合わせて復元
       // チップ表示は非同期にSPECIES待ちで反映(結果表示はブロックしない)
       applyPreCoreChips(_preCore);
     } else {
@@ -1800,4 +1878,7 @@ const I18N = I18N_ALL[lang];
   import { mgWrapHtml, initMgHints } from '../scripts/party-builder/mg-hints';
   window.__mgWrapHtml = mgWrapHtml;
   window.__mgHints = initMgHints;
+  // (C15) GA4計測ヘルパも同じ理由でwindow経由に橋渡しする。
+  import { track } from '../scripts/track';
+  window.track = track;
 </script>
