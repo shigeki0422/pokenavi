@@ -279,7 +279,8 @@ const I18N = I18N_ALL[lang];
     ]}
   />
 
-  <div class="card" id="pb-partybar"><div class="muted">{I18N.loading}</div></div>
+  <!-- (B24) 初期化は806KB相当のwasm+データ待ちのため、テキストだけでなくスピナーを出す -->
+  <div class="card" id="pb-partybar"><div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">{I18N.loading}</div></div></div>
 
   <div id="pb-validate"></div>
 
@@ -297,7 +298,7 @@ const I18N = I18N_ALL[lang];
   <section class="pb-selected">
     <div class="pb-selected-head" id="pb-selected-head"></div>
     <div class="pb-split">
-      <div class="card" id="pb-editor"><div class="muted">{I18N.loading}</div></div>
+      <div class="card" id="pb-editor"><div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">{I18N.loading}</div></div></div>
       <div class="card" id="pb-targets"></div>
     </div>
   </section>
@@ -1430,6 +1431,18 @@ const I18N = I18N_ALL[lang];
       }))
       .filter((g) => g.builds.length);
     return oppColsCache;
+  }
+  /** (B25) findHolesはparty×oppCols全組に対しjudgeVsBuildsを回す(1v1マトリクスと同じ重さ)ため、
+   * renderBalance→matchupMatrixHtmlのように同じフレームで同じparty/oppColsに対して2回呼ぶと
+   * 無駄になる。oppColsCacheと同じ流儀で、直近1件だけをholeFillSignature()と同じ署名文字列で
+   * キャッシュする(署名生成は軽いので、findHoles本体より十分安い)。 */
+  let findHolesCache = null;
+  function findHolesMemo(resolvedParty, oppCols) {
+    const key = holeFillSignature(resolvedParty, oppCols);
+    if (findHolesCache && findHolesCache.key === key) return findHolesCache.result;
+    const result = findHoles(resolvedParty, oppCols);
+    findHolesCache = { key, result };
+    return result;
   }
 
   // ---- (1) ポケモン相性・素早さタブの相手ヘッダのリンク化 ----
@@ -3076,7 +3089,7 @@ const I18N = I18N_ALL[lang];
       return;
     }
     const sum = partySummary(resolvedParty);
-    const holeInfo = findHoles(resolvedParty, buildOppCols());
+    const holeInfo = findHolesMemo(resolvedParty, buildOppCols());
     el.innerHTML = `
       <h2>${esc(I18N.balanceHeading)}</h2>
       <div class="bd-strip">
@@ -3252,7 +3265,7 @@ const I18N = I18N_ALL[lang];
    * ないので表自体を出さず、「穴なし」＋「全列を見る」(matchupHolesOnly解除)に差し替える。 */
   function matchupMatrixHtml(resolvedParty) {
     const oppCols = buildOppCols();
-    const holeInfo = findHoles(resolvedParty, oppCols);
+    const holeInfo = findHolesMemo(resolvedParty, oppCols);
     const toggleRow = `<div class="pb-mtx-toolbar">${matchupHolesToggleHtml()}</div>`;
     if (matchupHolesOnly && !holeInfo.holeLabels.length) {
       return `${toggleRow}<div class="pb-mtx-noholes"><span>✓ ${esc(I18N.matchupNoHolesMsg)}</span>`
@@ -3387,6 +3400,20 @@ const I18N = I18N_ALL[lang];
    * 入れ替え探索(6メンバー×候補数)はholesAfterSwap()の集合演算のみで行い、
    * judgeVsBuildsを6×候補数だけ追加で呼ぶことはしない。
    */
+  /** (B26) Promise.allでの一括fetch(最大50件)はSlow回線で同時接続数の奪い合いになり、
+   * 逆に完了が遅くなる。同時実行数を絞ったプールで順次消化する(結果順序はitemsと一致させる)。 */
+  async function mapPool(items, limit, fn) {
+    const results = new Array(items.length);
+    let next = 0;
+    async function worker() {
+      while (next < items.length) {
+        const idx = next++;
+        results[idx] = await fn(items[idx], idx);
+      }
+    }
+    await Promise.all(Array.from({ length: Math.min(limit, items.length) }, worker));
+    return results;
+  }
   /** 候補の型プールを作る。使用率上位50種について、メガ型・非メガ型を最大3型ずつ解決し、
    * 相手列ごとの「◎/○を取れるか」(coverageSet)まで済ませて返す。
    * 穴埋め提案と空き枠埋めの両方がこの同じプールを使う。 */
@@ -3395,7 +3422,7 @@ const I18N = I18N_ALL[lang];
       .filter((s) => !usedDex.has((s.icon || '').split('-')[0]))
       .sort((a, b) => (a.off ? 1 : 0) - (b.off ? 1 : 0) || a.rank - b.rank)
       .slice(0, 50);
-    const monDetails = await Promise.all(pool.map((s) => loadMon(s.icon).catch(() => null)));
+    const monDetails = await mapPool(pool, 6, (s) => loadMon(s.icon).catch(() => null));
     // メガは1体しか進化できないため、3体以上積むと選出パターンが減る。候補はメガ型・非メガ型を
     // 最大1つずつ持ち、追加はメガ2体まで、入れ替えはメガ有無が一致する組み合わせのみに絞る。
     // 同一種でもメガ型/非メガ型・持ち物違いを最大3型まで持つ(もちもの重複フィルタが効いたときに
@@ -3493,7 +3520,7 @@ const I18N = I18N_ALL[lang];
     await yieldToPaint();
     const resolvedParty = resolvedPartyList();
     const oppCols = buildOppCols();
-    const holeInfo = findHoles(resolvedParty, oppCols);
+    const holeInfo = findHolesMemo(resolvedParty, oppCols);
     if (!holeInfo.holeLabels.length) { holeFillLoading = false; hideModal(); return; }
     const sig = holeFillSignature(resolvedParty, oppCols);
     if (holeFillResult && holeFillResult.sig === sig) {
@@ -3656,12 +3683,12 @@ const I18N = I18N_ALL[lang];
 
     // 画面に並べるのは「いまの穴」に対する候補一覧（穴埋め提案の追加候補と同じ作り）。
     // まとめて追加はここから貪欲に1枠ずつ選んでいく。
-    const holesNow = findHoles(resolved, oppCols).holeIdx;
+    const holesNow = findHolesMemo(resolved, oppCols).holeIdx;
     const list = rank(holesNow).slice(0, 8);
 
     const picks = [];
     for (const slotIdx of emptyIdx) {
-      const holeInfo = findHoles(resolved, oppCols);
+      const holeInfo = findHolesMemo(resolved, oppCols);
       const best = rank(holeInfo.holeIdx)[0];
       if (!best) break;
       picks.push({ slotIdx, cand: best.cand, covered: best.covered,
@@ -3672,7 +3699,7 @@ const I18N = I18N_ALL[lang];
       resolved.push(best.cand.build);
     }
     return { list, picks, oppCols, holesBefore: holesNow.size,
-             holesAfter: findHoles(resolved, oppCols).holeIdx.size };
+             holesAfter: findHolesMemo(resolved, oppCols).holeIdx.size };
   }
 
   async function onFillClick() {

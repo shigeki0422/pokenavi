@@ -639,7 +639,13 @@ const I18N = I18N_ALL[lang];
   /* 複数軸の事前注意書き・エラー表示 */
   .ps-notice{font-size:.78rem;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:.5em .7em;margin-top:.5em}
   .ps-err{background:#fef2f2;border:1px solid #fecaca;color:#b91c1c;border-radius:10px;padding:.9em 1em;font-size:.85rem;font-weight:700}
+  .ps-err .pb-btn-sub{margin-left:.6em;vertical-align:middle}
   .ps-elapsed{font-size:.72rem;color:rgb(var(--gray))}
+  /* (S06/S08) ライブ計算中のキャンセルと、20秒/45秒経過時の強調表示 */
+  .ps-cancel-btn{margin-top:.2em}
+  .ps-urgent-note{display:none;font-size:.78rem;color:#b91c1c;font-weight:700}
+  .ps-loading.ps-urgent .ps-urgent-note{display:block}
+  .ps-loading.ps-urgent .ps-cancel-btn{background:#fee2e2;border-color:#fecaca;color:#b91c1c}
 
   /* (A1) 提案カードのアコーディオン */
   .hd.sug-toggle{cursor:pointer}
@@ -736,6 +742,11 @@ const I18N = I18N_ALL[lang];
       loadSub: '初回や複雑な軸は10〜20秒ほどかかることがあります',
       fixedLbl: s => `固定軸: ${s} / `, resultCount: n => `${n}件`, errPrefix: 'エラー: ',
       connErr: '提案サーバに接続できませんでした。時間をおいて再度お試しください。',
+      cancelBtn: 'キャンセル', retryBtn: '再試行',
+      congestedMsg: '混み合っています。もう少しお待ちください…',
+      urgentNote: '時間がかかっています。キャンセルして後でもう一度お試しください。',
+      tooManyMsg: 'リクエストが混み合っています。少し間隔を空けてから再試行してください。',
+      speciesLoadFailedMsg: '候補を読み込めませんでした',
       adLabel: '広告',
       omakase: 'おまかせ', importName: label => `${label}軸 かんたん構築`, rankLbl: n => `使用${n}位`,
       koOOR: '圏外', koRange: (a,b) => `確${a}〜${b}`, koFixed: n => `確${n}`, koRoll: n => `乱${n}`,
@@ -811,6 +822,11 @@ const I18N = I18N_ALL[lang];
       loadSub: 'First runs or complex cores can take 10–20 seconds',
       fixedLbl: s => `Fixed core: ${s} / `, resultCount: n => `${n} result(s)`, errPrefix: 'Error: ',
       connErr: 'Could not connect to the suggestion server. Please try again later.',
+      cancelBtn: 'Cancel', retryBtn: 'Retry',
+      congestedMsg: 'Servers are busy. Please wait a little longer…',
+      urgentNote: 'This is taking a while. You can cancel and try again later.',
+      tooManyMsg: 'Too many requests. Please wait a moment and try again.',
+      speciesLoadFailedMsg: 'Failed to load suggestions',
       adLabel: 'Advertisement',
       omakase: 'auto-pick', importName: label => `${label} core quick build`, rankLbl: n => `Rank #${n}`,
       koOOR: 'Out of range', koRange: (a,b) => `${a}–${b}HKO`, koFixed: n => `${n}HKO`, koRoll: n => `${n}HKO (roll-dependent)`,
@@ -886,6 +902,11 @@ const I18N = I18N_ALL[lang];
       loadSub: '처음이거나 복잡한 축은 10~20초 정도 걸릴 수 있습니다',
       fixedLbl: s => `고정 축: ${s} / `, resultCount: n => `${n}건`, errPrefix: '오류: ',
       connErr: '제안 서버에 연결할 수 없었습니다. 잠시 후 다시 시도해 주세요.',
+      cancelBtn: '취소', retryBtn: '재시도',
+      congestedMsg: '혼잡합니다. 조금만 더 기다려 주세요…',
+      urgentNote: '시간이 오래 걸리고 있습니다. 취소 후 나중에 다시 시도해 주세요.',
+      tooManyMsg: '요청이 많습니다. 잠시 간격을 두고 다시 시도해 주세요.',
+      speciesLoadFailedMsg: '후보를 불러오지 못했습니다',
       adLabel: '광고',
       omakase: '자동 선택', importName: label => `${label} 축 간단 구성`, rankLbl: n => `사용률 ${n}위`,
       koOOR: '범위 밖', koRange: (a,b) => `확정${a}~${b}`, koFixed: n => `확정${n}`, koRoll: n => `난수${n}`,
@@ -1564,11 +1585,24 @@ const I18N = I18N_ALL[lang];
   let SPECIES = [];
   let CORE = [];
   let _sugActive = -1;
+  let speciesLoadFailed = false;
   const vid = v => v.sp + '' + (v.mega==null?'*':v.mega);
 
-  fetch(API + '/species').then(r=>r.json()).then(d=>{
-    SPECIES = d.map(v=>({label:v.label, sp:v.sp, mega:v.mega, id:vid(v), icon:iconUrl(v.sp), rank:v.rank, exp:!!v.exp}));
-  }).catch(()=>{});
+  /** (S09/S10) 静的JSON(ビルド済み・軸ページと同じデータ)を優先し、404/失敗時のみ
+   * 従来のバックエンド(localhost:8899 または本番Cloud Run)へフォールバックする。
+   * 取得自体に失敗した場合はSPECIES=[]のまま「該当なし」と同じ見た目になってしまうため、
+   * speciesLoadFailedで区別し、検索欄側で専用メッセージ+再試行を出す(onFilterInput参照)。 */
+  function loadSpecies(){
+    return fetch('/suggest-data/species.json')
+      .then(r => r.ok ? r.json() : Promise.reject(new Error('static species unavailable')))
+      .catch(() => fetch(API + '/species').then(r => r.json()))
+      .then(d => {
+        SPECIES = d.map(v=>({label:v.label, sp:v.sp, mega:v.mega, id:vid(v), icon:iconUrl(v.sp), rank:v.rank, exp:!!v.exp}));
+        speciesLoadFailed = false;
+      })
+      .catch(() => { speciesLoadFailed = true; });
+  }
+  loadSpecies();
 
   function renderCoreChips(){
     const el = document.getElementById('core-chips');
@@ -1602,6 +1636,15 @@ const I18N = I18N_ALL[lang];
   function onFilterInput(val){
     const sug = document.getElementById('core-sug'); _sugActive=-1;
     const q = val.trim(); if(!q){ sug.style.display='none'; return; }
+    // (S09) 取得失敗と「該当なし」は原因が違う(前者は再試行で直る)ため、専用メッセージ+再試行を出す。
+    if(speciesLoadFailed && !SPECIES.length){
+      sug.innerHTML = `<div class="sug-item added">${esc(I18N.speciesLoadFailedMsg)}`
+        + `<button type="button" class="pb-btn-sub" id="core-sug-retry" style="margin-left:.5em">${esc(I18N.retryBtn)}</button></div>`;
+      sug.style.display='block';
+      const retryBtn = document.getElementById('core-sug-retry');
+      if(retryBtn) retryBtn.addEventListener('click', () => loadSpecies().then(() => onFilterInput(val)));
+      return;
+    }
     const qk = toKatakana(q);
     const ql = q.toLowerCase();
     const hits = SPECIES.filter(s=>s.label.includes(q)||s.label.includes(qk)||tPoke(s.label).toLowerCase().includes(ql)).slice(0,12);
@@ -1627,12 +1670,12 @@ const I18N = I18N_ALL[lang];
   document.getElementById('core-filter').addEventListener('keydown', onFilterKey);
   document.addEventListener('click', e=>{ if(!e.target.closest('.filter-wrap')) document.getElementById('core-sug').style.display='none'; });
 
-  /** (A1) 結果描画後は#out先頭へ自動スクロールする(モバイルではボタン操作位置から離れるため)。 */
+  /** (A1/S21) 結果描画後は#out先頭へ自動スクロールする(モバイルではボタン操作位置から離れるため)。
+   * ライブ計算中は#ps-ad-inline(広告)へscrollIntoViewする(run()側)が、結果が描画された後まで
+   * 広告優先のままだと#outの先頭(実際の結果)が画面外に残ってしまうため、ここでは常に#outを狙う。 */
   function scrollToOut(){
     const out = document.getElementById('out');
-    const ad = document.getElementById('ps-ad-inline');
-    const target = (ad && ad.style.display !== 'none') ? ad : out;
-    if(out && out.firstElementChild) target.scrollIntoView({behavior:'smooth', block:'start'});
+    if(out && out.firstElementChild) out.scrollIntoView({behavior:'smooth', block:'start'});
   }
   function renderResults(d){
     LAST = d.results;
@@ -1753,6 +1796,18 @@ const I18N = I18N_ALL[lang];
     _ensureAdLoaded();
     el.style.display = '';
   }
+  let _suggestAbort = null;
+  let _suggestSeq = 0;
+  /** (S07/S11) 失敗表示は#outだけに出す(#statusとの重複表示をやめる)。retryFnがあれば再試行ボタンを添える。
+   * msgHtmlは呼び出し側で既にesc済みの表示用文字列を渡すこと。 */
+  function renderRunError(msgHtml, retryFn){
+    const out = document.getElementById('out');
+    out.innerHTML = `<div class="ps-err">${msgHtml}`
+      + (retryFn ? `<button type="button" class="pb-btn-sub" id="ps-retry-btn">${esc(I18N.retryBtn)}</button>` : '')
+      + `</div>`;
+    const btn = retryFn && document.getElementById('ps-retry-btn');
+    if(btn) btn.addEventListener('click', retryFn);
+  }
   async function run(){
     const core = CORE.map(p=>({sp:p.sp, mega:p.mega}));
     const coreParam = currentCoreParam();
@@ -1760,17 +1815,34 @@ const I18N = I18N_ALL[lang];
     const out = document.getElementById('out');
     const status = document.getElementById('status');
     status.textContent = '';
+    // (S05) 軸を変えて再度「提案する」を押された場合は直前のリクエストを中断する。
+    // 連番(mySeq)はAbortの取りこぼし(古いfetchが中断前に解決する等)に備えた保険。
+    if(_suggestAbort) _suggestAbort.abort();
+    const abortCtrl = new AbortController();
+    _suggestAbort = abortCtrl;
+    const mySeq = ++_suggestSeq;
     // (B5) 軸2件以上は必ずライブ計算(10〜20秒)。軸1件以下はsuggest_cacheに事前計算済みで数百msなので
     // 「10〜20秒」の表示は出さず、実態に合わせた短い表示にする。
     const isLive = core.length >= 2;
     const msgs = I18N.loadMsgs;
     let mi = 0, sec = 0, timer = null;
     if(isLive){
-      out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg" id="ps-lmsg">${msgs[0]}</div><div class="ps-lsub">${I18N.loadSub}</div><div class="ps-elapsed" id="ps-elapsed">${I18N.elapsedSec(0)}</div></div>`;
+      out.innerHTML = `<div class="ps-loading" id="ps-loading"><div class="ps-spinner"></div>`
+        + `<div class="ps-lmsg" id="ps-lmsg">${msgs[0]}</div><div class="ps-lsub">${I18N.loadSub}</div>`
+        + `<div class="ps-elapsed" id="ps-elapsed">${I18N.elapsedSec(0)}</div>`
+        + `<div class="ps-urgent-note" id="ps-urgent-note">${esc(I18N.urgentNote)}</div>`
+        + `<button type="button" class="pb-btn-sub ps-cancel-btn" id="ps-cancel-btn">${esc(I18N.cancelBtn)}</button></div>`;
+      const cancelBtn = document.getElementById('ps-cancel-btn');
+      if(cancelBtn) cancelBtn.addEventListener('click', () => abortCtrl.abort());
       timer = setInterval(()=>{
         sec++;
         const es = document.getElementById('ps-elapsed'); if(es) es.textContent = I18N.elapsedSec(sec);
-        if(sec % 3 === 0){ mi = (mi+1)%msgs.length; const el = document.getElementById('ps-lmsg'); if(el) el.textContent = msgs[mi]; }
+        const lmsgEl = document.getElementById('ps-lmsg');
+        // (S08) 20秒を超えたら「混み合っています」に固定し、以降のメッセージ切り替えは止める
+        if(sec >= 20){ if(lmsgEl) lmsgEl.textContent = I18N.congestedMsg; }
+        else if(sec % 3 === 0){ mi = (mi+1)%msgs.length; if(lmsgEl) lmsgEl.textContent = msgs[mi]; }
+        // (S08) 45秒経過でキャンセルを強調表示する
+        if(sec === 45){ const el = document.getElementById('ps-loading'); if(el) el.classList.add('ps-urgent'); }
       }, 1000);
     } else {
       out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${I18N.calculating}</div></div>`;
@@ -1782,12 +1854,20 @@ const I18N = I18N_ALL[lang];
     }
     try{
       const r = await fetch(API + '/suggest', {method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({core, ncand:100, top:5})});
+        body: JSON.stringify({core, ncand:100, top:5}), signal: abortCtrl.signal});
+      if(mySeq !== _suggestSeq) return; // より新しいリクエストに追い越された
+      // (S22) MIN_INTERVAL/同時実行上限は429で返る。本文はJSON({error})想定だが、パース失敗時も
+      // 汎用文言でフォールバックできるよう、ステータスコードを先に見る。
+      if(r.status === 429){
+        let msg = I18N.tooManyMsg;
+        try{ const d = await r.json(); if(d && d.error) msg = d.error; }catch(e){}
+        renderRunError(esc(msg), run);
+        return;
+      }
       const d = await r.json();
+      if(mySeq !== _suggestSeq) return;
       if(d.error){
-        // (B5) エラーは#statusだけでなく#outにも表示する(#outが空のままだと気づけないため)
-        out.innerHTML = `<div class="ps-err">${I18N.errPrefix}${esc(d.error)}</div>`;
-        status.textContent = I18N.errPrefix + d.error;
+        renderRunError(I18N.errPrefix + esc(d.error), run); // (S07/S11)
         return;
       }
       saveSessionResult(coreParam, d);
@@ -1797,11 +1877,22 @@ const I18N = I18N_ALL[lang];
       history.replaceState(null, '', url.pathname + url.search);
       renderResults(d);
     }catch(e){
-      out.innerHTML = `<div class="ps-err">${I18N.connErr}</div>`;
-      status.textContent = I18N.connErr;
+      if(mySeq !== _suggestSeq) return;
+      if(e && e.name === 'AbortError'){
+        // (S06) キャンセル: エラー表示はせず初期状態(空の#out)に戻す
+        out.innerHTML = '';
+        return;
+      }
+      renderRunError(esc(I18N.connErr), run); // (S07/S11)
     } finally {
+      // timerはこの呼び出し専用(runのローカル変数)なので、他の呼び出しに追い越されていても
+      // 必ず止める。止め忘れると、古いintervalが同じidの#ps-elapsed等を殴り続けて
+      // 新しい呼び出しの経過秒表示が裏から壊れる。
       if(timer) clearInterval(timer);
-      go.disabled = false; go.classList.remove('loading');
+      // ボタンの活性化はまだ自分が最新のときだけ(追い越されていたら次のrunがfinallyで戻す)。
+      if(mySeq === _suggestSeq){
+        go.disabled = false; go.classList.remove('loading');
+      }
     }
   }
   document.getElementById('go').addEventListener('click', run);
