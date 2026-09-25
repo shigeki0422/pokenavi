@@ -11,3 +11,24 @@ https://www.pokenavi.jp/* https://pokenavi.jp/:splat 301
 /ko/blog/m3 /ko/blog/m3/ 301
 /blog/megaraichu-x-party-analysis /blog/raichu-y-analysis-m3/ 301
 /blog/megaraichu-x-party-analysis/ /blog/raichu-y-analysis-m3/ 301
+
+# ポケモン情報ページのスラッグ修正（別ポケモンの英名が割り当たっていた）
+# mr-rime は本来の持ち主(バリコオル)のURLになったので転送しない
+/pokemon/dachsbun/ /pokemon/aromatisse/ 301
+/en/pokemon/dachsbun/ /en/pokemon/aromatisse/ 301
+/ko/pokemon/dachsbun/ /ko/pokemon/aromatisse/ 301
+/pokemon/greedent/ /pokemon/diggersby/ 301
+/en/pokemon/greedent/ /en/pokemon/diggersby/ 301
+/ko/pokemon/greedent/ /ko/pokemon/diggersby/ 301
+/party-suggest/greedent/ /party-suggest/diggersby/ 301
+/pokemon/frosmoth/ /pokemon/mr-rime/ 301
+/en/pokemon/frosmoth/ /en/pokemon/mr-rime/ 301
+/ko/pokemon/frosmoth/ /ko/pokemon/mr-rime/ 301
+# /party-suggest/frosmoth/ は転送先(バリコオル)のページが現在は生成されないため張らない
+/pokemon/palossand/ /pokemon/runerigus/ 301
+/en/pokemon/palossand/ /en/pokemon/runerigus/ 301
+/ko/pokemon/palossand/ /ko/pokemon/runerigus/ 301
+/party-suggest/palossand/ /party-suggest/runerigus/ 301
+
+# メガが複数ある種のスラッグ衝突修正（mega-lucario と mega-lucario-Z が同じURLになっていた）
+/party-suggest/mega-lucario-2/ /party-suggest/mega-lucario/ 301

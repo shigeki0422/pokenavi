@@ -41,17 +41,16 @@ export async function getStaticPaths() {
   const res = await fetch('https://pokenavi-suggest-799947701075.asia-northeast1.run.app/species');
   const species: { label: string; sp: string; mega: string; rank: number }[] = await res.json();
 
-  // 種族によってはメガ進化が複数系統ある(リザードンX/Y、ライチュウX/Y等)。
-  // 同じsp(和名)に対しmegaを持つ候補が複数あると、単純な`mega-${baseSlug}`
-  // ではスラッグが衝突し片方のページが黙って消える(実際にライチュウX/Yで発生)。
-  // 複数ある場合のみlabel末尾のX/Yでスラッグを分ける(単一のメガ種は既存URLを
-  // 変えないよう`mega-${baseSlug}`のまま)。
+  // 同じsp(和名)にメガが複数ある場合だけスラッグを分ける。無印のメガと
+  // メガ○○Z のように末尾文字が無い系統が混ざると、以前は両方 String(メガの数)
+  // になって衝突し、片方のページが黙って消えていた(メガルカリオで発生)。
   const megaCountBySp: Record<string, number> = {};
   for (const s of species) {
     if (s.mega) megaCountBySp[s.sp] = (megaCountBySp[s.sp] ?? 0) + 1;
   }
 
   const paths = [];
+  const usedSlugs = new Set<string>();
   for (const s of species) {
     const baseSlug = spToSlug[s.sp];
     if (!baseSlug) continue;
@@ -59,15 +58,20 @@ export async function getStaticPaths() {
 
     let slug: string;
     if (s.mega) {
-      if ((megaCountBySp[s.sp] ?? 0) > 1) {
-        const variant = /([XY])$/.exec(s.label)?.[1]?.toLowerCase() ?? String(megaCountBySp[s.sp]);
-        slug = `mega-${baseSlug}-${variant}`;
-      } else {
-        slug = `mega-${baseSlug}`;
-      }
+      const variant = (megaCountBySp[s.sp] ?? 0) > 1
+        ? /([XYZ])$/.exec(s.label)?.[1]?.toLowerCase()
+        : undefined;
+      slug = variant ? `mega-${baseSlug}-${variant}` : `mega-${baseSlug}`;
     } else {
       slug = baseSlug;
     }
+    // 上の規則で分けきれない系統が増えても黙ってページが消えないようにする
+    if (usedSlugs.has(slug)) {
+      let n = 2;
+      while (usedSlugs.has(`${slug}-${n}`)) n++;
+      slug = `${slug}-${n}`;
+    }
+    usedSlugs.add(slug);
 
     paths.push({
       params: { slug },
@@ -132,7 +136,7 @@ const introText = introParts.join('');
     <!-- (S19) 汎用ページ(party-suggest.astro)にはあるが、このスラッグページには無かった工房への誘導CTA -->
     <div style="max-width:860px;margin:0 auto;padding:0 1.2rem 3rem;text-align:center">
       <p style="font-size:.85rem;color:rgb(var(--gray));margin-bottom:.6rem">6匹が決まったら細かい型を調整したい方へ</p>
-      <a href="/party-builder/" style="display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.4rem;background:rgb(var(--accent));color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem">
+      <a href="/party-builder/" style="display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.4rem;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem">
         パーティ工房で型を微調整する →
       </a>
     </div>

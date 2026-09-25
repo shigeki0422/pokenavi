@@ -32,7 +32,7 @@ const hasMegaPartySuggest = !!pokemonSlug && psSlugSet.has(`mega-${pokemonSlug}`
  * 複数系統ある。party-suggest/[slug].astroはこの場合スラッグをX/Yで分けて
  * 生成する(mega-{slug}-x / mega-{slug}-y)ため、ここでも両方の有無を見て
  * 別々のCTAリンクを出す(単一メガ種は従来通りmega-{slug}のまま)。 */
-const megaVariants = (['x', 'y'] as const)
+const megaVariants = (['x', 'y', 'z'] as const)
   .map((suffix) => ({ suffix, slug: `mega-${pokemonSlug}-${suffix}` }))
   .filter((v) => !!pokemonSlug && psSlugSet.has(v.slug));
 /** 「○○対策」ページ(src/pages/counters/[slug].astro)は使用率上位30体
@@ -228,6 +228,61 @@ const breadcrumbJsonLd = {
 				overflow-x: auto;
 				max-width: 100%;
 			}
+			/* 使用率データの5つの表はタブで切り替える(縦に並べると間延びするため)。
+			   見た目はパーティ工房のモバイル版タブに合わせたセグメント型。 */
+			:global(.prose .pn-tabbar) {
+				display: flex;
+				gap: 2px;
+				margin: 12px 0;
+				padding: 2px;
+				background: #f8fafc;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 9px;
+				overflow-x: auto;
+				scrollbar-width: none;
+			}
+			:global(.prose .pn-tabbar::-webkit-scrollbar) { display: none; }
+			:global(.prose .pn-tab) {
+				position: relative;
+				flex: 1 0 auto;
+				min-height: 40px;
+				padding: 0.5em 0.9em;
+				border: none;
+				border-radius: 7px;
+				background: none;
+				font-family: inherit;
+				font-size: 0.82rem;
+				font-weight: 700;
+				color: rgb(var(--gray));
+				white-space: nowrap;
+				cursor: pointer;
+			}
+			:global(.prose .pn-tab:hover) { color: rgb(var(--black)); }
+			/* 選択されていないタブ同士は境目が分からないので仕切り線を入れる。
+			   gap(2px)の中に絶対配置するので、幅は変わらない。 */
+			:global(.prose .pn-tab + .pn-tab::before) {
+				content: '';
+				position: absolute;
+				left: -2px;
+				top: 22%;
+				bottom: 22%;
+				width: 1px;
+				background: rgb(var(--gray-light));
+			}
+			:global(.prose .pn-tab.is-on::before),
+			:global(.prose .pn-tab.is-on + .pn-tab::before) { display: none; }
+			:global(.prose .pn-tab.is-on) {
+				background: #fff;
+				color: var(--accent);
+				box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
+			}
+			:global(.prose .pn-tabpanel) { display: none; }
+			:global(.prose .pn-tabpanel.is-on) { display: block; }
+			/* 狭い画面では5つが横に収まるよう左右の余白を詰める */
+			@media (max-width: 720px) {
+				:global(.prose .pn-tab) { padding: 0.5em 0.5em; font-size: 0.78rem; }
+			}
+
 			/* ステータス振り(30件)は高さを据え置いて中だけスクロールさせる。
 			   上の table 既定が display:block + overflow-x:auto でテーブル自身が
 			   スクロールコンテナになってしまい、th の sticky が効かないため戻す。 */
@@ -508,6 +563,26 @@ if(prose){
   });
 }
 })()</script>}
+
+		<script>
+			(function () {
+				document.querySelectorAll('.pn-tabs').forEach((box) => {
+					const tabs = [...box.querySelectorAll('.pn-tab')];
+					const panels = [...box.querySelectorAll('.pn-tabpanel')];
+					tabs.forEach((tab) => {
+						tab.addEventListener('click', () => {
+							const key = tab.dataset.tab;
+							tabs.forEach((t) => {
+								const on = t === tab;
+								t.classList.toggle('is-on', on);
+								t.setAttribute('aria-selected', String(on));
+							});
+							panels.forEach((p) => p.classList.toggle('is-on', p.dataset.tab === key));
+						});
+					});
+				});
+			})();
+		</script>
 
 		<script>
 			(function () {

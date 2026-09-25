@@ -104,6 +104,24 @@ const itemListJsonLd = {
 			.top-card .rank-badge.bronze { background: #92400e; }
 			.top-card .name { font-size: 0.85rem; font-weight: 700; color: rgb(var(--black)); }
 
+			.rank-link {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				gap: 6px;
+				margin-top: 10px;
+				padding: 10px 14px;
+				border: 1.5px solid var(--accent, #f97316);
+				border-radius: 10px;
+				background: #fff;
+				color: var(--accent, #f97316);
+				font-size: 0.88rem;
+				font-weight: 800;
+				text-decoration: none;
+				transition: background 0.15s;
+			}
+			.rank-link:hover { background: #fff7ed; }
+
 			/* 検索・全一覧 */
 			.all-section .section-title { background: #f8fafc; border-color: #94a3b8; }
 			.search-bar {
@@ -171,6 +189,7 @@ const itemListJsonLd = {
 							);
 						})}
 					</div>
+					<a class="rank-link" href="/ranking/">📈 使用率の推移を見る →</a>
 				</section>
 			)}
 

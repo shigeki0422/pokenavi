@@ -319,17 +319,11 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 });
 </script>
 
-<style>
-@media(min-width:768px){
-  .pn-data-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
-}
-</style>
+<div class="pn-tabs">
 
-<div class="pn-data-grid">
+<div class="pn-tabbar" role="tablist"><button type="button" class="pn-tab is-on" data-tab="moves" role="tab" aria-selected="true">技</button><button type="button" class="pn-tab" data-tab="items" role="tab" aria-selected="false">持ち物</button><button type="button" class="pn-tab" data-tab="natures" role="tab" aria-selected="false">性格</button><button type="button" class="pn-tab" data-tab="evs" role="tab" aria-selected="false">ステータス振り</button><button type="button" class="pn-tab" data-tab="partners" role="tab" aria-selected="false">同じチーム</button></div>
 
-<div>
-
-### 技
+<div class="pn-tabpanel is-on" data-tab="moves" role="tabpanel">
 
 <div style="margin:12px 0;overflow:visible">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -395,9 +389,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 </div>
 
-<div>
-
-### 持ち物
+<div class="pn-tabpanel" data-tab="items" role="tabpanel">
 
 <div style="margin:12px 0;overflow:visible">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -463,9 +455,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 </div>
 
-<div>
-
-### 性格
+<div class="pn-tabpanel" data-tab="natures" role="tabpanel">
 
 <div style="margin:12px 0;overflow:visible">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -531,9 +521,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 </div>
 
-<div>
-
-### ステータス振り
+<div class="pn-tabpanel" data-tab="evs" role="tabpanel">
 
 <div class="pn-ev-scroll" style="margin:12px 0">
 <table style="border-collapse:collapse;font-size:0.9em">
@@ -705,10 +693,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 </div>
 
-</div>
-
-
-### 同じチーム
+<div class="pn-tabpanel" data-tab="partners" role="tabpanel">
 
 <div style="margin:12px 0;overflow:visible">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -801,7 +786,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0858-00.webp" alt="ブリムオン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/mr-rime/" style="color:inherit;text-decoration:none">ブリムオン</a></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0858-00.webp" alt="ブリムオン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/hatterene/" style="color:inherit;text-decoration:none">ブリムオン</a></div></td>
   <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:12px;padding:2px 0"><span style="font-size:0.9em;color:#1e293b">平均 <strong>6.0位</strong></span><span style="font-size:0.82em;color:#16a34a">前回比 +2</span></div><div class="pn-popup" style="min-width:220px"><div style="font-size:0.8em;color:#64748b;margin-bottom:6px">順位推移（数字が小さいほど多く同居）</div><svg viewBox="0 0 240 72" style="width:100%;max-width:240px;height:auto;display:block" xmlns="http://www.w3.org/2000/svg">
 <line x1="8" y1="8" x2="232" y2="8" stroke="#e2e8f0" stroke-width="1"/>
 <text x="6" y="11" text-anchor="end" fill="#94a3b8" font-size="8">1</text>
@@ -901,6 +886,10 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </tr>
 </tbody>
 </table>
+</div>
+
+</div>
+
 </div>
 
 ---

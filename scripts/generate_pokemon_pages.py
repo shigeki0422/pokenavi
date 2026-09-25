@@ -755,7 +755,7 @@ POKEMON_DATA = {
         "analysis": ['kleavor-analysis-m2'],
     },
     "ホルード": {
-        "file": "greedent", "dex": 660, "id": "0660-00",
+        "file": "diggersby", "dex": 660, "id": "0660-00",
         "types": ["ノーマル", "じめん"],
         "stats": [85, 56, 77, 50, 77, 78],
         "analysis": ['greedent-analysis-m2'],
@@ -803,7 +803,7 @@ POKEMON_DATA = {
         "stats": [80, 120, 75, 75, 75, 60],
     },
     "ブリムオン": {
-        "file": "mr-rime", "dex": 858, "id": "0858-00",
+        "file": "hatterene", "dex": 858, "id": "0858-00",
         "types": ["エスパー", "フェアリー"],
         "stats": [80, 85, 75, 110, 100, 70],
     },
@@ -1130,7 +1130,7 @@ POKEMON_DATA = {
         "stats": [100, 100, 130, 45, 90, 35],
     },
     "デスバーン": {
-        "file": "palossand", "dex": 867, "id": "0867-00",
+        "file": "runerigus", "dex": 867, "id": "0867-00",
         "types": ["じめん", "ゴースト"],
         "stats": [58, 95, 145, 50, 105, 30],
     },
@@ -1416,7 +1416,7 @@ POKEMON_DATA = {
         "stats": [67, 58, 57, 81, 67, 101],
     },
     "バリコオル": {
-        "file": "frosmoth", "dex": 866, "id": "0866-00",
+        "file": "mr-rime", "dex": 866, "id": "0866-00",
         "types": ["こおり", "むし"],
         "stats": [80, 85, 75, 110, 100, 70],
     },
@@ -1515,7 +1515,7 @@ POKEMON_DATA = {
         "stats": [70, 70, 70, 70, 70, 70],
     },
     "フレフワン": {
-        "file": "dachsbun", "dex": 683, "id": "0683-00",
+        "file": "aromatisse", "dex": 683, "id": "0683-00",
         "types": ["フェアリー"],
         "stats": [57, 80, 99, 80, 87, 50],
     },
@@ -2574,22 +2574,25 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </tr>
 '''
 
+    # 5つの表を縦に並べるとページが間延びするのでタブで切り替える。
+    # 見出し文字列は en/ko 変換スクリプトの辞書に載っているものをそのまま使う。
+    tab_defs = [("moves", "技"), ("items", "持ち物"), ("natures", "性格"),
+                ("evs", "ステータス振り")] + ([("partners", "同じチーム")] if partners else [])
+    tab_bar = "".join(
+        f'<button type="button" class="pn-tab{" is-on" if i == 0 else ""}" '
+        f'data-tab="{key}" role="tab" aria-selected="{"true" if i == 0 else "false"}">{label}</button>'
+        for i, (key, label) in enumerate(tab_defs))
+
     section_data = f"""
 ## 使用率データ
 
 {RATE_CELL_STYLE}
 
-<style>
-@media(min-width:768px){{
-  .pn-data-grid{{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}}
-}}
-</style>
+<div class="pn-tabs">
 
-<div class="pn-data-grid">
+<div class="pn-tabbar" role="tablist">{tab_bar}</div>
 
-<div>
-
-### 技
+<div class="pn-tabpanel is-on" data-tab="moves" role="tabpanel">
 
 <div style="margin:12px 0;overflow:visible">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -2605,9 +2608,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 </div>
 
-<div>
-
-### 持ち物
+<div class="pn-tabpanel" data-tab="items" role="tabpanel">
 
 <div style="margin:12px 0;overflow:visible">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -2623,9 +2624,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 </div>
 
-<div>
-
-### 性格
+<div class="pn-tabpanel" data-tab="natures" role="tabpanel">
 
 <div style="margin:12px 0;overflow:visible">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -2641,9 +2640,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 </div>
 
-<div>
-
-### ステータス振り
+<div class="pn-tabpanel" data-tab="evs" role="tabpanel">
 
 <div class="pn-ev-scroll" style="margin:12px 0">
 <table style="border-collapse:collapse;font-size:0.9em">
@@ -2662,8 +2659,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </table>
 </div>
 <p style="font-size:0.8em;color:#666;margin:4px 0 0">H=HP A=こうげき B=ぼうぎょ C=とくこう D=とくぼう S=すばやさ</p>
-
-</div>
 
 </div>"""
 
@@ -2720,8 +2715,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     rank_header = f'平均順位・前回比 <span style="font-size:0.8em;color:#94a3b8;font-weight:400">{"ⓘ 推移" if has_partner_trend else ""}</span>'
 
     section_partners = f"""
-
-### 同じチーム
+<div class="pn-tabpanel" data-tab="partners" role="tabpanel">
 
 <div style="margin:12px 0;overflow:visible">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em">
@@ -2735,6 +2729,10 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 <tbody>
 {partner_rows}</tbody>
 </table>
+</div>
+
+</div>
+
 </div>
 
 ---"""
