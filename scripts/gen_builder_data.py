@@ -60,6 +60,15 @@ MIN_JOINT_NATURE_PCT = 3.0 # 観測1件だけの性格を採る場合に要求�
 NATURE_ALT_PCT = 15.0 # 型間で性格を分けるとき、第2の性格に要求する周辺採用率(%)
 MEGA_AXIS_GAP = 15    # メガ後のA/C差がこれ以上なら、その持ち物は物理/特殊のどちらか寄りと見なす
 
+# 同じ持ち物・同じ攻撃軸の「役割違い」の型。周辺分布の軸(A/C)だけでは2型目が立たないため、
+# 実構築(templates)に実在する型を1件写して足す。
+# (種 -> [(持ち物, 必須の技, 写す構築のラベル前置き or None)]) 上位構築で採用が確認できたものだけを手で登録する。
+# 前置きが None なら最新シーズンの最上位。メタグロスはBに厚く振る型が多数派でボディプレスの
+# 火力が出るため、M-5#223(H28 B30 S8)を指定する(最上位の#14はB18/S28でBが薄い少数派)。
+ROLE_VARIANTS = {
+    "メタグロス": [("メタグロスナイト", ("てっぺき", "ボディプレス"), "M-5#223 ")],
+}
+
 # 性格 -> (上昇stat idx, 下降stat idx)。並びは H,A,B,C,D,S。src/scripts/party-builder/stats.ts と同一。
 NATURE_MODS = {
     "いじっぱり": (1, 3), "ゆうかん": (1, 5), "やんちゃ": (1, 4), "さみしがり": (1, 2),
@@ -483,18 +492,7 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
         per_item[c["item"]] = per_item.get(c["item"], 0) + 1
 
         item, ev = c["item"], c["ev"]
-        md = _mega_of(tpl, item, normalize_mega_stone)
-        if md is not None:
-            t1, t2 = md.type1, md.type2
-            bs = [md.hp, md.attack, md.defense, md.sp_attack, md.sp_defense, md.speed]
-            ability = md.ability or base_ability
-            label = md.mega_name
-        else:
-            t1, t2 = tpl.type1, tpl.type2
-            bs = [tpl.base_hp, tpl.base_attack, tpl.base_defense,
-                  tpl.base_sp_attack, tpl.base_sp_defense, tpl.base_speed]
-            ability = base_ability
-            label = name
+        md, t1, t2, bs, ability, label = _form_of(tpl, name, item, normalize_mega_stone, base_ability)
         nature, backed = _pick_nature_joint(joint.get(item), _ev_axis(ev), natures, ev)
         if not backed and nature in used_natures:
             nature = _nature_alt(natures, ev, used_natures) or nature
@@ -508,7 +506,54 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
             "t1": t1, "t2": t2, "bs": bs, "mega": md is not None,
             "label": label, "spec": spec,
         })
+    for item, must, pin in ROLE_VARIANTS.get(name, []):
+        src = _role_variant_src(con, name, item, must, pin)
+        if not src or any(o["item"] == item and set(must) <= set(o["moves"]) for o in out):
+            continue
+        nature, tpl_ability, mv4, ev = src
+        md, t1, t2, bs, ability, label = _form_of(tpl, name, item, normalize_mega_stone, base_ability)
+        if md is None:
+            ability = tpl_ability or ability
+        spec = (f"{name}@{item}:{nature}:{'|'.join(mv4)}:"
+                f"{'/'.join(str(x) for x in ev)}:{ability}")
+        v = {"idx": 0, "item": item, "nature": nature, "ability": ability,
+             "ev": list(ev), "moves": mv4, "mpool": mpool,
+             "t1": t1, "t2": t2, "bs": bs, "mega": md is not None,
+             "label": label, "spec": spec}
+        if len(out) >= max_variants:
+            out.pop()
+        out.append(v)
+        for i, o in enumerate(out):
+            o["idx"] = i + 1
     return out
+
+
+def _form_of(tpl, name, item, normalize_mega_stone, base_ability):
+    md = _mega_of(tpl, item, normalize_mega_stone)
+    if md is not None:
+        bs = [md.hp, md.attack, md.defense, md.sp_attack, md.sp_defense, md.speed]
+        return md, md.type1, md.type2, bs, md.ability or base_ability, md.mega_name
+    bs = [tpl.base_hp, tpl.base_attack, tpl.base_defense,
+          tpl.base_sp_attack, tpl.base_sp_defense, tpl.base_speed]
+    return None, tpl.type1, tpl.type2, bs, base_ability, name
+
+
+def _role_variant_src(con, name, item, must, pin=None):
+    """templates から、must の技を全て持つ実構築のうち最も新しいシーズン・上位順位の1件(pin指定時はそのラベルの構築)。
+    (性格, 特性, 4技, EV) を返す。"""
+    best = None
+    for r in con.execute(
+            "SELECT label, nature, ability, move1, move2, move3, move4, "
+            "ev_h, ev_a, ev_b, ev_c, ev_d, ev_s FROM templates WHERE pokemon=? AND item=?",
+            (name, item)):
+        m = re.match(r"M-(\d+)#(\d+)", r[0] or "")
+        mv = [x for x in r[3:7] if x]
+        if not m or not all(x in mv for x in must) or (pin and not r[0].startswith(pin)):
+            continue
+        key = (-int(m.group(1)), int(m.group(2)))
+        if best is None or key < best[0]:
+            best = (key, (r[1], r[2], mv, [int(x or 0) for x in r[7:13]]))
+    return best[1] if best else None
 
 
 def _stone_xy(item):
