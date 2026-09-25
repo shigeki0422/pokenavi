@@ -236,6 +236,52 @@ fn is_rampage(pack: &Pack, mv: &crate::damage::DMove) -> bool {
     mv.name == l.げきりん || mv.name == l.あばれる || mv.name == l.はなびらのまい || mv.name == l.だいふんげき
 }
 
+/// 今の局面で `att` が撃つ最善の攻撃技 (技, 削り, 優先度, 倒せた)。選び方は greedy_sequence と持久戦の両方で共有する。
+fn best_attack(bt: &Battle, packr: &Pack, att: usize, avoid_rampage: bool)
+    -> Option<(usize, i64, i64, bool)> {
+    let def = 1 - att;
+    let n_moves = bt.sides[att].active().moves.len();
+    let hp_before = bt.sides[def].active().hp;
+    // こだわり系(choice_locked_move)と げきりん等の暴れ技(locked_move)は技を変えられない。
+    // 対戦本体は「指定された行動」をそのまま実行するのでロックを見てくれない。
+    // ここで候補を絞らないと、スカーフで技を撃ち分ける成立しない手順が出る。
+    let locked = {
+        let p = bt.sides[att].active();
+        p.choice_locked_move.or(p.locked_move)
+    };
+    let mut best: Option<(usize, i64, i64, bool)> = None; // (技, 削り, 優先度, 倒せた)
+    for i in 0..n_moves {
+        let Some(mv) = bt.sides[att].active().moves.get(i).cloned() else { continue };
+        if let Some(lk) = locked {
+            if mv.name != lk { continue; }
+        } else if avoid_rampage && is_rampage(packr, &mv) {
+            continue;
+        }
+        if mv.category == crate::pack::Cat::Status || mv.power.unwrap_or(0) <= 0
+            || is_excluded_from_matchup(packr, &mv) {
+            continue;
+        }
+        let mut probe = bt.clone();
+        let step = probe.turn + 1;   // run_loop_lim の上限は累積ターン数
+        drive(&mut probe, packr, att, i, step);
+        let dealt = hp_before - probe.sides[def].active().hp;
+        let ko = !probe.sides[def].active().is_alive;
+        let prio = mv.priority;
+        let better = match &best {
+            None => dealt > 0 || ko,
+            Some((_, bd, bp, bko)) => {
+                if ko != *bko { ko }              // 倒せる手を最優先
+                else if ko { prio > *bp || (prio == *bp && dealt > *bd) }  // 倒せるなら先制優先
+                else { dealt > *bd }              // 倒せないなら一番削れる手
+            }
+        };
+        if better {
+            best = Some((i, dealt, prio, ko));
+        }
+    }
+    best
+}
+
 fn greedy_sequence(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, roll: f64,
     avoid_rampage: bool,
@@ -243,51 +289,12 @@ fn greedy_sequence(
     let def = 1 - att;
     let mut bt = setup(pack, spec_a, spec_b, season, roll);
     let packr: &Pack = pack;
-    let n_moves = bt.sides[att].active().moves.len();
     let mut seq: Vec<usize> = Vec::new();
     for _ in 0..CAP {
         if !bt.sides[def].active().is_alive {
             break;
         }
-        let hp_before = bt.sides[def].active().hp;
-        // こだわり系(choice_locked_move)と げきりん等の暴れ技(locked_move)は技を変えられない。
-        // 対戦本体は「指定された行動」をそのまま実行するのでロックを見てくれない。
-        // ここで候補を絞らないと、スカーフで技を撃ち分ける成立しない手順が出る。
-        let locked = {
-            let p = bt.sides[att].active();
-            p.choice_locked_move.or(p.locked_move)
-        };
-        let mut best: Option<(usize, i64, i64, bool)> = None; // (技, 削り, 優先度, 倒せた)
-        for i in 0..n_moves {
-            let Some(mv) = bt.sides[att].active().moves.get(i).cloned() else { continue };
-            if let Some(lk) = locked {
-                if mv.name != lk { continue; }
-            } else if avoid_rampage && is_rampage(packr, &mv) {
-                continue;
-            }
-            if mv.category == crate::pack::Cat::Status || mv.power.unwrap_or(0) <= 0
-                || is_excluded_from_matchup(packr, &mv) {
-                continue;
-            }
-            let mut probe = bt.clone();
-            let step = probe.turn + 1;   // run_loop_lim の上限は累積ターン数
-            drive(&mut probe, packr, att, i, step);
-            let dealt = hp_before - probe.sides[def].active().hp;
-            let ko = !probe.sides[def].active().is_alive;
-            let prio = mv.priority;
-            let better = match &best {
-                None => dealt > 0 || ko,
-                Some((_, bd, bp, bko)) => {
-                    if ko != *bko { ko }              // 倒せる手を最優先
-                    else if ko { prio > *bp || (prio == *bp && dealt > *bd) }  // 倒せるなら先制優先
-                    else { dealt > *bd }              // 倒せないなら一番削れる手
-                }
-            };
-            if better {
-                best = Some((i, dealt, prio, ko));
-            }
-        }
-        let Some((mi, _, _, _)) = best else { break };
+        let Some((mi, _, _, _)) = best_attack(&bt, packr, att, avoid_rampage) else { break };
         seq.push(mi);
         let step = bt.turn + 1;
         drive(&mut bt, packr, att, mi, step);
@@ -296,6 +303,108 @@ fn greedy_sequence(
         }
     }
     (OUT_OF_RANGE, seq)
+}
+
+/// 持久戦ルートの打ち切りターン数。
+pub const STALL_CAP: i64 = 20;
+
+fn is_heal_move(pack: &Pack, mv: &crate::damage::DMove) -> bool {
+    let l = &pack.sy.l;
+    let n = mv.name;
+    n == l.なまける || n == l.じこさいせい || n == l.あさのひざし || n == l.こうごうせい
+        || n == l.つきのひかり || n == l.はねやすめ || n == l.タマゴうみ || n == l.ミルクのみ
+}
+
+/// 技名の並びに どくどく と回復技の両方があるか。持久戦ルートを走らせるかの枝刈り。
+fn stall_capable(pack: &Pack, moves: &[(String, bool)]) -> bool {
+    let l = &pack.sy.l;
+    let toxic = pack.intern.resolve(l.どくどく);
+    let heals = [l.なまける, l.じこさいせい, l.あさのひざし, l.こうごうせい,
+                 l.つきのひかり, l.はねやすめ, l.タマゴうみ, l.ミルクのみ]
+        .map(|s| pack.intern.resolve(s));
+    moves.iter().any(|(n, _)| n == toxic) && moves.iter().any(|(n, _)| heals.contains(&n.as_str()))
+}
+
+/// 両者が同時に行動する1ターンを実走する。
+fn drive_pair(bt: &mut Battle, pack: &Pack, idx: [Option<usize>; 2]) {
+    let mut rng = FixedRng;
+    let lim = bt.turn + 1;
+    bt.run_loop_lim(pack, &mut rng, lim, |b2, _r| {
+        let mk = |side: usize| match idx[side] {
+            Some(i) => Action {
+                kind: ActKind::Move,
+                mv: b2.sides[side].active().moves.get(i).cloned(),
+                move_idx: i as i64,
+                ..Default::default()
+            },
+            None => Action::default(),
+        };
+        [mk(0), mk(1)]
+    }, |_| {});
+}
+
+/// 持久戦ルート: `att` が どくどく で削りつつ回復技で粘って相手を倒す線。
+///
+/// 通常の判定は「互いに最大打点を撃ち続ける」ので、どくどく＋回復技の型は
+/// 攻撃技が弱いだけで圏外と出て、実際には勝てる対面を取りこぼす。
+/// どくどく＋回復技を持たない側は実走せず None を返す（枝刈り）。
+/// 相手は毎ターン最善の攻撃技を撃ち続ける。返す手順は連続もそのまま並べる。
+pub fn run_stall_route(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, roll: f64,
+) -> Option<(i64, Vec<String>)> {
+    let def = 1 - att;
+    let mut bt = setup(pack, spec_a, spec_b, season, roll);
+    let packr: &Pack = pack;
+    let (toxic_i, heal_i) = {
+        let p = bt.sides[att].active();
+        (p.moves.iter().position(|m| m.name == packr.sy.l.どくどく),
+         p.moves.iter().position(|m| is_heal_move(packr, m)))
+    };
+    let (Some(toxic_i), Some(heal_i)) = (toxic_i, heal_i) else { return None };
+    let mut seq: Vec<String> = Vec::new();
+    for _ in 0..STALL_CAP {
+        if !bt.sides[att].active().is_alive {
+            return None;
+        }
+        let foe_best = best_attack(&bt, packr, def, false);
+        let att_hp = bt.sides[att].active().hp;
+        let will_fall = foe_best.map_or(false, |(_, dealt, _, ko)| ko || dealt >= att_hp);
+        let foe_clean = bt.sides[def].active().status.is_none();
+        let pick = if foe_clean {
+            toxic_i
+        } else if will_fall {
+            heal_i
+        } else {
+            best_attack(&bt, packr, att, false).map(|x| x.0).unwrap_or(heal_i)
+        };
+        let locked = {
+            let p = bt.sides[att].active();
+            p.choice_locked_move.or(p.locked_move)
+        };
+        if let Some(lk) = locked {
+            match bt.sides[att].active().moves.iter().position(|m| m.name == lk) {
+                Some(i) if i == pick => {}
+                _ => return None,
+            }
+        }
+        let mut idx = [None, None];
+        idx[att] = Some(pick);
+        idx[def] = foe_best.map(|x| x.0);
+        drive_pair(&mut bt, packr, idx);
+        let name = bt.sides[att].active().moves.get(pick)
+            .map(|m| packr.intern.resolve(m.name).to_string())?;
+        seq.push(name);
+        if !bt.sides[att].active().is_alive {
+            return None;
+        }
+        if !bt.sides[def].active().is_alive {
+            return Some((seq.len() as i64, seq));
+        }
+        if foe_clean && pick == toxic_i && bt.sides[def].active().status.is_none() {
+            return None;
+        }
+    }
+    None
 }
 
 /// `spec_a` が `move_idx` の技を撃ち続けて `spec_b` を倒すまでの発数と、初撃の与ダメージ。
@@ -643,9 +752,48 @@ pub fn analyze_json(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_js
             0.0
         };
     }
-    let v = verdict_of(pack, &sides[0], &sides[1]);
+    let mut v = verdict_of(pack, &sides[0], &sides[1]);
+    apply_stall(pack, &mut v, [&info_a, &info_b], a, b, season);
     out["verdict"] = v;
     out
+}
+
+/// 持久戦ルート(どくどく＋回復)の結果を判定に反映する。
+/// すでに明確な勝ちの側は走らせない。片方だけが持久戦で勝てるなら記号を○/▲に寄せ、
+/// 両方勝てるなら通常の判定のままにする。
+fn apply_stall(pack: &mut Pack, v: &mut serde_json::Value, infos: [&SideInfo; 2],
+               a: &str, b: &str, season: &str) {
+    use serde_json::json;
+    let score = v["score"].as_f64().unwrap_or(0.0);
+    let mut route: [Option<(i64, Vec<String>)>; 2] = [None, None];
+    for att in 0..2usize {
+        let own = if att == 0 { score } else { -score };
+        if own >= 1.0 || !stall_capable(pack, &infos[att].moves) {
+            continue;
+        }
+        // 相手の最大乱数(自分も最大乱数になる)で勝てても、最低乱数では倒しきれないことがある。
+        // 乱数に左右されず勝てる線だけを採る。
+        route[att] = run_stall_route(pack, a, b, season, att, 1.0)
+            .and_then(|_| run_stall_route(pack, a, b, season, att, 0.0));
+    }
+    let [mine, theirs] = route;
+    let (side, picked) = match (mine, theirs) {
+        (Some(r), None) => (Some("me"), Some(r)),
+        (None, Some(r)) => (Some("opp"), Some(r)),
+        _ => (None, None),
+    };
+    match (side, picked) {
+        (Some(side), Some((turns, seq))) => {
+            let new_score = if side == "me" { score.max(1.0) } else { score.min(-1.0) };
+            v["score"] = json!(new_score);
+            v["sym"] = json!(score_sym(new_score));
+            v["win"] = json!(side == "me");
+            v["stall"] = json!({"side": side, "turns": turns, "seq": seq});
+        }
+        _ => {
+            v["stall"] = json!({"side": null, "turns": 0, "seq": Vec::<String>::new()});
+        }
+    }
 }
 
 struct SideVerdictInput {
@@ -694,9 +842,11 @@ fn verdict_of(pack: &Pack, me: &SideVerdictInput, opp: &SideVerdictInput) -> ser
     // 先後がランダムになるのは、素早さも決着ターンの優先度も同値のときだけ。
     let even = me.speed == opp.speed && my_p == opp_p;
     let score = score_of(my_hits, opp_hits, ko_first, even, me.ohko_p, opp.ohko_p);
+    let draw = my_hits >= OUT_OF_RANGE && opp_hits >= OUT_OF_RANGE;
     json!({
         "sym": score_sym(score),
-        "win": my_hits < opp_hits || (my_hits == opp_hits && ko_first),
+        "win": !draw && (my_hits < opp_hits || (my_hits == opp_hits && ko_first)),
+        "draw": draw,
         "score": score,
         "myHits": my_hits, "oppHits": opp_hits,
         "myS": me.speed, "oppS": opp.speed,
@@ -710,6 +860,10 @@ fn verdict_of(pack: &Pack, me: &SideVerdictInput, opp: &SideVerdictInput) -> ser
 /// 確定数だけで決着しているため素早さは無関係。確定数が同数の場合のみ先後が効く。
 pub fn score_of(my_hits: i64, opp_hits: i64, first: bool, even: bool,
                 my_ohko_p: f64, opp_ohko_p: f64) -> f64 {
+    // 互いに倒せない対面は素早さに関わらず引き分け。
+    if my_hits >= OUT_OF_RANGE && opp_hits >= OUT_OF_RANGE {
+        return 0.0;
+    }
     let diff = (opp_hits - my_hits) as f64;
     // 確定数が同じで先後もランダム（素早さ同値・優先度も同じ）なら真の五分。
     if diff == 0.0 && even {

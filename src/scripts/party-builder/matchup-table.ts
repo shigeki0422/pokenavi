@@ -25,6 +25,8 @@ export interface MatchupColumnVM {
    * 技名は翻訳済みで渡すこと（このモジュールは翻訳を持たない）。 */
   mySteps?: SeqStep[];
   oppSteps?: SeqStep[];
+  /** 持久戦の技の並び（翻訳済み）。無ければ verdict.stall.seq をそのまま使う。 */
+  stallSeq?: string[];
 }
 
 export interface MatchupTableVM {
@@ -43,6 +45,8 @@ interface Labels {
   detail(d: MoveHitDetail | null, prob: string): string;
   conds(c: string): string;
   judge(win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean): string;
+  draw: string;
+  stall(win: boolean, seq: string, turns: number): string;
 }
 
 const T: Record<Lang, Labels> = {
@@ -59,6 +63,9 @@ const T: Record<Lang, Labels> = {
     judge: (win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean) =>
       `${win ? "勝ち" : "負け"}：${mine}で倒す/${theirs}で倒される・`
       + `${byPrio ? "先制技で" : ""}${first ? "先手" : "後手"}`,
+    draw: "引き分け：互いに圏外・決着つかず",
+    stall: (win: boolean, seq: string, turns: number) =>
+      `持久戦で${win ? "勝ち" : "負け"}：${seq}（${turns}ターン・相手が交代しない前提）`,
   },
   en: {
     rowSpeed: "Speed", rowJudge: "Verdict",
@@ -73,6 +80,9 @@ const T: Record<Lang, Labels> = {
     judge: (win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean) =>
       `${win ? "Win" : "Loss"}: ${mine} to KO / ${theirs} to be KOed, `
       + `${first ? "moves first" : "moves second"}${byPrio ? " (priority)" : ""}`,
+    draw: "Draw: neither can KO",
+    stall: (win: boolean, seq: string, turns: number) =>
+      `${win ? "Win" : "Loss"} by stalling: ${seq} (${turns} turns, assuming no switch)`,
   },
   ko: {
     rowSpeed: "스피드", rowJudge: "판정",
@@ -87,6 +97,9 @@ const T: Record<Lang, Labels> = {
     judge: (win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean) =>
       `${win ? "승" : "패"}: ${mine}로 쓰러뜨림 / ${theirs}로 당함・`
       + `${byPrio ? "선제기로 " : ""}${first ? "선공" : "후공"}`,
+    draw: "무승부: 서로 쓰러뜨리지 못함",
+    stall: (win: boolean, seq: string, turns: number) =>
+      `지구전으로 ${win ? "승리" : "패배"}: ${seq} (${turns}턴・상대가 교체하지 않는 전제)`,
   },
 };
 
@@ -99,6 +112,28 @@ export function fmtProb(prob: number | null | undefined): string {
   if (p < 1) return "<1";
   if (p > 99 && p < 100) return ">99";
   return String(Math.round(p));
+}
+
+/** 連続する同じ技は「技×n」にまとめて「→」でつなぐ。 */
+function stallSeqText(seq: string[]): string {
+  const out: string[] = [];
+  for (let i = 0; i < seq.length;) {
+    let j = i;
+    while (j < seq.length && seq[j] === seq[i]) j++;
+    out.push(j - i > 1 ? `${seq[i]}×${j - i}` : seq[i]);
+    i = j;
+  }
+  return out.join("→");
+}
+
+/** 判定行の文。持久戦で決まったならそれを、互いに圏外なら引き分けを優先する。 */
+function judgeText(c: MatchupColumnVM, t: Labels): string {
+  const v = c.verdict;
+  if (v.stall?.side) {
+    return t.stall(v.stall.side === "me", stallSeqText(c.stallSeq ?? v.stall.seq), v.stall.turns);
+  }
+  if (v.draw) return t.draw;
+  return t.judge(v.win, t.hits(v.myHits ?? null), t.hits(v.oppHits ?? null), v.koFirst, v.koByPriority);
 }
 
 const pctText = (lo: number | null, hi: number | null): string =>
@@ -164,9 +199,7 @@ export function renderMatchupTable(vm: MatchupTableVM, lang: Lang): string {
   const judgeRow = `<td class="lft">${esc(t.rowJudge)}</td>` + vm.columns.map((c) =>
     `<td class="${c.verdict.win ? "mbp-judge-win" : "mbp-judge-lose"}">`
     + `<b class="mbp-sym">${esc(c.verdict.sym)}</b>`
-    + `<div class="mbp-judge-text">${esc(t.judge(c.verdict.win,
-        t.hits(c.verdict.myHits ?? null), t.hits(c.verdict.oppHits ?? null),
-        c.verdict.koFirst, c.verdict.koByPriority))}</div></td>`).join("");
+    + `<div class="mbp-judge-text">${esc(judgeText(c, t))}</div></td>`).join("");
 
   return `<div class="mbp-scroll"><table class="mbp-table">${head}`
     + `<tr>${myRow}</tr><tr>${oppRow}</tr><tr>${spdRow}</tr><tr>${judgeRow}</tr></table></div>`;

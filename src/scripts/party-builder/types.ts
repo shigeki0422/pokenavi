@@ -161,6 +161,13 @@ export interface ResolvedBuild {
 
 // ---- 1v1判定 (matchup.ts) 差し替え境界 ----
 
+/** どくどく＋回復技の持久戦ルート。side は判定を見ている自分から見た勝者(勝てる側が無い/両方勝てるなら null)。 */
+export interface StallInfo {
+  side: "me" | "opp" | null;
+  turns: number;
+  seq: string[];
+}
+
 export interface Verdict {
   sym: "◎" | "○" | "△" | "▲" | "×";
   win: boolean;
@@ -181,6 +188,10 @@ export interface Verdict {
   oppMove: string | null;
   /** 毎ターン最善手を選び直した場合の技の並び。同じ技の連打で最短なら空。 */
   mySeq: string[];
+  /** 互いに圏外で決着がつかない(引き分け)。 */
+  draw?: boolean;
+  /** 持久戦で勝敗が決まったか。記号・win には反映済みなので表示だけに使う。 */
+  stall?: StallInfo;
   stub: boolean;
 }
 

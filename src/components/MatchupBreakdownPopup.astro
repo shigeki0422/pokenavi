@@ -71,6 +71,7 @@ function toVM(breakdown: MatchupBreakdown): MatchupTableVM {
       label: T.buildLabel(j + 1),
       meta: [tItem(r.build.item), tNature(r.build.nature), r.evLabel],
       my: r.myDmg, opp: r.oppDmg, verdict: r.verdict,
+      stallSeq: r.verdict.stall?.seq.map((n) => tMove(n)),
       myMoveText: tMove(r.myDmg?.n ?? r.verdict.myMove),
       oppMoveText: tMove(r.oppDmg?.n ?? r.verdict.oppMove),
     })),
@@ -93,8 +94,10 @@ const T = {
     },
     condsLabel: (c: string) => `${c} 込みで計算`,
     fastLabel: (fast: boolean) => (fast ? '先手' : '後手'),
-    judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
-      `${win ? '勝ち' : '負け'}：${myHits}で倒す/${oppHits}で倒される・${fast ? '先手' : '後手'}`,
+    judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean, draw = false, stall?: { turns: number; seq: string }) =>
+      stall ? `持久戦で${win ? '勝ち' : '負け'}：${stall.seq}（${stall.turns}ターン・相手が交代しない前提）`
+        : draw ? '引き分け：互いに圏外・決着つかず'
+        : `${win ? '勝ち' : '負け'}：${myHits}で倒す/${oppHits}で倒される・${fast ? '先手' : '後手'}`,
   },
   en: {
     myTab: (i: number) => `My build ${i}`,
@@ -111,8 +114,10 @@ const T = {
     },
     condsLabel: (c: string) => `calculated with ${c}`,
     fastLabel: (fast: boolean) => (fast ? 'First' : 'Second'),
-    judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
-      `${win ? 'Win' : 'Lose'}: ${myHits} vs ${oppHits}, ${fast ? 'moves first' : 'moves second'}`,
+    judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean, draw = false, stall?: { turns: number; seq: string }) =>
+      stall ? `${win ? 'Win' : 'Lose'} by stalling: ${stall.seq} (${stall.turns} turns, assuming no switch)`
+        : draw ? 'Draw: neither can KO'
+        : `${win ? 'Win' : 'Lose'}: ${myHits} vs ${oppHits}, ${fast ? 'moves first' : 'moves second'}`,
   },
   ko: {
     myTab: (i: number) => `내 빌드 ${i}`,
@@ -129,8 +134,10 @@ const T = {
     },
     condsLabel: (c: string) => `${c} 포함 계산`,
     fastLabel: (fast: boolean) => (fast ? '선공' : '후공'),
-    judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean) =>
-      `${win ? '승리' : '패배'}: ${myHits} / ${oppHits}・${fast ? '선공' : '후공'}`,
+    judgeText: (win: boolean, myHits: string, oppHits: string, fast: boolean, draw = false, stall?: { turns: number; seq: string }) =>
+      stall ? `지구전으로 ${win ? '승리' : '패배'}: ${stall.seq} (${stall.turns}턴・상대가 교체하지 않는 전제)`
+        : draw ? '무승부: 서로 쓰러뜨리지 못함'
+        : `${win ? '승리' : '패배'}: ${myHits} / ${oppHits}・${fast ? '선공' : '후공'}`,
   },
 }[lang];
 

@@ -3215,6 +3215,7 @@ const I18N = I18N_ALL[lang];
    * その値をそのまま閾値判定に使えば scripts/_explain.py _dmg_line() の「n_lo>=5→圏外」と一致する
    * (詳細はmatchup.tsの_detailのコメント参照)。 */
   function pbMuDetailKoTxt(d) {
+        stallSeq: verdicts[i].stall?.seq.map((n) => tMove(n)),
     if (!d || d.hits == null || d.hits >= 5) return I18N.muDetailKoOOR;
     return d.certain ? I18N.hitsFmt(d.hits) : I18N.muDetailKoRoll(d.hits);
   }

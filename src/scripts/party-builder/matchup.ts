@@ -192,7 +192,7 @@ export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
   // 記号・勝敗・確定数・先後の決め方はすべてエンジン(analysis::analyze_json)にある。
   // ここで組み直すと、同じルールを提案API(Python)と工房(TS)で二重に持つことになり、
   // 実際に提案側だけ判定式が古いまま取り残されて結論が食い違った。
-  const v = _pair(me, opp).verdict;
+  const v = _pair(me, opp).verdict as EngineVerdict & Pick<Verdict, "draw" | "stall">;
   return { ...v, stub: false };
 }
 

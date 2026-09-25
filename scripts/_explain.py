@@ -252,7 +252,8 @@ def _mu_score(M, O, field):
                 "my_seq": v["mySeq"], "ko_by_priority": v["koByPriority"],
                 "my_steps": _steps("a", "b", v["mySeq"]),
                 "opp_steps": _steps("b", "a", v.get("oppSeq") or []),
-                "sym": v["sym"], "score": v["score"], "win": v["win"]}
+                "sym": v["sym"], "score": v["score"], "win": v["win"],
+                "draw": v.get("draw", False), "stall": v.get("stall")}
     if MU_MODE == "engine" and sa and sb:
         import _mu_engine as _ME
         ah, ar, am, bh, br, bm = _ME.mu_engine(sa, sb, L_REF[0])
@@ -375,7 +376,8 @@ def matchup_detail(specs, mon_name, opp_name, L):
                   f"{pri}{'先手' if fast else '後手'}")
         judge.append({"v": r.get("sym") or _score_sym(score), "win": win, "txt": reason,
                       "fast": fast, "by_prio": bool(r.get("ko_by_priority")),
-                      "my_hits": myh, "opp_hits": thh})
+                      "my_hits": myh, "opp_hits": thh,
+                      "draw": bool(r.get("draw")), "stall": r.get("stall")})
         seq.append({"my": r.get("my_steps") or [], "opp": r.get("opp_steps") or []})
     return {"mon": mon_name, "opp": opp_name, "my_spec": getattr(M, "_spec", None),
             "cols": cols, "me": me, "op": op, "spd": spd, "judge": judge, "seq": seq}
