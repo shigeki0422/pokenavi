@@ -43,7 +43,6 @@ const I18N_ALL = {
     storageNote: 'パーティはこのブラウザ内に保存されます(端末間の同期はありません)。持ち出しはエクスポートをご利用ください。',
     deleteConfirm: name => `「${name}」を削除しますか？`,
     slotRemoveTitle: '外す', undoRemoved: name => `${name}を外しました`, undoBtn: '元に戻す',
-    emptyGuideStep1: '①ポケモンを追加（＋をタップ）', emptyGuideStep2: '②仮想敵を設定', emptyGuideStep3: '③EVを微調整して判定を確認',
     slotSearchTitle: n => `枠${n}にポケモンを追加`, slotSearchClose: '✕ 閉じる',
     slotSearchPlaceholder: '追加するポケモンを検索（ひらがな可）',
     noHit: '該当なし', rankLbl: n => `使用${n}位`, offRankLbl: '圏外', adoptBtn: 'この案を採用',
@@ -123,7 +122,6 @@ const I18N_ALL = {
     storageNote: 'Parties are saved in this browser (not synced across devices). Use Export to take them with you.',
     deleteConfirm: name => `Delete "${name}"?`,
     slotRemoveTitle: 'Remove', undoRemoved: name => `Removed ${name}`, undoBtn: 'Undo',
-    emptyGuideStep1: '① Add a Pokémon (tap +)', emptyGuideStep2: '② Set a virtual opponent', emptyGuideStep3: '③ Fine-tune EVs and check the verdict',
     slotSearchTitle: n => `Add a Pokémon to slot ${n}`, slotSearchClose: '✕ Close',
     slotSearchPlaceholder: 'Search for a Pokémon to add',
     noHit: 'No matches', rankLbl: n => `Rank #${n}`, offRankLbl: 'Unranked', adoptBtn: 'Use this suggestion',
@@ -203,7 +201,6 @@ const I18N_ALL = {
     storageNote: '파티는 이 브라우저 안에 저장됩니다(기기 간 동기화는 없습니다). 반출은 내보내기를 이용해 주세요.',
     deleteConfirm: name => `「${name}」을(를) 삭제하시겠습니까?`,
     slotRemoveTitle: '제거', undoRemoved: name => `${name}을(를) 제거했습니다`, undoBtn: '되돌리기',
-    emptyGuideStep1: '① 포켓몬 추가（＋를 탭）', emptyGuideStep2: '② 가상의 적 설정', emptyGuideStep3: '③ EV를 미세 조정하고 판정 확인',
     slotSearchTitle: n => `칸${n}에 포켓몬 추가`, slotSearchClose: '✕ 닫기',
     slotSearchPlaceholder: '추가할 포켓몬 검색',
     noHit: '검색 결과 없음', rankLbl: n => `사용률 ${n}위`, offRankLbl: '순위권 밖', adoptBtn: '이 안을 채택',
@@ -291,7 +288,6 @@ const I18N = I18N_ALL[lang];
     </div>
     <div id="pb-team-holes"></div>
     <div class="iconrow" id="pb-tray"></div>
-    <div id="pb-empty-guide"></div>
     <div id="pb-slot-search"></div>
   </div>
 
@@ -750,12 +746,6 @@ const I18N = I18N_ALL[lang];
     body.pb-sheet-open .pb-undo-toast{bottom:calc(var(--pb-sheet-h, 50vh) + 16px)}
   }
 
-  /* (11) 空パーティ時の初見ガイド */
-  .pb-empty-guide{background:#f8fafc;border:1px dashed rgb(var(--gray-light));border-radius:10px;padding:.7em .9em;margin:.6em 0;display:flex;flex-direction:column;gap:.3em}
-  .pb-empty-guide-step{font-size:.82rem;color:rgb(var(--gray-dark))}
-  .pb-empty-guide-step b{color:var(--accent);margin-right:.35em}
-  /* (B27) 達成済みステップ */
-  .pb-empty-guide-step.pb-eg-done{color:#15803d;text-decoration:line-through;opacity:.75}
   /* (B28) 仮想敵0件の空状態 */
   .pb-empty-targets{display:flex;flex-direction:column;align-items:flex-start;gap:.5em;margin-top:.6em}
 </style>
@@ -819,7 +809,6 @@ const I18N = I18N_ALL[lang];
       storageNote: 'パーティはこのブラウザ内に保存されます(端末間の同期はありません)。持ち出しはエクスポートをご利用ください。',
       deleteConfirm: name => `「${name}」を削除しますか？`,
       slotRemoveTitle: '外す', undoRemoved: name => `${name}を外しました`, undoBtn: '元に戻す',
-      emptyGuideStep1: '①ポケモンを追加（＋をタップ）', emptyGuideStep2: '②仮想敵を設定', emptyGuideStep3: '③EVを微調整して判定を確認',
       slotSearchTitle: n => `枠${n}にポケモンを追加`, slotSearchClose: '✕ 閉じる',
       slotSearchPlaceholder: '追加するポケモンを検索（ひらがな可）',
       noHit: '該当なし', rankLbl: n => `使用${n}位`, offRankLbl: '圏外', adoptBtn: 'この案を採用',
@@ -934,7 +923,6 @@ const I18N = I18N_ALL[lang];
       storageNote: 'Parties are saved in this browser (not synced across devices). Use Export to take them with you.',
       deleteConfirm: name => `Delete "${name}"?`,
       slotRemoveTitle: 'Remove', undoRemoved: name => `Removed ${name}`, undoBtn: 'Undo',
-      emptyGuideStep1: '① Add a Pokémon (tap +)', emptyGuideStep2: '② Set a virtual opponent', emptyGuideStep3: '③ Fine-tune EVs and check the verdict',
       slotSearchTitle: n => `Add a Pokémon to slot ${n}`, slotSearchClose: '✕ Close',
       slotSearchPlaceholder: 'Search for a Pokémon to add',
       noHit: 'No matches', rankLbl: n => `Rank #${n}`, offRankLbl: 'Unranked', adoptBtn: 'Use this suggestion',
@@ -1051,7 +1039,6 @@ const I18N = I18N_ALL[lang];
       storageNote: '파티는 이 브라우저 안에 저장됩니다(기기 간 동기화는 없습니다). 반출은 내보내기를 이용해 주세요.',
       deleteConfirm: name => `「${name}」을(를) 삭제하시겠습니까?`,
       slotRemoveTitle: '제거', undoRemoved: name => `${name}을(를) 제거했습니다`, undoBtn: '되돌리기',
-      emptyGuideStep1: '① 포켓몬 추가（＋를 탭）', emptyGuideStep2: '② 가상의 적 설정', emptyGuideStep3: '③ EV를 미세 조정하고 판정 확인',
       slotSearchTitle: n => `칸${n}에 포켓몬 추가`, slotSearchClose: '✕ 닫기',
       slotSearchPlaceholder: '추가할 포켓몬 검색',
       noHit: '검색 결과 없음', rankLbl: n => `사용률 ${n}위`, offRankLbl: '순위권 밖', adoptBtn: '이 안을 채택',
@@ -1584,7 +1571,6 @@ const I18N = I18N_ALL[lang];
     renderPartyBar();
     renderValidate();
     renderTray();
-    renderEmptyGuide();
     updateFillBtnVisibility();
     renderSlotSearch();
     renderSelectedHead();
@@ -1779,26 +1765,6 @@ const I18N = I18N_ALL[lang];
     handleEl.addEventListener('pointermove', onPointerMove);
     handleEl.addEventListener('pointerup', onPointerUp);
     handleEl.addEventListener('pointercancel', onPointerUp);
-  }
-
-  /** (11)(B27) 6枠トレイ直下の3ステップ初見ガイド。以前は1体追加した時点で消えていたが、
-   * 「①ポケモンを追加」だけ達成した状態でガイドが消えると②③に気付かれずに終わっていたため、
-   * 少なくとも仮想敵を1体設定するまでは達成チェック付きで残す。 */
-  function renderEmptyGuide() {
-    const el = document.getElementById('pb-empty-guide');
-    if (!el) return;
-    const p = activeParty();
-    const filledCount = p ? p.slots.filter(Boolean).length : 0;
-    const hasTarget = !!p && p.slots.some((s) => s && s.targets && s.targets.length);
-    if (!p || hasTarget) { el.innerHTML = ''; return; }
-    const steps = [
-      { done: filledCount > 0, text: I18N.emptyGuideStep1 },
-      { done: hasTarget, text: I18N.emptyGuideStep2 },
-      { done: false, text: I18N.emptyGuideStep3 },
-    ];
-    el.innerHTML = `<div class="pb-empty-guide">${steps.map((s) =>
-      `<div class="pb-empty-guide-step${s.done ? ' pb-eg-done' : ''}">${s.done ? '✓ ' : ''}${esc(s.text)}</div>`
-    ).join('')}</div>`;
   }
 
   /** 空き枠がない(6匹満員)時は「空き枠を提案で埋める」ボタンを非表示にする。空きができたら再表示。 */
@@ -3215,7 +3181,6 @@ const I18N = I18N_ALL[lang];
    * その値をそのまま閾値判定に使えば scripts/_explain.py _dmg_line() の「n_lo>=5→圏外」と一致する
    * (詳細はmatchup.tsの_detailのコメント参照)。 */
   function pbMuDetailKoTxt(d) {
-        stallSeq: verdicts[i].stall?.seq.map((n) => tMove(n)),
     if (!d || d.hits == null || d.hits >= 5) return I18N.muDetailKoOOR;
     return d.certain ? I18N.hitsFmt(d.hits) : I18N.muDetailKoRoll(d.hits);
   }
@@ -3250,6 +3215,7 @@ const I18N = I18N_ALL[lang];
         oppMoveText: tMove(pairs[i].opp?.n ?? verdicts[i].oppMove),
         mySteps: pairs[i].mySteps.map((s) => ({ ...s, n: tMove(s.n) })),
         oppSteps: pairs[i].oppSteps.map((s) => ({ ...s, n: tMove(s.n) })),
+        stallSeq: verdicts[i].stall?.seq.map((n) => tMove(n)),
       })),
     };
     return `<div class="pb-pop-hd">${icoImg(b.icon, b.label, '')}${esc(tPoke(b.label))}<span class="pb-arw">vs</span>${icoImg(o.icon, o.label, '')}${esc(tPoke(o.label))}</div>
