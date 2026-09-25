@@ -59,32 +59,32 @@ const ROLE_NAME_MAP = lang === 'en' ? ROLE_NAME_EN : lang === 'ko' ? ROLE_NAME_K
 
 const I18N_ALL = {
   ja: {
-    title: preCoreLabel ? `${preCoreLabel}軸 M-6 軸から簡単構築` : 'M-6 軸から簡単構築',
+    title: preCoreLabel ? `${preCoreLabel}軸 M-6 パーティ構築` : 'パーティ構築',
     note: '※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。',
-    leadShort: '軸ポケモンを指定すると、バランスの良いパーティをシミュレーションで提案します。', leadMoreLabel: '詳しく', leadDetail: '各ポケの役割・パーティ統計・使用率上位との1v1相性つきで提案します。',
+    leadShort: '軸ポケモンを指定すると、バランスの良いパーティをシミュレーションで提案します。',
     blankAutoHelp: '空欄のまま実行すると、使用率上位から自動で軸を選びます。',
     corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
-    go: '提案する', close: '閉じる', shareBtn: '共有',
+    go: '提案する', close: '閉じる',
     multiAxisNotice: '⚠ 軸を2件以上指定すると必ずライブ計算になり、10〜20秒（他ユーザーの計算待ちも含む）かかります。',
     adLabel: '広告',
   },
   en: {
-    title: preCoreLabel ? `Quick Build from ${preCoreLabelDisplay} — M-6` : 'M-6 Quick Build from Core',
+    title: preCoreLabel ? `Party Builder around ${preCoreLabelDisplay} — M-6` : 'Party Builder',
     note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
-    leadShort: 'Specify a Pok\u00e9mon to build around, and the simulator suggests a balanced party.', leadMoreLabel: 'Details', leadDetail: "Each suggestion includes each member's role, team stats, and 1v1 matchups against the top usage ranks.",
+    leadShort: 'Specify a Pok\u00e9mon to build around, and the simulator suggests a balanced party.',
     blankAutoHelp: 'Leave the field blank to auto-pick a core from the top usage ranks.',
     corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
-    go: 'Suggest', close: 'Close', shareBtn: 'Share',
+    go: 'Suggest', close: 'Close',
     multiAxisNotice: '⚠ Two or more cores always trigger a live calculation, taking 10–20 seconds (including other users\' queued requests).',
     adLabel: 'Advertisement',
   },
   ko: {
-    title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-6 축으로 간단 구성` : 'M-6 축으로 간단 구성',
+    title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-6 파티 구성` : '파티 구성',
     note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
-    leadShort: '축으로 삼을 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다.', leadMoreLabel: '자세히', leadDetail: '각 포켓몬의 역할·파티 통계·사용률 상위와의 1v1 상성까지 함께 제안합니다.',
+    leadShort: '축으로 삼을 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다.',
     blankAutoHelp: '비워두고 실행하면 사용률 상위에서 자동으로 축을 선택합니다.',
     corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
-    go: '제안받기', close: '닫기', shareBtn: '공유',
+    go: '제안받기', close: '닫기',
     multiAxisNotice: '⚠ 축을 2개 이상 지정하면 반드시 라이브 계산이 되어 10~20초（다른 사용자의 대기 포함）가 걸립니다.',
     adLabel: '광고',
   },
@@ -95,12 +95,8 @@ const I18N = I18N_ALL[lang];
 <main>
   <h1>{I18N.title}</h1>
   <PartyToolsNav current="suggest" lang={lang} />
-  <!-- (C18/S15) 説明文を1行+「詳しく」に圧縮し、注意書き(note)は入力欄の下へ移す -->
+  <!-- (C18/S15) 説明文は1行にし、注意書き(note)は入力欄の下へ移す -->
   <p class="lead">{I18N.leadShort}</p>
-  <details class="lead-details">
-    <summary>{I18N.leadMoreLabel}</summary>
-    <p>{I18N.leadDetail}</p>
-  </details>
 
   <div class="card">
     <div class="corebox">
@@ -114,7 +110,6 @@ const I18N = I18N_ALL[lang];
     </div>
     <div class="row" style="margin-top:.6em">
       <button id="go" class="btn">{I18N.go}</button>
-      <button id="ps-share-btn" type="button" class="pb-btn-sub">{I18N.shareBtn}</button>
     </div>
     <p class="note">{I18N.note}</p>
     <div id="ps-multi-notice" class="ps-notice" style="display:none">{I18N.multiAxisNotice}</div>
@@ -144,13 +139,11 @@ const I18N = I18N_ALL[lang];
 
 <style is:global>
   main{width:auto;max-width:1040px;margin:0 auto;padding:1.4em 1em 4em;color:rgb(var(--gray-dark));overflow-x:clip}
+  /* 工房(PartyBuilderApp)と同じ幅にそろえる。ページ切替で左右がずれないようにするため */
+  @media (min-width:1024px){ main{max-width:1220px} }
+  html{scrollbar-gutter:stable}
   h1{font-size:1.5rem;margin:0 0 .2em}
-  .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 .3em}
-  /* (C18) 説明文を1行+「詳しく」に圧縮。初期状態は閉じたまま(<details>既定) */
-  .lead-details{margin:0 0 1.1em;font-size:.82rem;color:rgb(var(--gray))}
-  .lead-details summary{cursor:pointer;color:var(--accent);font-weight:700;list-style:none}
-  .lead-details summary::-webkit-details-marker{display:none}
-  .lead-details p{margin:.4em 0 0}
+  .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 1.1em}
   /* (S15) 入力欄の下に移した注意書き */
   .note{font-size:.8rem;color:rgb(var(--gray));background:#fff8e6;border:1px solid #f0d888;border-radius:8px;padding:.55em .8em;margin:.8em 0 0}
   /* (S16) 「空欄でおまかせ」の常設ヘルプ(ps-noticeより控えめな色) */
@@ -479,12 +472,12 @@ const I18N = I18N_ALL[lang];
    * フロントマター側のI18N_ALLは静的HTML生成に使う数個のキーだけの縮小版で、これとは別管理。 */
   const I18N_ALL = {
     ja: {
-      title: preCoreLabel ? `${preCoreLabel}軸 M-6 軸から簡単構築` : 'M-6 軸から簡単構築',
+      title: preCoreLabel ? `${preCoreLabel}軸 M-6 パーティ構築` : 'パーティ構築',
       lead: '軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案します。各ポケの役割・パーティ統計・使用率上位との1v1相性つき。',
       note: '※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。',
       corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
       corePlaceholderMore: 'さらに追加…（ひらがな可）',
-      go: '提案する', close: '閉じる', noHit: '該当なし', shareBtn: '共有', shareCopiedMsg: 'リンクをコピーしました', shareCopyFailedMsg: 'コピーに失敗しました。このURLを手動でコピーしてください',
+      go: '提案する', close: '閉じる', noHit: '該当なし',
       itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
       selfVsOpp: '自分 ＼ 相手', selfVsAtk: '自分 ＼ 攻撃', selfVsHit: '自分 ＼ 被弾',
       tabAtk: '攻撃相性', tabDef: '防御相性', tabMu: 'ポケモン相性', tabSpeed: '素早さ', tabArch: '想定パーティ相性', tabGuide: '選出ガイド', soon: '準備中',
@@ -559,12 +552,12 @@ const I18N = I18N_ALL[lang];
       yes: '有', no: '無',
     },
     en: {
-      title: preCoreLabel ? `Quick Build from ${preCoreLabelDisplay} — M-6` : 'M-6 Quick Build from Core',
+      title: preCoreLabel ? `Party Builder around ${preCoreLabelDisplay} — M-6` : 'Party Builder',
       lead: 'Specify a Pokémon (or Pokémon) to build around, and the simulator suggests a balanced party — with each member\'s role, team stats, and 1v1 matchups against the top usage ranks.',
       note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
       corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
       corePlaceholderMore: 'Add more…',
-      go: 'Suggest', close: 'Close', noHit: 'No matches', shareBtn: 'Share', shareCopiedMsg: 'Link copied', shareCopyFailedMsg: 'Copy failed. Please copy this URL manually',
+      go: 'Suggest', close: 'Close', noHit: 'No matches',
       itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
       selfVsOpp: 'You ＼ Opponent', selfVsAtk: 'You ＼ Attacking', selfVsHit: 'You ＼ Taking hits',
       tabAtk: 'Attack Matchup', tabDef: 'Defense Matchup', tabMu: 'Pokémon Matchup', tabSpeed: 'Speed', tabArch: 'Team Matchup', tabGuide: 'Selection Guide', soon: 'Coming soon',
@@ -639,12 +632,12 @@ const I18N = I18N_ALL[lang];
       yes: 'Yes', no: 'No',
     },
     ko: {
-      title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-6 축으로 간단 구성` : 'M-6 축으로 간단 구성',
+      title: preCoreLabel ? `${preCoreLabelDisplay} 축 M-6 파티 구성` : '파티 구성',
       lead: '축으로 삼고 싶은 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다. 각 포켓몬의 역할·파티 통계·사용률 상위와의 1v1 상성까지 확인할 수 있습니다.',
       note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
       corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
       corePlaceholderMore: '추가로 검색…',
-      go: '제안받기', close: '닫기', noHit: '검색 결과 없음', shareBtn: '공유', shareCopiedMsg: '링크를 복사했습니다', shareCopyFailedMsg: '복사에 실패했습니다. 이 URL을 직접 복사해 주세요',
+      go: '제안받기', close: '닫기', noHit: '검색 결과 없음',
       itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
       selfVsOpp: '나 ＼ 상대', selfVsAtk: '나 ＼ 공격', selfVsHit: '나 ＼ 피격',
       tabAtk: '공격 상성', tabDef: '방어 상성', tabMu: '포켓몬 상성', tabSpeed: '스피드', tabArch: '예상 파티 상성', tabGuide: '선출 가이드', soon: '준비 중',
@@ -1687,22 +1680,6 @@ const I18N = I18N_ALL[lang];
     }
   }
   document.getElementById('go').addEventListener('click', run);
-  /** (S13) 現在のURL(runで?core=を反映済み)をそのまま共有する。navigator.shareが使えれば
-   * まず試し、使えない/失敗時はクリップボードコピー、それも失敗したらprompt()でURLを手渡す。 */
-  document.getElementById('ps-share-btn').addEventListener('click', async () => {
-    const url = location.href;
-    window.track?.('ps_share', { core: currentCoreParam() });
-    if (navigator.share) {
-      try { await navigator.share({ url, title: document.title }); return; }
-      catch (e) { /* キャンセル・未対応時はコピーにフォールバック */ }
-    }
-    try { await navigator.clipboard.writeText(url); document.getElementById('status').textContent = I18N.shareCopiedMsg; }
-    catch (e) {
-      // prompt()自体が使えない環境(一部の埋め込みwebview等)もあるため、それも失敗したら#statusにURLを直接出す。
-      try { prompt(I18N.shareCopyFailedMsg, url); }
-      catch (e2) { document.getElementById('status').textContent = `${I18N.shareCopyFailedMsg} ${url}`; }
-    }
-  });
   /** en/ko版には軸ごとの静的プリセットページ(/party-suggest/{slug}/)が存在しないため、
    * ポケモン情報ページのCTAは代わりに ?core=軸ポケモン和名(複数はカンマ区切り) を付けてこの汎用ページへ
    * 誘導する。ja版は静的プリセットページ側のpreCoreLabelプロパティを優先する。

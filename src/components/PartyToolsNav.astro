@@ -9,26 +9,51 @@ const LABELS = {
 }[lang];
 ---
 <nav class="pt-nav" aria-label={LABELS.suggest + ' / ' + LABELS.builder}>
-	<a href={`${pfx}/party-suggest`} class:list={['pt-pill', { active: current === 'suggest' }]}>{LABELS.suggest}<span class="pt-start">{LABELS.start}</span></a>
-	<a href={`${pfx}/party-builder`} class:list={['pt-pill', { active: current === 'builder' }]}>{LABELS.builder}</a>
+	<a href={`${pfx}/party-suggest`} class:list={['pt-tab', { active: current === 'suggest' }]} aria-current={current === 'suggest' ? 'page' : undefined}>
+		<svg class="pt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.6L18.5 9.5l-4.7 1.9L12 16l-1.8-4.6L5.5 9.5l4.7-1.9z"/><path d="M19 15v4M17 17h4"/></svg>
+		<span class="pt-label">{LABELS.suggest}</span>
+		<span class="pt-start" role="img" aria-label={LABELS.start} title={LABELS.start}>
+			<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5L2.5 9.4l6.6-.9z"/></svg>
+		</span>
+	</a>
+	<a href={`${pfx}/party-builder`} class:list={['pt-tab', { active: current === 'builder' }]} aria-current={current === 'builder' ? 'page' : undefined}>
+		<svg class="pt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h8m4 0h4M4 12h2m4 0h10M4 18h10m4 0h2"/><circle cx="14" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="18" r="2"/></svg>
+		<span class="pt-label">{LABELS.builder}</span>
+	</a>
 </nav>
 <style>
-	.pt-nav { display: flex; gap: 0.5rem; margin: 0 0 0.9rem; flex-wrap: wrap; }
-	.pt-pill {
-		display: inline-flex; align-items: center;
-		padding: 0.45rem 0.95rem; border-radius: 9999px;
-		font-size: 0.85rem; font-weight: 700; text-decoration: none;
-		color: rgb(var(--gray-dark)); background: #f1f5f9; border: 1.5px solid transparent;
+	.pt-nav {
+		display: flex; gap: 3px; padding: 3px; margin: 0 0 0.9rem;
+		background: #e8ecf3; border-radius: 12px; max-width: 34rem;
 	}
-	.pt-pill.active {
-		color: var(--accent); background: #eef2ff; border-color: var(--accent);
+	.pt-tab {
+		flex: 1 1 0; position: relative; box-sizing: border-box; min-height: 44px; min-width: 0;
+		display: flex; align-items: center; justify-content: center; gap: 0.4rem;
+		padding: 0.4rem 0.7rem; border-radius: 9px;
+		font-size: 0.88rem; font-weight: 700; line-height: 1.25; text-align: center; text-decoration: none;
+		color: #475569; touch-action: manipulation;
 	}
-	@media (hover: hover) { .pt-pill:not(.active):hover { background: #e2e8f0; } }
+	.pt-ico { width: 1.15em; height: 1.15em; flex: none; opacity: 0.75; }
+	.pt-tab.active {
+		background: #fff; color: var(--accent);
+		box-shadow: 0 1px 3px rgba(15, 23, 42, 0.18);
+	}
+	.pt-tab.active .pt-ico { opacity: 1; }
+	.pt-tab.active::after {
+		content: ''; position: absolute; left: 22%; right: 22%; bottom: 3px;
+		height: 2px; border-radius: 2px; background: var(--accent);
+	}
+	@media (hover: hover) { .pt-tab:not(.active):hover { background: rgba(255, 255, 255, 0.65); color: #1e293b; } }
+	.pt-tab:not(.active):active { background: rgba(255, 255, 255, 0.85); }
 	.pt-start {
-		margin-left: 0.4rem; padding: 0.1rem 0.45rem; border-radius: 9999px;
-		font-size: 0.65rem; font-weight: 800; white-space: nowrap;
-		background: #fef3c7; color: #b45309;
+		flex: none; width: 1.1rem; height: 1.1rem; border-radius: 50%;
+		display: inline-grid; place-items: center;
+		background: #fde68a; color: #b45309;
 	}
-	/* (S17) 自分がいるページのピルに「はじめはこちら」は不要 */
-	.pt-pill.active .pt-start { display: none; }
+	.pt-start svg { width: 0.7rem; height: 0.7rem; }
+	/* (S17) 自分がいるページのタブに「はじめはこちら」は不要 */
+	.pt-tab.active .pt-start { display: none; }
+	@media (max-width: 420px) {
+		.pt-tab { font-size: 0.8rem; padding: 0.4rem 0.4rem; gap: 0.3rem; }
+	}
 </style>

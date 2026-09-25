@@ -18,7 +18,7 @@ const TYPE_NAME_MAP = lang === 'en' ? TYPE_NAME_EN : lang === 'ko' ? TYPE_NAME_K
 
 const I18N_ALL = {
   ja: {
-    title: 'パーティ工房',
+    title: 'パーティ構築',
     lead: '6匹の型を自由に微調整し、想定敵との素早さ比較・1v1判定をリアルタイムに確認できます。1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。',
     leadShort: '6匹の型を自由に微調整し、想定敵との比較をリアルタイムに確認できます。', leadMoreLabel: '詳しく', leadDetail: '素早さ比較・1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。',
     obStep1Title: 'ポケモンを追加', obStep1Desc: '空き枠の＋から選ぶか、「空き枠を提案で埋める」で自動編成',
@@ -97,7 +97,7 @@ const I18N_ALL = {
     miniBarMinimizeAria: '最小化', miniBarReopenAria: 'ミニバーを再表示',
   },
   en: {
-    title: 'Party Workshop',
+    title: 'Party Builder',
     lead: 'Freely fine-tune the builds of all 6 Pokémon and check Speed comparisons and 1v1 verdicts against expected opponents in real time. The 1v1 verdict is a pre-calculation based on each side\'s strongest hit, Speed, and bulk checks like Focus Sash (switches and status moves aren\'t included).',
     leadShort: 'Freely fine-tune the builds of all 6 Pok\u00e9mon and compare them against expected opponents in real time.', leadMoreLabel: 'Details', leadDetail: "Speed comparisons and 1v1 verdicts are pre-calculated using each side's strongest hit, Speed, and bulk checks like Focus Sash (switches and status moves aren't included).",
     obStep1Title: 'Add a Pokémon', obStep1Desc: 'Pick from an empty slot\'s +, or auto-fill with "Fill empty slots with suggestions"',
@@ -176,7 +176,7 @@ const I18N_ALL = {
     miniBarMinimizeAria: 'Minimize', miniBarReopenAria: 'Show mini bar again',
   },
   ko: {
-    title: '파티 공방',
+    title: '파티 구성',
     lead: '6마리의 빌드를 자유롭게 미세 조정하고, 예상 상대와의 스피드 비교·1v1 판정을 실시간으로 확인할 수 있습니다. 1v1 판정은 서로의 최대 위력·스피드·기합의띠 등의 버티기를 고려한 사전 계산입니다(교체·보조기술은 포함되지 않습니다).',
     leadShort: '6마리의 빌드를 자유롭게 미세 조정하고, 예상 상대와 실시간으로 비교할 수 있습니다.', leadMoreLabel: '자세히', leadDetail: '스피드 비교·1v1 판정은 서로의 최대 위력·스피드·기합의띠 등의 버티기를 고려한 사전 계산입니다(교체·보조기술은 포함되지 않습니다).',
     obStep1Title: '포켓몬 추가', obStep1Desc: '빈 칸의 ＋에서 선택하거나, 「빈 칸을 제안으로 채우기」로 자동 편성',
@@ -313,6 +313,7 @@ const I18N = I18N_ALL[lang];
 
 <style is:global>
   main{width:auto;max-width:1040px;margin:0 auto;padding:1.4em 1em 4em;color:rgb(var(--gray-dark));overflow-x:clip}
+  html{scrollbar-gutter:stable}
   /* (B14) ボトムナビ分の余白に、notch端末のホームインジケータ分を追加 */
   @media (max-width:1023.98px){ main{padding-bottom:calc(4em + env(safe-area-inset-bottom))} }
   h1{font-size:1.5rem;margin:0 0 .2em}
@@ -486,10 +487,10 @@ const I18N = I18N_ALL[lang];
   .pb-beta{font-size:.65rem;background:#fef3c7;color:#92400e;border-radius:9999px;padding:.15em .6em;margin-left:.5em;vertical-align:middle;font-weight:800}
   .pb-beta-badge{display:inline-block;font-size:.6rem;font-weight:800;color:#7c3aed;background:#ede9fe;border-radius:4px;padding:0 .3em;margin-left:.3em;vertical-align:1px}
   .pb-partybar-row{flex-wrap:wrap;gap:.4em}
-  .pb-partybar-row select.inp{flex:0 1 auto;min-width:0;max-width:11em}
+  .pb-partybar-row select.inp{flex:1 1 15em;min-width:12em;max-width:26em}
+  @media(max-width:640px){.pb-partybar-row select.inp{flex:1 1 100%;max-width:none}}
   .pb-partybar-row .pb-btn-sub{padding:.4em .7em;font-size:.74rem}
   .pb-storage-note{margin-top:.6em}
-  .pb-share-msg{margin-left:.6em}
   .pb-btn-sub{position:relative;min-height:40px;box-sizing:border-box;background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe;border-radius:8px;padding:.45em .9em;font-weight:700;font-size:.8rem;cursor:pointer;font-family:var(--font-atkinson)}
   /* (C02) 実寸を40pxまで確保しつつ、隣接ボタンが多いため拡張ヒットは控えめに */
   .pb-btn-sub::before{content:'';position:absolute;inset:-6px}
@@ -525,7 +526,7 @@ const I18N = I18N_ALL[lang];
   .pb-ev-step:disabled{opacity:.4;cursor:default}
   /* 仮想敵ごとの前提(天候・フィールド・積み)。既定のときは目立たせない */
   /* 6枠編成カードの穴サマリ。「空き枠を提案で埋める」の前提を同じ画面で見せる */
-  .pb-team-holes{display:flex;flex-wrap:wrap;align-items:center;gap:6px;width:100%;margin:.6em 0 0;padding:8px 10px;border:1px solid #fecaca;border-radius:10px;background:#fef2f2;font-size:.84rem;text-align:left;font-family:var(--font-atkinson);color:rgb(var(--gray-dark))}
+  .pb-team-holes{display:flex;flex-wrap:wrap;align-items:center;gap:6px;width:100%;margin:.6em 0;padding:8px 10px;border:1px solid #fecaca;border-radius:10px;background:#fef2f2;font-size:.84rem;text-align:left;font-family:var(--font-atkinson);color:rgb(var(--gray-dark))}
   .pb-team-holes.pb-hole-ok{border-color:#bbf7d0;background:#f0fdf4}
   .pb-team-holes-btn{cursor:pointer}
   @media(hover:hover){.pb-team-holes-btn:hover{border-color:#f87171;background:#fee2e2}}
@@ -611,6 +612,7 @@ const I18N = I18N_ALL[lang];
     main{max-width:1220px}
     .pb-split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1.1em;align-items:start}
     .pb-split > .card{margin-bottom:0}
+    .pb-split{margin-bottom:1.1em}
   }
 
   /* (B15) ≤1023px: 「選択中のポケモン」の見出し＋2タブ（型エディタ／仮想敵）。
@@ -784,7 +786,7 @@ const I18N = I18N_ALL[lang];
    * 直接定義し、window越しには渡さない(window越しに渡すのは単純な文字列/オブジェクトのみに限定)。 */
   const I18N_ALL = {
     ja: {
-      title: 'パーティ工房',
+      title: 'パーティ構築',
       lead: '6匹の型を自由に微調整し、想定敵との素早さ比較・1v1判定をリアルタイムに確認できます。1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。',
       obStep1Title: 'ポケモンを追加', obStep1Desc: '空き枠の＋から選ぶか、「空き枠を提案で埋める」で自動編成',
       obStep2Title: '型を調整', obStep2Desc: '持ち物・特性・性格・EVを変更すると実数値が即座に反映',
@@ -883,7 +885,6 @@ const I18N = I18N_ALL[lang];
       fillNoHoleReason: '埋まる穴は無し（使用率上位から）',
       fillClearBtn: '✕ 提案をクリア', alreadyAdded: '追加済み', addToEmptySlot: sp => `${sp}を空き枠に追加`,
       exportHeading: name => `エクスポート ー ${name}`, copyBtn: 'コピー', copiedMsg: 'コピーしました',
-      shareLinkBtn: 'リンクをコピー',
       copyFailedMsg: 'コピーに失敗しました。テキストを選択して手動でコピーしてください',
       importHeading: 'インポート', importHint: '6行のspecテキストを貼り付けてください（エクスポートした形式）',
       importPlaceholder: 'ここに貼り付け', importBtn: '取り込む',
@@ -898,7 +899,7 @@ const I18N = I18N_ALL[lang];
       miniBarMinimizeAria: '最小化', miniBarReopenAria: 'ミニバーを再表示',
     },
     en: {
-      title: 'Party Workshop',
+      title: 'Party Builder',
       lead: 'Freely fine-tune the builds of all 6 Pokémon and check Speed comparisons and 1v1 verdicts against expected opponents in real time. The 1v1 verdict is a pre-calculation based on each side\'s strongest hit, Speed, and bulk checks like Focus Sash (switches and status moves aren\'t included).',
       obStep1Title: 'Add a Pokémon', obStep1Desc: 'Pick from an empty slot\'s +, or auto-fill with "Fill empty slots with suggestions"',
       obStep2Title: 'Adjust the build', obStep2Desc: 'Changing item, ability, nature, or EVs updates the real stats instantly',
@@ -999,7 +1000,6 @@ const I18N = I18N_ALL[lang];
       fillNoHoleReason: 'Covers no current hole (picked by usage)',
       fillClearBtn: '✕ Clear suggestions', alreadyAdded: 'Already added', addToEmptySlot: sp => `Add ${sp} to an empty slot`,
       exportHeading: name => `Export — ${name}`, copyBtn: 'Copy', copiedMsg: 'Copied',
-      shareLinkBtn: 'Copy Link',
       copyFailedMsg: 'Copy failed. Please select the text and copy it manually',
       importHeading: 'Import', importHint: 'Paste 6 lines of spec text (the exported format)',
       importPlaceholder: 'Paste here', importBtn: 'Import',
@@ -1014,7 +1014,7 @@ const I18N = I18N_ALL[lang];
       miniBarMinimizeAria: 'Minimize', miniBarReopenAria: 'Show mini bar again',
     },
     ko: {
-      title: '파티 공방',
+      title: '파티 구성',
       lead: '6마리의 빌드를 자유롭게 미세 조정하고, 예상 상대와의 스피드 비교·1v1 판정을 실시간으로 확인할 수 있습니다. 1v1 판정은 서로의 최대 위력·스피드·기합의띠 등의 버티기를 고려한 사전 계산입니다(교체·보조기술은 포함되지 않습니다).',
       obStep1Title: '포켓몬 추가', obStep1Desc: '빈 칸의 ＋에서 선택하거나, 「빈 칸을 제안으로 채우기」로 자동 편성',
       obStep2Title: '빌드 조정', obStep2Desc: '지닌물건·특성·성격·EV를 변경하면 실수치가 즉시 반영',
@@ -1114,7 +1114,6 @@ const I18N = I18N_ALL[lang];
       fillNoHoleReason: '메우는 구멍 없음(사용률 상위에서)',
       fillClearBtn: '✕ 제안 지우기', alreadyAdded: '추가됨', addToEmptySlot: sp => `${sp}을(를) 빈 칸에 추가`,
       exportHeading: name => `내보내기 — ${name}`, copyBtn: '복사', copiedMsg: '복사했습니다',
-      shareLinkBtn: '링크 복사',
       copyFailedMsg: '복사에 실패했습니다. 텍스트를 선택하여 수동으로 복사해 주세요',
       importHeading: '가져오기', importHint: '6줄의 spec 텍스트를 붙여넣어 주세요（내보내기 형식）',
       importPlaceholder: '여기에 붙여넣기', importBtn: '가져오기',
@@ -1798,7 +1797,7 @@ const I18N = I18N_ALL[lang];
     if (!p) renamingParty = false; // (12b) パーティが無いのに編集状態が残らないようにする
     const options = store.parties.map((pp) => `<option value="${esc(pp.id)}" ${pp.id === store.activeId ? 'selected' : ''}>${esc(pp.name)}</option>`).join('');
     const nameFieldHtml = renamingParty && p
-      ? `<input type="text" id="pb-party-rename-input" class="inp" value="${esc(p.name)}" style="max-width:11em">`
+      ? `<input type="text" id="pb-party-rename-input" class="inp" value="${esc(p.name)}" style="flex:1 1 15em;min-width:12em;max-width:26em">`
       : `<select id="pb-party-select" class="inp">${options}</select>`;
     el.innerHTML = `
       <div class="row pb-partybar-row">
@@ -1809,9 +1808,8 @@ const I18N = I18N_ALL[lang];
         <button class="pb-btn-sub pb-danger" id="pb-p-del" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.partyDel)}</button>
         <button class="pb-btn-sub" id="pb-p-exp" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.partyExp)}</button>
         <button class="pb-btn-sub" id="pb-p-imp" ${renamingParty ? 'disabled' : ''}>${esc(I18N.partyImp)}</button>
-        ${HAS_COMPRESSION ? `<button class="pb-btn-sub" id="pb-p-share" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.shareLinkBtn)}</button>` : ''}
       </div>
-      <div class="muted pb-storage-note">${esc(I18N.storageNote)}<span id="pb-share-msg" class="pb-share-msg"></span></div>`;
+      <div class="muted pb-storage-note">${esc(I18N.storageNote)}</div>`;
     if (renamingParty && p) {
       // (12b) prompt()の代わりにインライン編集。Enter/blurで確定・Escで取消(esc()はvalue属性側で適用済み)。
       const input = document.getElementById('pb-party-rename-input');
@@ -1872,7 +1870,6 @@ const I18N = I18N_ALL[lang];
     });
     document.getElementById('pb-p-exp').addEventListener('click', () => { if (p && !renamingParty) openExportModal(p); });
     document.getElementById('pb-p-imp').addEventListener('click', () => { if (!renamingParty) openImportModal(); });
-    document.getElementById('pb-p-share')?.addEventListener('click', () => { if (p && !renamingParty) shareCurrentParty(); });
   }
 
   function renderTray() {
@@ -3958,85 +3955,6 @@ const I18N = I18N_ALL[lang];
     });
   }
 
-  // ---- (B22) 共有リンク ----
-  // CompressionStream/DecompressionStreamはSafari16.4+/Chrome80+で使用可能。未対応ブラウザでの
-  // 圧縮なしフォールバックは実装コストの割に対象が僅少なため、機能自体を非対応ブラウザでは
-  // 出さない(ボタンを描画しない)方を選ぶ。
-  const HAS_COMPRESSION = typeof CompressionStream !== 'undefined' && typeof DecompressionStream !== 'undefined';
-  async function compressToBase64Url(text) {
-    const stream = new Blob([text]).stream().pipeThrough(new CompressionStream('gzip'));
-    const buf = await new Response(stream).arrayBuffer();
-    let bin = '';
-    new Uint8Array(buf).forEach((b) => { bin += String.fromCharCode(b); });
-    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-  }
-  async function decompressFromBase64Url(b64url) {
-    const b64 = b64url.replace(/-/g, '+').replace(/_/g, '/');
-    const bin = atob(b64);
-    const bytes = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
-    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-    return new Response(stream).text();
-  }
-  let shareMsgTimer = null;
-  function showShareMsg(text) {
-    const el = document.getElementById('pb-share-msg');
-    if (!el) return;
-    el.textContent = text;
-    if (shareMsgTimer) clearTimeout(shareMsgTimer);
-    shareMsgTimer = setTimeout(() => { el.textContent = ''; }, 3000);
-  }
-  /** パーティのexportParty()文字列をgzip圧縮+base64urlにして#p=に載せ、共有用URLを作る。
-   * navigator.shareが使えればまず試し、使えない/失敗時はクリップボードコピー、それも失敗したらprompt()で
-   * URLを手動コピーできるようにする(既存のexportモーダルのコピー失敗時と同じフォールバック方針)。 */
-  async function shareCurrentParty() {
-    const p = activeParty();
-    if (!p || !HAS_COMPRESSION) return;
-    let url;
-    try {
-      const b64 = await compressToBase64Url(exportParty(p));
-      // ?party=&slot=&tab=(B21)はこの端末のパーティIDを指しており、共有先では無意味かつ
-      // 別ID衝突の恐れもあるため、共有URLは付けずに素のパス+#p=だけにする。
-      const u = new URL(location.pathname, location.href);
-      u.hash = `p=${b64}`;
-      url = u.toString();
-    } catch (e) { showShareMsg(I18N.copyFailedMsg); return; }
-    track('pb_share_create', { slots: p.slots.filter((s) => s !== null).length });
-    if (navigator.share) {
-      try { await navigator.share({ url, title: document.title }); return; }
-      catch (e) { /* キャンセル・未対応時はコピーにフォールバック */ }
-    }
-    try { await navigator.clipboard.writeText(url); showShareMsg(I18N.copiedMsg); }
-    catch (e) {
-      // prompt()自体が使えない環境(一部の埋め込みwebview等)もあるため、それも失敗したらメッセージ欄にURLを直接出す。
-      try { prompt(I18N.copyFailedMsg, url); }
-      catch (e2) { showShareMsg(`${I18N.copyFailedMsg} ${url}`); }
-    }
-  }
-  /** location.hashに#p=があれば解凍してパーティとして取り込み、アクティブ化する。取り込み後は
-   * hashを消して再読み込み時の二重取り込みを防ぐ(importFromSuggestHandoffのlocalStorage版と同じ考え方)。 */
-  async function importSharedPartyFromHash() {
-    if (!HAS_COMPRESSION) return false;
-    const h = location.hash;
-    if (!h.startsWith('#p=')) return false;
-    try {
-      const text = await decompressFromBase64Url(h.slice(3));
-      const party = importParty(text);
-      if (!party) return false;
-      store.parties.push(party);
-      store.activeId = party.id;
-      saveStore(store);
-      track('pb_share_open', { slots: party.slots.filter((s) => s !== null).length });
-      return true;
-    } catch (e) {
-      return false;
-    } finally {
-      const u = new URL(location.href);
-      u.hash = '';
-      history.replaceState(null, '', u.pathname + u.search);
-    }
-  }
-
   // ---- (B20/B21) 選択枠・タブの復元 ----
   /** ?party=&slot=&tab=(B21)があれば優先し、無ければsessionStorage(B20)から復元する。
    * 簡単構築の?core=と同じくhistory.replaceStateで反映済みのURLを再読み込みしても崩れない。 */
@@ -4088,7 +4006,6 @@ const I18N = I18N_ALL[lang];
     // (B22) 共有リンクの取り込みは「保存パーティが0件なら空パーティを1つ作る」より先に行う。
     // 先に空パーティを作ってしまうと、初めて開くユーザーが共有リンクを踏んだだけで
     // 中身の無い「無題」パーティが1つ余分に残ってしまう。
-    await importSharedPartyFromHash();
     if (store.parties.length === 0) createParty(store);
     const restoredScrollY = restoreUiState(); // (B20/B21)
     try {
