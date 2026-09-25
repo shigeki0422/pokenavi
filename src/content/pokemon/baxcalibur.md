@@ -1,9 +1,9 @@
 ---
 title: 'セグレイブ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのセグレイブ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率6位。'
+description: 'ポケモンチャンピオンズのセグレイブ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率5位。'
 pokemonName: 'セグレイブ'
 dexNumber: 998
-usageRank: 6
+usageRank: 5
 pubDate: '2026-09-23'
 draft: false
 analysisSlug: 'baxcalibur-analysis-m6'
@@ -18,7 +18,7 @@ analysisSlug: 'baxcalibur-analysis-m6'
       <img src="/images/types/type-14-ice.png" alt="こおり" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.998</strong>　／　使用率 <strong style="color:#dc2626">6位</strong>
+      全国図鑑 <strong>No.998</strong>　／　使用率 <strong style="color:#dc2626">5位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-23</div>
   </div>

@@ -1,9 +1,9 @@
 ---
 title: 'グレンアルマ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのグレンアルマ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率46位。'
+description: 'ポケモンチャンピオンズのグレンアルマ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率47位。'
 pokemonName: 'グレンアルマ'
 dexNumber: 936
-usageRank: 46
+usageRank: 47
 pubDate: '2026-09-23'
 draft: false
 
@@ -18,7 +18,7 @@ draft: false
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.936</strong>　／　使用率 <strong style="color:#dc2626">46位</strong>
+      全国図鑑 <strong>No.936</strong>　／　使用率 <strong style="color:#dc2626">47位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-09-23</div>
   </div>
