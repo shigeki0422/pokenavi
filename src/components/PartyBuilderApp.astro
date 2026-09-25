@@ -20,7 +20,7 @@ const I18N_ALL = {
   ja: {
     title: 'パーティ構築',
     lead: '6匹の型を自由に微調整し、想定敵との素早さ比較・1v1判定をリアルタイムに確認できます。1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。',
-    leadShort: '6匹の型を自由に微調整し、想定敵との比較をリアルタイムに確認できます。', leadMoreLabel: '詳しく', leadDetail: '素早さ比較・1v1判定は互いの最大打点・素早さ・きあいのタスキ等の耐えを考慮した事前計算です(交代・補助技は含みません)。',
+    leadShort: '6匹の型を自由に微調整し、想定敵との比較をリアルタイムに確認できます。',
     obStep1Title: 'ポケモンを追加', obStep1Desc: '空き枠の＋から選ぶか、「空き枠を提案で埋める」で自動編成',
     obStep2Title: '型を調整', obStep2Desc: '持ち物・特性・性格・EVを変更すると実数値が即座に反映',
     obStep3Title: '相性を確認', obStep3Desc: '使用率上位30体との1v1判定・素早さ比較でパーティの穴を見つける',
@@ -99,7 +99,7 @@ const I18N_ALL = {
   en: {
     title: 'Party Builder',
     lead: 'Freely fine-tune the builds of all 6 Pokémon and check Speed comparisons and 1v1 verdicts against expected opponents in real time. The 1v1 verdict is a pre-calculation based on each side\'s strongest hit, Speed, and bulk checks like Focus Sash (switches and status moves aren\'t included).',
-    leadShort: 'Freely fine-tune the builds of all 6 Pok\u00e9mon and compare them against expected opponents in real time.', leadMoreLabel: 'Details', leadDetail: "Speed comparisons and 1v1 verdicts are pre-calculated using each side's strongest hit, Speed, and bulk checks like Focus Sash (switches and status moves aren't included).",
+    leadShort: 'Freely fine-tune the builds of all 6 Pok\u00e9mon and compare them against expected opponents in real time.',
     obStep1Title: 'Add a Pokémon', obStep1Desc: 'Pick from an empty slot\'s +, or auto-fill with "Fill empty slots with suggestions"',
     obStep2Title: 'Adjust the build', obStep2Desc: 'Changing item, ability, nature, or EVs updates the real stats instantly',
     obStep3Title: 'Check matchups', obStep3Desc: 'Find gaps in your party via 1v1 verdicts and Speed comparisons against the top 30 usage ranks',
@@ -178,7 +178,7 @@ const I18N_ALL = {
   ko: {
     title: '파티 구성',
     lead: '6마리의 빌드를 자유롭게 미세 조정하고, 예상 상대와의 스피드 비교·1v1 판정을 실시간으로 확인할 수 있습니다. 1v1 판정은 서로의 최대 위력·스피드·기합의띠 등의 버티기를 고려한 사전 계산입니다(교체·보조기술은 포함되지 않습니다).',
-    leadShort: '6마리의 빌드를 자유롭게 미세 조정하고, 예상 상대와 실시간으로 비교할 수 있습니다.', leadMoreLabel: '자세히', leadDetail: '스피드 비교·1v1 판정은 서로의 최대 위력·스피드·기합의띠 등의 버티기를 고려한 사전 계산입니다(교체·보조기술은 포함되지 않습니다).',
+    leadShort: '6마리의 빌드를 자유롭게 미세 조정하고, 예상 상대와 실시간으로 비교할 수 있습니다.',
     obStep1Title: '포켓몬 추가', obStep1Desc: '빈 칸의 ＋에서 선택하거나, 「빈 칸을 제안으로 채우기」로 자동 편성',
     obStep2Title: '빌드 조정', obStep2Desc: '지닌물건·특성·성격·EV를 변경하면 실수치가 즉시 반영',
     obStep3Title: '상성 확인', obStep3Desc: '사용률 상위 30마리와의 1v1 판정・스피드 비교로 파티의 약점을 찾기',
@@ -262,10 +262,6 @@ const I18N = I18N_ALL[lang];
   <h1>{I18N.title}</h1>
   <PartyToolsNav current="builder" lang={lang} />
   <p class="lead">{I18N.leadShort}</p>
-  <details class="lead-details">
-    <summary>{I18N.leadMoreLabel}</summary>
-    <p>{I18N.leadDetail}</p>
-  </details>
   <OnboardingGuide
     storageKey="builder"
     lang={lang}
@@ -318,12 +314,7 @@ const I18N = I18N_ALL[lang];
   @media (max-width:1023.98px){ main{padding-bottom:calc(4em + env(safe-area-inset-bottom))} }
   h1{font-size:1.5rem;margin:0 0 .2em}
   h2{font-size:1.05rem;margin:0 0 .5em}
-  .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 .3em}
-  /* (C18) 説明文を1行+「詳しく」に圧縮。初期状態は閉じたまま(<details>既定) */
-  .lead-details{margin:0 0 1.1em;font-size:.82rem;color:rgb(var(--gray))}
-  .lead-details summary{cursor:pointer;color:var(--accent);font-weight:700;list-style:none}
-  .lead-details summary::-webkit-details-marker{display:none}
-  .lead-details p{margin:.4em 0 0}
+  .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 1.1em}
   .card{background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px;box-shadow:0 1px 3px rgba(var(--black),.05);padding:1em;margin-bottom:1.1em}
   .muted{font-size:.8rem;color:rgb(var(--gray))}
   .row{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap}
@@ -796,7 +787,6 @@ const I18N = I18N_ALL[lang];
       createPartyPrompt: 'パーティを作成してください',
       editorTitle: '型エディタ', editorSelectPrompt: '上の6枠から編集したい枠を選択してください',
       editorAddPrompt: 'ポケモンを追加すると型を編集できます',
-      coreSuggestBtn: 'この枠を軸に簡単構築',
       speciesDataMissing: '種族データが見つかりません（データ不整合）', muCalcError: 'データ不整合のため計算できません',
       editorHeading: n => `型エディタ ー 枠${n}`,
       slotHeading: n => `枠${n}`,
@@ -909,7 +899,6 @@ const I18N = I18N_ALL[lang];
       createPartyPrompt: 'Please create a party',
       editorTitle: 'Build Editor', editorSelectPrompt: 'Select a slot above to edit its build',
       editorAddPrompt: 'Add a Pokémon to edit its build',
-      coreSuggestBtn: 'Quick Build from this slot',
       speciesDataMissing: 'Species data not found (data inconsistency)', muCalcError: "Can't calculate due to a data inconsistency",
       editorHeading: n => `Build Editor — Slot ${n}`,
       slotHeading: n => `Slot ${n}`,
@@ -1024,7 +1013,6 @@ const I18N = I18N_ALL[lang];
       createPartyPrompt: '파티를 생성해 주세요',
       editorTitle: '빌드 에디터', editorSelectPrompt: '위의 6칸에서 편집할 칸을 선택해 주세요',
       editorAddPrompt: '포켓몬을 추가하면 빌드를 편집할 수 있습니다',
-      coreSuggestBtn: '이 칸을 축으로 간단 구성',
       speciesDataMissing: '종족 데이터를 찾을 수 없습니다（데이터 불일치）', muCalcError: '데이터 불일치로 계산할 수 없습니다',
       editorHeading: n => `빌드 에디터 — 칸${n}`,
       slotHeading: n => `칸${n}`,
@@ -1609,8 +1597,7 @@ const I18N = I18N_ALL[lang];
     const icon = rb ? rb.icon : null;
     const targetsCount = slot.targets.length;
     el.innerHTML = `
-      <div class="pb-selected-title">${icoImg(icon, name, 'monicon')}<span class="pb-selected-name">${esc(I18N.slotHeading(selectedIdx + 1))} ${esc(tPoke(name))}</span>
-        <button type="button" class="pb-btn-sub" id="pb-core-suggest">${esc(I18N.coreSuggestBtn)}</button></div>
+      <div class="pb-selected-title">${icoImg(icon, name, 'monicon')}<span class="pb-selected-name">${esc(I18N.slotHeading(selectedIdx + 1))} ${esc(tPoke(name))}</span></div>
       <div class="pb-selected-tabs" role="tablist">
         <button type="button" class="pb-sel-tab${selTab === 'editor' ? ' active' : ''}" data-sel-tab="editor" role="tab" aria-selected="${selTab === 'editor'}">${esc(I18N.editorTitle)}</button>
         <button type="button" class="pb-sel-tab${selTab === 'targets' ? ' active' : ''}" data-sel-tab="targets" role="tab" aria-selected="${selTab === 'targets'}">${esc(I18N.targetsHeading)}${targetsCount ? ` ${targetsCount}` : ''}</button>
@@ -1622,11 +1609,6 @@ const I18N = I18N_ALL[lang];
       // ミニバーの表示条件にselTabが絡むため、直前の描画内容で出し直す(二重表示/消し忘れ防止)。
       if (lastMiniBarArgs) renderMiniBar(lastMiniBarArgs.activeGrp, lastMiniBarArgs.allTabs, lastMiniBarArgs.sheetCtx);
     }));
-    // (B29) 軸ポケモンの和名(=slot.spを解決した内部ラベル)をそのまま?core=に渡す。表示言語での
-    // 翻訳名(tPoke)ではなく、簡単構築側がSPECIES.labelと突き合わせる和名を使う必要がある。
-    document.getElementById('pb-core-suggest').addEventListener('click', () => {
-      location.href = `${pfx}/party-suggest?core=${encodeURIComponent(name)}`;
-    });
     persistUi(); // (B20/B21)
   }
 
