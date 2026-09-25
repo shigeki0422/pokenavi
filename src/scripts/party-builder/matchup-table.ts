@@ -46,7 +46,8 @@ interface Labels {
   conds(c: string): string;
   judge(win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean): string;
   draw: string;
-  stall(win: boolean, seq: string, turns: number): string;
+  stall(win: boolean, turns: number): string;
+  stallHits(turns: number): string;
 }
 
 const T: Record<Lang, Labels> = {
@@ -64,8 +65,9 @@ const T: Record<Lang, Labels> = {
       `${win ? "勝ち" : "負け"}：${mine}で倒す/${theirs}で倒される・`
       + `${byPrio ? "先制技で" : ""}${first ? "先手" : "後手"}`,
     draw: "引き分け：互いに圏外・決着つかず",
-    stall: (win: boolean, seq: string, turns: number) =>
-      `持久戦で${win ? "勝ち" : "負け"}：${seq}（${turns}ターン・相手が交代しない前提）`,
+    stall: (win: boolean, turns: number) =>
+      `持久戦で${win ? "勝ち" : "負け"}（${turns}ターン・相手が交代しない前提）`,
+    stallHits: (turns: number) => `持久戦${turns}ターンで決着`,
   },
   en: {
     rowSpeed: "Speed", rowJudge: "Verdict",
@@ -81,8 +83,9 @@ const T: Record<Lang, Labels> = {
       `${win ? "Win" : "Loss"}: ${mine} to KO / ${theirs} to be KOed, `
       + `${first ? "moves first" : "moves second"}${byPrio ? " (priority)" : ""}`,
     draw: "Draw: neither can KO",
-    stall: (win: boolean, seq: string, turns: number) =>
-      `${win ? "Win" : "Loss"} by stalling: ${seq} (${turns} turns, assuming no switch)`,
+    stall: (win: boolean, turns: number) =>
+      `${win ? "Win" : "Loss"} by stalling (${turns} turns, assuming no switch)`,
+    stallHits: (turns: number) => `Decided in ${turns} turns (stall)`,
   },
   ko: {
     rowSpeed: "스피드", rowJudge: "판정",
@@ -98,8 +101,9 @@ const T: Record<Lang, Labels> = {
       `${win ? "승" : "패"}: ${mine}로 쓰러뜨림 / ${theirs}로 당함・`
       + `${byPrio ? "선제기로 " : ""}${first ? "선공" : "후공"}`,
     draw: "무승부: 서로 쓰러뜨리지 못함",
-    stall: (win: boolean, seq: string, turns: number) =>
-      `지구전으로 ${win ? "승리" : "패배"}: ${seq} (${turns}턴・상대가 교체하지 않는 전제)`,
+    stall: (win: boolean, turns: number) =>
+      `지구전으로 ${win ? "승리" : "패배"} (${turns}턴・상대가 교체하지 않는 전제)`,
+    stallHits: (turns: number) => `지구전 ${turns}턴으로 결착`,
   },
 };
 
@@ -114,23 +118,23 @@ export function fmtProb(prob: number | null | undefined): string {
   return String(Math.round(p));
 }
 
-/** 連続する同じ技は「技×n」にまとめて「→」でつなぐ。 */
-function stallSeqText(seq: string[]): string {
-  const out: string[] = [];
+/** 持久戦の技の並びを、連続する同じ技ごとの区間(開始ターン〜終了ターン)にまとめる。 */
+function stallRuns(seq: string[]): { n: string; from: number; to: number }[] {
+  const out: { n: string; from: number; to: number }[] = [];
   for (let i = 0; i < seq.length;) {
     let j = i;
     while (j < seq.length && seq[j] === seq[i]) j++;
-    out.push(j - i > 1 ? `${seq[i]}×${j - i}` : seq[i]);
+    out.push({ n: seq[i], from: i + 1, to: j });
     i = j;
   }
-  return out.join("→");
+  return out;
 }
 
 /** 判定行の文。持久戦で決まったならそれを、互いに圏外なら引き分けを優先する。 */
 function judgeText(c: MatchupColumnVM, t: Labels): string {
   const v = c.verdict;
   if (v.stall?.side) {
-    return t.stall(v.stall.side === "me", stallSeqText(c.stallSeq ?? v.stall.seq), v.stall.turns);
+    return t.stall(v.stall.side === "me", v.stall.turns);
   }
   if (v.draw) return t.draw;
   return t.judge(v.win, t.hits(v.myHits ?? null), t.hits(v.oppHits ?? null), v.koFirst, v.koByPriority);
@@ -161,6 +165,22 @@ function seqCell(steps: SeqStep[], t: Labels): string {
     + `<span class="mbp-hits">${esc(t.hits(steps.length))}</span>${conds}</td>`;
 }
 
+/** 持久戦で決着する側のセル。ターンごとの技を並べ、決着ターンを確定数の代わりに出す。
+ * 技の%は最大打点の技そのものの値（変化技は%なし）。 */
+function stallCell(c: MatchupColumnVM, d: MoveHitDetail | null, moveText: string, t: Labels): string {
+  const st = c.verdict.stall!;
+  const runs = stallRuns(c.stallSeq ?? st.seq);
+  const lines = runs.map((r) => {
+    const no = r.from === r.to ? `${r.from}` : `${r.from}〜${r.to}`;
+    const p = r.n === moveText ? pctText(d?.pctLo ?? null, d?.pctHi ?? null) : "";
+    return `<div class="mbp-step"><span class="mbp-step-no">${no}</span>`
+      + (p ? `<span class="mbp-pct">${p}</span>` : "")
+      + `<span class="mbp-move">${esc(r.n)}</span></div>`;
+  }).join("");
+  const conds = d?.conds ? `<div class="mbp-conds">${esc(t.conds(d.conds))}</div>` : "";
+  return `<td class="mbp-seq">${lines}<span class="mbp-hits">${esc(t.stallHits(st.turns))}</span>${conds}</td>`;
+}
+
 function dmgCell(d: MoveHitDetail | null, moveText: string, t: Labels, steps?: SeqStep[]): string {
   return steps && steps.length > 1 ? seqCell(steps, t) : singleCell(d, moveText, t);
 }
@@ -188,9 +208,11 @@ export function renderMatchupTable(vm: MatchupTableVM, lang: Lang): string {
   const head = `<tr><th class="lft"></th>` + vm.columns.map((c) =>
     `<th>${esc(c.label)}<div class="mbp-build-meta">${c.meta.map(esc).join("<br>")}</div></th>`).join("") + `</tr>`;
   const myRow = arrow(vm.myIconUrl, vm.myName, vm.oppIconUrl, vm.oppName)
-    + vm.columns.map((c) => dmgCell(c.my, c.myMoveText, t, c.mySteps)).join("");
+    + vm.columns.map((c) => c.verdict.stall?.side === "me"
+      ? stallCell(c, c.my, c.myMoveText, t) : dmgCell(c.my, c.myMoveText, t, c.mySteps)).join("");
   const oppRow = arrow(vm.oppIconUrl, vm.oppName, vm.myIconUrl, vm.myName)
-    + vm.columns.map((c) => dmgCell(c.opp, c.oppMoveText, t, c.oppSteps)).join("");
+    + vm.columns.map((c) => c.verdict.stall?.side === "opp"
+      ? stallCell(c, c.opp, c.oppMoveText, t) : dmgCell(c.opp, c.oppMoveText, t, c.oppSteps)).join("");
   const spdRow = `<td class="lft">${esc(t.rowSpeed)}</td>` + vm.columns.map((c) =>
     `<td class="mbp-spd-cell ${c.verdict.fast ? "mbp-spd-win" : "mbp-spd-lose"}">`
     + `<div>${esc(t.fast(c.verdict.fast))}</div>`

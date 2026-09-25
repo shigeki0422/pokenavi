@@ -2698,8 +2698,11 @@ const I18N = I18N_ALL[lang];
         const mySpeed = verdict.myS;
         const oppSpeed = verdict.oppS;
         const speedTag = mySpeed > oppSpeed ? `<span class="spd-tag t-out">${esc(I18N.speedFaster)}</span>` : mySpeed < oppSpeed ? `<span class="spd-tag t-in">${esc(I18N.speedSlower)}</span>` : `<span class="spd-tag t-eq">${esc(I18N.speedEq)}</span>`;
-        const myHitsTxt = verdict.myHits == null ? '—' : I18N.hitsFmt(verdict.myHits);
-        const oppHitsTxt = verdict.oppHits == null ? '—' : I18N.hitsFmt(verdict.oppHits);
+        const stallSide = verdict.stall && verdict.stall.side;
+        const myHitsTxt = stallSide === 'me' ? stallTurnsTxt(verdict.stall.turns)
+          : verdict.myHits == null ? '—' : I18N.hitsFmt(verdict.myHits);
+        const oppHitsTxt = stallSide === 'opp' ? stallTurnsTxt(verdict.stall.turns)
+          : verdict.oppHits == null ? '—' : I18N.hitsFmt(verdict.oppHits);
         const mb = moveBreakdown(rb, opp);
         // 被ダメ行: 相手の最大打点技(verdict.oppMoveと同一選定基準)の自分への与ダメレンジ・HP比。
         // 与ダメ行と同じ場の前提で出すため、向きを入れ替えて呼ぶのではなく対で取る。
@@ -2737,6 +2740,8 @@ const I18N = I18N_ALL[lang];
       const seqHtml = (r.verdict.mySeq || []).length
         ? `<div class="pb-mu-row pb-mu-seq">${esc(I18N.seqLbl((r.verdict.mySeq || []).map(tMove).join(' → '), r.verdict.myHits))}</div>`
         : '';
+      const stallHtml = r.verdict.stall && r.verdict.stall.side
+        ? `<div class="pb-mu-row pb-mu-seq">${esc(stallRouteTxt(r.verdict.stall))}</div>` : '';
       const oppDmgHtml = r.oppDmg
         ? `<div class="pb-mu-row pb-mu-hit">${esc(I18N.takenDmgLbl(tMove(r.oppDmg.name), dmgRangeTxt(r.oppDmg.dLo, r.oppDmg.dHi, r.oppDmg.pLo, r.oppDmg.pHi)))}</div>`
         : '';
@@ -2751,7 +2756,7 @@ const I18N = I18N_ALL[lang];
           <div class="pb-mu-row" title="${esc(I18N.speedTipTitle)}">S ${r.mySpeed} vs ${r.oppSpeed} ${r.speedTag}</div>
           <div class="pb-mu-row"><b style="font-size:1.05em">${r.verdict.sym}</b> ${esc(I18N.hitsSelfOpp(r.myHitsTxt, r.oppHitsTxt))}${r.verdict.stub ? '<span class="pb-beta-badge">β</span>' : ''}</div>
           <div class="pb-mb-row">${mbChips}</div>
-          ${seqHtml}${oppDmgHtml}
+          ${seqHtml}${stallHtml}${oppDmgHtml}
         </div>`;
     }).join('') + (editingThis && muEdit.bi === 'new' ? muEditorHtml(activeGrp, muEdit.draft, muEdit.detail, muEdit.loading) : '');
 
@@ -3157,13 +3162,38 @@ const I18N = I18N_ALL[lang];
     return `<div class="mtx-legend"><span>${I18N.speedMatrixLegend}</span></div>
       ${mgWrapHtml(`<table class="mtx">${head}${bodyRows}</table>`)}`;
   }
+  /** どくどく＋回復技の持久戦で決着する対面の、確定数の代わりの表示。 */
+  function stallTurnsTxt(turns) {
+    return lang === 'en' ? `stall ${turns}T` : lang === 'ko' ? `지구전${turns}턴` : `持久戦${turns}T`;
+  }
+  function stallHitsTxt(side, turns) {
+    const who = { ja: ['自分', '相手'], en: ['You', 'Opponent'], ko: ['나', '상대'] }[lang] || ['', ''];
+    const w = side === 'me' ? who[0] : who[1];
+    return lang === 'ja' ? `${w}${stallTurnsTxt(turns)}` : `${w}: ${stallTurnsTxt(turns)}`;
+  }
+  /** 持久戦の手順(連続する同じ技は「技×n」にまとめる)。 */
+  function stallRouteTxt(stall) {
+    const runs = [];
+    (stall.seq || []).forEach((n) => {
+      const last = runs[runs.length - 1];
+      if (last && last.n === n) last.c += 1; else runs.push({ n, c: 1 });
+    });
+    const route = runs.map((r) => (r.c > 1 ? `${tMove(r.n)}×${r.c}` : tMove(r.n))).join(' → ');
+    const head = { ja: '持久戦の手順', en: 'Stall route', ko: '지구전 수순' }[lang] || '';
+    const note = { ja: `${stall.turns}ターン・相手が交代しない前提`, en: `${stall.turns} turns, assuming no switch`, ko: `${stall.turns}턴・상대가 교체하지 않는 전제` }[lang] || '';
+    return `${head}: ${route}（${note}）`;
+  }
   /** 型ごとの内訳を1件ずつの配列で返す(タップポップオーバーはリスト表示、titleはこれをjoinした文字列を使う)。
    * 移植元: scripts/_explain.py matchup_grid() の集約対象そのもの。 */
   function muBreakdownLines(agg, builds) {
     return agg.verdicts.map((v, vi) => {
       const build = builds[vi];
-      const myTxt = v.myHits == null ? '—' : I18N.selfHitsFmt(v.myHits);
-      const oppTxt = v.oppHits == null ? '—' : I18N.oppHitsFmt(v.oppHits);
+      let myTxt = v.myHits == null ? '—' : I18N.selfHitsFmt(v.myHits);
+      let oppTxt = v.oppHits == null ? '—' : I18N.oppHitsFmt(v.oppHits);
+      if (v.stall && v.stall.side) {
+        if (v.stall.side === 'me') myTxt = stallHitsTxt('me', v.stall.turns);
+        else oppTxt = stallHitsTxt('opp', v.stall.turns);
+      }
       const item = build.item ? tItem(build.item) : I18N.noItem;
       return I18N.muBreakdownLine(vi + 1, item, v.sym, myTxt, oppTxt, v.koFirst ? I18N.turnFirst : I18N.turnSecond);
     });
