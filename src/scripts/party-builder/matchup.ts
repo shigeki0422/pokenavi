@@ -40,8 +40,8 @@ type Evaluated = {
   /** 毎ターン最善手を選び直した場合の手数と技の並び。 */
   seqHits: number;
   seq: string[];
-  /** 毎ターンの与ダメージ(実数値)。 */
-  turns: { n: string; lo: number; hi: number }[];
+  /** 毎ターンの与ダメージ(実数値)と、そのターンに相手が回復した量(オボンのみ等)。 */
+  turns: { n: string; lo: number; hi: number; heal?: number }[];
 };
 
 /** 対面の評価結果。場は対面ごとに1つなので、両方向をまとめて1回で求める。 */
@@ -268,6 +268,8 @@ export interface SeqStep {
   pctLo: number | null;
   pctHi: number | null;
   conds: string | null;
+  /** そのターンに相手が回復した量(最大HP比%)。オボンのみ・たべのこし等。 */
+  healPct?: number | null;
 }
 
 /** 発数が生ダメージから素直に計算した値より増えているときの要因名。 */
@@ -320,6 +322,36 @@ export function moveBreakdown(me: ResolvedBuild, opp: ResolvedBuild): MoveHitDet
   return p.a.moves.map((m) => _detail(m, p, 0, opp, p.b.hp));
 }
 
+/** 技ごとのダメージ幅(確定数は持たない)。仮想敵カードの技チップ用。 */
+export interface MoveDamage {
+  n: string;
+  dmgLo: number; dmgHi: number;
+  pctLo: number; pctHi: number;
+  /** 計算の前提(天候・場・連続技の回数の仮定など)。無ければ null。 */
+  conds: string | null;
+}
+
+/**
+ * 仮想敵カード用: 自分の各技→相手、相手の各技→自分のダメージ幅。同じ場の前提・同じ対面計算から取る。
+ * ターンごとの変化や技の使い分けは確定数では表せないので、ここはダメージ幅だけを返し、
+ * 勝敗に関わる数え方は1v1内訳の表(pairHitDetails)に任せる。変化技・無効(ダメージ0)は含めない。
+ */
+export function moveDamages(me: ResolvedBuild, opp: ResolvedBuild):
+    { my: MoveDamage[]; opp: MoveDamage[]; myHasMoves: boolean; oppHasMoves: boolean } {
+  const p = _pair(me, opp);
+  const conv = (moves: Evaluated["moves"], hpDef: number): MoveDamage[] => moves
+    .filter((m) => m.dmg !== null && m.dmgHi != null && m.dmgHi > 0)
+    .map((m) => ({
+      n: m.n, dmgLo: m.dmgLo!, dmgHi: m.dmgHi!,
+      pctLo: (m.dmgLo! / hpDef) * 100, pctHi: (m.dmgHi! / hpDef) * 100,
+      conds: _conds(m),
+    }));
+  return {
+    my: conv(p.a.moves, p.b.hp), opp: conv(p.b.moves, p.a.hp),
+    myHasMoves: p.a.moves.length > 0, oppHasMoves: p.b.moves.length > 0,
+  };
+}
+
 /** 手順の各手を表示用にする。%は同名の技の単発計算をそのまま使う
  * (単発行と基準を揃える。実走のHP減少を使うと ばけのかわ・砂・回復まで技のダメージに見える)。 */
 function _steps(e: Evaluated, cmpHits: number | null, hpDef: number): SeqStep[] {
@@ -348,6 +380,7 @@ function _turns(e: Evaluated, hpDef: number): SeqStep[] {
   if (!e.turns || e.turns.length < 2) return [];
   return e.turns.map((t) => ({
     n: t.n, pctLo: (t.lo / hpDef) * 100, pctHi: (t.hi / hpDef) * 100, conds: null,
+    healPct: t.heal ? (t.heal / hpDef) * 100 : null,
   }));
 }
 

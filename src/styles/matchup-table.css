@@ -21,6 +21,9 @@
 .mbp-spd-cell div:first-child { font-weight: 700; margin-bottom: 2px; }
 .mbp-build-meta { font-weight: 400; font-size: .9em; color: #64748b; margin-top: 2px; }
 .mbp-pct { font-weight: 800; display: block; }
+.mbp-psn { font-weight: 700; color: #7c3aed; white-space: nowrap; }
+.mbp-heal { font-size: .78em; font-weight: 700; color: #15803d; }
+.mbp-bind { font-weight: 700; color: #c2410c; white-space: nowrap; }
 .mbp-hits { color: #475569; display: block; margin-top: 2px; }
 .mbp-move { color: #94a3b8; font-size: .92em; margin-top: 1px; }
 /* ダメージ計算に効いた条件（天候・フィールド・いかく等）。%がどの前提の値かを示す */

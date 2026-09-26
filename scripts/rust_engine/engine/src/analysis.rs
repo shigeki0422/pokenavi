@@ -10,7 +10,17 @@ use crate::damage::Field;
 use crate::pack::Pack;
 use crate::poke::{build_poke, mega_evolve_poke, Poke};
 use crate::rng::BRng;
+use std::cell::{Cell, RefCell};
 use std::collections::HashMap;
+
+thread_local! {
+    /// へんげんじざい/リベロの持ち主が先に動くとき、相手の攻撃は「持ち主が技を撃った後のタイプ」に当たる。
+    /// 各方向を「防御側は動かない」前提で個別に走らせる分析では、防御側の型変化が起きないので、
+    /// (型を変える側, その側が撃つ技名) を控えておき、相手の攻撃を計算するときだけ setup で先に適用する。
+    static PRE_FORMS: RefCell<Vec<(usize, String)>> = RefCell::new(Vec::new());
+    /// いま計算している攻撃側。PRE_FORMS の適用先を「攻撃側ではない方」に限るために使う。
+    static CUR_ATT: Cell<usize> = Cell::new(usize::MAX);
+}
 
 /// これ以上かかる技は「圏外」。`_mu_engine.CAP` と同値。
 /// 5ターンで決着が付かない対面は実戦では交代が挟まるため、そこまでを見る
@@ -140,6 +150,19 @@ fn setup(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, roll: f64) -
     }
     let mut bt = Battle::new(s1, s2, field);
     apply_scenario(pack, &mut bt);
+    // 防御側の先行する型変化(へんげんじざい・リベロ)。攻撃側自身の型は変えない。
+    let cur = CUR_ATT.with(|c| c.get());
+    PRE_FORMS.with(|f| {
+        for (side, name) in f.borrow().iter() {
+            if *side == cur { continue; }
+            let packr: &Pack = pack;
+            let mv = bt.sides[*side].party[0].moves.iter()
+                .find(|m| packr.intern.resolve(m.name) == name.as_str()).cloned();
+            if let Some(mv) = mv {
+                crate::battle::apply_pre_move_forms(packr, &mut bt.sides[*side].party[0], &mv);
+            }
+        }
+    });
     bt
 }
 
@@ -343,15 +366,46 @@ fn drive_pair(bt: &mut Battle, pack: &Pack, idx: [Option<usize>; 2]) {
     }, |_| {});
 }
 
+/// 持久戦ルートの1ターンぶんの内訳。直接ダメージと毒ダメージ、ターン終了時のHPを分けて持つ
+/// (毒は1/16,2/16…と累積するので、合計だけでは「どくどくが効いている」ことが読めない)。
+pub struct StallTurn {
+    pub n: String,
+    /// 技が与える直接ダメージ(威力ベース。変化技は0)。
+    pub direct: i64,
+    /// このターン終了時の毒ダメージ。
+    pub poison: i64,
+    /// ターン終了時のバインド(まとわりつく等)のダメージ。
+    pub bind: i64,
+    /// このターンに防御側が回復した量(オボンのみ等の消費、たべのこし)。
+    pub heal: i64,
+    /// このターン終了時の防御側HP・攻撃側HP。
+    pub def_hp: i64,
+    pub att_hp: i64,
+}
+
+pub struct StallResult {
+    pub turns: i64,
+    pub seq: Vec<String>,
+    pub trace: Vec<StallTurn>,
+    pub def_max: i64,
+    pub att_max: i64,
+}
+
 /// 持久戦ルート: `att` が どくどく で削りつつ回復技で粘って相手を倒す線。
 ///
 /// 通常の判定は「互いに最大打点を撃ち続ける」ので、どくどく＋回復技の型は
 /// 攻撃技が弱いだけで圏外と出て、実際には勝てる対面を取りこぼす。
 /// どくどく＋回復技を持たない側は実走せず None を返す（枝刈り）。
 /// 相手は毎ターン最善の攻撃技を撃ち続ける。返す手順は連続もそのまま並べる。
-pub fn run_stall_route(
-    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, roll: f64,
-) -> Option<(i64, Vec<String>)> {
+#[derive(Clone, Copy, PartialEq)]
+pub enum StallOutcome { Win, Lose, Stuck }
+
+/// 持久戦の実走。`need_heal` なら回復技も持つ側だけ(勝ち筋の判定)、そうでなければ どくどく さえ持てば
+/// 走らせる(「勝てない対面でも、どくどくを入れた見込み」の表示用)。倒れた・倒しきれない場合も内訳を返す。
+fn simulate_stall(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, roll: f64, need_heal: bool,
+    passive_def: bool, cap: i64,
+) -> Option<(StallOutcome, StallResult)> {
     let def = 1 - att;
     let mut bt = setup(pack, spec_a, spec_b, season, roll);
     let packr: &Pack = pack;
@@ -360,22 +414,35 @@ pub fn run_stall_route(
         (p.moves.iter().position(|m| m.name == packr.sy.l.どくどく),
          p.moves.iter().position(|m| is_heal_move(packr, m)))
     };
-    let (Some(toxic_i), Some(heal_i)) = (toxic_i, heal_i) else { return None };
+    let Some(toxic_i) = toxic_i else { return None };
+    if need_heal && heal_i.is_none() { return None; }
     let mut seq: Vec<String> = Vec::new();
-    for _ in 0..STALL_CAP {
+    let mut trace: Vec<StallTurn> = Vec::new();
+    let (def_max, att_max) = (bt.sides[def].active().max_hp, bt.sides[att].active().max_hp);
+    for _ in 0..cap {
         if !bt.sides[att].active().is_alive {
             return None;
         }
-        let foe_best = best_attack(&bt, packr, def, false);
+        // passive_def: 相手は動かない前提(通常の1v1の各方向5ターンと同じ。相手に倒されるまでで打ち切らない)。
+        let foe_best = if passive_def { None } else { best_attack(&bt, packr, def, false) };
         let att_hp = bt.sides[att].active().hp;
         let will_fall = foe_best.map_or(false, |(_, dealt, _, ko)| ko || dealt >= att_hp);
         let foe_clean = bt.sides[def].active().status.is_none();
         let pick = if foe_clean {
             toxic_i
-        } else if will_fall {
-            heal_i
+        } else if will_fall && heal_i.is_some() && {
+            // 相手が先に動くなら、回復する前に落ちるので無駄。自分が先でも、回復ぶんを足して耐えられないなら無駄。
+            let foe_first = crate::ai::effective_speed(packr, bt.sides[def].active(), &bt.field)
+                > crate::ai::effective_speed(packr, bt.sides[att].active(), &bt.field);
+            !foe_first && foe_best.map_or(true, |(_, dealt, _, _)| dealt < (att_hp + att_max / 2).min(att_max))
+        } {
+            heal_i.unwrap()
+        } else if let Some(x) = best_attack(&bt, packr, att, false) {
+            x.0
+        } else if let Some(h) = heal_i {
+            h
         } else {
-            best_attack(&bt, packr, att, false).map(|x| x.0).unwrap_or(heal_i)
+            break;
         };
         let locked = {
             let p = bt.sides[att].active();
@@ -390,21 +457,70 @@ pub fn run_stall_route(
         let mut idx = [None, None];
         idx[att] = Some(pick);
         idx[def] = foe_best.map(|x| x.0);
+        let (def_before, bound_before, item_before) = {
+            let d = bt.sides[def].active();
+            (d.hp, d.bound_count, d.item)
+        };
+        // 技の直接ダメージは、実行前の局面で威力ベースに測る(HPの増減から逆算すると、回復と混ざって分けられない)。
+        let direct = match bt.sides[att].active().moves.get(pick).cloned() {
+            Some(mv) if mv.category != crate::pack::Cat::Status && mv.power.unwrap_or(0) > 0 =>
+                move_total_damage(packr, &mut bt.clone(), att, &mv, roll).min(def_before),
+            _ => 0,
+        };
         drive_pair(&mut bt, packr, idx);
         let name = bt.sides[att].active().moves.get(pick)
             .map(|m| packr.intern.resolve(m.name).to_string())?;
+        // 毒ダメージ = 最大HP × 累積カウント/16（ターン終了時に入る。どくどくを撃ったターンにも1/16入る）。
+        let (def_after, poison_now) = {
+            let d = bt.sides[def].active();
+            let poisoned = d.status == Some(packr.sy.st.badpoison);
+            (d.hp, if poisoned { (d.max_hp * d.bad_poison_count / 16).max(1) } else { 0 })
+        };
+        let alive = bt.sides[def].active().is_alive;
+        let poison = if alive { poison_now } else { poison_now.min((def_before - direct).max(0)) };
+        // バインド: このターン終了時にカウントが減っていれば(撃ったターンに掛かった分も含む)ダメージが入っている。
+        let (bound_after, band, item_after) = {
+            let d = bt.sides[def].active();
+            (d.bound_count, d.bound_by_band, d.item)
+        };
+        let ticked = (bound_before > 0 && bound_after < bound_before) || (bound_before == 0 && bound_after > 0);
+        let bind = if ticked { (def_max / if band { 6 } else { 8 }).max(1) } else { 0 };
+        // 回復: オボンのみ・オレンのみはこのターンに消費された分、たべのこしは持っている間。
+        let it = &packr.sy.l;
+        let mut heal = 0;
+        if item_before.is_some() && item_after != item_before {
+            if item_before == Some(it.オボンのみ) { heal += def_max / 4; }
+            else if item_before == Some(it.オレンのみ) { heal += 10; }
+        }
+        if item_after == Some(it.たべのこし) { heal += (def_max / 16).max(1); }
+        if !alive { heal = 0; }
+        trace.push(StallTurn {
+            n: name.clone(), direct, poison, bind, heal,
+            def_hp: def_after, att_hp: bt.sides[att].active().hp,
+        });
         seq.push(name);
         if !bt.sides[att].active().is_alive {
-            return None;
+            return Some((StallOutcome::Lose, StallResult { turns: seq.len() as i64, seq, trace, def_max, att_max }));
         }
         if !bt.sides[def].active().is_alive {
-            return Some((seq.len() as i64, seq));
+            return Some((StallOutcome::Win, StallResult { turns: seq.len() as i64, seq, trace, def_max, att_max }));
         }
         if foe_clean && pick == toxic_i && bt.sides[def].active().status.is_none() {
             return None;
         }
     }
-    None
+    if seq.is_empty() { return None; }
+    Some((StallOutcome::Stuck, StallResult { turns: seq.len() as i64, seq, trace, def_max, att_max }))
+}
+
+/// 持久戦で勝てる線（どくどく＋回復技）。勝てなければ None。
+pub fn run_stall_route(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, roll: f64,
+) -> Option<StallResult> {
+    match simulate_stall(pack, spec_a, spec_b, season, att, roll, true, false, STALL_CAP) {
+        Some((StallOutcome::Win, r)) => Some(r),
+        _ => None,
+    }
 }
 
 /// `spec_a` が `move_idx` の技を撃ち続けて `spec_b` を倒すまでの発数と、初撃の与ダメージ。
@@ -593,7 +709,7 @@ fn move_total_damage(packr: &Pack, bt: &mut Battle, att: usize, mv: &crate::dama
 /// 倒しきれなければ CAP ターンまで。回復・砂・たべのこし等のHP増減は含まない（技の威力を出すため）。
 pub fn per_turn_damage(
     pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, seq: &[usize],
-) -> Vec<(usize, i64, i64)> {
+) -> Vec<(usize, i64, i64, i64)> {
     let mut bt = setup(pack, spec_a, spec_b, season, 0.0);
     let packr: &Pack = pack;
     let def = 1 - att;
@@ -605,9 +721,24 @@ pub fn per_turn_damage(
         let lo = move_total_damage(packr, &mut bt.clone(), att, &mv, 0.0);
         let hi = move_total_damage(packr, &mut bt.clone(), att, &mv, 1.0);
         if lo <= 0 && hi <= 0 { break; }
-        out.push((mi, lo, hi));
+        let (item_before, def_max) = { let d = bt.sides[def].active(); (d.item, d.max_hp) };
         let step = bt.turn + 1;
         drive(&mut bt, packr, att, mi, step);
+        // このターンに防御側が回復した量(オボンのみ・オレンのみの消費、たべのこし)。倒れていれば0。
+        let heal = {
+            let d = bt.sides[def].active();
+            let l = &packr.sy.l;
+            let mut h = 0;
+            if d.is_alive {
+                if item_before.is_some() && d.item != item_before {
+                    if item_before == Some(l.オボンのみ) { h += def_max / 4; }
+                    else if item_before == Some(l.オレンのみ) { h += 10; }
+                }
+                if d.item == Some(l.たべのこし) { h += (def_max / 16).max(1); }
+            }
+            h
+        };
+        out.push((mi, lo, hi, heal));
     }
     out
 }
@@ -710,13 +841,42 @@ pub fn executed_damage(
 /// 同じ対面で工房と結論が食い違っていた（score の刻みが 0.5 と 1 で違う、
 /// 先制技での決着・手順・確定1の扱いが無い）。
 pub fn analyze_json(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_json::Value {
+    let base = analyze_core(pack, a, b, season);
+    // へんげんじざい/リベロの持ち主が先に動く対面は、相手の攻撃を「技を撃った後のタイプ」に対して計算し直す。
+    let (pa, pb) = prepared(pack, a, b, season);
+    let is_pr = |p: &Poke| p.ability == pack.sy.l.へんげんじざい || p.ability == pack.sy.ai.リベロ;
+    let spd = |k: &str| base[k]["speed"].as_i64().unwrap_or(0);
+    let first_move = |seq_key: &str, best_key: &str| -> Option<String> {
+        base["verdict"][seq_key].as_array().and_then(|a| a.first()).and_then(|x| x.as_str())
+            .or_else(|| base["verdict"][best_key].as_str()).map(|x| x.to_string())
+    };
+    let mut forms: Vec<(usize, String)> = Vec::new();
+    if is_pr(&pa) && spd("a") > spd("b") {
+        if let Some(n) = first_move("mySeq", "myMove") { forms.push((0, n)); }
+    }
+    if is_pr(&pb) && spd("b") > spd("a") {
+        if let Some(n) = first_move("oppSeq", "oppMove") { forms.push((1, n)); }
+    }
+    if forms.is_empty() {
+        return base;
+    }
+    PRE_FORMS.with(|f| *f.borrow_mut() = forms);
+    let out = analyze_core(pack, a, b, season);
+    PRE_FORMS.with(|f| f.borrow_mut().clear());
+    CUR_ATT.with(|c| c.set(usize::MAX));
+    out
+}
+
+fn analyze_core(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_json::Value {
     use serde_json::{json, Value};
+    CUR_ATT.with(|c| c.set(usize::MAX));
     let mut out = json!({});
     // 場は対面ごとに1つ。並びは (a, b) に固定し、攻撃側だけを切り替える
     // （攻撃側を常に先頭に置くと、両者が天候特性を持つ対面で天候が向きによって変わる）。
     let (info_a, info_b) = side_info(pack, a, b, season);
     let mut sides: Vec<SideVerdictInput> = Vec::new();
     for (key, att, me) in [("a", 0usize, &info_a), ("b", 1usize, &info_b)] {
+        CUR_ATT.with(|c| c.set(att));
         let mut moves = Vec::new();
         let mut best: Option<(String, i64, i64, i64, i64, usize)> = None; // (技名, 確定数, 初撃, 優先度, 最高乱数での発数, 技idx)
         for (i, (name, is_dmg)) in me.moves.iter().enumerate() {
@@ -768,7 +928,7 @@ pub fn analyze_json(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_js
         };
         let turns: Vec<Value> = if turn_seq.is_empty() { Vec::new() } else {
             per_turn_damage(pack, a, b, season, att, &turn_seq).into_iter()
-                .filter_map(|(mi, lo, hi)| me.moves.get(mi).map(|(n, _)| json!({"n": n, "lo": lo, "hi": hi})))
+                .filter_map(|(mi, lo, hi, heal)| me.moves.get(mi).map(|(n, _)| json!({"n": n, "lo": lo, "hi": hi, "heal": heal})))
                 .collect()
         };
         out[key] = json!({"hp": me.hp, "speed": me.speed, "moves": moves,
@@ -789,6 +949,7 @@ pub fn analyze_json(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_js
     // 確定1なら1.0、最高乱数でも1発にならないなら0.0。それ以外だけ実際に確率を出す
     // （1対面あたり最大2回で、条件に当たること自体が少ない）。
     for (att, side) in [(0usize, 0usize), (1usize, 1usize)] {
+        CUR_ATT.with(|c| c.set(att));
         let (hits, hits_hi, idx) = (sides[side].best_hits, sides[side].best_hits_hi, sides[side].best_idx);
         sides[side].ohko_p = if hits <= 1 {
             1.0
@@ -798,6 +959,7 @@ pub fn analyze_json(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_js
             0.0
         };
     }
+    CUR_ATT.with(|c| c.set(usize::MAX));
     let mut v = verdict_of(pack, &sides[0], &sides[1]);
     apply_stall(pack, &mut v, [&info_a, &info_b], a, b, season);
     out["verdict"] = v;
@@ -811,8 +973,9 @@ fn apply_stall(pack: &mut Pack, v: &mut serde_json::Value, infos: [&SideInfo; 2]
                a: &str, b: &str, season: &str) {
     use serde_json::json;
     let score = v["score"].as_f64().unwrap_or(0.0);
-    let mut route: [Option<(i64, Vec<String>)>; 2] = [None, None];
+    let mut route: [Option<StallResult>; 2] = [None, None];
     for att in 0..2usize {
+        CUR_ATT.with(|c| c.set(att));
         let own = if att == 0 { score } else { -score };
         if own >= 1.0 || !stall_capable(pack, &infos[att].moves) {
             continue;
@@ -822,6 +985,25 @@ fn apply_stall(pack: &mut Pack, v: &mut serde_json::Value, infos: [&SideInfo; 2]
         route[att] = run_stall_route(pack, a, b, season, att, 1.0)
             .and_then(|_| run_stall_route(pack, a, b, season, att, 0.0));
     }
+    // 勝ち筋が無い側でも、どくどくを持つなら「入れた場合の見込み」を返す(表示用。判定は変えない)。
+    let mut plans: [Option<serde_json::Value>; 2] = [None, None];
+    for att in 0..2usize {
+        CUR_ATT.with(|c| c.set(att));
+        if route[att].is_some() || !infos[att].moves.iter().any(|(n, _)| n == pack.intern.resolve(pack.sy.l.どくどく)) {
+            continue;
+        }
+        if let Some((oc, r)) = simulate_stall(pack, a, b, season, att, 0.0, false, true, CAP) {
+            let trace: Vec<serde_json::Value> = r.trace.iter().map(|t| json!({
+                "n": t.n, "direct": t.direct, "poison": t.poison, "bind": t.bind, "heal": t.heal,
+                "defHp": t.def_hp, "attHp": t.att_hp,
+            })).collect();
+            let oc_s = match oc { StallOutcome::Win => "win", StallOutcome::Lose => "lose", StallOutcome::Stuck => "stuck" };
+            plans[att] = Some(json!({"outcome": oc_s, "turns": r.turns, "seq": r.seq, "trace": trace,
+                                     "defMax": r.def_max, "attMax": r.att_max}));
+        }
+    }
+    CUR_ATT.with(|c| c.set(usize::MAX));
+    v["plans"] = json!({"me": plans[0].take(), "opp": plans[1].take()});
     let [mine, theirs] = route;
     let (side, picked) = match (mine, theirs) {
         (Some(r), None) => (Some("me"), Some(r)),
@@ -829,12 +1011,17 @@ fn apply_stall(pack: &mut Pack, v: &mut serde_json::Value, infos: [&SideInfo; 2]
         _ => (None, None),
     };
     match (side, picked) {
-        (Some(side), Some((turns, seq))) => {
+        (Some(side), Some(r)) => {
             let new_score = if side == "me" { score.max(1.0) } else { score.min(-1.0) };
             v["score"] = json!(new_score);
             v["sym"] = json!(score_sym(new_score));
             v["win"] = json!(side == "me");
-            v["stall"] = json!({"side": side, "turns": turns, "seq": seq});
+            let trace: Vec<serde_json::Value> = r.trace.iter().map(|t| json!({
+                "n": t.n, "direct": t.direct, "poison": t.poison, "bind": t.bind, "heal": t.heal,
+                "defHp": t.def_hp, "attHp": t.att_hp,
+            })).collect();
+            v["stall"] = json!({"side": side, "turns": r.turns, "seq": r.seq, "trace": trace,
+                                "defMax": r.def_max, "attMax": r.att_max});
         }
         _ => {
             v["stall"] = json!({"side": null, "turns": 0, "seq": Vec::<String>::new()});

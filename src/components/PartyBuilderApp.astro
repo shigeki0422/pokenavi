@@ -365,6 +365,9 @@ const I18N = I18N_ALL[lang];
   .lbl.item{background:#0ea5e9}.lbl.abil{background:#8b5cf6}.lbl.nat{background:#f59e0b}.lbl.mv{background:#10b981}.lbl.ev{background:#64748b}
   .tic{width:14px;height:14px;vertical-align:-2px}
   .iic{width:20px;height:20px;object-fit:contain;vertical-align:-5px}
+  .iic-stone,.iic-generic{display:inline-block;background-repeat:no-repeat;background-position:center;background-size:contain}
+  .iic-stone{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23c4b5fd'/><stop offset='1' stop-color='%23ec4899'/></linearGradient></defs><path d='M12 2.5l8 6.5-8 12.5L4 9z' fill='url(%23g)' stroke='%237c3aed' stroke-width='1.2' stroke-linejoin='round'/><path d='M4 9h16M12 2.5L9 9l3 12.5M12 2.5L15 9l-3 12.5' fill='none' stroke='white' stroke-opacity='.65' stroke-width='.9'/></svg>")}
+  .iic-generic{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='8.5' fill='%23e2e8f0' stroke='%2394a3b8' stroke-width='1.4'/><circle cx='12' cy='12' r='3' fill='%2394a3b8'/></svg>")}
   .mvchip{display:inline-flex;align-items:center;gap:.15em;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:9999px;padding:.08em .5em;font-size:.72rem;font-weight:600}
   .evchip{display:inline-flex;align-items:center;gap:.1em;color:#fff;font-size:.68rem;font-weight:700;padding:.06em .5em;border-radius:5px}
   .dtl-ico{width:24px;height:24px;object-fit:contain;vertical-align:-6px}
@@ -679,6 +682,78 @@ const I18N = I18N_ALL[lang];
   .pb-hf-card img.mtx-ico{width:32px;height:32px}
   .pb-hf-info{flex:1 1 120px;min-width:0}
   .pb-hf-name{font-weight:700;font-size:.85rem}
+  .pb-mb-block{margin-top:.4em}
+  .pb-mb-lbl{margin-top:.5em;font-size:.68rem;font-weight:800;color:rgb(var(--gray))}
+  .pb-mb-chips{display:flex;flex-wrap:wrap;gap:.3em;margin-top:.2em}
+  .pb-bstrip{display:flex;gap:8px;margin:.5em 0 .7em}
+  .pb-bstrip-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:.4em;min-height:44px;border:1.5px solid #e2e8f0;background:#fff;border-radius:12px;font-family:inherit;font-weight:800;font-size:.85rem;color:rgb(var(--gray-dark));cursor:pointer;touch-action:manipulation}
+  .pb-bstrip-add{flex:0 0 auto;min-width:44px;min-height:44px;border:1.5px dashed #c7d2fe;background:#eef2ff;color:#3730a3;border-radius:12px;font-family:inherit;font-weight:900;font-size:1.2rem;cursor:pointer;touch-action:manipulation}
+  .pb-bstrip-add.on{border-style:solid;border-color:var(--accent);background:#dbe0ff}
+  .pb-bstrip-btn.on{border-color:var(--accent);box-shadow:0 0 0 2px #dbe0ff}
+  .pb-bstrip-btn .pb-mu-sym{margin-left:0;min-width:1.7em;height:1.7em;font-size:.95rem}
+  .pb-tag{display:inline-flex;align-items:center;gap:.3em;height:26px;box-sizing:border-box;background:#f1f5f9;border-radius:6px;padding:0 .55em;font-size:.74rem;font-weight:700;color:#334155;white-space:nowrap}
+  .pb-tag .iic,.pb-tag .mvicon{width:18px;height:18px;vertical-align:baseline;flex:none}
+  .pb-tag-first{margin-left:.4em}
+  .pb-mu-tags{display:flex;flex-wrap:wrap;gap:.3em;margin-top:.5em}
+  .pb-mu-evline{font-size:.78rem;color:rgb(var(--gray));margin:.1em 0 .5em}
+  .pb-mu-evline b{color:rgb(var(--gray-dark));margin-right:.4em}
+  .pb-vbox{display:flex;flex-wrap:wrap;align-items:baseline;gap:.1em .8em;margin:.5em 0;padding:.4em .7em;border-radius:10px;font-size:.8rem;line-height:1.4;border:1px solid transparent}
+  .pb-vbox b{font-size:.9rem}
+  .pb-vbox.pb-sym-good{background:#f0fdf4;border-color:#bbf7d0;color:#166534}
+  .pb-vbox.pb-sym-mid{background:#fffbeb;border-color:#fde68a;color:#92400e}
+  .pb-vbox.pb-sym-bad{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+  .pb-race{margin:.55em 0}
+  .pb-race-lbl > span:last-child{white-space:nowrap}
+  .pb-race-lbl{display:flex;justify-content:space-between;gap:.5em;font-size:.7rem;font-weight:800;color:rgb(var(--gray));margin-bottom:.2em}
+  .pb-bar{position:relative;display:flex;height:22px;border-radius:7px;background:#eef1f5;overflow:hidden}
+  .pb-bar > .pb-seg{position:absolute;top:0;bottom:0}
+  .pb-seg{display:grid;place-items:center;font-size:.62rem;font-weight:800;color:#fff;border:none;border-right:2px solid #fff;padding:0;min-width:0;overflow:hidden;font-family:inherit;cursor:pointer;touch-action:manipulation}
+  .pb-seg-foe{background:#ef4444}
+  .pb-seg-me{background:#3b82f6}
+  .pb-seg-stall{background:#7c3aed}
+  .pb-seg-stallturn{position:relative}
+  .pb-stripe{position:absolute;left:0;right:0;bottom:0;height:6px;display:flex;background:rgba(255,255,255,.35)}
+  .pb-stripe i{display:block;height:100%}
+  .pb-part-p{background:#7c3aed}
+  .pb-part-b{background:#f59e0b}
+  .pb-heal{position:absolute;top:0;bottom:0;z-index:2;background:repeating-linear-gradient(45deg,#86efac,#86efac 4px,#dcfce7 4px,#dcfce7 8px);border-left:2px solid #16a34a;opacity:.62;pointer-events:auto}
+  .pb-tick-key{width:0!important;height:10px!important;border-radius:0!important;border-left:2px dashed rgba(15,23,42,.55);background:none!important;margin-right:.1em}
+  .pb-heal-key{background:repeating-linear-gradient(45deg,#86efac,#86efac 3px,#dcfce7 3px,#dcfce7 6px)}
+  .pb-part-d.me{background:#3b82f6}
+  .pb-part-d.foe{background:#ef4444}
+  .pb-legend{display:flex;flex-wrap:wrap;align-items:center;gap:.2em .35em;margin-top:.25em;font-size:.66rem;font-weight:700;color:rgb(var(--gray))}
+  .pb-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-left:.5em}
+  .pb-legend i:first-child{margin-left:0}
+  .pb-legend > *{white-space:nowrap}
+  .pb-legend-note{margin-left:auto;font-weight:600}
+  .pb-tick{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed rgba(15,23,42,.55);pointer-events:none}
+  .pb-ko{position:absolute;right:5px;top:50%;transform:translateY(-50%);font-size:.72rem;font-weight:900;color:#fff;text-shadow:0 0 3px rgba(0,0,0,.4)}
+  .pb-mv-h{margin:.8em 0 .2em;font-size:.7rem;font-weight:800;color:rgb(var(--gray))}
+  .pb-mv{display:grid;grid-template-columns:minmax(6.5em,9em) 1fr auto;align-items:center;gap:.5em;width:100%;font-size:.76rem;margin:.25em 0;padding:.15em 0;border:none;background:none;font-family:inherit;color:inherit;text-align:left;cursor:pointer;touch-action:manipulation}
+  .pb-mv-n{font-weight:800;overflow-wrap:anywhere}
+  .pb-mv-c{display:block;font-size:.62rem;font-weight:600;color:rgb(var(--gray))}
+  .pb-race-note{margin-top:.2em;font-size:.66rem;font-weight:600;color:rgb(var(--gray))}
+  .pb-mv-g{position:relative;height:10px;border-radius:5px;background:#eef1f5;overflow:hidden}
+  .pb-mv-g i{position:absolute;left:0;top:0;bottom:0;display:block}
+  .pb-mv-g i.hi{background:#fca5a5}
+  .pb-mv-g i.lo{background:#ef4444}
+  .pb-mv-me .pb-mv-g i.hi{background:#93c5fd}
+  .pb-mv-me .pb-mv-g i.lo{background:#3b82f6}
+  .pb-mv-p{text-align:right;color:rgb(var(--gray));font-weight:700;white-space:nowrap}
+  .pb-mu-others{display:flex;flex-wrap:wrap;align-items:center;gap:.3em;margin-top:.7em;font-size:.7rem;font-weight:800;color:rgb(var(--gray))}
+  .pb-mu-others > span:first-child{margin-right:.4em}
+  .pb-mu-1v1{margin-top:.6em;border-top:1px solid #e2e8f0;padding-top:.3em}
+  .pb-mu-1v1 > summary{display:flex;align-items:center;gap:.5em;min-height:40px;cursor:pointer;list-style:none;font-size:.8rem;font-weight:700;color:rgb(var(--gray-dark))}
+  .pb-mu-1v1 > summary::-webkit-details-marker{display:none}
+  .pb-mu-1v1 > summary::before{content:'▸';color:var(--accent);font-size:.9em;transition:transform .15s}
+  .pb-mu-1v1[open] > summary::before{transform:rotate(90deg)}
+  .pb-mu-1v1-lbl{color:var(--accent)}
+  .pb-mu-sym{display:inline-flex;align-items:center;justify-content:center;min-width:2em;height:2em;margin-left:.5em;padding:0 .3em;border-radius:9999px;font-size:1.15rem;font-weight:900;line-height:1}
+  .pb-sym-good{background:#dcfce7;color:#15803d}
+  .pb-sym-mid{background:#fef3c7;color:#b45309}
+  .pb-sym-bad{background:#fee2e2;color:#b91c1c}
+  .pb-mu-1v1-sub{font-weight:600;color:rgb(var(--gray))}
+  .pb-mu-1v1 .mbp-table{font-size:.8rem}
   .pb-mu-seq{font-size:.72rem;font-weight:700;color:var(--accent);background:#eef2ff;border-radius:6px;padding:.2em .5em;margin-top:.25em}
   .pb-hf-covers{font-size:.72rem;color:rgb(var(--gray))}
   .pb-hf-filter{display:flex;align-items:center;gap:.45em;font-size:.78rem;font-weight:700;color:rgb(var(--gray-dark));margin:0 0 .7em;cursor:pointer}
@@ -732,6 +807,8 @@ const I18N = I18N_ALL[lang];
   .pb-mu-badge{display:inline-flex;align-items:center;justify-content:center;min-width:15px;height:15px;padding:0 3px;border-radius:999px;font-size:.62rem;font-weight:900;margin-left:2px;line-height:1}
   .pb-mu-badge-x{background:#fee2e2;color:#b91c1c}
   .pb-mu-badge-tri{background:#ffedd5;color:#c2410c}
+  .pb-mu-badge-mid{background:#fef3c7;color:#b45309}
+  .pb-mu-badge-good{background:#dcfce7;color:#15803d}
 
   /* (9) 枠✕のUndoトースト（モバイルではミニバーの上に重ならないよう表示） */
   .pb-undo-toast{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:650;display:flex;align-items:center;gap:.8em;max-width:calc(100% - 2em);background:#1e293b;color:#fff;border-radius:10px;padding:.6em 1em;font-size:.82rem;box-shadow:0 4px 16px rgba(0,0,0,.25)}
@@ -765,7 +842,7 @@ const I18N = I18N_ALL[lang];
   import { ALL_NATURES, NEUTRAL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, effectiveSpeed, natureDisp } from '../scripts/party-builder/stats';
   import { TYPES } from '../scripts/party-builder/typechart';
   import { resolveSlot, resolveTargetSafe, attackMatrix, defenseMatrix, speedOrder, partySummary, findHoles, findWeakGapTypeIdx, coverageSet, exposedOnRemoval, holesAfterSwap } from '../scripts/party-builder/balance';
-  import { judge1v1, judgeVsBuilds, moveBreakdown, fmtKoProbPct, pairHitDetails, pairCacheStats } from '../scripts/party-builder/matchup';
+  import { judge1v1, judgeVsBuilds, moveDamages, fmtKoProbPct, pairHitDetails, pairCacheStats } from '../scripts/party-builder/matchup';
   import { setScenario, setupMoveNames } from '../scripts/engine/wasm';
   import { initEngine } from '../scripts/engine/wasm';
   import { tuneForTargets } from '../scripts/party-builder/suggest';
@@ -795,6 +872,8 @@ const I18N = I18N_ALL[lang];
       editorHeading: n => `型エディタ ー 枠${n}`,
       slotHeading: n => `枠${n}`,
       selTabEditorSub: '持ち物・EVを調整', selTabTargetsSub: '相手を選んで1v1判定',
+      chipsMyLbl: '自分の技 → 相手', chipsOppLbl: '相手の技 → 自分',
+      oneVsOneLbl: 'くわしい内訳（毎ターン・素早さ・判定）',
       itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
       templateBtn: '型テンプレから', megaTag: 'メガ', megaFixedNote: '（メガ進化で固定）',
       evRemain: n => `残り ${n}ポイント`, evRemainOver: n => `残り ${n}ポイント（上限超過）`,
@@ -908,6 +987,8 @@ const I18N = I18N_ALL[lang];
       editorHeading: n => `Build Editor — Slot ${n}`,
       slotHeading: n => `Slot ${n}`,
       selTabEditorSub: 'Adjust item & EVs', selTabTargetsSub: 'Pick opponents, see 1v1',
+      chipsMyLbl: 'Your moves → opponent', chipsOppLbl: 'Opponent moves → you',
+      oneVsOneLbl: 'Details (per turn, speed, verdict)',
       itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
       templateBtn: 'From set templates', megaTag: 'Mega', megaFixedNote: '(fixed by Mega Evolution)',
       evRemain: n => `${n} points left`, evRemainOver: n => `${n} points left (over the limit)`,
@@ -1023,6 +1104,8 @@ const I18N = I18N_ALL[lang];
       editorHeading: n => `빌드 에디터 — 칸${n}`,
       slotHeading: n => `칸${n}`,
       selTabEditorSub: '도구·EV 조정', selTabTargetsSub: '상대를 골라 1v1 판정',
+      chipsMyLbl: '내 기술 → 상대', chipsOppLbl: '상대 기술 → 나',
+      oneVsOneLbl: '자세한 내역(턴별·스피드·판정)',
       itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
       templateBtn: '빌드 템플릿에서', megaTag: '메가', megaFixedNote: '（메가진화로 고정）',
       evRemain: n => `남은 ${n}포인트`, evRemainOver: n => `남은 ${n}포인트（상한 초과）`,
@@ -1167,6 +1250,9 @@ const I18N = I18N_ALL[lang];
   const ITEM_PNG = {
     きあいのタスキ: 'item-0275-tasuki.png', こだわりスカーフ: 'item-0287-scarf.png', オボンのみ: 'item-0158-obon.png',
     ラムのみ: 'item-0157-ram.png', ヤチェのみ: 'item-0188-yache.png', ハバンのみ: 'item-0197-haban.png',
+    ガブリアスナイト: 'item-0683-garchompite.png', ガブリアスナイトZ: 'item-garchompite-z.png', ボーマンダナイト: 'item-0769-salamencite.png',
+    アブソルナイトZ: 'item-absolite-z.png', セグレイブナイト: 'item-baxcalibite.png', グソクムシャナイト: 'item-golisopodite.png',
+    ルカリオナイトZ: 'item-lucarionite-z.png',
   };
   const TYPEICON = {
     ノーマル: ['00', 'normal'], かくとう: ['01', 'fighting'], ひこう: ['02', 'flying'], どく: ['03', 'poison'],
@@ -1198,7 +1284,10 @@ const I18N = I18N_ALL[lang];
   /** PartySuggestApp.astro の itemIco と同一体裁(持ち物スプライト。ITEM_PNGに無い持ち物はアイコン無し)。
    * lookupは常にitemの生の(和名)値で行う(和名キーの固定表のため)。表示名の翻訳はesc(tItem(item))側で行う。 */
   function itemIco(item) {
-    return ITEM_PNG[item] ? `<img class="iic" src="/images/items/${ITEM_PNG[item]}" alt="">` : '';
+    if (ITEM_PNG[item]) return `<img class="iic" src="/images/items/${ITEM_PNG[item]}" alt="">`;
+    // アイコン画像が無い持ち物は、メガストーンなら宝石、それ以外は汎用の丸で代用する(アイコン有無で行の見た目が揺れないように)。
+    if (!item) return '';
+    return `<span class="iic ${/ナイト[XYZＸＹＺ]?$/.test(item) ? 'iic-stone' : 'iic-generic'}" aria-hidden="true"></span>`;
   }
   /** PartySuggestApp.astro の evChips 相当(StatArray版)。EVチップ「H<b>4</b>」のように各stat色付きで表示。 */
   function evChipsArr(evs) {
@@ -1280,6 +1369,47 @@ const I18N = I18N_ALL[lang];
   let holeFillLoading = false; // 計算中フラグ(ポップオーバーのスピナー表示用)
   let holeFillAllowDup = false; // もちもの重複を許可するか(既定は重複型を候補から除外)
   let holeFillView = { additions: [], swaps: [] }; // いま描画中のリスト(適用ボタンの参照先)
+  let mu1v1Open = false; // 仮想敵カードの「くわしい内訳」の開閉(再描画しても保つ。全カード共通)
+  let muBuildSel = 0; // 仮想敵カードで表示中の型(bi)。仮想敵を切り替えたら先頭に戻す
+  let muBuildGrp = null;
+  const MU_TXT = {
+    ja: {
+      win: '先に倒せる', lose: '先に倒される', draw: '引き分け',
+      stallWin: '持久戦で勝ち', stallLose: '持久戦で負け', stallNote: (n) => `${n}ターン`, noSwitch: '※相手が交代しない前提', noAct: '※相手が動かない前提（各方向5ターン）',
+      my: (n) => `自分 ${n >= 999 ? '6ターン以上' : `${n}ターン`}`,
+      opp: (n) => `相手 ${n >= 999 ? '6ターン以上' : `${n}ターン`}`,
+      first: '先手', second: '後手',
+      barOpp: '相手 → 自分', barMe: '自分 → 相手',
+      koOpp: (n) => `${n}ターンで倒される`, koMe: (n) => `${n}ターンで倒す`,
+      part: (x) => `5ターンで約${x}%`, noDmg: 'ダメージ技なし', stall: (n) => `毒込み${n}T`, planLose: (n) => `${n}Tで倒される`, planStuck: (n) => `${n}Tで決着つかず`, stripe: '下線＝内訳', assume: '前提', healTip: (x) => `相手が${x}%回復（オボンのみ等）`, healKey: '相手の回復（棒が戻る）', rand: (hi, p, lo) => `乱数${hi}発(${p}%)／最大${lo}ターン`, direct: '直接', poison: '毒', bind: '拘束', heal: '回復', tickNote: '点線＝元のHP', hpMe: '自分HP', hpOpp: '相手HP', remain: '自分の残りHP',
+      turnN: (n) => `${n}ターン目`,
+      movesOpp: '相手の技（自分へのダメージ）', movesMe: '自分の技（相手へのダメージ）', others: 'その他の技',
+    },
+    en: {
+      win: 'You KO first', lose: 'You get KOed first', draw: 'Draw',
+      stallWin: 'Win by stall', stallLose: 'Loss by stall', stallNote: (n) => `${n} turns`, noSwitch: '* Assumes no switch', noAct: '* Opponent assumed idle (5 turns each way)',
+      my: (n) => `You ${n >= 999 ? '6+ turns' : `${n}T`}`,
+      opp: (n) => `Opp ${n >= 999 ? '6+ turns' : `${n}T`}`,
+      first: 'You move first', second: 'You move second',
+      barOpp: 'Opponent → you', barMe: 'You → opponent',
+      koOpp: (n) => `KO in ${n}`, koMe: (n) => `KO in ${n}`,
+      part: (x) => `~${x}% in 5 turns`, noDmg: 'No damaging move', stall: (n) => `${n}T`, planLose: (n) => `KOed in ${n}T`, planStuck: (n) => `No KO in ${n}T`, stripe: 'Underline = breakdown', assume: 'Assumes', healTip: (x) => `Opponent heals ${x}%`, healKey: 'Opponent heals (bar rolls back)', rand: (hi, p, lo) => `${hi}HKO (${p}%) / max ${lo}T`, direct: 'Direct', poison: 'Poison', bind: 'Bind', heal: 'Heal', tickNote: 'Dashed = original HP', hpMe: 'Your HP', hpOpp: 'Opp HP', remain: 'Your HP left',
+      turnN: (n) => `Turn ${n}`,
+      movesOpp: 'Opponent moves (damage to you)', movesMe: 'Your moves (damage to opponent)', others: 'Other moves',
+    },
+    ko: {
+      win: '먼저 쓰러뜨림', lose: '먼저 쓰러짐', draw: '무승부',
+      stallWin: '지구전 승리', stallLose: '지구전 패배', stallNote: (n) => `${n}턴`, noSwitch: '※ 상대가 교체하지 않는 전제', noAct: '※ 상대가 행동하지 않는 전제(각 방향 5턴)',
+      my: (n) => `나 ${n >= 999 ? '6턴 이상' : `${n}턴`}`,
+      opp: (n) => `상대 ${n >= 999 ? '6턴 이상' : `${n}턴`}`,
+      first: '선공', second: '후공',
+      barOpp: '상대 → 나', barMe: '나 → 상대',
+      koOpp: (n) => `${n}턴에 쓰러짐`, koMe: (n) => `${n}턴에 쓰러뜨림`,
+      part: (x) => `5턴에 약 ${x}%`, noDmg: '대미지 기술 없음', stall: (n) => `독 포함 ${n}T`, planLose: (n) => `${n}T에 쓰러짐`, planStuck: (n) => `${n}T 결착 없음`, stripe: '밑줄＝내역', assume: '전제', healTip: (x) => `상대가 ${x}% 회복`, healKey: '상대 회복(막대가 되돌아감)', rand: (hi, p, lo) => `난수 ${hi}발(${p}%)／최대 ${lo}턴`, direct: '직접', poison: '독', bind: '구속', heal: '회복', tickNote: '점선＝원래 HP', hpMe: '내 HP', hpOpp: '상대 HP', remain: '내 남은 HP',
+      turnN: (n) => `${n}턴째`,
+      movesOpp: '상대 기술(나에게 주는 대미지)', movesMe: '내 기술(상대에게 주는 대미지)', others: '기타 기술',
+    },
+  }[window.__PB_LANG__] || null;
   let mbPopData = []; // (5) 仮想敵カードの技チップ用ポップオーバー内容(renderTargetsPanelのたびに作り直す)
   let renamingParty = false; // (12b) パーティ名インライン編集中フラグ(renderPartyBarのみが参照)
   let pendingUndo = null; // (9) 枠✕のUndoトースト。{ partyId, index, slotData, timer } または null(最後の1件のみ保持)
@@ -1479,10 +1609,13 @@ const I18N = I18N_ALL[lang];
     const worstOf = () => {
       let worst = null, worstRank = 99;
       for (const b of grp.builds) {
-        const opp = resolveTargetSafe(grp.sp, grp.label, grp.icon, b, core.moves);
-        if (!opp) continue;
-        const r = MU_SYM_RANK[judge1v1(rb, opp).sym];
-        if (r < worstRank) { worstRank = r; worst = judge1v1(rb, opp).sym; }
+        const opp0 = resolveTargetSafe(grp.sp, grp.label, grp.icon, b, core.moves);
+        if (!opp0) continue;
+        // 仮想敵カードと同じく、相手はその型が実際に持つ技だけで判定する(タブの記号とカードの記号を一致させる)。
+        const opp = { ...opp0, pool: [] };
+        const sym = judge1v1(rb, opp).sym;
+        const r = MU_SYM_RANK[sym];
+        if (r < worstRank) { worstRank = r; worst = sym; }
       }
       return worst;
     };
@@ -1501,9 +1634,10 @@ const I18N = I18N_ALL[lang];
   }
   /** (7) 仮想敵タブ用の最悪判定バッジ。×/▲のときだけ表示する(◎/○/△は警告不要のため非表示)。 */
   function muTabBadge(rb, grp, sc) {
+    // 全判定(◎○△▲×)を返す。以前は×/▲の警告だけだったが、良い結果のタブにも記号が無く、
+    // 「まだ判定していない」のか「問題なし」なのか区別できなかった。
     const w = worstMuSym(rb, grp, sc);
-    if (!w || (w.sym !== '×' && w.sym !== '▲')) return null;
-    return w;
+    return w || null;
   }
 
   /** label(仮想敵ラベル)に対応する種のmon jsonをloadMonで取得する。sp→species.icon経由(メガ型ラベルのicon誤用を避ける)。 */
@@ -2648,7 +2782,7 @@ const I18N = I18N_ALL[lang];
       const act = label === activeMuTab ? ' act' : '';
       const badge = grp ? muTabBadge(rb, grp, scenarioOf(slot, label)) : null;
       const badgeHtml = badge
-        ? `<span class="pb-mu-badge ${badge.sym === '×' ? 'pb-mu-badge-x' : 'pb-mu-badge-tri'}`
+        ? `<span class="pb-mu-badge ${badge.sym === '×' ? 'pb-mu-badge-x' : badge.sym === '▲' ? 'pb-mu-badge-tri' : badge.sym === '△' ? 'pb-mu-badge-mid' : 'pb-mu-badge-good'}`
           + `${badge.cond ? ' pb-mu-badge-cond' : ''}" title="${esc(badge.cond
               ? I18N.scCondTitle(badge.cond.text, badge.sym, badge.cond.sym) : I18N.muBadgeTitle)}">`
           + `${badge.sym}${badge.cond ? esc(I18N.scCondMark) : ''}</span>`
@@ -2678,7 +2812,10 @@ const I18N = I18N_ALL[lang];
       activeGrp.builds.forEach((b, bi) => {
         const opp = resolveTargetSafe(activeGrp.sp, activeGrp.label, activeGrp.icon, b, core.moves);
         if (!opp) return; // H3: 不整合buildはスキップ(型データが壊れていてもパネル全体はクラッシュさせない)
-        const verdict = judge1v1(rb, opp);
+        // 仮想敵カードでは、相手も「その型が実際に持つ技」だけで計算する（自分側は元から設定した技だけ。
+        // 他の画面の1v1は、相手を採用率上位の技プールから選ぶ）。
+        const oppSel = { ...opp, pool: [] };
+        const verdict = judge1v1(rb, oppSel);
         // 素早さは判定と同じ実効値(天候・エレキフィールド込み)を使う。ここだけ素の値にすると
         // 「先手と表示されているのに判定は後手扱い」という食い違いが出る。
         const mySpeed = verdict.myS;
@@ -2689,14 +2826,15 @@ const I18N = I18N_ALL[lang];
           : verdict.myHits == null ? '—' : I18N.hitsFmt(verdict.myHits);
         const oppHitsTxt = stallSide === 'opp' ? stallTurnsTxt(verdict.stall.turns)
           : verdict.oppHits == null ? '—' : I18N.hitsFmt(verdict.oppHits);
-        const mb = moveBreakdown(rb, opp);
+        const mb = moveDamages(rb, oppSel);
         // 被ダメ行: 相手の最大打点技(verdict.oppMoveと同一選定基準)の自分への与ダメレンジ・HP比。
         // 与ダメ行と同じ場の前提で出すため、向きを入れ替えて呼ぶのではなく対で取る。
-        const od = pairHitDetails(rb, opp).opp;
+        const pd = pairHitDetails(rb, oppSel);
+        const od = pd.opp;
         const oppDmg = od && od.dmgLo != null && od.dmgHi != null
           ? { name: od.n, dLo: od.dmgLo, dHi: od.dmgHi, pLo: od.pctLo, pHi: od.pctHi }
           : null;
-        rows.push({ grp: activeGrp, b, bi, opp, mySpeed, oppSpeed, speedTag, verdict, myHitsTxt, oppHitsTxt, mb, oppDmg });
+        rows.push({ grp: activeGrp, b, bi, opp: oppSel, rb, pd, verdict, mb, myHitsTxt, oppHitsTxt });
       });
     }
     } finally {
@@ -2704,52 +2842,28 @@ const I18N = I18N_ALL[lang];
     }
 
     mbPopData = [];
-    const cardsHtml = rows.map((r) => {
+    // 型ごとの結果を上のボタンで切り替え、表示するのは選んだ1型のカードだけ(縦に長くなるのを避ける)。
+    if (activeGrp && muBuildGrp !== activeGrp.label) { muBuildSel = 0; muBuildGrp = activeGrp.label; }
+    const selBi = editingThis && muEdit.bi !== 'new' ? muEdit.bi
+      : (rows.some((r) => r.bi === muBuildSel) ? muBuildSel : (rows.length ? rows[0].bi : 0));
+    const editingNew = editingThis && muEdit.bi === 'new';
+    const buildStripHtml = activeGrp && rows.length > 0
+      ? `<div class="pb-bstrip">${rows.map((r) => `<button type="button" class="pb-bstrip-btn${!editingNew && r.bi === selBi ? ' on' : ''}" data-mu-build="${r.bi}">${esc(I18N.buildLabel(Number(r.b.idx) || 0))}<span class="pb-mu-sym ${symClass(r.verdict.sym)}">${r.verdict.sym}</span></button>`).join('')}<button type="button" class="pb-bstrip-add${editingNew ? ' on' : ''}" id="pb-mu-add-build" title="${esc(I18N.muAddBuildBtn)}" aria-label="${esc(I18N.muAddBuildBtn)}">＋</button></div>`
+      : '';
+    const cardsHtml = buildStripHtml + rows.filter((r) => !editingNew && r.bi === selBi).map((r) => {
       if (editingThis && muEdit.bi === r.bi) {
         return muEditorHtml(r.grp, muEdit.draft, muEdit.detail, muEdit.loading);
       }
-      const mbDamaging = r.mb.filter((m) => m.hits != null);
-      const mbChips = mbDamaging.length
-        ? mbDamaging.map((m) => {
-            const hitsTxt = m.certain ? I18N.hitsFmt(m.hits) : I18N.randHitsFmt(m.hits, fmtKoProbPct(m.prob));
-            const dmgTxt = dmgRangeTxt(m.dmgLo, m.dmgHi, m.pctLo, m.pctHi);
-            const mvName = tMove(m.n);
-            const popIdx = mbPopData.push({ name: m.n, hitsTxt, dmgTxt }) - 1;
-            return `<button type="button" class="pb-mb-chip" data-mb-pop="${popIdx}" title="${esc(mvName)}：${esc(I18N.popDmgLbl(dmgTxt))}">
-                <span class="pb-mb-top">${esc(mvName)} ${hitsTxt}</span>
-                <span class="pb-mb-dmg">${dmgTxt}</span>
-              </button>`;
-          }).join('')
-        : `<span class="muted">${r.mb.length ? esc(I18N.noEffectiveMove) : esc(I18N.noMovesSet)}</span>`;
-      // 同じ技の連打では最短にならない対面(であいがしら等の初手限定技・ふうせん割り)で、
-      // 毎ターン選び直した場合の手順を出す。
-      const seqHtml = (r.verdict.mySeq || []).length
-        ? `<div class="pb-mu-row pb-mu-seq">${esc(I18N.seqLbl((r.verdict.mySeq || []).map(tMove).join(' → '), r.verdict.myHits))}</div>`
-        : '';
-      const stallHtml = r.verdict.stall && r.verdict.stall.side
-        ? `<div class="pb-mu-row pb-mu-seq">${esc(stallRouteTxt(r.verdict.stall))}</div>` : '';
-      const oppDmgHtml = r.oppDmg
-        ? `<div class="pb-mu-row pb-mu-hit">${esc(I18N.takenDmgLbl(tMove(r.oppDmg.name), dmgRangeTxt(r.oppDmg.dLo, r.oppDmg.dHi, r.oppDmg.pLo, r.oppDmg.pHi)))}</div>`
-        : '';
       const actionsHtml = editingThis ? '' : `<div class="pb-mu-actions">
           <button class="pb-btn-sub" data-mu-edit="${r.bi}">${esc(I18N.muEditBtn)}</button>
           <button class="pb-btn-sub pb-danger" data-mu-del="${r.bi}" ${canDelete ? '' : `disabled title="${esc(I18N.muDeleteLastTitle)}"`}>${esc(I18N.muDeleteBtn)}</button>
         </div>`;
-      return `<div class="pb-mu-card">
-          <div class="pb-mu-head"><div class="dtl-tname">${icoImg(r.grp.icon, r.grp.label, 'dtl-ico')}${esc(tPoke(r.grp.label))} ${esc(I18N.buildLabel(Number(r.b.idx) || 0))}</div>${actionsHtml}</div>
-          <div class="pb-mu-sub">${esc(I18N.hpLbl(r.opp.stats[0]))}</div>
-          ${muDetailHtml(r.b)}
-          <div class="pb-mu-row" title="${esc(I18N.speedTipTitle)}">S ${r.mySpeed} vs ${r.oppSpeed} ${r.speedTag}</div>
-          <div class="pb-mu-row"><b style="font-size:1.05em">${r.verdict.sym}</b> ${esc(I18N.hitsSelfOpp(r.myHitsTxt, r.oppHitsTxt))}${r.verdict.stub ? '<span class="pb-beta-badge">β</span>' : ''}</div>
-          <div class="pb-mb-row">${mbChips}</div>
-          ${seqHtml}${stallHtml}${oppDmgHtml}
-        </div>`;
+      return muCardHtml(r, actionsHtml);
     }).join('') + (editingThis && muEdit.bi === 'new' ? muEditorHtml(activeGrp, muEdit.draft, muEdit.detail, muEdit.loading) : '');
 
-    const addResetRow = activeGrp && !editingThis
+    const addResetRow = activeGrp && !editingThis && isCustomized
       ? `<div class="row" style="margin-top:.5em">
-          <button class="pb-btn-sub" id="pb-mu-add-build">${esc(I18N.muAddBuildBtn)}</button>
-          ${isCustomized ? `<button class="pb-btn-sub" id="pb-mu-reset-default">${esc(I18N.muResetDefaultBtn)}</button>` : ''}
+          <button class="pb-btn-sub" id="pb-mu-reset-default">${esc(I18N.muResetDefaultBtn)}</button>
         </div>`
       : '';
     const scenarioHtml = activeGrp ? scenarioRowHtml(slot, activeGrp.label) : '';
@@ -2797,10 +2911,20 @@ const I18N = I18N_ALL[lang];
         activeMuTab = top5[0];
         renderTargetsPanel();
       });
+      root.querySelectorAll('[data-mu-build]').forEach((btn) => btn.addEventListener('click', () => {
+        muBuildSel = +btn.dataset.muBuild;
+        if (muEdit) muEdit = null; // 編集中に別の型のタブを押したら編集は閉じる(タブ切り替え)
+        renderTargetsPanel();
+      }));
+      // 開閉は全カード共通(1枚を畳んだら他も畳む)。再描画しても保つ。
+      root.querySelectorAll('details.pb-mu-1v1').forEach((d) => d.addEventListener('toggle', () => {
+        mu1v1Open = d.open;
+        root.querySelectorAll('details.pb-mu-1v1').forEach((o) => { if (o.open !== d.open) o.open = d.open; });
+      }));
       root.querySelectorAll('[data-mb-pop]').forEach((btn) => btn.addEventListener('click', () => {
         const d = mbPopData[+btn.dataset.mbPop];
         if (!d) return;
-        openInfoPopover(tMove(d.name), `<div class="mvwrap" style="margin-bottom:.6em">${typeIcoForMove(d.name)}<span class="mvchip">${esc(tMove(d.name))}</span></div><div>${esc(I18N.popHitsLbl(d.hitsTxt))}</div><div>${esc(I18N.popDmgLbl(d.dmgTxt))}</div>`);
+        openInfoPopover(tMove(d.name), `<div class="mvwrap" style="margin-bottom:.6em">${typeIcoForMove(d.name)}<span class="mvchip">${esc(tMove(d.name))}</span></div>${d.turn ? `<div>${esc(MU_TXT.turnN(d.turn))}</div>` : ''}<div>${esc(I18N.popDmgLbl(d.dmgTxt))}</div>${d.note ? `<div class="muted">${esc(MU_TXT.assume)}：${esc(d.note)}</div>` : ''}`);
       }));
 
       root.querySelectorAll('[data-mu-tab]').forEach((chip) => chip.addEventListener('click', (e) => {
@@ -3148,6 +3272,183 @@ const I18N = I18N_ALL[lang];
     return `<div class="mtx-legend"><span>${I18N.speedMatrixLegend}</span></div>
       ${mgWrapHtml(`<table class="mtx">${head}${bodyRows}</table>`)}`;
   }
+  /** 1v1判定記号(◎○△▲×)の色分けクラス。 */
+  function symClass(sym) {
+    return sym === '◎' || sym === '○' ? 'pb-sym-good' : sym === '△' ? 'pb-sym-mid' : 'pb-sym-bad';
+  }
+  /** 1v1の結論を一文で(色つきの箱)。 */
+  function muVerdictBoxHtml(v) {
+    const t = MU_TXT;
+    let head, body;
+    if (v.stall && v.stall.side) {
+      head = v.stall.side === 'me' ? t.stallWin : t.stallLose;
+      body = t.stallNote(v.stall.turns);
+      const tr = v.stall.trace;
+      if (v.stall.side === 'me' && tr && tr.length && v.stall.attMax) {
+        body += ` ／ ${t.remain} ${Math.max(0, Math.round((tr[tr.length - 1].attHp / v.stall.attMax) * 100))}%`;
+      }
+    } else if (v.draw) {
+      head = t.draw; body = '';
+    } else {
+      head = v.win ? t.win : t.lose;
+      body = `${t.my(v.myHits ?? 999)} ／ ${t.opp(v.oppHits ?? 999)}`;
+    }
+    return `<div class="pb-vbox ${symClass(v.sym)}"><b>${esc(head)}</b>${body ? `<span>${esc(body)}</span>` : ''}</div>`;
+  }
+  /** エンジンの前提文(「最大3ヒット時」「3ヒット時」)を、回数の仮定が伝わる文に言い換える。 */
+  function muCondText(c) {
+    if (!c) return '';
+    return String(c).split('・').map((x) => {
+      let m = /^最大(\d+)ヒット時$/.exec(x);
+      if (m) return lang === 'en' ? `all ${m[1]} hits land` : lang === 'ko' ? `${m[1]}회 모두 명중 가정` : `${m[1]}発すべて命中を想定`;
+      m = /^(\d+)ヒット時$/.exec(x);
+      if (m) return lang === 'en' ? `${m[1]} hits (expected value for 2-5 hit moves)` : lang === 'ko' ? `${m[1]}회 가정(2~5회 기술의 기대값)` : `${m[1]}発を想定（2〜5回技の期待値）`;
+      return x;
+    }).join('・');
+  }
+  /** 棒の配置: 各ターンのダメージを左から積み、相手が回復(オボンのみ等)したターンは、その回復ぶん棒を左へ戻す
+   * (緑の縞を重ねて示し、次のターンは戻った位置から積む)。100%(右端)に届いたら以降は描かない。 */
+  function muLayout(items) {
+    const out = [];
+    let pos = 0;
+    items.forEach((it, i) => {
+      if (pos >= 100) return;
+      out.push({ kind: 'seg', i, left: pos, width: Math.max(0, Math.min(it.dmg, 100 - pos)) });
+      pos += it.dmg;
+      if (it.heal > 0 && pos < 100) {
+        const hs = Math.max(0, pos - it.heal);
+        out.push({ kind: 'heal', i, left: hs, width: pos - hs });
+        pos = hs;
+      }
+    });
+    return out;
+  }
+  /** ターンごとのダメージを積み上げる棒。右端(100%)に届けば倒れる。 */
+  function muRaceBarHtml(kind, turns, hits, stall, moveName, isOpp, defHp, detail) {
+    const stallTurns = stall ? stall.turns : 0;
+    const t = MU_TXT;
+    const who = isOpp ? t.barOpp : t.barMe;
+    // 技の使い分け(であいがしら→アイアンヘッド等)があるときは、各ターンに撃つ技を順に並べる。
+    const used = [];
+    turns.forEach((tn) => { if (used[used.length - 1] !== tn.n) used.push(tn.n); });
+    const label = used.length ? used.map((n) => tMove(n)).join(' → ') : (moveName ? tMove(moveName) : '');
+    const title = `${who}${label ? `（${label}）` : ''}`;
+    if (stallTurns) {
+      // どくどく＋回復の持久戦: 1本の横棒に「直接(青/赤)・毒(紫)・拘束(橙)」をターン順に積み上げる。
+      // 相手が回復(オボンのみ等)すると、そのぶん倒すのに必要なダメージが増える。棒の長さを
+      // 「元のHP＋回復ぶん」に合わせ、回復ぶんは右端の縞(緑)で示すので、最後まで満ちて✕になれば倒れたと読める。
+      const tr = stall.trace || [];
+      const meIsAtt = !isOpp;
+      const dmgMax = (meIsAtt ? stall.defMax : stall.attMax) || 1; // 攻められる側の最大HP
+      const myMax = (meIsAtt ? stall.attMax : stall.defMax) || 1;
+      const oppMax = (meIsAtt ? stall.defMax : stall.attMax) || 1;
+      const rate = (v) => { const x = (v / dmgMax) * 100; return x < 10 ? x.toFixed(1) : String(Math.round(x)); };
+      const pct1 = (v, max) => Math.max(0, Math.round((v / max) * 100));
+      const items = tr.map((x) => ({ dmg: ((x.direct + x.poison + x.bind) / dmgMax) * 100, heal: (x.heal / dmgMax) * 100 }));
+      const segs = muLayout(items).map((L) => {
+        const x = tr[L.i];
+        if (L.kind === 'heal') {
+          return `<span class="pb-heal" style="left:${L.left.toFixed(2)}%;width:${L.width.toFixed(2)}%" title="${esc(t.healTip(Math.round((x.heal / dmgMax) * 100)))}"></span>`;
+        }
+        const g = x.direct + x.poison + x.bind;
+        const share = (v) => (g > 0 ? ((v / g) * 100).toFixed(1) : '0');
+        const myHp = meIsAtt ? x.attHp : x.defHp, oppHp = meIsAtt ? x.defHp : x.attHp;
+        const parts = [`${t.direct} ${rate(x.direct)}%`, `${t.poison} ${rate(x.poison)}%`];
+        if (x.bind > 0) parts.push(`${t.bind} ${rate(x.bind)}%`);
+        const dmgTxt = `${parts.join(' ＋ ')}${x.heal > 0 ? ` ／ ${t.heal} ${rate(x.heal)}%` : ''} → ${t.hpMe} ${pct1(myHp, myMax)}% ／ ${t.hpOpp} ${pct1(oppHp, oppMax)}%`;
+        const popIdx = mbPopData.push({ name: x.n, dmgTxt, turn: L.i + 1 }) - 1;
+        return `<button type="button" class="pb-seg pb-seg-${isOpp ? 'foe' : 'me'} pb-seg-stallturn" style="left:${L.left.toFixed(2)}%;width:${L.width.toFixed(2)}%" data-mb-pop="${popIdx}" title="${esc(t.turnN(L.i + 1))} ${esc(tMove(x.n))}：${esc(dmgTxt)}">`
+          + `${L.i + 1}<span class="pb-stripe"><i class="pb-part-d ${isOpp ? 'foe' : 'me'}" style="width:${share(x.direct)}%"></i><i class="pb-part-p" style="width:${share(x.poison)}%"></i><i class="pb-part-b" style="width:${share(x.bind)}%"></i></span></button>`;
+      }).join('');
+      const dead = tr.length > 0 && tr[tr.length - 1].defHp <= 0; // 攻められる側が倒れたときだけ✕（自分が倒れる場合は別の棒で示す）
+      const seqNames = []; (stall.seq || []).forEach((n) => { if (seqNames[seqNames.length - 1] !== n) seqNames.push(n); });
+      const stitle = `${isOpp ? t.barOpp : t.barMe}（${seqNames.map((n) => tMove(n)).join(' → ')}）`;
+      // 持久戦の勝ち筋(outcomeなし)は「毒込みNT」。勝てない側の見込み(outcomeあり)は、通常の棒と同じく
+      // 「相手が動かない前提の5ターン」で、倒せれば「Nターンで倒す」、倒せなければ「5ターンで約X%」。
+      const pctDone = Math.min(99, Math.max(1, Math.round(tr.reduce((sum, x) => sum + (x.direct + x.poison + x.bind) / dmgMax * 100, 0))));
+      const right = !stall.outcome ? t.stall(stallTurns)
+        : stall.outcome === 'win' ? (isOpp ? t.koOpp(stallTurns) : t.koMe(stallTurns))
+        : t.part(pctDone);
+      const legend = `<span class="pb-legend-lbl">${esc(t.stripe)}</span><i class="pb-part-d ${isOpp ? 'foe' : 'me'}"></i>${esc(t.direct)}<i class="pb-part-p"></i>${esc(t.poison)}`
+        + (tr.some((x) => x.bind > 0) ? `<i class="pb-part-b"></i>${esc(t.bind)}` : '')
+        + (tr.some((x) => x.heal > 0) ? `<i class="pb-heal-key"></i>${esc(t.healKey)}` : '')
+;
+      return `<div class="pb-race"><div class="pb-race-lbl"><span>${esc(stitle)}</span><span>${esc(right)}</span></div>`
+        + `<div class="pb-bar">${segs}${dead ? '<span class="pb-ko">✕</span>' : ''}</div>`
+        + `<div class="pb-legend">${legend}<span class="pb-legend-note">${esc(stall.outcome ? t.noAct : t.noSwitch)}</span></div></div>`;
+    }
+    if (!turns.length) {
+      return `<div class="pb-race"><div class="pb-race-lbl"><span>${esc(title)}</span><span>${esc(t.noDmg)}</span></div><div class="pb-bar"></div></div>`;
+    }
+    // 棒は相手(自分)の最大HP=100%が右端。ターンごとのダメージを順に積み、100%を超えた分は右端で切る
+    // (縮尺を合計に合わせると、1発目が実際より小さく/大きく見える)。相手の回復は棒を戻して示す。
+    const layout = muLayout(turns.map((tn) => ({ dmg: tn.pctLo, heal: tn.healPct || 0 })));
+    const acc = turns.reduce((a, tn) => a + tn.pctLo, 0);
+    const parts = layout.map((L) => {
+      if (L.kind === 'heal') {
+        const tn = turns[L.i];
+        return `<span class="pb-heal" style="left:${L.left.toFixed(2)}%;width:${L.width.toFixed(2)}%" title="${esc(t.healTip(Math.round(tn.healPct)))}"></span>`;
+      }
+      const tn = turns[L.i];
+      const w = Math.max(0, L.width);
+      // タップ/ホバーでそのターンのダメージ(実数値と%)を出す。
+      const lo = Math.round(tn.pctLo * defHp / 100), hi = Math.round(tn.pctHi * defHp / 100);
+      const dmgTxt = dmgRangeTxt(lo, hi, tn.pctLo, tn.pctHi);
+      const popIdx = mbPopData.push({ name: tn.n, dmgTxt, turn: L.i + 1 }) - 1;
+      return `<button type="button" class="pb-seg pb-seg-${isOpp ? 'foe' : 'me'}" style="left:${L.left.toFixed(2)}%;width:${w.toFixed(2)}%" data-mb-pop="${popIdx}" title="${esc(t.turnN(L.i + 1))} ${esc(tMove(tn.n))}：${esc(dmgTxt)}">${w >= 9 ? L.i + 1 : ''}</button>`;
+    }).join('');
+    const anyHeal = turns.some((tn) => tn.healPct > 0);
+    const ko = hits < 999;
+    let right = ko ? (isOpp ? t.koOpp(hits) : t.koMe(hits)) : t.part(Math.min(99, Math.max(1, Math.round(acc))));
+    // 乱数で倒せる対面(最高乱数なら少ないターンで倒せる)は、確率を併記する。
+    if (detail && detail.certain === false && detail.hits != null && detail.hits < hits) {
+      right = t.rand(detail.hits, fmtKoProbPct(detail.prob), hits);
+    }
+    return `<div class="pb-race"><div class="pb-race-lbl"><span>${esc(title)}</span><span>${esc(right)}</span></div>`
+      + `<div class="pb-bar">${parts}${ko ? '<span class="pb-ko">✕</span>' : ''}</div>`
+      + (anyHeal ? `<div class="pb-legend"><i class="pb-heal-key"></i>${esc(t.healKey)}</div>` : '')
+      + (detail && detail.conds ? `<div class="pb-race-note">${esc(t.assume)}：${esc(muCondText(detail.conds))}</div>` : '') + `</div>`;
+  }
+  /** 技ごとのダメージ幅(最低〜最高)を棒で。 */
+  function muMoveBarsHtml(list, hasMoves, isMine) {
+    if (!list.length) return `<div class="muted">${hasMoves ? esc(I18N.noEffectiveMove) : esc(I18N.noMovesSet)}</div>`;
+    const f = (x) => (x < 10 ? x.toFixed(1) : String(Math.round(x)));
+    return [...list].sort((a, b) => b.pctHi - a.pctHi).map((m) => {
+      const dmgTxt = dmgRangeTxt(m.dmgLo, m.dmgHi, m.pctLo, m.pctHi);
+      const popIdx = mbPopData.push({ name: m.n, dmgTxt, note: muCondText(m.conds) }).length - 1;
+      return `<button type="button" class="pb-mv${isMine ? ' pb-mv-me' : ''}" data-mb-pop="${popIdx}" title="${esc(tMove(m.n))}：${esc(dmgTxt)}${m.conds ? `（${esc(MU_TXT.assume)}：${esc(muCondText(m.conds))}）` : ''}"><span class="pb-mv-n">${esc(tMove(m.n))}${m.conds ? `<small class="pb-mv-c">${esc(muCondText(m.conds))}</small>` : ''}</span>`
+      + `<span class="pb-mv-g"><i class="hi" style="width:${Math.min(100, m.pctHi).toFixed(1)}%"></i><i class="lo" style="width:${Math.min(100, m.pctLo).toFixed(1)}%"></i></span>`
+      + `<span class="pb-mv-p">${f(m.pctLo)}〜${f(m.pctHi)}%</span></button>`;
+    }).join('');
+  }
+  /** 仮想敵カード1枚(選択中の型)。 */
+  function muCardHtml(r, actionsHtml) {
+    const t = MU_TXT;
+    const v = r.verdict;
+    const stallMe = v.stall && v.stall.side === 'me' ? v.stall.turns : 0;
+    const stallOpp = v.stall && v.stall.side === 'opp' ? v.stall.turns : 0;
+    const turnsOf = (turns, d) => (turns && turns.length > 1 ? turns
+      : d && d.pctLo != null ? [{ n: d.n, pctLo: d.pctLo, pctHi: d.pctHi }] : []);
+    const myBar = muRaceBarHtml('me', turnsOf(r.pd.myTurns, r.pd.my), v.myHits ?? 999, stallMe ? v.stall : ((v.plans && v.plans.me) || null), r.pd.my && r.pd.my.n, false, r.opp.stats[0], r.pd.my);
+    const oppBar = muRaceBarHtml('foe', turnsOf(r.pd.oppTurns, r.pd.opp), v.oppHits ?? 999, stallOpp ? v.stall : ((v.plans && v.plans.opp) || null), r.pd.opp && r.pd.opp.n, true, r.rb.stats[0], r.pd.opp);
+    const status = (r.b.moves || []).filter(Boolean).filter((n) => !r.mb.opp.some((m) => m.n === n));
+    const others = status.length
+      ? `<div class="pb-mu-others"><span>${esc(t.others)}</span>${status.map((n) => `<span class="pb-tag">${typeIcoForMove(n)}${esc(tMove(n))}</span>`).join('')}</div>` : '';
+    return `<div class="pb-mu-card">
+        <div class="pb-mu-head"><div class="dtl-tname">${icoImg(r.grp.icon, r.grp.label, 'dtl-ico')}${esc(I18N.buildLabel(Number(r.b.idx) || 0))}<span class="pb-mu-sym ${symClass(v.sym)}">${v.sym}</span><span class="pb-tag pb-tag-first">${esc(v.koFirst ? t.first : t.second)}</span></div>${actionsHtml}</div>
+        <div class="pb-mu-tags"><span class="pb-tag">${itemIco(r.b.item)}${esc(tItem(r.b.item)) || '—'}</span><span class="pb-tag">${esc(tAbil(r.b.ability)) || '—'}</span><span class="pb-tag">${esc(tNatureDisp(r.b.nature)) || '—'}</span></div>
+        <div class="pb-mu-evline"><b>${esc(pbEvStr(r.opp.evs))}</b><span>（S ${v.myS} vs ${v.oppS}）</span></div>
+        ${muVerdictBoxHtml(v)}
+        ${myBar}${oppBar}
+        <div class="pb-mv-h">${esc(t.movesMe)}</div>${muMoveBarsHtml(r.mb.my, r.mb.myHasMoves, true)}
+        <div class="pb-mv-h">${esc(t.movesOpp)}</div>${muMoveBarsHtml(r.mb.opp, r.mb.oppHasMoves)}
+        ${others}
+        <details class="pb-mu-1v1"${mu1v1Open ? ' open' : ''}>
+          <summary><span class="pb-mu-1v1-lbl">${esc(I18N.oneVsOneLbl)}</span></summary>
+          ${muCardTableHtml(r.rb, r.grp, r.opp, r.pd, v)}
+        </details>
+      </div>`;
+  }
   /** どくどく＋回復技の持久戦で決着する対面の、確定数の代わりの表示。 */
   function stallTurnsTxt(turns) {
     return lang === 'en' ? `stall ${turns}T` : lang === 'ko' ? `지구전${turns}턴` : `持久戦${turns}T`;
@@ -3214,6 +3515,29 @@ const I18N = I18N_ALL[lang];
    * matchupDetailHtml()と同じ列構成(型ごとの列・与ダメ/被ダメ/素早さ/判定の4行)・体裁(pb-pop-*)で、
    * クライアント計算値(pairHitDetails/judge1v1)から生成する(APIは叩かない)。
    * 数値は仮想敵パネルの技別チップ(moveBreakdown)・判定バッジ(judge1v1)と同一関数を使うため一致する。 */
+  /** 1v1内訳の1列ぶん(型ごと)のビューモデル。相性表のセル詳細ポップアップと仮想敵カードで共有する。 */
+  function muColumnVm(label, opp, pair, verdict) {
+    return {
+      label,
+      meta: [tItem(opp.item) || I18N.noItem, tNature(opp.nature), pbEvStr(opp.evs)],
+      my: pair.my, opp: pair.opp, verdict,
+      myMoveText: tMove(pair.my?.n ?? verdict.myMove),
+      oppMoveText: tMove(pair.opp?.n ?? verdict.oppMove),
+      mySteps: pair.mySteps.map((s) => ({ ...s, n: tMove(s.n) })),
+      oppSteps: pair.oppSteps.map((s) => ({ ...s, n: tMove(s.n) })),
+      myTurns: pair.myTurns.map((s) => ({ ...s, n: tMove(s.n) })),
+      oppTurns: pair.oppTurns.map((s) => ({ ...s, n: tMove(s.n) })),
+      stallSeq: verdict.stall?.seq.map((n) => tMove(n)),
+    };
+  }
+  /** 仮想敵カードの1v1内訳(見出し行なしの1列)。 */
+  function muCardTableHtml(rb, grp, opp, pair, verdict) {
+    return renderMatchupTable({
+      myName: tPoke(rb.label), oppName: tPoke(grp.label),
+      myIconUrl: spriteUrl(rb.icon) || '', oppIconUrl: spriteUrl(grp.icon) || '',
+      columns: [muColumnVm('', opp, pair, verdict)],
+    }, lang, { compact: true });
+  }
   function matchupCellDetailHtml(b, o) {
     const builds = (o.builds || []).slice(0, 3);
     // 与ダメ・被ダメは同じ場の前提で出す（向きごとに呼ぶと天候が食い違う）
@@ -3224,18 +3548,7 @@ const I18N = I18N_ALL[lang];
     const vm = {
       myName: tPoke(b.label), oppName: tPoke(o.label),
       myIconUrl: spriteUrl(b.icon) || '', oppIconUrl: spriteUrl(o.icon) || '',
-      columns: builds.map((opp, i) => ({
-        label: I18N.buildLabel(i + 1),
-        meta: [tItem(opp.item) || I18N.noItem, tNature(opp.nature), pbEvStr(opp.evs)],
-        my: pairs[i].my, opp: pairs[i].opp, verdict: verdicts[i],
-        myMoveText: tMove(pairs[i].my?.n ?? verdicts[i].myMove),
-        oppMoveText: tMove(pairs[i].opp?.n ?? verdicts[i].oppMove),
-        mySteps: pairs[i].mySteps.map((s) => ({ ...s, n: tMove(s.n) })),
-        oppSteps: pairs[i].oppSteps.map((s) => ({ ...s, n: tMove(s.n) })),
-        myTurns: pairs[i].myTurns.map((s) => ({ ...s, n: tMove(s.n) })),
-        oppTurns: pairs[i].oppTurns.map((s) => ({ ...s, n: tMove(s.n) })),
-        stallSeq: verdicts[i].stall?.seq.map((n) => tMove(n)),
-      })),
+      columns: builds.map((opp, i) => muColumnVm(I18N.buildLabel(i + 1), opp, pairs[i], verdicts[i])),
     };
     return `<div class="pb-pop-hd">${icoImg(b.icon, b.label, '')}${esc(tPoke(b.label))}<span class="pb-arw">vs</span>${icoImg(o.icon, o.label, '')}${esc(tPoke(o.label))}</div>
       <div class="pb-pop-sub">${esc(matchupLead(lang))}</div>

@@ -176,7 +176,7 @@ export interface EngineSide {
   seq: string[];
   /** 毎ターンの与ダメージ(最低/最高乱数の実数値)。並びは手順があれば手順、無ければ最大打点技の連打。
    * 経路は最低乱数で進めるので、じきゅうりょくの防御上昇・積みなど2ターン目以降の変化が入る。 */
-  turns: { n: string; lo: number; hi: number }[];
+  turns: { n: string; lo: number; hi: number; heal?: number }[];
 }
 
 /** エンジンが決める1v1の記号判定。刻み・先制技・手順・確定1の扱いを表示側に持たない。 */

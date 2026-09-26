@@ -51,6 +51,11 @@ interface Labels {
   draw: string;
   stall(win: boolean, turns: number): string;
   stallHits(turns: number): string;
+  poisonLbl: string;
+  healLbl: string;
+  planLose(turns: number): string;
+  planStuck(turns: number): string;
+  bindLbl: string;
 }
 
 const T: Record<Lang, Labels> = {
@@ -71,7 +76,12 @@ const T: Record<Lang, Labels> = {
     draw: "引き分け：互いに6ターン以上かかる・決着つかず",
     stall: (win: boolean, turns: number) =>
       `持久戦で${win ? "勝ち" : "負け"}（${turns}ターン・相手が交代しない前提）`,
-    stallHits: (turns: number) => `持久戦${turns}ターンで決着`,
+    stallHits: (turns: number) => `毒込み${turns}ターンで決着`,
+    poisonLbl: "毒",
+    healLbl: "↩ 相手が回復",
+    planLose: (n: number) => `毒込みでも${n}ターンで倒される`,
+    planStuck: (n: number) => `毒込み${n}ターンでは決着つかず`,
+    bindLbl: "拘束",
   },
   en: {
     rowSpeed: "Speed", rowJudge: "Verdict",
@@ -90,7 +100,12 @@ const T: Record<Lang, Labels> = {
     draw: "Draw: neither can KO within 5 turns",
     stall: (win: boolean, turns: number) =>
       `${win ? "Win" : "Loss"} by stalling (${turns} turns, assuming no switch)`,
-    stallHits: (turns: number) => `Decided in ${turns} turns (stall)`,
+    stallHits: (turns: number) => `Decided in ${turns} turns (incl. poison)`,
+    poisonLbl: "Psn",
+    healLbl: "↩ Opp heals",
+    planLose: (n: number) => `KOed in ${n} turns even with poison`,
+    planStuck: (n: number) => `No KO in ${n} turns even with poison`,
+    bindLbl: "Bind",
   },
   ko: {
     rowSpeed: "스피드", rowJudge: "판정",
@@ -109,7 +124,12 @@ const T: Record<Lang, Labels> = {
     draw: "무승부: 5턴 안에 서로 쓰러뜨리지 못함",
     stall: (win: boolean, turns: number) =>
       `지구전으로 ${win ? "승리" : "패배"} (${turns}턴・상대가 교체하지 않는 전제)`,
-    stallHits: (turns: number) => `지구전 ${turns}턴으로 결착`,
+    stallHits: (turns: number) => `독 포함 ${turns}턴으로 결착`,
+    poisonLbl: "독",
+    healLbl: "↩ 상대 회복",
+    planLose: (n: number) => `독을 걸어도 ${n}턴에 쓰러짐`,
+    planStuck: (n: number) => `독을 걸어도 ${n}턴 안에 결착 없음`,
+    bindLbl: "구속",
   },
 };
 
@@ -173,8 +193,28 @@ function seqCell(steps: SeqStep[], t: Labels): string {
 
 /** 持久戦で決着する側のセル。ターンごとの技を並べ、決着ターンを確定数の代わりに出す。
  * 技の%は最大打点の技そのものの値（変化技は%なし）。 */
-function stallCell(c: MatchupColumnVM, d: MoveHitDetail | null, moveText: string, t: Labels): string {
-  const st = c.verdict.stall!;
+function stallCell(c: MatchupColumnVM, d: MoveHitDetail | null, moveText: string, t: Labels,
+                   st: NonNullable<Verdict["stall"]> | (NonNullable<Verdict["plans"]>["me"] & object) = c.verdict.stall!): string {
+  const outcome = (st as { outcome?: string }).outcome;
+  const footer = outcome === "lose" ? t.planLose(st.turns) : outcome === "stuck" ? t.planStuck(st.turns) : t.stallHits(st.turns);
+  // ターンごとの内訳(直接ダメージ＋毒)があれば、1ターン1行で出す。毒は1/16,2/16…と累積するので、
+  // 技のダメージだけを並べると「なぜ倒れるのか」が読めない。
+  if (st.trace && st.trace.length && st.defMax) {
+    const names = c.stallSeq ?? st.seq;
+    const pc = (v: number) => {
+      const x = (v / st.defMax!) * 100;
+      return x < 10 ? x.toFixed(1) : String(Math.round(x));
+    };
+    const lines = st.trace.map((tr, i) => {
+      const parts = [
+        tr.direct > 0 ? `<span class="mbp-pct">${pc(tr.direct)}%</span>` : "",
+        `<span class="mbp-psn">${esc(t.poisonLbl)} ${pc(tr.poison)}%</span>`,
+        tr.bind > 0 ? `<span class="mbp-bind">${esc(t.bindLbl)} ${pc(tr.bind)}%</span>` : "",
+      ].join("");
+      return `<div class="mbp-step"><span class="mbp-step-no">${i + 1}</span>${parts}<span class="mbp-move">${esc(names[i] ?? tr.n)}</span></div>`;
+    }).join("");
+    return `<td class="mbp-seq">${lines}<span class="mbp-hits">${esc(footer)}</span></td>`;
+  }
   const runs = stallRuns(c.stallSeq ?? st.seq);
   const lines = runs.map((r) => {
     const no = r.from === r.to ? `${r.from}` : `${r.from}〜${r.to}`;
@@ -191,17 +231,19 @@ function stallCell(c: MatchupColumnVM, d: MoveHitDetail | null, moveText: string
  * 末尾は単発の最大打点なら確定数/乱数n発、手順（技が切り替わる）なら判定と同じ確定数。 */
 function turnsCell(turns: SeqStep[], d: MoveHitDetail | null, verdictHits: number | null | undefined, t: Labels): string {
   // 連続して同じ技・同じダメージのターンは「1〜4」のようにまとめる（値が変わるターンだけ行を分ける）。
-  const runs: { n: string; p: string; from: number; to: number }[] = [];
+  const runs: { n: string; p: string; from: number; to: number; heal: number }[] = [];
   turns.forEach((s, i) => {
     const p = pctText(s.pctLo, s.pctHi);
+    const heal = s.healPct ? Math.round(s.healPct) : 0;
     const last = runs[runs.length - 1];
-    if (last && last.n === s.n && last.p === p) last.to = i + 1;
-    else runs.push({ n: s.n, p, from: i + 1, to: i + 1 });
+    if (last && last.n === s.n && last.p === p && last.heal === heal && !heal) last.to = i + 1;
+    else runs.push({ n: s.n, p, from: i + 1, to: i + 1, heal });
   });
   const lines = runs.map((r) =>
     `<div class="mbp-step"><span class="mbp-step-no">${r.from === r.to ? r.from : `${r.from}〜${r.to}`}</span>`
     + `<span class="mbp-pct">${esc(r.p)}</span>`
-    + `<span class="mbp-move">${esc(r.n)}</span></div>`).join("");
+    + `<span class="mbp-move">${esc(r.n)}</span></div>`
+    + (r.heal > 0 ? `<div class="mbp-heal">${esc(t.healLbl)} ${r.heal}%</div>` : "")).join("");
   const mixed = new Set(turns.map((s) => s.n)).size > 1;
   const foot = mixed || !d ? t.hits(verdictHits ?? null) : t.detail(d, fmtProb(d.prob));
   const conds = d?.conds ? `<div class="mbp-conds">${esc(t.conds(d.conds))}</div>` : "";
@@ -226,7 +268,7 @@ export function matchupLead(lang: Lang): string {
   return MATCHUP_LEAD[lang] ?? MATCHUP_LEAD.ja;
 }
 
-export function renderMatchupTable(vm: MatchupTableVM, lang: Lang): string {
+export function renderMatchupTable(vm: MatchupTableVM, lang: Lang, opts: { compact?: boolean } = {}): string {
   const t = T[lang] ?? T.ja;
   const ico = (url: string, name: string, cls: string) =>
     url ? `<img class="${cls}" src="${esc(url)}" alt="${esc(name)}" loading="lazy">` : "";
@@ -238,10 +280,14 @@ export function renderMatchupTable(vm: MatchupTableVM, lang: Lang): string {
     `<th>${esc(c.label)}<div class="mbp-build-meta">${c.meta.map(esc).join("<br>")}</div></th>`).join("") + `</tr>`;
   const myRow = arrow(vm.myIconUrl, vm.myName, vm.oppIconUrl, vm.oppName)
     + vm.columns.map((c) => c.verdict.stall?.side === "me"
-      ? stallCell(c, c.my, c.myMoveText, t) : dmgCell(c.my, c.myMoveText, t, c.mySteps, c.myTurns, c.verdict.myHits)).join("");
+      ? stallCell(c, c.my, c.myMoveText, t)
+      : c.verdict.plans?.me ? stallCell(c, c.my, c.myMoveText, t, c.verdict.plans.me)
+      : dmgCell(c.my, c.myMoveText, t, c.mySteps, c.myTurns, c.verdict.myHits)).join("");
   const oppRow = arrow(vm.oppIconUrl, vm.oppName, vm.myIconUrl, vm.myName)
     + vm.columns.map((c) => c.verdict.stall?.side === "opp"
-      ? stallCell(c, c.opp, c.oppMoveText, t) : dmgCell(c.opp, c.oppMoveText, t, c.oppSteps, c.oppTurns, c.verdict.oppHits)).join("");
+      ? stallCell(c, c.opp, c.oppMoveText, t)
+      : c.verdict.plans?.opp ? stallCell(c, c.opp, c.oppMoveText, t, c.verdict.plans.opp)
+      : dmgCell(c.opp, c.oppMoveText, t, c.oppSteps, c.oppTurns, c.verdict.oppHits)).join("");
   const spdRow = `<td class="lft">${esc(t.rowSpeed)}</td>` + vm.columns.map((c) =>
     `<td class="mbp-spd-cell ${c.verdict.fast ? "mbp-spd-win" : "mbp-spd-lose"}">`
     + `<div>${esc(t.fast(c.verdict.fast))}</div>`
@@ -252,6 +298,6 @@ export function renderMatchupTable(vm: MatchupTableVM, lang: Lang): string {
     + `<b class="mbp-sym">${esc(c.verdict.sym)}</b>`
     + `<div class="mbp-judge-text">${esc(judgeText(c, t))}</div></td>`).join("");
 
-  return `<div class="mbp-scroll"><table class="mbp-table">${head}`
+  return `<div class="mbp-scroll"><table class="mbp-table">${opts.compact ? "" : head}`
     + `<tr>${myRow}</tr><tr>${oppRow}</tr><tr>${spdRow}</tr><tr>${judgeRow}</tr></table></div>`;
 }

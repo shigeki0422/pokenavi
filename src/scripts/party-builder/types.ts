@@ -166,6 +166,16 @@ export interface StallInfo {
   side: "me" | "opp" | null;
   turns: number;
   seq: string[];
+  /** ターンごとの内訳(実数値)。direct=技の直接ダメージ、poison=ターン終了時の毒、heal=相手の回復(オボン等)。
+   * defMax は攻められる側の最大HP（%換算の分母）。 */
+  trace?: { n: string; direct: number; poison: number; bind: number; heal: number; defHp: number; attHp: number }[];
+  defMax?: number;
+  attMax?: number;
+}
+
+/** 勝ち筋が無い側が どくどく を入れた場合の見込み(表示用。記号・勝敗には影響しない)。 */
+export interface StallPlan extends Omit<StallInfo, "side"> {
+  outcome: "win" | "lose" | "stuck";
 }
 
 export interface Verdict {
@@ -192,6 +202,8 @@ export interface Verdict {
   draw?: boolean;
   /** 持久戦で勝敗が決まったか。記号・win には反映済みなので表示だけに使う。 */
   stall?: StallInfo;
+  /** 持久戦で勝てない側でも、どくどくを持つなら入れた場合の内訳。 */
+  plans?: { me?: StallPlan | null; opp?: StallPlan | null };
   stub: boolean;
 }
 

@@ -253,7 +253,8 @@ def _mu_score(M, O, field):
             hp = max(1, d[other]["hp"])
             if len(ts) < 2:
                 return []
-            return [{"n": t["n"], "pctLo": t["lo"] / hp * 100, "pctHi": t["hi"] / hp * 100} for t in ts]
+            return [{"n": t["n"], "pctLo": t["lo"] / hp * 100, "pctHi": t["hi"] / hp * 100,
+                     "healPct": (t.get("heal", 0) / hp * 100) if t.get("heal") else None} for t in ts]
         return {"myh": v["myHits"], "thh": v["oppHits"], "myr": ar, "thr": br,
                 "fast": v["koFirst"], "my_s": v["myS"], "op_s": v["oppS"],
                 "my_move": v["myMove"], "th_move": v["oppMove"],
@@ -262,7 +263,7 @@ def _mu_score(M, O, field):
                 "opp_steps": _steps("b", "a", v.get("oppSeq") or []),
                 "my_turns": _turns("a", "b"), "opp_turns": _turns("b", "a"),
                 "sym": v["sym"], "score": v["score"], "win": v["win"],
-                "draw": v.get("draw", False), "stall": v.get("stall")}
+                "draw": v.get("draw", False), "stall": v.get("stall"), "plans": v.get("plans")}
     if MU_MODE == "engine" and sa and sb:
         import _mu_engine as _ME
         ah, ar, am, bh, br, bm = _ME.mu_engine(sa, sb, L_REF[0])
@@ -386,7 +387,7 @@ def matchup_detail(specs, mon_name, opp_name, L):
         judge.append({"v": r.get("sym") or _score_sym(score), "win": win, "txt": reason,
                       "fast": fast, "by_prio": bool(r.get("ko_by_priority")),
                       "my_hits": myh, "opp_hits": thh,
-                      "draw": bool(r.get("draw")), "stall": r.get("stall")})
+                      "draw": bool(r.get("draw")), "stall": r.get("stall"), "plans": r.get("plans")})
         seq.append({"my": r.get("my_steps") or [], "opp": r.get("opp_steps") or [],
                     "my_turns": r.get("my_turns") or [], "opp_turns": r.get("opp_turns") or []})
     return {"mon": mon_name, "opp": opp_name, "my_spec": getattr(M, "_spec", None),
