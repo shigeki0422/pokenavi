@@ -61,6 +61,26 @@ export function eff(atk: string, d1: string, d2: string | null): number {
   return e1 * e2;
 }
 
+// 被弾倍率に効く特性。移植元: scripts/_party_quality.py の IMMUNE/HALF/SE_REDUCE（簡単構築側の防御相性と同じ規則）。
+const ABILITY_IMMUNE: Record<string, string> = {
+  "ふゆう": "じめん", "もらいび": "ほのお", "そうしょく": "くさ", "ちょすい": "みず",
+  "よびみず": "みず", "かんそうはだ": "みず", "ひらいしん": "でんき",
+  "でんきエンジン": "でんき", "ちくでん": "でんき",
+};
+const ABILITY_HALF: Record<string, string[]> = {
+  "あついしぼう": ["ほのお", "こおり"], "たいねつ": ["ほのお"], "すいほう": ["ほのお"], "もふもふ": ["ほのお"],
+};
+const ABILITY_SE_REDUCE = new Set(["プリズムアーマー", "フィルター", "ハードロック"]);
+
+/** eff() に、防御側の特性による無効・半減・抜群軽減を加えた被弾倍率。 */
+export function adjEff(atk: string, d1: string, d2: string | null, ability: string | null | undefined): number {
+  if (ability && ABILITY_IMMUNE[ability] === atk) return 0;
+  let e = eff(atk, d1, d2);
+  if (ability && ABILITY_HALF[ability]?.includes(atk)) e *= 0.5;
+  if (ability && ABILITY_SE_REDUCE.has(ability) && e >= 2) e *= 0.75;
+  return e;
+}
+
 /** 防御側(t1/t2)から見た、全18攻撃タイプに対する被弾倍率プロファイル。 */
 export function defenseProfile(t1: string, t2: string | null): Record<string, number> {
   const out: Record<string, number> = {};

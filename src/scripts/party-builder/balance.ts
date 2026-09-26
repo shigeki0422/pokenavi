@@ -6,7 +6,7 @@
 // UI側は「埋まっている枠だけ resolveSlot(slot, species, moves) した配列」を渡すこと。
 import type { MoveDict, ResolvedBuild, SpeciesMaster, Slot, TargetBuild } from "./types";
 import { effectiveSpeed, realStats } from "./stats";
-import { eff, TYPES } from "./typechart";
+import { adjEff, eff, TYPES } from "./typechart";
 import { judgeVsBuilds } from "./matchup";
 
 export function resolveSlot(slot: Slot, species: SpeciesMaster[], moves: MoveDict): ResolvedBuild {
@@ -117,7 +117,7 @@ export function attackMatrix(party: ResolvedBuild[]): TypeMatrix {
 
 /** 各メンバーが各タイプの攻撃技を受けたときの被弾倍率。 */
 export function defenseMatrix(party: ResolvedBuild[]): TypeMatrix {
-  const cells: (number | null)[][] = party.map((b) => TYPES.map((atkType) => eff(atkType, b.t1, b.t2)));
+  const cells: (number | null)[][] = party.map((b) => TYPES.map((atkType) => adjEff(atkType, b.t1, b.t2, b.ability)));
   return { types: TYPES, cells };
 }
 
