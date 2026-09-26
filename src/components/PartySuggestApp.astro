@@ -149,7 +149,7 @@ const I18N = I18N_ALL[lang];
   /* (S16) 「空欄でおまかせ」の常設ヘルプ(ps-noticeより控えめな色) */
   .ps-help{font-size:.76rem;color:rgb(var(--gray));margin-top:.4em}
   .ps-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7em;padding:3.2em 1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px}
-  .ps-spinner{width:38px;height:38px;border:4px solid rgb(var(--gray-light));border-top-color:rgb(var(--accent));border-radius:50%;animation:ps-spin .8s linear infinite}
+  .ps-spinner{width:38px;height:38px;border:4px solid rgb(var(--gray-light));border-top-color:var(--accent);border-radius:50%;animation:ps-spin .8s linear infinite}
   @keyframes ps-spin{to{transform:rotate(360deg)}}
   .ps-lmsg{font-weight:700;color:rgb(var(--gray-dark));font-size:.95rem}
   .ps-lsub{font-size:.8rem;color:rgb(var(--gray))}
