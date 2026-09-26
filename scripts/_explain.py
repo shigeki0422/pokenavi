@@ -319,7 +319,7 @@ def matchup_grid(specs, L):
     return {"tops": [{"label": c["label"], "sp": c["sp"]} for c in cols], "rows": rows}
 
 def _ko_lab(h):
-    return "圏外" if h >= 5 else f"確{h}"
+    return "圏外" if h >= 6 else f"確{h}"
 
 def _engine_lines(M, O):
     """M と O が対面したときの、両方向の与ダメ行と実効素早さ。
@@ -344,7 +344,7 @@ def _engine_lines(M, O):
         n_hi, _ = ME._run(sa, sb, mv, L, 1.0, att)
         lo = ME.move_damage(sa, sb, mv, L, 0.0, att) / max(1, foe_hp)
         hi = ME.move_damage(sa, sb, mv, L, 1.0, att) / max(1, foe_hp)
-        ko = "圏外" if n_lo >= 5 else (f"確{n_lo}" if n_lo == n_hi else f"乱{n_hi}")
+        ko = "圏外" if n_lo >= 6 else (f"確{n_lo}" if n_lo == n_hi else f"乱{n_hi}")
         # 数値も返す。表示は3画面（ポケモン情報・工房・簡単構築）で共有している
         # レンダラが組み立てるので、整形済みの文字列だけだと体裁を揃えられない。
         return {"move": mv, "pct": f"{lo*100:.0f}〜{hi*100:.0f}%", "ko": ko,
@@ -536,12 +536,12 @@ def firepower_matrix(specs, L):
             if not kns:
                 cells.append({"lab": "—", "cls": "ko0", "move": "", "note": "", "range": False}); continue
             lo_k, hi_k = min(kns), max(kns)                # 同フォルム内EV差での最善〜最悪
-            if lo_k >= 5:
+            if lo_k >= 6:
                 lab, cls = "圏外", "ko0"
             elif lo_k == hi_k:
                 lab, cls = f"確{lo_k}", f"ko{min(lo_k, 3)}"
             else:
-                hd = "圏外" if hi_k >= 5 else str(hi_k)
+                hd = "圏外" if hi_k >= 6 else str(hi_k)
                 lab, cls = f"確{lo_k}〜{hd}", f"ko{min(lo_k, 3)}r"
             cells.append({"lab": lab, "cls": cls, "move": mvname,
                           "note": "／".join(sorted(notes)), "range": lo_k != hi_k})
@@ -569,7 +569,7 @@ def fire_detail(specs, mon_name, opp_name, L):
             lo = _dmg(Me, Oe, _mv, field, False, 0.0) / max(1, Oe.max_hp)   # 最低ロール
             n_lo, _ = _apply_survive(_hits(lo), Oe, lo, _hurt_ratio(Me, Oe, _mv, field, 0.0))
             n_hi, note = _apply_survive(_hits(hi), Oe, hi, _hurt_ratio(Me, Oe, _mv, field, 1.0))
-            ko = "圏外" if n_lo >= 5 else (f"確{n_lo}" if n_lo == n_hi else f"乱{n_hi}")
+            ko = "圏外" if n_lo >= 6 else (f"確{n_lo}" if n_lo == n_hi else f"乱{n_hi}")
             cells.append({"pct": f"{lo*100:.0f}–{hi*100:.0f}%", "ko": ko, "note": note, "hi": hi})
         rows.append({"move": mv.name_jp, "type": mv.type, "cat": mv.category, "cells": cells})
     for j in range(len(vs)):                                   # 各型で最大打点の技を強調

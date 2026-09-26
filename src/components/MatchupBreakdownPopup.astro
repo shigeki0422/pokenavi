@@ -88,7 +88,7 @@ const T = {
     buildLabel: (i: number) => `型${i}`,
     rowSpeed: '素早さ',
     rowJudge: '判定',
-    hits: (n: number | null) => (n == null || n >= 999 ? '圏外' : `確定${n}`),
+    hits: (n: number | null) => (n == null ? '圏外' : n >= 999 ? '6ターン以上' : `確定${n}`),
     hitsDetail: (d: MoveHitDetail | null) => {
       if (!d || d.hits == null) return '圏外';
       const base = d.certain ? `確定${d.hits}` : `乱数${d.hits}発（${fmtKoProbPct(d.prob)}%）`;
@@ -108,7 +108,7 @@ const T = {
     buildLabel: (i: number) => `Build ${i}`,
     rowSpeed: 'Speed',
     rowJudge: 'Verdict',
-    hits: (n: number | null) => (n == null || n >= 999 ? 'out of range' : `KO in ${n}`),
+    hits: (n: number | null) => (n == null ? 'out of range' : n >= 999 ? '6+ turns' : `KO in ${n}`),
     hitsDetail: (d: MoveHitDetail | null) => {
       if (!d || d.hits == null) return 'out of range';
       const base = d.certain ? `KO in ${d.hits}` : `${d.hits}-hit (${fmtKoProbPct(d.prob)}% chance)`;

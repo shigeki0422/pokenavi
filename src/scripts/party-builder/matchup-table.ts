@@ -57,9 +57,10 @@ const T: Record<Lang, Labels> = {
   ja: {
     rowSpeed: "素早さ", rowJudge: "判定",
     fast: (f: boolean) => (f ? "先手" : "後手"),
-    hits: (n: number | null) => (n == null || n >= 999 ? "圏外" : `確定${n}`),
+    hits: (n: number | null) => (n == null ? "圏外" : n >= 999 ? "6ターン以上" : `確定${n}`),
     detail: (d: MoveHitDetail | null, prob: string) => {
       if (!d || d.hits == null) return "圏外";
+      if (d.hits >= 999) return "6ターン以上";
       const base = d.certain ? `確定${d.hits}` : `乱数${d.hits}発（${prob}%）`;
       return d.reason ? `${base}（${d.reason}込み）` : base;
     },
@@ -67,7 +68,7 @@ const T: Record<Lang, Labels> = {
     judge: (win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean) =>
       `${win ? "勝ち" : "負け"}：${mine}で倒す/${theirs}で倒される・`
       + `${byPrio ? "先制技で" : ""}${first ? "先手" : "後手"}`,
-    draw: "引き分け：互いに圏外・決着つかず",
+    draw: "引き分け：互いに6ターン以上かかる・決着つかず",
     stall: (win: boolean, turns: number) =>
       `持久戦で${win ? "勝ち" : "負け"}（${turns}ターン・相手が交代しない前提）`,
     stallHits: (turns: number) => `持久戦${turns}ターンで決着`,
@@ -75,9 +76,10 @@ const T: Record<Lang, Labels> = {
   en: {
     rowSpeed: "Speed", rowJudge: "Verdict",
     fast: (f: boolean) => (f ? "First" : "Second"),
-    hits: (n: number | null) => (n == null || n >= 999 ? "n/a" : `${n}HKO`),
+    hits: (n: number | null) => (n == null ? "n/a" : n >= 999 ? "6+ turns" : `${n}HKO`),
     detail: (d: MoveHitDetail | null, prob: string) => {
       if (!d || d.hits == null) return "n/a";
+      if (d.hits >= 999) return "6+ turns";
       const base = d.certain ? `${d.hits}HKO` : `${d.hits} hits (${prob}%)`;
       return d.reason ? `${base} (incl. ${d.reason})` : base;
     },
@@ -85,7 +87,7 @@ const T: Record<Lang, Labels> = {
     judge: (win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean) =>
       `${win ? "Win" : "Loss"}: ${mine} to KO / ${theirs} to be KOed, `
       + `${first ? "moves first" : "moves second"}${byPrio ? " (priority)" : ""}`,
-    draw: "Draw: neither can KO",
+    draw: "Draw: neither can KO within 5 turns",
     stall: (win: boolean, turns: number) =>
       `${win ? "Win" : "Loss"} by stalling (${turns} turns, assuming no switch)`,
     stallHits: (turns: number) => `Decided in ${turns} turns (stall)`,
@@ -93,9 +95,10 @@ const T: Record<Lang, Labels> = {
   ko: {
     rowSpeed: "스피드", rowJudge: "판정",
     fast: (f: boolean) => (f ? "선공" : "후공"),
-    hits: (n: number | null) => (n == null || n >= 999 ? "권외" : `확정${n}`),
+    hits: (n: number | null) => (n == null ? "권외" : n >= 999 ? "6턴 이상" : `확정${n}`),
     detail: (d: MoveHitDetail | null, prob: string) => {
       if (!d || d.hits == null) return "권외";
+      if (d.hits >= 999) return "6턴 이상";
       const base = d.certain ? `확정${d.hits}` : `난수${d.hits}발(${prob}%)`;
       return d.reason ? `${base}(${d.reason} 포함)` : base;
     },
@@ -103,7 +106,7 @@ const T: Record<Lang, Labels> = {
     judge: (win: boolean, mine: string, theirs: string, first: boolean, byPrio: boolean) =>
       `${win ? "승" : "패"}: ${mine}로 쓰러뜨림 / ${theirs}로 당함・`
       + `${byPrio ? "선제기로 " : ""}${first ? "선공" : "후공"}`,
-    draw: "무승부: 서로 쓰러뜨리지 못함",
+    draw: "무승부: 5턴 안에 서로 쓰러뜨리지 못함",
     stall: (win: boolean, turns: number) =>
       `지구전으로 ${win ? "승리" : "패배"} (${turns}턴・상대가 교체하지 않는 전제)`,
     stallHits: (turns: number) => `지구전 ${turns}턴으로 결착`,
