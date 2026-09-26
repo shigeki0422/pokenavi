@@ -88,6 +88,26 @@ TYPE_SLUG = {
     "こおり":"ice","ドラゴン":"dragon","あく":"dark","フェアリー":"fairy",
 }
 
+# 特性が1種類しか無い種は、その特性による無効をタイプ相性表にも反映する
+# (ロトム系・チリーン等のふゆう。特性を選べる種は表に反映しない)。移植元: src/scripts/party-builder/typechart.ts の ABILITY_IMMUNE
+ABILITY_IMMUNE = {
+    "ふゆう": "じめん", "もらいび": "ほのお", "そうしょく": "くさ", "ちょすい": "みず",
+    "よびみず": "みず", "かんそうはだ": "みず", "ひらいしん": "でんき",
+    "でんきエンジン": "でんき", "ちくでん": "でんき",
+}
+
+
+def sole_ability_immunity(pokemon: str):
+    """特性が1種類だけで、それが無効化特性なら (特性名, 無効になる攻撃タイプ)。無ければ None。"""
+    conn = get_conn()
+    abil = [r[0] for r in conn.execute(
+        "SELECT DISTINCT ability FROM pokemon_species_abilities WHERE pokemon_name=?", (pokemon,))]
+    conn.close()
+    if len(abil) == 1 and abil[0] in ABILITY_IMMUNE:
+        return abil[0], ABILITY_IMMUNE[abil[0]]
+    return None
+
+
 def type_effectiveness(types: list) -> dict:
     """与えられたタイプリスト（1〜2種）に対する全タイプの効果倍率を返す"""
     result = {}
@@ -2284,6 +2304,11 @@ def generate_page(pokemon_name: str, usage_rank: int) -> str:
 
     # タイプ相性計算
     eff = type_effectiveness(types)
+    _imm = sole_ability_immunity(pokemon_name)
+    if _imm:
+        eff[_imm[1]] = 0
+    imm_note = (f'<p style="font-size:0.85em;color:#64748b;margin:-4px 0 12px">'
+                f'※唯一の特性「{_imm[0]}」により、{_imm[1]}技は無効です。</p>\n') if _imm else ""
     x4  = [t for t in ALL_TYPES if eff.get(t) == 4]
     x2  = [t for t in ALL_TYPES if eff.get(t) == 2]
     x025 = [t for t in ALL_TYPES if eff.get(t) == 0.25]
@@ -2390,7 +2415,7 @@ draft: false
 </tbody>
 </table>
 </div>
-
+{imm_note}
 ---"""
 
     RATE_CELL_STYLE = """<style>

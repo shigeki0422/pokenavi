@@ -610,14 +610,18 @@ const I18N = I18N_ALL[lang];
      data-tab属性は枠選択時のみ付与される(renderSelectedHead)ため、未選択時は両カードとも
      従来通り縦積みのプレースホルダーのまま。≥1024pxはこの見出しごと非表示にして
      .pb-splitの2カラムグリッドと両カードdisplay:blockを常に保つ(デスクトップの見た目は不変)。 */
-  .pb-selected-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5em;margin-bottom:.6em}
+  .pb-selected-head{margin-bottom:.7em}
   .pb-selected-head:empty{display:none}
-  .pb-selected-title{display:flex;align-items:center;gap:.5em;font-weight:800;font-size:.92rem;min-width:0}
+  .pb-selected-title{display:flex;align-items:center;gap:.4em;font-weight:800;font-size:.85rem;color:rgb(var(--gray));margin-bottom:.35em}
   .pb-selected-title .monicon{width:32px;height:32px;flex-shrink:0}
-  .pb-selected-name{overflow-wrap:anywhere}
-  .pb-selected-tabs{display:flex;gap:2px;border:1px solid rgb(var(--gray-light));border-radius:9px;padding:2px;background:#f8fafc;flex-shrink:0}
-  .pb-sel-tab{border:none;background:none;padding:.5em .8em;font-size:.78rem;font-weight:700;color:rgb(var(--gray));cursor:pointer;border-radius:7px;font-family:var(--font-atkinson);min-height:40px;box-sizing:border-box}
-  .pb-sel-tab.active{background:#fff;color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  .pb-selected-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .pb-sel-tab{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:56px;padding:.4em .5em;border:1.5px solid #c7d2fe;border-radius:12px;background:#fff;color:var(--accent);cursor:pointer;font-family:var(--font-atkinson);box-sizing:border-box;touch-action:manipulation}
+  .pb-sel-tab-main{display:inline-flex;align-items:center;gap:.4em;font-size:.95rem;font-weight:800}
+  .pb-sel-tab-sub{font-size:.68rem;font-weight:600;color:rgb(var(--gray))}
+  .pb-sel-count{min-width:1.3em;padding:0 .4em;border-radius:9999px;background:#e0e7ff;color:#3730a3;font-size:.72rem;font-weight:800;line-height:1.5}
+  .pb-sel-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 2px 6px rgba(35,55,255,.28)}
+  .pb-sel-tab.active .pb-sel-tab-sub{color:rgba(255,255,255,.85)}
+  .pb-sel-tab.active .pb-sel-count{background:rgba(255,255,255,.25);color:#fff}
   @media (max-width:1023.98px){
     .pb-selected[data-tab="editor"] #pb-targets{display:none}
     .pb-selected[data-tab="targets"] #pb-editor{display:none}
@@ -790,6 +794,7 @@ const I18N = I18N_ALL[lang];
       speciesDataMissing: '種族データが見つかりません（データ不整合）', muCalcError: 'データ不整合のため計算できません',
       editorHeading: n => `型エディタ ー 枠${n}`,
       slotHeading: n => `枠${n}`,
+      selTabEditorSub: '持ち物・EVを調整', selTabTargetsSub: '相手を選んで1v1判定',
       itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
       templateBtn: '型テンプレから', megaTag: 'メガ', megaFixedNote: '（メガ進化で固定）',
       evRemain: n => `残り ${n}ポイント`, evRemainOver: n => `残り ${n}ポイント（上限超過）`,
@@ -902,6 +907,7 @@ const I18N = I18N_ALL[lang];
       speciesDataMissing: 'Species data not found (data inconsistency)', muCalcError: "Can't calculate due to a data inconsistency",
       editorHeading: n => `Build Editor — Slot ${n}`,
       slotHeading: n => `Slot ${n}`,
+      selTabEditorSub: 'Adjust item & EVs', selTabTargetsSub: 'Pick opponents, see 1v1',
       itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
       templateBtn: 'From set templates', megaTag: 'Mega', megaFixedNote: '(fixed by Mega Evolution)',
       evRemain: n => `${n} points left`, evRemainOver: n => `${n} points left (over the limit)`,
@@ -1016,6 +1022,7 @@ const I18N = I18N_ALL[lang];
       speciesDataMissing: '종족 데이터를 찾을 수 없습니다（데이터 불일치）', muCalcError: '데이터 불일치로 계산할 수 없습니다',
       editorHeading: n => `빌드 에디터 — 칸${n}`,
       slotHeading: n => `칸${n}`,
+      selTabEditorSub: '도구·EV 조정', selTabTargetsSub: '상대를 골라 1v1 판정',
       itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
       templateBtn: '빌드 템플릿에서', megaTag: '메가', megaFixedNote: '（메가진화로 고정）',
       evRemain: n => `남은 ${n}포인트`, evRemainOver: n => `남은 ${n}포인트（상한 초과）`,
@@ -1593,14 +1600,14 @@ const I18N = I18N_ALL[lang];
     if (sec) sec.dataset.tab = selTab;
     if (!el) return;
     const rb = resolveSlotSafe(slot);
-    const name = rb ? rb.label : slot.sp;
-    const icon = rb ? rb.icon : null;
     const targetsCount = slot.targets.length;
+    const tabBtn = (key, title, sub, badge) => `<button type="button" class="pb-sel-tab${selTab === key ? ' active' : ''}" data-sel-tab="${key}" role="tab" aria-selected="${selTab === key}">
+          <span class="pb-sel-tab-main">${esc(title)}${badge}</span><span class="pb-sel-tab-sub">${esc(sub)}</span></button>`;
     el.innerHTML = `
-      <div class="pb-selected-title">${icoImg(icon, name, 'monicon')}<span class="pb-selected-name">${esc(I18N.slotHeading(selectedIdx + 1))} ${esc(tPoke(name))}</span></div>
+      <div class="pb-selected-title">${icoImg(rb ? rb.icon : null, rb ? rb.label : slot.sp, 'monicon')}<span>${esc(I18N.slotHeading(selectedIdx + 1))}</span></div>
       <div class="pb-selected-tabs" role="tablist">
-        <button type="button" class="pb-sel-tab${selTab === 'editor' ? ' active' : ''}" data-sel-tab="editor" role="tab" aria-selected="${selTab === 'editor'}">${esc(I18N.editorTitle)}</button>
-        <button type="button" class="pb-sel-tab${selTab === 'targets' ? ' active' : ''}" data-sel-tab="targets" role="tab" aria-selected="${selTab === 'targets'}">${esc(I18N.targetsHeading)}${targetsCount ? ` ${targetsCount}` : ''}</button>
+        ${tabBtn('editor', I18N.editorTitle, I18N.selTabEditorSub, '')}
+        ${tabBtn('targets', I18N.targetsHeading, I18N.selTabTargetsSub, targetsCount ? `<span class="pb-sel-count">${targetsCount}</span>` : '')}
       </div>`;
     el.querySelectorAll('[data-sel-tab]').forEach((btn) => btn.addEventListener('click', () => {
       if (btn.dataset.selTab === selTab) return;

@@ -106,6 +106,7 @@ draft: false
 </tbody>
 </table>
 </div>
+<p style="font-size:0.85em;color:#64748b;margin:-4px 0 12px">※唯一の特性「ふゆう」により、じめん技は無効です。</p>
 
 ---
 

@@ -101,11 +101,12 @@ draft: false
   <td style="padding:10px 12px;border:1px solid #cbd5e1"><div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap"><img src="/images/types/type-03-poison.png" alt="どく" style="width:36px;height:36px"><img src="/images/types/type-06-bug.png" alt="むし" style="width:36px;height:36px"><img src="/images/types/type-09-fire.png" alt="ほのお" style="width:36px;height:36px"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:36px;height:36px"></div></td>
   <td style="padding:10px 12px;border:1px solid #cbd5e1"><div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:36px;height:36px"><img src="/images/types/type-10-water.png" alt="みず" style="width:36px;height:36px"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:36px;height:36px"></div></td>
   <td style="padding:10px 12px;border:1px solid #cbd5e1"><div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap"><img src="/images/types/type-12-electric.png" alt="でんき" style="width:36px;height:36px"></div></td>
-  <td style="padding:10px 12px;border:1px solid #cbd5e1"><div style="display:flex;justify-content:center;gap:4px;color:#aaa">—</div></td>
+  <td style="padding:10px 12px;border:1px solid #cbd5e1"><div style="display:flex;justify-content:center;gap:4px;flex-wrap:wrap"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:36px;height:36px"></div></td>
 </tr>
 </tbody>
 </table>
 </div>
+<p style="font-size:0.85em;color:#64748b;margin:-4px 0 12px">※唯一の特性「ふゆう」により、じめん技は無効です。</p>
 
 ---
 
