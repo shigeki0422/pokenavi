@@ -716,7 +716,7 @@ const I18N = I18N_ALL[lang];
   .pb-stripe i{display:block;height:100%}
   .pb-part-p{background:#7c3aed}
   .pb-part-b{background:#f59e0b}
-  .pb-heal{position:absolute;top:0;bottom:0;z-index:2;background:repeating-linear-gradient(45deg,#86efac,#86efac 4px,#dcfce7 4px,#dcfce7 8px);border-left:2px solid #16a34a;opacity:.62;pointer-events:auto}
+  .pb-heal{position:absolute;top:0;bottom:0;z-index:2;background:repeating-linear-gradient(45deg,#86efac,#86efac 4px,#dcfce7 4px,#dcfce7 8px);border-left:2px solid #16a34a;pointer-events:auto}
   .pb-tick-key{width:0!important;height:10px!important;border-radius:0!important;border-left:2px dashed rgba(15,23,42,.55);background:none!important;margin-right:.1em}
   .pb-heal-key{background:repeating-linear-gradient(45deg,#86efac,#86efac 3px,#dcfce7 3px,#dcfce7 6px)}
   .pb-part-d.me{background:#3b82f6}
@@ -1381,7 +1381,7 @@ const I18N = I18N_ALL[lang];
       first: '先手', second: '後手',
       barOpp: '相手 → 自分', barMe: '自分 → 相手',
       koOpp: (n) => `${n}ターンで倒される`, koMe: (n) => `${n}ターンで倒す`,
-      part: (x) => `5ターンで約${x}%`, noDmg: 'ダメージ技なし', stall: (n) => `毒込み${n}T`, planLose: (n) => `${n}Tで倒される`, planStuck: (n) => `${n}Tで決着つかず`, stripe: '下線＝内訳', assume: '前提', healTip: (x) => `相手が${x}%回復（オボンのみ等）`, healKey: '相手の回復（棒が戻る）', rand: (hi, p, lo) => `乱数${hi}発(${p}%)／最大${lo}ターン`, direct: '直接', poison: '毒', bind: '拘束', heal: '回復', tickNote: '点線＝元のHP', hpMe: '自分HP', hpOpp: '相手HP', remain: '自分の残りHP',
+      part: (x) => `5ターンで約${x}%`, noDmg: 'ダメージ技なし', stall: (n) => `毒込み${n}T`, planLose: (n) => `${n}Tで倒される`, planStuck: (n) => `${n}Tで決着つかず`, stripe: '下線＝内訳', assume: '前提', healTip: (x) => `相手が${x}%回復（オボンのみ等）`, healKey: '相手の回復（棒が戻る）', healTipMe: (x) => `自分が${x}%回復（オボンのみ等）`, healKeyMe: '自分の回復（棒が戻る）', rand: (hi, p, lo) => `乱数${hi}発(${p}%)／最大${lo}ターン`, direct: '直接', poison: '毒', bind: '拘束', heal: '回復', tickNote: '点線＝元のHP', hpMe: '自分HP', hpOpp: '相手HP', remain: '自分の残りHP',
       turnN: (n) => `${n}ターン目`,
       movesOpp: '相手の技（自分へのダメージ）', movesMe: '自分の技（相手へのダメージ）', others: 'その他の技',
     },
@@ -1393,7 +1393,7 @@ const I18N = I18N_ALL[lang];
       first: 'You move first', second: 'You move second',
       barOpp: 'Opponent → you', barMe: 'You → opponent',
       koOpp: (n) => `KO in ${n}`, koMe: (n) => `KO in ${n}`,
-      part: (x) => `~${x}% in 5 turns`, noDmg: 'No damaging move', stall: (n) => `${n}T`, planLose: (n) => `KOed in ${n}T`, planStuck: (n) => `No KO in ${n}T`, stripe: 'Underline = breakdown', assume: 'Assumes', healTip: (x) => `Opponent heals ${x}%`, healKey: 'Opponent heals (bar rolls back)', rand: (hi, p, lo) => `${hi}HKO (${p}%) / max ${lo}T`, direct: 'Direct', poison: 'Poison', bind: 'Bind', heal: 'Heal', tickNote: 'Dashed = original HP', hpMe: 'Your HP', hpOpp: 'Opp HP', remain: 'Your HP left',
+      part: (x) => `~${x}% in 5 turns`, noDmg: 'No damaging move', stall: (n) => `${n}T`, planLose: (n) => `KOed in ${n}T`, planStuck: (n) => `No KO in ${n}T`, stripe: 'Underline = breakdown', assume: 'Assumes', healTip: (x) => `Opponent heals ${x}%`, healKey: 'Opponent heals (bar rolls back)', healTipMe: (x) => `You heal ${x}%`, healKeyMe: 'You heal (bar rolls back)', rand: (hi, p, lo) => `${hi}HKO (${p}%) / max ${lo}T`, direct: 'Direct', poison: 'Poison', bind: 'Bind', heal: 'Heal', tickNote: 'Dashed = original HP', hpMe: 'Your HP', hpOpp: 'Opp HP', remain: 'Your HP left',
       turnN: (n) => `Turn ${n}`,
       movesOpp: 'Opponent moves (damage to you)', movesMe: 'Your moves (damage to opponent)', others: 'Other moves',
     },
@@ -1405,7 +1405,7 @@ const I18N = I18N_ALL[lang];
       first: '선공', second: '후공',
       barOpp: '상대 → 나', barMe: '나 → 상대',
       koOpp: (n) => `${n}턴에 쓰러짐`, koMe: (n) => `${n}턴에 쓰러뜨림`,
-      part: (x) => `5턴에 약 ${x}%`, noDmg: '대미지 기술 없음', stall: (n) => `독 포함 ${n}T`, planLose: (n) => `${n}T에 쓰러짐`, planStuck: (n) => `${n}T 결착 없음`, stripe: '밑줄＝내역', assume: '전제', healTip: (x) => `상대가 ${x}% 회복`, healKey: '상대 회복(막대가 되돌아감)', rand: (hi, p, lo) => `난수 ${hi}발(${p}%)／최대 ${lo}턴`, direct: '직접', poison: '독', bind: '구속', heal: '회복', tickNote: '점선＝원래 HP', hpMe: '내 HP', hpOpp: '상대 HP', remain: '내 남은 HP',
+      part: (x) => `5턴에 약 ${x}%`, noDmg: '대미지 기술 없음', stall: (n) => `독 포함 ${n}T`, planLose: (n) => `${n}T에 쓰러짐`, planStuck: (n) => `${n}T 결착 없음`, stripe: '밑줄＝내역', assume: '전제', healTip: (x) => `상대가 ${x}% 회복`, healKey: '상대 회복(막대가 되돌아감)', healTipMe: (x) => `내가 ${x}% 회복`, healKeyMe: '내 회복(막대가 되돌아감)', rand: (hi, p, lo) => `난수 ${hi}발(${p}%)／최대 ${lo}턴`, direct: '직접', poison: '독', bind: '구속', heal: '회복', tickNote: '점선＝원래 HP', hpMe: '내 HP', hpOpp: '상대 HP', remain: '내 남은 HP',
       turnN: (n) => `${n}턴째`,
       movesOpp: '상대 기술(나에게 주는 대미지)', movesMe: '내 기술(상대에게 주는 대미지)', others: '기타 기술',
     },
@@ -3306,23 +3306,30 @@ const I18N = I18N_ALL[lang];
       return x;
     }).join('・');
   }
-  /** 棒の配置: 各ターンのダメージを左から積み、相手が回復(オボンのみ等)したターンは、その回復ぶん棒を左へ戻す
-   * (緑の縞を重ねて示し、次のターンは戻った位置から積む)。100%(右端)に届いたら以降は描かない。 */
+  /** 棒の配置: 各ターンのダメージを左から積み、回復(オボンのみ等)したターンは、そのぶん棒を左へ戻す。
+   * 戻した区間は縞で示し、回復の後のターンは下の段に積む(上の段のターンが縞の下に隠れて見えなくなるのを防ぐ)。
+   * 100%(右端)に届いたら以降は描かない。 */
   function muLayout(items) {
     const out = [];
-    let pos = 0;
+    let pos = 0, lane = 0;
     items.forEach((it, i) => {
       if (pos >= 100) return;
-      out.push({ kind: 'seg', i, left: pos, width: Math.max(0, Math.min(it.dmg, 100 - pos)) });
+      out.push({ kind: 'seg', i, lane, left: pos, width: Math.max(0, Math.min(it.dmg, 100 - pos)) });
       pos += it.dmg;
       if (it.heal > 0 && pos < 100) {
         const hs = Math.max(0, pos - it.heal);
-        out.push({ kind: 'heal', i, left: hs, width: pos - hs });
+        out.push({ kind: 'heal', i, lane, left: hs, width: pos - hs });
         pos = hs;
+        lane++;
       }
     });
+    out.lanes = out.reduce((m, L) => (L.kind === 'seg' ? Math.max(m, L.lane + 1) : m), 1);
     return out;
   }
+  const MU_LANE_PX = 20;
+  const muLaneStyle = (L, lanes) => (lanes > 1 ? `top:${(L.lane * 100 / lanes).toFixed(2)}%;height:${(100 / lanes).toFixed(2)}%;bottom:auto;` : '');
+  const muHealStyle = (L, lanes, off = 0) => `top:calc(${((L.lane + 1) * 100 / lanes).toFixed(2)}% - ${5 + off}px);height:5px;bottom:auto;`;
+  const muBarAttr = (lanes) => (lanes > 1 ? ` style="height:${lanes * MU_LANE_PX}px"` : '');
   /** ターンごとのダメージを積み上げる棒。右端(100%)に届けば倒れる。 */
   function muRaceBarHtml(kind, turns, hits, stall, moveName, isOpp, defHp, detail) {
     const stallTurns = stall ? stall.turns : 0;
@@ -3345,10 +3352,11 @@ const I18N = I18N_ALL[lang];
       const rate = (v) => { const x = (v / dmgMax) * 100; return x < 10 ? x.toFixed(1) : String(Math.round(x)); };
       const pct1 = (v, max) => Math.max(0, Math.round((v / max) * 100));
       const items = tr.map((x) => ({ dmg: ((x.direct + x.poison + x.bind) / dmgMax) * 100, heal: (x.heal / dmgMax) * 100 }));
-      const segs = muLayout(items).map((L) => {
+      const stallLayout = muLayout(items);
+      const segs = stallLayout.map((L) => {
         const x = tr[L.i];
         if (L.kind === 'heal') {
-          return `<span class="pb-heal" style="left:${L.left.toFixed(2)}%;width:${L.width.toFixed(2)}%" title="${esc(t.healTip(Math.round((x.heal / dmgMax) * 100)))}"></span>`;
+          return `<span class="pb-heal" style="${muHealStyle(L, stallLayout.lanes, 6)}left:${L.left.toFixed(2)}%;width:${L.width.toFixed(2)}%" title="${esc((isOpp ? t.healTipMe : t.healTip)(Math.round((x.heal / dmgMax) * 100)))}"></span>`;
         }
         const g = x.direct + x.poison + x.bind;
         const share = (v) => (g > 0 ? ((v / g) * 100).toFixed(1) : '0');
@@ -3357,7 +3365,7 @@ const I18N = I18N_ALL[lang];
         if (x.bind > 0) parts.push(`${t.bind} ${rate(x.bind)}%`);
         const dmgTxt = `${parts.join(' ＋ ')}${x.heal > 0 ? ` ／ ${t.heal} ${rate(x.heal)}%` : ''} → ${t.hpMe} ${pct1(myHp, myMax)}% ／ ${t.hpOpp} ${pct1(oppHp, oppMax)}%`;
         const popIdx = mbPopData.push({ name: x.n, dmgTxt, turn: L.i + 1 }) - 1;
-        return `<button type="button" class="pb-seg pb-seg-${isOpp ? 'foe' : 'me'} pb-seg-stallturn" style="left:${L.left.toFixed(2)}%;width:${L.width.toFixed(2)}%" data-mb-pop="${popIdx}" title="${esc(t.turnN(L.i + 1))} ${esc(tMove(x.n))}：${esc(dmgTxt)}">`
+        return `<button type="button" class="pb-seg pb-seg-${isOpp ? 'foe' : 'me'} pb-seg-stallturn" style="${muLaneStyle(L, stallLayout.lanes)}left:${L.left.toFixed(2)}%;width:${L.width.toFixed(2)}%" data-mb-pop="${popIdx}" title="${esc(t.turnN(L.i + 1))} ${esc(tMove(x.n))}：${esc(dmgTxt)}">`
           + `${L.i + 1}<span class="pb-stripe"><i class="pb-part-d ${isOpp ? 'foe' : 'me'}" style="width:${share(x.direct)}%"></i><i class="pb-part-p" style="width:${share(x.poison)}%"></i><i class="pb-part-b" style="width:${share(x.bind)}%"></i></span></button>`;
       }).join('');
       const dead = tr.length > 0 && tr[tr.length - 1].defHp <= 0; // 攻められる側が倒れたときだけ✕（自分が倒れる場合は別の棒で示す）
@@ -3371,10 +3379,10 @@ const I18N = I18N_ALL[lang];
         : t.part(pctDone);
       const legend = `<span class="pb-legend-lbl">${esc(t.stripe)}</span><i class="pb-part-d ${isOpp ? 'foe' : 'me'}"></i>${esc(t.direct)}<i class="pb-part-p"></i>${esc(t.poison)}`
         + (tr.some((x) => x.bind > 0) ? `<i class="pb-part-b"></i>${esc(t.bind)}` : '')
-        + (tr.some((x) => x.heal > 0) ? `<i class="pb-heal-key"></i>${esc(t.healKey)}` : '')
+        + (tr.some((x) => x.heal > 0) ? `<i class="pb-heal-key"></i>${esc(isOpp ? t.healKeyMe : t.healKey)}` : '')
 ;
       return `<div class="pb-race"><div class="pb-race-lbl"><span>${esc(stitle)}</span><span>${esc(right)}</span></div>`
-        + `<div class="pb-bar">${segs}${dead ? '<span class="pb-ko">✕</span>' : ''}</div>`
+        + `<div class="pb-bar"${muBarAttr(stallLayout.lanes)}>${segs}${dead ? `<span class="pb-ko"${stallLayout.lanes > 1 ? ` style="top:${((stallLayout.lanes - 0.5) * 100 / stallLayout.lanes).toFixed(2)}%"` : ''}>✕</span>` : ''}</div>`
         + `<div class="pb-legend">${legend}<span class="pb-legend-note">${esc(stall.outcome ? t.noAct : t.noSwitch)}</span></div></div>`;
     }
     if (!turns.length) {
@@ -3387,7 +3395,7 @@ const I18N = I18N_ALL[lang];
     const parts = layout.map((L) => {
       if (L.kind === 'heal') {
         const tn = turns[L.i];
-        return `<span class="pb-heal" style="left:${L.left.toFixed(2)}%;width:${L.width.toFixed(2)}%" title="${esc(t.healTip(Math.round(tn.healPct)))}"></span>`;
+        return `<span class="pb-heal" style="${muHealStyle(L, layout.lanes)}left:${L.left.toFixed(2)}%;width:${L.width.toFixed(2)}%" title="${esc((isOpp ? t.healTipMe : t.healTip)(Math.round(tn.healPct)))}"></span>`;
       }
       const tn = turns[L.i];
       const w = Math.max(0, L.width);
@@ -3395,7 +3403,7 @@ const I18N = I18N_ALL[lang];
       const lo = Math.round(tn.pctLo * defHp / 100), hi = Math.round(tn.pctHi * defHp / 100);
       const dmgTxt = dmgRangeTxt(lo, hi, tn.pctLo, tn.pctHi);
       const popIdx = mbPopData.push({ name: tn.n, dmgTxt, turn: L.i + 1 }) - 1;
-      return `<button type="button" class="pb-seg pb-seg-${isOpp ? 'foe' : 'me'}" style="left:${L.left.toFixed(2)}%;width:${w.toFixed(2)}%" data-mb-pop="${popIdx}" title="${esc(t.turnN(L.i + 1))} ${esc(tMove(tn.n))}：${esc(dmgTxt)}">${w >= 9 ? L.i + 1 : ''}</button>`;
+      return `<button type="button" class="pb-seg pb-seg-${isOpp ? 'foe' : 'me'}" style="${muLaneStyle(L, layout.lanes)}left:${L.left.toFixed(2)}%;width:${w.toFixed(2)}%" data-mb-pop="${popIdx}" title="${esc(t.turnN(L.i + 1))} ${esc(tMove(tn.n))}：${esc(dmgTxt)}">${w >= 9 ? L.i + 1 : ''}</button>`;
     }).join('');
     const anyHeal = turns.some((tn) => tn.healPct > 0);
     const ko = hits < 999;
@@ -3405,8 +3413,8 @@ const I18N = I18N_ALL[lang];
       right = t.rand(detail.hits, fmtKoProbPct(detail.prob), hits);
     }
     return `<div class="pb-race"><div class="pb-race-lbl"><span>${esc(title)}</span><span>${esc(right)}</span></div>`
-      + `<div class="pb-bar">${parts}${ko ? '<span class="pb-ko">✕</span>' : ''}</div>`
-      + (anyHeal ? `<div class="pb-legend"><i class="pb-heal-key"></i>${esc(t.healKey)}</div>` : '')
+      + `<div class="pb-bar"${muBarAttr(layout.lanes)}>${parts}${ko ? `<span class="pb-ko"${layout.lanes > 1 ? ` style="top:${((layout.lanes - 0.5) * 100 / layout.lanes).toFixed(2)}%"` : ''}>✕</span>` : ''}</div>`
+      + (anyHeal ? `<div class="pb-legend"><i class="pb-heal-key"></i>${esc(isOpp ? t.healKeyMe : t.healKey)}</div>` : '')
       + (detail && detail.conds ? `<div class="pb-race-note">${esc(t.assume)}：${esc(muCondText(detail.conds))}</div>` : '') + `</div>`;
   }
   /** 技ごとのダメージ幅(最低〜最高)を棒で。 */
