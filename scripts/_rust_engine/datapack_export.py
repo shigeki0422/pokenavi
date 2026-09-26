@@ -171,6 +171,28 @@ def export():
     abil_cats = {"names": list(_ABIL_CATS),
                  "bits": {k: [int(b) for b in v] for k, v in _ABIL_CAT_BITS.items()}}
 
+    # ---- 型プール（_gen_type_pool.py の出力）----
+    # 使用率マージナルと対戦の常識的制約から作った「型まるごと」の候補。
+    # 決定化で JOINT_BUILD=1 のときに使う。
+    build_pool = {}
+    _bp = os.environ.get("BUILD_POOL", os.path.join(
+        os.path.dirname(ROOT), "_local", "ai_work", "type_pool_M-6.json"))
+    if os.path.exists(_bp):
+        with open(_bp) as _f:
+            for _r in json.load(_f):
+                out = []
+                for _b in _r["builds"]:
+                    out.append({
+                        "weight": _b["weight"],
+                        "item": _b["item"],
+                        "nature": _b["nature"],
+                        "ability": _b["ability"],
+                        "ev": list(_b["ev"]),
+                        "moves": sorted(_b["moves"]),
+                    })
+                build_pool[_r["species"]] = out
+        print(f"build_pool: {len(build_pool)}種")
+
     # ---- 登録テンプレートの実スプレッド（belief.registered_spreads_by_species） ----
     from simulator.belief import registered_spreads_by_species  # noqa: E402
     _ldr = DataLoader()
@@ -193,6 +215,7 @@ def export():
         "net": net,
         "ability_cats": abil_cats,
         "registered_spreads": reg,
+        "build_pool": build_pool,
     }
     body = {k: v for k, v in pack.items() if k != "header"}
     blob = json.dumps(body, ensure_ascii=False, sort_keys=True, separators=(",", ":"))

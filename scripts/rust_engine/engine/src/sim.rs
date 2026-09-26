@@ -92,8 +92,41 @@ pub fn full_battle(
     let mut b = Battle::new(s1, s2, field);
     let packr: &Pack = pack;
     b.start(packr, &pv1, &pv2);
+    // 検証用: BELIEF_PROBE=1 で両サイドに信念を付けて走らせ、終局後の P1 の信念を控える
+    // （Python の同じ対戦と、信念の更新が 1:1 か突き合わせるため）
+    let probe = std::env::var("BELIEF_PROBE").map(|v| v == "1").unwrap_or(false);
+    if probe {
+        crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(belief_season()));
+        crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(belief_season()));
+    }
     let result = b.run_with_ai(packr, ai1, ai2, &mut rng, |bt| on_turn(packr, bt));
+    if probe {
+        if let Some(bl) = b.sides[0].belief.0.take() {
+            let season = belief_season().to_string();
+            let mut out = Vec::new();
+            for (name, pb) in bl.species.iter() {
+                let mut pb = pb.clone();
+                let pw: Vec<f64> = match (packr.build_pool.get(name),
+                                          crate::poke::get_pokemon_template(packr, name, &season)) {
+                    (Some(arr), Some(t)) => pb.pool_weights(packr, &t, arr).to_vec(),
+                    _ => Vec::new(),
+                };
+                out.push((name.clone(), pb.post.clone(), pw, pb.known_moves.clone(),
+                          pb.known_item.clone(), pb.item_lost, pb.absent_items.clone()));
+            }
+            PROBE.with(|c| *c.borrow_mut() = out);
+        }
+    }
     BattleOut { result, turns: b.turn }
+}
+
+type ProbeRow = (String, Vec<f64>, Vec<f64>, Vec<String>, Option<String>, bool, Vec<String>);
+thread_local! {
+    static PROBE: std::cell::RefCell<Vec<ProbeRow>> = const { std::cell::RefCell::new(Vec::new()) };
+}
+
+pub fn belief_probe_take() -> Vec<ProbeRow> {
+    PROBE.with(|c| std::mem::take(&mut *c.borrow_mut()))
 }
 
 /// `_greedy_3v3(pa, sa, pb, sb, seed) -> 1/2/0`
@@ -147,6 +180,28 @@ pub fn belief_season() -> &'static str {
 
 /// `_v3_final._mcts_3v3(pa, sa, pb, sb, seed)`（両者MCTS・certain_ko_override 付き）
 #[allow(clippy::too_many_arguments)]
+/// 側ごとに探索量を変えられる版。sims=A側 / sims_b=B側。
+/// A/B ハーネスが SIMS_B を渡しても黙って無視されていたため追加（探索量の比較が
+/// 実際には同一 sims の健全性チェックになっていた）。
+#[allow(clippy::too_many_arguments)]
+pub fn mcts_3v3_sims(
+    pack: &mut Pack,
+    net: &NetW,
+    net_b: Option<&NetW>,
+    pa: &[String],
+    sa: &[usize],
+    pb: &[String],
+    sb: &[usize],
+    season_a: &str,
+    season_b: &str,
+    seed: i128,
+    sims: usize,
+    sims_b: usize,
+    on_turn: impl FnMut(&Pack, &Battle),
+) -> (i64, i64) {
+    mcts_3v3_inner(pack, net, net_b, pa, sa, pb, sb, season_a, season_b, seed, sims, sims_b, on_turn)
+}
+
 pub fn mcts_3v3(
     pack: &mut Pack,
     net: &NetW,
@@ -159,6 +214,25 @@ pub fn mcts_3v3(
     season_b: &str,
     seed: i128,
     sims: usize,
+    on_turn: impl FnMut(&Pack, &Battle),
+) -> (i64, i64) {
+    mcts_3v3_inner(pack, net, net_b, pa, sa, pb, sb, season_a, season_b, seed, sims, sims, on_turn)
+}
+
+#[allow(clippy::too_many_arguments)]
+fn mcts_3v3_inner(
+    pack: &mut Pack,
+    net: &NetW,
+    net_b: Option<&NetW>,
+    pa: &[String],
+    sa: &[usize],
+    pb: &[String],
+    sb: &[usize],
+    season_a: &str,
+    season_b: &str,
+    seed: i128,
+    sims: usize,
+    sims_b: usize,
     mut on_turn: impl FnMut(&Pack, &Battle),
 ) -> (i64, i64) {
     let mut rng = CpyRandom::new(seed);
@@ -192,7 +266,23 @@ pub fn mcts_3v3(
 
     let packr: &Pack = pack;
     let mut ai1 = SearchAI::new(packr, belief_season(), seed, sims);
-    let mut ai2 = SearchAI::new(packr, belief_season(), seed ^ 0x5bd1e995, sims);
+    let mut ai2 = SearchAI::new(packr, belief_season(), seed ^ 0x5bd1e995, sims_b);
+    // 側2だけ探索パラメータを変える（*_2 の env）。A/B で片側だけ設定を振るため。
+    // SearchAI::new が読む MCTS_FPU 等は両側に同じく効くので、そのままでは片側比較にならない。
+    let f2 = |k: &str| std::env::var(format!("{k}_2")).ok().and_then(|v| v.parse::<f64>().ok());
+    if let Some(v) = f2("MCTS_FPU") { ai2.mcts_fpu = v; }
+    if let Some(v) = f2("RM_PRIOR_MIX") { ai2.rm_prior_mix = v; }
+    if let Some(v) = f2("MCTS_P_FLOOR") { ai2.mcts_p_floor = v; }
+    if let Some(v) = f2("QSELECT_FRAC") { ai2.qselect_frac = v; }
+    if let Some(v) = f2("SOLVE_PLAY") { ai2.solve_play = v > 0.5; }
+    if let Some(v) = f2("MCTS_MAX_DEPTH") { ai2.mcts_max_depth = v as usize; }
+    // ORACLE_2=0 で側2だけ通常の決定化に戻す（片側だけ完全情報＝型予測の伸び代の測定）。
+    // ORACLE=1 は両側に効くので「隠れ情報の無い別ゲーム」になってしまう。
+    if let Some(v) = f2("ORACLE") { ai2.oracle = v > 0.5; }
+    if let Some(v) = f2("JOINT_BUILD") { ai2.joint_build = v > 0.5; }
+    if let Some(v) = f2("ITEM_GONE") { ai2.item_gone = v > 0.5; }
+    if let Some(v) = f2("ORACLE_MIX") { ai2.oracle_mix = v; }
+    if let Some(v) = f2("ORACLE_REVEAL") { ai2.oracle_reveal = v as u32; }
     let result = run_two_mcts(packr, [net, net_b.unwrap_or(net)], &mut b, &mut ai1, &mut ai2, &mut rng, on_turn);
     (result, b.turn)
 }
@@ -431,6 +521,40 @@ pub fn node_trace_rate() -> f64 {
     *S.get_or_init(|| std::env::var("NODE_TRACE").ok().and_then(|v| v.parse().ok()).unwrap_or(0.0))
 }
 
+/// 終盤の厳密ソルバで AI の手を採点する（env SOLVE_DEPTH>0 で有効）。
+/// 記録: (手番側, 均衡値, [(手index, 相手の均衡戦略に対する期待勝率)], AIが選んだ手index, 残り体数,
+///        ノード数, 評価したマス数, 全幅なら評価したはずのマス数)
+pub type SolveRec = (usize, f64, Vec<(usize, f64)>, usize, usize, u64, u64, u64);
+
+thread_local! {
+    static SOLVE_TRACE: std::cell::RefCell<Vec<SolveRec>> = const { std::cell::RefCell::new(Vec::new()) };
+}
+
+pub fn solve_depth() -> u32 {
+    static S: std::sync::OnceLock<u32> = std::sync::OnceLock::new();
+    *S.get_or_init(|| std::env::var("SOLVE_DEPTH").ok().and_then(|v| v.parse().ok()).unwrap_or(0))
+}
+
+/// 対象にする終盤の上限（両側の生存数の合計）。
+pub fn solve_max_alive() -> usize {
+    static S: std::sync::OnceLock<usize> = std::sync::OnceLock::new();
+    *S.get_or_init(|| std::env::var("SOLVE_MAX_ALIVE").ok().and_then(|v| v.parse().ok()).unwrap_or(3))
+}
+
+/// 採点の記録を取るか（env SOLVE_RECORD、既定1）。対戦で使うだけなら0にしてコストを省く。
+pub fn solve_record() -> bool {
+    static S: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *S.get_or_init(|| std::env::var("SOLVE_RECORD").map(|v| v != "0").unwrap_or(true))
+}
+
+pub fn solve_trace_push(r: SolveRec) {
+    SOLVE_TRACE.with(|l| l.borrow_mut().push(r));
+}
+
+pub fn solve_trace_take() -> Vec<SolveRec> {
+    SOLVE_TRACE.with(|l| std::mem::take(&mut *l.borrow_mut()))
+}
+
 pub fn value_q_max() -> bool {
     static S: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
     *S.get_or_init(|| std::env::var("VALUE_Q").map(|v| v == "max").unwrap_or(false))
@@ -457,6 +581,20 @@ pub fn node_trace_take() -> Vec<NodeRec> {
     NODE_TRACE.with(|l| std::mem::take(&mut *l.borrow_mut()))
 }
 
+/// 序盤 burn ターンを両側ランダムで進める（教師生成の開始局面を広げる）。
+/// ランダム手の局面は ai.choose を通らないので PI_TRACE にも入らない。
+thread_local! {
+    static BURN_TURNS: std::cell::Cell<i64> = const { std::cell::Cell::new(0) };
+}
+
+pub fn set_burn_turns(n: i64) {
+    BURN_TURNS.with(|c| c.set(n));
+}
+
+fn burn_turns() -> i64 {
+    BURN_TURNS.with(|c| c.get())
+}
+
 pub fn pi_trace_push(rec: PiRec) {
     PI_TRACE.with(|l| {
         if let Some(v) = l.borrow_mut().as_mut() {
@@ -469,7 +607,11 @@ pub fn pi_trace_push(rec: PiRec) {
 #[allow(clippy::too_many_arguments)]
 pub fn mcts_3v3_trace(
     pack: &mut Pack,
+    // net: 教師側（側1）のネット。反復学習で「1周前のネットに教師を作らせる」ために差し替える
     net: &NetW,
+    // net_b: 相手側のネット。None で両側同じ。教師を1種類の相手だけで作ると
+    // 価値関数がその相手に過適合するため、棋風・強さの違う相手を混ぜられるようにする。
+    net_b: Option<&NetW>,
     pa: &[String],
     sa: &[usize],
     pb: &[String],
@@ -478,11 +620,14 @@ pub fn mcts_3v3_trace(
     season_b: &str,
     seed: i128,
     sims: usize,
+    burn: i64,
 ) -> (i64, Vec<PiRec>, Vec<NodeRec>) {
     PI_TRACE.with(|l| *l.borrow_mut() = Some(Vec::new()));
     let _ = node_trace_take();
+    set_burn_turns(burn);
     let (r, _) =
-        mcts_3v3(pack, net, None, pa, sa, pb, sb, season_a, season_b, seed, sims, |_, _| {});
+        mcts_3v3(pack, net, net_b, pa, sa, pb, sb, season_a, season_b, seed, sims, |_, _| {});
+    set_burn_turns(0);
     let t = PI_TRACE.with(|l| l.borrow_mut().take()).unwrap_or_default();
     (r, t, node_trace_take())
 }
@@ -548,6 +693,86 @@ pub fn eval_x_push(x: &[f64]) {
 
 /// belief から引いた相手の型を記録する（search.rs から呼ばれる。既定では何もしない）。
 #[allow(clippy::too_many_arguments)]
+/// 決定化の的中率（計測用）。開示済みの技の本数（0..=4）ごとに分ける。
+/// 全ターンを平均すると「情報ゼロの1ターン目」と「技が3本見えた終盤」が混ざり、
+/// 型プールの狙い（1本見えたら残りが絞れる）が見えない。
+/// 各段 [試行数, 持ち物一致, 特性一致, 技の一致本数, 技4本完全一致, 全一致(持ち物・特性・技), 性格一致, 努力値一致,
+///        全項目一致(持ち物・特性・技・性格・努力値)]
+thread_local! {
+    static DET_HIT: std::cell::RefCell<[[u64; 9]; 5]> =
+        const { std::cell::RefCell::new([[0; 9]; 5]) };
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn det_hit_add(known: usize, item: bool, abil: bool, moves_hit: u64,
+                   all_moves: bool, full: bool, nature: bool, ev: bool) {
+    DET_HIT.with(|c| {
+        let v = &mut c.borrow_mut()[known.min(4)];
+        v[0] += 1;
+        v[1] += item as u64;
+        v[2] += abil as u64;
+        v[3] += moves_hit;
+        v[4] += all_moves as u64;
+        v[5] += full as u64;
+        v[6] += nature as u64;
+        v[7] += ev as u64;
+        v[8] += (full && nature && ev) as u64;
+    });
+}
+
+/// 決定化の整合チェック（計測用）。[確認数, 引いた型: 技/持ち物/特性/不発の持ち物 と矛盾,
+/// 真の型: 技/持ち物/特性/不発の持ち物 と矛盾]。真の型側の矛盾は開示処理のバグ
+thread_local! {
+    static DET_CONSIST: std::cell::RefCell<[u64; 9]> = const { std::cell::RefCell::new([0; 9]) };
+}
+
+pub fn det_consist_add(bad: &[bool; 8]) {
+    DET_CONSIST.with(|c| {
+        let mut v = c.borrow_mut();
+        v[0] += 1;
+        for (i, b) in bad.iter().enumerate() {
+            v[i + 1] += *b as u64;
+        }
+    });
+}
+
+/// 枠ごとの当たり率（計測用）。[判明本数 0..=4][真の技の採用率順位 0..=3] = [未判明の枠の数, 当たった数]
+thread_local! {
+    static DET_SLOT: std::cell::RefCell<[[[u64; 2]; 4]; 5]> = const { std::cell::RefCell::new([[[0; 2]; 4]; 5]) };
+}
+
+pub fn det_slot_add(known: usize, rank: usize, hit: bool) {
+    DET_SLOT.with(|c| {
+        let mut v = c.borrow_mut();
+        v[known.min(4)][rank.min(3)][0] += 1;
+        v[known.min(4)][rank.min(3)][1] += hit as u64;
+    });
+}
+
+pub fn det_slot_take() -> Vec<u64> {
+    DET_SLOT.with(|c| {
+        let v = *c.borrow();
+        *c.borrow_mut() = [[[0; 2]; 4]; 5];
+        v.iter().flat_map(|a| a.iter().flat_map(|b| b.iter().copied())).collect()
+    })
+}
+
+pub fn det_consist_take() -> Vec<u64> {
+    DET_CONSIST.with(|c| {
+        let v = *c.borrow();
+        *c.borrow_mut() = [0; 9];
+        v.to_vec()
+    })
+}
+
+pub fn det_hit_take() -> Vec<u64> {
+    DET_HIT.with(|c| {
+        let v = *c.borrow();
+        *c.borrow_mut() = [[0; 9]; 5];
+        v.iter().flat_map(|r| r.iter().copied()).collect()
+    })
+}
+
 pub fn cfg_log_push(
     pack: &Pack,
     name: &str,
@@ -626,6 +851,17 @@ fn run_two_mcts(
         rng,
         |bt, rng| {
             let mut out: [crate::battle::Action; 2] = [Default::default(), Default::default()];
+            let burn = burn_turns();
+            if burn > 0 && bt.turn <= burn {
+                for sx in 0..2usize {
+                    let (me, op) = crate::battle::split2(&mut bt.sides, sx);
+                    let c = crate::search::candidate_actions(packr, me, op, &bt.field, false);
+                    if !c.is_empty() {
+                        out[sx] = c[rng.choice(c.len())].clone();
+                    }
+                }
+                return out;
+            }
             for sx in 0..2usize {
                 let mut bl = bt.sides[sx].belief.0.take().unwrap();
                 let ai: &mut SearchAI = if sx == 0 { ai1 } else { ai2 };

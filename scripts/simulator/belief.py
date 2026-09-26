@@ -51,6 +51,79 @@ def _eff_speed_of(p, field, item_mult: float) -> int:
     return int(spd)
 
 
+def _is_mega_stone(item) -> bool:
+    from .battle import _is_megastone
+    return _is_megastone(item)
+
+
+def hp_pct(hp: int, max_hp: int) -> int:
+    """実機の相手HP表示（整数％、四捨五入）。"""
+    return (hp * 200 + max_hp) // (2 * max_hp) if max_hp else 0
+
+
+def obs_match(kind: str, dmg: int, hp: int, obs: float) -> bool:
+    """候補で計算したダメージが観測と合うか（Rust belief::obs_match と 1:1）。
+    taken: 相手のHPは整数％でしか見えない。表示の差は前後の丸めで最大±1%ずれるので、その幅で合わせる
+    dealt: 自分のHPは実数で見えるので、ダメージ量を整数で比べる"""
+    if kind == "taken":
+        return abs(dmg * 100 / hp - obs) <= 1.0 if hp else False
+    return dmg == obs
+
+
+_STAGES = ("stage_attack", "stage_defense", "stage_sp_attack", "stage_sp_defense", "stage_speed")
+
+
+CHOICE_BETA = 0.3
+
+
+def copy_poke(p):
+    import copy
+    return copy.deepcopy(p)
+
+
+def pub_state(p):
+    """観測時点の相手の個体の写し（能力変化・状態異常・メガ進化・タイプ・倒れた味方の数・
+    場に出てからのターン数など、実機で見えている状態をすべて含む）。
+    型を逆算するときは、これに候補の型の隠れた部分だけを差し込む（with_state）。
+    状態を一つずつ拾うと、そうだいしょう（倒れた味方の数）のような取りこぼしで正解を消していた"""
+    if p is None:
+        return None
+    import copy
+    return copy.deepcopy(p)
+
+
+def own_state(st, fallback):
+    """自分側の個体の行動前の写し（自分の個体は全部見えているのでそのまま使う）"""
+    import copy
+    return copy.deepcopy(st if st is not None else fallback)
+
+
+def with_state(prof, st):
+    """観測時点の相手の写しに、候補の型の隠れた部分（性格・努力値・能力値・持ち物・特性）を差し込む
+    （Rust belief::with_state と 1:1）。メガ進化済みなら候補もメガ後の能力値で、特性はメガ後（見えている）のまま。
+    持ち物を失っていることは見えているので、その場合は持ち物を付けない"""
+    if st is None:
+        return prof
+    import copy
+    q = copy.deepcopy(st)
+    if getattr(st, "_transformed", False):
+        return q
+    cand = prof
+    if st.mega_evolved and not prof.mega_evolved and prof.mega_data is not None:
+        cand = copy.deepcopy(prof)
+        cand.do_mega_evolve()
+    frac = (st.hp / st.max_hp) if st.max_hp else 1.0
+    for a in ("max_hp", "attack", "defense", "sp_attack", "sp_defense", "speed", "nature"):
+        setattr(q, a, getattr(cand, a))
+    q.evs = dict(cand.evs) if isinstance(cand.evs, dict) else cand.evs
+    if st.item is not None:
+        q.item = cand.item
+    if not st.mega_evolved:
+        q.ability = cand.ability
+    q.hp = max(1, round(frac * q.max_hp)) if st.hp > 0 else 0
+    return q
+
+
 def _default_belief_season() -> str:
     """信念の既定シーズン。BELIEF_SEASON > POOL_SEASON > M-6 の順で解決する。
     以前は M-2 固定で、M-6 の対戦でも M-2 の使用率分布から相手の型を引いていた。"""
@@ -68,6 +141,14 @@ class PokemonBelief:
         season = season or _default_belief_season()
         self.name = tpl.name
         self.tpl = tpl
+        self.loader = loader
+        # 型プール経路：観測したダメージを溜め、型ごとの重みへ初回参照時に反映する
+        self.dmg_obs: list = []
+        self.absent_items: set = set()
+        self.pool_w: list = []
+        self._pool_applied = 0
+        self._pool_prof: list = []
+        self._profs: list = []
 
         # ── 技/持ち物/特性: 使用率を周辺確率とする事前分布（開示で上書き） ──
         self.move_prior: Dict[str, float] = {m: r for m, r in tpl.top_moves}
@@ -79,6 +160,8 @@ class PokemonBelief:
         # この確率で最尤型を返す（0=常にサンプリング・従来）
         self.map_rate: float = float(os.environ.get("BUILD_MAP_RATE", "0") or 0)
         self.known_item: Optional[str] = known_item
+        self.item_lost: bool = False
+        self._item_epoch = 0
         self.known_ability: Optional[str] = known_ability
 
         # ── EV/性格の候補と事前確率 ──
@@ -131,23 +214,39 @@ class PokemonBelief:
             return
         for mv in knowledge.known_moves:
             self.known_moves.add(mv)
+        # 持ち物が入れ替わったら、それ以前の持ち物の推論（不発・こだわりの否定・喪失）は捨てる
+        ep = getattr(knowledge, "item_epoch", 0)
+        if ep != self._item_epoch:
+            self._item_epoch = ep
+            self.absent_items = set()
+            self.item_lost = bool(getattr(knowledge, "item_lost", False))
+            self.known_item = knowledge.known_item
         if knowledge.known_item:
             self.known_item = knowledge.known_item
+        if getattr(knowledge, "item_lost", False):
+            self.item_lost = True
+        if getattr(knowledge, "no_balloon", False):
+            self.observe_absent_item(("ふうせん",))   # 初登場時にふうせんの表示が無かった
         if knowledge.known_ability:
             self.known_ability = knowledge.known_ability
 
     # ── ダメージ割合からのEV/性格ベイズ更新 ──────────────────────────
     def observe_damage(self, attacker, move, observed_fraction: float,
-                       field, critical: bool = False) -> bool:
+                       field, critical: bool = False, subject=None, other_state=None) -> bool:
         """観測した被ダメージ割合で候補の事後確率を更新する。
         更新できた（いずれかの候補が観測を再現できた）場合 True。"""
+        import copy
+        # 自分側の個体も行動前の状態に戻す（りゅうせいぐん等で技の後に能力が下がっている）
+        attacker = own_state(other_state, attacker)
+        self.dmg_obs.append(("taken", attacker, move, observed_fraction,
+                             copy.deepcopy(field), critical, subject))
         liks = []
         for c in self.cands:
-            d = c["defender"]
+            d = with_state(c["defender"], subject)
             hit = 0
             for rr in _ROLLS:
                 dmg = calc_damage(attacker, d, move, field, critical=critical, random_roll=rr)
-                if round(dmg / d.max_hp, 3) == observed_fraction:
+                if obs_match("taken", dmg, d.max_hp, observed_fraction):
                     hit += 1
             liks.append(hit / len(_ROLLS))
         if sum(liks) == 0:
@@ -158,18 +257,23 @@ class PokemonBelief:
         return True
 
     def observe_damage_dealt(self, defender, move, observed_fraction: float,
-                             field, critical: bool = False) -> bool:
+                             field, critical: bool = False, subject=None,
+                             other_state=None) -> bool:
         """相手（この信念の主）が自分に与えたダメージ割合で事後確率を更新する。
         観測できるのは自分のHPが減った割合＝実機で見える情報だけ。攻撃側の候補を
         取り替えてダメージ式を回し、観測を再現できた候補の尤度でベイズ更新する。
         被ダメージ(observe_damage)は相手の耐久を絞るが、こちらは相手の攻撃を絞る。"""
+        import copy
+        defender = own_state(other_state, defender)
+        self.dmg_obs.append(("dealt", defender, move, observed_fraction,
+                             copy.deepcopy(field), critical, subject))
         liks = []
         for c in self.cands:
-            a = c["defender"]          # 同じ個体を攻撃側として使う（実数値は全ステ入っている）
+            a = with_state(c["defender"], subject)   # 同じ個体を攻撃側として使う
             hit = 0
             for rr in _ROLLS:
                 dmg = calc_damage(a, defender, move, field, critical=critical, random_roll=rr)
-                if round(dmg / defender.max_hp, 3) == observed_fraction:
+                if obs_match("dealt", dmg, defender.max_hp, observed_fraction):
                     hit += 1
             liks.append(hit / len(_ROLLS))
         if sum(liks) == 0:
@@ -179,16 +283,32 @@ class PokemonBelief:
         self.post = [x / t for x in new]
         return True
 
-    def observe_order(self, my_eff_speed: int, opp_first: bool, field) -> bool:
+    def observe_choice(self, move, own_def, field, subject) -> None:
+        """相手が攻撃技を選んだ（型プール経路で、明らかに強い技を持つ型の確率を下げる）。
+        同じ受け手に同じ技を選び続けたのは実質1回の判断なので、2回目以降は数えない
+        （毎回 ×0.3 を重ねて正解を消していた）"""
+        key = (move.name_jp, own_def.name)
+        seen = getattr(self, "_choice_seen", None)
+        if seen is None:
+            seen = set()
+            self._choice_seen = seen
+        if key in seen:
+            return
+        seen.add(key)
+        self.dmg_obs.append(("choice", own_def, move, 0, field, False, subject))
+
+    def observe_order(self, my_eff_speed: int, opp_first: bool, field, subject=None) -> bool:
         """行動順から相手の実効速度の上下限を絞る。優先度が同じ場合のみ呼ぶこと。
         候補ごとに「持ち物なし」と「こだわりスカーフ」の両方を試し、観測と矛盾しない
         組み合わせが1つも無い候補を落とす。スカーフでしか説明できなければスカーフを確定する。"""
         from .items import get_speed_item_multiplier
+        import copy
+        self.dmg_obs.append(("order", None, None, my_eff_speed, copy.deepcopy(field), opp_first, subject))
         scarf_p = self.item_prior.get("こだわりスカーフ", 0.0)
         liks = []
         need_scarf = True
         for c in self.cands:
-            d = c["defender"]
+            d = with_state(c["defender"], subject)
             base = _eff_speed_of(d, field, 1.0)
             ok_plain = (base >= my_eff_speed) if opp_first else (base <= my_eff_speed)
             ok_scarf = False
@@ -216,6 +336,7 @@ class PokemonBelief:
         開示済みなら何もしない（確定情報が優先）。"""
         if self.known_item is not None:
             return False
+        self.absent_items.update(items)
         drop = [i for i in items if i in self.item_prior]
         if not drop:
             return False
@@ -268,17 +389,48 @@ class PokemonBelief:
         技が1本分かっただけで持ち物や努力値の候補まで絞れる。候補が無ければ None。"""
         if not self.builds:
             return None
+        ok = self.consistent_builds()
+        if not ok:
+            return None
+        return self._pick_build(rng, ok)
+
+    def consistent_builds(self) -> list:
+        """判明情報（技・持ち物・特性・発動しなかった持ち物）と矛盾しない型（型プール/登録型）"""
         ok = []
         for b in self.builds:
             if self.known_item is not None and b["item"] != self.known_item:
                 continue
-            if self.known_ability is not None and b.get("ability") and b["ability"] != self.known_ability:
+            if self.known_item is None and b["item"] in self.absent_items:
+                continue                       # 発動しなかった持ち物（たべのこし等）
+            # メガ進化で分かる特性はメガ後のもの（ボーマンダ→スカイスキン）。型プールはメガ前の特性で
+            # 持つので、判明したメガ石の型は特性で弾かない（弾くと全滅して周辺分布に落ちていた）
+            mega_seen = self.known_item is not None and b["item"] == self.known_item \
+                and _is_mega_stone(b["item"])
+            if self.known_ability is not None and b.get("ability") and b["ability"] != self.known_ability \
+                    and not mega_seen:
                 continue
             if not self.known_moves.issubset(set(b["moves"])):
                 continue
             ok.append(b)
-        if not ok:
-            return None
+        return ok
+
+    def _pick_build(self, rng, ok):
+        if "weight" in self.builds[0]:
+            # 型プール：観測したダメージで絞った重み（Rust pick_pool_build と 1:1。和は逐次加算）
+            pw = self.pool_weights()
+            wmap = {id(b): x for b, x in zip(self.builds, pw)}
+            w = [(b, wmap[id(b)]) for b in ok]
+            tot = 0.0
+            for _b, x in w:
+                tot += x
+            if tot <= 0.0:
+                return None
+            r = rng.random() * tot
+            for b, x in w:
+                r -= x
+                if r <= 0.0:
+                    return b
+            return w[-1][0]
         w = [(b, max(self._build_weight(b), 1e-6)) for b in ok]
         # 情報は超加法的（実測: 持ち物だけ/技だけの開示は +0〜1.7pt、全部揃うと +10.0pt）。
         # 毎回ランダムに引くと「どれも少しずつ違う相手」ばかりになる。最尤型に寄せると
@@ -286,6 +438,118 @@ class PokemonBelief:
         if self.map_rate > 0.0 and rng.random() < self.map_rate:
             return max(w, key=lambda x: x[1])[0]
         return self._weighted(rng, w)
+
+    def pool_weights(self) -> list:
+        """型プールの型ごとの事後重み＝出現率 × Π(観測したダメージを再現できる尤度)。
+        使用率だけの初期値に、火力が低い→耐久振り・火力アイテム無しの型、のような絞り込みを掛ける。
+        尤度は持ち物・特性・性格・努力値が同じ型で共通なので、その組ごとに1回だけ計算する。"""
+        if len(self.pool_w) != len(self.builds):
+            self.pool_w = [b["weight"] for b in self.builds]
+            self._pool_applied = 0
+            self._pool_prof, self._profs = [], []
+            idx = {}
+            for b in self.builds:
+                key = (b["item"], b.get("ability", ""), b["nature"], tuple(b["ev"]))
+                if key not in idx:
+                    idx[key] = len(self._profs)
+                    ev = dict(zip("HABCDS", b["ev"]))
+                    self._profs.append(build_from_template(
+                        self.tpl, self.loader, randomize=False, override_evs=ev,
+                        override_nature=b["nature"], override_ability=b.get("ability") or None,
+                        override_item=b["item"] or None))
+                self._pool_prof.append(idx[key])
+        import random as _rnd
+        from .items import get_speed_item_multiplier
+        while self._pool_applied < len(self.dmg_obs):
+            kind, other, move, frac, field, crit, subj = self.dmg_obs[self._pool_applied]
+            self._pool_applied += 1
+            liks, any_hit = [], False
+            _st = _rnd.getstate()
+            if kind == "choice":
+                # 既定で無効。M-5 実構築で的中が上がらなかった（乱数3通りで型全一致 -0.2pt・技 -0.3pt、ばらつき±0.7pt）
+                if os.environ.get("POOL_CHOICE", "0") != "1":
+                    continue
+                self._apply_choice(other, move, field, subj)
+                continue
+            for prof0 in self._profs:
+                prof = with_state(prof0, subj)
+                if kind == "order":
+                    # 行動順：候補自身の持ち物（スカーフ等）込みの実効速度で先後が合うか
+                    sp = _eff_speed_of(prof, field, get_speed_item_multiplier(prof.item))  # prof は with_state 済み
+                    ok = (sp >= frac) if crit else (sp <= frac)
+                    liks.append(1.0 if ok else 0.0)
+                    any_hit = any_hit or ok
+                    continue
+                hit = 0
+                for rr in _ROLLS:
+                    _rnd.seed(0)     # 乱数はきまぐレーザーだけ。対戦の乱数を消費しない
+                    if kind == "taken":
+                        dmg = calc_damage(other, prof, move, field, critical=crit, random_roll=rr)
+                        hp = prof.max_hp
+                    else:
+                        dmg = calc_damage(prof, other, move, field, critical=crit, random_roll=rr)
+                        hp = other.max_hp
+                    if obs_match(kind, dmg, hp, frac):
+                        hit += 1
+                liks.append(hit / len(_ROLLS))
+                any_hit = any_hit or hit > 0
+            _rnd.setstate(_st)
+            if not any_hit:
+                continue
+            t = 0.0
+            for i, pi in enumerate(self._pool_prof):
+                self.pool_w[i] *= liks[pi] * (1 - _EPS) + _EPS
+                t += self.pool_w[i]
+            if t > 0.0:
+                self.pool_w = [x / t for x in self.pool_w]
+        return self.pool_w
+
+    def _apply_choice(self, own_def, move, field, subj) -> None:
+        """技選びの尤度（Rust PokemonBelief::apply_choice と 1:1）。
+        選んだ技の期待ダメージ×1.5 が、その型の攻撃技の最大に届かなければ ×CHOICE_BETA。
+        選んだ技で倒せるならどの型でも同じ（×1）。相手は戦略で弱い技も選ぶので消しはしない"""
+        import random as _rnd
+        from .ai import _expected_hits
+        rr = 7 / 15
+        names = sorted({m for b in self.builds for m in b["moves"]})
+        mvs = {}
+        for n in names:
+            md = self.loader.get_move(n)
+            if md is not None and md.category != "status":
+                mvs[n] = md
+        _st = _rnd.getstate()
+        cache = {}
+        lik = []
+        for b, pi in zip(self.builds, self._pool_prof):
+            if move.name_jp not in b["moves"]:
+                lik.append(1.0)
+                continue
+            if pi not in cache:
+                q = with_state(self._profs[pi], subj)
+                dd = {}
+                for n, md in mvs.items():
+                    _rnd.seed(0)
+                    # 持ち物が無いなげつけるは威力0（ダメージ式が未定義なので 0 として扱う。Rust も同じ）
+                    if n == "なげつける" and (getattr(q, "last_flung_item", None) or q.item) is None:
+                        dd[n] = 0.0
+                        continue
+                    d = calc_damage(q, copy_poke(own_def), md, field, critical=False, random_roll=rr)
+                    dd[n] = d * _expected_hits(md, q)
+                cache[pi] = dd
+            dd = cache[pi]
+            got = dd.get(move.name_jp, 0.0)
+            best = max((dd[m] for m in b["moves"] if m in dd), default=0.0)
+            if got >= own_def.hp or got * 1.5 >= best:
+                lik.append(1.0)
+            else:
+                lik.append(CHOICE_BETA)
+        _rnd.setstate(_st)
+        t = 0.0
+        for i, x in enumerate(lik):
+            self.pool_w[i] *= x
+            t += self.pool_w[i]
+        if t > 0.0:
+            self.pool_w = [x / t for x in self.pool_w]
 
     def _build_weight(self, b) -> float:
         """型の重み＝持ち物と技の使用率の積（同時分布が無いので周辺で近似する）。"""
@@ -401,6 +665,21 @@ def registered_builds_by_species(loader: DataLoader) -> Dict[str, list]:
     return out
 
 
+_POOL_CACHE: Dict[str, Dict[str, list]] = {}
+
+
+def pool_builds_by_species() -> Dict[str, list]:
+    """型プール（_gen_type_pool.py の出力を datapack に書き出したもの）の種ごとの型。
+    Rust の pack.build_pool と同じ源。以前 Python 側は登録テンプレートの型を引いており、Rust と食い違っていた。"""
+    path = os.environ.get("POKENAVI_DATAPACK") or os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "_rust_engine", "datapack.json")
+    if path not in _POOL_CACHE:
+        import json
+        with open(path) as f:
+            _POOL_CACHE[path] = json.load(f).get("build_pool", {})
+    return _POOL_CACHE[path]
+
+
 class OpponentBelief:
     """一方のサイドが相手パーティ全体について持つ信念（種族名→PokemonBelief）。"""
 
@@ -412,7 +691,7 @@ class OpponentBelief:
         self._reg = registered_spreads_by_species(loader) if use_registered else {}
         # 型まるごとの候補。JOINT_BUILD=1 で決定化が型単位のサンプリングになる
         self.joint = os.environ.get("JOINT_BUILD", "0") == "1"
-        self._builds = registered_builds_by_species(loader) if (use_registered and self.joint) else {}
+        self._builds = pool_builds_by_species() if (use_registered and self.joint) else {}
 
     def __deepcopy__(self, memo):
         # 信念は対戦状態の一部ではない（意思決定者の知識）。
@@ -467,26 +746,47 @@ class OpponentBelief:
                             known_item=knowledge.known_item)
             if b is not None:
                 b.observe_disclosure(knowledge)
+        # 同じ持ち物はパーティに1つ（上位構築410党で重複1件）。判明した味方の持ち物は他の個体の候補から外す。
+        # トリック等で入れ替わった後の持ち物は元の持ち物ではないので使わない（Rust OpponentBelief と 1:1）
+        team = [(n, k.known_item) for n, k in opp_view.pokemon.items()
+                if k.known_item and getattr(k, "item_epoch", 0) == 0]
+        for name in opp_view.pokemon:
+            b = self.species.get(name)
+            if b is None:
+                continue
+            for other, it in team:
+                if other != name:
+                    b.observe_absent_item((it,))   # 持ち物の事前分布（型が合わない時の引き先）からも外す
 
     def observe_damage(self, defender_name: str, attacker, move,
-                       observed_fraction: float, field, critical: bool = False) -> bool:
+                       observed_fraction: float, field, critical: bool = False,
+                       subject=None, other_state=None) -> bool:
         b = self.ensure(defender_name)
         if b is None:
             return False
-        return b.observe_damage(attacker, move, observed_fraction, field, critical)
+        return b.observe_damage(attacker, move, observed_fraction, field, critical, subject,
+                                other_state)
 
     def observe_damage_dealt(self, attacker_name: str, defender, move,
-                             observed_fraction: float, field, critical: bool = False) -> bool:
+                             observed_fraction: float, field, critical: bool = False,
+                             subject=None, other_state=None) -> bool:
         b = self.ensure(attacker_name)
         if b is None:
             return False
-        return b.observe_damage_dealt(defender, move, observed_fraction, field, critical)
+        return b.observe_damage_dealt(defender, move, observed_fraction, field, critical, subject,
+                                      other_state)
 
-    def observe_order(self, opp_name: str, my_eff_speed: int, opp_first: bool, field) -> bool:
+    def observe_choice(self, opp_name: str, move, own_def, field, subject) -> None:
+        b = self.ensure(opp_name)
+        if b is not None:
+            b.observe_choice(move, own_def, field, subject)
+
+    def observe_order(self, opp_name: str, my_eff_speed: int, opp_first: bool, field,
+                      subject=None) -> bool:
         b = self.ensure(opp_name)
         if b is None:
             return False
-        return b.observe_order(my_eff_speed, opp_first, field)
+        return b.observe_order(my_eff_speed, opp_first, field, subject)
 
     def observe_absent_item(self, opp_name: str, items) -> bool:
         b = self.ensure(opp_name)

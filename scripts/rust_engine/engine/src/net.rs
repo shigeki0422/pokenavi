@@ -13,8 +13,13 @@ pub struct NetW {
     pub b1: Vec<f64>,
     pub w2: Vec<f64>, // hidden2 x hidden
     pub b2: Vec<f64>,
-    pub wv: Vec<f64>, // hidden2
-    pub bv: f64,
+    pub wv: Vec<f64>, // vbins=0 なら hidden2、vbins>0 なら vbins x hidden2（row-major）
+    pub bv: f64,      // vbins=0 のときのスカラーバイアス
+    /// 価値ヘッドのビン数。0=従来のスカラー(sigmoid)。>0 で two-hot 分類ヘッド
+    /// （スカラー回帰は勝率0.5付近で勾配が潰れるので、分布で持つと接戦の局面も学習できる）。
+    pub vbins: usize,
+    pub bv_bins: Vec<f64>,
+    pub vcent: Vec<f64>,
     pub wp: Vec<f64>, // ACTION_DIM x hidden2
     pub bp: Vec<f64>,
     /// 隠れ層の活性。既定 tanh。JSON の "act":"relu" で ReLU。
@@ -53,6 +58,16 @@ impl NetW {
         let (wp, ad, h2b) = mat(&v["Wp"]);
         assert_eq!(ad, ACTION_DIM);
         assert_eq!(h2b, h2);
+        let vbins = v.get("vbins").and_then(|x| x.as_u64()).unwrap_or(0) as usize;
+        let (wv_flat, bv_scalar, bv_bins, vcent) = if vbins > 0 {
+            let (w, rows, cols) = mat(&v["Wv"]);
+            assert_eq!(rows, vbins);
+            assert_eq!(cols, h2);
+            let c: Vec<f64> = (0..vbins).map(|i| (i as f64 + 0.5) / vbins as f64).collect();
+            (w, 0.0, vecf(&v["bv"]), c)
+        } else {
+            (vecf(&v["Wv"]), v["bv"].as_f64().unwrap(), Vec::new(), Vec::new())
+        };
         Some(NetW {
             dim: d,
             hidden: h,
@@ -61,8 +76,11 @@ impl NetW {
             b1: vecf(&v["b1"]),
             w2,
             b2: vecf(&v["b2"]),
-            wv: vecf(&v["Wv"]),
-            bv: v["bv"].as_f64().unwrap(),
+            wv: wv_flat,
+            bv: bv_scalar,
+            vbins,
+            bv_bins,
+            vcent,
             wp,
             bp: vecf(&v["bp"]),
             relu: v.get("act").and_then(|a| a.as_str()) == Some("relu"),
@@ -89,17 +107,45 @@ impl NetW {
         rows8(&self.w2, self.hidden, self.hidden2, h1, &self.b2, h2, self.relu);
     }
 
+    /// top表現 → 価値。two-hot のときは softmax の期待値（Python の _value_from_top と同じ順序）。
+    fn value_of(&self, top: &[f64]) -> f64 {
+        if self.vbins == 0 {
+            let mut acc = 0.0f64;
+            for k in 0..self.hidden2 {
+                acc += top[k] * self.wv[k];
+            }
+            return 1.0 / (1.0 + (-(acc + self.bv)).exp());
+        }
+        let mut z: Vec<f64> = Vec::with_capacity(self.vbins);
+        for b in 0..self.vbins {
+            let row = &self.wv[b * self.hidden2..(b + 1) * self.hidden2];
+            let mut acc = 0.0f64;
+            for k in 0..self.hidden2 {
+                acc += top[k] * row[k];
+            }
+            z.push(acc + self.bv_bins[b]);
+        }
+        let mx = z.iter().fold(f64::NEG_INFINITY, |a, &b| if b > a { b } else { a });
+        let mut sum = 0.0f64;
+        for x in z.iter_mut() {
+            *x = (*x - mx).exp();
+            sum += *x;
+        }
+        let den = sum + 1e-12;
+        let mut v = 0.0f64;
+        for b in 0..self.vbins {
+            v += (z[b] / den) * self.vcent[b];
+        }
+        v
+    }
+
     /// PVNetNP.evaluate(x, legal_idx) -> (prior[legal順], value)
     pub fn evaluate(&self, x: &[f64], legal: &[usize], scratch: &mut NetScratch) -> (Vec<f64>, f64) {
         let mut nz = std::mem::take(&mut scratch.nz);
         self.top(x, &mut scratch.h1, &mut scratch.h2, &mut nz);
         scratch.nz = nz;
         let top = &scratch.h2;
-        let mut acc = 0.0f64;
-        for k in 0..self.hidden2 {
-            acc += top[k] * self.wv[k];
-        }
-        let v = 1.0 / (1.0 + (-(acc + self.bv)).exp());
+        let v = self.value_of(top);
         let mut lg: Vec<f64> = Vec::with_capacity(legal.len());
         for &a in legal {
             let row = &self.wp[a * self.hidden2..(a + 1) * self.hidden2];

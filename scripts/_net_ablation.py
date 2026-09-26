@@ -147,6 +147,39 @@ def _battle(args):
     return 1 if ((res == 1) == a_first) else -1
 
 
+# Rust 経路（ENGINE=rust）が解釈しない指定。黙って無視されると「効かない」ではなく
+# 「測っていない」結果になるので、起動時に落とす（SIMS_B を無視したまま探索量を比較し、
+# 実際には同一 sims の健全性チェックになっていた事故の再発防止）。
+_RUST_UNSUPPORTED = ("ORACLE_A", "ORACLE_REVEAL_A", "ACT_ORACLE", "ACT_ORACLE_Q",
+                     "BUILD_MAP_RATE_A", "COLLAPSE_MEGA",
+                     "VALUE_NOISE", "NET_POL", "NET_ENS")
+
+
+_HP_DEFAULT = {"MCTS_FPU": "0.5", "RM_PRIOR_MIX": "0.25", "MCTS_P_FLOOR": "1e-3", "QSELECT_FRAC": "0.1",
+               "SOLVE_PLAY": "0", "MCTS_MAX_DEPTH": "60",
+               # ORACLE は既定で「素の env の値」＝両側同じ（従来どおり）。
+               # HP_A="ORACLE=1" で **A側だけ** 完全情報にできる＝型予測の伸び代の測定。
+               # ORACLE=1 を両側に掛けると「隠れ情報の無い別ゲーム」になり、通常条件の強さを
+               # 予測しないことが実測で分かった（完全情報と通常条件の順位相関はほぼゼロ）。
+               "ORACLE": os.environ.get("ORACLE", "0"),
+               # HP_A="JOINT_BUILD=1" で A側だけ型プールから型まるごと決定化する
+               "JOINT_BUILD": os.environ.get("JOINT_BUILD", "0"),
+               # 先発の記録・消費した持ち物の記憶（2026-09-25 修正）。LEAD_SEEN=0 ITEM_GONE=0 と
+               # HP_A="LEAD_SEEN=1,ITEM_GONE=1" で A側だけ修正版にして旧挙動と比べる
+               "LEAD_SEEN": os.environ.get("LEAD_SEEN", "1"),
+               "ITEM_GONE": os.environ.get("ITEM_GONE", "1"),
+               # 計測用: HP_A="ORACLE_MIX=0.5" で A側だけ、その確率で相手の真の型を使う（精度と勝率の関係）
+               "ORACLE_MIX": os.environ.get("ORACLE_MIX", "0"),
+               # 計測用: HP_A="ORACLE_REVEAL=1" で A側だけ真の型の一部（1=持ち物 2=特性 4=技 8=性格・努力値）を使う
+               "ORACLE_REVEAL": os.environ.get("ORACLE_REVEAL", "0")}
+
+
+def _check_rust_env():
+    bad = [k for k in _RUST_UNSUPPORTED if os.environ.get(k)]
+    if bad:
+        sys.exit(f"ENGINE=rust では未対応の指定です（Python経路で実行してください）: {', '.join(bad)}")
+
+
 def _rust_battle(args):
     """本番経路（Rust IS-MCTS）で A/B する。net パスを側1/側2に振り分け、a_first で左右を入れ替える。"""
     import random as _r
@@ -157,7 +190,15 @@ def _rust_battle(args):
     na = NET_A or ""
     nb = NET_B or ""
     p1, p2 = (na, nb) if a_first else (nb, na)
-    r = E.mcts_3v3_ab(list(pa), sa, list(pb), sb, seed, SIMS, p1, p2, SEASON)
+    s_a, s_b = (SIMS, SIMS_B) if a_first else (SIMS_B, SIMS)
+    # HP_A="MCTS_FPU=0.3,RM_PRIOR_MIX=0.1": A側だけ探索パラメータを変える。
+    # Rust は素の env を側1、*_2 を側2 に使うので、a_first に合わせて振り分ける。
+    _hp = dict(kv.split("=") for kv in os.environ.get("HP_A", "").split(",") if "=" in kv)
+    for k, v in _HP_DEFAULT.items():
+        a_val = _hp.get(k, v)
+        os.environ[k] = a_val if a_first else v
+        os.environ[k + "_2"] = v if a_first else a_val
+    r = E.mcts_3v3_ab(list(pa), sa, list(pb), sb, seed, s_a, p1, p2, SEASON, s_b)
     if r == 0:
         return 0
     return 1 if ((r == 1) == a_first) else -1
@@ -166,10 +207,14 @@ def _rust_battle(args):
 def main():
     N = int(os.environ.get("N", "200"))
     P = _m6_pool.load_parties()
-    rng = random.Random(24680)
+    # 再現確認用に対戦の組と乱数の帯を変えられる（既定は従来と同じ）
+    ab_seed = int(os.environ.get("AB_SEED", "24680"))
+    rng = random.Random(ab_seed)
     _rust = os.environ.get("ENGINE") == "rust"
+    if _rust:
+        _check_rust_env()
     _six = _rust   # Rust は6体を渡して選出indexを別に指定する
-    jobs = [((P[a] if _six else P[a]), P[b], 80000 + i * 7717, i % 2 == 0)
+    jobs = [((P[a] if _six else P[a]), P[b], (80000 if ab_seed == 24680 else ab_seed * 1000) + i * 7717, i % 2 == 0)
             for i, (a, b) in enumerate(rng.sample(range(len(P)), 2) for _ in range(N))]
     la = os.path.basename(NET_A) if NET_A else "本番ネット"
     lb = os.path.basename(NET_B) if NET_B else ("本番ネット" if _rust else "ランダム初期化ネット")
@@ -178,6 +223,16 @@ def main():
     w = int(os.environ.get("AB_WORKERS", "0")) or max(1, (os.cpu_count() or 2) - 2)
     with mp.get_context("fork").Pool(w) as pool:
         out = pool.map(_rust_battle if _rust else _battle, jobs, chunksize=1)
+    # AB_DUMP=path: 1戦ごとの結果を書き出す（相手の型の種類ごとに勝率を分けて見る用）
+    if os.environ.get("AB_DUMP"):
+        import random as _r2
+        rows = []
+        for (pa, pb, seed, a_first), x in zip(jobs, out):
+            rr = _r2.Random(seed)
+            sa = rr.sample(range(len(pa)), 3); sb = rr.sample(range(len(pb)), 3)
+            rows.append({"pa": pa, "pb": pb, "sa": sa, "sb": sb, "a_first": a_first, "r": x})
+        with open(os.environ["AB_DUMP"], "w") as f:
+            json.dump(rows, f, ensure_ascii=False)
     win = sum(1 for x in out if x > 0); lose = sum(1 for x in out if x < 0); draw = sum(1 for x in out if x == 0)
     dec = win + lose; wr = win / dec if dec else 0
     z = (win - dec * 0.5) / math.sqrt(dec * 0.25) if dec else 0

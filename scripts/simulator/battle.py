@@ -173,6 +173,7 @@ class BattleSide:
         prev.enduring = False
         prev.grounded = False
         prev.used_moves = set()
+        prev._entry_moves = set()
         prev.ate_berry = False
         prev.protect_consecutive = 0
         prev.locked_move = None
@@ -211,6 +212,15 @@ class BattleSide:
 
 
 def _priority(action: Action, poke: BattlePokemon, field: "BattleField | None" = None) -> int:
+    base = _priority_base(action, poke, field)
+    if action.type not in ("switch", "mega") and action.move is not None \
+            and has_quick_claw_trigger(poke.item):
+        base += 1                                        # せんせいのツメ
+    return base
+
+
+def _priority_base(action: Action, poke: BattlePokemon, field: "BattleField | None" = None) -> int:
+    """乱数を使わない部分の優先度（せんせいのツメ以外）。行動順の観測でも使う"""
     if action.type == "switch":
         return 6
     if action.type == "mega":
@@ -228,9 +238,6 @@ def _priority(action: Action, poke: BattlePokemon, field: "BattleField | None" =
         base += 1
     # いたずらごころ: 変化技の優先度+1（技タイプを問わない。あく相手への無効は命中処理側）
     if poke.ability == "いたずらごころ" and action.move.category == "status":
-        base += 1
-    # せんせいのツメ
-    if has_quick_claw_trigger(poke.item):
         base += 1
     return base
 
@@ -522,6 +529,9 @@ def _disclose_contact_reaction(attacker_side, attacker, defender, move) -> List[
     out: List[str] = []
     if defender.item == "ゴツゴツメット":
         out += attacker_side.opp_view.on_item(defender.name, "ゴツゴツメット", "接触ダメージで判明")
+    elif attacker_side.belief is not None:
+        # 否定的観測: 接触技を当てたのに反動が無かった＝ゴツゴツメットではない
+        attacker_side.belief.observe_absent_item(defender.name, ("ゴツゴツメット",))
     if (defender.ability in ("さめはだ", "てつのとげ")
             and attacker.ability not in ("かたやぶり", "ターボブレイズ", "テラボルテージ")):
         out += attacker_side.opp_view.on_ability(defender.name, defender.ability)
@@ -553,8 +563,31 @@ def _execute_move(
     if move.name_jp != "とっておき":
         attacker.used_moves.add(move.name_jp)
 
-    # 技の選択を相手に公開（結果に関わらず）
-    logs.extend(defender_side.opp_view.on_move(attacker.name, move.name_jp))
+    # 技の選択を相手に公開（結果に関わらず）。自分の技だけを「判明した技」にする。
+    # わるあがき・まねっこでコピーした技を記録すると、相手の型の候補と矛盾して全滅していた
+    if any(m is not None and m.name_jp == move.name_jp for m in attacker.moves):
+        logs.extend(defender_side.opp_view.on_move(attacker.name, move.name_jp))
+        # 交代せずに違う技を打った＝こだわりアイテムではない（ねごとで出た技は数えない）
+        if not getattr(attacker, "_via_call", False):
+            em = getattr(attacker, "_entry_moves", None)
+            # 持ち物が途中で変わったら数え直す（トリックでスカーフを渡された等。縛りは渡された後から）
+            if em is None or getattr(attacker, "_entry_item", None) != attacker.item:
+                em = set()
+                attacker._entry_moves = em  # type: ignore
+                attacker._entry_item = attacker.item  # type: ignore
+            em.add(move.name_jp)
+            if len(em) >= 2 and defender_side.belief is not None:
+                defender_side.belief.observe_absent_item(
+                    attacker.name, ("こだわりスカーフ", "こだわりハチマキ", "こだわりメガネ"))
+            # 技選びの観測：攻撃技を自分で選んだ（縛られていない・先制技でない）とき、
+            # それより明らかに強い技を持つ型の確率を下げる（型プール経路の pool_weights で反映）
+            if (defender_side.belief is not None and move.category != "status"
+                    and (move.priority or 0) <= 0 and attacker.choice_locked_move is None
+                    and getattr(attacker, "encore_count", 0) == 0 and getattr(attacker, "lock_count", 0) == 0):
+                from .belief import pub_state as _ps2, own_state as _os2
+                import copy as _cp2
+                defender_side.belief.observe_choice(attacker.name, move, _os2(None, defender),
+                                                    _cp2.deepcopy(field), _ps2(attacker))
 
     # リチャージ（ギガインパクト・ブラストバーン等の次ターン行動不能）
     if getattr(attacker, 'recharge', False):
@@ -576,7 +609,9 @@ def _execute_move(
         saved_status, saved_count = attacker.status, attacker.sleep_count
         attacker.status = None
         fake_action = Action(type="move", move=selected)
+        attacker._via_call = True  # type: ignore
         logs.extend(_execute_move(attacker_side, defender_side, fake_action, field, opp_action))
+        attacker._via_call = False  # type: ignore
         if attacker.status is None:
             attacker.status = saved_status
             attacker.sleep_count = saved_count
@@ -1111,6 +1146,12 @@ def _execute_move(
 
     # ヒット数（連続技）
     hits = _calc_hits(move, attacker)
+    # 型の逆算用に、行動前の両者の見えている状態を控える（技の反動・能力低下が乗る前）
+    from .belief import pub_state as _pub_state, hp_pct
+    # 写しは信念を持つ実戦だけで取る（探索中の複製には信念が無い）
+    _has_bl = attacker_side.belief is not None or defender_side.belief is not None
+    _pre_att = _pub_state(attacker) if _has_bl else None
+    _pre_def = _pub_state(defender) if _has_bl else None
 
     # スクリーン補正（急所・かたやぶり・すりぬけ・スクリーン破壊技は無視）
     _SCREEN_BREAKERS = {"かわらわり", "レイジングブル", "サイコファング"}
@@ -1531,16 +1572,21 @@ def _execute_move(
             total_dmg, move.name_jp, attacker.name))
         # 推定器(任意): 観測した被ダメージ割合からEV/性格をベイズ更新
         # （攻撃側・場は観測時点の実値。再現不可な特殊ケースは belief 側で安全にスキップ）
-        if attacker_side.belief is not None:
+        # 観測がダメージ式1回分と一致する場合だけ推定に使う。連続技は合計しか見えず（1発分と比べていた）、
+        # 急所は倍率が違い、倒した一撃・タスキ/がんじょうで耐えた一撃は残りHPで打ち切られて本当の量が見えない
+        # （HPを超えた 290% のような値で EV/性格を絞っていた）
+        _obs_ok = hits == 1 and not critical and defender.is_alive and defender.hp > 1
+        if _obs_ok and attacker_side.belief is not None:
             attacker_side.belief.observe_damage(
                 defender.name, attacker, move,
-                round(total_dmg / defender.max_hp, 3), field)
+                hp_pct(defender.hp + total_dmg, defender.max_hp) - hp_pct(defender.hp, defender.max_hp),
+                field, subject=_pre_def, other_state=_pre_att)
         # 与ダメージ観測: 殴られた側は「自分がどれだけ減ったか」から相手の攻撃側EV/性格を絞る。
         # 被ダメージ観測は相手の耐久しか絞れず、A/C は事前分布のままだった。
-        if defender_side.belief is not None:
+        if _obs_ok and defender_side.belief is not None:
             defender_side.belief.observe_damage_dealt(
                 attacker.name, defender, move,
-                round(total_dmg / defender.max_hp, 3), field)
+                total_dmg, field, subject=_pre_att, other_state=_pre_def)
 
     # ひけん・ちえなみ / がんせきアックス：倒しても設置（ヒット時100%）
     if total_dmg > 0:
@@ -2073,6 +2119,8 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
             return logs
         attacker.item, defender.item = defender.item, attacker.item
         logs.append(f"{attacker.name} と {defender.name} は道具を入れ替えた！")
+        logs.extend(attacker_side.opp_view.on_item_swapped(defender.name, defender.item))
+        logs.extend(defender_side.opp_view.on_item_swapped(attacker.name, attacker.item))
         return logs
     # グラスフィールド
     if n == "グラスフィールド" and field is not None:
@@ -2112,8 +2160,10 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
             if cands:
                 chosen = random.choice(cands)
                 logs.append(f"{attacker.name} は ねごと で {chosen.name_jp} を使った！")
+                attacker._via_call = True  # type: ignore
                 logs += _execute_move(attacker_side, defender_side,
                                       Action(type="move", move=chosen), field)
+                attacker._via_call = False  # type: ignore
             else:
                 logs.append(f"{attacker.name} の ねごと は失敗した！")
         else:
@@ -2490,6 +2540,8 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
             return logs
         attacker.item, defender.item = defender.item, attacker.item
         logs.append(f"トリック！ {attacker.name} と {defender.name} のアイテムが入れ替わった！")
+        logs.extend(attacker_side.opp_view.on_item_swapped(defender.name, defender.item))
+        logs.extend(defender_side.opp_view.on_item_swapped(attacker.name, attacker.item))
         return logs
 
     # ミストフィールド
@@ -3232,15 +3284,23 @@ def _observe_order(s1, a1, s2, a2, field, p1_first) -> None:
         return
     if getattr(a1, "type", None) != "move" or getattr(a2, "type", None) != "move":
         return
-    pr1 = getattr(getattr(a1, "move", None), "priority", 0) or 0
-    pr2 = getattr(getattr(a2, "move", None), "priority", 0) or 0
-    if pr1 != pr2:
+    # 特性で変わる優先度（いたずらごころ・はやてのつばさ等）込みで比べる。技の表示優先度だけで
+    # 比べると、いたずらごころの変化技と通常技を「同じ優先度」とみなして速度を取り違えていた
+    if _priority_base(a1, s1.active, field) != _priority_base(a2, s2.active, field):
+        return
+    # 速度以外で順番が決まる場面は観測しない（トリックルームは逆順、おいかぜは倍、
+    # あとだし/クイックドロウは速度と無関係、はやあし/ぶきようは信念側の速度計算に入っていない）
+    if getattr(field, "trick_room", False) or s1.tailwind or s2.tailwind:
+        return
+    _abs = {s1.active.ability, s2.active.ability}
+    if _abs & {"あとだし", "クイックドロウ", "はやあし", "ぶきよう"}:
         return
     for me, opp, me_first in ((s1, s2, p1_first), (s2, s1, not p1_first)):
         if me.belief is None or me.active is None or opp.active is None:
             continue
+        from .belief import pub_state as _pub_state
         me.belief.observe_order(opp.active.name, _effective_speed(me.active, field),
-                                not me_first, field)
+                                not me_first, field, subject=_pub_state(opp.active))
 
 
 class Battle:
@@ -3288,12 +3348,30 @@ class Battle:
         _pv2 = self.side1.source6 if (_hidden and len(self.side1.source6) > len(self.side1.party)) else self.side1.party
         self.logs.extend(self.side1.opp_view.team_preview(_pv1))
         self.logs.extend(self.side2.opp_view.team_preview(_pv2))
+        # 先発も「場に出た」。交代時にしか記録しておらず、先発が一度引っ込むと探索の
+        # 隠れ選出の引き直しで別の個体に差し替えられていた（見えた技と正体が食い違う）
+        self.logs.extend(self.side1.opp_view.on_enter(self.side2.active))
+        self.logs.extend(self.side2.opp_view.on_enter(self.side1.active))
 
         # 入場時効果
         _entry_effects(self.side1.active, 0, self.field, self.side2.active, self.logs, self.side1.party)
         _entry_effects(self.side2.active, 1, self.field, self.side1.active, self.logs, self.side2.party)
 
         return self._turn_loop(ai1, ai2, verbose, on_turn=on_turn)
+
+    def _sync_item_loss(self) -> None:
+        """前回の行動選択時から持ち物が無くなった個体を、相手の opp_view に記録する。
+        消費・はたき落としは実機でメッセージが出る公開情報だが、開示していたのは
+        タスキ・ふうせん等の一部だけで、きのみ等を食べた相手を決定化で持ち物ありに戻していた。
+        スナップショットはこの Battle に持つ（探索の1手ごとの Battle では毎回取り直す）"""
+        cur = [[p.item for p in s.party] for s in (self.side1, self.side2)]
+        prev = getattr(self, "_item_snap", None)
+        if prev is not None:
+            for si, (side, viewer) in enumerate(((self.side1, self.side2), (self.side2, self.side1))):
+                for pi, p in enumerate(side.party):
+                    if pi < len(prev[si]) and prev[si][pi] is not None and p.item is None:
+                        self.logs.extend(viewer.opp_view.on_item_lost(p.name, prev[si][pi]))
+        self._item_snap = cur
 
     def _turn_loop(self, ai1, ai2, verbose=False, max_turns=None, on_turn=None) -> int:
         limit = MAX_TURNS if max_turns is None else min(max_turns, MAX_TURNS)
@@ -3320,6 +3398,7 @@ class Battle:
 
             # 情報系特性（おみとおし/きけんよち）：登場時に強制で相手情報を開示
             self._info_abilities_on_entry()
+            self._sync_item_loss()
 
             action1 = ai1(self.side1, self.side2, self.field)
             action2 = ai2(self.side2, self.side1, self.field)
@@ -3672,6 +3751,7 @@ class Battle:
             # きんちょうかん：相手がいるとこのポケモンはきのみを食べられない
             _berry_blocked = opp_side.active.is_alive and opp_side.active.ability == "きんちょうかん"
 
+            _item_before_berry = p.item
             # オボンのみ (HP半分以下)
             if not _berry_blocked and p.item == "オボンのみ" and p.hp <= p.max_hp // 2:
                 heal = p.max_hp // 4
@@ -3693,6 +3773,13 @@ class Battle:
                 on_item_consumed(p, [])
                 self.logs.append(f"{p.name} の オレンのみ が発動！ HPが {heal} 回復した！")
                 self.logs.extend(opp_side.opp_view.on_item(p.name, "オレンのみ", "HP回復から判明"))
+
+            # 否定的観測: 表示HPが半分を確実に下回ったのにきのみが発動しなかった＝オボンのみ/オレンのみではない。
+            # 表示は整数％なので境目（50%付近）は推論しない。きんちょうかんで食べられないときも何も分からない
+            if (opp_side.belief is not None and not _berry_blocked and p.is_alive
+                    and _item_before_berry not in ("オボンのみ", "オレンのみ")
+                    and p.hp <= p.max_hp // 2 and p.hp * 100 < p.max_hp * 49):
+                opp_side.belief.observe_absent_item(p.name, ("オボンのみ", "オレンのみ"))
 
             # ラムのみ・カゴのみ・モモンのみ・チーゴのみ
             if not _berry_blocked:

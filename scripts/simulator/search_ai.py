@@ -1237,7 +1237,8 @@ class SearchAI:
             if b is not None:
                 # 型まるごと。既知技は型に含まれている（矛盾する型は候補から外れている）
                 cfg.append({
-                    "ev": b["ev"], "nature": b["nature"],
+                    "ev": dict(zip("HABCDS", b["ev"])) if isinstance(b["ev"], list) else b["ev"],
+                    "nature": b["nature"],
                     "item": b["item"] if pb.known_item is None else pb.known_item,
                     "ability": pb.known_ability or b.get("ability") or pb.sample_ability(self._rng),
                     "moves": list(b["moves"]),
@@ -1250,6 +1251,11 @@ class SearchAI:
                 "ability": pb.sample_ability(self._rng),
                 "moves": pb.sample_moves(self._rng),
             })
+        # 持ち物が消費・はたき落としで無くなったことは公開情報（opp_view.item_lost）。
+        # 持ち物を戻すと、タスキを使い切った相手を探索の中で再びタスキ持ちとして読んでいた
+        for c, p in zip(cfg, opp_side.party):
+            if c is not None and getattr(belief.ensure(p.name), "item_lost", False):
+                c["item"] = None
         if self.oracle_reveal:
             self._reveal(cfg, opp_side)
         return cfg

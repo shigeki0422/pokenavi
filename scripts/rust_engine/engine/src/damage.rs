@@ -937,7 +937,11 @@ pub fn calc_damage(
     let rr = random_roll.or(roll_override);
     let roll = match rr {
         None => (85.0 + rng(1)) / 100.0,
-        Some(r) => 0.85 + r * 0.15,
+        // 16段のどれか（r*15 が整数）は実戦と同じ (85+k)/100（Python damage.py と同じ。浮動小数の丸めで1ずれていた）
+        Some(r) => {
+            let k = r * 15.0;
+            if (k - k.round()).abs() < 1e-9 { (85.0 + k.round()) / 100.0 } else { 0.85 + r * 0.15 }
+        }
     };
     dmg = fl(dmg as f64 * roll);
 

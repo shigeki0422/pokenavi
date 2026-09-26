@@ -240,6 +240,18 @@ pub struct SearchAI {
     /// 完全情報AI: 相手の型を決定化せず真値のまま読む（Python の SearchAI.oracle と同じ）。
     /// 型推定のノイズを外してネット品質だけを測る/学ぶためのもの。
     pub oracle: bool,
+    /// 決定化で型プールから型まるごと引く（env JOINT_BUILD=1）。
+    pub joint_build: bool,
+    /// 消費・はたき落としで無くなった既知の持ち物を決定化で戻さない（ITEM_GONE=0 で旧挙動＝A/B用）
+    pub item_gone: bool,
+    /// 計測用: この確率で相手の真の型をそのまま使う（型予測の精度を人為的に上げ、精度と勝率の関係を測る）
+    pub oracle_mix: f64,
+    /// 計測用: 相手の真の型のうち一部だけを使う（1=持ち物 2=特性 4=技 8=性格・努力値 のビット和）。
+    /// どの項目の予測精度が勝率に効くかを切り分ける（search_ai.py の oracle_reveal に相当）
+    pub oracle_reveal: u32,
+    /// 終盤（残り体数が SOLVE_MAX_ALIVE 以下）で、MCTS の代わりに厳密ソルバの最善手を指す。
+    /// ソルバで指したら実際に何%勝てるか＝探索の質の伸び代を勝率で測るためのもの。
+    pub solve_play: bool,
     pub ctx: NetCtx,
     tpl: TplCache,
     nodes: Vec<Node>,
@@ -254,13 +266,13 @@ impl SearchAI {
             season: season.to_string(),
             rng: CpyRandom::new(seed),
             mcts_sims: sims,
-            mcts_fpu: 0.5,
-            mcts_p_floor: 1e-3,
-            mcts_max_depth: 60,
-            rm_prior_mix: 0.25,
+            mcts_fpu: std::env::var("MCTS_FPU").ok().and_then(|v| v.parse().ok()).unwrap_or(0.5),
+            mcts_p_floor: std::env::var("MCTS_P_FLOOR").ok().and_then(|v| v.parse().ok()).unwrap_or(1e-3),
+            mcts_max_depth: std::env::var("MCTS_MAX_DEPTH").ok().and_then(|v| v.parse().ok()).unwrap_or(60),
+            rm_prior_mix: std::env::var("RM_PRIOR_MIX").ok().and_then(|v| v.parse().ok()).unwrap_or(0.25),
             collapse_mega: true,
             qselect: true,
-            qselect_frac: 0.1,
+            qselect_frac: std::env::var("QSELECT_FRAC").ok().and_then(|v| v.parse().ok()).unwrap_or(0.1),
             qselect_min: 10,
             downside_guard: true,
             downside_k: 8,
@@ -268,6 +280,11 @@ impl SearchAI {
             tree_roll: 0.85,
             hidden: true,
             oracle: std::env::var("ORACLE").map(|v| v == "1").unwrap_or(false),
+            joint_build: std::env::var("JOINT_BUILD").map(|v| v == "1").unwrap_or(false),
+            item_gone: std::env::var("ITEM_GONE").map(|v| v != "0").unwrap_or(true),
+            oracle_mix: std::env::var("ORACLE_MIX").ok().and_then(|v| v.parse().ok()).unwrap_or(0.0),
+            oracle_reveal: std::env::var("ORACLE_REVEAL").ok().and_then(|v| v.parse().ok()).unwrap_or(0),
+            solve_play: std::env::var("SOLVE_PLAY").ok().and_then(|v| v.parse::<f64>().ok()).unwrap_or(0.0) > 0.5,
             ctx: NetCtx::new(pack),
             tpl: TplCache::default(),
             nodes: Vec::new(),
@@ -391,6 +408,31 @@ impl SearchAI {
                 }
             }
         }
+        // 終盤の厳密ソルバで、選んだ手が最善からどれだけ損しているかを採点する
+        let sd = crate::sim::solve_depth();
+        let mut solver_decided = false;
+        let mut chosen_i = chosen_i;
+        if sd > 0 {
+            let alive: usize = sides.iter().map(|s| s.party.iter().filter(|p| p.is_alive).count()).sum();
+            let record = crate::sim::solve_record();
+            if alive <= crate::sim::solve_max_alive() && (record || self.solve_play) {
+                let mut sv = crate::solver::Solver::new(pack, net);
+                sv.collapse_mega = self.collapse_mega;
+                let (v, per) = sv.root(sides, field, me_idx, sd);
+                if record {
+                    crate::sim::solve_trace_push((me_idx, v, per.clone(), action_index(&cands[chosen_i]), alive,
+                                                  sv.nodes, sv.cells, sv.cells_full));
+                }
+                if self.solve_play {
+                    if let Some(&(best_ix, _)) = per.iter().max_by(|a, b| a.1.partial_cmp(&b.1).unwrap()) {
+                        if let Some(k) = cands.iter().position(|a| action_index(a) == best_ix) {
+                            chosen_i = k;
+                            solver_decided = true;
+                        }
+                    }
+                }
+            }
+        }
         // パリティ調査用: ルート直下の (行動, 訪問数, Q) を記録する（ROOT_LOG が Some のときだけ）。
         crate::sim::root_log_push(pack, cands, &stats, chosen_i);
         // 学習用: 盤面と根の訪問分布を記録する（PI_TRACE が Some のときだけ）。
@@ -422,7 +464,8 @@ impl SearchAI {
             crate::sim::pi_trace_push((me_idx, x, pi, rq));
         }
         let mut chosen = cands[chosen_i].clone();
-        if self.downside_guard {
+        let keep_guard = std::env::var("SOLVE_GUARD").map(|v| v != "0").unwrap_or(true);
+        if self.downside_guard && (keep_guard || !solver_decided) {
             chosen = self.apply_downside_guard(
                 pack, net, sides, me_idx, field, belief, cands, chosen, my_is_s1, grng,
             );
@@ -522,6 +565,98 @@ impl SearchAI {
     }
 
     /// SearchAI._sample_opp_config
+    /// 決定化で引いた型を相手の真の型と突き合わせて記録する（計測用・既定でも走る）。
+    #[allow(clippy::too_many_arguments)]
+    fn det_score(pack: &Pack, truth: &crate::poke::Poke, known: usize, item: Option<&str>,
+                 ability: &str, moves: &[String], nature: &str, ev: &crate::pack::EvEntry) {
+        let t_item = truth.item.map(|s| pack.intern.resolve(s).to_string());
+        let t_abil = pack.intern.resolve(truth.ability).to_string();
+        let t_moves: Vec<String> =
+            truth.moves.iter().map(|m| pack.intern.resolve(m.name).to_string()).collect();
+        let hit = moves.iter().filter(|m| t_moves.contains(m)).count() as u64;
+        let ok_item = item.map(String::from) == t_item;
+        let ok_abil = ability == t_abil;
+        let ok_moves = hit as usize == t_moves.len() && moves.len() == t_moves.len();
+        let ok_nat = pack.intern.resolve(truth.nature) == nature;
+        let ok_ev = truth.evs == [ev.h, ev.a, ev.b, ev.c, ev.d, ev.s];
+        crate::sim::det_hit_add(known, ok_item, ok_abil, hit, ok_moves,
+                                ok_item && ok_abil && ok_moves, ok_nat, ok_ev);
+    }
+
+/// 相手の真の技を採用率の高い順（定番→自由枠）に並べる
+fn truth_moves_by_prior(pack: &Pack, truth: &crate::poke::Poke, prior: &[(String, f64)]) -> Vec<String> {
+    let mut t: Vec<(String, f64)> = truth.moves.iter().map(|m| {
+        let n = pack.intern.resolve(m.name).to_string();
+        let r = prior.iter().find(|(x, _)| *x == n).map_or(0.0, |x| x.1);
+        (n, r)
+    }).collect();
+    t.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap_or(std::cmp::Ordering::Equal).then(a.0.cmp(&b.0)));
+    t.into_iter().map(|x| x.0).collect()
+}
+
+/// 枠ごとの当たり率（計測用）: 真の技を採用率順に並べ、未判明の枠を引いた型が当てているか
+fn det_slot(pack: &Pack, truth: &crate::poke::Poke, known: &[String], prior: &[(String, f64)], moves: &[String]) {
+    let order = Self::truth_moves_by_prior(pack, truth, prior);
+    for (rank, m) in order.iter().enumerate().take(4) {
+        if known.contains(m) {
+            continue;
+        }
+        crate::sim::det_slot_add(known.len(), rank, moves.contains(m));
+    }
+}
+
+/// 型プールから既知情報と矛盾しない型を1つ引く。候補が無ければ None（従来の周辺分布に落ちる）。
+fn pick_pool_build<'a>(
+    pack: &'a Pack,
+    name: &str,
+    pb: &mut crate::belief::PokemonBelief,
+    tpl: Option<&crate::poke::Template>,
+    rng: &mut CpyRandom,
+) -> Option<&'a crate::pack::PoolBuild> {
+    let arr = pack.build_pool.get(name)?;
+    // 観測したダメージで絞った型ごとの重み（テンプレが無ければ元の出現率）
+    let wts: Vec<f64> = match tpl {
+        Some(t) => pb.pool_weights(pack, t, arr).to_vec(),
+        None => arr.iter().map(|b| b.weight).collect(),
+    };
+    let mut tot = 0.0;
+    let mut ok: Vec<(&crate::pack::PoolBuild, f64)> = Vec::with_capacity(arr.len());
+    for (b, &bw) in arr.iter().zip(wts.iter()) {
+        if let Some(it) = pb.known_item.as_deref() {
+            if b.item != it {
+                continue;
+            }
+        }
+        // メガ進化で分かる特性はメガ後のもの。判明したメガ石の型は特性で弾かない（belief.py と同じ）
+        let mega_seen = pb.known_item.as_deref() == Some(b.item.as_str())
+            && crate::battle::is_megastone(pack, pack.intern.get(&b.item));
+        if let Some(ab) = pb.known_ability.as_deref() {
+            if !b.ability.is_empty() && b.ability != ab && !mega_seen {
+                continue;
+            }
+        }
+        if !pb.known_moves.iter().all(|m| b.moves.iter().any(|x| x == m)) {
+            continue;
+        }
+        if pb.known_item.is_none() && pb.absent_items.iter().any(|x| *x == b.item) {
+            continue;   // 発動しなかった持ち物（たべのこし等）
+        }
+        tot += bw;
+        ok.push((b, bw));
+    }
+    if ok.is_empty() || tot <= 0.0 {
+        return None;
+    }
+    let mut r = rng.random() * tot;
+    for (b, bw) in &ok {
+        r -= bw;
+        if r <= 0.0 {
+            return Some(b);
+        }
+    }
+    ok.last().map(|x| x.0)
+}
+
     fn sample_opp_config(
         &mut self,
         pack: &Pack,
@@ -543,13 +678,137 @@ impl SearchAI {
                 }
                 Some(i) => i,
             };
-            let pb = &belief.species[bi].1;
+            if self.oracle_mix > 0.0 && self.rng.random() < self.oracle_mix {
+                let km = belief.species[bi].1.known_moves.len();
+                crate::sim::det_hit_add(km, true, true, p.moves.len() as u64, true, true, true, true);
+                out.push(None);
+                continue;
+            }
+            let tpl_j = if self.joint_build { self.tpl.get(pack, &name, &self.season) } else { None };
+            let pb = &mut belief.species[bi].1;
+            // 型プールから型まるごと引く。技・持ち物・性格・努力値を独立に引くと
+            // 実在しない組み合わせになる（型丸ごと一致は事前で7%しかなかった）。
+            if self.joint_build {
+                if let Some(b) = Self::pick_pool_build(pack, &name, pb, tpl_j.as_ref(), &mut self.rng) {
+                    crate::sim::cfg_log_push(pack, &name, &b.ev, &b.nature,
+                                             Some(b.item.as_str()), &b.ability, &b.moves);
+                    Self::det_score(pack, p, pb.known_moves.len(),
+                                    Some(b.item.as_str()), &b.ability, &b.moves, &b.nature, &b.ev);
+                    Self::det_slot(pack, p, &pb.known_moves, &pb.move_prior, &b.moves);
+                    out.push(Some(SampledCfg {
+                        ev: b.ev.clone(),
+                        nature: b.nature.clone(),
+                        item: if b.item.is_empty() { None } else { Some(b.item.clone()) },
+                        // 判明した特性を優先（search_ai.py と同じ。メガ後の特性をメガ前で上書きしない）
+                        ability: pb.known_ability.clone().unwrap_or_else(|| b.ability.clone()),
+                        moves: b.moves.clone(),
+                    }));
+                    continue;
+                }
+            }
             let (ev, nature) = pb.sample_spread(&mut self.rng);
             let item = pb.sample_item(&mut self.rng);
             let ability = pb.sample_ability(&mut self.rng);
             let moves = pb.sample_moves(&mut self.rng, 4);
             crate::sim::cfg_log_push(pack, &name, &ev, &nature, item.as_deref(), &ability, &moves);
+            Self::det_score(pack, p, pb.known_moves.len(), item.as_deref(), &ability, &moves,
+                            &nature, &ev);
+            Self::det_slot(pack, p, &pb.known_moves, &pb.move_prior, &moves);
             out.push(Some(SampledCfg { ev, nature, item, ability, moves }));
+        }
+        // 持ち物が消費・はたき落としで無くなったことは公開情報（opp_view.item_lost・search_ai.py と同じ）
+        for (c, p) in out.iter_mut().zip(opp_side.party.iter()) {
+            if let Some(c) = c {
+                if self.item_gone {
+                    let name = pack.intern.resolve(p.name).to_string();
+                    if let Some(bi) = belief.ensure(pack, &name, None, None) {
+                        if belief.species[bi].1.item_lost {
+                            c.item = None;
+                        }
+                    }
+                }
+            }
+        }
+        if self.oracle_reveal != 0 {
+            for (c, p) in out.iter_mut().zip(opp_side.party.iter()) {
+                let c = match c { Some(c) => c, None => continue };
+                if self.oracle_reveal & 1 != 0 {
+                    c.item = p.item.map(|x| pack.intern.resolve(x).to_string());
+                }
+                if self.oracle_reveal & 2 != 0 {
+                    c.ability = pack.intern.resolve(p.ability).to_string();
+                }
+                if self.oracle_reveal & 4 != 0 {
+                    c.moves = p.moves.iter().map(|m| pack.intern.resolve(m.name).to_string()).collect();
+                }
+                if self.oracle_reveal & (16 | 32) != 0 {
+                    // 16=自由枠（未判明の真の技のうち採用率が最も低い1つ）だけ、32=定番3技だけを教える
+                    let name = pack.intern.resolve(p.name).to_string();
+                    if let Some(bi) = belief.ensure(pack, &name, None, None) {
+                        let pb = &belief.species[bi].1;
+                        let order = Self::truth_moves_by_prior(pack, p, &pb.move_prior);
+                        let mut give: Vec<String> = pb.known_moves.clone();
+                        if self.oracle_reveal & 32 != 0 {
+                            for m in order.iter().take(3) {
+                                if !give.contains(m) {
+                                    give.push(m.clone());
+                                }
+                            }
+                        }
+                        if self.oracle_reveal & 16 != 0 {
+                            if let Some(m) = order.iter().rev().find(|m| !pb.known_moves.contains(m)) {
+                                if !give.contains(m) {
+                                    give.push(m.clone());
+                                }
+                            }
+                        }
+                        for m in c.moves.iter() {
+                            if give.len() >= 4 {
+                                break;
+                            }
+                            if !give.contains(m) {
+                                give.push(m.clone());
+                            }
+                        }
+                        c.moves = give;
+                    }
+                }
+                if self.oracle_reveal & 8 != 0 {
+                    let e = p.evs;
+                    c.ev = crate::pack::EvEntry { h: e[0], a: e[1], b: e[2], c: e[3], d: e[4], s: e[5],
+                                                  ..Default::default() };
+                    c.nature = pack.intern.resolve(p.nature).to_string();
+                }
+            }
+        }
+                // 整合チェック（計測用・既定でも走る）: 引いた型と相手の真の型が、判明情報と矛盾していないか
+        for (c, p) in out.iter().zip(opp_side.party.iter()) {
+            let c = match c { Some(c) => c, None => continue };
+            let name = pack.intern.resolve(p.name).to_string();
+            let bi = match belief.ensure(pack, &name, None, None) { Some(i) => i, None => continue };
+            let pb = &belief.species[bi].1;
+            if pb.known_moves.is_empty() && pb.known_item.is_none() && pb.known_ability.is_none() {
+                continue;
+            }
+            let mut bad = [false; 8];
+            bad[0] = !pb.known_moves.iter().all(|m| c.moves.contains(m));
+            bad[1] = if pb.item_lost && self.item_gone {
+                c.item.is_some()
+            } else {
+                pb.known_item.is_some() && c.item != pb.known_item
+            };
+            bad[2] = pb.known_ability.as_ref().is_some_and(|a| *a != c.ability);
+            bad[3] = pb.known_item.is_none()
+                && c.item.as_ref().is_some_and(|it| pb.absent_items.contains(it));
+            let t_moves: Vec<String> =
+                p.moves.iter().map(|m| pack.intern.resolve(m.name).to_string()).collect();
+            let t_item = p.item.map(|x| pack.intern.resolve(x).to_string());
+            let t_abil = pack.intern.resolve(p.ability).to_string();
+            bad[4] = !pb.known_moves.iter().all(|m| t_moves.contains(m));
+            bad[5] = if pb.item_lost { t_item.is_some() } else { pb.known_item.is_some() && t_item != pb.known_item };
+            bad[6] = pb.known_ability.as_ref().is_some_and(|a| *a != t_abil);
+            bad[7] = pb.known_item.is_none() && t_item.as_ref().is_some_and(|it| pb.absent_items.contains(it));
+            crate::sim::det_consist_add(&bad);
         }
         out
     }
@@ -657,6 +916,7 @@ impl SearchAI {
             sides: [std::mem::take(&mut cs[0]), std::mem::take(&mut cs[1])],
             field: std::mem::take(cfield),
             turn: 0,
+            item_snap: Vec::new(),
         };
         b.sides[0].field_idx = 0;
         b.sides[1].field_idx = 1;

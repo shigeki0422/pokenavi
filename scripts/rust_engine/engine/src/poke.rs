@@ -142,6 +142,10 @@ pub struct Poke {
     pub protect_consecutive: i64,
     pub enduring: bool,
     pub ate_berry: bool,
+    /// 登場してから自分で選んだ技（ねごとで出た技は除く）。2種類以上＝こだわりアイテムではない
+    pub entry_moves: Vec<Sym>,
+    pub entry_item: Option<Sym>,
+    pub via_call: bool,
     pub used_moves: Vec<Sym>,
     pub heal_block_count: i64,
     pub deka_last: bool,

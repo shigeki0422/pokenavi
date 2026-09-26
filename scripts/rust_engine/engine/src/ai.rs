@@ -423,7 +423,8 @@ pub fn filter_valid_by_lock(me: &Poke) -> Vec<(usize, DMove)> {
     if let Some(lk) = lock {
         let locked: Vec<(usize, DMove)> =
             valid.iter().filter(|(_, mv)| mv.name == lk).cloned().collect();
-        return if !locked.is_empty() { locked } else { valid };
+        // 縛られた技が使えないときはわるあがき（ai.py と同じ）。技自体を持っていない場合（決定化で入れ替わった等）は縛りなし扱い
+        return if !locked.is_empty() || me.moves.iter().any(|m| m.name == lk) { locked } else { valid };
     }
     if !valid.is_empty() {
         valid

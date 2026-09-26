@@ -5,7 +5,7 @@
 //! ハーネス側の Python も同じく sorted に monkeypatch する（本番Pythonは無変更）。
 use crate::damage::{calc_damage, DMove, Field};
 use crate::interner::Sym;
-use crate::oppview::{round3, OppView};
+use crate::oppview::OppView;
 use crate::pack::{EvEntry, Pack};
 use crate::poke::{build_from_template_rand, get_pokemon_template, to_poke, Evs, Poke, Spec, Template};
 use crate::pysum::pysum;
@@ -31,6 +31,110 @@ pub struct Cand {
     pub defender: Poke,
 }
 
+/// 実機の相手HP表示（整数％、四捨五入）。belief.py の hp_pct と 1:1
+pub fn hp_pct(hp: i64, max_hp: i64) -> i64 {
+    if max_hp == 0 { 0 } else { (hp * 200 + max_hp).div_euclid(2 * max_hp) }
+}
+
+/// 候補で計算したダメージが観測と合うか（belief.py の obs_match と 1:1）。
+/// taken: 相手のHPは整数％でしか見えないので±1%の幅で合わせる。dealt: 自分のHPは実数で見えるので整数で比べる
+pub fn obs_match(taken: bool, dmg: i64, hp: i64, obs: f64) -> bool {
+    if taken {
+        hp != 0 && (dmg as f64 * 100.0 / hp as f64 - obs).abs() <= 1.0
+    } else {
+        dmg as f64 == obs
+    }
+}
+
+/// 観測時点の相手の個体の写し（belief.py の pub_state と 1:1）。見えている状態をすべて含む
+pub type PubState = Poke;
+
+pub fn pub_state(p: &Poke) -> PubState {
+    p.clone()
+}
+
+/// 自分側の個体の行動前の写し（belief.py の own_state）
+pub fn own_state(st: Option<&PubState>, fallback: &Poke) -> Poke {
+    st.cloned().unwrap_or_else(|| fallback.clone())
+}
+
+/// 観測時点の相手の写しに、候補の型の隠れた部分（性格・努力値・能力値・持ち物・特性）を差し込む
+/// （belief.py の with_state と 1:1）
+pub fn with_state(pack: &Pack, prof: &Poke, st: Option<&PubState>) -> Poke {
+    let st = match st {
+        None => return prof.clone(),
+        Some(s) => s,
+    };
+    let mut q = st.clone();
+    if st.transformed {
+        return q;
+    }
+    let mut cand = prof.clone();
+    if st.mega_evolved && !prof.mega_evolved {
+        crate::poke::mega_evolve_poke(pack, &mut cand);
+    }
+    let frac = if st.max_hp != 0 { st.hp as f64 / st.max_hp as f64 } else { 1.0 };
+    q.max_hp = cand.max_hp;
+    q.attack = cand.attack;
+    q.defense = cand.defense;
+    q.sp_attack = cand.sp_attack;
+    q.sp_defense = cand.sp_defense;
+    q.speed = cand.speed;
+    q.nature = cand.nature;
+    q.evs = cand.evs;
+    if st.item.is_some() {
+        q.item = cand.item;
+    }
+    if !st.mega_evolved {
+        q.ability = cand.ability;
+    }
+    q.hp = if st.hp > 0 {
+        std::cmp::max(1, (frac * q.max_hp as f64).round_ties_even() as i64)
+    } else {
+        0
+    };
+    q
+}
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub enum ObsKind {
+    Taken,
+    Dealt,
+    Order,
+    /// 相手が攻撃技を選んだ（mv=選んだ技、other=こちらの受け手）。belief.py の "choice"
+    Choice,
+}
+
+/// 技選びの尤度で、明らかに強い技を持つ型に掛ける係数（belief.py の CHOICE_BETA）
+pub const CHOICE_BETA: f64 = 0.3;
+
+fn dmove_by_name(pack: &Pack, name: &str) -> Option<DMove> {
+    let idx = *pack.move_by_name.get(name)?;
+    let md = &pack.moves[idx];
+    Some(DMove {
+        name: md.name,
+        ty: md.ty,
+        category: md.category,
+        power: md.power,
+        accuracy: md.accuracy,
+        priority: md.priority,
+        pp: md.pp,
+    })
+}
+
+/// 型プールの重み付けに後から使う観測。Taken=こちらが与えた被ダメージ、Dealt=相手が与えたダメージ、
+/// Order=行動順（frac に自分の実効速度、crit に「相手が先」）。other は自分側の個体（行動前の状態）
+#[derive(Clone, Debug)]
+pub struct DmgObs {
+    pub kind: ObsKind,
+    pub other: Poke,
+    pub mv: DMove,
+    pub frac: f64,
+    pub field: Field,
+    pub crit: bool,
+    pub subj: Option<PubState>,
+}
+
 #[derive(Clone, Debug)]
 pub struct PokemonBelief {
     pub name: String,
@@ -40,10 +144,19 @@ pub struct PokemonBelief {
     /// set → sorted 正規化（パリティ規約 #3）
     pub known_moves: Vec<String>,
     pub known_item: Option<String>,
+    pub item_lost: bool,
+    pub item_epoch: u32,
     pub known_ability: Option<String>,
     pub cands: Vec<Cand>,
     pub prior: Vec<f64>,
     pub post: Vec<f64>,
+    /// 型プール経路：観測したダメージと、型ごとの事後重み（belief.py と 1:1）
+    pub dmg_obs: Vec<DmgObs>,
+    pub absent_items: Vec<String>,
+    pub pool_w: Vec<f64>,
+    pub pool_applied: usize,
+    pub pool_prof: Vec<usize>,
+    pub profs: Vec<Poke>,
 }
 
 fn ev_key(e: &EvEntry) -> (i64, i64, i64, i64, i64, i64) {
@@ -155,10 +268,18 @@ impl PokemonBelief {
             ability_prior: tpl.top_abilities.clone(),
             known_moves: Vec::new(),
             known_item,
+            item_lost: false,
+            item_epoch: 0,
             known_ability,
             cands,
             prior,
             post,
+            dmg_obs: Vec::new(),
+            absent_items: Vec::new(),
+            pool_w: Vec::new(),
+            pool_applied: 0,
+            pool_prof: Vec::new(),
+            profs: Vec::new(),
         }
     }
 
@@ -171,11 +292,25 @@ impl PokemonBelief {
             }
         }
         self.known_moves.sort();
+        // 持ち物が入れ替わったら、それ以前の持ち物の推論は捨てる（belief.py と同じ）
+        if k.item_epoch != self.item_epoch {
+            self.item_epoch = k.item_epoch;
+            self.absent_items.clear();
+            self.item_lost = k.item_lost;
+            self.known_item = k.known_item.map(|i| pack.intern.resolve(i).to_string());
+        }
         if let Some(i) = k.known_item {
             let s = pack.intern.resolve(i).to_string();
             if !s.is_empty() {
                 self.known_item = Some(s);
             }
+        }
+        if k.item_lost {
+            self.item_lost = true;
+        }
+        // 初登場時にふうせんの表示が無かった（belief.py と 1:1）
+        if k.no_balloon {
+            self.observe_absent_item(&["ふうせん"]);
         }
         if let Some(a) = k.known_ability {
             let s = pack.intern.resolve(a).to_string();
@@ -186,6 +321,7 @@ impl PokemonBelief {
     }
 
     /// observe_damage: 16ロールで観測割合を再現できた候補の尤度でベイズ更新
+    #[allow(clippy::too_many_arguments)]
     pub fn observe_damage(
         &mut self,
         pack: &Pack,
@@ -195,10 +331,18 @@ impl PokemonBelief {
         field: &mut Field,
         critical: bool,
         rng: &mut dyn BRng,
+        subj: Option<&PubState>,
+        other_state: Option<&PubState>,
     ) -> bool {
+        // 自分側の個体も行動前の状態に戻す（りゅうせいぐん等で技の後に能力が下がっている）
+        let mut att = own_state(other_state, attacker);
+        self.dmg_obs.push(DmgObs { kind: ObsKind::Taken, other: att.clone(), mv: mv.clone(),
+                                   frac: observed_fraction, field: field.clone(), crit: critical,
+                                   subj: subj.cloned() });
         let rs = rolls();
         let mut liks: Vec<f64> = Vec::with_capacity(self.cands.len());
-        for c in self.cands.iter_mut() {
+        for c in self.cands.iter() {
+            let mut d = with_state(pack, &c.defender, subj);
             let mut hit = 0i64;
             for rr in rs.iter() {
                 let mut cb = |kind: u8| match kind {
@@ -207,8 +351,8 @@ impl PokemonBelief {
                 };
                 let dmg = calc_damage(
                     pack,
-                    attacker,
-                    &mut c.defender,
+                    &mut att,
+                    &mut d,
                     mv,
                     field,
                     critical,
@@ -216,7 +360,7 @@ impl PokemonBelief {
                     None,
                     &mut cb,
                 );
-                if round3(dmg as f64 / c.defender.max_hp as f64) == observed_fraction {
+                if obs_match(true, dmg, d.max_hp, observed_fraction) {
                     hit += 1;
                 }
             }
@@ -245,6 +389,7 @@ impl PokemonBelief {
 
     /// observe_damage_dealt（belief.py と 1:1）
     /// 殴られた側が「自分がどれだけ減ったか」から相手の攻撃側 EV/性格を絞る。
+    #[allow(clippy::too_many_arguments)]
     pub fn observe_damage_dealt(
         &mut self,
         pack: &Pack,
@@ -254,10 +399,17 @@ impl PokemonBelief {
         field: &mut Field,
         critical: bool,
         rng: &mut dyn BRng,
+        subj: Option<&PubState>,
+        other_state: Option<&PubState>,
     ) -> bool {
+        let mut def = own_state(other_state, defender);
+        self.dmg_obs.push(DmgObs { kind: ObsKind::Dealt, other: def.clone(), mv: mv.clone(),
+                                   frac: observed_fraction, field: field.clone(), crit: critical,
+                                   subj: subj.cloned() });
         let rs = rolls();
         let mut liks: Vec<f64> = Vec::with_capacity(self.cands.len());
-        for c in self.cands.iter_mut() {
+        for c in self.cands.iter() {
+            let mut a = with_state(pack, &c.defender, subj);
             let mut hit = 0i64;
             for rr in rs.iter() {
                 let mut cb = |kind: u8| match kind {
@@ -266,8 +418,8 @@ impl PokemonBelief {
                 };
                 let dmg = calc_damage(
                     pack,
-                    &mut c.defender,
-                    defender,
+                    &mut a,
+                    &mut def,
                     mv,
                     field,
                     critical,
@@ -275,7 +427,7 @@ impl PokemonBelief {
                     None,
                     &mut cb,
                 );
-                if round3(dmg as f64 / defender.max_hp as f64) == observed_fraction {
+                if obs_match(false, dmg, def.max_hp, observed_fraction) {
                     hit += 1;
                 }
             }
@@ -296,7 +448,11 @@ impl PokemonBelief {
         my_eff_speed: i64,
         opp_first: bool,
         field: &Field,
+        subj: Option<&PubState>,
     ) -> bool {
+        self.dmg_obs.push(DmgObs { kind: ObsKind::Order, other: Poke::default(), mv: DMove::default(),
+                                   frac: my_eff_speed as f64, field: field.clone(), crit: opp_first,
+                                   subj: subj.cloned() });
         let scarf = "こだわりスカーフ";
         let scarf_p = self
             .item_prior
@@ -308,11 +464,12 @@ impl PokemonBelief {
         let scarf_allowed =
             self.known_item.is_none() || self.known_item.as_deref() == Some(scarf);
         for c in self.cands.iter() {
-            let base = eff_speed_with(pack, &c.defender, field, 1.0);
+            let d = with_state(pack, &c.defender, subj);
+            let base = eff_speed_with(pack, &d, field, 1.0);
             let ok_plain = if opp_first { base >= my_eff_speed } else { base <= my_eff_speed };
             let mut ok_scarf = false;
             if scarf_p > 0.0 && scarf_allowed {
-                let sc = eff_speed_with(pack, &c.defender, field, 1.5);
+                let sc = eff_speed_with(pack, &d, field, 1.5);
                 ok_scarf = if opp_first { sc >= my_eff_speed } else { sc <= my_eff_speed };
             }
             if ok_plain {
@@ -331,11 +488,26 @@ impl PokemonBelief {
         true
     }
 
+    /// 相手が攻撃技を選んだ（型プール経路の pool_weights で反映。belief.py の observe_choice）
+    pub fn observe_choice(&mut self, mv: &DMove, own_def: Poke, field: &Field, subj: PubState) {
+        // 同じ受け手に同じ技を選び続けたのは実質1回の判断（belief.py と同じ）
+        if self.dmg_obs.iter().any(|o| o.kind == ObsKind::Choice && o.mv.name == mv.name && o.other.name == own_def.name) {
+            return;
+        }
+        self.dmg_obs.push(DmgObs { kind: ObsKind::Choice, other: own_def, mv: mv.clone(), frac: 0.0,
+                                   field: field.clone(), crit: false, subj: Some(subj) });
+    }
+
     /// observe_absent_item（belief.py と 1:1）
     /// 「発動しなかった」ことから持ち物を否定する。開示済みなら何もしない。
     pub fn observe_absent_item(&mut self, items: &[&str]) -> bool {
         if self.known_item.is_some() {
             return false;
+        }
+        for it in items {
+            if !self.absent_items.iter().any(|x| x == it) {
+                self.absent_items.push(it.to_string());
+            }
         }
         let before = self.item_prior.len();
         self.item_prior.retain(|(n, _)| !items.contains(&n.as_str()));
@@ -346,6 +518,152 @@ impl PokemonBelief {
             self.item_prior = vec![(String::new(), 100.0)];
         }
         true
+    }
+
+    /// 型プールの型ごとの事後重み（belief.py の pool_weights と 1:1）。
+    /// 重み＝型の出現率 × Π(観測したダメージを再現できる尤度)。尤度は持ち物・特性・性格・努力値が
+    /// 同じ型で共通なので、その組（プロファイル）ごとに1回だけ計算する。観測は初回参照時にまとめて反映。
+    pub fn pool_weights(&mut self, pack: &Pack, tpl: &Template, pool: &[crate::pack::PoolBuild]) -> &[f64] {
+        if self.pool_w.len() != pool.len() {
+            self.pool_w = pool.iter().map(|b| b.weight).collect();
+            self.pool_applied = 0;
+            self.pool_prof.clear();
+            self.profs.clear();
+            let mut idx: HashMap<(String, String, String, (i64, i64, i64, i64, i64, i64)), usize> = HashMap::new();
+            for b in pool {
+                let key = (b.item.clone(), b.ability.clone(), b.nature.clone(), ev_key(&b.ev));
+                let n = self.profs.len();
+                let i = *idx.entry(key).or_insert(n);
+                if i == n {
+                    let spec = Spec {
+                        name: tpl.name.clone(),
+                        item: if b.item.is_empty() { None } else { Some(b.item.clone()) },
+                        nature: Some(b.nature.clone()),
+                        moves: None,
+                        evs: Some(Evs { h: b.ev.h, a: b.ev.a, b: b.ev.b, c: b.ev.c, d: b.ev.d, s: b.ev.s }),
+                        ability: if b.ability.is_empty() { None } else { Some(b.ability.clone()) },
+                    };
+                    let bb = build_from_template_rand(pack, tpl, &spec, &mut None);
+                    self.profs.push(to_poke(pack, &bb));
+                }
+                self.pool_prof.push(i);
+            }
+        }
+        let rs = rolls();
+        // 計測用: POOL_DMG=0 で観測を反映しない（ダメージによる絞り込みの効果の切り分け）
+        if std::env::var("POOL_DMG").map(|v| v == "0").unwrap_or(false) {
+            self.pool_applied = self.dmg_obs.len();
+        }
+        while self.pool_applied < self.dmg_obs.len() {
+            let mut o = self.dmg_obs[self.pool_applied].clone();
+            self.pool_applied += 1;
+            if o.kind == ObsKind::Choice {
+                if std::env::var("POOL_CHOICE").map(|v| v != "1").unwrap_or(true) {
+                    continue;
+                }
+                // 技選びの尤度（belief.py の _apply_choice と 1:1）
+                let rr = 7.0 / 15.0;
+                let chosen = pack.intern.resolve(o.mv.name).to_string();
+                let mut names: Vec<String> = pool.iter().flat_map(|b| b.moves.iter().cloned()).collect();
+                names.sort();
+                names.dedup();
+                let mvs: Vec<(String, DMove)> = names.into_iter()
+                    .filter_map(|n| dmove_by_name(pack, &n).map(|d| (n, d)))
+                    .filter(|(_, d)| d.category != crate::pack::Cat::Status)
+                    .collect();
+                let mut cache: HashMap<usize, HashMap<String, f64>> = HashMap::new();
+                let mut lik: Vec<f64> = Vec::with_capacity(pool.len());
+                for (b, &pi) in pool.iter().zip(self.pool_prof.iter()) {
+                    if !b.moves.iter().any(|m| *m == chosen) {
+                        lik.push(1.0);
+                        continue;
+                    }
+                    if !cache.contains_key(&pi) {
+                        let mut q = with_state(pack, &self.profs[pi], o.subj.as_ref());
+                        let mut dd: HashMap<String, f64> = HashMap::new();
+                        for (n, dm) in mvs.iter() {
+                            // 持ち物が無いなげつけるは威力0（belief.py と同じ）
+                            if dm.name == pack.sy.mv.なげつける && q.last_flung_item.or(q.item).is_none() {
+                                dd.insert(n.clone(), 0.0);
+                                continue;
+                            }
+                            let mut cb = |kind: u8| if kind == 0 { 0.99 } else { 0.0 };
+                            let mut od = o.other.clone();
+                            let d = calc_damage(pack, &mut q, &mut od, dm, &mut o.field, false, Some(rr), None, &mut cb);
+                            dd.insert(n.clone(), d as f64 * crate::ai::expected_hits(pack, dm, &q));
+                        }
+                        cache.insert(pi, dd);
+                    }
+                    let dd = &cache[&pi];
+                    let got = dd.get(&chosen).copied().unwrap_or(0.0);
+                    let best = b.moves.iter().filter_map(|m| dd.get(m).copied()).fold(0.0f64, f64::max);
+                    lik.push(if got >= o.other.hp as f64 || got * 1.5 >= best { 1.0 } else { CHOICE_BETA });
+                }
+                let mut t = 0.0f64;
+                for (w, x) in self.pool_w.iter_mut().zip(lik.iter()) {
+                    *w *= *x;
+                    t += *w;
+                }
+                if t > 0.0 {
+                    for w in self.pool_w.iter_mut() {
+                        *w /= t;
+                    }
+                }
+                continue;
+            }
+            let mut liks = vec![0.0f64; self.profs.len()];
+            let mut any = false;
+            for (pi, prof0) in self.profs.iter().enumerate() {
+                let mut prof = with_state(pack, prof0, o.subj.as_ref());
+                if o.kind == ObsKind::Order {
+                    // 行動順：候補自身の持ち物（スカーフ等）込みの実効速度で先後が合うか
+                    let m = crate::items::get_speed_item_multiplier(pack, prof.item);
+                    let sp = eff_speed_with(pack, &prof, &o.field, m) as f64;
+                    let ok = if o.crit { sp >= o.frac } else { sp <= o.frac };
+                    liks[pi] = if ok { 1.0 } else { 0.0 };
+                    if ok {
+                        any = true;
+                    }
+                    continue;
+                }
+                let prof = &mut prof;
+                let mut hit = 0i64;
+                for rr in rs.iter() {
+                    // 乱数を使うのはきまぐレーザーの威力判定だけ。観測の再計算で対戦の乱数を消費しない
+                    let mut cb = |kind: u8| if kind == 0 { 0.99 } else { 0.0 };
+                    let (dmg, hp) = if o.kind == ObsKind::Taken {
+                        let d = calc_damage(pack, &mut o.other, prof, &o.mv, &mut o.field,
+                                            o.crit, Some(*rr), None, &mut cb);
+                        (d, prof.max_hp)
+                    } else {
+                        let d = calc_damage(pack, prof, &mut o.other, &o.mv, &mut o.field,
+                                            o.crit, Some(*rr), None, &mut cb);
+                        (d, o.other.max_hp)
+                    };
+                    if obs_match(o.kind == ObsKind::Taken, dmg, hp, o.frac) {
+                        hit += 1;
+                    }
+                }
+                liks[pi] = hit as f64 / 16.0;
+                if hit > 0 {
+                    any = true;
+                }
+            }
+            if !any {
+                continue;   // どの型でも再現できない＝モデル外（更新しない）
+            }
+            let mut t = 0.0f64;
+            for (w, &pi) in self.pool_w.iter_mut().zip(self.pool_prof.iter()) {
+                *w *= liks[pi] * (1.0 - EPS) + EPS;
+                t += *w;
+            }
+            if t > 0.0 {
+                for w in self.pool_w.iter_mut() {
+                    *w /= t;
+                }
+            }
+        }
+        &self.pool_w
     }
 
     fn apply_liks(&mut self, liks: &[f64]) {
@@ -490,6 +808,23 @@ impl OpponentBelief {
                 self.species[i].1.observe_disclosure(pack, &k);
             }
         }
+        // 同じ持ち物はパーティに1つ。判明した味方の持ち物は他の個体の候補から外す（belief.py と 1:1）
+        let team: Vec<(String, String)> = view.pokemon.iter()
+            .filter(|k| k.item_epoch == 0)
+            .filter_map(|k| k.known_item.map(|i| (pack.intern.resolve(k.name).to_string(),
+                                                  pack.intern.resolve(i).to_string())))
+            .filter(|(_, i)| !i.is_empty())
+            .collect();
+        for k in view.pokemon.iter() {
+            let name = pack.intern.resolve(k.name).to_string();
+            if let Some(e) = self.species.iter_mut().find(|e| e.0 == name) {
+                for (other, it) in &team {
+                    if *other != name {
+                        e.1.observe_absent_item(&[it.as_str()]);   // 持ち物の事前分布からも外す
+                    }
+                }
+            }
+        }
     }
 
     pub fn observe_damage(
@@ -502,6 +837,8 @@ impl OpponentBelief {
         field: &mut Field,
         critical: bool,
         rng: &mut dyn BRng,
+        subj: Option<&PubState>,
+        other_state: Option<&PubState>,
     ) -> bool {
         let name = pack.intern.resolve(defender_name).to_string();
         let i = match self.ensure(pack, &name, None, None) {
@@ -509,7 +846,8 @@ impl OpponentBelief {
             Some(i) => i,
         };
         let mut b = std::mem::replace(&mut self.species[i].1, PokemonBelief::empty());
-        let r = b.observe_damage(pack, attacker, mv, observed_fraction, field, critical, rng);
+        let r = b.observe_damage(pack, attacker, mv, observed_fraction, field, critical, rng,
+                                 subj, other_state);
         self.species[i].1 = b;
         r
     }
@@ -525,6 +863,8 @@ impl OpponentBelief {
         field: &mut Field,
         critical: bool,
         rng: &mut dyn BRng,
+        subj: Option<&PubState>,
+        other_state: Option<&PubState>,
     ) -> bool {
         let name = pack.intern.resolve(attacker_name).to_string();
         let i = match self.ensure(pack, &name, None, None) {
@@ -532,7 +872,8 @@ impl OpponentBelief {
             Some(i) => i,
         };
         let mut b = std::mem::replace(&mut self.species[i].1, PokemonBelief::empty());
-        let r = b.observe_damage_dealt(pack, defender, mv, observed_fraction, field, critical, rng);
+        let r = b.observe_damage_dealt(pack, defender, mv, observed_fraction, field, critical, rng,
+                                       subj, other_state);
         self.species[i].1 = b;
         r
     }
@@ -544,6 +885,7 @@ impl OpponentBelief {
         my_eff_speed: i64,
         opp_first: bool,
         field: &Field,
+        subj: Option<&PubState>,
     ) -> bool {
         let name = pack.intern.resolve(opp_name).to_string();
         let i = match self.ensure(pack, &name, None, None) {
@@ -551,9 +893,17 @@ impl OpponentBelief {
             Some(i) => i,
         };
         let mut b = std::mem::replace(&mut self.species[i].1, PokemonBelief::empty());
-        let r = b.observe_order(pack, my_eff_speed, opp_first, field);
+        let r = b.observe_order(pack, my_eff_speed, opp_first, field, subj);
         self.species[i].1 = b;
         r
+    }
+
+    pub fn observe_choice(&mut self, pack: &Pack, opp_name: Sym, mv: &DMove, own_def: Poke, field: &Field,
+                          subj: PubState) {
+        let name = pack.intern.resolve(opp_name).to_string();
+        if let Some(i) = self.ensure(pack, &name, None, None) {
+            self.species[i].1.observe_choice(mv, own_def, field, subj);
+        }
     }
 
     pub fn observe_absent_item(&mut self, pack: &Pack, opp_name: Sym, items: &[&str]) -> bool {
@@ -578,10 +928,18 @@ impl PokemonBelief {
             ability_prior: Vec::new(),
             known_moves: Vec::new(),
             known_item: None,
+            item_lost: false,
+            item_epoch: 0,
             known_ability: None,
             cands: Vec::new(),
             prior: Vec::new(),
             post: Vec::new(),
+            dmg_obs: Vec::new(),
+            absent_items: Vec::new(),
+            pool_w: Vec::new(),
+            pool_applied: 0,
+            pool_prof: Vec::new(),
+            profs: Vec::new(),
         }
     }
 }

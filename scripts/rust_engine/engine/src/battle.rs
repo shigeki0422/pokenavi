@@ -128,6 +128,7 @@ impl Side {
             prev.enduring = false;
             prev.grounded = false;
             prev.used_moves.clear();
+            prev.entry_moves.clear();
             prev.ate_berry = false;
             prev.protect_consecutive = 0;
             prev.locked_move = None;
@@ -179,6 +180,8 @@ pub struct Battle {
     pub sides: [Side; 2],
     pub field: Field,
     pub turn: i64,
+    /// 前回の行動選択時の持ち物（battle.py の _item_snap）。空＝未取得
+    pub item_snap: Vec<Vec<Option<crate::interner::Sym>>>,
 }
 
 #[inline]
@@ -254,6 +257,17 @@ fn gag_block(pack: &Pack, n: u16) -> bool {
 
 // ── 行動優先度 ────────────────────────────────────────────────────────────
 pub fn priority(pack: &Pack, action: &Action, poke: &Poke, field: &Field, rng: &mut dyn BRng) -> i64 {
+    let mut base = priority_base(pack, action, poke, field);
+    if !matches!(action.kind, ActKind::Switch | ActKind::Mega) && action.mv.is_some()
+        && it::has_quick_claw_trigger(pack, poke.item, rng)
+    {
+        base += 1;
+    }
+    base
+}
+
+/// 乱数を使わない部分の優先度（せんせいのツメ以外。battle.py の _priority_base）
+pub fn priority_base(pack: &Pack, action: &Action, poke: &Poke, field: &Field) -> i64 {
     let l = &pack.sy.l;
     match action.kind {
         ActKind::Switch => return 6,
@@ -274,9 +288,6 @@ pub fn priority(pack: &Pack, action: &Action, poke: &Poke, field: &Field, rng: &
         base += 1;
     }
     if poke.ability == l.いたずらごころ && mv.category == Cat::Status {
-        base += 1;
-    }
-    if it::has_quick_claw_trigger(pack, poke.item, rng) {
         base += 1;
     }
     base
@@ -900,9 +911,36 @@ pub fn execute_move(
             A!().used_moves.push(n);
         }
     }
-    {
+    // 自分の技だけを「判明した技」にする（わるあがき・まねっこのコピーは除く。battle.py と同じ）
+    if A!().moves.iter().any(|m| m.name == n) {
         let an = A!().name;
         sides[didx].opp_view.on_move(an, n);
+        // 交代せずに違う技を打った＝こだわりアイテムではない（battle.py と同じ）
+        if !A!().via_call {
+            // 持ち物が途中で変わったら数え直す（battle.py と同じ）
+            if A!().entry_moves.is_empty() || A!().entry_item != A!().item {
+                A!().entry_moves.clear();
+                A!().entry_item = A!().item;
+            }
+            if !A!().entry_moves.contains(&n) {
+                A!().entry_moves.push(n);
+            }
+            if A!().entry_moves.len() >= 2 && sides[didx].belief.0.is_some() {
+                let mut bl = sides[didx].belief.0.take().unwrap();
+                bl.observe_absent_item(pack, an, &["こだわりスカーフ", "こだわりハチマキ", "こだわりメガネ"]);
+                sides[didx].belief.0 = Some(bl);
+            }
+            // 技選びの観測（battle.py と同じ条件）
+            if sides[didx].belief.0.is_some() && mv.category != Cat::Status && mv.priority <= 0
+                && A!().choice_locked_move.is_none() && A!().encore_count == 0 && A!().lock_count == 0
+            {
+                let own_def = D!().clone();
+                let subj = crate::belief::pub_state(&A!());
+                let mut bl = sides[didx].belief.0.take().unwrap();
+                bl.observe_choice(pack, an, &mv, own_def, field, subj);
+                sides[didx].belief.0 = Some(bl);
+            }
+        }
     }
 
     if A!().recharge {
@@ -927,7 +965,9 @@ pub fn execute_move(
         let saved_count = A!().sleep_count;
         A!().status = None;
         let fake = Action { kind: ActKind::Move, mv: Some(selected), ..Default::default() };
+        sides[aidx].party[ai].via_call = true;
         execute_move(pack, sides, field, aidx, &fake, opp_action, rng, &mut 0);
+        sides[aidx].party[ai].via_call = false;
         if sides[aidx].party[ai].status.is_none() {
             sides[aidx].party[ai].status = saved_status;
             sides[aidx].party[ai].sleep_count = saved_count;
@@ -1464,6 +1504,11 @@ pub fn execute_move(
         rng.random() < c
     };
     let mut hits = calc_hits(pack, &mv, &A!(), rng);
+    // 型の逆算用に、行動前の両者の見えている状態を控える（battle.py の _pre_att/_pre_def）
+    // 写しは信念を持つ実戦だけで取る（探索中の複製には信念が無い。battle.py と同じ）
+    let has_bl = sides[aidx].belief.0.is_some() || sides[didx].belief.0.is_some();
+    let pre_att = if has_bl { Some(crate::belief::pub_state(&A!())) } else { None };
+    let pre_def = if has_bl { Some(crate::belief::pub_state(&D!())) } else { None };
 
     let screen_breaker = n == l.かわらわり || n == l.レイジングブル || n == l.サイコファング;
     let mut screen_mult = 1.0f64;
@@ -1609,6 +1654,11 @@ pub fn execute_move(
             let (dn, dit, dab, aab) = (D!().name, D!().item, D!().ability, A!().ability);
             if dit == Some(l.ゴツゴツメット) {
                 sides[aidx].opp_view.on_item(dn, l.ゴツゴツメット);
+            } else if sides[aidx].belief.0.is_some() {
+                // 否定的観測（battle.py と 1:1）: 接触技を当てたのに反動が無かった＝ゴツゴツメットではない
+                let mut bl = sides[aidx].belief.0.take().unwrap();
+                bl.observe_absent_item(pack, dn, &["ゴツゴツメット"]);
+                sides[aidx].belief.0 = Some(bl);
             }
             if (dab == l.さめはだ || dab == l.てつのとげ)
                 && aab != l.かたやぶり
@@ -1908,21 +1958,25 @@ pub fn execute_move(
         let an = A!().name;
         sides[aidx].opp_view.on_hp_change(dn, dhp, dmax, total_dmg, Some(n), Some(an));
         // 推定器(任意): 観測した被ダメージ割合で EV/性格をベイズ更新（battle.py:1384）
-        if sides[aidx].belief.0.is_some() {
-            let frac = crate::oppview::round3(total_dmg as f64 / dmax as f64);
+        // 観測がダメージ式1回分と一致する場合だけ使う（連続技・急所・倒した/耐えた一撃は除く。battle.py と同じ）
+        let obs_ok = hits == 1 && !critical && D!().is_alive && D!().hp > 1;
+        if obs_ok && sides[aidx].belief.0.is_some() {
+            let frac = (crate::belief::hp_pct(dhp + total_dmg, dmax) - crate::belief::hp_pct(dhp, dmax)) as f64;
             let mut bl = sides[aidx].belief.0.take().unwrap();
             let mut att = std::mem::take(&mut sides[aidx].party[ai]);
-            bl.observe_damage(pack, dn, &mut att, &mv, frac, field, false, rng);
+            bl.observe_damage(pack, dn, &mut att, &mv, frac, field, false, rng,
+                              pre_def.as_ref(), pre_att.as_ref());
             sides[aidx].party[ai] = att;
             sides[aidx].belief.0 = Some(bl);
         }
         // 与ダメージ観測（belief.py と 1:1）: 殴られた側は「自分がどれだけ減ったか」から
         // 相手の攻撃側 EV/性格を絞る。被ダメージ観測は相手の耐久しか絞れない。
-        if sides[didx].belief.0.is_some() {
-            let frac = crate::oppview::round3(total_dmg as f64 / dmax as f64);
+        if obs_ok && sides[didx].belief.0.is_some() {
+            let frac = total_dmg as f64;
             let mut bl = sides[didx].belief.0.take().unwrap();
             let mut def = std::mem::take(&mut sides[didx].party[di]);
-            bl.observe_damage_dealt(pack, an, &mut def, &mv, frac, field, false, rng);
+            bl.observe_damage_dealt(pack, an, &mut def, &mv, frac, field, false, rng,
+                                    pre_att.as_ref(), pre_def.as_ref());
             sides[didx].party[di] = def;
             sides[didx].belief.0 = Some(bl);
         }
@@ -2652,6 +2706,10 @@ pub fn apply_status_move(
         let (a, d) = (A!().item, D!().item);
         A!().item = d;
         D!().item = a;
+        // 入れ替わった持ち物は両者に見える（battle.py と同じ）
+        let (an, dn) = (A!().name, D!().name);
+        sides[aidx].opp_view.on_item_swapped(dn, a);
+        sides[didx].opp_view.on_item_swapped(an, d);
         return;
     }
     if n == l.グラスフィールド {
@@ -2699,7 +2757,9 @@ pub fn apply_status_move(
                 let k = rng.choice(cands.len());
                 let chosen = A!().moves[cands[k]].clone();
                 let act = Action { kind: ActKind::Move, mv: Some(chosen), ..Default::default() };
+                sides[aidx].party[ai].via_call = true;
                 execute_move(pack, sides, field, aidx, &act, None, rng, &mut 0);
+                sides[aidx].party[ai].via_call = false;
             }
         }
         return;
@@ -3043,6 +3103,10 @@ pub fn apply_status_move(
         let (a, d) = (A!().item, D!().item);
         A!().item = d;
         D!().item = a;
+        // 入れ替わった持ち物は両者に見える（battle.py と同じ）
+        let (an, dn) = (A!().name, D!().name);
+        sides[aidx].opp_view.on_item_swapped(dn, a);
+        sides[didx].opp_view.on_item_swapped(an, d);
         return;
     }
     if n == l.ミストフィールド {
@@ -3865,7 +3929,7 @@ fn entry_effects_side(pack: &Pack, sides: &mut [Side; 2], field: &mut Field, sx:
 
 impl Battle {
     pub fn new(s1: Side, s2: Side, field: Field) -> Battle {
-        let mut b = Battle { sides: [s1, s2], field, turn: 0 };
+        let mut b = Battle { sides: [s1, s2], field, turn: 0, item_snap: Vec::new() };
         b.sides[0].field_idx = 0;
         b.sides[1].field_idx = 1;
         b
@@ -4248,6 +4312,7 @@ impl Battle {
             let berry_blocked = self.sides[ox].active().is_alive
                 && self.sides[ox].active().ability == l.きんちょうかん;
 
+            let item_before_berry = self.sides[sx].active().item;
             // オボンのみ
             if !berry_blocked {
                 let trig = {
@@ -4285,6 +4350,22 @@ impl Battle {
                         p.name
                     };
                     self.sides[ox].opp_view.on_item(nm, l.オレンのみ);
+                }
+            }
+            // 否定的観測（battle.py と 1:1）: 表示HPが半分を確実に下回ったのにきのみが発動しなかった
+            // ＝オボンのみ/オレンのみではない。境目（50%付近）ときんちょうかんの時は推論しない
+            {
+                let (nm, hp, mx, alive) = {
+                    let p = self.sides[sx].active();
+                    (p.name, p.hp, p.max_hp, p.is_alive)
+                };
+                if self.sides[ox].belief.0.is_some() && !berry_blocked && alive
+                    && item_before_berry != Some(l.オボンのみ) && item_before_berry != Some(l.オレンのみ)
+                    && hp <= mx / 2 && hp * 100 < mx * 49
+                {
+                    let mut bl = self.sides[ox].belief.0.take().unwrap();
+                    bl.observe_absent_item(pack, nm, &["オボンのみ", "オレンのみ"]);
+                    self.sides[ox].belief.0 = Some(bl);
                 }
             }
             if !berry_blocked {
@@ -4540,6 +4621,17 @@ impl Battle {
     ) {
         self.sides[0].opp_view.team_preview(pv_for_s1);
         self.sides[1].opp_view.team_preview(pv_for_s2);
+        // 先発も「場に出た」（battle.py の run と同じ。隠れ選出の引き直しから外す）
+        let a0 = self.sides[0].active().clone();
+        let a1 = self.sides[1].active().clone();
+        // LEAD_SEEN=0（側2は LEAD_SEEN_2）で旧挙動＝先発を記録しない。A/B 専用
+        let on = |k: &str| std::env::var(k).map(|v| v != "0").unwrap_or(true);
+        if on("LEAD_SEEN_2") {
+            self.sides[1].opp_view.on_enter(pack, &a0);
+        }
+        if on("LEAD_SEEN") {
+            self.sides[0].opp_view.on_enter(pack, &a1);
+        }
         {
             let Battle { sides, field, .. } = self;
             entry_effects_side(pack, sides, field, 0);
@@ -4610,6 +4702,27 @@ impl Battle {
     }
 
     /// `resume(max_turns=n)` 相当（limit = min(n, MAX_TURNS)）
+    /// battle.py の _sync_item_loss（前回の行動選択時から持ち物が無くなった個体を相手の opp_view へ）
+    fn sync_item_loss(&mut self) {
+        let cur: Vec<Vec<Option<crate::interner::Sym>>> =
+            self.sides.iter().map(|s| s.party.iter().map(|p| p.item).collect()).collect();
+        if !self.item_snap.is_empty() {
+            for si in 0..2usize {
+                let vi = 1 - si;
+                for pi in 0..self.sides[si].party.len() {
+                    let prev = self.item_snap[si].get(pi).copied().flatten();
+                    if let Some(it) = prev {
+                        if self.sides[si].party[pi].item.is_none() {
+                            let nm = self.sides[si].party[pi].name;
+                            self.sides[vi].opp_view.on_item_lost(nm, it);
+                        }
+                    }
+                }
+            }
+        }
+        self.item_snap = cur;
+    }
+
     pub fn run_loop_lim(
         &mut self,
         pack: &Pack,
@@ -4650,6 +4763,7 @@ impl Battle {
             self.field.weather_negated = self.sides[0].active().ability == l.ノーてんき
                 || self.sides[1].active().ability == l.ノーてんき;
             self.info_abilities_on_entry(pack);
+            self.sync_item_loss();
 
             let [action1, action2] = get_acts(self, rng);
             let chooser1 = self.sides[0].active_idx;
@@ -4707,23 +4821,35 @@ impl Battle {
             // 行動順の観測（belief.py `_observe_order` と 1:1）。優先度が違うと速度の
             // 情報にならないので見送る。交代は速度と無関係（先に処理される）ので対象外。
             {
-                let pr = |a: &Action| a.mv.as_ref().map_or(0, |m| m.priority);
                 let both_move = action1.kind == ActKind::Move && action2.kind == ActKind::Move;
-                if both_move && pr(&action1) == pr(&action2) {
+                // 特性込みの優先度で比べ、速度以外で順番が決まる場面は観測しない（battle.py と同じ）
+                let same_pr = both_move && {
+                    let Battle { sides, field, .. } = &*self;
+                    priority_base(pack, &action1, sides[0].active(), field)
+                        == priority_base(pack, &action2, sides[1].active(), field)
+                };
+                let speed_decides = {
+                    let (a0, a1) = (self.sides[0].active().ability, self.sides[1].active().ability);
+                    let bad = [l.あとだし, l.クイックドロウ, l.はやあし, l.ぶきよう];
+                    !self.field.trick_room && !self.sides[0].tailwind && !self.sides[1].tailwind
+                        && !bad.contains(&a0) && !bad.contains(&a1)
+                };
+                if same_pr && speed_decides {
                     for sx in 0..2usize {
                         let me_first = if sx == 0 { p1_first } else { !p1_first };
                         if self.sides[sx].belief.0.is_none() {
                             continue;
                         }
-                        let (my_spd, opp_name) = {
+                        let (my_spd, opp_name, opp_st) = {
                             let Battle { sides, field, .. } = self;
                             (
                                 crate::ai::effective_speed(pack, sides[sx].active(), field),
                                 sides[1 - sx].active().name,
+                                crate::belief::pub_state(sides[1 - sx].active()),
                             )
                         };
                         let mut bl = self.sides[sx].belief.0.take().unwrap();
-                        bl.observe_order(pack, opp_name, my_spd, !me_first, &self.field);
+                        bl.observe_order(pack, opp_name, my_spd, !me_first, &self.field, Some(&opp_st));
                         self.sides[sx].belief.0 = Some(bl);
                     }
                 }

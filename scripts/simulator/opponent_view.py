@@ -16,6 +16,9 @@ class PokeKnowledge:
     type2: Optional[str] = None
     known_moves: List[str] = field(default_factory=list)
     known_item: Optional[str] = None
+    item_lost: bool = False     # 持ち物を消費・はたき落とされ済み（実機ではメッセージが出る公開情報）
+    item_epoch: int = 0         # トリック/すりかえで持ち物が入れ替わった回数（持ち物の推論をやり直す合図）
+    no_balloon: bool = False    # 初登場時にふうせんの表示が無かった＝ふうせんではない（実機は登場時に表示される）
     known_ability: Optional[str] = None
     threat_alert: bool = False  # きけんよちで「効果抜群/一撃必殺の技を持つ」と察知済み
     hp_fraction: float = 1.0    # 残りHP割合（実数は不可視。HPバーから観測できる割合）
@@ -97,6 +100,8 @@ class OpponentView:
             out += self.on_ability(poke.name, poke.ability)
         if poke.item in ENTRY_VISIBLE_ITEMS:
             out += self.on_item(poke.name, poke.item, "登場時に判明")
+        else:
+            k.no_balloon = True
         return out
 
     def on_move(self, poke_name: str, move_name: str) -> List[str]:
@@ -114,6 +119,23 @@ class OpponentView:
             return []
         k.known_item = item
         return [f"▷{self.viewer}: {poke_name} の持ち物【{item}】が判明（{reason}）"]
+
+    def on_item_swapped(self, poke_name: str, item) -> List[str]:
+        """トリック/すりかえで持ち物が入れ替わった（実機では入れ替わった持ち物が表示される）"""
+        k = self._get(poke_name)
+        k.known_item = item
+        k.item_lost = item is None
+        k.item_epoch += 1
+        return [f"▷{self.viewer}: {poke_name} の持ち物が【{item or 'なし'}】に入れ替わった"]
+
+    def on_item_lost(self, poke_name: str, item: str) -> List[str]:
+        """持ち物が無くなった（消費・はたきおとす等）。何を失ったかも表示されるので持ち物も確定する"""
+        k = self._get(poke_name)
+        if k.item_lost:
+            return []
+        k.item_lost = True
+        k.known_item = item
+        return [f"▷{self.viewer}: {poke_name} の持ち物【{item}】が無くなった"]
 
     def on_ability(self, poke_name: str, ability: str) -> List[str]:
         """特性が判明した"""

@@ -350,7 +350,10 @@ def calc_damage(
     if random_roll is None:
         roll = random.choice([85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100]) / 100
     else:
-        roll = 0.85 + random_roll * 0.15
+        # 16段のどれか（x*15 が整数）は実戦と同じ (85+k)/100 にする。0.85+x*0.15 は浮動小数の丸めで
+        # 0.91 が 0.90999… になり、切り捨てで実戦の136が135になって信念の観測照合で正解の型を潰していた
+        k = random_roll * 15
+        roll = (85 + round(k)) / 100 if abs(k - round(k)) < 1e-9 else 0.85 + random_roll * 0.15
     dmg = math.floor(dmg * roll)
 
     # タイプ一致補正（スキン系は元タイプ≠ノーマルになるので自然にSTABが付く）

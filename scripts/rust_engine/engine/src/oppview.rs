@@ -19,6 +19,12 @@ pub struct PokeKnowledge {
     pub type2: Option<Ty>,
     pub known_moves: Vec<Sym>,
     pub known_item: Option<Sym>,
+    /// 持ち物を消費・はたき落とされ済み（opponent_view.py の item_lost）
+    pub item_lost: bool,
+    /// トリック/すりかえで持ち物が入れ替わった回数（opponent_view.py の item_epoch）
+    pub item_epoch: u32,
+    /// 初登場時にふうせんの表示が無かった（opponent_view.py の no_balloon）
+    pub no_balloon: bool,
     pub known_ability: Option<Sym>,
     pub threat_alert: bool,
     pub hp_fraction: f64,
@@ -35,6 +41,9 @@ impl PokeKnowledge {
             type2: None,
             known_moves: Vec::new(),
             known_item: None,
+            item_lost: false,
+            item_epoch: 0,
+            no_balloon: false,
             known_ability: None,
             threat_alert: false,
             hp_fraction: 1.0,
@@ -110,6 +119,8 @@ impl OppView {
         }
         if it == Some(pack.sy.it.ふうせん) {
             self.on_item(p.name, pack.sy.it.ふうせん);
+        } else {
+            self.get(p.name).no_balloon = true;
         }
     }
 
@@ -119,6 +130,22 @@ impl OppView {
             return;
         }
         k.known_moves.push(move_name);
+    }
+
+    pub fn on_item_swapped(&mut self, poke_name: Sym, item: Option<Sym>) {
+        let k = self.get(poke_name);
+        k.known_item = item;
+        k.item_lost = item.is_none();
+        k.item_epoch += 1;
+    }
+
+    pub fn on_item_lost(&mut self, poke_name: Sym, item: Sym) {
+        let k = self.get(poke_name);
+        if k.item_lost {
+            return;
+        }
+        k.item_lost = true;
+        k.known_item = Some(item);
     }
 
     pub fn on_item(&mut self, poke_name: Sym, item: Sym) {

@@ -30,6 +30,8 @@ class PVNetNP:
         self.sd = np.ones(dim) if norm else None
         self._adam = None
         self.opt = "sgd"      # "adam" で Adam（train/train_pi の optimizer= で切替）
+        self._ema = None      # EMA の影パラメータ（train/train_pi の ema= で有効化）
+        self._ema_d = 0.0
         rng = np.random.default_rng(seed)
         self.W1 = rng.normal(0, (1.0 / dim) ** 0.5, (hidden, dim)); self.b1 = np.zeros(hidden)
         self.W2 = rng.normal(0, (1.0 / hidden) ** 0.5, (hidden2, hidden)); self.b2 = np.zeros(hidden2)
@@ -178,6 +180,29 @@ class PVNetNP:
             mh = m / (1.0 - 0.9 ** t); vh = v / (1.0 - 0.999 ** t)
             setattr(self, k, getattr(self, k) - lr_ep * mh / (np.sqrt(vh) + 1e-8))
 
+    _PARAMS = ("Wv", "bv", "Wp", "bp", "W2", "b2", "W1", "b1", "W3", "b3")
+
+    def _ema_update(self):
+        d = self._ema_d
+        if d <= 0.0:
+            return
+        if self._ema is None:
+            self._ema = {k: np.array(getattr(self, k), float)
+                         for k in self._PARAMS if getattr(self, k, None) is not None}
+            return
+        for k, sh in self._ema.items():
+            sh *= d
+            sh += (1.0 - d) * getattr(self, k)
+
+    def apply_ema(self):
+        """影パラメータを本体へ書き戻す。学習の最後に一度だけ呼ぶ。"""
+        if not self._ema:
+            return self
+        for k, sh in self._ema.items():
+            setattr(self, k, np.array(sh, float))
+        self._ema = None
+        return self
+
     def fit_norm(self, X):
         """入力正規化の統計を訓練データから決める（norm=True で作ったネットのみ有効）。"""
         if self.mu is None:
@@ -186,9 +211,10 @@ class PVNetNP:
         self.mu = X.mean(0); self.sd = X.std(0) + 1e-6
 
     def train(self, X, A, M, Y, epochs=30, lr=0.05, l2=1e-5, batch=256, seed=0, verbose=False,
-              optimizer=None):
+              optimizer=None, ema=0.0):
         if optimizer:
             self.opt = optimizer
+        self._ema_d = ema
         X = np.asarray(X, float); A = np.asarray(A, int); M = np.asarray(M, float); Y = np.asarray(Y, float)
         N = len(X); rng = np.random.default_rng(seed)
         onehot = np.zeros((N, ACTION_DIM)); onehot[np.arange(N), A] = 1.0
@@ -198,14 +224,16 @@ class PVNetNP:
             for s in range(0, N, batch):
                 bi = perm[s:s + batch]
                 self._step(X[bi], Y[bi], M[bi], onehot[bi], lr_ep, l2)
+                self._ema_update()
             if verbose:
                 print(f"  epoch {ep+1}/{epochs}  val_acc={self.value_acc(X,Y):.3f}", flush=True)
 
     def train_pi(self, X, PI, M, Y, epochs=20, lr=0.05, l2=1e-5, batch=256, seed=0, verbose=False,
-                 value_weight=1.0, optimizer=None):
+                 value_weight=1.0, optimizer=None, ema=0.0):
         """方策ターゲットが分布 PI（MCTS訪問分布）の学習。value_weight=0で方策のみ。"""
         if optimizer:
             self.opt = optimizer
+        self._ema_d = ema
         X = np.asarray(X, float); PI = np.asarray(PI, float); M = np.asarray(M, float); Y = np.asarray(Y, float)
         N = len(X); rng = np.random.default_rng(seed)
         for ep in range(epochs):
@@ -215,6 +243,7 @@ class PVNetNP:
                 bi = perm[s:s + batch]
                 vw = value_weight[bi] if isinstance(value_weight, np.ndarray) else value_weight
                 self._step(X[bi], Y[bi], M[bi], PI[bi], lr_ep, l2, vw)
+                self._ema_update()
             if verbose:
                 print(f"  epoch {ep+1}/{epochs}  val_acc={self.value_acc(X,Y):.3f}", flush=True)
 

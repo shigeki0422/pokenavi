@@ -2769,7 +2769,7 @@ _belief = PokemonBelief(_btpl_d, dl)
 _prior_true = _belief.prob_of_spread(_true_ev, _true_nat)
 # 真の型から固定ロールで観測を生成しベイズ更新
 for _rr in (0.0, 0.4, 0.7, 1.0, 0.2, 0.9):
-    _frac = round(_calc_dmg(_b_atk, _true_def, _b_move, _b_field, random_roll=_rr) / _true_def.max_hp, 3)
+    _frac = round(_calc_dmg(_b_atk, _true_def, _b_move, _b_field, random_roll=_rr) * 100 / _true_def.max_hp)
     _belief.observe_damage(_b_atk, _b_move, _frac, _b_field)
 _post_true = _belief.prob_of_spread(_true_ev, _true_nat)
 _map_ev, _map_nat = _belief.map_spread()
@@ -5503,6 +5503,192 @@ _pb32.known_moves = {"存在しない技ZZZ"}
 check("型候補: 候補が尽きたら None を返す（周辺分布へフォールバックする）",
       _pb32.sample_build(_r32) is None)
 
+# 型プール＋ダメージ観測：受けたダメージが小さい→耐久振りの型へ重みが寄る
+from simulator.pokemon import build_from_spec as _bfs39, parse_pokemon_spec as _pps39
+from simulator.battle import BattleField as _BF39
+_ob39 = _OB32(dl, season="M-6")
+_pb39 = _ob39.ensure("カバルドン")
+_pb39.builds = [
+    {"weight": 0.5, "item": "オボンのみ", "ability": "すなおこし", "nature": "わんぱく",
+     "ev": [32, 0, 32, 0, 2, 0], "moves": ["あくび", "じしん", "ステルスロック", "なまける"]},
+    {"weight": 0.5, "item": "オボンのみ", "ability": "すなおこし", "nature": "いじっぱり",
+     "ev": [0, 32, 0, 0, 2, 32], "moves": ["いわなだれ", "じしん", "ステルスロック", "つるぎのまい"]},
+]
+_att39 = _bfs39(_pps39("ガブリアス@こだわりハチマキ:いじっぱり:げきりん|じしん|ストーンエッジ|アイアンヘッド"
+                       ":2/32/0/0/0/32:さめはだ"), dl, season="M-6", randomize=False)
+_def39 = _bfs39(_pps39("カバルドン@オボンのみ:わんぱく:じしん|あくび|ステルスロック|なまける"
+                       ":32/0/32/0/2/0:すなおこし"), dl, season="M-6", randomize=False)
+_mv39 = next(m for m in _att39.moves if m.name_jp == "げきりん")
+from simulator.damage import calc_damage as _cd39
+_f39 = _BF39()
+_frac39 = round(_cd39(_att39, _def39, _mv39, _f39, critical=False, random_roll=0.5) * 100 / _def39.max_hp)
+_pb39.observe_damage(_att39, _mv39, _frac39, _f39)
+_w39 = _pb39.pool_weights()
+check("型プール＋ダメージ観測: 耐久振りで再現できる被ダメージなら耐久型の重みが上がる",
+      _w39[0] > 0.9 and abs(sum(_w39) - 1.0) < 1e-9, str(_w39))
+_r39 = _rnd32.Random(1)
+check("型プール＋ダメージ観測: sample_build は絞った重みで型を引く",
+      sum(_pb39.sample_build(_r39)["nature"] == "わんぱく" for _ in range(50)) >= 45)
+
+import inspect as _insp40
+from simulator import battle as _bmod40
+_src40 = _insp40.getsource(_bmod40)
+check("ダメージ観測: 連続技・急所・倒した/耐えた一撃は推定に使わない",
+      "_obs_ok = hits == 1 and not critical and defender.is_alive and defender.hp > 1" in _src40
+      and "if _obs_ok and attacker_side.belief is not None" in _src40
+      and "if _obs_ok and defender_side.belief is not None" in _src40)
+
+# 観測時点の状態：メガ進化・能力変化を載せて逆算する
+from simulator.belief import pub_state as _ps41, with_state as _ws41
+_mg41 = _bfs39(_pps39("ガブリアス@ガブリアスナイト:いじっぱり:げきりん|じしん|ストーンエッジ|つるぎのまい"
+                      ":2/32/0/0/0/32:さめはだ"), dl, season="M-6", randomize=False)
+import copy as _cp41
+_mg41b = _cp41.deepcopy(_mg41); _mg41b.do_mega_evolve(); _mg41b.stage_attack = 2
+_st41 = _ps41(_mg41b)
+_q41 = _ws41(_mg41, _st41)
+check("観測時点の状態: メガ進化と能力変化を候補に載せる",
+      _q41.mega_evolved and _q41.attack == _mg41b.attack and _q41.stage_attack == 2
+      and not _mg41.mega_evolved and _mg41.stage_attack == 0)
+# 発動しなかった持ち物は型プールの候補から外れる
+_pb42 = _ob39.ensure("ニンフィア")
+_pb42.builds = [
+    {"weight": 0.9, "item": "たべのこし", "ability": "フェアリースキン", "nature": "ずぶとい",
+     "ev": [32, 0, 32, 0, 2, 0], "moves": ["あくび", "ねがいごと", "まもる", "ハイパーボイス"]},
+    {"weight": 0.1, "item": "こだわりメガネ", "ability": "フェアリースキン", "nature": "ひかえめ",
+     "ev": [32, 0, 0, 32, 2, 0], "moves": ["ハイパーボイス", "サイコショック", "でんこうせっか", "シャドーボール"]},
+]
+_pb42.observe_absent_item(("たべのこし", "くろいヘドロ"))
+check("発動しなかった持ち物: 型プールの候補から外す",
+      all(_pb42.sample_build(_r39)["item"] == "こだわりメガネ" for _ in range(10)))
+_src43 = _insp40.getsource(_bmod40._observe_order)
+check("行動順の観測: 特性込みの優先度で比べ、トリックルーム・おいかぜ中は使わない",
+      "_priority_base(a1" in _src43 and "trick_room" in _src43 and "tailwind" in _src43)
+
+# メガ進化後（特性がメガ後のものに判明）でも、判明したメガ石の型は型プールから引ける
+_pb44 = _ob39.ensure("ボーマンダ")
+_pb44.builds = [{"weight": 1.0, "item": "ボーマンダナイト", "ability": "いかく", "nature": "ようき",
+                 "ev": [0, 32, 0, 0, 0, 32], "moves": ["すてみタックル", "じしん", "りゅうのまい", "はねやすめ"]}]
+_pb44.known_item = "ボーマンダナイト"; _pb44.known_ability = "スカイスキン"
+check("メガ進化後: 判明したメガ石の型は特性（メガ後）で弾かない",
+      _pb44.sample_build(_r39) is not None)
+
+# こだわりの否定：交代せずに違う技を2種類使ったら、こだわりアイテムの候補を外す
+_cA = _bfs39(_pps39("ガブリアス@こだわりハチマキ:いじっぱり:げきりん|じしん|ストーンエッジ|アイアンヘッド"
+                    ":2/32/0/0/0/32:さめはだ"), dl, season="M-6", randomize=False)
+_cB = _bfs39(_pps39("カバルドン@オボンのみ:わんぱく:じしん|あくび|ステルスロック|なまける"
+                    ":32/0/32/0/2/0:すなおこし"), dl, season="M-6", randomize=False)
+_c1 = BattleSide([_cA], viewer_label="P1"); _c2 = BattleSide([_cB], viewer_label="P2")
+_c1.field_idx = 0; _c2.field_idx = 1
+_c1.belief = _OB32(dl, season="M-6")
+_cb = Battle(_c1, _c2, BattleField())
+_c1.opp_view.team_preview(_c2.party); _c2.opp_view.team_preview(_c1.party)
+import random as _rnd45
+_rnd45.seed(2)
+_cb._turn_loop(lambda m, o, f: Action(type="move", move=m.active.moves[1], move_idx=1),
+               lambda m, o, f: Action(type="move", move=m.active.moves[2], move_idx=2), max_turns=1)
+_cb._turn_loop(lambda m, o, f: Action(type="move", move=m.active.moves[1], move_idx=1),
+               lambda m, o, f: Action(type="move", move=m.active.moves[1], move_idx=1), max_turns=2)
+_cpb = _c1.belief.get("カバルドン")
+check("こだわりの否定: 交代せずに違う技を2種類使ったらこだわりアイテムを外す",
+      _cpb is not None and {"こだわりスカーフ", "こだわりハチマキ", "こだわりメガネ"} <= _cpb.absent_items,
+      str(getattr(_cpb, "absent_items", None)))
+
+# 発動しなかったことからの否定：接触技で反動が無い→ゴツゴツメットではない／HPが半分未満できのみ不発→オボンのみではない
+_nA = _bfs39(_pps39("ガブリアス@きあいのタスキ:いじっぱり:げきりん|じしん|ストーンエッジ|アイアンヘッド"
+                    ":2/32/0/0/0/32:さめはだ"), dl, season="M-6", randomize=False)
+_nB = _bfs39(_pps39("カバルドン@たべのこし:わんぱく:じしん|あくび|ステルスロック|なまける"
+                    ":32/0/32/0/2/0:すなおこし"), dl, season="M-6", randomize=False)
+_n1 = BattleSide([_nA], viewer_label="P1"); _n2 = BattleSide([_nB], viewer_label="P2")
+_n1.field_idx = 0; _n2.field_idx = 1
+_n1.belief = _OB32(dl, season="M-6")
+_nb = Battle(_n1, _n2, BattleField())
+_n1.opp_view.team_preview(_n2.party); _n2.opp_view.team_preview(_n1.party)
+_n1.opp_view.on_enter(_nB); _n2.opp_view.on_enter(_nA)
+_nB.hp = _nB.max_hp * 45 // 100
+_rnd45.seed(3)
+_nb._turn_loop(lambda m, o, f: Action(type="move", move=m.active.moves[0], move_idx=0),
+               lambda m, o, f: Action(type="move", move=m.active.moves[1], move_idx=1), max_turns=1)
+_npb = _n1.belief.get("カバルドン")
+check("否定的観測: 接触技で反動が無ければゴツゴツメットではない",
+      _npb is not None and "ゴツゴツメット" in _npb.absent_items, str(getattr(_npb, "absent_items", None)))
+check("否定的観測: 表示HPが半分未満できのみが発動しなければオボンのみではない",
+      _npb is not None and _nB.is_alive and "オボンのみ" in _npb.absent_items, f"hp={_nB.hp}/{_nB.max_hp} {getattr(_npb, 'absent_items', None)}")
+
+_f1 = BattleSide([_bfs39(_pps39("ガブリアス@きあいのタスキ:いじっぱり:げきりん|じしん|ストーンエッジ|アイアンヘッド"
+                               ":2/32/0/0/0/32:さめはだ"), dl, season="M-6", randomize=False)], viewer_label="P1")
+_fB = _bfs39(_pps39("サーフゴー@こだわりスカーフ:おくびょう:ゴールドラッシュ|シャドーボール|トリック|10まんボルト"
+                    ":0/0/0/32/0/32:おうごんのからだ"), dl, season="M-6", randomize=False)
+_f1.belief = _OB32(dl, season="M-6")
+_f1.opp_view.team_preview([_fB]); _f1.opp_view.on_enter(_fB)
+_f1.belief.observe_disclosure(_f1.opp_view)
+_bpb = _f1.belief.get("サーフゴー")
+check("否定的観測: 初登場でふうせんの表示が無ければふうせんではない（型が合わない時の引き先からも外す）",
+      _f1.opp_view.pokemon["サーフゴー"].no_balloon and "ふうせん" in _bpb.absent_items
+      and "ふうせん" not in _bpb.item_prior, str(_bpb.absent_items))
+
+# 同じ持ち物はパーティに1つ：判明した味方の持ち物は他の個体の候補から外す
+_iA = _bfs39(_pps39("ガブリアス@こだわりハチマキ:いじっぱり:げきりん|じしん|ストーンエッジ|アイアンヘッド"
+                    ":2/32/0/0/0/32:さめはだ"), dl, season="M-6", randomize=False)
+_iB = _bfs39(_pps39("カバルドン@オボンのみ:わんぱく:じしん|あくび|ステルスロック|なまける"
+                    ":32/0/32/0/2/0:すなおこし"), dl, season="M-6", randomize=False)
+_iC = _bfs39(_pps39("アーマーガア@ゴツゴツメット:わんぱく:ボディプレス|てっぺき|はねやすめ|とんぼがえり"
+                    ":32/0/32/0/2/0:ミラーアーマー"), dl, season="M-6", randomize=False)
+_i1 = BattleSide([_iA], viewer_label="P1"); _i2 = BattleSide([_iB, _iC], viewer_label="P2")
+_i1.belief = _OB32(dl, season="M-6")
+_i1.opp_view.team_preview(_i2.party)
+_i1.opp_view.on_item("カバルドン", "オボンのみ", "テスト")
+_i1.belief.observe_disclosure(_i1.opp_view)
+_ipb = _i1.belief.get("アーマーガア")
+check("同じ持ち物はパーティに1つ: 判明した味方の持ち物（オボンのみ）は他の個体の候補から外す",
+      _ipb is not None and "オボンのみ" in _ipb.absent_items
+      and not any(b["item"] == "オボンのみ" for b in _ipb.consistent_builds())
+      and "オボンのみ" not in _i1.belief.get("カバルドン").absent_items,
+      str(getattr(_ipb, "absent_items", None)))
+
+from simulator.belief import obs_match as _om46, hp_pct as _hp46
+check("観測の粒度: 相手のHPは整数％（±1%で一致）、自分のHPは実数（整数で一致）",
+      _om46("taken", 50, 200, 25) and _om46("taken", 50, 200, 26) and not _om46("taken", 50, 200, 27)
+      and _om46("dealt", 37, 150, 37) and not _om46("dealt", 37, 150, 38)
+      and _hp46(1, 200) == 1 and _hp46(0, 200) == 0 and _hp46(199, 200) == 100)
+
+from simulator.ai import _filter_valid_by_lock as _fvl47
+_lk47 = _bfs39(_pps39("イエッサン(オス)@こだわりスカーフ:おくびょう:トリック|ワイドフォース|マジカルシャイン|マジカルフレイム"
+                      ":0/0/0/32/0/32:サイコメイカー"), dl, season="M-6", randomize=False)
+_lk47.choice_locked_move = "マジカルシャイン"; _lk47.disabled_move = "マジカルシャイン"
+check("縛られた技が封じられたら他の技は選べない（わるあがき）",
+      _fvl47([(i, m) for i, m in enumerate(_lk47.moves) if m], _lk47) == [])
+
+# 技選びの観測：弱い技を選んだら、明らかに強い技を持つ型の重みが下がる
+_ob48 = _OB32(dl, season="M-6")
+_pb48 = _ob48.ensure("ボーマンダ")
+_pb48.builds = [
+    {"weight": 0.5, "item": "ボーマンダナイト", "ability": "いかく", "nature": "ようき",
+     "ev": [0, 32, 0, 0, 0, 32], "moves": ["すてみタックル", "じしん", "りゅうのまい", "はねやすめ"]},
+    {"weight": 0.5, "item": "ボーマンダナイト", "ability": "いかく", "nature": "おくびょう",
+     "ev": [0, 0, 0, 32, 0, 32], "moves": ["すてみタックル", "りゅうせいぐん", "だいもんじ", "はねやすめ"]},
+]
+_df48 = _bfs39(_pps39("カバルドン@オボンのみ:わんぱく:じしん|あくび|ステルスロック|なまける"
+                      ":32/0/32/0/2/0:すなおこし"), dl, season="M-6", randomize=False)
+_mv48 = next(m for m in _bfs39(_pps39("ボーマンダ@ボーマンダナイト:ようき:すてみタックル|じしん|りゅうのまい|はねやすめ"
+                                      ":0/32/0/0/0/32:いかく"), dl, season="M-6", randomize=False).moves
+             if m.name_jp == "すてみタックル")
+from simulator.belief import pub_state as _ps48
+_subj48 = _ps48(_bfs39(_pps39("ボーマンダ@ボーマンダナイト:ようき:すてみタックル|じしん|りゅうのまい|はねやすめ"
+                              ":0/32/0/0/0/32:いかく"), dl, season="M-6", randomize=False))
+_pb48.observe_choice(_mv48, _df48, _BF39(), _subj48)
+_os33.environ["POOL_CHOICE"] = "1"
+_w48 = _pb48.pool_weights()
+del _os33.environ["POOL_CHOICE"]
+check("技選びの観測: 効きの悪い技を選んだら、はるかに強い技を持つ型の重みが下がる",
+      _w48[0] > _w48[1], str(_w48))
+_ob48b = _OB32(dl, season="M-6")
+_pb48b = _ob48b.ensure("ボーマンダ")
+_pb48b.builds = [dict(b) for b in _pb48.builds]
+_pb48b.observe_choice(_mv48, _df48, _BF39(), _subj48)
+_w48b = _pb48b.pool_weights()
+check("技選びの観測: 既定（POOL_CHOICE 未設定）では重みを変えない",
+      abs(_w48b[0] - _w48b[1]) < 1e-12, str(_w48b))
+
 _ob32b = _OB32(dl, season="M-6")
 check("型候補: JOINT_BUILD 未設定なら型候補を読み込まない",
       _ob32b.joint is False and _ob32b._builds == {})
@@ -5606,6 +5792,24 @@ _a30.train_pi(_Xt30, _PI30, _M30, _Y30, epochs=400, lr=5e-3, batch=20, optimizer
               value_weight=0.0)
 check("PVNetNP: relu+norm+Adam は方策ターゲットに適合できる", _top1_30(_a30) >= 0.95)
 check("PVNetNP: optimizer=adam で Adam の状態が作られる", _a30.opt == "adam" and _a30._adam["t"] > 0)
+
+# EMA: 影パラメータは実パラメータと違い、apply_ema で本体へ入る（＝学習後の値が変わる）
+_em30 = _PV30(24, 16, 8, seed=11, act="relu", norm=True)
+_em30.fit_norm(_Xt30)
+_em30.train_pi(_Xt30, _PI30, _M30, _Y30, epochs=30, lr=5e-3, batch=20, optimizer="adam",
+               value_weight=0.0, ema=0.9)
+_raw30 = _em30.W1.copy()
+check("PVNetNP: ema>0 で影パラメータが作られる", _em30._ema is not None)
+_em30.apply_ema()
+check("PVNetNP: apply_ema は本体の重みを平均へ置き換える",
+      _em30._ema is None and not _np30.allclose(_em30.W1, _raw30))
+
+_ne30 = _PV30(24, 16, 8, seed=11, act="relu", norm=True)
+_ne30.fit_norm(_Xt30)
+_ne30.train_pi(_Xt30, _PI30, _M30, _Y30, epochs=30, lr=5e-3, batch=20, optimizer="adam",
+               value_weight=0.0)
+check("PVNetNP: ema 既定(0)では影パラメータを作らず従来と同一",
+      _ne30._ema is None and _np30.allclose(_ne30.W1, _raw30))
 
 _fd30 = _PV30(24, 8, 6, seed=7, act="relu", norm=True)
 _fd30.fit_norm(_Xt30)
@@ -5802,6 +6006,88 @@ _bt36._turn_loop(lambda m, o, f: Action(type="move", move=m.active.moves[0], mov
 check("まねっこ: 相手の直前技をコピーして実行する",
       any("じしん をコピー" in x for x in _bt36.logs[_n36:]),
       str(_bt36.logs[_n36:_n36 + 4]))
+
+# 先発の開示：バトル開始時に両者の先発が seen になり、登場時特性（いかく）も開示される。
+# 交代時にしか on_enter しておらず、先発が隠れ選出の引き直し対象になっていた
+_lA = _bfs29(_pps29("ガブリアス@きあいのタスキ:いじっぱり:げきりん|じしん|がんせきふうじ|ステルスロック"
+                    ":2/32/0/0/0/32:さめはだ"), _L29, season="M-6", randomize=False)
+_lB = _bfs29(_pps29("ウインディ@オボンのみ:わんぱく:フレアドライブ|しんそく|おにび|バークアウト"
+                    ":32/0/32/0/2/0:いかく"), _L29, season="M-6", randomize=False)
+_ls1 = BattleSide([_lA], viewer_label="P1"); _ls2 = BattleSide([_lB], viewer_label="P2")
+_ls1.field_idx = 0; _ls2.field_idx = 1
+_r36.seed(3)
+Battle(_ls1, _ls2, BattleField()).run(
+    lambda m, o, f: Action(type="move", move=m.active.moves[1], move_idx=1),
+    lambda m, o, f: Action(type="move", move=m.active.moves[0], move_idx=0))
+check("先発の開示: 両者の先発がバトル開始時に seen になる",
+      _ls1.opp_view.pokemon["ウインディ"].seen and _ls2.opp_view.pokemon["ガブリアス"].seen)
+check("先発の開示: 先発のいかくは登場時に開示",
+      _ls1.opp_view.pokemon["ウインディ"].known_ability == "いかく")
+
+# 消費した持ち物の記憶：タスキが発動して無くなった相手を、決定化で再びタスキ持ちにしない
+from simulator.search_ai import SearchAI as _SAI38
+from simulator.belief import OpponentBelief as _OB38
+import copy as _cp38
+_gA = _bfs29(_pps29("ガブリアス@こだわりハチマキ:いじっぱり:げきりん|じしん|ストーンエッジ|アイアンヘッド"
+                    ":2/32/0/0/0/32:さめはだ"), _L29, season="M-6", randomize=False)
+_gB = _bfs29(_pps29("マスカーニャ@きあいのタスキ:ようき:トリックフラワー|はたきおとす|ふいうち|とんぼがえり"
+                    ":0/32/2/0/0/32:へんげんじざい"), _L29, season="M-6", randomize=False)
+_g1 = BattleSide([_gA], viewer_label="P1"); _g2 = BattleSide([_gB], viewer_label="P2")
+_g1.field_idx = 0; _g2.field_idx = 1
+_gb = Battle(_g1, _g2, BattleField())
+_g1.opp_view.team_preview(_g2.party); _g2.opp_view.team_preview(_g1.party)
+_g1.opp_view.on_enter(_gB); _g2.opp_view.on_enter(_gA)
+_r36.seed(1)
+_gb._turn_loop(lambda m, o, f: Action(type="move", move=m.active.moves[0], move_idx=0),
+               lambda m, o, f: Action(type="move", move=m.active.moves[0], move_idx=0), max_turns=1)
+_gb._sync_item_loss()   # 次の行動選択の直前に行われる記録
+_gbl = _OB38(_L29); _gbl.observe_disclosure(_g1.opp_view)
+_gai = _SAI38(_L29)
+_gok = []
+for _k in range(5):
+    _gc = [x for x in _gai._sample_opp_config(_g2, _gbl) if x][0]
+    _gp = _cp38.deepcopy(_gB); _gai._determinize(_gp, _gc); _gok.append(_gp.item)
+check("消費した持ち物の記憶: タスキ発動後の決定化でタスキを戻さない",
+      _gB.item is None and _g1.opp_view.pokemon[_gB.name].item_lost
+      and all(x is None for x in _gok), f"{_gB.item} {_gok}")
+
+# きのみを食べた相手：開示の無い消費でも item_lost が記録され、決定化で持ち物を戻さない
+_hB = _bfs29(_pps29("カバルドン@オボンのみ:わんぱく:じしん|あくび|ステルスロック|なまける"
+                    ":32/0/32/0/2/0:すなおこし"), _L29, season="M-6", randomize=False)
+_hA = _bfs29(_pps29("ガブリアス@こだわりハチマキ:いじっぱり:げきりん|じしん|ストーンエッジ|アイアンヘッド"
+                    ":2/32/0/0/0/32:さめはだ"), _L29, season="M-6", randomize=False)
+_h1 = BattleSide([_hA], viewer_label="P1"); _h2 = BattleSide([_hB], viewer_label="P2")
+_h1.field_idx = 0; _h2.field_idx = 1
+_hb = Battle(_h1, _h2, BattleField())
+_h1.opp_view.team_preview(_h2.party); _h2.opp_view.team_preview(_h1.party)
+_h1.opp_view.on_enter(_hB); _h2.opp_view.on_enter(_hA)
+_r36.seed(5)
+_hb._sync_item_loss()
+for _t in range(3):
+    if _hB.item is None or not _hB.is_alive:
+        break
+    _hb._turn_loop(lambda m, o, f: Action(type="move", move=m.active.moves[0], move_idx=0),
+                   lambda m, o, f: Action(type="move", move=m.active.moves[1], move_idx=1),
+                   max_turns=_hb.turn + 1)
+_hb._sync_item_loss()
+_hk = _h1.opp_view.pokemon[_hB.name]
+check("消費した持ち物の記憶: きのみを食べた相手は item_lost（持ち物名も確定）",
+      _hB.item is None and _hk.item_lost and _hk.known_item == "オボンのみ",
+      f"item={_hB.item} lost={_hk.item_lost} known={_hk.known_item}")
+
+# 正規化ロールの16段は実戦の (85+k)/100 と同じダメージ（浮動小数の丸めで1ずれ、信念が正解の型を潰していた）
+import random as _r37
+from simulator.damage import calc_damage as _cd37
+_a37 = _bfs(_pps("バシャーモ@きあいのタスキ:いじっぱり:つるぎのまい|まもる|インファイト|フレアドライブ:0/32/0/0/0/32:かそく"), _Lx, season="M-6", randomize=False)
+_d37 = _bfs(_pps("ウルガモス@オボンのみ:ひかえめ:あさのひざし|ちょうのまい|ほのおのまい|ギガドレイン:32/0/16/0/0/16:ほのおのからだ"), _Lx, season="M-6", randomize=False)
+_m37 = _Lx.get_move("フレアドライブ")
+_norm37 = [_cd37(_a37, _d37, _m37, BattleField(), False, k / 15) for k in range(16)]
+_real37 = set()
+for _s37 in range(400):
+    _r37.seed(_s37)
+    _real37.add(_cd37(_a37, _d37, _m37, BattleField(), False))
+check("正規化ロール: 16段の値が実戦の乱数の値と一致（136 を再現）",
+      set(_norm37) == _real37 and 136 in _norm37, f"norm={_norm37} real={sorted(_real37)}")
 
 # 集計
 # ════════════════════════════════════════════════════════════════

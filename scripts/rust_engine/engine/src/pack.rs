@@ -83,6 +83,17 @@ pub struct MegaStats {
     pub weight_kg: Option<f64>,
 }
 
+#[derive(Clone, Debug)]
+pub struct PoolBuild {
+    pub weight: f64,
+    pub item: String,
+    pub nature: String,
+    pub ability: String,
+    pub ev: EvEntry,
+    /// sorted（パリティ規約 #3）
+    pub moves: Vec<String>,
+}
+
 #[derive(Clone, Debug, Default)]
 pub struct EvEntry {
     pub h: i64,
@@ -178,6 +189,10 @@ pub struct Pack {
     pub n_abil_cats: usize,
     /// R4: 登録テンプレートの実スプレッド（belief.registered_spreads_by_species）
     pub registered_spreads: HashMap<String, Vec<(EvEntry, String)>>,
+    /// 型プール（_gen_type_pool.py の出力）。種族名 → 型まるごとの候補。
+    /// 技・持ち物・性格・努力値を独立に引くと実在しない組み合わせができるので、
+    /// 型単位で引けるようにする（JOINT_BUILD=1 で有効）。
+    pub build_pool: HashMap<String, Vec<PoolBuild>>,
     /// R4: ネット重み
     pub net: Option<crate::net::NetW>,
     /// ダンプ時点の simulator/** ダイジェスト（ケースの刻印照合用。casehdr参照）
@@ -512,6 +527,51 @@ impl Pack {
             }
         }
 
+        let mut build_pool: HashMap<String, Vec<PoolBuild>> = HashMap::new();
+        if let Some(bp) = v.get("build_pool").and_then(|x| x.as_object()) {
+            for (sp, arr) in bp {
+                let mut out = Vec::new();
+                for it in arr.as_array().map(|a| a.as_slice()).unwrap_or(&[]) {
+                    let gs = |k: &str| it[k].as_str().unwrap_or("").to_string();
+                    let nat = gs("nature");
+                    let item = gs("item");
+                    let abil = gs("ability");
+                    for t in [&nat, &item, &abil] {
+                        if !t.is_empty() {
+                            intern.intern(t);
+                        }
+                    }
+                    let mut moves: Vec<String> = it["moves"]
+                        .as_array()
+                        .map(|a| a.iter().filter_map(|m| m.as_str().map(String::from)).collect())
+                        .unwrap_or_default();
+                    for m in &moves {
+                        intern.intern(m);
+                    }
+                    moves.sort();
+                    let ev = &it["ev"];
+                    out.push(PoolBuild {
+                        weight: it["weight"].as_f64().unwrap_or(0.0),
+                        item,
+                        nature: nat,
+                        ability: abil,
+                        ev: EvEntry {
+                            h: j_i(&ev[0]).unwrap_or(0),
+                            a: j_i(&ev[1]).unwrap_or(0),
+                            b: j_i(&ev[2]).unwrap_or(0),
+                            c: j_i(&ev[3]).unwrap_or(0),
+                            d: j_i(&ev[4]).unwrap_or(0),
+                            s: j_i(&ev[5]).unwrap_or(0),
+                            spread: "型プール".to_string(),
+                            rate: 0.0,
+                        },
+                        moves,
+                    });
+                }
+                build_pool.insert(sp.clone(), out);
+            }
+        }
+
         let net = v.get("net").and_then(crate::net::NetW::from_value);
 
         // 後追いinternでflags配列が短くならないよう拡張
@@ -544,6 +604,7 @@ impl Pack {
             abil_cat_bits,
             n_abil_cats,
             registered_spreads,
+            build_pool,
             net,
             sim_hash: v["header"]["source_hashes"]["simulator_py"]
                 .as_str()

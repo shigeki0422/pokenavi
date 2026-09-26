@@ -47,6 +47,14 @@ fn eng() -> PyResult<&'static Mutex<Eng>> {
     Ok(ENG.get().unwrap())
 }
 
+/// 検証用: BELIEF_PROBE=1 で走らせた直前の対戦の P1 の信念
+/// [(種, 事後(EV/性格候補), 型プール重み, 判明技, 判明持ち物, 持ち物喪失, 発動しなかった持ち物)]
+#[pyfunction]
+#[allow(clippy::type_complexity)]
+fn belief_probe_take() -> PyResult<Vec<(String, Vec<f64>, Vec<f64>, Vec<String>, Option<String>, bool, Vec<String>)>> {
+    Ok(engine::sim::belief_probe_take())
+}
+
 #[pyfunction]
 #[pyo3(signature = (pa, sa, pb, sb, seed, season="M-3"))]
 fn greedy_3v3(
@@ -103,7 +111,7 @@ fn load_net_cached(path: &str) -> PyResult<engine::net::NetW> {
 }
 
 #[pyfunction]
-#[pyo3(signature = (pa, sa, pb, sb, seed, sims, net_a_path="", net_b_path="", season="M-6"))]
+#[pyo3(signature = (pa, sa, pb, sb, seed, sims, net_a_path="", net_b_path="", season="M-6", sims_b=0))]
 #[allow(clippy::too_many_arguments)]
 fn mcts_3v3_ab(
     pa: Vec<String>,
@@ -115,6 +123,7 @@ fn mcts_3v3_ab(
     net_a_path: &str,
     net_b_path: &str,
     season: &str,
+    sims_b: usize,
 ) -> PyResult<u8> {
     let na = if net_a_path.is_empty() { None } else { Some(load_net_cached(net_a_path)?) };
     let nb = if net_b_path.is_empty() { None } else { Some(load_net_cached(net_b_path)?) };
@@ -124,15 +133,57 @@ fn mcts_3v3_ab(
     let base = net.clone();
     let side1 = na.as_ref().unwrap_or(&base);
     let side2 = nb.as_ref().unwrap_or(&base);
-    let (r, _) = engine::sim::mcts_3v3(
-        pack, side1, Some(side2), &pa, &sa, &pb, &sb, season, season, seed, sims, |_, _| {},
+    let (r, _) = engine::sim::mcts_3v3_sims(
+        pack, side1, Some(side2), &pa, &sa, &pb, &sb, season, season, seed, sims,
+        if sims_b == 0 { sims } else { sims_b }, |_, _| {},
     );
     Ok(r as u8)
 }
 
-/// 学習用: mcts_3v3 を回し、各手番の (手番側, 盤面1037次元, [(行動index, 訪問数)]) を返す。
+/// 終盤の厳密ソルバによる採点: mcts_3v3 を回し、終盤の各手番で
+/// (手番側, 均衡値, [(手index, 期待勝率)], AIの手index, 残り体数, ノード数) を返す。
+/// env SOLVE_DEPTH（深さ）/ SOLVE_MAX_ALIVE（対象とする残り体数の上限）で制御する。
 #[pyfunction]
 #[pyo3(signature = (pa, sa, pb, sb, seed, sims, season="M-6"))]
+#[allow(clippy::type_complexity)]
+fn mcts_3v3_solve(
+    pa: Vec<String>,
+    sa: Vec<usize>,
+    pb: Vec<String>,
+    sb: Vec<usize>,
+    seed: i128,
+    sims: usize,
+    season: &str,
+) -> PyResult<(u8, Vec<(usize, f64, Vec<(usize, f64)>, usize, usize, u64, u64, u64)>)> {
+    let m = eng()?;
+    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let Eng { pack, net, .. } = &mut *g;
+    let net = net.clone();
+    let _ = engine::sim::solve_trace_take();
+    let (r, _) = engine::sim::mcts_3v3(pack, &net, None, &pa, &sa, &pb, &sb, season, season, seed, sims, |_, _| {});
+    Ok((r as u8, engine::sim::solve_trace_take()))
+}
+
+/// 決定化の的中率を取り出してリセットする。
+/// [試行数, 持ち物一致, 特性一致, 技の一致本数, 技4本完全一致, 全一致]
+#[pyfunction]
+fn det_slot_take() -> PyResult<Vec<u64>> {
+    Ok(engine::sim::det_slot_take())
+}
+
+#[pyfunction]
+fn det_consist_take() -> PyResult<Vec<u64>> {
+    Ok(engine::sim::det_consist_take())
+}
+
+#[pyfunction]
+fn det_hit_take() -> PyResult<Vec<u64>> {
+    Ok(engine::sim::det_hit_take())
+}
+
+/// 学習用: mcts_3v3 を回し、各手番の (手番側, 盤面1037次元, [(行動index, 訪問数)]) を返す。
+#[pyfunction]
+#[pyo3(signature = (pa, sa, pb, sb, seed, sims, season="M-6", net_b_path="", burn=0, net_a_path=""))]
 #[allow(clippy::type_complexity)]
 fn mcts_3v3_trace(
     pa: Vec<String>,
@@ -142,13 +193,18 @@ fn mcts_3v3_trace(
     seed: i128,
     sims: usize,
     season: &str,
+    net_b_path: &str,
+    burn: i64,
+    net_a_path: &str,
 ) -> PyResult<(u8, Vec<(usize, Vec<f64>, Vec<(usize, i64)>, f64)>, Vec<(Vec<f64>, f64, Vec<(usize, i64)>)>)> {
+    let nb = if net_b_path.is_empty() { None } else { Some(load_net_cached(net_b_path)?) };
+    let na = if net_a_path.is_empty() { None } else { Some(load_net_cached(net_a_path)?) };
     let m = eng()?;
     let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
     let Eng { pack, net, .. } = &mut *g;
-    let net = net.clone();
+    let net = na.unwrap_or_else(|| net.clone());
     let (r, recs, nodes) = engine::sim::mcts_3v3_trace(
-        pack, &net, &pa, &sa, &pb, &sb, season, season, seed, sims,
+        pack, &net, nb.as_ref(), &pa, &sa, &pb, &sb, season, season, seed, sims, burn,
     );
     Ok((r as u8, recs, nodes))
 }
@@ -299,9 +355,14 @@ fn version() -> String {
 #[pymodule]
 fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(greedy_3v3, m)?)?;
+    m.add_function(wrap_pyfunction!(belief_probe_take, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3, m)?)?;
+    m.add_function(wrap_pyfunction!(det_hit_take, m)?)?;
+    m.add_function(wrap_pyfunction!(det_consist_take, m)?)?;
+    m.add_function(wrap_pyfunction!(det_slot_take, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3_trace, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3_ab, m)?)?;
+    m.add_function(wrap_pyfunction!(mcts_3v3_solve, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_vs_dist, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_vs_dist_trace, m)?)?;
     m.add_function(wrap_pyfunction!(select_party_rng_probe, m)?)?;

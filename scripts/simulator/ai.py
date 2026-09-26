@@ -499,8 +499,12 @@ def _filter_valid_by_lock(valid: list, me: BattlePokemon) -> list:
         or (me.locked_move if (me.encore_count > 0 or me.lock_count > 0) else None)
     )
     if lock:
+        # 縛られた技が使えない（かなしばり等）ときは、他の技は選べずわるあがきになる（実機仕様）。
+        # 以前は他の技へ逃がしており、こだわり中に技を撃ち分けられていた
         locked = [(i, mv) for i, mv in valid if mv.name_jp == lock]
-        return locked if locked else valid
+        if locked or any(mv is not None and mv.name_jp == lock for mv in me.moves):
+            return locked
+        return valid
     return valid if valid else [(i, mv) for i, mv in enumerate(me.moves) if mv]
 
 

@@ -142,6 +142,8 @@ fn main() {
     let mut abils_seen: HashSet<u16> = HashSet::new();
     let mut items_seen: HashSet<u16> = HashSet::new();
     let mut first_fail: Option<String> = None;
+    // 乖離が仕様変更の反映漏れか実装不一致かは、技ごとの内訳を見ないと判断できない
+    let mut fail_by_move: std::collections::HashMap<String, usize> = std::collections::HashMap::new();
 
     for path in &args[2..] {
         let f = BufReader::new(std::fs::File::open(path).expect("shard"));
@@ -218,6 +220,7 @@ fn main() {
                 ok += 1;
             } else {
                 fails += 1;
+                *fail_by_move.entry(pack.intern.resolve(c.mv.name).to_string()).or_insert(0) += 1;
                 if first_fail.is_none() {
                     first_fail = Some(format!(
                         "case#{} ({}:{}) move={} atk={}({}) def={}({}) -> {}",
@@ -265,6 +268,12 @@ fn main() {
         .unwrap(),
     )
     .ok();
+    if !fail_by_move.is_empty() {
+        let mut fb: Vec<(String, usize)> = fail_by_move.into_iter().collect();
+        fb.sort_by(|a, b| b.1.cmp(&a.1));
+        let line: Vec<String> = fb.iter().take(10).map(|(m, n)| format!("{m}={n}")).collect();
+        println!("乖離の技別内訳: {}", line.join(" "));
+    }
     if let Some(f) = first_fail {
         println!("FIRST DIVERGENCE: {}", f);
         std::process::exit(1);
