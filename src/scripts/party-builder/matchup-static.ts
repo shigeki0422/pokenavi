@@ -210,6 +210,9 @@ export interface MatchupBuildRow {
   myDmg: ReturnType<typeof bestMoveHitDetail>;
   /** この型が自分(me)に与える最大打点技の詳細。 */
   oppDmg: ReturnType<typeof bestMoveHitDetail>;
+  /** 毎ターンの与ダメージ(2ターン以上かかる対面のみ)。 */
+  myTurns: ReturnType<typeof pairHitDetails>["myTurns"];
+  oppTurns: ReturnType<typeof pairHitDetails>["oppTurns"];
 }
 export interface MatchupBreakdown {
   me: ResolvedBuild;
@@ -233,7 +236,7 @@ export function getMatchupBreakdownForBuild(
     verdict: agg.verdicts[i],
     evLabel: evLabel(build.evs),
     // 与ダメ・被ダメは同じ場の前提で出す（向きごとに呼ぶと天候が食い違う）
-    ...(() => { const d = pairHitDetails(me, build); return { myDmg: d.my, oppDmg: d.opp }; })(),
+    ...(() => { const d = pairHitDetails(me, build); return { myDmg: d.my, oppDmg: d.opp, myTurns: d.myTurns, oppTurns: d.oppTurns }; })(),
   }));
   return { me, oppName: oppGroup.name, builds, sym: agg.sym, dep: agg.dep };
 }

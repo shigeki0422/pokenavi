@@ -40,6 +40,8 @@ type Evaluated = {
   /** 毎ターン最善手を選び直した場合の手数と技の並び。 */
   seqHits: number;
   seq: string[];
+  /** 毎ターンの与ダメージ(実数値)。 */
+  turns: { n: string; lo: number; hi: number }[];
 };
 
 /** 対面の評価結果。場は対面ごとに1つなので、両方向をまとめて1回で求める。 */
@@ -161,7 +163,7 @@ function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
       if (e.pruned) moves.push({ n: e.m.n, dmg: null, idx: -1 } as EngineMove & { idx: number });
       else { moves.push({ ...x.moves[k], idx: k }); k++; }
     }
-    return { hp: x.hp, speed: x.speed, moves, seqHits: x.seqHits, seq: x.seq };
+    return { hp: x.hp, speed: x.speed, moves, seqHits: x.seqHits, seq: x.seq, turns: x.turns ?? [] };
   };
   const pair: Pair = { a: side(r.a, entA), b: side(r.b, entB), specA, specB, verdict: r.verdict };
   _pairCache.set(key, pair);
@@ -340,13 +342,22 @@ function _steps(e: Evaluated, cmpHits: number | null, hpDef: number): SeqStep[] 
   });
 }
 
+/** 毎ターンの与ダメージ。2ターン以上かかる対面だけ返す（1ターンで終わる対面は単発表示で足りる）。
+ * %は防御側の最大HPに対する割合。防御上昇・積みなど、ターンごとに変わる値がそのまま出る。 */
+function _turns(e: Evaluated, hpDef: number): SeqStep[] {
+  if (!e.turns || e.turns.length < 2) return [];
+  return e.turns.map((t) => ({
+    n: t.n, pctLo: (t.lo / hpDef) * 100, pctHi: (t.hi / hpDef) * 100, conds: null,
+  }));
+}
+
 /**
  * 対面の与ダメ・被ダメを、同じ場の前提で同時に求める。
  * 向きごとに別々に呼ぶと天候が食い違うため、表示する2行は必ずここから取る。
  */
 export function pairHitDetails(me: ResolvedBuild, opp: ResolvedBuild):
     { my: MoveHitDetail | null; opp: MoveHitDetail | null;
-      mySteps: SeqStep[]; oppSteps: SeqStep[] } {
+      mySteps: SeqStep[]; oppSteps: SeqStep[]; myTurns: SeqStep[]; oppTurns: SeqStep[] } {
   const p = _pair(me, opp);
   const bm = _best(p.a), bo = _best(p.b);
   const my = bm ? _detail(bm, p, 0, opp, p.b.hp) : null;
@@ -356,6 +367,8 @@ export function pairHitDetails(me: ResolvedBuild, opp: ResolvedBuild):
     opp: oppD,
     mySteps: _steps(p.a, my?.hits ?? null, p.b.hp),
     oppSteps: _steps(p.b, oppD?.hits ?? null, p.a.hp),
+    myTurns: _turns(p.a, p.b.hp),
+    oppTurns: _turns(p.b, p.a.hp),
   };
 }
 

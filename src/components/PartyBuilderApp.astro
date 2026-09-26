@@ -3231,6 +3231,8 @@ const I18N = I18N_ALL[lang];
         oppMoveText: tMove(pairs[i].opp?.n ?? verdicts[i].oppMove),
         mySteps: pairs[i].mySteps.map((s) => ({ ...s, n: tMove(s.n) })),
         oppSteps: pairs[i].oppSteps.map((s) => ({ ...s, n: tMove(s.n) })),
+        myTurns: pairs[i].myTurns.map((s) => ({ ...s, n: tMove(s.n) })),
+        oppTurns: pairs[i].oppTurns.map((s) => ({ ...s, n: tMove(s.n) })),
         stallSeq: verdicts[i].stall?.seq.map((n) => tMove(n)),
       })),
     };

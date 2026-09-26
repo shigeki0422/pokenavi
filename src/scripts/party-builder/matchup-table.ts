@@ -25,6 +25,9 @@ export interface MatchupColumnVM {
    * 技名は翻訳済みで渡すこと（このモジュールは翻訳を持たない）。 */
   mySteps?: SeqStep[];
   oppSteps?: SeqStep[];
+  /** 毎ターンの与ダメージ(技名は翻訳済み)。2件以上あれば手順・単発より優先して表示する。 */
+  myTurns?: SeqStep[];
+  oppTurns?: SeqStep[];
   /** 持久戦の技の並び（翻訳済み）。無ければ verdict.stall.seq をそのまま使う。 */
   stallSeq?: string[];
 }
@@ -181,7 +184,30 @@ function stallCell(c: MatchupColumnVM, d: MoveHitDetail | null, moveText: string
   return `<td class="mbp-seq">${lines}<span class="mbp-hits">${esc(t.stallHits(st.turns))}</span>${conds}</td>`;
 }
 
-function dmgCell(d: MoveHitDetail | null, moveText: string, t: Labels, steps?: SeqStep[]): string {
+/** 毎ターンのダメージを1ターン1行で並べるセル。防御上昇・積みなどでターンごとに変わる値がそのまま読める。
+ * 末尾は単発の最大打点なら確定数/乱数n発、手順（技が切り替わる）なら判定と同じ確定数。 */
+function turnsCell(turns: SeqStep[], d: MoveHitDetail | null, verdictHits: number | null | undefined, t: Labels): string {
+  // 連続して同じ技・同じダメージのターンは「1〜4」のようにまとめる（値が変わるターンだけ行を分ける）。
+  const runs: { n: string; p: string; from: number; to: number }[] = [];
+  turns.forEach((s, i) => {
+    const p = pctText(s.pctLo, s.pctHi);
+    const last = runs[runs.length - 1];
+    if (last && last.n === s.n && last.p === p) last.to = i + 1;
+    else runs.push({ n: s.n, p, from: i + 1, to: i + 1 });
+  });
+  const lines = runs.map((r) =>
+    `<div class="mbp-step"><span class="mbp-step-no">${r.from === r.to ? r.from : `${r.from}〜${r.to}`}</span>`
+    + `<span class="mbp-pct">${esc(r.p)}</span>`
+    + `<span class="mbp-move">${esc(r.n)}</span></div>`).join("");
+  const mixed = new Set(turns.map((s) => s.n)).size > 1;
+  const foot = mixed || !d ? t.hits(verdictHits ?? null) : t.detail(d, fmtProb(d.prob));
+  const conds = d?.conds ? `<div class="mbp-conds">${esc(t.conds(d.conds))}</div>` : "";
+  return `<td class="mbp-seq">${lines}<span class="mbp-hits">${esc(foot)}</span>${conds}</td>`;
+}
+
+function dmgCell(d: MoveHitDetail | null, moveText: string, t: Labels, steps?: SeqStep[],
+                 turns?: SeqStep[], verdictHits?: number | null): string {
+  if (turns && turns.length > 1) return turnsCell(turns, d, verdictHits, t);
   return steps && steps.length > 1 ? seqCell(steps, t) : singleCell(d, moveText, t);
 }
 
@@ -209,10 +235,10 @@ export function renderMatchupTable(vm: MatchupTableVM, lang: Lang): string {
     `<th>${esc(c.label)}<div class="mbp-build-meta">${c.meta.map(esc).join("<br>")}</div></th>`).join("") + `</tr>`;
   const myRow = arrow(vm.myIconUrl, vm.myName, vm.oppIconUrl, vm.oppName)
     + vm.columns.map((c) => c.verdict.stall?.side === "me"
-      ? stallCell(c, c.my, c.myMoveText, t) : dmgCell(c.my, c.myMoveText, t, c.mySteps)).join("");
+      ? stallCell(c, c.my, c.myMoveText, t) : dmgCell(c.my, c.myMoveText, t, c.mySteps, c.myTurns, c.verdict.myHits)).join("");
   const oppRow = arrow(vm.oppIconUrl, vm.oppName, vm.myIconUrl, vm.myName)
     + vm.columns.map((c) => c.verdict.stall?.side === "opp"
-      ? stallCell(c, c.opp, c.oppMoveText, t) : dmgCell(c.opp, c.oppMoveText, t, c.oppSteps)).join("");
+      ? stallCell(c, c.opp, c.oppMoveText, t) : dmgCell(c.opp, c.oppMoveText, t, c.oppSteps, c.oppTurns, c.verdict.oppHits)).join("");
   const spdRow = `<td class="lft">${esc(t.rowSpeed)}</td>` + vm.columns.map((c) =>
     `<td class="mbp-spd-cell ${c.verdict.fast ? "mbp-spd-win" : "mbp-spd-lose"}">`
     + `<div>${esc(t.fast(c.verdict.fast))}</div>`

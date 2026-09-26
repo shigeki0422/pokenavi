@@ -1224,6 +1224,8 @@ const I18N = I18N_ALL[lang];
         stallSeq: (d.judge[i].stall && d.judge[i].stall.seq || []).map((n) => tMove(n)),
         mySteps: ((d.seq && d.seq[i] && d.seq[i].my) || []).map((x) => ({ ...x, n: tMove(x.n) })),
         oppSteps: ((d.seq && d.seq[i] && d.seq[i].opp) || []).map((x) => ({ ...x, n: tMove(x.n) })),
+        myTurns: ((d.seq && d.seq[i] && d.seq[i].my_turns) || []).map((x) => ({ ...x, n: tMove(x.n) })),
+        oppTurns: ((d.seq && d.seq[i] && d.seq[i].opp_turns) || []).map((x) => ({ ...x, n: tMove(x.n) })),
         myMoveText: tMove(d.me[i].move), oppMoveText: tMove(d.op[i].move),
       })),
     };

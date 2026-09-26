@@ -246,12 +246,21 @@ def _mu_score(M, O, field):
                             "pctLo": None if lo is None else lo / hp * 100,
                             "pctHi": None if hi is None else hi / hp * 100})
             return out
+
+        def _turns(side, other):
+            """毎ターンの与ダメージ(2ターン以上かかる対面のみ)。%は相手の最大HP比。"""
+            ts = d[side].get("turns") or []
+            hp = max(1, d[other]["hp"])
+            if len(ts) < 2:
+                return []
+            return [{"n": t["n"], "pctLo": t["lo"] / hp * 100, "pctHi": t["hi"] / hp * 100} for t in ts]
         return {"myh": v["myHits"], "thh": v["oppHits"], "myr": ar, "thr": br,
                 "fast": v["koFirst"], "my_s": v["myS"], "op_s": v["oppS"],
                 "my_move": v["myMove"], "th_move": v["oppMove"],
                 "my_seq": v["mySeq"], "ko_by_priority": v["koByPriority"],
                 "my_steps": _steps("a", "b", v["mySeq"]),
                 "opp_steps": _steps("b", "a", v.get("oppSeq") or []),
+                "my_turns": _turns("a", "b"), "opp_turns": _turns("b", "a"),
                 "sym": v["sym"], "score": v["score"], "win": v["win"],
                 "draw": v.get("draw", False), "stall": v.get("stall")}
     if MU_MODE == "engine" and sa and sb:
@@ -378,7 +387,8 @@ def matchup_detail(specs, mon_name, opp_name, L):
                       "fast": fast, "by_prio": bool(r.get("ko_by_priority")),
                       "my_hits": myh, "opp_hits": thh,
                       "draw": bool(r.get("draw")), "stall": r.get("stall")})
-        seq.append({"my": r.get("my_steps") or [], "opp": r.get("opp_steps") or []})
+        seq.append({"my": r.get("my_steps") or [], "opp": r.get("opp_steps") or [],
+                    "my_turns": r.get("my_turns") or [], "opp_turns": r.get("opp_turns") or []})
     return {"mon": mon_name, "opp": opp_name, "my_spec": getattr(M, "_spec", None),
             "cols": cols, "me": me, "op": op, "spd": spd, "judge": judge, "seq": seq}
 

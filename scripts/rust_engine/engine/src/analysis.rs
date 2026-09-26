@@ -557,6 +557,61 @@ pub fn move_damage(
     move_damage_sup(pack, spec_a, spec_b, season, att, move_idx, roll, Suppress::None)
 }
 
+/// 今の局面で技 `mv` が与えるダメージ（連続技は全ヒットの合計・威力ベース）。`bt` は書き換わるので複製を渡すこと。
+fn move_total_damage(packr: &Pack, bt: &mut Battle, att: usize, mv: &crate::damage::DMove, roll: f64) -> i64 {
+    // 技を撃つ直前の姿・タイプ変化（へんげんじざい・バトルスイッチ）。対戦本体と共有する
+    crate::battle::apply_pre_move_forms(packr, &mut bt.sides[att].party[0], mv);
+    let n = calc_hits(packr, mv, bt.sides[att].active(), &mut FixedRng);
+    // 急所も対戦本体と同じ手順で決める。FixedRng なので crit_chance が 1.0 のものだけ
+    // 急所になる＝確定数の前提と一致する（必中急所を落とすと確定数と食い違う）。
+    let critical = {
+        let a = &bt.sides[att].party[0];
+        let d = &bt.sides[1 - att].party[0];
+        let c = crate::battle::crit_chance(packr, a, mv, Some(d));
+        FixedRng.random() < c
+    };
+    let mut total = 0i64;
+    for hit_i in 0..n.max(1) {
+        let Battle { sides, field, .. } = &mut *bt;
+        let (sa, sd) = split2(sides, att);
+        let att = &mut sa.party[0];
+        let def = &mut sd.party[0];
+        // 1発ぶんの計算は対戦本体と同じ関数を使う（何発目かの反映を含む）
+        let mut r = FixedRng;
+        let d = hit_damage(packr, att, def, mv, field, hit_i, critical, Some(roll), &mut r);
+        total += d;
+        // マルチスケイル等「満タンのときだけ」の効果を2発目以降に持ち越さないよう、
+        // 連続技の各ヒットは HP を減らしながら計算する。倒れても止めない（威力を出すため）。
+        def.hp = (def.hp - d).max(1);
+    }
+    total
+}
+
+/// 毎ターンの与ダメージ（最低乱数/最高乱数）。技の並び `seq` を1ターンずつ実走し、各ターンの開始局面で
+/// その技が与えるダメージを測る（じきゅうりょくの防御上昇・積み・場の変化が2ターン目以降に効く）。
+/// 経路は最低乱数（確定数の前提）で進め、その各局面で最低/最高乱数の値を出す。倒れた時点で止め、
+/// 倒しきれなければ CAP ターンまで。回復・砂・たべのこし等のHP増減は含まない（技の威力を出すため）。
+pub fn per_turn_damage(
+    pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, att: usize, seq: &[usize],
+) -> Vec<(usize, i64, i64)> {
+    let mut bt = setup(pack, spec_a, spec_b, season, 0.0);
+    let packr: &Pack = pack;
+    let def = 1 - att;
+    let mut out = Vec::new();
+    for t in 0..CAP as usize {
+        if !bt.sides[def].active().is_alive { break; }
+        let Some(&mi) = seq.get(t).or(seq.last()) else { break };
+        let Some(mv) = bt.sides[att].active().moves.get(mi).cloned() else { break };
+        let lo = move_total_damage(packr, &mut bt.clone(), att, &mv, 0.0);
+        let hi = move_total_damage(packr, &mut bt.clone(), att, &mv, 1.0);
+        if lo <= 0 && hi <= 0 { break; }
+        out.push((mi, lo, hi));
+        let step = bt.turn + 1;
+        drive(&mut bt, packr, att, mi, step);
+    }
+    out
+}
+
 /// 表示するダメージは「実際に与えた分」ではなく「その技の威力」。
 /// execute_move は相手が倒れた時点でループを止めるため、そちらの合計は使えない
 /// （トリプルアクセルが 199% → 101% と頭打ちになった）。ここでは対戦本体と同じ前処理を
@@ -568,31 +623,7 @@ pub fn move_damage_sup(
     let mut bt = setup_sup(pack, spec_a, spec_b, season, roll, sup);
     let packr: &Pack = pack;
     let Some(mv) = bt.sides[att].active().moves.get(move_idx).cloned() else { return 0 };
-    // 技を撃つ直前の姿・タイプ変化（へんげんじざい・バトルスイッチ）。対戦本体と共有する
-    crate::battle::apply_pre_move_forms(packr, &mut bt.sides[att].party[0], &mv);
-    let n = calc_hits(packr, &mv, bt.sides[att].active(), &mut FixedRng);
-    // 急所も対戦本体と同じ手順で決める。FixedRng なので crit_chance が 1.0 のものだけ
-    // 急所になる＝確定数の前提と一致する（必中急所を落とすと確定数と食い違う）。
-    let critical = {
-        let a = &bt.sides[att].party[0];
-        let d = &bt.sides[1 - att].party[0];
-        let c = crate::battle::crit_chance(packr, a, &mv, Some(d));
-        FixedRng.random() < c
-    };
-    let mut total = 0i64;
-    for hit_i in 0..n.max(1) {
-        let Battle { sides, field, .. } = &mut bt;
-        let (sa, sd) = split2(sides, att);
-        let att = &mut sa.party[0];
-        let def = &mut sd.party[0];
-        // 1発ぶんの計算は対戦本体と同じ関数を使う（何発目かの反映を含む）
-        let mut r = FixedRng;
-        let d = hit_damage(packr, att, def, &mv, field, hit_i, critical, Some(roll), &mut r);
-        total += d;
-        // マルチスケイル等「満タンのときだけ」の効果を2発目以降に持ち越さないよう、
-        // 連続技の各ヒットは HP を減らしながら計算する。倒れても止めない（威力を出すため）。
-        def.hp = (def.hp - d).max(1);
-    }
+    let total = move_total_damage(packr, &mut bt, att, &mv, roll);
     if total == 0 && mv.power.is_none() {
         // がむしゃらのように威力がDBに無く、対戦本体の中でHPから決まる技。
         // calc_damage は 0 を返すので、実際に撃たせた値を使う。
@@ -725,8 +756,23 @@ pub fn analyze_json(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_js
         let seq_names: Vec<String> = seq_idx.iter()
             .filter_map(|i| me.moves.get(*i).map(|(n, _)| n.clone()))
             .collect();
+        // 表示する技の並び: 手順が単発の最大打点より遠回りでなく2種以上なら手順、無ければ最大打点の連打。
+        let best_hits_v = best.as_ref().map(|x| x.1).unwrap_or(OUT_OF_RANGE);
+        let mut uniq: Vec<&String> = seq_names.iter().collect();
+        uniq.sort();
+        uniq.dedup();
+        let turn_seq: Vec<usize> = if uniq.len() >= 2 && seq_hits <= best_hits_v {
+            seq_idx.clone()
+        } else {
+            best.as_ref().map(|x| vec![x.5]).unwrap_or_default()
+        };
+        let turns: Vec<Value> = if turn_seq.is_empty() { Vec::new() } else {
+            per_turn_damage(pack, a, b, season, att, &turn_seq).into_iter()
+                .filter_map(|(mi, lo, hi)| me.moves.get(mi).map(|(n, _)| json!({"n": n, "lo": lo, "hi": hi})))
+                .collect()
+        };
         out[key] = json!({"hp": me.hp, "speed": me.speed, "moves": moves,
-                          "seqHits": seq_hits, "seq": seq_names});
+                          "seqHits": seq_hits, "seq": seq_names, "turns": turns});
         sides.push(SideVerdictInput {
             speed: me.speed,
             best_name: best.as_ref().map(|x| x.0.clone()),

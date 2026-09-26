@@ -72,6 +72,8 @@ function toVM(breakdown: MatchupBreakdown): MatchupTableVM {
       meta: [tItem(r.build.item), tNature(r.build.nature), r.evLabel],
       my: r.myDmg, opp: r.oppDmg, verdict: r.verdict,
       stallSeq: r.verdict.stall?.seq.map((n) => tMove(n)),
+      myTurns: r.myTurns.map((s) => ({ ...s, n: tMove(s.n) })),
+      oppTurns: r.oppTurns.map((s) => ({ ...s, n: tMove(s.n) })),
       myMoveText: tMove(r.myDmg?.n ?? r.verdict.myMove),
       oppMoveText: tMove(r.oppDmg?.n ?? r.verdict.oppMove),
     })),
