@@ -1514,11 +1514,20 @@ fn winner_of(marks: &[crate::battle::RaceMark]) -> Option<usize> {
 }
 
 
-/// 先に倒された側を倒されなかったことにして、手順を続けるための嵩増し。
-/// 最大HPだけを増やし、それまでに受けたダメージはそのまま残す（割合で増やすと残りHPが少ない側は
-/// 嵩増し後も同じ1発で倒れてしまう）。以降の定率ダメージ(砂・いのちのたまの反動)も比例して増えるが、
-/// 割合は変わらないので決着が付くまでに倒れることはない。
-const CF_HP_MUL: i64 = 64;
+/// 勝った側 `w` が自分の行動の区切りで、ダメージの原因の記録なしに倒れたか（だいばくはつ・ミストバースト・いやしのねがい等の自分で倒れる技）。
+fn self_ko_by_own_move(marks: &[crate::battle::RaceMark], causes: &Causes, w: usize) -> bool {
+    for (k, m) in marks.iter().enumerate().skip(1) {
+        let p = &marks[k - 1];
+        if p.2[w] > 0 && m.2[w] <= 0 {
+            if !(m.0 == 1 && m.1 == w) { return false; }
+            // その区切りで記録された原因（ゴツゴツメット・さめはだ・反動・いのちのたま等）で倒れたなら自滅技ではない
+            let known: i64 = causes.iter().filter(|c| c.0 == k && c.1 == w && c.3 > 0).map(|c| c.3).sum();
+            return known < p.2[w];
+        }
+    }
+    false
+}
+
 
 /// 各側が方針 `plans` のとおりに行動する対戦を、指定の乱数（判定は中央乱数 0.5）で決着まで回す。
 pub fn sim_pair(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, plans: [Plan; 2],
@@ -1680,33 +1689,43 @@ fn sim_pair_memo(pack: &mut Pack, spec_a: &str, spec_b: &str, season: &str, plan
         // 勝った側の自滅(反動等)は l の手柄にしない。
         let w = winner;
         let mut cf = snap.clone();
-        cf.field.cf_guard[w] = true;
-        {
-            let p = cf.sides[l].active_mut();
-            let lost = p.max_hp - p.hp;
-            p.max_hp *= CF_HP_MUL;
-            p.hp = p.max_hp - lost;
-        }
+        // 負けた側に「倒れても行動し続ける」印を付ける。HPは本物のまま（0で止まる）なので、ふんか・オボンのみ・マルチスケイル等の
+        // HPで決まる要素は実際どおり。勝った側への反動も実際に減らしたHPが基準のまま（水増しで膨らまない）。
+        cf.sides[l].active_mut().undying = true;
         let mut a = acts;
         let mut ch = hist_before;
         loop {
             ch.push(a);
-            let m = drive_logged(&mut cf, packr, a);
+            let (m, mc) = drive_logged_causes(&mut cf, packr, a);
             if cf.turn > turn {
                 out.acts[l].push(a[l]);
             }
             if !cf.sides[w].active().is_alive {
-                // 仮定の続き(負けた側が倒れなかったら)で勝った側が倒れたターン。勝った側は与ダメージに比例する反動を受けない（cf_guard。
-                // 水増しした相手への反動は実際より大きく、自滅して手数が短く出ていた）。いのちのたま・ゴツゴツメット等は数える。
-                let _ = &m;
-                out.t[l] = cf.turn;
+                // 仮定の続きで勝った側が倒れたターン。負けた側が生きていたら起きること（技・ゴツゴツメット・さめはだ・反動・毒等）で倒れたら数える。
+                // 勝った側が自分の技で倒れた（だいばくはつ・ミストバースト等。原因の記録が無いまま0になる）ときは、負けた側が倒したのではないので数えない。
+                if !self_ko_by_own_move(&m, &mc, w) {
+                    out.t[l] = cf.turn;
+                }
                 break;
             }
             if !cf.sides[l].active().is_alive || cf.turn >= cap {
                 break;
             }
+            // 方針の手の選択は「負けた側がまだ十分なHPで場にいる」前提で行う（0で止まったHPのまま選ぶと、
+            // 勝った側の技の見込みダメージが0になって攻撃しなくなる）。実際の進行は本物のHPのまま。
+            let (mh0, h0) = { let p = cf.sides[l].active(); (p.max_hp, p.hp) };
+            {
+                let p = cf.sides[l].active_mut();
+                p.max_hp = mh0 * 64;
+                p.hp = p.max_hp - (mh0 - h0);
+            }
             a = [memo.action(&cf, packr, (me_first_on_tie, true, &ch), 0, plans[0]),
                  memo.action(&cf, packr, (me_first_on_tie, true, &ch), 1, plans[1])];
+            {
+                let p = cf.sides[l].active_mut();
+                p.max_hp = mh0;
+                p.hp = h0;
+            }
         }
         return out;
     }
@@ -1827,7 +1846,11 @@ fn race_entries(packr: &Pack, snap: &Battle, marks: &[crate::battle::RaceMark], 
                 }
                 let rx = rest(x);
                 if rx != 0 {
-                    ev.push(json!({"side": x, "kind": if rx > 0 { "other" } else { "heal" }, "amount": rx}));
+                    // だいばくはつ・じばく・ミストバースト で自分が倒れたぶんは selfko（再生で「◯◯は 倒れた！」の前に原因として出す）
+                    let l = &packr.sy.l;
+                    let selfko = mv.map_or(false, |m| m.name == l.だいばくはつ || m.name == l.じばく || m.name == l.ミストバースト);
+                    let kind = if rx < 0 { "heal" } else if selfko { "selfko" } else { "other" };
+                    ev.push(json!({"side": x, "kind": kind, "amount": rx}));
                 }
                 // 攻撃技を持たず何もしなかった行動は行にしない（表示で空行になるため）
                 if mv.is_none() && ev.is_empty() { prev = m; continue; }
@@ -2035,6 +2058,23 @@ mod tests {
         let m3 = vec![(0u8, 0usize, hp(10, 100), [None, None], f, z, [None, None], None), (1, 0, hp(10, 0), [None, None], f, z, [None, None], None),
                       (3, 0, hp(0, 0), [None, None], f, z, [None, None], None)];
         assert_eq!(winner_of(&m3), None, "倒した後のターン終了時に自分も倒れたら相打ち");
+    }
+
+    /// 仮定の続きで勝った側が倒れたとき、自分の技で倒れた（原因の記録なし）なら数えない・ゴツゴツメット等の原因があれば数える。
+    #[test]
+    fn 仮定の続きの自滅技の判定() {
+        let f = [false, false];
+        let z = [[0i32; 5]; 2];
+        let mk = |ph: u8, x: usize, h0: i64, h1: i64| (ph, x, [h0, h1], [None, None], f, z, [None, None], None);
+        // side1(勝った側) が自分の行動の区切りで 50→0（原因なし＝だいばくはつ等）
+        let m = vec![mk(0, 0, 100, 50), mk(1, 1, 100, 0)];
+        assert!(self_ko_by_own_move(&m, &Vec::new(), 1));
+        // 同じ区切りでゴツゴツメット50（相手由来）→ 数える
+        let c: Causes = vec![(1, 1, "helmet", 50)];
+        assert!(!self_ko_by_own_move(&m, &c, 1));
+        // 相手の行動の区切りで倒れた → 数える
+        let m2 = vec![mk(0, 0, 100, 50), mk(1, 0, 100, 0)];
+        assert!(!self_ko_by_own_move(&m2, &Vec::new(), 1));
     }
 
     /// 同じターン数で倒せるなら反動の無い技を選ぶ（メガボーマンダは じしん でオオニューラを確1）。

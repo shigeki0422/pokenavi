@@ -83,6 +83,10 @@ pub struct MoveInst {
 /// BattlePokemon の全状態（宣言77＋動的45）。simulator/pokemon.py + battle.py の動的属性。
 #[derive(Clone, Debug, Default)]
 pub struct Poke {
+    /// 分析専用。1v1判定の仮定の続き（倒された側が倒れなかったら）で、HPは本物のまま0で止まり倒れない。対戦本体は常に false。
+    pub undying: bool,
+    /// だいばくはつ・じばく・ミストバースト を使った（execute_move の最後で必ず倒れる）。
+    pub selfko_pending: bool,
     pub name: Sym,
     pub name_pika: bool,
     pub dex: i64,
@@ -767,7 +771,7 @@ impl Poke {
             return;
         }
         self.hp = std::cmp::max(0, self.hp - dmg);
-        if self.hp == 0 {
+        if self.hp == 0 && !self.undying {
             self.is_alive = false;
         }
     }

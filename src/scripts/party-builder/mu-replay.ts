@@ -308,9 +308,13 @@ function edgeCover(root: HTMLElement, x: number, y: number, fromTop: boolean): n
 function fitReplay(root: HTMLElement): void {
   const ctrl = root.querySelector<HTMLElement>(".mur-ctrl");
   const frame = root.querySelector<HTMLElement>(".mur-frame:not([hidden])");
-  if (!ctrl || !frame) return;
+  if (ctrl && frame) fitRange(root, ctrl, frame);
+}
+
+/** top の上端〜bot の下端が画面に収まるようにスクロール。収まらなければ top を上端に合わせる。 */
+function fitRange(root: HTMLElement, topEl: HTMLElement, botEl: HTMLElement): void {
   const sp = scrollParent(root);
-  const x = ctrl.getBoundingClientRect().left + 8;
+  const x = topEl.getBoundingClientRect().left + 8;
   let vTop = 0, vBot = window.innerHeight;
   if (sp) {
     const r = sp.getBoundingClientRect();
@@ -319,8 +323,8 @@ function fitReplay(root: HTMLElement): void {
   }
   vTop = Math.max(vTop, edgeCover(root, x, vTop + 1, true));
   vBot = Math.min(vBot, window.innerHeight - edgeCover(root, x, vBot - 1, false));
-  const top = ctrl.getBoundingClientRect().top - 4;
-  const bot = frame.getBoundingClientRect().bottom + 4;
+  const top = topEl.getBoundingClientRect().top - 4;
+  const bot = botEl.getBoundingClientRect().bottom + 4;
   let dy = 0;
   if (bot - top > vBot - vTop) dy = top - vTop;
   else if (top < vTop) dy = top - vTop;
@@ -329,4 +333,12 @@ function fitReplay(root: HTMLElement): void {
   // 連打でスムーズスクロールが途中の間も目標がずれないよう、現在位置からの絶対位置で指定する
   if (sp) sp.scrollTo({ top: sp.scrollTop + dy, behavior: "smooth" });
   else window.scrollTo({ top: window.scrollY + dy, behavior: "smooth" });
+}
+
+/** 「くわしい内訳」を開いたとき、見出し〜再生の操作ボタンと最初の画面（再生が無ければ中身全体）が収まるようにスクロール。 */
+export function fitOpenedDetail(det: HTMLDetailsElement): void {
+  const sum = det.querySelector<HTMLElement>(":scope > summary");
+  if (!sum) return;
+  const frame = det.querySelector<HTMLElement>(".mur-frame:not([hidden])");
+  requestAnimationFrame(() => fitRange(det, sum, frame ?? det));
 }

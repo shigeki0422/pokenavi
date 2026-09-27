@@ -918,6 +918,33 @@ pub fn execute_move(
     rng: &mut dyn BRng,
     dmg_out: &mut i64,
 ) {
+    let ai = sides[aidx].active_idx;
+    execute_move_inner(pack, sides, field, aidx, action, opp_action, rng, dmg_out);
+    // 自分が倒れる技（だいばくはつ・じばく・ミストバースト）は、外れ・まもる・タイプ無効・ばけのかわ等で技が途中で終わっても、
+    // 使った時点で自分は倒れる（実機どおり。battle.py _execute_move と同じ）
+    if let Some(p) = sides[aidx].party.get_mut(ai) {
+        if p.selfko_pending {
+            p.selfko_pending = false;
+            if p.is_alive {
+                let hp = p.hp;
+                p.take_damage(hp);
+                p.is_alive = false;
+            }
+        }
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn execute_move_inner(
+    pack: &Pack,
+    sides: &mut [Side; 2],
+    field: &mut Field,
+    aidx: usize,
+    action: &Action,
+    opp_action: Option<&Action>,
+    rng: &mut dyn BRng,
+    dmg_out: &mut i64,
+) {
     let l = &pack.sy.l;
     let st = &pack.sy.st;
     let we = &pack.sy.we;
@@ -1268,6 +1295,9 @@ pub fn execute_move(
         && (A!().ability == l.しめりけ || D!().ability == l.しめりけ)
     {
         return;
+    }
+    if n == l.だいばくはつ || n == l.じばく || n == l.ミストバースト {
+        A!().selfko_pending = true;
     }
     apply_pre_move_forms(pack, &mut A!(), &mv);
 
@@ -2271,9 +2301,7 @@ pub fn execute_move(
     {
         let (a, d) = two!();
         let h0 = a.hp;
-        if !field.cf_guard[aidx] {
-            apply_recoil(pack, a, d, &mv, dealt_hp);
-        }
+        apply_recoil(pack, a, d, &mv, dealt_hp);
         race_cause(aidx, "recoil", h0 - a.hp);
     }
     {
@@ -2332,9 +2360,7 @@ pub fn execute_move(
         {
             let (a, d) = two!();
             let h0 = a.hp;
-            if !field.cf_guard[aidx] {
-                apply_recoil(pack, a, d, &mv, pb_dealt);
-            }
+            apply_recoil(pack, a, d, &mv, pb_dealt);
             race_cause(aidx, "recoil", h0 - a.hp);
         }
         {
@@ -3770,6 +3796,11 @@ pub fn apply_secondary(
                     attacker.set_stage(stat, new_val);
                 }
             }
+        }
+        // ミストバースト: 相手を倒しても自分は倒れる（以前はこの早期 return で自分が残っていた。battle.py と同じ）
+        if n == l.ミストバースト && attacker.is_alive {
+            attacker.hp = 0;
+            attacker.is_alive = false;
         }
         return;
     }

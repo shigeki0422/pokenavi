@@ -2,7 +2,7 @@
 // 折りたたみの内訳）を静的HTMLで組み立てる。ポケモン情報ページ等のポップアップ(MatchupBreakdownPopup)が使う。
 // 見た目は styles/mu-card.css。工房(PartyBuilderApp)の仮想敵カードと文言・並び・色を揃えている。
 import { effLabel, renderAssumptions, renderMatchupTable } from "./matchup-table";
-import { renderReplay, handleReplayClick } from "./mu-replay";
+import { renderReplay, handleReplayClick, fitOpenedDetail } from "./mu-replay";
 import { causeCat, causeLabel, causeShort, condText, extraLabel, koByMove, lateMark, raceBarItems, stepLabel, turnTag, type BarItem, type MoveDamage, type MoveHitDetail, type SeqStep } from "./matchup";
 import type { Verdict } from "./types";
 import type { Lang } from "./assumptions";
@@ -234,6 +234,10 @@ function moveBars(list: MoveDamage[], mine: boolean, tMove: (n: string) => strin
 
 /** カードの棒のセグメント(button)をタップ/クリック/Enterしたとき、そのカードの詳細欄に内容を出す。ページで1回呼ぶ。 */
 export function bindMuCardClicks(root: Document | HTMLElement): void {
+  root.addEventListener("toggle", (e) => {
+    const det = e.target as HTMLDetailsElement;
+    if (det?.classList?.contains("muc-detail") && det.open) fitOpenedDetail(det);
+  }, true);
   root.addEventListener("click", (e) => {
     if (e.target && handleReplayClick(e.target as Element)) return;
     const seg = (e.target as Element | null)?.closest?.(".muc-seg[data-muc-d]") as HTMLElement | null;

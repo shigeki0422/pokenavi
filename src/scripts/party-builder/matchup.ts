@@ -224,6 +224,7 @@ const CAUSES: Record<string, { cat: string; ja: string; en: string; ko: string; 
   helmet: { cat: "self", ja: "ゴツゴツメット", en: "Rocky Helmet", ko: "울퉁불퉁멧", sja: "メ", sen: "RH", sko: "멧" },
   roughskin: { cat: "self", ja: "さめはだ・てつのトゲ", en: "Rough Skin / Iron Barbs", ko: "까칠한피부·철가시", sja: "肌", sen: "RS", sko: "피" },
   liquidooze: { cat: "self", ja: "ヘドロえき", en: "Liquid Ooze", ko: "해감액", sja: "液", sen: "LQ", sko: "액" },
+  selfko: { cat: "self", ja: "自分が倒れる技（だいばくはつ等）", en: "Self-KO move (Explosion etc.)", ko: "자폭 기술(대폭발 등)", sja: "爆", sen: "SK", sko: "폭" },
   other: { cat: "self", ja: "自分の行動によるダメージ", en: "Self-inflicted", ko: "자신의 행동에 의한 대미지", sja: "自", sen: "S", sko: "자" },
   recoilEtc: { cat: "self", ja: "反動など", en: "Recoil etc.", ko: "반동 등", sja: "反", sen: "R", sko: "반" },
   sandstorm: { cat: "weather", ja: "すなあらし", en: "Sandstorm", ko: "모래바람", sja: "砂", sen: "SS", sko: "모" },

@@ -544,6 +544,25 @@ def _execute_move(
     opp_action: Optional[Action] = None,
     dmg_out: Optional[list] = None,
 ) -> List[str]:
+    """自分が倒れる技（だいばくはつ・じばく・ミストバースト）は、外れ・まもる・タイプ無効・ばけのかわ等で技が途中で終わっても、
+    使った時点で自分は倒れる（実機どおり。battle.rs execute_move と同じ）。"""
+    _att = attacker_side.active
+    logs = _execute_move_inner(attacker_side, defender_side, action, field, opp_action, dmg_out)
+    if getattr(_att, "_selfko_pending", False):
+        _att._selfko_pending = False  # type: ignore
+        if _att.is_alive:
+            _att.take_damage(_att.hp)
+            _att.is_alive = False
+            logs.append(f"{_att.name} は 倒れた！")
+    return logs
+
+
+def _execute_move_inner(
+    attacker_side: BattleSide, defender_side: BattleSide,
+    action: Action, field: BattleField,
+    opp_action: Optional[Action] = None,
+    dmg_out: Optional[list] = None,
+) -> List[str]:
     """dmg_out を渡すとこの技が与えた合計ダメージを append する（早期returnなら何も入らない）。
     分析側が「その技のダメージ」を知るための出力で、対戦の挙動には影響しない。
     分析が calc_damage を直に呼ぶと、ここに至るまでの前処理（へんげんじざいのタイプ変更・
@@ -879,6 +898,8 @@ def _execute_move(
     if move.name_jp in ("だいばくはつ", "じばく", "ミストバースト") and "しめりけ" in (attacker.ability, defender.ability):
         logs.append(f"{attacker.name} は {move.name_jp} を使おうとしたが、しめりけ で出せなかった！")
         return logs
+    if move.name_jp in ("だいばくはつ", "じばく", "ミストバースト"):
+        attacker._selfko_pending = True  # type: ignore
 
     apply_pre_move_forms(attacker, move, logs)
 
@@ -2884,6 +2905,11 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
                     setattr(attacker, stat, new_val)
                     if new_val != old_val:
                         logs.append(f"{attacker.name} の {STAT_JP.get(stat, stat)} が{'下がった' if delta < 0 else '上がった'}！")
+        # ミストバースト: 相手を倒しても自分は倒れる（以前はこの早期 return で自分が残っていた。battle.rs と同じ）
+        if n == "ミストバースト" and attacker.is_alive:
+            attacker.hp = 0
+            attacker.is_alive = False
+            logs.append(f"{attacker.name} は ミストバースト の反動で倒れた！")
         return
 
     # ふんどのこぶし用: 攻撃技で被弾した回数を加算（防御側は生存中）

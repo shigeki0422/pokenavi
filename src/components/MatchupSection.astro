@@ -2,9 +2,6 @@
 import type { StaticMatchup } from '../scripts/party-builder/matchup-static';
 import { getMatchupBreakdownForBuild, myBuildOptions } from '../scripts/party-builder/matchup-static';
 import MatchupBreakdownPopup from './MatchupBreakdownPopup.astro';
-import { ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, itemNameOf } from '../i18n/game-terms';
-import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
-import { archTitle, punct } from '../scripts/party-builder/mu-card';
 
 interface Props {
   matchups: StaticMatchup[];
@@ -29,19 +26,15 @@ const T = {
   ko: { heading: '포켓몬 상성', fav: '유리한 상대', unfav: '불리한 상대', note: '사용률 상위 30마리와의 1v1 사전 계산에 따른 참고치입니다. 양측이 대표 샘플의 4기술로 1대1로 싸우는 경우를 랭크업·속이기 등 준비 1수와 반동·도구 효과까지 포함한 대전 시뮬레이션으로 판정합니다 (교체 미고려). *는 자신/상대의 샘플에 따라 평가가 달라집니다.', cta: '내 파티로 자세히 판정 → 파티 공방', linkSelf: (n: string) => `${n} 페이지 보기 →` },
 }[lang];
 
-const tItem = (n: string) => itemNameOf(n, lang, lang === 'en' ? ITEM_NAME_EN : ITEM_NAME_KO, lang === 'en' ? POKEMON_NAME_EN : POKEMON_NAME_KO);
-const tNature = (n: string) => (lang === 'en' ? NATURE_NAME_EN[n] ?? n : lang === 'ko' ? NATURE_NAME_KO[n] ?? n : n);
-const tAbility = (n: string) => (lang === 'en' ? ABILITY_NAME_EN[n] ?? n : lang === 'ko' ? ABILITY_NAME_KO[n] ?? n : n);
-const EVL = ['H', 'A', 'B', 'C', 'D', 'S'];
-const evText = (evs: number[]) => evs.map((v, i) => (v > 0 ? `${EVL[i]}${v}` : '')).filter(Boolean).join(' ');
 const B = {
-  ja: { my: '自分の型', note: '相性は代表型の割合で重み付けして判定。相手をタップすると型ごとの1v1を表示' },
-  en: { my: 'Your builds', note: 'Verdicts are weighted by each build\'s share. Tap an opponent for per-build 1v1s' },
-  ko: { my: '내 빌드', note: '상성은 대표 빌드의 비율로 가중해 판정. 상대를 탭하면 빌드별 1v1 표시' },
+  ja: { note: '相性は自分の代表型の割合で重み付けして判定。相手をタップすると、自分の型ごと・相手の型ごとの1v1を表示' },
+  en: { note: 'Verdicts are weighted by the share of your representative sets. Tap an opponent to see 1v1s for each of your sets and theirs' },
+  ko: { note: '상성은 내 대표 샘플의 비율로 가중해 판정. 상대를 탭하면 내 샘플별·상대 샘플별 1v1 표시' },
 }[lang];
 
 const favorable = matchups.filter(m => m.sym === '◎' || m.sym === '○');
 const unfavorable = matchups.filter(m => m.sym === '▲' || m.sym === '×');
+
 const displayName = (n: string) => {
   if (nameMap[n] || lang === 'ja' || !n.startsWith('メガ')) return nameMap[n] ?? n;
   const rest = n.slice(2);
@@ -57,8 +50,6 @@ const displayName = (n: string) => {
  * /counters/ページと共有するMatchupBreakdownPopup.astroに渡す。
  */
 const myOptions = ownName ? myBuildOptions(ownIcon, ownPreferItem, 3) : [];
-const myDefault = myOptions.reduce((bi, o, i) => ((o.build.weight ?? -1) > (myOptions[bi]?.build.weight ?? -1) ? i : bi), 0);
-const sectionUid = `mus-${ownIcon}-${[...(ownPreferItem ?? '')].map((c) => c.codePointAt(0)!.toString(36)).join('')}`;
 const breakdownsOf = (opponentIcon: string, opponentPreferItem?: string) =>
   myOptions
     .map((opt) => {
@@ -71,33 +62,7 @@ const breakdownsOf = (opponentIcon: string, opponentPreferItem?: string) =>
 {(favorable.length > 0 || unfavorable.length > 0) && (
   <section class="mu-section">
     <h2>{headingSuffix ? `${displayName(headingSuffix)} ` : ''}{T.heading}</h2>
-    {myOptions.length > 0 && (
-      <div class="mu-builds">
-        {myOptions.map((_, i) => (
-          <input type="radio" name={sectionUid} id={`${sectionUid}-${i}`} class="mu-b-radio" checked={i === myDefault} />
-        ))}
-        <div class="mu-b-tabs">
-          <span class="mu-b-cap">{B.my}</span>
-          {myOptions.map((o, i) => (
-            <label for={`${sectionUid}-${i}`} class="mu-b-tab">
-              {archTitle(o.build, lang, i + 1) ?? `${tItem(o.build.item)}${punct(lang).sep}${tNature(o.build.nature)}`}
-              {o.build.weight != null && <span class="mu-b-share">{Math.round(o.build.weight * 10) / 10}%</span>}
-            </label>
-          ))}
-        </div>
-        <div class="mu-b-panels">
-          {myOptions.map((o) => (
-            <div class="mu-b-panel">
-              <span class="mu-b-chip">{tItem(o.build.item)}</span>
-              <span class="mu-b-chip">{tAbility(o.build.ability)}</span>
-              <span class="mu-b-chip">{tNature(o.build.nature)}</span>
-              <span class="mu-b-ev">{evText(o.build.evs)}</span>
-            </div>
-          ))}
-        </div>
-        <p class="mu-b-note">{B.note}</p>
-      </div>
-    )}
+    {myOptions.length > 0 && <p class="mu-b-note">{B.note}</p>}
     <div class="mu-groups">
       {favorable.length > 0 && (
         <div class="mu-group">
@@ -187,23 +152,7 @@ const breakdownsOf = (opponentIcon: string, opponentPreferItem?: string) =>
 
 <style>
   .mu-section { margin: 1.5rem 0; }
-  /* 自分の代表型: 1v1ダイアログ・工房の仮想敵カードと同じ表記（系統名＋割合のタブ、持ち物・特性・性格のチップ＋努力値） */
-  .mu-builds { margin: 0 0 10px; }
-  .mu-b-radio { position: absolute; opacity: 0; pointer-events: none; }
-  .mu-b-tabs { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-bottom: 6px; }
-  .mu-b-cap { font-size: .7rem; font-weight: 800; color: #64748b; margin-right: 2px; }
-  .mu-b-tab { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 6px; border: 1px solid #e2e8f0; background: #f8fafc; cursor: pointer; font-size: .74rem; font-weight: 700; color: #475569; }
-  .mu-b-share { font-weight: 600; color: #94a3b8; }
-  .mu-b-panels > .mu-b-panel { display: none; flex-wrap: wrap; gap: .3em; align-items: center; }
-  .mu-b-radio:nth-of-type(1):checked ~ .mu-b-tabs label:nth-of-type(1),
-  .mu-b-radio:nth-of-type(2):checked ~ .mu-b-tabs label:nth-of-type(2),
-  .mu-b-radio:nth-of-type(3):checked ~ .mu-b-tabs label:nth-of-type(3) { border-color: var(--accent, #f97316); background: #fff7ed; color: #9a3412; }
-  .mu-b-radio:nth-of-type(1):checked ~ .mu-b-panels > .mu-b-panel:nth-of-type(1),
-  .mu-b-radio:nth-of-type(2):checked ~ .mu-b-panels > .mu-b-panel:nth-of-type(2),
-  .mu-b-radio:nth-of-type(3):checked ~ .mu-b-panels > .mu-b-panel:nth-of-type(3) { display: flex; }
-  .mu-b-chip { display: inline-flex; align-items: center; height: 24px; box-sizing: border-box; background: #f1f5f9; border-radius: 6px; padding: 0 .55em; font-size: .72rem; font-weight: 700; color: #334155; white-space: nowrap; }
-  .mu-b-ev { font-size: .76rem; font-weight: 700; color: #334155; margin-left: .3em; }
-  .mu-b-note { font-size: .68rem; color: #94a3b8; margin: 6px 0 0; }
+  .mu-b-note { font-size: .68rem; color: #94a3b8; margin: 0 0 10px; }
   .mu-groups { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .mu-group { border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 12px; background: #fff; }
   .mu-label { font-size: 0.78rem; font-weight: 700; margin-bottom: 8px; }

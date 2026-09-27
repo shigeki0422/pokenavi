@@ -30,15 +30,15 @@ const entry = (archetypeData as Record<string, Entry>)[icon];
 const T = {
   ja: {
     heading: '想定型', lede: (s: string) => `シーズン${s}の採用率から、技・持ち物・性格・努力値がどう一緒に使われるかを推定し、型の狙いごとにまとめたものです。割合はそのポケモン全体に占める割合です。`,
-    examples: '型の例（この型の中での割合。色は1つ目の例との違い）', trend: 'この型の傾向（型の中での採用率）', move: '技', item: '持ち物', nature: '性格', ev: '努力値', ability: '特性',
+    more: '詳しく見る', examples: '型の例（この型の中での割合。色は1つ目の例との違い）', trend: 'この型の傾向（型の中での採用率）', move: '技', item: '持ち物', nature: '性格', ev: '努力値', ability: '特性',
   },
   en: {
     heading: 'Estimated Sets', lede: (s: string) => `How moves, items, natures and EVs are used together, estimated from Season ${s} usage and grouped by intent. The share is out of all usage of this Pokémon.`,
-    examples: 'Example sets (share within this set; highlighted = differs from the first)', trend: 'Tendencies (usage within this set)', move: 'Moves', item: 'Item', nature: 'Nature', ev: 'EVs', ability: 'Ability',
+    more: 'Details', examples: 'Example sets (share within this set; highlighted = differs from the first)', trend: 'Tendencies (usage within this set)', move: 'Moves', item: 'Item', nature: 'Nature', ev: 'EVs', ability: 'Ability',
   },
   ko: {
     heading: '예상 샘플', lede: (s: string) => `시즌 ${s} 채용률로 기술·도구·성격·노력치가 함께 쓰이는 방식을 추정해 목적별로 묶은 것입니다. 비율은 이 포켓몬 전체 중 비율입니다.`,
-    examples: '샘플 예시 (샘플 안 비율, 색은 첫 번째와 다른 부분)', trend: '경향 (샘플 안 채용률)', move: '기술', item: '도구', nature: '성격', ev: '노력치', ability: '특성',
+    more: '자세히', examples: '샘플 예시 (샘플 안 비율, 색은 첫 번째와 다른 부분)', trend: '경향 (샘플 안 채용률)', move: '기술', item: '도구', nature: '성격', ev: '노력치', ability: '특성',
   },
 }[lang];
 
@@ -73,7 +73,7 @@ const color = (k: string) => COLOR[k] ?? '#475569';
         <details class="arc-card" open={i < 2} style={`--c:${color(g.kind)}`}>
           <summary>
             <span class="arc-name">{lang === 'ja' ? g.name : lang === 'en' ? `Set ${i + 1}` : `샘플 ${i + 1}`}</span>
-            <span class="arc-kind">{label(g.kind)}</span>
+            <span class="arc-kind" data-more={T.more}>{label(g.kind)}</span>
             <span class="arc-share">{g.share}%</span>
           </summary>
           <div class="arc-body">
@@ -119,6 +119,14 @@ const color = (k: string) => COLOR[k] ?? '#475569';
     display: flex; align-items: baseline; gap: 8px; padding: 10px 12px; cursor: pointer; list-style: none;
   }
   .arc-card summary::-webkit-details-marker { display: none; }
+  .arc-card summary::after {
+    content: ''; flex: none; align-self: center; width: 8px; height: 8px; margin-left: 4px;
+    border-right: 2px solid #94a3b8; border-bottom: 2px solid #94a3b8; transform: rotate(45deg) translate(-2px, -2px);
+    transition: transform .15s;
+  }
+  .arc-card[open] summary::after { transform: rotate(-135deg) translate(-2px, -2px); }
+  .arc-card summary:hover { background: #f8fafc; border-radius: 10px; }
+  .arc-card:not([open]) summary .arc-kind::after { content: attr(data-more); margin-left: 8px; color: var(--accent, #2563eb); font-weight: 600; }
   .arc-name { font-weight: 700; color: #0f172a; font-size: 0.92rem; }
   .arc-kind { font-size: 0.72rem; color: #64748b; }
   .arc-share { margin-left: auto; font-weight: 700; color: var(--c); font-variant-numeric: tabular-nums; }
