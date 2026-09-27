@@ -32,7 +32,7 @@ const logoAlt = lang === 'en' ? 'PokeNavi logo' : lang === 'ko' ? '포케나비 
 	</div>
 	<div class="header-nav" aria-label="主要カテゴリ">
 		<a href={`${pfx}/ranking/`} class:list={['hn-link', { active: path.startsWith(`${pfx}/ranking`) }]}>
-			{lang === 'en' ? 'Ranking' : lang === 'ko' ? '랭킹' : '使用率ランキング'}
+			{lang === 'en' ? 'Ranking' : lang === 'ko' ? '랭킹' : '使用率'}
 		</a>
 		<a href={`${pfx}/pokemon`} class:list={['hn-link', { active: path.startsWith(`${pfx}/pokemon`) }]}>
 			{lang === 'en' ? 'Pokémon' : lang === 'ko' ? '포켓몬' : 'ポケモン情報'}
@@ -40,11 +40,11 @@ const logoAlt = lang === 'en' ? 'PokeNavi logo' : lang === 'ko' ? '포케나비 
 		<a href={lang === 'ja' ? '/blog/' : `${pfx}/`} class:list={['hn-link', { active: path.startsWith('/blog') }]}>
 			{lang === 'en' ? 'Analysis' : lang === 'ko' ? '공략' : '考察記事'}
 		</a>
-		<a href={`${pfx}/party-building`} class:list={['hn-link', { active: path.startsWith(`${pfx}/party`) }]}>
-			{lang === 'en' ? 'Team Build' : lang === 'ko' ? '파티 구성' : 'パーティ構築'}
-		</a>
 		<a href={`${pfx}/battle-simulator`} class:list={['hn-link', { active: path.startsWith(`${pfx}/battle-simulator`) || path.startsWith(`${pfx}/simulator`) }]}>
 			{lang === 'en' ? 'Simulator' : lang === 'ko' ? '시뮬레이터' : 'シミュレータ'}
+		</a>
+		<a href={`${pfx}/party-building`} class:list={['hn-link', { active: path.startsWith(`${pfx}/party`) }]}>
+			{lang === 'en' ? 'Team Build' : lang === 'ko' ? '파티 구성' : 'パーティ構築'}
 		</a>
 	</div>
 </header>

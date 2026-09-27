@@ -28,10 +28,16 @@ def _enter(a, b):
     ハザードは1v1判定の前提（互いに場に出たところから）に無いので設置しない。
     a/b 自体は書き換えず、複製を返す。"""
     import copy
-    A = copy.deepcopy(a); B = copy.deepcopy(b)
+    # メガシンカ済みで渡された個体は、メガ前の姿で入場させてから1ターン目の行動前にメガシンカする（実機・Rust の判定と同じ順）
+    def _pre(p):
+        if getattr(p, "mega_evolved", False) and getattr(p, "_spec", None) and L_REF[0] is not None:
+            q = _build(p._spec, L_REF[0], mega=False)
+            return q
+        return copy.deepcopy(p)
+    A = _pre(a); B = _pre(b)
     f = BattleField()
-    _entry_effects(A, 0, f, B, [], [A])
-    _entry_effects(B, 1, f, A, [], [B])
+    from simulator.battle import _entry_and_mega
+    _entry_and_mega(A, B, f, [], [A], [B])
     return f, A, B
 
 
@@ -64,14 +70,14 @@ RECOV = {"なまける", "はねやすめ", "じこさいせい", "つきのひ�
 DB = os.path.join(os.path.dirname(__file__), "pokenavi.db")
 
 def _build(spec, L, mega=True):
-    p = build_from_spec(parse_pokemon_spec(spec), L, season="M-3", randomize=False)
+    p = build_from_spec(parse_pokemon_spec(spec), L, season=os.environ.get("POOL_SEASON", "M-6"), randomize=False)
     if mega and p.mega_data is not None: p.do_mega_evolve()
     p._spec = spec        # 実走版1v1（_mu_engine）が spec を必要とするため保持
     if L_REF[0] is None: L_REF[0] = L
     return p
 
 def role_of(spec, L):
-    p = build_from_spec(parse_pokemon_spec(spec), L, season="M-3", randomize=False)
+    p = build_from_spec(parse_pokemon_spec(spec), L, season=os.environ.get("POOL_SEASON", "M-6"), randomize=False)
     mvs = {m.name_jp for m in p.moves}
     it = spec.split("@", 1)[1].split(":")[0]
     evp = spec.split("@", 1)[1].split(":")[3].split("/")
@@ -102,7 +108,7 @@ def role_of(spec, L):
 def party_stats(specs, L, pg, th):
     from _threat_coverage import team_coverage
     from _construction_gap import team_features
-    tf = team_features(specs, L, "M-3")
+    tf = team_features(specs, L, os.environ.get("POOL_SEASON", "M-6"))
     cov = team_coverage(specs, L, th)[0]
     mons = [_build(s, L) for s in specs]
     wc = {}
@@ -158,22 +164,6 @@ def stat_details(specs, L, th):
         "members": names,
         "typematrix": {"atk_cov": atk_cov, "def_cov": def_cov, "rows": type_rows},
     }
-
-_TOPS = None
-def load_tops(L, n=12):
-    global _TOPS
-    if _TOPS is not None: return _TOPS
-    con = sqlite3.connect(DB)
-    cd = con.execute("SELECT MAX(crawled_date) FROM pokemon_usage WHERE season='M-3' AND rule='single'").fetchone()[0]
-    names = [r[0] for r in con.execute("SELECT pokemon FROM pokemon_usage WHERE season='M-3' AND rule='single' AND crawled_date=? ORDER BY rank LIMIT ?", (cd, n))]
-    con.close()
-    from gen_party_pool import PartyGen
-    pg = PartyGen()
-    _TOPS = []
-    for nm in names:
-        b = pg.pool.get(nm)
-        if b: _TOPS.append((nm, _build(b[0], L)))
-    return _TOPS
 
 # 1v1判定は Rust エンジン（工房・ポケモン情報ページが使う wasm と同じ analysis）に委ねる。
 # ここに判定式を持っていた頃は、score の刻み(0.5/1)・先制技での決着・最短手順・
@@ -253,7 +243,8 @@ def _mu_score(M, O, field):
             hp = max(1, d[other]["hp"])
             if len(ts) < 2:
                 return []
-            return [{"n": t["n"], "pctLo": t["lo"] / hp * 100, "pctHi": t["hi"] / hp * 100} for t in ts]
+            return [{"n": t["n"], "pctLo": t["lo"] / hp * 100, "pctHi": t["hi"] / hp * 100,
+                     "healPct": (t.get("heal", 0) / hp * 100) if t.get("heal") else None} for t in ts]
         return {"myh": v["myHits"], "thh": v["oppHits"], "myr": ar, "thr": br,
                 "fast": v["koFirst"], "my_s": v["myS"], "op_s": v["oppS"],
                 "my_move": v["myMove"], "th_move": v["oppMove"],
@@ -262,7 +253,7 @@ def _mu_score(M, O, field):
                 "opp_steps": _steps("b", "a", v.get("oppSeq") or []),
                 "my_turns": _turns("a", "b"), "opp_turns": _turns("b", "a"),
                 "sym": v["sym"], "score": v["score"], "win": v["win"],
-                "draw": v.get("draw", False), "stall": v.get("stall")}
+                "draw": v.get("draw", False), "stall": v.get("stall"), "plans": v.get("plans")}
     if MU_MODE == "engine" and sa and sb:
         import _mu_engine as _ME
         ah, ar, am, bh, br, bm = _ME.mu_engine(sa, sb, L_REF[0])
@@ -386,7 +377,7 @@ def matchup_detail(specs, mon_name, opp_name, L):
         judge.append({"v": r.get("sym") or _score_sym(score), "win": win, "txt": reason,
                       "fast": fast, "by_prio": bool(r.get("ko_by_priority")),
                       "my_hits": myh, "opp_hits": thh,
-                      "draw": bool(r.get("draw")), "stall": r.get("stall")})
+                      "draw": bool(r.get("draw")), "stall": r.get("stall"), "plans": r.get("plans")})
         seq.append({"my": r.get("my_steps") or [], "opp": r.get("opp_steps") or [],
                     "my_turns": r.get("my_turns") or [], "opp_turns": r.get("opp_turns") or []})
     return {"mon": mon_name, "opp": opp_name, "my_spec": getattr(M, "_spec", None),

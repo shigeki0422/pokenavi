@@ -8,6 +8,7 @@ import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 import SimPartyCard from '../components/SimPartyCard.astro';
+import BuildArchetypeSection from '../components/BuildArchetypeSection.astro';
 import LearnsetSection from '../components/LearnsetSection.astro';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
@@ -446,6 +447,7 @@ const breadcrumbJsonLd = {
 						<a href={`${pfx}/party-builder/`} class="hub-btn">{T.hubBuild}</a>
 					</div>
 					<slot />
+					<BuildArchetypeSection icon={ownIcon} lang={lang} />
 					<LearnsetSection icon={ownIcon} lang={lang} />
 					{matchupVariants.map((v) => (
 						<MatchupSection

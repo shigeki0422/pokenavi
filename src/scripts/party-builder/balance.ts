@@ -74,6 +74,10 @@ export function resolveTarget(sp: string, label: string, icon: string, build: Ta
     moves: resolvedMoves,
     mega: false,
     icon,
+    weight: build.share,
+    arch: build.arch,
+    archNo: build.archNo,
+    archSub: build.archSub,
   };
 }
 

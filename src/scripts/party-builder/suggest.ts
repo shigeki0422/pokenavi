@@ -34,8 +34,8 @@ function baseStatsOf(slot: Slot, resolved: ResolvedBuild): StatArray | null {
 /** 仮想敵ごとの前提をエンジンに反映する。判定側と同じ扱いにするため、
  * 空の指定は「既定」に戻す。 */
 function useScenario(sc: SlotScenario | null | undefined): void {
-  const on = !!(sc && (sc.w || sc.t || sc.n));
-  setScenario(on ? { weather: (sc!.w as never) || null, terrain: (sc!.t as never) || null, boost: sc!.n ?? 0 } : null);
+  const on = !!(sc && (sc.w || sc.t || sc.n || sc.m));
+  setScenario(on ? { weather: (sc!.w as never) || null, terrain: (sc!.t as never) || null, boost: sc!.n ?? 0, oppBoost: sc!.m ?? 0 } : null);
 }
 
 /**

@@ -30,10 +30,8 @@ CAP = int(os.environ.get("MU_ENGINE_CAP", "5"))   # これ以上かかる技は�
 
 
 def _build(spec, L):
-    p = build_from_spec(parse_pokemon_spec(spec), L, season=SEASON, randomize=False)
-    if p.mega_data is not None:
-        p.do_mega_evolve()
-    return p
+    """メガシンカ前の姿で組み立てる（メガシンカは入場効果の後＝_entry_and_mega で行う。実機・Rust の判定と同じ順）。"""
+    return build_from_spec(parse_pokemon_spec(spec), L, season=SEASON, randomize=False)
 
 
 class _Fixed:
@@ -91,8 +89,8 @@ def _run_inner(spec_0, spec_1, move_name, L, att=0):
     # run() は max_turns を取らないので、_turn_loop に渡すため入場効果だけ run と同じ手順で実行する
     b._faint_chooser1 = None; b._faint_chooser2 = None
     from simulator.battle import _entry_effects as _ee
-    _ee(P[0], 0, b.field, P[1], b.logs, [P[0]])
-    _ee(P[1], 1, b.field, P[0], b.logs, [P[1]])
+    from simulator.battle import _entry_and_mega as _entry_effects_both
+    _entry_effects_both(P[0], P[1], b.field, b.logs, [P[0]], [P[1]])
     ai1, ai2 = (attacker, _pass) if att == 0 else (_pass, attacker)
     b._turn_loop(ai1, ai2, max_turns=CAP)
     if first["dmg"] is None:
@@ -199,8 +197,8 @@ def _run_one(spec_0, spec_1, move_name, L, roll=0.0, att=0):
         s2 = BattleSide([P[1]], viewer_label="P2", source6=[P[1]])
         b = Battle(s1, s2, BattleField())
         from simulator.battle import _entry_effects as _ee, _execute_move as _em
-        _ee(P[0], 0, b.field, P[1], b.logs, [P[0]])
-        _ee(P[1], 1, b.field, P[0], b.logs, [P[1]])
+        from simulator.battle import _entry_and_mega as _entry_effects_both
+        _entry_effects_both(P[0], P[1], b.field, b.logs, [P[0]], [P[1]])
         A = P[att]
         mv = next((m for m in A.moves if m is not None and m.name_jp == move_name), None)
         if mv is None:
@@ -224,8 +222,8 @@ def _hit_damage_loop(spec_0, spec_1, mv_name, L, roll, att, n_hits):
     A, D = P[att], P[1 - att]
     f = BattleField()
     from simulator.battle import _entry_effects as _ee
-    _ee(P[0], 0, f, P[1], [], [P[0]])
-    _ee(P[1], 1, f, P[0], [], [P[1]])
+    from simulator.battle import _entry_and_mega as _entry_effects_both
+    _entry_effects_both(P[0], P[1], f, [], [P[0]], [P[1]])
     mv = next((m for m in A.moves if m is not None and m.name_jp == mv_name), None)
     if mv is None:
         return 0

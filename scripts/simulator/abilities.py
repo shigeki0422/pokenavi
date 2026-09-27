@@ -20,6 +20,10 @@ if TYPE_CHECKING:
 
 # ── てんきや/ぎたい：天候・フィールドでタイプが変わる ──────────────────────────
 
+
+# さまようたましい で入れ替えられない特性（第9世代の実機の不可リスト）。どちらかがこれなら入れ替えは起きない。
+WANDERING_SPIRIT_FAIL = frozenset(("ばけのかわ", "バトルスイッチ", "アイスフェイス", "きずなへんげ", "ぜったいねむり", "うのミサイル", "はらぺこスイッチ", "イリュージョン", "マルチタイプ", "かがくへんかガス", "スワームチェンジ", "ARシステム", "ぎょぐん", "リミットシールド", "ダルマモード", "マイティチェンジ", "ふしぎなまもり", "じんばいったい", "しれいとう"))
+
 def _apply_forme_type(poke: "BattlePokemon", field: "BattleField", logs: list) -> None:
     ab = poke.ability
     new_t = None
@@ -85,8 +89,12 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
             opponent.stage_attack = min(6, opponent.stage_attack + 1)
             logs.append(f"{poke.name} の いかく！ しかし {opponent.name} の あまのじゃく で攻撃が上がった！")
         else:
+            _before = opponent.stage_attack
             opponent.stage_attack = max(-6, opponent.stage_attack - 1)
             logs.append(f"{poke.name} の いかく！ {opponent.name} の攻撃が下がった！")
+            # まけんき・かちき: いかくで下げられても発動する（実際に下がったときだけ。abilities.rs と同じ）
+            if opponent.stage_attack < _before:
+                on_stat_lowered(opponent, logs)
 
     # ダウンロード
     if ab == "ダウンロード":
@@ -274,7 +282,8 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
         if ab == "ミイラ" and attacker.ability not in ("ミイラ", "かがくへんかガス"):
             attacker.ability = "ミイラ"  # type: ignore
             logs.append(f"{defender.name} の ミイラ！ {attacker.name} の特性が ミイラ になった！")
-        elif ab == "さまようたましい" and attacker.ability not in ("かがくへんかガス",):
+        elif ab == "さまようたましい" and attacker.ability not in WANDERING_SPIRIT_FAIL \
+                and defender.ability not in WANDERING_SPIRIT_FAIL:
             attacker.ability, defender.ability = defender.ability, attacker.ability  # type: ignore
             logs.append(f"{defender.name} の さまようたましい！ 特性を入れ替えた！")
 

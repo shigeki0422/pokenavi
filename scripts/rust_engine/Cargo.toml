@@ -10,7 +10,8 @@ codegen-units = 1
 
 [profile.release-wasm]
 inherits = "release"
-opt-level = "z"
+# 速度優先（1v1判定の全対面計算が "z" の約2倍速い。gzip後 192KB→243KB）
+opt-level = 3
 lto = "fat"
 codegen-units = 1
 panic = "abort"

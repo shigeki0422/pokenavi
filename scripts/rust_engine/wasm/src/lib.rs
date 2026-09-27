@@ -96,13 +96,15 @@ pub extern "C" fn dealloc(p: *mut u8, n: usize) {
 /// weather: 0=指定なし 1=晴れ 2=雨 3=すなあらし 4=あられ
 /// terrain: 0=指定なし 1=エレキ 2=グラス 3=サイコ 4=ミスト
 /// boost:   側0(spec_a)が技欄の先頭にある積み技を使った回数
+/// opp_boost: 側1(spec_b・相手)が技欄の先頭にある積み技を使った回数
 #[no_mangle]
-pub extern "C" fn set_scenario(weather: i32, terrain: i32, boost: i32) -> i32 {
+pub extern "C" fn set_scenario(weather: i32, terrain: i32, boost: i32, opp_boost: i32) -> i32 {
     let pack = match unsafe { PACK.as_mut() } { Some(p) => p, None => return -1 };
     pack.scenario = engine::pack::Scenario {
         weather: weather.clamp(0, 4) as u8,
         terrain: terrain.clamp(0, 4) as u8,
         boost: boost.clamp(0, 6),
+        opp_boost: opp_boost.clamp(0, 6),
     };
     0
 }
@@ -153,6 +155,11 @@ pub extern "C" fn analyze(ap: *const u8, an: usize, bp: *const u8, bn: usize,
 
 pub fn analyze_impl(a: &str, b: &str, season: &str) -> i32 {
     let pack = match unsafe { PACK.as_mut() } { Some(p) => p, None => return -1 };
+    // 未知の種族・読めない spec はパニック（wasm は abort＝以後の呼び出しが全部失敗）する前にエラーを返す
+    if let Some(e) = engine::poke::spec_error(pack, a, season).or_else(|| engine::poke::spec_error(pack, b, season)) {
+        set_result(&json!({"error": e}));
+        return -2;
+    }
     // 組み立ても判定も engine 側（analysis::analyze_json）にある。
     // ここに持つと提案API(PyO3)経路と食い違うため、受け渡しだけを行う。
     set_result(&analysis::analyze_json(pack, a, b, season));
@@ -169,6 +176,9 @@ pub extern "C" fn ko_prob(ap: *const u8, an: usize, bp: *const u8, bn: usize,
 
 pub fn ko_prob_impl(a: &str, b: &str, season: &str, att: usize, move_idx: usize, hits: usize) -> i32 {
     let pack = match unsafe { PACK.as_mut() } { Some(p) => p, None => return -1 };
+    if engine::poke::spec_error(pack, a, season).or_else(|| engine::poke::spec_error(pack, b, season)).is_some() {
+        return -2;
+    }
     let p = analysis::ko_probability(pack, a, b, season, att, move_idx, hits);
     set_result(&json!(p));
     0

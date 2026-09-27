@@ -3,9 +3,11 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
+import rankingData from '../../../data/ranking.json';
 import Sidebar from '../../../components/Sidebar.astro';
 import { POKEMON_NAME_KO } from '../../../i18n/pokemon-names';
 
+const season = Object.keys((rankingData as any).seasons).sort().at(-1)!;
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const pages = (await getCollection('pokemon'))
 	.filter((p) => showDrafts || !p.data.draft)
@@ -27,7 +29,7 @@ const alternates = [
 	<head>
 		<BaseHead
 			title="포켓몬 정보 | 포케나비"
-			description="포켓몬 챔피언스의 전 포켓몬 정보. M-3/M-2 환경의 기술·지닌물·특성·성격 채용률 데이터."
+			description={`포켓몬 챔피언스의 전 포켓몬 정보. ${season} 환경의 기술·지닌물·특성·성격 채용률 데이터.`}
 			imageUrl="/og-image.png"
 			alternates={alternates}
 			ogLocale="ko_KR"
@@ -157,7 +159,7 @@ const alternates = [
 						</ol>
 					</nav>
 					<h1>포켓몬 정보</h1>
-					<p class="subtitle">포켓몬 챔피언스 M-3/M-2 환경 · 기술／지닌물／특성 데이터 · {pages.length}마리 수록</p>
+					<p class="subtitle">포켓몬 챔피언스 {season} 환경 · 기술／지닌물／특성 데이터 · {pages.length}마리 수록</p>
 
 					{top10.length > 0 && (
 						<section class="top10-section">

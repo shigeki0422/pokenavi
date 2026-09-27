@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.dirname(_HERE)); sys.path.insert(0, _HERE)
 import state_codec as SC
 from simulator.simulate import get_loader
 from simulator.pokemon import build_from_spec, parse_pokemon_spec
-from simulator.battle import BattleSide, Battle, BattleField, Action, _entry_effects
+from simulator.battle import BattleSide, Battle, BattleField, Action, _entry_effects, _entry_order
 import simulator.damage as _dmg
 
 L = get_loader()
@@ -99,8 +99,12 @@ def generate(rec, seed):
         b = Battle(s1, s2, fld)
         s1.opp_view.team_preview([_PV(t) for t in rec["pv1"]])
         s2.opp_view.team_preview([_PV(t) for t in rec["pv2"]])
-        _entry_effects(s1.active, 0, fld, s2.active, b.logs, s1.party)
-        _entry_effects(s2.active, 1, fld, s1.active, b.logs, s2.party)
+        # 先発も「場に出た」（Battle.run / Rust start と同じ）
+        s1.opp_view.on_enter(s2.active)
+        s2.opp_view.on_enter(s1.active)
+        # Battle.start と同じく速い側から（gate_r2 は Rust の start で開始局面を作る）
+        for _sd, _os, _ix in _entry_order(s1, s2, fld):
+            _entry_effects(_sd.active, _ix, fld, _os.active, b.logs, _sd.party)
         bt_rng.draws = []                 # start までの抽選は rng0 扱い（既存記録も空）
         s0 = SC.encode_battle(b).vals
 

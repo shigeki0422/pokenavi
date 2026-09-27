@@ -1,0 +1,138 @@
+---
+/**
+ * ポケモン情報ページの「想定型」セクション。
+ *
+ * 使用率（技・持ち物・性格・努力値・特性）から型生成器で作った型の分布を、型の意図ごとの系統にまとめたもの。
+ * データは scripts/gen_archetype_data.py が作る src/data/archetypes.json（型生成器の固定版 v40）。
+ * キーはページ側のアイコンID（例: 0681-00）。
+ */
+import archetypeData from '../data/archetypes.json';
+import {
+  MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO,
+  ABILITY_NAME_EN, ABILITY_NAME_KO, itemNameOf,
+} from '../i18n/game-terms';
+import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
+
+interface Props {
+  /** dexNumber(4桁ゼロ埋め)-imageForm。例: 0681-00 */
+  icon: string;
+  lang: 'ja' | 'en' | 'ko';
+}
+const { icon, lang } = Astro.props;
+
+type Pair = [string, number];
+type Set_ = { moves: string[]; item: string; nature: string; ev: string; ability: string; p: number };
+type Trend = { moves: Pair[]; items: Pair[]; natures: Pair[]; evs: Pair[] };
+type Group = { name: string; kind: string; share: number; sets: Set_[]; trend: Trend };
+type Entry = { season: string; groups: Group[] };
+const entry = (archetypeData as Record<string, Entry>)[icon];
+
+const T = {
+  ja: {
+    heading: '想定型', lede: (s: string) => `シーズン${s}の採用率から、技・持ち物・性格・努力値がどう一緒に使われるかを推定し、型の狙いごとにまとめたものです。割合はそのポケモン全体に占める割合です。`,
+    examples: '型の例（この型の中での割合。色は1つ目の例との違い）', trend: 'この型の傾向（型の中での採用率）', move: '技', item: '持ち物', nature: '性格', ev: '努力値', ability: '特性',
+  },
+  en: {
+    heading: 'Estimated Sets', lede: (s: string) => `How moves, items, natures and EVs are used together, estimated from Season ${s} usage and grouped by intent. The share is out of all usage of this Pokémon.`,
+    examples: 'Example sets (share within this set; highlighted = differs from the first)', trend: 'Tendencies (usage within this set)', move: 'Moves', item: 'Item', nature: 'Nature', ev: 'EVs', ability: 'Ability',
+  },
+  ko: {
+    heading: '예상 샘플', lede: (s: string) => `시즌 ${s} 채용률로 기술·도구·성격·노력치가 함께 쓰이는 방식을 추정해 목적별로 묶은 것입니다. 비율은 이 포켓몬 전체 중 비율입니다.`,
+    examples: '샘플 예시 (샘플 안 비율, 색은 첫 번째와 다른 부분)', trend: '경향 (샘플 안 채용률)', move: '기술', item: '도구', nature: '성격', ev: '노력치', ability: '특성',
+  },
+}[lang];
+
+const pick = (en: Record<string, string>, ko: Record<string, string>) => (jp: string) =>
+  lang === 'en' ? en[jp] ?? jp : lang === 'ko' ? ko[jp] ?? jp : jp;
+const mv = pick(MOVE_NAME_EN, MOVE_NAME_KO);
+const it = (jp: string) => itemNameOf(jp, lang, lang === 'en' ? ITEM_NAME_EN : ITEM_NAME_KO, lang === 'en' ? POKEMON_NAME_EN : POKEMON_NAME_KO);
+const na = pick(NATURE_NAME_EN, NATURE_NAME_KO);
+const ab = pick(ABILITY_NAME_EN, ABILITY_NAME_KO);
+const WORDS: Record<'en' | 'ko', Record<string, string>> = {
+  en: { フルアタ: 'All-out attacker', 単一の型: 'Single set', メガ: 'Mega', スカーフ: 'Scarf', ハチマキ: 'Band', メガネ: 'Specs', 物理技: 'physical moves', 特殊技: 'special moves', 物理型: 'Physical', 特殊型: 'Special', 補助型: 'Support', 両刀型: 'Mixed', 物理: 'Physical', 特殊: 'Special', 補助: 'Support', 両刀: 'Mixed' },
+  ko: { フルアタ: '풀어택', 単一の型: '단일 샘플', メガ: '메가', スカーフ: '스카프', ハチマキ: '머리띠', メガネ: '안경', 物理技: '물리기', 特殊技: '특수기', 物理型: '물리형', 特殊型: '특수형', 補助型: '보조형', 両刀型: '양면형', 物理: '물리', 特殊: '특수', 補助: '보조', 両刀: '양면' },
+};
+/** 系統名は「区分・技＋技／技」の組み合わせなので、区切りごとに訳す */
+const label = (s: string) =>
+  lang === 'ja' ? s : s.split(/([・＋／])/).map((w) => (/[・＋／]/.test(w) ? (w === '・' ? ' · ' : w === '＋' ? ' + ' : ' / ') : WORDS[lang][w] ?? it(mv(w)))).join('');
+const COLOR: Record<string, string> = { 物理: '#c2410c', 特殊: '#1d4ed8', 補助: '#15803d', 両刀: '#7e22ce' };
+const color = (k: string) => COLOR[k] ?? '#475569';
+---
+
+{entry && entry.groups.length > 0 && (
+  <section class="arc-section">
+    <h2>{T.heading}</h2>
+    <p class="arc-lede">{T.lede(entry.season)}</p>
+    <div class="arc-stack" aria-hidden="true">
+      {entry.groups.map((g) => (
+        <span style={`width:${g.share}%;background:${color(g.kind)}`} title={`${lang === 'ja' ? g.name : ''} ${g.share}%`}></span>
+      ))}
+    </div>
+    <div class="arc-list">
+      {entry.groups.map((g, i) => (
+        <details class="arc-card" open={i < 2} style={`--c:${color(g.kind)}`}>
+          <summary>
+            <span class="arc-name">{lang === 'ja' ? g.name : lang === 'en' ? `Set ${i + 1}` : `샘플 ${i + 1}`}</span>
+            <span class="arc-kind">{label(g.kind)}</span>
+            <span class="arc-share">{g.share}%</span>
+          </summary>
+          <div class="arc-body">
+            <div class="arc-lbl">{T.examples}</div>
+            <ol class="arc-sets">
+              {g.sets.map((x, k) => {
+                /* 2つ目以降は1つ目の例と違うところに色を付ける（技は位置を揃えてある） */
+                const b = g.sets[0];
+                /* 色はクラスでなく要素に直接書く（開発サーバーでスタイルの差し替え後に色が消えることがあった） */
+                const d = (v: boolean) => (k > 0 && v ? `color:${color(g.kind)};background:${color(g.kind)}1f;border-radius:4px;padding:0 3px;font-weight:700` : undefined);
+                const sub: [string, boolean][] = [[it(x.item), x.item !== b.item], [na(x.nature), x.nature !== b.nature], [x.ev, x.ev !== b.ev], [ab(x.ability), x.ability !== b.ability]];
+                return (
+                <li>
+                  <div class="arc-set-mv">{x.moves.map((m, j) => <>{j > 0 && ' / '}<span style={d(!b.moves.includes(m))}>{mv(m)}</span></>)}</div>
+                  <div class="arc-set-sub">{sub.map(([t, v], j) => <>{j > 0 && (lang === 'ja' ? '・' : ' · ')}<span style={d(v)}>{t}</span></>)}</div>
+                  <span class="arc-set-p">{x.p}%</span>
+                </li>
+                );
+              })}
+            </ol>
+            <div class="arc-lbl">{T.trend}</div>
+            <dl class="arc-trend">
+              {([[T.move, g.trend.moves, mv], [T.item, g.trend.items, it], [T.nature, g.trend.natures, na], [T.ev, g.trend.evs, (s: string) => s]] as [string, Pair[], (s: string) => string][]).map(([lb, xs, f]) => (
+                <div><dt>{lb}</dt><dd>{xs.map(([k, p]) => <span>{f(k)}<em>{p}%</em></span>)}</dd></div>
+              ))}
+            </dl>
+          </div>
+        </details>
+      ))}
+    </div>
+  </section>
+)}
+
+<style>
+  .arc-section { margin: 1.5rem 0; }
+  .arc-lede { font-size: 0.82rem; color: #64748b; margin: 0 0 6px; line-height: 1.6; }
+  .arc-core { font-size: 0.8rem; color: #475569; margin: 0 0 8px; }
+  .arc-stack { display: flex; height: 10px; border-radius: 9999px; overflow: hidden; margin: 0 0 12px; background: #e2e8f0; }
+  .arc-stack span { display: block; height: 100%; border-right: 2px solid #fff; }
+  .arc-list { display: grid; gap: 8px; }
+  .arc-card { border: 1px solid #e2e8f0; border-left: 4px solid var(--c); border-radius: 10px; background: #fff; }
+  .arc-card summary {
+    display: flex; align-items: baseline; gap: 8px; padding: 10px 12px; cursor: pointer; list-style: none;
+  }
+  .arc-card summary::-webkit-details-marker { display: none; }
+  .arc-name { font-weight: 700; color: #0f172a; font-size: 0.92rem; }
+  .arc-kind { font-size: 0.72rem; color: #64748b; }
+  .arc-share { margin-left: auto; font-weight: 700; color: var(--c); font-variant-numeric: tabular-nums; }
+  .arc-body { padding: 0 12px 12px; }
+  .arc-lbl { font-size: 0.72rem; font-weight: 700; color: #64748b; margin: 4px 0 6px; }
+  .arc-sets { list-style: none; margin: 0 0 10px; padding: 0; display: grid; gap: 6px; }
+  .arc-sets li { position: relative; margin: 0; padding: 8px 64px 8px 10px; background: #f8fafc; border-radius: 8px; }
+  .arc-set-mv { font-weight: 700; color: #0f172a; font-size: 0.86rem; }
+  .arc-set-sub { color: #475569; font-size: 0.8rem; margin-top: 2px; }
+  .arc-set-p { position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-weight: 700; color: var(--c); font-variant-numeric: tabular-nums; font-size: 0.85rem; }
+  .arc-trend { margin: 0; display: grid; gap: 4px; }
+  .arc-trend div { display: grid; grid-template-columns: 4.5em 1fr; gap: 6px; align-items: baseline; }
+  .arc-trend dt { font-size: 0.75rem; font-weight: 700; color: #64748b; margin: 0; }
+  .arc-trend dd { margin: 0; display: flex; flex-wrap: wrap; gap: 4px; }
+  .arc-trend span { font-size: 0.78rem; background: #f1f5f9; border-radius: 6px; padding: 2px 7px; color: #0f172a; }
+  .arc-trend em { font-style: normal; color: #64748b; margin-left: 4px; font-variant-numeric: tabular-nums; font-size: 0.92em; }
+</style>

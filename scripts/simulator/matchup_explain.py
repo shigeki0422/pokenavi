@@ -144,8 +144,14 @@ def explain_matchup(specsA: List[str], specsB: List[str], loader, season: str = 
             # M-6採用率99.5%）やすなおこし・ひでりが効かず、ワイドフォースの地形補正も
             # 乗らないまま相性表を出していた。入場効果はポケモンを書き換えるのでコピーする。
             aa, bb, fld = copy.deepcopy((a, b, BattleField()))
-            _entry_effects(aa, 0, fld, bb)
-            _entry_effects(bb, 1, fld, aa)
+            # 入場時効果は素早さの速い側から（遅い側の天候・フィールドが残る。対戦本体と同じ）
+            from .ai import _effective_speed as _es
+            if _es(bb, fld) > _es(aa, fld):
+                _entry_effects(bb, 1, fld, aa)
+                _entry_effects(aa, 0, fld, bb)
+            else:
+                _entry_effects(aa, 0, fld, bb)
+                _entry_effects(bb, 1, fld, aa)
             v, da, db, af = _verdict(aa, bb, fld)
             row.append({"v": v, "dealt": da, "taken": db, "faster": af})
             if v == "A":

@@ -14,6 +14,8 @@ export interface SlotScenario {
   t?: string;
   /** 自分側の積み回数(0〜6)。 */
   n?: number;
+  /** 相手側(仮想敵)の積み回数(0〜6)。相手の型の先頭の積み技を使う。 */
+  m?: number;
 }
 
 export interface Slot {
@@ -90,6 +92,13 @@ export interface TargetBuild {
   /** メガ型ならメガ名(例: メガカイリュー)、それ以外は種名。 */
   label?: string;
   spec: string;
+  /** 型生成器の系統名（gen_builder_data.py の _pool_variants）。型プールに無い種には無い。 */
+  arch?: string;
+  /** 系統の番号（想定型セクションと同じ割合順）と、系統を分けた型の枝番（a, b…）。外国語版の見出し「Set 1a」に使う。 */
+  archNo?: number;
+  archSub?: string;
+  /** 種全体に占めるこの型の割合(%)。複数型の判定の重みに使う。型プールに無い種には無い。 */
+  share?: number;
 }
 
 export interface TargetGroup {
@@ -157,6 +166,12 @@ export interface ResolvedBuild {
   pool?: ResolvedMove[];
   mega: boolean;
   icon: string;
+  /** 複数型を集約するときの重み（種全体に占める型の割合%）。無ければ等しく扱う。 */
+  weight?: number;
+  /** 型の系統名（builder-data の arch）。型プールに無い種には無い。 */
+  arch?: string;
+  archNo?: number;
+  archSub?: string;
 }
 
 // ---- 1v1判定 (matchup.ts) 差し替え境界 ----
@@ -166,6 +181,16 @@ export interface StallInfo {
   side: "me" | "opp" | null;
   turns: number;
   seq: string[];
+  /** ターンごとの内訳(実数値)。direct=技の直接ダメージ、poison=ターン終了時の毒、heal=相手の回復(オボン等)。
+   * defMax は攻められる側の最大HP（%換算の分母）。 */
+  trace?: { n: string; direct: number; poison: number; bind: number; heal: number; defHp: number; attHp: number }[];
+  defMax?: number;
+  attMax?: number;
+}
+
+/** 勝ち筋が無い側が どくどく を入れた場合の見込み(表示用。記号・勝敗には影響しない)。 */
+export interface StallPlan extends Omit<StallInfo, "side"> {
+  outcome: "win" | "lose" | "stuck";
 }
 
 export interface Verdict {
@@ -186,12 +211,26 @@ export interface Verdict {
   oppHits: number | null;
   myMove: string | null;
   oppMove: string | null;
-  /** 毎ターン最善手を選び直した場合の技の並び。同じ技の連打で最短なら空。 */
+  /** 判定の対戦で実際に撃った技の並び。同じ技の連打なら空。準備の技を使うときは先頭がその技。 */
   mySeq: string[];
+  oppSeq?: string[];
+  /** 1ターン目に使う準備の技（積み技・ねこだまし）。無ければ null。 */
+  myPrep?: string | null;
+  oppPrep?: string | null;
+  /** 同速で、先後によって結果が変わる（記号は両方の順の平均。経過は自分が先の場合）。 */
+  tie?: boolean;
+  /** 相打ち（相手を倒した行動の反動等で同時に倒れる等）。引き分け扱い。mutualTurn はそのターン。 */
+  mutual?: boolean;
+  mutualTurn?: number | null;
+  /** 判定の対戦の経過（エンジンの RaceEntry）。倒れた後の行動は含まない。 */
+  race?: { turn: number; actor: 0 | 1 | null; move: string | null; flinch: boolean; hp: [number, number];
+           events: { side: 0 | 1; kind: string; amount: number; raw?: number }[] }[];
   /** 互いに圏外で決着がつかない(引き分け)。 */
   draw?: boolean;
   /** 持久戦で勝敗が決まったか。記号・win には反映済みなので表示だけに使う。 */
   stall?: StallInfo;
+  /** 持久戦で勝てない側でも、どくどくを持つなら入れた場合の内訳。 */
+  plans?: { me?: StallPlan | null; opp?: StallPlan | null };
   stub: boolean;
 }
 

@@ -4,6 +4,10 @@ use crate::pack::{Cat, Pack};
 use crate::poke::{apply_status, Poke, TransformBackup, ST_ATK, ST_DEF, ST_SPA, ST_SPD, ST_SPE};
 use crate::rng::BRng;
 
+/// さまようたましい で入れ替えられない特性（第9世代の実機の不可リスト。abilities.py WANDERING_SPIRIT_FAIL と同一）。
+const WANDERING_SPIRIT_FAIL: [&str; 19] = ["ばけのかわ", "バトルスイッチ", "アイスフェイス", "きずなへんげ", "ぜったいねむり", "うのミサイル", "はらぺこスイッチ", "イリュージョン", "マルチタイプ", "かがくへんかガス", "スワームチェンジ", "ARシステム", "ぎょぐん", "リミットシールド", "ダルマモード", "マイティチェンジ", "ふしぎなまもり", "じんばいったい", "しれいとう"];
+
+
 /// かたやぶり系
 #[inline]
 pub fn is_mold(pack: &Pack, p: &Poke) -> bool {
@@ -114,7 +118,12 @@ pub fn entry_ability(
         } else if oab == l.あまのじゃく {
             opponent.stage_attack = std::cmp::min(6, opponent.stage_attack + 1);
         } else {
+            let before = opponent.stage_attack;
             opponent.stage_attack = std::cmp::max(-6, opponent.stage_attack - 1);
+            // まけんき・かちき: いかくで下げられても発動する（実際に下がったときだけ。battle.py と同じ）
+            if opponent.stage_attack < before {
+                on_stat_lowered(pack, opponent);
+            }
         }
     }
 
@@ -319,7 +328,10 @@ pub fn on_after_hit(
         }
         if ab == l.ミイラ && attacker.ability != l.ミイラ && attacker.ability != l.かがくへんかガス {
             attacker.ability = l.ミイラ;
-        } else if ab == l.さまようたましい && attacker.ability != l.かがくへんかガス {
+        } else if ab == l.さまようたましい
+            && !WANDERING_SPIRIT_FAIL.contains(&pack.intern.resolve(attacker.ability))
+            && !WANDERING_SPIRIT_FAIL.contains(&pack.intern.resolve(defender.ability))
+        {
             std::mem::swap(&mut attacker.ability, &mut defender.ability);
         }
     }

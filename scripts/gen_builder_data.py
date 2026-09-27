@@ -33,6 +33,11 @@ RULE = "single"
 
 # 対象シーズンはDBの最新シーズンを自動採用する（固定値にすると新シーズン開始時に
 # 工房のデータだけ旧シーズンのまま取り残される）。BUILDER_SEASON で明示指定も可能。
+def arch_name(n):
+    """型名は「〜型」に統一する（ガブリアスナイトZ・フルアタ型）。すでに「型」で終わる名前（単一の型・物理型）はそのまま"""
+    return n if n.endswith("型") else n + "型"
+
+
 def _seasons_in_db():
     con = sqlite3.connect(DB)
     rows = [r[0] for r in con.execute("SELECT DISTINCT season FROM pokemon_usage")]
@@ -48,6 +53,17 @@ def _seasons_in_db():
 # 新しい順。SEASON が欠測の場合のみ、これより古いシーズンへ順に遡る。
 SEASON_ORDER = _seasons_in_db()
 SEASON = os.environ.get("BUILDER_SEASON") or (SEASON_ORDER[0] if SEASON_ORDER else "M-6")
+
+# 型生成器の固定版（v40）の系統表。ある種はここから型を作る（系統の割合の上位3系統・系統内で最も重い型）
+POOL_GROUPS = os.environ.get("BUILDER_POOL_GROUPS", os.path.join(ROOT, "_local", "ai_work", "frozen", "type_groups_M-6_v41.json"))
+_PG = {}
+
+
+def _pool_groups():
+    if "g" not in _PG:
+        _PG["g"] = json.load(open(POOL_GROUPS)) if SEASON == "M-6" and os.path.exists(POOL_GROUPS) else {}
+    return _PG["g"]
+
 
 MOVE_POOL_N = 10      # 技プールに入れる採用率上位の技数
 MAX_VARIANTS = 3      # 1種あたりの型数（型1/2/3）
@@ -414,6 +430,9 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
     tpl = tpl_of.get(name)
     if tpl is None:
         return []
+    pg = _pool_groups().get(name)
+    if pg:
+        return _pool_variants(con, name, tpl, pg, normalize_mega_stone, max_variants)
     items = _items_of(con, name)
     natures = _natures_of(con, name)
     abilities = _abilities_of(con, name)
@@ -525,6 +544,122 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
         out.append(v)
         for i, o in enumerate(out):
             o["idx"] = i + 1
+    return out
+
+
+MIN_ARCH_SHARE = 0.10   # 代表にする系統・分けた型の最低割合（種全体に占める割合）。これ未満のマイナーな型は代表にしない
+
+
+def _pool_variants(con, name, tpl, pg, normalize_mega_stone, max_variants):
+    """型生成器の系統から型を作る。1v1 の技プール（mpool）はその型の4技。種全体の10%以上の系統を割合の大きい順に最大 max_variants 個。
+    各系統の代表は、系統内で85%以上入る技（系統を特徴づける技）を全部持つ型のうち最も重い型
+    （技・持ち物・性格・努力値・特性の組そのもの）。
+    系統が足りないとき（カバルドンは95%の系統が1つ）は、大きい系統を技4つの組ごとに分けて、10%以上の組を足す。
+    share は種全体に占める割合(%)。分けた系統は、分けた型の割合の合計が系統の割合になるように組の割合で配る。
+    10%の足切りは分ける前の系統の割合で見る（分けた組は10%以上の組だけ足す）。並びは割合の大きい順。
+    archNo は系統の番号（想定型セクション archetypes.json の並びと同じ）、archSub は分けた型の枝番（a, b…。分けていなければ空）"""
+    move_rows = _moves_of(con, name)
+    mpool = [m for m, _ in move_rows[:MOVE_POOL_N]]
+    abilities = _abilities_of(con, name)
+    base_ability = abilities[0][0] if abilities else ""
+    groups = sorted(pg["groups"], key=lambda g: -g["share"])
+    gno = {id(g): i + 1 for i, g in enumerate(groups)}
+    groups = [g for g in groups if g["share"] >= MIN_ARCH_SHARE] or groups[:1]
+
+    def rep_builds(g):
+        """系統の特徴の技（系統内85%以上）を全部持つ型だけを候補にする"""
+        mw = {}
+        for x in g["builds"]:
+            for m in x["moves"]:
+                mw[m] = mw.get(m, 0.0) + x["weight"]
+        core = {m for m, w in mw.items() if w >= 0.85}
+        return [x for x in g["builds"] if core <= set(x["moves"])] or g["builds"]
+
+    def split(builds, key):
+        """key ごとの重みの合計と、その中で最も重い型（重みの大きい順）"""
+        by = {}
+        for x in builds:
+            k = key(x)
+            w, best = by.get(k, (0.0, None))
+            by[k] = (w + x["weight"], x if best is None or x["weight"] > best["weight"] else best)
+        return sorted(by.values(), key=lambda t: -t[0])
+
+    # 1) 系統ごとの代表  2) 足りなければ大きい系統を技4つの組で分ける  3) それでも足りなければ技4つ×持ち物で分ける
+    #   分けた型の割合は種全体に占めるその組の割合。10%未満の組は足さない
+    chosen = [{"g": g, "b": split(rep_builds(g), lambda x: 0)[0][1], "share": g["share"], "lv": 0}
+              for g in groups[:max_variants]]
+    for lv, key in ((1, lambda x: frozenset(x["moves"])), (2, lambda x: (frozenset(x["moves"]), x["item"]))):
+        if len(chosen) >= max_variants:
+            break
+        cand = []
+        for g0 in {id(c["g"]): c["g"] for c in chosen}.values():
+            subs = split(rep_builds(g0), key)
+            c = {"g": g0}
+            for w, b in subs:
+                cand.append((c["g"]["share"] * w, c["g"], b))
+        taken = {(c["g"]["name"], key(c["b"])) for c in chosen}
+        for sh, g, b in sorted(cand, key=lambda t: -t[0]):
+            if len(chosen) >= max_variants or sh < MIN_ARCH_SHARE:
+                break
+            if (g["name"], key(b)) in taken:
+                continue
+            # 系統の代表そのものも同じ粒度の割合に直す（系統全体の割合のままだと合計が100%を超える）
+            for c in chosen:
+                if c["g"] is g and c["lv"] < lv:
+                    c["lv"] = lv
+                    c["share"] = g["share"] * next((w for w, bb in split(rep_builds(g), key) if key(bb) == key(c["b"])), 0.0)
+            chosen.append({"g": g, "b": b, "share": sh, "lv": lv})
+            taken.add((g["name"], key(b)))
+    # 分けた系統は、分けた型の割合の合計が系統の割合になるように配り直す（分けた組に入らない型のぶんも代表たちで持つ）
+    for g in {id(c["g"]): c["g"] for c in chosen}.values():
+        sib = [c for c in chosen if c["g"] is g]
+        tot = sum(c["share"] for c in sib)
+        if len(sib) > 1 and tot > 0:
+            for c in sib:
+                c["share"] = g["share"] * c["share"] / tot
+        elif len(sib) == 1:
+            sib[0]["share"] = g["share"]
+    chosen.sort(key=lambda c: -c["share"])
+
+    def tag_parts(b, sib):
+        """同じ系統の代表どうしで違うところ（技 → 持ち物 → 性格の順）"""
+        common = set.intersection(*[set(o["moves"]) for o in sib])
+        diff = [m for m in b["moves"] if m not in common]
+        same = [o for o in sib if set(o["moves"]) == set(b["moves"])]
+        if diff and len(same) == 1:
+            return diff
+        if sum(1 for o in same if o["item"] == b["item"]) == 1:
+            return diff + [b["item"]]
+        return diff + [b["nature"]]
+
+    tags = {}
+    for g in {id(c["g"]): c["g"] for c in chosen}.values():
+        sib = [c for c in chosen if c["g"] is g]
+        if len(sib) < 2:
+            continue
+        gname = arch_name(g["name"])
+        raw = [tag_parts(c["b"], [o["b"] for o in sib]) for c in sib]
+        # 系統名に入っている技・持ち物は括弧の中で繰り返さない（消すと見分けが付かなくなる系統はそのまま）
+        short = [[x for x in p if x not in gname] for p in raw]
+        use = short if all(short) and len({tuple(p) for p in short}) == len(short) else raw
+        for k, (c, p) in enumerate(zip(sib, use)):
+            tags[id(c)] = ("（" + "・".join(p) + "）", "abcdefghij"[k])
+    out = []
+    for c in chosen:
+        g, b = c["g"], c["b"]
+        gname = arch_name(g["name"])
+        tag, sub = tags.get(id(c), ("", ""))
+        item, ev, mv4 = b["item"], list(b["ev"]), list(b["moves"])
+        md, t1, t2, bs, ability, label = _form_of(tpl, name, item, normalize_mega_stone, b.get("ability") or base_ability)
+        # 1v1 の判定に使う技はその型の4技だけ（種全体の上位10技にすると、物理の型が だいもんじ を撃つ計算になった）
+        pool = list(mv4)
+        spec = (f"{name}@{item}:{b['nature']}:{'|'.join(mv4)}:"
+                f"{'/'.join(str(x) for x in ev)}:{ability}")
+        out.append({"idx": len(out) + 1, "item": item, "nature": b["nature"], "ability": ability,
+                    "ev": ev, "moves": mv4, "mpool": pool, "t1": t1, "t2": t2, "bs": bs,
+                    "mega": md is not None, "label": label, "spec": spec,
+                    "arch": gname + tag, "archNo": gno[id(g)], "archSub": sub,
+                    "share": round(c["share"] * 100, 1)})
     return out
 
 

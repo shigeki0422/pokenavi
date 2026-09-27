@@ -34,6 +34,8 @@ pub struct Scenario {
     pub terrain: u8,
     /// 側0(自分)が積み技を使った回数
     pub boost: i32,
+    /// 側1(相手)が積み技を使った回数
+    pub opp_boost: i32,
 }
 
 #[derive(Clone, Debug)]
@@ -189,6 +191,8 @@ pub struct Pack {
     pub n_abil_cats: usize,
     /// R4: 登録テンプレートの実スプレッド（belief.registered_spreads_by_species）
     pub registered_spreads: HashMap<String, Vec<(EvEntry, String)>>,
+    /// メガ前の特性 {種族: (pick, 通常特性, メガ特性)}（simulator/data.py DataLoader.pre_mega_abilities）
+    pub pre_mega: HashMap<String, (String, Vec<String>, Vec<String>)>,
     /// 型プール（_gen_type_pool.py の出力）。種族名 → 型まるごとの候補。
     /// 技・持ち物・性格・努力値を独立に引くと実在しない組み合わせができるので、
     /// 型単位で引けるようにする（JOINT_BUILD=1 で有効）。
@@ -527,6 +531,18 @@ impl Pack {
             }
         }
 
+        let mut pre_mega: HashMap<String, (String, Vec<String>, Vec<String>)> = HashMap::new();
+        if let Some(pm) = v.get("pre_mega").and_then(|x| x.as_object()) {
+            let strs = |x: &Value| -> Vec<String> {
+                x.as_array().map(|a| a.iter().filter_map(|s| s.as_str().map(String::from)).collect()).unwrap_or_default()
+            };
+            for (sp, e) in pm {
+                let pick = e["pick"].as_str().unwrap_or("").to_string();
+                intern.intern(&pick);
+                pre_mega.insert(sp.clone(), (pick, strs(&e["legal"]), strs(&e["mega"])));
+            }
+        }
+
         let mut build_pool: HashMap<String, Vec<PoolBuild>> = HashMap::new();
         if let Some(bp) = v.get("build_pool").and_then(|x| x.as_object()) {
             for (sp, arr) in bp {
@@ -604,6 +620,7 @@ impl Pack {
             abil_cat_bits,
             n_abil_cats,
             registered_spreads,
+            pre_mega,
             build_pool,
             net,
             sim_hash: v["header"]["source_hashes"]["simulator_py"]

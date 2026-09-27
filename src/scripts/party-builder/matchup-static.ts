@@ -4,7 +4,7 @@ import fs from "node:fs";
 import path from "node:path";
 import type { MonDetail, MoveDict, ResolvedBuild, SpeciesMaster, TargetBuild, TargetGroup, Verdict } from "./types";
 import { resolveTarget } from "./balance";
-import { judgeVsBuildsMulti, judge1v1, bestMoveHitDetail, pairHitDetails } from "./matchup";
+import { judgeVsBuildsMulti, judge1v1, bestMoveHitDetail, pairHitDetails, moveDamages } from "./matchup";
 import { initEngineFrom } from "../engine/wasm";
 
 export interface StaticMatchup {
@@ -213,6 +213,8 @@ export interface MatchupBuildRow {
   /** 毎ターンの与ダメージ(2ターン以上かかる対面のみ)。 */
   myTurns: ReturnType<typeof pairHitDetails>["myTurns"];
   oppTurns: ReturnType<typeof pairHitDetails>["oppTurns"];
+  /** 技ごとのダメージ幅（工房の仮想敵カードの技の横棒と同じ値）。 */
+  moves: ReturnType<typeof moveDamages>;
 }
 export interface MatchupBreakdown {
   me: ResolvedBuild;
@@ -237,6 +239,7 @@ export function getMatchupBreakdownForBuild(
     evLabel: evLabel(build.evs),
     // 与ダメ・被ダメは同じ場の前提で出す（向きごとに呼ぶと天候が食い違う）
     ...(() => { const d = pairHitDetails(me, build); return { myDmg: d.my, oppDmg: d.opp, myTurns: d.myTurns, oppTurns: d.oppTurns }; })(),
+    moves: moveDamages(me, build),
   }));
   return { me, oppName: oppGroup.name, builds, sym: agg.sym, dep: agg.dep };
 }

@@ -16,7 +16,7 @@ type Exports = {
   ko_prob(ap: number, an: number, bp: number, bn: number, sp: number, sn: number,
           att: number, mi: number, hits: number): number;
   name_aliases(): number;
-  set_scenario(w: number, t: number, n: number): number;
+  set_scenario(w: number, t: number, n: number, m: number): number;
   setup_move_names(): number;
   type_dynamic(): number;
   dealloc(p: number, n: number): void;
@@ -89,6 +89,8 @@ export interface Scenario {
   terrain?: "エレキフィールド" | "グラスフィールド" | "サイコフィールド" | "ミストフィールド" | null;
   /** 自分側(specA)が積み技を使った回数。 */
   boost?: number;
+  /** 相手側(specB)が積み技を使った回数。 */
+  oppBoost?: number;
 }
 
 const WEATHER_CODE: Record<string, number> = { "晴れ": 1, "雨": 2, "すなあらし": 3, "あられ": 4 };
@@ -104,8 +106,9 @@ export function setScenario(s: Scenario | null): void {
   const w = s?.weather ? (WEATHER_CODE[s.weather] ?? 0) : 0;
   const t = s?.terrain ? (TERRAIN_CODE[s.terrain] ?? 0) : 0;
   const n = Math.max(0, Math.min(6, Math.round(s?.boost ?? 0)));
-  scenarioKeyStr = w || t || n ? `${w}.${t}.${n}` : "";
-  ex().set_scenario(w, t, n);
+  const m = Math.max(0, Math.min(6, Math.round(s?.oppBoost ?? 0)));
+  scenarioKeyStr = w || t || n || m ? `${w}.${t}.${n}.${m}` : "";
+  ex().set_scenario(w, t, n, m);
 }
 
 /** 現在の前提を表す短い文字列。計算結果を使い回す側のキーに混ぜる。 */
@@ -157,6 +160,8 @@ export interface EngineMove {
   /** 確定数(999=圏外)。最低乱数と最高乱数のそれぞれ。 */
   hitsLo?: number;
   hitsHi?: number;
+  /** 中央乱数での確定数（判定の対戦と同じ前提。表示の主）。 */
+  hitsMid?: number;
   /** 最大打点技の選定に使う値（1ターン目の防御側HP減少）。表示には使わない。
    * Python の _mu_engine._best_cached と同じ基準で選ぶために必要で、
    * ばけのかわ・天候の削り・たべのこしの回復が入る点が dmgLo と異なる。 */
@@ -164,6 +169,10 @@ export interface EngineMove {
   /** この技の与ダメ・確定数に実際に効いた条件（天候・フィールド・能力変化）。
    * 場に出ているだけで効いていないものは入らない。 */
   conds?: string[];
+  /** タイプ相性の倍率（0=無効）。 */
+  eff?: number | null;
+  /** エンジンが選んだ最大打点技（同じ確定数なら自分への不利益が無い技・命中率の高い技を優先）。 */
+  best?: boolean;
   dmg?: null;
 }
 
@@ -176,7 +185,10 @@ export interface EngineSide {
   seq: string[];
   /** 毎ターンの与ダメージ(最低/最高乱数の実数値)。並びは手順があれば手順、無ければ最大打点技の連打。
    * 経路は最低乱数で進めるので、じきゅうりょくの防御上昇・積みなど2ターン目以降の変化が入る。 */
-  turns: { n: string; lo: number; hi: number }[];
+  /** 判定の対戦で実際に撃った技の毎ターン（倒れた後は無い）。flinch=ひるんで動けず、
+   * extra=そのターンに相手が技以外で減らしたHP（相手自身の反動・ゴツゴツメット・天候等）。 */
+  turns: { n: string; lo: number; hi: number; dealt?: number; heal?: number; flinch?: boolean; idle?: boolean; blocked?: string | null;
+           extra?: { kind: string; amount: number; turn?: number; late?: boolean }[]; turn?: number; late?: boolean }[];
 }
 
 /** エンジンが決める1v1の記号判定。刻み・先制技・手順・確定1の扱いを表示側に持たない。 */
@@ -195,6 +207,27 @@ export interface EngineVerdict {
   myMove: string | null;
   oppMove: string | null;
   mySeq: string[];
+  oppSeq?: string[];
+  /** 1ターン目に使う準備の技（積み技・ねこだまし）。無ければ null。 */
+  myPrep?: string | null;
+  oppPrep?: string | null;
+  /** 同速で、先後によって結果が変わる（score は両方の順の平均。race は自分が先の場合）。 */
+  tie?: boolean;
+  /** 相打ち（引き分け扱い）とそのターン。 */
+  mutual?: boolean;
+  mutualTurn?: number | null;
+  /** 判定の対戦の経過。行動ごと・ターン終了時ごとの両者のHP(hp[0]=自分)と、HPが動いた原因。 */
+  race?: RaceEntry[];
+}
+
+export interface RaceEntry {
+  turn: number;
+  actor: 0 | 1 | null;
+  move: string | null;
+  flinch: boolean;
+  hp: [number, number];
+  /** raw: 技のダメージで、残りHPで頭打ちにする前の値（とどめの一撃のみ。amount は実際に減ったHP） */
+  events: { side: 0 | 1; kind: string; amount: number; raw?: number }[];
 }
 
 /** 1v1 の両側について HP・実効素早さ・各技の与ダメと確定数、および記号判定を得る。 */

@@ -150,6 +150,56 @@ class DataLoader:
         self.con = sqlite3.connect(db_path, check_same_thread=False)
         self.con.row_factory = sqlite3.Row
         self._move_cache: dict[str, MoveData] = {}
+        self._pre_mega: Optional[dict] = None
+
+    def pre_mega_abilities(self) -> dict:
+        """メガ石を持つ種族のメガシンカ前の特性 {種族: {"pick": 特性, "legal": [通常特性...], "mega": [メガ特性...]}}。
+        spec の特性はメガ後の特性（例: ボーマンダ:スカイスキン）で書かれることが多く、そのままではメガ前の姿が
+        本来の特性（いかく等）で入場しない。pick は POOL_SEASON（既定 M-6）の特性採用データのうち通常特性の最多
+        （通常特性の一覧が無い種族はメガ特性以外の最多）、無ければ通常特性の1番目。Rust は datapack の pre_mega を同じ規則で使う。"""
+        if self._pre_mega is not None:
+            return self._pre_mega
+        import os as _os
+        season = _os.environ.get("POOL_SEASON", "M-6")
+        out: dict = {}
+        megas: dict = {}
+        for r in self.con.execute("SELECT base_pokemon_jp, ability FROM pokemon_mega_stats"):
+            megas.setdefault(r[0], set())
+            if r[1]:
+                megas[r[0]].add(r[1])
+        for sp in sorted(megas):
+            mg = megas[sp]
+            legal = [r[0] for r in self.con.execute(
+                "SELECT ability FROM pokemon_species_abilities WHERE pokemon_name=? ORDER BY is_hidden, slot", (sp,))]
+            pick, src = None, None
+            last = self.con.execute(
+                "SELECT MAX(crawled_date) FROM pokemon_abilities WHERE season=? AND pokemon=?", (season, sp)).fetchone()[0]
+            if last:
+                for r in self.con.execute(
+                        "SELECT ability FROM pokemon_abilities WHERE season=? AND pokemon=? AND crawled_date=? "
+                        "ORDER BY usage_rate DESC, ability", (season, sp, last)):
+                    # 通常特性の一覧があればその中から（メガ特性と同じ いかく 等もメガ前の特性として正しい。例: ズルズキン）、
+                    # 無ければメガ特性以外（採用データにメガ後の特性が混ざるため）
+                    if (r[0] in legal) if legal else (r[0] not in mg):
+                        pick, src = r[0], f"{season}採用率"
+                        break
+            if pick is None:
+                if legal:
+                    pick, src = legal[0], "通常特性の1番目"
+            if pick is not None:
+                out[sp] = {"pick": pick, "legal": legal, "mega": sorted(mg), "src": src}
+        self._pre_mega = out
+        return out
+
+    def pre_mega_ability(self, species: str, spec_ability: Optional[str]) -> Optional[str]:
+        """メガ石を持つときのメガ前の特性。spec の特性がその種族の通常特性ならそれを使い（一覧が無い種族はメガ特性以外なら）、
+        そうでなければ pick。対象外の種族は None（spec のまま）。"""
+        e = self.pre_mega_abilities().get(species)
+        if e is None:
+            return None
+        if spec_ability and ((spec_ability in e["legal"]) if e["legal"] else (spec_ability not in e["mega"])):
+            return spec_ability
+        return e["pick"]
 
     def get_move(self, name_jp: str) -> Optional[MoveData]:
         if name_jp in self._move_cache:

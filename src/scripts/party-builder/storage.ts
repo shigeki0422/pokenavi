@@ -56,10 +56,12 @@ function toScenarios(x: any): Record<string, SlotScenario> | undefined {
   const out: Record<string, SlotScenario> = {};
   for (const [k, v] of Object.entries(x as Record<string, any>)) {
     if (!v || typeof v !== "object") continue;
-    let n = Number((v as any).n);
-    if (!Number.isFinite(n) || n < 0) n = 0;
-    const sc: SlotScenario = { w: toStr((v as any).w), t: toStr((v as any).t), n: Math.min(6, Math.round(n)) };
-    if (sc.w || sc.t || sc.n) out[k] = sc;
+    const cnt = (y: any): number => {
+      const c = Number(y);
+      return !Number.isFinite(c) || c < 0 ? 0 : Math.min(6, Math.round(c));
+    };
+    const sc: SlotScenario = { w: toStr((v as any).w), t: toStr((v as any).t), n: cnt((v as any).n), m: cnt((v as any).m) };
+    if (sc.w || sc.t || sc.n || sc.m) out[k] = sc;
   }
   return Object.keys(out).length ? out : undefined;
 }

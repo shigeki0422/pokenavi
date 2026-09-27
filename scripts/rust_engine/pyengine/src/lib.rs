@@ -11,7 +11,7 @@
 //! データパックは環境変数 POKENAVI_DATAPACK（既定 `_rust_engine/datapack.json`）から1度だけロードする。
 use engine::net::NetW;
 use engine::pack::Pack;
-use pyo3::exceptions::PyRuntimeError;
+use pyo3::exceptions::{PyRuntimeError, PyValueError};
 use pyo3::prelude::*;
 use std::sync::{Mutex, OnceLock};
 
@@ -26,6 +26,17 @@ static ENG: OnceLock<Mutex<Eng>> = OnceLock::new();
 
 fn datapack_path() -> String {
     std::env::var("POKENAVI_DATAPACK").unwrap_or_else(|_| "_rust_engine/datapack.json".to_string())
+}
+
+/// ロックを取る。前の呼び出しがパニックで抜けて poison されていても中身を使い続ける
+/// （エンジンの状態は呼び出しごとに作り直すので、壊れた途中状態は残らない。scenario は呼び出し側で既定に戻す）。
+fn lock_eng(m: &'static Mutex<Eng>) -> std::sync::MutexGuard<'static, Eng> {
+    let mut g = m.lock().unwrap_or_else(|e| e.into_inner());
+    if m.is_poisoned() {
+        g.pack.scenario = engine::pack::Scenario::default();
+        m.clear_poison();
+    }
+    g
 }
 
 fn eng() -> PyResult<&'static Mutex<Eng>> {
@@ -66,7 +77,7 @@ fn greedy_3v3(
     season: &str,
 ) -> PyResult<u8> {
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let mut g = lock_eng(m);
     let Eng { pack, .. } = &mut *g;
     Ok(engine::sim::greedy_3v3(pack, &pa, &sa, &pb, &sb, season, seed) as u8)
 }
@@ -83,7 +94,7 @@ fn mcts_3v3(
     season: &str,
 ) -> PyResult<u8> {
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let mut g = lock_eng(m);
     let Eng { pack, net, .. } = &mut *g;
     let net = net.clone();
     let (r, _) =
@@ -96,7 +107,7 @@ static NET_CACHE: std::sync::Mutex<Vec<(String, engine::net::NetW)>> =
     std::sync::Mutex::new(Vec::new());
 
 fn load_net_cached(path: &str) -> PyResult<engine::net::NetW> {
-    let mut c = NET_CACHE.lock().map_err(|_| PyRuntimeError::new_err("net cache lock"))?;
+    let mut c = NET_CACHE.lock().unwrap_or_else(|e| e.into_inner());
     if let Some((_, n)) = c.iter().find(|(p, _)| p == path) {
         return Ok(n.clone());
     }
@@ -128,7 +139,7 @@ fn mcts_3v3_ab(
     let na = if net_a_path.is_empty() { None } else { Some(load_net_cached(net_a_path)?) };
     let nb = if net_b_path.is_empty() { None } else { Some(load_net_cached(net_b_path)?) };
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let mut g = lock_eng(m);
     let Eng { pack, net, .. } = &mut *g;
     let base = net.clone();
     let side1 = na.as_ref().unwrap_or(&base);
@@ -156,7 +167,7 @@ fn mcts_3v3_solve(
     season: &str,
 ) -> PyResult<(u8, Vec<(usize, f64, Vec<(usize, f64)>, usize, usize, u64, u64, u64)>)> {
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let mut g = lock_eng(m);
     let Eng { pack, net, .. } = &mut *g;
     let net = net.clone();
     let _ = engine::sim::solve_trace_take();
@@ -200,7 +211,7 @@ fn mcts_3v3_trace(
     let nb = if net_b_path.is_empty() { None } else { Some(load_net_cached(net_b_path)?) };
     let na = if net_a_path.is_empty() { None } else { Some(load_net_cached(net_a_path)?) };
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let mut g = lock_eng(m);
     let Eng { pack, net, .. } = &mut *g;
     let net = na.unwrap_or_else(|| net.clone());
     let (r, recs, nodes) = engine::sim::mcts_3v3_trace(
@@ -220,7 +231,7 @@ fn mcts_vs_dist(
     season: &str,
 ) -> PyResult<u8> {
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let mut g = lock_eng(m);
     let Eng { pack, net, .. } = &mut *g;
     let net = net.clone();
     Ok(engine::sim::mcts_vs_dist(pack, &net, &pa, &sa, &pb, season, season, seed, sims) as u8)
@@ -238,7 +249,7 @@ fn mcts_vs_dist_trace(
     season: &str,
 ) -> PyResult<(u8, Vec<usize>, Vec<u64>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<String>, Vec<f64>)> {
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let mut g = lock_eng(m);
     let Eng { pack, net, .. } = &mut *g;
     let net = net.clone();
     let (r, idx, hs, nm, vs, ac, rt, cf, ev, dt, xx) =
@@ -256,7 +267,7 @@ fn select_party_rng_probe(
     season: &str,
 ) -> PyResult<(Vec<usize>, f64)> {
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let mut g = lock_eng(m);
     let Eng { pack, .. } = &mut *g;
     Ok(engine::sim::select_party_rng_probe(pack, &pa, &pb, season, seed))
 }
@@ -266,7 +277,7 @@ fn select_party_rng_probe(
 #[pyo3(signature = (panel_specs, season="M-3"))]
 fn live_setup(panel_specs: Vec<Vec<String>>, season: &str) -> PyResult<usize> {
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let mut g = lock_eng(m);
     let Eng { pack, live, .. } = &mut *g;
     let l = engine::live::Live::setup(pack, &panel_specs, season);
     let n = l.panel_net.len();
@@ -283,7 +294,7 @@ fn live_feats(
     specs: Vec<String>,
 ) -> PyResult<(PyObject, PyObject, Vec<i64>, Vec<i64>, usize, usize, usize, usize)> {
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let mut g = lock_eng(m);
     let Eng { pack, live, .. } = &mut *g;
     let live = live.as_mut().ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
     let states = live.panel_states(pack, &specs);
@@ -327,10 +338,43 @@ fn live_feats(
 #[pyfunction]
 #[pyo3(signature = (spec_a, spec_b, season="M-3"))]
 fn mu_analyze(spec_a: &str, spec_b: &str, season: &str) -> PyResult<String> {
+    mu_analyze_scenario(spec_a, spec_b, season, 0, 0, 0, 0)
+}
+
+/// 1v1判定の本体。不正な spec は組み立て前にエラーで返し、判定中のパニックも捕まえてエラーにする
+/// （パニックのまま抜けるとロックが壊れ、以後の呼び出しが全部失敗する＝提案APIが止まる）。
+fn analyze_guarded(g: &mut Eng, spec_a: &str, spec_b: &str, season: &str, sc: engine::pack::Scenario) -> PyResult<String> {
+    for sp in [spec_a, spec_b] {
+        if let Some(e) = engine::poke::spec_error(&g.pack, sp, season) {
+            return Err(PyValueError::new_err(e));
+        }
+    }
+    g.pack.scenario = sc;
+    let r = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        engine::analysis::analyze_json(&mut g.pack, spec_a, spec_b, season).to_string()
+    }));
+    g.pack.scenario = engine::pack::Scenario::default();
+    r.map_err(|e| {
+        let msg = e.downcast_ref::<String>().cloned()
+            .or_else(|| e.downcast_ref::<&str>().map(|x| x.to_string()))
+            .unwrap_or_else(|| "panic".into());
+        PyRuntimeError::new_err(format!("mu_analyze: {}", msg))
+    })
+}
+
+/// 「この状況なら」(天候・フィールド・自分/相手の積み回数)を指定した1v1判定。工房の仮想敵の前提と同じ。
+/// 指定はこの呼び出しの間だけ効き、終わったら既定に戻す。weather/terrain の番号は wasm の set_scenario と同じ。
+#[pyfunction]
+#[pyo3(signature = (spec_a, spec_b, season="M-3", weather=0, terrain=0, boost=0, opp_boost=0))]
+fn mu_analyze_scenario(spec_a: &str, spec_b: &str, season: &str, weather: i32, terrain: i32,
+                       boost: i32, opp_boost: i32) -> PyResult<String> {
     let m = eng()?;
-    let mut g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
-    let v = engine::analysis::analyze_json(&mut g.pack, spec_a, spec_b, season);
-    Ok(v.to_string())
+    let mut g = lock_eng(m);
+    let sc = engine::pack::Scenario {
+        weather: weather.clamp(0, 4) as u8, terrain: terrain.clamp(0, 4) as u8,
+        boost: boost.clamp(0, 6), opp_boost: opp_boost.clamp(0, 6),
+    };
+    analyze_guarded(&mut g, spec_a, spec_b, season, sc)
 }
 
 /// スコアから記号（◎○△▲×）へ。複数型の平均スコアを集約するときに使う。
@@ -343,7 +387,7 @@ fn mu_sym(score: f64) -> String {
 #[pyfunction]
 fn datapack_hash() -> PyResult<String> {
     let m = eng()?;
-    let g = m.lock().map_err(|_| PyRuntimeError::new_err("engine lock"))?;
+    let g = lock_eng(m);
     Ok(g.hash.clone())
 }
 
@@ -369,6 +413,7 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(live_setup, m)?)?;
     m.add_function(wrap_pyfunction!(live_feats, m)?)?;
     m.add_function(wrap_pyfunction!(mu_analyze, m)?)?;
+    m.add_function(wrap_pyfunction!(mu_analyze_scenario, m)?)?;
     m.add_function(wrap_pyfunction!(mu_sym, m)?)?;
     m.add_function(wrap_pyfunction!(datapack_hash, m)?)?;
     m.add_function(wrap_pyfunction!(version, m)?)?;

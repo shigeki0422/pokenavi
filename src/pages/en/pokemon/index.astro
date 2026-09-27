@@ -3,9 +3,11 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
+import rankingData from '../../../data/ranking.json';
 import Sidebar from '../../../components/Sidebar.astro';
 import { POKEMON_NAME_EN } from '../../../i18n/pokemon-names';
 
+const season = Object.keys((rankingData as any).seasons).sort().at(-1)!;
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const pages = (await getCollection('pokemon'))
 	.filter((p) => showDrafts || !p.data.draft)
@@ -27,7 +29,7 @@ const alternates = [
 	<head>
 		<BaseHead
 			title="Pokémon Data | PokeNavi"
-			description="Pokémon data for Pokémon Champions. Move, item, ability, and nature usage rates for the M-3/M-2 meta."
+			description={`Pokémon data for Pokémon Champions. Move, item, ability, and nature usage rates for the ${season} meta.`}
 			imageUrl="/og-image.png"
 			alternates={alternates}
 			ogLocale="en_US"
@@ -157,7 +159,7 @@ const alternates = [
 						</ol>
 					</nav>
 					<h1>Pokémon Data</h1>
-					<p class="subtitle">Pokémon Champions M-3/M-2 meta · Move / Item / Ability data · {pages.length} Pokémon</p>
+					<p class="subtitle">Pokémon Champions {season} meta · Move / Item / Ability data · {pages.length} Pokémon</p>
 
 					{top10.length > 0 && (
 						<section class="top10-section">

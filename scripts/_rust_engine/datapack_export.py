@@ -176,7 +176,7 @@ def export():
     # 決定化で JOINT_BUILD=1 のときに使う。
     build_pool = {}
     _bp = os.environ.get("BUILD_POOL", os.path.join(
-        os.path.dirname(ROOT), "_local", "ai_work", "type_pool_M-6.json"))
+        os.path.dirname(ROOT), "_local", "ai_work", "frozen", "type_pool_M-6_v41.json"))
     if os.path.exists(_bp):
         with open(_bp) as _f:
             for _r in json.load(_f):
@@ -216,6 +216,9 @@ def export():
         "ability_cats": abil_cats,
         "registered_spreads": reg,
         "build_pool": build_pool,
+        # メガ前の特性（simulator/data.py DataLoader.pre_mega_abilities と同じ規則。Rust の build_poke が使う）
+        "pre_mega": {k: {"pick": v["pick"], "legal": v["legal"], "mega": v["mega"]}
+                     for k, v in _ldr.pre_mega_abilities().items()},
     }
     body = {k: v for k, v in pack.items() if k != "header"}
     blob = json.dumps(body, ensure_ascii=False, sort_keys=True, separators=(",", ":"))

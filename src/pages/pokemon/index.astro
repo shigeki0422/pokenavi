@@ -3,7 +3,9 @@ import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Footer from '../../components/Footer.astro';
 import Header from '../../components/Header.astro';
+import rankingData from '../../data/ranking.json';
 
+const season = Object.keys((rankingData as any).seasons).sort().at(-1)!;
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const pages = (await getCollection('pokemon'))
 	.filter((p) => showDrafts || !p.data.draft)
@@ -41,7 +43,7 @@ const itemListJsonLd = {
 	<head>
 		<BaseHead
 			title="ポケモン情報一覧 | ポケナビ"
-			description="ポケモンチャンピオンズの全ポケモン情報まとめ。M-4環境の技・持ち物・特性・性格の採用率データ、上位ランカーの実戦パーティを掲載。"
+			description={`ポケモンチャンピオンズの全ポケモン情報まとめ。${season}環境の技・持ち物・特性・性格の採用率データ、上位ランカーの実戦パーティを掲載。`}
 		/>
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(breadcrumbJsonLd)} />
 		<script is:inline type="application/ld+json" set:html={JSON.stringify(itemListJsonLd)} />
@@ -167,7 +169,7 @@ const itemListJsonLd = {
 				</ol>
 			</nav>
 			<h1>ポケモン情報一覧</h1>
-			<p class="subtitle">ポケモンチャンピオンズ M-4環境 · 技／持ち物／特性データ · {pages.length}体掲載</p>
+			<p class="subtitle">ポケモンチャンピオンズ {season}環境 · 技／持ち物／特性データ · {pages.length}体掲載</p>
 
 			{top10.length > 0 && (
 				<section class="top10-section">

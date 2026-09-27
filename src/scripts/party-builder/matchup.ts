@@ -8,7 +8,7 @@
 // 判定本体は engine/wasm.ts 経由でエンジンを実走させる。
 import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./types";
 import { analyze, buildToSpec, koProb, scenarioKey, typeDynamic,
-         type EngineMove, type EngineVerdict } from "../engine/wasm";
+         type EngineMove, type EngineSide, type EngineVerdict } from "../engine/wasm";
 import { eff } from "./typechart";
 
 /**
@@ -40,8 +40,8 @@ type Evaluated = {
   /** 毎ターン最善手を選び直した場合の手数と技の並び。 */
   seqHits: number;
   seq: string[];
-  /** 毎ターンの与ダメージ(実数値)。 */
-  turns: { n: string; lo: number; hi: number }[];
+  /** 判定の対戦の毎ターンの与ダメージ(実数値)・回復量・ひるみ・技以外の増減など（エンジンが返すまま）。 */
+  turns: EngineSide["turns"];
 };
 
 /** 対面の評価結果。場は対面ごとに1つなので、両方向をまとめて1回で求める。 */
@@ -180,6 +180,9 @@ function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
  * 正本と違う技を選んでしまう（実測で 395対面中23件ずれた）。
  */
 function _best(e: Evaluated): (EngineMove & { idx: number }) | null {
+  // エンジンが選んだ最大打点技（同じ確定数なら反動等の不利益が無い技・命中率の高い技）。判定の対戦で撃つ技と揃える。
+  const flagged = e.moves.find((m) => m.best && m.dmg !== null && m.hitsLo !== undefined);
+  if (flagged) return flagged;
   let best: (EngineMove & { idx: number }) | null = null;
   for (const m of e.moves) {
     if (m.dmg === null || m.hitsLo === undefined) continue;
@@ -188,6 +191,124 @@ function _best(e: Evaluated): (EngineMove & { idx: number }) | null {
     }
   }
   return best;
+}
+
+/** エンジンの前提文を表示用に言い換える（「最大3ヒット時」「3ヒット時」→連続技の回数の仮定）。工房の技の行と共通。 */
+export function condText(c: string | null | undefined, lang: "ja" | "en" | "ko"): string {
+  if (!c) return "";
+  return String(c).split("・").map((x) => {
+    let m = /^最大(\d+)ヒット時$/.exec(x);
+    if (m) return lang === "en" ? `all ${m[1]} hits land` : lang === "ko" ? `${m[1]}회 모두 명중 가정` : `${m[1]}発すべて命中を想定`;
+    m = /^(\d+)ヒット時$/.exec(x);
+    if (m) return lang === "en" ? `${m[1]} hits (expected value for 2-5 hit moves)` : lang === "ko" ? `${m[1]}회 가정(2~5회 기술의 기대값)` : `${m[1]}発を想定（2〜5回技の期待値）`;
+    if (lang === "ja") return x;
+    m = /^(攻撃|特攻)([+-]\d+)$/.exec(x);
+    if (m) return `${COND_TERMS[m[1]][lang]} ${m[2]}`;
+    return COND_TERMS[x]?.[lang] ?? x;
+  }).join(lang === "en" ? ", " : lang === "ko" ? "·" : "・");
+}
+/** 前提に出る天候・フィールド・能力の名前の訳。 */
+const COND_TERMS: Record<string, { en: string; ko: string }> = {
+  晴れ: { en: "Sun", ko: "쾌청" }, 雨: { en: "Rain", ko: "비" }, すなあらし: { en: "Sandstorm", ko: "모래바람" },
+  あられ: { en: "Hail", ko: "싸라기눈" }, ゆき: { en: "Snow", ko: "눈" },
+  エレキフィールド: { en: "Electric Terrain", ko: "일렉트릭필드" }, グラスフィールド: { en: "Grassy Terrain", ko: "그래스필드" },
+  サイコフィールド: { en: "Psychic Terrain", ko: "사이코필드" }, ミストフィールド: { en: "Misty Terrain", ko: "미스트필드" },
+  攻撃: { en: "Atk", ko: "공격" }, 特攻: { en: "SpA", ko: "특공" },
+};
+
+/** ダメージレースの「技以外のHP減少」の原因。エンジンが対戦中に記録した kind を、見た目のカテゴリと名前にする。
+ * cat: self=自分の行動による自傷（反動・いのちのたま・ゴツゴツメット等）/ weather=天候 / status=状態異常 / disguise=ばけのかわ / other */
+const CAUSES: Record<string, { cat: string; ja: string; en: string; ko: string; sja: string; sen: string; sko: string }> = {
+  recoil: { cat: "self", ja: "技の反動", en: "Recoil", ko: "기술 반동", sja: "反", sen: "R", sko: "반" },
+  lifeorb: { cat: "self", ja: "いのちのたまの反動", en: "Life Orb recoil", ko: "생명의구슬 반동", sja: "玉", sen: "LO", sko: "구" },
+  helmet: { cat: "self", ja: "ゴツゴツメット", en: "Rocky Helmet", ko: "울퉁불퉁멧", sja: "メ", sen: "RH", sko: "멧" },
+  roughskin: { cat: "self", ja: "さめはだ・てつのトゲ", en: "Rough Skin / Iron Barbs", ko: "까칠한피부·철가시", sja: "肌", sen: "RS", sko: "피" },
+  liquidooze: { cat: "self", ja: "ヘドロえき", en: "Liquid Ooze", ko: "해감액", sja: "液", sen: "LQ", sko: "액" },
+  other: { cat: "self", ja: "自分の行動によるダメージ", en: "Self-inflicted", ko: "자신의 행동에 의한 대미지", sja: "自", sen: "S", sko: "자" },
+  recoilEtc: { cat: "self", ja: "反動など", en: "Recoil etc.", ko: "반동 등", sja: "反", sen: "R", sko: "반" },
+  sandstorm: { cat: "weather", ja: "すなあらし", en: "Sandstorm", ko: "모래바람", sja: "砂", sen: "SS", sko: "모" },
+  weather: { cat: "weather", ja: "天候", en: "Weather", ko: "날씨", sja: "天", sen: "W", sko: "날" },
+  poison: { cat: "status", ja: "どく", en: "Poison", ko: "독", sja: "毒", sen: "PSN", sko: "독" },
+  badpoison: { cat: "status", ja: "もうどく", en: "Toxic", ko: "맹독", sja: "毒", sen: "TOX", sko: "독" },
+  burn: { cat: "status", ja: "やけど", en: "Burn", ko: "화상", sja: "火", sen: "BRN", sko: "화" },
+  status: { cat: "status", ja: "状態異常", en: "Status", ko: "상태 이상", sja: "状", sen: "ST", sko: "상" },
+  sludge: { cat: "other", ja: "くろいヘドロ", en: "Black Sludge", ko: "검은진흙", sja: "泥", sen: "BS", sko: "진" },
+  disguise: { cat: "disguise", ja: "ばけのかわが剥がれた（1/8）", en: "Disguise busted (1/8)", ko: "탈이 벗겨짐(1/8)", sja: "皮", sen: "D", sko: "탈" },
+  bind: { cat: "other", ja: "まとわりつく等のしめつけ", en: "Binding (Infestation etc.)", ko: "조이기(엉겨붙기 등)", sja: "縛", sen: "BND", sko: "속" },
+  leechseed: { cat: "other", ja: "やどりぎのタネ", en: "Leech Seed", ko: "씨뿌리기", sja: "宿", sen: "LS", sko: "씨" },
+  saltcure: { cat: "other", ja: "しおづけ", en: "Salt Cure", ko: "소금절이", sja: "塩", sen: "SC", sko: "소" },
+  curse: { cat: "other", ja: "のろい", en: "Curse", ko: "저주", sja: "呪", sen: "CRS", sko: "저" },
+  eot: { cat: "other", ja: "ターン終了時のダメージ", en: "End-of-turn damage", ko: "턴 종료 시 대미지", sja: "終", sen: "E", sko: "종" },
+};
+export function causeCat(kind: string): string { return CAUSES[kind]?.cat ?? "other"; }
+export function causeLabel(kind: string, lang: "ja" | "en" | "ko"): string {
+  const c = CAUSES[kind]; return c ? (lang === "en" ? c.en : lang === "ko" ? c.ko : c.ja) : kind;
+}
+export function causeShort(kind: string, lang: "ja" | "en" | "ko"): string {
+  const c = CAUSES[kind]; return c ? (lang === "en" ? c.sen : lang === "ko" ? c.sko : c.sja) : "";
+}
+
+/** ダメージレースの棒の1区間。sub=move(技)/disguise/原因名/heal。lbl は起こした行動の番号（後から動いた行動は 1'）。 */
+export interface BarItem {
+  sub: string; dmg: number; heal: number; lbl: string; turn: number;
+  move?: string | null; pctLo?: number | null; pctHi?: number | null;
+  /** そのターンの中で先に動いた行動(first)・後から動いた行動(late)・ターン終了時(eot)のどれに伴う区間か */
+  order?: "first" | "late" | "eot";
+}
+
+const ORDER_TXT = {
+  ja: { late: "後", tag: (t: number, o?: string) => `T${t}${o === "late" ? "・後攻" : o === "first" ? "・先攻" : o === "eot" ? "・ターン終了時" : ""}` },
+  en: { late: "2nd", tag: (t: number, o?: string) => `T${t}${o === "late" ? " · moved 2nd" : o === "first" ? " · moved 1st" : o === "eot" ? " · end of turn" : ""}` },
+  ko: { late: "후", tag: (t: number, o?: string) => `T${t}${o === "late" ? " · 후공" : o === "first" ? " · 선공" : o === "eot" ? " · 턴 종료 시" : ""}` },
+};
+/** 棒の区間の中に出す「後から動いた」の小さな印。 */
+export function lateMark(lang: "ja" | "en" | "ko"): string { return (ORDER_TXT[lang] ?? ORDER_TXT.ja).late; }
+/** タップ詳細の見出し（例: T2・後攻）。ターン帯と揃える。 */
+export function turnTag(it: BarItem, lang: "ja" | "en" | "ko"): string { return (ORDER_TXT[lang] ?? ORDER_TXT.ja).tag(it.turn, it.order); }
+
+/** 判定の対戦の経過(race)から、HPの持ち主 owner の棒の区間を実際の発生順に並べる。
+ * 相手の技のダメージはその行動の時点、自分の行動による自傷(反動・いのちのたま・さめはだ等)はその行動の直後、
+ * ターン終了時のもの(天候・どく・たべのこし等)はそのターンの最後。番号は起こした行動の番号。
+ * atkTurns は相手(=棒を削る側)の毎ターン行。技の幅(最低〜最高乱数)を引くために使う。 */
+export function raceBarItems(race: NonNullable<Verdict["race"]>, owner: 0 | 1, hpOwner: number,
+                             atkTurns: SeqStep[]): BarItem[] {
+  const out: BarItem[] = [];
+  const pct = (x: number) => (x / Math.max(1, hpOwner)) * 100;
+  race.forEach((e, i) => {
+    const late = e.actor != null && race.slice(0, i).some((f) => f.turn === e.turn && f.actor != null && f.actor !== e.actor);
+    const lbl = `${e.turn}${late ? "'" : ""}`;
+    const order = e.actor == null ? "eot" : late ? "late" : "first";
+    for (const ev of e.events) {
+      if (ev.side !== owner || ev.amount === 0) continue;
+      if (ev.amount < 0) { out.push({ sub: "heal", dmg: 0, heal: pct(-ev.amount), lbl, turn: e.turn, order }); continue; }
+      if (ev.kind === "move" || ev.kind === "disguise") {
+        const row = atkTurns.find((r) => r.turn === e.turn && !r.flinch && !r.idle);
+        out.push({ sub: ev.kind, dmg: pct(ev.amount), heal: 0, lbl, turn: e.turn, move: e.move,
+                   pctLo: row?.pctLo ?? null, pctHi: row?.pctHi ?? null, order });
+      } else {
+        out.push({ sub: ev.kind, dmg: pct(ev.amount), heal: 0, lbl, turn: e.turn, order });
+      }
+    }
+  });
+  return out;
+}
+
+/** 毎ターン表示の番号。後から動いたターンは 1' のようにダッシュを付け、ひるんで動けなかったターンは番号を出さない。 */
+export function stepLabel(s: SeqStep, i: number): string {
+  if (s.flinch || s.idle) return "";
+  return `${s.turn ?? i + 1}${s.late ? "'" : ""}`;
+}
+
+/** 反動など(技以外のHP減少)の番号。それを起こした行動と同じ番号にする。 */
+export function extraLabel(x: { turn?: number; late?: boolean }, fallback: string): string {
+  return x.turn != null ? `${x.turn}${x.late ? "'" : ""}` : fallback;
+}
+
+/** 判定の対戦で `att` 側が技で相手を倒したか（反動等の自滅は倒した扱いにしない）。 */
+export function koByMove(race: Verdict["race"] | undefined, att: 0 | 1): boolean {
+  const def = 1 - att;
+  return !!race && race.some((e) => e.actor === att && e.hp[def] <= 0
+    && e.events.some((x) => x.side === def && x.kind === "move" && x.amount > 0));
 }
 
 export function judge1v1(me: ResolvedBuild, opp: ResolvedBuild): Verdict {
@@ -224,10 +345,18 @@ export function judgeVsBuilds(me: ResolvedBuild, opps: ResolvedBuild[]): Aggrega
  */
 export function judgeVsBuildsMulti(mes: ResolvedBuild[], opps: ResolvedBuild[]): AggregateVerdict {
   const verdicts: Verdict[] = [];
-  for (const me of mes) for (const opp of opps) verdicts.push(judge1v1(me, opp));
+  const weights: number[] = [];
+  // 型の重み＝種全体に占める型の割合。割合の無い型（型プールに無い種・工房で編集した型）は等しく扱う。
+  // 等しく平均すると、多数派の型で勝てても少数派の2型で負ければ不利になっていた（ボーマンダ）
+  const w = (b: ResolvedBuild, all: ResolvedBuild[]) => (all.every((x) => x.weight && x.weight > 0) ? b.weight! : 1);
+  for (const me of mes) for (const opp of opps) {
+    verdicts.push(judge1v1(me, opp));
+    weights.push(w(me, mes) * w(opp, opps));
+  }
   if (!verdicts.length) throw new Error("judgeVsBuildsMulti: 型が空です");
   const scores = verdicts.map(_scoreOfVerdict);
-  const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
+  const wsum = weights.reduce((a, b) => a + b, 0);
+  const mean = scores.reduce((a, sc, i) => a + sc * weights[i], 0) / wsum;
   return {
     sym: _scoreSym(mean),
     dep: _scoreSym(Math.min(...scores)) !== _scoreSym(Math.max(...scores)),
@@ -260,6 +389,8 @@ export interface MoveHitDetail {
    * %がどの前提の数字かを示す。無ければ null。
    */
   conds: string | null;
+  /** タイプ相性の倍率（0=無効）。変化技などは null。 */
+  eff?: number | null;
 }
 
 /** 手順の各手。%は技そのものの値(単発行と同じ基準)で、確定数は手順全体で1つなので持たない。 */
@@ -268,6 +399,21 @@ export interface SeqStep {
   pctLo: number | null;
   pctHi: number | null;
   conds: string | null;
+  /** そのターンに相手が回復した量(最大HP比%)。オボンのみ・たべのこし等。 */
+  healPct?: number | null;
+  /** ひるんで動けなかったターン。 */
+  flinch?: boolean;
+  /** 先に倒されて動けなかったが、そのターンに相手が反動等でHPを減らした行（行動は無い）。 */
+  idle?: boolean;
+  /** 技が特性で無効になった（ばけのかわ）。値は無効にした特性名。 */
+  blocked?: string | null;
+  /** 判定の対戦(中央乱数)で実際に減らしたHP(最大HP比%)。ダメージレースの棒の長さに使う。 */
+  pctDealt?: number | null;
+  /** 判定の対戦のターン番号と、そのターンに後から動いたか（表示は 1' のようにダッシュを付ける）。 */
+  turn?: number;
+  late?: boolean;
+  /** そのターンに相手が技以外で減らしたHP(最大HP比%)。相手自身の反動・ゴツゴツメット・天候等。 */
+  extra?: { kind: string; pct: number; turn?: number; late?: boolean }[];
 }
 
 /** 発数が生ダメージから素直に計算した値より増えているときの要因名。 */
@@ -290,24 +436,30 @@ function _reason(defender: ResolvedBuild, hp: number, dmg: number, hits: number)
 function _detail(m: EngineMove & { idx: number }, p: Pair, att: number,
                  defender: ResolvedBuild, hp: number): MoveHitDetail {
   const conds = _conds(m);
+  const eff = m.eff ?? null;
   const NONE: MoveHitDetail = { n: m.n, dmgLo: null, dmgHi: null, pctLo: null, pctHi: null,
-                                hits: null, prob: null, certain: true, reason: null, conds };
+                                hits: null, prob: null, certain: true, reason: null, conds, eff };
   if (m.dmg === null || m.dmgHi === undefined || m.dmgHi <= 0) return NONE;
   const dmgLo = m.dmgLo!, dmgHi = m.dmgHi;
   const lo = m.hitsLo!, hi = m.hitsHi!;
-  const base = { n: m.n, dmgLo, dmgHi, pctLo: (dmgLo / hp) * 100, pctHi: (dmgHi / hp) * 100, conds };
+  const base = { n: m.n, dmgLo, dmgHi, pctLo: (dmgLo / hp) * 100, pctHi: (dmgHi / hp) * 100, conds, eff };
 
   // 最低乱数でも最高乱数でも同じ発数なら乱数の影響を受けない。実用上限を超える場合も、
   // 保証値である最低乱数側の「確n」を出す（判定行と食い違わせないため）。
   if (lo === hi || hi > PROB_HITS_CAP || lo >= OUT_OF_RANGE) {
     return { ...base, hits: lo, prob: null, certain: true, reason: _reason(defender, hp, dmgLo, lo) };
   }
-  const prob = koProb(p.specA, p.specB, att, m.idx, hi) * 100;
-  const reason = _reason(defender, hp, dmgHi, hi);
-  // 発数 hi は最高乱数側の値なので確率は 100% 未満のはず。丸めで 100 に達した場合は
-  // 「乱数n発(100%)」という矛盾表示を避けて確定扱いにする。
-  if (prob >= 100) return { ...base, hits: hi, prob: null, certain: true, reason };
-  return { ...base, hits: hi, prob, certain: false, reason };
+  // 主表示は判定の対戦と同じ中央乱数で数えた発数。中央でも最低乱数と同じなら「確定」、
+  // そうでなければ「乱数n発(その発数以内に倒せる確率)」。
+  const mid = m.hitsMid ?? hi;
+  if (mid === lo) {
+    return { ...base, hits: lo, prob: null, certain: true, reason: _reason(defender, hp, dmgLo, lo) };
+  }
+  const prob = koProb(p.specA, p.specB, att, m.idx, mid) * 100;
+  const reason = _reason(defender, hp, (dmgLo + dmgHi) / 2, mid);
+  // 丸めで 100 に達した場合は「乱数n発(100%)」という矛盾表示を避けて確定扱いにする。
+  if (prob >= 100) return { ...base, hits: mid, prob: null, certain: true, reason };
+  return { ...base, hits: mid, prob, certain: false, reason };
 }
 
 /**
@@ -318,6 +470,39 @@ function _detail(m: EngineMove & { idx: number }, p: Pair, att: number,
 export function moveBreakdown(me: ResolvedBuild, opp: ResolvedBuild): MoveHitDetail[] {
   const p = _pair(me, opp);
   return p.a.moves.map((m) => _detail(m, p, 0, opp, p.b.hp));
+}
+
+/** 技ごとのダメージ幅(確定数は持たない)。仮想敵カードの技チップ用。 */
+export interface MoveDamage {
+  n: string;
+  dmgLo: number; dmgHi: number;
+  pctLo: number; pctHi: number;
+  /** 計算の前提(天候・場・連続技の回数の仮定など)。無ければ null。 */
+  conds: string | null;
+  /** タイプ相性の倍率（0=無効）。 */
+  eff?: number | null;
+}
+
+/**
+ * 仮想敵カード用: 自分の各技→相手、相手の各技→自分のダメージ幅。同じ場の前提・同じ対面計算から取る。
+ * ターンごとの変化や技の使い分けは確定数では表せないので、ここはダメージ幅だけを返し、
+ * 勝敗に関わる数え方は1v1内訳の表(pairHitDetails)に任せる。変化技・無効(ダメージ0)は含めない。
+ */
+export function moveDamages(me: ResolvedBuild, opp: ResolvedBuild):
+    { my: MoveDamage[]; opp: MoveDamage[]; myHasMoves: boolean; oppHasMoves: boolean } {
+  const p = _pair(me, opp);
+  const conv = (moves: Evaluated["moves"], hpDef: number): MoveDamage[] => moves
+    .filter((m) => m.dmg !== null && m.dmgHi != null && m.dmgHi > 0)
+    .map((m) => ({
+      n: m.n, dmgLo: m.dmgLo!, dmgHi: m.dmgHi!,
+      pctLo: (m.dmgLo! / hpDef) * 100, pctHi: (m.dmgHi! / hpDef) * 100,
+      conds: _conds(m),
+      eff: m.eff ?? null,
+    }));
+  return {
+    my: conv(p.a.moves, p.b.hp), opp: conv(p.b.moves, p.a.hp),
+    myHasMoves: p.a.moves.length > 0, oppHasMoves: p.b.moves.length > 0,
+  };
 }
 
 /** 手順の各手を表示用にする。%は同名の技の単発計算をそのまま使う
@@ -342,12 +527,18 @@ function _steps(e: Evaluated, cmpHits: number | null, hpDef: number): SeqStep[] 
   });
 }
 
-/** 毎ターンの与ダメージ。2ターン以上かかる対面だけ返す（1ターンで終わる対面は単発表示で足りる）。
+/** 毎ターンの与ダメージ（判定の対戦の経過どおり。倒れた後の行動は無い）。表の毎ターン表示は2件以上のときだけ使う。
  * %は防御側の最大HPに対する割合。防御上昇・積みなど、ターンごとに変わる値がそのまま出る。 */
 function _turns(e: Evaluated, hpDef: number): SeqStep[] {
-  if (!e.turns || e.turns.length < 2) return [];
+  if (!e.turns) return [];
   return e.turns.map((t) => ({
     n: t.n, pctLo: (t.lo / hpDef) * 100, pctHi: (t.hi / hpDef) * 100, conds: null,
+    healPct: t.heal ? (t.heal / hpDef) * 100 : null,
+    flinch: !!t.flinch, idle: !!t.idle,
+    pctDealt: t.dealt != null ? (t.dealt / hpDef) * 100 : null,
+    blocked: t.blocked ?? null,
+    turn: t.turn, late: !!t.late,
+    extra: (t.extra ?? []).map((x) => ({ kind: x.kind, pct: (x.amount / hpDef) * 100, turn: x.turn, late: x.late })),
   }));
 }
 
@@ -359,7 +550,11 @@ export function pairHitDetails(me: ResolvedBuild, opp: ResolvedBuild):
     { my: MoveHitDetail | null; opp: MoveHitDetail | null;
       mySteps: SeqStep[]; oppSteps: SeqStep[]; myTurns: SeqStep[]; oppTurns: SeqStep[] } {
   const p = _pair(me, opp);
-  const bm = _best(p.a), bo = _best(p.b);
+  // 判定の説明で「撃つ技」として出すのは判定の対戦で選んだ技（myMove/oppMove）。一覧の best は元のタイプで計算した最大打点で、
+  // へんげんじざい等で判定側の技と違うことがある。
+  const pick = (e: Evaluated, n: string | null | undefined) =>
+    (n ? e.moves.find((m) => m.n === n && m.dmg !== null && m.hitsLo !== undefined) : undefined) ?? _best(e);
+  const bm = pick(p.a, p.verdict?.myMove), bo = pick(p.b, p.verdict?.oppMove);
   const my = bm ? _detail(bm, p, 0, opp, p.b.hp) : null;
   const oppD = bo ? _detail(bo, p, 1, me, p.a.hp) : null;
   return {

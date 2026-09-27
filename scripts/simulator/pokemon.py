@@ -371,6 +371,11 @@ def build_from_template(tpl: PokemonTemplate, loader: DataLoader,
     mega_data = tpl.mega_data.get(normalize_mega_stone(item)) if item else None
     if mega_data is None and item:
         mega_data = tpl.mega_data.get(item)
+    # メガ石を持つ型は、メガ前の姿を元の種族の特性で入場させる（メガ後は do_mega_evolve がメガ特性に切り替える）
+    if mega_data is not None and hasattr(loader, "pre_mega_ability"):
+        _pm = loader.pre_mega_ability(tpl.name, ability)
+        if _pm:
+            ability = _pm
 
     poke = BattlePokemon(
         name=tpl.name, dex=tpl.dex,
@@ -410,12 +415,12 @@ def parse_pokemon_spec(spec_str: str) -> dict:
     # 持ち物を @ で分離
     item = None
     if "@" in spec_str:
-        spec_str, item_part = spec_str.split("@", 1)
+        # 種名に ":" を含むもの（ケンタロス:炎）があるので、@ があるときは @ より前をそのまま種名にする
+        name, item_part = spec_str.split("@", 1)
         item = item_part.split(":")[0].strip() or None
-        rest = item_part[len(item or ""):]
-        spec_str = spec_str + rest
-
-    parts = spec_str.split(":")
+        parts = [name] + item_part.split(":")[1:]
+    else:
+        parts = spec_str.split(":")
     name = parts[0].strip()
 
     nature = None

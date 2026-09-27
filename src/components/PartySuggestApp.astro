@@ -1220,7 +1220,7 @@ const I18N = I18N_ALL[lang];
                    myHits: d.judge[i].my_hits != null ? d.judge[i].my_hits : d.me[i].n_lo,
                    oppHits: d.judge[i].opp_hits != null ? d.judge[i].opp_hits : d.op[i].n_lo,
                    myMove: d.me[i].move, oppMove: d.op[i].move, stub: false,
-                   draw: !!d.judge[i].draw, stall: d.judge[i].stall || undefined },
+                   draw: !!d.judge[i].draw, stall: d.judge[i].stall || undefined, plans: d.judge[i].plans || undefined },
         stallSeq: (d.judge[i].stall && d.judge[i].stall.seq || []).map((n) => tMove(n)),
         mySteps: ((d.seq && d.seq[i] && d.seq[i].my) || []).map((x) => ({ ...x, n: tMove(x.n) })),
         oppSteps: ((d.seq && d.seq[i] && d.seq[i].opp) || []).map((x) => ({ ...x, n: tMove(x.n) })),

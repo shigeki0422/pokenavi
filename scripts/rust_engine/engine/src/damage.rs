@@ -49,6 +49,20 @@ pub struct Field {
     /// ふいうちのように相手の行動に依存する技も通る扱いにする。
     /// 対戦本体は常に false（Default）。
     pub assume_opp_attacks: bool,
+    /// 分析専用。素早さが同じときの先後（Some(true)=side0が先）。1v1判定は両方の順で回して平均する。
+    /// 対戦本体は常に None（Default）で、従来どおり乱数で決まる。
+    pub speed_tie_p1_first: Option<bool>,
+    /// 分析専用。最後の1体が倒れたターンも、生き残った側のターン終了時処理（毒・天候・たべのこし等）まで進める。
+    /// 1v1判定は6体戦の中の1対面なので、実機どおり倒れた後もそのターンの終了時処理が行われる前提で見る。
+    pub eot_on_last_faint: bool,
+    /// 分析専用。相手の見え方（opp_view の残りHP割合・被ダメージ記録・持ち物の消失）を更新しない。
+    /// 行動を外から与える1v1判定では AI も信念も使わないので結果は変わらず、round3 の文字列変換が重い。
+    pub no_view: bool,
+    /// 分析専用。開始局面の入場効果・メガシンカの順が同速で決まった（先後で天候等が変わりうる）。両順を回す対象にする。
+    pub start_tie: bool,
+    /// 分析専用。仮定の続き（相手の最大HPを水増しした局面）で、この側は与ダメージに比例する反動を受けない
+    /// （水増しした相手に与えたダメージは実際より大きく、反動も膨らんで自滅していた）。
+    pub cf_guard: [bool; 2],
 }
 
 #[inline]
@@ -727,6 +741,36 @@ fn apply_defender_ability(pack: &Pack, dmg: i64, defender: &Poke, mv: &DMove) ->
 
 // ── 本体 ────────────────────────────────────────────────────────────
 
+/// タイプ相性の倍率（特性・持ち物による無効は含まない）。calc_damage と1v1表示で共有する。
+pub fn type_effectiveness(pack: &Pack, attacker: &Poke, defender: &Poke, mv: &DMove, eff_type: Ty) -> f64 {
+    let s = &pack.sy;
+    let mut effectiveness = pack.eff(eff_type, defender.type1, defender.type2);
+    if mv.name == s.mv.フライングプレス && effectiveness != 0.0 {
+        effectiveness *= pack.eff(pack.tc.ひこう, defender.type1, defender.type2);
+    }
+    if eff_type == pack.tc.じめん
+        && defender.grounded
+        && defender.has_type(pack.tc.ひこう)
+    {
+        effectiveness = 1.0;
+        let flying = pack.tc.ひこう;
+        for t in [Some(defender.type1), defender.type2] {
+            if let Some(t) = t {
+                if t != flying {
+                    effectiveness *= pack.eff(eff_type, t, None);
+                }
+            }
+        }
+    }
+    if effectiveness == 0.0 && scrappy_override(pack, attacker, eff_type, defender) {
+        effectiveness = 1.0;
+    }
+    if mv.name == s.mv.フリーズドライ && defender.has_type(pack.tc.みず) {
+        effectiveness = f64::max(effectiveness, 2.0);
+    }
+    effectiveness
+}
+
 pub fn calc_damage(
     pack: &Pack,
     attacker: &mut Poke,
@@ -962,30 +1006,7 @@ pub fn calc_damage(
         dmg = fl(dmg as f64 * 1.33);
     }
 
-    let mut effectiveness = pack.eff(eff_type, defender.type1, defender.type2);
-    if mv.name == s.mv.フライングプレス && effectiveness != 0.0 {
-        effectiveness *= pack.eff(pack.tc.ひこう, defender.type1, defender.type2);
-    }
-    if eff_type == pack.tc.じめん
-        && defender.grounded
-        && defender.has_type(pack.tc.ひこう)
-    {
-        effectiveness = 1.0;
-        let flying = pack.tc.ひこう;
-        for t in [Some(defender.type1), defender.type2] {
-            if let Some(t) = t {
-                if t != flying {
-                    effectiveness *= pack.eff(eff_type, t, None);
-                }
-            }
-        }
-    }
-    if effectiveness == 0.0 && scrappy_override(pack, attacker, eff_type, defender) {
-        effectiveness = 1.0;
-    }
-    if mv.name == s.mv.フリーズドライ && defender.has_type(pack.tc.みず) {
-        effectiveness = f64::max(effectiveness, 2.0);
-    }
+    let effectiveness = type_effectiveness(pack, attacker, defender, mv, eff_type);
     dmg = fl(dmg as f64 * effectiveness);
     if dmg == 0 {
         return 0;

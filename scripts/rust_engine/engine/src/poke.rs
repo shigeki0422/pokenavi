@@ -137,7 +137,8 @@ pub struct Poke {
     pub flinched: bool,
     pub is_alive: bool,
     pub mega_evolved: bool,
-    pub mega: Option<crate::pack::MegaStats>,
+    /// 複製（探索・分析の1手ごとの局面コピー）で文字列を複製しないよう共有する。
+    pub mega: Option<std::sync::Arc<crate::pack::MegaStats>>,
     pub hero_forme: bool,
     pub protect_consecutive: i64,
     pub enduring: bool,
@@ -642,6 +643,17 @@ pub fn build_from_template_rand(
     let mega = item.as_ref().and_then(|it| {
         tpl.mega_get(&normalize_mega_stone(it)).or_else(|| tpl.mega_get(it)).cloned()
     });
+    // メガ石を持つ型は、メガ前の姿を元の種族の特性で入場させる（battle.py build_from_template と同じ規則）
+    let mut ability = ability;
+    if mega.is_some() {
+        if let Some((pick, legal, megas)) = pack.pre_mega.get(&tpl.name) {
+            let keep = !ability.is_empty()
+                && if legal.is_empty() { !megas.contains(&ability) } else { legal.contains(&ability) };
+            if !keep {
+                ability = pick.clone();
+            }
+        }
+    }
 
     if ability == "はりきり" {
         attack = ((attack as f64) * 1.5).floor() as i64;
@@ -858,6 +870,21 @@ pub fn mega_evolve_poke(pack: &Pack, p: &mut Poke) {
     p.mega_evolved = true;
 }
 
+/// spec が組み立てられないとき、その理由（組み立て前に呼ぶ。build_poke は不正な spec でパニックするため、
+/// 外部入力を受ける wasm・提案API はこれで先に弾く）。
+pub fn spec_error(pack: &Pack, spec_str: &str, season: &str) -> Option<String> {
+    let parts: Vec<&str> = spec_str.trim().split(':').collect();
+    if parts.len() >= 4 && !parts[3].trim().is_empty()
+        && parts[3].trim().split('/').any(|x| x.parse::<i64>().is_err()) {
+        return Some(format!("努力値を読めません: {}", spec_str));
+    }
+    let spec = parse_pokemon_spec(spec_str);
+    if get_pokemon_template(pack, &spec.name, season).is_none() {
+        return Some(format!("ポケモン '{}' が見つかりません (season={})", spec.name, season));
+    }
+    None
+}
+
 /// build_from_spec 相当: spec 文字列から実戦用 Poke を作る（randomize=False 経路）
 pub fn build_poke(pack: &mut Pack, spec_str: &str, season: &str) -> Poke {
     build_poke_rand(pack, spec_str, season, &mut None)
@@ -932,7 +959,7 @@ pub fn to_poke(pack: &Pack, b: &BuiltPokemon) -> Poke {
         pp: b.pp.clone(),
         moves,
         is_alive: true,
-        mega: b.mega.clone(),
+        mega: b.mega.clone().map(std::sync::Arc::new),
         ..Default::default()
     }
 }

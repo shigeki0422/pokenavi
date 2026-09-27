@@ -13,7 +13,7 @@ from .damage import calc_damage, check_hit, _effective_move_type, is_contact_mov
 from .abilities import (
     entry_ability, on_after_hit, on_ko, on_switch_out,
     end_of_turn_ability, on_stat_lowered, MOLD_BREAKER_ABILITIES,
-    _rough_skin_recoil, on_defender_ko,
+    _rough_skin_recoil, on_defender_ko, scrappy_override,
 )
 from .items import (
     apply_sturdy, try_cure_berry, try_white_herb,
@@ -1091,17 +1091,33 @@ def _execute_move(
     # フリーズドライ：みずタイプに2倍（通常こおりはみずに0.5倍）
     if move.name_jp == "フリーズドライ" and "みず" in (defender.type1, defender.type2):
         eff = max(eff, 2.0)  # みず弱点を優先
-    if eff == 0:
+    # きもったま: ノーマル・かくとう技はゴーストにも当たる（ダメージ計算側はもとから等倍扱い。ここで弾いて当たらなかった）
+    if eff == 0 and not scrappy_override(attacker, _eff_type, defender):
         logs.append(f"{move.name_jp} は {defender.name} に効かない…")
         return logs
 
-    # ばけのかわ（ミミッキュ）：初回ダメージ無効（ピボット技は交代フラグだけ立てて続行）
+    # ばけのかわ（ミミッキュ）：1発目のダメージだけ無効（連続技の2発目以降は通る。ねこだましのひるみは防げない＝実機どおり）
+    _disguise_ate_first = False
+    _disguise_just_broken = False
     if defender.ability == "ばけのかわ" and not getattr(defender, '_disguise_broken', False):
+        _disguise_just_broken = True
         defender._disguise_broken = True  # type: ignore
         dmg_penalty = max(1, math.floor(defender.max_hp / 8))
         defender.take_damage(dmg_penalty)
         logs.append(f"{defender.name} の ばけのかわ が破れた！({dmg_penalty})")
         logs.extend(attacker_side.opp_view.on_ability(defender.name, "ばけのかわ"))
+        if move.name_jp == "ねこだまし" and defender.is_alive and defender.ability not in ("せいしんりょく", "どんかん"):
+            defender.flinched = True
+            logs.append(f"{defender.name} はひるんだ！")
+        _disguise_ate_first = _is_multi_hit(move) and defender.is_alive
+    if _disguise_just_broken and not _disguise_ate_first:
+        # いのちのたま: ばけのかわに当たってダメージが0でも反動を受ける（実機どおり）
+        if attacker.item == "いのちのたま" and move.category != "status" and attacker.is_alive:
+            recoil = max(1, math.floor(attacker.max_hp / 10))
+            attacker.take_damage(recoil)
+            logs.extend(defender_side.opp_view.on_item(attacker.name, "いのちのたま", "反動ダメから判明")
+                        if defender_side is not None else [])
+            _hp_berry_now(attacker, defender, logs, defender_side.opp_view if defender_side is not None else None)
         PIVOT_MOVES = {"ボルトチェンジ", "とんぼがえり", "クイックターン"}
         if move.name_jp in PIVOT_MOVES and attacker.is_alive:
             attacker._pivot_out = True  # type: ignore
@@ -1165,10 +1181,14 @@ def _execute_move(
             screen_mult = 0.5
 
     total_dmg = 0
+    # 実際に減らしたHP（残りHPで頭打ち）。反動・吸収・かいがらのすずの基準（実機は与えたダメージ＝実際の減少量）。
+    dealt_hp = 0
     rough_skin_logs: List[str] = []  # さめはだ/てつのとげはダメージログの後にまとめて出力
     for _hit_i in range(hits):
         if not defender.is_alive:
             break
+        if _disguise_ate_first and _hit_i == 0:
+            continue
         attacker._multi_hit_index = _hit_i  # type: ignore
         dmg = calc_damage(attacker, defender, move, field, critical)
         if screen_mult < 1.0:
@@ -1187,6 +1207,7 @@ def _execute_move(
                 defender._substitute_hp = sub_hp - dmg  # type: ignore
                 logs.append(f"{attacker.name} の {move.name_jp} → みがわり に {dmg} ダメ")
             total_dmg += dmg
+            dealt_hp += min(dmg, sub_hp)
             continue
 
         # タスキ
@@ -1209,8 +1230,10 @@ def _execute_move(
             logs.append(f"{defender.name} の きあいのハチマキ で耐えた！")
             logs.extend(attacker_side.opp_view.on_item(defender.name, "きあいのハチマキ", "ハチマキ発動"))
 
+        _hp0 = defender.hp
         defender.take_damage(dmg)
         total_dmg += dmg
+        dealt_hp += _hp0 - defender.hp
         if dmg > 0:
             defender._took_damage_this_turn = True  # type: ignore
 
@@ -1232,12 +1255,6 @@ def _execute_move(
             attacker.item = None
             on_item_consumed(attacker, logs)
             logs.append(f"{attacker.name} の ノーマルジュエル が消費された！")
-
-        # いのちのたま反動
-        if attacker.item == "いのちのたま" and move.category != "status":
-            recoil = max(1, math.floor(attacker.max_hp / 10))
-            attacker.take_damage(recoil)
-            logs.extend(defender_side.opp_view.on_item(attacker.name, "いのちのたま", "反動ダメから判明"))
 
         # レッドカード: ダメージを与えてきた相手を追い出す（消費）。持ち主は防御側。
         # マジックミラーと同じ attacker._force_switch を使う＝処理タイミングも既存と揃える。
@@ -1278,9 +1295,18 @@ def _execute_move(
             logs.append(f"{defender.name} の ふうせん が割れた！")
             logs.extend(attacker_side.opp_view.on_item(defender.name, "ふうせん", "割れて判明"))
 
+        # いのちのたま反動：技1回につき1回（連続技は最後に当てた発の後）。レッドカード等の防御側の持ち物の後（実機・battle.rs と同じ順）
+        if attacker.item == "いのちのたま" and move.category != "status" \
+                and (_hit_i == hits - 1 or not defender.is_alive):
+            recoil = max(1, math.floor(attacker.max_hp / 10))
+            attacker.take_damage(recoil)
+            logs.extend(defender_side.opp_view.on_item(attacker.name, "いのちのたま", "反動ダメから判明"))
+            _hp_berry_now(attacker, defender, logs, defender_side.opp_view if defender_side is not None else None)
+
         # さめはだ/てつのとげ: バッファに収集（ダメージログの後に出力）
         _rough_skin_recoil(attacker, defender, move, rough_skin_logs)
         rough_skin_logs.extend(_disclose_contact_reaction(attacker_side, attacker, defender, move))
+        _hp_berry_now(attacker, defender, rough_skin_logs, defender_side.opp_view if defender_side is not None else None)
 
         # くちばしキャノン：弾技を使う前(=このターンまだ行動前)に接触技で被弾→攻撃側やけど
         if getattr(defender, '_beak_primed', False) and is_contact_move(move) and attacker.is_alive:
@@ -1345,6 +1371,10 @@ def _execute_move(
             on_defender_ko(attacker, defender, dmg, logs)
             on_ko(attacker, logs)
 
+        # 連続技の途中でHPが半分以下になったら、次のヒットの前にオボンのみ等を食べる（最後のヒットの後は従来の位置）
+        if _hit_i < hits - 1 and defender.is_alive:
+            _hp_berry_now(defender, attacker, logs, attacker_side.opp_view if attacker_side is not None else None)
+
     if dmg_out is not None:
         dmg_out.append(total_dmg)
     if hits > 1:
@@ -1376,8 +1406,8 @@ def _execute_move(
         logs.append(f"{attacker.name} は みちづれ に巻き込まれた！")
 
     # かいがらのすず（与えたダメージの1/8回復）
-    if attacker.item == "かいがらのすず" and total_dmg > 0 and attacker.is_alive:
-        heal = max(1, math.floor(total_dmg / 8))
+    if attacker.item == "かいがらのすず" and dealt_hp > 0 and attacker.is_alive:
+        heal = max(1, math.floor(dealt_hp / 8))
         attacker.hp = min(attacker.max_hp, attacker.hp + heal)
         logs.append(f"{attacker.name} の かいがらのすず で {heal}HP 回復した！")
 
@@ -1388,13 +1418,14 @@ def _execute_move(
         "パラボラチャージ": 0.5, "むねんのつるぎ": 0.5, "ウッドホーン": 0.5,
         "シャカシャカほう": 0.5,
     }
-    if move.name_jp in DRAIN_RATES and total_dmg > 0 and attacker.is_alive \
+    if move.name_jp in DRAIN_RATES and dealt_hp > 0 and attacker.is_alive \
             and defender.ability == "ヘドロえき":
-        dm = max(1, math.floor(total_dmg * DRAIN_RATES[move.name_jp]))
+        dm = max(1, math.floor(dealt_hp * DRAIN_RATES[move.name_jp]))
         attacker.take_damage(dm)
         logs.append(f"{defender.name} の ヘドロえき！ {attacker.name} は {dm} ダメージを受けた！")
-    elif move.name_jp in DRAIN_RATES and total_dmg > 0 and attacker.is_alive:
-        heal = max(1, math.floor(total_dmg * DRAIN_RATES[move.name_jp]))
+        _hp_berry_now(attacker, defender, logs, defender_side.opp_view if defender_side is not None else None)
+    elif move.name_jp in DRAIN_RATES and dealt_hp > 0 and attacker.is_alive:
+        heal = max(1, math.floor(dealt_hp * DRAIN_RATES[move.name_jp]))
         if attacker.item == "おおきなねっこ":
             heal = math.floor(heal * 1.3)
         attacker.hp = min(attacker.max_hp, attacker.hp + heal)
@@ -1588,6 +1619,9 @@ def _execute_move(
                 attacker.name, defender, move,
                 total_dmg, field, subject=_pre_att, other_state=_pre_def)
 
+    # オボンのみ/オレンのみ：被弾でHPが半分以下になった直後に発動（与ダメージの観測の後＝見える減り方は回復前）
+    _hp_berry_now(defender, attacker, logs, attacker_side.opp_view if attacker_side is not None else None)
+
     # ひけん・ちえなみ / がんせきアックス：倒しても設置（ヒット時100%）
     if total_dmg > 0:
         if move.name_jp == "ひけん・ちえなみ":
@@ -1717,8 +1751,9 @@ def _execute_move(
     # 追加効果（自己能力変化はKO時も発動、defender効果は関数内でガード済み）
     _apply_secondary(attacker, defender, move, total_dmg, logs, field, defender_side)
 
-    # 反動ダメ（すてみ系）
-    _apply_recoil(attacker, defender, move, total_dmg, logs)
+    # 反動ダメ（すてみ系）：実際に減らしたHPが基準
+    _apply_recoil(attacker, defender, move, dealt_hp, logs)
+    _hp_berry_now(attacker, defender, logs, defender_side.opp_view if defender_side is not None else None)
 
     # おやこあい（単発技のみ2回目を25%で追撃）：本体ヒットを完全に処理・記録した後に追撃を適用する
     if attacker.ability == "おやこあい" and hits == 1 and total_dmg > 0 and defender.is_alive:
@@ -1733,15 +1768,19 @@ def _execute_move(
         if defender.item == "きあいのハチマキ" and pb_dmg >= defender.hp and random.random() < 0.10:
             pb_dmg = defender.hp - 1
             logs.append(f"{defender.name} の きあいのハチマキ で耐えた！")
+        _pb0 = defender.hp
         defender.take_damage(pb_dmg)
+        pb_dealt = _pb0 - defender.hp
         logs.append(f"おやこあい 追撃！ {pb_dmg}ダメ")
+        _hp_berry_now(defender, attacker, logs, attacker_side.opp_view if attacker_side is not None else None)
         pb_rough: List[str] = []
         if defender.is_alive:
             on_after_hit(attacker, defender, move, logs)
             _apply_secondary(attacker, defender, move, pb_dmg, logs, field, defender_side)
         _rough_skin_recoil(attacker, defender, move, pb_rough)
         logs.extend(pb_rough)
-        _apply_recoil(attacker, defender, move, pb_dmg, logs)
+        _apply_recoil(attacker, defender, move, pb_dealt, logs)
+        _hp_berry_now(attacker, defender, logs, defender_side.opp_view if defender_side is not None else None)
         if not defender.is_alive:
             on_defender_ko(attacker, defender, pb_dmg, logs)
             on_ko(attacker, logs)
@@ -2786,6 +2825,12 @@ _MULTI_HIT_FIXED = None
 _ASSUME_OPP_ATTACKS = False
 
 
+def _is_multi_hit(move: MoveData) -> bool:
+    """連続技か（_calc_hits が2回以上を返しうる技）。乱数を使わない判定（battle.rs is_multi_hit と同じ）。"""
+    n = move.name_jp
+    return n in MULTI_HIT_2 or n in MULTI_HIT_3 or n in MULTI_HIT_RANDOM_25 or n == "ネズミざん"
+
+
 def _calc_hits(move: MoveData, attacker=None) -> int:
     n = move.name_jp
     skill_link = attacker is not None and getattr(attacker, 'ability', '') == "スキルリンク"
@@ -3238,6 +3283,63 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
     attacker.last_used_move = n
 
 
+def _speed_for_order(p, field) -> int:
+    """入場時効果・メガ進化の順を決める素早さ（ai._effective_speed と同じ式。Rust ai::effective_speed と同一）。"""
+    from .ai import _effective_speed
+    return _effective_speed(p, field)
+
+
+def _entry_order(side1, side2, field):
+    """対戦開始時の入場効果の順: 速い側が先（遅い側の天候・フィールドが残る）。同速は side1 が先。"""
+    if _speed_for_order(side2.active, field) > _speed_for_order(side1.active, field):
+        return [(side2, side1, 1), (side1, side2, 0)]
+    return [(side1, side2, 0), (side2, side1, 1)]
+
+
+def _entry_and_mega(p0, p1, field, logs=None, party0=None, party1=None):
+    """1v1分析用: メガシンカ前の姿で入場効果（速い側から）→ 1ターン目の行動前のメガシンカ（速い側から。同速は p0 が先）と
+    メガ後の特性の入場効果（ひでり等）。対戦本体（入場→ターン開始時のメガ進化）と同じ順。Rust analysis::setup_plain と同じ。"""
+    lg = logs if logs is not None else []
+    _entry_effects_both(p0, p1, field, lg, party0, party1)
+    order = [(p0, p1), (p1, p0)]
+    if _speed_for_order(p1, field) > _speed_for_order(p0, field):
+        order.reverse()
+    for p, o in order:
+        if getattr(p, "mega_data", None) is not None and not p.mega_evolved:
+            p.do_mega_evolve()
+            lg.append(f"{p.name} はメガ進化した！")
+            lg.extend(entry_ability(p, o, field, weather_duration=MAX_TURNS))
+
+
+def _entry_effects_both(p0, p1, field, logs=None, party0=None, party1=None):
+    """2体が同時に場に出たときの入場効果（速い側から。同速は p0 が先）。分析・手動対戦用。"""
+    if _speed_for_order(p1, field) > _speed_for_order(p0, field):
+        _entry_effects(p1, 1, field, p0, logs if logs is not None else [], party1)
+        _entry_effects(p0, 0, field, p1, logs if logs is not None else [], party0)
+    else:
+        _entry_effects(p0, 0, field, p1, logs if logs is not None else [], party0)
+        _entry_effects(p1, 1, field, p0, logs if logs is not None else [], party1)
+
+
+def _hp_berry_now(p, opp, logs, opp_view=None):
+    """オボンのみ/オレンのみ：HPが半分以下になった直後に発動する（実機どおり。ターン終了まで待たない）。
+    被弾直後・反動/いのちのたま/ゴツゴツメット等で減った直後に呼ぶ。ターン終了時の判定も残す。"""
+    if not p.is_alive or p.item not in ("オボンのみ", "オレンのみ") or p.hp > p.max_hp // 2:
+        return
+    if opp is not None and opp.is_alive and opp.ability == "きんちょうかん":
+        return
+    berry = p.item
+    heal = p.max_hp // 4 if berry == "オボンのみ" else 10
+    p.hp = min(p.max_hp, p.hp + heal)
+    p._last_berry = berry  # type: ignore
+    p.item = None
+    p.ate_berry = True
+    on_item_consumed(p, [])
+    logs.append(f"{p.name} の {berry} が発動！ HPが {heal} 回復した！")
+    if opp_view is not None:
+        logs.extend(opp_view.on_item(p.name, berry, "HP回復から判明"))
+
+
 def _apply_recoil(attacker, defender, move, dmg, logs):
     # いしあたま/ロックヘッド: 反動を受けない（わるあがき除く）
     if attacker.ability in ("いしあたま", "ロックヘッド") and move.name_jp != "わるあがき":
@@ -3353,9 +3455,10 @@ class Battle:
         self.logs.extend(self.side1.opp_view.on_enter(self.side2.active))
         self.logs.extend(self.side2.opp_view.on_enter(self.side1.active))
 
-        # 入場時効果
-        _entry_effects(self.side1.active, 0, self.field, self.side2.active, self.logs, self.side1.party)
-        _entry_effects(self.side2.active, 1, self.field, self.side1.active, self.logs, self.side2.party)
+        # 入場時効果：素早さの速い側から発動する（遅い側の天候・フィールドが後から上書きする＝実機どおり）。
+        # 同速は side1 が先（乱数を消費しない。Rust battle.rs start と同一）。
+        for _sd, _os, _ix in _entry_order(self.side1, self.side2, self.field):
+            _entry_effects(_sd.active, _ix, self.field, _os.active, self.logs, _sd.party)
 
         return self._turn_loop(ai1, ai2, verbose, on_turn=on_turn)
 
@@ -3405,8 +3508,11 @@ class Battle:
             # 行動を選んだ本体を記録（先攻で倒され交代した場合、後攻の行動権を失わせるため）
             chooser1, chooser2 = self.side1.active, self.side2.active
 
-            # メガ進化（行動前）
-            for _side, _action in [(self.side1, action1), (self.side2, action2)]:
+            # メガ進化（行動前）：素早さの速い側から（遅い側の ひでり 等が後から上書きする）。同速は side1 が先
+            _mega_pairs = [(self.side1, action1), (self.side2, action2)]
+            if _speed_for_order(self.side2.active, self.field) > _speed_for_order(self.side1.active, self.field):
+                _mega_pairs.reverse()
+            for _side, _action in _mega_pairs:
                 poke = _side.active
                 if _action.do_mega and not poke.mega_evolved and not _side.mega_used:
                     poke.do_mega_evolve()
@@ -3495,6 +3601,7 @@ class Battle:
                 prev_name = my_side.active.name
                 self.logs.append(f"{prev_name} は引っ込んだ！")
                 my_side.switch_to(idx, self.logs, self.field)
+                opp_side.active.bound_count = 0   # 拘束は拘束した側が場を離れると解ける
                 self.logs.append(f"{my_side.active.name} が出てきた！")
                 _entry_effects(my_side.active, my_side.field_idx,
                                 self.field, opp_side.active, self.logs, my_side.party)
@@ -3544,6 +3651,7 @@ class Battle:
                     next_idx = _choose_pivot_target(my_side, opp_side.active, _is_baton)
                     if next_idx is not None:
                         my_side.switch_to(next_idx, self.logs, self.field)
+                        opp_side.active.bound_count = 0   # 拘束は拘束した側が場を離れると解ける
                         self.logs.append(f"{my_side.active.name} が出てきた！")
                         _entry_effects(my_side.active,
                                        my_side.field_idx,
@@ -3560,6 +3668,7 @@ class Battle:
                     next_idx = _choose_pivot_target(opp_side, my_side.active, False)
                     if next_idx is not None:
                         opp_side.switch_to(next_idx, self.logs, self.field)
+                        my_side.active.bound_count = 0   # 拘束は拘束した側が場を離れると解ける
                         self.logs.append(f"{opp_side.active.name} が出てきた！")
                         _entry_effects(opp_side.active,
                                        opp_side.field_idx,
@@ -3577,6 +3686,7 @@ class Battle:
                     new_idx = random.choice(benched)
                     self.logs.append(f"{opp_side.active.name} は強制交代させられた！")
                     opp_side.switch_to(new_idx, self.logs, self.field)
+                    my_side.active.bound_count = 0   # 拘束は拘束した側が場を離れると解ける
                     _entry_effects(opp_side.active,
                                    opp_side.field_idx,
                                    self.field, my_side.active, self.logs, opp_side.party)
@@ -3609,6 +3719,7 @@ class Battle:
             if next_idx is None:
                 break
             fainted_side.switch_to(next_idx, self.logs, self.field)
+            opp_side.active.bound_count = 0   # 拘束は拘束した側が場を離れると解ける
             self.logs.append(f"{fainted_side.active.name} が登場した！")
             # 相打ちで相手側がマニュアル交代待ち中なら登場時効果を保留
             opp_awaiting = (
@@ -3668,8 +3779,11 @@ class Battle:
                 self.field.weather = None
                 self.logs.append("天候がおわった！")
 
-        # 天候ダメ・アイテム・状態異常
-        for side, side_idx in [(self.side1, 0), (self.side2, 1)]:
+        # 天候ダメ・アイテム・状態異常（素早さの速い側から。同速は side1 が先）
+        _eot_order = [(self.side1, 0), (self.side2, 1)]
+        if _speed_for_order(self.side2.active, self.field) > _speed_for_order(self.side1.active, self.field):
+            _eot_order.reverse()
+        for side, side_idx in _eot_order:
             p = side.active
             if not p.is_alive:
                 continue
@@ -3720,6 +3834,16 @@ class Battle:
                 if p.hp > old_hp:
                     src = "ねをはる" if getattr(p, 'rooted', False) else "アクアリング"
                     self.logs.append(f"{p.name} は {src} で HPが {p.hp - old_hp} 回復した！")
+
+            # グラスフィールド：地面にいるポケモンはターン終了時に最大HPの1/16回復
+            if self.field.grassy_terrain and p.is_alive and p.hp < p.max_hp:
+                _grounded = not ("ひこう" in (p.type1, p.type2) or p.ability == "ふゆう"
+                                 or getattr(p, "magnet_rise", False) or p.item == "ふうせん") \
+                    or getattr(p, "grounded", False) or getattr(self.field, "gravity", 0) > 0
+                if _grounded:
+                    old_hp = p.hp
+                    p.hp = min(p.max_hp, p.hp + max(1, p.max_hp // 16))
+                    self.logs.append(f"{p.name} は グラスフィールド で HPが {p.hp - old_hp} 回復した！")
 
             # 持ち物回復・ダメージ（たべのこし等）
             if p.item == "たべのこし":
@@ -3831,6 +3955,8 @@ class Battle:
                         self.logs.append(f"{p.name} は ねむって しまった！")
 
             # バインド継続ダメ・カウントダウン
+            if p.bound_count > 0 and p.is_alive and not (self.side2 if side_idx == 0 else self.side1).active.is_alive:
+                p.bound_count = 0
             if p.bound_count > 0 and p.is_alive:
                 bind_dmg = max(1, p.max_hp // (6 if getattr(p, "_bound_by_band", False) else 8))
                 p.take_damage(bind_dmg)
@@ -3897,7 +4023,7 @@ class Battle:
                 self.field.trick_room = False
 
         # フィールドカウント
-        for fname in ("misty_terrain", "electric_terrain", "psychic_terrain"):
+        for fname in ("misty_terrain", "electric_terrain", "psychic_terrain", "grassy_terrain"):
             count_attr = fname + "_count"
             if getattr(self.field, fname, False):
                 cnt = getattr(self.field, count_attr, 0) - 1

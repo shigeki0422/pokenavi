@@ -15,7 +15,7 @@ import sys
 KEEP = [
     "header", "types", "type_chart", "nature_mods", "form_aliases", "region_prefixes",
     "move_master", "secondary_moves", "pokemon_base_stats", "pokemon_mega_stats",
-    "usage_names_in_moves", "ability_cats",
+    "usage_names_in_moves", "ability_cats", "pre_mega",
 ]
 
 SRC = os.path.join(os.path.dirname(__file__), "datapack.json")
