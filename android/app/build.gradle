@@ -3,12 +3,20 @@ apply plugin: 'com.android.application'
 android {
     namespace = "jp.pokenavi.app"
     compileSdk = rootProject.ext.compileSdkVersion
+    signingConfigs {
+        release {
+            storeFile file(System.getenv("KEYSTORE_PATH") ?: "${System.getProperty('user.home')}/Documents/pokenavi-upload-new.keystore")
+            storePassword System.getenv("KEYSTORE_PASS") ?: ""
+            keyAlias "upload"
+            keyPassword System.getenv("KEY_PASS") ?: ""
+        }
+    }
     defaultConfig {
         applicationId "jp.pokenavi.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 2
-        versionName "1.1"
+        versionCode 4
+        versionName "1.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
@@ -18,6 +26,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

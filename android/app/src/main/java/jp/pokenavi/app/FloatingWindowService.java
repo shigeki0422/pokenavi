@@ -28,6 +28,7 @@ public class FloatingWindowService extends Service {
     private static final int FLOATING_W = 360;
     private static final int FLOATING_H = 600;
     private static final int HEADER_H = 48;
+    private static final int FS_BAR_H = 32;
 
     private static final int MODE_COLLAPSED = 0;
     private static final int MODE_FLOATING = 1;
@@ -57,7 +58,7 @@ public class FloatingWindowService extends Service {
         params.x = floatingX;
         params.y = floatingY;
         windowManager.addView(floatingView, params);
-        applyMode(MODE_COLLAPSED);
+        applyMode(MODE_FLOATING);
     }
 
     private View buildView() {
@@ -91,8 +92,13 @@ public class FloatingWindowService extends Service {
         panel.setOrientation(LinearLayout.VERTICAL);
         panel.setVisibility(View.GONE);
         panel.setTag("panel");
+        LinearLayout.LayoutParams panelLp = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        );
+        panel.setLayoutParams(panelLp);
 
-        // Header
+        // Normal header (visible in MODE_FLOATING only)
         LinearLayout header = new LinearLayout(this);
         header.setBackgroundColor(0xFF1a1a2e);
         header.setGravity(Gravity.CENTER_VERTICAL);
@@ -111,19 +117,34 @@ public class FloatingWindowService extends Service {
         title.setLayoutParams(titleLp);
         header.addView(title);
 
-        // Minimize button (−): collapse to bubble
-        TextView btnMinimize = makeHeaderButton("−", "btn_minimize");
+        TextView btnMinimize = makeHeaderButton("−", "btn_minimize", HEADER_H);
         header.addView(btnMinimize);
 
-        // Fullscreen toggle (⛶ / ⊡)
-        TextView btnFullscreen = makeHeaderButton("⛶", "btn_fullscreen");
+        TextView btnFullscreen = makeHeaderButton("⛶", "btn_fullscreen", HEADER_H);
         header.addView(btnFullscreen);
 
-        // Close button (✕): kill service
-        TextView btnClose = makeHeaderButton("✕", "btn_close");
+        TextView btnClose = makeHeaderButton("✕", "btn_close", HEADER_H);
         header.addView(btnClose);
 
         panel.addView(header);
+
+        // Fullscreen compact bar (visible in MODE_FULLSCREEN only)
+        LinearLayout fsBar = new LinearLayout(this);
+        fsBar.setBackgroundColor(0xCC1a1a2e);
+        fsBar.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
+        fsBar.setTag("fs_bar");
+        fsBar.setVisibility(View.GONE);
+        LinearLayout.LayoutParams fsBarLp = new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, dp(FS_BAR_H));
+        fsBar.setLayoutParams(fsBarLp);
+
+        TextView btnFsExit = makeHeaderButton("⊡", "btn_fs_exit", FS_BAR_H);
+        fsBar.addView(btnFsExit);
+
+        TextView btnFsClose = makeHeaderButton("✕", "btn_fs_close", FS_BAR_H);
+        fsBar.addView(btnFsClose);
+
+        panel.addView(fsBar);
 
         // WebView
         WebView webView = new WebView(this);
@@ -133,6 +154,7 @@ public class FloatingWindowService extends Service {
         ws.setDomStorageEnabled(true);
         ws.setLoadWithOverviewMode(true);
         ws.setUseWideViewPort(true);
+        webView.setBackgroundColor(0xFFFFFFFF);
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl("https://pokenavi.jp");
         LinearLayout.LayoutParams wvLp = new LinearLayout.LayoutParams(
@@ -181,13 +203,21 @@ public class FloatingWindowService extends Service {
         });
 
         btnFullscreen.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                applyMode(mode == MODE_FULLSCREEN ? MODE_FLOATING : MODE_FULLSCREEN);
-            }
+            if (event.getAction() == MotionEvent.ACTION_UP) returnToFullscreen();
             return true;
         });
 
         btnClose.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) stopSelf();
+            return true;
+        });
+
+        btnFsExit.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) returnToFullscreen();
+            return true;
+        });
+
+        btnFsClose.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_UP) stopSelf();
             return true;
         });
@@ -221,7 +251,6 @@ public class FloatingWindowService extends Service {
             return false;
         });
 
-        // Outside tap → minimize (floating mode only)
         root.setOnTouchListener((v, event) -> {
             if (event.getAction() == MotionEvent.ACTION_OUTSIDE && mode == MODE_FLOATING) {
                 applyMode(MODE_COLLAPSED);
@@ -232,14 +261,14 @@ public class FloatingWindowService extends Service {
         return root;
     }
 
-    private TextView makeHeaderButton(String text, String tag) {
+    private TextView makeHeaderButton(String text, String tag, int sizeDp) {
         TextView btn = new TextView(this);
         btn.setText(text);
         btn.setTextColor(0xFFCCCCCC);
-        btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, sizeDp == FS_BAR_H ? 15 : 18);
         btn.setGravity(Gravity.CENTER);
         btn.setTag(tag);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(HEADER_H), dp(HEADER_H));
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(sizeDp), dp(sizeDp));
         btn.setLayoutParams(lp);
         return btn;
     }
@@ -253,7 +282,8 @@ public class FloatingWindowService extends Service {
 
         View btnCollapsed = floatingView.findViewWithTag("btn_collapsed");
         View panel = floatingView.findViewWithTag("panel");
-        TextView btnFullscreen = floatingView.findViewWithTag("btn_fullscreen");
+        View header = floatingView.findViewWithTag("header");
+        View fsBar = floatingView.findViewWithTag("fs_bar");
 
         switch (mode) {
             case MODE_COLLAPSED:
@@ -272,7 +302,8 @@ public class FloatingWindowService extends Service {
             case MODE_FLOATING:
                 btnCollapsed.setVisibility(View.GONE);
                 panel.setVisibility(View.VISIBLE);
-                if (btnFullscreen != null) btnFullscreen.setText("⛶");
+                header.setVisibility(View.VISIBLE);
+                fsBar.setVisibility(View.GONE);
                 params.width = dp(FLOATING_W);
                 params.height = dp(FLOATING_H);
                 params.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -286,7 +317,8 @@ public class FloatingWindowService extends Service {
             case MODE_FULLSCREEN:
                 btnCollapsed.setVisibility(View.GONE);
                 panel.setVisibility(View.VISIBLE);
-                if (btnFullscreen != null) btnFullscreen.setText("⊡");
+                header.setVisibility(View.GONE);
+                fsBar.setVisibility(View.VISIBLE);
                 params.width = WindowManager.LayoutParams.MATCH_PARENT;
                 params.height = WindowManager.LayoutParams.MATCH_PARENT;
                 params.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
@@ -295,6 +327,13 @@ public class FloatingWindowService extends Service {
                 windowManager.updateViewLayout(floatingView, params);
                 break;
         }
+    }
+
+    private void returnToFullscreen() {
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+        stopSelf();
     }
 
     @Override
