@@ -8,6 +8,11 @@ paths:
   - "src/components/BuildArchetypeSection.astro"
   - "scripts/gen_builder_data.py"
   - "scripts/gen_archetype_data.py"
+  - "scripts/arch_groups.py"
+  - "scripts/update_type_pool.py"
+  - "scripts/pool_checks.py"
+  - "scripts/pool_versions.py"
+  - "scripts/pool_versions.json"
   - "scripts/rust_engine/engine/src/analysis.rs"
 ---
 
@@ -18,18 +23,30 @@ paths:
 ## データの流れ
 
 ```
-型生成器 scripts/_gen_type_pool.py
-  → 型プール（固定版）_local/ai_work/frozen/type_pool_M-6_v41.json（読み取り専用）
-  → 系統表 _local/ai_work/scripts/arch_view_data.py → frozen/type_groups_M-6_v41.json
-      ├ scripts/gen_builder_data.py   → public/builder-data/（mon/*.json の mu = 代表型≤3、targets.json = 仮想敵）
-      └ scripts/gen_archetype_data.py → src/data/archetypes.json（情報ページの想定型）
+使用率DB scripts/pokenavi.db
+  → 型生成器 scripts/_gen_type_pool.py（generate_one）
+  → 系統表 scripts/arch_groups.py（系統分け・命名。確認ページ _local/ai_work/scripts/arch_view_data.py もこれを import）
+  → 版 _local/ai_work/pools/<シーズン>/<日付>/ type_pool.json・type_groups.json・meta.json・report.md（積み上げ。上書きしない）
+     ポインタ scripts/pool_versions.json（コミットする）
+       page   … 情報ページ用。週次で更新 → gen_builder_data.py（public/builder-data: mon/*.json の mu・targets.json・version.json）
+                                         → gen_archetype_data.py（src/data/archetypes.json。"_version" に版）
+       season … シーズン固定版（今は M-6/v41 = _local/ai_work/frozen/*_M-6_v41.json・読み取り専用）
+                 → datapack_export.py（AI・共進化）・_repop_builds.py・_audit_*.py
 1v1エンジン Rust analysis.rs
   ├ wasm → public/engine/engine_wasm.wasm（＋ public/builder-data/engine.pack.json）… サイト（静的ページのビルド時・工房のブラウザ実行）
   └ pyengine → Cloud Run pokenavi-suggest（簡単構築の提案API。エンジンを変えたら再デプロイが要る。gcloud はユーザーが実行）
 ```
 
-- `_local/` は gitignore。系統表と arch_view_data.py はリポジトリだけでは再生成できない。
-- 系統表・型プールを作り直したら、gen_builder_data.py と gen_archetype_data.py を両方流す。
+- 週次の更新は1コマンド `scripts/venv/bin/python scripts/update_type_pool.py`（手順 `.claude/commands/weekly-pool-update.md`）。型プール → 系統表 → チェック → page ポインタ → gen_builder_data.py → gen_archetype_data.py → チェック。**想定型と 1v1 は必ず同じ版から同時に作る**（Set N の archNo を揃える。片方だけ流さない。gen_builder_data.py を毎日流すのは同じ page の版を読むので可）。
+- 版の解決は `scripts/pool_versions.py`（pools/<版>/ に無ければ frozen/<name>_<シーズン>_<タグ>.json）。env で上書き: `POOL_VERSION`/`GROUPS`（想定型）、`BUILDER_POOL_VERSION`/`BUILDER_POOL_GROUPS`（1v1）、`BUILD_POOL`（datapack）、`TYPES`（監査）。
+- 型プールの対象はシーズン中に使用率に出た全種。詳細（技・持ち物…）の日に圏外だった種はその種の最新の詳細の日、シーズン中の詳細が無い種は前のシーズン（archetypes の season に出る）、技が4つ未満の種（メタモン）は周辺分布の積で作る。
+- `_local/` は gitignore。ビルドに要る生成物（archetypes.json・public/builder-data）と pool_versions.json をコミットすれば Cloudflare のビルドは通る。prebuild の `scripts/check_archetypes.mjs` がランキング最新シーズンの抜け・シーズン違い・版のずれを警告する（ビルドは止めない）。
+- シーズン固定版（season）の切り替え: 新シーズン開始か環境の大変化のときだけ。週次の版を候補に A/B（勝率・較正・fresh_parity/belief_parity）で確認してから切り替え、datapack・wasm・Cloud Run を作り直す。
+
+## 週次のチェック（scripts/pool_checks.py。update_type_pool.py が自動で流す）
+- エラー（終了コード1で止める）: 生成ルール（覚えない技・没収技、ジュエルと同タイプの攻撃技、こだわり×積み/守る/回復＝item_ok、EV 各≤32・合計≤66、性格、他種のメガ石、PRUNE_W 未満の型（生成器が最後に落とす）、重みの合計）／命名・系統分け（下の規則）／出力の整合（archNo・archSub・割合が想定型と 1v1 で一致、分割ラベル、版の記録。`DIST=` で en/ko の型名漏れ）。
+- 警告（report.md に一覧）: 前の版との変化（系統の割合≥10pt・系統の消滅/新規・プールの採用率≥10pt・上位持ち物の入れ替わり・技の組の KL≥0.1。DB の変化<3pt なのにプールが動いたら「生成側の疑い」）、DB の使用率との差（技10pt（上位10を4枠へ伸ばした目標）・持ち物5・性格5・努力値10・特性15）、こだわり×変化技2本以上>5%、監査の違反率≥0.5%、ランキングの網羅。
+- 閾値は pool_checks.py の先頭の定数。規則は生成側の関数・定数（_gen_type_pool.item_ok/learnset/PRUNE_W、arch_groups.CORE/MAX_GROUPS/GIMMICK/full_attack）を import して判定する（二重に書かない）。検出のテストは test_all.py の 33。
 
 ## 型（系統）の規則
 - 名前は機能で付ける（区別できる技≥85%・積み技は必ず名前に入れる・フルアタ型・バトンは単独の系統・1系統だけの種は「単一の型」）。末尾は必ず「〜型」（`arch_name()`）。
@@ -58,5 +75,7 @@ paths:
 ## 既知の残課題
 - 翻訳辞書に無いもの: Champions 独自の特性（はどうのぼうご・うなぎのぼり・ほのおのたてがみ）、フォーム名7件。
 - 情報ページのHTMLは以前の約1.8倍（ポップアップのデータ埋め込み）。戻すならポップアップを開いたときにJSONを取得する方式へ。
-- バチンウニは同名の系統が2つある（系統表側の問題）。
+- 同名の系統（v41 のバチンウニ グランドコート×2・ガラルヤドラン フルアタ×2）は arch_groups.py で名前だけでまとめるよう直した（週次の版から。v41 の固定版には残る）。
+- ranking.json の画像IDの誤り（generate_ranking_json.py の ALIASES）: カットロトム/スピンロトムが逆（ページは 0479-05 がカット）、アローラペルシアン・アローラライチュウが None。想定型の確認はページの名前→ID と species.json で引いているので影響しない。
+- 系統の割合は1%未満の系統を落とすので合計が 99.4〜100%。
 - ゲート R3-fb / R3-sel / R4 は記録が古く採り直せない（生成スクリプトが無い）。一致確認は fresh_parity / belief_parity で行う。

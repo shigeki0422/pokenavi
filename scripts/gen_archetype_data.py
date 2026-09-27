@@ -1,9 +1,9 @@
 """ポケモン情報ページの「想定型」データ（src/data/archetypes.json）を作る。
 
 採用率は「使用率データ」の表で見られるので、ここでは型のかたまり（技4つ・持ち物・性格・努力値・特性がどう一緒に使われるか）を出す。
-元は型生成器の固定版（v40）を系統にまとめた系統表（_local/ai_work/frozen/type_groups_M-6_v40b.json）。
+元は型プールを系統にまとめた系統表（scripts/arch_groups.py の出力）。版は scripts/pool_versions.json の page（1v1 の public/builder-data と同じ版）。
 各系統で、まず完全な型の例を重みの大きい順に TOP_SETS 件、次に型の中での技・持ち物・性格・努力値の傾向を出す。
-キーはページ側のアイコンID（例: 0681-00）。env: GROUPS TOP_SETS
+キーはページ側のアイコンID（例: 0681-00）。"_version" に元の版を書く。env: POOL_VERSION GROUPS TOP_SETS
 """
 import collections
 import json
@@ -12,13 +12,14 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-GROUPS = os.environ.get("GROUPS", os.path.join(ROOT, "_local", "ai_work", "frozen", "type_groups_M-6_v41.json"))
+sys.path.insert(0, HERE)
+import pool_versions as PV   # noqa: E402
+from arch_groups import order_moves   # noqa: E402  表示順（タイプ一致→不一致→変化技）を確認ページと揃える
+VERSION = os.environ.get("POOL_VERSION") or PV.pointer("page")
+GROUPS = os.environ.get("GROUPS") or PV.path("type_groups", VERSION)
 OUT = os.path.join(ROOT, "src", "data", "archetypes.json")
 TOP_SETS = int(os.environ.get("TOP_SETS", "3"))
 TEND_MIN = 0.05   # 傾向に出す最低の採用率（型の中）
-
-sys.path.insert(0, os.path.join(ROOT, "_local", "ai_work", "scripts"))
-from arch_view_data import order_moves   # noqa: E402  表示順（タイプ一致→不一致→変化技）を確認ページと揃える
 
 
 def arch_name(n):
@@ -32,7 +33,7 @@ def ev_text(ev):
 
 def main():
     icon = {s["n"]: s["icon"] for s in json.load(open(os.path.join(ROOT, "public", "builder-data", "species.json")))}
-    out, miss = {}, []
+    out, miss = {"_version": VERSION}, []
     for sp, v in json.load(open(GROUPS)).items():
         ic = icon.get(sp)
         if not ic:
@@ -72,9 +73,9 @@ def main():
                 trend[k] = [[x, round(w * 100)] for x, w in tend[k].most_common(3) if w >= TEND_MIN]
             groups.append({"name": arch_name(g["name"]), "kind": g["kind"], "share": round(g["share"] * 100, 1),
                            "sets": sets, "trend": trend})
-        out[ic] = {"season": "M-6", "groups": groups}
+        out[ic] = {"season": v.get("season") or PV.season_of(VERSION), "groups": groups}
     json.dump(out, open(OUT, "w"), ensure_ascii=False, separators=(",", ":"))
-    print(f"{OUT}: {len(out)}種" + (f"  アイコン無し {miss}" if miss else ""))
+    print(f"{OUT}: {len(out) - 1}種（{VERSION}）" + (f"  アイコン無し {miss}" if miss else ""))
 
 
 if __name__ == "__main__":

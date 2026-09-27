@@ -175,8 +175,8 @@ def export():
     # 使用率マージナルと対戦の常識的制約から作った「型まるごと」の候補。
     # 決定化で JOINT_BUILD=1 のときに使う。
     build_pool = {}
-    _bp = os.environ.get("BUILD_POOL", os.path.join(
-        os.path.dirname(ROOT), "_local", "ai_work", "frozen", "type_pool_M-6_v41.json"))
+    import pool_versions as PV
+    _bp = os.environ.get("BUILD_POOL") or PV.path("type_pool", PV.pointer("season"))
     if os.path.exists(_bp):
         with open(_bp) as _f:
             for _r in json.load(_f):

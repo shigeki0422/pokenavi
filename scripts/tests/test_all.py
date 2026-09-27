@@ -6583,6 +6583,50 @@ _g32 = _pps32("ガブリアス@ガブリアスナイト:いじっぱり:じし�
 check("従来の書式はそのまま読める", _g32["name"] == "ガブリアス" and _g32["item"] == "ガブリアスナイト"
       and _g32["moves"][0] == "じしん" and _g32["evs"]["H"] == 2)
 
+print("\n=== 33. 型プールの週次チェック（scripts/pool_checks.py がわざと壊した入力を検出する） ===")
+import _gen_type_pool as _G33
+import arch_groups as _A33
+import pool_checks as _C33
+_ok33 = {"item": "きあいのタスキ", "nature": "ようき", "ability": "さめはだ", "ev": [0, 32, 0, 0, 2, 32],
+         "moves": ["じしん", "げきりん", "ステルスロック", "がんせきふうじ"], "weight": 1.0}
+_n33 = _C33.natures(_G33)
+check("生成ルール: 正しい型は違反なし", _C33.rule_errors(_G33, "ガブリアス", [_ok33], set(), _n33) == [],
+      str(_C33.rule_errors(_G33, "ガブリアス", [_ok33], set(), _n33)))
+def _err33(**kw):
+    return " ".join(_C33.rule_errors(_G33, "ガブリアス", [dict(_ok33, **kw)], set(), _n33))
+check("生成ルール: ジュエルに同タイプの攻撃技が無い", "ジュエル" in _err33(item="ノーマルジュエル"))
+check("生成ルール: こだわり×積み技", "こだわり" in _err33(item="こだわりスカーフ", moves=["じしん", "げきりん", "つるぎのまい", "がんせきふうじ"]))
+check("生成ルール: EV 33・合計67", "EV" in _err33(ev=[0, 33, 0, 0, 0, 32]) and "EV" in _err33(ev=[3, 32, 0, 0, 0, 32]))
+check("生成ルール: 覚えない技（没収技）", "覚えない技" in _err33(moves=["じしん", "げきりん", "ハイドロポンプ", "がんせきふうじ"]))
+check("生成ルール: 重みの合計", "重みの合計" in _err33(weight=0.5))
+def _g33(name, moves, share, item="きあいのタスキ", kind="物理"):
+    return {"name": name, "kind": kind, "share": share,
+            "builds": [{"item": item, "nature": "ようき", "ability": "さめはだ", "ev": [0, 32, 0, 0, 2, 32], "moves": moves, "weight": 1.0}]}
+_sd33 = ["じしん", "げきりん", "つるぎのまい", "がんせきふうじ"]
+_sr33 = ["じしん", "げきりん", "ステルスロック", "がんせきふうじ"]
+_ne33 = lambda gs: " ".join(_C33.naming_errors(_G33, _A33, "ガブリアス", gs))
+check("命名: 正しい系統は違反なし", _ne33([_g33("つるぎのまい", _sd33, 0.6), _g33("ステルスロック", _sr33, 0.4)]) == "",
+      _ne33([_g33("つるぎのまい", _sd33, 0.6), _g33("ステルスロック", _sr33, 0.4)]))
+check("命名: 同名の系統（バチンウニのグランドコート×2）", "同名" in _ne33([_g33("ステルスロック", _sr33, 0.6), _g33("ステルスロック", _sr33, 0.4, kind="特殊")]))
+check("命名: 名前の技が系統内85%未満", "名前の技" in _ne33([_g33("ドラゴンテール", _sd33, 0.6), _g33("ステルスロック", _sr33, 0.4)]))
+check("命名: 積み技が名前に無い", "積み技" in _ne33([_g33("じしん", _sd33, 0.6), _g33("ステルスロック", _sr33, 0.4)]))
+check("命名: 系統が7つ", "系統が7個" in _ne33([_g33(f"x{i}", _sr33, 1 / 7) for i in range(7)]))
+check("命名: 単一の型は系統が1つの種だけ", "単一の型" in _ne33([_g33("単一の型", _sr33, 0.6), _g33("つるぎのまい", _sd33, 0.4)]))
+check("命名: バトンの型が名前に無い", "バトン" in _ne33([_g33("つるぎのまい", ["じしん", "つるぎのまい", "バトンタッチ", "がんせきふうじ"], 0.6), _g33("ステルスロック", _sr33, 0.4)]))
+check("命名: 5%未満が同じ持ち物の区分で統合されていない", "5%未満" in _ne33([_g33("つるぎのまい", _sd33, 0.97), _g33("ステルスロック", _sr33, 0.03)]))
+check("命名: 持ち物の区分（メガ石）をまたぐ系統",
+      "またいで" in _ne33([{**_g33("つるぎのまい", _sd33, 1.0), "builds": _g33("つるぎのまい", _sd33, 1.0)["builds"] + [dict(_ok33, item="ガブリアスナイト", moves=_sd33)]}]))
+_arch33 = {"_version": "M-6/x", "0445-00": {"season": "M-6", "groups": [{"name": "つるぎのまい型", "share": 60.0}, {"name": "ステルスロック型", "share": 40.0}]}}
+_mu33 = lambda **kw: {"0445-00": {"mu": [dict({"arch": "つるぎのまい型", "archNo": 1, "archSub": "", "share": 60.0}, **kw)]}}
+check("出力: 整合していれば違反なし", _C33.output_errors(_arch33, _mu33(), "M-6/x", "M-6/x") == [], str(_C33.output_errors(_arch33, _mu33(), "M-6/x", "M-6/x")))
+check("出力: archNo が想定型の別の系統を指す", _C33.output_errors(_arch33, _mu33(archNo=2), "M-6/x", "M-6/x") != [])
+check("出力: 1v1 と想定型の割合の不一致", _C33.output_errors(_arch33, _mu33(share=50.0), "M-6/x", "M-6/x") != [])
+check("出力: 版の記録の不一致", _C33.output_errors(_arch33, _mu33(), "M-6/x", "M-6/y") != [])
+check("出力: 「〜型」でない系統名", _C33.output_errors({**_arch33, "0445-00": {"season": "M-6", "groups": [{"name": "つるぎのまい", "share": 100.0}]}}, {}, "M-6/x", "M-6/x") != [])
+_split33 = {"0445-00": {"mu": [{"arch": "つるぎのまい型（つるぎのまい・じしん）", "archNo": 1, "archSub": "a", "share": 30.0},
+                              {"arch": "つるぎのまい型（つるぎのまい・げきりん）", "archNo": 1, "archSub": "b", "share": 30.0}]}}
+check("出力: 分割ラベルの括弧内で系統名の語を繰り返す", any("繰り返" in e for e in _C33.output_errors(_arch33, _split33, "M-6/x", "M-6/x")))
+
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:
     print(f"\n--- 失敗リスト ---")

@@ -54,14 +54,17 @@ def _seasons_in_db():
 SEASON_ORDER = _seasons_in_db()
 SEASON = os.environ.get("BUILDER_SEASON") or (SEASON_ORDER[0] if SEASON_ORDER else "M-6")
 
-# 型生成器の固定版（v40）の系統表。ある種はここから型を作る（系統の割合の上位3系統・系統内で最も重い型）
-POOL_GROUPS = os.environ.get("BUILDER_POOL_GROUPS", os.path.join(ROOT, "_local", "ai_work", "frozen", "type_groups_M-6_v41.json"))
+# 型生成器の系統表（ページ用の版＝scripts/pool_versions.json の page。想定型 archetypes.json と同じ版を使い、系統番号 archNo を揃える）。
+# ある種はここから型を作る（系統の割合の上位3系統・系統内で最も重い型）
+import pool_versions as PV  # noqa: E402
+POOL_VERSION = os.environ.get("BUILDER_POOL_VERSION") or PV.pointer("page")
+POOL_GROUPS = os.environ.get("BUILDER_POOL_GROUPS") or PV.path("type_groups", POOL_VERSION)
 _PG = {}
 
 
 def _pool_groups():
     if "g" not in _PG:
-        _PG["g"] = json.load(open(POOL_GROUPS)) if SEASON == "M-6" and os.path.exists(POOL_GROUPS) else {}
+        _PG["g"] = json.load(open(POOL_GROUPS)) if SEASON == PV.season_of(POOL_VERSION) and os.path.exists(POOL_GROUPS) else {}
     return _PG["g"]
 
 
@@ -857,6 +860,7 @@ def main():
     write_json(os.path.join(OUT_DIR, "targets.json"), targets_out)
 
     build_mon_files(con, usage_rows, variants_of)
+    write_json(os.path.join(OUT_DIR, "version.json"), {"pool": POOL_VERSION if _pool_groups() else None})
 
     con.close()
     nv = sum(len(v) for v in variants_of.values())

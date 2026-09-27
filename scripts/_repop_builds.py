@@ -14,9 +14,10 @@ import random
 import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import pool_versions as PV  # noqa: E402
 POOL = os.environ.get("POOL", os.path.join(HERE, "gen_pop_m6.json"))
-TYPES = os.environ.get("TYPES", os.path.join(
-    os.path.dirname(HERE), "_local", "ai_work", "type_pool_M-6.json"))
+TYPES = os.environ.get("TYPES") or PV.path("type_pool", PV.pointer("season"))
 OUT = os.environ.get("OUT", os.path.join(HERE, "gen_pop_m6_new.json"))
 SEED = int(os.environ.get("SEED", "1"))
 

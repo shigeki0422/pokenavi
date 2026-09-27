@@ -11,6 +11,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import pool_versions as PV  # noqa: E402
 from _gen_type_pool import MV, MEGA, MEGA_AB, BASE, SETUP, BOOST, PIVOT, RECOVERY, PROTECT, \
     CHOICE, FRAGILE, ATK_X2, _BASE_AB, form_stats, _plain, con  # noqa: E402
 from simulator.data import NATURE_MODS  # noqa: E402
@@ -39,8 +40,7 @@ def relax(sp):
     _REL[sp] = (must, frag + defn > 1.02, atk < 1.1)
     return _REL[sp]
 
-TYPES = os.environ.get("TYPES", os.path.join(
-    os.path.dirname(HERE), "_local", "ai_work", "type_pool_M-6.json"))
+TYPES = os.environ.get("TYPES") or PV.path("type_pool", PV.pointer("season"))
 SEASON = os.environ.get("SEASON", "M-6")
 TOP = int(os.environ.get("TOP", "3"))
 

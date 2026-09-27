@@ -6,18 +6,15 @@
 ## 手順
 
 ### 1. DBの最新クロール日を確認
+シーズンは `POOL_SEASON`（無ければ DB の最新シーズン）。以降の手順の `$S` はこれ。
 ```bash
-cd /Users/shigeki/work/pokenavi && python3 -c "
-import sqlite3
-conn = sqlite3.connect('scripts/pokenavi.db')
-rows = conn.execute(\"SELECT crawled_date, COUNT(*) FROM pokemon_usage WHERE season='M-3' AND rule='single' GROUP BY crawled_date ORDER BY crawled_date\").fetchall()
-for r in rows: print(r)
-"
+cd /Users/shigeki/work/pokenavi && S=${POOL_SEASON:-$(sqlite3 scripts/pokenavi.db "SELECT season FROM pokemon_usage ORDER BY crawled_date DESC LIMIT 1")} && echo $S && \
+sqlite3 scripts/pokenavi.db "SELECT crawled_date, COUNT(*) FROM pokemon_usage WHERE season='$S' AND rule='single' GROUP BY crawled_date ORDER BY crawled_date"
 ```
 
 ### 2. EVデータの事前チェック（32超過がある場合はDB修正してから進む）
 ```bash
-sqlite3 scripts/pokenavi.db "SELECT MAX(ev_h), MAX(ev_a), MAX(ev_b), MAX(ev_c), MAX(ev_d), MAX(ev_s) FROM pokemon_evs WHERE season='M-3' AND rule='single' AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_evs WHERE season='M-3' AND rule='single');"
+sqlite3 scripts/pokenavi.db "SELECT MAX(ev_h), MAX(ev_a), MAX(ev_b), MAX(ev_c), MAX(ev_d), MAX(ev_s) FROM pokemon_evs WHERE season='$S' AND rule='single' AND crawled_date=(SELECT MAX(crawled_date) FROM pokemon_evs WHERE season='$S' AND rule='single');"
 ```
 
 ### 3. ranking.json を再生成
@@ -31,7 +28,10 @@ python3 scripts/generate_pokemon_pages.py
 python3 scripts/inject_faq_frontmatter.py   # FAQ(構造化データ)を再注入。ページ再生成で消えるため必須
 python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成
 python3 scripts/gen_learnset_data.py  # ポケモン情報ページ「覚える技」用データ(gen_builder_data.py の後に実行)
+node scripts/check_archetypes.mjs     # 想定型の抜け・版のずれの確認（警告のみ）
 ```
+- 想定型（archetypes.json）と 1v1 の型の元（型プール・系統表）は**週次の別手順** `.claude/commands/weekly-pool-update.md`。gen_builder_data.py は `scripts/pool_versions.json` の page の版を読むので、毎日流しても想定型と Set N の番号はずれない
+- 上の確認で「ランキングにあって想定型が無い」「版が揃っていない」が出たら、週次の手順を前倒しで流す（新シーズン開始時は必ず）
 
 ### 5. localhost で確認（ユーザーが確認・承認するまで待機）
 ```bash

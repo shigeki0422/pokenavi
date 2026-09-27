@@ -332,6 +332,11 @@ def item_ok(moves, item):
     # タスキは満タンからの一撃を耐える持ち物で、回復技の型とは噛み合わない（上位構築のタスキ253型で0件。さいきのいのり は味方の復活なので別）
     if item == "きあいのタスキ" and mv & (RECOVERY - {"さいきのいのり"}):
         return False
+    # ジュエルはそのタイプの攻撃技を使ったときに消費される（かるわざの発動に使う）。そのタイプの攻撃技が無い型には付けない
+    # （オオニューラ: ノーマル技なしでノーマルジュエルの型が17.5%あった）
+    if item.endswith("ジュエル") and not any(
+            MV.get(m, {}).get("type") == item[:-4] and MV.get(m, {}).get("cat") != "status" for m in mv):
+        return False
     # シードは場に出たとき1回だけ能力を上げ、交代すると消える。ピボット技とは噛み合わない（M-6 からの持ち物で上位構築に例なし）
     if item in SEEDS and mv & (PIVOT | {"すてゼリフ"}):
         return False
@@ -753,6 +758,11 @@ def latest(table, sp):
                 best = key
         _DATE["d"] = best[1] if best else None
     d = _DATE["d"]
+    # 詳細（技・持ち物…）のクロール日に圏外だった種は、その種の最新の詳細の日を使う
+    if sp and not con.execute("select 1 from pokemon_moves where season=? and crawled_date=? and pokemon=? limit 1",
+                              (SEASON, d, sp)).fetchone():
+        d = con.execute("select max(crawled_date) from pokemon_moves where season=? and pokemon=?",
+                        (SEASON, sp)).fetchone()[0] or d
     if table != "pokemon_moves":
         # 他テーブルに同じ日が無ければ、その日以前で最も近い日
         r = con.execute("select max(crawled_date) from %s where season=? and crawled_date<=?"
@@ -2210,6 +2220,10 @@ def generate(sp, n, seed=0):
             wt = _rake(keys_t, [wt[i] for i in keep])
         top = list(zip(keys_t, wt))
     tw = sum(c for _, c in top) or 1.0
+    # 合わせ直しで PRUNE_W を下回った型も落とす（残りの比はそのまま）
+    if PRUNE_W > 0 and any(c / tw >= PRUNE_W for _, c in top):
+        top = [(k, c) for k, c in top if c / tw >= PRUNE_W]
+        tw = sum(c for _, c in top)
     return {
         "species": sp,
         "marginal_error_pt": round(err * 100, 2),
@@ -2230,6 +2244,24 @@ def generate(sp, n, seed=0):
     }
 
 
+def generate_one(sp, seed):
+    global ARCH_W
+    arch_w0 = ARCH_W
+    r = generate(sp, NBUILD, seed=seed)
+    # 系統の辞書が今シーズンの採用率と合わない過去の型へ引っぱる種がある（M-6 アローラキュウコン +5pt）。
+    # 系統なしでも作り、技の周辺分布の誤差が ARCH_TOL 以上悪化していれば系統なしを採る
+    if arch_w0 > 0 and r:
+        ARCH_W = 0.0
+        r0 = generate(sp, NBUILD, seed=seed)
+        ARCH_W = arch_w0
+        if r0 and r["marginal_error_pt"] > r0["marginal_error_pt"] + ARCH_TOL:
+            r = r0
+            r["arch"] = False
+        else:
+            r["arch"] = True
+    return r
+
+
 def main():
     if os.environ.get("SPECIES"):
         targets = [x for x in os.environ["SPECIES"].split(",") if x]
@@ -2239,21 +2271,8 @@ def main():
             "select pokemon from pokemon_usage where season=? and crawled_date=? order by rank limit ?",
             (SEASON, d, TOPN))]
     res = []
-    global ARCH_W
-    arch_w0 = ARCH_W
     for i, sp in enumerate(targets):
-        r = generate(sp, NBUILD, seed=i)
-        # 系統の辞書が今シーズンの採用率と合わない過去の型へ引っぱる種がある（M-6 アローラキュウコン +5pt）。
-        # 系統なしでも作り、技の周辺分布の誤差が ARCH_TOL 以上悪化していれば系統なしを採る
-        if arch_w0 > 0 and r:
-            ARCH_W = 0.0
-            r0 = generate(sp, NBUILD, seed=i)
-            ARCH_W = arch_w0
-            if r0 and r["marginal_error_pt"] > r0["marginal_error_pt"] + ARCH_TOL:
-                r = r0
-                r["arch"] = False
-            else:
-                r["arch"] = True
+        r = generate_one(sp, i)
         if r:
             res.append(r)
             print(("%-16s 型%2d件  技 %5.2f  持ち物 %5.2f  性格 %5.2f  努力値 %5.2f (pt)"
