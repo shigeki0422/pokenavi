@@ -2,7 +2,7 @@
 アイコンテンプレートマッチングでポケモン名を識別してpokemon_usageに投入
 RANK_OVERRIDESで上書き可能（パンプジン・フォーム違い等）
 """
-import sqlite3, cv2, numpy as np
+import sqlite3, cv2, numpy as np, sys
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -320,6 +320,70 @@ import datetime as _datetime
 
 LARGE_FORMAT_SINCE = _datetime.date(2026, 6, 28)
 
+
+# ヘッダーのタイプアイコン領域（2400x1080）。姿違いはここでしか見分けられない。
+TYPE_BOX1 = (1402, 32, 1466, 96)
+TYPE_BOX2 = (1475, 32, 1539, 96)
+
+
+def _type_icons(rank_dir):
+    for fname in ("move_00.png", "ability_00.png"):
+        p = rank_dir / fname
+        if not p.exists():
+            continue
+        im = cv2.imread(str(p))
+        if im is None or im.shape[1] < TYPE_BOX2[2]:
+            continue
+        a = im[TYPE_BOX1[1]:TYPE_BOX1[3], TYPE_BOX1[0]:TYPE_BOX1[2]]
+        b = im[TYPE_BOX2[1]:TYPE_BOX2[3], TYPE_BOX2[0]:TYPE_BOX2[2]]
+        return a, b
+    return None
+
+
+def check_forms(conn, matched, target_dir):
+    """ヘッダーのタイプアイコンを読み、マスターのタイプと食い違う行を返す。
+
+    アイコン照合は前日のDB名でテンプレートを作るため、いったん基本種名が付くと
+    正しい絵に誤った名前が付いたまま毎日スコア1.0で自己伝播する（2026-09-13〜22に
+    ヒスイダイケンキ等5種で55件発生）。ゲーム画面も地方フォルムを「ダイケンキ」としか
+    表示しないので、名前照合でも目視でも検出できない。タイプアイコンだけが手がかりで、
+    かつ**その日のデータ自身を参照にすると誤りごと一致してしまう**ため、
+    scripts/type_icons/ の固定テンプレートと突き合わせる。
+    """
+    tdir = Path(__file__).parent / "type_icons"
+    if not tdir.exists():
+        return []
+    tmpl = {p.stem: cv2.imread(str(p)) for p in tdir.glob("*.png")}
+    tmpl = {k: v for k, v in tmpl.items() if v is not None}
+    if not tmpl:
+        return []
+    types = {n: (t1, t2) for n, t1, t2 in
+             conn.execute("SELECT pokemon_name, type1, type2 FROM pokemon_base_stats")}
+
+    def read_type(img):
+        best, score = None, -1.0
+        for name, t in tmpl.items():
+            sc = float(cv2.matchTemplate(img, t, cv2.TM_CCOEFF_NORMED).max())
+            if sc > score:
+                best, score = name, sc
+        return (None if best == "__NONE__" else best), score
+
+    warn = []
+    for rank, name in sorted(matched.items()):
+        if name not in types:
+            continue
+        ic = _type_icons(target_dir / f"{rank:03d}")
+        if ic is None:
+            continue
+        got1, s1 = read_type(ic[0])
+        got2, s2 = read_type(ic[1])
+        if min(s1, s2) < 0.8:
+            continue
+        if (got1, got2) != types[name]:
+            warn.append((rank, name, types[name], (got1, got2)))
+    return warn
+
+
 def main():
     overrides = TARGETS.get(CRAWLED_DATE, {})
     target_dir = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{CRAWLED_DATE}/detail")
@@ -403,6 +467,15 @@ def main():
     # POKEMON_DATAからpokemon_idを引く
     from generate_pokemon_pages import POKEMON_DATA
     id_map = {name: data.get("id") for name, data in POKEMON_DATA.items()}
+
+    form_warn = check_forms(conn, matched, target_dir)
+    if form_warn:
+        print(f"\n🚨 タイプ不一致 {len(form_warn)}件（姿違いの取り違えの疑い）:")
+        for rank, name, want, got in form_warn:
+            print(f"  rank={rank} '{name}' マスター={want} 画像={got}")
+            print(f"     画像: {target_dir}/{rank:03d}/move_00.png")
+        print("  → 画像でタイプを確認し、TARGETS に正しい名前を入れて再実行すること")
+        sys.exit(1)
 
     print(f"\n✅ 重複なし・{MAX_RANK}件確認 → 投入開始")
     now = datetime.now(timezone.utc).isoformat()
