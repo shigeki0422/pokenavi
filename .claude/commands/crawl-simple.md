@@ -47,6 +47,8 @@ python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択で
 python3 scripts/gen_learnset_data.py  # ポケモン情報ページ「覚える技」用データ(gen_builder_data.py の後に実行)
 python3 scripts/inject_faq_frontmatter.py
 ```
+- 想定型・1v1の型（型プール）はここでは作り直さない（詳細データの週次クロール `/crawl-full` の手順 7-2 で更新）。gen_builder_data.py は `scripts/pool_versions.json` の版を読むので、毎日流しても想定型と番号はずれない
+- ビルド前の `[archetypes]` 警告（ランキングに新しく入った種に想定型が無い等）が出たら、ユーザーに伝えて次の詳細クロールで更新する
 
 ### 8. ローカル確認
 ```bash

@@ -55,6 +55,14 @@ python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択で
 python3 scripts/gen_learnset_data.py  # ポケモン情報ページ「覚える技」用データ(gen_builder_data.py の後に実行)
 ```
 
+### 7-2. 想定型・1v1の型の週次更新（詳細データを入れたこの手順では必ず実行）
+```bash
+scripts/venv/bin/python scripts/update_type_pool.py
+```
+- 新しい詳細データで型プール→系統表→想定型（src/data/archetypes.json）と1v1の代表型・仮想敵（public/builder-data）を同じ版から作り直す。エラーなら止まるので直してから再実行
+- 出力の `report.md`（パスは実行ログの最後）を読み、警告（前回比の大きな変化・「生成側の疑い」・使用率との差）をユーザーに要約して見せる。詳しい読み方は `.claude/commands/weekly-pool-update.md`
+- コミット時は `src/data/archetypes.json`・`public/builder-data/`・`scripts/pool_versions.json` も含める
+
 ### 8. ローカル確認
 ```bash
 npm run dev
