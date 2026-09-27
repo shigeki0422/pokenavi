@@ -2833,7 +2833,7 @@ const I18N = I18N_ALL[lang];
       : (rows.some((r) => r.bi === muBuildSel) ? muBuildSel : (rows.length ? rows[0].bi : 0));
     const editingNew = editingThis && muEdit.bi === 'new';
     const buildStripHtml = activeGrp && rows.length > 0
-      ? `<div class="pb-bstrip">${rows.map((r) => `<button type="button" class="pb-bstrip-btn${!editingNew && r.bi === selBi ? ' on' : ''}" data-mu-build="${r.bi}">${esc(I18N.buildLabel(Number(r.b.idx) || 0))}<span class="pb-mu-sym ${symClass(r.verdict.sym)}">${r.verdict.sym}</span></button>`).join('')}<button type="button" class="pb-bstrip-add${editingNew ? ' on' : ''}" id="pb-mu-add-build" title="${esc(I18N.muAddBuildBtn)}" aria-label="${esc(I18N.muAddBuildBtn)}">＋</button></div>`
+      ? `<div class="pb-bstrip">${rows.map((r) => `<button type="button" class="pb-bstrip-btn${!editingNew && r.bi === selBi ? ' on' : ''}" data-mu-build="${r.bi}">${esc(I18N.buildLabel(r.bi + 1))}<span class="pb-mu-sym ${symClass(r.verdict.sym)}">${r.verdict.sym}</span></button>`).join('')}<button type="button" class="pb-bstrip-add${editingNew ? ' on' : ''}" id="pb-mu-add-build" title="${esc(I18N.muAddBuildBtn)}" aria-label="${esc(I18N.muAddBuildBtn)}">＋</button></div>`
       : '';
     const cardsHtml = buildStripHtml + rows.filter((r) => !editingNew && r.bi === selBi).map((r) => {
       if (editingThis && muEdit.bi === r.bi) {
@@ -3503,7 +3503,7 @@ const I18N = I18N_ALL[lang];
     const others = status.length
       ? `<div class="pb-mu-others"><span>${esc(t.others)}</span>${status.map((n) => `<span class="pb-tag">${typeIcoForMove(n)}${esc(tMove(n))}</span>`).join('')}</div>` : '';
     return `<div class="pb-mu-card">
-        <div class="pb-mu-head"><div class="dtl-tname">${icoImg(r.rb.icon, r.rb.label, 'dtl-ico')}<span class="pb-arw">vs</span>${icoImg(r.opp.icon || r.grp.icon, r.grp.label, 'dtl-ico')}${esc(I18N.buildLabel(Number(r.b.idx) || 0))}<span class="pb-mu-sym ${symClass(v.sym)}">${v.sym}</span><span class="pb-tag pb-tag-first">${esc(v.mutual ? t.mutual : v.tie ? t.tie : v.koFirst ? t.first : t.second)}</span></div>${actionsHtml}</div>
+        <div class="pb-mu-head"><div class="dtl-tname">${icoImg(r.rb.icon, r.rb.label, 'dtl-ico')}<span class="pb-arw">vs</span>${icoImg(r.opp.icon || r.grp.icon, r.grp.label, 'dtl-ico')}${esc(I18N.buildLabel(r.bi + 1))}<span class="pb-mu-sym ${symClass(v.sym)}">${v.sym}</span><span class="pb-tag pb-tag-first">${esc(v.mutual ? t.mutual : v.tie ? t.tie : v.koFirst ? t.first : t.second)}</span></div>${actionsHtml}</div>
         <div class="pb-mu-tags"><span class="pb-tag">${itemIco(r.b.item)}${esc(tItem(r.b.item)) || '—'}</span><span class="pb-tag">${esc(tAbil(r.b.ability)) || '—'}</span><span class="pb-tag">${esc(tNatureDisp(r.b.nature)) || '—'}</span></div>
         <div class="pb-mu-evline"><b>${esc(pbEvStr(r.opp.evs))}</b><span>（S ${v.myS} vs ${v.oppS}）</span></div>
         ${muVerdictBoxHtml(v)}
