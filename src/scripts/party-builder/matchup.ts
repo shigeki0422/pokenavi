@@ -10,6 +10,7 @@ import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./t
 import { analyze, buildToSpec, koProb, scenarioKey, typeDynamic,
          type EngineMove, type EngineSide, type EngineVerdict } from "../engine/wasm";
 import { eff } from "./typechart";
+import { ABILITY_NAME_EN, ABILITY_NAME_KO } from "../../i18n/game-terms";
 
 /**
  * 旧式: score>=1.5→◎ … の閾値が0.5刻みだったため、素早さの±0.5補正だけで
@@ -201,12 +202,22 @@ export function condText(c: string | null | undefined, lang: "ja" | "en" | "ko")
     if (m) return lang === "en" ? `all ${m[1]} hits land` : lang === "ko" ? `${m[1]}회 모두 명중 가정` : `${m[1]}発すべて命中を想定`;
     m = /^(\d+)ヒット時$/.exec(x);
     if (m) return lang === "en" ? `${m[1]} hits (expected value for 2-5 hit moves)` : lang === "ko" ? `${m[1]}회 가정(2~5회 기술의 기대값)` : `${m[1]}発を想定（2〜5回技の期待値）`;
+    // 防御側の特性による補正（エンジンが「特性を外すとダメージが変わる」ときだけ付ける）。満タン時だけ効く特性はその前提も書く
+    m = /^防御特性:(.+)$/.exec(x);
+    if (m) {
+      const ab = m[1], full = FULL_HP_ABILITIES.has(ab);
+      if (lang === "en") return `foe's ${ABILITY_NAME_EN[ab] ?? ab}${full ? " (at full HP)" : ""}`;
+      if (lang === "ko") return `상대의 ${ABILITY_NAME_KO[ab] ?? ab}${full ? "(HP 가득일 때)" : ""}`;
+      return `相手の${ab}${full ? "（HP満タン時）" : ""}`;
+    }
     if (lang === "ja") return x;
     m = /^(攻撃|特攻)([+-]\d+)$/.exec(x);
     if (m) return `${COND_TERMS[m[1]][lang]} ${m[2]}`;
     return COND_TERMS[x]?.[lang] ?? x;
   }).join(lang === "en" ? ", " : lang === "ko" ? "·" : "・");
 }
+/** HPが満タンのときだけ効く防御側の特性（注記に「HP満タン時」を添える）。 */
+const FULL_HP_ABILITIES = new Set(["マルチスケイル", "ファントムガード"]);
 /** 前提に出る天候・フィールド・能力の名前の訳。 */
 const COND_TERMS: Record<string, { en: string; ko: string }> = {
   晴れ: { en: "Sun", ko: "쾌청" }, 雨: { en: "Rain", ko: "비" }, すなあらし: { en: "Sandstorm", ko: "모래바람" },

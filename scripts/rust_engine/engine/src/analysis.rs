@@ -946,6 +946,14 @@ pub fn relevant_conds(
                 if dmg(&a, d0, f0) != base { v.push(format!("{}{}{}", lbl, if st > 0 { "+" } else { "" }, st)); }
             }
             if !v.is_empty() { out.push(v.join("・")); }
+            // 防御側の特性による補正（マルチスケイル・ファントムガード・フィルター・あついしぼう等）。特性を外すとダメージが変わるときだけ
+            if let Some(none) = packr.intern.get("") {
+                if d0.ability != none {
+                    let mut d = d0.clone();
+                    d.ability = none;
+                    if dmg(a0, &d, f0) != base { out.push(format!("防御特性:{}", packr.intern.resolve(d0.ability))); }
+                }
+            }
         }
     }
     // 連続技は回数を仮定しているので、その前提だけは明示する。
