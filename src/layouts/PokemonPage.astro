@@ -355,6 +355,22 @@ const breadcrumbJsonLd = {
 				min-height: 36px;
 				align-items: center;
 			}
+			/* 下にスクロールした時に何のページか分かるよう、ナビ左端にアイコンを出す。
+			   ナビは横スクロールするので sticky で左に貼り付ける。padding分の
+			   negative margin は、貼り付いた時に背景が左端まで届くようにするため。 */
+			.poke-nav-mon {
+				position: sticky;
+				left: 0;
+				z-index: 1;
+				display: inline-flex;
+				align-items: center;
+				flex-shrink: 0;
+				margin-left: -1rem;
+				padding: 0 8px 0 1rem;
+				background: #fff;
+				border-right: 1px solid #f1f5f9;
+			}
+			.poke-nav-mon img { width: 26px; height: 26px; display: block; }
 			:global(.poke-nav a) {
 				font-size: 0.79rem;
 				font-weight: 600;
@@ -422,7 +438,13 @@ const breadcrumbJsonLd = {
 	<body>
 		<Header />
 		<nav class="poke-nav" id="poke-nav" aria-label={T.navAria}>
-			<div class="poke-nav-inner" id="poke-nav-inner"></div>
+			<div class="poke-nav-inner" id="poke-nav-inner">
+				{pokemonName && (
+					<span class="poke-nav-mon">
+						<img src={`/images/pokemon/pokemon-${ownIcon}.webp`} alt={pokemonNameDisp} width="26" height="26" loading="eager" />
+					</span>
+				)}
+			</div>
 		</nav>
 		<main>
 			<article>
