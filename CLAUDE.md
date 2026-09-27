@@ -36,6 +36,7 @@ src/
 | 考察記事の執筆・加筆・推敲 | `.claude/skills/article-writing/SKILL.md`（So What原則・公平性・事実確認・型カード・画像番号表・SEO） |
 | ポケモン情報ページの作成・更新 | `.claude/skills/pokemon-page/SKILL.md`（DBクエリ雛形・画像/スプライト・FAQ JSON-LD） |
 | シミュレータ開発（scripts/simulator・scripts/tests） | `.claude/rules/simulator.md`（3点セット・監査スクリプト・盲点ゲート） |
+| パーティ構築・1v1判定・想定型（工房・簡単構築・情報ページの相性/想定型） | `.claude/rules/party-builder.md`（データの流れ・型の規則・1v1判定と表示の決定事項・残課題） |
 | 公開前の記事レビュー | `.claude/commands/記事レビュー.md`（観点1〜20） |
 | 破壊的コマンドの禁止（git stash/reset/clean・共有ディレクトリのrm・kill・同時ビルド） | `.claude/hooks/destructive_guard.py`（`.claude/settings.json` で登録） |
 
