@@ -11,7 +11,7 @@ from .ai import (HeuristicAI, should_mega_evolve, _forced_charging_action,
                  _filter_valid_by_lock, _filter_by_pp, _get_struggle)
 
 SETUP_MOVES = {  # 技名 → 主に上げる能力（積み全抜き判定用）
-    "つるぎのまい": "atk", "りゅうのまい": "atk", "ビルドアップ": "atk", "もりののろい": "atk",
+    "つるぎのまい": "atk", "りゅうのまい": "atk", "ギアチェンジ": "atk", "ビルドアップ": "atk", "もりののろい": "atk",
     "めいそう": "spa", "わるだくみ": "spa", "ロックカット": "spd_spe",
     "からをやぶる": "all", "りゅうせいぐん": None,
 }

@@ -2485,6 +2485,8 @@ pub fn self_boosts(pack: &Pack, n: u16) -> Option<Vec<(u8, i32)>> {
         vec![(2, 2)]
     } else if n == l.りゅうのまい {
         vec![(0, 1), (4, 1)]
+    } else if n == l.ギアチェンジ {
+        vec![(0, 1), (4, 2)]
     } else if n == l.からをやぶる {
         vec![(0, 2), (2, 2), (4, 2), (1, -1), (3, -1)]
     } else if n == l.めいそう {
@@ -3766,6 +3768,8 @@ fn flinch_prob(pack: &Pack, n: u16) -> Option<f64> {
         0.20
     } else if n == l.はやてがえし {
         1.00
+    } else if n == l.びりびりちくちく {
+        0.30
     } else {
         return None;
     };

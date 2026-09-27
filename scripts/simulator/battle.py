@@ -2013,6 +2013,7 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
         "つるぎのまい":   [("stage_attack", 2)],
         "わるだくみ":     [("stage_sp_attack", 2)],
         "りゅうのまい":   [("stage_attack", 1), ("stage_speed", 1)],
+        "ギアチェンジ":   [("stage_attack", 1), ("stage_speed", 2)],
         "からをやぶる":   [("stage_attack", 2), ("stage_sp_attack", 2), ("stage_speed", 2),
                            ("stage_defense", -1), ("stage_sp_defense", -1)],
         "めいそう":       [("stage_sp_attack", 1), ("stage_sp_defense", 1)],
@@ -3201,6 +3202,7 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
         "つららおとし": 0.30, "ひょうざんおろし": 0.30,
         "ゴッドバード": 0.30, "ドラゴンダイブ": 0.20,
         "はやてがえし": 1.00,
+        "びりびりちくちく": 0.30,
     }
     if n in FLINCH_MOVES and FLINCH_MOVES[n] > 0 and not force_no_secondary:
         if random.random() < FLINCH_MOVES[n]:

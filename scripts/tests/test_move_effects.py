@@ -8967,6 +8967,57 @@ _dfree = make_poke(type1="ノーマル", hp_b=255)
 _Bol(BattleSide([_dfree]), BattleSide([make_poke()]))._end_of_turn()
 check("非たこがためは下がらない(負例): たこがため", _dfree.stage_defense == 0 and _dfree.stage_sp_defense == 0)
 
+# ── びりびりちくちく ──
+check("DB: びりびりちくちく 取得可能", dl.get_move("びりびりちくちく") is not None)
+_mv_びりびりちくちく = dl.get_move("びりびりちくちく")
+if _mv_びりびりちくちく:
+    _pa_びりびりちくちく = make_poke(type1="でんき", atk_b=100, spatk_b=100)
+    _pd_びりびりちくちく = make_poke(type1="みず", def_b=100, spdef_b=100)
+    _d_びりびりちくちく = dmg(_pa_びりびりちくちく, _pd_びりびりちくちく, "びりびりちくちく")
+    check("ダメージ計算: びりびりちくちく", _d_びりびりちくちく > 0, f"dmg={_d_びりびりちくちく}")
+# びりびりちくちく: ひるみ30%
+_mv_f_びりびりちくちく = dl.get_move("びりびりちくちく")
+if _mv_f_びりびりちくちく:
+    random.seed(1); _fh_びりびりちくちく = 0
+    for _ in range(300):
+        _pa3 = make_poke(type1="でんき", atk_b=30, spatk_b=30); _pd3 = make_poke(type1="みず", def_b=255, spdef_b=255, hp_b=255)
+        execute(_pa3, _pd3, "びりびりちくちく"); _fh_びりびりちくちく += int(_pd3.flinched)
+    check("ひるみ(30%): びりびりちくちく", 27 <= _fh_びりびりちくちく <= 168, f"count={_fh_びりびりちくちく}/300")
+
+# ── ギアチェンジ ──
+check("DB: ギアチェンジ 取得可能", dl.get_move("ギアチェンジ") is not None)
+# ギアチェンジ: 自分攻撃+1
+_mv_sb_ギアチェンジ_attack = dl.get_move("ギアチェンジ")
+if _mv_sb_ギアチェンジ_attack:
+    _pa_sb = make_poke(type1="はがね"); _pd_sb = make_poke()
+    execute(_pa_sb, _pd_sb, "ギアチェンジ")
+    check("自分攻撃+1: ギアチェンジ", _pa_sb.stage_attack == 1, f"1回適用={_pa_sb.stage_attack} 期待=+1")
+# ギアチェンジ: 自分素早さ+2
+_mv_sb_ギアチェンジ_speed = dl.get_move("ギアチェンジ")
+if _mv_sb_ギアチェンジ_speed:
+    _pa_sb = make_poke(type1="はがね"); _pd_sb = make_poke()
+    execute(_pa_sb, _pd_sb, "ギアチェンジ")
+    check("自分素早さ+2: ギアチェンジ", _pa_sb.stage_speed == 2, f"1回適用={_pa_sb.stage_speed} 期待=+2")
+# ギアチェンジ: 自分攻撃+1
+_mvss_ギアチェンジ_attack = dl.get_move("ギアチェンジ")
+if _mvss_ギアチェンジ_attack:
+    random.seed(0); _got_ギアチェンジ_attack = 0
+    for _ in range(60):
+        _pas = make_poke(type1="はがね", atk_b=60, spatk_b=60); _pds = make_poke(type1="こおり", hp_b=255, def_b=255, spdef_b=255)
+        execute(_pas, _pds, "ギアチェンジ")
+        if _pas.stage_attack != 0: _got_ギアチェンジ_attack = _pas.stage_attack; break
+    check("自分攻撃+1: ギアチェンジ", _got_ギアチェンジ_attack == 1, f"1回適用={_got_ギアチェンジ_attack} 期待=1")
+
+# ── ミルクのみ ──
+check("DB: ミルクのみ 取得可能", dl.get_move("ミルクのみ") is not None)
+# ミルクのみ: HP回復（最大HPの約1/2・無天候）
+_mv_hp_ミルクのみ = dl.get_move("ミルクのみ")
+if _mv_hp_ミルクのみ:
+    _pa_hp = make_poke(type1="ノーマル", hp_b=200); _pa_hp.hp = 1; _pd_hp = make_poke()
+    execute(_pa_hp, _pd_hp, "ミルクのみ")
+    _exp_hp_ミルクのみ = _pa_hp.max_hp * 1 // 2
+    check("HP回復(約1/2): ミルクのみ", abs(_pa_hp.hp - (1 + _exp_hp_ミルクのみ)) <= 3 or _pa_hp.hp == _pa_hp.max_hp, f"hp={_pa_hp.hp} 期待≈{1 + _exp_hp_ミルクのみ}")
+
 
 print(f'\n全技テスト: {PASS}件PASS / {FAIL}件FAIL (計{PASS+FAIL}件)')
 if FAILURES:

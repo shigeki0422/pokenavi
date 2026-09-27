@@ -27,6 +27,7 @@ pub fn is_setup_move(pack: &Pack, name: Sym) -> bool {
     let l = &pack.sy.l;
     name == l.つるぎのまい
         || name == l.りゅうのまい
+        || name == l.ギアチェンジ
         || name == l.ちょうのまい
         || name == l.めいそう
         || name == l.わるだくみ

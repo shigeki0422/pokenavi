@@ -613,10 +613,13 @@ for name, type_, cat, power, accuracy, pp, effect in moves:
             break  # 1状態のみ
 
     # ── 回復技：自分のHPを回復する（前提条件のある技は除外） ──
+    # 「自分か味方の」(ミルクのみ)はシングルでは自分を回復するので自己回復として扱う
+    _self_heal = '自分のHP' in effect or '自分か味方のHP' in effect
     _heal_excl = ('ひんしになる' in effect or 'たくわえ' in effect or 'のみこむ' == name
-                  or '味方' in effect or '相手のHP' in effect or 'ねがいごと' in effect
+                  or ('味方' in effect and '自分か味方' not in effect)
+                  or '相手のHP' in effect or 'ねがいごと' in effect
                   or '相手の攻撃の数値分' in effect)  # ちからをすいとる等：専用ブロックで検証
-    if cat == 'status' and '自分のHP' in effect and '回復' in effect and not _heal_excl:
+    if cat == 'status' and _self_heal and '回復' in effect and not _heal_excl:
         sn = safe_name(name)
         _hfrm = re.search(r'最大HPの(\d+)/(\d+)', effect)
         _hn, _hd = (int(_hfrm.group(1)), int(_hfrm.group(2))) if _hfrm else (1, 2)
