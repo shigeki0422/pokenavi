@@ -913,22 +913,40 @@ pub fn relevant_conds(
 ) -> Vec<String> {
     let bt = setup(pack, spec_a, spec_b, season, 0.0);
     let mut out = Vec::new();
-    if let Some(w) = bt.field.weather {
-        out.push(pack.intern.resolve(w).to_string());
-    }
-    let f = &bt.field;
-    if f.electric_terrain { out.push("エレキフィールド".to_string()); }
-    else if f.grassy_terrain { out.push("グラスフィールド".to_string()); }
-    else if f.psychic_terrain { out.push("サイコフィールド".to_string()); }
-    else if f.misty_terrain { out.push("ミストフィールド".to_string()); }
-    {
-        let p = &bt.sides[att].party[0];
-        let a = p.stage(0);
-        let c = p.stage(2);
-        let mut v = Vec::new();
-        if a != 0 { v.push(format!("攻撃{}{}", if a > 0 { "+" } else { "" }, a)); }
-        if c != 0 { v.push(format!("特攻{}{}", if c > 0 { "+" } else { "" }, c)); }
-        if !v.is_empty() { out.push(v.join("・")); }
+    // 場の条件・能力ランクは、その技のダメージを実際に変えるものだけを出す（ダメージ計算そのものに、条件を外した場合と比べさせる。
+    // 表示用の規則表は持たない＝特殊技に攻撃ランク、じめん技にエレキフィールド等の無関係な注記が付かない）。
+    if let Some(mv) = bt.sides[att].active().moves.get(move_idx).cloned() {
+        let packr: &Pack = pack;
+        let def = 1 - att;
+        let dmg = |a: &Poke, d: &Poke, f: &Field| -> i64 {
+            let (mut a, mut d, mut f) = (a.clone(), d.clone(), f.clone());
+            crate::damage::calc_damage(packr, &mut a, &mut d, &mv, &mut f, false, Some(1.0), Some(1.0), &mut |_| 1.0)
+        };
+        let (a0, d0, f0) = (bt.sides[att].active(), bt.sides[def].active(), &bt.field);
+        let base = dmg(a0, d0, f0);
+        if base > 0 {
+            if let Some(w) = f0.weather {
+                let mut f = f0.clone();
+                f.weather = None;
+                if dmg(a0, d0, &f) != base { out.push(packr.intern.resolve(w).to_string()); }
+            }
+            let terr = if f0.electric_terrain { Some("エレキフィールド") } else if f0.grassy_terrain { Some("グラスフィールド") }
+                else if f0.psychic_terrain { Some("サイコフィールド") } else if f0.misty_terrain { Some("ミストフィールド") } else { None };
+            if let Some(tn) = terr {
+                let mut f = f0.clone();
+                f.electric_terrain = false; f.grassy_terrain = false; f.psychic_terrain = false; f.misty_terrain = false;
+                if dmg(a0, d0, &f) != base { out.push(tn.to_string()); }
+            }
+            let mut v = Vec::new();
+            for (k, lbl) in [(0u8, "攻撃"), (2u8, "特攻")] {
+                let st = a0.stage(k);
+                if st == 0 { continue; }
+                let mut a = a0.clone();
+                a.set_stage(k, 0);
+                if dmg(&a, d0, f0) != base { v.push(format!("{}{}{}", lbl, if st > 0 { "+" } else { "" }, st)); }
+            }
+            if !v.is_empty() { out.push(v.join("・")); }
+        }
     }
     // 連続技は回数を仮定しているので、その前提だけは明示する。
     if let Some(mv) = bt.sides[att].active().moves.get(move_idx) {
