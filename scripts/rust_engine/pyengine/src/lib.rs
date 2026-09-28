@@ -58,6 +58,12 @@ fn eng() -> PyResult<&'static Mutex<Eng>> {
     Ok(ENG.get().unwrap())
 }
 
+/// 検証用: PREDICT_PROBE=1 で走らせた直前の対戦の各ターンの読み (ターン, side1 JSON, side2 JSON)
+#[pyfunction]
+fn predict_probe_take() -> PyResult<Vec<(i64, String, String)>> {
+    Ok(engine::sim::predict_probe_take())
+}
+
 /// 検証用: BELIEF_PROBE=1 で走らせた直前の対戦の P1 の信念
 /// [(種, 事後(EV/性格候補), 型プール重み, 判明技, 判明持ち物, 持ち物喪失, 発動しなかった持ち物)]
 #[pyfunction]
@@ -410,6 +416,7 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(mcts_vs_dist, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_vs_dist_trace, m)?)?;
     m.add_function(wrap_pyfunction!(select_party_rng_probe, m)?)?;
+    m.add_function(wrap_pyfunction!(predict_probe_take, m)?)?;
     m.add_function(wrap_pyfunction!(live_setup, m)?)?;
     m.add_function(wrap_pyfunction!(live_feats, m)?)?;
     m.add_function(wrap_pyfunction!(mu_analyze, m)?)?;

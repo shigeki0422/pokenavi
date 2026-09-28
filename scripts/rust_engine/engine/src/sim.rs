@@ -99,7 +99,28 @@ pub fn full_battle(
         crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(belief_season()));
         crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(belief_season()));
     }
-    let result = b.run_with_ai(packr, ai1, ai2, &mut rng, |bt| on_turn(packr, bt));
+    // 検証用: PREDICT_PROBE=1 で各ターン終了時の両AIの「相手の型の読み」を控える（predict.py と突き合わせ）
+    let pprobe = std::env::var("PREDICT_PROBE").map(|v| v == "1").unwrap_or(false);
+    let joint = std::env::var("JOINT_BUILD").map(|v| v != "0").unwrap_or(true);
+    let mut app: [Vec<String>; 2] = [Vec::new(), Vec::new()];
+    let mut snaps: Vec<(i64, String, String)> = Vec::new();
+    let result = b.run_with_ai(packr, ai1, ai2, &mut rng, |bt| {
+        if pprobe {
+            for s in 0..2 {
+                let n = packr.intern.resolve(bt.sides[1 - s].active().name).to_string();
+                if !app[s].contains(&n) {
+                    app[s].push(n);
+                }
+            }
+            let a = crate::predict::snapshot(packr, &bt.sides[0], &app[0], joint).to_string();
+            let c = crate::predict::snapshot(packr, &bt.sides[1], &app[1], joint).to_string();
+            snaps.push((bt.turn, a, c));
+        }
+        on_turn(packr, bt)
+    });
+    if pprobe {
+        PPROBE.with(|c| *c.borrow_mut() = std::mem::take(&mut snaps));
+    }
     if probe {
         if let Some(bl) = b.sides[0].belief.0.take() {
             let season = belief_season().to_string();
@@ -123,6 +144,15 @@ pub fn full_battle(
 type ProbeRow = (String, Vec<f64>, Vec<f64>, Vec<String>, Option<String>, bool, Vec<String>);
 thread_local! {
     static PROBE: std::cell::RefCell<Vec<ProbeRow>> = const { std::cell::RefCell::new(Vec::new()) };
+}
+
+thread_local! {
+    static PPROBE: std::cell::RefCell<Vec<(i64, String, String)>> = const { std::cell::RefCell::new(Vec::new()) };
+}
+
+/// PREDICT_PROBE=1 で走らせた直前の対戦の、各ターンの (ターン, side1の読みJSON, side2の読みJSON)
+pub fn predict_probe_take() -> Vec<(i64, String, String)> {
+    PPROBE.with(|c| std::mem::take(&mut *c.borrow_mut()))
 }
 
 pub fn belief_probe_take() -> Vec<ProbeRow> {
@@ -281,6 +311,8 @@ fn mcts_3v3_inner(
     if let Some(v) = f2("ORACLE") { ai2.oracle = v > 0.5; }
     if let Some(v) = f2("JOINT_BUILD") { ai2.joint_build = v > 0.5; }
     if let Some(v) = f2("ITEM_GONE") { ai2.item_gone = v > 0.5; }
+    if let Some(v) = f2("AI_KO_PRECISE") { ai2.ko_precise = v > 0.5; }
+    if let Some(v) = f2("AI_PRUNE_IMMUNE") { ai2.prune_immune = v > 0.5; }
     if let Some(v) = f2("ORACLE_MIX") { ai2.oracle_mix = v; }
     if let Some(v) = f2("ORACLE_REVEAL") { ai2.oracle_reveal = v as u32; }
     let result = run_two_mcts(packr, [net, net_b.unwrap_or(net)], &mut b, &mut ai1, &mut ai2, &mut rng, on_turn);
@@ -867,8 +899,9 @@ fn run_two_mcts(
                 let ai: &mut SearchAI = if sx == 0 { ai1 } else { ai2 };
                 let a = ai.choose(packr, nets[sx], &mut bt.sides, sx, &mut bt.field, &mut bl, rng);
                 bt.sides[sx].belief.0 = Some(bl);
+                let precise = ai.ko_precise;
                 let (me, op) = crate::battle::split2(&mut bt.sides, sx);
-                out[sx] = certain_ko_override(packr, a, me, op, &mut bt.field, rng);
+                out[sx] = crate::ai::certain_ko_override_opt(packr, a, me, op, &mut bt.field, rng, precise);
             }
             ACT_LOG.with(|l| {
                 if let Some(v) = l.borrow_mut().as_mut() {

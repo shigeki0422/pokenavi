@@ -94,6 +94,8 @@ pub struct PoolBuild {
     pub ev: EvEntry,
     /// sorted（パリティ規約 #3）
     pub moves: Vec<String>,
+    /// 系統（phys/spec/mix）。表示用（predict.rs）で、決定化には使わない
+    pub side: String,
 }
 
 #[derive(Clone, Debug, Default)]
@@ -195,7 +197,7 @@ pub struct Pack {
     pub pre_mega: HashMap<String, (String, Vec<String>, Vec<String>)>,
     /// 型プール（_gen_type_pool.py の出力）。種族名 → 型まるごとの候補。
     /// 技・持ち物・性格・努力値を独立に引くと実在しない組み合わせができるので、
-    /// 型単位で引けるようにする（JOINT_BUILD=1 で有効）。
+    /// 型単位で引けるようにする（既定で有効。JOINT_BUILD=0 で無効）。
     pub build_pool: HashMap<String, Vec<PoolBuild>>,
     /// R4: ネット重み
     pub net: Option<crate::net::NetW>,
@@ -582,6 +584,7 @@ impl Pack {
                             rate: 0.0,
                         },
                         moves,
+                        side: gs("side"),
                     });
                 }
                 build_pool.insert(sp.clone(), out);

@@ -242,6 +242,10 @@ pub fn is_megastone(pack: &Pack, item: Option<u16>) -> bool {
                 || s.ends_with("ナイトＹ")
                 || s.ends_with("ナイトX")
                 || s.ends_with("ナイトY")
+                // M-6 の Zメガ石（battle.py _is_megastone と同じ。抜けていて、ガブリアスナイトZ 等を
+                // はたきおとす・トリックで奪えてしまい、型プールの読みでもメガ後の特性で型を全部弾いていた）
+                || s.ends_with("ナイトＺ")
+                || s.ends_with("ナイトZ")
         }
     }
 }
@@ -803,8 +807,10 @@ pub fn apply_pre_move_forms(pack: &Pack, attacker: &mut Poke, mv: &DMove) {
     if attacker.ability == l.バトルスイッチ && mv.category != Cat::Status {
         aegislash_to_blade(pack, attacker);
     }
+    // タイプなしの技（わるあがき）ではタイプが変わらない（battle.py と同じ）
     if (attacker.ability == l.へんげんじざい || attacker.ability == pack.sy.ai.リベロ)
         && !attacker.protean_used
+        && mv.ty != crate::pack::NO_TY
     {
         let new_type = mv.ty;
         if attacker.type1 != new_type || attacker.type2.is_some() {

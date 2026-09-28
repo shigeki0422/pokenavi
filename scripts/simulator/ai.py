@@ -62,25 +62,60 @@ _BLADE_ON = os.environ.get("AI_BLADE_FORME", "1") == "1"
 _MULTI_HIT_ON = os.environ.get("AI_MULTI_HIT", "1") == "1"
 
 
-def _expected_hits(move, attacker) -> float:
-    """連続技の期待ヒット数。正本は battle._calc_hits（2/3/2-5乱数/ネズミざん/スキルリンク）。
+def _hit_plan(move, attacker, mode: str = "exp"):
+    """連続技の [(何発目, 重み)]。正本は battle._calc_hits（2/3/2-5乱数/ネズミざん/スキルリンク）。
+    mode: "exp"=期待回数 / "min"=必ず当たる回数（確定KO判定） / "max"=最大回数（被弾の最悪値）。
+    トリプルアクセルは発ごとに威力が上がる（20/40/60）ので発ごとに計算する。
     AI_MULTI_HIT=0 で従来どおり1発として見る（A/B用）。"""
     if not _MULTI_HIT_ON:
-        return 1.0
+        return ((0, 1.0),)
     from .battle import MULTI_HIT_2, MULTI_HIT_3, MULTI_HIT_RANDOM_25
     n = move.name_jp
     skill_link = getattr(attacker, "ability", "") == "スキルリンク"
     if n in MULTI_HIT_2:
-        return 2.0
+        return ((0, 2.0),)
     if n in MULTI_HIT_3:
-        return 3.0
+        return ((0, 1.0), (1, 1.0), (2, 1.0))
     if n in MULTI_HIT_RANDOM_25:
         # random.choices([2,3,4,5], weights=[3,3,1,1]) の期待値 = 3.0
-        return 5.0 if skill_link else 3.0
+        return ((0, 5.0 if skill_link else {"exp": 3.0, "min": 2.0, "max": 5.0}[mode]),)
     if n == "ネズミざん":
         # 1回目は確定、以降 0.9 で継続（上限10）。E = (1-0.9^10)/0.1
-        return 10.0 if skill_link else 6.513
-    return 1.0
+        return ((0, 10.0 if skill_link else {"exp": 6.513, "min": 1.0, "max": 10.0}[mode]),)
+    return ((0, 1.0),)
+
+
+def _expected_hits(move, attacker) -> float:
+    """連続技の期待ヒット数（威力換算。トリプルアクセルは 20/40/60 で 1発目の6倍）。"""
+    if move.name_jp == "トリプルアクセル" and _MULTI_HIT_ON:
+        return 6.0
+    return sum(w for _, w in _hit_plan(move, attacker, "exp"))
+
+
+def _move_damage(attacker, defender, move, field, roll: float, mode: str,
+                 crit_mix: bool = False) -> float:
+    """1回の技使用の合計ダメージ見積もり（姿変化・連続技・へんげんじざい込み、命中率は含めない）。
+    発ごとの威力は attacker._multi_hit_index で決まる（前回の技の値が残っているので必ず設定して戻す）。"""
+    with _pre_move_forms_ctx(attacker, move):
+        saved = getattr(attacker, "_multi_hit_index", 0)
+        pc = crit_chance(attacker, move, defender) if crit_mix else 0.0
+        total = 0.0
+        try:
+            for hi, w in _hit_plan(move, attacker, mode):
+                attacker._multi_hit_index = hi   # type: ignore
+                d = calc_damage(attacker, defender, move, field, critical=False, random_roll=roll)
+                if pc > 0:
+                    dc = calc_damage(attacker, defender, move, field, critical=True, random_roll=roll)
+                    d = d * (1 - pc) + dc * pc
+                total += d * w
+        finally:
+            attacker._multi_hit_index = saved    # type: ignore
+        # へんげんじざい/リベロ: 技使用時にその技タイプへ変化するため全攻撃技がタイプ一致。
+        # 技を撃つ前の見積もりでは非一致技にSTAB(1.5)を補正（撃った後は一致扱いで二重計上しない）。
+        if attacker.ability in ("へんげんじざい", "リベロ") and move.type \
+                and move.type not in (attacker.type1, attacker.type2):
+            total *= 1.5
+        return total
 
 
 def _pre_move_forms_ctx(attacker, move):
@@ -129,24 +164,7 @@ def expected_damage(attacker: BattlePokemon, defender: BattlePokemon,
     eff = get_type_effectiveness(move.type, defender.type1, defender.type2)
     if eff == 0:
         return 0.0
-    with _pre_move_forms_ctx(attacker, move):
-        return _expected_damage_core(attacker, defender, move, field) * acc
-
-
-def _expected_damage_core(attacker, defender, move, field) -> float:
-    dmg = calc_damage(attacker, defender, move, field, critical=False, random_roll=0.5)
-    # 急所期待値（トリックフラワー等の必中急所はpc=1.0でcalc_damage(critical=True)になる）
-    pc = crit_chance(attacker, move, defender)
-    if pc > 0:
-        dmg_crit = calc_damage(attacker, defender, move, field, critical=True, random_roll=0.5)
-        dmg = dmg * (1 - pc) + dmg_crit * pc
-    # へんげんじざい/リベロ: 技使用時にその技タイプへ変化するため全攻撃技がタイプ一致。
-    # 選出評価ではタイプ変化前のため、非一致技にSTAB(1.5)を補正（実戦のcalc_damageは
-    # 技前に変化済みで二重計上にならない＝ここは選出スコア専用）。
-    if attacker.ability in ("へんげんじざい", "リベロ") \
-            and move.type not in (attacker.type1, attacker.type2):
-        dmg *= 1.5
-    return dmg * _expected_hits(move, attacker)
+    return _move_damage(attacker, defender, move, field, 0.5, "exp", crit_mix=True) * acc
 
 
 def _best_expected_damage(poke: BattlePokemon, opp: BattlePokemon,
@@ -282,8 +300,7 @@ def _can_ko(attacker: BattlePokemon, defender: BattlePokemon,
     eff = get_type_effectiveness(move.type, defender.type1, defender.type2)
     if eff == 0:
         return False
-    dmg = calc_damage(attacker, defender, move, field, critical=False, random_roll=0.5)
-    return dmg >= defender.hp
+    return _move_damage(attacker, defender, move, field, 0.5, "exp") >= defender.hp
 
 
 def _opp_priority_threatens(me: BattlePokemon, opp: BattlePokemon,
@@ -291,7 +308,7 @@ def _opp_priority_threatens(me: BattlePokemon, opp: BattlePokemon,
     """相手の先制技でKOされる可能性があるか（全技を参照=メタ知識）"""
     for mv in opp.moves:
         if mv and mv.priority > 0 and mv.power:
-            dmg = calc_damage(opp, me, mv, field, critical=False, random_roll=1.0)
+            dmg = _move_damage(opp, me, mv, field, 1.0, "max")
             if dmg >= me.hp:
                 return True
     return False
@@ -412,7 +429,9 @@ def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: B
             continue
         # random_roll は正規化値で roll = 0.85 + x*0.15。最低ロールは 0.0（0.85 を渡すと実効0.9775＝
         # ほぼ最高値になり、確定でないKOを確定と誤認する。実測: 介入の15.3%が該当）。
-        d = calc_damage(me, opp, mv, field, critical=False, random_roll=0.0)   # 最低ロールでKO=確定
+        # 姿変化（バトルスイッチ）と連続技の「必ず当たる回数」込み。単発の calc_damage 直呼びだと
+        # ギルガルドはシールド(攻50)のまま・連続技は1発ぶんになり、確定KOを見逃していた
+        d = _move_damage(me, opp, mv, field, 0.0, "min")                     # 最低ロールでKO=確定
         if d >= opp.hp and d > bestd:
             bestd = d; best = (i, mv)
     if best is None:
@@ -520,10 +539,12 @@ def _get_struggle():
     global _STRUGGLE_MOVE
     if _STRUGGLE_MOVE is None:
         from .data import MoveData
+        # タイプなし（相性・タイプ一致・スキン系の対象外＝ゴーストにも当たる）・必中（第5世代以降の実機仕様）。
+        # 以前はノーマル/命中100で、PP切れのポケモンがゴーストに「効かない」を繰り返し延々と居座っていた
         _STRUGGLE_MOVE = MoveData(
             name_jp="わるあがき", name_en="Struggle",
-            type="ノーマル", category="physical",
-            power=50, accuracy=100, priority=0, pp=1, effect_id=None,
+            type="", category="physical",
+            power=50, accuracy=None, priority=0, pp=1, effect_id=None,
         )
     return _STRUGGLE_MOVE
 

@@ -119,6 +119,58 @@ pub fn candidate_actions(pack: &Pack, me_s: &Side, op_s: &Side, field: &Field, c
     out
 }
 
+/// search_ai.py `_type_immune_move`。攻撃技が相手にタイプで無効か（execute_move のタイプ無効判定と同じ）。
+/// メガ進化と同時の技はメガ後の特性で実効タイプを決める。相手の特性による無効は非公開情報なので見ない。
+pub fn type_immune_move(pack: &Pack, me: &crate::poke::Poke, a: &Action, opp: &crate::poke::Poke, field: &Field) -> bool {
+    if a.kind != ActKind::Move || a.move_idx < 0 {
+        return false;
+    }
+    let mv = match &a.mv {
+        Some(m) => m,
+        None => return false,
+    };
+    if mv.category == Cat::Status {
+        return false;
+    }
+    let mut ab = me.ability;
+    if a.do_mega && !me.mega_evolved {
+        if let Some(md) = &me.mega {
+            if let Some(x) = &md.ability {
+                if !x.is_empty() {
+                    if let Some(sy) = pack.intern.get(x) {
+                        ab = sy;
+                    }
+                }
+            }
+        }
+    }
+    let t = crate::damage::effective_move_type_ab(pack, me, ab, mv, field);
+    if pack.eff(t, opp.type1, opp.type2) != 0.0 {
+        return false;
+    }
+    // きもったま（scrappy_override と同じ条件を差し替え後の特性で見る）
+    !(ab == pack.sy.ab.きもったま
+        && (t == pack.tc.ノーマル || t == pack.tc.かくとう)
+        && opp.has_type(pack.tc.ゴースト))
+}
+
+/// search_ai.py `_prune_immune_moves`。他に技の候補が無いとき（こだわり固定など）は外さない。
+pub fn prune_immune_moves(pack: &Pack, me_s: &Side, op_s: &Side, field: &Field, cands: Vec<Action>) -> Vec<Action> {
+    let opp = op_s.active();
+    let me = me_s.active();
+    if !opp.is_alive {
+        return cands;
+    }
+    let imm: Vec<bool> = cands.iter().map(|a| type_immune_move(pack, me, a, opp, field)).collect();
+    if !imm.iter().any(|&x| x) {
+        return cands;
+    }
+    if !cands.iter().zip(imm.iter()).any(|(a, &im)| a.kind == ActKind::Move && !im) {
+        return cands;
+    }
+    cands.into_iter().zip(imm).filter(|(_, im)| !*im).map(|(a, _)| a).collect()
+}
+
 /// train_az2._net_ai の nefn: (policy over legal, value=P(A勝))
 pub struct NetCtx {
     pub ft: FeatTables,
@@ -240,10 +292,14 @@ pub struct SearchAI {
     /// 完全情報AI: 相手の型を決定化せず真値のまま読む（Python の SearchAI.oracle と同じ）。
     /// 型推定のノイズを外してネット品質だけを測る/学ぶためのもの。
     pub oracle: bool,
-    /// 決定化で型プールから型まるごと引く（env JOINT_BUILD=1）。
+    /// 決定化で型プールから型まるごと引く（既定ON。env JOINT_BUILD=0 で無効）。
     pub joint_build: bool,
     /// 消費・はたき落としで無くなった既知の持ち物を決定化で戻さない（ITEM_GONE=0 で旧挙動＝A/B用）
     pub item_gone: bool,
+    /// 確定KO安全弁を姿変化・連続技込みで判定する（AI_KO_PRECISE=0 で旧判定＝A/B用。本番は常に true）
+    pub ko_precise: bool,
+    /// 相手の場のポケモンにタイプで無効な攻撃技を根の候補から外す（AI_PRUNE_IMMUNE=0 で旧挙動＝A/B用）
+    pub prune_immune: bool,
     /// 計測用: この確率で相手の真の型をそのまま使う（型予測の精度を人為的に上げ、精度と勝率の関係を測る）
     pub oracle_mix: f64,
     /// 計測用: 相手の真の型のうち一部だけを使う（1=持ち物 2=特性 4=技 8=性格・努力値 のビット和）。
@@ -280,8 +336,11 @@ impl SearchAI {
             tree_roll: 0.85,
             hidden: true,
             oracle: std::env::var("ORACLE").map(|v| v == "1").unwrap_or(false),
-            joint_build: std::env::var("JOINT_BUILD").map(|v| v == "1").unwrap_or(false),
+            // 既定ON（belief.py と同じ）。JOINT_BUILD=0 で旧挙動（要素ごとの決定化）
+            joint_build: std::env::var("JOINT_BUILD").map(|v| v != "0").unwrap_or(true),
             item_gone: std::env::var("ITEM_GONE").map(|v| v != "0").unwrap_or(true),
+            ko_precise: std::env::var("AI_KO_PRECISE").map(|v| v != "0").unwrap_or(true),
+            prune_immune: std::env::var("AI_PRUNE_IMMUNE").map(|v| v != "0").unwrap_or(true),
             oracle_mix: std::env::var("ORACLE_MIX").ok().and_then(|v| v.parse().ok()).unwrap_or(0.0),
             oracle_reveal: std::env::var("ORACLE_REVEAL").ok().and_then(|v| v.parse().ok()).unwrap_or(0),
             solve_play: std::env::var("SOLVE_PLAY").ok().and_then(|v| v.parse::<f64>().ok()).unwrap_or(0.0) > 0.5,
@@ -316,8 +375,11 @@ impl SearchAI {
         if let Some(a) = forced_charging_action(sides[me_idx].active_mut()) {
             return a;
         }
-        let cands =
+        let mut cands =
             candidate_actions(pack, &sides[me_idx], &sides[op_idx], field, self.collapse_mega);
+        if self.prune_immune {
+            cands = prune_immune_moves(pack, &sides[me_idx], &sides[op_idx], field, cands);
+        }
         if cands.len() <= 1 {
             if let Some(a) = cands.into_iter().next() {
                 return a;
@@ -1268,4 +1330,60 @@ fn pick_pool_build<'a>(
 /// Side に belief を設定する補助
 pub fn set_belief(side: &mut Side, b: OpponentBelief) {
     side.belief = BeliefSlot(Some(Box::new(b)));
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+    const HIP: &str = "カバルドン@オボンのみ:わんぱく:じしん|あくび|ふきとばし|なまける:32/0/32/0/0/0:すなおこし";
+    const SAL: &str = "ボーマンダ@ボーマンダナイト:ようき:すてみタックル|じしん|りゅうのまい|はねやすめ:0/32/0/0/0/32:いかく";
+    const MIM: &str = "ミミッキュ@いのちのたま:ようき:じゃれつく|シャドークロー|かげうち|つるぎのまい:0/32/0/0/0/32:ばけのかわ";
+    const GAR: &str = "ガブリアス@こだわりスカーフ:ようき:じしん|ドラゴンクロー|どくづき|つるぎのまい:0/32/0/0/0/32:さめはだ";
+    const SKA: &str = "エアームド@ゴツゴツメット:わんぱく:ボディプレス|はねやすめ|てっぺき|ステルスロック:32/0/32/0/0/0:がんじょう";
+    const TAU: &str = "ケンタロス@こだわりハチマキ:いじっぱり:すてみタックル|インファイト|じしん|アイアンヘッド:0/32/0/0/0/32:きもったま";
+
+    /// test_all.py 26f と同じ局面で、根の候補から外れる技が Python と一致する。
+    fn names(p: &mut Pack, me: &str, opp: &str, bench: &[&str], lock: Option<&str>) -> Vec<String> {
+        let mut party = vec![build_poke(p, me, "M-6")];
+        for b in bench {
+            party.push(build_poke(p, b, "M-6"));
+        }
+        if let Some(l) = lock {
+            party[0].choice_locked_move = Some(p.intern.get(l).unwrap());
+        }
+        let s1 = Side { party, active_idx: 0, ..Default::default() };
+        let s2 = Side { party: vec![build_poke(p, opp, "M-6")], active_idx: 0, ..Default::default() };
+        let f = Field::default();
+        let pr: &Pack = p;
+        let c = prune_immune_moves(pr, &s1, &s2, &f, candidate_actions(pr, &s1, &s2, &f, false));
+        c.iter()
+            .map(|a| match a.kind {
+                ActKind::Move => {
+                    format!("{}{}", if a.do_mega { "メガ+" } else { "" }, pr.intern.resolve(a.mv.as_ref().unwrap().name))
+                }
+                _ => "交代".to_string(),
+            })
+            .collect()
+    }
+
+    #[test]
+    fn 無効技を根の候補から外す() {
+        let mut p = pack();
+        let n = names(&mut p, HIP, SAL, &[], None);
+        assert!(!n.contains(&"じしん".to_string()) && n.contains(&"あくび".to_string()), "{n:?}");
+        let n = names(&mut p, GAR, SKA, &[], None);
+        assert!(!n.contains(&"どくづき".to_string()) && !n.contains(&"じしん".to_string())
+            && n.contains(&"ドラゴンクロー".to_string()), "{n:?}");
+        let n = names(&mut p, SAL, MIM, &[], None);
+        assert!(n.contains(&"メガ+すてみタックル".to_string()) && !n.contains(&"すてみタックル".to_string()), "{n:?}");
+        let n = names(&mut p, GAR, SKA, &[HIP], Some("どくづき"));
+        assert!(n.contains(&"どくづき".to_string()) && n.contains(&"交代".to_string()), "こだわり固定は外さない {n:?}");
+        let n = names(&mut p, TAU, MIM, &[], None);
+        assert!(n.contains(&"すてみタックル".to_string()) && n.contains(&"インファイト".to_string()), "きもったま {n:?}");
+    }
 }

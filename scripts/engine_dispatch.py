@@ -11,7 +11,7 @@
 フォールバック警告は理由ごとに1度だけ stderr に出す（loudly-once）。
 
 未対応コンフィグ（Rust版は実装していない）:
-  MCTS_CACHE / MCTS_EARLY / MCTS_NEXTTURN_LAMBDA / MCTS_QSELECT* / MCTS_DOWNSIDE_* /
+  MCTS_EARLY / MCTS_NEXTTURN_LAMBDA / MCTS_QSELECT* / MCTS_DOWNSIDE_* /
   MCTS_COLLAPSE_MEGA=0 / MCTS_EXPLAIN / HIDDEN_SELECTION=0 / SWITCH_BOOST / IMITATE_SWITCH /
   SELECT_MODE / LEARNED_SELECTION / SELECT_SIMS / SELECT_TOPK / MAX_MEGA / MIN_MEGA / MEGA_PENALTY
 探索方式（exp3 / duct / tree_search）と solve_zero_sum / choose_faint_switch は env ではなく
@@ -50,7 +50,6 @@ _G_BASE = [
     ("IMITATE_SWITCH", {None, "0"}),
 ]
 _G_MCTS = [
-    ("MCTS_CACHE", {None, "0"}),
     ("MCTS_EARLY", {None, "0"}),
     ("MCTS_NEXTTURN_LAMBDA", {None, "0", "0.0"}),
     ("MCTS_COLLAPSE_MEGA", {None, "1"}),

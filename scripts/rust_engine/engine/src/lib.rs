@@ -22,6 +22,7 @@ pub mod statec;
 pub mod interner;
 pub mod pack;
 pub mod poke;
+pub mod predict;
 pub mod pysum;
 pub mod syms;
 

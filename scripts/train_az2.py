@@ -194,8 +194,7 @@ def eval_vs_strategies(net, loader, parties, N=12, depth=8, seed=31):
 
 def _net_ai(net, loader, rollouts, depth, seed, adversarial=False, opp_k=6,
             tree=False, tree_depth=1, tree_k=3, tree_det=None, tree_extend_k=0,
-            mcts=False, mcts_sims=400, c_puct=1.5, mcts_select="duct", mcts_fast=True,
-            mcts_cache=False, mcts_ensemble=16):
+            mcts=False, mcts_sims=400, c_puct=1.5, mcts_select="duct", mcts_fast=True):
     """ネットの価値誘導探索AI。ロールアウト相手もネット（NetGreedyAI）＝AlphaZero的。
     mcts_fast=True: MCTS高速化（葉のencode+forward統合＝net_eval、cloneでbelief非複製）。結果はビット一致。"""
     from simulator.alphazero import NetGreedyAI, legal_actions_indexed
@@ -220,8 +219,6 @@ def _net_ai(net, loader, rollouts, depth, seed, adversarial=False, opp_k=6,
                 return pol, val
             ai.net_eval = nefn
             ai.fast_clone = True
-        if mcts_cache:
-            ai.mcts_cache = True; ai.mcts_ensemble = mcts_ensemble
     return ai
 
 

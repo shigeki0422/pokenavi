@@ -8,7 +8,7 @@ import os
 import random
 import multiprocessing as mp
 
-from simulator.battle import Battle, BattleSide, BattleField, _entry_effects
+from simulator.battle import Battle, BattleSide, BattleField
 
 _W = {}
 
@@ -55,9 +55,12 @@ def side_snapshot(side, field) -> dict:
     }
 
 
-def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, mcts_sims=None) -> dict:
+def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, mcts_sims=None,
+                    predict=False) -> dict:
     """1戦を実行し、ターン毎記録（turns）＋勝敗＋最終状態を返す。
-    mcts_sims未指定(None)＝本番既定MCTS(env F1_MCTS_SIMS, 既定400)。>0でMCTS@N、明示0でtree d2。"""
+    mcts_sims未指定(None)＝本番既定MCTS(env F1_MCTS_SIMS, 既定400)。>0でMCTS@N、明示0でtree d2。
+    predict=True: 各ターンの記録に両AIの「相手の型の読み」（turns[i].predict）と、
+    選出個体の実際の型（truth）を足す（simulator/predict.py。対戦の進行は変わらない）。"""
     if mcts_sims is None:
         mcts_sims = int(os.environ.get("F1_MCTS_SIMS", "400"))
     random.seed(seed)
@@ -82,28 +85,37 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, m
     from simulator.ai import certain_ko_override   # 確定KO安全弁でラップ
     def ai1(my, opp, f): return certain_ko_override(_a1(my, opp, f), my, opp, f)
     def ai2(my, opp, f): return certain_ko_override(_a2(my, opp, f), my, opp, f)
-    # run() 相当の前処理（見せ合い＋入場時効果）→ turn0 を記録
-    battle.logs.extend(s1.opp_view.team_preview(s2.party))
-    battle.logs.extend(s2.opp_view.team_preview(s1.party))
-    _entry_effects(s1.active, 0, field, s2.active, battle.logs, s1.party)
-    _entry_effects(s2.active, 1, field, s1.active, battle.logs, s2.party)
+    # run() と同じ前処理（見せ合い＝隠れ選出なら6体・先発の登場・入場時効果を速い順・瀕死交代の選び手）→ turn0 を記録
+    ai1.choose_faint_switch = _a1.choose_faint_switch
+    ai2.choose_faint_switch = _a2.choose_faint_switch
+    battle.start(ai1, ai2)
     turns = []
+    _pred = None
+    if predict:
+        from simulator.predict import Predictor, truth_of
+        _pred = Predictor(L)
+        _truth = {"side1": [truth_of(p) for p in sel1], "side2": [truth_of(p) for p in sel2]}
+
+    def _pp(t, s1_, s2_):
+        if _pred is not None:
+            t["predict"] = {"side1": _pred.snapshot(s1_, s2_), "side2": _pred.snapshot(s2_, s1_)}
+        return t
     init_logs = [f"P1選出: {', '.join(p.name for p in sel1)}",
                  f"P2選出: {', '.join(p.name for p in sel2)}"] + list(battle.logs)
-    turns.append({"turn": 0, "logs": init_logs,
+    turns.append(_pp({"turn": 0, "logs": init_logs,
                   "side1": side_snapshot(s1, field), "side2": side_snapshot(s2, field),
                   "weather": field.weather, "weather_count": getattr(field, "weather_count", 0),
                   "trick_room": field.trick_room,
-                  "trick_room_count": getattr(field, "trick_room_count", 0)})
+                  "trick_room_count": getattr(field, "trick_room_count", 0)}, s1, s2))
     prev = [len(battle.logs)]
 
     def cb(b):
         nl = b.logs[prev[0]:]; prev[0] = len(b.logs)
-        turns.append({"turn": b.turn, "logs": nl,
+        turns.append(_pp({"turn": b.turn, "logs": nl,
                       "side1": side_snapshot(b.side1, b.field), "side2": side_snapshot(b.side2, b.field),
                       "weather": b.field.weather, "weather_count": getattr(b.field, "weather_count", 0),
                       "trick_room": b.field.trick_room,
-                      "trick_room_count": getattr(b.field, "trick_room_count", 0)})
+                      "trick_room_count": getattr(b.field, "trick_room_count", 0)}, b.side1, b.side2))
 
     result = battle._turn_loop(ai1, ai2, on_turn=cb)
     if not s1.has_alive():
@@ -119,9 +131,12 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, m
                          ("stage_attack", "stage_sp_attack", "stage_speed", "stage_defense", "stage_sp_defense"))
             opp_alive.append((p.name, boosts))
     own_dead = [p.name for p in s1.party if not p.is_alive]
-    return {"selected1": [p.name for p in sel1], "selected2": [p.name for p in sel2],
-            "turns": turns, "result": result, "winner": winner,
-            "opp_alive": opp_alive, "own_dead": own_dead}
+    rec = {"selected1": [p.name for p in sel1], "selected2": [p.name for p in sel2],
+           "turns": turns, "result": result, "winner": winner,
+           "opp_alive": opp_alive, "own_dead": own_dead}
+    if _pred is not None:
+        rec["truth"] = _truth
+    return rec
 
 
 def _alive_dead(side):
@@ -149,7 +164,8 @@ def _mirror_turn(t):
     return out
 
 
-def play_and_record_both(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, mcts_sims=None):
+def play_and_record_both(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, mcts_sims=None,
+                         predict=False):
     """1戦を実行し P1視点(rec1) と P2視点(rec2=完全ミラー) の2記録を返す。
     総当たりのペア重複排除用：A対B を1回回せば B対A も視点反転で得られる。
     両サイドの belief注釈(▷P1/▷P2)は元から記録済みなので rec2 はラベル入替のみで正確。"""
@@ -177,18 +193,28 @@ def play_and_record_both(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed
     from simulator.ai import certain_ko_override
     def ai1(my, opp, f): return certain_ko_override(_a1(my, opp, f), my, opp, f)
     def ai2(my, opp, f): return certain_ko_override(_a2(my, opp, f), my, opp, f)
-    battle.logs.extend(s1.opp_view.team_preview(s2.party))
-    battle.logs.extend(s2.opp_view.team_preview(s1.party))
-    _entry_effects(s1.active, 0, field, s2.active, battle.logs, s1.party)
-    _entry_effects(s2.active, 1, field, s1.active, battle.logs, s2.party)
+    # run() と同じ前処理（見せ合い＝隠れ選出なら6体・先発の登場・入場時効果を速い順・瀕死交代の選び手）→ turn0 を記録
+    ai1.choose_faint_switch = _a1.choose_faint_switch
+    ai2.choose_faint_switch = _a2.choose_faint_switch
+    battle.start(ai1, ai2)
     turns = []
+    _pred = None
+    if predict:
+        from simulator.predict import Predictor, truth_of
+        _pred = Predictor(L)
+        _truth = {"side1": [truth_of(p) for p in sel1], "side2": [truth_of(p) for p in sel2]}
+
+    def _pp(t, s1_, s2_):
+        if _pred is not None:
+            t["predict"] = {"side1": _pred.snapshot(s1_, s2_), "side2": _pred.snapshot(s2_, s1_)}
+        return t
     init_logs = [f"P1選出: {', '.join(p.name for p in sel1)}",
                  f"P2選出: {', '.join(p.name for p in sel2)}"] + list(battle.logs)
-    turns.append({"turn": 0, "logs": init_logs,
+    turns.append(_pp({"turn": 0, "logs": init_logs,
                   "side1": side_snapshot(s1, field), "side2": side_snapshot(s2, field),
                   "weather": field.weather, "weather_count": getattr(field, "weather_count", 0),
                   "trick_room": field.trick_room,
-                  "trick_room_count": getattr(field, "trick_room_count", 0)})
+                  "trick_room_count": getattr(field, "trick_room_count", 0)}, s1, s2))
     prev = [len(battle.logs)]
 
     def cb(b):

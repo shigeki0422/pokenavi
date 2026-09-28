@@ -162,8 +162,8 @@ _HP_DEFAULT = {"MCTS_FPU": "0.5", "RM_PRIOR_MIX": "0.25", "MCTS_P_FLOOR": "1e-3"
                # ORACLE=1 を両側に掛けると「隠れ情報の無い別ゲーム」になり、通常条件の強さを
                # 予測しないことが実測で分かった（完全情報と通常条件の順位相関はほぼゼロ）。
                "ORACLE": os.environ.get("ORACLE", "0"),
-               # HP_A="JOINT_BUILD=1" で A側だけ型プールから型まるごと決定化する
-               "JOINT_BUILD": os.environ.get("JOINT_BUILD", "0"),
+               # 型プールから型まるごと決定化（既定ON）。JOINT_BUILD=0 と HP_A="JOINT_BUILD=1" で A側だけ有効にできる
+               "JOINT_BUILD": os.environ.get("JOINT_BUILD", "1"),
                # 先発の記録・消費した持ち物の記憶（2026-09-25 修正）。LEAD_SEEN=0 ITEM_GONE=0 と
                # HP_A="LEAD_SEEN=1,ITEM_GONE=1" で A側だけ修正版にして旧挙動と比べる
                "LEAD_SEEN": os.environ.get("LEAD_SEEN", "1"),
@@ -171,7 +171,11 @@ _HP_DEFAULT = {"MCTS_FPU": "0.5", "RM_PRIOR_MIX": "0.25", "MCTS_P_FLOOR": "1e-3"
                # 計測用: HP_A="ORACLE_MIX=0.5" で A側だけ、その確率で相手の真の型を使う（精度と勝率の関係）
                "ORACLE_MIX": os.environ.get("ORACLE_MIX", "0"),
                # 計測用: HP_A="ORACLE_REVEAL=1" で A側だけ真の型の一部（1=持ち物 2=特性 4=技 8=性格・努力値）を使う
-               "ORACLE_REVEAL": os.environ.get("ORACLE_REVEAL", "0")}
+               "ORACLE_REVEAL": os.environ.get("ORACLE_REVEAL", "0"),
+               # 無効技を根の候補から外す・確定KO安全弁の姿変化/連続技込み判定（2026-09-28）。
+               # AI_PRUNE_IMMUNE=0 AI_KO_PRECISE=0 と HP_A="AI_PRUNE_IMMUNE=1,AI_KO_PRECISE=1" で A側だけ修正版
+               "AI_PRUNE_IMMUNE": os.environ.get("AI_PRUNE_IMMUNE", "1"),
+               "AI_KO_PRECISE": os.environ.get("AI_KO_PRECISE", "1")}
 
 
 def _check_rust_env():

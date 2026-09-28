@@ -174,7 +174,7 @@ def export():
 
     # ---- 型プール（_gen_type_pool.py の出力）----
     # 使用率マージナルと対戦の常識的制約から作った「型まるごと」の候補。
-    # 決定化で JOINT_BUILD=1 のときに使う。
+    # 決定化で使う（既定ON。JOINT_BUILD=0 で無効）。
     build_pool = {}
     import pool_versions as PV
     _bp = os.environ.get("BUILD_POOL") or PV.path("type_pool", PV.pointer("season"))
@@ -190,6 +190,8 @@ def export():
                         "ability": _b["ability"],
                         "ev": list(_b["ev"]),
                         "moves": sorted(_b["moves"]),
+                        # 系統（phys/spec/mix）。AIの読みの表示用（simulator/predict.py）
+                        "side": _b.get("side", ""),
                     })
                 build_pool[_r["species"]] = out
         print(f"build_pool: {len(build_pool)}種")

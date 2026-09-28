@@ -5275,6 +5275,276 @@ check("期待ヒット数: スキルリンクは5発",
                                type("X", (), {"ability": "スキルリンク"})()) - 5.0) < 1e-9)
 
 
+print("\n=== 26e. AI火力見積もり: トリプルアクセルの威力上昇・前回の発数の持ち越し・確定KO/先制被弾判定 ===")
+# expected_damage は姿変化・連続技を入れていたが、(1) トリプルアクセルを「1発目(威力20)×3」で見て
+# 実際(20+40+60)の半分、(2) 前回の連続技の _multi_hit_index が残ったまま計算して威力60×3に化ける、
+# (3) certain_ko_override / _can_ko / _opp_priority_threatens は calc_damage 直呼びで姿変化も
+# 連続技も無視していた（REQUIREMENTS は「expected_damage を使う」と書いていたが実装は違った）。
+from simulator.damage import calc_damage as _cd26d
+from simulator.battle import BattleSide as _BS26d, Action as _Act26d, crit_chance as _cc26d
+_mas26d = _mk26c("マニューラ@いのちのたま:ようき:トリプルアクセル|はたきおとす|ねこだまし|つららおとし:0/32/0/0/0/32:プレッシャー")
+_tgt26d = _mk26c("ガブリアス@こだわりスカーフ:ようき:じしん|ドラゴンクロー|スケイルショット|つるぎのまい:0/32/0/0/0/32:さめはだ")
+_ta26d = [m for m in _mas26d.moves if m.name_jp == "トリプルアクセル"][0]
+def _sum26d(att, deff, mv):
+    pc = _cc26d(att, mv, deff); tot = 0.0
+    for i in range(3):
+        att._multi_hit_index = i
+        d = _cd26d(att, deff, mv, _f26c, critical=False, random_roll=0.5)
+        dc = _cd26d(att, deff, mv, _f26c, critical=True, random_roll=0.5)
+        tot += d * (1 - pc) + dc * pc
+    att._multi_hit_index = 0
+    return tot * (mv.accuracy or 100) / 100
+_want26d = _sum26d(_mas26d, _tgt26d, _ta26d)
+_got26d = _A26c.expected_damage(_mas26d, _tgt26d, _ta26d, _f26c)
+check("トリプルアクセル: 見積もり＝威力20/40/60の3発の合計×命中", abs(_got26d - _want26d) < 1e-6,
+      f"got={_got26d:.2f} want={_want26d:.2f}")
+_mas26d._multi_hit_index = 2
+_st26d = _A26c.expected_damage(_mas26d, _tgt26d, _ta26d, _f26c)
+check("前回の連続技の発数が残っていても見積もりは同じ・発数は元に戻す",
+      abs(_st26d - _want26d) < 1e-6 and _mas26d._multi_hit_index == 2,
+      f"{_st26d:.2f} vs {_want26d:.2f} idx={_mas26d._multi_hit_index}")
+_mas26d._multi_hit_index = 0
+check("期待ヒット数(威力換算): トリプルアクセルは1発目の6倍",
+      abs(_A26c._expected_hits(_ta26d, _mas26d) - 6.0) < 1e-9)
+
+def _ko26d(att, deff, name, hp, act=None):
+    deff.hp = hp
+    s1 = _BS26d([att], viewer_label="P1"); s2 = _BS26d([deff], viewer_label="P2")
+    a0 = act or _Act26d(type="move", move=[m for m in att.moves if m.category == "status"][0],
+                         move_idx=[i for i, m in enumerate(att.moves) if m.category == "status"][0])
+    r = _A26c.certain_ko_override(a0, s1, s2, _f26c)
+    deff.hp = deff.max_hp
+    return r.move.name_jp if r.type == "move" else r.type
+
+# ギルガルド: シールドのままの最低ロールでは届かず、ブレードなら届くHP
+_gil26d = _mk26c("ギルガルド@たべのこし:ひかえめ:シャドーボール|ラスターカノン|キングシールド|かげうち:32/0/2/32/0/0:バトルスイッチ")
+_hat26d = _mk26c("ハッサム@ゴツゴツメット:わんぱく:バレットパンチ|とんぼがえり|はねやすめ|つるぎのまい:32/0/32/0/0/0:テクニシャン")
+_sn26d = [m for m in _gil26d.moves if m.name_jp == "かげうち"][0]
+_sh26d = _cd26d(_gil26d, _hat26d, _sn26d, _f26c, critical=False, random_roll=0.0)
+_bl26d = _A26c._move_damage(_gil26d, _hat26d, _sn26d, _f26c, 0.0, "min")
+_hp26d = int((_sh26d + _bl26d) // 2)
+check("前提: ブレードの最低ロールがシールドより大きい", _bl26d > _sh26d + 1, f"shield={_sh26d} blade={_bl26d}")
+check("確定KO: ギルガルドのかげうちはブレード火力で判定し上書きする",
+      _ko26d(_gil26d, _hat26d, "かげうち", _hp26d) == "かげうち", f"hp={_hp26d}")
+check("確定KO: ブレード判定後もシールドのステータスに戻る",
+      not getattr(_gil26d, "_in_blade_forme", False) and _gil26d.attack == _mk26c(
+          "ギルガルド@たべのこし:ひかえめ:シャドーボール|ラスターカノン|キングシールド|かげうち:32/0/2/32/0/0:バトルスイッチ").attack)
+
+# 連続技（2〜5発）は「必ず当たる2発」で確定を判定する（3発目以降は当てにしない）
+_gab26d = _mk26c("ガブリアス@こだわりスカーフ:ようき:スケイルショット|ステルスロック|つるぎのまい|まもる:0/32/0/0/0/32:さめはだ")
+_sla26d = _mk26c("ヤドラン@ゴツゴツメット:ずぶとい:ねっとう|なまける|でんじは|トリック:32/0/32/0/0/0:さいせいりょく")
+_ss26d = [m for m in _gab26d.moves if m.name_jp == "スケイルショット"][0]
+_one26d = _cd26d(_gab26d, _sla26d, _ss26d, _f26c, critical=False, random_roll=0.0)
+_h2 = int(2 * _one26d)
+check("前提: 1発ぶんでは届かないHP", _one26d < _h2, f"1hit={_one26d} 2hits={_h2}")
+check("確定KO: スケイルショットは2発ぶんで確定を判定する",
+      _ko26d(_gab26d, _sla26d, "スケイルショット", _h2) == "スケイルショット", f"hp={_h2}")
+_h3 = int(2 * _one26d) + 1
+check("負例: 2発で届かないHPでは連続技の上書きをしない（3発目以降は確定でない）",
+      _ko26d(_gab26d, _sla26d, "スケイルショット", _h3) != "スケイルショット", f"hp={_h3}")
+
+# 先制技の脅威判定は最大ロール・最大回数（みずしゅりけん 5発）
+_gek26d = _mk26c("ゲッコウガ@いのちのたま:おくびょう:みずしゅりけん|あくのはどう|れいとうビーム|とんぼがえり:0/0/0/32/0/32:へんげんじざい")
+_ws26d = [m for m in _gek26d.moves if m.name_jp == "みずしゅりけん"][0]
+_w1 = _cd26d(_gek26d, _gab26d, _ws26d, _f26c, critical=False, random_roll=1.0)
+_w5 = _A26c._move_damage(_gek26d, _gab26d, _ws26d, _f26c, 1.0, "max")
+_gab26d.hp = int(_w1 * 2) + 1
+check("先制の脅威: みずしゅりけんは最大5発で判定する（1発ぶんでは届かないHP）",
+      _A26c._opp_priority_threatens(_gab26d, _gek26d, _f26c) and _w5 >= _gab26d.hp and _w1 < _gab26d.hp,
+      f"1発={_w1} 5発={_w5} hp={_gab26d.hp}")
+_gab26d.hp = _gab26d.max_hp
+
+
+print("\n=== 26f. 探索AI: 相手にタイプで無効な攻撃技を根の候補から外す ===")
+# 本番ネット同士300戦の実測で無効技は手番の0.7%。強制プレイアウトでは外しても勝率差+0.1pt±0.3
+# （勝敗がほぼ決まった局面の同値タイで方策priorに引かれていた）。見た目の悪手だけ消す。
+from simulator.search_ai import SearchAI as _SA26f, _prune_immune_moves as _pim26f, _type_immune_move as _tim26f
+_hip26f = _mk26c("カバルドン@オボンのみ:わんぱく:じしん|あくび|ふきとばし|なまける:32/0/32/0/0/0:すなおこし")
+_sal26f = _mk26c("ボーマンダ@ボーマンダナイト:ようき:すてみタックル|じしん|りゅうのまい|はねやすめ:0/32/0/0/0/32:いかく")
+_mim26f = _mk26c("ミミッキュ@いのちのたま:ようき:じゃれつく|シャドークロー|かげうち|つるぎのまい:0/32/0/0/0/32:ばけのかわ")
+_gar26f = _mk26c("ガブリアス@こだわりスカーフ:ようき:じしん|ドラゴンクロー|どくづき|つるぎのまい:0/32/0/0/0/32:さめはだ")
+_sk26f = _mk26c("エアームド@ゴツゴツメット:わんぱく:ボディプレス|はねやすめ|てっぺき|ステルスロック:32/0/32/0/0/0:がんじょう")
+_sa26f = _SA26f(dl, rollouts=2, depth=3)
+def _names26f(me, opp, bench=()):
+    s1 = BattleSide([me] + list(bench)); s2 = BattleSide([opp])
+    c = _pim26f(_sa26f._candidate_actions(s1, s2, _f26c), s1, s2, _f26c)
+    return [("メガ+" if a.do_mega else "") + a.move.name_jp if a.type == "move" else "交代" for a in c]
+_n26f = _names26f(_hip26f, _sal26f)
+check("無効技(じしん→ひこう)は外し、変化技は残す", "じしん" not in _n26f and "あくび" in _n26f, str(_n26f))
+_n26f = _names26f(_gar26f, _sk26f)
+check("無効技(どくづき→はがね)を外し、じしんは残す(エアームドはひこうなので じしんも外れる)",
+      "どくづき" not in _n26f and "じしん" not in _n26f and "ドラゴンクロー" in _n26f, str(_n26f))
+_n26f = _names26f(_sal26f, _mim26f)
+check("メガと同時の技はメガ後の特性で判定（スカイスキンのすてみタックルはゴーストに当たる）",
+      "メガ+すてみタックル" in _n26f and "すてみタックル" not in _n26f, str(_n26f))
+_gar26f.choice_locked_move = "どくづき"
+_n26f = _names26f(_gar26f, _sk26f, bench=[_hip26f])
+check("こだわり固定で残る技が無効技だけなら外さない（居座り/交代は探索に任せる）",
+      "どくづき" in _n26f and "交代" in _n26f, str(_n26f))
+_gar26f.choice_locked_move = None
+_hit26f = _mk26c("ラッキー@しんかのきせき:ずぶとい:ちきゅうなげ|タマゴうみ|ステルスロック|でんじは:32/0/32/0/0/0:しぜんかいふく")
+_n26f = _names26f(_hit26f, _sal26f)
+check("負例: 等倍で当たる技(ちきゅうなげ→ひこう)は外さない", "ちきゅうなげ" in _n26f, str(_n26f))
+_scr26f = _mk26c("ケンタロス@こだわりハチマキ:いじっぱり:すてみタックル|インファイト|じしん|アイアンヘッド:0/32/0/0/0/32:きもったま")
+_n26f = _names26f(_scr26f, _mim26f)
+check("負例: きもったまのノーマル/かくとう技はゴーストに当たるので外さない",
+      "すてみタックル" in _n26f and "インファイト" in _n26f, str(_n26f))
+
+
+print("\n=== 26g. わるあがき: タイプなし・必中 ===")
+# 第5世代以降の実機: わるあがきはタイプなし（相性・タイプ一致の対象外＝ゴーストにも当たる）で必ず命中する。
+# 以前はノーマル/命中100で、PP切れのイエッサンがギルガルドに「効かない」を繰り返し延々と居座っていた。
+from simulator.ai import _get_struggle as _gs26g
+_st26g = _gs26g()
+check("わるあがき: タイプなし・命中は必中(None)", _st26g.type == "" and _st26g.accuracy is None,
+      f"type={_st26g.type!r} acc={_st26g.accuracy}")
+_ind26g = _mk26c("イエッサン(オス)@こだわりスカーフ:おくびょう:ワイドフォース|サイコキネシス|マジカルシャイン|トリック:0/0/0/32/0/32:サイコメイカー")
+_gil26g = _mk26c("ギルガルド@たべのこし:れいせい:シャドーボール|ラスターカノン|キングシールド|かげうち:32/0/2/32/0/0:バトルスイッチ")
+_hp0 = _gil26g.hp
+_lg26g = execute(_ind26g, _gil26g, _st26g)
+check("わるあがきはゴーストにも当たる", _gil26g.hp < _hp0 and not any("効かない" in x for x in _lg26g),
+      " / ".join(_lg26g))
+_ken26g = _mk26c("ケンタロス@たべのこし:いじっぱり:すてみタックル|インファイト|じしん|アイアンヘッド:0/32/0/0/0/32:いかりのつぼ")
+_sla26g = _mk26c("ヤドラン@ゴツゴツメット:ずぶとい:ねっとう|なまける|でんじは|トリック:32/0/32/0/0/0:さいせいりょく")
+_d_st = dmg(_ken26g, _sla26g, _st26g)
+from simulator.data import MoveData as _MD26g
+_nn26g = _MD26g(name_jp="わるあがき", name_en="Struggle", type="ノーマル", category="physical",
+                 power=50, accuracy=None, priority=0, pp=1, effect_id=None)
+_d_nm = dmg(_ken26g, _sla26g, _nn26g)
+check("わるあがきはタイプ一致(1.5倍)が乗らない（ノーマルタイプが使っても）", _d_st < _d_nm and near(_d_st * 1.5, _d_nm, 0.05),
+      f"typeless={_d_st} normal={_d_nm}")
+_mas26g = _mk26c("マスカーニャ@こだわりスカーフ:ようき:トリックフラワー|はたきおとす|とんぼがえり|トリプルアクセル:0/32/0/0/0/32:へんげんじざい")
+execute(_mas26g, _sla26g, _st26g)
+check("へんげんじざい: わるあがきではタイプが変わらない", _mas26g.type1 == "くさ" and not getattr(_mas26g, "_protean_used", False),
+      f"{_mas26g.type1}/{_mas26g.type2}")
+_sla26g.stage_evasion = 6
+_hits26g = 0
+import random as _r26g
+for _i in range(20):
+    _r26g.seed(_i)
+    _sla26g.hp = _sla26g.max_hp
+    execute(_ken26g, _sla26g, _st26g)
+    _hits26g += _sla26g.hp < _sla26g.max_hp
+_sla26g.stage_evasion = 0
+check("わるあがきは回避+6でも必ず当たる", _hits26g == 20, f"{_hits26g}/20")
+
+
+print("\n=== 26h. AIの型の読みのスナップショット（simulator/predict.py） ===")
+# 対戦記録・再生・精度集計のために、AIの信念（相手の型の読み）を取り出す。信念は書き換えない。
+# Python↔Rust の一致は _rust_engine/predict_parity.py（greedy 対戦の全ターンで照合）。
+import copy as _cp26h, random as _r26h
+from simulator.predict import Predictor as _Pr26h, truth_of as _tr26h
+from simulator.belief import OpponentBelief as _OB26h
+from simulator.battle import Battle as _Bt26h, BattleSide as _BS26h, BattleField as _BF26h
+from simulator.ai import GreedyAI as _G26h
+_sp1 = ["ギルガルド@いのちのたま:れいせい:かげうち|アイアンヘッド|キングシールド|シャドーボール:32/0/0/32/0/0:バトルスイッチ",
+        "ボーマンダ@ボーマンダナイト:いじっぱり:げきりん|じしん|すてみタックル|りゅうのまい:0/32/0/0/0/32:いかく",
+        "アシレーヌ@カゴのみ:ずぶとい:なみのり|ねむる|めいそう|ムーンフォース:32/0/32/0/0/0:げきりゅう"]
+_sp2 = ["ガブリアス@こだわりスカーフ:ようき:じしん|ドラゴンクロー|スケイルショット|つるぎのまい:0/32/0/0/0/32:さめはだ",
+        "サーフゴー@たべのこし:ひかえめ:シャドーボール|ゴールドラッシュ|わるだくみ|じこさいせい:32/0/0/32/0/0:おうごんのからだ",
+        "ミミッキュ@いのちのたま:ようき:じゃれつく|シャドークロー|かげうち|つるぎのまい:0/32/0/0/0/32:ばけのかわ"]
+def _run26h(with_pred):
+    _r26h.seed(11)
+    A = [_mk26c(x) for x in _sp1]; B = [_mk26c(x) for x in _sp2]
+    s1 = _BS26h(A, viewer_label="P1"); s2 = _BS26h(B, viewer_label="P2")
+    s1.belief = _OB26h(dl); s2.belief = _OB26h(dl)
+    P = _Pr26h(dl); snaps = []
+    def cb(b):
+        if with_pred:
+            snaps.append((b.turn, P.snapshot(b.side1, b.side2), P.snapshot(b.side2, b.side1)))
+    b = _Bt26h(s1, s2, _BF26h()); g1 = _G26h(); g2 = _G26h()
+    res = b.run(g1, g2, on_turn=cb)
+    return b, res, snaps
+_b0, _res0, _ = _run26h(False)
+_b1, _res1, _sn26h = _run26h(True)
+check("読みを記録しても対戦の進行（ログ・勝敗）は変わらない", _b0.logs == _b1.logs and _res0 == _res1,
+      f"{len(_b0.logs)} vs {len(_b1.logs)}")
+check("前提: 数ターン分の読みが取れている", len(_sn26h) >= 3 and all(_sn26h[0][1].values()), str(len(_sn26h)))
+_last = _sn26h[-1][1]
+_ok26h = True; _msg = ""
+for _n, _e in _last.items():
+    kn = _e["known"]
+    for _m in kn["moves"]:
+        if dict(_e["marginal"]["moves"]).get(_m) != 1.0:
+            _ok26h = False; _msg = f"{_n} 判明技 {_m} が1.0でない"
+    if _e["pool"]:
+        for _t in _e["pool"]["top"]:
+            if kn["item"] and _t["item"] != kn["item"]:
+                _ok26h = False; _msg = f"{_n} 判明持ち物と矛盾する型 {_t}"
+            if not set(kn["moves"]) <= set(_t["moves"]):
+                _ok26h = False; _msg = f"{_n} 判明技と矛盾する型 {_t}"
+        _tot = sum(p for _, p in _e["pool"]["item"])
+        if kn["item"] is None and not (0.99 <= _tot <= 1.0001) and len(_e["pool"]["item"]) < 5:
+            _ok26h = False; _msg = f"{_n} 型の持ち物確率の和 {_tot}"
+check("判明技は所持確率1.0・型の上位候補は判明情報と矛盾しない", _ok26h, _msg)
+check("既定（JOINT_BUILD ON）の信念では、型がある種の used は pool",
+      all(e["used"] == ("pool" if e["pool"] else "marginal") for e in _last.values())
+      and any(e["used"] == "pool" for e in _last.values()))
+# 信念を書き換えない: スナップショット前後で信念の中身が同じ
+_s = _b1.side1
+_bel = _s.belief
+_before = {n: (sorted(pb.known_moves), pb.known_item, list(pb.post), list(pb.pool_w), dict(pb.item_prior),
+               len(pb.builds)) for n, pb in _bel.species.items()}
+_Pr26h(dl).snapshot(_s, _b1.side2)
+_after = {n: (sorted(pb.known_moves), pb.known_item, list(pb.post), list(pb.pool_w), dict(pb.item_prior),
+              len(pb.builds)) for n, pb in _bel.species.items()}
+check("スナップショットは信念を書き換えない", _before == _after and len(_before) > 0)
+_t26h = _tr26h(_mk26c(_sp1[0]))
+check("truth_of: 実際の型（持ち物・性格・努力値・技）", _t26h["item"] == "いのちのたま" and _t26h["ev"] == "32/0/0/32/0/0"
+      and sorted(_t26h["moves"]) == sorted(["かげうち", "アイアンヘッド", "キングシールド", "シャドーボール"]), str(_t26h))
+
+
+print("\n=== 26i. 観戦記録（feature1.play_and_record）と Battle.run の前処理が同じ ===")
+# 以前は feature1 が前処理を手で書いており、run() と食い違っていた: 先発の登場（opp_view.on_enter）を呼ばない
+# ＝先発が「場に出た」扱いにならず登場時に公開される特性（いかく等）が信念に入らない／見せ合いが選出3体
+# （隠れ選出にならず選出がAIに漏れる）／入場時効果が P1→P2 の固定順（run は速い順）／瀕死交代が
+# AIの価値ベース選択でなく簡易ヒューリスティック。Battle.start に前処理を切り出し、両方がそれを通る。
+import feature1 as _f26i, random as _r26i
+from simulator.learned_selection import learned_select_party as _lsp26i
+from simulator.ai import certain_ko_override as _cko26i
+from train_az2 import _net_ai as _na26i
+from simulator.pokemon import build_from_spec, parse_pokemon_spec
+from simulator.belief import OpponentBelief
+from simulator.battle import Battle, BattleSide, BattleField
+_f26i._ensure_loaded("M-6", 8)
+_L26i = _f26i._W["loader"]; _N26i = _f26i._W["net"]
+_P1s = ["ボーマンダ@ボーマンダナイト:いじっぱり:げきりん|じしん|すてみタックル|りゅうのまい:0/32/0/0/0/32:いかく",
+        "ギルガルド@いのちのたま:れいせい:かげうち|アイアンヘッド|キングシールド|シャドーボール:32/0/0/32/0/0:バトルスイッチ",
+        "アシレーヌ@カゴのみ:ずぶとい:なみのり|ねむる|めいそう|ムーンフォース:32/0/32/0/0/0:げきりゅう",
+        "カバルドン@オボンのみ:わんぱく:じしん|あくび|ふきとばし|なまける:32/0/32/0/0/0:すなおこし",
+        "ミミッキュ@いのちのたま:ようき:じゃれつく|シャドークロー|かげうち|つるぎのまい:0/32/0/0/0/32:ばけのかわ",
+        "サーフゴー@たべのこし:ひかえめ:シャドーボール|ゴールドラッシュ|わるだくみ|じこさいせい:32/0/0/32/0/0:おうごんのからだ"]
+_P2s = ["ガブリアス@こだわりスカーフ:ようき:じしん|ドラゴンクロー|スケイルショット|つるぎのまい:0/32/0/0/0/32:さめはだ",
+        "イダイトウ(オス)@こだわりハチマキ:いじっぱり:ウェーブタックル|おはかまいり|アクアジェット|クイックターン:0/32/0/0/0/32:てきおうりょく",
+        "エアームド@ゴツゴツメット:わんぱく:ボディプレス|はねやすめ|てっぺき|ステルスロック:32/0/32/0/0/0:がんじょう",
+        "リザードン@リザードナイトＹ:おくびょう:かえんほうしゃ|ソーラービーム|エアスラッシュ|ねっぷう:0/0/0/32/0/32:もうか",
+        "ニンフィア@たべのこし:ひかえめ:ハイパーボイス|でんこうせっか|めいそう|まもる:32/0/0/32/0/0:フェアリースキン",
+        "ドドゲザン@きあいのタスキ:いじっぱり:ドゲザン|アイアンヘッド|ふいうち|つるぎのまい:0/32/0/0/0/32:そうだいしょう"]
+_SIMS26i = 24
+_rec26i = _f26i.play_and_record(_P1s, _P2s, season="M-6", sel_temp=0.3, seed=4242, mcts_sims=_SIMS26i)
+# 同じ手順を Battle.run で回す（play_and_record の中身と同じ構築・同じシード）
+_r26i.seed(4242)
+_A = [build_from_spec(parse_pokemon_spec(x), _L26i, season="M-6", randomize=True) for x in _P1s]
+_B = [build_from_spec(parse_pokemon_spec(x), _L26i, season="M-6", randomize=True) for x in _P2s]
+_sa = _lsp26i(_A, _B, _L26i, n=3, temperature=0.3); _sb = _lsp26i(_B, _A, _L26i, n=3, temperature=0.3)
+_s1 = BattleSide(_sa, viewer_label="P1", source6=_A); _s2 = BattleSide(_sb, viewer_label="P2", source6=_B)
+_s1.belief = OpponentBelief(_L26i); _s2.belief = OpponentBelief(_L26i)
+_x1 = _na26i(_N26i, _L26i, 0, 12, 4242, mcts=True, mcts_sims=_SIMS26i, mcts_select="regret", mcts_fast=True)
+_x2 = _na26i(_N26i, _L26i, 0, 12, 4242 ^ 0x5bd1e995, mcts=True, mcts_sims=_SIMS26i, mcts_select="regret", mcts_fast=True)
+def _w1(m, o, f): return _cko26i(_x1(m, o, f), m, o, f)
+def _w2(m, o, f): return _cko26i(_x2(m, o, f), m, o, f)
+_w1.choose_faint_switch = _x1.choose_faint_switch; _w2.choose_faint_switch = _x2.choose_faint_switch
+_bt26i = Battle(_s1, _s2, BattleField())
+_res26i = _bt26i.run(_w1, _w2)
+_flog = [l for t in _rec26i["turns"] for l in t["logs"]][2:]    # 先頭2行は「P1選出/P2選出」の見出し
+check("観戦記録と Battle.run で同じシードなら同じ展開（全ログ・勝敗）",
+      _flog == _bt26i.logs and _rec26i["result"] == _res26i,
+      f"{len(_flog)} vs {len(_bt26i.logs)} res {_rec26i['result']}/{_res26i}")
+_t0 = _rec26i["turns"][0]["logs"]
+check("観戦記録: 見せ合いは6体（隠れ選出）", any("相手候補6体" in l for l in _t0), " / ".join(_t0[:4]))
+check("観戦記録: 先発の登場が記録される（opp_view.on_enter）", sum(1 for l in _t0 if "登場（" in l) == 2, " / ".join(_t0))
+
+
 print("\n=== 26b. 必ず急所に当たる技 ===")
 # move_master の effect_text が「必ず急所に当たる。」なのに急所率が 1/24 のままだった。
 # deep_audit の検出器 (r'必ず急所', ['急所']) はテストのラベル文字列に一致するだけで
@@ -5735,8 +6005,14 @@ check("技選びの観測: 既定（POOL_CHOICE 未設定）では重みを変�
       abs(_w48b[0] - _w48b[1]) < 1e-12, str(_w48b))
 
 _ob32b = _OB32(dl, season="M-6")
-check("型候補: JOINT_BUILD 未設定なら型候補を読み込まない",
-      _ob32b.joint is False and _ob32b._builds == {})
+check("型候補: 既定（JOINT_BUILD 未設定）で型プールを読み込む",
+      _ob32b.joint is True and len(_ob32b._builds) > 100)
+_sv32 = os.environ.get("JOINT_BUILD")
+os.environ["JOINT_BUILD"] = "0"
+_ob32c = _OB32(dl, season="M-6")
+if _sv32 is None: os.environ.pop("JOINT_BUILD", None)
+else: os.environ["JOINT_BUILD"] = _sv32
+check("型候補: JOINT_BUILD=0 なら型候補を読み込まない（旧挙動）", _ob32c.joint is False and _ob32c._builds == {})
 check("信念シーズン: BELIEF_SEASON > POOL_SEASON > M-6 の順で解決する",
       _ds32() in ("M-2", "M-3", "M-4", "M-5", "M-6"))
 

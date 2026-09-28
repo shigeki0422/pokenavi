@@ -103,9 +103,74 @@ pub fn expected_damage(
     if pack.eff(mv.ty, def.type1, def.type2) == 0.0 {
         return 0.0;
     }
-    // 技を撃つ直前の姿変化（バトルスイッチ）。対戦本体は apply_pre_move_forms を必ず通るのに
-    // 見積もりは calc_damage を直に呼ぶため取りこぼしていた（ギルガルドで1.8〜2.0倍の過小評価）。
-    // 正本: simulator/ai.py _pre_move_forms_ctx
+    move_damage(pack, atk, def, mv, field, 0.5, HitMode::Exp, true, rng) * acc
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+pub enum HitMode {
+    Exp,
+    Min,
+    Max,
+}
+
+/// ai.py `_hit_plan`。連続技の [(何発目, 重み)]。正本は battle::calc_hits。
+/// Exp=期待回数 / Min=必ず当たる回数（確定KO判定） / Max=最大回数（被弾の最悪値）。
+pub fn hit_plan(pack: &Pack, mv: &DMove, atk: &Poke, mode: HitMode) -> Vec<(i64, f64)> {
+    if !pack.env_multi_hit {
+        return vec![(0, 1.0)];
+    }
+    let l = &pack.sy.l;
+    let n = mv.name;
+    let skill_link = atk.ability == l.スキルリンク;
+    if n == l.ダブルキック || n == l.にどげり || n == l.ダブルウイング || n == l.ドラゴンアロー
+        || n == l.スパークリングアリア || n == l.ダブルパンツァー || n == l.ツインビーム
+        || n == l.ダブルアタック
+    {
+        return vec![(0, 2.0)];
+    }
+    if n == l.トリプルアクセル {
+        return vec![(0, 1.0), (1, 1.0), (2, 1.0)];
+    }
+    let pick = |e: f64, lo: f64, hi: f64| match mode {
+        HitMode::Exp => e,
+        HitMode::Min => lo,
+        HitMode::Max => hi,
+    };
+    if n == l.スケイルショット || n == l.みずしゅりけん || n == l.ロックブラスト
+        || n == l.タネマシンガン || n == l.つららばり || n == l.ミサイルばり
+        || n == l.ボーンラッシュ || n == l.あわ || n == l.スイープビンタ
+    {
+        // random.choices([2,3,4,5], weights=[3,3,1,1]) の期待値 = 3.0
+        return vec![(0, if skill_link { 5.0 } else { pick(3.0, 2.0, 5.0) })];
+    }
+    if n == l.ネズミざん {
+        return vec![(0, if skill_link { 10.0 } else { pick(6.513, 1.0, 10.0) })];
+    }
+    vec![(0, 1.0)]
+}
+
+/// ai.py `_expected_hits`（威力換算。トリプルアクセルは 20/40/60 で1発目の6倍）
+pub fn expected_hits(pack: &Pack, mv: &DMove, atk: &Poke) -> f64 {
+    if pack.env_multi_hit && mv.name == pack.sy.l.トリプルアクセル {
+        return 6.0;
+    }
+    hit_plan(pack, mv, atk, HitMode::Exp).iter().map(|x| x.1).sum()
+}
+
+/// ai.py `_move_damage`。1回の技使用の合計ダメージ見積もり（姿変化・連続技・へんげんじざい込み、命中率なし）。
+/// 発ごとの威力は multi_hit_index で決まる（前回の技の値が残っているので必ず設定して戻す）。
+#[allow(clippy::too_many_arguments)]
+pub fn move_damage(
+    pack: &Pack,
+    atk: &mut Poke,
+    def: &mut Poke,
+    mv: &DMove,
+    field: &mut Field,
+    roll: f64,
+    mode: HitMode,
+    crit_mix: bool,
+    rng: &mut dyn BRng,
+) -> f64 {
     let blade_applied = if pack.env_blade_forme
         && mv.category != Cat::Status
         && atk.ability == pack.sy.l.バトルスイッチ
@@ -116,59 +181,36 @@ pub fn expected_damage(
     } else {
         false
     };
-    let mut dmg = {
-        let mut f = dmg_rng(rng);
-        calc_damage(pack, atk, def, mv, field, false, Some(0.5), None, &mut f) as f64
-    };
-    let pc = crit_chance(pack, atk, mv, Some(def));
-    if pc > 0.0 {
-        let dc = {
+    let saved = atk.multi_hit_index;
+    let pc = if crit_mix { crit_chance(pack, atk, mv, Some(def)) } else { 0.0 };
+    let mut total = 0.0f64;
+    for (hi, w) in hit_plan(pack, mv, atk, mode) {
+        atk.multi_hit_index = hi;
+        let mut d = {
             let mut f = dmg_rng(rng);
-            calc_damage(pack, atk, def, mv, field, true, Some(0.5), None, &mut f) as f64
+            calc_damage(pack, atk, def, mv, field, false, Some(roll), None, &mut f) as f64
         };
-        dmg = dmg * (1.0 - pc) + dc * pc;
+        if pc > 0.0 {
+            let dc = {
+                let mut f = dmg_rng(rng);
+                calc_damage(pack, atk, def, mv, field, true, Some(roll), None, &mut f) as f64
+            };
+            d = d * (1.0 - pc) + dc * pc;
+        }
+        total += d * w;
     }
+    atk.multi_hit_index = saved;
     let l = &pack.sy.l;
-    if (atk.ability == l.へんげんじざい || atk.ability == pack.sy.ai.リベロ) && !atk.has_type(mv.ty)
+    if (atk.ability == l.へんげんじざい || atk.ability == pack.sy.ai.リベロ)
+        && mv.ty != crate::pack::NO_TY
+        && !atk.has_type(mv.ty)
     {
-        dmg *= 1.5;
+        total *= 1.5;
     }
-    // 連続技の期待ヒット数。正本: simulator/ai.py _expected_hits（battle.calc_hits と同じ表）
-    dmg *= expected_hits(pack, mv, atk);
     if blade_applied {
         crate::battle::revert_blade_pub(atk);
     }
-    dmg * acc
-}
-
-/// ai.py `_expected_hits`。battle::calc_hits の分岐と同じ表を期待値で返す。
-pub fn expected_hits(pack: &Pack, mv: &DMove, atk: &Poke) -> f64 {
-    if !pack.env_multi_hit {
-        return 1.0;
-    }
-    let l = &pack.sy.l;
-    let n = mv.name;
-    let skill_link = atk.ability == l.スキルリンク;
-    if n == l.ダブルキック || n == l.にどげり || n == l.ダブルウイング || n == l.ドラゴンアロー
-        || n == l.スパークリングアリア || n == l.ダブルパンツァー || n == l.ツインビーム
-        || n == l.ダブルアタック
-    {
-        return 2.0;
-    }
-    if n == l.トリプルアクセル {
-        return 3.0;
-    }
-    if n == l.スケイルショット || n == l.みずしゅりけん || n == l.ロックブラスト
-        || n == l.タネマシンガン || n == l.つららばり || n == l.ミサイルばり
-        || n == l.ボーンラッシュ || n == l.あわ || n == l.スイープビンタ
-    {
-        // random.choices([2,3,4,5], weights=[3,3,1,1]) の期待値 = 3.0
-        return if skill_link { 5.0 } else { 3.0 };
-    }
-    if n == l.ネズミざん {
-        return if skill_link { 10.0 } else { 6.513 };
-    }
-    1.0
+    total
 }
 
 /// ai.py `_best_expected_damage`
@@ -317,11 +359,7 @@ fn can_ko(
     if pack.eff(mv.ty, def.type1, def.type2) == 0.0 {
         return false;
     }
-    let d = {
-        let mut f = dmg_rng(rng);
-        calc_damage(pack, atk, def, mv, field, false, Some(0.5), None, &mut f)
-    };
-    d >= def.hp
+    move_damage(pack, atk, def, mv, field, 0.5, HitMode::Exp, false, rng) >= def.hp as f64
 }
 
 /// ai.py `_opp_priority_threatens`
@@ -335,11 +373,8 @@ fn opp_priority_threatens(
     let moves = opp.moves.clone();
     for mv in &moves {
         if mv.priority > 0 && mv.power.unwrap_or(0) != 0 {
-            let d = {
-                let mut f = dmg_rng(rng);
-                calc_damage(pack, opp, me, mv, field, false, Some(1.0), None, &mut f)
-            };
-            if d >= me.hp {
+            let d = move_damage(pack, opp, me, mv, field, 1.0, HitMode::Max, false, rng);
+            if d >= me.hp as f64 {
                 return true;
             }
         }
@@ -443,10 +478,11 @@ pub fn filter_by_pp(valid: &[(usize, DMove)], me: &Poke) -> Vec<(usize, DMove)> 
 pub fn struggle(pack: &Pack) -> DMove {
     DMove {
         name: pack.sy.l.わるあがき,
-        ty: pack.tc.ノーマル,
+        // タイプなし（ゴーストにも当たる）・必中。ai.py `_get_struggle` と同じ
+        ty: crate::pack::NO_TY,
         category: Cat::Physical,
         power: Some(50),
-        accuracy: Some(100),
+        accuracy: None,
         priority: 0,
         pp: Some(1),
     }
@@ -1158,6 +1194,19 @@ pub fn certain_ko_override(
     field: &mut Field,
     rng: &mut dyn BRng,
 ) -> Action {
+    certain_ko_override_opt(pack, act, my, opp, field, rng, true)
+}
+
+/// precise=false は 2026-09-28 以前の判定（姿変化・連続技なしの1発・A/B 用。env AI_KO_PRECISE=0）
+pub fn certain_ko_override_opt(
+    pack: &Pack,
+    act: Action,
+    my: &mut Side,
+    opp: &mut Side,
+    field: &mut Field,
+    rng: &mut dyn BRng,
+    precise: bool,
+) -> Action {
     let l = &pack.sy.l;
     let (mi, oi) = (my.active_idx, opp.active_idx);
     {
@@ -1192,7 +1241,7 @@ pub fn certain_ko_override(
     let op = &mut opp.party[oi];
     let valid = filter_by_pp(&filter_valid_by_lock(me), me);
     let mut best: Option<(usize, DMove)> = None;
-    let mut bestd = -1i64;
+    let mut bestd = -1.0f64;
     for (i, mv) in &valid {
         if mv.power.unwrap_or(0) == 0 || mv.category == Cat::Status {
             continue;
@@ -1203,13 +1252,16 @@ pub fn certain_ko_override(
         if !goes_first_pri(pack, me, op, mv.priority, field, opp_pri) {
             continue;
         }
-        let d = {
+        // 正規化ロール。最低ロールは 0.0（0.85 は実効 0.85+0.85*0.15=0.9775 ＝ほぼ最高値で、
+        // 確定でないKOを確定と誤認する。実測: 介入の15.3%が該当）。
+        // 姿変化（バトルスイッチ）と連続技の「必ず当たる回数」込み（ai.py _move_damage と同一）
+        let d = if precise {
+            move_damage(pack, me, op, mv, field, 0.0, HitMode::Min, false, rng)
+        } else {
             let mut f = dmg_rng(rng);
-            // 正規化ロール。最低ロールは 0.0（0.85 は実効 0.85+0.85*0.15=0.9775 ＝ほぼ最高値で、
-            // 確定でないKOを確定と誤認する。実測: 介入の15.3%が該当）
-            calc_damage(pack, me, op, mv, field, false, Some(0.0), None, &mut f)
+            calc_damage(pack, me, op, mv, field, false, Some(0.0), None, &mut f) as f64
         };
-        if d >= op.hp && d > bestd {
+        if d >= op.hp as f64 && d > bestd {
             bestd = d;
             best = Some((*i, mv.clone()));
         }
@@ -1542,4 +1594,102 @@ fn select_party_inner(
 /// メガ石所持判定（select_party の外部利用向け）
 pub fn has_megastone(pack: &Pack, p: &Poke) -> bool {
     is_megastone(pack, p.item)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    struct Z;
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { 0.0 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    /// test_all.py 26e と同じ: トリプルアクセルは発ごとの威力で合計し、残っている発数に左右されない。
+    #[test]
+    fn トリプルアクセルの見積もり() {
+        let mut p = pack();
+        let mut a = build_poke(&mut p, "マニューラ@いのちのたま:ようき:トリプルアクセル|はたきおとす|ねこだまし|つららおとし:0/32/0/0/0/32:プレッシャー", "M-6");
+        let mut d = build_poke(&mut p, "ガブリアス@こだわりスカーフ:ようき:じしん|ドラゴンクロー|スケイルショット|つるぎのまい:0/32/0/0/0/32:さめはだ", "M-6");
+        let pr: &Pack = &p;
+        let mv = a.moves.iter().find(|m| pr.intern.resolve(m.name) == "トリプルアクセル").unwrap().clone();
+        let mut f = Field::default();
+        let mut r = Z;
+        let pc = crit_chance(pr, &a, &mv, Some(&d));
+        let mut want = 0.0;
+        for i in 0..3 {
+            a.multi_hit_index = i;
+            let nc = calc_damage(pr, &mut a, &mut d, &mv, &mut f, false, Some(0.5), None, &mut |_| 0.0) as f64;
+            let c = calc_damage(pr, &mut a, &mut d, &mv, &mut f, true, Some(0.5), None, &mut |_| 0.0) as f64;
+            want += nc * (1.0 - pc) + c * pc;
+        }
+        want *= mv.accuracy.unwrap_or(100) as f64 / 100.0;
+        a.multi_hit_index = 2;
+        let got = expected_damage(pr, &mut a, &mut d, &mv, &mut f, &mut r);
+        assert!((got - want).abs() < 1e-6, "got={got} want={want}");
+        assert_eq!(a.multi_hit_index, 2, "発数は元に戻す");
+        assert!((expected_hits(pr, &mv, &a) - 6.0).abs() < 1e-9);
+    }
+
+    /// 確定KOは連続技(2〜5発)を必ず当たる2発で判定する（test_all.py 26e と同じ）。
+    #[test]
+    fn 確定ko_連続技は2発で判定() {
+        let mut p = pack();
+        let g = build_poke(&mut p, "ガブリアス@こだわりスカーフ:ようき:スケイルショット|ステルスロック|つるぎのまい|まもる:0/32/0/0/0/32:さめはだ", "M-6");
+        let s = build_poke(&mut p, "ヤドラン@ゴツゴツメット:ずぶとい:ねっとう|なまける|でんじは|トリック:32/0/32/0/0/0:さいせいりょく", "M-6");
+        let pr: &Pack = &p;
+        let mut my = Side { party: vec![g], active_idx: 0, ..Default::default() };
+        let mut op = Side { party: vec![s], active_idx: 0, ..Default::default() };
+        let mut f = Field::default();
+        let mut r = Z;
+        let mv = my.party[0].moves[0].clone();
+        let one = {
+            let (a, d) = (&mut my.party[0], &mut op.party[0]);
+            calc_damage(pr, a, d, &mv, &mut f, false, Some(0.0), None, &mut |_| 0.0)
+        };
+        let st = Action { kind: ActKind::Move, mv: Some(my.party[0].moves[3].clone()), move_idx: 3, switch_to: -1, do_mega: false };
+        op.party[0].hp = 2 * one;
+        let a = certain_ko_override(pr, st.clone(), &mut my, &mut op, &mut f, &mut r);
+        assert_eq!(a.move_idx, 0, "2発ぶんのHPなら確定");
+        op.party[0].hp = 2 * one + 1;
+        let a = certain_ko_override(pr, st, &mut my, &mut op, &mut f, &mut r);
+        assert_eq!(a.move_idx, 3, "3発目以降は当てにしない");
+    }
+
+    /// わるあがきはタイプなし・必中（ai.py `_get_struggle` と同じ。test_all.py 26g）。
+    #[test]
+    fn わるあがきはタイプなし() {
+        let mut p = pack();
+        let mut ind = build_poke(&mut p, "イエッサン(オス)@こだわりスカーフ:おくびょう:ワイドフォース|サイコキネシス|マジカルシャイン|トリック:0/0/0/32/0/32:サイコメイカー", "M-6");
+        let mut gil = build_poke(&mut p, "ギルガルド@たべのこし:れいせい:シャドーボール|ラスターカノン|キングシールド|かげうち:32/0/2/32/0/0:バトルスイッチ", "M-6");
+        let mut mas = build_poke(&mut p, "マスカーニャ@こだわりスカーフ:ようき:トリックフラワー|はたきおとす|とんぼがえり|トリプルアクセル:0/32/0/0/0/32:へんげんじざい", "M-6");
+        let pr: &Pack = &p;
+        let st = struggle(pr);
+        assert!(st.ty == crate::pack::NO_TY && st.accuracy.is_none());
+        let mut f = Field::default();
+        let d = calc_damage(pr, &mut ind, &mut gil, &st, &mut f, false, Some(0.5), None, &mut |_| 0.0);
+        assert!(d > 0, "ゴーストにも当たる");
+        let t0 = mas.type1;
+        crate::battle::apply_pre_move_forms(pr, &mut mas, &st);
+        assert!(mas.type1 == t0 && !mas.protean_used, "へんげんじざいでタイプが変わらない");
+    }
+
+    /// Zメガ石もメガストーン（battle.py _is_megastone と同じ）
+    #[test]
+    fn zメガ石はメガストーン() {
+        let p = pack();
+        for (n, want) in [("ガブリアスナイトZ", true), ("アブソルナイトＺ", true), ("ボーマンダナイト", true),
+                          ("いのちのたま", false)] {
+            let sy = p.intern.get(n);
+            assert_eq!(crate::battle::is_megastone(&p, sy), want && sy.is_some(), "{n}");
+        }
+    }
 }

@@ -51,9 +51,9 @@ def _mcts_3v3(args):
         return [mons[ld]] + [mons[j] for j in range(3) if j != ld]
     s1 = BattleSide(order(A, sa), viewer_label="P1", source6=A); s2 = BattleSide(order(B, sb), viewer_label="P2", source6=B)
     s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
-    _mc = os.environ.get("MCTS_CACHE", "0") == "1"; _me = os.environ.get("MCTS_EARLY", "0") == "1"
-    a1 = _net_ai(net, L, 0, 12, seed, mcts=True, mcts_sims=SIMS, mcts_select="regret", mcts_fast=True, mcts_cache=_mc)
-    a2 = _net_ai(net, L, 0, 12, seed ^ 0x5bd1e995, mcts=True, mcts_sims=SIMS, mcts_select="regret", mcts_fast=True, mcts_cache=_mc)
+    _me = os.environ.get("MCTS_EARLY", "0") == "1"
+    a1 = _net_ai(net, L, 0, 12, seed, mcts=True, mcts_sims=SIMS, mcts_select="regret", mcts_fast=True)
+    a2 = _net_ai(net, L, 0, 12, seed ^ 0x5bd1e995, mcts=True, mcts_sims=SIMS, mcts_select="regret", mcts_fast=True)
     # mcts_early は _net_ai の引数ではなく SearchAI の属性（_ai_bench.py と同じ流儀）。
     # 引数で渡すと TypeError になり Python 経路が丸ごと落ちるため属性で設定する。既定off。
     if _me:

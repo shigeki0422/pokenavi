@@ -83,8 +83,12 @@ pub fn effective_weather(pack: &Pack, field: &Field, poke: Option<&Poke>) -> Opt
 
 /// _effective_move_type
 pub fn effective_move_type(pack: &Pack, attacker: &Poke, mv: &DMove, field: &Field) -> Ty {
+    effective_move_type_ab(pack, attacker, attacker.ability, mv, field)
+}
+
+/// 特性を差し替えて実効タイプを求める（メガ進化と同時に撃つ技をメガ後の特性で見る用）
+pub fn effective_move_type_ab(pack: &Pack, attacker: &Poke, ab: Sym, mv: &DMove, field: &Field) -> Ty {
     let t = mv.ty;
-    let ab = attacker.ability;
     let normal = pack.tc.ノーマル;
     if t == normal {
         if let Some(&sk) = pack.skin.get(&ab) {

@@ -511,7 +511,9 @@ def apply_pre_move_forms(attacker, move, logs=None) -> None:
         logs = []
     if attacker.ability == "バトルスイッチ" and move.category != "status":
         _aegislash_to_blade(attacker, logs)
-    if attacker.ability in ("へんげんじざい", "リベロ") and not getattr(attacker, "_protean_used", False):
+    # タイプなしの技（わるあがき）ではタイプが変わらない
+    if attacker.ability in ("へんげんじざい", "リベロ") and not getattr(attacker, "_protean_used", False) \
+            and move.type:
         new_type = move.type
         if attacker.type1 != new_type or attacker.type2 is not None:
             attacker.type1 = new_type
@@ -3466,6 +3468,13 @@ class Battle:
         ai: BattleSide, BattleField → Action を返す callable
         on_turn: 各ターン完了時に on_turn(self) を呼ぶフック（記録/リプレイ用）。
         """
+        self.start(ai1, ai2)
+        return self._turn_loop(ai1, ai2, verbose, on_turn=on_turn)
+
+    def start(self, ai1, ai2) -> None:
+        """対戦前の前処理（見せ合い・先発の登場・入場時効果・瀕死交代の選び手の登録）。run() の前半。
+        ターン0を記録してから _turn_loop を回す経路（feature1 の観戦記録など）はこれを呼ぶ
+        （前処理を手で書くと run と食い違う: 先発の登場を記録しない・見せ合いが選出3体・入場の順序が固定）。"""
         # 対戦前の見せ合い：互いに相手の候補（種族・タイプ）を確認する。
         # 隠れ選出時(HIDDEN_SELECTION=1)は6体ソースを公開し、どの3体を選出したかは場に出るまで不明。
         # フラグOFF時は従来通り選出パーティ(=3体)を公開＝本番不変。
@@ -3487,8 +3496,6 @@ class Battle:
         # 同速は side1 が先（乱数を消費しない。Rust battle.rs start と同一）。
         for _sd, _os, _ix in _entry_order(self.side1, self.side2, self.field):
             _entry_effects(_sd.active, _ix, self.field, _os.active, self.logs, _sd.party)
-
-        return self._turn_loop(ai1, ai2, verbose, on_turn=on_turn)
 
     def _sync_item_loss(self) -> None:
         """前回の行動選択時から持ち物が無くなった個体を、相手の opp_view に記録する。

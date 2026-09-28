@@ -155,7 +155,7 @@ class PokemonBelief:
         self.item_prior: Dict[str, float] = {i: r for i, r in tpl.top_items}
         self.ability_prior: Dict[str, float] = {a: r for a, r in tpl.top_abilities}
         self.known_moves: set = set()
-        # 型まるごとの候補（登録テンプレート由来）。JOINT_BUILD=1 のとき決定化で使う
+        # 型まるごとの候補（型プール）。JOINT_BUILD（既定ON）のとき決定化で使う
         self.builds: list = []
         # この確率で最尤型を返す（0=常にサンプリング・従来）
         self.map_rate: float = float(os.environ.get("BUILD_MAP_RATE", "0") or 0)
@@ -689,8 +689,9 @@ class OpponentBelief:
         self.species: Dict[str, PokemonBelief] = {}
         # このメタ（登録パーティ同士）では真の型を候補に含めて推定精度を上げる
         self._reg = registered_spreads_by_species(loader) if use_registered else {}
-        # 型まるごとの候補。JOINT_BUILD=1 で決定化が型単位のサンプリングになる
-        self.joint = os.environ.get("JOINT_BUILD", "0") == "1"
+        # 型まるごとの候補（datapack の build_pool＝型プール）。決定化を型単位のサンプリングにする。
+        # 既定ON（2026-09-28。Rust A/B 4000戦×3プールで +2.5〜3.5pt・z≥3.1）。JOINT_BUILD=0 で旧挙動（要素ごと）
+        self.joint = os.environ.get("JOINT_BUILD", "1") != "0"
         self._builds = pool_builds_by_species() if (use_registered and self.joint) else {}
 
     def __deepcopy__(self, memo):
