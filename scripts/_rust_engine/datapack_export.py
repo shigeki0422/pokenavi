@@ -162,10 +162,11 @@ def export():
     if os.path.exists(npath):
         with open(npath) as f:
             nd = json.load(f)
-        net = {k: nd[k] for k in nd if k in
-               ("W1", "b1", "W2", "b2", "Wv", "bv", "Wp", "bp")}
-        net["_meta"] = {k: nd[k] for k in nd if k not in
-                        ("W1", "b1", "W2", "b2", "Wv", "bv", "Wp", "bp")}
+        # vbins（価値の two-hot の区間数。0=スカラー価値）は Rust net.rs がトップレベルから読むので重みと同じ階層に置く。
+        # _meta に入れると Rust は常に vbins=0 と読み、vbins>0 のネットで価値の形が合わなくなる。
+        _top = ("W1", "b1", "W2", "b2", "Wv", "bv", "Wp", "bp", "vbins")
+        net = {k: nd[k] for k in nd if k in _top}
+        net["_meta"] = {k: nd[k] for k in nd if k not in _top}
 
     # ---- 特性効果カテゴリ（features.py の _ability_cats 用） ----
     abil_cats = {"names": list(_ABIL_CATS),

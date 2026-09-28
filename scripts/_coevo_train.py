@@ -28,6 +28,13 @@ def _mega_plus_random(party6, rng, n=3):
         rng.shuffle(rest); sel += rest[:n - len(sel)]
     return sel[:n]
 
+def _specs(p, rng):
+    """系統単位の集団（_coevo_groups の出力: [[種, 系統番号, 名前], …]）なら、毎戦その系統から型を引く"""
+    if p and isinstance(p[0], (list, tuple)):
+        import _coevo_groups as C
+        return C.instantiate([(x[0], x[1]) for x in p], rng)
+    return p
+
 # ---- 自己対戦ワーカー（MCTS・π記録） ----
 _W = {}
 def _winit():
@@ -48,7 +55,7 @@ def _selfplay_batch(args):
     for _ in range(n_games):
         a, b = rng.sample(pool_specs, 2)
         try:
-            A = team(a); B = team(b)
+            A = team(_specs(a, rng)); B = team(_specs(b, rng))
             if os.environ.get("SELECT_MODE") == "mega1":   # 現実的選出（メガ1+非メガ2ランダム）で交代の効く盤面を経験
                 sa = _mega_plus_random(A, rng); sb = _mega_plus_random(B, rng)
             else:
@@ -91,7 +98,7 @@ def _ng_batch(args):
     for g in range(n_games):
         a, b = rng.sample(pool_specs, 2)
         try:
-            A = team(a); B = team(b)
+            A = team(_specs(a, rng)); B = team(_specs(b, rng))
             if os.environ.get("SELECT_MODE") == "mega1":
                 sa = _mega_plus_random(A, rng); sb = _mega_plus_random(B, rng)
             else:
@@ -106,11 +113,34 @@ def _ng_batch(args):
         except Exception: dr += 1
     return aw, al, dr
 
+def _rust_gate_batch(args):
+    """GATE_AI=rust: 本番と同じ Rust IS-MCTS（GATE_SIMS）でネット対ネット。選出は共進化の評価と同じヒューリスティック（温度0.3）、
+    型は系統から試合ごとに引く。先後（側1/側2）は1戦ごとに入れ替える"""
+    seed, pool_specs, n_games, pathA, pathB = args
+    import pokenavi_engine as E
+    rng = random.Random(seed); sims = int(os.environ.get("GATE_SIMS", "400"))
+    aw = al = dr = 0
+    for g in range(n_games):
+        a, b = rng.sample(pool_specs, 2)
+        try:
+            pa, pb = _specs(a, rng), _specs(b, rng)
+            sa = list(E.select_party_rng_probe(pb, pa, rng.randrange(1 << 30), SEASON)[0])
+            sb = list(E.select_party_rng_probe(pa, pb, rng.randrange(1 << 30), SEASON)[0])
+            a_first = (g % 2 == 0)
+            p1, p2 = (pathA, pathB) if a_first else (pathB, pathA)
+            r = E.mcts_3v3_ab(list(pa), sa, list(pb), sb, rng.randrange(1 << 30), sims, p1, p2, SEASON, sims)
+            if r == 0: dr += 1
+            elif (r == 1) == a_first: aw += 1
+            else: al += 1
+        except Exception:
+            dr += 1
+    return aw, al, dr
+
 def ng_eval(pool, pathA, pathB, N, workers, seedbase):
     per = max(1, N // workers)
     args = [(seedbase + k * 7919, pool, per, pathA, pathB) for k in range(workers)]
     with Pool(workers, initializer=_winit) as p:
-        res = p.map(_ng_batch, args)
+        res = p.map(_rust_gate_batch if os.environ.get("GATE_AI") == "rust" else _ng_batch, args)
     aw = sum(r[0] for r in res); al = sum(r[1] for r in res); dr = sum(r[2] for r in res)
     dec = aw + al; wr = aw / dec if dec else 0.0
     z = (aw - dec * 0.5) / math.sqrt(dec * 0.25) if dec else 0.0
@@ -181,7 +211,7 @@ def main():
     if pool_file:
         import json
         pf = json.load(open(pool_file))
-        pool = [p["specs"] for p in pf["parties"]]   # 共進化で自然発見した集団(雨等のsynergyが台頭)
+        pool = [p.get("specs") or p["groups"] for p in pf["parties"]]   # 共進化で自然発見した集団（系統単位なら毎戦型を引く）
         src = f"進化集団:{pool_file}"
     elif diverse:
         pool = [_broad_party(D, rng) for _ in range(poolN)]   # top使用率から広く6体=synergy同居を自然発生
@@ -219,10 +249,19 @@ def main():
     # 計算量を増やさずに実効データ量を数倍にできる。
     buf_eps = int(os.environ.get("REPLAY_EPOCHS", "1"))   # 1=従来（使い捨て）
     replay = []
+    # BEST_STOP=N: ゲート勝率が最高を更新した候補を best-so-far として保存し、N エポック続けて更新しなければ早期終了（最終は best-so-far）
+    best_stop = int(os.environ.get("BEST_STOP", "0"))
+    best_wr, best_path, since_best = -1.0, (os.environ.get("OUT_NET") or "az_net_coevo.json") + ".best", 0
+    # ACCUM=1: 棄却されても候補の重みから学習を続ける（エポックをまたいで積み上げる）。採用＝best-so-far の判定は別に持つ
+    accum = os.environ.get("ACCUM") == "1"
+    # FIRST_ACCEPT_MAX=N: 一度も採用が無い間は BEST_STOP で止めず、通算 N エポック採用が無ければ終了（EP_OFFSET＝前の実行で済んだエポック数）
+    first_max = int(os.environ.get("FIRST_ACCEPT_MAX", "0"))
+    ep_off = int(os.environ.get("EP_OFFSET", "0"))
+    last_cand = None
     for ep in range(epochs):
         t0 = time.time()
         per = max(1, games // workers)
-        args = [(1000 + ep * 100 + k, pool, per, n_sims) for k in range(workers)]
+        args = [(1000 + (ep + ep_off) * 100 + k, pool, per, n_sims) for k in range(workers)]
         samples = []
         with Pool(workers, initializer=_winit) as p:
             for s in p.map(_selfplay_batch, args): samples += s
@@ -232,7 +271,7 @@ def main():
         train_samples = [x for chunk in replay for x in chunk]
         X, PI, M, Y = to_arrays(train_samples)
         cand = copy.deepcopy(net); cand.train_pi(X, PI, M, Y, epochs=15, lr=0.05, batch=256)
-        cand.save(NET_TMP + ".cand")
+        cand.save(NET_TMP + ".cand"); last_cand = cand
         no_gate = os.environ.get("NO_GATE") == "1"
         if no_gate:
             # 探索的選出(ε大)で得た実結果価値はヒューリスティック選出ゲートに映らない→常に蓄積。
@@ -241,23 +280,55 @@ def main():
             gate_s = "蓄積(NO_GATE)"
         else:
             # ゲート: 候補 vs 凍結アンカー（大標本）
-            aw, al, dr, wr, pv = ng_eval(pool, NET_TMP + ".cand", ANCHOR_TMP, 300, workers, 5000 + ep)
-            accept = wr >= 0.52
-            if accept:
+            gate_n = int(os.environ.get("GATE_N", "300"))
+            split = int(os.environ.get("GATE_SPLIT", "0"))
+            if split:
+                # 集団の前半（共進化）と後半（使用率どおりの土台）で別々に測り、土台で負けていないことも条件にする
+                # （共進化の集団にだけ強くなり、土台では差が出なかった: A/B 52.9% / 50.5%）
+                r1 = ng_eval(pool[:split], NET_TMP + ".cand", ANCHOR_TMP, gate_n // 2, workers, 5000 + ep)
+                r2 = ng_eval(pool[split:], NET_TMP + ".cand", ANCHOR_TMP, gate_n // 2, workers, 6000 + ep)
+                aw, al, dr = r1[0] + r2[0], r1[1] + r2[1], r1[2] + r2[2]
+                wr = aw / (aw + al) if aw + al else 0.0
+                pv = min(r1[4], r2[4])
+                accept = wr >= 0.52 and r2[3] >= 0.5
+                print(f"  ゲート内訳: 共進化 {r1[3]*100:.1f}% / 土台 {r2[3]*100:.1f}%", flush=True)
+            else:
+                aw, al, dr, wr, pv = ng_eval(pool, NET_TMP + ".cand", ANCHOR_TMP, gate_n, workers, 5000 + ep)
+                accept = wr >= 0.52
+            if accept or accum:
                 net = cand; net.save(NET_TMP)
-                if new_arch: net.save(ANCHOR_TMP)
+                if new_arch and accept: net.save(ANCHOR_TMP)
             gate_s = (f"候補vs{'best-so-far' if new_arch else '凍結アンカー'} {aw}-{al}"
                       f"({wr*100:.1f}% p={pv:.3f}) [{'採用' if accept else '棄却'}]")
         rain_s = ""
         if probe_L is not None:
             rain_s = f" 雨コア価値={_rain_value(NET_TMP, probe_L, D, random.Random(7)):.3f}"
-        print(f"[epoch{ep+1}/{epochs}] 自己対戦{per*workers}局 学習{len(train_samples)}サンプル"
+        print(f"[epoch{ep+1+ep_off}/{epochs+ep_off}] 自己対戦{per*workers}局 学習{len(train_samples)}サンプル"
               + (f"(直近{len(replay)}ep分)" if buf_eps > 1 else "") + " "
               f"{gate_s}{rain_s} {time.time()-t0:.0f}秒", flush=True)
+        if best_stop and not no_gate:
+            if accept and wr > best_wr:
+                best_wr, since_best = wr, 0
+                net.save(best_path)
+                print(f"  best-so-far を更新（ゲート {wr*100:.1f}%）→ {best_path}", flush=True)
+            elif first_max and best_wr < 0:
+                if ep + 1 + ep_off >= first_max:
+                    print(f"  通算{first_max}エポック採用が無かったので終了（最終候補は最後の候補）", flush=True)
+                    break
+            else:
+                since_best += 1
+                if since_best >= best_stop:
+                    print(f"  {best_stop}エポック続けて best-so-far を更新しなかったので早期終了", flush=True)
+                    break
+    if best_stop and best_wr >= 0:
+        net = PVNetNP.load(best_path)
+    elif first_max and last_cand is not None:
+        net = last_cand
     # 最終評価: 学習ネット vs 凍結アンカー（大標本）
     net.save(FINAL_TMP)
     aw, al, dr, wr, pv = ng_eval(pool, FINAL_TMP, ANCHOR_TMP, 600, workers, 99000)
-    print(f"\n=== 最終: 学習ネット vs 現行ネット（多様集団・600戦・NetGreedy）===", flush=True)
+    _gl = "Rust MCTS@" + os.environ.get("GATE_SIMS", "400") if os.environ.get("GATE_AI") == "rust" else "NetGreedy"
+    print(f"\n=== 最終: 学習ネット vs 現行ネット（多様集団・600戦・{_gl}）===", flush=True)
     print(f"学習ネット: {aw}勝 {al}敗 {dr}分 → 勝率{wr*100:.1f}%  p={pv:.4f}  "
           f"{'有意に強化' if pv<0.05 and wr>0.5 else ('有意に弱化' if pv<0.05 else '有意差なし')}", flush=True)
     out = os.environ.get("OUT_NET") or ("az_net_coevo.json" if SEASON == "M-2" else f"az_net_coevo_{SEASON}.json")

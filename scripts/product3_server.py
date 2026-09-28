@@ -250,12 +250,23 @@ def _proposal_detail(args):
             "details": EX.stat_details(p, L, TH), "archetypes": arch,
             "speed": EX.speed_info(p, L)}
 
+# 提案は対戦AIのネットで評価するので、キャッシュのキーにネットの中身のハッシュを入れる。
+# ネット（az_net_np.json）を替えると古いキャッシュは自動的に当たらなくなる（読み込み時に捨てる）。
+import hashlib as _hashlib
+from simulator.az_np import AZNP_PATH as _AZNP_PATH
+try:
+    _NET_TAG = "net" + _hashlib.sha256(open(_AZNP_PATH, "rb").read()).hexdigest()[:12]
+except FileNotFoundError:
+    _NET_TAG = "net-none"
+
 _SCACHE = {}   # 提案は決定的（固定シード＋温度0の貪欲選出）なので軸ごとに結果をキャッシュ
 _SCACHE_FILE = os.path.join(os.path.dirname(__file__), "suggest_cache.json")
 try:
-    for _k, _v in json.load(open(_SCACHE_FILE, encoding="utf-8")).items():
-        _SCACHE[_k] = _v
-    print(f"提案キャッシュ事前ロード: {len(_SCACHE)}件（人気軸）", flush=True)
+    _all = json.load(open(_SCACHE_FILE, encoding="utf-8"))
+    for _k, _v in _all.items():
+        if _NET_TAG in _k:
+            _SCACHE[_k] = _v
+    print(f"提案キャッシュ事前ロード: {len(_SCACHE)}件（人気軸。別ネットの{len(_all) - len(_SCACHE)}件は捨てた）", flush=True)
 except FileNotFoundError:
     pass
 
@@ -265,7 +276,8 @@ _SGUIDE_FILE = os.path.join(os.path.dirname(__file__), "suggest_cache_guided_s.j
 try:
     _n_guided = 0
     for _k, _v in json.load(open(_SGUIDE_FILE, encoding="utf-8")).items():
-        _SCACHE[_k] = _v; _n_guided += 1
+        if _NET_TAG in _k:
+            _SCACHE[_k] = _v; _n_guided += 1
     print(f"選出ガイドオーバーレイ: {_n_guided}件", flush=True)
 except FileNotFoundError:
     pass
@@ -485,7 +497,8 @@ def _suggest_key(fixed, ncand, top):
                                   + ([f"mc{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_CAP else []) \
                                   + ([f"mp{SUGGEST_MEGA_PAIR}_{SUGGEST_MEGA_PAIR_FLOOR}_{SUGGEST_MEGA_PAIR_ABS}"] if SUGGEST_MEGA_PAIR else []) \
                                   + ([f"mw{SUGGEST_MEGA_SHARED_MAX}"] if SUGGEST_MEGA_SHARED_MAX else []) \
-                                  + ([f"ms{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_PAIR and SUGGEST_MEGA_CAP else [])
+                                  + ([f"ms{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_PAIR and SUGGEST_MEGA_CAP else []) \
+                                  + [_NET_TAG]
     return json.dumps(key, ensure_ascii=False)   # 解決後specでキー化（入力形式に非依存）
 
 def suggest(core_args, ncand, top):

@@ -6372,6 +6372,17 @@ except Exception as _e30:
 #     反動・吸収の基準＝実際に減らしたHP／グラスフィールドの回復と残りターン／さまようたましいの不可特性／
 #     オボンのみは被弾直後／入場時効果・メガ進化は速い側から／いのちのたまは技1回につき1回・ばけのかわでも受ける
 # ════════════════════════════════════════════════════════════════
+# datapack のネット: Rust net.rs は vbins（価値の two-hot の区間数）を重みと同じ階層から読む。_meta に入れると常に0と読まれる
+try:
+    import json as _jdp
+    _dp = _jdp.load(open(os.environ.get("POKENAVI_DATAPACK") or os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "_rust_engine", "datapack.json")))
+    _nf = _jdp.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "az_net_np.json")))
+    check("datapack のネットは vbins をトップレベルに持ち、本番ネットの値と一致する",
+          _dp["net"] is not None and _dp["net"].get("vbins", 0) == _nf.get("vbins", 0) and "vbins" not in _dp["net"].get("_meta", {}),
+          f"{_dp['net'].get('vbins') if _dp.get('net') else None} / {_nf.get('vbins')}")
+except FileNotFoundError:
+    pass
+
 print("\n=== 31. 対戦エンジン本体（監査の修正） ===")
 try:
     from simulator.pokemon import build_from_spec as _b31, parse_pokemon_spec as _p31
