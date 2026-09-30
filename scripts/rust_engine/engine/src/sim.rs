@@ -22,6 +22,10 @@ pub fn preview_of(party: &[Poke]) -> Vec<PvEntry> {
 /// `order(P, sub)`: 3体のうち最速をリードに（Python の max は最初の最大要素）
 fn order(pack: &Pack, party: &[Poke], sub: &[usize], f: &Field) -> Vec<Poke> {
     let mons: Vec<&Poke> = sub.iter().map(|&i| &party[i]).collect();
+    // 計測用: SEL_KEEP_ORDER=1 なら渡された並び（先頭＝sub[0]）のまま使う（選出の先頭を比べる用。既定は最速を先頭）
+    if std::env::var("SEL_KEEP_ORDER").map(|v| v == "1").unwrap_or(false) {
+        return mons.into_iter().cloned().collect();
+    }
     let mut ld = 0usize;
     let mut bv = i64::MIN;
     for (j, m) in mons.iter().enumerate() {

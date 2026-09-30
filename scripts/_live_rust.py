@@ -37,12 +37,10 @@ def needs_python(specs):
     return any(mv in s for s in specs for mv in RNG_MOVES)
 
 # Rust 版が実装していない env（有効なら Python 経路へ）
+# 採点（_product3.surrogate_score）の選出は select_party 固定（2026-10-01）なので、learned_selection の env
+# （LEARNED_SELECTION / SELECT_MODE / MAX_MEGA / MIN_MEGA）は採点に効かない＝ガード不要
 _GUARD = [
-    ("LEARNED_SELECTION", {None, "0"}),
-    ("SELECT_MODE", {None}),
     ("MEGA_PENALTY", {None, "50", "50.0"}),
-    ("MAX_MEGA", {None}),
-    ("MIN_MEGA", {None}),
 ]
 
 

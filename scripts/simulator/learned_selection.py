@@ -1,20 +1,22 @@
-"""学習選出（MCTS教師で学習したValMLP選出評価器）。本番記録系の select_party の drop-in 置換。
-A/B 実MCTS@1600・2000戦で 55.9%(z=+5.23, p<0.0001) とヒューリスティック選出を有意に上回ることを確認済み。
-モデル: simulator/selector_m2.json（_selector3.py 由来）。
-有効化: 環境変数 LEARNED_SELECTION=1 を明示した時のみ（既定OFF＝heuristicフォールバック）。
-フル検証が済むまで本番(auto_update)に出さないため opt-in にしている。検証後に auto_update.sh で =1 を設定して本番投入。
+"""学習選出（MCTS教師で学習したValMLP選出評価器）。本番の選出（select_party の drop-in 置換）。
+モデル: simulator/selector_m6b.json（M-6、2026-09-30 採用）。教師＝本番AI（Rust MCTS@400・JOINT_BUILD既定ON）で、自分の候補
+（3体＋先頭、メガ1体ルール内）を相手の選出をサンプリングして戦わせた勝率（段階1＋段階2b、1599対面）。入力は現行の既定特徴量（1037次元）。
+A/B（Rust MCTS@400・3プール各4000戦）: vs 相性ベースの規則的な選出 52.1〜52.7%（z=+2.7〜+3.5）、同ベースライン vs 旧 selector_m6 は有意差なし。
+既定で有効。LEARNED_SELECTION=0 でヒューリスティック選出（ai.select_party）。SELECTOR_PATH で別のモデル。
+モデルが無い・入力次元が現行の特徴量と合わないときはヒューリスティックに落ちる（旧 selector_m2/m3 は905次元で現行では動かない）。
 """
 import os
 import json
 import math
 import random
+import sys
 from itertools import combinations
 
 import numpy as np
 
 _MODEL = None
 _LOADED = False
-_PATH = os.environ.get("SELECTOR_PATH") or os.path.join(os.path.dirname(__file__), "selector_m2.json")
+_PATH = os.environ.get("SELECTOR_PATH") or os.path.join(os.path.dirname(__file__), "selector_m6b.json")
 
 
 def _load():
@@ -22,12 +24,19 @@ def _load():
     if _LOADED:
         return _MODEL
     _LOADED = True
-    if os.environ.get("LEARNED_SELECTION", "0") != "1" or not os.path.exists(_PATH):
-        _MODEL = None   # 既定OFF。検証完了後 LEARNED_SELECTION=1 で本番有効化
+    if os.environ.get("LEARNED_SELECTION", "1") == "0" or not os.path.exists(_PATH):
+        _MODEL = None
         return None
     with open(_PATH) as f:
         d = json.load(f)
-    _MODEL = {"W1": np.asarray(d["W1"], float), "b1": np.asarray(d["b1"], float),
+    from .features import feature_dim
+    W1 = np.asarray(d["W1"], float)
+    if W1.shape[1] != feature_dim():
+        print(f"[learned_selection] {_PATH}: 入力{W1.shape[1]}次元 ≠ 現行の特徴量{feature_dim()}次元 → ヒューリスティック選出",
+              file=sys.stderr, flush=True)
+        _MODEL = None
+        return None
+    _MODEL = {"W1": W1, "b1": np.asarray(d["b1"], float),
               "W2": np.asarray(d["W2"], float), "b2": float(d["b2"])}
     return _MODEL
 
@@ -62,6 +71,9 @@ def learned_select_party(party6, opp6, loader, n=3, temperature=0.0, rng=None):
     from .ai import select_party
     if os.environ.get("SELECT_MODE") == "mega1":   # 現実的選出（交代が機能する多様な対面）
         return _mega_plus_random(party6, rng, n)
+    if os.environ.get("SELECT_MODE") == "matchup":   # 相性ベースの規則的な選出（ベースライン）
+        from .selection_matchup import matchup_select_party
+        return matchup_select_party(party6, opp6, loader, n=n, temperature=temperature, rng=rng)
     if os.environ.get("SELECT_MODE") == "mcts":
         from .mcts_selection import mcts_select_party
         return mcts_select_party(party6, opp6, loader, n=n, temperature=temperature, rng=rng)

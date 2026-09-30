@@ -27,7 +27,10 @@ def _score_setup(L, net, panel_specs):
 
 def surrogate_score(specs):
     from simulator.pokemon import build_from_spec, parse_pokemon_spec
-    from simulator.learned_selection import learned_select_party
+    # 採点の選出はヒューリスティック（select_party）に固定する。採点モデル（ensemble_model_*）はこの選出の特徴で学習しており、
+    # Rust の高速経路（_live_rust.live_feats）も同じ選出を実装している。学習選出（既定ON）にすると候補1つあたり
+    # 数秒かかり提案APIが時間切れになる（2026-10-01）。提案の詳細（eval_vs_built）は学習選出を使う
+    from simulator.ai import select_party
     from simulator.belief import OpponentBelief
     from simulator.battle import BattleSide, BattleField
     from simulator.features import encode_state
@@ -35,8 +38,8 @@ def surrogate_score(specs):
     A = [build_from_spec(parse_pokemon_spec(s), L, season=SEASON, randomize=False) for s in specs]
     vals = []
     for B in _W["panel"]:
-        sa = learned_select_party(A, B, L, n=3, temperature=0.0)
-        sb = learned_select_party(B, A, L, n=3, temperature=0.0)
+        sa = select_party(A, B, L, n=3, temperature=0.0)
+        sb = select_party(B, A, L, n=3, temperature=0.0)
         s1 = BattleSide(sa, source6=A); s2 = BattleSide(sb, source6=B)
         s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
         vals.append(net.evaluate(encode_state(s1, s2, BattleField()), [0])[1])

@@ -5545,6 +5545,68 @@ check("観戦記録: 見せ合いは6体（隠れ選出）", any("相手候補6�
 check("観戦記録: 先発の登場が記録される（opp_view.on_enter）", sum(1 for l in _t0 if "登場（" in l) == 2, " / ".join(_t0))
 
 
+print("\n=== 26j. 相性ベースの規則的な選出（SELECT_MODE=matchup） ===")
+# ニューラル選出のベースライン。相手6体のどの3体が来ても穴が無い3体を、攻め・守り（弱点の重複）・1v1・負荷分散で選ぶ。
+import simulator.selection_matchup as _SM26j
+from simulator.learned_selection import learned_select_party as _lsp26j
+_T26j = {"off": [[0.5] * 6 for _ in range(6)], "tp": [{"じめん": 0.9} for _ in range(6)],
+         "weak": [{"じめん": i in (0, 1)} for i in range(6)], "mu": [[0.0] * 6 for _ in range(6)],
+         "mega_me": [False] * 6, "mega_opp": [False] * 6}
+_c26j = _SM26j.choose(_T26j)
+check("守り: じめん弱点の2体（0と1）を同時に選ばない", not ({0, 1} <= set(_c26j)), str(_c26j))
+_T26j["mu"] = [[1.0 if (i == 2 and j < 3) or (i == 3 and j >= 3) else 0.0 for j in range(6)] for i in range(6)]
+_T26j["weak"] = [{"じめん": False} for _ in range(6)]
+_c26j = _SM26j.choose(_T26j)
+check("1v1: 相手の前半に勝てる2と後半に勝てる3の両方を選ぶ", {2, 3} <= set(_c26j), str(_c26j))
+_T26j["mega_me"] = [True, True, False, False, False, False]
+_c26j = _SM26j.choose(_T26j)
+check("メガ1体ルール: メガ石持ちはちょうど1体", sum(1 for i in _c26j if i in (0, 1)) == 1, str(_c26j))
+_T26j["mega_opp"] = [True] * 5 + [False]
+_c26j = _SM26j.choose(_T26j)
+check("相手の推定メガ石持ちが5体以上でも候補が空にならない（メガ数最少の組で代える）", len(_c26j) == 3,
+      f"{_c26j} 相手の組={_SM26j._trios(_T26j['mega_opp'])[:3]}")
+_os26j = os.environ.get("SELECT_MODE"); os.environ["SELECT_MODE"] = "matchup"
+_A26j = [_mk26c(x) for x in _P1s]; _B26j = [_mk26c(x) for x in _P2s]
+_s1 = [p.name for p in _lsp26j(_A26j, _B26j, dl)]
+_B26j[0].moves = list(reversed(_B26j[0].moves)); _B26j[0].item = "たべのこし"
+_s2 = [p.name for p in _lsp26j(_A26j, _B26j, dl)]
+if _os26j is None: os.environ.pop("SELECT_MODE", None)
+else: os.environ["SELECT_MODE"] = _os26j
+check("SELECT_MODE=matchup で3体を返し、メガ石持ちは1体", len(_s1) == 3 and
+      sum(1 for n in _s1 if any(p.name == n and p.mega_data is not None for p in _A26j)) == 1, str(_s1))
+check("相手の真の技・持ち物を読まない（変えても選出が同じ）", _s1 == _s2, f"{_s1} / {_s2}")
+
+
+print("\n=== 26k. 学習選出の既定（simulator/selector_m6b.json、既定ON） ===")
+# M-6 の選出モデル（1037次元＝現行の既定特徴量）を既定で使う。旧 selector_m2/m3 は905次元で現行では動かない（削除/未使用）。
+import json as _js26k, tempfile as _tf26k
+import simulator.learned_selection as _LS26k
+from simulator.features import feature_dim as _fd26k
+from simulator.ai import select_party as _sp26k
+_sv26k = (_LS26k._PATH, _LS26k._LOADED, _LS26k._MODEL, os.environ.get("LEARNED_SELECTION"))
+os.environ.pop("LEARNED_SELECTION", None)
+_LS26k._PATH = os.path.join(os.path.dirname(_LS26k.__file__), "selector_m6b.json"); _LS26k._LOADED = False
+_m26k = _LS26k._load()
+check("既定で selector_m6b.json を読み、入力が現行の特徴量と同じ次元", _m26k is not None and _m26k["W1"].shape[1] == _fd26k(),
+      f"{None if _m26k is None else _m26k['W1'].shape} vs {_fd26k()}")
+_A26k = [_mk26c(x) for x in _P1s]; _B26k = [_mk26c(x) for x in _P2s]
+_sel26k = _LS26k.learned_select_party(_A26k, _B26k, dl, n=3, temperature=0.0)
+check("学習選出: 3体・メガ石持ちちょうど1体", len(_sel26k) == 3 and sum(1 for p in _sel26k if p.mega_data is not None) == 1,
+      str([p.name for p in _sel26k]))
+os.environ["LEARNED_SELECTION"] = "0"; _LS26k._LOADED = False
+check("LEARNED_SELECTION=0 ならヒューリスティック選出と同じ",
+      [p.name for p in _LS26k.learned_select_party(_A26k, _B26k, dl, n=3, temperature=0.0)]
+      == [p.name for p in _sp26k(_A26k, _B26k, dl, n=3, temperature=0.0)])
+os.environ.pop("LEARNED_SELECTION", None)
+_bad26k = _tf26k.NamedTemporaryFile("w", suffix=".json", delete=False)
+_js26k.dump({"W1": [[0.0] * 905], "b1": [0.0], "W2": [0.0], "b2": 0.0}, _bad26k); _bad26k.close()
+_LS26k._PATH = _bad26k.name; _LS26k._LOADED = False
+check("入力次元が合わないモデル（旧905次元）はヒューリスティックに落ちる", _LS26k._load() is None)
+_LS26k._PATH, _LS26k._LOADED, _LS26k._MODEL = _sv26k[0], False, None
+if _sv26k[3] is None: os.environ.pop("LEARNED_SELECTION", None)
+else: os.environ["LEARNED_SELECTION"] = _sv26k[3]
+
+
 print("\n=== 26b. 必ず急所に当たる技 ===")
 # move_master の effect_text が「必ず急所に当たる。」なのに急所率が 1/24 のままだった。
 # deep_audit の検出器 (r'必ず急所', ['急所']) はテストのラベル文字列に一致するだけで

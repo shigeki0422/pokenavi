@@ -18,6 +18,7 @@ from simulator.data import DataLoader
 from simulator.pokemon import parse_pokemon_spec, build_from_spec
 from simulator.battle import Battle, BattleSide, BattleField, _entry_effects, _speed_order, MAX_TURNS, Action
 from simulator.ai import HeuristicAI, select_party, should_mega_evolve
+from simulator.learned_selection import learned_select_party
 from simulator.simulate import run_simulation_specs
 from simulator.search_ai import SearchAI
 from simulator.belief import OpponentBelief
@@ -87,17 +88,9 @@ _sel_rng = random.Random(12345)
 
 # 任意パーティ汎化用の蒸留選出ポリシー（あれば使用。ヒューリスティックの上位互換）
 def learned_select(my6, opp6, my_specs, opp_specs):
-    """登録カードはNash表、それ以外（任意パーティ）はヒューリスティック選出 select_party。
-    （蒸留選出ポリシーはCRN評価で実効+0.4pt＝無益のため不採用）"""
-    my_id = _TMPL_IDX.get(frozenset(my_specs))
-    opp_id = _TMPL_IDX.get(frozenset(opp_specs))
-    if my_id is not None and opp_id is not None:
-        entry = _SEL_CACHE.get(f"{my_id}-{opp_id}")
-        if entry:
-            sel = sample_selection([tuple(s) for s in entry["sels"]], entry["mix"], _sel_rng)
-            if all(i < len(my6) for i in sel):
-                return selection_to_party(my6, sel)
-    return select_party(my6, opp6, loader)
+    """学習選出（simulator/selector_m6b.json、既定ON）。以前は登録カード同士だけ M-2 時代の Nash 表、それ以外は
+    ヒューリスティックだった（2026-10-01 に M-6 の学習選出へ統一）。LEARNED_SELECTION=0 でヒューリスティック"""
+    return learned_select_party(my6, opp6, loader, n=3, temperature=0.0)
 
 
 # ── リクエストモデル ──────────────────────────────────────────────────
@@ -820,7 +813,7 @@ def manual_start(req: ManualStartRequest):
         valid = [i for i in req.p1_indices if 0 <= i < len(party1_6)][:3]
         selected1 = [party1_6[i] for i in valid]
     else:
-        selected1 = select_party(party1_6, party2_6, loader)
+        selected1 = learned_select_party(party1_6, party2_6, loader, n=3, temperature=0.0)
     # P2（AI側）は学習済みナッシュ均衡で選出（ランダム相手は select_party 相当にフォールバック）
     selected2 = learned_select(party2_6, party1_6, req.p2, req.p1)
 
