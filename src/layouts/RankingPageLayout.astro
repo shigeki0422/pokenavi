@@ -6,37 +6,13 @@ import rankingData from '../data/ranking.json';
 import articleMeta from '../data/article-meta.json';
 import { getCollection } from 'astro:content';
 import { ui, type Lang } from '../i18n/ui';
+import { NAME_MAP } from '../data/ranking-name-map';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 
 interface Props { lang?: Lang; }
 const { lang = 'ja' } = Astro.props;
 const T = ui[lang];
 
-const NAME_MAP: Record<string, string> = {
-  'イダイトウ(オス)': 'イダイトウ (オス)',
-  'イダイトウ(メス)': 'イダイトウ（メス）',
-  'アローラキュウコン': 'キュウコン（アローラ）',
-  'フラエッテ(永遠)': 'フラエッテ（永遠）',
-  'ヒスイゾロアーク': 'ゾロアーク（ヒスイ）',
-  'ヒスイウインディ': 'ウインディ（ヒスイ）',
-  'ヒスイヌメルゴン': 'ヌメルゴン（ヒスイ）',
-  'ヒスイバクフーン': 'バクフーン（ヒスイ）',
-  'ガラルヤドラン': 'ヤドラン（ガラル）',
-  'ガラルヤドキング': 'ヤドキング（ガラル）',
-  'ルガルガン(昼)': 'ルガルガン（まひる）',
-  'ルガルガン(たそがれ)': 'ルガルガン（たそがれ）',
-  'ルガルガン(まよなか)': 'ルガルガン（まよなか）',
-  'ニャオニクス(オス)': 'ニャオニクス（オス）',
-  'ニャオニクス(メス)': 'ニャオニクス（メス）',
-  'ケンタロス:水': 'ケンタロス（水）',
-  'ケンタロス:炎': 'ケンタロス（炎）',
-  'ケンタロス:格': 'ケンタロス（格）',
-  'ヒスイクレベース': 'クレベース（ヒスイ）',
-  'ヒスイジュナイパー': 'ジュナイパー（ヒスイ）',
-  'ガラルマッギョ': 'マッギョ（ガラル）',
-  'ヒスイダイケンキ': 'ダイケンキ（ヒスイ）',
-  'アローラライチュウ': 'ライチュウ（アローラ）',
-};
 
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const pokemonPages = await getCollection('pokemon', p => showDrafts || !p.data.draft);
@@ -76,9 +52,6 @@ function buildChartSeason(sd: SeasonData) {
 }
 
 const chartPokemon = buildChartSeason(seasons[latestSeason]).pokemon;
-const allSeasonsChartJson = JSON.stringify(
-  Object.fromEntries(seasonKeys.map(s => [s, buildChartSeason(seasons[s])]))
-);
 const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
 
 // SEO: top 50 for ItemList structured data
@@ -131,6 +104,42 @@ const analysisCards = top50.flatMap((p, i) => {
     season: seasonMatch ? `M-${seasonMatch[1]}` : '',
   }];
 }).slice(0, 12);
+
+/** 検索意図（「今の環境で何が流行っているか」）に本文で答えるため、順位データから
+ * 週間の変動と上位陣の内訳をサーバー側で組み立てる。使用率の数値はクロール元が
+ * 公開していないため扱わず、順位と変動のみを根拠にする。 */
+const weekAgoDate = dates[Math.max(0, dates.length - 8)];
+const rankAt = (p: PokemonEntry, d: string) => p.dates[d]?.rank ?? null;
+type Move = { name: string; id: string | null; cur: number; prev: number | null; diff: number | null };
+const moves: Move[] = pokemon
+  .filter(p => rankAt(p, lastDate))
+  .map(p => {
+    const cur = rankAt(p, lastDate) as number;
+    const prev = rankAt(p, weekAgoDate);
+    return { name: p.name, id: p.id, cur, prev, diff: prev == null ? null : prev - cur };
+  });
+const curTop100 = moves.filter(m => m.cur <= 100);
+const risers = curTop100.filter(m => (m.diff ?? 0) > 0).sort((a, b) => (b.diff as number) - (a.diff as number)).slice(0, 5);
+const fallers = curTop100.filter(m => (m.diff ?? 0) < 0).sort((a, b) => (a.diff as number) - (b.diff as number)).slice(0, 5);
+const newcomers = curTop100.filter(m => m.prev == null).slice(0, 5);
+const moveByName: Record<string, Move> = Object.fromEntries(moves.map(m => [m.name, m]));
+const pokeUrl = (name: string) => {
+  const id = pageById[NAME_MAP[name] ?? name];
+  return id ? `/pokemon/${id}/` : null;
+};
+const spanDays = dates.length;
+const top10Rows = top10.map((p, i) => {
+  const mv = moveByName[p.name];
+  return {
+    rank: i + 1,
+    name: p.name,
+    url: pokeUrl(p.name),
+    img: p.id ? `/images/pokemon/pokemon-${p.id}.webp` : null,
+    diff: mv?.diff ?? null,
+    isNew: mv?.prev == null,
+    article: (latestArticleByName[p.name] ?? latestArticleByName[NAME_MAP[p.name] ?? p.name])?.slug ?? null,
+  };
+});
 
 const siteUrl = 'https://pokenavi.jp';
 const rankingPaths: Record<Lang, string> = { ja: '/ranking/', en: '/en/ranking/', ko: '/ko/ranking/' };
@@ -292,7 +301,29 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         background: #f8fafc; color: #64748b;
       }
       .stab.active { background: var(--accent,#f97316); color: #fff; border-color: var(--accent,#f97316); }
+      .stab.loading { opacity: .6; cursor: progress; }
       /* SEOテキストブロック */
+      /* 検索意図に本文で答えるための解説ブロック（日本語版のみ） */
+      .rk-summary { margin-top: 2rem; }
+      .rk-summary h2 { font-size: 1rem; font-weight: 700; padding: .4rem .9rem; background: #f8fafc; border-left: 3px solid var(--accent,#f97316); border-radius: 0 6px 6px 0; margin-bottom: .8rem; }
+      .rk-summary h3 { font-size: .92rem; font-weight: 700; margin: 1.4em 0 .5em; color: #1e293b; }
+      .rk-summary p { font-size: .86rem; line-height: 1.85; color: #334155; margin: 0 0 .6em; }
+      .rk-table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+      .rk-table th, .rk-table td { border: 1px solid #e2e8f0; padding: .45em .7em; text-align: left; }
+      .rk-table th { background: #f8fafc; font-weight: 700; white-space: nowrap; }
+      .rk-num { white-space: nowrap; font-weight: 700; }
+      .rk-name { display: flex; align-items: center; gap: 6px; }
+      .rk-name img { width: 28px; height: 28px; object-fit: contain; }
+      .rk-diff { white-space: nowrap; }
+      .rk-up { color: #059669; font-weight: 700; }
+      .rk-down { color: #dc2626; font-weight: 700; }
+      .rk-new { color: #7c3aed; font-weight: 700; }
+      .rk-flat { color: #94a3b8; }
+      .rk-moves { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0 24px; }
+      .rk-moves ul { margin: 0; padding-left: 1.2em; }
+      .rk-moves li { font-size: .85rem; line-height: 1.8; }
+      .rk-moves li span { margin-left: .5em; font-size: .8rem; }
+      .rk-note { font-size: .78rem !important; color: #64748b !important; margin-top: 1em !important; }
       .seo-ranking-list {
         margin-top: 2rem; padding: 1rem 1.5rem;
         background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
@@ -405,17 +436,91 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         </section>
       )}
 
-      <section class="seo-ranking-list">
-        <h2>{T.rankingTop10Title}</h2>
-        <p>{T.rankingTop10Desc}</p>
-        <ol>
-          {top10.map((p, i) => (
-            <li>{T.rankPrefix}{i + 1}{T.rankSuffix} {p.name}</li>
-          ))}
-        </ol>
-      </section>
+      {lang === 'ja' && (
+        <section class="rk-summary">
+          <h2>{latestSeason}シーズンの環境（{fmtDate(dates[0])}〜{fmtDate(lastDate)}）</h2>
+          <p>
+            ポケモンチャンピオンズ シングルバトルの使用率ランキングです。{fmtDate(lastDate)}時点の1位は{top10Rows[0]?.name}、2位{top10Rows[1]?.name}、3位{top10Rows[2]?.name}で、
+            {rankedCount}体を毎日集計しています（{latestSeason}シーズン{spanDays}日分）。
+            {risers.length > 0 && <>直近1週間で最も順位を上げたのは{risers[0].name}（{risers[0].prev}位→{risers[0].cur}位）、</>}
+            {fallers.length > 0 && <>最も下げたのは{fallers[0].name}（{fallers[0].prev}位→{fallers[0].cur}位）です。</>}
+          </p>
 
-      <script define:vars={{ chartJson, allSeasonsChartJson, latestSeason, CHART_ROWS, T_JS: {
+          <h3>上位10体と直近1週間の動き</h3>
+          <table class="rk-table">
+            <thead>
+              <tr><th>順位</th><th>ポケモン</th><th>前週比</th><th>考察</th></tr>
+            </thead>
+            <tbody>
+              {top10Rows.map(r => (
+                <tr>
+                  <td class="rk-num">{r.rank}位</td>
+                  <td class="rk-name">
+                    {r.img && <img src={r.img} alt="" width="28" height="28" loading="lazy" />}
+                    {r.url ? <a href={r.url}>{r.name}</a> : r.name}
+                  </td>
+                  <td class="rk-diff">
+                    {r.isNew ? <span class="rk-new">新規</span>
+                      : r.diff && r.diff > 0 ? <span class="rk-up">+{r.diff}</span>
+                      : r.diff && r.diff < 0 ? <span class="rk-down">{r.diff}</span>
+                      : <span class="rk-flat">±0</span>}
+                  </td>
+                  <td>{r.article ? <a href={`/blog/${r.article}/`}>記事</a> : <span class="rk-flat">—</span>}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div class="rk-moves">
+            <div>
+              <h3>順位を上げたポケモン（直近1週間）</h3>
+              <ul>
+                {risers.map(m => (
+                  <li>
+                    {pokeUrl(m.name) ? <a href={pokeUrl(m.name)}>{m.name}</a> : m.name}
+                    <span class="rk-up">{m.prev}位 → {m.cur}位（+{m.diff}）</span>
+                  </li>
+                ))}
+                {newcomers.map(m => (
+                  <li>
+                    {pokeUrl(m.name) ? <a href={pokeUrl(m.name)}>{m.name}</a> : m.name}
+                    <span class="rk-new">圏外 → {m.cur}位</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3>順位を下げたポケモン（直近1週間）</h3>
+              <ul>
+                {fallers.map(m => (
+                  <li>
+                    {pokeUrl(m.name) ? <a href={pokeUrl(m.name)}>{m.name}</a> : m.name}
+                    <span class="rk-down">{m.prev}位 → {m.cur}位（{m.diff}）</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <p class="rk-note">
+            変動は{fmtDate(weekAgoDate)}と{fmtDate(lastDate)}の順位の比較です。上位100位以内のポケモンを対象にしています。
+            さらに細かい変動は<a href="/trends/">環境変動ランキング</a>で確認できます。
+          </p>
+        </section>
+      )}
+
+      {lang !== 'ja' && (
+        <section class="seo-ranking-list">
+          <h2>{T.rankingTop10Title}</h2>
+          <p>{T.rankingTop10Desc}</p>
+          <ol>
+            {top10.map((p, i) => (
+              <li>{T.rankPrefix}{i + 1}{T.rankSuffix} {p.name}</li>
+            ))}
+          </ol>
+        </section>
+      )}
+
+      <script define:vars={{ chartJson, latestSeason, seasonDataBase: `${lang === 'ja' ? '' : `/${lang}`}/ranking-data/${lang}/`, CHART_ROWS, T_JS: {
         chartTitleBase: T.rankingChartTitleBase,
         rankSuffix: T.rankSuffix,
         rankPrefix: T.rankPrefix,
@@ -423,8 +528,17 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         names: lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {},
       } }}>
       (function() {
-        const allSeasons = JSON.parse(allSeasonsChartJson);
         let currentSeason = latestSeason;
+        // 他シーズンの順位データはHTMLに埋め込まず、タブを押したときに取得する
+        const seasonCache = {};
+        async function fetchSeason(s) {
+          if (!seasonCache[s]) {
+            const r = await fetch(`${seasonDataBase}${s}.json`);
+            if (!r.ok) throw new Error('season fetch failed');
+            seasonCache[s] = await r.json();
+          }
+          return seasonCache[s];
+        }
         let data = JSON.parse(chartJson);
         let { dates, pokemon } = data;
         const canvas = document.getElementById('bump-canvas');
@@ -1009,13 +1123,20 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           draw(); drawRanks();
         });
 
-        document.getElementById('season-tabs')?.addEventListener('click', e => {
+        document.getElementById('season-tabs')?.addEventListener('pointerenter', e => {
+          const btn = e.target.closest?.('.stab');
+          if (btn?.dataset.season) fetchSeason(btn.dataset.season).catch(() => {});
+        }, true);
+        document.getElementById('season-tabs')?.addEventListener('click', async e => {
           const btn = e.target.closest('.stab');
           if (!btn) return;
           const s = btn.dataset.season;
           if (!s || s === currentSeason) return;
+          let sd;
+          btn.classList.add('loading');
+          try { sd = await fetchSeason(s); } catch (err) { btn.classList.remove('loading'); return; }
+          btn.classList.remove('loading');
           currentSeason = s;
-          const sd = allSeasons[s];
           dates.length = 0; sd.dates.forEach(d => dates.push(d));
           pokemon.length = 0; sd.pokemon.forEach(p => pokemon.push(p));
           document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
