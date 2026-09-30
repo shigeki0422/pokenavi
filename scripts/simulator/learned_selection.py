@@ -185,9 +185,21 @@ _CONSUMED_BERRIES = frozenset((
     "ウタンのみ", "タンガのみ", "ヨロギのみ", "カシブのみ", "ハバンのみ", "ナモのみ", "リリバのみ", "ロゼルのみ", "ホズのみ"))
 
 
+# ダメージ計算がグローバル乱数を消費する技（_live_rust.RNG_MOVES と同じ）。これを持つ個体がいる対面は、符号化のたびに乱数を
+# 消費する元の実装でしか同じ結果にならない（高速版は計算を使い回して消費回数が減る・Rust 版は乱数を持たない＝panic していた）
+_RNG_MOVES = frozenset(("きまぐレーザー",))
+
+
+def _has_rng_move(pokes):
+    return any(m is not None and m.name_jp in _RNG_MOVES for p in pokes for m in (p.moves or []))
+
+
 def _fast_ok(party6, opp6):
-    """_FastEncoder の前提（無傷・能力変化なし・状態異常なし・未メガ・半減きのみ無し）を満たすか。満たさなければ元の実装で"""
+    """_FastEncoder の前提（無傷・能力変化なし・状態異常なし・未メガ・半減きのみ無し・乱数を消費する技無し）を満たすか。
+    満たさなければ元の実装で"""
     from .features import _STAGES
+    if _has_rng_move(list(party6) + list(opp6)):
+        return False
     for p in list(party6) + list(opp6):
         if (not p.is_alive or p.hp != p.max_hp or p.status or p.mega_evolved or p.item in _CONSUMED_BERRIES
                 or any(getattr(p, s, 0) for s in _STAGES)):
@@ -198,6 +210,8 @@ def _fast_ok(party6, opp6):
 def _rust_ok(party6, opp6):
     """Rust 版は選出時点の個体（spec から組み直せる状態）が前提。半減きのみは元の実装と同じ順で消費するので可"""
     from .features import _STAGES
+    if _has_rng_move(list(party6) + list(opp6)):
+        return False
     return all(p.is_alive and p.hp == p.max_hp and not p.status and not p.mega_evolved
                and not any(getattr(p, s, 0) for s in _STAGES) for p in list(party6) + list(opp6))
 
@@ -224,7 +238,9 @@ def _rust_states(party6, opp6, n, rng):
                                     os.environ.get("POOL_SEASON", "M-6"), n,
                                     int(os.environ.get("MIN_MEGA", str(_t))), int(os.environ.get("MAX_MEGA", str(_t))),
                                     list(st[1]))
-    except Exception:
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except BaseException:           # Rust の panic は PyO3 では BaseException（PanicException）。Python 版へ落とす
         return None
     cands, osels, xb, dim, newst = r
     rng.setstate((st[0], tuple(newst), st[2]))

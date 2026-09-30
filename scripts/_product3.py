@@ -25,24 +25,50 @@ def _score_setup(L, net, panel_specs):
     _W["L"] = L; _W["net"] = net
     _W["panel"] = [[build_from_spec(parse_pokemon_spec(s), L, season=SEASON, randomize=False) for s in sp] for sp in panel_specs]
 
+_SEL_SEED = 20261001
+
+
+def panel_selections(A):
+    """採点のパネル各面での選出（自分・パネル側とも学習選出、温度0）。相手の仮定の乱数は面ごとに固定のシードで
+    （グローバル乱数に依らず採点が決まる。Rust 経路 _live_rust.feats も同じ選出を使う）。各面の前後で個体を巻き戻す。
+    戻り: [(自分の6体の添字の並び, パネル側の6体の添字の並び), ...]"""
+    import random as _r
+    from simulator.learned_selection import learned_select_party
+    from simulator.ai import _state_snapshot, _state_restore
+    L = _W["L"]
+    out = []
+    for pi, B in enumerate(_W["panel"]):
+        snap = _state_snapshot(list(A) + list(B))
+        try:
+            sa = learned_select_party(A, B, L, n=3, temperature=0.0, rng=_r.Random(_SEL_SEED + 2 * pi))
+            sb = learned_select_party(B, A, L, n=3, temperature=0.0, rng=_r.Random(_SEL_SEED + 2 * pi + 1))
+            out.append(([next(k for k, p in enumerate(A) if p is m) for m in sa],
+                        [next(k for k, p in enumerate(B) if p is m) for m in sb]))
+        finally:
+            _state_restore(snap)
+    return out
+
+
 def surrogate_score(specs):
+    """ネットのパネル特徴: パネル20面それぞれで、学習選出（既定のモデル）で選んだ両者の初期状態をネットで評価した平均。
+    面ごとに個体を巻き戻す（符号化の副作用＝半減きのみの消費などを次の面へ持ち越さない）。Rust 経路（_live_rust.feats）と一致
+    （_rust_engine/live_parity.py）。2026-10-01 に選出をヒューリスティックから学習選出へ（採点モデルは同時に再学習）。"""
     from simulator.pokemon import build_from_spec, parse_pokemon_spec
-    # 採点の選出はヒューリスティック（select_party）に固定する。採点モデル（ensemble_model_*）はこの選出の特徴で学習しており、
-    # Rust の高速経路（_live_rust.live_feats）も同じ選出を実装している。学習選出（既定ON）にすると候補1つあたり
-    # 数秒かかり提案APIが時間切れになる（2026-10-01）。提案の詳細（eval_vs_built）は学習選出を使う
-    from simulator.ai import select_party
     from simulator.belief import OpponentBelief
     from simulator.battle import BattleSide, BattleField
     from simulator.features import encode_state
+    from simulator.ai import _state_snapshot, _state_restore
     L = _W["L"]; net = _W["net"]
     A = [build_from_spec(parse_pokemon_spec(s), L, season=SEASON, randomize=False) for s in specs]
     vals = []
-    for B in _W["panel"]:
-        sa = select_party(A, B, L, n=3, temperature=0.0)
-        sb = select_party(B, A, L, n=3, temperature=0.0)
-        s1 = BattleSide(sa, source6=A); s2 = BattleSide(sb, source6=B)
-        s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
-        vals.append(net.evaluate(encode_state(s1, s2, BattleField()), [0])[1])
+    for (ia, ib), B in zip(panel_selections(A), _W["panel"]):
+        snap = _state_snapshot(list(A) + list(B))
+        try:
+            s1 = BattleSide([A[i] for i in ia], source6=A); s2 = BattleSide([B[i] for i in ib], source6=B)
+            s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
+            vals.append(net.evaluate(encode_state(s1, s2, BattleField()), [0])[1])
+        finally:
+            _state_restore(snap)
     return statistics.mean(vals)
 
 def eval_vs_built(specs, opp_built):

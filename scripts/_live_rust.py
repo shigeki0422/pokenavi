@@ -105,7 +105,11 @@ def feats(m, specs, net, panel_spd, panel_hp):
     if needs_python(specs):
         STATS["needs_python"] += 1
         raise NeedsPython(specs)
-    sb, mb, spd_a, hp_a, npanel, dim, na, nb = m.live_feats(list(specs))
+    # 選出はパネル各面の学習選出（Python の _product3.panel_selections。学習選出は内部で Rust 版を使う）
+    import _product3 as P3
+    from simulator.pokemon import build_from_spec, parse_pokemon_spec
+    A = [build_from_spec(parse_pokemon_spec(s), P3._W["L"], season=P3.SEASON, randomize=False) for s in specs]
+    sb, mb, spd_a, hp_a, npanel, dim, na, nb = m.live_feats(list(specs), P3.panel_selections(A))
     X = np.frombuffer(sb, dtype="<f8").reshape(npanel, dim)
     ns = statistics.mean(net.evaluate(X[i], [0])[1] for i in range(npanel))
     D = np.frombuffer(mb, dtype="<i8").reshape(npanel, 2, na * nb).tolist()

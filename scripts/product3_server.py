@@ -259,14 +259,21 @@ try:
 except FileNotFoundError:
     _NET_TAG = "net-none"
 
+# 採点モデル（ENS_MODEL）の中身も同様にキーへ入れる（採点モデルを替えたら古いキャッシュは当たらない・読み込み時に捨てる）
+try:
+    from _ensemble_surrogate import MODEL as _ENS_PATH
+    _ENS_TAG = "ens" + _hashlib.sha256(open(_ENS_PATH, "rb").read()).hexdigest()[:12]
+except FileNotFoundError:
+    _ENS_TAG = "ens-none"
+
 _SCACHE = {}   # 提案は決定的（固定シード＋温度0の貪欲選出）なので軸ごとに結果をキャッシュ
 _SCACHE_FILE = os.path.join(os.path.dirname(__file__), "suggest_cache.json")
 try:
     _all = json.load(open(_SCACHE_FILE, encoding="utf-8"))
     for _k, _v in _all.items():
-        if _NET_TAG in _k:
+        if _NET_TAG in _k and _ENS_TAG in _k:
             _SCACHE[_k] = _v
-    print(f"提案キャッシュ事前ロード: {len(_SCACHE)}件（人気軸。別ネットの{len(_all) - len(_SCACHE)}件は捨てた）", flush=True)
+    print(f"提案キャッシュ事前ロード: {len(_SCACHE)}件（人気軸。別ネット・別採点モデルの{len(_all) - len(_SCACHE)}件は捨てた）", flush=True)
 except FileNotFoundError:
     pass
 
@@ -276,7 +283,7 @@ _SGUIDE_FILE = os.path.join(os.path.dirname(__file__), "suggest_cache_guided_s.j
 try:
     _n_guided = 0
     for _k, _v in json.load(open(_SGUIDE_FILE, encoding="utf-8")).items():
-        if _NET_TAG in _k:
+        if _NET_TAG in _k and _ENS_TAG in _k:
             _SCACHE[_k] = _v; _n_guided += 1
     print(f"選出ガイドオーバーレイ: {_n_guided}件", flush=True)
 except FileNotFoundError:
@@ -498,7 +505,7 @@ def _suggest_key(fixed, ncand, top):
                                   + ([f"mp{SUGGEST_MEGA_PAIR}_{SUGGEST_MEGA_PAIR_FLOOR}_{SUGGEST_MEGA_PAIR_ABS}"] if SUGGEST_MEGA_PAIR else []) \
                                   + ([f"mw{SUGGEST_MEGA_SHARED_MAX}"] if SUGGEST_MEGA_SHARED_MAX else []) \
                                   + ([f"ms{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_PAIR and SUGGEST_MEGA_CAP else []) \
-                                  + [_NET_TAG]
+                                  + [_NET_TAG, _ENS_TAG]
     return json.dumps(key, ensure_ascii=False)   # 解決後specでキー化（入力形式に非依存）
 
 def suggest(core_args, ncand, top):

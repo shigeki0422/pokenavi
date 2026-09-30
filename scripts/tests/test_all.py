@@ -5631,6 +5631,12 @@ check("学習選出: 高速版が元の実装と同じ（温度0/0.3・乱数の
       f"{_res26l['ref']} / {_res26l['fast']}")
 check("学習選出: Rust 版が元の実装と同じ（温度0/0.3・乱数の消費まで）", _res26l["rust"] == _res26l["ref"],
       f"{_res26l['ref']} / {_res26l['rust']}")
+# 乱数を消費する技（きまぐレーザー）持ちがいる対面は、Rust 版・高速版を使わず元の実装で（Rust では panic していた）
+_kmg26l = [x for x in ["ブリジュラス@いのちのたま:ひかえめ:きまぐレーザー|りゅうせいぐん|ラスターカノン|10まんボルト:0/0/0/32/0/32:じきゅうりょく"]]
+_Ak = [_mk26c(x) for x in _kmg26l + _P1s[1:]]; _Bk = [_mk26c(x) for x in _P2s]
+check("学習選出: 乱数を消費する技の持ち主がいても落ちない（Rust 版・高速版を使わない）",
+      not _LS26l._rust_ok(_Ak, _Bk) and not _LS26l._fast_ok(_Ak, _Bk)
+      and len(_LS26l.learned_select_party(_Ak, _Bk, dl, n=3, temperature=0.0, rng=_r26l.Random(3))) == 3)
 from simulator.ai import select_party as _sp26l, select_party_multi as _spm26l
 _A = [_mk26c(x) for x in _P1s]; _B = [_mk26c(x) for x in _P2s]
 _g1 = _r26l.Random(5); _g2 = _r26l.Random(5)
@@ -5638,6 +5644,31 @@ _seq = [[p.name for p in _sp26l(_A, _B, dl, n=3, temperature=t, rng=_g1)] for t 
 _mul = [[p.name for p in x] for x in _spm26l(_A, _B, dl, n=3, temperatures=(0.0, 1.0, 1.0), rng=_g2)]
 check("select_party_multi: select_party を続けて呼んだのと同じ（乱数の消費も）", _seq == _mul and _g1.random() == _g2.random(),
       f"{_seq} / {_mul}")
+
+
+print("\n=== 26m. 提案の採点の選出（学習選出・面ごとに固定シード） ===")
+# 採点はグローバル乱数に依らず決まり、同じ候補を2回採点しても同じ値。Rust 経路（live_feats に選出を渡す）と Python 経路が一致
+try:
+    import _product3 as _P326m, feature1 as _F26m, random as _r26m
+    _F26m._ensure_loaded("M-6", 8)
+    _P326m.SEASON = "M-6"
+    _P326m._score_setup(_F26m._W["loader"], _F26m._W["net"], [_P1s, _P2s])
+    _r26m.seed(1); _v1 = _P326m.surrogate_score(_P2s)
+    _r26m.seed(999); _r26m.random(); _v2 = _P326m.surrogate_score(_P2s)
+    check("採点: グローバル乱数に依らず同じ値", _v1 == _v2, f"{_v1} / {_v2}")
+    import pokenavi_engine as _E26m, numpy as _np26m
+    _E26m.live_setup([_P1s, _P2s], "M-6")
+    _A26m = [build_from_spec(parse_pokemon_spec(x), _F26m._W["loader"], season="M-6", randomize=False) for x in _P2s]
+    _sels26m = _P326m.panel_selections(_A26m)
+    _sb26m, *_r26mr = _E26m.live_feats(list(_P2s), _sels26m)
+    _npan, _dim = _r26mr[3], _r26mr[4]
+    _X26m = _np26m.frombuffer(_sb26m, dtype="<f8").reshape(_npan, _dim)
+    _vals = [_F26m._W["net"].evaluate(_X26m[i], [0])[1] for i in range(_npan)]
+    import statistics as _st26m
+    check("採点: Rust 経路（選出を渡した live_feats）のネット特徴が Python と一致", abs(_st26m.mean(_vals) - _v1) < 1e-12,
+          f"{_st26m.mean(_vals)} / {_v1}")
+except ImportError as _e26m:
+    check("採点のテスト（pyengine が必要）", False, str(_e26m))
 
 
 print("\n=== 26b. 必ず急所に当たる技 ===")

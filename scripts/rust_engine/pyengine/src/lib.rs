@@ -333,16 +333,21 @@ fn live_setup(panel_specs: Vec<Vec<String>>, season: &str) -> PyResult<usize> {
 /// 1候補ぶんの中間量。集約(net forward / statistics.mean)は Python 側が行う。
 /// 返り値: (states_bytes<f64 LE>, mats_bytes<i64 LE>, spd_a, hp_a, npanel, dim, na, nb)
 #[pyfunction]
-#[pyo3(signature = (specs))]
+#[pyo3(signature = (specs, sels=None))]
 fn live_feats(
     py: Python<'_>,
     specs: Vec<String>,
+    sels: Option<Vec<(Vec<usize>, Vec<usize>)>>,
 ) -> PyResult<(PyObject, PyObject, Vec<i64>, Vec<i64>, usize, usize, usize, usize)> {
     let m = eng()?;
     let mut g = lock_eng(m);
     let Eng { pack, live, .. } = &mut *g;
     let live = live.as_mut().ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
-    let states = live.panel_states(pack, &specs);
+    // sels（パネルごとの (自分の選出, パネル側の選出)）を渡すと学習選出の結果で符号化する。無ければ従来のヒューリスティック
+    let states = match &sels {
+        Some(s) => live.panel_states_sel(pack, &specs, s),
+        None => live.panel_states(pack, &specs),
+    };
     let (spd_a, hp_a, mats) = live.rich_matrices(pack, &specs);
     let npanel = states.len();
     let dim = states.first().map(|v| v.len()).unwrap_or(0);

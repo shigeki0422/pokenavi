@@ -1216,9 +1216,13 @@ PIMC（決定化ごとに別の木 E=1/4/8/16）と MAPLE（k=5）はいずれ�
 - 旧 `selector_m2.json`（M-2〜M-3、905次元）は現行の特徴量では動かないので削除。`selector_m3.json` も905次元で未使用。
 - 使う経路: ライブ実戦テスト（/simulate・`gen_party_ga._play_winner`）、観戦記録（`feature1.play_and_record*`・precompute・
   sim_server の選出。以前の登録カード同士の Nash 表は廃止）、提案の詳細（`_product3.eval_vs_built`）。
-- 使わない経路: 提案の採点（`_product3.surrogate_score`）はヒューリスティックに固定（採点モデルはこの選出の特徴で学習済み・
-  Rust の高速経路 `_live_rust` も同じ選出。学習選出だと候補1つあたり数秒で提案APIが時間切れになる）。Rust の探索・総当たり
-  （`mcts_3v3` は渡された選出、`mcts_vs_dist` の相手選出は Rust のヒューリスティック）。
+- 提案の採点（`_product3.surrogate_score`・Rust `live_feats`）も学習選出（2026-10-01 夕〜。以前はヒューリスティックに固定）:
+  パネル各面で自分・パネル側とも学習選出（温度0、相手の仮定の乱数は面ごとの固定シード＝グローバル乱数に依らない）、面ごとに
+  個体を巻き戻す（以前は符号化の副作用＝半減きのみの消費が次の面・次の候補へ持ち越されていた）。選出は `_product3.panel_selections`
+  で決めて Rust に渡す（`live_feats(specs, sels)`）。採点モデル（ensemble_model_m6.json）はこの特徴で総当たり v3 から再学習。
+  候補1件の採点 約70ms（Rust 経路）。Rust/Python の一致は `_rust_engine/live_parity.py`。
+- 使わない経路: Rust の探索・総当たり（`mcts_3v3` は渡された選出、`mcts_vs_dist` の相手選出は Rust のヒューリスティック）、
+  学習選出の中の「相手の選出の仮定」（ヒューリスティック）。相性ベースの規則的な選出（SELECT_MODE=matchup）は削除せず残す。
 
 ### 4-1i. 提案の採点の Rust 経路（_live_rust.live_feats）と Python 経路の一致（2026-10-01、途中）
 

@@ -141,6 +141,31 @@ impl Live {
         out
     }
 
+    /// 選出を外から渡す版（学習選出。選出は Python 側で learned_select_party を使って決める）。
+    /// パネルごとに元の個体の複製で符号化する（符号化の副作用＝半減きのみの消費などを次のパネル・次の候補へ持ち越さない。
+    /// Python の _product3.surrogate_score と同じ。2026-10-01）
+    pub fn panel_states_sel(&mut self, pack: &mut Pack, specs: &[String], sels: &[(Vec<usize>, Vec<usize>)]) -> Vec<Vec<f64>> {
+        let season = self.season.clone();
+        let a6: Vec<Poke> = specs.iter().map(|s| build_poke(pack, s, &season)).collect();
+        let packr: &Pack = pack;
+        let mut out = Vec::with_capacity(self.panel_net.len());
+        for (pi, (sa, sb)) in sels.iter().enumerate() {
+            let b6 = &self.panel_net[pi];
+            let mut sides = [
+                Side { party: sa.iter().map(|&i| a6[i].clone()).collect(), active_idx: 0, ..Default::default() },
+                Side { party: sb.iter().map(|&i| b6[i].clone()).collect(), active_idx: 0, ..Default::default() },
+            ];
+            crate::search::set_belief(&mut sides[0], OpponentBelief::new(&season));
+            crate::search::set_belief(&mut sides[1], OpponentBelief::new(&season));
+            let mut field = Field::default();
+            self.memo.begin();
+            let x = encode_state(packr, &self.ft, &mut sides, 0, &mut field, &mut self.memo, &mut NoRng);
+            self.memo.end();
+            out.push(x);
+        }
+        out
+    }
+
     /// `_matchup_surrogate._bestdmg` の 6x6 行列（A→B, B→A）をパネル数ぶん返す。
     /// 併せて A 側の実効素早さ・最大HPを返す（Python 側の集約に使う）。
     #[allow(clippy::type_complexity)]
