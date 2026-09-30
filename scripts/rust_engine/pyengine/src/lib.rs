@@ -20,6 +20,8 @@ struct Eng {
     net: NetW,
     hash: String,
     live: Option<engine::live::Live>,
+    /// 学習選出の状態の符号化に使う（初回に作る）
+    ft: Option<engine::features::FeatTables>,
 }
 
 static ENG: OnceLock<Mutex<Eng>> = OnceLock::new();
@@ -54,8 +56,45 @@ fn eng() -> PyResult<&'static Mutex<Eng>> {
         .net
         .clone()
         .ok_or_else(|| PyRuntimeError::new_err("datapack に net が無い"))?;
-    let _ = ENG.set(Mutex::new(Eng { pack, net, hash, live: None }));
+    let _ = ENG.set(Mutex::new(Eng { pack, net, hash, live: None, ft: None }));
     Ok(ENG.get().unwrap())
+}
+
+/// 学習選出（simulator/learned_selection.py）の候補・相手の仮定・状態ベクトル。推論と選択は Python 側。
+/// state は random.getstate()[1]（624語＋位置）。戻り: (候補, 相手の仮定, 状態ベクトルのバイト列 f64 LE, 次元, 進めた乱数の状態)
+#[pyfunction]
+#[allow(clippy::type_complexity, clippy::too_many_arguments)]
+fn learned_select_states(
+    py: Python<'_>,
+    specs_a: Vec<String>,
+    specs_b: Vec<String>,
+    season: &str,
+    n: usize,
+    min_mega: usize,
+    max_mega: usize,
+    state: Vec<u32>,
+) -> PyResult<(Vec<Vec<usize>>, Vec<Vec<usize>>, PyObject, usize, Vec<u32>)> {
+    if state.len() != 625 {
+        return Err(PyValueError::new_err("state は 625 語（random.getstate()[1]）"));
+    }
+    let m = eng()?;
+    let mut g = lock_eng(m);
+    for sp in specs_a.iter().chain(specs_b.iter()) {
+        if let Some(e) = engine::poke::spec_error(&g.pack, sp, season) {
+            return Err(PyValueError::new_err(e));
+        }
+    }
+    let Eng { pack, ft, .. } = &mut *g;
+    if ft.is_none() {
+        *ft = Some(engine::features::FeatTables::build(pack));
+    }
+    let ftr = ft.as_ref().unwrap();
+    let (c, o, xs, dim, st) = engine::sim::learned_select_states(pack, ftr, &specs_a, &specs_b, season, n, min_mega, max_mega, &state);
+    let mut buf = Vec::with_capacity(xs.len() * 8);
+    for v in xs {
+        buf.extend_from_slice(&v.to_le_bytes());
+    }
+    Ok((c, o, pyo3::types::PyBytes::new_bound(py, &buf).into(), dim, st))
 }
 
 /// 検証用: PREDICT_PROBE=1 で走らせた直前の対戦の各ターンの読み (ターン, side1 JSON, side2 JSON)
@@ -417,6 +456,7 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(mcts_vs_dist_trace, m)?)?;
     m.add_function(wrap_pyfunction!(select_party_rng_probe, m)?)?;
     m.add_function(wrap_pyfunction!(predict_probe_take, m)?)?;
+    m.add_function(wrap_pyfunction!(learned_select_states, m)?)?;
     m.add_function(wrap_pyfunction!(live_setup, m)?)?;
     m.add_function(wrap_pyfunction!(live_feats, m)?)?;
     m.add_function(wrap_pyfunction!(mu_analyze, m)?)?;

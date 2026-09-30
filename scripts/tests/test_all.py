@@ -5607,6 +5607,39 @@ if _sv26k[3] is None: os.environ.pop("LEARNED_SELECTION", None)
 else: os.environ["LEARNED_SELECTION"] = _sv26k[3]
 
 
+print("\n=== 26l. 学習選出の3実装（元の実装・Python 高速版・Rust 版）が同じ選出・同じ乱数の消費 ===")
+# 高速版は相手の仮定（select_party 3回）の採点を1回に、状態ベクトルは対面内で個体の特徴ブロック・与ダメ割合・速度を使い回して組む。
+# Rust 版は候補・相手の仮定・状態ベクトルを Rust で作り、推論と選択は Python（numpy）。数千対面の照合は _local の sel_impl_check.py
+import random as _r26l
+import simulator.learned_selection as _LS26l
+_sv26l = os.environ.get("LEARNED_SELECTION_IMPL")
+_LS26l._LOADED = False
+_res26l = {}
+for _impl in ("ref", "fast", "rust"):
+    os.environ["LEARNED_SELECTION_IMPL"] = _impl
+    _out = []
+    for _k, (_pa, _pb) in enumerate(((_P1s, _P2s), (_P2s, _P1s))):
+        _A = [_mk26c(x) for x in _pa]; _B = [_mk26c(x) for x in _pb]
+        for _t in (0.0, 0.3):
+            _g = _r26l.Random(100 + _k)
+            _out.append([_A.index(p) for p in _LS26l.learned_select_party(_A, _B, dl, n=3, temperature=_t, rng=_g)])
+            _out.append(_g.random())
+    _res26l[_impl] = _out
+if _sv26l is None: os.environ.pop("LEARNED_SELECTION_IMPL", None)
+else: os.environ["LEARNED_SELECTION_IMPL"] = _sv26l
+check("学習選出: 高速版が元の実装と同じ（温度0/0.3・乱数の消費まで）", _res26l["fast"] == _res26l["ref"],
+      f"{_res26l['ref']} / {_res26l['fast']}")
+check("学習選出: Rust 版が元の実装と同じ（温度0/0.3・乱数の消費まで）", _res26l["rust"] == _res26l["ref"],
+      f"{_res26l['ref']} / {_res26l['rust']}")
+from simulator.ai import select_party as _sp26l, select_party_multi as _spm26l
+_A = [_mk26c(x) for x in _P1s]; _B = [_mk26c(x) for x in _P2s]
+_g1 = _r26l.Random(5); _g2 = _r26l.Random(5)
+_seq = [[p.name for p in _sp26l(_A, _B, dl, n=3, temperature=t, rng=_g1)] for t in (0.0, 1.0, 1.0)]
+_mul = [[p.name for p in x] for x in _spm26l(_A, _B, dl, n=3, temperatures=(0.0, 1.0, 1.0), rng=_g2)]
+check("select_party_multi: select_party を続けて呼んだのと同じ（乱数の消費も）", _seq == _mul and _g1.random() == _g2.random(),
+      f"{_seq} / {_mul}")
+
+
 print("\n=== 26b. 必ず急所に当たる技 ===")
 # move_master の effect_text が「必ず急所に当たる。」なのに急所率が 1/24 のままだった。
 # deep_audit の検出器 (r'必ず急所', ['急所']) はテストのラベル文字列に一致するだけで

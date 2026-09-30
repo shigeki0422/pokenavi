@@ -36,6 +36,21 @@ impl CpyRandom {
         r
     }
 
+    /// CPython の random.getstate()[1]（624語＋位置）から作る（Python の乱数を Rust で続けて進めるため）
+    pub fn from_state(words: &[u32]) -> Self {
+        let mut r = CpyRandom { mt: [0u32; N], idx: N };
+        r.mt.copy_from_slice(&words[..N]);
+        r.idx = words[N] as usize;
+        r
+    }
+
+    /// random.setstate 用（624語＋位置）
+    pub fn state(&self) -> Vec<u32> {
+        let mut v = self.mt.to_vec();
+        v.push(self.idx as u32);
+        v
+    }
+
     /// init_genrand
     fn init_genrand(&mut self, s: u32) {
         self.mt[0] = s;

@@ -917,3 +917,80 @@ fn run_two_mcts(
         |bt| on_turn(packr, bt),
     )
 }
+
+
+/// simulator/learned_selection.py の学習選出（候補・相手の仮定・状態ベクトル）。MLP の推論と選択は Python 側（numpy）で行う
+/// （Python と同じ行列積の丸め＝選出が完全一致するように）。state は CPython random.getstate()[1]（624語＋位置）。
+/// 戻り: (候補＝自分6体の添字の並び, 相手の仮定＝相手6体の添字の並び×3, 状態ベクトル[候補×仮定×次元], 次元, 進めた乱数の状態)
+#[allow(clippy::type_complexity, clippy::too_many_arguments)]
+pub fn learned_select_states(
+    pack: &mut Pack,
+    ft: &crate::features::FeatTables,
+    specs_a: &[String],
+    specs_b: &[String],
+    season: &str,
+    n: usize,
+    min_mega: usize,
+    max_mega: usize,
+    state: &[u32],
+) -> (Vec<Vec<usize>>, Vec<Vec<usize>>, Vec<f64>, usize, Vec<u32>) {
+    let mut a6: Vec<Poke> = specs_a.iter().map(|s| crate::poke::build_poke(pack, s, season)).collect();
+    let mut b6: Vec<Poke> = specs_b.iter().map(|s| crate::poke::build_poke(pack, s, season)).collect();
+    let packr: &Pack = pack;
+    let pen: f64 = std::env::var("MEGA_PENALTY").ok().and_then(|v| v.parse().ok()).unwrap_or(50.0);
+    let cell = std::cell::RefCell::new(CpyRandom::from_state(state));
+    // 相手の仮定: ヒューリスティック選出の温度0＋温度1×2（Python の select_party_multi と同じ順・同じ乱数）
+    let mut osels: Vec<Vec<usize>> = Vec::with_capacity(3);
+    let nb = n.min(b6.len());
+    for t in [0.0, 1.0, 1.0] {
+        let mut sr = SharedRng(&cell);
+        let mut srng = || cell.borrow_mut().random();
+        osels.push(crate::ai::select_party(packr, &mut b6, &mut a6, nb, t, pen, &mut sr, &mut srng));
+    }
+    // 候補（3体＋先頭）。メガ1体ルール: min_mega..=max_mega 体
+    let mut cands: Vec<Vec<usize>> = Vec::new();
+    let na = a6.len();
+    let mut combo = vec![0usize; n];
+    fn rec(start: usize, k: usize, na: usize, n: usize, combo: &mut Vec<usize>, out: &mut Vec<Vec<usize>>) {
+        if k == n {
+            out.push(combo.clone());
+            return;
+        }
+        for i in start..na {
+            combo[k] = i;
+            rec(i + 1, k + 1, na, n, combo, out);
+        }
+    }
+    let mut combos = Vec::new();
+    rec(0, 0, na, n, &mut combo, &mut combos);
+    for c in combos {
+        let nm = c.iter().filter(|&&i| a6[i].mega.is_some()).count();
+        if nm < min_mega || nm > max_mega {
+            continue;
+        }
+        for li in 0..n {
+            let mut o = vec![c[li]];
+            o.extend(c.iter().enumerate().filter(|(j, _)| *j != li).map(|(_, &i)| i));
+            cands.push(o);
+        }
+    }
+    let mut memo = crate::features::DmgMemo::default();
+    let mut xs: Vec<f64> = Vec::new();
+    let mut dim = 0usize;
+    for c in &cands {
+        for os in &osels {
+            let mut sides = [
+                Side { party: c.iter().map(|&i| a6[i].clone()).collect(), active_idx: 0, field_idx: 0, ..Default::default() },
+                Side { party: os.iter().map(|&i| b6[i].clone()).collect(), active_idx: 0, field_idx: 1, ..Default::default() },
+            ];
+            let mut field = Field::default();
+            memo.begin();
+            let x = crate::features::encode_state(packr, ft, &mut sides, 0, &mut field, &mut memo, &mut crate::live::NoRng);
+            memo.end();
+            dim = x.len();
+            xs.extend_from_slice(&x);
+        }
+    }
+    let st = cell.into_inner().state();
+    (cands, osels, xs, dim, st)
+}

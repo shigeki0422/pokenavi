@@ -57,6 +57,8 @@ const M_SETUP: &[&str] = &[
     "つるぎのまい", "りゅうのまい", "ちょうのまい", "めいそう", "わるだくみ", "からをやぶる",
     "てっぺき", "ビルドアップ", "とぐろをまく", "こうそくいどう", "ロックカット", "アシッドボム",
     "はらだいこ", "めざましビンタ", "つめとぎ", "コットンガード", "とける",
+    // v3 の追加（features.py と 1:1。抜けていて コスモパワー/せいちょう持ちの積みフラグが Rust だけ立たなかった。2026-10-01）
+    "コスモパワー", "せいちょう",
 ];
 const M_RECOVER: &[&str] = &[
     "はねやすめ", "じこさいせい", "なまける", "つきのひかり", "あさのひざし", "こうごうせい",
@@ -149,7 +151,9 @@ pub struct FeatTables {
     /// pack の Ty → features.py の TYPES index（無ければ usize::MAX）
     pub ty2fi: [usize; 256],
     /// 道具 sym → 8bit
-    pub item_bits: HashMap<Sym, u8>,
+    /// 持ち物カテゴリのビット（N_ITEM_FLAGS=18 なので u32。u8 だと 8 以上のシフトが実行時に 0〜7 へ折り返し、
+    /// v2 の10カテゴリが旧8カテゴリと重なって立っていた＝features.py と食い違っていた。2026-10-01 修正）
+    pub item_bits: HashMap<Sym, u32>,
     /// 技 sym → フラグ
     pub move_bits: HashMap<Sym, u32>,
     pub kmg: Option<Sym>,
@@ -177,11 +181,11 @@ impl FeatTables {
             assert!(t != NO_TY, "type {} not in pack", name);
             ty2fi[t as usize] = fi;
         }
-        let mut item_bits: HashMap<Sym, u8> = HashMap::new();
+        let mut item_bits: HashMap<Sym, u32> = HashMap::new();
         for (bi, grp) in ITEM_FLAGS.iter().enumerate() {
             for s in grp.iter() {
                 if let Some(id) = pack.intern.get(s) {
-                    *item_bits.entry(id).or_insert(0) |= 1u8 << bi;
+                    *item_bits.entry(id).or_insert(0) |= 1u32 << bi;
                 }
             }
         }
@@ -347,11 +351,13 @@ fn move_features(pack: &Pack, ft: &FeatTables, p: &Poke, out: &mut Vec<f64>) {
     out.extend_from_slice(&c3);
     // タイプ別最大威力だけでは「命中90でC2段下がる130」と「命中100で下降なしの90」が
     // 区別できない。最大威力技1本の性質を明示する。
-    let best = p
-        .moves
-        .iter()
-        .filter(|m| m.power.unwrap_or(0) != 0 && m.category != Cat::Status)
-        .max_by_key(|m| m.power.unwrap_or(0));
+    // 同じ威力なら先に並んだ技（Python の max と同じ。Rust の max_by_key は後ろを返すので使わない）
+    let mut best: Option<&crate::damage::DMove> = None;
+    for m in p.moves.iter().filter(|m| m.power.unwrap_or(0) != 0 && m.category != Cat::Status) {
+        if best.map_or(true, |b| m.power.unwrap_or(0) > b.power.unwrap_or(0)) {
+            best = Some(m);
+        }
+    }
     match best {
         None => out.extend_from_slice(&[0.0, 0.0, 0.0, 0.0]),
         Some(m) => {

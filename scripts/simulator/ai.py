@@ -837,18 +837,25 @@ def select_party(party6: List[BattlePokemon], opp6: List[BattlePokemon],
       味方アシレーヌのソクノのみが消え、対戦開始時点で持ち物なしになっていた）。
       採点前の状態を保存し、返す直前に必ず巻き戻す。
     """
+    return select_party_multi(party6, opp6, loader, n, [temperature], rng)[0]
+
+
+def select_party_multi(party6: List[BattlePokemon], opp6: List[BattlePokemon],
+                       loader: DataLoader, n: int = 3, temperatures=(0.0,), rng=None) -> List[List[BattlePokemon]]:
+    """select_party を温度の列の順に続けて呼んだのと同じ結果（乱数の消費も同じ）を、採点1回で返す。
+    採点（各個体のスコア）は温度に依らず、select_party は毎回呼び出し前の状態に巻き戻すので、1回の採点を使い回せる。
+    学習選出の相手の仮定（温度0＋温度1×2）で使う。"""
     _snap = _state_snapshot(list(party6) + list(opp6))
     try:
-        return _select_party_inner(party6, opp6, loader, n, temperature, rng)
+        return _select_party_inner(party6, opp6, loader, n, list(temperatures), rng)
     finally:
         _state_restore(_snap)
 
 
 def _select_party_inner(party6: List[BattlePokemon], opp6: List[BattlePokemon],
-                        loader: DataLoader, n: int = 3,
-                        temperature: float = 0.0, rng=None) -> List[BattlePokemon]:
+                        loader: DataLoader, n: int, temperatures, rng=None) -> List[List[BattlePokemon]]:
     if len(party6) <= n:
-        return _order_by_lead(list(party6), opp6, temperature, rng or random)
+        return [_order_by_lead(list(party6), opp6, t, rng or random) for t in temperatures]
 
     dummy_field = BattleField()
 
@@ -905,12 +912,16 @@ def _select_party_inner(party6: List[BattlePokemon], opp6: List[BattlePokemon],
             return _poke_score(poke, as_mega=False) - MEGA_PENALTY       # 2体目以降のメガ石持ち
         return _poke_score(poke, as_mega=False)                          # 非メガ＝素評価
 
+    scores = [_eff_score(p) for p in party6]
+    return [_choose_by_scores(party6, opp6, scores, n, t, rng) for t in temperatures]
+
+
+def _choose_by_scores(party6, opp6, scores, n, temperature, rng):
     if temperature and temperature > 0:   # 温度付きサンプリング選出
-        scores = [_eff_score(p) for p in party6]
         idx = _temp_sample_indices(scores, n, temperature, rng or random)
         return _order_by_lead([party6[i] for i in idx], opp6, temperature, rng or random)
 
-    indexed = sorted(enumerate(party6), key=lambda x: _eff_score(x[1]), reverse=True)
+    indexed = sorted(enumerate(party6), key=lambda x: scores[x[0]], reverse=True)
 
     selected: List[BattlePokemon] = []
     seen_type_pairs: List[tuple] = []

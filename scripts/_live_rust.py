@@ -81,8 +81,9 @@ def _matchup_feats_from(spd_a, hp_a, spd_b, hp_b, dAB, dBA):
     b_ohko = sum(1 for x in offA if x >= 1.0) / nA
     a_2hko = sum(1 for x in offB if x >= 0.5) / nB
     b_2hko = sum(1 for x in offA if x >= 0.5) / nA
-    a_moff = statistics.mean(min(x, 1.5) for x in offB)
-    b_moff = statistics.mean(min(x, 1.5) for x in offA)
+    # 上限は 1.0（_matchup_surrogate.matchup_feats と同じ。1.5 になっていて採点の特徴5・6が学習時と食い違っていた。2026-10-01 修正）
+    a_moff = statistics.mean(min(x, 1.0) for x in offB)
+    b_moff = statistics.mean(min(x, 1.0) for x in offA)
     a_rev = 0
     for j in range(nB):
         if any(spd_a[i] > spd_b[j] and dAB[i][j] >= hp_b[j] for i in range(nA)):
