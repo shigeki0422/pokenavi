@@ -25,19 +25,21 @@ def resolve_fixed(pg, args):
       - "種名"（=メガ優先の先頭型）
     """
     out = []
+    alts = []   # 自動で選んだ枠の代わりの候補（持ち物が他の固定枠と重なったときに使う）
     for a in args:
+        alts.append(None)
         if isinstance(a, dict):
             sp, mega = a.get("sp"), a.get("mega")
             blds = pg.pool.get(sp)
             if not blds:
                 raise SystemExit(f"プールに種 '{sp}' が無い")
             if mega is None:
-                out.append(blds[0])
+                out.append(blds[0]); alts[-1] = [s for s in blds if _spec_mega(s) == _spec_mega(blds[0])]
             elif mega == "":
                 nm = [s for s in blds if not _spec_mega(s)]
                 if not nm:
                     raise SystemExit(f"'{sp}' の非メガ型は使用率が低く未収録です（低使用率型の対応は準備中）")
-                out.append(nm[0])
+                out.append(nm[0]); alts[-1] = nm
             else:
                 mm = [s for s in blds if _spec_mega(s) and _item_of(s) == mega]
                 if not mm:
@@ -49,7 +51,17 @@ def resolve_fixed(pg, args):
             blds = pg.pool.get(a)
             if not blds:
                 raise SystemExit(f"プールに種 '{a}' が無い")
-            out.append(blds[0])
+            out.append(blds[0]); alts[-1] = [s for s in blds if _spec_mega(s) == _spec_mega(blds[0])]
+    # 持ち物は1パーティで重複できないので、自動で選んだ枠の持ち物が先の枠と重なったら次点の型に替える
+    # （例: カバルドン＋ブリジュラスがどちらも先頭型オボンのみ→合法なパーティが1件も作れなかった）
+    used = set()
+    for i, sp in enumerate(out):
+        it = _item_of(sp)
+        if it in used and alts[i]:
+            alt = next((x for x in alts[i] if _item_of(x) not in used), None)
+            if alt is not None:
+                out[i] = sp = alt; it = _item_of(sp)
+        used.add(it)
     return out
 
 def complete_core(pg, L, th, fixed_specs, rng, N):
