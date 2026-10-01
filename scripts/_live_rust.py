@@ -38,8 +38,9 @@ def unsupported():
     return [f"{k}={os.environ.get(k)}" for k, ok in _GUARD if os.environ.get(k) not in ok]
 
 
-def setup(panel_specs):
-    """パネルを Rust 側に構築。使えるなら module を、使えないなら None を返す。"""
+def setup(panel_specs, slot=0, heuristic=False):
+    """パネルを Rust 側（スロット slot）に構築。使えるなら module を、使えないなら None を返す。
+    heuristic=True は選出をヒューリスティックに（学習選出のモデルを渡さない）"""
     bad = unsupported()
     if bad:
         _ED._warn("cfg:live", f"live: 未対応コンフィグ [{', '.join(bad)}]")
@@ -50,10 +51,10 @@ def setup(panel_specs):
             _ED._warn("live:old", "pokenavi_engine に live_setup が無い（旧ビルド）")
         return None
     try:
-        m.live_setup([list(sp) for sp in panel_specs], SEASON)
+        m.live_setup([list(sp) for sp in panel_specs], SEASON, slot)
         # 採点の選出＝学習選出のモデルを Rust に1回渡す（読めない・無効ならヒューリスティック。Python 経路と同じ）
         from simulator import learned_selection as _LS
-        m.live_set_selector(_LS._PATH if _LS._load() is not None else "")
+        m.live_set_selector(_LS._PATH if (_LS._load() is not None and not heuristic) else "", slot)
     except BaseException as e:
         _ED._warn("live:setup", f"live_setup 失敗: {e}")
         return None
@@ -90,10 +91,10 @@ def _matchup_feats_from(spd_a, hp_a, spd_b, hp_b, dAB, dBA):
             a_ohko - b_ohko, b_2hko - a_2hko]
 
 
-def feats(m, specs, net, panel_spd, panel_hp):
+def feats(m, specs, net, panel_spd, panel_hp, slot=0):
     """ネットt0パネル特徴(1) + リッチ特徴(12) を返す。construction特徴はPython側で足す。"""
     # 選出（学習選出）・符号化・ダメージ行列まで Rust で完結（乱数を消費する技も面ごとの固定シードで Python と同じ）
-    sb, mb, spd_a, hp_a, npanel, dim, na, nb = m.live_feats(list(specs))
+    sb, mb, spd_a, hp_a, npanel, dim, na, nb = m.live_feats(list(specs), None, slot)
     X = np.frombuffer(sb, dtype="<f8").reshape(npanel, dim)
     ns = statistics.mean(net.evaluate(X[i], [0])[1] for i in range(npanel))
     D = np.frombuffer(mb, dtype="<i8").reshape(npanel, 2, na * nb).tolist()

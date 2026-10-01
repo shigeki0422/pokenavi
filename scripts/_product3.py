@@ -44,10 +44,12 @@ class _seeded_global:
         _r.setstate(self.st)
 
 
-def _panel_eval(A, B, pi, encode=True):
-    """パネル1面: 学習選出（自分→パネル側、温度0）と、その選出の初期状態ベクトル。Rust live.rs panel_states_full と同じ"""
+def _panel_eval(A, B, pi, encode=True, heuristic=False):
+    """パネル1面: 学習選出（自分→パネル側、温度0）と、その選出の初期状態ベクトル。Rust live.rs panel_states_full と同じ。
+    heuristic=True はヒューリスティック選出（ai.select_party。2段階採点の1段目＝旧採点モデルの学習時の特徴）"""
     import random as _r
     from simulator.learned_selection import learned_select_party
+    from simulator.ai import select_party
     from simulator.ai import _state_snapshot, _state_restore
     from simulator.belief import OpponentBelief
     from simulator.battle import BattleSide, BattleField
@@ -56,8 +58,9 @@ def _panel_eval(A, B, pi, encode=True):
     snap = _state_snapshot(list(A) + list(B))
     try:
         with _seeded_global(_G_SEED + pi):
-            sa = learned_select_party(A, B, L, n=3, temperature=0.0, rng=_r.Random(_SEL_SEED + 2 * pi))
-            sb = learned_select_party(B, A, L, n=3, temperature=0.0, rng=_r.Random(_SEL_SEED + 2 * pi + 1))
+            sel = select_party if heuristic else learned_select_party
+            sa = sel(A, B, L, n=3, temperature=0.0, rng=_r.Random(_SEL_SEED + 2 * pi))
+            sb = sel(B, A, L, n=3, temperature=0.0, rng=_r.Random(_SEL_SEED + 2 * pi + 1))
             ia = [next(k for k, p in enumerate(A) if p is m) for m in sa]
             ib = [next(k for k, p in enumerate(B) if p is m) for m in sb]
             x = None
@@ -71,19 +74,22 @@ def _panel_eval(A, B, pi, encode=True):
         _state_restore(snap)
 
 
-def panel_selections(A):
+def panel_selections(A, panel=None, heuristic=False):
     """採点のパネル各面での選出 [(自分の6体の添字の並び, パネル側の6体の添字の並び), ...]（照合用）"""
-    return [_panel_eval(A, B, pi, encode=False)[:2] for pi, B in enumerate(_W["panel"])]
+    return [_panel_eval(A, B, pi, encode=False, heuristic=heuristic)[:2]
+            for pi, B in enumerate(_W["panel"] if panel is None else panel)]
 
 
-def surrogate_score(specs):
+def surrogate_score(specs, panel=None, heuristic=False):
     """ネットのパネル特徴: パネル20面それぞれで、学習選出（既定のモデル）で選んだ両者の初期状態をネットで評価した平均。
     面ごとに個体を巻き戻し、乱数は面ごとの固定シード（グローバル乱数に依らず決まる）。Rust 経路（_live_rust.feats＝
-    live.rs panel_states_full で選出まで完結）と一致（_rust_engine/live_parity.py）。"""
+    live.rs panel_states_full で選出まで完結）と一致（_rust_engine/live_parity.py）。
+    panel: 構築済みパネル（既定 _W["panel"]）。heuristic: 選出をヒューリスティックに（2段階採点の1段目）"""
     from simulator.pokemon import build_from_spec, parse_pokemon_spec
     L = _W["L"]; net = _W["net"]
     A = [build_from_spec(parse_pokemon_spec(s), L, season=SEASON, randomize=False) for s in specs]
-    vals = [net.evaluate(_panel_eval(A, B, pi)[2], [0])[1] for pi, B in enumerate(_W["panel"])]
+    vals = [net.evaluate(_panel_eval(A, B, pi, heuristic=heuristic)[2], [0])[1]
+            for pi, B in enumerate(_W["panel"] if panel is None else panel)]
     return statistics.mean(vals)
 
 def eval_vs_built(specs, opp_built):

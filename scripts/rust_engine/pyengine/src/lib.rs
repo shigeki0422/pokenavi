@@ -19,7 +19,8 @@ struct Eng {
     pack: Pack,
     net: NetW,
     hash: String,
-    live: Option<engine::live::Live>,
+    /// 採点パネル（スロットごと。0＝本採点、1＝2段階採点の1段目など）
+    live: Vec<Option<engine::live::Live>>,
     /// 学習選出の状態の符号化に使う（初回に作る）
     ft: Option<engine::features::FeatTables>,
 }
@@ -56,17 +57,18 @@ fn eng() -> PyResult<&'static Mutex<Eng>> {
         .net
         .clone()
         .ok_or_else(|| PyRuntimeError::new_err("datapack に net が無い"))?;
-    let _ = ENG.set(Mutex::new(Eng { pack, net, hash, live: None, ft: None }));
+    let _ = ENG.set(Mutex::new(Eng { pack, net, hash, live: Vec::new(), ft: None }));
     Ok(ENG.get().unwrap())
 }
 
 /// 提案の採点の選出に使う学習選出のモデル（selector_m6b.json 等）を live に渡す（起動時に1回）。空文字で外す（ヒューリスティック）
 #[pyfunction]
-fn live_set_selector(path: &str) -> PyResult<bool> {
+#[pyo3(signature = (path, slot=0))]
+fn live_set_selector(path: &str, slot: usize) -> PyResult<bool> {
     let m = eng()?;
     let mut g = lock_eng(m);
     let Eng { live, .. } = &mut *g;
-    let live = live.as_mut().ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
+    let live = live.get_mut(slot).and_then(|x| x.as_mut()).ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
     if path.is_empty() {
         live.selector = None;
         return Ok(false);
@@ -77,13 +79,21 @@ fn live_set_selector(path: &str) -> PyResult<bool> {
     Ok(true)
 }
 
+/// 照合用（SEL_FAST_CHECK=1）: 学習選出の高速版と元の実装の比較 (選んだ回数, 選出が違った回数, 候補の値の差の最大, 元の実装に落とした回数,
+/// 相手の仮定を表で計算した回数, 仮定・乱数の消費が違った回数)。読むとゼロに戻す
+#[pyfunction]
+fn sel_fast_stats_take() -> (u64, u64, f64, u64, u64, u64) {
+    engine::selector::fast_stats_take()
+}
+
 /// 照合用: 採点のパネル各面で Rust が選んだ (自分の選出, パネル側の選出)
 #[pyfunction]
-fn live_panel_selections(specs: Vec<String>) -> PyResult<Vec<(Vec<usize>, Vec<usize>)>> {
+#[pyo3(signature = (specs, slot=0))]
+fn live_panel_selections(specs: Vec<String>, slot: usize) -> PyResult<Vec<(Vec<usize>, Vec<usize>)>> {
     let m = eng()?;
     let mut g = lock_eng(m);
     let Eng { pack, live, .. } = &mut *g;
-    let live = live.as_mut().ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
+    let live = live.get_mut(slot).and_then(|x| x.as_mut()).ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
     Ok(live.panel_states_full(pack, &specs).1)
 }
 
@@ -346,30 +356,34 @@ fn select_party_rng_probe(
 
 /// ライブ提案経路のパネル初期化（`_ensemble_surrogate._setup_panel` 相当）。
 #[pyfunction]
-#[pyo3(signature = (panel_specs, season="M-3"))]
-fn live_setup(panel_specs: Vec<Vec<String>>, season: &str) -> PyResult<usize> {
+#[pyo3(signature = (panel_specs, season="M-3", slot=0))]
+fn live_setup(panel_specs: Vec<Vec<String>>, season: &str, slot: usize) -> PyResult<usize> {
     let m = eng()?;
     let mut g = lock_eng(m);
     let Eng { pack, live, .. } = &mut *g;
     let l = engine::live::Live::setup(pack, &panel_specs, season);
     let n = l.panel_net.len();
-    *live = Some(l);
+    if live.len() <= slot {
+        live.resize_with(slot + 1, || None);
+    }
+    live[slot] = Some(l);
     Ok(n)
 }
 
 /// 1候補ぶんの中間量。集約(net forward / statistics.mean)は Python 側が行う。
 /// 返り値: (states_bytes<f64 LE>, mats_bytes<i64 LE>, spd_a, hp_a, npanel, dim, na, nb)
 #[pyfunction]
-#[pyo3(signature = (specs, sels=None))]
+#[pyo3(signature = (specs, sels=None, slot=0))]
 fn live_feats(
     py: Python<'_>,
     specs: Vec<String>,
     sels: Option<Vec<(Vec<usize>, Vec<usize>)>>,
+    slot: usize,
 ) -> PyResult<(PyObject, PyObject, Vec<i64>, Vec<i64>, usize, usize, usize, usize)> {
     let m = eng()?;
     let mut g = lock_eng(m);
     let Eng { pack, live, .. } = &mut *g;
-    let live = live.as_mut().ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
+    let live = live.get_mut(slot).and_then(|x| x.as_mut()).ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
     // 既定（sels 無し）は選出まで Rust で完結（live_set_selector のモデルで学習選出、無ければヒューリスティック）。
     // sels（パネルごとの (自分の選出, パネル側の選出)）を渡すとその選出で符号化する（照合用）
     let states = match &sels {
@@ -491,6 +505,7 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(predict_probe_take, m)?)?;
     m.add_function(wrap_pyfunction!(learned_select_states, m)?)?;
     m.add_function(wrap_pyfunction!(live_set_selector, m)?)?;
+    m.add_function(wrap_pyfunction!(sel_fast_stats_take, m)?)?;
     m.add_function(wrap_pyfunction!(live_panel_selections, m)?)?;
     m.add_function(wrap_pyfunction!(live_setup, m)?)?;
     m.add_function(wrap_pyfunction!(live_feats, m)?)?;

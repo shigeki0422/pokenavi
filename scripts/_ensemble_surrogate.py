@@ -25,8 +25,8 @@ MODEL = os.path.join(os.path.dirname(__file__),
 _R_SEED = 20261003
 
 
-def _feats(specs, L, net, pg, th, field, panel_mons, spd):
-    ns = P3.surrogate_score(specs)                 # ネットt0パネル（P3._W panel使用）
+def _feats(specs, L, net, pg, th, field, panel_mons, spd, panel_built=None, heuristic=False):
+    ns = P3.surrogate_score(specs, panel_built, heuristic)   # ネットt0パネル（既定は P3._W panel）
     A = M.build_party(specs, L)
     for mo in A: spd[id(mo)] = _effective_speed(mo, field)
     fs = []
@@ -76,14 +76,18 @@ def train():
     print(f"保存: {MODEL}  特徴{X.shape[1]}次元  学習内r={r:.3f}")
 
 class EnsembleScorer:
-    def __init__(self, L, net, pg, th):
+    """model: 採点モデルのパス（既定 ENS_MODEL）。heuristic: パネルの選出をヒューリスティックに（学習選出のモデルを渡さない）。
+    slot: Rust 側のパネルの置き場所（採点器を複数持つとき別々に。2段階採点の1段目は 1）"""
+    def __init__(self, L, net, pg, th, model=None, heuristic=False, slot=0):
         self.L, self.net, self.pg, self.th = L, net, pg, th
+        self.heuristic, self.slot = heuristic, slot
         self.field = BattleField()
-        m = json.load(open(MODEL, encoding="utf-8"))
+        m = json.load(open(model or MODEL, encoding="utf-8"))
         self.mu = np.array(m["mu"]); self.sd = np.array(m["sd"]); self.w = np.array(m["w"])
         self.panel_mons, self.spd = _setup_panel(L, net, m["panel"], self.field)
+        self.panel_built = P3._W["panel"]          # この採点器のパネル（P3._W は採点器を作るたびに上書きされる）
         # ENGINE=rust のときだけネイティブ経路（無効・失敗時は None＝従来の純Python経路）
-        self._rust = _LR.setup(m["panel"])
+        self._rust = _LR.setup(m["panel"], slot=slot, heuristic=heuristic)
         if self._rust is not None:
             self._pspd = [[self.spd[id(mo)] for mo in pm] for pm in self.panel_mons]
             self._php = [[mo.max_hp for mo in pm] for pm in self.panel_mons]
@@ -92,7 +96,7 @@ class EnsembleScorer:
         """33次元の生特徴。Rust経路が有効ならネット/リッチ部分だけネイティブ計算（集約はPython）。"""
         if self._rust is not None:
             try:
-                nr = _LR.feats(self._rust, specs, self.net, self._pspd, self._php)
+                nr = _LR.feats(self._rust, specs, self.net, self._pspd, self._php, slot=self.slot)
                 return np.array(nr + list(confeat(specs, self.L, self.pg, self.th)))
             except (KeyboardInterrupt, SystemExit):
                 raise
@@ -101,7 +105,8 @@ class EnsembleScorer:
                 _LR.ERRORS.append((list(specs), repr(e)))
                 _ED._warn("live:exc", f"live_feats 実行時例外: {e} → 以後Python経路")
                 self._rust = None
-        return np.array(_feats(specs, self.L, self.net, self.pg, self.th, self.field, self.panel_mons, self.spd))
+        return np.array(_feats(specs, self.L, self.net, self.pg, self.th, self.field, self.panel_mons, self.spd,
+                               self.panel_built, self.heuristic))
 
     def score(self, specs):
         x = self._x(specs)

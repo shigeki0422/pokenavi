@@ -52,6 +52,8 @@ pub struct Live {
     pub season: String,
     /// 採点の選出に使う学習選出のモデル（None ならヒューリスティック選出）。live_set_selector で1回だけ渡す
     pub selector: Option<crate::selector::Selector>,
+    /// 面ごとの固定シードで初期化済みの乱数 [G_SEED, SEL_SEED 2pi, 2pi+1, R_SEED]（毎回の init_by_array を省く。複製して使う）
+    seeded: Vec<[crate::cpyrng::CpyRandom; 4]>,
 }
 
 /// _product3.surrogate_score / _ensemble_surrogate._feats と同じ固定シード（面ごと）
@@ -93,6 +95,17 @@ impl Live {
             memo: DmgMemo::default(),
             season: season.to_string(),
             selector: None,
+            seeded: (0..panel_specs.len())
+                .map(|pi| {
+                    let pi = pi as i128;
+                    [
+                        crate::cpyrng::CpyRandom::new(G_SEED + pi),
+                        crate::cpyrng::CpyRandom::new(SEL_SEED + 2 * pi),
+                        crate::cpyrng::CpyRandom::new(SEL_SEED + 2 * pi + 1),
+                        crate::cpyrng::CpyRandom::new(R_SEED + pi),
+                    ]
+                })
+                .collect(),
         }
     }
 
@@ -183,13 +196,14 @@ impl Live {
         let mut out = Vec::with_capacity(self.panel_net.len());
         let mut sels = Vec::with_capacity(self.panel_net.len());
         for pi in 0..self.panel_net.len() {
-            let mut g = crate::cpyrng::CpyRandom::new(G_SEED + pi as i128);
-            let mut s1 = crate::cpyrng::CpyRandom::new(SEL_SEED + 2 * pi as i128);
-            let mut s2 = crate::cpyrng::CpyRandom::new(SEL_SEED + 2 * pi as i128 + 1);
+            let mut g = self.seeded[pi][0].clone();
+            let mut s1 = self.seeded[pi][1].clone();
+            let mut s2 = self.seeded[pi][2].clone();
             let mut a = a6.clone();
             let mut b = self.panel_net[pi].clone();
-            let sa = crate::selector::select(packr, &self.ft, self.selector.as_ref(), &mut a, &mut b, 3, &mut g, &mut s1);
-            let sb = crate::selector::select(packr, &self.ft, self.selector.as_ref(), &mut b, &mut a, 3, &mut g, &mut s2);
+            let mut pc = crate::selector::PairCache::default();
+            let sa = crate::selector::select_cached(packr, &self.ft, self.selector.as_ref(), &mut a, &mut b, 3, &mut g, &mut s1, &mut pc, true);
+            let sb = crate::selector::select_cached(packr, &self.ft, self.selector.as_ref(), &mut b, &mut a, 3, &mut g, &mut s2, &mut pc, false);
             let mut sides = [
                 Side { party: sa.iter().map(|&i| a6[i].clone()).collect(), active_idx: 0, ..Default::default() },
                 Side { party: sb.iter().map(|&i| self.panel_net[pi][i].clone()).collect(), active_idx: 0, ..Default::default() },
@@ -229,7 +243,7 @@ impl Live {
         let mut mats = Vec::with_capacity(self.panel_rich.len());
         for pi in 0..self.panel_rich.len() {
             let mut b6 = std::mem::take(&mut self.panel_rich[pi]);
-            let mut rr = crate::cpyrng::CpyRandom::new(R_SEED + pi as i128);
+            let mut rr = self.seeded[pi][3].clone();
             let na = a6.len();
             let nb = b6.len();
             let mut dab = vec![0i64; na * nb];

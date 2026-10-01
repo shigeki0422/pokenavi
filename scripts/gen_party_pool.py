@@ -202,6 +202,8 @@ _RECOVERY_IT = {"たべのこし", "オボンのみ", "くろいヘドロ"}
 # 人間分布に寄せる役割目標（1チームあたり）
 _ROLE_TARGET = {"hazard": 1, "special": 2, "status": 1, "recovery": 2, "bulk": 3}
 
+_ROLE_IDX = {t: i for i, t in enumerate(("hazard", "special", "status", "recovery", "bulk", "scarf", "physical"))}
+
 def sample_role_targets(rng):
     """M-3上位119実構築の役割/党統計（hazard0.78 special2.59 status1.15 recovery2.03 bulk3.08 scarf0.57）に較正した確率的目標。"""
     t = {"special": 3 if rng.random() < 0.6 else 2, "status": 1, "recovery": 2, "bulk": 3}
@@ -511,54 +513,72 @@ class PartyGen:
             pass
         cache[build] = w; return w
 
+    def _rb_info(self, p, b):
+        """_role_builds 用の型ごとの前計算（型の文字列解析を試行ループから外す。重みの値・計算順は元の式と同一）:
+        (spec, 持ち物, 役割の添字タプル, (持ち物使用率+1)×技使用率, (持ち物使用率+IU_FLOOR)×技使用率, トリル有, あまごい有)"""
+        cache = self.__dict__.setdefault("_rb_info_cache", {})
+        k = (p, b)
+        x = cache.get(k)
+        if x is None:
+            iu = self.item_usage.get(p, {}); it = _item_of(b); mv = self._mvw(p, b); m = _moves_of(b)
+            ridx = tuple(_ROLE_IDX[t] for t in self.build_roles.get(b, ()) if t in _ROLE_IDX)
+            x = cache[k] = (b, it, ridx, (iu.get(it, 0) + 1) * mv, (iu.get(it, 0) + IU_FLOOR) * mv,
+                            "トリックルーム" in m, "あまごい" in m)
+        return x
+
     def _role_builds(self, picked, holders, rng, tries=120, targets=None, fixed=None):
         """役割目標を満たすよう型を選ぶ。持ち物は全相異。best-effort。
         fixed={種キー: spec} を渡すとその枠は指定specをそのまま採用（軸指定コア用）。
         低使用率メガ軸（pg.megaに型が無い＝mega_allのみ）でも生成できるほか、
-        固定枠の持ち物・役割が重複判定/役割カウントに正しく反映される。"""
+        固定枠の持ち物・役割が重複判定/役割カウントに正しく反映される。
+        型ごとの値は _rb_info で前計算し、乱数の消費・重み・採点は前計算前の実装と完全に同じ（出力一致）。"""
         targets = targets or sample_role_targets(rng)
         best = None; best_score = -1
         # チーム文脈のペイオフ判定（種族依存＝triesで不変）。始動技が活きる受け手が居ないパーティでは
         # その型を選ばない（例: 遅いエース不在のトリックルーム、あまごい受け手不在のあまごい＝死に技回避）
         has_slow_ace = any(self._traits(q, q in holders)[0] for q in picked)
         has_rain = any(self._traits(q, q in holders)[1] for q in picked)
-        def payoff(b):
-            mv = _moves_of(b)
-            if "トリックルーム" in mv and not has_slow_ace: return 0.0
-            if "あまごい" in mv and not has_rain: return 0.0
-            return 1.0
+        fixed = fixed or {}
+        info = {}
+        for p in picked:
+            fb = fixed.get(p)
+            if fb is not None:
+                info[p] = self._rb_info(p, fb)
+            else:
+                xs = [self._rb_info(p, b) for b in (self.mega[p] if p in holders else self.nonm[p])]
+                info[p] = [(x, 0.0 if (x[5] and not has_slow_ace) or (x[6] and not has_rain) else 1.0) for x in xs]
+        need0 = [0] * len(_ROLE_IDX)
+        for t, v in targets.items():
+            need0[_ROLE_IDX[t]] = v
+        total = sum(targets.values())
+        fac = [1 + ROLE_W * g for g in range(len(_ROLE_IDX) + 1)]
         for _ in range(tries):
             order = list(picked); rng.shuffle(order)
-            party = {}; used_items = set(); need = dict(targets); ok = True
+            party = {}; used_items = set(); need = list(need0); ok = True
             for p in order:
-                fb = (fixed or {}).get(p)
-                if fb is not None:
-                    if _item_of(fb) in used_items: ok = False; break
-                    party[p] = fb; used_items.add(_item_of(fb))
-                    for t in self.build_roles.get(fb, ()):
-                        if need.get(t, 0) > 0: need[t] -= 1
-                    continue
-                builds = [b for b in (self.mega[p] if p in holders else self.nonm[p]) if _item_of(b) not in used_items]
-                if not builds: ok = False; break
-                def gain(b):
-                    return sum(1 for t in self.build_roles.get(b, ()) if need.get(t, 0) > 0)
-                iu = self.item_usage.get(p, {})
-                # 持ち物使用率×技使用率を主・役割充足を従に重み付け・ペイオフ不在の始動技はゼロ重み
-                wts = [(iu.get(_item_of(b), 0) + 1) * self._mvw(p, b) * (1 + ROLE_W * gain(b)) * payoff(b) for b in builds]
-                if sum(wts) <= 0: wts = [(iu.get(_item_of(b), 0) + 1) * self._mvw(p, b) * (1 + ROLE_W * gain(b)) for b in builds]   # 全滅回避
-                chosen = rng.choices(builds, weights=wts, k=1)[0]
-                party[p] = chosen; used_items.add(_item_of(chosen))
-                for t in self.build_roles.get(chosen, ()):
-                    if need.get(t, 0) > 0: need[t] -= 1
+                if p in fixed:
+                    x = info[p]
+                    if x[1] in used_items: ok = False; break
+                else:
+                    xs = [xp for xp in info[p] if xp[0][1] not in used_items]
+                    if not xs: ok = False; break
+                    gs = [sum(1 for i in xp[0][2] if need[i] > 0) for xp in xs]
+                    # 持ち物使用率×技使用率を主・役割充足を従に重み付け・ペイオフ不在の始動技はゼロ重み
+                    wts = [xp[0][3] * fac[g] * xp[1] for xp, g in zip(xs, gs)]
+                    if sum(wts) <= 0: wts = [xp[0][3] * fac[g] for xp, g in zip(xs, gs)]   # 全滅回避
+                    x = rng.choices(xs, weights=wts, k=1)[0][0]
+                party[p] = x; used_items.add(x[1])
+                for i in x[2]:
+                    if need[i] > 0: need[i] -= 1
             if not ok: continue
-            roles = sum(targets[t] - max(0, need[t]) for t in targets)   # 満たした役割数
+            roles = total - sum(need)   # 満たした役割数
             # 使用率項＝持ち物×技構成（技を無視すると120試行のargmaxが人気持ち物の低使用率技型を系統選択してしまう）。
-            # +30フロア: 持ち物使用率が低くても技構成が標準的な型が役割枠を競えるように（トリル型が唯一のbulk供給になるのを防ぐ）
-            usage = sum((self.item_usage.get(p, {}).get(_item_of(party[p]), 0) + IU_FLOOR) * self._mvw(p, party[p]) for p in picked) / 100.0
+            # +IU_FLOORフロア: 持ち物使用率が低くても技構成が標準的な型が役割枠を競えるように（トリル型が唯一のbulk供給になるのを防ぐ）
+            usage = sum(party[p][4] for p in picked) / 100.0
             score = roles + ITEM_USAGE_W * usage                          # 役割充足＋使用率
             if score > best_score:
-                best_score = score; best = [party[p] for p in picked]
-                if score == sum(targets.values()): break
+                best_score = score; best = [party[p][0] for p in picked]
+                if score == total: break
         return best
 
     def mutate_cooc(self, party, rng, nslots=None):
@@ -601,7 +621,7 @@ class PartyGen:
     def _types_of_spec(self, spec):
         """specのタイプ（メガ石を持つならメガ後）。is_legalの中で呼ぶので種名+メガでキャッシュする。"""
         name = spec.split("@")[0]
-        mega = bool(_spec_mega(spec))
+        mega = _item_of(spec) if _spec_mega(spec) else None    # メガ石ごと（リザードナイトX＝ほのお/ドラゴン、Y＝ほのお/ひこう）
         cache = self.__dict__.setdefault("_types_cache", {})
         k = (name, mega)
         if k in cache: return cache[k]
@@ -615,9 +635,10 @@ class PartyGen:
         try:
             t = self._L.get_pokemon_template(name)
             t1, t2 = t.type1, t.type2
-            md = list((t.mega_data or {}).values())
-            if mega and md:
-                t1, t2 = md[0].type1, md[0].type2
+            mdd = t.mega_data or {}
+            if mega and mdd:
+                m0 = mdd.get(mega) or list(mdd.values())[0]
+                t1, t2 = m0.type1, m0.type2
             out = tuple(x for x in (t1, t2) if x)
         except Exception:
             pass

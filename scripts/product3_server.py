@@ -25,6 +25,7 @@ _f1._ensure_loaded(SEASON, 8)
 L = _f1._W["loader"]; NET = _f1._W["net"]
 PG = PartyGen(); TH = load_threats(L)
 ENS = EnsembleScorer(L, NET, PG, TH)   # アンサンブル(ネット+リッチ守備+構築, CV r≈0.69)
+
 SPECIES = [p for p, _ in sorted(PG.rank.items(), key=lambda x: x[1]) if p in PG.pokes]
 
 _CALIB = None
@@ -218,11 +219,15 @@ def _apply_mega_overlap_penalty(scored, fixnames=()):
     return sorted(scored, key=lambda x: -(x[0] - MEGA_OVERLAP_W * _mega_weak_shared(x[1], fixnames)))
 
 
+def _par_map(f, xs):
+    if len(xs) < 8:
+        return [f(x) for x in xs]
+    return _get_pool().map(f, xs, chunksize=4)
+
+
 def _par_score(cands):
     """候補のENSスコアをCPU並列で計算（fork継承でネットは共有・ピクル不要）。"""
-    if len(cands) < 8:
-        return [_score_one(p) for p in cands]
-    return _get_pool().map(_score_one, cands, chunksize=4)
+    return _par_map(_score_one, cands)
 
 # メガ数較正は実測A/Bで不採用（2026-07-12）: 候補プールは実119構築の2メガ率84%とほぼ一致[82-91%]なのに
 # ENS順位のtop5では約54%まで下がる。層化選出(2メガ84%へ強制)を実装し検証したが、
@@ -524,7 +529,7 @@ def suggest(core_args, ncand, top):
     # ncand=100 では候補の8割が上位3メガに集中し、Mライチュウ/Mフラエッテのような
     # 弱点の被らないメガが1件も生成されなかった（実測ボーマンダ軸: 下限超えメガ2種→600で7種）。
     _nc = _ncand_for(len(fixed), ncand)
-    _t = time.time(); cands = complete_core(PG, L, TH, fixed, rng, _nc); tg = time.time() - _t
+    _t = time.time(); cands = complete_core(PG, L, TH, fixed, rng, _nc, strict=True); tg = time.time() - _t
     fixnames = [f.split("@")[0] for f in fixed]
     _t = time.time()
     scored = _select_proposals(cands, fixnames, top)

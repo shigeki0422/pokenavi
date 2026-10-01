@@ -4917,6 +4917,96 @@ except Exception as _e22:
 
 
 # ════════════════════════════════════════════════════════════════
+# 22b. 提案の残り枠の生成: 条件を満たす型だけから引く（_product3_complete、2026-10-01）
+#     種の重み＝使用率ベースの重み×（今の条件を満たす型の確率の合計）、型は満たす型の中で正規化して引く。
+#     軸の解決: メガが上限を超えたら使用率の低い方を非メガへ。作れない指定は理由つきで即エラー。
+# ════════════════════════════════════════════════════════════════
+print("\n=== 22b. 提案の残り枠の生成（条件を満たす型だけから引く） ===")
+try:
+    import _product3_complete as _PC22b
+    from gen_party_pool import _spec_mega as _sm22b, _item_of as _it22b
+    _pg = _pg21
+    _two = [p for p in _pg.pokes if _pg.mega.get(p) and _pg.nonm.get(p) and _pg.rank.get(p, 9999) <= 80]
+    # 1) 種族の時点で作れない指定: 同じタイプ3体
+    _bytype = {}
+    for _p in _pg.pokes:
+        for _b in _pg.nonm.get(_p, [])[:1]:
+            for _t in _pg._types_of_spec(_b):
+                _bytype.setdefault(_t, []).append(_b)
+    _t3 = next(_t for _t, _v in _bytype.items() if len({_pg.dexof(x) for x in _v}) >= 3)
+    _f3 = []
+    for _b in _bytype[_t3]:
+        if _pg.dexof(_b) not in {_pg.dexof(x) for x in _f3} and _it22b(_b) not in {_it22b(x) for x in _f3}:
+            _f3.append(_b)
+        if len(_f3) == 3: break
+    _why = _PC22b.infeasible_reason(_pg, _f3)
+    check("作れない指定: 同じタイプ3体を理由つきで判定", _why is not None and _t3 in _why and "2体まで" in _why, str(_why))
+    _m3 = [_pg.mega[p][0] for p in _two[:3]]
+    _why = _PC22b.infeasible_reason(_pg, _m3)
+    check("作れない指定: メガの型3体を理由つきで判定", _why is not None and "メガ" in _why, str(_why))
+    try:
+        _PC22b.complete_core(_pg, None, None, _f3, random.Random(0), 5, strict=True); _raised = None
+    except SystemExit as _e:
+        _raised = str(_e)
+    check("作れない指定: 生成の前に SystemExit（フロントに出す文言）", _raised is not None and _t3 in _raised, str(_raised))
+    # 2) 軸の解決: 自動でメガを選んだ3体 → 使用率の低い方を非メガに
+    _hit = None
+    for _i in range(len(_two)):
+        for _j in range(_i + 1, len(_two)):
+            for _k in range(_j + 1, len(_two)):
+                _c = [_two[_i], _two[_j], _two[_k]]
+                if not all(_sm22b(_pg.pool[x][0]) for x in _c): continue
+                if len({_pg.dex.get(x) for x in _c}) < 3: continue
+                try:
+                    _r = _PC22b.resolve_fixed(_pg, [{"sp": x, "mega": None} for x in _c])
+                except SystemExit:
+                    continue
+                _hit = (_c, _r); break
+            if _hit: break
+        if _hit: break
+    if _hit:
+        _c, _r = _hit
+        _low = max(_c, key=lambda x: _pg.rank.get(x, 9999))
+        _nm = [x for x, s_ in zip(_c, _r) if not _sm22b(s_)]
+        check("軸の解決: メガが上限を超えたら使用率の低い方を非メガの型に", sum(bool(_sm22b(x)) for x in _r) == 2 and _nm == [_low],
+              f"{_c} → 非メガ {_nm}（使用率最下位 {_low}）")
+    else:
+        check("軸の解決のテスト対象（自動メガ3体）が見つかる", False)
+    # 3) 生成: メガ枠が埋まった軸ではメガの型を引かない・全件合法
+    _f2 = [_pg.mega[p][0] for p in _two[:2]]
+    if _PC22b.infeasible_reason(_pg, _f2) is None:
+        _keys = [_pg.keyof(x) for x in _f2]
+        _ps = [_PC22b.sample_weighted(_pg, _keys, _f2, random.Random(_i), 2) for _i in range(60)]
+        _ps = [_f2 + [r_[1][k] for k in r_[0][2:]] for r_ in _ps if r_]
+        check("生成: メガ枠が埋まった軸では残り枠にメガの型が出ない・全件合法",
+              len(_ps) >= 50 and all(sum(bool(_sm22b(x)) for x in p_) == 2 and _pg.is_legal(p_, megas_set=(2,)) for p_ in _ps),
+              f"{len(_ps)}件")
+        # 種の重み＝使用率ベースの重み×（条件を満たす型の確率の合計）（1枠目の抽選の重みを記録して照合）
+        class _Rec(random.Random):
+            def choices(self, seq, weights=None, k=1, **kw):
+                self.log.append((list(seq), list(weights))); return super().choices(seq, weights=weights, k=k, **kw)
+        _rr = _Rec(5); _rr.log = []
+        _PC22b.sample_weighted(_pg, _keys, _f2, _rr, 2)
+        _sps, _ws = _rr.log[0]
+        _base = _PC22b._species_base(_pg, _keys, {_pg.dex.get(k) for k in _keys})
+        _ui, _tc, _mg = _PC22b._fixed_state(_pg, _f2)
+        _exp = {p: _base[p] * sum(x[1] for x in _PC22b._build_probs(_pg, p) if _PC22b._build_ok(x, _ui, _tc, _mg, 2, 3)) for p in _base}
+        check("生成: 種の重み＝使用率ベースの重み×条件を満たす型の確率の合計（メガしかない型の種は0）",
+              all(abs(w_ - _exp[p]) < 1e-12 for p, w_ in zip(_sps, _ws))
+              and all(_exp[p] == 0 for p in _base if not _pg.nonm.get(p)) and set(_sps) == {p for p in _exp if _exp[p] > 0},
+              f"{len(_sps)}種")
+    else:
+        check("生成のテスト対象（メガ2体の軸）が作れる", False, _PC22b.infeasible_reason(_pg, _f2))
+    # メガ石ごとのタイプ（リザードナイトX＝ほのお/ドラゴン、Y＝ほのお/ひこう）。以前は X も Y のタイプで重なりを判定していた
+    _tx = {_st: _pg._types_of_spec(f"リザードン@{_st}:ひかえめ:かえんほうしゃ|エアスラッシュ|りゅうのはどう|ソーラービーム:2/0/0/32/0/32:もうか")
+           for _st in ("リザードナイトX", "リザードナイトY")}
+    check("タイプの重なり判定: メガ石ごとのタイプ（リザードナイトX はドラゴン・Y はひこう）",
+          _tx == {"リザードナイトX": ("ほのお", "ドラゴン"), "リザードナイトY": ("ほのお", "ひこう")}, str(_tx))
+except Exception as _e22b:
+    check("残り枠の生成のテストが実行できる", False, f"{type(_e22b).__name__}: {_e22b}")
+
+
+# ════════════════════════════════════════════════════════════════
 # 23. ばけのかわの確定数（表示用の1v1判定）
 #     battle.py:992 は「1発目のダメージを無効化し最大HPの1/8を消費」。
 #     表示側が単純な n+1 だと削りを無視して1手多く見積もる（実例: 1発44%で確4と誤表示）。
@@ -5692,6 +5782,82 @@ try:
           [(list(a), list(b)) for a, b in _E26m.live_panel_selections(list(_P2s))] == [tuple(x) for x in _pyh])
 except ImportError as _e26m:
     check("採点のテスト（pyengine が必要）", False, str(_e26m))
+
+
+_SCRIPTS_DIR26n = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+print("\n=== 26n. 提案の2段階採点（1段目＝同じ採点モデル・選出だけヒューリスティック） ===")
+# 採点器を2つ（本採点＝スロット0・1段目＝スロット1）持っても互いに干渉せず、1段目も Rust 経路と Python 経路が一致
+try:
+    import _ensemble_surrogate as _ES26n, feature1 as _F26n, numpy as _np26n
+    from gen_party_pool import PartyGen as _PG26n
+    from _threat_coverage import load_threats as _lt26n
+    _F26n._ensure_loaded("M-6", 8)
+    _sv26n = os.environ.get("POOL_SEASON"); os.environ["POOL_SEASON"] = "M-6"
+    import _live_rust as _LR26n, _product3 as _P326n
+    _LR26n.SEASON = "M-6"; _P326n.SEASON = "M-6"
+    _L26n = _F26n._W["loader"]; _pg26n = _PG26n(); _th26n = _lt26n(_L26n)
+    _e0 = _ES26n.EnsembleScorer(_L26n, _F26n._W["net"], _pg26n, _th26n, model=os.path.join(_SCRIPTS_DIR26n, "ensemble_model_m6.json"))
+    _x0a = _e0._x(_P1s)
+    _e1 = _ES26n.EnsembleScorer(_L26n, _F26n._W["net"], _pg26n, _th26n,
+                                model=os.path.join(_SCRIPTS_DIR26n, "ensemble_model_m6.json"), heuristic=True, slot=1)
+    check("2段階採点: 本採点・1段目とも Rust 経路が有効", _e0._rust is not None and _e1._rust is not None)
+    check("2段階採点: 1段目の採点器を作っても本採点の特徴量は変わらない（Rust のスロットが別）",
+          _np26n.array_equal(_x0a, _e0._x(_P1s)))
+    for _nm26n, _e in (("本採点", _e0), ("1段目", _e1)):
+        _xr = _e._x(_P2s); _r = _e._rust; _e._rust = None
+        try:
+            _xp = _e._x(_P2s)
+        finally:
+            _e._rust = _r
+        check(f"2段階採点（{_nm26n}）: Rust 経路と Python 経路の特徴量が一致", _np26n.array_equal(_xr, _xp), f"{_xr[:3]} / {_xp[:3]}")
+    _A26n = [build_from_spec(parse_pokemon_spec(x), _L26n, season="M-6", randomize=False) for x in _P2s]
+    check("2段階採点: 1段目の選出（ヒューリスティック）が Rust と Python で一致",
+          [(list(a), list(b)) for a, b in _E26m.live_panel_selections(list(_P2s), 1)]
+          == [tuple(x) for x in _P326n.panel_selections(_A26n, _e1.panel_built, heuristic=True)])
+    if _sv26n is None: os.environ.pop("POOL_SEASON", None)
+    else: os.environ["POOL_SEASON"] = _sv26n
+except ImportError as _e26n:
+    check("2段階採点のテスト（pyengine が必要）", False, str(_e26n))
+
+
+print("\n=== 26o. 提案の採点の学習選出: Rust 高速版（第1層の分解・相手の仮定を表で）が元の実装と同じ ===")
+# 高速版は W1·x を個体ブロック・対面（与ダメ割合・素早さ）・定数の寄与に分け、選出1回につき1回だけ前計算する。
+# 半減きのみ・ホズのみの消費（符号化の中で次の対面へ持ち越す）も追う。SEL_FAST_CHECK=1 で元の実装も計算して照合、SEL_FAST=0 で元の実装
+import subprocess as _sp26o, sys as _sy26o, json as _js26o
+_code26o = r"""
+import sys, json, os
+sys.path.insert(0, %r)
+import pokenavi_engine as E
+from simulator import learned_selection as LS
+A = json.loads(sys.argv[1]); B = json.loads(sys.argv[2]); K = json.loads(sys.argv[3])
+E.live_setup([A, B], "M-6", 0); E.live_set_selector(LS._PATH, 0)
+out = [E.live_panel_selections(c, 0) for c in K]
+st = E.sel_fast_stats_take() if os.environ.get("SEL_FAST_CHECK") == "1" else None
+print(json.dumps([out, st]))
+""" % _SCRIPTS_DIR26n
+def _berry26o(sp, it):
+    head, rest = sp.split(":", 1)
+    return head.split("@")[0] + "@" + it + ":" + rest
+_A26o = [_P1s[0], _P1s[1], _berry26o(_P1s[2], "リンドのみ"), _berry26o(_P1s[3], "イトケのみ"), _P1s[4], _P1s[5]]
+_B26o = [_berry26o(_P2s[0], "ヤチェのみ"), _P2s[1], _berry26o(_P2s[2], "オッカのみ"), _P2s[3], _berry26o(_P2s[4], "ホズのみ"),
+         _berry26o(_P2s[5], "ヨプのみ")]
+_kmg26o = "ブリジュラス@いのちのたま:ひかえめ:きまぐレーザー|りゅうせいぐん|ラスターカノン|10まんボルト:0/0/0/32/0/32:じきゅうりょく"
+_K26o = [_A26o, _B26o, list(_P1s), list(_P2s), [_kmg26o] + list(_P1s[1:])]
+def _run26o(env):
+    e = dict(os.environ); e.update(env)
+    r = _sp26o.run([_sy26o.executable, "-c", _code26o, _js26o.dumps(_A26o), _js26o.dumps(_B26o), _js26o.dumps(_K26o)],
+                   capture_output=True, text=True, env=e)
+    return _js26o.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 else (None, r.stderr[-300:])
+_fast26o, _st26o = _run26o({"SEL_FAST_CHECK": "1"})
+_ref26o, _ = _run26o({"SEL_FAST": "0"})
+_dflt26o, _ = _run26o({})
+check("学習選出の高速版: 元の実装と選出が全件同じ・値の差は丸め誤差だけ（半減きのみ・ホズのみ持ちを含む）",
+      _st26o is not None and _st26o[0] > 0 and _st26o[1] == 0 and _st26o[2] < 1e-12, f"{_st26o}")
+check("学習選出の高速版: 相手の仮定（ヒューリスティック選出）を表で計算しても元と同じ仮定・乱数の消費",
+      _st26o is not None and _st26o[4] > 0 and _st26o[5] == 0, f"{_st26o}")
+check("学習選出の高速版: 乱数を消費する技の持ち主がいる対面は元の実装に落とす", _st26o is not None and _st26o[3] > 0, f"{_st26o}")
+check("学習選出の高速版: 既定（高速版）と SEL_FAST=0（元の実装）でパネルの選出が同じ", _dflt26o is not None and _dflt26o == _ref26o,
+      f"{_dflt26o} / {_ref26o}")
 
 
 print("\n=== 26b. 必ず急所に当たる技 ===")

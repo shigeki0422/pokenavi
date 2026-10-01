@@ -26,10 +26,12 @@ def resolve_fixed(pg, args):
     """
     out = []
     alts = []   # 自動で選んだ枠の代わりの候補（持ち物が他の固定枠と重なったときに使う）
+    auto = []   # メガの有無を自動で選んだ枠の種キー（メガが上限を超えたら・タイプが重なったら替えてよい枠）
     for a in args:
-        alts.append(None)
+        alts.append(None); auto.append(None)
         if isinstance(a, dict):
             sp, mega = a.get("sp"), a.get("mega")
+            if mega is None: auto[-1] = sp
             blds = pg.pool.get(sp)
             if not blds:
                 raise SystemExit(f"プールに種 '{sp}' が無い")
@@ -51,6 +53,7 @@ def resolve_fixed(pg, args):
             blds = pg.pool.get(a)
             if not blds:
                 raise SystemExit(f"プールに種 '{a}' が無い")
+            auto[-1] = a
             out.append(blds[0]); alts[-1] = [s for s in blds if _spec_mega(s) == _spec_mega(blds[0])]
     # 持ち物は1パーティで重複できないので、自動で選んだ枠の持ち物が先の枠と重なったら次点の型に替える
     # （例: カバルドン＋ブリジュラスがどちらも先頭型オボンのみ→合法なパーティが1件も作れなかった）
@@ -62,9 +65,244 @@ def resolve_fixed(pg, args):
             if alt is not None:
                 out[i] = sp = alt; it = _item_of(sp)
         used.add(it)
+    out = _fit_fixed(pg, out, auto)
+    why = infeasible_reason(pg, out)
+    if why:
+        raise SystemExit(why)
     return out
 
-def complete_core(pg, L, th, fixed_specs, rng, N):
+
+def _fit_fixed(pg, out, auto):
+    """メガの有無を自動で選んだ枠を、条件（メガ2体まで・持ち物・タイプの重なり）に合うよう替える。
+    メガが上限を超えたら使用率の低い方から非メガの型へ。それでもタイプが重なるなら、自動の枠の形（非メガ／メガ石ごと）を替える
+    組み合わせを、替える枠の少ない順に探す（同数なら使用率の低い枠を替える方を先に）。合う組み合わせが無ければそのまま
+    （理由は infeasible_reason が返す）"""
+    import itertools
+    form = lambda b: _item_of(b) if _spec_mega(b) else ""
+    def forms(i, cur, others):
+        """枠 i の今と違う形の型（形ごとに先頭・持ち物が他と重ならないもの）"""
+        used = {_item_of(x) for x in others}
+        res = {}
+        for b in pg.pool.get(auto[i], []):
+            f = form(b)
+            if f != form(cur) and f not in res and _item_of(b) not in used:
+                res[f] = b
+        return list(res.values())
+    out = list(out)
+    megas = sum(bool(_spec_mega(x)) for x in out)
+    if megas > MEGA_MAX:
+        for i in sorted([i for i, a in enumerate(auto) if a and _spec_mega(out[i])],
+                        key=lambda i: -pg.rank.get(auto[i], 9999)):
+            if megas <= MEGA_MAX:
+                break
+            nm = [b for b in forms(i, out[i], out[:i] + out[i + 1:]) if not _spec_mega(b)]
+            if nm:
+                out[i] = nm[0]; megas -= 1
+    if infeasible_reason(pg, out) is None:
+        return out
+    idx = [i for i, a in enumerate(auto) if a]
+    for k in range(1, len(idx) + 1):
+        for comb in sorted(itertools.combinations(idx, k), key=lambda c: -sum(pg.rank.get(auto[i], 9999) for i in c)):
+            def rec(n, cand):
+                if n == len(comb):
+                    return cand if infeasible_reason(pg, cand) is None else None
+                i = comb[n]
+                for b in forms(i, cand[i], cand[:i] + cand[i + 1:]):
+                    r = rec(n + 1, cand[:i] + [b] + cand[i + 1:])
+                    if r is not None:
+                        return r
+                return None
+            r = rec(0, list(out))
+            if r is not None:
+                return r
+    return out
+
+
+# 残り枠の生成方式（2026-10-01）: weighted＝条件を満たす型だけから引く（既定）、legacy＝引いてから確かめて捨てる（旧方式）
+GEN_MODE = os.environ.get("GEN_MODE", "weighted")
+# weighted で、引いた種・メガの有無のまま型を役割目標で選び直す（_role_builds。旧方式と同じ型の選び方）
+GEN_ROLE_REFINE = os.environ.get("GEN_ROLE_REFINE", "1") == "1"
+MEGA_MAX = 2
+
+
+def _type_names(pg, spec):
+    return pg._types_of_spec(spec)
+
+
+def _build_probs(pg, p):
+    """種 p の型確率: 型ごとに（持ち物の使用率+1）×（技構成の使用率）を種内で正規化（_role_builds の役割を除いた重みと同じ）。
+    返り値 [(spec, 確率, メガか, 持ち物, タイプ), ...]"""
+    cache = pg.__dict__.setdefault("_bp_cache", {})
+    if p not in cache:
+        bs = pg.pool.get(p, [])
+        iu = pg.item_usage.get(p, {})
+        ws = [(iu.get(_item_of(b), 0) + 1) * pg._mvw(p, b) for b in bs]
+        t = sum(ws) or 1.0
+        cache[p] = [(b, w / t, bool(_spec_mega(b)), _item_of(b), _type_names(pg, b)) for b, w in zip(bs, ws)]
+    return cache[p]
+
+
+def _build_ok(info, used_items, tcount, megas, m, rem_after):
+    """型が今の条件（使用済みの持ち物・タイプの重なり上限・メガの残り枠・最後までにメガを m 体にできるか）を満たすか"""
+    _, _, mg, it, ty = info
+    if it in used_items:
+        return False
+    if TYPEDUP_MAX and any(tcount[t] + 1 > TYPEDUP_MAX for t in ty):
+        return False
+    if mg:
+        return megas + 1 <= m
+    return m - megas <= rem_after
+
+
+def _species_tables(pg):
+    """_species_base 用の前計算（並びは pg.pokes／同居の並びのまま）: 補完対象の種 [(種, 図鑑, 使用率重み)]、
+    種ごとの同居相手 [(相手, 図鑑, 重み)]（pg.w にあり順位内のものだけ）"""
+    t = pg.__dict__.get("_sp_tables")
+    if t is None or t[0] != MAX_RANK:
+        inrank = lambda p: pg.rank.get(p, 9999) <= MAX_RANK
+        cand = [(p, pg.dex.get(p), pg.w[p]) for p in pg.pokes if inrank(p)]
+        nb = {q: [(pt, pg.dex.get(pt), w) for pt, w in d.items() if pt in pg.w and inrank(pt)] for q, d in pg.cooc.items()}
+        t = pg._sp_tables = (MAX_RANK, cand, nb)
+    return t[1], t[2]
+
+
+def _species_base(pg, picked, used_dex):
+    """次の種の選ばれやすさ（今の使用率ベースの重み）: 同居の重み 70%＋使用率の重み 30%（旧方式の抽選の周辺分布）"""
+    cand_all, nb = _species_tables(pg)
+    cand = [(p, w) for p, d, w in cand_all if d not in used_dex]
+    neigh = collections.Counter()
+    for q in picked:
+        for pt, d, w in nb.get(q, ()):
+            if d not in used_dex:
+                neigh[pt] += w
+    W = sum(w for _, w in cand) or 1.0
+    if not neigh:
+        return {p: w / W for p, w in cand}
+    Nn = sum(neigh.values())
+    return {p: 0.3 * w / W + 0.7 * neigh.get(p, 0) / Nn for p, w in cand}
+
+
+def _fixed_state(pg, fixed_specs):
+    used_items = {_item_of(s) for s in fixed_specs}
+    tcount = collections.Counter(t for s in fixed_specs for t in _type_names(pg, s))
+    return used_items, tcount, sum(bool(_spec_mega(s)) for s in fixed_specs)
+
+
+def sample_weighted(pg, fixed_keys, fixed_specs, rng, m):
+    """残り枠を「条件を満たす型だけ」から順に引く。種の重み＝使用率ベースの重み×（条件を満たす型の確率の合計）、
+    型はその中で確率を正規化して引く。行き止まり（どの種も条件を満たせない）なら None。返り値 (picked, {種: 型})"""
+    picked = list(fixed_keys)
+    used_dex = {pg.dex.get(k) for k in fixed_keys}
+    used_items, tcount, megas = _fixed_state(pg, fixed_specs)
+    chosen = {}
+    while len(picked) < 6:
+        rem_after = 6 - len(picked) - 1
+        base = _species_base(pg, picked, used_dex)
+        # _build_ok と同じ判定。この枠で一定の部分（メガ可否・上限に達したタイプ）を先に決めておく
+        ok_mega, ok_non = megas + 1 <= m, m - megas <= rem_after
+        full_t = {t for t, c in tcount.items() if c + 1 > TYPEDUP_MAX} if TYPEDUP_MAX else set()
+        sps, wts, valid = [], [], {}
+        for p, bw in base.items():
+            v = [x for x in _build_probs(pg, p)
+                 if (ok_mega if x[2] else ok_non) and x[3] not in used_items and full_t.isdisjoint(x[4])]
+            mass = sum(x[1] for x in v)
+            if mass > 0 and bw > 0:
+                sps.append(p); wts.append(bw * mass); valid[p] = v
+        if not sps:
+            return None
+        p = rng.choices(sps, weights=wts, k=1)[0]
+        v = valid[p]
+        info = rng.choices(v, weights=[x[1] for x in v], k=1)[0]
+        b, _, mg, it, ty = info
+        chosen[p] = b; picked.append(p); used_dex.add(pg.dex.get(p)); used_items.add(it)
+        for t in ty:
+            tcount[t] += 1
+        megas += mg
+    return picked, chosen
+
+
+def infeasible_reason(pg, fixed_specs):
+    """種族の時点で作れない指定の理由（フロントに出す文言）。作れるなら None"""
+    names = [s.split("@")[0] for s in fixed_specs]
+    dex = [pg.dexof(s) for s in fixed_specs]
+    if len(set(dex)) != len(dex):
+        return "同じポケモン（リージョンフォーム・性別違いを含む）は1パーティに1体までです。"
+    megas = sum(bool(_spec_mega(s)) for s in fixed_specs)
+    if megas > MEGA_MAX:
+        return f"メガシンカの型は1パーティ{MEGA_MAX}体までです（指定に{megas}体含まれています）。"
+    items = collections.Counter(_item_of(s) for s in fixed_specs)
+    dup = [it for it, c in items.items() if c > 1]
+    if dup:
+        return f"持ち物「{dup[0]}」が重なっています（同じ持ち物は1パーティに1つまでです）。"
+    if TYPEDUP_MAX:
+        tc = collections.Counter(t for s in fixed_specs for t in _type_names(pg, s))
+        over = [(t, c) for t, c in tc.items() if c > TYPEDUP_MAX]
+        if over:
+            t, c = over[0]
+            who = "・".join(n for n, s in zip(names, fixed_specs) if t in _type_names(pg, s))
+            return f"{who} で {t}タイプが{c}体になります（同じタイプは{TYPEDUP_MAX}体までです）。"
+    if len(fixed_specs) >= 6:
+        return None if megas >= 1 else "メガシンカの型が1体も入っていません（1パーティ1〜2体）。"
+    fixed_keys = [pg.keyof(s) or s.split("@")[0] for s in fixed_specs]
+    used_dex = set(dex)
+    used_items, tcount, _ = _fixed_state(pg, fixed_specs)
+    rem_after = 6 - len(fixed_specs) - 1
+    base = _species_base(pg, fixed_keys, used_dex)
+    for m in sorted({max(megas, 1), max(megas, 2)}):
+        if any(_build_ok(x, used_items, tcount, megas, m, rem_after) for p in base for x in _build_probs(pg, p)):
+            return None
+    return "この組み合わせでは残りの枠に入れられるポケモンがいません（タイプの重なり・持ち物・メガシンカの枠の条件）。"
+
+
+def complete_core(pg, L, th, fixed_specs, rng, N, dedupe=True, strict=False):
+    """固定軸 fixed_specs の残り枠を補完した候補パーティを最大 N 件。GEN_MODE=weighted（既定）は条件を満たす型だけから引く。
+    作れない指定は strict なら SystemExit（理由つき・フロントに出す文言）、でなければ []"""
+    if GEN_MODE == "legacy":
+        return complete_core_legacy(pg, L, th, fixed_specs, rng, N, dedupe)
+    why = infeasible_reason(pg, fixed_specs)
+    if why:
+        if strict:
+            raise SystemExit(why)
+        print(f"[gen] 作れない指定: {why}", flush=True)
+        return []
+    fixed_keys = [pg.keyof(s) or s.split("@")[0] for s in fixed_specs]
+    fixed_map = dict(zip(fixed_keys, fixed_specs))
+    fixed_mega = sum(bool(_spec_mega(s)) for s in fixed_specs)
+    results = []; seen = set(); guard = 0
+    rej = collections.Counter()
+    t_rb = 0.0; t_all = time.perf_counter()
+    while len(results) < N and guard < N * 30:
+        guard += 1
+        m = max(fixed_mega, 2 if rng.random() < MEGA2_PROB else 1)
+        r = sample_weighted(pg, fixed_keys, fixed_specs, rng, m)
+        if r is None:
+            rej["行き止まり"] += 1; continue
+        picked, chosen = r
+        party = [fixed_map[k] if k in fixed_map else chosen[k] for k in picked]
+        if GEN_ROLE_REFINE:
+            holders = {k for k in picked if _spec_mega(fixed_map.get(k) or chosen[k])}
+            _t0 = time.perf_counter()
+            rb = pg._role_builds(picked, holders, rng, fixed=fixed_map)
+            t_rb += time.perf_counter() - _t0
+            if rb and pg.is_legal(rb, megas_set=(1, 2)):
+                party = rb
+            else:
+                rej["役割の選び直し失敗(引いた型のまま)"] += 1
+        if not pg.is_legal(party, megas_set=(1, 2)):
+            rej["非合法"] += 1; continue
+        if not _synergy_ok(party): rej["シナジー不足"] += 1; continue
+        key = tuple(sorted(party))
+        if dedupe and key in seen: rej["重複"] += 1; continue
+        seen.add(key); results.append(party)
+    print(f"[gen] mode=weighted fixed={len(fixed_specs)} N={N} got={len(results)} try={guard} "
+          f"total={time.perf_counter()-t_all:.1f}s role_builds={t_rb:.1f}s rej={dict(rej.most_common())}", flush=True)
+    if not results and strict:
+        raise SystemExit("この組み合わせでは条件（タイプの重なり・持ち物・メガシンカの枠）を満たすパーティが作れませんでした。")
+    return results
+
+
+def complete_core_legacy(pg, L, th, fixed_specs, rng, N, dedupe=True):
+    """旧方式（引いてから確かめて捨てる）。照合用に残す（GEN_MODE=legacy）"""
     fixed_keys = [pg.keyof(s) or s.split("@")[0] for s in fixed_specs]
     fixed_map = dict(zip(fixed_keys, fixed_specs))
     fixed_dex = {pg.dex.get(k) for k in fixed_keys}
@@ -130,7 +368,7 @@ def complete_core(pg, L, th, fixed_specs, rng, N):
             continue
         if not _synergy_ok(party): rej['シナジー不足'] += 1; continue
         key = tuple(sorted(party))
-        if key in seen: rej['重複'] += 1; continue
+        if dedupe and key in seen: rej['重複'] += 1; continue
         seen.add(key); results.append(party)
     print(f"[gen] fixed={len(fixed_specs)} N={N} got={len(results)} try={guard} "
           f"total={time.perf_counter()-t_all:.1f}s role_builds={t_rb[0]:.1f}s "

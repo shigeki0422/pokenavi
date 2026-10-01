@@ -1469,6 +1469,102 @@ pub fn select_party_multi(
     out
 }
 
+/// select_party_multi と同じ結果を、1対面の最大期待ダメージ（best_expected_damage）を表から引いて計算する
+/// （学習選出の高速版が、同じ2パーティの選出2回で表を共有する）。採点の副作用は「受け手の半減きのみ等の消費」だけを状態として追う。
+/// 呼び出し側の条件: 全員無傷・能力ランク0・乱数を引く技なし・消費される持ち物とかるわざの組なし。
+/// bed(攻め手がパーティ側か, 攻め手の添字, 攻め手がメガ後か, 攻め手の持ち物が消費済みか, 受け手の添字, 受け手がメガ後か, 受け手の持ち物が消費済みか)
+/// → (値, 受け手の持ち物を消費したか)。bed が None（乱数を引いた等）なら None（srng は未消費。呼び出し側は元の実装へ）
+#[allow(clippy::too_many_arguments, clippy::type_complexity)]
+pub fn select_party_multi_tab(
+    pack: &Pack,
+    party6: &[Poke],
+    opp6: &[Poke],
+    n: usize,
+    temperatures: &[f64],
+    mega_penalty: f64,
+    srng: &mut dyn FnMut() -> f64,
+    bed: &mut dyn FnMut(bool, usize, bool, bool, usize, bool, bool) -> Option<(f64, bool)>,
+) -> Option<Vec<Vec<usize>>> {
+    if party6.len() <= n {
+        return None;
+    }
+    let field = Field::default();
+    let mut oc = vec![false; opp6.len()];
+    let ospd: Vec<i64> = opp6.iter().map(|o| effective_speed(pack, o, &field)).collect();
+    let mut score = |i: usize, mega: bool, oc: &mut Vec<bool>| -> Option<f64> {
+        let pm;
+        let p: &Poke = if mega {
+            let mut q = party6[i].clone();
+            mega_evolve_poke(pack, &mut q);
+            pm = q;
+            &pm
+        } else {
+            &party6[i]
+        };
+        let my_hp = f64::max(1.0, p.max_hp as f64);
+        let my_spd = effective_speed(pack, p, &field);
+        let mut pc = false;
+        let mut val = 0.0f64;
+        for oi in 0..opp6.len() {
+            let opp_hp = f64::max(1.0, opp6[oi].max_hp as f64);
+            let (my_best, c1) = bed(true, i, mega, pc, oi, false, oc[oi])?;
+            if c1 {
+                oc[oi] = true;
+            }
+            let (opp_best, c2) = bed(false, oi, false, oc[oi], i, mega, pc)?;
+            if c2 {
+                pc = true;
+            }
+            let faster = my_spd >= ospd[oi];
+            let my_ko = my_best >= opp_hp;
+            let opp_ko = opp_best >= my_hp;
+            let mv = if my_ko && faster {
+                2.0
+            } else if my_ko && !opp_ko {
+                1.3
+            } else if opp_ko && !faster && !my_ko {
+                -1.5
+            } else {
+                let mr = f64::min(my_best / opp_hp, 1.5);
+                let orr = f64::min(opp_best / my_hp, 1.5);
+                (mr - orr) + (if faster { 0.3 } else { -0.3 })
+            };
+            val += mv;
+        }
+        if p.moves.iter().any(|mv| is_hazard(pack, mv.name) && mv.category == Cat::Status) {
+            val += 2.0;
+        }
+        Some(val)
+    };
+    let is_cap = |p: &Poke| p.mega.is_some() && !p.mega_evolved;
+    let mut mbest: Option<usize> = None;
+    let mut bv = f64::NEG_INFINITY;
+    for (k, i) in (0..party6.len()).filter(|&i| is_cap(&party6[i])).enumerate() {
+        let v = score(i, true, &mut oc)?;
+        if k == 0 || v > bv {
+            bv = v;
+            mbest = Some(i);
+        }
+    }
+    let mut scores = Vec::with_capacity(party6.len());
+    for i in 0..party6.len() {
+        let v = if Some(i) == mbest {
+            score(i, true, &mut oc)?
+        } else {
+            let v = score(i, false, &mut oc)?;
+            if is_cap(&party6[i]) {
+                v - mega_penalty
+            } else {
+                v
+            }
+        };
+        scores.push(v);
+    }
+    let mut p6 = party6.to_vec();
+    let mut o6 = opp6.to_vec();
+    Some(temperatures.iter().map(|&t| choose_by_scores(pack, &mut p6, &mut o6, &scores, n, t, srng)).collect())
+}
+
 #[allow(clippy::too_many_arguments)]
 fn select_party_inner(
     pack: &Pack,

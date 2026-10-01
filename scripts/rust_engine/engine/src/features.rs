@@ -827,3 +827,34 @@ pub fn feature_dim(pack: &Pack) -> usize {
     let per_side = 3 * poke_block_len(pack) + 7 + 2;
     2 * per_side + 18 + 9 + 18 + 38
 }
+
+// ── 学習選出の高速版（selector.rs）用: 符号化の部品を単独で ─────────────────────────
+
+/// side_features の1体ぶんの個体ブロック（陣営のメガ未使用）
+pub fn poke_block_vec(pack: &Pack, ft: &FeatTables, p: &Poke) -> Vec<f64> {
+    let mut out = Vec::with_capacity(poke_block_len(pack));
+    poke_block(pack, ft, Some(p), false, &mut out);
+    out
+}
+
+/// encode_state の期待与ダメ割合1マス（壁なし・場は既定）。att/deff は呼び出し側の複製（持ち物の消費が deff に残る）。
+/// 乱数を引いたら rng_used を立てる（呼び出し側は元の実装に落とす）
+pub fn pair_frac(pack: &Pack, att: &mut Poke, deff: &mut Poke, rng_used: &mut bool) -> f64 {
+    if !att.is_alive || !deff.is_alive {
+        return 0.0;
+    }
+    let mut field = Field::default();
+    let mut cb = |_k: u8| {
+        *rng_used = true;
+        0.0
+    };
+    expected_frac_calc(pack, att, deff, &mut field, Some((false, false, false)), &mut cb)
+}
+
+/// encode_state のすばやさ上回り 3x3 で使う実効速度（追い風・天候なし）
+pub fn plain_speed(pack: &Pack, ft: &FeatTables, p: &Poke) -> f64 {
+    if !p.is_alive {
+        return -1.0;
+    }
+    real_speed_calc(pack, ft, p, false, &Field::default())
+}
