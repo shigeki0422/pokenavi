@@ -1444,10 +1444,26 @@ pub fn select_party(
     rng: &mut dyn BRng,
     srng: &mut dyn FnMut() -> f64,
 ) -> Vec<usize> {
+    select_party_multi(pack, party6, opp6, n, &[temperature], mega_penalty, rng, srng).remove(0)
+}
+
+/// ai.py `select_party_multi`: select_party を温度の列の順に続けて呼んだのと同じ結果（採点は1回。rng＝採点のダメージ計算、
+/// srng＝温度つきの抽選）
+#[allow(clippy::too_many_arguments)]
+pub fn select_party_multi(
+    pack: &Pack,
+    party6: &mut Vec<Poke>,
+    opp6: &mut Vec<Poke>,
+    n: usize,
+    temperatures: &[f64],
+    mega_penalty: f64,
+    rng: &mut dyn BRng,
+    srng: &mut dyn FnMut() -> f64,
+) -> Vec<Vec<usize>> {
     let snap_p = party6.clone();
     let snap_o = opp6.clone();
     let out =
-        select_party_inner(pack, party6, opp6, n, temperature, mega_penalty, rng, srng);
+        select_party_inner(pack, party6, opp6, n, temperatures, mega_penalty, rng, srng);
     *party6 = snap_p;
     *opp6 = snap_o;
     out
@@ -1459,18 +1475,22 @@ fn select_party_inner(
     party6: &mut Vec<Poke>,
     opp6: &mut Vec<Poke>,
     n: usize,
-    temperature: f64,
+    temperatures: &[f64],
     mega_penalty: f64,
     rng: &mut dyn BRng,
     srng: &mut dyn FnMut() -> f64,
-) -> Vec<usize> {
+) -> Vec<Vec<usize>> {
     let mut dummy = Field::default();
     if party6.len() <= n {
-        let mut idx: Vec<usize> = (0..party6.len()).collect();
-        let pool = party6.clone();
-        let opp = opp6.clone();
-        order_by_lead(pack, &mut idx, &pool, &opp, temperature, srng);
-        return idx;
+        let mut out = Vec::new();
+        for &temperature in temperatures {
+            let mut idx: Vec<usize> = (0..party6.len()).collect();
+            let pool = party6.clone();
+            let opp = opp6.clone();
+            order_by_lead(pack, &mut idx, &pool, &opp, temperature, srng);
+            out.push(idx);
+        }
+        return out;
     }
 
     // _poke_score
@@ -1549,16 +1569,27 @@ fn select_party_inner(
         }
     };
 
+    let scores: Vec<f64> = (0..party6.len()).map(|i| eff_score(i, party6, opp6)).collect();
+    temperatures.iter().map(|&t| choose_by_scores(pack, party6, opp6, &scores, n, t, srng)).collect()
+}
+
+/// ai.py `_choose_by_scores`
+fn choose_by_scores(
+    pack: &Pack,
+    party6: &mut Vec<Poke>,
+    opp6: &mut Vec<Poke>,
+    scores: &[f64],
+    n: usize,
+    temperature: f64,
+    srng: &mut dyn FnMut() -> f64,
+) -> Vec<usize> {
     if temperature > 0.0 {
-        let scores: Vec<f64> = (0..party6.len()).map(|i| eff_score(i, party6, opp6)).collect();
-        let mut idx = temp_sample_indices(&scores, n, temperature, srng);
+        let mut idx = temp_sample_indices(scores, n, temperature, srng);
         let pool = party6.clone();
         let opp = opp6.clone();
         order_by_lead(pack, &mut idx, &pool, &opp, temperature, srng);
         return idx;
     }
-
-    let scores: Vec<f64> = (0..party6.len()).map(|i| eff_score(i, party6, opp6)).collect();
     // sorted(enumerate(party6), key=..., reverse=True) は安定ソート（同点は元順）
     let mut indexed: Vec<usize> = (0..party6.len()).collect();
     indexed.sort_by(|&a, &b| scores[b].partial_cmp(&scores[a]).unwrap());

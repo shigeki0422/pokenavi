@@ -5647,7 +5647,8 @@ check("select_party_multi: select_party を続けて呼んだのと同じ（乱�
 
 
 print("\n=== 26m. 提案の採点の選出（学習選出・面ごとに固定シード） ===")
-# 採点はグローバル乱数に依らず決まり、同じ候補を2回採点しても同じ値。Rust 経路（live_feats に選出を渡す）と Python 経路が一致
+# 採点はグローバル乱数に依らず決まり（乱数を消費する技も面ごとの固定シード）、同じ候補を2回採点しても同じ値。
+# Rust 経路（live_feats の中で学習選出まで完結）と Python 経路が選出・ネット特徴まで一致
 try:
     import _product3 as _P326m, feature1 as _F26m, random as _r26m
     _F26m._ensure_loaded("M-6", 8)
@@ -5656,17 +5657,39 @@ try:
     _r26m.seed(1); _v1 = _P326m.surrogate_score(_P2s)
     _r26m.seed(999); _r26m.random(); _v2 = _P326m.surrogate_score(_P2s)
     check("採点: グローバル乱数に依らず同じ値", _v1 == _v2, f"{_v1} / {_v2}")
-    import pokenavi_engine as _E26m, numpy as _np26m
+    import pokenavi_engine as _E26m, numpy as _np26m, statistics as _st26m
+    from simulator import learned_selection as _LS26m
+    _kmg26m = "ブリジュラス@いのちのたま:ひかえめ:きまぐレーザー|りゅうせいぐん|ラスターカノン|10まんボルト:0/0/0/32/0/32:じきゅうりょく"
+    _K26m = [_kmg26m] + list(_P1s[1:])           # 乱数を消費する技（きまぐレーザー）の持ち主がいる候補
+    _r26m.seed(3); _vk1 = _P326m.surrogate_score(_K26m)
+    _r26m.seed(4); _vk2 = _P326m.surrogate_score(_K26m)
+    check("採点: 乱数を消費する技の持ち主がいてもグローバル乱数に依らず同じ値", _vk1 == _vk2, f"{_vk1} / {_vk2}")
+    # 選出まで Rust 内で（学習選出のモデルは1回だけ渡す）。選出・状態ベクトル・ネット特徴が Python と一致
     _E26m.live_setup([_P1s, _P2s], "M-6")
-    _A26m = [build_from_spec(parse_pokemon_spec(x), _F26m._W["loader"], season="M-6", randomize=False) for x in _P2s]
-    _sels26m = _P326m.panel_selections(_A26m)
-    _sb26m, *_r26mr = _E26m.live_feats(list(_P2s), _sels26m)
-    _npan, _dim = _r26mr[3], _r26mr[4]
-    _X26m = _np26m.frombuffer(_sb26m, dtype="<f8").reshape(_npan, _dim)
-    _vals = [_F26m._W["net"].evaluate(_X26m[i], [0])[1] for i in range(_npan)]
-    import statistics as _st26m
-    check("採点: Rust 経路（選出を渡した live_feats）のネット特徴が Python と一致", abs(_st26m.mean(_vals) - _v1) < 1e-12,
-          f"{_st26m.mean(_vals)} / {_v1}")
+    check("live_set_selector: 学習選出のモデルを読める", _E26m.live_set_selector(_LS26m._PATH) is True)
+    for _nm, _sp, _v in (("通常", _P2s, _v1), ("きまぐレーザー", _K26m, _vk1)):
+        _A26m = [build_from_spec(parse_pokemon_spec(x), _F26m._W["loader"], season="M-6", randomize=False) for x in _sp]
+        _py = _P326m.panel_selections(_A26m)
+        _rs = [(list(a), list(b)) for a, b in _E26m.live_panel_selections(list(_sp))]
+        check(f"採点の選出（{_nm}）: Rust 内の学習選出が Python と一致", _rs == [tuple(x) for x in _py], f"{_rs} / {_py}")
+        _sb26m, *_r26mr = _E26m.live_feats(list(_sp))
+        _npan, _dim = _r26mr[3], _r26mr[4]
+        _X26m = _np26m.frombuffer(_sb26m, dtype="<f8").reshape(_npan, _dim)
+        _vals = [_F26m._W["net"].evaluate(_X26m[i], [0])[1] for i in range(_npan)]
+        check(f"採点（{_nm}）: Rust 経路（選出まで Rust）のネット特徴が Python と一致", _st26m.mean(_vals) == _v,
+              f"{_st26m.mean(_vals)} / {_v}")
+    _sb26n, *_ = _E26m.live_feats(list(_P2s), _P326m.panel_selections(
+        [build_from_spec(parse_pokemon_spec(x), _F26m._W["loader"], season="M-6", randomize=False) for x in _P2s]))
+    check("live_feats: 選出を渡した場合も同じ状態ベクトル", _sb26n == _E26m.live_feats(list(_P2s))[0])
+    _E26m.live_set_selector("")
+    _A26h = [build_from_spec(parse_pokemon_spec(x), _F26m._W["loader"], season="M-6", randomize=False) for x in _P2s]
+    _sv26m = (_LS26m._MODEL, _LS26m._LOADED); _LS26m._MODEL, _LS26m._LOADED = None, True   # モデル無し（読めなかった時）
+    try:
+        _pyh = _P326m.panel_selections(_A26h)
+    finally:
+        _LS26m._MODEL, _LS26m._LOADED = _sv26m
+    check("採点の選出（モデル無し）: Rust のヒューリスティック選出が Python と一致",
+          [(list(a), list(b)) for a, b in _E26m.live_panel_selections(list(_P2s))] == [tuple(x) for x in _pyh])
 except ImportError as _e26m:
     check("採点のテスト（pyengine が必要）", False, str(_e26m))
 

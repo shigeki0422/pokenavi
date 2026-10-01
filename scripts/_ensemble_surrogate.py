@@ -22,11 +22,17 @@ CACHE_GLOB = os.environ.get("TRAIN_CACHE_GLOB",
 MODEL = os.path.join(os.path.dirname(__file__),
                      os.environ.get("ENS_MODEL", "ensemble_model.json"))
 
+_R_SEED = 20261003
+
+
 def _feats(specs, L, net, pg, th, field, panel_mons, spd):
     ns = P3.surrogate_score(specs)                 # ネットt0パネル（P3._W panel使用）
     A = M.build_party(specs, L)
     for mo in A: spd[id(mo)] = _effective_speed(mo, field)
-    fs = [M.matchup_feats(A, B, field, spd) for B in panel_mons]
+    fs = []
+    for pi, B in enumerate(panel_mons):          # きまぐレーザー等の乱数は面ごとの固定シード（Rust live.rs R_SEED と同じ）
+        with P3._seeded_global(_R_SEED + pi):
+            fs.append(M.matchup_feats(A, B, field, spd))
     rich = [statistics.mean(c) for c in zip(*fs)]
     con = confeat(specs, L, pg, th)
     return [ns] + list(rich) + list(con)
@@ -88,8 +94,6 @@ class EnsembleScorer:
             try:
                 nr = _LR.feats(self._rust, specs, self.net, self._pspd, self._php)
                 return np.array(nr + list(confeat(specs, self.L, self.pg, self.th)))
-            except _LR.NeedsPython:
-                pass          # この候補だけ Python 経路（Rustは有効のまま）
             except (KeyboardInterrupt, SystemExit):
                 raise
             except BaseException as e:

@@ -20,27 +20,17 @@ import engine_dispatch as _ED
 # Python経路と平均scoreが0.104ずれていた）。POOL_SEASON連動にする。既定M-3＝従来と同一。
 SEASON = os.environ.get("POOL_SEASON", "M-3")
 
-# ダメージ計算がグローバル random を消費する技（Python側が非決定的になる）。
-# 該当する構築は Rust に渡さず Python 経路で採点する（＝従来どおりの挙動を保つ）。
-RNG_MOVES = ("きまぐレーザー",)
+# 乱数を消費する技（きまぐレーザー）も、Python 経路（面ごとの固定シード）と同じ乱数列を Rust が使うので Rust で採点する（2026-10-01）
 
 # 計測用（パリティゲートが「本当にRust経路を通ったか」を検証するために使う）
-STATS = {"rust": 0, "needs_python": 0}
+STATS = {"rust": 0}
 ERRORS = []
 
-
-class NeedsPython(Exception):
-    """この候補は Rust では扱えない（Python 経路で採点する。Rustは無効化しない）"""
-
-
-def needs_python(specs):
-    return any(mv in s for s in specs for mv in RNG_MOVES)
-
-# Rust 版が実装していない env（有効なら Python 経路へ）
-# 採点（_product3.surrogate_score）の選出は select_party 固定（2026-10-01）なので、learned_selection の env
-# （LEARNED_SELECTION / SELECT_MODE / MAX_MEGA / MIN_MEGA）は採点に効かない＝ガード不要
+# Rust 版が実装していない env（有効なら Python 経路へ）。学習選出の MIN_MEGA/MAX_MEGA は Rust も読む。
+# LEARNED_SELECTION=0 / SELECTOR_PATH は setup で Rust に渡すモデルに反映（ヒューリスティック選出も Rust にある）
 _GUARD = [
     ("MEGA_PENALTY", {None, "50", "50.0"}),
+    ("SELECT_MODE", {None, ""}),
 ]
 
 
@@ -59,11 +49,11 @@ def setup(panel_specs):
         if m is not None:
             _ED._warn("live:old", "pokenavi_engine に live_setup が無い（旧ビルド）")
         return None
-    if any(needs_python(sp) for sp in panel_specs):
-        _ED._warn("live:panel_rng", "パネルに乱数消費技が含まれる → Python経路")
-        return None
     try:
         m.live_setup([list(sp) for sp in panel_specs], SEASON)
+        # 採点の選出＝学習選出のモデルを Rust に1回渡す（読めない・無効ならヒューリスティック。Python 経路と同じ）
+        from simulator import learned_selection as _LS
+        m.live_set_selector(_LS._PATH if _LS._load() is not None else "")
     except BaseException as e:
         _ED._warn("live:setup", f"live_setup 失敗: {e}")
         return None
@@ -102,14 +92,8 @@ def _matchup_feats_from(spd_a, hp_a, spd_b, hp_b, dAB, dBA):
 
 def feats(m, specs, net, panel_spd, panel_hp):
     """ネットt0パネル特徴(1) + リッチ特徴(12) を返す。construction特徴はPython側で足す。"""
-    if needs_python(specs):
-        STATS["needs_python"] += 1
-        raise NeedsPython(specs)
-    # 選出はパネル各面の学習選出（Python の _product3.panel_selections。学習選出は内部で Rust 版を使う）
-    import _product3 as P3
-    from simulator.pokemon import build_from_spec, parse_pokemon_spec
-    A = [build_from_spec(parse_pokemon_spec(s), P3._W["L"], season=P3.SEASON, randomize=False) for s in specs]
-    sb, mb, spd_a, hp_a, npanel, dim, na, nb = m.live_feats(list(specs), P3.panel_selections(A))
+    # 選出（学習選出）・符号化・ダメージ行列まで Rust で完結（乱数を消費する技も面ごとの固定シードで Python と同じ）
+    sb, mb, spd_a, hp_a, npanel, dim, na, nb = m.live_feats(list(specs))
     X = np.frombuffer(sb, dtype="<f8").reshape(npanel, dim)
     ns = statistics.mean(net.evaluate(X[i], [0])[1] for i in range(npanel))
     D = np.frombuffer(mb, dtype="<i8").reshape(npanel, 2, na * nb).tolist()

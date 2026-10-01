@@ -1217,10 +1217,20 @@ PIMC（決定化ごとに別の木 E=1/4/8/16）と MAPLE（k=5）はいずれ�
 - 使う経路: ライブ実戦テスト（/simulate・`gen_party_ga._play_winner`）、観戦記録（`feature1.play_and_record*`・precompute・
   sim_server の選出。以前の登録カード同士の Nash 表は廃止）、提案の詳細（`_product3.eval_vs_built`）。
 - 提案の採点（`_product3.surrogate_score`・Rust `live_feats`）も学習選出（2026-10-01 夕〜。以前はヒューリスティックに固定）:
-  パネル各面で自分・パネル側とも学習選出（温度0、相手の仮定の乱数は面ごとの固定シード＝グローバル乱数に依らない）、面ごとに
-  個体を巻き戻す（以前は符号化の副作用＝半減きのみの消費が次の面・次の候補へ持ち越されていた）。選出は `_product3.panel_selections`
-  で決めて Rust に渡す（`live_feats(specs, sels)`）。採点モデル（ensemble_model_m6.json）はこの特徴で総当たり v3 から再学習。
-  候補1件の採点 約70ms（Rust 経路）。Rust/Python の一致は `_rust_engine/live_parity.py`。
+  パネル各面で自分・パネル側とも学習選出（温度0）、面ごとに個体を巻き戻す（以前は符号化の副作用＝半減きのみの消費が次の面・
+  次の候補へ持ち越されていた）。採点モデル（ensemble_model_m6.json）はこの特徴で総当たり v3 から再学習。
+- **採点は乱数を面ごとの固定シードで決める（2026-10-01 夜）**: パネル面 pi ごとに、選出2回と状態の符号化はグローバル乱数を
+  20261002+pi、相手の仮定の抽選は 20261001+2pi（自分の選出）/ +2pi+1（パネル側の選出）、リッチ特徴（`matchup_feats`）は
+  グローバル乱数を 20261003+pi に固定して、終わったら元の状態に戻す。乱数を消費する技（きまぐレーザー）の持ち主がいても採点は
+  グローバル乱数に依らず決まる（以前は Python 経路に落とし、呼ぶたびに値が変わり得た）。
+- **選出まで Rust で完結（2026-10-01 夜）**: Rust `live_feats(specs)` が パネル各面の学習選出（`selector.rs`: 候補の列挙・
+  相手の仮定＝`ai::select_party_multi`（温度0,1,1・採点1回）・符号化・ValMLP 推論・最初の最大を取る）、状態ベクトル、ダメージ行列を
+  上の固定シード（Python の MT19937 と同じ `CpyRandom`）で作る。モデル重みは `live_set_selector(path)` で起動時に1回だけ渡す
+  （`_live_rust.setup`。学習選出のモデルが無い・無効なら空文字＝ヒューリスティック選出。`SELECT_MODE` 指定時は Python 経路）。
+  推論は 0 の入力を飛ばす逐次和（素朴な逐次和とビット一致・cargo test）。Python の numpy（BLAS）とは丸め順が違うが、選出は
+  照合で全件一致。`live_feats(specs, sels)`（選出を渡す）と `live_panel_selections(specs)`（照合用）も残す。
+  候補1件の採点 約70ms（選出を Python で決めて渡していた時）→ 約35ms（M1・1スレッド）。Rust/Python の一致は `_rust_engine/live_parity.py`
+  （選出・状態ベクトル・特徴量・採点値、きまぐレーザー持ちの候補を含む）。
 - 使わない経路: Rust の探索・総当たり（`mcts_3v3` は渡された選出、`mcts_vs_dist` の相手選出は Rust のヒューリスティック）、
   学習選出の中の「相手の選出の仮定」（ヒューリスティック）。相性ベースの規則的な選出（SELECT_MODE=matchup）は削除せず残す。
 

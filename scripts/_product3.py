@@ -25,50 +25,65 @@ def _score_setup(L, net, panel_specs):
     _W["L"] = L; _W["net"] = net
     _W["panel"] = [[build_from_spec(parse_pokemon_spec(s), L, season=SEASON, randomize=False) for s in sp] for sp in panel_specs]
 
-_SEL_SEED = 20261001
+_SEL_SEED = 20261001    # 相手の仮定の抽選（自分の選出 2pi・パネル側 2pi+1）
+_G_SEED = 20261002      # 選出と状態の符号化のダメージ計算（きまぐレーザー等がグローバル乱数を消費する）
+# Rust live.rs の SEL_SEED/G_SEED と同じ値（_ensemble_surrogate の _R_SEED も live.rs の R_SEED と同じ）
 
 
-def panel_selections(A):
-    """採点のパネル各面での選出（自分・パネル側とも学習選出、温度0）。相手の仮定の乱数は面ごとに固定のシードで
-    （グローバル乱数に依らず採点が決まる。Rust 経路 _live_rust.feats も同じ選出を使う）。各面の前後で個体を巻き戻す。
-    戻り: [(自分の6体の添字の並び, パネル側の6体の添字の並び), ...]"""
+class _seeded_global:
+    """グローバル乱数を固定シードにして、終わったら元に戻す（採点がグローバル乱数の状態に依らず決まるように）"""
+    def __init__(self, seed):
+        self.seed = seed
+
+    def __enter__(self):
+        import random as _r
+        self.st = _r.getstate(); _r.seed(self.seed)
+
+    def __exit__(self, *a):
+        import random as _r
+        _r.setstate(self.st)
+
+
+def _panel_eval(A, B, pi, encode=True):
+    """パネル1面: 学習選出（自分→パネル側、温度0）と、その選出の初期状態ベクトル。Rust live.rs panel_states_full と同じ"""
     import random as _r
     from simulator.learned_selection import learned_select_party
     from simulator.ai import _state_snapshot, _state_restore
+    from simulator.belief import OpponentBelief
+    from simulator.battle import BattleSide, BattleField
+    from simulator.features import encode_state
     L = _W["L"]
-    out = []
-    for pi, B in enumerate(_W["panel"]):
-        snap = _state_snapshot(list(A) + list(B))
-        try:
+    snap = _state_snapshot(list(A) + list(B))
+    try:
+        with _seeded_global(_G_SEED + pi):
             sa = learned_select_party(A, B, L, n=3, temperature=0.0, rng=_r.Random(_SEL_SEED + 2 * pi))
             sb = learned_select_party(B, A, L, n=3, temperature=0.0, rng=_r.Random(_SEL_SEED + 2 * pi + 1))
-            out.append(([next(k for k, p in enumerate(A) if p is m) for m in sa],
-                        [next(k for k, p in enumerate(B) if p is m) for m in sb]))
-        finally:
-            _state_restore(snap)
-    return out
+            ia = [next(k for k, p in enumerate(A) if p is m) for m in sa]
+            ib = [next(k for k, p in enumerate(B) if p is m) for m in sb]
+            x = None
+            if encode:
+                _state_restore(snap); snap = _state_snapshot(list(A) + list(B))
+                s1 = BattleSide([A[i] for i in ia], source6=A); s2 = BattleSide([B[i] for i in ib], source6=B)
+                s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
+                x = encode_state(s1, s2, BattleField())
+        return ia, ib, x
+    finally:
+        _state_restore(snap)
+
+
+def panel_selections(A):
+    """採点のパネル各面での選出 [(自分の6体の添字の並び, パネル側の6体の添字の並び), ...]（照合用）"""
+    return [_panel_eval(A, B, pi, encode=False)[:2] for pi, B in enumerate(_W["panel"])]
 
 
 def surrogate_score(specs):
     """ネットのパネル特徴: パネル20面それぞれで、学習選出（既定のモデル）で選んだ両者の初期状態をネットで評価した平均。
-    面ごとに個体を巻き戻す（符号化の副作用＝半減きのみの消費などを次の面へ持ち越さない）。Rust 経路（_live_rust.feats）と一致
-    （_rust_engine/live_parity.py）。2026-10-01 に選出をヒューリスティックから学習選出へ（採点モデルは同時に再学習）。"""
+    面ごとに個体を巻き戻し、乱数は面ごとの固定シード（グローバル乱数に依らず決まる）。Rust 経路（_live_rust.feats＝
+    live.rs panel_states_full で選出まで完結）と一致（_rust_engine/live_parity.py）。"""
     from simulator.pokemon import build_from_spec, parse_pokemon_spec
-    from simulator.belief import OpponentBelief
-    from simulator.battle import BattleSide, BattleField
-    from simulator.features import encode_state
-    from simulator.ai import _state_snapshot, _state_restore
     L = _W["L"]; net = _W["net"]
     A = [build_from_spec(parse_pokemon_spec(s), L, season=SEASON, randomize=False) for s in specs]
-    vals = []
-    for (ia, ib), B in zip(panel_selections(A), _W["panel"]):
-        snap = _state_snapshot(list(A) + list(B))
-        try:
-            s1 = BattleSide([A[i] for i in ia], source6=A); s2 = BattleSide([B[i] for i in ib], source6=B)
-            s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
-            vals.append(net.evaluate(encode_state(s1, s2, BattleField()), [0])[1])
-        finally:
-            _state_restore(snap)
+    vals = [net.evaluate(_panel_eval(A, B, pi)[2], [0])[1] for pi, B in enumerate(_W["panel"])]
     return statistics.mean(vals)
 
 def eval_vs_built(specs, opp_built):

@@ -12,6 +12,7 @@ pub mod damage;
 pub mod features;
 pub mod net;
 pub mod search;
+pub mod selector;
 pub mod solver;
 pub mod items;
 pub mod live;

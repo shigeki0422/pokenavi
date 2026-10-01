@@ -50,7 +50,14 @@ pub struct Live {
     pub ft: FeatTables,
     pub memo: DmgMemo,
     pub season: String,
+    /// 採点の選出に使う学習選出のモデル（None ならヒューリスティック選出）。live_set_selector で1回だけ渡す
+    pub selector: Option<crate::selector::Selector>,
 }
+
+/// _product3.surrogate_score / _ensemble_surrogate._feats と同じ固定シード（面ごと）
+pub const SEL_SEED: i128 = 20261001;   // 相手の仮定の抽選（自分の選出 2pi・パネル側 2pi+1）
+pub const G_SEED: i128 = 20261002;     // 選出と状態の符号化のダメージ計算（きまぐレーザー等）
+pub const R_SEED: i128 = 20261003;     // リッチ特徴のダメージ行列
 
 impl Live {
     pub fn setup(pack: &mut Pack, panel_specs: &[Vec<String>], season: &str) -> Live {
@@ -85,6 +92,7 @@ impl Live {
             ft,
             memo: DmgMemo::default(),
             season: season.to_string(),
+            selector: None,
         }
     }
 
@@ -166,6 +174,37 @@ impl Live {
         out
     }
 
+    /// `_product3.surrogate_score` の状態（選出も Rust で完結）。パネル pi ごとに乱数を固定シードで作り、
+    /// 自分→パネル側の順に学習選出（selector が無ければヒューリスティック）、元の個体の複製で符号化する。
+    pub fn panel_states_full(&mut self, pack: &mut Pack, specs: &[String]) -> (Vec<Vec<f64>>, Vec<(Vec<usize>, Vec<usize>)>) {
+        let season = self.season.clone();
+        let a6: Vec<Poke> = specs.iter().map(|s| build_poke(pack, s, &season)).collect();
+        let packr: &Pack = pack;
+        let mut out = Vec::with_capacity(self.panel_net.len());
+        let mut sels = Vec::with_capacity(self.panel_net.len());
+        for pi in 0..self.panel_net.len() {
+            let mut g = crate::cpyrng::CpyRandom::new(G_SEED + pi as i128);
+            let mut s1 = crate::cpyrng::CpyRandom::new(SEL_SEED + 2 * pi as i128);
+            let mut s2 = crate::cpyrng::CpyRandom::new(SEL_SEED + 2 * pi as i128 + 1);
+            let mut a = a6.clone();
+            let mut b = self.panel_net[pi].clone();
+            let sa = crate::selector::select(packr, &self.ft, self.selector.as_ref(), &mut a, &mut b, 3, &mut g, &mut s1);
+            let sb = crate::selector::select(packr, &self.ft, self.selector.as_ref(), &mut b, &mut a, 3, &mut g, &mut s2);
+            let mut sides = [
+                Side { party: sa.iter().map(|&i| a6[i].clone()).collect(), active_idx: 0, ..Default::default() },
+                Side { party: sb.iter().map(|&i| self.panel_net[pi][i].clone()).collect(), active_idx: 0, ..Default::default() },
+            ];
+            crate::search::set_belief(&mut sides[0], OpponentBelief::new(&season));
+            crate::search::set_belief(&mut sides[1], OpponentBelief::new(&season));
+            let mut field = Field::default();
+            let mut memo = DmgMemo::default();
+            let x = encode_state(packr, &self.ft, &mut sides, 0, &mut field, &mut memo, &mut crate::selector::GRng(&mut g));
+            out.push(x);
+            sels.push((sa, sb));
+        }
+        (out, sels)
+    }
+
     /// `_matchup_surrogate._bestdmg` の 6x6 行列（A→B, B→A）をパネル数ぶん返す。
     /// 併せて A 側の実効素早さ・最大HPを返す（Python 側の集約に使う）。
     #[allow(clippy::type_complexity)]
@@ -190,18 +229,19 @@ impl Live {
         let mut mats = Vec::with_capacity(self.panel_rich.len());
         for pi in 0..self.panel_rich.len() {
             let mut b6 = std::mem::take(&mut self.panel_rich[pi]);
+            let mut rr = crate::cpyrng::CpyRandom::new(R_SEED + pi as i128);
             let na = a6.len();
             let nb = b6.len();
             let mut dab = vec![0i64; na * nb];
             let mut dba = vec![0i64; nb * na];
             for i in 0..na {
                 for j in 0..nb {
-                    dab[i * nb + j] = best_dmg(packr, &mut a6[i], &mut b6[j], &mut self.rich_field);
+                    dab[i * nb + j] = best_dmg(packr, &mut a6[i], &mut b6[j], &mut self.rich_field, &mut rr);
                 }
             }
             for j in 0..nb {
                 for i in 0..na {
-                    dba[j * na + i] = best_dmg(packr, &mut b6[j], &mut a6[i], &mut self.rich_field);
+                    dba[j * na + i] = best_dmg(packr, &mut b6[j], &mut a6[i], &mut self.rich_field, &mut rr);
                 }
             }
             self.panel_rich[pi] = b6;
@@ -217,7 +257,7 @@ impl Live {
 /// 実体を書き換える（対戦本体では正しい）。ここは 6x6 行列を同じ Poke を使い回して埋めるため、
 /// 保護しないと 1 回目の計算で相手のきのみが消え 2 回目以降が「きのみ無し」になる。
 /// Python 側 `_matchup_surrogate._dmg_safe` と同じ扱いにしてパリティを保つ。
-fn best_dmg(pack: &Pack, a: &mut Poke, b: &mut Poke, field: &mut Field) -> i64 {
+fn best_dmg(pack: &Pack, a: &mut Poke, b: &mut Poke, field: &mut Field, rr: &mut crate::cpyrng::CpyRandom) -> i64 {
     let mut best = 0i64;
     let moves = a.moves.clone();
     let (b_item, a_item) = (b.item, a.item);
@@ -227,8 +267,9 @@ fn best_dmg(pack: &Pack, a: &mut Poke, b: &mut Poke, field: &mut Field) -> i64 {
             && mv.power.unwrap_or(0) > 0
         {
             let d =
-                calc_damage(pack, a, b, mv, field, false, Some(0.85), None, &mut |_| {
-                    panic!("live: calc_damage が乱数を消費した")
+                // きまぐレーザー等は面ごとの固定シードの乱数（Python の _feats が面ごとに random.seed(R_SEED+pi) する）
+                calc_damage(pack, a, b, mv, field, false, Some(0.85), None, &mut |k| {
+                    if k == 0 { rr.random() } else { rr.choice(16) as f64 }
                 });
             b.item = b_item;
             a.item = a_item;

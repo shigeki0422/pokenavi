@@ -60,6 +60,33 @@ fn eng() -> PyResult<&'static Mutex<Eng>> {
     Ok(ENG.get().unwrap())
 }
 
+/// 提案の採点の選出に使う学習選出のモデル（selector_m6b.json 等）を live に渡す（起動時に1回）。空文字で外す（ヒューリスティック）
+#[pyfunction]
+fn live_set_selector(path: &str) -> PyResult<bool> {
+    let m = eng()?;
+    let mut g = lock_eng(m);
+    let Eng { live, .. } = &mut *g;
+    let live = live.as_mut().ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
+    if path.is_empty() {
+        live.selector = None;
+        return Ok(false);
+    }
+    let sel = engine::selector::Selector::from_json(path)
+        .ok_or_else(|| PyValueError::new_err(format!("{path}: 選出モデルとして読めない")))?;
+    live.selector = Some(sel);
+    Ok(true)
+}
+
+/// 照合用: 採点のパネル各面で Rust が選んだ (自分の選出, パネル側の選出)
+#[pyfunction]
+fn live_panel_selections(specs: Vec<String>) -> PyResult<Vec<(Vec<usize>, Vec<usize>)>> {
+    let m = eng()?;
+    let mut g = lock_eng(m);
+    let Eng { pack, live, .. } = &mut *g;
+    let live = live.as_mut().ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
+    Ok(live.panel_states_full(pack, &specs).1)
+}
+
 /// 学習選出（simulator/learned_selection.py）の候補・相手の仮定・状態ベクトル。推論と選択は Python 側。
 /// state は random.getstate()[1]（624語＋位置）。戻り: (候補, 相手の仮定, 状態ベクトルのバイト列 f64 LE, 次元, 進めた乱数の状態)
 #[pyfunction]
@@ -343,10 +370,11 @@ fn live_feats(
     let mut g = lock_eng(m);
     let Eng { pack, live, .. } = &mut *g;
     let live = live.as_mut().ok_or_else(|| PyRuntimeError::new_err("live_setup 未実行"))?;
-    // sels（パネルごとの (自分の選出, パネル側の選出)）を渡すと学習選出の結果で符号化する。無ければ従来のヒューリスティック
+    // 既定（sels 無し）は選出まで Rust で完結（live_set_selector のモデルで学習選出、無ければヒューリスティック）。
+    // sels（パネルごとの (自分の選出, パネル側の選出)）を渡すとその選出で符号化する（照合用）
     let states = match &sels {
         Some(s) => live.panel_states_sel(pack, &specs, s),
-        None => live.panel_states(pack, &specs),
+        None => live.panel_states_full(pack, &specs).0,
     };
     let (spd_a, hp_a, mats) = live.rich_matrices(pack, &specs);
     let npanel = states.len();
@@ -462,6 +490,8 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(select_party_rng_probe, m)?)?;
     m.add_function(wrap_pyfunction!(predict_probe_take, m)?)?;
     m.add_function(wrap_pyfunction!(learned_select_states, m)?)?;
+    m.add_function(wrap_pyfunction!(live_set_selector, m)?)?;
+    m.add_function(wrap_pyfunction!(live_panel_selections, m)?)?;
     m.add_function(wrap_pyfunction!(live_setup, m)?)?;
     m.add_function(wrap_pyfunction!(live_feats, m)?)?;
     m.add_function(wrap_pyfunction!(mu_analyze, m)?)?;
