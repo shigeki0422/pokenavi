@@ -235,6 +235,8 @@ def _par_score(cands):
 # 総当たり実勝率データ(1メガ0.502/2メガ0.495・ほぼ拮抗)と整合。ENSのtop5選好は測定として正しい。
 # 教訓: 母集団分布との一致は目的ではなく手段。効果は必ず実対戦A/Bで確認してから採用する。
 
+SUGGEST_ARCH = os.environ.get("SUGGEST_ARCH", "0") == "1"
+
 def _proposal_detail(args):
     """1提案ぶんの詳細（役割・想定勝率・相性・統計）を組み立てる。fork並列用にモジュール関数化。"""
     sc, p, fixnames = args
@@ -246,7 +248,8 @@ def _proposal_detail(args):
                      "moves": mv.split("|"), "mega": _spec_mega(s), "core": hd in fixnames,
                      "roles": EX.role_of(s, L)})
     arch = []
-    for a in ARCHES:
+    # 「想定パーティ相性」タブは 2026-09-14 に画面から外したので既定では計算しない（詳細の時間の大半だった）。復活時は SUGGEST_ARCH=1
+    for a in (ARCHES if SUGGEST_ARCH else ()):
         v, pick = P3.eval_vs_built(p, a["built"])
         arch.append({"label": a["label"], "opp": a["names"], "wr": a["wr"],
                      "adv": round(calibrate(v), 4), "pick": pick})
