@@ -1,18 +1,33 @@
 ---
-const clientId = import.meta.env.PUBLIC_ADSENSE_CLIENT_ID;
-const slotId = import.meta.env.PUBLIC_ADSENSE_SLOT_ID;
+/** 記事・ポケモン情報ページの本文末尾に出す固定の広告枠。
+ * 自動広告はタイプ相性表のセル内など本文の途中に差し込まれて表示を壊したため、
+ * これらのページでは自動広告を除外し、この固定枠だけで出す。
+ * パブリッシャーIDとスロットIDはHTMLに出る公開値で、BaseHeadのローダーと同様に直書きする
+ * (環境変数経由はビルド環境側の設定漏れで広告が消える事故が起きたため)。 */
+const CLIENT_ID = 'ca-pub-6144860227440327';
+const SLOT_ID = '8319443257';
 ---
 
-{clientId && slotId && (
-  <div class="ad-unit">
-    <ins
-      class="adsbygoogle"
-      style="display:block"
-      data-ad-client={clientId}
-      data-ad-slot={slotId}
-      data-ad-format="auto"
-      data-full-width-responsive="true"
-    ></ins>
-    <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-  </div>
-)}
+<div class="ad-unit">
+  <ins
+    class="adsbygoogle"
+    style="display:block"
+    data-ad-client={CLIENT_ID}
+    data-ad-slot={SLOT_ID}
+    data-ad-format="auto"
+    data-full-width-responsive="true"
+  ></ins>
+  <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<style>
+  /* 本文がflexコンテナの場合、幅指定がないと中身が空のうちは0pxに潰れて
+     広告が表示されないため、幅を明示する。 */
+  .ad-unit {
+    margin: 2rem auto;
+    width: 100%;
+    align-self: stretch;
+    max-width: 720px;
+    min-height: 100px;
+  }
+</style>
