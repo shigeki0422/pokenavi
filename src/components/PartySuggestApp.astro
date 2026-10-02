@@ -12,13 +12,6 @@ interface Props {
   lang?: 'ja' | 'en' | 'ko';
 }
 const { preCoreLabel, lang = 'ja' } = Astro.props;
-/** 軸2件以上は必ずライブ計算（cache miss）になりCloud Runの実CPU課金が発生する
- * （suggest_cache.jsonは単軸221件のみで2軸以上のヒットは0件）。この待ち時間だけに
- * 出す広告のHTMLを環境変数で受け取る。未設定なら従来どおり広告なしの待機表示のまま。
- * AdMaxはPC向け/スマホ向けで別の広告枠(別タグ)が必要なため2本持つ。表示時に
- * ビューポート幅(既存のブレークポイント640pxに合わせる)でどちらを使うか選ぶ。 */
-const suggestLoadingAdHtmlPc = import.meta.env.PUBLIC_ADMAX_SUGGEST_LOADING_EMBED || '';
-const suggestLoadingAdHtmlMobile = import.meta.env.PUBLIC_ADMAX_SUGGEST_LOADING_EMBED_MOBILE || '';
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 // 1v1判定の前提文。is:inline スクリプトからは import できないので define:vars で渡す
 const assumeLead = MATCHUP_LEAD[lang] ?? MATCHUP_LEAD.ja;
@@ -115,22 +108,13 @@ const I18N = I18N_ALL[lang];
     <div id="ps-multi-notice" class="ps-notice" style="display:none">{I18N.multiAxisNotice}</div>
     <div id="status" class="muted" style="margin-top:.5em"></div>
   </div>
-  <!-- 軸2件以上の実行で表示し、結果表示後も残す(クリックできるように)。AdMaxのt.jsは
-     1ページ1回しか処理しないため、#out(毎回innerHTMLで作り直す)の外に常駐させる。 -->
+  <!-- 軸2件以上の実行で表示し、結果表示後も残す(クリックできるように)。広告の読み込みは
+     1ページ1回だけなので、#out(毎回innerHTMLで作り直す)の外に常駐させる。 -->
   <div id="ps-ad-inline" class="ps-ad-inline" style="display:none">
     <div class="ps-ad-label">{I18N.adLabel}</div>
     <div id="ps-ad-slot" class="ps-ad-slot"><div class="ps-ad-bg"><div class="ps-spinner"></div></div></div>
   </div>
   <div id="out"></div>
-  <!-- 広告未設定時も<template>自体は常に出力する(空のset:html)。
-     {cond && <template set:html>} という条件付きレンダリングは、このファイルの
-     規模でAstroコンパイラの変換を異常に遅くする(単体コンパイルが60秒超で終わらない、
-     無条件なら264ms)ため避ける。実害はJS側でtextContentの有無を見て判定している。
-     <template>はvoid要素ではないため自己終了(/>)は無視され、閉じタグを省略すると
-     後続のマークアップ全体(popupを含む)が中身として飲み込まれる。
-     必ず</template>で明示的に閉じる。 -->
-<template id="ps-ad-embed-src-pc" set:html={suggestLoadingAdHtmlPc}></template>
-<template id="ps-ad-embed-src-mobile" set:html={suggestLoadingAdHtmlMobile}></template>
   <div id="popup" class="pop-overlay" style="display:none">
     <div class="pop-card"><button class="pop-x" id="pop-x" aria-label={I18N.close}>✕</button><div id="pop-body"></div></div>
   </div>
@@ -425,7 +409,7 @@ const I18N = I18N_ALL[lang];
   .ps-ad-slot{position:relative;width:300px;max-width:100%;height:250px;margin:0 auto;overflow:hidden}
   /* 在庫なし(no-fill)でも真っ白にならないよう、広告の背面にスピナーを敷いておく */
   .ps-ad-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-  .ps-ad-unit{position:relative;display:block;width:300px;height:250px}
+  .ps-ad-unit{position:relative;display:inline-block;width:300px;height:250px}
 
   /* 複数軸の事前注意書き・エラー表示 */
   .ps-notice{font-size:.78rem;color:#92400e;background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:.5em .7em;margin-top:.5em}
@@ -1542,45 +1526,39 @@ const I18N = I18N_ALL[lang];
       }
     });
   }
-  /** 軸2件以上（cache miss）のライブ計算中だけ出す広告ダイアログ。
-   * PC/スマホでAdMaxの広告枠(タグ)が別物のため2本持ち、表示時のビューポート幅
-   * (既存のモバイル判定と同じ640px)でどちらを使うか選ぶ。どちらも未設定なら
-   * テンプレートごと空のままHAS_LOADING_ADがfalseになり、以下の分岐は完全に
-   * 無効化される（既存動作のまま）。 */
-  function _adEmbedTemplate(){
-    const id = window.matchMedia('(max-width:640px)').matches ? 'ps-ad-embed-src-mobile' : 'ps-ad-embed-src-pc';
-    return document.getElementById(id);
-  }
-  // textContentでの判定はsrc属性だけの外部読み込み型scriptタグ(中身のテキストが空)
-  // で常にfalseになるため使わない。子ノードの有無で判定する。
-  const HAS_LOADING_AD = !!(_adEmbedTemplate()?.content?.childNodes?.length);
+  /** 軸2件以上（cache miss）はCloud Runの実CPU課金が発生するため、その計算待ちに出すAdSenseの広告枠。
+   * 枠が非表示のまま広告を読み込むと幅0で失敗するので、表示に切り替えて幅が確定してから読み込む。 */
   let _adLoaded = false;
-  function _ensureAdLoaded(){
+  function _ensureAdLoaded(tries){
     if (_adLoaded) return;
-    const src = _adEmbedTemplate();
     const slot = document.getElementById('ps-ad-slot');
-    const m = src?.innerHTML.match(/adm\.shinobi\.jp\/s\/([0-9a-f]{32})/);
-    if (!slot || !m) return;
-    // 管理画面の標準タグ(document.write型)はiframe(srcdoc)経由でしか動的に差し込めず、
-    // その場合AdMaxには「iframe内・非HTTPS(sc=0)・URL=about:srcdoc」と伝わって入札が
-    // 付きにくくなる。同じ枠IDで使える公式の非同期タグ(t.js)なら本体ページに直接置ける。
-    const unit = document.createElement('div');
-    unit.className = 'admax-ads ps-ad-unit';
-    unit.setAttribute('data-admax-id', m[1]);
-    slot.appendChild(unit);
-    (window.admaxads = window.admaxads || []).push({ admax_id: m[1], type: 'banner' });
-    const s = document.createElement('script');
-    s.src = 'https://adm.shinobi.jp/st/t.js';
-    s.async = true;
-    s.charset = 'utf-8';
-    document.body.appendChild(s);
+    if (!slot) return;
+    if (!slot.offsetWidth) {
+      if ((tries || 0) < 20) requestAnimationFrame(() => _ensureAdLoaded((tries || 0) + 1));
+      return;
+    }
+    const ins = document.createElement('ins');
+    ins.className = 'adsbygoogle ps-ad-unit';
+    ins.style.cssText = 'display:inline-block;width:300px;height:250px';
+    // IDはHTMLに出る公開値。is:inlineスクリプトからはフロントマターの定数を参照できないため直書きする
+    ins.setAttribute('data-ad-client', 'ca-pub-6144860227440327');
+    ins.setAttribute('data-ad-slot', '8319443257');
+    slot.appendChild(ins);
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { return; }
     _adLoaded = true;
+    // 在庫が無いとAdSenseが枠を高さ0に畳むため、「広告」のラベルだけが残らないようブロックごと隠す
+    setTimeout(() => {
+      if (ins.dataset.adStatus === 'unfilled') {
+        const el = document.getElementById('ps-ad-inline');
+        if (el) el.style.display = 'none';
+      }
+    }, 3000);
   }
   function showInlineAd(){
     const el = document.getElementById('ps-ad-inline');
     if (!el) return;
-    _ensureAdLoaded();
     el.style.display = '';
+    _ensureAdLoaded(0);
   }
   let _suggestAbort = null;
   let _suggestSeq = 0;
@@ -1633,7 +1611,7 @@ const I18N = I18N_ALL[lang];
     } else {
       out.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${I18N.calculating}</div></div>`;
     }
-    if(isLive && HAS_LOADING_AD){
+    if(isLive){
       showInlineAd();
       // モバイルではボタン位置のままだと広告が画面外になるため、広告+計算中表示を視界に入れる
       document.getElementById('ps-ad-inline').scrollIntoView({block:'start'});
