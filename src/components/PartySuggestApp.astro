@@ -268,92 +268,6 @@ const I18N = I18N_ALL[lang];
   .arch-lb{font-weight:700;font-size:.82rem;display:flex;flex-wrap:wrap;align-items:baseline;gap:.4em}
   .advbar{width:100px;height:12px;border-radius:6px;background:#eef2f7;overflow:hidden;display:inline-flex;vertical-align:middle}
   /* 選出ガイド */
-  .gd-req{margin-top:.7em;padding:.45em 1em;border:1.5px solid var(--accent);border-radius:8px;background:#eef2ff;color:var(--accent-dark,#3730a3);font-weight:700;font-size:.82rem;cursor:pointer;font-family:var(--font-atkinson)}
-  .gd-req:hover{background:#e0e7ff}
-  .gd-req:disabled{opacity:.5;cursor:wait}
-  .gd-req-done{margin-top:.6em;font-size:.8rem;color:#15803d !important}
-  /* 選出戦略の図 */
-  .sc-wrap{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:.8em .9em;margin:.6em 0 .8em}
-  .sc-hd{font-size:.75rem;font-weight:800;color:#0369a1;margin-bottom:.6em;letter-spacing:.03em}
-  .sc-trio{display:inline-flex;gap:2px;align-items:center;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:2px 4px}
-  .sc-trio.sc-opp{background:#fff7ed;border-color:#fed7aa}
-  .sc-ico{width:34px;height:34px;object-fit:contain}
-  .sc-big .sc-ico{width:44px;height:44px}
-  .sc-mini .sc-ico{width:22px;height:22px}
-  .sc-ico-s{width:24px;height:24px;object-fit:contain;vertical-align:-6px}
-  .sc-base{display:flex;align-items:center;gap:.7em;flex-wrap:wrap;background:#eef2ff;border:1.5px solid var(--accent);border-radius:10px;padding:.55em .7em}
-  .sc-tag{font-size:.68rem;font-weight:800;color:#fff;background:var(--accent);border-radius:9999px;padding:.15em .7em;white-space:nowrap}
-  .sc-meta{font-size:.82rem;color:#0f172a}
-  .sc-sub{font-size:.7rem;color:rgb(var(--gray));margin-top:1px}
-  .sc-branch-hd{font-size:.7rem;font-weight:800;color:rgb(var(--gray));margin:.8em 0 .35em}
-  .sc-concept{font-size:.85rem;line-height:1.6;color:#0f172a;background:#fff;border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:.5em .7em;margin-bottom:.6em}
-  .sc-rule{display:flex;align-items:center;gap:.6em;border:1px solid #e2e8f0;border-radius:8px;padding:.45em .6em;margin-bottom:.35em;background:#fff}
-  .sc-rule-cond{min-width:74px;text-align:center}
-  .sc-teams{display:flex;flex-direction:column;gap:3px}
-  .sc-team-ico{display:flex;gap:1px;background:#fff7ed;border:1px solid #fed7aa;border-radius:6px;padding:1px 2px}
-  .sc-ico-t{width:20px;height:20px;object-fit:contain}
-  .sc-rule2{border:1px solid #e2e8f0;border-radius:8px;padding:.5em .6em;margin-bottom:.4em;background:#fff}
-  .sc-summary{font-size:.85rem;font-weight:700;color:#0f172a;background:#eff6ff;border:1px solid #bfdbfe;border-radius:6px;padding:.4em .6em;margin-bottom:.5em}
-  .sc-rule-body{display:flex;align-items:center;gap:.6em;flex-wrap:wrap}
-  .sc-watch{font-size:.72rem;font-weight:800;color:#b91c1c;margin-bottom:.4em;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-  .sc-w{display:inline-flex;align-items:center;gap:2px;background:#fee2e2;border-radius:6px;padding:0 .35em;margin-left:2px;font-weight:700}
-  .sc-hi{display:inline-block;border:2px solid #ef4444;border-radius:5px;background:#fff;line-height:0}
-  .sc-dim{opacity:.32;line-height:0}
-  .sc-chips{display:flex;gap:4px;flex-wrap:wrap;margin-top:3px;align-items:center}
-  .sc-watch-n{color:#64748b;font-weight:700}
-  .sc-mode{font-size:.62rem;font-weight:700;border-radius:5px;padding:0 .3em;margin-left:3px;white-space:nowrap}
-  .sc-m-sp{background:#fee2e2;color:#b91c1c}
-  .sc-m-top{background:#b91c1c;color:#fff;font-weight:800}
-  .sc-m-di{background:#fef3c7;color:#92400e}
-  .sc-evb{font-weight:800;color:#0f172a;background:#f1f5f9;border-radius:5px;padding:0 .35em}
-  .sc-cmp{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin-top:4px;font-size:.72rem;font-weight:400;color:#0f172a}
-  .sc-note{font-size:.66rem;color:#64748b;font-weight:400;margin-top:2px}
-  .sc-mtrio{display:inline-flex;gap:1px;background:#fff;border:1px solid #e2e8f0;border-radius:5px;padding:1px 2px;vertical-align:middle}
-  .sc-m-nt{background:#f1f5f9;color:#64748b}
-  .sc-rule-act{flex:1;min-width:0}
-  .sc-typechip{display:inline-block;font-size:.7rem;font-weight:800;background:#f1f5f9;border:1px solid #cbd5e1;border-radius:8px;padding:.25em .5em;line-height:1.3}
-  table.sc-roles{width:100%;border-collapse:collapse;font-size:.78rem;background:#fff;border-radius:8px;overflow:hidden}
-  table.sc-roles th{font-size:.65rem;color:rgb(var(--gray));text-align:left;padding:.25em .5em;background:#f1f5f9}
-  table.sc-roles td{padding:.3em .5em;border-top:1px solid #f1f5f9;vertical-align:middle}
-  .sc-stbadge{font-size:.65rem;font-weight:800;border-radius:6px;padding:.1em .45em}
-  .sc-stb-core{background:#eef2ff;color:#3730a3}
-  .sc-stb-flex{background:#ecfccb;color:#4d7c0f}
-  .sc-stb-spot{background:#fef3c7;color:#92400e}
-  .sc-stb-bench{background:#f1f5f9;color:#64748b}
-  .sc-ex{margin-top:.6em}
-  .sc-ex summary{cursor:pointer;font-size:.75rem;color:#2563eb;font-weight:700}
-  .sc-branch{display:flex;align-items:center;gap:.6em;flex-wrap:wrap;border:1px solid #e2e8f0;border-radius:8px;padding:.5em .6em;margin-bottom:.4em;background:#fff}
-  .sc-col{display:flex;flex-direction:column;gap:2px}
-  .sc-lbl{font-size:.65rem;color:rgb(var(--gray));font-weight:700}
-  .sc-arr{color:var(--accent);font-weight:800;font-size:1rem}
-  .sc-arr2{color:#b45309;font-weight:800;margin:0 3px}
-  .sc-swap{font-size:.72rem;color:#b45309;margin-top:2px}
-  .sc-alt{font-size:.7rem;color:rgb(var(--gray));margin-top:2px;display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-  .sc-gain{background:#dcfce7;color:#15803d;font-weight:800;border-radius:6px;padding:0 .35em;font-size:.7rem}
-  .sc-spot{display:flex;align-items:center;gap:.55em;border:1px dashed #f59e0b;border-radius:8px;padding:.45em .6em;margin-bottom:.35em;background:#fffbeb;font-size:.82rem}
-  .sc-role{font-size:.68rem;color:#92400e;background:#fef3c7;border-radius:6px;padding:0 .35em;margin-left:.4em}
-  .sc-bench{margin-top:.5em;font-size:.78rem;color:rgb(var(--gray));display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-  .sc-caution{margin-top:.6em;font-size:.78rem;color:#b91c1c;background:#fef2f2;border-radius:8px;padding:.4em .6em;display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-  .sc-hard{background:#fff;border:1px solid #fecaca;border-radius:8px;padding:.5em .6em}
-  .sc-hard-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:.3em}
-  .sc-hard-lb{font-size:.68rem;font-weight:800;color:#b91c1c;min-width:96px}
-  .sc-bw{margin-top:.5em;display:flex;gap:.5em;flex-wrap:wrap;font-size:.75rem;font-weight:700}
-  .sc-good{background:#dcfce7;color:#15803d;border-radius:6px;padding:.15em .6em}
-  .sc-bad{background:#fee2e2;color:#b91c1c;border-radius:6px;padding:.15em .6em}
-  .gd-detail-wrap{margin-top:.5em}
-  .gd-detail-wrap summary{cursor:pointer;font-size:.78rem;color:#2563eb;font-weight:700}
-  .gd-names{font-size:.72rem;color:rgb(var(--gray));margin-top:2px}
-  .gd-det{margin-top:4px;font-size:.74rem}
-  .gd-det summary{cursor:pointer;color:#2563eb;font-size:.72rem}
-  .cnt-row{display:flex;align-items:center;gap:4px;flex-wrap:wrap;padding:.2em 0;border-bottom:1px dashed #f1f5f9}
-  .cnt-ico{width:20px;height:20px;object-fit:contain;vertical-align:-5px}
-  .cnt-wr{font-size:.7rem;font-weight:700;color:#334155}
-  .gd-band{font-size:.72rem;font-weight:800;padding:.1em .45em;border-radius:6px}
-  .gd-b-good{background:#dcfce7;color:#15803d}
-  .gd-b-ok{background:#ecfccb;color:#4d7c0f}
-  .gd-b-mid{background:#fef9c3;color:#a16207}
-  .gd-b-bad{background:#fee2e2;color:#b91c1c}
-  .gd-alt{flex-basis:100%;font-size:.72rem;color:#b45309;padding-left:1.2em}
   .sp-val{font-size:.56rem;font-weight:800;color:var(--accent);white-space:nowrap}
   table.mtx td.sp-cell,table.mtx td.mu-cell,table.mtx td.at-cell{cursor:pointer}
   table.mtx td.sp-cell:hover,table.mtx td.mu-cell:hover,table.mtx td.at-cell:hover{outline:2px solid var(--accent);outline-offset:-2px}
@@ -399,8 +313,6 @@ const I18N = I18N_ALL[lang];
   .advfill.adv-good{background:#16a34a}.advfill.adv-mid{background:#f59e0b}.advfill.adv-bad{background:#dc2626}
   .advtxt{font-weight:800;font-size:.82rem;margin-left:.4em;display:inline-block;vertical-align:middle}
   .advtxt.adv-good{color:#15803d}.advtxt.adv-mid{color:#b45309}.advtxt.adv-bad{color:#b91c1c}
-  .soon-box{text-align:center;padding:2em 1em;color:rgb(var(--gray))}
-  .soon-badge{display:inline-block;background:#eef2ff;color:#3730a3;font-weight:800;font-size:.9rem;border-radius:9999px;padding:.35em 1.1em;margin-bottom:.6em}
 
   /* 軸2件以上のライブ計算（cache miss）中だけ出す全画面広告ダイアログ。
    * pop-overlay(z-index:1000)より前面に出す必要があるため2000。 */
@@ -464,9 +376,9 @@ const I18N = I18N_ALL[lang];
       go: '提案する', close: '閉じる', noHit: '該当なし',
       itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
       selfVsOpp: '自分 ＼ 相手', selfVsAtk: '自分 ＼ 攻撃', selfVsHit: '自分 ＼ 被弾',
-      tabAtk: '攻撃相性', tabDef: '防御相性', tabMu: 'ポケモン相性', tabSpeed: '素早さ', tabArch: '想定パーティ相性', tabGuide: '選出ガイド', soon: '準備中',
+      tabAtk: '攻撃相性', tabDef: '防御相性', tabMu: 'ポケモン相性', tabSpeed: '素早さ', tabArch: '想定パーティ相性', tabGuide: '選出ガイド',
       suggestion: n => `提案 ${n}`, saveToBuilder: 'パーティ工房で保存・微調整',
-      muLegend: '複数の想定型を踏まえたポケモン単位の相性。◎有利 ○やや有利 △반반 ▲やや不利 ×不利。<b>*</b>＝型により有利不利が変化。<b>セルをクリックで判定根拠</b>（与被ダメ・確定数・素早さ）。',
+      muLegend: '複数の想定型を踏まえたポケモン単位の相性。◎有利 ○やや有利 △五分 ▲やや不利 ×不利。<b>*</b>＝型により有利不利が変化。<b>セルをクリックで判定根拠</b>（与被ダメ・確定数・素早さ）。',
       atkLegend: '各味方が<b>そのタイプを攻撃するときの最大倍率</b>。<b class="ao-good">×2</b>=抜群で通る <b class="ao-bad">½/0</b>=通りにくい。<b>セルをクリックで技別の倍率</b>。',
       defLegend: '各味方が<b>そのタイプ技を受けるときの被弾倍率</b>。<b class="df-w1">×2/×4</b>=弱点 <b class="df-r1">½以下</b>=半減 <b class="df-imm">0</b>=無効。受けの穴が一目で分かります。',
       speedLegend: '味方（左・素早さ順）が上位30体より速いか（スカーフ込み）。<b class="bg-cc">◎</b>＝相手の全型より速い <b class="bg-cn">△</b>＝型次第で前後 <b class="bg-cx">×</b>＝全型より遅い。<b>セルをクリックで相手型別Sの内訳</b>。',
@@ -475,36 +387,8 @@ const I18N = I18N_ALL[lang];
       elapsedSec: n => `経過 ${n}秒`,
       noArchData: '評価データがありません', archLegend: 'いくつかの構築に対してAI同士の対戦シミュレーションから想定勝率を算出。',
       thOpp: '対戦相手', thWr: '想定勝率', thRec: 'おすすめ選出',
-      guideEmptyMsg: 'この軸の選出ガイド（相手構築ごとのおすすめ3匹）はまだ計算されていません。',
-      guideReqBtn: 'この軸のガイド計算をリクエスト', guideReqDone: 'リクエストを受け付けました。数日以内に追加される予定です。',
-      guideDetSummary: 'この選出は相手のどの出し方に強い？', guideDetailWrap: '対戦相手ごとの詳細（参考）',
-      guideLegend: '<b>おすすめ選出</b>＝相手がどの3匹を出すか分からない前提で、期待勝率が最も高い3匹（AI対戦シミュレーション）。勝率は参考値です。',
-      vsRow: '相手が {opp} → この選出で {band}', altReadable: '↳ 読み切れるなら {mons} が有効',
-      bandGood: '◎ 有利', bandOk: '○ やや有利', bandMid: '△ 반반', bandBad: '× 危険',
-      scHd: '選出ガイド — このパーティの使い方', scBaseTag: '基本形',
-      scBaseSub: n => `迷ったらこの3匹（8構築中${n}構築で最善）`,
-      scTeamCond: '相手のチーム（見せ合い）にこれが見えたら',
-      chipMonIn: n => `${n}入り`, chipType2: n => `${n}タイプ2体以上`,
-      swapAdd: name => `<b>${name}</b> を入れる`, unseenAny: '実測ではどの相手にも選出されなかった',
-      watchNone: '実測ではどの選出でも同等（無理に替えなくてよい）',
-      refBase: '基本形', refAlt: '次点候補',
-      modeTop: (a,b) => `決め手 ${a}%→${b}%`, modeTieWith: r => `${r}と同等`,
-      modeDelta: (r,d) => `${r}より ${d>0?'+':''}${d}pt`, modeNoData: '比較データなし',
-      reasonSwap: (lost,gained,base,pick) => `この並びには ${lost} より ${gained} が機能する（${base}% → ${pick}%）`,
-      reasonAdopt: (base,pick) => `この並びには採用形の方が勝てる（${base}% → ${pick}%）`,
-      reasonCost: (opp,base,pick) => `。ただし相手が${opp}を出す形では逆に不利（${base}%→${pick}%）`,
-      reasonTie: 'AI対戦の実測では他の選出と差がつかない。無理に替える必要はない',
-      roleTable: '6匹の役割', roleColRole: '役割', roleColTurn: '出番', roleCore: '基本形', roleFlex: '入替枠', roleSpot: '刺し要員', roleBench: '控え', coreTag: '軸',
-      selRate: (n,N) => `選出率 ${Math.round(n/N*100)}%（${n}/${N}）`,
-      altExDetails: n => `実例：相手構築別の入れ替え（${n}件）`,
-      measGain: p => `実測 +${p}pt`, oppTeamLbl: n => `相手チーム ${n}`, thisTrioLbl: 'この3匹',
-      oftenSends: mons => `よく出すのは ${mons}`,
-      caution: (opp,opp3) => `⚠ ${opp} が ${opp3} と出す形は苦しい`, cautionAlt: alt => ` ／ 読み切れるなら ${alt}`,
-      hardOpp: '重い相手', hardMons: '苦手なポケモン', hardMonsSub: 'この駒が相手の選出に入ると勝率が落ちる',
-      hardTeams: '苦手な構築', hardTeamsSub: best => `最善を尽くしても不利。${best}`,
-      hardBestFor: (opp,trio) => `${opp}には ${trio} が最善`,
-      hardWhy: (opp,mons) => `${opp}は ${mons} の並びが特に厳しい`,
-      bwGood: (opp,pct) => `得意 ${opp} ${pct}`, bwBad: (opp,pct) => `警戒 ${opp} ${pct}`,
+      coreTag: '軸',
+      gdCalc: '計算中…（数秒かかります）',
       speedFaster: '抜ける', speedSlower: '抜かれる', speedEq: '同速',
       speedYou: name => `あなた（${name}）`,
       calculating: '計算中…', fetchFailed: '取得に失敗しました',
@@ -544,7 +428,7 @@ const I18N = I18N_ALL[lang];
       go: 'Suggest', close: 'Close', noHit: 'No matches',
       itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
       selfVsOpp: 'You ＼ Opponent', selfVsAtk: 'You ＼ Attacking', selfVsHit: 'You ＼ Taking hits',
-      tabAtk: 'Attack Matchup', tabDef: 'Defense Matchup', tabMu: 'Pokémon Matchup', tabSpeed: 'Speed', tabArch: 'Team Matchup', tabGuide: 'Selection Guide', soon: 'Coming soon',
+      tabAtk: 'Attack Matchup', tabDef: 'Defense Matchup', tabMu: 'Pokémon Matchup', tabSpeed: 'Speed', tabArch: 'Team Matchup', tabGuide: 'Selection Guide',
       suggestion: n => `Suggestion ${n}`, saveToBuilder: 'Save & fine-tune in Party Workshop',
       muLegend: 'Pokémon-level matchup across multiple assumed sets. ◎ favorable ○ slightly favorable △ even ▲ slightly unfavorable × unfavorable. <b>*</b> = favorability varies by set. <b>Click a cell for the reasoning</b> (damage dealt/taken, KO count, speed).',
       atkLegend: 'The <b>highest multiplier</b> each of your Pokémon gets when attacking that type. <b class="ao-good">×2</b> = super effective <b class="ao-bad">½/0</b> = doesn\'t hit well. <b>Click a cell for the per-move breakdown</b>.',
@@ -555,36 +439,8 @@ const I18N = I18N_ALL[lang];
       elapsedSec: n => `Elapsed ${n}s`,
       noArchData: 'No evaluation data available', archLegend: 'Estimated win rate from AI-vs-AI battle simulations against several team builds.',
       thOpp: 'Opponent', thWr: 'Est. win rate', thRec: 'Recommended picks',
-      guideEmptyMsg: 'The selection guide for this core (recommended trio per opposing team) hasn\'t been calculated yet.',
-      guideReqBtn: 'Request a guide for this core', guideReqDone: 'Request received — it will be added within a few days.',
-      guideDetSummary: 'Which opposing leads is this pick strong against?', guideDetailWrap: 'Details per opponent (reference)',
-      guideLegend: '<b>Recommended pick</b> = the 3 Pokémon with the highest expected win rate assuming you don\'t know the opponent\'s trio (AI battle simulation). Win rates are for reference only.',
-      vsRow: 'If opponent leads {opp} → this pick is {band}', altReadable: '↳ if you can read it, {mons} works too',
-      bandGood: '◎ Favorable', bandOk: '○ Slightly favorable', bandMid: '△ Even', bandBad: '× Risky',
-      scHd: 'Selection Guide — how to use this party', scBaseTag: 'Default',
-      scBaseSub: n => `When in doubt, use this trio (best in ${n} of 8 builds)`,
-      scTeamCond: 'When you see this in Team Preview',
-      chipMonIn: n => `Has ${n}`, chipType2: n => `2+ ${n}-type`,
-      swapAdd: name => `Bring in <b>${name}</b>`, unseenAny: 'Never picked against any opponent in testing',
-      watchNone: 'Testing shows no difference between picks (no need to change)',
-      refBase: 'the default', refAlt: 'the runner-up',
-      modeTop: (a,b) => `Key factor ${a}%→${b}%`, modeTieWith: r => `tied with ${r}`,
-      modeDelta: (r,d) => `${d>0?'+':''}${d}pt vs ${r}`, modeNoData: 'No comparison data',
-      reasonSwap: (lost,gained,base,pick) => `${gained} works better here than ${lost} (${base}% → ${pick}%)`,
-      reasonAdopt: (base,pick) => `The adopted set wins more here (${base}% → ${pick}%)`,
-      reasonCost: (opp,base,pick) => `. However it's worse if the opponent leads ${opp} (${base}%→${pick}%)`,
-      reasonTie: 'AI battle testing shows no measurable difference from the alternative pick — no need to switch',
-      roleTable: 'Roles of all 6', roleColRole: 'Role', roleColTurn: 'Usage', roleCore: 'Default', roleFlex: 'Flex slot', roleSpot: 'Situational', roleBench: 'Bench', coreTag: 'core',
-      selRate: (n,N) => `Picked ${Math.round(n/N*100)}% (${n}/${N})`,
-      altExDetails: n => `Examples: swaps by opposing build (${n})`,
-      measGain: p => `measured +${p}pt`, oppTeamLbl: n => `Opponent team ${n}`, thisTrioLbl: 'This trio',
-      oftenSends: mons => `Often leads with ${mons}`,
-      caution: (opp,opp3) => `⚠ Tough matchup vs ${opp} when they bring ${opp3}`, cautionAlt: alt => ` / If you can read it, ${alt} works`,
-      hardOpp: 'Tough opponents', hardMons: 'Tough Pokémon', hardMonsSub: 'Win rate drops when this Pokémon is in the opponent\'s pick',
-      hardTeams: 'Tough builds', hardTeamsSub: best => `Unfavorable even at your best. ${best}`,
-      hardBestFor: (opp,trio) => `Best pick vs ${opp} is ${trio}`,
-      hardWhy: (opp,mons) => `${opp}'s ${mons} lineup is especially tough`,
-      bwGood: (opp,pct) => `Strong vs ${opp} ${pct}`, bwBad: (opp,pct) => `Watch out for ${opp} ${pct}`,
+      coreTag: 'core',
+      gdCalc: 'Calculating… (takes a few seconds)',
       speedFaster: 'outspeeds', speedSlower: 'outsped', speedEq: 'tied',
       speedYou: name => `You (${name})`,
       calculating: 'Calculating…', fetchFailed: 'Failed to load',
@@ -624,7 +480,7 @@ const I18N = I18N_ALL[lang];
       go: '제안받기', close: '닫기', noHit: '검색 결과 없음',
       itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
       selfVsOpp: '나 ＼ 상대', selfVsAtk: '나 ＼ 공격', selfVsHit: '나 ＼ 피격',
-      tabAtk: '공격 상성', tabDef: '방어 상성', tabMu: '포켓몬 상성', tabSpeed: '스피드', tabArch: '예상 파티 상성', tabGuide: '선출 가이드', soon: '준비 중',
+      tabAtk: '공격 상성', tabDef: '방어 상성', tabMu: '포켓몬 상성', tabSpeed: '스피드', tabArch: '예상 파티 상성', tabGuide: '선출 가이드',
       suggestion: n => `제안 ${n}`, saveToBuilder: '파티 공방에서 저장·조정하기',
       muLegend: '여러 예상 타입을 고려한 포켓몬 단위 상성. ◎유리 ○약간유리 △반반 ▲약간불리 ×불리. <b>*</b>＝타입에 따라 유불리가 달라짐. <b>셀 클릭 시 판정 근거</b>（주는/받는 대미지·확정타·스피드）를 확인할 수 있습니다.',
       atkLegend: '각 아군이 <b>해당 타입을 공격할 때의 최대 배율</b>. <b class="ao-good">×2</b>=효과가 굉장함 <b class="ao-bad">½/0</b>=잘 통하지 않음. <b>셀 클릭 시 기술별 배율</b>을 확인할 수 있습니다.',
@@ -635,36 +491,8 @@ const I18N = I18N_ALL[lang];
       elapsedSec: n => `경과 ${n}초`,
       noArchData: '평가 데이터가 없습니다', archLegend: '여러 구성에 대해 AI 간 대전 시뮬레이션으로 예상 승률을 산출했습니다.',
       thOpp: '상대', thWr: '예상 승률', thRec: '추천 선출',
-      guideEmptyMsg: '이 축의 선출 가이드（상대 구성별 추천 3마리）는 아직 계산되지 않았습니다.',
-      guideReqBtn: '이 축의 가이드 계산 요청하기', guideReqDone: '요청이 접수되었습니다. 며칠 내로 추가될 예정입니다.',
-      guideDetSummary: '이 선출은 상대의 어떤 리드에 강할까요?', guideDetailWrap: '상대별 상세（참고용）',
-      guideLegend: '<b>추천 선출</b>＝상대가 어떤 3마리를 낼지 모른다는 전제로 기대 승률이 가장 높은 3마리（AI 대전 시뮬레이션）. 승률은 참고값입니다.',
-      vsRow: '상대가 {opp}를 리드하면 → 이 선출은 {band}', altReadable: '↳ 읽어낼 수 있다면 {mons}도 유효',
-      bandGood: '◎ 유리', bandOk: '○ 약간 유리', bandMid: '△ 반반', bandBad: '× 위험',
-      scHd: '선출 가이드 — 이 파티 활용법', scBaseTag: '기본형',
-      scBaseSub: n => `망설여진다면 이 3마리（8개 구성 중 ${n}개 구성에서 최선）`,
-      scTeamCond: '상대 팀（팀 프리뷰）에서 이게 보이면',
-      chipMonIn: n => `${n} 포함`, chipType2: n => `${n}타입 2마리 이상`,
-      swapAdd: name => `<b>${name}</b>를 넣는다`, unseenAny: '실측에서는 어떤 상대에게도 선출되지 않았습니다',
-      watchNone: '실측 결과 어떤 선출도 동등（무리해서 바꾸지 않아도 됨）',
-      refBase: '기본형', refAlt: '차점 후보',
-      modeTop: (a,b) => `결정적 요인 ${a}%→${b}%`, modeTieWith: r => `${r}와 동등`,
-      modeDelta: (r,d) => `${r}보다 ${d>0?'+':''}${d}pt`, modeNoData: '비교 데이터 없음',
-      reasonSwap: (lost,gained,base,pick) => `이 구성에서는 ${lost}보다 ${gained}가 더 잘 기능함（${base}% → ${pick}%）`,
-      reasonAdopt: (base,pick) => `이 구성에서는 채용형이 더 승리함（${base}% → ${pick}%）`,
-      reasonCost: (opp,base,pick) => `. 다만 상대가 ${opp}를 내는 형태에서는 오히려 불리함（${base}%→${pick}%）`,
-      reasonTie: 'AI 대전 실측으로는 다른 선출과 차이가 없습니다. 무리해서 바꿀 필요는 없습니다',
-      roleTable: '6마리의 역할', roleColRole: '역할', roleColTurn: '출전', roleCore: '기본형', roleFlex: '교체 슬롯', roleSpot: '핀치 요원', roleBench: '후보', coreTag: '축',
-      selRate: (n,N) => `선출률 ${Math.round(n/N*100)}%（${n}/${N}）`,
-      altExDetails: n => `실례: 상대 구성별 교체（${n}건）`,
-      measGain: p => `실측 +${p}pt`, oppTeamLbl: n => `상대 팀 ${n}`, thisTrioLbl: '이 3마리',
-      oftenSends: mons => `자주 내는 것은 ${mons}`,
-      caution: (opp,opp3) => `⚠ ${opp}가 ${opp3}를 내는 구성은 힘듭니다`, cautionAlt: alt => ` ／ 읽어낼 수 있다면 ${alt}`,
-      hardOpp: '까다로운 상대', hardMons: '까다로운 포켓몬', hardMonsSub: '이 포켓몬이 상대 선출에 들어가면 승률이 떨어짐',
-      hardTeams: '까다로운 구성', hardTeamsSub: best => `최선을 다해도 불리함. ${best}`,
-      hardBestFor: (opp,trio) => `${opp}에게는 ${trio}가 최선`,
-      hardWhy: (opp,mons) => `${opp}는 ${mons} 조합이 특히 까다로움`,
-      bwGood: (opp,pct) => `강한 상대 ${opp} ${pct}`, bwBad: (opp,pct) => `주의할 상대 ${opp} ${pct}`,
+      coreTag: '축',
+      gdCalc: '계산 중…（몇 초 걸립니다）',
       speedFaster: '이김', speedSlower: '당함', speedEq: '동속',
       speedYou: name => `당신（${name}）`,
       calculating: '계산 중…', fetchFailed: '가져오기에 실패했습니다',
@@ -798,6 +626,7 @@ const I18N = I18N_ALL[lang];
     const dn = tPoke(name);
     return u ? `<img class="${cls}" src="${u}" alt="${esc(dn)}" title="${esc(dn)}" onerror="this.style.display='none'">` : '';
   }
+  Object.assign(window, { __PS_LANG__: lang, __PS_ICO__: icoImg, __PS_TPOKE__: tPoke, __PS_ESC__: esc });
   function typeIco(move){
     const t = MOVET[move]; const e = t ? TYPEICON[t] : null;
     return e ? `<img class="tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${esc(t)}">` : '';
@@ -895,17 +724,14 @@ const I18N = I18N_ALL[lang];
     const st = res.stats ? `<div class="stats">${Object.entries(res.stats).filter(([k])=>!_skip[k]).map(([k,v])=>`<span><b>${esc(statLabel(k))}</b> ${esc(statValue(k,v))}</span>`).join('')}</div>` : '';
     const dt = res.details || {};
     const tm = dt.typematrix;
-    const arch = res.archetypes;
-    // 「想定パーティ相性」「選出ガイド」は価値を出せていないので一旦タブから外す（2026-09-14）。
-    // 折りたたみ内の詳細は提案の約2.5%しか開かれておらず、ガイドは計算依頼ボタンが30日で115件。
-    // 描画関数(archetypeHtml/guideHtml)と paneHtml の分岐は残してあるので、
-    // 下の2行を戻せば復活する。再考のうえ設計し直す。
+    // 「想定パーティ相性」は 2026-09-14 に外したまま。選出ガイドは学習選出・よくある構築で作り直して復活（2026-10）。
     // (S18) 初期タブは攻撃相性→ポケモン相性。パーティの穴が最初に見えるタブを優先する(工房のB16と同じ判断)。
     const tbar = `<div class="tabbar">
         <button class="tb" data-i="${i}" data-t="atktype">${I18N.tabAtk}</button>
         <button class="tb" data-i="${i}" data-t="deftype">${I18N.tabDef}</button>
         <button class="tb active" data-i="${i}" data-t="mu">${I18N.tabMu}</button>
         <button class="tb" data-i="${i}" data-t="speed">${I18N.tabSpeed}</button>
+        <button class="tb" data-i="${i}" data-t="guide">${I18N.tabGuide}</button>
       </div>`;
     const collapsed = i !== 0;
     // (S01) 「工房で保存・微調整」はアコーディオンの開閉トグル(.sug-toggle)の外、.sug-body末尾に置く。
@@ -963,160 +789,26 @@ const I18N = I18N_ALL[lang];
     return `<div class="mtx-legend"><span>${I18N.archLegend}</span></div>
       <table class="dtl arch"><tr><th>${I18N.thOpp}</th><th>${I18N.thWr}</th></tr>${rows}</table>`;
   }
-  function guideHtml(res){
-    const g = res.guide;
-    if(!g||!g.length) return `<div class="soon-box"><div class="soon-badge">${I18N.soon}</div><div class="muted">${I18N.guideEmptyMsg}</div>
-      <button class="gd-req">${I18N.guideReqBtn}</button>
-      <div class="gd-req-done muted" style="display:none">${I18N.guideReqDone}</div></div>`;
-    const rows = g.slice().sort((x,y)=>y.wr-x.wr).map(x=>{
-      const pct = Math.round(x.wr*100);
-      const cls = pct>=55?'adv-good':pct<45?'adv-bad':'adv-mid';
-      const opp = (x.opp||[]).map(n=>icoImg(n,'dtl-ico')).join('');
-      const rec = (x.recommend||[]).map(n=>icoImg(n,'dtl-ico')).join('');
-      const recNames = (x.recommend||[]).map(n=>esc(tPoke(n))).join(' / ');
-      const band = w => w>=0.75?[I18N.bandGood,'gd-b-good']:w>=0.6?[I18N.bandOk,'gd-b-ok']:w>=0.4?[I18N.bandMid,'gd-b-mid']:[I18N.bandBad,'gd-b-bad'];
-      const vsRows = (x.vs||[]).map(v=>{
-        const [bl,bc]=band(v.wr??1);
-        const alt = v.alt?`<div class="gd-alt">${I18N.altReadable.replace('{mons}',(v.alt.my3||[]).map(n=>icoImg(n,'cnt-ico')).join(''))}</div>`:'';
-        return `<div class="cnt-row">${I18N.vsRow.replace('{opp}',(v.opp3||[]).map(n=>icoImg(n,'cnt-ico')).join('')).replace('{band}',`<span class="gd-band ${bc}">${bl}</span>`)}${alt}</div>`;
-      }).join('');
-      return `<tr>
-        <td><div class="arch-lb">${esc(tArchLabel(x.label))}</div><div class="dtl-mem">${opp}</div></td>
-        <td><div class="dtl-mem">${rec}</div><div class="gd-names">${recNames}</div>${vsRows?`<details class="gd-det"><summary>${I18N.guideDetSummary}</summary>${vsRows}</details>`:''}</td>
-        <td><div class="advbar"><div class="advfill ${cls}" style="width:${pct}%"></div></div><div class="advtxt ${cls}">${pct}%</div></td></tr>`;
-    }).join('');
-    return `${strategyChart(res.strategy)}
-      <details class="gd-detail-wrap"><summary>${I18N.guideDetailWrap}</summary>
-      <div class="mtx-legend"><span>${I18N.guideLegend}</span></div>
-      <table class="dtl arch gd"><tr><th>${I18N.thOpp}</th><th>${I18N.thRec}</th><th>${I18N.thWr}</th></tr>${rows}</table></details>`;
+  const guideBody = g => window.__guideBody(g, legendBox);
+  function loadGuide(res, i){
+    if(res._guideP) return;
+    res._guideP = fetch(API+'/guide',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({specs:res.specs})})
+      .then(r=>r.json())
+      .then(d=>{ if(!d || d.error || !d.members) throw new Error(d && d.error); res._guide = d; return true; })
+      .catch(()=>false)
+      .then(ok=>{
+        if(!ok) res._guideP = null;
+        const tb = document.querySelector(`.tb.active[data-i="${i}"]`), pane = document.getElementById('pane-'+i);
+        if(LAST[i]!==res || !tb || tb.dataset.t!=='guide' || !pane) return;
+        pane.innerHTML = ok ? guideBody(res._guide) : `<div class="muted">${I18N.fetchFailed}</div>`;
+        syncLegendOpen();
+      });
   }
-  function strategyChart(s){
-    if(!s||!s.base) return '';
-    const trio = (arr,cls='')=>`<div class="sc-trio ${cls}">${(arr||[]).map(n=>`<span class="sc-mon" title="${esc(tPoke(n))}">${icoImg(n,'sc-ico')}</span>`).join('')}</div>`;
-    const pct = w=>Math.round((w||0)*100)+'%';
-    const b = s.base;
-    let html = `<div class="sc-wrap"><div class="sc-hd">${I18N.scHd}</div>`;
-    if(s.concept) html += `<div class="sc-concept">${esc(s.concept)}</div>`;
-    html += `<div class="sc-base"><div class="sc-tag">${I18N.scBaseTag}</div>${trio(b.trio,'sc-big')}
-      <div class="sc-meta"><b>${I18N.thWr} ${pct(b.wr)}</b><div class="sc-sub">${I18N.scBaseSub((b.opps||[]).length)}</div></div></div>`;
-    if((s.rules||[]).length){
-      html += `<div class="sc-branch-hd">${I18N.scTeamCond}</div>`;
-      html += s.rules.map(ru=>{
-        // 軸ポケモン：勝率の微差検定（decisive/tie）ではなく、実測で選出された構築を直接示す。
-        // 8構築程度のサンプルでは勝率の細かい優劣より「活きる場」を示す方が頑健で誤解を招かない。
-        if(ru.core){
-          let condChip = '';
-          if(ru.cond && ru.cond.kind==='mon') condChip = `<span class="sc-typechip">${I18N.chipMonIn(esc(tPoke(ru.cond.value)))}</span>`;
-          else if(ru.cond && ru.cond.kind==='type') condChip = `<span class="sc-typechip">${I18N.chipType2(esc(ru.cond.value))}</span>`;
-          else if(ru.cond && ru.cond.kind==='trait') condChip = `<span class="sc-typechip">${esc(ru.cond.label)}</span>`;
-          const sel = (ru.selected||[]).map(a=>`<div class="sc-team"><div class="sc-team-ico">${(a.names||[]).map(n=>icoImg(n,'sc-ico-t')).join('')}</div>
-            <div class="sc-sub">${esc(tArchLabel(a.opp))}</div></div>`).join('');
-          return `<div class="sc-rule2">
-            <div class="sc-summary">${esc(ru.summary)}</div>
-            <div class="sc-rule-body">
-              <div class="sc-teams">${sel || `<div class="sc-sub muted">${I18N.unseenAny}</div>`}</div>
-              <div class="sc-arr">▶</div>
-              <div class="sc-rule-act"><div class="sc-swap">${icoImg(ru.mon,'sc-ico-s')} <b>${esc(tPoke(ru.mon))}</b>${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(r=>esc(tRole(r))).join('・')}</span>`:''}（${I18N.coreTag}）</div><div class="sc-chips">${condChip}</div></div>
-            </div>
-          </div>`;
-        }
-        const evd = ru.evidence;
-        const refName = e => (e && e.ref==='base') ? I18N.refBase : I18N.refAlt;
-        const watchHd = (!evd)
-          ? `<div class="sc-watch sc-watch-n">${I18N.watchNone}</div>` : '';
-        const teams = (ru.teams||[]).map(t=>{
-          const hi = new Set(t.hi||[]);
-          const dim = t.mode==='decisive';
-          const ev = t.ev;
-          const isTop = evd && t.opp===evd.opp && ev && ev.key;
-          let badge;
-          if(isTop){
-            badge = `<span class="sc-mode sc-m-top">${I18N.modeTop(Math.round(ev.key.base*100),Math.round(ev.key.pick*100))}</span>`;
-          } else if(ev){
-            badge = ev.tie ? `<span class="sc-mode sc-m-nt">${I18N.modeTieWith(refName(ev))}</span>`
-                      : `<span class="sc-mode sc-m-sp">${I18N.modeDelta(refName(ev),Math.round(ev.delta*100))}</span>`;
-          } else {
-            badge = `<span class="sc-mode sc-m-nt">${I18N.modeNoData}</span>`;
-          }
-          return `<div class="sc-team"><div class="sc-team-ico">${(t.names||[]).map(n=>
-            `<span class="${hi.has(n)?'sc-hi':(dim?'sc-dim':'')}">${icoImg(n,'sc-ico-t')}</span>`).join('')}</div>
-            <div class="sc-sub">${esc(tArchLabel(t.opp))} ${badge}</div></div>`;
-        }).join('');
-        let condChip = '';
-        if(ru.cond && ru.cond.kind==='mon') condChip = `<span class="sc-typechip">${I18N.chipMonIn(esc(tPoke(ru.cond.value)))}</span>`;
-        else if(ru.cond && ru.cond.kind==='type') condChip = `<span class="sc-typechip">${I18N.chipType2(esc(ru.cond.value))}</span>`;
-        else if(ru.cond && ru.cond.kind==='trait') condChip = `<span class="sc-typechip">${esc(ru.cond.label)}</span>`;
-        let reason = '';
-        if(evd){
-          const rt = evd.ref_trio||[], tr = evd.trio||[];
-          const gained = tr.filter(n=>!rt.includes(n)), lost = rt.filter(n=>!tr.includes(n));
-          reason = (gained.length && lost.length)
-            ? I18N.reasonSwap(lost.map(n=>esc(tPoke(n))).join('・'), gained.map(n=>esc(tPoke(n))).join('・'), Math.round(evd.base*100), Math.round(evd.pick*100))
-            : I18N.reasonAdopt(Math.round(evd.base*100), Math.round(evd.pick*100));
-          if(evd.cost) reason += I18N.reasonCost((evd.cost.opp3||[]).map(n=>esc(tPoke(n))).join('・'), Math.round(evd.cost.base*100), Math.round(evd.cost.pick*100));
-        } else if(ru.explain==='tie'){
-          reason = I18N.reasonTie;
-        } else if(ru.why) reason = ru.why;
-        reason = reason ? `<div class="sc-sub">${reason}</div>` : '';
-        const swap = ru.out ? `${icoImg(ru.out,'sc-ico-s')}<span class="sc-arr2">→</span>${icoImg(ru.mon,'sc-ico-s')}` : icoImg(ru.mon,'sc-ico-s');
-        return `<div class="sc-rule2">
-          ${ru.summary?`<div class="sc-summary">${esc(ru.summary)}</div>`:''}
-          ${watchHd}
-          <div class="sc-rule-body">
-            <div class="sc-teams">${teams}</div>
-            <div class="sc-arr">▶</div>
-            <div class="sc-rule-act"><div class="sc-swap">${swap} ${I18N.swapAdd(esc(tPoke(ru.mon)))}${(ru.roles||[]).length?`<span class="sc-role">${ru.roles.map(r=>esc(tRole(r))).join('・')}</span>`:''}</div>${reason}<div class="sc-chips">${condChip}</div></div>
-          </div>
-        </div>`;
-      }).join('');
-    }
-    if((s.role_table||[]).length){
-      const stLbl = {core:I18N.roleCore, flex:I18N.roleFlex, spot:I18N.roleSpot, bench:I18N.roleBench};
-      html += `<div class="sc-branch-hd">${I18N.roleTable}</div><table class="sc-roles"><tr><th></th><th>${I18N.roleColRole}</th><th>${I18N.roleColTurn}</th></tr>` +
-        s.role_table.map(rt=>`<tr class="sc-st-${rt.status}">
-          <td>${icoImg(rt.mon,'sc-ico-s')} ${esc(tPoke(rt.mon))}</td>
-          <td>${(rt.roles||[]).map(r=>esc(tRole(r))).join('・')||'-'}</td>
-          <td><span class="sc-stbadge sc-stb-${rt.status}">${stLbl[rt.status]||''}</span> <span class="sc-sub">${I18N.selRate(rt.n,rt.N)}</span></td>
-        </tr>`).join('') + `</table>`;
-    }
-    if((s.alts||[]).length){
-      html += `<details class="sc-ex"><summary>${I18N.altExDetails(s.alts.length)}</summary>` +
-        s.alts.map(a=>{
-          const gain = (a.delta!=null) ? `<span class="sc-gain">${I18N.measGain(Math.round(a.delta*100))}</span>` : '';
-          const swap = (a.out&&a.in&&a.out.length&&a.in.length)
-            ? `<div class="sc-swap">${a.out.map(n=>icoImg(n,'sc-ico-s')).join('')}<span class="sc-arr2">→</span>${a.in.map(n=>icoImg(n,'sc-ico-s')).join('')}</div>` : '';
-          const altline = a.alt_trio ? `<div class="sc-alt">${I18N.refAlt} ${trio(a.alt_trio,'sc-mini')} ${pct(a.alt_wr)} ${gain}</div>` : '';
-          return `<div class="sc-branch">
-            <div class="sc-col"><div class="sc-lbl">${I18N.oppTeamLbl(esc(tArchLabel(a.opp)))}</div>${trio(a.team&&a.team.length?a.team:a.opp3,'sc-opp sc-mini')}<div class="sc-sub">${I18N.oftenSends((a.opp3||[]).map(n=>esc(tPoke(n))).join('・'))}</div></div>
-            <div class="sc-arr">▶</div>
-            <div class="sc-col"><div class="sc-lbl">${I18N.thisTrioLbl}</div>${trio(a.trio)}<div class="sc-meta"><b>${pct(a.wr)}</b></div>${swap}${altline}</div>
-          </div>`;
-        }).join('') + `</details>`;
-    }
-    if(s.caution){
-      const alt = s.caution.alt?I18N.cautionAlt(trio(s.caution.alt,'sc-mini')):'';
-      html += `<div class="sc-caution">${I18N.caution(esc(tArchLabel(s.caution.opp)), trio(s.caution.opp3,'sc-mini'))}${alt}</div>`;
-    }
-    if(s.hard && ((s.hard.teams||[]).length || (s.hard.mons||[]).length)){
-      html += `<div class="sc-branch-hd">${I18N.hardOpp}</div><div class="sc-hard">`;
-      if((s.hard.mons||[]).length){
-        html += `<div class="sc-hard-row"><span class="sc-hard-lb">${I18N.hardMons}</span>` +
-          s.hard.mons.map(m=>`<span class="sc-w">${icoImg(m.mon,'sc-ico-s')}${esc(tPoke(m.mon))} <b>${pct(m.wr)}</b></span>`).join('') +
-          `<div class="sc-sub">${I18N.hardMonsSub}</div></div>`;
-      }
-      if((s.hard.teams||[]).length){
-        const whyRows = s.hard.teams.filter(t=>t.why&&t.why.length).map(t=>
-          `<div class="sc-sub">${I18N.hardWhy(esc(tArchLabel(t.opp)), t.why.map(n=>`<span class="sc-w">${icoImg(n,'sc-ico-s')}${esc(tPoke(n))}</span>`).join(''))}</div>`).join('');
-        html += `<div class="sc-hard-row"><span class="sc-hard-lb">${I18N.hardTeams}</span>` +
-          s.hard.teams.map(t=>`<span class="sc-w">${esc(tArchLabel(t.opp))} <b>${pct(t.wr)}</b></span>`).join('') +
-          `<div class="sc-sub">${I18N.hardTeamsSub(s.hard.teams[0]?I18N.hardBestFor(esc(tArchLabel(s.hard.teams[0].opp)), trio(s.hard.teams[0].trio,'sc-mini')):'')}</div>${whyRows}</div>`;
-      }
-      html += `</div>`;
-    }
-    if(s.best&&s.worst){
-      html += `<div class="sc-bw"><span class="sc-good">${I18N.bwGood(esc(tArchLabel(s.best.opp)), pct(s.best.wr))}</span><span class="sc-bad">${I18N.bwBad(esc(tArchLabel(s.worst.opp)), pct(s.worst.wr))}</span></div>`;
-    }
-    return html + `</div>`;
+  function guideHtml(res, i){
+    if(res._guide) return guideBody(res._guide);
+    if(!res.specs || !res.specs.length) return `<div class="muted">${I18N.fetchFailed}</div>`;
+    loadGuide(res, i);
+    return `<div class="muted gd-wait">${I18N.gdCalc}</div>`;
   }
   const SPSYM = {win:'◎', may:'△', lose:'×'};
   function speedHtml(res){
@@ -1135,7 +827,7 @@ const I18N = I18N_ALL[lang];
     if(t==='mu') return matchupHtml(res);
     if(t==='speed') return speedHtml(res);
     if(t==='arch') return archetypeHtml(res);
-    if(t==='guide') return guideHtml(res);
+    if(t==='guide') return guideHtml(res, i);
     return attackTypeHtml(res);
   }
 
@@ -1261,7 +953,6 @@ const I18N = I18N_ALL[lang];
     const sc=e.target.closest('.sp-cell'); if(sc){ openDetail(sc,'speed_detail'); return; }
     const mc=e.target.closest('.mu-cell'); if(mc){ openDetail(mc,'matchup_detail'); return; }
     const ac=e.target.closest('.at-cell'); if(ac){ openAtkDetail(ac); return; }
-    const gr=e.target.closest('.gd-req'); if(gr){ requestGuide(gr); return; }
     const ib=e.target.closest('.ps-import-btn'); if(ib){ handleImportToBuilder(ib); return; }
     const hd=e.target.closest('.sug-toggle'); if(hd){ toggleSug(hd); return; }
   });
@@ -1276,15 +967,6 @@ const I18N = I18N_ALL[lang];
     try{ localStorage.setItem('pn-builder-import', JSON.stringify({name, specs: res.specs})); }
     catch(e){ /* localStorage不可時は遷移のみ行う(工房側で無視される) */ }
     location.href = pfx + '/party-builder';
-  }
-  async function requestGuide(btn){
-    btn.disabled = true;
-    try{
-      const core = CORE.map(p=>({sp:p.sp, mega:p.mega}));
-      await fetch(API+'/guide_request',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({core})});
-      btn.style.display='none';
-      const d = btn.parentElement.querySelector('.gd-req-done'); if(d) d.style.display='block';
-    }catch(_){ btn.disabled=false; }
   }
 
   let LAST = [];
@@ -1713,6 +1395,9 @@ const I18N = I18N_ALL[lang];
   import { renderMatchupTable } from '../scripts/party-builder/matchup-table';
   import '../styles/matchup-table.css';
   window.__mtTable = (vm, lang) => renderMatchupTable(vm, lang);
+  import { guideBody } from '../scripts/party-builder/diag-shared';
+  import '../styles/select-guide.css';
+  window.__guideBody = (g, legend) => guideBody(g, { lang: window.__PS_LANG__, ico: window.__PS_ICO__, tPoke: window.__PS_TPOKE__, esc: window.__PS_ESC__, legend });
   // (C03) 横スクロールヒント(.mg-wrap)は工房(PartyBuilderApp.astro)と共有する実装に切り出した。
   import { mgWrapHtml, initMgHints } from '../scripts/party-builder/mg-hints';
   window.__mgWrapHtml = mgWrapHtml;

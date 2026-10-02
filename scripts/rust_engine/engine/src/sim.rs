@@ -11,7 +11,7 @@ use crate::cpyrng::CpyRandom;
 use crate::damage::Field;
 use crate::interner::Sym;
 use crate::pack::{Pack, Ty};
-use crate::poke::{build_poke_rand, Poke};
+use crate::poke::{build_poke, build_poke_rand, Poke};
 
 pub type PvEntry = (Sym, Ty, Option<Ty>, Ty, Option<Ty>);
 
@@ -164,6 +164,54 @@ pub fn belief_probe_take() -> Vec<ProbeRow> {
 }
 
 /// `_greedy_3v3(pa, sa, pb, sb, seed) -> 1/2/0`
+/// 選出ガイドの集計（_select_guide.per_opp と同じ考え方）: 相手ごとに 自分の学習選出（温度0）と、
+/// それ vs 相手の選出（相手側の学習選出の値から温度1で抽選）を先後交互に k 戦した貪欲AIの勝率（引き分け0.5）。
+/// 戻り: 相手ごとに (自分の選出の添字の並び＝先頭がリード, 勝率)。選べない相手は空の並び
+#[allow(clippy::too_many_arguments)]
+pub fn guide_rows(
+    pack: &mut Pack,
+    ft: &crate::features::FeatTables,
+    sel: &crate::selector::Selector,
+    specs: &[String],
+    opps: &[Vec<String>],
+    season: &str,
+    k: usize,
+    seed: i128,
+) -> Vec<(Vec<usize>, f64)> {
+    let a6: Vec<Poke> = specs.iter().map(|s| build_poke(pack, s, season)).collect();
+    let mut out = Vec::with_capacity(opps.len());
+    for (j, op) in opps.iter().enumerate() {
+        let b6: Vec<Poke> = op.iter().map(|s| build_poke(pack, s, season)).collect();
+        let jj = seed + 7919 * j as i128;
+        let mut g = crate::cpyrng::CpyRandom::new(jj);
+        let mut s1 = crate::cpyrng::CpyRandom::new(jj + 1);
+        let mut s2 = crate::cpyrng::CpyRandom::new(jj + 2);
+        let mut r = crate::cpyrng::CpyRandom::new(jj + 3);
+        let mut pc = crate::selector::PairCache::default();
+        let (mut a, mut b) = (a6.clone(), b6.clone());
+        let packr: &Pack = pack;
+        let (mc, mv) = crate::selector::select_scores(packr, ft, sel, &mut a, &mut b, 3, &mut g, &mut s1, &mut pc, true);
+        let (mut a, mut b) = (a6.clone(), b6.clone());
+        let (oc, ov) = crate::selector::select_scores(packr, ft, sel, &mut b, &mut a, 3, &mut g, &mut s2, &mut pc, false);
+        if mc.is_empty() || oc.is_empty() {
+            out.push((Vec::new(), 0.5));
+            continue;
+        }
+        let bi = (0..mv.len()).fold(0, |b, i| if mv[i] > mv[b] { i } else { b });
+        let my = mc[bi].clone();
+        let mut w = 0.0;
+        for gi in 0..k {
+            let ob = &oc[crate::selector::softmax_pick(&ov, 1.0, r.random())];
+            let sd = jj + 1000 + gi as i128;
+            let res = if gi % 2 == 0 { greedy_3v3(pack, specs, &my, op, ob, season, sd) } else { greedy_3v3(pack, op, ob, specs, &my, season, sd) };
+            let (win, lose) = if gi % 2 == 0 { (1, 2) } else { (2, 1) };
+            w += if res == win { 1.0 } else if res == lose { 0.0 } else { 0.5 };
+        }
+        out.push((my, if k > 0 { w / k as f64 } else { 0.5 }));
+    }
+    out
+}
+
 pub fn greedy_3v3(
     pack: &mut Pack,
     pa: &[String],
@@ -933,6 +981,7 @@ pub fn learned_select_states(
     min_mega: usize,
     max_mega: usize,
     state: &[u32],
+    osels_in: Option<&[Vec<usize>]>,
 ) -> (Vec<Vec<usize>>, Vec<Vec<usize>>, Vec<f64>, usize, Vec<u32>) {
     let mut a6: Vec<Poke> = specs_a.iter().map(|s| crate::poke::build_poke(pack, s, season)).collect();
     let mut b6: Vec<Poke> = specs_b.iter().map(|s| crate::poke::build_poke(pack, s, season)).collect();
@@ -942,7 +991,14 @@ pub fn learned_select_states(
     // 相手の仮定: ヒューリスティック選出の温度0＋温度1×2（Python の select_party_multi と同じ順・同じ乱数）
     let mut osels: Vec<Vec<usize>> = Vec::with_capacity(3);
     let nb = n.min(b6.len());
+    // osels_in: 相手の仮定を外から渡す（SEL_OPP_ASSUME=learned で Python が相手の学習選出から作る）。乱数は消費しない
+    if let Some(o) = osels_in {
+        osels = o.to_vec();
+    }
     for t in [0.0, 1.0, 1.0] {
+        if osels_in.is_some() {
+            break;
+        }
         let mut sr = SharedRng(&cell);
         let mut srng = || cell.borrow_mut().random();
         osels.push(crate::ai::select_party(packr, &mut b6, &mut a6, nb, t, pen, &mut sr, &mut srng));
@@ -993,4 +1049,110 @@ pub fn learned_select_states(
     }
     let st = cell.into_inner().state();
     (cands, osels, xs, dim, st)
+}
+
+/// 記録用の行動（kind 0=技/1=交代/2=メガ/3=パス, 技名, move_idx, switch_to, do_mega）
+pub type ActRec = (u8, String, i64, i64, bool);
+/// 各ターン終了時の要約（turn, 側ごとに (場の添字, [(名前, HP, 最大HP, 状態異常)])）
+pub type SideSum = (usize, Vec<(String, i64, i64, String)>);
+pub type TurnSum = (i64, [SideSum; 2]);
+/// 各手番の (turn, [側1, 側2], 行動を選び終えた直後の対戦の乱数の状態)
+pub type DecRec = (i64, [ActRec; 2], Vec<u32>);
+
+fn act_rec(pack: &Pack, a: &crate::battle::Action) -> ActRec {
+    use crate::battle::ActKind;
+    let k = match a.kind {
+        ActKind::Move => 0,
+        ActKind::Switch => 1,
+        ActKind::Mega => 2,
+        ActKind::Pass => 3,
+    };
+    let mv = a.mv.as_ref().map(|m| pack.intern.resolve(m.name).to_string()).unwrap_or_default();
+    (k, mv, a.move_idx, a.switch_to, a.do_mega)
+}
+
+fn side_sum(pack: &Pack, s: &Side) -> SideSum {
+    let ps = s
+        .party
+        .iter()
+        .map(|p| {
+            let st = p.status.map(|x| pack.intern.resolve(x).to_string()).unwrap_or_default();
+            (pack.intern.resolve(p.name).to_string(), p.hp, p.max_hp, st)
+        })
+        .collect();
+    (s.active_idx, ps)
+}
+
+/// 観戦記録用: mcts_3v3 と同じ両者MCTSの対戦を回し、各手番の行動と乱数の状態・各ターンの要約を返す。
+/// 選出は渡された並びのまま（先頭がリード）。state を渡すと、6体の生成後に対戦の乱数をその状態へ置き換える
+/// （Python 側で生成→選出まで進めた random の状態を引き継ぎ、Python の対戦エンジンで同じ乱数のまま再生するため）。
+#[allow(clippy::too_many_arguments)]
+pub fn mcts_3v3_record(
+    pack: &mut Pack,
+    net: &NetW,
+    pa: &[String],
+    sa: &[usize],
+    pb: &[String],
+    sb: &[usize],
+    season: &str,
+    seed: i128,
+    sims: usize,
+    state: Option<&[u32]>,
+) -> (i64, Vec<DecRec>, Vec<TurnSum>) {
+    let mut rng0 = CpyRandom::new(seed);
+    let mut a6: Vec<Poke> = Vec::with_capacity(pa.len());
+    for s in pa {
+        let mut r: Option<&mut dyn crate::rng::BRng> = Some(&mut rng0);
+        a6.push(build_poke_rand(pack, s, season, &mut r));
+    }
+    let mut b6: Vec<Poke> = Vec::with_capacity(pb.len());
+    for s in pb {
+        let mut r: Option<&mut dyn crate::rng::BRng> = Some(&mut rng0);
+        b6.push(build_poke_rand(pack, s, season, &mut r));
+    }
+    if let Some(st) = state {
+        rng0 = CpyRandom::from_state(st);
+    }
+    let p1: Vec<Poke> = sa.iter().map(|&i| a6[i].clone()).collect();
+    let p2: Vec<Poke> = sb.iter().map(|&i| b6[i].clone()).collect();
+    let pv1 = if b6.len() > p2.len() { preview_of(&b6) } else { preview_of(&p2) };
+    let pv2 = if a6.len() > p1.len() { preview_of(&a6) } else { preview_of(&p1) };
+    let n6a: Vec<Sym> = a6.iter().map(|p| p.name).collect();
+    let n6b: Vec<Sym> = b6.iter().map(|p| p.name).collect();
+    let s1 = Side { party: p1, active_idx: 0, source6_names: n6a, ..Default::default() };
+    let s2 = Side { party: p2, active_idx: 0, source6_names: n6b, ..Default::default() };
+    let mut b = Battle::new(s1, s2, Field::default());
+    let cell = std::cell::RefCell::new(rng0);
+    {
+        let packr: &Pack = pack;
+        b.start(packr, &pv1, &pv2);
+    }
+    crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(belief_season()));
+    crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(belief_season()));
+    let packr: &Pack = pack;
+    let mut ai1 = SearchAI::new(packr, belief_season(), seed, sims);
+    let mut ai2 = SearchAI::new(packr, belief_season(), seed ^ 0x5bd1e995, sims);
+    let mut decs: Vec<DecRec> = Vec::new();
+    let mut sums: Vec<TurnSum> = Vec::new();
+    let mut sr = SharedRng(&cell);
+    let result = b.run_loop(
+        packr,
+        &mut sr,
+        |bt, rng| {
+            let mut out: [crate::battle::Action; 2] = [Default::default(), Default::default()];
+            for sx in 0..2usize {
+                let mut bl = bt.sides[sx].belief.0.take().unwrap();
+                let ai: &mut SearchAI = if sx == 0 { &mut ai1 } else { &mut ai2 };
+                let a = ai.choose(packr, net, &mut bt.sides, sx, &mut bt.field, &mut bl, rng);
+                bt.sides[sx].belief.0 = Some(bl);
+                let precise = ai.ko_precise;
+                let (me, op) = crate::battle::split2(&mut bt.sides, sx);
+                out[sx] = crate::ai::certain_ko_override_opt(packr, a, me, op, &mut bt.field, rng, precise);
+            }
+            decs.push((bt.turn, [act_rec(packr, &out[0]), act_rec(packr, &out[1])], cell.borrow().state()));
+            out
+        },
+        |bt| sums.push((bt.turn, [side_sum(packr, &bt.sides[0]), side_sum(packr, &bt.sides[1])])),
+    );
+    (result, decs, sums)
 }

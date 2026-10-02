@@ -5860,6 +5860,87 @@ check("学習選出の高速版: 既定（高速版）と SEL_FAST=0（元の実
       f"{_dflt26o} / {_ref26o}")
 
 
+print("\n=== 26p. 学習選出の「相手の選出の仮定」を学習選出に（env SEL_OPP_ASSUME=learned、既定はヒューリスティック） ===")
+# 相手の仮定＝相手側の学習選出（その中の仮定はこちらのヒューリスティック）の温度0＋温度 SEL_OPP_TEMP の抽選2回。
+# 3実装（元・Python 高速版・Rust 版）と Rust の採点の選出（selector.rs select_cached）が同じ選出・同じ乱数の消費
+import random as _r26p
+import simulator.learned_selection as _LS26p
+_sv26p = {k: os.environ.get(k) for k in ("SEL_OPP_ASSUME", "LEARNED_SELECTION_IMPL")}
+_LS26p._LOADED = False
+_m26p = _LS26p._load()
+_A26p = [_mk26c(x) for x in _P1s]; _B26p = [_mk26c(x) for x in _P2s]
+_g1 = _r26p.Random(41); _g2 = _r26p.Random(41)
+_os26p = _LS26p._opp_learned(_A26p, _B26p, dl, 3, _g1, _m26p)
+_want26p = [_B26p.index(p) for p in _LS26p.learned_select_party(_B26p, _A26p, dl, n=3, temperature=0.0, rng=_g2)]
+_ocand26p = _LS26p._candidates(_B26p, 3)
+check("相手の仮定（学習選出版）: 1つ目は相手側の学習選出（温度0）と同じ", _os26p is not None and _os26p[0] == _want26p,
+      f"{_os26p} / {_want26p}")
+check("相手の仮定（学習選出版）: 3つとも相手の候補（メガ1体ルール内）、乱数は相手の学習選出の分＋抽選2回",
+      _os26p is not None and len(_os26p) == 3 and all(o in _ocand26p for o in _os26p)
+      and (_g2.random(), _g2.random(), _g2.random())[2] == _g1.random())
+_res26p = {}
+os.environ["SEL_OPP_ASSUME"] = "learned"
+for _impl in ("ref", "fast", "rust"):
+    os.environ["LEARNED_SELECTION_IMPL"] = _impl
+    _out = []
+    for _k, (_pa, _pb) in enumerate(((_P1s, _P2s), (_P2s, _P1s))):
+        _A = [_mk26c(x) for x in _pa]; _B = [_mk26c(x) for x in _pb]
+        for _t in (0.0, 0.3):
+            _g = _r26p.Random(200 + _k)
+            _out.append([_A.index(p) for p in _LS26p.learned_select_party(_A, _B, dl, n=3, temperature=_t, rng=_g)])
+            _out.append(_g.random())
+    _res26p[_impl] = _out
+for _k, _v in _sv26p.items():
+    if _v is None: os.environ.pop(_k, None)
+    else: os.environ[_k] = _v
+check("SEL_OPP_ASSUME=learned: 高速版・Rust 版が元の実装と同じ（温度0/0.3・乱数の消費まで）",
+      _res26p["fast"] == _res26p["ref"] and _res26p["rust"] == _res26p["ref"], f"{_res26p}")
+_g3 = _r26p.Random(41)
+_dflt26p = [_A26p.index(p) for p in _LS26p.learned_select_party(_A26p, _B26p, dl, n=3, temperature=0.0, rng=_g3)]
+_g4 = _r26p.Random(41)
+_base26p = max(_LS26p._score_cands(_A26p, _B26p, dl, 3, _g4, _m26p), key=lambda x: x[1])[0]
+check("SEL_OPP_ASSUME 未指定: 既定（ヒューリスティックの仮定）のまま", _dflt26p == list(_base26p) and _g3.random() == _g4.random(),
+      f"{_dflt26p} / {_base26p}")
+try:
+    import pokenavi_engine as _E26p
+    _ok26p = "osels" in (getattr(_E26p.learned_select_states, "__text_signature__", "") or "")
+except ImportError:
+    _ok26p = False
+if _ok26p:
+    _code26p = r"""
+import sys, json, os
+sys.path.insert(0, %r)
+import pokenavi_engine as E
+import feature1 as F
+F._ensure_loaded("M-6", 8)
+import _product3 as P3
+from simulator import learned_selection as LS
+from simulator.pokemon import build_from_spec, parse_pokemon_spec
+P3.SEASON = "M-6"
+A = json.loads(sys.argv[1]); B = json.loads(sys.argv[2])
+P3._score_setup(F._W["loader"], F._W["net"], [A, B])
+E.live_setup([A, B], "M-6", 0); E.live_set_selector(LS._PATH, 0)
+out = []
+for c in (A, B):
+    py = [[list(x), list(y)] for x, y in P3.panel_selections([build_from_spec(parse_pokemon_spec(s), F._W["loader"], season="M-6", randomize=False) for s in c])]
+    rs = [[list(x), list(y)] for x, y in E.live_panel_selections(c, 0)]
+    out.append([py, rs])
+print(json.dumps(out))
+""" % _SCRIPTS_DIR26n
+    def _run26p(env):
+        e = dict(os.environ); e.update(env)
+        r = _sp26o.run([_sy26o.executable, "-c", _code26p, _js26o.dumps(_P1s), _js26o.dumps(_P2s)], capture_output=True,
+                       text=True, env=e, cwd=_SCRIPTS_DIR26n)
+        return _js26o.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 else None
+    _l26p = _run26p({"SEL_OPP_ASSUME": "learned"})
+    _l0p = _run26p({"SEL_OPP_ASSUME": "learned", "SEL_FAST": "0"})
+    check("SEL_OPP_ASSUME=learned: Rust の採点の選出（select_cached）が Python と一致",
+          _l26p is not None and all(py == rs for py, rs in _l26p), f"{_l26p}")
+    check("SEL_OPP_ASSUME=learned: Rust 高速版と元の実装（SEL_FAST=0）で同じ", _l26p is not None and _l26p == _l0p)
+else:
+    print("  （pyengine が SEL_OPP_ASSUME 対応前のビルドなので Rust 側の照合は省略。maturin develop 後に実行される）")
+
+
 print("\n=== 26b. 必ず急所に当たる技 ===")
 # move_master の effect_text が「必ず急所に当たる。」なのに急所率が 1/24 のままだった。
 # deep_audit の検出器 (r'必ず急所', ['急所']) はテストのラベル文字列に一致するだけで
@@ -7245,6 +7326,96 @@ check("出力: 「〜型」でない系統名", _C33.output_errors({**_arch33, "
 _split33 = {"0445-00": {"mu": [{"arch": "つるぎのまい型（つるぎのまい・じしん）", "archNo": 1, "archSub": "a", "share": 30.0},
                               {"arch": "つるぎのまい型（つるぎのまい・げきりん）", "archNo": 1, "archSub": "b", "share": 30.0}]}}
 check("出力: 分割ラベルの括弧内で系統名の語を繰り返す", any("繰り返" in e for e in _C33.output_errors(_arch33, _split33, "M-6/x", "M-6/x")))
+
+print("\n=== 34. 選出ガイド（相手集団 guide_pool_m6.json の統計・学習選出・Rust guide_rows） ===")
+import random as _r34
+import _select_guide as _SG34
+from simulator.learned_selection import learned_select_scores as _lss34, learned_select_party as _lsp34
+_A34 = [_mk26c(x) for x in _P1s]; _B34 = [_mk26c(x) for x in _P2s]
+_sc34 = _lss34(_A34, _B34, dl, n=3, rng=_r34.Random(5))
+_pk34 = _lsp34(_A34, _B34, dl, n=3, temperature=0.0, rng=_r34.Random(5))
+check("学習選出の全候補のスコア: 最良が learned_select_party（温度0）と同じ並び",
+      _sc34 is not None and [id(p) for p in max(_sc34, key=lambda x: x[1])[0]] == [id(p) for p in _pk34])
+_O34 = _SG34.load_pool()
+_stones34 = lambda specs: [s for s in specs if s.split("@")[1].split(":")[0].endswith(("ナイト", "ナイトX", "ナイトY", "ナイトZ"))]
+check("相手集団: 2000党以上・各6体（種と持ち物の重複なし・メガ石1〜2）",
+      len(_O34) >= 2000 and all(len(o) == 6 and len({s.split("@")[0] for s in o}) == 6
+                                and len({s.split("@")[1].split(":")[0] for s in o}) == 6
+                                and 1 <= len(_stones34(o)) <= 2 for o in _O34[:300]))
+_n34 = [s.split("@")[0] for s in _P1s]
+_mega34 = {s.split("@")[0] for s in _stones34(_P1s)}
+_rw34 = _SG34.rows(_P1s, _O34[:120], "M-6", 4)
+check("選出ガイド: 相手ごとの自分の3体はパーティ内・重複なし・メガ石持ちちょうど1体、貪欲の勝率0〜1",
+      len(_rw34) == 120 and all(len(set(my)) == 3 and len({_n34[i] for i in my} & _mega34) == 1 and 0 <= g <= 1 for my, _, g in _rw34))
+check("選出ガイド: 同じ入力なら同じ結果（固定シード）", _SG34.rows(_P1s, _O34[:120], "M-6", 4) == _rw34)
+_rw34b = [(my, on, g) for my, on, g in _rw34]
+for _k34 in range(len(_rw34b)):
+    _my, _on, _g = _rw34b[_k34]
+    _rw34b[_k34] = (_my, _on + (["テスト用X"] if _k34 % 2 == 0 else []), 1.0 if _k34 % 2 == 0 else 0.0)
+_sm34 = _SG34.summarize(_n34, _rw34b, min_n=30, z_min=3)
+check("集計: 選出率の合計＝3・先発率の合計＝1・多い3体は割合の降順",
+      abs(sum(m["sel"] for m in _sm34["members"]) - 3) < 0.01 and abs(sum(m["lead"] for m in _sm34["members"]) - 1) < 0.01
+      and [t["share"] for t in _sm34["trios"]] == sorted([t["share"] for t in _sm34["trios"]], reverse=True))
+check("集計: 相手にいると有利度が上がる種を得意に出す（差＝較正の傾き）",
+      any(x["opp"] == "テスト用X" and abs(x["diff"] - _SG34.CAL_B) < 1e-3 for x in _sm34["strong"]), str(_sm34["strong"]))
+
+# 4-1k: 診断の1戦＝探索は Rust（mcts_3v3_record）・記録は Python で同じ乱数のまま再生
+try:
+    import pokenavi_engine as _E35
+    _ok35 = hasattr(_E35, "mcts_3v3_record")
+except ImportError:
+    _ok35 = False
+if _ok35:
+    import feature1 as _F35, _diagnose as _DG35
+    from simulator.battle import Action as _Act35
+    _F35._ensure_loaded("M-6", 8)
+    _keys35 = {"selected1", "selected2", "turns", "result", "winner", "opp_alive", "own_dead", "truth"}
+    _rs35 = []
+    for _sd35, _sel35 in ((3, None), (17, [2, 0, 4]), (29, [5, 1, 3])):
+        try:
+            _rs35.append((_sel35, _F35.play_and_record_rust(_P1s, _O34[_sd35], season="M-6", seed=_sd35, mcts_sims=40,
+                                                            predict=True, sel1_idx=_sel35, sel1_temp=0.0)))
+        except _F35.ReplayMismatch as _e35:
+            _rs35.append((_sel35, str(_e35)))
+    check("診断の1戦（Rust探索→Python再生）: 各ターンの HP・場の個体・状態異常・勝敗が Rust と一致",
+          all(isinstance(r, dict) for _, r in _rs35), str([r for _, r in _rs35 if not isinstance(r, dict)])[:300])
+    _rd35 = [(sl, r) for sl, r in _rs35 if isinstance(r, dict)]
+    check("診断の1戦: 記録のキー・ターン0から連番・predict あり・選出の指定どおり",
+          all(set(r) == _keys35 and [t["turn"] for t in r["turns"]] == list(range(len(r["turns"])))
+              and all("predict" in t for t in r["turns"]) and r["result"] in (0, 1, 2)
+              and (sl is None or r["selected1"] == [_P1s[i].split("@")[0] for i in sl]) for sl, r in _rd35))
+    _mv35 = _mk26c(_P1s[0])
+    _a35 = [_F35._rust_action((1, "", 0, 2, False), _mv35), _F35._rust_action((3, "", 0, -1, False), _mv35),
+            _F35._rust_action((0, _mv35.moves[1].name_jp, 1, -1, True), _mv35),
+            _F35._rust_action((0, "わるあがき", 0, -1, False), _mv35)]
+    check("Rust の行動→Python の Action（交代・パス・技＋メガ・わるあがき）",
+          (_a35[0].type, _a35[0].switch_to) == ("switch", 2) and _a35[1].type == "pass"
+          and _a35[2].move is _mv35.moves[1] and _a35[2].move_idx == 1 and _a35[2].do_mega
+          and _a35[3].move.name_jp == "わるあがき")
+    _orig35 = _E35.mcts_3v3_record
+    def _bad35(*a, **k):
+        r, d, t = _orig35(*a, **k)
+        t0, (sa, sb) = t[0]
+        return r, d, [(t0, ((sa[0], [(n, h + 1, m, st) for n, h, m, st in sa[1]]), sb))] + t[1:]
+    _E35.mcts_3v3_record = _bad35
+    try:
+        _F35.play_and_record_rust(_P1s, _O34[3], season="M-6", seed=3, mcts_sims=40)
+        _mm35 = False
+    except _F35.ReplayMismatch:
+        _mm35 = True
+    finally:
+        _E35.mcts_3v3_record = _orig35
+    check("再生が Rust の要約と食い違えば ReplayMismatch", _mm35)
+    _po35, _pp35 = _F35.play_and_record_rust, _F35.play_and_record
+    def _raise35(*a, **k): raise _F35.ReplayMismatch("t")
+    _F35.play_and_record_rust = _raise35
+    _F35.play_and_record = lambda *a, **k: {"selected1": [_P1s[i].split("@")[0] for i in (k["sel1_idx"] or [0, 1, 2])], "turns": [], "fb": True}
+    try:
+        _bj35 = _DG35.battle_job((_P1s, _O34[3], "M-6", 3, None))
+    finally:
+        _F35.play_and_record_rust, _F35.play_and_record = _po35, _pp35
+    check("battle_job: 再生が食い違った戦は従来の Python 版で記録（my_sel・auto を付ける）",
+          _bj35.get("fb") is True and _bj35["my_sel"] == [0, 1, 2] and _bj35["auto"] is True)
 
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:

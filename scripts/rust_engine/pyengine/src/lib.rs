@@ -79,6 +79,34 @@ fn live_set_selector(path: &str, slot: usize) -> PyResult<bool> {
     Ok(true)
 }
 
+static SEL_CACHE: std::sync::Mutex<Vec<(String, engine::selector::Selector)>> = std::sync::Mutex::new(Vec::new());
+
+/// 選出ガイドの集計（engine::sim::guide_rows）。sel_path＝学習選出のモデル（初回のみ読む）。戻り: 相手ごとに (自分の選出, 貪欲の勝率)
+#[pyfunction]
+#[pyo3(signature = (specs, opps, season, k, seed, sel_path))]
+fn guide_rows(specs: Vec<String>, opps: Vec<Vec<String>>, season: &str, k: usize, seed: i128, sel_path: &str) -> PyResult<Vec<(Vec<usize>, f64)>> {
+    let mut sc = SEL_CACHE.lock().unwrap_or_else(|e| e.into_inner());
+    if !sc.iter().any(|(p, _)| p == sel_path) {
+        let s = engine::selector::Selector::from_json(sel_path)
+            .ok_or_else(|| PyValueError::new_err(format!("{sel_path}: 選出モデルとして読めない")))?;
+        sc.push((sel_path.to_string(), s));
+    }
+    let sel = &sc.iter().find(|(p, _)| p == sel_path).unwrap().1;
+    let m = eng()?;
+    let mut g = lock_eng(m);
+    for sp in specs.iter().chain(opps.iter().flatten()) {
+        if let Some(e) = engine::poke::spec_error(&g.pack, sp, season) {
+            return Err(PyValueError::new_err(e));
+        }
+    }
+    let Eng { pack, ft, .. } = &mut *g;
+    if ft.is_none() {
+        *ft = Some(engine::features::FeatTables::build(pack));
+    }
+    let ftr = ft.as_ref().unwrap();
+    Ok(engine::sim::guide_rows(pack, ftr, sel, &specs, &opps, season, k, seed))
+}
+
 /// 照合用（SEL_FAST_CHECK=1）: 学習選出の高速版と元の実装の比較 (選んだ回数, 選出が違った回数, 候補の値の差の最大, 元の実装に落とした回数,
 /// 相手の仮定を表で計算した回数, 仮定・乱数の消費が違った回数)。読むとゼロに戻す
 #[pyfunction]
@@ -99,7 +127,9 @@ fn live_panel_selections(specs: Vec<String>, slot: usize) -> PyResult<Vec<(Vec<u
 
 /// 学習選出（simulator/learned_selection.py）の候補・相手の仮定・状態ベクトル。推論と選択は Python 側。
 /// state は random.getstate()[1]（624語＋位置）。戻り: (候補, 相手の仮定, 状態ベクトルのバイト列 f64 LE, 次元, 進めた乱数の状態)
+/// osels: 相手の仮定を渡す（None なら Rust でヒューリスティック 温度0,1,1）
 #[pyfunction]
+#[pyo3(signature = (specs_a, specs_b, season, n, min_mega, max_mega, state, osels=None))]
 #[allow(clippy::type_complexity, clippy::too_many_arguments)]
 fn learned_select_states(
     py: Python<'_>,
@@ -110,6 +140,7 @@ fn learned_select_states(
     min_mega: usize,
     max_mega: usize,
     state: Vec<u32>,
+    osels: Option<Vec<Vec<usize>>>,
 ) -> PyResult<(Vec<Vec<usize>>, Vec<Vec<usize>>, PyObject, usize, Vec<u32>)> {
     if state.len() != 625 {
         return Err(PyValueError::new_err("state は 625 語（random.getstate()[1]）"));
@@ -126,7 +157,7 @@ fn learned_select_states(
         *ft = Some(engine::features::FeatTables::build(pack));
     }
     let ftr = ft.as_ref().unwrap();
-    let (c, o, xs, dim, st) = engine::sim::learned_select_states(pack, ftr, &specs_a, &specs_b, season, n, min_mega, max_mega, &state);
+    let (c, o, xs, dim, st) = engine::sim::learned_select_states(pack, ftr, &specs_a, &specs_b, season, n, min_mega, max_mega, &state, osels.as_deref());
     let mut buf = Vec::with_capacity(xs.len() * 8);
     for v in xs {
         buf.extend_from_slice(&v.to_le_bytes());
@@ -488,11 +519,38 @@ fn version() -> String {
     format!("pokenavi_engine {} (R5)", env!("CARGO_PKG_VERSION"))
 }
 
+/// 観戦記録用: mcts_3v3 と同じ両者MCTSの1戦の (勝敗, 各手番の行動と行動選択直後の乱数の状態, 各ターンの要約)。
+/// sa/sb は並びのまま（先頭がリード）。state＝6体生成後に置き換える CPython random の状態（624語＋位置）
+#[pyfunction]
+#[pyo3(signature = (pa, sa, pb, sb, seed, sims, season="M-6", state=None))]
+#[allow(clippy::too_many_arguments, clippy::type_complexity)]
+fn mcts_3v3_record(
+    pa: Vec<String>,
+    sa: Vec<usize>,
+    pb: Vec<String>,
+    sb: Vec<usize>,
+    seed: i128,
+    sims: usize,
+    season: &str,
+    state: Option<Vec<u32>>,
+) -> PyResult<(u8, Vec<engine::sim::DecRec>, Vec<engine::sim::TurnSum>)> {
+    if state.as_ref().map(|v| v.len() != 625).unwrap_or(false) {
+        return Err(PyValueError::new_err("state は 625 語"));
+    }
+    let m = eng()?;
+    let mut g = lock_eng(m);
+    let Eng { pack, net, .. } = &mut *g;
+    let net = net.clone();
+    let (r, d, t) = engine::sim::mcts_3v3_record(pack, &net, &pa, &sa, &pb, &sb, season, seed, sims, state.as_deref());
+    Ok((r as u8, d, t))
+}
+
 #[pymodule]
 fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(greedy_3v3, m)?)?;
     m.add_function(wrap_pyfunction!(belief_probe_take, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3, m)?)?;
+    m.add_function(wrap_pyfunction!(mcts_3v3_record, m)?)?;
     m.add_function(wrap_pyfunction!(det_hit_take, m)?)?;
     m.add_function(wrap_pyfunction!(det_consist_take, m)?)?;
     m.add_function(wrap_pyfunction!(det_slot_take, m)?)?;
@@ -506,6 +564,7 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(learned_select_states, m)?)?;
     m.add_function(wrap_pyfunction!(live_set_selector, m)?)?;
     m.add_function(wrap_pyfunction!(sel_fast_stats_take, m)?)?;
+    m.add_function(wrap_pyfunction!(guide_rows, m)?)?;
     m.add_function(wrap_pyfunction!(live_panel_selections, m)?)?;
     m.add_function(wrap_pyfunction!(live_setup, m)?)?;
     m.add_function(wrap_pyfunction!(live_feats, m)?)?;

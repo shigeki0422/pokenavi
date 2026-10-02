@@ -216,7 +216,7 @@ def _rust_ok(party6, opp6):
                and not any(getattr(p, s, 0) for s in _STAGES) for p in list(party6) + list(opp6))
 
 
-def _rust_states(party6, opp6, n, rng):
+def _rust_states(party6, opp6, n, rng, osels=None):
     """Rust 版（pokenavi_engine.learned_select_states）: 候補・相手の仮定・状態ベクトルを Rust で作る。
     相手の仮定の温度つきサンプリングは Python の乱数状態を渡して Rust で進め、終わった状態を書き戻す（乱数の消費も Python と同じ）。
     使えなければ None（Python 版へ）。"""
@@ -237,7 +237,7 @@ def _rust_states(party6, opp6, n, rng):
         r = m.learned_select_states([spec_of(p) for p in party6], [spec_of(p) for p in opp6],
                                     os.environ.get("POOL_SEASON", "M-6"), n,
                                     int(os.environ.get("MIN_MEGA", str(_t))), int(os.environ.get("MAX_MEGA", str(_t))),
-                                    list(st[1]))
+                                    list(st[1]), *([osels] if osels is not None else []))
     except (KeyboardInterrupt, SystemExit):
         raise
     except BaseException:           # Rust の panic は PyO3 では BaseException（PanicException）。Python 版へ落とす
@@ -246,6 +246,46 @@ def _rust_states(party6, opp6, n, rng):
     rng.setstate((st[0], tuple(newst), st[2]))
     X = np.frombuffer(xb, dtype="<f8").reshape(len(cands), len(osels), dim)
     return cands, osels, X
+
+
+def _score_cands(party6, opp6, loader, n, rng, model, osel_idx=None):
+    """候補（添字の並び）と値（相手の仮定ごとの予測の平均）[(添字, 値)]。osel_idx: 相手の仮定（相手6体の添字の並び）を渡す
+    （None ならヒューリスティック選出 温度0,1,1＝_opp_assumptions）"""
+    impl = os.environ.get("LEARNED_SELECTION_IMPL", "auto")
+    if impl in ("auto", "rust") and _rust_ok(party6, opp6):
+        r = _rust_states(party6, opp6, n, rng, osel_idx)
+        if r is not None:
+            ci, oi, X = r
+            return [(list(c), float(np.mean(_predict(model, X[k])))) for k, c in enumerate(ci)]
+    if osel_idx is None:
+        opp_sels = _opp_assumptions(party6, opp6, loader, n, rng)
+    else:
+        opp_sels = [[opp6[i] for i in o] for o in osel_idx]
+    if impl in ("auto", "fast", "rust") and _fast_ok(party6, opp6):
+        enc = _FastEncoder(party6, opp_sels).encode
+    else:
+        enc = _encode_ref
+    out = []
+    for c in _candidates(party6, n):
+        order = [party6[i] for i in c]
+        xs = [enc(order, osel) for osel in opp_sels]
+        out.append((c, float(np.mean(_predict(model, xs)))))
+    return out
+
+
+def _opp_learned(party6, opp6, loader, n, rng, model):
+    """相手の選出の仮定を学習選出そのものに（env SEL_OPP_ASSUME=learned。既定はヒューリスティック 温度0,1,1）:
+    相手側の学習選出（その中の仮定は既定どおりこちらのヒューリスティック選出）の温度0の最良＋温度 SEL_OPP_TEMP（既定1.0）の
+    抽選2回。返り値は相手6体の添字の並び×3。相手が選ぶ余地が無い・候補が無いときは None（既定の仮定へ）"""
+    nb = min(n, len(opp6))
+    if len(opp6) <= nb:
+        return None
+    oc = _score_cands(opp6, party6, loader, nb, rng, model)
+    if not oc:
+        return None
+    t = float(os.environ.get("SEL_OPP_TEMP", "1.0"))
+    best = max(oc, key=lambda x: x[1])[0]
+    return [list(best), list(_softmax_pick(oc, t, rng)), list(_softmax_pick(oc, t, rng))]
 
 
 def learned_select_party(party6, opp6, loader, n=3, temperature=0.0, rng=None):
@@ -267,30 +307,18 @@ def learned_select_party(party6, opp6, loader, n=3, temperature=0.0, rng=None):
     if model is None or len(party6) <= n:
         return select_party(party6, opp6, loader, n=n, temperature=temperature, rng=rng)
     rng = rng or random
-    impl = os.environ.get("LEARNED_SELECTION_IMPL", "auto")
-    cands = None
-    if impl in ("auto", "rust") and _rust_ok(party6, opp6):
-        r = _rust_states(party6, opp6, n, rng)
-        if r is not None:
-            ci, oi, X = r
-            cands = [([party6[i] for i in c], float(np.mean(_predict(model, X[k])))) for k, c in enumerate(ci)]
-    if cands is None:
-        opp_sels = _opp_assumptions(party6, opp6, loader, n, rng)
-        if impl in ("auto", "fast", "rust") and _fast_ok(party6, opp6):
-            enc = _FastEncoder(party6, opp_sels).encode
-        else:
-            enc = _encode_ref
-        cands = []
-        for c in _candidates(party6, n):
-            order = [party6[i] for i in c]
-            xs = [enc(order, osel) for osel in opp_sels]
-            cands.append((order, float(np.mean(_predict(model, xs)))))
+    osel_idx = _opp_learned(party6, opp6, loader, n, rng, model) if os.environ.get("SEL_OPP_ASSUME") == "learned" else None
+    cands = [([party6[i] for i in c], sc) for c, sc in _score_cands(party6, opp6, loader, n, rng, model, osel_idx)]
     if not cands:
         return select_party(party6, opp6, loader, n=n, temperature=temperature, rng=rng)
     if temperature <= 0:
         return max(cands, key=lambda x: x[1])[0]
-    # スコアは[0,1]で差が小さいため、標準化(z-score)してから温度ソフトマックス
-    # （実証済みの「決定的最良」に近い＝最良中心＋たまに変化、を保つ。生スコア/温度だとほぼ一様になる）
+    return _softmax_pick(cands, temperature, rng)
+
+
+def _softmax_pick(cands, temperature, rng):
+    """[(x, スコア)] から1つ引く（乱数1回）。スコアは[0,1]で差が小さいため、標準化(z-score)してから温度ソフトマックス
+    （実証済みの「決定的最良」に近い＝最良中心＋たまに変化、を保つ。生スコア/温度だとほぼ一様になる）"""
     s = np.array([sc for _, sc in cands]); sd = s.std()
     z = (s - s.mean()) / sd if sd > 1e-9 else s * 0.0
     ws = np.exp((z - z.max()) / max(1e-6, temperature))
@@ -300,3 +328,14 @@ def learned_select_party(party6, opp6, loader, n=3, temperature=0.0, rng=None):
         if r <= acc:
             return order
     return cands[-1][0]
+
+
+def learned_select_scores(party6, opp6, loader, n=3, rng=None):
+    """学習選出の全候補 [(3体の並び（先頭＝リード）, スコア)]。スコア＝相手の選出の仮定に対する予測勝率の平均。
+    モデルが無い・3体以下なら None（呼び出し側でヒューリスティックへ）。learned_select_party と同じ計算・同じ乱数の消費"""
+    model = _load()
+    if model is None or len(party6) <= n:
+        return None
+    rng = rng or random
+    osel_idx = _opp_learned(party6, opp6, loader, n, rng, model) if os.environ.get("SEL_OPP_ASSUME") == "learned" else None
+    return [([party6[i] for i in c], sc) for c, sc in _score_cands(party6, opp6, loader, n, rng, model, osel_idx)] or None

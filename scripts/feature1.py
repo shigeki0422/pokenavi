@@ -56,11 +56,12 @@ def side_snapshot(side, field) -> dict:
 
 
 def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, mcts_sims=None,
-                    predict=False) -> dict:
+                    predict=False, sel1_idx=None, sel1_temp=None) -> dict:
     """1戦を実行し、ターン毎記録（turns）＋勝敗＋最終状態を返す。
     mcts_sims未指定(None)＝本番既定MCTS(env F1_MCTS_SIMS, 既定400)。>0でMCTS@N、明示0でtree d2。
     predict=True: 各ターンの記録に両AIの「相手の型の読み」（turns[i].predict）と、
-    選出個体の実際の型（truth）を足す（simulator/predict.py。対戦の進行は変わらない）。"""
+    選出個体の実際の型（truth）を足す（simulator/predict.py。対戦の進行は変わらない）。
+    sel1_idx: P1 の選出を specs1 の添字で指定（先頭がリード）。sel1_temp: P1 を自動選出するときの温度（None＝sel_temp）。"""
     if mcts_sims is None:
         mcts_sims = int(os.environ.get("F1_MCTS_SIMS", "400"))
     random.seed(seed)
@@ -71,7 +72,8 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, m
     L = _W["loader"]; net = _W["net"]
     P1 = [build_from_spec(parse_pokemon_spec(sp), L, season=season, randomize=True) for sp in specs1]
     P2 = [build_from_spec(parse_pokemon_spec(sp), L, season=season, randomize=True) for sp in specs2]
-    sel1 = learned_select_party(P1, P2, L, n=min(3, len(P1)), temperature=sel_temp)
+    sel1 = ([P1[i] for i in sel1_idx] if sel1_idx is not None else
+            learned_select_party(P1, P2, L, n=min(3, len(P1)), temperature=sel_temp if sel1_temp is None else sel1_temp))
     sel2 = learned_select_party(P2, P1, L, n=min(3, len(P2)), temperature=sel_temp)
     s1 = BattleSide(sel1, viewer_label="P1", source6=P1); s2 = BattleSide(sel2, viewer_label="P2", source6=P2)
     s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
@@ -130,6 +132,129 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, m
             boosts = sum(getattr(p, a, 0) for a in
                          ("stage_attack", "stage_sp_attack", "stage_speed", "stage_defense", "stage_sp_defense"))
             opp_alive.append((p.name, boosts))
+    own_dead = [p.name for p in s1.party if not p.is_alive]
+    rec = {"selected1": [p.name for p in sel1], "selected2": [p.name for p in sel2],
+           "turns": turns, "result": result, "winner": winner,
+           "opp_alive": opp_alive, "own_dead": own_dead}
+    if _pred is not None:
+        rec["truth"] = _truth
+    return rec
+
+
+class ReplayMismatch(Exception):
+    pass
+
+
+def _rust_action(rec, active):
+    from simulator.battle import Action
+    kind, mv, midx, sw, mega = rec
+    if kind == 1:
+        return Action(type="switch", switch_to=sw)
+    if kind == 2:
+        return Action(type="mega", do_mega=True)
+    if kind == 3:
+        return Action(type="pass")
+    moves = active.moves
+    if 0 <= midx < len(moves) and moves[midx] is not None and moves[midx].name_jp == mv:
+        return Action(type="move", move=moves[midx], move_idx=midx, do_mega=mega)
+    for i, m in enumerate(moves):
+        if m is not None and m.name_jp == mv:
+            return Action(type="move", move=m, move_idx=i, do_mega=mega)
+    if mv == "わるあがき":
+        from simulator.ai import _get_struggle
+        return Action(type="move", move=_get_struggle(), move_idx=midx, do_mega=mega)
+    raise ReplayMismatch(f"技が無い: {active.name} {mv}")
+
+
+def _sum_of(side):
+    return (side.active_idx, [(p.hp, p.max_hp, p.status or "") for p in side.party])
+
+
+def play_and_record_rust(specs1, specs2, season="M-2", sel_temp=0.6, seed=0, mcts_sims=None,
+                         predict=False, sel1_idx=None, sel1_temp=None) -> dict:
+    """play_and_record と同じ記録を、行動の探索だけ Rust（pokenavi_engine.mcts_3v3_record）で作る。
+    選出・6体生成は Python（play_and_record と同じ乱数の流れ）。Rust が返す各手番の行動を Python の Battle に与え、
+    行動選択直後の乱数の状態を Rust のものに合わせて再生する（探索が対戦の乱数を消費するため）。
+    各ターンの HP・場の個体・状態異常が Rust の要約と食い違えば ReplayMismatch。瀕死交代は両エンジンともヒューリスティック。"""
+    import pokenavi_engine as E
+    if mcts_sims is None:
+        mcts_sims = int(os.environ.get("F1_MCTS_SIMS", "400"))
+    random.seed(seed)
+    from simulator.pokemon import build_from_spec, parse_pokemon_spec
+    from simulator.learned_selection import learned_select_party
+    from simulator.belief import OpponentBelief
+    L = _W["loader"]
+    P1 = [build_from_spec(parse_pokemon_spec(sp), L, season=season, randomize=True) for sp in specs1]
+    P2 = [build_from_spec(parse_pokemon_spec(sp), L, season=season, randomize=True) for sp in specs2]
+    sel1 = ([P1[i] for i in sel1_idx] if sel1_idx is not None else
+            learned_select_party(P1, P2, L, n=min(3, len(P1)), temperature=sel_temp if sel1_temp is None else sel1_temp))
+    sel2 = learned_select_party(P2, P1, L, n=min(3, len(P2)), temperature=sel_temp)
+    ia = [next(i for i, q in enumerate(P1) if q is p) for p in sel1]
+    ib = [next(i for i, q in enumerate(P2) if q is p) for p in sel2]
+    st = list(random.getstate()[1])
+    r_res, decs, sums = E.mcts_3v3_record(list(specs1), ia, list(specs2), ib, seed, mcts_sims, season, st)
+    dec_at = {t: (a, s) for t, a, s in decs}
+    sum_at = {t: s for t, s in sums}
+    s1 = BattleSide(sel1, viewer_label="P1", source6=P1); s2 = BattleSide(sel2, viewer_label="P2", source6=P2)
+    s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
+    field = BattleField(); battle = Battle(s1, s2, field)
+
+    def mk(sx):
+        def ai(my, opp, f):
+            got = dec_at.get(battle.turn)
+            if got is None:
+                raise ReplayMismatch(f"turn {battle.turn}: Rust の行動が無い")
+            if my.belief is not None:
+                my.belief.observe_disclosure(my.opp_view)
+            a = _rust_action(got[0][sx], my.active)
+            if sx == 1:
+                random.setstate((3, tuple(got[1]), None))
+            return a
+        return ai
+    ai1, ai2 = mk(0), mk(1)
+    battle.start(ai1, ai2)
+    turns = []
+    _pred = None
+    if predict:
+        from simulator.predict import Predictor, truth_of
+        _pred = Predictor(L)
+        _truth = {"side1": [truth_of(p) for p in sel1], "side2": [truth_of(p) for p in sel2]}
+
+    def _pp(t, s1_, s2_):
+        if _pred is not None:
+            t["predict"] = {"side1": _pred.snapshot(s1_, s2_), "side2": _pred.snapshot(s2_, s1_)}
+        return t
+    init_logs = [f"P1選出: {', '.join(p.name for p in sel1)}",
+                 f"P2選出: {', '.join(p.name for p in sel2)}"] + list(battle.logs)
+    turns.append(_pp({"turn": 0, "logs": init_logs,
+                  "side1": side_snapshot(s1, field), "side2": side_snapshot(s2, field),
+                  "weather": field.weather, "weather_count": getattr(field, "weather_count", 0),
+                  "trick_room": field.trick_room,
+                  "trick_room_count": getattr(field, "trick_room_count", 0)}, s1, s2))
+    prev = [len(battle.logs)]
+
+    def cb(b):
+        want = sum_at.get(b.turn)
+        got = (_sum_of(b.side1), _sum_of(b.side2))
+        if want is None or tuple((ai_, [(h, m, s) for _, h, m, s in ps]) for ai_, ps in want) != got:
+            raise ReplayMismatch(f"turn {b.turn}: rust={want} py={got}")
+        nl = b.logs[prev[0]:]; prev[0] = len(b.logs)
+        turns.append(_pp({"turn": b.turn, "logs": nl,
+                      "side1": side_snapshot(b.side1, b.field), "side2": side_snapshot(b.side2, b.field),
+                      "weather": b.field.weather, "weather_count": getattr(b.field, "weather_count", 0),
+                      "trick_room": b.field.trick_room,
+                      "trick_room_count": getattr(b.field, "trick_room_count", 0)}, b.side1, b.side2))
+
+    result = battle._turn_loop(ai1, ai2, on_turn=cb)
+    if not s1.has_alive():
+        result = 2
+    elif not s2.has_alive():
+        result = 1
+    if result != r_res or len(turns) - 1 != len(sums):
+        raise ReplayMismatch(f"結果: rust={r_res}/{len(sums)}T py={result}/{len(turns) - 1}T")
+    winner = (f"P1 ({sel1[0].name}側)" if result == 1
+              else f"P2 ({sel2[0].name}側)" if result == 2 else "引き分け")
+    opp_alive, _ = _alive_dead(s2)
     own_dead = [p.name for p in s1.party if not p.is_alive]
     rec = {"selected1": [p.name for p in sel1], "selected2": [p.name for p in sel2],
            "turns": turns, "result": result, "winner": winner,

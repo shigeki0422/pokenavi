@@ -39,6 +39,17 @@ export function fromSuggestSpec(s: string): Slot | null {
   return fromSpec(sp + s.slice(atIdx));
 }
 
+const SERVER_NAME_FIX: Record<string, string> = {
+  "ケンタロス:炎": "パルデアケンタロス(炎)",
+  "ケンタロス:水": "パルデアケンタロス(水)",
+  "ケンタロス:格": "パルデアケンタロス(闘)",
+};
+
+/** 提案API(サーバ)へ送る spec。コロン形の種名は spec の区切りと衝突するので型プールの括弧形に直す。 */
+export function toServerSpec(slot: Slot): string {
+  return toSpec({ ...slot, sp: SERVER_NAME_FIX[slot.sp] || slot.sp });
+}
+
 export function toSpec(slot: Slot): string {
   const moves = (slot.moves || []).join("|");
   const evs = slot.evs.join("/");

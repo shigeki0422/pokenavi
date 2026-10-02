@@ -297,6 +297,7 @@ const I18N = I18N_ALL[lang];
   </section>
 
   <div class="card" id="pb-balance"></div>
+  <div class="card" id="pb-diag"></div>
   <slot />
 </main>
 
@@ -844,6 +845,100 @@ const I18N = I18N_ALL[lang];
 
   /* (B28) 仮想敵0件の空状態 */
   .pb-empty-targets{display:flex;flex-direction:column;align-items:flex-start;gap:.5em;margin-top:.6em}
+
+  /* パーティ診断（試作） */
+  .dg{min-width:0}
+  .dg-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5em}
+  .dg-h2{margin:0;display:flex;align-items:center;gap:.5em}
+  .dg-badge{font-size:.62rem;font-weight:800;color:#92400e;background:#fef3c7;border:1px solid #fcd34d;border-radius:9999px;padding:.1em .6em}
+  .dg .btn:disabled,.dg .pb-btn-sub:disabled{opacity:.45;cursor:not-allowed}
+  .dg-reason:empty{display:none}
+  .dg-reason{margin-top:.4em}
+  .dg-stale{margin-top:.6em;font-size:.78rem;background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:8px;padding:.4em .6em}
+  .dg-err{margin-top:.6em;font-size:.82rem;background:#fee2e2;color:#b91c1c;border-radius:8px;padding:.5em .7em}
+  .dg-legend{margin-top:.6em}
+  .dg .tabbar{position:static;flex-wrap:wrap}
+  .dg-pane{padding-top:.6em;min-width:0}
+  .dg-h3{font-size:.82rem;font-weight:800;color:#0369a1;margin:1em 0 .4em}
+  .dg-h4{font-size:.74rem;font-weight:800;color:rgb(var(--gray-dark));margin:.7em 0 .3em}
+  .dg-sub{font-size:.72rem;color:rgb(var(--gray))}
+  .dg-mon{display:inline-flex;align-items:center;gap:2px;font-weight:700;overflow-wrap:anywhere;vertical-align:middle}
+  .dg-ico{width:28px;height:28px;object-fit:contain;flex-shrink:0}
+  .dg-ico-s{width:24px;height:24px;object-fit:contain;flex-shrink:0;vertical-align:middle}
+  .dg-ico-xs{width:20px;height:20px;object-fit:contain;flex-shrink:0}
+  .dg-overall{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .8em;background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:.6em .8em}
+  .dg-ov-lb{font-size:.8rem;font-weight:700}
+  .dg-ov-v .gd-adv{font-size:1.2rem}
+  .dg-rank{flex-basis:100%;font-size:.8rem}
+  .dg-ul{margin:0;padding-left:1.2em;font-size:.82rem;line-height:1.7}
+  .dg-ul.dg-good li::marker{color:#15803d}
+  .dg-ul.dg-bad li::marker{color:#b91c1c}
+  .dg-opps{display:flex;flex-direction:column;gap:.35em}
+  .dg-opp{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .7em;text-align:left;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:.35em .5em;cursor:pointer;font-family:inherit;min-width:0}
+  .dg-opp.sel{border-color:var(--accent);box-shadow:0 0 0 2px rgba(37,99,235,.18);background:#eff6ff}
+  .dg-opp-icons{display:inline-flex;flex-wrap:wrap;gap:1px}
+  .dg-opp-meta{display:flex;flex-wrap:wrap;align-items:center;gap:.2em .6em}
+  .dg-why{font-size:.74rem;font-weight:700;color:#334155}
+  .dg-why-w{color:#b91c1c}
+  .dg-mode{display:flex;flex-wrap:wrap;gap:.4em 1.2em;font-size:.82rem;margin-bottom:.3em}
+  .dg-picks{display:flex;flex-wrap:wrap;gap:.35em;margin-top:.35em}
+  .dg-pick{position:relative;display:inline-flex;align-items:center;gap:3px;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:.3em .55em;font-size:.78rem;font-weight:700;cursor:pointer;font-family:inherit;min-height:40px}
+  .dg-pick.on{border-color:var(--accent);background:#eff6ff}
+  .dg-ord{display:inline-flex;align-items:center;justify-content:center;width:1.3em;height:1.3em;border-radius:50%;background:var(--accent);color:#fff;font-size:.7rem}
+  .dg-lead{font-size:.62rem;font-weight:800;color:#fff;background:#0ea5e9;border-radius:9999px;padding:0 .45em;margin-left:2px;white-space:nowrap}
+  .dg-fight-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5em;margin-top:.8em}
+  .dg-blist{display:flex;flex-direction:column;gap:.25em}
+  .dg-brow{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:.3em .5em;cursor:pointer;font-family:inherit;text-align:left}
+  .dg-brow.cur{border-color:var(--accent);background:#eff6ff}
+  .dg-bn{font-size:.74rem;font-weight:800}
+  .dg-res{font-size:.72rem;font-weight:800;border-radius:6px;padding:.05em .5em;background:#f1f5f9;color:#475569}
+  .dg-res-win{background:#dcfce7;color:#15803d}
+  .dg-res-lose{background:#fee2e2;color:#b91c1c}
+  .dg-res-err{background:#fee2e2;color:#b91c1c}
+  .dg-res-big{font-size:.95rem;padding:.15em .7em}
+  .dg-rp{margin-top:.8em;border:1px solid #e2e8f0;border-radius:10px;padding:.6em;background:#fcfdff;min-width:0}
+  .dg-rp-hd{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .7em}
+  .dg-selrow{display:flex;flex-wrap:wrap;align-items:center;gap:.25em .5em;margin-top:.35em;font-size:.8rem}
+  .dg-ctl{display:flex;flex-wrap:wrap;align-items:center;gap:.4em;margin:.6em 0 .3em}
+  .dg-turn{font-size:.8rem;font-weight:800}
+  .dg-sides{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.6em}
+  .dg-side{min-width:0}
+  .dg-pm{border:1px solid #e2e8f0;border-radius:8px;padding:.25em .4em;margin-bottom:.25em;background:#fff;min-width:0}
+  .dg-pm.act{border-color:var(--accent);box-shadow:inset 3px 0 0 var(--accent)}
+  .dg-pm.dead{opacity:.45}
+  .dg-pm-hd{display:flex;flex-wrap:wrap;align-items:center;gap:2px .35em;font-size:.76rem;min-width:0;overflow-wrap:anywhere}
+  .dg-unseen{display:flex;align-items:center;gap:.4em;color:rgb(var(--gray))}
+  .dg-q{font-weight:800}
+  .dg-pm-hp{display:flex;align-items:center;gap:.35em;margin-top:2px}
+  .dg-hp{flex:1;min-width:0;height:8px;border-radius:4px;background:#eef2f7;overflow:hidden}
+  .dg-hp>i{display:block;height:100%}
+  .dg-hp-g{background:#22c55e}.dg-hp-y{background:#eab308}.dg-hp-r{background:#ef4444}
+  .dg-hpv{font-size:.68rem;width:2.8em;text-align:right}
+  .dg-st{font-size:.62rem;font-weight:800;background:#f1f5f9;color:#7c3aed;border-radius:4px;padding:0 .3em}
+  .dg-stg{font-size:.62rem;font-weight:800;background:#eef2ff;color:#3730a3;border-radius:4px;padding:0 .3em}
+  .dg-logs{margin-top:.5em;font-size:.78rem;line-height:1.55;background:#fff;border:1px solid #e2e8f0;border-radius:8px;padding:.4em .6em;overflow-wrap:anywhere}
+  .dg-log.note{color:rgb(var(--gray));font-size:.72rem}
+  .dg-note-tag{font-size:.6rem;font-weight:800;background:#f1f5f9;border-radius:4px;padding:0 .3em;margin-right:.3em}
+  .dg-pred{border:1px solid #e2e8f0;border-radius:8px;padding:.35em .5em;margin-bottom:.35em;background:#fff;min-width:0}
+  .dg-known{font-size:.72rem;margin:.15em 0;overflow-wrap:anywhere}
+  .dg-cand{display:flex;gap:.5em;font-size:.72rem;padding:.2em 0;border-top:1px solid #f1f5f9;min-width:0}
+  .dg-cand.ok{background:#f0fdf4}
+  .dg-cand-p{font-weight:800;white-space:nowrap;min-width:3.6em}
+  .dg-cand-b{min-width:0;overflow-wrap:anywhere}
+  .dg-ok{color:#15803d;font-weight:800}
+  .dg-imp{border:1px solid #e2e8f0;border-radius:8px;padding:.5em .6em;margin-top:.5em;background:#fff}
+  .dg-imp-hd{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em}
+  .dg-arr{color:var(--accent);font-weight:800}
+  .dg-gain{font-size:.78rem;font-weight:800;background:#dcfce7;color:#15803d;border-radius:6px;padding:.05em .5em}
+  .dg-gain-s{color:#15803d}
+  .dg-spec{font-size:.74rem;color:#334155;margin:.3em 0;overflow-wrap:anywhere}
+  .dg-fix{display:flex;flex-wrap:wrap;align-items:center;gap:.2em .4em;font-size:.76rem;margin-bottom:.4em}
+  .dg-imp-none{margin-top:.6em}
+  .dg-applied{display:flex;flex-wrap:wrap;align-items:center;gap:.5em;font-size:.8rem;background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:.4em .6em}
+  @media (max-width:640px){
+    .dg-sides{gap:.35em}
+    .dg-pm-hd{font-size:.7rem}
+  }
 </style>
 
 <script is:inline define:vars={{ lang, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, pfx }}>
@@ -859,7 +954,9 @@ const I18N = I18N_ALL[lang];
 <script>
   import { loadCore, loadMon, loadNameUrlMap, nameUrlMapSync } from '../scripts/party-builder/data';
   import { loadStore, saveStore, createParty, createPartyFromSlots, duplicateParty, renameParty, deleteParty, getEffectiveTargets } from '../scripts/party-builder/storage';
-  import { fromSpec, fromSuggestSpec, exportParty, importParty } from '../scripts/party-builder/spec';
+  import { fromSpec, fromSuggestSpec, exportParty, importParty, toServerSpec } from '../scripts/party-builder/spec';
+  import { initDiag } from '../scripts/party-builder/diag';
+  import '../styles/select-guide.css';
   import { matchupLead, renderAssumptions, renderMatchupTable, effLabel } from '../scripts/party-builder/matchup-table';
   import { renderMuCard, renderMuTabs, bindMuCardClicks, archTitle } from '../scripts/party-builder/mu-card';
   import { itemNameOf } from '../i18n/game-terms';
@@ -3151,6 +3248,7 @@ const I18N = I18N_ALL[lang];
   }
 
   function renderBalance() {
+    if (diag) diag.refresh();
     const el = document.getElementById('pb-balance');
     const resolvedParty = resolvedPartyList();
     if (!resolvedParty.length) {
@@ -4378,6 +4476,39 @@ const I18N = I18N_ALL[lang];
     return restoredScrollY;
   }
 
+  // ---- パーティ診断（試作） ----
+  let diag = null;
+  const diagHost = {
+    lang, esc, tPoke, tMove, tItem, tAbil, tNature,
+    maps: { poke: window.__PB_POKEMON_MAP__, move: window.__PB_MOVE_MAP__, abil: window.__PB_ABIL_MAP__, item: window.__PB_ITEM_MAP__, type: window.__PB_TYPE_MAP__ },
+    getSpecs() {
+      const p = activeParty();
+      const filled = p ? p.slots.filter(Boolean).length : 0;
+      return { specs: p && filled === 6 ? p.slots.map((s) => toServerSpec(s)) : null, filled };
+    },
+    applySpec(slotIdx, spec) {
+      const p = activeParty();
+      const slot = fromSuggestSpec(spec);
+      if (!p || !slot || !p.slots[slotIdx]) return null;
+      const prevSlot = p.slots[slotIdx];
+      p.slots[slotIdx] = { ...slot, targets: [] };
+      p.updatedAt = Date.now();
+      saveStore(store);
+      const rbOld = resolveSlotSafe(prevSlot);
+      showUndoToast(null, p.id, slotIdx, prevSlot, 'replace', I18N.holeFillSwappedMsg(tPoke(rbOld ? rbOld.label : prevSlot.sp), tPoke(slot.sp)));
+      render();
+      return { partyId: p.id, slot: prevSlot };
+    },
+    restoreSlot(slotIdx, prev) {
+      const party = store.parties.find((pp) => pp.id === prev.partyId);
+      if (!party) return;
+      party.slots[slotIdx] = prev.slot;
+      party.updatedAt = Date.now();
+      saveStore(store);
+      if (activeParty() && activeParty().id === prev.partyId) render();
+    },
+  };
+
   // ---- 初期化 ----
   /** M1: loadCore()失敗時(fetch失敗・不正レスポンス等)に「読み込み中…」のまま止まらないよう、
    * 「6枠編成」カード直上に失敗表示+再試行ボタンを出す。再試行はページ再読み込みで単純化する。 */
@@ -4411,6 +4542,7 @@ const I18N = I18N_ALL[lang];
       renderInitError();
       return;
     }
+    diag = initDiag(document.getElementById('pb-diag'), diagHost);
     render();
     if (restoredScrollY !== null) requestAnimationFrame(() => window.scrollTo(0, restoredScrollY));
   }

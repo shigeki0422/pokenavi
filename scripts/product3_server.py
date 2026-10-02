@@ -91,6 +91,52 @@ def _load_archetypes(n=8):
 ARCHES = _load_archetypes(8)
 print(f"アーキタイプ盤面 {len(ARCHES)}個: {[a['label'] for a in ARCHES]}", flush=True)
 
+# 選出ガイド（相手＝使用率＋同居率で引いた3000党 guide_pool_m6.json の統計・学習選出）。1提案 約2秒（1コア）なので
+# /suggest には付けず、画面でガイドを開いたときに /guide で1提案ずつ計算する（相手を分けて永続プールで並列）
+import _select_guide as SG
+import _diagnose as DG
+try:
+    GPOOL = SG.load_pool()
+except FileNotFoundError:
+    GPOOL = []
+print(f"選出ガイドの相手 {len(GPOOL)}党", flush=True)
+_GMEMO = {}
+
+def _guide_all(specs):
+    """(summarize の出力, 相手の添字順の貪欲勝率（選べなかった相手は nan）)。/guide と /diagnose で共有"""
+    key = tuple(specs)
+    if key not in _GMEMO:
+        nc = max(2, _WORKERS)
+        parts = _get_pool().map(DG.rows_at, DG.chunk_jobs(specs, GPOOL, SEASON, nc))
+        rows = [(r[0], [x.split("@")[0] for x in GPOOL[i + jj * nc]], r[1])
+                for i, part in enumerate(parts) for jj, r in enumerate(part) if r]
+        if len(_GMEMO) > 2000:
+            _GMEMO.clear()
+        _GMEMO[key] = (SG.summarize([x.split("@")[0] for x in specs], rows), DG.g_array(DG.merge(parts, nc, len(GPOOL))))
+    return _GMEMO[key]
+
+def guide(specs):
+    return _guide_all(specs)[0]
+
+# パーティ診断（ローカル版）。中身は _diagnose.py
+DREF = DG.load_ref()
+
+def diagnose(specs):
+    g, gs = _guide_all(specs)
+    opps = DG.pick_opps(GPOOL, gs, g["weak"])
+    opps = _get_pool().apply(DG.remeasure, (list(specs), [GPOOL[o["id"]] for o in opps], opps, SEASON))
+    return {"guide": g, "rank": DG.rank(g["adv"], DREF), "opps": opps}
+
+def diag_battle(specs, opp, seed, my_sel):
+    """押すたびに新しい1戦（メモしない）。メインプロセスのエンジンを握らないようプールのワーカーで回す"""
+    rec = _get_pool().apply(DG.battle_job, ((list(specs), GPOOL[opp], SEASON, seed, my_sel),))
+    rec["opp_names"] = [x.split("@")[0] for x in GPOOL[opp]]
+    return rec
+
+def improve(specs):
+    return DG.improve(specs, lambda rest: [r["specs"][0] for r in complete(rest, 1, DG.PER_SLOT + 1)["results"]],
+                      _get_pool().map, GPOOL[:DG.IMPROVE_OPPS], SEASON, max(2, _WORKERS))
+
 def _xy_suffix(stone):
     # M-6でZストーン（ルカリオナイトZ等）が追加された。Zを拾わないと同名2件が並ぶ。
     for c in ("X", "Y", "Z"):
@@ -282,18 +328,6 @@ try:
         if _NET_TAG in _k and _ENS_TAG in _k:
             _SCACHE[_k] = _v
     print(f"提案キャッシュ事前ロード: {len(_SCACHE)}件（人気軸。別ネット・別採点モデルの{len(_all) - len(_SCACHE)}件は捨てた）", flush=True)
-except FileNotFoundError:
-    pass
-
-# 選出ガイド（バッチが焼き上げ済みのコアのみ・全240コア完了前でも計算済み分から段階的に同梱可）。
-# ファイルが無ければ何もしない＝未焼成コアは従来通りguide/strategyキー無し（UIは「準備中」表示）。
-_SGUIDE_FILE = os.path.join(os.path.dirname(__file__), "suggest_cache_guided_s.json")
-try:
-    _n_guided = 0
-    for _k, _v in json.load(open(_SGUIDE_FILE, encoding="utf-8")).items():
-        if _NET_TAG in _k and _ENS_TAG in _k:
-            _SCACHE[_k] = _v; _n_guided += 1
-    print(f"選出ガイドオーバーレイ: {_n_guided}件", flush=True)
 except FileNotFoundError:
     pass
 
@@ -521,7 +555,7 @@ def suggest(core_args, ncand, top):
     ck = _suggest_key(fixed, ncand, top)
     hit = _SCACHE.get(ck)
     if hit is not None:
-        return hit                      # 同一軸は即時返却（重い計算をスキップ）
+        return hit       # 同一軸は即時返却（重い計算をスキップ）
     # キャッシュミス＝事前計算済み241軸に無い組み合わせ（未収録種 or 複数コア指定等）。
     # 必然性修復はコスト上ライブ計算に組み込めないため、後日オフラインでキャッシュへ追加できるよう
     # Cloud Logging（標準stdout）に構造化ログを残すのみ（追加インフラ不要・$0）。
@@ -682,7 +716,7 @@ _HEAVY_LOCK = threading.Lock()                       # 重い計算の同時実�
 HEAVY_WAIT = float(os.environ.get("HEAVY_WAIT", "3"))  # ロック取得の最大待ち秒。0で即諦める
 _BUSY = json.dumps({"error": "いま提案の計算が混み合っています。数十秒おいて再試行してください。"}, ensure_ascii=False)
 _LAST_HIT = {}                                       # ip -> 直近の重い処理時刻
-_HEAVY = ("/suggest", "/simulate", "/complete")
+_HEAVY = ("/suggest", "/simulate", "/complete", "/improve")
 MAX_BODY_BYTES = int(os.environ.get("MAX_BODY_BYTES", 16 * 1024))  # POSTボディ上限(既定16KB)。超過は413
 MAX_SPEC_LEN = 500                                   # /complete の specs 1本あたりの文字数上限
 
@@ -718,7 +752,7 @@ class H(BaseHTTPRequestHandler):
             self._send(404, "{}")
 
     def do_POST(self):
-        if self.path not in ("/suggest", "/simulate", "/complete", "/fire_detail", "/speed_detail", "/matchup_detail", "/atk_detail", "/guide_request"):
+        if self.path not in ("/suggest", "/simulate", "/complete", "/fire_detail", "/speed_detail", "/matchup_detail", "/atk_detail", "/guide", "/diagnose", "/diag_battle", "/improve"):
             self._send(404, "{}"); return
         try:
             n = int(self.headers.get("Content-Length", 0) or 0)
@@ -733,18 +767,29 @@ class H(BaseHTTPRequestHandler):
             _LAST_HIT[ip] = now
         try:
             req = json.loads(self.rfile.read(n) or "{}")
-            if self.path == "/guide_request":
-                core = req.get("core") or []
-                if not isinstance(core, list) or len(core) > 6:
+            if self.path in ("/guide", "/diagnose", "/diag_battle", "/improve"):
+                specs = req.get("specs") or []
+                if not GPOOL or not isinstance(specs, list) or len(specs) != 6 or not all(isinstance(x, str) and len(x) <= MAX_SPEC_LEN for x in specs):
                     self._send(200, json.dumps({"error": "invalid"}, ensure_ascii=False)); return
-                safe = []
-                for a in core[:6]:
-                    if isinstance(a, dict):
-                        safe.append({"sp": str(a.get("sp", ""))[:30], "mega": (None if a.get("mega") is None else str(a.get("mega"))[:30])})
-                    else:
-                        safe.append(str(a)[:120])
-                print("[GUIDE_REQUEST] " + json.dumps({"core": safe, "ip": self._client_ip()}, ensure_ascii=False), flush=True)
-                self._send(200, json.dumps({"ok": True}, ensure_ascii=False)); return
+                if self.path == "/guide":
+                    self._send(200, json.dumps(guide(specs), ensure_ascii=False)); return
+                if self.path == "/diagnose":
+                    self._send(200, json.dumps(diagnose(specs), ensure_ascii=False)); return
+                if self.path == "/diag_battle":
+                    opp, seed, my_sel = req.get("opp"), req.get("seed", 0), req.get("my_sel")
+                    if type(opp) is not int or not 0 <= opp < len(GPOOL) or type(seed) is not int or not 0 <= seed < 2 ** 31:
+                        self._send(200, json.dumps({"error": "oppは0〜相手数-1、seedは0〜2^31-1の整数で指定してください"}, ensure_ascii=False)); return
+                    if my_sel is not None and not (isinstance(my_sel, list) and len(my_sel) == 3
+                                                   and all(type(i) is int and 0 <= i < 6 for i in my_sel) and len(set(my_sel)) == 3):
+                        self._send(200, json.dumps({"error": "my_selは0〜5の異なる整数3つ（先頭がリード）かnullで指定してください"}, ensure_ascii=False)); return
+                    self._send(200, json.dumps(diag_battle(specs, opp, seed, my_sel), ensure_ascii=False)); return
+                if not self._acquire_heavy():
+                    self._send(429, _BUSY); return
+                try:
+                    res = improve(specs)
+                finally:
+                    _HEAVY_LOCK.release()
+                self._send(200, json.dumps(res, ensure_ascii=False)); return
             if self.path == "/atk_detail":
                 self._send(200, json.dumps(EX.atk_detail(req.get("specs") or [], req.get("mon", ""), req.get("type", ""), L), ensure_ascii=False)); return
             if self.path in ("/fire_detail", "/speed_detail", "/matchup_detail"):

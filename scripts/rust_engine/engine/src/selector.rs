@@ -206,6 +206,21 @@ pub fn select_cached(
         }
     };
     let nb = n.min(opp.len());
+    if opp_assume_learned() && opp.len() > nb {
+        let osels = learned_osels(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x);
+        let cands = candidates(me, n);
+        if cands.is_empty() {
+            let mut gr = GRng(g);
+            let mut sr = || s.random();
+            return crate::ai::select_party_multi(pack, me, opp, n, &[0.0], pen, &mut gr, &mut sr).remove(0);
+        }
+        if fast_on() && osels.iter().all(|o| o.len() == 3) && cands.iter().all(|c| c.len() == 3) {
+            if let Some((best, _)) = select_fast(pack, ft, sel, me, opp, &osels, &cands, pc, me_is_x) {
+                return cands[best].clone();
+            }
+        }
+        return cands[select_ref(pack, ft, sel, me, opp, &osels, &cands, g).0].clone();
+    }
     let simple = fast_on() && me.iter().chain(opp.iter()).all(|p| pristine(pack, ft, p));
     let chk = if simple && fast_check() { Some((g.clone(), s.clone())) } else { None };
     let tab = if simple {
@@ -263,6 +278,140 @@ pub fn select_cached(
         FAST_FALLBACK.fetch_add(1, Ordering::Relaxed);
     }
     cands[select_ref(pack, ft, sel, me, opp, &osels, &cands, g).0].clone()
+}
+
+/// 学習選出の全候補と値（温度0の選出なら値の最大）。相手の仮定は既定どおりヒューリスティック 温度0,1,1。選出ガイドの集計用
+#[allow(clippy::too_many_arguments)]
+pub fn select_scores(
+    pack: &Pack,
+    ft: &FeatTables,
+    sel: &Selector,
+    me: &mut Vec<Poke>,
+    opp: &mut Vec<Poke>,
+    n: usize,
+    g: &mut CpyRandom,
+    s: &mut CpyRandom,
+    pc: &mut PairCache,
+    me_is_x: bool,
+) -> (Vec<Vec<usize>>, Vec<f64>) {
+    let pen: f64 = std::env::var("MEGA_PENALTY").ok().and_then(|v| v.parse().ok()).unwrap_or(50.0);
+    let nb = n.min(opp.len());
+    let cands = candidates(me, n);
+    if cands.is_empty() || me.len() <= n {
+        return (Vec::new(), Vec::new());
+    }
+    let simple = fast_on() && me.iter().chain(opp.iter()).all(|p| pristine(pack, ft, p));
+    let tab = if simple {
+        let mut sr = || s.random();
+        heur_tab(pack, opp, me, nb, pen, &mut sr, pc, !me_is_x)
+    } else {
+        None
+    };
+    let osels = match tab {
+        Some(x) => x,
+        None => {
+            let mut gr = GRng(g);
+            let mut sr = || s.random();
+            crate::ai::select_party_multi(pack, opp, me, nb, &[0.0, 1.0, 1.0], pen, &mut gr, &mut sr)
+        }
+    };
+    if fast_on() && osels.len() == 3 && osels.iter().all(|o| o.len() == 3) && cands.iter().all(|c| c.len() == 3) {
+        if let Some((_, vals)) = select_fast(pack, ft, sel, me, opp, &osels, &cands, pc, me_is_x) {
+            return (cands, vals);
+        }
+    }
+    let vals = select_ref(pack, ft, sel, me, opp, &osels, &cands, g).1;
+    (cands, vals)
+}
+
+/// 学習選出の中の「相手の選出の仮定」を学習選出そのものに（env SEL_OPP_ASSUME=learned。既定はヒューリスティック 温度0,1,1）
+pub fn opp_assume_learned() -> bool {
+    static V: OnceLock<bool> = OnceLock::new();
+    *V.get_or_init(|| std::env::var("SEL_OPP_ASSUME").map(|v| v == "learned").unwrap_or(false))
+}
+
+fn opp_temp() -> f64 {
+    static V: OnceLock<f64> = OnceLock::new();
+    *V.get_or_init(|| std::env::var("SEL_OPP_TEMP").ok().and_then(|v| v.parse().ok()).unwrap_or(1.0))
+}
+
+/// learned_selection._softmax_pick: 値を標準化（母標準偏差）して exp((z−max)/温度) の重みで1つ引く（乱数1回）
+pub fn softmax_pick(vals: &[f64], temperature: f64, r: f64) -> usize {
+    let n = vals.len() as f64;
+    let m = vals.iter().sum::<f64>() / n;
+    let sd = (vals.iter().map(|v| (v - m) * (v - m)).sum::<f64>() / n).sqrt();
+    let z: Vec<f64> = vals.iter().map(|v| if sd > 1e-9 { (v - m) / sd } else { v * 0.0 }).collect();
+    let zm = z.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
+    let ws: Vec<f64> = z.iter().map(|x| ((x - zm) / temperature.max(1e-6)).exp()).collect();
+    let tot: f64 = ws.iter().sum();
+    let r = r * tot;
+    let mut acc = 0.0;
+    for (i, w) in ws.iter().enumerate() {
+        acc += w;
+        if r <= acc {
+            return i;
+        }
+    }
+    vals.len() - 1
+}
+
+/// 相手の選出の仮定（学習選出版）: 相手側の学習選出（その中の仮定＝こちらのヒューリスティック選出 温度0,1,1）の
+/// 温度0の最良＋温度 SEL_OPP_TEMP（既定1.0）の抽選2回。乱数 s の消費順はこちらのヒューリスティック選出→抽選2回（Python と同じ）
+#[allow(clippy::too_many_arguments)]
+fn learned_osels(
+    pack: &Pack,
+    ft: &FeatTables,
+    sel: &Selector,
+    me: &mut Vec<Poke>,
+    opp: &mut Vec<Poke>,
+    n: usize,
+    nb: usize,
+    pen: f64,
+    g: &mut CpyRandom,
+    s: &mut CpyRandom,
+    pc: &mut PairCache,
+    me_is_x: bool,
+) -> Vec<Vec<usize>> {
+    let simple = fast_on() && me.iter().chain(opp.iter()).all(|p| pristine(pack, ft, p));
+    let nm = nb.min(me.len()).min(n);
+    let tab = if simple {
+        let mut sr = || s.random();
+        heur_tab(pack, me, opp, nm, pen, &mut sr, pc, me_is_x)
+    } else {
+        None
+    };
+    let mine = match tab {
+        Some(x) => x,
+        None => {
+            let mut gr = GRng(g);
+            let mut sr = || s.random();
+            crate::ai::select_party_multi(pack, me, opp, nm, &[0.0, 1.0, 1.0], pen, &mut gr, &mut sr)
+        }
+    };
+    let oc = candidates(opp, nb);
+    if oc.is_empty() {
+        let mut gr = GRng(g);
+        let mut sr = || s.random();
+        return crate::ai::select_party_multi(pack, opp, me, nb, &[0.0, 1.0, 1.0], pen, &mut gr, &mut sr);
+    }
+    let mut vals = None;
+    if fast_on() && mine.len() == 3 && mine.iter().all(|o| o.len() == 3) && oc.iter().all(|c| c.len() == 3) {
+        vals = select_fast(pack, ft, sel, opp, me, &mine, &oc, pc, !me_is_x).map(|x| x.1);
+    }
+    let vals = match vals {
+        Some(v) => v,
+        None => select_ref(pack, ft, sel, opp, me, &mine, &oc, g).1,
+    };
+    let mut best = 0usize;
+    for (k, &v) in vals.iter().enumerate() {
+        if v > vals[best] {
+            best = k;
+        }
+    }
+    let t = opp_temp();
+    let a = softmax_pick(&vals, t, s.random());
+    let b = softmax_pick(&vals, t, s.random());
+    vec![oc[best].clone(), oc[a].clone(), oc[b].clone()]
 }
 
 /// 元の実装（候補×相手の仮定ごとに状態を符号化して推論）。戻り値: (最良の候補, 各候補の値)
@@ -759,6 +908,23 @@ fn select_fast(
 mod tests {
     use super::*;
 
+    const FA: [&str; 6] = [
+        "ボーマンダ@ボーマンダナイト:いじっぱり:げきりん|じしん|すてみタックル|りゅうのまい:0/32/0/0/0/32:いかく",
+        "ギルガルド@いのちのたま:れいせい:かげうち|アイアンヘッド|キングシールド|シャドーボール:32/0/0/32/0/0:バトルスイッチ",
+        "アシレーヌ@リンドのみ:ずぶとい:なみのり|ねむる|めいそう|ムーンフォース:32/0/32/0/0/0:げきりゅう",
+        "カバルドン@イトケのみ:わんぱく:じしん|あくび|ふきとばし|なまける:32/0/32/0/0/0:すなおこし",
+        "ミミッキュ@いのちのたま:ようき:じゃれつく|シャドークロー|かげうち|つるぎのまい:0/32/0/0/0/32:ばけのかわ",
+        "サーフゴー@たべのこし:ひかえめ:シャドーボール|ゴールドラッシュ|わるだくみ|じこさいせい:32/0/0/32/0/0:おうごんのからだ",
+    ];
+    const FB: [&str; 6] = [
+        "ガブリアス@ヤチェのみ:ようき:じしん|ドラゴンクロー|スケイルショット|つるぎのまい:0/32/0/0/0/32:さめはだ",
+        "イダイトウ(オス)@こだわりハチマキ:いじっぱり:ウェーブタックル|おはかまいり|アクアジェット|クイックターン:0/32/0/0/0/32:てきおうりょく",
+        "エアームド@オッカのみ:わんぱく:ボディプレス|はねやすめ|てっぺき|ステルスロック:32/0/32/0/0/0:がんじょう",
+        "リザードン@リザードナイトＹ:おくびょう:かえんほうしゃ|ソーラービーム|エアスラッシュ|ねっぷう:0/0/0/32/0/32:もうか",
+        "ニンフィア@ホズのみ:ひかえめ:ハイパーボイス|でんこうせっか|めいそう|まもる:32/0/0/32/0/0:フェアリースキン",
+        "ドドゲザン@ヨプのみ:いじっぱり:ドゲザン|アイアンヘッド|ふいうち|つるぎのまい:0/32/0/0/0/32:そうだいしょう",
+    ];
+
     #[test]
     fn sparse_predict_equals_dense() {
         let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6b.json");
@@ -788,22 +954,7 @@ mod tests {
             None => return,
         };
         let mut pack = Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"));
-        let a = [
-            "ボーマンダ@ボーマンダナイト:いじっぱり:げきりん|じしん|すてみタックル|りゅうのまい:0/32/0/0/0/32:いかく",
-            "ギルガルド@いのちのたま:れいせい:かげうち|アイアンヘッド|キングシールド|シャドーボール:32/0/0/32/0/0:バトルスイッチ",
-            "アシレーヌ@リンドのみ:ずぶとい:なみのり|ねむる|めいそう|ムーンフォース:32/0/32/0/0/0:げきりゅう",
-            "カバルドン@イトケのみ:わんぱく:じしん|あくび|ふきとばし|なまける:32/0/32/0/0/0:すなおこし",
-            "ミミッキュ@いのちのたま:ようき:じゃれつく|シャドークロー|かげうち|つるぎのまい:0/32/0/0/0/32:ばけのかわ",
-            "サーフゴー@たべのこし:ひかえめ:シャドーボール|ゴールドラッシュ|わるだくみ|じこさいせい:32/0/0/32/0/0:おうごんのからだ",
-        ];
-        let b = [
-            "ガブリアス@ヤチェのみ:ようき:じしん|ドラゴンクロー|スケイルショット|つるぎのまい:0/32/0/0/0/32:さめはだ",
-            "イダイトウ(オス)@こだわりハチマキ:いじっぱり:ウェーブタックル|おはかまいり|アクアジェット|クイックターン:0/32/0/0/0/32:てきおうりょく",
-            "エアームド@オッカのみ:わんぱく:ボディプレス|はねやすめ|てっぺき|ステルスロック:32/0/32/0/0/0:がんじょう",
-            "リザードン@リザードナイトＹ:おくびょう:かえんほうしゃ|ソーラービーム|エアスラッシュ|ねっぷう:0/0/0/32/0/32:もうか",
-            "ニンフィア@ホズのみ:ひかえめ:ハイパーボイス|でんこうせっか|めいそう|まもる:32/0/0/32/0/0:フェアリースキン",
-            "ドドゲザン@ヨプのみ:いじっぱり:ドゲザン|アイアンヘッド|ふいうち|つるぎのまい:0/32/0/0/0/32:そうだいしょう",
-        ];
+        let (a, b) = (FA, FB);
         let a6: Vec<Poke> = a.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
         let b6: Vec<Poke> = b.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
         let pack = pack;
@@ -831,6 +982,47 @@ mod tests {
             }
         }
         assert!(pc.tabs.as_ref().unwrap().xy.iter().any(|t| t.cons[0]), "半減きのみの消費が起きる組を含む");
+    }
+
+    /// SEL_OPP_ASSUME=learned の相手の仮定: 1つ目は相手側の学習選出（既定の仮定＝こちらのヒューリスティック）の温度0と同じ選出・
+    /// 同じ乱数の消費。残り2つは相手の候補から引いたもの
+    #[test]
+    fn learned_osels_first_is_opp_learned_choice() {
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6b.json");
+        let sel = match Selector::from_json(p) {
+            Some(s) => s,
+            None => return,
+        };
+        let mut pack = Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"));
+        let a6: Vec<Poke> = FA.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
+        let b6: Vec<Poke> = FB.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
+        let pack = pack;
+        let ft = FeatTables::build(&pack);
+        for seed in 0..4i128 {
+            let (mut me, mut opp) = (a6.clone(), b6.clone());
+            let (mut g, mut s) = (CpyRandom::new(7), CpyRandom::new(300 + seed));
+            let os = learned_osels(&pack, &ft, &sel, &mut me, &mut opp, 3, 3, 50.0, &mut g, &mut s, &mut PairCache::default(), true);
+            let (mut me2, mut opp2) = (a6.clone(), b6.clone());
+            let (mut g2, mut s2) = (CpyRandom::new(7), CpyRandom::new(300 + seed));
+            let want = select_cached(&pack, &ft, Some(&sel), &mut opp2, &mut me2, 3, &mut g2, &mut s2, &mut PairCache::default(), false);
+            assert_eq!(os[0], want);
+            assert_eq!(os.len(), 3);
+            let oc = candidates(&b6, 3);
+            assert!(os.iter().all(|o| oc.contains(o)));
+            s2.random();
+            s2.random();
+            assert_eq!(s.random(), s2.random(), "乱数の消費＝相手の学習選出の分＋抽選2回");
+        }
+    }
+
+    #[test]
+    fn softmax_pick_bounds() {
+        let v = [0.2, 0.5, 0.5, 0.1];
+        assert_eq!(softmax_pick(&v, 1.0, 0.0), 0);
+        assert_eq!(softmax_pick(&v, 1.0, 0.999999), 3);
+        assert_eq!(softmax_pick(&v, 1e-9, 0.5), 1);
+        assert_eq!(softmax_pick(&[0.3, 0.3], 1.0, 0.49), 0);
+        assert_eq!(softmax_pick(&[0.3, 0.3], 1.0, 0.51), 1);
     }
 
     #[test]
