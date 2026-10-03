@@ -3,18 +3,85 @@ import BaseHead from '../components/BaseHead.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import BattleAssistApp from '../components/BattleAssistApp.astro';
+import ToolPageNotes from '../components/ToolPageNotes.astro';
 
-const title = 'ポケモンチャンピオンズ 対戦アシスト | 対戦中に使うダメージ計算';
-const description = 'パーティ工房に登録した自分のパーティで、目の前の相手との技ダメージを対戦中にその場で確認。相手はよく使われる型ごとに試算し、型は変えた瞬間に再計算します。';
+const title = 'ポケモンチャンピオンズ ダメージ計算 | 対戦中に使う対戦アシスト';
+const description = '対戦中、相手を選ぶだけで技ごとのダメージと確定数がすぐ出るダメージ計算ツール。自分のパーティはパーティ工房から読み込み済み。相手は使用率から推定した想定型ごとに試算し、持ち物・特性・天候・フィールドを変えるとその場で再計算します。';
+const siteUrl = 'https://pokenavi.jp';
+
+const faqs = [
+  {
+    q: '相手の型はどうやって決まりますか。',
+    a: 'ポケモンチャンピオンズの採用率データから推定した想定型を、採用率の高い順に複数用意しています。相手の持ち物・特性・性格・EV・技は画面上で差し替えられ、変更した瞬間にダメージが計算し直されます。',
+  },
+  {
+    q: '自分のパーティはどこから読み込まれますか。',
+    a: 'パーティ工房で保存したパーティがそのまま読み込まれます。対戦アシスト側で型を変えても工房のパーティは変わらず、この画面だけの一時的な調整として扱われます。工房側に反映したい場合は上書き保存のボタンを押してください。',
+  },
+  {
+    q: '確定数の表示は何を意味しますか。',
+    a: '「確定2発」は乱数に関係なく2発で落とせること、「乱数2発」は乱数次第で2発になることを指します。6発以上かかる場合は「6発以上」とまとめて表示します。',
+  },
+  {
+    q: '天候やフィールドは計算に入りますか。',
+    a: '入ります。天候とフィールドを選ぶとダメージに反映されます。初期状態は「特性まかせ」で、場に出ている特性から自動で判定します。',
+  },
+  {
+    q: '対戦中に開いたままで使えますか。',
+    a: '使えます。横に並べて開いたまま相手を切り替えられるように作っています。計算はブラウザ内で行うため、相手を選び直しても待ち時間はほとんどありません。',
+  },
+  {
+    q: 'パーティ工房との違いは何ですか。',
+    a: 'パーティ工房は構築を組む前後に型を詰めるためのツールで、6匹全体のバランスを見ます。対戦アシストは対戦中に目の前の1匹と向き合うためのもので、相手を選ぶ操作だけで必要な数字が出るように絞ってあります。',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'ポケナビ 対戦アシスト',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: siteUrl + '/battle-assist/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+};
 ---
 
 <html lang="ja">
   <head>
     <BaseHead title={title} description={description} imageUrl="/og-party-builder.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body>
     <Header />
     <BattleAssistApp lang="ja" />
+    <ToolPageNotes faqs={faqs}>
+      <h2>対戦アシストでできること</h2>
+      <p>対戦中に、<strong>目の前の相手との殴り合いの結果を数字で確かめる</strong>ためのツールです。相手を選ぶ以外の操作をほとんど要らなくして、1ターンの合間でも見られる速さを目指しています。</p>
+      <table>
+        <thead><tr><th>知りたいこと</th><th>画面で見るところ</th></tr></thead>
+        <tbody>
+          <tr><td>この技で落とせるか</td><td>「自分 → 相手」のダメージと確定数。確定2発・乱数2発のように表示されます</td></tr>
+          <tr><td>このまま殴り合って耐えるか</td><td>「相手 → 自分」のダメージ。相手の技ごとに自分の残りHPを確認できます</td></tr>
+          <tr><td>相手の型が違ったらどうなるか</td><td>型のタブ。採用率の高い順に並んでおり、切り替えるとその場で計算し直します</td></tr>
+          <tr><td>天候やフィールドが変わったら</td><td>天候・フィールドの選択。初期は特性から自動で判定します</td></tr>
+        </tbody>
+      </table>
+
+      <h2>使い方</h2>
+      <ol>
+        <li><strong>自分のパーティを選ぶ</strong> — パーティ工房に保存したパーティがそのまま読み込まれます</li>
+        <li><strong>相手を入力する</strong> — ひらがなでも検索でき、使用率順の一覧からも選べます</li>
+        <li><strong>型を切り替えて確かめる</strong> — 採用率の高い型から順に、技ごとのダメージと確定数が出ます</li>
+        <li><strong>前提を変える</strong> — 持ち物・特性・天候・フィールドを変えると、その場で再計算されます</li>
+      </ol>
+
+      <h2>計算の前提</h2>
+      <p>相手の型は、ポケモンチャンピオンズの採用率データから<a href="/pokemon/">推定した想定型</a>を使っています。実際の相手がこの型と違うことはあるので、型を切り替えて幅を見るのが前提の使い方です。急所・追加効果・交代は計算に含みません。</p>
+      <p>構築を組む段階の調整は<a href="/party-builder/">パーティ工房</a>、たたき台づくりは<a href="/party-suggest/">軸から簡単構築</a>が向いています。対戦アシストは、すでに組んだパーティを持って対戦している最中のためのツールです。</p>
+    </ToolPageNotes>
     <Footer />
   </body>
 </html>

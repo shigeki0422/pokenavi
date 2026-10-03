@@ -6,7 +6,7 @@ import ToolPageNotes from '../components/ToolPageNotes.astro';
 import rankingData from '../data/ranking.json';
 
 const title = 'ポケモンチャンピオンズ AI構築ツール | 軸から自動生成・パーティ工房';
-const description = 'ポケモンチャンピオンズのAIパーティ構築ツール2種。軸ポケモンから残り5枠を自動生成する「軸から簡単構築」と、1v1相性を見ながら6匹の型を微調整できる「パーティ工房」。';
+const description = 'ポケモンチャンピオンズのAIパーティ構築ツール3種。軸ポケモンから残り5枠を自動生成する「軸から簡単構築」、1v1相性を見ながら6匹の型を微調整できる「パーティ工房」、対戦中のダメージ計算に使う「対戦アシスト」。';
 const siteUrl = 'https://pokenavi.jp';
 
 /** シーズン名・集計規模はranking.jsonから引く(固定値だと更新のたびに古くなる)。 */
@@ -19,8 +19,8 @@ const fmtDate = (d: string) => { const [, m, dd] = d.split('-'); return `${parse
 
 const faqs = [
   {
-    q: 'どちらのツールを使えばいいですか。',
-    a: '軸にしたいポケモンだけ決まっていて残り5枠が白紙なら「軸から簡単構築」、6匹はすでに決まっていて型を詰めたいなら「パーティ工房」です。まず簡単構築でたたき台を作り、工房で仕上げる流れが基本になります。',
+    q: 'どのツールを使えばいいですか。',
+    a: '軸にしたいポケモンだけ決まっていて残り5枠が白紙なら「軸から簡単構築」、6匹はすでに決まっていて型を詰めたいなら「パーティ工房」、組んだパーティで対戦している最中なら「対戦アシスト」です。まず簡単構築でたたき台を作り、工房で仕上げ、対戦中はアシストで数字を確認する流れになります。',
   },
   {
     q: '提案や判定は何を根拠にしていますか。',
@@ -58,6 +58,13 @@ const jsonLd = {
       '@type': 'SoftwareApplication',
       name: 'パーティ工房',
       url: siteUrl + '/party-builder/',
+      applicationCategory: 'GameApplication',
+      operatingSystem: 'Web',
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: '対戦アシスト',
+      url: siteUrl + '/battle-assist/',
       applicationCategory: 'GameApplication',
       operatingSystem: 'Web',
     },
@@ -139,7 +146,7 @@ const jsonLd = {
     <Header />
     <main>
       <h1>パーティ構築</h1>
-      <p class="lead">ポケモンチャンピオンズのパーティ構築を支援する、AIシミュレーションに裏付けられた2つのツールです。目的に合わせて使い分けることで、たたき台づくりから細かな詰めまでをカバーできます。</p>
+      <p class="lead">ポケモンチャンピオンズのパーティ構築を支援する、AIシミュレーションに裏付けられた3つのツールです。目的に合わせて使い分けることで、たたき台づくりから細かな詰め、対戦中の確認までをカバーできます。</p>
 
       <div class="cards">
         <div class="card">
@@ -169,13 +176,27 @@ const jsonLd = {
           </ul>
           <a class="cta" href="/party-builder">パーティ工房を使う →</a>
         </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h2>対戦アシスト</h2>
+          </div>
+          <p class="for-whom">対戦中に数字を確かめたい人向け</p>
+          <p class="desc">組んだパーティを持ったまま、目の前の相手との技ダメージと確定数をその場で計算します。</p>
+          <ul>
+            <li>相手を選ぶだけで与ダメ・被ダメを表示</li>
+            <li>採用率の高い想定型ごとに試算</li>
+            <li>天候・フィールドを変えると即再計算</li>
+          </ul>
+          <a class="cta" href="/battle-assist">対戦アシストを使う →</a>
+        </div>
       </div>
 
-      <p class="usage-tip">まず「軸から簡単構築」でたたき台を作り、「パーティ工房」で仮想敵に合わせて詰めるのがおすすめです。</p>
+      <p class="usage-tip">まず「軸から簡単構築」でたたき台を作り、「パーティ工房」で仮想敵に合わせて詰め、対戦中は「対戦アシスト」で数字を確かめる、という流れがおすすめです。</p>
 
     <ToolPageNotes faqs={faqs}>
         <h2>どちらを使うか</h2>
-        <p>2つのツールは、構築のどの段階にいるかで使い分けます。迷ったら、いま手元に「何が決まっているか」で選んでください。</p>
+        <p>3つのツールは、構築のどの段階にいるかで使い分けます。迷ったら、いま手元に「何が決まっているか」で選んでください。</p>
         <table>
           <thead>
             <tr><th>いまの状態</th><th>使うツール</th><th>できること</th></tr>
@@ -196,11 +217,16 @@ const jsonLd = {
               <td>パーティ工房</td>
               <td>仮想敵を指定して素早さ実数値を比較し、1v1で有利を取れるかを判定します。</td>
             </tr>
+            <tr>
+              <td>いま対戦している</td>
+              <td><a href="/battle-assist/">対戦アシスト</a></td>
+              <td>目の前の相手を選ぶと、技ごとのダメージと確定数が出ます。相手の型は採用率の高い順に切り替えられます。</td>
+            </tr>
           </tbody>
         </table>
 
         <h2>提案と判定の根拠</h2>
-        <p>どちらのツールも、想像で組んだ型ではなく<strong>実際に使われている型</strong>を基準にしています。シーズン{seasonKey}の対戦データから{speciesCount}体分を集計し、次の項目をポケモンごとに保持しています。</p>
+        <p>いずれのツールも、想像で組んだ型ではなく<strong>実際に使われている型</strong>を基準にしています。シーズン{seasonKey}の対戦データから{speciesCount}体分を集計し、次の項目をポケモンごとに保持しています。</p>
         <ul>
           <li><strong>技・持ち物・特性・性格・EV</strong> — それぞれの採用率を上位から集計。主流型の再現に使います</li>
           <li><strong>同居率</strong> — どのポケモンと一緒に使われているか。提案時の並びの自然さに反映されます</li>
