@@ -1,0 +1,20 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BattleAssistApp from '../../components/BattleAssistApp.astro';
+
+const title = 'Pokémon Champions Battle Assist | Damage calculator for live battles';
+const description = 'Check move damage against the Pokémon in front of you, mid-battle, using the team saved in your Party Workshop. The opponent is calculated for each common set and recalculated the moment you change it.';
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-party-builder.png" />
+  </head>
+  <body>
+    <Header />
+    <BattleAssistApp lang="en" />
+    <Footer />
+  </body>
+</html>

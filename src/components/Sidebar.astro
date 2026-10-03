@@ -11,7 +11,7 @@ const NAV = {
     home: 'ホーム',
     navResearch: '調べる', navRead: '読む', navWatch: '観る', navBuild: '戦う',
     watchParent: '仮想バトル観戦', simA: 'M-A環境', simB: 'M-B環境', soonTitle: '近日公開予定',
-    buildParent: 'パーティ構築', quickBuild: '軸から簡単構築', detailBuild: 'パーティ工房',
+    buildParent: 'パーティ構築', quickBuild: '軸から簡単構築', detailBuild: 'パーティ工房', assist: '対戦アシスト',
     pokemon: 'ポケモン情報', ranking: '使用率ランキング', blog: '考察記事',
     m6: 'M-6 シーズン', m5: 'M-5 シーズン', m4: 'M-4 シーズン', m3: 'M-3 シーズン', m2: 'M-2 シーズン', about: '運営者情報', privacy: 'プライバシーポリシー',
   },
@@ -19,7 +19,7 @@ const NAV = {
     home: 'Home',
     navResearch: 'Research', navRead: 'Read', navWatch: 'Watch', navBuild: 'Battle',
     watchParent: 'AI Battle Replays', simA: 'M-A', simB: 'M-B', soonTitle: 'Coming soon',
-    buildParent: 'Team Building', quickBuild: 'Quick Build from Core', detailBuild: 'Party Workshop',
+    buildParent: 'Team Building', quickBuild: 'Quick Build from Core', detailBuild: 'Party Workshop', assist: 'Battle Assist',
     pokemon: 'Pokémon Data', ranking: 'Usage Ranking', blog: 'Analysis',
     m3: 'M-3 Season', m2: 'M-2 Season', about: 'About', privacy: 'Privacy Policy',
   },
@@ -27,7 +27,7 @@ const NAV = {
     home: '홈',
     navResearch: '알아보기', navRead: '읽기', navWatch: '보기', navBuild: '배틀',
     watchParent: '가상 대전 관전', simA: 'M-A', simB: 'M-B', soonTitle: '준비 중',
-    buildParent: '파티 구성', quickBuild: '축으로 간단 구성', detailBuild: '파티 공방',
+    buildParent: '파티 구성', quickBuild: '축으로 간단 구성', detailBuild: '파티 공방', assist: '배틀 어시스트',
     pokemon: '포켓몬 정보', ranking: '사용률 랭킹', blog: '공략 기사',
     m3: 'M-3 시즌', m2: 'M-2 시즌', about: '운영자 정보', privacy: '개인정보 처리방침',
   },
@@ -45,6 +45,7 @@ const isSimBActive = isActive(`${pfx}/simulator-mb`);
 const isWatchParentActive = isActive(`${pfx}/battle-simulator`);
 const isQuickBuildActive = isActive(`${pfx}/party-suggest`);
 const isDetailBuildActive = isActive(`${pfx}/party-builder`);
+const isAssistActive = isActive(`${pfx}/battle-assist`);
 const isPartyBuildingActive = isActive(`${pfx}/party-building`);
 const isBuildParentActive = isPartyBuildingActive;
 const buildParentHref = `${pfx}/party-building`;
@@ -85,7 +86,7 @@ const langUrls = isBlogPath
 		{lang === 'ja' && <>
 			<div class="sb-verb-caption">📖 {NAV.navRead}</div>
 			<a href="/blog" class:list={['sb-link', { active: isBlogActive }]}>{NAV.blog}</a>
-			<a href="/blog/m6/" class:list={['sb-sublink', { active: isM6Active }]}>{NAV.m6}<span class="season-badge new">NEW</span></a>
+			<a href="/blog/m6/" class:list={['sb-sublink', { active: isM6Active }]}>{NAV.m6}</a>
 			<a href="/blog/m5/" class:list={['sb-sublink', { active: isM5Active }]}>{NAV.m5}</a>
 			<a href="/blog/m4/" class:list={['sb-sublink', { active: isM4Active }]}>{NAV.m4}</a>
 			<a href="/blog/m3/" class:list={['sb-sublink', { active: isM3Active }]}>{NAV.m3}</a>
@@ -95,12 +96,13 @@ const langUrls = isBlogPath
 		<div class="sb-verb-caption">🎬 {NAV.navWatch}</div>
 		<a href={`${pfx}/battle-simulator`} class:list={['sb-link', { active: isWatchParentActive }]}>{NAV.watchParent}</a>
 		<a href={`${pfx}/simulator`} class:list={['sb-sublink', { active: isSimAActive }]}>{NAV.simA}</a>
-		<a href={`${pfx}/simulator-mb`} class:list={['sb-sublink', { active: isSimBActive }]}>{NAV.simB}<span class="season-badge new">NEW</span></a>
+		<a href={`${pfx}/simulator-mb`} class:list={['sb-sublink', { active: isSimBActive }]}>{NAV.simB}</a>
 
 		<div class="sb-verb-caption">⚔️ {NAV.navBuild}</div>
 		<a href={buildParentHref} class:list={['sb-link', { active: isBuildParentActive }]}>{NAV.buildParent}</a>
-		<a href={`${pfx}/party-suggest`} class:list={['sb-sublink', { active: isQuickBuildActive }]}>{NAV.quickBuild}<span class="season-badge new">NEW</span></a>
-		<a href={`${pfx}/party-builder`} class:list={['sb-sublink', { active: isDetailBuildActive }]}>{NAV.detailBuild}<span class="season-badge new">NEW</span></a>
+		<a href={`${pfx}/party-suggest`} class:list={['sb-sublink', { active: isQuickBuildActive }]}>{NAV.quickBuild}</a>
+		<a href={`${pfx}/party-builder`} class:list={['sb-sublink', { active: isDetailBuildActive }]}>{NAV.detailBuild}</a>
+		<a href={`${pfx}/battle-assist`} class:list={['sb-sublink', { active: isAssistActive }]}>{NAV.assist}<span class="season-badge new">NEW</span></a>
 	</nav>
 	<div class="sb-foot">
 		<div class="lang-switcher">

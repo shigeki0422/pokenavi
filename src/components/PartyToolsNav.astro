@@ -1,11 +1,11 @@
 ---
-interface Props { current: 'suggest' | 'builder'; lang?: 'ja' | 'en' | 'ko' }
+interface Props { current: 'suggest' | 'builder' | 'assist'; lang?: 'ja' | 'en' | 'ko' }
 const { current, lang = 'ja' } = Astro.props;
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 const LABELS = {
-	ja: { suggest: '軸から簡単構築', builder: 'パーティ工房', start: 'はじめはこちら' },
-	en: { suggest: 'Quick Build from Core', builder: 'Party Workshop', start: 'Start here' },
-	ko: { suggest: '축으로 간단 구성', builder: '파티 공방', start: '처음이라면 여기' },
+	ja: { suggest: '軸から簡単構築', builder: 'パーティ工房', assist: '対戦アシスト', start: 'はじめはこちら' },
+	en: { suggest: 'Quick Build from Core', builder: 'Party Workshop', assist: 'Battle Assist', start: 'Start here' },
+	ko: { suggest: '축으로 간단 구성', builder: '파티 공방', assist: '배틀 어시스트', start: '처음이라면 여기' },
 }[lang];
 ---
 <nav class="pt-nav" aria-label={LABELS.suggest + ' / ' + LABELS.builder}>
@@ -20,11 +20,15 @@ const LABELS = {
 		<svg class="pt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h8m4 0h4M4 12h2m4 0h10M4 18h10m4 0h2"/><circle cx="14" cy="6" r="2"/><circle cx="8" cy="12" r="2"/><circle cx="16" cy="18" r="2"/></svg>
 		<span class="pt-label">{LABELS.builder}</span>
 	</a>
+	<a href={`${pfx}/battle-assist`} class:list={['pt-tab', { active: current === 'assist' }]} aria-current={current === 'assist' ? 'page' : undefined}>
+		<svg class="pt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>
+		<span class="pt-label">{LABELS.assist}</span>
+	</a>
 </nav>
 <style>
 	.pt-nav {
 		display: flex; gap: 3px; padding: 3px; margin: 0 0 0.9rem;
-		background: #e8ecf3; border-radius: 12px; max-width: 34rem;
+		background: #e8ecf3; border-radius: 12px; max-width: 46rem;
 	}
 	.pt-tab {
 		flex: 1 1 0; position: relative; box-sizing: border-box; min-height: 44px; min-width: 0;

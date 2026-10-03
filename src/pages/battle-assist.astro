@@ -1,0 +1,20 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import BattleAssistApp from '../components/BattleAssistApp.astro';
+
+const title = 'ポケモンチャンピオンズ 対戦アシスト | 対戦中に使うダメージ計算';
+const description = 'パーティ工房に登録した自分のパーティで、目の前の相手との技ダメージを対戦中にその場で確認。相手はよく使われる型ごとに試算し、型は変えた瞬間に再計算します。';
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-party-builder.png" />
+  </head>
+  <body>
+    <Header />
+    <BattleAssistApp lang="ja" />
+    <Footer />
+  </body>
+</html>

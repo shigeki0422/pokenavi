@@ -1,0 +1,20 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import BattleAssistApp from '../../components/BattleAssistApp.astro';
+
+const title = '포켓몬 챔피언스 배틀 어시스트 | 배틀 중에 쓰는 대미지 계산';
+const description = '파티 공방에 등록한 내 파티로 눈앞의 상대와의 기술 대미지를 배틀 중에 바로 확인. 상대는 자주 쓰이는 샘플별로 계산하고, 샘플을 바꾸는 즉시 다시 계산합니다.';
+---
+
+<html lang="ko">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-party-builder.png" />
+  </head>
+  <body>
+    <Header />
+    <BattleAssistApp lang="ko" />
+    <Footer />
+  </body>
+</html>
