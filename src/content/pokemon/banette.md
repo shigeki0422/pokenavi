@@ -87,7 +87,7 @@ analysisSlug: 'banette-analysis-m2'
 
 <div style="display:flex;align-items:center;gap:6px;margin:4px 0 10px"><img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:36px;height:36px;vertical-align:middle" /></div>
 
-**特性：いたずらごころ** — 変化技の優先度が1段階上がる。あくタイプの相手への変化技は無効になる。
+**特性：いたずらごころ** — 変化技の優先度が1段階上がる。あくタイプの相手を対象にとる変化技は無効になる（自分や場が対象の変化技は使える）。
 
 <div style="max-width:560px;margin:10px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #e2e8f0">
