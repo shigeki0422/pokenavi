@@ -44,7 +44,7 @@ def _apply_forme_type(poke: "BattlePokemon", field: "BattleField", logs: list) -
 # ── 場に出た時 ──────────────────────────────────────────────────────────────
 
 def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
-                  field: "BattleField", weather_duration: int = 5) -> list[str]:
+                  field: "BattleField") -> list[str]:
     logs = []
     ab = poke.ability
 
@@ -53,9 +53,10 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
         "すなおこし": "sandstorm", "ひでり": "sunny",
         "あめふらし": "rain",      "ゆきふらし": "hail",
     }
+    WEATHER_ROCK = {"sandstorm": "さらさらいわ", "sunny": "あついいわ", "rain": "しめったいわ", "hail": "つめたいいわ"}
     if ab in WEATHER_MAP and field.weather != WEATHER_MAP[ab]:
         field.weather = WEATHER_MAP[ab]
-        field.weather_count = weather_duration
+        field.weather_count = 8 if poke.item == WEATHER_ROCK[WEATHER_MAP[ab]] else 5
         logs.append(f"{poke.name} の {ab}！")
 
     # メイカー系：登場時にフィールドを展開
@@ -65,10 +66,9 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
         "サイコメイカー": ("psychic_terrain", "足元が不思議な感じになった"),
     }
     if ab in TERRAIN_MAKERS and not getattr(field, TERRAIN_MAKERS[ab][0], False):
-        from .items import terrain_turns, try_terrain_seed
+        from .items import terrain_turns, try_terrain_seed, set_terrain
         _attr, _msg = TERRAIN_MAKERS[ab]
-        setattr(field, _attr, True)
-        setattr(field, _attr + "_count", terrain_turns(poke.item))
+        set_terrain(field, _attr, terrain_turns(poke.item))
         logs.append(f"{poke.name} の {ab}！ {_msg}！")
         for _sp in (poke, opponent):
             try_terrain_seed(_sp, field, logs)   # 設置時は両者のシードが発動する
@@ -81,7 +81,10 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
         elif opponent.ability == "びびり":
             opponent.stage_speed = min(6, opponent.stage_speed + 1)
             logs.append(f"{poke.name} の いかく！ {opponent.name} の びびり で素早さが上がった！")
-        elif opponent.ability in ("クリアボディ", "しろいけむり", "かがくへんかガス",
+        elif opponent.ability == "ミラーアーマー":
+            logs.append(f"{poke.name} の いかく！ {opponent.name} の ミラーアーマー で跳ね返した！")
+            reflect_stat_drop(poke, "stage_attack", -1, logs)
+        elif opponent.ability in ("クリアボディ", "しろいけむり", "かがくへんかガス", "かいりきバサミ",
                                 "マイペース", "どんかん", "きもったま", "せいしんりょく"):
             logs.append(f"{poke.name} の いかく は {opponent.name} に効かなかった！")
         elif opponent.ability == "あまのじゃく":
@@ -149,7 +152,7 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
 # ── 技で被弾した後 ──────────────────────────────────────────────────────────
 
 def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
-                 move, logs: list) -> None:
+                 move, logs: list, field=None) -> None:
     """物理・特殊を問わず被弾後の特性効果"""
     ab = defender.ability
 
@@ -162,7 +165,7 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
     # せいでんき (接触技 → 30%麻痺)
     if ab == "せいでんき" and is_contact_move(move) and attacker.ability != "えんかく":
         if random.random() < 0.30:
-            ok = attacker.apply_status("paralysis")
+            ok = attacker.apply_status("paralysis", field=field)
             if ok:
                 logs.append(f"{defender.name} の せいでんき！ {attacker.name} が まひ した！")
 
@@ -170,45 +173,19 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
     if ab == "ほうし" and is_contact_move(move) and attacker.ability != "えんかく":
         if random.random() < 0.30:
             st = random.choice(["poison", "paralysis", "sleep"])
-            ok = attacker.apply_status(st)
+            from .pokemon import terrain_blocks_sleep
+            ok = not (st == "sleep" and terrain_blocks_sleep(attacker, field)) and attacker.apply_status(st, field=field)
             if ok:
                 if st == "sleep":
-                    attacker.sleep_count = random.randint(1, 3)
+                    attacker.sleep_count = random.randint(2, 4)
+                    attacker._sleep_acts = 0  # type: ignore
+                    attacker._sleep_rest = False  # type: ignore
                 _jp = {"poison": "どく", "paralysis": "まひ", "sleep": "ねむり"}[st]
                 logs.append(f"{defender.name} の ほうし！ {attacker.name} は {_jp} になった！")
 
     # のろわれボディ → battle.py の _execute_move 内で処理
 
-    # ひらいしん（でんき無効 → SpAtk+1 は damage.py で0ダメにした後ここで処理）
-    if ab == "ひらいしん" and move.type == "でんき":
-        defender.stage_sp_attack = min(6, defender.stage_sp_attack + 1)
-        logs.append(f"{defender.name} の ひらいしん！ 特攻が上がった！")
-
-    # ちくでん/ちょすい/かんそうはだ（対応タイプを吸収すると最大HP1/4回復）
-    _ABSORB_HEAL = {"ちくでん": "でんき", "ちょすい": "みず", "かんそうはだ": "みず", "どしょく": "じめん"}
-    if ab in _ABSORB_HEAL and move.type == _ABSORB_HEAL[ab]:
-        if defender.hp < defender.max_hp:
-            heal = max(1, defender.max_hp // 4)
-            defender.hp = min(defender.max_hp, defender.hp + heal)
-            logs.append(f"{defender.name} の {ab}！ HPが {heal} 回復した！")
-
-    # もらいび（ほのお無効 → 次のほのお技強化フラグ）
-    if ab == "もらいび" and move.type == "ほのお":
-        if not getattr(defender, "_flash_fire_active", False):
-            defender._flash_fire_active = True  # type: ignore
-            logs.append(f"{defender.name} の もらいび が発動！")
-
-    # でんきエンジン（でんき無効 → Speed+1）
-    if ab == "でんきエンジン" and move.type == "でんき":
-        defender.stage_speed = min(6, defender.stage_speed + 1)
-        logs.append(f"{defender.name} の でんきエンジン！ 素早さが上がった！")
-
-    # そうしょく（くさ無効 → 攻撃+1）
-    if ab == "そうしょく" and move.type == "くさ":
-        defender.stage_attack = min(6, defender.stage_attack + 1)
-        logs.append(f"{defender.name} の そうしょく！ 攻撃が上がった！")
-
-    # でんきにかえる（被弾 → 次のでんき技の威力1.5倍、何度でも再充電可）
+    # でんきにかえる（被弾 → 次のでんき技の威力2倍、何度でも再充電可）
     if ab == "でんきにかえる":
         defender._electromorphosis_charged = True  # type: ignore
         logs.append(f"{defender.name} の でんきにかえる！ でんき技がチャージされた！")
@@ -225,7 +202,7 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
     # シンクロ（状態異常を受けたら攻撃側にも同じ状態異常）
     if ab == "シンクロ" and defender.is_alive and defender.status in ("poison","badpoison","paralysis","burn"):
         if attacker.is_alive:
-            ok = attacker.apply_status(defender.status)
+            ok = attacker.apply_status(defender.status, field=field)
             if ok:
                 logs.append(f"{defender.name} の シンクロ！ {attacker.name} にも {defender.status} が伝染った！")
 
@@ -237,19 +214,16 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
             defender._gyaku_triggered = True  # type: ignore
             logs.append(f"{defender.name} の ぎゃくじょう！ 特攻が上がった！")
 
-    # ねばりかわ / ながいしっぽ（接触技 → 攻撃側の素早さ-1）
+    # ねばりかわ / ながいしっぽ（接触技 → 攻撃側の素早さ-1。技の後の反応なので かたやぶり では消えない）
     if ab in ("ねばりかわ", "ながいしっぽ") and is_contact_move(move) and attacker.ability != "えんかく":
-        if attacker.ability not in ("かたやぶり", "ターボブレイズ", "テラボルテージ"):
-            attacker.stage_speed = max(-6, attacker.stage_speed - 1)
-            logs.append(f"{defender.name} の {ab}！ {attacker.name} の素早さが下がった！")
+        attacker.stage_speed = max(-6, attacker.stage_speed - 1)
+        logs.append(f"{defender.name} の {ab}！ {attacker.name} の素早さが下がった！")
 
     # じきゅうりょく（被弾 → 防御+1）
     if ab == "じきゅうりょく":
-        if attacker.ability not in ("かたやぶり", "ターボブレイズ", "テラボルテージ"):
-            defender.stage_defense = min(6, defender.stage_defense + 1)
-            logs.append(f"{defender.name} の じきゅうりょく！ 防御が上がった！")
+        defender.stage_defense = min(6, defender.stage_defense + 1)
+        logs.append(f"{defender.name} の じきゅうりょく！ 防御が上がった！")
 
-    _mold = attacker.ability in ("かたやぶり", "ターボブレイズ", "テラボルテージ")
     # えんかく: 攻撃側の技は接触扱いにならない
     _contact = is_contact_move(move) and attacker.ability != "えんかく"
 
@@ -268,13 +242,13 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
         defender.stage_attack = min(6, defender.stage_attack + 1)
         logs.append(f"{defender.name} の ねつこうかん！ 攻撃が上がった！")
 
-    # 接触技を受けた時の防御側特性（かたやぶり系で無視される）
-    if _contact and not _mold and attacker.is_alive:
+    # 接触技を受けた時の防御側特性（技の後の反応なので かたやぶり系でも発動する）
+    if _contact and attacker.is_alive:
         if ab == "ほのおのからだ" and random.random() < 0.30:
-            if attacker.apply_status("burn"):
+            if attacker.apply_status("burn", field=field):
                 logs.append(f"{defender.name} の ほのおのからだ！ {attacker.name} は やけど した！")
         if ab == "どくのトゲ" and random.random() < 0.30:
-            if attacker.apply_status("poison"):
+            if attacker.apply_status("poison", field=field):
                 logs.append(f"{defender.name} の どくのトゲ！ {attacker.name} は どく になった！")
         if ab == "ぬめぬめ":
             attacker.stage_speed = max(-6, attacker.stage_speed - 1)
@@ -289,7 +263,7 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
 
     # どくしゅ（攻撃側：接触技を当てると30%でどく）
     if attacker.ability == "どくしゅ" and _contact and defender.is_alive and random.random() < 0.30:
-        if defender.apply_status("poison"):
+        if defender.apply_status("poison", field=field):
             logs.append(f"{attacker.name} の どくしゅ！ {defender.name} は どく になった！")
 
     # あくしゅう（攻撃側：ダメージを与えた技で10%ひるみ）
@@ -308,34 +282,56 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
 # ── さめはだ/てつのとげ（防御側が倒れても発動）──────────────────────────────────
 
 def _rough_skin_recoil(attacker: "BattlePokemon", defender: "BattlePokemon",
-                       move, logs: list) -> None:
+                       move, logs: list, field=None) -> None:
     ab = defender.ability
     _enkaku = attacker.ability == "えんかく"
-    if ab in ("さめはだ", "てつのとげ") and is_contact_move(move) and not _enkaku:
-        if attacker.ability not in ("かたやぶり", "ターボブレイズ", "テラボルテージ"):
-            recoil = max(1, attacker.max_hp // 8)
-            attacker.take_damage(recoil)
-            logs.append(f"{defender.name} の {ab}！ {attacker.name} に {recoil} のダメージ！")
+    _mg = attacker.ability == "マジックガード"
+    if ab in ("さめはだ", "てつのとげ") and is_contact_move(move) and not _enkaku and not _mg:
+        recoil = max(1, attacker.max_hp // 8)
+        attacker.take_damage(recoil)
+        logs.append(f"{defender.name} の {ab}！ {attacker.name} に {recoil} のダメージ！")
 
     # ゴツゴツメット（アイテムなので かたやぶり では無効化されない。削りは1/6）
-    if defender.item == "ゴツゴツメット" and is_contact_move(move) and not _enkaku:
+    if defender.item == "ゴツゴツメット" and is_contact_move(move) and not _enkaku and not _mg:
         recoil = max(1, attacker.max_hp // 6)
         attacker.take_damage(recoil)
         logs.append(f"{defender.name} の ゴツゴツメット！ {attacker.name} に {recoil} のダメージ！")
 
     # ゆうばく（接触技でひんしにされると相手に最大HP1/4ダメージ）
-    if ab == "ゆうばく" and is_contact_move(move) and not _enkaku and not defender.is_alive and attacker.is_alive:
-        if attacker.ability not in ("かたやぶり", "ターボブレイズ", "テラボルテージ"):
-            recoil = max(1, attacker.max_hp // 4)
-            attacker.take_damage(recoil)
-            logs.append(f"{defender.name} の ゆうばく！ {attacker.name} に {recoil} のダメージ！")
+    if ab == "ゆうばく" and is_contact_move(move) and not _enkaku and not _mg and not defender.is_alive and attacker.is_alive:
+        recoil = max(1, attacker.max_hp // 4)
+        attacker.take_damage(recoil)
+        logs.append(f"{defender.name} の ゆうばく！ {attacker.name} に {recoil} のダメージ！")
 
     # とびだすハバネロ（被弾 → 攻撃側をやけど）
     if ab == "とびだすハバネロ" and move.category != "status":
-        if attacker.ability not in ("かたやぶり", "ターボブレイズ", "テラボルテージ"):
-            ok = attacker.apply_status("burn")
-            if ok:
-                logs.append(f"{defender.name} の とびだすハバネロ！ {attacker.name} がやけどを負った！")
+        ok = attacker.apply_status("burn", field=field)
+        if ok:
+            logs.append(f"{defender.name} の とびだすハバネロ！ {attacker.name} がやけどを負った！")
+
+
+def on_absorb(defender: "BattlePokemon", move_type: str, logs: list) -> None:
+    """特性で技を無効にしたときの効果（ひらいしん・ちょすい 等）。技の最終タイプで判定"""
+    ab = defender.ability
+    if ab == "ひらいしん" and move_type == "でんき":
+        defender.stage_sp_attack = min(6, defender.stage_sp_attack + 1)
+        logs.append(f"{defender.name} の ひらいしん！ 特攻が上がった！")
+    _ABSORB_HEAL = {"ちくでん": "でんき", "ちょすい": "みず", "かんそうはだ": "みず", "どしょく": "じめん"}
+    if ab in _ABSORB_HEAL and move_type == _ABSORB_HEAL[ab]:
+        if defender.hp < defender.max_hp:
+            heal = max(1, defender.max_hp // 4)
+            defender.hp = min(defender.max_hp, defender.hp + heal)
+            logs.append(f"{defender.name} の {ab}！ HPが {heal} 回復した！")
+    if ab == "もらいび" and move_type == "ほのお":
+        if not getattr(defender, "_flash_fire_active", False):
+            defender._flash_fire_active = True  # type: ignore
+            logs.append(f"{defender.name} の もらいび が発動！")
+    if ab == "でんきエンジン" and move_type == "でんき":
+        defender.stage_speed = min(6, defender.stage_speed + 1)
+        logs.append(f"{defender.name} の でんきエンジン！ 素早さが上がった！")
+    if ab == "そうしょく" and move_type == "くさ":
+        defender.stage_attack = min(6, defender.stage_attack + 1)
+        logs.append(f"{defender.name} の そうしょく！ 攻撃が上がった！")
 
 
 def on_defender_ko(attacker: "BattlePokemon", defender: "BattlePokemon",
@@ -375,7 +371,7 @@ def end_of_turn_ability(poke: "BattlePokemon", field: "BattleField", logs: list)
     ab = poke.ability
 
     # かそく
-    if ab == "かそく":
+    if ab == "かそく" and not getattr(poke, "_switched_this_turn", False):
         poke.stage_speed = min(6, poke.stage_speed + 1)
 
     # アイスボディ（雹中HP1/16回復）
@@ -444,18 +440,20 @@ def end_of_turn_ability(poke: "BattlePokemon", field: "BattleField", logs: list)
             heal = max(1, poke.max_hp // 8)
             poke.hp = min(poke.max_hp, poke.hp + heal)
 
-    # ムラっけ: ランダムに1ランク上昇 + 1ランク下降
+    # ムラっけ: 攻撃・防御・特攻・特防・素早さ（命中・回避は対象外）のうち+6でないものを1つ+2、-6でない別の1つを-1
     if ab == "ムラっけ":
-        STATS = ["stage_attack","stage_defense","stage_sp_attack","stage_sp_defense","stage_speed","stage_accuracy","stage_evasion"]
-        up_stat = random.choice(STATS)
-        old = getattr(poke, up_stat, 0)
-        setattr(poke, up_stat, min(6, old + 2))
-        down_stat = random.choice([s for s in STATS if s != up_stat])
-        old2 = getattr(poke, down_stat, 0)
-        setattr(poke, down_stat, max(-6, old2 - 1))
-        from .pokemon import STAT_STAGE_MULT
-        _STAT_JP = {"stage_attack":"こうげき","stage_defense":"ぼうぎょ","stage_sp_attack":"とくこう","stage_sp_defense":"とくぼう","stage_speed":"すばやさ","stage_accuracy":"めいちゅう","stage_evasion":"かいひ"}
-        logs.append(f"{poke.name} の ムラっけ！ {_STAT_JP.get(up_stat,up_stat)}↑↑ {_STAT_JP.get(down_stat,down_stat)}↓")
+        STATS = ["stage_attack", "stage_defense", "stage_sp_attack", "stage_sp_defense", "stage_speed"]
+        _ups = [s for s in STATS if getattr(poke, s) < 6]
+        up_stat = random.choice(_ups) if _ups else None
+        _downs = [s for s in STATS if getattr(poke, s) > -6 and s != up_stat]
+        down_stat = random.choice(_downs) if _downs else None
+        if up_stat:
+            setattr(poke, up_stat, min(6, getattr(poke, up_stat) + 2))
+        if down_stat:
+            setattr(poke, down_stat, max(-6, getattr(poke, down_stat) - 1))
+        _STAT_JP = {"stage_attack": "こうげき", "stage_defense": "ぼうぎょ", "stage_sp_attack": "とくこう",
+                    "stage_sp_defense": "とくぼう", "stage_speed": "すばやさ"}
+        logs.append(f"{poke.name} の ムラっけ！ {_STAT_JP.get(up_stat, '-')}↑↑ {_STAT_JP.get(down_stat, '-')}↓")
 
 
 # ── 交代で引っ込む時 ────────────────────────────────────────────────────────
@@ -489,6 +487,23 @@ def on_switch_out(poke: "BattlePokemon", logs: list, field=None) -> None:
 
 
 # ── 能力が下げられた時 ──────────────────────────────────────────────────────
+
+def reflect_stat_drop(target: "BattlePokemon", stat: str, delta: int, logs: list) -> None:
+    """ミラーアーマー で跳ね返された能力低下を受ける（受ける側の特性で防げる。跳ね返しは1回だけ）"""
+    if target.ability in ("クリアボディ", "しろいけむり"):
+        return
+    if stat == "stage_attack" and target.ability == "かいりきバサミ":
+        return
+    if stat == "stage_defense" and target.ability == "はとむね":
+        return
+    if target.ability == "あまのじゃく":
+        delta = -delta
+    old = getattr(target, stat, 0)
+    setattr(target, stat, max(-6, min(6, old + delta)))
+    if getattr(target, stat, 0) < old:
+        logs.append(f"{target.name} の 能力が下がった！")
+        on_stat_lowered(target, logs)
+
 
 def on_stat_lowered(poke: "BattlePokemon", logs: list) -> None:
     ab = poke.ability
@@ -593,6 +608,8 @@ NO_SINGLE_BATTLE_EFFECT = {
     "レシーバー", "すじがねいり",
     # 性別未実装のため発動しない
     "とうそうしん", "メロメロボディ",
+    # 野生からの逃走だけの特性（トレーナー同士の対戦の交代には効かない。監査200 #8）
+    "にげあし",
 }
 # 注: おみとおし/きけんよち は情報開示として正式実装（Battle._info_abilities_on_entry）。
 
@@ -624,13 +641,12 @@ def get_pinch_multiplier(attacker: "BattlePokemon", move_type: str) -> float:
 # ── きれあじ (Sharpness) ────────────────────────────────────────────────────
 
 SLICING_MOVES = {
-    # DBに存在する切る技（ポケモンチャンピオンズ準拠）
-    "アクアカッター", "エアスラッシュ", "エアカッター", "がんせきアックス",
-    "クロスポイズン", "サイコカッター", "シェルブレード", "シザークロス",
-    "シャドークロー", "せいなるつるぎ", "ソーラーブレード", "つじぎり",
-    "つばめがえし", "ドゲザン", "ドラゴンクロー", "ネズミざん",
-    "ひけん・ちえなみ", "ブレイククロー", "フェイタルクロー",
-    "むねんのつるぎ", "リーフブレード", "きりさく",
+    # 切る技（実機 SV の一覧。ツメ・クロー系は含まない）
+    "アクアカッター", "エアカッター", "エアスラッシュ", "いあいぎり", "がんせきアックス",
+    "きょじゅうざん", "きりさく", "クロスポイズン", "サイコカッター", "サイコブレイド",
+    "シェルブレード", "シザークロス", "しんぴのつるぎ", "せいなるつるぎ", "ソーラーブレード",
+    "タキオンカッター", "つじぎり", "つばめがえし", "ドゲザン", "ネズミざん", "はっぱカッター",
+    "ひけん・ちえなみ", "パワフルエッジ", "むねんのつるぎ", "リーフブレード", "れんぞくぎり",
 }
 
 

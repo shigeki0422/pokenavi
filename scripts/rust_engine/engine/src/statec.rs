@@ -159,6 +159,8 @@ pub fn poke_fields(e: &mut Enc, p: &Poke, pfx: &str) {
     e.b("infatuation", p.infatuation);
     e.b("torment", p.torment);
     e.b("trapped", p.trapped);
+    e.b("no_retreat", p.no_retreat);
+    e.i("shed_tail_sub", p.shed_tail_sub);
     e.i("times_hit", p.times_hit);
     e.b("ability_suppressed", p.ability_suppressed);
     e.b("rooted", p.rooted);

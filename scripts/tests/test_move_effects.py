@@ -3928,8 +3928,9 @@ if _mv_やまあらし:
 _mvcr_やまあらし = dl.get_move("やまあらし")
 if _mvcr_やまあらし:
     _pac = make_poke(type1="かくとう", atk_b=100, spatk_b=100)
-    _d_crit = dmg(_pac, make_poke(type1="ノーマル", def_b=100, spdef_b=100), "やまあらし")
-    check("必ず急所(>0): やまあらし", _d_crit > 0)
+    from simulator.battle import crit_chance as _cc_やまあらし
+    _cr_やまあらし = _cc_やまあらし(_pac, _mvcr_やまあらし, make_poke(type1="ノーマル", def_b=100, spdef_b=100))
+    check("必ず急所(1.0): やまあらし", _cr_やまあらし == 1.0, f"crit={_cr_やまあらし}")
 
 # ── ヘドロウェーブ ──
 check("DB: ヘドロウェーブ 取得可能", dl.get_move("ヘドロウェーブ") is not None)
@@ -5964,6 +5965,16 @@ if _mv_うらみつらみ:
     _pd_うらみつらみ = make_poke(type1="エスパー", def_b=100, spdef_b=100)
     _d_うらみつらみ = dmg(_pa_うらみつらみ, _pd_うらみつらみ, "うらみつらみ")
     check("ダメージ計算: うらみつらみ", _d_うらみつらみ > 0, f"dmg={_d_うらみつらみ}")
+# うらみつらみ: 相手攻撃-1
+_mv_dd_うらみつらみ = dl.get_move("うらみつらみ")
+if _mv_dd_うらみつらみ:
+    _pa_dd = make_poke(type1="ゴースト", atk_b=30, spatk_b=30)
+    random.seed(0); _dd_val_うらみつらみ = 0; _dd_ok_うらみつらみ = False
+    for _ in range(60):
+        _pd_dd = make_poke(type1="エスパー", hp_b=255, def_b=255, spdef_b=255)
+        execute(_pa_dd, _pd_dd, "うらみつらみ")
+        if _pd_dd.stage_attack != 0: _dd_val_うらみつらみ = _pd_dd.stage_attack; _dd_ok_うらみつらみ = True; break
+    check("相手攻撃-1: うらみつらみ", _dd_ok_うらみつらみ and _dd_val_うらみつらみ == -1, f"1回適用={_dd_val_うらみつらみ} 期待=-1")
 
 # ── ひゃっきやこう ──
 check("DB: ひゃっきやこう 取得可能", dl.get_move("ひゃっきやこう") is not None)
@@ -6282,8 +6293,9 @@ if _mvmust_トリックフラワ_:
 _mvcr_トリックフラワ_ = dl.get_move("トリックフラワー")
 if _mvcr_トリックフラワ_:
     _pac = make_poke(type1="くさ", atk_b=100, spatk_b=100)
-    _d_crit = dmg(_pac, make_poke(type1="みず", def_b=100, spdef_b=100), "トリックフラワー")
-    check("必ず急所(>0): トリックフラワー", _d_crit > 0)
+    from simulator.battle import crit_chance as _cc_トリックフラワ_
+    _cr_トリックフラワ_ = _cc_トリックフラワ_(_pac, _mvcr_トリックフラワ_, make_poke(type1="みず", def_b=100, spdef_b=100))
+    check("必ず急所(1.0): トリックフラワー", _cr_トリックフラワ_ == 1.0, f"crit={_cr_トリックフラワ_}")
 
 # ── おかたづけ ──
 check("DB: おかたづけ 取得可能", dl.get_move("おかたづけ") is not None)
@@ -6380,17 +6392,18 @@ if _mvpv_しっぽきり:
     _s1p = BattleSide([_pap, make_poke()]); _s2p = BattleSide([_pdp])
     random.seed(0); _execute_move(_s1p, _s2p, Action(type="move", move=_mvpv_しっぽきり), BattleField())
     check("ピボット交代フラグ: しっぽきり", getattr(_pap, "_pivot_out", False) or _s1p.active_idx != 0, "pivot未発火")
-# しっぽきり: HP1/2を消費してみがわりを残す
+# しっぽきり: HP1/2を消費してみがわりを残し、交代先に引き継ぐ（監査200 #12）
 _satk = BattleSide([make_poke(hp_b=200), make_poke()]); _satk.active.hp = _satk.active.max_hp; _hpsk = _satk.active.hp
 _execute_move(_satk, BattleSide([make_poke()]), Action(type="move", move=dl.get_move("しっぽきり")), BattleField())
-check("みがわり生成: しっぽきり", getattr(_satk.party[0], "_substitute_hp", 0) > 0 and _satk.party[0].hp < _hpsk, f"sub={getattr(_satk.party[0],'_substitute_hp',0)}")
-# 消費は最大HP1/2・身代わりHPは最大HP1/4（effect_text通り）
+check("みがわり生成: しっぽきり", getattr(_satk.party[0], "_shed_tail_sub", 0) > 0 and _satk.party[0].hp < _hpsk and _satk.party[0]._pivot_out, f"sub={getattr(_satk.party[0],'_shed_tail_sub',0)}")
+# 消費は最大HP1/2（切り上げ）・身代わりHPは最大HP1/4（effect_text通り）
 _satk_v = BattleSide([make_poke(hp_b=200), make_poke()]); _satk_v.active.hp = _satk_v.active.max_hp; _mhp = _satk_v.active.max_hp
 _execute_move(_satk_v, BattleSide([make_poke()]), Action(type="move", move=dl.get_move("しっぽきり")), BattleField())
-check("HP消費1/2: しっぽきり", _satk_v.party[0].hp == _mhp - _mhp // 2, f"hp={_satk_v.party[0].hp} 期待={_mhp - _mhp // 2}")
-check("身代わりHP1/4: しっぽきり", _satk_v.party[0]._substitute_hp == _mhp // 4, f"sub={_satk_v.party[0]._substitute_hp} 期待={_mhp // 4}")
+check("HP消費1/2: しっぽきり", _satk_v.party[0].hp == _mhp - (_mhp + 1) // 2, f"hp={_satk_v.party[0].hp} 期待={_mhp - (_mhp + 1) // 2}")
+_satk_v.switch_to(1)
+check("身代わりHP1/4: しっぽきり（交代先に引き継ぐ）", _satk_v.party[1]._substitute_hp == _mhp // 4, f"sub={getattr(_satk_v.party[1], '_substitute_hp', 0)} 期待={_mhp // 4}")
 # 身代わりが技を肩代わり（本体ダメージなし）
-_holder = _satk_v.party[0]; _sub_sk = _holder._substitute_hp; _hp_sk = _holder.hp
+_holder = _satk_v.party[1]; _sub_sk = _holder._substitute_hp; _hp_sk = _holder.hp
 _atksk = make_poke(type1="ノーマル", atk_b=20, moves=["たいあたり"])
 _execute_move(BattleSide([_atksk]), BattleSide([_holder]), Action(type="move", move=dl.get_move("たいあたり")), BattleField())
 check("身代わりが肩代わり(本体ダメージなし): しっぽきり", _holder.hp == _hp_sk and getattr(_holder,"_substitute_hp",0) < _sub_sk, f"hp={_holder.hp}/{_hp_sk} sub={getattr(_holder,'_substitute_hp',0)}/{_sub_sk}")
@@ -6793,10 +6806,15 @@ _SBfsw.MAX_TURNS = _mx_fsw
 # ── ねごと ──
 check("DB: ねごと 取得可能", dl.get_move("ねごと") is not None)
 # ねごと: ねむり中に技を使う
-_png = make_poke(atk_b=120, moves=["たいあたり"]); _png.status = "sleep"
+_png = make_poke(atk_b=120, moves=["たいあたり"]); _png.status = "sleep"; _png.sleep_count = 3
 _dng = make_poke(hp_b=200, def_b=50); _hng = _dng.hp
 execute(_png, _dng, "ねごと")
 check("ねごと 技発動: ねごと", _dng.hp < _hng, f"hp={_dng.hp}")
+# negative: カウンタが尽きる行動では起きて失敗
+_png_w = make_poke(atk_b=120, moves=["たいあたり"]); _png_w.status = "sleep"; _png_w.sleep_count = 1
+_dng_w = make_poke(hp_b=200, def_b=50); _hng_w = _dng_w.hp
+execute(_png_w, _dng_w, "ねごと")
+check("起きる行動では失敗: ねごと", _dng_w.hp == _hng_w and _png_w.status is None, f"hp={_dng_w.hp}/{_hng_w}")
 # negative: 覚醒(非ねむり)状態では失敗
 _png_aw = make_poke(atk_b=120, moves=["たいあたり"]); _dng_aw = make_poke(hp_b=200, def_b=50); _hng_aw = _dng_aw.hp
 execute(_png_aw, _dng_aw, "ねごと")
@@ -7810,8 +7828,9 @@ if _mv_こおりのいぶき:
 _mvcr_こおりのいぶき = dl.get_move("こおりのいぶき")
 if _mvcr_こおりのいぶき:
     _pac = make_poke(type1="こおり", atk_b=100, spatk_b=100)
-    _d_crit = dmg(_pac, make_poke(type1="くさ", def_b=100, spdef_b=100), "こおりのいぶき")
-    check("必ず急所(>0): こおりのいぶき", _d_crit > 0)
+    from simulator.battle import crit_chance as _cc_こおりのいぶき
+    _cr_こおりのいぶき = _cc_こおりのいぶき(_pac, _mvcr_こおりのいぶき, make_poke(type1="くさ", def_b=100, spdef_b=100))
+    check("必ず急所(1.0): こおりのいぶき", _cr_こおりのいぶき == 1.0, f"crit={_cr_こおりのいぶき}")
 
 # ── ゴッドバード ──
 check("DB: ゴッドバード 取得可能", dl.get_move("ゴッドバード") is not None)
@@ -8698,11 +8717,12 @@ if _mv_sb_はいすいのじん_speed:
     _pa_sb = make_poke(type1="かくとう"); _pd_sb = make_poke()
     execute(_pa_sb, _pd_sb, "はいすいのじん")
     check("自分素早さ+1: はいすいのじん", _pa_sb.stage_speed == 1, f"1回適用={_pa_sb.stage_speed} 期待=+1")
-# はいすいのじん: 全能力+1かつ自分が交代不可になる。すでに交代不可なら失敗
+# はいすいのじん: 全能力+1かつ自分が交代不可になる（場を離れるまで）。すでに はいすいのじん 中なら失敗（監査200 #8）
+from simulator.battle import is_trapped as _it_h
 _ph = make_poke(type1="かくとう"); execute(_ph, make_poke(), "はいすいのじん")
-check("使用後に交代不可: はいすいのじん", _ph.trapped, f"trapped={_ph.trapped}")
-_ph2 = make_poke(type1="かくとう"); _ph2.trapped = True; execute(_ph2, make_poke(), "はいすいのじん")
-check("すでに交代不可なら失敗(能力上がらない): はいすいのじん", _ph2.stage_attack == 0, f"atk={_ph2.stage_attack}")
+check("使用後に交代不可: はいすいのじん", _it_h(_ph, make_poke()), f"no_retreat={getattr(_ph, '_no_retreat', False)}")
+_ph2 = make_poke(type1="かくとう"); _ph2._no_retreat = True; execute(_ph2, make_poke(), "はいすいのじん")
+check("すでに はいすいのじん 中なら失敗(能力上がらない): はいすいのじん", _ph2.stage_attack == 0, f"atk={_ph2.stage_attack}")
 
 # ── どくばりセンボン ──
 check("DB: どくばりセンボン 取得可能", dl.get_move("どくばりセンボン") is not None)

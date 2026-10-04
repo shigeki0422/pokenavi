@@ -107,6 +107,40 @@ fn guide_rows(specs: Vec<String>, opps: Vec<Vec<String>>, season: &str, k: usize
     Ok(engine::sim::guide_rows(pack, ftr, sel, &specs, &opps, season, k, seed))
 }
 
+/// guide_rows の対戦を MCTS@sims にした版（engine::sim::guide_rows_mcts）。戻りの形は guide_rows と同じ
+#[pyfunction]
+#[pyo3(signature = (specs, opps, season, k, seed, sel_path, sims))]
+#[allow(clippy::too_many_arguments)]
+fn guide_rows_mcts(specs: Vec<String>, opps: Vec<Vec<String>>, season: &str, k: usize, seed: i128, sel_path: &str, sims: usize) -> PyResult<Vec<(Vec<usize>, f64)>> {
+    let mut sc = SEL_CACHE.lock().unwrap_or_else(|e| e.into_inner());
+    if !sc.iter().any(|(p, _)| p == sel_path) {
+        let s = engine::selector::Selector::from_json(sel_path)
+            .ok_or_else(|| PyValueError::new_err(format!("{sel_path}: 選出モデルとして読めない")))?;
+        sc.push((sel_path.to_string(), s));
+    }
+    let sel = &sc.iter().find(|(p, _)| p == sel_path).unwrap().1;
+    let m = eng()?;
+    let mut g = lock_eng(m);
+    for sp in specs.iter().chain(opps.iter().flatten()) {
+        if let Some(e) = engine::poke::spec_error(&g.pack, sp, season) {
+            return Err(PyValueError::new_err(e));
+        }
+    }
+    let Eng { pack, ft, net, .. } = &mut *g;
+    if ft.is_none() {
+        *ft = Some(engine::features::FeatTables::build(pack));
+    }
+    let ftr = ft.as_ref().unwrap();
+    let net = net.clone();
+    Ok(engine::sim::guide_rows_mcts(pack, &net, ftr, sel, &specs, &opps, season, k, seed, sims))
+}
+
+/// 計測用（env MCTS_DEPTH_STATS=1）: MCTS の1シミュレーションが木の中を進んだターン数の分布（添字＝ターン数、15以上は15）。読むとゼロに戻す
+#[pyfunction]
+fn mcts_depth_stats_take() -> Vec<u64> {
+    engine::search::depth_stats_take()
+}
+
 /// 照合用（SEL_FAST_CHECK=1）: 学習選出の高速版と元の実装の比較 (選んだ回数, 選出が違った回数, 候補の値の差の最大, 元の実装に落とした回数,
 /// 相手の仮定を表で計算した回数, 仮定・乱数の消費が違った回数)。読むとゼロに戻す
 #[pyfunction]
@@ -333,6 +367,40 @@ fn mcts_3v3_trace(
     Ok((r as u8, recs, nodes))
 }
 
+/// 生成用: 探索あり（序盤 turns ターンは根の訪問数^(1/temp) で抽選＋根に Dirichlet ノイズ）の mcts_3v3_trace。
+/// 戻り: (勝者, [(手番側, 盤面, 訪問分布, 根の価値)], [(ターン, 手番側, 抽選対象か, 最善と違う手か, 引いた手の訪問数, 最善の訪問数, 引いた手のQ, 最善のQ, 総訪問)])
+#[pyfunction]
+#[pyo3(signature = (pa, sa, pb, sb, seed, sims, season="M-6", turns=6, temp=1.0, eps=0.25, alpha=0.5, net_a_path="", net_b_path="", min_frac=0.0))]
+#[allow(clippy::type_complexity, clippy::too_many_arguments)]
+fn mcts_3v3_explore(
+    pa: Vec<String>,
+    sa: Vec<usize>,
+    pb: Vec<String>,
+    sb: Vec<usize>,
+    seed: i128,
+    sims: usize,
+    season: &str,
+    turns: i64,
+    temp: f64,
+    eps: f64,
+    alpha: f64,
+    net_a_path: &str,
+    net_b_path: &str,
+    min_frac: f64,
+) -> PyResult<(u8, Vec<(usize, Vec<f64>, Vec<(usize, i64)>, f64)>, Vec<(i64, usize, bool, bool, i64, i64, f64, f64, i64)>)> {
+    let nb = if net_b_path.is_empty() { None } else { Some(load_net_cached(net_b_path)?) };
+    let na = if net_a_path.is_empty() { None } else { Some(load_net_cached(net_a_path)?) };
+    let m = eng()?;
+    let mut g = lock_eng(m);
+    let Eng { pack, net, .. } = &mut *g;
+    let net = na.unwrap_or_else(|| net.clone());
+    let cfg = engine::sim::ExploreCfg { turns, temp, eps, alpha, min_frac };
+    let (r, recs, xs) = engine::sim::mcts_3v3_explore(
+        pack, &net, nb.as_ref(), &pa, &sa, &pb, &sb, season, season, seed, sims, cfg,
+    );
+    Ok((r as u8, recs, xs))
+}
+
 #[pyfunction]
 #[pyo3(signature = (pa, sa, pb, seed, sims, season="M-3"))]
 fn mcts_vs_dist(
@@ -514,6 +582,16 @@ fn datapack_hash() -> PyResult<String> {
     Ok(g.hash.clone())
 }
 
+/// 型の書式の読み取り（照合テスト用。Python の pokemon.parse_pokemon_spec と同じ結果を返す）。
+/// (種名, 持ち物, 性格, 技, 努力値 H/A/B/C/D/S, 特性)。努力値が読めなければ例外
+#[pyfunction]
+#[allow(clippy::type_complexity)]
+fn parse_spec(spec: &str) -> PyResult<(String, Option<String>, Option<String>, Option<Vec<String>>, Option<Vec<i64>>, Option<String>)> {
+    let x = engine::poke::parse_spec_checked(spec).map_err(pyo3::exceptions::PyValueError::new_err)?;
+    let evs = x.evs.map(|e| vec![e.h, e.a, e.b, e.c, e.d, e.s]);
+    Ok((x.name, x.item, x.nature, x.moves, evs, x.ability))
+}
+
 #[pyfunction]
 fn version() -> String {
     format!("pokenavi_engine {} (R5)", env!("CARGO_PKG_VERSION"))
@@ -548,6 +626,7 @@ fn mcts_3v3_record(
 #[pymodule]
 fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(greedy_3v3, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_spec, m)?)?;
     m.add_function(wrap_pyfunction!(belief_probe_take, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3_record, m)?)?;
@@ -555,6 +634,7 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(det_consist_take, m)?)?;
     m.add_function(wrap_pyfunction!(det_slot_take, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3_trace, m)?)?;
+    m.add_function(wrap_pyfunction!(mcts_3v3_explore, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3_ab, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3_solve, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_vs_dist, m)?)?;
@@ -565,6 +645,8 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(live_set_selector, m)?)?;
     m.add_function(wrap_pyfunction!(sel_fast_stats_take, m)?)?;
     m.add_function(wrap_pyfunction!(guide_rows, m)?)?;
+    m.add_function(wrap_pyfunction!(guide_rows_mcts, m)?)?;
+    m.add_function(wrap_pyfunction!(mcts_depth_stats_take, m)?)?;
     m.add_function(wrap_pyfunction!(live_panel_selections, m)?)?;
     m.add_function(wrap_pyfunction!(live_setup, m)?)?;
     m.add_function(wrap_pyfunction!(live_feats, m)?)?;

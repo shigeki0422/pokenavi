@@ -10,6 +10,7 @@ from gen_party_pool import (PartyGen, _spec_mega, _item_of, _ROLE_TARGET, _moves
                              sample_role_targets, ROLE_W, ITEM_USAGE_W, IU_FLOOR, DBPATH, TYPEDUP_MAX)
 from _threat_coverage import load_threats, team_coverage
 import _product3 as P3
+import seed_rule
 
 SEASON = "M-3"
 NCAND = int(os.environ.get("NCAND", "150"))
@@ -65,6 +66,14 @@ def resolve_fixed(pg, args):
             if alt is not None:
                 out[i] = sp = alt; it = _item_of(sp)
         used.add(it)
+    # 自動で選んだ枠のシードは、指定の中に設置役がいなければ同じ形の別の持ち物の型に替える（seed_rule）
+    for i in seed_rule.violations(out):
+        if alts[i]:
+            others = {_item_of(x) for j, x in enumerate(out) if j != i}
+            alt = next((x for x in alts[i] if _item_of(x) not in others
+                        and i not in seed_rule.violations(out[:i] + [x] + out[i + 1:])), None)
+            if alt is not None:
+                out[i] = alt
     out = _fit_fixed(pg, out, auto)
     why = infeasible_reason(pg, out)
     if why:
@@ -254,6 +263,11 @@ def infeasible_reason(pg, fixed_specs):
     return "この組み合わせでは残りの枠に入れられるポケモンがいません（タイプの重なり・持ち物・メガシンカの枠の条件）。"
 
 
+def _seed_fix(pg, party, rng, fixed_specs):
+    """設置役のいないシードを固定枠以外で同じ種の別の持ち物の型に替える（替えられなければそのまま＝is_legal で落ちる）"""
+    return pg.fix_seeds(party, rng, keep=set(fixed_specs)) or party
+
+
 def complete_core(pg, L, th, fixed_specs, rng, N, dedupe=True, strict=False):
     """固定軸 fixed_specs の残り枠を補完した候補パーティを最大 N 件。GEN_MODE=weighted（既定）は条件を満たす型だけから引く。
     作れない指定は strict なら SystemExit（理由つき・フロントに出す文言）、でなければ []"""
@@ -284,11 +298,12 @@ def complete_core(pg, L, th, fixed_specs, rng, N, dedupe=True, strict=False):
             _t0 = time.perf_counter()
             rb = pg._role_builds(picked, holders, rng, fixed=fixed_map)
             t_rb += time.perf_counter() - _t0
-            if rb and pg.is_legal(rb, megas_set=(1, 2)):
+            if rb and pg.is_legal(rb, megas_set=(1, 2), seed_exempt=fixed_specs):
                 party = rb
             else:
                 rej["役割の選び直し失敗(引いた型のまま)"] += 1
-        if not pg.is_legal(party, megas_set=(1, 2)):
+        party = _seed_fix(pg, party, rng, fixed_specs)
+        if not pg.is_legal(party, megas_set=(1, 2), seed_exempt=fixed_specs):
             rej["非合法"] += 1; continue
         if not _synergy_ok(party): rej["シナジー不足"] += 1; continue
         key = tuple(sorted(party))
@@ -360,10 +375,11 @@ def complete_core_legacy(pg, L, th, fixed_specs, rng, N, dedupe=True):
         rb = pg._role_builds(picked, holders, rng, fixed=fixed_map)
         t_rb[0] += time.perf_counter() - _t0
         if not rb: rej['型割当失敗'] += 1; continue
-        party = [fixed_map[k] if k in fixed_map else rb[i] for i, k in enumerate(picked)]
-        if not pg.is_legal(party, megas_set=(1, 2)):
+        party = _seed_fix(pg, [fixed_map[k] if k in fixed_map else rb[i] for i, k in enumerate(picked)], rng, fixed_specs)
+        if not pg.is_legal(party, megas_set=(1, 2), seed_exempt=fixed_specs):
             if pg.type_dup_max(party) > 2: rej['非合法:タイプ被り'] += 1
             elif len({_item_of(x) for x in party}) != 6: rej['非合法:持ち物重複'] += 1
+            elif not seed_rule.ok(party, fixed_specs): rej['非合法:設置役のいないシード'] += 1
             else: rej['非合法:その他'] += 1
             continue
         if not _synergy_ok(party): rej['シナジー不足'] += 1; continue
@@ -509,8 +525,8 @@ def complete_core_free(pg, L, th, fixed_specs, rng, N):
         if any(p not in holders and not pg.nonm.get(p) for p in nonfixed): continue
         rb = _role_builds_ext(pg, picked, fixed_map, holders, rng)
         if not rb: continue
-        party = rb
-        if not pg.is_legal(party, megas_set=(1, 2)): continue
+        party = _seed_fix(pg, rb, rng, fixed_specs)
+        if not pg.is_legal(party, megas_set=(1, 2), seed_exempt=fixed_specs): continue
         key = tuple(sorted(party))
         if key in seen: continue
         seen.add(key); results.append(party)

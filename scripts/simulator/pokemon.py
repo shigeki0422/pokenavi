@@ -131,7 +131,7 @@ class BattlePokemon:
     fainted_allies: int = 0
 
     # 特殊状態フラグ
-    perish_count: int = 0            # ほろびのうた（3→2→1→0で倒れる）
+    perish_count: int = 0            # ほろびのうた（使ったターンの終わりに4→3、3ターン後の終わりに0で倒れる）
     destiny_bond: bool = False       # みちづれ
     cursed: bool = False             # のろい（ゴーストが呪いをかけた）
     charged: bool = False            # じゅうでん（次の電気技×2）
@@ -182,9 +182,12 @@ class BattlePokemon:
             spd = math.floor(spd * 0.5)
         return spd
 
-    def apply_status(self, status: str, corrosion: bool = False) -> bool:
-        """状態異常を付与。成功でTrue。corrosion=True（ふしょく）ははがね/どくの毒免疫を貫通。"""
+    def apply_status(self, status: str, corrosion: bool = False, field=None) -> bool:
+        """状態異常を付与。成功でTrue。corrosion=True（ふしょく）ははがね/どくの毒免疫を貫通。
+        field を渡すと、ミストフィールド中の接地個体には付与しない（原因を問わず）。"""
         if self.status is not None:
+            return False
+        if misty_blocks(self, field):
             return False
         # 特性による状態異常免疫
         _ab = self.ability
@@ -469,3 +472,22 @@ def build_from_spec(spec: dict, loader: "DataLoader",
         override_evs=spec.get("evs"),
         override_moves=spec.get("moves"),
     )
+
+
+def is_grounded_for_terrain(p, field) -> bool:
+    airborne = ("ひこう" in (p.type1, p.type2) or p.ability == "ふゆう"
+                or getattr(p, "magnet_rise", False) or p.item == "ふうせん")
+    return not airborne or getattr(p, "grounded", False) or getattr(field, "gravity", 0) > 0
+
+
+def misty_blocks(p, field) -> bool:
+    """ミストフィールド中の接地個体は状態異常・こんらんにならない"""
+    return field is not None and getattr(field, "misty_terrain", False) and is_grounded_for_terrain(p, field)
+
+
+def terrain_blocks_sleep(p, field) -> bool:
+    if field is None or not (getattr(field, "electric_terrain", False) or getattr(field, "misty_terrain", False)):
+        return False
+    airborne = ("ひこう" in (p.type1, p.type2) or p.ability == "ふゆう"
+                or getattr(p, "magnet_rise", False) or p.item == "ふうせん")
+    return not airborne or getattr(p, "grounded", False) or getattr(field, "gravity", 0) > 0

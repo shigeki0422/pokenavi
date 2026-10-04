@@ -1,6 +1,6 @@
 //! simulator/learned_selection.py の学習選出（温度0）の Rust 版。提案の採点（live_feats）の中で使う。
 //! 候補（3体＋先頭・メガ1体ルール）× 相手の仮定（ヒューリスティック選出 温度0＋温度1×2、採点1回）の状態ベクトルを
-//! ValMLP（tanh 隠れ層＋sigmoid）で採点し、相手の仮定3つの平均が最大の候補（同点は先）を選ぶ。
+//! ValMLP（tanh または ReLU の隠れ層＋sigmoid）で採点し、相手の仮定3つの平均が最大の候補（同点は先）を選ぶ。
 //! 乱数: g＝ダメージ計算（Python のグローバル乱数に相当）、s＝相手の仮定の温度つき抽選（Python の rng 引数に相当）。
 use crate::battle::Side;
 use std::sync::atomic::{AtomicU64, Ordering};
@@ -20,6 +20,8 @@ pub struct Selector {
     pub b1: Vec<f64>,
     pub w2: Vec<f64>,
     pub b2: f64,
+    /// 隠れ層の活性化（モデルの "act"。無ければ tanh）。true＝ReLU
+    pub relu: bool,
     /// 高速版の個体ブロックの射影のキャッシュ: (陣営, ブロックのビット列) → 位置 0..3 の W1 射影を並べた 3h
     proj: Mutex<FnvMap<(u8, Vec<u64>), Vec<f64>>>,
 }
@@ -37,13 +39,21 @@ impl Selector {
             }
         }
         let f = |k: &str| -> Option<Vec<f64>> { v[k].as_array()?.iter().map(|x| x.as_f64()).collect() };
+        if !v["U"].is_null() {
+            return None;
+        }
+        let relu = match v["act"].as_str() {
+            None | Some("tanh") => false,
+            Some("relu") => true,
+            Some(_) => return None,
+        };
         let mut w1t = vec![0.0f64; h * d];
         for j in 0..h {
             for k in 0..d {
                 w1t[k * h + j] = flat[j * d + k];
             }
         }
-        Some(Selector { h, d, w1: flat, w1t, b1: f("b1")?, w2: f("W2")?, b2: v["b2"].as_f64()?, proj: Mutex::new(FnvMap::default()) })
+        Some(Selector { h, d, w1: flat, w1t, b1: f("b1")?, w2: f("W2")?, b2: v["b2"].as_f64()?, relu, proj: Mutex::new(FnvMap::default()) })
     }
 
     /// 個体 p のブロック（陣営 side の位置 0..3、先頭の添字 base）の W1 射影を位置ごとに並べた 3h。添字順の逐次和
@@ -75,7 +85,13 @@ impl Selector {
         out
     }
 
-    /// learned_selection._predict（1行）。tanh(x·W1ᵀ + b1)·W2 + b2 の sigmoid。
+    /// 隠れ層の活性化（learned_selection._predict と同じ）
+    #[inline]
+    pub fn act(&self, z: f64) -> f64 {
+        if self.relu { if z > 0.0 { z } else { 0.0 } } else { z.tanh() }
+    }
+
+    /// learned_selection._predict（1行）。act(x·W1ᵀ + b1)·W2 + b2 の sigmoid。
     /// 隠れ層の各和は添字順の逐次和（0 の入力は足しても値が変わらないので飛ばす＝predict_dense と同じ値）
     pub fn predict(&self, x: &[f64]) -> f64 {
         let h = self.h;
@@ -91,7 +107,7 @@ impl Selector {
         }
         let mut z = 0.0f64;
         for j in 0..h {
-            z += (s[j] + self.b1[j]).tanh() * self.w2[j];
+            z += self.act(s[j] + self.b1[j]) * self.w2[j];
         }
         1.0 / (1.0 + (-(z + self.b2)).exp())
     }
@@ -105,7 +121,7 @@ impl Selector {
             for k in 0..self.d {
                 s += x[k] * row[k];
             }
-            z += (s + self.b1[j]).tanh() * self.w2[j];
+            z += self.act(s + self.b1[j]) * self.w2[j];
         }
         1.0 / (1.0 + (-(z + self.b2)).exp())
     }
@@ -206,20 +222,21 @@ pub fn select_cached(
         }
     };
     let nb = n.min(opp.len());
-    if opp_assume_learned() && opp.len() > nb {
-        let osels = learned_osels(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x);
-        let cands = candidates(me, n);
-        if cands.is_empty() {
-            let mut gr = GRng(g);
-            let mut sr = || s.random();
-            return crate::ai::select_party_multi(pack, me, opp, n, &[0.0], pen, &mut gr, &mut sr).remove(0);
-        }
-        if fast_on() && osels.iter().all(|o| o.len() == 3) && cands.iter().all(|c| c.len() == 3) {
-            if let Some((best, _)) = select_fast(pack, ft, sel, me, opp, &osels, &cands, pc, me_is_x) {
-                return cands[best].clone();
+    if opp_assume() != OppAssume::Heur && opp.len() > nb {
+        if let Some((osels, agg)) = opp_sets(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x) {
+            let cands = candidates(me, n);
+            if cands.is_empty() {
+                let mut gr = GRng(g);
+                let mut sr = || s.random();
+                return crate::ai::select_party_multi(pack, me, opp, n, &[0.0], pen, &mut gr, &mut sr).remove(0);
             }
+            if fast_on() && osels.iter().all(|o| o.len() == 3) && cands.iter().all(|c| c.len() == 3) {
+                if let Some((best, _)) = select_fast(pack, ft, sel, me, opp, &osels, &cands, pc, me_is_x, &agg) {
+                    return cands[best].clone();
+                }
+            }
+            return cands[select_ref(pack, ft, sel, me, opp, &osels, &cands, g, &agg).0].clone();
         }
-        return cands[select_ref(pack, ft, sel, me, opp, &osels, &cands, g).0].clone();
     }
     let simple = fast_on() && me.iter().chain(opp.iter()).all(|p| pristine(pack, ft, p));
     let chk = if simple && fast_check() { Some((g.clone(), s.clone())) } else { None };
@@ -257,11 +274,11 @@ pub fn select_cached(
         return crate::ai::select_party_multi(pack, me, opp, n, &[0.0], pen, &mut gr, &mut sr).remove(0);
     }
     if fast_on() && osels.len() == 3 && osels.iter().all(|o| o.len() == 3) && cands.iter().all(|c| c.len() == 3) {
-        if let Some((best, vals)) = select_fast(pack, ft, sel, me, opp, &osels, &cands, pc, me_is_x) {
+        if let Some((best, vals)) = select_fast(pack, ft, sel, me, opp, &osels, &cands, pc, me_is_x, &Agg::Mean3) {
             if !fast_check() {
                 return cands[best].clone();
             }
-            let old = select_ref(pack, ft, sel, me, opp, &osels, &cands, g);
+            let old = select_ref(pack, ft, sel, me, opp, &osels, &cands, g, &Agg::Mean3);
             let mut st = FAST_STATS.get_or_init(|| Mutex::new(FastStats::default())).lock().unwrap();
             st.0 += 1;
             if old.0 != best {
@@ -277,10 +294,10 @@ pub fn select_cached(
         }
         FAST_FALLBACK.fetch_add(1, Ordering::Relaxed);
     }
-    cands[select_ref(pack, ft, sel, me, opp, &osels, &cands, g).0].clone()
+    cands[select_ref(pack, ft, sel, me, opp, &osels, &cands, g, &Agg::Mean3).0].clone()
 }
 
-/// 学習選出の全候補と値（温度0の選出なら値の最大）。相手の仮定は既定どおりヒューリスティック 温度0,1,1。選出ガイドの集計用
+/// 学習選出の全候補と値（温度0の選出なら値の最大）。相手の仮定は既定ヒューリスティック 温度0,1,1（SEL_OPP_ASSUME で切り替え）。選出ガイドの集計用
 #[allow(clippy::too_many_arguments)]
 pub fn select_scores(
     pack: &Pack,
@@ -300,6 +317,17 @@ pub fn select_scores(
     if cands.is_empty() || me.len() <= n {
         return (Vec::new(), Vec::new());
     }
+    if opp_assume() != OppAssume::Heur && opp.len() > nb {
+        if let Some((osels, agg)) = opp_sets(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x) {
+            if fast_on() && osels.iter().all(|o| o.len() == 3) && cands.iter().all(|c| c.len() == 3) {
+                if let Some((_, vals)) = select_fast(pack, ft, sel, me, opp, &osels, &cands, pc, me_is_x, &agg) {
+                    return (cands, vals);
+                }
+            }
+            let vals = select_ref(pack, ft, sel, me, opp, &osels, &cands, g, &agg).1;
+            return (cands, vals);
+        }
+    }
     let simple = fast_on() && me.iter().chain(opp.iter()).all(|p| pristine(pack, ft, p));
     let tab = if simple {
         let mut sr = || s.random();
@@ -316,18 +344,207 @@ pub fn select_scores(
         }
     };
     if fast_on() && osels.len() == 3 && osels.iter().all(|o| o.len() == 3) && cands.iter().all(|c| c.len() == 3) {
-        if let Some((_, vals)) = select_fast(pack, ft, sel, me, opp, &osels, &cands, pc, me_is_x) {
+        if let Some((_, vals)) = select_fast(pack, ft, sel, me, opp, &osels, &cands, pc, me_is_x, &Agg::Mean3) {
             return (cands, vals);
         }
     }
-    let vals = select_ref(pack, ft, sel, me, opp, &osels, &cands, g).1;
+    let vals = select_ref(pack, ft, sel, me, opp, &osels, &cands, g, &Agg::Mean3).1;
     (cands, vals)
 }
 
-/// 学習選出の中の「相手の選出の仮定」を学習選出そのものに（env SEL_OPP_ASSUME=learned。既定はヒューリスティック 温度0,1,1）
+/// 学習選出の中の「相手の選出の仮定」（env SEL_OPP_ASSUME。既定はヒューリスティック 温度0,1,1）
+#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+pub enum OppAssume {
+    Heur,
+    Learned,
+    LearnedK,
+    All,
+}
+
+pub fn opp_assume() -> OppAssume {
+    static V: OnceLock<OppAssume> = OnceLock::new();
+    *V.get_or_init(|| match std::env::var("SEL_OPP_ASSUME").as_deref() {
+        Ok("learned") => OppAssume::Learned,
+        Ok("learnedK") => OppAssume::LearnedK,
+        Ok("all") => OppAssume::All,
+        _ => OppAssume::Heur,
+    })
+}
+
 pub fn opp_assume_learned() -> bool {
-    static V: OnceLock<bool> = OnceLock::new();
-    *V.get_or_init(|| std::env::var("SEL_OPP_ASSUME").map(|v| v == "learned").unwrap_or(false))
+    opp_assume() == OppAssume::Learned
+}
+
+fn opp_k() -> usize {
+    static V: OnceLock<usize> = OnceLock::new();
+    *V.get_or_init(|| std::env::var("SEL_OPP_K").ok().and_then(|v| v.parse().ok()).unwrap_or(8))
+}
+
+/// SEL_OPP_ASSUME=all の集め方: 0=mean / 1=minmix / 2=weighted
+fn opp_mix() -> u8 {
+    static V: OnceLock<u8> = OnceLock::new();
+    *V.get_or_init(|| match std::env::var("SEL_OPP_MIX").as_deref() {
+        Ok("minmix") => 1,
+        Ok("weighted") => 2,
+        _ => 0,
+    })
+}
+
+fn opp_alpha() -> f64 {
+    static V: OnceLock<f64> = OnceLock::new();
+    *V.get_or_init(|| std::env::var("SEL_OPP_ALPHA").ok().and_then(|v| v.parse().ok()).unwrap_or(0.5))
+}
+
+/// 相手の仮定ごとの予測勝率 v から候補の値を作る
+pub enum Agg {
+    /// 既定・learned: 3つの平均 (v0+v1+v2)/3
+    Mean3,
+    /// 重み付き和 Σ w_j·v_j（添字順の逐次和）
+    W(Vec<f64>),
+    /// α·平均＋(1−α)·最悪。最悪は g 個ずつ（同じ3体の先頭違い）の平均の最小
+    MinMix(f64, usize),
+}
+
+impl Agg {
+    pub fn score(&self, v: &[f64]) -> f64 {
+        match self {
+            Agg::Mean3 => {
+                let g = |i: usize| v.get(i).copied().unwrap_or(0.0);
+                (g(0) + g(1) + g(2)) / 3.0
+            }
+            Agg::W(w) => {
+                let mut acc = 0.0f64;
+                for (wj, vj) in w.iter().zip(v.iter()) {
+                    acc += wj * vj;
+                }
+                acc
+            }
+            Agg::MinMix(a, g) => {
+                let mut tot = 0.0f64;
+                for x in v {
+                    tot += x;
+                }
+                let mean = tot / v.len() as f64;
+                let mut mn = f64::INFINITY;
+                for c in v.chunks(*g) {
+                    let mut t = 0.0f64;
+                    for x in c {
+                        t += x;
+                    }
+                    let m = t / c.len() as f64;
+                    if m < mn {
+                        mn = m;
+                    }
+                }
+                a * mean + (1.0 - a) * mn
+            }
+        }
+    }
+}
+
+/// softmax_pick と同じ重み（標準化→exp((z−max)/温度)）の大きい順に k 個（同じ重みは添字の小さい方が先）、和で割った重み
+pub fn topk_weights(vals: &[f64], temperature: f64, k: usize) -> Vec<(usize, f64)> {
+    let n = vals.len() as f64;
+    let m = vals.iter().sum::<f64>() / n;
+    let sd = (vals.iter().map(|v| (v - m) * (v - m)).sum::<f64>() / n).sqrt();
+    let z: Vec<f64> = vals.iter().map(|v| if sd > 1e-9 { (v - m) / sd } else { v * 0.0 }).collect();
+    let zm = z.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
+    let ws: Vec<f64> = z.iter().map(|x| ((x - zm) / temperature.max(1e-6)).exp()).collect();
+    let mut ord: Vec<usize> = (0..vals.len()).collect();
+    ord.sort_by(|&a, &b| ws[b].partial_cmp(&ws[a]).unwrap_or(std::cmp::Ordering::Equal).then(a.cmp(&b)));
+    ord.truncate(k.max(1));
+    let mut tot = 0.0f64;
+    for &i in &ord {
+        tot += ws[i];
+    }
+    ord.into_iter().map(|i| (i, ws[i] / tot)).collect()
+}
+
+/// 相手の仮定と集め方（SEL_OPP_ASSUME）。None なら既定（ヒューリスティック 温度0,1,1・平均）で
+///   learned  … learned_osels（3通り・平均）
+///   learnedK … 相手側の学習選出の値の softmax（温度 SEL_OPP_TEMP）の上位 SEL_OPP_K 候補を重みで（重みの和＝1）
+///   all      … 相手の全候補（3体＋先頭、メガ1体ルール内）。SEL_OPP_MIX=mean（平均）/ minmix（SEL_OPP_ALPHA·平均＋(1−α)·
+///               3体の組ごとの平均の最悪）/ weighted（全候補を softmax の重みで＝learnedK の K＝全候補）
+/// 乱数 s の消費: learned は learned_osels と同じ。learnedK・all weighted は相手側の学習選出の分（こちらのヒューリスティック選出）だけ。
+/// all mean・minmix は消費しない
+#[allow(clippy::too_many_arguments)]
+fn opp_sets(
+    pack: &Pack,
+    ft: &FeatTables,
+    sel: &Selector,
+    me: &mut Vec<Poke>,
+    opp: &mut Vec<Poke>,
+    n: usize,
+    nb: usize,
+    pen: f64,
+    g: &mut CpyRandom,
+    s: &mut CpyRandom,
+    pc: &mut PairCache,
+    me_is_x: bool,
+) -> Option<(Vec<Vec<usize>>, Agg)> {
+    let mode = opp_assume();
+    if mode == OppAssume::Learned {
+        return Some((learned_osels(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x), Agg::Mean3));
+    }
+    if mode == OppAssume::All && opp_mix() != 2 {
+        let oc = candidates(opp, nb);
+        if oc.is_empty() {
+            return None;
+        }
+        let a = if opp_mix() == 1 { opp_alpha() } else { 1.0 };
+        return Some((oc, Agg::MinMix(a, nb)));
+    }
+    let (oc, vals) = opp_learned_vals(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x)?;
+    let k = if mode == OppAssume::LearnedK { opp_k() } else { oc.len() };
+    let tw = topk_weights(&vals, opp_temp(), k);
+    Some((tw.iter().map(|&(i, _)| oc[i].clone()).collect(), Agg::W(tw.iter().map(|&(_, w)| w).collect())))
+}
+
+/// 相手側の学習選出（その中の仮定＝こちらのヒューリスティック選出 温度0,1,1）の候補と値。候補が無ければ None
+#[allow(clippy::too_many_arguments)]
+fn opp_learned_vals(
+    pack: &Pack,
+    ft: &FeatTables,
+    sel: &Selector,
+    me: &mut Vec<Poke>,
+    opp: &mut Vec<Poke>,
+    n: usize,
+    nb: usize,
+    pen: f64,
+    g: &mut CpyRandom,
+    s: &mut CpyRandom,
+    pc: &mut PairCache,
+    me_is_x: bool,
+) -> Option<(Vec<Vec<usize>>, Vec<f64>)> {
+    let simple = fast_on() && me.iter().chain(opp.iter()).all(|p| pristine(pack, ft, p));
+    let nm = nb.min(me.len()).min(n);
+    let tab = if simple {
+        let mut sr = || s.random();
+        heur_tab(pack, me, opp, nm, pen, &mut sr, pc, me_is_x)
+    } else {
+        None
+    };
+    let mine = match tab {
+        Some(x) => x,
+        None => {
+            let mut gr = GRng(g);
+            let mut sr = || s.random();
+            crate::ai::select_party_multi(pack, me, opp, nm, &[0.0, 1.0, 1.0], pen, &mut gr, &mut sr)
+        }
+    };
+    let oc = candidates(opp, nb);
+    if oc.is_empty() {
+        return None;
+    }
+    let mut vals = None;
+    if fast_on() && mine.len() == 3 && mine.iter().all(|o| o.len() == 3) && oc.iter().all(|c| c.len() == 3) {
+        vals = select_fast(pack, ft, sel, opp, me, &mine, &oc, pc, !me_is_x, &Agg::Mean3).map(|x| x.1);
+    }
+    let vals = match vals {
+        Some(v) => v,
+        None => select_ref(pack, ft, sel, opp, me, &mine, &oc, g, &Agg::Mean3).1,
+    };
+    Some((oc, vals))
 }
 
 fn opp_temp() -> f64 {
@@ -396,11 +613,11 @@ fn learned_osels(
     }
     let mut vals = None;
     if fast_on() && mine.len() == 3 && mine.iter().all(|o| o.len() == 3) && oc.iter().all(|c| c.len() == 3) {
-        vals = select_fast(pack, ft, sel, opp, me, &mine, &oc, pc, !me_is_x).map(|x| x.1);
+        vals = select_fast(pack, ft, sel, opp, me, &mine, &oc, pc, !me_is_x, &Agg::Mean3).map(|x| x.1);
     }
     let vals = match vals {
         Some(v) => v,
-        None => select_ref(pack, ft, sel, opp, me, &mine, &oc, g).1,
+        None => select_ref(pack, ft, sel, opp, me, &mine, &oc, g, &Agg::Mean3).1,
     };
     let mut best = 0usize;
     for (k, &v) in vals.iter().enumerate() {
@@ -425,13 +642,14 @@ fn select_ref(
     osels: &[Vec<usize>],
     cands: &[Vec<usize>],
     g: &mut CpyRandom,
+    agg: &Agg,
 ) -> (usize, Vec<f64>) {
     let mut memo = DmgMemo::default();
     let mut best = 0usize;
     let mut bv = f64::NEG_INFINITY;
     let mut vals = Vec::with_capacity(cands.len());
     for (k, c) in cands.iter().enumerate() {
-        let mut v = [0.0f64; 3];
+        let mut v = vec![0.0f64; osels.len()];
         for (j, os) in osels.iter().enumerate() {
             let mut sides = [
                 Side { party: c.iter().map(|&i| me[i].clone()).collect(), active_idx: 0, field_idx: 0, ..Default::default() },
@@ -441,7 +659,7 @@ fn select_ref(
             let x = encode_state(pack, ft, &mut sides, 0, &mut field, &mut memo, &mut GRng(g));
             v[j] = sel.predict(&x);
         }
-        let sc = (v[0] + v[1] + v[2]) / 3.0;
+        let sc = agg.score(&v);
         vals.push(sc);
         if sc > bv {
             bv = sc;
@@ -719,6 +937,7 @@ fn select_fast(
     cands: &[Vec<usize>],
     pc: &mut PairCache,
     me_is_x: bool,
+    agg: &Agg,
 ) -> Option<(usize, Vec<f64>)> {
     if me.len() < 3 || opp.len() < 3 || !me.iter().chain(opp.iter()).all(|p| pristine(pack, ft, p)) {
         return None;
@@ -798,7 +1017,7 @@ fn select_fast(
 
     // 相手の仮定の重複を除く
     let mut uniq: Vec<&Vec<usize>> = Vec::new();
-    let mut umap = [0usize; 3];
+    let mut umap = vec![0usize; osels.len()];
     for (j, os) in osels.iter().enumerate() {
         umap[j] = match uniq.iter().position(|u| *u == os) {
             Some(i) => i,
@@ -882,7 +1101,7 @@ fn select_fast(
         }
         let mut z = 0.0f64;
         for j in 0..h {
-            z += s[j].tanh() * sel.w2[j];
+            z += sel.act(s[j]) * sel.w2[j];
         }
         1.0 / (1.0 + (-(z + sel.b2)).exp())
     };
@@ -890,11 +1109,15 @@ fn select_fast(
     let mut bv = f64::NEG_INFINITY;
     let mut vals = Vec::with_capacity(cands.len());
     let mut uv = vec![0.0f64; uniq.len()];
+    let mut ov = vec![0.0f64; osels.len()];
     for (k, c) in cands.iter().enumerate() {
         for (u, x) in uv.iter_mut().enumerate() {
             *x = value(c, u);
         }
-        let sc = (uv[umap[0]] + uv[umap[1]] + uv[umap[2]]) / 3.0;
+        for (j, x) in ov.iter_mut().enumerate() {
+            *x = uv[umap[j]];
+        }
+        let sc = agg.score(&ov);
         vals.push(sc);
         if sc > bv {
             bv = sc;
@@ -972,9 +1195,9 @@ mod tests {
                 assert_eq!(tab, want);
                 assert_eq!(s1.random(), s2.random(), "相手の仮定の抽選の乱数の消費");
                 let cands = candidates(me, 3);
-                let (fb, fv) = select_fast(&pack, &ft, &sel, me, opp, &tab, &cands, &mut pc, me_is_x).unwrap();
+                let (fb, fv) = select_fast(&pack, &ft, &sel, me, opp, &tab, &cands, &mut pc, me_is_x, &Agg::Mean3).unwrap();
                 let (mut m3, mut o3) = (me.clone(), opp.clone());
-                let (rb, rv) = select_ref(&pack, &ft, &sel, &mut m3, &mut o3, &tab, &cands, &mut g);
+                let (rb, rv) = select_ref(&pack, &ft, &sel, &mut m3, &mut o3, &tab, &cands, &mut g, &Agg::Mean3);
                 assert_eq!(fb, rb);
                 for (x, y) in fv.iter().zip(rv.iter()) {
                     assert!((x - y).abs() < 1e-12, "{x} {y}");
@@ -1013,6 +1236,112 @@ mod tests {
             s2.random();
             assert_eq!(s.random(), s2.random(), "乱数の消費＝相手の学習選出の分＋抽選2回");
         }
+    }
+
+    /// 相手の全候補を仮定にした集め方（重み付き・平均＋最悪）でも、高速版が元の実装と同じ選出・値（丸め誤差のみ）
+    #[test]
+    fn fast_equals_ref_all_assumptions() {
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6b.json");
+        let sel = match Selector::from_json(p) {
+            Some(s) => s,
+            None => return,
+        };
+        let mut pack = Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"));
+        let a6: Vec<Poke> = FA.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
+        let b6: Vec<Poke> = FB.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
+        let pack = pack;
+        let ft = FeatTables::build(&pack);
+        let oc = candidates(&b6, 3);
+        let ov: Vec<f64> = (0..oc.len()).map(|i| ((i * 37) % 11) as f64 / 10.0).collect();
+        let tw = topk_weights(&ov, 1.0, 8);
+        let aggs = [
+            (oc.clone(), Agg::MinMix(1.0, 3)),
+            (oc.clone(), Agg::MinMix(0.5, 3)),
+            (tw.iter().map(|&(i, _)| oc[i].clone()).collect::<Vec<_>>(), Agg::W(tw.iter().map(|&(_, w)| w).collect())),
+        ];
+        let cands = candidates(&a6, 3);
+        for (os, agg) in aggs.iter() {
+            let mut pc = PairCache::default();
+            let (fb, fv) = select_fast(&pack, &ft, &sel, &a6, &b6, os, &cands, &mut pc, true, agg).unwrap();
+            let (mut m3, mut o3) = (a6.clone(), b6.clone());
+            let (rb, rv) = select_ref(&pack, &ft, &sel, &mut m3, &mut o3, os, &cands, &mut CpyRandom::new(7), agg);
+            assert_eq!(fb, rb);
+            for (x, y) in fv.iter().zip(rv.iter()) {
+                assert!((x - y).abs() < 1e-12, "{x} {y}");
+            }
+        }
+    }
+
+    /// ReLU の隠れ層（"act": "relu"）: 逐次和と素朴な和が一致し、高速版が元の実装と同じ選出・値。未知の活性化・"U"（入力の追加）は読まない
+    #[test]
+    fn relu_model_fast_equals_ref() {
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6b.json");
+        let mut v: serde_json::Value = match std::fs::read_to_string(p).ok().and_then(|t| serde_json::from_str(&t).ok()) {
+            Some(v) => v,
+            None => return,
+        };
+        let dir = std::env::temp_dir();
+        let write = |name: &str, v: &serde_json::Value| -> String {
+            let f = dir.join(format!("{}_{}.json", name, std::process::id()));
+            std::fs::write(&f, serde_json::to_string(v).unwrap()).unwrap();
+            f.to_string_lossy().to_string()
+        };
+        v["act"] = serde_json::Value::from("gelu");
+        assert!(Selector::from_json(&write("sel_gelu", &v)).is_none());
+        v["act"] = serde_json::Value::from("relu");
+        let mut vu = v.clone();
+        vu["U"] = serde_json::json!([0.0]);
+        assert!(Selector::from_json(&write("sel_u", &vu)).is_none());
+        let sel = Selector::from_json(&write("sel_relu", &v)).unwrap();
+        assert!(sel.relu);
+        let mut seed = 999u64;
+        for _ in 0..20 {
+            let x: Vec<f64> = (0..sel.d)
+                .map(|_| {
+                    seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+                    let u = (seed >> 11) as f64 / (1u64 << 53) as f64;
+                    if u < 0.7 { 0.0 } else { (u - 0.85) * 4.0 }
+                })
+                .collect();
+            assert_eq!(sel.predict(&x).to_bits(), sel.predict_dense(&x).to_bits());
+        }
+        let mut pack = Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"));
+        let a6: Vec<Poke> = FA.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
+        let b6: Vec<Poke> = FB.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
+        let pack = pack;
+        let ft = FeatTables::build(&pack);
+        let oc = candidates(&b6, 3);
+        let ov: Vec<f64> = (0..oc.len()).map(|i| ((i * 37) % 11) as f64 / 10.0).collect();
+        let tw = topk_weights(&ov, 1.0, 8);
+        let os: Vec<Vec<usize>> = tw.iter().map(|&(i, _)| oc[i].clone()).collect();
+        let agg = Agg::W(tw.iter().map(|&(_, w)| w).collect());
+        let cands = candidates(&a6, 3);
+        let mut pc = PairCache::default();
+        let (fb, fv) = select_fast(&pack, &ft, &sel, &a6, &b6, &os, &cands, &mut pc, true, &agg).unwrap();
+        let (mut m3, mut o3) = (a6.clone(), b6.clone());
+        let (rb, rv) = select_ref(&pack, &ft, &sel, &mut m3, &mut o3, &os, &cands, &mut CpyRandom::new(7), &agg);
+        assert_eq!(fb, rb);
+        for (x, y) in fv.iter().zip(rv.iter()) {
+            assert!((x - y).abs() < 1e-12, "{x} {y}");
+        }
+    }
+
+    #[test]
+    fn topk_weights_and_agg() {
+        let v = [0.2, 0.5, 0.5, 0.1, 0.4];
+        let tw = topk_weights(&v, 1.0, 3);
+        assert_eq!(tw.iter().map(|x| x.0).collect::<Vec<_>>(), vec![1, 2, 4]);
+        assert!((tw.iter().map(|x| x.1).sum::<f64>() - 1.0).abs() < 1e-15);
+        let all = topk_weights(&v, 1.0, 100);
+        assert_eq!(all.len(), 5);
+        assert!((all.iter().map(|x| x.1).sum::<f64>() - 1.0).abs() < 1e-15);
+        assert_eq!(topk_weights(&[0.3, 0.3, 0.3], 1.0, 2), vec![(0, 0.5), (1, 0.5)]);
+        assert_eq!(Agg::Mean3.score(&[0.1, 0.2, 0.6]), (0.1 + 0.2 + 0.6) / 3.0);
+        assert_eq!(Agg::W(vec![0.25, 0.75]).score(&[0.4, 0.8]), 0.25 * 0.4 + 0.75 * 0.8);
+        let x = [0.6, 0.6, 0.6, 0.2, 0.4, 0.3];
+        assert!((Agg::MinMix(1.0, 3).score(&x) - 2.7 / 6.0).abs() < 1e-15);
+        assert!((Agg::MinMix(0.0, 3).score(&x) - 0.3).abs() < 1e-15);
+        assert!((Agg::MinMix(0.5, 3).score(&x) - (0.5 * 0.45 + 0.5 * 0.3)).abs() < 1e-15);
     }
 
     #[test]

@@ -1,6 +1,9 @@
 """パーティ診断（ローカル版・2026-10-02）。提案APIの /diagnose・/diag_battle・/improve の中身。
-相手集団・有利度の定義は _select_guide と同じ（guide_pool_m6.json・Rust guide_rows の貪欲勝率を CAL_A/CAL_B で較正）。
-並列は呼び出し側の永続プールの map を受け取る（サーバは _get_pool()、参照分布の生成は自前の Pool）。
+相手集団は _select_guide と同じ（guide_pool_m6.json）。選出率・条件ルール・苦手/得意は /guide の集計（貪欲8戦×3000党）のまま。
+有利度（全体・順位・代表相手・改善案）は Rust guide_rows_mcts（同じ選出で対戦を両者 MCTS@SIMS）の勝率をそのまま使う
+（貪欲の差は本番AIの差をほぼ予測しない。根拠 _local/ai_work/diag_validation_20261002.md）。
+全体の有利度は _diag_ref.py が事前計算（diag_adv_m6.json・参照分布 diag_ref_m6.json）。無い党はサーバが貪欲の値を概算で返し、裏で同じ計算を回す。
+並列は呼び出し側のプールを受け取る（サーバは _get_pool()、事前計算は自前の Pool）。
 """
 import json
 import math
@@ -10,9 +13,13 @@ from collections import Counter
 
 import _select_guide as SG
 
-REF_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.environ.get("DIAG_REF", "diag_ref_m6.json"))
-OPP_GK = 64
-N_OPPS, IMPROVE_OPPS, PER_SLOT, Z_MIN, MAX_CANDS, FIX_MIN_N = 9, 1000, 4, 2.0, 6, 30
+_DIR = os.path.dirname(os.path.abspath(__file__))
+REF_FILE = os.path.join(_DIR, os.environ.get("DIAG_REF", "diag_ref_m6.json"))
+ADV_FILE = os.path.join(_DIR, os.environ.get("DIAG_ADV", "diag_adv_m6.json"))
+SIMS = int(os.environ.get("DIAG_SIMS", "64"))
+MC_NC = 20
+ADV_OPPS, ADV_K, OPP_K = 200, 4, 16
+N_OPPS, IMPROVE_OPPS, IMPROVE_K, PER_SLOT, D_MIN, Z_MIN, FIX_MIN_N = 9, 300, 4, 2, 0.03, 2.0, 30
 PRED_TOP = 3
 
 
@@ -44,11 +51,6 @@ def merge(parts, nc, n):
         for jj, r in enumerate(part):
             out[i + jj * nc] = r
     return out
-
-
-def overall_adv(aligned):
-    a = [adv_of(r[1]) for r in aligned if r]
-    return sum(a) / len(a)
 
 
 def g_array(aligned):
@@ -106,14 +108,96 @@ def pick_opps(pool, gs, weak, n=N_OPPS):
     return out
 
 
-def remeasure(specs, parties, opps, season, seed=7):
-    """表示する相手だけ貪欲 OPP_GK 戦で測り直す（集計用の8戦では1党ごとの値は揺れが大きく、0/8＝37%が並ぶ）"""
+def party_key(specs):
+    return "\n".join(sorted(specs))
+
+
+def is_stone(spec):
+    return spec.split("@", 1)[1].split(":")[0].endswith(("ナイト", "ナイトX", "ナイトY", "ナイトZ", "ナイトＸ", "ナイトＹ", "ナイトＺ"))
+
+
+def mrows_at(a):
+    """(specs, opps, season, seed, k) → 相手ごとに (自分の選出, MCTS@SIMS の k 戦の勝率) か None"""
+    specs, opps, season, seed, k = a
     import pokenavi_engine as E
     from simulator.learned_selection import _PATH
-    r = E.guide_rows(list(specs), parties, season, OPP_GK, seed, _PATH)
-    for o, (my, g) in zip(opps, r):
-        if my:
-            o["adv"] = round(adv_of(g), 3)
+    return [(my, w) if my else None for my, w in E.guide_rows_mcts(list(specs), opps, season, k, seed, _PATH, SIMS)]
+
+
+def mrows_at_i(a):
+    return a[0], mrows_at(a[1])
+
+
+def mchunk_jobs(specs, opps, season, k, nc=MC_NC):
+    """相手 i::nc・シード 1+100003·i（パーティによらず同じ相手に同じシード＝党どうしを対にできる）"""
+    return [(list(specs), opps[i::nc], season, 1 + 100_003 * i, k) for i in range(nc)]
+
+
+def mean_se(xs):
+    m = sum(xs) / len(xs)
+    sd = math.sqrt(sum((x - m) ** 2 for x in xs) / max(1, len(xs) - 1))
+    return m, sd / math.sqrt(len(xs))
+
+
+def run_jobs(imap, jobs, progress=None):
+    """imap＝プールの imap_unordered。mrows_at を並列に回して jobs の順に返す。progress(済み, 全体)"""
+    out = [None] * len(jobs)
+    for n, (i, r) in enumerate(imap(mrows_at_i, list(enumerate(jobs))), 1):
+        out[i] = r
+        if progress:
+            progress(n, len(jobs))
+    return out
+
+
+def mcts_adv(specs, imap, opps, season, k, progress=None):
+    """全体の有利度＝相手ごとの勝率の平均（MCTS@SIMS をそのまま。MCTS@400 との差は党平均で約1pt＝較正しない）"""
+    al = merge(run_jobs(imap, mchunk_jobs(specs, opps, season, k), progress), MC_NC, len(opps))
+    m, se = mean_se([r[1] for r in al if r])
+    return {"adv": round(m, 4), "se": round(se, 4), "n_opp": len(opps), "k": k, "sims": SIMS}
+
+
+_LIVE = {}
+
+
+def _load_live(path):
+    """事前計算の途中でも読めるよう、更新されていたら読み直す（書く側は os.replace で置き換える）"""
+    try:
+        mt = os.path.getmtime(path)
+    except OSError:
+        return None
+    c = _LIVE.get(path)
+    if not c or c[0] != mt:
+        try:
+            c = (mt, json.load(open(path, encoding="utf-8")))
+        except (OSError, ValueError):
+            return c[1] if c else None
+        _LIVE[path] = c
+    return c[1]
+
+
+def cached_adv(specs):
+    d = _load_live(ADV_FILE)
+    return (d or {}).get("adv", {}).get(party_key(specs))
+
+
+def remeasure_job(a):
+    """代表相手1党に MCTS@SIMS を OPP_K 戦"""
+    specs, opp, season, oid = a
+    import pokenavi_engine as E
+    from simulator.learned_selection import _PATH
+    my, w = E.guide_rows_mcts(list(specs), [opp], season, OPP_K, 7 + 7919 * oid, _PATH, SIMS)[0]
+    return w if my else None
+
+
+def remeasure_jobs(specs, pool, opps, season):
+    """表示する相手だけ MCTS@SIMS×OPP_K 戦で測り直す（貪欲の相手別の値は本番AIと r≈0.5）。結果は apply_remeasure で入れる"""
+    return [(list(specs), pool[o["id"]], season, o["id"]) for o in opps]
+
+
+def apply_remeasure(opps, ws):
+    for o, w in zip(opps, ws):
+        o["adv"] = None if w is None else round(w, 3)
+        o["k"] = OPP_K
     return opps
 
 
@@ -145,36 +229,45 @@ def battle_job(a):
     return _trim_predict(rec)
 
 
-def improve(specs, cand_fn, pmap, opps, season, nc):
-    """各枠を cand_fn(残り5体) の候補で入れ替え、相手 opps に対する有利度を base と同じシードで比べる（相手ごとの差の平均と標準誤差で z）"""
-    specs = list(specs)
+def improve_cands(specs, cand_fn):
+    """各枠を cand_fn(残り5体)（/complete と同じ補完の上位）の候補で入れ替え。同じ種は除き各枠 PER_SLOT 件"""
     cands = []
     for i in range(6):
         rest = specs[:i] + specs[i + 1:]
         got = [sp for sp in cand_fn(rest) if _name(sp) != _name(specs[i])]
         cands += [(i, sp) for sp in got[:PER_SLOT]]
+    return cands
+
+
+def improve(specs, cands, imap, opps, season, progress=None):
+    """cands＝improve_cands の (枠, spec)。候補の党と元の党を同じ相手・同じシードで MCTS@SIMS×IMPROVE_K 戦し、相手ごとの差の平均と標準誤差で z。
+    diff≥D_MIN かつ z≥Z_MIN だけを差の大きい順に返す。mega2＝残り5体にメガ石があるのにメガ石の候補（選出ではメガは1体だけ）"""
+    specs = list(specs)
     parties = [specs] + [specs[:i] + [sp] + specs[i + 1:] for i, sp in cands]
     n = len(opps)
-    parts = pmap(rows_at, [j for p in parties for j in chunk_jobs(p, opps, season, nc)])
-    al = [merge(parts[k * nc:(k + 1) * nc], nc, n) for k in range(len(parties))]
+    jobs = [j for p in parties for j in mchunk_jobs(p, opps, season, IMPROVE_K)]
+    parts = run_jobs(imap, jobs, progress)
+    al = [merge(parts[k * MC_NC:(k + 1) * MC_NC], MC_NC, n) for k in range(len(parties))]
     base = al[0]
     onames = [{_name(x) for x in o} for o in opps]
     out = []
     for (i, sp), ca in zip(cands, al[1:]):
         idx = [j for j in range(n) if base[j] and ca[j]]
-        d = [adv_of(ca[j][1]) - adv_of(base[j][1]) for j in idx]
-        m = sum(d) / len(d)
-        sd = math.sqrt(sum((x - m) ** 2 for x in d) / max(1, len(d) - 1))
-        z = m / (sd / math.sqrt(len(d))) if sd > 0 else 0.0
-        if z < Z_MIN:
+        d = [ca[j][1] - base[j][1] for j in idx]
+        m, se = mean_se(d)
+        z = m / se if se > 0 else 0.0
+        if m < D_MIN or z < Z_MIN:
             continue
         by = {}
         for j, x in zip(idx, d):
             for s in onames[j]:
                 by.setdefault(s, []).append(x)
         fixes = sorted(((s, sum(v) / len(v)) for s, v in by.items() if len(v) >= FIX_MIN_N), key=lambda x: -x[1])[:3]
+        rest = specs[:i] + specs[i + 1:]
         out.append({"slot": i, "out": _name(specs[i]), "in": _name(sp), "spec": sp,
-                    "adv": round(overall_adv(ca), 3), "diff": round(m, 3), "z": round(z, 1),
+                    "adv": round(mean_se([r[1] for r in ca if r])[0], 3), "diff": round(m, 3), "se": round(se, 3), "z": round(z, 1),
+                    "mega2": is_stone(sp) and any(is_stone(x) for x in rest),
                     "fixes": [{"opp": s, "diff": round(v, 3)} for s, v in fixes if v > 0]})
     out.sort(key=lambda x: -x["diff"])
-    return {"base": round(overall_adv(base), 3), "n_opp": n, "n_cand": len(cands), "cands": out[:MAX_CANDS]}
+    return {"base": round(mean_se([r[1] for r in base if r])[0], 3), "n_opp": n, "k": IMPROVE_K, "sims": SIMS,
+            "n_cand": len(cands), "tried": [{"slot": i, "out": _name(specs[i]), "in": _name(sp)} for i, sp in cands], "cands": out}

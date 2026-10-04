@@ -42,18 +42,17 @@ pub fn is_setup_move(pack: &Pack, name: Sym) -> bool {
         || name == l.はらだいこ
 }
 
-/// battle.py:44 is_trapped。`_bound_turns` は BattlePokemon に存在しない属性のため
-/// getattr の既定 0 が常に使われる＝バインドでは交代不可にならない（Python の実挙動）。
+/// battle.py is_trapped。ゴーストタイプと きれいなぬけがら は常に交代できる。逃げられない状態・はいすいのじん・バインド・かげふみ
 pub fn is_trapped(pack: &Pack, poke: &Poke, opponent: Option<&Poke>) -> bool {
-    if poke.ability == pack.sy.l.にげあし {
+    if poke.has_type(pack.tc.ゴースト) || poke.item == Some(pack.sy.l.きれいなぬけがら) {
         return false;
     }
     if let Some(o) = opponent {
-        if o.is_alive && o.ability == pack.sy.l.かげふみ && !poke.has_type(pack.tc.ゴースト) {
+        if o.is_alive && o.ability == pack.sy.l.かげふみ {
             return true;
         }
     }
-    poke.trapped
+    poke.trapped || poke.no_retreat || poke.bound_count > 0
 }
 
 /// ai.py `_effective_speed`
@@ -209,6 +208,11 @@ pub fn move_damage(
     }
     if blade_applied {
         crate::battle::revert_blade_pub(atk);
+        // ai.py _pre_move_forms_ctx は見積もりの後に _shield_* を消す（正準状態では0）。同じにする
+        atk.shield_atk = 0;
+        atk.shield_def = 0;
+        atk.shield_spatk = 0;
+        atk.shield_spdef = 0;
     }
     total
 }
@@ -1186,6 +1190,54 @@ fn opp_max_priority_known(pack: &Pack, my: &mut Side, op: &Poke) -> i64 {
         .unwrap_or(0)
 }
 
+/// AI_KO_COND=0 で成功条件の確認を外す（A/B 用。既定 ON）
+pub fn ko_cond_env() -> bool {
+    std::env::var("AI_KO_COND").map(|v| v != "0").unwrap_or(true)
+}
+
+/// 監査40の AI 修正の既定（AI_FIX40=0 で旧挙動。ai.py / search_ai.py の _FIX40_ON と同じ）
+pub fn fix40_env() -> bool {
+    std::env::var("AI_FIX40").map(|v| v != "0").unwrap_or(true)
+}
+
+/// 監査200 C の AI 修正の既定（AI_FIX200=0 で旧挙動。search_ai.py の _FIX200_ON と同じ）
+pub fn fix200_env() -> bool {
+    std::env::var("AI_FIX200").map(|v| v != "0").unwrap_or(true)
+}
+
+/// ai.py `_ko_hit_prob`: 確定KOの安全弁で使う命中率（公開情報）
+fn ko_hit_prob(pack: &Pack, me: &Poke, op: &Poke, mv: &DMove, field: &Field) -> f64 {
+    let acc = match mv.accuracy {
+        None => return 1.0,
+        Some(a) => a,
+    };
+    if me.lock_on || op.defenseless {
+        return 1.0;
+    }
+    let s = &pack.sy;
+    if me.ability == s.ab.ノーガード || op.ability == s.ab.ノーガード {
+        return 1.0;
+    }
+    let w = crate::damage::effective_weather(pack, field, Some(me));
+    let thunder = mv.name == s.mv.かみなり || mv.name == s.mv.ぼうふう;
+    if (thunder && w == Some(s.we.rain)) || (mv.name == s.mv.ふぶき && w == Some(s.we.hail)) {
+        return 1.0;
+    }
+    let eva = if me.ability == s.ab.するどいめ || me.ability == s.ab.はっこう { 0 } else { op.stage_evasion };
+    let mut p = (acc as f64) * crate::poke::acc_eva_stage(me.stage_accuracy - eva) / 100.0;
+    if thunder && w == Some(s.we.sunny) {
+        p = 0.5;
+    }
+    if me.ability == s.ab.ふくがん {
+        p *= 1.3;
+    }
+    if me.ability == s.ab.はりきり && mv.category == Cat::Physical {
+        p *= 0.8;
+    }
+    p *= crate::damage::get_evasion_item_mult(pack, op.item) * crate::damage::get_accuracy_evasion_item(pack, me.item);
+    p.min(1.0)
+}
+
 pub fn certain_ko_override(
     pack: &Pack,
     act: Action,
@@ -1194,10 +1246,54 @@ pub fn certain_ko_override(
     field: &mut Field,
     rng: &mut dyn BRng,
 ) -> Action {
-    certain_ko_override_opt(pack, act, my, opp, field, rng, true)
+    certain_ko_override_opt(pack, act, my, opp, field, rng, true, ko_cond_env(), fix40_env())
+}
+
+/// ai.py `_ko_move_fails`: 成功条件のある攻撃技で、確定KOの前提（撃てば当たる）が成り立たないか。
+/// 相手の行動しだいで失敗する技（ふいうち・はやてがえし）と、威力が後で入る技（みらいよち）は常に除く。
+fn ko_move_fails(pack: &Pack, me: &Poke, op: &Poke, mv: &DMove, field: &Field, fix40: bool) -> bool {
+    let l = &pack.sy.l;
+    let n = mv.name;
+    if (n == l.ねこだまし || n == l.であいがしら) && me.turns_out > 0 {
+        return true;
+    }
+    if fix40
+        && ((n == l.でんこうそうげき && !me.has_type(pack.tc.でんき)) || (n == l.もえつきる && !me.has_type(pack.tc.ほのお)))
+    {
+        return true;
+    }
+    if n == l.ふいうち || n == l.はやてがえし || n == l.みらいよち {
+        return true;
+    }
+    if n == l.ポルターガイスト && op.item.is_none() {
+        return true;
+    }
+    if n == l.とっておき {
+        let others: Vec<_> = me.moves.iter().map(|m| m.name).filter(|&x| x != l.とっておき).collect();
+        if others.is_empty() || !others.iter().all(|x| me.used_moves.contains(x)) {
+            return true;
+        }
+    }
+    if n == l.アイアンローラー
+        && !(field.grassy_terrain || field.electric_terrain || field.psychic_terrain || field.misty_terrain)
+    {
+        return true;
+    }
+    if field.psychic_terrain && mv.priority > 0 {
+        let grounded = !(op.has_type(pack.tc.ひこう)
+            || op.ability == l.ふゆう
+            || op.magnet_rise
+            || op.item == Some(pack.sy.it.ふうせん))
+            || op.grounded;
+        if grounded {
+            return true;
+        }
+    }
+    false
 }
 
 /// precise=false は 2026-09-28 以前の判定（姿変化・連続技なしの1発・A/B 用。env AI_KO_PRECISE=0）
+/// cond=false は 2026-10-04 以前の判定（成功条件のある技も候補にする・A/B 用。env AI_KO_COND=0）
 pub fn certain_ko_override_opt(
     pack: &Pack,
     act: Action,
@@ -1206,8 +1302,9 @@ pub fn certain_ko_override_opt(
     field: &mut Field,
     rng: &mut dyn BRng,
     precise: bool,
+    cond: bool,
+    fix40: bool,
 ) -> Action {
-    let l = &pack.sy.l;
     let (mi, oi) = (my.active_idx, opp.active_idx);
     {
         let me = &my.party[mi];
@@ -1242,11 +1339,16 @@ pub fn certain_ko_override_opt(
     let valid = filter_by_pp(&filter_valid_by_lock(me), me);
     let mut best: Option<(usize, DMove)> = None;
     let mut bestd = -1.0f64;
+    let mut bestp = -1.0f64;
+    let mut probs: Vec<(crate::interner::Sym, f64)> = Vec::new();
     for (i, mv) in &valid {
         if mv.power.unwrap_or(0) == 0 || mv.category == Cat::Status {
             continue;
         }
         if pack.eff(mv.ty, op.type1, op.type2) == 0.0 {
+            continue;
+        }
+        if cond && ko_move_fails(pack, me, op, mv, field, fix40) {
             continue;
         }
         if !goes_first_pri(pack, me, op, mv.priority, field, opp_pri) {
@@ -1255,15 +1357,23 @@ pub fn certain_ko_override_opt(
         // 正規化ロール。最低ロールは 0.0（0.85 は実効 0.85+0.85*0.15=0.9775 ＝ほぼ最高値で、
         // 確定でないKOを確定と誤認する。実測: 介入の15.3%が該当）。
         // 姿変化（バトルスイッチ）と連続技の「必ず当たる回数」込み（ai.py _move_damage と同一）
+        let (sm, so) = (crate::damage::EstSnap::take(me), crate::damage::EstSnap::take(op));
         let d = if precise {
             move_damage(pack, me, op, mv, field, 0.0, HitMode::Min, false, rng)
         } else {
             let mut f = dmg_rng(rng);
             calc_damage(pack, me, op, mv, field, false, Some(0.0), None, &mut f) as f64
         };
-        if d >= op.hp as f64 && d > bestd {
-            bestd = d;
-            best = Some((*i, mv.clone()));
+        sm.restore(me);
+        so.restore(op);
+        if d >= op.hp as f64 {
+            let p = if fix40 { ko_hit_prob(pack, me, op, mv, field) } else { 1.0 };
+            probs.push((mv.name, p));
+            if p > bestp || (p == bestp && d > bestd) {
+                bestp = p;
+                bestd = d;
+                best = Some((*i, mv.clone()));
+            }
         }
     }
     let (bi, bmv) = match best {
@@ -1272,6 +1382,18 @@ pub fn certain_ko_override_opt(
     };
     if act.kind == ActKind::Move && act.mv.as_ref().map(|m| m.name) == Some(bmv.name) {
         return act;
+    }
+    // 命中が確実でない技で上書きするのは、選んだ手が命中率の低い確定KO技だったときだけ（ai.py と同じ）
+    if fix40 && bestp < 1.0 {
+        let ap = if act.kind == ActKind::Move {
+            act.mv.as_ref().and_then(|m| probs.iter().find(|(n, _)| *n == m.name).map(|x| x.1))
+        } else {
+            None
+        };
+        match ap {
+            Some(a) if a < bestp => {}
+            _ => return act,
+        }
     }
     Action {
         kind: ActKind::Move,
@@ -1784,10 +1906,11 @@ mod tests {
         };
         let st = Action { kind: ActKind::Move, mv: Some(my.party[0].moves[3].clone()), move_idx: 3, switch_to: -1, do_mega: false };
         op.party[0].hp = 2 * one;
-        let a = certain_ko_override(pr, st.clone(), &mut my, &mut op, &mut f, &mut r);
+        // 命中90の技なので、回数の判定だけを見るため命中の条件（監査40 #3）は外す
+        let a = certain_ko_override_opt(pr, st.clone(), &mut my, &mut op, &mut f, &mut r, true, true, false);
         assert_eq!(a.move_idx, 0, "2発ぶんのHPなら確定");
         op.party[0].hp = 2 * one + 1;
-        let a = certain_ko_override(pr, st, &mut my, &mut op, &mut f, &mut r);
+        let a = certain_ko_override_opt(pr, st, &mut my, &mut op, &mut f, &mut r, true, true, false);
         assert_eq!(a.move_idx, 3, "3発目以降は当てにしない");
     }
 
@@ -1807,6 +1930,46 @@ mod tests {
         let t0 = mas.type1;
         crate::battle::apply_pre_move_forms(pr, &mut mas, &st);
         assert!(mas.type1 == t0 && !mas.protean_used, "へんげんじざいでタイプが変わらない");
+    }
+
+    /// 確定KOは成功条件のある技を、条件を満たさない局面で候補にしない（test_all.py 37 と同じ）
+    #[test]
+    fn 確定ko_初回だけの技と条件付きの技() {
+        let mut p = pack();
+        let gu = build_poke(&mut p, "グソクムシャ@きれいなぬけがら:いじっぱり:であいがしら|きゅうけつ|ふいうち|ねこだまし:32/32/0/0/0/0:ききかいひ", "M-6");
+        let g = build_poke(&mut p, "ガブリアス@きれいなぬけがら:ようき:じしん:0/32/0/0/0/32:さめはだ", "M-6");
+        let pr: &Pack = &p;
+        let mut my = Side { party: vec![gu], active_idx: 0, ..Default::default() };
+        let mut op = Side { party: vec![g], active_idx: 0, ..Default::default() };
+        let mut f = Field::default();
+        let mut r = Z;
+        op.party[0].hp = 1;
+        let st = Action { kind: ActKind::Move, mv: Some(my.party[0].moves[1].clone()), move_idx: 1, switch_to: -1, do_mega: false };
+        let a = certain_ko_override_opt(pr, st.clone(), &mut my, &mut op, &mut f, &mut r, true, true, true);
+        assert_eq!(a.move_idx, 0, "登場ターンは であいがしら");
+        my.party[0].turns_out = 1;
+        let a = certain_ko_override_opt(pr, st.clone(), &mut my, &mut op, &mut f, &mut r, true, true, true);
+        assert_eq!(a.move_idx, 1, "2ターン目以降は であいがしら/ねこだまし/ふいうち を当てにしない");
+        let a = certain_ko_override_opt(pr, st, &mut my, &mut op, &mut f, &mut r, true, false, true);
+        assert_ne!(a.move_idx, 1, "旧判定（A/B 用）は上書きしていた");
+    }
+
+    /// 確定KOの見積もりで半減きのみを消費しない（実際の攻撃でだけ消費）
+    #[test]
+    fn 確定ko_見積もりで半減きのみを消費しない() {
+        let mut p = pack();
+        let g = build_poke(&mut p, "ガブリアス@きれいなぬけがら:ようき:じしん|つるぎのまい:0/32/0/0/0/32:さめはだ", "M-6");
+        let e = build_poke(&mut p, "エンペルト@シュカのみ:ひかえめ:なみのり:32/0/0/32/0/0:げきりゅう", "M-6");
+        let pr: &Pack = &p;
+        let mut my = Side { party: vec![g], active_idx: 0, ..Default::default() };
+        let mut op = Side { party: vec![e], active_idx: 0, ..Default::default() };
+        let mut f = Field::default();
+        let mut r = Z;
+        op.party[0].hp = 10;
+        let st = Action { kind: ActKind::Move, mv: Some(my.party[0].moves[1].clone()), move_idx: 1, switch_to: -1, do_mega: false };
+        let a = certain_ko_override(pr, st, &mut my, &mut op, &mut f, &mut r);
+        assert_eq!(a.move_idx, 0);
+        assert_eq!(op.party[0].item, pr.intern.get("シュカのみ"), "シュカのみが残る");
     }
 
     /// Zメガ石もメガストーン（battle.py _is_megastone と同じ）

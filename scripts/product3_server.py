@@ -118,14 +118,43 @@ def _guide_all(specs):
 def guide(specs):
     return _guide_all(specs)[0]
 
-# パーティ診断（ローカル版）。中身は _diagnose.py
-DREF = DG.load_ref()
+# パーティ診断（ローカル版）。中身は _diagnose.py。有利度は MCTS@64（事前計算 diag_adv_m6.json）。
+# 無い党は貪欲の値を「概算」で即返し、裏で MCTS@64（事前計算と同じ 相手200党×4戦）を回す（adv_job を /job_status で取る）。
+# その場で相手100党×2戦にすると WORKERS=2・負荷下で +35秒（実測）かかり、待たせるより概算＋差し替えにした
+_AMEMO = {}
+
+def _rank(adv):
+    ref = DG._load_live(DG.REF_FILE)
+    rk = DG.rank(adv, ref)
+    if rk:
+        rk["method"] = ref.get("method", "greedy")
+    return rk
+
+def _adv_job(specs):
+    key = DG.party_key(specs)
+    def run(j):
+        a = dict(DG.mcts_adv(specs, _get_pool().imap_unordered, GPOOL[:DG.ADV_OPPS], SEASON, DG.ADV_K,
+                             progress=lambda n, t: j.update(done=n, total=t)), approx=False)
+        if len(_AMEMO) > 2000:
+            _AMEMO.clear()
+        _AMEMO[key] = a
+        return {"adv": a, "rank": _rank(a["adv"])}
+    return _start_job(("adv", key), run)
 
 def diagnose(specs):
     g, gs = _guide_all(specs)
     opps = DG.pick_opps(GPOOL, gs, g["weak"])
-    opps = _get_pool().apply(DG.remeasure, (list(specs), [GPOOL[o["id"]] for o in opps], opps, SEASON))
-    return {"guide": g, "rank": DG.rank(g["adv"], DREF), "opps": opps}
+    pend = _get_pool().map_async(DG.remeasure_job, DG.remeasure_jobs(specs, GPOOL, opps, SEASON), chunksize=1)
+    adv = DG.cached_adv(specs) or _AMEMO.get(DG.party_key(specs))
+    out = {}
+    if adv:
+        adv = dict(adv, approx=False)
+    else:
+        adv = {"adv": g["adv"], "approx": "greedy"}
+        out["adv_job"] = _adv_job(specs)
+    opps = DG.apply_remeasure(opps, pend.get())
+    out.update({"guide": dict(g, adv=adv["adv"], adv_greedy=g["adv"]), "adv": adv, "rank": _rank(adv["adv"]), "opps": opps})
+    return out
 
 def diag_battle(specs, opp, seed, my_sel):
     """押すたびに新しい1戦（メモしない）。メインプロセスのエンジンを握らないようプールのワーカーで回す"""
@@ -133,9 +162,54 @@ def diag_battle(specs, opp, seed, my_sel):
     rec["opp_names"] = [x.split("@")[0] for x in GPOOL[opp]]
     return rec
 
-def improve(specs):
-    return DG.improve(specs, lambda rest: [r["specs"][0] for r in complete(rest, 1, DG.PER_SLOT + 1)["results"]],
-                      _get_pool().map, GPOOL[:DG.IMPROVE_OPPS], SEASON, max(2, _WORKERS))
+# 数分かかる計算は非同期ジョブ（開始で job id、POST /job_status {job} で進捗・結果）。同じ入力のジョブは使い回す（失敗したものだけ作り直す）
+_JOBS, _JBYKEY = {}, {}
+_IMP_RUN = threading.Lock()
+
+def _job_view(j):
+    out = {k: j[k] for k in ("job", "kind", "state", "done", "total", "error") if k in j}
+    out["elapsed"] = round((j.get("t_end") or time.time()) - j["t0"])
+    if j["state"] == "run" and j["done"] and j.get("t_run"):
+        out["eta"] = round((time.time() - j["t_run"]) / j["done"] * (j["total"] - j["done"]))
+    if j["state"] == "done":
+        out["result"] = j["result"]
+    return out
+
+def _start_job(key, fn):
+    jid = _JBYKEY.get(key)
+    if jid in _JOBS and _JOBS[jid]["state"] != "error":
+        return _job_view(_JOBS[jid])
+    if len(_JOBS) > 300:
+        for k in [k for k, v in _JOBS.items() if v["state"] in ("done", "error")][:150]:
+            _JOBS.pop(k, None)
+    jid = os.urandom(6).hex()
+    j = {"job": jid, "kind": key[0], "state": "queued", "done": 0, "total": 0, "t0": time.time()}
+    _JOBS[jid] = j
+    _JBYKEY[key] = jid
+
+    def run():
+        try:
+            j["state"], j["t_run"] = "run", time.time()
+            j["result"] = fn(j)
+            j["state"] = "done"
+        except Exception as e:
+            j.update(state="error", error=repr(e))
+        j["t_end"] = time.time()
+    threading.Thread(target=run, daemon=True).start()
+    return _job_view(j)
+
+def improve_start(specs):
+    """候補の生成（complete）は _HEAVY_LOCK の中、対戦は外（プールは共有）。改善案のジョブは同時に1つ（_IMP_RUN）"""
+    specs = list(specs)
+    def run(j):
+        with _IMP_RUN:
+            j["state"] = "cands"
+            with _HEAVY_LOCK:
+                cands = DG.improve_cands(specs, lambda rest: [r["specs"][0] for r in complete(rest, 1, DG.PER_SLOT + 1)["results"]])
+            j.update(state="run", t_run=time.time())
+            return DG.improve(specs, cands, _get_pool().imap_unordered, GPOOL[:DG.IMPROVE_OPPS], SEASON,
+                              progress=lambda n, t: j.update(done=n, total=t))
+    return _start_job(("improve", tuple(specs)), run)
 
 def _xy_suffix(stone):
     # M-6でZストーン（ルカリオナイトZ等）が追加された。Zを拾わないと同名2件が並ぶ。
@@ -752,7 +826,7 @@ class H(BaseHTTPRequestHandler):
             self._send(404, "{}")
 
     def do_POST(self):
-        if self.path not in ("/suggest", "/simulate", "/complete", "/fire_detail", "/speed_detail", "/matchup_detail", "/atk_detail", "/guide", "/diagnose", "/diag_battle", "/improve"):
+        if self.path not in ("/suggest", "/simulate", "/complete", "/fire_detail", "/speed_detail", "/matchup_detail", "/atk_detail", "/guide", "/diagnose", "/diag_battle", "/improve", "/job_status"):
             self._send(404, "{}"); return
         try:
             n = int(self.headers.get("Content-Length", 0) or 0)
@@ -767,6 +841,9 @@ class H(BaseHTTPRequestHandler):
             _LAST_HIT[ip] = now
         try:
             req = json.loads(self.rfile.read(n) or "{}")
+            if self.path == "/job_status":
+                j = _JOBS.get(req.get("job") if isinstance(req.get("job"), str) else "")
+                self._send(200, json.dumps(_job_view(j) if j else {"error": "job が見つかりません"}, ensure_ascii=False)); return
             if self.path in ("/guide", "/diagnose", "/diag_battle", "/improve"):
                 specs = req.get("specs") or []
                 if not GPOOL or not isinstance(specs, list) or len(specs) != 6 or not all(isinstance(x, str) and len(x) <= MAX_SPEC_LEN for x in specs):
@@ -783,13 +860,7 @@ class H(BaseHTTPRequestHandler):
                                                    and all(type(i) is int and 0 <= i < 6 for i in my_sel) and len(set(my_sel)) == 3):
                         self._send(200, json.dumps({"error": "my_selは0〜5の異なる整数3つ（先頭がリード）かnullで指定してください"}, ensure_ascii=False)); return
                     self._send(200, json.dumps(diag_battle(specs, opp, seed, my_sel), ensure_ascii=False)); return
-                if not self._acquire_heavy():
-                    self._send(429, _BUSY); return
-                try:
-                    res = improve(specs)
-                finally:
-                    _HEAVY_LOCK.release()
-                self._send(200, json.dumps(res, ensure_ascii=False)); return
+                self._send(200, json.dumps(improve_start(specs), ensure_ascii=False)); return
             if self.path == "/atk_detail":
                 self._send(200, json.dumps(EX.atk_detail(req.get("specs") or [], req.get("mon", ""), req.get("type", ""), L), ensure_ascii=False)); return
             if self.path in ("/fire_detail", "/speed_detail", "/matchup_detail"):

@@ -171,6 +171,242 @@ pub fn prune_immune_moves(pack: &Pack, me_s: &Side, op_s: &Side, field: &Field, 
     cands.into_iter().zip(imm).filter(|(_, im)| !*im).map(|(a, _)| a).collect()
 }
 
+/// search_ai.py `_futile_move`: 必ず失敗する手・成功しても効果の無い手か（公開情報だけで判定する）
+pub fn futile_move(pack: &Pack, me_s: &Side, op_s: &Side, mv: &crate::damage::DMove, field: &Field) -> bool {
+    let me = me_s.active();
+    let opp = op_s.active();
+    let n = pack.intern.resolve(mv.name);
+    let tc = &pack.tc;
+    let st = &pack.sy.st;
+    if mv.category == Cat::Status && me.taunt_count > 0 {
+        return true;
+    }
+    if me.throat_chop_count > 0 && pack.flags(mv.name).sound {
+        return true;
+    }
+    if (n == "ねこだまし" || n == "であいがしら") && me.turns_out > 0 {
+        return true;
+    }
+    if (n == "ほえる" || n == "ふきとばし")
+        && !op_s.party.iter().enumerate().any(|(i, p)| p.is_alive && i != op_s.active_idx)
+    {
+        return true;
+    }
+    if n == "でんこうそうげき" && !me.has_type(tc.でんき) {
+        return true;
+    }
+    if n == "もえつきる" && !me.has_type(tc.ほのお) {
+        return true;
+    }
+    if n == "アイアンローラー"
+        && !(field.grassy_terrain || field.electric_terrain || field.psychic_terrain || field.misty_terrain)
+    {
+        return true;
+    }
+    if n == "ゲップ" && !me.ate_berry {
+        return true;
+    }
+    if (n == "いびき" || n == "ねごと") && me.status != Some(st.sleep) {
+        return true;
+    }
+    if n == "デカハンマー" && me.deka_last {
+        return true;
+    }
+    if n == "とっておき" {
+        let others: Vec<_> = me.moves.iter().map(|m| m.name).filter(|&x| pack.intern.resolve(x) != "とっておき").collect();
+        if others.is_empty() || !others.iter().all(|x| me.used_moves.contains(x)) {
+            return true;
+        }
+    }
+    const HEAL: [&str; 11] = ["じこさいせい", "はねやすめ", "なまける", "タマゴうみ", "ミルクのみ", "つきのひかり", "あさのひざし",
+                              "こうごうせい", "すなあつめ", "かいふくしれい", "ねむる"];
+    if HEAL.contains(&n) && me.hp >= me.max_hp {
+        return true;
+    }
+    let boost: &[u8] = match n {
+        "つるぎのまい" => &[0],
+        "わるだくみ" => &[2],
+        "りゅうのまい" | "ギアチェンジ" => &[0, 4],
+        "めいそう" => &[2, 3],
+        "ちょうのまい" => &[2, 3, 4],
+        "はいすいのじん" => &[0, 1, 2, 3, 4],
+        "コスモパワー" => &[1, 3],
+        "てっぺき" | "コットンガード" | "とける" | "たてこもる" => &[1],
+        "ビルドアップ" => &[0, 1],
+        "こうそくいどう" | "ロックカット" => &[4],
+        "ドわすれ" => &[3],
+        "とぐろをまく" => &[0, 1, 5],
+        "ちいさくなる" | "かげぶんしん" => &[6],
+        "せいちょう" => &[0, 2],
+        _ => &[],
+    };
+    if !boost.is_empty() {
+        let cap = if me.ability == pack.sy.l.あまのじゃく { -6 } else { 6 };
+        if boost.iter().all(|&k| me.stage(k) == cap) {
+            return true;
+        }
+    }
+    if (n == "リフレクター" && me_s.reflect) || (n == "ひかりのかべ" && me_s.light_screen) {
+        return true;
+    }
+    if n == "オーロラベール"
+        && (me_s.aurora_veil || crate::damage::effective_weather(pack, field, Some(me)) != Some(pack.sy.we.hail))
+    {
+        return true;
+    }
+    if n == "おいかぜ" && me_s.tailwind {
+        return true;
+    }
+    if n == "みがわり" && (me.substitute_hp > 0 || me.hp <= me.max_hp / 4) {
+        return true;
+    }
+    if !opp.is_alive {
+        return false;
+    }
+    let stv = match n {
+        "でんじは" | "しびれごな" | "へびにらみ" => Some(0),
+        "おにび" => Some(1),
+        "どくどく" | "どくのこな" => Some(2),
+        "ねむりごな" | "さいみんじゅつ" | "うたう" | "キノコのほうし" | "あくび" => Some(3),
+        _ => None,
+    };
+    if let Some(k) = stv {
+        if opp.status.is_some() || op_s.safeguard > 0 {
+            return true;
+        }
+        if n == "あくび" && opp.yawn_count != 0 {
+            return true;
+        }
+        if matches!(n, "しびれごな" | "ねむりごな" | "どくのこな" | "キノコのほうし") && opp.has_type(tc.くさ) {
+            return true;
+        }
+        if k == 0 && (opp.has_type(tc.でんき) || (n == "でんじは" && opp.has_type(tc.じめん))) {
+            return true;
+        }
+        if k == 1 && opp.has_type(tc.ほのお) {
+            return true;
+        }
+        if k == 2 && me.ability != pack.sy.l.ふしょく && (opp.has_type(tc.どく) || opp.has_type(tc.はがね)) {
+            return true;
+        }
+    }
+    if n == "ちょうはつ" && opp.taunt_count > 0 {
+        return true;
+    }
+    if n == "アンコール" && (opp.encore_count > 0 || opp.last_used_move.is_none()) {
+        return true;
+    }
+    if n == "やどりぎのタネ" && (opp.seeded || opp.has_type(tc.くさ)) {
+        return true;
+    }
+    false
+}
+
+/// search_ai.py `_known_immune`: 開示済みの ふうせん・特性 で無効な攻撃技か
+fn known_immune(pack: &Pack, me: &crate::poke::Poke, a: &Action, opp: &crate::poke::Poke,
+                kn: &crate::oppview::PokeKnowledge, field: &Field) -> bool {
+    let mv = match &a.mv {
+        Some(m) => m,
+        None => return false,
+    };
+    let mut ab = me.ability;
+    if a.do_mega && !me.mega_evolved {
+        if let Some(md) = &me.mega {
+            if let Some(x) = &md.ability {
+                if !x.is_empty() {
+                    if let Some(sy) = pack.intern.get(x) {
+                        ab = sy;
+                    }
+                }
+            }
+        }
+    }
+    let t = crate::damage::effective_move_type_ab(pack, me, ab, mv, field);
+    if t == pack.tc.じめん && kn.known_item == Some(pack.sy.it.ふうせん) && !kn.item_lost && !opp.grounded {
+        return true;
+    }
+    if let Some(ka) = kn.known_ability {
+        let mut me2 = me.clone();
+        me2.ability = ab;
+        if !crate::damage::should_ignore_ability(pack, &me2) {
+            let mut o2 = opp.clone();
+            o2.ability = ka;
+            return crate::damage::check_move_immunity(pack, &o2, t, mv.name)
+                && !crate::damage::scrappy_override(pack, &me2, t, &o2);
+        }
+    }
+    false
+}
+
+/// 監査200 C: 持ち物が無いと判明した相手への ポルターガイスト・連続の みちづれ（search_ai.py `_futile_move` の _FIX200_ON 部分）
+pub fn futile_move_200(pack: &Pack, me_s: &Side, op_s: &Side, mv: &crate::damage::DMove) -> bool {
+    let me = me_s.active();
+    let opp = op_s.active();
+    let l = &pack.sy.l;
+    if mv.name == l.みちづれ && me.destiny_bond_last_turn {
+        return true;
+    }
+    if mv.name == l.ポルターガイスト && opp.is_alive {
+        if let Some(k) = me_s.opp_view.find(opp.name) {
+            if k.item_lost {
+                return true;
+            }
+        }
+    }
+    false
+}
+
+/// search_ai.py `_prune_futile_moves`。技の候補が残らないときは外さない。
+pub fn prune_futile_moves(pack: &Pack, me_s: &Side, op_s: &Side, field: &Field, cands: Vec<Action>) -> Vec<Action> {
+    prune_futile_moves_opt(pack, me_s, op_s, field, cands, crate::ai::fix200_env())
+}
+
+pub fn prune_futile_moves_opt(pack: &Pack, me_s: &Side, op_s: &Side, field: &Field, cands: Vec<Action>, fix200: bool) -> Vec<Action> {
+    let me = me_s.active();
+    if !me.is_alive {
+        return cands;
+    }
+    let opp = op_s.active();
+    let kn = me_s.opp_view.find(opp.name);
+    let bad: Vec<bool> = cands
+        .iter()
+        .map(|a| {
+            if a.kind != ActKind::Move || a.move_idx < 0 {
+                return false;
+            }
+            let mv = match &a.mv {
+                Some(m) => m,
+                None => return false,
+            };
+            let mut f = futile_move(pack, me_s, op_s, mv, field) || (fix200 && futile_move_200(pack, me_s, op_s, mv));
+            if !f && mv.category != Cat::Status && opp.is_alive {
+                if let Some(k) = kn {
+                    f = known_immune(pack, me, a, opp, k, field);
+                }
+            }
+            f
+        })
+        .collect();
+    if !bad.iter().any(|&x| x) || !cands.iter().zip(bad.iter()).any(|(a, &b)| a.kind == ActKind::Move && !b) {
+        return cands;
+    }
+    cands.into_iter().zip(bad).filter(|(_, b)| !*b).map(|(a, _)| a).collect()
+}
+
+/// search_ai.py `_resample_sleep`: 相手のねむりカウンタを、見えている情報（眠ってから行動しようとした回数・ねむる か）と
+/// 整合する値から引き直す
+pub fn resample_sleep(pack: &Pack, poke: &mut crate::poke::Poke, rng: &mut dyn BRng) {
+    let acts = poke.sleep_acts;
+    let dec = if poke.ability == pack.sy.l.はやおき { 2 } else { 1 };
+    let opts: &[i64] = if poke.sleep_rest { &[3] } else { &[2, 3, 4] };
+    let feas: Vec<i64> = opts.iter().copied().filter(|c| c - dec * acts > 0).collect();
+    if feas.is_empty() {
+        return;
+    }
+    let c0 = if feas.len() == 1 { feas[0] } else { feas[rng.choice(feas.len())] };
+    poke.sleep_count = c0 - dec * acts;
+}
+
 /// train_az2._net_ai の nefn: (policy over legal, value=P(A勝))
 pub struct NetCtx {
     pub ft: FeatTables,
@@ -298,8 +534,15 @@ pub struct SearchAI {
     pub item_gone: bool,
     /// 確定KO安全弁を姿変化・連続技込みで判定する（AI_KO_PRECISE=0 で旧判定＝A/B用。本番は常に true）
     pub ko_precise: bool,
+    /// 確定KO安全弁で成功条件のある技（2ターン目以降のであいがしら等）を除く（AI_KO_COND=0 で旧判定＝A/B用）
+    pub ko_cond: bool,
     /// 相手の場のポケモンにタイプで無効な攻撃技を根の候補から外す（AI_PRUNE_IMMUNE=0 で旧挙動＝A/B用）
     pub prune_immune: bool,
+    /// 監査40の AI 修正（必ず失敗・効果の無い手を根から外す／確定KOの命中・タイプ条件／ねむりカウンタの決定化）。
+    /// 既定ON。AI_FIX40=0 で旧挙動（A/B用。AI_FIX40_2 で側2だけ）
+    pub fix40: bool,
+    /// 既定ON。AI_FIX200=0 で旧挙動（監査200 C。AI_FIX200_2 で側2だけ）
+    pub fix200: bool,
     /// 計測用: この確率で相手の真の型をそのまま使う（型予測の精度を人為的に上げ、精度と勝率の関係を測る）
     pub oracle_mix: f64,
     /// 計測用: 相手の真の型のうち一部だけを使う（1=持ち物 2=特性 4=技 8=性格・努力値 のビット和）。
@@ -340,7 +583,10 @@ impl SearchAI {
             joint_build: std::env::var("JOINT_BUILD").map(|v| v != "0").unwrap_or(true),
             item_gone: std::env::var("ITEM_GONE").map(|v| v != "0").unwrap_or(true),
             ko_precise: std::env::var("AI_KO_PRECISE").map(|v| v != "0").unwrap_or(true),
+            ko_cond: crate::ai::ko_cond_env(),
             prune_immune: std::env::var("AI_PRUNE_IMMUNE").map(|v| v != "0").unwrap_or(true),
+            fix40: crate::ai::fix40_env(),
+            fix200: crate::ai::fix200_env(),
             oracle_mix: std::env::var("ORACLE_MIX").ok().and_then(|v| v.parse().ok()).unwrap_or(0.0),
             oracle_reveal: std::env::var("ORACLE_REVEAL").ok().and_then(|v| v.parse().ok()).unwrap_or(0),
             solve_play: std::env::var("SOLVE_PLAY").ok().and_then(|v| v.parse::<f64>().ok()).unwrap_or(0.0) > 0.5,
@@ -379,6 +625,9 @@ impl SearchAI {
             candidate_actions(pack, &sides[me_idx], &sides[op_idx], field, self.collapse_mega);
         if self.prune_immune {
             cands = prune_immune_moves(pack, &sides[me_idx], &sides[op_idx], field, cands);
+        }
+        if self.fix40 {
+            cands = prune_futile_moves_opt(pack, &sides[me_idx], &sides[op_idx], field, cands, self.fix200);
         }
         if cands.len() <= 1 {
             if let Some(a) = cands.into_iter().next() {
@@ -495,6 +744,35 @@ impl SearchAI {
                 }
             }
         }
+        if let Some(cfg) = crate::sim::explore_cfg() {
+            let best_i = chosen_i;
+            let win = crate::sim::explore_window();
+            if win {
+                let maxn = stats.iter().map(|x| x.1).max().unwrap_or(0);
+                let thr = std::cmp::max(1, (cfg.min_frac * maxn as f64).ceil() as i64);
+                let ws: Vec<f64> = stats
+                    .iter()
+                    .map(|(_, n, _)| if *n >= thr { (*n as f64).powf(1.0 / cfg.temp.max(1e-3)) } else { 0.0 })
+                    .collect();
+                let tot: f64 = ws.iter().sum();
+                if tot > 0.0 {
+                    let r = crate::sim::explore_rand() * tot;
+                    let mut acc = 0.0;
+                    for (k, w) in ws.iter().enumerate() {
+                        acc += w;
+                        if r <= acc && *w > 0.0 {
+                            chosen_i = k;
+                            break;
+                        }
+                    }
+                }
+            }
+            let ntot: i64 = stats.iter().map(|(_, n, _)| *n).sum();
+            crate::sim::explore_log_push((
+                crate::sim::explore_turn(), me_idx, win, chosen_i != best_i,
+                stats[chosen_i].1, stats[best_i].1, stats[chosen_i].2, stats[best_i].2, ntot,
+            ));
+        }
         // パリティ調査用: ルート直下の (行動, 訪問数, Q) を記録する（ROOT_LOG が Some のときだけ）。
         crate::sim::root_log_push(pack, cands, &stats, chosen_i);
         // 学習用: 盤面と根の訪問分布を記録する（PI_TRACE が Some のときだけ）。
@@ -608,7 +886,7 @@ impl SearchAI {
             let name_sym = pool[pi];
             pi += 1;
             let name = pack.intern.resolve(name_sym).to_string();
-            let tpl = match self.tpl.get(pack, &name, &self.season) {
+            let tpl = match self.tpl.get_playable(pack, &name, &self.season) {
                 None => continue,
                 Some(t) => t,
             };
@@ -622,7 +900,11 @@ impl SearchAI {
             };
             let mut r: Option<&mut dyn BRng> = Some(grng);
             let b = crate::poke::build_from_template_rand(pack, &tpl, &spec, &mut r);
-            cs[di].party[i] = crate::poke::to_poke(pack, &b);
+            let nb = crate::poke::to_poke(pack, &b);
+            if nb.moves.is_empty() {
+                continue;
+            }
+            cs[di].party[i] = nb;
         }
     }
 
@@ -927,6 +1209,9 @@ fn pick_pool_build<'a>(
                 poke.ability = a;
             }
         }
+        if self.fix40 && poke.status == Some(pack.sy.st.sleep) {
+            resample_sleep(pack, poke, &mut self.rng);
+        }
         let mut mvs: Vec<crate::damage::DMove> = Vec::new();
         for m in &c.moves {
             if let Some(&idx) = pack.move_by_name.get(m) {
@@ -1146,6 +1431,23 @@ fn pick_pool_build<'a>(
     ) {
         if !self.nodes[root].expanded {
             self.expand_with_value(pack, net, root, cs, cfield, my_is_s1, grng);
+            if crate::sim::explore_window() {
+                if let Some(cfg) = crate::sim::explore_cfg() {
+                    if cfg.eps > 0.0 {
+                        let nd = &mut self.nodes[root];
+                        let mut keys: Vec<usize> = nd.p[0].keys().copied().collect();
+                        keys.sort_unstable();
+                        let g: Vec<f64> = keys.iter().map(|_| crate::sim::explore_gamma(cfg.alpha)).collect();
+                        let gs: f64 = g.iter().sum();
+                        if gs > 0.0 {
+                            for (k, gv) in keys.iter().zip(g.iter()) {
+                                let e = nd.p[0].get_mut(k).unwrap();
+                                *e = (1.0 - cfg.eps) * *e + cfg.eps * gv / gs;
+                            }
+                        }
+                    }
+                }
+            }
         }
         let mut node = root;
         let mut path: Vec<(usize, usize, usize)> = Vec::new();
@@ -1198,6 +1500,7 @@ fn pick_pool_build<'a>(
                 }
             }
         }
+        depth_stat(depth);
         // backup（nextturn_lambda=0 なので v_root == v）
         for (nd_i, im, io) in path {
             let nd = &mut self.nodes[nd_i];
@@ -1386,4 +1689,22 @@ mod tests {
         let n = names(&mut p, TAU, MIM, &[], None);
         assert!(n.contains(&"すてみタックル".to_string()) && n.contains(&"インファイト".to_string()), "きもったま {n:?}");
     }
+}
+
+static DEPTH_ON: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+static DEPTH_HIST: std::sync::Mutex<[u64; 16]> = std::sync::Mutex::new([0; 16]);
+
+/// 計測用（env MCTS_DEPTH_STATS=1）: 1 シミュレーションで木の中を何ターン進んだか（葉の評価までの手番数）の分布
+fn depth_stat(d: usize) {
+    if !*DEPTH_ON.get_or_init(|| std::env::var("MCTS_DEPTH_STATS").map(|v| v == "1").unwrap_or(false)) {
+        return;
+    }
+    DEPTH_HIST.lock().unwrap_or_else(|e| e.into_inner())[d.min(15)] += 1;
+}
+
+pub fn depth_stats_take() -> Vec<u64> {
+    let mut h = DEPTH_HIST.lock().unwrap_or_else(|e| e.into_inner());
+    let out = h.to_vec();
+    *h = [0; 16];
+    out
 }

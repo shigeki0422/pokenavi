@@ -3,7 +3,7 @@
 //! パリティ規約 #3: `known_moves` は Python では set なので反復順が PYTHONHASHSEED 依存。
 //! ここでは sorted（種名のコードポイント順＝UTF-8バイト順）に正規化する。
 //! ハーネス側の Python も同じく sorted に monkeypatch する（本番Pythonは無変更）。
-use crate::damage::{calc_damage, DMove, Field};
+use crate::damage::{calc_damage, DMove, EstSnap, Field};
 use crate::interner::Sym;
 use crate::oppview::OppView;
 use crate::pack::{EvEntry, Pack};
@@ -349,6 +349,7 @@ impl PokemonBelief {
                     0 => rng.random(),
                     _ => rng.choice(16) as f64,
                 };
+                let (sa, sd) = (EstSnap::take(&att), EstSnap::take(&d));
                 let dmg = calc_damage(
                     pack,
                     &mut att,
@@ -360,6 +361,8 @@ impl PokemonBelief {
                     None,
                     &mut cb,
                 );
+                sa.restore(&mut att);
+                sd.restore(&mut d);
                 if obs_match(true, dmg, d.max_hp, observed_fraction) {
                     hit += 1;
                 }
@@ -416,6 +419,7 @@ impl PokemonBelief {
                     0 => rng.random(),
                     _ => rng.choice(16) as f64,
                 };
+                let (sa, sd) = (EstSnap::take(&a), EstSnap::take(&def));
                 let dmg = calc_damage(
                     pack,
                     &mut a,
@@ -427,6 +431,8 @@ impl PokemonBelief {
                     None,
                     &mut cb,
                 );
+                sa.restore(&mut a);
+                sd.restore(&mut def);
                 if obs_match(false, dmg, def.max_hp, observed_fraction) {
                     hit += 1;
                 }
@@ -589,7 +595,9 @@ impl PokemonBelief {
                             }
                             let mut cb = |kind: u8| if kind == 0 { 0.99 } else { 0.0 };
                             let mut od = o.other.clone();
+                            let sq = EstSnap::take(&q);
                             let d = calc_damage(pack, &mut q, &mut od, dm, &mut o.field, false, Some(rr), None, &mut cb);
+                            sq.restore(&mut q);
                             dd.insert(n.clone(), d as f64 * crate::ai::expected_hits(pack, dm, &q));
                         }
                         cache.insert(pi, dd);
@@ -631,6 +639,7 @@ impl PokemonBelief {
                 for rr in rs.iter() {
                     // 乱数を使うのはきまぐレーザーの威力判定だけ。観測の再計算で対戦の乱数を消費しない
                     let mut cb = |kind: u8| if kind == 0 { 0.99 } else { 0.0 };
+                    let (so, sp) = (EstSnap::take(&o.other), EstSnap::take(prof));
                     let (dmg, hp) = if o.kind == ObsKind::Taken {
                         let d = calc_damage(pack, &mut o.other, prof, &o.mv, &mut o.field,
                                             o.crit, Some(*rr), None, &mut cb);
@@ -640,6 +649,8 @@ impl PokemonBelief {
                                             o.crit, Some(*rr), None, &mut cb);
                         (d, o.other.max_hp)
                     };
+                    so.restore(&mut o.other);
+                    sp.restore(prof);
                     if obs_match(o.kind == ObsKind::Taken, dmg, hp, o.frac) {
                         hit += 1;
                     }
@@ -948,6 +959,7 @@ impl PokemonBelief {
 #[derive(Default)]
 pub struct TplCache {
     map: HashMap<String, Option<Template>>,
+    playable: HashMap<String, Option<Template>>,
 }
 
 impl TplCache {
@@ -958,5 +970,94 @@ impl TplCache {
         let t = get_pokemon_template(pack, name, season);
         self.map.insert(name.to_string(), t.clone());
         t
+    }
+
+    /// SearchAI._tpl_playable: season に使用率行（技）が無い種は、行のある新しいシーズンのテンプレを使う
+    pub fn get_playable(&mut self, pack: &Pack, name: &str, season: &str) -> Option<Template> {
+        if let Some(t) = self.playable.get(name) {
+            return t.clone();
+        }
+        let t = self.get(pack, name, season);
+        let r = match &t {
+            Some(x) if x.top_moves.is_empty() => {
+                let mut alt = None;
+                for s in ["M-6", "M-5", "M-4", "M-3", "M-2"] {
+                    if s == season {
+                        continue;
+                    }
+                    if let Some(c) = get_pokemon_template(pack, name, s) {
+                        if !c.top_moves.is_empty() {
+                            alt = Some(c);
+                            break;
+                        }
+                    }
+                }
+                alt.or(t)
+            }
+            _ => t,
+        };
+        self.playable.insert(name.to_string(), r.clone());
+        r
+    }
+}
+
+#[cfg(test)]
+mod fix200_belief_tests {
+    use super::*;
+    use crate::pack::PoolBuild;
+    use crate::poke::build_poke;
+
+    struct Z;
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { 0.5 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    fn pb_(w: f64, nature: &str, ev: [i64; 6]) -> PoolBuild {
+        PoolBuild {
+            weight: w,
+            item: "たべのこし".into(),
+            nature: nature.into(),
+            ability: "せいしんりょく".into(),
+            ev: EvEntry { h: ev[0], a: ev[1], b: ev[2], c: ev[3], d: ev[4], s: ev[5], ..Default::default() },
+            moves: vec!["あくび".into(), "イカサマ".into(), "つきのひかり".into(), "まもる".into()],
+            side: String::new(),
+        }
+    }
+
+    #[test]
+    fn r4mcts_観測の再計算で充電を消費しない() {
+        let mut p = Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"));
+        let mut att = build_poke(&mut p, "ハラバリー@たべのこし:ひかえめ:10まんボルト|みずびたし|どくどく|なまける:32/0/0/32/0/0:でんきにかえる", "M-6");
+        let mut dfn = build_poke(&mut p, "ブラッキー@たべのこし:おだやか:イカサマ|あくび|まもる|つきのひかり:32/0/0/0/32/0:せいしんりょく", "M-6");
+        let p = p;
+        let mut ob = OpponentBelief::new("M-6");
+        let i = ob.ensure(&p, "ブラッキー", None, None).unwrap();
+        let sub = dfn.clone();
+        let mv = att.moves.iter().find(|m| p.intern.resolve(m.name) == "10まんボルト").unwrap().clone();
+        let mut f = Field::default();
+        att.electromorphosis_charged = true;
+        let mut cb = |k: u8| if k == 0 { 0.99 } else { 0.0 };
+        let d = calc_damage(&p, &mut att, &mut dfn, &mv, &mut f, false, Some(0.5), None, &mut cb);
+        let frac = (d as f64 * 100.0 / dfn.max_hp as f64).round();
+        att.electromorphosis_charged = true;
+        let pb = &mut ob.species[i].1;
+        pb.observe_damage(&p, &mut att, &mv, frac, &mut f, false, &mut Z, Some(&sub), None);
+        let tpl = get_pokemon_template(&p, "ブラッキー", "M-6").unwrap();
+        let pool = vec![pb_(0.5, "いじっぱり", [0, 32, 0, 0, 2, 32]), pb_(0.5, "おだやか", [32, 0, 0, 0, 32, 0])];
+        let w = pb.pool_weights(&p, &tpl, &pool).to_vec();
+        assert!(pb.dmg_obs.last().unwrap().other.electromorphosis_charged);
+        assert!(w[1] > 0.9, "{:?}", w);
+    }
+
+    #[test]
+    fn r4mcts_控えの再サンプルは技のあるシーズンのテンプレ() {
+        let p = Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"));
+        let mut c = TplCache::default();
+        assert!(c.get(&p, "ケンタロス:水", "M-6").map_or(false, |t| t.top_moves.is_empty()));
+        assert!(c.get_playable(&p, "ケンタロス:水", "M-6").map_or(false, |t| !t.top_moves.is_empty()));
+        assert!(c.get_playable(&p, "ガブリアス", "M-6").map_or(false, |t| !t.top_moves.is_empty()));
     }
 }

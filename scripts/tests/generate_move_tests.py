@@ -10,7 +10,8 @@ sys.path.insert(0, '/Users/shigeki/work/pokenavi/scripts')
 conn = sqlite3.connect('/Users/shigeki/work/pokenavi/scripts/pokenavi.db')
 cur = conn.cursor()
 cur.execute("SELECT name_jp, type, category, power, accuracy, pp, effect_text FROM move_master ORDER BY id")
-moves = cur.fetchall()
+from simulator.damage import effect_text_of
+moves = [(n, t, c, p, a, pp, effect_text_of(n, e)) for (n, t, c, p, a, pp, e) in cur.fetchall()]
 conn.close()
 
 STATUS_MAP = {
@@ -815,8 +816,9 @@ for name, type_, cat, power, accuracy, pp, effect in moves:
         tests_for_move.append(f'if _mvcr_{sn}:')
         # 急所は通常の1.5倍。乱数最大で比較（急所ありは防御ランク無視等あるが最低1.4倍は出る）
         tests_for_move.append(f'    _pac = make_poke(type1="{atk_type}", atk_b=100, spatk_b=100)')
-        tests_for_move.append(f'    _d_crit = dmg(_pac, make_poke(type1="{def_type}", def_b=100, spdef_b=100), "{name}")')
-        tests_for_move.append(f'    check("必ず急所(>0): {name}", _d_crit > 0)')
+        tests_for_move.append(f'    from simulator.battle import crit_chance as _cc_{sn}')
+        tests_for_move.append(f'    _cr_{sn} = _cc_{sn}(_pac, _mvcr_{sn}, make_poke(type1="{def_type}", def_b=100, spdef_b=100))')
+        tests_for_move.append(f'    check("必ず急所(1.0): {name}", _cr_{sn} == 1.0, f"crit={{_cr_{sn}}}")')
 
     # ── ピボット（攻撃後に交代） ──────────────────────────────
     if '手持ちの他のポケモンと交代' in effect or 'ピボット' in effect:
@@ -1906,11 +1908,12 @@ for name, type_, cat, power, accuracy, pp, effect in moves:
         tests_for_move.append('execute(_pt, _dt, "ひっくりかえす")')
         tests_for_move.append('check("相手能力変化が逆転: ひっくりかえす", _dt.stage_attack==-2 and _dt.stage_speed==-1 and _dt.stage_defense==1, f"A={_dt.stage_attack} S={_dt.stage_speed} B={_dt.stage_defense}")')
     elif name == 'はいすいのじん':
-        tests_for_move.append('# はいすいのじん: 全能力+1かつ自分が交代不可になる。すでに交代不可なら失敗')
+        tests_for_move.append('# はいすいのじん: 全能力+1かつ自分が交代不可になる（場を離れるまで）。すでに はいすいのじん 中なら失敗（監査200 #8）')
+        tests_for_move.append('from simulator.battle import is_trapped as _it_h')
         tests_for_move.append('_ph = make_poke(type1="かくとう"); execute(_ph, make_poke(), "はいすいのじん")')
-        tests_for_move.append('check("使用後に交代不可: はいすいのじん", _ph.trapped, f"trapped={_ph.trapped}")')
-        tests_for_move.append('_ph2 = make_poke(type1="かくとう"); _ph2.trapped = True; execute(_ph2, make_poke(), "はいすいのじん")')
-        tests_for_move.append('check("すでに交代不可なら失敗(能力上がらない): はいすいのじん", _ph2.stage_attack == 0, f"atk={_ph2.stage_attack}")')
+        tests_for_move.append('check("使用後に交代不可: はいすいのじん", _it_h(_ph, make_poke()), f"no_retreat={getattr(_ph, \'_no_retreat\', False)}")')
+        tests_for_move.append('_ph2 = make_poke(type1="かくとう"); _ph2._no_retreat = True; execute(_ph2, make_poke(), "はいすいのじん")')
+        tests_for_move.append('check("すでに はいすいのじん 中なら失敗(能力上がらない): はいすいのじん", _ph2.stage_attack == 0, f"atk={_ph2.stage_attack}")')
     elif name == 'ふんどのこぶし':
         tests_for_move.append('# ふんどのこぶし: 攻撃技で受けた回数(times_hit)×50 威力上昇(上限350)')
         tests_for_move.append('_pf = make_poke(type1="ゴースト", atk_b=100); _df = make_poke(def_b=100)')
@@ -1943,17 +1946,18 @@ for name, type_, cat, power, accuracy, pp, effect in moves:
         tests_for_move.append('_prb = make_poke(type1="ノーマル", type2="ほのお")')
         tests_for_move.append('check("フォルム別タイプ: レイジングブル", _emtr(_prb, dl.get_move("レイジングブル"), BattleField()) == "ほのお", f"type={_emtr(_prb, dl.get_move(\'レイジングブル\'), BattleField())}")')
     elif name == 'しっぽきり':
-        tests_for_move.append('# しっぽきり: HP1/2を消費してみがわりを残す')
+        tests_for_move.append('# しっぽきり: HP1/2を消費してみがわりを残し、交代先に引き継ぐ（監査200 #12）')
         tests_for_move.append('_satk = BattleSide([make_poke(hp_b=200), make_poke()]); _satk.active.hp = _satk.active.max_hp; _hpsk = _satk.active.hp')
         tests_for_move.append('_execute_move(_satk, BattleSide([make_poke()]), Action(type="move", move=dl.get_move("しっぽきり")), BattleField())')
-        tests_for_move.append('check("みがわり生成: しっぽきり", getattr(_satk.party[0], "_substitute_hp", 0) > 0 and _satk.party[0].hp < _hpsk, f"sub={getattr(_satk.party[0],\'_substitute_hp\',0)}")')
-        tests_for_move.append('# 消費は最大HP1/2・身代わりHPは最大HP1/4（effect_text通り）')
+        tests_for_move.append('check("みがわり生成: しっぽきり", getattr(_satk.party[0], "_shed_tail_sub", 0) > 0 and _satk.party[0].hp < _hpsk and _satk.party[0]._pivot_out, f"sub={getattr(_satk.party[0],\'_shed_tail_sub\',0)}")')
+        tests_for_move.append('# 消費は最大HP1/2（切り上げ）・身代わりHPは最大HP1/4（effect_text通り）')
         tests_for_move.append('_satk_v = BattleSide([make_poke(hp_b=200), make_poke()]); _satk_v.active.hp = _satk_v.active.max_hp; _mhp = _satk_v.active.max_hp')
         tests_for_move.append('_execute_move(_satk_v, BattleSide([make_poke()]), Action(type="move", move=dl.get_move("しっぽきり")), BattleField())')
-        tests_for_move.append('check("HP消費1/2: しっぽきり", _satk_v.party[0].hp == _mhp - _mhp // 2, f"hp={_satk_v.party[0].hp} 期待={_mhp - _mhp // 2}")')
-        tests_for_move.append('check("身代わりHP1/4: しっぽきり", _satk_v.party[0]._substitute_hp == _mhp // 4, f"sub={_satk_v.party[0]._substitute_hp} 期待={_mhp // 4}")')
+        tests_for_move.append('check("HP消費1/2: しっぽきり", _satk_v.party[0].hp == _mhp - (_mhp + 1) // 2, f"hp={_satk_v.party[0].hp} 期待={_mhp - (_mhp + 1) // 2}")')
+        tests_for_move.append('_satk_v.switch_to(1)')
+        tests_for_move.append('check("身代わりHP1/4: しっぽきり（交代先に引き継ぐ）", _satk_v.party[1]._substitute_hp == _mhp // 4, f"sub={getattr(_satk_v.party[1], \'_substitute_hp\', 0)} 期待={_mhp // 4}")')
         tests_for_move.append('# 身代わりが技を肩代わり（本体ダメージなし）')
-        tests_for_move.append('_holder = _satk_v.party[0]; _sub_sk = _holder._substitute_hp; _hp_sk = _holder.hp')
+        tests_for_move.append('_holder = _satk_v.party[1]; _sub_sk = _holder._substitute_hp; _hp_sk = _holder.hp')
         tests_for_move.append('_atksk = make_poke(type1="ノーマル", atk_b=20, moves=["たいあたり"])')
         tests_for_move.append('_execute_move(BattleSide([_atksk]), BattleSide([_holder]), Action(type="move", move=dl.get_move("たいあたり")), BattleField())')
         tests_for_move.append('check("身代わりが肩代わり(本体ダメージなし): しっぽきり", _holder.hp == _hp_sk and getattr(_holder,"_substitute_hp",0) < _sub_sk, f"hp={_holder.hp}/{_hp_sk} sub={getattr(_holder,\'_substitute_hp\',0)}/{_sub_sk}")')
@@ -2445,10 +2449,15 @@ for name, type_, cat, power, accuracy, pp, effect in moves:
         tests_for_move.append('check("リサイクル 道具復元: リサイクル", _prc.item == "オボンのみ")')
     elif name == 'ねごと':
         tests_for_move.append('# ねごと: ねむり中に技を使う')
-        tests_for_move.append('_png = make_poke(atk_b=120, moves=["たいあたり"]); _png.status = "sleep"')
+        tests_for_move.append('_png = make_poke(atk_b=120, moves=["たいあたり"]); _png.status = "sleep"; _png.sleep_count = 3')
         tests_for_move.append('_dng = make_poke(hp_b=200, def_b=50); _hng = _dng.hp')
         tests_for_move.append('execute(_png, _dng, "ねごと")')
         tests_for_move.append('check("ねごと 技発動: ねごと", _dng.hp < _hng, f"hp={_dng.hp}")')
+        tests_for_move.append('# negative: カウンタが尽きる行動では起きて失敗')
+        tests_for_move.append('_png_w = make_poke(atk_b=120, moves=["たいあたり"]); _png_w.status = "sleep"; _png_w.sleep_count = 1')
+        tests_for_move.append('_dng_w = make_poke(hp_b=200, def_b=50); _hng_w = _dng_w.hp')
+        tests_for_move.append('execute(_png_w, _dng_w, "ねごと")')
+        tests_for_move.append('check("起きる行動では失敗: ねごと", _dng_w.hp == _hng_w and _png_w.status is None, f"hp={_dng_w.hp}/{_hng_w}")')
         tests_for_move.append('# negative: 覚醒(非ねむり)状態では失敗')
         tests_for_move.append('_png_aw = make_poke(atk_b=120, moves=["たいあたり"]); _dng_aw = make_poke(hp_b=200, def_b=50); _hng_aw = _dng_aw.hp')
         tests_for_move.append('execute(_png_aw, _dng_aw, "ねごと")')

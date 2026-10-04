@@ -220,6 +220,13 @@ fn main() {
                 ok += 1;
             } else {
                 fails += 1;
+                // R1_DUMP_FAILS=<path>: 乖離した全ケースを (ファイル, 行, Rustの値, 記録の値) で書き出す（仕様変更後の照合用）
+                if let Ok(dp) = std::env::var("R1_DUMP_FAILS") {
+                    use std::io::Write;
+                    let mut fo = std::fs::OpenOptions::new().create(true).append(true).open(dp).unwrap();
+                    writeln!(fo, "{}\t{}\t{}\t{}\t{:?}\t{}", path, k + 2, d, c.dmg,
+                             c.def.item.map(|x| pack.intern.resolve(x).to_string()), c.def.stage_speed).ok();
+                }
                 *fail_by_move.entry(pack.intern.resolve(c.mv.name).to_string()).or_insert(0) += 1;
                 if first_fail.is_none() {
                     first_fail = Some(format!(

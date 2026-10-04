@@ -24,6 +24,16 @@ def _is_secondary_effect(eff: str) -> bool:
     return False
 
 
+# DB（move_master.effect_text）の効果文が実機と違う技の上書き。追加効果の判定・技テストの生成・付録Aはこちらを使う
+EFFECT_TEXT_OVERRIDES = {
+    "うらみつらみ": "相手の攻撃を1段階下げる。",
+}
+
+
+def effect_text_of(name: str, db_text: Optional[str]) -> str:
+    return EFFECT_TEXT_OVERRIDES.get(name, db_text or "")
+
+
 _SECONDARY_MOVES = None
 # 探索のロールアウト中だけ設定する固定ダメージロール（0.0=最低〜1.0=最高）。Noneで通常乱数。
 _ROLL_OVERRIDE = None
@@ -40,7 +50,7 @@ def _secondary_effect_moves() -> set:
         try:
             con = sqlite3.connect(str(db))
             for n, eff in con.execute("SELECT name_jp, effect_text FROM move_master"):
-                if _is_secondary_effect(eff or ""):
+                if _is_secondary_effect(effect_text_of(n, eff)):
                     s.add(n)
             con.close()
         except Exception:
@@ -80,6 +90,37 @@ SOUND_MOVES = {
     "ぶきみなじゅもん", "ほろびのうた", "みわくのボイス", "りんしょう",
     "サイコノイズ", "ソウルビート", "ドラゴンエール", "フレアソング",
 }
+
+# 相手を対象にとる変化技（実機の対象が相手1体・相手全体のもの）。おうごんのからだ が全て防ぎ、みがわり は貫通技以外を防ぐ。
+# まもる系・半無敵・いたずらごころ（あく）の判定にも使う
+FOE_STATUS = frozenset({
+    "でんじは", "おにび", "どくどく", "どくのこな", "しびれごな", "ねむりごな", "キノコのほうし",
+    "さいみんじゅつ", "あくび", "へびにらみ", "ちょうおんぱ", "あやしいひかり", "いばる", "おだてる",
+    "ちょうはつ", "アンコール", "かなしばり", "いちゃもん", "やどりぎのタネ", "メロメロ", "くろいまなざし",
+    "なきごえ", "にらみつける", "あまえる", "すなかけ", "フラッシュ", "あまいかおり", "うそなき",
+    "ひっくりかえす", "トリック", "すりかえ", "なかよくする", "とおせんぼう", "くすぐる", "テクスチャー2",
+    "ふきとばし", "ほえる", "こわいかお", "わたほうし", "いたみわけ", "おきみやげ", "フェザーダンス",
+    "パワースワップ", "ガードスワップ", "スピードスワップ", "ガードシェア", "パワーシェア", "きりばらい",
+    "みずびたし", "すてゼリフ", "かいでんぱ", "つぶらなひとみ", "ちからをすいとる", "どくのいと", "さいはい",
+    "いえき", "いとをはく", "いやしのはどう", "いやなおと", "うたう", "うらみ", "おさきにどうぞ", "おたけび",
+    "きんぞくおん", "さきおくり", "じこあんじ", "シンプルビーム", "スキルスワップ", "そうでん", "てんしのキッス",
+    "なかまづくり", "なみだめ", "なやみのタネ", "なりきり", "ハバネロエキス", "ハロウィン", "ふしょくガス",
+    "フラフラダンス", "まほうのこな", "ミラータイプ", "もりののろい", "ロックオン", "たこがため",
+})
+# まもる系を貫通する攻撃技と、守りの対象にならない相手向けの変化技
+PROTECT_PIERCE = frozenset({"フェイント", "ゴーストダイブ", "シャドーダイブ"})
+PROTECT_PIERCE_STATUS = frozenset({"ほえる", "ふきとばし", "じこあんじ", "なりきり", "おさきにどうぞ", "さいはい"})
+# 溜め技の1ターン目で姿を消している間に当たる技
+_SKY_HITS = frozenset({"かみなり", "ぼうふう", "うちおとす", "サウザンアロー", "スカイアッパー", "たつまき", "かぜおこし"})
+SEMI_INVULN_HITS = {
+    "そらをとぶ": _SKY_HITS, "とびはねる": _SKY_HITS,
+    "あなをほる": frozenset({"じしん", "マグニチュード", "じわれ"}),
+    "ダイビング": frozenset({"なみのり", "うずしお"}),
+    "ゴーストダイブ": frozenset(), "シャドーダイブ": frozenset(),
+}
+# ちいさくなる 状態の相手に必中・ダメージ2倍の技
+MINIMIZE_MOVES = frozenset({"ふみつけ", "のしかかり", "ドラゴンダイブ", "ヘビーボンバー", "ヒートスタンプ",
+                            "フライングプレス", "ハードローラー", "サンダーダイブ", "マリシャスムーンサルト"})
 
 PUNCH_MOVES = {"アームハンマー", "スカイアッパー", "アイスハンマー", "ぶちかまし",
                "でんこうそうげき"}
@@ -127,6 +168,8 @@ def _effective_move_type(attacker: "BattlePokemon", move: MoveData,
         }
         eff_w = effective_weather(field, attacker) or ""
         return WEATHER_TYPE.get(eff_w, "ノーマル")
+    if move.name_jp == "オーラぐるま" and getattr(attacker, "_hangry", False):
+        return "あく"
     if move.name_jp == "レイジングブル":
         # 使用者のtype2があればそのタイプ、なければtype1（かくとう）、どちらでもなければノーマル
         if attacker.type2:
@@ -149,6 +192,32 @@ def _effective_move_type(attacker: "BattlePokemon", move: MoveData,
             if getattr(field, "misty_terrain", False):
                 return "フェアリー"
     return t
+
+
+_EST_ATTRS = ("item", "stage_speed", "charged", "_electromorphosis_charged")
+_MISSING = object()
+
+
+class estimate_only:
+    """見積もり用。calc_damage が実際の攻撃のために書き換える状態（半減きのみの消費とかるわざ・
+    じゅうでん/でんきエンジンの解除）を、抜けるときに元に戻す。対戦中の実体でAIが見積もっても状態を変えない"""
+
+    def __init__(self, *pokes):
+        self.pokes = pokes
+
+    def __enter__(self):
+        self.saved = [(p, [getattr(p, a, _MISSING) for a in _EST_ATTRS]) for p in self.pokes]
+        return self
+
+    def __exit__(self, *exc):
+        for p, vals in self.saved:
+            for a, v in zip(_EST_ATTRS, vals):
+                if v is _MISSING:
+                    if hasattr(p, a):
+                        delattr(p, a)
+                else:
+                    setattr(p, a, v)
+        return False
 
 
 def calc_damage(
@@ -246,8 +315,11 @@ def calc_damage(
 
     # ボディプレス（自身のBをAとして使う）
     if move.name_jp == "ボディプレス":
-        atk = attacker.get_effective_stat("defense") if not critical else max(
-            attacker.get_effective_stat("defense"), attacker.defense)
+        if def_ignores_atk_stage:
+            atk = attacker.defense
+        else:
+            atk = attacker.get_effective_stat("defense") if not critical else max(
+                attacker.get_effective_stat("defense"), attacker.defense)
 
     # イカサマ（相手のAを参照）
     if move.name_jp == "イカサマ":
@@ -401,17 +473,17 @@ def calc_damage(
 
     # 持ち物補正（防御側）
     if defender.ability != "ぶきよう":
-        dmg = _apply_defender_item(dmg, defender, move, effectiveness)
+        dmg = _apply_defender_item(dmg, defender, move, effectiveness, eff_type)
 
     # 特性補正（攻撃側）
-    dmg = _apply_attacker_ability(dmg, attacker, defender, move, field, critical, ignore_ab)
+    dmg = _apply_attacker_ability(dmg, attacker, defender, move, field, critical, ignore_ab, eff_type)
 
     # 特性補正（防御側）
     if not ignore_ab:
-        dmg = _apply_defender_ability(dmg, attacker, defender, move, field)
+        dmg = _apply_defender_ability(dmg, attacker, defender, move, field, eff_type)
 
     # 低HP時ブースト（もうか・げきりゅう・しんりょく）
-    pinch = get_pinch_multiplier(attacker, move.type)
+    pinch = get_pinch_multiplier(attacker, eff_type)
     if pinch > 1.0:
         dmg = math.floor(dmg * pinch)
 
@@ -421,7 +493,7 @@ def calc_damage(
         dmg = math.floor(dmg * sharp)
 
     # タイプ強化アイテム（ぶきようは無効）
-    type_boost = get_type_boost(attacker.item, move.type, attacker.name) if attacker.ability != "ぶきよう" else 1.0
+    type_boost = get_type_boost(attacker.item, eff_type, attacker.name) if attacker.ability != "ぶきよう" else 1.0
     if type_boost > 1.0:
         dmg = math.floor(dmg * type_boost)
 
@@ -440,9 +512,9 @@ def calc_damage(
     if eff_type == "ほのお" and attacker.ability == "ほのおのたてがみ":
         dmg = math.floor(dmg * 1.5)
 
-    # でんきにかえるチャージ中のでんき技強化（使用後リセット）
+    # でんきにかえるチャージ中のでんき技強化（2倍・使用後リセット）
     if eff_type == "でんき" and getattr(attacker, "_electromorphosis_charged", False):
-        dmg = math.floor(dmg * 1.5)
+        dmg = math.floor(dmg * 2)
         attacker._electromorphosis_charged = False  # type: ignore
 
     # 無防備状態（きょけんとつげき使用後）：受ける技のダメージ2倍
@@ -684,9 +756,7 @@ def _effective_power(attacker, defender, move, field, eff_type: str = "") -> int
             power = power * 2
 
     # ちいさくなる状態の相手に2倍（のしかかり等）
-    MINIMIZE_2X = {"のしかかり", "ドラゴンダイブ", "ヘビーボンバー", "ヒートスタンプ",
-                   "フライングプレス", "サンダーダイブ"}
-    if move.name_jp in MINIMIZE_2X and getattr(defender, "minimized", False):
+    if move.name_jp in MINIMIZE_MOVES and getattr(defender, "minimized", False):
         power = power * 2
 
     # 半無敵状態の相手に2倍（なみのり/うずしお→水中、じしん/マグニチュード→地中）
@@ -716,7 +786,8 @@ def _apply_attacker_item(dmg, attacker, move, effectiveness) -> int:
     return dmg
 
 
-def _apply_defender_item(dmg, defender, move, effectiveness) -> int:
+def _apply_defender_item(dmg, defender, move, effectiveness, eff_type=None) -> int:
+    mtype = eff_type or move.type
     item = defender.item
     if item is None:
         return dmg
@@ -744,13 +815,13 @@ def _apply_defender_item(dmg, defender, move, effectiveness) -> int:
         "ロゼルのみ":  "フェアリー",
     }
     # ホズのみ: ノーマル技を常に半減（抜群条件なし）
-    if item == "ホズのみ" and move.type == "ノーマル" and effectiveness > 0:
+    if item == "ホズのみ" and mtype == "ノーマル" and effectiveness > 0:
         dmg = math.floor(dmg * 0.5)
         defender.item = None
         from .items import on_item_consumed
         on_item_consumed(defender, [])
     elif item in berry_resist and effectiveness >= 2.0:
-        if move.type == berry_resist[item]:
+        if mtype == berry_resist[item]:
             dmg = math.floor(dmg * 0.5)
             defender.item = None
             from .items import on_item_consumed
@@ -760,7 +831,8 @@ def _apply_defender_item(dmg, defender, move, effectiveness) -> int:
 
 
 def _apply_attacker_ability(dmg, attacker, defender, move, field, critical,
-                             ignore_defender_ab=False) -> int:
+                             ignore_defender_ab=False, eff_type=None) -> int:
+    mtype = eff_type or move.type
     ab = attacker.ability
     if ab == "ちからずく" and move.category != "status" and move.name_jp in _secondary_effect_moves():
         dmg = math.floor(dmg * 1.3)
@@ -778,8 +850,8 @@ def _apply_attacker_ability(dmg, attacker, defender, move, field, critical,
         # 反動技 ＋ 外し時クラッシュ技（とびひざげり/とびげり）のみ。
         # じゃれつく・とびはねる は反動が無いため対象外（誤適用バグ修正）。
         "すてみタックル","フレアドライブ","ボルテッカー","ウェーブタックル",
-        "ダブルエッジ","ブレイブバード","ウッドハンマー",
-        "とびひざげり","とびげり",
+        "ダブルエッジ","ブレイブバード","ウッドハンマー","もろはのずつき","ワイルドボルト","はめつのひかり",
+        "とびひざげり","とびげり","かかとおとし","サンダーダイブ",
     ):
         dmg = math.floor(dmg * 1.2)
     elif ab == "がんじょうあご" and move.name_jp in (
@@ -792,7 +864,7 @@ def _apply_attacker_ability(dmg, attacker, defender, move, field, critical,
         "だいちのはどう",
     ):
         dmg = math.floor(dmg * 1.5)
-    elif ab == "すいほう" and move.type == "みず":
+    elif ab == "すいほう" and mtype == "みず":
         dmg = math.floor(dmg * 2)
     elif ab == "アナライズ" and getattr(attacker, "_acts_second", False):
         dmg = math.floor(dmg * 1.3)
@@ -800,7 +872,7 @@ def _apply_attacker_ability(dmg, attacker, defender, move, field, critical,
         dmg = math.floor(dmg * 1.5)
     elif ab == "はりこみ" and getattr(defender, "_switched_this_turn", False):
         dmg = math.floor(dmg * 2.0)
-    elif ab == "はがねのせいしん" and move.type == "はがね":
+    elif ab == "はがねのせいしん" and mtype == "はがね":
         dmg = math.floor(dmg * 1.5)
     elif ab == "そうだいしょう":
         boost = 1.0 + 0.1 * min(5, attacker.fainted_allies)
@@ -808,7 +880,8 @@ def _apply_attacker_ability(dmg, attacker, defender, move, field, critical,
     return dmg
 
 
-def _apply_defender_ability(dmg, attacker, defender, move, field) -> int:
+def _apply_defender_ability(dmg, attacker, defender, move, field, eff_type=None) -> int:
+    mtype = eff_type or move.type
     ab = defender.ability
     if ab == "マルチスケイル" and defender.hp == defender.max_hp:
         dmg = math.floor(dmg * 0.5)
@@ -816,32 +889,60 @@ def _apply_defender_ability(dmg, attacker, defender, move, field) -> int:
         dmg = math.floor(dmg * 0.5)
     elif ab == "はどうのぼうご" and is_contact_move(move):
         dmg = math.floor(dmg * 0.5)
-    elif ab == "あついしぼう" and move.type in ("ほのお", "こおり"):
+    elif ab == "あついしぼう" and mtype in ("ほのお", "こおり"):
         dmg = math.floor(dmg * 0.5)
-    elif ab == "かんそうはだ" and move.type == "ほのお":
+    elif ab == "かんそうはだ" and mtype == "ほのお":
         dmg = math.floor(dmg * 1.25)
-    elif ab in ("たいねつ", "すいほう") and move.type == "ほのお":
+    elif ab in ("たいねつ", "すいほう") and mtype == "ほのお":
         dmg = math.floor(dmg * 0.5)
-    elif ab == "きよめのしお" and move.type == "ゴースト":
+    elif ab == "きよめのしお" and mtype == "ゴースト":
         dmg = math.floor(dmg * 0.5)
     elif ab == "もふもふ":
         if move.category == "physical":
             dmg = math.floor(dmg * 0.5)
-        if move.type == "ほのお":
+        if mtype == "ほのお":
             dmg = math.floor(dmg * 2)
     elif ab in ("フィルター", "ハードロック", "プリズムアーマー"):
         from .data import get_type_effectiveness
-        eff = get_type_effectiveness(move.type, defender.type1, defender.type2)
+        eff = get_type_effectiveness(mtype, defender.type1, defender.type2)
         if eff > 1.0:
             dmg = math.floor(dmg * 0.75)
     return dmg
 
 
+def targets_foe(move) -> bool:
+    """相手を対象にとる技（攻撃技と、相手を対象にとる変化技 FOE_STATUS）。まもる・半無敵の判定の対象"""
+    return move.category != "status" or move.name_jp in FOE_STATUS
+
+
+def protect_blocks(move) -> bool:
+    """まもる系で防がれる技か（フェイント・ゴーストダイブ・シャドーダイブ、ほえる 等の守りを貫通する変化技は除く）"""
+    if move.category != "status":
+        return move.name_jp not in PROTECT_PIERCE
+    return move.name_jp in FOE_STATUS and move.name_jp not in PROTECT_PIERCE_STATUS
+
+
+def semi_invulnerable_miss(attacker, defender, move) -> bool:
+    """溜め技の1ターン目（そらをとぶ・あなをほる・ダイビング・ゴーストダイブ 等）で姿を消している相手には当たらない"""
+    dc = getattr(defender, "charging_move", None)
+    if dc not in SEMI_INVULN_HITS or not targets_foe(move):
+        return False
+    if "ノーガード" in (attacker.ability, defender.ability) or getattr(attacker, "lock_on", False):
+        return False
+    return move.name_jp not in SEMI_INVULN_HITS[dc]
+
+
 def check_hit(attacker, defender, move, field) -> bool:
-    """命中判定"""
+    """命中判定。まもる・半無敵は必中技（命中「—」・ノーガード・雨のかみなり 等）より先に判定する"""
     from .items import get_evasion_item_mult
     field._weather_negated = "ノーてんき" in (attacker.ability, defender.ability)
+    if targets_foe(move) and defender.protecting and protect_blocks(move):
+        return False
+    if semi_invulnerable_miss(attacker, defender, move):
+        return False
     if move.accuracy is None:
+        return True
+    if getattr(defender, "minimized", False) and move.name_jp in MINIMIZE_MOVES:
         return True
     # ロックオン：直前にロックオンした相手には必中
     if getattr(attacker, "lock_on", False):
@@ -878,8 +979,6 @@ def check_hit(attacker, defender, move, field) -> bool:
         acc_mult = ACC_EVA_STAGE[max(-6, min(6, acc_stage))]
         hit_rate *= acc_mult
         hit_rate *= get_evasion_item_mult(defender.item)
-        if defender.protecting and move.name_jp not in ("フェイント", "ゴーストダイブ"):
-            return False
         return random.random() < hit_rate
 
     # するどいめ/はっこう: 相手の回避率の変化を無視
@@ -907,9 +1006,8 @@ def check_hit(attacker, defender, move, field) -> bool:
     # こうかくレンズ（攻撃側の命中率補正）
     from .items import get_accuracy_evasion_item
     hit_rate *= get_accuracy_evasion_item(attacker.item)
-
-    # まもるで無効（フェイント・ゴーストダイブはまもるを貫通）
-    if defender.protecting and move.name_jp not in ("フェイント", "ゴーストダイブ"):
-        return False
+    # フォーカスレンズ: 相手より後に動くとき命中1.2倍
+    if attacker.item == "フォーカスレンズ" and getattr(attacker, "_acts_second", False):
+        hit_rate *= 1.2
 
     return random.random() < hit_rate

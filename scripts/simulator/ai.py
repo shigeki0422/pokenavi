@@ -10,7 +10,7 @@ from typing import List, Optional
 from .battle import Action, BattleSide, BattleField, crit_chance
 from .pokemon import BattlePokemon
 from .data import get_type_effectiveness, DataLoader
-from .damage import calc_damage
+from .damage import calc_damage, estimate_only
 from .items import get_speed_item_multiplier
 
 HAZARD_MOVES = {"ステルスロック", "まきびし", "スパイク", "どくびし"}
@@ -395,6 +395,66 @@ def _disguise_intact(my_side, opp) -> bool:
     return getattr(my_side, "opp_view", None) is None and opp.ability == "ばけのかわ"
 
 
+# 成功条件のある攻撃技。確定KOの前提（この技を撃てば当たる）が成り立たない局面では候補にしない。
+# 相手の行動しだいで失敗する技（ふいうち・はやてがえし）と、威力が後で入る技（みらいよち）は常に除く。
+_KO_COND_ON = os.environ.get("AI_KO_COND", "1") != "0"
+_KO_NEVER_CERTAIN = ("ふいうち", "はやてがえし", "みらいよち")
+
+
+_FIX40_ON = os.environ.get("AI_FIX40", "1") != "0"
+
+
+def _ko_hit_prob(me, opp, mv, field) -> float:
+    """確定KOの安全弁で使う命中率（公開情報: 技の命中・命中/回避ランク・天候・ノーガード・こうかくレンズ 等）。"""
+    from .damage import ACC_EVA_STAGE, effective_weather as _ew
+    from .items import get_evasion_item_mult, get_accuracy_evasion_item
+    if mv.accuracy is None or getattr(me, "lock_on", False) or getattr(opp, "_defenseless", False):
+        return 1.0
+    if "ノーガード" in (me.ability, opp.ability):
+        return 1.0
+    n = mv.name_jp
+    w = _ew(field, me)
+    if n in ("かみなり", "ぼうふう") and w == "rain" or n == "ふぶき" and w == "hail":
+        return 1.0
+    eva = 0 if me.ability in ("するどいめ", "はっこう") else opp.stage_evasion
+    p = mv.accuracy * ACC_EVA_STAGE[max(-6, min(6, me.stage_accuracy - eva))] / 100
+    if n in ("かみなり", "ぼうふう") and w == "sunny":
+        p = 0.5
+    if me.ability == "ふくがん":
+        p *= 1.3
+    if me.ability == "はりきり" and mv.category == "physical":
+        p *= 0.8
+    p *= get_evasion_item_mult(opp.item) * get_accuracy_evasion_item(me.item)
+    return min(1.0, p)
+
+
+def _ko_move_fails(me, opp, mv, field) -> bool:
+    n = mv.name_jp
+    if n in ("ねこだまし", "であいがしら") and me.turns_out > 0:
+        return True
+    if _FIX40_ON and (n == "でんこうそうげき" and "でんき" not in (me.type1, me.type2)
+                      or n == "もえつきる" and "ほのお" not in (me.type1, me.type2)):
+        return True
+    if n in _KO_NEVER_CERTAIN:
+        return True
+    if n == "ポルターガイスト" and opp.item is None:
+        return True
+    if n == "とっておき":
+        others = {m.name_jp for m in me.moves if m and m.name_jp != "とっておき"}
+        if not others or not others.issubset(me.used_moves):
+            return True
+    if n == "アイアンローラー" and not (field.grassy_terrain or field.electric_terrain
+                                      or field.psychic_terrain or field.misty_terrain):
+        return True
+    if getattr(field, "psychic_terrain", False) and mv.priority > 0:
+        grounded = not ("ひこう" in (opp.type1, opp.type2) or opp.ability == "ふゆう"
+                        or getattr(opp, "magnet_rise", False) or opp.item == "ふうせん") \
+            or getattr(opp, "grounded", False)
+        if grounded:
+            return True
+    return False
+
+
 def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: BattleField):
     """確定KO安全弁：先制（または優先度）で最低ロールでもOHKOできる攻撃技があれば、それを最優先。
     任意AI(MCTS/ネット)の出力 act を受け、確実に倒せる手を逃している場合のみ上書きする。
@@ -419,11 +479,13 @@ def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: B
     valid = _filter_by_pp(_filter_valid_by_lock(valid, me), me)
     # 相手の最大優先度はループ前に1回だけ求める（Rust 実装と呼び出し回数を揃える）
     _opp_pri = _opp_max_priority(opp, my_side)
-    best = None; bestd = -1
+    best = None; bestd = -1; bestp = -1.0; probs = {}
     for i, mv in valid:
         if not mv.power or mv.category == "status":
             continue
         if get_type_effectiveness(mv.type, opp.type1, opp.type2) == 0:
+            continue
+        if _KO_COND_ON and _ko_move_fails(me, opp, mv, field):
             continue
         if not _goes_first(me, opp, mv.priority, field, opp_max=_opp_pri):
             continue
@@ -431,13 +493,23 @@ def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: B
         # ほぼ最高値になり、確定でないKOを確定と誤認する。実測: 介入の15.3%が該当）。
         # 姿変化（バトルスイッチ）と連続技の「必ず当たる回数」込み。単発の calc_damage 直呼びだと
         # ギルガルドはシールド(攻50)のまま・連続技は1発ぶんになり、確定KOを見逃していた
-        d = _move_damage(me, opp, mv, field, 0.0, "min")                     # 最低ロールでKO=確定
-        if d >= opp.hp and d > bestd:
-            bestd = d; best = (i, mv)
+        with estimate_only(me, opp):                                         # 見積もりで半減きのみ等を消費しない
+            d = _move_damage(me, opp, mv, field, 0.0, "min")                 # 最低ロールでKO=確定
+        if d >= opp.hp:
+            p = _ko_hit_prob(me, opp, mv, field) if _FIX40_ON else 1.0
+            probs[id(mv)] = p
+            if (p, d) > (bestp, bestd):
+                bestp = p; bestd = d; best = (i, mv)
     if best is None:
         return act
     if act and getattr(act, "type", None) == "move" and act.move is best[1]:
         return act                                  # 既に同じ手を選んでいる
+    # 命中が確実でない技で上書きするのは、選んだ手が命中率の低い確定KO技だったときだけ
+    # （10まんボルトで倒せるのに でんじほう に替えない／探索が選んだ別の手を不確実な一撃で上書きしない）
+    if _FIX40_ON and bestp < 1.0:
+        ap = probs.get(id(act.move)) if (act and getattr(act, "type", None) == "move" and act.move is not None) else None
+        if ap is None or ap >= bestp:
+            return act
     return Action(type="move", move=best[1], move_idx=best[0],
                   do_mega=bool(act and getattr(act, "do_mega", False)))
 

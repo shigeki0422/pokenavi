@@ -28,6 +28,10 @@ WHICH="${1:-all}"
 #   ・AI の判断を埋め込んだ層 = R3-fb・R4-enc・R4-mcts。対戦AIやダメージ見積もりを
 #     変えるたびに古くなる。ここは記録ゲートではなく fresh_parity.py（同一入力を
 #     python/rust で走らせて突き合わせ）と実対戦の統計等価で担保する
+# 2026-10-04（監査200）: 記録コーパスは全層を生成し直せるようにした（入力は既存コーパスのまま、期待値だけを現在の Python で採り直す）。
+#   R1: gen_r1_cases.py / R2: gen_r2_cases.py / R3-fb: gen_r3fb_cases.py / R3-sel: gen_r3sel_cases.py /
+#   R4-enc: gen_r4enc_cases.py / R4-mcts: gen_r4mc_cases.py（seqnet は __pycache__ の pyc から読む）。
+#   仕様を変えたら該当層を採り直し → ゲートで乖離0 → case_stamp.py --stamp の順。
 # 【落とし穴】Python が import するのは rust_engine/pyengine（モジュール名 pokenavi_engine）で、
 # rust_engine/engine はその依存ライブラリ。`cargo build` も `engine` 側の `maturin develop` も
 # venv の .so を更新しない。ai.rs/battle.rs を変えたら必ず pyengine 側で maturin develop すること。

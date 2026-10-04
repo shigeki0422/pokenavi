@@ -69,6 +69,27 @@ fn fl(x: f64) -> i64 {
 
 /// effective_weather(field, poke)
 #[inline]
+/// ミストフィールド中の接地個体は状態異常・こんらんにならない（pokemon.py misty_blocks と同じ）
+pub fn misty_blocks(pack: &Pack, p: &Poke, field: Option<&Field>) -> bool {
+    match field {
+        Some(f) if f.misty_terrain => {
+            let airborne = p.has_type(pack.tc.ひこう) || p.ability == pack.sy.ab.ふゆう || p.magnet_rise
+                || p.item == Some(pack.sy.it.ふうせん);
+            !airborne || p.grounded || f.gravity > 0
+        }
+        _ => false,
+    }
+}
+
+pub fn terrain_blocks_sleep(pack: &Pack, p: &Poke, field: &Field) -> bool {
+    if !(field.electric_terrain || field.misty_terrain) {
+        return false;
+    }
+    let airborne = p.has_type(pack.tc.ひこう) || p.ability == pack.sy.ab.ふゆう || p.magnet_rise
+        || p.item == Some(pack.sy.it.ふうせん);
+    !airborne || p.grounded || field.gravity > 0
+}
+
 pub fn effective_weather(pack: &Pack, field: &Field, poke: Option<&Poke>) -> Option<Sym> {
     if let Some(p) = poke {
         if p.ability == pack.sy.ab.メガソーラー {
@@ -99,7 +120,13 @@ pub fn effective_move_type_ab(pack: &Pack, attacker: &Poke, ab: Sym, mv: &DMove,
         return pack.tc.みず;
     }
     if mv.name == pack.sy.mv.ウェザーボール {
-        let w = effective_weather(pack, field, Some(attacker));
+        let w = if ab == pack.sy.ab.メガソーラー {
+            Some(pack.sy.we.sunny)
+        } else if field.weather_negated {
+            None
+        } else {
+            field.weather
+        };
         return match w {
             Some(x) if x == pack.sy.we.sunny => pack.tc.ほのお,
             Some(x) if x == pack.sy.we.rain => pack.tc.みず,
@@ -107,6 +134,9 @@ pub fn effective_move_type_ab(pack: &Pack, attacker: &Poke, ab: Sym, mv: &DMove,
             Some(x) if x == pack.sy.we.hail => pack.tc.こおり,
             _ => normal,
         };
+    }
+    if mv.name == pack.sy.l.オーラぐるま && attacker.hangry {
+        return pack.tc.あく;
     }
     if mv.name == pack.sy.mv.レイジングブル {
         if let Some(t2) = attacker.type2 {
@@ -625,18 +655,18 @@ fn apply_attacker_item(pack: &Pack, dmg: i64, attacker: &Poke, mv: &DMove, eff: 
     }
 }
 
-fn apply_defender_item(pack: &Pack, dmg: i64, defender: &mut Poke, mv: &DMove, eff: f64) -> i64 {
+fn apply_defender_item(pack: &Pack, dmg: i64, defender: &mut Poke, _mv: &DMove, eff: f64, mty: Ty) -> i64 {
     let item = match defender.item {
         Some(i) => i,
         None => return dmg,
     };
     let mut dmg = dmg;
-    if item == pack.sy.it.ホズのみ && mv.ty == pack.tc.ノーマル && eff > 0.0 {
+    if item == pack.sy.it.ホズのみ && mty == pack.tc.ノーマル && eff > 0.0 {
         dmg = fl(dmg as f64 * 0.5);
         defender.item = None;
         on_item_consumed(pack, defender);
     } else if let Some(&bt) = pack.berry_resist.get(&item) {
-        if eff >= 2.0 && mv.ty == bt {
+        if eff >= 2.0 && mty == bt {
             dmg = fl(dmg as f64 * 0.5);
             defender.item = None;
             on_item_consumed(pack, defender);
@@ -652,6 +682,7 @@ fn apply_attacker_ability(
     defender: &Poke,
     mv: &DMove,
     field: &Field,
+    mty: Ty,
 ) -> i64 {
     let ab = attacker.ability;
     let s = &pack.sy;
@@ -679,7 +710,7 @@ fn apply_attacker_ability(
         fl(d * 1.5)
     } else if ab == s.ab.メガランチャー && f.mega_launcher {
         fl(d * 1.5)
-    } else if ab == s.ab.すいほう && mv.ty == pack.tc.みず {
+    } else if ab == s.ab.すいほう && mty == pack.tc.みず {
         fl(d * 2.0)
     } else if ab == s.ab.アナライズ && attacker.acts_second {
         fl(d * 1.3)
@@ -690,7 +721,7 @@ fn apply_attacker_ability(
         fl(d * 1.5)
     } else if ab == s.ab.はりこみ && defender.switched_this_turn {
         fl(d * 2.0)
-    } else if ab == s.ab.はがねのせいしん && mv.ty == pack.tc.はがね {
+    } else if ab == s.ab.はがねのせいしん && mty == pack.tc.はがね {
         fl(d * 1.5)
     } else if ab == s.ab.そうだいしょう {
         let boost = 1.0 + 0.1 * (std::cmp::min(5, attacker.fainted_allies) as f64);
@@ -700,7 +731,7 @@ fn apply_attacker_ability(
     }
 }
 
-fn apply_defender_ability(pack: &Pack, dmg: i64, defender: &Poke, mv: &DMove) -> i64 {
+fn apply_defender_ability(pack: &Pack, dmg: i64, defender: &Poke, mv: &DMove, mty: Ty) -> i64 {
     let ab = defender.ability;
     let s = &pack.sy.ab;
     let d = dmg as f64;
@@ -711,25 +742,25 @@ fn apply_defender_ability(pack: &Pack, dmg: i64, defender: &Poke, mv: &DMove) ->
         fl(d * 0.5)
     } else if ab == s.はどうのぼうご && is_contact_move(pack, mv) {
         fl(d * 0.5)
-    } else if ab == s.あついしぼう && (mv.ty == fire || mv.ty == pack.tc.こおり) {
+    } else if ab == s.あついしぼう && (mty == fire || mty == pack.tc.こおり) {
         fl(d * 0.5)
-    } else if ab == s.かんそうはだ && mv.ty == fire {
+    } else if ab == s.かんそうはだ && mty == fire {
         fl(d * 1.25)
-    } else if (ab == s.たいねつ || ab == s.すいほう) && mv.ty == fire {
+    } else if (ab == s.たいねつ || ab == s.すいほう) && mty == fire {
         fl(d * 0.5)
-    } else if ab == s.きよめのしお && mv.ty == pack.tc.ゴースト {
+    } else if ab == s.きよめのしお && mty == pack.tc.ゴースト {
         fl(d * 0.5)
     } else if ab == s.もふもふ {
         let mut x = dmg;
         if mv.category == Cat::Physical {
             x = fl(x as f64 * 0.5);
         }
-        if mv.ty == fire {
+        if mty == fire {
             x = fl(x as f64 * 2.0);
         }
         x
     } else if ab == s.フィルター || ab == s.ハードロック || ab == s.プリズムアーマー {
-        let e = pack.eff(mv.ty, defender.type1, defender.type2);
+        let e = pack.eff(mty, defender.type1, defender.type2);
         if e > 1.0 {
             fl(d * 0.75)
         } else {
@@ -770,6 +801,23 @@ pub fn type_effectiveness(pack: &Pack, attacker: &Poke, defender: &Poke, mv: &DM
         effectiveness = f64::max(effectiveness, 2.0);
     }
     effectiveness
+}
+
+/// damage.py `estimate_only`: calc_damage が実際の攻撃のために書き換える状態
+/// （半減きのみの消費とかるわざ・じゅうでん/でんきエンジンの解除）。見積もりの前に取り、後で戻す
+#[derive(Clone, Copy)]
+pub struct EstSnap(Option<Sym>, i32, bool, bool);
+
+impl EstSnap {
+    pub fn take(p: &Poke) -> EstSnap {
+        EstSnap(p.item, p.stage_speed, p.charged, p.electromorphosis_charged)
+    }
+    pub fn restore(self, p: &mut Poke) {
+        p.item = self.0;
+        p.stage_speed = self.1;
+        p.charged = self.2;
+        p.electromorphosis_charged = self.3;
+    }
 }
 
 pub fn calc_damage(
@@ -855,7 +903,9 @@ pub fn calc_damage(
     }
 
     if mv.name == s.mv.ボディプレス {
-        atk = if !critical {
+        atk = if def_ignores_atk_stage {
+            attacker.defense
+        } else if !critical {
             attacker.eff_stat(1)
         } else {
             std::cmp::max(attacker.eff_stat(1), attacker.defense)
@@ -1017,14 +1067,14 @@ pub fn calc_damage(
         dmg = apply_attacker_item(pack, dmg, attacker, mv, effectiveness);
     }
     if defender.ability != s.ab.ぶきよう {
-        dmg = apply_defender_item(pack, dmg, defender, mv, effectiveness);
+        dmg = apply_defender_item(pack, dmg, defender, mv, effectiveness, eff_type);
     }
-    dmg = apply_attacker_ability(pack, dmg, attacker, defender, mv, field);
+    dmg = apply_attacker_ability(pack, dmg, attacker, defender, mv, field, eff_type);
     if !ignore_ab {
-        dmg = apply_defender_ability(pack, dmg, defender, mv);
+        dmg = apply_defender_ability(pack, dmg, defender, mv, eff_type);
     }
 
-    let pinch = get_pinch_multiplier(pack, attacker, mv.ty);
+    let pinch = get_pinch_multiplier(pack, attacker, eff_type);
     if pinch > 1.0 {
         dmg = fl(dmg as f64 * pinch);
     }
@@ -1033,7 +1083,7 @@ pub fn calc_damage(
         dmg = fl(dmg as f64 * sharp);
     }
     let type_boost = if attacker.ability != s.ab.ぶきよう {
-        get_type_boost(pack, attacker.item, mv.ty, attacker.name_pika)
+        get_type_boost(pack, attacker.item, eff_type, attacker.name_pika)
     } else {
         1.0
     };
@@ -1055,7 +1105,7 @@ pub fn calc_damage(
         dmg = fl(dmg as f64 * 1.5);
     }
     if eff_type == pack.tc.でんき && attacker.electromorphosis_charged {
-        dmg = fl(dmg as f64 * 1.5);
+        dmg = fl(dmg as f64 * 2.0);
         attacker.electromorphosis_charged = false;
     }
 
@@ -1088,10 +1138,20 @@ pub fn check_hit(
     if field.always_hit {
         return true;
     }
+    // まもる・半無敵は必中技（命中「—」・ノーガード・雨のかみなり 等）より先に判定する（damage.py と同じ）
+    if targets_foe(pack, mv) && defender.protecting && protect_blocks(pack, mv) {
+        return false;
+    }
+    if semi_invulnerable_miss(pack, attacker, defender, mv) {
+        return false;
+    }
     let acc = match mv.accuracy {
         None => return true,
         Some(a) => a,
     };
+    if defender.minimized && pack.flags(mv.name).minimize2x {
+        return true;
+    }
     if attacker.lock_on {
         return true;
     }
@@ -1133,12 +1193,6 @@ pub fn check_hit(
         let acc_stage = attacker.stage_accuracy - defender.stage_evasion;
         hit_rate *= acc_eva_stage(acc_stage);
         hit_rate *= get_evasion_item_mult(pack, defender.item);
-        if defender.protecting
-            && mv.name != s.mv.フェイント
-            && mv.name != s.mv.ゴーストダイブ
-        {
-            return false;
-        }
         return rng() < hit_rate;
     }
     let eva = if attacker.ability == s.ab.するどいめ || attacker.ability == s.ab.はっこう {
@@ -1162,10 +1216,41 @@ pub fn check_hit(
     }
     hit_rate *= get_evasion_item_mult(pack, defender.item);
     hit_rate *= get_accuracy_evasion_item(pack, attacker.item);
-    if defender.protecting && mv.name != s.mv.フェイント && mv.name != s.mv.ゴーストダイブ {
-        return false;
+    // フォーカスレンズ: 相手より後に動くとき命中1.2倍
+    if attacker.item == Some(pack.sy.l.フォーカスレンズ) && attacker.acts_second {
+        hit_rate *= 1.2;
     }
     rng() < hit_rate
+}
+
+/// 相手を対象にとる技（攻撃技と FOE_STATUS）。damage.py targets_foe
+pub fn targets_foe(pack: &Pack, mv: &DMove) -> bool {
+    mv.category != Cat::Status || pack.flags(mv.name).foe_status
+}
+
+/// まもる系で防がれる技か。damage.py protect_blocks
+pub fn protect_blocks(pack: &Pack, mv: &DMove) -> bool {
+    let f = pack.flags(mv.name);
+    if mv.category != Cat::Status {
+        return !f.protect_pierce;
+    }
+    f.foe_status && !f.protect_pierce_status
+}
+
+/// 溜め技の1ターン目で姿を消している相手には当たらない。damage.py semi_invulnerable_miss
+pub fn semi_invulnerable_miss(pack: &Pack, attacker: &Poke, defender: &Poke, mv: &DMove) -> bool {
+    let st = match defender.charging_move {
+        Some(c) => pack.flags(c).semi_inv,
+        None => 0,
+    };
+    if st == 0 || !targets_foe(pack, mv) {
+        return false;
+    }
+    let ng = pack.sy.ab.ノーガード;
+    if attacker.ability == ng || defender.ability == ng || attacker.lock_on {
+        return false;
+    }
+    pack.flags(mv.name).semi_hits & (1u8 << st) == 0
 }
 
 /// is_contact_move（simulator/damage.py:450）

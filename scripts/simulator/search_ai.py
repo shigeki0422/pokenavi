@@ -18,6 +18,7 @@ import random
 from typing import List, Optional
 
 from .battle import Action, Battle, BattleSide, BattleField, is_trapped
+from .damage import effective_weather
 from .features import dmg_memo_begin as _dmg_memo_begin, dmg_memo_end as _dmg_memo_end
 from .data import DataLoader, NATURE_MODS, get_type_effectiveness
 from .pokemon import calc_hp, calc_stat, build_from_template
@@ -115,6 +116,166 @@ def _prune_immune_moves(cands, my_side, opp_side, field):
     return [a for a, im in zip(cands, imm) if not im]
 
 
+# 監査40（2026-10-04）の AI 修正（必ず失敗・効果の無い手を根から外す／確定KOの命中・タイプ条件／ねむりカウンタの決定化）。
+# 既定ON。実対戦A/Bのため env AI_FIX40=0 で旧挙動（Rust は AI_FIX40_2 で側2だけ切替）。
+_FIX40_ON = os.environ.get("AI_FIX40", "1") != "0"
+# 監査200 C（持ち物が無いと判明した相手への ポルターガイスト・連続の みちづれ を候補から外す）。env AI_FIX200=0 で旧挙動（Rust は AI_FIX200_2 で側2だけ）
+_FIX200_ON = os.environ.get("AI_FIX200", "1") != "0"
+
+_FUTILE_BOOST = {
+    "つるぎのまい": ("stage_attack",), "わるだくみ": ("stage_sp_attack",), "りゅうのまい": ("stage_attack", "stage_speed"),
+    "ギアチェンジ": ("stage_attack", "stage_speed"), "めいそう": ("stage_sp_attack", "stage_sp_defense"),
+    "ちょうのまい": ("stage_sp_attack", "stage_sp_defense", "stage_speed"),
+    "はいすいのじん": ("stage_attack", "stage_defense", "stage_sp_attack", "stage_sp_defense", "stage_speed"),
+    "コスモパワー": ("stage_defense", "stage_sp_defense"), "てっぺき": ("stage_defense",),
+    "ビルドアップ": ("stage_attack", "stage_defense"), "こうそくいどう": ("stage_speed",), "ロックカット": ("stage_speed",),
+    "ドわすれ": ("stage_sp_defense",), "コットンガード": ("stage_defense",),
+    "とぐろをまく": ("stage_attack", "stage_defense", "stage_accuracy"), "ちいさくなる": ("stage_evasion",),
+    "とける": ("stage_defense",), "たてこもる": ("stage_defense",), "かげぶんしん": ("stage_evasion",),
+    "せいちょう": ("stage_attack", "stage_sp_attack"),
+}
+_FUTILE_HEAL = frozenset({"じこさいせい", "はねやすめ", "なまける", "タマゴうみ", "ミルクのみ", "つきのひかり", "あさのひざし",
+                          "こうごうせい", "すなあつめ", "かいふくしれい", "ねむる"})
+_FUTILE_STATUS = {"でんじは": "paralysis", "しびれごな": "paralysis", "へびにらみ": "paralysis", "おにび": "burn",
+                  "どくどく": "poison", "どくのこな": "poison", "ねむりごな": "sleep", "さいみんじゅつ": "sleep",
+                  "うたう": "sleep", "キノコのほうし": "sleep", "あくび": "sleep"}
+_POWDER = frozenset({"しびれごな", "ねむりごな", "どくのこな", "キノコのほうし"})
+from .damage import SOUND_MOVES as _SOUND
+
+
+def _futile_move(me, my_side, opp_side, mv, field) -> bool:
+    """必ず失敗する手・成功しても効果の無い手か（公開情報だけで判定する）。"""
+    n = mv.name_jp
+    opp = opp_side.active
+    if mv.category == "status" and me.taunt_count > 0:
+        return True
+    if me.throat_chop_count > 0 and n in _SOUND:
+        return True
+    if n in ("ねこだまし", "であいがしら") and me.turns_out > 0:
+        return True
+    if n in ("ほえる", "ふきとばし") and not any(p.is_alive and i != opp_side.active_idx for i, p in enumerate(opp_side.party)):
+        return True
+    if n == "でんこうそうげき" and "でんき" not in (me.type1, me.type2):
+        return True
+    if n == "もえつきる" and "ほのお" not in (me.type1, me.type2):
+        return True
+    if n == "アイアンローラー" and not (field.grassy_terrain or field.electric_terrain
+                                      or field.psychic_terrain or field.misty_terrain):
+        return True
+    if n == "ゲップ" and not getattr(me, "ate_berry", False):
+        return True
+    if n in ("いびき", "ねごと") and me.status != "sleep":
+        return True
+    if n == "デカハンマー" and getattr(me, "_deka_last", False):
+        return True
+    if _FIX200_ON and n == "みちづれ" and getattr(me, "_destiny_bond_last_turn", False):
+        return True
+    if n == "とっておき":
+        others = {m.name_jp for m in me.moves if m and m.name_jp != "とっておき"}
+        if not others or not others.issubset(me.used_moves):
+            return True
+    if n in _FUTILE_HEAL and me.hp >= me.max_hp:
+        return True
+    if n in _FUTILE_BOOST:
+        cap = -6 if me.ability == "あまのじゃく" else 6
+        if all(getattr(me, st, 0) == cap for st in _FUTILE_BOOST[n]):
+            return True
+    if n == "リフレクター" and my_side.reflect or n == "ひかりのかべ" and my_side.light_screen:
+        return True
+    if n == "オーロラベール" and (my_side.aurora_veil or effective_weather(field, me) != "hail"):
+        return True
+    if n == "おいかぜ" and my_side.tailwind:
+        return True
+    if n == "みがわり" and (getattr(me, "_substitute_hp", 0) > 0 or me.hp <= me.max_hp // 4):
+        return True
+    if opp is None or not opp.is_alive:
+        return False
+    ot = (opp.type1, opp.type2)
+    if n in _FUTILE_STATUS:
+        st = _FUTILE_STATUS[n]
+        if opp.status is not None or getattr(opp_side, "safeguard", 0) > 0:
+            return True
+        if n == "あくび" and opp.yawn_count:
+            return True
+        if n in _POWDER and "くさ" in ot:
+            return True
+        if st == "paralysis" and ("でんき" in ot or (n == "でんじは" and "じめん" in ot)):
+            return True
+        if st == "burn" and "ほのお" in ot:
+            return True
+        if st == "poison" and me.ability != "ふしょく" and ("どく" in ot or "はがね" in ot):
+            return True
+    if n == "ちょうはつ" and opp.taunt_count > 0:
+        return True
+    if n == "アンコール" and (opp.encore_count > 0 or not opp.last_used_move):
+        return True
+    if n == "やどりぎのタネ" and (opp.seeded or "くさ" in ot):
+        return True
+    if _FIX200_ON and n == "ポルターガイスト":
+        kn = my_side.opp_view.get(opp.name)
+        if kn is not None and kn.item_lost:
+            return True
+    return False
+
+
+def _prune_futile_moves(cands, my_side, opp_side, field):
+    """根の候補から、必ず失敗する手・効果の無い手（_futile_move）と、開示済みの ふうせん・特性で無効な攻撃技を外す。
+    技の候補が残らないときは外さない（_prune_immune_moves と同じ）。"""
+    me = my_side.active
+    if me is None or not me.is_alive:
+        return cands
+    kn = my_side.opp_view.get(opp_side.active.name) if opp_side.active is not None else None
+    bad = []
+    for a in cands:
+        if a.type != "move" or a.move is None or a.move_idx is None or a.move_idx < 0:
+            bad.append(False)
+            continue
+        f = _futile_move(me, my_side, opp_side, a.move, field)
+        if not f and kn is not None and a.move.category != "status" and opp_side.active.is_alive:
+            f = _known_immune(me, a, opp_side.active, kn, field)
+        bad.append(f)
+    if not any(bad) or not any(a.type == "move" and not b for a, b in zip(cands, bad)):
+        return cands
+    return [a for a, b in zip(cands, bad) if not b]
+
+
+def _known_immune(me, act, opp, kn, field) -> bool:
+    from .battle import _effective_move_type
+    from .abilities import check_move_immunity, should_ignore_ability, scrappy_override
+    ab0 = me.ability
+    md = me.mega_data
+    if getattr(act, "do_mega", False) and md is not None and not me.mega_evolved and md.ability:
+        me.ability = md.ability
+    try:
+        t = _effective_move_type(me, act.move, field)
+        if (t == "じめん" and kn.known_item == "ふうせん" and not kn.item_lost
+                and not getattr(opp, "grounded", False)):
+            return True
+        if kn.known_ability and not should_ignore_ability(me):
+            o_ab = opp.ability
+            opp.ability = kn.known_ability
+            try:
+                return check_move_immunity(opp, t, act.move.name_jp) and not scrappy_override(me, t, opp)
+            finally:
+                opp.ability = o_ab
+        return False
+    finally:
+        me.ability = ab0
+
+
+def _resample_sleep(poke, rng) -> None:
+    """相手のねむりカウンタを、見えている情報（眠ってから行動しようとした回数・ねむる か）と整合する値から引き直す。
+    眠った時のカウンタは2〜4の一様（ねむるは3）。行動のたびに1（はやおきは2）減り、0以下で起きる。"""
+    acts = getattr(poke, "_sleep_acts", 0)
+    dec = 2 if poke.ability == "はやおき" else 1
+    opts = [3] if getattr(poke, "_sleep_rest", False) else [2, 3, 4]
+    feas = [c for c in opts if c - dec * acts > 0]
+    if not feas:
+        return
+    c0 = feas[0] if len(feas) == 1 else rng.choice(feas)
+    poke.sleep_count = c0 - dec * acts
+
+
 class SearchAI:
     def __init__(self, loader: DataLoader, rollouts: int = 16, depth: int = 50,
                  season: Optional[str] = None, rollout_ai=None, seed: int = 0, value_fn=None,
@@ -202,6 +363,7 @@ class SearchAI:
         # 無効技は勝敗がほぼ決まった局面の同値タイで方策priorに引かれて選ばれていた（実測 0.7%/手番、
         # 強制プレイアウトで外しても勝率差 +0.1pt±0.3＝強さは変わらず、見た目の悪手だけ消える）
         self.prune_immune = os.environ.get("AI_PRUNE_IMMUNE", "1") == "1"
+        self.fix40 = _FIX40_ON
         self.downside_guard = os.environ.get("MCTS_DOWNSIDE_GUARD", "1") == "1"
         self.downside_k = int(os.environ.get("MCTS_DOWNSIDE_K", "8"))          # サンプルする相手型数
         self.downside_margin = float(os.environ.get("MCTS_DOWNSIDE_MARGIN", "0.20"))  # この差以上で交代へ上書き
@@ -231,6 +393,8 @@ class SearchAI:
         cands = self._candidate_actions(my_side, opp_side, field)
         if self.prune_immune:
             cands = _prune_immune_moves(cands, my_side, opp_side, field)
+        if self.fix40:
+            cands = _prune_futile_moves(cands, my_side, opp_side, field)
         if len(cands) <= 1:
             return cands[0] if cands else self._fallback(my_side, opp_side, field)
         if self.mcts:
@@ -1105,6 +1269,8 @@ class SearchAI:
             poke.item = c["item"]
         if c.get("ability"):
             poke.ability = c["ability"]
+        if getattr(self, "fix40", False) and poke.status == "sleep":
+            _resample_sleep(poke, self._rng)
         mvs = [self.loader.get_move(m) for m in c.get("moves", [])]
         mvs = [m for m in mvs if m is not None]
         if mvs:

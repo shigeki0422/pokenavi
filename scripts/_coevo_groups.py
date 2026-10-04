@@ -24,6 +24,7 @@ from collections import defaultdict
 from multiprocessing import Pool
 
 import _pop_gen as PG
+import seed_rule
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 GROUPS = os.environ.get("GROUPS", os.path.join(os.path.dirname(HERE), "_local", "ai_work", "frozen", "type_groups_M-6_v40.json"))
@@ -70,25 +71,49 @@ def _pick_group(sp, rng, mega=None):
 def _species(rng):
     """種の組は _pop_gen.gen_party と同じ（使用率の Zipf＋同居率）。型プールに無い種は外す"""
     g = load()
+    back = pool_names(g["groups"])
     for _ in range(50):
-        team = [m["name"] for m in map(_parse_name, PG.gen_party(g["D"], rng))]
+        team = [back.get(m["name"], m["name"]) for m in map(_parse_name, PG.gen_party(g["D"], rng))]
         if all(sp in g["groups"] for sp in team):
             return team
     raise RuntimeError("型プールにある種だけでパーティを作れない")
+
+
+def pool_names(groups):
+    """_pop_gen の種名（「:」の無い正規名。ケンタロス:炎→ケンタロス(炎)）から型プールの種名への表。
+    フォルム補正した種（source_species）は元の種名からも引く（監査200 T1: ケンタロス:炎 が生成集団に0体だった）"""
+    back = {PG.canon(k): k for k in groups}
+    back.update({PG.canon(v["source_species"]): k for k, v in groups.items() if v.get("source_species")})
+    return back
 
 
 def _parse_name(spec):
     return {"name": spec.split("@")[0].split(":")[0]}
 
 
+# メガを外す枠の種で、メガでない系統の割合がこれ未満なら種ごと入れ替える（2026-10-04・監査40 #23）。
+# メガが3枠になった党でメガでない系統へ落とすと、カメックスの しろいハーブ（使用率1.6%）が生成集団で24〜29%、
+# ゲンガーの きあいのタスキ（22%）が40% のように、少数派の非メガ系統が膨らんでいた
+NONMEGA_MIN = float(os.environ.get("COEVO_NONMEGA_MIN", "0.15"))
+
+
+def _nonmega_share(sp):
+    g = load()
+    return sum(x["share"] for x, m in zip(g["groups"][sp]["groups"], g["mega"][sp]) if not m)
+
+
 def repair(party, rng):
-    """メガの系統は1〜2枠（上位構築はメガ石2個が84%、3個は禁止）"""
+    """メガの系統は1〜2枠（上位構築はメガ石2個が84%、3個は禁止）。外す枠はメガでない系統の割合が大きい種から選び、
+    それも NONMEGA_MIN 未満なら種ごとメガでない種へ入れ替える"""
     g = load()
     mg = [i for i, (sp, gi) in enumerate(party) if g["mega"][sp][gi]]
     while len(mg) > 2:
-        i = mg.pop(rng.randrange(len(mg)))
-        gi = _pick_group(party[i][0], rng, mega=False)
-        while gi is None:     # メガの系統しか無い種は、メガの無い種へ入れ替える
+        best = max(_nonmega_share(party[j][0]) for j in mg)
+        cand = [j for j in mg if _nonmega_share(party[j][0]) == best]
+        i = cand[rng.randrange(len(cand))]
+        mg.remove(i)
+        gi = _pick_group(party[i][0], rng, mega=False) if best >= NONMEGA_MIN else None
+        while gi is None:     # メガの系統しか無い（少ない）種は、メガの無い種へ入れ替える
             sp = _fresh_species(rng, {x for x, _ in party})
             gi = _pick_group(sp, rng, mega=False)
             party[i] = (sp, gi)
@@ -149,7 +174,8 @@ def gen_party(rng):
 
 
 def instantiate(party, rng, tries=200):
-    """系統から型を引く。同じ持ち物はパーティに1つ（重複したら引き直す）"""
+    """系統から型を引く。同じ持ち物はパーティに1つ（重複したら引き直す）。
+    シードの型は設置役がいるときだけ（いなければ同じ系統の別の持ち物の型に替える＝seed_rule）"""
     g = load()
     for _ in range(tries):
         used, out, dup = set(), [], False
@@ -161,8 +187,14 @@ def instantiate(party, rng, tries=200):
             b = rng.choices(pick, weights=[x["weight"] for x in pick])[0]
             used.add(b["item"])
             out.append(spec_of(sp, b))
-        if not dup and plausible(out):
-            return out
+        if dup:
+            continue
+        fixed = seed_rule.fix(out, lambda i: [(spec_of(party[i][0], b), b["weight"])
+                                              for b in g["groups"][party[i][0]]["groups"][party[i][1]]["builds"]], rng)
+        if fixed is not None:
+            out = fixed
+            if plausible(out):
+                return out
     return out
 
 

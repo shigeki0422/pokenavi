@@ -135,6 +135,15 @@ pub struct MoveFlags {
     pub reckless: bool,
     pub strong_jaw: bool,
     pub mega_launcher: bool,
+    pub foe_status: bool,
+    pub sub_bypass: bool,
+    pub encore_fail: bool,
+    pub protect_pierce: bool,
+    pub protect_pierce_status: bool,
+    /// 半無敵の状態（1=空 2=地中 3=水中 4=ゴーストダイブ）。0 は該当なし
+    pub semi_inv: u8,
+    /// 半無敵の状態に当たる技（bit 1=空 2=地中 3=水中）
+    pub semi_hits: u8,
 }
 
 
@@ -437,6 +446,9 @@ impl Pack {
             };
             mark(&mut move_flags, &intern, crate::syms::BALL_BOMB_MOVES, |m| m.ball_bomb = true);
             mark(&mut move_flags, &intern, crate::syms::SOUND_MOVES, |m| m.sound = true);
+            mark(&mut move_flags, &intern, crate::syms::FOE_STATUS_MOVES, |m| m.foe_status = true);
+            mark(&mut move_flags, &intern, crate::syms::SUB_BYPASS_STATUS, |m| m.sub_bypass = true);
+            mark(&mut move_flags, &intern, crate::syms::ENCORE_FAIL, |m| m.encore_fail = true);
             mark(&mut move_flags, &intern, crate::syms::PUNCH_MOVES, |m| m.punch_set = true);
             mark(&mut move_flags, &intern, crate::syms::NON_CONTACT_PHYSICAL, |m| {
                 m.non_contact_physical = true
@@ -454,6 +466,16 @@ impl Pack {
             mark(&mut move_flags, &intern, crate::syms::MEGA_LAUNCHER_MOVES, |m| {
                 m.mega_launcher = true
             });
+            mark(&mut move_flags, &intern, crate::syms::PROTECT_PIERCE, |m| m.protect_pierce = true);
+            mark(&mut move_flags, &intern, crate::syms::PROTECT_PIERCE_STATUS, |m| m.protect_pierce_status = true);
+            mark(&mut move_flags, &intern, crate::syms::SEMI_INVULN_SKY, |m| m.semi_inv = 1);
+            mark(&mut move_flags, &intern, crate::syms::SEMI_INVULN_DIG, |m| m.semi_inv = 2);
+            mark(&mut move_flags, &intern, crate::syms::SEMI_INVULN_DIVE, |m| m.semi_inv = 3);
+            mark(&mut move_flags, &intern, crate::syms::SEMI_INVULN_PHANTOM, |m| m.semi_inv = 4);
+            mark(&mut move_flags, &intern, crate::syms::HITS_SKY, |m| m.semi_hits |= 1 << 1);
+            mark(&mut move_flags, &intern, crate::syms::HITS_DIG, |m| m.semi_hits |= 1 << 2);
+            mark(&mut move_flags, &intern, crate::syms::HITS_DIVE, |m| m.semi_hits |= 1 << 3);
+            mark(&mut move_flags, &intern, crate::syms::SECONDARY_EXTRA, |m| m.secondary = true);
             for s in v["secondary_moves"].as_array().unwrap() {
                 if let Some(id) = intern.get(s.as_str().unwrap()) {
                     move_flags[id as usize].secondary = true;

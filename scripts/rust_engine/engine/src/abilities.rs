@@ -1,6 +1,6 @@
 //! simulator/abilities.py の移植（ダメージ計算内の判定は damage.rs 側に既存）。
 use crate::damage::{effective_weather, is_contact_move, DMove, Field};
-use crate::pack::{Cat, Pack};
+use crate::pack::{Cat, Pack, Ty};
 use crate::poke::{apply_status, Poke, TransformBackup, ST_ATK, ST_DEF, ST_SPA, ST_SPD, ST_SPE};
 use crate::rng::BRng;
 
@@ -57,7 +57,6 @@ pub fn entry_ability(
     poke: &mut Poke,
     opponent: &mut Poke,
     field: &mut Field,
-    weather_duration: i64,
 ) {
     let l = &pack.sy.l;
     let we = &pack.sy.we;
@@ -76,26 +75,24 @@ pub fn entry_ability(
     };
     if let Some(w) = wm {
         if field.weather != Some(w) {
+            let rock = if w == we.sandstorm { l.さらさらいわ } else if w == we.sunny { l.あついいわ } else if w == we.rain { l.しめったいわ } else { l.つめたいいわ };
             field.weather = Some(w);
-            field.weather_count = weather_duration;
+            field.weather_count = if poke.item == Some(rock) { 8 } else { 5 };
         }
     }
 
     if ab == l.エレキメイカー && !field.electric_terrain {
-        field.electric_terrain = true;
-        field.electric_terrain_count = crate::items::terrain_turns(pack, poke.item);
+        crate::items::set_terrain(field, 0, crate::items::terrain_turns(pack, poke.item));
         crate::items::try_terrain_seed(pack, poke, field);
         crate::items::try_terrain_seed(pack, opponent, field);
     }
     if ab == l.グラスメイカー && !field.grassy_terrain {
-        field.grassy_terrain = true;
-        field.grassy_terrain_count = crate::items::terrain_turns(pack, poke.item);
+        crate::items::set_terrain(field, 1, crate::items::terrain_turns(pack, poke.item));
         crate::items::try_terrain_seed(pack, poke, field);
         crate::items::try_terrain_seed(pack, opponent, field);
     }
     if ab == l.サイコメイカー && !field.psychic_terrain {
-        field.psychic_terrain = true;
-        field.psychic_terrain_count = crate::items::terrain_turns(pack, poke.item);
+        crate::items::set_terrain(field, 2, crate::items::terrain_turns(pack, poke.item));
         crate::items::try_terrain_seed(pack, poke, field);
         crate::items::try_terrain_seed(pack, opponent, field);
     }
@@ -106,9 +103,12 @@ pub fn entry_ability(
             opponent.stage_attack = std::cmp::min(6, opponent.stage_attack + 1);
         } else if oab == l.びびり {
             opponent.stage_speed = std::cmp::min(6, opponent.stage_speed + 1);
+        } else if oab == l.ミラーアーマー {
+            reflect_stat_drop(pack, poke, 0, -1);
         } else if oab == l.クリアボディ
             || oab == l.しろいけむり
             || oab == l.かがくへんかガス
+            || oab == l.かいりきバサミ
             || oab == l.マイペース
             || oab == l.どんかん
             || oab == l.きもったま
@@ -194,6 +194,7 @@ pub fn on_after_hit(
     attacker: &mut Poke,
     defender: &mut Poke,
     mv: &DMove,
+    field: &Field,
     rng: &mut dyn BRng,
 ) {
     let l = &pack.sy.l;
@@ -207,7 +208,7 @@ pub fn on_after_hit(
 
     if ab == l.せいでんき && is_contact_move(pack, mv) && attacker.ability != l.えんかく {
         if rng.random() < 0.30 {
-            apply_status(pack, attacker, st.paralysis, false);
+            apply_status(pack, attacker, st.paralysis, false, Some(field));
         }
     }
 
@@ -215,44 +216,14 @@ pub fn on_after_hit(
         if rng.random() < 0.30 {
             let idx = rng.choice(3);
             let s = [st.poison, st.paralysis, st.sleep][idx];
-            let ok = apply_status(pack, attacker, s, false);
+            let ok = !(s == st.sleep && crate::damage::terrain_blocks_sleep(pack, attacker, field))
+                && apply_status(pack, attacker, s, false, Some(field));
             if ok && s == st.sleep {
-                attacker.sleep_count = rng.randint(1, 3);
+                attacker.sleep_count = rng.randint(2, 4);
+                attacker.sleep_acts = 0;
+                attacker.sleep_rest = false;
             }
         }
-    }
-
-    if ab == l.ひらいしん && mv.ty == pack.tc.でんき {
-        defender.stage_sp_attack = std::cmp::min(6, defender.stage_sp_attack + 1);
-    }
-
-    // ちくでん/ちょすい/かんそうはだ/どしょく
-    let absorb = if ab == l.ちくでん {
-        Some(pack.tc.でんき)
-    } else if ab == l.ちょすい || ab == l.かんそうはだ {
-        Some(pack.tc.みず)
-    } else if ab == l.どしょく {
-        Some(pack.tc.じめん)
-    } else {
-        None
-    };
-    if let Some(t) = absorb {
-        if mv.ty == t && defender.hp < defender.max_hp {
-            let heal = std::cmp::max(1, defender.max_hp / 4);
-            defender.hp = std::cmp::min(defender.max_hp, defender.hp + heal);
-        }
-    }
-
-    if ab == l.もらいび && mv.ty == pack.tc.ほのお && !defender.flash_fire_active {
-        defender.flash_fire_active = true;
-    }
-
-    if ab == l.でんきエンジン && mv.ty == pack.tc.でんき {
-        defender.stage_speed = std::cmp::min(6, defender.stage_speed + 1);
-    }
-
-    if ab == l.そうしょく && mv.ty == pack.tc.くさ {
-        defender.stage_attack = std::cmp::min(6, defender.stage_attack + 1);
     }
 
     if ab == l.でんきにかえる {
@@ -272,7 +243,7 @@ pub fn on_after_hit(
             if (s == st.poison || s == st.badpoison || s == st.paralysis || s == st.burn)
                 && attacker.is_alive
             {
-                apply_status(pack, attacker, s, false);
+                apply_status(pack, attacker, s, false, Some(field));
             }
         }
     }
@@ -288,16 +259,14 @@ pub fn on_after_hit(
     if (ab == l.ねばりかわ || ab == l.ながいしっぽ)
         && is_contact_move(pack, mv)
         && attacker.ability != l.えんかく
-        && !is_mold(pack, attacker)
     {
         attacker.stage_speed = std::cmp::max(-6, attacker.stage_speed - 1);
     }
 
-    if ab == l.じきゅうりょく && !is_mold(pack, attacker) {
+    if ab == l.じきゅうりょく {
         defender.stage_defense = std::cmp::min(6, defender.stage_defense + 1);
     }
 
-    let mold = is_mold(pack, attacker);
     let contact = is_contact_move(pack, mv) && attacker.ability != l.えんかく;
 
     if ab == l.せいぎのこころ && mv.ty == pack.tc.あく {
@@ -316,12 +285,12 @@ pub fn on_after_hit(
         defender.stage_attack = std::cmp::min(6, defender.stage_attack + 1);
     }
 
-    if contact && !mold && attacker.is_alive {
+    if contact && attacker.is_alive {
         if ab == l.ほのおのからだ && rng.random() < 0.30 {
-            apply_status(pack, attacker, st.burn, false);
+            apply_status(pack, attacker, st.burn, false, Some(field));
         }
         if ab == l.どくのトゲ && rng.random() < 0.30 {
-            apply_status(pack, attacker, st.poison, false);
+            apply_status(pack, attacker, st.poison, false, Some(field));
         }
         if ab == l.ぬめぬめ {
             attacker.stage_speed = std::cmp::max(-6, attacker.stage_speed - 1);
@@ -337,7 +306,7 @@ pub fn on_after_hit(
     }
 
     if attacker.ability == l.どくしゅ && contact && defender.is_alive && rng.random() < 0.30 {
-        apply_status(pack, defender, st.poison, false);
+        apply_status(pack, defender, st.poison, false, Some(field));
     }
 
     if attacker.ability == l.あくしゅう
@@ -360,35 +329,67 @@ pub fn on_after_hit(
 }
 
 /// _rough_skin_recoil
-pub fn rough_skin_recoil(pack: &Pack, attacker: &mut Poke, defender: &mut Poke, mv: &DMove) {
+pub fn rough_skin_recoil(pack: &Pack, attacker: &mut Poke, defender: &mut Poke, mv: &DMove, field: &Field) {
     let l = &pack.sy.l;
     let st = &pack.sy.st;
     let ab = defender.ability;
     let enkaku = attacker.ability == l.えんかく;
-    if (ab == l.さめはだ || ab == l.てつのとげ) && is_contact_move(pack, mv) && !enkaku {
-        if !is_mold(pack, attacker) {
-            let recoil = std::cmp::max(1, attacker.max_hp / 8);
-            attacker.take_damage(recoil);
-        }
+    let mg = attacker.ability == l.マジックガード;
+    if (ab == l.さめはだ || ab == l.てつのとげ) && is_contact_move(pack, mv) && !enkaku && !mg {
+        let recoil = std::cmp::max(1, attacker.max_hp / 8);
+        attacker.take_damage(recoil);
     }
 
     // ゴツゴツメット（アイテムなので かたやぶり では無効化されない。削りは1/6）
-    if defender.item == Some(pack.sy.it.ゴツゴツメット) && is_contact_move(pack, mv) && !enkaku {
+    if defender.item == Some(pack.sy.it.ゴツゴツメット) && is_contact_move(pack, mv) && !enkaku && !mg {
         let recoil = std::cmp::max(1, attacker.max_hp / 6);
         attacker.take_damage(recoil);
     }
     if ab == l.ゆうばく
         && is_contact_move(pack, mv)
         && !enkaku
+        && !mg
         && !defender.is_alive
         && attacker.is_alive
-        && !is_mold(pack, attacker)
     {
         let recoil = std::cmp::max(1, attacker.max_hp / 4);
         attacker.take_damage(recoil);
     }
-    if ab == l.とびだすハバネロ && mv.category != Cat::Status && !is_mold(pack, attacker) {
-        apply_status(pack, attacker, st.burn, false);
+    if ab == l.とびだすハバネロ && mv.category != Cat::Status {
+        apply_status(pack, attacker, st.burn, false, Some(field));
+    }
+}
+
+/// 特性で技を無効にしたときの効果（ひらいしん・ちょすい 等）。技の最終タイプで判定（abilities.py on_absorb と同じ）
+pub fn on_absorb(pack: &Pack, defender: &mut Poke, mty: Ty) {
+    let l = &pack.sy.l;
+    let ab = defender.ability;
+    if ab == l.ひらいしん && mty == pack.tc.でんき {
+        defender.stage_sp_attack = std::cmp::min(6, defender.stage_sp_attack + 1);
+    }
+    let absorb = if ab == l.ちくでん {
+        Some(pack.tc.でんき)
+    } else if ab == l.ちょすい || ab == l.かんそうはだ {
+        Some(pack.tc.みず)
+    } else if ab == l.どしょく {
+        Some(pack.tc.じめん)
+    } else {
+        None
+    };
+    if let Some(t) = absorb {
+        if mty == t && defender.hp < defender.max_hp {
+            let heal = std::cmp::max(1, defender.max_hp / 4);
+            defender.hp = std::cmp::min(defender.max_hp, defender.hp + heal);
+        }
+    }
+    if ab == l.もらいび && mty == pack.tc.ほのお && !defender.flash_fire_active {
+        defender.flash_fire_active = true;
+    }
+    if ab == l.でんきエンジン && mty == pack.tc.でんき {
+        defender.stage_speed = std::cmp::min(6, defender.stage_speed + 1);
+    }
+    if ab == l.そうしょく && mty == pack.tc.くさ {
+        defender.stage_attack = std::cmp::min(6, defender.stage_attack + 1);
     }
 }
 
@@ -423,13 +424,34 @@ pub fn on_ko(pack: &Pack, attacker: &mut Poke) {
     }
 }
 
+/// ミラーアーマー で跳ね返された能力低下を受ける（受ける側の特性で防げる。跳ね返しは1回だけ。abilities.py と同じ）
+pub fn reflect_stat_drop(pack: &Pack, target: &mut Poke, stat: u8, delta: i32) {
+    let l = &pack.sy.l;
+    let ab = target.ability;
+    if ab == l.クリアボディ || ab == l.しろいけむり {
+        return;
+    }
+    if stat == 0 && ab == l.かいりきバサミ {
+        return;
+    }
+    if stat == 1 && ab == l.はとむね {
+        return;
+    }
+    let d = if ab == l.あまのじゃく { -delta } else { delta };
+    let old = target.stage(stat);
+    target.set_stage(stat, (old + d).clamp(-6, 6));
+    if target.stage(stat) < old {
+        on_stat_lowered(pack, target);
+    }
+}
+
 /// end_of_turn_ability
 pub fn end_of_turn_ability(pack: &Pack, p: &mut Poke, field: &Field, rng: &mut dyn BRng) {
     let l = &pack.sy.l;
     let we = &pack.sy.we;
     let ab = p.ability;
 
-    if ab == l.かそく {
+    if ab == l.かそく && !p.switched_this_turn {
         p.stage_speed = std::cmp::min(6, p.stage_speed + 1);
     }
     if ab == l.アイスボディ && effective_weather(pack, field, Some(p)) == Some(we.hail) {
@@ -503,18 +525,17 @@ pub fn end_of_turn_ability(pack: &Pack, p: &mut Poke, field: &Field, rng: &mut d
         }
     }
     if ab == l.ムラっけ {
-        let up = rng.choice(7) as u8;
-        p.set_stage(up, std::cmp::min(6, p.stage(up) + 2));
-        // Python: [s for s in STATS if s != up_stat] の6要素から choice
-        let idx = rng.choice(6);
-        let mut rest: Vec<u8> = Vec::with_capacity(6);
-        for i in 0..7u8 {
-            if i != up {
-                rest.push(i);
-            }
+        // 攻撃・防御・特攻・特防・素早さ（命中・回避は対象外）。abilities.py と同じ乱数の引き方
+        let ups: Vec<u8> = (0..5u8).filter(|&i| p.stage(i) < 6).collect();
+        let up = if ups.is_empty() { None } else { Some(ups[rng.choice(ups.len())]) };
+        let downs: Vec<u8> = (0..5u8).filter(|&i| p.stage(i) > -6 && Some(i) != up).collect();
+        let down = if downs.is_empty() { None } else { Some(downs[rng.choice(downs.len())]) };
+        if let Some(u) = up {
+            p.set_stage(u, std::cmp::min(6, p.stage(u) + 2));
         }
-        let down = rest[idx];
-        p.set_stage(down, std::cmp::max(-6, p.stage(down) - 1));
+        if let Some(d) = down {
+            p.set_stage(d, std::cmp::max(-6, p.stage(d) - 1));
+        }
     }
 }
 

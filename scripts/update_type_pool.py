@@ -54,22 +54,29 @@ def _gen(args):
 
 
 def simple_builds(sp):
-    """生成器が作れない種（技が4つに満たない）: 周辺分布の積。PRUNE_W 未満は落とす"""
-    mg = G.marginals(sp)
-    if not mg or not mg["moves"] or len(mg["moves"]) >= 4 or not mg["items"] or not mg["natures"]:
-        return None
-    moves = sorted(mg["moves"])
-    ab = max(mg["abilities"], key=mg["abilities"].get) if mg["abilities"] else ""
-    evs = mg["evs"] or {(0, 0, 0, 0, 0, 0): 1.0}
-    bs = [{"item": it, "nature": na, "ability": ab, "moves": moves, "ev": list(ev), "side": "",
-           "weight": pi * pn * pe}
-          for it, pi in mg["items"].items() for na, pn in mg["natures"].items() for ev, pe in evs.items()]
-    bs = [b for b in bs if b["weight"] >= G.PRUNE_W]
-    z = sum(b["weight"] for b in bs)
-    for b in bs:
-        b["weight"] = round(b["weight"] / z, 6)
-        b["spec"] = f"{sp}@{b['item']}:{b['nature']}:{'|'.join(moves)}:{'/'.join(map(str, b['ev']))}:{ab}"
-    return {"species": sp, "builds": sorted(bs, key=lambda b: -b["weight"]), "simple": True}
+    return G.simple_builds(sp)
+
+
+def form_fixes(pool):
+    """DB のフォルム誤登録を補正する（_gen_type_pool.form_fix。例: ルガルガン(昼) の かたいツメ 100% → ルガルガン(たそがれ)）。
+    補正先の種がすでにあるときは、詳細データの新しい方を残す。戻り値 {元の種: 補正先}"""
+    fixed = {}
+    by = {r["species"]: r for r in pool}
+    for r in list(pool):
+        to = G.form_fix(r["species"])
+        if not to:
+            continue
+        src = r["species"]
+        old = by.get(to)
+        if old is not None:
+            if (G.latest("pokemon_moves", src) or "") < (G.latest("pokemon_moves", to) or ""):
+                pool.remove(r)
+                continue
+            pool.remove(old)
+        G.rename_species(r, to)
+        by[to] = r
+        fixed[src] = to
+    return fixed
 
 
 def targets():
@@ -116,9 +123,13 @@ def main():
     for sp, r in zip(cur, res):
         if not r or not r["builds"]:
             r = simple_builds(sp)
-            (simple if r else none).append(sp)
+            if not r:
+                none.append(sp)
         if r:
+            if r.get("simple"):
+                simple.append(sp)
             pool.append(r)
+    form_fixed = form_fixes(pool)
     t_pool = time.time() - t0
     # 詳細データが今シーズンに無い種は、詳細のある直近のシーズンで作る（別プロセス: 生成器はシーズンを import 時に読む）
     fallback = {}
@@ -144,8 +155,11 @@ def main():
         groups[r["species"]] = {"rank": None, "groups": gtab}
         if r.get("season"):
             groups[r["species"]]["season"] = r["season"]
+        if r.get("source_species"):
+            groups[r["species"]]["source_species"] = r["source_species"]
     for sp, rk in G.con.execute("select pokemon, rank from pokemon_usage where season=? and crawled_date=?",
                                 (SEASON, usage_date)):
+        sp = form_fixed.get(sp, sp)
         if sp in groups:
             groups[sp]["rank"] = rk
     t_grp = time.time() - t0 - t_pool - t_fb
@@ -162,7 +176,7 @@ def main():
         "species": len(pool),
         "older_detail_date": {sp: G.latest("pokemon_moves", sp) for sp in cur
                               if G.latest("pokemon_moves", sp) != G.latest("pokemon_moves", None)},
-        "fallback_season": fallback, "simple_product": simple, "not_generated": none,
+        "fallback_season": fallback, "simple_product": simple, "not_generated": none, "form_fixed": form_fixed,
         "params": params, "git": git_info(), "jobs": jobs,
         "seconds": {"pool": round(t_pool), "fallback": round(t_fb), "groups": round(t_grp)},
     }
@@ -170,7 +184,7 @@ def main():
         json.dump(meta, f, ensure_ascii=False, indent=1)
     print(f"{out_dir}: {len(pool)}種（型プール {t_pool:.0f}s・前シーズン {t_fb:.0f}s・系統 {t_grp:.0f}s）"
           + (f"  前シーズンで作成 {fallback}" if fallback else "") + (f"  周辺分布の積 {simple}" if simple else "")
-          + (f"  作れず {none}" if none else ""))
+          + (f"  作れず {none}" if none else "") + (f"  フォルム補正 {form_fixed}" if form_fixed else ""))
     import pool_checks as C
     prev = PV.pointer("page")
     rep = os.path.join(out_dir, "report.md")

@@ -26,8 +26,11 @@ const T: Record<Lang, any> = {
     head: 'パーティ診断', badge: '試作', run: '診断する', rerun: 'もう一度診断する',
     needSix: (n: number) => `6体そろうと診断できます（いま${n}体）`,
     stale: '編集中のパーティが診断時から変わっています。結果は診断したときのパーティのものです。',
-    loading: '診断中…（数秒かかります）',
-    legend: '相手は使用率・同居率から生成した M-6 のパーティ 3000 党。数値はすべて AI 同士のシミュレーションによる参考値です。',
+    loading: '診断中…（数十秒かかります）',
+    legend: '相手は使用率・同居率から生成した M-6 のパーティ。有利度は本番の対戦AI（探索を減らした版）同士の勝率、選出率・選出の傾向・苦手/得意は簡易AIで 3000 党を集計した値です。すべてシミュレーションによる参考値です。',
+    advNote: (n: number, k: number) => `相手 ${n} 党×${k} 戦`,
+    approx: '概算（簡易AI）', approxRun: (d: number, t: number) => `本番AIで計算中…${t ? ` ${Math.round((d / t) * 100)}%` : ''}`,
+    refGreedy: '（比較対象は簡易AIでの値）',
     tabSum: '概要', tabGuide: '選出ガイド', tabSim: '対戦シミュレーション', tabImp: '改善案',
     overall: '全体の有利度', rank: (n: number, p: number) => `生成した M-6 のパーティ ${n} 党の中で <b>${p <= 50 ? `上位 ${p}%` : `下位 ${101 - p}%`}</b>`,
     strong: '強み', weak: '弱み・注意点', tend: '選出の傾向', none: '特になし',
@@ -48,9 +51,12 @@ const T: Record<Lang, any> = {
     me: '自分', opp: '相手', fainted: 'ひんし', unseen: '未登場',
     aiNote: '自分AIのメモ', predHd: '相手の型の読み（自分側AI）', predNone: 'まだ相手が場に出ていません',
     known: '判明', correct: '正解', items: '持ち物', abil: '特性',
-    impBtn: '改善案を計算', impLoading: (s: number) => `計算中…（数十秒かかります・${s}秒経過）`,
-    impNone: '有意に上がる1枠の入れ替えは見つかりませんでした。',
-    impBase: (b: string, n: number) => `今のパーティ: 有利度 ${b}（相手 ${n} 党）`, impTried: (n: number) => `${n} 通りの入れ替えを試算`,
+    impBtn: '改善案を計算', impLoading: (s: number) => `計算中…（数分〜十数分かかります・${s}秒経過）`,
+    impProg: (d: number, t: number, eta: number | null) => `本番AIで対戦中… ${d}/${t}${eta != null ? `（残り約 ${Math.max(1, Math.round(eta / 60))} 分）` : ''}`,
+    impCands: '入れ替え候補を作成中…',
+    impNone: '有利度が 3pt 以上・有意に上がる1枠の入れ替えは見つかりませんでした。',
+    impBase: (b: string, n: number, k: number) => `今のパーティ: 有利度 ${b}（相手 ${n} 党×${k} 戦）`, impTried: (n: number) => `${n} 通りの入れ替えを本番AIで試算`,
+    mega2: 'メガシンカは1試合に1体だけなので、2体目のメガストーンは同時には選出されません（控えの選択肢として効く案です）',
     impFix: '効く相手', impTry: 'この入れ替えを試す', impStale: 'パーティが変わったため試せません（もう一度診断してください）',
     applied: (o: string, i: string) => `${o} を ${i} に入れ替えました`, undo: '入れ替え前に戻す',
     errOld: 'サーバ未対応です（API サーバがパーティ診断に対応していません）', errNet: 'サーバに接続できませんでした', errPfx: 'エラー: ',
@@ -60,8 +66,11 @@ const T: Record<Lang, any> = {
     head: 'Team Checkup', badge: 'Beta', run: 'Run checkup', rerun: 'Run again',
     needSix: (n: number) => `Add all 6 Pokémon to run the checkup (now ${n})`,
     stale: 'Your team has changed since the checkup. Results below are for the team at that time.',
-    loading: 'Checking… (takes a few seconds)',
-    legend: 'Opponents are 3,000 M-6 teams generated from usage and teammate rates. All numbers come from AI-vs-AI simulations and are for reference only.',
+    loading: 'Checking… (takes tens of seconds)',
+    legend: 'Opponents are M-6 teams generated from usage and teammate rates. Edge is the win rate between our battle AI (reduced search); pick rates, tendencies and strengths/weaknesses come from a fast AI over 3,000 teams. All numbers are simulations for reference only.',
+    advNote: (n: number, k: number) => `${n} teams × ${k} battles`,
+    approx: 'Estimate (fast AI)', approxRun: (d: number, t: number) => `Computing with the battle AI…${t ? ` ${Math.round((d / t) * 100)}%` : ''}`,
+    refGreedy: ' (reference measured with the fast AI)',
     tabSum: 'Overview', tabGuide: 'Pick guide', tabSim: 'Battle sim', tabImp: 'Improvements',
     overall: 'Overall edge', rank: (n: number, p: number) => `<b>${p <= 50 ? `Top ${p}%` : `Bottom ${101 - p}%`}</b> among ${n} generated M-6 teams`,
     strong: 'Strengths', weak: 'Weaknesses', tend: 'Pick tendencies', none: 'Nothing notable',
@@ -82,9 +91,12 @@ const T: Record<Lang, any> = {
     me: 'You', opp: 'Opponent', fainted: 'Fainted', unseen: 'Not yet seen',
     aiNote: 'Your AI notes', predHd: 'Set predictions (your AI)', predNone: 'No opposing Pokémon has appeared yet',
     known: 'Revealed', correct: 'Correct', items: 'Item', abil: 'Ability',
-    impBtn: 'Find improvements', impLoading: (s: number) => `Calculating… (takes tens of seconds, ${s}s)`,
-    impNone: 'No single-slot swap gives a significant improvement.',
-    impBase: (b: string, n: number) => `Current team: edge ${b} (vs ${n} teams)`, impTried: (n: number) => `${n} swaps tested`,
+    impBtn: 'Find improvements', impLoading: (s: number) => `Calculating… (takes several minutes, ${s}s)`,
+    impProg: (d: number, t: number, eta: number | null) => `Battling with the battle AI… ${d}/${t}${eta != null ? ` (about ${Math.max(1, Math.round(eta / 60))} min left)` : ''}`,
+    impCands: 'Building swap candidates…',
+    impNone: 'No single-slot swap raises the edge by 3pt or more with significance.',
+    impBase: (b: string, n: number, k: number) => `Current team: edge ${b} (${n} teams × ${k} battles)`, impTried: (n: number) => `${n} swaps tested with the battle AI`,
+    mega2: 'Only one Pokémon can Mega Evolve per battle, so a second Mega Stone is never brought together with the first (it works as a back-up option).',
     impFix: 'Helps against', impTry: 'Try this swap', impStale: 'Team has changed; run the checkup again to try this',
     applied: (o: string, i: string) => `Swapped ${o} for ${i}`, undo: 'Undo swap',
     errOld: 'Not supported by the server (API server has no checkup endpoints)', errNet: 'Could not connect to the server', errPfx: 'Error: ',
@@ -94,8 +106,11 @@ const T: Record<Lang, any> = {
     head: '파티 진단', badge: '시험판', run: '진단하기', rerun: '다시 진단하기',
     needSix: (n: number) => `6마리를 모두 채우면 진단할 수 있습니다（현재 ${n}마리）`,
     stale: '진단한 뒤 파티가 바뀌었습니다. 아래 결과는 진단 당시 파티 기준입니다.',
-    loading: '진단 중…（몇 초 걸립니다）',
-    legend: '상대는 사용률・동반율로 생성한 M-6 파티 3000개입니다. 모든 수치는 AI끼리의 시뮬레이션에 의한 참고값입니다.',
+    loading: '진단 중…（수십 초 걸립니다）',
+    legend: '상대는 사용률・동반율로 생성한 M-6 파티입니다. 유리도는 실전 대전 AI(탐색 축소판)끼리의 승률, 선출률・선출 경향・강점/약점은 간이 AI로 3000개 파티를 집계한 값입니다. 모든 수치는 시뮬레이션에 의한 참고값입니다.',
+    advNote: (n: number, k: number) => `상대 ${n}개×${k}전`,
+    approx: '개산（간이 AI）', approxRun: (d: number, t: number) => `실전 AI로 계산 중…${t ? ` ${Math.round((d / t) * 100)}%` : ''}`,
+    refGreedy: '（비교 대상은 간이 AI 값）',
     tabSum: '개요', tabGuide: '선출 가이드', tabSim: '대전 시뮬레이션', tabImp: '개선안',
     overall: '전체 유리도', rank: (n: number, p: number) => `생성한 M-6 파티 ${n}개 중 <b>${p <= 50 ? `상위 ${p}%` : `하위 ${101 - p}%`}</b>`,
     strong: '강점', weak: '약점・주의점', tend: '선출 경향', none: '특별히 없음',
@@ -116,9 +131,12 @@ const T: Record<Lang, any> = {
     me: '나', opp: '상대', fainted: '기절', unseen: '미등장',
     aiNote: '내 AI 메모', predHd: '상대 샘플 예측（내 AI）', predNone: '아직 상대가 등장하지 않았습니다',
     known: '판명', correct: '정답', items: '지닌 물건', abil: '특성',
-    impBtn: '개선안 계산', impLoading: (s: number) => `계산 중…（수십 초 걸립니다・${s}초 경과）`,
-    impNone: '유의미하게 좋아지는 1칸 교체를 찾지 못했습니다.',
-    impBase: (b: string, n: number) => `현재 파티: 유리도 ${b}（상대 ${n}개）`, impTried: (n: number) => `교체 ${n}가지 시산`,
+    impBtn: '개선안 계산', impLoading: (s: number) => `계산 중…（수 분 걸립니다・${s}초 경과）`,
+    impProg: (d: number, t: number, eta: number | null) => `실전 AI로 대전 중… ${d}/${t}${eta != null ? `（약 ${Math.max(1, Math.round(eta / 60))}분 남음）` : ''}`,
+    impCands: '교체 후보 작성 중…',
+    impNone: '유리도가 3pt 이상・유의미하게 좋아지는 1칸 교체를 찾지 못했습니다.',
+    impBase: (b: string, n: number, k: number) => `현재 파티: 유리도 ${b}（상대 ${n}개×${k}전）`, impTried: (n: number) => `교체 ${n}가지를 실전 AI로 시산`,
+    mega2: '메가진화는 한 시합에 1마리뿐이라 2번째 메가스톤은 동시에 선출되지 않습니다（후보 교체 요원으로서 효과가 있는 안입니다）',
     impFix: '효과 있는 상대', impTry: '이 교체 시험하기', impStale: '파티가 바뀌어 시험할 수 없습니다（다시 진단해 주세요）',
     applied: (o: string, i: string) => `${o}을(를) ${i}(으)로 교체했습니다`, undo: '교체 전으로 되돌리기',
     errOld: '서버 미지원（API 서버가 파티 진단에 대응하지 않습니다）', errNet: '서버에 연결할 수 없습니다', errPfx: '오류: ',
@@ -188,8 +206,20 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
   const st: any = {
     specs: null, key: '', data: null, loading: false, err: null, tab: 'sum',
     opp: null, selMode: 'auto', mySel: [], battles: [], cur: -1, turn: 0, timer: null, fighting: false,
-    imp: null, impLoading: false, impErr: null, impT0: 0, impTimer: null, applied: null,
+    imp: null, impLoading: false, impErr: null, impT0: 0, impTimer: null, impJob: null, applied: null, advTimer: null, advJob: null,
   };
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+  async function pollJob(job: any, key: string, onTick: (j: any) => void): Promise<any> {
+    let j = job;
+    while (j && j.state !== 'done' && j.state !== 'error') {
+      onTick(j);
+      await sleep(3000);
+      if (key !== st.key) return null;
+      j = await post('/job_status', { job: j.job });
+    }
+    if (j && j.state === 'error') throw new ApiError('srv', String(j.error || ''));
+    return j ? j.result : null;
+  }
 
   el.innerHTML = `<div class="dg">
     <div class="dg-top"><h2 class="dg-h2">${esc(I.head)}<span class="dg-badge">${esc(I.badge)}</span></h2>
@@ -217,7 +247,7 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     if (!specs || st.loading) return;
     stopAuto();
     if (st.impTimer) clearInterval(st.impTimer);
-    Object.assign(st, { specs, key: specs.join('\n'), loading: true, err: null, data: null, opp: null, mySel: [], battles: [], cur: -1, imp: null, impErr: null, impLoading: false, applied: null });
+    Object.assign(st, { specs, key: specs.join('\n'), loading: true, err: null, data: null, opp: null, mySel: [], battles: [], cur: -1, imp: null, impErr: null, impLoading: false, impJob: null, advJob: null, applied: null });
     renderBody(); refresh();
     try {
       const [d] = await Promise.all([post('/diagnose', { specs }), loadIcons()]);
@@ -226,6 +256,19 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     } catch (e) { st.err = e; }
     st.loading = false;
     renderBody(); refresh();
+    if (st.data && st.data.adv_job) pollAdv(st.data.adv_job);
+  }
+
+  async function pollAdv(job: any) {
+    const key = st.key;
+    const tick = (j: any) => { st.advJob = j; const m = el.querySelector('#dg-adv-run'); if (m) m.textContent = I.approxRun(j.done || 0, j.total || 0); };
+    try {
+      const r = await pollJob(job, key, tick);
+      if (!r || key !== st.key) return;
+      Object.assign(st.data, { adv: r.adv, rank: r.rank });
+      st.data.guide.adv = r.adv.adv;
+    } catch (e) { if (key === st.key && st.data) st.data.adv.failed = true; }
+    if (key === st.key && (st.tab === 'sum' || st.tab === 'guide') && $('dg-pane')) renderPane();
   }
 
   function renderBody() {
@@ -272,8 +315,12 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     }
     const list = (arr: string[], cls: string) => arr.length ? `<ul class="dg-ul ${cls}">${arr.map((x) => `<li>${x}</li>`).join('')}</ul>` : `<div class="muted">${esc(I.none)}</div>`;
     const pct = rk && typeof rk.pct === 'number' ? Math.max(1, Math.round(rk.pct * 100)) : null;
-    return `<div class="dg-overall"><div class="dg-ov-lb">${esc(I.overall)}</div><div class="dg-ov-v">${gdAdv(g.adv, lang)}</div>
-        ${pct !== null ? `<div class="dg-rank">${I.rank(rk.ref_n, pct)}</div>` : ''}</div>
+    const a = st.data.adv || {};
+    const aj = st.advJob || st.data.adv_job || {};
+    const advSub = a.approx ? `<span class="dg-sub">${esc(I.approx)}${a.failed ? '' : ` ・<span id="dg-adv-run">${esc(I.approxRun(aj.done || 0, aj.total || 0))}</span>`}</span>`
+      : a.n_opp ? `<span class="dg-sub">${esc(I.advNote(a.n_opp, a.k))}${a.se ? ` ±${(a.se * 100).toFixed(1)}pt` : ''}</span>` : '';
+    return `<div class="dg-overall"><div class="dg-ov-lb">${esc(I.overall)}</div><div class="dg-ov-v">${gdAdv(g.adv, lang)}</div>${advSub}
+        ${pct !== null ? `<div class="dg-rank">${I.rank(rk.ref_n, pct)}${rk.method === 'greedy' ? esc(I.refGreedy) : ''}</div>` : ''}</div>
       <div class="dg-h3">${esc(I.strong)}</div>${list(strong, 'dg-good')}
       <div class="dg-h3">${esc(I.weak)}</div>${list(weak, 'dg-bad')}
       <div class="dg-h3">${esc(I.tend)}</div>${list(tend, '')}`;
@@ -461,16 +508,17 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     if (!pane) return;
     const undo = st.applied ? `<div class="dg-applied"><span>${esc(I.applied(tP(st.applied.out), tP(st.applied.in)))}</span><button type="button" class="pb-btn-sub" id="dg-undo">${esc(I.undo)}</button></div>` : '';
     let main = '';
-    if (st.impLoading) main = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg" id="dg-imp-msg">${esc(I.impLoading(Math.round((Date.now() - st.impT0) / 1000)))}</div></div>`;
+    if (st.impLoading) main = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg" id="dg-imp-msg">${esc(impMsg())}</div></div>`;
     else if (st.impErr) main = `<div class="dg-err">${errMsg(st.impErr)}</div>`;
     else if (st.imp) {
       const d = st.imp;
       const cands = (d.cands || []).map((c: any, i: number) => `<div class="dg-imp">
-          <div class="dg-imp-hd">${mon(c.out)}<span class="dg-arr">→</span>${mon(c.in)}<span class="dg-gain">${esc(I.advVs)} ${pt(c.diff)}</span><span class="dg-sub">${gdRound(d.base)}→${gdRound(c.adv)}</span></div>
+          <div class="dg-imp-hd">${mon(c.out)}<span class="dg-arr">→</span>${mon(c.in)}<span class="dg-gain">${esc(I.advVs)} ${pt(c.diff)}</span><span class="dg-sub">±${(c.se * 100).toFixed(1)}pt</span><span class="dg-sub">${gdRound(d.base)}→${gdRound(c.adv)}</span></div>
           <div class="dg-spec">${specSummary(c.spec)}</div>
+          ${c.mega2 ? `<div class="dg-sub">※ ${esc(I.mega2)}</div>` : ''}
           ${(c.fixes || []).length ? `<div class="dg-fix"><span class="dg-sub">${esc(I.impFix)}:</span> ${c.fixes.map((f: any) => `${mon(f.opp, 'dg-ico-xs')} <b class="dg-gain-s">${pt(f.diff)}</b>`).join(' ')}</div>` : ''}
           <button type="button" class="pb-btn-sub dg-try" data-try="${i}">${esc(I.impTry)}</button></div>`).join('');
-      main = `<div class="dg-sub">${esc(I.impBase(gdRound(d.base), d.n_opp))}${d.n_cand ? `・${esc(I.impTried(d.n_cand))}` : ''}</div>${cands || `<div class="muted dg-imp-none">${esc(I.impNone)}</div>`}`;
+      main = `<div class="dg-sub">${esc(I.impBase(gdRound(d.base), d.n_opp, d.k))}${d.n_cand ? `・${esc(I.impTried(d.n_cand))}` : ''}</div>${cands || `<div class="muted dg-imp-none">${esc(I.impNone)}</div>`}`;
     }
     pane.innerHTML = `${undo}<div class="dg-fight-row"><button type="button" class="btn" id="dg-imp-run" ${st.impLoading ? 'disabled' : ''}>${esc(I.impBtn)}</button></div>${main}`;
     $('dg-imp-run').addEventListener('click', runImprove);
@@ -484,13 +532,22 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     }));
     refresh();
   }
+  function impMsg() {
+    const j = st.impJob;
+    if (j && j.state === 'cands') return I.impCands;
+    if (j && j.state === 'run' && j.total) return I.impProg(j.done, j.total, j.eta != null ? j.eta : null);
+    return I.impLoading(Math.round((Date.now() - st.impT0) / 1000));
+  }
   async function runImprove() {
     if (st.impLoading) return;
-    Object.assign(st, { impLoading: true, impErr: null, imp: null, impT0: Date.now() });
+    Object.assign(st, { impLoading: true, impErr: null, imp: null, impJob: null, impT0: Date.now() });
     const key = st.key;
-    st.impTimer = setInterval(() => { const m = el.querySelector('#dg-imp-msg'); if (m) m.textContent = I.impLoading(Math.round((Date.now() - st.impT0) / 1000)); }, 1000);
+    st.impTimer = setInterval(() => { const m = el.querySelector('#dg-imp-msg'); if (m) m.textContent = impMsg(); }, 1000);
     if (st.tab === 'imp') renderImp();
-    try { st.imp = await post('/improve', { specs: st.specs }); } catch (e) { st.impErr = e; }
+    try {
+      const d = await post('/improve', { specs: st.specs });
+      st.imp = d.cands ? d : await pollJob(d, key, (j) => { st.impJob = j; });
+    } catch (e) { st.impErr = e; }
     clearInterval(st.impTimer);
     if (key !== st.key) return;
     st.impLoading = false;

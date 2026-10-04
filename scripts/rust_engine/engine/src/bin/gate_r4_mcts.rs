@@ -13,6 +13,8 @@ fn main() {
     let mut stamp = engine::casehdr::StampCheck::new(&pack.sim_hash);
     let net = pack.net.clone().expect("datapack に net が無い");
     let bench = std::env::var("R4_BENCH").is_ok();
+    let only: Option<i64> = std::env::var("R4_ONLY").ok().and_then(|x| x.parse().ok());
+    let dump = only.is_some() && std::env::var("R4_DUMP").is_ok();
 
     let (mut battles, mut turns) = (0i64, 0i64);
     let (mut dr, mut dt, mut dsx) = (0i64, 0i64, 0i64);
@@ -48,11 +50,22 @@ fn main() {
 
             let mut got: Vec<u64> = Vec::with_capacity(exp_h.len());
             let te = std::time::Instant::now();
+            if let Some(o) = only {
+                if bid != o {
+                    continue;
+                }
+            }
             let (res, nturn) = mcts_3v3(&mut pack, &net, None, &parties[ia], &sa, &parties[ib], &sb,
                                         &seasons[ia], &seasons[ib], seed, sims, |pk, bt| {
                 if !bench {
-                    let e = encode_battle(pk, bt, false);
+                    let e = encode_battle(pk, bt, dump);
                     got.push(sv_hash(&e.vals));
+                    if dump {
+                        // R4_ONLY と併用: 毎ターンの正準状態を名前つきで出す（Python の state_codec と突き合わせる用）
+                        let names = e.names.clone().unwrap_or_default();
+                        let vals: Vec<String> = e.vals.iter().map(|v| format!("{:?}", v)).collect();
+                        println!("DUMP {}", serde_json::json!({"turn": got.len(), "names": names, "vals": vals}));
+                    }
                 }
             });
             eng += te.elapsed().as_nanos();

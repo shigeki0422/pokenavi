@@ -56,7 +56,8 @@ def get_move_flags(move_name):
 def get_effect_desc(move_name, cursor):
     cursor.execute("SELECT effect_text FROM move_master WHERE name_jp = ?", (move_name,))
     row = cursor.fetchone()
-    return (row[0] or "") if row else ""
+    from simulator.damage import effect_text_of
+    return effect_text_of(move_name, row[0] if row else None)
 
 def format_table_row(name, type_, power, accuracy, priority, pp, flags, effect):
     power_str = str(power) if power else "可変" if name in BYPASS_DAMAGE_CALC else "—"

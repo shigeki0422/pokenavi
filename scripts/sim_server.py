@@ -319,8 +319,7 @@ def run_battle_data(specs1, specs2, season="M-2"):
                 if mega_stone:
                     battle.logs.extend(_opp.opp_view.on_item(poke.name, mega_stone, "メガ進化"))
                 from simulator.abilities import entry_ability as _entry_ability
-                battle.logs.extend(_entry_ability(poke, _opp.active, field,
-                                                  weather_duration=MAX_TURNS))
+                battle.logs.extend(_entry_ability(poke, _opp.active, field))
 
         p1_first = _speed_order(side1, action1, side2, action2, field)
 
@@ -725,7 +724,7 @@ def _exec_manual_turn(side1, side2, field, battle, action1):
                 _opp = side2 if _side is side1 else side1
                 if mega_stone:
                     battle.logs.extend(_opp.opp_view.on_item(poke.name, mega_stone, "メガ進化"))
-                battle.logs.extend(_entry_ability(poke, _opp.active, field, weather_duration=MAX_TURNS))
+                battle.logs.extend(_entry_ability(poke, _opp.active, field))
 
         p1_first = _speed_order(side1, action1, side2, action2, field)
         first_side,  first_action,  first_opp  = (side1, action1, side2) if p1_first else (side2, action2, side1)

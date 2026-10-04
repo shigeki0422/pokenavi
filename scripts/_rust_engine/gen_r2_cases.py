@@ -78,6 +78,9 @@ def _enc_action(a):
     return ["move", a.move_idx, md, -1, bool(a.do_mega)]
 
 
+_NAMES = []
+
+
 def generate(rec, seed):
     bt_rng = RecRandom(seed)
     pol = random.Random(seed ^ 0x5bd1e995)
@@ -106,7 +109,9 @@ def generate(rec, seed):
         for _sd, _os, _ix in _entry_order(s1, s2, fld):
             _entry_effects(_sd.active, _ix, fld, _os.active, b.logs, _sd.party)
         bt_rng.draws = []                 # start までの抽選は rng0 扱い（既存記録も空）
-        s0 = SC.encode_battle(b).vals
+        _e0 = SC.encode_battle(b, with_names=True)
+        s0 = _e0.vals
+        _NAMES[:] = _e0.names
 
         turns = []
         chosen = {}
@@ -174,6 +179,8 @@ def main():
             rec["nturn"] = len(turns); rec["rng0"] = []
             ok += 1
             out.append(json.dumps(rec, ensure_ascii=False))
+        if _NAMES:
+            hdr["names"] = list(_NAMES)   # 状態の欄（state_codec と statec.rs）が増えたら見出しも合わせる
         out[0] = json.dumps(hdr, ensure_ascii=False)
         if not DRY:
             with open(path, "w", encoding="utf-8") as f:

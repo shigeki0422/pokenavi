@@ -75,6 +75,19 @@ def terrain_turns(setter_item: Optional[str]) -> int:
     return TERRAIN_TURNS_EXTENDED if setter_item == TERRAIN_EXTEND_ITEM else TERRAIN_TURNS
 
 
+_TERRAINS = ("electric_terrain", "grassy_terrain", "psychic_terrain", "misty_terrain")
+
+
+def set_terrain(field, attr: str, count: int) -> None:
+    """フィールドを張る。フィールドは1つだけなので、他のフィールドは解除する（実機どおり）"""
+    for a in _TERRAINS:
+        if a != attr:
+            setattr(field, a, False)
+            setattr(field, a + "_count", 0)
+    setattr(field, attr, True)
+    setattr(field, attr + "_count", count)
+
+
 def try_terrain_seed(poke, field, logs: list) -> bool:
     """該当フィールドが張られていればシードを発動して消費する。発動でTrue。
     フィールド設置時と、フィールド継続中の登場時の両方から呼ぶ。"""
@@ -214,8 +227,8 @@ def try_white_herb(poke: "BattlePokemon", logs: list) -> None:
     if poke.item != "しろいハーブ":
         return
     stats = ["stage_attack","stage_defense","stage_sp_attack",
-             "stage_sp_defense","stage_speed"]
-    if any(getattr(poke, s, 0) < 0 for s in stats):
+             "stage_sp_defense","stage_speed","stage_accuracy","stage_evasion"]
+    if poke.is_alive and any(getattr(poke, s, 0) < 0 for s in stats):
         for s in stats:
             if getattr(poke, s, 0) < 0:
                 setattr(poke, s, 0)
@@ -229,10 +242,11 @@ def try_mental_herb(poke: "BattlePokemon", logs: list) -> None:
     if poke.item != "メンタルハーブ":
         return
     afflicted = (poke.infatuation or poke.taunt_count > 0 or poke.encore_count > 0
-                 or poke.heal_block_count > 0 or poke.disabled_turns > 0)
+                 or poke.heal_block_count > 0 or poke.disabled_turns > 0 or poke.torment)
     if not afflicted:
         return
     poke.infatuation = False
+    poke.torment = False
     poke.taunt_count = 0
     poke.encore_count = 0
     poke.locked_move = None

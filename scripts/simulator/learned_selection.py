@@ -36,14 +36,20 @@ def _load():
               file=sys.stderr, flush=True)
         _MODEL = None
         return None
+    act = d.get("act", "tanh")
+    if act not in ("tanh", "relu") or "U" in d:
+        print(f"[learned_selection] {_PATH}: 活性化 {act}・入力の追加（U）は未対応 → ヒューリスティック選出", file=sys.stderr, flush=True)
+        _MODEL = None
+        return None
     _MODEL = {"W1": W1, "b1": np.asarray(d["b1"], float),
-              "W2": np.asarray(d["W2"], float), "b2": float(d["b2"])}
+              "W2": np.asarray(d["W2"], float), "b2": float(d["b2"]), "act": act}
     return _MODEL
 
 
 def _predict(model, X):
     X = np.asarray(X, float)
-    H = np.tanh(X @ model["W1"].T + model["b1"])
+    Z = X @ model["W1"].T + model["b1"]
+    H = np.maximum(Z, 0.0) if model.get("act") == "relu" else np.tanh(Z)
     return 1.0 / (1.0 + np.exp(-(H @ model["W2"] + model["b2"])))
 
 
@@ -248,15 +254,41 @@ def _rust_states(party6, opp6, n, rng, osels=None):
     return cands, osels, X
 
 
-def _score_cands(party6, opp6, loader, n, rng, model, osel_idx=None):
-    """候補（添字の並び）と値（相手の仮定ごとの予測の平均）[(添字, 値)]。osel_idx: 相手の仮定（相手6体の添字の並び）を渡す
-    （None ならヒューリスティック選出 温度0,1,1＝_opp_assumptions）"""
+def _agg(p, agg):
+    """相手の仮定ごとの予測 p から候補の値（Rust selector::Agg と同じ定義・同じ和の順）。
+    agg: None＝平均 / ("w", 重み)＝重み付き和 / ("minmix", α, g)＝α·平均＋(1−α)·（g 個ずつの平均の最小）"""
+    if agg is None:
+        return float(np.mean(p))
+    if agg[0] == "w":
+        acc = 0.0
+        for w, x in zip(agg[1], p):
+            acc += w * float(x)
+        return acc
+    a, g = agg[1], agg[2]
+    tot = 0.0
+    for x in p:
+        tot += float(x)
+    mn = math.inf
+    for i in range(0, len(p), g):
+        t = 0.0
+        for x in p[i:i + g]:
+            t += float(x)
+        mn = min(mn, t / len(p[i:i + g]))
+    return a * (tot / len(p)) + (1.0 - a) * mn
+
+
+def _score_cands(party6, opp6, loader, n, rng, model, osel_idx=None, agg=None):
+    """候補（添字の並び）と値（相手の仮定ごとの予測を agg で集めたもの。既定は平均）[(添字, 値)]。osel_idx: 相手の仮定
+    （相手6体の添字の並び）を渡す（None ならヒューリスティック選出 温度0,1,1＝_opp_assumptions）"""
     impl = os.environ.get("LEARNED_SELECTION_IMPL", "auto")
     if impl in ("auto", "rust") and _rust_ok(party6, opp6):
         r = _rust_states(party6, opp6, n, rng, osel_idx)
         if r is not None:
             ci, oi, X = r
-            return [(list(c), float(np.mean(_predict(model, X[k])))) for k, c in enumerate(ci)]
+            if agg is None:
+                return [(list(c), float(np.mean(_predict(model, X[k])))) for k, c in enumerate(ci)]
+            P = _predict(model, X.reshape(-1, X.shape[2])).reshape(X.shape[0], X.shape[1])
+            return [(list(c), _agg(P[k], agg)) for k, c in enumerate(ci)]
     if osel_idx is None:
         opp_sels = _opp_assumptions(party6, opp6, loader, n, rng)
     else:
@@ -269,7 +301,7 @@ def _score_cands(party6, opp6, loader, n, rng, model, osel_idx=None):
     for c in _candidates(party6, n):
         order = [party6[i] for i in c]
         xs = [enc(order, osel) for osel in opp_sels]
-        out.append((c, float(np.mean(_predict(model, xs)))))
+        out.append((c, _agg(_predict(model, xs), agg)))
     return out
 
 
@@ -286,6 +318,54 @@ def _opp_learned(party6, opp6, loader, n, rng, model):
     t = float(os.environ.get("SEL_OPP_TEMP", "1.0"))
     best = max(oc, key=lambda x: x[1])[0]
     return [list(best), list(_softmax_pick(oc, t, rng)), list(_softmax_pick(oc, t, rng))]
+
+
+def _topk_weights(vals, temperature, k):
+    """_softmax_pick と同じ重みの大きい順に k 個（同じ重みは添字の小さい方が先）と、和で割った重み（Rust selector::topk_weights）"""
+    s = np.array(vals, float); sd = s.std()
+    z = (s - s.mean()) / sd if sd > 1e-9 else s * 0.0
+    ws = [float(w) for w in np.exp((z - z.max()) / max(1e-6, temperature))]
+    order = sorted(range(len(ws)), key=lambda i: (-ws[i], i))[:max(1, k)]
+    tot = 0.0
+    for i in order:
+        tot += ws[i]
+    return [(i, ws[i] / tot) for i in order]
+
+
+def _opp_mode():
+    m = os.environ.get("SEL_OPP_ASSUME")
+    return m if m in ("learned", "learnedK", "all") else None
+
+
+def _opp_assume(party6, opp6, loader, n, rng, model):
+    """相手の選出の仮定と集め方（env SEL_OPP_ASSUME。Rust selector::opp_sets と同じ定義）。None なら既定（ヒューリスティック 温度0,1,1・平均）
+      learned  … _opp_learned（3通り・平均）
+      learnedK … 相手側の学習選出の値の softmax（温度 SEL_OPP_TEMP）の上位 SEL_OPP_K（既定8）候補を、和を1にした重みで
+      all      … 相手の全候補（3体＋先頭・メガ1体ルール内）。SEL_OPP_MIX=mean（既定）/ minmix（SEL_OPP_ALPHA（既定0.5）·平均＋
+                  (1−α)·3体の組ごとの平均の最悪）/ weighted（全候補を softmax の重みで）
+    返り値: (相手6体の添字の並びのリスト, agg)"""
+    mode = _opp_mode()
+    if mode is None:
+        return None
+    if mode == "learned":
+        o = _opp_learned(party6, opp6, loader, n, rng, model)
+        return (o, None) if o is not None else None
+    nb = min(n, len(opp6))
+    if len(opp6) <= nb:
+        return None
+    mix = os.environ.get("SEL_OPP_MIX", "mean")
+    if mode == "all" and mix != "weighted":
+        oc = _candidates(opp6, nb)
+        if not oc:
+            return None
+        a = float(os.environ.get("SEL_OPP_ALPHA", "0.5")) if mix == "minmix" else 1.0
+        return oc, ("minmix", a, nb)
+    oc = _score_cands(opp6, party6, loader, nb, rng, model)
+    if not oc:
+        return None
+    k = int(os.environ.get("SEL_OPP_K", "8")) if mode == "learnedK" else len(oc)
+    tw = _topk_weights([v for _, v in oc], float(os.environ.get("SEL_OPP_TEMP", "1.0")), k)
+    return [list(oc[i][0]) for i, _ in tw], ("w", [w for _, w in tw])
 
 
 def learned_select_party(party6, opp6, loader, n=3, temperature=0.0, rng=None):
@@ -307,8 +387,8 @@ def learned_select_party(party6, opp6, loader, n=3, temperature=0.0, rng=None):
     if model is None or len(party6) <= n:
         return select_party(party6, opp6, loader, n=n, temperature=temperature, rng=rng)
     rng = rng or random
-    osel_idx = _opp_learned(party6, opp6, loader, n, rng, model) if os.environ.get("SEL_OPP_ASSUME") == "learned" else None
-    cands = [([party6[i] for i in c], sc) for c, sc in _score_cands(party6, opp6, loader, n, rng, model, osel_idx)]
+    osel_idx, agg = _opp_assume(party6, opp6, loader, n, rng, model) or (None, None)
+    cands = [([party6[i] for i in c], sc) for c, sc in _score_cands(party6, opp6, loader, n, rng, model, osel_idx, agg)]
     if not cands:
         return select_party(party6, opp6, loader, n=n, temperature=temperature, rng=rng)
     if temperature <= 0:
@@ -337,5 +417,5 @@ def learned_select_scores(party6, opp6, loader, n=3, rng=None):
     if model is None or len(party6) <= n:
         return None
     rng = rng or random
-    osel_idx = _opp_learned(party6, opp6, loader, n, rng, model) if os.environ.get("SEL_OPP_ASSUME") == "learned" else None
-    return [([party6[i] for i in c], sc) for c, sc in _score_cands(party6, opp6, loader, n, rng, model, osel_idx)] or None
+    osel_idx, agg = _opp_assume(party6, opp6, loader, n, rng, model) or (None, None)
+    return [([party6[i] for i in c], sc) for c, sc in _score_cands(party6, opp6, loader, n, rng, model, osel_idx, agg)] or None

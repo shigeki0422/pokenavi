@@ -7,6 +7,8 @@ R2 コーパス（cases/turn_*.jsonl）の期待値を採り直すために使�
 Python 側の属性名は battle.py が動的に付けるものが多く、Rust では underscore 無しの名前に
 なっている（例: _disguise_broken → disguise_broken）。_get はその差を吸収する。
 """
+import struct as _struct
+import zlib as _zlib
 from typing import List, Optional, Tuple
 
 STAGE_NAMES = ["stage_attack", "stage_defense", "stage_sp_attack",
@@ -115,6 +117,8 @@ def poke_fields(e: Enc, p, pfx: str):
     e.b("infatuation", _get(p, "infatuation", False))
     e.b("torment", _get(p, "torment", False))
     e.b("trapped", _get(p, "trapped", False))
+    e.b("no_retreat", _get(p, "_no_retreat", False))
+    e.i("shed_tail_sub", _get(p, "_shed_tail_sub", 0))
     e.i("times_hit", _get(p, "times_hit", 0) or 0)
     e.b("ability_suppressed", _get(p, "ability_suppressed", False))
     e.b("rooted", _get(p, "rooted", False))
@@ -137,7 +141,8 @@ def poke_fields(e: Enc, p, pfx: str):
     bs = _get(p, "baton_stages")
     e.b("has_baton", bs is not None)
     for i, nm in enumerate(STAGE_NAMES):
-        e.i(f"baton_{nm}", (bs[i] if bs is not None else 0))
+        # battle.py の _baton_stages は {能力名: 段階} の辞書（Rust は7要素の配列）
+        e.i(f"baton_{nm}", (0 if bs is None else bs.get(nm, 0) if isinstance(bs, dict) else bs[i]))
     e.b("beak_primed", _get(p, "beak_primed", False))
     e.b("destiny_bond_last_turn", _get(p, "destiny_bond_last_turn", False))
     e.b("disguise_broken", _get(p, "disguise_broken", False))
@@ -291,6 +296,36 @@ def field_fields(e: Enc, f):
     e.b("grassy_terrain", _get(f, "grassy_terrain", False))
     e.i("grassy_terrain_count", _get(f, "grassy_terrain_count", 0) or 0)
     e.b("weather_negated", _get(f, "weather_negated", False))
+
+
+def canon_bytes(vals) -> bytes:
+    """statec.rs canon_bytes と 1:1（None→00 / bool→01 <00|01> / 数値→02 <f64 LE> / 文字列→03 <utf8> 00）"""
+    out = bytearray()
+    for v in vals:
+        if v is None:
+            out.append(0)
+        elif isinstance(v, bool):
+            out += bytes((1, 1 if v else 0))
+        elif isinstance(v, (int, float)):
+            out.append(2)
+            out += _struct.pack("<d", float(v))
+        else:
+            out.append(3)
+            out += str(v).encode("utf-8")
+            out.append(0)
+    return bytes(out)
+
+
+def sv_hash(vals) -> int:
+    """statec.rs sv_hash と 1:1: (crc32 << 32) | adler32"""
+    b = canon_bytes(vals)
+    return (_zlib.crc32(b) << 32) | _zlib.adler32(b)
+
+
+def f_hash(vals) -> int:
+    """statec.rs f64_hash と 1:1（f64 ベクトル）"""
+    b = b"".join(b"\x02" + _struct.pack("<d", float(x)) for x in vals)
+    return (_zlib.crc32(b) << 32) | _zlib.adler32(b)
 
 
 def encode_battle(b, with_names: bool = False) -> Enc:

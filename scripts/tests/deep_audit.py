@@ -21,7 +21,8 @@ TS = open('/Users/shigeki/work/pokenavi/scripts/tests/test_move_effects.py', enc
 conn = sqlite3.connect('/Users/shigeki/work/pokenavi/scripts/pokenavi.db')
 cur = conn.cursor()
 cur.execute("SELECT name_jp, category, power, effect_text FROM move_master")
-MOVES = cur.fetchall()
+from simulator.damage import effect_text_of as _eto
+MOVES = [(n, c, p, _eto(n, e)) for (n, c, p, e) in cur.fetchall()]
 cur.execute("SELECT name_jp, type FROM move_master")
 _MOVE_TYPE = dict(cur.fetchall())
 conn.close()

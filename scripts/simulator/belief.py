@@ -26,7 +26,7 @@ from typing import List, Optional, Dict
 
 from .data import DataLoader
 from .pokemon import build_from_template
-from .damage import calc_damage
+from .damage import calc_damage, estimate_only
 
 # ダメージ乱数の16段階（0.85〜1.00）に対応する random_roll（0〜1）
 _ROLLS = [k / 15 for k in range(16)]
@@ -245,7 +245,8 @@ class PokemonBelief:
             d = with_state(c["defender"], subject)
             hit = 0
             for rr in _ROLLS:
-                dmg = calc_damage(attacker, d, move, field, critical=critical, random_roll=rr)
+                with estimate_only(attacker, d):
+                    dmg = calc_damage(attacker, d, move, field, critical=critical, random_roll=rr)
                 if obs_match("taken", dmg, d.max_hp, observed_fraction):
                     hit += 1
             liks.append(hit / len(_ROLLS))
@@ -272,7 +273,8 @@ class PokemonBelief:
             a = with_state(c["defender"], subject)   # 同じ個体を攻撃側として使う
             hit = 0
             for rr in _ROLLS:
-                dmg = calc_damage(a, defender, move, field, critical=critical, random_roll=rr)
+                with estimate_only(a, defender):
+                    dmg = calc_damage(a, defender, move, field, critical=critical, random_roll=rr)
                 if obs_match("dealt", dmg, defender.max_hp, observed_fraction):
                     hit += 1
             liks.append(hit / len(_ROLLS))
@@ -483,12 +485,13 @@ class PokemonBelief:
                 hit = 0
                 for rr in _ROLLS:
                     _rnd.seed(0)     # 乱数はきまぐレーザーだけ。対戦の乱数を消費しない
-                    if kind == "taken":
-                        dmg = calc_damage(other, prof, move, field, critical=crit, random_roll=rr)
-                        hp = prof.max_hp
-                    else:
-                        dmg = calc_damage(prof, other, move, field, critical=crit, random_roll=rr)
-                        hp = other.max_hp
+                    with estimate_only(other, prof):
+                        if kind == "taken":
+                            dmg = calc_damage(other, prof, move, field, critical=crit, random_roll=rr)
+                            hp = prof.max_hp
+                        else:
+                            dmg = calc_damage(prof, other, move, field, critical=crit, random_roll=rr)
+                            hp = other.max_hp
                     if obs_match(kind, dmg, hp, frac):
                         hit += 1
                 liks.append(hit / len(_ROLLS))
@@ -533,7 +536,8 @@ class PokemonBelief:
                     if n == "なげつける" and (getattr(q, "last_flung_item", None) or q.item) is None:
                         dd[n] = 0.0
                         continue
-                    d = calc_damage(q, copy_poke(own_def), md, field, critical=False, random_roll=rr)
+                    with estimate_only(q):
+                        d = calc_damage(q, copy_poke(own_def), md, field, critical=False, random_roll=rr)
                     dd[n] = d * _expected_hits(md, q)
                 cache[pi] = dd
             dd = cache[pi]

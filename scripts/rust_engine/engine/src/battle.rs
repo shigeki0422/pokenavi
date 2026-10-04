@@ -132,6 +132,8 @@ impl Side {
             prev.ate_berry = false;
             prev.protect_consecutive = 0;
             prev.locked_move = None;
+            prev.encore_count = 0;
+            prev.taunt_count = 0;
             prev.choice_locked_move = None;
             prev.disabled_move = None;
             prev.disabled_turns = 0;
@@ -153,7 +155,26 @@ impl Side {
             prev.destiny_bond = false;
             prev.cursed = false;
             prev.charged = false;
+            prev.bad_poison_count = 0;
+            prev.trapped = false;
+            prev.no_retreat = false;
+            prev.last_used_move = None;
+            prev.last_move_obj = None;
+            prev.magnet_rise = false;
+            prev.levitate_turns = 0;
+            prev.minimized = false;
+            prev.lock_on = false;
+            prev.seeded = false;
+            prev.rooted = false;
+            prev.aqua_ring = false;
+            prev.infatuation = false;
+            prev.torment = false;
+            prev.heal_block_count = 0;
+            prev.syrup_count = 0;
+            prev.ability_suppressed = false;
+            prev.acts_second = false;
         }
+        let shed_sub = std::mem::take(&mut self.party[pi].shed_tail_sub);
         self.active_idx = idx;
         let baton = self.party[pi].baton_stages;
         if let Some(bs) = baton {
@@ -165,8 +186,10 @@ impl Side {
         }
         let fainted = self.party.iter().filter(|p| !p.is_alive).count() as i64;
         let a = &mut self.party[idx];
+        if shed_sub > 0 {
+            a.substitute_hp = shed_sub;
+        }
         a.turns_out = 0;
-        a.times_hit = 0;
         a.switched_this_turn = true;
         a.fainted_allies = fainted;
     }
@@ -257,44 +280,7 @@ fn is_berry(pack: &Pack, item: Option<u16>) -> bool {
 
 // ── おうごんのからだ が無効化する変化技 ────────────────────────────────────
 fn gag_block(pack: &Pack, n: u16) -> bool {
-    let l = &pack.sy.l;
-    n == l.でんじは
-        || n == l.おにび
-        || n == l.どくどく
-        || n == l.どくのこな
-        || n == l.しびれごな
-        || n == l.ねむりごな
-        || n == l.キノコのほうし
-        || n == l.さいみんじゅつ
-        || n == l.あくび
-        || n == l.へびにらみ
-        || n == l.ちょうおんぱ
-        || n == l.あやしいひかり
-        || n == l.いばる
-        || n == l.おだてる
-        || n == l.ちょうはつ
-        || n == l.アンコール
-        || n == l.かなしばり
-        || n == l.いちゃもん
-        || n == l.やどりぎのタネ
-        || n == l.メロメロ
-        || n == l.くろいまなざし
-        || n == l.なきごえ
-        || n == l.にらみつける
-        || n == l.あまえる
-        || n == l.すなかけ
-        || n == l.フラッシュ
-        || n == l.あまいかおり
-        || n == l.うそなき
-        || n == l.ひっくりかえす
-        || n == l.ワンダールーム
-        || n == l.トリック
-        || n == l.すりかえ
-        || n == l.なかよくする
-        || n == l.このゆびとまれ
-        || n == l.とおせんぼう
-        || n == l.くすぐる
-        || n == l.テクスチャー2
+    pack.flags(n).foe_status
 }
 
 // ── 行動優先度 ────────────────────────────────────────────────────────────
@@ -322,7 +308,12 @@ pub fn priority_base(pack: &Pack, action: &Action, poke: &Poke, field: &Field) -
     };
     let mut base = mv.priority;
     if mv.name == l.グラススライダー && field.grassy_terrain {
-        if !(poke.ability == l.ふゆう || poke.has_type(pack.tc.ひこう) || poke.magnet_rise) {
+        if !(poke.ability == l.ふゆう
+            || poke.has_type(pack.tc.ひこう)
+            || poke.magnet_rise
+            || poke.item == Some(pack.sy.it.ふうせん))
+            || poke.grounded
+        {
             base += 1;
         }
     }
@@ -452,13 +443,13 @@ pub fn entry_effects(
     {
         let poke = &mut side.party[pi];
         poke.turns_out = 0;
-        poke.times_hit = 0;
         poke.pivot_out = false;
         poke.force_switch = false;
 
         let immune_to_ground = poke.has_type(pack.tc.ひこう)
             || poke.ability == l.ふゆう
-            || poke.ability == l.うなぎのぼり;
+            || poke.ability == l.うなぎのぼり
+            || poke.item == Some(pack.sy.it.ふうせん);
 
         if field.stealth_rock[side_idx] && poke.ability != l.マジックガード {
             let eff = pack.eff(pack.tc.いわ, poke.type1, poke.type2);
@@ -480,15 +471,11 @@ pub fn entry_effects(
             } else if !poke.has_type(pack.tc.はがね) {
                 let layers = field.toxic_spikes[side_idx];
                 let status = if layers >= 2 { st.badpoison } else { st.poison };
-                apply_status(pack, poke, status, false);
+                apply_status(pack, poke, status, false, Some(&*field));
             }
         }
         if field.sticky_web[side_idx] && !immune_to_ground {
             poke.stage_speed = std::cmp::max(-6, poke.stage_speed - 1);
-        }
-        if poke.ability == l.がんじょう && !poke.is_alive {
-            poke.hp = 1;
-            poke.is_alive = true;
         }
     }
     // イリュージョン（party の末尾から生存かつ自分でない個体）
@@ -510,7 +497,12 @@ pub fn entry_effects(
     if let Some(nm) = ill {
         side.party[pi].illusion_name = Some(nm);
     }
-    ab::entry_ability(pack, &mut side.party[pi], opponent, field, 5);
+    ab::entry_ability(pack, &mut side.party[pi], opponent, field);
+    // 継続中のフィールドに登場したときもシードを発動する（設置時の発動は技・特性の側）
+    it::try_terrain_seed(pack, &mut side.party[pi], field);
+    // しろいハーブ: 能力が下がった直後に発動（ねばねばネット・いかく 等）
+    it::try_white_herb(pack, &mut side.party[pi]);
+    it::try_white_herb(pack, opponent);
 }
 
 // ── 交代先選択（エンジン内蔵ヒューリスティック）────────────────────────────
@@ -570,6 +562,10 @@ pub fn best_faint_switch(
             for mi in 0..nmv {
                 let mv = side.party[i].moves[mi].clone();
                 if mv.category != Cat::Status && mv.power.unwrap_or(0) > 0 {
+                    let (sp, so) = (
+                        crate::damage::EstSnap::take(&side.party[i]),
+                        crate::damage::EstSnap::take(opp),
+                    );
                     let d = calc_damage(
                         pack,
                         &mut side.party[i],
@@ -581,6 +577,8 @@ pub fn best_faint_switch(
                         None,
                         &mut |k| if k == 0 { rng.random() } else { rng.choice(16) as f64 },
                     );
+                    sp.restore(&mut side.party[i]);
+                    so.restore(opp);
                     if (d as f64) > best {
                         best = d as f64;
                     }
@@ -914,6 +912,86 @@ pub fn calc_hits(pack: &Pack, mv: &DMove, attacker: &Poke, rng: &mut dyn BRng) -
 /// 分析側が「その技のダメージ」を知るための出力で、対戦の挙動には影響しない。
 /// 分析が calc_damage を直に呼ぶと、ここに至るまでの前処理
 /// （へんげんじざいのタイプ変更・バトルスイッチ・急所判定・連続回数）を取りこぼす。
+/// とびひざげり系: 外れ・まもる・無効で最大HPの1/2の反動（battle.py _crash_recoil と同じ）
+/// 浮いている（じめん技・じわれ が当たらない）。battle.py _airborne
+pub fn airborne(pack: &Pack, p: &Poke, field: &Field, attacker: Option<&Poke>) -> bool {
+    if p.grounded || field.gravity > 0 {
+        return false;
+    }
+    let lev = p.ability == pack.sy.l.ふゆう
+        && !attacker.map(|a| crate::damage::should_ignore_ability(pack, a)).unwrap_or(false);
+    p.has_type(pack.tc.ひこう) || lev || p.magnet_rise || p.item == Some(pack.sy.it.ふうせん)
+}
+
+/// かいふくふうじ 中は回復できない。battle.py _can_heal
+#[inline]
+pub fn can_heal(p: &Poke) -> bool {
+    p.heal_block_count <= 0
+}
+
+/// 覚えている技の残りPP（覚えていなければ0）。battle.py _move_pp
+pub fn move_pp(p: &Poke, name: u16) -> i64 {
+    for (i, m) in p.moves.iter().enumerate() {
+        if m.name == name && i < p.pp.len() {
+            return p.pp[i];
+        }
+    }
+    0
+}
+
+/// 場を離れたポケモンが相手に掛けていた拘束を解く。battle.py _release_by_leaving
+#[inline]
+fn release_by_leaving(opp: &mut Poke) {
+    opp.bound_count = 0;
+    opp.trapped = false;
+    opp.octolocked = false;
+}
+
+/// 相手の変化技による能力低下（すてゼリフ・おきみやげ・ちからをすいとる）。battle.py _foe_stat_drop
+fn foe_stat_drop(pack: &Pack, attacker: &mut Poke, defender: &mut Poke, drops: &[(u8, i32)]) -> bool {
+    let l = &pack.sy.l;
+    if defender.ability == l.ミラーアーマー {
+        for &(stat, delta) in drops {
+            ab::reflect_stat_drop(pack, attacker, stat, delta);
+        }
+        return true;
+    }
+    let mut changed = false;
+    let mut lowered = false;
+    for &(stat, delta) in drops {
+        let d = if defender.ability == l.あまのじゃく { -delta } else { delta };
+        let dab = defender.ability;
+        if d < 0
+            && (dab == l.クリアボディ || dab == l.しろいけむり || dab == l.かがくへんかガス
+                || (stat == 0 && dab == l.かいりきバサミ)
+                || (stat == 1 && dab == l.はとむね))
+        {
+            continue;
+        }
+        let old = defender.stage(stat);
+        let new = (old + d).clamp(-6, 6);
+        if new != old {
+            defender.set_stage(stat, new);
+            changed = true;
+            lowered = lowered || d < 0;
+        }
+    }
+    if lowered {
+        ab::on_stat_lowered(pack, defender);
+    }
+    changed
+}
+
+fn crash_recoil(pack: &Pack, a: &mut Poke, n: u16) {
+    let l = &pack.sy.l;
+    if (n == l.とびひざげり || n == l.とびげり || n == l.かかとおとし || n == l.サンダーダイブ) && a.is_alive
+        && a.ability != l.マジックガード
+    {
+        let recoil = std::cmp::max(1, a.max_hp / 2);
+        a.take_damage(recoil);
+    }
+}
+
 pub fn execute_move(
     pack: &Pack,
     sides: &mut [Side; 2],
@@ -985,8 +1063,15 @@ fn execute_move_inner(
 
     A!().defenseless = false;
     A!().flinched = false;
+    if n != l.みちづれ {
+        A!().destiny_bond = false;
+    }
     A!().last_used_move = Some(n);
     A!().last_move_obj = Some(mv.clone());
+    // 間に別の技（変化技を含む）を使えば次の デカハンマー は出せる（battle.py と同じ）
+    if n != l.デカハンマー {
+        A!().deka_last = false;
+    }
     if n != l.とっておき {
         let nm = A!().name;
         let _ = nm;
@@ -1036,6 +1121,12 @@ fn execute_move_inner(
         if A!().status != Some(st.sleep) {
             return;
         }
+        A!().sleep_count -= if A!().ability == l.はやおき { 2 } else { 1 };
+        if A!().sleep_count <= 0 {
+            A!().status = None;
+            return;
+        }
+        A!().sleep_acts += 1;
         let usable: Vec<usize> = (0..A!().moves.len())
             .filter(|&i| A!().moves[i].category != Cat::Status)
             .collect();
@@ -1059,19 +1150,11 @@ fn execute_move_inner(
     }
 
     if mv.category == Cat::Status && A!().taunt_count > 0 {
-        A!().taunt_count = std::cmp::max(0, A!().taunt_count - 1);
         return;
     }
 
     if A!().throat_chop_count > 0 && pack.flags(n).sound {
         return;
-    }
-
-    if A!().encore_count > 0 && A!().locked_move.is_some() {
-        A!().encore_count -= 1;
-        if A!().encore_count == 0 {
-            A!().locked_move = None;
-        }
     }
 
     if A!().disabled_move == Some(n) {
@@ -1085,6 +1168,7 @@ fn execute_move_inner(
     if A!().status == Some(st.sleep) {
         A!().sleep_count -= if A!().ability == l.はやおき { 2 } else { 1 };
         if A!().sleep_count > 0 {
+            A!().sleep_acts += 1;
             if n == l.いびき || n == l.ねごと {
                 // 使える
             } else {
@@ -1177,19 +1261,28 @@ fn execute_move_inner(
     if n == l.おいかぜ {
         if !sides[aidx].tailwind {
             sides[aidx].tailwind = true;
-            sides[aidx].tailwind_count = 3;
+            sides[aidx].tailwind_count = 4;
         }
         return;
     }
+    let bounce = D!().ability == l.マジックミラー && A!().ability != l.マジックミラー;
     if n == l.まきびし {
-        let oi = sides[didx].field_idx;
+        let oi = if bounce { sides[aidx].field_idx } else { sides[didx].field_idx };
         if field.spikes[oi] < 3 {
             field.spikes[oi] += 1;
         }
         return;
     }
     if n == l.ステルスロック {
-        if !sides[didx].stealth_rock_set && !sides[didx].sr_pending {
+        if bounce {
+            let ai2 = sides[aidx].field_idx;
+            if !field.stealth_rock[ai2] {
+                field.stealth_rock[ai2] = true;
+                sides[aidx].stealth_rock_set = true;
+            }
+            return;
+        }
+        if !field.stealth_rock[sides[didx].field_idx] && !sides[didx].sr_pending {
             sides[didx].sr_pending = true;
         }
         return;
@@ -1213,6 +1306,14 @@ fn execute_move_inner(
                 5
             }
         };
+        // 同じ天候では失敗（battle.py と同じ）
+        let same = (n == l.あまごい && field.weather == Some(we.rain))
+            || (n == l.にほんばれ && field.weather == Some(we.sunny))
+            || (n == l.すなあらし && field.weather == Some(we.sandstorm))
+            || ((n == l.あられ || n == l.ゆきげしき) && field.weather == Some(we.hail));
+        if same {
+            return;
+        }
         if n == l.あまごい {
             field.weather = Some(we.rain);
             field.weather_count = wt(l.しめったいわ, &A!());
@@ -1239,8 +1340,10 @@ fn execute_move_inner(
             return;
         }
         if n == l.さむいギャグ {
-            field.weather = Some(we.hail);
-            field.weather_count = wt(l.つめたいいわ, &A!());
+            if field.weather != Some(we.hail) {
+                field.weather = Some(we.hail);
+                field.weather_count = wt(l.つめたいいわ, &A!());
+            }
             A!().pivot_out = true;
             return;
         }
@@ -1248,7 +1351,7 @@ fn execute_move_inner(
 
     // 変化技
     if mv.category == Cat::Status {
-        if A!().ability == l.いたずらごころ && D!().has_type(pack.tc.あく) {
+        if A!().ability == l.いたずらごころ && pack.flags(n).foe_status && D!().has_type(pack.tc.あく) {
             return;
         }
         let hit = {
@@ -1261,7 +1364,13 @@ fn execute_move_inner(
         if D!().ability == l.おうごんのからだ && gag_block(pack, n) {
             return;
         }
-        apply_status_move(pack, sides, field, aidx, &mv, rng);
+        if D!().substitute_hp > 0 && gag_block(pack, n) && !pack.flags(n).sub_bypass && !pack.flags(n).sound
+            && A!().ability != l.すりぬけ && D!().ability != l.マジックミラー
+        {
+            return;
+        }
+        let pending = matches!(opp_action, Some(oa) if oa.kind == ActKind::Move) && !A!().acts_second;
+        apply_status_move(pack, sides, field, aidx, &mv, rng, pending);
         return;
     }
 
@@ -1312,7 +1421,7 @@ fn execute_move_inner(
         if n == l.ぜったいれいど && D!().has_type(pack.tc.こおり) {
             return;
         }
-        if n == l.じわれ && D!().has_type(pack.tc.ひこう) {
+        if n == l.じわれ && airborne(pack, &D!(), field, Some(&A!())) {
             return;
         }
         if (n == l.つのドリル || n == l.ハサミギロチン) && D!().has_type(pack.tc.ゴースト) {
@@ -1487,7 +1596,6 @@ fn execute_move_inner(
             if pmove == Some(l.キングシールド)
                 && is_contact_move(pack, &mv)
                 && A!().ability != l.えんかく
-                && !ab::is_mold(pack, &A!())
             {
                 A!().stage_attack = std::cmp::max(-6, A!().stage_attack - 1);
             }
@@ -1497,7 +1605,7 @@ fn execute_move_inner(
                 && D!().is_alive
                 && A!().is_alive
             {
-                apply_status(pack, &mut A!(), st.poison, false);
+                apply_status(pack, &mut A!(), st.poison, false, Some(&*field));
             }
             if pmove == Some(l.ニードルガード)
                 && is_contact_move(pack, &mv)
@@ -1509,12 +1617,8 @@ fn execute_move_inner(
             }
         } else {
             A!().move_failed_this_turn = true;
-            if n == l.とびひざげり || n == l.とびげり || n == l.かかとおとし || n == l.サンダーダイブ
-            {
-                let recoil = std::cmp::max(1, A!().max_hp / 2);
-                A!().take_damage(recoil);
-            }
         }
+        crash_recoil(pack, &mut A!(), n);
         return;
     }
 
@@ -1529,12 +1633,30 @@ fn execute_move_inner(
     }
     // きもったま: ノーマル・かくとう技はゴーストにも当たる（ダメージ計算側はもとから等倍扱い。ここで弾いて当たらなかった）
     if eff == 0.0 && !crate::damage::scrappy_override(pack, &A!(), eff_type, &D!()) {
+        crash_recoil(pack, &mut A!(), n);
+        return;
+    }
+
+    // 特性・ふうせんで無効（ダメージ0の命中ではなく「効かない」。接触の反応・技の追加効果・反動は起きない。battle.py と同じ）
+    let mold = crate::damage::should_ignore_ability(pack, &A!());
+    let ab_immune = !mold
+        && crate::damage::check_move_immunity(pack, &D!(), eff_type, n)
+        && !crate::damage::scrappy_override(pack, &A!(), eff_type, &D!());
+    let bal_immune = D!().item == Some(pack.sy.it.ふうせん) && eff_type == pack.tc.じめん && !D!().grounded;
+    if ab_immune || bal_immune {
+        if ab_immune {
+            // 特性で無効になったことは表示される（HPが満タンで回復しなくても特性は判明。battle.py と同じ）
+            let (dn, dab) = (D!().name, D!().ability);
+            sides[aidx].opp_view.on_ability(dn, dab);
+            ab::on_absorb(pack, &mut D!(), eff_type);
+        }
+        crash_recoil(pack, &mut A!(), n);
         return;
     }
 
     // ばけのかわ: 1発目のダメージだけを防ぐ（連続技の2発目以降は通る。ねこだましのひるみは防げない＝実機どおり）
     let mut disguise_ate_first = false;
-    if D!().ability == l.ばけのかわ && !D!().disguise_broken {
+    if D!().ability == l.ばけのかわ && !D!().disguise_broken && !mold {
         D!().disguise_broken = true;
         {
             let dn = D!().name;
@@ -1550,7 +1672,9 @@ fn execute_move_inner(
         disguise_ate_first = is_multi_hit(pack, &mv) && D!().is_alive;
         if !disguise_ate_first {
             // いのちのたま: ばけのかわに当たってダメージが0でも反動を受ける（実機どおり。battle.py と同一）
-            if A!().item == Some(l.いのちのたま) && mv.category != Cat::Status && A!().is_alive {
+            if A!().item == Some(l.いのちのたま) && mv.category != Cat::Status && A!().is_alive
+                && A!().ability != l.マジックガード
+            {
                 let recoil = std::cmp::max(1, ((A!().max_hp as f64) / 10.0).floor() as i64);
                 let h0 = A!().hp;
                 A!().take_damage(recoil);
@@ -1593,7 +1717,7 @@ fn execute_move_inner(
             let dn = D!().name;
             sides[aidx].opp_view.on_item(dn, l.きあいのタスキ);
         }
-        if D!().ability == l.がんじょう && D!().hp == D!().max_hp && ret_dmg >= D!().hp {
+        if D!().ability == l.がんじょう && D!().hp == D!().max_hp && ret_dmg >= D!().hp && !mold {
             ret_dmg = D!().hp - 1;
         }
         if D!().item == Some(l.きあいのハチマキ) && ret_dmg >= D!().hp && rng.random() < 0.10 {
@@ -1624,7 +1748,7 @@ fn execute_move_inner(
 
     let screen_breaker = n == l.かわらわり || n == l.レイジングブル || n == l.サイコファング;
     let mut screen_mult = 1.0f64;
-    if !critical && !ab::is_mold(pack, &A!()) && A!().ability != l.すりぬけ && !screen_breaker {
+    if !critical && A!().ability != l.すりぬけ && !screen_breaker {
         if mv.category == Cat::Physical && (sides[didx].reflect || sides[didx].aurora_veil) {
             screen_mult = 0.5;
         } else if mv.category == Cat::Special
@@ -1637,6 +1761,7 @@ fn execute_move_inner(
     let mut total_dmg: i64 = 0;
     // 実際に減らしたHP（残りHPで頭打ち）。反動・吸収・かいがらのすずの基準。
     let mut dealt_hp: i64 = 0;
+    let (mut sub_hits, mut real_hits) = (0i64, 0i64);
     for hit_i in 0..hits {
         if !D!().is_alive {
             break;
@@ -1657,7 +1782,8 @@ fn execute_move_inner(
         }
 
         let sub_hp = D!().substitute_hp;
-        if sub_hp > 0 && n != l.ぼうふう && n != l.ハイパーボイス {
+        if sub_hp > 0 && !pack.flags(n).sound && A!().ability != l.すりぬけ {
+            // みがわり が受けた攻撃: 追加効果・接触の反応・防御側の持ち物/特性は起きない（battle.py と同じ）
             if dmg >= sub_hp {
                 D!().substitute_hp = 0;
             } else {
@@ -1665,8 +1791,29 @@ fn execute_move_inner(
             }
             total_dmg += dmg;
             dealt_hp += std::cmp::min(dmg, sub_hp);
+            sub_hits += 1;
+            if A!().item == Some(pack.sy.it.ノーマルジュエル) && eff_type == pack.tc.ノーマル {
+                A!().item = None;
+                it::on_item_consumed(pack, &mut A!());
+            }
+            if A!().item == Some(l.いのちのたま) && A!().ability != l.マジックガード && hit_i == hits - 1 {
+                let recoil = std::cmp::max(1, ((A!().max_hp as f64) / 10.0).floor() as i64);
+                let h0 = A!().hp;
+                A!().take_damage(recoil);
+                race_cause(aidx, "lifeorb", h0 - A!().hp);
+                let an = A!().name;
+                sides[didx].opp_view.on_item(an, l.いのちのたま);
+                let nerv = D!().is_alive && D!().ability == l.きんちょうかん;
+                let hb0 = A!().hp;
+                if let Some(bb) = hp_berry_now(pack, &mut A!(), nerv) {
+                    race_cause(aidx, "berry", hb0 - A!().hp);
+                    let an = A!().name;
+                    sides[didx].opp_view.on_item(an, bb);
+                }
+            }
             continue;
         }
+        real_hits += 1;
 
         if D!().item == Some(l.きあいのタスキ) && D!().hp == D!().max_hp && dmg >= D!().hp {
             dmg = D!().hp - 1;
@@ -1675,7 +1822,7 @@ fn execute_move_inner(
             let dn = D!().name;
             sides[aidx].opp_view.on_item(dn, l.きあいのタスキ);
         }
-        if D!().ability == l.がんじょう && D!().hp == D!().max_hp && dmg >= D!().hp {
+        if D!().ability == l.がんじょう && D!().hp == D!().max_hp && dmg >= D!().hp && !mold {
             dmg = D!().hp - 1;
             let dn = D!().name;
             sides[aidx].opp_view.on_ability(dn, l.がんじょう);
@@ -1706,7 +1853,7 @@ fn execute_move_inner(
         // ノーマルジュエル: ノーマル技を撃つと消費（威力補正は pack.type_boost）。
         // 消費は実戦経路だけで行う。calc_damage の中でやるとAIの見積りを呼ぶだけで無くなる。
         if A!().item == Some(pack.sy.it.ノーマルジュエル)
-            && mv.ty == pack.tc.ノーマル
+            && eff_type == pack.tc.ノーマル
             && mv.category != Cat::Status
         {
             A!().item = None;
@@ -1762,7 +1909,7 @@ fn execute_move_inner(
         }
 
         // いのちのたま: 技1回につき1回（連続技は最後に当てた発の後）
-        if A!().item == Some(l.いのちのたま) && mv.category != Cat::Status
+        if A!().item == Some(l.いのちのたま) && mv.category != Cat::Status && A!().ability != l.マジックガード
             && (hit_i == hits - 1 || !D!().is_alive)
         {
             let recoil = std::cmp::max(1, ((A!().max_hp as f64) / 10.0).floor() as i64);
@@ -1785,7 +1932,7 @@ fn execute_move_inner(
             let helmet = D!().item == Some(l.ゴツゴツメット);
             let h0 = A!().hp;
             let (a, d) = two!();
-            ab::rough_skin_recoil(pack, a, d, &mv);
+            ab::rough_skin_recoil(pack, a, d, &mv, field);
             race_cause(aidx, if helmet { "helmet" } else { "roughskin" }, h0 - a.hp);
         }
         {
@@ -1799,7 +1946,7 @@ fn execute_move_inner(
         }
         // 接触して初めて分かる防御側の持ち物/特性を開示（条件は rough_skin_recoil と一致）
         if A!().ability != l.えんかく && is_contact_move(pack, &mv) {
-            let (dn, dit, dab, aab) = (D!().name, D!().item, D!().ability, A!().ability);
+            let (dn, dit, dab) = (D!().name, D!().item, D!().ability);
             if dit == Some(l.ゴツゴツメット) {
                 sides[aidx].opp_view.on_item(dn, l.ゴツゴツメット);
             } else if sides[aidx].belief.0.is_some() {
@@ -1808,16 +1955,12 @@ fn execute_move_inner(
                 bl.observe_absent_item(pack, dn, &["ゴツゴツメット"]);
                 sides[aidx].belief.0 = Some(bl);
             }
-            if (dab == l.さめはだ || dab == l.てつのとげ)
-                && aab != l.かたやぶり
-                && aab != l.ターボブレイズ
-                && aab != l.テラボルテージ
-            {
+            if dab == l.さめはだ || dab == l.てつのとげ {
                 sides[aidx].opp_view.on_ability(dn, dab);
             }
         }
         if D!().beak_primed && is_contact_move(pack, &mv) && A!().is_alive {
-            apply_status(pack, &mut A!(), st.burn, false);
+            apply_status(pack, &mut A!(), st.burn, false, Some(&*field));
         }
         if (n == l.ついばむ || n == l.むしくい) && A!().is_alive && is_berry(pack, D!().item) {
             let berry = D!().item.unwrap();
@@ -1860,11 +2003,11 @@ fn execute_move_inner(
         }
         if D!().is_alive {
             let (a, d) = two!();
-            ab::on_after_hit(pack, a, d, &mv, rng);
+            ab::on_after_hit(pack, a, d, &mv, field, rng);
         }
         if D!().is_alive && A!().ability == l.ポイズンタッチ && is_contact_move(pack, &mv) {
             if rng.random() < 0.30 {
-                let ok = apply_status(pack, &mut D!(), st.poison, false);
+                let ok = apply_status(pack, &mut D!(), st.poison, false, Some(&*field));
                 if ok {
                     it::try_cure_berry(pack, &mut D!());
                 }
@@ -1897,7 +2040,8 @@ fn execute_move_inner(
         }
     }
 
-    if critical && D!().is_alive && D!().ability == l.いかりのつぼ {
+    let sub_absorbed = sub_hits > 0 && real_hits == 0;
+    if critical && D!().is_alive && D!().ability == l.いかりのつぼ && !sub_absorbed {
         D!().stage_attack = 6;
     }
 
@@ -1911,7 +2055,7 @@ fn execute_move_inner(
         A!().take_damage(hp);
         A!().is_alive = false;
     }
-    if A!().item == Some(l.かいがらのすず) && dealt_hp > 0 && A!().is_alive {
+    if A!().item == Some(l.かいがらのすず) && dealt_hp > 0 && A!().is_alive && can_heal(&A!()) {
         let heal = std::cmp::max(1, ((dealt_hp as f64) / 8.0).floor() as i64);
         let h0 = A!().hp;
         A!().hp = std::cmp::min(A!().max_hp, A!().hp + heal);
@@ -1937,20 +2081,21 @@ fn execute_move_inner(
         };
         if let Some(r) = rate {
             if dealt_hp > 0 && A!().is_alive && D!().ability == l.ヘドロえき {
-                let dm = std::cmp::max(1, ((dealt_hp as f64) * r).floor() as i64);
-                let h0 = A!().hp;
-                A!().take_damage(dm);
-                race_cause(aidx, "liquidooze", h0 - A!().hp);
-                {
-            let nerv = D!().is_alive && D!().ability == l.きんちょうかん;
-            let hb0 = A!().hp;
-            if let Some(bb) = hp_berry_now(pack, &mut A!(), nerv) {
-                race_cause(aidx, "berry", hb0 - A!().hp);
-                let an = A!().name;
-                sides[didx].opp_view.on_item(an, bb);
-            }
-        }
-            } else if dealt_hp > 0 && A!().is_alive {
+                // マジックガード は ヘドロえき のダメージを受けない（回復もしない）
+                if A!().ability != l.マジックガード {
+                    let dm = std::cmp::max(1, ((dealt_hp as f64) * r).floor() as i64);
+                    let h0 = A!().hp;
+                    A!().take_damage(dm);
+                    race_cause(aidx, "liquidooze", h0 - A!().hp);
+                    let nerv = D!().is_alive && D!().ability == l.きんちょうかん;
+                    let hb0 = A!().hp;
+                    if let Some(bb) = hp_berry_now(pack, &mut A!(), nerv) {
+                        race_cause(aidx, "berry", hb0 - A!().hp);
+                        let an = A!().name;
+                        sides[didx].opp_view.on_item(an, bb);
+                    }
+                }
+            } else if dealt_hp > 0 && A!().is_alive && can_heal(&A!()) {
                 let mut heal = std::cmp::max(1, ((dealt_hp as f64) * r).floor() as i64);
                 if A!().item == Some(l.おおきなねっこ) {
                     heal = ((heal as f64) * 1.3).floor() as i64;
@@ -1962,15 +2107,14 @@ fn execute_move_inner(
         }
     }
 
-    if D!().is_alive && D!().ability == l.のろわれボディ && rng.random() < 0.30 {
+    if D!().is_alive && D!().ability == l.のろわれボディ && !sub_absorbed && rng.random() < 0.30 {
         if A!().disabled_move.is_none() {
             A!().disabled_move = Some(n);
             A!().disabled_turns = 3;
         }
     }
-    if D!().ability == l.こぼれダネ && total_dmg > 0 && !field.grassy_terrain {
-        field.grassy_terrain = true;
-        field.grassy_terrain_count = 5;
+    if D!().ability == l.こぼれダネ && total_dmg > 0 && !sub_absorbed && !field.grassy_terrain {
+        it::set_terrain(field, 1, 5);
         {
             let (dp, ap) = { let (x, y) = two!(); (y, x) };
             crate::items::try_terrain_seed(pack, dp, field);
@@ -1978,11 +2122,11 @@ fn execute_move_inner(
         }
     }
 
-    if D!().ability == l.すなはき && total_dmg > 0 && field.weather != Some(we.sandstorm) {
+    if D!().ability == l.すなはき && total_dmg > 0 && !sub_absorbed && field.weather != Some(we.sandstorm) {
         field.weather = Some(we.sandstorm);
         field.weather_count = 5;
     }
-    if D!().ability == l.どくげしょう && mv.category == Cat::Physical && total_dmg > 0 {
+    if D!().ability == l.どくげしょう && mv.category == Cat::Physical && total_dmg > 0 && !sub_absorbed {
         let fi = sides[aidx].field_idx;
         if field.toxic_spikes[fi] < 2 {
             field.toxic_spikes[fi] += 1;
@@ -1990,7 +2134,7 @@ fn execute_move_inner(
     }
 
     // はたきおとす
-    if n == l.はたきおとす && D!().is_alive && D!().item.is_some() {
+    if n == l.はたきおとす && D!().is_alive && D!().item.is_some() && !sub_absorbed {
         let itm = D!().item.unwrap();
         if is_megastone(pack, Some(itm)) {
             // 失敗
@@ -2003,8 +2147,22 @@ fn execute_move_inner(
         }
     }
 
+    // 固定ダメージ技（いかりのまえば・ちきゅうなげ 等）が みがわり に当たったら みがわり が受ける（battle.py _to_sub）
+    macro_rules! to_sub {
+        ($d:expr) => {{
+            let dd: i64 = $d;
+            let sh = D!().substitute_hp;
+            if sub_absorbed && sh > 0 {
+                D!().substitute_hp = std::cmp::max(0, sh - dd);
+                total_dmg += dd;
+                true
+            } else {
+                false
+            }
+        }};
+    }
     // いかりのまえば
-    if n == l.いかりのまえば && D!().is_alive {
+    if n == l.いかりのまえば && D!().is_alive && !to_sub!(std::cmp::max(1, D!().hp / 2)) {
         if D!().has_type(pack.tc.ゴースト) {
             return;
         }
@@ -2027,20 +2185,26 @@ fn execute_move_inner(
         if D!().has_type(pack.tc.ゴースト) {
             return;
         }
-        D!().take_damage(50);
-        total_dmg += 50;
+        if !to_sub!(50) {
+            D!().take_damage(50);
+            total_dmg += 50;
+        }
     }
     if n == l.ナイトヘッド && D!().is_alive {
         if D!().has_type(pack.tc.ノーマル) {
             return;
         }
-        D!().take_damage(50);
-        total_dmg += 50;
+        if !to_sub!(50) {
+            D!().take_damage(50);
+            total_dmg += 50;
+        }
     }
     if n == l.いのちがけ && D!().is_alive {
         let dmg = A!().hp;
-        D!().take_damage(dmg);
-        total_dmg += dmg;
+        if !to_sub!(dmg) {
+            D!().take_damage(dmg);
+            total_dmg += dmg;
+        }
         let hp = A!().hp;
         A!().take_damage(hp);
         A!().is_alive = false;
@@ -2092,8 +2256,10 @@ fn execute_move_inner(
         let target_hp = A!().hp;
         if D!().hp > target_hp {
             let extra = D!().hp - target_hp;
-            D!().take_damage(extra);
-            total_dmg += extra;
+            if !to_sub!(extra) {
+                D!().take_damage(extra);
+                total_dmg += extra;
+            }
         }
     }
     if n == l.すてゼリフ && D!().is_alive {
@@ -2111,7 +2277,7 @@ fn execute_move_inner(
     if (n == l.ボルトチェンジ || n == l.とんぼがえり || n == l.クイックターン) && A!().is_alive {
         A!().pivot_out = true;
     }
-    if n == l.くらいつく && total_dmg > 0 && D!().is_alive {
+    if n == l.くらいつく && total_dmg > 0 && D!().is_alive && !sub_absorbed {
         D!().trapped = true;
         A!().trapped = true;
     }
@@ -2122,11 +2288,12 @@ fn execute_move_inner(
 
     if (n == l.ドラゴンテール || n == l.ほえる || n == l.ふきとばし || n == l.ともえなげ)
         && D!().is_alive
+        && !sub_absorbed
     {
         D!().force_switch = true;
     }
 
-    if total_dmg > 0 && !field.no_view {
+    if total_dmg > 0 && !sub_absorbed && !field.no_view {
         let (dn, dhp, dmax) = (D!().name, D!().hp, D!().max_hp);
         let an = A!().name;
         sides[aidx].opp_view.on_hp_change(dn, dhp, dmax, total_dmg, Some(n), Some(an));
@@ -2192,7 +2359,7 @@ fn execute_move_inner(
         A!().recharge = true;
     }
 
-    if n == l.うちおとす && total_dmg > 0 && D!().is_alive {
+    if n == l.うちおとす && total_dmg > 0 && D!().is_alive && !sub_absorbed {
         D!().grounded = true;
         D!().magnet_rise = false;
         let cm = D!().charging_move;
@@ -2200,7 +2367,7 @@ fn execute_move_inner(
             D!().charging_move = None;
         }
     }
-    if n == l.クリアスモッグ && total_dmg > 0 && D!().is_alive {
+    if n == l.クリアスモッグ && total_dmg > 0 && D!().is_alive && !sub_absorbed {
         for i in 0..5u8 {
             D!().set_stage(i, 0);
         }
@@ -2213,21 +2380,18 @@ fn execute_move_inner(
             A!().seeded = false;
         }
     }
-    if n == l.こうそくスピン && total_dmg > 0 && A!().is_alive {
+    if (n == l.こうそくスピン || n == l.キラースピン) && total_dmg > 0 && A!().is_alive {
         let mi = sides[aidx].field_idx;
-        if field.stealth_rock[mi] {
-            field.stealth_rock[mi] = false;
+        field.stealth_rock[mi] = false;
+        field.spikes[mi] = 0;
+        field.toxic_spikes[mi] = 0;
+        field.sticky_web[mi] = false;
+        if n == l.こうそくスピン {
+            A!().stage_speed = std::cmp::min(6, A!().stage_speed + 1);
         }
-        if field.spikes[mi] > 0 {
-            field.spikes[mi] = 0;
-        }
-        if field.toxic_spikes[mi] > 0 {
-            field.toxic_spikes[mi] = 0;
-        }
-        A!().stage_speed = std::cmp::min(6, A!().stage_speed + 1);
     }
-    if n == l.キラースピン && total_dmg > 0 && D!().is_alive {
-        if apply_status(pack, &mut D!(), st.poison, false) {
+    if n == l.キラースピン && total_dmg > 0 && D!().is_alive && !sub_absorbed {
+        if apply_status(pack, &mut D!(), st.poison, false, Some(&*field)) {
             it::try_cure_berry(pack, &mut D!());
         }
     }
@@ -2250,7 +2414,7 @@ fn execute_move_inner(
             field.grassy_terrain_count = 0;
         }
     }
-    if (n == l.どろぼう || n == l.ほしがる) && total_dmg > 0 && A!().is_alive {
+    if (n == l.どろぼう || n == l.ほしがる) && total_dmg > 0 && A!().is_alive && !sub_absorbed {
         if A!().item.is_none() && D!().item.is_some() {
             let itm = D!().item.unwrap();
             if is_megastone(pack, Some(itm)) || D!().ability == l.ねんちゃく {
@@ -2263,6 +2427,7 @@ fn execute_move_inner(
     }
     if A!().ability == l.マジシャン
         && total_dmg > 0
+        && !sub_absorbed
         && A!().is_alive
         && A!().item.is_none()
         && D!().item.is_some()
@@ -2273,6 +2438,7 @@ fn execute_move_inner(
         D!().item = None;
     }
     if D!().ability == l.わるいてぐせ
+        && !sub_absorbed
         && is_contact_move(pack, &mv)
         && A!().ability != l.えんかく
         && D!().is_alive
@@ -2302,7 +2468,7 @@ fn execute_move_inner(
     let dsg = sides[didx].safeguard;
     {
         let (a, d) = two!();
-        apply_secondary(pack, a, d, &mv, total_dmg, field, dsg, rng);
+        apply_secondary(pack, a, d, &mv, total_dmg, field, dsg, rng, sub_absorbed);
     }
     {
         let (a, d) = two!();
@@ -2320,8 +2486,27 @@ fn execute_move_inner(
         }
     }
 
-    // おやこあい
-    if A!().ability == l.おやこあい && hits == 1 && total_dmg > 0 && D!().is_alive {
+    // おやこあい（2発目も みがわり が残っていれば みがわり が受ける）
+    let pb_sub = D!().substitute_hp;
+    if A!().ability == l.おやこあい && hits == 1 && total_dmg > 0 && D!().is_alive && pb_sub > 0
+        && !pack.flags(n).sound && A!().ability != l.すりぬけ
+    {
+        let pb = std::cmp::max(1, ((total_dmg as f64) * 0.25).floor() as i64);
+        D!().substitute_hp = std::cmp::max(0, pb_sub - pb);
+        {
+            let (a, d) = two!();
+            let h0 = a.hp;
+            apply_recoil(pack, a, d, &mv, std::cmp::min(pb, pb_sub));
+            race_cause(aidx, "recoil", h0 - a.hp);
+        }
+        let nerv = D!().is_alive && D!().ability == l.きんちょうかん;
+        let hb0 = A!().hp;
+        if let Some(bb) = hp_berry_now(pack, &mut A!(), nerv) {
+            race_cause(aidx, "berry", hb0 - A!().hp);
+            let an = A!().name;
+            sides[didx].opp_view.on_item(an, bb);
+        }
+    } else if A!().ability == l.おやこあい && hits == 1 && total_dmg > 0 && D!().is_alive {
         let mut pb = std::cmp::max(1, ((total_dmg as f64) * 0.25).floor() as i64);
         if D!().item == Some(l.きあいのタスキ) && D!().hp == D!().max_hp && pb >= D!().hp {
             pb = D!().hp - 1;
@@ -2350,17 +2535,17 @@ fn execute_move_inner(
         if D!().is_alive {
             {
                 let (a, d) = two!();
-                ab::on_after_hit(pack, a, d, &mv, rng);
+                ab::on_after_hit(pack, a, d, &mv, field, rng);
             }
             let dsg2 = sides[didx].safeguard;
             let (a, d) = two!();
-            apply_secondary(pack, a, d, &mv, pb, field, dsg2, rng);
+            apply_secondary(pack, a, d, &mv, pb, field, dsg2, rng, false);
         }
         {
             let helmet = D!().item == Some(l.ゴツゴツメット);
             let h0 = A!().hp;
             let (a, d) = two!();
-            ab::rough_skin_recoil(pack, a, d, &mv);
+            ab::rough_skin_recoil(pack, a, d, &mv, field);
             race_cause(aidx, if helmet { "helmet" } else { "roughskin" }, h0 - a.hp);
         }
         {
@@ -2527,6 +2712,11 @@ pub fn self_boosts(pack: &Pack, n: u16) -> Option<Vec<(u8, i32)>> {
     Some(v)
 }
 
+/// battle.py `_has_bench`: 交代できる控え（場に出ていない生存個体）がいるか
+fn has_bench(side: &Side) -> bool {
+    side.party.iter().enumerate().any(|(i, p)| p.is_alive && i != side.active_idx)
+}
+
 pub fn apply_status_move(
     pack: &Pack,
     sides: &mut [Side; 2],
@@ -2534,6 +2724,7 @@ pub fn apply_status_move(
     aidx: usize,
     mv: &DMove,
     rng: &mut dyn BRng,
+    target_pending: bool,
 ) {
     let l = &pack.sy.l;
     let st = &pack.sy.st;
@@ -2553,18 +2744,35 @@ pub fn apply_status_move(
     }
 
     // マジックミラー（個別処理される対人変化技）
-    if (n == l.ちょうはつ || n == l.アンコール || n == l.やどりぎのタネ)
+    if (n == l.ちょうはつ || n == l.アンコール || n == l.やどりぎのタネ || n == l.あくび
+        || n == l.どくびし || n == l.ねばねばネット)
         && D!().ability == l.マジックミラー
     {
         if A!().ability != l.マジックミラー {
-            apply_status_move(pack, sides, field, didx, mv, rng);
+            apply_status_move(pack, sides, field, didx, mv, rng, false);
         }
+        return;
+    }
+    macro_rules! two {
+        () => {{
+            let (a, b) = sides.split_at_mut(1);
+            if aidx == 0 {
+                (&mut a[0].party[ai], &mut b[0].party[di])
+            } else {
+                (&mut b[0].party[ai], &mut a[0].party[di])
+            }
+        }};
+    }
+    // すてゼリフ を跳ね返すと使った側の能力が下がる（どちらも交代しない）
+    if n == l.すてゼリフ && D!().ability == l.マジックミラー && A!().ability != l.マジックミラー {
+        let (a, d) = two!();
+        foe_stat_drop(pack, d, a, &[(0, -1), (2, -1)]);
         return;
     }
 
     if n == l.ひっくりかえす {
         if D!().ability == l.マジックミラー && A!().ability != l.マジックミラー {
-            apply_status_move(pack, sides, field, didx, mv, rng);
+            apply_status_move(pack, sides, field, didx, mv, rng, false);
             return;
         }
         for i in 0..7u8 {
@@ -2588,14 +2796,14 @@ pub fn apply_status_move(
     }
 
     if n == l.すてゼリフ {
-        let dab = D!().ability;
-        if dab != l.クリアボディ && dab != l.しろいけむり && dab != l.かがくへんかガス {
-            for stx in [0u8, 2u8] {
-                let v = D!().stage(stx);
-                D!().set_stage(stx, std::cmp::max(-6, v - 1));
-            }
+        // 能力が変わらなければ交代しない（ミラーアーマー で跳ね返されたときは交代する）
+        let changed = {
+            let (a, d) = two!();
+            foe_stat_drop(pack, a, d, &[(0, -1), (2, -1)])
+        };
+        if changed {
+            A!().pivot_out = true;
         }
-        A!().pivot_out = true;
         return;
     }
 
@@ -2614,7 +2822,7 @@ pub fn apply_status_move(
     }
 
     if n == l.のみこむ {
-        if A!().stockpile_count <= 0 {
+        if A!().stockpile_count <= 0 || !can_heal(&A!()) {
             return;
         }
         let ratio = match A!().stockpile_count {
@@ -2687,9 +2895,17 @@ pub fn apply_status_move(
         if A!().hp >= A!().max_hp {
             return;
         }
+        let aab = A!().ability;
+        if aab == l.ふみん || aab == l.やるき || aab == l.スイートベール || aab == l.きよめのしお
+            || crate::damage::terrain_blocks_sleep(pack, &A!(), field)
+        {
+            return;
+        }
         A!().hp = A!().max_hp;
         A!().status = Some(st.sleep);
-        A!().sleep_count = 2;
+        A!().sleep_count = 3;
+        A!().sleep_acts = 0;
+        A!().sleep_rest = true;
         A!().bad_poison_count = 0;
         return;
     }
@@ -2723,20 +2939,25 @@ pub fn apply_status_move(
     }
 
     if n == l.あくび {
-        if D!().status.is_none() && D!().yawn_count == 0 {
-            let dab = D!().ability;
-            if dab != l.ふみん && dab != l.やるき {
-                D!().yawn_count = 2;
-            }
+        let dab = D!().ability;
+        if D!().status.is_none() && D!().yawn_count == 0
+            && dab != l.ふみん && dab != l.やるき && dab != l.スイートベール && dab != l.きよめのしお
+            && !(dab == l.リーフガード && effective_weather(pack, field, Some(&D!())) == Some(we.sunny))
+            && !crate::damage::terrain_blocks_sleep(pack, &D!(), field)
+            && sides[didx].safeguard == 0
+        {
+            D!().yawn_count = 2;
         }
         return;
     }
 
     if n == l.アンコール {
         if D!().ability == l.アロマベール {
-        } else if D!().last_used_move.is_some() && D!().encore_count == 0 {
-            D!().encore_count = 3;
-            D!().locked_move = D!().last_used_move;
+        } else if let Some(lm) = D!().last_used_move {
+            if D!().encore_count == 0 && !pack.flags(lm).encore_fail && move_pp(&D!(), lm) > 0 {
+                D!().encore_count = if target_pending { 3 } else { 4 };
+                D!().locked_move = Some(lm);
+            }
         }
         return;
     }
@@ -2744,7 +2965,7 @@ pub fn apply_status_move(
     if n == l.ちょうはつ {
         if D!().ability == l.アロマベール {
         } else if D!().taunt_count == 0 {
-            D!().taunt_count = 3;
+            D!().taunt_count = if target_pending || D!().switched_this_turn { 3 } else { 4 };
         }
         return;
     }
@@ -2768,7 +2989,7 @@ pub fn apply_status_move(
         return;
     }
 
-    if n == l.はいすいのじん && A!().trapped {
+    if n == l.はいすいのじん && A!().no_retreat {
         return;
     }
 
@@ -2789,7 +3010,7 @@ pub fn apply_status_move(
             A!().minimized = true;
         }
         if n == l.はいすいのじん {
-            A!().trapped = true;
+            A!().no_retreat = true;
         }
         return;
     }
@@ -2804,7 +3025,12 @@ pub fn apply_status_move(
         return;
     }
     if n == l.でんじふゆう {
+        // 使ったターンを含め5ターン（交代で終わる）
+        if A!().magnet_rise || A!().grounded || A!().rooted || field.gravity > 0 {
+            return;
+        }
         A!().magnet_rise = true;
+        A!().levitate_turns = 5;
         return;
     }
     if n == l.ロックオン {
@@ -2935,9 +3161,17 @@ pub fn apply_status_move(
         sides[didx].opp_view.on_item_swapped(an, d);
         return;
     }
+    // 同じフィールドでは失敗
+    if (n == l.グラスフィールド && field.grassy_terrain)
+        || (n == l.ミストフィールド && field.misty_terrain)
+        || (n == l.エレキフィールド && field.electric_terrain)
+        || (n == l.サイコフィールド && field.psychic_terrain)
+    {
+        return;
+    }
     if n == l.グラスフィールド {
-        field.grassy_terrain = true;
-        field.grassy_terrain_count = it::terrain_turns(pack, A!().item);
+        let tt = it::terrain_turns(pack, A!().item);
+        it::set_terrain(field, 1, tt);
         it::try_terrain_seed(pack, &mut A!(), field);
         it::try_terrain_seed(pack, &mut D!(), field);
         return;
@@ -3017,7 +3251,7 @@ pub fn apply_status_move(
     if let Some((debs,)) = opponent_debuffs(pack, n) {
         if D!().ability == l.マジックミラー {
             if A!().ability != l.マジックミラー {
-                apply_status_move(pack, sides, field, didx, mv, rng);
+                apply_status_move(pack, sides, field, didx, mv, rng, false);
             }
             return;
         }
@@ -3034,16 +3268,21 @@ pub fn apply_status_move(
                     {
                         continue;
                     }
+                    if val == st.sleep && crate::damage::terrain_blocks_sleep(pack, &D!(), field) {
+                        continue;
+                    }
                     if dab == l.リーフガード
                         && effective_weather(pack, field, Some(&D!())) == Some(we.sunny)
                     {
                         continue;
                     }
                     let corr = A!().ability == l.ふしょく;
-                    let ok = apply_status(pack, &mut D!(), val, corr);
+                    let ok = apply_status(pack, &mut D!(), val, corr, Some(&*field));
                     if ok {
                         if val == st.sleep {
-                            D!().sleep_count = rng.randint(1, 3);
+                            D!().sleep_count = rng.randint(2, 4);
+                            D!().sleep_acts = 0;
+                            D!().sleep_rest = false;
                         }
                         it::try_cure_berry(pack, &mut D!());
                         if D!().ability == l.シンクロ
@@ -3053,19 +3292,24 @@ pub fn apply_status_move(
                                 || val == st.burn)
                             && A!().is_alive
                         {
-                            apply_status(pack, &mut A!(), val, false);
+                            apply_status(pack, &mut A!(), val, false, Some(&*field));
                         }
                     }
                 }
                 Deb::Confused => {
                     if sg {
                     } else if D!().ability == l.マイペース {
+                    } else if crate::damage::misty_blocks(pack, &D!(), Some(&*field)) {
                     } else {
                         D!().confused = true;
                         it::try_cure_berry(pack, &mut D!());
                     }
                 }
                 Deb::Stage(attr, val) => {
+                    if val < 0 && D!().ability == l.ミラーアーマー {
+                        ab::reflect_stat_drop(pack, &mut A!(), attr, val);
+                        continue;
+                    }
                     let v = if D!().ability == l.あまのじゃく { -val } else { val };
                     let dab = D!().ability;
                     if v < 0
@@ -3132,7 +3376,7 @@ pub fn apply_status_move(
         let dab = D!().ability;
         if dab == l.マジックミラー {
             blocked = true;
-            if A!().ability != l.マジックミラー {
+            if A!().ability != l.マジックミラー && has_bench(&sides[aidx]) {
                 A!().force_switch = true;
             }
         } else if dab == l.おうごんのからだ {
@@ -3144,7 +3388,7 @@ pub fn apply_status_move(
         } else if n == l.ふきとばし && dab == l.かぜのり {
             blocked = true;
         }
-        if !blocked {
+        if !blocked && has_bench(&sides[didx]) {
             for i in 0..7u8 {
                 D!().set_stage(i, 0);
             }
@@ -3172,10 +3416,10 @@ pub fn apply_status_move(
 
     if n == l.ほろびのうた {
         if A!().perish_count == 0 {
-            A!().perish_count = 3;
+            A!().perish_count = 4;
         }
-        if D!().perish_count == 0 {
-            D!().perish_count = 3;
+        if D!().perish_count == 0 && D!().ability != l.ぼうおん {
+            D!().perish_count = 4;
         }
         return;
     }
@@ -3238,12 +3482,9 @@ pub fn apply_status_move(
     }
 
     if n == l.おきみやげ {
-        for stx in [0u8, 2u8] {
-            let dab = D!().ability;
-            if dab != l.クリアボディ && dab != l.しろいけむり && dab != l.かがくへんかガス {
-                let old_v = D!().stage(stx);
-                D!().set_stage(stx, std::cmp::max(-6, old_v - 2));
-            }
+        {
+            let (a, d) = two!();
+            foe_stat_drop(pack, a, d, &[(0, -2), (2, -2)]);
         }
         let hp = A!().hp;
         A!().take_damage(hp);
@@ -3288,7 +3529,11 @@ pub fn apply_status_move(
             field.spikes[idx] = 0;
             field.toxic_spikes[idx] = 0;
             field.sticky_web[idx] = false;
+            field.stealth_rock[idx] = false;
+            sides[sx].stealth_rock_set = false;
         }
+        A!().substitute_hp = 0;
+        D!().substitute_hp = 0;
         A!().stage_attack = std::cmp::min(6, A!().stage_attack + 1);
         A!().stage_speed = std::cmp::min(6, A!().stage_speed + 1);
         return;
@@ -3333,22 +3578,22 @@ pub fn apply_status_move(
         return;
     }
     if n == l.ミストフィールド {
-        field.misty_terrain = true;
-        field.misty_terrain_count = it::terrain_turns(pack, A!().item);
+        let tt = it::terrain_turns(pack, A!().item);
+        it::set_terrain(field, 3, tt);
         it::try_terrain_seed(pack, &mut A!(), field);
         it::try_terrain_seed(pack, &mut D!(), field);
         return;
     }
     if n == l.エレキフィールド {
-        field.electric_terrain = true;
-        field.electric_terrain_count = it::terrain_turns(pack, A!().item);
+        let tt = it::terrain_turns(pack, A!().item);
+        it::set_terrain(field, 0, tt);
         it::try_terrain_seed(pack, &mut A!(), field);
         it::try_terrain_seed(pack, &mut D!(), field);
         return;
     }
     if n == l.サイコフィールド {
-        field.psychic_terrain = true;
-        field.psychic_terrain_count = it::terrain_turns(pack, A!().item);
+        let tt = it::terrain_turns(pack, A!().item);
+        it::set_terrain(field, 2, tt);
         it::try_terrain_seed(pack, &mut A!(), field);
         it::try_terrain_seed(pack, &mut D!(), field);
         return;
@@ -3359,22 +3604,23 @@ pub fn apply_status_move(
         return;
     }
     if n == l.しっぽきり {
-        let cost = A!().max_hp / 2;
+        let cost = (A!().max_hp + 1) / 2;
         let sub_hp = A!().max_hp / 4;
-        if A!().hp > cost && A!().substitute_hp == 0 {
+        if A!().hp > cost && A!().substitute_hp == 0 && has_bench(&sides[aidx]) {
             A!().hp -= cost;
-            A!().substitute_hp = sub_hp;
+            A!().shed_tail_sub = sub_hp;
             A!().pivot_out = true;
         }
         return;
     }
     if n == l.ちからをすいとる {
+        if D!().stage_attack <= -6 || !can_heal(&A!()) {
+            return;
+        }
         let heal = D!().eff_stat(0);
         A!().hp = std::cmp::min(A!().max_hp, A!().hp + heal);
-        let dab = D!().ability;
-        if dab != l.クリアボディ && dab != l.しろいけむり && dab != l.かがくへんかガス {
-            D!().stage_attack = std::cmp::max(-6, D!().stage_attack - 1);
-        }
+        let (a, d) = two!();
+        foe_stat_drop(pack, a, d, &[(0, -1)]);
         return;
     }
     if n == l.ほおばる {
@@ -3386,7 +3632,8 @@ pub fn apply_status_move(
         return;
     }
     if n == l.かなしばり {
-        if D!().last_used_move.is_some() && D!().disabled_move.is_none() {
+        let lum = D!().last_used_move;
+        if lum.is_some() && D!().disabled_move.is_none() && move_pp(&D!(), lum.unwrap()) > 0 {
             D!().disabled_move = D!().last_used_move;
             D!().disabled_turns = 4;
         }
@@ -3653,6 +3900,8 @@ fn def_downs(pack: &Pack, n: u16) -> Option<(u8, i32, f64)> {
         (4, -1, 1.00)
     } else if n == l.ワイドブレイカー {
         (0, -1, 1.00)
+    } else if n == l.うらみつらみ {
+        (0, -1, 1.00)
     } else if n == l.ソウルクラッシュ {
         (2, -1, 1.00)
     } else {
@@ -3791,11 +4040,14 @@ pub fn apply_secondary(
     field: &Field,
     def_safeguard: i64,
     rng: &mut dyn BRng,
+    sub_hit: bool,
 ) {
     let l = &pack.sy.l;
     let st = &pack.sy.st;
     let we = &pack.sy.we;
     let n = mv.name;
+    // みがわり が受けたときは相手への効果は起きず、自分への効果だけ起きる（battle.py と同じ）
+    let tgt = !sub_hit;
 
     if !defender.is_alive {
         if let Some(effs) = self_effects_ko(pack, n) {
@@ -3815,13 +4067,13 @@ pub fn apply_secondary(
         return;
     }
 
-    if dmg > 0 {
+    if dmg > 0 && tgt {
         defender.times_hit += 1;
     }
 
     let force_no_secondary = attacker.ability == l.ちからずく || defender.ability == l.りんぷん;
 
-    if n == l.じごくづき && dmg > 0 && defender.is_alive {
+    if n == l.じごくづき && dmg > 0 && defender.is_alive && tgt {
         defender.throat_chop_count = 2;
     }
 
@@ -3832,13 +4084,13 @@ pub fn apply_secondary(
         || n == l.うずしお
         || n == l.すなじごく
         || n == l.トラバサミ;
-    if is_bind && dmg > 0 && defender.is_alive && defender.bound_count == 0 {
+    if is_bind && dmg > 0 && defender.is_alive && defender.bound_count == 0 && tgt {
         defender.bound_count = rng.randint(4, 5);
         // しめつけバンドを持つのは「縛った側」。EOTで相手を辿らずに済むよう束縛時に控える。
         defender.bound_by_band = attacker.item == Some(pack.sy.it.しめつけバンド);
     }
 
-    if n == l.なげつける && defender.is_alive && !force_no_secondary {
+    if n == l.なげつける && defender.is_alive && !force_no_secondary && tgt {
         let flung = attacker.last_flung_item;
         let s2 = if flung == Some(l.どくバリ) {
             Some(st.poison)
@@ -3848,7 +4100,7 @@ pub fn apply_secondary(
             None
         };
         if let Some(sv) = s2 {
-            let ok = apply_status(pack, defender, sv, false);
+            let ok = apply_status(pack, defender, sv, false, Some(&*field));
             if ok {
                 it::try_cure_berry(pack, defender);
             }
@@ -3857,7 +4109,7 @@ pub fn apply_secondary(
 
     let sg_sec = def_safeguard > 0;
     if let Some((effect, prob)) = status_effects(pack, n) {
-        if !force_no_secondary && !sg_sec {
+        if !force_no_secondary && !sg_sec && tgt {
             let sunny_freeze = effect == Some(st.freeze)
                 && effective_weather(pack, field, Some(defender)) == Some(we.sunny);
             if sunny_freeze {
@@ -3865,13 +4117,13 @@ pub fn apply_secondary(
             } else if rng.random() < prob {
                 match effect {
                     None => {
-                        if defender.ability != l.マイペース {
+                        if defender.ability != l.マイペース && !crate::damage::misty_blocks(pack, defender, Some(field)) {
                             defender.confused = true;
                             it::try_cure_berry(pack, defender);
                         }
                     }
                     Some(e) => {
-                        let ok = apply_status(pack, defender, e, false);
+                        let ok = apply_status(pack, defender, e, false, Some(&*field));
                         if ok {
                             it::try_cure_berry(pack, defender);
                         }
@@ -3881,28 +4133,28 @@ pub fn apply_secondary(
         }
     }
 
-    if n == l.トライアタック && !force_no_secondary && rng.random() < 0.20 {
+    if n == l.トライアタック && !force_no_secondary && tgt && rng.random() < 0.20 {
         let idx = rng.choice(3);
         let effect = [st.paralysis, st.burn, st.freeze][idx];
         if !(effect == st.freeze
             && effective_weather(pack, field, Some(defender)) == Some(we.sunny))
         {
-            let ok = apply_status(pack, defender, effect, false);
+            let ok = apply_status(pack, defender, effect, false, Some(&*field));
             if ok {
                 it::try_cure_berry(pack, defender);
             }
         }
     }
 
-    if (n == l.しっとのほのお || n == l.みわくのボイス) && !force_no_secondary {
+    if (n == l.しっとのほのお || n == l.みわくのボイス) && !force_no_secondary && tgt {
         let any_up = (0..7u8).any(|i| defender.stage(i) > 0);
         if any_up {
             if n == l.みわくのボイス {
-                if defender.ability != l.マイペース {
+                if defender.ability != l.マイペース && !crate::damage::misty_blocks(pack, defender, Some(field)) {
                     defender.confused = true;
                     it::try_cure_berry(pack, defender);
                 }
-            } else if apply_status(pack, defender, st.burn, false) {
+            } else if apply_status(pack, defender, st.burn, false, Some(&*field)) {
                 it::try_cure_berry(pack, defender);
             }
         }
@@ -3913,7 +4165,7 @@ pub fn apply_secondary(
     }
 
     if let Some((stat, delta0, prob)) = def_downs(pack, n) {
-        if !force_no_secondary {
+        if !force_no_secondary && tgt {
             let mut delta = delta0;
             if defender.ability == l.あまのじゃく {
                 delta = -delta;
@@ -3981,7 +4233,7 @@ pub fn apply_secondary(
         }
     }
 
-    if n == l.ぶきみなじゅもん && defender.is_alive {
+    if n == l.ぶきみなじゅもん && defender.is_alive && tgt {
         if let Some(lum) = defender.last_used_move {
             let np = defender.pp.len();
             for i in 0..defender.moves.len() {
@@ -3994,30 +4246,33 @@ pub fn apply_secondary(
     }
 
     if let Some(fp) = flinch_prob(pack, n) {
-        if fp > 0.0 && !force_no_secondary && rng.random() < fp {
+        if fp > 0.0 && !force_no_secondary && tgt && rng.random() < fp {
             if defender.ability != l.せいしんりょく && defender.ability != l.どんかん {
                 defender.flinched = true;
             }
         }
     }
 
-    if n == l.フェイタルクロー && defender.is_alive && !force_no_secondary && rng.random() < 0.30 {
+    if n == l.フェイタルクロー && defender.is_alive && !force_no_secondary && tgt && rng.random() < 0.30 {
         let idx = rng.choice(3);
         let chosen = [st.poison, st.paralysis, st.sleep][idx];
-        let ok = apply_status(pack, defender, chosen, false);
+        let ok = !(chosen == st.sleep && crate::damage::terrain_blocks_sleep(pack, defender, field))
+            && apply_status(pack, defender, chosen, false, Some(&*field));
         if ok {
             if chosen == st.sleep {
-                defender.sleep_count = rng.randint(1, 3);
+                defender.sleep_count = rng.randint(2, 4);
+                defender.sleep_acts = 0;
+                defender.sleep_rest = false;
             }
             it::try_cure_berry(pack, defender);
         }
     }
 
-    if n == l.かげぬい && dmg > 0 && defender.is_alive {
+    if n == l.かげぬい && dmg > 0 && defender.is_alive && tgt {
         defender.trapped = true;
     }
 
-    if n == l.ねっとう || n == l.ねっさのだいち {
+    if (n == l.ねっとう || n == l.ねっさのだいち) && tgt {
         if defender.is_alive && defender.status == Some(st.freeze) {
             defender.status = None;
         }
@@ -4054,16 +4309,16 @@ pub fn apply_secondary(
         attacker.type2 = if rem.len() > 1 { Some(rem[1]) } else { None };
     }
 
-    if n == l.しおづけ && defender.is_alive && !force_no_secondary && !defender.salted {
+    if n == l.しおづけ && defender.is_alive && !force_no_secondary && tgt && !defender.salted {
         defender.salted = true;
     }
-    if n == l.みずあめボム && defender.is_alive && !force_no_secondary {
+    if n == l.みずあめボム && defender.is_alive && !force_no_secondary && tgt {
         defender.syrup_count = 3;
     }
-    if n == l.サイコノイズ && defender.is_alive && !force_no_secondary {
+    if n == l.サイコノイズ && defender.is_alive && !force_no_secondary && tgt {
         defender.heal_block_count = 2;
     }
-    if n == l.うたかたのアリア && defender.is_alive && defender.status == Some(st.burn) {
+    if n == l.うたかたのアリア && defender.is_alive && defender.status == Some(st.burn) && tgt {
         defender.status = None;
     }
     if n == l.ミストバースト && attacker.is_alive {
@@ -4081,7 +4336,7 @@ pub fn apply_secondary(
             if attacker.lock_count <= 0 {
                 attacker.locked_move = None;
                 attacker.lock_count = 0;
-                if attacker.ability != l.マイペース {
+                if attacker.ability != l.マイペース && !crate::damage::misty_blocks(pack, attacker, Some(field)) {
                     attacker.confused = true;
                     it::try_cure_berry(pack, attacker);
                 }
@@ -4109,7 +4364,7 @@ pub fn apply_secondary(
 /// opp_nervous: 相手が場にいて きんちょうかん。battle.py `_hp_berry_now` と同一。
 pub fn hp_berry_now(pack: &Pack, p: &mut Poke, opp_nervous: bool) -> Option<crate::interner::Sym> {
     let l = &pack.sy.l;
-    if !p.is_alive || p.hp > p.max_hp / 2 || opp_nervous {
+    if !p.is_alive || p.hp > p.max_hp / 2 || opp_nervous || !can_heal(p) {
         return None;
     }
     let berry = p.item?;
@@ -4211,11 +4466,12 @@ impl Battle {
                 Some(i) => i,
             };
             self.sides[fx].switch_to(pack, next_idx);
-            self.sides[1 - fx].active_mut().bound_count = 0;
+            release_by_leaving(self.sides[1 - fx].active_mut());
             {
                 let Battle { sides, field, .. } = self;
                 entry_effects_side(pack, sides, field, fx);
             }
+            self.apply_healing_wish(fx);
             let nm = self.sides[fx].active().clone();
             self.sides[ox].opp_view.on_enter(pack, &nm);
         }
@@ -4297,7 +4553,7 @@ impl Battle {
                 && self.sides[mx].party[idx as usize].is_alive
             {
                 self.sides[mx].switch_to(pack, idx as usize);
-                self.sides[1 - mx].active_mut().bound_count = 0;
+                release_by_leaving(self.sides[1 - mx].active_mut());
                 {
                     let Battle { sides, field, .. } = self;
                     entry_effects_side(pack, sides, field, mx);
@@ -4311,10 +4567,50 @@ impl Battle {
         }
 
         if action.kind == ActKind::Move && action.mv.is_some() {
+            let enc_action;
+            // アンコールされた技のPPが尽きたらアンコールは解ける（わるあがき等をその技に差し替えない）
+            {
+                let a = self.sides[mx].active_mut();
+                if a.encore_count > 0 {
+                    if let Some(lm) = a.locked_move {
+                        if move_pp(a, lm) <= 0 {
+                            a.encore_count = 0;
+                            a.locked_move = None;
+                        }
+                    }
+                }
+            }
+            let action = {
+                let a = self.sides[mx].active();
+                let cur = action.mv.as_ref().map(|m| m.name);
+                match a.locked_move {
+                    Some(lm) if a.encore_count > 0 && cur != Some(lm) => {
+                        match a.moves.iter().position(|m| m.name == lm) {
+                            Some(ei) => {
+                                enc_action = Action {
+                                    kind: ActKind::Move,
+                                    mv: Some(a.moves[ei].clone()),
+                                    move_idx: ei as i64,
+                                    do_mega: action.do_mega,
+                                    ..Default::default()
+                                };
+                                &enc_action
+                            }
+                            None => action,
+                        }
+                    }
+                    _ => action,
+                }
+            };
             {
                 let Battle { sides, field, .. } = self;
                 execute_move(pack, sides, field, mx, action, opp_action, rng, &mut 0);
             }
+            it::try_white_herb(pack, self.sides[mx].active_mut());
+            it::try_white_herb(pack, self.sides[ox].active_mut());
+            // メンタルハーブ: 行動制限を受けた直後に発動
+            it::try_mental_herb(pack, self.sides[mx].active_mut());
+            it::try_mental_herb(pack, self.sides[ox].active_mut());
             // PP消費
             let mi = action.move_idx;
             {
@@ -4371,7 +4667,7 @@ impl Battle {
                 };
                 if let Some(ni) = next_idx {
                     self.sides[mx].switch_to(pack, ni);
-                    self.sides[1 - mx].active_mut().bound_count = 0;
+                    release_by_leaving(self.sides[1 - mx].active_mut());
                     {
                         let Battle { sides, field, .. } = self;
                         entry_effects_side(pack, sides, field, mx);
@@ -4396,7 +4692,7 @@ impl Battle {
                 };
                 if let Some(ni) = next_idx {
                     self.sides[ox].switch_to(pack, ni);
-                    self.sides[1 - ox].active_mut().bound_count = 0;
+                    release_by_leaving(self.sides[1 - ox].active_mut());
                     {
                         let Battle { sides, field, .. } = self;
                         entry_effects_side(pack, sides, field, ox);
@@ -4421,7 +4717,7 @@ impl Battle {
                     let k = rng.choice(benched.len());
                     let new_idx = benched[k];
                     self.sides[ox].switch_to(pack, new_idx);
-                    self.sides[1 - ox].active_mut().bound_count = 0;
+                    release_by_leaving(self.sides[1 - ox].active_mut());
                     {
                         let Battle { sides, field, .. } = self;
                         entry_effects_side(pack, sides, field, ox);
@@ -4501,8 +4797,10 @@ impl Battle {
                         p.take_damage(dmg);
                     } else if p.status == Some(st.poison) || p.status == Some(st.badpoison) {
                         if p.ability == l.ポイズンヒール {
-                            let heal = std::cmp::max(1, p.max_hp / 8);
-                            p.hp = std::cmp::min(p.max_hp, p.hp + heal);
+                            if can_heal(p) {
+                                let heal = std::cmp::max(1, p.max_hp / 8);
+                                p.hp = std::cmp::min(p.max_hp, p.hp + heal);
+                            }
                         } else if p.status == Some(st.poison) {
                             let dmg = std::cmp::max(1, p.max_hp / 8);
                             p.take_damage(dmg);
@@ -4521,7 +4819,7 @@ impl Battle {
             // ねをはる/アクアリング
             {
                 let p = self.sides[sx].active_mut();
-                if (p.rooted || p.aqua_ring) && p.is_alive {
+                if (p.rooted || p.aqua_ring) && p.is_alive && can_heal(p) {
                     let heal = std::cmp::max(1, p.max_hp / 16);
                     p.hp = std::cmp::min(p.max_hp, p.hp + heal);
                 }
@@ -4533,7 +4831,7 @@ impl Battle {
                 let p = self.sides[sx].active_mut();
                 let airborne = p.has_type(pack.tc.ひこう) || p.ability == l.ふゆう || p.magnet_rise
                     || p.item == Some(pack.sy.it.ふうせん);
-                if p.is_alive && p.hp < p.max_hp && (!airborne || p.grounded || gravity) {
+                if p.is_alive && p.hp < p.max_hp && can_heal(p) && (!airborne || p.grounded || gravity) {
                     let heal = std::cmp::max(1, p.max_hp / 16);
                     p.hp = std::cmp::min(p.max_hp, p.hp + heal);
                 }
@@ -4542,11 +4840,11 @@ impl Battle {
             let eot_h3 = self.sides[sx].active().hp;
             // たべのこし / くろいヘドロ
             {
-                let (item, is_poison) = {
+                let (item, is_poison, healable, mg) = {
                     let p = self.sides[sx].active();
-                    (p.item, p.has_type(pack.tc.どく))
+                    (p.item, p.has_type(pack.tc.どく), can_heal(p), p.ability == l.マジックガード)
                 };
-                if item == Some(l.たべのこし) {
+                if item == Some(l.たべのこし) && healable {
                     let (nm, healed) = {
                         let p = self.sides[sx].active_mut();
                         let heal = std::cmp::max(1, p.max_hp / 16);
@@ -4561,7 +4859,7 @@ impl Battle {
                     if is_poison {
                         let (nm, healed) = {
                             let p = self.sides[sx].active_mut();
-                            let heal = std::cmp::max(1, p.max_hp / 16);
+                            let heal = if healable { std::cmp::max(1, p.max_hp / 16) } else { 0 };
                             let old = p.hp;
                             p.hp = std::cmp::min(p.max_hp, p.hp + heal);
                             (p.name, p.hp > old)
@@ -4569,7 +4867,7 @@ impl Battle {
                         if healed {
                             self.sides[ox].opp_view.on_item(nm, l.くろいヘドロ);
                         }
-                    } else {
+                    } else if !mg {
                         let p = self.sides[sx].active_mut();
                         let dmg = std::cmp::max(1, p.max_hp / 16);
                         p.take_damage(dmg);
@@ -4585,12 +4883,12 @@ impl Battle {
             // 否定的観測（belief.py と 1:1）: HPが満タンでないのにターン終了で回復しなかった
             // ＝回復持ち物ではない。満タンだと回復が起きなくても何も分からないので除外する。
             {
-                let (nm, hp, mx, alive, item) = {
+                let (nm, hp, mx, alive, item, healable) = {
                     let p = self.sides[sx].active();
-                    (p.name, p.hp, p.max_hp, p.is_alive, p.item)
+                    (p.name, p.hp, p.max_hp, p.is_alive, p.item, can_heal(p))
                 };
                 let not_recov = item != Some(l.たべのこし) && item != Some(l.くろいヘドロ);
-                if self.sides[ox].belief.0.is_some() && hp < mx && alive && not_recov {
+                if self.sides[ox].belief.0.is_some() && hp < mx && alive && not_recov && healable {
                     let mut bl = self.sides[ox].belief.0.take().unwrap();
                     bl.observe_absent_item(pack, nm, &["たべのこし", "くろいヘドロ"]);
                     self.sides[ox].belief.0 = Some(bl);
@@ -4606,7 +4904,7 @@ impl Battle {
             if !berry_blocked {
                 let trig = {
                     let p = self.sides[sx].active();
-                    p.item == Some(l.オボンのみ) && p.hp <= p.max_hp / 2
+                    p.item == Some(l.オボンのみ) && p.hp <= p.max_hp / 2 && can_heal(p)
                 };
                 if trig {
                     let nm = {
@@ -4626,7 +4924,7 @@ impl Battle {
             if !berry_blocked {
                 let trig = {
                     let p = self.sides[sx].active();
-                    p.item == Some(l.オレンのみ) && p.hp <= p.max_hp / 2
+                    p.item == Some(l.オレンのみ) && p.hp <= p.max_hp / 2 && can_heal(p)
                 };
                 if trig {
                     let nm = {
@@ -4645,11 +4943,11 @@ impl Battle {
             // 否定的観測（battle.py と 1:1）: 表示HPが半分を確実に下回ったのにきのみが発動しなかった
             // ＝オボンのみ/オレンのみではない。境目（50%付近）ときんちょうかんの時は推論しない
             {
-                let (nm, hp, mx, alive) = {
+                let (nm, hp, mx, alive, healable) = {
                     let p = self.sides[sx].active();
-                    (p.name, p.hp, p.max_hp, p.is_alive)
+                    (p.name, p.hp, p.max_hp, p.is_alive, can_heal(p))
                 };
-                if self.sides[ox].belief.0.is_some() && !berry_blocked && alive
+                if self.sides[ox].belief.0.is_some() && !berry_blocked && alive && healable
                     && item_before_berry != Some(l.オボンのみ) && item_before_berry != Some(l.オレンのみ)
                     && hp <= mx / 2 && hp * 100 < mx * 49
                 {
@@ -4675,7 +4973,7 @@ impl Battle {
             {
                 let seeded = {
                     let p = self.sides[sx].active();
-                    p.seeded && p.is_alive
+                    p.seeded && p.is_alive && p.ability != l.マジックガード
                 };
                 if seeded {
                     let drain = {
@@ -4687,7 +4985,7 @@ impl Battle {
                         d
                     };
                     let o = self.sides[ox].active_mut();
-                    if o.is_alive {
+                    if o.is_alive && can_heal(o) {
                         let h0 = o.hp;
                         o.hp = std::cmp::min(o.max_hp, o.hp + drain);
                         race_cause(ox, "leechseed", h0 - o.hp);
@@ -4705,7 +5003,7 @@ impl Battle {
             // しおづけ
             {
                 let p = self.sides[sx].active_mut();
-                if p.salted && p.is_alive {
+                if p.salted && p.is_alive && p.ability != l.マジックガード {
                     let ws = p.has_type(pack.tc.みず) || p.has_type(pack.tc.はがね);
                     let rate = if ws { 1.0 / 8.0 } else { 1.0 / 16.0 };
                     let dmg = std::cmp::max(1, ((p.max_hp as f64) * rate).floor() as i64);
@@ -4719,11 +5017,15 @@ impl Battle {
                 let p = self.sides[sx].active_mut();
                 if p.yawn_count > 0 {
                     p.yawn_count -= 1;
-                    if p.yawn_count == 0 && p.status.is_none() {
-                        if p.ability != l.ふみん && p.ability != l.やるき {
-                            p.status = Some(st.sleep);
-                            p.sleep_count = rng.randint(1, 3);
-                        }
+                    if p.yawn_count == 0 && p.status.is_none()
+                        && !crate::damage::terrain_blocks_sleep(pack, p, &self.field)
+                        && !(p.ability == l.リーフガード
+                            && effective_weather(pack, &self.field, Some(&*p)) == Some(pack.sy.we.sunny))
+                        && apply_status(pack, p, st.sleep, false, Some(&self.field))
+                    {
+                        p.sleep_count = rng.randint(2, 4);
+                        p.sleep_acts = 0;
+                        p.sleep_rest = false;
                     }
                 }
             }
@@ -4734,10 +5036,12 @@ impl Battle {
             {
                 let p = self.sides[sx].active_mut();
                 if p.bound_count > 0 && p.is_alive {
-                    let d = std::cmp::max(1, p.max_hp / if p.bound_by_band { 6 } else { 8 });
-                    let h0 = p.hp;
-                    p.take_damage(d);
-                    race_cause(sx, "bind", h0 - p.hp);
+                    if p.ability != l.マジックガード {
+                        let d = std::cmp::max(1, p.max_hp / if p.bound_by_band { 6 } else { 8 });
+                        let h0 = p.hp;
+                        p.take_damage(d);
+                        race_cause(sx, "bind", h0 - p.hp);
+                    }
                     p.bound_count -= 1;
                 }
             }
@@ -4776,6 +5080,13 @@ impl Battle {
                 }
                 if p.heal_block_count > 0 {
                     p.heal_block_count -= 1;
+                }
+                // でんじふゆう: 使ったターンを含め5ターン
+                if p.levitate_turns > 0 {
+                    p.levitate_turns -= 1;
+                    if p.levitate_turns == 0 {
+                        p.magnet_rise = false;
+                    }
                 }
                 p.move_failed_last = p.move_failed_this_turn;
                 p.move_failed_this_turn = false;
@@ -4846,7 +5157,9 @@ impl Battle {
         for sx in 0..2usize {
             if self.sides[sx].wish_count > 0 {
                 self.sides[sx].wish_count -= 1;
-                if self.sides[sx].wish_count == 0 && self.sides[sx].active().is_alive {
+                if self.sides[sx].wish_count == 0 && self.sides[sx].active().is_alive
+                    && can_heal(self.sides[sx].active())
+                {
                     let wh = self.sides[sx].wish_hp;
                     let p = self.sides[sx].active_mut();
                     let heal = std::cmp::min(wh, p.max_hp - p.hp);
@@ -4878,7 +5191,7 @@ impl Battle {
                     p.is_alive = false;
                 }
             }
-            if p.cursed && p.is_alive {
+            if p.cursed && p.is_alive && p.ability != l.マジックガード {
                 let d = std::cmp::max(1, p.max_hp / 4);
                 let h0 = p.hp;
                 p.take_damage(d);
@@ -4920,6 +5233,10 @@ impl Battle {
         }
         self.faint_switch(pack, 0, rng);
         self.faint_switch(pack, 1, rng);
+        // ターン終了後に出たポケモンは次のターンの頭から場にいる扱い（実機の activeTurns。battle.py と同じ）
+        for sx in 0..2usize {
+            self.sides[sx].active_mut().switched_this_turn = false;
+        }
     }
 
     /// run（見せ合い＋初手入場）。preview は [(name, base_t1, base_t2, t1, t2)]
@@ -5042,7 +5359,9 @@ impl Battle {
         let (me, opp) = split2(sides, sx);
         let mi = me.active_idx;
         let oi = opp.active_idx;
-        ab::entry_ability(pack, &mut me.party[mi], &mut opp.party[oi], field, MAX_TURNS);
+        ab::entry_ability(pack, &mut me.party[mi], &mut opp.party[oi], field);
+        it::try_white_herb(pack, &mut me.party[mi]);
+        it::try_white_herb(pack, &mut opp.party[oi]);
     }
 
     fn sync_item_loss(&mut self) {
@@ -5234,5 +5553,630 @@ impl Battle {
             return 1;
         }
         0
+    }
+}
+
+/// 監査5（2026-10-04）の修正。test_all.py 37 と同じ局面
+#[cfg(test)]
+mod fix5_tests {
+    use super::*;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    struct Z;
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { 0.99 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    const N: &str = "きれいなぬけがら";
+
+    fn sides(p: &mut Pack, a: &[&str], b: &[&str]) -> [Side; 2] {
+        let pa: Vec<Poke> = a.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        let pb: Vec<Poke> = b.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        [Side { party: pa, active_idx: 0, field_idx: 0, ..Default::default() },
+         Side { party: pb, active_idx: 0, field_idx: 1, ..Default::default() }]
+    }
+
+    fn mv_of(p: &Pack, poke: &Poke, n: &str) -> Action {
+        let (i, m) = poke.moves.iter().enumerate().find(|(_, m)| p.intern.resolve(m.name) == n).unwrap();
+        Action { kind: ActKind::Move, mv: Some(m.clone()), move_idx: i as i64, switch_to: -1, do_mega: false }
+    }
+
+    #[test]
+    fn 継続中のフィールドへの登場でシードが発動() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("オオニューラ@サイコシード:ようき:インファイト:0/32/0/0/0/32:かるわざ")],
+                          &[&format!("ガブリアス@{N}:ようき:じしん:0/32/0/0/0/32:さめはだ")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        it::set_terrain(&mut f, 2, 5);
+        let mut opp = s[1].party[0].clone();
+        entry_effects(pr, &mut s[0], 0, &mut f, &mut opp);
+        let o = &s[0].party[0];
+        assert!(o.item.is_none() && o.stage_sp_defense == 1, "サイコシード発動");
+        assert_eq!(o.stage_speed, 2, "かるわざ");
+        let mut s2 = sides(&mut p, &[&format!("オオニューラ@サイコシード:ようき:インファイト:0/32/0/0/0/32:かるわざ")],
+                           &[&format!("ガブリアス@{N}:ようき:じしん:0/32/0/0/0/32:さめはだ")]);
+        let pr: &Pack = &p;
+        let mut f2 = Field::default();
+        it::set_terrain(&mut f2, 1, 5);
+        entry_effects(pr, &mut s2[0], 0, &mut f2, &mut opp);
+        assert!(s2[0].party[0].item.is_some(), "別のフィールドでは発動しない");
+    }
+
+    #[test]
+    fn ふうせんは設置物の接地判定() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &["ガブリアス@ふうせん:ようき:じしん:0/32/0/0/0/32:さめはだ"],
+                          &[&format!("カバルドン@{N}:わんぱく:じしん:32/0/32/0/0/0:すなおこし")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        f.spikes[0] = 3;
+        f.sticky_web[0] = true;
+        let mut opp = s[1].party[0].clone();
+        entry_effects(pr, &mut s[0], 0, &mut f, &mut opp);
+        let g = &s[0].party[0];
+        assert!(g.hp == g.max_hp && g.stage_speed == 0);
+    }
+
+    #[test]
+    fn フィールドは1つだけ() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ゴリランダー@{N}:いじっぱり:グラスフィールド:32/32/0/0/0/0:グラスメイカー")],
+                          &[&format!("ガブリアス@{N}:ようき:じしん:0/32/0/0/0/32:さめはだ")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        it::set_terrain(&mut f, 2, 5);
+        let a = mv_of(pr, &s[0].party[0], "グラスフィールド");
+        let mut d = 0;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert!(f.grassy_terrain && !f.psychic_terrain && f.psychic_terrain_count == 0);
+    }
+
+    #[test]
+    fn ほえるは控えがいなければ失敗() {
+        let mut p = pack();
+        let hip = format!("カバルドン@{N}:わんぱく:ほえる:32/0/32/0/0/0:すなおこし");
+        let gab = format!("ガブリアス@{N}:ようき:じしん:0/32/0/0/0/32:さめはだ");
+        let mut s = sides(&mut p, &[&hip], &[&gab]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        s[1].party[0].stage_attack = 2;
+        let a = mv_of(pr, &s[0].party[0], "ほえる");
+        let mut d = 0;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert!(s[1].party[0].stage_attack == 2 && !s[1].party[0].force_switch, "控え無し: 失敗");
+        let mut s = sides(&mut p, &[&hip], &[&gab, &gab.replace("ガブリアス", "ボーマンダ").replace("さめはだ", "いかく")]);
+        let pr: &Pack = &p;
+        s[1].party[0].stage_attack = 2;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert!(s[1].party[0].stage_attack == 0 && s[1].party[0].force_switch, "控えあり: 成功");
+    }
+
+    #[test]
+    fn キラースピンは設置物を除去し素早さは上がらない() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("キラフロル@{N}:ひかえめ:キラースピン|こうそくスピン:32/0/0/32/0/0:どくげしょう")],
+                          &[&format!("カバルドン@{N}:わんぱく:じしん:32/0/32/0/0/0:すなおこし")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        f.stealth_rock[0] = true;
+        f.spikes[0] = 2;
+        f.toxic_spikes[0] = 1;
+        f.sticky_web[0] = true;
+        f.stealth_rock[1] = true;
+        s[0].party[0].seeded = true;
+        let a = mv_of(pr, &s[0].party[0], "キラースピン");
+        let mut d = 0;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert!(d > 0);
+        assert!(!f.stealth_rock[0] && f.spikes[0] == 0 && f.toxic_spikes[0] == 0 && !f.sticky_web[0]);
+        assert!(f.stealth_rock[1], "相手側は残る");
+        assert!(!s[0].party[0].seeded && s[0].party[0].stage_speed == 0);
+        f.sticky_web[0] = true;
+        let a = mv_of(pr, &s[0].party[0], "こうそくスピン");
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert!(!f.sticky_web[0] && s[0].party[0].stage_speed == 1);
+    }
+
+    #[test]
+    fn ねむるは3回目の行動で起きる() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("カビゴン@{N}:わんぱく:ねむる|のしかかり|ねごと:32/0/32/0/0/0:あついしぼう")],
+                          &[&format!("カバルドン@{N}:わんぱく:じしん:32/0/32/0/0/0:すなおこし")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        let sleep = pr.sy.st.sleep;
+        s[0].party[0].hp = 10;
+        let a = mv_of(pr, &s[0].party[0], "ねむる");
+        let mut d = 0;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert!(s[0].party[0].status == Some(sleep) && s[0].party[0].sleep_count == 3);
+        let b = mv_of(pr, &s[0].party[0], "のしかかり");
+        execute_move(pr, &mut s, &mut f, 0, &b, None, &mut Z, &mut d);
+        execute_move(pr, &mut s, &mut f, 0, &b, None, &mut Z, &mut d);
+        assert!(s[0].party[0].status == Some(sleep) && s[1].party[0].hp == s[1].party[0].max_hp);
+        execute_move(pr, &mut s, &mut f, 0, &b, None, &mut Z, &mut d);
+        assert!(s[0].party[0].status.is_none());
+        s[0].party[0].status = Some(sleep);
+        s[0].party[0].sleep_count = 1;
+        let c = mv_of(pr, &s[0].party[0], "ねごと");
+        execute_move(pr, &mut s, &mut f, 0, &c, None, &mut Z, &mut d);
+        assert!(s[0].party[0].status.is_none(), "ねごともカウンタを減らす");
+        s[0].party[0].hp = 10;
+        it::set_terrain(&mut f, 0, 5);
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert!(s[0].party[0].status.is_none() && s[0].party[0].hp == 10, "フィールドで接地ならねむる失敗");
+    }
+
+    #[test]
+    fn あくびの失敗条件() {
+        let mut p = pack();
+        let hip = format!("カバルドン@{N}:わんぱく:あくび:32/0/32/0/0/0:すなおこし");
+        let gab = format!("ガブリアス@{N}:ようき:じしん:0/32/0/0/0/32:さめはだ");
+        let mut s = sides(&mut p, &[&hip], &[&gab]);
+        let pr: &Pack = &p;
+        let a = mv_of(pr, &s[0].party[0], "あくび");
+        let mut d = 0;
+        let mut f = Field::default();
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert_eq!(s[1].party[0].yawn_count, 2);
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert_eq!(s[1].party[0].yawn_count, 2, "ねむけ中は失敗");
+        for t in 0..2usize {
+            let mut s = sides(&mut p, &[&hip], &[&gab]);
+            let pr: &Pack = &p;
+            let mut f = Field::default();
+            f.electric_terrain = t == 0;
+            f.misty_terrain = t == 1;
+            execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+            assert_eq!(s[1].party[0].yawn_count, 0, "フィールドで接地なら失敗");
+        }
+        let mut s = sides(&mut p, &[&hip], &[&gab]);
+        let pr: &Pack = &p;
+        s[1].safeguard = 3;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert_eq!(s[1].party[0].yawn_count, 0, "しんぴのまもり");
+        let mut s = sides(&mut p, &[&hip], &[&gab]);
+        let pr: &Pack = &p;
+        s[1].party[0].status = Some(pr.sy.st.burn);
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert_eq!(s[1].party[0].yawn_count, 0, "状態異常");
+    }
+
+    #[test]
+    fn グラススライダーはふうせんで先制にならない() {
+        let mut p = pack();
+        let s = sides(&mut p, &[&format!("ゴリランダー@ふうせん:いじっぱり:グラススライダー:32/32/0/0/0/0:グラスメイカー")],
+                      &[&format!("ガブリアス@{N}:ようき:じしん:0/32/0/0/0/32:さめはだ")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        it::set_terrain(&mut f, 1, 5);
+        let mut g = s[0].party[0].clone();
+        let a = mv_of(pr, &g, "グラススライダー");
+        assert_eq!(priority_base(pr, &a, &g, &f), 0);
+        g.item = None;
+        assert_eq!(priority_base(pr, &a, &g, &f), 1);
+    }
+}
+
+/// 監査40（2026-10-04）の修正。test_all.py 39 と同じ局面
+#[cfg(test)]
+mod fix40_tests {
+    use super::*;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    struct Z;
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { 0.5 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    const N: &str = "きれいなぬけがら";
+    const DUM: &str = "カビゴン@きれいなぬけがら:わんぱく:のろい|ボディプレス:32/0/32/0/0/0:あついしぼう";
+
+    fn sides(p: &mut Pack, a: &[&str], b: &[&str]) -> [Side; 2] {
+        let pa: Vec<Poke> = a.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        let pb: Vec<Poke> = b.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        [Side { party: pa, active_idx: 0, field_idx: 0, ..Default::default() },
+         Side { party: pb, active_idx: 0, field_idx: 1, ..Default::default() }]
+    }
+
+    fn mv_of(p: &Pack, poke: &Poke, n: &str) -> Action {
+        let (i, m) = poke.moves.iter().enumerate().find(|(_, m)| p.intern.resolve(m.name) == n).unwrap();
+        Action { kind: ActKind::Move, mv: Some(m.clone()), move_idx: i as i64, switch_to: -1, do_mega: false }
+    }
+
+    #[test]
+    fn audit40_1_メガ進化の天候は5ターン() {
+        let mut p = pack();
+        let [a, b] = sides(&mut p, &["リザードン@リザードナイトY:ひかえめ:はねやすめ:0/0/0/32/0/32:もうか"], &[DUM]);
+        let pr: &Pack = &p;
+        let mut bt = Battle::new(a, b, Field::default());
+        bt.mega_one(pr, 0);
+        assert_eq!(bt.field.weather, Some(pr.sy.we.sunny));
+        assert_eq!(bt.field.weather_count, 5);
+    }
+
+    #[test]
+    fn audit40_7_ミラーアーマーはいかくを跳ね返す() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ボーマンダ@{N}:いじっぱり:すてみタックル:0/32/0/0/0/32:いかく")],
+                          &[&format!("アーマーガア@{N}:わんぱく:ボディプレス:32/0/32/0/0/0:ミラーアーマー")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        let mut opp = s[1].party[0].clone();
+        entry_effects(pr, &mut s[0], 0, &mut f, &mut opp);
+        assert_eq!(s[0].party[0].stage_attack, -1);
+        assert_eq!(opp.stage_attack, 0);
+    }
+
+    #[test]
+    fn audit40_11_ほろびのうたのカウントは4() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ゲンガー@{N}:おくびょう:ほろびのうた:32/0/0/0/0/32:のろわれボディ")], &[DUM]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        let a = mv_of(pr, &s[0].party[0], "ほろびのうた");
+        let mut d = 0;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert_eq!((s[0].party[0].perish_count, s[1].party[0].perish_count), (4, 4));
+    }
+
+    #[test]
+    fn audit40_8_とびひざげりはタイプ無効でも反動() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("エースバーン@{N}:ようき:とびひざげり:0/32/0/0/0/32:もうか")],
+                          &[&format!("ゲンガー@{N}:おくびょう:のろい:32/0/0/0/0/32:のろわれボディ")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        let a = mv_of(pr, &s[0].party[0], "とびひざげり");
+        let mut d = 0;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        let e = &s[0].party[0];
+        assert_eq!(e.max_hp - e.hp, e.max_hp / 2);
+    }
+
+    #[test]
+    fn audit40_15_特性で無効の技は効かない() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("パーモット@{N}:ようき:でんこうそうげき:0/32/0/0/0/32:てつのこぶし")],
+                          &[&format!("ライチュウ@{N}:おくびょう:わるだくみ:0/0/0/32/0/32:ひらいしん")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        let a = mv_of(pr, &s[0].party[0], "でんこうそうげき");
+        let mut d = 0;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert!(s[0].party[0].has_type(pr.tc.でんき), "タイプは残る");
+        assert_eq!(s[1].party[0].stage_sp_attack, 1);
+        let mut s = sides(&mut p, &[&format!("ゴリランダー@{N}:いじっぱり:10まんばりき:32/32/0/0/0/0:グラスメイカー")],
+                          &["ウォッシュロトム@ゴツゴツメット:ずぶとい:おにび:32/0/32/0/0/0:ふゆう"]);
+        let pr: &Pack = &p;
+        let a = mv_of(pr, &s[0].party[0], "10まんばりき");
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert_eq!(s[0].party[0].hp, s[0].party[0].max_hp, "ゴツゴツメットは発動しない");
+    }
+
+    #[test]
+    fn audit40_みがわりとミストフィールドは状態異常を防ぐ() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ヒートロトム@{N}:ずぶとい:おにび|でんじは|ちょうはつ:32/0/32/0/0/0:ふゆう")],
+                          &[&format!("ゲンガー@{N}:おくびょう:みがわり:32/0/0/0/0/32:のろわれボディ")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        s[1].party[0].substitute_hp = 40;
+        let mut d = 0;
+        for m in ["おにび", "でんじは"] {
+            let a = mv_of(pr, &s[0].party[0], m);
+            execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        }
+        assert!(s[1].party[0].status.is_none());
+        let a = mv_of(pr, &s[0].party[0], "ちょうはつ");
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert!(s[1].party[0].taunt_count > 0, "ちょうはつ は貫通");
+        let mut s = sides(&mut p, &[&format!("ブラッキー@{N}:ずぶとい:でんじは|あやしいひかり:32/0/32/0/0/0:せいしんりょく")], &[DUM]);
+        let pr: &Pack = &p;
+        f.misty_terrain = true;
+        f.misty_terrain_count = 5;
+        for m in ["でんじは", "あやしいひかり"] {
+            let a = mv_of(pr, &s[0].party[0], m);
+            execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        }
+        assert!(s[1].party[0].status.is_none() && !s[1].party[0].confused);
+    }
+
+    fn names(p: &Pack, c: &[Action]) -> Vec<String> {
+        c.iter().map(|a| match &a.mv { Some(m) => p.intern.resolve(m.name).to_string(), None => "sw".to_string() }).collect()
+    }
+
+    fn cands(s: &Side) -> Vec<Action> {
+        let me = s.active();
+        let mut v: Vec<Action> = me.moves.iter().enumerate()
+            .map(|(i, m)| Action { kind: ActKind::Move, mv: Some(m.clone()), move_idx: i as i64, switch_to: -1, do_mega: false })
+            .collect();
+        for (i, p) in s.party.iter().enumerate() {
+            if i != s.active_idx && p.is_alive {
+                v.push(Action { kind: ActKind::Switch, mv: None, move_idx: 0, switch_to: i as i64, do_mega: false });
+            }
+        }
+        v
+    }
+
+    #[test]
+    fn audit40_19_必ず失敗する手と効果の無い手を候補から外す() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("グソクムシャ@{N}:いじっぱり:であいがしら|アクアブレイク|じこさいせい|つるぎのまい:32/32/0/0/0/0:ききかいひ"), DUM],
+                          &[DUM]);
+        let pr: &Pack = &p;
+        let f = Field::default();
+        s[0].party[0].turns_out = 1;
+        s[0].party[0].stage_attack = 6;
+        let c = crate::search::prune_futile_moves(pr, &s[0], &s[1], &f, cands(&s[0]));
+        assert_eq!(names(pr, &c), vec!["アクアブレイク", "sw"]);
+        let mut s = sides(&mut p, &[&format!("カバルドン@{N}:わんぱく:ほえる|あくび|じしん|でんじは:32/0/32/0/0/0:すなおこし")], &[DUM]);
+        let pr: &Pack = &p;
+        s[1].party[0].status = Some(pr.sy.st.paralysis);
+        let c = crate::search::prune_futile_moves(pr, &s[0], &s[1], &f, cands(&s[0]));
+        assert_eq!(names(pr, &c), vec!["じしん"]);
+        let mut s = sides(&mut p, &[&format!("カバルドン@{N}:わんぱく:じしん|がんせきふうじ:32/0/32/0/0/0:すなおこし")],
+                          &["サーフゴー@ふうせん:ひかえめ:シャドーボール:0/0/0/32/0/32:おうごんのからだ"]);
+        let pr: &Pack = &p;
+        let g = s[1].party[0].clone();
+        s[0].opp_view.on_enter(pr, &g);
+        let c = crate::search::prune_futile_moves(pr, &s[0], &s[1], &f, cands(&s[0]));
+        assert_eq!(names(pr, &c), vec!["がんせきふうじ"]);
+        let mut s = sides(&mut p, &[&format!("アシレーヌ@{N}:ひかえめ:ムーンフォース|アンコール|めいそう|うたかたのアリア:32/0/0/32/0/0:げきりゅう")], &[DUM]);
+        let pr: &Pack = &p;
+        s[1].party[0].last_used_move = Some(pr.sy.l.のろい);
+        s[0].party[0].taunt_count = 2;
+        let c = crate::search::prune_futile_moves(pr, &s[0], &s[1], &f, cands(&s[0]));
+        assert_eq!(names(pr, &c), vec!["ムーンフォース", "うたかたのアリア"], "ちょうはつ中の変化技");
+        s[0].party[0].taunt_count = 0;
+        s[0].party[0].throat_chop_count = 2;
+        let c = crate::search::prune_futile_moves(pr, &s[0], &s[1], &f, cands(&s[0]));
+        assert_eq!(names(pr, &c), vec!["ムーンフォース", "アンコール", "めいそう"], "じごくづき中の音技");
+    }
+
+    #[test]
+    fn audit40_3_確定KOは命中の高い技で上書き() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ライチュウ@{N}:ひかえめ:10まんボルト|でんじほう|わるだくみ:0/0/0/32/0/32:ひらいしん")],
+                          &[&format!("ギャラドス@{N}:ようき:たきのぼり:0/32/0/0/0/32:いかく")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        s[1].party[0].hp = 30;
+        let st = mv_of(pr, &s[0].party[0], "わるだくみ");
+        let [mut a, mut b] = s;
+        let r = crate::ai::certain_ko_override_opt(pr, st.clone(), &mut a, &mut b, &mut f, &mut Z, true, true, true);
+        assert_eq!(pr.intern.resolve(r.mv.unwrap().name), "10まんボルト");
+        a.party[0].moves.remove(0);
+        a.party[0].pp.remove(0);
+        let st = mv_of(pr, &a.party[0], "わるだくみ");
+        let r = crate::ai::certain_ko_override_opt(pr, st.clone(), &mut a, &mut b, &mut f, &mut Z, true, true, true);
+        assert_eq!(pr.intern.resolve(r.mv.unwrap().name), "わるだくみ", "命中50の技では上書きしない");
+    }
+
+    #[test]
+    fn audit40_ねむりカウンタの決定化() {
+        let mut p = pack();
+        let s = sides(&mut p, &[DUM], &[DUM]);
+        let pr: &Pack = &p;
+        let mut q = s[0].party[0].clone();
+        q.status = Some(pr.sy.st.sleep);
+        q.sleep_acts = 2;
+        q.sleep_count = 1;
+        let mut r = crate::cpyrng::CpyRandom::new(5);
+        let mut seen = std::collections::BTreeSet::new();
+        for _ in 0..60 {
+            crate::search::resample_sleep(pr, &mut q, &mut r);
+            seen.insert(q.sleep_count);
+        }
+        assert_eq!(seen.into_iter().collect::<Vec<_>>(), vec![1, 2]);
+        q.sleep_rest = true;
+        q.sleep_acts = 1;
+        crate::search::resample_sleep(pr, &mut q, &mut r);
+        assert_eq!(q.sleep_count, 2);
+    }
+
+    #[test]
+    fn audit40_13_おうごんのからだはいたみわけを防ぐ() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ウォッシュロトム@{N}:ずぶとい:いたみわけ:32/0/32/0/0/0:ふゆう")],
+                          &[&format!("サーフゴー@{N}:ひかえめ:シャドーボール:0/0/0/32/0/32:おうごんのからだ")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        s[0].party[0].hp = 10;
+        let a = mv_of(pr, &s[0].party[0], "いたみわけ");
+        let mut d = 0;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
+        assert_eq!(s[0].party[0].hp, 10);
+        assert_eq!(s[1].party[0].hp, s[1].party[0].max_hp);
+    }
+}
+
+/// 監査200（2026-10-04）の修正。test_all.py 40 と同じ局面
+#[cfg(test)]
+mod fix200_tests {
+    use super::*;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    struct Z;
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { 0.5 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    const N: &str = "メトロノーム";
+    const DUM: &str = "カビゴン@メトロノーム:わんぱく:のろい|まもる:32/0/32/0/0/0:あついしぼう";
+    const BLK: &str = "ブラッキー@メトロノーム:ずぶとい:ねがいごと|のろい:32/0/32/0/0/0:せいしんりょく";
+
+    fn sides(p: &mut Pack, a: &[&str], b: &[&str]) -> [Side; 2] {
+        let pa: Vec<Poke> = a.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        let pb: Vec<Poke> = b.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        [Side { party: pa, active_idx: 0, field_idx: 0, ..Default::default() },
+         Side { party: pb, active_idx: 0, field_idx: 1, ..Default::default() }]
+    }
+
+    fn mv_of(p: &Pack, poke: &Poke, n: &str) -> Action {
+        let (i, m) = poke.moves.iter().enumerate().find(|(_, m)| p.intern.resolve(m.name) == n).unwrap();
+        Action { kind: ActKind::Move, mv: Some(m.clone()), move_idx: i as i64, switch_to: -1, do_mega: false }
+    }
+
+    fn run(pr: &Pack, s: &mut [Side; 2], f: &mut Field, who: usize, n: &str) {
+        let a = mv_of(pr, &s[who].party[s[who].active_idx], n);
+        let mut d = 0;
+        execute_move(pr, s, f, who, &a, None, &mut Z, &mut d);
+    }
+
+    #[test]
+    fn r4mcts_メガ前でもメガソーラーのウェザーボールはほのお() {
+        let mut p = pack();
+        let me = build_poke(&mut p, "メガニウム@メガニウムナイト:おくびょう:ソーラービーム|ウェザーボール|げんしのちから|くさわけ:2/0/0/32/0/32:しんりょく", "M-6");
+        let mv = me.moves.iter().find(|m| p.intern.resolve(m.name) == "ウェザーボール").unwrap().clone();
+        let f = Field::default();
+        let t = crate::damage::effective_move_type_ab(&p, &me, p.sy.ab.メガソーラー, &mv, &f);
+        assert_eq!(t, p.tc.ほのお);
+        assert_eq!(crate::damage::effective_move_type_ab(&p, &me, me.ability, &mv, &f), p.tc.ノーマル);
+    }
+
+    #[test]
+    fn audit200_1_まもるは必中技より先() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ルカリオ@{N}:おくびょう:はどうだん:0/0/0/32/0/32:せいしんりょく")],
+                          &[&format!("ガブリアス@{N}:わんぱく:まもる:32/0/32/0/0/0:さめはだ")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        s[1].party[0].protecting = true;
+        run(pr, &mut s, &mut f, 0, "はどうだん");
+        assert_eq!(s[1].party[0].hp, s[1].party[0].max_hp);
+    }
+
+    #[test]
+    fn audit200_3_5_7_ステロの撒き直し_跳ね返し_おいかぜ() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("カバルドン@{N}:わんぱく:ステルスロック|まきびし:32/0/32/0/0/0:すなおこし")],
+                          &[&format!("エーフィ@{N}:ずぶとい:おいかぜ:32/0/32/0/0/0:マジックミラー")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        run(pr, &mut s, &mut f, 0, "ステルスロック");
+        run(pr, &mut s, &mut f, 0, "まきびし");
+        assert_eq!((f.stealth_rock, f.spikes), ([true, false], [1, 0]));
+        s[1].party[0].ability = pr.sy.l.せいしんりょく;
+        s[1].stealth_rock_set = true;
+        run(pr, &mut s, &mut f, 0, "ステルスロック");
+        assert!(s[1].sr_pending);
+        run(pr, &mut s, &mut f, 1, "おいかぜ");
+        assert_eq!(s[1].tailwind_count, 4);
+    }
+
+    #[test]
+    fn audit200_4_いたずらごころは自分対象の変化技をあくにも使える() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("エルフーン@{N}:おくびょう:みがわり|でんじは:0/0/0/32/0/32:いたずらごころ")], &[BLK]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        run(pr, &mut s, &mut f, 0, "みがわり");
+        run(pr, &mut s, &mut f, 0, "でんじは");
+        assert!(s[0].party[0].substitute_hp > 0);
+        assert!(s[1].party[0].status.is_none());
+    }
+
+    #[test]
+    fn audit200_6_8_9_12_23_交代で消える状態としっぽきり() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ミミズズ@{N}:わんぱく:しっぽきり|でんじふゆう:32/0/32/0/0/0:どしょく"), BLK], &[DUM]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        run(pr, &mut s, &mut f, 0, "でんじふゆう");
+        assert_eq!((s[0].party[0].magnet_rise, s[0].party[0].levitate_turns), (true, 5));
+        {
+            let m = &mut s[0].party[0];
+            m.bad_poison_count = 3;
+            m.trapped = true;
+            m.last_used_move = Some(pr.sy.l.のろい);
+        }
+        run(pr, &mut s, &mut f, 0, "しっぽきり");
+        let sub = s[0].party[0].max_hp / 4;
+        s[0].switch_to(pr, 1);
+        let m = &s[0].party[0];
+        assert_eq!((m.bad_poison_count, m.trapped, m.last_used_move, m.magnet_rise), (0, false, None, false));
+        assert_eq!(s[0].party[1].substitute_hp, sub);
+    }
+
+    #[test]
+    fn audit200_8_ゴーストときれいなぬけがらは交代できる() {
+        let mut p = pack();
+        let s = sides(&mut p, &[&format!("ゲンガー@{N}:おくびょう:のろい:0/0/0/32/0/32:のろわれボディ"),
+                                "カビゴン@きれいなぬけがら:わんぱく:のろい:32/0/32/0/0/0:あついしぼう", DUM], &[DUM]);
+        let pr: &Pack = &p;
+        let mut ps = s[0].party.clone();
+        for q in ps.iter_mut() {
+            q.trapped = true;
+            q.bound_count = 3;
+        }
+        let r: Vec<bool> = ps.iter().map(|q| crate::ai::is_trapped(pr, q, None)).collect();
+        assert_eq!(r, vec![false, false, true]);
+    }
+
+    #[test]
+    fn audit200_みがわりは追加効果と接触の反応を防ぐ() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ドドゲザン@{N}:いじっぱり:はたきおとす:32/32/0/0/0/0:まけんき")],
+                          &["ガブリアス@ゴツゴツメット:わんぱく:のろい:32/0/32/0/0/0:さめはだ", BLK]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        s[1].party[0].substitute_hp = 200;
+        run(pr, &mut s, &mut f, 0, "はたきおとす");
+        assert_eq!(s[1].party[0].item, Some(pr.sy.it.ゴツゴツメット));
+        assert_eq!(s[0].party[0].hp, s[0].party[0].max_hp);
+        assert!(s[1].party[0].substitute_hp < 200);
+    }
+
+    #[test]
+    fn audit200_16_うらみつらみは追加効果() {
+        let p = pack();
+        assert!(p.flags(p.sy.l.うらみつらみ).secondary);
+        assert_eq!(def_downs(&p, p.sy.l.うらみつらみ), Some((0, -1, 1.0)));
+    }
+
+    #[test]
+    fn audit200_2_種名にコロンを含む型() {
+        let s = crate::poke::parse_pokemon_spec("ケンタロス:炎@こだわりスカーフ:いじっぱり:レイジングブル|インファイト:0/32/0/0/0/32:いかく");
+        assert_eq!(s.name, "ケンタロス:炎");
+        assert_eq!(s.item.as_deref(), Some("こだわりスカーフ"));
+        assert_eq!(s.evs.map(|e| (e.a, e.s)), Some((32, 32)));
+        assert_eq!(s.ability.as_deref(), Some("いかく"));
+        assert!(crate::poke::parse_spec_checked("ガブリアス:ようき:じしん:32/x").is_err());
+    }
+
+    #[test]
+    fn audit200_28_連続のみちづれを候補から外す() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ジュペッタ@{N}:ゆうかん:みちづれ|かげうち:32/32/0/0/0/0:おみとおし")], &[DUM]);
+        let pr: &Pack = &p;
+        let f = Field::default();
+        s[0].party[0].destiny_bond_last_turn = true;
+        let c: Vec<Action> = (0..2).map(|i| mv_of(pr, &s[0].party[0], ["みちづれ", "かげうち"][i])).collect();
+        let r = crate::search::prune_futile_moves_opt(pr, &s[0], &s[1], &f, c.clone(), true);
+        assert_eq!(r.len(), 1);
+        assert_eq!(crate::search::prune_futile_moves_opt(pr, &s[0], &s[1], &f, c, false).len(), 2);
     }
 }

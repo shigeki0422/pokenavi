@@ -64,6 +64,10 @@ pub fn round3(x: f64) -> f64 {
 }
 
 impl OppView {
+    pub fn find(&self, name: Sym) -> Option<&PokeKnowledge> {
+        self.pokemon.iter().find(|k| k.name == name)
+    }
+
     fn get(&mut self, name: Sym) -> &mut PokeKnowledge {
         if let Some(i) = self.pokemon.iter().position(|k| k.name == name) {
             return &mut self.pokemon[i];

@@ -1266,13 +1266,14 @@ _kb_g = make_poke(type1="ゴースト", ability="こぼれダネ", hp_b=255, def
 execute(make_poke(atk_b=10), _kb_g, "たいあたり", f=_f_kb2)
 check("こぼれダネ ダメージ0では展開しない(負例)", _f_kb2.grassy_terrain is False)
 
-# ── にげあし: 交代を邪魔する効果を無視 ──
+# ── にげあし: 野生からの逃走だけで、交代を邪魔する効果は防がない（監査200 #8。交代できるのはゴーストタイプ・きれいなぬけがら）──
 _shadow = make_poke(ability="かげふみ")
-check("にげあし かげふみ下でも交代できる", is_trapped(make_poke(ability="にげあし"), _shadow) is False)
+check("にげあし でも かげふみ 下では交代できない", is_trapped(make_poke(ability="にげあし"), _shadow) is True)
 check("にげあし 通常特性はかげふみで交代不可(負例)",
       is_trapped(make_poke(ability="しんりょく"), _shadow) is True)
+check("ゴーストタイプ は かげふみ 下でも交代できる", is_trapped(make_poke(type1="ゴースト"), _shadow) is False)
 _bound = make_poke(ability="にげあし"); _bound.trapped = True
-check("にげあし トラップ技も無視", is_trapped(_bound, make_poke()) is False)
+check("にげあし でも逃げられない状態は交代できない", is_trapped(_bound, make_poke()) is True)
 _bound_n = make_poke(ability="しんりょく"); _bound_n.trapped = True
 check("にげあし 通常特性はトラップ技で交代不可(負例)",
       is_trapped(_bound_n, make_poke()) is True)
@@ -2641,7 +2642,7 @@ check("じょおうのいげん 通常技は通る", _pq2.hp < _hq2, f"hp={_pq2.
 from simulator.abilities import NO_SINGLE_BATTLE_EFFECT as _NSE
 _noeff = ["いやしのこころ", "おもてなし", "きみょうなくすり", "きょうせい", "テレパシー",
           "フラワーベール", "フレンドガード", "プラス", "マイナス", "レシーバー", "すじがねいり",
-          "とうそうしん", "メロメロボディ"]
+          "とうそうしん", "メロメロボディ", "にげあし"]
 check("効果なし特性リストが文書と一致", set(_noeff) == _NSE, f"diff={set(_noeff) ^ _NSE}")
 for _ab_ne in _noeff:
     _pne = make_poke(type1="ノーマル", ability=_ab_ne, hp_b=200, def_b=100)
@@ -4574,10 +4575,13 @@ _d8 = make_poke(type1="ノーマル", hp_b=255); _d8.protecting = True
 execute(make_poke(type1="でんき"), _d8, "でんじは")
 check("まもる中: 変化技も防がれる", _d8.status is None, f"status={_d8.status}")
 
-# 9. みがわり中は状態異常技が効かない
-_d9 = make_poke(type1="ノーマル", hp_b=255); _d9._substitute_hp = 50
+# 9. みがわり中は状態異常技が効かない（同じ乱数で みがわり 無しなら入ることも確かめる。以前は でんじは が外れて偶然通っていた）
+random.seed(9); _d9c = make_poke(type1="ノーマル", hp_b=255)
+execute(make_poke(type1="でんき"), _d9c, "でんじは")
+random.seed(9); _d9 = make_poke(type1="ノーマル", hp_b=255); _d9._substitute_hp = 50
 execute(make_poke(type1="でんき"), _d9, "でんじは")
-check("みがわり中: 状態異常技無効", _d9.status is None, f"status={_d9.status}")
+check("audit40 既知 みがわり中: 状態異常技無効（対照: みがわり無しなら同じ乱数でまひ）", _d9c.status == "paralysis" and _d9.status is None,
+      f"control={_d9c.status} status={_d9.status}")
 
 # 10. 天候は違う天候で上書きできる（雨→晴れ）
 _fw = BattleField(); _fw.weather = "rain"
@@ -5427,11 +5431,13 @@ _ss26d = [m for m in _gab26d.moves if m.name_jp == "スケイルショット"][0
 _one26d = _cd26d(_gab26d, _sla26d, _ss26d, _f26c, critical=False, random_roll=0.0)
 _h2 = int(2 * _one26d)
 check("前提: 1発ぶんでは届かないHP", _one26d < _h2, f"1hit={_one26d} 2hits={_h2}")
+_A26c._FIX40_ON = False   # 命中90の技なので、回数の判定だけを見るため命中の条件（audit40 #3）を外す
 check("確定KO: スケイルショットは2発ぶんで確定を判定する",
       _ko26d(_gab26d, _sla26d, "スケイルショット", _h2) == "スケイルショット", f"hp={_h2}")
 _h3 = int(2 * _one26d) + 1
 check("負例: 2発で届かないHPでは連続技の上書きをしない（3発目以降は確定でない）",
       _ko26d(_gab26d, _sla26d, "スケイルショット", _h3) != "スケイルショット", f"hp={_h3}")
+_A26c._FIX40_ON = True
 
 # 先制技の脅威判定は最大ロール・最大回数（みずしゅりけん 5発）
 _gek26d = _mk26c("ゲッコウガ@いのちのたま:おくびょう:みずしゅりけん|あくのはどう|れいとうビーム|とんぼがえり:0/0/0/32/0/32:へんげんじざい")
@@ -5940,6 +5946,213 @@ print(json.dumps(out))
 else:
     print("  （pyengine が SEL_OPP_ASSUME 対応前のビルドなので Rust 側の照合は省略。maturin develop 後に実行される）")
 
+
+print("\n=== 26q. 学習選出の相手の仮定 learnedK / all（mean・minmix・weighted）（env SEL_OPP_ASSUME、既定はヒューリスティック） ===")
+# learnedK＝相手側の学習選出の値の softmax 上位K候補を和1の重みで、all＝相手の全候補を 平均／α·平均＋(1−α)·組ごとの最悪／softmax の重みで。
+# Python 3実装（元・高速版・Rust 版）と Rust select_scores（guide_rows・Rust 単独で相手の仮定まで計算）が同じ選出・同じ乱数の消費
+import random as _r26q
+import simulator.learned_selection as _LS26q
+_K26q = ("SEL_OPP_ASSUME", "SEL_OPP_K", "SEL_OPP_MIX", "SEL_OPP_ALPHA", "SEL_OPP_TEMP", "LEARNED_SELECTION_IMPL")
+_sv26q = {k: os.environ.get(k) for k in _K26q}
+def _env26q(d):
+    for k in _K26q:
+        os.environ.pop(k, None)
+    os.environ.update(d)
+_tw26q = _LS26q._topk_weights([0.2, 0.5, 0.5, 0.1, 0.4], 1.0, 3)
+check("_topk_weights: 重みの大きい順に K 個（同じ重みは添字順）・重みの和＝1",
+      [i for i, _ in _tw26q] == [1, 2, 4] and abs(sum(w for _, w in _tw26q) - 1.0) < 1e-15, f"{_tw26q}")
+check("_topk_weights: K が候補数以上なら全候補・和＝1",
+      len(_LS26q._topk_weights([0.2, 0.5, 0.1], 1.0, 99)) == 3
+      and abs(sum(w for _, w in _LS26q._topk_weights([0.2, 0.5, 0.1], 1.0, 99)) - 1.0) < 1e-15)
+_x26q = [0.6, 0.6, 0.6, 0.2, 0.4, 0.3]
+check("_agg: minmix α=1 は平均・α=0 は3体の組ごとの平均の最悪・α=0.5 はその中間",
+      abs(_LS26q._agg(_x26q, ("minmix", 1.0, 3)) - 0.45) < 1e-15 and abs(_LS26q._agg(_x26q, ("minmix", 0.0, 3)) - 0.3) < 1e-15
+      and abs(_LS26q._agg(_x26q, ("minmix", 0.5, 3)) - 0.375) < 1e-15)
+check("_agg: 重み付き和", _LS26q._agg([0.4, 0.8], ("w", [0.25, 0.75])) == 0.25 * 0.4 + 0.75 * 0.8)
+_LS26q._LOADED = False
+_m26q = _LS26q._load()
+_A26q = [_mk26c(x) for x in _P1s]; _B26q = [_mk26c(x) for x in _P2s]
+_env26q({"SEL_OPP_ASSUME": "learnedK"})
+_oa26q = _LS26q._opp_assume(_A26q, _B26q, dl, 3, _r26q.Random(5), _m26q)
+check("learnedK: 相手の仮定は既定 K=8 個・相手の候補・重みの和＝1・重みは降順",
+      _oa26q is not None and len(_oa26q[0]) == 8 and all(o in _LS26q._candidates(_B26q, 3) for o in _oa26q[0])
+      and abs(sum(_oa26q[1][1]) - 1.0) < 1e-12 and _oa26q[1][1] == sorted(_oa26q[1][1], reverse=True), f"{_oa26q}")
+_env26q({"SEL_OPP_ASSUME": "learnedK", "SEL_OPP_K": "1"})
+_g5 = _r26q.Random(5); _g6 = _r26q.Random(5)
+_oa1 = _LS26q._opp_assume(_A26q, _B26q, dl, 3, _g5, _m26q)
+_env26q({})
+_want26q = [_B26q.index(p) for p in _LS26q.learned_select_party(_B26q, _A26q, dl, n=3, temperature=0.0, rng=_g6)]
+check("learnedK K=1: 仮定は相手側の学習選出（温度0）だけ・重み1・乱数の消費は相手の学習選出の分だけ",
+      _oa1 is not None and _oa1[0] == [_want26q] and _oa1[1][1] == [1.0] and _g5.random() == _g6.random(), f"{_oa1} / {_want26q}")
+_env26q({"SEL_OPP_ASSUME": "all", "SEL_OPP_MIX": "weighted"})
+_oaw = _LS26q._opp_assume(_A26q, _B26q, dl, 3, _r26q.Random(5), _m26q)
+check("all weighted: 相手の全候補・重みの和＝1",
+      _oaw is not None and sorted(_oaw[0]) == sorted(_LS26q._candidates(_B26q, 3)) and abs(sum(_oaw[1][1]) - 1.0) < 1e-12)
+_env26q({"SEL_OPP_ASSUME": "all", "SEL_OPP_MIX": "minmix"})
+_g7 = _r26q.Random(5)
+_oam = _LS26q._opp_assume(_A26q, _B26q, dl, 3, _g7, _m26q)
+check("all minmix: 相手の全候補（候補順）・α 既定0.5・乱数を消費しない",
+      _oam is not None and _oam[0] == _LS26q._candidates(_B26q, 3) and _oam[1] == ("minmix", 0.5, 3)
+      and _g7.random() == _r26q.Random(5).random())
+_env26q({"SEL_OPP_ASSUME": "bogus"})
+check("SEL_OPP_ASSUME が未知の値なら既定（仮定を作らない）", _LS26q._opp_assume(_A26q, _B26q, dl, 3, _r26q.Random(5), _m26q) is None)
+_MODES26q = {"learnedK": {"SEL_OPP_ASSUME": "learnedK"},
+             "all_mean": {"SEL_OPP_ASSUME": "all", "SEL_OPP_MIX": "mean"},
+             "all_minmix": {"SEL_OPP_ASSUME": "all", "SEL_OPP_MIX": "minmix", "SEL_OPP_ALPHA": "0.25"},
+             "all_weighted": {"SEL_OPP_ASSUME": "all", "SEL_OPP_MIX": "weighted"}}
+_py26q = {}
+for _mn, _me in _MODES26q.items():
+    _res = {}
+    for _impl in ("ref", "fast", "rust"):
+        _env26q(dict(_me, LEARNED_SELECTION_IMPL=_impl))
+        _out = []
+        for _k, (_pa, _pb) in enumerate(((_P1s, _P2s), (_P2s, _P1s))):
+            _A = [_mk26c(x) for x in _pa]; _B = [_mk26c(x) for x in _pb]
+            _g = _r26q.Random(301 + _k)
+            _sc = _LS26q.learned_select_scores(_A, _B, dl, n=3, rng=_g)
+            _out.append(([_A.index(p) for p in max(_sc, key=lambda x: x[1])[0]], [v for _, v in _sc], _g.random()))
+        _res[_impl] = _out
+    _py26q[_mn] = [o[0] for o in _res["rust"]]
+    check(f"SEL_OPP_ASSUME {_mn}: 高速版・Rust 版が元の実装と同じ選出・値（差1e-12未満）・乱数の消費",
+          all(a[0] == b[0] and a[2] == b[2] and max(abs(x - y) for x, y in zip(a[1], b[1])) < 1e-12
+              for _i in ("fast", "rust") for a, b in zip(_res[_i], _res["ref"])), f"{[(k, [o[0] for o in v]) for k, v in _res.items()]}")
+_env26q({})
+_dq = _LS26q.learned_select_scores(_A26q, _B26q, dl, n=3, rng=_r26q.Random(41))
+_bq = _LS26q._score_cands(_A26q, _B26q, dl, 3, _r26q.Random(41), _m26q)
+check("SEL_OPP_ASSUME 未指定: 値が既定（ヒューリスティックの仮定・平均）と完全一致",
+      [(list(_A26q.index(p) for p in o), v) for o, v in _dq] == [(list(c), v) for c, v in _bq])
+for _k, _v in _sv26q.items():
+    if _v is None: os.environ.pop(_k, None)
+    else: os.environ[_k] = _v
+try:
+    import pokenavi_engine as _E26q
+    _ok26q = hasattr(_E26q, "guide_rows")
+except ImportError:
+    _ok26q = False
+if _ok26q:
+    _code26q = r"""
+import sys, json
+import pokenavi_engine as E
+A = json.loads(sys.argv[1]); B = json.loads(sys.argv[2]); P = sys.argv[3]
+print(json.dumps([E.guide_rows(A, [B], "M-6", 0, 300, P)[0][0], E.guide_rows(B, [A], "M-6", 0, 301, P)[0][0]]))
+"""
+    def _run26q(env):
+        e = dict(os.environ)
+        for k in _K26q:
+            e.pop(k, None)
+        e.update(env)
+        r = _sp26o.run([_sy26o.executable, "-c", _code26q, _js26o.dumps(_P1s), _js26o.dumps(_P2s), _LS26q._PATH],
+                       capture_output=True, text=True, env=e, cwd=_SCRIPTS_DIR26n)
+        return _js26o.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 else r.stderr[-500:]
+    for _mn, _me in _MODES26q.items():
+        _rs = _run26q(_me); _rs0 = _run26q(dict(_me, SEL_FAST="0"))
+        check(f"SEL_OPP_ASSUME {_mn}: Rust select_scores（高速版・元の実装とも）の選出が Python と一致",
+              _rs == _py26q[_mn] and _rs0 == _py26q[_mn], f"{_rs} / {_rs0} / {_py26q[_mn]}")
+else:
+    print("  （pyengine が無いので Rust 側の照合は省略）")
+
+
+print("\n=== 26r. 学習選出のモデル形式（隠れ層 ReLU・selector_m6c 等の別モデル）（既定 selector_m6b・tanh は不変） ===")
+# モデル JSON の "act"（無ければ tanh）。ReLU は Python _predict と Rust Selector（逐次和・高速版）の両方。未知の活性化・"U"（入力の追加）は
+# 読まずにヒューリスティックへ。ReLU モデルでも3実装（元・高速版・Rust 版）と Rust select_scores（guide_rows）の選出が一致
+import json as _j26r, tempfile as _tf26r, random as _r26r
+import numpy as _np26r
+import simulator.learned_selection as _LS26r
+_K26r = ("SEL_OPP_ASSUME", "SEL_OPP_K", "LEARNED_SELECTION_IMPL")
+_sv26r = {k: os.environ.get(k) for k in _K26r}
+_p0_26r, _m0_26r, _l0_26r = _LS26r._PATH, _LS26r._MODEL, _LS26r._LOADED
+_base26r = _j26r.load(open(os.path.join(os.path.dirname(_LS26r.__file__), "selector_m6b.json")))
+_td26r = _tf26r.mkdtemp()
+def _wr26r(name, d):
+    p = os.path.join(_td26r, name); _j26r.dump(d, open(p, "w")); return p
+def _ld26r(p):
+    _LS26r._PATH = p; _LS26r._LOADED = False
+    return _LS26r._load()
+_relu26r = _wr26r("relu.json", dict(_base26r, act="relu"))
+_m26r = _ld26r(_relu26r)
+check("ReLU のモデル（\"act\": \"relu\"）を読む", _m26r is not None and _m26r["act"] == "relu")
+_x26r = _np26r.random.default_rng(3).normal(size=(5, _m26r["W1"].shape[1]))
+_want26r = 1 / (1 + _np26r.exp(-(_np26r.maximum(_x26r @ _m26r["W1"].T + _m26r["b1"], 0) @ _m26r["W2"] + _m26r["b2"])))
+check("_predict: ReLU の隠れ層", _np26r.allclose(_LS26r._predict(_m26r, _x26r), _want26r, rtol=0, atol=1e-15))
+_mt26r = _ld26r(os.path.join(os.path.dirname(_LS26r.__file__), "selector_m6b.json"))
+_wt26r = 1 / (1 + _np26r.exp(-(_np26r.tanh(_x26r @ _mt26r["W1"].T + _mt26r["b1"]) @ _mt26r["W2"] + _mt26r["b2"])))
+check("_predict: \"act\" の無いモデル（selector_m6b）は tanh のまま", _mt26r["act"] == "tanh"
+      and _np26r.array_equal(_LS26r._predict(_mt26r, _x26r), _wt26r))
+check("未知の活性化のモデルは読まない（ヒューリスティック選出へ）", _ld26r(_wr26r("gelu.json", dict(_base26r, act="gelu"))) is None)
+check("入力の追加（\"U\"）を持つモデルは読まない", _ld26r(_wr26r("u.json", dict(_base26r, act="relu", U=[0.0], Ub=0.0))) is None)
+_m6c26r = os.path.join(os.path.dirname(_LS26r.__file__), "selector_m6c.json")
+_mc26r = _ld26r(_m6c26r) if os.path.exists(_m6c26r) else None
+from simulator.features import feature_dim as _fd26r
+check("selector_m6c.json（新ネット教師の再学習・既定ではない）を tanh のモデルとして読み、入力が現行の特徴量と同じ次元",
+      _mc26r is not None and _mc26r["act"] == "tanh" and _mc26r["W1"].shape[1] == _fd26r())
+_py26rc = None
+if _mc26r is not None:
+    _rc = {}
+    for _impl in ("ref", "rust"):
+        for k in _K26r:
+            os.environ.pop(k, None)
+        os.environ.update({"SEL_OPP_ASSUME": "learnedK", "LEARNED_SELECTION_IMPL": _impl})
+        _A = [_mk26c(x) for x in _P1s]; _B = [_mk26c(x) for x in _P2s]
+        _sc = _LS26r.learned_select_scores(_A, _B, dl, n=3, rng=_r26r.Random(501))
+        _rc[_impl] = ([_A.index(p) for p in max(_sc, key=lambda x: x[1])[0]], [v for _, v in _sc])
+    check("selector_m6c: Rust 版が元の実装と同じ選出・値（差1e-12未満）",
+          _rc["ref"][0] == _rc["rust"][0] and max(abs(x - y) for x, y in zip(_rc["ref"][1], _rc["rust"][1])) < 1e-12, f"{_rc['ref'][0]} {_rc['rust'][0]}")
+    _py26rc = []
+    for _k, (_pa, _pb) in enumerate(((_P1s, _P2s), (_P2s, _P1s))):
+        _A = [_mk26c(x) for x in _pa]; _B = [_mk26c(x) for x in _pb]
+        _sc = _LS26r.learned_select_scores(_A, _B, dl, n=3, rng=_r26r.Random(301 + _k))
+        _py26rc.append([_A.index(p) for p in max(_sc, key=lambda x: x[1])[0]])
+_m26r = _ld26r(_relu26r)
+_res26r = {}
+for _impl in ("ref", "fast", "rust"):
+    for k in _K26r:
+        os.environ.pop(k, None)
+    os.environ.update({"SEL_OPP_ASSUME": "learnedK", "LEARNED_SELECTION_IMPL": _impl})
+    _out = []
+    for _k, (_pa, _pb) in enumerate(((_P1s, _P2s), (_P2s, _P1s))):
+        _A = [_mk26c(x) for x in _pa]; _B = [_mk26c(x) for x in _pb]
+        _g = _r26r.Random(401 + _k)
+        _sc = _LS26r.learned_select_scores(_A, _B, dl, n=3, rng=_g)
+        _out.append(([_A.index(p) for p in max(_sc, key=lambda x: x[1])[0]], [v for _, v in _sc], _g.random()))
+    _res26r[_impl] = _out
+check("ReLU のモデル（learnedK）: 高速版・Rust 版が元の実装と同じ選出・値（差1e-12未満）・乱数の消費",
+      all(a[0] == b[0] and a[2] == b[2] and max(abs(x - y) for x, y in zip(a[1], b[1])) < 1e-12
+          for _i in ("fast", "rust") for a, b in zip(_res26r[_i], _res26r["ref"])), f"{[(k, [o[0] for o in v]) for k, v in _res26r.items()]}")
+_py26r = [o[0] for o in _res26r["rust"]]
+for k, v in _sv26r.items():
+    if v is None: os.environ.pop(k, None)
+    else: os.environ[k] = v
+_LS26r._PATH, _LS26r._MODEL, _LS26r._LOADED = _p0_26r, _m0_26r, _l0_26r
+try:
+    import pokenavi_engine as _E26r
+    _ok26r = hasattr(_E26r, "guide_rows")
+except ImportError:
+    _ok26r = False
+if _ok26r:
+    _code26r = r"""
+import sys, json
+import pokenavi_engine as E
+A = json.loads(sys.argv[1]); B = json.loads(sys.argv[2]); P = sys.argv[3]
+print(json.dumps([E.guide_rows(A, [B], "M-6", 0, 300, P)[0][0], E.guide_rows(B, [A], "M-6", 0, 301, P)[0][0]]))
+"""
+    def _run26r(path, env):
+        e = dict(os.environ)
+        for k in _K26r:
+            e.pop(k, None)
+        e.update(env)
+        r = _sp26o.run([_sy26o.executable, "-c", _code26r, _js26o.dumps(_P1s), _js26o.dumps(_P2s), path],
+                       capture_output=True, text=True, env=e, cwd=_SCRIPTS_DIR26n)
+        return _js26o.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 else r.stderr[-500:]
+    _rs26r = _run26r(_relu26r, {"SEL_OPP_ASSUME": "learnedK"}); _rs26r0 = _run26r(_relu26r, {"SEL_OPP_ASSUME": "learnedK", "SEL_FAST": "0"})
+    check("ReLU のモデル: Rust select_scores（高速版・元の実装とも）の選出が Python と一致",
+          _rs26r == _py26r and _rs26r0 == _py26r, f"{_rs26r} / {_rs26r0} / {_py26r}")
+    if _py26rc is not None:
+        _rsc = _run26r(_m6c26r, {"SEL_OPP_ASSUME": "learnedK"})
+        check("selector_m6c: Rust select_scores（guide_rows）の選出が Python の学習選出と一致", _rsc == _py26rc, f"{_rsc} / {_py26rc}")
+    _bad26r = _run26r(_wr26r("gelu2.json", dict(_base26r, act="gelu")), {})
+    check("Rust: 未知の活性化のモデルは読めないエラー", isinstance(_bad26r, str) and "選出モデルとして読めない" in _bad26r, f"{_bad26r}")
+else:
+    print("  （pyengine が無いので Rust 側の照合は省略）")
 
 print("\n=== 26b. 必ず急所に当たる技 ===")
 # move_master の effect_text が「必ず急所に当たる。」なのに急所率が 1/24 のままだった。
@@ -7006,7 +7219,7 @@ try:
     check("仮定の続き: ふんかは倒れた後の0のHPで威力が落ちるので、決着ターン(2)までには倒せない（水増しで威力が落ちず2と出ていた）",
           _fk30["myHits"] > 2 and _fk30["oppHits"] == 2, f"{_fk30['myHits']} {_fk30['oppHits']}")
     _gh30 = _mu30("ギャラドス@ゴツゴツメット:わんぱく:たきのぼり|ちょうはつ|ゆきなだれ|パワーウィップ:32/0/32/0/0/0:いかく",
-                  "アーマーガア@ゴツゴツメット:わんぱく:てっぺき|とんぼがえり|はねやすめ|ボディプレス:32/0/32/0/0/0:ミラーアーマー")["verdict"]
+                  "アーマーガア@ゴツゴツメット:わんぱく:てっぺき|とんぼがえり|はねやすめ|ボディプレス:32/0/32/0/0/0:プレッシャー")["verdict"]
     check("仮定の続き: 倒れた側が生きていたら受けるゴツゴツメット（相手のボディプレス）で相手が倒れるターンは数える（4ターン目）",
           _gh30["myHits"] == 4 and _gh30["oppHits"] == 4 and not _gh30["win"], f"{_gh30['myHits']} {_gh30['oppHits']}")
     _mbv30 = _mu30("フレフワン@ようせいのハネ:ひかえめ:トリックルーム|ムーンフォース|アンコール|ミストバースト:0/0/0/0/0/0:アロマベール",
@@ -7316,6 +7529,23 @@ check("命名: バトンの型が名前に無い", "バトン" in _ne33([_g33("�
 check("命名: 5%未満が同じ持ち物の区分で統合されていない", "5%未満" in _ne33([_g33("つるぎのまい", _sd33, 0.97), _g33("ステルスロック", _sr33, 0.03)]))
 check("命名: 持ち物の区分（メガ石）をまたぐ系統",
       "またいで" in _ne33([{**_g33("つるぎのまい", _sd33, 1.0), "builds": _g33("つるぎのまい", _sd33, 1.0)["builds"] + [dict(_ok33, item="ガブリアスナイト", moves=_sd33)]}]))
+_e64 = [dict(_ok33, ev=[0, 32, 0, 0, 0, 32])]
+_e66 = [dict(_ok33, ev=[2, 32, 0, 0, 0, 32])]
+_dbe33 = {(2, 32, 0, 0, 0, 32): 0.97, (0, 32, 0, 0, 0, 32): 0.03}
+check("audit40 #21 週次チェック: 努力値の合計がDB（合計66が主流）と食い違うと検出し、合っていれば出さない",
+      _C33.ev_total_diff(_e64, _dbe33)[0] > _C33.EV_TOTAL_TOL and _C33.ev_total_diff(_e66, _dbe33)[0] < _C33.EV_TOTAL_TOL)
+check("audit40 #21 生成器: 出力の努力値は2刻みで余り2を残す（32/32 に余り2＝合計66、1/1 は大きい端数の方へ2）",
+      _G33._ev_fine((2, 32, 0, 0, 0, 32)) == (2, 32, 0, 0, 0, 32) and _G33._ev_fine((0, 32, 1, 0, 1, 32)) == (0, 32, 2, 0, 0, 32)
+      and _G33._ev_fine((32, 0, 25, 0, 9, 0)) == (32, 0, 26, 0, 8, 0), str(_G33._ev_fine((0, 32, 1, 0, 1, 32))))
+check("audit40 #22 週次チェック: 特性の DB との差の許容は5pt", _C33.MARG_TOL["abilities"] == 5.0)
+_gk33 = _G33.generate_one("ドドゲザン", 0)
+_mg33 = _G33.marginals("ドドゲザン")
+_pm33 = _C33.pool_marg(_G33, _gk33["builds"])
+_abd33 = max(abs(_pm33["abilities"].get(k, 0) - v) for k, v in _mg33["abilities"].items())
+check("audit40 #22 生成器: ドドゲザンの特性の採用率がDBと1pt以内（まけんき 約20%）", _abd33 < 0.01 and _pm33["abilities"]["まけんき"] > 0.15,
+      f"{dict(_pm33['abilities'])} {_mg33['abilities']}")
+_etd33 = _C33.ev_total_diff(_gk33["builds"], {e: v for t in _G33.ev_fine_table("ドドゲザン").values() for e, v in t.items()})
+check("audit40 #21 生成器: ドドゲザンの努力値の合計の割合がDBと2pt以内（合計66が主流）", _etd33[0] < 2.0, str(_etd33))
 _arch33 = {"_version": "M-6/x", "0445-00": {"season": "M-6", "groups": [{"name": "つるぎのまい型", "share": 60.0}, {"name": "ステルスロック型", "share": 40.0}]}}
 _mu33 = lambda **kw: {"0445-00": {"mu": [dict({"arch": "つるぎのまい型", "archNo": 1, "archSub": "", "share": 60.0}, **kw)]}}
 check("出力: 整合していれば違反なし", _C33.output_errors(_arch33, _mu33(), "M-6/x", "M-6/x") == [], str(_C33.output_errors(_arch33, _mu33(), "M-6/x", "M-6/x")))
@@ -7358,6 +7588,27 @@ check("集計: 選出率の合計＝3・先発率の合計＝1・多い3体は�
       and [t["share"] for t in _sm34["trios"]] == sorted([t["share"] for t in _sm34["trios"]], reverse=True))
 check("集計: 相手にいると有利度が上がる種を得意に出す（差＝較正の傾き）",
       any(x["opp"] == "テスト用X" and abs(x["diff"] - _SG34.CAL_B) < 1e-3 for x in _sm34["strong"]), str(_sm34["strong"]))
+
+# 4-1k: 診断の有利度＝guide_rows と同じ選出・乱数で対戦を MCTS にした guide_rows_mcts
+try:
+    import pokenavi_engine as _E36
+    _ok36 = hasattr(_E36, "guide_rows_mcts")
+except ImportError:
+    _ok36 = False
+if _ok36:
+    from simulator.learned_selection import _PATH as _SP36
+    _m36 = _E36.guide_rows_mcts(_P1s, _O34[:6], "M-6", 2, 1, _SP36, 16)
+    _g36 = _E36.guide_rows(_P1s, _O34[:6], "M-6", 2, 1, _SP36)
+    check("guide_rows_mcts: 相手ごとに (選出3体, 勝率 0〜1・k=2 なら 0/0.25/…/1)・選出は guide_rows と同じ",
+          len(_m36) == 6 and all(len(set(my)) == 3 and 0 <= w <= 1 and (w * 4) % 1 == 0 for my, w in _m36)
+          and [my for my, _ in _m36] == [my for my, _ in _g36])
+    check("guide_rows_mcts: 同じ入力なら同じ結果（固定シード）", _E36.guide_rows_mcts(_P1s, _O34[:6], "M-6", 2, 1, _SP36, 16) == _m36)
+    import _diagnose as _DG36
+    _al36 = _DG36.merge([_DG36.mrows_at(j) for j in _DG36.mchunk_jobs(_P1s, _O34[:6], "M-6", 2, nc=3)], 3, 6)
+    check("診断: mchunk_jobs→mrows_at→merge で相手の添字順に戻る（1相手ずつ直接回した値と一致）",
+          [r[1] for r in _al36] == [_E36.guide_rows_mcts(_P1s, [_O34[j]], "M-6", 2, 1 + 100_003 * (j % 3) + 7919 * (j // 3), _SP36, _DG36.SIMS)[0][1] for j in range(6)])
+    _st36 = [s for s in _P1s if _DG36.is_stone(s)]
+    check("診断: is_stone はメガストーン（〜ナイト/ナイトX/Y/Z）だけ", len(_st36) == 1 and not _DG36.is_stone("ピカチュウ@でんきだま:ようき:でんきショック|でんこうせっか|10まんボルト|アイアンテール:0/32/0/0/2/32:せいでんき"))
 
 # 4-1k: 診断の1戦＝探索は Rust（mcts_3v3_record）・記録は Python で同じ乱数のまま再生
 try:
@@ -7416,6 +7667,1523 @@ if _ok35:
         _F35.play_and_record_rust, _F35.play_and_record = _po35, _pp35
     check("battle_job: 再生が食い違った戦は従来の Python 版で記録（my_sel・auto を付ける）",
           _bj35.get("fb") is True and _bj35["my_sel"] == [0, 1, 2] and _bj35["auto"] is True)
+
+print("\n=== 37. 監査5（2026-10-04）の修正 ===")
+from simulator.battle import BattleSide as _BS37, Action as _Act37, _priority_base as _pb37, _entry_effects as _ee37
+from simulator.items import set_terrain as _st37
+_N37 = "きれいなぬけがら"
+_mk37 = _mk26c
+def _side37(*specs):
+    return _BS37([_mk37(x) for x in specs], viewer_label="P")
+def _mv37(poke, n):
+    i = next(i for i, m in enumerate(poke.moves) if m and m.name_jp == n)
+    return _Act37(type="move", move=poke.moves[i], move_idx=i)
+
+# (1) 確定KO: 初回だけの技（であいがしら・ねこだまし）は登場ターンだけ、相手の行動しだいの ふいうち は使わない
+_gu37 = _side37(f"グソクムシャ@{_N37}:いじっぱり:であいがしら|きゅうけつ|ふいうち|ねこだまし:32/32/0/0/0/0:ききかいひ")
+_ga37 = _side37(f"ガブリアス@{_N37}:ようき:じしん:0/32/0/0/0/32:さめはだ")
+_ga37.active.hp = 1
+_st_act37 = _mv37(_gu37.active, "きゅうけつ")
+_r37 = _A26c.certain_ko_override(_st_act37, _gu37, _ga37, _BF26c())
+check("確定KO: 登場ターンは であいがしら で上書き", _r37.move.name_jp == "であいがしら", _r37.move.name_jp)
+_gu37.active.turns_out = 1
+_r37 = _A26c.certain_ko_override(_st_act37, _gu37, _ga37, _BF26c())
+check("確定KO: 2ターン目以降は であいがしら/ねこだまし/ふいうち を当てにしない（選んだ手のまま）",
+      _r37.move.name_jp == "きゅうけつ", _r37.move.name_jp)
+_A26c._KO_COND_ON = False
+_r37o = _A26c.certain_ko_override(_st_act37, _gu37, _ga37, _BF26c())
+_A26c._KO_COND_ON = True
+check("確定KO: 旧判定（AI_KO_COND=0）は失敗する技で上書きしていた（負例）", _r37o.move.name_jp != "きゅうけつ", _r37o.move.name_jp)
+_tf37 = _BF26c(); _tf37.psychic_terrain = True
+_bu37 = _side37(f"グソクムシャ@{_N37}:いじっぱり:アクアジェット|きゅうけつ:32/32/0/0/0/0:ききかいひ")
+_bu37.active.turns_out = 1
+_r37p = _A26c.certain_ko_override(_mv37(_bu37.active, "きゅうけつ"), _bu37, _ga37, _tf37)
+check("確定KO: サイコフィールドで接地した相手への先制技は候補にしない", _r37p.move.name_jp == "きゅうけつ", _r37p.move.name_jp)
+_ga37.active.hp = _ga37.active.max_hp
+
+# (4) 確定KOの見積もりで半減きのみを消費しない（実際の攻撃でだけ消費）
+_g37 = _side37(f"ガブリアス@{_N37}:ようき:じしん|つるぎのまい:0/32/0/0/0/32:さめはだ")
+_e37 = _side37("エンペルト@シュカのみ:ひかえめ:なみのり:32/0/0/32/0/0:げきりゅう")
+_e37.active.hp = 10
+_r37b = _A26c.certain_ko_override(_mv37(_g37.active, "つるぎのまい"), _g37, _e37, _BF26c())
+check("確定KO: 見積もりで半減きのみを消費しない", _r37b.move.name_jp == "じしん" and _e37.active.item == "シュカのみ",
+      f"{_r37b.move.name_jp} {_e37.active.item}")
+_e37.active.hp = _e37.active.max_hp
+_execute_move(_g37, _e37, _mv37(_g37.active, "じしん"), _BF26c())
+check("半減きのみ: 実際の攻撃では消費する", _e37.active.item is None)
+
+# (3) 継続中のフィールドに後から出たシードは発動（Rust の entry_effects も同じ）
+_f37 = _BF26c(); _st37(_f37, "psychic_terrain", 5)
+_o37 = _mk37("オオニューラ@サイコシード:ようき:インファイト:0/32/0/0/0/32:かるわざ")
+_ee37(_o37, 0, _f37, _mk37(f"ガブリアス@{_N37}:ようき:じしん:0/32/0/0/0/32:さめはだ"), [], [_o37])
+check("サイコシード: 展開済みの場への登場で発動（とくぼう+1・かるわざ）",
+      _o37.item is None and _o37.stage_sp_defense == 1 and _o37.stage_speed == 2)
+
+# (6) フィールドは1つだけ
+_f37 = _BF26c(); _st37(_f37, "psychic_terrain", 5)
+_gr37 = _side37(f"ゴリランダー@{_N37}:いじっぱり:グラスフィールド:32/32/0/0/0/0:グラスメイカー")
+_execute_move(_gr37, _side37(f"ガブリアス@{_N37}:ようき:じしん:0/32/0/0/0/32:さめはだ"), _mv37(_gr37.active, "グラスフィールド"), _f37)
+check("フィールド: グラスフィールドを張るとサイコフィールドは解除", _f37.grassy_terrain and not _f37.psychic_terrain
+      and _f37.psychic_terrain_count == 0)
+_f37 = _BF26c(); _st37(_f37, "electric_terrain", 5)
+from simulator.abilities import entry_ability as _ea37
+_ea37(_mk37(f"イエッサン(オス)@{_N37}:おくびょう:サイコキネシス:0/0/0/32/0/32:サイコメイカー"), _mk37(f"ガブリアス@{_N37}:ようき:じしん:0/32/0/0/0/32:さめはだ"), _f37)
+check("フィールド: サイコメイカーで張るとエレキフィールドは解除", _f37.psychic_terrain and not _f37.electric_terrain)
+
+# (7) ほえる/ふきとばし: 控えがいなければ失敗（能力変化はリセットしない）
+_hip37 = f"カバルドン@{_N37}:わんぱく:ほえる|ふきとばし:32/0/32/0/0/0:すなおこし"
+_gab37 = f"ガブリアス@{_N37}:ようき:じしん:0/32/0/0/0/32:さめはだ"
+for _w37 in ("ほえる", "ふきとばし"):
+    _a37, _d37 = _side37(_hip37), _side37(_gab37)
+    _d37.active.stage_attack = 2
+    _execute_move(_a37, _d37, _mv37(_a37.active, _w37), _BF26c())
+    check(f"{_w37}: 控えなしは失敗（能力変化そのまま・交代なし）",
+          _d37.active.stage_attack == 2 and not getattr(_d37.active, "_force_switch", False))
+    _a37, _d37 = _side37(_hip37), _side37(_gab37, f"ボーマンダ@{_N37}:ようき:じしん:0/32/0/0/0/32:いかく")
+    _d37.active.stage_attack = 2
+    _execute_move(_a37, _d37, _mv37(_a37.active, _w37), _BF26c())
+    check(f"{_w37}: 控えありは成功（能力変化リセット・交代）",
+          _d37.active.stage_attack == 0 and getattr(_d37.active, "_force_switch", False))
+
+# (5) キラースピン: 自分側の設置物・やどりぎ・バインドを除去。素早さ+1 は こうそくスピン だけ
+_k37 = _side37(f"キラフロル@{_N37}:ひかえめ:キラースピン|こうそくスピン:32/0/0/32/0/0:どくげしょう")
+_k37.field_idx = 0
+_kd37 = _side37(f"カバルドン@{_N37}:わんぱく:じしん:32/0/32/0/0/0:すなおこし"); _kd37.field_idx = 1
+_f37 = _BF26c()
+_f37.stealth_rock[0] = True; _f37.spikes[0] = 2; _f37.toxic_spikes[0] = 1; _f37.sticky_web[0] = True
+_f37.stealth_rock[1] = True
+_k37.active.seeded = True; _k37.active.bound_count = 3
+_execute_move(_k37, _kd37, _mv37(_k37.active, "キラースピン"), _f37)
+check("キラースピン: ステルスロック・まきびし・どくびし・ねばねばネットを除去",
+      not _f37.stealth_rock[0] and _f37.spikes[0] == 0 and _f37.toxic_spikes[0] == 0 and not _f37.sticky_web[0])
+check("キラースピン: 相手側の設置物は残る（負例）", _f37.stealth_rock[1])
+check("キラースピン: やどりぎ・バインド解除、素早さは上がらない",
+      not _k37.active.seeded and _k37.active.bound_count == 0 and _k37.active.stage_speed == 0)
+_f37.sticky_web[0] = True
+_execute_move(_k37, _kd37, _mv37(_k37.active, "こうそくスピン"), _f37)
+check("こうそくスピン: ねばねばネットも除去・素早さ+1", not _f37.sticky_web[0] and _k37.active.stage_speed == 1)
+
+# (8) グラススライダー: ふうせん持ちは接地していないので優先度+1にならない
+_f37 = _BF26c(); _st37(_f37, "grassy_terrain", 5)
+_gg37 = _mk37("ゴリランダー@ふうせん:いじっぱり:グラススライダー:32/32/0/0/0/0:グラスメイカー")
+check("グラススライダー: ふうせん持ちは優先度0", _pb37(_mv37(_gg37, "グラススライダー"), _gg37, _f37) == 0)
+_gg37.item = None
+check("グラススライダー: 接地なら優先度+1（正例）", _pb37(_mv37(_gg37, "グラススライダー"), _gg37, _f37) == 1)
+
+# (2) シードは同じパーティにそのフィールドを張る個体がいるときだけ（scripts/seed_rule.py・生成の全経路）
+import seed_rule as _SR37
+_ny37 = "オオニューラ@サイコシード:ようき:インファイト|フェイタルクロー|ねこだまし|まもる:0/32/0/0/0/32:かるわざ"
+_yes37 = "イエッサン(オス)@こだわりスカーフ:おくびょう:サイコキネシス:0/0/0/32/0/32:サイコメイカー"
+_oth37 = [f"ガブリアス@きあいのタスキ:ようき:じしん:0/32/0/0/0/32:さめはだ",
+          "カバルドン@オボンのみ:わんぱく:じしん:32/0/32/0/0/0:すなおこし",
+          "アシレーヌ@たべのこし:ひかえめ:ムーンフォース:32/0/0/32/0/0:げきりゅう",
+          "ギルガルド@いのちのたま:ひかえめ:シャドーボール:32/0/0/32/0/0:バトルスイッチ"]
+check("シードの規則: 設置役（サイコメイカー）がいれば違反なし", _SR37.violations([_ny37, _yes37] + _oth37) == [])
+check("シードの規則: 設置役がいなければ違反（負例）", _SR37.violations([_ny37] + _oth37 + ["メタグロス@メタグロスナイト:いじっぱり:アイアンヘッド:0/32/0/0/0/32:クリアボディ"]) == [0])
+check("シードの規則: フィールド技を持つ個体も設置役",
+      _SR37.violations([_ny37, "ゴリランダー@オボンのみ:いじっぱり:サイコフィールド:32/32/0/0/0/0:しんりょく"]) == [])
+check("シードの規則: メガ後の特性（メガライチュウX＝エレキメイカー）も設置役",
+      _SR37.violations(["パーモット@エレキシード:ようき:インファイト:0/32/0/0/0/32:てつのこぶし",
+                        "ライチュウ@ライチュウナイトX:おくびょう:10まんボルト:0/0/0/32/0/32:せいでんき"]) == [])
+check("シードの規則: 別のフィールドの設置役では足りない（負例）",
+      _SR37.violations([_ny37, "ゴリランダー@オボンのみ:いじっぱり:グラススライダー:32/32/0/0/0/0:グラスメイカー"]) == [0])
+_fx37 = _SR37.fix([_ny37] + _oth37, lambda i: [(_ny37, 1.0), (_ny37.replace("サイコシード", "きあいのタスキ"), 1.0),
+                                               (_ny37.replace("サイコシード", "ラムのみ"), 1.0)], random.Random(0))
+check("シードの規則: 替えるときは他と重ならない別の持ち物の型に（タスキはガブリアスと重なる）",
+      _fx37 is not None and _fx37[0].split("@")[1].startswith("ラムのみ"), str(_fx37 and _fx37[0]))
+check("シードの規則: 替えられる型が無ければ None（負例）",
+      _SR37.fix([_ny37] + _oth37, lambda i: [(_ny37, 1.0), (_ny37.replace("サイコシード", "きあいのタスキ"), 1.0)], random.Random(0)) is None)
+import gen_party_pool as _GP37
+_pg37 = _GP37.PartyGen()
+check("PartyGen.is_legal: 設置役のいないシードは不合法",
+      not _pg37.is_legal([_ny37] + _oth37 + ["メタグロス@メタグロスナイト:いじっぱり:アイアンヘッド:0/32/0/0/0/32:クリアボディ"], megas_set=(1, 2)))
+check("PartyGen.is_legal: ユーザーが明示した型（seed_exempt）は見ない",
+      _pg37.is_legal([_ny37] + _oth37 + ["メタグロス@メタグロスナイト:いじっぱり:アイアンヘッド:0/32/0/0/0/32:クリアボディ"], megas_set=(1, 2), seed_exempt=[_ny37]))
+_rng37 = random.Random(5); _bad37 = 0; _n37 = 0
+for _ in range(120):
+    _pp37 = _pg37.sample(_rng37)
+    if _pp37:
+        _n37 += 1; _bad37 += bool(_SR37.violations(_pp37))
+check("PartyGen.sample: 生成した党に設置役のいないシードが無い", _n37 > 100 and _bad37 == 0, f"{_bad37}/{_n37}")
+check("pool_checks: 型が全部シードの系統はエラー",
+      len(_C33.seed_errors({"オオニューラ": {"groups": [{"name": "テスト", "builds": [{"item": "サイコシード"}]}]}})) == 1
+      and _C33.seed_errors({"オオニューラ": {"groups": [{"name": "テスト", "builds": [{"item": "サイコシード"}, {"item": "きあいのタスキ"}]}]}}) == [])
+
+# Python/Rust の照合: シード・フィールド・ほえる・キラースピン・半減きのみの局面を Rust で対戦し Python で再生（食い違えば ReplayMismatch）
+if _ok35:
+    _par37 = [
+        ([f"イエッサン(オス)@{_N37}:おくびょう:サイコキネシス|トリック:0/0/0/32/0/32:サイコメイカー",
+          "オオニューラ@サイコシード:ようき:インファイト|フェイタルクロー|ねこだまし|まもる:0/32/0/0/0/32:かるわざ",
+          "ゴリランダー@グラスシード:いじっぱり:グラススライダー|とんぼがえり:32/32/0/0/0/0:グラスメイカー"],
+         [f"ガブリアス@{_N37}:ようき:じしん|ドラゴンクロー:0/32/0/0/0/32:さめはだ",
+          "エンペルト@シュカのみ:ひかえめ:なみのり|れいとうビーム:32/0/0/32/0/0:げきりゅう",
+          "カバルドン@オボンのみ:わんぱく:じしん|ほえる|ステルスロック|なまける:32/0/32/0/0/0:すなおこし"]),
+        (["キラフロル@きあいのタスキ:ひかえめ:キラースピン|パワージェム|ステルスロック|ヘドロばくだん:32/0/0/32/0/0:どくげしょう",
+          "グソクムシャ@グソクムシャナイト:いじっぱり:であいがしら|きゅうけつ|アクアブレイク|とんぼがえり:32/32/0/0/0/0:ききかいひ",
+          "ゴリランダー@ふうせん:いじっぱり:グラススライダー|ウッドハンマー:32/32/0/0/0/0:グラスメイカー"],
+         ["カバルドン@たべのこし:わんぱく:ステルスロック|ふきとばし|じしん|なまける:32/0/32/0/0/0:すなおこし",
+          f"ガブリアス@{_N37}:ようき:じしん|ドラゴンクロー|ステルスロック:0/32/0/0/0/32:さめはだ",
+          "エンペルト@シュカのみ:ひかえめ:なみのり|れいとうビーム:32/0/0/32/0/0:げきりゅう"]),
+    ]
+    _mm37 = []
+    for _k37, (_pa37, _pb37s) in enumerate(_par37):
+        for _sd37 in (1, 2):
+            try:
+                _F35.play_and_record_rust(_pa37, _pb37s, season="M-6", seed=_sd37, mcts_sims=30, sel1_idx=[0, 1, 2])
+            except _F35.ReplayMismatch as _e37x:
+                _mm37.append((_k37, _sd37, str(_e37x)[:120]))
+    check("Python/Rust 照合: シード・フィールド・ほえる・キラースピン・半減きのみの局面で再生が一致", not _mm37, str(_mm37))
+
+# ════════════════════════════════════════════════════════════════
+# 38. ねむりのターン数（行動しようとするたびに1減る。初期値2〜4・ねむる3）とねむけ（あくび）
+# ════════════════════════════════════════════════════════════════
+print("\n=== 38. ねむり・ねむけ ===")
+import random as _r38
+
+
+def _fails38(p):
+    n = 0
+    for _ in range(10):
+        lg = execute(p, make_poke(hp_b=255, def_b=255), "たいあたり")
+        if "ねむっている" not in " ".join(lg):
+            return n
+        n += 1
+    return n
+
+
+_cnt38, _fl38 = set(), []
+_r38.seed(38)
+while len(_fl38) < 300:
+    _d38 = make_poke(type1="ノーマル", hp_b=255, moves=["たいあたり"])
+    execute(make_poke(type1="ノーマル"), _d38, "うたう")
+    if _d38.status == "sleep":
+        _cnt38.add(_d38.sleep_count)
+        _fl38.append(_fails38(_d38))
+check("ねむり: 初期カウンタは2〜4", _cnt38 == {2, 3, 4}, str(_cnt38))
+check("ねむり: 最初の行動は必ず失敗し、2〜4回目の行動で起きる（失敗は1〜3回）",
+      set(_fl38) == {1, 2, 3}, str(sorted(set(_fl38))))
+_fy38 = []
+_r38.seed(381)
+for _ in range(200):
+    _y38 = make_poke(type1="ノーマル", hp_b=255, moves=["たいあたり"]); _y38.yawn_count = 1
+    _by38 = Battle(BattleSide([_y38]), BattleSide([make_poke(moves=["まもる"])]), BattleField())
+    _by38.resume(_Force("たいあたり"), _Force("まもる"), max_turns=1)
+    if _y38.status == "sleep":
+        _fy38.append((_y38.sleep_count, _fails38(_y38)))
+check("あくび: ねむけから眠ったときもカウンタ2〜4・失敗1〜3回",
+      {c for c, _ in _fy38} == {2, 3, 4} and {f for _, f in _fy38} == {1, 2, 3} and len(_fy38) == 200, str(set(_fy38)))
+_rs38 = make_poke(type1="ノーマル", hp_b=255, moves=["ねむる", "たいあたり"]); _rs38.hp = 10
+execute(_rs38, make_poke(), "ねむる")
+check("ねむる: カウンタ3", _rs38.status == "sleep" and _rs38.sleep_count == 3 and _rs38.hp == _rs38.max_hp,
+      f"{_rs38.status} {_rs38.sleep_count}")
+check("ねむる: 2回行動できず3回目の行動で起きる", _fails38(_rs38) == 2)
+_eb38 = make_poke(type1="ノーマル", hp_b=255, ability="はやおき", moves=["ねむる", "たいあたり"]); _eb38.hp = 10
+execute(_eb38, make_poke(), "ねむる")
+check("はやおき: ねむるは1回だけ行動できない", _fails38(_eb38) == 1)
+_eb38b = make_poke(type1="ノーマル", ability="はやおき", moves=["たいあたり"]); _eb38b.status = "sleep"; _eb38b.sleep_count = 2
+check("はやおき: カウンタ2なら最初の行動で起きる", _fails38(_eb38b) == 0 and _eb38b.status is None)
+_sw38 = BattleSide([make_poke(name="寝", moves=["たいあたり"]), make_poke(name="控え", moves=["たいあたり"])])
+_sw38.active.status = "sleep"; _sw38.active.sleep_count = 3
+_sw38.switch_to(1); _sw38.switch_to(0)
+check("ねむり: 控えにいる間はカウンタが減らない", _sw38.active.status == "sleep" and _sw38.active.sleep_count == 3,
+      f"{_sw38.active.sleep_count}")
+_st38 = make_poke(moves=["ねごと", "のしかかり"]); _st38.status = "sleep"; _st38.sleep_count = 1
+_lst38 = execute(_st38, make_poke(), "ねごと")
+check("ねごと: 使うとカウンタが減り、起きたらねごとは失敗", _st38.status is None and "失敗" in " ".join(_lst38))
+_st38b = make_poke(moves=["ねごと", "のしかかり"]); _st38b.status = "sleep"; _st38b.sleep_count = 3
+execute(_st38b, make_poke(hp_b=255), "ねごと")
+check("ねごと: 使った分カウンタが減る", _st38b.status == "sleep" and _st38b.sleep_count == 2, f"{_st38b.sleep_count}")
+
+_fe38 = BattleField(); _fe38.electric_terrain = True; _fe38.electric_terrain_count = 5
+_fm38 = BattleField(); _fm38.misty_terrain = True; _fm38.misty_terrain_count = 5
+
+
+def _yawn38(d, f=None, side_sg=0):
+    s1 = BattleSide([make_poke(moves=["あくび"])]); s2 = BattleSide([d]); s2.safeguard = side_sg
+    _execute_move(s1, s2, Action(type="move", move=dl.get_move("あくび")), f or BattleField())
+    return d.yawn_count
+
+
+check("あくび: 通常はねむけ2", _yawn38(make_poke()) == 2)
+_ps38 = make_poke(); _ps38.status = "paralysis"
+check("あくび: 状態異常の相手には失敗", _yawn38(_ps38) == 0)
+_pz38 = make_poke(); _pz38.status = "sleep"; _pz38.sleep_count = 3
+check("あくび: ねむっている相手には失敗", _yawn38(_pz38) == 0)
+_py38 = make_poke(); _py38.yawn_count = 1
+check("あくび: ねむけ状態の相手には失敗（カウントそのまま）", _yawn38(_py38) == 1)
+check("あくび: エレキフィールドで接地の相手には失敗", _yawn38(make_poke(), _fe38) == 0)
+check("あくび: ミストフィールドで接地の相手には失敗", _yawn38(make_poke(), _fm38) == 0)
+check("あくび: フィールド中でもひこうタイプには効く", _yawn38(make_poke(type1="ひこう"), _fe38) == 2)
+check("あくび: しんぴのまもりで失敗", _yawn38(make_poke(), side_sg=3) == 0)
+for _ab38 in ("ふみん", "やるき", "スイートベール", "きよめのしお"):
+    check(f"あくび: {_ab38} には失敗", _yawn38(make_poke(ability=_ab38)) == 0)
+_mm38a = make_poke(moves=["あくび"]); _mm38d = make_poke(ability="マジックミラー")
+_execute_move(BattleSide([_mm38a]), BattleSide([_mm38d]), Action(type="move", move=dl.get_move("あくび")), BattleField())
+check("あくび: マジックミラーで跳ね返る", _mm38a.yawn_count == 2 and _mm38d.yawn_count == 0)
+
+
+def _onset38(prep):
+    d = make_poke(type1="ノーマル", hp_b=255, moves=["たいあたり"]); d.yawn_count = 1
+    f = BattleField(); prep(d, f)
+    Battle(BattleSide([d]), BattleSide([make_poke(moves=["まもる"])]), f).resume(_Force("たいあたり"), _Force("まもる"), max_turns=1)
+    return d
+
+
+def _setf38(d, f):
+    f.electric_terrain = True; f.electric_terrain_count = 5
+
+
+def _setst38(d, f):
+    d.status = "burn"
+
+
+check("ねむけ: 眠る前にエレキフィールドが張られると眠らない", _onset38(_setf38).status is None)
+check("ねむけ: 眠る前に別の状態異常になると眠らない", _onset38(_setst38).status == "burn")
+check("ねむけ: 眠らなくてもねむけは消える", _onset38(_setst38).yawn_count == 0)
+
+
+class _SwAI38:
+    def __init__(self): self.t = 0
+    def __call__(self, my, opp, f):
+        self.t += 1
+        if self.t == 1:
+            return Action(type="switch", switch_to=1)
+        return _Act(type="move", move=my.active.moves[0], move_idx=0)
+
+
+_ya38 = make_poke(name="あくび役", spd_b=200, moves=["あくび"])
+_yb38 = [make_poke(name="先発", hp_b=255, moves=["まもる"]), make_poke(name="交代先", hp_b=255, moves=["まもる"])]
+_byb38 = Battle(BattleSide([_ya38]), BattleSide(_yb38), BattleField())
+_swai38 = _SwAI38()
+_byb38.resume(_Force("あくび"), _swai38, max_turns=1)
+check("あくび: 交代読み＝交代で出てきた相手にねむけが入る", _yb38[1].yawn_count == 1 and _yb38[0].yawn_count == 0,
+      f"{_yb38[0].yawn_count} {_yb38[1].yawn_count}")
+_byb38.resume(_Force("あくび"), _swai38, max_turns=2)
+check("あくび: 交代先は次のターンの終わりに眠る", _yb38[1].status == "sleep" and _yb38[1].sleep_count in (2, 3, 4))
+_rz38 = make_poke(moves=["ねむる"]); _rz38.hp = 10
+execute(_rz38, make_poke(), "ねむる", _fe38)
+check("ねむる: エレキフィールドで接地なら失敗", _rz38.status is None and _rz38.hp == 10)
+_r38.seed(3)
+_gz38 = 0
+for _ in range(200):
+    _dz38 = make_poke(type1="ノーマル", hp_b=255)
+    execute(make_poke(), _dz38, "うたう", _fm38)
+    _gz38 += _dz38.status == "sleep"
+check("ねむり技: ミストフィールドで接地の相手は眠らない", _gz38 == 0)
+
+if _ok35:
+    _N38 = "きれいなぬけがら"
+    _par38 = [
+        (["カバルドン@オボンのみ:わんぱく:じしん|あくび|ふきとばし|なまける:32/0/32/0/0/0:すなおこし",
+          "カビゴン@カゴのみ:わんぱく:のしかかり|ねむる|ねごと|じしん:32/0/32/0/0/0:あついしぼう",
+          "オオニューラ@きあいのタスキ:ようき:インファイト|フェイタルクロー|ねこだまし|まもる:0/32/0/0/0/32:かるわざ"],
+         ["ビビヨン@たべのこし:おくびょう:ちょうのまい|ねむりごな|ぼうふう|みがわり:0/0/0/32/0/32:ふくがん",
+          "ラフレシア@たべのこし:おだやか:ちからをすいとる|どくどく|やどりぎのタネ|ムーンフォース:32/0/32/0/0/0:ほうし",
+          "アシレーヌ@たべのこし:ひかえめ:うたかたのアリア|ねむる|あくび|ムーンフォース:32/0/24/0/0/8:げきりゅう"]),
+        (["アローラペルシアン@きあいのタスキ:おくびょう:こごえるかぜ|さいみんじゅつ|すてゼリフ|ちょうはつ:32/0/0/0/0/32:ファーコート",
+          "ニンフィア@たべのこし:ずぶとい:ハイパーボイス|あくび|まもる|ミストフィールド:32/0/32/0/0/0:フェアリースキン",
+          "フシギバナ@きあいのタスキ:ひかえめ:ギガドレイン|ねむりごな|ヘドロばくだん|まもる:32/0/0/32/0/0:しんりょく"],
+         ["カバルドン@たべのこし:わんぱく:じしん|あくび|ステルスロック|なまける:32/0/32/0/0/0:すなおこし",
+          "オオニューラ@きあいのタスキ:ようき:インファイト|フェイタルクロー|ねこだまし|まもる:0/32/0/0/0/32:かるわざ",
+          "アシレーヌ@カゴのみ:ひかえめ:うたかたのアリア|ねむる|めいそう|ムーンフォース:32/0/24/0/0/8:げきりゅう"]),
+    ]
+    _mm38 = []
+    for _k38, (_pa38, _pb38) in enumerate(_par38):
+        for _sd38 in range(1, 7):
+            try:
+                _F35.play_and_record_rust(_pa38, _pb38, season="M-6", seed=_sd38, mcts_sims=30, sel1_idx=[0, 1, 2])
+            except _F35.ReplayMismatch as _e38x:
+                _mm38.append((_k38, _sd38, str(_e38x)[:120]))
+    check("Python/Rust 照合: ねむり・ねむけ・ねむる・ねごとの局面で再生が一致", not _mm38, str(_mm38))
+
+print("\n=== 39. 監査40（2026-10-04）の修正 ===")
+import random as _r39
+from simulator.battle import (Battle as _B39, BattleSide as _S39, BattleField as _F39, Action as _A39,
+                              _execute_move as _x39, _entry_effects as _ee39)
+from simulator.pokemon import build_from_spec as _bfs39, parse_pokemon_spec as _pps39
+from simulator.damage import calc_damage as _cd39
+_N39 = "きれいなぬけがら"
+
+
+def _mk39(spec):
+    return _bfs39(_pps39(spec), dl, season="M-6", randomize=False)
+
+
+class _P39:
+    """ターンごとの行動計画（技名・"M:技名"でメガ進化・整数で交代）。最後の手を繰り返す"""
+    def __init__(self, plan):
+        self.plan = plan
+        self.bt = None
+
+    def __call__(self, my, opp, f):
+        x = self.plan[min(self.bt.turn, len(self.plan)) - 1]
+        if isinstance(x, int):
+            return _A39(type="switch", switch_to=x)
+        mega = x.startswith("M:")
+        nm = x[2:] if mega else x
+        for i, m in enumerate(my.active.moves):
+            if m is not None and m.name_jp == nm:
+                return _A39(type="move", move=m, move_idx=i, do_mega=mega)
+        return _A39(type="move", move=my.active.moves[0], move_idx=0)
+
+
+def _bt39(s1, s2, p1, p2, seed=1, prep=None):
+    _r39.seed(seed)
+    a, b = _S39([_mk39(x) for x in s1]), _S39([_mk39(x) for x in s2])
+    if prep:
+        prep(a, b)
+    bt = _B39(a, b, _F39())
+    ai1, ai2 = _P39(p1), _P39(p2)
+    ai1.bt = ai2.bt = bt
+    bt.start(ai1, ai2)
+    return bt, ai1, ai2
+
+
+def _go39(bt, ai1, ai2, t):
+    bt.resume(ai1, ai2, max_turns=t)
+
+
+_DUM39 = f"カビゴン@{_N39}:わんぱく:のろい|ボディプレス:32/0/32/0/0/0:あついしぼう"
+
+# #1 メガ進化で出た天候は5ターン
+_bt, _a1, _a2 = _bt39([f"リザードン@リザードナイトY:ひかえめ:はねやすめ:0/0/0/32/0/32:もうか"], [_DUM39],
+                      ["M:はねやすめ"], ["のろい"])
+_go39(_bt, _a1, _a2, 1)
+_w1 = (_bt.field.weather, _bt.field.weather_count)
+_go39(_bt, _a1, _a2, 5)
+check("audit40 #1 メガ進化の ひでり は5ターン（1ターン目の終わりに残り4・5ターン目の終わりに終わる）",
+      _w1 == ("sunny", 4) and _bt.field.weather is None, f"{_w1} {_bt.field.weather}")
+from simulator.battle import _entry_and_mega as _eam39
+_f1v1 = _F39()
+_eam39(_mk39(f"リザードン@リザードナイトY:ひかえめ:はねやすめ:0/0/0/32/0/32:もうか"), _mk39(_DUM39), _f1v1)
+check("audit40 #1 1v1判定の開始局面: メガリザードンYの晴れは5ターン", (_f1v1.weather, _f1v1.weather_count) == ("sunny", 5),
+      f"{_f1v1.weather} {_f1v1.weather_count}")
+try:
+    import pokenavi_engine as _E39
+except ImportError:
+    pass
+
+# #2 アンコール: かけたターンに後攻の相手の技を差し替え、3回の行動を縛る
+_kyu39 = f"アローラキュウコン@{_N39}:おくびょう:アンコール|ムーンフォース:32/0/32/0/0/32:ゆきふらし"
+_bt, _a1, _a2 = _bt39([_kyu39], [_DUM39], ["ムーンフォース", "アンコール", "ムーンフォース"], ["のろい", "ボディプレス"])
+_hp39 = []
+for _t in range(1, 6):
+    _go39(_bt, _a1, _a2, _t)
+    _hp39.append((_bt.side2.active.stage_attack, _bt.side1.active.hp))
+check("audit40 #2 アンコール（先攻）: そのターンの技を差し替え、3回 のろい を繰り返して4回目で解ける",
+      [a for a, _ in _hp39[:4]] == [1, 2, 3, 4] and _hp39[3][1] == _bt.side1.active.max_hp and _hp39[4][1] < _bt.side1.active.max_hp,
+      f"{_hp39}")
+_slow39 = f"カビゴン@{_N39}:わんぱく:アンコール|のろい:32/0/32/0/0/0:あついしぼう"
+_fast39 = f"アローラキュウコン@{_N39}:おくびょう:ムーンフォース|わるだくみ:32/0/32/0/0/32:ゆきふらし"
+_bt, _a1, _a2 = _bt39([_slow39], [_fast39], ["のろい", "アンコール", "のろい"], ["ムーンフォース", "ムーンフォース", "わるだくみ"])
+_sp39 = []
+for _t in range(1, 7):
+    _go39(_bt, _a1, _a2, _t)
+    _sp39.append(_bt.side2.active.stage_sp_attack)
+check("audit40 #2 アンコール（後攻）: 次のターンから3回縛る（3〜5ターン目は ムーンフォース、6ターン目に わるだくみ）",
+      _sp39 == [0, 0, 0, 0, 0, 2], f"{_sp39}")
+_bt, _a1, _a2 = _bt39([_kyu39], [_DUM39, _DUM39.replace("カビゴン", "ブラッキー").replace("あついしぼう", "せいしんりょく")],
+                      ["ムーンフォース", "アンコール", "ムーンフォース"], ["のろい", "のろい", 1, 0, "ボディプレス"])
+_go39(_bt, _a1, _a2, 3)
+check("audit40 #2 アンコール は交代で解ける（控えに戻ったら残りターンも消える）",
+      _bt.side2.active is _bt.side2.party[1] and _bt.side2.party[0].encore_count == 0 and _bt.side2.party[0].locked_move is None,
+      f"{_bt.side2.party[0].encore_count}")
+
+# #4 みちづれ は次の行動で解ける
+_bt, _a1, _a2 = _bt39([f"ゲンガー@{_N39}:おくびょう:みちづれ|シャドーボール:0/0/0/32/0/32:のろわれボディ", _DUM39],
+                      [f"ドドゲザン@くろいメガネ:いじっぱり:つるぎのまい|ドゲザン:32/32/0/0/0/0:そうだいしょう", _DUM39],
+                      ["みちづれ", "シャドーボール"], ["つるぎのまい", "ドゲザン"])
+_go39(_bt, _a1, _a2, 2)
+check("audit40 #4 みちづれ: 次の行動（シャドーボール）の後に倒されても相手は道連れにならない",
+      not _bt.side1.party[0].is_alive and _bt.side2.party[0].is_alive, f"{[p.is_alive for p in _bt.side2.party]}")
+
+# #5 いやしのねがい は瀕死交代で出た後続にも入る
+def _hw39(a, b):
+    a.party[1].hp = a.party[1].max_hp // 3
+    a.party[1].status = "burn"
+_bt, _a1, _a2 = _bt39([f"イエッサン(オス)@{_N39}:おくびょう:いやしのねがい:0/0/0/32/0/32:サイコメイカー",
+                       f"アシレーヌ@{_N39}:ひかえめ:ムーンフォース:0/0/0/32/0/0:げきりゅう"],
+                      [_DUM39], ["いやしのねがい", "ムーンフォース"], ["のろい"], prep=_hw39)
+_go39(_bt, _a1, _a2, 1)
+_ash39 = _bt.side1.active
+check("audit40 #5 いやしのねがい: 使って倒れた後の瀕死交代で出た アシレーヌ が全快・状態異常回復",
+      _ash39.name == "アシレーヌ" and _ash39.hp == _ash39.max_hp and _ash39.status is None, f"{_ash39.name} {_ash39.hp}/{_ash39.max_hp} {_ash39.status}")
+
+# #6 タイプ強化の持ち物・ピンチ特性・防御側の特性は技の最終タイプで判定
+_nym39 = _mk39(f"ニンフィア@ようせいのハネ:ひかえめ:ハイパーボイス:32/0/0/32/0/0:フェアリースキン")
+_nyn39 = _mk39(f"ニンフィア@{_N39}:ひかえめ:ハイパーボイス:32/0/0/32/0/0:フェアリースキン")
+_tg39 = _mk39(_DUM39)
+_d1, _d0 = _cd39(_nym39, _tg39, _nym39.moves[0], _F39(), False, 0.5), _cd39(_nyn39, _tg39, _nyn39.moves[0], _F39(), False, 0.5)
+check("audit40 #6 フェアリースキン＋ようせいのハネ: フェアリーになった ハイパーボイス が1.2倍", 1.15 < _d1 / _d0 < 1.25, f"{_d1} {_d0}")
+_fs39 = _F39(); _fs39.weather = "sunny"; _fs39.weather_count = 5
+_cz39 = _mk39(f"リザードン@{_N39}:ひかえめ:ウェザーボール:0/0/0/32/0/32:もうか")
+_tg39 = _mk39(f"ブラッキー@{_N39}:ずぶとい:つきのひかり:32/0/32/0/0/0:せいしんりょく")
+_dfull = _cd39(_cz39, _tg39, _cz39.moves[0], _fs39, False, 0.5)
+_cz39.hp = _cz39.max_hp // 3
+_dlow = _cd39(_cz39, _tg39, _cz39.moves[0], _fs39, False, 0.5)
+check("audit40 #6 もうか: 晴れの ウェザーボール（ほのお）でもピンチで1.5倍", 1.45 < _dlow / _dfull < 1.55, f"{_dlow} {_dfull}")
+_tf39 = _mk39(f"カビゴン@{_N39}:わんぱく:のろい:32/0/32/0/0/0:あついしぼう")
+_tn39 = _mk39(f"カビゴン@{_N39}:わんぱく:のろい:32/0/32/0/0/0:めんえき")
+_cz39.hp = _cz39.max_hp
+_dth = _cd39(_cz39, _tf39, _cz39.moves[0], _fs39, False, 0.5)
+_dnm = _cd39(_cz39, _tn39, _cz39.moves[0], _fs39, False, 0.5)
+check("audit40 #6 あついしぼう: 晴れの ウェザーボール（ほのお）を半減", 0.45 < _dth / _dnm < 0.55, f"{_dth} {_dnm}")
+
+# #7 ミラーアーマー は いかく・変化技の能力低下を跳ね返す
+_bt, _a1, _a2 = _bt39([f"アーマーガア@{_N39}:わんぱく:ボディプレス:32/0/32/0/0/0:ミラーアーマー"],
+                      [f"ボーマンダ@{_N39}:いじっぱり:すてみタックル|こわいかお:0/32/0/0/0/32:いかく"], ["ボディプレス"], ["こわいかお"])
+_ia39 = (_bt.side1.active.stage_attack, _bt.side2.active.stage_attack)
+_go39(_bt, _a1, _a2, 1)
+check("audit40 #7 ミラーアーマー: いかく を跳ね返す（ボーマンダの攻撃-1）・こわいかお を跳ね返す（ボーマンダの素早さ-2）",
+      _ia39 == (0, -1) and _bt.side1.active.stage_speed == 0 and _bt.side2.active.stage_speed == -2,
+      f"{_ia39} {_bt.side1.active.stage_speed} {_bt.side2.active.stage_speed}")
+
+# #8 とびひざげり は まもる・タイプ無効でも反動
+_ace39 = f"エースバーン@{_N39}:ようき:とびひざげり:0/32/0/0/0/32:もうか"
+_bt, _a1, _a2 = _bt39([_ace39], [f"ニンフィア@{_N39}:ずぶとい:まもる:32/0/32/0/0/0:フェアリースキン"], ["とびひざげり"], ["まもる"])
+_go39(_bt, _a1, _a2, 1)
+_hjk1 = _bt.side1.active.max_hp - _bt.side1.active.hp
+_bt, _a1, _a2 = _bt39([_ace39], [f"ゲンガー@{_N39}:おくびょう:のろい:32/0/0/0/0/32:のろわれボディ"], ["とびひざげり"], ["のろい"])
+_bt.side2.active.moves = [dl.get_move("のろい")]
+_go39(_bt, _a1, _a2, 1)
+_hjk2 = _bt.side1.active.max_hp - _bt.side1.active.hp
+_mh39 = _bt.side1.active.max_hp // 2
+check("audit40 #8 とびひざげり: まもる で防がれても・ゴーストに無効でも最大HPの1/2の反動", _hjk1 == _mh39 and _hjk2 >= _mh39, f"{_hjk1} {_hjk2}")
+
+# #9 かたやぶり: 壁・ベールは無視しない／ばけのかわ は無視／さめはだ・キングシールド は受ける
+_gy39 = _mk39(f"ギャラドス@ギャラドスナイト:いじっぱり:たきのぼり:0/32/0/0/0/32:いかく")
+_gy39.do_mega_evolve()
+_sA, _sB = _S39([_gy39]), _S39([_mk39(_DUM39)])
+_sB.reflect = True; _sB.reflect_count = 5
+_r39.seed(1); _x39(_sA, _sB, _A39(type="move", move=_gy39.moves[0], move_idx=0), _F39())
+_dref = _sB.active.max_hp - _sB.active.hp
+_sB2 = _S39([_mk39(_DUM39)])
+_r39.seed(1); _x39(_sA, _sB2, _A39(type="move", move=_gy39.moves[0], move_idx=0), _F39())
+_dno = _sB2.active.max_hp - _sB2.active.hp
+check("audit40 #9 かたやぶり: リフレクター は無視しない（ダメージ半分）", _gy39.ability == "かたやぶり" and 0.4 < _dref / max(1, _dno) < 0.6, f"{_dref} {_dno}")
+_mim39 = _S39([_mk39(f"ミミッキュ@{_N39}:いじっぱり:つるぎのまい:32/0/0/0/0/0:ばけのかわ")])
+_r39.seed(1); _x39(_sA, _mim39, _A39(type="move", move=_gy39.moves[0], move_idx=0), _F39())
+check("audit40 #9 かたやぶり: ばけのかわ を無視して本体にダメージ（化けの皮は残る）",
+      _mim39.active.max_hp - _mim39.active.hp > _mim39.active.max_hp // 8 + 5 and not getattr(_mim39.active, "_disguise_broken", False))
+_gab39 = _S39([_mk39(f"ガブリアス@{_N39}:わんぱく:つるぎのまい:32/0/32/0/0/0:さめはだ")])
+_gy39.hp = _gy39.max_hp
+_r39.seed(1); _x39(_sA, _gab39, _A39(type="move", move=_gy39.moves[0], move_idx=0), _F39())
+check("audit40 #9 かたやぶり: さめはだ の反動は受ける", _gy39.max_hp - _gy39.hp == max(1, _gy39.max_hp // 8), f"{_gy39.hp}/{_gy39.max_hp}")
+_gil39 = _S39([_mk39(f"ギルガルド@{_N39}:いじっぱり:キングシールド:32/32/0/0/0/0:バトルスイッチ")])
+_gil39.active.protecting = True; _gil39.active._protect_move = "キングシールド"
+_gy39.stage_attack = 0
+_r39.seed(1); _x39(_sA, _gil39, _A39(type="move", move=_gy39.moves[0], move_idx=0), _F39())
+check("audit40 #9 かたやぶり: キングシールド の攻撃低下は受ける", _gy39.stage_attack == -1, f"{_gy39.stage_attack}")
+_stu39 = _S39([_mk39(f"ドドゲザン@{_N39}:いじっぱり:つるぎのまい:32/0/0/0/0/0:がんじょう")])
+_stu39.active.ability = "がんじょう"; _stu39.active.max_hp = _stu39.active.hp = 30
+_r39.seed(1); _x39(_sA, _stu39, _A39(type="move", move=_gy39.moves[0], move_idx=0), _F39())
+check("audit40 #9 かたやぶり: がんじょう を無視して倒す", not _stu39.active.is_alive)
+
+# #10 しろいハーブ は能力が下がった直後に発動（からをやぶる・いかく）
+_bt, _a1, _a2 = _bt39([f"カメックス@しろいハーブ:おくびょう:からをやぶる:0/0/0/32/0/32:げきりゅう"],
+                      [f"ギャラドス@{_N39}:わんぱく:たきのぼり:32/0/32/0/0/0:じしんかじょう"], ["からをやぶる"], ["たきのぼり"])
+_l0 = len(_bt.logs)
+_go39(_bt, _a1, _a2, 1)
+_lg39 = _bt.logs[_l0:]
+_ih = next((i for i, x in enumerate(_lg39) if "しろいハーブ" in x), 99)
+_ia = next((i for i, x in enumerate(_lg39) if "たきのぼり" in x), -1)
+check("audit40 #10 しろいハーブ: からをやぶる の直後に発動（相手の攻撃より前）", _ih < _ia, f"{_ih} {_ia}")
+_bt, _a1, _a2 = _bt39([f"ガブリアス@しろいハーブ:ようき:じしん:0/32/0/0/0/32:さめはだ"],
+                      [f"ボーマンダ@{_N39}:いじっぱり:すてみタックル:0/32/0/0/0/32:いかく"], ["じしん"], ["すてみタックル"])
+check("audit40 #10 しろいハーブ: 登場時の いかく の直後に発動（1ターン目の前に攻撃0）",
+      _bt.side1.active.stage_attack == 0 and _bt.side1.active.item is None, f"{_bt.side1.active.stage_attack} {_bt.side1.active.item}")
+
+# #11 ほろびのうた は使った3ターン後の終わりに倒れる
+_bt, _a1, _a2 = _bt39([f"ゲンガー@{_N39}:おくびょう:ほろびのうた:32/0/0/0/0/32:のろわれボディ", _DUM39],
+                      [_DUM39, _DUM39], ["ほろびのうた"], ["のろい"])
+_al39 = []
+for _t in range(1, 5):
+    _go39(_bt, _a1, _a2, _t)
+    _al39.append((_bt.side1.party[0].is_alive, _bt.side2.party[0].is_alive))
+check("audit40 #11 ほろびのうた: 3ターン目の終わりまで生き、4ターン目の終わりに両者倒れる",
+      _al39[:3] == [(True, True)] * 3 and _al39[3] == (False, False), f"{_al39}")
+
+# #12 ボディプレス は防御側の てんねん で自分の防御ランクを無視される
+_cv39 = _mk39(f"アーマーガア@{_N39}:わんぱく:ボディプレス:32/0/32/0/0/0:プレッシャー")
+_sk39 = _mk39(_DUM39)
+_sk39.ability = "てんねん"
+_b0 = _cd39(_cv39, _sk39, _cv39.moves[0], _F39(), False, 0.5)
+_cv39.stage_defense = 2
+_b2 = _cd39(_cv39, _sk39, _cv39.moves[0], _F39(), False, 0.5)
+check("audit40 #12 ボディプレス: 相手が てんねん なら防御+2が無視される", _b0 == _b2, f"{_b0} {_b2}")
+
+# #13 おうごんのからだ は いたみわけ 等の相手向けの変化技を防ぐ
+_sR = _S39([_mk39(f"ウォッシュロトム@{_N39}:ずぶとい:いたみわけ|ほえる|すてゼリフ:32/0/32/0/0/0:ふゆう"), _mk39(_DUM39)])
+_sG = _S39([_mk39(f"サーフゴー@{_N39}:ひかえめ:シャドーボール:0/0/0/32/0/32:おうごんのからだ"), _mk39(_DUM39)])
+_sR.active.hp = 10
+_r39.seed(1); _x39(_sR, _sG, _A39(type="move", move=_sR.active.moves[0], move_idx=0), _F39())
+check("audit40 #13 おうごんのからだ: いたみわけ を防ぐ", _sR.active.hp == 10 and _sG.active.hp == _sG.active.max_hp)
+_r39.seed(1); _x39(_sR, _sG, _A39(type="move", move=_sR.active.moves[2], move_idx=2), _F39())
+check("audit40 #13 おうごんのからだ: すてゼリフ を防ぐ（能力は下がらず交代もしない）",
+      _sG.active.stage_attack == 0 and not getattr(_sR.active, "_pivot_out", False))
+
+# #14 かそく は登場したターンには発動しない（ターン終わりの瀕死交代で出たら次のターンは発動）
+_baz39 = f"バシャーモ@{_N39}:いじっぱり:まもる|ビルドアップ:0/32/0/0/0/32:かそく"
+_bt, _a1, _a2 = _bt39([f"アシレーヌ@{_N39}:ひかえめ:ムーンフォース:0/0/0/32/0/0:げきりゅう", _baz39], [_DUM39],
+                      [1, "ビルドアップ"], ["のろい"])
+_go39(_bt, _a1, _a2, 1)
+_s1 = _bt.side1.active.stage_speed
+_go39(_bt, _a1, _a2, 2)
+check("audit40 #14 かそく: 交代で出たターンは上がらず、次のターンの終わりに+1", (_s1, _bt.side1.active.stage_speed) == (0, 1),
+      f"{_s1} {_bt.side1.active.stage_speed}")
+def _eot39(a, b):
+    a.party[0].hp = 1
+    a.party[0].status = "poison"
+_bt, _a1, _a2 = _bt39([f"アシレーヌ@{_N39}:ひかえめ:ムーンフォース:0/0/0/32/0/0:げきりゅう", _baz39], [_DUM39],
+                      ["ムーンフォース", "ビルドアップ"], ["のろい"], prep=_eot39)
+_go39(_bt, _a1, _a2, 1)
+_s1 = (_bt.side1.active.name, _bt.side1.active.stage_speed)
+_go39(_bt, _a1, _a2, 2)
+check("audit40 #14 かそく（新しい扱いの確認）: ターン終わりの瀕死交代で出たら次のターンの終わりに+1",
+      _s1 == ("バシャーモ", 0) and _bt.side1.active.stage_speed == 1, f"{_s1} {_bt.side1.active.stage_speed}")
+
+# #15 特性・ふうせんで無効の技は「効かない」（接触反応・追加効果・タイプ喪失・ばつぐん表示なし）
+_pw39 = _S39([_mk39(f"パーモット@{_N39}:ようき:でんこうそうげき:0/32/0/0/0/32:てつのこぶし")])
+_rc39 = _S39([_mk39(f"ライチュウ@{_N39}:おくびょう:わるだくみ:0/0/0/32/0/32:ひらいしん")])
+_r39.seed(1); _lg39 = _x39(_pw39, _rc39, _A39(type="move", move=_pw39.active.moves[0], move_idx=0), _F39())
+check("audit40 #15 でんこうそうげき → ひらいしん: でんきタイプは残り、相手の特攻+1",
+      "でんき" in (_pw39.active.type1, _pw39.active.type2) and _rc39.active.stage_sp_attack == 1, f"{_pw39.active.type1} {_pw39.active.type2}")
+_gr39 = _S39([_mk39(f"ゴリランダー@{_N39}:いじっぱり:10まんばりき:32/32/0/0/0/0:グラスメイカー")])
+_rw39 = _S39([_mk39(f"ウォッシュロトム@ゴツゴツメット:ずぶとい:おにび:32/0/32/0/0/0:ふゆう")])
+_r39.seed(1); _lg39 = _x39(_gr39, _rw39, _A39(type="move", move=_gr39.active.moves[0], move_idx=0), _F39())
+check("audit40 #15 ふゆう に無効の接触技: ゴツゴツメット は発動せず「ばつぐん」も出ない",
+      _gr39.active.hp == _gr39.active.max_hp and not any("ばつぐん" in x for x in _lg39), f"{_gr39.active.hp} {_lg39}")
+_rb39 = _S39([_mk39(f"ガブリアス@ふうせん:わんぱく:つるぎのまい:32/0/32/0/0/0:さめはだ")])
+_r39.seed(1); _x39(_gr39, _rb39, _A39(type="move", move=_gr39.active.moves[0], move_idx=0), _F39())
+check("audit40 #15 ふうせん に無効の じめん技: さめはだ は発動しない", _gr39.active.hp == _gr39.active.max_hp and _rb39.active.item == "ふうせん")
+
+# #16 みがわり を貫通するのは音技（ぼうふう は音技でない）
+_sub39 = _S39([_mk39(f"ライチュウ@{_N39}:おくびょう:みがわり:32/0/32/0/0/32:ひらいしん")])
+_sub39.active._substitute_hp = _sub39.active.max_hp // 4
+_ar39 = _S39([_mk39(f"アシレーヌ@{_N39}:ひかえめ:うたかたのアリア|ぼうふう:32/0/0/32/0/0:げきりゅう")])
+_r39.seed(1); _x39(_ar39, _sub39, _A39(type="move", move=_ar39.active.moves[0], move_idx=0), _F39())
+_h1 = (_sub39.active.hp < _sub39.active.max_hp, _sub39.active._substitute_hp == _sub39.active.max_hp // 4)
+_sub39.active.hp = _sub39.active.max_hp
+_r39.seed(1); _x39(_ar39, _sub39, _A39(type="move", move=_ar39.active.moves[1], move_idx=1), _F39())
+check("audit40 #16 みがわり: うたかたのアリア（音技）は貫通、ぼうふう は みがわり が受ける",
+      _h1 == (True, True) and _sub39.active.hp == _sub39.active.max_hp, f"{_h1} {_sub39.active.hp}")
+
+# #17 ちょうはつ は3ターン（先に動かれたら次のターンから3ターン）
+_gya39 = f"ギャラドス@{_N39}:ようき:ちょうはつ|たきのぼり:0/32/0/0/0/32:いかく"
+_bt, _a1, _a2 = _bt39([_gya39], [_DUM39], ["ちょうはつ", "たきのぼり"], ["のろい"])
+_tt39 = []
+for _t in range(1, 5):
+    _go39(_bt, _a1, _a2, _t)
+    _tt39.append(_bt.side2.active.stage_attack)
+check("audit40 #17 ちょうはつ（先攻）: 1〜3ターン目の のろい を封じ、4ターン目に使える", _tt39 == [-1, -1, -1, 0], f"{_tt39}")
+_bt, _a1, _a2 = _bt39([_DUM39.replace("ボディプレス", "ちょうはつ")], [f"ギャラドス@{_N39}:ようき:りゅうのまい|たきのぼり:0/32/0/0/0/32:いかく"],
+                      ["のろい", "ちょうはつ", "のろい"], ["りゅうのまい"])
+_tt39 = []
+for _t in range(1, 7):
+    _go39(_bt, _a1, _a2, _t)
+    _tt39.append(_bt.side2.active.stage_attack)
+check("audit40 #17 ちょうはつ（後攻）: 次のターンから3ターン封じる（3〜5ターン目は失敗、6ターン目に りゅうのまい）",
+      _tt39 == [1, 2, 2, 2, 2, 3], f"{_tt39}")
+
+# 既知: みがわり は相手向けの変化技を防ぐ（音技・貫通技は除く）
+_sb39 = _S39([_mk39(f"ゲンガー@{_N39}:おくびょう:みがわり:32/0/0/0/0/32:のろわれボディ")])
+_sb39.active._substitute_hp = 40
+_wo39 = _S39([_mk39(f"ヒートロトム@{_N39}:ずぶとい:おにび|でんじは|うたう|ちょうはつ:32/0/32/0/0/0:ふゆう")])
+_r39.seed(1)
+for _i in range(2):
+    _x39(_wo39, _sb39, _A39(type="move", move=_wo39.active.moves[_i], move_idx=_i), _F39())
+check("audit40 既知 みがわり: おにび・でんじは を防ぐ", _sb39.active.status is None, f"{_sb39.active.status}")
+_x39(_wo39, _sb39, _A39(type="move", move=_wo39.active.moves[3], move_idx=3), _F39())
+check("audit40 既知 みがわり: ちょうはつ は貫通する", _sb39.active.taunt_count > 0)
+
+# 既知: ミストフィールド は接地個体の状態異常全般・こんらんを防ぐ
+_fm39 = _F39(); _fm39.misty_terrain = True; _fm39.misty_terrain_count = 5
+_mi39 = _S39([_mk39(f"ブラッキー@{_N39}:ずぶとい:でんじは|あやしいひかり|どくどく|おにび:32/0/32/0/0/0:せいしんりょく")])
+_tg39 = _S39([_mk39(_DUM39)])
+_r39.seed(1)
+for _i in range(4):
+    _x39(_mi39, _tg39, _A39(type="move", move=_mi39.active.moves[_i], move_idx=_i), _fm39)
+check("audit40 既知 ミストフィールド: 接地の相手に まひ・こんらん・もうどく・やけど が入らない",
+      _tg39.active.status is None and not _tg39.active.confused, f"{_tg39.active.status} {_tg39.active.confused}")
+_fl39 = _S39([_mk39(f"ボーマンダ@{_N39}:いじっぱり:すてみタックル:0/32/0/0/0/32:いかく")])
+_x39(_mi39, _fl39, _A39(type="move", move=_mi39.active.moves[0], move_idx=0), _fm39)
+check("audit40 既知 ミストフィールド: 浮いている相手（ひこう）には入る", _fl39.active.status == "paralysis")
+
+
+# #3 確定KOの上書き: 命中率とタイプの条件（AI_FIX40）
+import simulator.ai as _AI39
+_rai39 = _S39([_mk39(f"ライチュウ@{_N39}:ひかえめ:10まんボルト|でんじほう|わるだくみ:0/0/0/32/0/32:ひらいしん")])
+_tgt39 = _S39([_mk39(f"ギャラドス@{_N39}:ようき:たきのぼり:0/32/0/0/0/32:いかく")])
+_tgt39.active.hp = 30
+_st39 = _A39(type="move", move=_rai39.active.moves[2], move_idx=2)
+_k39 = _AI39.certain_ko_override(_st39, _rai39, _tgt39, _F39())
+check("audit40 #3 確定KO: 10まんボルト でも でんじほう でも倒せるなら命中100の 10まんボルト", _k39.move.name_jp == "10まんボルト", _k39.move.name_jp)
+_rai39b = _S39([_mk39(f"ライチュウ@{_N39}:ひかえめ:でんじほう|わるだくみ:0/0/0/32/0/32:ひらいしん")])
+_k39 = _AI39.certain_ko_override(_A39(type="move", move=_rai39b.active.moves[1], move_idx=1), _rai39b, _tgt39, _F39())
+check("audit40 #3 確定KO: 命中50の でんじほう しか倒せないなら探索の手（わるだくみ）を上書きしない", _k39.move.name_jp == "わるだくみ", _k39.move.name_jp)
+_paw39 = _S39([_mk39(f"パーモット@{_N39}:ようき:でんこうそうげき|インファイト|さいきのいのり:0/32/0/0/0/32:てつのこぶし")])
+_paw39.active.type1, _paw39.active.type2 = "かくとう", None
+_tgt39.active.hp = 5
+_k39 = _AI39.certain_ko_override(_A39(type="move", move=_paw39.active.moves[2], move_idx=2), _paw39, _tgt39, _F39())
+check("audit40 #3 確定KO: でんきタイプを失った でんこうそうげき は候補にしない", _k39.move.name_jp != "でんこうそうげき", _k39.move.name_jp)
+
+# #18〜#20 必ず失敗する手・効果の無い手を探索の候補から外す（AI_FIX40）
+from simulator.search_ai import _prune_futile_moves as _pf39, _resample_sleep as _rs39
+def _cands39(side):
+    return [_A39(type="move", move=m, move_idx=i) for i, m in enumerate(side.active.moves)] + \
+           [_A39(type="switch", switch_to=i) for i, p in enumerate(side.party) if i != side.active_idx and p.is_alive]
+def _left39(me, op, f=None):
+    return [a.move.name_jp if a.type == "move" else "sw" for a in _pf39(_cands39(me), me, op, f or _F39())]
+_gu39 = _S39([_mk39(f"グソクムシャ@{_N39}:いじっぱり:であいがしら|アクアブレイク|じこさいせい|つるぎのまい:32/32/0/0/0/0:ききかいひ"), _mk39(_DUM39)])
+_op39 = _S39([_mk39(f"カビゴン@{_N39}:わんぱく:のろい:32/0/32/0/0/0:あついしぼう")])
+_gu39.active.turns_out = 1
+_gu39.active.stage_attack = 6
+_lf39 = _left39(_gu39, _op39)
+check("audit40 #18/#19 候補: 2ターン目以降の であいがしら・満タンの じこさいせい・攻撃+6の つるぎのまい を外す",
+      _lf39 == ["アクアブレイク", "sw"], f"{_lf39}")
+_gu39.active.turns_out = 0; _gu39.active.stage_attack = 0; _gu39.active.hp -= 1
+check("audit40 #18/#19 候補: 登場ターン・HPが減った・積める状態なら外さない", _left39(_gu39, _op39) == ["であいがしら", "アクアブレイク", "じこさいせい", "つるぎのまい", "sw"],
+      f"{_left39(_gu39, _op39)}")
+_hip39 = _S39([_mk39(f"カバルドン@{_N39}:わんぱく:ほえる|あくび|じしん|でんじは:32/0/32/0/0/0:すなおこし")])
+_op39.active.status = "paralysis"
+check("audit40 #19 候補: 控えのいない相手への ほえる・状態異常の相手への あくび/でんじは を外す", _left39(_hip39, _op39) == ["じしん"], f"{_left39(_hip39, _op39)}")
+_gold39 = _S39([_mk39(f"サーフゴー@ふうせん:ひかえめ:シャドーボール:0/0/0/32/0/32:おうごんのからだ")])
+_hip39.opp_view.on_enter(_gold39.active)
+_hip2 = _S39([_mk39(f"カバルドン@{_N39}:わんぱく:じしん|がんせきふうじ:32/0/32/0/0/0:すなおこし")])
+_hip2.opp_view.on_enter(_gold39.active)
+check("audit40 #20 候補: 登場時に見えた ふうせん の相手への じめん技を外す", _left39(_hip2, _gold39) == ["がんせきふうじ"], f"{_left39(_hip2, _gold39)}")
+_paw39b = _S39([_mk39(f"パーモット@{_N39}:ようき:でんこうそうげき|インファイト:0/32/0/0/0/32:てつのこぶし")])
+_paw39b.active.type1, _paw39b.active.type2 = "かくとう", None
+check("audit40 #19 候補: でんきタイプを失った でんこうそうげき を外す", _left39(_paw39b, _op39) == ["インファイト"], f"{_left39(_paw39b, _op39)}")
+_tau39 = _S39([_mk39(f"アシレーヌ@{_N39}:ひかえめ:ムーンフォース|アンコール|めいそう|うたかたのアリア:32/0/0/32/0/0:げきりゅう")])
+_tau39.active.taunt_count = 2
+_top39 = _S39([_mk39(_DUM39)]); _top39.active.last_used_move = "のろい"
+_lt39 = _left39(_tau39, _top39)
+_tau39.active.taunt_count = 0; _tau39.active.throat_chop_count = 2
+_lj39 = _left39(_tau39, _top39)
+check("audit40 #19 候補: ちょうはつ中の変化技・じごくづき中の音技を外す",
+      _lt39 == ["ムーンフォース", "うたかたのアリア"] and _lj39 == ["ムーンフォース", "アンコール", "めいそう"], f"{_lt39} {_lj39}")
+_only39 = _S39([_mk39(f"グソクムシャ@{_N39}:いじっぱり:であいがしら:32/32/0/0/0/0:ききかいひ")])
+_only39.active.turns_out = 1
+check("audit40 #19 候補: 技の候補が残らないときは外さない", _left39(_only39, _op39) == ["であいがしら"])
+
+# 探索のねむりカウンタ: 相手のカウンタは見えている情報（眠ってからの行動回数・ねむる か）と整合する値から引き直す
+_sl39 = _mk39(_DUM39)
+_sl39.status = "sleep"; _sl39._sleep_acts = 2; _sl39._sleep_rest = False; _sl39.sleep_count = 1
+_rr39 = _r39.Random(5)
+_vals39 = set()
+for _ in range(60):
+    _rs39(_sl39, _rr39)
+    _vals39.add(_sl39.sleep_count)
+_sl39._sleep_rest = True; _sl39._sleep_acts = 1
+_rs39(_sl39, _rr39)
+check("audit40 ねむりの決定化: 2回行動して眠ったまま→残り1か2（眠った時2〜4）、ねむる で1回→残り2",
+      _vals39 == {1, 2} and _sl39.sleep_count == 2, f"{_vals39} {_sl39.sleep_count}")
+_bt, _a1, _a2 = _bt39([f"ゲンガー@{_N39}:おくびょう:さいみんじゅつ:32/0/0/0/0/32:のろわれボディ"], [_DUM39], ["さいみんじゅつ"], ["のろい"], seed=7)
+_go39(_bt, _a1, _a2, 1)
+_sn39 = []
+while _bt.side2.active.status == "sleep" and _bt.turn < 6:
+    _go39(_bt, _a1, _a2, _bt.turn + 1)
+    _sn39.append(getattr(_bt.side2.active, "_sleep_acts", None))
+check("audit40 ねむりの決定化: 眠ってからの行動回数を数える", _sn39 and _sn39[0] == 1, f"{_sn39}")
+
+# #23 生成集団: メガが3枠になった党でメガを外すのは、メガでない系統の割合が大きい種（メガ専用の種の少数派の系統を膨らませない）
+import os as _os39b, _coevo_groups as _CG39
+_cwd39 = _os39b.getcwd(); _os39b.chdir(_os39b.path.dirname(_os39b.path.abspath(_CG39.__file__)))   # _pop_gen は DB を相対パスで開く
+_cg39 = _CG39.load()
+_os39b.chdir(_cwd39)
+def _gi39(sp, mega):
+    return next(i for i, m in enumerate(_cg39["mega"][sp]) if m == mega)
+_ok39c = True
+for _sd in range(20):
+    _pt39 = [("カメックス", _gi39("カメックス", True)), ("リザードン", _gi39("リザードン", True)), ("ガブリアス", _gi39("ガブリアス", True)),
+             ("アシレーヌ", 0), ("カバルドン", 0), ("ギルガルド", 0)]
+    _rp39 = _CG39.repair(list(_pt39), _r39.Random(_sd))
+    _ok39c &= (_rp39[0] == _pt39[0] and _rp39[1] == _pt39[1] and _rp39[2][0] == "ガブリアス" and not _cg39["mega"]["ガブリアス"][_rp39[2][1]])
+check("audit40 #23 生成集団: メガ3枠の党はメガでない系統の多い種（ガブリアス）のメガを外す（カメックス・リザードンはメガのまま）", _ok39c)
+
+# #23/#24 作り直した生成集団（guide_pool_m6_v2.json）: 設置役のいないシード（死に持ち物）が無く、努力値は合計66が主流
+import os as _os39, json as _js39, seed_rule as _SR39
+_gp39 = _os39.path.join(_os39.path.dirname(_os39.path.abspath(_SR39.__file__)), "guide_pool_m6_v2.json")
+if _os39.path.exists(_gp39):
+    _gpd39 = [o["party"] for o in _js39.load(open(_gp39))]
+    _dead39 = sum(len(_SR39.violations(p)) for p in _gpd39)
+    _ev66 = sum(1 for p in _gpd39 for x in p if sum(int(v) for v in x.split("@")[1].split(":")[3].split("/")) == 66)
+    check("audit40 #23/#24 生成集団 v2: 3000党・死にシード0・努力値の合計66が9割以上",
+          len(_gpd39) == 3000 and _dead39 == 0 and _ev66 >= 0.9 * 6 * len(_gpd39), f"{len(_gpd39)} {_dead39} {_ev66}")
+
+# Python/Rust 照合: 各問題の局面を Rust の探索で戦い、Python で再生して一致（技を絞って局面を強制）
+try:
+    import feature1 as _F39f
+    _ok39 = hasattr(_E39, "mcts_3v3_record")
+except (ImportError, NameError):
+    _ok39 = False
+if _ok39:
+    _F39f._ensure_loaded("M-6", 8)
+    _PAR39 = {
+        "#1": ([f"リザードン@リザードナイトY:ひかえめ:ウェザーボール:0/0/0/32/0/32:もうか"],
+               [f"ブラッキー@{_N39}:ずぶとい:つきのひかり:32/0/32/0/0/0:せいしんりょく"], "天候がおわった"),
+        "#2": ([_kyu39], [_DUM39], "繰り返すことになった"),
+        "#4": ([f"ゲンガー@{_N39}:おくびょう:みちづれ|シャドーボール:0/0/0/32/0/32:のろわれボディ", _DUM39],
+               [f"ドドゲザン@くろいメガネ:いじっぱり:つるぎのまい|ドゲザン:32/32/0/0/0/0:そうだいしょう"], "みちづれ"),
+        "#5": ([f"イエッサン(オス)@{_N39}:おくびょう:いやしのねがい:0/0/0/32/0/32:サイコメイカー",
+                f"アシレーヌ@{_N39}:ひかえめ:ムーンフォース:0/0/0/32/0/0:げきりゅう"],
+               [f"ヒートロトム@{_N39}:ずぶとい:おにび|オーバーヒート:32/0/32/0/0/0:ふゆう"], "いやしのねがい で全快"),
+        "#6": ([f"ニンフィア@ようせいのハネ:ひかえめ:ハイパーボイス:32/0/0/32/0/0:フェアリースキン"], [_DUM39], "ハイパーボイス"),
+        "#7": ([f"アーマーガア@{_N39}:わんぱく:ボディプレス:32/0/32/0/0/0:ミラーアーマー"],
+               [f"ボーマンダ@{_N39}:いじっぱり:すてみタックル|こわいかお:0/32/0/0/0/32:いかく"], "ミラーアーマー"),
+        "#8": ([_ace39], [f"ニンフィア@{_N39}:ずぶとい:まもる|ハイパーボイス:32/0/32/0/0/0:フェアリースキン"], "叩きつけられた"),
+        "#9": ([f"ギャラドス@ギャラドスナイト:いじっぱり:たきのぼり:0/32/0/0/0/32:いかく"],
+               [f"ミミッキュ@{_N39}:いじっぱり:つるぎのまい|じゃれつく:32/32/0/0/0/0:ばけのかわ",
+                f"ガブリアス@{_N39}:わんぱく:じしん:32/0/32/0/0/0:さめはだ"], "さめはだ"),
+        "#9b": ([f"ギャラドス@ギャラドスナイト:いじっぱり:たきのぼり:0/32/0/0/0/32:いかく"],
+                [f"アローラキュウコン@ひかりのねんど:おくびょう:オーロラベール|ムーンフォース:32/0/0/0/0/32:ゆきふらし"], "オーロラベール"),
+        "#10": ([f"カメックス@しろいハーブ:おくびょう:からをやぶる|なみのり:0/0/0/32/0/32:げきりゅう"],
+                [f"ギャラドス@{_N39}:わんぱく:たきのぼり:32/0/32/0/0/0:じしんかじょう"], "しろいハーブ"),
+        "#11": ([f"ゲンガー@{_N39}:おくびょう:ほろびのうた|まもる:32/0/0/0/0/32:のろわれボディ", _DUM39], [_DUM39, _DUM39], "ほろびのうた で倒れた"),
+        "#12": ([f"アーマーガア@{_N39}:わんぱく:ボディプレス:32/0/32/0/0/0:プレッシャー"],
+                [f"ラウドボーン@{_N39}:ずぶとい:フレアソング:32/0/32/0/0/0:てんねん"], "ボディプレス"),
+        "#13": ([f"ウォッシュロトム@{_N39}:ずぶとい:いたみわけ|ハイドロポンプ:32/0/32/0/0/0:ふゆう"],
+                [f"サーフゴー@{_N39}:ひかえめ:シャドーボール:0/0/0/32/0/32:おうごんのからだ"], "おうごんのからだ"),
+        "#14": ([f"アシレーヌ@{_N39}:ひかえめ:ムーンフォース:0/0/0/32/0/0:げきりゅう", _baz39.replace("ビルドアップ", "フレアドライブ")], [_DUM39], "バシャーモ"),
+        "#15": ([f"パーモット@{_N39}:ようき:でんこうそうげき:0/32/0/0/0/32:てつのこぶし"],
+                [f"ライチュウ@{_N39}:おくびょう:10まんボルト:0/0/0/32/0/32:ひらいしん"], "効かない"),
+        "#15b": ([f"ゴリランダー@{_N39}:いじっぱり:10まんばりき:32/32/0/0/0/0:グラスメイカー"],
+                 [f"ウォッシュロトム@ゴツゴツメット:ずぶとい:おにび|ハイドロポンプ:32/0/32/0/0/0:ふゆう"], "効かない"),
+        "#16": ([f"ライチュウ@{_N39}:おくびょう:みがわり:32/0/32/0/0/32:ひらいしん"],
+                [f"アシレーヌ@{_N39}:ひかえめ:うたかたのアリア:32/0/0/32/0/0:げきりゅう"], "みがわり"),
+        "#17": ([_gya39], [_DUM39], "ちょうはつ"),
+        "sub": ([f"ゲンガー@{_N39}:おくびょう:みがわり|シャドーボール:32/0/0/0/0/32:のろわれボディ"],
+                [f"ヒートロトム@{_N39}:ずぶとい:おにび|オーバーヒート:32/0/32/0/0/0:ふゆう"], "みがわり"),
+        "misty": ([f"ニンフィア@{_N39}:ずぶとい:ミストフィールド|ハイパーボイス:32/0/32/0/0/0:フェアリースキン"],
+                  [f"ブラッキー@{_N39}:ずぶとい:でんじは|イカサマ:32/0/32/0/0/0:せいしんりょく"], "ミストフィールド"),
+    }
+    _mm39, _seen39 = [], {}
+    for _k39, (_pa39, _pb39, _kw39) in _PAR39.items():
+        for _sd39 in (1, 2, 3, 4, 5, 6, 7, 8):
+            try:
+                _rec39 = _F39f.play_and_record_rust(_pa39, _pb39, season="M-6", seed=_sd39, mcts_sims=30,
+                                                     sel1_idx=list(range(len(_pa39))))
+                if any(_kw39 in l for t in _rec39["turns"] for l in t["logs"]):
+                    _seen39[_k39] = True
+            except _F39f.ReplayMismatch as _e39x:
+                _mm39.append((_k39, _sd39, str(_e39x)[:160]))
+    check("audit40 Python/Rust 照合: 各問題の局面（#1〜#17・みがわり・ミストフィールド）で再生が一致", not _mm39, str(_mm39)[:600])
+    check("audit40 Python/Rust 照合: 各局面で問題の場面が実際に起きた", set(_seen39) == set(_PAR39), str(set(_PAR39) - set(_seen39)))
+
+print("\n=== 40. 監査200（2026-10-04）の修正 ===")
+import random as _r40
+from simulator.battle import (Battle as _B40, BattleSide as _S40, BattleField as _F40, Action as _A40,
+                              _execute_move as _x40, is_trapped as _it40)
+from simulator.pokemon import build_from_spec as _bfs40, parse_pokemon_spec as _pps40
+from simulator.damage import calc_damage as _cd40, check_hit as _ch40
+_N40 = "メトロノーム"
+
+
+def _mk40(spec):
+    return _bfs40(_pps40(spec), dl, season="M-6", randomize=False)
+
+
+class _P40:
+    """ターンごとの行動計画（技名・"M:技名"でメガ進化・整数で交代）。最後の手を繰り返す"""
+    def __init__(self, plan):
+        self.plan = plan
+        self.bt = None
+
+    def __call__(self, my, opp, f):
+        x = self.plan[min(self.bt.turn, len(self.plan)) - 1]
+        if isinstance(x, int):
+            return _A40(type="switch", switch_to=x)
+        if x == "わるあがき":
+            from simulator.ai import _get_struggle
+            return _A40(type="move", move=_get_struggle(), move_idx=-1)
+        for i, m in enumerate(my.active.moves):
+            if m is not None and m.name_jp == x:
+                return _A40(type="move", move=m, move_idx=i)
+        return _A40(type="move", move=my.active.moves[0], move_idx=0)
+
+
+def _bt40(s1, s2, p1, p2, seed=1, prep=None):
+    _r40.seed(seed)
+    a, b = _S40([_mk40(x) for x in s1]), _S40([_mk40(x) for x in s2])
+    if prep:
+        prep(a, b)
+    bt = _B40(a, b, _F40())
+    ai1, ai2 = _P40(p1), _P40(p2)
+    ai1.bt = ai2.bt = bt
+    bt.start(ai1, ai2)
+    return bt, ai1, ai2
+
+
+def _go40(bt, ai1, ai2, t):
+    bt.resume(ai1, ai2, max_turns=t)
+
+
+def _case40(name, fn):
+    """1問題ぶんの検査。修正前のコードで例外になったら FAIL として数える"""
+    try:
+        fn()
+    except Exception as e:
+        check(f"audit200 {name}（例外）", False, repr(e)[:200])
+
+
+_DUM40 = f"カビゴン@{_N40}:わんぱく:のろい|まもる:32/0/32/0/0/0:あついしぼう"
+_BLK40 = f"ブラッキー@{_N40}:ずぶとい:ねがいごと|のろい:32/0/32/0/0/0:せいしんりょく"
+_GAB40 = f"ガブリアス@{_N40}:わんぱく:まもる|のろい:32/0/32/0/0/0:さめはだ"
+
+
+def _t1():
+    for mv, sp in (("はどうだん", f"ルカリオ@{_N40}:おくびょう:はどうだん:0/0/0/32/0/32:せいしんりょく"),
+                   ("ばくれつパンチ", f"カイリキー@{_N40}:いじっぱり:ばくれつパンチ:32/32/0/0/0/0:ノーガード")):
+        bt, a1, a2 = _bt40([sp], [_GAB40], [mv], ["まもる"])
+        _go40(bt, a1, a2, 1)
+        g = bt.side2.active
+        check(f"audit200 #1 まもる は必中技（{mv}）より先に判定して防ぐ", g.hp == g.max_hp and not g.confused, f"{g.hp}/{g.max_hp}")
+    bt, a1, a2 = _bt40([f"カバルドン@{_N40}:わんぱく:あくび:32/0/32/0/0/0:すなおこし"], [_GAB40], ["あくび"], ["まもる"])
+    _go40(bt, a1, a2, 1)
+    check("audit200 #1 まもる は あくび（命中「—」）も防ぐ", bt.side2.active.yawn_count == 0, f"{bt.side2.active.yawn_count}")
+    bt, a1, a2 = _bt40([f"カバルドン@{_N40}:わんぱく:ほえる:32/0/32/0/0/0:すなおこし"], [_GAB40, _BLK40], ["ほえる"], ["まもる"])
+    _go40(bt, a1, a2, 1)
+    check("audit200 #1 ほえる は守りを貫通する（対照）", bt.side2.active.name == "ブラッキー", bt.side2.active.name)
+    sw = _mk40(f"エルフーン@{_N40}:おくびょう:つるぎのまい:0/0/0/32/0/32:いたずらごころ")
+    g = _mk40(_GAB40)
+    g.protecting = True
+    check("audit200 #1 自分が対象の変化技は相手の守りに関係なく成功", _ch40(sw, g, dl.get_move("つるぎのまい"), _F40()))
+
+
+def _t3():
+    bt, a1, a2 = _bt40([f"フォレトス@{_N40}:わんぱく:こうそくスピン|まもる:32/0/32/0/0/0:がんじょう"],
+                       [f"カバルドン@{_N40}:わんぱく:ステルスロック|のろい:32/0/32/0/0/0:すなおこし"],
+                       ["まもる", "こうそくスピン", "まもる"], ["ステルスロック", "のろい", "ステルスロック"])
+    sr = []
+    for t in (1, 2, 3):
+        _go40(bt, a1, a2, t)
+        sr.append(bt.field.stealth_rock[0])
+    check("audit200 #3 ステルスロック: こうそくスピン で消された後に撒き直せる", sr == [True, False, True], f"{sr}")
+
+
+def _t4():
+    bt, a1, a2 = _bt40([f"エルフーン@{_N40}:おくびょう:みがわり|でんじは:0/0/0/32/0/32:いたずらごころ"], [_BLK40],
+                       ["みがわり", "でんじは"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    sub = getattr(bt.side1.active, "_substitute_hp", 0)
+    _go40(bt, a1, a2, 2)
+    check("audit200 #4 いたずらごころ: あく相手でも自分対象の みがわり は成功、相手対象の でんじは は失敗",
+          sub > 0 and bt.side2.active.status is None, f"{sub} {bt.side2.active.status}")
+
+
+def _t5():
+    esp = f"エーフィ@{_N40}:ずぶとい:めいそう:32/0/32/0/0/0:マジックミラー"
+    bt, a1, a2 = _bt40([esp], [f"オニシズクモ@{_N40}:わんぱく:ステルスロック|まきびし|ねばねばネット|どくびし:32/0/32/0/0/0:すいほう"],
+                       ["めいそう"], ["ステルスロック", "まきびし", "ねばねばネット", "どくびし"])
+    _go40(bt, a1, a2, 4)
+    f = bt.field
+    check("audit200 #5 マジックミラー: ステルスロック・まきびし・ねばねばネット・どくびし を使った側に跳ね返す",
+          (f.stealth_rock, f.spikes, f.sticky_web, f.toxic_spikes) == ([False, True], [0, 1], [False, True], [0, 1]),
+          f"{f.stealth_rock} {f.spikes} {f.sticky_web} {f.toxic_spikes}")
+    bt, a1, a2 = _bt40([esp, _BLK40], [f"オーロンゲ@{_N40}:わんぱく:すてゼリフ:32/0/32/0/0/0:いたずらごころ", _BLK40],
+                       ["めいそう"], ["すてゼリフ"])
+    _go40(bt, a1, a2, 1)
+    o = bt.side2.active
+    check("audit200 #5 マジックミラー: すてゼリフ を跳ね返す（使った側の攻撃・特攻-1、どちらも交代しない）",
+          o.name == "オーロンゲ" and (o.stage_attack, o.stage_sp_attack) == (-1, -1) and bt.side1.active.name == "エーフィ",
+          f"{o.name} {o.stage_attack} {o.stage_sp_attack} {bt.side1.active.name}")
+
+
+def _t6():
+    bt, a1, a2 = _bt40([_DUM40, _BLK40], [f"ドヒドイデ@{_N40}:ずぶとい:どくどく|まもる:32/0/32/0/0/0:さいせいりょく"],
+                       ["のろい", "のろい", 1, 0, "のろい"], ["どくどく", "まもる", "まもる", "まもる", "まもる"])
+    _go40(bt, a1, a2, 3)
+    c = bt.side1.party[0]
+    hp3 = c.hp
+    _go40(bt, a1, a2, 4)
+    check("audit200 #6 もうどく: 交代で戻ると段階は1から（戻ったターンの終わりは1/16）",
+          c.status == "badpoison" and hp3 - c.hp == c.max_hp // 16, f"{c.status} {hp3 - c.hp} {c.max_hp // 16}")
+
+
+def _t7():
+    bt, a1, a2 = _bt40([f"エルフーン@{_N40}:おくびょう:おいかぜ|まもる:0/0/0/32/0/32:いたずらごころ"], [_DUM40],
+                       ["おいかぜ", "まもる"], ["のろい"])
+    tw = []
+    for t in range(1, 6):
+        _go40(bt, a1, a2, t)
+        tw.append(bt.side1.tailwind)
+    check("audit200 #7 おいかぜ は使ったターンを含め4ターン（4ターン目の終わりに切れる）", tw == [True, True, True, False, False], f"{tw}")
+
+
+def _t8():
+    bt, a1, a2 = _bt40([f"ブラッキー@{_N40}:ずぶとい:くろいまなざし|のろい:32/0/32/0/0/0:せいしんりょく", _DUM40],
+                       [_DUM40, _BLK40], ["くろいまなざし", 1], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    t1 = _it40(bt.side2.active, bt.side1.active)
+    _go40(bt, a1, a2, 2)
+    check("audit200 #8 くろいまなざし: 縛った側が交代すると解ける", t1 and not _it40(bt.side2.active, bt.side1.active),
+          f"{t1} {_it40(bt.side2.active, bt.side1.active)}")
+    bt, a1, a2 = _bt40([f"マフィティフ@{_N40}:いじっぱり:くらいつく|まもる:32/32/0/0/0/0:いかく", _BLK40], [_DUM40, _BLK40],
+                       ["くらいつく", "まもる"], ["のろい", 1])
+    _go40(bt, a1, a2, 1)
+    both = (_it40(bt.side1.active, bt.side2.active), _it40(bt.side2.active, bt.side1.active))
+    _go40(bt, a1, a2, 2)
+    check("audit200 #8 くらいつく: 両者交代不可、相手が退場すると使った側も解ける",
+          both == (True, True) and not _it40(bt.side1.active, bt.side2.active), f"{both} {_it40(bt.side1.active, bt.side2.active)}")
+    bt, a1, a2 = _bt40([f"ドヒドイデ@{_N40}:ずぶとい:まとわりつく:32/0/32/0/0/0:さいせいりょく"], [_DUM40, _BLK40],
+                       ["まとわりつく"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    c = bt.side2.active
+    check("audit200 #8 バインド中は交代できない", c.bound_count > 0 and _it40(c, bt.side1.active), f"{c.bound_count}")
+    gh = _mk40(f"ゲンガー@{_N40}:おくびょう:のろい:0/0/0/32/0/32:のろわれボディ")
+    gh.bound_count = 3; gh.trapped = True
+    sh = _mk40(f"カビゴン@きれいなぬけがら:わんぱく:のろい:32/0/32/0/0/0:あついしぼう")
+    sh.bound_count = 3; sh.trapped = True
+    check("audit200 #8 ゴーストタイプ・きれいなぬけがら は逃げられない状態・バインドでも交代できる",
+          sh.item == "きれいなぬけがら" and not _it40(gh, None) and not _it40(sh, None))
+
+
+def _t9():
+    kyu = f"アローラキュウコン@{_N40}:おくびょう:アンコール|かなしばり|ムーンフォース:32/0/32/0/0/32:ゆきふらし"
+    bt, a1, a2 = _bt40([kyu], [_DUM40, _BLK40], ["ムーンフォース", "アンコール"], ["のろい", 1])
+    _go40(bt, a1, a2, 2)
+    check("audit200 #9 交代で出たばかりの相手（前の出番の技は消える）への アンコール は失敗",
+          bt.side2.active.encore_count == 0 and bt.side2.active.last_used_move is None and bt.side2.party[0].last_used_move is None,
+          f"{bt.side2.active.encore_count} {bt.side2.party[0].last_used_move}")
+    bt, a1, a2 = _bt40([kyu], [_DUM40], ["ムーンフォース", "アンコール"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    c = bt.side2.active
+    c.pp[0] = 0
+    _go40(bt, a1, a2, 2)
+    check("audit200 #9 直前の技のPPが0なら アンコール は失敗", c.encore_count == 0, f"{c.encore_count}")
+    bt, a1, a2 = _bt40([kyu], [_DUM40], ["ムーンフォース", "アンコール", "ムーンフォース"], ["のろい", "のろい", "わるあがき"])
+    _go40(bt, a1, a2, 2)
+    c = bt.side2.active
+    enc = c.encore_count
+    c.pp[0] = 0
+    a0 = c.stage_attack
+    l0 = len(bt.logs)
+    _go40(bt, a1, a2, 3)
+    check("audit200 #9 アンコールされた技のPPが尽きたらアンコールは解け、わるあがき をその技に差し替えない",
+          enc > 0 and c.encore_count == 0 and c.stage_attack == a0 and any("わるあがき" in x for x in bt.logs[l0:]),
+          f"{enc} {c.encore_count} {c.stage_attack} {a0}")
+    bt, a1, a2 = _bt40([kyu], [_DUM40, _BLK40], ["ムーンフォース", "ムーンフォース", "ムーンフォース", "かなしばり"], ["のろい", 1, 0, "のろい"])
+    _go40(bt, a1, a2, 4)
+    check("audit200 #9 一度引っ込んで戻った相手（戻ってから技を使っていない）への かなしばり は失敗",
+          bt.side2.active.name == "カビゴン" and bt.side2.active.disabled_move is None, f"{bt.side2.active.disabled_move}")
+
+
+def _t10():
+    for tgt in (f"ウォッシュロトム@{_N40}:ずぶとい:なまける:32/0/32/0/0/0:ふゆう",
+                f"サーフゴー@ふうせん:ずぶとい:わるだくみ:32/0/32/0/0/0:おうごんのからだ"):
+        bt, a1, a2 = _bt40([f"カビゴン@{_N40}:いじっぱり:じわれ:32/32/0/0/0/0:あついしぼう"], [tgt], ["じわれ"], ["なまける"], seed=3)
+        _go40(bt, a1, a2, 4)
+        check(f"audit200 #10 じわれ は浮いている相手（{tgt.split('@')[0]}・{tgt.split(':')[-1] if 'ふうせん' not in tgt else 'ふうせん'}）に効かない",
+              bt.side2.active.is_alive, f"{bt.side2.active.hp}")
+    mr = _mk40(f"クレッフィ@{_N40}:ずぶとい:でんじふゆう:32/0/32/0/0/0:いたずらごころ")
+    mr.magnet_rise = True
+    from simulator.battle import _airborne
+    check("audit200 #10 でんじふゆう 中も浮いている扱い", _airborne(mr, _F40()))
+
+
+def _t11():
+    bt, a1, a2 = _bt40([f"ドラパルト@{_N40}:ようき:ゴーストダイブ:0/32/0/0/0/32:すりぬけ"],
+                       [f"ガブリアス@{_N40}:ようき:ドラゴンクロー:0/32/0/0/0/32:さめはだ"], ["ゴーストダイブ"], ["ドラゴンクロー"])
+    _go40(bt, a1, a2, 1)
+    d = bt.side1.active
+    check("audit200 #11 溜め技（ゴーストダイブ）の1ターン目は相手の攻撃が当たらない", d.hp == d.max_hp and d.charging_move == "ゴーストダイブ",
+          f"{d.hp}/{d.max_hp}")
+    dig = _mk40(f"ガブリアス@{_N40}:ようき:あなをほる:0/32/0/0/0/32:さめはだ")
+    dig.charging_move = "あなをほる"
+    eq = _mk40(f"カバルドン@{_N40}:わんぱく:じしん|ストーンエッジ:32/0/32/0/0/0:すなおこし")
+    _orig = _r40.random
+    try:
+        _r40.random = lambda: 0.0
+        hit_eq, hit_se = _ch40(eq, dig, dl.get_move("じしん"), _F40()), _ch40(eq, dig, dl.get_move("ストーンエッジ"), _F40())
+    finally:
+        _r40.random = _orig
+    check("audit200 #11 あなをほる中: じしん は当たり、ストーンエッジ は（命中の乱数に関係なく）当たらない", hit_eq and not hit_se, f"{hit_eq} {hit_se}")
+
+
+def _t12():
+    bt, a1, a2 = _bt40([f"ミミズズ@{_N40}:わんぱく:しっぽきり:32/0/32/0/0/0:どしょく", _BLK40], [_DUM40], ["しっぽきり"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    m = bt.side1.party[0]
+    check("audit200 #12 しっぽきり: みがわり（最大HPの1/4）は交代先に引き継がれる",
+          bt.side1.active.name == "ブラッキー" and getattr(bt.side1.active, "_substitute_hp", 0) == m.max_hp // 4
+          and getattr(m, "_substitute_hp", 0) == 0, f"{bt.side1.active.name} {getattr(bt.side1.active, '_substitute_hp', 0)}")
+    bt, a1, a2 = _bt40([f"ミミズズ@{_N40}:わんぱく:しっぽきり:32/0/32/0/0/0:どしょく"], [_DUM40], ["しっぽきり"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    check("audit200 #12 しっぽきり: 控えがいなければ失敗（HPは減らない）", bt.side1.active.hp == bt.side1.active.max_hp)
+
+
+def _t13():
+    bt, a1, a2 = _bt40([f"イッカネズミ@{_N40}:ようき:おかたづけ|ネズミざん:0/32/0/0/0/32:テクニシャン"],
+                       [f"ゲンガー@{_N40}:おくびょう:ステルスロック|みがわり|まもる:32/0/0/0/0/32:のろわれボディ"],
+                       ["ネズミざん", "ネズミざん", "おかたづけ"], ["ステルスロック", "みがわり", "まもる"], seed=4)
+    _go40(bt, a1, a2, 2)
+    pre = (bt.field.stealth_rock[0], getattr(bt.side2.active, "_substitute_hp", 0) > 0)
+    _go40(bt, a1, a2, 3)
+    check("audit200 #13 おかたづけ は ステルスロック と みがわり も消す",
+          pre == (True, True) and not bt.field.stealth_rock[0] and getattr(bt.side2.active, "_substitute_hp", 0) == 0,
+          f"{pre} {bt.field.stealth_rock} {getattr(bt.side2.active, '_substitute_hp', 0)}")
+
+
+def _t14():
+    bt, a1, a2 = _bt40([f"ランクルス@いのちのたま:ひかえめ:ドレインパンチ:32/0/0/32/0/0:マジックガード"],
+                       [f"ガブリアス@ゴツゴツメット:わんぱく:のろい:32/0/32/0/0/0:さめはだ"], ["ドレインパンチ"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    r = bt.side1.active
+    check("audit200 #14 マジックガード: いのちのたま・さめはだ・ゴツゴツメット の反動を受けない", r.hp == r.max_hp, f"{r.hp}/{r.max_hp}")
+    def _prep(a, b):
+        p = a.party[0]
+        p.seeded = True; p.cursed = True; p._salted = True; p.bound_count = 3
+    bt, a1, a2 = _bt40([f"フーディン@くろいヘドロ:おくびょう:めいそう:0/0/0/32/0/32:マジックガード"], [_DUM40], ["めいそう"], ["のろい"], prep=_prep)
+    _go40(bt, a1, a2, 1)
+    f = bt.side1.active
+    check("audit200 #14 マジックガード: やどりぎ・のろい・しおづけ・バインド・くろいヘドロ のダメージを受けない",
+          f.hp == f.max_hp, f"{f.hp}/{f.max_hp}")
+
+
+def _t15():
+    bt, a1, a2 = _bt40([f"コノヨザル@{_N40}:いじっぱり:ふんどのこぶし|ビルドアップ:32/32/0/0/0/0:まけんき", _BLK40],
+                       [f"ガブリアス@{_N40}:いじっぱり:ドラゴンクロー:32/0/32/0/0/0:さめはだ"],
+                       ["ビルドアップ", "ビルドアップ", 1, 0], ["ドラゴンクロー"])
+    _go40(bt, a1, a2, 4)
+    check("audit200 #15 ふんどのこぶし: 被弾回数は交代しても戻らない", bt.side1.party[0].times_hit >= 2,
+          f"{bt.side1.party[0].times_hit}")
+
+
+def _t16():
+    bt, a1, a2 = _bt40([f"ヒスイゾロアーク@{_N40}:おくびょう:うらみつらみ:0/0/0/32/0/32:イリュージョン"], [_GAB40], ["うらみつらみ"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    check("audit200 #16 うらみつらみ は相手の攻撃を1段階下げる（のろいの+1と合わせて0）", bt.side2.active.stage_attack == 0,
+          f"{bt.side2.active.stage_attack}")
+    from simulator.damage import _secondary_effect_moves
+    check("audit200 #16 うらみつらみ は追加効果のある技（ちからずく の対象）", "うらみつらみ" in _secondary_effect_moves())
+
+
+def _t17():
+    bt, a1, a2 = _bt40([f"オーロンゲ@{_N40}:わんぱく:すてゼリフ:32/0/32/0/0/0:いたずらごころ", _BLK40],
+                       [f"メタグロス@{_N40}:いじっぱり:てっぺき:32/32/0/0/0/0:クリアボディ"], ["すてゼリフ"], ["てっぺき"])
+    _go40(bt, a1, a2, 1)
+    check("audit200 #17 すてゼリフ: 相手の能力が下がらなければ交代しない", bt.side1.active.name == "オーロンゲ", bt.side1.active.name)
+    bt, a1, a2 = _bt40([f"オーロンゲ@{_N40}:わんぱく:すてゼリフ:32/0/32/0/0/0:おみとおし", _BLK40],
+                       [f"ドドゲザン@{_N40}:いじっぱり:アイアンヘッド:32/32/0/0/0/0:まけんき"], ["すてゼリフ"], ["アイアンヘッド"])
+    _go40(bt, a1, a2, 1)
+    d = bt.side2.active
+    check("audit200 #17 すてゼリフ: まけんき が1回発動（攻撃 -1+2=+1・特攻-1）して交代する",
+          (d.stage_attack, d.stage_sp_attack) == (1, -1) and bt.side1.active.name == "ブラッキー",
+          f"{d.stage_attack} {d.stage_sp_attack} {bt.side1.active.name}")
+    bt, a1, a2 = _bt40([f"ゲンガー@{_N40}:おくびょう:おきみやげ:0/0/0/32/0/32:のろわれボディ", _BLK40],
+                       [f"ドドゲザン@{_N40}:いじっぱり:アイアンヘッド:32/32/0/0/0/0:まけんき"], ["おきみやげ"], ["アイアンヘッド"])
+    _go40(bt, a1, a2, 1)
+    d = bt.side2.active
+    check("audit200 #17 おきみやげ: まけんき が発動（攻撃 -2+2=0・特攻-2）", (d.stage_attack, d.stage_sp_attack) == (0, -2),
+          f"{d.stage_attack} {d.stage_sp_attack}")
+
+
+def _t18():
+    mo = _mk40(f"モルペコ@{_N40}:ようき:オーラぐるま:0/32/0/0/0/32:はらぺこスイッチ")
+    from simulator.damage import _effective_move_type
+    t0 = _effective_move_type(mo, mo.moves[0], _F40())
+    mo._hangry = True
+    check("audit200 #18 オーラぐるま: まんぷくは でんき、はらぺこは あく", (t0, _effective_move_type(mo, mo.moves[0], _F40())) == ("でんき", "あく"),
+          f"{t0}")
+
+
+def _t19():
+    a = _mk40(f"ハラバリー@{_N40}:ひかえめ:パラボラチャージ:32/0/0/32/0/0:でんきにかえる")
+    d = _mk40(_DUM40)
+    d0 = _cd40(a, d, a.moves[0], _F40(), False, 0.5)
+    a._electromorphosis_charged = True
+    d1 = _cd40(a, d, a.moves[0], _F40(), False, 0.5)
+    check("audit200 #19 でんきにかえる: 次のでんき技は2倍", 1.95 < d1 / d0 < 2.05, f"{d1} {d0}")
+
+
+def _t20():
+    for sp, rate in ((_DUM40, 16), (f"エンペルト@{_N40}:ずぶとい:のろい:32/0/32/0/0/0:かちき", 8)):
+        def _prep(a, b):
+            b.party[0]._salted = True
+        bt, a1, a2 = _bt40([f"キョジオーン@{_N40}:わんぱく:のろい:32/0/32/0/0/0:きよめのしお"], [sp], ["のろい"], ["のろい"], prep=_prep)
+        _go40(bt, a1, a2, 1)
+        p = bt.side2.active
+        check(f"audit200 #20 しおづけ（Champions 仕様・SVより弱体）: {p.name} は最大HPの1/{rate}", p.max_hp - p.hp == p.max_hp // rate,
+              f"{p.max_hp - p.hp} {p.max_hp // rate}")
+
+
+def _t21():
+    d = _mk40(_DUM40)
+    for mv in ("ワイルドボルト", "もろはのずつき"):
+        a1 = _mk40(f"エンブオー@{_N40}:いじっぱり:{mv}:0/32/0/0/0/32:すてみ")
+        a0 = _mk40(f"エンブオー@{_N40}:いじっぱり:{mv}:0/32/0/0/0/32:もうか")
+        x1, x0 = _cd40(a1, d, a1.moves[0], _F40(), False, 0.5), _cd40(a0, d, a0.moves[0], _F40(), False, 0.5)
+        check(f"audit200 #21 すてみ は {mv} を1.2倍", 1.15 < x1 / x0 < 1.25, f"{x1} {x0}")
+
+
+def _t22():
+    def _prep(a, b):
+        b.party[1].hp = 3
+    bt, a1, a2 = _bt40([f"カバルドン@{_N40}:わんぱく:ステルスロック|のろい:32/0/32/0/0/0:すなおこし"],
+                       [_DUM40, f"トリデプス@{_N40}:ずぶとい:のろい:32/0/32/0/0/0:がんじょう", _BLK40],
+                       ["ステルスロック", "のろい"], ["のろい", 1], prep=_prep)
+    _go40(bt, a1, a2, 2)
+    check("audit200 #22 がんじょう は設置物では耐えない（ステルスロックで倒れる）", not bt.side2.party[1].is_alive,
+          f"{bt.side2.party[1].hp}")
+
+
+def _t23():
+    bt, a1, a2 = _bt40([f"クレッフィ@{_N40}:ずぶとい:でんじふゆう|まもる:32/0/32/0/0/0:いたずらごころ"], [_DUM40],
+                       ["でんじふゆう", "まもる"], ["のろい"])
+    mr = []
+    for t in range(1, 7):
+        _go40(bt, a1, a2, t)
+        mr.append(bt.side1.active.magnet_rise)
+    check("audit200 #23 でんじふゆう は使ったターンを含め5ターン（5ターン目の終わりに切れる）", mr == [True] * 4 + [False, False], f"{mr}")
+    bt, a1, a2 = _bt40([f"クレッフィ@{_N40}:ずぶとい:でんじふゆう:32/0/32/0/0/0:いたずらごころ", _BLK40], [_DUM40],
+                       ["でんじふゆう", 1], ["のろい"])
+    _go40(bt, a1, a2, 2)
+    check("audit200 #23 でんじふゆう は交代で終わる", not bt.side1.party[0].magnet_rise)
+
+
+def _t24():
+    def _prep(a, b):
+        b.party[0].hp = b.party[0].max_hp // 2
+        b.party[0].heal_block_count = 2
+    bt, a1, a2 = _bt40([f"ストリンダー(ハイ)@{_N40}:ひかえめ:ちょうはつ:0/0/0/32/0/32:パンクロック"],
+                       [f"カビゴン@たべのこし:わんぱく:のろい:32/0/32/0/0/0:あついしぼう"], ["ちょうはつ"], ["のろい"], prep=_prep)
+    bt.field.grassy_terrain = True; bt.field.grassy_terrain_count = 5
+    h0 = bt.side2.active.hp
+    _go40(bt, a1, a2, 1)
+    check("audit200 #24 かいふくふうじ は たべのこし・グラスフィールド の回復も止める", bt.side2.active.hp == h0, f"{bt.side2.active.hp} {h0}")
+
+
+def _t25():
+    h = _mk40(f"ハリーマン@{_N40}:ずぶとい:ちいさくなる:32/0/32/0/0/0:すいすい")
+    h.minimized = True; h.stage_evasion = 6
+    k = _mk40(f"カビゴン@{_N40}:いじっぱり:のしかかり:32/32/0/0/0/0:あついしぼう")
+    _r40.seed(2)
+    hits = sum(_ch40(k, h, k.moves[0], _F40()) for _ in range(50))
+    check("audit200 #25 ちいさくなる の相手に のしかかり は必中", hits == 50, f"{hits}")
+    def _prep(a, b):
+        b.party[0].stage_attack = -6
+        a.party[0].hp = a.party[0].max_hp // 2
+    bt, a1, a2 = _bt40([f"ウツボット@{_N40}:ずぶとい:ちからをすいとる:32/0/32/0/0/0:ようりょくそ"], [_DUM40],
+                       ["ちからをすいとる"], ["まもる"], prep=_prep)
+    h0 = bt.side1.active.hp
+    bt.side2.active.moves = [dl.get_move("あくび")]
+    _go40(bt, a1, a2, 1)
+    check("audit200 #25 ちからをすいとる は相手の攻撃が-6なら失敗（回復しない）", bt.side1.active.hp == h0, f"{bt.side1.active.hp} {h0}")
+
+
+def _t27():
+    a = _mk40(f"ラフレシア@フォーカスレンズ:ひかえめ:ねむりごな:32/0/0/32/0/0:ようりょくそ")
+    d = _mk40(_DUM40)
+    mv = dl.get_move("ねむりごな")
+    a._acts_second = True
+    _orig = _r40.random
+    try:
+        _r40.random = lambda: 0.75 * 1.2 - 0.01
+        lens = _ch40(a, d, mv, _F40())
+        a._acts_second = False
+        first = _ch40(a, d, mv, _F40())
+    finally:
+        _r40.random = _orig
+    check("audit200 #27 フォーカスレンズ: 後攻のとき命中1.2倍（命中75→90）、先攻では補正なし", a.item == "フォーカスレンズ" and lens and not first, f"{lens} {first}")
+    bt, a1, a2 = _bt40([f"オーロンゲ@{_N40}:わんぱく:ちょうはつ:32/0/32/0/0/0:いたずらごころ"],
+                       [f"カビゴン@メンタルハーブ:わんぱく:のろい|まもる:32/0/32/0/0/0:あついしぼう"], ["ちょうはつ"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    c = bt.side2.active
+    check("audit200 #27 メンタルハーブ は ちょうはつ を受けた直後に発動（同じターンの のろい が使える）",
+          c.item is None and c.taunt_count == 0 and c.stage_attack == 1, f"{c.item} {c.taunt_count} {c.stage_attack}")
+    from simulator.abilities import end_of_turn_ability
+    mo = _mk40(f"オニシズクモ@{_N40}:ずぶとい:のろい:32/0/32/0/0/0:すいほう")
+    mo.ability = "ムラっけ"
+    _r40.seed(3)
+    ae = set()
+    for _ in range(200):
+        for s in ("stage_attack", "stage_defense", "stage_sp_attack", "stage_sp_defense", "stage_speed", "stage_accuracy", "stage_evasion"):
+            setattr(mo, s, 0)
+        end_of_turn_ability(mo, _F40(), [])
+        ae.add((mo.stage_accuracy, mo.stage_evasion))
+    check("audit200 #27 ムラっけ は命中・回避を変えない", ae == {(0, 0)}, f"{ae}")
+    from simulator.abilities import get_sharpness_multiplier
+    ba = _mk40(f"バサギリ@{_N40}:いじっぱり:シザークロス:0/32/0/0/0/32:きれあじ")
+    check("audit200 #27 きれあじ: シザークロス・ドゲザン は1.5倍、ドラゴンクロー・ブレイククロー は対象外",
+          [get_sharpness_multiplier(ba, m) for m in ("シザークロス", "ドゲザン", "ドラゴンクロー", "ブレイククロー")] == [1.5, 1.5, 1.0, 1.0])
+
+
+def _tsub():
+    sub = _S40([_mk40(f"ガブリアス@ゴツゴツメット:わんぱく:のろい:32/0/32/0/0/0:さめはだ"), _mk40(_BLK40)])
+    sub.active._substitute_hp = 200
+    att = _S40([_mk40(f"ドドゲザン@{_N40}:いじっぱり:はたきおとす|ドラゴンテール|アイアンヘッド:32/32/0/0/0/0:まけんき")])
+    _r40.seed(1)
+    _x40(att, sub, _A40(type="move", move=att.active.moves[0], move_idx=0), _F40())
+    _x40(att, sub, _A40(type="move", move=att.active.moves[1], move_idx=1), _F40())
+    check("audit200 みがわり: 接触の反応（ゴツゴツメット・さめはだ）・はたきおとす・ドラゴンテール の交代は起きない",
+          att.active.hp == att.active.max_hp and sub.active.item == "ゴツゴツメット" and not getattr(sub.active, "_force_switch", False)
+          and sub.active._substitute_hp < 200, f"{att.active.hp}/{att.active.max_hp} {sub.active.item} {sub.active._substitute_hp}")
+    burn = 0
+    for sd in range(60):
+        s2 = _S40([_mk40(_DUM40)])
+        s2.active._substitute_hp = 999
+        fire = _S40([_mk40(f"ヒートロトム@{_N40}:ずぶとい:ねっぷう|オーバーヒート:32/0/32/0/0/0:ふゆう")])
+        _r40.seed(sd)
+        _x40(fire, s2, _A40(type="move", move=fire.active.moves[0], move_idx=0), _F40())
+        burn += s2.active.status == "burn"
+    _x40(fire, s2, _A40(type="move", move=fire.active.moves[1], move_idx=1), _F40())
+    check("audit200 みがわり: 追加効果（ねっぷう の やけど）は入らないが、自分の能力変化（オーバーヒートの特攻-2）は起きる",
+          burn == 0 and fire.active.stage_sp_attack == -2 and s2.active.hp == s2.active.max_hp, f"{burn} {fire.active.stage_sp_attack}")
+    s3 = _S40([_mk40(_GAB40)])
+    s3.active._substitute_hp = 30
+    gh = _S40([_mk40(f"ゲンガー@{_N40}:おくびょう:ナイトヘッド:0/0/0/32/0/32:のろわれボディ")])
+    _x40(gh, s3, _A40(type="move", move=gh.active.moves[0], move_idx=0), _F40())
+    check("audit200 みがわり: ナイトヘッド（固定ダメージ）は みがわり が受ける", s3.active.hp == s3.active.max_hp and s3.active._substitute_hp == 0,
+          f"{s3.active.hp} {s3.active._substitute_hp}")
+
+
+def _tweather():
+    bt, a1, a2 = _bt40([f"ペリッパー@{_N40}:ずぶとい:あまごい|まもる:32/0/32/0/0/0:あめふらし"], [_DUM40], ["まもる", "まもる", "あまごい"], ["のろい"])
+    _go40(bt, a1, a2, 2)
+    w2 = bt.field.weather_count
+    _go40(bt, a1, a2, 3)
+    check("audit200 同じ天候の あまごい は失敗（残りターンは延びない）", bt.field.weather == "rain" and bt.field.weather_count == w2 - 1,
+          f"{w2} {bt.field.weather_count}")
+    bt, a1, a2 = _bt40([f"ゴリランダー@{_N40}:いじっぱり:グラスフィールド|まもる:32/32/0/0/0/0:グラスメイカー"], [_DUM40],
+                       ["まもる", "グラスフィールド"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    g1 = bt.field.grassy_terrain_count
+    _go40(bt, a1, a2, 2)
+    check("audit200 同じフィールドの グラスフィールド は失敗（残りターンは延びない）", bt.field.grassy_terrain and bt.field.grassy_terrain_count == g1 - 1,
+          f"{g1} {bt.field.grassy_terrain_count}")
+
+
+for _nm40, _fn40 in (("#1", _t1), ("#3", _t3), ("#4", _t4), ("#5", _t5), ("#6", _t6), ("#7", _t7), ("#8", _t8), ("#9", _t9),
+                     ("#10", _t10), ("#11", _t11), ("#12", _t12), ("#13", _t13), ("#14", _t14), ("#15", _t15), ("#16", _t16),
+                     ("#17", _t17), ("#18", _t18), ("#19", _t19), ("#20", _t20), ("#21", _t21), ("#22", _t22), ("#23", _t23),
+                     ("#24", _t24), ("#25", _t25), ("#27", _t27), ("みがわり", _tsub), ("天候・フィールド", _tweather)):
+    _case40(_nm40, _fn40)
+
+
+# B: 型の書式（Rust parse_pokemon_spec を Python と同じ解析に。種名の「:」・空白・欄の省略）
+def _tspec():
+    import pokenavi_engine as _E
+    import json as _js, os as _os
+    import pool_versions as _PV
+    specs = ["ケンタロス:炎@こだわりスカーフ:いじっぱり:レイジングブル|インファイト:0/32/0/0/0/32:いかく",
+             "ケンタロス:水@たべのこし:わんぱく::32/0/32/0/0/2:いかく", "ガブリアス", "ガブリアス@ガブリアスナイト",
+             "ガブリアス:ようき:じしん| げきりん |:2/32", " ガブリアス @ ふうせん : ようき : じしん : 2 / 32 / 0 : さめはだ ",
+             "メタモン@こだわりスカーフ:のんき:へんしん:32/0/32/0/0/0:かわりもの", "ガブリアス@:ようき"]
+    def _py(s):
+        d = _pps40(s)
+        ev = None if d["evs"] is None else [d["evs"][k] for k in ("H", "A", "B", "C", "D", "S")]
+        return (d["name"], d["item"], d["nature"], d["moves"], ev, d["ability"])
+    bad = [s for s in specs if tuple(_E.parse_spec(s)) != _py(s)]
+    check("audit200 #2 型の書式: Rust の解析が Python と一致（種名に「:」・空白・欄の省略）", not bad, str(bad[:3]))
+    pool = []
+    for e in _js.load(open(_PV.path("type_pool", _PV.pointer("season")))):
+        pool += [b["spec"] for b in e["builds"]]
+    bad = [s for s in pool if tuple(_E.parse_spec(s)) != _py(s)]
+    check(f"audit200 #2 型の書式: 型プール全{len(pool)}件で Rust の解析が Python と一致", len(pool) > 1000 and not bad, str(bad[:3]))
+    try:
+        _E.parse_spec("ガブリアス:ようき:じしん:32/x/0")
+        ok = False
+    except ValueError:
+        ok = True
+    check("audit200 #2 型の書式: 読めない努力値は Rust でも例外（パニックではない）", ok)
+    import feature1 as _F
+    _F._ensure_loaded("M-6", 8)
+    rec = _F.play_and_record_rust([specs[0]], [_DUM40], season="M-6", seed=1, mcts_sims=20, sel1_idx=[0])
+    check("audit200 #2 ケンタロス:炎 で Rust の対戦が動き、Python の再生と一致", rec["selected1"] == ["ケンタロス:炎"], f"{rec['selected1']}")
+
+
+_case40("#2", _tspec)
+
+
+# Python/Rust 照合: 各問題の局面を Rust の探索で戦い、Python で再生して一致（技を絞って局面を強制）
+def _tpar():
+    import feature1 as _F
+    import pokenavi_engine as _E
+    if not hasattr(_E, "mcts_3v3_record"):
+        return
+    _F._ensure_loaded("M-6", 8)
+    G = "ガブリアス@{}:ようき:じしん|ドラゴンクロー|まもる:0/32/0/0/0/32:さめはだ".format(_N40)
+    PAR = {
+        "#1": ([f"ルカリオ@{_N40}:おくびょう:はどうだん|わるだくみ:0/0/0/32/0/32:せいしんりょく"],
+               [f"ガブリアス@{_N40}:わんぱく:まもる:32/0/32/0/0/0:さめはだ"], "防がれた"),
+        "#1b": ([f"カバルドン@{_N40}:わんぱく:あくび|じしん:32/0/32/0/0/0:すなおこし"], [f"ゲンガー@{_N40}:おくびょう:まもる|シャドーボール:0/0/0/32/0/32:のろわれボディ"], "防がれた"),
+        "#3": ([f"フォレトス@{_N40}:わんぱく:こうそくスピン:32/0/32/0/0/0:がんじょう"],
+               [f"カバルドン@{_N40}:わんぱく:ステルスロック:32/0/32/0/0/0:すなおこし"], "吹き飛んだ"),
+        "#4": ([f"エルフーン@{_N40}:おくびょう:みがわり|ムーンフォース:0/0/0/32/0/32:いたずらごころ"], [_BLK40.replace("ねがいごと|のろい", "イカサマ|のろい")], "みがわり を作った"),
+        "#5": ([f"エーフィ@{_N40}:ずぶとい:めいそう|サイコキネシス:32/0/32/0/0/0:マジックミラー"],
+               [f"カバルドン@{_N40}:わんぱく:ステルスロック:32/0/32/0/0/0:すなおこし"], "跳ね返した"),
+        "#5b": ([f"エーフィ@{_N40}:ずぶとい:めいそう|サイコキネシス:32/0/32/0/0/0:マジックミラー"],
+                [f"オーロンゲ@{_N40}:わんぱく:すてゼリフ|じゃれつく:32/0/32/0/0/0:おみとおし", _BLK40], "跳ね返した"),
+        "#6": ([f"ドヒドイデ@{_N40}:ずぶとい:どくどく|ねっとう:32/0/32/0/0/0:さいせいりょく"], [_DUM40, _BLK40], "もうどく"),
+        "#7": ([f"エルフーン@{_N40}:おくびょう:おいかぜ|ムーンフォース:0/0/0/32/0/32:いたずらごころ"], [_DUM40], "おいかぜ の効果が切れた"),
+        "#8": ([f"マフィティフ@{_N40}:いじっぱり:くらいつく|じゃれつく:32/32/0/0/0/0:いかく"], [_DUM40, _BLK40], "くらいつく"),
+        "#9": ([f"アローラキュウコン@{_N40}:おくびょう:アンコール|ムーンフォース:32/0/32/0/0/32:ゆきふらし"], [_DUM40, _BLK40], "繰り返すことになった"),
+        "#10": ([f"カビゴン@{_N40}:いじっぱり:じわれ:32/32/0/0/0/0:あついしぼう"],
+                [f"ウォッシュロトム@{_N40}:ずぶとい:ハイドロポンプ:32/0/32/0/0/0:ふゆう"], "じわれ は"),
+        "#11": ([f"ドラパルト@{_N40}:ようき:ゴーストダイブ:0/32/0/0/0/32:すりぬけ"], [G], "ためている"),
+        "#12": ([f"ミミズズ@{_N40}:わんぱく:しっぽきり|アイアンヘッド:32/0/32/0/0/0:どしょく", _BLK40], [_DUM40], "しっぽきり"),
+        "#13": ([f"イッカネズミ@{_N40}:ようき:おかたづけ|かみくだく:0/32/0/0/0/32:テクニシャン"],
+                [f"ゲンガー@{_N40}:おくびょう:ステルスロック|みがわり|シャドーボール:32/0/0/0/0/32:のろわれボディ"], "おかたづけ"),
+        "#14": ([f"ランクルス@いのちのたま:ひかえめ:ドレインパンチ:32/0/0/32/0/0:マジックガード"],
+                [f"ガブリアス@ゴツゴツメット:わんぱく:のろい|じしん:32/0/32/0/0/0:さめはだ"], "ドレインパンチ"),
+        "#15": ([f"コノヨザル@{_N40}:いじっぱり:ふんどのこぶし|ビルドアップ:32/32/0/0/0/0:まけんき", _BLK40], [G], "ふんどのこぶし"),
+        "#16": ([f"ヒスイゾロアーク@{_N40}:おくびょう:うらみつらみ:0/0/0/32/0/32:イリュージョン"], [G], "こうげき が下がった"),
+        "#17": ([f"オーロンゲ@{_N40}:わんぱく:すてゼリフ|じゃれつく:32/0/32/0/0/0:おみとおし", _BLK40],
+                [f"メタグロス@{_N40}:いじっぱり:てっぺき|コメットパンチ:32/32/0/0/0/0:クリアボディ"], "下がらなかった"),
+        "#18": ([f"モルペコ@{_N40}:ようき:オーラぐるま:0/32/0/0/0/32:はらぺこスイッチ"], [_DUM40], "オーラぐるま →"),
+        "#19": ([f"ハラバリー@{_N40}:ひかえめ:パラボラチャージ:32/0/0/32/0/0:でんきにかえる"], [_DUM40.replace("のろい|まもる", "のしかかり")], "でんきにかえる"),
+        "#21": ([f"エンブオー@{_N40}:いじっぱり:ワイルドボルト:0/32/0/0/0/32:すてみ"], [_DUM40], "ワイルドボルト"),
+        "#23": ([f"クレッフィ@{_N40}:ずぶとい:でんじふゆう|イカサマ:32/0/32/0/0/0:いたずらごころ"], [G], "でんじふゆう"),
+        "#24": ([f"ストリンダー(ハイ)@{_N40}:ひかえめ:サイコノイズ:0/0/0/32/0/32:パンクロック"],
+                [f"カビゴン@たべのこし:わんぱく:のしかかり:32/0/32/0/0/0:あついしぼう"], "かいふくふうじ"),
+        "#25": ([f"ハリーマン@{_N40}:ずぶとい:ちいさくなる|アクアテール:32/0/32/0/0/0:すいすい"],
+                [f"カビゴン@{_N40}:いじっぱり:のしかかり:32/32/0/0/0/0:あついしぼう"], "のしかかり"),
+        "#25b": ([f"ウツボット@{_N40}:ずぶとい:ちからをすいとる|リーフブレード:32/0/32/0/0/0:ようりょくそ"],
+                 [f"カビゴン@{_N40}:いじっぱり:のしかかり:32/32/0/0/0/0:あついしぼう"], "ちからをすいとる"),
+        "#27": ([f"オーロンゲ@{_N40}:わんぱく:ちょうはつ|じゃれつく:32/0/32/0/0/0:いたずらごころ"],
+                [f"カビゴン@メンタルハーブ:わんぱく:のろい|のしかかり:32/0/32/0/0/0:あついしぼう"], "メンタルハーブ"),
+        "#27b": ([f"スコヴィラン@{_N40}:ひかえめ:かえんほうしゃ|まもる:0/0/0/32/0/32:ムラっけ"], [_DUM40], "ムラっけ"),
+        "sub": ([f"ゲンガー@{_N40}:おくびょう:みがわり:32/0/0/0/0/32:のろわれボディ"],
+                [f"ヒートロトム@{_N40}:ずぶとい:ねっぷう|オーバーヒート:32/0/32/0/0/0:ふゆう"], "みがわり に"),
+        "weather": ([f"ペリッパー@{_N40}:ずぶとい:あまごい|ぼうふう:32/0/32/0/0/0:あめふらし"], [_DUM40], "すでに同じ天候"),
+    }
+    mm, seen = [], set()
+    for k, (pa, pb, kw) in PAR.items():
+        for sd in (1, 2, 3, 4):
+            try:
+                rec = _F.play_and_record_rust(pa, pb, season="M-6", seed=sd, mcts_sims=30, sel1_idx=list(range(len(pa))))
+                if any(kw in l for t in rec["turns"] for l in t["logs"]):
+                    seen.add(k)
+            except _F.ReplayMismatch as e:
+                mm.append((k, sd, str(e)[:160]))
+    check("audit200 Python/Rust 照合: 各問題の局面（#1〜#27・みがわり・天候）で再生が一致", not mm, str(mm)[:600])
+    check("audit200 Python/Rust 照合: 各局面で問題の場面が実際に起きた", seen == set(PAR), str(set(PAR) - seen))
+
+
+_case40("Py/Rust", _tpar)
+
+
+# C: #28・#29 必ず失敗する手・特性で無効と表示された技を候補から外す（AI_FIX200）
+def _tai():
+    from simulator.search_ai import _prune_futile_moves as _pf
+    def cands(side):
+        return [_A40(type="move", move=m, move_idx=i) for i, m in enumerate(side.active.moves)]
+    def left(me, op):
+        return [a.move.name_jp for a in _pf(cands(me), me, op, _F40())]
+    ju = _S40([_mk40(f"ジュペッタ@{_N40}:ゆうかん:ポルターガイスト|みちづれ|かげうち:32/32/0/0/0/0:おみとおし")])
+    ga = _S40([_mk40(f"ガブリアス@オボンのみ:わんぱく:じしん:32/0/32/0/0/0:さめはだ")])
+    ju.opp_view.on_enter(ga.active)
+    l0 = left(ju, ga)
+    ga.active.item = None
+    ju.opp_view.on_item_lost(ga.active.name, "オボンのみ")
+    ju.active._destiny_bond_last_turn = True
+    l1 = left(ju, ga)
+    check("audit200 #28 候補: 持ち物が無いと判明した相手への ポルターガイスト・連続の みちづれ を外す（判明前・初回は外さない）",
+          l0 == ["ポルターガイスト", "みちづれ", "かげうち"] and l1 == ["かげうち"], f"{l0} {l1}")
+    bt, a1, a2 = _bt40([f"デカヌチャン@{_N40}:いじっぱり:デカハンマー|つるぎのまい:32/32/0/0/0/0:マイペース"], [_DUM40],
+                       ["デカハンマー", "つるぎのまい", "デカハンマー"], ["のろい"])
+    _go40(bt, a1, a2, 2)
+    h0 = bt.side2.active.hp
+    _go40(bt, a1, a2, 3)
+    check("audit200 #28 デカハンマー: 間に変化技を使えば次は出せる（以前は つるぎのまい の後も連続扱いで失敗）",
+          bt.side2.active.hp < h0, f"{bt.side2.active.hp} {h0}")
+    mi = _S40([_mk40(f"ミミズズ@{_N40}:わんぱく:のろい:32/0/32/0/0/0:どしょく")])
+    gb = _S40([_mk40(f"ガブリアス@{_N40}:いじっぱり:じしん|ドラゴンクロー:0/32/0/0/0/32:さめはだ")])
+    gb.opp_view.on_enter(mi.active)
+    _r40.seed(1)
+    _x40(gb, mi, _A40(type="move", move=gb.active.moves[0], move_idx=0), _F40())
+    kn = gb.opp_view.get(mi.active.name)
+    check("audit200 #29 どしょく でHP満タンのまま じしん が「効かない」→ 特性が判明し、次の候補から じしん を外す",
+          kn is not None and kn.known_ability == "どしょく" and left(gb, mi) == ["ドラゴンクロー"],
+          f"{getattr(kn, 'known_ability', None)} {left(gb, mi)}")
+
+
+_case40("#28/#29", _tai)
+
+
+# D: 型プール生成器（T1・T3・T4）と生成集団 v3
+def _tpool():
+    import os as _o, json as _j, sqlite3 as _sq
+    import _gen_type_pool as _G
+    import _coevo_groups as _CGx
+    check("audit200 T1 型プール生成器の対象は使用率上位200（TOPN の既定）", _G.TOPN == 200, f"{_G.TOPN}")
+    r = _G.generate_one("メタモン", 1)
+    check("audit200 T1 メタモン は へんしん 1技の型を作る（技が4つに満たない種は周辺分布の積）",
+          bool(r and r["builds"]) and all(b["moves"] == ["へんしん"] for b in r["builds"]), f"{r and len(r['builds'])}")
+    check("audit200 T3 ひかりのねんど は壁技の無い型に付けない（壁技があれば付けられる）",
+          not _G.item_ok(["ふぶき", "フリーズドライ", "こおりのつぶて", "ちょうはつ"], "ひかりのねんど")
+          and _G.item_ok(["ふぶき", "フリーズドライ", "オーロラベール", "ちょうはつ"], "ひかりのねんど"))
+    con = _sq.connect(_o.path.join(_o.path.dirname(_o.path.abspath(_G.__file__)), "pokenavi.db"))
+    def _raw(sp, it):
+        d = _G.latest("pokemon_items", sp)
+        rows = dict(con.execute("select item, usage_rate from pokemon_items where season=? and crawled_date=? and pokemon=?",
+                                (_G.SEASON, d, sp)).fetchall())
+        return rows.get(it, 0) / (sum(rows.values()) or 1)
+    lu, go = _G.marginals("ルチャブル")["items"], _G.marginals("ゴリランダー")["items"]
+    check("audit200 T3 自分でフィールドを張れない種のシードは採用率を下げる（ルチャブル エレキシード）、張れる種は下げない（ゴリランダー グラスシード）",
+          lu.get("エレキシード", 0) < 0.5 * _raw("ルチャブル", "エレキシード") and go.get("グラスシード", 0) >= 0.9 * _raw("ゴリランダー", "グラスシード"),
+          f"{lu.get('エレキシード', 0):.3f} {_raw('ルチャブル', 'エレキシード'):.3f} {go.get('グラスシード', 0):.3f}")
+    check("audit200 T4 ルガルガン(昼) の かたいツメ 100% はフォルム誤登録（たそがれ）として補正、他の種は補正しない",
+          _G.form_fix("ルガルガン(昼)") == "ルガルガン(たそがれ)" and _G.form_fix("ガブリアス") is None, f"{_G.form_fix('ルガルガン(昼)')}")
+    bk = _CGx.pool_names({"ケンタロス:炎": {}, "ルガルガン(たそがれ)": {"source_species": "ルガルガン(昼)"}})
+    check("audit200 T1 生成集団: 正規名（ケンタロス(炎)）とフォルム補正の元の名から型プールの種名を引ける",
+          bk.get("ケンタロス(炎)") == "ケンタロス:炎" and bk.get("ルガルガン(昼)") == "ルガルガン(たそがれ)", f"{bk}")
+    gp = _o.path.join(_o.path.dirname(_o.path.abspath(_CGx.__file__)), "guide_pool_m6_v3.json")
+    if _o.path.exists(gp):
+        import seed_rule as _SRx
+        P = [o["party"] for o in _j.load(open(gp))]
+        names = [s.split("@")[0] for p in P for s in p]
+        check("audit200 T1/T2 生成集団 v3: ケンタロス:炎・メタモン が入り、ルガルガン(昼) は無く、死にシード0",
+              len(P) == 3000 and names.count("ケンタロス:炎") > 0 and names.count("メタモン") > 0
+              and names.count("ルガルガン(昼)") == 0 and sum(len(_SRx.violations(p)) for p in P) == 0,
+              f"{names.count('ケンタロス:炎')} {names.count('メタモン')} {names.count('ルガルガン(昼)')}")
+
+
+_case40("型（T1/T3/T4）", _tpool)
+
+
+def _belief_est():
+    from simulator.belief import OpponentBelief as _OBe
+    from simulator.damage import calc_damage as _cde
+    pb = _OBe(dl, season="M-6").ensure("ブラッキー")
+    pb.builds = [
+        {"weight": 0.5, "item": "たべのこし", "ability": "せいしんりょく", "nature": "いじっぱり",
+         "ev": [0, 32, 0, 0, 2, 32], "moves": ["イカサマ", "あくび", "まもる", "つきのひかり"]},
+        {"weight": 0.5, "item": "たべのこし", "ability": "せいしんりょく", "nature": "おだやか",
+         "ev": [32, 0, 0, 0, 32, 0], "moves": ["イカサマ", "あくび", "まもる", "つきのひかり"]},
+    ]
+    att = _mk40("ハラバリー@たべのこし:ひかえめ:10まんボルト|みずびたし|どくどく|なまける:32/0/0/32/0/0:でんきにかえる")
+    dfn = _mk40("ブラッキー@たべのこし:おだやか:イカサマ|あくび|まもる|つきのひかり:32/0/0/0/32/0:せいしんりょく")
+    mv = next(m for m in att.moves if m.name_jp == "10まんボルト")
+    f = _F40()
+    att._electromorphosis_charged = True
+    frac = round(_cde(att, dfn, mv, f, critical=False, random_roll=0.5) * 100 / dfn.max_hp)
+    att._electromorphosis_charged = True
+    sub = _mk40("ブラッキー@たべのこし:おだやか:イカサマ|あくび|まもる|つきのひかり:32/0/0/0/32/0:せいしんりょく")
+    pb.observe_damage(att, mv, frac, f, subject=sub)
+    w = pb.pool_weights()
+    check("R4-mcts 照合: ダメージ観測の再計算で観測側の状態（でんきにかえるの充電）を消費しない",
+          getattr(pb.dmg_obs[-1][1], "_electromorphosis_charged", False) is True, "")
+    check("R4-mcts 照合: 充電込みの被ダメージ観測で、再現できる型（耐久型＝2番目）の重みが上がる",
+          w[1] > 0.9, str(w))
+
+
+_case40("R4-mcts 信念の観測再計算", _belief_est)
+
+
+def _wb_mega():
+    from simulator.search_ai import _type_immune_move
+    me = _mk40("メガニウム@メガニウムナイト:おくびょう:ソーラービーム|ウェザーボール|げんしのちから|くさわけ:2/0/0/32/0/32:しんりょく")
+    op = _mk40("サーフゴー@いのちのたま:ひかえめ:ゴールドラッシュ|シャドーボール|わるだくみ|じこさいせい:2/0/0/32/0/32:おうごんのからだ")
+    i = next(k for k, m in enumerate(me.moves) if m.name_jp == "ウェザーボール")
+    f = _F40()
+    check("R4-mcts 照合: メガソーラー になる ウェザーボール+メガ は ゴースト相手でもタイプ無効で外さない（素の ウェザーボール は外す）",
+          not _type_immune_move(me, _A40(type="move", move=me.moves[i], move_idx=i, do_mega=True), op, f)
+          and _type_immune_move(me, _A40(type="move", move=me.moves[i], move_idx=i, do_mega=False), op, f))
+
+
+_case40("R4-mcts メガ前提の技タイプ", _wb_mega)
 
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:

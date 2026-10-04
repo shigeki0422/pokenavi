@@ -20,7 +20,7 @@ DB = os.path.join(ROOT, "pokenavi.db")
 OUT = os.path.join(HERE, "datapack.json")
 
 from simulator.data import NATURE_MODS, _chart_raw, _types, DataLoader  # noqa: E402
-from simulator.damage import _is_secondary_effect  # noqa: E402
+from simulator.damage import _is_secondary_effect, effect_text_of  # noqa: E402
 from simulator.ability_categories import CATEGORIES as _ABIL_CATS, ABILITY_CAT_BITS as _ABIL_CAT_BITS  # noqa: E402
 
 SEASONS = os.environ.get("DATAPACK_SEASONS", "M-2,M-3,M-4,M-5,M-6").split(",")
@@ -84,7 +84,7 @@ def export():
     moves = []
     secondary = []
     for r in con.execute("SELECT * FROM move_master ORDER BY id"):
-        eff = r["effect_text"] or ""
+        eff = effect_text_of(r["name_jp"], r["effect_text"])
         moves.append({
             "name_jp": r["name_jp"], "name_en": r["name_en"], "type": r["type"],
             "category": r["category"], "power": r["power"], "accuracy": r["accuracy"],

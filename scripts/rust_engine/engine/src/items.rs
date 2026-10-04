@@ -109,8 +109,8 @@ pub fn try_white_herb(pack: &Pack, p: &mut Poke) {
     if p.item != Some(pack.sy.l.しろいハーブ) {
         return;
     }
-    if (0..5).any(|i| p.stage(i) < 0) {
-        for i in 0..5 {
+    if p.is_alive && (0..7).any(|i| p.stage(i) < 0) {
+        for i in 0..7 {
             if p.stage(i) < 0 {
                 p.set_stage(i, 0);
             }
@@ -127,11 +127,13 @@ pub fn try_mental_herb(pack: &Pack, p: &mut Poke) {
         || p.taunt_count > 0
         || p.encore_count > 0
         || p.heal_block_count > 0
-        || p.disabled_turns > 0;
+        || p.disabled_turns > 0
+        || p.torment;
     if !afflicted {
         return;
     }
     p.infatuation = false;
+    p.torment = false;
     p.taunt_count = 0;
     p.encore_count = 0;
     p.locked_move = None;
@@ -162,6 +164,18 @@ pub fn terrain_turns(pack: &Pack, setter_item: Option<crate::interner::Sym>) -> 
     } else {
         5
     }
+}
+
+/// フィールドを張る（0=エレキ 1=グラス 2=サイコ 3=ミスト）。フィールドは1つだけなので他は解除する（items.py set_terrain）
+pub fn set_terrain(field: &mut crate::damage::Field, which: u8, count: i64) {
+    field.electric_terrain = which == 0;
+    field.grassy_terrain = which == 1;
+    field.psychic_terrain = which == 2;
+    field.misty_terrain = which == 3;
+    field.electric_terrain_count = if which == 0 { count } else { 0 };
+    field.grassy_terrain_count = if which == 1 { count } else { 0 };
+    field.psychic_terrain_count = if which == 2 { count } else { 0 };
+    field.misty_terrain_count = if which == 3 { count } else { 0 };
 }
 
 /// フィールド発動アイテム（シード）。該当フィールドが張られていれば能力+1して消費する。

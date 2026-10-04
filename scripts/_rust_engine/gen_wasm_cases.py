@@ -4,7 +4,7 @@ Rust パリティ(`cases/*.jsonl`)と同じ考え方で、Python の実行結果
 表示側(%・確率・記号)は含めない。ここで守りたいのはルール層＝
 「HP・実効素早さ・各技の与ダメ・確定数」が Python と一致すること。
 
-env: NCASE(300) / OUT(_rust_engine/cases/wasm_1v1.jsonl)
+env: NCASE(300) / OUT(_rust_engine/cases/wasm_1v1.jsonl) / FROM（既存のケースの a・b の組で採り直す）
 """
 import json
 import os
@@ -49,6 +49,21 @@ def side(spec_0, spec_1, att, field, X, Y):
 def main():
     import random
 
+    if os.environ.get("FROM"):
+        # 既存のケース（a・b の型）をそのまま使って期待値だけ採り直す（元のパネル m3_top119_valid.json は消失）
+        pairs = [(json.loads(x)["a"], json.loads(x)["b"]) for x in open(os.environ["FROM"]) if x.strip()]
+        n = 0
+        with open(OUT, "w") as f:
+            for sa, sb in pairs:
+                A = E._build(sa, L)
+                B = E._build(sb, L)
+                field, A2, B2 = E._enter(A, B)
+                rec = {"a": sa, "b": sb,
+                       "sa": side(sa, sb, 0, field, A2, B2), "sb": side(sa, sb, 1, field, B2, A2)}
+                f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+                n += 1
+        print(f"{OUT}: {n}件（{os.environ['FROM']} の組で採り直し）")
+        return
     panel = json.load(open("m3_top119_valid.json"))
     seen = {}
     for t in panel:

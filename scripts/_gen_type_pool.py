@@ -13,7 +13,7 @@
 検証: 実型を正解として妥当性(生成型が実在する率)とマージナル誤差を測ると
   素朴 26.6%/14.3pt → 較正のみ 36.8%/0.9pt → 較正＋制約 41.0%/1.6pt
 
-env: SEASON(M-6) SPECIES(カンマ区切り・空で使用率上位TOPN) TOPN(40) N(24) OUT(空で標準出力)
+env: SEASON(M-6) SPECIES(カンマ区切り・空で使用率上位TOPN) TOPN(200) N(24) OUT(空で標準出力) SEED_SOLO_W(0.25)
 """
 import collections
 import itertools
@@ -28,9 +28,10 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_build_pool import SETUP_A, SETUP_C, SETUP as SETUP_ALL, RECOVERY, PROTECT, PIVOT, HAZARD
 from simulator.data import NATURE_MODS
 from simulator.battle import MULTI_HIT_2, MULTI_HIT_RANDOM_25
+import seed_rule
 
 SEASON = os.environ.get("SEASON") or os.environ.get("POOL_SEASON", "M-6")
-TOPN = int(os.environ.get("TOPN", "40"))
+TOPN = int(os.environ.get("TOPN", "200"))
 NBUILD = int(os.environ.get("N", "24"))
 OUT = os.environ.get("OUT", "")
 DB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "pokenavi.db")
@@ -314,6 +315,11 @@ def natures_for(moves, nats):
 TRICK = {"トリック", "すりかえ"}
 SEEDS = {"サイコシード", "グラスシード", "エレキシード", "ミストシード"}
 ITEM_NEEDS = {"カゴのみ": "ねむる"}     # 持ち物の型が必ず持つ技（上位構築 28/28）
+# ひかりのねんど は自分が張る壁を延ばすだけ。壁技の無い型では何もしない（監査200 T3: バイバニラ 9.8%）
+SCREENS = {"リフレクター", "ひかりのかべ", "オーロラベール"}
+# 設置役のいないシードは使えない（seed_rule）。自分でフィールドを張らない種のシードの採用率はこの倍率に下げる。
+# パーティを作るときは設置役のいる党でだけ残す（seed_rule.fix）ので、単体の型としては主流にしない（監査200 T3: ルチャブル エレキシード 47%）
+SEED_SOLO_W = float(os.environ.get("SEED_SOLO_W", "0.25"))
 
 
 def item_ok(moves, item):
@@ -323,6 +329,8 @@ def item_ok(moves, item):
     if item in CHOICE and (mv & (SETUP | PROTECT | RECOVERY)):
         return False
     if item in ITEM_NEEDS and ITEM_NEEDS[item] not in mv:
+        return False
+    if item == "ひかりのねんど" and not (mv & SCREENS):
         return False
     # メガの型は ねむる を持たない（上位構築のメガ805型で0件）
     if item in _STONES and "ねむる" in mv:
@@ -813,6 +821,122 @@ def _ev_key(ev):
     return tuple(big)
 
 
+EV_FINE = int(os.environ.get("EV_FINE", "2"))   # 出力する型の努力値の刻み（0で EV_STEP の集約のまま＝2026-10-04 以前）
+
+
+def _ev_fine(ev):
+    """出力用の努力値（EV_FINE 刻み）。切り捨てた端数（EV_FINE の倍数ぶん）は端数の大きい振り先へ戻す（最大剰余法）。
+    DB の主流 32/32/2（合計66）をそのまま残す。生成の内部は EV_STEP の集約のまま（監査40 #21）"""
+    big = [(v // EV_FINE) * EV_FINE for v in ev]
+    lost = ((sum(ev) - sum(big)) // EV_FINE) * EV_FINE
+    for i in sorted(range(6), key=lambda j: (-(ev[j] - big[j]), -big[j], j)):
+        if lost <= 0:
+            break
+        add = min(EV_FINE, lost, 32 - big[i])
+        if add > 0:
+            big[i] += add
+            lost -= add
+    return tuple(big)
+
+
+_EVF = {}
+
+
+def ev_fine_table(sp):
+    """DB の努力値（最新日）を {EV_STEP の集約キー: {EV_FINE の型: 割合}} にする"""
+    if (SEASON, sp) not in _EVF:
+        dd = latest("pokemon_evs", sp)
+        t = collections.defaultdict(collections.Counter)
+        for r in con.execute("select ev_h,ev_a,ev_b,ev_c,ev_d,ev_s,usage_rate from pokemon_evs "
+                             "where season=? and crawled_date=? and pokemon=?", (SEASON, dd, sp)):
+            v = tuple(r[:6])
+            t[_ev_key(v)][_ev_fine(v)] += r[6]
+        _EVF[(SEASON, sp)] = t
+    return _EVF[(SEASON, sp)]
+
+
+def refine_builds(sp, top, abils):
+    """出力の直前に、型（側・技・持ち物・性格・努力値の集約キー）を (1) 努力値の集約キーを DB の EV_FINE 刻みの配分へ、
+    (2) 特性を採用率どおりに按分する（監査40 #21/#22）。技・持ち物・性格の同時分布は変えない。
+    PRUNE_W 未満になった枝は落とすが、元の型ごとに一番重い枝は残す（型そのものは消さない）。"""
+    merged = collections.Counter()
+    for (side, sv, it, na, ab, ev), c in top:
+        merged[(side, sv, it, na, ev)] += c
+    tw = sum(merged.values()) or 1.0
+    evt = ev_fine_table(sp) if (EV_FINE > 0 and MARG_SRC == "usage") else {}
+    abl = sorted(abils.items(), key=lambda kv: -kv[1]) if abils else [("", 1.0)]
+    kids, par, e8s, ftgt = [], [], [], {}
+    # 特性で割ると PRUNE_W を下回る軽い型は割らずに、採用率に足りない特性へ丸ごと割り当てる（大きい順・不足の大きい特性へ）。
+    # 割ると少数派の特性の枝が全部落ちて、その特性が0%になっていた（ドサイドン ハードロック 100%／DB 93%）
+    amin = min(pa for _, pa in abl)
+    whole = {k: c for k, c in merged.items() if c * amin / tw < PRUNE_W} if PRUNE_W > 0 and len(abl) > 1 else {}
+    got = collections.Counter()
+    for k, c in merged.items():
+        if k not in whole:
+            for ab, pa in abl:
+                got[ab] += c * pa
+    pick = {}
+    for k, c in sorted(whole.items(), key=lambda kv: -kv[1]):
+        ab = max(abl, key=lambda x: (x[1] * tw - got[x[0]], x[1]))[0]
+        pick[k] = ab
+        got[ab] += c
+    for pi, ((side, sv, it, na, ev), c) in enumerate(merged.items()):
+        fine = evt.get(tuple(ev))
+        fz = sum(fine.values()) if fine else 0.0
+        evs_f = sorted(((e, v / fz) for e, v in fine.items()), key=lambda kv: -kv[1]) if fz > 0 else [(tuple(ev), 1.0)]
+        ftgt[tuple(ev)] = dict(evs_f)
+        abs_ = [(pick[(side, sv, it, na, ev)], 1.0)] if (side, sv, it, na, ev) in pick else abl
+        cand = [((side, sv, it, na, ab, e), c * pe * pa) for e, pe in evs_f for ab, pa in abs_]
+        keep = [kv for kv in cand if kv[1] / tw >= PRUNE_W] if PRUNE_W > 0 else cand
+        if not keep:
+            keep = [((side, sv, it, na, abs_[0][0], evs_f[0][0]), c)]
+        kids += keep
+        par += [(pi, c)] * len(keep)
+        e8s += [tuple(ev)] * len(keep)
+    abt = dict(abl)
+
+    def ipf(kids, par, e8s, w, iters=60):
+        # 枝を落とした分の特性・努力値の割合を、元の型の重みを保ったまま合わせ直す（反復比例当てはめ）
+        for _ in range(iters):
+            g = collections.Counter()
+            for (k, _), x in zip(kids, w):
+                g[k[4]] += x
+            zt = sum(abt.get(a, 0.0) for a in g) or 1.0
+            gz = sum(g.values()) or 1.0
+            w = [x * ((abt.get(k[4], 0.0) / zt) / (g[k[4]] / gz) if g[k[4]] > 0 and abt.get(k[4], 0.0) > 0 else 1.0)
+                 for (k, _), x in zip(kids, w)]
+            g8, gf = collections.Counter(), collections.Counter()
+            for (k, _), x, e8 in zip(kids, w, e8s):
+                g8[e8] += x
+                gf[(e8, k[5])] += x
+            w = [x * (ftgt[e8].get(k[5], 0.0) * g8[e8] / gf[(e8, k[5])] if gf[(e8, k[5])] > 0 and ftgt[e8].get(k[5], 0.0) > 0 else 1.0)
+                 for (k, _), x, e8 in zip(kids, w, e8s)]
+            gp = collections.Counter()
+            for (pi, _), x in zip(par, w):
+                gp[pi] += x
+            w = [x * c / gp[pi] if gp[pi] > 0 else x for (pi, c), x in zip(par, w)]
+        return w
+
+    w = [x for _, x in kids]
+    for _round in range(6):
+        w = ipf(kids, par, e8s, w)
+        if PRUNE_W <= 0:
+            break
+        best = {}
+        for idx, ((pi, _), x) in enumerate(zip(par, w)):
+            if pi not in best or x > w[best[pi]]:
+                best[pi] = idx
+        keepi = [idx for idx, x in enumerate(w) if x / tw >= PRUNE_W or best[par[idx][0]] == idx]
+        if len(keepi) == len(w):
+            break
+        kids, par, e8s, w = ([kids[i] for i in keepi], [par[i] for i in keepi], [e8s[i] for i in keepi], [w[i] for i in keepi])
+    gp = collections.Counter()
+    for (pi, _), x in zip(par, w):
+        gp[pi] += x
+    w = [x * c / gp[pi] for (pi, c), x in zip(par, w)]
+    return [(k, x) for (k, _), x in zip(kids, w)]
+
+
 MARG_SRC = os.environ.get("MARG_SRC", "usage")   # usage | templates（検証用）
 
 
@@ -978,7 +1102,92 @@ def marginals(sp):
         agg[_ev_key(v)] += r
     out["evs"] = _floor({v: r / tot for v, r in agg.items()}, th=FLOOR_EV) if tot > 0 else {}
     out["tail"] = tail_moves(sp, set(mv))
+    out["items"] = usable_items(sp, out)
     return out
+
+
+def screen_for(sp, mg):
+    """ひかりのねんど の型に持たせる壁技。使用率上位に壁技があれば最も採用率の高いもの、
+    無ければ使用率に出ない技の候補（tail）のうち最も有力な壁技。覚えなければ None（ねんど は使えない）"""
+    top = [m for m in (mg.get("moves") or {}) if m in SCREENS]
+    if top:
+        return max(top, key=lambda m: mg["moves"][m])
+    tail = [(m, w) for m, w in (mg.get("tail") or []) if m in SCREENS]
+    return max(tail, key=lambda x: x[1])[0] if tail else None
+
+
+def _sets_terrain(sp, terrain, mg):
+    """その種が自分でフィールドを張れるか（使用率に出る特性・メガ後の特性・フィールド技。seed_rule と同じ表）"""
+    if any(seed_rule.ABILITY_TERRAIN.get(a) == terrain for a in mg.get("abilities") or {}):
+        return True
+    mab = seed_rule._mega_abilities()
+    if any(seed_rule.ABILITY_TERRAIN.get(mab.get(it)) == terrain for it in mg.get("items") or {} if (sp, it) in MEGA):
+        return True
+    return any(seed_rule.MOVE_TERRAIN.get(m) == terrain for m in mg.get("moves") or {})
+
+
+def usable_items(sp, mg):
+    """持ち物の目標から使えない持ち物を外す・下げる（監査200 T3。生成器と週次チェックの両方がこの目標を見る）。
+    ひかりのねんど は使用率上位の技に壁技が無ければ外す。シードは自分でフィールドを張れない種なら SEED_SOLO_W 倍"""
+    items = dict(mg.get("items") or {})
+    if "ひかりのねんど" in items and screen_for(sp, mg) is None and len(items) > 1:
+        items.pop("ひかりのねんど")
+    for it, ter in seed_rule.SEED_TERRAIN.items():
+        if it in items and len(items) > 1 and not _sets_terrain(sp, ter, mg):
+            items[it] *= SEED_SOLO_W
+    z = sum(items.values()) or 1.0
+    return {k: v / z for k, v in items.items()}
+
+
+def simple_builds(sp):
+    """生成器が作れない種（使用率に出る技が4つに満たない。メタモン の へんしん 1技 等）: 周辺分布の積。PRUNE_W 未満は落とす"""
+    mg = marginals(sp)
+    if not mg or not mg["moves"] or len(mg["moves"]) >= 4 or not mg["items"] or not mg["natures"]:
+        return None
+    moves = sorted(mg["moves"])
+    ab = max(mg["abilities"], key=mg["abilities"].get) if mg["abilities"] else ""
+    evs = mg["evs"] or {(0, 0, 0, 0, 0, 0): 1.0}
+    bs = [{"item": it, "nature": na, "ability": ab, "moves": moves, "ev": list(ev), "side": "",
+           "weight": pi * pn * pe}
+          for it, pi in mg["items"].items() for na, pn in mg["natures"].items() for ev, pe in evs.items()]
+    bs = [b for b in bs if b["weight"] >= PRUNE_W]
+    z = sum(b["weight"] for b in bs)
+    for b in bs:
+        b["weight"] = round(b["weight"] / z, 6)
+        b["spec"] = f"{sp}@{b['item']}:{b['nature']}:{'|'.join(moves)}:{'/'.join(map(str, b['ev']))}:{ab}"
+    return {"species": sp, "builds": sorted(bs, key=lambda b: -b["weight"]), "simple": True}
+
+
+def form_fix(sp):
+    """DB のフォルム誤登録の補正先（監査200 T4）。使用率に出る特性の過半がその種の特性に無く、同じ種の別フォルムだけの特性なら
+    そのフォルムを返す（例: ルガルガン(昼) の かたいツメ 100% → ルガルガン(たそがれ)）。無ければ None"""
+    legal = collections.defaultdict(set)
+    for n, a in con.execute("select pokemon_name, ability from pokemon_species_abilities"):
+        legal[n].add(a)
+    if sp not in legal:
+        return None
+    dd = latest("pokemon_abilities", sp)
+    ab = {a: r for a, r in con.execute(
+        "select ability, usage_rate from pokemon_abilities where season=? and crawled_date=? and pokemon=?",
+        (SEASON, dd, sp)) if a}
+    tot = sum(ab.values())
+    bad = {a for a in ab if a not in legal[sp]}
+    if not tot or sum(ab[a] for a in bad) < 0.5 * tot:
+        return None
+    stem = sp.split("(")[0]
+    cands = [n for n in legal if n != sp and n.split("(")[0] == stem and bad <= legal[n]]
+    return cands[0] if len(cands) == 1 else None
+
+
+def rename_species(r, to):
+    """型プールの1種の結果を別の種名に付け替える（form_fix）。元の種名は source_species に残す"""
+    src = r["species"]
+    r["source_species"] = src
+    r["species"] = to
+    for b in r["builds"]:
+        if b.get("spec", "").startswith(src + "@"):
+            b["spec"] = to + b["spec"][len(src):]
+    return r
 
 
 def _draw(moves, w, rng):
@@ -1462,6 +1671,10 @@ def generate(sp, n, seed=0):
     for it, m in ITEM_NEEDS.items():
         if items.get(it, 0) > 0 and m not in P and m in MV and P:
             P[m] = min(items[it], min(P.values()))
+    # ひかりのねんど の型は壁技を持つ（監査200 T3）。上位10に壁技が無ければ ねんど の率で足す（カゴのみ→ねむる と同じ扱い）
+    _scr = screen_for(sp, mg) if items.get("ひかりのねんど", 0) > 0 else None
+    if _scr and _scr not in P and P:
+        P[_scr] = min(items["ひかりのねんど"], min(P.values()))
     slack = max(0.0, 4.0 - sum(P.values()))
     moves = sorted(P)
     # 層の比率は性格分布だけでは決まらない。メガ石で攻撃方面が変わる種では持ち物の分布が
@@ -2224,6 +2437,8 @@ def generate(sp, n, seed=0):
     if PRUNE_W > 0 and any(c / tw >= PRUNE_W for _, c in top):
         top = [(k, c) for k, c in top if c / tw >= PRUNE_W]
         tw = sum(c for _, c in top)
+    top = refine_builds(sp, top, abils)
+    tw = sum(c for _, c in top) or 1.0
     return {
         "species": sp,
         "marginal_error_pt": round(err * 100, 2),
@@ -2248,6 +2463,8 @@ def generate_one(sp, seed):
     global ARCH_W
     arch_w0 = ARCH_W
     r = generate(sp, NBUILD, seed=seed)
+    if not r or not r.get("builds"):
+        return simple_builds(sp)
     # 系統の辞書が今シーズンの採用率と合わない過去の型へ引っぱる種がある（M-6 アローラキュウコン +5pt）。
     # 系統なしでも作り、技の周辺分布の誤差が ARCH_TOL 以上悪化していれば系統なしを採る
     if arch_w0 > 0 and r:

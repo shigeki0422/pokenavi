@@ -138,6 +138,10 @@ pub struct Poke {
     pub pp: Vec<i64>,
     pub bad_poison_count: i64,
     pub sleep_count: i64,
+    /// 眠ってから行動しようとした回数（公開情報。決定化でカウンタを引き直すのに使う）
+    pub sleep_acts: i64,
+    /// ねむる で眠った（カウンタ3が公開情報）
+    pub sleep_rest: bool,
     pub flinched: bool,
     pub is_alive: bool,
     pub mega_evolved: bool,
@@ -176,6 +180,10 @@ pub struct Poke {
     pub infatuation: bool,
     pub torment: bool,
     pub trapped: bool,
+    /// はいすいのじん（場を離れるまで交代不可）
+    pub no_retreat: bool,
+    /// しっぽきり で交代先に残す みがわり のHP
+    pub shed_tail_sub: i64,
     pub ability_suppressed: bool,
     pub rooted: bool,
     pub aqua_ring: bool,
@@ -288,53 +296,54 @@ pub struct Spec {
 fn chars(s: &str) -> Vec<char> {
     s.chars().collect()
 }
-fn substr(v: &[char], a: usize) -> String {
-    v[a.min(v.len())..].iter().collect()
+
+/// spec の欄の分割（pokemon.parse_pokemon_spec と同じ）。種名に「:」を含む種（ケンタロス:炎 等）があるので、
+/// `@` があるときは `@` より前をそのまま種名にし、持ち物の後ろを「:」で区切る。返り値は (欄の並び, 持ち物)
+fn split_spec(spec_str: &str) -> (Vec<String>, Option<String>) {
+    let s = spec_str.trim();
+    match s.find('@') {
+        Some(pos) => {
+            let name = &s[..pos];
+            let segs: Vec<&str> = s[pos + '@'.len_utf8()..].split(':').collect();
+            let it = segs[0].trim();
+            let item = if it.is_empty() { None } else { Some(it.to_string()) };
+            let mut parts = vec![name.to_string()];
+            parts.extend(segs[1..].iter().map(|x| x.to_string()));
+            (parts, item)
+        }
+        None => (s.split(':').map(|x| x.to_string()).collect(), None),
+    }
 }
 
-/// parse_pokemon_spec の忠実移植
+/// 努力値の欄（Python の int() と同じく前後の空白は許す）。読めなければ Err
+fn parse_evs(raw: &str) -> Result<Evs, String> {
+    let mut vals = Vec::new();
+    for x in raw.split('/') {
+        vals.push(x.trim().parse::<i64>().map_err(|_| format!("努力値を読めません: {}", raw))?);
+    }
+    let g = |i: usize| vals.get(i).copied().unwrap_or(0);
+    Ok(Evs { h: g(0), a: g(1), b: g(2), c: g(3), d: g(4), s: g(5) })
+}
+
+pub fn parse_spec_checked(spec_str: &str) -> Result<Spec, String> {
+    let (parts, item) = split_spec(spec_str);
+    let name = parts.first().map(|x| x.trim().to_string()).unwrap_or_default();
+    let field = |i: usize| parts.get(i).map(|x| x.trim()).filter(|x| !x.is_empty());
+    let nature = field(1).map(|x| x.to_string());
+    let moves = field(2).map(|raw| {
+        raw.split('|').map(|m| m.trim().to_string()).filter(|m| !m.is_empty()).collect()
+    });
+    let evs = match field(3) {
+        Some(raw) => Some(parse_evs(raw)?),
+        None => None,
+    };
+    let ability = field(4).map(|x| x.to_string());
+    Ok(Spec { name, item, nature, moves, evs, ability })
+}
+
+/// parse_pokemon_spec の忠実移植（努力値が読めない spec は Python と同じく失敗＝パニック。外部入力は spec_error で先に弾く）
 pub fn parse_pokemon_spec(spec_str: &str) -> Spec {
-    let mut s = spec_str.trim().to_string();
-    let mut item: Option<String> = None;
-    if let Some(pos) = s.find('@') {
-        let head = s[..pos].to_string();
-        let item_part = s[pos + '@'.len_utf8()..].to_string();
-        let first_seg = item_part.split(':').next().unwrap_or("").trim().to_string();
-        let it = if first_seg.is_empty() { None } else { Some(first_seg) };
-        let ilen = it.as_deref().unwrap_or("").chars().count();
-        let rest = substr(&chars(&item_part), ilen);
-        item = it;
-        s = head + &rest;
-    }
-    let parts: Vec<&str> = s.split(':').collect();
-    let name = parts.first().unwrap_or(&"").trim().to_string();
-    let mut nature = None;
-    let mut moves = None;
-    let mut evs = None;
-    let mut ability = None;
-    if parts.len() >= 2 && !parts[1].trim().is_empty() {
-        nature = Some(parts[1].trim().to_string());
-    }
-    if parts.len() >= 3 && !parts[2].trim().is_empty() {
-        moves = Some(
-            parts[2]
-                .trim()
-                .split('|')
-                .map(|m| m.trim().to_string())
-                .filter(|m| !m.is_empty())
-                .collect(),
-        );
-    }
-    if parts.len() >= 4 && !parts[3].trim().is_empty() {
-        let vals: Vec<i64> =
-            parts[3].trim().split('/').map(|x| x.parse::<i64>().expect("ev int")).collect();
-        let g = |i: usize| vals.get(i).copied().unwrap_or(0);
-        evs = Some(Evs { h: g(0), a: g(1), b: g(2), c: g(3), d: g(4), s: g(5) });
-    }
-    if parts.len() >= 5 && !parts[4].trim().is_empty() {
-        ability = Some(parts[4].trim().to_string());
-    }
-    Spec { name, item, nature, moves, evs, ability }
+    parse_spec_checked(spec_str).unwrap_or_else(|e| panic!("{}", e))
 }
 
 pub fn normalize_mega_stone(name: &str) -> String {
@@ -784,10 +793,13 @@ impl Poke {
 }
 
 /// BattlePokemon.apply_status
-pub fn apply_status(pack: &Pack, p: &mut Poke, status: Sym, corrosion: bool) -> bool {
+pub fn apply_status(pack: &Pack, p: &mut Poke, status: Sym, corrosion: bool, field: Option<&crate::damage::Field>) -> bool {
     let l = &pack.sy.l;
     let st = &pack.sy.st;
     if p.status.is_some() {
+        return false;
+    }
+    if crate::damage::misty_blocks(pack, p, field) {
         return false;
     }
     let ab = p.ability;
@@ -877,12 +889,10 @@ pub fn mega_evolve_poke(pack: &Pack, p: &mut Poke) {
 /// spec が組み立てられないとき、その理由（組み立て前に呼ぶ。build_poke は不正な spec でパニックするため、
 /// 外部入力を受ける wasm・提案API はこれで先に弾く）。
 pub fn spec_error(pack: &Pack, spec_str: &str, season: &str) -> Option<String> {
-    let parts: Vec<&str> = spec_str.trim().split(':').collect();
-    if parts.len() >= 4 && !parts[3].trim().is_empty()
-        && parts[3].trim().split('/').any(|x| x.parse::<i64>().is_err()) {
-        return Some(format!("努力値を読めません: {}", spec_str));
-    }
-    let spec = parse_pokemon_spec(spec_str);
+    let spec = match parse_spec_checked(spec_str) {
+        Ok(x) => x,
+        Err(_) => return Some(format!("努力値を読めません: {}", spec_str)),
+    };
     if get_pokemon_template(pack, &spec.name, season).is_none() {
         return Some(format!("ポケモン '{}' が見つかりません (season={})", spec.name, season));
     }

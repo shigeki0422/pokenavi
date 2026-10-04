@@ -6,6 +6,7 @@ M-3はusage_rate未格納のため種の重みは順位(rank)から算出（既�
 使い方: venv/bin/python gen_party_pool.py [N]
 """
 import os, re, sys, random, collections, sqlite3, math
+import seed_rule
 
 D = os.path.dirname(__file__)
 # 型プールのシーズン。POOL_SEASON で切り替える（M-C投入時に M-6 へ）。
@@ -462,7 +463,9 @@ class PartyGen:
                 if chosen is None: ok = False; break
                 party[p] = chosen; used_items.add(_item_of(chosen))
             if ok:
-                return [party[p] for p in picked]
+                out = self.fix_seeds([party[p] for p in picked], rng)
+                if out is not None:
+                    return out
         return None
 
     def _traits(self, name, mega=False):
@@ -579,6 +582,8 @@ class PartyGen:
             if score > best_score:
                 best_score = score; best = [party[p][0] for p in picked]
                 if score == total: break
+        if best is not None:
+            best = self.fix_seeds(best, rng, keep=set(fixed.values())) or best
         return best
 
     def mutate_cooc(self, party, rng, nslots=None):
@@ -653,13 +658,14 @@ class PartyGen:
                 c[t] += 1
         return max(c.values()) if c else 0
 
-    def is_legal(self, party, megas=2, megas_set=None):
+    def is_legal(self, party, megas=2, megas_set=None, seed_exempt=()):
         """合法性: 6体・図鑑番号全相異(リージョン/性別違いも重複NG)・メガ数(既定ちょうど2, megas_setで許容集合指定)・
         持ち物全相異・同一タイプはTYPEDUP_MAX体まで。
         タイプ被り上限は「メガ2体まで」と同じ前提ルール。人間の上位構築は最大被りが2体以下で
         M-3実上位92%・M-4実上位95%（3体以上は5〜8%の例外）だが、こちらの生成物は18%が3体以上
         ＝人間の3倍以上の頻度で被らせていた。実勝率との相関は弱い（実上位でr=-0.09〜-0.15）ので
-        勝率のための制約ではなく、構成の納得感を担保するためのもの。"""
+        勝率のための制約ではなく、構成の納得感を担保するためのもの。
+        シードは同じパーティにそのフィールドを張る個体がいるときだけ（seed_rule。seed_exempt はユーザーが明示した型）。"""
         if len(party) != 6: return False
         if len({self.dexof(s) for s in party}) != 6: return False
         nmega = sum(_spec_mega(s) for s in party)
@@ -669,7 +675,18 @@ class PartyGen:
             return False
         if len({_item_of(s) for s in party}) != 6: return False
         if TYPEDUP_MAX and self.type_dup_max(party) > TYPEDUP_MAX: return False
+        if not seed_rule.ok(party, seed_exempt): return False
         return True
+
+    def fix_seeds(self, party, rng, keep=()):
+        """設置役のいないシードの型を、同じ種・同じメガ区分の別の持ち物の型に替える（seed_rule）。無理なら None"""
+        def alts(i):
+            k = self.keyof(party[i])
+            if k is None: return []
+            bs = self.mega_all.get(k, []) if _spec_mega(party[i]) else self.nonm.get(k, [])
+            iu = self.item_usage.get(k, {})
+            return [(b, iu.get(_item_of(b), 0) + 1) for b in bs]
+        return seed_rule.fix(party, alts, rng, keep)
 
 def main():
     N = int(sys.argv[1]) if len(sys.argv) > 1 else 300

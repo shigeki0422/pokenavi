@@ -25,7 +25,9 @@ SHARE_WARN_PT = 10.0    # 警告: 系統の割合の前の版からの変化
 MARG_SHIFT_PT = 10.0    # 警告: プール上の採用率（技・持ち物・性格・努力値・特性）の前の版からの最大差
 DB_QUIET_PT = 3.0       # DB の使用率の変化がこれ未満なのにプールが MARG_SHIFT_PT 以上動いた → 生成側が原因の疑い
 KL_WARN = 0.10          # 警告: 技の組（型の技4つ）の分布の前の版からの KL（nats）
-MARG_TOL = {"moves": 10.0, "items": 5.0, "natures": 5.0, "evs": 10.0, "abilities": 15.0}   # 警告: DB の使用率との差(pt)
+# 特性は生成器が採用率で按分するようになった（2026-10-04・監査40 #22）ので 15→5pt
+MARG_TOL = {"moves": 10.0, "items": 5.0, "natures": 5.0, "evs": 10.0, "abilities": 5.0}   # 警告: DB の使用率との差(pt)
+EV_TOTAL_TOL = 10.0     # 警告: 努力値の合計（66＝32/32/2 等）の割合の DB との差(pt)（監査40 #21: 8刻みの丸めで合計64しか無かった）
 CHOICE_STATUS2_MAX = 0.05   # 警告: こだわりの型のうち変化技（トリック/すりかえ以外）2本以上の割合（上位構築は1.2%）
 AUDIT_WARN = 0.005      # 警告: _audit_type_pool の違反率（[参考] を除く）
 WEIGHT_TOL = 1e-3
@@ -322,8 +324,9 @@ def stat_warnings(G, prev, new):
 def marg_warnings(G, pool, meta):
     """プールの採用率と DB の使用率（生成器の目標）の差"""
     W = []
-    for sp, r in pool.items():
+    for sp0, r in pool.items():
         raw = {}
+        sp = r.get("source_species", sp0)   # フォルム補正した種は元の種名の DB の使用率と比べる
         season = r.get("season") or meta.get("season") or G.SEASON
         s0 = G.SEASON
         G.SEASON = season
@@ -339,11 +342,23 @@ def marg_warnings(G, pool, meta):
                 for it, m in G.ITEM_NEEDS.items():
                     if mg["items"].get(it, 0) > 0 and m not in Q and m in G.MV and Q:
                         Q[m] = min(mg["items"][it], min(Q.values()))
+                _scr = G.screen_for(sp, mg) if mg["items"].get("ひかりのねんど", 0) > 0 else None
+                if _scr and _scr not in Q and Q:
+                    Q[_scr] = min(mg["items"]["ひかりのねんど"], min(Q.values()))
                 dbm["moves"] = {m: q for m, q in Q.items() if m in P}
                 raw = P
         finally:
             G.SEASON = s0
         pm = pool_marg(G, r["builds"])
+        s1 = G.SEASON
+        G.SEASON = season
+        try:
+            fine = {e: v for t in G.ev_fine_table(sp).values() for e, v in t.items()}
+        finally:
+            G.SEASON = s1
+        et = ev_total_diff(r["builds"], fine)
+        if et and et[0] > EV_TOTAL_TOL:
+            W.append(("DB との差（努力値の合計）", sp, f"合計{et[1]} プール {et[2]:.1f}% / DB {et[3]:.1f}%（許容 {EV_TOTAL_TOL:.0f}pt）"))
         for c in CATS:
             ref = dbm.get(c) or {}
             if not ref:
@@ -354,6 +369,20 @@ def marg_warnings(G, pool, meta):
                 extra = f"（DB {raw.get(d[1], 0) * 100:.1f}% を4枠へ伸ばした目標）" if c == "moves" else ""
                 W.append((f"DB との差（{CAT_JA[c]}）", sp, f"{d[1]} プール {pm[c].get(d[1], 0) * 100:.1f}% / DB {ref.get(d[1], 0) * 100:.1f}%{extra}（許容 {MARG_TOL[c]:.0f}pt）"))
     return W
+
+
+def ev_total_diff(builds, db_evs):
+    """努力値の合計の割合のプールと DB の最大差 (pt, 合計, プール%, DB%)。DB が空なら None"""
+    if not db_evs:
+        return None
+    z = sum(b["weight"] for b in builds) or 1.0
+    pt, dt = collections.Counter(), collections.Counter()
+    for b in builds:
+        pt[sum(b["ev"])] += b["weight"] / z
+    zd = sum(db_evs.values()) or 1.0
+    for e, v in db_evs.items():
+        dt[sum(e)] += v / zd
+    return max((abs(pt.get(k, 0) - dt.get(k, 0)) * 100, k, pt.get(k, 0) * 100, dt.get(k, 0) * 100) for k in set(pt) | set(dt))
 
 
 def audit_warnings(pool):
@@ -444,6 +473,44 @@ def coverage_warnings(arch):
     return W
 
 
+def seed_errors(groups):
+    """シードは設置役がいるときだけ採用する（seed_rule）。パーティ側で同じ系統の別の持ち物の型に替えるので、
+    系統の型が全部シードだと替えられない＝エラー"""
+    import seed_rule as SR
+    err = []
+    for sp, v in groups.items():
+        for g in v["groups"]:
+            if g["builds"] and all(b["item"] in SR.SEED_TERRAIN for b in g["builds"]):
+                err.append((sp, f"{arch_name(g['name'])}: 型が全部シード（設置役のいないパーティで別の持ち物に替えられない）"))
+    return err
+
+
+def seed_party_errors(n=200, seed=0):
+    """パーティ生成（gen_party_pool.PartyGen）で設置役のいないシードが残らないか"""
+    import random
+    import seed_rule as SR
+    from gen_party_pool import PartyGen
+    pg, rng = PartyGen(), random.Random(seed)
+    bad = 0
+    for _ in range(n):
+        p = pg.sample(rng)
+        if p is not None and SR.violations(p):
+            bad += 1
+    return [f"パーティ生成 {n}党のうち {bad}党に設置役のいないシード"] if bad else []
+
+
+def seed_pool_warnings():
+    """保存済みのパーティ集団（guide_pool_*.json）に残る設置役のいないシード（作り直すまで残る）"""
+    import seed_rule as SR
+    W = []
+    for f in sorted(glob.glob(os.path.join(HERE, "guide_pool_*.json"))):
+        P = [o["party"] for o in json.load(open(f))]
+        bad = sum(1 for p in P if SR.violations(p))
+        if bad:
+            W.append(("設置役のいないシード", os.path.basename(f), f"{bad}/{len(P)}党"))
+    return W
+
+
 def run(prev, new, stage="all", dist=None):
     import _gen_type_pool as G
     import arch_groups as A
@@ -455,12 +522,14 @@ def run(prev, new, stage="all", dist=None):
         used[sp].add(m)
     nats = natures(G)
     for sp, r in npool.items():
-        E += [("生成ルール", sp, e) for e in rule_errors(G, sp, r["builds"], used[sp], nats)]
+        E += [("生成ルール", sp, e) for e in rule_errors(G, sp, r["builds"], used[r.get("source_species", sp)] | used[sp], nats)]
         cs = choice_status2(G, r["builds"])
         if cs > CHOICE_STATUS2_MAX:
             W.append(("こだわり×変化技2本以上", sp, f"こだわりの型の {cs * 100:.1f}%（上限 {CHOICE_STATUS2_MAX * 100:.0f}%）"))
     for sp, v in ngroups.items():
         E += [("命名・系統分け", sp, e) for e in naming_errors(G, A, sp, v["groups"])]
+    E += [("シードの規則", sp, e) for sp, e in seed_errors(ngroups)]
+    W += seed_pool_warnings()
     W += stat_warnings(G, P, N)
     W += marg_warnings(G, npool, nmeta)
     W += audit_warnings(npool)
@@ -471,6 +540,7 @@ def run(prev, new, stage="all", dist=None):
         bver = json.load(open(vp)).get("pool") if os.path.exists(vp) else None
         mons = {os.path.basename(f)[:-5]: json.load(open(f)) for f in glob.glob(os.path.join(bd, "mon", "*.json"))}
         E += [("出力の整合", "", e) for e in output_errors(arch, mons, new, bver)]
+        E += [("シードの規則", "", e) for e in seed_party_errors()]
         if dist:
             E += [("en/ko の型名漏れ", "", e) for e in leak_errors(dist, arch, page_keys())]
         W += coverage_warnings(arch)

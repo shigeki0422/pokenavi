@@ -21,6 +21,7 @@ fn main() {
     let mut stamp = engine::casehdr::StampCheck::new(&pack.sim_hash);
     let bench = std::env::var("R3_BENCH").is_ok();
     let only: Option<i64> = std::env::var("R3_ONLY").ok().and_then(|x| x.parse().ok());
+    let dump = only.is_some() && std::env::var("R3_DUMP").is_ok();
 
     let mut battles = 0i64;
     let mut turns = 0i64;
@@ -102,8 +103,14 @@ fn main() {
                     None,
                     |pk, bt| {
                         if !bench {
-                            let e = encode_battle(pk, bt, false);
+                            let e = encode_battle(pk, bt, dump);
                             got_h.push(sv_hash(&e.vals));
+                            if dump {
+                                // R3_ONLY と併用: 毎ターンの正準状態を名前つきで出す（Python の state_codec と突き合わせる用）
+                                let names = e.names.clone().unwrap_or_default();
+                                let vals: Vec<String> = e.vals.iter().map(|v| format!("{:?}", v)).collect();
+                                println!("DUMP {}", serde_json::json!({"turn": got_h.len(), "names": names, "vals": vals}));
+                            }
                         }
                     },
                 )

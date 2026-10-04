@@ -212,6 +212,58 @@ pub fn guide_rows(
     out
 }
 
+/// guide_rows と同じ選出・乱数で、対戦を両者 MCTS@sims にした版（パーティ診断の有利度）。戻りの形も同じ
+#[allow(clippy::too_many_arguments)]
+pub fn guide_rows_mcts(
+    pack: &mut Pack,
+    net: &crate::net::NetW,
+    ft: &crate::features::FeatTables,
+    sel: &crate::selector::Selector,
+    specs: &[String],
+    opps: &[Vec<String>],
+    season: &str,
+    k: usize,
+    seed: i128,
+    sims: usize,
+) -> Vec<(Vec<usize>, f64)> {
+    let a6: Vec<Poke> = specs.iter().map(|s| build_poke(pack, s, season)).collect();
+    let mut out = Vec::with_capacity(opps.len());
+    for (j, op) in opps.iter().enumerate() {
+        let b6: Vec<Poke> = op.iter().map(|s| build_poke(pack, s, season)).collect();
+        let jj = seed + 7919 * j as i128;
+        let mut g = crate::cpyrng::CpyRandom::new(jj);
+        let mut s1 = crate::cpyrng::CpyRandom::new(jj + 1);
+        let mut s2 = crate::cpyrng::CpyRandom::new(jj + 2);
+        let mut r = crate::cpyrng::CpyRandom::new(jj + 3);
+        let mut pc = crate::selector::PairCache::default();
+        let (mut a, mut b) = (a6.clone(), b6.clone());
+        let packr: &Pack = pack;
+        let (mc, mv) = crate::selector::select_scores(packr, ft, sel, &mut a, &mut b, 3, &mut g, &mut s1, &mut pc, true);
+        let (mut a, mut b) = (a6.clone(), b6.clone());
+        let (oc, ov) = crate::selector::select_scores(packr, ft, sel, &mut b, &mut a, 3, &mut g, &mut s2, &mut pc, false);
+        if mc.is_empty() || oc.is_empty() {
+            out.push((Vec::new(), 0.5));
+            continue;
+        }
+        let bi = (0..mv.len()).fold(0, |b, i| if mv[i] > mv[b] { i } else { b });
+        let my = mc[bi].clone();
+        let mut w = 0.0;
+        for gi in 0..k {
+            let ob = &oc[crate::selector::softmax_pick(&ov, 1.0, r.random())];
+            let sd = jj + 1000 + gi as i128;
+            let res = if gi % 2 == 0 {
+                mcts_3v3(pack, net, None, specs, &my, op, ob, season, season, sd, sims, |_, _| {}).0
+            } else {
+                mcts_3v3(pack, net, None, op, ob, specs, &my, season, season, sd, sims, |_, _| {}).0
+            };
+            let (win, lose) = if gi % 2 == 0 { (1, 2) } else { (2, 1) };
+            w += if res == win { 1.0 } else if res == lose { 0.0 } else { 0.5 };
+        }
+        out.push((my, if k > 0 { w / k as f64 } else { 0.5 }));
+    }
+    out
+}
+
 pub fn greedy_3v3(
     pack: &mut Pack,
     pa: &[String],
@@ -364,7 +416,10 @@ fn mcts_3v3_inner(
     if let Some(v) = f2("JOINT_BUILD") { ai2.joint_build = v > 0.5; }
     if let Some(v) = f2("ITEM_GONE") { ai2.item_gone = v > 0.5; }
     if let Some(v) = f2("AI_KO_PRECISE") { ai2.ko_precise = v > 0.5; }
+    if let Some(v) = f2("AI_KO_COND") { ai2.ko_cond = v > 0.5; }
     if let Some(v) = f2("AI_PRUNE_IMMUNE") { ai2.prune_immune = v > 0.5; }
+    if let Some(v) = f2("AI_FIX40") { ai2.fix40 = v > 0.5; }
+    if let Some(v) = f2("AI_FIX200") { ai2.fix200 = v > 0.5; }
     if let Some(v) = f2("ORACLE_MIX") { ai2.oracle_mix = v; }
     if let Some(v) = f2("ORACLE_REVEAL") { ai2.oracle_reveal = v as u32; }
     let result = run_two_mcts(packr, [net, net_b.unwrap_or(net)], &mut b, &mut ai1, &mut ai2, &mut rng, on_turn);
@@ -935,6 +990,7 @@ fn run_two_mcts(
         rng,
         |bt, rng| {
             let mut out: [crate::battle::Action; 2] = [Default::default(), Default::default()];
+            set_cur_turn(bt.turn);
             let burn = burn_turns();
             if burn > 0 && bt.turn <= burn {
                 for sx in 0..2usize {
@@ -951,9 +1007,9 @@ fn run_two_mcts(
                 let ai: &mut SearchAI = if sx == 0 { ai1 } else { ai2 };
                 let a = ai.choose(packr, nets[sx], &mut bt.sides, sx, &mut bt.field, &mut bl, rng);
                 bt.sides[sx].belief.0 = Some(bl);
-                let precise = ai.ko_precise;
+                let (precise, cond, fx40) = (ai.ko_precise, ai.ko_cond, ai.fix40);
                 let (me, op) = crate::battle::split2(&mut bt.sides, sx);
-                out[sx] = crate::ai::certain_ko_override_opt(packr, a, me, op, &mut bt.field, rng, precise);
+                out[sx] = crate::ai::certain_ko_override_opt(packr, a, me, op, &mut bt.field, rng, precise, cond, fx40);
             }
             ACT_LOG.with(|l| {
                 if let Some(v) = l.borrow_mut().as_mut() {
@@ -1145,9 +1201,9 @@ pub fn mcts_3v3_record(
                 let ai: &mut SearchAI = if sx == 0 { &mut ai1 } else { &mut ai2 };
                 let a = ai.choose(packr, net, &mut bt.sides, sx, &mut bt.field, &mut bl, rng);
                 bt.sides[sx].belief.0 = Some(bl);
-                let precise = ai.ko_precise;
+                let (precise, cond, fx40) = (ai.ko_precise, ai.ko_cond, ai.fix40);
                 let (me, op) = crate::battle::split2(&mut bt.sides, sx);
-                out[sx] = crate::ai::certain_ko_override_opt(packr, a, me, op, &mut bt.field, rng, precise);
+                out[sx] = crate::ai::certain_ko_override_opt(packr, a, me, op, &mut bt.field, rng, precise, cond, fx40);
             }
             decs.push((bt.turn, [act_rec(packr, &out[0]), act_rec(packr, &out[1])], cell.borrow().state()));
             out
@@ -1155,4 +1211,117 @@ pub fn mcts_3v3_record(
         |bt| sums.push((bt.turn, [side_sum(packr, &bt.sides[0]), side_sum(packr, &bt.sides[1])])),
     );
     (result, decs, sums)
+}
+
+/// 生成用の探索（AlphaZero 方式）: 序盤 turns ターンは根の訪問回数^(1/temp) に比例して手を抽選し、
+/// 根の事前分布に Dirichlet(alpha) ノイズを eps だけ混ぜる。mcts_3v3_explore からのみ有効になる。
+#[derive(Clone, Copy, Debug)]
+pub struct ExploreCfg {
+    pub turns: i64,
+    pub temp: f64,
+    pub eps: f64,
+    pub alpha: f64,
+    pub min_frac: f64,
+}
+
+/// (ターン, 手番側, 抽選の対象ターンか, 最善と違う手を引いたか, 引いた手の訪問数, 最善手の訪問数,
+///  引いた手のQ, 最善手のQ, 根の総訪問数)。PI_TRACE と1対1に並ぶ。
+pub type ExploreRec = (i64, usize, bool, bool, i64, i64, f64, f64, i64);
+
+thread_local! {
+    static EXPLORE: std::cell::Cell<Option<ExploreCfg>> = const { std::cell::Cell::new(None) };
+    static EXPLORE_RNG: std::cell::Cell<u64> = const { std::cell::Cell::new(0) };
+    static CUR_TURN: std::cell::Cell<i64> = const { std::cell::Cell::new(0) };
+    static EXPLORE_LOG: std::cell::RefCell<Vec<ExploreRec>> = const { std::cell::RefCell::new(Vec::new()) };
+}
+
+pub fn set_cur_turn(t: i64) {
+    CUR_TURN.with(|c| c.set(t));
+}
+
+pub fn explore_cfg() -> Option<ExploreCfg> {
+    EXPLORE.with(|c| c.get())
+}
+
+pub fn explore_window() -> bool {
+    match explore_cfg() {
+        Some(c) => CUR_TURN.with(|t| t.get()) <= c.turns,
+        None => false,
+    }
+}
+
+pub fn explore_turn() -> i64 {
+    CUR_TURN.with(|t| t.get())
+}
+
+pub fn explore_rand() -> f64 {
+    EXPLORE_RNG.with(|c| {
+        let mut z = c.get().wrapping_add(0x9E3779B97F4A7C15);
+        c.set(z);
+        z = (z ^ (z >> 30)).wrapping_mul(0xBF58476D1CE4E5B9);
+        z = (z ^ (z >> 27)).wrapping_mul(0x94D049BB133111EB);
+        z ^= z >> 31;
+        ((z >> 11) as f64 + 0.5) / (1u64 << 53) as f64
+    })
+}
+
+fn explore_normal() -> f64 {
+    let u1 = explore_rand();
+    let u2 = explore_rand();
+    (-2.0 * u1.ln()).sqrt() * (2.0 * std::f64::consts::PI * u2).cos()
+}
+
+pub fn explore_gamma(alpha: f64) -> f64 {
+    if alpha < 1.0 {
+        let u = explore_rand();
+        return explore_gamma(alpha + 1.0) * u.powf(1.0 / alpha);
+    }
+    let d = alpha - 1.0 / 3.0;
+    let c = 1.0 / (9.0 * d).sqrt();
+    loop {
+        let x = explore_normal();
+        let v = 1.0 + c * x;
+        if v <= 0.0 {
+            continue;
+        }
+        let v = v * v * v;
+        let u = explore_rand();
+        if u.ln() < 0.5 * x * x + d - d * v + d * v.ln() {
+            return d * v;
+        }
+    }
+}
+
+pub fn explore_log_push(r: ExploreRec) {
+    EXPLORE_LOG.with(|l| l.borrow_mut().push(r));
+}
+
+/// mcts_3v3_trace の探索あり版（生成専用）。戻り: (勝者, PI_TRACE, 探索の記録)。
+#[allow(clippy::too_many_arguments)]
+pub fn mcts_3v3_explore(
+    pack: &mut Pack,
+    net: &NetW,
+    net_b: Option<&NetW>,
+    pa: &[String],
+    sa: &[usize],
+    pb: &[String],
+    sb: &[usize],
+    season_a: &str,
+    season_b: &str,
+    seed: i128,
+    sims: usize,
+    cfg: ExploreCfg,
+) -> (i64, Vec<PiRec>, Vec<ExploreRec>) {
+    PI_TRACE.with(|l| *l.borrow_mut() = Some(Vec::new()));
+    let _ = node_trace_take();
+    EXPLORE_LOG.with(|l| l.borrow_mut().clear());
+    EXPLORE_RNG.with(|c| c.set((seed as u64) ^ 0xD1B54A32D192ED03));
+    EXPLORE.with(|c| c.set(Some(cfg)));
+    let (r, _) =
+        mcts_3v3(pack, net, net_b, pa, sa, pb, sb, season_a, season_b, seed, sims, |_, _| {});
+    EXPLORE.with(|c| c.set(None));
+    let t = PI_TRACE.with(|l| l.borrow_mut().take()).unwrap_or_default();
+    let _ = node_trace_take();
+    let x = EXPLORE_LOG.with(|l| std::mem::take(&mut *l.borrow_mut()));
+    (r, t, x)
 }
