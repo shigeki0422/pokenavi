@@ -5,7 +5,8 @@ import path from 'node:path';
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
-import { getHeadToHead } from '../../scripts/party-builder/matchup-static';
+import { getHeadToHead, getMatchupBreakdown } from '../../scripts/party-builder/matchup-static';
+import { fmtKoProbPct } from '../../scripts/party-builder/matchup';
 import partySuggestSlugs from '../../data/party-suggest-slugs.json';
 import { MATCHUP_SEASON } from '../../consts';
 
@@ -72,11 +73,61 @@ const jsonLd = {
 const HITS_LABEL = (n: number | null) => (n == null || n >= 999 ? '圏外' : `確定${n}発`);
 const verdict = h2h?.verdict;
 const winnerName = verdict ? (verdict.win ? a.name : b.name) : null;
+
+/** 相手の型は1つではないため、採用率上位の型ごとに勝敗と技のダメージを出す。
+ * 主流型同士の1行判定だけでは、型が違ったときにどう変わるかが分からず、
+ * ページとしても薄くなるため。 */
+const bd = getMatchupBreakdown(a.icon, b.icon);
+const pct = (lo: number | null, hi: number | null) =>
+  lo == null || hi == null ? '—' : `${Math.round(lo)}〜${Math.round(hi)}%`;
+const hitLabel = (d: { hits: number | null; certain: boolean; prob: number | null } | null) => {
+  if (!d || d.hits == null || d.hits >= 999) return '倒せない';
+  if (d.certain) return `確定${d.hits}発`;
+  return `乱数${d.hits}発(${fmtKoProbPct(d.prob)}%)`;
+};
+const seenSetKeys = new Set<string>();
+const uniqueBuilds = (bd?.builds ?? []).filter((r) => {
+  const key = [r.build.item, r.build.nature, r.evLabel, (r.build.moves ?? []).map((m) => m.n).join(',')].join('|');
+  if (seenSetKeys.has(key)) return false;
+  seenSetKeys.add(key);
+  return true;
+});
+const setRows = uniqueBuilds.map((r, i) => ({
+  no: i + 1,
+  item: r.build.item,
+  nature: r.build.nature,
+  ev: r.evLabel,
+  moves: (r.build.moves ?? []).slice(0, 4).map((m) => m.n).join(' / '),
+  win: r.verdict?.win ?? null,
+  fast: r.verdict?.fast ?? null,
+  myDmgPct: pct(r.myDmg?.pctLo ?? null, r.myDmg?.pctHi ?? null),
+  myMove: r.myDmg?.n ?? '—',
+  myHits: hitLabel(r.myDmg ?? null),
+  oppDmgPct: pct(r.oppDmg?.pctLo ?? null, r.oppDmg?.pctHi ?? null),
+  oppMove: r.oppDmg?.n ?? '—',
+  oppHits: hitLabel(r.oppDmg ?? null),
+  myMoves: (r.moves?.my ?? []).slice(0, 4),
+  oppMoves: (r.moves?.opp ?? []).slice(0, 4),
+}));
+const winCount = setRows.filter((r) => r.win === true).length;
+const mainRow = setRows[0] ?? null;
+const sameAcrossSets = setRows.length > 1 && setRows.every((r) =>
+  r.myDmgPct === setRows[0].myDmgPct && r.oppDmgPct === setRows[0].oppDmgPct && r.win === setRows[0].win);
+/** 型ごとに結果が割れるかどうかは、読み手が一番知りたい一文なので本文に出す。 */
+const summary = setRows.length === 0 ? null
+  : winCount === setRows.length ? `${a.name}は${b.name}の想定型${setRows.length}種すべてに対して有利です。`
+  : winCount === 0 ? `${a.name}は${b.name}の想定型${setRows.length}種すべてに対して不利です。`
+  : `${b.name}の型によって結果が分かれます（${setRows.length}種のうち${a.name}有利が${winCount}種）。相手の型を読んでから動く必要がある対面です。`;
+
+/** 中身の薄いページを大量にインデックスさせないため、使用率上位どうしの
+ * 組み合わせ(=検索需要があり、型プールも揃っている)だけを検索対象にする。 */
+const INDEX_RANK_LIMIT = 20;
+const indexable = !!h2h && setRows.length > 0 && a.rank <= INDEX_RANK_LIMIT && b.rank <= INDEX_RANK_LIMIT;
 ---
 
 <html lang="ja">
   <head>
-    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" noindex={!indexable} />
     <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
     <style>
       main { max-width: 760px; margin: 0 auto; padding: 1.4em 1em 4em; color: rgb(var(--gray-dark)); }
@@ -101,6 +152,19 @@ const winnerName = verdict ? (verdict.win ? a.name : b.name) : null;
       .cta.primary { background: var(--accent); color: #fff; }
       .cta.ghost { background: #fff; border: 1.5px solid var(--accent); color: var(--accent); }
       .note { font-size: .78rem; color: rgb(var(--gray)); line-height: 1.7; }
+      .summary { font-size: .92rem; line-height: 1.8; background: #f8fafc; border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; padding: .7em .9em; margin-bottom: 1.6em; }
+      .sets h2 { font-size: 1.02rem; margin: 0 0 .4em; padding: .35em .8em; background: #f8fafc; border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; }
+      .sec-note { font-size: .78rem; color: rgb(var(--gray)); margin: 0 0 1em; }
+      /* スマホでは4列が潰れて読めないので横スクロールにする */
+      .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+      .sets-table { min-width: 520px; }
+      .sets-table td.left { text-align: left; }
+      .sets-table td.win { color: #15803d; font-weight: 700; white-space: nowrap; }
+      .sets-table td.lose { color: #b91c1c; font-weight: 700; white-space: nowrap; }
+      .mv-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0 1.2em; }
+      .mv-cols h3 { font-size: .8rem; margin: .4em 0 .2em; color: rgb(var(--gray)); }
+      .mv-cols ul { margin: 0; padding-left: 1.1em; font-size: .82rem; line-height: 1.7; }
+      .mv-pct { color: rgb(var(--gray)); font-size: .78rem; }
       .empty { text-align: center; padding: 2em; color: rgb(var(--gray)); }
     </style>
   </head>
@@ -136,6 +200,54 @@ const winnerName = verdict ? (verdict.win ? a.name : b.name) : null;
             <tr><td class="lbl">最大打点技</td><td>{verdict.myMove ?? '—'}</td><td>{verdict.oppMove ?? '—'}</td></tr>
             <tr><td class="lbl">相手を倒すのに必要な回数</td><td>{HITS_LABEL(verdict.myHits)}</td><td>{HITS_LABEL(verdict.oppHits)}</td></tr>
           </table>
+
+          {summary && <p class="summary">{summary}</p>}
+
+          {setRows.length > 0 && (
+            <section class="sets">
+              <h2>{b.name}の想定型ごとの結果</h2>
+              <p class="sec-note">相手の型は、{MATCHUP_SEASON}の採用率から推定した上位{setRows.length}種です。{a.name}側は採用率最多の型で固定しています。</p>
+              <div class="table-scroll" style="overflow-x:auto">
+              <table class="detail sets-table" style="min-width:520px">
+                <thead>
+                  <tr><th>型</th><th>持ち物・性格・EV</th><th>技</th><th>判定</th></tr>
+                </thead>
+                <tbody>
+                  {setRows.map((r) => (
+                    <tr>
+                      <td class="lbl">型{r.no}</td>
+                      <td class="left">{r.item}・{r.nature}・{r.ev}</td>
+                      <td class="left">{r.moves}</td>
+                      <td class={r.win ? 'win' : 'lose'}>{r.win ? `${a.name}有利` : `${b.name}有利`}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              </div>
+              {sameAcrossSets && <p class="sec-note">※ この3種の間では与ダメージ・被ダメージに差が出ないため、下の技ダメージは共通です。</p>}
+            </section>
+          )}
+
+          {(mainRow && (mainRow.myMoves.length > 0 || mainRow.oppMoves.length > 0)) && (
+            <section class="sets">
+              <h2>技ごとのダメージ</h2>
+              <p class="sec-note">{mainRow.item}・{mainRow.nature}の{b.name}に対する計算です。数字は相手の最大HPに対する割合（最小乱数〜最大乱数）です。</p>
+              <div class="mv-cols">
+                <div>
+                  <h3>{a.name} → {b.name}</h3>
+                  <ul>
+                    {mainRow.myMoves.map((m) => (<li>{m.n} <span class="mv-pct">{Math.round(m.pctLo)}〜{Math.round(m.pctHi)}%</span></li>))}
+                  </ul>
+                </div>
+                <div>
+                  <h3>{b.name} → {a.name}</h3>
+                  <ul>
+                    {mainRow.oppMoves.map((m) => (<li>{m.n} <span class="mv-pct">{Math.round(m.pctLo)}〜{Math.round(m.pctHi)}%</span></li>))}
+                  </ul>
+                </div>
+              </div>
+            </section>
+          )}
 
           <div class="cta-row">
             <a class="cta primary" href={`/pokemon/${a.slug}/`}>{a.name}の詳細データ →</a>
