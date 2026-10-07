@@ -4542,7 +4542,9 @@ const I18N = I18N_ALL[lang];
       renderInitError();
       return;
     }
-    diag = initDiag(document.getElementById('pb-diag'), diagHost);
+    const diagEl = document.getElementById('pb-diag');
+    if (/(^|\.)pokenavi\.jp$/.test(location.hostname)) diagEl.remove();
+    else diag = initDiag(diagEl, diagHost);
     render();
     if (restoredScrollY !== null) requestAnimationFrame(() => window.scrollTo(0, restoredScrollY));
   }
