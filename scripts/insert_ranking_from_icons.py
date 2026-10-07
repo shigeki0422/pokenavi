@@ -11,10 +11,10 @@ CROP = (240, 10, 390, 135)
 
 TEMPLATE_DATE = None  # build_templates() 内で自動決定
 
-SEASON = "M-6"
+SEASON = "M-7"
 # 取り込む順位の上限。通常は200。クロールが途中で止まった等で
 # 上位のみ扱う場合に下げる（M-6初日は端末スリープで101位以降が取れず100件）
-MAX_RANK = 200
+MAX_RANK = 148
 RULE   = "single"
 MATCH_THRESHOLD = 0.80  # 通常フォーマット用
 MATCH_THRESHOLD_GRAY = 0.20  # 横長フォーマット(6/28〜)用
@@ -1076,6 +1076,8 @@ TARGETS["2026-10-04"] = {}
 TARGETS["2026-10-05"] = {}
 
 TARGETS["2026-10-06"] = {}
+
+TARGETS["2026-10-07"] = {}
 
 TARGETS["2026-10-07"] = {}
 
