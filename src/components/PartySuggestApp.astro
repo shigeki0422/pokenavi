@@ -731,7 +731,7 @@ const I18N = I18N_ALL[lang];
         <button class="tb" data-i="${i}" data-t="deftype">${I18N.tabDef}</button>
         <button class="tb active" data-i="${i}" data-t="mu">${I18N.tabMu}</button>
         <button class="tb" data-i="${i}" data-t="speed">${I18N.tabSpeed}</button>
-        <button class="tb" data-i="${i}" data-t="guide">${I18N.tabGuide}</button>
+        ${/(^|\.)pokenavi\.jp$/.test(location.hostname) ? '' : `<button class="tb" data-i="${i}" data-t="guide">${I18N.tabGuide}</button>`}
       </div>`;
     const collapsed = i !== 0;
     // (S01) 「工房で保存・微調整」はアコーディオンの開閉トグル(.sug-toggle)の外、.sug-body末尾に置く。
