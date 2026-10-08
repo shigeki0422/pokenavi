@@ -20,7 +20,7 @@ from datetime import date
 from PIL import Image
 
 OUTPUT_DIR    = f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{date.today().isoformat()}"
-TOTAL_POKEMON = 148
+TOTAL_POKEMON = 200
 
 LIST_X        = 1600
 LIST_ENTRY_Y  = [350, 482, 614, 746, 878]

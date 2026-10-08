@@ -1,9 +1,9 @@
 ---
 title: 'ルカリオ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのルカリオ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率8位。'
+description: 'ポケモンチャンピオンズのルカリオ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率5位。'
 pokemonName: 'ルカリオ'
 dexNumber: 448
-usageRank: 8
+usageRank: 5
 pubDate: '2026-05-24'
 draft: false
 
@@ -18,7 +18,7 @@ draft: false
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.448</strong>　／　使用率 <strong style="color:#dc2626">8位</strong>
+      全国図鑑 <strong>No.448</strong>　／　使用率 <strong style="color:#dc2626">5位</strong>
     </div>
     
   </div>

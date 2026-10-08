@@ -1,9 +1,9 @@
 ---
 title: 'ユキメノコ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのユキメノコ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率119位。'
+description: 'ポケモンチャンピオンズのユキメノコ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率78位。'
 pokemonName: 'ユキメノコ'
 dexNumber: 478
-usageRank: 119
+usageRank: 78
 pubDate: '2026-05-24'
 draft: false
 analysisSlug: 'froslass-analysis-m2'
@@ -18,7 +18,7 @@ analysisSlug: 'froslass-analysis-m2'
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.478</strong>　／　使用率 <strong style="color:#dc2626">119位</strong>
+      全国図鑑 <strong>No.478</strong>　／　使用率 <strong style="color:#dc2626">78位</strong>
     </div>
     
   </div>

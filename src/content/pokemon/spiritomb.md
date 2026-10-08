@@ -1,9 +1,9 @@
 ---
 title: 'ミカルゲ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのミカルゲ基礎データ。種族値・タイプ相性・特性・覚える技を掲載。使用率圏外。'
+description: 'ポケモンチャンピオンズのミカルゲ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率175位。'
 pokemonName: 'ミカルゲ'
 dexNumber: 442
-usageRank: 999
+usageRank: 175
 pubDate: '2026-05-24'
 draft: false
 
@@ -18,7 +18,7 @@ draft: false
       <img src="/images/types/type-16-dark.png" alt="あく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.442</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
+      全国図鑑 <strong>No.442</strong>　／　使用率 <strong style="color:#dc2626">175位</strong>
     </div>
     
   </div>

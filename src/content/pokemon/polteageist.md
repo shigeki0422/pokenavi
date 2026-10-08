@@ -1,9 +1,9 @@
 ---
 title: 'ポットデス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのポットデス基礎データ。種族値・タイプ相性・特性・覚える技を掲載。使用率圏外。'
+description: 'ポケモンチャンピオンズのポットデス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率89位。'
 pokemonName: 'ポットデス'
 dexNumber: 855
-usageRank: 999
+usageRank: 89
 pubDate: '2026-05-24'
 draft: false
 analysisSlug: 'polteageist-analysis-m2'
@@ -17,7 +17,7 @@ analysisSlug: 'polteageist-analysis-m2'
       <img src="/images/types/type-07-ghost.png" alt="ゴースト" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.855</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
+      全国図鑑 <strong>No.855</strong>　／　使用率 <strong style="color:#dc2626">89位</strong>
     </div>
     
   </div>

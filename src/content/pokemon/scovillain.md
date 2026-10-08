@@ -1,9 +1,9 @@
 ---
 title: 'スコヴィラン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのスコヴィラン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率148位。'
+description: 'ポケモンチャンピオンズのスコヴィラン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率74位。'
 pokemonName: 'スコヴィラン'
 dexNumber: 952
-usageRank: 148
+usageRank: 74
 pubDate: '2026-05-24'
 draft: false
 analysisSlug: 'scovillain-analysis-m2'
@@ -18,7 +18,7 @@ analysisSlug: 'scovillain-analysis-m2'
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.952</strong>　／　使用率 <strong style="color:#dc2626">148位</strong>
+      全国図鑑 <strong>No.952</strong>　／　使用率 <strong style="color:#dc2626">74位</strong>
     </div>
     
   </div>
