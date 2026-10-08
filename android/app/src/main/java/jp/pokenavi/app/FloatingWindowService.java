@@ -1,153 +1,144 @@
 package jp.pokenavi.app;
 
+import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.graphics.Typeface;
-import android.graphics.drawable.GradientDrawable;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import org.json.JSONArray;
 
 public class FloatingWindowService extends Service {
 
-    private WindowManager windowManager;
+    private WindowManager wm;
     private View floatingView;
-    private WindowManager.LayoutParams params;
+    private WindowManager.LayoutParams lp;
+    private WebView webView;
+    private String currentUrl = "https://pokenavi.jp";
 
-    private static final int COLLAPSED_SIZE = 56;
-    private static final int FLOATING_W = 360;
-    private static final int FLOATING_H = 600;
+    private static final int TAB_W    = 28;
+    private static final int HANDLE_W = 20;
     private static final int HEADER_H = 48;
-    private static final int FS_BAR_H = 32;
+    private static final int DEFAULT_PANEL_W = 320;
+    private static final int MIN_PANEL_W = 160;
+    private static final int MAX_PANEL_W = 540;
 
     private static final int MODE_COLLAPSED = 0;
-    private static final int MODE_FLOATING = 1;
-    private static final int MODE_FULLSCREEN = 2;
-
+    private static final int MODE_FLOATING  = 1;
     private int mode = MODE_COLLAPSED;
-    private int floatingX = 50;
-    private int floatingY = 600;
+
+    private int totalW;
+
+    private boolean interactingWithWebView = false;
+
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private final Runnable restoreModal = () -> {
+        interactingWithWebView = false;
+        lp.flags |= WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                  | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
+        try { wm.updateViewLayout(floatingView, lp); } catch (Exception ignored) {}
+    };
+
+    @Override public IBinder onBind(Intent i) { return null; }
 
     @Override
-    public IBinder onBind(Intent intent) { return null; }
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (intent != null) {
+            String url = intent.getStringExtra("url");
+            if (url != null && !url.isEmpty()) {
+                currentUrl = url;
+                if (webView != null) webView.loadUrl(url);
+            }
+        }
+        return START_NOT_STICKY;
+    }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+        totalW = dp(TAB_W + DEFAULT_PANEL_W + HANDLE_W);
         floatingView = buildView();
-        params = new WindowManager.LayoutParams(
-            dp(COLLAPSED_SIZE), dp(COLLAPSED_SIZE),
+        lp = new WindowManager.LayoutParams(
+            dp(TAB_W),
+            WindowManager.LayoutParams.MATCH_PARENT,
             WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                 | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+                | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
             PixelFormat.TRANSLUCENT
         );
-        params.gravity = Gravity.TOP | Gravity.START;
-        params.x = floatingX;
-        params.y = floatingY;
-        windowManager.addView(floatingView, params);
+        lp.gravity = Gravity.TOP | Gravity.START;
+        lp.x = 0;
+        lp.y = 0;
+        wm.addView(floatingView, lp);
         applyMode(MODE_FLOATING);
     }
 
     private View buildView() {
         LinearLayout root = new LinearLayout(this);
-        root.setOrientation(LinearLayout.VERTICAL);
+        root.setOrientation(LinearLayout.HORIZONTAL);
 
-        // --- Collapsed bubble ---
-        LinearLayout btnCollapsed = new LinearLayout(this);
-        btnCollapsed.setOrientation(LinearLayout.VERTICAL);
-        btnCollapsed.setGravity(Gravity.CENTER);
-        btnCollapsed.setTag("btn_collapsed");
-        GradientDrawable bubbleBg = new GradientDrawable();
-        bubbleBg.setCornerRadius(dp(14));
-        bubbleBg.setColor(0xFF1a1a2e);
-        bubbleBg.setStroke(dp(2), 0xFF4a90e2);
-        btnCollapsed.setBackground(bubbleBg);
-        LinearLayout.LayoutParams bubbleLp = new LinearLayout.LayoutParams(dp(COLLAPSED_SIZE), dp(COLLAPSED_SIZE));
-        btnCollapsed.setLayoutParams(bubbleLp);
+        // --- Tab (collapse / expand) ---
+        LinearLayout tab = new LinearLayout(this);
+        tab.setTag("tab");
+        tab.setBackgroundColor(0xFF1a1a2e);
+        tab.setGravity(Gravity.CENTER);
+        tab.setOrientation(LinearLayout.VERTICAL);
+        tab.setLayoutParams(new LinearLayout.LayoutParams(
+            dp(TAB_W), LinearLayout.LayoutParams.MATCH_PARENT));
+        TextView tabIco = new TextView(this);
+        tabIco.setText("≡");
+        tabIco.setTextColor(0xFF4a90e2);
+        tabIco.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        tabIco.setGravity(Gravity.CENTER);
+        tab.addView(tabIco);
+        root.addView(tab);
 
-        ImageView bubbleIcon = new ImageView(this);
-        bubbleIcon.setImageResource(R.mipmap.ic_launcher_round);
-        bubbleIcon.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        LinearLayout.LayoutParams iconLp = new LinearLayout.LayoutParams(dp(40), dp(40));
-        bubbleIcon.setLayoutParams(iconLp);
-        btnCollapsed.addView(bubbleIcon);
-
-        root.addView(btnCollapsed);
-
-        // --- Panel (shared by floating + fullscreen) ---
+        // --- Panel (header + webview) ---
         LinearLayout panel = new LinearLayout(this);
+        panel.setTag("panel");
         panel.setOrientation(LinearLayout.VERTICAL);
         panel.setVisibility(View.GONE);
-        panel.setTag("panel");
-        LinearLayout.LayoutParams panelLp = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
-        );
-        panel.setLayoutParams(panelLp);
+        panel.setLayoutParams(new LinearLayout.LayoutParams(
+            0, LinearLayout.LayoutParams.MATCH_PARENT, 1f));
 
-        // Normal header (visible in MODE_FLOATING only)
         LinearLayout header = new LinearLayout(this);
         header.setBackgroundColor(0xFF1a1a2e);
         header.setGravity(Gravity.CENTER_VERTICAL);
-        header.setTag("header");
-        LinearLayout.LayoutParams headerLp = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, dp(HEADER_H));
-        header.setLayoutParams(headerLp);
-
+        header.setLayoutParams(new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, dp(HEADER_H)));
         TextView title = new TextView(this);
         title.setText("ポケナビ");
         title.setTextColor(0xFF4a90e2);
         title.setTextSize(TypedValue.COMPLEX_UNIT_SP, 15);
         title.setTypeface(null, Typeface.BOLD);
-        LinearLayout.LayoutParams titleLp = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
-        titleLp.setMarginStart(dp(12));
+        LinearLayout.LayoutParams titleLp = new LinearLayout.LayoutParams(
+            0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f);
+        titleLp.setMarginStart(dp(10));
         title.setLayoutParams(titleLp);
         header.addView(title);
-
-        TextView btnMinimize = makeHeaderButton("−", "btn_minimize", HEADER_H);
-        header.addView(btnMinimize);
-
-        TextView btnFullscreen = makeHeaderButton("⛶", "btn_fullscreen", HEADER_H);
-        header.addView(btnFullscreen);
-
-        TextView btnClose = makeHeaderButton("✕", "btn_close", HEADER_H);
-        header.addView(btnClose);
-
+        header.addView(makeBtn("⛶", "btn_fs"));
+        header.addView(makeBtn("✕", "btn_x"));
         panel.addView(header);
 
-        // Fullscreen compact bar (visible in MODE_FULLSCREEN only)
-        LinearLayout fsBar = new LinearLayout(this);
-        fsBar.setBackgroundColor(0xCC1a1a2e);
-        fsBar.setGravity(Gravity.CENTER_VERTICAL | Gravity.END);
-        fsBar.setTag("fs_bar");
-        fsBar.setVisibility(View.GONE);
-        LinearLayout.LayoutParams fsBarLp = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, dp(FS_BAR_H));
-        fsBar.setLayoutParams(fsBarLp);
-
-        TextView btnFsExit = makeHeaderButton("⊡", "btn_fs_exit", FS_BAR_H);
-        fsBar.addView(btnFsExit);
-
-        TextView btnFsClose = makeHeaderButton("✕", "btn_fs_close", FS_BAR_H);
-        fsBar.addView(btnFsClose);
-
-        panel.addView(fsBar);
-
-        // WebView
-        WebView webView = new WebView(this);
+        webView = new WebView(this);
         webView.setTag("webview");
         WebSettings ws = webView.getSettings();
         ws.setJavaScriptEnabled(true);
@@ -155,183 +146,215 @@ public class FloatingWindowService extends Service {
         ws.setLoadWithOverviewMode(true);
         ws.setUseWideViewPort(true);
         webView.setBackgroundColor(0xFFFFFFFF);
-        webView.setWebViewClient(new WebViewClient());
-        webView.loadUrl("https://pokenavi.jp");
-        LinearLayout.LayoutParams wvLp = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-        webView.setLayoutParams(wvLp);
+        webView.addJavascriptInterface(new SelectBridge(), "_SB");
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView v, String url) {
+                currentUrl = url;
+                v.evaluateJavascript(
+                    "(function(){" +
+                    "var i=0;" +
+                    "function setup(s){" +
+                    "  if(s.dataset._sb)return;" +
+                    "  s.dataset._sb=++i;" +
+                    "  var sx,sy,mv;" +
+                    "  s.addEventListener('touchstart',function(e){" +
+                    "    sx=e.touches[0].clientX;sy=e.touches[0].clientY;mv=false;" +
+                    "  },true);" +
+                    "  s.addEventListener('touchmove',function(e){" +
+                    "    if(Math.abs(e.touches[0].clientX-sx)>10||Math.abs(e.touches[0].clientY-sy)>10)mv=true;" +
+                    "  },true);" +
+                    "  s.addEventListener('touchend',function(e){" +
+                    "    if(mv)return;" +
+                    "    e.preventDefault();e.stopPropagation();" +
+                    "    var opts=Array.from(s.options).map(function(o){return o.text;});" +
+                    "    window._SB.show(s.dataset._sb,JSON.stringify(opts),s.selectedIndex);" +
+                    "  },true);" +
+                    "}" +
+                    "document.querySelectorAll('select').forEach(setup);" +
+                    "new MutationObserver(function(ms){ms.forEach(function(m){" +
+                    "  m.addedNodes.forEach(function(n){" +
+                    "    if(n.querySelectorAll)n.querySelectorAll('select').forEach(setup);" +
+                    "  });" +
+                    "})}).observe(document.documentElement,{childList:true,subtree:true});" +
+                    "})();",
+                    null
+                );
+            }
+        });
+        webView.loadUrl(currentUrl);
+        webView.setLayoutParams(new LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
         panel.addView(webView);
-
         root.addView(panel);
 
+        // --- Resize handle (right edge) ---
+        TextView handle = new TextView(this);
+        handle.setTag("handle");
+        handle.setBackgroundColor(0xFF2a2a4a);
+        handle.setText("⋮");
+        handle.setTextColor(0xFF4a90e2);
+        handle.setGravity(Gravity.CENTER);
+        handle.setVisibility(View.GONE);
+        handle.setLayoutParams(new LinearLayout.LayoutParams(
+            dp(HANDLE_W), LinearLayout.LayoutParams.MATCH_PARENT));
+        root.addView(handle);
+
         // --- Touch listeners ---
-        final int[] dragStart = new int[2];
-        final int[] windowStart = new int[2];
-        final boolean[] dragging = {false};
 
-        btnCollapsed.setOnTouchListener((v, event) -> {
-            switch (event.getAction()) {
+        tab.setOnClickListener(v -> {
+            if (mode == MODE_COLLAPSED) applyMode(MODE_FLOATING);
+            else applyMode(MODE_COLLAPSED);
+        });
+
+        root.findViewWithTag("btn_fs").setOnTouchListener((v, e) -> {
+            if (e.getAction() == MotionEvent.ACTION_UP) returnToFullscreen();
+            return true;
+        });
+        root.findViewWithTag("btn_x").setOnTouchListener((v, e) -> {
+            if (e.getAction() == MotionEvent.ACTION_UP) stopSelf();
+            return true;
+        });
+
+        // Combo box fix: タッチ時に NOT_TOUCH_MODAL を外してポップアップを有効化、
+        // 2秒無操作で復元
+        webView.setOnTouchListener((v, e) -> {
+            handler.removeCallbacks(restoreModal);
+            interactingWithWebView = true;
+            if ((lp.flags & WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL) != 0) {
+                lp.flags &= ~(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                            | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH);
+                wm.updateViewLayout(floatingView, lp);
+            }
+            if (e.getAction() == MotionEvent.ACTION_UP
+                    || e.getAction() == MotionEvent.ACTION_CANCEL) {
+                handler.postDelayed(restoreModal, 2000);
+            }
+            return false;
+        });
+
+        // Resize drag
+        final int[] dragX = {0};
+        final int[] startW = {0};
+        handle.setOnTouchListener((v, e) -> {
+            switch (e.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    dragging[0] = false;
-                    dragStart[0] = (int) event.getRawX();
-                    dragStart[1] = (int) event.getRawY();
-                    windowStart[0] = params.x;
-                    windowStart[1] = params.y;
+                    dragX[0] = (int) e.getRawX();
+                    startW[0] = totalW;
                     return true;
                 case MotionEvent.ACTION_MOVE:
-                    int dx = (int) event.getRawX() - dragStart[0];
-                    int dy = (int) event.getRawY() - dragStart[1];
-                    if (Math.abs(dx) > 8 || Math.abs(dy) > 8) dragging[0] = true;
-                    if (dragging[0]) {
-                        params.x = windowStart[0] + dx;
-                        params.y = windowStart[1] + dy;
-                        floatingX = params.x;
-                        floatingY = params.y;
-                        windowManager.updateViewLayout(floatingView, params);
-                    }
-                    return true;
-                case MotionEvent.ACTION_UP:
-                    if (!dragging[0]) applyMode(MODE_FLOATING);
+                    int delta = (int) e.getRawX() - dragX[0];
+                    int newW = startW[0] + delta;
+                    newW = Math.max(dp(TAB_W + MIN_PANEL_W + HANDLE_W),
+                           Math.min(dp(TAB_W + MAX_PANEL_W + HANDLE_W), newW));
+                    totalW = newW;
+                    lp.width = totalW;
+                    wm.updateViewLayout(floatingView, lp);
                     return true;
             }
             return false;
         });
 
-        btnMinimize.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) applyMode(MODE_COLLAPSED);
-            return true;
-        });
-
-        btnFullscreen.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) returnToFullscreen();
-            return true;
-        });
-
-        btnClose.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) stopSelf();
-            return true;
-        });
-
-        btnFsExit.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) returnToFullscreen();
-            return true;
-        });
-
-        btnFsClose.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_UP) stopSelf();
-            return true;
-        });
-
-        // Header drag (floating mode only)
-        header.setOnTouchListener((v, event) -> {
-            if (mode != MODE_FLOATING) return false;
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    dragging[0] = false;
-                    dragStart[0] = (int) event.getRawX();
-                    dragStart[1] = (int) event.getRawY();
-                    windowStart[0] = params.x;
-                    windowStart[1] = params.y;
-                    return true;
-                case MotionEvent.ACTION_MOVE:
-                    int dx = (int) event.getRawX() - dragStart[0];
-                    int dy = (int) event.getRawY() - dragStart[1];
-                    if (Math.abs(dx) > 8 || Math.abs(dy) > 8) dragging[0] = true;
-                    if (dragging[0]) {
-                        params.x = windowStart[0] + dx;
-                        params.y = windowStart[1] + dy;
-                        floatingX = params.x;
-                        floatingY = params.y;
-                        windowManager.updateViewLayout(floatingView, params);
-                    }
-                    return true;
-                case MotionEvent.ACTION_UP:
-                    return true;
+        // Outside touch → フラグ復元 + コンボ操作中でなければ折りたたみ
+        root.setOnTouchListener((v, e) -> {
+            if (e.getAction() == MotionEvent.ACTION_OUTSIDE) {
+                boolean wasInteracting = interactingWithWebView;
+                handler.removeCallbacks(restoreModal);
+                restoreModal.run();
+                if (!wasInteracting) applyMode(MODE_COLLAPSED);
             }
             return false;
-        });
-
-        root.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_OUTSIDE && mode == MODE_FLOATING) {
-                applyMode(MODE_COLLAPSED);
-            }
-            return true;
         });
 
         return root;
     }
 
-    private TextView makeHeaderButton(String text, String tag, int sizeDp) {
+    private class SelectBridge {
+        @JavascriptInterface
+        public void show(final String sbId, final String optionsJson, final int selectedIndex) {
+            handler.post(() -> {
+                try {
+                    JSONArray arr = new JSONArray(optionsJson);
+                    String[] items = new String[arr.length()];
+                    for (int i = 0; i < arr.length(); i++) items[i] = arr.getString(i);
+                    AlertDialog dialog = new AlertDialog.Builder(
+                            new ContextThemeWrapper(FloatingWindowService.this,
+                                    android.R.style.Theme_Material_Light_Dialog))
+                            .setSingleChoiceItems(items, selectedIndex, (d, which) -> {
+                                webView.evaluateJavascript(
+                                    "(function(){" +
+                                    "var s=document.querySelector('[data-_sb=\"" + sbId + "\"]');" +
+                                    "if(s){s.selectedIndex=" + which + ";" +
+                                    "s.dispatchEvent(new Event('change',{bubbles:true}));}" +
+                                    "})();", null);
+                                d.dismiss();
+                            })
+                            .setNegativeButton("キャンセル", null)
+                            .create();
+                    dialog.getWindow().setType(
+                            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+                    dialog.show();
+                } catch (Exception ignored) {}
+            });
+        }
+    }
+
+    private TextView makeBtn(String text, String tag) {
         TextView btn = new TextView(this);
         btn.setText(text);
-        btn.setTextColor(0xFFCCCCCC);
-        btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, sizeDp == FS_BAR_H ? 15 : 18);
-        btn.setGravity(Gravity.CENTER);
         btn.setTag(tag);
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(dp(sizeDp), dp(sizeDp));
-        btn.setLayoutParams(lp);
+        btn.setTextColor(0xFFCCCCCC);
+        btn.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+        btn.setGravity(Gravity.CENTER);
+        btn.setLayoutParams(new LinearLayout.LayoutParams(dp(HEADER_H), dp(HEADER_H)));
         return btn;
     }
 
     private void applyMode(int newMode) {
-        if (newMode == MODE_FULLSCREEN) {
-            floatingX = params.x;
-            floatingY = params.y;
-        }
         mode = newMode;
+        View panel  = floatingView.findViewWithTag("panel");
+        View handle = floatingView.findViewWithTag("handle");
 
-        View btnCollapsed = floatingView.findViewWithTag("btn_collapsed");
-        View panel = floatingView.findViewWithTag("panel");
-        View header = floatingView.findViewWithTag("header");
-        View fsBar = floatingView.findViewWithTag("fs_bar");
+        boolean isLandscape = getResources().getConfiguration().orientation
+                == Configuration.ORIENTATION_LANDSCAPE;
 
-        switch (mode) {
-            case MODE_COLLAPSED:
-                btnCollapsed.setVisibility(View.VISIBLE);
-                panel.setVisibility(View.GONE);
-                params.width = dp(COLLAPSED_SIZE);
-                params.height = dp(COLLAPSED_SIZE);
-                params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                    | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-                params.x = floatingX;
-                params.y = floatingY;
-                windowManager.updateViewLayout(floatingView, params);
-                break;
-
-            case MODE_FLOATING:
-                btnCollapsed.setVisibility(View.GONE);
-                panel.setVisibility(View.VISIBLE);
-                header.setVisibility(View.VISIBLE);
-                fsBar.setVisibility(View.GONE);
-                params.width = dp(FLOATING_W);
-                params.height = dp(FLOATING_H);
-                params.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                    | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
-                params.x = floatingX;
-                params.y = floatingY;
-                windowManager.updateViewLayout(floatingView, params);
-                break;
-
-            case MODE_FULLSCREEN:
-                btnCollapsed.setVisibility(View.GONE);
-                panel.setVisibility(View.VISIBLE);
-                header.setVisibility(View.GONE);
-                fsBar.setVisibility(View.VISIBLE);
-                params.width = WindowManager.LayoutParams.MATCH_PARENT;
-                params.height = WindowManager.LayoutParams.MATCH_PARENT;
-                params.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS;
-                params.x = 0;
-                params.y = 0;
-                windowManager.updateViewLayout(floatingView, params);
-                break;
+        if (mode == MODE_COLLAPSED) {
+            panel.setVisibility(View.GONE);
+            handle.setVisibility(View.GONE);
+            lp.width = dp(TAB_W);
+            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                     | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                     | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                     | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+        } else {
+            panel.setVisibility(View.VISIBLE);
+            handle.setVisibility(View.VISIBLE);
+            lp.width = totalW;
+            // 横画面: 上下全画面 / 縦画面: 上部固定・画面の半分
+            lp.height = isLandscape
+                ? WindowManager.LayoutParams.MATCH_PARENT
+                : getResources().getDisplayMetrics().heightPixels / 2;
+            lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                     | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                     | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                     | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
         }
+        lp.x = 0;
+        lp.y = 0;
+        wm.updateViewLayout(floatingView, lp);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (mode == MODE_FLOATING) applyMode(MODE_FLOATING);
     }
 
     private void returnToFullscreen() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent.putExtra("url", currentUrl);
         startActivity(intent);
         stopSelf();
     }
@@ -339,7 +362,10 @@ public class FloatingWindowService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (floatingView != null) windowManager.removeView(floatingView);
+        handler.removeCallbacksAndMessages(null);
+        if (floatingView != null) {
+            try { wm.removeView(floatingView); } catch (Exception ignored) {}
+        }
     }
 
     private int dp(int dp) {

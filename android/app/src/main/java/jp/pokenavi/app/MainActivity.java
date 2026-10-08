@@ -105,6 +105,12 @@ public class MainActivity extends BridgeActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         stopService(new Intent(this, FloatingWindowService.class));
+        try {
+            String url = intent.getStringExtra("url");
+            if (url != null && !url.isEmpty()) {
+                getBridge().getWebView().loadUrl(url);
+            }
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -157,7 +163,12 @@ public class MainActivity extends BridgeActivity {
     }
 
     private void startFloatingService() {
-        startService(new Intent(this, FloatingWindowService.class));
+        Intent intent = new Intent(this, FloatingWindowService.class);
+        try {
+            String url = getBridge().getWebView().getUrl();
+            if (url != null) intent.putExtra("url", url);
+        } catch (Exception ignored) {}
+        startService(intent);
     }
 
     private int dp(int dp) {
