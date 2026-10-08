@@ -212,6 +212,24 @@ pub fn select_cached(
     pc: &mut PairCache,
     me_is_x: bool,
 ) -> Vec<usize> {
+    select_cached_as(pack, ft, sel, me, opp, n, g, s, pc, me_is_x, opp_assume())
+}
+
+/// select_cached の相手の仮定を引数で与える版（env SEL_OPP_ASSUME に依らない）
+#[allow(clippy::too_many_arguments)]
+pub fn select_cached_as(
+    pack: &Pack,
+    ft: &FeatTables,
+    sel: Option<&Selector>,
+    me: &mut Vec<Poke>,
+    opp: &mut Vec<Poke>,
+    n: usize,
+    g: &mut CpyRandom,
+    s: &mut CpyRandom,
+    pc: &mut PairCache,
+    me_is_x: bool,
+    mode: OppAssume,
+) -> Vec<usize> {
     let pen: f64 = std::env::var("MEGA_PENALTY").ok().and_then(|v| v.parse().ok()).unwrap_or(50.0);
     let sel = match sel {
         Some(x) if me.len() > n => x,
@@ -222,8 +240,8 @@ pub fn select_cached(
         }
     };
     let nb = n.min(opp.len());
-    if opp_assume() != OppAssume::Heur && opp.len() > nb {
-        if let Some((osels, agg)) = opp_sets(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x) {
+    if mode != OppAssume::Heur && opp.len() > nb {
+        if let Some((osels, agg)) = opp_sets(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x, mode) {
             let cands = candidates(me, n);
             if cands.is_empty() {
                 let mut gr = GRng(g);
@@ -297,7 +315,7 @@ pub fn select_cached(
     cands[select_ref(pack, ft, sel, me, opp, &osels, &cands, g, &Agg::Mean3).0].clone()
 }
 
-/// 学習選出の全候補と値（温度0の選出なら値の最大）。相手の仮定は既定ヒューリスティック 温度0,1,1（SEL_OPP_ASSUME で切り替え）。選出ガイドの集計用
+/// 学習選出の全候補と値（温度0の選出なら値の最大）。相手の仮定は既定 learnedK8（SEL_OPP_ASSUME で切り替え）。選出ガイドの集計用
 #[allow(clippy::too_many_arguments)]
 pub fn select_scores(
     pack: &Pack,
@@ -317,8 +335,9 @@ pub fn select_scores(
     if cands.is_empty() || me.len() <= n {
         return (Vec::new(), Vec::new());
     }
-    if opp_assume() != OppAssume::Heur && opp.len() > nb {
-        if let Some((osels, agg)) = opp_sets(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x) {
+    let mode = opp_assume();
+    if mode != OppAssume::Heur && opp.len() > nb {
+        if let Some((osels, agg)) = opp_sets(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x, mode) {
             if fast_on() && osels.iter().all(|o| o.len() == 3) && cands.iter().all(|c| c.len() == 3) {
                 if let Some((_, vals)) = select_fast(pack, ft, sel, me, opp, &osels, &cands, pc, me_is_x, &agg) {
                     return (cands, vals);
@@ -352,7 +371,7 @@ pub fn select_scores(
     (cands, vals)
 }
 
-/// 学習選出の中の「相手の選出の仮定」（env SEL_OPP_ASSUME。既定はヒューリスティック 温度0,1,1）
+/// 学習選出の中の「相手の選出の仮定」（env SEL_OPP_ASSUME。未指定は learnedK＝既定（2026-10-06〜）、heur 等それ以外はヒューリスティック 温度0,1,1）
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
 pub enum OppAssume {
     Heur,
@@ -367,6 +386,7 @@ pub fn opp_assume() -> OppAssume {
         Ok("learned") => OppAssume::Learned,
         Ok("learnedK") => OppAssume::LearnedK,
         Ok("all") => OppAssume::All,
+        Err(_) => OppAssume::LearnedK,
         _ => OppAssume::Heur,
     })
 }
@@ -481,8 +501,8 @@ fn opp_sets(
     s: &mut CpyRandom,
     pc: &mut PairCache,
     me_is_x: bool,
+    mode: OppAssume,
 ) -> Option<(Vec<Vec<usize>>, Agg)> {
-    let mode = opp_assume();
     if mode == OppAssume::Learned {
         return Some((learned_osels(pack, ft, sel, me, opp, n, nb, pen, g, s, pc, me_is_x), Agg::Mean3));
     }
@@ -1150,7 +1170,7 @@ mod tests {
 
     #[test]
     fn sparse_predict_equals_dense() {
-        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6b.json");
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6d.json");
         let s = match Selector::from_json(p) {
             Some(s) => s,
             None => return,
@@ -1171,7 +1191,7 @@ mod tests {
     /// 高速版（分解した第1層・表で引く相手の仮定）が元の実装と同じ選出・値の差は丸め誤差だけ（半減きのみ・ホズのみの消費を含む）
     #[test]
     fn fast_equals_ref() {
-        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6b.json");
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6d.json");
         let sel = match Selector::from_json(p) {
             Some(s) => s,
             None => return,
@@ -1211,7 +1231,7 @@ mod tests {
     /// 同じ乱数の消費。残り2つは相手の候補から引いたもの
     #[test]
     fn learned_osels_first_is_opp_learned_choice() {
-        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6b.json");
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6d.json");
         let sel = match Selector::from_json(p) {
             Some(s) => s,
             None => return,
@@ -1227,7 +1247,8 @@ mod tests {
             let os = learned_osels(&pack, &ft, &sel, &mut me, &mut opp, 3, 3, 50.0, &mut g, &mut s, &mut PairCache::default(), true);
             let (mut me2, mut opp2) = (a6.clone(), b6.clone());
             let (mut g2, mut s2) = (CpyRandom::new(7), CpyRandom::new(300 + seed));
-            let want = select_cached(&pack, &ft, Some(&sel), &mut opp2, &mut me2, 3, &mut g2, &mut s2, &mut PairCache::default(), false);
+            let want = select_cached_as(&pack, &ft, Some(&sel), &mut opp2, &mut me2, 3, &mut g2, &mut s2, &mut PairCache::default(), false,
+                                        OppAssume::Heur);
             assert_eq!(os[0], want);
             assert_eq!(os.len(), 3);
             let oc = candidates(&b6, 3);
@@ -1241,7 +1262,7 @@ mod tests {
     /// 相手の全候補を仮定にした集め方（重み付き・平均＋最悪）でも、高速版が元の実装と同じ選出・値（丸め誤差のみ）
     #[test]
     fn fast_equals_ref_all_assumptions() {
-        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6b.json");
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6d.json");
         let sel = match Selector::from_json(p) {
             Some(s) => s,
             None => return,
@@ -1275,7 +1296,7 @@ mod tests {
     /// ReLU の隠れ層（"act": "relu"）: 逐次和と素朴な和が一致し、高速版が元の実装と同じ選出・値。未知の活性化・"U"（入力の追加）は読まない
     #[test]
     fn relu_model_fast_equals_ref() {
-        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6b.json");
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6d.json");
         let mut v: serde_json::Value = match std::fs::read_to_string(p).ok().and_then(|t| serde_json::from_str(&t).ok()) {
             Some(v) => v,
             None => return,

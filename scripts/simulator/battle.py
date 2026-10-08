@@ -996,6 +996,7 @@ def _execute_move_inner(
             return logs
         attacker._last_flung_item = attacker.item  # type: ignore
         attacker.item = None
+        on_item_consumed(attacker, logs)
 
     # じょおうのいげん/テイルアーマー：相手の先制技（優先度+）を受け付けない
     if move.priority > 0 and defender.ability in ("じょおうのいげん", "テイルアーマー"):
@@ -1037,8 +1038,8 @@ def _execute_move_inner(
             return logs
         if defender.item == "きあいのタスキ" and defender.hp == defender.max_hp:
             defender.item = None
-            on_item_consumed(defender, logs)
             logs.append(f"{defender.name} のきあいのタスキ で耐えた！")
+            on_item_consumed(defender, logs)
             defender.hp = 1
         elif defender.item == "きあいのハチマキ" and random.random() < 0.10:
             logs.append(f"{defender.name} の きあいのハチマキ で耐えた！")
@@ -1279,21 +1280,23 @@ def _execute_move_inner(
         if ret_dmg <= 0:
             logs.append(f"{attacker.name} の {move.name_jp} は失敗した！")
             return logs
+        _rx = []
         if defender.item == "きあいのタスキ" and defender.hp == defender.max_hp and ret_dmg >= defender.hp:
             ret_dmg = defender.hp - 1
             defender.item = None
-            on_item_consumed(defender, logs)
-            logs.append(f"{defender.name} のきあいのタスキ で耐えた！")
-            logs.extend(attacker_side.opp_view.on_item(defender.name, "きあいのタスキ", "タスキ発動"))
+            _rx.append(f"{defender.name} のきあいのタスキ で耐えた！")
+            on_item_consumed(defender, _rx)
+            _rx.extend(attacker_side.opp_view.on_item(defender.name, "きあいのタスキ", "タスキ発動"))
         if (defender.ability == "がんじょう" and defender.hp == defender.max_hp and ret_dmg >= defender.hp
                 and not _sia(attacker)):
             ret_dmg = defender.hp - 1
-            logs.append(f"{defender.name} の がんじょう で耐えた！")
+            _rx.append(f"{defender.name} の がんじょう で耐えた！")
         if defender.item == "きあいのハチマキ" and ret_dmg >= defender.hp and random.random() < 0.10:
             ret_dmg = defender.hp - 1
-            logs.append(f"{defender.name} の きあいのハチマキ で耐えた！")
+            _rx.append(f"{defender.name} の きあいのハチマキ で耐えた！")
         defender.take_damage(ret_dmg)
         logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に {ret_dmg}ダメ")
+        logs.extend(_rx)
         if not defender.is_alive:
             on_defender_ko(attacker, defender, ret_dmg, logs)
             on_ko(attacker, logs)
@@ -1313,25 +1316,37 @@ def _execute_move_inner(
 
     # スクリーン補正（急所・かたやぶり・すりぬけ・スクリーン破壊技は無視）
     _SCREEN_BREAKERS = {"かわらわり", "レイジングブル", "サイコファング"}
-    screen_mult = 1.0
-    if (not critical
-            and attacker.ability != "すりぬけ"
-            and move.name_jp not in _SCREEN_BREAKERS):
-        if move.category == "physical" and (defender_side.reflect or defender_side.aurora_veil):
-            screen_mult = 0.5
-        elif move.category == "special" and (defender_side.light_screen or defender_side.aurora_veil):
-            screen_mult = 0.5
+
+    def _screen_mult(crit):
+        if (not crit
+                and attacker.ability != "すりぬけ"
+                and move.name_jp not in _SCREEN_BREAKERS):
+            if move.category == "physical" and (defender_side.reflect or defender_side.aurora_veil):
+                return 0.5
+            if move.category == "special" and (defender_side.light_screen or defender_side.aurora_veil):
+                return 0.5
+        return 1.0
+    screen_mult = _screen_mult(critical)
+    _any_crit = critical
 
     total_dmg = 0
     # 実際に減らしたHP（残りHPで頭打ち）。反動・吸収・かいがらのすずの基準（実機は与えたダメージ＝実際の減少量）。
     dealt_hp = 0
     rough_skin_logs: List[str] = []  # さめはだ/てつのとげはダメージログの後にまとめて出力
     _sub_hits = _real_hits = 0
+    # 発ごとの反応（タスキ・かるわざ・被弾の特性等）は技の行の後に出す。みがわり の行だけはその場
+    _main_logs = logs
+    logs = _hit_logs = []
     for _hit_i in range(hits):
         if not defender.is_alive:
             break
         if _disguise_ate_first and _hit_i == 0:
             continue
+        # 1発ごとに命中判定する連続技は急所も1発ごと
+        if _hit_i > 0 and move.name_jp in ACCURACY_CHAINED:
+            critical = _check_critical(attacker, move, defender)
+            screen_mult = _screen_mult(critical)
+            _any_crit = _any_crit or critical
         attacker._multi_hit_index = _hit_i  # type: ignore
         dmg = calc_damage(attacker, defender, move, field, critical)
         if screen_mult < 1.0:
@@ -1346,17 +1361,17 @@ def _execute_move_inner(
             # みがわり が受けた攻撃: 追加効果・接触の反応・防御側の持ち物/特性は起きない（自分の能力変化・反動・吸収・いのちのたまは起きる）
             if dmg >= sub_hp:
                 defender._substitute_hp = 0  # type: ignore
-                logs.append(f"{defender.name} の みがわり が壊れた！")
+                _main_logs.append(f"{defender.name} の みがわり が壊れた！")
             else:
                 defender._substitute_hp = sub_hp - dmg  # type: ignore
-                logs.append(f"{attacker.name} の {move.name_jp} → みがわり に {dmg} ダメ")
+                _main_logs.append(f"{attacker.name} の {move.name_jp} → みがわり に {dmg} ダメ")
             total_dmg += dmg
             dealt_hp += min(dmg, sub_hp)
             _sub_hits += 1
             if attacker.item == "ノーマルジュエル" and _eff_type == "ノーマル":
                 attacker.item = None
-                on_item_consumed(attacker, logs)
                 logs.append(f"{attacker.name} の ノーマルジュエル が消費された！")
+                on_item_consumed(attacker, logs)
             if attacker.item == "いのちのたま" and attacker.ability != "マジックガード" and _hit_i == hits - 1:
                 recoil = max(1, math.floor(attacker.max_hp / 10))
                 attacker.take_damage(recoil)
@@ -1369,8 +1384,8 @@ def _execute_move_inner(
         if defender.item == "きあいのタスキ" and defender.hp == defender.max_hp and dmg >= defender.hp:
             dmg = defender.hp - 1
             defender.item = None
-            on_item_consumed(defender, logs)
             logs.append(f"{defender.name} のきあいのタスキ で耐えた！")
+            on_item_consumed(defender, logs)
             logs.extend(attacker_side.opp_view.on_item(defender.name, "きあいのタスキ", "タスキ発動"))
 
         # がんじょう（HP満タン時1耐え。かたやぶり系は無視）
@@ -1409,8 +1424,8 @@ def _execute_move_inner(
         if attacker.item == "ノーマルジュエル" and _eff_type == "ノーマル" \
                 and move.category != "status":
             attacker.item = None
-            on_item_consumed(attacker, logs)
             logs.append(f"{attacker.name} の ノーマルジュエル が消費された！")
+            on_item_consumed(attacker, logs)
 
         # レッドカード: ダメージを与えてきた相手を追い出す（消費）。持ち主は防御側。
         # マジックミラーと同じ attacker._force_switch を使う＝処理タイミングも既存と揃える。
@@ -1418,12 +1433,12 @@ def _execute_move_inner(
             if any(p.is_alive for i, p in enumerate(attacker_side.party)
                    if i != attacker_side.active_idx):
                 defender.item = None
-                on_item_consumed(defender, logs)
                 if attacker.ability == "ばんけん":
                     logs.append(f"{defender.name} の レッドカード！ しかし {attacker.name} の ばんけん で効かなかった！")
                 else:
                     attacker._force_switch = True  # type: ignore
                     logs.append(f"{defender.name} の レッドカード！ {attacker.name} は追い出された！")
+                on_item_consumed(defender, logs)
 
         # だっしゅつボタン: ダメージを受けた自分が手持ちに戻る（消費）。
         # 交代先は選べる想定なので、ランダム交代(_force_switch)ではなくピボット扱いにする。
@@ -1431,9 +1446,9 @@ def _execute_move_inner(
             if any(p.is_alive for i, p in enumerate(defender_side.party)
                    if i != defender_side.active_idx):
                 defender.item = None
-                on_item_consumed(defender, logs)
                 defender._pivot_out = True  # type: ignore
                 logs.append(f"{defender.name} の だっしゅつボタン！ 引っ込んだ！")
+                on_item_consumed(defender, logs)
 
         # ききかいひ: HPが1/2以下になると手持ちに戻る（この技で1/2を跨いだ時のみ）
         if defender.ability == "ききかいひ" and total_dmg > 0 and defender.is_alive \
@@ -1447,8 +1462,8 @@ def _execute_move_inner(
         # ふうせん: 技のダメージを受けると割れて無くなる
         if defender.item == "ふうせん" and total_dmg > 0:
             defender.item = None
-            on_item_consumed(defender, logs)
             logs.append(f"{defender.name} の ふうせん が割れた！")
+            on_item_consumed(defender, logs)
             logs.extend(attacker_side.opp_view.on_item(defender.name, "ふうせん", "割れて判明"))
 
         # いのちのたま反動：技1回につき1回（連続技は最後に当てた発の後）。レッドカード等の防御側の持ち物の後（実機・battle.rs と同じ順）
@@ -1476,6 +1491,7 @@ def _execute_move_inner(
             defender.item = None
             attacker.ate_berry = True
             logs.append(f"{attacker.name} は {defender.name} の {_berry} を食べた！")
+            on_item_consumed(defender, logs)
             if _berry == "オボンのみ":
                 _h = attacker.max_hp // 4
                 attacker.hp = min(attacker.max_hp, attacker.hp + _h)
@@ -1521,6 +1537,7 @@ def _execute_move_inner(
                 defender.stage_sp_attack = min(6, defender.stage_sp_attack + 2)
                 defender.item = None
                 logs.append(f"{defender.name} の じゃくてんほけん が発動！")
+                on_item_consumed(defender, logs)
 
         # 倒した時の特性
         if not defender.is_alive:
@@ -1531,6 +1548,7 @@ def _execute_move_inner(
         if _hit_i < hits - 1 and defender.is_alive:
             _hp_berry_now(defender, attacker, logs, attacker_side.opp_view if attacker_side is not None else None)
 
+    logs = _main_logs
     _sub_absorbed = _sub_hits > 0 and _real_hits == 0
     if dmg_out is not None:
         dmg_out.append(total_dmg)
@@ -1539,7 +1557,7 @@ def _execute_move_inner(
     else:
         logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に {total_dmg}ダメ")
 
-    if critical:
+    if _any_crit:
         logs.append("急所に当たった！")
         # いかりのつぼ：急所を受けると攻撃が最大（6段階）になる
         if defender.is_alive and defender.ability == "いかりのつぼ" and not _sub_absorbed:
@@ -1549,6 +1567,7 @@ def _execute_move_inner(
         logs.append("こうかはばつぐんだ！")
     elif eff < 1.0:
         logs.append("こうかはいまひとつ…")
+    logs.extend(_hit_logs)
 
     # だいばくはつ・じばく：攻撃後に自分はひんしになる
     if move.name_jp in ("だいばくはつ", "じばく") and attacker.is_alive:
@@ -1633,6 +1652,7 @@ def _execute_move_inner(
             logs.append(f"{defender.name} の {defender.item} が叩き落とされた！")
             logs.extend(attacker_side.opp_view.on_item(defender.name, defender.item, "はたきおとした"))
             defender.item = None
+            on_item_consumed(defender, logs)
 
     def _to_sub(d) -> bool:
         """固定ダメージ技（いかりのまえば・ちきゅうなげ 等）が みがわり に当たったら みがわり が受ける"""
@@ -1651,19 +1671,21 @@ def _execute_move_inner(
             logs.append(f"{move.name_jp} は {defender.name} に効かない…")
             return logs
         fang_dmg = max(1, defender.hp // 2)
+        _rx = []
         if defender.item == "きあいのタスキ" and defender.hp == defender.max_hp and fang_dmg >= defender.hp:
             fang_dmg = defender.hp - 1
             defender.item = None
-            on_item_consumed(defender, logs)
-            logs.append(f"{defender.name} のきあいのタスキ で耐えた！")
+            _rx.append(f"{defender.name} のきあいのタスキ で耐えた！")
+            on_item_consumed(defender, _rx)
         if defender.ability == "がんじょう" and defender.hp == defender.max_hp and fang_dmg >= defender.hp:
             fang_dmg = defender.hp - 1
         if defender.item == "きあいのハチマキ" and fang_dmg >= defender.hp and random.random() < 0.10:
             fang_dmg = defender.hp - 1
-            logs.append(f"{defender.name} の きあいのハチマキ で耐えた！")
+            _rx.append(f"{defender.name} の きあいのハチマキ で耐えた！")
         defender.take_damage(fang_dmg)
         total_dmg += fang_dmg
         logs.append(f"いかりのまえば で {fang_dmg} ダメ！")
+        logs.extend(_rx)
 
     # ちきゅうなげ：Lv50固定ダメ・ゴーストタイプ無効
     if move.name_jp == "ちきゅうなげ" and defender.is_alive:
@@ -1892,6 +1914,7 @@ def _execute_move_inner(
                 attacker.item = defender.item
                 logs.append(f"{attacker.name} は {defender.name} の {attacker.item} を奪った！")
                 defender.item = None
+                on_item_consumed(defender, logs)
 
     # マジシャン：技でダメージを与えると相手の道具を奪う（自分が道具未所持時）
     if attacker.ability == "マジシャン" and total_dmg > 0 and attacker.is_alive and not _sub_absorbed \
@@ -1900,6 +1923,7 @@ def _execute_move_inner(
         attacker.item = defender.item
         defender.item = None
         logs.append(f"{attacker.name} の マジシャン！ {defender.name} の {attacker.item} を奪った！")
+        on_item_consumed(defender, logs)
 
     # わるいてぐせ：接触技を受けると相手の道具を盗む（自分が道具未所持時）
     if defender.ability == "わるいてぐせ" and is_contact_move(move) and attacker.ability != "えんかく" and defender.is_alive \
@@ -1909,6 +1933,7 @@ def _execute_move_inner(
         defender.item = attacker.item
         attacker.item = None
         logs.append(f"{defender.name} の わるいてぐせ！ {attacker.name} の {defender.item} を盗んだ！")
+        on_item_consumed(attacker, logs)
 
     # スクリーン破壊技（レイジングブル/かわらわり/サイコファング）：命中時に相手のスクリーンを壊す
     if move.name_jp in ("レイジングブル", "かわらわり", "サイコファング") and total_dmg > 0 and defender_side is not None:
@@ -1946,20 +1971,22 @@ def _execute_move_inner(
         _hp_berry_now(attacker, defender, logs, defender_side.opp_view if defender_side is not None else None)
     elif attacker.ability == "おやこあい" and hits == 1 and total_dmg > 0 and defender.is_alive:
         pb_dmg = max(1, math.floor(total_dmg * 0.25))
+        _rx = []
         if defender.item == "きあいのタスキ" and defender.hp == defender.max_hp and pb_dmg >= defender.hp:
             pb_dmg = defender.hp - 1
             defender.item = None
-            on_item_consumed(defender, logs)
-            logs.append(f"{defender.name} のきあいのタスキ で耐えた！（おやこあい2発目）")
+            _rx.append(f"{defender.name} のきあいのタスキ で耐えた！（おやこあい2発目）")
+            on_item_consumed(defender, _rx)
         if defender.ability == "がんじょう" and defender.hp == defender.max_hp and pb_dmg >= defender.hp:
             pb_dmg = defender.hp - 1
         if defender.item == "きあいのハチマキ" and pb_dmg >= defender.hp and random.random() < 0.10:
             pb_dmg = defender.hp - 1
-            logs.append(f"{defender.name} の きあいのハチマキ で耐えた！")
+            _rx.append(f"{defender.name} の きあいのハチマキ で耐えた！")
         _pb0 = defender.hp
         defender.take_damage(pb_dmg)
         pb_dealt = _pb0 - defender.hp
         logs.append(f"おやこあい 追撃！ {pb_dmg}ダメ")
+        logs.extend(_rx)
         _hp_berry_now(defender, attacker, logs, attacker_side.opp_view if attacker_side is not None else None)
         pb_rough: List[str] = []
         if defender.is_alive:
@@ -2383,10 +2410,14 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
         if _is_megastone(attacker.item) or _is_megastone(defender.item):
             logs.append(f"{attacker.name} の すりかえ は失敗した！（メガストーン）")
             return logs
+        _had = (attacker.item is not None, defender.item is not None)
         attacker.item, defender.item = defender.item, attacker.item
         logs.append(f"{attacker.name} と {defender.name} は道具を入れ替えた！")
         logs.extend(attacker_side.opp_view.on_item_swapped(defender.name, defender.item))
         logs.extend(defender_side.opp_view.on_item_swapped(attacker.name, attacker.item))
+        for _p, _h in ((attacker, _had[0]), (defender, _had[1])):
+            if _h and _p.item is None:
+                on_item_consumed(_p, logs)
         return logs
     if n in _TERRAIN_MOVES and field is not None and getattr(field, _TERRAIN_MOVES[n], False):
         logs.append(f"しかし {n} は失敗した！（すでに同じフィールド）")
@@ -2818,10 +2849,14 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
         if _is_megastone(attacker.item) or _is_megastone(defender.item):
             logs.append(f"{attacker.name} の トリック は失敗した！（メガストーン）")
             return logs
+        _had = (attacker.item is not None, defender.item is not None)
         attacker.item, defender.item = defender.item, attacker.item
         logs.append(f"トリック！ {attacker.name} と {defender.name} のアイテムが入れ替わった！")
         logs.extend(attacker_side.opp_view.on_item_swapped(defender.name, defender.item))
         logs.extend(defender_side.opp_view.on_item_swapped(attacker.name, attacker.item))
+        for _p, _h in ((attacker, _had[0]), (defender, _had[1])):
+            if _h and _p.item is None:
+                on_item_consumed(_p, logs)
         return logs
 
     # ミストフィールド
@@ -2894,6 +2929,7 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
             attacker.ate_berry = True
             attacker.stage_defense = min(6, attacker.stage_defense + 2)
             logs.append(f"{attacker.name} の ぼうぎょ が上がった！")
+            on_item_consumed(attacker, logs)
         else:
             logs.append(f"{attacker.name} の ほおばる は失敗した！（きのみなし）")
         return logs
@@ -3053,7 +3089,7 @@ MATCHUP_EXCLUDED = COUNTER_MOVES | NO_KO_MOVES
 # これらは常に最大回数まで当たる扱いになる。回数自体が乱数の2〜5回技とは別扱い。
 ACCURACY_CHAINED = {"トリプルアクセル", "ネズミざん"}
 
-# ネズミざんの「もう1発続くか」の判定に使う関数。None なら random.random()。
+# トリプルアクセル・ネズミざんの「もう1発続くか」の判定に使う関数。None なら random.random()。
 # 分析側が必中を仮定するために差し替える差込口で、既定では対戦本体の挙動は変わらない
 # （damage._ROLL_OVERRIDE と同じ位置づけ）。
 _HIT_CONTINUE = None
@@ -3078,8 +3114,15 @@ def _calc_hits(move: MoveData, attacker=None) -> int:
 
     if n in MULTI_HIT_2:
         return 2
+    # トリプルアクセル：1発ごとに命中判定（命中90）し、外れたらそこで終わる。スキルリンクは必ず3回
     if n in MULTI_HIT_3:
-        return 3
+        if skill_link:
+            return 3
+        hits = 1
+        _hc = _HIT_CONTINUE or random.random
+        while hits < 3 and _hc() < 0.90:
+            hits += 1
+        return hits
     if n in MULTI_HIT_RANDOM_25:
         if skill_link:
             return 5
@@ -3587,8 +3630,8 @@ def _hp_berry_now(p, opp, logs, opp_view=None):
     p._last_berry = berry  # type: ignore
     p.item = None
     p.ate_berry = True
-    on_item_consumed(p, [])
     logs.append(f"{p.name} の {berry} が発動！ HPが {heal} 回復した！")
+    on_item_consumed(p, logs)
     if opp_view is not None:
         logs.extend(opp_view.on_item(p.name, berry, "HP回復から判明"))
 
@@ -4158,8 +4201,8 @@ class Battle:
                 p._last_berry = "オボンのみ"  # type: ignore
                 p.item = None
                 p.ate_berry = True
-                on_item_consumed(p, [])
                 self.logs.append(f"{p.name} の オボンのみ が発動！ HPが {heal} 回復した！")
+                on_item_consumed(p, self.logs)
                 self.logs.extend(opp_side.opp_view.on_item(p.name, "オボンのみ", "HP回復から判明"))
 
             # オレンのみ (HP半分以下で10回復・固定値)
@@ -4169,8 +4212,8 @@ class Battle:
                 p._last_berry = "オレンのみ"  # type: ignore
                 p.item = None
                 p.ate_berry = True
-                on_item_consumed(p, [])
                 self.logs.append(f"{p.name} の オレンのみ が発動！ HPが {heal} 回復した！")
+                on_item_consumed(p, self.logs)
                 self.logs.extend(opp_side.opp_view.on_item(p.name, "オレンのみ", "HP回復から判明"))
 
             # 否定的観測: 表示HPが半分を確実に下回ったのにきのみが発動しなかった＝オボンのみ/オレンのみではない。

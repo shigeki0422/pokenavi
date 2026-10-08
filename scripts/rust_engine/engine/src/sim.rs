@@ -420,6 +420,7 @@ fn mcts_3v3_inner(
     if let Some(v) = f2("AI_PRUNE_IMMUNE") { ai2.prune_immune = v > 0.5; }
     if let Some(v) = f2("AI_FIX40") { ai2.fix40 = v > 0.5; }
     if let Some(v) = f2("AI_FIX200") { ai2.fix200 = v > 0.5; }
+    if let Some(v) = f2("AI_FIXHZ") { ai2.fixhz = v > 0.5; }
     if let Some(v) = f2("ORACLE_MIX") { ai2.oracle_mix = v; }
     if let Some(v) = f2("ORACLE_REVEAL") { ai2.oracle_reveal = v as u32; }
     let result = run_two_mcts(packr, [net, net_b.unwrap_or(net)], &mut b, &mut ai1, &mut ai2, &mut rng, on_turn);

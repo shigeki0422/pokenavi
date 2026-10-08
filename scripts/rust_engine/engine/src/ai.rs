@@ -503,7 +503,6 @@ fn should_mega(me: &Poke) -> bool {
 pub struct HazCtx {
     pub remaining: usize,
     pub field_idx: usize,
-    pub sr_set: bool,
     pub sr_pending: bool,
 }
 
@@ -512,7 +511,6 @@ impl HazCtx {
         HazCtx {
             remaining: opp.party.iter().filter(|p| p.is_alive).count(),
             field_idx: opp.field_idx,
-            sr_set: opp.stealth_rock_set,
             sr_pending: opp.sr_pending,
         }
     }
@@ -528,7 +526,7 @@ pub fn hazard_value(pack: &Pack, name: Sym, opp: &HazCtx, field: &Field) -> f64 
     let entries = opp_remaining as f64;
     let oi = opp.field_idx;
     if name == l.ステルスロック {
-        if opp.sr_set || opp.sr_pending || field.stealth_rock[oi] {
+        if opp.sr_pending || field.stealth_rock[oi] {
             return 0.0;
         }
         return entries * AVG_HP * 0.125;
@@ -1203,6 +1201,11 @@ pub fn fix40_env() -> bool {
 /// 監査200 C の AI 修正の既定（AI_FIX200=0 で旧挙動。search_ai.py の _FIX200_ON と同じ）
 pub fn fix200_env() -> bool {
     std::env::var("AI_FIX200").map(|v| v != "0").unwrap_or(true)
+}
+
+/// 設置済み（上限まで）の設置技を外す AI 修正の既定（AI_FIXHZ=0 で旧挙動。search_ai.py の _FIXHZ_ON と同じ）
+pub fn fixhz_env() -> bool {
+    std::env::var("AI_FIXHZ").map(|v| v != "0").unwrap_or(true)
 }
 
 /// ai.py `_ko_hit_prob`: 確定KOの安全弁で使う命中率（公開情報）

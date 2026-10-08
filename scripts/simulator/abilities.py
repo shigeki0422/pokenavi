@@ -169,10 +169,12 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
             if ok:
                 logs.append(f"{defender.name} の せいでんき！ {attacker.name} が まひ した！")
 
-    # ほうし (接触技 → 30%で どく/まひ/ねむり のいずれか)
-    if ab == "ほうし" and is_contact_move(move) and attacker.ability != "えんかく":
-        if random.random() < 0.30:
-            st = random.choice(["poison", "paralysis", "sleep"])
+    # ほうし (接触技 → ねむり11%・まひ10%・どく9%。くさタイプ・ぼうじん・ぼうじんゴーグルには発動しない)
+    if ab == "ほうし" and is_contact_move(move) and attacker.ability not in ("えんかく", "ぼうじん") \
+            and "くさ" not in (attacker.type1, attacker.type2) and attacker.item != "ぼうじんゴーグル":
+        _r = random.random()
+        st = "sleep" if _r < 0.11 else "paralysis" if _r < 0.21 else "poison" if _r < 0.30 else None
+        if st is not None:
             from .pokemon import terrain_blocks_sleep
             ok = not (st == "sleep" and terrain_blocks_sleep(attacker, field)) and attacker.apply_status(st, field=field)
             if ok:

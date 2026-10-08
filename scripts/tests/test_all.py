@@ -5673,7 +5673,7 @@ check("SELECT_MODE=matchup で3体を返し、メガ石持ちは1体", len(_s1) 
 check("相手の真の技・持ち物を読まない（変えても選出が同じ）", _s1 == _s2, f"{_s1} / {_s2}")
 
 
-print("\n=== 26k. 学習選出の既定（simulator/selector_m6b.json、既定ON） ===")
+print("\n=== 26k. 学習選出の既定（simulator/selector_m6d.json、既定ON・相手の仮定 learnedK8） ===")
 # M-6 の選出モデル（1037次元＝現行の既定特徴量）を既定で使う。旧 selector_m2/m3 は905次元で現行では動かない（削除/未使用）。
 import json as _js26k, tempfile as _tf26k
 import simulator.learned_selection as _LS26k
@@ -5681,9 +5681,17 @@ from simulator.features import feature_dim as _fd26k
 from simulator.ai import select_party as _sp26k
 _sv26k = (_LS26k._PATH, _LS26k._LOADED, _LS26k._MODEL, os.environ.get("LEARNED_SELECTION"))
 os.environ.pop("LEARNED_SELECTION", None)
-_LS26k._PATH = os.path.join(os.path.dirname(_LS26k.__file__), "selector_m6b.json"); _LS26k._LOADED = False
+_sv26k_env = os.environ.pop("SEL_OPP_ASSUME", None), os.environ.pop("SELECTOR_PATH", None)
+import importlib as _il26k
+check("既定のモデルパスは selector_m6d.json", os.path.basename(_il26k.reload(_LS26k)._PATH) == "selector_m6d.json", _LS26k._PATH)
+check("SEL_OPP_ASSUME 未指定の既定は learnedK（K=8）・heur でヒューリスティック", _LS26k._opp_mode() == "learnedK" and
+      (os.environ.__setitem__("SEL_OPP_ASSUME", "heur") or _LS26k._opp_mode()) is None)
+os.environ.pop("SEL_OPP_ASSUME", None)
+for _k26k, _v26k in zip(("SEL_OPP_ASSUME", "SELECTOR_PATH"), _sv26k_env):
+    if _v26k is not None: os.environ[_k26k] = _v26k
+_LS26k._PATH = os.path.join(os.path.dirname(_LS26k.__file__), "selector_m6d.json"); _LS26k._LOADED = False
 _m26k = _LS26k._load()
-check("既定で selector_m6b.json を読み、入力が現行の特徴量と同じ次元", _m26k is not None and _m26k["W1"].shape[1] == _fd26k(),
+check("既定で selector_m6d.json を読み、入力が現行の特徴量と同じ次元", _m26k is not None and _m26k["W1"].shape[1] == _fd26k(),
       f"{None if _m26k is None else _m26k['W1'].shape} vs {_fd26k()}")
 _A26k = [_mk26c(x) for x in _P1s]; _B26k = [_mk26c(x) for x in _P2s]
 _sel26k = _LS26k.learned_select_party(_A26k, _B26k, dl, n=3, temperature=0.0)
@@ -5854,9 +5862,11 @@ def _run26o(env):
     r = _sp26o.run([_sy26o.executable, "-c", _code26o, _js26o.dumps(_A26o), _js26o.dumps(_B26o), _js26o.dumps(_K26o)],
                    capture_output=True, text=True, env=e)
     return _js26o.loads(r.stdout.strip().splitlines()[-1]) if r.returncode == 0 else (None, r.stderr[-300:])
-_fast26o, _st26o = _run26o({"SEL_FAST_CHECK": "1"})
-_ref26o, _ = _run26o({"SEL_FAST": "0"})
-_dflt26o, _ = _run26o({})
+_fast26o, _st26o = _run26o({"SEL_FAST_CHECK": "1", "SEL_OPP_ASSUME": "heur"})
+_ref26o, _ = _run26o({"SEL_FAST": "0", "SEL_OPP_ASSUME": "heur"})
+_dflt26o, _ = _run26o({"SEL_OPP_ASSUME": "heur"})
+_refK26o, _ = _run26o({"SEL_FAST": "0", "SEL_OPP_ASSUME": "learnedK", "SEL_OPP_K": "8"})
+_dfltK26o, _ = _run26o({"SEL_OPP_ASSUME": "learnedK", "SEL_OPP_K": "8"})
 check("学習選出の高速版: 元の実装と選出が全件同じ・値の差は丸め誤差だけ（半減きのみ・ホズのみ持ちを含む）",
       _st26o is not None and _st26o[0] > 0 and _st26o[1] == 0 and _st26o[2] < 1e-12, f"{_st26o}")
 check("学習選出の高速版: 相手の仮定（ヒューリスティック選出）を表で計算しても元と同じ仮定・乱数の消費",
@@ -5864,6 +5874,8 @@ check("学習選出の高速版: 相手の仮定（ヒューリスティック�
 check("学習選出の高速版: 乱数を消費する技の持ち主がいる対面は元の実装に落とす", _st26o is not None and _st26o[3] > 0, f"{_st26o}")
 check("学習選出の高速版: 既定（高速版）と SEL_FAST=0（元の実装）でパネルの選出が同じ", _dflt26o is not None and _dflt26o == _ref26o,
       f"{_dflt26o} / {_ref26o}")
+check("学習選出の高速版: 相手の仮定 learnedK8 でも高速版と SEL_FAST=0（元の実装）でパネルの選出が同じ",
+      _dfltK26o is not None and _dfltK26o == _refK26o, f"{_dfltK26o} / {_refK26o}")
 
 
 print("\n=== 26p. 学習選出の「相手の選出の仮定」を学習選出に（env SEL_OPP_ASSUME=learned、既定はヒューリスティック） ===")
@@ -5872,6 +5884,7 @@ print("\n=== 26p. 学習選出の「相手の選出の仮定」を学習選出�
 import random as _r26p
 import simulator.learned_selection as _LS26p
 _sv26p = {k: os.environ.get(k) for k in ("SEL_OPP_ASSUME", "LEARNED_SELECTION_IMPL")}
+os.environ["SEL_OPP_ASSUME"] = "heur"
 _LS26p._LOADED = False
 _m26p = _LS26p._load()
 _A26p = [_mk26c(x) for x in _P1s]; _B26p = [_mk26c(x) for x in _P2s]
@@ -5896,16 +5909,18 @@ for _impl in ("ref", "fast", "rust"):
             _out.append([_A.index(p) for p in _LS26p.learned_select_party(_A, _B, dl, n=3, temperature=_t, rng=_g)])
             _out.append(_g.random())
     _res26p[_impl] = _out
-for _k, _v in _sv26p.items():
-    if _v is None: os.environ.pop(_k, None)
-    else: os.environ[_k] = _v
+os.environ["SEL_OPP_ASSUME"] = "heur"
+os.environ.pop("LEARNED_SELECTION_IMPL", None)
 check("SEL_OPP_ASSUME=learned: 高速版・Rust 版が元の実装と同じ（温度0/0.3・乱数の消費まで）",
       _res26p["fast"] == _res26p["ref"] and _res26p["rust"] == _res26p["ref"], f"{_res26p}")
 _g3 = _r26p.Random(41)
 _dflt26p = [_A26p.index(p) for p in _LS26p.learned_select_party(_A26p, _B26p, dl, n=3, temperature=0.0, rng=_g3)]
 _g4 = _r26p.Random(41)
 _base26p = max(_LS26p._score_cands(_A26p, _B26p, dl, 3, _g4, _m26p), key=lambda x: x[1])[0]
-check("SEL_OPP_ASSUME 未指定: 既定（ヒューリスティックの仮定）のまま", _dflt26p == list(_base26p) and _g3.random() == _g4.random(),
+for _k, _v in _sv26p.items():
+    if _v is None: os.environ.pop(_k, None)
+    else: os.environ[_k] = _v
+check("SEL_OPP_ASSUME=heur: ヒューリスティックの仮定（2026-10-06 までの既定）", _dflt26p == list(_base26p) and _g3.random() == _g4.random(),
       f"{_dflt26p} / {_base26p}")
 try:
     import pokenavi_engine as _E26p
@@ -5980,7 +5995,7 @@ check("learnedK: 相手の仮定は既定 K=8 個・相手の候補・重みの�
 _env26q({"SEL_OPP_ASSUME": "learnedK", "SEL_OPP_K": "1"})
 _g5 = _r26q.Random(5); _g6 = _r26q.Random(5)
 _oa1 = _LS26q._opp_assume(_A26q, _B26q, dl, 3, _g5, _m26q)
-_env26q({})
+_env26q({"SEL_OPP_ASSUME": "heur"})
 _want26q = [_B26q.index(p) for p in _LS26q.learned_select_party(_B26q, _A26q, dl, n=3, temperature=0.0, rng=_g6)]
 check("learnedK K=1: 仮定は相手側の学習選出（温度0）だけ・重み1・乱数の消費は相手の学習選出の分だけ",
       _oa1 is not None and _oa1[0] == [_want26q] and _oa1[1][1] == [1.0] and _g5.random() == _g6.random(), f"{_oa1} / {_want26q}")
@@ -6016,10 +6031,10 @@ for _mn, _me in _MODES26q.items():
     check(f"SEL_OPP_ASSUME {_mn}: 高速版・Rust 版が元の実装と同じ選出・値（差1e-12未満）・乱数の消費",
           all(a[0] == b[0] and a[2] == b[2] and max(abs(x - y) for x, y in zip(a[1], b[1])) < 1e-12
               for _i in ("fast", "rust") for a, b in zip(_res[_i], _res["ref"])), f"{[(k, [o[0] for o in v]) for k, v in _res.items()]}")
-_env26q({})
+_env26q({"SEL_OPP_ASSUME": "heur"})
 _dq = _LS26q.learned_select_scores(_A26q, _B26q, dl, n=3, rng=_r26q.Random(41))
 _bq = _LS26q._score_cands(_A26q, _B26q, dl, 3, _r26q.Random(41), _m26q)
-check("SEL_OPP_ASSUME 未指定: 値が既定（ヒューリスティックの仮定・平均）と完全一致",
+check("SEL_OPP_ASSUME=heur: 値がヒューリスティックの仮定・平均と完全一致",
       [(list(_A26q.index(p) for p in o), v) for o, v in _dq] == [(list(c), v) for c, v in _bq])
 for _k, _v in _sv26q.items():
     if _v is None: os.environ.pop(_k, None)
@@ -6667,6 +6682,7 @@ _ai31.oracle_reveal = set()
 
 _cands31 = ["a", "b", "c"]
 _ai31._candidate_actions = lambda *_a, **_k: list(_cands31)
+_ai_idx31 = _SA31.__dict__["_action_index"]
 _SA31._action_index = staticmethod(lambda a: {"a": 0, "b": 1, "c": 2}[a])
 check("計測フック: ヒント未設定なら候補は絞られない",
       _ai31._opp_candidates(None, None, None, 0) == _cands31)
@@ -6680,6 +6696,7 @@ check("計測フック: 深さ0のみヒントで1手に絞る",
 _ai31.act_oracle_depth = 99
 check("計測フック: act_oracle_depth=99 は全深さで絞る",
       _ai31._opp_candidates(None, None, None, 5) == ["b"])
+_SA31._action_index = _ai_idx31
 
 # ════════════════════════════════════════════════════════════════
 # PVNetNP: 活性・正規化・最適化の切替（既定は従来仕様と完全一致）
@@ -9010,11 +9027,11 @@ def _tpar():
         "#1b": ([f"カバルドン@{_N40}:わんぱく:あくび|じしん:32/0/32/0/0/0:すなおこし"], [f"ゲンガー@{_N40}:おくびょう:まもる|シャドーボール:0/0/0/32/0/32:のろわれボディ"], "防がれた"),
         "#3": ([f"フォレトス@{_N40}:わんぱく:こうそくスピン:32/0/32/0/0/0:がんじょう"],
                [f"カバルドン@{_N40}:わんぱく:ステルスロック:32/0/32/0/0/0:すなおこし"], "吹き飛んだ"),
-        "#4": ([f"エルフーン@{_N40}:おくびょう:みがわり|ムーンフォース:0/0/0/32/0/32:いたずらごころ"], [_BLK40.replace("ねがいごと|のろい", "イカサマ|のろい")], "みがわり を作った"),
+        "#4": ([f"エルフーン@{_N40}:おくびょう:みがわり:0/0/0/32/0/32:いたずらごころ"], [_BLK40.replace("ねがいごと|のろい", "イカサマ|のろい")], "みがわり を作った"),
         "#5": ([f"エーフィ@{_N40}:ずぶとい:めいそう|サイコキネシス:32/0/32/0/0/0:マジックミラー"],
                [f"カバルドン@{_N40}:わんぱく:ステルスロック:32/0/32/0/0/0:すなおこし"], "跳ね返した"),
         "#5b": ([f"エーフィ@{_N40}:ずぶとい:めいそう|サイコキネシス:32/0/32/0/0/0:マジックミラー"],
-                [f"オーロンゲ@{_N40}:わんぱく:すてゼリフ|じゃれつく:32/0/32/0/0/0:おみとおし", _BLK40], "跳ね返した"),
+                [f"オーロンゲ@{_N40}:わんぱく:すてゼリフ:32/0/32/0/0/0:おみとおし", _BLK40], "跳ね返した"),
         "#6": ([f"ドヒドイデ@{_N40}:ずぶとい:どくどく|ねっとう:32/0/32/0/0/0:さいせいりょく"], [_DUM40, _BLK40], "もうどく"),
         "#7": ([f"エルフーン@{_N40}:おくびょう:おいかぜ|ムーンフォース:0/0/0/32/0/32:いたずらごころ"], [_DUM40], "おいかぜ の効果が切れた"),
         "#8": ([f"マフィティフ@{_N40}:いじっぱり:くらいつく|じゃれつく:32/32/0/0/0/0:いかく"], [_DUM40, _BLK40], "くらいつく"),
@@ -9184,6 +9201,327 @@ def _wb_mega():
 
 
 _case40("R4-mcts メガ前提の技タイプ", _wb_mega)
+
+print("\n=== 41. 設置済みの設置技を候補から外す（hazard_1004） ===")
+_HZ41 = ("ステルスロック", "まきびし", "どくびし", "ねばねばネット")
+_FOR41 = f"フォレトス@{_N40}:わんぱく:ステルスロック|まきびし|どくびし|ボディプレス:32/0/32/0/0/0:がんじょう"
+_ONI41 = f"オニシズクモ@{_N40}:わんぱく:ねばねばネット|アクアブレイク:32/0/32/0/0/0:すいほう"
+_OPP41 = [_DUM40, _BLK40, _GAB40]
+
+
+def _full41(n, i, f):
+    return bool(n == "ステルスロック" and f.stealth_rock[i] or n == "まきびし" and f.spikes[i] >= 3
+                or n == "どくびし" and f.toxic_spikes[i] >= 2 or n == "ねばねばネット" and f.sticky_web[i])
+
+
+def _thz_unit():
+    from simulator.search_ai import _prune_futile_moves as _pf
+    def left(spec, f):
+        me, op = _S40([_mk40(spec)]), _S40([_mk40(_DUM40), _mk40(_DUM40)])
+        me.field_idx, op.field_idx = 0, 1
+        c = [_A40(type="move", move=m, move_idx=i) for i, m in enumerate(me.active.moves)]
+        return [a.move.name_jp for a in _pf(c, me, op, f)]
+    f = _F40()
+    r = [left(_FOR41, f)]
+    f.stealth_rock[0], f.spikes[0], f.toxic_spikes[0] = True, 3, 2
+    r.append(left(_FOR41, f))
+    f.stealth_rock[1], f.spikes[1], f.toxic_spikes[1] = True, 2, 1
+    r.append(left(_FOR41, f))
+    f.spikes[1], f.toxic_spikes[1] = 3, 2
+    r.append(left(_FOR41, f))
+    r.append(left(_ONI41, f))
+    f.sticky_web[1] = True
+    r.append(left(_ONI41, f))
+    exp = [["ステルスロック", "まきびし", "どくびし", "ボディプレス"]] * 2 + [["まきびし", "どくびし", "ボディプレス"], ["ボディプレス"],
+           ["ねばねばネット", "アクアブレイク"], ["アクアブレイク"]]
+    check("hazard1004 #H1 候補: 相手側に設置済みの ステルスロック・まきびし3層・どくびし2層・ねばねばネット を外す（未満・自分側の設置は外さない。Rust の cargo hazard1004 と同じ場面・同じ期待値）",
+          r == exp, str(r))
+
+
+_case40("hazard1004 #H1", _thz_unit)
+
+
+def _thz_play():
+    import feature1 as _F
+    import pokenavi_engine as _E
+    import simulator.ai as _AIm
+    if not hasattr(_E, "mcts_3v3_record"):
+        return
+    _F._ensure_loaded("M-6", 8)
+    A = [_FOR41, _ONI41]
+    def sfull(n, st, web):
+        return bool(n == "ステルスロック" and st["stealth_rock"] or n == "まきびし" and st["spikes"] >= 3
+                    or n == "どくびし" and st["toxic_spikes"] >= 2 or n == "ねばねばネット" and web)
+    cap, bad_r, use_r, mm = {}, [], 0, []
+    _orig = _E.mcts_3v3_record
+    def _rec(*a, **k):
+        r = _orig(*a, **k)
+        cap["d"] = r[1]
+        return r
+    _E.mcts_3v3_record = _rec
+    try:
+        for sd in range(1, 9):
+            try:
+                rec = _F.play_and_record_rust(A, _OPP41, season="M-6", seed=sd, mcts_sims=30, sel1_idx=[0, 1])
+            except _F.ReplayMismatch as e:
+                mm.append((sd, str(e)[:120]))
+                continue
+            T = rec["turns"]
+            for t, acts, _s in cap["d"]:
+                k, mv = acts[0][0], acts[0][1]
+                if k != 0 or mv not in _HZ41:
+                    continue
+                use_r += 1
+                st = T[t - 1]["side2"]
+                web = any("ねばねばネット が張られた" in l for x in T[:t] for l in x["logs"])
+                me = T[t - 1]["side1"]
+                p = me["party"][me["active_idx"]]
+                if sfull(mv, st, web) and any(m["pp"] > 0 and not sfull(m["name"], st, web) for m in p["moves"]):
+                    bad_r.append((sd, t, mv))
+    finally:
+        _E.mcts_3v3_record = _orig
+    check("hazard1004 #H2 Rust 探索（同じ場面・8戦）: 他に技があるとき設置済み/上限の設置技を選ばない・Python 再生と一致",
+          use_r > 0 and not bad_r and not mm, f"uses={use_r} bad={bad_r[:6]} mm={mm[:2]}")
+    bad_p, use_p = [], [0]
+    _ck = _AIm.certain_ko_override
+    def wrap(act, my, opp, f):
+        a = _ck(act, my, opp, f)
+        if my.field_idx == 0 and a.type == "move" and a.move is not None and a.move.name_jp in _HZ41:
+            use_p[0] += 1
+            if _full41(a.move.name_jp, opp.field_idx, f) and any(
+                    m is not None and my.active.pp[i] > 0 and not _full41(m.name_jp, opp.field_idx, f)
+                    for i, m in enumerate(my.active.moves)):
+                bad_p.append(a.move.name_jp)
+        return a
+    _AIm.certain_ko_override = wrap
+    try:
+        for sd in range(1, 7):
+            _F.play_and_record(A, _OPP41, season="M-6", seed=sd, mcts_sims=30, sel1_idx=[0, 1])
+    finally:
+        _AIm.certain_ko_override = _ck
+    check("hazard1004 #H2 Python 探索（同じ場面・6戦）: 他に技があるとき設置済み/上限の設置技を選ばない",
+          use_p[0] > 0 and not bad_p, f"uses={use_p[0]} bad={bad_p}")
+
+
+_case40("hazard1004 #H2", _thz_play)
+
+print("\n=== 42. 除去された ステルスロック を撒き直す（retrain_1005・保留ケース6） ===")
+
+
+def _tsr_respread():
+    from simulator.ai import _hazard_value as _hv
+    from simulator.search_ai import SearchAI as _SA
+    setter = f"カバルドン@{_N40}:わんぱく:ステルスロック|のろい:32/0/32/0/0/0:すなのちから"
+    spinner = f"ガブリアス@{_N40}:わんぱく:のろい|こうそくスピン|キラースピン|きりばらい:32/0/32/0/0/0:さめはだ"
+    sa = _SA(dl, rollouts=2, depth=3)
+    for rm in ("こうそくスピン", "キラースピン", "きりばらい"):
+        bt, a1, a2 = _bt40([setter], [spinner, spinner], ["ステルスロック", "のろい"], ["のろい", rm])
+        _go40(bt, a1, a2, 1)
+        set1 = bool(bt.field.stealth_rock[1])
+        _go40(bt, a1, a2, 2)
+        gone = not bt.field.stealth_rock[1]
+        hv = _hv("ステルスロック", bt.side1, bt.side2, bt.field)
+        cand = any(a.move is not None and a.move.name_jp == "ステルスロック"
+                   for a in sa._candidate_actions(bt.side1, bt.side2, bt.field))
+        check(f"retrain1005 #SR {rm} で除去された ステルスロック は撒き直しの候補に戻る（価値>0・候補にある）",
+              set1 and gone and hv > 0 and cand, f"set={set1} gone={gone} hv={hv} cand={cand}")
+    bt, a1, a2 = _bt40([setter], [spinner, spinner], ["ステルスロック", "のろい"], ["のろい"])
+    _go40(bt, a1, a2, 2)
+    check("retrain1005 #SR 除去されていない ステルスロック は候補から外す（負例）",
+          bool(bt.field.stealth_rock[1]) and _hv("ステルスロック", bt.side1, bt.side2, bt.field) == 0
+          and not any(a.move is not None and a.move.name_jp == "ステルスロック"
+                      for a in sa._candidate_actions(bt.side1, bt.side2, bt.field)))
+
+
+_case40("retrain1005 #SR", _tsr_respread)
+
+
+print("\n=== 43. 選出率の低い4種の監査（audit4_1008）の修正 ===")
+_JU43 = "ジュカイン@{}:ようき:{}:0/32/0/0/0/32:かるわざ"
+
+
+def _noitem43(a, b):
+    b.party[0].item = None
+
+
+def _ta1():
+    """E1 かるわざ: 持ち物を失う経路ごとに素早さが上がる（実戦の1ターン）"""
+    C = {
+        "しろいハーブ": (_JU43.format("しろいハーブ", "インファイト"), _DUM40, "インファイト", "のろい"),
+        "はたきおとされ": (_JU43.format("オボンのみ", "つるぎのまい"),
+                       f"ゴリランダー@{_N40}:わんぱく:はたきおとす:32/0/32/0/0/0:グラスメイカー", "つるぎのまい", "はたきおとす"),
+        "ラムのみ": (_JU43.format("ラムのみ", "つるぎのまい"), _BLK40.replace("ねがいごと|のろい", "どくどく"), "つるぎのまい", "どくどく"),
+        "メンタルハーブ": (_JU43.format("メンタルハーブ", "つるぎのまい"),
+                       f"オーロンゲ@{_N40}:わんぱく:ちょうはつ:32/0/32/0/0/0:いたずらごころ", "つるぎのまい", "ちょうはつ"),
+        "じゃくてんほけん": ("ジュカイン@じゃくてんほけん:ずぶとい:つるぎのまい:32/0/32/0/32/0:かるわざ",
+                         f"ウインディ@{_N40}:ずぶとい:かえんほうしゃ:0/0/32/0/0/0:せいぎのこころ", "つるぎのまい", "かえんほうしゃ"),
+        "なげつける": (_JU43.format("くろいてっきゅう", "なげつける"), _DUM40, "なげつける", "のろい"),
+        "マジシャン": (_JU43.format("オボンのみ", "つるぎのまい"), f"マフォクシー@{_N40}:ずぶとい:マジカルフレイム:32/0/32/0/0/0:マジシャン",
+                    "つるぎのまい", "マジカルフレイム", _noitem43),
+        "わるいてぐせ": (_JU43.format("オボンのみ", "リーフブレード"), f"マニューラ@{_N40}:わんぱく:のろい:32/0/32/0/32/0:わるいてぐせ",
+                     "リーフブレード", "のろい", _noitem43),
+        "ついばむ": (_JU43.format("オボンのみ", "つるぎのまい"), f"ムクホーク@{_N40}:わんぱく:ついばむ:32/0/32/0/0/0:いかく",
+                   "つるぎのまい", "ついばむ"),
+        "どろぼう": (_JU43.format("オボンのみ", "つるぎのまい"), f"ムクホーク@{_N40}:わんぱく:どろぼう:32/0/32/0/0/0:いかく",
+                   "つるぎのまい", "どろぼう", _noitem43),
+        "トリック": (_JU43.format("たべのこし", "トリック"), _DUM40, "トリック", "のろい", _noitem43),
+        "ほおばる": (_JU43.format("オボンのみ", "ほおばる"), _DUM40, "ほおばる", "のろい"),
+    }
+    for k, (a, b, pa, pb, *pr) in C.items():
+        bt, a1, a2 = _bt40([a], [b], [pa], [pb], prep=pr[0] if pr else None)
+        _go40(bt, a1, a2, 1)
+        j = bt.side1.active
+        check(f"audit4 E1 かるわざ: {k} で持ち物を失うと素早さ+2", j.item is None and j.stage_speed == 2,
+              f"item={j.item} S={j.stage_speed}")
+    bt, a1, a2 = _bt40([_JU43.format("オボンのみ", "つるぎのまい")], [_DUM40], ["つるぎのまい"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    check("audit4 E1 かるわざ: 持ち物が残っていれば素早さは変わらない（対照）",
+          bt.side1.active.item == "オボンのみ" and bt.side1.active.stage_speed == 0, f"{bt.side1.active.stage_speed}")
+    j = _mk40(_JU43.format("ヒメリのみ", "つるぎのまい"))
+    j.pp[0] = 0
+    lg = []
+    try_leppa_berry(j, lg)
+    check("audit4 E1 かるわざ: ヒメリのみ で持ち物を失うと素早さ+2", j.item is None and j.stage_speed == 2, f"{j.item} {j.stage_speed}")
+    j = _mk40(_JU43.format("サルのみ", "つるぎのまい"))
+    j.hp = j.max_hp // 4
+    apply_hp_berry(j, lg)
+    check("audit4 E1 かるわざ: ピンチきのみ（サルのみ）で持ち物を失うと素早さ+2", j.item is None and j.stage_speed == 2,
+          f"{j.item} {j.stage_speed}")
+
+
+def _ta2():
+    """E2 トリプルアクセル: 1発ごとに命中判定し外れたら終わる・急所も1発ごと"""
+    import simulator.battle as _B
+    mv = dl.get_move("トリプルアクセル")
+    a = _mk40(f"マスカーニャ@{_N40}:いじっぱり:トリプルアクセル:32/32/0/0/0/0:しんりょく")
+    _r40.seed(43)
+    cnt = {1: 0, 2: 0, 3: 0}
+    for _ in range(20000):
+        cnt[_B._calc_hits(mv, a)] += 1
+    fr = {k: v / 20000 for k, v in cnt.items()}
+    check("audit4 E2 トリプルアクセル: 2発目以降は1発ごとに90%で続く（1回10%・2回9%・3回81%）",
+          abs(fr[1] - 0.10) < 0.012 and abs(fr[2] - 0.09) < 0.012 and abs(fr[3] - 0.81) < 0.015, f"{fr}")
+    sl = _mk40(f"マスカーニャ@{_N40}:いじっぱり:トリプルアクセル:32/32/0/0/0/0:スキルリンク")
+    check("audit4 E2 トリプルアクセル: スキルリンクは必ず3回", all(_B._calc_hits(mv, sl) == 3 for _ in range(200)))
+    _sv = _B._HIT_CONTINUE
+    _B._HIT_CONTINUE = lambda: 0.0
+    try:
+        check("audit4 E2 トリプルアクセル: 分析の差込口（_HIT_CONTINUE=必中）では3回", _B._calc_hits(mv, a) == 3)
+        calls = []
+        _ck = _B._check_critical
+
+        def _cnt(*x, **kw):
+            calls.append(1)
+            return _ck(*x, **kw)
+        _B._check_critical = _cnt
+        try:
+            res = {}
+            for nm, sp in (("トリプルアクセル", f"マスカーニャ@{_N40}:いじっぱり:トリプルアクセル:32/32/0/0/0/0:しんりょく"),
+                           ("ダブルウイング", f"ファイアロー@{_N40}:いじっぱり:ダブルウイング:32/32/0/0/0/0:はやてのつばさ")):
+                calls.clear()
+                bt, a1, a2 = _bt40([sp], [_DUM40], [nm], ["のろい"])
+                _go40(bt, a1, a2, 1)
+                res[nm] = len(calls)
+        finally:
+            _B._check_critical = _ck
+        check("audit4 E2 トリプルアクセル: 急所は1発ごとに判定（3回当てて3回）、他の連続技は1回（対照）",
+              res == {"トリプルアクセル": 3, "ダブルウイング": 1}, f"{res}")
+    finally:
+        _B._HIT_CONTINUE = _sv
+
+
+def _ta3():
+    """E3 ほうし: くさ・ぼうじん・ぼうじんゴーグルには発動しない、ねむり11%・まひ10%・どく9%"""
+    import collections
+    from simulator.abilities import on_after_hit as _oah
+    rf = _mk40(f"ラフレシア@{_N40}:ずぶとい:じこさいせい:32/0/32/0/0/0:ほうし")
+    for nm, sp, mvn in (("くさタイプ", f"ゴリランダー@{_N40}:いじっぱり:グラススライダー:32/32/0/0/0/0:グラスメイカー", "グラススライダー"),
+                        ("ぼうじん", f"フォレトス@{_N40}:いじっぱり:ジャイロボール:32/32/0/0/0/0:ぼうじん", "ジャイロボール"),
+                        ("ぼうじんゴーグル", "カイリキー@ぼうじんゴーグル:いじっぱり:かみくだく:32/32/0/0/0/0:ノーガード", "かみくだく")):
+        n = 0
+        _r40.seed(7)
+        for _ in range(300):
+            at = _mk40(sp)
+            _oah(at, rf, dl.get_move(mvn), [], _F40())
+            n += at.status is not None
+        check(f"audit4 E3 ほうし: {nm} には発動しない", n == 0, f"{n}/300")
+    c = collections.Counter()
+    _r40.seed(8)
+    N = 20000
+    for _ in range(N):
+        at = _mk40(f"カイリキー@{_N40}:いじっぱり:かみくだく:32/32/0/0/0/0:ノーガード")
+        _oah(at, rf, dl.get_move("かみくだく"), [], _F40())
+        c[at.status] += 1
+    fr = {k: c[k] / N for k in ("sleep", "paralysis", "poison")}
+    check("audit4 E3 ほうし: 状態の配分は ねむり11%・まひ10%・どく9%",
+          abs(fr["sleep"] - 0.11) < 0.008 and abs(fr["paralysis"] - 0.10) < 0.008 and abs(fr["poison"] - 0.09) < 0.008, f"{fr}")
+
+
+def _td1():
+    """D1 反応のログ（タスキ・かるわざ・じきゅうりょく）は原因の技の行の後"""
+    def order(bt, keys):
+        L = bt.logs
+        ix = []
+        for k in keys:
+            hit = [i for i, l in enumerate(L) if k in l]
+            ix.append(hit[0] if hit else -1)
+        return ix
+    bt, a1, a2 = _bt40([f"カイリキー@{_N40}:いじっぱり:インファイト:32/32/0/0/0/0:ノーガード"],
+                       ["ジュカイン@きあいのタスキ:おくびょう:つるぎのまい:0/0/0/0/0/32:かるわざ"], ["インファイト"], ["つるぎのまい"])
+    _go40(bt, a1, a2, 1)
+    ix = order(bt, ["インファイト → ジュカイン", "きあいのタスキ で耐えた", "ジュカイン の かるわざ"])
+    check("audit4 D1 きあいのタスキ・かるわざ のログは技の行の後（技→タスキ→かるわざ）", -1 not in ix and ix == sorted(ix), f"{ix}")
+    bt, a1, a2 = _bt40(["ジュカイン@ノーマルジュエル:ようき:ねこだまし:0/32/0/0/0/32:かるわざ"], [_DUM40], ["ねこだまし"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    ix = order(bt, ["ねこだまし → カビゴン", "ノーマルジュエル が消費された", "ジュカイン の かるわざ"])
+    check("audit4 D1 ノーマルジュエル・かるわざ のログは技の行の後（技→ジュエル→かるわざ）", -1 not in ix and ix == sorted(ix), f"{ix}")
+    bt, a1, a2 = _bt40([f"カイリキー@{_N40}:いじっぱり:かみくだく:32/32/0/0/0/0:ノーガード"],
+                       [f"バンバドロ@{_N40}:わんぱく:のろい:32/0/32/0/0/0:じきゅうりょく"], ["かみくだく"], ["のろい"])
+    _go40(bt, a1, a2, 1)
+    ix = order(bt, ["かみくだく → バンバドロ", "じきゅうりょく"])
+    check("audit4 D1 じきゅうりょく のログは技の行の後", -1 not in ix and ix == sorted(ix), f"{ix}")
+
+
+def _tpar43():
+    """E1〜E3 の局面を Rust の探索で戦い、Python で再生して一致・場面が実際に起きた"""
+    import feature1 as _F
+    import pokenavi_engine as _E
+    if not hasattr(_E, "mcts_3v3_record"):
+        return
+    _F._ensure_loaded("M-6", 8)
+    PAR = {
+        "E1 しろいハーブ": ([_JU43.format("しろいハーブ", "インファイト")], [_DUM40], "かるわざ"),
+        "E1 はたきおとす": ([_JU43.format("オボンのみ", "つるぎのまい")],
+                         [f"ゴリランダー@{_N40}:わんぱく:はたきおとす:32/0/32/0/0/0:グラスメイカー"], "かるわざ"),
+        "E1 ラムのみ": ([_JU43.format("ラムのみ", "つるぎのまい")], [_BLK40.replace("ねがいごと|のろい", "どくどく")], "かるわざ"),
+        "E1 メンタルハーブ": ([_JU43.format("メンタルハーブ", "つるぎのまい")],
+                          [f"オーロンゲ@{_N40}:わんぱく:ちょうはつ:32/0/32/0/0/0:いたずらごころ"], "かるわざ"),
+        "E1 ついばむ": ([_JU43.format("オボンのみ", "つるぎのまい")], [f"ムクホーク@{_N40}:わんぱく:ついばむ:32/0/32/0/0/0:いかく"], "かるわざ"),
+        "E1 ほおばる": ([_JU43.format("オボンのみ", "ほおばる")], [_DUM40], "かるわざ"),
+        "E2 トリプルアクセル": ([f"マスカーニャ@{_N40}:いじっぱり:トリプルアクセル:32/32/0/0/0/0:しんりょく"],
+                             ["カビゴン@きれいなぬけがら:ずぶとい:なまける:32/0/32/0/32/0:あついしぼう"], "(2回)"),
+        "E3 ほうし（くさ以外）": ([f"カイリキー@{_N40}:いじっぱり:かみくだく:32/32/0/0/0/0:ノーガード"],
+                               [f"ラフレシア@{_N40}:ずぶとい:じこさいせい:32/0/32/0/0/0:ほうし"], "ほうし！"),
+    }
+    NEG = {"E3 ほうし（くさ）": ([f"ゴリランダー@{_N40}:いじっぱり:グラススライダー:32/32/0/0/0/0:グラスメイカー"],
+                               [f"ラフレシア@{_N40}:ずぶとい:じこさいせい:32/0/32/0/0/0:ほうし"], "ほうし！")}
+    mm, seen, neg = [], set(), set()
+    for grp, out in ((PAR, seen), (NEG, neg)):
+        for k, (pa, pb, kw) in grp.items():
+            for sd in range(1, 9 if k.startswith("E2") or k.startswith("E3") else 3):
+                try:
+                    rec = _F.play_and_record_rust(pa, pb, season="M-6", seed=sd, mcts_sims=8, sel1_idx=list(range(len(pa))))
+                    if any(kw in l for t in rec["turns"] for l in t["logs"]):
+                        out.add(k)
+                except _F.ReplayMismatch as e:
+                    mm.append((k, sd, str(e)[:160]))
+    check("audit4 Python/Rust 照合: E1〜E3 の局面で再生が一致", not mm, str(mm)[:600])
+    check("audit4 Python/Rust 照合: 各局面で問題の場面が実際に起きた", seen == set(PAR), str(set(PAR) - seen))
+    check("audit4 Python/Rust 照合: くさタイプには ほうし が発動しない（Rust の対戦でも）", not neg, str(neg))
+
+
+for _nm43, _fn43 in (("E1", _ta1), ("E2", _ta2), ("E3", _ta3), ("D1", _td1), ("Py/Rust", _tpar43)):
+    _case40(f"audit4 {_nm43}", _fn43)
 
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:

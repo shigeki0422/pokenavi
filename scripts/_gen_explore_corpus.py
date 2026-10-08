@@ -6,7 +6,7 @@
 出力: OUT/shards/w{ワーカー}_c{チャンク}.npz（_gen_value_corpus_big.py と同じ列＋XW(抽選対象ターンの局面か)・XC(その対局で最善と違う手を引いた回数)
      ・RM/RO(手番側/相手側の選出に選出率の低い種が入るか)）、OUT/progress_w*.txt、OUT/sel_w*.json（種ごとの提示数・選出数）、
      OUT/xlog_w*.jsonl（チャンクごとの抽選の統計）。
-env: OUT W TARGET CHUNK PER_GAME SIMS BASE_SEED TEST_EVERY  X_TURNS(6) X_TEMP(1.0) X_EPS(0.25) X_ALPHA(0.5) X_MINFRAC(0.1: 最多訪問の1割未満の手は引かない)
+env: OUT W TARGET CHUNK GUIDE(guide_pool_m6.json) GENOMES(系統の集団の glob。GROUPS と同じ系統表のもの) PER_GAME SIMS BASE_SEED TEST_EVERY  X_TURNS(6) X_TEMP(1.0) X_EPS(0.25) X_ALPHA(0.5) X_MINFRAC(0.1: 最多訪問の1割未満の手は引かない)
      SEL_MODE(explore|prod) SEL_TEMP(1.0) SEL_BETA(2.0)  GAME_MODE(explore|prod: prod は mcts_3v3_trace＝本番どおり)
 停止: OUT/STOP。再実行で続きのチャンクから。
 """
@@ -49,9 +49,9 @@ RARE = {"カバルドン", "キラフロル", "オオニューラ", "イエッ�
 
 
 def _pools():
-    guide = [e["party"] for e in json.load(open(os.path.join(HERE, "guide_pool_m6.json")))]
+    guide = [e["party"] for e in json.load(open(os.environ.get("GUIDE", os.path.join(HERE, "guide_pool_m6.json"))))]
     genomes = []
-    for f in sorted(glob.glob(os.path.join(AW, "coevo_groups*_M-6*.json"))):
+    for f in sorted(glob.glob(os.environ.get("GENOMES", os.path.join(AW, "coevo_groups*_M-6*.json")))):
         d = json.load(open(f))
         genomes += [[(x[0], x[1]) for x in p["groups"]] for p in d["parties"]]
     return guide, genomes

@@ -121,6 +121,8 @@ def _prune_immune_moves(cands, my_side, opp_side, field):
 _FIX40_ON = os.environ.get("AI_FIX40", "1") != "0"
 # 監査200 C（持ち物が無いと判明した相手への ポルターガイスト・連続の みちづれ を候補から外す）。env AI_FIX200=0 で旧挙動（Rust は AI_FIX200_2 で側2だけ）
 _FIX200_ON = os.environ.get("AI_FIX200", "1") != "0"
+# 相手側に設置済み（上限まで）の ステルスロック・まきびし3層・どくびし2層・ねばねばネット を候補から外す。env AI_FIXHZ=0 で旧挙動（Rust は AI_FIXHZ_2 で側2だけ）
+_FIXHZ_ON = os.environ.get("AI_FIXHZ", "1") != "0"
 
 _FUTILE_BOOST = {
     "つるぎのまい": ("stage_attack",), "わるだくみ": ("stage_sp_attack",), "りゅうのまい": ("stage_attack", "stage_speed"),
@@ -188,6 +190,8 @@ def _futile_move(me, my_side, opp_side, mv, field) -> bool:
         return True
     if n == "みがわり" and (getattr(me, "_substitute_hp", 0) > 0 or me.hp <= me.max_hp // 4):
         return True
+    if _FIXHZ_ON and _hazard_full(n, opp_side, field):
+        return True
     if opp is None or not opp.is_alive:
         return False
     ot = (opp.type1, opp.type2)
@@ -216,6 +220,12 @@ def _futile_move(me, my_side, opp_side, mv, field) -> bool:
         if kn is not None and kn.item_lost:
             return True
     return False
+
+
+def _hazard_full(n, opp_side, field) -> bool:
+    i = opp_side.field_idx
+    return (n == "ステルスロック" and bool(field.stealth_rock[i]) or n == "まきびし" and field.spikes[i] >= 3
+            or n == "どくびし" and field.toxic_spikes[i] >= 2 or n == "ねばねばネット" and bool(field.sticky_web[i]))
 
 
 def _prune_futile_moves(cands, my_side, opp_side, field):

@@ -875,7 +875,14 @@ pub fn calc_hits(pack: &Pack, mv: &DMove, attacker: &Poke, rng: &mut dyn BRng) -
         return 2;
     }
     if n == l.トリプルアクセル {
-        return 3;
+        if skill_link {
+            return 3;
+        }
+        let mut hits = 1;
+        while hits < 3 && rng.hit_continue() < 0.90 {
+            hits += 1;
+        }
+        return hits;
     }
     if n == l.スケイルショット
         || n == l.みずしゅりけん
@@ -1402,6 +1409,7 @@ fn execute_move_inner(
         }
         A!().last_flung_item = A!().item;
         A!().item = None;
+        it::on_item_consumed(pack, &mut A!());
     }
     if mv.priority > 0 && (D!().ability == l.じょおうのいげん || D!().ability == l.テイルアーマー) {
         return;
@@ -1734,11 +1742,12 @@ fn execute_move_inner(
         return;
     }
 
-    let critical = {
+    let mut critical = {
         let (a, d) = (&sides[aidx].party[ai], &sides[didx].party[di]);
         let c = crit_chance(pack, a, &mv, Some(d));
         rng.random() < c
     };
+    let mut any_crit = critical;
     let mut hits = calc_hits(pack, &mv, &A!(), rng);
     // 型の逆算用に、行動前の両者の見えている状態を控える（battle.py の _pre_att/_pre_def）
     // 写しは信念を持つ実戦だけで取る（探索中の複製には信念が無い。battle.py と同じ）
@@ -1747,16 +1756,20 @@ fn execute_move_inner(
     let pre_def = if has_bl { Some(crate::belief::pub_state(&D!())) } else { None };
 
     let screen_breaker = n == l.かわらわり || n == l.レイジングブル || n == l.サイコファング;
-    let mut screen_mult = 1.0f64;
-    if !critical && A!().ability != l.すりぬけ && !screen_breaker {
-        if mv.category == Cat::Physical && (sides[didx].reflect || sides[didx].aurora_veil) {
-            screen_mult = 0.5;
-        } else if mv.category == Cat::Special
-            && (sides[didx].light_screen || sides[didx].aurora_veil)
-        {
-            screen_mult = 0.5;
+    let screen_of = |crit: bool, sides: &[Side], att_ab: crate::interner::Sym| -> f64 {
+        if !crit && att_ab != l.すりぬけ && !screen_breaker {
+            if mv.category == Cat::Physical && (sides[didx].reflect || sides[didx].aurora_veil) {
+                return 0.5;
+            } else if mv.category == Cat::Special
+                && (sides[didx].light_screen || sides[didx].aurora_veil)
+            {
+                return 0.5;
+            }
         }
-    }
+        1.0
+    };
+    let mut screen_mult = screen_of(critical, &sides[..], A!().ability);
+    let chained = is_accuracy_chained(pack, &mv);
 
     let mut total_dmg: i64 = 0;
     // 実際に減らしたHP（残りHPで頭打ち）。反動・吸収・かいがらのすずの基準。
@@ -1768,6 +1781,15 @@ fn execute_move_inner(
         }
         if disguise_ate_first && hit_i == 0 {
             continue;
+        }
+        if hit_i > 0 && chained {
+            critical = {
+                let (a, d) = (&sides[aidx].party[ai], &sides[didx].party[di]);
+                let c = crit_chance(pack, a, &mv, Some(d));
+                rng.random() < c
+            };
+            screen_mult = screen_of(critical, &sides[..], A!().ability);
+            any_crit = any_crit || critical;
         }
         let ro = field.roll_override;
         let mut dmg = {
@@ -1965,6 +1987,7 @@ fn execute_move_inner(
         if (n == l.ついばむ || n == l.むしくい) && A!().is_alive && is_berry(pack, D!().item) {
             let berry = D!().item.unwrap();
             D!().item = None;
+            it::on_item_consumed(pack, &mut D!());
             A!().ate_berry = true;
             if berry == l.オボンのみ {
                 let h = A!().max_hp / 4;
@@ -2019,6 +2042,7 @@ fn execute_move_inner(
                 D!().stage_attack = std::cmp::min(6, D!().stage_attack + 2);
                 D!().stage_sp_attack = std::cmp::min(6, D!().stage_sp_attack + 2);
                 D!().item = None;
+                it::on_item_consumed(pack, &mut D!());
             }
         }
         if !D!().is_alive {
@@ -2041,7 +2065,7 @@ fn execute_move_inner(
     }
 
     let sub_absorbed = sub_hits > 0 && real_hits == 0;
-    if critical && D!().is_alive && D!().ability == l.いかりのつぼ && !sub_absorbed {
+    if any_crit && D!().is_alive && D!().ability == l.いかりのつぼ && !sub_absorbed {
         D!().stage_attack = 6;
     }
 
@@ -2144,6 +2168,7 @@ fn execute_move_inner(
             let dn = D!().name;
             sides[aidx].opp_view.on_item(dn, itm);
             D!().item = None;
+            it::on_item_consumed(pack, &mut D!());
         }
     }
 
@@ -2422,6 +2447,7 @@ fn execute_move_inner(
             } else {
                 A!().item = Some(itm);
                 D!().item = None;
+                it::on_item_consumed(pack, &mut D!());
             }
         }
     }
@@ -2436,6 +2462,7 @@ fn execute_move_inner(
     {
         A!().item = D!().item;
         D!().item = None;
+        it::on_item_consumed(pack, &mut D!());
     }
     if D!().ability == l.わるいてぐせ
         && !sub_absorbed
@@ -2449,6 +2476,7 @@ fn execute_move_inner(
     {
         D!().item = A!().item;
         A!().item = None;
+        it::on_item_consumed(pack, &mut A!());
     }
     if (n == l.レイジングブル || n == l.かわらわり || n == l.サイコファング) && total_dmg > 0 {
         if sides[didx].reflect {
@@ -3159,6 +3187,12 @@ pub fn apply_status_move(
         let (an, dn) = (A!().name, D!().name);
         sides[aidx].opp_view.on_item_swapped(dn, a);
         sides[didx].opp_view.on_item_swapped(an, d);
+        if a.is_some() && A!().item.is_none() {
+            it::on_item_consumed(pack, &mut A!());
+        }
+        if d.is_some() && D!().item.is_none() {
+            it::on_item_consumed(pack, &mut D!());
+        }
         return;
     }
     // 同じフィールドでは失敗
@@ -3575,6 +3609,12 @@ pub fn apply_status_move(
         let (an, dn) = (A!().name, D!().name);
         sides[aidx].opp_view.on_item_swapped(dn, a);
         sides[didx].opp_view.on_item_swapped(an, d);
+        if a.is_some() && A!().item.is_none() {
+            it::on_item_consumed(pack, &mut A!());
+        }
+        if d.is_some() && D!().item.is_none() {
+            it::on_item_consumed(pack, &mut D!());
+        }
         return;
     }
     if n == l.ミストフィールド {
@@ -3628,6 +3668,7 @@ pub fn apply_status_move(
             A!().item = None;
             A!().ate_berry = true;
             A!().stage_defense = std::cmp::min(6, A!().stage_defense + 2);
+            it::on_item_consumed(pack, &mut A!());
         }
         return;
     }
@@ -6178,5 +6219,240 @@ mod fix200_tests {
         let r = crate::search::prune_futile_moves_opt(pr, &s[0], &s[1], &f, c.clone(), true);
         assert_eq!(r.len(), 1);
         assert_eq!(crate::search::prune_futile_moves_opt(pr, &s[0], &s[1], &f, c, false).len(), 2);
+    }
+}
+
+#[cfg(test)]
+mod hazard_tests {
+    use super::*;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    const FOR: &str = "フォレトス@メトロノーム:わんぱく:ステルスロック|まきびし|どくびし|ボディプレス:32/0/32/0/0/0:がんじょう";
+    const DEN: &str = "オニシズクモ@メトロノーム:わんぱく:ねばねばネット|アクアブレイク:32/0/32/0/0/0:すいほう";
+    const DUM: &str = "カビゴン@メトロノーム:わんぱく:のろい|まもる:32/0/32/0/0/0:あついしぼう";
+
+    fn left(p: &mut Pack, me: &str, f: &Field) -> Vec<String> {
+        let s = [Side { party: vec![build_poke(p, me, "M-6")], active_idx: 0, field_idx: 0, ..Default::default() },
+                 Side { party: vec![build_poke(p, DUM, "M-6"), build_poke(p, DUM, "M-6")], active_idx: 0, field_idx: 1, ..Default::default() }];
+        let pr: &Pack = p;
+        let c: Vec<Action> = s[0].party[0].moves.iter().enumerate()
+            .map(|(i, m)| Action { kind: ActKind::Move, mv: Some(m.clone()), move_idx: i as i64, switch_to: -1, do_mega: false })
+            .collect();
+        crate::search::prune_futile_moves(pr, &s[0], &s[1], f, c).iter()
+            .map(|a| pr.intern.resolve(a.mv.as_ref().unwrap().name).to_string()).collect()
+    }
+
+    #[test]
+    fn hazard1004_設置済みのステロと上限の設置技を候補から外す() {
+        let mut p = pack();
+        let mut f = Field::default();
+        assert_eq!(left(&mut p, FOR, &f), ["ステルスロック", "まきびし", "どくびし", "ボディプレス"]);
+        f.stealth_rock[0] = true;
+        f.spikes[0] = 3;
+        f.toxic_spikes[0] = 2;
+        assert_eq!(left(&mut p, FOR, &f), ["ステルスロック", "まきびし", "どくびし", "ボディプレス"]);
+        f.stealth_rock[1] = true;
+        f.spikes[1] = 2;
+        f.toxic_spikes[1] = 1;
+        assert_eq!(left(&mut p, FOR, &f), ["まきびし", "どくびし", "ボディプレス"]);
+        f.spikes[1] = 3;
+        f.toxic_spikes[1] = 2;
+        assert_eq!(left(&mut p, FOR, &f), ["ボディプレス"]);
+        assert_eq!(left(&mut p, DEN, &f), ["ねばねばネット", "アクアブレイク"]);
+        f.sticky_web[1] = true;
+        assert_eq!(left(&mut p, DEN, &f), ["アクアブレイク"]);
+    }
+
+    #[test]
+    fn retrain1005_除去されたステロは撒き直しの候補に戻る() {
+        let mut p = pack();
+        let mut s = [Side { party: vec![build_poke(&mut p, FOR, "M-6")], active_idx: 0, field_idx: 0, ..Default::default() },
+                     Side { party: vec![build_poke(&mut p, DUM, "M-6"), build_poke(&mut p, DUM, "M-6")], active_idx: 0, field_idx: 1, ..Default::default() }];
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        s[1].stealth_rock_set = true;
+        let has = |s: &[Side; 2], f: &Field| crate::search::candidate_actions(pr, &s[0], &s[1], f, true).iter()
+            .any(|a| a.mv.as_ref().map_or(false, |m| pr.intern.resolve(m.name) == "ステルスロック"));
+        assert!(crate::ai::hazard_value(pr, pr.sy.l.ステルスロック, &crate::ai::HazCtx::of(&s[1]), &f) > 0.0);
+        assert!(has(&s, &f));
+        f.stealth_rock[1] = true;
+        assert_eq!(crate::ai::hazard_value(pr, pr.sy.l.ステルスロック, &crate::ai::HazCtx::of(&s[1]), &f), 0.0);
+        assert!(!has(&s, &f));
+    }
+}
+
+/// 選出率の低い4種の監査（audit4_1008）の修正。test_all.py 43 と同じ局面
+#[cfg(test)]
+mod audit4_tests {
+    use super::*;
+    use crate::poke::build_poke;
+    use crate::cpyrng::CpyRandom;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    struct Z;
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { 0.5 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    /// random() の呼び出し回数を数える（値は 0.5＝命中・急所なし・続く）
+    struct Cnt(usize);
+    impl BRng for Cnt {
+        fn random(&mut self) -> f64 {
+            self.0 += 1;
+            0.5
+        }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    const N: &str = "メトロノーム";
+    const DUM: &str = "カビゴン@メトロノーム:わんぱく:のろい|まもる:32/0/32/0/0/0:あついしぼう";
+
+    fn ju(item: &str, mv: &str) -> String {
+        format!("ジュカイン@{item}:ようき:{mv}:0/32/0/0/0/32:かるわざ")
+    }
+
+    fn sides(p: &mut Pack, a: &[&str], b: &[&str]) -> [Side; 2] {
+        let pa: Vec<Poke> = a.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        let pb: Vec<Poke> = b.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        [Side { party: pa, active_idx: 0, field_idx: 0, ..Default::default() },
+         Side { party: pb, active_idx: 0, field_idx: 1, ..Default::default() }]
+    }
+
+    fn act(p: &Pack, poke: &Poke, n: &str) -> Action {
+        let (i, m) = poke.moves.iter().enumerate().find(|(_, m)| p.intern.resolve(m.name) == n).unwrap();
+        Action { kind: ActKind::Move, mv: Some(m.clone()), move_idx: i as i64, switch_to: -1, do_mega: false }
+    }
+
+    fn run(pr: &Pack, s: &mut [Side; 2], who: usize, n: &str, rng: &mut dyn BRng) {
+        let a = act(pr, &s[who].party[0], n);
+        let mut d = 0;
+        let mut f = Field::default();
+        execute_move(pr, s, &mut f, who, &a, None, rng, &mut d);
+    }
+
+    #[test]
+    fn audit4_e1_かるわざは持ち物を失う全経路で発動() {
+        let mut p = pack();
+        let cases: Vec<(&str, String, String, usize, &str, bool)> = vec![
+            ("はたきおとされ", ju("オボンのみ", "つるぎのまい"), format!("ゴリランダー@{N}:わんぱく:はたきおとす:32/0/32/0/0/0:グラスメイカー"), 1, "はたきおとす", false),
+            ("ついばむ", ju("オボンのみ", "つるぎのまい"), format!("ムクホーク@{N}:わんぱく:ついばむ:32/0/32/0/0/0:いかく"), 1, "ついばむ", false),
+            ("どろぼう", ju("オボンのみ", "つるぎのまい"), format!("ムクホーク@{N}:わんぱく:どろぼう:32/0/32/0/0/0:いかく"), 1, "どろぼう", true),
+            ("マジシャン", ju("オボンのみ", "つるぎのまい"), format!("マフォクシー@{N}:ずぶとい:マジカルフレイム:32/0/32/0/0/0:マジシャン"), 1, "マジカルフレイム", true),
+            ("わるいてぐせ", ju("オボンのみ", "リーフブレード"), format!("マニューラ@{N}:わんぱく:のろい:32/0/32/0/32/0:わるいてぐせ"), 0, "リーフブレード", true),
+            ("トリック", ju("たべのこし", "トリック"), DUM.to_string(), 0, "トリック", true),
+            ("なげつける", ju("くろいてっきゅう", "なげつける"), DUM.to_string(), 0, "なげつける", false),
+            ("ほおばる", ju("オボンのみ", "ほおばる"), DUM.to_string(), 0, "ほおばる", false),
+            ("じゃくてんほけん", "ジュカイン@じゃくてんほけん:ずぶとい:つるぎのまい:32/0/32/0/32/0:かるわざ".to_string(),
+             format!("ウインディ@{N}:ずぶとい:かえんほうしゃ:0/0/32/0/0/0:せいぎのこころ"), 1, "かえんほうしゃ", false),
+        ];
+        for (k, a, b, who, mv, noitem) in cases {
+            let mut s = sides(&mut p, &[&a], &[&b]);
+            if noitem {
+                s[1].party[0].item = None;
+            }
+            run(&p, &mut s, who, mv, &mut Z);
+            let j = &s[0].party[0];
+            assert!(j.item.is_none() && j.stage_speed == 2, "{k}: item={:?} S={}", j.item, j.stage_speed);
+        }
+        let mut q = pack();
+        let mut j = build_poke(&mut q, &ju("しろいハーブ", "つるぎのまい"), "M-6");
+        j.stage_defense = -1;
+        it::try_white_herb(&q, &mut j);
+        assert_eq!((j.item, j.stage_speed), (None, 2), "しろいハーブ");
+        let mut j = build_poke(&mut q, &ju("メンタルハーブ", "つるぎのまい"), "M-6");
+        j.taunt_count = 3;
+        it::try_mental_herb(&q, &mut j);
+        assert_eq!((j.item, j.stage_speed), (None, 2), "メンタルハーブ");
+        let mut j = build_poke(&mut q, &ju("ヒメリのみ", "つるぎのまい"), "M-6");
+        j.pp[0] = 0;
+        it::try_leppa_berry(&q, &mut j);
+        assert_eq!((j.item, j.stage_speed), (None, 2), "ヒメリのみ");
+        let mut j = build_poke(&mut q, &ju("ラムのみ", "つるぎのまい"), "M-6");
+        j.status = Some(q.sy.st.poison);
+        it::try_cure_berry(&q, &mut j);
+        assert_eq!((j.item, j.stage_speed), (None, 2), "ラムのみ");
+        let mut j = build_poke(&mut q, &ju("サルのみ", "つるぎのまい"), "M-6");
+        j.hp = j.max_hp / 4;
+        it::apply_hp_berry(&q, &mut j);
+        assert_eq!((j.item, j.stage_speed), (None, 2), "サルのみ");
+        let mut j = build_poke(&mut q, &ju("オボンのみ", "つるぎのまい"), "M-6");
+        it::try_cure_berry(&q, &mut j);
+        assert_eq!(j.stage_speed, 0, "持ち物が残れば変わらない");
+    }
+
+    #[test]
+    fn audit4_e2_トリプルアクセルは1発ごとに命中判定と急所() {
+        let mut p = pack();
+        let a = build_poke(&mut p, &format!("マスカーニャ@{N}:いじっぱり:トリプルアクセル:32/32/0/0/0/0:しんりょく"), "M-6");
+        let sl = build_poke(&mut p, &format!("マスカーニャ@{N}:いじっぱり:トリプルアクセル:32/32/0/0/0/0:スキルリンク"), "M-6");
+        let mv = a.moves[0].clone();
+        let mut r = CpyRandom::new(43);
+        let mut c = [0usize; 4];
+        for _ in 0..20000 {
+            c[calc_hits(&p, &mv, &a, &mut r) as usize] += 1;
+        }
+        let fr: Vec<f64> = c.iter().map(|&x| x as f64 / 20000.0).collect();
+        assert!((fr[1] - 0.10).abs() < 0.012 && (fr[2] - 0.09).abs() < 0.012 && (fr[3] - 0.81).abs() < 0.015, "{fr:?}");
+        assert!((0..200).all(|_| calc_hits(&p, &mv, &sl, &mut r) == 3), "スキルリンク");
+        // 3回当たる乱数で random() の回数: トリプルアクセルは急所が3回、ダブルウイングは1回
+        let mut n = Vec::new();
+        for spec in [format!("マスカーニャ@{N}:いじっぱり:トリプルアクセル:32/32/0/0/0/0:しんりょく"),
+                     format!("マスカーニャ@{N}:いじっぱり:ダブルウイング:32/32/0/0/0/0:しんりょく")] {
+            let mut s = sides(&mut p, &[&spec], &[DUM]);
+            let mut g = Cnt(0);
+            let m = p.intern.resolve(s[0].party[0].moves[0].name).to_string();
+            run(&p, &mut s, 0, &m, &mut g);
+            n.push(g.0);
+        }
+        assert_eq!(n[0], n[1] + 2 + 2, "トリプルアクセル: 続くかの判定2回＋2・3発目の急所2回 {n:?}");
+    }
+
+    #[test]
+    fn audit4_e3_ほうしはくさ_ぼうじん_ゴーグルに発動しない() {
+        let mut p = pack();
+        let rf = build_poke(&mut p, &format!("ラフレシア@{N}:ずぶとい:じこさいせい:32/0/32/0/0/0:ほうし"), "M-6");
+        let mut f = Field::default();
+        let specs = [
+            (format!("ゴリランダー@{N}:いじっぱり:グラススライダー:32/32/0/0/0/0:グラスメイカー"), true),
+            (format!("フォレトス@{N}:いじっぱり:ジャイロボール:32/32/0/0/0/0:ぼうじん"), true),
+            ("カイリキー@ぼうじんゴーグル:いじっぱり:かみくだく:32/32/0/0/0/0:ノーガード".to_string(), true),
+            (format!("カイリキー@{N}:いじっぱり:かみくだく:32/32/0/0/0/0:ノーガード"), false),
+        ];
+        for (sp, immune) in specs.iter() {
+            let base = build_poke(&mut p, sp, "M-6");
+            let mv = base.moves[0].clone();
+            let mut r = CpyRandom::new(8);
+            let mut c = [0usize; 3];
+            let nn = 20000;
+            for _ in 0..nn {
+                let mut at = base.clone();
+                let mut df = rf.clone();
+                crate::abilities::on_after_hit(&p, &mut at, &mut df, &mv, &mut f, &mut r);
+                match at.status {
+                    Some(x) if x == p.sy.st.sleep => c[0] += 1,
+                    Some(x) if x == p.sy.st.paralysis => c[1] += 1,
+                    Some(x) if x == p.sy.st.poison => c[2] += 1,
+                    _ => {}
+                }
+            }
+            if *immune {
+                assert_eq!(c, [0, 0, 0], "{sp}");
+            } else {
+                let fr: Vec<f64> = c.iter().map(|&x| x as f64 / nn as f64).collect();
+                assert!((fr[0] - 0.11).abs() < 0.008 && (fr[1] - 0.10).abs() < 0.008 && (fr[2] - 0.09).abs() < 0.008, "{fr:?}");
+            }
+        }
     }
 }

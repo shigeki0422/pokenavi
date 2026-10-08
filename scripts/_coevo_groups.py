@@ -13,6 +13,7 @@ env: GROUPS COEVO_SIMS(50) COEVO_WORKERS(12) SEED(0)
        COEVO_SP_CAP(0)   同じ種を含む党の割合の上限（例 0.3）。生存と子の生成で守る
        COEVO_SHARE(0)    fitness sharing の係数。順位付けの適応度 = 勝率 − 係数×（党の6種の集団内の頻度の平均）
        COEVO_NICHE_SP(0) 1ならニッチの区分に「集団で最も多い種を含むか」を足す
+     COEVO_STOP  このファイルがあればその世代で進化を打ち切り、最後の検証へ進む（世代ごとに OUT_ckpt.json を保存）
 """
 import json
 import math
@@ -36,6 +37,7 @@ BASE = os.environ.get("COEVO_BASE", os.path.join(os.path.dirname(HERE), "_local"
 SP_CAP = float(os.environ.get("COEVO_SP_CAP", "0"))
 SHARE = float(os.environ.get("COEVO_SHARE", "0"))
 NICHE_SP = os.environ.get("COEVO_NICHE_SP", "0") == "1"
+STOP = os.environ.get("COEVO_STOP", "")
 
 _G = {}
 
@@ -404,7 +406,8 @@ def evolve(pop_size, gens, games_per, out, seed=0, log=print):
         log(f"[gen{gnum}] 勝率 最大{max(raw) * 100:.1f}% 生存平均{sum(raw[i] for i in surv) / len(surv) * 100:.1f}% "
             f"ニッチ={len(niches)} 殿堂{len(hof)} 対戦{len(pairs)} 多い種={' '.join(f'{k}{v*100:.0f}%' for k, v in topf)} "
             f"{time.time() - t0:.0f}秒", flush=True)
-        if gnum == gens - 1:
+        dump(pop, fit, out.replace(".json", "_ckpt.json"), {"gen": gnum, "seed": seed})
+        if gnum == gens - 1 or (STOP and os.path.exists(STOP)):
             break
         newpop = [list(pop[i]) for i in surv]
         topw = {k: max(0.01, fit[i] - 0.4) for k, i in enumerate(surv)}

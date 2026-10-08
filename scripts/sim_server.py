@@ -1061,7 +1061,7 @@ def _f1_store_put(aid, label, card):
 _F1_CACHE_DIR = os.path.join(os.path.dirname(__file__), "f1_cache")
 _F1_SAVED = {}   # subject_label -> {analysis_id, cards(サマリ)}
 # AIバージョン：探索/評価を変えたら更新。記録の再利用（対戦数の段階拡張）は同一バージョン間のみ。
-AI_VER = "mcts-guardq800-1"
+AI_VER = "mcts-guardq800-2-net1006"
 
 
 def _f1_safe(name):

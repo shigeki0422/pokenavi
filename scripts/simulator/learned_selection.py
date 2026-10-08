@@ -1,5 +1,5 @@
 """学習選出（MCTS教師で学習したValMLP選出評価器）。本番の選出（select_party の drop-in 置換）。
-モデル: simulator/selector_m6b.json（M-6、2026-09-30 採用）。教師＝本番AI（Rust MCTS@400・JOINT_BUILD既定ON）で、自分の候補
+モデル: simulator/selector_m6d.json（M-6、2026-10-06 採用。retrain_1005 ft3e4_c1・相手の仮定 learnedK8 が既定。SEL_OPP_ASSUME=heur で旧既定）。旧: selector_m6b.json（2026-09-30）。教師＝本番AI（Rust MCTS@400・JOINT_BUILD既定ON）で、自分の候補
 （3体＋先頭、メガ1体ルール内）を相手の選出をサンプリングして戦わせた勝率（段階1＋段階2b、1599対面）。入力は現行の既定特徴量（1037次元）。
 A/B（Rust MCTS@400・3プール各4000戦）: vs 相性ベースの規則的な選出 52.1〜52.7%（z=+2.7〜+3.5）、同ベースライン vs 旧 selector_m6 は有意差なし。
 既定で有効。LEARNED_SELECTION=0 でヒューリスティック選出（ai.select_party）。SELECTOR_PATH で別のモデル。
@@ -16,7 +16,7 @@ import numpy as np
 
 _MODEL = None
 _LOADED = False
-_PATH = os.environ.get("SELECTOR_PATH") or os.path.join(os.path.dirname(__file__), "selector_m6b.json")
+_PATH = os.environ.get("SELECTOR_PATH") or os.path.join(os.path.dirname(__file__), "selector_m6d.json")
 
 
 def _load():
@@ -333,12 +333,12 @@ def _topk_weights(vals, temperature, k):
 
 
 def _opp_mode():
-    m = os.environ.get("SEL_OPP_ASSUME")
+    m = os.environ.get("SEL_OPP_ASSUME", "learnedK")
     return m if m in ("learned", "learnedK", "all") else None
 
 
 def _opp_assume(party6, opp6, loader, n, rng, model):
-    """相手の選出の仮定と集め方（env SEL_OPP_ASSUME。Rust selector::opp_sets と同じ定義）。None なら既定（ヒューリスティック 温度0,1,1・平均）
+    """相手の選出の仮定と集め方（env SEL_OPP_ASSUME。Rust selector::opp_sets と同じ定義。未指定は learnedK＝既定（2026-10-06〜）、heur 等それ以外は None＝ヒューリスティック 温度0,1,1・平均）
       learned  … _opp_learned（3通り・平均）
       learnedK … 相手側の学習選出の値の softmax（温度 SEL_OPP_TEMP）の上位 SEL_OPP_K（既定8）候補を、和を1にした重みで
       all      … 相手の全候補（3体＋先頭・メガ1体ルール内）。SEL_OPP_MIX=mean（既定）/ minmix（SEL_OPP_ALPHA（既定0.5）·平均＋

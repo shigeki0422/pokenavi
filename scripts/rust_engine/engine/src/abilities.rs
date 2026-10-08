@@ -212,10 +212,24 @@ pub fn on_after_hit(
         }
     }
 
-    if ab == l.ほうし && is_contact_move(pack, mv) && attacker.ability != l.えんかく {
-        if rng.random() < 0.30 {
-            let idx = rng.choice(3);
-            let s = [st.poison, st.paralysis, st.sleep][idx];
+    if ab == l.ほうし
+        && is_contact_move(pack, mv)
+        && attacker.ability != l.えんかく
+        && attacker.ability != l.ぼうじん
+        && !attacker.has_type(pack.tc.くさ)
+        && attacker.item != Some(l.ぼうじんゴーグル)
+    {
+        let r = rng.random();
+        let pick = if r < 0.11 {
+            Some(st.sleep)
+        } else if r < 0.21 {
+            Some(st.paralysis)
+        } else if r < 0.30 {
+            Some(st.poison)
+        } else {
+            None
+        };
+        if let Some(s) = pick {
             let ok = !(s == st.sleep && crate::damage::terrain_blocks_sleep(pack, attacker, field))
                 && apply_status(pack, attacker, s, false, Some(field));
             if ok && s == st.sleep {

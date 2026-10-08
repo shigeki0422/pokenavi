@@ -34,9 +34,7 @@ def _hazard_value(move_name: str, my_side: BattleSide, opp_side: BattleSide,
     opp_idx = getattr(opp_side, 'field_idx', 1)
 
     if move_name == "ステルスロック":
-        if (opp_side.stealth_rock_set
-                or getattr(opp_side, '_stealth_rock_pending', False)
-                or field.stealth_rock[opp_idx]):
+        if getattr(opp_side, '_stealth_rock_pending', False) or field.stealth_rock[opp_idx]:
             return 0.0
         return entries_remaining * _AVG_HP * 0.125
 

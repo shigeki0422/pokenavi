@@ -61,6 +61,7 @@ pub fn apply_hp_berry(pack: &Pack, p: &mut Poke) {
         p.ruminate_count = 1;
     }
     p.item = None;
+    on_item_consumed(pack, p);
     if p.ability == l.ほおぶくろ {
         let h = std::cmp::max(1, p.max_hp / 3);
         p.hp = std::cmp::min(p.max_hp, p.hp + h);
@@ -68,12 +69,19 @@ pub fn apply_hp_berry(pack: &Pack, p: &mut Poke) {
 }
 
 pub fn try_cure_berry(pack: &Pack, p: &mut Poke) {
-    let l = &pack.sy.l;
-    let st = &pack.sy.st;
     let it = match p.item {
         Some(i) => i,
         None => return,
     };
+    try_cure_berry_inner(pack, p, it);
+    if p.item.is_none() {
+        on_item_consumed(pack, p);
+    }
+}
+
+fn try_cure_berry_inner(pack: &Pack, p: &mut Poke, it: crate::interner::Sym) {
+    let l = &pack.sy.l;
+    let st = &pack.sy.st;
     if it == l.ラムのみ && (p.status.is_some() || p.confused) {
         p.status = None;
         p.bad_poison_count = 0;
@@ -116,6 +124,7 @@ pub fn try_white_herb(pack: &Pack, p: &mut Poke) {
             }
         }
         p.item = None;
+        on_item_consumed(pack, p);
     }
 }
 
@@ -141,6 +150,7 @@ pub fn try_mental_herb(pack: &Pack, p: &mut Poke) {
     p.disabled_move = None;
     p.disabled_turns = 0;
     p.item = None;
+    on_item_consumed(pack, p);
 }
 
 pub fn try_leppa_berry(pack: &Pack, p: &mut Poke) {
@@ -152,6 +162,7 @@ pub fn try_leppa_berry(pack: &Pack, p: &mut Poke) {
             let cap = p.moves[i].pp.unwrap_or(0);
             p.pp[i] = std::cmp::min(cap, p.pp[i] + 10);
             p.item = None;
+            on_item_consumed(pack, p);
             return;
         }
     }

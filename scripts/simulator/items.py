@@ -105,8 +105,8 @@ def try_terrain_seed(poke, field, logs: list) -> bool:
     setattr(poke, sattr, min(6, getattr(poke, sattr) + 1))
     name = poke.item
     poke.item = None
-    on_item_consumed(poke, logs)
     logs.append(f"{poke.name} の {name}！ 能力が上がった！")
+    on_item_consumed(poke, logs)
     return True
 
 
@@ -175,6 +175,7 @@ def apply_hp_berry(poke: "BattlePokemon", logs: list) -> None:
             poke._ruminate_berry = poke.item  # type: ignore
             poke._ruminate_count = 1  # type: ignore  # 次ターン終わりに再度食べる
         poke.item = None
+        on_item_consumed(poke, logs)
         # ほおぶくろ: きのみを食べると最大HP1/3回復
         if poke.ability == "ほおぶくろ":
             _h = max(1, poke.max_hp // 3)
@@ -186,6 +187,7 @@ def apply_hp_berry(poke: "BattlePokemon", logs: list) -> None:
 
 def try_cure_berry(poke: "BattlePokemon", logs: list) -> None:
     """状態異常治癒きのみを状態付与直後またはターン終了時に適用"""
+    had = poke.item
     if poke.item == "ラムのみ" and (poke.status is not None or poke.confused):
         poke.status = None
         poke.bad_poison_count = 0
@@ -219,6 +221,8 @@ def try_cure_berry(poke: "BattlePokemon", logs: list) -> None:
         poke.confused = False
         poke.item = None
         logs.append(f"{poke.name} の ナナシのみ！ こんらんが治った")
+    if had is not None and poke.item is None:
+        on_item_consumed(poke, logs)
 
 
 # ── しろいハーブ（能力低下を一度リセット） ──────────────────────────────────
@@ -234,6 +238,7 @@ def try_white_herb(poke: "BattlePokemon", logs: list) -> None:
                 setattr(poke, s, 0)
         poke.item = None
         logs.append(f"{poke.name} の しろいハーブ！ 能力低下がリセットされた")
+        on_item_consumed(poke, logs)
 
 
 # ── メンタルハーブ（メロメロ・ちょうはつ等を一度だけ回復） ──────────────────
@@ -255,6 +260,7 @@ def try_mental_herb(poke: "BattlePokemon", logs: list) -> None:
     poke.disabled_turns = 0
     poke.item = None
     logs.append(f"{poke.name} の メンタルハーブ！ 行動制限が解除された")
+    on_item_consumed(poke, logs)
 
 
 # ── ヒメリのみ（PPが0になった技のPPを10回復） ──────────────────────────────
@@ -267,6 +273,7 @@ def try_leppa_berry(poke: "BattlePokemon", logs: list) -> None:
             poke.pp[i] = min(mv.pp, poke.pp[i] + 10)
             poke.item = None
             logs.append(f"{poke.name} の ヒメリのみ！ {mv.name_jp} のPPが回復した")
+            on_item_consumed(poke, logs)
             return
 
 
@@ -304,6 +311,7 @@ def check_sleep_berry(poke: "BattlePokemon", logs: list) -> None:
         poke.sleep_count = 0
         poke.item = None
         logs.append(f"{poke.name} の カゴのみ で目を覚ました！")
+        on_item_consumed(poke, logs)
 
 
 # ── かるわざ（アイテムを消費した後 Speed×2） ──────────────────────────────

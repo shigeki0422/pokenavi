@@ -356,12 +356,29 @@ pub fn futile_move_200(pack: &Pack, me_s: &Side, op_s: &Side, mv: &crate::damage
     false
 }
 
+/// search_ai.py `_hazard_full`: 相手側に設置済み（上限まで）の ステルスロック・まきびし3層・どくびし2層・ねばねばネット
+pub fn hazard_full(pack: &Pack, op_s: &Side, mv: &crate::damage::DMove, field: &Field) -> bool {
+    let i = op_s.field_idx;
+    match pack.intern.resolve(mv.name) {
+        "ステルスロック" => field.stealth_rock[i],
+        "まきびし" => field.spikes[i] >= 3,
+        "どくびし" => field.toxic_spikes[i] >= 2,
+        "ねばねばネット" => field.sticky_web[i],
+        _ => false,
+    }
+}
+
 /// search_ai.py `_prune_futile_moves`。技の候補が残らないときは外さない。
 pub fn prune_futile_moves(pack: &Pack, me_s: &Side, op_s: &Side, field: &Field, cands: Vec<Action>) -> Vec<Action> {
     prune_futile_moves_opt(pack, me_s, op_s, field, cands, crate::ai::fix200_env())
 }
 
 pub fn prune_futile_moves_opt(pack: &Pack, me_s: &Side, op_s: &Side, field: &Field, cands: Vec<Action>, fix200: bool) -> Vec<Action> {
+    prune_futile_moves_opt2(pack, me_s, op_s, field, cands, fix200, crate::ai::fixhz_env())
+}
+
+pub fn prune_futile_moves_opt2(pack: &Pack, me_s: &Side, op_s: &Side, field: &Field, cands: Vec<Action>, fix200: bool,
+                               fixhz: bool) -> Vec<Action> {
     let me = me_s.active();
     if !me.is_alive {
         return cands;
@@ -378,7 +395,8 @@ pub fn prune_futile_moves_opt(pack: &Pack, me_s: &Side, op_s: &Side, field: &Fie
                 Some(m) => m,
                 None => return false,
             };
-            let mut f = futile_move(pack, me_s, op_s, mv, field) || (fix200 && futile_move_200(pack, me_s, op_s, mv));
+            let mut f = futile_move(pack, me_s, op_s, mv, field) || (fix200 && futile_move_200(pack, me_s, op_s, mv))
+                || (fixhz && hazard_full(pack, op_s, mv, field));
             if !f && mv.category != Cat::Status && opp.is_alive {
                 if let Some(k) = kn {
                     f = known_immune(pack, me, a, opp, k, field);
@@ -543,6 +561,8 @@ pub struct SearchAI {
     pub fix40: bool,
     /// 既定ON。AI_FIX200=0 で旧挙動（監査200 C。AI_FIX200_2 で側2だけ）
     pub fix200: bool,
+    /// 既定ON。AI_FIXHZ=0 で旧挙動（設置済みの設置技を外す。AI_FIXHZ_2 で側2だけ）
+    pub fixhz: bool,
     /// 計測用: この確率で相手の真の型をそのまま使う（型予測の精度を人為的に上げ、精度と勝率の関係を測る）
     pub oracle_mix: f64,
     /// 計測用: 相手の真の型のうち一部だけを使う（1=持ち物 2=特性 4=技 8=性格・努力値 のビット和）。
@@ -587,6 +607,7 @@ impl SearchAI {
             prune_immune: std::env::var("AI_PRUNE_IMMUNE").map(|v| v != "0").unwrap_or(true),
             fix40: crate::ai::fix40_env(),
             fix200: crate::ai::fix200_env(),
+            fixhz: crate::ai::fixhz_env(),
             oracle_mix: std::env::var("ORACLE_MIX").ok().and_then(|v| v.parse().ok()).unwrap_or(0.0),
             oracle_reveal: std::env::var("ORACLE_REVEAL").ok().and_then(|v| v.parse().ok()).unwrap_or(0),
             solve_play: std::env::var("SOLVE_PLAY").ok().and_then(|v| v.parse::<f64>().ok()).unwrap_or(0.0) > 0.5,
@@ -627,7 +648,7 @@ impl SearchAI {
             cands = prune_immune_moves(pack, &sides[me_idx], &sides[op_idx], field, cands);
         }
         if self.fix40 {
-            cands = prune_futile_moves_opt(pack, &sides[me_idx], &sides[op_idx], field, cands, self.fix200);
+            cands = prune_futile_moves_opt2(pack, &sides[me_idx], &sides[op_idx], field, cands, self.fix200, self.fixhz);
         }
         if cands.len() <= 1 {
             if let Some(a) = cands.into_iter().next() {
