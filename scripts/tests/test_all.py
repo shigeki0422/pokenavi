@@ -4847,33 +4847,45 @@ print("\n=== 21. 提案プールのフォーム整合 ===")
 try:
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
     from gen_party_pool import PartyGen as _PG21, FORM_FIX as _FF21
-    _pg21 = _PG21()
-    _bad21 = []
-    for _k21, _real21 in _FF21.items():
-        if _k21 not in _pg21.pool: continue
-        for _s21 in _pg21.pool[_k21]:
-            if not _s21.startswith(_real21 + "@"):
-                _bad21.append((_k21, _s21.split("@")[0])); break
-    check("FORM_FIXのプール型が実体種名で生成される", not _bad21, f"不一致={_bad21[:3]}")
-
-    # プールキー「キュウコン」の実体はアローラ形。素の名前で順位を引くと通常キュウコン
-    # （使用率が遥かに低い）を拾い、MAX_RANK=80 の補完プールから丸ごと脱落する。
-    # 閾値は季節で動く（M-3で9位・M-5で33位）ので、通常キュウコンとの差で判定する。
-    _ak21 = _pg21.rank.get("キュウコン", 9999)
+    import gen_party_pool as _GP21
     import sqlite3 as _sq21
     _con21 = _sq21.connect("scripts/pokenavi.db")
     _cd21 = _con21.execute("SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule='single'",
-                           (_pg21.__class__.__module__ and __import__("gen_party_pool").USAGE_SEASON,)).fetchone()[0]
-    _plain21 = _con21.execute("SELECT rank FROM pokemon_usage WHERE season=? AND rule='single' "
-                              "AND pokemon='キュウコン' AND crawled_date=?",
-                              (__import__("gen_party_pool").USAGE_SEASON, _cd21)).fetchone()
+                           (_GP21.USAGE_SEASON,)).fetchone()[0]
+    _live21 = dict(_con21.execute("SELECT pokemon, rank FROM pokemon_usage WHERE season=? AND rule='single' AND crawled_date=?",
+                                  (_GP21.USAGE_SEASON, _cd21)).fetchall())
     _con21.close()
-    _plain21 = _plain21[0] if _plain21 else 9999
-    check("アローラキュウコンの順位が実体側で解決される",
-          _ak21 <= 80 and _ak21 != _plain21, f"rank={_ak21} 通常キュウコン={_plain21}")
-
-    _veil21 = any("オーロラベール" in _s21 for _s21 in _pg21.pool.get("キュウコン", []))
-    check("アローラキュウコンの型にオーロラベール(実採用96%)が含まれる", _veil21, "壁型に未搭載")
+    # M-3 の md はキー「キュウコン」の中身がアローラ形。型プール（提案の既定・Cloud Run）と M-6 の md は種名が DB の種名そのもの
+    # （キュウコン＝通常形・アローラキュウコン＝アローラ形）なので、FORM_FIX はコロン形（ケンタロス:炎）だけに効く（form_fix_for）。
+    # 以前は M-6 の md で通常キュウコン（ひでり・あついいわ）が アローラキュウコン の名前で生成されていた
+    _pgs21 = {}
+    for _src21 in ("md", "pool"):
+        _pg21 = _pgs21[_src21] = _PG21(src=_src21)
+        _bad21 = []
+        for _k21, _real21 in (_GP21.form_fix_for(_pg21.pool) if _src21 == "md" else _FF21).items():
+            if _k21 not in _pg21.pool or (_src21 == "pool" and ":" not in _k21): continue
+            for _s21 in _pg21.pool[_k21]:
+                if not _s21.startswith(_real21 + "@"):
+                    _bad21.append((_k21, _s21.split("@")[0])); break
+        check(f"[{_src21}] FORM_FIXのプール型が実体種名で生成される", not _bad21, f"不一致={_bad21[:3]}")
+        _ak21 = "キュウコン" if _src21 == "md" and "キュウコン" in _GP21.form_fix_for(_pg21.pool) else "アローラキュウコン"
+        _ab21 = _pg21.pool.get(_ak21, [])
+        _rk21 = _pg21.rank.get(_ak21, 9999)
+        _plain21 = _live21.get("キュウコン", 9999)
+        check(f"[{_src21}] アローラキュウコンの順位が実体側で解決される（{_GP21.USAGE_SEASON}）",
+              _rk21 <= 80 and _rk21 == _live21.get("アローラキュウコン") and _rk21 != _plain21,
+              f"rank={_rk21} DBのアローラキュウコン={_live21.get('アローラキュウコン')} 通常キュウコン={_plain21}")
+        check(f"[{_src21}] アローラキュウコンの型が実体名・ゆきふらし・こおり/フェアリー",
+              bool(_ab21) and all(_s21.startswith("アローラキュウコン@") and _s21.endswith(":ゆきふらし") for _s21 in _ab21)
+              and _pg21._types_of_spec(_ab21[0]) == ("こおり", "フェアリー"), str([_s21.split(":")[0] for _s21 in _ab21[:3]]))
+        _veil21 = sum(_pg21.build_weight(_ak21, _s21) for _s21 in _ab21 if "オーロラベール" in _s21) / (sum(_pg21.build_weight(_ak21, _s21) for _s21 in _ab21) or 1)
+        check(f"[{_src21}] アローラキュウコンの型にオーロラベール(実採用96%)が含まれる（型の重みで過半）", _veil21 > 0.5, f"壁型の重み {_veil21:.2f}")
+        if _ak21 == "アローラキュウコン":
+            _pl21 = _pg21.pool.get("キュウコン", [])
+            check(f"[{_src21}] キー「キュウコン」は通常形（ほのお・ゆきふらしのキメラが無い）",
+                  all(_s21.startswith("キュウコン@") and not _s21.endswith(":ゆきふらし") for _s21 in _pl21)
+                  and (not _pl21 or _pg21._types_of_spec(_pl21[0]) == ("ほのお",)) and _pg21.dex.get("キュウコン") == _pg21.dex.get("アローラキュウコン"),
+                  str([(_s21.split(":")[0], _s21.split(":")[-1]) for _s21 in _pl21[:2]]))
 except Exception as _e21:
     check("提案プールのフォーム整合テストが実行できる", False, f"{type(_e21).__name__}: {_e21}")
 
@@ -4929,7 +4941,7 @@ print("\n=== 22b. 提案の残り枠の生成（条件を満たす型だけか�
 try:
     import _product3_complete as _PC22b
     from gen_party_pool import _spec_mega as _sm22b, _item_of as _it22b
-    _pg = _pg21
+    _pg = _pgs21["pool"]
     _two = [p for p in _pg.pokes if _pg.mega.get(p) and _pg.nonm.get(p) and _pg.rank.get(p, 9999) <= 80]
     # 1) 種族の時点で作れない指定: 同じタイプ3体
     _bytype = {}
@@ -4984,7 +4996,28 @@ try:
         _ps = [_f2 + [r_[1][k] for k in r_[0][2:]] for r_ in _ps if r_]
         check("生成: メガ枠が埋まった軸では残り枠にメガの型が出ない・全件合法",
               len(_ps) >= 50 and all(sum(bool(_sm22b(x)) for x in p_) == 2 and _pg.is_legal(p_, megas_set=(2,)) for p_ in _ps),
-              f"{len(_ps)}件")
+              f"{len(_ps)}件 不正={[p_ for p_ in _ps if not _pg.is_legal(p_, megas_set=(2,))][:1]}")
+        # 型プール（提案の既定）はシードの型を持つ種がある。設置役のいないシードを sample_weighted 自体が替える（fix_ev_1008 の後の確認で
+        # メガ2体の軸の60件中1件が 設置役のいないシード で不正だった）。md・型プールの両方で、メガ0〜2体の軸の残り枠が全件合法
+        for _src22b, _pgx in _pgs21.items():
+            _tw = [p for p in _pgx.pokes if _pgx.mega.get(p) and _pgx.nonm.get(p) and _pgx.rank.get(p, 9999) <= 30]
+            _one = [p for p in _pgx.pokes if _pgx.nonm.get(p) and _pgx.rank.get(p, 9999) <= 30]
+            _axes = [[_pgx.mega[a][0], _pgx.mega[b][0]] for a, b in zip(_tw[:8], _tw[1:9])] + [[_pgx.nonm[a][0]] for a in _one[:8]] + [[_pgx.mega[a][0]] for a in _tw[:4]]
+            _axes = [f_ for f_ in _axes if _PC22b.infeasible_reason(_pgx, f_) is None]
+            _n22b, _bad22b = 0, []
+            for f_ in _axes:
+                _kx = [_pgx.keyof(x) for x in f_]
+                _fm = sum(bool(_sm22b(x)) for x in f_)
+                for _i in range(40):
+                    _m = max(_fm, 2 if _i % 5 else 1)
+                    r_ = _PC22b.sample_weighted(_pgx, _kx, f_, random.Random(1000 + _i), _m)
+                    if not r_: continue
+                    p_ = f_ + [r_[1][k] for k in r_[0][len(f_):]]
+                    _n22b += 1
+                    if not (sum(bool(_sm22b(x)) for x in p_) == _m and _pgx.is_legal(p_, megas_set=(_m,))):
+                        _bad22b.append([x.split(":")[0] for x in p_])
+            check(f"[{_src22b}] 生成: 軸{len(_axes)}件の残り枠が全件合法（メガ数・持ち物・タイプ・設置役のいないシード）",
+                  _n22b >= 20 * len(_axes) and len(_axes) >= 15 and not _bad22b, f"{_n22b}件中 不正{len(_bad22b)} {_bad22b[:2]}")
         # 種の重み＝使用率ベースの重み×（条件を満たす型の確率の合計）（1枠目の抽選の重みを記録して照合）
         class _Rec(random.Random):
             def choices(self, seq, weights=None, k=1, **kw):
@@ -9522,6 +9555,149 @@ def _tpar43():
 
 for _nm43, _fn43 in (("E1", _ta1), ("E2", _ta2), ("E3", _ta3), ("D1", _td1), ("Py/Rust", _tpar43)):
     _case40(f"audit4 {_nm43}", _fn43)
+
+# ════════════════════════════════════════════════════════════════
+# 44. 努力値の余り（合計66）と提案の型の出どころ（fix_ev_1008）
+#     Champions の努力値は各32・合計66。合計64（A32 S32）で2余る型が型プール・提案・生成集団・工房に出ていた。
+#     余りは DB で余りが最も多く置かれている能力へ（ev_fill）。提案の型は build_pool_M-6.md のドラフト型ではなく
+#     シーズン固定版の型プールから取る（ゴリランダーの7型中4型が やどりぎのタネ/つるぎのまい 型だった）。
+# ════════════════════════════════════════════════════════════════
+print("\n=== 44. 努力値の余り（合計66）と提案の型の出どころ ===")
+
+
+def _t44_fill():
+    import ev_fill as EF
+    check("ev_fill: 余りは DB で余りが最も多い能力へ（ガブリアス A32 S32 → H2）",
+          EF.fill("ガブリアス", [0, 32, 0, 0, 0, 32]) == [2, 32, 0, 0, 0, 32], str(EF.fill("ガブリアス", [0, 32, 0, 0, 0, 32])))
+    check("ev_fill: 同じ大きな振り先の配分を優先（ガブリアス H32 B32 → D2。DB H32-B32-D2 3.7% > S2 2.6%）",
+          EF.fill("ガブリアス", [32, 0, 32, 0, 0, 0]) == [32, 0, 32, 0, 2, 0], str(EF.fill("ガブリアス", [32, 0, 32, 0, 0, 0])))
+    check("ev_fill: データの無い種は H", EF.fill("存在しない種", [0, 32, 0, 0, 0, 32]) == [2, 32, 0, 0, 0, 32])
+    _e = EF.fill("存在しない種", [32, 32, 0, 0, 0, 0])
+    check("ev_fill: 振り先が32なら次の能力へ（各32を超えない）", _e == [32, 32, 2, 0, 0, 0], str(_e))
+    _e = EF.fill("存在しない種", [0, 0, 0, 0, 0, 0])
+    check("ev_fill: 0振りも合計66に", sum(_e) == 66 and max(_e) <= 32, str(_e))
+    check("ev_fill: 合計66の型は変えない", EF.fill("ガブリアス", [0, 32, 2, 0, 0, 32]) == [0, 32, 2, 0, 0, 32])
+    _b = EF.fill_builds("ガブリアス", [
+        {"item": "a", "nature": "n", "ability": "x", "moves": ["m1", "m2"], "ev": [0, 32, 0, 0, 0, 32], "weight": 0.3,
+         "spec": "ガブリアス@a:n:m1|m2:0/32/0/0/0/32:x"},
+        {"item": "a", "nature": "n", "ability": "x", "moves": ["m2", "m1"], "ev": [2, 32, 0, 0, 0, 32], "weight": 0.5,
+         "spec": "ガブリアス@a:n:m2|m1:2/32/0/0/0/32:x"}])
+    check("ev_fill: 埋めて同じになった型は重みを足して1つに（spec も合計66）",
+          len(_b) == 1 and abs(_b[0]["weight"] - 0.8) < 1e-9 and _b[0]["spec"].endswith(":2/32/0/0/0/32:x"), str(_b))
+
+
+def _t44_gen():
+    import _gen_type_pool as _G44
+    _r = _G44.simple_builds("メタモン")
+    check("型プール生成器: 周辺分布の積の種（メタモン）も合計66", _r and not [b for b in _r["builds"] if sum(b["ev"]) != 66])
+    _r = _G44.generate_one("ゴロンダ", 0)
+    check("型プール生成器: 努力値の DB が無い種（ゴロンダ・旧 0振り）も合計66",
+          _r and not [b for b in _r["builds"] if sum(b["ev"]) != 66], str(_r and _r["builds"][0]["ev"]))
+    _r = _G44.generate_one("ガブリアス", 0)
+    check("型プール生成器: DB の合計64の配分（0.7%）も合計66で出す", _r and not [b for b in _r["builds"] if sum(b["ev"]) != 66])
+    import update_type_pool as _U44
+    import inspect as _in44
+    check("週次の型生成（update_type_pool）が最後に ev_fill.fill_pool を通す", "ev_fill.fill_pool(pool" in _in44.getsource(_U44.main))
+
+
+def _t44_suggest():
+    import json as _j44
+    import pool_versions as _PV44
+    import gen_party_pool as _GP44
+    _sv = _PV44.pointer("season")
+    check("提案: M-6 の型の出どころは型プール（build_pool_M-6.md ではない）",
+          _GP44.party_pool_src(_PV44.season_of(_sv)) == "pool" and _GP44.party_pool_src("M-3") == "md")
+    _pg = _GP44.PartyGen(src="pool")
+    _pool = {r["species"]: {(b["item"], tuple(sorted(b["moves"]))) for b in r["builds"]}
+             for r in _j44.load(open(_PV44.path("type_pool", _sv)))}
+    _bad_ev, _bad_src, _n = [], [], 0
+    for _sp, _ss in _pg.pool_resolve.items():
+        for _s in _ss:
+            _n += 1
+            _it, _na, _mv, _ev, _ab = _s.split("@", 1)[1].split(":")
+            if sum(map(int, _ev.split("/"))) != 66:
+                _bad_ev.append(_s)
+            if (_it, tuple(sorted(_mv.split("|")))) not in _pool.get(_sp, ()):
+                _bad_src.append(_s)
+    check("提案: 全ての型の努力値が合計66", _n > 1000 and not _bad_ev, f"{len(_bad_ev)}/{_n} 例 {_bad_ev[:2]}")
+    check("提案: 全ての型が型プール（season の版）にある", not _bad_src, f"{len(_bad_src)}/{_n} 例 {_bad_src[:2]}")
+    _gr = _pg.pool.get("ゴリランダー", [])
+    _sd = sum(_pg.bw[s] for s in _gr if "やどりぎのタネ" in s and "つるぎのまい" in s)
+    check("提案: ゴリランダーの やどりぎのタネ＋つるぎのまい 型は採用率どおり少ない（旧 md は7型中4型）", len(_gr) >= 5 and _sd < 0.05, f"{_sd:.3f}")
+    _raw = [b for r in _j44.load(open(_PV44.path("type_pool", _sv))) for b in r["builds"]]
+    _bad_rule = [s for ss in _pg.pool_resolve.values() for s in ss
+                 if not _GP44.rule_ok({"item": s.split("@", 1)[1].split(":")[0], "moves": s.split("@", 1)[1].split(":")[2].split("|")})]
+    check("提案: 全ての型が持ち物と技の規則（item_ok）を満たす（v41 の ひかりのねんど＝壁技なし 等は読むときに外す）",
+          any(not _GP44.rule_ok(b) for b in _raw) and not _bad_rule, f"{len(_bad_rule)}件 例 {_bad_rule[:2]}")
+    check("提案: 型プールの キュウコン は通常のキュウコン（md の「キュウコン＝アローラ」の付け替えをしない）",
+          all(s.startswith("キュウコン@") for s in _pg.pool.get("キュウコン", [])) and "アローラキュウコン" in _pg.pool)
+    import random as _r44
+    _rng = _r44.Random(3); _bad = 0; _np = 0
+    for _ in range(60):
+        _p = _pg.sample_cooc(_rng)
+        if _p:
+            _np += 1; _bad += any(sum(map(int, x.split("@", 1)[1].split(":")[3].split("/"))) != 66 for x in _p)
+    check("提案: 生成した党の努力値が全て合計66", _np > 50 and _bad == 0, f"{_bad}/{_np}")
+
+
+def _t44_coevo():
+    import _coevo_groups as _CG44
+    import pool_versions as _PV44
+    check("生成集団: 系統表は season の版", os.path.abspath(_CG44.GROUPS) == os.path.abspath(_PV44.path("type_groups", _PV44.pointer("season"))))
+    _cwd = os.getcwd(); os.chdir(os.path.dirname(os.path.abspath(_CG44.__file__)))
+    try:
+        _g = _CG44.load()["groups"]
+    finally:
+        os.chdir(_cwd)
+    _bad = [(sp, b["ev"]) for sp, v in _g.items() for g in v["groups"] for b in g["builds"] if sum(b["ev"]) != 66]
+    check("生成集団: 系統の型の努力値が全て合計66", not _bad, str(_bad[:3]))
+    import gen_party_pool as _GP44
+    _bad = [(sp, b["item"], b["moves"]) for sp, v in _g.items() for g in v["groups"] for b in g["builds"] if not _GP44.rule_ok(b)]
+    check("生成集団: 系統の型が全て持ち物と技の規則（item_ok）を満たす（v41 の規則より前の型は読むときに外す）", not _bad, str(_bad[:3]))
+
+
+def _t44_builder():
+    import gen_builder_data as _B44
+    _e = _B44.fill_ev_presets("ガブリアス", [([2, 32, 0, 0, 0, 32], 26.7), ([0, 32, 0, 0, 0, 32], 0.7), ([0, 0, 0, 32, 0, 32], 0.6),
+                                            ([31, 0, 8, 32, 0, 0], 0.5), ([16, 252, 0, 0, 0, 252], 0.4)])
+    check("工房: 努力値の候補は合計66・埋めて同じになった配分は採用率を足す・合計66超/32超（DB の誤り）は落とす",
+          _e[0] == {"ev": [2, 32, 0, 0, 0, 32], "pct": 27.4} and len(_e) == 2 and all(sum(x["ev"]) == 66 for x in _e), str(_e))
+    _v = {"ガブリアス": [{"ev": [0, 32, 0, 0, 0, 32], "spec": "ガブリアス@きあいのタスキ:ようき:じしん:0/32/0/0/0/32:さめはだ"}]}
+    _B44.fill_variants(_v)
+    check("工房/1v1: 代表型と型プリセットの努力値を合計66に",
+          _v["ガブリアス"][0]["ev"] == [2, 32, 0, 0, 0, 32] and _v["ガブリアス"][0]["spec"].endswith(":2/32/0/0/0/32:さめはだ"), str(_v))
+    _B44.SEASON = _B44.PV.season_of(_B44.POOL_VERSION); _B44._PG.clear()
+    _pg = _B44._pool_groups()
+    _bad = [(sp, b["ev"]) for sp, v in _pg.items() for g in v["groups"] for b in g["builds"] if sum(b["ev"]) != 66]
+    check("工房/1v1: 系統表（page の版）を読んだ時点で努力値が合計66", _pg and not _bad, str(_bad[:3]))
+
+
+def _t44_checks():
+    import pool_checks as _C44
+    import _gen_type_pool as _G44
+    _b = [{"item": "きあいのタスキ", "nature": "ようき", "ability": "さめはだ", "moves": ["じしん", "げきりん", "ステルスロック", "がんせきふうじ"],
+           "ev": [0, 32, 0, 0, 0, 32], "weight": 1.0}]
+    check("週次チェック: 合計64の型はエラー", any("EV" in e for e in _C44.rule_errors(_G44, "ガブリアス", _b)))
+    _b[0]["ev"] = [2, 32, 0, 0, 0, 32]
+    check("週次チェック: 合計66の型は通す（負例）", not any("EV" in e for e in _C44.rule_errors(_G44, "ガブリアス", _b)))
+    _arch = {"0445-00": {"groups": [{"name": "x型", "sets": [{"ev": "A32 S32"}]}]}}
+    _mons = {"0445-00": {"n": "ガブリアス", "mu": [{"ev": [2, 32, 0, 0, 0, 32]}], "builds": ["ガブリアス@a:n:m:0/32/0/0/0/32:x"],
+                         "evs": [{"ev": [0, 32, 0, 0, 0, 32]}]}}
+    check("週次チェック: 生成物（想定型・型プリセット・努力値の候補）の合計≠66 を全て拾う", len(_C44.ev_output_errors(_arch, _mons)) == 3,
+          str(_C44.ev_output_errors(_arch, _mons)))
+    _cur, _old = _C44.split_mons(dict(_mons, **{"0711-01": {"n": "パンプジン (ちいさい)", "evs": [{"ev": [0] * 6}]}}), {"0445-00"})
+    check("週次チェック: species.json に無い前のシーズンの mon は生成物のチェックから外して一覧にする",
+          set(_cur) == {"0445-00"} and _old == ["0711-01（パンプジン (ちいさい)）"], f"{list(_cur)} {_old}")
+    import inspect as _in44c
+    check("週次チェック: 提案の型の持ち物と技の規則（item_ok）を見る", "item_ok" in _in44c.getsource(_C44.source_errors))
+
+
+for _nm44, _fn44 in (("ev_fill", _t44_fill), ("生成器", _t44_gen), ("提案", _t44_suggest), ("生成集団", _t44_coevo),
+                     ("工房", _t44_builder), ("週次チェック", _t44_checks)):
+    try:
+        _fn44()
+    except Exception as _e44:
+        check(f"44 {_nm44} のテストが実行できる", False, f"{type(_e44).__name__}: {_e44}")
 
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:

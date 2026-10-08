@@ -34,7 +34,8 @@ def ev_text(ev):
 def main():
     icon = {s["n"]: s["icon"] for s in json.load(open(os.path.join(ROOT, "public", "builder-data", "species.json")))}
     out, miss = {"_version": VERSION}, []
-    for sp, v in json.load(open(GROUPS)).items():
+    import ev_fill
+    for sp, v in ev_fill.fill_groups(json.load(open(GROUPS)), PV.season_of(VERSION)).items():
         ic = icon.get(sp)
         if not ic:
             miss.append(sp)

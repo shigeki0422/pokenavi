@@ -2,7 +2,7 @@
 
 パーティは6枠の（種, 系統）。共進化が選ぶのは種と系統で、対戦で使う型は毎戦その系統の中から
 型プールの重みどおりに引く（系統内の技・持ち物・性格・努力値は使用率どおりに保たれる）。
-系統表は _local/ai_work/frozen/type_groups_M-6_v40.json（固定）（arch_view_data.py の GROUPS_OUT）。
+系統表はシーズン固定版（scripts/pool_versions.json の season。提案・AI と同じ版）。努力値は ev_fill で合計66。
 評価は Rust の MCTS（本番ネット・既定50sims）、選出は6体から3体を無作為（A/B と同じ）。
 
 使い方:
@@ -28,7 +28,8 @@ import _pop_gen as PG
 import seed_rule
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-GROUPS = os.environ.get("GROUPS", os.path.join(os.path.dirname(HERE), "_local", "ai_work", "frozen", "type_groups_M-6_v40.json"))
+import pool_versions as PV
+GROUPS = os.environ.get("GROUPS") or PV.path("type_groups", PV.pointer("season"))
 SEASON = "M-6"
 SIMS = int(os.environ.get("COEVO_SIMS", "50"))
 WORKERS = int(os.environ.get("COEVO_WORKERS", "12"))
@@ -50,7 +51,12 @@ def load():
         import _necessity_verify as V
         from simulator.simulate import get_loader
         _G["pg"], _G["V"], _G["L"] = PartyGen(), V, get_loader()
-        _G["groups"] = json.load(open(GROUPS))
+        import ev_fill
+        from gen_party_pool import rule_ok
+        _G["groups"] = ev_fill.fill_groups(json.load(open(GROUPS)), SEASON)
+        for v in _G["groups"].values():
+            for g in v["groups"]:
+                g["builds"] = [b for b in g["builds"] if rule_ok(b)] or g["builds"]
         _G["D"] = PG.load(season=SEASON)
         stones = _G["D"]["megastones"]
         _G["mega"] = {sp: [sum(b["weight"] for b in g["builds"] if b["item"] in stones) >= 0.5 for g in v["groups"]]
@@ -327,11 +333,17 @@ def dump(pop, elo, path, extra=None):
     rows = [{"elo": elo[i] if elo else None,
              "groups": [[sp, gi, g["groups"][sp]["groups"][gi]["name"]] for sp, gi in pop[i]]}
             for i in (sorted(range(len(pop)), key=lambda i: -elo[i]) if elo else range(len(pop)))]
-    json.dump(dict(extra or {}, season=SEASON, parties=rows), open(path, "w"), ensure_ascii=False, indent=1)
+    json.dump(dict(extra or {}, season=SEASON, groups_file=GROUPS, parties=rows), open(path, "w"), ensure_ascii=False, indent=1)
 
 
 def _load_base():
-    return [[(x[0], x[1]) for x in p["groups"]] for p in json.load(open(BASE))["parties"]]
+    """保存した集団の系統は名前で今の系統表に引き直す（v40 で作った集団を v41 の系統表で読むと番号がずれる）"""
+    g = load()
+
+    def idx(sp, gi, name=None):
+        names = [x["name"] for x in g["groups"][sp]["groups"]]
+        return names.index(name) if name in names else min(gi, len(names) - 1)
+    return [[(x[0], idx(*x)) for x in p["groups"]] for p in json.load(open(BASE))["parties"]]
 
 
 def _wr(res, idx):

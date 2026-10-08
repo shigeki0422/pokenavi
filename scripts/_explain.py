@@ -436,7 +436,7 @@ def _best_move(M, O, field):
 
 _TOPB = None
 # 相手パネル（相性表の相手列）を選ぶ使用率のシーズン。環境が変わったらここを更新する。
-# 型プール自体は build_pool_M-3.md（＋上位構築から抽出した実型）を使い続けるので、
+# 型は gen_party_pool.PartyGen の出どころ（POOL_SEASON が season の版のシーズンなら型プール、過去シーズンは build_pool_*.md）。
 # ここで切り替わるのは「誰を相手に評価するか」だけ。
 USAGE_SEASON = os.environ.get("USAGE_SEASON", "M-5")
 

@@ -13,8 +13,7 @@
 !diag_adv_m6.json
 !suggest_cache.json
 !gen_pop_m6.json
-!build_pool_M-6.md
-!build_pool_M-6_extra.md
+!pool_versions.json
 simulator/__pycache__
 **/__pycache__
 *.log

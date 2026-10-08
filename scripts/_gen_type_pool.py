@@ -27,6 +27,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_build_pool import SETUP_A, SETUP_C, SETUP as SETUP_ALL, RECOVERY, PROTECT, PIVOT, HAZARD
 from simulator.data import NATURE_MODS
+import ev_fill
 from simulator.battle import MULTI_HIT_2, MULTI_HIT_RANDOM_25
 import seed_rule
 
@@ -1155,7 +1156,7 @@ def simple_builds(sp):
     for b in bs:
         b["weight"] = round(b["weight"] / z, 6)
         b["spec"] = f"{sp}@{b['item']}:{b['nature']}:{'|'.join(moves)}:{'/'.join(map(str, b['ev']))}:{ab}"
-    return {"species": sp, "builds": sorted(bs, key=lambda b: -b["weight"]), "simple": True}
+    return {"species": sp, "builds": ev_fill.fill_builds(sp, bs, SEASON), "simple": True}
 
 
 def form_fix(sp):
@@ -2476,6 +2477,7 @@ def generate_one(sp, seed):
             r["arch"] = False
         else:
             r["arch"] = True
+    r["builds"] = ev_fill.fill_builds(sp, r["builds"], SEASON)
     return r
 
 

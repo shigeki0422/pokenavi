@@ -10,6 +10,7 @@ from gen_party_pool import (PartyGen, _spec_mega, _item_of, _ROLE_TARGET, _moves
                              sample_role_targets, ROLE_W, ITEM_USAGE_W, IU_FLOOR, DBPATH, TYPEDUP_MAX)
 from _threat_coverage import load_threats, team_coverage
 import _product3 as P3
+import gen_party_pool as _GP
 import seed_rule
 
 SEASON = "M-3"
@@ -139,13 +140,12 @@ def _type_names(pg, spec):
 
 
 def _build_probs(pg, p):
-    """種 p の型確率: 型ごとに（持ち物の使用率+1）×（技構成の使用率）を種内で正規化（_role_builds の役割を除いた重みと同じ）。
+    """種 p の型確率: pg.build_weight（型プールは型の重み、md は（持ち物の使用率+1）×技構成の使用率）を種内で正規化（_role_builds の役割を除いた重みと同じ）。
     返り値 [(spec, 確率, メガか, 持ち物, タイプ), ...]"""
     cache = pg.__dict__.setdefault("_bp_cache", {})
     if p not in cache:
         bs = pg.pool.get(p, [])
-        iu = pg.item_usage.get(p, {})
-        ws = [(iu.get(_item_of(b), 0) + 1) * pg._mvw(p, b) for b in bs]
+        ws = [pg.build_weight(p, b) for b in bs]
         t = sum(ws) or 1.0
         cache[p] = [(b, w / t, bool(_spec_mega(b)), _item_of(b), _type_names(pg, b)) for b, w in zip(bs, ws)]
     return cache[p]
@@ -199,7 +199,8 @@ def _fixed_state(pg, fixed_specs):
 
 def sample_weighted(pg, fixed_keys, fixed_specs, rng, m):
     """残り枠を「条件を満たす型だけ」から順に引く。種の重み＝使用率ベースの重み×（条件を満たす型の確率の合計）、
-    型はその中で確率を正規化して引く。行き止まり（どの種も条件を満たせない）なら None。返り値 (picked, {種: 型})"""
+    型はその中で確率を正規化して引く。設置役のいないシードは同じ種の別の持ち物の型に替える（seed_rule）。
+    行き止まり（どの種も条件を満たせない・シードを替えられない）なら None。返り値 (picked, {種: 型})"""
     picked = list(fixed_keys)
     used_dex = {pg.dex.get(k) for k in fixed_keys}
     used_items, tcount, megas = _fixed_state(pg, fixed_specs)
@@ -227,6 +228,13 @@ def sample_weighted(pg, fixed_keys, fixed_specs, rng, m):
         for t in ty:
             tcount[t] += 1
         megas += mg
+    nfix = len(fixed_keys)
+    party = list(fixed_specs) + [chosen[k] for k in picked[nfix:]]
+    if seed_rule.violations(party, fixed_specs):
+        party = pg.fix_seeds(party, rng, keep=set(fixed_specs))
+        if party is None or seed_rule.violations(party, fixed_specs):
+            return None
+        chosen = dict(zip(picked[nfix:], party[nfix:]))
     return picked, chosen
 
 
@@ -442,7 +450,7 @@ def _role_builds_ext(pg, picked, fixed_map, holders, rng, tries=120, targets=Non
     """_role_builds() の固定メンバー対応版。fixed_map にある種は型選択をスキップし既存specをそのまま使う
     （型プール非所属でも可）。役割目標の充足・持ち物の重複回避は固定メンバーの分も考慮したうえで、
     新規に埋める種にのみ型を選ぶ。返り値は picked と同順の6spec（fixedはそのまま・新規は選定結果）。"""
-    targets = targets or sample_role_targets(rng)
+    targets = targets or (_GP.sample_role_targets_pool(rng) if pg.src == "pool" else sample_role_targets(rng))
     new_p = [p for p in picked if p not in fixed_map]
     has_slow_ace = any(pg._traits(q, q in holders)[0] for q in picked)
     has_rain = any(pg._traits(q, q in holders)[1] for q in picked)
@@ -467,16 +475,15 @@ def _role_builds_ext(pg, picked, fixed_map, holders, rng, tries=120, targets=Non
             if not builds: ok = False; break
             def gain(b):
                 return sum(1 for t in pg.build_roles.get(b, ()) if need.get(t, 0) > 0)
-            iu = pg.item_usage.get(p, {})
-            wts = [(iu.get(_item_of(b), 0) + 1) * pg._mvw(p, b) * (1 + ROLE_W * gain(b)) * payoff(b) for b in builds]
-            if sum(wts) <= 0: wts = [(iu.get(_item_of(b), 0) + 1) * pg._mvw(p, b) * (1 + ROLE_W * gain(b)) for b in builds]
+            wts = [pg.build_weight(p, b) * (1 + pg.role_w * gain(b)) * payoff(b) for b in builds]
+            if sum(wts) <= 0: wts = [pg.build_weight(p, b) * (1 + pg.role_w * gain(b)) for b in builds]
             chosen = rng.choices(builds, weights=wts, k=1)[0]
             party[p] = chosen; used_items.add(_item_of(chosen))
             for t in pg.build_roles.get(chosen, ()):
                 if need.get(t, 0) > 0: need[t] -= 1
         if not ok: continue
         roles = sum(targets[t] - max(0, need[t]) for t in targets)
-        usage = sum((pg.item_usage.get(p, {}).get(_item_of(party[p]), 0) + IU_FLOOR) * pg._mvw(p, party[p]) for p in picked) / 100.0
+        usage = sum(pg._rb_info(p, party[p])[4] for p in picked) / 100.0
         score = roles + ITEM_USAGE_W * usage
         if score > best_score:
             best_score = score; best = [party[p] for p in picked]

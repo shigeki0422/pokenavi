@@ -57,6 +57,7 @@ SEASON = os.environ.get("BUILDER_SEASON") or (SEASON_ORDER[0] if SEASON_ORDER el
 # 型生成器の系統表（ページ用の版＝scripts/pool_versions.json の page。想定型 archetypes.json と同じ版を使い、系統番号 archNo を揃える）。
 # ある種はここから型を作る（系統の割合の上位3系統・系統内で最も重い型）
 import pool_versions as PV  # noqa: E402
+import ev_fill  # noqa: E402
 POOL_VERSION = os.environ.get("BUILDER_POOL_VERSION") or PV.pointer("page")
 POOL_GROUPS = os.environ.get("BUILDER_POOL_GROUPS") or PV.path("type_groups", POOL_VERSION)
 _PG = {}
@@ -64,7 +65,7 @@ _PG = {}
 
 def _pool_groups():
     if "g" not in _PG:
-        _PG["g"] = json.load(open(POOL_GROUPS)) if SEASON == PV.season_of(POOL_VERSION) and os.path.exists(POOL_GROUPS) else {}
+        _PG["g"] = ev_fill.fill_groups(json.load(open(POOL_GROUPS)), SEASON) if SEASON == PV.season_of(POOL_VERSION) and os.path.exists(POOL_GROUPS) else {}
     return _PG["g"]
 
 
@@ -750,12 +751,33 @@ def build_targets(con, usage_rows, tpl_of, variants_of, n=30):
     return out
 
 
+def fill_ev_presets(name, rows):
+    """工房の努力値の候補（DB の配分・採用率）。合計66に満たない配分は余りを埋め（ev_fill）、同じ配分になったものは採用率を足す。
+    合計66超・32超の配分（DB の読み取り誤り。フレフワン H31 B8 C32 等）は落とす"""
+    out = {}
+    for ev, p in rows:
+        if sum(ev) > ev_fill.TOTAL or max(ev) > ev_fill.CAP:
+            continue
+        k = tuple(ev_fill.fill(name, ev, SEASON))
+        out[k] = round(out.get(k, 0.0) + p, 1)
+    return [{"ev": list(k), "pct": p} for k, p in sorted(out.items(), key=lambda kv: -kv[1])]
+
+
+def fill_variants(variants_of):
+    """代表型（1v1・工房の型プリセット・仮想敵）の努力値を合計66に（ev_fill）"""
+    for name, vs in variants_of.items():
+        for v in vs or []:
+            v["ev"] = ev_fill.fill(name, v["ev"], SEASON)
+            if v.get("spec"):
+                v["spec"] = ev_fill.fill_spec(v["spec"], SEASON, sp=name)
+
+
 def build_mon_files(con, usage_rows, variants_of):
     for name, rank, pid in usage_rows:
         items = [{"n": n, "pct": p} for n, p in _items_of(con, name)]
         abilities = [{"n": n, "pct": p} for n, p in _abilities_of(con, name)]
         natures = [{"n": n, "pct": p} for n, p in _natures_of(con, name)]
-        evs = [{"ev": ev, "pct": p} for ev, p in _evs_of(con, name)]
+        evs = fill_ev_presets(name, _evs_of(con, name))
         moves = [{"n": n, "pct": p} for n, p in _moves_of(con, name)]
         learnset = sorted(
             {r[0] for r in con.execute("SELECT move_jp FROM pokemon_learnsets WHERE pokemon_name=?", (name,))},
@@ -855,6 +877,7 @@ def main():
         for n in drop:
             variants_of.pop(n, None)
     write_json(os.path.join(OUT_DIR, "species.json"), species_list)
+    fill_variants(variants_of)
 
     targets_out = build_targets(con, usage_rows, tpl_of, variants_of)
     write_json(os.path.join(OUT_DIR, "targets.json"), targets_out)

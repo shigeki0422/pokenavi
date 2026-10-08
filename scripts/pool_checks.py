@@ -1,6 +1,7 @@
 """型プールの版のチェックと差分レポート（週次の型生成 update_type_pool.py から自動で呼ぶ。単体でも使える）。
 
-エラー（終了コード1）: 生成ルールの違反・型命名/系統分けの規則の違反・出力（想定型と1v1）の不整合
+エラー（終了コード1）: 生成ルールの違反（努力値の合計≠66 を含む）・型命名/系統分けの規則の違反・出力（想定型と1v1）の不整合・
+  生成物の努力値の合計≠66・型の出どころ（提案・生成集団・工房が型プールの版から型を取っているか）
 警告（一覧にしてレポートに入れる）: 前の版との統計の変化・DB の使用率との差・ランキングの網羅・監査（_audit_type_pool）の違反率
 規則は生成側（_gen_type_pool・arch_groups・gen_builder_data）の関数と定数を import して使い、ここに二重に書かない。
 
@@ -32,6 +33,7 @@ CHOICE_STATUS2_MAX = 0.05   # 警告: こだわりの型のうち変化技（ト
 AUDIT_WARN = 0.005      # 警告: _audit_type_pool の違反率（[参考] を除く）
 WEIGHT_TOL = 1e-3
 PRUNE_W_FLOOR = 0.999   # エラー: 重みが PRUNE_W 未満の型（丸めの分だけ許す）
+EV_TOTAL = 66           # エラー: 努力値の合計が66でない型（2026-10-08。余りは使用率で埋める＝ev_fill）
 CATS = ("moves", "items", "natures", "evs", "abilities")
 CAT_JA = {"moves": "技", "items": "持ち物", "natures": "性格", "evs": "努力値", "abilities": "特性"}
 
@@ -71,8 +73,8 @@ def rule_errors(G, sp, builds, used=None, nats=None):
     for b in builds:
         mv, it, ev = b["moves"], b["item"], b["ev"]
         tag = f"{it}:{b['nature']}:{'|'.join(mv)}:{'/'.join(map(str, ev))}"
-        if len(ev) != 6 or any(not isinstance(x, int) or x < 0 or x > 32 for x in ev) or sum(ev) > 66:
-            err.append(f"EV（H/A/B/C/D/S・各≤32・合計≤66） {tag}")
+        if len(ev) != 6 or any(not isinstance(x, int) or x < 0 or x > 32 for x in ev) or sum(ev) != EV_TOTAL:
+            err.append(f"EV（H/A/B/C/D/S・各≤32・合計{EV_TOTAL}。余りは ev_fill） {tag}")
         if nats is not None and b["nature"] not in nats:
             err.append(f"性格が不明 {tag}")
         if len(mv) > 4 or len(set(mv)) != len(mv):
@@ -473,6 +475,76 @@ def coverage_warnings(arch):
     return W
 
 
+def _bkey(b):
+    return (b["item"], tuple(sorted(b["moves"])))
+
+
+def _ev_sum_text(t):
+    return sum(int(x[1:]) for x in t.split() if x[:1] in "HABCDS" and x[1:].isdigit())
+
+
+def split_mons(mons, icons):
+    """builder-data/mon のうち今の species.json にあるもの（gen_builder_data がこの版で作ったもの）と、それ以外（前のシーズンのまま残るファイル）"""
+    return {k: m for k, m in mons.items() if k in icons}, sorted(f"{k}（{m.get('n', '')}）" for k, m in mons.items() if k not in icons)
+
+
+def ev_output_errors(arch, mons):
+    """生成物（想定型・1v1 の代表型・工房の型プリセット・努力値の候補）の努力値の合計が66か"""
+    err = []
+    for k, v in arch.items():
+        if k.startswith("_"):
+            continue
+        for g in v["groups"]:
+            for x in g["sets"]:
+                if _ev_sum_text(x["ev"]) != EV_TOTAL:
+                    err.append(f"想定型 {k} {g['name']}: 努力値 {x['ev']}")
+    for k, m in mons.items():
+        for b in m.get("mu", []):
+            if sum(b["ev"]) != EV_TOTAL:
+                err.append(f"1v1 {m.get('n', k)} {b.get('arch', '')}: 努力値 {b['ev']}")
+        for sp in m.get("builds", []):
+            ev = [int(x) for x in sp.split("@", 1)[1].split(":")[3].split("/")]
+            if sum(ev) != EV_TOTAL:
+                err.append(f"工房の型プリセット {m.get('n', k)}: {sp}")
+        for e in m.get("evs", []):
+            if sum(e["ev"]) != EV_TOTAL:
+                err.append(f"工房の努力値の候補 {m.get('n', k)}: {e['ev']}")
+    return err
+
+
+def source_errors(page_version, mons):
+    """提案・生成集団・工房の型が型プール（版指定）由来か。提案の型は合計66・持ち物と技の規則（item_ok。v41 の規則より前の型は読むときに外す）も見る。
+    提案（gen_party_pool）＝ season の版・生成集団（_coevo_groups）＝ season の版・工房/1v1（builder-data の mu）＝ page の版"""
+    import gen_party_pool as GPP
+    import _gen_type_pool as GT
+    err = []
+    season_v = PV.pointer("season")
+    if GPP.party_pool_src(PV.season_of(season_v)) != "pool":
+        err.append(f"提案: {PV.season_of(season_v)} の型の出どころが型プールでない（build_pool_*.md）")
+    pool = {r["species"]: {_bkey(b) for b in r["builds"]} for r in json.load(open(PV.path("type_pool", season_v)))}
+    pg = GPP.PartyGen(src="pool", version=season_v)
+    for sp, specs in pg.pool_resolve.items():
+        for s in specs:
+            it, na, mv, ev, ab = s.split("@", 1)[1].split(":")
+            if (it, tuple(sorted(mv.split("|")))) not in pool.get(sp, ()):
+                err.append(f"提案 {sp}: 型プール {season_v} に無い型 {s}")
+            if sum(int(x) for x in ev.split("/")) != EV_TOTAL:
+                err.append(f"提案 {sp}: 努力値の合計が{EV_TOTAL}でない {s}")
+            if not GT.item_ok(mv.split("|"), it):
+                err.append(f"提案 {sp}: 持ち物と技の規則(item_ok)に反する型 {s}")
+    import _coevo_groups as CG
+    if os.path.abspath(CG.GROUPS) != os.path.abspath(PV.path("type_groups", season_v)):
+        err.append(f"生成集団: 系統表 {CG.GROUPS} が season の版 {season_v} でない")
+    page = json.load(open(PV.path("type_groups", page_version)))
+    pkeys = {sp: {_bkey(b) for g in v["groups"] for b in g["builds"]} for sp, v in page.items()}
+    for k, m in mons.items():
+        sp = m.get("n")
+        for b in m.get("mu", []):
+            if b.get("archNo") and sp in pkeys and _bkey(b) not in pkeys[sp]:
+                err.append(f"1v1 {sp} {b.get('arch', '')}: 型プール {page_version} に無い型")
+    return err
+
+
 def seed_errors(groups):
     """シードは設置役がいるときだけ採用する（seed_rule）。パーティ側で同じ系統の別の持ち物の型に替えるので、
     系統の型が全部シードだと替えられない＝エラー"""
@@ -508,6 +580,9 @@ def seed_pool_warnings():
         bad = sum(1 for p in P if SR.violations(p))
         if bad:
             W.append(("設置役のいないシード", os.path.basename(f), f"{bad}/{len(P)}党"))
+        ev = sum(1 for p in P if any(sum(map(int, x.split("@", 1)[1].split(":")[3].split("/"))) != EV_TOTAL for x in p))
+        if ev:
+            W.append(("努力値の合計≠66（作り直すまで残る）", os.path.basename(f), f"{ev}/{len(P)}党"))
     return W
 
 
@@ -539,7 +614,14 @@ def run(prev, new, stage="all", dist=None):
         vp = os.path.join(bd, "version.json")
         bver = json.load(open(vp)).get("pool") if os.path.exists(vp) else None
         mons = {os.path.basename(f)[:-5]: json.load(open(f)) for f in glob.glob(os.path.join(bd, "mon", "*.json"))}
+        sp_p = os.path.join(bd, "species.json")
+        if os.path.exists(sp_p):
+            mons, old = split_mons(mons, {x["icon"] for x in json.load(open(sp_p))})
+            if old:
+                W.append(("species.json に無い mon（gen_builder_data が作り直さない前のシーズンのファイル）", "", f"{len(old)}件 {'、'.join(old)}"))
         E += [("出力の整合", "", e) for e in output_errors(arch, mons, new, bver)]
+        E += [("努力値の合計", "", e) for e in ev_output_errors(arch, mons)]
+        E += [("型の出どころ", "", e) for e in source_errors(new, mons)]
         E += [("シードの規則", "", e) for e in seed_party_errors()]
         if dist:
             E += [("en/ko の型名漏れ", "", e) for e in leak_errors(dist, arch, page_keys())]

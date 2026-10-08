@@ -16,7 +16,7 @@ paths:
   - "scripts/rust_engine/engine/src/analysis.rs"
 ---
 
-# パーティ構築・1v1判定・想定型の設計（2026-09-27 時点）
+# パーティ構築・1v1判定・想定型の設計（2026-09-27 時点・2026-10-08 型の出どころと努力値を追記）
 
 エンジンの仕様の正本は `scripts/simulator/REQUIREMENTS.md`（4-0-1 = 1v1判定、5-10 = 代表型）。ここは全体の構成と、ユーザーが決めた表示・判定の規則をまとめる。
 
@@ -31,12 +31,17 @@ paths:
        page   … 情報ページ用。週次で更新 → gen_builder_data.py（public/builder-data: mon/*.json の mu・targets.json・version.json）
                                          → gen_archetype_data.py（src/data/archetypes.json。"_version" に版）
        season … シーズン固定版（今は M-6/v41 = _local/ai_work/frozen/*_M-6_v41.json・読み取り専用）
-                 → datapack_export.py（AI・共進化）・_repop_builds.py・_audit_*.py
+                 → datapack_export.py（AI）・gen_party_pool.PartyGen（簡単構築の提案・補完 _product3_complete・提案キャッシュ）
+                   ・_coevo_groups.py（生成集団・共進化）・_repop_builds.py・_audit_*.py
+  努力値 … どの経路も scripts/ev_fill.py で合計66に揃えてから使う（生成器の出力・型プール/系統表の読み込み・工房の候補）
 1v1エンジン Rust analysis.rs
   ├ wasm → public/engine/engine_wasm.wasm（＋ public/builder-data/engine.pack.json）… サイト（静的ページのビルド時・工房のブラウザ実行）
   └ pyengine → Cloud Run pokenavi-suggest（簡単構築の提案API。エンジンを変えたら再デプロイが要る。gcloud はユーザーが実行）
 ```
 
+- **型の出どころは型プール（版指定）に一本化**（2026-10-08）: 提案・生成集団・工房・情報ページ・AI はすべて同じ型プールの版を使う（提案・生成集団・AI＝season、工房・情報ページ＝page）。提案（`PartyGen`）は手元に版が無ければ datapack の `build_pool`（Cloud Run。同じ season の版）を読む。`build_pool_<シーズン>.md`（手作りのドラフト型）は型プールの無い過去シーズン（M-3 等）専用（`gen_build_pool.py`・`gen_party_ga.py`・`_append_m4_builds.py` も過去シーズン用。`_gen_type_pool.md_builds` の M-4 上位構築 md は系統の事前分布で、型の出どころではない）。`pool_checks.py` が「型の出どころ」と「努力値の合計≠66」をエラーにする。
+- 努力値は合計66（各≤32）。余りはその種の DB（そのシーズンの最新日）で余りが最も多く置かれている能力へ（同じ大きな振り先の配分を優先・データが無ければ H→B→D→S→A→C）。`ev_fill.py`。
+- `gen_builder_data.py` はシーズンを DB の最新シーズンから自動で決めるので、新シーズンの使用率だけ入って詳細（技・努力値）がまだの日（例 M-7 の 2026-10-07）は page の版と食い違う。その間は `BUILDER_SEASON=<page のシーズン>` で流す。
 - 週次の更新は1コマンド `scripts/venv/bin/python scripts/update_type_pool.py`（手順 `.claude/commands/weekly-pool-update.md`）。型プール → 系統表 → チェック → page ポインタ → gen_builder_data.py → gen_archetype_data.py → チェック。**想定型と 1v1 は必ず同じ版から同時に作る**（Set N の archNo を揃える。片方だけ流さない。gen_builder_data.py を毎日流すのは同じ page の版を読むので可）。
 - 版の解決は `scripts/pool_versions.py`（pools/<版>/ に無ければ frozen/<name>_<シーズン>_<タグ>.json）。env で上書き: `POOL_VERSION`/`GROUPS`（想定型）、`BUILDER_POOL_VERSION`/`BUILDER_POOL_GROUPS`（1v1）、`BUILD_POOL`（datapack）、`TYPES`（監査）。
 - 型プールの対象はシーズン中に使用率に出た全種。詳細（技・持ち物…）の日に圏外だった種はその種の最新の詳細の日、シーズン中の詳細が無い種は前のシーズン（archetypes の season に出る）、技が4つ未満の種（メタモン）は周辺分布の積で作る。
@@ -44,7 +49,7 @@ paths:
 - シーズン固定版（season）の切り替え: 新シーズン開始か環境の大変化のときだけ。週次の版を候補に A/B（勝率・較正・fresh_parity/belief_parity）で確認してから切り替え、datapack・wasm・Cloud Run を作り直す。
 
 ## 週次のチェック（scripts/pool_checks.py。update_type_pool.py が自動で流す）
-- エラー（終了コード1で止める）: 生成ルール（覚えない技・没収技、ジュエルと同タイプの攻撃技、こだわり×積み/守る/回復＝item_ok、EV 各≤32・合計≤66、性格、他種のメガ石、PRUNE_W 未満の型（生成器が最後に落とす）、重みの合計）／命名・系統分け（下の規則）／出力の整合（archNo・archSub・割合が想定型と 1v1 で一致、分割ラベル、版の記録。`DIST=` で en/ko の型名漏れ）。
+- エラー（終了コード1で止める）: 生成ルール（覚えない技・没収技、ジュエルと同タイプの攻撃技、こだわり×積み/守る/回復＝item_ok、EV 各≤32・合計＝66、性格、他種のメガ石、PRUNE_W 未満の型（生成器が最後に落とす）、重みの合計）／命名・系統分け（下の規則）／出力の整合（archNo・archSub・割合が想定型と 1v1 で一致、分割ラベル、版の記録。`DIST=` で en/ko の型名漏れ）／努力値の合計≠66（想定型・1v1・工房の型プリセット・努力値の候補）／型の出どころ（提案の型が season の版にあり合計66・生成集団の系統表が season の版・1v1 の型が page の版にある）。
 - 警告（report.md に一覧）: 前の版との変化（系統の割合≥10pt・系統の消滅/新規・プールの採用率≥10pt・上位持ち物の入れ替わり・技の組の KL≥0.1。DB の変化<3pt なのにプールが動いたら「生成側の疑い」）、DB の使用率との差（技10pt（上位10を4枠へ伸ばした目標）・持ち物5・性格5・努力値10・特性15）、こだわり×変化技2本以上>5%、監査の違反率≥0.5%、ランキングの網羅。
 - 閾値は pool_checks.py の先頭の定数。規則は生成側の関数・定数（_gen_type_pool.item_ok/learnset/PRUNE_W、arch_groups.CORE/MAX_GROUPS/GIMMICK/full_attack）を import して判定する（二重に書かない）。検出のテストは test_all.py の 33。
 

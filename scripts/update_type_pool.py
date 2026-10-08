@@ -146,6 +146,8 @@ def main():
             fallback[r["species"]] = s
         os.remove(tmp)
     none += [sp for sp, s in other.items() if sp not in fallback]
+    import ev_fill
+    ev_fill.fill_pool(pool, SEASON)
     t_fb = time.time() - t0 - t_pool
 
     import arch_groups as A

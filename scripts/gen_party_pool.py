@@ -1,6 +1,9 @@
-"""M-3パーティ生成の土台：build_pool_M-3.md の型のみを使い、使用率順位で重み付けして
-6体パーティをサンプルする（型数の多寡が種の選出確率に影響しないよう、種→型の二段選択）。
-任意のわざ/特性/持ち物/EVの組合せ探索はしない（mdの型のみ）。GAはこの上に載せる。
+"""パーティ生成の土台（簡単構築の提案・補完・生成集団）。使用率順位で種を重み付けして6体パーティをサンプルする
+（型数の多寡が種の選出確率に影響しないよう、種→型の二段選択）。
+
+型の出どころ（2026-10-08）: シーズン固定版の型プール（scripts/pool_versions.json の season。AI の datapack と同じ版）が
+POOL_SEASON と同じシーズンなら型プールを使う（_load_type_pool。型の重み＝型プールの重み・努力値は ev_fill で合計66）。
+build_pool_<シーズン>.md（手作りのドラフト型）は型プールの無い過去シーズン（M-3 等）専用。PARTY_POOL_SRC=md で旧方式と比べられる。
 
 M-3はusage_rate未格納のため種の重みは順位(rank)から算出（既定 1/rank^RANK_EXP）。
 使い方: venv/bin/python gen_party_pool.py [N]
@@ -34,6 +37,106 @@ FORM_FIX = {"ケンタロス:炎": "パルデアケンタロス(炎)", "ケン�
             # 解決され「ほのおタイプでゆきふらしを持つ」実在しないキメラになり、さらに使用率も
             # 通常キュウコンの168位で上書きされて MAX_RANK=80 の補完プールから脱落していた（実際は9位）。
             "キュウコン": "アローラキュウコン"}
+
+PARTY_POOL_COVER = float(os.environ.get("PARTY_POOL_COVER", "0.95"))   # 型プールから種ごとに残す型の重みの累積
+PARTY_POOL_MAXB = int(os.environ.get("PARTY_POOL_MAXB", "40"))          # 種ごとの型の上限（持ち物・特性・技4つの組の単位）
+# 型プールのときの _role_builds の既定（fix_ev_1008）。型の重みが採用率どおりなので、役割の後押し（ROLE_W）・120試行から役割充足（ROLE_SCORE_W）
+# と使用率（POOL_USAGE_SCALE＝種内で最も重い型の使用率項）で選ぶことをやめ、型の重みどおりに引く（主要30種の技の採用率と DB の差 22.6→4.6pt）
+POOL_ROLE_W, POOL_ROLE_SCORE_W, POOL_USAGE_SCALE = 0.0, 0.0, 0.0
+
+
+def form_fix_for(keys):
+    """md のキーに効かせる FORM_FIX。コロン形は常に、キュウコン→アローラキュウコン はアローラキュウコンの節が別にある md
+    （M-6 以降。キュウコンの節は通常形）では効かせない"""
+    keys = set(keys)
+    return {k: r for k, r in FORM_FIX.items() if ":" in k or r not in keys}
+
+
+def _envf(k, default):
+    v = os.environ.get(k)
+    return float(v) if v not in (None, "") else float(default)
+
+
+def party_pool_src(season=None):
+    """型の出どころ: pool（シーズン固定版の型プール）か md（過去シーズンの build_pool_*.md）"""
+    src = os.environ.get("PARTY_POOL_SRC")
+    if src:
+        return src
+    import pool_versions as PV
+    return "pool" if PV.season_of(party_pool_version()) == (season or POOL_SEASON) else "md"
+
+
+def party_pool_version():
+    import pool_versions as PV
+    return os.environ.get("PARTY_POOL_VERSION") or PV.pointer("season")
+
+
+def _type_pool_records(version):
+    """型プールの版の中身 [{species, builds}]。手元に版が無ければ datapack の build_pool（Cloud Run・同じ season の版）"""
+    import json
+    import pool_versions as PV
+    p = PV.path("type_pool", version)
+    if os.path.exists(p):
+        return json.load(open(p))
+    dp = os.environ.get("POKENAVI_DATAPACK") or os.path.join(D, "_rust_engine", "datapack.json")
+    return [{"species": sp, "builds": bs} for sp, bs in json.load(open(dp))["build_pool"].items()]
+
+
+def rule_ok(b):
+    """型プールの生成器の持ち物と技の規則（_gen_type_pool.item_ok）を満たすか。シーズン固定版 v41 は規則（ひかりのねんど＝壁技 等・
+    2026-10-04）より前の版で、読み取り専用なので読むときに外す（提案・生成集団）"""
+    import _gen_type_pool as GT
+    return GT.item_ok(b["moves"], b["item"])
+
+
+def compact_builds(builds, cover=None, maxb=None):
+    """型プールの型を（持ち物・特性・技4つ）の組にまとめ（性格・努力値は組の中で最も重い型のもの・重みは合計）、
+    重い順に累積 cover まで・最大 maxb 個"""
+    cover = PARTY_POOL_COVER if cover is None else cover
+    maxb = PARTY_POOL_MAXB if maxb is None else maxb
+    by = {}
+    for b in builds:
+        k = (b["item"], b.get("ability", ""), tuple(sorted(b["moves"])))
+        w, best = by.get(k, (0.0, None))
+        by[k] = (w + b["weight"], b if best is None or b["weight"] > best["weight"] else best)
+    out, acc = [], 0.0
+    tot = sum(w for w, _ in by.values()) or 1.0
+    for w, b in sorted(by.values(), key=lambda t: -t[0]):
+        if out and (acc >= cover or len(out) >= maxb):
+            break
+        out.append((b, w / tot))
+        acc += w / tot
+    return out
+
+
+def _load_type_pool(version=None):
+    """シーズン固定版の型プール → parse_pool と同じ形（pool, rank, item_usage, moves_pool）＋型の重み {spec: 重み}"""
+    import ev_fill
+    import pool_versions as PV
+    version = version or party_pool_version()
+    recs = ev_fill.fill_pool(_type_pool_records(version), PV.season_of(version))
+    pool, item_usage, moves_pool, weight = {}, {}, {}, {}
+    for r in recs:
+        r["builds"] = [b for b in r["builds"] if rule_ok(b)] or r["builds"]
+        key = r["species"]
+        head = FORM_FIX.get(key, key) if ":" in key else key
+        iu = collections.Counter()
+        mv = collections.Counter()
+        for b in r["builds"]:
+            iu[b["item"]] += b["weight"]
+            for m in b["moves"]:
+                mv[m] += b["weight"]
+        z = sum(iu.values()) or 1.0
+        item_usage[key] = {it: round(100 * w / z, 1) for it, w in iu.items()}
+        moves_pool[key] = [m for m, _ in mv.most_common()]
+        specs = []
+        for b, w in compact_builds(r["builds"]):
+            s = f"{head}@{b['item']}:{b['nature']}:{'|'.join(b['moves'])}:{'/'.join(map(str, b['ev']))}:{b.get('ability', '')}"
+            specs.append(s)
+            weight[s] = w
+        pool[key] = specs
+    return pool, {}, item_usage, moves_pool, weight
+
 
 def _ev_to_slash(evstr):
     d = {k: 0 for k in EVK}
@@ -107,6 +210,8 @@ def parse_pool(md=MD):
     _extras = [os.path.join(os.path.dirname(md), f)
                for f in _EXTRA_BY_SEASON.get(POOL_SEASON, ())]
     sources = [md] + [f for f in _extras if os.path.exists(f)]
+    heads = {h.group(1).strip() for _src in sources for ln in open(_src, encoding="utf-8") if (h := HEADER.match(ln))}
+    ffix = form_fix_for(heads)
     cur = None
     for _src in sources:
       for ln in open(_src, encoding="utf-8"):
@@ -131,7 +236,7 @@ def parse_pool(md=MD):
         item, nature, ability, evs, moves = (x.strip() for x in m.groups())
         mv = _fix_choice_moves(item, [s.strip() for s in moves.split("/") if s.strip()], moves_pool[cur])
         moves = "|".join(mv)
-        sp = FORM_FIX.get(cur, cur)
+        sp = ffix.get(cur, cur)
         pool[cur].append(f"{sp}@{item}:{nature}:{moves}:{_ev_to_slash(evs)}:{ability}")
     def norm(s):
         head, rest = s.split("@", 1); it, na, mv, ev, ab = rest.split(":")
@@ -205,21 +310,50 @@ _ROLE_TARGET = {"hazard": 1, "special": 2, "status": 1, "recovery": 2, "bulk": 3
 
 _ROLE_IDX = {t: i for i, t in enumerate(("hazard", "special", "status", "recovery", "bulk", "scarf", "physical"))}
 
+# M-6 の役割の数の分布（1党あたり）。M-6 の上位構築が DB に無いので、型プール（v41）から型の重みどおりに組んだ生成集団 3000党の統計
+# （_local/ai_work/fix_ev_1008/role_stats.py。hazard0.90 special2.54 status0.72 recovery2.11 bulk2.72 scarf0.47）
+ROLE_DIST_M6 = {"hazard": {0: .299, 1: .513, 2: .176, 3: .011}, "special": {0: .018, 1: .147, 2: .33, 3: .327, 4: .142, 5: .036},
+                "status": {0: .413, 1: .466, 2: .111, 3: .01}, "recovery": {0: .032, 1: .238, 2: .4, 3: .255, 4: .074},
+                "bulk": {0: .005, 1: .073, 2: .337, 3: .387, 4: .171, 5: .026}, "scarf": {0: .532, 1: .468}}
+
+
+def sample_role_targets_pool(rng):
+    """型プールの生成集団の役割の数の分布から目標を引く（型プールを使うとき）"""
+    out = {}
+    for t, d in ROLE_DIST_M6.items():
+        ks = list(d)
+        v = rng.choices(ks, weights=[d[k] for k in ks], k=1)[0]
+        if v:
+            out[t] = v
+    return out
+
+
 def sample_role_targets(rng):
-    """M-3上位119実構築の役割/党統計（hazard0.78 special2.59 status1.15 recovery2.03 bulk3.08 scarf0.57）に較正した確率的目標。"""
+    """M-3上位119実構築の役割/党統計（hazard0.78 special2.59 status1.15 recovery2.03 bulk3.08 scarf0.57）に較正した確率的目標。
+    型プール（M-6）では使わない（sample_role_targets_pool）"""
     t = {"special": 3 if rng.random() < 0.6 else 2, "status": 1, "recovery": 2, "bulk": 3}
     if rng.random() < 0.6: t["hazard"] = 1
     if rng.random() < 0.25: t["scarf"] = 1
     return t
 ITEM_USAGE_W = float(os.environ.get("ITEM_USAGE_W", "1.5"))   # パーティ採用スコアでの持ち物使用率の重み（支配的アイテムを優先／拮抗時は役割が決める）
 MV_POW = float(os.environ.get("MV_POW", "1.5"))     # 技使用率(幾何平均)の指数。上げるほど人気技構成に寄る（トリル等の低使用率技を抑制）
-ROLE_W = float(os.environ.get("ROLE_W", "2.0"))     # 型選択での役割充足ボーナス係数。上げるほど役割目標(実構築較正)の達成率が上がる
+ROLE_W = float(os.environ.get("ROLE_W", "2.0"))     # 型選択での役割充足ボーナス係数（md のとき。型プールは PartyGen.role_w＝POOL_ROLE_W）。上げるほど役割目標(実構築較正)の達成率が上がる
 IU_FLOOR = float(os.environ.get("IU_FLOOR", "20"))  # argmax使用率項の持ち物使用率フロア。上げるほど不人気持ち物×人気技構成の型が役割枠を競える（20でミミッキュトリル率15%≒実12%）
 MIN_MEGA_USAGE = float(os.environ.get("MIN_MEGA_USAGE", "5"))   # メガ石の実使用率(%)がこれ未満なら生成候補から除外（2026-07-13）
 
 class PartyGen:
-    def __init__(self):
-        self.pool, self.rank, self.item_usage, self.moves_pool = parse_pool()
+    def __init__(self, src=None, version=None):
+        self.src = src or party_pool_src()
+        _pool = self.src == "pool"
+        self.role_w = _envf("ROLE_W", POOL_ROLE_W if _pool else 2.0)
+        self.role_score_w = _envf("ROLE_SCORE_W", POOL_ROLE_SCORE_W if _pool else 1.0)
+        self.usage_scale = _envf("POOL_USAGE_SCALE", POOL_USAGE_SCALE)
+        self.version = (version or party_pool_version()) if self.src == "pool" else MD
+        if self.src == "pool":
+            self.pool, self.rank, self.item_usage, self.moves_pool, self.bw = _load_type_pool(self.version)
+        else:
+            self.pool, self.rank, self.item_usage, self.moves_pool = parse_pool()
+            self.bw = {}
         self.pokes = [p for p in self.pool if self.pool[p]]
         live = self._live_rank()                       # USAGE_SEASON の最新クロールの順位を優先
         # プールのキーとDBの種名が食い違うフォーム（例: キー「キュウコン」＝実体アローラキュウコン）は
@@ -228,7 +362,8 @@ class PartyGen:
         if live:
             # FORM_FIX は「このプールキーの実体はこの種」という宣言なので、キーが同名で
             # DBに存在していても実体側の順位で必ず上書きする（同名の別種を拾うのが問題そのもの）。
-            for _k, _real in FORM_FIX.items():
+            # 型プールの種名は DB の種名そのもの（キュウコン と アローラキュウコン は別の種）なので、md だけ
+            for _k, _real in (form_fix_for(self.pool) if self.src == "md" else {}).items():
                 if _real in live: live[_k] = live[_real]
             self.rank = {p: live.get(p, self.rank.get(p, 9999)) for p in self.pokes}
         self.w = {p: 1.0 / (self.rank.get(p, 9999) ** RANK_EXP) for p in self.pokes}
@@ -247,9 +382,12 @@ class PartyGen:
         # プールに残っていた）。ただし self.mega_all（除外前）は明示コア指定の解決用に残す＝
         # Part3「低使用率ポケモンのパーティ提案対応」でユーザーが意図してメガライチュウX等を選んだ場合は
         # 使用率に関わらず解決できる（種自体・非メガ型は元々フィルタ対象外）。
-        self.mega = {p: _prefer_builds(_mega_hi.get(p, []), self.moves_pool.get(p, []), self.item_usage.get(p, {})) for p in self.pokes}
+        # 型プールは生成器が規則（覚える技・持ち物と技・こだわり×積み）と採用率を満たしているので、md 用の絞り込みはしない
+        prefer = (lambda bs, p: list(bs)) if self.src == "pool" else (
+            lambda bs, p: _prefer_builds(bs, self.moves_pool.get(p, []), self.item_usage.get(p, {})))
+        self.mega = {p: prefer(_mega_hi.get(p, []), p) for p in self.pokes}
         self.mega_all = {p: self.mega[p] + _mega_lo.get(p, []) for p in self.pokes}
-        self.nonm = {p: _prefer_builds([s for s in self.pool[p] if not _spec_mega(s)], self.moves_pool.get(p, []), self.item_usage.get(p, {})) for p in self.pokes}
+        self.nonm = {p: prefer([s for s in self.pool[p] if not _spec_mega(s)], p) for p in self.pokes}
         self.pool = {p: self.mega[p] + self.nonm[p] for p in self.pokes}   # 自動生成用（コア解決も既定はこちら）
         # 明示コア指定の解決専用プール（低使用率メガも含む・resolve_fixedが参照）
         self.pool_resolve = {p: self.mega_all[p] + self.nonm[p] for p in self.pokes}
@@ -372,9 +510,7 @@ class PartyGen:
             holders = self._pick_holders(picked, megas, rng)
             if holders is None: continue
             if os.environ.get("ROLE_BIAS", "1") == "1":
-                tgt = dict(_ROLE_TARGET)
-                if rng.random() < 0.65: tgt["scarf"] = 1   # 実人間のスカーフ採用率に合わせる
-                party = self._role_builds(picked, holders, rng, targets=tgt)
+                party = self._role_builds(picked, holders, rng, targets=self._fixed_targets(rng))
             else:
                 party = self._distinct_builds(picked, holders, rng)
             if party and self.is_legal(party, megas_set=(1, 2)):
@@ -523,11 +659,36 @@ class PartyGen:
         k = (p, b)
         x = cache.get(k)
         if x is None:
-            iu = self.item_usage.get(p, {}); it = _item_of(b); mv = self._mvw(p, b); m = _moves_of(b)
+            it = _item_of(b); m = _moves_of(b)
             ridx = tuple(_ROLE_IDX[t] for t in self.build_roles.get(b, ()) if t in _ROLE_IDX)
-            x = cache[k] = (b, it, ridx, (iu.get(it, 0) + 1) * mv, (iu.get(it, 0) + IU_FLOOR) * mv,
-                            "トリックルーム" in m, "あまごい" in m)
+            if self.src == "pool":
+                w = self.bw.get(b, 0.0); top = self._bw_top(p)
+                x = cache[k] = (b, it, ridx, w, self.usage_scale * w / top if top else 0.0,
+                                "トリックルーム" in m, "あまごい" in m)
+            else:
+                iu = self.item_usage.get(p, {}); mv = self._mvw(p, b)
+                x = cache[k] = (b, it, ridx, (iu.get(it, 0) + 1) * mv, (iu.get(it, 0) + IU_FLOOR) * mv,
+                                "トリックルーム" in m, "あまごい" in m)
         return x
+
+    def _fixed_targets(self, rng):
+        if self.src == "pool":
+            return sample_role_targets_pool(rng)
+        tgt = dict(_ROLE_TARGET)
+        if rng.random() < 0.65: tgt["scarf"] = 1   # 実人間のスカーフ採用率に合わせる
+        return tgt
+
+    def _bw_top(self, p):
+        cache = self.__dict__.setdefault("_bw_top_cache", {})
+        if p not in cache:
+            cache[p] = max((self.bw.get(b, 0.0) for b in self.pool_resolve.get(p, [])), default=0.0)
+        return cache[p]
+
+    def build_weight(self, p, b):
+        """型の選ばれやすさ（種内）。型プールは型の重み、md は（持ち物の使用率+1）×技構成の使用率"""
+        if self.src == "pool":
+            return self.bw.get(b, 0.0)
+        return (self.item_usage.get(p, {}).get(_item_of(b), 0) + 1) * self._mvw(p, b)
 
     def _role_builds(self, picked, holders, rng, tries=120, targets=None, fixed=None):
         """役割目標を満たすよう型を選ぶ。持ち物は全相異。best-effort。
@@ -535,7 +696,7 @@ class PartyGen:
         低使用率メガ軸（pg.megaに型が無い＝mega_allのみ）でも生成できるほか、
         固定枠の持ち物・役割が重複判定/役割カウントに正しく反映される。
         型ごとの値は _rb_info で前計算し、乱数の消費・重み・採点は前計算前の実装と完全に同じ（出力一致）。"""
-        targets = targets or sample_role_targets(rng)
+        targets = targets or (sample_role_targets_pool(rng) if self.src == "pool" else sample_role_targets(rng))
         best = None; best_score = -1
         # チーム文脈のペイオフ判定（種族依存＝triesで不変）。始動技が活きる受け手が居ないパーティでは
         # その型を選ばない（例: 遅いエース不在のトリックルーム、あまごい受け手不在のあまごい＝死に技回避）
@@ -554,7 +715,7 @@ class PartyGen:
         for t, v in targets.items():
             need0[_ROLE_IDX[t]] = v
         total = sum(targets.values())
-        fac = [1 + ROLE_W * g for g in range(len(_ROLE_IDX) + 1)]
+        fac = [1 + self.role_w * g for g in range(len(_ROLE_IDX) + 1)]
         for _ in range(tries):
             order = list(picked); rng.shuffle(order)
             party = {}; used_items = set(); need = list(need0); ok = True
@@ -578,10 +739,10 @@ class PartyGen:
             # 使用率項＝持ち物×技構成（技を無視すると120試行のargmaxが人気持ち物の低使用率技型を系統選択してしまう）。
             # +IU_FLOORフロア: 持ち物使用率が低くても技構成が標準的な型が役割枠を競えるように（トリル型が唯一のbulk供給になるのを防ぐ）
             usage = sum(party[p][4] for p in picked) / 100.0
-            score = roles + ITEM_USAGE_W * usage                          # 役割充足＋使用率
+            score = self.role_score_w * roles + ITEM_USAGE_W * usage      # 役割充足＋使用率
             if score > best_score:
                 best_score = score; best = [party[p][0] for p in picked]
-                if score == total: break
+                if score == total or (self.src == "pool" and not self.role_score_w and not self.usage_scale): break
         if best is not None:
             best = self.fix_seeds(best, rng, keep=set(fixed.values())) or best
         return best
@@ -610,9 +771,7 @@ class PartyGen:
         if holders is None:
             holders = self._pick_holders(picked, 2, rng) or self._pick_holders(picked, 1, rng)
         if holders is None: return None
-        tgt = dict(_ROLE_TARGET)
-        if rng.random() < 0.65: tgt["scarf"] = 1
-        party2 = self._role_builds(picked, holders, rng, targets=tgt)
+        party2 = self._role_builds(picked, holders, rng, targets=self._fixed_targets(rng))
         return party2 if (party2 and self.is_legal(party2, megas_set=(1, 2))) else None
 
     def fix_items(self, party, rng):
