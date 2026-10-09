@@ -1,9 +1,9 @@
 ---
 title: 'バイバニラ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのバイバニラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率36位。'
+description: 'ポケモンチャンピオンズのバイバニラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率41位。'
 pokemonName: 'バイバニラ'
 dexNumber: 584
-usageRank: 36
+usageRank: 41
 pubDate: '2026-05-24'
 draft: false
 analysisSlug: 'vanilluxe-analysis-m2'
@@ -17,7 +17,7 @@ analysisSlug: 'vanilluxe-analysis-m2'
       <img src="/images/types/type-14-ice.png" alt="こおり" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.584</strong>　／　使用率 <strong style="color:#dc2626">36位</strong>
+      全国図鑑 <strong>No.584</strong>　／　使用率 <strong style="color:#dc2626">41位</strong>
     </div>
     
   </div>

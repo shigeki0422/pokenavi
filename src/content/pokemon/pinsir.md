@@ -1,9 +1,9 @@
 ---
 title: 'カイロス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのカイロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率199位。'
+description: 'ポケモンチャンピオンズのカイロス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率191位。'
 pokemonName: 'カイロス'
 dexNumber: 127
-usageRank: 199
+usageRank: 191
 pubDate: '2026-05-24'
 draft: false
 
@@ -17,7 +17,7 @@ draft: false
       <img src="/images/types/type-06-bug.png" alt="むし" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.127</strong>　／　使用率 <strong style="color:#dc2626">199位</strong>
+      全国図鑑 <strong>No.127</strong>　／　使用率 <strong style="color:#dc2626">191位</strong>
     </div>
     
   </div>
