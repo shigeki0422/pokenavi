@@ -27,6 +27,9 @@ pub fn action_index(a: &Action) -> usize {
 /// alphazero.legal_actions_indexed（方策マスク用の列挙。設置技の除外は無い）
 pub fn legal_actions_indexed(pack: &Pack, me_s: &Side, op_s: &Side) -> Vec<usize> {
     let me = me_s.active();
+    if let Some(a) = crate::ai::forced_recharge_action(me) {
+        return vec![a.move_idx as usize];
+    }
     let can_mega = me.mega.is_some() && !me.mega_evolved && !me_s.mega_used;
     let valid = filter_valid_by_lock(me);
     let pp_valid = filter_by_pp(&valid, me);

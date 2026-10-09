@@ -110,6 +110,18 @@ class Action:
     do_mega: bool = False
 
 
+def forced_recharge_action(me) -> Optional[Action]:
+    """反動ターン（はかいこうせん等の次ターン）は交代も含めて行動を選べない。反動の技（無ければ先頭の技）を返す"""
+    if not getattr(me, "recharge", False) or not me.is_alive:
+        return None
+    idx = next((i for i, mv in enumerate(me.moves) if mv is not None and mv.name_jp == me.last_used_move), None)
+    if idx is None:
+        idx = next((i for i, mv in enumerate(me.moves) if mv is not None), None)
+    if idx is None:
+        return None
+    return Action(type="move", move=me.moves[idx], move_idx=idx, do_mega=False)
+
+
 class BattleSide:
     def __init__(self, party: List[BattlePokemon], viewer_label: str = "",
                  source6: "Optional[List[BattlePokemon]]" = None):
@@ -660,6 +672,14 @@ def _execute_move_inner(
     if move is None:
         return logs
 
+    # 反動ターンは技を使わない（技の公開・最後に使った技・技選びの観測もしない）
+    if getattr(attacker, 'recharge', False):
+        attacker.recharge = False
+        attacker.flinched = False
+        attacker.destiny_bond = False
+        logs.append(f"{attacker.name} は動けない！")
+        return logs
+
     attacker.flinched = False
     if move.name_jp != "みちづれ":
         attacker.destiny_bond = False
@@ -695,12 +715,6 @@ def _execute_move_inner(
                 import copy as _cp2
                 defender_side.belief.observe_choice(attacker.name, move, _os2(None, defender),
                                                     _cp2.deepcopy(field), _ps2(attacker))
-
-    # リチャージ（ギガインパクト・ブラストバーン等の次ターン行動不能）
-    if getattr(attacker, 'recharge', False):
-        attacker.recharge = False
-        logs.append(f"{attacker.name} は動けない！")
-        return logs
 
     # ねごと（ねむり中に別技を選んで使う）
     if move.name_jp == "ねごと":
@@ -972,6 +986,7 @@ def _execute_move_inner(
             and opp_action.type == "move"
             and opp_action.move is not None
             and opp_action.move.category != "status"
+            and not getattr(defender, "recharge", False)
         )
         if not opp_is_attacking:
             logs.append(f"{attacker.name} の ふいうち は失敗した！")
@@ -3806,6 +3821,8 @@ class Battle:
 
             action1 = ai1(self.side1, self.side2, self.field)
             action2 = ai2(self.side2, self.side1, self.field)
+            action1 = forced_recharge_action(self.side1.active) or action1
+            action2 = forced_recharge_action(self.side2.active) or action2
             # 行動を選んだ本体を記録（先攻で倒され交代した場合、後攻の行動権を失わせるため）
             chooser1, chooser2 = self.side1.active, self.side2.active
 
@@ -3922,6 +3939,7 @@ class Battle:
                 _ei = next((i for i, m in enumerate(_a.moves) if m is not None and m.name_jp == _a.locked_move), None)
                 if _ei is not None:
                     action = Action(type="move", move=_a.moves[_ei], move_idx=_ei, do_mega=action.do_mega)
+            _recharging = bool(getattr(_a, "recharge", False))
             logs = _execute_move(my_side, opp_side, action, self.field, opp_action)
             self.logs.extend(logs)
             try_white_herb(my_side.active, self.logs)
@@ -3932,7 +3950,7 @@ class Battle:
 
             # PP消費（わるあがきはmove_idx=-1なのでスキップ）
             attacker = my_side.active
-            if action.move_idx is not None and 0 <= action.move_idx < len(attacker.pp):
+            if not _recharging and action.move_idx is not None and 0 <= action.move_idx < len(attacker.pp):
                 # プレッシャー: 相手の技を受けると追加で1減る（攻撃技が相手を対象にした場合）
                 _pp_cost = 1
                 if (action.move is not None and action.move.category != "status"

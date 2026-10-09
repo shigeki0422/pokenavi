@@ -163,7 +163,7 @@ fn live_panel_selections(specs: Vec<String>, slot: usize) -> PyResult<Vec<(Vec<u
 /// state は random.getstate()[1]（624語＋位置）。戻り: (候補, 相手の仮定, 状態ベクトルのバイト列 f64 LE, 次元, 進めた乱数の状態)
 /// osels: 相手の仮定を渡す（None なら Rust でヒューリスティック 温度0,1,1）
 #[pyfunction]
-#[pyo3(signature = (specs_a, specs_b, season, n, min_mega, max_mega, state, osels=None))]
+#[pyo3(signature = (specs_a, specs_b, season, n, min_mega, max_mega, state, osels=None, megaform=false))]
 #[allow(clippy::type_complexity, clippy::too_many_arguments)]
 fn learned_select_states(
     py: Python<'_>,
@@ -175,6 +175,7 @@ fn learned_select_states(
     max_mega: usize,
     state: Vec<u32>,
     osels: Option<Vec<Vec<usize>>>,
+    megaform: bool,
 ) -> PyResult<(Vec<Vec<usize>>, Vec<Vec<usize>>, PyObject, usize, Vec<u32>)> {
     if state.len() != 625 {
         return Err(PyValueError::new_err("state は 625 語（random.getstate()[1]）"));
@@ -191,7 +192,7 @@ fn learned_select_states(
         *ft = Some(engine::features::FeatTables::build(pack));
     }
     let ftr = ft.as_ref().unwrap();
-    let (c, o, xs, dim, st) = engine::sim::learned_select_states(pack, ftr, &specs_a, &specs_b, season, n, min_mega, max_mega, &state, osels.as_deref());
+    let (c, o, xs, dim, st) = engine::sim::learned_select_states(pack, ftr, &specs_a, &specs_b, season, n, min_mega, max_mega, &state, osels.as_deref(), megaform);
     let mut buf = Vec::with_capacity(xs.len() * 8);
     for v in xs {
         buf.extend_from_slice(&v.to_le_bytes());

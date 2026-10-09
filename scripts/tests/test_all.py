@@ -5706,7 +5706,7 @@ check("SELECT_MODE=matchup で3体を返し、メガ石持ちは1体", len(_s1) 
 check("相手の真の技・持ち物を読まない（変えても選出が同じ）", _s1 == _s2, f"{_s1} / {_s2}")
 
 
-print("\n=== 26k. 学習選出の既定（simulator/selector_m6d.json、既定ON・相手の仮定 learnedK8） ===")
+print("\n=== 26k. 学習選出の既定（simulator/selector_m6e.json、既定ON・相手の仮定 learnedK8） ===")
 # M-6 の選出モデル（1037次元＝現行の既定特徴量）を既定で使う。旧 selector_m2/m3 は905次元で現行では動かない（削除/未使用）。
 import json as _js26k, tempfile as _tf26k
 import simulator.learned_selection as _LS26k
@@ -5716,15 +5716,15 @@ _sv26k = (_LS26k._PATH, _LS26k._LOADED, _LS26k._MODEL, os.environ.get("LEARNED_S
 os.environ.pop("LEARNED_SELECTION", None)
 _sv26k_env = os.environ.pop("SEL_OPP_ASSUME", None), os.environ.pop("SELECTOR_PATH", None)
 import importlib as _il26k
-check("既定のモデルパスは selector_m6d.json", os.path.basename(_il26k.reload(_LS26k)._PATH) == "selector_m6d.json", _LS26k._PATH)
+check("既定のモデルパスは selector_m6e.json", os.path.basename(_il26k.reload(_LS26k)._PATH) == "selector_m6e.json", _LS26k._PATH)
 check("SEL_OPP_ASSUME 未指定の既定は learnedK（K=8）・heur でヒューリスティック", _LS26k._opp_mode() == "learnedK" and
       (os.environ.__setitem__("SEL_OPP_ASSUME", "heur") or _LS26k._opp_mode()) is None)
 os.environ.pop("SEL_OPP_ASSUME", None)
 for _k26k, _v26k in zip(("SEL_OPP_ASSUME", "SELECTOR_PATH"), _sv26k_env):
     if _v26k is not None: os.environ[_k26k] = _v26k
-_LS26k._PATH = os.path.join(os.path.dirname(_LS26k.__file__), "selector_m6d.json"); _LS26k._LOADED = False
+_LS26k._PATH = os.path.join(os.path.dirname(_LS26k.__file__), "selector_m6e.json"); _LS26k._LOADED = False
 _m26k = _LS26k._load()
-check("既定で selector_m6d.json を読み、入力が現行の特徴量と同じ次元", _m26k is not None and _m26k["W1"].shape[1] == _fd26k(),
+check("既定で selector_m6e.json を読み、入力が megaform_ohko1（現行の特徴量＋一撃必殺18次元）", _m26k is not None and _m26k["v2"] and _m26k["W1"].shape[1] == _fd26k() + 18,
       f"{None if _m26k is None else _m26k['W1'].shape} vs {_fd26k()}")
 _A26k = [_mk26c(x) for x in _P1s]; _B26k = [_mk26c(x) for x in _P2s]
 _sel26k = _LS26k.learned_select_party(_A26k, _B26k, dl, n=3, temperature=0.0)
@@ -9698,6 +9698,179 @@ for _nm44, _fn44 in (("ev_fill", _t44_fill), ("生成器", _t44_gen), ("提案",
         _fn44()
     except Exception as _e44:
         check(f"44 {_nm44} のテストが実行できる", False, f"{type(_e44).__name__}: {_e44}")
+
+# ── 45. 低選出8種の調査（lowsel_1009）: E1 反動ターンの交代・E2 一撃必殺の命中補正 ──
+def _t45_recharge():
+    from simulator.battle import forced_recharge_action as _frc45
+    from simulator.alphazero import legal_actions_indexed as _lai45
+    from simulator.ai import _forced_charging_action as _fca45
+    a = make_poke(name="A", atk_b=150, moves=["のしかかり", "はかいこうせん"])
+    b = make_poke(name="B", moves=["まもる"])
+    foe = make_poke(name="F", hp_b=255, def_b=230, moves=["なまける"], ability="ノーガード")
+    s1, s2 = BattleSide([a, b]), BattleSide([foe])
+    bt = Battle(s1, s2, BattleField())
+    bt.resume(_Force("はかいこうせん"), _Force("なまける"), max_turns=1)
+    check("45 E1 はかいこうせん の後は反動", a.recharge and foe.is_alive)
+    _pp = list(a.pp)
+    _leg = _lai45(s1, s2, bt.field)
+    check("45 E1 反動ターンの合法手は反動の技だけ（交代・メガ・他の技なし）",
+          [ix for _, ix in _leg] == [1] and _leg[0][0].type == "move", str([ix for _, ix in _leg]))
+    _fc = _fca45(a)
+    check("45 E1 AIの強制手は反動の技", _fc is not None and _fc.move_idx == 1 and not _fc.do_mega)
+    _n0 = len(bt.logs)
+    bt.resume(lambda my, opp, f: _Act(type="switch", switch_to=1), _Force("なまける"), max_turns=2)
+    check("45 E1 反動ターンに交代を選んでも交代しない", s1.active is a and not a.recharge, str(bt.logs[_n0:]))
+    check("45 E1 反動ターンは動けない・PPは減らない", any("動けない" in l for l in bt.logs[_n0:]) and a.pp == _pp,
+          f"{a.pp} {_pp}")
+    check("45 E1 反動でなければ強制手なし（負例）", _frc45(a) is None and _fca45(a) is None)
+    _sk = make_poke(name="S", atk_b=150, moves=["ふいうち"]); _rc = make_poke(name="R", moves=["はかいこうせん"])
+    _rc.recharge = True
+    _hp = _rc.hp
+    _execute_move(BattleSide([_sk]), BattleSide([_rc]), _Act(type="move", move=_sk.moves[0]), BattleField(),
+                  _Act(type="move", move=_rc.moves[0], move_idx=0))
+    _hp1 = _rc.hp
+    _rc.recharge = False
+    _execute_move(BattleSide([_sk]), BattleSide([_rc]), _Act(type="move", move=_sk.moves[0]), BattleField(),
+                  _Act(type="move", move=_rc.moves[0], move_idx=0))
+    check("45 E1 反動ターンの相手への ふいうち は失敗（対照: 反動でなければ当たる）", _hp1 == _hp and _rc.hp < _hp, f"{_hp1} {_rc.hp} {_hp}")
+
+
+def _t45_ohko():
+    from simulator.damage import check_hit as _ch45
+    _st = random.getstate()
+    for _n in ("じわれ", "つのドリル", "ハサミギロチン", "ぜったいれいど"):
+        _base = 0.20 if _n == "ぜったいれいど" else 0.30
+        _rates = []
+        for _acc, _eva, _ab, _it in ((6, 0, "しんりょく", None), (0, 6, "しんりょく", None), (0, 0, "ふくがん", "こうかくレンズ"),
+                                     (0, 0, "しんりょく", None)):
+            _a = make_poke(moves=[_n], ability=_ab, item=_it); _a.stage_accuracy = _acc
+            _d = make_poke(); _d.stage_evasion = _eva
+            random.seed(4500)
+            _rates.append(sum(_ch45(_a, _d, _a.moves[0], BattleField()) for _ in range(4000)) / 4000)
+        check(f"45 E2 {_n} の命中は命中/回避ランク・ふくがん・こうかくレンズで変わらない（{_base:.0%}）",
+              all(abs(r - _base) < 0.025 for r in _rates), str(_rates))
+        _a = make_poke(moves=[_n]); _d = make_poke(ability="ノーガード")
+        check(f"45 E2 {_n} は ノーガード で必中", all(_ch45(_a, _d, _a.moves[0], BattleField()) for _ in range(200)))
+    random.setstate(_st)
+
+
+_P45A = ["ジュペッタ@ジュペッタナイト:いじっぱり:かげうち|みちづれ|アンコール|ポルターガイスト:0/32/2/0/0/32:おみとおし",
+         "カビゴン@カゴのみ:わんぱく:じしん|じわれ|ねむる|れいとうパンチ:32/0/2/0/32/0:あついしぼう",
+         "ヤミラミ@ヤミラミナイト:ずぶとい:おにび|じこさいせい|アンコール|イカサマ:32/0/32/0/2/0:いたずらごころ",
+         "ギルガルド@いのちのたま:れいせい:かげうち|アイアンヘッド|キングシールド|シャドーボール:32/0/0/32/0/0:バトルスイッチ",
+         "アシレーヌ@カゴのみ:ずぶとい:なみのり|ねむる|めいそう|ムーンフォース:32/0/32/0/0/0:げきりゅう",
+         "ミミッキュ@いのちのたま:ようき:じゃれつく|シャドークロー|かげうち|つるぎのまい:0/32/0/0/0/32:ばけのかわ"]
+
+
+def _t45_selv2():
+    import json as _j45, tempfile as _tf45, subprocess as _sp45
+    import numpy as _np45
+    import simulator.learned_selection as _LS45
+    import simulator.features as _FT45
+    _A = [_mk26c(x) for x in _P45A]
+    _jv = _FT45.sel_mega_view(_A[0])
+    check("45 選出v2: メガ石持ちはメガ後の複製（特性・素早さ・メガ可ビット1）で、元の個体は変えない",
+          _jv is not _A[0] and _jv.ability == "いたずらごころ" and _jv.speed != _A[0].speed and not _A[0].mega_evolved
+          and _FT45._poke_block(_jv, BattleSide([]), False)[2 + len(_FT45.TYPES) + 5 + 6 + len(_FT45._ITEM_FLAGS) + _FT45._N_ABIL_CATS] == 1.0,
+          f"{_jv.ability} {_jv.speed}/{_A[0].speed}")
+    check("45 選出v2: メガ石を持たない個体はそのまま", _FT45.sel_mega_view(_A[1]) is _A[1])
+    _kab = _A[1]
+    _P2 = [_mk26c(x) for x in _P2s]
+    _hit = _mk26c("ギルガルド@たべのこし:れいせい:シャドーボール|ラスターカノン|キングシールド|かげうち:32/0/2/32/0/0:バトルスイッチ")
+    _cases = [(_kab, _hit, 0.30, "じわれ"), (_kab, _P2[2], 0.0, "ひこう・がんじょう"), (_kab, _P2[3], 0.0, "ひこう"),
+              (_kab, _mk26c("カバルドン@オボンのみ:わんぱく:じしん|あくび|ふきとばし|なまける:32/0/32/0/0/0:すなおこし"), 0.30, "地面")]
+    _gj = _mk26c("カビゴン@カゴのみ:わんぱく:じしん|じわれ|ねむる|れいとうパンチ:32/0/2/0/32/0:あついしぼう"); _gj.ability = "ノーガード"
+    _cases.append((_gj, _hit, 1.0, "ノーガード"))
+    _rk = _mk26c("ドドゲザン@きあいのタスキ:いじっぱり:ドゲザン|アイアンヘッド|ふいうち|つるぎのまい:0/32/0/0/0/32:そうだいしょう"); _rk.ability = "がんじょう"
+    _cases.append((_kab, _rk, 0.0, "がんじょう"))
+    _mb = _mk26c("カビゴン@カゴのみ:わんぱく:じしん|じわれ|ねむる|れいとうパンチ:32/0/2/0/32/0:あついしぼう"); _mb.ability = "かたやぶり"
+    _cases.append((_mb, _rk, 0.30, "かたやぶり は がんじょう を無視"))
+    _sc = _mk26c("ギルガルド@たべのこし:れいせい:シャドーボール|ラスターカノン|キングシールド|かげうち:32/0/2/32/0/0:バトルスイッチ")
+    _sc.moves = [dl.get_move("ぜったいれいど")]
+    _cases += [(_sc, _hit, 0.20, "ぜったいれいど（非こおり）"), (_hit, _kab, 0.0, "一撃必殺なし")]
+    _got = [(_w, round(_FT45.ohko_ev(_a, _d), 6)) for _a, _d, _w, _ in _cases]
+    check("45 選出v2: 一撃必殺の期待値（命中×HP割合・タイプ/浮遊/がんじょう無効・かたやぶり・ノーガード）",
+          all(abs(a - b) < 1e-12 for a, b in _got), str([(c[3], g) for c, g in zip(_cases, _got)]))
+    _base = _j45.load(open(os.path.join(os.path.dirname(_LS45.__file__), "selector_m6d.json")))
+    _rng = _np45.random.default_rng(45)
+    _W1 = _np45.asarray(_base["W1"])
+    _v2 = dict(_base, feat="megaform_ohko1", W1=_np45.concatenate([_W1, _rng.normal(0, 1.0, (_W1.shape[0], 18))], 1).tolist())
+    _v2z = dict(_base, feat="megaform_ohko1", W1=_np45.concatenate([_W1, _np45.zeros((_W1.shape[0], 18))], 1).tolist())
+    _td = _tf45.mkdtemp()
+    def _wr(n, d):
+        q = os.path.join(_td, n); _j45.dump(d, open(q, "w")); return q
+    _pv2, _pv2z = _wr("v2.json", _v2), _wr("v2z.json", _v2z)
+    _K = ("SEL_OPP_ASSUME", "SEL_OPP_K", "LEARNED_SELECTION_IMPL", "SEL_FAST")
+    _sv = {k: os.environ.get(k) for k in _K}
+    _p0, _m0, _l0 = _LS45._PATH, _LS45._MODEL, _LS45._LOADED
+    def _ld(q):
+        _LS45._PATH = q; _LS45._LOADED = False
+        return _LS45._load()
+    try:
+        _m = _ld(_pv2)
+        check("45 選出v2: \"feat\": \"megaform_ohko1\" のモデル（入力1037+18次元）を読む", _m is not None and _m["v2"] and _m["W1"].shape[1] == _FT45.feature_dim() + 18)
+        check("45 選出v2: 未知の入力形式のモデルは読まない", _ld(_wr("vx.json", dict(_v2, feat="megaform_x"))) is None)
+        check("45 選出v2: 入力形式の無い旧モデル（m6d・1037次元）は従来どおり読む",
+              (lambda m: m is not None and not m["v2"] and m["W1"].shape[1] == _FT45.feature_dim())(_ld(os.path.join(os.path.dirname(_LS45.__file__), "selector_m6d.json"))))
+        _o = [_P2[i] for i in (0, 4, 5)]
+        _x1 = _LS45._encode_ref([_A[3], _A[4], _A[5]], _o); _x2 = _LS45._encode_ref([_A[3], _A[4], _A[5]], _o, True)
+        check("45 選出v2: メガ石も一撃必殺も無い組は先頭1037次元が旧入力と同じ・末尾18次元は0",
+              _x2[:len(_x1)] == _x1 and _x2[len(_x1):] == [0.0] * 18)
+        _pairs = [(_P45A, _P2s), (_P2s, _P45A), (_P45A, _P1s)]
+        _res = {}
+        for _impl in ("ref", "fast", "rust"):
+            for k in _K:
+                os.environ.pop(k, None)
+            os.environ.update({"SEL_OPP_ASSUME": "learnedK", "LEARNED_SELECTION_IMPL": _impl})
+            _m = _ld(_pv2)
+            _out = []
+            for _k, (_pa, _pb) in enumerate(_pairs):
+                _a = [_mk26c(x) for x in _pa]; _b = [_mk26c(x) for x in _pb]
+                _g = random.Random(4501 + _k)
+                _s = _LS45.learned_select_scores(_a, _b, dl, n=3, rng=_g)
+                _out.append(([_a.index(q) for q in max(_s, key=lambda x: x[1])[0]], [v for _, v in _s], _g.random()))
+            _res[_impl] = _out
+        check("45 選出v2（learnedK）: 高速版・Rust 版が元の実装と同じ選出・値（差1e-12未満）・乱数の消費",
+              all(a[0] == b[0] and a[2] == b[2] and max(abs(x - y) for x, y in zip(a[1], b[1])) < 1e-12
+                  for _i in ("fast", "rust") for a, b in zip(_res[_i], _res["ref"])), str({k: [o[0] for o in v] for k, v in _res.items()}))
+        _cands = _LS45._candidates([_mk26c(x) for x in _P45A], 3)
+        check("45 選出v2: メガ石持ち2体の党でも候補はメガ1体ちょうど（メガ後の形で評価するのは選ばれた1体だけ）",
+              all(sum(1 for i in c if i in (0, 2)) == 1 for c in _cands) and _cands)
+        os.environ.pop("LEARNED_SELECTION_IMPL", None)
+        _py = []
+        for _k, (_pa, _pb) in enumerate(_pairs):
+            _a = [_mk26c(x) for x in _pa]; _b = [_mk26c(x) for x in _pb]
+            _s = _LS45.learned_select_scores(_a, _b, dl, n=3, rng=random.Random(301))
+            _py.append([_a.index(q) for q in max(_s, key=lambda x: x[1])[0]])
+        _code = "import sys, json\nimport pokenavi_engine as E\nP = json.loads(sys.argv[1]); M = sys.argv[2]\n" \
+                "print(json.dumps([E.guide_rows(a, [b], 'M-6', 0, 300, M)[0][0] for a, b in P]))"
+        for _env in ({"SEL_OPP_ASSUME": "learnedK"}, {"SEL_OPP_ASSUME": "learnedK", "SEL_FAST": "0"}):
+            _e = dict(os.environ); _e.update(_env)
+            _r = _sp45.run([sys.executable, "-c", _code, _j45.dumps(_pairs, ensure_ascii=False), _pv2], capture_output=True, text=True,
+                           env=_e, cwd=_SCRIPTS_DIR26n)
+            _rs = _j45.loads(_r.stdout.strip().splitlines()[-1]) if _r.returncode == 0 else _r.stderr[-300:]
+            check(f"45 選出v2: Rust select_scores（guide_rows・{'元の実装' if _env.get('SEL_FAST') else '高速版'}）の選出が Python と一致", _rs == _py, f"{_rs} / {_py}")
+        _r = _sp45.run([sys.executable, "-c", _code, _j45.dumps(_pairs[:1], ensure_ascii=False), _wr("vx2.json", dict(_v2, feat="megaform_x"))],
+                       capture_output=True, text=True, cwd=_SCRIPTS_DIR26n)
+        check("45 選出v2: Rust も未知の入力形式のモデルは読まない", _r.returncode != 0 and "選出モデルとして読めない" in _r.stderr, _r.stderr[-200:])
+        _m6e = os.path.join(os.path.dirname(_LS45.__file__), "selector_m6e.json")
+        if os.path.exists(_m6e):
+            check("45 選出v2: selector_m6e.json（既定）を v2 のモデルとして読む", (lambda m: m is not None and m["v2"])(_ld(_m6e)))
+            _r = _sp45.run([sys.executable, "-c", _code, _j45.dumps(_pairs[:1], ensure_ascii=False), _m6e], capture_output=True, text=True,
+                           cwd=_SCRIPTS_DIR26n)
+            check("45 選出v2: Rust も selector_m6e.json を読む", _r.returncode == 0, _r.stderr[-200:])
+    finally:
+        for k, v in _sv.items():
+            if v is None: os.environ.pop(k, None)
+            else: os.environ[k] = v
+        _LS45._PATH, _LS45._MODEL, _LS45._LOADED = _p0, _m0, _l0
+
+
+for _nm45, _fn45 in (("反動ターン", _t45_recharge), ("一撃必殺の命中", _t45_ohko), ("選出の入力v2", _t45_selv2)):
+    try:
+        _fn45()
+    except Exception as _e45:
+        check(f"45 {_nm45} のテストが実行できる", False, f"{type(_e45).__name__}: {_e45}")
 
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:

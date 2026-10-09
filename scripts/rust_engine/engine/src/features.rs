@@ -449,7 +449,7 @@ fn poke_block(pack: &Pack, ft: &FeatTables, p: Option<&Poke>, mega_used: bool, o
         out.push(if (ib >> b) & 1 == 1 { 1.0 } else { 0.0 });
     }
     abil_cats(pack, out, p.ability, ft.n_cats);
-    out.push(if p.mega.is_some() && !p.mega_evolved && !mega_used { 1.0 } else { 0.0 });
+    out.push(if (p.mega.is_some() && !p.mega_evolved && !mega_used) || p.sel_megav { 1.0 } else { 0.0 });
     move_features(pack, ft, p, out);
     volatile_block(Some(p), out);
 }

@@ -465,7 +465,8 @@ def _poke_block(p, side, opp_belief=False) -> List[float]:
     items = _flags(p.item, _ITEM_FLAGS)
     # 特性は効果カテゴリで表現。相手側(opp_belief指定)は未知特性をマスク（不完全情報）。
     abils = _ability_cats(p, opp_belief)
-    megav = 1.0 if (p.mega_data is not None and not p.mega_evolved and not side.mega_used) else 0.0
+    megav = 1.0 if ((p.mega_data is not None and not p.mega_evolved and not side.mega_used)
+                    or getattr(p, "_sel_megav", False)) else 0.0
     return [alive, hpf] + tvec + st + stats + items + abils + [megav] + _move_features(p) + _volatile_block(p)
 
 
@@ -569,3 +570,61 @@ def encode_state(side1, side2, field) -> List[float]:
 
 def feature_dim() -> int:
     return 2 * _PER_SIDE + _MATRIX + _SPEEDMAT + _DISCLOSE + _FIELD
+
+
+# ── 学習選出の入力 v2（モデルの "feat": SEL_FEAT_V2。Rust selector.rs と同じ）──────────────────────────
+# メガ石持ちはメガ後の種族値・タイプ・特性で個体ブロック・与ダメ・素早さを作る（「メガ可」ビットは1のまま）。
+# 末尾に一撃必殺技の期待値（命中率×相手HP割合）の 3x3（自分→相手）＋3x3（相手→自分）を足す。価値ネットの特徴量は変えない。
+SEL_FEAT_V2 = "megaform_ohko1"
+SEL_EXTRA_V2 = 18
+_OHKO = ("じわれ", "ぜったいれいど", "つのドリル", "ハサミギロチン")
+_MOLD = ("かたやぶり", "ターボブレイズ", "テラボルテージ")
+
+
+def sel_mega_view(p):
+    """メガ石持ち（未メガ）はメガ後の複製（_sel_megav＝メガ可ビット1）。それ以外はそのまま"""
+    if p is None or getattr(p, "mega_data", None) is None or p.mega_evolved:
+        return p
+    import copy
+    q = copy.copy(p)
+    q.do_mega_evolve()
+    q._sel_megav = True  # type: ignore
+    return q
+
+
+def ohko_ev(att, deff) -> float:
+    """att の一撃必殺技で deff の HP を削る割合の期待値（命中率×HP割合の最大）。無効（タイプ・浮いている・がんじょう）は0"""
+    if att is None or deff is None or not att.is_alive or not deff.is_alive or not deff.max_hp:
+        return 0.0
+    best = 0.0
+    mold = att.ability in _MOLD
+    dt = (deff.type1, deff.type2)
+    for mv in att.moves or []:
+        if mv is None or mv.name_jp not in _OHKO:
+            continue
+        n = mv.name_jp
+        if n == "ぜったいれいど" and "こおり" in dt:
+            continue
+        if n in ("つのドリル", "ハサミギロチン") and "ゴースト" in dt:
+            continue
+        if n == "じわれ" and ("ひこう" in dt or deff.item == "ふうせん" or (deff.ability == "ふゆう" and not mold)):
+            continue
+        if deff.ability == "がんじょう" and not mold:
+            continue
+        if "ノーガード" in (att.ability, deff.ability):
+            pr = 1.0
+        elif n == "ぜったいれいど" and "こおり" not in (att.type1, att.type2):
+            pr = 0.20
+        else:
+            pr = 0.30
+        best = max(best, pr * deff.hp / deff.max_hp)
+    return best
+
+
+def sel_extra(order, osel) -> List[float]:
+    """v2 の末尾18次元: 一撃必殺の期待値 自分[i]→相手[j]（i*3+j）、相手[j]→自分[i]（9+j*3+i）"""
+    order = (list(order) + [None] * 3)[:3]
+    osel = (list(osel) + [None] * 3)[:3]
+    f = [ohko_ev(a, d) for a in order for d in osel]
+    f += [ohko_ev(a, d) for a in osel for d in order]
+    return f

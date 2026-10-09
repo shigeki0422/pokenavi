@@ -1069,6 +1069,13 @@ fn execute_move_inner(
     }
 
     A!().defenseless = false;
+    // 反動ターンは技を使わない（技の公開・最後に使った技・技選びの観測もしない。battle.py と同じ）
+    if A!().recharge {
+        A!().recharge = false;
+        A!().flinched = false;
+        A!().destiny_bond = false;
+        return;
+    }
     A!().flinched = false;
     if n != l.みちづれ {
         A!().destiny_bond = false;
@@ -1116,11 +1123,6 @@ fn execute_move_inner(
                 sides[didx].belief.0 = Some(bl);
             }
         }
-    }
-
-    if A!().recharge {
-        A!().recharge = false;
-        return;
     }
 
     // ねごと（ダメージ技の再実行）
@@ -1390,6 +1392,7 @@ fn execute_move_inner(
             Some(oa) => {
                 oa.kind == ActKind::Move
                     && oa.mv.as_ref().map(|m| m.category != Cat::Status).unwrap_or(false)
+                    && !D!().recharge
             }
             None => false,
         };
@@ -4643,6 +4646,7 @@ impl Battle {
                     _ => action,
                 }
             };
+            let recharging = self.sides[mx].active().recharge;
             {
                 let Battle { sides, field, .. } = self;
                 execute_move(pack, sides, field, mx, action, opp_action, rng, &mut 0);
@@ -4659,7 +4663,7 @@ impl Battle {
                 let opp_pressure = self.sides[ox].active().ability == l.プレッシャー;
                 let s = &mut self.sides[mx];
                 let ai = s.active_idx;
-                if mi >= 0 && (mi as usize) < s.party[ai].pp.len() {
+                if !recharging && mi >= 0 && (mi as usize) < s.party[ai].pp.len() {
                     let mut cost = 1;
                     if action.mv.as_ref().map(|m| m.category != Cat::Status).unwrap_or(false)
                         && opp_alive
@@ -5470,6 +5474,8 @@ impl Battle {
             }
 
             let [action1, action2] = get_acts(self, rng);
+            let action1 = crate::ai::forced_recharge_action(self.sides[0].active()).unwrap_or(action1);
+            let action2 = crate::ai::forced_recharge_action(self.sides[1].active()).unwrap_or(action2);
             let chooser1 = self.sides[0].active_idx;
             let chooser2 = self.sides[1].active_idx;
 
@@ -6453,6 +6459,104 @@ mod audit4_tests {
                 let fr: Vec<f64> = c.iter().map(|&x| x as f64 / nn as f64).collect();
                 assert!((fr[0] - 0.11).abs() < 0.008 && (fr[1] - 0.10).abs() < 0.008 && (fr[2] - 0.09).abs() < 0.008, "{fr:?}");
             }
+        }
+    }
+}
+
+/// 低選出8種の調査（lowsel_1009）で見つけた E1（反動ターンの交代）・E2（一撃必殺の命中補正）。test_all.py 45 と同じ局面
+#[cfg(test)]
+mod lowsel1009_tests {
+    use super::*;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    struct Z;
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { 0.5 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    const N: &str = "きれいなぬけがら";
+    const DUM: &str = "カビゴン@きれいなぬけがら:わんぱく:なまける|まもる:32/0/32/0/0/0:あついしぼう";
+
+    fn sides(p: &mut Pack, a: &[&str], b: &[&str]) -> [Side; 2] {
+        let pa: Vec<Poke> = a.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        let pb: Vec<Poke> = b.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        [Side { party: pa, active_idx: 0, field_idx: 0, ..Default::default() },
+         Side { party: pb, active_idx: 0, field_idx: 1, ..Default::default() }]
+    }
+
+    fn mv_of(p: &Pack, poke: &Poke, n: &str) -> Action {
+        let (i, m) = poke.moves.iter().enumerate().find(|(_, m)| p.intern.resolve(m.name) == n).unwrap();
+        Action { kind: ActKind::Move, mv: Some(m.clone()), move_idx: i as i64, switch_to: -1, do_mega: false }
+    }
+
+    #[test]
+    fn lowsel1009_e1_反動ターンは交代できずPPも減らない() {
+        let mut p = pack();
+        let [a, b] = sides(&mut p, &[&format!("カビゴン@{N}:いじっぱり:のしかかり|はかいこうせん:0/32/0/0/0/32:あついしぼう"), DUM], &[DUM]);
+        let pr: &Pack = &p;
+        let mut bt = Battle::new(a, b, Field::default());
+        let hb = mv_of(pr, &bt.sides[0].party[0], "はかいこうせん");
+        let rest = mv_of(pr, &bt.sides[1].party[0], "なまける");
+        let sw = Action { kind: ActKind::Switch, mv: None, move_idx: -1, switch_to: 1, do_mega: false };
+        let (h2, r2) = (hb.clone(), rest.clone());
+        bt.run_loop_lim(pr, &mut Z, 1, move |_, _| [h2.clone(), r2.clone()], |_| {});
+        assert!(bt.sides[0].active().recharge, "はかいこうせん の後は反動");
+        let pp = bt.sides[0].active().pp.clone();
+        assert_eq!(crate::search::legal_actions_indexed(pr, &bt.sides[0], &bt.sides[1]), vec![1usize], "反動ターンの合法手は反動の技だけ");
+        let fc = crate::ai::forced_charging_action(bt.sides[0].active_mut()).unwrap();
+        assert_eq!((fc.kind, fc.move_idx), (ActKind::Move, 1));
+        bt.run_loop_lim(pr, &mut Z, 2, move |_, _| [sw.clone(), rest.clone()], |_| {});
+        let s = &bt.sides[0];
+        assert_eq!(s.active_idx, 0, "反動ターンに交代した");
+        assert!(!s.active().recharge);
+        assert_eq!(s.active().pp, pp, "反動ターンにPPが減った");
+    }
+
+    #[test]
+    fn lowsel1009_e1_反動中の相手へのふいうちは失敗() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &[&format!("ドドゲザン@{N}:いじっぱり:ふいうち:0/32/0/0/0/32:まけんき")],
+                          &[&format!("カビゴン@{N}:いじっぱり:はかいこうせん:0/32/0/0/0/32:あついしぼう")]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        let a = mv_of(pr, &s[0].party[0], "ふいうち");
+        let o = mv_of(pr, &s[1].party[0], "はかいこうせん");
+        s[1].party[0].recharge = true;
+        let hp = s[1].party[0].hp;
+        let mut d = 0;
+        execute_move(pr, &mut s, &mut f, 0, &a, Some(&o), &mut Z, &mut d);
+        assert_eq!(s[1].party[0].hp, hp);
+        s[1].party[0].recharge = false;
+        execute_move(pr, &mut s, &mut f, 0, &a, Some(&o), &mut Z, &mut d);
+        assert!(s[1].party[0].hp < hp, "対照: 反動でなければ当たる");
+    }
+
+    #[test]
+    fn lowsel1009_e2_一撃必殺は命中回避ランクと命中補正を受けない() {
+        let mut p = pack();
+        let s = sides(&mut p, &[&format!("カビゴン@こうかくレンズ:いじっぱり:じわれ|つのドリル|ハサミギロチン|ぜったいれいど:32/32/0/0/0/0:ふくがん")], &[DUM]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        for n in ["じわれ", "つのドリル", "ハサミギロチン", "ぜったいれいど"] {
+            let m = mv_of(pr, &s[0].party[0], n).mv.unwrap();
+            let base = if n == "ぜったいれいど" { 0.20 } else { 0.30 };
+            let mut a = s[0].party[0].clone();
+            let mut d = s[1].party[0].clone();
+            a.stage_accuracy = 6;
+            assert!(!crate::damage::check_hit(pr, &a, &d, &m, &mut f, &mut || base + 0.01), "{n}: 命中+6でも上がらない");
+            assert!(crate::damage::check_hit(pr, &a, &d, &m, &mut f, &mut || base - 0.01), "{n}: 命中{base}");
+            a.stage_accuracy = 0;
+            d.stage_evasion = 6;
+            assert!(crate::damage::check_hit(pr, &a, &d, &m, &mut f, &mut || base - 0.01), "{n}: 回避+6でも下がらない");
+            d.ability = pr.sy.ab.ノーガード;
+            assert!(crate::damage::check_hit(pr, &a, &d, &m, &mut f, &mut || 0.99), "{n}: ノーガードは必中");
         }
     }
 }

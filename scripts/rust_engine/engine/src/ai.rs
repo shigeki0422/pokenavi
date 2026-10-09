@@ -427,8 +427,20 @@ fn priority_ko_action(
     })
 }
 
+/// battle.py `forced_recharge_action`（反動ターンは交代も含めて行動を選べない。反動の技、無ければ先頭の技）
+pub fn forced_recharge_action(me: &Poke) -> Option<Action> {
+    if !me.recharge || !me.is_alive || me.moves.is_empty() {
+        return None;
+    }
+    let i = me.moves.iter().position(|m| Some(m.name) == me.last_used_move).unwrap_or(0);
+    Some(Action { kind: ActKind::Move, mv: Some(me.moves[i].clone()), move_idx: i as i64, switch_to: -1, do_mega: false })
+}
+
 /// ai.py `_forced_charging_action`（該当技が無ければ charging_move をクリアする＝副作用あり）
 pub fn forced_charging_action(me: &mut Poke) -> Option<Action> {
+    if let Some(a) = forced_recharge_action(me) {
+        return Some(a);
+    }
     let cm = me.charging_move?;
     for (i, mv) in me.moves.iter().enumerate() {
         if mv.name == cm {
@@ -1225,6 +1237,10 @@ fn ko_hit_prob(pack: &Pack, me: &Poke, op: &Poke, mv: &DMove, field: &Field) -> 
     let thunder = mv.name == s.mv.かみなり || mv.name == s.mv.ぼうふう;
     if (thunder && w == Some(s.we.rain)) || (mv.name == s.mv.ふぶき && w == Some(s.we.hail)) {
         return 1.0;
+    }
+    let l = &s.l;
+    if mv.name == l.じわれ || mv.name == l.ぜったいれいど || mv.name == l.つのドリル || mv.name == l.ハサミギロチン {
+        return if mv.name == l.ぜったいれいど && !me.has_type(pack.tc.こおり) { 0.20 } else { 0.30 };
     }
     let eva = if me.ability == s.ab.するどいめ || me.ability == s.ab.はっこう { 0 } else { op.stage_evasion };
     let mut p = (acc as f64) * crate::poke::acc_eva_stage(me.stage_accuracy - eva) / 100.0;

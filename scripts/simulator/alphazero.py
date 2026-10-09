@@ -12,7 +12,7 @@ import math
 import random
 from typing import List, Optional
 
-from .battle import Action, Battle, BattleSide, BattleField, is_trapped
+from .battle import Action, Battle, BattleSide, BattleField, is_trapped, forced_recharge_action
 from .features import encode_state, feature_dim
 from .ai import (HeuristicAI, _filter_valid_by_lock, _filter_by_pp, _get_struggle,
                  _forced_charging_action)
@@ -67,6 +67,9 @@ class NetGreedyAI:
 def legal_actions_indexed(my_side, opp_side, field):
     """(Action, action_index) の合法手リスト。SearchAI と整合した列挙。"""
     me = my_side.active
+    fr = forced_recharge_action(me)
+    if fr is not None:
+        return [(fr, fr.move_idx)]
     can_mega = (me.mega_data is not None and not me.mega_evolved and not my_side.mega_used)
     valid = [(i, mv) for i, mv in enumerate(me.moves) if mv is not None]
     valid = _filter_valid_by_lock(valid, me)

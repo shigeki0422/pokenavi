@@ -932,6 +932,9 @@ def semi_invulnerable_miss(attacker, defender, move) -> bool:
     return move.name_jp not in SEMI_INVULN_HITS[dc]
 
 
+OHKO_MOVES = frozenset({"じわれ", "ぜったいれいど", "つのドリル", "ハサミギロチン"})
+
+
 def check_hit(attacker, defender, move, field) -> bool:
     """命中判定。まもる・半無敵は必中技（命中「—」・ノーガード・雨のかみなり 等）より先に判定する"""
     from .items import get_evasion_item_mult
@@ -963,9 +966,9 @@ def check_hit(attacker, defender, move, field) -> bool:
     POWDER_MOVES = {"しびれごな", "ねむりごな", "どくのこな", "キノコのほうし", "わたほうし", "ちょうのこな"}
     if move.name_jp in POWDER_MOVES and "くさ" in (defender.type1, defender.type2):
         return False
-    # ぜったいれいど: こおりタイプが使うと30%、非こおりタイプは20%
-    if move.name_jp == "ぜったいれいど":
-        acc = 0.30 if "こおり" in (attacker.type1, attacker.type2) else 0.20
+    # 一撃必殺技: 命中率/回避率ランク・命中を変える特性/持ち物の補正を受けない（30%。ぜったいれいどを非こおりタイプが使うと20%。レベルは全員50）
+    if move.name_jp in OHKO_MOVES:
+        acc = 0.20 if move.name_jp == "ぜったいれいど" and "こおり" not in (attacker.type1, attacker.type2) else 0.30
         return random.random() < acc
     if effective_weather(field, attacker) == "rain" and move.name_jp in ("かみなり", "ぼうふう"):
         return True  # 雨中必中

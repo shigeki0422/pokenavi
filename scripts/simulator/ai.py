@@ -7,7 +7,7 @@ import math
 import os
 import random
 from typing import List, Optional
-from .battle import Action, BattleSide, BattleField, crit_chance
+from .battle import Action, BattleSide, BattleField, crit_chance, forced_recharge_action
 from .pokemon import BattlePokemon
 from .data import get_type_effectiveness, DataLoader
 from .damage import calc_damage, estimate_only
@@ -414,6 +414,9 @@ def _ko_hit_prob(me, opp, mv, field) -> float:
     w = _ew(field, me)
     if n in ("かみなり", "ぼうふう") and w == "rain" or n == "ふぶき" and w == "hail":
         return 1.0
+    from .damage import OHKO_MOVES
+    if n in OHKO_MOVES:
+        return 0.20 if n == "ぜったいれいど" and "こおり" not in (me.type1, me.type2) else 0.30
     eva = 0 if me.ability in ("するどいめ", "はっこう") else opp.stage_evasion
     p = mv.accuracy * ACC_EVA_STAGE[max(-6, min(6, me.stage_accuracy - eva))] / 100
     if n in ("かみなり", "ぼうふう") and w == "sunny":
@@ -568,7 +571,10 @@ def should_mega_evolve(me: BattlePokemon, opp: BattlePokemon,
 
 
 def _forced_charging_action(me: BattlePokemon) -> Optional[Action]:
-    """溜め中の場合、同じ技を強制継続するActionを返す"""
+    """溜め中の場合、同じ技を強制継続するActionを返す。反動ターンは反動の技（交代も選べない）"""
+    fr = forced_recharge_action(me)
+    if fr is not None:
+        return fr
     if not me.charging_move:
         return None
     for i, mv in enumerate(me.moves):

@@ -22,6 +22,8 @@ pub struct Selector {
     pub b2: f64,
     /// 隠れ層の活性化（モデルの "act"。無ければ tanh）。true＝ReLU
     pub relu: bool,
+    /// 入力 v2（モデルの "feat" = "megaform_ohko1"）: メガ石持ちはメガ後の形で符号化し、末尾に一撃必殺の期待値 18 次元
+    pub v2: bool,
     /// 高速版の個体ブロックの射影のキャッシュ: (陣営, ブロックのビット列) → 位置 0..3 の W1 射影を並べた 3h
     proj: Mutex<FnvMap<(u8, Vec<u64>), Vec<f64>>>,
 }
@@ -47,13 +49,18 @@ impl Selector {
             Some("relu") => true,
             Some(_) => return None,
         };
+        let v2 = match v["feat"].as_str() {
+            None => false,
+            Some(SEL_FEAT_V2) => true,
+            Some(_) => return None,
+        };
         let mut w1t = vec![0.0f64; h * d];
         for j in 0..h {
             for k in 0..d {
                 w1t[k * h + j] = flat[j * d + k];
             }
         }
-        Some(Selector { h, d, w1: flat, w1t, b1: f("b1")?, w2: f("W2")?, b2: v["b2"].as_f64()?, relu, proj: Mutex::new(FnvMap::default()) })
+        Some(Selector { h, d, w1: flat, w1t, b1: f("b1")?, w2: f("W2")?, b2: v["b2"].as_f64()?, relu, v2, proj: Mutex::new(FnvMap::default()) })
     }
 
     /// 個体 p のブロック（陣営 side の位置 0..3、先頭の添字 base）の W1 射影を位置ごとに並べた 3h。添字順の逐次和
@@ -125,6 +132,72 @@ impl Selector {
         }
         1.0 / (1.0 + (-(z + self.b2)).exp())
     }
+}
+
+/// 入力 v2 の形式名（learned_selection / features.py の SEL_FEAT_V2）と末尾の次元
+pub const SEL_FEAT_V2: &str = "megaform_ohko1";
+pub const SEL_EXTRA_V2: usize = 18;
+
+/// features.py sel_mega_view: メガ石持ち（未メガ）はメガ後の複製（メガ可ビット1）。それ以外は複製
+pub fn sel_view(pack: &Pack, p: &Poke) -> Poke {
+    let mut q = p.clone();
+    if q.mega.is_some() && !q.mega_evolved {
+        crate::poke::mega_evolve_poke(pack, &mut q);
+        q.sel_megav = true;
+    }
+    q
+}
+
+/// features.py ohko_ev: 一撃必殺技で削る HP 割合の期待値（命中率×HP割合の最大）。無効（タイプ・浮いている・がんじょう）は0
+pub fn ohko_ev(pack: &Pack, a: &Poke, d: &Poke) -> f64 {
+    if !a.is_alive || !d.is_alive || d.max_hp == 0 {
+        return 0.0;
+    }
+    let l = &pack.sy.l;
+    let mold = a.ability == l.かたやぶり || a.ability == l.ターボブレイズ || a.ability == l.テラボルテージ;
+    let mut best = 0.0f64;
+    for m in &a.moves {
+        let n = m.name;
+        if !(n == l.じわれ || n == l.ぜったいれいど || n == l.つのドリル || n == l.ハサミギロチン) {
+            continue;
+        }
+        if n == l.ぜったいれいど && d.has_type(pack.tc.こおり) {
+            continue;
+        }
+        if (n == l.つのドリル || n == l.ハサミギロチン) && d.has_type(pack.tc.ゴースト) {
+            continue;
+        }
+        if n == l.じわれ && (d.has_type(pack.tc.ひこう) || d.item == Some(pack.sy.it.ふうせん) || (d.ability == l.ふゆう && !mold)) {
+            continue;
+        }
+        if d.ability == l.がんじょう && !mold {
+            continue;
+        }
+        let pr = if a.ability == l.ノーガード || d.ability == l.ノーガード {
+            1.0
+        } else if n == l.ぜったいれいど && !a.has_type(pack.tc.こおり) {
+            0.20
+        } else {
+            0.30
+        };
+        let v = pr * d.hp as f64 / d.max_hp as f64;
+        if v > best {
+            best = v;
+        }
+    }
+    best
+}
+
+/// features.py sel_extra: 自分[i]→相手[j]（i*3+j）、相手[j]→自分[i]（9+j*3+i）。3体に満たない位置は0
+pub fn sel_extra(pack: &Pack, a: &[Poke], b: &[Poke]) -> Vec<f64> {
+    let mut out = vec![0.0f64; SEL_EXTRA_V2];
+    for i in 0..a.len().min(3) {
+        for j in 0..b.len().min(3) {
+            out[i * 3 + j] = ohko_ev(pack, &a[i], &b[j]);
+            out[9 + j * 3 + i] = ohko_ev(pack, &b[j], &a[i]);
+        }
+    }
+    out
 }
 
 /// CpyRandom を BRng として渡す（ダメージ計算の乱数）
@@ -671,12 +744,17 @@ fn select_ref(
     for (k, c) in cands.iter().enumerate() {
         let mut v = vec![0.0f64; osels.len()];
         for (j, os) in osels.iter().enumerate() {
+            let view = |p: &Poke| if sel.v2 { sel_view(pack, p) } else { p.clone() };
+            let pa: Vec<Poke> = c.iter().map(|&i| view(&me[i])).collect();
+            let pb: Vec<Poke> = os.iter().map(|&i| view(&opp[i])).collect();
+            let ex = if sel.v2 { sel_extra(pack, &pa, &pb) } else { Vec::new() };
             let mut sides = [
-                Side { party: c.iter().map(|&i| me[i].clone()).collect(), active_idx: 0, field_idx: 0, ..Default::default() },
-                Side { party: os.iter().map(|&i| opp[i].clone()).collect(), active_idx: 0, field_idx: 1, ..Default::default() },
+                Side { party: pa, active_idx: 0, field_idx: 0, ..Default::default() },
+                Side { party: pb, active_idx: 0, field_idx: 1, ..Default::default() },
             ];
             let mut field = Field::default();
-            let x = encode_state(pack, ft, &mut sides, 0, &mut field, &mut memo, &mut GRng(g));
+            let mut x = encode_state(pack, ft, &mut sides, 0, &mut field, &mut memo, &mut GRng(g));
+            x.extend_from_slice(&ex);
             v[j] = sel.predict(&x);
         }
         let sc = agg.score(&v);
@@ -962,11 +1040,20 @@ fn select_fast(
     if me.len() < 3 || opp.len() < 3 || !me.iter().chain(opp.iter()).all(|p| pristine(pack, ft, p)) {
         return None;
     }
+    let (mev, oppv);
+    let (me, opp): (&[Poke], &[Poke]) = if sel.v2 {
+        mev = me.iter().map(|p| sel_view(pack, p)).collect::<Vec<Poke>>();
+        oppv = opp.iter().map(|p| sel_view(pack, p)).collect::<Vec<Poke>>();
+        (&mev, &oppv)
+    } else {
+        (me, opp)
+    };
     let (h, d) = (sel.h, sel.d);
     let pbl = crate::features::poke_block_len(pack);
     let per = 3 * pbl + 7 + 2;
     let (m1, m2, sp) = (2 * per, 2 * per + 9, 2 * per + 18);
-    if d != crate::features::feature_dim(pack) {
+    let dbase = crate::features::feature_dim(pack);
+    if d != dbase + if sel.v2 { SEL_EXTRA_V2 } else { 0 } {
         return None;
     }
     if pc.tabs.is_none() {
@@ -996,9 +1083,10 @@ fn select_fast(
         let mut field = Field::default();
         let mut memo = DmgMemo::default();
         let mut c = encode_state(pack, ft, &mut sides, 0, &mut field, &mut memo, &mut NoRng);
-        if c.len() != d {
+        if c.len() != dbase {
             return None;
         }
+        c.resize(d, 0.0);
         for v in c[0..3 * pbl].iter_mut() {
             *v = 0.0;
         }
@@ -1008,8 +1096,8 @@ fn select_fast(
         for v in c[m1..sp + 9].iter_mut() {
             *v = 0.0;
         }
-        c[d - 2] = 0.0;
-        c[d - 1] = 0.0;
+        c[dbase - 2] = 0.0;
+        c[dbase - 1] = 0.0;
         c
     };
     let col = |k: usize| &sel.w1t[k * h..(k + 1) * h];
@@ -1069,11 +1157,15 @@ fn select_fast(
                     axpy(o, d1(q, p).v[0], m2 + j * 3 + k);
                     let fast = if spm[p] < 0.0 || spo[q] < 0.0 { 0.0 } else if spm[p] >= spo[q] { 1.0 } else { 0.0 };
                     axpy(o, fast, sp + k * 3 + j);
+                    if sel.v2 {
+                        axpy(o, ohko_ev(pack, &me[p], &opp[q]), dbase + k * 3 + j);
+                        axpy(o, ohko_ev(pack, &opp[q], &me[p]), dbase + 9 + j * 3 + k);
+                    }
                 }
                 if k == 0 {
                     let (a1, a2) = (esm[p], eso[os[0]]);
-                    axpy(o, if a1 >= a2 { 1.0 } else { 0.0 }, d - 2);
-                    axpy(o, ((a1 - a2) as f64 / 200.0).min(1.0).max(-1.0), d - 1);
+                    axpy(o, if a1 >= a2 { 1.0 } else { 0.0 }, dbase - 2);
+                    axpy(o, ((a1 - a2) as f64 / 200.0).min(1.0).max(-1.0), dbase - 1);
                 }
             }
         }
@@ -1344,6 +1436,70 @@ mod tests {
         assert_eq!(fb, rb);
         for (x, y) in fv.iter().zip(rv.iter()) {
             assert!((x - y).abs() < 1e-12, "{x} {y}");
+        }
+    }
+
+    /// 入力 v2（"feat": "megaform_ohko1"、sel_mega_1009）: メガ石持ちはメガ後の形・末尾に一撃必殺の期待値18次元。
+    /// 高速版が元の実装と同じ選出・値、未知の形式は読まない。test_all.py 45 と対
+    #[test]
+    fn megaform_v2_fast_equals_ref() {
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6d.json");
+        let mut v: serde_json::Value = match std::fs::read_to_string(p).ok().and_then(|t| serde_json::from_str(&t).ok()) {
+            Some(v) => v,
+            None => return,
+        };
+        let dir = std::env::temp_dir();
+        let write = |name: &str, v: &serde_json::Value| -> String {
+            let f = dir.join(format!("{}_{}.json", name, std::process::id()));
+            std::fs::write(&f, serde_json::to_string(v).unwrap()).unwrap();
+            f.to_string_lossy().to_string()
+        };
+        let mut seed = 4242u64;
+        let mut rnd = || {
+            seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+            (seed >> 11) as f64 / (1u64 << 53) as f64 - 0.5
+        };
+        for row in v["W1"].as_array_mut().unwrap() {
+            let r = row.as_array_mut().unwrap();
+            for _ in 0..SEL_EXTRA_V2 {
+                r.push(serde_json::Value::from(rnd() * 4.0));
+            }
+        }
+        v["feat"] = serde_json::Value::from("megaform_x");
+        assert!(Selector::from_json(&write("sel_featx", &v)).is_none());
+        v["feat"] = serde_json::Value::from(SEL_FEAT_V2);
+        let sel = Selector::from_json(&write("sel_v2", &v)).unwrap();
+        assert!(sel.v2);
+        let mut pack = Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"));
+        let mut fb = FB.to_vec();
+        fb[1] = "カビゴン@たべのこし:わんぱく:じわれ|のしかかり|ねむる|あくび:32/0/32/0/0/0:あついしぼう";
+        let a6: Vec<Poke> = FA.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
+        let b6: Vec<Poke> = fb.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
+        let pack = pack;
+        let ft = FeatTables::build(&pack);
+        let mv = sel_view(&pack, &a6[0]);
+        assert!(mv.mega_evolved && mv.sel_megav && !a6[0].mega_evolved);
+        let blk = crate::features::poke_block_vec(&pack, &ft, &mv);
+        assert_ne!(blk, crate::features::poke_block_vec(&pack, &ft, &a6[0]));
+        assert_eq!(ohko_ev(&pack, &b6[1], &a6[2]), 0.30);
+        assert_eq!(ohko_ev(&pack, &b6[1], &b6[2]), 0.0, "ひこう・がんじょう には じわれ が効かない");
+        let oc = candidates(&b6, 3);
+        let ov: Vec<f64> = (0..oc.len()).map(|i| ((i * 37) % 11) as f64 / 10.0).collect();
+        let tw = topk_weights(&ov, 1.0, 8);
+        let os: Vec<Vec<usize>> = tw.iter().map(|&(i, _)| oc[i].clone()).collect();
+        let agg = Agg::W(tw.iter().map(|&(_, w)| w).collect());
+        for (me, op, osx) in [(&a6, &b6, &os), (&b6, &a6, &candidates(&a6, 3)[..8].to_vec())] {
+            let cands = candidates(me, 3);
+            let ag2 = Agg::W(vec![0.125; 8]);
+            let ag = if std::ptr::eq(me, &a6) { &agg } else { &ag2 };
+            let mut pc = PairCache::default();
+            let (fb, fv) = select_fast(&pack, &ft, &sel, me, op, osx, &cands, &mut pc, true, ag).unwrap();
+            let (mut m3, mut o3) = (me.clone(), op.clone());
+            let (rb, rv) = select_ref(&pack, &ft, &sel, &mut m3, &mut o3, osx, &cands, &mut CpyRandom::new(7), ag);
+            assert_eq!(fb, rb);
+            for (x, y) in fv.iter().zip(rv.iter()) {
+                assert!((x - y).abs() < 1e-12, "{x} {y}");
+            }
         }
     }
 

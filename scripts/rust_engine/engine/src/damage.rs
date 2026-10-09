@@ -1173,8 +1173,9 @@ pub fn check_hit(
     if POWDER.contains(&nm) && defender.has_type(pack.tc.くさ) {
         return false;
     }
-    if mv.name == s.mv.ぜったいれいど {
-        let a = if attacker.has_type(pack.tc.こおり) { 0.30 } else { 0.20 };
+    // 一撃必殺技: 命中率/回避率ランク・命中を変える特性/持ち物の補正を受けない（damage.py と同じ）
+    if mv.name == s.l.じわれ || mv.name == s.l.ぜったいれいど || mv.name == s.l.つのドリル || mv.name == s.l.ハサミギロチン {
+        let a = if mv.name == s.l.ぜったいれいど && !attacker.has_type(pack.tc.こおり) { 0.20 } else { 0.30 };
         return rng() < a;
     }
     let w_atk = effective_weather(pack, field, Some(attacker));
