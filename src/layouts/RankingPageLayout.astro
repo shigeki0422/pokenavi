@@ -128,18 +128,25 @@ const pokeUrl = (name: string) => {
   return id ? `/pokemon/${id}/` : null;
 };
 const spanDays = dates.length;
-const top10Rows = top10.map((p, i) => {
-  const mv = moveByName[p.name];
-  return {
-    rank: i + 1,
-    name: p.name,
-    url: pokeUrl(p.name),
-    img: p.id ? `/images/pokemon/pokemon-${p.id}.webp` : null,
-    diff: mv?.diff ?? null,
-    isNew: mv?.prev == null,
-    article: (latestArticleByName[p.name] ?? latestArticleByName[NAME_MAP[p.name] ?? p.name])?.slug ?? null,
-  };
-});
+/** 順位データの本体はcanvasのチャートで、検索エンジンにはテキストとして存在しない。
+ * 「使用率ランキング」で検索した人が求める一覧そのものが本文に無く、47,000表示に対して
+ * CTR0.5%に留まっていたため、全順位をテキストの表としても出す。 */
+const allRows = [...pokemon]
+  .filter(p => p.dates[lastDate]?.rank)
+  .sort((a, b) => (a.dates[lastDate]!.rank) - (b.dates[lastDate]!.rank))
+  .map(p => {
+    const mv = moveByName[p.name];
+    return {
+      rank: p.dates[lastDate]!.rank,
+      name: dispName(p.name),
+      url: pokeUrl(p.name),
+      img: p.id ? `/images/pokemon/pokemon-${p.id}.webp` : null,
+      diff: mv?.diff ?? null,
+      isNew: mv?.prev == null,
+      article: (latestArticleByName[p.name] ?? latestArticleByName[NAME_MAP[p.name] ?? p.name])?.slug ?? null,
+    };
+  });
+const top10Rows = allRows.slice(0, 10);
 
 const siteUrl = 'https://pokenavi.jp';
 const rankingPaths: Record<Lang, string> = { ja: '/ranking/', en: '/en/ranking/', ko: '/ko/ranking/' };
@@ -324,6 +331,10 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
       .rk-moves li { font-size: .85rem; line-height: 1.8; }
       .rk-moves li span { margin-left: .5em; font-size: .8rem; }
       .rk-note { font-size: .78rem !important; color: #64748b !important; margin-top: 1em !important; }
+      /* 全順位の一覧。行数が多いので行の高さと文字を詰める */
+      .rk-full-wrap { margin-top: .4em; }
+      .rk-full td, .rk-full th { padding: .3em .6em; font-size: .82rem; }
+      .rk-full .rk-name img { width: 24px; height: 24px; }
       .seo-ranking-list {
         margin-top: 2rem; padding: 1rem 1.5rem;
         background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px;
@@ -389,9 +400,9 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           <button class="rbtn" data-rows="50">TOP50</button>
           <button class="rbtn" data-rows="100">TOP100</button>
           <button class="rbtn" data-rows="200">TOP200</button>
-          <button class="share-btn" id="share-chart-btn" title="Xにシェア">
+          <button class="share-btn" id="share-chart-btn" title={T.shareTitle}>
             <svg width="14" height="14" viewBox="0 0 1200 1227" fill="currentColor" aria-hidden="true"><path d="M714.163 519.284L1160.89 0H1055.03L667.137 450.887L357.328 0H0L468.492 681.821L0 1226.37H105.866L515.491 750.218L842.672 1226.37H1200L714.163 519.284ZM569.165 687.828L521.697 619.934L144.011 79.6944H306.615L611.412 515.685L658.88 583.579L1055.08 1150.3H892.476L569.165 687.828Z"/></svg>
-            <span class="share-btn-label">シェア</span>
+            <span class="share-btn-label">{T.shareLabel}</span>
           </button>
         </div>
         <div class="share-toast" id="share-toast"></div>
@@ -446,31 +457,6 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
             {fallers.length > 0 && <>最も下げたのは{fallers[0].name}（{fallers[0].prev}位→{fallers[0].cur}位）です。</>}
           </p>
 
-          <h3>上位10体と直近1週間の動き</h3>
-          <table class="rk-table">
-            <thead>
-              <tr><th>順位</th><th>ポケモン</th><th>前週比</th><th>考察</th></tr>
-            </thead>
-            <tbody>
-              {top10Rows.map(r => (
-                <tr>
-                  <td class="rk-num">{r.rank}位</td>
-                  <td class="rk-name">
-                    {r.img && <img src={r.img} alt="" width="28" height="28" loading="lazy" />}
-                    {r.url ? <a href={r.url}>{r.name}</a> : r.name}
-                  </td>
-                  <td class="rk-diff">
-                    {r.isNew ? <span class="rk-new">新規</span>
-                      : r.diff && r.diff > 0 ? <span class="rk-up">+{r.diff}</span>
-                      : r.diff && r.diff < 0 ? <span class="rk-down">{r.diff}</span>
-                      : <span class="rk-flat">±0</span>}
-                  </td>
-                  <td>{r.article ? <a href={`/blog/${r.article}/`}>記事</a> : <span class="rk-flat">—</span>}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
           <div class="rk-moves">
             <div>
               <h3>順位を上げたポケモン（直近1週間）</h3>
@@ -501,6 +487,36 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
               </ul>
             </div>
           </div>
+          <h3 id="full-list">{latestSeason} 使用率ランキング 全{allRows.length}体（{fmtDate(lastDate)}時点）</h3>
+          <p class="rk-note">
+            チャートと同じ順位をテキストの一覧にしたものです。ポケモン名から各ポケモンの技・持ち物・特性の採用率ページへ移動できます。
+          </p>
+          <div class="rk-full-wrap">
+            <table class="rk-table rk-full">
+              <thead>
+                <tr><th>順位</th><th>ポケモン</th><th>前週比</th><th>考察</th></tr>
+              </thead>
+              <tbody>
+                {allRows.map(r => (
+                  <tr>
+                    <td class="rk-num">{r.rank}位</td>
+                    <td class="rk-name">
+                      {r.img && <img src={r.img} alt="" width="24" height="24" loading="lazy" />}
+                      {r.url ? <a href={r.url}>{r.name}</a> : r.name}
+                    </td>
+                    <td class="rk-diff">
+                      {r.isNew ? <span class="rk-new">新規</span>
+                        : r.diff && r.diff > 0 ? <span class="rk-up">+{r.diff}</span>
+                        : r.diff && r.diff < 0 ? <span class="rk-down">{r.diff}</span>
+                        : <span class="rk-flat">±0</span>}
+                    </td>
+                    <td>{r.article ? <a href={`/blog/${r.article}/`}>記事</a> : <span class="rk-flat">—</span>}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
           <p class="rk-note">
             変動は{fmtDate(weekAgoDate)}と{fmtDate(lastDate)}の順位の比較です。上位100位以内のポケモンを対象にしています。
             さらに細かい変動は<a href="/trends/">環境変動ランキング</a>で確認できます。
@@ -514,7 +530,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           <p>{T.rankingTop10Desc}</p>
           <ol>
             {top10.map((p, i) => (
-              <li>{T.rankPrefix}{i + 1}{T.rankSuffix} {p.name}</li>
+              <li>{T.rankPrefix}{i + 1}{T.rankSuffix} {NAME_I18N[p.name] ?? p.name}</li>
             ))}
           </ol>
         </section>
@@ -526,6 +542,10 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         rankPrefix: T.rankPrefix,
         outOfRanking: T.outOfRanking,
         names: lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEMON_NAME_KO : {},
+        shareHeading: T.shareHeading,
+        shareCopied: T.shareCopied,
+        shareSaved: T.shareSaved,
+        sharePost: T.sharePost,
       } }}>
       (function() {
         let currentSeason = latestSeason;
@@ -1040,12 +1060,12 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           ctx.textBaseline = 'middle';
           ctx.textAlign = 'left';
           const latestDate = dates[dates.length - 1] || '';
-          let headerLeft = currentSeason + ' 使用率ランキング';
+          let headerLeft = currentSeason + ' ' + T_JS.shareHeading;
           if (pinnedIdx >= 0) {
             const p = pokemon[pinnedIdx];
             const name = T_JS.names[p.name] ?? p.name;
             const rank = p.ranksByDate[latestDate];
-            headerLeft = `${name}${rank ? '　' + rank + '位' : ''}　｜　${currentSeason} 使用率ランキング`;
+            headerLeft = `${name}${rank ? '　' + T_JS.rankPrefix + rank + T_JS.rankSuffix : ''}　｜　${currentSeason} ${T_JS.shareHeading}`;
           }
           ctx.fillText(headerLeft, 10, HEADER_H / 2);
 
@@ -1063,12 +1083,12 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           ctx.textBaseline = 'middle';
           ctx.fillText('pokenavi.jp/ranking', outW / 2, HEADER_H + DATE_H + chartLogH + FOOTER_H / 2);
 
-          let shareText = `${currentSeason} 使用率ランキング（${latestDate.replace(/-/g, '/')}）`;
+          let shareText = `${currentSeason} ${T_JS.shareHeading}（${latestDate.replace(/-/g, '/')}）`;
           if (pinnedIdx >= 0) {
             const p = pokemon[pinnedIdx];
             const name = T_JS.names[p.name] ?? p.name;
             const rank = p.ranksByDate[latestDate];
-            shareText = `${name}${rank ? ' ' + rank + '位' : ''} | ` + shareText;
+            shareText = `${name}${rank ? ' ' + T_JS.rankPrefix + rank + T_JS.rankSuffix : ''} | ` + shareText;
           }
 
           const siteUrl = 'https://pokenavi.jp/ranking';
@@ -1085,7 +1105,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           const supportsClipboard = !!(window.ClipboardItem && navigator.clipboard?.write);
 
           function showWithXLink(msg) {
-            toast.innerHTML = `<span>${msg}</span><a href="${tweetUrl}" target="_blank" rel="noopener">Xで投稿する →</a>`;
+            toast.innerHTML = `<span>${msg}</span><a href="${tweetUrl}" target="_blank" rel="noopener">${T_JS.sharePost}</a>`;
             toast.classList.add('show');
             clearTimeout(toastTimer);
             toastTimer = setTimeout(() => toast.classList.remove('show'), 6000);
@@ -1094,14 +1114,14 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
           if (supportsClipboard) {
             const blobPromise = new Promise(resolve => off.toBlob(resolve, 'image/png'));
             navigator.clipboard.write([new ClipboardItem({ 'image/png': blobPromise })])
-              .then(() => showWithXLink('📋 画像をコピーしました！Xに貼り付けてシェア：'))
+              .then(() => showWithXLink(T_JS.shareCopied))
               .catch(() => {
                 blobPromise.then(blob => {
                   const a = document.createElement('a');
                   a.href = URL.createObjectURL(blob);
                   a.download = 'pokenavi-ranking.png';
                   a.click();
-                  showWithXLink('🖼 画像を保存しました。添付してシェア：');
+                  showWithXLink(T_JS.shareSaved);
                 });
               });
           } else {
@@ -1110,7 +1130,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
               a.href = URL.createObjectURL(blob);
               a.download = 'pokenavi-ranking.png';
               a.click();
-              showWithXLink('🖼 画像を保存しました。添付してシェア：');
+              showWithXLink(T_JS.shareSaved);
             }, 'image/png');
           }
         });
