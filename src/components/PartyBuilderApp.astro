@@ -64,6 +64,7 @@ const I18N_ALL = {
     popHitsLbl: t => `確定数: ${t}`, popDmgLbl: t => `与ダメ: ${t}`,
     speedTipTitle: '自分の素早さ実数値 vs 相手の素早さ実数値(スカーフ込み)',
     tuneBtn: 'EV逆算(素早さ・火力・耐久)', applyBtn: '適用',
+    evResetBtn: 'EV初期化', evResetTitle: 'EVを全て0に戻す(振り替え元が無いときに、ここから振り直して逆算を試せます)',
     tuneKindSpeed: '素早さ', tuneKindKo: '火力', tuneKindSurvive: '耐久',
     holeNone: 'なし',
     balanceHeading: 'パーティバランス', addPokemonPrompt: 'ポケモンを追加してください',
@@ -143,6 +144,7 @@ const I18N_ALL = {
     popHitsLbl: t => `KO count: ${t}`, popDmgLbl: t => `Damage dealt: ${t}`,
     speedTipTitle: 'Your Speed stat vs the opponent\'s Speed stat (Scarf included)',
     tuneBtn: 'EV back-calc (Speed / Power / Bulk)', applyBtn: 'Apply',
+    evResetBtn: 'Reset EVs', evResetTitle: 'Reset all EVs to 0 (use this to re-run back-calc when there is nothing left to reallocate from)',
     tuneKindSpeed: 'Speed', tuneKindKo: 'Power', tuneKindSurvive: 'Bulk',
     holeNone: 'None',
     balanceHeading: 'Party Balance', addPokemonPrompt: 'Please add a Pokémon',
@@ -222,6 +224,7 @@ const I18N_ALL = {
     popHitsLbl: t => `확정타: ${t}`, popDmgLbl: t => `주는 대미지: ${t}`,
     speedTipTitle: '나의 스피드 실수치 vs 상대의 스피드 실수치(스카프 포함)',
     tuneBtn: 'EV 역산(스피드・화력・내구)', applyBtn: '적용',
+    evResetBtn: 'EV 초기화', evResetTitle: 'EV를 모두 0으로 되돌립니다(옮길 곳이 없을 때 여기서 다시 배분해 역산을 시도할 수 있습니다)',
     tuneKindSpeed: '스피드', tuneKindKo: '화력', tuneKindSurvive: '내구',
     holeNone: '없음',
     balanceHeading: '파티 밸런스', addPokemonPrompt: '포켓몬을 추가해 주세요',
@@ -508,12 +511,18 @@ const I18N = I18N_ALL[lang];
   .pb-th-names{flex:1 1 auto;min-width:0;color:rgb(var(--gray-dark))}
   .pb-th-hint{margin-left:auto;white-space:nowrap;color:var(--accent);font-weight:700}
   /* 前提つきでのみ結果が変わる対面。記号は素の判定のままで、印と枠線だけ足す */
-  .pb-sc-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:.5em 0;padding:8px 10px;border:1px solid rgb(var(--gray-light));border-radius:10px;background:#f8fafc;font-size:.86rem}
+  .pb-sc-details{margin:.5em 0}
+  .pb-sc-summary{display:flex;align-items:center;gap:.5em;cursor:pointer;font-weight:800;color:rgb(var(--gray-dark));padding:.3em 0;list-style:none}
+  .pb-sc-summary::-webkit-details-marker{display:none}
+  .pb-sc-summary::before{content:'▸';display:inline-block;transition:transform .15s}
+  details[open]>.pb-sc-summary::before{transform:rotate(90deg)}
+  .pb-sc-badge{font-size:.68rem;font-weight:800;color:var(--accent);background:#eef2ff;border:1px solid var(--accent);border-radius:999px;padding:.1em .6em}
+  .pb-sc-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:.3em 0 .5em;padding:8px 10px;border:1px solid rgb(var(--gray-light));border-radius:10px;background:#f8fafc;font-size:.86rem}
   .pb-sc-row.pb-sc-on{background:#eef2ff;border-color:var(--accent)}
   .pb-sc-hd{font-weight:800;color:rgb(var(--gray-dark))}
-  .pb-sc-f{display:flex;align-items:center;gap:4px;color:rgb(var(--gray-dark))}
-  .pb-sc-sel{min-height:44px;padding:4px 6px;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#fff;font-family:var(--font-atkinson);font-size:1rem;max-width:11em}
-  @media(max-width:640px){.pb-sc-row{gap:6px;padding:7px 8px}.pb-sc-sel{max-width:8.5em}}
+  .pb-sc-f{display:flex;flex-direction:column;align-items:flex-start;gap:3px;color:rgb(var(--gray-dark));flex:1 1 11em}
+  .pb-sc-sel{min-height:44px;width:100%;padding:4px 6px;border:1px solid rgb(var(--gray-light));border-radius:8px;background:#fff;font-family:var(--font-atkinson);font-size:1rem}
+  @media(max-width:640px){.pb-sc-row{gap:6px;padding:7px 8px}.pb-sc-f{flex-basis:100%}}
   @media(hover:hover){.pb-ev-step:not(:disabled):hover{background:#eef2ff;border-color:var(--accent)}}
   .pb-ev-lbl{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;color:#fff;font-weight:800;font-size:.72rem}
   /* スマホでスクロール中にEVバーへ指が触れると値が飛ぶ。pan-y で縦のパンはページに渡し、
@@ -719,6 +728,7 @@ const I18N = I18N_ALL[lang];
   .pb-mv-n{font-weight:800;overflow-wrap:anywhere}
   .pb-mv-c{display:block;font-size:.62rem;font-weight:600;color:rgb(var(--gray))}
   .pb-race-note{margin-top:.2em;font-size:.66rem;font-weight:600;color:rgb(var(--gray))}
+  .pb-mu-note{margin:.4em 0;padding:.4em .6em;border-radius:8px;background:#fffbeb;border:1px solid #fde68a;color:#92400e;font-size:.76rem;font-weight:600}
   .pb-mv-g{position:relative;height:10px;border-radius:5px;background:#eef1f5;overflow:hidden}
   .pb-mv-g i{position:absolute;left:0;top:0;bottom:0;display:block}
   .pb-mv-g i.hi{background:#fca5a5}
@@ -989,6 +999,8 @@ const I18N = I18N_ALL[lang];
       scWeather: '天候', scTerrain: 'フィールド', scBoost: '積み（自分）', scOppBoost: '積み（相手）',
       scNone: 'なし', scAuto: '特性任せ',
       scBoostNoMove: '積み技なし',
+      scBoostNotApplied: 'この型は積み技を持たないため、相手の積みは反映されません',
+      scOnBadge: '設定中', scOnBadgeTitle: '天候・フィールド・積みのいずれかを変えています',
       scReset: '既定に戻す',
       scOn: (parts) => `前提: ${parts}`,
       scBoostTimes: (n) => `${n}回`,
@@ -998,6 +1010,7 @@ const I18N = I18N_ALL[lang];
       popHitsLbl: t => `確定数: ${t}`, popDmgLbl: t => `与ダメ: ${t}`,
       speedTipTitle: '自分の素早さ実数値 vs 相手の素早さ実数値(スカーフ込み)',
       tuneBtn: 'EV逆算(素早さ・火力・耐久)', applyBtn: '適用',
+      evResetBtn: 'EV初期化', evResetTitle: 'EVを全て0に戻す(振り替え元が無いときに、ここから振り直して逆算を試せます)',
       tuneKindSpeed: '素早さ', tuneKindKo: '火力', tuneKindSurvive: '耐久',
       holeNone: 'なし',
       balanceHeading: 'パーティバランス', addPokemonPrompt: 'ポケモンを追加してください',
@@ -1047,6 +1060,10 @@ const I18N = I18N_ALL[lang];
       handoffHeading: 'パーティ工房への取り込み',
       handoffFailed: '提案データを取り込めませんでした。型を解決できませんでした',
       handoffImportedMsg: '簡単構築の内容を取り込みました',
+      newPartyName: n => `パーティ${n}`, importedPartyName: 'インポート', partyCopyName: name => `${name}のコピー`,
+      validItemDup: (item, labels) => `持ち物重複: ${item}(${labels.join('、')})`,
+      validEvOver: (label, sum, max) => `EV合計超過: ${label}(合計${sum}、上限${max})`,
+      validDexDup: (labels, dex) => `図鑑番号重複: ${labels.join('、')}(#${dex})`,
       initErrorMsg: 'データの読み込みに失敗しました。再読み込みしてください', retryBtn: '再試行',
       miniBarExpandAria: '仮想敵の詳細を展開', sheetCollapseBtn: '▼閉じる', sheetExpandCaret: '▲詳細',
       miniBarMinimizeAria: '最小化', miniBarReopenAria: 'ミニバーを再表示',
@@ -1099,6 +1116,8 @@ const I18N = I18N_ALL[lang];
       scWeather: 'Weather', scTerrain: 'Terrain', scBoost: 'Your boosts', scOppBoost: 'Opponent boosts',
       scNone: 'None', scAuto: 'From abilities',
       scBoostNoMove: 'No setup move',
+      scBoostNotApplied: "This build has no setup move, so the opponent's boosts have no effect on it",
+      scOnBadge: 'Custom', scOnBadgeTitle: 'Weather, terrain, or boosts are changed from default',
       scReset: 'Reset',
       scOn: (parts) => `Assumed: ${parts}`,
       scBoostTimes: (n) => `x${n}`,
@@ -1110,6 +1129,7 @@ const I18N = I18N_ALL[lang];
       popHitsLbl: t => `KO count: ${t}`, popDmgLbl: t => `Damage dealt: ${t}`,
       speedTipTitle: 'Your Speed stat vs the opponent\'s Speed stat (Scarf included)',
       tuneBtn: 'EV back-calc (Speed / Power / Bulk)', applyBtn: 'Apply',
+      evResetBtn: 'Reset EVs', evResetTitle: 'Reset all EVs to 0 (use this to re-run back-calc when there is nothing left to reallocate from)',
       tuneKindSpeed: 'Speed', tuneKindKo: 'Power', tuneKindSurvive: 'Bulk',
       holeNone: 'None',
       balanceHeading: 'Party Balance', addPokemonPrompt: 'Please add a Pokémon',
@@ -1160,6 +1180,10 @@ const I18N = I18N_ALL[lang];
       handoffHeading: 'Import into Party Workshop',
       handoffFailed: "Couldn't import the suggestion data. The build couldn't be resolved",
       handoffImportedMsg: 'Imported from Quick Build',
+      newPartyName: n => `Party ${n}`, importedPartyName: 'Imported', partyCopyName: name => `Copy of ${name}`,
+      validItemDup: (item, labels) => `Duplicate item: ${item} (${labels.join(', ')})`,
+      validEvOver: (label, sum, max) => `EV total over the limit: ${label} (total ${sum}, max ${max})`,
+      validDexDup: (labels, dex) => `Duplicate Pokédex number: ${labels.join(', ')} (#${dex})`,
       initErrorMsg: 'Failed to load data. Please reload the page.', retryBtn: 'Retry',
       miniBarExpandAria: 'Expand virtual opponent details', sheetCollapseBtn: '▼ Close', sheetExpandCaret: '▲ Details',
       miniBarMinimizeAria: 'Minimize', miniBarReopenAria: 'Show mini bar again',
@@ -1212,6 +1236,8 @@ const I18N = I18N_ALL[lang];
       scWeather: '날씨', scTerrain: '필드', scBoost: '랭크업(나)', scOppBoost: '랭크업(상대)',
       scNone: '없음', scAuto: '특성에 맡김',
       scBoostNoMove: '랭크업 기술 없음',
+      scBoostNotApplied: '이 타입은 랭크업 기술이 없어 상대의 랭크업이 반영되지 않습니다',
+      scOnBadge: '설정됨', scOnBadgeTitle: '날씨・필드・랭크업 중 하나가 기본값과 다릅니다',
       scReset: '기본값으로',
       scOn: (parts) => `전제: ${parts}`,
       scBoostTimes: (n) => `${n}회`,
@@ -1223,6 +1249,7 @@ const I18N = I18N_ALL[lang];
       popHitsLbl: t => `확정타: ${t}`, popDmgLbl: t => `주는 대미지: ${t}`,
       speedTipTitle: '나의 스피드 실수치 vs 상대의 스피드 실수치(스카프 포함)',
       tuneBtn: 'EV 역산(스피드・화력・내구)', applyBtn: '적용',
+      evResetBtn: 'EV 초기화', evResetTitle: 'EV를 모두 0으로 되돌립니다(옮길 곳이 없을 때 여기서 다시 배분해 역산을 시도할 수 있습니다)',
       tuneKindSpeed: '스피드', tuneKindKo: '화력', tuneKindSurvive: '내구',
       holeNone: '없음',
       balanceHeading: '파티 밸런스', addPokemonPrompt: '포켓몬을 추가해 주세요',
@@ -1272,6 +1299,10 @@ const I18N = I18N_ALL[lang];
       handoffHeading: '파티 공방으로 가져오기',
       handoffFailed: '제안 데이터를 가져오지 못했습니다. 빌드를 해석할 수 없었습니다',
       handoffImportedMsg: '간단 구성 내용을 가져왔습니다',
+      newPartyName: n => `파티${n}`, importedPartyName: '가져온 파티', partyCopyName: name => `${name}의 사본`,
+      validItemDup: (item, labels) => `도구 중복: ${item}(${labels.join(', ')})`,
+      validEvOver: (label, sum, max) => `EV 합계 초과: ${label}(합계 ${sum}, 상한 ${max})`,
+      validDexDup: (labels, dex) => `도감 번호 중복: ${labels.join(', ')}(#${dex})`,
       initErrorMsg: '데이터를 불러오지 못했습니다. 다시 불러와 주세요.', retryBtn: '재시도',
       miniBarExpandAria: '가상의 적 상세 펼치기', sheetCollapseBtn: '▼ 닫기', sheetExpandCaret: '▲ 상세',
       miniBarMinimizeAria: '최소화', miniBarReopenAria: '미니바 다시 표시',
@@ -1287,7 +1318,7 @@ const I18N = I18N_ALL[lang];
     if (n.startsWith('メガ')) {
       const rest = n.slice(2);
       let base = map[rest], suf = '';
-      if (!base && (rest.endsWith('X') || rest.endsWith('Y'))) { suf = rest.slice(-1); base = map[rest.slice(0, -1)]; }
+      if (!base && /[XYZ]$/.test(rest)) { suf = rest.slice(-1); base = map[rest.slice(0, -1)]; }
       if (base) return lang === 'ko' ? `메가${base}${suf}` : `Mega ${base}${suf ? ` ${suf}` : ''}`;
     }
     return n;
@@ -1343,7 +1374,7 @@ const I18N = I18N_ALL[lang];
   }
   function typeIcoByName(t) {
     const e = t ? TYPEICON[t] : null;
-    return e ? `<img class="tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${esc(t)}">` : '';
+    return e ? `<img class="tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${esc(tType(t))}">` : '';
   }
   /** PartySuggestApp.astro の itemIco と同一体裁(持ち物スプライト。ITEM_PNGに無い持ち物はアイコン無し)。
    * lookupは常にitemの生の(和名)値で行う(和名キーの固定表のため)。表示名の翻訳はesc(tItem(item))側で行う。 */
@@ -1419,6 +1450,7 @@ const I18N = I18N_ALL[lang];
   let lastMiniBarArgs = null; // (B07) 再展開ピル・IntersectionObserverから直前の描画内容でrenderMiniBar()を呼び直すためのキャッシュ
   let lastMiniBarHtml = null; // (B12) renderMiniBar()が直前に描画したHTML文字列。同じならinnerHTMLに触れずscrollTop/フォーカスを保つ
   let mtxPopData = []; // (5) ポケモン相性マトリクスのセル用ポップオーバー内容(renderのたびに作り直す)
+  let scenarioOpen = false; // 「この状況で見る」(天候・フィールド・積み)の開閉。普段は畳んでおく(全仮想敵共通)
   let holeFillResult = null; // 「穴を埋める候補」の計算結果キャッシュ。{ sig, additions, swaps } または null(未計算)
   let holeFillLoading = false; // 計算中フラグ(ポップオーバーのスピナー表示用)
   let holeFillAllowDup = false; // もちもの重複を許可するか(既定は重複型を候補から除外)
@@ -1956,7 +1988,10 @@ const I18N = I18N_ALL[lang];
     if (!p || !core) { el.innerHTML = ''; return; }
     const issues = validateParty(p, core.species);
     if (!issues.length) { el.innerHTML = ''; return; }
-    el.innerHTML = `<div class="pb-valid-banner"><ul>${issues.map((i) => `<li>⚠ ${esc(i.message)}</li>`).join('')}</ul></div>`;
+    const issueText = (i) => i.type === 'item-dup' ? I18N.validItemDup(tItem(i.item), i.labels.map(tPoke))
+      : i.type === 'ev-over' ? I18N.validEvOver(tPoke(i.labels[0]), i.sum, EV_TOTAL_MAX)
+      : I18N.validDexDup(i.labels.map(tPoke), i.dex);
+    el.innerHTML = `<div class="pb-valid-banner"><ul>${issues.map((i) => `<li>⚠ ${esc(issueText(i))}</li>`).join('')}</ul></div>`;
   }
 
   function renderPartyBar() {
@@ -2013,13 +2048,13 @@ const I18N = I18N_ALL[lang];
     }
     document.getElementById('pb-p-new').addEventListener('click', () => {
       if (renamingParty) return;
-      createParty(store);
+      createParty(store, I18N.newPartyName(store.parties.length + 1));
       resetPartyUiState();
       render();
     });
     document.getElementById('pb-p-dup').addEventListener('click', () => {
       if (!p || renamingParty) return;
-      duplicateParty(store, p.id);
+      duplicateParty(store, p.id, I18N.partyCopyName(p.name));
       resetPartyUiState();
       render();
     });
@@ -2559,6 +2594,9 @@ const I18N = I18N_ALL[lang];
       const remainEl = document.getElementById('pb-ev-remain');
       if (remainEl) remainEl.innerHTML = evRemainText(slot.evs);
     }
+    // EV逆算の結果は変更前のEVに対する提案なので、EVをバー側で動かしたら開いていても消す
+    // (動かすたびに逆算をやり直すのは重いので、自動で再計算はしない。もう一度ボタンを押させる)。
+    tuneResults = null;
     renderValidate();
     scheduleRenderTargets();
     scheduleRenderBalance();
@@ -2732,6 +2770,12 @@ const I18N = I18N_ALL[lang];
     const names = (grp.builds || []).map((b) => (b.moves || []).find((m) => m && set.has(m))).filter(Boolean);
     return [...new Set(names)];
   }
+  /** この型(build)自身が積み技を持つか。「積み（相手）」は型ごとに自分の技欄から積み技を探すので、
+   * 同じ仮想敵でも型1は持っていて型2は持っていない、ということがある(逆もある)。 */
+  function buildHasSetupMove(b) {
+    const set = setupMoves();
+    return (b && b.moves || []).some((m) => m && set.has(m));
+  }
   /** エンジンへ渡す形。ラベル文字列はエンジン側の対応表と同じものだけ通す。 */
   function applyScenario(sc) {
     setScenario(scenarioIsDefault(sc) ? null : { weather: sc.w || null, terrain: sc.t || null, boost: sc.n, oppBoost: sc.m || 0 });
@@ -2775,9 +2819,15 @@ const I18N = I18N_ALL[lang];
           <select class="pb-sc-sel" id="pb-sc-m">${[0, 1, 2, 3, 4, 5, 6].map((n) => opt(String(n), String(sc.m), n === 0 ? I18N.scNone : `${oppName} ${I18N.scBoostTimes(n)}`)).join('')}</select></label>`
       : `<span class="pb-sc-f muted">${esc(I18N.scOppBoost)} ${esc(I18N.scBoostNoMove)}</span>`;
     const reset = scenarioIsDefault(sc) ? '' : `<button type="button" class="pb-btn-sub" id="pb-sc-reset">${esc(I18N.scReset)}</button>`;
-    return `<div class="pb-sc-row${scenarioIsDefault(sc) ? '' : ' pb-sc-on'}">
-        <span class="pb-sc-hd">${esc(I18N.scHd)}</span>${wSel}${tSel}${nSel}${mSel}${reset}
-      </div>`;
+    const on = !scenarioIsDefault(sc);
+    // 普段は使わない設定なので畳んでおく。畳んだままでも「何か設定している」ことが分かるよう、
+    // 見出しにバッジを出す(開閉の状態はこのセッション中・全仮想敵共通で保つ)。
+    // キー名は scOn と衝突させない(既存の scOn は「前提:」文言の関数で別物)。
+    const badge = on ? `<span class="pb-sc-badge" title="${esc(I18N.scOnBadgeTitle)}">${esc(I18N.scOnBadge)}</span>` : '';
+    return `<details class="pb-sc-details"${scenarioOpen ? ' open' : ''}>
+        <summary class="pb-sc-summary">${esc(I18N.scHd)}${badge}</summary>
+        <div class="pb-sc-row${on ? ' pb-sc-on' : ''}">${wSel}${tSel}${nSel}${mSel}${reset}</div>
+      </details>`;
   }
   function bindScenarioRow(el, slot, label) {
     const w = el.querySelector('#pb-sc-w');
@@ -2790,6 +2840,8 @@ const I18N = I18N_ALL[lang];
     if (mm) mm.addEventListener('change', () => saveScenario(slot, label, { m: Number(mm.value) || 0 }));
     const r = el.querySelector('#pb-sc-reset');
     if (r) r.addEventListener('click', () => saveScenario(slot, label, { w: '', t: '', n: 0, m: 0 }));
+    const d = el.querySelector('details.pb-sc-details');
+    if (d) d.addEventListener('toggle', () => { scenarioOpen = d.open; });
   }
 
   function renderTargetsPanel() {
@@ -2887,7 +2939,11 @@ const I18N = I18N_ALL[lang];
           <button class="pb-btn-sub" data-mu-edit="${r.bi}">${esc(I18N.muEditBtn)}</button>
           <button class="pb-btn-sub pb-danger" data-mu-del="${r.bi}" ${canDelete ? '' : `disabled title="${esc(I18N.muDeleteLastTitle)}"`}>${esc(I18N.muDeleteBtn)}</button>
         </div>`;
-      return muCardHtml(r, actionsHtml);
+      // 「積み（相手）」は共通の1本の選択だが、型ごとに自分の技欄の積み技しか見ない(エンジンと同じ)。
+      // この型が積み技を持たないときは、回数を上げても効かないことを明示する。
+      const noBoostNote = scenario && scenario.m > 0 && !buildHasSetupMove(r.b)
+        ? `<div class="pb-mu-note">${esc(I18N.scBoostNotApplied)}</div>` : '';
+      return noBoostNote + muCardHtml(r, actionsHtml);
     }).join('') + (editingThis && muEdit.bi === 'new' ? muEditorHtml(activeGrp, muEdit.draft, muEdit.detail, muEdit.loading) : '');
 
     const addResetRow = activeGrp && !editingThis && isCustomized
@@ -2918,6 +2974,7 @@ const I18N = I18N_ALL[lang];
       ${addResetRow}
       <div class="row" style="margin-top:.7em">
         <button class="pb-btn-sub" id="pb-tune-btn" ${slot.targets.length ? '' : 'disabled'}>${esc(I18N.tuneBtn)}</button>
+        <button class="pb-btn-sub" id="pb-ev-reset-btn" title="${esc(I18N.evResetTitle)}">${esc(I18N.evResetBtn)}</button>
       </div>
       <div id="pb-tune-out"></div>
     `;
@@ -3031,6 +3088,7 @@ const I18N = I18N_ALL[lang];
     searchInput.addEventListener('keydown', onTargetSearchKey);
 
     el.querySelector('#pb-tune-btn').addEventListener('click', onTuneClick);
+    el.querySelector('#pb-ev-reset-btn').addEventListener('click', onEvResetClick);
     if (tuneResults) renderTuneOut();
     persistUi(); // (B20/B21)
   }
@@ -3076,26 +3134,46 @@ const I18N = I18N_ALL[lang];
     else if (e.key === 'Escape') { sug.style.display = 'none'; }
   }
 
+  /** 仮想敵カードで今まさに表示している1型(種・型とも1つ)。EV逆算の対象をこれだけに絞るための共通の選び方
+   * (renderTargetsPanelのselBiと同じ: 直前に選んだ型があればそれ、無ければ先頭)。 */
+  function activeMuBuild(slot) {
+    if (!activeMuTab) return null;
+    const grp = effectiveTargets().find((g) => g.label === activeMuTab);
+    if (!grp || !grp.builds.length) return null;
+    const bi = muBuildGrp === grp.label && grp.builds[muBuildSel] ? muBuildSel : 0;
+    return { grp, b: grp.builds[bi] };
+  }
   function onTuneClick() {
     const p = activeParty();
     const slot = p.slots[selectedIdx];
     const rb = resolveSlotSafe(slot);
     if (!rb) return;
-    const oppResolved = [];
-    // 逆算も仮想敵ごとの前提(天候・フィールド・積み)で行う。型ごとに1件ずつ並ぶので、
-    // 前提も同じ並びで渡す(ラベルはメガ型で別名になるため、添字で対応付ける)。
-    const oppScenarios = [];
-    const targetsList = effectiveTargets();
-    slot.targets.forEach((label) => {
-      const grp = targetsList.find((g) => g.label === label);
-      if (!grp) return;
-      grp.builds.forEach((b) => {
-        const resolved = resolveTargetSafe(grp.sp, grp.label, grp.icon, b, core.moves);
-        if (resolved) { oppResolved.push(resolved); oppScenarios.push(scenarioOf(slot, label)); }
-      });
-    });
-    tuneResults = tuneForTargets(slot, rb, oppResolved, oppScenarios);
+    // 対象は今カードに表示している1体・1型だけ(全仮想敵・全型をまとめて出すと、
+    // どの型への提案か分からなくなるため)。
+    const active = activeMuBuild(slot);
+    if (!active) { tuneResults = []; renderTuneOut(); return; }
+    const resolved = resolveTargetSafe(active.grp.sp, active.grp.label, active.grp.icon, active.b, core.moves);
+    const oppResolved = resolved ? [resolved] : [];
+    const oppScenarios = resolved ? [scenarioOf(slot, active.grp.label)] : [];
+    tuneResults = tuneForTargets(slot, rb, oppResolved, oppScenarios, { lang, tName: tPoke, tNature });
     renderTuneOut();
+  }
+  /** EVを全て0に戻す。EVを使い切っていると逆算の振り替え元(攻撃の逆側のみ)が無くなって
+   * 「振り替え先がありません」としか出ないため、その場で0から振り直して逆算をもう一度試せるようにする。 */
+  function onEvResetClick() {
+    const p = activeParty();
+    if (!p || selectedIdx === null) return;
+    const slot = p.slots[selectedIdx];
+    if (!slot) return;
+    slot.evs = [0, 0, 0, 0, 0, 0];
+    p.updatedAt = Date.now();
+    saveStore(store);
+    tuneResults = null;
+    renderValidate();
+    renderEditor();
+    renderTray();
+    renderTargetsPanel();
+    renderBalance();
   }
   const TUNE_KIND_LABEL = { speed: I18N.tuneKindSpeed, ko: I18N.tuneKindKo, survive: I18N.tuneKindSurvive };
   const TUNE_KIND_ICON = { speed: '⚡', ko: '⚔️', survive: '🛡️' };
@@ -3140,8 +3218,9 @@ const I18N = I18N_ALL[lang];
       const grp = effectiveTargets().find((g) => g.label === label);
       return `${grp ? icoImg(grp.icon, label, 'pb-hole-ico') : ''}${esc(tPoke(label))}`;
     };
-    if (holeLabels.length <= 3) return holeLabels.map(withIcon).join('、');
-    return `<span title="${esc(holeLabels.map(tPoke).join('、'))}">${holeLabels.slice(0, 3).map(withIcon).join('、')}…</span>`;
+    const sep = lang === 'ja' ? '、' : ', ';
+    if (holeLabels.length <= 3) return holeLabels.map(withIcon).join(sep);
+    return `<span title="${esc(holeLabels.map(tPoke).join(sep))}">${holeLabels.slice(0, 3).map(withIcon).join(sep)}…</span>`;
   }
 
   // ---- パーティバランス ----
@@ -3264,7 +3343,7 @@ const I18N = I18N_ALL[lang];
     const dm = defenseMatrix(resolvedParty);
     const gapIdx = kind === 'def' ? findWeakGapTypeIdx(resolvedParty) : null;
     const corner = kind === 'atk' ? I18N.selfVsAtk : I18N.selfVsHit;
-    const head = `<tr><th class="mtx-corner mtx-stick">${esc(corner)}</th>` + TYPES.map((t, ti) => `<th class="${gapIdx && gapIdx.has(ti) ? 'mtx-gap' : ''}" title="${esc(t)}">${typeIcoByName(t)}</th>`).join('') + `</tr>`;
+    const head = `<tr><th class="mtx-corner mtx-stick">${esc(corner)}</th>` + TYPES.map((t, ti) => `<th class="${gapIdx && gapIdx.has(ti) ? 'mtx-gap' : ''}" title="${esc(tType(t))}">${typeIcoByName(t)}</th>`).join('') + `</tr>`;
     const rows = resolvedParty.map((b, mi) => {
       const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(b.icon, b.label, 'mtx-ico')}<div class="mtx-name">${esc(tPoke(b.label))}</div></div></th>`;
       const cells = TYPES.map((t, ti) => {
@@ -4228,7 +4307,7 @@ const I18N = I18N_ALL[lang];
       <div class="muted" id="pb-import-msg" style="margin-top:.4em;color:#dc2626"></div>`;
     document.getElementById('pb-import-go').addEventListener('click', () => {
       const text = document.getElementById('pb-import-ta').value;
-      const party = importParty(text);
+      const party = importParty(text, I18N.importedPartyName);
       if (!party) { document.getElementById('pb-import-msg').textContent = I18N.importFailedMsg; return; }
       store.parties.push(party);
       store.activeId = party.id;
@@ -4288,7 +4367,7 @@ const I18N = I18N_ALL[lang];
     }
     const name = data && typeof data.name === 'string' && data.name.trim() ? data.name.trim() : undefined;
     const prevActiveId = store.activeId;
-    const party = createPartyFromSlots(store, slots, name);
+    const party = createPartyFromSlots(store, slots, name ?? I18N.newPartyName(store.parties.length + 1));
     resetPartyUiState();
     // (S02) 取り込み直後にUndoトーストを出す。取り消すと新規パーティを削除し、直前のアクティブパーティに戻す。
     // renderTray/renderEditor等はcore(種族データ)読み込み後でないと呼べないため、init()内のこの時点では
@@ -4296,7 +4375,7 @@ const I18N = I18N_ALL[lang];
     // (storeは同じ参照を書き換えているため、直後のrender()で復元後の状態がそのまま反映される)。
     showUndoToast(null, null, null, null, 'custom', I18N.handoffImportedMsg, () => {
       store.parties = store.parties.filter((pp) => pp.id !== party.id);
-      if (!store.parties.length) createParty(store); // 唯一のパーティだった場合、空のまま(0件)にはしない
+      if (!store.parties.length) createParty(store, I18N.newPartyName(1)); // 唯一のパーティだった場合、空のまま(0件)にはしない
       store.activeId = store.parties.some((pp) => pp.id === prevActiveId) ? prevActiveId : store.parties[0].id;
       saveStore(store);
       resetPartyUiState();
@@ -4388,7 +4467,7 @@ const I18N = I18N_ALL[lang];
     // (B22) 共有リンクの取り込みは「保存パーティが0件なら空パーティを1つ作る」より先に行う。
     // 先に空パーティを作ってしまうと、初めて開くユーザーが共有リンクを踏んだだけで
     // 中身の無い「無題」パーティが1つ余分に残ってしまう。
-    if (store.parties.length === 0) createParty(store);
+    if (store.parties.length === 0) createParty(store, I18N.newPartyName(1));
     const restoredScrollY = restoreUiState(); // (B20/B21)
     try {
       // 1v1判定は対戦エンジン(wasm)が行う。描画前に必ず読み込む
