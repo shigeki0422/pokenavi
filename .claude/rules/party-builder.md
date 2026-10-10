@@ -67,12 +67,15 @@ paths:
 - 打ち切りは5ターン（持久戦は20）。PPを見ていないため、ユーザー判断で延ばさない。
 - 相手を倒した行動の反動等で自分も倒れたら相打ち（引き分け）。同速は先後両方の平均。
 - メガはメガ前の特性で入場 → 1ターン目の行動前に素早さ順でメガシンカ（ダブルいかく・天候の取り合い）。
+- 無効（0倍）の技は撃つ手・最大打点技にしない（試合中に当たるようになればその時点から撃つ）。他の種のメガ石ではメガシンカしない（builder-data の持ち物からも外す）。REQUIREMENTS 4-0-1・2026-10-10。
+- 表示側から渡す spec（2026-10-10）: 技は外さない（0倍の技も。外すと「0倍の技で接触を避ける」線が消える・へんげんじざい/へんしん/メガ後のスキンで当たる技まで外していた）。メガ石持ちの特性欄はメガ前の特性（targets.json・mon の mu は `ability`＝メガ前・`mab`＝メガ後。工房の特性の欄もメガ前を選べ、横に「→ メガ: 特性」）。表示用のメガ後の特性は `ResolvedBuild.megaAbility`（被弾倍率もこちら）。シーズンは渡さない（wasm.ts・`_explain.MU_GRID_SEASON` とも空文字）。
 - 「倒されなかったら何ターンで倒せたか」は、倒れた側に「倒れても行動し続ける」印（`Poke.undying`）を付けて実HPのまま続きを回す（HPの水増しはしない）。
 - へんげんじざい/リベロのタイプ変化は経過（棒・再生）にだけ反映し、技ごとのダメージ一覧は元のタイプで出す。
 - 速度の目安: 1対面 0.47ms 以内（`scripts/tests/dump_all_matchups.ts` 系のベンチ）。判定を変えたら全対面ダンプで記号の変化を一覧にして確認する。
 
 ## 表示（src/scripts/party-builder/）
 - `mu-card.ts`: 1v1カードの共有レンダラ（情報ページのポップアップ・工房・対策ページで同じもの）。棒は時系列でターン帯（T1, T2…）、後攻は小さな印、原因ごとの色分け、左に「その棒のHPの持ち主」のアイコン。タップで詳細「60〜72 (35〜42%)　※本シミュでは中央の66 (39%)で計算」。
+- **1v1相性ダイアログは `mu-cell-popup.ts` の `openMuDialog`（ライブ計算：自分の型×相手の種の代表型 → wasm → 表示）／`renderMuDialog`（情報ページの埋め込みデータ）だけを使う**（工房・簡単構築・情報ページ・対戦アシスト）。ページ側で `renderMatchupTable`/`renderMuPopup`/`renderMuCard` を直接呼ばない（prebuild の `scripts/check_mu_dialog.mjs` が止める）。簡単構築の「ポケモン相性」の一覧（Cloud Run `_explain.matchup_grid`・提案キャッシュの matchup）もダイアログと同じ相手＝page の版の代表型（`scripts/builder_targets.json`＝gen_builder_data.py が targets.json と同時に書く写し。同じ列・順番・メガX/Y）と同じ集約（割合の重み付き平均・`*`＝型ごとの記号の最良≠最悪、`mu_agg`＝matchup.ts judgeVsBuildsMulti）。エンジンへの入力はどちらも spec をそのまま渡す（技を外さない・メガ石持ちの特性はメガ前・シーズン無し。どちらかを変えたら `_explain.py` も直す。test_all の 46 が wasm と全セル、47 が入力の規則を突き合わせる）。週次の update_type_pool.py が `_refresh_panel.py MATCHUP_ONLY=1` で一覧の記号と素早さタブも作り直す（Cloud Run の再デプロイが要る）。素早さタブの相手列・内訳（`/speed_detail`、X/Y は `lbl`）も同じ page の版の代表型。提案（パーティの中身）と採点・必然性リペアの穴判定（`_explain.load_top_builds`/`_opp_columns`）は season の版のまま。「攻撃相性」タブはタイプ相性の表（内訳 `/atk_detail`）。
 - `mu-replay.ts`: 対戦再生（1ターンずつ・特性発動/メガシンカ/とどめは技そのもののダメージ）。操作やくわしい内訳を開いたときは画面内に収まるようスクロール。
 - 情報ページ: `MatchupSection.astro`（相性表は自分の代表型の割合で重み付けした判定。自分の型の切替は置かない）＋ `MatchupBreakdownPopup.astro`（判定結果を `<template class="mbp-data">` のJSONで埋め込み、開いたときにクライアント描画。ポップアップ内で自分/相手の型をタブ切替）。`BuildArchetypeSection.astro` が想定型。
 - 簡単構築 `PartySuggestApp.astro` の「選出ガイド」タブ（2026-10-02 相手集団の統計に変更）: タブを開いたときに `POST /guide {specs}` で1提案ずつ計算（`scripts/_select_guide.py`＋Rust `guide_rows`、約1.2秒・同じパーティはメモ）。相手＝使用率＋同居率の生成器で引いた M-6 の3000党（`scripts/guide_pool_m6.json`、`_guide_opps.py` が作る。シーズンを替えたら作り直す）。相手ごとに学習選出（先頭＝リード）と貪欲AI 8戦の勝率（MCTS@400 へ線形較正）を出し、集計だけを表示: 全体の有利度・よく選ぶ3匹・各ポケモンの選出率/先発率・「相手にこれがいたら入れる/外す」・苦手/得意な相手。少数の相手（旧版の10構築・旧々版 `_d1_guide.py` の8構築）は1対面ごとの揺れがそのまま出るので使わない。表示の基準（z≥6・差25pt／2.5pt）は独立な2集団で97〜98%再現する値（REQUIREMENTS 4-1j）。

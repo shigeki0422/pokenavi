@@ -293,95 +293,52 @@ def _mu_score_inner(M, O, field):
             "my_move": mbm.name_jp if mbm else "—", "th_move": tbm.name_jp if tbm else "—",
             "score": score, "win": win}
 
+# 簡単構築の一覧の相手＝工房・情報ページ・相性ダイアログと同じ page の版の代表型（gen_builder_data.py が targets.json と同時に書く）
+BUILDER_TARGETS = os.environ.get("BUILDER_TARGETS", os.path.join(os.path.dirname(os.path.abspath(__file__)), "builder_targets.json"))
+_BTG = None
+
+
+def load_builder_targets():
+    global _BTG
+    if _BTG is None:
+        with open(BUILDER_TARGETS, encoding="utf-8") as f:
+            _BTG = json.load(f)
+    return _BTG
+
+
+def mu_agg(scores, shares):
+    """src/scripts/party-builder/matchup.ts judgeVsBuildsMulti と同じ集約（割合の重み付き平均・割合の無い型があれば等しく）。"""
+    w = shares if all(x and x > 0 for x in shares) else [1] * len(scores)
+    mean = sum(a * b for a, b in zip(scores, w)) / sum(w)
+    return {"v": _score_sym(mean), "dep": _score_sym(min(scores)) != _score_sym(max(scores))}
+
+
+# 1v1 の spec は全項目指定なので使用率表（シーズン）を引かない（ブラウザの wasm.ts と同じくシーズン無し）
+MU_GRID_SEASON = ""
+
+
+def _spec_score(sa, sb, L):
+    r = _rust()
+    if r is not None:
+        return json.loads(r.mu_analyze(sa, sb, MU_GRID_SEASON))["verdict"]["score"]
+    return _mu_score(_build(sa, L), _build(sb, L), BattleField())["score"]
+
+
 def matchup_grid(specs, L):
-    """味方×上位相手(X/Y等フォルム別列)の1v1相性。相手の複数型を踏まえ、型で割れる場合は印。"""
-    field = BattleField()
-    cols = _opp_columns(L)
-    mons = [(s.split("@")[0], _build(s, L)) for s in specs]
+    """味方×相手の種（page の版の代表型。メガX/Yは別列）の1v1相性。記号と「*」は相性ダイアログ側と同じ集約。
+    spec はそのまま渡す（技を外さない・メガ石持ちはメガ前の特性で入場）＝ブラウザ（matchup.ts _pair）と同じ"""
+    if L is None:
+        from simulator.data import DataLoader
+        L = DataLoader()
+    cols = load_builder_targets()
     rows = []
-    for nm, M in mons:
+    for s in specs:
         cells = []
-        for col in cols:
-            scs = [_mu_score(M, v["p"], field)["score"] for v in col["variants"]]
-            sym = _score_sym(sum(scs) / len(scs))
-            dep = _score_sym(min(scs)) != _score_sym(max(scs))
-            cells.append({"v": sym, "dep": dep})
-        rows.append({"mon": nm, "cells": cells})
-    return {"tops": [{"label": c["label"], "sp": c["sp"]} for c in cols], "rows": rows}
-
-def _ko_lab(h):
-    return "圏外" if h >= 6 else f"確{h}"
-
-def _engine_lines(M, O):
-    """M と O が対面したときの、両方向の与ダメ行と実効素早さ。
-
-    以前は damage 計算だけの静的評価（_dmg_line）で、入場効果すら見ていなかったため、
-    工房・記事側をエンジンに寄せた後も提案側だけ古い数値が出ていた。
-    ルールは全て対戦エンジン（_mu_engine の実走）に任せる。
-    """
-    sa, sb = getattr(M, "_spec", None), getattr(O, "_spec", None)
-    L = L_REF[0]
-    field, A2, B2 = _enter(M, O)
-    none = {"move": "—", "pct": "0%", "ko": "圏外", "n_lo": 999, "n_hi": 999}
-    if not sa or not sb or L is None:
-        return none, none, _effective_speed(A2, field), _effective_speed(B2, field)
-    import _mu_engine as ME
-    ME._LOADER[0] = L
-    ah, _ar, am, bh, _br, bm = ME.mu_engine(sa, sb, L)
-
-    def line(mv, n_lo, att, foe_hp):
-        if mv == "—" or n_lo >= 999:
-            return dict(none)
-        n_hi, _ = ME._run(sa, sb, mv, L, 1.0, att)
-        lo = ME.move_damage(sa, sb, mv, L, 0.0, att) / max(1, foe_hp)
-        hi = ME.move_damage(sa, sb, mv, L, 1.0, att) / max(1, foe_hp)
-        ko = "圏外" if n_lo >= 6 else (f"確{n_lo}" if n_lo == n_hi else f"乱{n_hi}")
-        # 数値も返す。表示は3画面（ポケモン情報・工房・簡単構築）で共有している
-        # レンダラが組み立てるので、整形済みの文字列だけだと体裁を揃えられない。
-        return {"move": mv, "pct": f"{lo*100:.0f}〜{hi*100:.0f}%", "ko": ko,
-                "n_lo": n_lo, "n_hi": n_hi, "pct_lo": lo * 100, "pct_hi": hi * 100}
-
-    return (line(am, ah, 0, B2.max_hp), line(bm, bh, 1, A2.max_hp),
-            _effective_speed(A2, field), _effective_speed(B2, field))
-
-
-def matchup_detail(specs, mon_name, opp_name, L):
-    """1v1判定の根拠：相手の想定型別に、与ダメ/被ダメの確定数(乱数幅)・素早さ・勝敗理由。"""
-    field = BattleField()
-    mi = next((i for i, s in enumerate(specs) if s.split("@")[0] == mon_name), 0)
-    M = _build(specs[mi], L)
-    vs = _find_variants(opp_name, L)
-    cols, me, op, spd, judge, seq = [], [], [], [], [], []
-    for i, v in enumerate(vs):
-        O = v["p"]
-        ml, ol, my_s, op_s = _engine_lines(M, O)
-        # 判定はマトリクスと同じエンジンの結論を使う。ここで別に組み立てていた頃は
-        # 一覧が○なのに内訳は「負け・後手」と出る食い違いが起きた。
-        r = _mu_score(M, O, field)
-        fast = r["fast"]
-        myh, thh = r["myh"], r["thh"]
-        win = r["win"]
-        score = r["score"]
-        # spec も返す。クライアントは同じ対戦エンジン(wasm)でこの spec から計算し直すので、
-        # 表示の計算がサーバとクライアントで二重にならない（数値・体裁の食い違いを構造的に防ぐ）。
-        cols.append({"idx": i + 1, "item": v["item"], "nature": v["nature"], "ev": _ev_str(v["ev"]),
-                     "t1": O.type1, "t2": O.type2, "spec": getattr(O, "_spec", None)})
-        me.append(ml); op.append(ol)
-        # 素早さ行は実数値の比較（先後の結論は judge 側が優先度込みで持つ）。
-        raw_fast = my_s > op_s
-        spd.append({"fast": raw_fast, "my_s": my_s, "opp_s": op_s,
-                    "txt": f"{'先手' if raw_fast else '後手'}（自S{my_s} / 相S{op_s}）"})
-        pri = "先制技で" if r.get("ko_by_priority") else ""
-        reason = (f"{'勝ち' if win else '負け'}：{ml['ko']}で倒す / {ol['ko']}で倒される・"
-                  f"{pri}{'先手' if fast else '後手'}")
-        judge.append({"v": r.get("sym") or _score_sym(score), "win": win, "txt": reason,
-                      "fast": fast, "by_prio": bool(r.get("ko_by_priority")),
-                      "my_hits": myh, "opp_hits": thh,
-                      "draw": bool(r.get("draw")), "stall": r.get("stall"), "plans": r.get("plans")})
-        seq.append({"my": r.get("my_steps") or [], "opp": r.get("opp_steps") or [],
-                    "my_turns": r.get("my_turns") or [], "opp_turns": r.get("opp_turns") or []})
-    return {"mon": mon_name, "opp": opp_name, "my_spec": getattr(M, "_spec", None),
-            "cols": cols, "me": me, "op": op, "spd": spd, "judge": judge, "seq": seq}
+        for g in cols:
+            bs = [b for b in g["builds"] if b.get("spec")]
+            cells.append(mu_agg([_spec_score(s, b["spec"], L) for b in bs], [b.get("share") for b in bs]))
+        rows.append({"mon": s.split("@")[0], "cells": cells})
+    return {"tops": [{"label": g["label"], "sp": g["sp"]} for g in cols], "rows": rows}
 
 EVK6 = ["H", "A", "B", "C", "D", "S"]
 def _ev_str(ev):
@@ -426,18 +383,9 @@ def _apply_survive(n, O, ratio, ratio_hurt=None):
     if O.item == "きあいのタスキ": return (2 if n == 1 else n), "きあいのタスキ"
     return n, ""
 
-def _best_move(M, O, field):
-    bm, bd = None, -1.0
-    for mv in M.moves:
-        if mv.category == "status" or not (mv.power or 0): continue
-        d = _dmg(M, O, mv, field, False, 1.0)
-        if d > bd: bd, bm = d, mv
-    return bm
-
 _TOPB = None
-# 相手パネル（相性表の相手列）を選ぶ使用率のシーズン。環境が変わったらここを更新する。
+# 提案の必然性リペアの穴判定（_necessity_verify.hole_mons）の相手パネル＝season の版。画面の一覧・素早さタブの相手は builder_targets（page の版）。
 # 型は gen_party_pool.PartyGen の出どころ（POOL_SEASON が season の版のシーズンなら型プール、過去シーズンは build_pool_*.md）。
-# ここで切り替わるのは「誰を相手に評価するか」だけ。
 USAGE_SEASON = os.environ.get("USAGE_SEASON", "M-5")
 
 
@@ -475,11 +423,6 @@ def load_top_builds(L, n=30, k=3):
         if builds: _TOPB.append((nm, builds))
     return _TOPB
 
-def _find_variants(name, L):
-    for nm, vs in load_top_builds(L):
-        if nm == name: return vs
-    return []
-
 def _stone_xy(item):
     if item.endswith(("X", "Ｘ")): return "X"
     if item.endswith(("Y", "Ｙ")): return "Y"
@@ -503,84 +446,42 @@ def _opp_columns(L):
             cols.append({"label": nm, "sp": nm, "variants": groups[order[0]]})
     return cols
 
-def firepower_matrix(specs, L):
-    """味方×上位相手(X/Y等フォルム別列)の与ダメ確定数。同フォルム内のEV差で幅があれば範囲表示。"""
-    field = BattleField()
-    cols = _opp_columns(L)
-    mons = [(s.split("@")[0], _build(s, L)) for s in specs]
-    rows = []
-    for nm, M in mons:
-        cells = []
-        for col in cols:
-            kns, notes, mvname = [], set(), ""
-            for v in col["variants"]:
-                O = v["p"]
-                # 入場処理を走らせた後の場と個体で評価（天候/フィールド/いかく/トレース込み）
-                field, Me, Oe = _enter(M, O)
-                bm = _best_move(Me, Oe, field)
-                if bm is None: continue
-                if not mvname: mvname = bm.name_jp
-                _r = _dmg(Me, Oe, bm, field, False, 0.0) / max(1, Oe.max_hp)   # 最低ロール
-                n, note = _apply_survive(_hits(_r), Oe, _r, _hurt_ratio(Me, Oe, bm, field, 0.0))
-                if note: notes.add(note)
-                kns.append(n)
-            if not kns:
-                cells.append({"lab": "—", "cls": "ko0", "move": "", "note": "", "range": False}); continue
-            lo_k, hi_k = min(kns), max(kns)                # 同フォルム内EV差での最善〜最悪
-            if lo_k >= 6:
-                lab, cls = "圏外", "ko0"
-            elif lo_k == hi_k:
-                lab, cls = f"確{lo_k}", f"ko{min(lo_k, 3)}"
-            else:
-                hd = "圏外" if hi_k >= 6 else str(hi_k)
-                lab, cls = f"確{lo_k}〜{hd}", f"ko{min(lo_k, 3)}r"
-            cells.append({"lab": lab, "cls": cls, "move": mvname,
-                          "note": "／".join(sorted(notes)), "range": lo_k != hi_k})
-        rows.append({"mon": nm, "cells": cells})
-    return {"tops": [{"label": c["label"], "sp": c["sp"]} for c in cols], "rows": rows}
+_SPC = None
 
-def fire_detail(specs, mon_name, opp_name, L):
-    """1マスの内訳：自分の攻撃技(行)×相手の想定型(列)の与ダメ%と確定数。"""
+
+def _speed_cols(L):
+    """素早さタブの相手列＝ポケモン相性の一覧・相性ダイアログと同じ page の版の代表型（列・順番・メガX/Y）。メガは素早さもメガ後"""
+    global _SPC
+    if _SPC is not None:
+        return _SPC
     field = BattleField()
-    mi = next((i for i, s in enumerate(specs) if s.split("@")[0] == mon_name), 0)
-    M = _build(specs[mi], L)
-    vs = _find_variants(opp_name, L)
-    cols = [{"idx": i + 1, "item": v["item"], "nature": v["nature"], "ability": v["ability"], "ev": _ev_str(v["ev"]),
-             "t1": v["p"].type1, "t2": v["p"].type2}
-            for i, v in enumerate(vs)]
-    moves = [mv for mv in M.moves if mv.category in ("physical", "special") and (mv.power or 0) > 0]
-    rows = []
-    for mv in moves:
-        cells = []
-        for v in vs:
-            O = v["p"]
-            field, Me, Oe = _enter(M, O)   # 入場処理後の場と個体で評価
-            _mv = next((x for x in Me.moves if x.name_jp == mv.name_jp), mv)
-            hi = _dmg(Me, Oe, _mv, field, False, 1.0) / max(1, Oe.max_hp)
-            lo = _dmg(Me, Oe, _mv, field, False, 0.0) / max(1, Oe.max_hp)   # 最低ロール
-            n_lo, _ = _apply_survive(_hits(lo), Oe, lo, _hurt_ratio(Me, Oe, _mv, field, 0.0))
-            n_hi, note = _apply_survive(_hits(hi), Oe, hi, _hurt_ratio(Me, Oe, _mv, field, 1.0))
-            ko = "圏外" if n_lo >= 6 else (f"確{n_lo}" if n_lo == n_hi else f"乱{n_hi}")
-            cells.append({"pct": f"{lo*100:.0f}–{hi*100:.0f}%", "ko": ko, "note": note, "hi": hi})
-        rows.append({"move": mv.name_jp, "type": mv.type, "cat": mv.category, "cells": cells})
-    for j in range(len(vs)):                                   # 各型で最大打点の技を強調
-        if rows:
-            bi = max(range(len(rows)), key=lambda i: rows[i]["cells"][j]["hi"])
-            rows[bi]["cells"][j]["best"] = True
-    return {"mon": mon_name, "opp": opp_name, "cols": cols, "rows": rows}
+    out = []
+    for g in load_builder_targets():
+        bs = []
+        for i, b in enumerate(g["builds"]):
+            if not b.get("spec"):
+                continue
+            bs.append({"idx": i + 1, "s": _effective_speed(_build(b["spec"], L), field), "item": b["item"],
+                       "nature": b["nature"], "ev": _ev_str("/".join(str(x) for x in b["ev"])),
+                       "scarf": b["item"] == "こだわりスカーフ"})
+        if bs:
+            out.append({"label": g["label"], "sp": g["sp"], "builds": bs})
+    _SPC = out
+    return out
+
 
 def speed_info(specs, L):
-    """味方×上位相手(X/Y等フォルム別列)の素早さ相性。同フォルム内のS振り差で『抜く／型次第／遅い』。"""
+    """味方×相手の種（page の版の代表型）の素早さ相性。型ごとの素早さの差で『抜く／型次第／遅い』。"""
     field = BattleField()
-    cols = _opp_columns(L)
-    opp_sp = [[_effective_speed(v["p"], field) for v in c["variants"]] for c in cols]
+    cols = _speed_cols(L)
     mons = [(s.split("@")[0], _build(s, L), s) for s in specs]
     rows = []
     for nm, M, s in mons:
         sp = _effective_speed(M, field)
         scarf = s.split("@", 1)[1].split(":")[0] == "こだわりスカーフ"
         cells, sure, maybe = [], 0, 0
-        for spds in opp_sp:
+        for c in cols:
+            spds = [b["s"] for b in c["builds"]]
             mx, mn = max(spds), min(spds)
             if sp > mx: st = "win"; sure += 1
             elif sp > mn: st = "may"; maybe += 1
@@ -591,16 +492,27 @@ def speed_info(specs, L):
     rows.sort(key=lambda r: -r["spd"])
     return {"tops": [{"label": c["label"], "sp": c["sp"]} for c in cols], "total": len(cols), "rows": rows}
 
-def speed_detail(specs, mon_name, opp_name, L):
-    """1マスの内訳：相手の想定型のS実数値を速い順で、自分のSと比較（どこから抜けるか）。"""
+
+def speed_detail(specs, mon_name, opp_name, L, label=None):
+    """1マスの内訳：相手の代表型のS実数値を速い順で、自分のSと比較（どこから抜けるか）。label はメガX/Yの列の区別（無ければ種の最初の列）"""
     field = BattleField()
     mi = next((i for i, s in enumerate(specs) if s.split("@")[0] == mon_name), 0)
     M = _build(specs[mi], L)
     my_s = _effective_speed(M, field)
     my_scarf = specs[mi].split("@", 1)[1].split(":")[0] == "こだわりスカーフ"
-    vs = _find_variants(opp_name, L)
-    builds = [{"idx": i + 1, "s": _effective_speed(v["p"], field), "item": v["item"],
-               "nature": v["nature"], "ev": _ev_str(v["ev"]), "scarf": v["item"] == "こだわりスカーフ"}
-              for i, v in enumerate(vs)]
-    builds.sort(key=lambda b: -b["s"])
+    cols = [c for c in _speed_cols(L) if c["sp"] == opp_name]
+    col = next((c for c in cols if c["label"] == label), cols[0] if cols else None)
+    builds = sorted(col["builds"] if col else [], key=lambda b: -b["s"])
     return {"mon": mon_name, "opp": opp_name, "my_s": my_s, "my_scarf": my_scarf, "builds": builds}
+
+
+def atk_detail(specs, mon_name, type_name, L):
+    """攻撃相性セルの内訳：その味方の技一覧と、各技の指定タイプへの倍率。"""
+    mi = next((i for i, s in enumerate(specs) if s.split("@")[0] == mon_name), 0)
+    M = _build(specs[mi], L)
+    moves = []
+    for mv in M.moves:
+        atk = mv.category in ("physical", "special") and bool(mv.type) and (mv.power or 0) > 0
+        moves.append({"name": mv.name_jp, "type": mv.type or "", "atk": atk,
+                      "eff": get_type_effectiveness(mv.type, type_name, None) if atk else None})
+    return {"mon": mon_name, "type": type_name, "moves": moves}

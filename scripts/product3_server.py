@@ -826,7 +826,7 @@ class H(BaseHTTPRequestHandler):
             self._send(404, "{}")
 
     def do_POST(self):
-        if self.path not in ("/suggest", "/simulate", "/complete", "/fire_detail", "/speed_detail", "/matchup_detail", "/atk_detail", "/guide", "/diagnose", "/diag_battle", "/improve", "/job_status"):
+        if self.path not in ("/suggest", "/simulate", "/complete", "/speed_detail", "/atk_detail", "/guide", "/diagnose", "/diag_battle", "/improve", "/job_status"):
             self._send(404, "{}"); return
         try:
             n = int(self.headers.get("Content-Length", 0) or 0)
@@ -863,9 +863,8 @@ class H(BaseHTTPRequestHandler):
                 self._send(200, json.dumps(improve_start(specs), ensure_ascii=False)); return
             if self.path == "/atk_detail":
                 self._send(200, json.dumps(EX.atk_detail(req.get("specs") or [], req.get("mon", ""), req.get("type", ""), L), ensure_ascii=False)); return
-            if self.path in ("/fire_detail", "/speed_detail", "/matchup_detail"):
-                fn = {"/fire_detail": EX.fire_detail, "/speed_detail": EX.speed_detail, "/matchup_detail": EX.matchup_detail}[self.path]
-                self._send(200, json.dumps(fn(req.get("specs") or [], req.get("mon", ""), req.get("opp", ""), L), ensure_ascii=False)); return
+            if self.path == "/speed_detail":
+                self._send(200, json.dumps(EX.speed_detail(req.get("specs") or [], req.get("mon", ""), req.get("opp", ""), L, req.get("lbl")), ensure_ascii=False)); return
             if self.path == "/simulate":
                 specs = req.get("specs") or []
                 opp_idx = int(req.get("opp_idx", 0))

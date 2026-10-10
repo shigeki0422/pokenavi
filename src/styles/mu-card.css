@@ -32,7 +32,7 @@ button.muc-seg { padding: 0; border-top: none; border-bottom: none; border-left:
 .muc-mv-c { display: block; font-size: .62rem; font-weight: 600; color: #64748b; }
 .muc-seg-foe { background: #ef4444; }
 .muc-seg-disguise { background: repeating-linear-gradient(45deg, #7c3aed, #7c3aed 3px, #c4b5fd 3px, #c4b5fd 6px) !important; }
-.muc-seg-self, .muc-self-key { background: repeating-linear-gradient(45deg, #64748b, #64748b 3px, #94a3b8 3px, #94a3b8 6px); }
+.muc-seg-self { background: repeating-linear-gradient(45deg, #64748b, #64748b 3px, #94a3b8 3px, #94a3b8 6px); }
 .muc-heal { position: absolute; z-index: 2; background: repeating-linear-gradient(45deg, #86efac, #86efac 4px, #dcfce7 4px, #dcfce7 8px); border-left: 2px solid #16a34a; }
 .muc-heal-key { background: repeating-linear-gradient(45deg, #86efac, #86efac 3px, #dcfce7 3px, #dcfce7 6px); }
 .muc-ko-self { color: #334155 !important; text-shadow: none !important; }
@@ -52,22 +52,49 @@ button.muc-seg { padding: 0; border-top: none; border-bottom: none; border-left:
 .muc-mv-p { text-align: right; color: #64748b; font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .muc-detail { margin-top: .6em; border-top: 1px solid #e2e8f0; padding-top: .3em; }
 .muc-detail > summary { cursor: pointer; font-size: .78rem; font-weight: 700; color: var(--accent, #f97316); min-height: 32px; display: flex; align-items: center; }
-.muc-tab-radio { position: absolute; opacity: 0; pointer-events: none; }
-.muc-tab-labels { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; margin-bottom: 6px; }
-.muc-tab-cap { font-size: .66rem; font-weight: 800; color: #64748b; margin-right: 2px; }
-.muc-tab { display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 6px; border: 1px solid #e2e8f0; background: #f8fafc; cursor: pointer; font-size: .72rem; font-weight: 700; color: #475569; }
-.muc-tab-share { font-weight: 600; color: #94a3b8; }
-.muc-tab-sym { font-weight: 900; border-radius: 999px; min-width: 1.5em; text-align: center; }
-.muc-tab-sym.muc-good { background: #dcfce7; color: #15803d; }
-.muc-tab-sym.muc-mid { background: #fef3c7; color: #b45309; }
-.muc-tab-sym.muc-bad { background: #fee2e2; color: #b91c1c; }
-.muc-tab-panels > .muc-tab-panel { display: none; }
-.muc-tab-radio:nth-of-type(1):checked ~ .muc-tab-labels .muc-tab:nth-of-type(1),
-.muc-tab-radio:nth-of-type(2):checked ~ .muc-tab-labels .muc-tab:nth-of-type(2),
-.muc-tab-radio:nth-of-type(3):checked ~ .muc-tab-labels .muc-tab:nth-of-type(3) { border-color: var(--accent, #f97316); background: #fff7ed; color: #9a3412; }
-.muc-tab-radio:nth-of-type(1):checked ~ .muc-tab-panels > .muc-tab-panel:nth-of-type(1),
-.muc-tab-radio:nth-of-type(2):checked ~ .muc-tab-panels > .muc-tab-panel:nth-of-type(2),
-.muc-tab-radio:nth-of-type(3):checked ~ .muc-tab-panels > .muc-tab-panel:nth-of-type(3) { display: block; }
+.mbp-tab-radio, .mbp-otab-radio { position: absolute; opacity: 0; pointer-events: none; }
+.mbp-tab-labels, .mbp-otab-labels { display: flex; gap: 4px; margin-bottom: 6px; flex-wrap: wrap; align-items: center; }
+.mbp-tab-cap { font-size: .66rem; font-weight: 800; color: #64748b; margin-right: 2px; }
+.mbp-tab-label, .mbp-otab-label {
+  display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 6px;
+  border: 1px solid #e2e8f0; background: #f8fafc; cursor: pointer; font-size: .7rem; font-weight: 700;
+  color: #475569; line-height: 1.4;
+}
+.mbp-tab-sub { font-weight: 600; font-size: .92em; color: #94a3b8; }
+.mbp-otab-sym { font-weight: 900; border-radius: 999px; min-width: 1.5em; text-align: center; }
+.mbp-otab-sym.muc-good { background: #dcfce7; color: #15803d; }
+.mbp-otab-sym.muc-mid { background: #fef3c7; color: #b45309; }
+.mbp-otab-sym.muc-bad { background: #fee2e2; color: #b91c1c; }
+.mbp-tab-panels > .mbp-tab-panel, .mbp-otab-panels > .mbp-otab-panel { display: none; }
+.mbp-tab-radio:nth-of-type(1):checked ~ .mbp-tab-labels label:nth-of-type(1),
+.mbp-tab-radio:nth-of-type(2):checked ~ .mbp-tab-labels label:nth-of-type(2),
+.mbp-tab-radio:nth-of-type(3):checked ~ .mbp-tab-labels label:nth-of-type(3),
+.mbp-otab-radio:nth-of-type(1):checked ~ .mbp-otab-labels label:nth-of-type(1),
+.mbp-otab-radio:nth-of-type(2):checked ~ .mbp-otab-labels label:nth-of-type(2),
+.mbp-otab-radio:nth-of-type(3):checked ~ .mbp-otab-labels label:nth-of-type(3) {
+  border-color: var(--accent, #f97316); background: #fff7ed; color: #9a3412;
+}
+.mbp-tab-radio:nth-of-type(1):checked ~ .mbp-tab-panels > .mbp-tab-panel:nth-of-type(1),
+.mbp-tab-radio:nth-of-type(2):checked ~ .mbp-tab-panels > .mbp-tab-panel:nth-of-type(2),
+.mbp-tab-radio:nth-of-type(3):checked ~ .mbp-tab-panels > .mbp-tab-panel:nth-of-type(3),
+.mbp-otab-radio:nth-of-type(1):checked ~ .mbp-otab-panels > .mbp-otab-panel:nth-of-type(1),
+.mbp-otab-radio:nth-of-type(2):checked ~ .mbp-otab-panels > .mbp-otab-panel:nth-of-type(2),
+.mbp-otab-radio:nth-of-type(3):checked ~ .mbp-otab-panels > .mbp-otab-panel:nth-of-type(3) {
+  display: block;
+}
+.mbp-tab-panels.single > .mbp-tab-panel, .mbp-otab-panels.single > .mbp-otab-panel { display: block; }
+
+/* 1v1相性ダイアログ（mu-cell-popup.ts の renderMuDialog / showMuOverlay） */
+.muc-dlg-hd { display: flex; align-items: center; gap: 6px; font-weight: 800; margin-bottom: 4px; padding-right: 28px; flex-wrap: wrap; }
+.muc-dlg-hd img { width: 32px; height: 32px; object-fit: contain; }
+.muc-dlg-vs { color: #94a3b8; font-weight: 700; font-size: .78rem; }
+.muc-dlg-sub { font-size: .72rem; color: #64748b; margin-bottom: 8px; line-height: 1.5; }
+.muc-dlg-body { font-size: .78rem; }
+.muc-dlg-ov { position: fixed; inset: 0; z-index: 1000; background: rgba(15, 23, 42, .45); display: flex; align-items: center; justify-content: center; padding: 12px; }
+.muc-dlg-ov[hidden] { display: none; }
+.muc-dlg { position: relative; background: #fff; border-radius: 12px; padding: 14px 14px 12px; width: min(36rem, 100%); max-height: 88vh; overflow-y: auto; box-sizing: border-box; }
+.muc-dlg-x { position: absolute; top: 8px; right: 8px; width: 28px; height: 28px; border-radius: 999px; border: none; background: #f1f5f9; color: #475569; cursor: pointer; }
+html.muc-dlg-lock { overflow: hidden; }
 
 .muc-basis{margin-left:auto;font-size:.66rem;font-weight:500;color:#94a3b8;white-space:nowrap}
 .muc-bar-col { flex: 1 1 auto; min-width: 0; }

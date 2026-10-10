@@ -14,7 +14,7 @@ cd /Users/shigeki/work/pokenavi && scripts/venv/bin/python scripts/update_type_p
 ```
 - シーズンは `POOL_SEASON`（無ければ DB の最新シーズン）。版は `<シーズン>/<今日>`（`VERSION=M-6/2026-09-27b` で別名）。同じ版が既にあれば止まる（上書きしない）
 - 出力: `_local/ai_work/pools/<シーズン>/<日付>/` に `type_pool.json`・`type_groups.json`・`meta.json`（使用率の日・生成パラメータ・生成器の git ハッシュ・所要時間）・`report.md`（差分とチェック）
-- 流れ: 型プール（並列 `JOBS`）→ 系統表 → チェック（プール・系統表）→ `scripts/pool_versions.json` の page を新しい版へ → `gen_builder_data.py` → `gen_archetype_data.py` → チェック（出力の整合）
+- 流れ: 型プール（並列 `JOBS`）→ 系統表 → チェック（プール・系統表）→ `scripts/pool_versions.json` の page を新しい版へ → `gen_builder_data.py`（`scripts/builder_targets.json` も書く）→ `gen_archetype_data.py` → チェック（出力の整合）→ 提案キャッシュの一覧の記号（`_refresh_panel.py MATCHUP_ONLY=1`・約30秒）
 - エラーがあれば終了コード1で止まる。プール・系統表のエラーならポインタも生成物も変えない。出力の整合のエラーならポインタを戻して生成物を作り直す
 - 所要時間の目安: 約3分（2026-09-27 初回 160秒・12並列。型プール131s・前シーズン10s・系統2s・チェック各数秒・gen_* 数秒。内訳は meta.json の seconds）
 
@@ -32,10 +32,10 @@ npm run dev
 - en/ko の型名漏れはビルド後に `DIST=<dist> scripts/venv/bin/python scripts/pool_checks.py <前の版> <新しい版>` で確認できる
 
 ### 4. コミット（ユーザーの承認後のみ）
-`src/data/archetypes.json`・`public/builder-data/`・`scripts/pool_versions.json` を一緒にコミットする（`_local` の版の実体は gitignore。ビルドに要るのは生成物だけ）。
+`src/data/archetypes.json`・`public/builder-data/`・`scripts/pool_versions.json`・`scripts/builder_targets.json`・`scripts/suggest_cache.json` を一緒にコミットする。簡単構築の一覧の記号が変わるので Cloud Run（pokenavi-suggest）の再デプロイが要る（`_local` の版の実体は gitignore。ビルドに要るのは生成物だけ）。
 
 ## 戻すとき
-`scripts/pool_versions.json` の page を前の版にして `scripts/venv/bin/python scripts/gen_builder_data.py && scripts/venv/bin/python scripts/gen_archetype_data.py`。版は消さずに残っている。
+`scripts/pool_versions.json` の page を前の版にして `scripts/venv/bin/python scripts/gen_builder_data.py && scripts/venv/bin/python scripts/gen_archetype_data.py && MATCHUP_ONLY=1 scripts/venv/bin/python scripts/_refresh_panel.py`。版は消さずに残っている。
 
 ## シーズン固定版（season ポインタ）の切り替え
 AI・提案API・共進化・datapack は `season` の版（今は `M-6/v41` = `_local/ai_work/frozen/`）。新シーズン開始時か環境が大きく変わったときだけ、週次の版を候補にして A/B（勝率・較正・fresh_parity/belief_parity）で確認してから `season` を切り替える。切り替えたら datapack_export・wasm・Cloud Run の再デプロイが要る（.claude/rules/party-builder.md）。

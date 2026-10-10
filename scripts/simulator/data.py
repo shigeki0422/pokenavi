@@ -326,7 +326,8 @@ class DataLoader:
                 "SELECT * FROM pokemon_mega_stats WHERE mega_stone=? OR mega_stone=?",
                 (stone, item_row["item"])
             ).fetchone()
-            if mega_row:
+            # 他種のメガ石（クロールの誤読: ルガルガン(昼)のリザードナイトY）はメガシンカしない
+            if mega_row and mega_row["base_dex"] == base["dex_number"]:
                 mega_data_map[stone] = MegaData(
                     mega_name=mega_row["mega_name_jp"],
                     type1=mega_row["type1"], type2=mega_row["type2"],

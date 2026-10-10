@@ -454,30 +454,8 @@ const I18N = I18N_ALL[lang];
   .pop-x{position:sticky;top:0;display:flex;align-items:center;justify-content:center;margin:-.6em -.7em -44px auto;width:44px;height:44px;background:none;border:none;font-size:1.1rem;color:rgb(var(--gray));cursor:pointer;line-height:1;z-index:5}
   .pop-x:hover{color:#dc2626}
 
-  /* 相性マトリクスのセル詳細ポップオーバー（PartySuggestApp.astro matchupDetailHtml準拠、pb-名前空間で移植） */
-  .pb-pop-hd{display:flex;align-items:center;gap:.4em;font-weight:800;font-size:.95rem;margin-bottom:.2em}
-  .pb-pop-hd img{width:30px;height:30px;object-fit:contain}
+  /* 仮想敵カードの見出しの矢印 */
   .pb-arw{color:rgb(var(--gray));font-weight:900}
-  .pb-pop-sub{font-size:.76rem;color:rgb(var(--gray));margin-bottom:.35em}
-  .pb-pop-assume{font-size:.74rem;color:rgb(var(--gray));margin-bottom:.7em}
-  .pb-pop-assume summary{cursor:pointer}
-  .pb-pop-assume ul{margin:.4em 0 0;padding-left:1.2em;line-height:1.6}
-  table.pb-pop-t{width:100%;border-collapse:collapse;font-size:.8rem}
-  table.pb-pop-t th{font-size:.66rem;font-weight:800;color:rgb(var(--gray));background:#f8fafc;padding:.4em .5em;border-bottom:1px solid rgb(var(--gray-light));text-align:center;white-space:nowrap}
-  table.pb-pop-t td{padding:.4em .5em;border-bottom:1px solid #f1f5f9;text-align:center;white-space:nowrap}
-  /* 型が横に並ぶので縦の区切りが要る。無いと隣の型の文がつながって読めた（スマホで報告） */
-  table.pb-pop-t th+th,table.pb-pop-t td+td{border-left:1px solid rgb(var(--gray-light))}
-  /* 横スクロールすると行の見出し（与ダメ/被ダメ/素早さ/判定）が流れて何の行か分からなくなる */
-  table.pb-pop-t th.lft,table.pb-pop-t td.lft{position:sticky;left:0;z-index:1;background:#fff;
-    box-shadow:2px 0 3px -1px rgba(0,0,0,.12)}
-  table.pb-pop-t th.lft{background:#f8fafc}
-  .pb-pop-pct{font-weight:700}
-  .pb-pop-ko{font-size:.7rem;color:rgb(var(--gray))}
-  /* 発数の要因（ばけのかわ等）と、ダメージ計算に効いた条件（天候・いかく等） */
-  .pb-pop-note{font-size:.66rem;color:#b45309}
-  .pb-pop-col-sub{font-size:.6rem;color:rgb(var(--gray));font-weight:600;display:block}
-  .pb-pop-types{display:block;margin:2px 0}
-  .pb-pop-types img{width:18px;height:18px;vertical-align:middle}
 
   /* pb- 新規クラス */
   .pb-beta{font-size:.65rem;background:#fef3c7;color:#92400e;border-radius:9999px;padding:.15em .6em;margin-left:.5em;vertical-align:middle;font-weight:800}
@@ -641,14 +619,6 @@ const I18N = I18N_ALL[lang];
   .pb-mu-head .pb-arw{font-size:.8rem;font-weight:700}
   .pb-mu-head .pb-mu-sym{min-width:28px;height:28px;margin-left:.2em;font-size:1rem}
   .pb-mu-head .pb-tag{height:28px;font-size:.8rem}
-  .pb-mu-sub{font-size:.7rem;color:rgb(var(--gray));margin:.1em 0 .3em}
-  .pb-mu-row{display:flex;align-items:center;gap:.5em;flex-wrap:wrap;font-size:.82rem;margin-top:.15em}
-  .pb-mb-row{display:flex;flex-wrap:wrap;gap:.3em;margin-top:.4em}
-  .pb-mb-chip{display:inline-flex;flex-direction:column;align-items:flex-start;line-height:1.25;font-size:.68rem;font-weight:700;background:#f1f5f9;border-radius:6px;padding:.15em .5em;color:rgb(var(--gray-dark));white-space:nowrap}
-  .pb-mb-chip.pb-mb-none{color:rgb(var(--gray));font-weight:400}
-  .pb-mb-top{white-space:nowrap}
-  .pb-mb-dmg{font-size:.62rem;font-weight:600;color:rgb(var(--gray));white-space:nowrap}
-  .pb-mu-hit{font-size:.76rem;color:rgb(var(--gray-dark));background:#fef2f2;border-radius:6px;padding:.2em .5em;margin-top:.4em}
   .pb-mu-actions{margin-left:auto;display:flex;gap:.3em;flex-wrap:wrap}
   .pb-mu-ev-grid{display:flex;flex-wrap:wrap;margin:.5em 0}
   .pb-mu-ev-row{display:inline-flex;align-items:center;gap:.35em;margin:.15em .6em .15em 0}
@@ -686,9 +656,6 @@ const I18N = I18N_ALL[lang];
   .pb-hf-card img.mtx-ico{width:32px;height:32px}
   .pb-hf-info{flex:1 1 120px;min-width:0}
   .pb-hf-name{font-weight:700;font-size:.85rem}
-  .pb-mb-block{margin-top:.4em}
-  .pb-mb-lbl{margin-top:.5em;font-size:.68rem;font-weight:800;color:rgb(var(--gray))}
-  .pb-mb-chips{display:flex;flex-wrap:wrap;gap:.3em;margin-top:.2em}
   .pb-bstrip{display:flex;gap:8px;margin:.5em 0 .7em}
   .pb-bstrip-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:.4em;min-height:44px;border:1.5px solid #e2e8f0;background:#fff;border-radius:12px;font-family:inherit;font-weight:800;font-size:.85rem;color:rgb(var(--gray-dark));cursor:pointer;touch-action:manipulation}
   .pb-bstrip-add{flex:0 0 auto;min-width:44px;min-height:44px;border:1.5px dashed #c7d2fe;background:#eef2ff;color:#3730a3;border-radius:12px;font-family:inherit;font-weight:900;font-size:1.2rem;cursor:pointer;touch-action:manipulation}
@@ -715,7 +682,6 @@ const I18N = I18N_ALL[lang];
   .pb-seg-foe{background:#ef4444}
   .pb-vbox-basis{margin-left:auto;font-size:.66rem;font-weight:500;color:#94a3b8;white-space:nowrap}
   .pb-seg-me{background:#3b82f6}
-  .pb-seg-stall{background:#7c3aed}
   .pb-bar-row{display:flex;align-items:center;gap:4px}
   .pb-bar-row > .pb-bar{flex:1 1 auto;min-width:0}
   .pb-bar-col{flex:1 1 auto;min-width:0}
@@ -733,14 +699,12 @@ const I18N = I18N_ALL[lang];
   .pb-seg-disguise{background:repeating-linear-gradient(45deg,#7c3aed,#7c3aed 3px,#c4b5fd 3px,#c4b5fd 6px)}
   .pb-ko-self{color:#334155;text-shadow:none}
   .pb-seg-self{background:repeating-linear-gradient(45deg,#64748b,#64748b 3px,#94a3b8 3px,#94a3b8 6px)}
-  .pb-self-key{display:inline-block;width:14px;height:8px;background:repeating-linear-gradient(45deg,#64748b,#64748b 3px,#94a3b8 3px,#94a3b8 6px)}
   .pb-seg-stallturn{position:relative}
   .pb-stripe{position:absolute;left:0;right:0;bottom:0;height:6px;display:flex;background:rgba(255,255,255,.35)}
   .pb-stripe i{display:block;height:100%}
   .pb-part-p{background:#7c3aed}
   .pb-part-b{background:#f59e0b}
   .pb-heal{position:absolute;top:0;bottom:0;z-index:2;background:repeating-linear-gradient(45deg,#86efac,#86efac 4px,#dcfce7 4px,#dcfce7 8px);border-left:2px solid #16a34a;pointer-events:auto}
-  .pb-tick-key{width:0!important;height:10px!important;border-radius:0!important;border-left:2px dashed rgba(15,23,42,.55);background:none!important;margin-right:.1em}
   .pb-heal-key{background:repeating-linear-gradient(45deg,#86efac,#86efac 3px,#dcfce7 3px,#dcfce7 6px)}
   .pb-part-d.me{background:#3b82f6}
   .pb-part-d.foe{background:#ef4444}
@@ -749,7 +713,6 @@ const I18N = I18N_ALL[lang];
   .pb-legend i:first-child{margin-left:0}
   .pb-legend > *{white-space:nowrap}
   .pb-legend-note{margin-left:auto;font-weight:600}
-  .pb-tick{position:absolute;top:0;bottom:0;width:0;border-left:2px dashed rgba(15,23,42,.55);pointer-events:none}
   .pb-ko{position:absolute;right:5px;top:50%;transform:translateY(-50%);font-size:.72rem;font-weight:900;color:#fff;text-shadow:0 0 3px rgba(0,0,0,.4)}
   .pb-mv-h{margin:.8em 0 .2em;font-size:.7rem;font-weight:800;color:rgb(var(--gray))}
   .pb-mv{display:grid;grid-template-columns:8em 1fr 6.8em;align-items:center;gap:.5em;width:100%;font-size:.76rem;margin:.25em 0;padding:.15em 0;border:none;background:none;font-family:inherit;color:inherit;text-align:left;cursor:pointer;touch-action:manipulation}
@@ -775,16 +738,13 @@ const I18N = I18N_ALL[lang];
   .pb-sym-good{background:#dcfce7;color:#15803d}
   .pb-sym-mid{background:#fef3c7;color:#b45309}
   .pb-sym-bad{background:#fee2e2;color:#b91c1c}
-  .pb-mu-1v1-sub{font-weight:600;color:rgb(var(--gray))}
   .pb-mu-1v1 .mbp-table{font-size:.8rem}
-  .pb-mu-seq{font-size:.72rem;font-weight:700;color:var(--accent);background:#eef2ff;border-radius:6px;padding:.2em .5em;margin-top:.25em}
   .pb-hf-covers{font-size:.72rem;color:rgb(var(--gray))}
   .pb-hf-filter{display:flex;align-items:center;gap:.45em;font-size:.78rem;font-weight:700;color:rgb(var(--gray-dark));margin:0 0 .7em;cursor:pointer}
   .pb-hf-filter input{width:16px;height:16px}
   .pb-hf-build{flex:0 0 100%;display:flex;flex-wrap:wrap;align-items:center;gap:.3em;margin:.1em 0 0;padding-top:.35em;border-top:1px dashed rgb(var(--gray-light))}
   .pb-hf-bitem,.pb-hf-bnat,.pb-hf-bev{display:inline-flex;align-items:center;gap:.15em;font-size:.68rem;font-weight:700;background:#f1f5f9;border-radius:6px;padding:.1em .45em;color:rgb(var(--gray-dark))}
   .pb-hf-swap-arrow{color:rgb(var(--gray));font-weight:900;flex-shrink:0}
-  .pb-hole-seg{color:#b91c1c}
   .pb-hole-ico{width:16px;height:16px;object-fit:contain;vertical-align:-3px;margin-right:1px}
 
   /* 型エディタ ヘッダ */
@@ -793,7 +753,6 @@ const I18N = I18N_ALL[lang];
 
   /* タップ可能なポップオーバー対象（マトリクスセル/技チップ） */
   table.mtx td[data-mtx-pop]{cursor:pointer}
-  button.pb-mb-chip{border:none;font-family:inherit;font-size:.68rem;font-weight:700;color:inherit;text-align:left;cursor:pointer}
 
   /* (1) モバイル固定判定ミニバー(タップでボトムシートに展開) */
   .pb-minibar{position:fixed;left:0;right:0;bottom:0;z-index:600;display:none;background:#fff;border-top:1px solid rgb(var(--gray-light));box-shadow:0 -2px 12px rgba(0,0,0,.1);padding-bottom:env(safe-area-inset-bottom)}
@@ -957,8 +916,9 @@ const I18N = I18N_ALL[lang];
   import { fromSpec, fromSuggestSpec, exportParty, importParty, toServerSpec } from '../scripts/party-builder/spec';
   import { initDiag } from '../scripts/party-builder/diag';
   import '../styles/select-guide.css';
-  import { matchupLead, renderAssumptions, renderMatchupTable, effLabel } from '../scripts/party-builder/matchup-table';
-  import { renderMuCard, renderMuTabs, bindMuCardClicks, archTitle } from '../scripts/party-builder/mu-card';
+  import { effLabel } from '../scripts/party-builder/matchup-table';
+  import { bindMuCardClicks } from '../scripts/party-builder/mu-card';
+  import { openMuDialog, abilityText, muCardTableHtml as sharedMuCardTableHtml } from '../scripts/party-builder/mu-cell-popup';
   import { itemNameOf } from '../i18n/game-terms';
   import { renderReplay } from '../scripts/party-builder/mu-replay';
   bindMuCardClicks(document);
@@ -1396,16 +1356,6 @@ const I18N = I18N_ALL[lang];
   /** PartySuggestApp.astro の evChips 相当(StatArray版)。EVチップ「H<b>4</b>」のように各stat色付きで表示。 */
   function evChipsArr(evs) {
     return EVK.map((k, i) => `<span class="evchip ev-${k}">${k}<b>${Number(evs[i]) || 0}</b></span>`).join('');
-  }
-  /** 仮想敵カードの型表示。PartySuggestApp.astro の detailHtml() と同じ体裁(dgrid+lblチップ・mvchip・evChips)に揃える。 */
-  function muDetailHtml(b) {
-    return `<div class="dgrid">
-        <div class="dcell"><span class="lbl item">${I18N.itemLbl}</span><span class="dval">${itemIco(b.item)}${esc(tItem(b.item)) || '—'}</span></div>
-        <div class="dcell"><span class="lbl abil">${I18N.abilLbl}</span><span class="dval">${esc(tAbil(b.ability)) || '—'}</span></div>
-        <div class="dcell"><span class="lbl nat">${I18N.natLbl}</span><span class="dval">${esc(tNatureDisp(b.nature)) || '—'}</span></div>
-      </div>
-      <div class="drow"><span class="lbl mv">${I18N.moveLbl}</span><span class="mvwrap">${b.moves.filter(Boolean).map((x) => `<span class="mvchip">${typeIcoForMove(x)}${esc(tMove(x))}</span>`).join('') || '—'}</span></div>
-      <div class="drow"><span class="lbl ev">${I18N.evLbl}</span><span class="mvwrap">${evChipsArr(b.ev)}</span></div>`;
   }
   /** 穴を埋める候補カードに出す型の要約(持ち物・性格・技・EV)。 */
   function hfBuildHtml(slot) {
@@ -2453,9 +2403,8 @@ const I18N = I18N_ALL[lang];
     const rb = resolveSlotSafe(slot);
     const megaOpt = slot.item ? sm.mega.find((m) => m.stone === slot.item) : undefined;
     const itemOpts = itemSelectOptions(detail.items, slot.item, core.items);
-    const abilityOpts = megaOpt
-      ? `<option value="${esc(megaOpt.ability)}" selected>${esc(tAbil(megaOpt.ability))}</option>`
-      : fieldOptions(detail.abilities, slot.ability);
+    // 以前の保存データのメガ後の特性はメガ前の最多の特性として出す（エンジンも同じ扱い）
+    const abilityOpts = fieldOptions(detail.abilities, megaOpt && !(detail.abilities || []).some((a) => a.n === slot.ability) ? ((detail.abilities || [])[0] || {}).n : slot.ability);
     const natureOpts = natureSelectOptions(detail.natures, slot.nature);
 
     const tplBtn = (detail.builds || []).length
@@ -2501,7 +2450,7 @@ const I18N = I18N_ALL[lang];
       ${head}
       <div class="dgrid pb-select-row">
         <div class="dcell"><span class="lbl item">${esc(I18N.itemLbl)}</span><select class="inp" id="pb-f-item">${itemOpts}</select></div>
-        <div class="dcell"><span class="lbl abil">${esc(I18N.abilLbl)}</span><select class="inp" id="pb-f-ability" ${megaOpt ? 'disabled' : ''}>${abilityOpts}</select>${megaOpt ? `<span class="pb-mega-note">${esc(I18N.megaFixedNote)}</span>` : ''}</div>
+        <div class="dcell"><span class="lbl abil">${esc(I18N.abilLbl)}</span><select class="inp" id="pb-f-ability">${abilityOpts}</select>${megaOpt ? `<span class="pb-mega-note">→ ${esc(I18N.megaTag)}: ${esc(tAbil(megaOpt.ability))}</span>` : ''}</div>
         <div class="dcell"><span class="lbl nat">${esc(I18N.natLbl)}</span><select class="inp" id="pb-f-nature">${natureOpts}</select></div>
       </div>
       <div class="pb-ev-editor">
@@ -2515,9 +2464,7 @@ const I18N = I18N_ALL[lang];
       slot.item = e.target.value;
       commitAndReflow();
     });
-    if (!megaOpt) {
-      el.querySelector('#pb-f-ability').addEventListener('change', (e) => { slot.ability = e.target.value; commitAndReflow(); });
-    }
+    el.querySelector('#pb-f-ability').addEventListener('change', (e) => { slot.ability = e.target.value; commitAndReflow(); });
     el.querySelector('#pb-f-nature').addEventListener('change', (e) => { slot.nature = e.target.value; commitAndReflow(); });
 
     el.querySelectorAll('.pb-ev-range, .pb-ev-num').forEach((inp) => inp.addEventListener('input', onEvInput));
@@ -3602,7 +3549,7 @@ const I18N = I18N_ALL[lang];
       ? `<div class="pb-mu-others"><span>${esc(t.others)}</span>${status.map((n) => `<span class="pb-tag">${typeIcoForMove(n)}${esc(tMove(n))}</span>`).join('')}</div>` : '';
     return `<div class="pb-mu-card">
         <div class="pb-mu-head"><div class="dtl-tname">${icoImg(r.rb.icon, r.rb.label, 'dtl-ico')}<span class="pb-arw">vs</span>${icoImg(r.opp.icon || r.grp.icon, r.grp.label, 'dtl-ico')}${esc(I18N.buildLabel(r.bi + 1))}<span class="pb-mu-sym ${symClass(v.sym)}">${v.sym}</span><span class="pb-tag pb-tag-first">${esc(v.mutual ? t.mutual : v.tie ? t.tie : v.koFirst ? t.first : t.second)}</span></div>${actionsHtml}</div>
-        <div class="pb-mu-tags"><span class="pb-tag">${itemIco(r.b.item)}${esc(tItem(r.b.item)) || '—'}</span><span class="pb-tag">${esc(tAbil(r.b.ability)) || '—'}</span><span class="pb-tag">${esc(tNatureDisp(r.b.nature)) || '—'}</span></div>
+        <div class="pb-mu-tags"><span class="pb-tag">${itemIco(r.b.item)}${esc(tItem(r.b.item)) || '—'}</span><span class="pb-tag">${esc(abilityText({ ability: r.b.ability, megaAbility: r.b.mab }, tAbil)) || '—'}</span><span class="pb-tag">${esc(tNatureDisp(r.b.nature)) || '—'}</span></div>
         <div class="pb-mu-evline"><b>${esc(pbEvStr(r.opp.evs))}</b><span>（S ${v.myS} vs ${v.oppS}）</span></div>
         ${muVerdictBoxHtml(v)}
         ${myBar}${oppBar}${v.tie ? `<div class="pb-legend">${esc(t.tieNote)}</div>` : ''}
@@ -3629,18 +3576,6 @@ const I18N = I18N_ALL[lang];
     const w = side === 'me' ? who[0] : who[1];
     return lang === 'ja' ? `${w}${stallTurnsTxt(turns)}` : `${w}: ${stallTurnsTxt(turns)}`;
   }
-  /** 持久戦の手順(連続する同じ技は「技×n」にまとめる)。 */
-  function stallRouteTxt(stall) {
-    const runs = [];
-    (stall.seq || []).forEach((n) => {
-      const last = runs[runs.length - 1];
-      if (last && last.n === n) last.c += 1; else runs.push({ n, c: 1 });
-    });
-    const route = runs.map((r) => (r.c > 1 ? `${tMove(r.n)}×${r.c}` : tMove(r.n))).join(' → ');
-    const head = { ja: '持久戦の手順', en: 'Stall route', ko: '지구전 수순' }[lang] || '';
-    const note = { ja: `${stall.turns}ターン・相手が交代しない前提`, en: `${stall.turns} turns, assuming no switch`, ko: `${stall.turns}턴・상대가 교체하지 않는 전제` }[lang] || '';
-    return `${head}: ${route}（${note}）`;
-  }
   /** 型ごとの内訳を1件ずつの配列で返す(タップポップオーバーはリスト表示、titleはこれをjoinした文字列を使う)。
    * 移植元: scripts/_explain.py matchup_grid() の集約対象そのもの。 */
   function muBreakdownLines(agg, builds) {
@@ -3656,95 +3591,14 @@ const I18N = I18N_ALL[lang];
       return I18N.muBreakdownLine(vi + 1, item, v.sym, myTxt, oppTxt, v.koFirst ? I18N.turnFirst : I18N.turnSecond);
     });
   }
-  function muBreakdownTitle(agg, builds) {
-    return muBreakdownLines(agg, builds).join(' / ');
-  }
   /** EV文字列「H4 A28 ...」(0のstatは省略)。移植元: scripts/_explain.py _ev_str()。値は32スケールのまま(表示上の変換なし)。 */
   function pbEvStr(evs) {
     return EVK.map((k, i) => (Number(evs[i]) ? `${k}${evs[i]}` : null)).filter(Boolean).join(' ');
   }
-  /** 相性マトリクスのセル詳細ポップオーバー用の確定数表示。「簡単構築」(PartySuggestApp.astro
-   * matchupDetailHtml/tKo)の表記(確N/乱N/圏外)に合わせる(工房本来の「乱数N発(P%)」形式とは別表記)。
-   * pairHitDetails()のhitsは判定の対戦と同じ中央乱数で数えた発数（中央でも最低乱数と同じ発数なら確定）。
-   * 6発以上は「6ターン以上」と出す（詳細はmatchup.tsの_detailのコメント参照）。 */
-  function pbMuDetailKoTxt(d) {
-    if (!d || d.hits == null) return I18N.dashOpt;
-    if (d.hits >= 6) return I18N.muDetailKoOOR;
-    return d.certain ? I18N.hitsFmt(d.hits) : I18N.muDetailKoRoll(d.hits);
-  }
-  /** 与ダメ内訳1件。「簡単構築」のdmgRow相当(与ダメ%レンジ+確定数+技名)。 */
-  function pbMuDetailLine(d) {
-    if (!d) return { moveTxt: I18N.dashOpt, pctTxt: '0%', koTxt: I18N.dashOpt, noteTxt: '' };
-    const pctTxt = `${Math.round(d.pctLo)}〜${Math.round(d.pctHi)}%`;
-    return { moveTxt: tMove(d.n), pctTxt, koTxt: pbMuDetailKoTxt(d),
-             // 発数が素の計算より増えた要因（ばけのかわ/タスキ/たべのこし等）と、
-             // ダメージ計算に効いた場の条件（天候・フィールド・いかく）。
-             noteTxt: [d.reason ? I18N.muNoteHits(d.reason) : '', d.conds ? I18N.muNoteConds(d.conds) : ''].filter(Boolean).join(' / ') };
-  }
-  /** 相性マトリクスのセルをタップした時の詳細ポップオーバー本体。PartySuggestApp.astroの
-   * matchupDetailHtml()と同じ列構成(型ごとの列・与ダメ/被ダメ/素早さ/判定の4行)・体裁(pb-pop-*)で、
-   * クライアント計算値(pairHitDetails/judge1v1)から生成する(APIは叩かない)。
-   * 数値は仮想敵パネルの技別チップ(moveBreakdown)・判定バッジ(judge1v1)と同一関数を使うため一致する。 */
-  /** 1v1内訳の1列ぶん(型ごと)のビューモデル。相性表のセル詳細ポップアップと仮想敵カードで共有する。 */
-  function muColumnVm(label, opp, pair, verdict) {
-    return {
-      label,
-      meta: [tItem(opp.item) || I18N.noItem, tNature(opp.nature), pbEvStr(opp.evs)],
-      my: pair.my, opp: pair.opp, verdict,
-      myMoveText: tMove(pair.my?.n ?? verdict.myMove),
-      oppMoveText: tMove(pair.opp?.n ?? verdict.oppMove),
-      mySteps: pair.mySteps.map((s) => ({ ...s, n: tMove(s.n) })),
-      oppSteps: pair.oppSteps.map((s) => ({ ...s, n: tMove(s.n) })),
-      myTurns: pair.myTurns.map((s) => ({ ...s, n: tMove(s.n) })),
-      oppTurns: pair.oppTurns.map((s) => ({ ...s, n: tMove(s.n) })),
-      stallSeq: verdict.stall?.seq.map((n) => tMove(n)),
-    };
-  }
+  const MU_NAMES = { tPoke, tMove, tItem, tAbil, tNature };
   /** 仮想敵カードの1v1内訳(見出し行なしの1列)。 */
   function muCardTableHtml(rb, grp, opp, pair, verdict) {
-    return renderMatchupTable({
-      myName: tPoke(rb.label), oppName: tPoke(grp.label),
-      myIconUrl: spriteUrl(rb.icon) || '', oppIconUrl: spriteUrl(grp.icon) || '',
-      columns: [muColumnVm('', opp, pair, verdict)],
-    }, lang, { compact: true });
-  }
-  let muPopUid = 0;
-  function matchupCellDetailHtml(b, o) {
-    const builds = (o.builds || []).slice(0, 3);
-    // 与ダメ・被ダメは同じ場の前提で出す（向きごとに呼ぶと天候が食い違う）
-    const pairs = builds.map((opp) => pairHitDetails(b, opp));
-    const verdicts = builds.map((opp) => judge1v1(b, opp));
-    // 表そのものはポケモン情報ページ・簡単構築と同じ共有レンダラで組む。
-    // ここで独自に組むと罫線・行見出し・桁数が食い違う（実際に食い違った）。
-    // 表記は仮想敵カード・ポケモン情報ページの1v1ダイアログと同じカード（mu-card.ts）。相手の型はタブで切り替える。
-    const tabs = builds.map((opp, i) => {
-      const md = moveDamages(b, opp);
-      const card = renderMuCard({
-        verdict: verdicts[i],
-        chips: [tItem(opp.item) || I18N.noItem, tAbil(opp.ability), tNature(opp.nature)],
-        evLabel: pbEvStr(opp.evs),
-        myTurns: pairs[i].myTurns, oppTurns: pairs[i].oppTurns,
-        my: pairs[i].my, opp: pairs[i].opp,
-        myMoves: md.my, oppMoves: md.opp, myHasMoves: md.myHasMoves, oppHasMoves: md.oppHasMoves,
-        detailHtml: renderAssumptions(lang) + muCardTableHtml(b, o, opp, pairs[i], verdicts[i]),
-        tMove,
-        hpOpp: opp.stats[0], hpMe: b.stats[0],
-        myIcon: spriteUrl(b.icon) || '', oppIcon: spriteUrl(opp.icon || o.icon) || '',
-        myName: tPoke(b.label), oppName: tPoke(o.label), tItem: (n) => tItem(n) || n, tPoke, tAbility: tAbil,
-      }, lang);
-      return {
-        title: archTitle(opp, lang, i + 1) || `${tItem(opp.item) || I18N.noItem}${lang === 'ja' ? '・' : ', '}${tNature(opp.nature)}`,
-        share: opp.weight != null ? `${Math.round(opp.weight * 10) / 10}%` : '',
-        sym: verdicts[i].sym, html: card,
-      };
-    });
-    const defIdx = builds.reduce((bi, x, i) => ((x.weight ?? -1) > (builds[bi].weight ?? -1) ? i : bi), 0);
-    const cap = { ja: '相手の型', en: 'Opponent build', ko: '상대 빌드' }[lang] || '';
-    muPopUid += 1;
-    return `<div class="pb-pop-hd">${icoImg(b.icon, b.label, '')}${esc(tPoke(b.label))}<span class="pb-arw">vs</span>${icoImg(o.icon, o.label, '')}${esc(tPoke(o.label))}</div>
-      <div class="pb-pop-sub">${esc(matchupLead(lang))}</div>
-      ${renderMuTabs(tabs, `pb-mupop-${muPopUid}`, defIdx, cap)}
-      ${addTargetButtonHtml(o.label)}`;
+    return sharedMuCardTableHtml(rb, grp, opp, pair, verdict, lang, MU_NAMES);
   }
   /** (C12) 「穴だけ表示」トグルのHTML。checked状態はmatchupHolesOnlyをそのまま反映する
    * (再描画のたびに作り直すため、チェック操作自体の反映はbindMatchupHolesToggle側で行う)。 */
@@ -3833,9 +3687,14 @@ const I18N = I18N_ALL[lang];
     paneEl.querySelectorAll('[data-mtx-pop]').forEach((td) => td.addEventListener('click', () => {
       const d = mtxPopData[+td.dataset.mtxPop];
       if (!d) return;
-      openInfoPopover('', matchupCellDetailHtml(d.b, d.o));
-      const addBtn = document.getElementById('pb-mtx-add-target');
-      if (addBtn && !addBtn.disabled) addBtn.addEventListener('click', () => addTargetFromMatrix(d.o.label));
+      openMuDialog({
+        lang, names: MU_NAMES, mine: d.b, opp: d.o, extraHtml: addTargetButtonHtml(d.o.label),
+        show: (html) => {
+          openInfoPopover('', html);
+          const addBtn = document.getElementById('pb-mtx-add-target');
+          if (addBtn && !addBtn.disabled) addBtn.addEventListener('click', () => addTargetFromMatrix(d.o.label));
+        },
+      });
     }));
   }
 

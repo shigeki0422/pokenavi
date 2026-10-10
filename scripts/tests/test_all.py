@@ -5206,7 +5206,6 @@ try:
              "マスカーニャ@きあいのタスキ:ようき:トリックフラワー|はたきおとす|とんぼがえり|くさむすび:0/32/0/0/0/32:へんげんじざい"]
     import json as _json24
     for _fn24, _nm24 in ((_E24.matchup_grid, "matchup_grid"),
-                         (_E24.firepower_matrix, "firepower_matrix"),
                          (_E24.speed_info, "speed_info")):
         _o1 = _json24.dumps(_fn24(_sp24, _L24), ensure_ascii=False, sort_keys=True)
         _o2 = _json24.dumps(_fn24(_sp24, _L24), ensure_ascii=False, sort_keys=True)
@@ -9871,6 +9870,172 @@ for _nm45, _fn45 in (("反動ターン", _t45_recharge), ("一撃必殺の命中
         _fn45()
     except Exception as _e45:
         check(f"45 {_nm45} のテストが実行できる", False, f"{type(_e45).__name__}: {_e45}")
+
+# === 46 簡単構築の「ポケモン相性」一覧（Cloud Run）＝相性ダイアログ（wasm）と同じ相手の代表型・同じ集約 ===
+def _t46_suggest_mu(EX=None):
+    import json as _j46, os as _o46, shutil as _sh46, subprocess as _sp46, tempfile as _tf46
+    if EX is None:
+        import _explain as EX
+    _sd = _o46.path.dirname(_o46.path.dirname(_o46.path.abspath(__file__)))
+    _root = _o46.path.dirname(_sd)
+    _tg = _j46.load(open(_o46.path.join(_root, "public", "builder-data", "targets.json"), encoding="utf-8"))
+    _bt = _o46.path.join(_sd, "builder_targets.json")
+    check("46 一覧の相手: scripts/builder_targets.json が page の版の targets.json と同じ中身",
+          _o46.path.exists(_bt) and _j46.load(open(_bt, encoding="utf-8")) == _tg)
+    _specs = ["ガブリアス@きあいのタスキ:いじっぱり:じしん|つるぎのまい|ほのおのキバ|スケイルショット:2/32/0/0/0/32:さめはだ",
+              "カイリュー@たべのこし:いじっぱり:じしん|はねやすめ|りゅうのまい|ドラゴンテール:32/2/24/0/0/8:マルチスケイル",
+              "ボーマンダ@ボーマンダナイト:いじっぱり:げきりん|じしん|すてみタックル|りゅうのまい:2/32/0/0/0/32:いかく",
+              "ミミロップ@ミミロップナイト:ようき:かみなりパンチ|ねこだまし|インファイト|トリプルアクセル:2/32/0/0/0/32:じゅうなん",
+              "ボーマンダ@ボーマンダナイト:いじっぱり:げきりん|じしん|すてみタックル|りゅうのまい:2/32/0/0/0/32:じしんかじょう",
+              "ニャオニクス(メス)@ニャオニクスナイト:おくびょう:サイコキネシス|みわくのボイス|10まんボルト|わるだくみ:2/0/0/32/0/32:かちき",
+              "カラマネロ@カラマネナイト:しんちょう:ちょうはつ|はたきおとす|ばかぢから|サイコカッター:32/0/2/0/32/0:きゅうばん"]
+    _g = EX.matchup_grid(_specs, DataLoader())
+    check("46 一覧の相手: 列（ラベル・種）と並びが targets.json と同じ（メガX/Yは別列）",
+          [(t["label"], t["sp"]) for t in _g["tops"]] == [(g["label"], g["sp"]) for g in _tg], str([t["label"] for t in _g["tops"]][:13]))
+    _agg = getattr(EX, "mu_agg", None)
+    check("46 一覧の集約: 割合で重み付け（80%の型○1.5・20%の型△-0.5 → ○、型により変化の*あり）",
+          _agg is not None and _agg([1.5, -0.5], [80, 20]) == {"v": "○", "dep": True})
+    check("46 一覧の集約: 割合の無い型があれば等しく平均（→ △）",
+          _agg is not None and _agg([1.5, -0.5], [80, None]) == {"v": "△", "dep": True})
+    _npx = _sh46.which("npx")
+    check("46 一覧の記号の照合: npx（tsx）がある", _npx is not None)
+    if not _npx:
+        return
+    with _tf46.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8") as _f:
+        _j46.dump(_specs, _f, ensure_ascii=False)
+    _r = _sp46.run([_npx, "--no-install", "tsx", _o46.path.join(_sd, "tests", "dump_suggest_mu.ts"), _f.name],
+                   capture_output=True, text=True, cwd=_root)
+    _o46.unlink(_f.name)
+    _ts = _j46.loads(_r.stdout) if _r.returncode == 0 else None
+    _bad = [] if _ts else ["dump 失敗 " + _r.stderr[-300:]]
+    for _s, _row in zip(_specs, _g["rows"]):
+        for _t, _c, _w in zip(_g["tops"], _row["cells"], (_ts or {}).get(_s) or []):
+            if (_t["label"], _c["v"], _c["dep"]) != tuple(_w):
+                _bad.append((_s.split("@")[0], _t["label"], _c, _w))
+    check("46 一覧の記号: ブラウザ（wasm・openMuDialog と同じ相手と集約）と全セル一致（7匹×31列。技を外さない・メガ前の特性・割合の重み）",
+          _ts is not None and not _bad and len(_ts) == len(_specs), str(_bad[:5]))
+
+
+try:
+    _t46_suggest_mu()
+except Exception as _e46:
+    check("46 簡単構築の一覧の記号のテストが実行できる", False, f"{type(_e46).__name__}: {_e46}")
+
+# === 47 1v1判定の入力（技を外さない・メガ石持ちはメガ前の特性で入場・シーズン無し）と簡単構築の素早さタブの相手＝page の版 ===
+def _t47_mu_input(EX=None):
+    import json as _j47, os as _o47, shutil as _sh47, subprocess as _sp47
+    if EX is None:
+        import _explain as EX
+    _sd = _o47.path.dirname(_o47.path.dirname(_o47.path.abspath(__file__)))
+    _root = _o47.path.dirname(_sd)
+    _L = DataLoader()
+    _calls = []
+
+    class _Rec:
+        def __init__(self, real): self.real = real
+        def mu_analyze(self, a, b, season):
+            _calls.append((a, b, season))
+            return self.real.mu_analyze(a, b, season)
+        def __getattr__(self, k): return getattr(self.real, k)
+    _real = EX._rust()
+    _moxie = "ボーマンダ@ボーマンダナイト:いじっぱり:げきりん|じしん|すてみタックル|りゅうのまい:2/32/0/0/0/32:じしんかじょう"
+    _dnite = "カイリュー@たべのこし:いじっぱり:じしん|はねやすめ|りゅうのまい|ドラゴンテール:32/2/24/0/0/8:マルチスケイル"
+    EX._RUST = _Rec(_real)
+    try:
+        EX.matchup_grid([_moxie, _dnite], _L)
+    finally:
+        EX._RUST = _real
+    _bt = _j47.load(open(_o47.path.join(_sd, "builder_targets.json"), encoding="utf-8"))
+    _bspecs = {b["spec"] for g in _bt for b in g["builds"] if b.get("spec")}
+    check("47 一覧: 自分の spec をそのままエンジンに渡す（メガ石持ちの特性をメガ後の特性に置き換えない・0倍の技 じしん を外さない）",
+          bool(_calls) and {a for a, _, _ in _calls} == {_moxie, _dnite}, str(sorted({a for a, _, _ in _calls})[:2]))
+    check("47 一覧: 相手の代表型の spec もそのまま渡す（技を外さない）",
+          bool(_calls) and {b for _, b, _ in _calls} <= _bspecs, str([b for _, b, _ in _calls if b not in _bspecs][:2]))
+    check("47 一覧: シーズン無し（ブラウザの wasm と同じ。spec は全項目指定で使用率表を引かない）",
+          bool(_calls) and {x for _, _, x in _calls} == {""}, str({x for _, _, x in _calls}))
+    _pm = _L.pre_mega_abilities()
+    _bad = [(g["label"], b["ability"], b.get("mab")) for g in _bt for b in g["builds"]
+            if b.get("mega") and not (b.get("mab") and b["spec"].rsplit(":", 1)[1] == b["ability"]
+                                      and (b["ability"] in (_pm.get(g["sp"], {}).get("legal") or [b["ability"]])))]
+    check("47 代表型: メガ型の ability・spec はメガ前の特性、メガ後の特性は mab（targets.json・builder_targets.json）",
+          not _bad and any(b.get("mega") for g in _bt for b in g["builds"]), str(_bad[:4]))
+    _si = getattr(EX, "speed_info", None)
+    _g = _si([_moxie], _L) if _si else None
+    check("47 素早さタブ: 相手の列が page の版の代表型（builder_targets.json と同じ列・順番・メガX/Y）",
+          _g is not None and [(t["label"], t["sp"]) for t in _g["tops"]] == [(g["label"], g["sp"]) for g in _bt])
+    _sd47 = getattr(EX, "speed_detail", None)
+    _y = _sd47([_moxie], "ボーマンダ", "リザードン", _L, "メガリザードンY") if _sd47 and _sd47.__code__.co_argcount >= 5 else None
+    _ny = len(next((g["builds"] for g in _bt if g["label"] == "メガリザードンY"), []))
+    check("47 素早さの内訳: メガX/Yの列を label で選ぶ（相手の型の数・持ち物が その列の代表型）",
+          _y is not None and len(_y["builds"]) == _ny and all(b["item"] == "リザードナイトY" for b in _y["builds"]), str(_y)[:200])
+    _ad = getattr(EX, "atk_detail", None)
+    _a = _ad([_dnite], "カイリュー", "ひこう", _L) if _ad else None
+    check("47 攻撃相性の内訳（/atk_detail）: 技ごとの倍率を返す（じしん→ひこう 0倍）",
+          _a is not None and any(m["name"] == "じしん" and m["eff"] == 0 for m in _a["moves"]), str(_a)[:200])
+    _srv = open(_o47.path.join(_sd, "product3_server.py"), encoding="utf-8").read()
+    check("47 旧API（/matchup_detail・/fire_detail と関数）を残さない",
+          "/matchup_detail" not in _srv and "/fire_detail" not in _srv
+          and not any(hasattr(EX, f) for f in ("matchup_detail", "fire_detail", "firepower_matrix", "_engine_lines", "_prune_spec")))
+    _npx = _sh47.which("npx")
+    if not _npx:
+        check("47 1v1判定の入力（TS）: npx（tsx）がある", False)
+        return
+    _r = _sp47.run([_npx, "--no-install", "tsx", _o47.path.join(_sd, "tests", "check_mu_rules.ts")],
+                   capture_output=True, text=True, cwd=_root)
+    _res = _j47.loads(_r.stdout) if _r.returncode == 0 else {"check_mu_rules.ts が実行できる": [False, _r.stderr[-300:]]}
+    for _k, (_ok, _det) in _res.items():
+        check(f"47 {_k}", _ok, _det)
+
+
+try:
+    _t47_mu_input()
+except Exception as _e47:
+    check("47 1v1判定の入力のテストが実行できる", False, f"{type(_e47).__name__}: {_e47}")
+
+# === 48 他の種のメガ石ではメガシンカしない（Python・Rust・builder-data）と 0倍の技を「何もしない手」にしない（Rust 1v1） ===
+def _t48_foreign_stone_and_immune(BD=None):
+    import json as _j48, os as _o48, glob as _g48, sqlite3 as _s48
+    _sd = _o48.path.dirname(_o48.path.dirname(_o48.path.abspath(__file__)))
+    BD = BD or _o48.path.join(_o48.path.dirname(_sd), "public", "builder-data")
+    _L = DataLoader()
+    _t = _L.get_pokemon_template("ルガルガン(昼)", "M-6")
+    check("48 他の種のメガ石: ルガルガン(昼) のテンプレに リザードナイトY のメガが無い（Python）",
+          _t is not None and not any(k.startswith("リザードナイト") for k in _t.mega_data), str(list(_t.mega_data) if _t else None))
+    from simulator.pokemon import build_from_spec as _bfs48, parse_pokemon_spec as _pps48
+    _lyc = "ルガルガン(昼)@リザードナイトY:ようき:アクセルロック|インファイト|がむしゃら|カウンター:2/32/0/0/0/32:かたいツメ"
+    _p = _bfs48(_pps48(_lyc), _L, season="M-6", randomize=False)
+    check("48 他の種のメガ石: 持たせてもメガシンカしない（Python）", _p.mega_data is None)
+    _own = _bfs48(_pps48("リザードン@リザードナイトY:おくびょう:かえんほうしゃ|はねやすめ|りゅうのはどう|ソーラービーム:2/0/0/32/0/32:もうか"), _L, season="M-6", randomize=False)
+    check("48 自分のメガ石はメガシンカする（リザードン@リザードナイトY）", _own.mega_data is not None)
+    import pokenavi_engine as _E48
+    _gar = "ガブリアス@きあいのタスキ:いじっぱり:じしん|つるぎのまい|ほのおのキバ|スケイルショット:2/32/0/0/0/32:さめはだ"
+    _m = _j48.loads(_E48.mu_analyze(_lyc, _gar, "M-6"))["verdict"]["raceInit"]["mega"]
+    check("48 他の種のメガ石: 持たせてもメガシンカしない（Rust・使用率表のあるシーズン）", _m[0] is None, str(_m))
+    _con = _s48.connect(_o48.path.join(_sd, "pokenavi.db"))
+    _dex = {r[0]: r[1] for r in _con.execute("SELECT pokemon_name, dex_number FROM pokemon_base_stats")}
+    _sdex = {r[0]: r[1] for r in _con.execute("SELECT mega_stone, base_dex FROM pokemon_mega_stats")}
+    _con.close()
+    _sp = _j48.load(open(_o48.path.join(BD, "species.json"), encoding="utf-8"))
+    _bad = [(s["n"], m["stone"]) for s in _sp for m in s["mega"] if s["n"] in _dex and _sdex.get(m["stone"], _dex[s["n"]]) != _dex[s["n"]]]
+    _mons = [_j48.load(open(f, encoding="utf-8")) for f in _g48.glob(_o48.path.join(BD, "mon", "*.json"))]
+    _bad += [(m.get("n"), x) for m in _mons if m.get("n") in _dex
+             for x in [i["n"] for i in m.get("items", [])] + [b["item"] for b in m.get("mu", [])]
+             if _sdex.get(x, _dex[m["n"]]) != _dex[m["n"]]]
+    check("48 builder-data: 他の種のメガ石を メガの候補・持ち物の候補・代表型に入れない（型の生成器と同じく持ち物から外す）",
+          not _bad and len(_mons) > 100, str(_bad[:5]))
+    _dn = "カイリュー@たべのこし:いじっぱり:じしん|はねやすめ|りゅうのまい|ドラゴンテール:32/2/24/0/0/8:マルチスケイル"
+    _cv = "アーマーガア@ゴツゴツメット:わんぱく:てっぺき|とんぼがえり|はねやすめ|ボディプレス:32/0/32/0/2/0:プレッシャー"
+    _d = _j48.loads(_E48.mu_analyze(_dn, _cv, ""))
+    _best = [m["n"] for m in _d["a"]["moves"] if m.get("best")]
+    check("48 1v1: 0倍の じしん を最大打点技・撃つ手にしない（ゴツゴツメットを避ける「何もしない手」で引き分けにしない）",
+          _d["verdict"]["score"] == -2 and _best != ["じしん"] and "じしん" not in (_d["verdict"].get("mySeq") or [])
+          and _d["verdict"]["myMove"] != "じしん", f'{_d["verdict"]["score"]} {_best} {_d["verdict"]["myMove"]}')
+
+
+try:
+    _t48_foreign_stone_and_immune()
+except Exception as _e48:
+    check("48 他の種のメガ石・0倍の技のテストが実行できる", False, f"{type(_e48).__name__}: {_e48}")
 
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:

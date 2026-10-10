@@ -151,8 +151,17 @@ def _robust_rows(con, table, cols, name):
     return best
 
 
+def _foreign_stones(con, name):
+    """他の種のメガ石（クロールの誤読: ルガルガン(昼)のリザードナイトY）。型の生成器（_gen_type_pool.marginals）と同じく持ち物から外す"""
+    dex = con.execute("SELECT dex_number FROM pokemon_base_stats WHERE pokemon_name=?", (name,)).fetchone()
+    if not dex:
+        return set()
+    return {r[0] for r in con.execute("SELECT mega_stone FROM pokemon_mega_stats WHERE base_dex != ?", (dex[0],))}
+
+
 def _items_of(con, name):
-    return [(r[0], r[1] or 0.0) for r in _robust_rows(con, "pokemon_items", "item", name)]
+    bad = _foreign_stones(con, name)
+    return [(r[0], r[1] or 0.0) for r in _robust_rows(con, "pokemon_items", "item", name) if r[0] not in bad]
 
 
 def _natures_of(con, name):
@@ -527,22 +536,20 @@ def build_variants(con, name, tpl_of, normalize_mega_stone, max_variants=MAX_VAR
             "idx": len(out) + 1, "item": item, "nature": nature, "ability": ability,
             "ev": list(ev), "moves": mv4, "mpool": mpool,
             "t1": t1, "t2": t2, "bs": bs, "mega": md is not None,
-            "label": label, "spec": spec,
+            "label": label, "spec": spec, **_mab(md),
         })
     for item, must, pin in ROLE_VARIANTS.get(name, []):
         src = _role_variant_src(con, name, item, must, pin)
         if not src or any(o["item"] == item and set(must) <= set(o["moves"]) for o in out):
             continue
         nature, tpl_ability, mv4, ev = src
-        md, t1, t2, bs, ability, label = _form_of(tpl, name, item, normalize_mega_stone, base_ability)
-        if md is None:
-            ability = tpl_ability or ability
+        md, t1, t2, bs, ability, label = _form_of(tpl, name, item, normalize_mega_stone, tpl_ability or base_ability)
         spec = (f"{name}@{item}:{nature}:{'|'.join(mv4)}:"
                 f"{'/'.join(str(x) for x in ev)}:{ability}")
         v = {"idx": 0, "item": item, "nature": nature, "ability": ability,
              "ev": list(ev), "moves": mv4, "mpool": mpool,
              "t1": t1, "t2": t2, "bs": bs, "mega": md is not None,
-             "label": label, "spec": spec}
+             "label": label, "spec": spec, **_mab(md)}
         if len(out) >= max_variants:
             out.pop()
         out.append(v)
@@ -661,17 +668,22 @@ def _pool_variants(con, name, tpl, pg, normalize_mega_stone, max_variants):
                 f"{'/'.join(str(x) for x in ev)}:{ability}")
         out.append({"idx": len(out) + 1, "item": item, "nature": b["nature"], "ability": ability,
                     "ev": ev, "moves": mv4, "mpool": pool, "t1": t1, "t2": t2, "bs": bs,
-                    "mega": md is not None, "label": label, "spec": spec,
+                    "mega": md is not None, "label": label, "spec": spec, **_mab(md),
                     "arch": gname + tag, "archNo": gno[id(g)], "archSub": sub,
                     "share": round(c["share"] * 100, 1)})
     return out
 
 
+def _mab(md):
+    return {"mab": md.ability} if md is not None and md.ability else {}
+
+
 def _form_of(tpl, name, item, normalize_mega_stone, base_ability):
+    """型の姿。特性は入場時（メガ前）の特性（メガはメガ前の特性で入場して1ターン目の行動前にメガシンカする）。メガ後の特性は _mab"""
     md = _mega_of(tpl, item, normalize_mega_stone)
     if md is not None:
         bs = [md.hp, md.attack, md.defense, md.sp_attack, md.sp_defense, md.speed]
-        return md, md.type1, md.type2, bs, md.ability or base_ability, md.mega_name
+        return md, md.type1, md.type2, bs, base_ability, md.mega_name
     bs = [tpl.base_hp, tpl.base_attack, tpl.base_defense,
           tpl.base_sp_attack, tpl.base_sp_defense, tpl.base_speed]
     return None, tpl.type1, tpl.type2, bs, base_ability, name
@@ -881,6 +893,8 @@ def main():
 
     targets_out = build_targets(con, usage_rows, tpl_of, variants_of)
     write_json(os.path.join(OUT_DIR, "targets.json"), targets_out)
+    # 簡単構築の一覧の記号（Cloud Run・_explain.matchup_grid）も同じ代表型で出す。デプロイ対象は scripts/ だけなので写しを置く
+    write_json(os.path.join(HERE, "builder_targets.json"), targets_out)
 
     build_mon_files(con, usage_rows, variants_of)
     write_json(os.path.join(OUT_DIR, "version.json"), {"pool": POOL_VERSION if _pool_groups() else None})

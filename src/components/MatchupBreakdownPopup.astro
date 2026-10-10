@@ -1,7 +1,8 @@
 ---
 import type { MatchupBreakdown } from '../scripts/party-builder/matchup-static';
 import type { ResolvedBuild } from '../scripts/party-builder/types';
-import { archTitle, punct, type MuPopupData, type MuPopupRow } from '../scripts/party-builder/mu-card';
+import type { MuPopupData, MuPopupRow } from '../scripts/party-builder/mu-card';
+import { muPopupRow, buildTitle, buildShare } from '../scripts/party-builder/mu-cell-popup';
 import '../styles/matchup-table.css';
 import '../styles/mu-card.css';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO,
@@ -15,7 +16,7 @@ import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
  * 相手の型(最大3)をタブで切り替え、自分の型が複数あれば自分の型も切り替えられる。
  * 既定のタブは自分・相手とも割合(share)が最大の型。タブ見出しは型の系統名(arch)と割合。
  * カードと再生は全ポップアップぶんを静的HTMLにするとページが数倍に膨らむため、判定結果だけをJSONで埋め込み、
- * ポップアップを開いたときにクライアントで組み立てる（mu-card.ts の renderMuPopup）。
+ * ポップアップを開いたときにクライアントで組み立てる（mu-cell-popup.ts の renderMuDialog。他ページの1v1ダイアログと同じ関数）。
  */
 interface Props {
   lang: 'ja' | 'en' | 'ko';
@@ -50,10 +51,7 @@ const EV_LABELS = ['H', 'A', 'B', 'C', 'D', 'S'] as const;
 const evText = (evs: ResolvedBuild['evs']) =>
   evs.map((v, i) => (v > 0 ? `${EV_LABELS[i]}${v}` : null)).filter((x): x is string => x !== null).join(' ');
 
-/** タブ見出し: 型の系統名(arch。外国語版は想定型セクションと同じ番号の「Set 1a」)。系統名の無い型は持ち物・性格。 */
-const buildTitle = (b: ResolvedBuild, i: number) =>
-  archTitle(b, lang, i + 1) ?? `${tItem(b.item)}${punct(lang).sep}${tNature(b.nature)}`;
-const buildShare = (b: ResolvedBuild) => (b.weight != null ? `${Math.round(b.weight * 10) / 10}%` : '');
+const names = { tPoke, tMove, tItem, tAbil: tAbility, tNature };
 const argmax = (xs: (number | undefined)[]) => xs.reduce<number>((bi, x, i) => ((x ?? -1) > (xs[bi] ?? -1) ? i : bi), 0);
 
 /** 表示に使わない判定の項目 */
@@ -71,7 +69,7 @@ function slim(x: unknown, drop?: Set<string>): unknown {
   return o;
 }
 
-/** 割合(%)がダメージとHPから同じ式で出せる項目は割合を省く（開いたときに renderMuPopup が計算し直す）。 */
+/** 割合(%)がダメージとHPから同じ式で出せる項目は割合を省く（開いたときに renderMuDialog が計算し直す）。 */
 type Dmg = { dmgLo?: number | null; dmgHi?: number | null; pctLo?: number | null; pctHi?: number | null };
 function dropPct<T extends Dmg>(m: T | null, hp: number): T | null {
   if (!m || m.dmgLo == null || m.dmgHi == null) return m;
@@ -79,7 +77,7 @@ function dropPct<T extends Dmg>(m: T | null, hp: number): T | null {
 }
 type St = { sides: { hp?: number; stg?: number[] }[] };
 const noStg = (st: St): St => ({ ...st, sides: st.sides.map((sd) => (sd.stg?.every((x) => x === 0) ? { ...sd, stg: undefined } : sd)) });
-/** 経過の各時点の状態は、直前と同じなら省き、HPは経過の hp と同じなら省き、能力変化が無ければ省く（renderMuPopup が戻す）。 */
+/** 経過の各時点の状態は、直前と同じなら省き、HPは経過の hp と同じなら省き、能力変化が無ければ省く（renderMuDialog が戻す）。 */
 function slimRace(v: MatchupBreakdown['builds'][number]['verdict']) {
   if (!v.race) return v;
   let prev = '';
@@ -104,7 +102,7 @@ const data: MuPopupData = {
   mine: myBreakdowns.map((mb, i) => {
     const bd = mb.breakdown;
     return {
-      t: buildTitle(bd.me, i), sub: buildShare(bd.me) || evText(bd.me.evs),
+      t: buildTitle(bd.me, i, lang, names), sub: buildShare(bd.me) || evText(bd.me.evs),
       hp: bd.me.stats[0], ic: bd.me.icon || myIcon,
       def: argmax(bd.builds.map((r) => r.build.weight)),
       rows: bd.builds.map((r, j): MuPopupRow => {
@@ -122,16 +120,16 @@ const data: MuPopupData = {
           if (ev.ability) abils.add(ev.ability);
           ev.abilities?.forEach((x) => x && abils.add(x));
         });
+        const row = muPopupRow(bd.me, r.build, j, lang, names, {
+          verdict: v, pair: { my: r.myDmg, opp: r.oppDmg, myTurns: r.myTurns, oppTurns: r.oppTurns }, moves: r.moves, ev: r.evLabel,
+        });
         return {
-          t: buildTitle(r.build, j), sh: buildShare(r.build), sym: v.sym,
-          chips: [tItem(r.build.item), tAbility(r.build.ability), tNature(r.build.nature)],
-          ev: r.evLabel, hp: r.build.stats[0], ic: r.build.icon || oppIcon,
+          ...row, ic: r.build.icon || oppIcon,
           v: slim(slimRace(v), DROP_V) as MuPopupRow['v'],
-          mt: slim(r.myTurns) as MuPopupRow['mt'], ot: slim(r.oppTurns) as MuPopupRow['ot'],
-          md: slim(dropPct(r.myDmg, r.build.stats[0])) as MuPopupRow['md'], od: slim(dropPct(r.oppDmg, bd.me.stats[0])) as MuPopupRow['od'],
-          mm: slim(r.moves.my.map((m) => dropPct(m, r.build.stats[0]))) as MuPopupRow['mm'],
-          om: slim(r.moves.opp.map((m) => dropPct(m, bd.me.stats[0]))) as MuPopupRow['om'],
-          nmh: !r.moves.myHasMoves, noh: !r.moves.oppHasMoves,
+          mt: slim(row.mt) as MuPopupRow['mt'], ot: slim(row.ot) as MuPopupRow['ot'],
+          md: slim(dropPct(row.md ?? null, r.build.stats[0])) as MuPopupRow['md'], od: slim(dropPct(row.od ?? null, bd.me.stats[0])) as MuPopupRow['od'],
+          mm: slim((row.mm ?? []).map((m) => dropPct(m, r.build.stats[0]))) as MuPopupRow['mm'],
+          om: slim((row.om ?? []).map((m) => dropPct(m, bd.me.stats[0]))) as MuPopupRow['om'],
         };
       }),
     };
@@ -161,7 +159,8 @@ const json = JSON.stringify(slim(data)).replace(/</g, '\\u003c').replace(/&/g, '
 </div>
 
 <script>
-  import { bindMuCardClicks, renderMuPopup, type MuPopupData } from '../scripts/party-builder/mu-card';
+  import { bindMuCardClicks, type MuPopupData } from '../scripts/party-builder/mu-card';
+  import { renderMuDialog } from '../scripts/party-builder/mu-cell-popup';
   // カードの棒のセグメントをタップすると、そのカードの詳細欄にターン・技名/原因・減ったHPを出す
   bindMuCardClicks(document);
   /** ポップアップを開いたとき、埋め込んだ判定結果から中身（タブ・カード・再生）を組み立てる（1回だけ）。 */
@@ -171,7 +170,7 @@ const json = JSON.stringify(slim(data)).replace(/</g, '\\u003c').replace(/&/g, '
     if (!src || !body) return;
     const d = JSON.parse(src.content.textContent || '{}') as MuPopupData;
     const ds = root.dataset;
-    body.innerHTML = renderMuPopup(d, (ds.mbpLang as 'ja' | 'en' | 'ko') || 'ja', {
+    body.innerHTML = renderMuDialog(d, (ds.mbpLang as 'ja' | 'en' | 'ko') || 'ja', {
       myName: ds.mbpMy ?? '', oppName: ds.mbpOpp ?? '', myIcon: ds.mbpMyicon ?? '', oppIcon: ds.mbpOppicon ?? '', uid: ds.mbpUid ?? '',
     });
     src.remove();
@@ -230,37 +229,6 @@ const json = JSON.stringify(slim(data)).replace(/</g, '\\u003c').replace(/&/g, '
   .mbp-hd img { width: 28px; height: 28px; object-fit: contain; }
   .mbp-vs { color: #94a3b8; font-weight: 700; font-size: .74rem; }
 
-  .mbp-tab-radio, .mbp-otab-radio { position: absolute; opacity: 0; pointer-events: none; }
-  .mbp-tab-labels, .mbp-otab-labels { display: flex; gap: 4px; margin-bottom: 6px; flex-wrap: wrap; align-items: center; }
-  .mbp-tab-cap { font-size: .66rem; font-weight: 800; color: #64748b; margin-right: 2px; }
-  .mbp-tab-label, .mbp-otab-label {
-    display: inline-flex; align-items: center; gap: 4px; padding: 4px 8px; border-radius: 6px;
-    border: 1px solid #e2e8f0; background: #f8fafc; cursor: pointer; font-size: .7rem; font-weight: 700;
-    color: #475569; line-height: 1.4;
-  }
-  .mbp-tab-sub { font-weight: 600; font-size: .92em; color: #94a3b8; }
-  .mbp-otab-sym { font-weight: 900; border-radius: 999px; min-width: 1.5em; text-align: center; }
-  .mbp-otab-sym.muc-good { background: #dcfce7; color: #15803d; }
-  .mbp-otab-sym.muc-mid { background: #fef3c7; color: #b45309; }
-  .mbp-otab-sym.muc-bad { background: #fee2e2; color: #b91c1c; }
-  .mbp-tab-panels > .mbp-tab-panel, .mbp-otab-panels > .mbp-otab-panel { display: none; }
-  .mbp-tab-radio:nth-of-type(1):checked ~ .mbp-tab-labels label:nth-of-type(1),
-  .mbp-tab-radio:nth-of-type(2):checked ~ .mbp-tab-labels label:nth-of-type(2),
-  .mbp-tab-radio:nth-of-type(3):checked ~ .mbp-tab-labels label:nth-of-type(3),
-  .mbp-otab-radio:nth-of-type(1):checked ~ .mbp-otab-labels label:nth-of-type(1),
-  .mbp-otab-radio:nth-of-type(2):checked ~ .mbp-otab-labels label:nth-of-type(2),
-  .mbp-otab-radio:nth-of-type(3):checked ~ .mbp-otab-labels label:nth-of-type(3) {
-    border-color: var(--accent, #f97316); background: #fff7ed; color: #9a3412;
-  }
-  .mbp-tab-radio:nth-of-type(1):checked ~ .mbp-tab-panels > .mbp-tab-panel:nth-of-type(1),
-  .mbp-tab-radio:nth-of-type(2):checked ~ .mbp-tab-panels > .mbp-tab-panel:nth-of-type(2),
-  .mbp-tab-radio:nth-of-type(3):checked ~ .mbp-tab-panels > .mbp-tab-panel:nth-of-type(3),
-  .mbp-otab-radio:nth-of-type(1):checked ~ .mbp-otab-panels > .mbp-otab-panel:nth-of-type(1),
-  .mbp-otab-radio:nth-of-type(2):checked ~ .mbp-otab-panels > .mbp-otab-panel:nth-of-type(2),
-  .mbp-otab-radio:nth-of-type(3):checked ~ .mbp-otab-panels > .mbp-otab-panel:nth-of-type(3) {
-    display: block;
-  }
-  .mbp-tab-panels.single > .mbp-tab-panel, .mbp-otab-panels.single > .mbp-otab-panel { display: block; }
   .mbp-link { display: inline-block; margin-top: 6px; font-size: .8rem; font-weight: 700; color: var(--accent, #f97316); text-decoration: none; }
   .mbp-link:hover { text-decoration: underline; }
 </style>

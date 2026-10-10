@@ -17,7 +17,6 @@ export function resolveSlot(slot: Slot, species: SpeciesMaster[], moves: MoveDic
   const t1 = megaOpt ? megaOpt.t1 : sm.t1;
   const t2 = megaOpt ? megaOpt.t2 : sm.t2;
   const bs = megaOpt ? megaOpt.bs : sm.bs;
-  const ability = megaOpt && megaOpt.ability ? megaOpt.ability : slot.ability;
 
   const stats = realStats(bs, slot.evs, slot.nature);
 
@@ -36,13 +35,20 @@ export function resolveSlot(slot: Slot, species: SpeciesMaster[], moves: MoveDic
     t2,
     stats,
     item: slot.item,
-    ability,
+    // メガ石持ちもメガ前の特性で入場する（メガ前に無い特性・空欄ならエンジンがメガ前の最多の特性にする）
+    ability: slot.ability,
+    megaAbility: megaOpt?.ability || undefined,
     nature: slot.nature,
     evs: slot.evs,
     moves: resolvedMoves,
     mega: !!megaOpt,
     icon: sm.icon,
   };
+}
+
+/** メガ後も含めた場に出ているときの特性（被弾倍率・表示用）。 */
+export function activeAbility(b: { ability: string; megaAbility?: string }): string {
+  return b.megaAbility || b.ability;
 }
 
 /** targets.json の1ビルドを ResolvedBuild 相当に解決する(bs/タイプは既に解決済みなのでメガ判定不要)。 */
@@ -69,6 +75,7 @@ export function resolveTarget(sp: string, label: string, icon: string, build: Ta
     stats,
     item: build.item,
     ability: build.ability,
+    megaAbility: build.mab || undefined,
     nature: build.nature,
     evs: build.ev,
     moves: resolvedMoves,
@@ -121,7 +128,7 @@ export function attackMatrix(party: ResolvedBuild[]): TypeMatrix {
 
 /** 各メンバーが各タイプの攻撃技を受けたときの被弾倍率。 */
 export function defenseMatrix(party: ResolvedBuild[]): TypeMatrix {
-  const cells: (number | null)[][] = party.map((b) => TYPES.map((atkType) => adjEff(atkType, b.t1, b.t2, b.ability)));
+  const cells: (number | null)[][] = party.map((b) => TYPES.map((atkType) => adjEff(atkType, b.t1, b.t2, activeAbility(b))));
   return { types: TYPES, cells };
 }
 

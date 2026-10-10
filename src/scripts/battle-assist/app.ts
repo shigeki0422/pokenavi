@@ -7,6 +7,7 @@ import { importParty } from "../party-builder/spec";
 import { resolveSlot } from "../party-builder/balance";
 import { judge1v1, moveDamages, pairHitDetails, fmtKoProbPct, type MoveDamage, type MoveHitDetail } from "../party-builder/matchup";
 import { symClass, archTitle } from "../party-builder/mu-card";
+import { abilityText, openMuDialog } from "../party-builder/mu-cell-popup";
 import { itemNameOf } from "../../i18n/game-terms";
 import { initEngine, setScenario, setupMoveNames, type Scenario } from "../engine/wasm";
 import { ALL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, natureDisp } from "../party-builder/stats";
@@ -50,7 +51,7 @@ const TX = {
     noSetup: "積み技なし", setupPre: "を", setupLong: "回使った状態", setupShort: "回", dec: "減らす", inc: "増やす",
     item: "持ち物", ability: "特性", nature: "性格", moves: "技", none: "なし", total: "合計", noEv: "無振り",
     evAria: (x: string) => `${x}のEV`, decAria: (x: string) => `${x}を減らす`, incAria: (x: string) => `${x}を増やす`, moveAria: (n: number) => `技${n}`,
-    promptOpp: "相手のポケモンを選ぶと、技ごとのダメージがここに出ます。", promptParty: "自分のパーティを選んでください。", calcErr: "型を計算できませんでした",
+    promptOpp: "相手のポケモンを選ぶと、技ごとのダメージがここに出ます。", promptParty: "自分のパーティを選んでください。", calcErr: "型を計算できませんでした", muOpen: "1v1の内訳・対戦の再生",
     me: "自分", opp: "相手", edit: "編集", done: "完了", adjusting: "調整中", edited: "編集",
     dirtyNote: "この調整はこのページに記憶されています（工房のパーティは元のまま）", save: "工房のパーティに上書き保存", discard: "工房の型に戻す",
     setLbl: "型", setAria: "相手の型", tplFallback: (k: number) => `型${k}`, tplReset: "この型をテンプレに戻す",
@@ -73,7 +74,7 @@ const TX = {
     noSetup: "No setup move", setupPre: "", setupLong: "use(s)", setupShort: "×", dec: "Decrease", inc: "Increase",
     item: "Item", ability: "Ability", nature: "Nature", moves: "Moves", none: "None", total: "Total", noEv: "No EVs",
     evAria: (x: string) => `${x} EV`, decAria: (x: string) => `Decrease ${x}`, incAria: (x: string) => `Increase ${x}`, moveAria: (n: number) => `Move ${n}`,
-    promptOpp: "Pick the opponent's Pokémon to see the damage of each move here.", promptParty: "Choose your party.", calcErr: "Couldn't calculate this set",
+    promptOpp: "Pick the opponent's Pokémon to see the damage of each move here.", promptParty: "Choose your party.", calcErr: "Couldn't calculate this set", muOpen: "1v1 breakdown & replay",
     me: "You", opp: "Opp", edit: "Edit", done: "Done", adjusting: "Adjusted", edited: "Edited",
     dirtyNote: "These changes are kept on this page (your Workshop party is unchanged)", save: "Overwrite Workshop party", discard: "Revert to Workshop set",
     setLbl: "Set", setAria: "Opponent set", tplFallback: (k: number) => `Set ${k}`, tplReset: "Reset this set",
@@ -96,7 +97,7 @@ const TX = {
     noSetup: "랭크업 기술 없음", setupPre: "", setupLong: "회 사용한 상태", setupShort: "회", dec: "줄이기", inc: "늘리기",
     item: "도구", ability: "특성", nature: "성격", moves: "기술", none: "없음", total: "합계", noEv: "무보정",
     evAria: (x: string) => `${x} EV`, decAria: (x: string) => `${x} 줄이기`, incAria: (x: string) => `${x} 늘리기`, moveAria: (n: number) => `기술 ${n}`,
-    promptOpp: "상대 포켓몬을 고르면 기술별 대미지가 여기에 표시됩니다.", promptParty: "내 파티를 선택하세요.", calcErr: "이 샘플을 계산할 수 없습니다",
+    promptOpp: "상대 포켓몬을 고르면 기술별 대미지가 여기에 표시됩니다.", promptParty: "내 파티를 선택하세요.", calcErr: "이 샘플을 계산할 수 없습니다", muOpen: "1v1 상세・대전 재생",
     me: "나", opp: "상대", edit: "편집", done: "완료", adjusting: "조정 중", edited: "편집됨",
     dirtyNote: "이 조정은 이 페이지에 저장되어 있습니다(공방 파티는 그대로)", save: "공방 파티에 덮어쓰기", discard: "공방 샘플로 되돌리기",
     setLbl: "샘플", setAria: "상대 샘플", tplFallback: (k: number) => `샘플 ${k}`, tplReset: "이 샘플 초기화",
@@ -209,13 +210,6 @@ function tplSlot(sp: string, b: TargetBuild): Slot {
 }
 function oppSlot(o: OppState, k: number): Slot {
   return o.edits[k] ?? tplSlot(o.sp, templatesOf(o)[k] ?? templatesOf(o)[0]);
-}
-function oppResolved(o: OppState, k: number): ResolvedBuild | null {
-  const rb = resolveSafe(oppSlot(o, k));
-  if (!rb) return null;
-  const t = templatesOf(o)[k];
-  // 編集した型は割合の重みを外さない（型の比重は相手の選び方で決まるので、中身を変えても同じとみなす）
-  return { ...rb, weight: t?.share, arch: t?.arch, archNo: t?.archNo, archSub: t?.archSub };
 }
 function tplTitle(o: OppState, k: number): string {
   const t = templatesOf(o)[k];
@@ -415,7 +409,7 @@ function setupRow(side: Side, s: Slot): string {
 
 function compactHtml(side: Side, s: Slot, rb: ResolvedBuild): string {
   return `<div class="ba-kv"><span>${X.item}</span><b>${esc(tItem(s.item) || X.none)}</b></div>
-    <div class="ba-kv"><span>${X.ability}</span><b>${esc(tAbil(rb.ability) || "—")}</b></div>
+    <div class="ba-kv"><span>${X.ability}</span><b>${esc(abilityText(rb, tAbil) || "—")}</b></div>
     <div class="ba-kv"><span>${X.nature}</span><b>${esc(tNatDisp(s.nature) || "—")}</b></div>
     <div class="ba-kv"><span>EV</span><b>${esc(evStr(s.evs))}</b></div>
     <div class="ba-stats">${rb.stats.map((v, i) => `<span><small>${STAT[i]}</small>${v}</span>`).join("")}</div>
@@ -583,6 +577,7 @@ function renderCalcResults() {
         <span class="ba-res-o ${v.koFirst ? "ba-first" : "ba-second"}">${order}</span>
         <span class="ba-res-s">S ${v.myS}/${v.oppS}</span>
         ${scenTxt ? `<span class="ba-res-sc">${esc(scenTxt)}</span>` : ""}
+        <button type="button" class="ba-mu-open" data-mu-open>${esc(X.muOpen)}</button>
       </div>
       <div class="ba-dm-h ba-me-c">${X.dmMe} <small>HP ${opp.stats[0]}</small></div>
       ${mb.my.length ? moveRows(mb.my, opp, true) : `<div class="ba-muted">${esc(X.noDmg)}</div>`}
@@ -615,6 +610,25 @@ function renderCalcResults() {
       <div class="ba-bar-v"><span class="muc-sym ${symClass(v.sym)}">${v.sym}</span><small>${order}</small></div>
       ${ico(opp.icon, opp.label, "ba-bar-ico")}
     </div>`;
+}
+
+/** 工房・簡単構築・情報ページと同じ1v1ダイアログ（相手の型はタブ・既定は表示中の型）。場・積みの前提はこのページの指定どおり。 */
+function openMuFor() {
+  const mySlot = slotOf("me");
+  const o = st.oppMon;
+  const me = mySlot ? resolveSafe(forCalc(mySlot, st.setupMe)) : null;
+  if (!me || !o) return;
+  const builds = templatesOf(o).map((t, k) => {
+    const rb = resolveSafe(forCalc(oppSlot(o, k), st.setupOpp));
+    return rb ? { ...rb, weight: t.share, arch: t.arch, archNo: t.archNo, archSub: t.archSub } : null;
+  });
+  const cur = builds[o.sel];
+  if (!cur) return;
+  const ok = builds.filter((b): b is ResolvedBuild => !!b);
+  openMuDialog({
+    lang: L, names: { tPoke, tMove, tItem, tAbil, tNature: tNat }, mine: me,
+    opp: { label: o.sp, icon: o.icon, builds: ok }, oppDef: ok.indexOf(cur), scenario: fieldScenario(true),
+  });
 }
 
 // ================= 操作 =================
@@ -667,7 +681,9 @@ function bind() {
     const t = e.target as HTMLElement;
     const q = (sel: string) => t.closest(sel) as HTMLElement | null;
     let x: HTMLElement | null;
-    if ((x = q("[data-add-opp]"))) {
+    if (q("[data-mu-open]")) {
+      openMuFor();
+    } else if ((x = q("[data-add-opp]"))) {
       await setOpp(x.dataset.addOpp!);
       $("ba-calc").scrollIntoView({ behavior: "smooth", block: "start" });
     } else if (t.id === "ba-pick-more") {

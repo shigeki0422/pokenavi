@@ -94,13 +94,3 @@ export function speciesByName(n: string): SpeciesMaster | undefined {
   if (!coreCache) return undefined;
   return coreCache.species.find((s) => s.n === n);
 }
-
-/** テスト/リセット用: メモリキャッシュを破棄する。 */
-export function _resetCacheForTest(): void {
-  coreCache = null;
-  corePromise = null;
-  monCache.clear();
-  monPromises.clear();
-  nameUrlCache = null;
-  nameUrlPromise = null;
-}

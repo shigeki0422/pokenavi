@@ -5,8 +5,6 @@ export const TYPES = [
   "はがね", "ほのお", "みず", "くさ", "でんき", "エスパー", "こおり", "ドラゴン", "あく", "フェアリー",
 ] as const;
 
-export type TypeName = (typeof TYPES)[number];
-
 /** TYPE_CHART[攻撃タイプ][防御タイプ] = 倍率。0=無効, 0.5=半減, (省略)=等倍, 2=弱点 */
 export const TYPE_CHART: Record<string, Record<string, number>> = {
   "ノーマル": { "ゴースト": 0, "はがね": 0.5, "いわ": 0.5 },
@@ -79,13 +77,4 @@ export function adjEff(atk: string, d1: string, d2: string | null, ability: stri
   if (ability && ABILITY_HALF[ability]?.includes(atk)) e *= 0.5;
   if (ability && ABILITY_SE_REDUCE.has(ability) && e >= 2) e *= 0.75;
   return e;
-}
-
-/** 防御側(t1/t2)から見た、全18攻撃タイプに対する被弾倍率プロファイル。 */
-export function defenseProfile(t1: string, t2: string | null): Record<string, number> {
-  const out: Record<string, number> = {};
-  for (const atk of TYPES) {
-    out[atk] = eff(atk, t1, t2);
-  }
-  return out;
 }

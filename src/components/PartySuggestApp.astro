@@ -4,7 +4,6 @@ import iconsData from '../../public/sim-data/icons.json';
 import itemSpriteData from '../../public/sim-data/item_sprite.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
-import { ASSUMPTIONS_LABEL, MATCHUP_ASSUMPTIONS, MATCHUP_LEAD } from '../scripts/party-builder/assumptions';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO, TYPE_NAME_EN, TYPE_NAME_KO, ROLE_NAME_EN, ROLE_NAME_KO } from '../i18n/game-terms';
 
 interface Props {
@@ -13,10 +12,6 @@ interface Props {
 }
 const { preCoreLabel, lang = 'ja' } = Astro.props;
 const pfx = lang === 'ja' ? '' : `/${lang}`;
-// 1v1判定の前提文。is:inline スクリプトからは import できないので define:vars で渡す
-const assumeLead = MATCHUP_LEAD[lang] ?? MATCHUP_LEAD.ja;
-const assumeLabel = ASSUMPTIONS_LABEL[lang] ?? ASSUMPTIONS_LABEL.ja;
-const assumeItems = MATCHUP_ASSUMPTIONS[lang] ?? MATCHUP_ASSUMPTIONS.ja;
 
 const ICONS = iconsData as Record<string, string>;
 const MOVET = moveTypesData as Record<string, string>;
@@ -235,7 +230,6 @@ const I18N = I18N_ALL[lang];
   .dtl-mem img{width:24px;height:24px;object-fit:contain}
   .dtl-ico{width:24px;height:24px;object-fit:contain;vertical-align:-6px}
   .dtl-tname{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-weight:700}
-  .dtl-ok{color:#16a34a;font-weight:800}.dtl-ng{color:#dc2626;font-weight:800}
 
   /* マトリクス（脅威対応・タイプ相性：味方を列に） */
   table.mtx td.df-imm{background:#99f6e4;color:#0f766e}
@@ -244,13 +238,8 @@ const I18N = I18N_ALL[lang];
   table.mtx td.df-n{background:#fff;color:#cbd5e1}
   table.mtx td.df-w1{background:#fee2e2;color:#b91c1c}
   table.mtx td.df-w2{background:#fca5a5;color:#7f1d1d}
-  .tm-def{font-weight:800;font-size:.74rem}
   .mtx-legend{display:flex;flex-wrap:wrap;gap:.5em .9em;font-size:.72rem;color:rgb(var(--gray-dark));margin-bottom:.4em;align-items:center}
   .mtx-legend b{padding:1px 5px;border-radius:4px}
-  .mtx-legend b.lg-wall{background:#dbeafe;color:#1d4ed8}
-  .mtx-legend b.lg-off{background:#ffedd5;color:#c2410c}
-  .mtx-legend b.lg-w{background:#fee2e2;color:#b91c1c}
-  .mtx-legend b.lg-r{background:#dcfce7;color:#15803d}
   table.mtx td.ao-good{background:#bbf7d0;color:#15803d;font-weight:800}
   table.mtx td.ao-neu{background:#fff;color:#cbd5e1}
   table.mtx td.ao-bad{background:#f1f5f9;color:#94a3b8}
@@ -283,9 +272,6 @@ const I18N = I18N_ALL[lang];
   .pop-hd img{width:30px;height:30px;object-fit:contain}
   .pop-hd .arw{color:rgb(var(--gray));font-weight:900}
   .pop-sub{font-size:.76rem;color:rgb(var(--gray));margin-bottom:.35em}
-  .pop-assume{font-size:.74rem;color:rgb(var(--gray));margin-bottom:.7em}
-  .pop-assume summary{cursor:pointer}
-  .pop-assume ul{margin:.4em 0 0;padding-left:1.2em;line-height:1.6}
   table.pop-t{width:100%;border-collapse:collapse;font-size:.8rem}
   table.pop-t th{font-size:.66rem;font-weight:800;color:rgb(var(--gray));background:#f8fafc;padding:.4em .5em;border-bottom:1px solid rgb(var(--gray-light));text-align:center;white-space:nowrap}
   table.pop-t th.lft,table.pop-t td.lft{text-align:left}
@@ -297,9 +283,6 @@ const I18N = I18N_ALL[lang];
     box-shadow:2px 0 3px -1px rgba(0,0,0,.12)}
   table.pop-t th.lft{background:#f8fafc}
   table.pop-t td.best{background:#ecfdf5;font-weight:800}
-  .pop-pct{font-weight:700}.pop-ko{font-size:.7rem;color:rgb(var(--gray))}
-  .pop-col-sub{font-size:.6rem;color:rgb(var(--gray));font-weight:600;display:block}
-  .pop-types{display:block;margin:2px 0}.pop-types img{width:18px;height:18px;vertical-align:middle}
   .mvchip-s{display:inline-flex;align-items:center;gap:.15em;font-weight:700}
   .spd-row{display:flex;align-items:center;gap:.6em;padding:.4em .5em;border-radius:8px;margin:.2em 0;font-size:.85rem}
   .spd-row.me{background:#eef2ff;border:1.5px solid var(--accent);font-weight:800}
@@ -361,7 +344,7 @@ const I18N = I18N_ALL[lang];
   }
 </style>
 
-<script is:inline define:vars={{ assumeLead, assumeLabel, assumeItems, ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, ITEM_SPRITE, preCoreLabel, preCoreLabelDisplay, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
+<script is:inline define:vars={{ ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, ITEM_SPRITE, preCoreLabel, preCoreLabelDisplay, lang, pfx, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
   /** I18N_ALL は関数(フォーマッタ)を値に含むため、Astroのdefine:varsはJSON化の過程で
    * 関数プロパティを黙って落としてしまう(define:varsはprops→スクリプトへJSON経由で注入される)。
    * そのためI18N_ALLはこのスクリプト内にフルセットを直接定義し、defineVars経由では渡さない。
@@ -528,10 +511,6 @@ const I18N = I18N_ALL[lang];
   const API = /(^|\.)pokenavi\.jp$/.test(location.hostname) ? 'https://pokenavi-suggest-799947701075.asia-northeast1.run.app' : 'http://localhost:8899';
   const EVK = ['H','A','B','C','D','S'];
   const esc = s => (s||'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-  /** 常に同じ前提は既定で畳んで出す（文言は assumptions.ts に1箇所で持つ）。 */
-  const assumptionsHtml = () =>
-    `<details class="pop-assume"><summary>${esc(assumeLabel)}</summary><ul>` +
-    assumeItems.map(a => `<li>${esc(a)}</li>`).join('') + `</ul></details>`;
   const toKatakana = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
   const _regionalPrefix = [['ヒスイ',3],['ガラル',3],['アローラ',4]];
   /** メガ進化名(「メガガブリアス」等)は辞書に個別登録せず、素体名+メガ接頭辞から動的に組み立てる
@@ -572,36 +551,6 @@ const I18N = I18N_ALL[lang];
       if(base) return lang==='ko' ? `${base}나이트` : `${base}ite`;
     }
     return n;
-  }
-  /** バックエンド(scripts/_explain.py)が返す確定数・先攻/後攻・勝敗の定型文字列を解析して翻訳する。
-   * 固定パターン(確N/確N〜M/乱N/圏外、先手/後手、勝ち/負け)のみを対象にし、
-   * それ以外の自由記述テキストはそのまま返す。 */
-  /** _apply_survive()の注記(ばけのかわ/がんじょう/きあいのタスキ)は特性名・持ち物名そのものなので
-   * 各辞書を順に引いて翻訳する。 */
-  function tSurviveNote(note){
-    if(!note) return note;
-    return note.split('／').map(n => ABILITY_NAME_MAP[n] || ITEM_NAME_MAP[n] || n).join('/');
-  }
-  function tKo(ko){
-    if(ko==null) return ko;
-    if(ko==='圏外') return I18N.koOOR;
-    let m = /^確(\d+)〜(\d+)$/.exec(ko);
-    if(m) return I18N.koRange(m[1],m[2]);
-    m = /^確(\d+)$/.exec(ko);
-    if(m) return I18N.koFixed(m[1]);
-    m = /^乱(\d+)$/.exec(ko);
-    if(m) return I18N.koRoll(m[1]);
-    return ko;
-  }
-  function tSpdTxt(txt){
-    const m = /^(先手|後手)（自S(\d+) \/ 相S(\d+)）$/.exec(txt||'');
-    if(!m) return txt;
-    return I18N.spdTxt(m[1]==='先手'?I18N.turnFirst:I18N.turnSecond, m[2], m[3]);
-  }
-  function tJudgeTxt(txt){
-    const m = /^(勝ち|負け)：(.+?)で倒す \/ (.+?)で倒される・(先手|後手)$/.exec(txt||'');
-    if(!m) return txt;
-    return I18N.judgeTxt(m[1]==='勝ち'?I18N.judgeWin:I18N.judgeLoss, tKo(m[2]), tKo(m[3]), m[4]==='先手'?I18N.turnFirst:I18N.turnSecond);
   }
   const STAT_LABELS = {'最大弱点重複':'statMaxWeakOverlap','メガ数':'statMegaCount','設置技':'statHazards','天候':'statWeather','スカーフ':'statScarf','物理/特殊':'statPhysSpec','平均素早さ':'statAvgSpeed'};
   function statLabel(k){ const key = STAT_LABELS[k]; return key ? I18N[key] : k; }
@@ -665,7 +614,7 @@ const I18N = I18N_ALL[lang];
   /** (A4)(C03) 横スクロール可能な相性表をラップし、右端にフェード+矢印ヒントを付ける。
    * 実装は工房(PartyBuilderApp.astro)と共有するsrc/scripts/party-builder/mg-hints.tsに切り出し済み。
    * このスクリプトはdefine:varsのis:inlineでimportできないため、window.__mgWrapHtml経由で呼ぶ
-   * (window.__mtTableと同じ渡し方)。未ロードの場合に備え、フォールバックとして旧実装を残す。 */
+   * (window.__openMuDialogと同じ渡し方)。未ロードの場合に備え、フォールバックとして旧実装を残す。 */
   function mgWrap(tableHtml){
     if (typeof window.__mgWrapHtml === 'function') return window.__mgWrapHtml(tableHtml);
     return `<div class="mg-wrap"><div class="mg">${tableHtml}</div><div class="mg-hint" aria-hidden="true">→</div></div>`;
@@ -677,14 +626,13 @@ const I18N = I18N_ALL[lang];
     const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + mu.tops.map((t,j)=>`<th class="${holeCols[j]?'th-hole':''}">${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(tPoke(t.label))}</div></th>`).join('') + `</tr>`;
     const rows = mu.rows.map(rw=>{
       const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(rw.mon,'mtx-ico')}<div class="mtx-name">${esc(tPoke(rw.mon))}</div></div></th>`;
-      const cells = rw.cells.map((c,j)=>`<td class="${col(c.v)} mu-cell" data-mon="${esc(rw.mon)}" data-opp="${esc(mu.tops[j].sp)}">${c.v}${c.dep?'<span class="mu-dep">*</span>':''}</td>`).join('');
+      const cells = rw.cells.map((c,j)=>`<td class="${col(c.v)} mu-cell" data-mon="${esc(rw.mon)}" data-opp="${esc(mu.tops[j].sp)}" data-lbl="${esc(mu.tops[j].label)}">${c.v}${c.dep?'<span class="mu-dep">*</span>':''}</td>`).join('');
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
     return `${legendBox(I18N.muLegend)}
       ${mgWrap(`<table class="mtx">${head}${rows}</table>`)}`;
   }
   function typeIcoByName(t){ const e=TYPEICON[t]; return e?`<img class="dtl-ico" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${esc(t)}">`:''; }
-  function memIcons(list){ return list&&list.length ? `<span class="dtl-mem">${list.map(n=>icoImg(n,'')).join('')}</span>` : ''; }
 
   function memRowHead(m){
     return `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(m.name,'mtx-ico')}<div class="mtx-name">${esc(tPoke(m.name))}</div></div></th>`;
@@ -816,7 +764,7 @@ const I18N = I18N_ALL[lang];
     const head = `<tr><th class="mtx-corner mtx-stick">${I18N.selfVsOpp}</th>` + sp.tops.map(t=>`<th>${icoImg(t.sp,'mtx-ico')}<div class="mtx-name">${esc(tPoke(t.label))}</div></th>`).join('') + `</tr>`;
     const rows = sp.rows.map(r=>{
       const hd = `<th class="mtx-stick"><div class="mtx-rowh">${icoImg(r.mon,'mtx-ico')}<div class="mtx-name">${esc(tPoke(r.mon))}<br><span class="sp-val">S${r.spd}${r.scarf?'⚡':''}</span></div></div></th>`;
-      const cells = r.cells.map((c,j)=>`<td class="${col(SPSYM[c])} sp-cell" data-mon="${esc(r.mon)}" data-opp="${esc(sp.tops[j].sp)}">${SPSYM[c]}</td>`).join('');
+      const cells = r.cells.map((c,j)=>`<td class="${col(SPSYM[c])} sp-cell" data-mon="${esc(r.mon)}" data-opp="${esc(sp.tops[j].sp)}" data-lbl="${esc(sp.tops[j].label)}">${SPSYM[c]}</td>`).join('');
       return `<tr>${hd}${cells}</tr>`;
     }).join('');
     return `${legendBox(I18N.speedLegend)}
@@ -852,64 +800,18 @@ const I18N = I18N_ALL[lang];
     return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
       <div class="pop-sub">${I18N.popSpeedSub}</div>${rows}`;
   }
-  /** 1v1判定の内訳。表そのものはポケモン情報ページ・工房と同じ共有レンダラで組む
-   * （scripts/party-builder/matchup-table.ts）。ここで独自に組むと罫線・行見出し・
-   * 桁数が食い違う。数値はサーバが対戦エンジンで出したものをそのまま渡す。 */
-  function matchupDetailHtml(d){
-    // サーバが古い（数値フィールドを返さない）間は、整形済みの "45〜54%" から読み取る。
-    // これで配信順に依存しない（フロントを先に出してもサーバを先に出しても壊れない）。
-    const pctPair = (c) => {
-      if (c.pct_lo != null) return [c.pct_lo, c.pct_hi];
-      const m = /(-?[\d.]+)\s*〜\s*(-?[\d.]+)/.exec(c.pct || '');
-      return m ? [parseFloat(m[1]), parseFloat(m[2])] : null;
-    };
-    const cell = (c) => {
-      if (!c || !c.move || c.move === '—') return null;
-      const p = pctPair(c);
-      if (!p) return null;
-      return {
-        n: c.move, pctLo: p[0], pctHi: p[1],
-        hits: c.n_lo >= 999 ? null : (c.n_lo === c.n_hi ? c.n_lo : c.n_hi),
-        certain: c.n_lo === c.n_hi, prob: null, reason: null, conds: null,
-        dmgLo: null, dmgHi: null,
-      };
-    };
-    // 素早さも数値が無ければ "先手（自S169 / 相S84）" から読み取る
-    const spdNums = (sp) => {
-      if (sp.my_s != null) return [sp.my_s, sp.opp_s];
-      const m = /S(\d+)\D+S(\d+)/.exec(sp.txt || '');
-      return m ? [Number(m[1]), Number(m[2])] : [0, 0];
-    };
-    const vm = {
-      myName: tPoke(d.mon), oppName: tPoke(d.opp),
-      myIconUrl: iconUrl(d.mon) || '', oppIconUrl: iconUrl(d.opp) || '',
-      columns: d.cols.map((c, i) => ({
-        label: I18N.thVariant(c.idx),
-        meta: [tItem(c.item) || '', tNature(c.nature) || '', c.ev],
-        my: cell(d.me[i]), opp: cell(d.op[i]),
-        // 先後・確定数・記号はサーバが返すエンジンの結論をそのまま使う。
-        // ここで素早さから組み直すと、一覧が○なのに内訳は「負け・後手」になる。
-        verdict: { sym: d.judge[i].v, win: d.judge[i].win, fast: d.spd[i].fast,
-                   koFirst: d.judge[i].fast != null ? d.judge[i].fast : d.spd[i].fast,
-                   koByPriority: !!d.judge[i].by_prio, even: false,
-                   myS: spdNums(d.spd[i])[0], oppS: spdNums(d.spd[i])[1],
-                   myHits: d.judge[i].my_hits != null ? d.judge[i].my_hits : d.me[i].n_lo,
-                   oppHits: d.judge[i].opp_hits != null ? d.judge[i].opp_hits : d.op[i].n_lo,
-                   myMove: d.me[i].move, oppMove: d.op[i].move, stub: false,
-                   draw: !!d.judge[i].draw, stall: d.judge[i].stall || undefined, plans: d.judge[i].plans || undefined },
-        stallSeq: (d.judge[i].stall && d.judge[i].stall.seq || []).map((n) => tMove(n)),
-        mySteps: ((d.seq && d.seq[i] && d.seq[i].my) || []).map((x) => ({ ...x, n: tMove(x.n) })),
-        oppSteps: ((d.seq && d.seq[i] && d.seq[i].opp) || []).map((x) => ({ ...x, n: tMove(x.n) })),
-        myTurns: ((d.seq && d.seq[i] && d.seq[i].my_turns) || []).map((x) => ({ ...x, n: tMove(x.n) })),
-        oppTurns: ((d.seq && d.seq[i] && d.seq[i].opp_turns) || []).map((x) => ({ ...x, n: tMove(x.n) })),
-        myMoveText: tMove(d.me[i].move), oppMoveText: tMove(d.op[i].move),
-      })),
-    };
-    return `<div class="pop-hd">${icoImg(d.mon,'')}${esc(tPoke(d.mon))}<span class="arw">vs</span>${icoImg(d.opp,'')}${esc(tPoke(d.opp))}</div>
-      <div class="pop-sub">${esc(assumeLead)}</div>
-      ${assumptionsHtml()}
-      ${typeof window.__mtTable === 'function' ? window.__mtTable(vm, lang)
-          : `<div class="muted" style="padding:1em">${I18N.calculating}</div>`}`;
+  /** 1v1判定の内訳は工房・ポケモン情報ページと同じダイアログ（mu-cell-popup.ts の openMuDialog）。
+   * 自分＝提案のその個体の spec、相手＝その種の代表型（builder-data/targets.json）。wasm でブラウザ内計算する。 */
+  function openMuDetail(el){
+    const res = suggOf(el); if(!res) return;
+    const spec = (res.specs||[]).find(s => s.split('@')[0] === el.dataset.mon);
+    if(!spec || typeof window.__openMuDialog !== 'function') return;
+    window.__openMuDialog({
+      lang, names: { tPoke, tMove, tItem, tAbil, tNature }, mine: spec,
+      opp: { sp: el.dataset.opp, label: el.dataset.lbl }, show: popShow,
+      loadingHtml: `<div class="muted" style="padding:1em">${I18N.calculating}</div>`,
+      errorHtml: `<div class="muted" style="padding:1em">${I18N.fetchFailed}</div>`,
+    });
   }
   function atkDetailHtml(d){
     const EFF = e=>e>=2?'×2':e===1?'×1':e===0?'無効':e<=0.25?'¼':'½';
@@ -935,9 +837,9 @@ const I18N = I18N_ALL[lang];
   }
   async function openDetail(el, kind){
     const res = suggOf(el); if(!res) return;
-    const body = {specs:res.specs, mon:el.dataset.mon, opp:el.dataset.opp};
-    const render = {speed_detail:speedDetailHtml, matchup_detail:matchupDetailHtml}[kind];
-    const key = _cacheKey(kind, res.specs, el.dataset.mon, el.dataset.opp);
+    const body = {specs:res.specs, mon:el.dataset.mon, opp:el.dataset.opp, lbl:el.dataset.lbl};
+    const render = {speed_detail:speedDetailHtml}[kind];
+    const key = _cacheKey(kind, res.specs, el.dataset.mon, el.dataset.lbl || el.dataset.opp);
     if(_detailCache.has(key)){ popShow(render(_detailCache.get(key))); return; }
     popShow(`<div class="muted" style="padding:1em">${I18N.calculating}</div>`);
     try{
@@ -951,7 +853,7 @@ const I18N = I18N_ALL[lang];
   document.addEventListener('keydown', e=>{ if(e.key==='Escape') popHide(); });
   document.addEventListener('click', e=>{
     const sc=e.target.closest('.sp-cell'); if(sc){ openDetail(sc,'speed_detail'); return; }
-    const mc=e.target.closest('.mu-cell'); if(mc){ openDetail(mc,'matchup_detail'); return; }
+    const mc=e.target.closest('.mu-cell'); if(mc){ openMuDetail(mc); return; }
     const ac=e.target.closest('.at-cell'); if(ac){ openAtkDetail(ac); return; }
     const ib=e.target.closest('.ps-import-btn'); if(ib){ handleImportToBuilder(ib); return; }
     const hd=e.target.closest('.sug-toggle'); if(hd){ toggleSug(hd); return; }
@@ -1392,9 +1294,10 @@ const I18N = I18N_ALL[lang];
 <script>
   // このページのメインスクリプトは define:vars のため is:inline で、import できない。
   // 共有レンダラだけモジュール側で読み込んで window 経由で渡す。
-  import { renderMatchupTable } from '../scripts/party-builder/matchup-table';
+  import { openMuDialog } from '../scripts/party-builder/mu-cell-popup';
   import '../styles/matchup-table.css';
-  window.__mtTable = (vm, lang) => renderMatchupTable(vm, lang);
+  import '../styles/mu-card.css';
+  window.__openMuDialog = openMuDialog;
   import { guideBody } from '../scripts/party-builder/diag-shared';
   import '../styles/select-guide.css';
   window.__guideBody = (g, legend) => guideBody(g, { lang: window.__PS_LANG__, ico: window.__PS_ICO__, tPoke: window.__PS_TPOKE__, esc: window.__PS_ESC__, legend });

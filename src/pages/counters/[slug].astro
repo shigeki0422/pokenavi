@@ -21,10 +21,9 @@ import { MATCHUP_SEASON } from '../../consts';
  * プールを集約評価し、自分(候補)の型は主流型1つに固定する」という前提を
  * getMatchups()/getMatchupBreakdown()に一本化し、対策ページ・ポケモン詳細
  * ページのどちらで見ても同じ判定になるようにする。
- * ポップアップの表示自体もMatchupBreakdownPopup.astro(簡単構築のmatchup_detail
- * ポップアップと同じ「型を列に並べ、型ごとに与ダメ・被ダメ・素早さ・判定を通しで
- * 見せる」構造)を/pokemon/(MatchupSection.astro)と共有し、今後どちらかの表示を
- * 直す時は1ファイルの修正で両方に反映されるようにする。
+ * ポップアップの表示自体もMatchupBreakdownPopup.astro(工房・簡単構築と同じ
+ * 1v1相性ダイアログ mu-cell-popup.ts)を/pokemon/(MatchupSection.astro)と共有し、
+ * 今後どちらかの表示を直す時は1ファイルの修正で両方に反映されるようにする。
  */
 export async function getStaticPaths() {
   const targetsPath = path.join(process.cwd(), 'public', 'builder-data', 'targets.json');

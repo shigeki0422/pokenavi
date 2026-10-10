@@ -1094,7 +1094,9 @@ fn analyze_core(pack: &mut Pack, a: &str, b: &str, season: &str) -> serde_json::
             // 1発で倒せる技どうしは先制技を優先（最後の一撃で先に倒す方が良い）
             let prio = base_bt.sides[att].active().moves.get(i).map(|m| m.priority).unwrap_or(0);
             let key = (hits_mid, if hits_mid <= 1 { -prio } else { 0 }, bad, -acc, -first_lo);
-            if best_key.map_or(true, |k| key < k) {
+            // 無効（0倍）で倒せない技は最大打点技にしない（反動が無いだけで選ばれ、撃っても何も起きない手になっていた）
+            let never = eff == Some(0.0) && hits_mid >= OUT_OF_RANGE;
+            if !never && best_key.map_or(true, |k| key < k) {
                 best_key = Some(key);
                 best = Some((name.clone(), hits_lo, first_lo, move_priority(pack, name), hits_hi, i));
             }
@@ -1429,13 +1431,31 @@ fn plan_action(bt: &Battle, packr: &Pack, side: usize, plan: Plan) -> Option<usi
 fn plan_action_with(bt: &Battle, packr: &Pack, side: usize, plan: Plan,
                     ba: &mut dyn FnMut(usize, bool) -> BestAttack) -> Option<usize> {
     match plan {
-        Plan::Max(i) => Some(i),
+        // 今の局面で相手に無効（0倍）なら撃たずに、その局面の最善の攻撃技にする（0倍の技で接触を避ける「何もしない手」にしない）。
+        // 相手のタイプが試合中に変わり（へんげんじざい・へんしん等）当たるようになれば、その時点から撃つ。
+        Plan::Max(i) => if immune_now(bt, packr, side, i) { ba(side, false).map(|x| x.0) } else { Some(i) },
         Plan::Seq(av) => ba(side, av).map(|x| x.0),
         Plan::Prep(i, av) => {
             if bt.turn == 0 { Some(i) } else { ba(side, av).map(|x| x.0) }
         }
         Plan::Stall(av) => stall_action(bt, packr, side, av, ba),
     }
+}
+
+/// `att` の技 `i` が今の局面で相手に無効か（タイプ・特性・ふうせん。move_effectiveness と同じ判定を今の局面で行う）。
+fn immune_now(bt: &Battle, packr: &Pack, att: usize, i: usize) -> bool {
+    let Some(mv) = bt.sides[att].active().moves.get(i).cloned() else { return false };
+    if mv.category == crate::pack::Cat::Status || mv.power.unwrap_or(0) <= 0 {
+        return false;
+    }
+    let mut a = bt.sides[att].active().clone();
+    crate::battle::apply_pre_move_forms(packr, &mut a, &mv);
+    let d = bt.sides[1 - att].active();
+    let ty = crate::damage::effective_move_type(packr, &a, &mv, &bt.field);
+    (!crate::damage::should_ignore_ability(packr, &a)
+        && crate::damage::check_move_immunity(packr, d, ty, mv.name)
+        && !crate::damage::scrappy_override(packr, &a, ty, d))
+        || (d.item == Some(packr.sy.it.ふうせん) && ty == packr.tc.じめん && !d.grounded)
 }
 
 /// 持久戦で状態異常を入れる技（どくどく・おにび）の位置。

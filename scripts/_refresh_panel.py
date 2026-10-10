@@ -16,7 +16,10 @@
   FORCE=1 python _refresh_panel.py         # 変化の有無によらず実行
   IN=... OUT=... python _refresh_panel.py
 
-env: IN(suggest_cache.json) OUT(=IN) FP(panel_fingerprint.json) FORCE(0)
+  MATCHUP_ONLY=1 python _refresh_panel.py # 一覧の記号（相性）と素早さタブだけ作り直す。相手＝builder_targets.json（page の版）なので
+                                           # 週次の型プール更新（update_type_pool.py）が gen_builder_data.py の後に流す
+
+env: IN(suggest_cache.json) OUT(=IN) FP(panel_fingerprint.json) FORCE(0) MATCHUP_ONLY(0)
 """
 import json
 import os
@@ -42,7 +45,37 @@ def fingerprint():
     return {"season": EX.USAGE_SEASON, "panel": panel, "threats": threats}
 
 
+def refresh_matchup() -> None:
+    import _explain as EX
+    from simulator.data import DataLoader
+    t0 = time.time()
+    L = DataLoader()
+    cache = json.load(open(IN, encoding="utf-8"))
+    tops = EX.matchup_grid([], L)["tops"]
+    rows, n_res, n_chg, n_spd = {}, 0, 0, 0
+    for ent in cache.values():
+        for r in ent.get("results", []):
+            specs = r.get("specs")
+            if not specs:
+                continue
+            new = [s for s in specs if s not in rows]
+            if new:
+                rows.update(zip(new, EX.matchup_grid(new, L)["rows"]))
+            mu = {"tops": tops, "rows": [rows[s] for s in specs]}
+            n_chg += mu != r.get("matchup")
+            r["matchup"] = mu
+            spd = EX.speed_info(specs, L)
+            n_spd += spd != r.get("speed")
+            r["speed"] = spd
+            n_res += 1
+    json.dump(cache, open(OUT, "w", encoding="utf-8"), ensure_ascii=False)
+    print(f"{OUT}: {n_res}提案の相性（一覧の記号）と素早さを作り直した（変化 相性{n_chg}・素早さ{n_spd}）/ {time.time()-t0:.0f}s")
+
+
 def main() -> None:
+    if os.environ.get("MATCHUP_ONLY") == "1":
+        refresh_matchup()
+        return
     t0 = time.time()
     import product3_server as S
     import _explain as EX
@@ -66,7 +99,7 @@ def main() -> None:
             specs = r.get("specs")
             if not specs:
                 continue
-            # 順位に依存する4項目だけ差し替える。specs/mons/archetypes/speed は触らない
+            # 順位に依存する4項目だけ差し替える。specs/mons/archetypes は触らない（speed は MATCHUP_ONLY 側）
             r["matchup"] = EX.matchup_grid(specs, S.L)
             r["coverage"] = round(team_coverage(specs, S.L, S.TH)[0], 2)
             r["stats"] = EX.party_stats(specs, S.L, S.PG, S.TH)

@@ -6,6 +6,7 @@
   2. 系統表: scripts/arch_groups.py
   3. _local/ai_work/pools/<シーズン>/<日付>/ に type_pool.json・type_groups.json・meta.json を書く（既にあれば止める。上書きしない）
   4. scripts/pool_versions.json の page を新しい版へ向け、gen_builder_data.py → gen_archetype_data.py を流す（archNo を揃えるため必ず両方）
+     簡単構築の一覧の記号（suggest_cache.json の matchup）も同じ代表型（scripts/builder_targets.json）で作り直す（_refresh_panel.py MATCHUP_ONLY=1）
   5. チェックと前の page 版との差分レポート（scripts/pool_checks.py）を版のフォルダの report.md に書く。
      プールと系統表のエラーなら 4 の前に止める（ポインタも生成物も変えない）。出力の整合のエラーならポインタを戻して生成物を作り直す。終了コード1
 
@@ -224,7 +225,8 @@ def main():
         PV.set_pointer("page", prev)
         pages()
         sys.exit(f"出力の整合にエラーがあるのでページ用の版を {prev} に戻し、生成物も作り直した")
-    print(f"page: {prev} → {version}  合計 {time.time() - t0:.0f}s")
+    subprocess.run([py, os.path.join(HERE, "_refresh_panel.py")], cwd=HERE, check=True, env=dict(os.environ, MATCHUP_ONLY="1"))
+    print(f"page: {prev} → {version}  合計 {time.time() - t0:.0f}s（提案キャッシュの一覧の記号も更新。Cloud Run は要再デプロイ）")
 
 
 if __name__ == "__main__":

@@ -3,7 +3,8 @@
 // 文字列と JSON の受け渡しだけを行う。TS 側にルールを再実装しないことが目的。
 let mod: WebAssembly.Instance | null = null;
 let mem: WebAssembly.Memory;
-let season = "M-3";
+// 1v1 の spec は全項目指定なので使用率表（シーズン）を引かない。エンジンにはシーズン無しで渡す
+const SEASON = "";
 /** 正式名 → spec に書ける別名。DB の正式名にはコロンを含むものがあり、
  * spec の区切りと衝突するため（ケンタロス:炎 → パルデアケンタロス(炎)）。 */
 let aliases = new Map<string, string>();
@@ -18,7 +19,6 @@ type Exports = {
   name_aliases(): number;
   set_scenario(w: number, t: number, n: number, m: number): number;
   setup_move_names(): number;
-  type_dynamic(): number;
   dealloc(p: number, n: number): void;
   result_ptr(): number;
   result_len(): number;
@@ -56,9 +56,8 @@ function take(): unknown {
 }
 
 /** wasm 本体とデータパックを直接渡して初期化する。ビルド時(Node)経路はこちらを使う。 */
-export async function initEngineFrom(wasmBytes: BufferSource, packText: string, s = "M-3"): Promise<void> {
+export async function initEngineFrom(wasmBytes: BufferSource, packText: string): Promise<void> {
   if (mod) return;
-  season = s;
   const w = await WebAssembly.instantiate(wasmBytes, {});
   mod = "instance" in w ? w.instance : (w as unknown as WebAssembly.Instance);
   mem = (mod.exports as unknown as Exports).memory;
@@ -72,13 +71,13 @@ export async function initEngineFrom(wasmBytes: BufferSource, packText: string, 
 }
 
 /** ブラウザ用。ページ描画前に一度だけ呼ぶ。 */
-export async function initEngine(wasmUrl: string, packUrl: string, s = "M-3"): Promise<void> {
+export async function initEngine(wasmUrl: string, packUrl: string): Promise<void> {
   if (mod) return;
   const [bytes, pack] = await Promise.all([
     fetch(wasmUrl).then((r) => r.arrayBuffer()),
     fetch(packUrl).then((r) => r.text()),
   ]);
-  await initEngineFrom(bytes, pack, s);
+  await initEngineFrom(bytes, pack);
 }
 
 /** 1v1判定を「この状況なら」に切り替える指定。既定(すべて0/未指定)は特性由来の天候のまま・積みなし。 */
@@ -120,18 +119,6 @@ export function scenarioKey(): string {
 export function setupMoveNames(): string[] {
   ex().setup_move_names();
   return take() as string[];
-}
-
-/** 型だけでは無効(0倍)を判定できない技・特性。判定に使う条件そのものを返すので、
- * 表示側の事前除外がエンジンの挙動と食い違わない。 */
-export function typeDynamic(): { moves: string[]; abilities: string[] } {
-  ex().type_dynamic();
-  return take() as { moves: string[]; abilities: string[] };
-}
-
-/** 初期化済みか。静的ビルドと実行時で分岐する呼び出し側の判定用。 */
-export function engineReady(): boolean {
-  return mod !== null;
 }
 
 /** ResolvedBuild を Python/Rust 共通の spec 文字列にする。
@@ -234,7 +221,7 @@ export interface RaceEntry {
 export function analyze(specA: string, specB: string): { a: EngineSide; b: EngineSide; verdict: EngineVerdict } {
   const e = ex();
   try {
-    if (e.analyze(...put(specA), ...put(specB), ...put(season)) !== 0) {
+    if (e.analyze(...put(specA), ...put(specB), ...put(SEASON)) !== 0) {
       throw new Error("analyze 失敗");
     }
     return take() as { a: EngineSide; b: EngineSide; verdict: EngineVerdict };
@@ -248,7 +235,7 @@ export function analyze(specA: string, specB: string): { a: EngineSide; b: Engin
 export function koProb(spec0: string, spec1: string, att: number, moveIdx: number, hits: number): number {
   const e = ex();
   try {
-    if (e.ko_prob(...put(spec0), ...put(spec1), ...put(season), att, moveIdx, hits) !== 0) {
+    if (e.ko_prob(...put(spec0), ...put(spec1), ...put(SEASON), att, moveIdx, hits) !== 0) {
       throw new Error("ko_prob 失敗");
     }
     return take() as number;

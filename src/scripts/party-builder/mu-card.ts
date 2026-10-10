@@ -300,21 +300,6 @@ export function renderMuCard(vm: MuCardVM, lang: Lang): string {
     + `</div>`;
 }
 
-/** 型ごとのカードをタブで切り替える（CSSだけで切り替わる。uid はページ内で一意に）。
- * 見出しは型の系統名(arch)＋想定使用率(share%)と記号。既定は defaultIdx（割合が最大の型）。 */
-export function renderMuTabs(tabs: { title: string; share: string; sym: string; html: string }[], uid: string,
-                             defaultIdx: number, capLabel: string): string {
-  if (tabs.length <= 1) return tabs[0]?.html ?? "";
-  const radios = tabs.map((_, i) =>
-    `<input type="radio" class="muc-tab-radio" name="${esc(uid)}" id="${esc(uid)}-${i}"${i === defaultIdx ? " checked" : ""}>`).join("");
-  const labels = tabs.map((tb, i) =>
-    `<label class="muc-tab" for="${esc(uid)}-${i}"><span class="muc-tab-sym ${symClass(tb.sym)}">${esc(tb.sym)}</span>`
-    + `${esc(tb.title)}${tb.share ? `<span class="muc-tab-share">${esc(tb.share)}</span>` : ""}</label>`).join("");
-  const panels = tabs.map((tb) => `<div class="muc-tab-panel">${tb.html}</div>`).join("");
-  return `<div class="muc-tabs">${radios}<div class="muc-tab-labels"><span class="muc-tab-cap">${esc(capLabel)}</span>${labels}</div>`
-    + `<div class="muc-tab-panels">${panels}</div></div>`;
-}
-
 /** 1v1ポップアップ（ポケモン情報ページ・対策ページ）の1枚ぶんのデータ。名前は和名のまま持ち、表示時に dict で訳す。
  * ページに埋め込むJSONを小さくするため、null・false の項目は省いてある（読む側は無い＝null/false とみなす）。 */
 export interface MuPopupRow {
@@ -353,10 +338,12 @@ const POPUP_TXT = {
 
 /** 1v1ポップアップの中身（自分の型タブ・相手の型タブ・カード）。ポップアップを開いたときにクライアントで組み立てる。 */
 export function renderMuPopup(d: MuPopupData, lang: Lang,
-                              ctx: { myName: string; oppName: string; myIcon: string; oppIcon: string; uid: string }): string {
+                              ctx: { myName: string; oppName: string; myIcon: string; oppIcon: string; uid: string;
+                                     names?: { tMove(n: string): string; tItem(n: string): string; tPoke(n: string): string; tAbility(n: string): string } }): string {
   const L = POPUP_TXT[lang] ?? POPUP_TXT.ja;
   const tr = (m?: Record<string, string>) => (n: string) => (n && m?.[n]) || n;
-  const tMove = tr(d.dict?.m), tItem = tr(d.dict?.i), tPoke = tr(d.dict?.p), tAbility = tr(d.dict?.a);
+  const N = ctx.names;
+  const tMove = N?.tMove ?? tr(d.dict?.m), tItem = N?.tItem ?? tr(d.dict?.i), tPoke = N?.tPoke ?? tr(d.dict?.p), tAbility = N?.tAbility ?? tr(d.dict?.a);
   const tMoveDash = (n: string | null | undefined) => (n ? tMove(n) : "—");
   const sprite = (ic: string) => `/images/pokemon/pokemon-${ic}.webp`;
   const uid = esc(ctx.uid);

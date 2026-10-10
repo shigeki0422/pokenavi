@@ -437,8 +437,11 @@ pub fn get_pokemon_template(pack: &Pack, raw_name: &str, season: &str) -> Option
         if mega_data.iter().any(|(k, _)| *k == stone) {
             continue;
         }
-        if let Some(m) =
-            pack.mega_stats.iter().find(|m| m.mega_stone == stone || m.mega_stone == *item)
+        // 他種のメガ石（クロールの誤読: ルガルガン(昼)のリザードナイトY）はメガシンカしない
+        if let Some(m) = pack
+            .mega_stats
+            .iter()
+            .find(|m| (m.mega_stone == stone || m.mega_stone == *item) && m.base_dex == base.dex)
         {
             mega_data.push((stone, m.clone()));
         }

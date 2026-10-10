@@ -77,7 +77,10 @@ export interface TargetBuild {
   idx: number;
   item: string;
   nature: string;
+  /** 入場時（メガ前）の特性。spec の特性欄と同じ。 */
   ability: string;
+  /** メガ型のメガ後の特性（表示用）。 */
+  mab?: string;
   ev: StatArray;
   /** 表示・プリセット用の代表4技(採用率TOP4)。1v1判定には mpool を使う。 */
   moves: string[];
@@ -153,7 +156,10 @@ export interface ResolvedBuild {
   t2: string | null;
   stats: StatArray; // 実数値 [H,A,B,C,D,S]
   item: string;
+  /** 入場時の特性（メガ石持ちはメガ前の特性。エンジンの spec に渡す）。 */
   ability: string;
+  /** メガ後の特性。被弾倍率・表示に使う。 */
+  megaAbility?: string;
   nature: string;
   evs: StatArray;
   moves: ResolvedMove[];

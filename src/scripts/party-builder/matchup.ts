@@ -7,9 +7,8 @@
 // 半減きのみの消費・ロール引数の取り違えが順に表面化した）。ルールを一箇所に集約するため、
 // 判定本体は engine/wasm.ts 経由でエンジンを実走させる。
 import type { AggregateVerdict, ResolvedBuild, ResolvedMove, Verdict } from "./types";
-import { analyze, buildToSpec, koProb, scenarioKey, typeDynamic,
+import { analyze, buildToSpec, koProb, scenarioKey,
          type EngineMove, type EngineSide, type EngineVerdict } from "../engine/wasm";
-import { eff } from "./typechart";
 import { ABILITY_NAME_EN, ABILITY_NAME_KO } from "../../i18n/game-terms";
 
 /**
@@ -66,56 +65,6 @@ function _conds(m: EngineMove): string | null {
 }
 
 /**
- * 対面(me, opp)を1回だけエンジンに投げ、両方向の評価を得る。
- *
- * 向きごとに投げ分けると、両者が天候特性を持つ対面（キュウコン vs ペリッパー等）で
- * 「後から出た側の天候が勝つ」規則により場が変わり、与ダメと被ダメで前提が食い違う
- * （実測でPythonと4対面ずれた）。並びは常に (me, opp) に固定する。
- *
- * 技は採用率TOP10プールをそのまま渡す。spec の技欄は4本に切り詰められない
- * （simulator/pokemon.py の override_moves と同じ）ので1回で全技を評価できる。
- */
-/** 事前除外から外す技・特性。本体はエンジンが返す表で、ここに直書きしているのは
- * 「エンジン側ではタイプ固定だが、持ち物や形態でタイプが変わりうる」技だけ。
- * 手で並べた表だけにしていたとき だいちのはどう・レイジングブル・うるおいボイスが
- * 抜けていて、サイコフィールドのだいちのはどうが計算前に落ちていた。 */
-const EXTRA_TYPE_VARIABLE_MOVES = [
-  "めざめるダンス", "さばきのつぶて", "テクノバスター", "マルチアタック", "オーラぐるま",
-];
-
-let typeDyn: { moves: Set<string>; abilities: Set<string> } | null = null;
-function typeDynSets(): { moves: Set<string>; abilities: Set<string> } {
-  if (!typeDyn) {
-    const t = typeDynamic();
-    typeDyn = {
-      moves: new Set([...t.moves, ...EXTRA_TYPE_VARIABLE_MOVES]),
-      abilities: new Set(t.abilities),
-    };
-  }
-  return typeDyn;
-}
-
-/**
- * タイプ相性で0倍になる攻撃技をエンジンに渡す前に落とす。
- *
- * 倒せない技ほど打ち切りまで実走する（無効技は毎回上限ターンぶん回る）ので、
- * 明らかに0と分かる技を送らないだけで実走回数が目に見えて減る。
- * 落とした技は「—」として表示に戻すため、見た目は変わらない。
- * 特性由来の無効（ふゆう・ちくでん等）は型では判定できないのでそのまま送る。
- */
-function _poolEntries(attacker: ResolvedBuild, defender: ResolvedBuild) {
-  const src = (attacker.pool && attacker.pool.length ? attacker.pool : attacker.moves) ?? [];
-  const dyn = typeDynSets();
-  const bend = dyn.abilities.has(attacker.ability);
-  return src.map((m) => ({
-    m,
-    pruned: !bend && !dyn.moves.has(m.n)
-      && m.cat !== "status" && typeof m.power === "number" && (m.power as number) > 0
-      && eff(m.type, defender.t1, defender.t2) === 0,
-  }));
-}
-
-/**
  * 対面の評価結果の使い回し。キーはエンジンに渡す spec そのものなので、
  * 「いつ捨てるか」の判断が要らない(spec が違えば別のキーになる)。
  * EV を1振り動かして変わるのは触った1匹の spec だけなので、6匹×31列のうち
@@ -138,11 +87,24 @@ export const pairCacheStats = {
   },
 };
 
+function _pool(b: ResolvedBuild): ResolvedMove[] {
+  return (b.pool && b.pool.length ? b.pool : b.moves) ?? [];
+}
+
+/**
+ * 対面(me, opp)を1回だけエンジンに投げ、両方向の評価を得る。
+ *
+ * 向きごとに投げ分けると、両者が天候特性を持つ対面（キュウコン vs ペリッパー等）で
+ * 「後から出た側の天候が勝つ」規則により場が変わり、与ダメと被ダメで前提が食い違う
+ * （実測でPythonと4対面ずれた）。並びは常に (me, opp) に固定する。
+ *
+ * 技は採用率TOP10プールをそのまま渡す。spec の技欄は4本に切り詰められない
+ * （simulator/pokemon.py の override_moves と同じ）ので1回で全技を評価できる。
+ */
 function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
-  const entA = _poolEntries(me, opp);
-  const entB = _poolEntries(opp, me);
-  const specA = buildToSpec({ ...me, moves: entA.filter((e) => !e.pruned).map((e) => e.m) });
-  const specB = buildToSpec({ ...opp, moves: entB.filter((e) => !e.pruned).map((e) => e.m) });
+  // 0倍の技も外さずに渡す（外すと「0倍の技で接触を避ける」等の線が消えて判定が変わる）
+  const specA = buildToSpec({ ...me, moves: _pool(me) });
+  const specB = buildToSpec({ ...opp, moves: _pool(opp) });
   // 前提(天候・フィールド・積み)が違えば別の計算なのでキーに混ぜる
   const key = `${scenarioKey()}\u0001${specA}\u0001${specB}`;
   const hit = _pairCache.get(key);
@@ -155,18 +117,11 @@ function _pair(me: ResolvedBuild, opp: ResolvedBuild): Pair {
   }
   pairCacheStats.miss++;
   const r = analyze(specA, specB);
-  // エンジンが返す並びは「落としたあと」の並び。idx は koProb がこの spec を再利用するため
-  // 落としたあとの位置でなければならない。表示は元の並びに戻す。
-  const side = (x: typeof r.a, ent: ReturnType<typeof _poolEntries>): Evaluated => {
-    const moves: (EngineMove & { idx: number })[] = [];
-    let k = 0;
-    for (const e of ent) {
-      if (e.pruned) moves.push({ n: e.m.n, dmg: null, idx: -1 } as EngineMove & { idx: number });
-      else { moves.push({ ...x.moves[k], idx: k }); k++; }
-    }
-    return { hp: x.hp, speed: x.speed, moves, seqHits: x.seqHits, seq: x.seq, turns: x.turns ?? [] };
-  };
-  const pair: Pair = { a: side(r.a, entA), b: side(r.b, entB), specA, specB, verdict: r.verdict };
+  const side = (x: typeof r.a): Evaluated => ({
+    hp: x.hp, speed: x.speed, moves: x.moves.map((m, idx) => ({ ...m, idx })),
+    seqHits: x.seqHits, seq: x.seq, turns: x.turns ?? [],
+  });
+  const pair: Pair = { a: side(r.a), b: side(r.b), specA, specB, verdict: r.verdict };
   _pairCache.set(key, pair);
   if (_pairCache.size > PAIR_CACHE_MAX) {
     _pairCache.delete(_pairCache.keys().next().value as string);
@@ -186,7 +141,7 @@ function _best(e: Evaluated): (EngineMove & { idx: number }) | null {
   if (flagged) return flagged;
   let best: (EngineMove & { idx: number }) | null = null;
   for (const m of e.moves) {
-    if (m.dmg === null || m.hitsLo === undefined) continue;
+    if (m.dmg === null || m.hitsLo === undefined || (m.eff === 0 && m.hitsLo >= OUT_OF_RANGE)) continue;
     if (!best || m.hitsLo < best.hitsLo! || (m.hitsLo === best.hitsLo && (m.firstLo ?? 0) > (best.firstLo ?? 0))) {
       best = m;
     }
@@ -436,8 +391,9 @@ function _reason(defender: ResolvedBuild, hp: number, dmg: number, hits: number)
   const raw = dmg > 0 ? Math.ceil(hp / dmg) : OUT_OF_RANGE;
   if (hits <= raw) return null;
   const causes: string[] = [];
-  if (["ばけのかわ", "がんじょう", "マルチスケイル", "ファントムガード"].includes(defender.ability)) {
-    causes.push(defender.ability);
+  const ab = defender.megaAbility || defender.ability;
+  if (["ばけのかわ", "がんじょう", "マルチスケイル", "ファントムガード"].includes(ab)) {
+    causes.push(ab);
   }
   if (["きあいのタスキ", "たべのこし", "オボンのみ", "オレンのみ"].includes(defender.item)) {
     causes.push(defender.item);
