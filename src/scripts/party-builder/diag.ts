@@ -1,6 +1,7 @@
 // 工房の「パーティ診断」パネル（試作・ローカル用）。API 契約は product3_server.py の /diagnose・/diag_battle・/improve。
 import { guideBody, gdAdv, gdRound, makeLogTranslator, SIM_LOG_TERM } from './diag-shared';
 import { normalizeSuggestSpeciesName } from './spec';
+import { MATCHUP_SEASON } from '../../consts';
 
 type Lang = 'ja' | 'en' | 'ko';
 
@@ -27,12 +28,12 @@ const T: Record<Lang, any> = {
     needSix: (n: number) => `6体そろうと診断できます（いま${n}体）`,
     stale: '編集中のパーティが診断時から変わっています。結果は診断したときのパーティのものです。',
     loading: '診断中…（数十秒かかります）',
-    legend: '相手は使用率・同居率から生成した M-6 のパーティ。有利度は本番の対戦AI（探索を減らした版）同士の勝率、選出率・選出の傾向・苦手/得意は簡易AIで 3000 党を集計した値です。すべてシミュレーションによる参考値です。',
+    legend: `相手は使用率・同居率から生成した ${MATCHUP_SEASON} のパーティ。有利度は本番の対戦AI（探索を減らした版）同士の勝率、選出率・選出の傾向・苦手/得意は簡易AIで 3000 党を集計した値です。すべてシミュレーションによる参考値です。`,
     advNote: (n: number, k: number) => `相手 ${n} 党×${k} 戦`,
     approx: '概算（簡易AI）', approxRun: (d: number, t: number) => `本番AIで計算中…${t ? ` ${Math.round((d / t) * 100)}%` : ''}`,
     refGreedy: '（比較対象は簡易AIでの値）',
     tabSum: '概要', tabGuide: '選出ガイド', tabSim: '対戦シミュレーション', tabImp: '改善案',
-    overall: '全体の有利度', rank: (n: number, p: number) => `生成した M-6 のパーティ ${n} 党の中で <b>${p <= 50 ? `上位 ${p}%` : `下位 ${101 - p}%`}</b>`,
+    overall: '全体の有利度', rank: (n: number, p: number) => `生成した ${MATCHUP_SEASON} のパーティ ${n} 党の中で <b>${p <= 50 ? `上位 ${p}%` : `下位 ${101 - p}%`}</b>`,
     strong: '強み', weak: '弱み・注意点', tend: '選出の傾向', none: '特になし',
     sStrong: (m: string, d: string) => `${m} がいる相手に強い（${d}）`,
     sWeak: (m: string, d: string) => `${m} がいる相手に弱い（${d}）`,
@@ -67,12 +68,12 @@ const T: Record<Lang, any> = {
     needSix: (n: number) => `Add all 6 Pokémon to run the checkup (now ${n})`,
     stale: 'Your team has changed since the checkup. Results below are for the team at that time.',
     loading: 'Checking… (takes tens of seconds)',
-    legend: 'Opponents are M-6 teams generated from usage and teammate rates. Edge is the win rate between our battle AI (reduced search); pick rates, tendencies and strengths/weaknesses come from a fast AI over 3,000 teams. All numbers are simulations for reference only.',
+    legend: `Opponents are ${MATCHUP_SEASON} teams generated from usage and teammate rates. Edge is the win rate between our battle AI (reduced search); pick rates, tendencies and strengths/weaknesses come from a fast AI over 3,000 teams. All numbers are simulations for reference only.`,
     advNote: (n: number, k: number) => `${n} teams × ${k} battles`,
     approx: 'Estimate (fast AI)', approxRun: (d: number, t: number) => `Computing with the battle AI…${t ? ` ${Math.round((d / t) * 100)}%` : ''}`,
     refGreedy: ' (reference measured with the fast AI)',
     tabSum: 'Overview', tabGuide: 'Pick guide', tabSim: 'Battle sim', tabImp: 'Improvements',
-    overall: 'Overall edge', rank: (n: number, p: number) => `<b>${p <= 50 ? `Top ${p}%` : `Bottom ${101 - p}%`}</b> among ${n} generated M-6 teams`,
+    overall: 'Overall edge', rank: (n: number, p: number) => `<b>${p <= 50 ? `Top ${p}%` : `Bottom ${101 - p}%`}</b> among ${n} generated ${MATCHUP_SEASON} teams`,
     strong: 'Strengths', weak: 'Weaknesses', tend: 'Pick tendencies', none: 'Nothing notable',
     sStrong: (m: string, d: string) => `Strong against teams with ${m} (${d})`,
     sWeak: (m: string, d: string) => `Weak against teams with ${m} (${d})`,
@@ -107,12 +108,12 @@ const T: Record<Lang, any> = {
     needSix: (n: number) => `6마리를 모두 채우면 진단할 수 있습니다（현재 ${n}마리）`,
     stale: '진단한 뒤 파티가 바뀌었습니다. 아래 결과는 진단 당시 파티 기준입니다.',
     loading: '진단 중…（수십 초 걸립니다）',
-    legend: '상대는 사용률・동반율로 생성한 M-6 파티입니다. 유리도는 실전 대전 AI(탐색 축소판)끼리의 승률, 선출률・선출 경향・강점/약점은 간이 AI로 3000개 파티를 집계한 값입니다. 모든 수치는 시뮬레이션에 의한 참고값입니다.',
+    legend: `상대는 사용률・동반율로 생성한 ${MATCHUP_SEASON} 파티입니다. 유리도는 실전 대전 AI(탐색 축소판)끼리의 승률, 선출률・선출 경향・강점/약점은 간이 AI로 3000개 파티를 집계한 값입니다. 모든 수치는 시뮬레이션에 의한 참고값입니다.`,
     advNote: (n: number, k: number) => `상대 ${n}개×${k}전`,
     approx: '개산（간이 AI）', approxRun: (d: number, t: number) => `실전 AI로 계산 중…${t ? ` ${Math.round((d / t) * 100)}%` : ''}`,
     refGreedy: '（비교 대상은 간이 AI 값）',
     tabSum: '개요', tabGuide: '선출 가이드', tabSim: '대전 시뮬레이션', tabImp: '개선안',
-    overall: '전체 유리도', rank: (n: number, p: number) => `생성한 M-6 파티 ${n}개 중 <b>${p <= 50 ? `상위 ${p}%` : `하위 ${101 - p}%`}</b>`,
+    overall: '전체 유리도', rank: (n: number, p: number) => `생성한 ${MATCHUP_SEASON} 파티 ${n}개 중 <b>${p <= 50 ? `상위 ${p}%` : `하위 ${101 - p}%`}</b>`,
     strong: '강점', weak: '약점・주의점', tend: '선출 경향', none: '특별히 없음',
     sStrong: (m: string, d: string) => `${m}이(가) 있는 상대에게 강함（${d}）`,
     sWeak: (m: string, d: string) => `${m}이(가) 있는 상대에게 약함（${d}）`,

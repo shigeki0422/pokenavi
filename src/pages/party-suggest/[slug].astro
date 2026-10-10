@@ -1,4 +1,5 @@
 ---
+import { MATCHUP_SEASON } from '../../consts';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
@@ -15,10 +16,11 @@ export async function getStaticPaths() {
     if (!p.data.draft) spToSlug[p.data.pokemonName] = p.id;
   }
 
-  const m6 = (rankingData as any).seasons['M-6'];
-  const latestDate = [...m6.dates].sort().slice(-1)[0];
+  // 提案は型プール(builder-data)のシーズンの採用率で作られるため、順位表記もそれに揃える
+  const seasonData = (rankingData as any).seasons[MATCHUP_SEASON] ?? (rankingData as any).seasons['M-6'];
+  const latestDate = [...seasonData.dates].sort().slice(-1)[0];
   const rankMap: Record<string, number> = {};
-  for (const p of m6.pokemon) {
+  for (const p of seasonData.pokemon) {
     if (p.dates[latestDate]) rankMap[p.name] = p.dates[latestDate].rank;
   }
 
@@ -83,9 +85,9 @@ export async function getStaticPaths() {
 
 const { label, sp, rank, baseSlug, isMega, articleSlug } = Astro.props;
 const siteUrl = 'https://pokenavi.jp';
-const title = `${label}構築 M-6 | ${label}軸のパーティ自動提案（軸から簡単構築）`;
+const title = `${label}構築 ${MATCHUP_SEASON} | ${label}軸のパーティ自動提案（軸から簡単構築）`;
 const rankText = rank ? `使用率${rank}位の` : '';
-const description = `${label}構築をAIで自動提案。ポケモンチャンピオンズM-6 ${rankText}${label}を軸にしたパーティを自動生成し、役割・タイプ相性・使用率TOP30との1v1相性まで診断。`;
+const description = `${label}構築をAIで自動提案。ポケモンチャンピオンズ${MATCHUP_SEASON} ${rankText}${label}を軸にしたパーティを自動生成し、役割・タイプ相性・使用率TOP30との1v1相性まで診断。`;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
