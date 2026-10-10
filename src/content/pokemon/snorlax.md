@@ -1,9 +1,9 @@
 ---
 title: 'カビゴン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのカビゴン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率65位。'
+description: 'ポケモンチャンピオンズのカビゴン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率69位。'
 pokemonName: 'カビゴン'
 dexNumber: 143
-usageRank: 65
+usageRank: 69
 pubDate: '2026-05-24'
 draft: false
 analysisSlug: 'snorlax-analysis-m2'
@@ -17,7 +17,7 @@ analysisSlug: 'snorlax-analysis-m2'
       <img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.143</strong>　／　使用率 <strong style="color:#dc2626">65位</strong>
+      全国図鑑 <strong>No.143</strong>　／　使用率 <strong style="color:#dc2626">69位</strong>
     </div>
     
   </div>

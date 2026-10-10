@@ -1,9 +1,9 @@
 ---
 title: 'パーモット | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのパーモット基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率28位。'
+description: 'ポケモンチャンピオンズのパーモット基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率29位。'
 pokemonName: 'パーモット'
 dexNumber: 923
-usageRank: 28
+usageRank: 29
 pubDate: '2026-05-24'
 draft: false
 analysisSlug: 'pawmot-analysis-m6'
@@ -18,7 +18,7 @@ analysisSlug: 'pawmot-analysis-m6'
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.923</strong>　／　使用率 <strong style="color:#dc2626">28位</strong>
+      全国図鑑 <strong>No.923</strong>　／　使用率 <strong style="color:#dc2626">29位</strong>
     </div>
     
   </div>

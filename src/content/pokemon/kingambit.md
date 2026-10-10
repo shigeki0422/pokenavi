@@ -1,9 +1,9 @@
 ---
 title: 'ドドゲザン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのドドゲザン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率43位。'
+description: 'ポケモンチャンピオンズのドドゲザン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率40位。'
 pokemonName: 'ドドゲザン'
 dexNumber: 983
-usageRank: 43
+usageRank: 40
 pubDate: '2026-05-24'
 draft: false
 
@@ -18,7 +18,7 @@ draft: false
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.983</strong>　／　使用率 <strong style="color:#dc2626">43位</strong>
+      全国図鑑 <strong>No.983</strong>　／　使用率 <strong style="color:#dc2626">40位</strong>
     </div>
     
   </div>

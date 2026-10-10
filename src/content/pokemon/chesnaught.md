@@ -1,9 +1,9 @@
 ---
 title: 'ブリガロン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのブリガロン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率152位。'
+description: 'ポケモンチャンピオンズのブリガロン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率156位。'
 pokemonName: 'ブリガロン'
 dexNumber: 652
-usageRank: 152
+usageRank: 156
 pubDate: '2026-05-24'
 draft: false
 
@@ -18,7 +18,7 @@ draft: false
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.652</strong>　／　使用率 <strong style="color:#dc2626">152位</strong>
+      全国図鑑 <strong>No.652</strong>　／　使用率 <strong style="color:#dc2626">156位</strong>
     </div>
     
   </div>

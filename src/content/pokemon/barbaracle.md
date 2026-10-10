@@ -1,9 +1,9 @@
 ---
 title: 'ガメノデス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのガメノデス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率132位。'
+description: 'ポケモンチャンピオンズのガメノデス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率139位。'
 pokemonName: 'ガメノデス'
 dexNumber: 689
-usageRank: 132
+usageRank: 139
 pubDate: '2026-05-24'
 draft: false
 analysisSlug: 'barbaracle-analysis-m3'
@@ -18,7 +18,7 @@ analysisSlug: 'barbaracle-analysis-m3'
       <img src="/images/types/type-10-water.png" alt="みず" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.689</strong>　／　使用率 <strong style="color:#dc2626">132位</strong>
+      全国図鑑 <strong>No.689</strong>　／　使用率 <strong style="color:#dc2626">139位</strong>
     </div>
     
   </div>

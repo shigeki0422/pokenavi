@@ -1,9 +1,9 @@
 ---
 title: 'ペロリーム | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのペロリーム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率91位。'
+description: 'ポケモンチャンピオンズのペロリーム基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率93位。'
 pokemonName: 'ペロリーム'
 dexNumber: 685
-usageRank: 91
+usageRank: 93
 pubDate: '2026-05-24'
 draft: false
 
@@ -17,7 +17,7 @@ draft: false
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.685</strong>　／　使用率 <strong style="color:#dc2626">91位</strong>
+      全国図鑑 <strong>No.685</strong>　／　使用率 <strong style="color:#dc2626">93位</strong>
     </div>
     
   </div>
