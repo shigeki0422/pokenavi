@@ -356,6 +356,18 @@ def marg_warnings(G, pool, meta):
         try:
             mg = G.marginals(sp) or {}
             dbm = {c: v for c, v in mg.items() if c in CATS}
+            # 努力値はプール側が「生値 → _ev_fine（2刻み）→ ev_fill（合計66）→ _ev_key（8刻みで集約）」を
+            # 通った値なので、DB 側も同じ順で通す。_ev_key は _ev_fine と可換でないため、生値をそのまま
+            # _ev_key すると別のクラスに落ちる（ペルシアンの H15-A32-B1-D2-S16 は H15→H8 で端数8が S へ回り
+            # (8,32,0,0,0,24)、_ev_fine 後の H16 は 8の倍数なので (16,32,0,0,0,16)。これで
+            # 「プール 63.2% / DB 0.0%」という同じ型どうしの比較ができていなかった 2026-10-11）
+            fine = collections.Counter()
+            for inner in G.ev_fine_table(sp).values():
+                for ev, w in inner.items():
+                    fine[G._ev_key(ev)] += w
+            if fine:
+                zf = sum(fine.values())
+                dbm["evs"] = {k: v / zf for k, v in fine.items()}
             if mg.get("moves") and mg.get("natures"):
                 # 技の目標は生成器と同じく上位10の率を4枠（400%）へ伸ばしたもの（generate の past_fill・ITEM_NEEDS）
                 P = {m: p for m, p in mg["moves"].items() if m != G.TAIL}
