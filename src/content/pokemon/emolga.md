@@ -1,12 +1,25 @@
 ---
 title: 'エモンガ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエモンガ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率197位。'
+description: 'ポケモンチャンピオンズのエモンガ基礎データ。種族値・タイプ相性・特性・覚える技を掲載。使用率圏外。'
 pokemonName: 'エモンガ'
 dexNumber: 587
-usageRank: 197
+usageRank: 999
+updatedDate: '2026-10-11'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['ほっぺすりすり', 'アンコール', 'エアスラッシュ', 'ちょうはつ']
+  topMovePct: [71.7, 58.1, 51.8, 36.5]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'ひかりのこな']
+  topItemPct: [50.4, 8.6, 7.1]
+  topAbility: 'でんきエンジン'
+  topAbilityPct: 77.0
+  topNature: 'おくびょう'
+  topNaturePct: 55.9
+  topNature2: 'ようき'
+  topNaturePct2: 17.2
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,7 +31,7 @@ draft: false
       <img src="/images/types/type-02-flying.png" alt="ひこう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.587</strong>　／　使用率 <strong style="color:#dc2626">197位</strong>
+      全国図鑑 <strong>No.587</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
     </div>
     
   </div>

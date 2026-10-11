@@ -1,12 +1,25 @@
 ---
 title: 'ボスゴドラ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのボスゴドラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率113位。'
+description: 'ポケモンチャンピオンズのボスゴドラ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率110位。'
 pokemonName: 'ボスゴドラ'
 dexNumber: 306
-usageRank: 113
-pubDate: '2026-05-24'
+usageRank: 110
+updatedDate: '2026-10-11'
+pubDate: '2026-10-11'
 draft: false
 
+faq:
+  season: 'M-7'
+  topMoves: ['ボディプレス', 'てっぺき', 'メタルバースト', 'ヘビーボンバー']
+  topMovePct: [72.0, 52.8, 48.8, 42.7]
+  topItems: ['ボスゴドラナイト', 'レッドカード', 'ゴツゴツメット']
+  topItemPct: [69.3, 14.1, 4.1]
+  topAbility: 'がんじょう'
+  topAbilityPct: 94.6
+  topNature: 'わんぱく'
+  topNaturePct: 38.1
+  topNature2: 'いじっぱり'
+  topNaturePct2: 19.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -18,9 +31,9 @@ draft: false
       <img src="/images/types/type-05-rock.png" alt="いわ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.306</strong>　／　使用率 <strong style="color:#dc2626">113位</strong>
+      全国図鑑 <strong>No.306</strong>　／　使用率 <strong style="color:#dc2626">110位</strong>
     </div>
-    
+    <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-10-11</div>
   </div>
 </div>
 
@@ -252,20 +265,20 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 </tr>
 </thead>
 <tbody>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">1</td>
-  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1">がんじょう</td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">HPが満タンの時、一撃でひんしになる技のダメージを受けると、HPを1残して耐える。</div></div></div></td>
+<tr style="background:#fef9c3">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">がんじょう</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:94.6%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">94.6%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">HPが満タンの時、一撃でひんしになる技のダメージを受けると、HPを1残して耐える。</div></div></div></td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">2</td>
-  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1">ヘヴィメタル</td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">自分の重さが2倍になる。</div></div></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;">ヘヴィメタル</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:4.0%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">4.0%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">自分の重さが2倍になる。</div></div></div></td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3</td>
-  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1">いしあたま</td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="padding:2px 0;color:#94a3b8">—</div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5">自分もダメージを受ける技を出してもHPが減らない。</div></div></div></td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;">いしあたま</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">自分もダメージを受ける技を出してもHPが減らない。</div></div></div></td>
 </tr>
 </tbody>
 </table>
@@ -273,4 +286,500 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 
 ---
 
+## 使用率データ
 
+<style>
+.pn-rate-wrap{position:relative;display:inline-block;width:100%}
+.pn-hover-name{cursor:help}
+.pn-hover-name:hover{background:#f8fafc}
+.pn-popup{display:none;position:fixed;z-index:200;background:#fff;border:1px solid #cbd5e1;border-radius:8px;padding:10px 12px;box-shadow:0 4px 16px rgba(0,0,0,.12);white-space:normal;max-width:min(320px,80vw);word-break:break-word}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded',function(){
+document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
+  var popup=wrap.querySelector('.pn-popup');
+  if(!popup)return;
+  function adjust(anchor){
+    var wr=anchor.getBoundingClientRect();
+    popup.style.left=wr.left+'px';
+    popup.style.right='auto';
+    popup.style.top=(wr.bottom+4)+'px';
+    popup.style.bottom='auto';
+    popup.style.visibility='hidden';
+    popup.style.display='block';
+    var r=popup.getBoundingClientRect();
+    if(r.right>window.innerWidth-8){
+      popup.style.left='auto';
+      popup.style.right=(window.innerWidth-wr.right)+'px';
+    }
+    if(r.bottom>window.innerHeight-8){
+      popup.style.top='auto';
+      popup.style.bottom=(window.innerHeight-wr.top+4)+'px';
+    }
+    popup.style.visibility='';
+  }
+  function bind(el){
+    el.addEventListener('mouseenter',function(){adjust(el);popup.style.display='block';});
+    el.addEventListener('mouseleave',function(){popup.style.display='';});
+    el.addEventListener('touchstart',function(e){
+      e.preventDefault();
+      adjust(el);
+      popup.style.display='block';
+      function hide(ev){if(!el.contains(ev.target)){popup.style.display='';document.removeEventListener('touchstart',hide);}}
+      setTimeout(function(){document.addEventListener('touchstart',hide,{passive:true});},0);
+    });
+  }
+  bind(wrap);
+  // 採用率セルだけでなく、同じ行の特性名・技名・持ち物セルからも同じ説明を開く
+  var row=wrap.closest('tr');
+  var name=row&&row.querySelector('.pn-hover-name');
+  if(name)bind(name);
+});
+});
+</script>
+
+<div class="pn-tabs">
+
+<div class="pn-tabbar" role="tablist"><button type="button" class="pn-tab is-on" data-tab="moves" role="tab" aria-selected="true">技</button><button type="button" class="pn-tab" data-tab="items" role="tab" aria-selected="false">持ち物</button><button type="button" class="pn-tab" data-tab="natures" role="tab" aria-selected="false">性格</button><button type="button" class="pn-tab" data-tab="evs" role="tab" aria-selected="false">ステータス振り</button><button type="button" class="pn-tab" data-tab="partners" role="tab" aria-selected="false">同じチーム</button></div>
+
+<div class="pn-tabpanel is-on" data-tab="moves" role="tabpanel">
+
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<thead><tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
+</tr></thead>
+<tbody>
+<tr style="background:#fef9c3">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:20px;height:20px"> ボディプレス</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:72.0%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">72.0%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="height:16px;vertical-align:middle"><span style="background:#ef4444;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">物理</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">威力</span> <b>80</b></span><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">命中</span> <b>100%</b></span><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>12</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">この技は攻撃ではなく、防御の数値でダメージが決まる。</div></div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:20px;height:20px"> てっぺき</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:52.8%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">52.8%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-08-steel.png" alt="はがね" style="height:16px;vertical-align:middle"><span style="background:#10b981;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">変化</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>16</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">自分の防御を2段階上げる。</div></div></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:20px;height:20px"> メタルバースト</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:48.8%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">48.8%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-08-steel.png" alt="はがね" style="height:16px;vertical-align:middle"><span style="background:#ef4444;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">物理</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">命中</span> <b>100%</b></span><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>12</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">使ったターンに相手から受けた技のダメージを1.5倍にして返す。</div></div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:20px;height:20px"> ヘビーボンバー</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:42.7%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">42.7%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-08-steel.png" alt="はがね" style="height:16px;vertical-align:middle"><span style="background:#ef4444;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">物理</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">命中</span> <b>100%</b></span><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>12</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">自分が相手より重いほど威力が上がる。相手の重さが自分の重さの1/5以下で120、1/4以下で100、1/3以下で80、1/2以下で60、1/2より上で40。ちいさくなる状態の相手には、威力が2倍になり必ず命中する。</div></div></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:20px;height:20px"> じしん</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:32.7%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">32.7%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-04-ground.png" alt="じめん" style="height:16px;vertical-align:middle"><span style="background:#ef4444;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">物理</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">威力</span> <b>100</b></span><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">命中</span> <b>100%</b></span><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>12</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">地中状態の相手には威力が2倍になる。グラスフィールド状態の時、威力が1/2になる。</div></div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-05-rock.png" alt="いわ" style="width:20px;height:20px"> ステルスロック</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:20.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">20.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-05-rock.png" alt="いわ" style="height:16px;vertical-align:middle"><span style="background:#10b981;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">変化</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>20</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">相手の場をステルスロック状態にする。</div></div></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:20px;height:20px"> ゆきなだれ</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:17.3%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">17.3%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-14-ice.png" alt="こおり" style="height:16px;vertical-align:middle"><span style="background:#ef4444;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">物理</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">威力</span> <b>60</b></span><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">命中</span> <b>100%</b></span><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>12</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">優先度-4この技を使うターンに相手からの技ダメージを受けていれば、威力が2倍になる。</div></div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:20px;height:20px"> ねむる</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:13.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">13.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="height:16px;vertical-align:middle"><span style="background:#10b981;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">変化</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>8</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">自分のHPを全回復し状態異常も回復する。2ターンの間ねむり状態になる。HPが満タンだと失敗する。</div></div></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-14-ice.png" alt="こおり" style="width:20px;height:20px"> れいとうパンチ</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:11.0%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">11.0%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-14-ice.png" alt="こおり" style="height:16px;vertical-align:middle"><span style="background:#ef4444;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">物理</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">威力</span> <b>75</b></span><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">命中</span> <b>100%</b></span><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>16</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">10%の確率で相手をこおり状態にする。</div></div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:20px;height:20px"> がむしゃら</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:10.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">10.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="height:16px;vertical-align:middle"><span style="background:#ef4444;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">物理</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#1e293b;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">命中</span> <b>100%</b></span><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>8</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">相手の残りHPから自分の残りHPを引いた数値のダメージを与える。相手のHPが自分のHP以下なら失敗する。</div></div></div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<div class="pn-tabpanel" data-tab="items" role="tabpanel">
+
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<thead><tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">持ち物</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
+</tr></thead>
+<tbody>
+<tr style="background:#fef9c3">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-384px -384px;flex-shrink:0"></span>ボスゴドラナイト</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:69.3%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">69.3%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">対応するポケモンがバトル中にメガシンカできる。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-456px -336px;flex-shrink:0"></span>レッドカード</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:14.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">14.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">技でダメージを与えてきた相手を交代させる。1度使うとその対戦中は無くなる。</div></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-408px -336px;flex-shrink:0"></span>ゴツゴツメット</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:4.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">4.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">接触技を受けると相手に最大HPの1/6のダメージを与える。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-336px -192px;flex-shrink:0"></span>でんきだま</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:3.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">3.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">ピカチュウが持つとでんきタイプの技の威力が2倍になる。</div></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-288px -192px;flex-shrink:0"></span>たべのこし</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:3.3%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">3.3%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">ターン終わりに最大HPの1/16回復する。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-192px -192px;flex-shrink:0"></span>きあいのハチマキ</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:2.3%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">2.3%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">ひんしになる技のダメージを受けると10%の確率でHPを1残して耐える。</div></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/items/item-0158-obon.png" alt="オボンのみ" style="width:24px;height:24px" loading="lazy">オボンのみ</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.3%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.3%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">HPが最大HPの1/2以下になった時、最大HPの1/4回復する。1度使うと無くなる。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-432px -336px;flex-shrink:0"></span>ふうせん</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">地面にいないことになりじめんタイプの技・まきびし・どくびし・ねばねばネット状態が効かない。技のダメージを受けるとその対戦中は無くなる。</div></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-432px -216px;flex-shrink:0"></span>こうかくレンズ</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.3%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.3%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">技の命中率が1.1倍になる。</div></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
+  <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><span style="display:inline-block;width:24px;height:24px;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;background-position:-288px -96px;flex-shrink:0"></span>カゴのみ</div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.3%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.3%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px">ねむり状態を回復する。1度使うと無くなる。</div></div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<div class="pn-tabpanel" data-tab="natures" role="tabpanel">
+
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<thead><tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">性格</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
+</tr></thead>
+<tbody>
+<tr style="background:#fef9c3">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold">わんぱく <small style="color:#666">（B↑ C↓）</small></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:38.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">38.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">いじっぱり <small style="color:#666">（A↑ C↓）</small></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:19.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">19.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">しんちょう <small style="color:#666">（D↑ C↓）</small></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:18.2%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">18.2%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">のんき</td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:7.7%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">7.7%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ゆうかん <small style="color:#666">（A↑ S↓）</small></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:5.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">5.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ようき <small style="color:#666">（S↑ C↓）</small></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:4.6%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">4.6%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">なまいき <small style="color:#666">（D↑ S↓）</small></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:3.2%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">3.2%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">ひかえめ <small style="color:#666">（C↑ A↓）</small></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.6%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.6%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">のうてんき <small style="color:#666">（C↑ B↓）</small></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.6%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.6%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;">おだやか <small style="color:#666">（D↑ A↓）</small></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.5%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.5%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+<div class="pn-tabpanel" data-tab="evs" role="tabpanel">
+
+<div class="pn-ev-scroll" style="margin:12px 0">
+<table style="border-collapse:collapse;font-size:0.9em">
+<thead><tr style="background:#f1f5f9">
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;width:36px">順位</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">H</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">A</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">B</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">C</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">D</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">S</th>
+  <th style="padding:8px 10px;border:1px solid #cbd5e1;text-align:left;width:45%">採用率</th>
+</tr></thead>
+<tbody>
+<tr style="background:#fef9c3">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:21.0%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">21.0%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">2</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:12.8%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">12.8%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">3</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:11.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">11.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">4</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:7.6%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">7.6%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">5</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:6.0%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">6.0%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">6</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:5.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">5.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">7</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:3.2%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">3.2%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">8</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:3.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">3.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">9</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:2.2%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">2.2%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">10</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.7%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.7%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">11</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.7%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.7%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">12</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">10</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">24</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.6%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.6%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">13</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">14</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">20</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.5%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.5%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">14</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.5%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.5%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">15</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">6</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">26</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">16</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">17</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">30</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:1.1%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">1.1%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">18</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.8%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.8%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">19</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">4</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">30</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.8%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.8%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">20</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">2</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.7%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.7%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">21</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.7%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.7%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">22</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">20</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">14</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.7%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.7%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">23</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">1</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">1</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.6%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.6%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">24</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">10</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">24</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.6%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.6%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">25</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">5</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">24</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">5</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.5%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.5%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">26</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">7</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">27</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">27</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">20</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">1</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">13</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">28</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">16</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">18</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">29</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">13</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">21</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+<tr>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;">30</td>
+  <td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center"><strong>32</strong></td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">30</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center">4</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td><td style="padding:8px 10px;border:1px solid #cbd5e1;text-align:center;color:#aaa">0</td>
+  <td style="padding:6px 10px;border:1px solid #cbd5e1"><div style="padding:2px 0"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:0.4%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">0.4%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:0.8em;color:#666;margin:4px 0 0">H=HP A=こうげき B=ぼうぎょ C=とくこう D=とくぼう S=すばやさ</p>
+
+</div>
+
+<div class="pn-tabpanel" data-tab="partners" role="tabpanel">
+
+<div style="margin:12px 0;overflow:visible">
+<table style="width:100%;border-collapse:collapse;font-size:0.9em">
+<thead>
+<tr style="background:#f1f5f9">
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;width:44px">順位</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left;width:30%">ポケモン</th>
+  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">平均順位・前回比 <span style="font-size:0.8em;color:#94a3b8;font-weight:400"></span></th>
+</tr>
+</thead>
+<tbody>
+<tr style="background:#fef9c3">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;font-weight:bold">1</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;font-weight:bold"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/garchomp/" style="color:inherit;text-decoration:none">ガブリアス</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">2</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0730-00.webp" alt="アシレーヌ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/primarina/" style="color:inherit;text-decoration:none">アシレーヌ</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">3</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0373-00.webp" alt="ボーマンダ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/salamence/" style="color:inherit;text-decoration:none">ボーマンダ</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">4</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0006-00.webp" alt="リザードン" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/charizard/" style="color:inherit;text-decoration:none">リザードン</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">5</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/mimikyu/" style="color:inherit;text-decoration:none">ミミッキュ</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">6</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/archaludon/" style="color:inherit;text-decoration:none">ブリジュラス</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">7</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/basculegion/" style="color:inherit;text-decoration:none">イダイトウ(オス)</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">8</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/dragonite/" style="color:inherit;text-decoration:none">カイリュー</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div></td>
+</tr>
+<tr>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">9</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0876-00.webp" alt="イエッサン(オス)" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/indeedee/" style="color:inherit;text-decoration:none">イエッサン(オス)</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div></td>
+</tr>
+<tr style="background:#fafafa">
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center"><img src="/images/pokemon/pokemon-0812-00.webp" alt="ゴリランダー" style="width:28px;height:28px;vertical-align:middle;margin-right:6px" loading="lazy"><a href="/pokemon/rillaboom/" style="color:inherit;text-decoration:none">ゴリランダー</a></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div style="padding:2px 0;color:#94a3b8;font-size:0.85em">—</div></td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+
+</div>
+
+---

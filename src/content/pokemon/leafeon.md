@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのリーフィア基礎データ
 pokemonName: 'リーフィア'
 dexNumber: 470
 usageRank: 999
+updatedDate: '2026-10-11'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['リーフブレード', 'はたきおとす', 'つるぎのまい', 'やどりぎのタネ']
+  topMovePct: [63.4, 54.1, 36.4, 34.8]
+  topItems: ['いのちのたま', 'たべのこし', 'オボンのみ']
+  topItemPct: [21.1, 16.6, 14.8]
+  topAbility: 'ようりょくそ'
+  topAbilityPct: 89.5
+  topNature: 'いじっぱり'
+  topNaturePct: 42.4
+  topNature2: 'わんぱく'
+  topNaturePct2: 31.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

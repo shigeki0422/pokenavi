@@ -28,8 +28,7 @@ DB_QUIET_PT = 3.0       # DB の使用率の変化がこれ未満なのにプー
 KL_WARN = 0.10          # 警告: 技の組（型の技4つ）の分布の前の版からの KL（nats）
 # 特性は生成器が採用率で按分するようになった（2026-10-04・監査40 #22）ので 15→5pt
 MARG_TOL = {"moves": 10.0, "items": 5.0, "natures": 5.0, "evs": 10.0, "abilities": 5.0}   # 警告: DB の使用率との差(pt)
-EV_TOTAL_TOL = 10.0     # 警告: 努力値の合計（66＝32/32/2 等）の割合の DB との差(pt)（監査40 #21: 8刻みの丸めで合計64しか無かった）
-CHOICE_STATUS2_MAX = 0.05   # 警告: こだわりの型のうち変化技（トリック/すりかえ以外）2本以上の割合（上位構築は1.2%）
+EV_TOTAL_TOL = 10.0     # 努力値の合計の DB との差(pt)。ev_fill が66に揃えるようになったので警告には使わない（ev_total_diff のテストで残す）
 AUDIT_WARN = 0.005      # 警告: _audit_type_pool の違反率（[参考] を除く）
 WEIGHT_TOL = 1e-3
 PRUNE_W_FLOOR = 0.999   # エラー: 重みが PRUNE_W 未満の型（丸めの分だけ許す）
@@ -88,19 +87,11 @@ def rule_errors(G, sp, builds, used=None, nats=None):
                 err.append(f"覚えない技（没収技を含む） {nl} {tag}")
         if not G.item_ok(mv, it):
             why = ("ジュエルに同タイプの攻撃技が無い" if it.endswith("ジュエル") else
-                   "こだわり×積み/守る/回復" if it in G.CHOICE else "持ち物と技の規則(item_ok)")
+                   "こだわり×積み技（トリック/すりかえ無し）" if it in G.CHOICE else "持ち物と技の規則(item_ok)")
             err.append(f"{why} {tag}")
         if it in G._STONES and it not in stones:
             err.append(f"他の種のメガ石 {tag}")
     return err
-
-
-def choice_status2(G, builds):
-    ch = [b for b in builds if b["item"] in G.CHOICE]
-    tot = sum(b["weight"] for b in ch)
-    bad = sum(b["weight"] for b in ch
-              if sum(1 for m in b["moves"] if G.MV.get(m, {}).get("cat") == "status" and m not in G.TRICK) >= 2)
-    return bad / tot if tot else 0.0
 
 
 # ════════ 型命名・系統分け（エラー） ════════
@@ -114,6 +105,13 @@ def naming_errors(G, A, sp, groups):
             return None
         return b["item"] if b["item"] in stones else A.CHOICE_SHORT.get(b["item"])
 
+    # 耐久/速攻で割った系統は名前を「割る前の中身」で付けている（arch_groups）。
+    # 名前の技の採用率とフルアタ判定も割る前（軸ペアを合わせた中身）で見る
+    axpool = collections.defaultdict(list)
+    for g in groups:
+        if g.get("axis"):
+            axpool[A.axis_base(g["name"])] += [dict(b, weight=b["weight"] * g["share"]) for b in g["builds"]]
+
     names = [g["name"] for g in groups]
     dup = sorted(n for n, c in collections.Counter(names).items() if c > 1)
     if dup:
@@ -124,11 +122,13 @@ def naming_errors(G, A, sp, groups):
     for g in groups:
         gb = g["builds"]
         n = g["name"]
+        nb = axpool.get(A.axis_base(n), gb) if g.get("axis") else gb
         z = sum(b["weight"] for b in gb) or 1.0
+        nz = sum(b["weight"] for b in nb) or 1.0
         mv = collections.Counter()
-        for b in gb:
+        for b in nb:
             for m in b["moves"]:
-                mv[m] += b["weight"] / z
+                mv[m] += b["weight"] / nz
         cs = collections.Counter()
         for b in gb:
             cs[cls(b)] += b["weight"]
@@ -137,7 +137,8 @@ def naming_errors(G, A, sp, groups):
         if len(cs) > 1:
             err.append(f"{n}: 持ち物の区分（メガ石・こだわり系・その他）をまたいでいる {dict(cs)}")
         head = ("メガ" if len(stones) < 2 else c0) if c0 in stones else c0
-        body = n[len(head) + 1:] if head and n.startswith(head + "・") else ("" if head and n == head else n)
+        n0 = A.axis_base(n)
+        body = n0[len(head) + 1:] if head and n0.startswith(head + "・") else ("" if head and n0 == head else n0)
         toks = [t for t in re.split(r"[＋／]", body) if t]
         for t in toks:
             if t in G.MV:
@@ -147,9 +148,9 @@ def naming_errors(G, A, sp, groups):
         for m, p in mv.items():
             if m in G.BOOST and p >= 0.5 and m not in toks and not ("フルアタ" in toks and G.MV.get(m, {}).get("cat") != "status"):
                 err.append(f"{n}: 積み技 {m}（系統内 {p * 100:.0f}%）が名前に無い")
-        if A.full_attack(gb) and "フルアタ" not in toks and body != "フルアタ":
+        if A.full_attack(nb) and "フルアタ" not in toks and body != "フルアタ":
             err.append(f"{n}: 攻撃技4本が{A.CORE * 100:.0f}%以上なのにフルアタ型でない")
-        if "フルアタ" in toks and not A.full_attack(gb, 0.5):
+        if "フルアタ" in toks and not A.full_attack(nb, 0.5):
             err.append(f"{n}: フルアタ型なのに攻撃技4本が半分未満")
         baton = sum(b["weight"] for b in gb if A.GIMMICK & set(b["moves"])) / z
         if any(t in A.GIMMICK for t in toks) and baton < 0.5:
@@ -170,8 +171,20 @@ def naming_errors(G, A, sp, groups):
         plain = [t for t in toks if t in G.MV and t not in G.BOOST and t not in A.GIMMICK]
         if head_less and plain:
             err.append(f"{g['name']}: 系統が1つの種の名前に技 {plain}（単一の型・フルアタ・積み技で名付ける）")
-    for g, c in zip(groups, gcls):
-        if g["share"] < 0.05 and any(o is not g and oc == c and o["share"] >= 0.05 for o, oc in zip(groups, gcls)):
+    # 寄せ先は生成側（arch_groups）と同じ条件で数える。持ち物の区分だけでなく積み技の区分も揃っている
+    # 相手にしか寄せない（積み技の型が混ざると「積み技は必ず名前に入れる」と衝突するため）
+    # バトンの型は生成側で tag=(None, "", "", ギミック) と持ち物も積み技も空にして1つにまとめるので、
+    # ここでも積み技の区分を空として扱う（そうしないと別の系統の寄せ先に見える）
+    gsetup = []
+    for g in groups:
+        sc = collections.Counter()
+        for b in g["builds"]:
+            sc["" if A.GIMMICK & set(b["moves"]) else A.setup_class(b["moves"])] += b["weight"]
+        gsetup.append(sc.most_common(1)[0][0])
+    # 生成側は「寄せ先が1つでもあれば寄せる」（5%以上は要求しない）。同じ条件で数える
+    for g, c, sx in zip(groups, gcls, gsetup):
+        if g["share"] < 0.05 and any(o is not g and oc == c and os_ == sx
+                                     for o, oc, os_ in zip(groups, gcls, gsetup)):
             err.append(f"{g['name']}: 5%未満（{g['share'] * 100:.1f}%）なのに同じ持ち物の区分の系統に統合されていない")
     return err
 
@@ -323,6 +336,14 @@ def stat_warnings(G, prev, new):
     return W
 
 
+def form_fix_warnings(pool):
+    """クロールのフォルム誤ラベルを生成側（_gen_type_pool.form_fix）が黙って補正した種。
+    静かに直るのでランキングの表示名が誤ったまま残る（M-6 9/17〜M-7 のルガルガン(昼)＝実体はたそがれ）。
+    タイプが同じフォルム同士はタイプアイコンの照合では見つからないので、ここで必ず目に入るようにする"""
+    return [("フォルムの誤ラベル（使用率の表示名を直す）", r["source_species"], f"実体は {sp}")
+            for sp, r in pool.items() if r.get("source_species") and r["source_species"] != sp]
+
+
 def marg_warnings(G, pool, meta):
     """プールの採用率と DB の使用率（生成器の目標）の差"""
     W = []
@@ -352,15 +373,9 @@ def marg_warnings(G, pool, meta):
         finally:
             G.SEASON = s0
         pm = pool_marg(G, r["builds"])
-        s1 = G.SEASON
-        G.SEASON = season
-        try:
-            fine = {e: v for t in G.ev_fine_table(sp).values() for e, v in t.items()}
-        finally:
-            G.SEASON = s1
-        et = ev_total_diff(r["builds"], fine)
-        if et and et[0] > EV_TOTAL_TOL:
-            W.append(("DB との差（努力値の合計）", sp, f"合計{et[1]} プール {et[2]:.1f}% / DB {et[3]:.1f}%（許容 {EV_TOTAL_TOL:.0f}pt）"))
+        # 努力値の合計は ev_fill.py が必ず66に揃えるので、DB の生の合計分布（合計64の型も実在する。
+        # サダイジャの A32-S32 など）と比べると必ず差が出る。比べる意味が無いので警告にしない（2026-10-11）。
+        # 生成物が66になっていないこと自体は「努力値の合計≠66」のエラー／警告が見ている
         for c in CATS:
             ref = dbm.get(c) or {}
             if not ref:
@@ -598,14 +613,12 @@ def run(prev, new, stage="all", dist=None):
     nats = natures(G)
     for sp, r in npool.items():
         E += [("生成ルール", sp, e) for e in rule_errors(G, sp, r["builds"], used[r.get("source_species", sp)] | used[sp], nats)]
-        cs = choice_status2(G, r["builds"])
-        if cs > CHOICE_STATUS2_MAX:
-            W.append(("こだわり×変化技2本以上", sp, f"こだわりの型の {cs * 100:.1f}%（上限 {CHOICE_STATUS2_MAX * 100:.0f}%）"))
     for sp, v in ngroups.items():
         E += [("命名・系統分け", sp, e) for e in naming_errors(G, A, sp, v["groups"])]
     E += [("シードの規則", sp, e) for sp, e in seed_errors(ngroups)]
     W += seed_pool_warnings()
     W += stat_warnings(G, P, N)
+    W += form_fix_warnings(npool)
     W += marg_warnings(G, npool, nmeta)
     W += audit_warnings(npool)
     if stage == "all":
@@ -638,7 +651,7 @@ def run(prev, new, stage="all", dist=None):
     L[2:2] = [f"- **エラー {len(E)}件・警告 {len(W)}件**（段階 {stage}{'・DIST ' + dist if dist else ''}）"]
     L += table("エラー", E) + table("警告", W)
     L += ["", "## 閾値", "", f"- 系統の割合の変化 ≥{SHARE_WARN_PT:.0f}pt・プールの採用率の変化 ≥{MARG_SHIFT_PT:.0f}pt（DB の変化 <{DB_QUIET_PT:.0f}pt なら生成側の疑い）"
-          f"・技の組の KL ≥{KL_WARN}・DB との差 {MARG_TOL}・こだわり×変化技2本以上 >{CHOICE_STATUS2_MAX * 100:.0f}%・監査の違反率 ≥{AUDIT_WARN * 100:.1f}%"]
+          f"・技の組の KL ≥{KL_WARN}・DB との差 {MARG_TOL}・監査の違反率 ≥{AUDIT_WARN * 100:.1f}%"]
     return E, W, L
 
 

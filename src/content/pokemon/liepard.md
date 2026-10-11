@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのレパルダス基礎データ
 pokemonName: 'レパルダス'
 dexNumber: 510
 usageRank: 999
+updatedDate: '2026-10-11'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['アンコール', 'イカサマ', 'まねっこ', 'まもる']
+  topMovePct: [86.1, 82.7, 73.6, 62.3]
+  topItems: ['きあいのタスキ', 'オボンのみ', 'たべのこし']
+  topItemPct: [39.1, 17.0, 12.5]
+  topAbility: 'いたずらごころ'
+  topAbilityPct: 95.9
+  topNature: 'ずぶとい'
+  topNaturePct: 28.9
+  topNature2: 'ようき'
+  topNaturePct2: 16.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

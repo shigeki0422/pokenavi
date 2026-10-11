@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのジュナイパー基礎デー
 pokemonName: 'ジュナイパー'
 dexNumber: 724
 usageRank: 999
+updatedDate: '2026-10-11'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-4'
+  topMoves: ['フレアドライブ', 'ふいうち', 'インファイト', 'じしん']
+  topMovePct: [88.9, 52.2, 45.1, 39.7]
+  topItems: ['エンブオナイト', 'こだわりスカーフ', 'いのちのたま']
+  topItemPct: [82.5, 5.6, 3.0]
+  topAbility: 'すてみ'
+  topAbilityPct: 69.4
+  topNature: 'いじっぱり'
+  topNaturePct: 63.6
+  topNature2: 'ゆうかん'
+  topNaturePct2: 14.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

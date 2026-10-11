@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのダイケンキ基礎データ
 pokemonName: 'ダイケンキ'
 dexNumber: 503
 usageRank: 999
+updatedDate: '2026-10-11'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['ひけん・ちえなみ', 'せいなるつるぎ', 'ふいうち', 'シェルブレード']
+  topMovePct: [98.7, 94.3, 78.7, 41.4]
+  topItems: ['くろいメガネ', 'きあいのタスキ', 'こだわりスカーフ']
+  topItemPct: [43.7, 19.8, 13.9]
+  topAbility: 'きれあじ'
+  topAbilityPct: 98.8
+  topNature: 'いじっぱり'
+  topNaturePct: 79.8
+  topNature2: 'ようき'
+  topNaturePct2: 15.3
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

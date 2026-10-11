@@ -324,10 +324,12 @@ SEED_SOLO_W = float(os.environ.get("SEED_SOLO_W", "0.25"))
 
 
 def item_ok(moves, item):
-    """こだわり系は変化技と両立しない。実型での発火率0.00%。
-    持ち物と技のセット（上位構築）: カゴのみの型は必ず ねむる を持つ（28/28）、トリック/すりかえの型は必ずこだわり系（29/29）"""
+    """持ち物と技のセット（上位構築）: カゴのみの型は必ず ねむる を持つ（28/28）、トリック/すりかえの型は必ずこだわり系（29/29）"""
     mv = set(moves)
-    if item in CHOICE and (mv & (SETUP | PROTECT | RECOVERY)):
+    # こだわり系は選んだ技しか出せないので、積んでも攻撃に移れず型として成立しない。
+    # ただしトリック/すりかえで相手にこだわりを押し付けてから積む型は成立する（2026-10-11）。
+    # 守るも積み技と同じで、守った先に勝ちがない（回復は制限しない）
+    if item in CHOICE and (mv & (SETUP | PROTECT)) and not (mv & TRICK):
         return False
     if item in ITEM_NEEDS and ITEM_NEEDS[item] not in mv:
         return False
@@ -490,9 +492,10 @@ def valid(moves, item=None):
         return False
     if _boost_clash(moves):
         return False
-    # トリック/すりかえ はこだわり系とセット（29/29）で、こだわりは積み・守る・回復と両立しない
-    if set(moves) & TRICK and set(moves) & (SETUP | PROTECT | RECOVERY):
-        return False
+    # トリック/すりかえ はこだわり系とセット（29/29。item_ok が見る）。
+    # 押し付けた後は自分はこだわりを持たないので、積み技・守る・回復と両立する（2026-10-11）。
+    # 以前はここでも禁止していたため、サーフゴーの トリック＋わるだくみ（DB: トリック18.6%・わるだくみ76.0%）が
+    # 1型も生成されていなかった（item_ok だけ直しても技の組の段で落ちる）
     # 攻撃を上げる積み技なのに主力が特殊技だけ（逆も）。上位構築2460型で0件、生成ではミロカロス・ギルガルドに5%出ていた
     ph = any(MV[m]["cat"] == "physical" for m in atk)
     sp = any(MV[m]["cat"] == "special" for m in atk)
@@ -1159,6 +1162,20 @@ def simple_builds(sp):
     return {"species": sp, "builds": ev_fill.fill_builds(sp, bs, SEASON), "simple": True}
 
 
+_FORM_PREFIX = ("ヒスイ", "アローラ", "ガラル", "パルデア")
+
+
+def _form_stem(n):
+    """フォルム違いを束ねる基本の種名。括弧・コロンの後ろと地方の接頭辞を落とす
+    （ダイケンキ＝ヒスイダイケンキ、ケンタロス＝ケンタロス:炎）。
+    接頭辞を見ないと form_fix が ヒスイ/アローラ の誤ラベルを取りこぼす（2026-10-11）"""
+    n = n.split("(")[0].split(":")[0]
+    for p in _FORM_PREFIX:
+        if n.startswith(p) and len(n) > len(p):
+            return n[len(p):]
+    return n
+
+
 def form_fix(sp):
     """DB のフォルム誤登録の補正先（監査200 T4）。使用率に出る特性の過半がその種の特性に無く、同じ種の別フォルムだけの特性なら
     そのフォルムを返す（例: ルガルガン(昼) の かたいツメ 100% → ルガルガン(たそがれ)）。無ければ None"""
@@ -1175,8 +1192,7 @@ def form_fix(sp):
     bad = {a for a in ab if a not in legal[sp]}
     if not tot or sum(ab[a] for a in bad) < 0.5 * tot:
         return None
-    stem = sp.split("(")[0]
-    cands = [n for n in legal if n != sp and n.split("(")[0] == stem and bad <= legal[n]]
+    cands = [n for n in legal if n != sp and _form_stem(n) == _form_stem(sp) and bad <= legal[n]]
     return cands[0] if len(cands) == 1 else None
 
 
@@ -2125,8 +2141,18 @@ def generate(sp, n, seed=0):
         if not any(r):
             for j, i in enumerate(it_keys):
                 r[j] = item_ok(b[1], i)
-        if not any(r):
-            r[it_keys.index(max(items, key=items.get))] = True
+    # ここまでで1つも持ち物が無い型は成立しない（持ち物と技の規則をどれも満たさない）。
+    # 以前は使用率最大の持ち物を強制していたが、それは規則違反の型を作るだけだった
+    # （こだわり＋ねむる を許したとき、カイロスの ねむる＋積み技 の型に カイロスナイト が付いた 2026-10-11）。
+    # 全部が全滅するときだけは型を1つも作れなくなるので、従来どおり最大の持ち物を当てる
+    drop = [bx for bx, r in enumerate(it_compat) if not any(r)]
+    if drop and len(drop) < len(builds):
+        builds = [b for bx, b in enumerate(builds) if bx not in set(drop)]
+        it_compat = [r for bx, r in enumerate(it_compat) if bx not in set(drop)]
+    else:
+        for r in it_compat:
+            if not any(r):
+                r[it_keys.index(max(items, key=items.get))] = True
     if MOVE_LIFT_POW > 0:
         it_w = [[(move_lift("item", it, b[1]) * rest_item_w(b[1], it) if it_compat[bx][j] else 0.0)
                  for j, it in enumerate(it_keys)]

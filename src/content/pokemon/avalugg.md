@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのクレベース基礎データ
 pokemonName: 'クレベース'
 dexNumber: 713
 usageRank: 999
+updatedDate: '2026-10-11'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['ボディプレス', 'じこさいせい', 'てっぺき', 'ミラーコート']
+  topMovePct: [84.9, 80.0, 69.1, 48.9]
+  topItems: ['ゴツゴツメット', 'たべのこし', 'オボンのみ']
+  topItemPct: [45.9, 21.6, 15.3]
+  topAbility: 'がんじょう'
+  topAbilityPct: 89.6
+  topNature: 'わんぱく'
+  topNaturePct: 60.1
+  topNature2: 'のんき'
+  topNaturePct2: 18.1
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -115,6 +115,18 @@ def group_name(sp, item, mv, sibs, mshare):
     return "＋".join(order_moves(sp, item, feats, mshare))
 
 
+def add_kind_suffix(name, kind0):
+    """名前の攻撃技が系統の向きと逆の分類だけなら「＋物理技/特殊技」を添える。
+    判定は pool_checks.naming_errors と同じ（cat != status・積み技を除く）にする。"""
+    kc = {"物理": "physical", "特殊": "special"}.get(kind0)
+    if not kc or "技" in name.split("＋")[-1:][0][-2:]:
+        return name
+    atk = [m for m in name.split("＋") if m in G.MV and G.MV[m]["cat"] != "status" and m not in G.BOOST]
+    if atk and not any(G.MV[m]["cat"] == kc for m in atk):
+        return name + "＋" + kind0 + "技"
+    return name
+
+
 def slot_alts(sp, item, mv, mshare):
     """入れ替わる枠: 系統内で2割以上・85%未満の技（種の共通の技を除く）の上位2つ"""
     return [[m, round(mv[m] * 100)] for m in order_moves(sp, item, [m for m, p in mv.most_common()
@@ -124,6 +136,26 @@ def slot_alts(sp, item, mv, mshare):
 FLAG_ROLES = {"設置", "強制交代", "守る", "変化"}   # 系統を分ける補助の役割（回復・ピボット・吸収は4つ目の枠の選択になりやすいので分けない）
 KEY_ATTACKS = {"ボディプレス", "イカサマ"}
 GIMMICK = {"バトンタッチ"}   # 型の狙いそのものを決める技（積んだ能力を控えへ渡す）。積むかどうかと同じく必ず分け、名前にも入れる
+EV_AXIS_MIN = 16    # 耐久（H+B+D）も素早さもこれ未満（＝攻撃に寄せた型）なら耐久/速攻の軸では分けない
+EV_SPLIT_MIN = 0.3  # 系統内で少ない側の向きがこれ以上あれば耐久型と速攻型に割る
+
+
+def axis_base(name):
+    """「〜・耐久」「〜・速攻」から軸の表示を外した名前（週次チェックが技名のトークンを読むため）"""
+    for a in ("耐久", "速攻"):
+        if name.endswith("・" + a):
+            return name[:-len(a) - 1]
+        if name == a:
+            return ""
+    return name
+
+
+def ev_axis(ev):
+    """努力値の向き。どちらにも振っていない（攻撃に寄せた）型は軸なし（""）"""
+    bulk, speed = ev[0] + ev[2] + ev[4], ev[5]
+    if max(bulk, speed) < EV_AXIS_MIN:
+        return ""
+    return "耐久" if bulk > speed else "速攻"
 
 
 def key_moves(moves):
@@ -185,8 +217,10 @@ def group_species(sp, bs):
         ids = {id(b) for b in gb}
         return shares([b for b in bs if id(b) not in ids])
 
+    axlab, axpair = {}, {}   # 耐久/速攻で割った系統の「（耐久）／（速攻）」と、割った相手
     def sibs(c, cs):
-        return [shares(x["builds"]) for x in cs if x is not c and x["tag"][0] == c["tag"][0]]
+        return [shares(x.get("nmbuilds", x["builds"])) for x in cs
+                if x is not c and x["tag"][0] == c["tag"][0] and axpair.get(id(c)) != id(x)]
 
     def nm(c):
         gb = c["builds"]
@@ -212,10 +246,15 @@ def group_species(sp, bs):
         return d + (1.0 if a["tag"][0] != b["tag"][0] else 0.0) + (0.5 if bool(a["tag"][1]) != bool(b["tag"][1]) else 0.0) \
             + (0.5 if a["tag"][3] != b["tag"][3] else 0.0)
     wt = lambda c: sum(b["weight"] for b in c["builds"])
+    # 寄せ先は「同じ区分で自分以外」。区分の系統が全部5%未満のときに寄せ先が無くなるのを避ける
+    # （エアームドのメガ石は 2.5/2.7/4.8/0.7/0.1% と全部5%未満で、寄せた結果だけが5%を超えていた）。
+    # 小さい順に処理するので、寄せ続ければ最後は区分で最大の1つに集まる
     for c in sorted([c for c in big if wt(c) / z < 0.05], key=wt):
-        rest = [x for x in big if x is not c and wt(x) / z >= 0.05 and x["tag"][0] == c["tag"][0]]
+        # 積み技の区分が違う相手には寄せない。寄せると積み技の型が混ざった系統ができ、
+        # 「積み技は必ず名前に入れる」規則と衝突する（シビルドンのとぐろをまく 61%）
+        rest = [x for x in big if x is not c and x["tag"][0] == c["tag"][0] and x["tag"][1] == c["tag"][1]]
         if rest:
-            min(rest, key=lambda x: dist(c, x))["builds"] += c["builds"]
+            min(rest, key=lambda x: (dist(c, x), -wt(x)))["builds"] += c["builds"]
             big.remove(c)
     while len(big) > MAX_GROUPS:
         same = [(a, b) for i, a in enumerate(big) for b in big[i + 1:] if a["tag"][0] == b["tag"][0]]
@@ -225,6 +264,27 @@ def group_species(sp, bs):
         keep, drop = (a, b) if wt(a) >= wt(b) else (b, a)
         keep["builds"] += drop["builds"]
         big.remove(drop)
+    # 技と持ち物が同じでも耐久型と速攻型は別の型なので、系統内で努力値の向きが二分している系統を割る
+    # （M-7 のリザードン メガY は H32 の耐久 と S32 の速攻 が1つの系統だった）。
+    # 名前は割る前の中身（nmbuilds）で付け、「（耐久）／（速攻）」だけで見分ける（割った相手とは技で見分けない。
+    # 技が同じで努力値だけが違うので、技で見分けようとすると片方が「フルアタ」になり機能を表さない名前になる）
+    for c in sorted([x for x in big if wt(x) / z >= 0.05], key=wt, reverse=True):
+        if len(big) >= MAX_GROUPS:
+            break
+        parts = collections.defaultdict(list)
+        for b in c["builds"]:
+            parts[ev_axis(b["ev"])].append(b)
+        pw = {k: sum(b["weight"] for b in v) for k, v in parts.items()}
+        # 割った片方が5%未満だと「5%未満は同じ区分の系統へ寄せる」規則と衝突するので割らない
+        if min(pw.get("耐久", 0.0), pw.get("速攻", 0.0)) < max(EV_SPLIT_MIN * wt(c), 0.05 * z):
+            continue
+        parts[max(("耐久", "速攻"), key=lambda k: pw[k])] += parts.pop("", [])   # 攻撃に寄せた型は大きい方へ
+        pair = {k: dict(c, builds=parts[k], nmbuilds=c["builds"]) for k in ("耐久", "速攻")}
+        big[big.index(c)] = pair["耐久"]
+        big.append(pair["速攻"])
+        for k, x in pair.items():
+            axlab[id(x)] = k
+        axpair[id(pair["耐久"])], axpair[id(pair["速攻"])] = id(pair["速攻"]), id(pair["耐久"])
     # 名前が同じになった系統は見分けられないのでまとめ、名前を付け直す（向きだけが違う同名の系統も残さない。バチンウニのグランドコート×2）
     for _ in range(5):
         arr = []
@@ -243,31 +303,32 @@ def group_species(sp, bs):
             for b in gb:
                 for m in b["moves"]:
                     mv[m] += b["weight"] / gz
+            nb = c.get("nmbuilds", gb)   # 名前は割る前の中身で付ける（耐久/速攻で名前の土台が変わらないように）
+            nz = sum(b["weight"] for b in nb)
+            nmv = collections.Counter()
+            for b in nb:
+                for m in b["moves"]:
+                    nmv[m] += b["weight"] / nz
             tag = c["tag"][0]
             head = ("メガ" if len(stones) < 2 else tag) if tag in stones else tag
-            item0 = max(gb, key=lambda b: b["weight"])["item"]
+            item0 = max(nb, key=lambda b: b["weight"])["item"]
             kind0 = collections.Counter()
             for b in gb:
                 kind0[kind(b["moves"])] += b["weight"]
             kind0 = kind0.most_common(1)[0][0]
             # 名前に載る技が無ければ型の性質（向き・積み技）で名付ける。横の区分表示と重なるので、そのときは区分表示を省く
             # 積み技は区分名ではなく技名で示す（系統内2割以上の積み技を多い順に「／」で並べる）
-            setup_nm = "／".join(m for m, p in mv.most_common() if m in G.BOOST and p >= 0.2) if c["tag"][1] or c["tag"][3] else ""
-            gname = group_name(sp, item0, mv, sibs(c, [x for x in big if sum(b["weight"] for b in x["builds"]) / z >= 0.01]), mshare)
-            by_tag = not full_attack(gb) and not gname
-            # 名前の攻撃技が系統の向きと逆の分類だけ（特殊の系統に しんそく）だと型を表さないので、向きの技を添える
-            kc = {"物理": "physical", "特殊": "special"}.get(kind0)
-            atk = [m for m in gname.split("＋") if m in G.MV and G.MV[m]["cat"] != "status" and m not in G.BOOST]
-            if kc and atk and not any(G.MV[m]["cat"] == kc for m in atk):
-                gname += "＋" + kind0 + "技"
+            setup_nm = "／".join(m for m, p in nmv.most_common() if m in G.BOOST and p >= 0.2) if c["tag"][1] or c["tag"][3] else ""
+            gname = group_name(sp, item0, nmv, sibs(c, [x for x in big if sum(b["weight"] for b in x["builds"]) / z >= 0.01]), mshare)
+            by_tag = not full_attack(nb) and not gname
             # 積み技は必ず主の名前に入れる（名前の技に無い分を後ろに足す）
             extra = "／".join(m for m in setup_nm.split("／") if m and m not in gname.split("＋"))
             extra = "＋".join(x for x in [m for m in sorted(c["tag"][3]) if m not in gname.split("＋")] + [extra] if x)
             gname = "＋".join(x for x in (gname, extra) if x)
             # 技で見分けられない系統は持ち物で見分ける（系統内2割以上の持ち物を多い順に2つまで）
             itc = collections.Counter()
-            for b in gb:
-                itc[b["item"]] += b["weight"] / gz
+            for b in nb:
+                itc[b["item"]] += b["weight"] / nz
             items_nm = "／".join(i for i, p in itc.most_common(2) if p >= 0.2 and i)
             # 持ち物は同じ区分のほかの系統と見分けるための名前なので、型が1つの種では使わない
             if len([x for x in big if sum(b["weight"] for b in x["builds"]) / z >= 0.01]) == 1:
@@ -276,20 +337,26 @@ def group_species(sp, bs):
             if not gname and head:
                 # 区分名（メガ・スカーフ）だけで同じ区分の相手がいない系統は、区分名だけでは中身が分からないので、
                 # ほぼ必ず入り（85%以上）ほかの系統全体の2倍以上ある技を2つまで添える
-                mo = other(gb)
-                ch = [m for m, p in mv.items() if p >= CORE and mshare.get(m, 0) < 0.85 and p >= 2 * max(mo.get(m, 0.0), 0.05)]
-                ch = sorted(ch, key=lambda m: -(mv[m] / max(mo.get(m, 0.0), 0.05)))[:2]
+                mo = other(nb)
+                ch = [m for m, p in nmv.items() if p >= CORE and mshare.get(m, 0) < 0.85 and p >= 2 * max(mo.get(m, 0.0), 0.05)]
+                ch = sorted(ch, key=lambda m: -(nmv[m] / max(mo.get(m, 0.0), 0.05)))[:2]
                 gname = "＋".join(order_moves(sp, item0, ch, mshare))
-            name = "フルアタ" if full_attack(gb) else (gname or ("フルアタ" if full_attack(gb, 0.5) else
+            # 名前の攻撃技が系統の向きと逆の分類だけ（特殊の系統に カウンター）だと型を表さないので向きの技を添える。
+            # 判定は gname が出そろった後（積み技の追加・区分名だけの系統での技の選び直しの後）に1回だけ行う。
+            # 先に判定すると、後から足した技で pool_checks（最終名の全トークンを見る）と食い違う
+            gname = add_kind_suffix(gname, kind0)
+            name = "フルアタ" if full_attack(nb) else (gname or ("フルアタ" if full_attack(nb, 0.5) else
                                                         ("" if head else (items_nm or f"{kind0}型"))))
-            alts = slot_alts(sp, item0, mv, mshare)
+            alts = slot_alts(sp, item0, nmv, mshare)
             if head:
                 name = f"{head}・{name}" if name else head
+            if axlab.get(id(c)):
+                name = f"{name}・{axlab[id(c)]}" if name else axlab[id(c)]
             kk = collections.Counter()
             for b in gb:
                 kk[kind(b["moves"])] += b["weight"]
             gw = sum(b["weight"] for b in gb)
-            gtab.append({"name": name, "kind": kk.most_common(1)[0][0], "share": gz / z,
+            gtab.append({"name": name, "kind": kk.most_common(1)[0][0], "share": gz / z, "axis": axlab.get(id(c), ""),
                          "builds": [dict(b, weight=b["weight"] / gw) for b in gb]})
             arr.append({"_c": c, "name": name, "alts": alts, "kind": kk.most_common(1)[0][0], "setup": "", "by_tag": by_tag, "mega": tag in stones,
                         "share": round(gz / z * 100, 1),
@@ -308,9 +375,14 @@ def group_species(sp, bs):
             for c2 in cs[1:]:
                 cs[0]["builds"] += c2["builds"]
                 big.remove(c2)
+            # 中身が混ざった系統は努力値の向きも割る前の名前も意味を失う
+            cs[0].pop("nmbuilds", None)
+            axlab.pop(id(cs[0]), None)
+            axpair.pop(id(cs[0]), None)
     for x in arr:
         x.pop("_c")
     arr.sort(key=lambda x: -x["share"])
+    gtab.sort(key=lambda g: -g["share"])   # 耐久/速攻で割った系統を後ろに足すので並べ直す（代表型は割合の降順）
     return arr, gtab
 
 

@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのゴルーグ基礎データ。
 pokemonName: 'ゴルーグ'
 dexNumber: 623
 usageRank: 999
+updatedDate: '2026-10-11'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['ポルターガイスト', 'ぶちかまし', 'れいとうパンチ', 'ドレインパンチ']
+  topMovePct: [72.8, 63.7, 55.5, 35.1]
+  topItems: ['ゴルーグナイト', 'きあいのタスキ', 'いのちのたま']
+  topItemPct: [49.4, 11.6, 8.7]
+  topAbility: 'てつのこぶし'
+  topAbilityPct: 63.1
+  topNature: 'いじっぱり'
+  topNaturePct: 56.5
+  topNature2: 'ゆうかん'
+  topNaturePct2: 24.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

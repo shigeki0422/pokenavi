@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのバクーダ基礎データ。
 pokemonName: 'バクーダ'
 dexNumber: 323
 usageRank: 999
+updatedDate: '2026-10-11'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-4'
+  topMoves: ['だいちのちから', 'げんしのちから', 'ふんか', 'かえんほうしゃ']
+  topMovePct: [96.7, 66.9, 53.1, 48.8]
+  topItems: ['バクーダナイト', 'イトケのみ', 'ものしりメガネ']
+  topItemPct: [87.7, 7.1, 1.2]
+  topAbility: 'ハードロック'
+  topAbilityPct: 89.4
+  topNature: 'れいせい'
+  topNaturePct: 77.0
+  topNature2: 'ひかえめ'
+  topNaturePct2: 17.5
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

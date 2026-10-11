@@ -26,7 +26,31 @@ def _seasons_in_db(db_path):
 
     return sorted(rows, key=key, reverse=True)
 
-SEASON = os.environ.get('PAGES_SEASON') or (_seasons_in_db(DB_PATH)[0] if _seasons_in_db(DB_PATH) else 'M-6')
+def _season_with_detail(db_path):
+    """使用率の順位だけでなく詳細（技・持ち物・性格・EV・チームメイト）が入っている最新のシーズン。
+
+    新シーズンは順位が先に入り、詳細（OCR）は後日のフルクロールで入る。最新シーズンをそのまま使うと
+    その数日間は詳細が0件のまま「使用率データ」セクションが空のページを作ってしまう
+    （2026-10-07 のシーズン移行から 10/10 まで、本番の全ページで技・持ち物・性格・EV・チームメイトが
+    消えたまま4日間 push され続けた）。詳細のあるシーズンまで遡る。"""
+    seasons = _seasons_in_db(db_path)
+    if not seasons:
+        return 'M-6'
+    con = sqlite3.connect(db_path)
+    try:
+        for s in seasons:
+            n = con.execute("SELECT COUNT(*) FROM pokemon_moves WHERE season=? AND rule='single'", (s,)).fetchone()[0]
+            if n:
+                if s != seasons[0]:
+                    print(f"⚠ {seasons[0]} はまだ詳細（技・持ち物…）が無いので {s} のデータでページを作る"
+                          f"（詳細のフルクロール後に再実行する。PAGES_SEASON= で上書きできる）")
+                return s
+    finally:
+        con.close()
+    return seasons[0]
+
+
+SEASON = os.environ.get('PAGES_SEASON') or _season_with_detail(DB_PATH)
 
 # ---- 防御タイプ相性チャート（Gen 6+）----
 # DEFENSE[守備タイプ] = {攻撃タイプ: 倍率}

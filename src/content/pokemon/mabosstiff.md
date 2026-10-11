@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのマフィティフ基礎デー
 pokemonName: 'マフィティフ'
 dexNumber: 943
 usageRank: 999
+updatedDate: '2026-10-11'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-6'
+  topMoves: ['くらいつく', 'のろい', 'みちづれ', 'ちょうはつ']
+  topMovePct: [79.4, 40.8, 29.5, 27.3]
+  topItems: ['ふうせん', 'きあいのタスキ', 'レッドカード']
+  topItemPct: [22.4, 12.2, 11.8]
+  topAbility: 'ばんけん'
+  topAbilityPct: 61.2
+  topNature: 'いじっぱり'
+  topNaturePct: 46.5
+  topNature2: 'わんぱく'
+  topNaturePct2: 18.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

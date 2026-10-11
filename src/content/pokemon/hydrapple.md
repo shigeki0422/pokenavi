@@ -4,9 +4,22 @@ description: 'ポケモンチャンピオンズのカミツオロチ基礎デー
 pokemonName: 'カミツオロチ'
 dexNumber: 1019
 usageRank: 999
+updatedDate: '2026-10-11'
 pubDate: '2026-05-24'
 draft: false
 
+faq:
+  season: 'M-5'
+  topMoves: ['きまぐレーザー', 'だいちのちから', 'ギガドレイン', 'ふいうち']
+  topMovePct: [88.2, 58.2, 44.2, 35.9]
+  topItems: ['たべのこし', 'オボンのみ', 'いのちのたま']
+  topItemPct: [18.4, 14.6, 12.6]
+  topAbility: 'さいせいりょく'
+  topAbilityPct: 90.0
+  topNature: 'ひかえめ'
+  topNaturePct: 47.0
+  topNature2: 'れいせい'
+  topNaturePct2: 21.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
