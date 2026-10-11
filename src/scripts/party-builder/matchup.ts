@@ -440,6 +440,34 @@ export function moveBreakdown(me: ResolvedBuild, opp: ResolvedBuild): MoveHitDet
   return p.a.moves.map((m) => _detail(m, p, 0, opp, p.b.hp));
 }
 
+/** 指定した技(名前)の発数の生の内訳。EV逆算のように「判定(中央乱数)の発数」ではなく
+ * 「確定(最低乱数)・乱数(中央乱数とその確率)」を別々に要る呼び出し元向け（_detailの中身を公開する版）。
+ * 見つからない・ダメージ技でない場合は null。 */
+export interface MoveHitsRange {
+  /** 確定数（最低乱数でもこの発数で倒せる。最高乱数でもこれより縮まない場合も含む）。 */
+  lo: number;
+  /** 最高乱数での発数（これより少ない発数になることはない）。 */
+  hi: number;
+  /** 判定と同じ中央乱数での発数。loと同じなら確定、違えば「乱数mid発」。 */
+  mid: number;
+  /** 中央乱数の発数(mid)以内に収まる確率(%)。lo===midなら確定なのでnull。 */
+  midProb: number | null;
+}
+// 向きは常に (me, opp) で固定して1回だけ実走する（向きを入れ替えて2回呼ぶと、互いに天候特性を
+// 持つ対面で場が変わり与ダメの前提が食い違う。pairHitDetailsと同じ理由）。attで技の持ち主を選ぶ。
+export function moveHitsRange(
+  me: ResolvedBuild, opp: ResolvedBuild, att: 0 | 1, moveName: string,
+): MoveHitsRange | null {
+  const p = _pair(me, opp);
+  const side = att === 0 ? p.a : p.b;
+  const m = side.moves.find((x) => x.n === moveName);
+  if (!m || m.dmg === null || m.hitsLo === undefined) return null;
+  const lo = m.hitsLo, hi = m.hitsHi ?? lo, mid = m.hitsMid ?? lo;
+  if (lo === mid || lo >= OUT_OF_RANGE) return { lo, hi, mid: lo, midProb: null };
+  const midProb = koProb(p.specA, p.specB, att, m.idx, mid) * 100;
+  return { lo, hi, mid, midProb: midProb >= 100 ? null : midProb };
+}
+
 /** 技ごとのダメージ幅(確定数は持たない)。仮想敵カードの技チップ用。 */
 export interface MoveDamage {
   n: string;
