@@ -12,7 +12,7 @@ from _party_quality import TYPES, adj_eff
 from _construction_gap import (HAZARD_MOVES, SETUP_MOVES, PIVOT, STATUS, RECOVERY,
                                RECOVERY_ITEM, WEATHER_AB, WEATHER_MV)
 from _threat_coverage import load_threats, team_coverage
-from gen_party_pool import PartyGen
+from gen_party_pool import PartyGen, FORM_FIX
 
 FEATS = ["hazard", "pivot", "priority", "setup", "status", "recovery", "scarf", "weather",
          "bulk_inv", "mixed_off", "spec_cnt", "phys_cnt", "def_cover", "threat_cov",
@@ -72,10 +72,23 @@ def features(party, L, pg, threats):
     f["weak_max"] = max(wc.values())
     f["threat_cov"] = team_coverage(party, L, threats)[0]
     f["n_mega"] = sum(1 for s in party if _is_mega_item(_spec_mega_item(s)))
-    f["usage_sum"] = sum(1.0 / pg.rank.get(s.split("@")[0], 1.0) for s in party)
+    f["usage_sum"] = sum(1.0 / _usage_rank(pg, s.split("@")[0]) for s in party)
     f["avg_speed"] = statistics.mean(p.speed for p in mons)
     f["fast_cnt"] = sum(1 for p in mons if p.speed >= 150)
     return [float(f[k]) for k in FEATS]
+
+
+_POOL_KEY = {real: key for key, real in FORM_FIX.items() if ":" in key}
+
+
+def _usage_rank(pg, name):
+    """型プールの順位→使用率表の順位→圏外(9999)。spec の括弧形（パルデアケンタロス(炎)）は型プール・DB のコロン形でも引く。
+    以前は既定 1.0＝1位扱いで、型プールの鍵と名前が違う種・型プールに無い種ほど使用率が高く見えた"""
+    for k in (name, _POOL_KEY.get(name)):
+        r = pg.rank.get(k) or getattr(pg, "live_rank", {}).get(k)
+        if r:
+            return r
+    return 9999
 
 
 def _is_mega_item(it):

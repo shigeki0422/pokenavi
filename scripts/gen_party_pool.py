@@ -356,6 +356,7 @@ class PartyGen:
             self.bw = {}
         self.pokes = [p for p in self.pool if self.pool[p]]
         live = self._live_rank()                       # USAGE_SEASON の最新クロールの順位を優先
+        self.live_rank = dict(live)
         # プールのキーとDBの種名が食い違うフォーム（例: キー「キュウコン」＝実体アローラキュウコン）は
         # FORM_FIX で解決した実体名の順位を引く。素の名前で引くと別種の順位（通常キュウコン168位）を
         # 拾い、MAX_RANK の補完プールから実使用率9位の種が丸ごと脱落する。

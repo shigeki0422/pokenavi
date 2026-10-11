@@ -10037,6 +10037,35 @@ try:
 except Exception as _e48:
     check("48 他の種のメガ石・0倍の技のテストが実行できる", False, f"{type(_e48).__name__}: {_e48}")
 
+
+def _t50_usage_sum_unknown_species():
+    import types as _ty50
+    import _surrogate as _S50
+    from _threat_coverage import load_threats as _lt50
+    _party = ["ガブリアス@きあいのタスキ:いじっぱり:じしん|つるぎのまい|ほのおのキバ|スケイルショット:2/32/0/0/0/32:さめはだ",
+              "アーマーガア@ゴツゴツメット:わんぱく:てっぺき|とんぼがえり|はねやすめ|ボディプレス:32/0/32/0/2/0:プレッシャー",
+              "ダイケンキ@くろいメガネ:いじっぱり:ひけん・ちえなみ|せいなるつるぎ|ふいうち|シェルブレード:2/32/0/0/0/32:きれあじ"]
+    _th = _lt50(dl)
+    _k = _S50.FEATS.index("usage_sum")
+    _pg0 = _ty50.SimpleNamespace(rank={"ガブリアス": 2, "アーマーガア": 4}, live_rank={})
+    _pg1 = _ty50.SimpleNamespace(rank={"ガブリアス": 2, "アーマーガア": 4}, live_rank={"ダイケンキ": 50})
+    _u0 = _S50.features(_party, dl, _pg0, _th)[_k]
+    _u1 = _S50.features(_party, dl, _pg1, _th)[_k]
+    check("50 採点の構築特徴 usage_sum: 型プールにも使用率表にも無い種は圏外（1位扱いにしない）",
+          abs(_u0 - (0.5 + 0.25 + 1 / 9999)) < 1e-9, str(_u0))
+    check("50 採点の構築特徴 usage_sum: 型プールに無い種は使用率表の順位で数える", abs(_u1 - (0.5 + 0.25 + 1 / 50)) < 1e-9, str(_u1))
+    _tau = ["パルデアケンタロス(炎)@いのちのたま:いじっぱり:インファイト|フレアドライブ|レイジングブル|ワイルドボルト:32/32/2/0/0/0:いかく"]
+    _pg2 = _ty50.SimpleNamespace(rank={"ケンタロス:炎": 121}, live_rank={"ケンタロス:炎": 121})
+    _u2 = _S50.features(_tau, dl, _pg2, _th)[_k]
+    check("50 採点の構築特徴 usage_sum: spec の括弧形（パルデアケンタロス(炎)）は型プールのコロン形の順位で数える",
+          abs(_u2 - 1 / 121) < 1e-12, str(_u2))
+
+
+try:
+    _t50_usage_sum_unknown_species()
+except Exception as _e50:
+    check("50 usage_sum のテストが実行できる", False, f"{type(_e50).__name__}: {_e50}")
+
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:
     print(f"\n--- 失敗リスト ---")
