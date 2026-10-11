@@ -188,7 +188,6 @@ impl PokemonBelief {
         tpl: &Template,
         known_ability: Option<String>,
         known_item: Option<String>,
-        extra: Option<&Vec<(EvEntry, String)>>,
     ) -> PokemonBelief {
         let mut natures: Vec<(String, f64)> = tpl.top_natures.clone();
         if natures.is_empty() {
@@ -217,37 +216,6 @@ impl PokemonBelief {
                 let d = to_poke(pack, &b);
                 cands.push(Cand { ev: ev.clone(), nature: nat.clone(), defender: d });
                 priors.push(f64::max(ev.rate, 1e-9) * f64::max(*nr, 1e-9));
-            }
-        }
-
-        if let Some(ex) = extra {
-            let mut keys: Vec<(i64, i64, i64, i64, i64, i64, String)> = cands
-                .iter()
-                .map(|c| {
-                    let k = ev_key(&c.ev);
-                    (k.0, k.1, k.2, k.3, k.4, k.5, c.nature.clone())
-                })
-                .collect();
-            let avg = if priors.is_empty() { 1.0 } else { pysum(priors.iter().copied()) / priors.len() as f64 };
-            for (ev, nat) in ex {
-                let k = ev_key(ev);
-                let key = (k.0, k.1, k.2, k.3, k.4, k.5, nat.clone());
-                if keys.contains(&key) {
-                    continue;
-                }
-                keys.push(key);
-                let spec = Spec {
-                    name: tpl.name.clone(),
-                    item: known_item.clone(),
-                    nature: Some(nat.clone()),
-                    moves: None,
-                    evs: Some(Evs { h: ev.h, a: ev.a, b: ev.b, c: ev.c, d: ev.d, s: ev.s }),
-                    ability: known_ability.clone(),
-                };
-                let b = build_from_template_rand(pack, tpl, &spec, &mut None);
-                let d = to_poke(pack, &b);
-                cands.push(Cand { ev: ev.clone(), nature: nat.clone(), defender: d });
-                priors.push(avg);
             }
         }
 
@@ -752,12 +720,11 @@ pub struct OpponentBelief {
     pub season: String,
     /// 種名 → belief（Python dict の挿入順を保持）
     pub species: Vec<(String, PokemonBelief)>,
-    pub use_registered: bool,
 }
 
 impl OpponentBelief {
     pub fn new(season: &str) -> OpponentBelief {
-        OpponentBelief { season: season.to_string(), species: Vec::new(), use_registered: true }
+        OpponentBelief { season: season.to_string(), species: Vec::new() }
     }
 
     fn idx(&self, name: &str) -> Option<usize> {
@@ -800,12 +767,7 @@ impl OpponentBelief {
                 alt.or(t)
             }
         }?;
-        let extra = if self.use_registered {
-            pack.registered_spreads.get(name).cloned()
-        } else {
-            None
-        };
-        let b = PokemonBelief::new(pack, &tpl, known_ability, known_item, extra.as_ref());
+        let b = PokemonBelief::new(pack, &tpl, known_ability, known_item);
         self.species.push((name.to_string(), b));
         Some(self.species.len() - 1)
     }
@@ -1050,6 +1012,28 @@ mod fix200_belief_tests {
         let w = pb.pool_weights(&p, &tpl, &pool).to_vec();
         assert!(pb.dmg_obs.last().unwrap().other.electromorphosis_charged);
         assert!(w[1] > 0.9, "{:?}", w);
+    }
+
+    #[test]
+    fn 相手信念は登録構築の努力値を候補に足さない() {
+        let path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json");
+        let v0: serde_json::Value = serde_json::from_str(&std::fs::read_to_string(path).unwrap()).unwrap();
+        let mut v1 = v0.clone();
+        v1["registered_spreads"] = serde_json::json!({
+            "ガブリアス": [[{"H": 4, "A": 0, "B": 252, "C": 0, "D": 0, "S": 252}, "おくびょう"]]
+        });
+        let key = |p: &Pack| {
+            let mut ob = OpponentBelief::new("M-6");
+            let i = ob.ensure(p, "ガブリアス", None, None).unwrap();
+            let pb = &ob.species[i].1;
+            let c: Vec<_> = pb.cands.iter().map(|c| (ev_key(&c.ev), c.nature.clone())).collect();
+            (c, pb.prior.clone())
+        };
+        let (c0, p0) = key(&Pack::from_value(&v0));
+        let (c1, p1) = key(&Pack::from_value(&v1));
+        assert!(!c0.contains(&((4, 0, 252, 0, 0, 252), "おくびょう".to_string())));
+        assert_eq!(c0, c1);
+        assert_eq!(p0, p1);
     }
 
     #[test]

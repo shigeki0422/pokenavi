@@ -11,7 +11,7 @@ import os
 import sys
 
 # Pack::from_value が読むキーのうち、1v1 の実走に要るものだけ。
-# net(MCTSの評価関数) / usage(選出・提案) / registered_spreads(相手型の推定) は除く。
+# net(MCTSの評価関数) / usage(選出・提案) は除く。
 KEEP = [
     "header", "types", "type_chart", "nature_mods", "form_aliases", "region_prefixes",
     "move_master", "secondary_moves", "pokemon_base_stats", "pokemon_mega_stats",

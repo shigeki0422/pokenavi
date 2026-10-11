@@ -200,8 +200,6 @@ pub struct Pack {
     /// R4: 特性 sym -> 効果カテゴリのビット（features.py の ABILITY_CAT_BITS）
     pub abil_cat_bits: HashMap<Sym, u64>,
     pub n_abil_cats: usize,
-    /// R4: 登録テンプレートの実スプレッド（belief.registered_spreads_by_species）
-    pub registered_spreads: HashMap<String, Vec<(EvEntry, String)>>,
     /// メガ前の特性 {種族: (pick, 通常特性, メガ特性)}（simulator/data.py DataLoader.pre_mega_abilities）
     pub pre_mega: HashMap<String, (String, Vec<String>, Vec<String>)>,
     /// 型プール（_gen_type_pool.py の出力）。種族名 → 型まるごとの候補。
@@ -528,33 +526,6 @@ impl Pack {
             }
         }
 
-        // ---- R4: 登録スプレッド ----
-        let mut registered_spreads: HashMap<String, Vec<(EvEntry, String)>> = HashMap::new();
-        if let Some(rs) = v.get("registered_spreads") {
-            for (sp, arr) in rs.as_object().unwrap() {
-                let mut out = Vec::new();
-                for it in arr.as_array().unwrap() {
-                    let ev = &it[0];
-                    let nat = it[1].as_str().unwrap_or("").to_string();
-                    intern.intern(&nat);
-                    out.push((
-                        EvEntry {
-                            h: j_i(&ev["H"]).unwrap_or(0),
-                            a: j_i(&ev["A"]).unwrap_or(0),
-                            b: j_i(&ev["B"]).unwrap_or(0),
-                            c: j_i(&ev["C"]).unwrap_or(0),
-                            d: j_i(&ev["D"]).unwrap_or(0),
-                            s: j_i(&ev["S"]).unwrap_or(0),
-                            spread: "登録".to_string(),
-                            rate: 0.0,
-                        },
-                        nat,
-                    ));
-                }
-                registered_spreads.insert(sp.clone(), out);
-            }
-        }
-
         let mut pre_mega: HashMap<String, (String, Vec<String>, Vec<String>)> = HashMap::new();
         if let Some(pm) = v.get("pre_mega").and_then(|x| x.as_object()) {
             let strs = |x: &Value| -> Vec<String> {
@@ -644,7 +615,6 @@ impl Pack {
             skin,
             abil_cat_bits,
             n_abil_cats,
-            registered_spreads,
             pre_mega,
             build_pool,
             net,

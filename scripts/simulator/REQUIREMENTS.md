@@ -1414,6 +1414,11 @@ PIMC（決定化ごとに別の木 E=1/4/8/16）と MAPLE（k=5）はいずれ�
   （USAGE_SEASON の最新クロールの順位）、それも無ければ 9999（圏外）。spec の括弧形（パルデアケンタロス(炎)/(水)/(闘)）は型プール・DB のコロン形（ケンタロス:炎）でも引く。
   以前は既定 1.0＝1位扱いで、md→型プールの切替（10/08）以降、パルデアケンタロス入りの候補と学習主役の「ダイケンキ」3党の使用率が1位扱いになっていた
   （本番モデルでの採点値への影響は約 −0.002＝usage_sum の重み 0.0007 × 約3σ）。テスト: test_all 50。
+- **datapack の鮮度の検出**（2026-10-10、`datapack_export.source_hashes` の `db_tables`）: 登録テンプレート（`templates`＝`registered_spreads` の素材）と
+  種族の特性表（`pokemon_species_abilities`＝`pre_mega` の素材）も含める。以前は含めておらず、10/10 に GameWith 上位構築を templates に登録した後も
+  datapack の `registered_spreads` が古いまま（131種→143種）検出されなかった（Python の belief は新しい登録スプレッド、Rust は古い登録スプレッドで対戦する。
+  R4-G3 の記録（10/09）との乖離は mc_00 で結果 5/294（E1/E2 の仕様変更）→ 再出力後 27/294（登録スプレッド）。記録を採り直して乖離0）。テスト: test_all 49。
+  2026-10-11 に `registered_spreads` 自体を廃止したため、`templates` は datapack の素材から外した（行を足しても `db_tables` も中身も変わらないことを test_all 49 で確認）。
 - **2段階採点は試して外した（2026-10-01）**: 選出の高速化（4-1h）で本採点が候補1件 約7ms になり、短縮効果が小さいため全件本採点に戻した。Rust の live の採点器スロット（`slot` 引数）は残っている。
 - **残り枠の生成（2026-10-01 夜、`_product3_complete.complete_core`、`GEN_MODE=legacy` で旧方式）**: 種の重み＝使用率ベースの重み
   （同居70%＋使用率30%）×（その種の型確率＝`PartyGen.build_weight`（型プールは型の重み（4-1l）、md は（持ち物使用率+1）×技構成使用率）を種内で正規化したもののうち、今の条件＝使用済みの持ち物・
@@ -1607,7 +1612,14 @@ AI（`ai.py`）は `my_side.opp_view` の既知情報のみを参照して意思
 
 - **技/持ち物/特性**: 使用率DB（`top_moves`/`top_items`/`top_abilities`）を事前分布とし、`opp_view` の開示（`observe_disclosure`）で確定。ダメージ計算は使わない（ユーザー要件「使用率や組み合わせから確率的に警戒」）。`prob_has_move`/`prob_item`/`prob_ability` で参照。
 - **EV/性格**: 使用率の `top_evs × top_natures` を候補スプレッドとして列挙（各候補は具体的な防御体を構築）。`observe_damage` で、攻撃側を既知としてダメージ式を逆算し、16段階の乱数ロールで観測割合を再現できる割合を尤度としてベイズ更新。再現不可な観測（マルチヒット・急所等のモデル外）は安全にスキップ。`map_spread`/`spread_posterior`/`expected_stat` で参照。
-- **登録スプレッド混入（発展②）**: `OpponentBelief(use_registered=True, 既定)` は `m1_party` の実スプレッド（種族別）を候補に追加する（`registered_spreads_by_species`、キャッシュ付）。このメタは登録パーティ同士のため真の型が候補に入り、ダメージ観測で尤度が集中する。耐久(防御/特防)推定の事後誤差が事前比 約65%改善（混入なしは約10%）。
+- **相手信念は登録構築を使わない**（2026-10-11 廃止）: 旧「登録スプレッド混入（発展②）」＝ `templates` の全行（シーズン無関係）の努力値・性格を
+  努力値・性格の候補 `cands` に平均の重みで足す仕組み（M-1〜M-2 の「相手は登録パーティ」前提の名残。`registered_spreads_by_species`／`PokemonBelief(extra_spreads=)`／
+  Rust `pack.registered_spreads`／datapack の `registered_spreads`）を Python・Rust とも削除した。10/10 に GameWith の M-6 上位121構築を `templates` に登録したことで、
+  対戦AIが登録構築の型を知っている状態になるため。相手の型の推定は型プール（`build_pool`、JOINT_BUILD 既定ON）が正本で、`cands` は型プールに合う型が無いときの代替にだけ使う。
+  `OpponentBelief(use_registered=False)` は型プールを外す意味だけが残る。
+  直接対決（Rust MCTS@400・az_net_np・selector_m6e・learnedK8、guide_pool_m6 の2000対×先後、外す前＝GameWith 登録前の131種の登録スプレッド）:
+  外した版 49.98%（SE 0.03・下限95% −0.07pt）。結果が変わった対は2000対中1対のみ＝強さへの影響なし。
+  テスト: test_all「相手信念: templates に行を足しても…」・49、cargo `相手信念は登録構築の努力値を候補に足さない`。
 - **統合**: `BattleSide.belief`（任意）に `OpponentBelief` を付与すると、被ダメージ確定点（`on_hp_change` と同じ箇所）で自動的に `observe_damage` が呼ばれEV/性格を推定。`belief` は対戦状態ではなく意思決定者の知識のため `Battle.clone()`（ロールアウト）には引き継がれない（`__deepcopy__`→None）。
 - **参照シーズン（`BELIEF_SEASON`）**: 事前分布を引くシーズン。既定は env `BELIEF_SEASON`、未設定なら `"M-2"`。明示引数 `OpponentBelief(loader, season)` は env より優先。
 - **欠損時フォールバック（型リーク防止・2026-09-14）**: 指定シーズンに使用率行が無い種は、行のある最新シーズンへ自動フォールバックする（`_tpl_with_prior`。Rust `belief.rs` も同一）。事前分布を空のままにすると `_determinize` が falsy を上書きしない実装のせいで**相手の真の持ち物・特性・技が探索に残る＝型リーク**になるため、空の事前分布は許さない。`test_all.py` 節26 が M-6 上位40種で不変条件を検査する。

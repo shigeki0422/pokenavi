@@ -136,8 +136,7 @@ class PokemonBelief:
     """相手1体の型・技・持ち物・特性の信念。"""
 
     def __init__(self, tpl, loader: DataLoader, season: Optional[str] = None,
-                 known_ability: Optional[str] = None, known_item: Optional[str] = None,
-                 extra_spreads: Optional[list] = None):
+                 known_ability: Optional[str] = None, known_item: Optional[str] = None):
         season = season or _default_belief_season()
         self.name = tpl.name
         self.tpl = tpl
@@ -184,24 +183,6 @@ class PokemonBelief:
                     "defender": defender,
                 })
                 priors.append(max(er, 1e-9) * max(nr, 1e-9))
-
-        # 登録パーティの実スプレッドを候補に追加（このメタは登録パーティ同士のため、
-        # 真の型を候補に含めることで推定の的中・耐久較正を強化する）。
-        if extra_spreads:
-            keys = {(tuple(c["ev"].get(k, 0) for k in "HABCDS"), c["nature"]) for c in self.cands}
-            avg = (sum(priors) / len(priors)) if priors else 1.0
-            for ev, nat in extra_spreads:
-                key = (tuple(ev.get(k, 0) for k in "HABCDS"), nat)
-                if key in keys:
-                    continue
-                keys.add(key)
-                defender = build_from_template(
-                    tpl, loader, randomize=False,
-                    override_evs={k: ev.get(k, 0) for k in ("H", "A", "B", "C", "D", "S")},
-                    override_nature=nat, override_ability=known_ability, override_item=known_item)
-                self.cands.append({"ev": dict(ev), "nature": nat,
-                                   "label": f"{ev.get('spread', '登録')}/{nat}", "defender": defender})
-                priors.append(avg)
 
         s = sum(priors) or 1.0
         self.prior = [p / s for p in priors]
@@ -607,39 +588,13 @@ class PokemonBelief:
         return self.ability_prior.get(ability_name, 0.0)
 
 
-_REG_SPREAD_CACHE: Dict[int, Dict[str, list]] = {}
-
-
-def registered_spreads_by_species(loader: DataLoader) -> Dict[str, list]:
-    """登録テンプレート（UIと同一源）から種族ごとの実スプレッド一覧
-    [(ev_dict, nature), ...] を取得（重複除去・キャッシュ）。"""
-    ck = id(loader)
-    if ck in _REG_SPREAD_CACHE:
-        return _REG_SPREAD_CACHE[ck]
-    from .env import load_templates
-    out: Dict[str, list] = {}
-    seen: Dict[str, set] = {}
-    for party in load_templates():
-        for spec in party.specs:
-            ev = {k: spec["evs"].get(k, 0) for k in "HABCDS"}
-            ev["spread"] = "登録"
-            key = (tuple(ev[k] for k in "HABCDS"), spec["nature"])
-            s = seen.setdefault(spec["name"], set())
-            if key in s:
-                continue
-            s.add(key)
-            out.setdefault(spec["name"], []).append((ev, spec["nature"]))
-    _REG_SPREAD_CACHE[ck] = out
-    return out
-
-
 _REG_BUILD_CACHE: Dict[int, Dict[str, list]] = {}
 
 
 def registered_builds_by_species(loader: DataLoader) -> Dict[str, list]:
     """登録テンプレートから種族ごとの**型まるごと**の一覧を取得する。
 
-    `registered_spreads_by_species` は努力値と性格しか取らず、技・持ち物との同時性を捨てていた。
+    努力値と性格だけを周辺分布から引くと、技・持ち物との同時性を捨てることになる。
     技4本を周辺分布から独立に引くと、実在しない組み合わせができる（実測: 事前のみで全一致7%）。
     型単位で引けば組み合わせが保たれ、技が1本判明しただけで持ち物や努力値の候補まで絞れる。
     """
@@ -691,8 +646,6 @@ class OpponentBelief:
         self.loader = loader
         self.season = season or _default_belief_season()
         self.species: Dict[str, PokemonBelief] = {}
-        # このメタ（登録パーティ同士）では真の型を候補に含めて推定精度を上げる
-        self._reg = registered_spreads_by_species(loader) if use_registered else {}
         # 型まるごとの候補（datapack の build_pool＝型プール）。決定化を型単位のサンプリングにする。
         # 既定ON（2026-09-28。Rust A/B 4000戦×3プールで +2.5〜3.5pt・z≥3.1）。JOINT_BUILD=0 で旧挙動（要素ごと）
         self.joint = os.environ.get("JOINT_BUILD", "1") != "0"
@@ -733,8 +686,7 @@ class OpponentBelief:
                 return None
             pb = PokemonBelief(
                 tpl, self.loader, season,
-                known_ability=known_ability, known_item=known_item,
-                extra_spreads=self._reg.get(name))
+                known_ability=known_ability, known_item=known_item)
             pb.builds = self._builds.get(name, [])
             if getattr(self, "_map_rate", None) is not None:
                 pb.map_rate = self._map_rate

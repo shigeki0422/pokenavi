@@ -63,6 +63,11 @@ def source_hashes(con=None):
                 f"SELECT * FROM {tb} WHERE rule='single' AND season IN ({qs}) "
                 f"ORDER BY season, pokemon, crawled_date, rank, rowid", SEASONS):
             d.update(repr(tuple(r)).encode())
+    # pre_mega（pokemon_species_abilities）も datapack の素材。templates は素材ではない（相手信念に登録構築を使わない）
+    for tb, order in (("pokemon_species_abilities", "pokemon_name, slot"),):
+        d.update(tb.encode())
+        for r in con.execute(f"SELECT * FROM {tb} ORDER BY {order}"):
+            d.update(repr(tuple(r)).encode())
     if own:
         con.close()
     npath = os.path.join(ROOT, "az_net_np.json")
@@ -196,11 +201,7 @@ def export():
                 build_pool[_r["species"]] = out
         print(f"build_pool: {len(build_pool)}種")
 
-    # ---- 登録テンプレートの実スプレッド（belief.registered_spreads_by_species） ----
-    from simulator.belief import registered_spreads_by_species  # noqa: E402
     _ldr = DataLoader()
-    reg = {k: [[{kk: ev[kk] for kk in "HABCDS"}, nat] for ev, nat in v]
-           for k, v in registered_spreads_by_species(_ldr).items()}
 
     pack = {
         "header": {"version": 2, "seasons": SEASONS, "topn": TOPN, "content_hash": None},
@@ -217,7 +218,6 @@ def export():
         "usage": usage,
         "net": net,
         "ability_cats": abil_cats,
-        "registered_spreads": reg,
         "build_pool": build_pool,
         # メガ前の特性（simulator/data.py DataLoader.pre_mega_abilities と同じ規則。Rust の build_poke が使う）
         "pre_mega": {k: {"pick": v["pick"], "legal": v["legal"], "mega": v["mega"]}
@@ -238,7 +238,7 @@ def export():
     print(f"wrote {OUT} bytes={size} hash={pack['header']['content_hash']}")
     print(f"file_sha256={file_hash}")
     print(f"source_hashes={pack['header']['source_hashes']}")
-    print(f"abil_cats={len(abil_cats['bits'])}x{len(abil_cats['names'])} reg_species={len(reg)}")
+    print(f"abil_cats={len(abil_cats['bits'])}x{len(abil_cats['names'])}")
     print(f"moves={len(moves)} secondary={len(secondary)} base={len(base)} "
           f"mega={len(mega)} usage_keys={len(usage)} net={'yes' if net else 'no'}")
 

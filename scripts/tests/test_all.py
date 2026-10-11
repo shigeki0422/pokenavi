@@ -2955,23 +2955,34 @@ _mu_s = solve_matchup(_parties[0], _parties[1], dl, k=2, samples=1, seed=0,
                       ai_factory=lambda ld: SearchAI(ld, rollouts=2, depth=5, seed=0), with_belief=True)
 check("選出均衡(SearchAI行動方策) 解が分布", near(sum(_mu_s['x']), 1.0) and 0.0 <= _mu_s['value'] <= 1.0)
 
-# ── 発展② beliefに登録パーティ実スプレッドを混ぜる ──
-from simulator.belief import registered_spreads_by_species
-_reg = registered_spreads_by_species(dl)
-check("登録スプレッド取得", len(_reg) > 0 and all(isinstance(v, list) and v for v in _reg.values()))
-# 登録スプレッドを持つ種族で、混入により候補数が増える
-_sp_name = next((n for n in _reg if dl.get_pokemon_template(n)), None)
-_tpl_sp = dl.get_pokemon_template(_sp_name)
-_b_plain = PokemonBelief(_tpl_sp, dl)
-_b_reg = PokemonBelief(_tpl_sp, dl, extra_spreads=_reg[_sp_name])
-check("登録スプレッド混入で候補が増加または同等", len(_b_reg.cands) >= len(_b_plain.cands))
-# 真の登録スプレッドが候補に含まれる（混入版）
-_true_reg_ev, _true_reg_nat = _reg[_sp_name][0]
-check("登録スプレッド混入で真の型が候補入り",
-      _b_reg.prob_of_spread(_true_reg_ev, _true_reg_nat) > 0.0)
-# OpponentBelief は既定で登録スプレッドを使い、無効化も可能
-check("OpponentBelief 既定で登録スプレッド有効", len(OpponentBelief(dl)._reg) > 0)
-check("OpponentBelief use_registered=Falseで無効", OpponentBelief(dl, use_registered=False)._reg == {})
+# ── 相手信念は登録構築（templates）を使わない（2026-10-11。型の候補は型プールが正本） ──
+import simulator.env as _env_rg
+from simulator.data import DataLoader as _DL_rg
+_orig_lt_rg = _env_rg.load_templates
+_sp_rg = "ガブリアス"
+_fake_ev_rg = {"H": 4, "A": 0, "B": 252, "C": 0, "D": 0, "S": 252}
+_fake_key_rg = (tuple(_fake_ev_rg[k] for k in "HABCDS"), "おくびょう")
+
+
+def _cands_rg(ob):
+    pb = ob.ensure(_sp_rg)
+    return [(tuple(c["ev"].get(k, 0) for k in "HABCDS"), c["nature"]) for c in pb.cands], list(pb.prior)
+
+
+_ld0_rg, _ld1_rg = _DL_rg(), _DL_rg()
+_c0_rg = _cands_rg(OpponentBelief(_ld0_rg))
+_fake_rg = _env_rg.RegisteredParty(party_id=999999, label="t", specs=[{
+    "name": _sp_rg, "item": None, "nature": "おくびょう", "ability": None, "moves": ["じしん"], "evs": dict(_fake_ev_rg)}])
+_env_rg.load_templates = lambda loader=None: _orig_lt_rg(loader) + [_fake_rg]
+try:
+    _c1_rg = _cands_rg(OpponentBelief(_ld1_rg))
+finally:
+    _env_rg.load_templates = _orig_lt_rg
+check("相手信念: 追加する登録構築の努力値・性格は元の候補に無い（テストの前提）", _fake_key_rg not in _c0_rg[0])
+check("相手信念: templates に行を足しても努力値・性格の候補と事前確率が変わらない", _c0_rg == _c1_rg)
+check("相手信念: use_registered=False は型プールを外す（既定は型プールあり）",
+      OpponentBelief(dl, use_registered=False)._builds == {}
+      and (__import__("os").environ.get("JOINT_BUILD", "1") == "0" or len(OpponentBelief(dl)._builds) > 0))
 
 # ── 発展③ ロールアウト方策にSearchAI（再帰探索, 2段ネスト） ──
 from simulator.search_ai import make_nested_search
@@ -10036,6 +10047,57 @@ try:
     _t48_foreign_stone_and_immune()
 except Exception as _e48:
     check("48 他の種のメガ石・0倍の技のテストが実行できる", False, f"{type(_e48).__name__}: {_e48}")
+
+
+def _t49_datapack_source_templates():
+    import os as _o49
+    import sqlite3 as _s49
+    import sys as _y49
+    _sd = _o49.path.dirname(_o49.path.dirname(_o49.path.abspath(__file__)))
+    _y49.path.insert(0, _o49.path.join(_sd, "_rust_engine"))
+    from datapack_export import source_hashes as _sh49
+    _src = _s49.connect(_o49.path.join(_sd, "pokenavi.db"))
+    _mem = _s49.connect(":memory:")
+    _src.backup(_mem)
+    _src.close()
+    _h0 = _sh49(_mem)["db_tables"]
+    _mem.execute("INSERT INTO templates (party_id, label, slot, pokemon, nature, ev_h, ev_b, ev_s) "
+                 "VALUES (999999, 't', 0, 'ガブリアス', 'おくびょう', 4, 252, 252)")
+    _mem.execute("UPDATE templates SET ev_h = ev_h + 1 WHERE id = (SELECT MIN(id) FROM templates)")
+    _h1 = _sh49(_mem)["db_tables"]
+    _mem.execute("UPDATE pokemon_species_abilities SET is_hidden = 1 - is_hidden "
+                 "WHERE rowid = (SELECT MIN(rowid) FROM pokemon_species_abilities)")
+    _h2 = _sh49(_mem)["db_tables"]
+    _mem.close()
+    check("49 datapack の鮮度: 登録テンプレート（templates）は datapack の素材ではない（行を足しても db_tables のダイジェストが変わらない）", _h0 == _h1)
+    check("49 datapack の鮮度: 種族の特性表（pre_mega の素材）が変わると db_tables のダイジェストが変わる", _h1 != _h2)
+    import tempfile as _tf49
+    import json as _j49
+    import datapack_export as _dx49
+    import simulator.env as _env49
+    _orig_lt49, _orig_out49 = _env49.load_templates, _dx49.OUT
+    _fake49 = _env49.RegisteredParty(party_id=999999, label="t", specs=[{
+        "name": "ガブリアス", "item": None, "nature": "おくびょう", "ability": None, "moves": ["じしん"],
+        "evs": {"H": 4, "A": 0, "B": 252, "C": 0, "D": 0, "S": 252}}])
+    _hs49 = []
+    with _tf49.TemporaryDirectory() as _td49:
+        try:
+            for _k49, _lt49 in enumerate((_orig_lt49, lambda loader=None: _orig_lt49(loader) + [_fake49])):
+                _env49.load_templates = _lt49
+                _dx49.OUT = _o49.path.join(_td49, f"dp{_k49}.json")
+                _dx49.export()
+                _d49 = _j49.load(open(_dx49.OUT))
+                _hs49.append((_d49["header"]["content_hash"], "registered_spreads" in _d49))
+        finally:
+            _env49.load_templates, _dx49.OUT = _orig_lt49, _orig_out49
+    check("49 datapack: templates に構築を足しても中身（content_hash）が変わらず、registered_spreads を含まない",
+          _hs49[0][0] == _hs49[1][0] and not _hs49[0][1] and not _hs49[1][1], str(_hs49))
+
+
+try:
+    _t49_datapack_source_templates()
+except Exception as _e49:
+    check("49 datapack の鮮度のテストが実行できる", False, f"{type(_e49).__name__}: {_e49}")
 
 
 def _t50_usage_sum_unknown_species():
