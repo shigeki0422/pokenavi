@@ -1419,6 +1419,11 @@ PIMC（決定化ごとに別の木 E=1/4/8/16）と MAPLE（k=5）はいずれ�
   datapack の `registered_spreads` が古いまま（131種→143種）検出されなかった（Python の belief は新しい登録スプレッド、Rust は古い登録スプレッドで対戦する。
   R4-G3 の記録（10/09）との乖離は mc_00 で結果 5/294（E1/E2 の仕様変更）→ 再出力後 27/294（登録スプレッド）。記録を採り直して乖離0）。テスト: test_all 49。
   2026-10-11 に `registered_spreads` 自体を廃止したため、`templates` は datapack の素材から外した（行を足しても `db_tables` も中身も変わらないことを test_all 49 で確認）。
+  2026-10-11: 使用率表（moves/items/abilities/natures/evs）は export が実際に読む行だけをハッシュする＝`SEASONS`（M-2〜M-6）のシーズン・
+  種ごとの最新日（`pokemon_moves` 基準）・rank 順の上位 `TOPN`。加えて `usage_names_in_moves`（全シーズンの `pokemon_moves` の種名）と
+  `pre_mega` の素材（`POOL_SEASON` の特性表の種ごとの最新日＋`pokemon_species_abilities` 全体）。他シーズン（M-7）の行・古い日の行を足しても
+  stale にならず、シーズンの最新日の行や新しい種名が変われば stale になる（test_all 49b）。同日の 26n の FAIL は M-7 の行ではなく、
+  M-3/M-6 のルガルガン（フォルムの誤ラベル）を DB ごと直したことによる本物の stale（再出力で usage の4キーが変化）。
 - **2段階採点は試して外した（2026-10-01）**: 選出の高速化（4-1h）で本採点が候補1件 約7ms になり、短縮効果が小さいため全件本採点に戻した。Rust の live の採点器スロット（`slot` 引数）は残っている。
 - **残り枠の生成（2026-10-01 夜、`_product3_complete.complete_core`、`GEN_MODE=legacy` で旧方式）**: 種の重み＝使用率ベースの重み
   （同居70%＋使用率30%）×（その種の型確率＝`PartyGen.build_weight`（型プールは型の重み（4-1l）、md は（持ち物使用率+1）×技構成使用率）を種内で正規化したもののうち、今の条件＝使用済みの持ち物・

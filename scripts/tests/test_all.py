@@ -4773,25 +4773,58 @@ if _pg19:
     _hp19 = _gbd._pool_groups().get("カバルドン")
     if _hp19:
         _vh19 = _gbd.build_variants(_con19, "カバルドン", _tpl19, _nms19)
-        check("型プールの種: 系統が1つでも大きい系統を分けて3型にする（カバルドン）",
+        check("型プールの種: 割合10%以上の系統が3つ未満なら大きい系統を分けて3型にする（カバルドン）",
               len(_vh19) == 3 and len({b["arch"] for b in _vh19}) == 3 and all(b["share"] >= 10 for b in _vh19),
               str([(b["arch"], b["share"]) for b in _vh19]))
         check("型プールの種: 分けた型の名前は系統名に入っている持ち物を括弧の中で繰り返さない（カバルドン）",
               all("（" not in b["arch"] or "オボンのみ" not in b["arch"].split("（", 1)[1] for b in _vh19),
               str([b["arch"] for b in _vh19]))
-        check("型プールの種: 分けた型に系統の番号と枝番が付く（カバルドン）",
-              [(b["archNo"], b["archSub"]) for b in _vh19] == [(1, "a"), (1, "b"), (1, "c")],
-              str([(b["archNo"], b["archSub"]) for b in _vh19]))
-    for _sp19 in ("プクリン", "ヌメルゴン"):
-        _g19 = _gbd._pool_groups().get(_sp19)
-        if not _g19:
+    # 分割の規則は合成した系統で確かめる（実データの種は版ごとに系統の数が変わり、分けられない版もある）
+    def _b19(mv, w, item="オボンのみ"):
+        return {"item": item, "nature": "わんぱく", "ability": "すなおこし", "moves": mv,
+                "ev": [32, 0, 32, 0, 2, 0], "side": "phys", "weight": w}
+    _X19 = ["あくび", "じしん", "なまける", "ステルスロック"]
+    _Y19 = ["あくび", "じしん", "ふきとばし", "ステルスロック"]
+    _Z19 = ["あくび", "じしん", "まもる", "ステルスロック"]
+    _K19 = ["あくび", "こおりのキバ", "じしん", "なまける"]
+    _pgA19 = {"rank": 1, "groups": [
+        {"name": "ステルスロック", "kind": "", "share": 0.6, "axis": "", "builds": [_b19(_X19, 0.6), _b19(_Y19, 0.35), _b19(_Z19, 0.05)]},
+        {"name": "こおりのキバ", "kind": "", "share": 0.35, "axis": "", "builds": [_b19(_K19, 1.0, "ゴツゴツメット")]},
+        {"name": "まもる", "kind": "", "share": 0.05, "axis": "", "builds": [_b19(_Z19, 1.0)]}]}
+    _vA19 = _gbd._pool_variants(_con19, "カバルドン", _tpl19["カバルドン"], _pgA19, _nms19, 3)
+    check("型プールの種: 系統が2つなら大きい系統を分け、並びは割合の降順・分割片は元の系統の番号＋枝番（合成）",
+          [(b["archNo"], b["archSub"], b["share"]) for b in _vA19] == [(1, "a", 37.9), (2, "", 35.0), (1, "b", 22.1)],
+          str([(b["archNo"], b["archSub"], b["share"]) for b in _vA19]))
+    _pgB19 = {"rank": 1, "groups": [
+        {"name": "ステルスロック", "kind": "", "share": 0.95, "axis": "", "builds": [_b19(_X19, 0.5), _b19(_Y19, 0.3), _b19(_Z19, 0.2)]},
+        {"name": "まもる", "kind": "", "share": 0.05, "axis": "", "builds": [_b19(_Z19, 1.0)]}]}
+    _vB19 = _gbd._pool_variants(_con19, "カバルドン", _tpl19["カバルドン"], _pgB19, _nms19, 3)
+    check("型プールの種: 系統が1つなら3つに分けて 1a/1b/1c・分割片の合計＝系統の割合（合成）",
+          [(b["archNo"], b["archSub"]) for b in _vB19] == [(1, "a"), (1, "b"), (1, "c")]
+          and abs(sum(b["share"] for b in _vB19) - 95.0) <= 0.15,
+          str([(b["archNo"], b["archSub"], b["share"]) for b in _vB19]))
+    # 実データ（page の版の全種）で同じ規則: 並びは降順・分割片の合計＝系統の割合（各片は0.1%に丸めるので片の数×0.05まで）・枝番は降順に a, b…
+    _nsplit19, _bad19 = 0, []
+    for _sp19, _g19 in _gbd._pool_groups().items():
+        if _sp19 not in _tpl19:
             continue
         _vs19 = _gbd.build_variants(_con19, _sp19, _tpl19, _nms19)
-        _top_g19 = max(_g19["groups"], key=lambda g: g["share"])
-        _sum19 = sum(b["share"] for b in _vs19 if b["archNo"] == 1)
-        check(f"型プールの種: 分けた型の割合の合計が系統の割合（{_sp19}）",
-              len([b for b in _vs19 if b["archNo"] == 1]) >= 2 and abs(_sum19 - _top_g19["share"] * 100) <= 0.2,
-              f"{_sum19} vs {_top_g19['share'] * 100}: {[(b['arch'], b['share']) for b in _vs19]}")
+        _gs19 = sorted(_g19["groups"], key=lambda g: -g["share"])
+        if [b["share"] for b in _vs19] != sorted((b["share"] for b in _vs19), reverse=True):
+            _bad19.append((_sp19, "並び"))
+        for _no19 in {b["archNo"] for b in _vs19}:
+            _pc19 = [b for b in _vs19 if b["archNo"] == _no19]
+            _want19 = _gs19[_no19 - 1]["share"] * 100
+            if len(_pc19) == 1:
+                if _pc19[0]["archSub"] != "" or abs(_pc19[0]["share"] - _want19) > 0.05 + 1e-9:
+                    _bad19.append((_sp19, _no19, "単独"))
+                continue
+            _nsplit19 += 1
+            if [b["archSub"] for b in _pc19] != list("abcdefghij"[:len(_pc19)]) \
+                    or abs(sum(b["share"] for b in _pc19) - _want19) > 0.05 * len(_pc19) + 1e-9:
+                _bad19.append((_sp19, _no19, [(b["archSub"], b["share"]) for b in _pc19], round(_want19, 2)))
+    check("型プールの種: 全種で 並びは割合の降順・分割片の合計＝系統の割合・枝番は a, b…（分けた系統が1つ以上ある）",
+          _nsplit19 > 0 and not _bad19, f"split={_nsplit19} bad={_bad19[:5]}")
     check("型プールの種: 型に系統の割合(%)が付く", all(b.get("share", 0) > 0 for b in _vg19))
 # 型プールの種は代表型の性格をそのまま使う（REQUIREMENTS 5-10）ので、性格をずらす処理の確認は型プールに無い種のときだけ
 if "ニンフィア" not in _gbd._pool_groups():
@@ -10170,6 +10203,51 @@ try:
     _t49_datapack_source_templates()
 except Exception as _e49:
     check("49 datapack の鮮度のテストが実行できる", False, f"{type(_e49).__name__}: {_e49}")
+
+
+def _t49b_datapack_source_season_rows():
+    import os as _o
+    import sqlite3 as _s
+    import sys as _y
+    _sd = _o.path.dirname(_o.path.dirname(_o.path.abspath(__file__)))
+    _y.path.insert(0, _o.path.join(_sd, "_rust_engine"))
+    from datapack_export import source_hashes as _sh, SEASONS as _SS
+    _src = _s.connect(_o.path.join(_sd, "pokenavi.db"))
+    _m = _s.connect(":memory:")
+    _src.backup(_m)
+    _src.close()
+    _other = "M-99"
+    assert _other not in _SS
+    _last = _m.execute("SELECT MAX(crawled_date) FROM pokemon_moves WHERE season='M-6' AND rule='single' "
+                       "AND pokemon='ガブリアス'").fetchone()[0]
+    _cols = "season, rule, pokemon, rank, move, usage_rate, source, crawled_date, crawled_at"
+
+    def _h():
+        return _sh(_m)["db_tables"]
+    _h0 = _h()
+    _m.execute(f"INSERT INTO pokemon_moves ({_cols}) SELECT '{_other}', rule, pokemon, rank, move, usage_rate, source, "
+               f"crawled_date, crawled_at FROM pokemon_moves WHERE season='M-6' AND pokemon='ガブリアス' AND crawled_date=?", (_last,))
+    _m.execute("INSERT INTO pokemon_items (season, rule, pokemon, rank, item, usage_rate, source, crawled_date, crawled_at) "
+               f"VALUES ('{_other}', 'single', 'ガブリアス', 1, 'こだわりスカーフ', 50.0, 't', '2099-01-01', 't')")
+    _h1 = _h()
+    _m.execute(f"INSERT INTO pokemon_moves ({_cols}) VALUES ('M-6', 'single', 'ガブリアス', 1, 'はねる', 99.0, 't', '2000-01-01', 't')")
+    _h2 = _h()
+    _m.execute("UPDATE pokemon_moves SET usage_rate = usage_rate + 0.1 WHERE season='M-6' AND pokemon='ガブリアス' "
+               "AND crawled_date=? AND rank=1", (_last,))
+    _h3 = _h()
+    _m.execute(f"INSERT INTO pokemon_moves ({_cols}) VALUES ('{_other}', 'single', 'テスト新種', 1, 'はねる', 50.0, 't', '2099-01-01', 't')")
+    _h4 = _h()
+    _m.close()
+    check("49b datapack の鮮度: 他シーズンの使用率の行を足しても db_tables が変わらない（日々のクロールで Rust が無効にならない）", _h0 == _h1)
+    check("49b datapack の鮮度: datapack が読まない行（シーズン内の最新でない日）を足しても db_tables が変わらない", _h1 == _h2)
+    check("49b datapack の鮮度: シーズンの最新日の行が変わると db_tables が変わる", _h2 != _h3)
+    check("49b datapack の鮮度: 新しい種の名前（usage_names_in_moves は全シーズンから作る）が増えると db_tables が変わる", _h3 != _h4)
+
+
+try:
+    _t49b_datapack_source_season_rows()
+except Exception as _e49b:
+    check("49b datapack の鮮度（シーズンの行）のテストが実行できる", False, f"{type(_e49b).__name__}: {_e49b}")
 
 
 def _t50_usage_sum_unknown_species():

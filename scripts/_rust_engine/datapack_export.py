@@ -56,18 +56,36 @@ def source_hashes(con=None):
     for tb in ("move_master", "pokemon_base_stats", "pokemon_mega_stats"):
         for r in con.execute(f"SELECT * FROM {tb} ORDER BY id"):
             d.update(repr(tuple(r)).encode())
+    # 使用率表は export が読む行（SEASONS のシーズン・種ごとの最新日（pokemon_moves 基準）・rank 順の上位 TOPN）だけを入れる。
+    # 他シーズンの行や古い日の行で stale にすると、日々のクロールのたびに Rust が無効になる。
     qs = ",".join("?" * len(SEASONS))
-    for tb in ("pokemon_moves", "pokemon_items", "pokemon_abilities",
-               "pokemon_natures", "pokemon_evs"):
-        for r in con.execute(
-                f"SELECT * FROM {tb} WHERE rule='single' AND season IN ({qs}) "
-                f"ORDER BY season, pokemon, crawled_date, rank, rowid", SEASONS):
-            d.update(repr(tuple(r)).encode())
-    # pre_mega（pokemon_species_abilities）も datapack の素材。templates は素材ではない（相手信念に登録構築を使わない）
-    for tb, order in (("pokemon_species_abilities", "pokemon_name, slot"),):
+    for tb, k in (("pokemon_moves", "moves"), ("pokemon_items", "items"), ("pokemon_abilities", "abilities"),
+                  ("pokemon_natures", "natures"), ("pokemon_evs", "evs")):
         d.update(tb.encode())
-        for r in con.execute(f"SELECT * FROM {tb} ORDER BY {order}"):
+        for r in con.execute(
+                f"SELECT * FROM (SELECT t.*, ROW_NUMBER() OVER (PARTITION BY t.season, t.pokemon "
+                f"ORDER BY t.rank) AS _rn FROM {tb} t JOIN (SELECT season, pokemon, MAX(crawled_date) AS cd "
+                f"FROM pokemon_moves WHERE rule='single' AND season IN ({qs}) GROUP BY season, pokemon) m "
+                f"ON t.season=m.season AND t.pokemon=m.pokemon AND t.crawled_date=m.cd "
+                f"WHERE t.rule='single') WHERE _rn<=? ORDER BY season, pokemon, _rn",
+                (*SEASONS, TOPN[k])):
             d.update(repr(tuple(r)).encode())
+    d.update(b"usage_names_in_moves")
+    for (p,) in con.execute("SELECT DISTINCT pokemon FROM pokemon_moves WHERE rule='single' ORDER BY pokemon"):
+        d.update(p.encode() + b"\n")
+    # pre_mega（simulator/data.py pre_mega_abilities）: 種族の特性表（全体）と POOL_SEASON の特性表（種ごとの最新日）。templates は素材ではない
+    d.update(b"pokemon_species_abilities")
+    for r in con.execute("SELECT * FROM pokemon_species_abilities ORDER BY pokemon_name, slot"):
+        d.update(repr(tuple(r)).encode())
+    d.update(b"pre_mega")
+    for r in con.execute(
+            "SELECT a.pokemon, a.ability, a.usage_rate FROM pokemon_abilities a JOIN "
+            "(SELECT pokemon, MAX(crawled_date) AS cd FROM pokemon_abilities WHERE season=? GROUP BY pokemon) m "
+            "ON a.pokemon=m.pokemon AND a.crawled_date=m.cd WHERE a.season=? "
+            "AND a.pokemon IN (SELECT base_pokemon_jp FROM pokemon_mega_stats) "
+            "ORDER BY a.pokemon, a.usage_rate DESC, a.ability",
+            (os.environ.get("POOL_SEASON", "M-6"),) * 2):
+        d.update(repr(tuple(r)).encode())
     if own:
         con.close()
     npath = os.path.join(ROOT, "az_net_np.json")
