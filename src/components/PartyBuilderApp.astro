@@ -2049,12 +2049,14 @@ const I18N = I18N_ALL[lang];
     document.getElementById('pb-p-new').addEventListener('click', () => {
       if (renamingParty) return;
       createParty(store, I18N.newPartyName(store.parties.length + 1));
+      track('pb_party', { action: 'new', parties: store.parties.length });
       resetPartyUiState();
       render();
     });
     document.getElementById('pb-p-dup').addEventListener('click', () => {
       if (!p || renamingParty) return;
       duplicateParty(store, p.id, I18N.partyCopyName(p.name));
+      track('pb_party', { action: 'dup', parties: store.parties.length });
       resetPartyUiState();
       render();
     });
@@ -2067,11 +2069,12 @@ const I18N = I18N_ALL[lang];
       if (!p || renamingParty) return;
       if (confirm(I18N.deleteConfirm(p.name))) {
         deleteParty(store, p.id);
+        track('pb_party', { action: 'del', parties: store.parties.length });
         resetPartyUiState();
         render();
       }
     });
-    document.getElementById('pb-p-exp').addEventListener('click', () => { if (p && !renamingParty) openExportModal(p); });
+    document.getElementById('pb-p-exp').addEventListener('click', () => { if (p && !renamingParty) { track('pb_party', { action: 'export' }); openExportModal(p); } });
     document.getElementById('pb-p-imp').addEventListener('click', () => { if (!renamingParty) openImportModal(); });
   }
 
@@ -2991,6 +2994,7 @@ const I18N = I18N_ALL[lang];
         const top5 = targetsList.slice(0, 5).map((g) => g.label).filter((l) => !slot.targets.includes(l));
         if (!top5.length) return;
         slot.targets.push(...top5);
+        track('pb_target_add', { via: 'top5', n: top5.length });
         p.updatedAt = Date.now();
         saveStore(store);
         tuneResults = null;
@@ -3093,6 +3097,16 @@ const I18N = I18N_ALL[lang];
     persistUi(); // (B20/B21)
   }
 
+  /** 仮想敵(上位30)に無い種を探した記録。31位以降の需要を測る。候補が1種に絞れたときだけ、1種1回 */
+  const targetMissSent = new Set();
+  function trackTargetMiss(q, qk) {
+    const hit = core.species.filter((s) => matchesQuery(s.n, q, qk));
+    const exact = hit.filter((s) => s.n === q || s.n === qk);
+    const sp = exact.length ? exact : hit;
+    if (sp.length !== 1 || targetMissSent.has(sp[0].n)) return;
+    targetMissSent.add(sp[0].n);
+    track('pb_target_miss', { sp: sp[0].n, rank: sp[0].off ? 0 : sp[0].rank });
+  }
   function onTargetSearchInput(val) {
     const sug = document.getElementById('pb-target-sug');
     if (!sug || !core) return;
@@ -3101,6 +3115,7 @@ const I18N = I18N_ALL[lang];
     if (!q) { sug.style.display = 'none'; return; }
     const qk = toKatakana(q);
     const hits = effectiveTargets().filter((g) => matchesQuery(g.label, q, qk)).slice(0, 12);
+    if (!hits.length) trackTargetMiss(q, qk);
     const p = activeParty();
     const slot = p.slots[selectedIdx];
     if (!hits.length) { sug.innerHTML = `<div class="sug-item added">${esc(I18N.noHit)}</div>`; sug.style.display = 'block'; return; }
@@ -3115,6 +3130,7 @@ const I18N = I18N_ALL[lang];
     const p = activeParty();
     const slot = p.slots[selectedIdx];
     if (!slot.targets.includes(label)) slot.targets.push(label);
+    track('pb_target_add', { via: 'search', rank: effectiveTargets().findIndex((g) => g.label === label) + 1 });
     p.updatedAt = Date.now();
     saveStore(store);
     const input = document.getElementById('pb-target-search');
@@ -3144,6 +3160,7 @@ const I18N = I18N_ALL[lang];
     return { grp, b: grp.builds[bi] };
   }
   function onTuneClick() {
+    track('pb_tune');
     const p = activeParty();
     const slot = p.slots[selectedIdx];
     const rb = resolveSlotSafe(slot);
@@ -3752,6 +3769,7 @@ const I18N = I18N_ALL[lang];
     const slot = p.slots[selectedIdx];
     if (!slot || slot.targets.includes(label)) return;
     slot.targets.push(label);
+    track('pb_target_add', { via: 'matrix', rank: effectiveTargets().findIndex((g) => g.label === label) + 1 });
     p.updatedAt = Date.now();
     saveStore(store);
     tuneResults = null;
@@ -3766,6 +3784,7 @@ const I18N = I18N_ALL[lang];
     paneEl.querySelectorAll('[data-mtx-pop]').forEach((td) => td.addEventListener('click', () => {
       const d = mtxPopData[+td.dataset.mtxPop];
       if (!d) return;
+      track('pb_mu_open', { from: 'matrix' });
       openMuDialog({
         lang, names: MU_NAMES, mine: d.b, opp: d.o, extraHtml: addTargetButtonHtml(d.o.label),
         show: (html) => {
@@ -3938,6 +3957,7 @@ const I18N = I18N_ALL[lang];
   async function onHoleFillClick() {
     const p = activeParty();
     if (!p || !core) return;
+    track('pb_hole_fill');
     // 穴の再計算・署名づくりもエンジンを回すので、ダイアログを先に出してから行う。
     holeFillLoading = true;
     openHoleFillPopover();
@@ -4132,6 +4152,7 @@ const I18N = I18N_ALL[lang];
     const p = activeParty();
     if (!p || !core) return;
     if (!p.slots.some((s) => !s)) return;
+    track('pb_fill', { empty: p.slots.filter((s) => !s).length });
     fillLoading = true;
     fillFailed = false;
     openFillPopover();
@@ -4310,6 +4331,7 @@ const I18N = I18N_ALL[lang];
       const party = importParty(text, I18N.importedPartyName);
       if (!party) { document.getElementById('pb-import-msg').textContent = I18N.importFailedMsg; return; }
       store.parties.push(party);
+      track('pb_party', { action: 'import', parties: store.parties.length });
       store.activeId = party.id;
       saveStore(store);
       hideModal();
@@ -4463,6 +4485,7 @@ const I18N = I18N_ALL[lang];
   }
   async function init() {
     store = loadStore();
+    track('pb_open', { parties: store.parties.length, full: store.parties.filter((x) => x.slots.every(Boolean)).length });
     importFromSuggestHandoff();
     // (B22) 共有リンクの取り込みは「保存パーティが0件なら空パーティを1つ作る」より先に行う。
     // 先に空パーティを作ってしまうと、初めて開くユーザーが共有リンクを踏んだだけで

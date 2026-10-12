@@ -926,6 +926,7 @@ const I18N = I18N_ALL[lang];
     document.querySelectorAll('.tb').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const i = +btn.dataset.i, t = btn.dataset.t;
+        window.track?.('suggest_tab', { tab: t });
         document.querySelectorAll(`.tb[data-i="${i}"]`).forEach(b=>b.classList.toggle('active', b.dataset.t===t));
         document.getElementById('pane-'+i).innerHTML = paneHtml(LAST[i], t, i);
         syncLegendOpen();
@@ -1173,6 +1174,9 @@ const I18N = I18N_ALL[lang];
     // (B5) 軸2件以上は必ずライブ計算(10〜20秒)。軸1件以下はsuggest_cacheに事前計算済みで数百msなので
     // 「10〜20秒」の表示は出さず、実態に合わせた短い表示にする。
     const isLive = core.length >= 2;
+    window.track?.('suggest_run', { axes: core.length });
+    const t0 = Date.now();
+    let outcome = 'superseded';
     const msgs = I18N.loadMsgs;
     let mi = 0, sec = 0, timer = null;
     if(isLive){
@@ -1210,15 +1214,18 @@ const I18N = I18N_ALL[lang];
       if(r.status === 429){
         let msg = I18N.tooManyMsg;
         try{ const d = await r.json(); if(d && d.error) msg = d.error; }catch(e){}
+        outcome = 'busy';
         renderRunError(esc(msg), run);
         return;
       }
       const d = await r.json();
       if(mySeq !== _suggestSeq) return;
       if(d.error){
+        outcome = 'error';
         renderRunError(I18N.errPrefix + esc(d.error), run); // (S07/S11)
         return;
       }
+      outcome = 'ok';
       saveSessionResult(coreParam, d);
       // (B6) ?core=軸1,軸2 をURLに反映し、リロード/共有で自動復元できるようにする
       const url = new URL(location.href);
@@ -1229,11 +1236,14 @@ const I18N = I18N_ALL[lang];
       if(mySeq !== _suggestSeq) return;
       if(e && e.name === 'AbortError'){
         // (S06) キャンセル: エラー表示はせず初期状態(空の#out)に戻す
+        outcome = 'cancel';
         out.innerHTML = '';
         return;
       }
+      outcome = 'error';
       renderRunError(esc(I18N.connErr), run); // (S07/S11)
     } finally {
+      window.track?.('suggest_done', { axes: core.length, outcome, sec: Math.round((Date.now() - t0) / 1000) });
       // timerはこの呼び出し専用(runのローカル変数)なので、他の呼び出しに追い越されていても
       // 必ず止める。止め忘れると、古いintervalが同じidの#ps-elapsed等を殴り続けて
       // 新しい呼び出しの経過秒表示が裏から壊れる。

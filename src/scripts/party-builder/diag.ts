@@ -2,6 +2,7 @@
 import { guideBody, gdAdv, gdRound, makeLogTranslator, SIM_LOG_TERM } from './diag-shared';
 import { normalizeSuggestSpeciesName } from './spec';
 import { MATCHUP_SEASON } from '../../consts';
+import { track } from '../track';
 
 type Lang = 'ja' | 'en' | 'ko';
 
@@ -250,6 +251,7 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     if (st.impTimer) clearInterval(st.impTimer);
     Object.assign(st, { specs, key: specs.join('\n'), loading: true, err: null, data: null, opp: null, mySel: [], battles: [], cur: -1, imp: null, impErr: null, impLoading: false, impJob: null, advJob: null, applied: null });
     renderBody(); refresh();
+    track('diag_run');
     try {
       const [d] = await Promise.all([post('/diagnose', { specs }), loadIcons()]);
       if (st.key !== specs.join('\n')) return;
@@ -367,6 +369,7 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
 
   async function fight(oppId: number, random: boolean) {
     if (st.fighting) return;
+    track('diag_fight', { random });
     const o = (st.data.opps || []).find((x: any) => x.id === oppId);
     const b: any = { opp: oppId, random, names: o ? o.names : null, seed: Math.floor(Math.random() * 2147483647), mySel: st.selMode === 'manual' ? [...st.mySel] : null, rec: null, err: null };
     st.battles.push(b);
@@ -541,6 +544,7 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
   }
   async function runImprove() {
     if (st.impLoading) return;
+    track('diag_improve');
     Object.assign(st, { impLoading: true, impErr: null, imp: null, impJob: null, impT0: Date.now() });
     const key = st.key;
     st.impTimer = setInterval(() => { const m = el.querySelector('#dg-imp-msg'); if (m) m.textContent = impMsg(); }, 1000);
