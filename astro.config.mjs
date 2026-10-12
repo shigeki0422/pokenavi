@@ -10,7 +10,7 @@ export default defineConfig({
 	integrations: [
 		mdx(),
 		sitemap({
-			filter: (page) => !/\/(en|ko|matchup)\//.test(page),
+			filter: (page) => !/\/(en|ko|matchup)\//.test(page) && !/\/(premium|terms|tokushoho)\/$/.test(page),
 		}),
 	],
 	fonts: [

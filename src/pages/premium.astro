@@ -1,0 +1,69 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const title = 'ポケナビ プレミアム';
+const description = 'ポケナビの有料プラン「ポケナビ プレミアム」の内容と料金。広告なし・簡単構築の複数軸・1v1判定の上位100体など。';
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" noindex />
+    <style>
+      main {
+        max-width: 720px;
+        margin: 0 auto;
+        padding: 2em 1.5em 4em;
+        color: rgb(var(--gray-dark));
+        line-height: 1.8;
+      }
+      h1 { font-size: 1.6rem; margin-bottom: 0.4em; }
+      h2 { font-size: 1.15rem; margin: 2em 0 0.5em; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.3em; }
+      p, li { font-size: 0.95rem; }
+      ul { padding-left: 1.4em; }
+      .updated { font-size: 0.82rem; color: rgb(var(--gray)); margin-bottom: 2em; }
+      a { color: var(--accent); }
+      table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+      th, td { border: 1px solid #e2e8f0; padding: .6em .8em; text-align: left; vertical-align: top; }
+      th { background: #f8fafc; width: 32%; font-weight: 600; }
+      ol { padding-left: 1.4em; }
+      td.c { text-align: center; }
+      .price { font-size: 1.3rem; font-weight: 700; margin: .2em 0 .1em; }
+      .notice { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: .8em 1em; font-size: .9rem; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>ポケナビ プレミアム</h1>
+      <p class="notice">ポケナビ プレミアムは近日提供開始予定です。現在はお申込みいただけません。</p>
+
+      <h2>料金</h2>
+      <p class="price">月額300円（税込）</p>
+      <p>クレジットカード決済（Stripe）。いつでも解約でき、解約後も支払い済みの期間の終了日までご利用いただけます。</p>
+
+      <h2>できること</h2>
+      <p>ポケナビのツールは引き続き無料でご利用いただけます。プレミアムでは次の制限がなくなります。</p>
+      <table>
+        <tr><th>機能</th><th>無料</th><th>プレミアム</th></tr>
+        <tr><td>広告</td><td class="c">表示あり</td><td class="c">表示なし</td></tr>
+        <tr><td>簡単構築の軸の指定</td><td class="c">1体まで</td><td class="c">2体以上</td></tr>
+        <tr><td>パーティ工房の1v1判定の相手</td><td class="c">使用率上位30体</td><td class="c">使用率上位100体</td></tr>
+        <tr><td>パーティ診断</td><td class="c">1日の回数に上限あり・広告の視聴が必要</td><td class="c">回数無制限・広告なし</td></tr>
+        <tr><td>パーティの保存</td><td class="c">このブラウザ内のみ</td><td class="c">端末間で同期</td></tr>
+      </table>
+      <p>※パーティ診断と端末間の同期は順次提供します。提供開始時に内容を変更する場合があります。</p>
+
+      <h2>ご利用にあたって</h2>
+      <ul>
+        <li><a href="/terms/">利用規約</a></li>
+        <li><a href="/tokushoho/">特定商取引法に基づく表記</a></li>
+        <li><a href="/privacy/">プライバシーポリシー</a></li>
+      </ul>
+      <p>お問い合わせ：<a href="mailto:hello@pokenavi.jp">hello@pokenavi.jp</a></p>
+
+    </main>
+    <Footer />
+  </body>
+</html>
