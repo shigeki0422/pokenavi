@@ -10,6 +10,7 @@ import { symClass, archTitle } from "../party-builder/mu-card";
 import { abilityText, openMuDialog } from "../party-builder/mu-cell-popup";
 import { itemNameOf } from "../../i18n/game-terms";
 import { initEngine, setScenario, setupMoveNames, type Scenario } from "../engine/wasm";
+import { track } from "../track";
 import { ALL_NATURES, EV_STAT_MAX, EV_TOTAL_MAX, natureDisp } from "../party-builder/stats";
 import type { MonDetail, ResolvedBuild, Slot, StatArray, Store, TargetBuild } from "../party-builder/types";
 
@@ -318,9 +319,10 @@ function renderSuggest(q: string) {
     : `<div class="ba-muted">${esc(X.notFound)}</div>`;
   box.hidden = false;
 }
-async function setOpp(sp: string) {
+async function setOpp(sp: string, via: string) {
   const sm = core.species.find((s) => s.n === sp);
   if (!sm) return;
+  track("ba_opp", { via, rank: (sm as any).off ? 0 : sm.rank });
   await ensureDetail(sm.icon);
   st.oppMon = { sp, icon: sm.icon, sel: 0, edits: {} };
   st.setupOpp = "";
@@ -618,6 +620,7 @@ function openMuFor() {
   const o = st.oppMon;
   const me = mySlot ? resolveSafe(forCalc(mySlot, st.setupMe)) : null;
   if (!me || !o) return;
+  track("ba_mu_open");
   const builds = templatesOf(o).map((t, k) => {
     const rb = resolveSafe(forCalc(oppSlot(o, k), st.setupOpp));
     return rb ? { ...rb, weight: t.share, arch: t.arch, archNo: t.archNo, archSub: t.archSub } : null;
@@ -668,6 +671,7 @@ function saveMyToParty() {
   if (!p || !ov) return;
   const raw = p.slots[st.my];
   if (!confirm(X.confirmSave(p.name, tPoke(raw?.sp ?? "")))) return;
+  track("ba_save");
   p.slots[st.my] = { ...ov, targets: raw?.targets ?? [], scenarios: raw?.scenarios };
   p.updatedAt = Date.now();
   saveStore(store);
@@ -684,7 +688,7 @@ function bind() {
     if (q("[data-mu-open]")) {
       openMuFor();
     } else if ((x = q("[data-add-opp]"))) {
-      await setOpp(x.dataset.addOpp!);
+      await setOpp(x.dataset.addOpp!, q("#ba-pick") ? "pick" : "search");
       $("ba-calc").scrollIntoView({ behavior: "smooth", block: "start" });
     } else if (t.id === "ba-pick-more") {
       pickAll = true; renderPicker();
@@ -695,6 +699,7 @@ function bind() {
     } else if ((x = q("[data-toggle-edit]"))) {
       const k = x.dataset.toggleEdit === "me" ? "editMe" : "editOpp";
       st[k] = !st[k]; renderCalc(); saveState();
+      if (st[k]) track("ba_edit", { side: x.dataset.toggleEdit });
     } else if ((x = q("[data-step]"))) {
       const k = x.dataset.step as "boostMe" | "boostOpp";
       st[k] = Math.max(0, Math.min(6, st[k] + Number(x.dataset.d)));
@@ -714,17 +719,20 @@ function bind() {
       st = { ...defaultState(), partyId: st.partyId, my: st.my, myEdits: st.myEdits };
       render();
     } else if (t.id === "ba-demo") {
+      track("ba_party", { action: "demo" });
       demoParty();
     } else if (t.id === "ba-import-btn") {
       const p = importParty(($("ba-import-txt") as HTMLTextAreaElement).value);
       if (!p) { $("ba-import-err").textContent = X.importErr; return; }
       const np = createPartyFromSlots(store, p.slots, X.importName);
+      track("ba_party", { action: "import" });
       st.partyId = np.id; render();
     }
   });
   root.addEventListener("change", (e) => {
     const t = e.target as HTMLElement;
     if (t.id === "ba-party-sel") { st.partyId = (t as HTMLSelectElement).value; st.my = 0; render(); return; }
+    if (t.id === "ba-weather" || t.id === "ba-terrain") track("ba_cond", { kind: t.id.slice(3) });
     if (t.id === "ba-weather") { st.weather = (t as HTMLSelectElement).value; render(); return; }
     if (t.id === "ba-terrain") { st.terrain = (t as HTMLSelectElement).value; render(); return; }
     if (t.id === "ba-tpl-sel") {
@@ -732,6 +740,7 @@ function bind() {
       return;
     }
     if (t.dataset.setup) {
+      track("ba_cond", { kind: "setup" });
       st[t.dataset.setup === "me" ? "setupMe" : "setupOpp"] = (t as HTMLSelectElement).value;
       renderCalc(); saveState(); return;
     }
@@ -768,7 +777,7 @@ function bind() {
     const first = document.querySelector("#ba-opp-sug [data-add-opp]") as HTMLElement | null;
     if (first) {
       e.preventDefault();
-      await setOpp(first.dataset.addOpp!);
+      await setOpp(first.dataset.addOpp!, "enter");
       $("ba-calc").scrollIntoView({ behavior: "smooth", block: "start" });
     }
   });
@@ -800,6 +809,7 @@ async function init() {
   SETUP = new Set(setupMoveNames());
   store = loadStore();
   st = loadState();
+  track("ba_open", { parties: store.parties.length });
   if (st.oppMon) await ensureDetail(st.oppMon.icon);
   $("ba-loading").remove();
   $("ba-main").hidden = false;

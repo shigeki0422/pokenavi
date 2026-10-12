@@ -1143,3 +1143,17 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
         stepTurn, toggleAuto, openReplay, selectOppPoke,
       });
     </script>
+    <script>
+      import { track } from '../scripts/track';
+      // 本体は is:inline の巨大スクリプトなので、計測はクリックの委譲でここに分ける（再描画で要素が消える前に拾うため capture）
+      document.addEventListener('click', (e) => {
+        const t = (e.target as Element).closest<HTMLElement>('#subject-list .pitem, #opp-list .pitem, .rtab, #btn-auto, #tab-ranker, #tab-pokemon');
+        if (!t) return;
+        const mode = document.querySelector<HTMLElement>('main[data-simmode]')?.dataset.simmode || 'MA';
+        if (t.closest('#subject-list')) track('sim_subject', { mode });
+        else if (t.closest('#opp-list')) track('sim_opp', { mode, kind: t.dataset.pk ? 'pokemon' : 'ranker' });
+        else if (t.classList.contains('rtab')) track('sim_replay', { mode });
+        else if (t.id === 'btn-auto') track('sim_autoplay', { mode });
+        else track('sim_tab', { mode, tab: t.id.slice(4) });
+      }, true);
+    </script>
