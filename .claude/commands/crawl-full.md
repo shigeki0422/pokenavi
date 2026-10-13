@@ -21,7 +21,7 @@ cd /Users/shigeki/work/pokenavi && python3 scripts/crawl_champions.py
 
 ### 3. クロップ（簡易版と共通）
 ```bash
-python3 scripts/crop_panels.py /tmp/champ_crawl_$(date +%Y-%m-%d)
+python3 scripts/crop_panels.py crawl_data/champ_crawl_$(date +%Y-%m-%d)
 ```
 
 ### 4. ランキング取り込み（簡易版と同じ手順4〜5を実施）
@@ -71,7 +71,7 @@ npm run dev
 デプロイはユーザーが `git push origin main` で実施。
 
 ## 注意事項
-- `/tmp/champ_crawl_*` は絶対に削除しない
+- `crawl_data/champ_crawl_*` は絶対に削除しない（destructive_guard.py が拒否する）
 - 同居ポケモンのフォーム識別はパートナー画像のアイコンマッチングで自動判別（キュウコン/アローラキュウコン、ロトム系等）
 - OCR誤読性格は `insert_detail_from_journal.py` の `OCR_NATURES` で自動補正
 - DB投入後に `[SKIP_NATURE]` ログが多い場合は新しい誤読パターンなので `OCR_NATURES` に追記する

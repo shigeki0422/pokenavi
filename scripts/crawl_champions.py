@@ -31,8 +31,17 @@ ARROW_RIGHT   = (2330, 540)
 ARROW_LEFT    = (70, 540)
 BACK_BTN      = (308, 49)
 
-PANELS = ["move"]
-PANEL_MAX_SCROLL = {"move": 0, "item": 1, "partner": 1, "nature": 1, "ev": 8, "ability": 0}
+PANELS = ["move", "item", "partner", "nature", "ev", "ability"]
+# ランキングだけ要る日は撮るパネルを絞れる（PANELS=move）。順位の判定は move_00.png の
+# ヘッダーのアイコンだけを使う（insert_ranking_from_icons.py）ので、残り5枚は詳細 OCR 専用。
+# 6枚すべて撮ると1体あたり12ページぶんのスクロールになり、200体で約3時間かかる
+if os.environ.get("PANELS"):
+    _want = [p.strip() for p in os.environ["PANELS"].split(",") if p.strip()]
+    _bad = [p for p in _want if p not in PANELS]
+    if _bad:
+        raise SystemExit(f"PANELS に知らないパネル {_bad}（指定できるのは {PANELS}）")
+    PANELS = [p for p in PANELS if p in _want]   # 画面の並び順は変えない
+PANEL_MAX_SCROLL = {"move": 1, "item": 1, "partner": 1, "nature": 1, "ev": 8, "ability": 0}
 
 PROGRESS_FILE = f"{OUTPUT_DIR}/last_rank.txt"
 

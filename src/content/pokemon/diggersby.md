@@ -1,10 +1,10 @@
 ---
 title: 'ホルード | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのホルード基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率109位。'
+description: 'ポケモンチャンピオンズのホルード基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率119位。'
 pokemonName: 'ホルード'
 dexNumber: 660
-usageRank: 109
-updatedDate: '2026-10-11'
+usageRank: 119
+updatedDate: '2026-10-13'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'greedent-analysis-m2'
@@ -31,7 +31,7 @@ faq:
       <img src="/images/types/type-04-ground.png" alt="じめん" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.660</strong>　／　使用率 <strong style="color:#dc2626">109位</strong>
+      全国図鑑 <strong>No.660</strong>　／　使用率 <strong style="color:#dc2626">119位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-10-11</div>
   </div>

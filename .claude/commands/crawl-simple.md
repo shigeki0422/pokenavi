@@ -15,14 +15,24 @@ adb devices
 
 ### 2. ADBキャプチャ
 ```bash
-cd /Users/shigeki/work/pokenavi && python3 scripts/crawl_champions.py
+cd /Users/shigeki/work/pokenavi && PANELS=move python3 scripts/crawl_champions.py
 ```
-200位まで自動撮影（約3時間）。完了まで待機。
+200位まで自動撮影。**`PANELS=move` を必ず付ける**（1体7〜9秒・200体で約30分）。
+
+順位の判定に使うのは `move_00.png` のヘッダーのアイコンだけ（`insert_ranking_from_icons.py`）で、
+残り5パネル（item/partner/nature/ev/ability）は詳細OCR専用。付け忘れると6パネル撮って
+1体52秒・**約3時間**かかる（フルクロールと同じ所要時間になる）。
+
+**途中で止めたら、再開前に端末をランキング一覧の先頭（1位が見える状態）に戻すこと。**
+詳細画面のまま再開すると `scroll_to_top()` が戻り切れず「❌ 先頭に戻れていない」で終了する。
+再開は `last_rank.txt` の次の順位から自動で続く。
 
 ### 3. クロップ
 ```bash
-python3 scripts/crop_panels.py /tmp/champ_crawl_$(date +%Y-%m-%d)
+python3 scripts/crop_panels.py crawl_data/champ_crawl_$(date +%Y-%m-%d)
 ```
+保存先は `crawl_data/`（`/tmp` は再起動で消えるため 2026-09-12 に移動済み。`crawl_champions.py` の
+`OUTPUT_DIR` が正本）。
 
 ### 4. insert_ranking_from_icons.py の日付設定
 `scripts/insert_ranking_from_icons.py` の以下2箇所を今日の日付に更新する：
@@ -58,6 +68,6 @@ npm run dev
 デプロイはユーザーが `git push origin main` で実施。
 
 ## 注意事項
-- `/tmp/champ_crawl_*` は絶対に削除しない（過去分の画像マッチング遡及確認のため）
+- `crawl_data/champ_crawl_*` は絶対に削除しない（destructive_guard.py が拒否する）（過去分の画像マッチング遡及確認のため）
 - アイコンマッチング重複時は必ず画像を目視確認してから RANK_OVERRIDES に追記する
 - デプロイは `git push origin main` のみ（wrangler pages deploy は不要）
