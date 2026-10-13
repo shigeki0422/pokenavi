@@ -1,4 +1,5 @@
 ---
+import { readFileSync } from 'node:fs';
 import { MATCHUP_SEASON } from '../../consts';
 import { getCollection } from 'astro:content';
 import BaseHead from '../../components/BaseHead.astro';
@@ -40,8 +41,8 @@ export async function getStaticPaths() {
     }
   }
 
-  const res = await fetch('https://pokenavi-suggest-799947701075.asia-northeast1.run.app/species');
-  const species: { label: string; sp: string; mega: string; rank: number }[] = await res.json();
+  // Cloud Run の /species と同じ中身（export_species_json.py が書く）。ビルドを Cloud Run に依存させない
+  const species: { label: string; sp: string; mega: string; rank: number }[] = JSON.parse(readFileSync('public/suggest-data/species.json', 'utf-8'));
 
   // 同じsp(和名)にメガが複数ある場合だけスラッグを分ける。無印のメガと
   // メガ○○Z のように末尾文字が無い系統が混ざると、以前は両方 String(メガの数)

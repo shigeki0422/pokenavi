@@ -1,7 +1,7 @@
 """Product3 ローカル製品：コア入力→残り枠補完→サロゲート提案。
 モデル常駐のHTTPサーバ＋簡易UI。 起動: venv/bin/python product3_server.py  → http://localhost:8899
 """
-import os, numpy as np, json, random, html, glob, threading, time
+import os, numpy as np, json, random, html, glob, threading, time, hmac
 import pool_versions as _PVS
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("GA_SIMS", os.environ.get("SIM_SIMS", "150"))   # ライブ実戦テストのMCTS探索数（軽め）
@@ -798,6 +798,10 @@ _LAST_HIT = {}                                       # ip -> 直近の重い処�
 _HEAVY = ("/suggest", "/simulate", "/complete", "/improve")
 MAX_BODY_BYTES = int(os.environ.get("MAX_BODY_BYTES", 16 * 1024))  # POSTボディ上限(既定16KB)。超過は413
 MAX_SPEC_LEN = 500                                   # /complete の specs 1本あたりの文字数上限
+# Cloudflare Pages Functions(functions/api/[[path]].js)の中継だけが知る値。中継を経た呼び出しは
+# 送信元IPが Cloudflare になるので、MIN_INTERVAL はこの値が合うときだけ中継が渡す利用者のIPで数える
+PROXY_SECRET = os.environ.get("PROXY_SECRET", "")
+PROXY_REQUIRED = os.environ.get("PROXY_REQUIRED") == "1"  # 1で中継を経ない直接の呼び出しを403にする
 
 class H(BaseHTTPRequestHandler):
     def _send(self, code, body, ctype="application/json"):
@@ -809,7 +813,17 @@ class H(BaseHTTPRequestHandler):
     def _acquire_heavy(self):
         return _HEAVY_LOCK.acquire(timeout=HEAVY_WAIT) if HEAVY_WAIT > 0 else _HEAVY_LOCK.acquire(blocking=False)
 
+    def _from_proxy(self):
+        return bool(PROXY_SECRET) and hmac.compare_digest(self.headers.get("X-Pokenavi-Proxy", ""), PROXY_SECRET)
+
+    def _reject_direct(self):
+        if PROXY_REQUIRED and self.path != "/health" and not self._from_proxy():
+            self._send(403, "{}"); return True
+        return False
+
     def _client_ip(self):
+        if self._from_proxy() and self.headers.get("X-Pokenavi-Client-IP"):
+            return self.headers["X-Pokenavi-Client-IP"]
         xff = self.headers.get("Fly-Client-IP") or self.headers.get("X-Forwarded-For", "")
         return (xff.split(",")[0].strip() if xff else self.client_address[0])
 
@@ -823,6 +837,7 @@ class H(BaseHTTPRequestHandler):
     def log_message(self, *a): pass
 
     def do_GET(self):
+        if self._reject_direct(): return
         if self.path == "/" or self.path == "/health":
             self._send(200, "ok" if self.path == "/health" else PAGE, "text/plain" if self.path == "/health" else "text/html")
         elif self.path == "/species":
@@ -831,6 +846,7 @@ class H(BaseHTTPRequestHandler):
             self._send(404, "{}")
 
     def do_POST(self):
+        if self._reject_direct(): return
         if self.path not in ("/suggest", "/simulate", "/complete", "/speed_detail", "/atk_detail", "/guide", "/diagnose", "/diag_battle", "/improve", "/job_status"):
             self._send(404, "{}"); return
         try:

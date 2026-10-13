@@ -20,7 +20,7 @@ export interface DiagHost {
   restoreSlot: (slotIdx: number, prev: any) => void;
 }
 
-const API = /(^|\.)pokenavi\.jp$/.test(location.hostname) ? 'https://pokenavi-suggest-799947701075.asia-northeast1.run.app' : 'http://localhost:8899';
+const API = /(^|\.)pokenavi\.jp$/.test(location.hostname) ? '/api' : 'http://localhost:8899';
 const EVK = ['H', 'A', 'B', 'C', 'D', 'S'];
 
 const T: Record<Lang, any> = {
