@@ -2317,6 +2317,7 @@ fn execute_move_inner(
     if (n == l.ドラゴンテール || n == l.ほえる || n == l.ふきとばし || n == l.ともえなげ)
         && D!().is_alive
         && !sub_absorbed
+        && D!().ability != l.ばんけん
     {
         D!().force_switch = true;
     }
@@ -5704,6 +5705,32 @@ mod fix5_tests {
         s[1].party[0].stage_attack = 2;
         execute_move(pr, &mut s, &mut f, 0, &a, None, &mut Z, &mut d);
         assert!(s[1].party[0].stage_attack == 0 && s[1].party[0].force_switch, "控えあり: 成功");
+    }
+
+    #[test]
+    fn ドラゴンテールはばんけんの相手を交代させない() {
+        let mut p = pack();
+        struct H;
+        impl BRng for H {
+            fn random(&mut self) -> f64 { 0.5 }
+            fn choice(&mut self, _n: usize) -> usize { 0 }
+            fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+            fn choices(&mut self) -> i64 { 2 }
+        }
+        let gab = format!("ガブリアス@{N}:いじっぱり:ドラゴンテール:32/32/0/0/0/0:さめはだ");
+        let maf = format!("マフィティフ@{N}:わんぱく:かみくだく:32/2/0/0/32/0:ばんけん");
+        let bench = format!("アシレーヌ@{N}:ひかえめ:ムーンフォース:32/0/0/32/0/0:げきりゅう");
+        let mut s = sides(&mut p, &[&gab], &[&maf, &bench]);
+        let pr: &Pack = &p;
+        let mut f = Field::default();
+        let a = mv_of(pr, &s[0].party[0], "ドラゴンテール");
+        let mut d = 0;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut H, &mut d);
+        assert!(s[1].party[0].hp < s[1].party[0].max_hp && !s[1].party[0].force_switch, "ばんけん: 追い出されない hp={} fs={}", s[1].party[0].hp, s[1].party[0].force_switch);
+        let mut s = sides(&mut p, &[&gab], &[&maf.replace("ばんけん", "いかく"), &bench]);
+        let pr: &Pack = &p;
+        execute_move(pr, &mut s, &mut f, 0, &a, None, &mut H, &mut d);
+        assert!(s[1].party[0].force_switch, "ばんけん以外: 追い出される");
     }
 
     #[test]

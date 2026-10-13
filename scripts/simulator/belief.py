@@ -24,7 +24,7 @@ import math
 import os
 from typing import List, Optional, Dict
 
-from .data import DataLoader
+from .data import DataLoader, default_season
 from .pokemon import build_from_template
 from .damage import calc_damage, estimate_only
 
@@ -125,11 +125,11 @@ def with_state(prof, st):
 
 
 def _default_belief_season() -> str:
-    """信念の既定シーズン。BELIEF_SEASON > POOL_SEASON > M-6 の順で解決する。
+    """信念の既定シーズン。BELIEF_SEASON > POOL_SEASON > season の版のシーズン の順で解決する。
     以前は M-2 固定で、M-6 の対戦でも M-2 の使用率分布から相手の型を引いていた。"""
     return (os.environ.get("BELIEF_SEASON")
             or os.environ.get("POOL_SEASON")
-            or "M-6")
+            or default_season())
 
 
 class PokemonBelief:
@@ -657,7 +657,7 @@ class OpponentBelief:
         return None
 
     # 使用率行のあるシーズンを新しい順に探す（事前分布が空だと型リークになるため）。
-    _FALLBACK_SEASONS = ("M-6", "M-5", "M-4", "M-3", "M-2")
+    _FALLBACK_SEASONS = ("M-7", "M-6", "M-5", "M-4", "M-3", "M-2")
 
     def _tpl_with_prior(self, name: str):
         """事前分布を持つテンプレート。self.season に使用率行が無い種は、行のある

@@ -301,14 +301,14 @@ use crate::net::NetW;
 use crate::search::SearchAI;
 
 /// belief のシーズン。Python の `belief._default_belief_season()` と同じ解決順
-/// （BELIEF_SEASON > POOL_SEASON > M-6）。以前は "M-2" 固定で、M-6 の対戦でも
+/// （BELIEF_SEASON > POOL_SEASON > season の版のシーズン＝M-7。test_all で pool_versions.json と照合）。以前は "M-2" 固定で、M-6 の対戦でも
 /// M-2 の使用率分布から相手の型を決定化していた。
 pub fn belief_season() -> &'static str {
     static S: std::sync::OnceLock<String> = std::sync::OnceLock::new();
     S.get_or_init(|| {
         std::env::var("BELIEF_SEASON")
             .or_else(|_| std::env::var("POOL_SEASON"))
-            .unwrap_or_else(|_| "M-6".to_string())
+            .unwrap_or_else(|_| "M-7".to_string())
     })
 }
 

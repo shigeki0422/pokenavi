@@ -6,6 +6,9 @@ export const SITE_TITLE = 'ポケナビ';
 // 切り替わっても表記が古いまま残るため、生成物のversion.json（"M-6/2026-10-08"形式）から引く。
 import builderVersion from '../public/builder-data/version.json';
 export const MATCHUP_SEASON = (builderVersion.pool ?? '').split('/')[0] || 'M-6';
+// 提案・選出ガイド・診断の相手集団のシーズン（scripts/pool_versions.json の season の版）。
+import poolVersions from '../scripts/pool_versions.json';
+export const SUGGEST_SEASON = (poolVersions.season ?? '').split('/')[0];
 // シーズン名は入れない（固定値だと更新のたびに検索結果の説明文が古いまま残る）。
 // トップページはsrc/pages/index.astroでranking.jsonの最新シーズンを差し込む。
 export const SITE_DESCRIPTION = 'ポケモンチャンピオンズの使用率・勝率・パーティ構成をデータで分析。対戦シミュレーターとパーティ提案で最新環境を攻略。';

@@ -15,6 +15,8 @@ from itertools import combinations
 
 import numpy as np
 
+from .data import default_season
+
 _MODEL = None
 _LOADED = False
 _PATH = os.environ.get("SELECTOR_PATH") or os.path.join(os.path.dirname(__file__), "selector_m6e.json")
@@ -268,7 +270,7 @@ def _rust_states(party6, opp6, n, rng, osels=None, v2=False):
         avail_mega = sum(1 for p in party6 if getattr(p, "mega_data", None) is not None)
         _t = 1 if avail_mega >= 1 else 0
         r = m.learned_select_states([spec_of(p) for p in party6], [spec_of(p) for p in opp6],
-                                    os.environ.get("POOL_SEASON", "M-6"), n,
+                                    os.environ.get("POOL_SEASON") or default_season(), n,
                                     int(os.environ.get("MIN_MEGA", str(_t))), int(os.environ.get("MAX_MEGA", str(_t))),
                                     list(st[1]), osels, **({"megaform": True} if v2 else {}))
     except (KeyboardInterrupt, SystemExit):

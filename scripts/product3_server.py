@@ -2,6 +2,7 @@
 モデル常駐のHTTPサーバ＋簡易UI。 起動: venv/bin/python product3_server.py  → http://localhost:8899
 """
 import os, numpy as np, json, random, html, glob, threading, time
+import pool_versions as _PVS
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("GA_SIMS", os.environ.get("SIM_SIMS", "150"))   # ライブ実戦テストのMCTS探索数（軽め）
 import multiprocessing as mp
@@ -20,7 +21,7 @@ EVK = ["H", "A", "B", "C", "D", "S"]
 
 print("モデル読込中...", flush=True)
 # シーズンは POOL_SEASON に追従（M-6移行時にM-3固定だと種テンプレート・アーキタイプが旧環境のままになる）
-SEASON = os.environ.get("POOL_SEASON", "M-3")
+SEASON = os.environ.get("POOL_SEASON") or _PVS.season()
 _f1._ensure_loaded(SEASON, 8)
 L = _f1._W["loader"]; NET = _f1._W["net"]
 PG = PartyGen(); TH = load_threats(L)
@@ -50,7 +51,7 @@ def calibrate(v):
 
 _ARCH_FILE = os.path.join(os.path.dirname(__file__),
                           os.environ.get("ARCH_FILE",
-                                         f"archetypes_{os.environ.get('POOL_SEASON','M-3').lower().replace('-','')}.json"))
+                                         f"archetypes_{_PVS.file_tag(SEASON)}.json"))
 
 def _scan_archetypes(n=8):
     """総当たり実勝率(5.5GB)から、メガ軸が重複しない代表アーキタイプをn個抽出（devのみ）。"""
@@ -91,7 +92,7 @@ def _load_archetypes(n=8):
 ARCHES = _load_archetypes(8)
 print(f"アーキタイプ盤面 {len(ARCHES)}個: {[a['label'] for a in ARCHES]}", flush=True)
 
-# 選出ガイド（相手＝使用率＋同居率で引いた3000党 guide_pool_m6.json の統計・学習選出）。1提案 約2秒（1コア）なので
+# 選出ガイド（相手＝使用率＋同居率で引いた3000党 guide_pool_<シーズン>.json の統計・学習選出）。1提案 約2秒（1コア）なので
 # /suggest には付けず、画面でガイドを開いたときに /guide で1提案ずつ計算する（相手を分けて永続プールで並列）
 import _select_guide as SG
 import _diagnose as DG
@@ -118,7 +119,7 @@ def _guide_all(specs):
 def guide(specs):
     return _guide_all(specs)[0]
 
-# パーティ診断（ローカル版）。中身は _diagnose.py。有利度は MCTS@64（事前計算 diag_adv_m6.json）。
+# パーティ診断（ローカル版）。中身は _diagnose.py。有利度は MCTS@64（事前計算 diag_adv_<シーズン>.json）。
 # 無い党は貪欲の値を「概算」で即返し、裏で MCTS@64（事前計算と同じ 相手200党×4戦）を回す（adv_job を /job_status で取る）。
 # その場で相手100党×2戦にすると WORKERS=2・負荷下で +35秒（実測）かかり、待たせるより概算＋差し替えにした
 _AMEMO = {}
@@ -394,14 +395,18 @@ try:
 except FileNotFoundError:
     _ENS_TAG = "ens-none"
 
+# 型プールの版（season。PARTY_POOL_VERSION で上書き）も同様。版を替えたら古いキャッシュは当たらない
+import gen_party_pool as _GPP
+_POOL_TAG = "pool" + _GPP.party_pool_version()
+
 _SCACHE = {}   # 提案は決定的（固定シード＋温度0の貪欲選出）なので軸ごとに結果をキャッシュ
 _SCACHE_FILE = os.path.join(os.path.dirname(__file__), "suggest_cache.json")
 try:
     _all = json.load(open(_SCACHE_FILE, encoding="utf-8"))
     for _k, _v in _all.items():
-        if _NET_TAG in _k and _ENS_TAG in _k:
+        if _NET_TAG in _k and _ENS_TAG in _k and f'"{_POOL_TAG}"' in _k:
             _SCACHE[_k] = _v
-    print(f"提案キャッシュ事前ロード: {len(_SCACHE)}件（人気軸。別ネット・別採点モデルの{len(_all) - len(_SCACHE)}件は捨てた）", flush=True)
+    print(f"提案キャッシュ事前ロード: {len(_SCACHE)}件（人気軸。別ネット・別採点モデル・別の型プールの版の{len(_all) - len(_SCACHE)}件は捨てた）", flush=True)
 except FileNotFoundError:
     pass
 
@@ -621,7 +626,7 @@ def _suggest_key(fixed, ncand, top):
                                   + ([f"mp{SUGGEST_MEGA_PAIR}_{SUGGEST_MEGA_PAIR_FLOOR}_{SUGGEST_MEGA_PAIR_ABS}"] if SUGGEST_MEGA_PAIR else []) \
                                   + ([f"mw{SUGGEST_MEGA_SHARED_MAX}"] if SUGGEST_MEGA_SHARED_MAX else []) \
                                   + ([f"ms{SUGGEST_MEGA_CAP}"] if SUGGEST_MEGA_PAIR and SUGGEST_MEGA_CAP else []) \
-                                  + [_NET_TAG, _ENS_TAG]
+                                  + [_NET_TAG, _ENS_TAG, _POOL_TAG]
     return json.dumps(key, ensure_ascii=False)   # 解決後specでキー化（入力形式に非依存）
 
 def suggest(core_args, ncand, top):

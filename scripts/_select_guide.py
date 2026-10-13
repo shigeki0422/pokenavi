@@ -1,5 +1,5 @@
 """パーティ提案の選出ガイド（相手集団の統計版・2026-10-02）。
-相手＝M-6 の使用率＋同居率の生成器で引いた NP 党（guide_pool_m6.json、`_guide_opps.py sample` が作る）。相手ごとに
+相手＝season のシーズンの使用率＋同居率の生成器で引いた NP 党（guide_pool_<m7 等>.json、`_guide_opps.py sample` が作る）。相手ごとに
 自分の学習選出（温度0、先頭＝リード）と、それ vs 相手の選出（相手側の学習選出の値から温度1で抽選）を Rust 貪欲AIで GK 戦（先後交互）し、
 貪欲の勝率 g を MCTS@400 の勝率へ線形較正（CAL_A + CAL_B·g）した値を有利度とする（Rust `guide_rows`）。
 集計（summarize）: 全体の有利度・各ポケモンの選出率/先発率・多い3体・相手にいる種ごとの選出の変化（条件ルール）と有利度の差（苦手/得意）。
@@ -13,7 +13,9 @@ import math
 import os
 from collections import defaultdict
 
-POOL_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.environ.get("GUIDE_POOL", "guide_pool_m6.json"))
+import pool_versions as _PVS
+
+POOL_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), os.environ.get("GUIDE_POOL") or f"guide_pool_{_PVS.file_tag()}.json")
 GK = int(os.environ.get("GUIDE_GK", "8"))
 CAL_A, CAL_B = 0.371, 0.409
 Z_MIN, D_RULE, D_FOE, MIN_N = 6.0, 0.25, 0.025, 30

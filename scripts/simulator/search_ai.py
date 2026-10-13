@@ -1150,7 +1150,7 @@ class SearchAI:
         return self._tpl_cache[name]
 
     # 使用率行のあるシーズンを新しい順に探す（種テンプレは season 引数で技/持ち物/特性を引く）。
-    _MOVE_SEASONS = ("M-6", "M-5", "M-4", "M-3", "M-2")
+    _MOVE_SEASONS = ("M-7", "M-6", "M-5", "M-4", "M-3", "M-2")
 
     def _tpl_playable(self, name):
         """技を持つテンプレート。self.season に使用率行が無い種で技0本の個体が

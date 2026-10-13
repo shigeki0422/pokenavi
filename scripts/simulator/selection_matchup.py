@@ -13,6 +13,8 @@ import os
 from itertools import combinations
 from typing import Dict, List, Optional
 
+from .data import default_season
+
 _DEF_W = (1.0, 1.0, 1.0, 1.0, 0.5)
 _MU_CACHE: Dict[tuple, float] = {}
 
@@ -66,7 +68,7 @@ def opp_move_type_probs(name, loader) -> Dict[str, float]:
             for t in ts:
                 out[t] = out.get(t, 0.0) + b["weight"] / tot
         return out
-    tpl = loader.get_pokemon_template(name, os.environ.get("POOL_SEASON", "M-6"))
+    tpl = loader.get_pokemon_template(name, os.environ.get("POOL_SEASON") or default_season())
     for mn, r in (getattr(tpl, "top_moves", None) or []):
         md = loader.get_move(mn)
         if md is not None and md.category != "status" and (md.power or 0) > 0:
@@ -82,9 +84,10 @@ def _opp_spec(o) -> Optional[str]:
             + "/".join(str(x) for x in b["ev"]) + f":{b.get('ability', '')}")
 
 
-def v1(p, o, season="M-6") -> float:
+def v1(p, o, season=None) -> float:
     """自分 p と相手 o の1v1（1=勝ち・0.5=相打ち扱い・0=負け）。相手は型プールの最多の型"""
     import json
+    season = season or os.environ.get("POOL_SEASON") or default_season()
     sa, sb = spec_of(p), _opp_spec(o)
     if sb is None:
         return 0.5

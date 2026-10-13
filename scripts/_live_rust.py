@@ -10,6 +10,7 @@
 Rust とPythonで丸め順が食い違う余地が原理的に無い。
 """
 import os
+import pool_versions as _PVS
 import statistics
 
 import numpy as np
@@ -17,8 +18,8 @@ import numpy as np
 import engine_dispatch as _ED
 
 # シーズン固定はM-6運用で誤採点になる（M-6のパーティをM-3データで計算し、
-# Python経路と平均scoreが0.104ずれていた）。POOL_SEASON連動にする。既定M-3＝従来と同一。
-SEASON = os.environ.get("POOL_SEASON", "M-3")
+# Python経路と平均scoreが0.104ずれていた）。POOL_SEASON連動にする（既定は season の版のシーズン）。
+SEASON = os.environ.get("POOL_SEASON") or _PVS.season()
 
 # 乱数を消費する技（きまぐレーザー）も、Python 経路（面ごとの固定シード）と同じ乱数列を Rust が使うので Rust で採点する（2026-10-01）
 

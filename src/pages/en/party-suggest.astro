@@ -1,11 +1,12 @@
 ---
+import { MATCHUP_SEASON } from '../../consts';
 import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import PartySuggestApp from '../../components/PartySuggestApp.astro';
 
-const title = 'Pokémon Champions M-6 Quick Build from Core | Auto-Generate a Team Around Your Core Pick';
-const description = 'For Pokémon Champions M-6. Specify one core Pokémon for an auto-suggested team of 6, with roles, type matchups, speed tiers, and 1v1 matchups vs the Top 30 usage picks.';
+const title = `Pokémon Champions ${MATCHUP_SEASON} Quick Build from Core | Auto-Generate a Team Around Your Core Pick`;
+const description = `For Pokémon Champions ${MATCHUP_SEASON}. Specify one core Pokémon for an auto-suggested team of 6, with roles, type matchups, speed tiers, and 1v1 matchups vs the Top 30 usage picks.`;
 const siteUrl = 'https://pokenavi.jp';
 const jsonLd = {
   '@context': 'https://schema.org',

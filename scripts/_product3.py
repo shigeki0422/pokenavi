@@ -4,6 +4,7 @@ covered_sample候補 → 価値ネットのターン0パネル評価で強い順
 env NCAND(300) PANEL(24) TOPN(60) K(12) SIMS(300) OUT(候補json)
 """
 import os, sys, json, random, statistics
+import pool_versions as _PVS
 os.environ.setdefault("OMP_NUM_THREADS", "1")
 os.environ.setdefault("GA_SIMS", os.environ.get("SIMS", "300"))
 import multiprocessing as mp
@@ -13,7 +14,7 @@ from gen_party_pool import PartyGen
 from _threat_coverage import load_threats, covered_sample
 
 # M-3固定だとM-6運用でnet-t0とeval_vs_builtが旧環境のテンプレートで計算される。
-SEASON = os.environ.get("POOL_SEASON", "M-3")
+SEASON = os.environ.get("POOL_SEASON") or _PVS.season()
 NCAND = int(os.environ.get("NCAND", "300"))
 PANELN = int(os.environ.get("PANEL", "24"))
 TOPN = int(os.environ.get("TOPN", "60"))

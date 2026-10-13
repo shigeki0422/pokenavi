@@ -1,5 +1,6 @@
 """Product3提案の説明情報：役割・パーティ統計・使用率上位との1v1相性。"""
 import json, os, sqlite3, statistics, sys, math
+import pool_versions as _PVS
 from simulator.pokemon import build_from_spec, parse_pokemon_spec
 from simulator.damage import calc_damage
 from simulator.ai import _effective_speed, SETUP_MOVES
@@ -70,14 +71,14 @@ RECOV = {"なまける", "はねやすめ", "じこさいせい", "つきのひ�
 DB = os.path.join(os.path.dirname(__file__), "pokenavi.db")
 
 def _build(spec, L, mega=True):
-    p = build_from_spec(parse_pokemon_spec(spec), L, season=os.environ.get("POOL_SEASON", "M-6"), randomize=False)
+    p = build_from_spec(parse_pokemon_spec(spec), L, season=os.environ.get("POOL_SEASON") or _PVS.season(), randomize=False)
     if mega and p.mega_data is not None: p.do_mega_evolve()
     p._spec = spec        # 実走版1v1（_mu_engine）が spec を必要とするため保持
     if L_REF[0] is None: L_REF[0] = L
     return p
 
 def role_of(spec, L):
-    p = build_from_spec(parse_pokemon_spec(spec), L, season=os.environ.get("POOL_SEASON", "M-6"), randomize=False)
+    p = build_from_spec(parse_pokemon_spec(spec), L, season=os.environ.get("POOL_SEASON") or _PVS.season(), randomize=False)
     mvs = {m.name_jp for m in p.moves}
     it = spec.split("@", 1)[1].split(":")[0]
     evp = spec.split("@", 1)[1].split(":")[3].split("/")
@@ -108,7 +109,7 @@ def role_of(spec, L):
 def party_stats(specs, L, pg, th):
     from _threat_coverage import team_coverage
     from _construction_gap import team_features
-    tf = team_features(specs, L, os.environ.get("POOL_SEASON", "M-6"))
+    tf = team_features(specs, L, os.environ.get("POOL_SEASON") or _PVS.season())
     cov = team_coverage(specs, L, th)[0]
     mons = [_build(s, L) for s in specs]
     wc = {}
@@ -174,7 +175,7 @@ _RUST_WARNED = False
 
 def _season():
     """判定に渡すシーズン。サーバの POOL_SEASON に追従する（型プールと揃える）。"""
-    return os.environ.get("POOL_SEASON", "M-3")
+    return os.environ.get("POOL_SEASON") or _PVS.season()
 
 
 def _rust():
@@ -386,7 +387,7 @@ def _apply_survive(n, O, ratio, ratio_hurt=None):
 _TOPB = None
 # 提案の必然性リペアの穴判定（_necessity_verify.hole_mons）の相手パネル＝season の版。画面の一覧・素早さタブの相手は builder_targets（page の版）。
 # 型は gen_party_pool.PartyGen の出どころ（POOL_SEASON が season の版のシーズンなら型プール、過去シーズンは build_pool_*.md）。
-USAGE_SEASON = os.environ.get("USAGE_SEASON", "M-5")
+USAGE_SEASON = os.environ.get("USAGE_SEASON") or os.environ.get("POOL_SEASON") or _PVS.season()
 
 
 def load_top_builds(L, n=30, k=3):

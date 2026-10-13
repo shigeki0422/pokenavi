@@ -30,11 +30,11 @@ import seed_rule
 HERE = os.path.dirname(os.path.abspath(__file__))
 import pool_versions as PV
 GROUPS = os.environ.get("GROUPS") or PV.path("type_groups", PV.pointer("season"))
-SEASON = "M-6"
+SEASON = PV.season()
 SIMS = int(os.environ.get("COEVO_SIMS", "50"))
 WORKERS = int(os.environ.get("COEVO_WORKERS", "12"))
 SELECT = os.environ.get("COEVO_SELECT", "heur")
-BASE = os.environ.get("COEVO_BASE", os.path.join(os.path.dirname(HERE), "_local", "ai_work", "coevo_base_M-6.json"))
+BASE = os.environ.get("COEVO_BASE", os.path.join(os.path.dirname(HERE), "_local", "ai_work", f"coevo_base_{SEASON}.json"))
 SP_CAP = float(os.environ.get("COEVO_SP_CAP", "0"))
 SHARE = float(os.environ.get("COEVO_SHARE", "0"))
 NICHE_SP = os.environ.get("COEVO_NICHE_SP", "0") == "1"

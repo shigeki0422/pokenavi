@@ -1,34 +1,35 @@
 // 選出ガイドの描画（簡単構築・工房の診断で共有）と、対戦記録のログ翻訳表（観戦ビューア・工房の診断で共有）。
+import { SUGGEST_SEASON } from '../../consts';
 export const GUIDE_I18N: Record<'ja' | 'en' | 'ko', any> = {
   ja: {
     bandGood: '◎ 有利', bandOk: '○ やや有利', bandMid: '△ 五分', bandSlBad: '▲ やや不利', bandBad: '× 不利',
-    gdHead: n => `相手 ${n} 党（使用率・同居率から作った M-6 のパーティ）全体への有利度`,
+    gdHead: n => `相手 ${n} 党（使用率・同居率から作った ${SUGGEST_SEASON} のパーティ）全体への有利度`,
     gdTrios: 'よく選ぶ3匹', gdTrioShare: p => `選ぶ割合 ${p}`, gdTrioAdv: 'この組の有利度',
     gdMembers: '各ポケモンの選出率・先発率', gdSel: '選出率', gdLead: '先発率',
     gdRules: '相手にこれがいたら', gdOppShare: p => `相手の${p}に入る`, gdAdd: '入れる', gdDrop: '外す',
     gdNoRules: '相手のパーティによって選出を大きく変える必要はありません。',
     gdWeak: '苦手な相手', gdStrong: '得意な相手', gdWhen: p => `いるときの有利度 ${p}`,
-    gdLegend: n => `相手は使用率・同居率から作った M-6 のパーティ ${n} 党。選出は相手のパーティを見て AI（学習した選出）が決めたものです。<b>有利度</b>＝その選出で戦ったときの想定勝率（簡易シミュレーションを AI 同士の大量対戦の勝率に合わせて補正した参考値）。◎62%以上 ○56%以上 △50%以上 ▲46%以上 ×それ未満。「入れる／外す」の％は、相手にその種がいないとき→いるときの選出率。表示する傾向は、二つの独立な相手集団の両方で再現したものだけです。`,
+    gdLegend: n => `相手は使用率・同居率から作った ${SUGGEST_SEASON} のパーティ ${n} 党。選出は相手のパーティを見て AI（学習した選出）が決めたものです。<b>有利度</b>＝その選出で戦ったときの想定勝率（簡易シミュレーションを AI 同士の大量対戦の勝率に合わせて補正した参考値）。◎62%以上 ○56%以上 △50%以上 ▲46%以上 ×それ未満。「入れる／外す」の％は、相手にその種がいないとき→いるときの選出率。表示する傾向は、二つの独立な相手集団の両方で再現したものだけです。`,
   },
   en: {
     bandGood: '◎ Favorable', bandOk: '○ Slight edge', bandMid: '△ Even', bandSlBad: '▲ Slightly behind', bandBad: '× Behind',
-    gdHead: n => `Edge against all ${n} opposing teams (M-6 teams generated from usage and teammate rates)`,
+    gdHead: n => `Edge against all ${n} opposing teams (${SUGGEST_SEASON} teams generated from usage and teammate rates)`,
     gdTrios: 'Most-picked trios', gdTrioShare: p => `Picked ${p}`, gdTrioAdv: 'Edge with this trio',
     gdMembers: 'Pick rate & lead rate', gdSel: 'Pick rate', gdLead: 'Lead',
     gdRules: 'If the opponent has…', gdOppShare: p => `on ${p} of teams`, gdAdd: 'Bring', gdDrop: 'Leave out',
     gdNoRules: 'No need to change your picks much depending on the opposing team.',
     gdWeak: 'Tough opponents', gdStrong: 'Favorable opponents', gdWhen: p => `Edge when present ${p}`,
-    gdLegend: n => `Opponents are ${n} M-6 teams generated from usage and teammate rates. Picks are made by the AI (learned selection) after seeing the opposing team. <b>Edge</b> = estimated win rate with that pick (a quick simulation calibrated to large-scale AI-vs-AI results; for reference only). ◎ 62%+ ○ 56%+ △ 50%+ ▲ 46%+ × below. For Bring / Leave out, the % is the pick rate when that Pokémon is absent → present on the opposing team. Only trends that reproduce in two independent opponent pools are shown.`,
+    gdLegend: n => `Opponents are ${n} ${SUGGEST_SEASON} teams generated from usage and teammate rates. Picks are made by the AI (learned selection) after seeing the opposing team. <b>Edge</b> = estimated win rate with that pick (a quick simulation calibrated to large-scale AI-vs-AI results; for reference only). ◎ 62%+ ○ 56%+ △ 50%+ ▲ 46%+ × below. For Bring / Leave out, the % is the pick rate when that Pokémon is absent → present on the opposing team. Only trends that reproduce in two independent opponent pools are shown.`,
   },
   ko: {
     bandGood: '◎ 유리', bandOk: '○ 약간 유리', bandMid: '△ 반반', bandSlBad: '▲ 약간 불리', bandBad: '× 불리',
-    gdHead: n => `상대 ${n}개 파티（사용률・동반율로 만든 M-6 파티） 전체에 대한 유리도`,
+    gdHead: n => `상대 ${n}개 파티（사용률・동반율로 만든 ${SUGGEST_SEASON} 파티） 전체에 대한 유리도`,
     gdTrios: '자주 고르는 3마리', gdTrioShare: p => `고르는 비율 ${p}`, gdTrioAdv: '이 조합의 유리도',
     gdMembers: '포켓몬별 선출률・선봉률', gdSel: '선출률', gdLead: '선봉률',
     gdRules: '상대에게 이 포켓몬이 있으면', gdOppShare: p => `상대의 ${p}에 포함`, gdAdd: '넣기', gdDrop: '빼기',
     gdNoRules: '상대 파티에 따라 선출을 크게 바꿀 필요는 없습니다.',
     gdWeak: '어려운 상대', gdStrong: '유리한 상대', gdWhen: p => `있을 때 유리도 ${p}`,
-    gdLegend: n => `상대는 사용률・동반율로 만든 M-6 파티 ${n}개입니다. 선출은 상대 파티를 보고 AI（학습 선출）가 고른 것입니다. <b>유리도</b>＝그 선출로 싸웠을 때의 예상 승률（간이 시뮬레이션을 AI끼리의 대량 대전 승률에 맞춰 보정한 참고값）. ◎62% 이상 ○56% 이상 △50% 이상 ▲46% 이상 ×그 미만. 「넣기／빼기」의 %는 상대에게 그 포켓몬이 없을 때→있을 때의 선출률입니다. 서로 독립된 두 상대 집단 모두에서 재현된 경향만 표시합니다.`,
+    gdLegend: n => `상대는 사용률・동반율로 만든 ${SUGGEST_SEASON} 파티 ${n}개입니다. 선출은 상대 파티를 보고 AI（학습 선출）가 고른 것입니다. <b>유리도</b>＝그 선출로 싸웠을 때의 예상 승률（간이 시뮬레이션을 AI끼리의 대량 대전 승률에 맞춰 보정한 참고값）. ◎62% 이상 ○56% 이상 △50% 이상 ▲46% 이상 ×그 미만. 「넣기／빼기」의 %는 상대에게 그 포켓몬이 없을 때→있을 때의 선출률입니다. 서로 독립된 두 상대 집단 모두에서 재현된 경향만 표시합니다.`,
   },
 };
 

@@ -19,11 +19,11 @@ sys.path.insert(0, ROOT)
 DB = os.path.join(ROOT, "pokenavi.db")
 OUT = os.path.join(HERE, "datapack.json")
 
-from simulator.data import NATURE_MODS, _chart_raw, _types, DataLoader  # noqa: E402
+from simulator.data import NATURE_MODS, _chart_raw, _types, DataLoader, default_season  # noqa: E402
 from simulator.damage import _is_secondary_effect, effect_text_of  # noqa: E402
 from simulator.ability_categories import CATEGORIES as _ABIL_CATS, ABILITY_CAT_BITS as _ABIL_CAT_BITS  # noqa: E402
 
-SEASONS = os.environ.get("DATAPACK_SEASONS", "M-2,M-3,M-4,M-5,M-6").split(",")
+SEASONS = os.environ.get("DATAPACK_SEASONS", "M-2,M-3,M-4,M-5,M-6,M-7").split(",")
 
 TOPN = {"moves": 12, "items": 5, "abilities": 3, "natures": 3, "evs": 3}
 
@@ -84,7 +84,7 @@ def source_hashes(con=None):
             "ON a.pokemon=m.pokemon AND a.crawled_date=m.cd WHERE a.season=? "
             "AND a.pokemon IN (SELECT base_pokemon_jp FROM pokemon_mega_stats) "
             "ORDER BY a.pokemon, a.usage_rate DESC, a.ability",
-            (os.environ.get("POOL_SEASON", "M-6"),) * 2):
+            (os.environ.get("POOL_SEASON") or default_season(),) * 2):
         d.update(repr(tuple(r)).encode())
     if own:
         con.close()

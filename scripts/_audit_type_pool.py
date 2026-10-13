@@ -1,7 +1,7 @@
 """型プールの監査。リザードンで起きた「特殊技が物理型に入る」類のバグを機械的に探す。
 
 重みつきで違反率を出し、代表例を添える。目視では198種×数千型を確認できない。
-env: TYPES(_local/ai_work/type_pool_M-6.json) SEASON(M-6) TOP(3)
+env: TYPES(season の版の型プール) SEASON(season の版のシーズン) TOP(3)
 """
 import collections
 import json
@@ -41,7 +41,7 @@ def relax(sp):
     return _REL[sp]
 
 TYPES = os.environ.get("TYPES") or PV.path("type_pool", PV.pointer("season"))
-SEASON = os.environ.get("SEASON", "M-6")
+SEASON = os.environ.get("SEASON") or PV.season()
 TOP = int(os.environ.get("TOP", "3"))
 
 USED = collections.defaultdict(set)

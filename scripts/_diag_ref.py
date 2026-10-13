@@ -2,9 +2,9 @@
 対象: 参照分布 ref（相手集団と同じ生成器 _guide_opps で別シード SEED の NP 党）と提案キャッシュ suggest_cache.json の全提案パーティ
 （各キーの1位→2位…の順。ref と1位を交互に先に回す）。1党＝相手 guide_pool の先頭 ADV_OPPS 党×ADV_K 戦を MC_NC 個に分けて回す
 （_diagnose.mcts_adv と同じ分け方・シード）。
-出力: 結果の行 OUT/res.jsonl（再開用）・diag_adv_m6.json（党ごとの adv/se。サーバが読み直す）・diag_ref_m6.json（ref の adv の昇順。MIN_REF 党以上で書く）。
+出力: 結果の行 OUT/res.jsonl（再開用）・diag_adv_<m7 等>.json（党ごとの adv/se。サーバが読み直す）・diag_ref_<m7 等>.json（ref の adv の昇順。MIN_REF 党以上で書く）。
 止める: touch OUT/STOP（走っている分を書いてから抜ける）。再開: 同じコマンドをもう一度。
-使い方: POOL_SEASON=M-6 USAGE_SEASON=M-6 ENGINE=rust venv/bin/python _diag_ref.py   env: NP(300) SEED(1) PROCS(8) OUT(_local/ai_work/diag_mcts)
+使い方: ENGINE=rust venv/bin/python _diag_ref.py   env: NP(300) SEED(1) PROCS(8) OUT(_local/ai_work/diag_mcts_<m7 等>)
 """
 import json
 import multiprocessing as mp
@@ -14,9 +14,10 @@ import time
 
 import _diagnose as DG
 import _select_guide as SG
+import pool_versions as _PVS
 
-SEASON = os.environ.get("POOL_SEASON", "M-6")
-OUT = os.environ.get("OUT") or os.path.join(DG._DIR, "..", "_local", "ai_work", "diag_mcts")
+SEASON = os.environ.get("POOL_SEASON") or _PVS.season()
+OUT = os.environ.get("OUT") or os.path.join(DG._DIR, "..", "_local", "ai_work", f"diag_mcts_{_PVS.file_tag(SEASON)}")
 MIN_REF = 30
 
 

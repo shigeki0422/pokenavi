@@ -1,8 +1,8 @@
 """パーティ診断（ローカル版・2026-10-02）。提案APIの /diagnose・/diag_battle・/improve の中身。
-相手集団は _select_guide と同じ（guide_pool_m6.json）。選出率・条件ルール・苦手/得意は /guide の集計（貪欲8戦×3000党）のまま。
+相手集団は _select_guide と同じ（guide_pool_<m7 等>.json）。選出率・条件ルール・苦手/得意は /guide の集計（貪欲8戦×3000党）のまま。
 有利度（全体・順位・代表相手・改善案）は Rust guide_rows_mcts（同じ選出で対戦を両者 MCTS@SIMS）の勝率をそのまま使う
 （貪欲の差は本番AIの差をほぼ予測しない。根拠 _local/ai_work/diag_validation_20261002.md）。
-全体の有利度は _diag_ref.py が事前計算（diag_adv_m6.json・参照分布 diag_ref_m6.json）。無い党はサーバが貪欲の値を概算で返し、裏で同じ計算を回す。
+全体の有利度は _diag_ref.py が事前計算（diag_adv_<m7 等>.json・参照分布 diag_ref_<m7 等>.json）。無い党はサーバが貪欲の値を概算で返し、裏で同じ計算を回す。
 並列は呼び出し側のプールを受け取る（サーバは _get_pool()、事前計算は自前の Pool）。
 """
 import json
@@ -12,10 +12,11 @@ import os
 from collections import Counter
 
 import _select_guide as SG
+import pool_versions as _PVS
 
 _DIR = os.path.dirname(os.path.abspath(__file__))
-REF_FILE = os.path.join(_DIR, os.environ.get("DIAG_REF", "diag_ref_m6.json"))
-ADV_FILE = os.path.join(_DIR, os.environ.get("DIAG_ADV", "diag_adv_m6.json"))
+REF_FILE = os.path.join(_DIR, os.environ.get("DIAG_REF") or f"diag_ref_{_PVS.file_tag()}.json")
+ADV_FILE = os.path.join(_DIR, os.environ.get("DIAG_ADV") or f"diag_adv_{_PVS.file_tag()}.json")
 SIMS = int(os.environ.get("DIAG_SIMS", "64"))
 MC_NC = 20
 ADV_OPPS, ADV_K, OPP_K = 200, 4, 16

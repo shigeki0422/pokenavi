@@ -6,6 +6,9 @@
 import sys, math, random
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent))
+# pokenavi_engine は datapack を POKENAVI_DATAPACK か cwd 相対の _rust_engine/datapack.json から読む。どこから流しても同じ datapack を読むよう固定する
+import os as _os0
+_os0.environ.setdefault("POKENAVI_DATAPACK", str(Path(__file__).parent.parent / "_rust_engine" / "datapack.json"))
 
 from simulator.data import DataLoader, get_type_effectiveness
 from simulator.battle import (
@@ -4888,10 +4891,17 @@ finally:
 #     上書きされて実使用率9位の種が補完プールから丸ごと脱落していた。
 # ════════════════════════════════════════════════════════════════
 print("\n=== 21. 提案プールのフォーム整合 ===")
+# この検査（と 22b）は M-6 の md（build_pool_M-6.md）と M-6 の型プール（v41）で組んだもの。season の版が替わっても同じデータで
+# 見るようシーズンを固定して読み直す（22b の後で元の env に戻して読み直す）
+import importlib as _il21
+_env21 = {k: os.environ.get(k) for k in ("POOL_SEASON", "USAGE_SEASON", "PARTY_POOL_VERSION", "PARTY_POOL_SRC")}
 try:
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
-    from gen_party_pool import PartyGen as _PG21, FORM_FIX as _FF21
+    os.environ.update(POOL_SEASON="M-6", USAGE_SEASON="M-6", PARTY_POOL_VERSION="M-6/v41")
+    os.environ.pop("PARTY_POOL_SRC", None)
     import gen_party_pool as _GP21
+    _GP21 = _il21.reload(_GP21)
+    _PG21, _FF21 = _GP21.PartyGen, _GP21.FORM_FIX
     import sqlite3 as _sq21
     _con21 = _sq21.connect("scripts/pokenavi.db")
     _cd21 = _con21.execute("SELECT MAX(crawled_date) FROM pokemon_usage WHERE season=? AND rule='single'",
@@ -5085,6 +5095,14 @@ try:
           _tx == {"リザードナイトX": ("ほのお", "ドラゴン"), "リザードナイトY": ("ほのお", "ひこう")}, str(_tx))
 except Exception as _e22b:
     check("残り枠の生成のテストが実行できる", False, f"{type(_e22b).__name__}: {_e22b}")
+# 21・22b は M-6 に固定して読み直した gen_party_pool を使う。ここで元の env に戻して読み直す
+for _k21, _v21 in _env21.items():
+    if _v21 is None:
+        os.environ.pop(_k21, None)
+    else:
+        os.environ[_k21] = _v21
+import gen_party_pool as _GP21r
+_il21.reload(_GP21r)
 
 
 # ════════════════════════════════════════════════════════════════
@@ -6312,15 +6330,16 @@ _c_m2 = _prior26(_M2_OK, "M-2"); _c_m6 = _prior26(_M2_OK, "M-6")
 check(f"対照: {_M2_OK} はどちらのシーズンでも事前分布が付く",
       _c_m2[0] > 0 and _c_m6[0] > 0, f"M-2={_c_m2} M-6={_c_m6}")
 
-# 既定シーズンは BELIEF_SEASON > POOL_SEASON > M-6（以前は M-2 固定で、M-6 の対戦でも
+# 既定シーズンは BELIEF_SEASON > POOL_SEASON > season の版のシーズン（以前は M-2 固定で、M-6 の対戦でも
 # M-2 の使用率分布から相手の型を決定化していた）
 _save26 = _os26.environ.get("BELIEF_SEASON")
 _savep26 = _os26.environ.get("POOL_SEASON")
 try:
     _os26.environ.pop("BELIEF_SEASON", None)
     _os26.environ.pop("POOL_SEASON", None)
-    check("BELIEF_SEASON も POOL_SEASON も無ければ既定は M-6", _OB26(_L26).season == "M-6",
-          f"{_OB26(_L26).season}")
+    import pool_versions as _PV26
+    check("BELIEF_SEASON も POOL_SEASON も無ければ既定は season の版のシーズン", _OB26(_L26).season == _PV26.season(),
+          f"{_OB26(_L26).season} / {_PV26.season()}")
     _os26.environ["POOL_SEASON"] = "M-3"
     check("POOL_SEASON に追従する", _OB26(_L26).season == "M-3", f"{_OB26(_L26).season}")
     _os26.environ.pop("POOL_SEASON", None)
@@ -6335,6 +6354,21 @@ finally:
         _os26.environ["POOL_SEASON"] = _savep26
     if _save26 is not None:
         _os26.environ["BELIEF_SEASON"] = _save26
+
+# season の版を切り替えたとき、Rust の既定シーズン・フォールバック列と Python の列が同時に動いているか
+# （M-7 移行時、Rust sim.rs の既定 M-6 と belief.rs のフォールバック列が Python と食い違うところだった）
+import re as _re26s
+from simulator.belief import OpponentBelief as _OBf26
+from simulator.search_ai import SearchAI as _SAf26
+_rs26s = open(_os26.path.join(str(Path(__file__).parent.parent), "rust_engine", "engine", "src", "sim.rs"), encoding="utf-8").read()
+_rb26s = open(_os26.path.join(str(Path(__file__).parent.parent), "rust_engine", "engine", "src", "belief.rs"), encoding="utf-8").read()
+_rdef26s = _re26s.search(r'fn belief_season\(\)[^}]*?unwrap_or_else\(\|_\| "(M-\d+)"', _rs26s, _re26s.S)
+check("Rust belief_season() の既定が season の版のシーズン", _rdef26s is not None and _rdef26s.group(1) == _PV26.season(),
+      f"{_rdef26s and _rdef26s.group(1)} / {_PV26.season()}")
+_rfb26s = [tuple(_re26s.findall(r'"(M-\d+)"', m)) for m in _re26s.findall(r'for s in \[([^\]]*)\]', _rb26s)]
+check("Rust belief.rs のフォールバック列（2箇所）が Python の _FALLBACK_SEASONS・_MOVE_SEASONS と同じで先頭が season の版のシーズン",
+      len(_rfb26s) == 2 and all(x == _OBf26._FALLBACK_SEASONS == _SAf26._MOVE_SEASONS for x in _rfb26s)
+      and _OBf26._FALLBACK_SEASONS[0] == _PV26.season(), f"{_rfb26s} / {_OBf26._FALLBACK_SEASONS} / {_SAf26._MOVE_SEASONS}")
 
 # Rust は sim.rs の BELIEF_SEASON="M-2" 定数を使うため、M-2 以外では Python 経路に落とす
 try:
@@ -6713,8 +6747,8 @@ _ob32c = _OB32(dl, season="M-6")
 if _sv32 is None: os.environ.pop("JOINT_BUILD", None)
 else: os.environ["JOINT_BUILD"] = _sv32
 check("型候補: JOINT_BUILD=0 なら型候補を読み込まない（旧挙動）", _ob32c.joint is False and _ob32c._builds == {})
-check("信念シーズン: BELIEF_SEASON > POOL_SEASON > M-6 の順で解決する",
-      _ds32() in ("M-2", "M-3", "M-4", "M-5", "M-6"))
+check("信念シーズン: BELIEF_SEASON > POOL_SEASON > season の版のシーズン の順で解決する（使用率行のあるシーズン）",
+      _ds32() in ("M-2", "M-3", "M-4", "M-5", "M-6", "M-7"), _ds32())
 
 # ════════════════════════════════════════════════════════════════
 # SearchAI の計測用フック（既定OFFで本番挙動が変わらないこと）
@@ -7598,6 +7632,28 @@ _ok33 = {"item": "きあいのタスキ", "nature": "ようき", "ability": "さ
 _n33 = _C33.natures(_G33)
 check("生成ルール: 正しい型は違反なし", _C33.rule_errors(_G33, "ガブリアス", [_ok33], set(), _n33) == [],
       str(_C33.rule_errors(_G33, "ガブリアス", [_ok33], set(), _n33)))
+# M-6 v41 は「ルガルガン(昼)」の名前で かたいツメ（たそがれ）の型を持ち、AI・提案が昼の種族値で扱っていた（2026-10-12）
+_ab33 = _C33.species_abilities(_G33)
+_lyc33 = _C33.form_label_errors(_G33, _ab33, "ルガルガン(昼)", [dict(_ok33, ability="かたいツメ"), dict(_ok33, ability="かたいツメ")])
+check("特性・フォルム: 昼の名前で かたいツメ の型はエラー（実体 たそがれ・型数を出す）",
+      len(_lyc33) == 1 and "ルガルガン(たそがれ)" in _lyc33[0] and "2型" in _lyc33[0], str(_lyc33))
+check("特性・フォルム: 正しいフォルムの特性は通す（たそがれ×かたいツメ・昼×するどいめ・まよなか×ノーガード）",
+      _C33.form_label_errors(_G33, _ab33, "ルガルガン(たそがれ)", [dict(_ok33, ability="かたいツメ")]) == []
+      and _C33.form_label_errors(_G33, _ab33, "ルガルガン(昼)", [dict(_ok33, ability="するどいめ")]) == []
+      and _C33.form_label_errors(_G33, _ab33, "ルガルガン(まよなか)", [dict(_ok33, ability="ノーガード")]) == [])
+check("特性・フォルム: 地方フォルムも見る（ダイケンキ×きれあじ → ヒスイダイケンキ）",
+      any("ヒスイダイケンキ" in e for e in _C33.form_label_errors(_G33, _ab33, "ダイケンキ", [dict(_ok33, ability="きれあじ")])))
+check("特性・フォルム: 特性表に無い種は判定しない", _C33.form_label_errors(_G33, _ab33, "存在しない種", [_ok33]) == [])
+import pool_versions as _PV33, os as _o33, json as _j33
+_v41p33 = _PV33.path("type_pool", "M-6/v41")
+if _o33.path.exists(_v41p33):
+    _v41e33 = [(r["species"], e) for r in _j33.load(open(_v41p33)) for e in _C33.form_label_errors(_G33, _ab33, r["species"], r["builds"])]
+    check("特性・フォルム: 修正前の M-6 v41 で ルガルガン(昼)×かたいツメ 404型だけを検出する",
+          len(_v41e33) == 1 and _v41e33[0][0] == "ルガルガン(昼)" and "404型" in _v41e33[0][1], str(_v41e33))
+_pgp33 = _PV33.path("type_pool", _PV33.pointer("page"))
+if _o33.path.exists(_pgp33):
+    _pge33 = [(r["species"], e) for r in _j33.load(open(_pgp33)) for e in _C33.form_label_errors(_G33, _ab33, r["species"], r["builds"])]
+    check(f"特性・フォルム: page の版 {_PV33.pointer('page')} にフォルムの誤ラベルが無い", not _pge33, str(_pge33[:3]))
 def _err33(**kw):
     return " ".join(_C33.rule_errors(_G33, "ガブリアス", [dict(_ok33, **kw)], set(), _n33))
 check("生成ルール: ジュエルに同タイプの攻撃技が無い", "ジュエル" in _err33(item="ノーマルジュエル"))
@@ -9204,7 +9260,10 @@ def _tpar():
     }
     mm, seen = [], set()
     for k, (pa, pb, kw) in PAR.items():
-        for sd in (1, 2, 3, 4):
+        # 4シードで場面が起きなければ8まで延ばす（AI の判断は信念のシーズン等で変わり、場面の起き方はシード次第）
+        for sd in range(1, 9):
+            if sd > 4 and k in seen:
+                break
             try:
                 rec = _F.play_and_record_rust(pa, pb, season="M-6", seed=sd, mcts_sims=30, sel1_idx=list(range(len(pa))))
                 if any(kw in l for t in rec["turns"] for l in t["logs"]):
@@ -9720,7 +9779,7 @@ def _t44_suggest():
     import pool_versions as _PV44
     import gen_party_pool as _GP44
     _sv = _PV44.pointer("season")
-    check("提案: M-6 の型の出どころは型プール（build_pool_M-6.md ではない）",
+    check("提案: season の版のシーズンの型の出どころは型プール（build_pool_*.md ではない）・M-3 は md",
           _GP44.party_pool_src(_PV44.season_of(_sv)) == "pool" and _GP44.party_pool_src("M-3") == "md")
     _pg = _GP44.PartyGen(src="pool")
     _pool = {r["species"]: {(b["item"], tuple(sorted(b["moves"]))) for b in r["builds"]}
@@ -9742,8 +9801,14 @@ def _t44_suggest():
     _raw = [b for r in _j44.load(open(_PV44.path("type_pool", _sv))) for b in r["builds"]]
     _bad_rule = [s for ss in _pg.pool_resolve.values() for s in ss
                  if not _GP44.rule_ok({"item": s.split("@", 1)[1].split(":")[0], "moves": s.split("@", 1)[1].split(":")[2].split("|")})]
-    check("提案: 全ての型が持ち物と技の規則（item_ok）を満たす（v41 の ひかりのねんど＝壁技なし 等は読むときに外す）",
-          any(not _GP44.rule_ok(b) for b in _raw) and not _bad_rule, f"{len(_bad_rule)}件 例 {_bad_rule[:2]}")
+    check("提案: 全ての型が持ち物と技の規則（item_ok）を満たす", not _bad_rule, f"{len(_bad_rule)}件 例 {_bad_rule[:2]}")
+    # 規則違反の型を含む版（v41 の ひかりのねんど＝壁技なし 等）でも、提案は読むときに外す
+    _raw41 = [b for r in _j44.load(open(_PV44.path("type_pool", "M-6/v41"))) for b in r["builds"]]
+    _pg41 = _GP44.PartyGen(src="pool", version="M-6/v41")
+    _bad41 = [s for ss in _pg41.pool_resolve.values() for s in ss
+              if not _GP44.rule_ok({"item": s.split("@", 1)[1].split(":")[0], "moves": s.split("@", 1)[1].split(":")[2].split("|")})]
+    check("提案: 規則違反の型を含む版（v41）でも読むときに外す",
+          any(not _GP44.rule_ok(b) for b in _raw41) and not _bad41, f"{len(_bad41)}件 例 {_bad41[:2]}")
     check("提案: 型プールの キュウコン は通常のキュウコン（md の「キュウコン＝アローラ」の付け替えをしない）",
           all(s.startswith("キュウコン@") for s in _pg.pool.get("キュウコン", [])) and "アローラキュウコン" in _pg.pool)
     import random as _r44
@@ -10277,6 +10342,65 @@ try:
     _t50_usage_sum_unknown_species()
 except Exception as _e50:
     check("50 usage_sum のテストが実行できる", False, f"{type(_e50).__name__}: {_e50}")
+
+# === 51 season の版の切り替え（M-6/v41 → M-7）: シーズンと生成物のファイル名は season のポインタから決める ===
+def _t51_season_pointer():
+    import importlib, os as _o51, re as _r51, subprocess as _sp51, sys as _sy51, json as _j51
+    import pool_versions as _PV51
+    from simulator.data import default_season as _ds51
+    _sd = str(Path(__file__).parent.parent)
+    _s = _PV51.season()
+    check("51 season(): pool_versions.json の season の版のシーズン", _s == _PV51.season_of(_PV51.pointer("season")), _s)
+    check("51 simulator.data.default_season() は pool_versions.season() と同じ", _ds51() == _s, f"{_ds51()} / {_s}")
+    check("51 file_tag: M-7 → m7・M-10 → m10", _PV51.file_tag("M-7") == "m7" and _PV51.file_tag("M-10") == "m10")
+    # env を消した子プロセスで既定値を読む（このプロセスは他のテストで POOL_SEASON 等を書き換えている）
+    _env = {k: v for k, v in _o51.environ.items() if k not in ("POOL_SEASON", "USAGE_SEASON", "GUIDE_POOL", "DIAG_REF", "DIAG_ADV", "DATAPACK_SEASONS", "PARTY_POOL_VERSION")}
+    _code = (
+        "import json, os, sys\n"
+        "sys.path.insert(0, '.')\n"
+        "import gen_party_pool as G, _select_guide as SG, _diagnose as DG\n"
+        "sys.path.insert(0, '_rust_engine')\n"
+        "import datapack_export as DX\n"
+        "print(json.dumps([G.POOL_SEASON, G.USAGE_SEASON, os.path.basename(SG.POOL_FILE), os.path.basename(DG.REF_FILE), os.path.basename(DG.ADV_FILE), DX.SEASONS, G.party_pool_version()]))\n")
+    _r = _sp51.run([_sy51.executable, "-c", _code], cwd=_sd, env=_env, capture_output=True, text=True)
+    _out = _j51.loads(_r.stdout.strip().splitlines()[-1]) if _r.returncode == 0 else None
+    _t = _PV51.file_tag(_s)
+    check("51 POOL_SEASON 未指定の既定: 提案の型プールのシーズン・使用率のシーズンが season の版のシーズン",
+          _out is not None and _out[0] == _s and _out[1] == _s, str(_out) if _out else _r.stderr[-400:])
+    check("51 選出ガイド・診断の生成物のファイル名が season のシーズン（guide_pool_<tag>・diag_ref_<tag>・diag_adv_<tag>）",
+          _out is not None and _out[2:5] == [f"guide_pool_{_t}.json", f"diag_ref_{_t}.json", f"diag_adv_{_t}.json"], str(_out))
+    check("51 datapack の使用率に season のシーズンが入る（入らないと信念・テンプレートが前シーズンへフォールバックする）",
+          _out is not None and _s in _out[5], str(_out))
+    check("51 提案の型プールの版は season のポインタ", _out is not None and _out[6] == _PV51.pointer("season"), str(_out))
+    for _f in (f"guide_pool_{_t}.json", f"archetypes_{_t}.json", f"ensemble_model_{_t}.json", f"diag_ref_{_t}.json", f"diag_adv_{_t}.json"):
+        check(f"51 .gcloudignore が {_f} をコンテナに入れる", f"!{_f}" in open(_o51.path.join(_sd, ".gcloudignore")).read().splitlines())
+    # pool_checks を SEASON 無しで流すと、監査の緩和判定（_audit_type_pool.relax）が既定のシーズンの使用率で行われ、
+    # M-7 の版に M-6 の使用率で「監査の違反率」の警告が出ていた。新しい版のシーズンを既定にする
+    _code2 = (
+        "import os, sys\n"
+        "sys.path.insert(0, '.')\n"
+        "import pool_checks as C\n"
+        "def _stop(v):\n"
+        "    raise RuntimeError('SEASON=' + str(os.environ.get('SEASON')))\n"
+        "C.load = _stop\n"
+        "try:\n"
+        "    C.run('M-6/v41', 'M-5/x')\n"
+        "except RuntimeError as e:\n"
+        "    print(e)\n")
+    _r2 = _sp51.run([_sy51.executable, "-c", _code2], cwd=_sd, env={k: v for k, v in _env.items() if k != "SEASON"},
+                    capture_output=True, text=True)
+    check("51 pool_checks.run は SEASON 未指定なら新しい版のシーズンで生成器・監査を読む",
+          _r2.stdout.strip().endswith("SEASON=M-5"), _r2.stdout[-200:] + _r2.stderr[-300:])
+    # 提案キャッシュのキーに型プールの版を入れる（版を替えたのに前の版の提案が当たり続けないように）
+    _src = open(_o51.path.join(_sd, "product3_server.py"), encoding="utf-8").read()
+    check("51 提案キャッシュのキーと読み込みの照合に型プールの版（_POOL_TAG）が入る",
+          "+ [_NET_TAG, _ENS_TAG, _POOL_TAG]" in _src and 'f\'"{_POOL_TAG}"\' in _k' in _src)
+
+
+try:
+    _t51_season_pointer()
+except Exception as _e51:
+    check("51 season の版の切り替えのテストが実行できる", False, f"{type(_e51).__name__}: {_e51}")
 
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:

@@ -8,16 +8,14 @@ VARIANTSの中身はDBクエリだけのgen_party_pool.PartyGen()から組み立
 
 使い方: venv/bin/python export_species_json.py [出力先パス]
 既定の出力先は public/suggest-data/species.json（工房が使う public/builder-data/ とは別名にして衝突を避ける）。
-POOL_SEASON環境変数で対象シーズンを切り替える(既定M-6＝本番Cloud RunのPOOL_SEASONと同じ)。
-gen_party_pool.py自体の既定はM-3のままなので、ここで明示的にM-6を既定にしないと、この
-静的JSONだけ古いシーズンのまま取り残される（過去に本体のbuilder-dataで実際に起きた事故と同種）。
-シーズン移行時はこの既定値も一緒に更新すること。
+POOL_SEASON環境変数で対象シーズンを切り替える(既定 season の版のシーズン＝本番Cloud RunのPOOL_SEASONと同じ)。
 """
 import os
+import pool_versions as _PVS
 import sys
 import json
 
-os.environ.setdefault("POOL_SEASON", "M-6")
+os.environ.setdefault("POOL_SEASON", _PVS.season())
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from gen_party_pool import PartyGen, _spec_mega, _item_of  # noqa: E402
 

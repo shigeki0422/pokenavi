@@ -12,6 +12,13 @@ from typing import Optional
 DB_PATH = os.environ.get("POKENAVI_DB") or os.path.join(
     os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "pokenavi.db")
 
+
+def default_season() -> str:
+    """POOL_SEASON の既定。scripts/pool_versions.json の season の版のシーズン（例 M-7）。"""
+    import json
+    pv = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "pool_versions.json")
+    return json.load(open(pv))["season"].split("/")[0]
+
 # 性格補正テーブル: 上げる/(下げる) → (上昇ステータス, 低下ステータス)
 NATURE_MODS = {
     "いじっぱり": ("attack",     "sp_attack"),
@@ -155,12 +162,12 @@ class DataLoader:
     def pre_mega_abilities(self) -> dict:
         """メガ石を持つ種族のメガシンカ前の特性 {種族: {"pick": 特性, "legal": [通常特性...], "mega": [メガ特性...]}}。
         spec の特性はメガ後の特性（例: ボーマンダ:スカイスキン）で書かれることが多く、そのままではメガ前の姿が
-        本来の特性（いかく等）で入場しない。pick は POOL_SEASON（既定 M-6）の特性採用データのうち通常特性の最多
+        本来の特性（いかく等）で入場しない。pick は POOL_SEASON（既定 season の版のシーズン）の特性採用データのうち通常特性の最多
         （通常特性の一覧が無い種族はメガ特性以外の最多）、無ければ通常特性の1番目。Rust は datapack の pre_mega を同じ規則で使う。"""
         if self._pre_mega is not None:
             return self._pre_mega
         import os as _os
-        season = _os.environ.get("POOL_SEASON", "M-6")
+        season = _os.environ.get("POOL_SEASON") or default_season()
         out: dict = {}
         megas: dict = {}
         for r in self.con.execute("SELECT base_pokemon_jp, ability FROM pokemon_mega_stats"):

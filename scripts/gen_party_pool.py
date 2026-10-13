@@ -9,11 +9,12 @@ M-3はusage_rate未格納のため種の重みは順位(rank)から算出（既�
 使い方: venv/bin/python gen_party_pool.py [N]
 """
 import os, re, sys, random, collections, sqlite3, math
+import pool_versions as _PVS
 import seed_rule
 
 D = os.path.dirname(__file__)
-# 型プールのシーズン。POOL_SEASON で切り替える（M-C投入時に M-6 へ）。
-POOL_SEASON = os.environ.get("POOL_SEASON", "M-3")
+# 型プールのシーズン。既定は season の版のシーズン（POOL_SEASON で上書き）。
+POOL_SEASON = os.environ.get("POOL_SEASON") or _PVS.season()
 MD = os.path.join(D, os.environ.get("POOL_MD", f"build_pool_{POOL_SEASON}.md"))
 DBPATH = os.path.join(D, "pokenavi.db")
 SEASON = POOL_SEASON    # 型プール（build_pool_{POOL_SEASON}.md ＋ 上位構築の追加型）のシーズン。
@@ -21,7 +22,7 @@ SEASON = POOL_SEASON    # 型プール（build_pool_{POOL_SEASON}.md ＋ 上位�
 # _live_rank/_load_cooc がここを見る。型プールのシーズン(SEASON)とは別物なので混同しないこと。
 # 以前は両方が 'M-3' 直書きで、M-4→M-5 と進んでも順位・同居率がM-3のまま止まっていた
 # （シビルドンはM-3で77位→M-5で114位なのに MAX_RANK=80 を通過し続けていた）。
-USAGE_SEASON = os.environ.get("USAGE_SEASON") or os.environ.get("POOL_SEASON", "M-5")
+USAGE_SEASON = os.environ.get("USAGE_SEASON") or POOL_SEASON
 TYPEDUP_MAX = int(os.environ.get("TYPEDUP_MAX", "2"))
 USAGE_DATE = os.environ.get("USAGE_DATE") or None   # 例 2026-09-11。未指定なら最新クロール
 PREFER_IU_KEEP = float(os.environ.get("PREFER_IU_KEEP", "5"))  # 技が同じでも別型として残す持ち物の実使用率(%)   # 同一タイプを持てる味方の上限（0で無効）

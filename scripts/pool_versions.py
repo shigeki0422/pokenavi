@@ -40,3 +40,13 @@ def path(name, version):
 
 def season_of(version):
     return version.split("/")[0]
+
+
+def season():
+    """season の版のシーズン（例: M-7）。POOL_SEASON 等の env の既定値に使う。"""
+    return season_of(pointer("season"))
+
+
+def file_tag(s=None):
+    """シーズン別の生成物のファイル名の接尾辞（M-7 → m7）。既定は POOL_SEASON、無ければ season の版。"""
+    return (s or os.environ.get("POOL_SEASON") or season()).lower().replace("-", "")

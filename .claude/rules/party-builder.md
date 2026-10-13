@@ -30,7 +30,7 @@ paths:
      ポインタ scripts/pool_versions.json（コミットする）
        page   … 情報ページ用。週次で更新 → gen_builder_data.py（public/builder-data: mon/*.json の mu・targets.json・version.json）
                                          → gen_archetype_data.py（src/data/archetypes.json。"_version" に版）
-       season … シーズン固定版（今は M-6/v41 = _local/ai_work/frozen/*_M-6_v41.json・読み取り専用）
+       season … シーズン固定版（今は M-7/2026-10-11i＝pools/M-7/2026-10-11i/・chmod a-w。2026-10-12 まで M-6/v41）。コードのシーズンは pool_versions.season()
                  → datapack_export.py（AI）・gen_party_pool.PartyGen（簡単構築の提案・補完 _product3_complete・提案キャッシュ）
                    ・_coevo_groups.py（生成集団・共進化）・_repop_builds.py・_audit_*.py
   努力値 … どの経路も scripts/ev_fill.py で合計66に揃えてから使う（生成器の出力・型プール/系統表の読み込み・工房の候補）
@@ -51,7 +51,7 @@ paths:
 - シーズン固定版（season）の切り替え: 新シーズン開始か環境の大変化のときだけ。週次の版を候補に A/B（勝率・較正・fresh_parity/belief_parity）で確認してから切り替え、datapack・wasm・Cloud Run を作り直す。
 
 ## 週次のチェック（scripts/pool_checks.py。update_type_pool.py が自動で流す）
-- エラー（終了コード1で止める）: 生成ルール（覚えない技・没収技、ジュエルと同タイプの攻撃技、こだわり×積み技（トリック/すりかえが無いときだけ。押し付けてから積む型は成立する。守る・回復は制限しない）＝item_ok、EV 各≤32・合計＝66、性格、他種のメガ石、PRUNE_W 未満の型（生成器が最後に落とす）。持ち物と技の規則をどれも満たさない型は使用率最大の持ち物を当てずに落とす（当てると規則違反の型ができる。2026-10-11）、重みの合計）／命名・系統分け（下の規則）／出力の整合（archNo・archSub・割合が想定型と 1v1 で一致、分割ラベル、版の記録。`DIST=` で en/ko の型名漏れ）／努力値の合計≠66（想定型・1v1・工房の型プリセット・努力値の候補）／型の出どころ（提案の型が season の版にあり合計66・生成集団の系統表が season の版・1v1 の型が page の版にある）。
+- エラー（終了コード1で止める）: 生成ルール（覚えない技・没収技、ジュエルと同タイプの攻撃技、こだわり×積み技（トリック/すりかえが無いときだけ。押し付けてから積む型は成立する。守る・回復は制限しない）＝item_ok、EV 各≤32・合計＝66、性格、他種のメガ石、PRUNE_W 未満の型（生成器が最後に落とす）。持ち物と技の規則をどれも満たさない型は使用率最大の持ち物を当てずに落とす（当てると規則違反の型ができる。2026-10-11）、重みの合計）／命名・系統分け（下の規則）／出力の整合（archNo・archSub・割合が想定型と 1v1 で一致、分割ラベル、版の記録。`DIST=` で en/ko の型名漏れ）／努力値の合計≠66（想定型・1v1・工房の型プリセット・努力値の候補）／フォルムの誤ラベル（特性がそのフォルムの特性表に無い型。M-6 v41 のルガルガン(昼)×かたいツメ＝実体たそがれ 404型を検出）／型の出どころ（提案の型が season の版にあり合計66・生成集団の系統表が season の版・1v1 の型が page の版にある）。
 - 警告（report.md に一覧）: 前の版との変化（系統の割合≥10pt・系統の消滅/新規・プールの採用率≥10pt・上位持ち物の入れ替わり・技の組の KL≥0.1。DB の変化<3pt なのにプールが動いたら「生成側の疑い」）、DB の使用率との差（技10pt（上位10を4枠へ伸ばした目標）・持ち物5・性格5・努力値10・特性15。**努力値は DB 側もプールと同じ順（`_ev_fine`→`_ev_key`）で集約する。`_ev_key` は `_ev_fine` と可換でないので生値をそのまま集約すると別のクラスに落ちる**。努力値の合計は `ev_fill` が必ず66に揃えるので比べない）、監査の違反率≥0.5%、ランキングの網羅、フォルムの誤ラベル（`_gen_type_pool.form_fix` がクロールの誤ラベルを特性から黙って補正した種。タイプが同じフォルム同士はタイプアイコンの照合では見つからないので、ここで必ず目に入るようにする。2026-10-11 に M-6 9/17〜M-7 の「ルガルガン(昼)」＝実体たそがれ と M-3 6/26 の3フォーム循環シフトを DB ごと修正）。
 - 閾値は pool_checks.py の先頭の定数。規則は生成側の関数・定数（_gen_type_pool.item_ok/learnset/PRUNE_W、arch_groups.CORE/MAX_GROUPS/GIMMICK/full_attack）を import して判定する（二重に書かない）。検出のテストは test_all.py の 33。
 
@@ -84,7 +84,7 @@ paths:
 - **1v1相性ダイアログは `mu-cell-popup.ts` の `openMuDialog`（ライブ計算：自分の型×相手の種の代表型 → wasm → 表示）／`renderMuDialog`（情報ページの埋め込みデータ）だけを使う**（工房・簡単構築・情報ページ・対戦アシスト）。ページ側で `renderMatchupTable`/`renderMuPopup`/`renderMuCard` を直接呼ばない（prebuild の `scripts/check_mu_dialog.mjs` が止める）。簡単構築の「ポケモン相性」の一覧（Cloud Run `_explain.matchup_grid`・提案キャッシュの matchup）もダイアログと同じ相手＝page の版の代表型（`scripts/builder_targets.json`＝gen_builder_data.py が targets.json と同時に書く写し。同じ列・順番・メガX/Y）と同じ集約（割合の重み付き平均・`*`＝型ごとの記号の最良≠最悪、`mu_agg`＝matchup.ts judgeVsBuildsMulti）。エンジンへの入力はどちらも spec をそのまま渡す（技を外さない・メガ石持ちの特性はメガ前・シーズン無し。どちらかを変えたら `_explain.py` も直す。test_all の 46 が wasm と全セル、47 が入力の規則を突き合わせる）。週次の update_type_pool.py が `_refresh_panel.py MATCHUP_ONLY=1` で一覧の記号と素早さタブも作り直す（Cloud Run の再デプロイが要る）。素早さタブの相手列・内訳（`/speed_detail`、X/Y は `lbl`）も同じ page の版の代表型。提案（パーティの中身）と採点・必然性リペアの穴判定（`_explain.load_top_builds`/`_opp_columns`）は season の版のまま。「攻撃相性」タブはタイプ相性の表（内訳 `/atk_detail`）。
 - `mu-replay.ts`: 対戦再生（1ターンずつ・特性発動/メガシンカ/とどめは技そのもののダメージ）。操作やくわしい内訳を開いたときは画面内に収まるようスクロール。
 - 情報ページ: `MatchupSection.astro`（相性表は自分の代表型の割合で重み付けした判定。自分の型の切替は置かない）＋ `MatchupBreakdownPopup.astro`（判定結果を `<template class="mbp-data">` のJSONで埋め込み、開いたときにクライアント描画。ポップアップ内で自分/相手の型をタブ切替）。`BuildArchetypeSection.astro` が想定型。
-- 簡単構築 `PartySuggestApp.astro` の「選出ガイド」タブ（2026-10-02 相手集団の統計に変更）: タブを開いたときに `POST /guide {specs}` で1提案ずつ計算（`scripts/_select_guide.py`＋Rust `guide_rows`、約1.2秒・同じパーティはメモ）。相手＝使用率＋同居率の生成器で引いた M-6 の3000党（`scripts/guide_pool_m6.json`、`_guide_opps.py` が作る。シーズンを替えたら作り直す）。相手ごとに学習選出（先頭＝リード）と貪欲AI 8戦の勝率（MCTS@400 へ線形較正）を出し、集計だけを表示: 全体の有利度・よく選ぶ3匹・各ポケモンの選出率/先発率・「相手にこれがいたら入れる/外す」・苦手/得意な相手。少数の相手（旧版の10構築・旧々版 `_d1_guide.py` の8構築）は1対面ごとの揺れがそのまま出るので使わない。表示の基準（z≥6・差25pt／2.5pt）は独立な2集団で97〜98%再現する値（REQUIREMENTS 4-1j）。
+- 簡単構築 `PartySuggestApp.astro` の「選出ガイド」タブ（2026-10-02 相手集団の統計に変更）: タブを開いたときに `POST /guide {specs}` で1提案ずつ計算（`scripts/_select_guide.py`＋Rust `guide_rows`、約1.2秒・同じパーティはメモ）。相手＝使用率＋同居率の生成器で引いた season のシーズンの3000党（`scripts/guide_pool_<m7 等>.json`＝`pool_versions.file_tag()`、`_guide_opps.py` が作る。シーズンを替えたら作り直す）。相手ごとに学習選出（先頭＝リード）と貪欲AI 8戦の勝率（MCTS@400 へ線形較正）を出し、集計だけを表示: 全体の有利度・よく選ぶ3匹・各ポケモンの選出率/先発率・「相手にこれがいたら入れる/外す」・苦手/得意な相手。少数の相手（旧版の10構築・旧々版 `_d1_guide.py` の8構築）は1対面ごとの揺れがそのまま出るので使わない。表示の基準（z≥6・差25pt／2.5pt）は独立な2集団で97〜98%再現する値（REQUIREMENTS 4-1j）。
 - 工房 `PartyBuilderApp.astro`: 仮想敵の前提（天候・フィールド・自分/相手の積み）はそのカードとEV逆算にだけ使い、相性表・穴の計算には反映しない。
 
 ## 既知の残課題

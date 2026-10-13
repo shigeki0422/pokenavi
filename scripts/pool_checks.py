@@ -1,6 +1,6 @@
 """型プールの版のチェックと差分レポート（週次の型生成 update_type_pool.py から自動で呼ぶ。単体でも使える）。
 
-エラー（終了コード1）: 生成ルールの違反（努力値の合計≠66 を含む）・型命名/系統分けの規則の違反・出力（想定型と1v1）の不整合・
+エラー（終了コード1）: 生成ルールの違反（努力値の合計≠66 を含む）・特性がその種（フォルム）の特性表に無い型（フォルムの誤ラベル）・型命名/系統分けの規則の違反・出力（想定型と1v1）の不整合・
   生成物の努力値の合計≠66・型の出どころ（提案・生成集団・工房が型プールの版から型を取っているか）
 警告（一覧にしてレポートに入れる）: 前の版との統計の変化・DB の使用率との差・ランキングの網羅・監査（_audit_type_pool）の違反率
 規則は生成側（_gen_type_pool・arch_groups・gen_builder_data）の関数と定数を import して使い、ここに二重に書かない。
@@ -91,6 +91,26 @@ def rule_errors(G, sp, builds, used=None, nats=None):
             err.append(f"{why} {tag}")
         if it in G._STONES and it not in stones:
             err.append(f"他の種のメガ石 {tag}")
+    return err
+
+
+def species_abilities(G):
+    legal = collections.defaultdict(set)
+    for n, a in G.con.execute("select pokemon_name, ability from pokemon_species_abilities"):
+        legal[n].add(a)
+    return legal
+
+
+def form_label_errors(G, abil, sp, builds):
+    """特性がその種（フォルム）の特性表に無い型。タイプが同じフォルム同士（ルガルガン 昼/たそがれ/まよなか）は
+    タイプアイコンの照合では見つからず、M-6 v41 は「ルガルガン(昼)」の名前で かたいツメ（たそがれ）の型を持っていた（2026-10-12）"""
+    if sp not in abil:
+        return []
+    bad = collections.Counter(b["ability"] for b in builds if b["ability"] not in abil[sp])
+    err = []
+    for ab, n in bad.items():
+        real = [x for x in abil if x != sp and G._form_stem(x) == G._form_stem(sp) and ab in abil[x]]
+        err.append(f"特性 {ab} がこの種の特性表 {sorted(abil[sp])} に無い {n}型" + (f"（フォルムの誤ラベル: 実体は {'/'.join(real)}）" if real else ""))
     return err
 
 
@@ -614,6 +634,8 @@ def seed_pool_warnings():
 
 
 def run(prev, new, stage="all", dist=None):
+    # 生成器・監査は import 時に SEASON を読む。未指定だと新しい版と別シーズンの使用率で監査の緩和を判定してしまう
+    os.environ.setdefault("SEASON", PV.season_of(new))
     import _gen_type_pool as G
     import arch_groups as A
     P, N = load(prev), load(new)
@@ -625,6 +647,11 @@ def run(prev, new, stage="all", dist=None):
     nats = natures(G)
     for sp, r in npool.items():
         E += [("生成ルール", sp, e) for e in rule_errors(G, sp, r["builds"], used[r.get("source_species", sp)] | used[sp], nats)]
+    abil = species_abilities(G)
+    for sp, r in npool.items():
+        E += [("特性・フォルム", sp, e) for e in form_label_errors(G, abil, sp, r["builds"])]
+    for sp, v in ngroups.items():
+        E += [("特性・フォルム（系統表）", sp, e) for e in form_label_errors(G, abil, sp, [b for g in v["groups"] for b in g["builds"]])]
     for sp, v in ngroups.items():
         E += [("命名・系統分け", sp, e) for e in naming_errors(G, A, sp, v["groups"])]
     E += [("シードの規則", sp, e) for sp, e in seed_errors(ngroups)]
