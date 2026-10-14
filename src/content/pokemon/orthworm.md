@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのミミズズ基礎データ。
 pokemonName: 'ミミズズ'
 dexNumber: 968
 usageRank: 97
-updatedDate: '2026-10-13'
+updatedDate: '2026-10-14'
 pubDate: '2026-10-11'
 draft: false
 

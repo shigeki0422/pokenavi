@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのペロリーム基礎データ
 pokemonName: 'ペロリーム'
 dexNumber: 685
 usageRank: 96
-updatedDate: '2026-10-13'
+updatedDate: '2026-10-14'
 pubDate: '2026-10-11'
 draft: false
 

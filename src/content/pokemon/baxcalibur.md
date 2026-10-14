@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのセグレイブ基礎データ
 pokemonName: 'セグレイブ'
 dexNumber: 998
 usageRank: 14
-updatedDate: '2026-10-13'
+updatedDate: '2026-10-14'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'baxcalibur-analysis-m6'

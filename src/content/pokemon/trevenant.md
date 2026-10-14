@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのオーロット基礎データ
 pokemonName: 'オーロット'
 dexNumber: 709
 usageRank: 999
-updatedDate: '2026-10-13'
+updatedDate: '2026-10-14'
 pubDate: '2026-05-24'
 draft: false
 

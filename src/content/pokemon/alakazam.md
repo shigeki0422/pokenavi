@@ -1,10 +1,10 @@
 ---
 title: 'フーディン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのフーディン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率94位。'
+description: 'ポケモンチャンピオンズのフーディン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率95位。'
 pokemonName: 'フーディン'
 dexNumber: 65
-usageRank: 94
-updatedDate: '2026-10-13'
+usageRank: 95
+updatedDate: '2026-10-14'
 pubDate: '2026-10-11'
 draft: false
 
@@ -30,7 +30,7 @@ faq:
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.65</strong>　／　使用率 <strong style="color:#dc2626">94位</strong>
+      全国図鑑 <strong>No.65</strong>　／　使用率 <strong style="color:#dc2626">95位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-10-11</div>
   </div>

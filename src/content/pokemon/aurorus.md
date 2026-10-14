@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのアマルルガ基礎データ
 pokemonName: 'アマルルガ'
 dexNumber: 699
 usageRank: 176
-updatedDate: '2026-10-13'
+updatedDate: '2026-10-14'
 pubDate: '2026-10-11'
 draft: false
 

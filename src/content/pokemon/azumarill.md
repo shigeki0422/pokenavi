@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのマリルリ基礎データ。
 pokemonName: 'マリルリ'
 dexNumber: 184
 usageRank: 89
-updatedDate: '2026-10-13'
+updatedDate: '2026-10-14'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'azumarill-analysis-m2'

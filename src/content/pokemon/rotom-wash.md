@@ -5,7 +5,7 @@ pokemonName: 'ウォッシュロトム'
 dexNumber: 479
 usageRank: 31
 imageForm: '02'
-updatedDate: '2026-10-13'
+updatedDate: '2026-10-14'
 pubDate: '2026-10-11'
 draft: false
 

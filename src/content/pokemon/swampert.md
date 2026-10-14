@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのラグラージ基礎データ
 pokemonName: 'ラグラージ'
 dexNumber: 260
 usageRank: 36
-updatedDate: '2026-10-13'
+updatedDate: '2026-10-14'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'swampert-analysis-m3'
