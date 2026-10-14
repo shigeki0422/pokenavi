@@ -10402,6 +10402,51 @@ try:
 except Exception as _e51:
     check("51 season の版の切り替えのテストが実行できる", False, f"{type(_e51).__name__}: {_e51}")
 
+# 52 型生成器: 素早さを下げる攻撃技（がんせきふうじ等）の方面の仕分け（2026-10-14）
+def _t52_speed_ctrl():
+    import json as _j52, os as _o52, subprocess as _sp52, sys as _sy52
+    _sd = _o52.path.dirname(_o52.path.dirname(_o52.path.abspath(__file__)))
+    _code = (
+        "import json, os, sys, zlib, collections\n"
+        "os.environ['N'] = '0'\n"
+        "import _gen_type_pool as G\n"
+        "gab = {'phys': 0.666, 'spec': 0.298, 'mix': 0.036}\n"
+        "bri = {'spec': 0.944, 'phys': 0.044, 'mix': 0.012}\n"
+        "try:\n"
+        "    unit = [G.gate('がんせきふうじ', 'spec', gab), G.gate('がんせきふうじ', 'phys', gab),\n"
+        "            G.gate('がんせきふうじ', 'spec', bri), G.gate('じしん', 'spec', bri)]\n"
+        "except TypeError as e:\n"
+        "    unit = str(e)\n"
+        "out = {'unit': unit}\n"
+        "for sp in ('ガブリアス', 'バクフーン'):\n"
+        "    r = G.generate_one(sp, zlib.crc32(sp.encode()))\n"
+        "    z = collections.Counter(); w = collections.Counter()\n"
+        "    for b in r['builds']:\n"
+        "        k = 'Z' if b['item'] == 'ガブリアスナイトZ' else ('spec' if G.nature_side(b['nature']) == 'spec' else 'other')\n"
+        "        w[k] += b['weight']\n"
+        "        if 'がんせきふうじ' in b['moves']:\n"
+        "            z[k] += b['weight']\n"
+        "    tot = sum(w.values())\n"
+        "    out[sp] = {k: [w[k] / tot, z[k] / w[k]] for k in w}\n"
+        "print(json.dumps(out, ensure_ascii=False))\n")
+    _r = _sp52.run([_sy52.executable, "-c", _code], cwd=_sd, env=dict(_o52.environ, SEASON="M-7"),
+                   capture_output=True, text=True)
+    _d = _j52.loads(_r.stdout.strip().splitlines()[-1]) if _r.returncode == 0 else {}
+    check("52 gate: 物理の層が過半の種（ガブリアス 物理の層 0.67）では がんせきふうじ を特殊の層に入れない／特殊寄りの種（ブリジュラス 0.06）は入れる",
+          _d.get("unit") == [False, True, True, False], str(_d.get("unit")) + _r.stderr[-300:])
+    _g = _d.get("ガブリアス", {}).get("Z", [0, 1])
+    check("52 M-7 ガブリアスナイトZ の型に がんせきふうじ が主力として入らない（上位構築 M-6 の Z 19型で0件。修正前81%）・Z の型が縮まない（使用率35%）",
+          _g[1] < 0.10 and _g[0] >= 0.25, str(_d.get("ガブリアス")))
+    _b = _d.get("バクフーン", {}).get("spec", [0, 0])
+    check("52 M-7 バクフーン（特殊の層 0.94・がんせきふうじ 43%）は特殊の型に がんせきふうじ が入る",
+          _b[1] >= 0.3, str(_d.get("バクフーン")))
+
+
+try:
+    _t52_speed_ctrl()
+except Exception as _e52:
+    check("52 素早さを下げる技の仕分けのテストが実行できる", False, f"{type(_e52).__name__}: {_e52}")
+
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:
     print(f"\n--- 失敗リスト ---")

@@ -392,7 +392,7 @@ def marg_warnings(G, pool, meta):
                 # 技の目標は生成器と同じく上位10の率を4枠（400%）へ伸ばしたもの（generate の past_fill・ITEM_NEEDS）
                 P = {m: p for m, p in mg["moves"].items() if m != G.TAIL}
                 sides = G.side_weights(mg["natures"])
-                cap = {m: max(p, sum(sides[k] for k in sides if G.gate(m, k))) for m, p in P.items()}
+                cap = {m: max(p, sum(sides[k] for k in sides if G.gate(m, k, sides))) for m, p in P.items()}
                 Q, _ = G.past_fill(sp, P, cap, sides, mg["items"])
                 for it, m in G.ITEM_NEEDS.items():
                     if mg["items"].get(it, 0) > 0 and m not in Q and m in G.MV and Q:

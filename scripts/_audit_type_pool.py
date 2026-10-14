@@ -193,6 +193,7 @@ def gen_rules(sp, mv, it, na, season):
     G._FRAGILE_OFF[0] = frag_off
     G._NOATK_OK[0] = noatk_ok
     op = open_at(sp, season)
+    sides = _SIDES.get((sp, season))
     core = [m for m in mv if m not in op]
     out = []
     if not G.valid(tuple(mv)):
@@ -200,7 +201,7 @@ def gen_rules(sp, mv, it, na, season):
     elif not G.item_ok(mv, it):
         out.append("こだわり＋変化技")
     side = G.nature_side(na)
-    bad = [m for m in core if not G.gate(m, side)]
+    bad = [m for m in core if not G.gate(m, side, sides)]
     if bad:
         out.append(f"性格の層に入らない技({side})")
     if not G.natures_for(core, {na: 1.0}):
@@ -216,6 +217,7 @@ def gen_rules(sp, mv, it, na, season):
 
 _RELS = {}
 _OPEN = {}
+_SIDES = {}
 
 
 def open_at(sp, season):
@@ -225,8 +227,9 @@ def open_at(sp, season):
         mg = G.marginals(sp) or {}
         P = mg.get("moves", {})
         sides = G.side_weights(mg.get("natures", {})) if mg.get("natures") else {}
+        _SIDES[key] = sides
         _OPEN[key] = {m for m in P if m != G.TAIL and
-                      P[m] > sum(sides[k] for k in sides if G.gate(m, k)) + 0.02}
+                      P[m] > sum(sides[k] for k in sides if G.gate(m, k, sides)) + 0.02}
     return _OPEN[key]
 
 

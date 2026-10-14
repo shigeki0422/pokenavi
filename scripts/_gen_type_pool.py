@@ -99,17 +99,24 @@ _ROLE_WORDS = ("優先度", "味方の場にかかっている", "取り除", "�
 def _plain(m):
     """付加価値のない純粋な火力技か。先制・ピボット・積み・回復・強制交代は役割が違う。
     条件付き先制や設置解除のように、効果テキストで役割が決まる技も除く。"""
+    # 確実に素早さを下げる技は削り役（がんせきふうじ・こごえるかぜ）。方面の仕分けは gate の SPD_OWN_MIN
+    return not (_role_move(m) or speed_ctrl(m))
+
+
+def _role_move(m):
     v = MV[m]
     # 威力50未満で効果を持つ技は火力ではなく補助（ほっぺすりすり威力20＝まひ撒き）。
     # 主力扱いすると特殊型で引けず、ストリンダーで使用率55%→生成0%になった。
     # 連続技（スケイルショット等）は表示威力が低いだけの火力なので除く。
     weak_util = (0 < v["power"] < 50 and v["eff"]
                  and "連続" not in v["eff"] and "回攻撃" not in v["eff"])
-    # 確実に素早さを下げる技は削り役（がんせきふうじ・こごえるかぜ）。特殊型ブリジュラスも持つ
-    speed_ctrl = v["eff"].startswith("相手の素早さを")
-    return not (v["cat"] == "status" or v["pri"] > 0 or m in PIVOT or m in SETUP
-                or m in FORCE or weak_util or speed_ctrl
-                or any(w in v["eff"] for w in _ROLE_WORDS))
+    return (v["cat"] == "status" or v["pri"] > 0 or m in PIVOT or m in SETUP
+            or m in FORCE or weak_util or any(w in v["eff"] for w in _ROLE_WORDS))
+
+
+def speed_ctrl(m):
+    v = MV[m]
+    return v["cat"] != "status" and v["eff"].startswith("相手の素早さを")
 
 
 def orientation(moves):
@@ -262,8 +269,21 @@ def items_for(sp, side, items):
     return out
 
 
-def gate(m, side):
-    """その方面の型が採らない技を落とす。先制・ピボット・搦め手は火力を当てにしないので残す。"""
+# 素早さを下げる攻撃技を反対方面の型にも入れてよいのは、技の方面の層（性格で決まる）が過半に満たない種だけ。
+# 上位構築（全シーズン templates）で反対方面の性格に入っていたのは この割合が0.38以下の種（ブリジュラス・リザードンY・バクフーン等）、
+# 0.59以上の種では0件（ガブリアス M-2〜M-6 71件・ゴウカザル4件ほか）。一律に通すとガブリアスナイトZ の特殊型に がんせきふうじ が81%入った。
+# 両刀の層は数えない（ゴウカザル M-7 は両刀0.50で、数えると特殊の層から締め出され系統が組み替わった）
+SPD_OWN_MIN = 0.5
+
+
+def spd_own(m, sides):
+    own = "phys" if MV[m]["cat"] == "physical" else "spec"
+    return sides.get(own, 0.0)
+
+
+def gate(m, side, sides=None):
+    """その方面の型が採らない技を落とす。先制・ピボット・搦め手は火力を当てにしないので残す。
+    sides（その種の層の構成比）を渡すと、素早さを下げる攻撃技は SPD_OWN_MIN で方面の仕分けをするか決める"""
     if m == TAIL:
         return True
     if m not in MV:
@@ -274,7 +294,8 @@ def gate(m, side):
         return side == "phys"
     if m in SETUP_C:
         return side == "spec"
-    if not _plain(m):
+    if not _plain(m) and not (sides and speed_ctrl(m) and not _role_move(m)
+                              and spd_own(m, sides) >= SPD_OWN_MIN):
         return True
     cat = MV[m]["cat"]
     if cat == "physical":
@@ -1613,11 +1634,11 @@ def past_fill(sp, P, cap=None, sides=None, items=None):
     # どちらにも入れる ニトロチャージ・はねやすめ が全部 Y に押し出されていた（上位構築では ニトロチャージ は X 7/14・Y 7/42）
     if sides:
         for k in sides:
-            only = [m for m in add if gate(m, k) and not any(gate(m, k2) for k2 in sides if k2 != k and k2 != "mix")]
+            only = [m for m in add if gate(m, k, sides) and not any(gate(m, k2, sides) for k2 in sides if k2 != k and k2 != "mix")]
             if not only or k == "mix":
                 continue
-            room = 4.0 * sides[k] - sum(p * (1.0 if not any(gate(t, k2) for k2 in sides if k2 != k and k2 != "mix")
-                                             else sides[k]) for t, p in P.items() if gate(t, k))
+            room = 4.0 * sides[k] - sum(p * (1.0 if not any(gate(t, k2, sides) for k2 in sides if k2 != k and k2 != "mix")
+                                             else sides[k]) for t, p in P.items() if gate(t, k, sides))
             have = sum(add[m] for m in only)
             if have > 0 and room < have:
                 f = max(0.0, room) / have
@@ -1680,7 +1701,7 @@ def generate(sp, n, seed=0):
     if TAIL_MODE == "past" and P:
         # 伸ばした後の率は、その技が入れる層の合計を超えない（元の率より上は層の容量まで）。
         # 超えた分は向きの合わない型へあふれる（じしん 66→73% がメガガブリアスZ の特殊型に入った）
-        cap = {m: max(p, sum(sides[k] for k in sides if gate(m, k))) for m, p in P.items()}
+        cap = {m: max(p, sum(sides[k] for k in sides if gate(m, k, sides))) for m, p in P.items()}
         P, tail = past_fill(sp, P, cap, sides, items)
     # 持ち物から必ず決まる技（カゴのみ→ねむる）が無ければ、その持ち物の率で足す（10位の率以下なので10位より下にいて矛盾しない）。
     # マルノームは カゴのみ 11.1% なのに ねむる が上位10に無く、カゴのみが0%になっていた。
@@ -1736,7 +1757,7 @@ def generate(sp, n, seed=0):
     # 層の容量を使用率が超える技は、層の規則よりデータを優先して全層で引けるようにする
     # （ガラルヤドランのシェルブレードは使用率73%だが物理・両刀層は計31%しかない）。
     open_all = {m for m in moves if m != TAIL and
-                P[m] > sum(sides[k] for k in sk if gate(m, k)) + 0.02}
+                P[m] > sum(sides[k] for k in sk if gate(m, k, sides)) + 0.02}
     mcorr = move_corr(sp) if CORR_W > 0 else {}
     mpair = pair_strength(sp if LOSO or OWN_K > 0 else None) if PAIR_W > 0 else {}
     if PAIR_W > 0 and OWN_K > 0 and not LOSO:
@@ -1746,7 +1767,7 @@ def generate(sp, n, seed=0):
             g = mpair.get(key)
             mpair[key] = (w * st + OWN_K * (g or 0.0)) / (w + OWN_K)
     rpair = role_pair_strength(sp if LOSO else None) if PAIR_W > 0 and ROLE_BACKOFF else {}
-    gk = lambda m, k: gate(m, k) or m in open_all
+    gk = lambda m, k: gate(m, k, sides) or m in open_all
     # 層の持ち物がメガ石中心なら、技をその層へ配る初期値にメガ石と技の相性を掛ける。
     # 持ち物の割り当てで相性を掛けても、特殊の層が実質メガ石だけ（ガブリアスナイトZ）だと、層に配られた
     # ステルスロックがそのままメガの型に残った（上位構築のメガの型は設置0.5%・非メガ21.3%）
@@ -1771,10 +1792,15 @@ def generate(sp, n, seed=0):
         # 層がほぼメガの型なら、メガと強く反発する役割（設置・強制交代：上位構築でメガの型の0.5%/0.6%）の技はその層に配らない。
         # 技ごとの相性だと件数の少ない技（まきびし 0.3）が漏れるので役割で見る
         # ただしメガでない層に入りきらない技は消さない（ドラミドロはほぼメガで、どくびし 30% が0%になった）
-        if mf[k] >= 0.9 and mrole.get(move_role(m), 1.0) <= 0.2 \
+        if mf[k] >= 0.9 and mrole.get(move_role(m), 1.0) <= 0.2 and not short[k] \
                 and sum(sides[k2] for k2 in sk if mf[k2] < 0.9 and gk(m, k2)) >= P[m]:
             return 0.0
         return mf[k] * l + (1.0 - mf[k])
+    # 層の4枠を、反発する役割の技を除いた技だけでは埋めきれない層では、その役割の技も配る。
+    # 素早さを下げる技を方面で仕分けると、ガブリアスナイトZ の特殊層は特殊技4本（計1.05）で4枠×0.35 を埋められず
+    # Z の型が35%→18%に縮んだ（上位構築 M-6 の Z 19型は ステルスロック 5・ドラゴンテール 1）
+    short = {k: sum(min(P[m], sides[k]) for m in moves if m != TAIL and gk(m, k)
+                    and mrole.get(move_role(m), 1.0) > 0.2) + slack < 4.0 * sides[k] for k in sk}
     # 性格も同じ扱い: 層の性格と技の相性（上位構築の lift）を層の性格の使用率で平均し、全層の平均との比を掛ける。
     # 性格は層で決まるので、相性を持ち物の段で掛けても層に入った技は動かない（グソクムシャの ゆうかん 13% が
     # とんぼがえりの型ではなく つるぎのまい の型にも一律に付いた）
@@ -1968,7 +1994,7 @@ def generate(sp, n, seed=0):
             for _ in range(reps):
                 mv = list(c)
                 for _slot in range(4 - len(c)):
-                    cands = [m for m in tw if gate(m, side) and m not in mv]
+                    cands = [m for m in tw if gate(m, side, sides) and m not in mv]
                     sc = tail_cache.get(tuple(mv))
                     if sc is None:
                         sc = tail_cache[tuple(mv)] = tail_scores(mv, list(tw))
@@ -2358,7 +2384,7 @@ def generate(sp, n, seed=0):
         for m in sorted(moves, key=lambda x: -abs(got[x] / z - P[x]))[:6]:
             print("    %-16s 目標%5.1f%% 実現%5.1f%% 差%+6.1fpt  引ける層 %s"
                   % (m, P[m] * 100, got[m] / z * 100, (got[m] / z - P[m]) * 100,
-                     ",".join(k for k in sk if gate(m, k))), file=sys.stderr)
+                     ",".join(k for k in sk if gate(m, k, sides))), file=sys.stderr)
     err_it = max(abs(got_it[i] / z - p) for i, p in items.items())
     err_na = max(abs(got_na[na] / z - p) for na, p in nats.items())
     err_ev = max(abs(got_ev[e] / z - p) for e, p in evs.items()) if evs else 0.0
