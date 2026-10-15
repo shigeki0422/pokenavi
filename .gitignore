@@ -61,3 +61,6 @@ scripts/rust_engine/*/target/
 # ワークスペース直下の target/ は上のパターンに一致しない（135MBの生成物が入る）
 scripts/rust_engine/target/
 _local/
+
+# Cloudflare Pages Functions のローカル用シークレット
+.dev.vars
