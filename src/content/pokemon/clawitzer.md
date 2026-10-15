@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのブロスター基礎データ
 pokemonName: 'ブロスター'
 dexNumber: 693
 usageRank: 183
-updatedDate: '2026-10-14'
+updatedDate: '2026-10-15'
 pubDate: '2026-10-11'
 draft: false
 

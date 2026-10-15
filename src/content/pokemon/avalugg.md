@@ -1,10 +1,10 @@
 ---
 title: 'クレベース | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのクレベース基礎データ。種族値・タイプ相性・特性・覚える技を掲載。使用率圏外。'
+description: 'ポケモンチャンピオンズのクレベース基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率200位。'
 pokemonName: 'クレベース'
 dexNumber: 713
-usageRank: 999
-updatedDate: '2026-10-14'
+usageRank: 200
+updatedDate: '2026-10-15'
 pubDate: '2026-05-24'
 draft: false
 
@@ -30,7 +30,7 @@ faq:
       <img src="/images/types/type-14-ice.png" alt="こおり" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.713</strong>　／　使用率 <strong style="color:#dc2626">圏外</strong>
+      全国図鑑 <strong>No.713</strong>　／　使用率 <strong style="color:#dc2626">200位</strong>
     </div>
     
   </div>

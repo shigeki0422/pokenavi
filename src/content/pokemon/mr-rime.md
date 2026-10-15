@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのバリコオル基礎データ
 pokemonName: 'バリコオル'
 dexNumber: 866
 usageRank: 999
-updatedDate: '2026-10-14'
+updatedDate: '2026-10-15'
 pubDate: '2026-05-24'
 draft: false
 

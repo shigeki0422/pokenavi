@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのバクーダ基礎データ。
 pokemonName: 'バクーダ'
 dexNumber: 323
 usageRank: 999
-updatedDate: '2026-10-14'
+updatedDate: '2026-10-15'
 pubDate: '2026-05-24'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのギルガルド基礎データ
 pokemonName: 'ギルガルド'
 dexNumber: 681
 usageRank: 29
-updatedDate: '2026-10-14'
+updatedDate: '2026-10-15'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'aegislash-analysis-m2'
