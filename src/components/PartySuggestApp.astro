@@ -357,6 +357,7 @@ const I18N = I18N_ALL[lang];
       note: '※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。',
       corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
       corePlaceholderMore: 'さらに追加…（ひらがな可）',
+      coreMax: '軸は6体までです',
       go: '提案する', close: '閉じる', noHit: '該当なし',
       itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
       selfVsOpp: '自分 ＼ 相手', selfVsAtk: '自分 ＼ 攻撃', selfVsHit: '自分 ＼ 被弾',
@@ -409,6 +410,7 @@ const I18N = I18N_ALL[lang];
       note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
       corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
       corePlaceholderMore: 'Add more…',
+      coreMax: 'Up to 6 cores',
       go: 'Suggest', close: 'Close', noHit: 'No matches',
       itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
       selfVsOpp: 'You ＼ Opponent', selfVsAtk: 'You ＼ Attacking', selfVsHit: 'You ＼ Taking hits',
@@ -461,6 +463,7 @@ const I18N = I18N_ALL[lang];
       note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
       corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
       corePlaceholderMore: '추가로 검색…',
+      coreMax: '축은 6마리까지입니다',
       go: '제안받기', close: '닫기', noHit: '검색 결과 없음',
       itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
       selfVsOpp: '나 ＼ 상대', selfVsAtk: '나 ＼ 공격', selfVsHit: '나 ＼ 피격',
@@ -940,6 +943,7 @@ const I18N = I18N_ALL[lang];
 
   let SPECIES = [];
   let CORE = [];
+  const MAX_CORE = 6; // パーティは6体。サーバー(/suggest)と中継(/api/suggest)も同じ上限で断る
   let _sugActive = -1;
   let speciesLoadFailed = false;
   const vid = v => v.sp + '' + (v.mega==null?'*':v.mega);
@@ -964,14 +968,16 @@ const I18N = I18N_ALL[lang];
     const el = document.getElementById('core-chips');
     el.innerHTML = CORE.map(p=>`<span class="filter-chip" title="${esc(tPoke(p.label))}">${p.icon?`<img src="${p.icon}" alt="${esc(p.sp)}">`:''}${esc(tPoke(p.label))}<button class="filter-chip-x" data-id="${esc(p.id)}">✕</button></span>`).join('');
     el.querySelectorAll('.filter-chip-x').forEach(b=>b.addEventListener('click',()=>removeCore(b.dataset.id)));
-    document.getElementById('core-filter').placeholder = CORE.length ? I18N.corePlaceholderMore : I18N.corePlaceholder;
+    const inp = document.getElementById('core-filter');
+    inp.disabled = CORE.length >= MAX_CORE;
+    inp.placeholder = inp.disabled ? I18N.coreMax : CORE.length ? I18N.corePlaceholderMore : I18N.corePlaceholder;
     // (B5) 軸2件以上は必ずライブ計算(10〜20秒)になることを実行前に知らせる
     const notice = document.getElementById('ps-multi-notice');
     if(notice) notice.style.display = CORE.length>=2 ? 'block' : 'none';
   }
   function addCore(id){
     const v = SPECIES.find(s=>s.id===id);
-    if(v && !CORE.some(p=>p.id===id)) CORE.push(v);
+    if(v && !CORE.some(p=>p.id===id) && CORE.length < MAX_CORE) CORE.push(v);
     const inp = document.getElementById('core-filter'); inp.value=''; inp.focus();
     document.getElementById('core-sug').style.display='none'; _sugActive=-1;
     renderCoreChips();
@@ -1287,7 +1293,7 @@ const I18N = I18N_ALL[lang];
   function applyPreCoreChipsNow(param){
     param.split(',').map(s => s.trim()).filter(Boolean).forEach(label => {
       const v = SPECIES.find(s => s.label === label);
-      if (v && !CORE.some(p => p.id === v.id)) CORE.push(v);
+      if (v && !CORE.some(p => p.id === v.id) && CORE.length < MAX_CORE) CORE.push(v);
     });
     renderCoreChips();
   }

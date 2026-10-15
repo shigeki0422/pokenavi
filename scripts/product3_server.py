@@ -798,6 +798,7 @@ _LAST_HIT = {}                                       # ip -> 直近の重い処�
 _HEAVY = ("/suggest", "/simulate", "/complete", "/improve")
 MAX_BODY_BYTES = int(os.environ.get("MAX_BODY_BYTES", 16 * 1024))  # POSTボディ上限(既定16KB)。超過は413
 MAX_SPEC_LEN = 500                                   # /complete の specs 1本あたりの文字数上限
+MAX_CORE = 6                                         # /suggest の軸の数の上限（パーティは6体）
 # Cloudflare Pages Functions(functions/api/[[path]].js)の中継だけが知る値。中継を経た呼び出しは
 # 送信元IPが Cloudflare になるので、MIN_INTERVAL はこの値が合うときだけ中継が渡す利用者のIPで数える
 PROXY_SECRET = os.environ.get("PROXY_SECRET", "")
@@ -918,6 +919,8 @@ class H(BaseHTTPRequestHandler):
                 self._send(200, json.dumps(res, ensure_ascii=False))
                 return
             core = req.get("core") or []
+            if not isinstance(core, list) or len(core) > MAX_CORE or not all(isinstance(c, dict) for c in core):
+                self._send(200, json.dumps({"error": f"軸は{MAX_CORE}体までです"}, ensure_ascii=False)); return
             nc = min(300, max(20, int(req.get("ncand", 120))))
             top = min(10, max(1, int(req.get("top", 5))))
             hit = suggest_cached(core, nc, top)

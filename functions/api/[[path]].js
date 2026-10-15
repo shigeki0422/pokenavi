@@ -4,6 +4,7 @@ const ORIGIN = 'https://pokenavi-suggest-799947701075.asia-northeast1.run.app';
 const GET_PATHS = new Set(['species']);
 const POST_PATHS = new Set(['suggest', 'simulate', 'complete', 'speed_detail', 'atk_detail', 'guide', 'diagnose', 'diag_battle', 'improve', 'job_status']);
 const MAX_BODY_BYTES = 16 * 1024;
+const MAX_CORE = 6; // パーティは6体。画面・サーバーと同じ上限
 
 const json = (status, obj) => new Response(JSON.stringify(obj), { status, headers: { 'Content-Type': 'application/json; charset=utf-8' } });
 
@@ -28,6 +29,11 @@ export async function onRequest({ request, env, params, waitUntil }) {
     body = await request.arrayBuffer();
     if (body.byteLength > MAX_BODY_BYTES) return json(413, { error: `リクエストボディが大きすぎます（上限${MAX_BODY_BYTES}バイト）` });
     headers['Content-Type'] = 'application/json';
+    if (path === 'suggest') {
+      let core;
+      try { core = JSON.parse(new TextDecoder().decode(body)).core; } catch (e) { return json(400, { error: 'invalid json' }); }
+      if (core != null && (!Array.isArray(core) || core.length > MAX_CORE)) return json(400, { error: `軸は${MAX_CORE}体までです` });
+    }
   }
 
   let res;
