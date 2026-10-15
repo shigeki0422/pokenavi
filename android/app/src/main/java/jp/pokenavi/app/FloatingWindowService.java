@@ -15,7 +15,7 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.webkit.JavascriptInterface;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -146,7 +146,35 @@ public class FloatingWindowService extends Service {
         ws.setLoadWithOverviewMode(true);
         ws.setUseWideViewPort(true);
         webView.setBackgroundColor(0xFFFFFFFF);
-        webView.addJavascriptInterface(new SelectBridge(), "_SB");
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public boolean onJsPrompt(WebView v, String url, String message,
+                                      String def, android.webkit.JsPromptResult result) {
+                if (!message.startsWith("_SB:")) return false;
+                // format: "_SB:<id>:<selectedIndex>:<optionsJson>"
+                String[] parts = message.split(":", 4);
+                if (parts.length < 4) { result.cancel(); return true; }
+                int sel = Integer.parseInt(parts[2]);
+                try {
+                    JSONArray arr = new JSONArray(parts[3]);
+                    String[] items = new String[arr.length()];
+                    for (int i = 0; i < arr.length(); i++) items[i] = arr.getString(i);
+                    AlertDialog dialog = new AlertDialog.Builder(
+                            new ContextThemeWrapper(FloatingWindowService.this,
+                                    android.R.style.Theme_Material_Light_Dialog))
+                            .setSingleChoiceItems(items, sel, (d, which) -> {
+                                result.confirm(String.valueOf(which));
+                                d.dismiss();
+                            })
+                            .setNegativeButton("キャンセル", (d, w) -> result.cancel())
+                            .setOnCancelListener(d -> result.cancel())
+                            .create();
+                    dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
+                    dialog.show();
+                } catch (Exception e) { result.cancel(); }
+                return true;
+            }
+        });
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView v, String url) {
@@ -168,7 +196,8 @@ public class FloatingWindowService extends Service {
                     "    if(mv)return;" +
                     "    e.preventDefault();e.stopPropagation();" +
                     "    var opts=Array.from(s.options).map(function(o){return o.text;});" +
-                    "    window._SB.show(s.dataset._sb,JSON.stringify(opts),s.selectedIndex);" +
+                    "    var r=window.prompt('_SB:'+s.dataset._sb+':'+s.selectedIndex+':'+JSON.stringify(opts));" +
+                    "    if(r!==null){s.selectedIndex=parseInt(r);s.dispatchEvent(new Event('change',{bubbles:true}));}" +
                     "  },true);" +
                     "}" +
                     "document.querySelectorAll('select').forEach(setup);" +
@@ -269,36 +298,6 @@ public class FloatingWindowService extends Service {
         return root;
     }
 
-    private class SelectBridge {
-        @JavascriptInterface
-        public void show(final String sbId, final String optionsJson, final int selectedIndex) {
-            handler.post(() -> {
-                try {
-                    JSONArray arr = new JSONArray(optionsJson);
-                    String[] items = new String[arr.length()];
-                    for (int i = 0; i < arr.length(); i++) items[i] = arr.getString(i);
-                    AlertDialog dialog = new AlertDialog.Builder(
-                            new ContextThemeWrapper(FloatingWindowService.this,
-                                    android.R.style.Theme_Material_Light_Dialog))
-                            .setSingleChoiceItems(items, selectedIndex, (d, which) -> {
-                                webView.evaluateJavascript(
-                                    "(function(){" +
-                                    "var s=document.querySelector('[data-_sb=\"" + sbId + "\"]');" +
-                                    "if(s){s.selectedIndex=" + which + ";" +
-                                    "s.dispatchEvent(new Event('change',{bubbles:true}));}" +
-                                    "})();", null);
-                                d.dismiss();
-                            })
-                            .setNegativeButton("キャンセル", null)
-                            .create();
-                    dialog.getWindow().setType(
-                            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY);
-                    dialog.show();
-                } catch (Exception ignored) {}
-            });
-        }
-    }
-
     private TextView makeBtn(String text, String tag) {
         TextView btn = new TextView(this);
         btn.setText(text);
@@ -317,12 +316,14 @@ public class FloatingWindowService extends Service {
 
         boolean isLandscape = getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_LANDSCAPE;
+        int sbH = statusBarHeight();
+        int screenH = getResources().getDisplayMetrics().heightPixels;
 
         if (mode == MODE_COLLAPSED) {
             panel.setVisibility(View.GONE);
             handle.setVisibility(View.GONE);
             lp.width = dp(TAB_W);
-            lp.height = WindowManager.LayoutParams.MATCH_PARENT;
+            lp.height = screenH - sbH;
             lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                      | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                      | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
@@ -331,17 +332,17 @@ public class FloatingWindowService extends Service {
             panel.setVisibility(View.VISIBLE);
             handle.setVisibility(View.VISIBLE);
             lp.width = totalW;
-            // 横画面: 上下全画面 / 縦画面: 上部固定・画面の半分
+            // 横画面: ステータスバー下から画面下まで / 縦画面: 上半分
             lp.height = isLandscape
-                ? WindowManager.LayoutParams.MATCH_PARENT
-                : getResources().getDisplayMetrics().heightPixels / 2;
+                ? screenH - sbH
+                : (screenH - sbH) / 2;
             lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
                      | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
                      | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
                      | WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH;
         }
         lp.x = 0;
-        lp.y = 0;
+        lp.y = sbH;
         wm.updateViewLayout(floatingView, lp);
     }
 
@@ -366,6 +367,11 @@ public class FloatingWindowService extends Service {
         if (floatingView != null) {
             try { wm.removeView(floatingView); } catch (Exception ignored) {}
         }
+    }
+
+    private int statusBarHeight() {
+        int id = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        return id > 0 ? getResources().getDimensionPixelSize(id) : dp(24);
     }
 
     private int dp(int dp) {
