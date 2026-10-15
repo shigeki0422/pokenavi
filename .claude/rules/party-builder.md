@@ -30,7 +30,7 @@ paths:
      ポインタ scripts/pool_versions.json（コミットする）
        page   … 情報ページ用。週次で更新 → gen_builder_data.py（public/builder-data: mon/*.json の mu・targets.json・version.json）
                                          → gen_archetype_data.py（src/data/archetypes.json。"_version" に版）
-       season … シーズン固定版（今は M-7/2026-10-11i＝pools/M-7/2026-10-11i/・chmod a-w。2026-10-12 まで M-6/v41）。コードのシーズンは pool_versions.season()
+       season … シーズン固定版（今は M-7/2026-10-15＝pools/M-7/2026-10-15/・chmod a-w。2026-10-15 まで M-7/2026-10-11i、2026-10-12 まで M-6/v41）。コードのシーズンは pool_versions.season()
                  → datapack_export.py（AI）・gen_party_pool.PartyGen（簡単構築の提案・補完 _product3_complete・提案キャッシュ）
                    ・_coevo_groups.py（生成集団・共進化）・_repop_builds.py・_audit_*.py
   努力値 … どの経路も scripts/ev_fill.py で合計66に揃えてから使う（生成器の出力・型プール/系統表の読み込み・工房の候補）
