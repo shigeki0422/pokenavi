@@ -1,5 +1,5 @@
 // プレミアムの申込み（Stripe Checkout）と管理（カスタマーポータル）。カード情報は Stripe だけが扱う
-import { readSession, sessionCookie, json, redirect } from '../../../lib/pages/session.js';
+import { readSession, sessionCookies, json, redirect } from '../../../lib/pages/session.js';
 import { stripe, premiumUntil } from '../../../lib/pages/stripe.js';
 
 const now = () => Math.floor(Date.now() / 1000);
@@ -37,7 +37,7 @@ export async function onRequest(ctx) {
     // 次回のログインで顧客を見つけられるよう、顧客に uid を記録する（メールアドレス等はサイト側に持たない）
     await stripe(env, 'POST', `customers/${cs.customer}`, { metadata: { pn_uid: s.u } });
     const next = { ...s, c: cs.customer, p: await premiumUntil(env, cs.customer), t: now() };
-    return redirect('/premium/?welcome=1', [await sessionCookie(env, next)]);
+    return redirect('/premium/?welcome=1', await sessionCookies(env, next));
   }
 
   if (action === 'portal' && request.method === 'POST') {

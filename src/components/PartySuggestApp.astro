@@ -1148,7 +1148,7 @@ const I18N = I18N_ALL[lang];
   }
   function showInlineAd(){
     const el = document.getElementById('ps-ad-inline');
-    if (!el) return;
+    if (!el || document.documentElement.classList.contains('pn-premium')) return; // プレミアム会員(BaseHead参照)
     el.style.display = '';
     _ensureAdLoaded(0);
   }

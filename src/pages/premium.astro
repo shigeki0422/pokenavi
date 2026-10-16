@@ -10,7 +10,7 @@ const description = 'ポケナビの有料プラン「ポケナビ プレミア�
 <html lang="ja">
   <head>
     <BaseHead title={title} description={description} imageUrl="/og-image.png" noindex />
-    <style>
+    <style is:global>
       main {
         max-width: 720px;
         margin: 0 auto;
@@ -31,13 +31,26 @@ const description = 'ポケナビの有料プラン「ポケナビ プレミア�
       td.c { text-align: center; }
       .price { font-size: 1.3rem; font-weight: 700; margin: .2em 0 .1em; }
       .notice { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 8px; padding: .8em 1em; font-size: .9rem; }
+      .pb-box { border: 1px solid #e2e8f0; border-radius: 10px; padding: 1em 1.2em; margin: 1em 0; }
+      .pb-msg { font-size: .9rem; margin: 0 0 .7em; }
+      .pb-msg.ok { color: #15803d; font-weight: 600; }
+      .pb-msg.err { color: #b91c1c; }
+      .pb-btn { display: inline-block; background: var(--accent); color: #fff; border: 0; border-radius: 8px; padding: .65em 1.4em; font-size: 1rem; font-weight: 600; cursor: pointer; }
+      .pb-btn:disabled { opacity: .6; cursor: default; }
+      .pb-sub { background: none; border: 0; color: rgb(var(--gray)); text-decoration: underline; cursor: pointer; font-size: .85rem; margin-left: 1em; }
+      .pb-note { font-size: .8rem; color: rgb(var(--gray)); margin: .7em 0 0; }
     </style>
   </head>
   <body>
     <Header />
     <main>
       <h1>ポケナビ プレミアム</h1>
-      <p class="notice">ポケナビ プレミアムは近日提供開始予定です。現在はお申込みいただけません。</p>
+      <p class="notice" id="pb-soon">ポケナビ プレミアムは近日提供開始予定です。現在はお申込みいただけません。</p>
+      <div class="pb-box" id="pb-box" hidden>
+        <p class="pb-msg" id="pb-msg"></p>
+        <div id="pb-actions"></div>
+        <p class="pb-note" id="pb-note"></p>
+      </div>
 
       <h2>料金</h2>
       <p class="price">月額300円（税込）</p>
@@ -64,6 +77,47 @@ const description = 'ポケナビの有料プラン「ポケナビ プレミア�
       <p>お問い合わせ：<a href="mailto:hello@pokenavi.jp">hello@pokenavi.jp</a></p>
 
     </main>
+    <script>
+      const $ = (id) => document.getElementById(id);
+      const q = new URLSearchParams(location.search);
+      const FLASH = { welcome: ['ok', 'ご登録ありがとうございます。プレミアムをご利用いただけます。'], cancelled: ['err', 'ログインをキャンセルしました。'], failed: ['err', 'ログインできませんでした。時間をおいて再度お試しください。'] };
+      const fmt = (t) => new Date(t * 1000).toLocaleDateString('ja-JP');
+      async function post(path, btn) {
+        btn.disabled = true;
+        const d = await fetch(path, { method: 'POST' }).then((r) => r.json()).catch(() => ({}));
+        if (d.url) location.href = d.url;
+        else { btn.disabled = false; $('pb-msg').className = 'pb-msg err'; $('pb-msg').textContent = d.error || '処理に失敗しました。時間をおいて再度お試しください。'; }
+      }
+      function button(label, onClick, cls = 'pb-btn') {
+        const b = document.createElement('button');
+        b.className = cls; b.textContent = label; b.onclick = () => onClick(b);
+        $('pb-actions').append(b);
+      }
+      (async () => {
+        const res = await fetch('/api/auth/me').catch(() => null);
+        if (!res || !res.ok) return;
+        const me = await res.json();
+        if (!me.enabled) return;
+        $('pb-soon').hidden = true;
+        $('pb-box').hidden = false;
+        const flash = FLASH[q.get('welcome') ? 'welcome' : q.get('login')];
+        if (flash) { $('pb-msg').className = 'pb-msg ' + flash[0]; $('pb-msg').textContent = flash[1]; }
+        if (!me.loggedIn) {
+          button('Google でログインして申し込む', () => { location.href = '/api/auth/login?return=/premium/'; });
+          $('pb-note').textContent = 'ログインには Google アカウントを使います。当サイトが受け取るのはアカウントを識別するIDだけで、メールアドレスや名前は受け取りません。';
+          return;
+        }
+        if (me.premium) {
+          if (!flash) { $('pb-msg').className = 'pb-msg ok'; $('pb-msg').textContent = `プレミアム会員です（${fmt(me.until)} まで有効・解約しなければ自動更新）`; }
+          button('お支払い・解約の管理', (b) => post('/api/billing/portal', b));
+        } else {
+          button('月額300円で申し込む', (b) => post('/api/billing/checkout', b));
+          if (me.customer) button('過去のお支払いを見る', (b) => post('/api/billing/portal', b), 'pb-sub');
+          $('pb-note').textContent = 'お支払いは Stripe の決済ページで行います。カード情報は当サイトを通りません。';
+        }
+        button('ログアウト', async () => { await fetch('/api/auth/logout', { method: 'POST' }); location.href = '/premium/'; }, 'pb-sub');
+      })();
+    </script>
     <Footer />
   </body>
 </html>

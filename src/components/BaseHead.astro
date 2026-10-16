@@ -97,6 +97,11 @@ const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 <meta property="twitter:description" content={description} />
 {!noOgImage && <meta property="twitter:image" content={ogImageUrl} />}
 
+<!-- プレミアム会員は広告を出さない: 会員期限の目印Cookie(pn_prem, /api/auth が発行)があれば広告リクエストを止め、広告枠を隠す。
+     期限切れの目印が残っていれば自動更新を取り込むため /api/auth/me を呼ぶ -->
+<script is:inline>try{var m=document.cookie.match(/(?:^|; )pn_prem=(\d+)/);if(m){if(+m[1]*1e3>Date.now()){document.documentElement.classList.add('pn-premium');(window.adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;}else{fetch('/api/auth/me');}}}catch(e){}</script>
+<style is:inline>.pn-premium .ad-unit,.pn-premium .ps-ad-inline,.pn-premium ins.adsbygoogle,.pn-premium .google-auto-placed{display:none!important}</style>
+
 <!-- Google AdSense -->
 <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6144860227440327" crossorigin="anonymous"></script>
 
