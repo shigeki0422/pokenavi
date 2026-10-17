@@ -8,7 +8,9 @@
 - adbサイレント失敗: stderr をログに出力
 - screencap空ファイル: サイズ検証＋リトライ
 - どこで止まったか不明: タイムスタンプ＋経過秒ログ
-- 再開ポイント: last_rank.txt に最後に完了したrankを保存
+- last_rank.txt に最後に完了したrankを保存する（進捗の記録用。**再開には使えない**:
+  リストの位置は「詳細から BACK した回数」で進むので、途中の順位から始めても一覧は先頭のままで別の種を撮る。
+  中断したら一覧の先頭に戻して最初からやり直す）
 """
 
 import subprocess
@@ -156,6 +158,58 @@ def same_rank_shown(path_a, path_b):
     return (a & b).sum() / max((a | b).sum(), 1) >= 0.93
 
 
+PKG = "jp.pokemon.pokemonchampions"
+# 画面オフからランキング画面まで（2026-10-17 に実機で確定）。座標は 2400x1080 の実座標
+LAUNCH_TAPS = [("START", 1200, 884, 35), ("バトル", 1496, 396, 6),
+               ("バトルデータ", 1416, 924, 6), ("ランクバトル", 768, 306, 6),
+               ("ポケモンタブ", 1837, 156, 6)]
+NOTICE_CLOSE = (958, 996)
+
+
+def notice_shown():
+    """その日の最初の起動で出るお知らせ画面か（オンライン大会の告知）。
+    出ていないのに「閉じる」を押すとホーム画面の別の場所を叩くので、必ず見てから押す"""
+    ref_path = os.path.join(os.path.dirname(__file__), "launch_refs", "notice_title.png")
+    probe = f"{OUTPUT_DIR}/_probe_notice.png"
+    # 画面が撮れない・参照が無いときに False を返すと、お知らせが出ていても閉じずに次へ進み、
+    # ホーム画面のつもりでお知らせ画面の別の場所を叩く。判断できないなら進まず止める
+    if not os.path.exists(ref_path):
+        log(f"❌ お知らせ判定の参照画像が無い: {ref_path}")
+        sys.exit(1)
+    if not screenshot(probe):
+        log("❌ お知らせ判定の画面が撮れない（画面オフ・adb不調）。出ているか分からないまま進めない")
+        sys.exit(1)
+    import cv2
+    ref, cur = cv2.imread(ref_path), cv2.imread(probe)
+    if ref is None or cur is None:
+        log("❌ お知らせ判定の画像を読めない")
+        sys.exit(1)
+    return float(cv2.matchTemplate(cur[0:200, :], ref, cv2.TM_CCOEFF_NORMED).max()) >= 0.8
+
+
+def launch_to_ranking():
+    """画面オフの状態からランキング画面（1位が見えている）まで運ぶ。LAUNCH=1 で実行する"""
+    log("起動シーケンス: 画面オン")
+    adb("shell input keyevent KEYCODE_WAKEUP", check=True)
+    time.sleep(2)
+    log("起動シーケンス: 前日のアプリを終了")
+    adb(f"shell am force-stop {PKG}", check=True)
+    time.sleep(2)
+    log("起動シーケンス: アプリ起動")
+    adb(f"shell monkey -p {PKG} -c android.intent.category.LAUNCHER 1")
+    time.sleep(20)
+    for name, x, y, wait in LAUNCH_TAPS:
+        log(f"起動シーケンス: {name}")
+        tap(x, y, wait=wait)
+        if name == "START":
+            if notice_shown():
+                log("起動シーケンス: お知らせを閉じる（その日の最初の起動）")
+                tap(*NOTICE_CLOSE, wait=6)
+            else:
+                log("起動シーケンス: お知らせは出ていない")
+    log("起動シーケンス: 完了（ランキング画面のはず。この後の先頭確認で検証する）")
+
+
 def crawl_detail(rank):
     save_dir = f"{OUTPUT_DIR}/detail/{rank:03d}"
     os.makedirs(save_dir, exist_ok=True)
@@ -174,6 +228,13 @@ def crawl_detail(rank):
         log(f"[{rank:3d}位] 直前と同じ画面 → 撮り直し {attempt + 1}/4")
         tap(*BACK_BTN, wait=2.5)
         tap(LIST_X, LIST_ENTRY_Y[slot_for_rank(rank)], wait=2.5)
+    else:
+        # 4回とも直前と同じ＝ランキング一覧から離れている（お知らせ・大会告知などが割り込んだ）。
+        # 以前はそのまま保存して次へ進んでいたため、別画面を撮り続けたまま気づけなかった
+        # （2026-10-14 に 147〜156位の10件が大会告知とスカウト画面になった）。ここで止める。
+        log(f"❌ [{rank:3d}位] 4回撮り直しても直前と同じ画面のまま。アプリがランキング一覧から離れている")
+        log(f"   {save_dir}/{PANELS[0]}_00.png を確認し、ランキング一覧（1位が見える状態）に戻してから最初からやり直す")
+        sys.exit(1)
     for i, panel in enumerate(PANELS):
         n = capture_panel(save_dir, panel)
         counts[panel] = n
@@ -191,6 +252,9 @@ def main():
     os.makedirs(OUTPUT_DIR, exist_ok=True)
     log(f"保存先: {OUTPUT_DIR}")
     check_adb()
+
+    if os.environ.get("LAUNCH") == "1":
+        launch_to_ranking()
 
     # アプリの起動からランキング画面まで辿ってきたときは必ず1位が見えているので、
     # 140回スワイプして先頭へ戻す必要がない（実測 2分17秒。SKIP_TOP=1 で省く）。

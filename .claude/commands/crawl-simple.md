@@ -13,10 +13,16 @@ adb devices
 ```
 → deviceが1件以上あることを確認。なければ中断。
 
-### 2. ADBキャプチャ
+### 2. ADBキャプチャ（画面オフからそのまま実行できる）
 ```bash
-cd /Users/shigeki/work/pokenavi && PANELS=move SKIP_TOP=1 python3 scripts/crawl_champions.py
+cd /Users/shigeki/work/pokenavi && LAUNCH=1 PANELS=move SKIP_TOP=1 python3 scripts/crawl_champions.py
 ```
+`LAUNCH=1` が画面オン → 前日のアプリを終了 → 起動 → START → お知らせを閉じる（出ていれば）→
+バトル → バトルデータ → ランクバトル → ポケモンタブ、までを自動でやる（2026-10-17 に実機で確定）。
+**端末のロックが無効になっていることが前提**。お知らせはその日の最初の起動でしか出ないので、
+画面を見て出ているときだけ閉じる（出ていないのに押すとホーム画面の別の場所を叩くため）。
+
+手でランキング画面を開いてから実行するときは `LAUNCH=1` を外す。
 200位まで自動撮影。**`PANELS=move` を必ず付ける**（1体7〜9秒・200体で約30分）。
 
 順位の判定に使うのは `move_00.png` のヘッダーのアイコンだけ（`insert_ranking_from_icons.py`）で、
