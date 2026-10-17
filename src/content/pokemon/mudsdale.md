@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのバンバドロ基礎データ
 pokemonName: 'バンバドロ'
 dexNumber: 750
 usageRank: 168
-updatedDate: '2026-10-16'
+updatedDate: '2026-10-17'
 pubDate: '2026-10-11'
 draft: false
 

@@ -1,10 +1,10 @@
 ---
 title: 'クレッフィ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのクレッフィ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率161位。'
+description: 'ポケモンチャンピオンズのクレッフィ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率162位。'
 pokemonName: 'クレッフィ'
 dexNumber: 707
-usageRank: 161
-updatedDate: '2026-10-16'
+usageRank: 162
+updatedDate: '2026-10-17'
 pubDate: '2026-10-11'
 draft: false
 
@@ -31,7 +31,7 @@ faq:
       <img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.707</strong>　／　使用率 <strong style="color:#dc2626">161位</strong>
+      全国図鑑 <strong>No.707</strong>　／　使用率 <strong style="color:#dc2626">162位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-10-11</div>
   </div>

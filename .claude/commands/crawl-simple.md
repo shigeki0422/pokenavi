@@ -15,13 +15,18 @@ adb devices
 
 ### 2. ADBキャプチャ
 ```bash
-cd /Users/shigeki/work/pokenavi && PANELS=move python3 scripts/crawl_champions.py
+cd /Users/shigeki/work/pokenavi && PANELS=move SKIP_TOP=1 python3 scripts/crawl_champions.py
 ```
 200位まで自動撮影。**`PANELS=move` を必ず付ける**（1体7〜9秒・200体で約30分）。
 
 順位の判定に使うのは `move_00.png` のヘッダーのアイコンだけ（`insert_ranking_from_icons.py`）で、
 残り5パネル（item/partner/nature/ev/ability）は詳細OCR専用。付け忘れると6パネル撮って
 1体52秒・**約3時間**かかる（フルクロールと同じ所要時間になる）。
+
+**`SKIP_TOP=1` は「1位が見えている」ときだけ付ける**（アプリを起動してランキング画面まで辿ってきた直後は必ずそうなる）。
+付けると140回スワイプして先頭へ戻す工程（実測2分17秒）を省ける。どこまでスクロールしたか分からない状態で
+付けると途中の順位から撮り始めてしまうので、その場合は付けずに実行する。先頭確認（1位との一致率）は
+どちらでも走るので、ずれていれば止まる。
 
 **途中で止めたら、再開前に端末をランキング一覧の先頭（1位が見える状態）に戻すこと。**
 詳細画面のまま再開すると `scroll_to_top()` が戻り切れず「❌ 先頭に戻れていない」で終了する。

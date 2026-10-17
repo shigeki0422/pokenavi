@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのダストダス基礎データ
 pokemonName: 'ダストダス'
 dexNumber: 569
 usageRank: 999
-updatedDate: '2026-10-16'
+updatedDate: '2026-10-17'
 pubDate: '2026-05-24'
 draft: false
 

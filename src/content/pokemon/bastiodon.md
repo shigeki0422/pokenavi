@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのトリデプス基礎データ
 pokemonName: 'トリデプス'
 dexNumber: 411
 usageRank: 195
-updatedDate: '2026-10-16'
+updatedDate: '2026-10-17'
 pubDate: '2026-05-24'
 draft: false
 

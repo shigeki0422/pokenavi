@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのヘラクロス基礎データ
 pokemonName: 'ヘラクロス'
 dexNumber: 214
 usageRank: 104
-updatedDate: '2026-10-16'
+updatedDate: '2026-10-17'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'heracross-analysis-m2'
