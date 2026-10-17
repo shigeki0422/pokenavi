@@ -1,10 +1,10 @@
 ---
 title: 'ヌメルゴン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのヌメルゴン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率190位。'
+description: 'ポケモンチャンピオンズのヌメルゴン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率187位。'
 pokemonName: 'ヌメルゴン'
 dexNumber: 706
-usageRank: 190
-updatedDate: '2026-10-15'
+usageRank: 187
+updatedDate: '2026-10-16'
 pubDate: '2026-10-11'
 draft: false
 
@@ -30,7 +30,7 @@ faq:
       <img src="/images/types/type-15-dragon.png" alt="ドラゴン" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.706</strong>　／　使用率 <strong style="color:#dc2626">190位</strong>
+      全国図鑑 <strong>No.706</strong>　／　使用率 <strong style="color:#dc2626">187位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-10-11</div>
   </div>

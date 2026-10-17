@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのデカヌチャン基礎デー
 pokemonName: 'デカヌチャン'
 dexNumber: 959
 usageRank: 92
-updatedDate: '2026-10-15'
+updatedDate: '2026-10-16'
 pubDate: '2026-10-11'
 draft: false
 

@@ -5,7 +5,7 @@ pokemonName: 'フロストロトム'
 dexNumber: 479
 usageRank: 999
 imageForm: '03'
-updatedDate: '2026-10-15'
+updatedDate: '2026-10-16'
 pubDate: '2026-05-24'
 draft: false
 

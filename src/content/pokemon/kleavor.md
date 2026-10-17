@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのバサギリ基礎データ。
 pokemonName: 'バサギリ'
 dexNumber: 900
 usageRank: 77
-updatedDate: '2026-10-15'
+updatedDate: '2026-10-16'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'kleavor-analysis-m2'
