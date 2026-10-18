@@ -20,11 +20,13 @@ interface Props {
 	ogLocale?: string;
 	/** ページ側で検索対象の可否を決める場合に渡す(未指定ならURLのルールで判定)。 */
 	noindex?: boolean;
+	/** AdSense をプレミアム会員には読み込まない（オファーウォールの対象ページ用。広告リクエストの停止だけではオファーウォールが出うるため） */
+	adsSkipPremium?: boolean;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, imageUrl, noOgImage = false, type = 'website', pubDate, updatedDate, alternates, ogLocale, noindex: noindexProp } = Astro.props;
+const { title, description, image = FallbackImage, imageUrl, noOgImage = false, type = 'website', pubDate, updatedDate, alternates, ogLocale, noindex: noindexProp, adsSkipPremium = false } = Astro.props;
 const ogImageUrl = imageUrl ? new URL(imageUrl, Astro.site) : new URL(image.src, Astro.url);
 
 // サイト名・og:localeはURLのプレフィックスから判定する(呼び出し元がlang propを
@@ -98,12 +100,15 @@ const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 {!noOgImage && <meta property="twitter:image" content={ogImageUrl} />}
 
 <!-- プレミアム会員は広告を出さない: 会員期限の目印Cookie(pn_prem, /api/auth が発行)があれば広告リクエストを止め、広告枠を隠す。
-     期限切れの目印が残っていれば自動更新を取り込むため /api/auth/me を呼ぶ -->
-<script is:inline>try{var m=document.cookie.match(/(?:^|; )pn_prem=(\d+)/);if(m){if(+m[1]*1e3>Date.now()){document.documentElement.classList.add('pn-premium');(window.adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;}else{fetch('/api/auth/me');}}}catch(e){}</script>
-<style is:inline>.pn-premium .ad-unit,.pn-premium .ps-ad-inline,.pn-premium ins.adsbygoogle,.pn-premium .google-auto-placed{display:none!important}</style>
+     /api/auth/me は課金が有効な環境でだけ応答する。応答があれば html に pn-billing を付け、プレミアムへの導線(.pn-prem-cta)を
+     未課金の利用者にだけ出す。結果は window.__pnMe で各ツールと共有する（期限切れの目印の更新もここで取り込まれる） -->
+<script is:inline>try{var d=document.documentElement,m=document.cookie.match(/(?:^|; )pn_prem=(\d+)/);if(m&&+m[1]*1e3>Date.now()){d.classList.add('pn-premium');(window.adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;}window.__pnMe=fetch('/api/auth/me').then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(me){if(me&&me.enabled){d.classList.add('pn-billing');if(me.premium)d.classList.add('pn-premium');}return me;});}catch(e){}</script>
+<style is:inline>.pn-premium .ad-unit,.pn-premium .ps-ad-inline,.pn-premium .pb-ad,.pn-premium ins.adsbygoogle,.pn-premium .google-auto-placed{display:none!important}html:not(.pn-billing) .pn-prem-cta,html.pn-premium .pn-prem-cta{display:none!important}.pn-ad-remove{font-weight:600;margin-left:.6em;color:rgb(var(--gray));text-decoration:underline}</style>
 
 <!-- Google AdSense -->
-<script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6144860227440327" crossorigin="anonymous"></script>
+{adsSkipPremium
+  ? <script is:inline>if(!document.documentElement.classList.contains('pn-premium')){var s=document.createElement('script');s.async=true;s.crossOrigin='anonymous';s.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6144860227440327';document.head.appendChild(s);}</script>
+  : <script is:inline async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6144860227440327" crossorigin="anonymous"></script>}
 
 <!-- Cloudflare Web Analytics -->
 {cfBeaconToken && (

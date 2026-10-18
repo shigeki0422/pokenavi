@@ -10,8 +10,10 @@ import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME
 interface Props {
   preCoreLabel?: string;
   lang?: 'ja' | 'en' | 'ko';
+  /** single = 軸1体（既定・選んだら即提案）／ multi = 軸2〜6体（ライブ計算。オファーウォールの対象URL） */
+  mode?: 'single' | 'multi';
 }
-const { preCoreLabel, lang = 'ja' } = Astro.props;
+const { preCoreLabel, lang = 'ja', mode = 'single' } = Astro.props;
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 
 const ICONS = iconsData as Record<string, string>;
@@ -49,65 +51,91 @@ const ROLE_NAME_MAP = lang === 'en' ? ROLE_NAME_EN : lang === 'ko' ? ROLE_NAME_K
 const I18N_ALL = {
   ja: {
     title: preCoreLabel ? `${preCoreLabel}軸 ${MATCHUP_SEASON} パーティ構築` : 'パーティ構築',
-    note: '※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。',
     leadShort: '軸ポケモンを指定すると、バランスの良いパーティをシミュレーションで提案します。',
     blankAutoHelp: '空欄のまま実行すると、使用率上位から自動で軸を選びます。',
     corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
     go: '提案する', close: '閉じる',
+    titleMulti: '複数の軸からパーティ構築',
+    modeSingle: '1体を軸に提案', modeMulti: '複数の軸で提案',
+    modeSingleDesc: 'ポケモンを1体選ぶと、すぐにそのポケモンを軸にしたパーティを提案します。',
+    modeMultiDesc: '2〜6体の軸を組み合わせてパーティを提案します（ライブ計算・10〜20秒）。',
+    toMultiHint: '2体以上を軸にしたいときは → 複数軸モード',
+    corePlaceholderSingle: '軸にするポケモンを検索（選ぶとすぐ提案・ひらがな可）',
+    corePlaceholderMulti: '軸にするポケモンを2体以上追加（ひらがな可）',
+    modesAria: '提案のモード',
     multiAxisNotice: '⚠ 軸を2件以上指定すると必ずライブ計算になり、10〜20秒（他ユーザーの計算待ちも含む）かかります。',
-    adLabel: '広告',
+    adLabel: '広告', adRemove: '広告を非表示にする',
   },
   en: {
     title: preCoreLabel ? `Party Builder around ${preCoreLabelDisplay} — ${MATCHUP_SEASON}` : 'Party Builder',
-    note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
     leadShort: 'Specify a Pok\u00e9mon to build around, and the simulator suggests a balanced party.',
     blankAutoHelp: 'Leave the field blank to auto-pick a core from the top usage ranks.',
     corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
     go: 'Suggest', close: 'Close',
+    titleMulti: 'Party Builder from Multiple Cores',
+    modeSingle: 'One core', modeMulti: 'Multiple cores',
+    modeSingleDesc: 'Pick one Pokémon and a party built around it is suggested right away.',
+    modeMultiDesc: 'Combine 2–6 cores into one party (live calculation, 10–20 s).',
+    toMultiHint: 'Want two or more cores? → Multiple-core mode',
+    corePlaceholderSingle: 'Search for a core Pokémon (suggests as soon as you pick)',
+    corePlaceholderMulti: 'Add two or more core Pokémon',
+    modesAria: 'Suggestion mode',
     multiAxisNotice: '⚠ Two or more cores always trigger a live calculation, taking 10–20 seconds (including other users\' queued requests).',
-    adLabel: 'Advertisement',
+    adLabel: 'Advertisement', adRemove: 'Remove ads',
   },
   ko: {
     title: preCoreLabel ? `${preCoreLabelDisplay} 축 ${MATCHUP_SEASON} 파티 구성` : '파티 구성',
-    note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
     leadShort: '축으로 삼을 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다.',
     blankAutoHelp: '비워두고 실행하면 사용률 상위에서 자동으로 축을 선택합니다.',
     corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
     go: '제안받기', close: '닫기',
+    titleMulti: '여러 축으로 파티 구성',
+    modeSingle: '1마리 축으로 제안', modeMulti: '여러 축으로 제안',
+    modeSingleDesc: '포켓몬을 1마리 고르면 바로 그 포켓몬을 축으로 한 파티를 제안합니다.',
+    modeMultiDesc: '2~6마리의 축을 조합해 파티를 제안합니다（라이브 계산・10~20초）.',
+    toMultiHint: '2마리 이상을 축으로 하려면 → 여러 축 모드',
+    corePlaceholderSingle: '축으로 삼을 포켓몬 검색（고르면 바로 제안）',
+    corePlaceholderMulti: '축으로 삼을 포켓몬을 2마리 이상 추가',
+    modesAria: '제안 모드',
     multiAxisNotice: '⚠ 축을 2개 이상 지정하면 반드시 라이브 계산이 되어 10~20초（다른 사용자의 대기 포함）가 걸립니다.',
-    adLabel: '광고',
+    adLabel: '광고', adRemove: '광고 숨기기',
   },
 } as const;
 const I18N = I18N_ALL[lang];
 ---
 
 <main>
-  <h1>{I18N.title}</h1>
+  <h1>{mode === 'multi' ? I18N.titleMulti : I18N.title}</h1>
   <PartyToolsNav current="suggest" lang={lang} />
-  <!-- (C18/S15) 説明文は1行にし、注意書き(note)は入力欄の下へ移す -->
+  <!-- (C18/S15) 説明文は1行にする -->
   <p class="lead">{I18N.leadShort}</p>
 
   <div class="card">
+    <nav class="ps-modes" aria-label={I18N.modesAria}>
+      <a href={`${pfx}/party-suggest/`} id="ps-mode-single" class:list={['ps-mode', { active: mode === 'single' }]} aria-current={mode === 'single' ? 'page' : undefined}>{I18N.modeSingle}</a>
+      <a href={`${pfx}/party-suggest/multi/`} id="ps-mode-multi" class:list={['ps-mode', { active: mode === 'multi' }]} aria-current={mode === 'multi' ? 'page' : undefined}>{I18N.modeMulti}</a>
+    </nav>
+    <p class="ps-mode-desc">{mode === 'multi' ? I18N.modeMultiDesc : I18N.modeSingleDesc}</p>
     <div class="corebox">
       <div id="core-chips" class="filter-chips"></div>
       <div class="filter-wrap">
-        <input type="text" id="core-filter" class="filter-inp" placeholder={I18N.corePlaceholder} autocomplete="off" />
+        <input type="text" id="core-filter" class="filter-inp" placeholder={mode === 'multi' ? I18N.corePlaceholderMulti : I18N.corePlaceholderSingle} autocomplete="off" />
         <div class="filter-sug" id="core-sug" style="display:none"></div>
       </div>
       <!-- (S16) 「空欄でおまかせ」はplaceholderだけだと気付かれにくいため常設ヘルプにする -->
-      <div class="ps-help">{I18N.blankAutoHelp}</div>
+      {mode === 'single' && <div class="ps-help">{I18N.blankAutoHelp}</div>}
+      {mode === 'single' && <a class="ps-to-multi" id="ps-to-multi" href={`${pfx}/party-suggest/multi/`}>{I18N.toMultiHint}</a>}
     </div>
     <div class="row" style="margin-top:.6em">
       <button id="go" class="btn">{I18N.go}</button>
     </div>
-    <p class="note">{I18N.note}</p>
-    <div id="ps-multi-notice" class="ps-notice" style="display:none">{I18N.multiAxisNotice}</div>
+    <div id="ps-multi-notice" class="ps-notice" style={mode === 'multi' ? '' : 'display:none'}>{I18N.multiAxisNotice}</div>
     <div id="status" class="muted" style="margin-top:.5em"></div>
   </div>
   <!-- 軸2件以上の実行で表示し、結果表示後も残す(クリックできるように)。広告の読み込みは
      1ページ1回だけなので、#out(毎回innerHTMLで作り直す)の外に常駐させる。 -->
   <div id="ps-ad-inline" class="ps-ad-inline" style="display:none">
-    <div class="ps-ad-label">{I18N.adLabel}</div>
+    <div class="ps-ad-label">{I18N.adLabel}<a class="pn-ad-remove pn-prem-cta" href="/premium/">{I18N.adRemove}</a></div>
     <div id="ps-ad-slot" class="ps-ad-slot"><div class="ps-ad-bg"><div class="ps-spinner"></div></div></div>
   </div>
   <div id="out"></div>
@@ -125,9 +153,14 @@ const I18N = I18N_ALL[lang];
   h1{font-size:1.5rem;margin:0 0 .2em}
   .lead{font-size:.88rem;color:rgb(var(--gray));margin:0 0 1.1em}
   /* (S15) 入力欄の下に移した注意書き */
-  .note{font-size:.8rem;color:rgb(var(--gray));background:#fff8e6;border:1px solid #f0d888;border-radius:8px;padding:.55em .8em;margin:.8em 0 0}
   /* (S16) 「空欄でおまかせ」の常設ヘルプ(ps-noticeより控えめな色) */
   .ps-help{font-size:.76rem;color:rgb(var(--gray));margin-top:.4em}
+  .ps-modes{display:flex;gap:4px;padding:3px;background:rgb(var(--gray-light));border-radius:10px;margin:0 0 .5em}
+  .ps-mode{flex:1;text-align:center;padding:.5em .4em;border-radius:8px;font-size:.85rem;font-weight:700;color:rgb(var(--gray-dark));text-decoration:none}
+  .ps-mode.active{background:#fff;color:var(--accent);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+  .ps-mode-desc{font-size:.8rem;color:rgb(var(--gray));margin:0 0 .7em}
+  .ps-to-multi{display:inline-block;margin-top:.5em;font-size:.82rem;font-weight:700;color:var(--accent)}
+  .ps-addaxis{margin:0 0 .8em}
   .ps-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7em;padding:3.2em 1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px}
   .ps-spinner{width:38px;height:38px;border:4px solid rgb(var(--gray-light));border-top-color:var(--accent);border-radius:50%;animation:ps-spin .8s linear infinite}
   @keyframes ps-spin{to{transform:rotate(360deg)}}
@@ -345,7 +378,7 @@ const I18N = I18N_ALL[lang];
   }
 </style>
 
-<script is:inline define:vars={{ ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, ITEM_SPRITE, preCoreLabel, preCoreLabelDisplay, lang, pfx, MATCHUP_SEASON, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
+<script is:inline define:vars={{ PS_MODE: mode, ICONS, MOVET, NATURE, TYPEICON, ITEM_PNG, ITEM_SPRITE, preCoreLabel, preCoreLabelDisplay, lang, pfx, MATCHUP_SEASON, POKEMON_NAME_MAP, MOVE_NAME_MAP, ABILITY_NAME_MAP, ITEM_NAME_MAP, NATURE_NAME_MAP, TYPE_NAME_MAP, ROLE_NAME_MAP }}>
   /** I18N_ALL は関数(フォーマッタ)を値に含むため、Astroのdefine:varsはJSON化の過程で
    * 関数プロパティを黙って落としてしまう(define:varsはprops→スクリプトへJSON経由で注入される)。
    * そのためI18N_ALLはこのスクリプト内にフルセットを直接定義し、defineVars経由では渡さない。
@@ -354,9 +387,9 @@ const I18N = I18N_ALL[lang];
     ja: {
       title: preCoreLabel ? `${preCoreLabel}軸 ${MATCHUP_SEASON} パーティ構築` : 'パーティ構築',
       lead: '軸にしたいポケモンを指定すると、シミュレーションによりバランスの良いパーティを提案します。各ポケの役割・パーティ統計・使用率上位との1v1相性つき。',
-      note: '※ 現在は使用率上位のポケモンを軸とした提案に対応しています。使用率の低いポケモンを軸にした構築は未対応で、今後追加予定です。',
       corePlaceholder: '軸にするポケモンを検索（ひらがな可・空欄でおまかせ）',
       corePlaceholderMore: 'さらに追加…（ひらがな可）',
+      corePlaceholderSingle: '別のポケモンを検索（選ぶとすぐ提案）', addAxisBtn: '＋ 軸を追加して提案（複数軸モード）', multiNeedMore: '軸をもう1体以上追加してください（複数軸モードは2体から）',
       coreMax: '軸は6体までです',
       go: '提案する', close: '閉じる', noHit: '該当なし',
       itemLbl: '持ち物', abilLbl: '特性', natLbl: '性格', moveLbl: '技', evLbl: 'EV',
@@ -392,7 +425,7 @@ const I18N = I18N_ALL[lang];
       urgentNote: '時間がかかっています。キャンセルして後でもう一度お試しください。',
       tooManyMsg: 'リクエストが混み合っています。少し間隔を空けてから再試行してください。',
       speciesLoadFailedMsg: '候補を読み込めませんでした',
-      adLabel: '広告',
+      adLabel: '広告', adRemove: '広告を非表示にする',
       omakase: 'おまかせ', importName: label => `${label}軸 かんたん構築`, rankLbl: n => `使用${n}位`,
       koOOR: '6ターン以上', koRange: (a,b) => `確${a}〜${b}`, koFixed: n => `確${n}`, koRoll: n => `乱${n}`,
       turnFirst: '先手', turnSecond: '後手',
@@ -407,9 +440,9 @@ const I18N = I18N_ALL[lang];
     en: {
       title: preCoreLabel ? `Party Builder around ${preCoreLabelDisplay} — ${MATCHUP_SEASON}` : 'Party Builder',
       lead: 'Specify a Pokémon (or Pokémon) to build around, and the simulator suggests a balanced party — with each member\'s role, team stats, and 1v1 matchups against the top usage ranks.',
-      note: '※ Currently supports building around top-usage Pokémon only. Building around low-usage Pokémon is not yet supported (planned for the future).',
       corePlaceholder: 'Search for a Pokémon to build around (leave blank to let it choose)',
       corePlaceholderMore: 'Add more…',
+      corePlaceholderSingle: 'Search another Pokémon (suggests as soon as you pick)', addAxisBtn: '+ Add cores (multiple-core mode)', multiNeedMore: 'Add at least one more core (multiple-core mode needs two or more).',
       coreMax: 'Up to 6 cores',
       go: 'Suggest', close: 'Close', noHit: 'No matches',
       itemLbl: 'Item', abilLbl: 'Ability', natLbl: 'Nature', moveLbl: 'Moves', evLbl: 'EV',
@@ -445,7 +478,7 @@ const I18N = I18N_ALL[lang];
       urgentNote: 'This is taking a while. You can cancel and try again later.',
       tooManyMsg: 'Too many requests. Please wait a moment and try again.',
       speciesLoadFailedMsg: 'Failed to load suggestions',
-      adLabel: 'Advertisement',
+      adLabel: 'Advertisement', adRemove: 'Remove ads',
       omakase: 'auto-pick', importName: label => `${label} core quick build`, rankLbl: n => `Rank #${n}`,
       koOOR: '6+ turns', koRange: (a,b) => `${a}–${b}HKO`, koFixed: n => `${n}HKO`, koRoll: n => `${n}HKO (roll-dependent)`,
       turnFirst: 'Moves first', turnSecond: 'Moves second',
@@ -460,9 +493,9 @@ const I18N = I18N_ALL[lang];
     ko: {
       title: preCoreLabel ? `${preCoreLabelDisplay} 축 ${MATCHUP_SEASON} 파티 구성` : '파티 구성',
       lead: '축으로 삼고 싶은 포켓몬을 지정하면 시뮬레이션으로 균형 잡힌 파티를 제안합니다. 각 포켓몬의 역할·파티 통계·사용률 상위와의 1v1 상성까지 확인할 수 있습니다.',
-      note: '※ 현재는 사용률 상위 포켓몬을 축으로 한 제안만 지원합니다. 사용률이 낮은 포켓몬을 축으로 한 구성은 아직 지원하지 않으며, 추후 추가될 예정입니다.',
       corePlaceholder: '축으로 삼을 포켓몬 검색（비워두면 자동 선택）',
       corePlaceholderMore: '추가로 검색…',
+      corePlaceholderSingle: '다른 포켓몬 검색（고르면 바로 제안）', addAxisBtn: '＋ 축 추가해서 제안（여러 축 모드）', multiNeedMore: '축을 1마리 이상 더 추가해 주세요（여러 축 모드는 2마리부터）',
       coreMax: '축은 6마리까지입니다',
       go: '제안받기', close: '닫기', noHit: '검색 결과 없음',
       itemLbl: '지닌물건', abilLbl: '특성', natLbl: '성격', moveLbl: '기술', evLbl: 'EV',
@@ -498,7 +531,7 @@ const I18N = I18N_ALL[lang];
       urgentNote: '시간이 오래 걸리고 있습니다. 취소 후 나중에 다시 시도해 주세요.',
       tooManyMsg: '요청이 많습니다. 잠시 간격을 두고 다시 시도해 주세요.',
       speciesLoadFailedMsg: '후보를 불러오지 못했습니다',
-      adLabel: '광고',
+      adLabel: '광고', adRemove: '광고 숨기기',
       omakase: '자동 선택', importName: label => `${label} 축 간단 구성`, rankLbl: n => `사용률 ${n}위`,
       koOOR: '6턴 이상', koRange: (a,b) => `확정${a}~${b}`, koFixed: n => `확정${n}`, koRoll: n => `난수${n}`,
       turnFirst: '선공', turnSecond: '후공',
@@ -969,18 +1002,29 @@ const I18N = I18N_ALL[lang];
     el.innerHTML = CORE.map(p=>`<span class="filter-chip" title="${esc(tPoke(p.label))}">${p.icon?`<img src="${p.icon}" alt="${esc(p.sp)}">`:''}${esc(tPoke(p.label))}<button class="filter-chip-x" data-id="${esc(p.id)}">✕</button></span>`).join('');
     el.querySelectorAll('.filter-chip-x').forEach(b=>b.addEventListener('click',()=>removeCore(b.dataset.id)));
     const inp = document.getElementById('core-filter');
+    if (PS_MODE === 'single') {
+      // 1軸モード: 選び直すと差し替え。複数軸モードへのリンクには今の軸を持たせる（遷移先で追加済みにする）
+      if (CORE.length) inp.placeholder = I18N.corePlaceholderSingle;
+      const q = CORE.length ? '?core=' + encodeURIComponent(CORE[0].label) : '';
+      for (const id of ['ps-mode-multi', 'ps-to-multi']) { const a = document.getElementById(id); if (a) a.href = `${pfx}/party-suggest/multi/${q}`; }
+      return;
+    }
+    // 1軸モードへ戻るリンクには、1番目に選んだ軸を持たせる
+    const single = document.getElementById('ps-mode-single');
+    if (single) single.href = `${pfx}/party-suggest/` + (CORE.length ? '?core=' + encodeURIComponent(CORE[0].label) : '');
     inp.disabled = CORE.length >= MAX_CORE;
-    inp.placeholder = inp.disabled ? I18N.coreMax : CORE.length ? I18N.corePlaceholderMore : I18N.corePlaceholder;
-    // (B5) 軸2件以上は必ずライブ計算(10〜20秒)になることを実行前に知らせる
-    const notice = document.getElementById('ps-multi-notice');
-    if(notice) notice.style.display = CORE.length>=2 ? 'block' : 'none';
+    inp.dataset.ph0 = inp.dataset.ph0 || inp.placeholder;
+    inp.placeholder = inp.disabled ? I18N.coreMax : CORE.length ? I18N.corePlaceholderMore : inp.dataset.ph0;
   }
   function addCore(id){
     const v = SPECIES.find(s=>s.id===id);
-    if(v && !CORE.some(p=>p.id===id) && CORE.length < MAX_CORE) CORE.push(v);
-    const inp = document.getElementById('core-filter'); inp.value=''; inp.focus();
+    if (PS_MODE === 'single') { if (v) CORE = [v]; }
+    else if(v && !CORE.some(p=>p.id===id) && CORE.length < MAX_CORE) CORE.push(v);
+    const inp = document.getElementById('core-filter'); inp.value='';
     document.getElementById('core-sug').style.display='none'; _sugActive=-1;
     renderCoreChips();
+    // 1軸モードは選んだらすぐ提案する（軸1体は事前計算済みで速い）
+    if (PS_MODE === 'single') { inp.blur(); if (v) run(); } else inp.focus();
   }
   function removeCore(id){ CORE = CORE.filter(p=>p.id!==id); renderCoreChips(); }
 
@@ -1043,7 +1087,10 @@ const I18N = I18N_ALL[lang];
     LAST = d.results;
     LAST_FIXED = d.fixed || [];
     document.getElementById('status').textContent = (d.fixed && d.fixed.length ? I18N.fixedLbl(d.fixed.map(tPoke).join(' + ')) : '') + I18N.resultCount(d.results.length);
-    document.getElementById('out').innerHTML = d.results.map((res,i)=>sugHtml(res,i)).join('');
+    // 1軸モードの結果の上に「軸を追加」（複数軸モードへ。今の軸を引き継ぐ）
+    const axis = PS_MODE === 'single' ? (CORE[0] ? CORE[0].label : (d.fixed || [])[0]) : null;
+    const addAxis = axis ? `<div class="ps-addaxis"><a class="pb-btn-sub" href="${pfx}/party-suggest/multi/?core=${encodeURIComponent(axis)}">${esc(I18N.addAxisBtn)}</a></div>` : '';
+    document.getElementById('out').innerHTML = addAxis + d.results.map((res,i)=>sugHtml(res,i)).join('');
     bindTabs();
     scrollToOut();
   }
@@ -1129,6 +1176,12 @@ const I18N = I18N_ALL[lang];
       if ((tries || 0) < 20) requestAnimationFrame(() => _ensureAdLoaded((tries || 0) + 1));
       return;
     }
+    // 開発環境では AdSense が配信せず枠ごと畳まれるので、位置と大きさの確認用に枠だけ描く
+    if (!/(^|\.)pokenavi\.jp$/.test(location.hostname)) {
+      slot.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;border:2px dashed #cbd5e1;border-radius:8px;color:#94a3b8;font-size:.8rem;line-height:1.5">広告 300×250<br>（本番ではここに AdSense の広告）</div>';
+      _adLoaded = true;
+      return;
+    }
     const ins = document.createElement('ins');
     ins.className = 'adsbygoogle ps-ad-unit';
     ins.style.cssText = 'display:inline-block;width:300px;height:250px';
@@ -1165,6 +1218,7 @@ const I18N = I18N_ALL[lang];
     if(btn) btn.addEventListener('click', retryFn);
   }
   async function run(){
+    if (PS_MODE === 'multi' && CORE.length < 2) { document.getElementById('status').textContent = I18N.multiNeedMore; return; }
     const core = CORE.map(p=>({sp:p.sp, mega:p.mega}));
     const coreParam = currentCoreParam();
     const go = document.getElementById('go'); go.disabled = true; go.classList.add('loading');
@@ -1180,7 +1234,7 @@ const I18N = I18N_ALL[lang];
     // (B5) 軸2件以上は必ずライブ計算(10〜20秒)。軸1件以下はsuggest_cacheに事前計算済みで数百msなので
     // 「10〜20秒」の表示は出さず、実態に合わせた短い表示にする。
     const isLive = core.length >= 2;
-    window.track?.('suggest_run', { axes: core.length });
+    window.track?.('suggest_run', { axes: core.length, mode: PS_MODE });
     const t0 = Date.now();
     let outcome = 'superseded';
     const msgs = I18N.loadMsgs;
@@ -1267,8 +1321,11 @@ const I18N = I18N_ALL[lang];
    * sessionStorageに軸が完全一致する結果があればAPIを叩き直さず即復元する。
    * (C9) /species取得待ちのポーリングには上限を設け、失敗時に無限ループしないようにする。 */
   const _preCore = preCoreLabel || new URLSearchParams(location.search).get('core');
-  if (_preCore) {
-    const _cached = loadSessionResult(_preCore);
+  // 以前の共有URL（1軸のページに ?core=A,B）は複数軸モードへ移す
+  if (PS_MODE === 'single' && _preCore && !preCoreLabel && _preCore.includes(',')) location.replace(`${pfx}/party-suggest/multi/` + location.search);
+  else if (_preCore) {
+    // 複数軸モードに軸1体で来たとき（「軸を追加」から）は、追加を待つので結果を出さない
+    const _cached = PS_MODE === 'multi' && !_preCore.includes(',') ? null : loadSessionResult(_preCore);
     if (_cached) {
       renderResults(_cached);
       applyCardUiState(loadSessionUi(_preCore)); // (S14) タブ・展開・選択ポケの状態も合わせて復元
@@ -1284,14 +1341,15 @@ const I18N = I18N_ALL[lang];
         }
         clearInterval(_waitForSpecies);
         applyPreCoreChipsNow(_preCore);
-        if (CORE.length) run();
+        if (CORE.length >= (PS_MODE === 'multi' ? 2 : 1)) run();
+        else if (PS_MODE === 'multi') document.getElementById('core-filter').focus();
       }, 100);
     }
   }
   // SPECIES取得済み前提の同期版。「チップ追加→CORE.length判定→run()」を同一tickで行うため
   // 非同期版を挟むとCOREが空のままrun()判定が走り自動実行されない
   function applyPreCoreChipsNow(param){
-    param.split(',').map(s => s.trim()).filter(Boolean).forEach(label => {
+    param.split(',').map(s => s.trim()).filter(Boolean).slice(0, PS_MODE === 'single' ? 1 : MAX_CORE).forEach(label => {
       const v = SPECIES.find(s => s.label === label);
       if (v && !CORE.some(p => p.id === v.id) && CORE.length < MAX_CORE) CORE.push(v);
     });

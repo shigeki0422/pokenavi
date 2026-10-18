@@ -1,0 +1,36 @@
+---
+// 簡単構築の複数軸モード（軸2〜6体・ライブ計算）。AdSense のオファーウォールはこのURLだけを対象にする
+import { MATCHUP_SEASON } from '../../../consts';
+import BaseHead from '../../../components/BaseHead.astro';
+import Header from '../../../components/Header.astro';
+import Footer from '../../../components/Footer.astro';
+import PartySuggestApp from '../../../components/PartySuggestApp.astro';
+
+const title = `Pokémon Champions ${MATCHUP_SEASON} Quick Build from Multiple Cores | Auto-Suggest a Team Around 2–6 Picks`;
+const description = `For Pokémon Champions ${MATCHUP_SEASON}. Pick 2–6 core Pokémon and get a suggested party that fills the remaining slots around them.`;
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" adsSkipPremium
+      alternates={[
+        { lang: 'ja', url: 'https://pokenavi.jp/party-suggest/multi/' },
+        { lang: 'en', url: 'https://pokenavi.jp/en/party-suggest/multi/' },
+        { lang: 'ko', url: 'https://pokenavi.jp/ko/party-suggest/multi/' },
+        { lang: 'x-default', url: 'https://pokenavi.jp/party-suggest/multi/' },
+      ]}
+      ogLocale="en_US"
+    />
+  </head>
+  <body>
+    <Header />
+    <PartySuggestApp mode="multi" lang="en" />
+    <div style="max-width:860px;margin:0 auto;padding:0 1.2rem 3rem;text-align:center">
+      <p style="font-size:.85rem;color:rgb(var(--gray));margin-bottom:.6rem">Want to fine-tune the 6 picks once they're set?</p>
+      <a href="/en/party-builder/" style="display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.4rem;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem">
+        Fine-tune builds in the Party Workshop →
+      </a>
+    </div>
+    <Footer />
+  </body>
+</html>

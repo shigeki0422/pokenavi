@@ -1,0 +1,29 @@
+---
+// 簡単構築の複数軸モード（軸2〜6体・ライブ計算）。AdSense のオファーウォールはこのURLだけを対象にする
+import { MATCHUP_SEASON } from '../../consts';
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import PartySuggestApp from '../../components/PartySuggestApp.astro';
+
+const title = `ポケモンチャンピオンズ${MATCHUP_SEASON} 複数の軸から簡単構築 | 2〜6体の軸を組み合わせてパーティを自動提案`;
+const description = `ポケモンチャンピオンズ${MATCHUP_SEASON}対応。使いたいポケモンを2〜6体指定すると、その組み合わせを軸に残りの枠を埋めたパーティを提案します。`;
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" adsSkipPremium
+    />
+  </head>
+  <body>
+    <Header />
+    <PartySuggestApp mode="multi" />
+    <div style="max-width:860px;margin:0 auto;padding:0 1.2rem 3rem;text-align:center">
+      <p style="font-size:.85rem;color:rgb(var(--gray));margin-bottom:.6rem">6匹が決まったら細かい型を調整したい方へ</p>
+      <a href="/party-builder/" style="display:inline-flex;align-items:center;gap:.5rem;padding:.55rem 1.4rem;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:.9rem">
+        パーティ工房で型を微調整する →
+      </a>
+    </div>
+    <Footer />
+  </body>
+</html>
