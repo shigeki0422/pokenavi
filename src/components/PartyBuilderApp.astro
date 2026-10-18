@@ -301,6 +301,7 @@ const I18N = I18N_ALL[lang];
 
   <div class="card" id="pb-balance"></div>
   <div class="card" id="pb-diag"></div>
+  <div id="pb-ad-bottom" class="pb-ad" hidden></div>
   <slot />
 </main>
 
@@ -313,6 +314,12 @@ const I18N = I18N_ALL[lang];
 <div class="pb-undo-toast" id="pb-undo-toast" style="display:none"></div>
 
 <style is:global>
+  /* 広告（未課金のみ・2か所）。読み込み後にレイアウトがずれないよう高さを先に確保する */
+  .pb-ad{margin:1em 0;padding:.8em 0 1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px;text-align:center}
+  .pb-ad-label{font-size:.68rem;font-weight:800;color:rgb(var(--gray));letter-spacing:.05em;margin-bottom:.5em}
+  .pb-ad-slot{width:300px;max-width:100%;height:250px;margin:0 auto;overflow:hidden}
+  .pb-ad-dummy{height:100%;display:flex;align-items:center;justify-content:center;border:2px dashed #cbd5e1;border-radius:8px;color:#94a3b8;font-size:.8rem;line-height:1.5;padding:0 1em}
+  #pb-fill-ad.pb-ad{margin:0 0 1em;padding:.5em 0 .6em}
   main{width:auto;max-width:1040px;margin:0 auto;padding:1.4em 1em 4em;color:rgb(var(--gray-dark));overflow-x:clip}
   html{scrollbar-gutter:stable}
   /* (B14) ボトムナビ分の余白に、notch端末のホームインジケータ分を追加 */
@@ -370,6 +377,7 @@ const I18N = I18N_ALL[lang];
   .lbl.item{background:#0ea5e9}.lbl.abil{background:#8b5cf6}.lbl.nat{background:#f59e0b}.lbl.mv{background:#10b981}.lbl.ev{background:#64748b}
   .tic{width:14px;height:14px;vertical-align:-2px}
   .iic{width:20px;height:20px;object-fit:contain;vertical-align:-5px}
+  .isp{display:inline-block;background-image:url('/images/items/item-sprite.png');background-size:480px 648px;flex-shrink:0}
   .iic-stone,.iic-generic{display:inline-block;background-repeat:no-repeat;background-position:center;background-size:contain}
   .iic-stone{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='%23c4b5fd'/><stop offset='1' stop-color='%23ec4899'/></linearGradient></defs><path d='M12 2.5l8 6.5-8 12.5L4 9z' fill='url(%23g)' stroke='%237c3aed' stroke-width='1.2' stroke-linejoin='round'/><path d='M4 9h16M12 2.5L9 9l3 12.5M12 2.5L15 9l-3 12.5' fill='none' stroke='white' stroke-opacity='.65' stroke-width='.9'/></svg>")}
   .iic-generic{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><circle cx='12' cy='12' r='8.5' fill='%23e2e8f0' stroke='%2394a3b8' stroke-width='1.4'/><circle cx='12' cy='12' r='3' fill='%2394a3b8'/></svg>")}
@@ -922,6 +930,8 @@ const I18N = I18N_ALL[lang];
 
 <script>
   import { loadCore, loadMon, loadNameUrlMap, nameUrlMapSync } from '../scripts/party-builder/data';
+  // 持ち物名→item-sprite.png の座標（簡単構築と同じ表。scripts/gen_item_sprite_map.py）
+  import ITEM_SPRITE from '../../public/sim-data/item_sprite.json';
   import { loadStore, saveStore, createParty, createPartyFromSlots, duplicateParty, renameParty, deleteParty, getEffectiveTargets } from '../scripts/party-builder/storage';
   import { fromSpec, fromSuggestSpec, exportParty, importParty, toServerSpec } from '../scripts/party-builder/spec';
   import { initDiag } from '../scripts/party-builder/diag';
@@ -956,7 +966,7 @@ const I18N = I18N_ALL[lang];
       obStep1Title: 'ポケモンを追加', obStep1Desc: '空き枠の＋から選ぶか、「空き枠を提案で埋める」で自動編成',
       obStep2Title: '型を調整', obStep2Desc: '持ち物・特性・性格・EVを変更すると実数値が即座に反映',
       obStep3Title: '相性を確認', obStep3Desc: '使用率上位30体との1v1判定・素早さ比較でパーティの穴を見つける',
-      loading: '読み込み中…', close: '閉じる',
+      loading: '読み込み中…', close: '閉じる', adLabel: '広告', adRemove: '広告を非表示にする',
       teamHead: '6枠編成', teamDndHint: '（ドラッグで並べ替え）', fillBtn: '空き枠を提案で埋める',
       createPartyPrompt: 'パーティを作成してください',
       editorTitle: '型エディタ', editorSelectPrompt: '上の6枠から編集したい枠を選択してください',
@@ -1074,7 +1084,7 @@ const I18N = I18N_ALL[lang];
       obStep1Title: 'Add a Pokémon', obStep1Desc: 'Pick from an empty slot\'s +, or auto-fill with "Fill empty slots with suggestions"',
       obStep2Title: 'Adjust the build', obStep2Desc: 'Changing item, ability, nature, or EVs updates the real stats instantly',
       obStep3Title: 'Check matchups', obStep3Desc: 'Find gaps in your party via 1v1 verdicts and Speed comparisons against the top 30 usage ranks',
-      loading: 'Loading…', close: 'Close',
+      loading: 'Loading…', close: 'Close', adLabel: 'Advertisement', adRemove: 'Remove ads',
       teamHead: 'Your 6 Slots', teamDndHint: '(Drag to reorder)', fillBtn: 'Fill Empty Slots with Suggestions',
       createPartyPrompt: 'Please create a party',
       editorTitle: 'Build Editor', editorSelectPrompt: 'Select a slot above to edit its build',
@@ -1194,7 +1204,7 @@ const I18N = I18N_ALL[lang];
       obStep1Title: '포켓몬 추가', obStep1Desc: '빈 칸의 ＋에서 선택하거나, 「빈 칸을 제안으로 채우기」로 자동 편성',
       obStep2Title: '빌드 조정', obStep2Desc: '지닌물건·특성·성격·EV를 변경하면 실수치가 즉시 반영',
       obStep3Title: '상성 확인', obStep3Desc: '사용률 상위 30마리와의 1v1 판정・스피드 비교로 파티의 약점을 찾기',
-      loading: '불러오는 중…', close: '닫기',
+      loading: '불러오는 중…', close: '닫기', adLabel: '광고', adRemove: '광고 숨기기',
       teamHead: '6마리 편성', teamDndHint: '（드래그로 순서 변경）', fillBtn: '빈 칸을 제안으로 채우기',
       createPartyPrompt: '파티를 생성해 주세요',
       editorTitle: '빌드 에디터', editorSelectPrompt: '위의 6칸에서 편집할 칸을 선택해 주세요',
@@ -1376,11 +1386,13 @@ const I18N = I18N_ALL[lang];
     const e = t ? TYPEICON[t] : null;
     return e ? `<img class="tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${esc(tType(t))}">` : '';
   }
-  /** PartySuggestApp.astro の itemIco と同一体裁(持ち物スプライト。ITEM_PNGに無い持ち物はアイコン無し)。
+  /** PartySuggestApp.astro の itemIco と同一体裁(専用PNG → 持ち物スプライト → 汎用アイコンの順)。
    * lookupは常にitemの生の(和名)値で行う(和名キーの固定表のため)。表示名の翻訳はesc(tItem(item))側で行う。 */
   function itemIco(item) {
     if (ITEM_PNG[item]) return `<img class="iic" src="/images/items/${ITEM_PNG[item]}" alt="">`;
-    // アイコン画像が無い持ち物は、メガストーンなら宝石、それ以外は汎用の丸で代用する(アイコン有無で行の見た目が揺れないように)。
+    const sp = ITEM_SPRITE[item];
+    if (sp) return `<span class="iic isp" style="background-position:${sp[0]}px ${sp[1]}px" aria-hidden="true"></span>`;
+    // スプライトにも無い持ち物は、メガストーンなら宝石、それ以外は汎用の丸で代用する(アイコン有無で行の見た目が揺れないように)。
     if (!item) return '';
     return `<span class="iic ${/ナイト[XYZＸＹＺ]?$/.test(item) ? 'iic-stone' : 'iic-generic'}" aria-hidden="true"></span>`;
   }
@@ -4182,8 +4194,10 @@ const I18N = I18N_ALL[lang];
   }
   function openFillPopover() {
     const body = document.getElementById('pb-modal-body');
-    body.innerHTML = `<h3 style="margin-top:0">${esc(I18N.fillBtn)}</h3><div id="pb-fill-body"></div>`;
+    body.innerHTML = `<h3 style="margin-top:0">${esc(I18N.fillBtn)}</h3><div id="pb-fill-ad"></div><div id="pb-fill-body"></div>`;
     showModal();
+    // 計算中から結果の後まで同じ位置に出す（結果は下に足されるので視界から押し出されない）。候補一覧を圧迫しない横長の小さい枠
+    mountAd(document.getElementById('pb-fill-ad'), 'banner');
     renderFillBody();
   }
   function speciesInParty(party, spName) {
@@ -4508,6 +4522,37 @@ const I18N = I18N_ALL[lang];
     else diag = initDiag(diagEl, diagHost);
     render();
     if (restoredScrollY !== null) requestAnimationFrame(() => window.scrollTo(0, restoredScrollY));
+  }
+  /** 広告は未課金の利用者だけに2か所（ページ最下部・空き枠提案の結果）。課金が有効な環境
+   * （/api/auth/me が enabled を返す）でだけ出す。本番で課金を始めるまでは従来どおり工房に広告は無い。 */
+  let adsOn = false;
+  (window.__pnMe || Promise.resolve(null)).then((me) => {
+    adsOn = !!(me && me.enabled && !me.premium && !document.documentElement.classList.contains('pn-premium'));
+    if (adsOn) mountAd(document.getElementById('pb-ad-bottom'));
+  });
+  function mountAd(host, size = 'rect') {
+    const [w, h] = size === 'banner' ? [320, 100] : [300, 250];
+    if (!adsOn || !host) return;
+    host.hidden = false;
+    host.className = 'pb-ad';
+    host.innerHTML = `<div class="pb-ad-label">${esc(I18N.adLabel)}<a class="pn-ad-remove" href="/premium/">${esc(I18N.adRemove)}</a></div><div class="pb-ad-slot" style="width:${w}px;height:${h}px"></div>`;
+    const slot = host.querySelector('.pb-ad-slot');
+    // 開発環境では AdSense が配信しないので、位置と大きさの確認用に枠だけ描く
+    if (!/(^|\.)pokenavi\.jp$/.test(location.hostname)) {
+      slot.innerHTML = `<div class="pb-ad-dummy">${esc(I18N.adLabel)} ${w}×${h}<br>（本番ではここに AdSense の広告）</div>`;
+      return;
+    }
+    const ins = document.createElement('ins');
+    ins.className = 'adsbygoogle';
+    ins.style.cssText = `display:inline-block;width:${w}px;height:${h}px`;
+    ins.setAttribute('data-ad-client', 'ca-pub-6144860227440327');
+    ins.setAttribute('data-ad-slot', '8319443257');
+    slot.appendChild(ins);
+    try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { host.hidden = true; return; }
+    // 在庫が無いと AdSense が枠を畳むので、「広告」のラベルだけが残らないようブロックごと隠す。
+    // 広告ブロッカー等で状態が付かないまま残る場合も、8秒で配信が無ければ隠す
+    setTimeout(() => { if (ins.dataset.adStatus === 'unfilled') host.hidden = true; }, 3000);
+    setTimeout(() => { if (ins.dataset.adStatus !== 'filled') host.hidden = true; }, 8000);
   }
   init();
 </script>

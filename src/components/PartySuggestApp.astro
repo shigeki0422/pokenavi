@@ -1191,13 +1191,17 @@ const I18N = I18N_ALL[lang];
     slot.appendChild(ins);
     try { (window.adsbygoogle = window.adsbygoogle || []).push({}); } catch (e) { return; }
     _adLoaded = true;
-    // 在庫が無いとAdSenseが枠を高さ0に畳むため、「広告」のラベルだけが残らないようブロックごと隠す
-    setTimeout(() => {
-      if (ins.dataset.adStatus === 'unfilled') {
+    // 在庫が無いとAdSenseが枠を高さ0に畳むため、「広告」のラベルだけが残らないようブロックごと隠す。
+    // 広告ブロッカー等で読み込み自体が止まると状態が付かず読み込み中の表示が残り続けるので、8秒で配信が無ければ隠す
+    const hideUnlessFilled = (final) => {
+      const st = ins.dataset.adStatus;
+      if (st === 'unfilled' || (final && st !== 'filled')) {
         const el = document.getElementById('ps-ad-inline');
         if (el) el.style.display = 'none';
       }
-    }, 3000);
+    };
+    setTimeout(() => hideUnlessFilled(false), 3000);
+    setTimeout(() => hideUnlessFilled(true), 8000);
   }
   function showInlineAd(){
     const el = document.getElementById('ps-ad-inline');
