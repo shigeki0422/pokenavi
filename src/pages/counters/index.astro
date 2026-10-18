@@ -12,8 +12,13 @@ import { MATCHUP_SEASON } from '../../consts';
  * ページ以外から辿り着けなかった(索引ページが無い孤立ページ群)。
  * ここで全対象種への一覧導線を作る。
  */
+// 対策ページの対象は拡張プール(counter-targets.json)。[slug].astroと同じ元データを見る。
+const counterPath = path.join(process.cwd(), 'public', 'builder-data', 'counter-targets.json');
 const targets = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), 'public', 'builder-data', 'targets.json'), 'utf8'),
+  fs.readFileSync(
+    fs.existsSync(counterPath) ? counterPath : path.join(process.cwd(), 'public', 'builder-data', 'targets.json'),
+    'utf8',
+  ),
 ) as { sp: string; icon: string }[];
 const pokemonPages = await getCollection('pokemon', (p) => !p.data.draft);
 const nameToPage: Record<string, (typeof pokemonPages)[number]> = {};

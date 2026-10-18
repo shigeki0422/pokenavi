@@ -6,7 +6,7 @@ import BaseHead from '../../components/BaseHead.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import MatchupBreakdownPopup from '../../components/MatchupBreakdownPopup.astro';
-import { getMatchups, getMatchupBreakdown } from '../../scripts/party-builder/matchup-static';
+import { getMatchups, getMatchupBreakdown, getCounterBreakdown, getCounterMatchup, counterDefenders } from '../../scripts/party-builder/matchup-static';
 import partySuggestSlugs from '../../data/party-suggest-slugs.json';
 import { MATCHUP_SEASON } from '../../consts';
 
@@ -26,8 +26,14 @@ import { MATCHUP_SEASON } from '../../consts';
  * 今後どちらかの表示を直す時は1ファイルの修正で両方に反映されるようにする。
  */
 export async function getStaticPaths() {
+  // 対策ページの対象は拡張プール(counter-targets.json・使用率上位100体)。
+  // targets.json(上位30体)は工房の仮想敵・対面ページ・Cloud Runが共有しており、
+  // そちらを増やすと提案の計算まで重くなるため、このページ専用のプールを使う。
+  const counterPath = path.join(process.cwd(), 'public', 'builder-data', 'counter-targets.json');
   const targetsPath = path.join(process.cwd(), 'public', 'builder-data', 'targets.json');
-  const targets = JSON.parse(fs.readFileSync(targetsPath, 'utf8')) as { sp: string; icon: string; label?: string }[];
+  const targets = JSON.parse(
+    fs.readFileSync(fs.existsSync(counterPath) ? counterPath : targetsPath, 'utf8'),
+  ) as { sp: string; icon: string; label?: string; stone?: string }[];
   const pokemonPages = await getCollection('pokemon', (p) => !p.data.draft);
 
   const nameToPage: Record<string, (typeof pokemonPages)[number]> = {};
@@ -88,27 +94,29 @@ type Counter = {
    * 系統ごとの内訳を全て並べる(1件のみが通常ケース)。 */
   breakdowns: { label: string; breakdown: NonNullable<ReturnType<typeof getMatchupBreakdown>> }[];
 };
+const defenderEntries = counterDefenders().filter((d) => d.icon === defenderIcon);
 const counters: Counter[] = [];
 for (const p of pokemonPages) {
   if (!p.data.pokemonName || p.data.dexNumber == null) continue;
   const icon = `${String(p.data.dexNumber).padStart(4, '0')}-${p.data.imageForm ?? '00'}`;
   if (icon === defenderIcon) continue;
-  const matchups = getMatchups(icon);
-  if (!matchups) continue;
-  // defenderがメガ進化複数系統(リザードンX/Y等)の場合、getMatchups()は
-  // targets.jsonの和名(defenderName)ではなく系統名(メガリザードンX等)で
-  // 複数エントリを返すため、名前ではなくアイコンで一致させる。「対策」として
-  // 挙げるのは、全系統に対して有利(◎/○)な場合のみ(片方にしか勝てないなら
-  // 対策として不確実なため除外する)。
-  const matched = matchups.filter((x) => x.icon === defenderIcon);
-  if (!matched.length) continue;
+  // defenderがメガ進化複数系統(リザードンX/Y等)の場合は系統ごとに判定し、
+  // 「対策」として挙げるのは全系統に対して有利(◎/○)な場合のみ
+  // (片方にしか勝てないなら対策として不確実なため除外する)。
+  const matched = defenderEntries
+    .map((d) => {
+      const m = getCounterMatchup(icon, defenderIcon, d.preferItem);
+      return m ? { ...m, name: d.name, preferItem: d.preferItem } : null;
+    })
+    .filter((m): m is NonNullable<typeof m> => !!m);
+  if (!matched.length || matched.length !== defenderEntries.length) continue;
   if (!matched.every((x) => x.sym === '◎' || x.sym === '○')) continue;
   const sym: '◎' | '○' = matched.some((x) => x.sym === '○') ? '○' : '◎';
   const dep = matched.some((x) => x.dep) || new Set(matched.map((x) => x.sym)).size > 1;
 
   const breakdowns = matched
     .map((mm) => {
-      const breakdown = getMatchupBreakdown(icon, defenderIcon, undefined, mm.preferItem);
+      const breakdown = getCounterBreakdown(icon, defenderIcon, mm.preferItem);
       return breakdown ? { label: mm.name, breakdown } : null;
     })
     .filter((b): b is NonNullable<typeof b> => !!b);

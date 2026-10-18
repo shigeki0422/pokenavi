@@ -150,6 +150,57 @@ interface OpponentGroup {
 }
 const resolvedTargetsExpanded: OpponentGroup[] = resolvedTargets;
 
+/** 対策ページ(/counters/)専用の拡張プール(counter-targets.json・使用率上位100体)。
+ * targets.json を増やすと工房の仮想敵一覧・対面ページの組み合わせ数・Cloud Runの
+ * 提案まで一斉に重くなるため、対策ページだけこちらを参照する。生成物が無い環境では
+ * targets.json にフォールバックする(従来どおり上位30体)。 */
+const counterGroups: TargetGroup[] = (() => {
+  try {
+    return readJson<TargetGroup[]>("counter-targets.json");
+  } catch {
+    return targetGroups;
+  }
+})();
+const resolvedCounterTargets: OpponentGroup[] = counterGroups.map((g) => ({
+  icon: g.icon,
+  name: g.label ?? g.sp,
+  preferItem: g.stone,
+  builds: g.builds.map((b) => resolveTarget(g.sp, g.label ?? g.sp, g.icon, b, moves)),
+}));
+
+/** 対策ページ用: 拡張プールの相手に対する1v1内訳。targets.jsonに無い相手でも判定できる。 */
+export function getCounterBreakdown(
+  myIcon: string,
+  oppIcon: string,
+  oppPreferItem?: string,
+): MatchupBreakdown | null {
+  const me = mainBuild(myIcon);
+  if (!me) return null;
+  const oppGroup = resolvedCounterTargets.find((t) => t.icon === oppIcon && t.preferItem === oppPreferItem);
+  if (!oppGroup || !oppGroup.builds.length) return null;
+  return buildBreakdown(me, oppGroup);
+}
+
+/** 対策ページ用: 拡張プールの相手に対する集約判定(◎○△▲×)。
+ * 自分側は代表型(最大3)を総当たりする getMatchups() と同じ前提にそろえる。 */
+export function getCounterMatchup(
+  myIcon: string,
+  oppIcon: string,
+  oppPreferItem?: string,
+): { sym: StaticMatchup["sym"]; dep: boolean } | null {
+  const mes = myVariants(myIcon);
+  if (!mes.length) return null;
+  const oppGroup = resolvedCounterTargets.find((t) => t.icon === oppIcon && t.preferItem === oppPreferItem);
+  if (!oppGroup || !oppGroup.builds.length) return null;
+  const v = judgeVsBuildsMulti(mes, oppGroup.builds);
+  return { sym: v.sym, dep: v.dep };
+}
+
+/** 対策ページ用: 拡張プールに含まれる相手(=対策ページを作る対象)の一覧。 */
+export function counterDefenders(): { sp: string; icon: string; name: string; preferItem?: string }[] {
+  return counterGroups.map((g) => ({ sp: g.sp, icon: g.icon, name: g.label ?? g.sp, preferItem: g.stone }));
+}
+
 const cache = new Map<string, StaticMatchup[] | null>();
 
 function judgeAgainstPool(mes: ResolvedBuild[], ownIcon: string): StaticMatchup[] {
@@ -232,6 +283,10 @@ export function getMatchupBreakdownForBuild(
 ): MatchupBreakdown | null {
   const oppGroup = resolvedTargetsExpanded.find((t) => t.icon === oppIcon && t.preferItem === oppPreferItem);
   if (!oppGroup || !oppGroup.builds.length) return null;
+  return buildBreakdown(me, oppGroup);
+}
+
+function buildBreakdown(me: ResolvedBuild, oppGroup: OpponentGroup): MatchupBreakdown {
   const agg = judgeVsBuildsMulti([me], oppGroup.builds);
   const builds = oppGroup.builds.map((build, i) => ({
     build,

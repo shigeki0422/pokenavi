@@ -893,6 +893,12 @@ def main():
 
     targets_out = build_targets(con, usage_rows, tpl_of, variants_of)
     write_json(os.path.join(OUT_DIR, "targets.json"), targets_out)
+    # 対策ページ(/counters/)専用の拡張プール。targets.json を増やすと工房の仮想敵一覧・
+    # 対面ページの組み合わせ数・Cloud Runの提案(matchup_grid)まで一斉に重くなるため、
+    # 「対策ページの対象を増やす」目的のファイルだけ別に出す。
+    counter_n = int(os.environ.get("BUILDER_COUNTER_N") or 100)
+    write_json(os.path.join(OUT_DIR, "counter-targets.json"),
+               build_targets(con, usage_rows, tpl_of, variants_of, n=counter_n))
     # 簡単構築の一覧の記号（Cloud Run・_explain.matchup_grid）も同じ代表型で出す。デプロイ対象は scripts/ だけなので写しを置く
     write_json(os.path.join(HERE, "builder_targets.json"), targets_out)
 
