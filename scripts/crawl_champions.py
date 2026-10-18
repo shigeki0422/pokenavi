@@ -302,6 +302,12 @@ def main():
         tap(*BACK_BTN, wait=2.0)
 
     log(f"完了: {TOTAL_POKEMON}件")
+    # 画面オフから起動したときは元に戻す（LAUNCH=1 のときだけ。手でランキング画面を開いて
+    # 実行したときは画面を使っている最中かもしれないので消さない）。
+    # 異常終了（sys.exit）の経路はここを通らないので、止まった画面はそのまま残る
+    if os.environ.get("LAUNCH") == "1":
+        log("画面オフ")
+        adb("shell input keyevent KEYCODE_SLEEP", check=True)
 
 
 if __name__ == "__main__":
