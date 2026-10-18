@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのハカドッグ基礎データ
 pokemonName: 'ハカドッグ'
 dexNumber: 972
 usageRank: 118
-updatedDate: '2026-10-17'
+updatedDate: '2026-10-18'
 pubDate: '2026-10-11'
 draft: false
 

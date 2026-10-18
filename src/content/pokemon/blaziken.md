@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのバシャーモ基礎データ
 pokemonName: 'バシャーモ'
 dexNumber: 257
 usageRank: 41
-updatedDate: '2026-10-17'
+updatedDate: '2026-10-18'
 pubDate: '2026-10-11'
 draft: false
 

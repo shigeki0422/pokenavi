@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのドドゲザン基礎データ
 pokemonName: 'ドドゲザン'
 dexNumber: 983
 usageRank: 40
-updatedDate: '2026-10-17'
+updatedDate: '2026-10-18'
 pubDate: '2026-10-11'
 draft: false
 

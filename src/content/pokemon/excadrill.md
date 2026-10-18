@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのドリュウズ基礎データ
 pokemonName: 'ドリュウズ'
 dexNumber: 530
 usageRank: 73
-updatedDate: '2026-10-17'
+updatedDate: '2026-10-18'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'excadrill-analysis-m2'

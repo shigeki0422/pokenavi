@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのガルーラ基礎データ。
 pokemonName: 'ガルーラ'
 dexNumber: 115
 usageRank: 72
-updatedDate: '2026-10-17'
+updatedDate: '2026-10-18'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'kangaskhan-analysis-m2'

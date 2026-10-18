@@ -1,10 +1,10 @@
 ---
 title: 'グレンアルマ | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのグレンアルマ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率76位。'
+description: 'ポケモンチャンピオンズのグレンアルマ基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率77位。'
 pokemonName: 'グレンアルマ'
 dexNumber: 936
-usageRank: 76
-updatedDate: '2026-10-17'
+usageRank: 77
+updatedDate: '2026-10-18'
 pubDate: '2026-10-11'
 draft: false
 
@@ -31,7 +31,7 @@ faq:
       <img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.936</strong>　／　使用率 <strong style="color:#dc2626">76位</strong>
+      全国図鑑 <strong>No.936</strong>　／　使用率 <strong style="color:#dc2626">77位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-10-11</div>
   </div>
@@ -313,7 +313,7 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;">10</td>
   <td class="pn-hover-name" style="padding:8px 12px;border:1px solid #cbd5e1;"><div style="display:flex;align-items:center;gap:6px"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:20px;height:20px"> トリックルーム</div></td>
-  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:5.8%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">5.8%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="height:16px;vertical-align:middle"><span style="background:#10b981;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">変化</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>8</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">優先度-75ターンの間、全体の場をトリックルーム状態にする。</div></div></div></div></td>
+  <td style="padding:6px 12px;border:1px solid #cbd5e1"><div class="pn-rate-wrap"><div style="display:flex;align-items:center;gap:4px"><div style="position:relative;flex:1;min-width:0;background:#e2e8f0;border-radius:3px;height:20px;overflow:hidden"><div style="position:absolute;inset:0;background:#bfdbfe;width:5.8%"></div><span style="position:relative;z-index:1;font-weight:600;font-size:0.88em;padding:0 6px;line-height:20px;white-space:nowrap">5.8%</span></div><span style="width:40px;flex-shrink:0;text-align:right"></span></div><div class="pn-popup"><div style="max-width:260px;white-space:normal;line-height:1.5;margin-bottom:0px"><div style="display:flex;align-items:center;gap:6px;margin-bottom:2px"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="height:16px;vertical-align:middle"><span style="background:#10b981;color:#fff;font-size:0.72em;padding:1px 5px;border-radius:3px;font-weight:600">変化</span></div><div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:4px"><span style="background:#f1f5f9;color:#475569;font-size:0.78em;padding:2px 6px;border-radius:4px;white-space:nowrap"><span style="color:#94a3b8;font-size:0.85em">PP</span> <b>8</b></span></div><div style="font-size:0.8em;color:#374151;margin-top:6px;line-height:1.45">優先度-7。5ターンの間、全体の場をトリックルーム状態にする。</div></div></div></div></td>
 </tr>
 </tbody>
 </table>
