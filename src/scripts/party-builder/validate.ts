@@ -6,6 +6,10 @@ import { EV_TOTAL_MAX } from "./stats";
 export interface ValidationIssue {
   type: "item-dup" | "ev-over" | "dex-dup";
   message: string;
+  labels: string[];
+  item?: string;
+  sum?: number;
+  dex?: string;
 }
 
 function filledSlots(party: Party): Slot[] {
@@ -40,7 +44,7 @@ export function validateParty(party: Party, species: SpeciesMaster[]): Validatio
   }
   for (const [item, labels] of byItem) {
     if (labels.length >= 2) {
-      out.push({ type: "item-dup", message: `持ち物重複: ${item}(${labels.join("、")})` });
+      out.push({ type: "item-dup", message: `持ち物重複: ${item}(${labels.join("、")})`, labels, item });
     }
   }
 
@@ -49,7 +53,7 @@ export function validateParty(party: Party, species: SpeciesMaster[]): Validatio
     const sum = s.evs.reduce((a, b) => a + b, 0);
     if (sum > EV_TOTAL_MAX) {
       const label = labelOf(s, smOf.get(s.sp));
-      out.push({ type: "ev-over", message: `EV合計超過: ${label}(合計${sum}、上限${EV_TOTAL_MAX})` });
+      out.push({ type: "ev-over", message: `EV合計超過: ${label}(合計${sum}、上限${EV_TOTAL_MAX})`, labels: [label], sum });
     }
   }
 
@@ -66,7 +70,7 @@ export function validateParty(party: Party, species: SpeciesMaster[]): Validatio
   }
   for (const [dex, labels] of byDex) {
     if (labels.length >= 2) {
-      out.push({ type: "dex-dup", message: `図鑑番号重複: ${labels.join("、")}(#${dex})` });
+      out.push({ type: "dex-dup", message: `図鑑番号重複: ${labels.join("、")}(#${dex})`, labels, dex });
     }
   }
 
