@@ -544,6 +544,16 @@ pub struct SearchAI {
     pub downside_guard: bool,
     pub downside_k: usize,
     pub downside_margin: f64,
+    /// 下方ガードの版（env AI_DSG。AI_DSG_1 / AI_DSG_2 で側ごと。search_ai.py _DSG と同じ）:
+    /// 0=差 margin 以上なら必ず交代へ（2026-10-19 以前。5 は計測の対照用で 0 と同じ動き）
+    /// 1=margin 0.30 / 2=探索の Q が選んだ手より 0.10 超低い交代へは上書きしない / 3=直前に引っ込めた味方へ戻す上書きをしない / 4=2+3（既定）
+    pub dsg: u8,
+    /// 直近の手番の交代（引っ込めた側の添字, 出した添字）。交代でなければ None（下方ガードの版3・4と計測用）
+    pub sw_hist: Vec<Option<(usize, usize)>>,
+    /// 計測用: 各手番で下方ガードが上書きしたか（sw_hist と同じ並び）・このターンの上書き・往復の続き
+    guard_hist: Vec<bool>,
+    guard_now: bool,
+    in_loop: bool,
     pub tree_roll: f64,
     pub hidden: bool,
     /// 完全情報AI: 相手の型を決定化せず真値のまま読む（Python の SearchAI.oracle と同じ）。
@@ -603,6 +613,11 @@ impl SearchAI {
             downside_guard: true,
             downside_k: 8,
             downside_margin: 0.20,
+            dsg: dsg_env(),
+            sw_hist: Vec::new(),
+            guard_hist: Vec::new(),
+            guard_now: false,
+            in_loop: false,
             tree_roll: 0.85,
             hidden: true,
             oracle: std::env::var("ORACLE").map(|v| v == "1").unwrap_or(false),
@@ -635,6 +650,43 @@ impl SearchAI {
     /// SearchAI.__call__（mcts 経路）
     #[allow(clippy::too_many_arguments)]
     pub fn choose(
+        &mut self,
+        pack: &Pack,
+        net: &NetW,
+        sides: &mut [Side; 2],
+        me_idx: usize,
+        field: &mut Field,
+        belief: &mut OpponentBelief,
+        grng: &mut dyn BRng,
+    ) -> Action {
+        let cur = sides[me_idx].active_idx;
+        self.guard_now = false;
+        let a = self.choose_inner(pack, net, sides, me_idx, field, belief, grng);
+        let h = if a.kind == ActKind::Switch && a.switch_to >= 0 { Some((cur, a.switch_to as usize)) } else { None };
+        self.sw_hist.push(h);
+        self.guard_hist.push(self.guard_now);
+        let k = self.sw_hist.len();
+        let mut lp = false;
+        if k >= 3 {
+            if let (Some((x0, y0)), Some((x1, y1)), Some((x2, y2))) = (self.sw_hist[k - 3], self.sw_hist[k - 2], self.sw_hist[k - 1]) {
+                lp = x1 == y0 && y1 == x0 && x2 == x0 && y2 == y0;
+            }
+        }
+        if lp && !self.in_loop {
+            dsg_stat(self.dsg, 5);
+            if self.guard_hist[k - 3..].iter().any(|&g| g) {
+                dsg_stat(self.dsg, 7);
+            }
+        }
+        self.in_loop = lp;
+        if h.is_some() {
+            dsg_stat(self.dsg, 6);
+        }
+        a
+    }
+
+    #[allow(clippy::too_many_arguments)]
+    fn choose_inner(
         &mut self,
         pack: &Pack,
         net: &NetW,
@@ -836,8 +888,13 @@ impl SearchAI {
         let mut chosen = cands[chosen_i].clone();
         let keep_guard = std::env::var("SOLVE_GUARD").map(|v| v != "0").unwrap_or(true);
         if self.downside_guard && (keep_guard || !solver_decided) {
+            let sq: Vec<(i64, i64, f64)> = stats
+                .iter()
+                .map(|(i, n, q)| (if cands[*i].kind == ActKind::Switch { cands[*i].switch_to } else { -1 }, *n, *q))
+                .collect();
+            let qc = stats[chosen_i].2;
             chosen = self.apply_downside_guard(
-                pack, net, sides, me_idx, field, belief, cands, chosen, my_is_s1, grng,
+                pack, net, sides, me_idx, field, belief, cands, chosen, my_is_s1, grng, &sq, qc,
             );
         }
         chosen
@@ -1611,12 +1668,15 @@ fn pick_pool_build<'a>(
         chosen: Action,
         my_is_s1: bool,
         grng: &mut dyn BRng,
+        sq: &[(i64, i64, f64)],
+        qc: f64,
     ) -> Action {
         let switches: Vec<Action> =
             root_my.iter().filter(|a| a.kind == ActKind::Switch).cloned().collect();
         if switches.is_empty() {
             return chosen;
         }
+        dsg_stat(self.dsg, 0);
         let chosen_is_switch = chosen.kind == ActKind::Switch;
         let mut cand: Vec<Action> = Vec::new();
         if !chosen_is_switch {
@@ -1649,11 +1709,63 @@ fn pick_pool_build<'a>(
         } else {
             ds[0]
         };
-        if ds[off + bi] - base >= self.downside_margin {
+        let to = switches[bi].switch_to;
+        // 探索での交代先の Q（訪問0なら None）
+        let qs = sq.iter().find(|x| x.0 == to && x.1 > 0).map(|x| x.2);
+        let lowq = qs.map(|q| qc - q > 0.10).unwrap_or(false);
+        let cur = sides[me_idx].active_idx;
+        let back = matches!(self.sw_hist.last(), Some(Some((from, into))) if *into == cur && *from as i64 == to);
+        let diff = ds[off + bi] - base;
+        if diff >= dsg_margin(self.dsg, self.downside_margin) {
+            if !dsg_allow(self.dsg, lowq, back) {
+                dsg_stat(self.dsg, 4);
+                return chosen;
+            }
+            dsg_stat(self.dsg, 1);
+            self.guard_now = true;
+            if lowq {
+                dsg_stat(self.dsg, 2);
+            }
+            if back {
+                dsg_stat(self.dsg, 3);
+            }
             return switches[bi].clone();
         }
         chosen
     }
+}
+
+/// 下方ガードで上書きする差（版1は 0.30）。search_ai.py _dsg_margin と同じ
+pub fn dsg_margin(dsg: u8, margin: f64) -> f64 {
+    if dsg == 1 { 0.30 } else { margin }
+}
+
+/// 差が足りたうえで上書きしてよいか（lowq=探索の Q が選んだ手より 0.10 超低い交代、back=直前に引っ込めた味方へ戻す交代）。search_ai.py _dsg_allow と同じ
+pub fn dsg_allow(dsg: u8, lowq: bool, back: bool) -> bool {
+    !((lowq && (dsg == 2 || dsg == 4)) || (back && (dsg == 3 || dsg == 4)))
+}
+
+/// 下方ガードの版（env AI_DSG。既定は 4＝2026-10-19 の A/B で採用）
+pub fn dsg_env() -> u8 {
+    std::env::var("AI_DSG").ok().and_then(|v| v.parse::<u8>().ok()).unwrap_or(4)
+}
+
+thread_local! {
+    /// 計測用（版ごと）: [ガードを評価, 上書き, 上書き先の Q が 0.10 超低い, 直前に引っ込めた味方へ戻す上書き, 規則で見送り,
+    /// 交代の3連続往復（続く往復は1回と数える）, 交代, そのうち上書きを含む往復]
+    static DSG_STATS: std::cell::RefCell<[[u64; 8]; 6]> = const { std::cell::RefCell::new([[0; 8]; 6]) };
+}
+
+fn dsg_stat(v: u8, k: usize) {
+    DSG_STATS.with(|c| c.borrow_mut()[(v as usize).min(5)][k] += 1);
+}
+
+pub fn dsg_stats_take() -> Vec<u64> {
+    DSG_STATS.with(|c| {
+        let v = *c.borrow();
+        *c.borrow_mut() = [[0; 8]; 6];
+        v.iter().flat_map(|a| a.iter().copied()).collect()
+    })
 }
 
 /// Side に belief を設定する補助
@@ -1743,5 +1855,23 @@ fn terminal_v(winner: i64, my_is_s1: bool) -> f64 {
         1.0
     } else {
         0.0
+    }
+}
+
+#[cfg(test)]
+mod mc1019_dsg_tests {
+    use super::*;
+
+    #[test]
+    fn mc1019_下方ガードの版() {
+        assert_eq!((dsg_margin(1, 0.20), dsg_margin(0, 0.20), dsg_margin(4, 0.20)), (0.30, 0.20, 0.20));
+        let lowq: Vec<bool> = (0..5).map(|v| dsg_allow(v, true, false)).collect();
+        let back: Vec<bool> = (0..5).map(|v| dsg_allow(v, false, true)).collect();
+        assert_eq!(lowq, vec![true, true, false, true, false]);
+        assert_eq!(back, vec![true, true, true, false, false]);
+        assert!((0..5).all(|v| dsg_allow(v, false, false)));
+        if std::env::var("AI_DSG").is_err() {
+            assert_eq!(dsg_env(), 4, "既定は版4");
+        }
     }
 }

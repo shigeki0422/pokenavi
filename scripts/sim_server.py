@@ -338,6 +338,7 @@ def run_battle_data(specs1, specs2, season="M-2"):
             if second_side.active.flinched:
                 battle.logs.append(f"{second_side.active.name} はひるんで動けない！")
                 second_side.active.flinched = False
+                second_side.active.protect_consecutive = 0
             else:
                 # 先攻の攻撃で倒れて強制交代したポケモンはそのターン行動しない
                 if second_side.active_idx != second_pre_idx:
@@ -744,6 +745,7 @@ def _exec_manual_turn(side1, side2, field, battle, action1):
             if second_side.active.flinched:
                 battle.logs.append(f"{second_side.active.name} はひるんで動けない！")
                 second_side.active.flinched = False
+                second_side.active.protect_consecutive = 0
             elif not second_side.active.is_alive:
                 pass  # 先攻技で倒れたため後攻行動をスキップ
             else:
@@ -941,6 +943,7 @@ def manual_action(req: ManualActionRequest):
                 if side2.active.flinched:
                     battle.logs.append(f"{side2.active.name} はひるんで動けない！")
                     side2.active.flinched = False
+                    side2.active.protect_consecutive = 0
                 else:
                     if side2.active_idx != second_pre_idx:
                         action2 = Action(type="pass")
@@ -1047,7 +1050,7 @@ def _f1_store_put(aid, label, card):
 _F1_CACHE_DIR = os.path.join(os.path.dirname(__file__), "f1_cache")
 _F1_SAVED = {}   # subject_label -> {analysis_id, cards(サマリ)}
 # AIバージョン：探索/評価を変えたら更新。記録の再利用（対戦数の段階拡張）は同一バージョン間のみ。
-AI_VER = "mcts-guardq800-2-net1006-mc1018"
+AI_VER = "mcts-guardq800-2-net1006-mc1019"
 
 
 def _f1_safe(name):

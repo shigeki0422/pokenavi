@@ -301,6 +301,16 @@ def _terminal_v(winner, my_is_s1) -> float:
         return 0.5
     return 1.0 if ((winner == 1) == my_is_s1) else 0.0
 
+
+def _dsg_margin(dsg: int, margin: float) -> float:
+    """下方ガードで上書きする差（版1は 0.30）。search.rs dsg_margin と同じ"""
+    return 0.30 if dsg == 1 else margin
+
+
+def _dsg_allow(dsg: int, lowq: bool, back: bool) -> bool:
+    """差が足りたうえで上書きしてよいか（lowq=探索の Q が選んだ手より 0.10 超低い交代、back=直前に引っ込めた味方へ戻す交代）。search.rs dsg_allow と同じ"""
+    return not ((lowq and dsg in (2, 4)) or (back and dsg in (3, 4)))
+
 class SearchAI:
     def __init__(self, loader: DataLoader, rollouts: int = 16, depth: int = 50,
                  season: Optional[str] = None, rollout_ai=None, seed: int = 0, value_fn=None,
@@ -392,6 +402,10 @@ class SearchAI:
         self.downside_guard = os.environ.get("MCTS_DOWNSIDE_GUARD", "1") == "1"
         self.downside_k = int(os.environ.get("MCTS_DOWNSIDE_K", "8"))          # サンプルする相手型数
         self.downside_margin = float(os.environ.get("MCTS_DOWNSIDE_MARGIN", "0.20"))  # この差以上で交代へ上書き
+        # 下方ガードの版（env AI_DSG。search.rs SearchAI.dsg と同じ）: 0=差 margin 以上なら必ず交代（2026-10-19 以前）
+        # 1=margin 0.30 / 2=探索の Q が選んだ手より 0.10 超低い交代へは上書きしない / 3=直前に引っ込めた味方へ戻す上書きをしない / 4=2+3（既定。mc_fix_1019 の A/B）
+        self.dsg = int(os.environ.get("AI_DSG", "4"))
+        self.sw_hist = []
         # 次ターン価値ブレンド：ルート手の評価を「末端Q(深い読み)」と「次ターンの状態価値(1手先)」の混合に。
         # root_Q = (1-λ)·末端 + λ·次ターン。直後に明らかに損な手（無償死・反動相打ち）を避ける基礎力を付与。λ=0で従来。
         self.nextturn_lambda = float(os.environ.get("MCTS_NEXTTURN_LAMBDA", "0"))
@@ -408,6 +422,12 @@ class SearchAI:
 
     # ── 公開API（AIコールバック） ──────────────────────────────────
     def __call__(self, my_side: BattleSide, opp_side: BattleSide, field: BattleField) -> Action:
+        cur = my_side.active_idx
+        a = self._choose(my_side, opp_side, field)
+        self.sw_hist.append((cur, a.switch_to) if a.type == "switch" and a.switch_to is not None and a.switch_to >= 0 else None)
+        return a
+
+    def _choose(self, my_side: BattleSide, opp_side: BattleSide, field: BattleField) -> Action:
         me = my_side.active
         if not me.is_alive:
             return Action(type="pass")
@@ -728,22 +748,24 @@ class SearchAI:
                     if (a.type == "move" and a.move_idx == best_a.move_idx
                             and getattr(a, "do_mega", False) and n >= best_n * 0.9):
                         chosen = a; break
+        pre = chosen
         if self.downside_guard:
-            pre = chosen
-            chosen = self._apply_downside_guard(my_side, opp_side, field, root_my, chosen)
-            if chosen is not pre:
-                reason = "downside_guard"
+            chosen = self._apply_downside_guard(my_side, opp_side, field, root_my, chosen, stats)
         if self.explain:
             tot = sum(n for _, n, _ in stats) or 1
             rootV = sum(meW.get(self._action_index(a), 0.0) for a, _, _ in stats) / tot
-            top = _explain_top(stats, chosen)
+            top = _explain_top(stats, pre)
             self.last_decision = {
                 "value": round(rootV, 3),
-                "chosen": self._action_label(chosen, my_side),
+                "chosen": self._action_label(pre, my_side),
                 "reason": reason,
                 "cands": [{"a": self._action_label(a, my_side), "v": round(n / tot, 3),
                            "q": (round(q, 3) if q >= 0 else None)} for a, n, q in top],
             }
+            # 下方ガードで交代へ差し替えた手番は、読み（探索の手）と実行した手を分けて残す（観戦画面の注記）
+            if chosen is not pre:
+                self.last_decision["exec"] = self._action_label(chosen, my_side)
+                self.last_decision["reason"] = "downside_guard"
         return chosen
 
     def _action_label(self, a, side) -> str:
@@ -788,8 +810,9 @@ class SearchAI:
             worst = min(worst, v_type)
         return worst
 
-    def _apply_downside_guard(self, my_side, opp_side, field, root_my, chosen) -> Action:
-        """chosen と各控え交代の「最悪型」価値を比べ、交代が margin 以上勝るなら最良の交代へ上書き。"""
+    def _apply_downside_guard(self, my_side, opp_side, field, root_my, chosen, stats=()) -> Action:
+        """chosen と各控え交代の「最悪型」価値を比べ、交代が margin 以上勝るなら最良の交代へ上書き。
+        stats=[(手, 訪問数, Q)]（版2・4で探索の Q を見る。search.rs apply_downside_guard と同じ）"""
         switches = [a for a in root_my if a.type == "switch"]
         if not switches:
             return chosen
@@ -799,8 +822,13 @@ class SearchAI:
         base = ds.get(id(chosen))
         if base is None:
             base = self._downside_value(my_side, opp_side, field, chosen)
-        if ds[id(best_sw)] - base >= self.downside_margin:
-            return best_sw
+        if ds[id(best_sw)] - base >= _dsg_margin(self.dsg, self.downside_margin):
+            qc = next((q for a, _, q in stats if a is chosen), -1.0)
+            qs = next((q for a, n, q in stats if a.type == "switch" and a.switch_to == best_sw.switch_to and n > 0), None)
+            lowq = qs is not None and qc - qs > 0.10
+            last = self.sw_hist[-1] if self.sw_hist else None
+            back = last is not None and last[1] == my_side.active_idx and last[0] == best_sw.switch_to
+            return best_sw if _dsg_allow(self.dsg, lowq, back) else chosen
         return chosen
 
     def choose_faint_switch(self, fainted_side, opp_side, field):

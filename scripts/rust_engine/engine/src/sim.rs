@@ -421,6 +421,8 @@ fn mcts_3v3_inner(
     if let Some(v) = f2("AI_FIX40") { ai2.fix40 = v > 0.5; }
     if let Some(v) = f2("AI_KOV") { ai2.kov = v as u8; }
     if let Some(v) = std::env::var("AI_KOV_1").ok().and_then(|v| v.parse::<u8>().ok()) { ai1.kov = v; }
+    if let Some(v) = std::env::var("AI_DSG_1").ok().and_then(|v| v.parse::<u8>().ok()) { ai1.dsg = v; }
+    if let Some(v) = std::env::var("AI_DSG_2").ok().and_then(|v| v.parse::<u8>().ok()) { ai2.dsg = v; }
     for (k, ai) in [("AI_DRAW_OLD_1", &mut ai1), ("AI_DRAW_OLD_2", &mut ai2)] {
         if std::env::var(k).map(|v| v == "1").unwrap_or(false) { ai.draw_old = true; }
     }

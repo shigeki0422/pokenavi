@@ -12,6 +12,7 @@ import math
 import random
 from typing import Optional, TYPE_CHECKING
 from .damage import is_contact_move, effective_weather
+from .pokemon import subj_line
 
 if TYPE_CHECKING:
     from .pokemon import BattlePokemon
@@ -156,7 +157,7 @@ def synchronize(holder: "BattlePokemon", source: "BattlePokemon", status: str, l
     if holder.ability != "シンクロ" or source is None or source is holder or status not in _SYNC_JP:
         return
     if source.is_alive and source.apply_status(status, field=field):
-        logs.append(f"{holder.name} の シンクロ！ {source.name} も {_SYNC_JP[status]} になった！")
+        logs.append(subj_line(holder, f"{holder.name} の シンクロ！ {source.name} も {_SYNC_JP[status]} になった！"))
         from .items import try_cure_berry
         try_cure_berry(source, logs)
 
@@ -196,7 +197,7 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
                     attacker._sleep_acts = 0  # type: ignore
                     attacker._sleep_rest = False  # type: ignore
                 _jp = {"poison": "どく", "paralysis": "まひ", "sleep": "ねむり"}[st]
-                logs.append(f"{defender.name} の ほうし！ {attacker.name} は {_jp} になった！")
+                logs.append(subj_line(defender, f"{defender.name} の ほうし！ {attacker.name} は {_jp} になった！"))
                 synchronize(attacker, defender, st, logs, field)
 
     # のろわれボディ → battle.py の _execute_move 内で処理
@@ -255,27 +256,27 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
     if _contact and attacker.is_alive:
         if ab == "ほのおのからだ" and random.random() < 0.30:
             if attacker.apply_status("burn", field=field):
-                logs.append(f"{defender.name} の ほのおのからだ！ {attacker.name} は やけど した！")
+                logs.append(subj_line(defender, f"{defender.name} の ほのおのからだ！ {attacker.name} は やけど した！"))
                 synchronize(attacker, defender, "burn", logs, field)
         if ab == "どくのトゲ" and random.random() < 0.30:
             if attacker.apply_status("poison", field=field):
-                logs.append(f"{defender.name} の どくのトゲ！ {attacker.name} は どく になった！")
+                logs.append(subj_line(defender, f"{defender.name} の どくのトゲ！ {attacker.name} は どく になった！"))
                 synchronize(attacker, defender, "poison", logs, field)
         if ab == "ぬめぬめ":
             attacker.stage_speed = max(-6, attacker.stage_speed - 1)
-            logs.append(f"{defender.name} の ぬめぬめ！ {attacker.name} の素早さが下がった！")
+            logs.append(subj_line(defender, f"{defender.name} の ぬめぬめ！ {attacker.name} の素早さが下がった！"))
         if ab == "ミイラ" and attacker.ability not in ("ミイラ", "かがくへんかガス"):
             attacker.ability = "ミイラ"  # type: ignore
-            logs.append(f"{defender.name} の ミイラ！ {attacker.name} の特性が ミイラ になった！")
+            logs.append(subj_line(defender, f"{defender.name} の ミイラ！ {attacker.name} の特性が ミイラ になった！"))
         elif ab == "さまようたましい" and attacker.ability not in WANDERING_SPIRIT_FAIL \
                 and defender.ability not in WANDERING_SPIRIT_FAIL:
             attacker.ability, defender.ability = defender.ability, attacker.ability  # type: ignore
-            logs.append(f"{defender.name} の さまようたましい！ 特性を入れ替えた！")
+            logs.append(subj_line(defender, f"{defender.name} の さまようたましい！ 特性を入れ替えた！"))
 
     # どくしゅ（攻撃側：接触技を当てると30%でどく）
     if attacker.ability == "どくしゅ" and _contact and defender.is_alive and random.random() < 0.30:
         if defender.apply_status("poison", field=field):
-            logs.append(f"{attacker.name} の どくしゅ！ {defender.name} は どく になった！")
+            logs.append(subj_line(attacker, f"{attacker.name} の どくしゅ！ {defender.name} は どく になった！"))
             synchronize(defender, attacker, "poison", logs, field)
 
     # あくしゅう（攻撃側：ダメージを与えた技で10%ひるみ）

@@ -326,6 +326,12 @@ fn mcts_3v3_solve(
 
 /// 決定化の的中率を取り出してリセットする。
 /// [試行数, 持ち物一致, 特性一致, 技の一致本数, 技4本完全一致, 全一致]
+/// 下方ガードの計測（版0..4 × [評価, 上書き, Q が低い上書き, 戻す上書き, 規則で見送り, 交代の3連続往復, 交代]）を取り出してリセットする
+#[pyfunction]
+fn dsg_stats_take() -> PyResult<Vec<u64>> {
+    Ok(engine::search::dsg_stats_take())
+}
+
 #[pyfunction]
 fn det_slot_take() -> PyResult<Vec<u64>> {
     Ok(engine::sim::det_slot_take())
@@ -635,6 +641,7 @@ fn pokenavi_engine(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(det_hit_take, m)?)?;
     m.add_function(wrap_pyfunction!(det_consist_take, m)?)?;
     m.add_function(wrap_pyfunction!(det_slot_take, m)?)?;
+    m.add_function(wrap_pyfunction!(dsg_stats_take, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3_trace, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3_explore, m)?)?;
     m.add_function(wrap_pyfunction!(mcts_3v3_ab, m)?)?;

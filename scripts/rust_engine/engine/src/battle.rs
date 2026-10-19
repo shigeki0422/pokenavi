@@ -1092,7 +1092,59 @@ fn execute_move_inner(
         }};
     }
 
+    macro_rules! mark_used {
+        () => {{
+            A!().last_used_move = Some(n);
+            A!().last_move_obj = Some(mv.clone());
+            // 間に別の技（変化技を含む）を使えば次の デカハンマー は出せる（battle.py と同じ）
+            if n != l.デカハンマー {
+                A!().deka_last = false;
+            }
+            if n != l.とっておき {
+                let nm = A!().name;
+                let _ = nm;
+                if !A!().used_moves.contains(&n) {
+                    A!().used_moves.push(n);
+                }
+            }
+            // 自分の技だけを「判明した技」にする（わるあがき・まねっこのコピーは除く。battle.py と同じ）
+            if A!().moves.iter().any(|m| m.name == n) {
+                let an = A!().name;
+                sides[didx].opp_view.on_move(an, n);
+                // 交代せずに違う技を打った＝こだわりアイテムではない（battle.py と同じ）
+                if !A!().via_call {
+                    // 持ち物が途中で変わったら数え直す（battle.py と同じ）
+                    if A!().entry_moves.is_empty() || A!().entry_item != A!().item {
+                        A!().entry_moves.clear();
+                        A!().entry_item = A!().item;
+                    }
+                    if !A!().entry_moves.contains(&n) {
+                        A!().entry_moves.push(n);
+                    }
+                    if A!().entry_moves.len() >= 2 && sides[didx].belief.0.is_some() {
+                        let mut bl = sides[didx].belief.0.take().unwrap();
+                        bl.observe_absent_item(pack, an, &["こだわりスカーフ", "こだわりハチマキ", "こだわりメガネ"]);
+                        sides[didx].belief.0 = Some(bl);
+                    }
+                    // 技選びの観測（battle.py と同じ条件）
+                    if sides[didx].belief.0.is_some() && mv.category != Cat::Status && mv.priority <= 0
+                        && A!().choice_locked_move.is_none() && A!().encore_count == 0 && A!().lock_count == 0
+                    {
+                        let own_def = D!().clone();
+                        let subj = crate::belief::pub_state(&A!());
+                        let mut bl = sides[didx].belief.0.take().unwrap();
+                        bl.observe_choice(pack, an, &mv, own_def, field, subj);
+                        sides[didx].belief.0 = Some(bl);
+                    }
+                }
+            }
+        }};
+    }
+
     A!().defenseless = false;
+    // まもるの連続回数は、このターンにまもる系を成功させたときだけ続く（動けない・反動・別の技なら0。N1）
+    let protect_prev = A!().protect_consecutive;
+    A!().protect_consecutive = 0;
     // 反動ターンは技を使わない（技の公開・最後に使った技・技選びの観測もしない。battle.py と同じ）
     if A!().recharge {
         A!().recharge = false;
@@ -1104,53 +1156,9 @@ fn execute_move_inner(
     if n != l.みちづれ {
         A!().destiny_bond = false;
     }
-    A!().last_used_move = Some(n);
-    A!().last_move_obj = Some(mv.clone());
-    // 間に別の技（変化技を含む）を使えば次の デカハンマー は出せる（battle.py と同じ）
-    if n != l.デカハンマー {
-        A!().deka_last = false;
-    }
-    if n != l.とっておき {
-        let nm = A!().name;
-        let _ = nm;
-        if !A!().used_moves.contains(&n) {
-            A!().used_moves.push(n);
-        }
-    }
-    // 自分の技だけを「判明した技」にする（わるあがき・まねっこのコピーは除く。battle.py と同じ）
-    if A!().moves.iter().any(|m| m.name == n) {
-        let an = A!().name;
-        sides[didx].opp_view.on_move(an, n);
-        // 交代せずに違う技を打った＝こだわりアイテムではない（battle.py と同じ）
-        if !A!().via_call {
-            // 持ち物が途中で変わったら数え直す（battle.py と同じ）
-            if A!().entry_moves.is_empty() || A!().entry_item != A!().item {
-                A!().entry_moves.clear();
-                A!().entry_item = A!().item;
-            }
-            if !A!().entry_moves.contains(&n) {
-                A!().entry_moves.push(n);
-            }
-            if A!().entry_moves.len() >= 2 && sides[didx].belief.0.is_some() {
-                let mut bl = sides[didx].belief.0.take().unwrap();
-                bl.observe_absent_item(pack, an, &["こだわりスカーフ", "こだわりハチマキ", "こだわりメガネ"]);
-                sides[didx].belief.0 = Some(bl);
-            }
-            // 技選びの観測（battle.py と同じ条件）
-            if sides[didx].belief.0.is_some() && mv.category != Cat::Status && mv.priority <= 0
-                && A!().choice_locked_move.is_none() && A!().encore_count == 0 && A!().lock_count == 0
-            {
-                let own_def = D!().clone();
-                let subj = crate::belief::pub_state(&A!());
-                let mut bl = sides[didx].belief.0.take().unwrap();
-                bl.observe_choice(pack, an, &mv, own_def, field, subj);
-                sides[didx].belief.0 = Some(bl);
-            }
-        }
-    }
-
     // ねごと（ダメージ技の再実行）
     if n == l.ねごと {
+        mark_used!();
         if A!().status != Some(st.sleep) {
             return;
         }
@@ -1179,18 +1187,6 @@ fn execute_move_inner(
             sides[aidx].party[ai].status = saved_status;
             sides[aidx].party[ai].sleep_count = saved_count;
         }
-        return;
-    }
-
-    if mv.category == Cat::Status && A!().taunt_count > 0 {
-        return;
-    }
-
-    if A!().throat_chop_count > 0 && pack.flags(n).sound {
-        return;
-    }
-
-    if A!().disabled_move == Some(n) {
         return;
     }
 
@@ -1242,30 +1238,42 @@ fn execute_move_inner(
         return;
     }
 
+    // 動けると決まってから、最後に使った技・技の公開・技選びの観測（N2）
+    mark_used!();
+
+    if mv.category == Cat::Status && A!().taunt_count > 0 {
+        return;
+    }
+
+    if A!().throat_chop_count > 0 && pack.flags(n).sound {
+        return;
+    }
+
+    if A!().disabled_move == Some(n) {
+        return;
+    }
+
     // まもる系
     if n == l.まもる || n == l.キングシールド || n == l.ニードルガード || n == l.みきり
         || n == l.こらえる || n == l.トーチカ
     {
-        let cnt = A!().protect_consecutive;
+        let cnt = protect_prev;
         let success_rate = (1.0f64 / 3.0).powi(cnt as i32);
         if cnt > 0 && rng.random() >= success_rate {
-            A!().protect_consecutive = 0;
             return;
         }
         if n == l.こらえる {
             A!().enduring = true;
-            A!().protect_consecutive += 1;
+            A!().protect_consecutive = cnt + 1;
             return;
         }
         A!().protecting = true;
         A!().protect_move = Some(n);
-        A!().protect_consecutive += 1;
+        A!().protect_consecutive = cnt + 1;
         if n == l.キングシールド && A!().ability == l.バトルスイッチ {
             aegislash_to_shield(&mut A!());
         }
         return;
-    } else {
-        A!().protect_consecutive = 0;
     }
 
     // スクリーン技
@@ -3591,6 +3599,9 @@ pub fn apply_status_move(
             sides[sx].reflect = false;
             sides[sx].light_screen = false;
             sides[sx].aurora_veil = false;
+            sides[sx].reflect_count = 0;
+            sides[sx].light_screen_count = 0;
+            sides[sx].aurora_veil_count = 0;
         }
         return;
     }
@@ -5606,7 +5617,9 @@ impl Battle {
                 && needs_target(pack, self.sides[ox].active(), second_action)
             {
                 // 相手不在（自分・場が対象の技は出す）
+                self.sides[ox].active_mut().protect_consecutive = 0;
             } else if self.sides[ox].active().flinched {
+                self.sides[ox].active_mut().protect_consecutive = 0;
                 if self.sides[ox].active().ability == l.ふくつのこころ {
                     let p = self.sides[ox].active_mut();
                     p.stage_speed = std::cmp::min(6, p.stage_speed + 1);
@@ -6890,5 +6903,113 @@ mod synchronize_tests {
         assert_eq!(r2, (Some(st.badpoison), Some(st.badpoison)));
         assert_eq!(r3, (Some(st.sleep), None));
         assert_eq!(r4, (Some(st.paralysis), Some(st.burn)));
+    }
+}
+
+#[cfg(test)]
+mod mc1019_tests {
+    use super::*;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    struct Z(f64);
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { self.0 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    const DUM: &str = "カビゴン@きれいなぬけがら:わんぱく:なまける|まもる:32/0/32/0/0/0:あついしぼう";
+    const GAB: &str = "ガブリアス@きれいなぬけがら:ようき:じしん|つるぎのまい:0/32/0/0/0/32:さめはだ";
+
+    fn sides(p: &mut Pack, a: &[&str], b: &[&str]) -> [Side; 2] {
+        let pa: Vec<Poke> = a.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        let pb: Vec<Poke> = b.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        [Side { party: pa, active_idx: 0, field_idx: 0, ..Default::default() },
+         Side { party: pb, active_idx: 0, field_idx: 1, ..Default::default() }]
+    }
+
+    fn mv_of(p: &Pack, poke: &Poke, n: &str) -> Action {
+        let (i, m) = poke.moves.iter().enumerate().find(|(_, m)| p.intern.resolve(m.name) == n).unwrap();
+        Action { kind: ActKind::Move, mv: Some(m.clone()), move_idx: i as i64, switch_to: -1, do_mega: false }
+    }
+
+    fn one(p: &Pack, s: [Side; 2], x: &str, y: &str) -> Battle {
+        let mut bt = Battle::new(s[0].clone(), s[1].clone(), Field::default());
+        let a = mv_of(p, &bt.sides[0].party[0], x);
+        let b = mv_of(p, &bt.sides[1].party[0], y);
+        let lim = bt.turn + 1;
+        bt.run_loop_lim(p, &mut Z(0.5), lim, move |_, _| [a.clone(), b.clone()], |_| {});
+        bt
+    }
+
+    fn nm(p: &Pack, s: Option<crate::interner::Sym>) -> String {
+        s.map(|x| p.intern.resolve(x).to_string()).unwrap_or_default()
+    }
+
+    #[test]
+    fn mc1019_n1_動けなかったターンはまもるの連続回数を0に戻す() {
+        let mut p = pack();
+        let (sleep, freeze) = (p.sy.st.sleep, p.sy.st.freeze);
+        for frozen in [false, true] {
+            let mut s = sides(&mut p, &[DUM], &[DUM]);
+            s[0].party[0].status = Some(if frozen { freeze } else { sleep });
+            s[0].party[0].sleep_count = 5;
+            s[0].party[0].protect_consecutive = 2;
+            let bt = one(&p, s, "まもる", "なまける");
+            assert!(!bt.sides[0].party[0].protecting);
+            assert_eq!(bt.sides[0].party[0].protect_consecutive, 0, "こおり={frozen}");
+        }
+        let mut s = sides(&mut p, &["マスカーニャ@きれいなぬけがら:ようき:ねこだまし:0/32/0/0/0/32:へんげんじざい"], &[DUM]);
+        s[1].party[0].protect_consecutive = 2;
+        let bt = one(&p, s, "ねこだまし", "なまける");
+        assert_eq!(bt.sides[1].party[0].protect_consecutive, 0, "ひるみ");
+        let s = sides(&mut p, &[DUM], &[DUM]);
+        let bt = one(&p, s, "まもる", "なまける");
+        assert_eq!(bt.sides[0].party[0].protect_consecutive, 1, "成功したら1");
+    }
+
+    #[test]
+    fn mc1019_n2_動けなかったターンに選んだ技は明かさず最後に使った技にしない() {
+        let mut p = pack();
+        let (sleep, freeze) = (p.sy.st.sleep, p.sy.st.freeze);
+        let mut s = sides(&mut p, &[GAB], &[DUM]);
+        s[0].party[0].status = Some(sleep);
+        s[0].party[0].sleep_count = 5;
+        let bt = one(&p, s, "つるぎのまい", "なまける");
+        let g = bt.sides[0].party[0].name;
+        let km: Vec<String> = bt.sides[1].opp_view.find(g).map(|k| k.known_moves.iter().map(|m| nm(&p, Some(*m))).collect()).unwrap_or_default();
+        assert!(!km.contains(&"つるぎのまい".to_string()), "{km:?}");
+        assert_eq!(bt.sides[0].party[0].last_used_move, None);
+
+        let mut s = sides(&mut p, &[GAB], &["オーロンゲ@きれいなぬけがら:わんぱく:アンコール|なまける:32/0/32/0/0/0:おみとおし"]);
+        s[0].party[0].status = Some(sleep);
+        s[0].party[0].sleep_count = 5;
+        let jishin = s[0].party[0].moves[0].name;
+        s[0].party[0].last_used_move = Some(jishin);
+        let bt = one(&p, s, "つるぎのまい", "アンコール");
+        assert!(bt.sides[0].party[0].encore_count > 0);
+        assert_eq!(nm(&p, bt.sides[0].party[0].locked_move), "じしん");
+
+        let s = sides(&mut p, &[GAB], &[DUM]);
+        let bt = one(&p, s, "つるぎのまい", "なまける");
+        assert_eq!(nm(&p, bt.sides[0].party[0].last_used_move), "つるぎのまい");
+    }
+
+    #[test]
+    fn mc1019_きりばらいで壁の残りターンも0() {
+        let mut p = pack();
+        let mut s = sides(&mut p, &["アーマーガア@きれいなぬけがら:わんぱく:きりばらい:32/0/32/0/0/0:プレッシャー"], &[DUM]);
+        s[1].reflect = true;
+        s[1].reflect_count = 5;
+        s[1].light_screen = true;
+        s[1].light_screen_count = 5;
+        let bt = one(&p, s, "きりばらい", "なまける");
+        assert!(!bt.sides[1].reflect && !bt.sides[1].light_screen);
+        assert_eq!((bt.sides[1].reflect_count, bt.sides[1].light_screen_count), (0, 0));
     }
 }

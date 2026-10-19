@@ -89,17 +89,19 @@ def _ko_wrap(_a):
 
 
 def _log_sides(b, i0):
-    """ログの各行の陣営（1=側1・2=側2・0=場・観測行）。行頭のポケモン名がどちらの選出にいるかで決め、
-    両方にいる（同種ミラー）ときはその行を書いた時点の場のポケモン名、それでも決まらなければ書いた側の文脈"""
+    """ログの各行の陣営（1=側1・2=側2・0=場・観測行）。主語のポケモンを持つ行（subj_line）はその側。ほかは行頭のポケモン名が
+    どちらの選出にいるかで決め、両方にいる（同種ミラー）ときはその行を書いた時点の場のポケモン名、それでも決まらなければ書いた側の文脈"""
     meta = getattr(b.logs, "meta", None)
     if meta is None or len(meta) != len(b.logs):
         return []
     n1 = {p.name for p in b.side1.party}; n2 = {p.name for p in b.side2.party}
     out = []
-    for line, (ctx, a1, a2) in zip(b.logs[i0:], meta[i0:]):
+    for line, (ctx, a1, a2, ov) in zip(b.logs[i0:], meta[i0:]):
         m = None if line.startswith("▷") else re.match(r"^(\S+?) (?:の|は|が)", line)
         nm = m.group(1) if m else None
-        if nm is None or (nm not in n1 and nm not in n2):
+        if ov and not line.startswith("▷"):
+            out.append(ov)
+        elif nm is None or (nm not in n1 and nm not in n2):
             out.append(0)
         elif nm not in n2:
             out.append(1)

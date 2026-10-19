@@ -8,6 +8,17 @@ from dataclasses import dataclass, field
 from typing import Optional, List
 from .data import PokemonTemplate, MoveData, MegaData, NATURE_MODS, DataLoader
 
+
+class SubjLine(str):
+    """ログの1行に主語のポケモンを持たせる（観戦記録の陣営表示用。同種ミラーで名前から決められない行。N4）"""
+    subj = 0
+
+
+def subj_line(poke, text: str) -> str:
+    x = SubjLine(text)
+    x.subj = id(poke)
+    return x
+
 STAT_STAGE_MULT = {
     -6: 2/8, -5: 2/7, -4: 2/6, -3: 2/5, -2: 2/4, -1: 2/3,
      0: 1.0,
