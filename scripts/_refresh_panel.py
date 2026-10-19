@@ -48,6 +48,8 @@ def fingerprint():
 def refresh_matchup() -> None:
     import _explain as EX
     from simulator.data import DataLoader
+    if not EX._rust():
+        raise SystemExit("pokenavi_engine が無い python では一覧の記号がブラウザ（wasm）とずれるので作り直さない（scripts/venv/bin/python で流す）")
     t0 = time.time()
     L = DataLoader()
     cache = json.load(open(IN, encoding="utf-8"))

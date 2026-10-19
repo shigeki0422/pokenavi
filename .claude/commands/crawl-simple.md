@@ -67,11 +67,12 @@ python3 scripts/generate_ranking_json.py
 ### 7. ポケモンページ再生成
 ```bash
 python3 scripts/generate_pokemon_pages.py
-python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成
+python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成。scripts/builder_targets.json と提案キャッシュの一覧の記号(scripts/suggest_cache.json、_refresh_panel.py MATCHUP_ONLY=1)も続けて作り直す
 python3 scripts/gen_learnset_data.py  # ポケモン情報ページ「覚える技」用データ(gen_builder_data.py の後に実行)
 python3 scripts/inject_faq_frontmatter.py
 ```
 - 想定型・1v1の型（型プール）はここでは作り直さない（詳細データの週次クロール `/crawl-full` の手順 7-2 で更新）。gen_builder_data.py は `scripts/pool_versions.json` の版を読むので、毎日流しても想定型と番号はずれない
+- `gen_builder_data.py` を流したら、`public/builder-data/`・`scripts/builder_targets.json`・`scripts/suggest_cache.json` を**必ず一緒にコミット**する（2026-10-16〜19 は targets.json だけコミットされ、簡単構築の一覧の記号が古い相手のまま残った。test_all 46 が検出する）。コミット前に `cd scripts && PYTHONHASHSEED=0 venv/bin/python tests/test_all.py`（約3分）で 46（一覧の相手・記号の鮮度）を含む全件パスを確認し、コミット後に `git status --short public/builder-data scripts/builder_targets.json scripts/suggest_cache.json` が空であることを確認。suggest_cache.json が変わったら Cloud Run（pokenavi-suggest）の再デプロイが要るのでユーザーに伝える
 - ビルド前の `[archetypes]` 警告（ランキングに新しく入った種に想定型が無い等）が出たら、ユーザーに伝えて次の詳細クロールで更新する
 
 ### 8. ローカル確認

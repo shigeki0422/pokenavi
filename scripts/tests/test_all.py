@@ -10073,6 +10073,15 @@ def _t46_suggest_mu(EX=None):
     _g = EX.matchup_grid(_specs, DataLoader())
     check("46 一覧の相手: 列（ラベル・種）と並びが targets.json と同じ（メガX/Yは別列）",
           [(t["label"], t["sp"]) for t in _g["tops"]] == [(g["label"], g["sp"]) for g in _tg], str([t["label"] for t in _g["tops"]][:13]))
+    _sc = _j46.load(open(_o46.path.join(_sd, "suggest_cache.json"), encoding="utf-8"))
+    _rs = [r for e in _sc.values() for r in e.get("results", []) if r.get("matchup") and r.get("specs")]
+    _cols = [(g["label"], g["sp"]) for g in _tg]
+    _old = [r["specs"][0] for r in _rs if [(t["label"], t["sp"]) for t in r["matchup"]["tops"]] != _cols]
+    _L46 = DataLoader()
+    _stale = [r["specs"][0] for r in _rs[:3] if EX.matchup_grid(r["specs"], _L46) != r["matchup"]]
+    check("46 一覧の記号: suggest_cache.json が今の builder_targets.json で作った値（全提案の列が同じ・先頭3提案の記号が再計算と一致。"
+          "gen_builder_data の後の _refresh_panel.py MATCHUP_ONLY=1 とコミット漏れの検出）",
+          _rs and not _old and not _stale, f"列が古い {len(_old)}/{len(_rs)}件・記号が古い {_stale}")
     _agg = getattr(EX, "mu_agg", None)
     check("46 一覧の集約: 割合で重み付け（80%の型○1.5・20%の型△-0.5 → ○、型により変化の*あり）",
           _agg is not None and _agg([1.5, -0.5], [80, 20]) == {"v": "○", "dep": True})

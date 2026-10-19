@@ -51,9 +51,11 @@ python3 scripts/insert_detail_from_journal.py
 ```bash
 python3 scripts/generate_pokemon_pages.py
 python3 scripts/inject_faq_frontmatter.py
-python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成
+python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成。scripts/builder_targets.json と提案キャッシュの一覧の記号(scripts/suggest_cache.json、_refresh_panel.py MATCHUP_ONLY=1)も続けて作り直す
 python3 scripts/gen_learnset_data.py  # ポケモン情報ページ「覚える技」用データ(gen_builder_data.py の後に実行)
 ```
+
+- `gen_builder_data.py` を流したら、`public/builder-data/`・`scripts/builder_targets.json`・`scripts/suggest_cache.json` を**必ず一緒にコミット**する（2026-10-16〜19 は targets.json だけコミットされ、簡単構築の一覧の記号が古い相手のまま残った。test_all 46 が検出する）。コミット前に `cd scripts && PYTHONHASHSEED=0 venv/bin/python tests/test_all.py`（約3分）で 46（一覧の相手・記号の鮮度）を含む全件パスを確認し、コミット後に `git status --short public/builder-data scripts/builder_targets.json scripts/suggest_cache.json` が空であることを確認。suggest_cache.json が変わったら Cloud Run（pokenavi-suggest）の再デプロイが要るのでユーザーに伝える
 
 ### 7-2. 想定型・1v1の型の週次更新（詳細データを入れたこの手順では必ず実行）
 ```bash
@@ -61,7 +63,7 @@ scripts/venv/bin/python scripts/update_type_pool.py
 ```
 - 新しい詳細データで型プール→系統表→想定型（src/data/archetypes.json）と1v1の代表型・仮想敵（public/builder-data）を同じ版から作り直す。エラーなら止まるので直してから再実行
 - 出力の `report.md`（パスは実行ログの最後）を読み、警告（前回比の大きな変化・「生成側の疑い」・使用率との差）をユーザーに要約して見せる。詳しい読み方は `.claude/commands/weekly-pool-update.md`
-- コミット時は `src/data/archetypes.json`・`public/builder-data/`・`scripts/pool_versions.json` も含める
+- コミット時は `src/data/archetypes.json`・`public/builder-data/`・`scripts/pool_versions.json`・`scripts/builder_targets.json`・`scripts/suggest_cache.json` も含める
 
 ### 8. ローカル確認
 ```bash

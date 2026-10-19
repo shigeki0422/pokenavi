@@ -5,6 +5,8 @@
 
 使い方: python3 scripts/gen_builder_data.py
         BUILDER_SEASON=M-4 python3 scripts/gen_builder_data.py   # シーズン切替
+最後に提案キャッシュの一覧の記号（_refresh_panel.py MATCHUP_ONLY=1、scripts/venv の python）も作り直す。
+コミットは public/builder-data/・scripts/builder_targets.json・scripts/suggest_cache.json を一緒に。
 
 ── 設計（2026-08 改修） ─────────────────────────────────────────────
 1. 技は「4技固定のビルド」ではなく **採用率TOP10の技プール(mpool)** として持つ。
@@ -23,6 +25,8 @@ import os
 import re
 import sqlite3
 import json
+import subprocess
+import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -912,6 +916,15 @@ def main():
           f"targets={len(targets_out)} mon={len(usage_rows)} 型合計={nv} 型0件={len(empty)}")
     if empty:
         print("  型0件:", ", ".join(empty[:20]))
+    refresh_suggest_matchup()
+
+
+def refresh_suggest_matchup():
+    """簡単構築の一覧の記号・素早さタブ（suggest_cache.json）の相手は builder_targets.json なので、書いたら必ず作り直す
+    （2026-10-16〜19 の日次更新で targets.json だけ新しくなり、一覧の記号が古い相手のまま残った）"""
+    py = os.path.join(HERE, "venv", "bin", "python")
+    subprocess.run([py if os.path.exists(py) else sys.executable, os.path.join(HERE, "_refresh_panel.py")],
+                   cwd=HERE, check=True, env=dict(os.environ, MATCHUP_ONLY="1"))
 
 
 if __name__ == "__main__":

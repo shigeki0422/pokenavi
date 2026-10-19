@@ -26,10 +26,11 @@ python3 scripts/generate_ranking_json.py
 ```bash
 python3 scripts/generate_pokemon_pages.py
 python3 scripts/inject_faq_frontmatter.py   # FAQ(構造化データ)を再注入。ページ再生成で消えるため必須
-python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成
+python3 scripts/gen_builder_data.py   # パーティ工房のデータ(選択できるポケモン/型/仮想敵)を最新シーズンで再生成。scripts/builder_targets.json と提案キャッシュの一覧の記号(scripts/suggest_cache.json、_refresh_panel.py MATCHUP_ONLY=1)も続けて作り直す
 python3 scripts/gen_learnset_data.py  # ポケモン情報ページ「覚える技」用データ(gen_builder_data.py の後に実行)
 node scripts/check_archetypes.mjs     # 想定型の抜け・版のずれの確認（警告のみ）
 ```
+- `gen_builder_data.py` を流したら、`public/builder-data/`・`scripts/builder_targets.json`・`scripts/suggest_cache.json` を**必ず一緒にコミット**する（2026-10-16〜19 は targets.json だけコミットされ、簡単構築の一覧の記号が古い相手のまま残った。test_all 46 が検出する）。コミット前に `cd scripts && PYTHONHASHSEED=0 venv/bin/python tests/test_all.py`（約3分）で 46（一覧の相手・記号の鮮度）を含む全件パスを確認し、コミット後に `git status --short public/builder-data scripts/builder_targets.json scripts/suggest_cache.json` が空であることを確認。suggest_cache.json が変わったら Cloud Run（pokenavi-suggest）の再デプロイが要るのでユーザーに伝える
 - 想定型（archetypes.json）と 1v1 の型の元（型プール・系統表）は**週次の別手順** `.claude/commands/weekly-pool-update.md`。gen_builder_data.py は `scripts/pool_versions.json` の page の版を読むので、毎日流しても想定型と Set N の番号はずれない
 - 上の確認で「ランキングにあって想定型が無い」「版が揃っていない」が出たら、週次の手順を前倒しで流す（新シーズン開始時は必ず）
 
@@ -46,7 +47,7 @@ npm run build
 
 ### 7. コミット＆デプロイ（ユーザーの承認後のみ実行）
 ```bash
-git add src/data/ranking.json src/data/learnsets.json src/data/move-details.json src/content/pokemon/ && \
+git add src/data/ranking.json src/data/learnsets.json src/data/move-details.json src/content/pokemon/ public/builder-data/ scripts/builder_targets.json scripts/suggest_cache.json && \
 git commit -m "feat: $(date +%m/%d)クロールデータ反映（使用率ランキング・ポケモン情報ページ更新）" && \
 git push origin main && \
 npx wrangler pages deploy dist --project-name pokenavi --branch main
