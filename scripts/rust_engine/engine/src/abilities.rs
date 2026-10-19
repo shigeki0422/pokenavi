@@ -1,5 +1,6 @@
 //! simulator/abilities.py の移植（ダメージ計算内の判定は damage.rs 側に既存）。
 use crate::damage::{effective_weather, is_contact_move, DMove, Field};
+use crate::interner::Sym;
 use crate::pack::{Cat, Pack, Ty};
 use crate::poke::{apply_status, Poke, TransformBackup, ST_ATK, ST_DEF, ST_SPA, ST_SPD, ST_SPE};
 use crate::rng::BRng;
@@ -207,8 +208,8 @@ pub fn on_after_hit(
     }
 
     if ab == l.せいでんき && is_contact_move(pack, mv) && attacker.ability != l.えんかく {
-        if rng.random() < 0.30 {
-            apply_status(pack, attacker, st.paralysis, false, Some(field));
+        if rng.random() < 0.30 && apply_status(pack, attacker, st.paralysis, false, Some(field)) {
+            synchronize(pack, attacker, defender, st.paralysis, field);
         }
     }
 
@@ -237,6 +238,9 @@ pub fn on_after_hit(
                 attacker.sleep_acts = 0;
                 attacker.sleep_rest = false;
             }
+            if ok {
+                synchronize(pack, attacker, defender, s, field);
+            }
         }
     }
 
@@ -250,16 +254,6 @@ pub fn on_after_hit(
         || n == l.エアカッター;
     if ab == l.ふうりょく && is_wind {
         defender.charged = true;
-    }
-
-    if ab == l.シンクロ && defender.is_alive {
-        if let Some(s) = defender.status {
-            if (s == st.poison || s == st.badpoison || s == st.paralysis || s == st.burn)
-                && attacker.is_alive
-            {
-                apply_status(pack, attacker, s, false, Some(field));
-            }
-        }
     }
 
     if ab == l.ぎゃくじょう && defender.is_alive {
@@ -300,11 +294,11 @@ pub fn on_after_hit(
     }
 
     if contact && attacker.is_alive {
-        if ab == l.ほのおのからだ && rng.random() < 0.30 {
-            apply_status(pack, attacker, st.burn, false, Some(field));
+        if ab == l.ほのおのからだ && rng.random() < 0.30 && apply_status(pack, attacker, st.burn, false, Some(field)) {
+            synchronize(pack, attacker, defender, st.burn, field);
         }
-        if ab == l.どくのトゲ && rng.random() < 0.30 {
-            apply_status(pack, attacker, st.poison, false, Some(field));
+        if ab == l.どくのトゲ && rng.random() < 0.30 && apply_status(pack, attacker, st.poison, false, Some(field)) {
+            synchronize(pack, attacker, defender, st.poison, field);
         }
         if ab == l.ぬめぬめ {
             attacker.stage_speed = std::cmp::max(-6, attacker.stage_speed - 1);
@@ -319,8 +313,13 @@ pub fn on_after_hit(
         }
     }
 
-    if attacker.ability == l.どくしゅ && contact && defender.is_alive && rng.random() < 0.30 {
-        apply_status(pack, defender, st.poison, false, Some(field));
+    if attacker.ability == l.どくしゅ
+        && contact
+        && defender.is_alive
+        && rng.random() < 0.30
+        && apply_status(pack, defender, st.poison, false, Some(field))
+    {
+        synchronize(pack, defender, attacker, st.poison, field);
     }
 
     if attacker.ability == l.あくしゅう
@@ -369,8 +368,23 @@ pub fn rough_skin_recoil(pack: &Pack, attacker: &mut Poke, defender: &mut Poke, 
         let recoil = std::cmp::max(1, attacker.max_hp / 4);
         attacker.take_damage(recoil);
     }
-    if ab == l.とびだすハバネロ && mv.category != Cat::Status {
-        apply_status(pack, attacker, st.burn, false, Some(field));
+    if ab == l.とびだすハバネロ
+        && mv.category != Cat::Status
+        && apply_status(pack, attacker, st.burn, false, Some(field))
+    {
+        synchronize(pack, attacker, defender, st.burn, field);
+    }
+}
+
+pub fn synchronize(pack: &Pack, holder: &Poke, source: &mut Poke, status: Sym, field: &Field) {
+    let st = &pack.sy.st;
+    if holder.ability != pack.sy.l.シンクロ
+        || !(status == st.poison || status == st.badpoison || status == st.paralysis || status == st.burn)
+    {
+        return;
+    }
+    if source.is_alive && apply_status(pack, source, status, false, Some(field)) {
+        crate::items::try_cure_berry(pack, source);
     }
 }
 

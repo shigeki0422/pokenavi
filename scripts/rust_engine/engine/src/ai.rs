@@ -1311,6 +1311,89 @@ fn ko_move_fails(pack: &Pack, me: &Poke, op: &Poke, mv: &DMove, field: &Field, f
     false
 }
 
+/// 確定KO安全弁の版（env AI_KOV。ai.py _KOV）: 2=絞った版（既定）、1=2026-10-18 以前、0=上書きしない
+pub fn kov_env() -> u8 {
+    std::env::var("AI_KOV").ok().and_then(|v| v.parse::<u8>().ok()).unwrap_or(2)
+}
+
+/// ai.py `_charges_this_turn`
+fn charges_this_turn(pack: &Pack, me: &Poke, mv: &DMove, field: &Field) -> bool {
+    let l = &pack.sy.l;
+    let n = mv.name;
+    let two = n == l.ソーラービーム || n == l.ソーラーブレード || n == l.あなをほる || n == l.そらをとぶ
+        || n == l.ダイビング || n == l.エレクトロビーム || n == l.ゴッドバード
+        || n == l.とびはねる || n == l.メテオビーム || n == l.ゴーストダイブ;
+    if !two {
+        return false;
+    }
+    let w = crate::damage::effective_weather(pack, field, Some(me));
+    if (n == l.ソーラービーム || n == l.ソーラーブレード) && w == Some(pack.sy.we.sunny) {
+        return false;
+    }
+    !(n == l.エレクトロビーム && w == Some(pack.sy.we.rain))
+}
+
+/// ai.py `_screen_est`
+fn screen_est(pack: &Pack, me: &Poke, opp: &Side, mv: &DMove) -> f64 {
+    let l = &pack.sy.l;
+    if me.ability == l.すりぬけ || mv.name == l.かわらわり || mv.name == l.レイジングブル || mv.name == l.サイコファング {
+        return 1.0;
+    }
+    if mv.category == Cat::Physical && (opp.reflect || opp.aurora_veil) {
+        return 0.5;
+    }
+    if mv.category == Cat::Special && (opp.light_screen || opp.aurora_veil) {
+        return 0.5;
+    }
+    1.0
+}
+
+/// ai.py `_opp_mega_forms`: 相手がこのターンにメガ進化しうるならメガ後の姿の写し
+/// （持ち物は開示済みならそれ、未開示なら事前分布で10%以上のメガ石。真値は読まない）
+fn opp_mega_forms(pack: &Pack, my: &mut Side, opp: &Side) -> Vec<Poke> {
+    const MEGA_MAYBE: f64 = 10.0;
+    let op = opp.active();
+    if op.mega_evolved || opp.mega_used {
+        return Vec::new();
+    }
+    let mut mds: Vec<(Option<crate::interner::Sym>, std::sync::Arc<crate::pack::MegaStats>)> = Vec::new();
+    if my.belief.0.is_none() {
+        if let Some(m) = &op.mega {
+            mds.push((op.item, m.clone()));
+        }
+    } else {
+        let (_, k_it) = known_view(my, pack, op);
+        let (_, it_prior, _) = priors_of(my, pack, op);
+        let stones: Vec<String> = match k_it {
+            Some(i) => vec![pack.intern.resolve(i).to_string()],
+            None => it_prior.iter().filter(|(_, r)| *r >= MEGA_MAYBE).map(|(n, _)| n.clone()).collect(),
+        };
+        if stones.is_empty() {
+            return Vec::new();
+        }
+        let season = my.belief.0.as_ref().map(|b| b.season.clone()).unwrap_or_default();
+        let name = pack.intern.resolve(op.name).to_string();
+        let tpl = match crate::poke::get_pokemon_template(pack, &name, &season) {
+            Some(t) => t,
+            None => return Vec::new(),
+        };
+        for st in &stones {
+            if let Some(m) = tpl.mega_get(&crate::poke::normalize_mega_stone(st)).or_else(|| tpl.mega_get(st)) {
+                mds.push((pack.intern.get(st), std::sync::Arc::new(m.clone())));
+            }
+        }
+    }
+    let mut out = Vec::new();
+    for (it, m) in mds {
+        let mut c = op.clone();
+        c.mega = Some(m);
+        c.item = it;
+        crate::poke::mega_evolve_poke(pack, &mut c);
+        out.push(c);
+    }
+    out
+}
+
 /// precise=false は 2026-09-28 以前の判定（姿変化・連続技なしの1発・A/B 用。env AI_KO_PRECISE=0）
 /// cond=false は 2026-10-04 以前の判定（成功条件のある技も候補にする・A/B 用。env AI_KO_COND=0）
 pub fn certain_ko_override_opt(
@@ -1324,6 +1407,26 @@ pub fn certain_ko_override_opt(
     cond: bool,
     fix40: bool,
 ) -> Action {
+    certain_ko_override_kov(pack, act, my, opp, field, rng, precise, cond, fix40, kov_env())
+}
+
+#[allow(clippy::too_many_arguments)]
+pub fn certain_ko_override_kov(
+    pack: &Pack,
+    act: Action,
+    my: &mut Side,
+    opp: &mut Side,
+    field: &mut Field,
+    rng: &mut dyn BRng,
+    precise: bool,
+    cond: bool,
+    fix40: bool,
+    kov: u8,
+) -> Action {
+    if kov == 0 {
+        return act;
+    }
+    let narrow = kov >= 2;
     let (mi, oi) = (my.active_idx, opp.active_idx);
     {
         let me = &my.party[mi];
@@ -1333,6 +1436,9 @@ pub fn certain_ko_override_opt(
         }
     }
     if forced_charging_action(&mut my.party[mi]).is_some() {
+        return act;
+    }
+    if narrow && my.party[mi].status == Some(pack.sy.st.sleep) {
         return act;
     }
     // 耐える系の判定は相手の真値ではなく opp_view（開示済み）＋使用率事前分布で行う。
@@ -1353,6 +1459,12 @@ pub fn certain_ko_override_opt(
         let op = opp.party[oi].clone();
         opp_max_priority_known(pack, my, &op)
     };
+    let mut forms: Vec<Poke> = if narrow { opp_mega_forms(pack, my, opp) } else { Vec::new() };
+    let screens: Vec<f64> = if narrow {
+        my.party[mi].moves.iter().map(|m| screen_est(pack, &my.party[mi], opp, m)).collect()
+    } else {
+        Vec::new()
+    };
     let me = &mut my.party[mi];
     let op = &mut opp.party[oi];
     let valid = filter_by_pp(&filter_valid_by_lock(me), me);
@@ -1370,7 +1482,17 @@ pub fn certain_ko_override_opt(
         if cond && ko_move_fails(pack, me, op, mv, field, fix40) {
             continue;
         }
-        if !goes_first_pri(pack, me, op, mv.priority, field, opp_pri) {
+        if narrow
+            && ((me.status == Some(pack.sy.st.freeze)
+                && !(mv.name == pack.sy.l.もえつきる || mv.name == pack.sy.l.ねっとう || mv.name == pack.sy.l.ねっさのだいち
+                    || mv.name == pack.sy.l.せいなるほのお || mv.name == pack.sy.l.かえんボール))
+                || charges_this_turn(pack, me, mv, field))
+        {
+            continue;
+        }
+        if !goes_first_pri(pack, me, op, mv.priority, field, opp_pri)
+            || forms.iter().any(|f| !goes_first_pri(pack, me, f, mv.priority, field, opp_pri))
+        {
             continue;
         }
         // 正規化ロール。最低ロールは 0.0（0.85 は実効 0.85+0.85*0.15=0.9775 ＝ほぼ最高値で、
@@ -1385,7 +1507,20 @@ pub fn certain_ko_override_opt(
         };
         sm.restore(me);
         so.restore(op);
-        if d >= op.hp as f64 {
+        let sc = if narrow { screens.get(*i).copied().unwrap_or(1.0) } else { 1.0 };
+        let mut d = if sc < 1.0 { (d * sc).floor() } else { d };
+        let mut ko = d >= op.hp as f64;
+        for f in forms.iter_mut() {
+            let sf = crate::damage::EstSnap::take(f);
+            let sm = crate::damage::EstSnap::take(me);
+            let df = move_damage(pack, me, f, mv, field, 0.0, HitMode::Min, false, rng);
+            sm.restore(me);
+            sf.restore(f);
+            let df = if sc < 1.0 { (df * sc).floor() } else { df };
+            ko = ko && df >= f.hp as f64;
+            d = d.min(df);
+        }
+        if ko {
             let p = if fix40 { ko_hit_prob(pack, me, op, mv, field) } else { 1.0 };
             probs.push((mv.name, p));
             if p > bestp || (p == bestp && d > bestd) {
@@ -1401,6 +1536,12 @@ pub fn certain_ko_override_opt(
     };
     if act.kind == ActKind::Move && act.mv.as_ref().map(|m| m.name) == Some(bmv.name) {
         return act;
+    }
+    if narrow && act.kind == ActKind::Move {
+        let ap = act.mv.as_ref().and_then(|m| probs.iter().find(|(n, _)| *n == m.name).map(|x| x.1));
+        if ap.map_or(false, |a| a >= bestp) {
+            return act;
+        }
     }
     // 命中が確実でない技で上書きするのは、選んだ手が命中率の低い確定KO技だったときだけ（ai.py と同じ）
     if fix40 && bestp < 1.0 {
@@ -2002,3 +2143,134 @@ mod tests {
         }
     }
 }
+
+/// M-C 総当たりの監査（mc_audit_1018）A1: 確定KO安全弁を絞る。test_all.py 54 と同じ局面
+#[cfg(test)]
+mod mc1018_ai_tests {
+    use super::*;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    struct Z;
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { 0.0 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    const DUM: &str = "カビゴン@きれいなぬけがら:わんぱく:なまける|まもる:32/0/32/0/0/0:あついしぼう";
+
+    fn st(my: &Side, i: usize) -> Action {
+        Action { kind: ActKind::Move, mv: Some(my.party[0].moves[i].clone()), move_idx: i as i64, switch_to: -1, do_mega: false }
+    }
+
+    fn ov(pr: &Pack, my: &mut Side, op: &mut Side, f: &mut Field, keep: usize, kov: u8) -> i64 {
+        let a = st(my, keep);
+        certain_ko_override_kov(pr, a, my, op, f, &mut Z, true, true, true, kov).move_idx
+    }
+
+    fn min_dmg(pr: &Pack, my: &mut Side, op: &mut Side, f: &mut Field, i: usize) -> i64 {
+        let mv = my.party[0].moves[i].clone();
+        move_damage(pr, &mut my.party[0], &mut op.party[0], &mv, f, 0.0, HitMode::Min, false, &mut Z) as i64
+    }
+
+    #[test]
+    fn mc1018_a1_眠っている間は上書きしない() {
+        let mut p = pack();
+        let g = build_poke(&mut p, "ガブリアス@きれいなぬけがら:ようき:じしん|つるぎのまい:0/32/0/0/0/32:さめはだ", "M-6");
+        let d = build_poke(&mut p, DUM, "M-6");
+        let pr: &Pack = &p;
+        let mut my = Side { party: vec![g], active_idx: 0, ..Default::default() };
+        let mut op = Side { party: vec![d], active_idx: 1 - 1, field_idx: 1, ..Default::default() };
+        let mut f = Field::default();
+        op.party[0].hp = 10;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 0, "起きていれば上書き");
+        my.party[0].status = Some(pr.sy.st.sleep);
+        my.party[0].sleep_count = 3;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 1, "眠っていれば上書きしない");
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 1), 0, "旧版は上書き");
+        my.party[0].status = Some(pr.sy.st.freeze);
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 1, "こおりでも上書きしない");
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 0), 1, "AI_KOV=0 は上書きしない");
+    }
+
+    #[test]
+    fn mc1018_a1_探索の手も確定koなら探索の手() {
+        let mut p = pack();
+        let g = build_poke(&mut p, "ガブリアス@きれいなぬけがら:ようき:じしん|ドラゴンクロー|つるぎのまい:0/32/0/0/0/32:さめはだ", "M-6");
+        let d = build_poke(&mut p, DUM, "M-6");
+        let pr: &Pack = &p;
+        let mut my = Side { party: vec![g], active_idx: 0, ..Default::default() };
+        let mut op = Side { party: vec![d], active_idx: 0, field_idx: 1, ..Default::default() };
+        let mut f = Field::default();
+        op.party[0].hp = 10;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 1, "ドラゴンクローでも確定なら探索の手");
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 1), 0, "旧版は打点の大きい じしん に差し替える");
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 2, 2), 0, "積み技は確定KOの技に差し替える");
+    }
+
+    #[test]
+    fn mc1018_a1_溜める溜め技では上書きしない() {
+        let mut p = pack();
+        let g = build_poke(&mut p, "フシギバナ@きれいなぬけがら:おくびょう:ソーラービーム|こうごうせい:0/0/0/32/0/32:ようりょくそ", "M-6");
+        let d = build_poke(&mut p, DUM, "M-6");
+        let pr: &Pack = &p;
+        let mut my = Side { party: vec![g], active_idx: 0, ..Default::default() };
+        let mut op = Side { party: vec![d], active_idx: 0, field_idx: 1, ..Default::default() };
+        let mut f = Field::default();
+        op.party[0].hp = 10;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 1, "晴れでなければ溜めるだけ");
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 1), 0, "旧版は上書き");
+        f.weather = Some(pr.sy.we.sunny);
+        f.weather_count = 5;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 0, "晴れなら即時");
+    }
+
+    #[test]
+    fn mc1018_a1_相手の壁を見積もりに入れる() {
+        let mut p = pack();
+        let g = build_poke(&mut p, "ガブリアス@きれいなぬけがら:ようき:じしん|つるぎのまい:0/32/0/0/0/32:さめはだ", "M-6");
+        let d = build_poke(&mut p, DUM, "M-6");
+        let pr: &Pack = &p;
+        let mut my = Side { party: vec![g], active_idx: 0, ..Default::default() };
+        let mut op = Side { party: vec![d], active_idx: 0, field_idx: 1, ..Default::default() };
+        let mut f = Field::default();
+        let dm = min_dmg(pr, &mut my, &mut op, &mut f, 0);
+        op.party[0].hp = dm;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 0);
+        op.reflect = true;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 1, "リフレクターで半分なら確定ではない");
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 1), 0, "旧版は壁を見ない");
+        op.party[0].hp = dm / 2;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 0, "半分でも届けば上書き");
+    }
+
+    #[test]
+    fn mc1018_a1_相手がメガ進化できるならメガ後の姿で見積もる() {
+        let mut p = pack();
+        let g = build_poke(&mut p, "サーナイト@きれいなぬけがら:おくびょう:10まんボルト|めいそう:0/0/0/32/0/32:トレース", "M-6");
+        let d = build_poke(&mut p, "リザードン@リザードナイトY:ひかえめ:かえんほうしゃ:32/0/0/0/0/0:もうか", "M-6");
+        let pr: &Pack = &p;
+        let mut my = Side { party: vec![g], active_idx: 0, ..Default::default() };
+        let mut op = Side { party: vec![d], active_idx: 0, field_idx: 1, ..Default::default() };
+        let mut f = Field::default();
+        let base = min_dmg(pr, &mut my, &mut op, &mut f, 0);
+        let mut mg = op.clone();
+        crate::poke::mega_evolve_poke(pr, &mut mg.party[0]);
+        let mega = min_dmg(pr, &mut my, &mut mg, &mut f, 0);
+        assert!(mega < base, "前提: メガYは特防が高い {mega} {base}");
+        op.party[0].hp = base;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 1, "メガ後に耐えるなら上書きしない");
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 1), 0, "旧版はメガ前で見積もる");
+        op.mega_used = true;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 0, "メガ進化を使った後なら上書き");
+        op.mega_used = false;
+        op.party[0].hp = mega;
+        assert_eq!(ov(pr, &mut my, &mut op, &mut f, 1, 2), 0, "メガ後も倒せるなら上書き");
+    }
+}
+

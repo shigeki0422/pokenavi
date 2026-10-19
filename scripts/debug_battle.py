@@ -12,7 +12,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from simulator.data import DataLoader
 from simulator.pokemon import build_from_template, parse_pokemon_spec, build_from_spec
-from simulator.battle import Battle, BattleSide, BattleField
+from simulator.battle import Battle, BattleSide, BattleField, battle_outcome
 from simulator.ai import HeuristicAI, select_party
 from simulator.simulate import run_simulation
 
@@ -142,10 +142,8 @@ def run_single_battle(loader, p1_specs, p2_specs, step=False, season="M-2"):
 
     while turn < MAX_TURNS:
         turn += 1
-        if not side1.has_alive():
-            result = 2; break
-        if not side2.has_alive():
-            result = 1; break
+        if not (side1.has_alive() and side2.has_alive()):
+            result = battle_outcome(side1, side2); break
 
         action1 = ai(side1, side2, field)
         action2 = ai(side2, side1, field)
@@ -207,10 +205,7 @@ def run_single_battle(loader, p1_specs, p2_specs, step=False, season="M-2"):
                 print("\n中断")
                 return
 
-    if not side1.has_alive():
-        result = 2
-    elif not side2.has_alive():
-        result = 1
+    result = battle_outcome(side1, side2, result)
 
     winner_str = (f"{B}P1({selected1[0].name}側)勝利{RESET}" if result == 1
                   else f"{R}P2({selected2[0].name}側)勝利{RESET}" if result == 2

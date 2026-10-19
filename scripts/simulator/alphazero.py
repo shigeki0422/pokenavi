@@ -224,6 +224,8 @@ class _Node:
 
 
 def _terminal_value(b, my_is_s1) -> float:
+    if not b.side1.has_alive() and not b.side2.has_alive():
+        return 0.5
     if not b.side1.has_alive():
         return 0.0 if my_is_s1 else 1.0
     if not b.side2.has_alive():

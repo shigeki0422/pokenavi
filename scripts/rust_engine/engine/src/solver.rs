@@ -204,6 +204,7 @@ impl<'a> Solver<'a> {
     /// 局面の均衡値（自分 me 視点の勝率）。
     pub fn value(&mut self, sides: &[Side; 2], field: &Field, me: usize, depth: u32) -> f64 {
         self.nodes += 1;
+        if !sides[0].has_alive() && !sides[1].has_alive() { return 0.5; }
         if !sides[0].has_alive() { return if me == 1 { 1.0 } else { 0.0 }; }
         if !sides[1].has_alive() { return if me == 0 { 1.0 } else { 0.0 }; }
         if depth == 0 {

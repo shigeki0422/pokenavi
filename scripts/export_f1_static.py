@@ -181,9 +181,13 @@ def _slim_poke(p):
 def _slim_side(s):
     o = {"active_idx": s.get("active_idx", 0),
          "party": [_slim_poke(p) for p in s.get("party", [])]}
-    for k in ("reflect", "light_screen", "aurora_veil", "stealth_rock", "spikes", "toxic_spikes"):
+    for k in ("reflect", "light_screen", "aurora_veil", "stealth_rock", "spikes", "toxic_spikes", "sticky_web",
+              "tailwind", "safeguard"):
         if s.get(k):
             o[k] = s[k]
+    for k in ("reflect", "light_screen", "aurora_veil", "tailwind"):
+        if s.get(k) and s.get(k + "_count"):
+            o[k + "_count"] = s[k + "_count"]
     return o
 
 
@@ -194,10 +198,17 @@ def _slim_turn(t):
         o["weather"] = t["weather"]; o["weather_count"] = t.get("weather_count", 0)
     if t.get("trick_room"):
         o["trick_room"] = True; o["trick_room_count"] = t.get("trick_room_count", 0)
+    if t.get("terrain"):
+        o["terrain"] = t["terrain"]; o["terrain_count"] = t.get("terrain_count", 0)
+    for k in ("gravity", "magic_room", "wonder_room"):
+        if t.get(k):
+            o[k] = t[k]
     if t.get("expl1"):
         o["expl1"] = t["expl1"]
     if t.get("expl2"):
         o["expl2"] = t["expl2"]
+    if any(t.get("log_sides") or ()):
+        o["log_sides"] = t["log_sides"]
     return o
 
 

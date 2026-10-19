@@ -3563,6 +3563,12 @@ if _mv_dd_ラスタ_カノン:
 
 # ── トリックルーム ──
 check("DB: トリックルーム 取得可能", dl.get_move("トリックルーム") is not None)
+# トリックルーム: 優先度-7
+_mv_pr_トリックル_ム = dl.get_move("トリックルーム")
+if _mv_pr_トリックル_ム and _mv_pr_トリックル_ム.priority == -7:
+    check("優先度-7: トリックルーム", _mv_pr_トリックル_ム.priority == -7)
+elif _mv_pr_トリックル_ム:
+    check("優先度-7: トリックルーム", _mv_pr_トリックル_ム.priority == -7, f"DB優先度={_mv_pr_トリックル_ム.priority} 仕様=-7")
 # トリックルーム: 場の状態セット
 _s1rm, _s2rm, _frm = execute_ctx(make_poke(type1="エスパー"), make_poke(), "トリックルーム")
 check("トリックルーム 場の状態: トリックルーム", bool(getattr(_frm, "trick_room", 0)))

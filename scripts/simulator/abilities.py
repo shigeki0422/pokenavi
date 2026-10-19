@@ -149,6 +149,18 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
     return logs
 
 
+_SYNC_JP = {"poison": "どく", "badpoison": "もうどく", "paralysis": "まひ", "burn": "やけど"}
+
+
+def synchronize(holder: "BattlePokemon", source: "BattlePokemon", status: str, logs: list, field=None) -> None:
+    if holder.ability != "シンクロ" or source is None or source is holder or status not in _SYNC_JP:
+        return
+    if source.is_alive and source.apply_status(status, field=field):
+        logs.append(f"{holder.name} の シンクロ！ {source.name} も {_SYNC_JP[status]} になった！")
+        from .items import try_cure_berry
+        try_cure_berry(source, logs)
+
+
 # ── 技で被弾した後 ──────────────────────────────────────────────────────────
 
 def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
@@ -168,6 +180,7 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
             ok = attacker.apply_status("paralysis", field=field)
             if ok:
                 logs.append(f"{defender.name} の せいでんき！ {attacker.name} が まひ した！")
+                synchronize(attacker, defender, "paralysis", logs, field)
 
     # ほうし (接触技 → ねむり11%・まひ10%・どく9%。くさタイプ・ぼうじん・ぼうじんゴーグルには発動しない)
     if ab == "ほうし" and is_contact_move(move) and attacker.ability not in ("えんかく", "ぼうじん") \
@@ -184,6 +197,7 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
                     attacker._sleep_rest = False  # type: ignore
                 _jp = {"poison": "どく", "paralysis": "まひ", "sleep": "ねむり"}[st]
                 logs.append(f"{defender.name} の ほうし！ {attacker.name} は {_jp} になった！")
+                synchronize(attacker, defender, st, logs, field)
 
     # のろわれボディ → battle.py の _execute_move 内で処理
 
@@ -200,13 +214,6 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
     if ab == "ふうりょく" and move.name_jp in WIND_MOVES:
         defender.charged = True
         logs.append(f"{defender.name} の ふうりょく！ じゅうでん状態になった！")
-
-    # シンクロ（状態異常を受けたら攻撃側にも同じ状態異常）
-    if ab == "シンクロ" and defender.is_alive and defender.status in ("poison","badpoison","paralysis","burn"):
-        if attacker.is_alive:
-            ok = attacker.apply_status(defender.status, field=field)
-            if ok:
-                logs.append(f"{defender.name} の シンクロ！ {attacker.name} にも {defender.status} が伝染った！")
 
     # ぎゃくじょう（HP半分以下になった時に攻撃+2）
     if ab == "ぎゃくじょう" and defender.is_alive:
@@ -249,9 +256,11 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
         if ab == "ほのおのからだ" and random.random() < 0.30:
             if attacker.apply_status("burn", field=field):
                 logs.append(f"{defender.name} の ほのおのからだ！ {attacker.name} は やけど した！")
+                synchronize(attacker, defender, "burn", logs, field)
         if ab == "どくのトゲ" and random.random() < 0.30:
             if attacker.apply_status("poison", field=field):
                 logs.append(f"{defender.name} の どくのトゲ！ {attacker.name} は どく になった！")
+                synchronize(attacker, defender, "poison", logs, field)
         if ab == "ぬめぬめ":
             attacker.stage_speed = max(-6, attacker.stage_speed - 1)
             logs.append(f"{defender.name} の ぬめぬめ！ {attacker.name} の素早さが下がった！")
@@ -267,6 +276,7 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
     if attacker.ability == "どくしゅ" and _contact and defender.is_alive and random.random() < 0.30:
         if defender.apply_status("poison", field=field):
             logs.append(f"{attacker.name} の どくしゅ！ {defender.name} は どく になった！")
+            synchronize(defender, attacker, "poison", logs, field)
 
     # あくしゅう（攻撃側：ダメージを与えた技で10%ひるみ）
     if attacker.ability == "あくしゅう" and defender.is_alive and move.category != "status" and random.random() < 0.10:
@@ -310,6 +320,7 @@ def _rough_skin_recoil(attacker: "BattlePokemon", defender: "BattlePokemon",
         ok = attacker.apply_status("burn", field=field)
         if ok:
             logs.append(f"{defender.name} の とびだすハバネロ！ {attacker.name} がやけどを負った！")
+            synchronize(attacker, defender, "burn", logs, field)
 
 
 def on_absorb(defender: "BattlePokemon", move_type: str, logs: list) -> None:

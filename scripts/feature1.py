@@ -6,9 +6,10 @@
 """
 import os
 import random
+import re
 import multiprocessing as mp
 
-from simulator.battle import Battle, BattleSide, BattleField
+from simulator.battle import Battle, BattleSide, BattleField, battle_outcome, SideLog
 
 _W = {}
 
@@ -52,7 +53,75 @@ def side_snapshot(side, field) -> dict:
         "aurora_veil": side.aurora_veil, "aurora_veil_count": side.aurora_veil_count,
         "stealth_rock": field.stealth_rock[side.field_idx], "spikes": field.spikes[side.field_idx],
         "toxic_spikes": field.toxic_spikes[side.field_idx],
+        "sticky_web": field.sticky_web[side.field_idx],
+        "tailwind": side.tailwind, "tailwind_count": side.tailwind_count,
+        "safeguard": side.safeguard,
     }
+
+
+TERRAINS = ("psychic", "electric", "grassy", "misty")
+FIELD_KEYS = ("weather", "weather_count", "trick_room", "trick_room_count", "terrain", "terrain_count",
+              "gravity", "magic_room", "wonder_room")
+
+
+def field_snapshot(field) -> dict:
+    terrain = next((t for t in TERRAINS if getattr(field, t + "_terrain", False)), None)
+    return {"weather": field.weather, "weather_count": getattr(field, "weather_count", 0),
+            "trick_room": field.trick_room, "trick_room_count": getattr(field, "trick_room_count", 0),
+            "terrain": terrain, "terrain_count": getattr(field, terrain + "_terrain_count", 0) if terrain else 0,
+            "gravity": getattr(field, "gravity", 0), "magic_room": getattr(field, "magic_room", 0),
+            "wonder_room": getattr(field, "wonder_room", 0)}
+
+
+def _ko_wrap(_a):
+    """確定KO安全弁で包む。上書きした手番は探索の読み（last_decision）に実行した手と理由を残す"""
+    from simulator.ai import certain_ko_override
+
+    def ai(my, opp, f):
+        a = _a(my, opp, f)
+        b = certain_ko_override(a, my, opp, f)
+        ld = getattr(_a, "last_decision", None)
+        if b is not a and isinstance(ld, dict):
+            ld["exec"] = _a._action_label(b, my)
+            ld["reason"] = "certain_ko"
+        return b
+    return ai
+
+
+def _log_sides(b, i0):
+    """ログの各行の陣営（1=側1・2=側2・0=場・観測行）。行頭のポケモン名がどちらの選出にいるかで決め、
+    両方にいる（同種ミラー）ときはその行を書いた時点の場のポケモン名、それでも決まらなければ書いた側の文脈"""
+    meta = getattr(b.logs, "meta", None)
+    if meta is None or len(meta) != len(b.logs):
+        return []
+    n1 = {p.name for p in b.side1.party}; n2 = {p.name for p in b.side2.party}
+    out = []
+    for line, (ctx, a1, a2) in zip(b.logs[i0:], meta[i0:]):
+        m = None if line.startswith("▷") else re.match(r"^(\S+?) (?:の|は|が)", line)
+        nm = m.group(1) if m else None
+        if nm is None or (nm not in n1 and nm not in n2):
+            out.append(0)
+        elif nm not in n2:
+            out.append(1)
+        elif nm not in n1:
+            out.append(2)
+        else:
+            out.append(1 if nm == a1 != a2 else 2 if nm == a2 != a1 else ctx)
+    return out
+
+
+def _tag_turn(t, b, i0, head=()):
+    sides = _log_sides(b, i0)
+    if sides:
+        t["log_sides"] = list(head) + sides
+    for sx, side in ((1, b.side1), (2, b.side2)):
+        ex = getattr(side, "_encore_exec", None)
+        if ex:
+            side._encore_exec = None
+            e = t.get(f"expl{sx}")
+            if isinstance(e, dict):
+                e["exec"] = ex
+                e["reason"] = "encore"
 
 
 def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, mcts_sims=None,
@@ -77,7 +146,7 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, m
     sel2 = learned_select_party(P2, P1, L, n=min(3, len(P2)), temperature=sel_temp)
     s1 = BattleSide(sel1, viewer_label="P1", source6=P1); s2 = BattleSide(sel2, viewer_label="P2", source6=P2)
     s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
-    field = BattleField(); battle = Battle(s1, s2, field)
+    field = BattleField(); battle = Battle(s1, s2, field); battle.logs = SideLog(battle)
     if mcts_sims > 0:   # 最新エンジン（MCTS@N）。テーマ総当たり用
         _a1 = _net_ai(net, L, 0, 12, seed, mcts=True, mcts_sims=mcts_sims, mcts_select="regret", mcts_fast=True)
         _a2 = _net_ai(net, L, 0, 12, seed ^ 0x5bd1e995, mcts=True, mcts_sims=mcts_sims, mcts_select="regret", mcts_fast=True)
@@ -85,8 +154,8 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, m
         _a1 = _net_ai(net, L, 0, 12, seed, tree=True, tree_depth=2, tree_k=4, tree_det=det)
         _a2 = _net_ai(net, L, 0, 12, seed ^ 0x5bd1e995, tree=True, tree_depth=2, tree_k=4, tree_det=det)
     from simulator.ai import certain_ko_override   # 確定KO安全弁でラップ
-    def ai1(my, opp, f): return certain_ko_override(_a1(my, opp, f), my, opp, f)
-    def ai2(my, opp, f): return certain_ko_override(_a2(my, opp, f), my, opp, f)
+    ai1 = _ko_wrap(_a1)
+    ai2 = _ko_wrap(_a2)
     # run() と同じ前処理（見せ合い＝隠れ選出なら6体・先発の登場・入場時効果を速い順・瀕死交代の選び手）→ turn0 を記録
     ai1.choose_faint_switch = _a1.choose_faint_switch
     ai2.choose_faint_switch = _a2.choose_faint_switch
@@ -106,24 +175,18 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, m
                  f"P2選出: {', '.join(p.name for p in sel2)}"] + list(battle.logs)
     turns.append(_pp({"turn": 0, "logs": init_logs,
                   "side1": side_snapshot(s1, field), "side2": side_snapshot(s2, field),
-                  "weather": field.weather, "weather_count": getattr(field, "weather_count", 0),
-                  "trick_room": field.trick_room,
-                  "trick_room_count": getattr(field, "trick_room_count", 0)}, s1, s2))
+                  **field_snapshot(field)}, s1, s2))
+    _tag_turn(turns[0], battle, 0, (0, 0))
     prev = [len(battle.logs)]
 
     def cb(b):
         nl = b.logs[prev[0]:]; prev[0] = len(b.logs)
         turns.append(_pp({"turn": b.turn, "logs": nl,
                       "side1": side_snapshot(b.side1, b.field), "side2": side_snapshot(b.side2, b.field),
-                      "weather": b.field.weather, "weather_count": getattr(b.field, "weather_count", 0),
-                      "trick_room": b.field.trick_room,
-                      "trick_room_count": getattr(b.field, "trick_room_count", 0)}, b.side1, b.side2))
+                      **field_snapshot(b.field)}, b.side1, b.side2))
+        _tag_turn(turns[-1], b, len(b.logs) - len(nl))
 
-    result = battle._turn_loop(ai1, ai2, on_turn=cb)
-    if not s1.has_alive():
-        result = 2
-    elif not s2.has_alive():
-        result = 1
+    result = battle_outcome(s1, s2, battle._turn_loop(ai1, ai2, on_turn=cb))
     winner = (f"P1 ({sel1[0].name}側)" if result == 1
               else f"P2 ({sel2[0].name}側)" if result == 2 else "引き分け")
     opp_alive = []
@@ -197,7 +260,7 @@ def play_and_record_rust(specs1, specs2, season="M-2", sel_temp=0.6, seed=0, mct
     sum_at = {t: s for t, s in sums}
     s1 = BattleSide(sel1, viewer_label="P1", source6=P1); s2 = BattleSide(sel2, viewer_label="P2", source6=P2)
     s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
-    field = BattleField(); battle = Battle(s1, s2, field)
+    field = BattleField(); battle = Battle(s1, s2, field); battle.logs = SideLog(battle)
 
     def mk(sx):
         def ai(my, opp, f):
@@ -228,9 +291,8 @@ def play_and_record_rust(specs1, specs2, season="M-2", sel_temp=0.6, seed=0, mct
                  f"P2選出: {', '.join(p.name for p in sel2)}"] + list(battle.logs)
     turns.append(_pp({"turn": 0, "logs": init_logs,
                   "side1": side_snapshot(s1, field), "side2": side_snapshot(s2, field),
-                  "weather": field.weather, "weather_count": getattr(field, "weather_count", 0),
-                  "trick_room": field.trick_room,
-                  "trick_room_count": getattr(field, "trick_room_count", 0)}, s1, s2))
+                  **field_snapshot(field)}, s1, s2))
+    _tag_turn(turns[0], battle, 0, (0, 0))
     prev = [len(battle.logs)]
 
     def cb(b):
@@ -241,15 +303,10 @@ def play_and_record_rust(specs1, specs2, season="M-2", sel_temp=0.6, seed=0, mct
         nl = b.logs[prev[0]:]; prev[0] = len(b.logs)
         turns.append(_pp({"turn": b.turn, "logs": nl,
                       "side1": side_snapshot(b.side1, b.field), "side2": side_snapshot(b.side2, b.field),
-                      "weather": b.field.weather, "weather_count": getattr(b.field, "weather_count", 0),
-                      "trick_room": b.field.trick_room,
-                      "trick_room_count": getattr(b.field, "trick_room_count", 0)}, b.side1, b.side2))
+                      **field_snapshot(b.field)}, b.side1, b.side2))
+        _tag_turn(turns[-1], b, len(b.logs) - len(nl))
 
-    result = battle._turn_loop(ai1, ai2, on_turn=cb)
-    if not s1.has_alive():
-        result = 2
-    elif not s2.has_alive():
-        result = 1
+    result = battle_outcome(s1, s2, battle._turn_loop(ai1, ai2, on_turn=cb))
     if result != r_res or len(turns) - 1 != len(sums):
         raise ReplayMismatch(f"結果: rust={r_res}/{len(sums)}T py={result}/{len(turns) - 1}T")
     winner = (f"P1 ({sel1[0].name}側)" if result == 1
@@ -282,10 +339,10 @@ def _swap_p1p2(line):
 def _mirror_turn(t):
     out = {"turn": t["turn"], "logs": [_swap_p1p2(l) for l in t["logs"]],
            "side1": t["side2"], "side2": t["side1"],
-           "weather": t["weather"], "weather_count": t["weather_count"],
-           "trick_room": t["trick_room"], "trick_room_count": t["trick_room_count"]}
+           **{k: t[k] for k in FIELD_KEYS if k in t}}
     if t.get("expl2") is not None: out["expl1"] = t["expl2"]
     if t.get("expl1") is not None: out["expl2"] = t["expl1"]
+    if t.get("log_sides") is not None: out["log_sides"] = [{1: 2, 2: 1}.get(x, 0) for x in t["log_sides"]]
     return out
 
 
@@ -308,7 +365,7 @@ def play_and_record_both(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed
     sel2 = learned_select_party(P2, P1, L, n=min(3, len(P2)), temperature=sel_temp)
     s1 = BattleSide(sel1, viewer_label="P1", source6=P1); s2 = BattleSide(sel2, viewer_label="P2", source6=P2)
     s1.belief = OpponentBelief(L); s2.belief = OpponentBelief(L)
-    field = BattleField(); battle = Battle(s1, s2, field)
+    field = BattleField(); battle = Battle(s1, s2, field); battle.logs = SideLog(battle)
     if mcts_sims > 0:
         _a1 = _net_ai(net, L, 0, 12, seed, mcts=True, mcts_sims=mcts_sims, mcts_select="regret", mcts_fast=True)
         _a2 = _net_ai(net, L, 0, 12, seed ^ 0x5bd1e995, mcts=True, mcts_sims=mcts_sims, mcts_select="regret", mcts_fast=True)
@@ -316,8 +373,8 @@ def play_and_record_both(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed
         _a1 = _net_ai(net, L, 0, 12, seed, tree=True, tree_depth=2, tree_k=4, tree_det=det)
         _a2 = _net_ai(net, L, 0, 12, seed ^ 0x5bd1e995, tree=True, tree_depth=2, tree_k=4, tree_det=det)
     from simulator.ai import certain_ko_override
-    def ai1(my, opp, f): return certain_ko_override(_a1(my, opp, f), my, opp, f)
-    def ai2(my, opp, f): return certain_ko_override(_a2(my, opp, f), my, opp, f)
+    ai1 = _ko_wrap(_a1)
+    ai2 = _ko_wrap(_a2)
     # run() と同じ前処理（見せ合い＝隠れ選出なら6体・先発の登場・入場時効果を速い順・瀕死交代の選び手）→ turn0 を記録
     ai1.choose_faint_switch = _a1.choose_faint_switch
     ai2.choose_faint_switch = _a2.choose_faint_switch
@@ -337,29 +394,23 @@ def play_and_record_both(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed
                  f"P2選出: {', '.join(p.name for p in sel2)}"] + list(battle.logs)
     turns.append(_pp({"turn": 0, "logs": init_logs,
                   "side1": side_snapshot(s1, field), "side2": side_snapshot(s2, field),
-                  "weather": field.weather, "weather_count": getattr(field, "weather_count", 0),
-                  "trick_room": field.trick_room,
-                  "trick_room_count": getattr(field, "trick_room_count", 0)}, s1, s2))
+                  **field_snapshot(field)}, s1, s2))
+    _tag_turn(turns[0], battle, 0, (0, 0))
     prev = [len(battle.logs)]
 
     def cb(b):
         nl = b.logs[prev[0]:]; prev[0] = len(b.logs)
         t = {"turn": b.turn, "logs": nl,
              "side1": side_snapshot(b.side1, b.field), "side2": side_snapshot(b.side2, b.field),
-             "weather": b.field.weather, "weather_count": getattr(b.field, "weather_count", 0),
-             "trick_room": b.field.trick_room,
-             "trick_room_count": getattr(b.field, "trick_room_count", 0)}
+             **field_snapshot(b.field)}
         if getattr(_a1, "last_decision", None) is not None:
             t["expl1"] = _a1.last_decision; _a1.last_decision = None
         if getattr(_a2, "last_decision", None) is not None:
             t["expl2"] = _a2.last_decision; _a2.last_decision = None
+        _tag_turn(t, b, len(b.logs) - len(nl))
         turns.append(t)
 
-    result = battle._turn_loop(ai1, ai2, on_turn=cb)
-    if not s1.has_alive():
-        result = 2
-    elif not s2.has_alive():
-        result = 1
+    result = battle_outcome(s1, s2, battle._turn_loop(ai1, ai2, on_turn=cb))
     n1 = [p.name for p in sel1]; n2 = [p.name for p in sel2]
     aliveA, deadA = _alive_dead(s2)   # A=P1視点：相手=s2
     aliveB, deadB = _alive_dead(s1)   # B=P2視点：相手=s1

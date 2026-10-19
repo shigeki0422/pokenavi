@@ -562,6 +562,10 @@ pub struct SearchAI {
     /// 監査40の AI 修正（必ず失敗・効果の無い手を根から外す／確定KOの命中・タイプ条件／ねむりカウンタの決定化）。
     /// 既定ON。AI_FIX40=0 で旧挙動（A/B用。AI_FIX40_2 で側2だけ）
     pub fix40: bool,
+    /// 確定KO安全弁の版（AI_KOV。ai::kov_env。AI_KOV_1 / AI_KOV_2 で側ごと）
+    pub kov: u8,
+    /// A/B 用（AI_DRAW_OLD_1 / AI_DRAW_OLD_2）: 最後の1体どうしの相打ちを 2026-10-18 以前の「側2の勝ち」として探索する
+    pub draw_old: bool,
     /// 既定ON。AI_FIX200=0 で旧挙動（監査200 C。AI_FIX200_2 で側2だけ）
     pub fix200: bool,
     /// 既定ON。AI_FIXHZ=0 で旧挙動（設置済みの設置技を外す。AI_FIXHZ_2 で側2だけ）
@@ -609,6 +613,8 @@ impl SearchAI {
             ko_cond: crate::ai::ko_cond_env(),
             prune_immune: std::env::var("AI_PRUNE_IMMUNE").map(|v| v != "0").unwrap_or(true),
             fix40: crate::ai::fix40_env(),
+            kov: crate::ai::kov_env(),
+            draw_old: false,
             fix200: crate::ai::fix200_env(),
             fixhz: crate::ai::fixhz_env(),
             oracle_mix: std::env::var("ORACLE_MIX").ok().and_then(|v| v.parse().ok()).unwrap_or(0.0),
@@ -1501,8 +1507,8 @@ fn pick_pool_build<'a>(
                 grng,
             );
             depth += 1;
-            if winner != 0 {
-                v = if (winner == 1) == my_is_s1 { 1.0 } else { 0.0 };
+            if winner != 0 || !cs[0].has_alive() {
+                v = terminal_v(if winner == 0 && self.draw_old { 2 } else { winner }, my_is_s1);
                 break;
             }
             let key = (ix_me, ix_op);
@@ -1574,12 +1580,8 @@ fn pick_pool_build<'a>(
                 let mut c: [Side; 2] = [b[0].clone(), b[1].clone()];
                 let mut cf = bf.clone();
                 let winner = self.advance_turn(pack, &mut c, &mut cf, a, oa, my_is_s1, grng);
-                let v = if winner != 0 {
-                    if (winner == 1) == my_is_s1 {
-                        1.0
-                    } else {
-                        0.0
-                    }
+                let v = if winner != 0 || !c[0].has_alive() {
+                    terminal_v(if winner == 0 && self.draw_old { 2 } else { winner }, my_is_s1)
                 } else {
                     self.leaf_value(pack, net, &mut c, &mut cf, my_is_s1, grng)
                 };
@@ -1731,4 +1733,15 @@ pub fn depth_stats_take() -> Vec<u64> {
     let out = h.to_vec();
     *h = [0; 16];
     out
+}
+
+/// search_ai._terminal_v: winner=0 で終局＝最後の1体どうしが同時に倒れた引き分け
+fn terminal_v(winner: i64, my_is_s1: bool) -> f64 {
+    if winner == 0 {
+        0.5
+    } else if (winner == 1) == my_is_s1 {
+        1.0
+    } else {
+        0.0
+    }
 }

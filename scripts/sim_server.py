@@ -16,7 +16,7 @@ import uvicorn
 
 from simulator.data import DataLoader
 from simulator.pokemon import parse_pokemon_spec, build_from_spec
-from simulator.battle import Battle, BattleSide, BattleField, _entry_effects, _speed_order, MAX_TURNS, Action
+from simulator.battle import Battle, BattleSide, BattleField, _entry_effects, _speed_order, MAX_TURNS, Action, battle_outcome
 from simulator.ai import HeuristicAI, select_party, should_mega_evolve
 from simulator.learned_selection import learned_select_party
 from simulator.simulate import run_simulation_specs
@@ -298,10 +298,8 @@ def run_battle_data(specs1, specs2, season="M-2"):
     result = 0
 
     for turn in range(1, MAX_TURNS + 1):
-        if not side1.has_alive():
-            result = 2; break
-        if not side2.has_alive():
-            result = 1; break
+        if not (side1.has_alive() and side2.has_alive()):
+            result = battle_outcome(side1, side2); break
 
         action1 = REPLAY_AI(side1, side2, field)
         action2 = REPLAY_AI(side2, side1, field)
@@ -370,10 +368,7 @@ def run_battle_data(specs1, specs2, season="M-2"):
         if result != 0:
             break
 
-    if not side1.has_alive():
-        result = 2
-    elif not side2.has_alive():
-        result = 1
+    result = battle_outcome(side1, side2, result)
 
     return {
         "selected1": [p.name for p in selected1],
@@ -763,10 +758,7 @@ def _exec_manual_turn(side1, side2, field, battle, action1):
 
         battle._end_of_turn()
 
-        if not side1.has_alive():
-            result = 2
-        elif not side2.has_alive():
-            result = 1
+        result = battle_outcome(side1, side2, result)
     finally:
         side1._manual_switch = False  # type: ignore
 
@@ -957,10 +949,7 @@ def manual_action(req: ManualActionRequest):
                     if side2.active.is_alive:
                         side2.active._acts_second = False  # type: ignore
                 battle._end_of_turn()
-                if not side1.has_alive():
-                    result = 2
-                elif not side2.has_alive():
-                    result = 1
+                result = battle_outcome(side1, side2, result)
             finally:
                 side1._manual_switch = False  # type: ignore
             awaiting = result == 0 and (
@@ -968,10 +957,7 @@ def manual_action(req: ManualActionRequest):
                 or getattr(side1.active, '_pivot_out', False)
             )
         else:
-            if not side2.has_alive():
-                result = 1
-            elif not side1.has_alive():
-                result = 2
+            result = battle_outcome(side1, side2, result)
 
         if awaiting:
             sess["phase"] = "awaiting_switch"
@@ -980,7 +966,7 @@ def manual_action(req: ManualActionRequest):
             sess["phase"] = "action"
 
         new_logs = battle.logs[prev_log_len:]
-        done = (result != 0 or sess["turn"] >= MAX_TURNS) and not awaiting
+        done = (result != 0 or not (side1.has_alive() and side2.has_alive()) or sess["turn"] >= MAX_TURNS) and not awaiting
         if done:
             _flush_imitation(sess, result)
             del _manual_battles[req.battle_id]
@@ -1019,7 +1005,7 @@ def manual_action(req: ManualActionRequest):
         sess["p2_entry_pending"] = p2_entry_pending
         sess["mid_turn_ctx"] = mid_turn_ctx
 
-    done = (result != 0 or sess["turn"] >= MAX_TURNS) and not awaiting
+    done = (result != 0 or not (side1.has_alive() and side2.has_alive()) or sess["turn"] >= MAX_TURNS) and not awaiting
     if done:
         _flush_imitation(sess, result)
         del _manual_battles[req.battle_id]
@@ -1061,7 +1047,7 @@ def _f1_store_put(aid, label, card):
 _F1_CACHE_DIR = os.path.join(os.path.dirname(__file__), "f1_cache")
 _F1_SAVED = {}   # subject_label -> {analysis_id, cards(サマリ)}
 # AIバージョン：探索/評価を変えたら更新。記録の再利用（対戦数の段階拡張）は同一バージョン間のみ。
-AI_VER = "mcts-guardq800-2-net1006"
+AI_VER = "mcts-guardq800-2-net1006-mc1018"
 
 
 def _f1_safe(name):

@@ -253,9 +253,9 @@ class BattlePokemon:
         def nat(key):
             return 1.1 if up == key else (0.9 if dn == key else 1.0)
 
-        hp_ratio = self.hp / self.max_hp
+        old_max = self.max_hp
         self.max_hp = calc_hp(md.hp, evs.get('H', 0))
-        self.hp = max(1, math.floor(self.max_hp * hp_ratio))
+        self.hp = max(1, self.hp * self.max_hp // old_max)
         self.attack     = calc_stat(md.attack,     evs.get('A', 0), 31, nat('attack'))
         self.defense    = calc_stat(md.defense,    evs.get('B', 0), 31, nat('defense'))
         self.sp_attack  = calc_stat(md.sp_attack,  evs.get('C', 0), 31, nat('sp_attack'))

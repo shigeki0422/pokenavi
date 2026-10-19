@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import json, glob
 from simulator.data import DataLoader
 from simulator.pokemon import build_from_spec, parse_pokemon_spec
-from simulator.battle import Battle, BattleSide, BattleField, _entry_effects, _speed_order, MAX_TURNS, is_trapped
+from simulator.battle import Battle, BattleSide, BattleField, _entry_effects, _speed_order, MAX_TURNS, is_trapped, battle_outcome
 from simulator.ai import GreedyAI, select_party, Action, _effective_speed
 from simulator.features import _expected_frac, switch_wins_1v1, switch_wins_1v1_split
 from simulator.damage import calc_damage
@@ -366,8 +366,8 @@ def main():
             rec_ai = _mkai(_PV.load(_recpath), L, 0, 12, 0, mcts=True,
                            mcts_sims=int(os.environ.get("REC_SIMS", "300")), mcts_select="regret", mcts_fast=True)
             print(f"{DIM}推奨表示: 905模倣エンジン({_recpath}){RESET}")
-    _entry_effects(side1.active, 0, field, side2.active, [])
-    _entry_effects(side2.active, 1, field, side1.active, [])
+    from simulator.battle import _entry_effects_both
+    _entry_effects_both(side1.active, side2.active, field, [])
     battle = Battle(side1, side2, field)
     print(f"\n{BOLD}{'='*56}{RESET}")
     print(f"{B}あなた(P1) 選出{RESET}: {', '.join(p.name for p in sa)}")
@@ -380,8 +380,7 @@ def main():
     prev = 0; turn = 0; result = 0; my_switches = 0
     while turn < MAX_TURNS:
         turn += 1
-        if not side1.has_alive(): result = 2; break
-        if not side2.has_alive(): result = 1; break
+        if not (side1.has_alive() and side2.has_alive()): result = battle_outcome(side1, side2); break
         print(f"\n{BOLD}{'─'*56}\nTurn {turn}{RESET}")
         show_side("P1", side1, B); show_p2(side2, side1.opp_view)
         a1 = manual_action(side1, side2, field, gai, rec_ai)
@@ -418,9 +417,8 @@ def main():
         if logs:
             print(f"  {DIM}── ログ ──{RESET}")
             for ln in logs: print(f"    {ln}")
-        if not side1.has_alive(): result = 2
-        elif not side2.has_alive(): result = 1
-        if result: break
+        result = battle_outcome(side1, side2, result)
+        if result or not (side1.has_alive() and side2.has_alive()): break
     rs = (f"{B}あなたの勝ち！{RESET}" if result==1 else f"{R}あなたの負け{RESET}" if result==2 else f"{Y}引き分け{RESET}")
     print(f"\n{BOLD}{'='*56}{RESET}\n  結果: {rs}  ({turn}ターン / あなたの自発交代 {my_switches}回)\n")
     # 記録保存（引分は学習価値が曖昧なので除外）。訓練形式: {feat, idx(=選んだ行動), legal, y(=勝1/負0)}

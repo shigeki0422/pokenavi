@@ -401,6 +401,68 @@ _KO_NEVER_CERTAIN = ("ふいうち", "はやてがえし", "みらいよち")
 
 _FIX40_ON = os.environ.get("AI_FIX40", "1") != "0"
 
+# 確定KO安全弁の版（env AI_KOV。A/B 用）: 2=絞った版（既定）、1=2026-10-18 以前、0=上書きしない
+_KOV = int(os.environ.get("AI_KOV", "2"))
+_THAW_MOVES = ("もえつきる", "ねっとう", "ねっさのだいち", "せいなるほのお", "かえんボール")
+_TWO_TURN = ("ソーラービーム", "ソーラーブレード", "あなをほる", "そらをとぶ", "ダイビング", "エレクトロビーム",
+             "ゴッドバード", "とびはねる", "メテオビーム", "ゴーストダイブ")
+_SCREEN_BREAKERS = ("かわらわり", "レイジングブル", "サイコファング")
+_MEGA_MAYBE = 10.0
+
+
+def _charges_this_turn(me, mv, field) -> bool:
+    """溜め技がこのターンは溜めるだけになるか（battle.py の溜め技と同じ条件: 晴れのソーラー・雨のエレクトロビームだけ即時）"""
+    from .damage import effective_weather as _ew
+    if mv.name_jp not in _TWO_TURN:
+        return False
+    w = _ew(field, me)
+    if mv.name_jp in ("ソーラービーム", "ソーラーブレード") and w == "sunny":
+        return False
+    return not (mv.name_jp == "エレクトロビーム" and w == "rain")
+
+
+def _screen_est(me, opp_side, mv) -> float:
+    """相手の壁（リフレクター・ひかりのかべ・オーロラベール）の倍率（battle.py _screen_mult の急所なし）"""
+    if me.ability == "すりぬけ" or mv.name_jp in _SCREEN_BREAKERS:
+        return 1.0
+    if mv.category == "physical" and (opp_side.reflect or opp_side.aurora_veil):
+        return 0.5
+    if mv.category == "special" and (opp_side.light_screen or opp_side.aurora_veil):
+        return 0.5
+    return 1.0
+
+
+def _opp_mega_forms(my_side, opp_side, opp) -> list:
+    """相手がこのターンにメガ進化しうるなら、メガ後の姿（写し）の一覧。
+    持ち物は開示済みならそれ、未開示なら使用率事前分布で10%以上のメガ石（真値は読まない）。"""
+    from .data import normalize_mega_stone
+    if opp.mega_evolved or getattr(opp_side, "mega_used", False):
+        return []
+    view = getattr(my_side, "opp_view", None)
+    belief = getattr(my_side, "belief", None)
+    if view is None or belief is None:
+        mds = [(opp.item, opp.mega_data)] if opp.mega_data is not None else []
+    else:
+        k = view.get(opp.name)
+        k_it = getattr(k, "known_item", None) if k is not None else None
+        _, it_prior = _opp_prior(my_side, opp.name)
+        stones = [k_it] if k_it else sorted(n for n, r in (it_prior or {}).items() if r >= _MEGA_MAYBE)
+        if not stones:
+            return []
+        tpl = belief.loader.get_pokemon_template(opp.name, belief.season)
+        if tpl is None:
+            return []
+        mds = [(st, tpl.mega_data.get(normalize_mega_stone(st)) or tpl.mega_data.get(st)) for st in stones]
+        mds = [(st, md) for st, md in mds if md is not None]
+    out = []
+    for st, md in mds:
+        c = copy.copy(opp)
+        c.mega_data = md
+        c.item = st
+        c.do_mega_evolve()
+        out.append(c)
+    return out
+
 
 def _ko_hit_prob(me, opp, mv, field) -> float:
     """確定KOの安全弁で使う命中率（公開情報: 技の命中・命中/回避ランク・天候・ノーガード・こうかくレンズ 等）。"""
@@ -461,9 +523,12 @@ def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: B
     任意AI(MCTS/ネット)の出力 act を受け、確実に倒せる手を逃している場合のみ上書きする。
     積み・変化技で自滅する誤選択や、弱い攻撃技を選ぶミス(例トリックフラワー<はたきおとす)を防ぐ。"""
     me = my_side.active; opp = opp_side.active
-    if me is None or opp is None or not me.is_alive or not opp.is_alive:
+    if _KOV == 0 or me is None or opp is None or not me.is_alive or not opp.is_alive:
         return act
     if _forced_charging_action(me):                 # 溜め中などは介入しない
+        return act
+    narrow = _KOV >= 2
+    if narrow and me.status == "sleep":             # 眠っていて技が出ない（ねごと を上書きしない）
         return act
     # 耐える系の判定は「相手の真値」ではなく opp_view（開示済み情報）で行う。
     # 真値を読むと、未開示のタスキ/マルチスケイル/がんじょう/ばけのかわを常に知っている
@@ -480,6 +545,7 @@ def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: B
     valid = _filter_by_pp(_filter_valid_by_lock(valid, me), me)
     # 相手の最大優先度はループ前に1回だけ求める（Rust 実装と呼び出し回数を揃える）
     _opp_pri = _opp_max_priority(opp, my_side)
+    forms = [opp] + (_opp_mega_forms(my_side, opp_side, opp) if narrow else [])
     best = None; bestd = -1; bestp = -1.0; probs = {}
     for i, mv in valid:
         if not mv.power or mv.category == "status":
@@ -488,15 +554,25 @@ def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: B
             continue
         if _KO_COND_ON and _ko_move_fails(me, opp, mv, field):
             continue
-        if not _goes_first(me, opp, mv.priority, field, opp_max=_opp_pri):
+        if narrow and (me.status == "freeze" and mv.name_jp not in _THAW_MOVES or _charges_this_turn(me, mv, field)):
+            continue
+        if not all(_goes_first(me, f, mv.priority, field, opp_max=_opp_pri) for f in forms):
             continue
         # random_roll は正規化値で roll = 0.85 + x*0.15。最低ロールは 0.0（0.85 を渡すと実効0.9775＝
         # ほぼ最高値になり、確定でないKOを確定と誤認する。実測: 介入の15.3%が該当）。
         # 姿変化（バトルスイッチ）と連続技の「必ず当たる回数」込み。単発の calc_damage 直呼びだと
         # ギルガルドはシールド(攻50)のまま・連続技は1発ぶんになり、確定KOを見逃していた
-        with estimate_only(me, opp):                                         # 見積もりで半減きのみ等を消費しない
-            d = _move_damage(me, opp, mv, field, 0.0, "min")                 # 最低ロールでKO=確定
-        if d >= opp.hp:
+        ko = True; d = None
+        for f in forms:
+            with estimate_only(me, f):                                       # 見積もりで半減きのみ等を消費しない
+                df = _move_damage(me, f, mv, field, 0.0, "min")              # 最低ロールでKO=確定
+            if narrow:
+                sm = _screen_est(me, opp_side, mv)
+                if sm < 1.0:
+                    df = math.floor(df * sm)
+            ko = ko and df >= f.hp
+            d = df if d is None else min(d, df)
+        if ko:
             p = _ko_hit_prob(me, opp, mv, field) if _FIX40_ON else 1.0
             probs[id(mv)] = p
             if (p, d) > (bestp, bestd):
@@ -505,6 +581,8 @@ def certain_ko_override(act, my_side: BattleSide, opp_side: BattleSide, field: B
         return act
     if act and getattr(act, "type", None) == "move" and act.move is best[1]:
         return act                                  # 既に同じ手を選んでいる
+    if narrow and act and getattr(act, "type", None) == "move" and probs.get(id(act.move), -1.0) >= bestp:
+        return act                                  # 探索の手も確定KOなら探索の手（交代先への打点も見ている）
     # 命中が確実でない技で上書きするのは、選んだ手が命中率の低い確定KO技だったときだけ
     # （10まんボルトで倒せるのに でんじほう に替えない／探索が選んだ別の手を不確実な一撃で上書きしない）
     if _FIX40_ON and bestp < 1.0:

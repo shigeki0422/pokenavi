@@ -96,7 +96,9 @@ impl Side {
         let pi = self.active_idx;
         {
             let prev = &mut self.party[pi];
-            ab::on_switch_out(pack, prev);
+            if prev.is_alive {
+                ab::on_switch_out(pack, prev);
+            }
             if prev.transformed {
                 if let Some(b) = prev.transform_backup.take() {
                     prev.attack = b.attack;
@@ -276,6 +278,28 @@ pub fn is_megastone(pack: &Pack, item: Option<u16>) -> bool {
 #[inline]
 fn is_berry(pack: &Pack, item: Option<u16>) -> bool {
     matches!(item, Some(i) if pack.intern.resolve(i).ends_with("のみ"))
+}
+
+/// battle.py battle_outcome: 1=side1勝ち 2=side2勝ち 0=引き分け（最後の1体どうしが同じターンに倒れた・打ち切り）
+pub fn battle_outcome(sides: &[Side; 2]) -> i64 {
+    match (sides[0].has_alive(), sides[1].has_alive()) {
+        (true, false) => 1,
+        (false, true) => 2,
+        _ => 0,
+    }
+}
+
+/// battle.py _needs_target: 先攻が自滅して相手が場にいないとき失敗する手
+fn needs_target(pack: &Pack, poke: &Poke, action: &Action) -> bool {
+    let l = &pack.sy.l;
+    let mv = match (&action.kind, &action.mv) {
+        (ActKind::Move, Some(m)) => m,
+        _ => return false,
+    };
+    if crate::damage::targets_foe(pack, mv) || mv.name == l.へんしん || mv.name == l.まねっこ || mv.name == l.ねごと {
+        return true;
+    }
+    mv.name == l.のろい && poke.has_type(pack.tc.ゴースト)
 }
 
 // ── おうごんのからだ が無効化する変化技 ────────────────────────────────────
@@ -1171,6 +1195,7 @@ fn execute_move_inner(
     }
 
     if A!().status == Some(st.paralysis) && rng.random() < 0.25 {
+        A!().immobile = true;
         return;
     }
 
@@ -1182,6 +1207,7 @@ fn execute_move_inner(
                 // 使える
             } else {
                 A!().charging_move = None;
+                A!().immobile = true;
                 return;
             }
         } else {
@@ -1197,6 +1223,7 @@ fn execute_move_inner(
         } else if rng.random() < 0.2 {
             A!().status = None;
         } else {
+            A!().immobile = true;
             return;
         }
     }
@@ -1211,6 +1238,7 @@ fn execute_move_inner(
                 .floor() as i64,
         );
         A!().take_damage(self_dmg);
+        A!().immobile = true;
         return;
     }
 
@@ -1221,7 +1249,7 @@ fn execute_move_inner(
         let cnt = A!().protect_consecutive;
         let success_rate = (1.0f64 / 3.0).powi(cnt as i32);
         if cnt > 0 && rng.random() >= success_rate {
-            A!().protect_consecutive += 1;
+            A!().protect_consecutive = 0;
             return;
         }
         if n == l.こらえる {
@@ -1274,7 +1302,7 @@ fn execute_move_inner(
         }
         return;
     }
-    let bounce = D!().ability == l.マジックミラー && A!().ability != l.マジックミラー;
+    let bounce = D!().is_alive && D!().ability == l.マジックミラー && A!().ability != l.マジックミラー;
     if n == l.まきびし {
         let oi = if bounce { sides[aidx].field_idx } else { sides[didx].field_idx };
         if field.spikes[oi] < 3 {
@@ -1615,8 +1643,10 @@ fn execute_move_inner(
                 && A!().ability != l.えんかく
                 && D!().is_alive
                 && A!().is_alive
+                && apply_status(pack, &mut A!(), st.poison, false, Some(&*field))
             {
-                apply_status(pack, &mut A!(), st.poison, false, Some(&*field));
+                let (a, d) = two!();
+                ab::synchronize(pack, a, d, st.poison, &*field);
             }
             if pmove == Some(l.ニードルガード)
                 && is_contact_move(pack, &mv)
@@ -1984,8 +2014,13 @@ fn execute_move_inner(
                 sides[aidx].opp_view.on_ability(dn, dab);
             }
         }
-        if D!().beak_primed && is_contact_move(pack, &mv) && A!().is_alive {
-            apply_status(pack, &mut A!(), st.burn, false, Some(&*field));
+        if D!().beak_primed
+            && is_contact_move(pack, &mv)
+            && A!().is_alive
+            && apply_status(pack, &mut A!(), st.burn, false, Some(&*field))
+        {
+            let (a, d) = two!();
+            ab::synchronize(pack, a, d, st.burn, &*field);
         }
         if (n == l.ついばむ || n == l.むしくい) && A!().is_alive && is_berry(pack, D!().item) {
             let berry = D!().item.unwrap();
@@ -2036,6 +2071,8 @@ fn execute_move_inner(
                 let ok = apply_status(pack, &mut D!(), st.poison, false, Some(&*field));
                 if ok {
                     it::try_cure_berry(pack, &mut D!());
+                    let (a, d) = two!();
+                    ab::synchronize(pack, d, a, st.poison, &*field);
                 }
             }
         }
@@ -2422,6 +2459,8 @@ fn execute_move_inner(
     if n == l.キラースピン && total_dmg > 0 && D!().is_alive && !sub_absorbed {
         if apply_status(pack, &mut D!(), st.poison, false, Some(&*field)) {
             it::try_cure_berry(pack, &mut D!());
+            let (a, d) = two!();
+            ab::synchronize(pack, d, a, st.poison, &*field);
         }
     }
     *dmg_out = total_dmg;
@@ -2778,6 +2817,7 @@ pub fn apply_status_move(
     // マジックミラー（個別処理される対人変化技）
     if (n == l.ちょうはつ || n == l.アンコール || n == l.やどりぎのタネ || n == l.あくび
         || n == l.どくびし || n == l.ねばねばネット)
+        && D!().is_alive
         && D!().ability == l.マジックミラー
     {
         if A!().ability != l.マジックミラー {
@@ -3323,15 +3363,8 @@ pub fn apply_status_move(
                             D!().sleep_rest = false;
                         }
                         it::try_cure_berry(pack, &mut D!());
-                        if D!().ability == l.シンクロ
-                            && (val == st.poison
-                                || val == st.badpoison
-                                || val == st.paralysis
-                                || val == st.burn)
-                            && A!().is_alive
-                        {
-                            apply_status(pack, &mut A!(), val, false, Some(&*field));
-                        }
+                        let (a, d) = two!();
+                        ab::synchronize(pack, d, a, val, &*field);
                     }
                 }
                 Deb::Confused => {
@@ -3583,7 +3616,7 @@ pub fn apply_status_move(
     }
     if n == l.のろい {
         if A!().has_type(pack.tc.ゴースト) {
-            let cost = std::cmp::max(1, A!().max_hp / 4);
+            let cost = std::cmp::max(1, A!().max_hp / 2);
             A!().take_damage(cost);
             D!().cursed = true;
         } else {
@@ -4148,6 +4181,7 @@ pub fn apply_secondary(
             let ok = apply_status(pack, defender, sv, false, Some(&*field));
             if ok {
                 it::try_cure_berry(pack, defender);
+                ab::synchronize(pack, defender, attacker, sv, field);
             }
         }
     }
@@ -4171,6 +4205,7 @@ pub fn apply_secondary(
                         let ok = apply_status(pack, defender, e, false, Some(&*field));
                         if ok {
                             it::try_cure_berry(pack, defender);
+                            ab::synchronize(pack, defender, attacker, e, field);
                         }
                     }
                 }
@@ -4187,6 +4222,7 @@ pub fn apply_secondary(
             let ok = apply_status(pack, defender, effect, false, Some(&*field));
             if ok {
                 it::try_cure_berry(pack, defender);
+                ab::synchronize(pack, defender, attacker, effect, field);
             }
         }
     }
@@ -4201,6 +4237,7 @@ pub fn apply_secondary(
                 }
             } else if apply_status(pack, defender, st.burn, false, Some(&*field)) {
                 it::try_cure_berry(pack, defender);
+                ab::synchronize(pack, defender, attacker, st.burn, field);
             }
         }
     }
@@ -4310,6 +4347,7 @@ pub fn apply_secondary(
                 defender.sleep_rest = false;
             }
             it::try_cure_berry(pack, defender);
+            ab::synchronize(pack, defender, attacker, chosen, field);
         }
     }
 
@@ -4648,6 +4686,9 @@ impl Battle {
                 }
             };
             let recharging = self.sides[mx].active().recharge;
+            let opp_down = !self.sides[ox].active().is_alive;
+            self.sides[mx].active_mut().immobile = false;
+            let mover = self.sides[mx].active_idx;
             {
                 let Battle { sides, field, .. } = self;
                 execute_move(pack, sides, field, mx, action, opp_action, rng, &mut 0);
@@ -4664,7 +4705,7 @@ impl Battle {
                 let opp_pressure = self.sides[ox].active().ability == l.プレッシャー;
                 let s = &mut self.sides[mx];
                 let ai = s.active_idx;
-                if !recharging && mi >= 0 && (mi as usize) < s.party[ai].pp.len() {
+                if !recharging && !s.party[mover].immobile && mi >= 0 && (mi as usize) < s.party[ai].pp.len() {
                     let mut cost = 1;
                     if action.mv.as_ref().map(|m| m.category != Cat::Status).unwrap_or(false)
                         && opp_alive
@@ -4694,7 +4735,9 @@ impl Battle {
                 self.field.stealth_rock[fi] = true;
             }
 
-            self.faint_switch(pack, ox, rng);
+            if !opp_down {
+                self.faint_switch(pack, ox, rng);
+            }
             if !defer_self_faint {
                 self.faint_switch(pack, mx, rng);
             }
@@ -5442,11 +5485,8 @@ impl Battle {
         let limit = std::cmp::min(max_turns, MAX_TURNS);
         while self.turn < limit {
             self.turn += 1;
-            if !self.sides[0].has_alive() {
-                return 2;
-            }
-            if !self.sides[1].has_alive() {
-                return 1;
+            if !self.sides[0].has_alive() || !self.sides[1].has_alive() {
+                return battle_outcome(&self.sides);
             }
             // バリアフリー
             for bx in 0..2usize {
@@ -5562,8 +5602,10 @@ impl Battle {
 
             if self.sides[ox].active_idx != second_chooser {
                 // 行動権喪失
-            } else if !self.sides[fx].active().is_alive {
-                // 相手不在
+            } else if !self.sides[fx].active().is_alive
+                && needs_target(pack, self.sides[ox].active(), second_action)
+            {
+                // 相手不在（自分・場が対象の技は出す）
             } else if self.sides[ox].active().flinched {
                 if self.sides[ox].active().ability == l.ふくつのこころ {
                     let p = self.sides[ox].active_mut();
@@ -5594,13 +5636,7 @@ impl Battle {
             race_mark(self, 3, 0);
             on_turn(self);
         }
-        if !self.sides[0].has_alive() {
-            return 2;
-        }
-        if !self.sides[1].has_alive() {
-            return 1;
-        }
-        0
+        battle_outcome(&self.sides)
     }
 }
 
@@ -6585,5 +6621,274 @@ mod lowsel1009_tests {
             d.ability = pr.sy.ab.ノーガード;
             assert!(crate::damage::check_hit(pr, &a, &d, &m, &mut f, &mut || 0.99), "{n}: ノーガードは必中");
         }
+    }
+}
+
+/// M-C 総当たりの監査（mc_audit_1018）の E1〜E7。test_all.py 54 と同じ局面
+#[cfg(test)]
+mod mc1018_tests {
+    use super::*;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    struct Z(f64);
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { self.0 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    const N: &str = "きれいなぬけがら";
+    const DUM: &str = "カビゴン@きれいなぬけがら:わんぱく:なまける|まもる:32/0/32/0/0/0:あついしぼう";
+
+    fn sides(p: &mut Pack, a: &[&str], b: &[&str]) -> [Side; 2] {
+        let pa: Vec<Poke> = a.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        let pb: Vec<Poke> = b.iter().map(|s| build_poke(p, s, "M-6")).collect();
+        [Side { party: pa, active_idx: 0, field_idx: 0, ..Default::default() },
+         Side { party: pb, active_idx: 0, field_idx: 1, ..Default::default() }]
+    }
+
+    fn mv_of(p: &Pack, poke: &Poke, n: &str) -> Action {
+        let (i, m) = poke.moves.iter().enumerate().find(|(_, m)| p.intern.resolve(m.name) == n).unwrap();
+        Action { kind: ActKind::Move, mv: Some(m.clone()), move_idx: i as i64, switch_to: -1, do_mega: false }
+    }
+
+    fn turn(p: &Pack, bt: &mut Battle, a: &Action, b: &Action, r: f64) -> i64 {
+        let (a, b) = (a.clone(), b.clone());
+        let lim = bt.turn + 1;
+        bt.run_loop_lim(p, &mut Z(r), lim, move |_, _| [a.clone(), b.clone()], |_| {})
+    }
+
+    #[test]
+    fn mc1018_e1_最後の1体どうしの相打ちは引き分け() {
+        let mut p = pack();
+        for first in [0usize, 1] {
+            let att = format!("ボーマンダ@いのちのたま:いじっぱり:すてみタックル:0/32/0/0/0/32:いかく");
+            let (a, b) = if first == 0 { (att.as_str(), DUM) } else { (DUM, att.as_str()) };
+            let [mut s0, mut s1] = sides(&mut p, &[a], &[b]);
+            s0.party[0].hp = 1;
+            s1.party[0].hp = 1;
+            let pr: &Pack = &p;
+            let mut bt = Battle::new(s0, s1, Field::default());
+            let x = mv_of(pr, &bt.sides[0].party[0], if first == 0 { "すてみタックル" } else { "なまける" });
+            let y = mv_of(pr, &bt.sides[1].party[0], if first == 0 { "なまける" } else { "すてみタックル" });
+            let r = turn(pr, &mut bt, &x, &y, 0.5);
+            assert!(!bt.sides[0].has_alive() && !bt.sides[1].has_alive(), "両者倒れる");
+            assert_eq!(r, 0, "反動技の使い手が側{first}: 引き分け");
+            assert_eq!(battle_outcome(&bt.sides), 0);
+        }
+    }
+
+    #[test]
+    fn mc1018_e2_のろいゴーストは最大HPの半分() {
+        let mut p = pack();
+        let s = sides(&mut p, &[&format!("ミミッキュ@{N}:いじっぱり:のろい:0/0/0/0/0/0:ぼうじん")], &[DUM]);
+        let pr: &Pack = &p;
+        let mut bt = Battle::new(s[0].clone(), s[1].clone(), Field::default());
+        let x = mv_of(pr, &bt.sides[0].party[0], "のろい");
+        let y = mv_of(pr, &bt.sides[1].party[0], "なまける");
+        let mx = bt.sides[0].party[0].max_hp;
+        turn(pr, &mut bt, &x, &y, 0.5);
+        assert_eq!(mx - bt.sides[0].party[0].hp, mx / 2);
+        assert!(bt.sides[1].party[0].cursed);
+    }
+
+    #[test]
+    fn mc1018_e3_まもるが失敗したら連続回数は0() {
+        let mut p = pack();
+        let s = sides(&mut p, &[&format!("カバルドン@{N}:わんぱく:まもる:32/0/32/0/0/0:すなおこし")], &[DUM]);
+        let pr: &Pack = &p;
+        let mut bt = Battle::new(s[0].clone(), s[1].clone(), Field::default());
+        bt.sides[0].party[0].protect_consecutive = 1;
+        let x = mv_of(pr, &bt.sides[0].party[0], "まもる");
+        let y = mv_of(pr, &bt.sides[1].party[0], "なまける");
+        turn(pr, &mut bt, &x, &y, 0.5);
+        assert!(!bt.sides[0].party[0].protecting, "成功率1/3に0.5は失敗");
+        assert_eq!(bt.sides[0].party[0].protect_consecutive, 0);
+        turn(pr, &mut bt, &x, &y, 0.5);
+        assert_eq!(bt.sides[0].party[0].protect_consecutive, 1, "失敗の次は必ず成功");
+    }
+
+    #[test]
+    fn mc1018_e4_瀕死の交代でさいせいりょくは発動しない() {
+        let mut p = pack();
+        let [mut s0, s1] = sides(&mut p, &[&format!("ドヒドイデ@{N}:ずぶとい:どくびし:0/0/0/0/0/0:さいせいりょく"), DUM],
+                                 &[&format!("ガブリアス@{N}:いじっぱり:じしん:0/32/0/0/0/32:さめはだ")]);
+        s0.party[0].hp = 10;
+        let pr: &Pack = &p;
+        let mut bt = Battle::new(s0, s1, Field::default());
+        let x = mv_of(pr, &bt.sides[0].party[0], "どくびし");
+        let y = mv_of(pr, &bt.sides[1].party[0], "じしん");
+        turn(pr, &mut bt, &x, &y, 0.5);
+        let d = &bt.sides[0].party[0];
+        assert!(!d.is_alive && d.hp == 0, "hp={}", d.hp);
+        assert_eq!(bt.sides[0].active_idx, 1);
+    }
+
+    #[test]
+    fn mc1018_e5_先攻が自滅しても後攻の自分や場が対象の技は出る() {
+        let mut p = pack();
+        let fast = format!("ボーマンダ@こだわりスカーフ:いじっぱり:すてみタックル:0/32/0/0/0/32:いかく");
+        for (mv, self_target) in [("ステルスロック", true), ("あくび", false)] {
+            let [mut s0, s1] = sides(&mut p, &[&fast, DUM], &[&format!("カバルドン@{N}:わんぱく:ステルスロック|あくび:32/0/32/0/0/0:すなおこし")]);
+            s0.party[0].hp = 1;
+            let pr: &Pack = &p;
+            let mut bt = Battle::new(s0, s1, Field::default());
+            let x = mv_of(pr, &bt.sides[0].party[0], "すてみタックル");
+            let y = mv_of(pr, &bt.sides[1].party[0], mv);
+            turn(pr, &mut bt, &x, &y, 0.5);
+            assert!(!bt.sides[0].party[0].is_alive);
+            if self_target {
+                assert!(bt.field.stealth_rock[0], "ステルスロックは撒ける");
+            } else {
+                assert_eq!(bt.sides[0].active().yawn_count, 0, "あくびは対象がいないので失敗");
+            }
+        }
+    }
+
+    #[test]
+    fn mc1018_e6_メガ進化のHPは整数演算() {
+        let mut p = pack();
+        for h in [78i64, 121, 98] {
+            let mut x = build_poke(&mut p, "リザードン@リザードナイトY:ひかえめ:かえんほうしゃ:2/0/0/32/0/32:もうか", "M-6");
+            x.hp = h;
+            let mx = x.max_hp;
+            crate::poke::mega_evolve_poke(&p, &mut x);
+            assert_eq!(x.hp, h * x.max_hp / mx, "{h}/{mx}");
+            assert_eq!(x.hp, h);
+        }
+    }
+
+    #[test]
+    fn mc1018_e7_動けなかったターンはPPを減らさない() {
+        let mut p = pack();
+        for (st, r) in [("sleep", 0.5), ("freeze", 0.5), ("paralysis", 0.1)] {
+            let s = sides(&mut p, &[&format!("カビゴン@{N}:しんちょう:のしかかり:0/0/0/0/0/0:あついしぼう")], &[DUM]);
+            let pr: &Pack = &p;
+            let mut bt = Battle::new(s[0].clone(), s[1].clone(), Field::default());
+            let sy = match st { "sleep" => pr.sy.st.sleep, "freeze" => pr.sy.st.freeze, _ => pr.sy.st.paralysis };
+            bt.sides[0].party[0].status = Some(sy);
+            bt.sides[0].party[0].sleep_count = 4;
+            let pp = bt.sides[0].party[0].pp[0];
+            let x = mv_of(pr, &bt.sides[0].party[0], "のしかかり");
+            let y = mv_of(pr, &bt.sides[1].party[0], "なまける");
+            turn(pr, &mut bt, &x, &y, r);
+            assert_eq!(bt.sides[0].party[0].pp[0], pp, "{st}");
+        }
+        let s = sides(&mut p, &[&format!("カビゴン@{N}:しんちょう:のしかかり:0/0/0/0/0/0:あついしぼう")], &[DUM]);
+        let pr: &Pack = &p;
+        let mut bt = Battle::new(s[0].clone(), s[1].clone(), Field::default());
+        let pp = bt.sides[0].party[0].pp[0];
+        let x = mv_of(pr, &bt.sides[0].party[0], "のしかかり");
+        let y = mv_of(pr, &bt.sides[1].party[0], "なまける");
+        turn(pr, &mut bt, &x, &y, 0.5);
+        assert_eq!(bt.sides[0].party[0].pp[0], pp - 1, "対照: 動けたら減る");
+    }
+}
+
+#[cfg(test)]
+mod synchronize_tests {
+    use super::*;
+    use crate::interner::Sym;
+    use crate::poke::build_poke;
+
+    fn pack() -> Pack {
+        Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"))
+    }
+
+    struct Z(f64);
+    impl BRng for Z {
+        fn random(&mut self) -> f64 { self.0 }
+        fn choice(&mut self, _n: usize) -> usize { 0 }
+        fn randint(&mut self, a: i64, _b: i64) -> i64 { a }
+        fn choices(&mut self) -> i64 { 2 }
+    }
+
+    const SYNC: &str = "ブラッキー@きれいなぬけがら:わんぱく:なまける|すてみタックル|ほうでん:0/0/0/0/0/0:シンクロ";
+
+    fn mv(p: &Pack, poke: &Poke, n: &str) -> DMove {
+        poke.moves.iter().find(|m| p.intern.resolve(m.name) == n).unwrap().clone()
+    }
+
+    fn act(p: &Pack, poke: &Poke, n: &str) -> Action {
+        let (i, m) = poke.moves.iter().enumerate().find(|(_, m)| p.intern.resolve(m.name) == n).unwrap();
+        Action { kind: ActKind::Move, mv: Some(m.clone()), move_idx: i as i64, switch_to: -1, do_mega: false }
+    }
+
+    fn status_turn(p: &mut Pack, opp: &str, opp_status: bool, n: &str) -> (Option<Sym>, Option<Sym>) {
+        let a = build_poke(p, SYNC, "M-6");
+        let mut b = build_poke(p, opp, "M-6");
+        if opp_status {
+            b.status = Some(p.sy.st.burn);
+        }
+        let pr: &Pack = &*p;
+        let s0 = Side { party: vec![a], active_idx: 0, field_idx: 0, ..Default::default() };
+        let s1 = Side { party: vec![b], active_idx: 0, field_idx: 1, ..Default::default() };
+        let mut bt = Battle::new(s0, s1, Field::default());
+        let x = act(pr, &bt.sides[0].party[0], "なまける");
+        let y = act(pr, &bt.sides[1].party[0], n);
+        let lim = bt.turn + 1;
+        bt.run_loop_lim(pr, &mut Z(0.0), lim, move |_, _| [x.clone(), y.clone()], |_| {});
+        (bt.sides[0].party[0].status, bt.sides[1].party[0].status)
+    }
+
+    #[test]
+    fn sync_状態異常の持ち主が攻撃を受けても移さない() {
+        let mut p = pack();
+        let mut h = build_poke(&mut p, SYNC, "M-6");
+        let mut a = build_poke(&mut p, SYNC, "M-6");
+        a.ability = p.intern.intern("あついしぼう");
+        let pr: &Pack = &p;
+        h.status = Some(pr.sy.st.paralysis);
+        let m = mv(pr, &a, "すてみタックル");
+        crate::abilities::on_after_hit(pr, &mut a, &mut h, &m, &Field::default(), &mut Z(0.0));
+        assert_eq!(a.status, None);
+    }
+
+    #[test]
+    fn sync_追加効果と特性で移す_ねむりは移さない() {
+        let mut p = pack();
+        let mut h = build_poke(&mut p, SYNC, "M-6");
+        let mut a = build_poke(&mut p, SYNC, "M-6");
+        a.ability = p.intern.intern("あついしぼう");
+        let pr: &Pack = &p;
+        let st = &pr.sy.st;
+        let m = mv(pr, &a, "ほうでん");
+        apply_secondary(pr, &mut a, &mut h, &m, 50, &Field::default(), 0, &mut Z(0.0), false);
+        assert_eq!((h.status, a.status), (Some(st.paralysis), Some(st.paralysis)));
+
+        let mut h = build_poke(&mut p, SYNC, "M-6");
+        let mut s = build_poke(&mut p, SYNC, "M-6");
+        s.ability = p.intern.intern("せいでんき");
+        let mut k = build_poke(&mut p, SYNC, "M-6");
+        k.ability = p.intern.intern("ほうし");
+        let pr: &Pack = &p;
+        let st = &pr.sy.st;
+        let m = mv(pr, &h, "すてみタックル");
+        crate::abilities::on_after_hit(pr, &mut h, &mut s, &m, &Field::default(), &mut Z(0.0));
+        assert_eq!((h.status, s.status), (Some(st.paralysis), Some(st.paralysis)));
+        let mut h = build_poke(&mut p, SYNC, "M-6");
+        let pr: &Pack = &p;
+        crate::abilities::on_after_hit(pr, &mut h, &mut k, &m, &Field::default(), &mut Z(0.0));
+        assert_eq!((h.status, k.status), (Some(pr.sy.st.sleep), None));
+    }
+
+    #[test]
+    fn sync_変化技で移す_既に状態異常なら移さない() {
+        let mut p = pack();
+        let opp = "カビゴン@きれいなぬけがら:わんぱく:でんじは|どくどく|さいみんじゅつ:0/0/0/0/0/0:あついしぼう";
+        let r1 = status_turn(&mut p, opp, false, "でんじは");
+        let r2 = status_turn(&mut p, opp, false, "どくどく");
+        let r3 = status_turn(&mut p, opp, false, "さいみんじゅつ");
+        let r4 = status_turn(&mut p, opp, true, "でんじは");
+        let st = &p.sy.st;
+        assert_eq!(r1, (Some(st.paralysis), Some(st.paralysis)));
+        assert_eq!(r2, (Some(st.badpoison), Some(st.badpoison)));
+        assert_eq!(r3, (Some(st.sleep), None));
+        assert_eq!(r4, (Some(st.paralysis), Some(st.burn)));
     }
 }

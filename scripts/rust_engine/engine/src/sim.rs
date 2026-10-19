@@ -419,6 +419,11 @@ fn mcts_3v3_inner(
     if let Some(v) = f2("AI_KO_COND") { ai2.ko_cond = v > 0.5; }
     if let Some(v) = f2("AI_PRUNE_IMMUNE") { ai2.prune_immune = v > 0.5; }
     if let Some(v) = f2("AI_FIX40") { ai2.fix40 = v > 0.5; }
+    if let Some(v) = f2("AI_KOV") { ai2.kov = v as u8; }
+    if let Some(v) = std::env::var("AI_KOV_1").ok().and_then(|v| v.parse::<u8>().ok()) { ai1.kov = v; }
+    for (k, ai) in [("AI_DRAW_OLD_1", &mut ai1), ("AI_DRAW_OLD_2", &mut ai2)] {
+        if std::env::var(k).map(|v| v == "1").unwrap_or(false) { ai.draw_old = true; }
+    }
     if let Some(v) = f2("AI_FIX200") { ai2.fix200 = v > 0.5; }
     if let Some(v) = f2("AI_FIXHZ") { ai2.fixhz = v > 0.5; }
     if let Some(v) = f2("ORACLE_MIX") { ai2.oracle_mix = v; }
@@ -1008,9 +1013,9 @@ fn run_two_mcts(
                 let ai: &mut SearchAI = if sx == 0 { ai1 } else { ai2 };
                 let a = ai.choose(packr, nets[sx], &mut bt.sides, sx, &mut bt.field, &mut bl, rng);
                 bt.sides[sx].belief.0 = Some(bl);
-                let (precise, cond, fx40) = (ai.ko_precise, ai.ko_cond, ai.fix40);
+                let (precise, cond, fx40, kov) = (ai.ko_precise, ai.ko_cond, ai.fix40, ai.kov);
                 let (me, op) = crate::battle::split2(&mut bt.sides, sx);
-                out[sx] = crate::ai::certain_ko_override_opt(packr, a, me, op, &mut bt.field, rng, precise, cond, fx40);
+                out[sx] = crate::ai::certain_ko_override_kov(packr, a, me, op, &mut bt.field, rng, precise, cond, fx40, kov);
             }
             ACT_LOG.with(|l| {
                 if let Some(v) = l.borrow_mut().as_mut() {
@@ -1208,9 +1213,9 @@ pub fn mcts_3v3_record(
                 let ai: &mut SearchAI = if sx == 0 { &mut ai1 } else { &mut ai2 };
                 let a = ai.choose(packr, net, &mut bt.sides, sx, &mut bt.field, &mut bl, rng);
                 bt.sides[sx].belief.0 = Some(bl);
-                let (precise, cond, fx40) = (ai.ko_precise, ai.ko_cond, ai.fix40);
+                let (precise, cond, fx40, kov) = (ai.ko_precise, ai.ko_cond, ai.fix40, ai.kov);
                 let (me, op) = crate::battle::split2(&mut bt.sides, sx);
-                out[sx] = crate::ai::certain_ko_override_opt(packr, a, me, op, &mut bt.field, rng, precise, cond, fx40);
+                out[sx] = crate::ai::certain_ko_override_kov(packr, a, me, op, &mut bt.field, rng, precise, cond, fx40, kov);
             }
             decs.push((bt.turn, [act_rec(packr, &out[0]), act_rec(packr, &out[1])], cell.borrow().state()));
             out

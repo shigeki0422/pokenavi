@@ -151,6 +151,8 @@ pub struct Poke {
     pub mega: Option<std::sync::Arc<crate::pack::MegaStats>>,
     pub hero_forme: bool,
     pub protect_consecutive: i64,
+    /// ねむり・こおり・まひ・こんらんの自傷で技を出せなかった（そのターンはPPを減らさない）
+    pub immobile: bool,
     pub enduring: bool,
     pub ate_berry: bool,
     /// 登場してから自分で選んだ技（ねごとで出た技は除く）。2種類以上＝こだわりアイテムではない
@@ -706,9 +708,9 @@ pub fn do_mega_evolve(pack: &Pack, p: &mut BuiltPokemon) {
         Some(m) => m.clone(),
         None => return,
     };
-    let hp_ratio = (p.hp as f64) / (p.max_hp as f64);
+    let old_max = p.max_hp;
     p.max_hp = calc_hp(md.hp, p.evs.h);
-    p.hp = std::cmp::max(1, ((p.max_hp as f64) * hp_ratio).floor() as i64);
+    p.hp = std::cmp::max(1, p.hp * p.max_hp / old_max);
     p.attack = calc_stat(md.attack, p.evs.a, 31, nat_mod(pack, &p.nature, 0));
     p.defense = calc_stat(md.defense, p.evs.b, 31, nat_mod(pack, &p.nature, 1));
     p.sp_attack = calc_stat(md.sp_attack, p.evs.c, 31, nat_mod(pack, &p.nature, 2));
@@ -866,9 +868,9 @@ pub fn mega_evolve_poke(pack: &Pack, p: &mut Poke) {
             None => 1.0,
         }
     };
-    let hp_ratio = (p.hp as f64) / (p.max_hp as f64);
+    let old_max = p.max_hp;
     p.max_hp = calc_hp(md.hp, p.evs[0]);
-    p.hp = std::cmp::max(1, ((p.max_hp as f64) * hp_ratio).floor() as i64);
+    p.hp = std::cmp::max(1, p.hp * p.max_hp / old_max);
     p.attack = calc_stat(md.attack, p.evs[1], 31, nat(0));
     p.defense = calc_stat(md.defense, p.evs[2], 31, nat(1));
     p.sp_attack = calc_stat(md.sp_attack, p.evs[3], 31, nat(2));

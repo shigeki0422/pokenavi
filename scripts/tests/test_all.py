@@ -10447,6 +10447,501 @@ try:
 except Exception as _e52:
     check("52 素早さを下げる技の仕分けのテストが実行できる", False, f"{type(_e52).__name__}: {_e52}")
 
+print("\n=== 53. 観戦記録に場の状態（フィールド・トリックルーム・おいかぜ）が残る ===")
+# 以前の記録は天候とトリックルームだけで、サイコフィールド等が張られているか・残りターンが観戦で分からなかった。
+def _t53_field_record():
+    import feature1 as _F53, export_f1_static as _X53
+    from simulator.battle import Battle as _B53, BattleSide as _BS53, BattleField as _BF53
+    _a = make_poke(name="メイカー", hp_b=255, def_b=200, spdef_b=200, ability="サイコメイカー", moves=["つるぎのまい", "おいかぜ"])
+    _d = make_poke(name="相手", hp_b=255, def_b=200, spdef_b=200, spd_b=50, moves=["つるぎのまい", "トリックルーム"])
+    _b = _B53(_BS53([_a]), _BS53([_d]), _BF53())
+    _plan1 = ["おいかぜ"] + ["つるぎのまい"] * 9
+    _plan2 = ["トリックルーム"] + ["つるぎのまい"] * 9
+    def _ai1(my, opp, f): return _Force(_plan1[_b.turn - 1])(my, opp, f)
+    def _ai2(my, opp, f): return _Force(_plan2[_b.turn - 1])(my, opp, f)
+    _b.start(_ai1, _ai2)
+    _rec = [dict(turn=0, logs=list(_b.logs), side1=_F53.side_snapshot(_b.side1, _b.field),
+                 side2=_F53.side_snapshot(_b.side2, _b.field), **_F53.field_snapshot(_b.field))]
+    _prev = [len(_b.logs)]
+    def _cb(bb):
+        nl = bb.logs[_prev[0]:]; _prev[0] = len(bb.logs)
+        _rec.append(dict(turn=bb.turn, logs=nl, side1=_F53.side_snapshot(bb.side1, bb.field),
+                         side2=_F53.side_snapshot(bb.side2, bb.field), **_F53.field_snapshot(bb.field)))
+    _b._turn_loop(_ai1, _ai2, max_turns=7, on_turn=_cb)
+    _tc = [(t["terrain"], t["terrain_count"]) for t in _rec]
+    check("53 サイコメイカーの入場でサイコフィールドが記録される（ターン0で残り5）", _tc[0] == ("psychic", 5), str(_tc))
+    check("53 フィールドの残りターンが1ずつ減り、5ターン目の終わりに切れる", _tc[1:6] == [("psychic", 4), ("psychic", 3), ("psychic", 2), ("psychic", 1), (None, 0)], str(_tc))
+    check("53 フィールドが切れたことがログに日本語の技名で出る", any("サイコフィールド の効果が切れた！" in l for l in _rec[5]["logs"]), str(_rec[5]["logs"]))
+    _tr = [(t["trick_room"], t["trick_room_count"]) for t in _rec]
+    check("53 トリックルームが記録され5ターンで切れる", _tr[1] == (True, 4) and _tr[4] == (True, 1) and _tr[5] == (False, 0), str(_tr))
+    check("53 トリックルームが自然に切れたこともログに出る", any("トリックルーム の効果が切れた！" in l for l in _rec[5]["logs"]), str(_rec[5]["logs"]))
+    _tw = [(t["side1"]["tailwind"], t["side1"]["tailwind_count"]) for t in _rec]
+    check("53 おいかぜ（自分側）が残りターン付きで記録される", _tw[1] == (True, 3) and _tw[4] == (False, 0) and not _rec[1]["side2"]["tailwind"], str(_tw))
+    _m = _F53._mirror_turn(_rec[2])
+    check("53 視点反転した記録にもフィールドが残る", _m.get("terrain") == "psychic" and _m.get("terrain_count") == 3 and _m["side1"]["tailwind"] is False, str({k: _m.get(k) for k in ("terrain", "terrain_count")}))
+    _s = _X53._slim_turn(_rec[2])
+    check("53 公開用の軽量化でフィールド・おいかぜが落ちない", _s.get("terrain") == "psychic" and _s.get("terrain_count") == 3 and _s["side1"].get("tailwind_count") == 2, str(_s))
+    _s0 = _X53._slim_turn(_rec[6])
+    check("53 フィールドが無いターンは軽量化でキー自体を出さない（古い記録と同じ形）", "terrain" not in _s0 and "tailwind" not in _s0["side1"], str({k: v for k, v in _s0.items() if k != "logs"}))
+
+
+try:
+    _t53_field_record()
+except Exception as _e53:
+    check("53 場の状態の記録のテストが実行できる", False, f"{type(_e53).__name__}: {_e53}")
+
+print("\n=== 54. M-C 総当たりの監査（mc_audit_1018）の修正 ===")
+# 番号は _local/ai_work/mc_audit_1018/report.md。Rust は battle.rs mc1018_tests・ai.rs mc1018_ai_tests。
+
+
+def _t54_env():
+    import random as _r
+    from simulator.battle import Battle as _B, BattleSide as _S, BattleField as _F, Action as _A
+    from simulator.pokemon import build_from_spec as _bfs, parse_pokemon_spec as _pps
+
+    def mk(s):
+        return _bfs(_pps(s), dl, season="M-6", randomize=False)
+
+    def act(side, name):
+        p = side.active
+        i = next(i for i, m in enumerate(p.moves) if m is not None and m.name_jp == name)
+        return _A(type="move", move=p.moves[i], move_idx=i)
+
+    def run(s1, s2, p1, p2, turns, seed=1, prep=None):
+        _r.seed(seed)
+        a, b = _S([mk(x) for x in s1]), _S([mk(x) for x in s2])
+        if prep:
+            prep(a, b)
+        bt = _B(a, b, _F())
+        k = [0, 0]
+
+        def plan(pl, j):
+            def ai(my, opp, f):
+                x = pl[min(k[j], len(pl) - 1)]
+                k[j] += 1
+                return act(my, x)
+            return ai
+        a1, a2 = plan(p1, 0), plan(p2, 1)
+        bt.start(a1, a2)
+        r = bt._turn_loop(a1, a2, max_turns=turns)
+        return bt, r
+    return mk, run
+
+
+_N54 = "きれいなぬけがら"
+_DUM54 = f"カビゴン@{_N54}:わんぱく:なまける|まもる:32/0/32/0/0/0:あついしぼう"
+
+
+def _t54_e1():
+    mk, run = _t54_env()
+    # E1 最後の1体どうしが同じターンに倒れたら引き分け（以前は必ず側2の勝ち）
+    for first in (1, 2):
+        att = "ボーマンダ@いのちのたま:いじっぱり:すてみタックル:0/32/0/0/0/32:いかく"
+        sp1, sp2 = ([att], [_DUM54]) if first == 1 else ([_DUM54], [att])
+
+        def prep(a, b):
+            a.party[0].hp = 1; b.party[0].hp = 1
+        bt, r = run(sp1, sp2, ["すてみタックル" if first == 1 else "なまける"], ["なまける" if first == 1 else "すてみタックル"], 1, prep=prep)
+        check(f"54 E1 最後の1体どうしの相打ちは引き分け（反動技の使い手が側{first}）",
+              r == 0 and not bt.side1.has_alive() and not bt.side2.has_alive(), f"result={r}")
+        from simulator.alphazero import _terminal_value
+        check(f"54 E1 探索の終局の価値も引き分け＝0.5（alphazero・側{first}）", _terminal_value(bt, True) == 0.5 and _terminal_value(bt, False) == 0.5)
+    from simulator import search_ai as _SA
+    check("54 E1 探索の終局の価値（search_ai）: 引き分け0.5・勝ち1・負け0",
+          (_SA._terminal_v(0, True), _SA._terminal_v(1, True), _SA._terminal_v(1, False)) == (0.5, 1.0, 0.0))
+    from simulator.battle import battle_outcome
+    import feature1 as _F1
+    check("54 E1 観戦記録の結果判定も同じ関数（feature1.battle_outcome）", _F1.battle_outcome is battle_outcome)
+
+
+
+def _t54_e2():
+    mk, run = _t54_env()
+    # E2 のろい（ゴースト）の自傷は最大HPの1/2
+    bt, _ = run([f"ミミッキュ@{_N54}:いじっぱり:のろい:0/0/0/0/0/0:ぼうじん"], [_DUM54], ["のろい"], ["なまける"], 1)
+    m = bt.side1.party[0]
+    check("54 E2 のろい（ゴースト）の自傷は最大HPの1/2", m.max_hp - m.hp == m.max_hp // 2 and bt.side2.active.cursed, f"{m.hp}/{m.max_hp}")
+
+
+
+def _t54_e3():
+    mk, run = _t54_env()
+    # E3 まもる系が失敗したら連続回数は0に戻る（次は必ず成功）
+    fails = after = ok_next = 0
+    for sd in range(40):
+        def prep(a, b):
+            a.party[0].protect_consecutive = 1
+        bt, _ = run([f"カバルドン@{_N54}:わんぱく:まもる:32/0/32/0/0/0:すなおこし"], [_DUM54], ["まもる"], ["なまける"], 1, seed=sd, prep=prep)
+        p = bt.side1.active
+        if any("まもる は失敗した" in l for l in bt.logs):
+            fails += 1
+            after += p.protect_consecutive == 0
+    check("54 E3 まもるが失敗したら連続回数は0（次のまもるは必ず成功）", fails > 0 and after == fails, f"失敗{fails} 0に戻った{after}")
+
+
+
+def _t54_e4():
+    mk, run = _t54_env()
+    # E4 瀕死の交代では さいせいりょく 等を呼ばない（生きて引っ込むときは呼ぶ＝対照）
+    def prep4(a, b):
+        a.party[0].hp = 10
+    bt, _ = run([f"ドヒドイデ@{_N54}:ずぶとい:どくびし:0/0/0/0/0/0:さいせいりょく", _DUM54],
+                [f"ガブリアス@{_N54}:いじっぱり:じしん:0/32/0/0/0/32:さめはだ"], ["どくびし"], ["じしん"], 1, prep=prep4)
+    d = bt.side1.party[0]
+    check("54 E4 瀕死の交代では さいせいりょく が発動しない（HP0のまま）",
+          not d.is_alive and d.hp == 0 and not any("さいせいりょく" in l for l in bt.logs), f"hp={d.hp}")
+    from simulator.battle import BattleSide as _S
+    s = _S([mk(f"ドヒドイデ@{_N54}:ずぶとい:どくびし:0/0/0/0/0/0:さいせいりょく"), mk(_DUM54)])
+    s.party[0].hp = 30
+    lg = []
+    s.switch_to(1, lg, None)
+    check("54 E4 生きて引っ込むときは さいせいりょく が発動（対照）", s.party[0].hp == 30 + s.party[0].max_hp // 3, f"{s.party[0].hp}")
+
+
+
+def _t54_e5():
+    mk, run = _t54_env()
+    # E5 先攻が自滅しても後攻の自分・場が対象の技は出る（相手が対象の技は従来どおり不発）
+    fast = "ボーマンダ@こだわりスカーフ:いじっぱり:すてみタックル:0/32/0/0/0/32:いかく"
+
+    def prep5(a, b):
+        a.party[0].hp = 1
+    bt, _ = run([fast, _DUM54], [f"カバルドン@{_N54}:わんぱく:ステルスロック|あくび:32/0/32/0/0/0:すなおこし"], ["すてみタックル"], ["ステルスロック"], 1, prep=prep5)
+    check("54 E5 先攻が反動で倒れても後攻の ステルスロック は撒ける", bt.field.stealth_rock[0] and not bt.side1.party[0].is_alive)
+
+    def prep5b(a, b):
+        a.party[0].hp = 1; b.party[0].hp = 50
+    bt, _ = run([fast, _DUM54], [f"アーマーガア@{_N54}:わんぱく:はねやすめ:32/0/32/0/0/0:プレッシャー"], ["すてみタックル"], ["はねやすめ"], 1, prep=prep5b)
+    check("54 E5 先攻が反動で倒れても後攻の はねやすめ は出る", any("アーマーガア は はねやすめ を使った" in l for l in bt.logs)
+          and not any("相手がいない" in l for l in bt.logs), str([l for l in bt.logs if "アーマーガア" in l][-3:]))
+    bt, _ = run([fast, _DUM54], [f"カバルドン@{_N54}:わんぱく:ステルスロック|あくび:32/0/32/0/0/0:すなおこし"], ["すてみタックル"], ["あくび"], 1, prep=prep5)
+    check("54 E5 相手が対象の技（あくび）は相手がいないので不発（対照）",
+          any("相手がいない" in l for l in bt.logs) and bt.side1.active.yawn_count == 0)
+
+
+
+def _t54_e6():
+    mk, run = _t54_env()
+    # E6 メガ進化のHPは整数演算（以前は浮動小数で1減ることがあった）
+    bad = []
+    for h in (78, 121, 98):
+        p = mk("リザードン@リザードナイトY:ひかえめ:かえんほうしゃ:2/0/0/32/0/32:もうか")
+        p.hp = h; mx = p.max_hp
+        p.do_mega_evolve()
+        if p.hp != h * p.max_hp // mx:
+            bad.append((h, p.hp))
+    check("54 E6 メガ進化のHPは整数演算（121/155 → 121/155）", not bad, str(bad))
+
+
+
+def _t54_e7():
+    mk, run = _t54_env()
+    # E7 ねむり・こおり・まひ・こんらんの自傷で動けなかったターンはPPを減らさない
+    for st in ("sleep", "freeze"):
+        def prep7(a, b, st=st):
+            a.party[0].status = st; a.party[0].sleep_count = 4
+        bt, _ = run([f"カビゴン@{_N54}:しんちょう:のしかかり:0/0/0/0/0/0:あついしぼう"], [_DUM54], ["のしかかり"], ["なまける"], 2, seed=3, prep=prep7)
+        p = bt.side1.party[0]
+        used = sum(1 for l in bt.logs if l.startswith("カビゴン の のしかかり"))
+        check(f"54 E7 {st} で動けなかったターンはPPを減らさない", p.pp[0] == p.moves[0].pp - used, f"PP {p.pp[0]} 使用{used}")
+    mism = []
+    for sd in range(30):
+        def prep7p(a, b):
+            a.party[0].status = "paralysis"
+        bt, _ = run([f"カビゴン@{_N54}:しんちょう:のしかかり:0/0/0/0/0/0:あついしぼう"], [_DUM54], ["のしかかり"], ["なまける"], 3, seed=sd, prep=prep7p)
+        p = bt.side1.party[0]
+        used = sum(1 for l in bt.logs if l.startswith("カビゴン の のしかかり"))
+        if p.pp[0] != p.moves[0].pp - used:
+            mism.append(sd)
+    check("54 E7 まひで動けなかったターンはPPを減らさない（動けたターンだけ減る）", not mism, str(mism[:5]))
+
+
+def _t54_ai():
+    # A1 確定KO安全弁を絞る（眠り・こおり／溜める溜め技／相手の壁／相手のメガ進化）
+    from simulator import ai as _AI
+    from simulator.battle import BattleSide as _S, BattleField as _F, Action as _A
+    from simulator.ai import _move_damage
+    mk, _ = _t54_env()
+    saved = _AI._KOV
+
+    def ov(my, op, f, keep, kov):
+        _AI._KOV = kov
+        try:
+            a = _A(type="move", move=my.active.moves[keep], move_idx=keep)
+            return _AI.certain_ko_override(a, my, op, f).move_idx
+        finally:
+            _AI._KOV = saved
+
+    def sides(a, b):
+        s1, s2 = _S([mk(a)]), _S([mk(b)])
+        s1.field_idx, s2.field_idx = 0, 1
+        return s1, s2
+    G = "ガブリアス@きれいなぬけがら:ようき:じしん|つるぎのまい:0/32/0/0/0/32:さめはだ"
+    my, op = sides(G, _DUM54); f = _F()
+    op.active.hp = 10
+    r = [ov(my, op, f, 1, 2)]
+    my.active.status = "sleep"; my.active.sleep_count = 3
+    r += [ov(my, op, f, 1, 2), ov(my, op, f, 1, 1)]
+    my.active.status = "freeze"
+    r += [ov(my, op, f, 1, 2), ov(my, op, f, 1, 0)]
+    check("54 A1 眠り・こおりで動けない間は上書きしない（旧版は上書き・AI_KOV=0 は上書きしない）", r == [0, 1, 0, 1, 1], str(r))
+
+    my, op = sides("ガブリアス@きれいなぬけがら:ようき:じしん|ドラゴンクロー|つるぎのまい:0/32/0/0/0/32:さめはだ", _DUM54); f = _F()
+    op.active.hp = 10
+    r = [ov(my, op, f, 1, 2), ov(my, op, f, 1, 1), ov(my, op, f, 2, 2)]
+    check("54 A1 探索の選んだ手も確定KOなら探索の手のまま（旧版は打点の大きい技に差し替える）", r == [1, 0, 0], str(r))
+
+    my, op = sides("フシギバナ@きれいなぬけがら:おくびょう:ソーラービーム|こうごうせい:0/0/0/32/0/32:ようりょくそ", _DUM54); f = _F()
+    op.active.hp = 10
+    r = [ov(my, op, f, 1, 2), ov(my, op, f, 1, 1)]
+    f.weather = "sunny"; f.weather_count = 5
+    r.append(ov(my, op, f, 1, 2))
+    check("54 A1 溜めるだけになる溜め技（晴れでないソーラービーム）では上書きしない", r == [1, 0, 0], str(r))
+
+    my, op = sides(G, _DUM54); f = _F()
+    dm = int(_move_damage(my.active, op.active, my.active.moves[0], f, 0.0, "min"))
+    op.active.hp = dm
+    r = [ov(my, op, f, 1, 2)]
+    op.reflect = True
+    r += [ov(my, op, f, 1, 2), ov(my, op, f, 1, 1)]
+    op.active.hp = dm // 2
+    r.append(ov(my, op, f, 1, 2))
+    check("54 A1 相手の壁（リフレクター）を確定KOの見積もりに入れる", r == [0, 1, 0, 0], str(r))
+
+    my, op = sides("サーナイト@きれいなぬけがら:おくびょう:10まんボルト|めいそう:0/0/0/32/0/32:トレース",
+                   "リザードン@リザードナイトY:ひかえめ:かえんほうしゃ:32/0/0/0/0/0:もうか"); f = _F()
+    base = int(_move_damage(my.active, op.active, my.active.moves[0], f, 0.0, "min"))
+    import copy as _cp
+    mg = _cp.copy(op.active); mg.do_mega_evolve()
+    mega = int(_move_damage(my.active, mg, my.active.moves[0], f, 0.0, "min"))
+    op.active.hp = base
+    r = [mega < base, ov(my, op, f, 1, 2), ov(my, op, f, 1, 1)]
+    op.mega_used = True
+    r.append(ov(my, op, f, 1, 2))
+    op.mega_used = False; op.active.hp = mega
+    r.append(ov(my, op, f, 1, 2))
+    check("54 A1 相手がこのターンにメガ進化できるならメガ後の姿で見積もる", r == [True, 1, 0, 0, 0], str(r))
+
+    # 信念がある本番の経路: 持ち物は開示済みか使用率事前分布（10%以上のメガ石）で判断し、真値は読まない
+    from simulator.belief import OpponentBelief
+    my, op = sides("サーナイト@きれいなぬけがら:おくびょう:10まんボルト|めいそう:0/0/0/32/0/32:トレース",
+                   "リザードン@いのちのたま:ひかえめ:かえんほうしゃ:32/0/0/0/0/0:もうか"); f = _F()
+    my.belief = OpponentBelief(dl, "M-6")
+    my.opp_view.team_preview(op.party); my.opp_view.on_enter(op.active)
+    forms = _AI._opp_mega_forms(my, op, op.active)
+    _, ip = _AI._opp_prior(my, "リザードン")
+    want = sorted(n for n, v in (ip or {}).items() if v >= 10.0 and "ナイト" in n)
+    check("54 A1 メガ後の姿は事前分布のメガ石から作る（真の持ち物がメガ石でなくても）",
+          len(want) >= 1 and sorted(x.item for x in forms) == want and all(x.mega_evolved for x in forms), f"{[x.item for x in forms]} {want}")
+
+
+def _t54_parity():
+    # Python/Rust 照合: 各局面を Rust の探索で戦い Python で再生して一致（E1 の引き分け・E2・E3・E4・E5）
+    import feature1 as _F
+    import pokenavi_engine as _E
+    if not hasattr(_E, "mcts_3v3_record"):
+        return
+    _F._ensure_loaded("M-6", 8)
+    N = _N54
+    PAR = {
+        "E2": ([f"ミミッキュ@{N}:いじっぱり:のろい:0/0/0/0/0/0:ぼうじん"], [f"カビゴン@{N}:しんちょう:ねむる:0/0/0/0/0/0:あついしぼう"], range(3, 5)),
+        "E3": ([f"カバルドン@{N}:わんぱく:まもる:0/0/0/0/0/0:すなおこし"], [f"ガブリアス@{N}:いじっぱり:ドラゴンクロー:0/0/0/0/0/0:さめはだ"], range(3, 5)),
+        "E4": ([f"ドヒドイデ@{N}:ずぶとい:どくびし:0/0/0/0/0/0:さいせいりょく", f"カビゴン@{N}:しんちょう:のろい:0/0/0/0/0/0:あついしぼう"],
+               ["ガブリアス@こだわりハチマキ:いじっぱり:じしん:0/32/0/0/0/32:さめはだ"], range(3, 5)),
+        "E1/E5": ([f"フォレトス@{N}:いじっぱり:だいばくはつ:0/32/0/0/0/32:がんじょう", f"ガブリアス@{N}:いじっぱり:じしん:0/32/0/0/0/32:さめはだ"],
+                  [f"カビゴン@{N}:わんぱく:のろい|のしかかり:32/0/32/0/0/0:あついしぼう"], range(1, 7)),
+    }
+    mm, res = [], {}
+    for k, (pa, pb, seeds) in PAR.items():
+        for sd in seeds:
+            try:
+                rec = _F.play_and_record_rust(pa, pb, season="M-6", seed=sd, mcts_sims=20, sel1_idx=list(range(len(pa))))
+                res[(k, sd)] = rec
+            except _F.ReplayMismatch as e:
+                mm.append((k, sd, str(e)[:160]))
+    check("54 Python/Rust 照合: のろい・まもる・さいせいりょく・だいばくはつ の局面で再生が一致", not mm, str(mm)[:600])
+    r6 = res.get(("E1/E5", 6))
+    check("54 E1 Python/Rust 照合: 最後の1体どうしの相打ち（だいばくはつ）は両実装とも引き分け",
+          r6 is not None and r6["result"] == 0 and any("爆発して倒れた" in l for l in r6["turns"][-1]["logs"]), str(r6 and r6["result"]))
+    r = res.get(("E2", 3))
+    m = r and next(p for p in r["turns"][1]["side1"]["party"] if p["name"] == "ミミッキュ")
+    check("54 E2 Python/Rust 照合: のろいの自傷が1/2", bool(m) and m["max_hp"] - m["hp"] >= m["max_hp"] // 2, str(m and (m["hp"], m["max_hp"])))
+
+
+def _t54_display():
+    # D 観戦の表示（ログと記録）。番号は mc_audit_1018 の D1〜D10
+    mk, run = _t54_env()
+    N = _N54
+
+    def prep_last(a, b):
+        b.party[0].hp = 1
+    bt, _ = run([f"ガブリアス@{N}:いじっぱり:じしん:0/32/0/0/0/32:さめはだ"], [_DUM54], ["じしん"], ["なまける"], 1, prep=prep_last)
+    check("54 D3 最後の1体を倒したときも「倒れた！」の行が出る", bt.logs.count("カビゴン は倒れた！") == 1, str(bt.logs[-3:]))
+
+    def prep_dko(a, b):
+        a.party[0].hp = 1; b.party[0].hp = 1
+    bt, _ = run(["ボーマンダ@いのちのたま:いじっぱり:すてみタックル:0/32/0/0/0/32:いかく"], [_DUM54], ["すてみタックル"], ["なまける"], 1, prep=prep_dko)
+    check("54 D3 相打ちでは両方に「倒れた！」が1回ずつ", bt.logs.count("ボーマンダ は倒れた！") == 1 and bt.logs.count("カビゴン は倒れた！") == 1, str(bt.logs[-4:]))
+    check("54 D5 いのちのたまの反動の行が出る（反動ダメージの量つき）",
+          any(l.startswith("ボーマンダ は いのちのたま で ") and l.endswith(" のダメージを受けた！") for l in bt.logs), str(bt.logs[-4:]))
+    bt, _ = run(["ボーマンダ@いのちのたま:いじっぱり:すてみタックル:0/32/0/0/0/32:いかく", _DUM54], [_DUM54], ["すてみタックル"], ["なまける"], 1, prep=prep_dko)
+    check("54 D3 最後の1体を倒した反動で自分も倒れたら（控えが残っていても）自分にも「倒れた！」",
+          bt.logs.count("ボーマンダ は倒れた！") == 1 and bt.logs.count("カビゴン は倒れた！") == 1, str(bt.logs[-4:]))
+
+    def prep_rv(a, b):
+        k = a.party[1]; k.hp = 0; k.is_alive = False; k._faint_logged = True
+    bt, _ = run([f"パーモット@{N}:ようき:さいきのいのり:0/32/0/0/0/32:てつのこぶし", _DUM54], [_DUM54], ["さいきのいのり"], ["なまける"], 1, prep=prep_rv)
+    k = bt.side1.party[1]
+    check("54 D3 さいきのいのり で復活した個体は次に倒れたときも「倒れた！」が出る（印を戻す）",
+          k.is_alive and not getattr(k, "_faint_logged", False), str((k.hp, k.is_alive)))
+
+    bt, _ = run([f"ガブリアス@{N}:いじっぱり:じしん:0/32/0/0/0/32:さめはだ"], [f"ミミッキュ@{N}:わんぱく:のろい:32/0/32/0/0/0:ばけのかわ"], ["じしん"], ["のろい"], 1)
+    i = next((k for k, l in enumerate(bt.logs) if "ばけのかわ が破れた" in l), -1)
+    check("54 D4 ばけのかわ が攻撃を受けたときも攻撃側の技の行が出る（ばけのかわの行の前）",
+          i > 0 and bt.logs[i - 1] == "ガブリアス の じしん → ミミッキュ に 0ダメ", str(bt.logs[max(0, i - 2):i + 1]))
+
+    bt, _ = run([f"アーマーガア@{N}:わんぱく:とんぼがえり:32/0/32/0/0/0:プレッシャー", _DUM54], [_DUM54], ["とんぼがえり"], ["なまける"], 1)
+    j = next((k for k, l in enumerate(bt.logs) if l == "カビゴン が出てきた！"), -1)
+    check("54 D6 とんぼがえりで引っ込むと「引っ込んだ」の行が「出てきた」の前に出る", j > 0 and bt.logs[j - 1] == "アーマーガア は引っ込んだ！", str(bt.logs[-4:]))
+    bt, _ = run([f"カイリュー@{N}:いじっぱり:ドラゴンテール:0/32/0/0/0/32:マルチスケイル"], [_DUM54, f"ブラッキー@{N}:ずぶとい:なまける:32/0/32/0/0/0:せいしんりょく"],
+                ["ドラゴンテール"], ["なまける"], 1)
+    j = next((k for k, l in enumerate(bt.logs) if "は強制交代させられた" in l), -1)
+    check("54 D6 強制交代で入った個体の「出てきた」の行が出る", j != -1 and j + 1 < len(bt.logs) and bt.logs[j + 1] == "ブラッキー が出てきた！", str(bt.logs[j:j + 2]))
+
+    def prep_ms(a, b):
+        b.party[0].hp = 5
+    hit = []
+    for sd in range(1, 9):
+        bt, _ = run([f"ガブリアス@{N}:いじっぱり:スケイルショット:0/32/0/0/0/32:さめはだ"], [_DUM54], ["スケイルショット"], ["なまける"], 1, seed=sd, prep=prep_ms)
+        hit += [l for l in bt.logs if l.startswith("ガブリアス の スケイルショット →")]
+    check("54 D7 連続技の回数は実際に当たった回数（1発目で倒れたら1回）", hit and all(l.endswith("(1回)") for l in hit), str(hit[:3]))
+
+    bt, _ = run([f"ガブリアス@{N}:いじっぱり:でんじは:0/32/0/0/0/32:さめはだ"], [f"ブラッキー@{N}:ずぶとい:なまける:32/0/32/0/0/0:シンクロ"], ["でんじは"], ["なまける"], 1, seed=5)
+    check("54 D9 シンクロ の行の状態名は日本語", any("シンクロ！" in l and "まひ になった" in l for l in bt.logs), str([l for l in bt.logs if "シンクロ" in l]))
+    bt, _ = run([f"ウツボット@{N}:ずぶとい:ちからをすいとる:32/0/32/0/0/0:ようりょくそ"], [f"カビゴン@{N}:いじっぱり:なまける:32/32/0/0/0/0:あついしぼう"], ["ちからをすいとる"], ["なまける"], 1)
+    check("54 D9 ちからをすいとる の回復量は実際に回復した値（満タンなら0）", "ウツボット は 0HP を吸収した！" in bt.logs, str([l for l in bt.logs if "吸収" in l]))
+
+    # D1 上書き・アンコールの差し替えを AI の読みに残す
+    import feature1 as _F1
+    from simulator.battle import BattleSide as _S, BattleField as _F, Action as _A
+
+    class _Stub:
+        last_decision = None
+
+        def __call__(self, my, opp, f):
+            self.last_decision = {"chosen": "つるぎのまい", "reason": "qselect", "cands": []}
+            return _A(type="move", move=my.active.moves[1], move_idx=1)
+
+        def _action_label(self, a, side):
+            return a.move.name_jp
+    st = _Stub()
+    my = _S([mk("ガブリアス@きれいなぬけがら:ようき:じしん|つるぎのまい:0/32/0/0/0/32:さめはだ")]); op = _S([mk(_DUM54)])
+    my.field_idx, op.field_idx = 0, 1
+    op.active.hp = 10
+    a = _F1._ko_wrap(st)(my, op, _F())
+    check("54 D1 確定KO安全弁で上書きした手番は読みに実行した手と理由（certain_ko）を残す",
+          a.move.name_jp == "じしん" and st.last_decision.get("exec") == "じしん" and st.last_decision.get("reason") == "certain_ko", str(st.last_decision))
+    bt, _ = run([f"ガブリアス@{N}:ようき:つるぎのまい|じしん:0/32/0/0/0/32:さめはだ"], [f"オーロンゲ@{N}:わんぱく:アンコール|なまける:32/0/32/0/0/0:いたずらごころ"],
+                ["つるぎのまい", "じしん"], ["なまける", "アンコール"], 2)
+    t = {"expl1": {"chosen": "じしん", "reason": "qselect", "cands": []}}
+    bt.logs = list(bt.logs)
+    _F1._tag_turn(t, bt, 0)
+    check("54 D1 アンコールで差し替えた手番は読みに実行した手と理由（encore）を残す",
+          t["expl1"].get("exec") == "つるぎのまい" and t["expl1"].get("reason") == "encore", str(t["expl1"]))
+
+    # D10 選んだ手が訪問の上位4に無くても表に出す
+    from simulator.search_ai import _explain_top
+    acts = [object() for _ in range(6)]
+    stats = [(acts[k], 100 - k * 10, 0.5) for k in range(6)]
+    top = _explain_top(stats, acts[5])
+    check("54 D10 選んだ手が上位4の外でも読みの表に出す", len(top) == 5 and top[-1][0] is acts[5] and _explain_top(stats, acts[0]) == stats[:4])
+
+    # D2 ログの各行に陣営（同種ミラーでも区別する）
+    from simulator.battle import Battle as _B, SideLog
+    import random as _r
+    _r.seed(1)
+    g = f"ガブリアス@{N}:いじっぱり:じしん:0/32/0/0/0/32:さめはだ"
+    b = _B(_S([mk(g)]), _S([mk(g), mk(_DUM54)]), _F())
+    b.logs = SideLog(b)
+
+    def ai(my, opp, f):
+        return _A(type="move", move=my.active.moves[0], move_idx=0)
+    b.start(ai, ai)
+    i0 = len(b.logs)
+    b._turn_loop(ai, ai, max_turns=1)
+    sides = _F1._log_sides(b, i0)
+    rows = list(zip(b.logs[i0:], sides))
+    hits = [s for l, s in rows if l.startswith("ガブリアス の じしん →")]
+    check("54 D2 同種ミラーでも技の行に使った側の陣営が付く（先攻=側1・後攻=側2）", sorted(hits) == [1, 2], str(rows))
+    check("54 D2 観測行（▷）と場の行は陣営なし（0）", all(s == 0 for l, s in rows if l.startswith("▷")), str(rows))
+    m = _F1._mirror_turn({"turn": 1, "logs": ["a", "b"], "side1": {}, "side2": {}, "log_sides": [1, 2]})
+    check("54 D2 視点反転で陣営も入れ替わる", m["log_sides"] == [2, 1])
+    import export_f1_static as _X
+    check("54 D2 公開用の軽量化で陣営が残る（全部0なら出さない）",
+          _X._slim_turn({"turn": 1, "logs": ["a"], "side1": {}, "side2": {}, "log_sides": [1]}).get("log_sides") == [1]
+          and "log_sides" not in _X._slim_turn({"turn": 1, "logs": ["a"], "side1": {}, "side2": {}, "log_sides": [0]}))
+
+
+for _nm54, _fn54 in (("E1", _t54_e1), ("E2", _t54_e2), ("E3", _t54_e3), ("E4", _t54_e4), ("E5", _t54_e5), ("E6", _t54_e6),
+                     ("E7", _t54_e7), ("A1", _t54_ai), ("D", _t54_display), ("Py/Rust", _t54_parity)):
+    try:
+        _fn54()
+    except Exception as _e54:
+        import traceback as _tb54
+        check(f"54 {_nm54} のテストが実行できる", False, f"{type(_e54).__name__}: {_e54} {_tb54.format_exc()[-400:]}")
+
+
+print("\n=== 56. シンクロ（相手の技・特性で状態異常にされた時だけ移す） ===")
+# ── 56. シンクロ: 相手の技・特性で どく/もうどく/まひ/やけど にされた時だけ相手に移す ──
+def _t56_sync():
+    from simulator.abilities import on_after_hit as _oah
+    from simulator.battle import _apply_secondary as _sec
+    _rr = random.random
+    def _lo():
+        return 0.0
+    try:
+        random.random = _lo
+        _s = make_poke(ability="シンクロ"); _s.status = "paralysis"; _a = make_poke()
+        _oah(_a, _s, dl.get_move("たいあたり"), [], None)
+        check("56 状態異常のシンクロ持ちが攻撃を受けても相手は状態異常にならない", _a.status is None, str(_a.status))
+        _s = make_poke(ability="シンクロ"); _a = make_poke()
+        _apply_status_move(_a, _s, dl.get_move("でんじは"))
+        check("56 でんじは でまひにされたら相手もまひ", _s.status == "paralysis" and _a.status == "paralysis", f"{_s.status} {_a.status}")
+        _s = make_poke(ability="シンクロ"); _a = make_poke()
+        _apply_status_move(_a, _s, dl.get_move("どくどく"))
+        check("56 どくどく でもうどくにされたら相手ももうどく", _s.status == "badpoison" and _a.status == "badpoison", f"{_s.status} {_a.status}")
+        _s = make_poke(ability="シンクロ"); _a = make_poke()
+        _apply_status_move(_a, _s, dl.get_move("さいみんじゅつ"))
+        check("56 ねむりは移らない", _s.status == "sleep" and _a.status is None, f"{_s.status} {_a.status}")
+        _s = make_poke(ability="シンクロ"); _a = make_poke(); _a.status = "burn"
+        _apply_status_move(_a, _s, dl.get_move("でんじは"))
+        check("56 相手が既に状態異常なら移らない（やけどのまま）", _s.status == "paralysis" and _a.status == "burn", f"{_s.status} {_a.status}")
+        _s = make_poke(ability="シンクロ"); _a = make_poke(type1="でんき")
+        _apply_status_move(_a, _s, dl.get_move("でんじは"))
+        check("56 相手がタイプで無効（でんき→まひ）なら移らない", _s.status == "paralysis" and _a.status is None, f"{_s.status} {_a.status}")
+        _s = make_poke(ability="シンクロ"); _a = make_poke()
+        _sec(_a, _s, dl.get_move("ほうでん"), 50, [], None)
+        check("56 ダメージ技の追加効果（ほうでん）でまひにされたら相手もまひ", _s.status == "paralysis" and _a.status == "paralysis", f"{_s.status} {_a.status}")
+        _s = make_poke(ability="シンクロ"); _a = make_poke()
+        _sec(_a, _s, dl.get_move("れいとうビーム"), 50, [], None)
+        check("56 こおりは移らない", _s.status == "freeze" and _a.status is None, f"{_s.status} {_a.status}")
+        _s = make_poke(ability="シンクロ"); _st = make_poke(ability="せいでんき")
+        _oah(_s, _st, dl.get_move("すてみタックル"), [], None)
+        check("56 相手の特性（せいでんき）でまひにされたら相手もまひ", _s.status == "paralysis" and _st.status == "paralysis", f"{_s.status} {_st.status}")
+        _s = make_poke(ability="シンクロ"); _pt = make_poke(ability="どくしゅ")
+        _oah(_pt, _s, dl.get_move("すてみタックル"), [], None)
+        check("56 攻撃側の特性（どくしゅ）でどくにされたら相手もどく", _s.status == "poison" and _pt.status == "poison", f"{_s.status} {_pt.status}")
+    finally:
+        random.random = _rr
+
+
+try:
+    _t56_sync()
+except Exception as _e56:
+    import traceback as _tb56
+    check("56 シンクロのテストが実行できる", False, f"{type(_e56).__name__}: {_e56} {_tb56.format_exc()[-400:]}")
+
+
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:
     print(f"\n--- 失敗リスト ---")

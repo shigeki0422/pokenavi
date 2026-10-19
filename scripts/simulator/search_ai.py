@@ -286,6 +286,21 @@ def _resample_sleep(poke, rng) -> None:
     poke.sleep_count = c0 - dec * acts
 
 
+
+def _explain_top(stats, chosen, k=4):
+    """読みの表に出す候補: 訪問の多い順に k 手。選んだ手がその外なら末尾に足す"""
+    top = sorted(stats, key=lambda x: -x[1])[:k]
+    if all(a is not chosen for a, _, _ in top):
+        top += [x for x in stats if x[0] is chosen][:1]
+    return top
+
+
+def _terminal_v(winner, my_is_s1) -> float:
+    """終局の価値。winner=0 で終局＝最後の1体どうしが同時に倒れた引き分け"""
+    if winner == 0:
+        return 0.5
+    return 1.0 if ((winner == 1) == my_is_s1) else 0.0
+
 class SearchAI:
     def __init__(self, loader: DataLoader, rollouts: int = 16, depth: int = 50,
                  season: Optional[str] = None, rollout_ai=None, seed: int = 0, value_fn=None,
@@ -662,7 +677,7 @@ class SearchAI:
             winner = b.resume(a1, a2, max_turns=1)   # 1ターンだけ解決
         finally:
             _dmg._ROLL_OVERRIDE = _prev
-        if winner != 0:
+        if winner != 0 or not b.side1.has_alive():
             return self._score(b, winner, my_is_s1)
         if depth <= 0:
             return self._leaf_value(b, my_is_s1)
@@ -721,7 +736,7 @@ class SearchAI:
         if self.explain:
             tot = sum(n for _, n, _ in stats) or 1
             rootV = sum(meW.get(self._action_index(a), 0.0) for a, _, _ in stats) / tot
-            top = sorted(stats, key=lambda x: -x[1])[:4]
+            top = _explain_top(stats, chosen)
             self.last_decision = {
                 "value": round(rootV, 3),
                 "chosen": self._action_label(chosen, my_side),
@@ -767,7 +782,7 @@ class SearchAI:
             for oa in opp_cands:
                 c1, c2, cf = self._clone_state(b1, b2, bf)
                 winner = self._advance_turn(c1, c2, cf, a, oa, my_is_s1)
-                v = (1.0 if ((winner == 1) == my_is_s1) else 0.0) if winner != 0 \
+                v = _terminal_v(winner, my_is_s1) if (winner != 0 or not c1.has_alive()) \
                     else self._mcts_leaf_value(c1, c2, cf, my_is_s1)
                 v_type = min(v_type, v)
             worst = min(worst, v_type)
@@ -1048,8 +1063,8 @@ class SearchAI:
             path.append((node, idx_me, idx_op, sg_me, sg_op))
             winner = self._advance_turn(cs1, cs2, cfield, a_me, a_op, my_is_s1)
             depth += 1
-            if winner != 0:
-                v = 1.0 if ((winner == 1) == my_is_s1) else 0.0
+            if winner != 0 or not cs1.has_alive():
+                v = _terminal_v(winner, my_is_s1)
                 if depth == 1: first_v = v
                 break
             key = (idx_me, idx_op)
@@ -1320,6 +1335,8 @@ class SearchAI:
         return self._score(b, winner, my_is_s1)
 
     def _score(self, b, winner, my_is_s1) -> float:
+        if winner == 0 and not b.side1.has_alive():
+            return 0.5
         if winner == 1:
             return 1.0 if my_is_s1 else 0.0
         if winner == 2:
