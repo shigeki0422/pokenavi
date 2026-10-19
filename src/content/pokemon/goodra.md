@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのヌメルゴン基礎データ
 pokemonName: 'ヌメルゴン'
 dexNumber: 706
 usageRank: 186
-updatedDate: '2026-10-18'
+updatedDate: '2026-10-19'
 pubDate: '2026-10-11'
 draft: false
 

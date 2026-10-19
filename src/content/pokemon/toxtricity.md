@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのストリンダー(ハイ)基�
 pokemonName: 'ストリンダー(ハイ)'
 dexNumber: 849
 usageRank: 97
-updatedDate: '2026-10-18'
+updatedDate: '2026-10-19'
 pubDate: '2026-10-11'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのフラージェス基礎デー
 pokemonName: 'フラージェス'
 dexNumber: 671
 usageRank: 191
-updatedDate: '2026-10-18'
+updatedDate: '2026-10-19'
 pubDate: '2026-10-11'
 draft: false
 

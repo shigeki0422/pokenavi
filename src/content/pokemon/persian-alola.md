@@ -5,7 +5,7 @@ pokemonName: 'アローラペルシアン'
 dexNumber: 53
 usageRank: 138
 imageForm: '01'
-updatedDate: '2026-10-18'
+updatedDate: '2026-10-19'
 pubDate: '2026-10-11'
 draft: false
 

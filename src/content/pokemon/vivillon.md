@@ -5,7 +5,7 @@ pokemonName: 'ビビヨン'
 dexNumber: 666
 usageRank: 108
 imageForm: '18'
-updatedDate: '2026-10-18'
+updatedDate: '2026-10-19'
 pubDate: '2026-10-11'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのペリッパー基礎データ
 pokemonName: 'ペリッパー'
 dexNumber: 279
 usageRank: 49
-updatedDate: '2026-10-18'
+updatedDate: '2026-10-19'
 pubDate: '2026-10-11'
 draft: false
 

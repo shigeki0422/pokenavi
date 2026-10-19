@@ -1,10 +1,10 @@
 ---
 title: 'オトスパス | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのオトスパス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率122位。'
+description: 'ポケモンチャンピオンズのオトスパス基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率125位。'
 pokemonName: 'オトスパス'
 dexNumber: 853
-usageRank: 122
-updatedDate: '2026-10-18'
+usageRank: 125
+updatedDate: '2026-10-19'
 pubDate: '2026-10-11'
 draft: false
 
@@ -30,7 +30,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.853</strong>　／　使用率 <strong style="color:#dc2626">122位</strong>
+      全国図鑑 <strong>No.853</strong>　／　使用率 <strong style="color:#dc2626">125位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-10-11</div>
   </div>
