@@ -15,6 +15,7 @@ SEASON = "M-7"
 # 取り込む順位の上限。通常は200。クロールが途中で止まった等で
 # 上位のみ扱う場合に下げる（M-6初日は端末スリープで101位以降が取れず100件）
 MAX_RANK = 200
+HEADER_MIN = 0.30       # これ未満はランキングの詳細でない画面とみなす（正常の下限 0.47 と異常の上限 0.15 の間）
 RULE   = "single"
 MATCH_THRESHOLD = 0.80  # 通常フォーマット用
 MATCH_THRESHOLD_GRAY = 0.20  # 横長フォーマット(6/28〜)用
@@ -384,9 +385,47 @@ def check_forms(conn, matched, target_dir):
     return warn
 
 
+def check_headers(target_dir):
+    """撮れている画面がランキングの詳細かどうかを、ヘッダー帯（上部150px）で全件見る。
+
+    クロール中にアプリがランキング一覧から離れると、お知らせや大会告知の画面を撮り続ける。
+    アイコンのマッチングは「ヘッダーのどこか」を切り出して照合するだけなので、別画面でも
+    それらしいスコアが出てしまい素通りする（2026-10-14 に 147〜156位の10件が大会告知と
+    スカウト画面のまま投入されかけた）。投入の前にここで止める。"""
+    dirs = sorted(d for d in target_dir.iterdir() if d.is_dir() and d.name.isdigit())
+    imgs = {}
+    for d in dirs:
+        f = d / "move_00.png"
+        if not f.exists():
+            f = d / "_c_move_00.png"
+        if f.exists():
+            im = cv2.imread(str(f))
+            if im is not None and im.shape[0] >= 150:
+                imgs[int(d.name)] = im[:150]
+    if len(imgs) < 3:
+        return []
+    # 参照は自分自身の中から等間隔に5枚選ぶ（固定の見本を置くとアプリの更新で古くなる）。
+    # 正常なヘッダーどうしの一致は実測 0.47〜1.00、別画面は 0.15 以下（2026-10-14 の大会告知）
+    # から -0.08（タイトル画面）。間を取って HEADER_MIN で切る
+    ranks = sorted(imgs)
+    refs = [imgs[ranks[len(ranks) * i // 6]] for i in (1, 2, 3, 4, 5)]
+    bad = []
+    for r in ranks:
+        sc = max(float(cv2.matchTemplate(imgs[r], ref, cv2.TM_CCOEFF_NORMED).max()) for ref in refs)
+        if sc < HEADER_MIN:
+            bad.append((r, round(sc, 3)))
+    return bad
+
+
 def main():
     overrides = TARGETS.get(CRAWLED_DATE, {})
     target_dir = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{CRAWLED_DATE}/detail")
+
+    bad = check_headers(target_dir)
+    if bad:
+        print(f"🚫 ランキングの詳細でない画面が {len(bad)}件: {bad[:12]}")
+        print("   アプリが一覧から離れたまま撮り続けている。画像を確認し、撮り直してから投入する")
+        sys.exit(1)
 
     conn = sqlite3.connect(DB)
     pokemon_master = set(r[0] for r in conn.execute("SELECT pokemon_name FROM pokemon_base_stats"))
