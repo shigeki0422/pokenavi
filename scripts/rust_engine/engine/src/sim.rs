@@ -1045,6 +1045,7 @@ pub fn learned_select_states(
     state: &[u32],
     osels_in: Option<&[Vec<usize>]>,
     megaform: bool,
+    field: bool,
 ) -> (Vec<Vec<usize>>, Vec<Vec<usize>>, Vec<f64>, usize, Vec<u32>) {
     let mut a6: Vec<Poke> = specs_a.iter().map(|s| crate::poke::build_poke(pack, s, season)).collect();
     let mut b6: Vec<Poke> = specs_b.iter().map(|s| crate::poke::build_poke(pack, s, season)).collect();
@@ -1098,10 +1099,13 @@ pub fn learned_select_states(
     let mut dim = 0usize;
     for c in &cands {
         for os in &osels {
-            let view = |p: &Poke| if megaform { crate::selector::sel_view(packr, p) } else { p.clone() };
+            let view = |p: &Poke| if megaform || field { crate::selector::sel_view(packr, p) } else { p.clone() };
             let pa: Vec<Poke> = c.iter().map(|&i| view(&a6[i])).collect();
             let pb: Vec<Poke> = os.iter().map(|&i| view(&b6[i])).collect();
-            let ex = if megaform { crate::selector::sel_extra(packr, &pa, &pb) } else { Vec::new() };
+            let mut ex = if megaform || field { crate::selector::sel_extra(packr, &pa, &pb) } else { Vec::new() };
+            if field {
+                ex.extend(crate::selector::sel_field_block(packr, ft, &pa, &pb));
+            }
             let mut sides = [
                 Side { party: pa, active_idx: 0, field_idx: 0, ..Default::default() },
                 Side { party: pb, active_idx: 0, field_idx: 1, ..Default::default() },

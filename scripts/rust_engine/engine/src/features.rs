@@ -858,3 +858,36 @@ pub fn plain_speed(pack: &Pack, ft: &FeatTables, p: &Poke) -> f64 {
     }
     real_speed_calc(pack, ft, p, false, &Field::default())
 }
+
+/// 学習選出の入力 v3（selector.rs の場の相乗）: 場 field での最大与ダメ割合（features.py sel_frac。乱数を引く技は除く・複製で計算）
+pub fn sel_frac(pack: &Pack, ft: &FeatTables, att: &Poke, deff: &Poke, field: &Field) -> f64 {
+    if !att.is_alive || !deff.is_alive {
+        return 0.0;
+    }
+    let (mut a, mut d, mut f) = (att.clone(), deff.clone(), field.clone());
+    let mut best = 0.0f64;
+    let moves: Vec<DMove> = a.moves.clone();
+    let mut cb = |_k: u8| 0.0;
+    for mv in &moves {
+        if mv.power.unwrap_or(0) != 0 && mv.category != Cat::Status && Some(mv.name) != ft.kmg {
+            let v = calc_damage(pack, &mut a, &mut d, mv, &mut f, false, Some(0.925), None, &mut cb) as f64 / (d.max_hp.max(1)) as f64;
+            if v > best {
+                best = v;
+            }
+        }
+    }
+    best.min(1.5)
+}
+
+/// features.py sel_speed: 場 field での実効速度（エレキフィールドのサーフテールを含む）。倒れていれば -1
+pub fn sel_speed(pack: &Pack, ft: &FeatTables, p: &Poke, field: &Field) -> f64 {
+    if !p.is_alive {
+        return -1.0;
+    }
+    let v = real_speed_calc(pack, ft, p, false, field);
+    if p.ability == pack.sy.l.サーフテール && field.electric_terrain {
+        v * 2.0
+    } else {
+        v
+    }
+}

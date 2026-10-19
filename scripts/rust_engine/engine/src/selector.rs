@@ -24,6 +24,8 @@ pub struct Selector {
     pub relu: bool,
     /// 入力 v2（モデルの "feat" = "megaform_ohko1"）: メガ石持ちはメガ後の形で符号化し、末尾に一撃必殺の期待値 18 次元
     pub v2: bool,
+    /// 入力 v3（"feat" = "megaform_ohko1_field1"）: v2 に加えて末尾に場の相乗 62 次元
+    pub field: bool,
     /// 高速版の個体ブロックの射影のキャッシュ: (陣営, ブロックのビット列) → 位置 0..3 の W1 射影を並べた 3h
     proj: Mutex<FnvMap<(u8, Vec<u64>), Vec<f64>>>,
 }
@@ -49,9 +51,10 @@ impl Selector {
             Some("relu") => true,
             Some(_) => return None,
         };
-        let v2 = match v["feat"].as_str() {
-            None => false,
-            Some(SEL_FEAT_V2) => true,
+        let (v2, field) = match v["feat"].as_str() {
+            None => (false, false),
+            Some(SEL_FEAT_V2) => (true, false),
+            Some(SEL_FEAT_V3) => (true, true),
             Some(_) => return None,
         };
         let mut w1t = vec![0.0f64; h * d];
@@ -60,7 +63,7 @@ impl Selector {
                 w1t[k * h + j] = flat[j * d + k];
             }
         }
-        Some(Selector { h, d, w1: flat, w1t, b1: f("b1")?, w2: f("W2")?, b2: v["b2"].as_f64()?, relu, v2, proj: Mutex::new(FnvMap::default()) })
+        Some(Selector { h, d, w1: flat, w1t, b1: f("b1")?, w2: f("W2")?, b2: v["b2"].as_f64()?, relu, v2, field, proj: Mutex::new(FnvMap::default()) })
     }
 
     /// 個体 p のブロック（陣営 side の位置 0..3、先頭の添字 base）の W1 射影を位置ごとに並べた 3h。添字順の逐次和
@@ -198,6 +201,208 @@ pub fn sel_extra(pack: &Pack, a: &[Poke], b: &[Poke]) -> Vec<f64> {
         }
     }
     out
+}
+
+/// 入力 v3（"feat" = "megaform_ohko1_field1"、v2 を含む）: 末尾にさらに場の相乗 62 次元（features.py sel_field_block）
+pub const SEL_FEAT_V3: &str = "megaform_ohko1_field1";
+pub const SEL_EXTRA_FIELD: usize = 62;
+/// 張る役の強さ (特性・先発, 特性・控え, 技・先発, 技・控え)
+const SEL_S: [f64; 4] = [1.0, 0.7, 0.7, 0.49];
+
+/// 場のキー: (フィールド 0なし/1エレキ/2グラス/3サイコ/4ミスト, 天候)
+pub type FKey = (u8, Option<crate::interner::Sym>);
+
+fn sel_role(pack: &Pack, p: &Poke, pos: usize, terrain: bool) -> (u32, f64) {
+    let l = &pack.sy.l;
+    let we = &pack.sy.we;
+    let (sa, sm) = if pos == 0 { (SEL_S[0], SEL_S[2]) } else { (SEL_S[1], SEL_S[3]) };
+    let wcode = |w: crate::interner::Sym| w as u32 + 1;
+    if terrain {
+        let ab = if p.ability == l.エレキメイカー { 1 } else if p.ability == l.グラスメイカー { 2 } else if p.ability == l.サイコメイカー { 3 } else { 0 };
+        if ab != 0 {
+            return (ab, sa);
+        }
+        for m in &p.moves {
+            let k = if m.name == l.エレキフィールド { 1 } else if m.name == l.グラスフィールド { 2 } else if m.name == l.サイコフィールド { 3 } else if m.name == l.ミストフィールド { 4 } else { 0 };
+            if k != 0 {
+                return (k, sm);
+            }
+        }
+        return (0, 0.0);
+    }
+    let ab = if p.ability == l.ひでり { Some(we.sunny) } else if p.ability == l.あめふらし { Some(we.rain) } else if p.ability == l.すなおこし { Some(we.sandstorm) } else if p.ability == l.ゆきふらし { Some(we.hail) } else { None };
+    if let Some(w) = ab {
+        return (wcode(w), sa);
+    }
+    if p.ability == l.すなはき {
+        return (wcode(we.sandstorm), sm);
+    }
+    for m in &p.moves {
+        let w = if m.name == l.にほんばれ { Some(we.sunny) } else if m.name == l.あまごい { Some(we.rain) } else if m.name == l.すなあらし { Some(we.sandstorm) } else if m.name == l.ゆきげしき || m.name == l.あられ { Some(we.hail) } else { None };
+        if let Some(w) = w {
+            return (wcode(w), sm);
+        }
+    }
+    (0, 0.0)
+}
+
+/// features.py sel_field_of: 3体（先頭＝先発）が張る場。(キー, s, [フィールドの s, 天候の s, 先発が張る, 控えが張る])。張らなければキーは None
+pub fn sel_field_of(pack: &Pack, trio: &[&Poke]) -> (Option<FKey>, f64, [f64; 4]) {
+    let (mut t, mut ts, mut tp) = (0u32, 0.0f64, -1i64);
+    let (mut w, mut ws, mut wp) = (0u32, 0.0f64, -1i64);
+    for (i, p) in trio.iter().enumerate().take(3) {
+        let (k, s) = sel_role(pack, p, i, true);
+        if k != 0 && s > ts {
+            t = k;
+            ts = s;
+            tp = i as i64;
+        }
+        let (k, s) = sel_role(pack, p, i, false);
+        if k != 0 && s > ws {
+            w = k;
+            ws = s;
+            wp = i as i64;
+        }
+    }
+    let flags = [ts, ws, if tp == 0 || wp == 0 { 1.0 } else { 0.0 }, if tp > 0 || wp > 0 { 1.0 } else { 0.0 }];
+    if t == 0 && w == 0 {
+        return (None, 0.0, flags);
+    }
+    let wk = if w == 0 { None } else { Some((w - 1) as crate::interner::Sym) };
+    (Some((t as u8, wk)), ts.max(ws), flags)
+}
+
+/// features.py sel_field_obj
+pub fn sel_field_obj(key: Option<FKey>) -> Field {
+    let mut f = Field::default();
+    if let Some((t, w)) = key {
+        match t {
+            1 => {
+                f.electric_terrain = true;
+                f.electric_terrain_count = 5;
+            }
+            2 => {
+                f.grassy_terrain = true;
+                f.grassy_terrain_count = 5;
+            }
+            3 => {
+                f.psychic_terrain = true;
+                f.psychic_terrain_count = 5;
+            }
+            4 => {
+                f.misty_terrain = true;
+                f.misty_terrain_count = 5;
+            }
+            _ => {}
+        }
+        if w.is_some() {
+            f.weather = w;
+            f.weather_count = 5;
+        }
+    }
+    f
+}
+
+/// features.py sel_field_view: 合うシードを発動した複製
+pub fn sel_field_view(pack: &Pack, p: &Poke, field: &Field) -> Poke {
+    let mut q = p.clone();
+    crate::items::try_terrain_seed(pack, &mut q, field);
+    q
+}
+
+fn faster(a: f64, b: f64) -> f64 {
+    if a < 0.0 || b < 0.0 { 0.0 } else if a >= b { 1.0 } else { 0.0 }
+}
+
+/// 場ごとの部品（与ダメ割合 自分→相手・相手→自分・速度）。添字は渡した並び
+struct FieldTab {
+    mo: Vec<f64>,
+    om: Vec<f64>,
+    sm: Vec<f64>,
+    so: Vec<f64>,
+}
+
+impl FieldTab {
+    fn build(pack: &Pack, ft: &FeatTables, me: &[Poke], opp: &[Poke], key: Option<FKey>) -> FieldTab {
+        let f = sel_field_obj(key);
+        let vm: Vec<Poke> = me.iter().map(|p| if key.is_some() { sel_field_view(pack, p, &f) } else { p.clone() }).collect();
+        let vo: Vec<Poke> = opp.iter().map(|p| if key.is_some() { sel_field_view(pack, p, &f) } else { p.clone() }).collect();
+        let (nm, no) = (me.len(), opp.len());
+        let mut mo = vec![0.0; nm * no];
+        let mut om = vec![0.0; nm * no];
+        for p in 0..nm {
+            for q in 0..no {
+                mo[p * no + q] = crate::features::sel_frac(pack, ft, &vm[p], &vo[q], &f);
+                om[q * nm + p] = crate::features::sel_frac(pack, ft, &vo[q], &vm[p], &f);
+            }
+        }
+        FieldTab {
+            mo,
+            om,
+            sm: vm.iter().map(|p| crate::features::sel_speed(pack, ft, p, &f)).collect(),
+            so: vo.iter().map(|p| crate::features::sel_speed(pack, ft, p, &f)).collect(),
+        }
+    }
+}
+
+/// 自分・相手の個体（添字）に対する場の部品を、場ごとに1回だけ作る
+struct FieldTabs<'a> {
+    pack: &'a Pack,
+    ft: &'a FeatTables,
+    me: &'a [Poke],
+    opp: &'a [Poke],
+    tabs: Vec<(Option<FKey>, FieldTab)>,
+}
+
+impl<'a> FieldTabs<'a> {
+    fn new(pack: &'a Pack, ft: &'a FeatTables, me: &'a [Poke], opp: &'a [Poke]) -> Self {
+        FieldTabs { pack, ft, me, opp, tabs: Vec::new() }
+    }
+    fn get(&mut self, key: Option<FKey>) -> usize {
+        if let Some(i) = self.tabs.iter().position(|(k, _)| *k == key) {
+            return i;
+        }
+        let t = FieldTab::build(self.pack, self.ft, self.me, self.opp, key);
+        self.tabs.push((key, t));
+        self.tabs.len() - 1
+    }
+    /// sel_field_block（自分の並び c・相手の並び os。いずれも 3体）
+    fn block(&mut self, c: &[usize], os: &[usize]) -> Vec<f64> {
+        let mut out = vec![0.0f64; SEL_EXTRA_FIELD];
+        let no = self.opp.len();
+        let nm = self.me.len();
+        let t0 = self.get(None);
+        for side in 0..2 {
+            let (key, s, flags) = {
+                let trio: Vec<&Poke> = if side == 0 { c.iter().map(|&i| &self.me[i]).collect() } else { os.iter().map(|&i| &self.opp[i]).collect() };
+                sel_field_of(self.pack, &trio)
+            };
+            out[54 + side * 4..58 + side * 4].copy_from_slice(&flags);
+            if key.is_none() {
+                continue;
+            }
+            let tk = self.get(key);
+            let (a, b) = (&self.tabs[tk].1, &self.tabs[t0].1);
+            let o = side * 27;
+            for i in 0..c.len().min(3) {
+                for j in 0..os.len().min(3) {
+                    let (p, q) = (c[i], os[j]);
+                    out[o + i * 3 + j] = s * (a.mo[p * no + q] - b.mo[p * no + q]);
+                    out[o + 9 + j * 3 + i] = s * (a.om[q * nm + p] - b.om[q * nm + p]);
+                    out[o + 18 + i * 3 + j] = s * (faster(a.sm[p], a.so[q]) - faster(b.sm[p], b.so[q]));
+                }
+            }
+        }
+        out
+    }
+}
+
+/// features.py sel_field_block（3体ずつ・メガ後の形を渡す）
+pub fn sel_field_block(pack: &Pack, ft: &FeatTables, a: &[Poke], b: &[Poke]) -> Vec<f64> {
+    let mut t = FieldTabs::new(pack, ft, a, b);
+    let c: Vec<usize> = (0..a.len()).collect();
+    let os: Vec<usize> = (0..b.len()).collect();
+    t.block(&c, &os)
 }
 
 /// CpyRandom を BRng として渡す（ダメージ計算の乱数）
@@ -747,7 +952,10 @@ fn select_ref(
             let view = |p: &Poke| if sel.v2 { sel_view(pack, p) } else { p.clone() };
             let pa: Vec<Poke> = c.iter().map(|&i| view(&me[i])).collect();
             let pb: Vec<Poke> = os.iter().map(|&i| view(&opp[i])).collect();
-            let ex = if sel.v2 { sel_extra(pack, &pa, &pb) } else { Vec::new() };
+            let mut ex = if sel.v2 { sel_extra(pack, &pa, &pb) } else { Vec::new() };
+            if sel.field {
+                ex.extend(sel_field_block(pack, ft, &pa, &pb));
+            }
             let mut sides = [
                 Side { party: pa, active_idx: 0, field_idx: 0, ..Default::default() },
                 Side { party: pb, active_idx: 0, field_idx: 1, ..Default::default() },
@@ -1053,9 +1261,10 @@ fn select_fast(
     let per = 3 * pbl + 7 + 2;
     let (m1, m2, sp) = (2 * per, 2 * per + 9, 2 * per + 18);
     let dbase = crate::features::feature_dim(pack);
-    if d != dbase + if sel.v2 { SEL_EXTRA_V2 } else { 0 } {
+    if d != dbase + if sel.v2 { SEL_EXTRA_V2 } else { 0 } + if sel.field { SEL_EXTRA_FIELD } else { 0 } {
         return None;
     }
+    let mut ftabs = FieldTabs::new(pack, ft, me, opp);
     if pc.tabs.is_none() {
         let (xs, ys) = if me_is_x { (me, opp) } else { (opp, me) };
         pc.tabs = Some(Tabs::build(pack, xs, ys)?);
@@ -1209,6 +1418,12 @@ fn select_fast(
                         mc[j] = true;
                     }
                 }
+            }
+        }
+        if sel.field {
+            let fb = ftabs.block(c, os);
+            for (k, &v) in fb.iter().enumerate() {
+                axpy(&mut s, v, dbase + SEL_EXTRA_V2 + k);
             }
         }
         let mut z = 0.0f64;
@@ -1501,6 +1716,93 @@ mod tests {
                 assert!((x - y).abs() < 1e-12, "{x} {y}");
             }
         }
+    }
+
+    /// 入力 v3（"feat": "megaform_ohko1_field1"、sel_field_1018）: 末尾に場の相乗62次元。
+    /// 張る役（サイコメイカー）が先発なら強さ1.0・控えなら0.7、シード（サイコシード）の発動＋かるわざ、相手のメガリザードンY（ひでり）。
+    /// 高速版が元の実装と同じ選出・値。test_all.py 55 と対
+    #[test]
+    fn field1_fast_equals_ref() {
+        let p = concat!(env!("CARGO_MANIFEST_DIR"), "/../../simulator/selector_m6e.json");
+        let mut v: serde_json::Value = match std::fs::read_to_string(p).ok().and_then(|t| serde_json::from_str(&t).ok()) {
+            Some(v) => v,
+            None => return,
+        };
+        let dir = std::env::temp_dir();
+        let write = |name: &str, v: &serde_json::Value| -> String {
+            let f = dir.join(format!("{}_{}.json", name, std::process::id()));
+            std::fs::write(&f, serde_json::to_string(v).unwrap()).unwrap();
+            f.to_string_lossy().to_string()
+        };
+        let mut seed = 1018u64;
+        let mut rnd = || {
+            seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+            (seed >> 11) as f64 / (1u64 << 53) as f64 - 0.5
+        };
+        for row in v["W1"].as_array_mut().unwrap() {
+            let r = row.as_array_mut().unwrap();
+            for _ in 0..SEL_EXTRA_FIELD {
+                r.push(serde_json::Value::from(rnd() * 4.0));
+            }
+        }
+        v["feat"] = serde_json::Value::from(SEL_FEAT_V3);
+        let sel = Selector::from_json(&write("sel_v3", &v)).unwrap();
+        assert!(sel.v2 && sel.field);
+        let mut pack = Pack::load(concat!(env!("CARGO_MANIFEST_DIR"), "/../../_rust_engine/datapack.json"));
+        let fa = [
+            "イエッサン(オス)@きあいのタスキ:ひかえめ:アンコール|マジカルシャイン|マジカルフレイム|ワイドフォース:2/0/0/32/0/32:サイコメイカー",
+            "カメックス@カメックスナイト:ひかえめ:あくのはどう|からをやぶる|だいちのはどう|はどうだん:10/0/0/26/0/30:げきりゅう",
+            "グソクムシャ@グソクムシャナイト:いじっぱり:とんぼがえり|アイアンヘッド|アクアジェット|ドリルライナー:2/32/0/0/0/32:ききかいひ",
+            "オオニューラ@サイコシード:いじっぱり:つるぎのまい|ほのおのパンチ|インファイト|フェイタルクロー:32/32/0/0/0/2:かるわざ",
+            "サーフゴー@こだわりスカーフ:ひかえめ:10まんボルト|ゴールドラッシュ|シャドーボール|トリック:2/0/0/32/0/32:おうごんのからだ",
+            "ヒスイダイケンキ@くろいメガネ:いじっぱり:せいなるつるぎ|ひけん・ちえなみ|ふいうち|シェルブレード:2/32/0/0/0/32:きれあじ",
+        ];
+        let fb = [FB[0], FB[3], FB[5], FB[1], FB[2], FB[4]];
+        let a6: Vec<Poke> = fa.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
+        let b6: Vec<Poke> = fb.iter().map(|s| crate::poke::build_poke(&mut pack, s, "M-6")).collect();
+        let pack = pack;
+        let ft = FeatTables::build(&pack);
+        let va: Vec<Poke> = a6.iter().map(|p| sel_view(&pack, p)).collect();
+        let vb: Vec<Poke> = b6.iter().map(|p| sel_view(&pack, p)).collect();
+        let trio = |v: &Vec<Poke>, ix: [usize; 3]| ix.iter().map(|&i| v[i].clone()).collect::<Vec<Poke>>();
+        let ob = trio(&vb, [0, 1, 2]);
+        let lead = sel_field_block(&pack, &ft, &trio(&va, [0, 1, 3]), &ob);
+        let back = sel_field_block(&pack, &ft, &trio(&va, [1, 0, 3]), &ob);
+        let none = sel_field_block(&pack, &ft, &trio(&va, [1, 2, 3]), &ob);
+        assert_eq!(&lead[54..58], &[1.0, 0.0, 1.0, 0.0]);
+        assert_eq!(&back[54..58], &[0.7, 0.0, 0.0, 1.0]);
+        assert_eq!(&lead[58..62], &[0.0, 0.7, 0.0, 1.0], "相手の控えのメガリザードンY（ひでり）");
+        assert!(lead[3] > 0.3, "サイコフィールドの だいちのはどう（カメックス→ガブリアス）{}", lead[3]);
+        assert!((back[0] - 0.7 * lead[3]).abs() < 1e-12);
+        assert!(lead[24] == 1.0 && lead[25] == 1.0, "サイコシード＋かるわざで オオニューラ が抜く {:?}", &lead[18..27]);
+        assert!(none[..27].iter().all(|&x| x == 0.0) && none[54..58] == [0.0; 4]);
+        let f = sel_field_obj(Some((3, None)));
+        let q = sel_field_view(&pack, &va[3], &f);
+        assert!(q.stage_sp_defense == 1 && q.item.is_none() && q.stage_speed == 2 && va[3].item.is_some());
+        let mut pv = Vec::new();
+        for (me, op) in [(&a6, &b6), (&b6, &a6)] {
+            let cands = candidates(me, 3);
+            let oc = candidates(op, 3);
+            let osx: Vec<Vec<usize>> = (0..8).map(|i| oc[(i * 7) % oc.len()].clone()).collect();
+            let ag = Agg::W(vec![0.125; 8]);
+            let mut pc = PairCache::default();
+            let (fb, fv) = select_fast(&pack, &ft, &sel, me, op, &osx, &cands, &mut pc, true, &ag).unwrap();
+            let (mut m3, mut o3) = (me.clone(), op.clone());
+            let (rb, rv) = select_ref(&pack, &ft, &sel, &mut m3, &mut o3, &osx, &cands, &mut CpyRandom::new(7), &ag);
+            assert_eq!(fb, rb);
+            for (x, y) in fv.iter().zip(rv.iter()) {
+                assert!((x - y).abs() < 1e-12, "{x} {y}");
+            }
+            pv.push(fv);
+        }
+        v["W1"].as_array_mut().unwrap().iter_mut().for_each(|r| {
+            let r = r.as_array_mut().unwrap();
+            let n = r.len();
+            r.truncate(n - SEL_EXTRA_FIELD);
+        });
+        v["feat"] = serde_json::Value::from(SEL_FEAT_V2);
+        let s2 = Selector::from_json(&write("sel_v2b", &v)).unwrap();
+        assert!(s2.v2 && !s2.field);
     }
 
     #[test]

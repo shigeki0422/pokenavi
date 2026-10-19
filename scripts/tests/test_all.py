@@ -5767,7 +5767,7 @@ check("SELECT_MODE=matchup で3体を返し、メガ石持ちは1体", len(_s1) 
 check("相手の真の技・持ち物を読まない（変えても選出が同じ）", _s1 == _s2, f"{_s1} / {_s2}")
 
 
-print("\n=== 26k. 学習選出の既定（simulator/selector_m6e.json、既定ON・相手の仮定 learnedK8） ===")
+print("\n=== 26k. 学習選出の既定（simulator/selector_m6f.json、既定ON・相手の仮定 learnedK8） ===")
 # M-6 の選出モデル（1037次元＝現行の既定特徴量）を既定で使う。旧 selector_m2/m3 は905次元で現行では動かない（削除/未使用）。
 import json as _js26k, tempfile as _tf26k
 import simulator.learned_selection as _LS26k
@@ -5777,15 +5777,15 @@ _sv26k = (_LS26k._PATH, _LS26k._LOADED, _LS26k._MODEL, os.environ.get("LEARNED_S
 os.environ.pop("LEARNED_SELECTION", None)
 _sv26k_env = os.environ.pop("SEL_OPP_ASSUME", None), os.environ.pop("SELECTOR_PATH", None)
 import importlib as _il26k
-check("既定のモデルパスは selector_m6e.json", os.path.basename(_il26k.reload(_LS26k)._PATH) == "selector_m6e.json", _LS26k._PATH)
+check("既定のモデルパスは selector_m6f.json", os.path.basename(_il26k.reload(_LS26k)._PATH) == "selector_m6f.json", _LS26k._PATH)
 check("SEL_OPP_ASSUME 未指定の既定は learnedK（K=8）・heur でヒューリスティック", _LS26k._opp_mode() == "learnedK" and
       (os.environ.__setitem__("SEL_OPP_ASSUME", "heur") or _LS26k._opp_mode()) is None)
 os.environ.pop("SEL_OPP_ASSUME", None)
 for _k26k, _v26k in zip(("SEL_OPP_ASSUME", "SELECTOR_PATH"), _sv26k_env):
     if _v26k is not None: os.environ[_k26k] = _v26k
-_LS26k._PATH = os.path.join(os.path.dirname(_LS26k.__file__), "selector_m6e.json"); _LS26k._LOADED = False
+_LS26k._PATH = os.path.join(os.path.dirname(_LS26k.__file__), "selector_m6f.json"); _LS26k._LOADED = False
 _m26k = _LS26k._load()
-check("既定で selector_m6e.json を読み、入力が megaform_ohko1（現行の特徴量＋一撃必殺18次元）", _m26k is not None and _m26k["v2"] and _m26k["W1"].shape[1] == _fd26k() + 18,
+check("既定で selector_m6f.json を読み、入力が megaform_ohko1_field1（現行の特徴量＋一撃必殺18次元＋場の相乗62次元）", _m26k is not None and _m26k["v2"] and _m26k.get("field") and _m26k["W1"].shape[1] == _fd26k() + 18 + 62,
       f"{None if _m26k is None else _m26k['W1'].shape} vs {_fd26k()}")
 _A26k = [_mk26c(x) for x in _P1s]; _B26k = [_mk26c(x) for x in _P2s]
 _sel26k = _LS26k.learned_select_party(_A26k, _B26k, dl, n=3, temperature=0.0)
@@ -10889,6 +10889,146 @@ for _nm54, _fn54 in (("E1", _t54_e1), ("E2", _t54_e2), ("E3", _t54_e3), ("E4", _
     except Exception as _e54:
         import traceback as _tb54
         check(f"54 {_nm54} のテストが実行できる", False, f"{type(_e54).__name__}: {_e54} {_tb54.format_exc()[-400:]}")
+
+
+# === 55 選出の入力 v3（megaform_ohko1_field1・sel_field_1018）: 味方/相手の3体が張る場（フィールド・天候）での与ダメ・素早さ・シード ===
+_P55A = ["イエッサン(オス)@きあいのタスキ:ひかえめ:アンコール|マジカルシャイン|マジカルフレイム|ワイドフォース:2/0/0/32/0/32:サイコメイカー",
+         "カメックス@カメックスナイト:ひかえめ:あくのはどう|からをやぶる|だいちのはどう|はどうだん:10/0/0/26/0/30:げきりゅう",
+         "グソクムシャ@グソクムシャナイト:いじっぱり:とんぼがえり|アイアンヘッド|アクアジェット|ドリルライナー:2/32/0/0/0/32:ききかいひ",
+         "オオニューラ@サイコシード:いじっぱり:つるぎのまい|ほのおのパンチ|インファイト|フェイタルクロー:32/32/0/0/0/2:かるわざ",
+         "サーフゴー@こだわりスカーフ:ひかえめ:10まんボルト|ゴールドラッシュ|シャドーボール|トリック:2/0/0/32/0/32:おうごんのからだ",
+         "ヒスイダイケンキ@くろいメガネ:いじっぱり:せいなるつるぎ|ひけん・ちえなみ|ふいうち|シェルブレード:2/32/0/0/0/32:きれあじ"]
+_P55B = [_P2s[0], _P2s[3], _P2s[5], _P2s[1], _P2s[2], _P2s[4]]
+
+
+def _t55_feat():
+    import simulator.features as _FT
+    from simulator.ability_categories import CATEGORIES as _C, ABILITY_CAT_BITS as _B
+    _iw = _C.index("weather_set")
+    check("55 特性カテゴリの天候設置に ひでり・あめふらし・すなおこし・ゆきふらし が入っている（価値ネット・選出の個体ブロック）",
+          all(_B[a][_iw] for a in ("ひでり", "あめふらし", "すなおこし", "ゆきふらし")))
+    _A = [_FT.sel_mega_view(_mk26c(x)) for x in _P55A]; _B5 = [_FT.sel_mega_view(_mk26c(x)) for x in _P55B]
+    _lead = _FT.sel_field_block([_A[0], _A[1], _A[3]], _B5[:3])
+    _back = _FT.sel_field_block([_A[1], _A[0], _A[3]], _B5[:3])
+    _none = _FT.sel_field_block([_A[1], _A[2], _A[3]], _B5[:3])
+    check("55 張る役（サイコメイカー）が先発なら場の強さ1.0・先発フラグ、控えなら0.7・控えフラグ", _lead[54:58] == [1.0, 0.0, 1.0, 0.0]
+          and _back[54:58] == [0.7, 0.0, 0.0, 1.0], f"{_lead[54:58]} {_back[54:58]}")
+    check("55 相手の控えのメガリザードンY（メガ後の特性 ひでり）を相手の場（天候0.7）として扱う", _lead[58:62] == [0.0, 0.7, 0.0, 1.0], str(_lead[58:62]))
+    check("55 サイコフィールドで だいちのはどう（メガカメックス→ガブリアス）の与ダメが上がる（差>0.3、控えなら0.7倍）",
+          _lead[3] > 0.3 and abs(_back[0] - 0.7 * _lead[3]) < 1e-12, f"{_lead[3]} {_back[0]}")
+    check("55 サイコシード＋かるわざ の オオニューラ がガブリアス・メガリザードンYを抜く（素早さの差）", _lead[24] == 1.0 and _lead[25] == 1.0, str(_lead[18:27]))
+    check("55 サイコシードで特防+1（メガリザードンYからの被ダメが下がる）", _lead[9 + 1 * 3 + 2] < -0.2, str(_lead[9:18]))
+    check("55 張る役のいない3体は場の差0（負例）", _none[:27] == [0.0] * 27 and _none[54:58] == [0.0] * 4)
+    _o = _mk26c(_P55A[3])
+    _q = _FT.sel_field_view(_o, _FT.sel_field_obj("psychic_terrain", None))
+    check("55 シードの発動は複製だけ（元の個体の持ち物・能力ランクは変えない）", _q.item is None and _q.stage_sp_defense == 1 and _q.stage_speed == 2
+          and _o.item == "サイコシード" and _o.stage_speed == 0)
+    _r = _mk26c("ペリッパー@しめったいわ:ひかえめ:ぼうふう|なみのり|はねやすめ|とんぼがえり:32/0/0/32/0/0:あめふらし")
+    _s = _mk26c("カメックス@しんぴのしずく:ひかえめ:なみのり|れいとうビーム|あくのはどう|からをやぶる:32/0/0/32/0/0:げきりゅう")
+    _s.ability = "すいすい"
+    _w = _FT.sel_field_block([_r, _s], [_B5[2]])
+    check("55 あめふらし（天候1.0）: すいすい が ドドゲザン を抜く・雨で なみのり の与ダメが上がる", _w[54:58] == [0.0, 1.0, 1.0, 0.0] and _w[21] == 1.0 and _w[3] > 0, str(_w))
+
+
+def _t55_parity():
+    import json as _j, tempfile as _tf, subprocess as _sp
+    import numpy as _np
+    import simulator.learned_selection as _LS
+    import simulator.features as _FT
+    _base = _j.load(open(os.path.join(os.path.dirname(_LS.__file__), "selector_m6e.json")))
+    _W1 = _np.asarray(_base["W1"]); _rng = _np.random.default_rng(55)
+    _v3 = dict(_base, feat="megaform_ohko1_field1", W1=_np.concatenate([_W1, _rng.normal(0, 1.0, (_W1.shape[0], 62))], 1).tolist())
+    _td = _tf.mkdtemp()
+    def _wr(n, d):
+        q = os.path.join(_td, n); _j.dump(d, open(q, "w")); return q
+    _pv3 = _wr("v3.json", _v3)
+    _K = ("SEL_OPP_ASSUME", "SEL_OPP_K", "LEARNED_SELECTION_IMPL", "SEL_FAST")
+    _sv = {k: os.environ.get(k) for k in _K}
+    _p0, _m0, _l0 = _LS._PATH, _LS._MODEL, _LS._LOADED
+    def _ld(q):
+        _LS._PATH = q; _LS._LOADED = False
+        return _LS._load()
+    try:
+        _m = _ld(_pv3)
+        check("55 \"feat\": \"megaform_ohko1_field1\" のモデル（1037+18+62次元）を読む（v2 を含む）",
+              _m is not None and _m["v2"] and _m["field"] and _m["W1"].shape[1] == _FT.feature_dim() + 18 + 62)
+        _m2 = _ld(os.path.join(os.path.dirname(_LS.__file__), "selector_m6e.json"))
+        check("55 v2 のモデル（m6e）は場の入力なしのまま", _m2 is not None and _m2["v2"] and not _m2.get("field"))
+        _a = [_mk26c(x) for x in _P55A]; _o = [_mk26c(x) for x in _P55B[:3]]
+        _x2 = _LS._encode_ref([_a[0], _a[1], _a[3]], _o, True); _x3 = _LS._encode_ref([_a[0], _a[1], _a[3]], _o, True, True)
+        check("55 v3 の状態ベクトルは v2 と同じ先頭＋末尾62次元", _x3[:len(_x2)] == _x2 and len(_x3) == len(_x2) + 62)
+        _pairs = [(_P55A, _P55B), (_P55B, _P55A), (_P55A, _P1s)]
+        _res = {}
+        for _impl in ("ref", "fast", "rust"):
+            for k in _K:
+                os.environ.pop(k, None)
+            os.environ.update({"SEL_OPP_ASSUME": "learnedK", "LEARNED_SELECTION_IMPL": _impl})
+            _ld(_pv3)
+            _out = []
+            for _k, (_pa, _pb) in enumerate(_pairs):
+                _a = [_mk26c(x) for x in _pa]; _b = [_mk26c(x) for x in _pb]
+                _g = random.Random(5501 + _k)
+                _s = _LS.learned_select_scores(_a, _b, dl, n=3, rng=_g)
+                _out.append(([_a.index(q) for q in max(_s, key=lambda x: x[1])[0]], [v for _, v in _s], _g.random()))
+            _res[_impl] = _out
+        check("55 v3（learnedK）: 高速版・Rust 版が元の実装と同じ選出・値（差1e-12未満）・乱数の消費",
+              all(a[0] == b[0] and a[2] == b[2] and max(abs(x - y) for x, y in zip(a[1], b[1])) < 1e-12
+                  for _i in ("fast", "rust") for a, b in zip(_res[_i], _res["ref"])), str({k: [o[0] for o in v] for k, v in _res.items()}))
+        os.environ.pop("LEARNED_SELECTION_IMPL", None)
+        _py = []
+        for _k, (_pa, _pb) in enumerate(_pairs):
+            _a = [_mk26c(x) for x in _pa]; _b = [_mk26c(x) for x in _pb]
+            _s = _LS.learned_select_scores(_a, _b, dl, n=3, rng=random.Random(301))
+            _py.append([_a.index(q) for q in max(_s, key=lambda x: x[1])[0]])
+        _code = "import sys, json\nimport pokenavi_engine as E\nP = json.loads(sys.argv[1]); M = sys.argv[2]\n" \
+                "print(json.dumps([E.guide_rows(a, [b], 'M-6', 0, 300, M)[0][0] for a, b in P]))"
+        for _env in ({"SEL_OPP_ASSUME": "learnedK"}, {"SEL_OPP_ASSUME": "learnedK", "SEL_FAST": "0"}):
+            _e = dict(os.environ); _e.update(_env)
+            _r = _sp.run([sys.executable, "-c", _code, _j.dumps(_pairs, ensure_ascii=False), _pv3], capture_output=True, text=True,
+                         env=_e, cwd=_SCRIPTS_DIR26n)
+            _rs = _j.loads(_r.stdout.strip().splitlines()[-1]) if _r.returncode == 0 else _r.stderr[-300:]
+            check(f"55 v3: Rust select_scores（guide_rows・{'元の実装' if _env.get('SEL_FAST') else '高速版'}）の選出が Python と一致", _rs == _py, f"{_rs} / {_py}")
+    finally:
+        for k, v in _sv.items():
+            if v is None: os.environ.pop(k, None)
+            else: os.environ[k] = v
+        _LS._PATH, _LS._MODEL, _LS._LOADED = _p0, _m0, _l0
+
+
+def _t55_model(path=None):
+    import simulator.learned_selection as _LS
+    path = path or _LS._PATH
+    if not os.path.exists(path):
+        return
+    _sv = os.environ.get("SEL_OPP_ASSUME")
+    _p0, _m0, _l0 = _LS._PATH, _LS._MODEL, _LS._LOADED
+    try:
+        os.environ["SEL_OPP_ASSUME"] = "learnedK"
+        _LS._PATH = path; _LS._LOADED = False
+        check("55 selector_m6f.json を v3（場の相乗あり）のモデルとして読む", (lambda m: m is not None and m.get("field"))(_LS._load()))
+        _lead, _syn = [], []
+        for _o in (_P1s, _P2s, _P45A):
+            _a = [_mk26c(x) for x in _P55A]; _b = [_mk26c(x) for x in _o]
+            _sc = {tuple(_a.index(q) for q in od): v for od, v in _LS.learned_select_scores(_a, _b, dl, n=3, rng=random.Random(1))}
+            _y = max(v for k, v in _sc.items() if set(k) == {0, 1, 3} and k[0] == 0)
+            _lead.append(_y - max(v for k, v in _sc.items() if set(k) == {0, 1, 3} and k[0] != 0))
+            _syn.append(_y - max(v for k, v in _sc.items() if set(k) == {1, 3, 4}))
+        check("55 m6f: 生成#97 の イエッサン・カメックス・オオニューラ は張る役（イエッサン）先発の並びが最も高い（3党とも。m6e は1党で逆）",
+              all(x > 0 for x in _lead), str(_lead))
+        check("55 m6f: イエッサン先発＋カメックス＋オオニューラ が 張る役なしの カメックス・オオニューラ・サーフゴー より高い（3党とも。m6e は1党で逆）",
+              all(x > 0 for x in _syn), str(_syn))
+    finally:
+        if _sv is None: os.environ.pop("SEL_OPP_ASSUME", None)
+        else: os.environ["SEL_OPP_ASSUME"] = _sv
+        _LS._PATH, _LS._MODEL, _LS._LOADED = _p0, _m0, _l0
+
+
+for _nm55, _fn55 in (("場の特徴", _t55_feat), ("3実装の一致", _t55_parity), ("m6f の相乗の評価", _t55_model)):
+    try:
+        _fn55()
+    except Exception as _e55:
+        import traceback as _tb55
+        check(f"55 {_nm55} のテストが実行できる", False, f"{type(_e55).__name__}: {_e55} {_tb55.format_exc()[-400:]}")
 
 
 print("\n=== 56. シンクロ（相手の技・特性で状態異常にされた時だけ移す） ===")

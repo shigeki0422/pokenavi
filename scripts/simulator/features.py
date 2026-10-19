@@ -628,3 +628,153 @@ def sel_extra(order, osel) -> List[float]:
     f = [ohko_ev(a, d) for a in order for d in osel]
     f += [ohko_ev(a, d) for a in osel for d in order]
     return f
+
+
+# ── 学習選出の入力 v3（"feat": SEL_FEAT_V3。v2 の末尾にさらに場の相乗 62 次元。Rust selector.rs と同じ）──────────
+# 各陣営の3体の中で場（フィールド・天候）を張る役がいれば、その場を仮定した与ダメ割合・素早さ上回りの「場なしとの差」を強さ s 倍で入れる
+# （シードの発動＝能力ランク+1・持ち物の消失・かるわざ、天候の素早さ特性・サーフテールを反映）。陣営ごとに 27（自分→相手 9・相手→自分 9・
+# 素早さ 9）×自分の場・相手の場、末尾に陣営ごと [フィールドの s, 天候の s, 先発が張る, 控えが張る]。
+# s: 特性で張る役 先発1.0・控え0.7（synergy_1018 の実測で場の下で行動した割合 先発0.648/控え0.470）、技で張る役は1手かかるので 0.7 倍。
+SEL_FEAT_V3 = "megaform_ohko1_field1"
+SEL_EXTRA_FIELD = 62
+_SEL_T_AB = {"サイコメイカー": "psychic_terrain", "エレキメイカー": "electric_terrain", "グラスメイカー": "grassy_terrain"}
+_SEL_T_MV = {"サイコフィールド": "psychic_terrain", "エレキフィールド": "electric_terrain",
+             "グラスフィールド": "grassy_terrain", "ミストフィールド": "misty_terrain"}
+_SEL_W_AB = {"ひでり": "sunny", "あめふらし": "rain", "すなおこし": "sandstorm", "ゆきふらし": "hail"}
+_SEL_W_MV = {"にほんばれ": "sunny", "あまごい": "rain", "すなあらし": "sandstorm", "ゆきげしき": "hail", "あられ": "hail",
+             "すなはき": "sandstorm"}
+_SEL_S = (1.0, 0.7, 0.7, 0.49)   # (特性・先発, 特性・控え, 技・先発, 技・控え)
+_SEL_KMG = ("きまぐレーザー",)
+
+
+def _sel_role(p, pos, ab_map, mv_map):
+    """p が張る場とその強さ（特性が技より強い）。張らなければ (None, 0)"""
+    if p is None:
+        return None, 0.0
+    if p.ability in ab_map:
+        return ab_map[p.ability], _SEL_S[0 if pos == 0 else 1]
+    if p.ability in mv_map:
+        return mv_map[p.ability], _SEL_S[2 if pos == 0 else 3]
+    for m in p.moves or []:
+        if m is not None and m.name_jp in mv_map:
+            return mv_map[m.name_jp], _SEL_S[2 if pos == 0 else 3]
+    return None, 0.0
+
+
+def sel_field_of(trio):
+    """3体（先頭＝先発）が張る場: (フィールド属性名|None, その s, 位置, 天候|None, その s, 位置)。同じ強さは前の位置"""
+    t = (None, 0.0, -1); w = (None, 0.0, -1)
+    for i, p in enumerate(list(trio)[:3]):
+        k, s = _sel_role(p, i, _SEL_T_AB, _SEL_T_MV)
+        if k is not None and s > t[1]:
+            t = (k, s, i)
+        k, s = _sel_role(p, i, _SEL_W_AB, _SEL_W_MV)
+        if k is not None and s > w[1]:
+            w = (k, s, i)
+    return t + w
+
+
+def sel_field_obj(terrain, weather):
+    from .battle import BattleField
+    f = BattleField()
+    if terrain:
+        setattr(f, terrain, True); setattr(f, terrain + "_count", 5)
+    if weather:
+        f.weather = weather; f.weather_count = 5
+    return f
+
+
+def sel_field_view(p, field):
+    """場の下の個体（複製）: 合うシードを発動（能力ランク+1・持ち物の消失・かるわざ）"""
+    import copy
+    from .items import try_terrain_seed
+    q = copy.copy(p)
+    try_terrain_seed(q, field, [])
+    return q
+
+
+def sel_frac(att, deff, field) -> float:
+    """場 field での att→deff の最大与ダメ割合（_expected_frac_calc と同じ。乱数を引く技は除く・前後で個体を巻き戻す）"""
+    if att is None or deff is None or not att.is_alive or not deff.is_alive:
+        return 0.0
+    from .ai import _state_snapshot, _state_restore
+    snap = _state_snapshot([att, deff])
+    try:
+        best = 0.0
+        for mv in att.moves:
+            if mv and mv.power and mv.category != "status" and mv.name_jp not in _SEL_KMG:
+                try:
+                    f = calc_damage(att, deff, mv, field, random_roll=0.925) / max(1, deff.max_hp)
+                except Exception:
+                    f = 0.0
+                if f > best:
+                    best = f
+        return min(1.5, best)
+    finally:
+        _state_restore(snap)
+
+
+def sel_speed(p, field) -> float:
+    """場 field での実効速度（_real_speed_calc ＋ エレキフィールドのサーフテール）。倒れていれば -1"""
+    if p is None or not p.is_alive:
+        return -1.0
+    from .battle import BattleSide
+    v = _real_speed_calc(p, BattleSide([]), field)
+    if p.ability == "サーフテール" and field.electric_terrain:
+        v *= 2
+    return v
+
+
+def _faster(a, b):
+    return 0.0 if (a < 0 or b < 0) else (1.0 if a >= b else 0.0)
+
+
+class SelFieldCache:
+    """sel_field_block の部品（場ごとの複製・与ダメ割合・速度）を対面内で使い回す。値は直接計算と同じ"""
+
+    def __init__(self):
+        self.fields, self.views, self.frac, self.spd = {}, {}, {}, {}
+
+    def field(self, key):
+        if key not in self.fields:
+            self.fields[key] = sel_field_obj(*key) if key is not None else sel_field_obj(None, None)
+        return self.fields[key]
+
+    def view(self, p, key):
+        if key is None:
+            return p
+        k = (id(p), key)
+        if k not in self.views:
+            self.views[k] = (p, sel_field_view(p, self.field(key)))
+        return self.views[k][1]
+
+    def fr(self, a, d, key):
+        k = (id(a), id(d), key)
+        if k not in self.frac:
+            self.frac[k] = (a, d, sel_frac(self.view(a, key), self.view(d, key), self.field(key)))
+        return self.frac[k][2]
+
+    def sp(self, p, key):
+        k = (id(p), key)
+        if k not in self.spd:
+            self.spd[k] = (p, sel_speed(self.view(p, key), self.field(key)))
+        return self.spd[k][1]
+
+
+def sel_field_block(order, osel, cache=None) -> List[float]:
+    """入力 v3 の末尾62次元（上の説明）。order/osel は sel_mega_view 済みの3体"""
+    c = cache or SelFieldCache()
+    order = (list(order) + [None] * 3)[:3]; osel = (list(osel) + [None] * 3)[:3]
+    out: List[float] = []
+    flags: List[float] = []
+    for trio in (order, osel):
+        tk, ts, tp, wk, ws, wp = sel_field_of(trio)
+        flags += [ts, ws, 1.0 if 0 in (tp, wp) else 0.0, 1.0 if (tp > 0 or wp > 0) else 0.0]
+        if tk is None and wk is None:
+            out += [0.0] * 27
+            continue
+        s = max(ts, ws); key = (tk, wk)
+        out += [s * (c.fr(a, d, key) - c.fr(a, d, None)) for a in order for d in osel]
+        out += [s * (c.fr(a, d, key) - c.fr(a, d, None)) for a in osel for d in order]
+        out += [s * (_faster(c.sp(a, key), c.sp(d, key)) - _faster(c.sp(a, None), c.sp(d, None))) for a in order for d in osel]
+    return out + flags
