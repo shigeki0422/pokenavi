@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのカバルドン基礎データ
 pokemonName: 'カバルドン'
 dexNumber: 450
 usageRank: 4
-updatedDate: '2026-10-19'
+updatedDate: '2026-10-20'
 pubDate: '2026-10-11'
 draft: false
 

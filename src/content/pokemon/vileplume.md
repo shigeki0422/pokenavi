@@ -1,10 +1,10 @@
 ---
 title: 'ラフレシア | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのラフレシア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率143位。'
+description: 'ポケモンチャンピオンズのラフレシア基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率142位。'
 pokemonName: 'ラフレシア'
 dexNumber: 45
-usageRank: 143
-updatedDate: '2026-10-19'
+usageRank: 142
+updatedDate: '2026-10-20'
 pubDate: '2026-10-11'
 draft: false
 
@@ -31,7 +31,7 @@ faq:
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.45</strong>　／　使用率 <strong style="color:#dc2626">143位</strong>
+      全国図鑑 <strong>No.45</strong>　／　使用率 <strong style="color:#dc2626">142位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-10-11</div>
   </div>

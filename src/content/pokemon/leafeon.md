@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのリーフィア基礎データ
 pokemonName: 'リーフィア'
 dexNumber: 470
 usageRank: 999
-updatedDate: '2026-10-19'
+updatedDate: '2026-10-20'
 pubDate: '2026-05-24'
 draft: false
 

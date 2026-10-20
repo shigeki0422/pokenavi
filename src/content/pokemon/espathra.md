@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのクエスパトラ基礎デー
 pokemonName: 'クエスパトラ'
 dexNumber: 956
 usageRank: 65
-updatedDate: '2026-10-19'
+updatedDate: '2026-10-20'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'espathra-analysis-m2'

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのユキノオー基礎データ
 pokemonName: 'ユキノオー'
 dexNumber: 460
 usageRank: 176
-updatedDate: '2026-10-19'
+updatedDate: '2026-10-20'
 pubDate: '2026-10-11'
 draft: false
 

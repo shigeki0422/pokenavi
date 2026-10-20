@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのルカリオ基礎データ。
 pokemonName: 'ルカリオ'
 dexNumber: 448
 usageRank: 6
-updatedDate: '2026-10-19'
+updatedDate: '2026-10-20'
 pubDate: '2026-10-11'
 draft: false
 

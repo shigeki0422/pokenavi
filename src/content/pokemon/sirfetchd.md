@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのネギガナイト基礎デー
 pokemonName: 'ネギガナイト'
 dexNumber: 865
 usageRank: 110
-updatedDate: '2026-10-19'
+updatedDate: '2026-10-20'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'sirfetchd-analysis-m6'

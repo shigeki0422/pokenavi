@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのタブンネ基礎データ。
 pokemonName: 'タブンネ'
 dexNumber: 531
 usageRank: 193
-updatedDate: '2026-10-19'
+updatedDate: '2026-10-20'
 pubDate: '2026-10-11'
 draft: false
 
