@@ -11,13 +11,19 @@
 		"build": "astro build && rm -rf dist/sim-data-verify",
 		"deploy": "npm run build && rm -f dist/sim-data/saved.json && npx wrangler pages deploy dist --project-name pokenavi --branch main && python3 scripts/request_indexing.py --all-posts",
 		"preview": "astro preview",
-		"astro": "astro"
+		"astro": "astro",
+		"dev:drafts": "INCLUDE_DRAFTS=true astro dev --port 4555"
 	},
 	"dependencies": {
 		"@astrojs/mdx": "^5.0.6",
 		"@astrojs/rss": "^4.0.18",
 		"@astrojs/sitemap": "^3.7.2",
+		"@capacitor/ios": "^8.5.2",
 		"astro": "^6.3.5",
 		"sharp": "^0.34.3"
+	},
+	"devDependencies": {
+		"@capacitor/android": "^8.5.2",
+		"@capacitor/cli": "^8.5.2"
 	}
 }
