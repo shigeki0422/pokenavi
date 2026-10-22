@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのニンフィア基礎データ
 pokemonName: 'ニンフィア'
 dexNumber: 700
 usageRank: 50
-updatedDate: '2026-10-20'
+updatedDate: '2026-10-22'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'sylveon-analysis-m2'

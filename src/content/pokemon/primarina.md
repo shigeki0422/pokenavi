@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのアシレーヌ基礎データ
 pokemonName: 'アシレーヌ'
 dexNumber: 730
 usageRank: 2
-updatedDate: '2026-10-20'
+updatedDate: '2026-10-22'
 pubDate: '2026-10-11'
 draft: false
 

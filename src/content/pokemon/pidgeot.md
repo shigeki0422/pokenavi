@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのピジョット基礎データ
 pokemonName: 'ピジョット'
 dexNumber: 18
 usageRank: 172
-updatedDate: '2026-10-20'
+updatedDate: '2026-10-22'
 pubDate: '2026-10-11'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのマルノーム基礎データ
 pokemonName: 'マルノーム'
 dexNumber: 317
 usageRank: 195
-updatedDate: '2026-10-20'
+updatedDate: '2026-10-22'
 pubDate: '2026-10-11'
 draft: false
 

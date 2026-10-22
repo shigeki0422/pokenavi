@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのコータス基礎データ。
 pokemonName: 'コータス'
 dexNumber: 324
 usageRank: 114
-updatedDate: '2026-10-20'
+updatedDate: '2026-10-22'
 pubDate: '2026-10-11'
 draft: false
 

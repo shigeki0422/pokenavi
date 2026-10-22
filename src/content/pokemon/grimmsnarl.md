@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのオーロンゲ基礎データ
 pokemonName: 'オーロンゲ'
 dexNumber: 861
 usageRank: 55
-updatedDate: '2026-10-20'
+updatedDate: '2026-10-22'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'grimmsnarl-analysis-m3'

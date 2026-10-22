@@ -1,10 +1,10 @@
 ---
 title: 'ドサイドン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのドサイドン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率181位。'
+description: 'ポケモンチャンピオンズのドサイドン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率182位。'
 pokemonName: 'ドサイドン'
 dexNumber: 464
-usageRank: 181
-updatedDate: '2026-10-20'
+usageRank: 182
+updatedDate: '2026-10-22'
 pubDate: '2026-10-11'
 draft: false
 
@@ -31,7 +31,7 @@ faq:
       <img src="/images/types/type-05-rock.png" alt="いわ" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.464</strong>　／　使用率 <strong style="color:#dc2626">181位</strong>
+      全国図鑑 <strong>No.464</strong>　／　使用率 <strong style="color:#dc2626">182位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-10-11</div>
   </div>

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのキュウコン基礎データ
 pokemonName: 'キュウコン'
 dexNumber: 38
 usageRank: 179
-updatedDate: '2026-10-20'
+updatedDate: '2026-10-22'
 pubDate: '2026-10-11'
 draft: false
 

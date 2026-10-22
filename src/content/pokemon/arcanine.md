@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのウインディ基礎データ
 pokemonName: 'ウインディ'
 dexNumber: 59
 usageRank: 133
-updatedDate: '2026-10-20'
+updatedDate: '2026-10-22'
 pubDate: '2026-10-11'
 draft: false
 

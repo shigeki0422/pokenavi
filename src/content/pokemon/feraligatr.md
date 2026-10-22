@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのオーダイル基礎データ
 pokemonName: 'オーダイル'
 dexNumber: 160
 usageRank: 140
-updatedDate: '2026-10-20'
+updatedDate: '2026-10-22'
 pubDate: '2026-10-11'
 draft: false
 
