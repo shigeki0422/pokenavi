@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのホルード基礎データ。
 pokemonName: 'ホルード'
 dexNumber: 660
 usageRank: 124
-updatedDate: '2026-10-22'
+updatedDate: '2026-10-23'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'greedent-analysis-m2'

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのジャローダ基礎データ
 pokemonName: 'ジャローダ'
 dexNumber: 497
 usageRank: 96
-updatedDate: '2026-10-22'
+updatedDate: '2026-10-23'
 pubDate: '2026-10-11'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのメタグロス基礎データ
 pokemonName: 'メタグロス'
 dexNumber: 376
 usageRank: 14
-updatedDate: '2026-10-22'
+updatedDate: '2026-10-23'
 pubDate: '2026-10-11'
 draft: false
 

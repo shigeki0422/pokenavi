@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのコノヨザル基礎データ
 pokemonName: 'コノヨザル'
 dexNumber: 979
 usageRank: 80
-updatedDate: '2026-10-22'
+updatedDate: '2026-10-23'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'annihilape-analysis-m3'

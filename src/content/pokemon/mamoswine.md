@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのマンムー基礎データ。
 pokemonName: 'マンムー'
 dexNumber: 473
 usageRank: 67
-updatedDate: '2026-10-22'
+updatedDate: '2026-10-23'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'mamoswine-analysis-m2'

@@ -5,7 +5,7 @@ pokemonName: 'ヒートロトム'
 dexNumber: 479
 usageRank: 26
 imageForm: '01'
-updatedDate: '2026-10-22'
+updatedDate: '2026-10-23'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'rotom-heat-analysis-m2'

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのシャンデラ基礎データ
 pokemonName: 'シャンデラ'
 dexNumber: 609
 usageRank: 107
-updatedDate: '2026-10-22'
+updatedDate: '2026-10-23'
 pubDate: '2026-10-11'
 draft: false
 

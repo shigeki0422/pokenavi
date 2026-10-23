@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのグソクムシャ基礎デー
 pokemonName: 'グソクムシャ'
 dexNumber: 768
 usageRank: 5
-updatedDate: '2026-10-22'
+updatedDate: '2026-10-23'
 pubDate: '2026-10-11'
 draft: false
 analysisSlug: 'golisopod-analysis-m6'
