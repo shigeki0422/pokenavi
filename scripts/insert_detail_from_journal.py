@@ -9,7 +9,7 @@ from pathlib import Path
 DB = Path(__file__).parent / "pokenavi.db"
 
 WF_DIRS = [
-    "/private/tmp/claude-501/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/scratchpad/journal_1011",
+    "/private/tmp/claude-501/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/scratchpad/journal_1024",
 ]
 
 OCR_MOVES = {
@@ -154,6 +154,8 @@ OCR_MOVES = {
     "サンダータイブ": "サンダーダイブ",
 }
 OCR_ITEMS = {
+    "マフォクシーナイト": "マフォクシナイト",  # 2026-10-24 長音符の足しすぎ（画像は「マフォクシナイト」96.7%）
+    "テンリュウナイト": "デンリュウナイト",  # 2026-10-24 濁点落ち（144位 デンリュウ No.181 のメガ石）
     "だつじんのおび": "たつじんのおび",
     "たつじんのおびび": "たつじんのおび",
     "だつじんのおびび": "たつじんのおび",
@@ -508,7 +510,7 @@ def resolve_partner_form(name, types):
     type_set = frozenset(types)
     return FORM_BY_TYPES[name].get(type_set, name)
 
-CRAWLED_DATE = "2026-10-11"
+CRAWLED_DATE = "2026-10-24"
 
 # 実在する別の技名に誤読され、マスター照合では検出できないケースの位置指定上書き。
 # GATE2（リスト内重複）で気付いたものを、必ずクロール画像で確認してから登録する。
@@ -728,6 +730,20 @@ RANK_OVERRIDES_BY_DATE = {
 }
 RANK_OVERRIDES = RANK_OVERRIDES_BY_DATE.get(CRAWLED_DATE, {})
 
+
+def ranking_names(conn):
+    """その日の使用率ランキングから rank→種名。OCR の名前より優先して使う。
+
+    OCR はポケモン名を頻繁に読み違える（2026-10-24 実測:「セグレイブ」→「セクレイフ」、
+    「バンギラス」→「バフキラス」、「ジャローダ」→「ジャロダ」など200件中40件前後）。
+    一方 pokemon_usage の名前はアイコンのテンプレートマッチで決まり、重複チェックと
+    タイプアイコン照合（insert_ranking_from_icons.check_forms）を通っているので信頼できる。
+    OCR からは技・持ち物・特性・性格・EV・同居率だけを採り、名前はこちらで決める。
+    手で書いた RANK_OVERRIDES_BY_DATE があればさらにそれを優先する（フォームの補正など）。"""
+    return {r[0]: r[1] for r in conn.execute(
+        "SELECT rank, pokemon FROM pokemon_usage WHERE season=? AND rule='single' AND crawled_date=?",
+        (SEASON, CRAWLED_DATE))}
+
 def ev_spread(ev):
     parts = []
     for key, label in [("h","H"),("a","A"),("b","B"),("c","C"),("d","D"),("s","S")]:
@@ -762,6 +778,9 @@ def main():
     item_master = set(r[0] for r in conn.execute("SELECT name_jp FROM item_master"))
     ability_master = set(r[0] for r in conn.execute("SELECT name_jp FROM ability_master"))
     pokemon_master = set(r[0] for r in conn.execute("SELECT pokemon_name FROM pokemon_base_stats"))
+    rank_names = ranking_names(conn)
+    if rank_names:
+        print(f"ランキングから種名を引く: {len(rank_names)}件（OCR の名前は使わない）")
 
     now = datetime.now(timezone.utc).isoformat()
 
@@ -792,7 +811,8 @@ def main():
             continue
         rec = all_data[rank]
         pokemon_raw = rec["pokemon"]
-        pokemon = RANK_OVERRIDES.get(rank) or OCR_POKEMON.get(pokemon_raw, pokemon_raw)
+        pokemon = (RANK_OVERRIDES.get(rank) or rank_names.get(rank)
+                   or OCR_POKEMON.get(pokemon_raw, pokemon_raw))
         if pokemon not in pokemon_master:
             master_miss_ranks.append((rank, pokemon_raw, pokemon))
             continue
@@ -892,7 +912,8 @@ def main():
             continue
         rec = all_data[rank]
         pokemon_raw = rec["pokemon"]
-        pokemon = RANK_OVERRIDES.get(rank) or OCR_POKEMON.get(pokemon_raw, pokemon_raw)
+        pokemon = (RANK_OVERRIDES.get(rank) or rank_names.get(rank)
+                   or OCR_POKEMON.get(pokemon_raw, pokemon_raw))
 
         # フォーム付きポケモン（イダイトウ(オス/メス)等）はusageテーブルから正式名を取得
         if pokemon not in pokemon_master and rank in rank_to_pokemon:

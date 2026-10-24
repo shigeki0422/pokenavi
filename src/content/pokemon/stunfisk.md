@@ -4,22 +4,22 @@ description: 'ポケモンチャンピオンズのマッギョ基礎データ。
 pokemonName: 'マッギョ'
 dexNumber: 618
 usageRank: 999
-updatedDate: '2026-10-23'
+updatedDate: '2026-10-24'
 pubDate: '2026-10-11'
 draft: false
 
 faq:
-  season: 'M-7'
-  topMoves: ['だいちのちから', 'ステルスロック', 'あくび', '10まんボルト']
-  topMovePct: [95.8, 94.2, 89.7, 58.7]
-  topItems: ['オボンのみ', 'たべのこし', 'ふうせん']
-  topItemPct: [48.5, 43.1, 2.8]
+  season: 'M-4'
+  topMoves: ['だいちのちから', 'ステルスロック', '10まんボルト', 'あくび']
+  topMovePct: [69.3, 68.6, 58.9, 55.4]
+  topItems: ['オボンのみ', 'たべのこし', 'たつじんのおび']
+  topItemPct: [40.9, 21.7, 10.6]
   topAbility: 'せいでんき'
-  topAbilityPct: 88.9
+  topAbilityPct: 82.2
   topNature: 'おだやか'
-  topNaturePct: 67.5
-  topNature2: 'ずぶとい'
-  topNaturePct2: 21.4
+  topNaturePct: 40.6
+  topNature2: 'ひかえめ'
+  topNaturePct2: 19.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

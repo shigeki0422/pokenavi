@@ -15,9 +15,11 @@ adb devices
 
 ### 2. ADBキャプチャ（簡易版と共通）
 ```bash
-cd /Users/shigeki/work/pokenavi && python3 scripts/crawl_champions.py
+cd /Users/shigeki/work/pokenavi && LAUNCH=1 SKIP_TOP=1 python3 scripts/crawl_champions.py
 ```
-200位まで自動撮影（約3時間）。完了まで待機。
+200位まで自動撮影（6パネル・1体52秒・**約3時間**）。完了まで待機。
+`PANELS` は付けない（付けると技のパネルしか撮らない＝簡易版になる）。
+`LAUNCH=1` で画面オフから起動し、終わったら画面を消す。詳細は `/crawl-simple` の手順2。
 
 ### 3. クロップ（簡易版と共通）
 ```bash
@@ -30,9 +32,20 @@ python3 scripts/crop_panels.py crawl_data/champ_crawl_$(date +%Y-%m-%d)
 python3 scripts/insert_ranking_from_icons.py
 ```
 
-### 5. OCRワークフロー実行
-`scripts/ocr_workflow_template.js` の `CRAWL_DATE` と `TOTAL_RANKS` を設定し、
-Workflow ツールに貼り付けて実行（haiku モデルで200件並列OCR）。
+### 5. 画像の縮小 → OCR
+```bash
+python3 scripts/shrink_panels.py crawl_data/champ_crawl_$(date +%Y-%m-%d)
+```
+`_c_*.png` から `_s_*.png`（ヘッダー除去＋0.6倍）を作る。**これを飛ばすとOCRのコストが3倍近くになる**
+（1ランク 4.3MB → 1.7MB。2026-10-24 実測）。
+
+そのうえで `scripts/ocr_prompt_template.txt` の `{DATE}` `{OUT_DIR}` `{RANKS}` を置換し、
+**Agent ツールで11〜13体に分けて並列実行**する（haiku・1体あたり16〜24ランク）。
+出力は `{OUT_DIR}/{rank3桁}.json`。
+
+- `scripts/ocr_workflow_template.js`（Workflow で200件並列）は**古いので使わない**。
+  `CRAWL_DIR` が `/tmp/champ_crawl_*` のままで実体（`crawl_data/`）と違い、縮小前の `_c_` を読む作りになっている
+- 1ランクに1エージェントを割り当てると起動のオーバーヘッドが大きい。16ランクずつまとめる
 
 ### 6. 同居ポケモン（パートナー）の画像マッチング → DB投入
 OCRワークフローが返した `partners` リストのアイコン画像（`_c_partner_*.png`）に対して

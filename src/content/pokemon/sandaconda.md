@@ -4,22 +4,22 @@ description: 'ポケモンチャンピオンズのサダイジャ基礎データ
 pokemonName: 'サダイジャ'
 dexNumber: 844
 usageRank: 999
-updatedDate: '2026-10-23'
+updatedDate: '2026-10-24'
 pubDate: '2026-10-11'
 draft: false
 
 faq:
-  season: 'M-7'
-  topMoves: ['へびにらみ', 'じしん', 'ステルスロック', 'がむしゃら']
-  topMovePct: [80.2, 79.4, 74.4, 52.4]
-  topItems: ['きあいのタスキ', 'たべのこし', 'さらさらいわ']
-  topItemPct: [65.4, 10.3, 7.2]
+  season: 'M-5'
+  topMoves: ['じしん', 'へびにらみ', 'ステルスロック', 'がむしゃら']
+  topMovePct: [74.4, 63.3, 61.8, 38.3]
+  topItems: ['きあいのタスキ', 'さらさらいわ', 'たべのこし']
+  topItemPct: [31.6, 20.7, 13.9]
   topAbility: 'すなはき'
-  topAbilityPct: 76.5
+  topAbilityPct: 71.6
   topNature: 'ようき'
-  topNaturePct: 24.9
-  topNature2: 'いじっぱり'
-  topNaturePct2: 20.1
+  topNaturePct: 29.0
+  topNature2: 'わんぱく'
+  topNaturePct2: 26.0
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

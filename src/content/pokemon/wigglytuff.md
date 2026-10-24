@@ -4,22 +4,22 @@ description: 'ポケモンチャンピオンズのプクリン基礎データ。
 pokemonName: 'プクリン'
 dexNumber: 40
 usageRank: 999
-updatedDate: '2026-10-23'
+updatedDate: '2026-10-24'
 pubDate: '2026-10-11'
 draft: false
 
 faq:
-  season: 'M-7'
-  topMoves: ['アンコール', 'ムーンフォース', 'ステルスロック', 'ミストバースト']
-  topMovePct: [50.5, 48.4, 45.7, 25.5]
-  topItems: ['オボンのみ', 'ひかりのねんど', 'たべのこし']
-  topItemPct: [45.7, 23.3, 11.5]
+  season: 'M-6'
+  topMoves: ['ムーンフォース', 'ステルスロック', 'かえんほうしゃ', 'れいとうビーム']
+  topMovePct: [69.3, 53.4, 35.5, 28.9]
+  topItems: ['オボンのみ', 'きあいのタスキ', 'たべのこし']
+  topItemPct: [36.4, 10.6, 10.5]
   topAbility: 'かちき'
-  topAbilityPct: 71.3
-  topNature: 'おだやか'
-  topNaturePct: 42.1
-  topNature2: 'ひかえめ'
-  topNaturePct2: 25.0
+  topAbilityPct: 66.8
+  topNature: 'ひかえめ'
+  topNaturePct: 43.2
+  topNature2: 'ずぶとい'
+  topNaturePct2: 41.6
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
