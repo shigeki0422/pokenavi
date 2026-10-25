@@ -5,6 +5,7 @@ import Footer from '../../components/Footer.astro';
 import FormattedDate from '../../components/FormattedDate.astro';
 import Header from '../../components/Header.astro';
 import articleMeta from '../../data/article-meta.json';
+import { blogSeasons, seasonLabel } from '../../utils/blogSeasons';
 
 const TYPE_COLOR: Record<string, string> = {
 	'ノーマル':'#9da0aa','ほのお':'#f87c3f','みず':'#4fa4e0','くさ':'#5abf5a',
@@ -23,11 +24,13 @@ const allPosts = (await getCollection('blog'))
 		return (ma?.rank ?? 999) - (mb?.rank ?? 999);
 	});
 
-const seasons = ['m6', 'm5', 'm4', 'm3', 'm2'] as const;
+const seasons = await blogSeasons();
 const postsBySeason = Object.fromEntries(
 	seasons.map((s) => [s, allPosts.filter((p) => p.id.includes(`-${s}`))])
 ) as Record<string, typeof allPosts>;
-const seasonLabels: Record<string, string> = { m6: 'M-6（最新）', m5: 'M-5', m4: 'M-4', m3: 'M-3', m2: 'M-2' };
+const seasonLabels: Record<string, string> = Object.fromEntries(
+	seasons.map((s, i) => [s, seasonLabel(s) + (i === 0 ? '（最新）' : '')])
+);
 ---
 
 <!doctype html>

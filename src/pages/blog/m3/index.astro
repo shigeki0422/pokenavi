@@ -5,6 +5,8 @@ import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
 import FormattedDate from '../../../components/FormattedDate.astro';
 import articleMeta from '../../../data/article-meta.json';
+import { blogSeasons } from '../../../utils/blogSeasons';
+const isLatest = (await blogSeasons())[0] === 'm3';
 
 const ITEMS_PER_PAGE = 20;
 
@@ -106,7 +108,7 @@ const posts = allPosts;
 					<div class="label">シーズン</div>
 					<div class="name">M-3</div>
 				</div>
-				<span class="badge">最新シーズン</span>
+				{isLatest && <span class="badge">最新シーズン</span>}
 			</div>
 			<h1>M-3 シーズン 考察記事</h1>
 			<p class="subtitle">使用率上位ポケモン考察（{allPosts.length}件）</p>
