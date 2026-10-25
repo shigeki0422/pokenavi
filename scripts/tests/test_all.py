@@ -1742,9 +1742,10 @@ check("まけんき 能力低下で攻撃+2", p_defiant.stage_attack == old_sd +
 p_anger = make_poke(ability="ぎゃくじょう", def_b=200, hp_b=255)
 p_anger.hp = p_anger.max_hp // 2 + 1
 execute(make_poke(atk_b=60), p_anger, "たいあたり")
-check("ぎゃくじょう HP半分以下で特攻+1",
-      p_anger.is_alive and p_anger.hp <= p_anger.max_hp // 2 and p_anger.stage_sp_attack == 1 and p_anger.stage_attack == 0,
-      f"hp={p_anger.hp}/{p_anger.max_hp} spa={p_anger.stage_sp_attack}")
+check("ぎゃくじょう 攻撃でHP半分以下になると攻撃・特攻・素早さ+1、防御・特防-1（Showdown Anger Shell。2026-10-20 REQUIREMENTS 2-5）",
+      p_anger.is_alive and p_anger.hp <= p_anger.max_hp // 2
+      and (p_anger.stage_attack, p_anger.stage_sp_attack, p_anger.stage_speed, p_anger.stage_defense, p_anger.stage_sp_defense) == (1, 1, 1, -1, -1),
+      f"hp={p_anger.hp}/{p_anger.max_hp} A{p_anger.stage_attack} C{p_anger.stage_sp_attack} S{p_anger.stage_speed} B{p_anger.stage_defense} D{p_anger.stage_sp_defense}")
 # 負例：HPが1/2超のままなら上がらない
 p_anger2 = make_poke(ability="ぎゃくじょう", def_b=200, hp_b=255); p_anger2.hp = p_anger2.max_hp
 execute(make_poke(atk_b=10), p_anger2, "たいあたり")
@@ -7595,7 +7596,7 @@ try:
     _bb._end_of_turn()
     check("拘束: 縛った側が場にいればターン終了時に1/8", _h - _d.hp == max(1, _d.max_hp // 8) and _d.bound_count == 2,
           f"{_h - _d.hp}")
-    # 速いカバルドン(side2)が先に処理されるので、遅いドヒドイデ(side1)が砂で倒れる前に拘束のダメージが入る
+    # ターン終了時は段ごと（天候→…→拘束。Showdown の順。2026-10-20 D10）: 砂で縛り手が倒れたら、拘束の段では解けてダメージは入らない
     _a = _mk31("ドヒドイデ@くろいヘドロ:しんちょう:くろいきり|じこさいせい|どくどく|まとわりつく:32/0/0/0/32/0:ひとでなし")
     _d = _mk31("カバルドン@ゴツゴツメット:わんぱく:じしん|あくび|ステルスロック|なまける:32/0/32/0/32/0:すなおこし")
     _s1, _s2 = _sides31(_a, _d)
@@ -7604,8 +7605,8 @@ try:
     _a.hp = 1; _a.item = None
     _d.bound_count = 3; _h = _d.hp - 40; _d.hp = _h
     _bb._end_of_turn()
-    check("ターン終了時処理は素早さの速い側から（速い側の拘束ダメージは、遅い縛り手が砂で倒れる前に入る）",
-          not _a.is_alive and _h - _d.hp == max(1, _d.max_hp // 8), f"{_a.hp} {_h - _d.hp}")
+    check("ターン終了時処理は段ごと（砂の段で縛り手が倒れたら、拘束の段では解けてダメージは入らない）",
+          not _a.is_alive and _h - _d.hp == 0 and _d.bound_count == 0, f"{_a.hp} {_h - _d.hp} {_d.bound_count}")
 except Exception as _e31:
     import traceback; traceback.print_exc()
     check("対戦エンジン本体の監査修正テストが実行できる", False, f"{type(_e31).__name__}: {_e31}")
@@ -10769,9 +10770,11 @@ def _t54_parity():
             except _F.ReplayMismatch as e:
                 mm.append((k, sd, str(e)[:160]))
     check("54 Python/Rust 照合: のろい・まもる・さいせいりょく・だいばくはつ の局面で再生が一致", not mm, str(mm)[:600])
-    r6 = res.get(("E1/E5", 6))
+    # 両方の全員が倒れて終わった戦（だいばくはつの相打ち）。シードの選び方は 2026-10-20 のルール変更（瀕死交代のタイミング等）で変わるので条件で拾う
+    dk = [r for (k, sd), r in res.items() if k == "E1/E5" and any("爆発して倒れた" in l for l in r["turns"][-1]["logs"])
+          and not any(p["alive"] for sx in ("side1", "side2") for p in r["turns"][-1][sx]["party"])]
     check("54 E1 Python/Rust 照合: 最後の1体どうしの相打ち（だいばくはつ）は両実装とも引き分け",
-          r6 is not None and r6["result"] == 0 and any("爆発して倒れた" in l for l in r6["turns"][-1]["logs"]), str(r6 and r6["result"]))
+          bool(dk) and all(r["result"] == 0 for r in dk), str([r["result"] for r in dk]))
     r = res.get(("E2", 3))
     m = r and next(p for p in r["turns"][1]["side1"]["party"] if p["name"] == "ミミッキュ")
     check("54 E2 Python/Rust 照合: のろいの自傷が1/2", bool(m) and m["max_hp"] - m["hp"] >= m["max_hp"] // 2, str(m and (m["hp"], m["max_hp"])))
@@ -11304,6 +11307,494 @@ for _nm57, _fn57 in (("N1", _t57_n1), ("N2", _t57_n2), ("N3", _t57_n3), ("N4", _
     except Exception as _e57:
         import traceback as _tb57
         check(f"57 {_nm57} のテストが実行できる", False, f"{type(_e57).__name__}: {_e57} {_tb57.format_exc()[-400:]}")
+
+print("\n=== 58. 規則監査（rule_audit_1020・mc1019 の記録）の修正 ===")
+# 番号は rule_audit_1020 の規則（A01 あばれ 等）。Rust は battle.rs mc1020_tests。仕様は REQUIREMENTS 1-14・4-3・4-6・4-6c ほか
+
+
+def _t58_env():
+    import random as _r
+    from simulator.battle import Battle as _B, BattleSide as _S, BattleField as _F, Action as _A, SideLog as _SL
+    from simulator.pokemon import build_from_spec as _bfs, parse_pokemon_spec as _pps
+
+    def mk(s):
+        return _bfs(_pps(s), dl, season="M-6", randomize=False)
+
+    def act(side, name):
+        p = side.active
+        i = next((i for i, m in enumerate(p.moves) if m is not None and m.name_jp == name), None)
+        if i is None:
+            return _A(type="move", move=dl.get_move(name), move_idx=-1)
+        return _A(type="move", move=p.moves[i], move_idx=i)
+
+    def run(s1, s2, p1, p2, turns, seed=1, prep=None, sidelog=False, field=None):
+        _r.seed(seed)
+        a, b = _S([mk(x) for x in s1]), _S([mk(x) for x in s2])
+        bt = _B(a, b, field or _F())
+        if prep:
+            prep(bt)
+        if sidelog:
+            bt.logs = _SL(bt)
+        k = [0, 0]
+
+        def plan(pl, j):
+            def ai(my, opp, f):
+                x = pl[min(k[j], len(pl) - 1)]
+                k[j] += 1
+                if callable(x):
+                    return x(my)
+                if x.startswith("SW:"):
+                    return _A(type="switch", switch_to=int(x[3:]))
+                return act(my, x)
+            return ai
+        a1, a2 = plan(p1, 0), plan(p2, 1)
+        bt.start(a1, a2)
+        bt._i0 = len(bt.logs)
+        r = bt._turn_loop(a1, a2, max_turns=turns)
+        return bt, r
+    return run, act
+
+
+_N58 = "きれいなぬけがら"
+_KAB58 = f"カビゴン@{_N58}:しんちょう:のろい|まもる:0/0/0/0/0/0:あついしぼう"
+_KABB58 = f"カビゴン@{_N58}:しんちょう:のろい|まもる:32/0/32/0/32/0:あついしぼう"
+_GAB58 = f"ガブリアス@{_N58}:いじっぱり:げきりん|じしん:0/32/0/0/0/32:さめはだ"
+
+
+def _t58_rampage():
+    run, act = _t58_env()
+    from simulator.alphazero import legal_actions_indexed
+    from simulator.battle import is_trapped, rampage_locked
+    from simulator.search_ai import SearchAI
+    import types as _ty
+    hp1 = lambda bt: setattr(bt.side2.party[0], "hp", 1)
+    bt, _ = run([_GAB58], [_KAB58, _KAB58], ["げきりん", "じしん"], ["のろい"], 1, prep=hp1)
+    g = bt.side1.party[0]
+    check("58 A01 げきりんで倒しても固定される（倒した後も同じ技・残り1〜2回）",
+          g.locked_move == "げきりん" and g.lock_count in (1, 2), f"{g.locked_move} {g.lock_count}")
+    bt, _ = run([_GAB58, _KAB58], [_KABB58], ["げきりん"], ["のろい"], 1)
+    leg = legal_actions_indexed(bt.side1, bt.side2, bt.field)
+    check("58 A01 あばれの固定中の合法手は固定の技だけ（交代もメガシンカも無い）",
+          [(a.type, a.move.name_jp if a.move else None) for a, _ in leg] == [("move", "げきりん")], str(leg))
+    bt.side1.active.pp[0] = 0
+    leg = legal_actions_indexed(bt.side1, bt.side2, bt.field)
+    check("58 A01 固定中に技のPPが0でも わるあがき にならない（2回目以降はPPを使わない）",
+          [a.move.name_jp for a, _ in leg] == ["げきりん"], str(leg))
+    cands = SearchAI._candidate_actions(_ty.SimpleNamespace(collapse_mega=False), bt.side1, bt.side2, bt.field)
+    check("58 A01 探索の候補（SearchAI._candidate_actions）も固定の技だけ", [c.type for c in cands] == ["move"], str(cands))
+    gh = bt.side1.active
+    gh.type1 = "ゴースト"
+    check("58 A01 ゴーストタイプ・きれいなぬけがら でも固定中は交代できない（is_trapped）", is_trapped(gh, bt.side2.active) and rampage_locked(gh))
+    from collections import Counter
+    cnt, pp_ok, conf = Counter(), True, True
+    for sd in range(80):
+        bt, _ = run([f"ガブリアス@{_N58}:いじっぱり:げきりん:0/0/0/0/0/0:すながくれ"], [_KABB58], ["げきりん"], ["のろい"], 6, seed=sd)
+        n = sum(1 for l in bt.logs if "げきりん →" in l)
+        i_c = next((i for i, l in enumerate(bt.logs) if "疲れてこんらん" in l), None)
+        if i_c is None:
+            continue
+        cnt[sum(1 for l in bt.logs[:i_c] if "げきりん →" in l)] += 1
+    for sd in range(10):
+        bt, _ = run([f"ガブリアス@{_N58}:いじっぱり:げきりん:0/0/0/0/0/0:すながくれ"], [_KABB58], ["げきりん"], ["のろい"], 2, seed=sd)
+        g = bt.side1.party[0]
+        pp_ok = pp_ok and g.pp[0] == g.moves[0].pp - 1 and sum(1 for l in bt.logs if "げきりん →" in l) == 2
+    check("58 A01 あばれは合計2〜3ターンで疲れてこんらん（実機・Showdown。REQUIREMENTS 1-14）", set(cnt) == {2, 3}, str(dict(cnt)))
+    check("58 A01 あばれのPPは初回だけ減る", pp_ok)
+    # 固定中の技がまもるで防がれたら固定は解ける（最後のターンだったら疲れてこんらん）
+    seen = set()
+    for sd in range(40):
+        bt, _ = run([f"ガブリアス@{_N58}:いじっぱり:げきりん:0/0/0/0/0/0:すながくれ"], [_KABB58], ["げきりん"], ["のろい", "まもる"], 2, seed=sd)
+        g = bt.side1.party[0]
+        last = g.confused
+        seen.add(last)
+        if g.locked_move is not None:
+            seen.add("still")
+    check("58 A01 固定中にまもるで防がれたら固定が解ける（最後のターンならこんらん・そうでなければこんらんしない）",
+          "still" not in seen and seen == {True, False}, str(seen))
+
+
+def _t58_confusion():
+    run, act = _t58_env()
+    from collections import Counter
+    c = Counter()
+    for sd in range(80):
+        def prep(bt):
+            bt.side1.party[0].confuse()
+        bt, _ = run([_KABB58], [f"ブラッキー@{_N58}:おだやか:ねがいごと:32/0/0/0/32/0:シンクロ"], ["のろい"], ["ねがいごと"], 6, seed=sd, prep=prep)
+        acts = [l for l in bt.logs if "こんらん が とけた" in l or "こんらんして自分を傷つけた" in l or "のろい！" in l]
+        k = next((i for i, l in enumerate(acts) if "こんらん が とけた" in l), None)
+        c[None if k is None else k + 1] += 1
+    check("58 A12 こんらんは2〜4回目の行動で解ける（REQUIREMENTS 4-3）", set(c) <= {2, 3, 4} and len(c) == 3, str(dict(c)))
+
+
+def _t58_ohko_disguise():
+    run, act = _t58_env()
+    hit = None
+    for sd in range(300):
+        bt, _ = run([f"カビゴン@{_N58}:いじっぱり:じわれ:0/0/0/0/0/0:あついしぼう"], [f"ミミッキュ@ゴツゴツメット:いじっぱり:つるぎのまい:0/0/0/0/0/0:ばけのかわ"],
+                    ["じわれ"], ["つるぎのまい"], 1, seed=sd)
+        if any("じわれ → ミミッキュ に 0ダメ" in l for l in bt.logs):
+            hit = bt
+            break
+    m = hit.side2.party[0] if hit else None
+    check("58 A35 一撃必殺は ばけのかわ に防がれて剥がれる（Showdown の Disguise onDamage）",
+          m is not None and m.is_alive and getattr(m, "_disguise_broken", False), str(hit.logs[-6:] if hit else None))
+    k = hit.side1.party[0] if hit else None
+    check("58 C09 ばけのかわ が防いだ一撃必殺（じわれ＝非接触）ではゴツゴツメットは出ない", k is not None and k.hp == k.max_hp, f"{k.hp if k else None}")
+    for sd in range(300):
+        bt, _ = run([f"ドドゲザン@{_N58}:いじっぱり:ハサミギロチン:0/0/0/0/0/0:まけんき"], [f"アーマーガア@ゴツゴツメット:わんぱく:はねやすめ:0/0/0/0/0/0:プレッシャー"],
+                    ["ハサミギロチン"], ["はねやすめ"], 1, seed=sd)
+        if any("一撃必殺" in l for l in bt.logs):
+            break
+    d = bt.side1.party[0]
+    check("58 C09 一撃必殺（接触）で倒してもゴツゴツメットの反動を受ける", d.hp == d.max_hp - d.max_hp // 6, f"{d.hp}/{d.max_hp}")
+    check("58 D07 一撃必殺で倒れた表示は1回", sum(1 for l in bt.logs if "倒れた" in l and "アーマーガア" in l) == 1,
+          str([l for l in bt.logs if "倒れた" in l]))
+    for sd in range(300):
+        bt, _ = run([f"ドドゲザン@{_N58}:いじっぱり:ハサミギロチン:0/0/0/0/0/0:まけんき"], [f"キラフロル@{_N58}:ずぶとい:のろい:0/0/0/0/0/0:どくげしょう"],
+                    ["ハサミギロチン"], ["のろい"], 1, seed=sd)
+        if any("一撃必殺" in l for l in bt.logs):
+            break
+    check("58 C21 一撃必殺（物理）で倒しても どくげしょう でどくびしがまかれる", bt.field.toxic_spikes[0] == 1, str(bt.field.toxic_spikes))
+    bt, _ = run([f"ガブリアス@{_N58}:いじっぱり:じしん:0/0/0/0/0/0:すながくれ"], [f"ミミッキュ@ゴツゴツメット:いじっぱり:つるぎのまい:0/0/0/0/0/0:ばけのかわ"],
+                ["じしん"], ["つるぎのまい"], 1)
+    check("58 C09 じしん（非接触）では ばけのかわ でもゴツゴツメットは出ない", bt.side1.party[0].hp == bt.side1.party[0].max_hp)
+    bt, _ = run([f"ガブリアス@{_N58}:いじっぱり:ドラゴンクロー|アイアンヘッド:0/0/0/0/0/0:すながくれ"], [f"ミミッキュ@ゴツゴツメット:いじっぱり:つるぎのまい:0/0/0/0/0/0:ばけのかわ"],
+                ["アイアンヘッド"], ["つるぎのまい"], 1)
+    g = bt.side1.party[0]
+    check("58 C09 ばけのかわ に接触技が当たってもゴツゴツメットの反動を受ける（Showdown: ダメージ0でも DamagingHit）",
+          g.hp == g.max_hp - g.max_hp // 6, f"{g.hp}/{g.max_hp}")
+
+
+def _t58_faint_timing():
+    run, act = _t58_env()
+
+    def prep(bt):
+        bt.side2.party[0].hp = 1
+        bt.side1.party[0].hp -= 40
+        bt.field.weather = "sandstorm"; bt.field.weather_count = 5
+    bt, _ = run([f"ガブリアス@たべのこし:ようき:じしん:0/32/0/0/0/32:さめはだ"], [_KAB58, f"ミミッキュ@{_N58}:いじっぱり:のろい:0/0/0/0/0/0:ばけのかわ"],
+                ["じしん"], ["のろい"], 1, prep=prep)
+    m = bt.side2.party[1]
+    i_in = next((i for i, l in enumerate(bt.logs) if "ミミッキュ が登場した" in l), None)
+    i_eot = next((i for i, l in enumerate(bt.logs) if "たべのこし で HPが" in l), None)
+    check("58 D06 倒れた個体の交代はターン終了時の処理の後（交代先はそのターンの砂を受けない。REQUIREMENTS 4-6）",
+          m.hp == m.max_hp and i_in is not None and i_eot is not None and i_eot < i_in
+          and not any("ミミッキュ は すなあらし" in l for l in bt.logs), f"{m.hp}/{m.max_hp} {i_in} {i_eot}")
+    i_f = next((i for i, l in enumerate(bt.logs) if l == "カビゴン は倒れた！"), None)
+    check("58 D06 倒れた表示は倒れた直後（ターン終了時の処理・交代の前）", i_f is not None and i_eot is not None and i_f < i_eot, f"{i_f} {i_eot}")
+    # 先攻に倒された側はそのターン行動しない（交代先も出ない）
+    bt, _ = run([f"ガブリアス@{_N58}:ようき:じしん:0/32/0/0/0/32:さめはだ"], [f"カビゴン@{_N58}:しんちょう:のしかかり:0/0/0/0/0/0:あついしぼう", _KAB58],
+                ["じしん"], ["のしかかり"], 1, prep=lambda bt: setattr(bt.side2.party[0], "hp", 1))
+    check("58 D06 先攻に倒された側は行動しない（後攻の技は出ない）", not any("のしかかり" in l and not l.startswith("▷") for l in bt.logs))
+
+
+def _t58_sucker_redcard():
+    run, act = _t58_env()
+    bt, _ = run([f"ドドゲザン@{_N58}:いじっぱり:ふいうち:0/0/0/0/0/0:まけんき"], [f"ハッサム@{_N58}:いじっぱり:バレットパンチ:0/0/0/0/0/32:テクニシャン"],
+                ["ふいうち"], ["バレットパンチ"], 1, seed=2)
+    check("58 B10 相手が先に行動したら ふいうち は失敗する（Showdown: 相手がまだ動いていない時だけ）",
+          any("ふいうち は失敗した" in l for l in bt.logs), str([l for l in bt.logs if "ふいうち" in l]))
+    bt, _ = run([f"ドドゲザン@{_N58}:いじっぱり:ふいうち:0/0/0/0/0/32:まけんき"], [f"カビゴン@{_N58}:いじっぱり:のしかかり:0/0/0/0/0/0:あついしぼう"],
+                ["ふいうち"], ["のしかかり"], 1)
+    check("58 B10 相手より先なら ふいうち は当たる", any("ふいうち →" in l for l in bt.logs))
+    bt, _ = run([f"カビゴン@{_N58}:ゆうかん:のしかかり:0/0/0/0/0/0:あついしぼう", f"カバルドン@{_N58}:わんぱく:のろい:0/0/0/0/0/0:すなおこし"],
+                [f"ガブリアス@レッドカード:ようき:つるぎのまい:0/0/0/0/0/32:さめはだ"], ["のしかかり"], ["つるぎのまい"], 1)
+    check("58 A25 レッドカードは当てたターンにすぐ交代させる（Showdown・実機）",
+          bt.side1.active.name == "カバルドン" and any("強制交代" in l for l in bt.logs), bt.side1.active.name)
+
+    def low(bt):
+        bt.side2.party[0].hp = 1
+    bt, _ = run([f"カビゴン@{_N58}:ゆうかん:のしかかり:0/0/0/0/0/0:あついしぼう", f"カバルドン@{_N58}:わんぱく:のろい:0/0/0/0/0/0:すなおこし"],
+                [f"ガブリアス@レッドカード:ようき:つるぎのまい:0/0/0/0/0/32:さめはだ", _KAB58], ["のしかかり"], ["つるぎのまい"], 1, prep=low)
+    check("58 A25 持ち主が倒れたら レッドカード は発動しない（Showdown target.hp）", bt.side1.party[0].is_alive and bt.side1.active_idx == 0
+          and bt.side2.party[0].item == "レッドカード", f"{bt.side1.active.name} {bt.side2.party[0].item}")
+
+
+def _t58_contact_status():
+    run, act = _t58_env()
+    from simulator.alphazero import legal_actions_indexed
+    from simulator.ai import _filter_valid_by_lock
+    bt, _ = run([f"フラエッテ(永遠)@{_N58}:ひかえめ:ドレインキッス:0/0/0/0/0/0:フラワーベール"], [f"アーマーガア@ゴツゴツメット:わんぱく:はねやすめ:0/0/0/0/0/0:プレッシャー"],
+                ["ドレインキッス"], ["はねやすめ"], 1)
+    check("58 B03 ドレインキッスは接触技（ゴツゴツメットが発動）", any("ゴツゴツメット" in l and not l.startswith("▷") for l in bt.logs))
+    bt, _ = run([_KAB58], [f"カビゴン@{_N58}:しんちょう:のろい|のしかかり:0/0/0/0/0/0:あついしぼう"], ["のろい"], ["のしかかり"], 0,
+                prep=lambda bt: setattr(bt.side2.party[0], "taunt_count", 3))
+    leg = [a.move.name_jp for a, _ in legal_actions_indexed(bt.side2, bt.side1, bt.field) if a.type == "move"]
+    check("58 A05 ちょうはつ中は変化技を合法手に入れない", leg == ["のしかかり"], str(leg))
+    p = bt.side2.party[0]
+    p.choice_locked_move = "のろい"; p.item = "こだわりスカーフ"
+    v = _filter_valid_by_lock([(i, m) for i, m in enumerate(p.moves)], p)
+    check("58 A05 ちょうはつ中に変化技へ縛られていたら わるあがき（選べる技なし）", v == [], str(v))
+    p.item = None; p.taunt_count = 0
+    v = _filter_valid_by_lock([(i, m) for i, m in enumerate(p.moves)], p)
+    check("58 A23 こだわりアイテムを失ったら技の縛りは解ける", len(v) == 2, str(v))
+    p.torment = True; p.last_used_move = "のしかかり"
+    v = [m.name_jp for i, m in _filter_valid_by_lock([(i, m) for i, m in enumerate(p.moves)], p)]
+    check("58 A06 いちゃもん中は直前の技を合法手に入れない", v == ["のろい"], str(v))
+    def enc(bt):
+        q = bt.side2.party[0]; q.pp[0] = 0; q.encore_count = 2; q.locked_move = "のろい"; q.last_used_move = "のろい"
+    bt, _ = run([_KAB58], [f"カビゴン@{_N58}:しんちょう:のろい|のしかかり:0/0/0/0/0/0:あついしぼう"], ["のろい"], ["のろい"], 0, prep=enc)
+    leg = [a.move.name_jp for a, _ in legal_actions_indexed(bt.side2, bt.side1, bt.field) if a.type == "move"]
+    check("58 A04 アンコールの技のPPが尽きたら縛りは無い（わるあがきにならない）", leg == ["のしかかり"], str(leg))
+    def enc2(bt):
+        q = bt.side2.party[0]; q.pp[0] = 1; q.encore_count = 3; q.locked_move = "のろい"; q.last_used_move = "のろい"
+    bt, _ = run([_KAB58], [f"カビゴン@{_N58}:しんちょう:のろい|のしかかり:0/0/0/0/0/0:あついしぼう"], ["のろい"], ["のろい"], 1, prep=enc2)
+    q = bt.side2.party[0]
+    check("58 A04 アンコールの技のPPがターン中に尽きたらターン終了時にアンコールが解ける（Showdown encore onResidual）",
+          q.encore_count == 0 and q.locked_move is None, f"{q.encore_count} {q.locked_move}")
+    bt, _ = run([f"オーロンゲ@{_N58}:いじわる:のろい:0/0/0/0/0/0:いたずらごころ"], [f"カビゴン@{_N58}:しんちょう:のしかかり:0/0/0/0/0/0:あついしぼう"],
+                [lambda my: act(my, "いちゃもん"), "のろい"], ["のしかかり"], 2)
+    check("58 A06 いちゃもん中は同じ技を続けて出せない", sum(1 for l in bt.logs if "のしかかり →" in l) == 1)
+    bt, _ = run([f"ゲンガー@{_N58}:おくびょう:のろい|シャドーボール:0/0/0/0/0/0:のろわれボディ"], [f"ゲンガー@{_N58}:おくびょう:シャドーボール:0/0/0/0/0/0:のろわれボディ"],
+                [lambda my: act(my, "ふういん"), "のろい"], ["シャドーボール"], 2)
+    check("58 A08 ふういん中は相手が共通の技を出せない", not any(l.startswith("ゲンガー の シャドーボール →") for l in bt.logs))
+    found = None
+    for sd in range(100):
+        def para(bt):
+            bt.side1.party[0].status = "paralysis"
+        bt, _ = run([f"ガブリアス@こだわりスカーフ:ようき:じしん|げきりん:0/0/0/0/0/0:さめはだ"], [_KAB58], ["じしん"], ["のろい"], 1, seed=sd, prep=para)
+        if any("しびれて" in l for l in bt.logs):
+            found = bt.side1.party[0].choice_locked_move
+            break
+    check("58 A23 動けなかったターンはこだわりの縛りが付かない", found is None and sd < 99, str(found))
+
+
+def _t58_items_status():
+    run, act = _t58_env()
+    bt, _ = run([f"カバルドン@{_N58}:わんぱく:あくび|のろい:0/0/0/0/0/0:すなおこし"], [f"カビゴン@ラムのみ:しんちょう:のろい:0/0/0/0/0/0:あついしぼう"],
+                ["あくび", "のろい"], ["のろい"], 2)
+    k = bt.side2.party[0]
+    check("58 C42 あくびで眠ったらラムのみがすぐ治す（Showdown の Lum onAfterSetStatus）", k.status is None and k.item is None, f"{k.status} {k.item}")
+    bt, _ = run([f"カビゴン@カゴのみ:しんちょう:ねむる:0/0/0/0/0/0:あついしぼう"], [_KAB58],
+                ["ねむる"], ["のろい"], 1, prep=lambda bt: setattr(bt.side1.party[0], "hp", 100))
+    k = bt.side1.party[0]
+    i_r = next((i for i, l in enumerate(bt.logs) if "ねむって体力を回復" in l), None)
+    i_c = next((i for i, l in enumerate(bt.logs) if "カゴのみ" in l and not l.startswith("▷")), None)
+    check("58 C42 ねむる で眠ったらカゴのみがすぐ起こす（同じ行動の直後）", k.status is None and i_r is not None and i_c is not None and i_c == i_r + 1,
+          f"{k.status} {i_r} {i_c}")
+
+    def bind(bt):
+        p = bt.side2.party[0]; p.hp = p.max_hp // 2 + 2; p.bound_count = 4
+    bt, _ = run([f"ドヒドイデ@{_N58}:ずぶとい:のろい:0/0/0/0/0/0:さいせいりょく"], [f"カビゴン@オボンのみ:しんちょう:のろい:0/0/0/0/0/0:あついしぼう"],
+                ["のろい"], ["のろい"], 1, prep=bind)
+    k = bt.side2.party[0]
+    check("58 C06 ターン終了時のバインドでHP半分以下になったらオボンのみをすぐ食べる", k.item is None and k.hp > k.max_hp // 2, f"{k.hp}/{k.max_hp} {k.item}")
+
+    def sr(bt):
+        bt.field.stealth_rock[1] = True
+        p = bt.side2.party[1]; p.hp = p.max_hp // 2 + 3
+    bt, _ = run([_KAB58], [_KAB58, f"リザードン@オボンのみ:ひかえめ:かえんほうしゃ:0/0/0/0/0/0:もうか"], ["のろい"], ["SW:1"], 1, prep=sr)
+    z = bt.side2.party[1]
+    check("58 C06 登場時の設置技でHP半分以下になったらオボンのみをすぐ食べる", z.item is None, f"{z.hp}/{z.max_hp} {z.item}")
+
+    def frz(bt):
+        bt.side2.party[0].status = "freeze"
+    bt, _ = run([f"リザードン@{_N58}:ひかえめ:かえんほうしゃ:0/0/0/0/0/0:もうか"], [f"カビゴン@{_N58}:しんちょう:のろい:32/0/32/0/32/0:あついしぼう"],
+                ["かえんほうしゃ"], ["のろい"], 1, prep=frz, seed=3)
+    check("58 A11 こおり状態でほのお技を受けると治る（REQUIREMENTS 4-3）", bt.side2.party[0].status is None)
+    ok = 0
+    for sd in range(20):
+        bt, _ = run([f"リザードン@{_N58}:いじっぱり:フレアドライブ:0/0/0/0/0/0:もうか"], [f"カビゴン@{_N58}:しんちょう:のろい:32/0/32/0/32/0:あついしぼう"],
+                    ["フレアドライブ"], ["のろい"], 1, prep=lambda bt: setattr(bt.side1.party[0], "status", "freeze"), seed=sd)
+        ok += any("フレアドライブ →" in l for l in bt.logs)
+    check("58 A11 こおり状態でも フレアドライブ は溶けて出る（DB の効果文・Showdown defrost）", ok == 20, str(ok))
+    bt, _ = run([f"ゲンガー@{_N58}:おくびょう:みがわり:32/0/0/0/0/32:のろわれボディ"], [f"カビゴン@{_N58}:いじっぱり:かみくだく:0/0/0/0/0/0:あついしぼう"],
+                ["みがわり"], ["かみくだく"], 1)
+    check("58 D20 みがわり が受けた攻撃に本体への行を出さない", not any("かみくだく → ゲンガー" in l for l in bt.logs)
+          and any("みがわり が壊れた" in l or "→ みがわり" in l for l in bt.logs), str([l for l in bt.logs if "かみくだく" in l or "みがわり" in l]))
+    bt, _ = run([f"カバルドン@{_N58}:わんぱく:あくび|つるぎのまい|ステルスロック|ねばねばネット:0/0/0/0/0/0:すなおこし"],
+                [f"アーマーガア@{_N58}:わんぱく:はねやすめ:0/0/0/0/0/0:プレッシャー", _KAB58], ["あくび", "つるぎのまい", "ステルスロック", "ねばねばネット"], ["はねやすめ"], 4)
+    p = bt.side1.party[0]
+    used = [p.moves[i].pp - p.pp[i] for i in range(4)]
+    check("58 B12 プレッシャー: 相手が対象の変化技・ステルスロックはPP2、自分が対象・ねばねばネットはPP1（Showdown pressureTargets）",
+          used == [2, 1, 2, 1], str(used))
+
+
+def _t58_eot_order():
+    run, act = _t58_env()
+
+    def setup(bt):
+        p = bt.side2.party[0]; p.status = "poison"; p.hp = 10
+    bt, _ = run([_KAB58], [f"カビゴン@たべのこし:しんちょう:のろい:0/0/0/0/0/0:あついしぼう"], ["のろい"], ["のろい"], 1, prep=setup)
+    ls = [l for l in bt.logs if "どく のダメージ" in l or ("たべのこし" in l and not l.startswith("▷"))]
+    check("58 D10 ターン終了時は たべのこし が どく より先（Showdown の残り処理の順 5→9）", ls and "たべのこし" in ls[0], str(ls))
+
+    def setup2(bt):
+        p = bt.side1.party[0]; p.status = "badpoison"; p.bad_poison_count = 2; p.hp = 80
+    bt, _ = run([f"ブラッキー@{_N58}:おだやか:ねがいごと|まもる:0/0/0/0/0/0:シンクロ"], [_KAB58], ["ねがいごと", "まもる"], ["のろい"], 2, prep=setup2)
+    i_w = next((i for i, l in enumerate(bt.logs) if "ねがいごと が叶った" in l), None)
+    i_p = [i for i, l in enumerate(bt.logs) if "もうどく のダメージ" in l]
+    check("58 D10 ねがいごとは どく より先に叶う（Showdown 4→9）", i_w is not None and len(i_p) == 2 and i_p[0] < i_w < i_p[1], f"{i_w} {i_p}")
+
+    def ls2(bt):
+        p = bt.side1.party[0]; p.seeded = True; p.hp = 5
+        q = bt.side2.party[0]; q.hp = q.max_hp // 2
+    bt, _ = run([_KAB58, _KAB58], [_KAB58], ["のろい"], ["のろい"], 1, prep=ls2)
+    q = bt.side2.party[0]
+    check("58 A17 やどりぎの回復は実際に吸ったHPまで（残りHP5なら5だけ）", q.hp == q.max_hp // 2 + 5, f"{q.hp}/{q.max_hp}")
+    def rain(bt):
+        bt.field.weather = "rain"; bt.field.weather_count = 5
+        bt.side1.party[0].hp = 50
+    bt, _ = run([f"ペリッパー@{_N58}:ずぶとい:のろい:0/0/0/0/0/0:あめうけざら"], [_KAB58], ["のろい"], ["のろい"], 1, prep=rain)
+    check("58 H01 あめうけざら の回復を表示する", any("あめうけざら で HPが" in l for l in bt.logs))
+    bt, _ = run([f"ユキメノコ@{_N58}:おくびょう:さむいギャグ:0/0/0/0/0/0:ゆきがくれ", _KAB58], [_KAB58], ["さむいギャグ"], ["のろい"], 1,
+                prep=lambda bt: (setattr(bt.field, "weather", "hail"), setattr(bt.field, "weather_count", 5)))
+    check("58 D04 ゆき中の さむいギャグ も技の行を出す", any("さむいギャグ を使った" in l for l in bt.logs))
+
+
+def _t58_misc_display():
+    run, act = _t58_env()
+    bt, _ = run([f"ミミロップ@{_N58}:いじっぱり:インファイト:0/0/0/0/0/0:きもったま"], [f"ゲンガー@{_N58}:おくびょう:のろい:32/0/32/0/0/0:のろわれボディ"],
+                ["インファイト"], ["のろい"], 1)
+    check("58 B05 きもったま でゴースト（ゴースト/どく）に当てたかくとう技は「いまひとつ」（どくの0.5）",
+          any("いまひとつ" in l for l in bt.logs))
+    bt, _ = run([f"ミミロップ@{_N58}:いじっぱり:インファイト:0/0/0/0/0/0:きもったま"], [f"ミミッキュ@{_N58}:いじっぱり:のろい:32/0/32/0/0/0:ばけのかわ"],
+                ["インファイト", "インファイト"], ["のろい"], 2)
+    check("58 B05 きもったま でゴースト/フェアリーに当てたかくとう技は「いまひとつ」・無効の0として表示しない",
+          sum(1 for l in bt.logs if "いまひとつ" in l) == 1, str([l for l in bt.logs if "こうか" in l]))
+    bt, _ = run([f"ルカリオ@{_N58}:いじっぱり:ドレインパンチ:0/32/0/0/0/32:せいしんりょく"], [_KABB58], ["ドレインパンチ"], ["のろい"], 1)
+    check("58 H01 HP満タンでの吸収は「吸収した」を出さない（実際の回復量で表示）", not any("吸収した" in l for l in bt.logs))
+    bt, _ = run([f"ルカリオ@{_N58}:いじっぱり:インファイト:0/32/0/0/0/32:せいしんりょく"], [f"カビゴン@ヨプのみ:しんちょう:のろい:32/0/32/0/32/0:あついしぼう"],
+                ["インファイト"], ["のろい"], 1)
+    check("58 C46 半減きのみの発動を表示する", bt.side2.party[0].item is None and any("ヨプのみ！" in l for l in bt.logs),
+          str([l for l in bt.logs if "ヨプ" in l]))
+    from simulator.battle import _hp_berry_now
+    from simulator.pokemon import build_from_spec as _bfs, parse_pokemon_spec as _pps
+    k = _bfs(_pps(f"カビゴン@オボンのみ:しんちょう:のろい:0/0/0/0/0/0:あついしぼう"), dl, season="M-6", randomize=False)
+    k.hp = 10; lg = []
+    _hp_berry_now(k, None, lg)
+    check("58 D21 オボンのみの行は主語の個体を持つ（同名ミラーの陣営を主語で決める）", lg and getattr(lg[0], "subj", 0) == id(k))
+    bt, _ = run([f"ゲンガー@{_N58}:おくびょう:みちづれ:0/0/0/0/0/32:のろわれボディ"], [f"ガブリアス@{_N58}:いじっぱり:じしん|シャドークロー:0/32/0/0/0/0:さめはだ", _KAB58],
+                ["みちづれ"], ["シャドークロー"], 1, prep=lambda bt: setattr(bt.side1.party[0], "hp", 1))
+    check("58 D07 みちづれ で倒れた表示は1回", sum(1 for l in bt.logs if l.startswith("ガブリアス は") and "倒れた" in l) == 0
+          and sum(1 for l in bt.logs if "みちづれ に巻き込まれた" in l) == 1, str([l for l in bt.logs if "倒れた" in l or "巻き込" in l]))
+    seen = {}
+    for sd in range(120):
+        bt, _ = run([f"ガブリアス@{_N58}:いじっぱり:アイアンヘッド:0/32/0/0/0/32:さめはだ"], [f"ウルガモス@{_N58}:ずぶとい:のろい:0/0/0/0/0/0:ほのおのからだ", _KAB58],
+                    ["アイアンヘッド"], ["のろい"], 1, seed=sd, prep=lambda bt: setattr(bt.side2.party[0], "hp", 1))
+        seen[sd] = bt.side1.party[0].status == "burn"
+    n = sum(seen.values())
+    check("58 C23 ほのおのからだ は持ち主が倒れても発動する（Showdown の DamagingHit・約30%）", 20 <= n <= 55, f"{n}/120")
+
+
+def _t58_counter_balloon():
+    run, act = _t58_env()
+    bt, _ = run([f"ラグラージ@{_N58}:おだやか:ミラーコート:32/0/0/0/32/0:げきりゅう"], [f"ブリジュラス@ふうせん:ひかえめ:りゅうせいぐん:32/0/32/0/32/0:じきゅうりょく"],
+                ["ミラーコート"], ["りゅうせいぐん"], 1)
+    b = bt.side2.party[0]
+    check("58 C39/C18 ミラーコートを受けても ふうせん が割れ、じきゅうりょく が発動する", b.is_alive and b.item is None and b.stage_defense == 1,
+          f"{b.is_alive} {b.item} {b.stage_defense} {bt.logs[-5:]}")
+
+
+def _t58_selfboost():
+    run, act = _t58_env()
+    hp1 = lambda bt: setattr(bt.side2.party[0], "hp", 1)
+    bt, _ = run([f"ガブリアス@{_N58}:いじっぱり:スケイルショット:0/32/0/0/0/32:さめはだ"], [_KAB58, _KAB58], ["スケイルショット"], ["のろい"], 1, prep=hp1)
+    a = bt.side1.party[0]
+    check("58 B09 スケイルショット で倒しても防御-1・素早さ+1", (a.stage_defense, a.stage_speed) == (-1, 1), f"{a.stage_defense} {a.stage_speed}")
+    bt, _ = run([f"リザードン@{_N58}:いじっぱり:ニトロチャージ:0/32/0/0/0/32:もうか"], [_KAB58, _KAB58], ["ニトロチャージ"], ["のろい"], 1, prep=hp1)
+    check("58 B09 ニトロチャージ で倒しても素早さ+1", bt.side1.party[0].stage_speed == 1)
+    n = 0
+    for sd in range(60):
+        bt, _ = run([f"リザードン@{_N58}:ひかえめ:ほのおのまい:0/0/0/32/0/32:もうか"], [_KAB58, _KAB58], ["ほのおのまい"], ["のろい"], 1, prep=hp1, seed=sd)
+        n += bt.side1.party[0].stage_sp_attack == 1
+    check("58 B09 ほのおのまい で倒しても50%で特攻+1", 18 <= n <= 42, f"{n}/60")
+
+
+def _t58_parity():
+    import feature1 as _F
+    import pokenavi_engine as _E
+    if not hasattr(_E, "mcts_3v3_record"):
+        return
+    _F._ensure_loaded("M-6", 8)
+    N = _N58
+    PAR = {
+        "A01": ([f"ガブリアス@{N}:いじっぱり:げきりん:0/32/0/0/0/32:さめはだ"], [_KABB58, _KABB58], "疲れてこんらん"),
+        "A12": ([f"アシレーヌ@{N}:ひかえめ:あやしいひかり|みずのはどう:0/0/0/32/0/32:げきりゅう"], [_KABB58], "こんらん"),
+        "A35": ([f"カビゴン@{N}:いじっぱり:じわれ:32/32/0/0/0/0:あついしぼう"], [f"ミミッキュ@ゴツゴツメット:いじっぱり:のろい|じゃれつく:32/0/32/0/0/0:ばけのかわ"], "0ダメ"),
+        "D06": ([f"ガブリアス@{N}:ようき:じしん:0/32/0/0/0/32:すながくれ", _KAB58], [f"カバルドン@{N}:わんぱく:のろい:0/0/0/0/0/0:すなおこし", _KAB58], "登場した"),
+        "A25": ([f"カビゴン@{N}:ゆうかん:のしかかり:0/0/0/0/0/0:あついしぼう", f"カバルドン@{N}:わんぱく:のろい:0/0/0/0/0/0:すなおこし"],
+                [f"ガブリアス@レッドカード:ようき:つるぎのまい|じしん:0/0/0/0/0/32:さめはだ"], "レッドカード"),
+        "C42": ([f"カバルドン@{N}:わんぱく:あくび|じしん:32/0/32/0/0/0:すなおこし"], [f"カビゴン@ラムのみ:しんちょう:のろい|のしかかり:0/0/0/0/0/0:あついしぼう"], "ラムのみ"),
+        "D10": ([f"ドヒドイデ@{N}:ずぶとい:どくどく|ねっとう:32/0/32/0/0/0:さいせいりょく"], [f"ブラッキー@たべのこし:おだやか:ねがいごと|イカサマ:32/0/0/0/32/0:シンクロ"], "ねがいごと が叶った"),
+        "B12": ([f"カバルドン@{N}:わんぱく:あくび|じしん:32/0/32/0/0/0:すなおこし"], [f"アーマーガア@{N}:わんぱく:はねやすめ|ボディプレス:32/0/32/0/0/0:プレッシャー"], "あくび"),
+        "A05": ([f"オーロンゲ@{N}:わんぱく:ちょうはつ|じゃれつく:32/0/32/0/0/0:いたずらごころ"], [f"カビゴン@{N}:わんぱく:のろい|のしかかり:32/0/32/0/0/0:あついしぼう"], "ちょうはつ"),
+        "C39": ([f"ラグラージ@{N}:おだやか:ミラーコート|じしん:32/0/0/0/32/0:げきりゅう"], [f"ブリジュラス@ふうせん:ひかえめ:りゅうせいぐん|ラスターカノン:32/0/32/0/32/0:じきゅうりょく"], "ミラーコート"),
+    }
+    mm, seen = [], set()
+    for k, (pa, pb, kw) in PAR.items():
+        for sd in range(1, 9):
+            if sd > 4 and k in seen:
+                break
+            try:
+                rec = _F.play_and_record_rust(pa, pb, season="M-6", seed=sd, mcts_sims=30, sel1_idx=list(range(len(pa))))
+                if any(kw in l for t in rec["turns"] for l in t["logs"]):
+                    seen.add(k)
+            except _F.ReplayMismatch as e:
+                mm.append((k, sd, str(e)[:160]))
+    check("58 Python/Rust 照合: 各規則の局面を Rust の探索で戦い Python で再生して一致", not mm, str(mm)[:600])
+    check("58 Python/Rust 照合: 各局面で規則の場面が実際に起きた", seen == set(PAR), str(set(PAR) - seen))
+
+
+def _t58_simul_switch():
+    run, act = _t58_env()
+
+    def both(bt):
+        for sd in (bt.side1, bt.side2):
+            p = sd.party[0]; p.hp = 1; p.status = "poison"
+    bt, _ = run([_KAB58, f"ボーマンダ@{_N58}:いじっぱり:じしん:0/0/0/0/0/0:いかく"], [_KAB58, _KABB58], ["のろい"], ["のろい"], 1, prep=both)
+    k = bt.side2.active
+    check("58 C01 両側とも倒れたら両方を出してから いかく（倒れた相手ではなく交代先に効く）",
+          bt.side1.active.name == "ボーマンダ" and k.name == "カビゴン" and k.is_alive and k.stage_attack == -1, f"{k.name} {k.stage_attack}")
+
+
+def _t58_post_rr():
+    run, act = _t58_env()
+    bt, _ = run([f"アーマーガア@{_N58}:いじっぱり:とんぼがえり:0/32/0/0/0/32:プレッシャー", f"ボーマンダ@{_N58}:いじっぱり:じしん:0/0/0/0/0/0:いかく"],
+                [_KAB58, _KABB58], ["とんぼがえり"], ["のろい"], 1, prep=lambda bt: setattr(bt.side2.party[0], "hp", 1))
+    k0, k1 = bt.side2.party
+    check("58 C01 相手が倒れて場が空のときに出た いかく は何もしない（交代先にも効かない）",
+          bt.side1.active.name == "ボーマンダ" and k0.stage_attack == 0 and k1.stage_attack == 0 and not any("いかく！" in l for l in bt.logs),
+          f"{k0.stage_attack} {k1.stage_attack}")
+    bt, _ = run([f"カバルドン@{_N58}:わんぱく:ほえる:0/0/0/0/0/0:すなおこし"], [f"アーマーガア@{_N58}:わんぱく:はねやすめ:0/0/0/0/0/0:プレッシャー", _KAB58],
+                ["ほえる"], ["はねやすめ"], 1)
+    p = bt.side1.party[0]
+    check("58 B12 プレッシャーの相手を ほえる で追い出しても PP は2減る（技を出す時点の相手で決まる）",
+          bt.side2.active.name == "カビゴン" and p.moves[0].pp - p.pp[0] == 2, f"{bt.side2.active.name} {p.pp[0]}/{p.moves[0].pp}")
+    got = None
+    for sd in range(80):
+        bt, _ = run([f"カイリュー@ラムのみ:いじっぱり:しんそく:0/0/0/0/0/0:マルチスケイル"], [f"ウルガモス@{_N58}:ずぶとい:のろい:0/0/0/0/0/0:ほのおのからだ", _KAB58],
+                    ["しんそく"], ["のろい"], 1, seed=sd, prep=lambda bt: setattr(bt.side2.party[0], "hp", 1))
+        if any("ほのおのからだ！" in l for l in bt.logs):
+            got = bt.side1.party[0]
+            break
+    check("58 C42 ほのおのからだ（持ち主が倒れても）でやけどになったら ラムのみ がすぐ治す", got is not None and got.status is None and got.item is None,
+          f"{got and (got.status, got.item)}")
+
+
+def _t58_lashout():
+    from simulator.pokemon import build_from_spec as _bfs, parse_pokemon_spec as _pps
+    a = _bfs(_pps(f"マフィティフ@{_N58}:いじっぱり:やけっぱち:0/32/0/0/0/32:いかく"), dl, season="M-6", randomize=False)
+    d = _bfs(_pps(_KABB58), dl, season="M-6", randomize=False)
+    base = dmg(a, d, "やけっぱち")
+    a.status = "burn"; a.ability = "こんじょう"
+    burn = dmg(a, d, "やけっぱち")
+    a.status = None; a.ability = "いかく"; a._move_failed_last = True
+    fail = dmg(a, d, "やけっぱち")
+    check("58 1-2 やけっぱち（Temper Flare）は前のターンに技が失敗していたら威力2倍・やけどでは上がらない（REQUIREMENTS 1-2 の誤記）",
+          fail >= base * 2 - 2 and burn < base * 2 - 2, f"{base} {burn} {fail}")
+
+
+for _nm58, _fn58 in (("1-2", _t58_lashout), ("全再戦後", _t58_post_rr), ("C01", _t58_simul_switch), ("A01", _t58_rampage), ("A12", _t58_confusion), ("A35", _t58_ohko_disguise), ("D06", _t58_faint_timing),
+                     ("B10/A25", _t58_sucker_redcard), ("接触・合法手", _t58_contact_status), ("持ち物・状態", _t58_items_status),
+                     ("D10", _t58_eot_order), ("表示", _t58_misc_display), ("C39", _t58_counter_balloon), ("B09", _t58_selfboost),
+                     ("Py/Rust", _t58_parity)):
+    try:
+        _fn58()
+    except Exception as _e58:
+        import traceback as _tb58
+        check(f"58 {_nm58} のテストが実行できる", False, f"{type(_e58).__name__}: {_e58} {_tb58.format_exc()[-400:]}")
 
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:

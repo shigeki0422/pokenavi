@@ -17,7 +17,7 @@ import os
 import random
 from typing import List, Optional
 
-from .battle import Action, Battle, BattleSide, BattleField, is_trapped
+from .battle import Action, Battle, BattleSide, BattleField, is_trapped, forced_recharge_action
 from .damage import effective_weather
 from .features import dmg_memo_begin as _dmg_memo_begin, dmg_memo_end as _dmg_memo_end
 from .data import DataLoader, NATURE_MODS, get_type_effectiveness
@@ -1158,6 +1158,10 @@ class SearchAI:
 
     def _candidate_actions(self, my_side, opp_side, field) -> List[Action]:
         me = my_side.active
+        # 反動ターン・あばれの固定中はその技だけ（交代・メガシンカも選べない。A01）
+        fr = forced_recharge_action(me)
+        if fr is not None:
+            return [fr]
         # メガ可能なら「メガする/しない」を独立した選択肢として探索（勝率で比較）
         # collapse_mega=True: メガ石持ちは常にメガ前提（メガ無し重複を列挙しない＝分岐半減）
         can_mega = (me.mega_data is not None and not me.mega_evolved and not my_side.mega_used)

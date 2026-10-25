@@ -42,8 +42,25 @@ pub fn is_setup_move(pack: &Pack, name: Sym) -> bool {
         || name == l.はらだいこ
 }
 
-/// battle.py is_trapped。ゴーストタイプと きれいなぬけがら は常に交代できる。逃げられない状態・はいすいのじん・バインド・かげふみ
+thread_local! {
+    static LEGAL_OLD: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+
+/// A/B 用（AI_LEGAL_OLD_1 / AI_LEGAL_OLD_2）: 探索の合法手を 2026-10-20 以前の列挙に戻す（ちょうはつ・いちゃもん・アンコールのPP切れ・
+/// こだわりアイテムを失った縛り・あばれの固定を見ない）。SearchAI.choose の間だけ立てる（エンジンの規則には効かない）
+pub fn legal_old() -> bool {
+    LEGAL_OLD.with(|c| c.get())
+}
+
+pub fn set_legal_old(v: bool) {
+    LEGAL_OLD.with(|c| c.set(v));
+}
+
+/// battle.py is_trapped。あばれの固定中は交代できない。ゴーストタイプと きれいなぬけがら は常に交代できる。逃げられない状態・はいすいのじん・バインド・かげふみ
 pub fn is_trapped(pack: &Pack, poke: &Poke, opponent: Option<&Poke>) -> bool {
+    if !legal_old() && crate::battle::rampage_locked(pack, poke) {
+        return true;
+    }
     if poke.has_type(pack.tc.ゴースト) || poke.item == Some(pack.sy.l.きれいなぬけがら) {
         return false;
     }
@@ -428,8 +445,17 @@ fn priority_ko_action(
 }
 
 /// battle.py `forced_recharge_action`（反動ターンは交代も含めて行動を選べない。反動の技、無ければ先頭の技）
-pub fn forced_recharge_action(me: &Poke) -> Option<Action> {
-    if !me.recharge || !me.is_alive || me.moves.is_empty() {
+pub fn forced_recharge_action(pack: &Pack, me: &Poke) -> Option<Action> {
+    if !me.is_alive || me.moves.is_empty() {
+        return None;
+    }
+    // あばれの固定中はその技だけ（交代・メガシンカも選べない。A01）
+    if !legal_old() && crate::battle::rampage_locked(pack, me) {
+        if let Some(i) = me.moves.iter().position(|m| Some(m.name) == me.locked_move) {
+            return Some(Action { kind: ActKind::Move, mv: Some(me.moves[i].clone()), move_idx: i as i64, switch_to: -1, do_mega: false });
+        }
+    }
+    if !me.recharge {
         return None;
     }
     let i = me.moves.iter().position(|m| Some(m.name) == me.last_used_move).unwrap_or(0);
@@ -437,8 +463,8 @@ pub fn forced_recharge_action(me: &Poke) -> Option<Action> {
 }
 
 /// ai.py `_forced_charging_action`（該当技が無ければ charging_move をクリアする＝副作用あり）
-pub fn forced_charging_action(me: &mut Poke) -> Option<Action> {
-    if let Some(a) = forced_recharge_action(me) {
+pub fn forced_charging_action(pack: &Pack, me: &mut Poke) -> Option<Action> {
+    if let Some(a) = forced_recharge_action(pack, me) {
         return Some(a);
     }
     let cm = me.charging_move?;
@@ -458,25 +484,50 @@ pub fn forced_charging_action(me: &mut Poke) -> Option<Action> {
 }
 
 /// ai.py `_filter_valid_by_lock`
-pub fn filter_valid_by_lock(me: &Poke) -> Vec<(usize, DMove)> {
+pub fn filter_valid_by_lock(pack: &Pack, me: &Poke) -> Vec<(usize, DMove)> {
     let all: Vec<(usize, DMove)> =
         me.moves.iter().enumerate().map(|(i, m)| (i, m.clone())).collect();
     let mut valid = all.clone();
     if let Some(d) = me.disabled_move {
         valid.retain(|(_, mv)| mv.name != d);
     }
-    let lock = me.choice_locked_move.or({
-        if me.encore_count > 0 || me.lock_count > 0 {
-            me.locked_move
-        } else {
-            None
+    let old = legal_old();
+    // ちょうはつ中は変化技・いちゃもん中は直前の技を選べない（A05・A06。全部選べなければわるあがき）
+    let mut restricted = false;
+    if !old && me.taunt_count > 0 {
+        valid.retain(|(_, mv)| mv.category != Cat::Status);
+        restricted = true;
+    }
+    if !old && me.torment {
+        if let Some(lm) = me.last_used_move {
+            valid.retain(|(_, mv)| mv.name != lm);
+            restricted = true;
         }
-    });
+    }
+    // アンコールの技のPPが尽きていれば縛りは無い（A04）・こだわりアイテムを失ったら縛りは無い（A23）
+    let mut enc = if me.encore_count > 0 || me.lock_count > 0 { me.locked_move } else { None };
+    if !old && me.encore_count > 0 {
+        if let Some(e) = enc {
+            let has_pp = me.moves.iter().enumerate().any(|(i, m)| m.name == e && i < me.pp.len() && me.pp[i] > 0);
+            if !has_pp {
+                enc = None;
+            }
+        }
+    }
+    let choice = if old || crate::items::is_choice_item(pack, me.item) {
+        me.choice_locked_move
+    } else {
+        None
+    };
+    let lock = choice.or(enc);
     if let Some(lk) = lock {
         let locked: Vec<(usize, DMove)> =
             valid.iter().filter(|(_, mv)| mv.name == lk).cloned().collect();
         // 縛られた技が使えないときはわるあがき（ai.py と同じ）。技自体を持っていない場合（決定化で入れ替わった等）は縛りなし扱い
         return if !locked.is_empty() || me.moves.iter().any(|m| m.name == lk) { locked } else { valid };
+    }
+    if restricted {
+        return valid;
     }
     if !valid.is_empty() {
         valid
@@ -700,14 +751,14 @@ pub fn greedy_ai(
     if !me.is_alive {
         return Action::default();
     }
-    if let Some(a) = forced_charging_action(me) {
+    if let Some(a) = forced_charging_action(pack, me) {
         return a;
     }
     let do_mega = should_mega(me) && !mega_used;
     if me.moves.is_empty() {
         return Action::default();
     }
-    let valid = filter_valid_by_lock(me);
+    let valid = filter_valid_by_lock(pack, me);
     let pp_valid = filter_by_pp(&valid, me);
     if pp_valid.is_empty() {
         return Action {
@@ -759,14 +810,14 @@ pub fn random_ai(
     if !me.is_alive {
         return Action::default();
     }
-    if let Some(a) = forced_charging_action(me) {
+    if let Some(a) = forced_charging_action(pack, me) {
         return a;
     }
     let do_mega = should_mega(me) && !mega_used;
     if me.moves.is_empty() {
         return Action::default();
     }
-    let valid = filter_valid_by_lock(me);
+    let valid = filter_valid_by_lock(pack, me);
     let pp_valid = filter_by_pp(&valid, me);
     if pp_valid.is_empty() {
         return Action {
@@ -801,14 +852,14 @@ pub fn heuristic_ai(
         if !me.is_alive {
             return Action::default();
         }
-        if let Some(a) = forced_charging_action(me) {
+        if let Some(a) = forced_charging_action(pack, me) {
             return a;
         }
         let do_mega = should_mega(me) && !mega_used;
         if me.moves.is_empty() {
             return Action::default();
         }
-        let valid = filter_valid_by_lock(me);
+        let valid = filter_valid_by_lock(pack, me);
         let pp_valid = filter_by_pp(&valid, me);
         if pp_valid.is_empty() {
             return Action {
@@ -1435,7 +1486,7 @@ pub fn certain_ko_override_kov(
             return act;
         }
     }
-    if forced_charging_action(&mut my.party[mi]).is_some() {
+    if forced_charging_action(pack, &mut my.party[mi]).is_some() {
         return act;
     }
     if narrow && my.party[mi].status == Some(pack.sy.st.sleep) {
@@ -1467,7 +1518,7 @@ pub fn certain_ko_override_kov(
     };
     let me = &mut my.party[mi];
     let op = &mut opp.party[oi];
-    let valid = filter_by_pp(&filter_valid_by_lock(me), me);
+    let valid = filter_by_pp(&filter_valid_by_lock(pack, me), me);
     let mut best: Option<(usize, DMove)> = None;
     let mut bestd = -1.0f64;
     let mut bestp = -1.0f64;

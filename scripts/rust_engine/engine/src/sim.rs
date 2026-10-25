@@ -426,6 +426,9 @@ fn mcts_3v3_inner(
     for (k, ai) in [("AI_DRAW_OLD_1", &mut ai1), ("AI_DRAW_OLD_2", &mut ai2)] {
         if std::env::var(k).map(|v| v == "1").unwrap_or(false) { ai.draw_old = true; }
     }
+    for (k, ai) in [("AI_LEGAL_OLD_1", &mut ai1), ("AI_LEGAL_OLD_2", &mut ai2)] {
+        if std::env::var(k).map(|v| v == "1").unwrap_or(false) { ai.legal_old = true; }
+    }
     if let Some(v) = f2("AI_FIX200") { ai2.fix200 = v > 0.5; }
     if let Some(v) = f2("AI_FIXHZ") { ai2.fixhz = v > 0.5; }
     if let Some(v) = f2("ORACLE_MIX") { ai2.oracle_mix = v; }

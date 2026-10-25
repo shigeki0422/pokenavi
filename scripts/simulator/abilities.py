@@ -74,8 +74,10 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
         for _sp in (poke, opponent):
             try_terrain_seed(_sp, field, logs)   # 設置時は両者のシードが発動する
 
+    # 相手が倒れていて場が空のとき（倒れた個体の交代はターン終了時）は、相手に向く登場時の特性は何もしない（Showdown の adjacentFoes。rule_audit_1020 C01）
+    _foe = bool(getattr(opponent, "is_alive", False))
     # いかく
-    if ab == "いかく":
+    if ab == "いかく" and _foe:
         if opponent.ability == "ばんけん":
             opponent.stage_attack = min(6, opponent.stage_attack + 1)
             logs.append(f"{poke.name} の いかく！ しかし {opponent.name} の ばんけん で攻撃が上がった！")
@@ -101,7 +103,7 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
                 on_stat_lowered(opponent, logs)
 
     # ダウンロード
-    if ab == "ダウンロード":
+    if ab == "ダウンロード" and _foe:
         if opponent.defense <= opponent.sp_defense:
             poke.stage_attack = min(6, poke.stage_attack + 1)
             logs.append(f"{poke.name} の ダウンロード：攻撃が上がった！")
@@ -114,21 +116,21 @@ def entry_ability(poke: "BattlePokemon", opponent: "BattlePokemon",
         _apply_forme_type(poke, field, logs)
 
     # トレース（登場時に相手の特性をコピー）
-    if ab == "トレース":
+    if ab == "トレース" and _foe:
         _UNCOPYABLE = {"トレース", "かわりもの", "イリュージョン", "ばけのかわ", "かがくへんかガス"}
         if opponent.ability and opponent.ability not in _UNCOPYABLE:
             poke.ability = opponent.ability  # type: ignore
             logs.append(f"{poke.name} は トレース！ {opponent.name} の {opponent.ability} になった！")
 
     # かんろなミツ（登場時に相手の回避率-1。1戦闘1回）
-    if ab == "かんろなミツ" and not getattr(poke, "_honey_used", False):
+    if ab == "かんろなミツ" and _foe and not getattr(poke, "_honey_used", False):
         poke._honey_used = True  # type: ignore
         if opponent.ability not in ("クリアボディ", "しろいけむり", "かいりきバサミ"):
             opponent.stage_evasion = max(-6, opponent.stage_evasion - 1)
             logs.append(f"{poke.name} の かんろなミツ！ {opponent.name} の回避率が下がった！")
 
     # かわりもの（登場時に目の前の相手に変身。HP以外コピー、PP5、ランクもコピー）
-    if ab == "かわりもの" and not getattr(poke, "_transformed", False):
+    if ab == "かわりもの" and _foe and not getattr(poke, "_transformed", False):
         poke._transform_backup = {  # type: ignore
             "attack": poke.attack, "defense": poke.defense, "sp_attack": poke.sp_attack,
             "sp_defense": poke.sp_defense, "speed": poke.speed, "ability": poke.ability,
@@ -164,13 +166,22 @@ def synchronize(holder: "BattlePokemon", source: "BattlePokemon", status: str, l
 
 # ── 技で被弾した後 ──────────────────────────────────────────────────────────
 
+def _cure_now(p, logs) -> None:
+    """接触の特性で状態異常になったら ラムのみ 等はすぐ発動する（Showdown の Lum onAfterSetStatus。C42）"""
+    from .items import try_cure_berry
+    try_cure_berry(p, logs)
+
+
 def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
-                 move, logs: list, field=None) -> None:
-    """物理・特殊を問わず被弾後の特性効果"""
+                 move, logs: list, field=None, hp_before=None) -> None:
+    """物理・特殊を問わず被弾後の特性効果。持ち主（防御側）が倒れても、接触で攻撃側に起きる反応
+    （せいでんき・ほうし・ほのおのからだ・どくのトゲ・ぬめぬめ 等）は起きる（Showdown の DamagingHit。C23）。
+    hp_before: この一撃の前のHP（ぎゃくじょう の判定）"""
     ab = defender.ability
+    alive = defender.is_alive
 
     # くだけるよろい
-    if ab == "くだけるよろい" and move.category == "physical":
+    if alive and ab == "くだけるよろい" and move.category == "physical":
         defender.stage_defense = max(-6, defender.stage_defense - 1)
         defender.stage_speed   = min(6, defender.stage_speed + 2)
         logs.append(f"{defender.name} の くだけるよろい！ 防御↓ 素早さ↑↑")
@@ -182,8 +193,9 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
             if ok:
                 logs.append(f"{defender.name} の せいでんき！ {attacker.name} が まひ した！")
                 synchronize(attacker, defender, "paralysis", logs, field)
+                _cure_now(attacker, logs)
 
-    # ほうし (接触技 → ねむり11%・まひ10%・どく9%。くさタイプ・ぼうじん・ぼうじんゴーグルには発動しない)
+    # ほうし (接触技 → ねむり11%・まひ10%・どく9%。くさタイプ・ぼうじん・ぼうじんゴーグル持ちには発動しない)
     if ab == "ほうし" and is_contact_move(move) and attacker.ability not in ("えんかく", "ぼうじん") \
             and "くさ" not in (attacker.type1, attacker.type2) and attacker.item != "ぼうじんゴーグル":
         _r = random.random()
@@ -199,11 +211,12 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
                 _jp = {"poison": "どく", "paralysis": "まひ", "sleep": "ねむり"}[st]
                 logs.append(subj_line(defender, f"{defender.name} の ほうし！ {attacker.name} は {_jp} になった！"))
                 synchronize(attacker, defender, st, logs, field)
+                _cure_now(attacker, logs)
 
     # のろわれボディ → battle.py の _execute_move 内で処理
 
     # でんきにかえる（被弾 → 次のでんき技の威力2倍、何度でも再充電可）
-    if ab == "でんきにかえる":
+    if alive and ab == "でんきにかえる":
         defender._electromorphosis_charged = True  # type: ignore
         logs.append(f"{defender.name} の でんきにかえる！ でんき技がチャージされた！")
 
@@ -212,17 +225,17 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
         "こごえるかぜ", "ぼうふう", "ふぶき", "ねっぷう", "ふきとばし",
         "おいかぜ", "すなあらし", "はなふぶき", "エアカッター",
     }
-    if ab == "ふうりょく" and move.name_jp in WIND_MOVES:
+    if alive and ab == "ふうりょく" and move.name_jp in WIND_MOVES:
         defender.charged = True
         logs.append(f"{defender.name} の ふうりょく！ じゅうでん状態になった！")
 
-    # ぎゃくじょう（HP半分以下になった時に攻撃+2）
-    if ab == "ぎゃくじょう" and defender.is_alive:
-        was_above_half = not getattr(defender, '_gyaku_triggered', False)
-        if was_above_half and defender.hp <= defender.max_hp // 2:
-            defender.stage_sp_attack = min(6, defender.stage_sp_attack + 1)
-            defender._gyaku_triggered = True  # type: ignore
-            logs.append(f"{defender.name} の ぎゃくじょう！ 特攻が上がった！")
+    # ぎゃくじょう（攻撃でHPが半分以下になった時: 攻撃・特攻・素早さ+1、防御・特防-1。Showdown Anger Shell）
+    if alive and ab == "ぎゃくじょう" and hp_before is not None \
+            and defender.hp <= defender.max_hp // 2 and hp_before > defender.max_hp // 2:
+        for _st, _d in (("stage_attack", 1), ("stage_sp_attack", 1), ("stage_speed", 1),
+                        ("stage_defense", -1), ("stage_sp_defense", -1)):
+            setattr(defender, _st, max(-6, min(6, getattr(defender, _st) + _d)))
+        logs.append(f"{defender.name} の ぎゃくじょう！ 攻撃・特攻・素早さが上がり、防御・特防が下がった！")
 
     # ねばりかわ / ながいしっぽ（接触技 → 攻撃側の素早さ-1。技の後の反応なので かたやぶり では消えない）
     if ab in ("ねばりかわ", "ながいしっぽ") and is_contact_move(move) and attacker.ability != "えんかく":
@@ -230,7 +243,7 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
         logs.append(f"{defender.name} の {ab}！ {attacker.name} の素早さが下がった！")
 
     # じきゅうりょく（被弾 → 防御+1）
-    if ab == "じきゅうりょく":
+    if alive and ab == "じきゅうりょく":
         defender.stage_defense = min(6, defender.stage_defense + 1)
         logs.append(f"{defender.name} の じきゅうりょく！ 防御が上がった！")
 
@@ -238,17 +251,17 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
     _contact = is_contact_move(move) and attacker.ability != "えんかく"
 
     # せいぎのこころ（あく技を受けると攻撃+1）
-    if ab == "せいぎのこころ" and move.type == "あく":
+    if alive and ab == "せいぎのこころ" and move.type == "あく":
         defender.stage_attack = min(6, defender.stage_attack + 1)
         logs.append(f"{defender.name} の せいぎのこころ！ 攻撃が上がった！")
 
     # びびり（あく・ゴースト・むし技のダメージで素早さ+1。いかくは entry_ability 側）
-    if ab == "びびり" and move.type in ("あく", "ゴースト", "むし"):
+    if alive and ab == "びびり" and move.type in ("あく", "ゴースト", "むし"):
         defender.stage_speed = min(6, defender.stage_speed + 1)
         logs.append(f"{defender.name} の びびり！ 素早さが上がった！")
 
     # ねつこうかん（ほのお技を受けると攻撃+1。やけど免疫は pokemon.apply_status 側）
-    if ab == "ねつこうかん" and move.type == "ほのお":
+    if alive and ab == "ねつこうかん" and move.type == "ほのお":
         defender.stage_attack = min(6, defender.stage_attack + 1)
         logs.append(f"{defender.name} の ねつこうかん！ 攻撃が上がった！")
 
@@ -258,17 +271,19 @@ def on_after_hit(attacker: "BattlePokemon", defender: "BattlePokemon",
             if attacker.apply_status("burn", field=field):
                 logs.append(subj_line(defender, f"{defender.name} の ほのおのからだ！ {attacker.name} は やけど した！"))
                 synchronize(attacker, defender, "burn", logs, field)
+                _cure_now(attacker, logs)
         if ab == "どくのトゲ" and random.random() < 0.30:
             if attacker.apply_status("poison", field=field):
                 logs.append(subj_line(defender, f"{defender.name} の どくのトゲ！ {attacker.name} は どく になった！"))
                 synchronize(attacker, defender, "poison", logs, field)
+                _cure_now(attacker, logs)
         if ab == "ぬめぬめ":
             attacker.stage_speed = max(-6, attacker.stage_speed - 1)
             logs.append(subj_line(defender, f"{defender.name} の ぬめぬめ！ {attacker.name} の素早さが下がった！"))
-        if ab == "ミイラ" and attacker.ability not in ("ミイラ", "かがくへんかガス"):
+        if alive and ab == "ミイラ" and attacker.ability not in ("ミイラ", "かがくへんかガス"):
             attacker.ability = "ミイラ"  # type: ignore
             logs.append(subj_line(defender, f"{defender.name} の ミイラ！ {attacker.name} の特性が ミイラ になった！"))
-        elif ab == "さまようたましい" and attacker.ability not in WANDERING_SPIRIT_FAIL \
+        elif alive and ab == "さまようたましい" and attacker.ability not in WANDERING_SPIRIT_FAIL \
                 and defender.ability not in WANDERING_SPIRIT_FAIL:
             attacker.ability, defender.ability = defender.ability, attacker.ability  # type: ignore
             logs.append(subj_line(defender, f"{defender.name} の さまようたましい！ 特性を入れ替えた！"))
@@ -382,22 +397,48 @@ def on_ko(attacker: "BattlePokemon", logs: list) -> None:
 # ── ターン終了時 ────────────────────────────────────────────────────────────
 
 def end_of_turn_ability(poke: "BattlePokemon", field: "BattleField", logs: list) -> None:
+    """ターン終了時の特性をまとめて（天候→状態異常の回復→その他）。対戦の処理順は battle._end_of_turn_body が段ごとに呼ぶ"""
+    eot_weather_ability(poke, field, logs)
+    eot_cure_ability(poke, field, logs)
+    eot_late_ability(poke, field, logs)
+
+
+def eot_weather_ability(poke: "BattlePokemon", field: "BattleField", logs: list) -> None:
+    """天候の段（Showdown の Weather。砂嵐のダメージと同じ段）"""
     ab = poke.ability
+    w = effective_weather(field, poke)
 
-    # かそく
-    if ab == "かそく" and not getattr(poke, "_switched_this_turn", False):
-        poke.stage_speed = min(6, poke.stage_speed + 1)
-
-    # アイスボディ（雹中HP1/16回復）
-    if ab == "アイスボディ" and effective_weather(field, poke) == "hail":
+    # アイスボディ（雪中HP1/16回復）・あめうけざら（雨中HP1/16回復）
+    if (ab == "アイスボディ" and w == "hail") or (ab == "あめうけざら" and w == "rain"):
         heal = max(1, poke.max_hp // 16)
+        old = poke.hp
         poke.hp = min(poke.max_hp, poke.hp + heal)
+        if poke.hp > old:
+            logs.append(f"{poke.name} の {ab} で HPが {poke.hp - old} 回復した！")
 
-    # あめうけざら（雨中HP1/16回復）
-    if ab == "あめうけざら" and effective_weather(field, poke) == "rain":
-        heal = max(1, poke.max_hp // 16)
-        poke.hp = min(poke.max_hp, poke.hp + heal)
+    # サンパワー（晴れ中1/8ダメ）
+    if ab == "サンパワー" and w == "sunny":
+        dmg = max(1, poke.max_hp // 8)
+        poke.take_damage(dmg)
+        logs.append(f"{poke.name} の サンパワー！ {dmg} のダメージ！")
 
+    # かんそうはだ（晴れダメ・雨回復）
+    if ab == "かんそうはだ":
+        if w == "sunny":
+            dmg = max(1, poke.max_hp // 8)
+            poke.take_damage(dmg)
+            logs.append(f"{poke.name} の かんそうはだ！ {dmg} のダメージ！")
+        elif w == "rain":
+            heal = max(1, poke.max_hp // 8)
+            old = poke.hp
+            poke.hp = min(poke.max_hp, poke.hp + heal)
+            if poke.hp > old:
+                logs.append(f"{poke.name} の かんそうはだ で HPが {poke.hp - old} 回復した！")
+
+
+def eot_cure_ability(poke: "BattlePokemon", field: "BattleField", logs: list) -> None:
+    """うるおいボディ・だっぴ（Showdown の残り処理 5 番。たべのこしの直前）"""
+    ab = poke.ability
     # うるおいボディ（雨中ターン終わりに状態異常が治る）
     if ab == "うるおいボディ" and effective_weather(field, poke) == "rain" and poke.status is not None:
         poke.status = None
@@ -410,14 +451,18 @@ def end_of_turn_ability(poke: "BattlePokemon", field: "BattleField", logs: list)
         poke.bad_poison_count = 0
         logs.append(f"{poke.name} の だっぴ！ 状態異常が治った")
 
+
+def eot_late_ability(poke: "BattlePokemon", field: "BattleField", logs: list) -> None:
+    """かそく・ムラっけ・しゅうかく・はんすう 等（Showdown の残り処理 28〜29 番＝最後）"""
+    ab = poke.ability
+
+    # かそく
+    if ab == "かそく" and not getattr(poke, "_switched_this_turn", False):
+        poke.stage_speed = min(6, poke.stage_speed + 1)
+
     # てんきや/ぎたい（ターン終わりに天候・フィールドでタイプ再計算）
     if ab in ("てんきや", "ぎたい"):
         _apply_forme_type(poke, field, logs)
-
-    # はらぺこスイッチ（ターン終わりにまんぷく/はらぺこを切り替え）
-    if ab == "はらぺこスイッチ":
-        poke._hangry = not getattr(poke, "_hangry", False)  # type: ignore
-        logs.append(f"{poke.name} の はらぺこスイッチ！ 模様が変わった！")
 
     # しゅうかく（ターン終わり、消費したきのみを50%／にほんばれ中は必ず復活）
     if ab == "しゅうかく" and poke.item is None and getattr(poke, "_last_berry", None):
@@ -439,21 +484,6 @@ def end_of_turn_ability(poke: "BattlePokemon", field: "BattleField", logs: list)
                 _st = _QB[_berry]; setattr(poke, f"stage_{_st}", min(6, getattr(poke, f"stage_{_st}", 0) + 1))
                 logs.append(f"{poke.name} の はんすう！ {_berry} の効果が再発動した！")
 
-    # サンパワー（晴れ中1/8ダメ）
-    if ab == "サンパワー" and effective_weather(field, poke) == "sunny":
-        dmg = max(1, poke.max_hp // 8)
-        poke.take_damage(dmg)
-        logs.append(f"{poke.name} の サンパワー！ {dmg} のダメージ！")
-
-    # かんそうはだ（晴れダメ・雨回復）
-    if ab == "かんそうはだ":
-        if effective_weather(field, poke) == "sunny":
-            poke.take_damage(max(1, poke.max_hp // 8))
-            logs.append(f"{poke.name} は日光でダメージを受けた！")
-        elif effective_weather(field, poke) == "rain":
-            heal = max(1, poke.max_hp // 8)
-            poke.hp = min(poke.max_hp, poke.hp + heal)
-
     # ムラっけ: 攻撃・防御・特攻・特防・素早さ（命中・回避は対象外）のうち+6でないものを1つ+2、-6でない別の1つを-1
     if ab == "ムラっけ":
         STATS = ["stage_attack", "stage_defense", "stage_sp_attack", "stage_sp_defense", "stage_speed"]
@@ -468,6 +498,11 @@ def end_of_turn_ability(poke: "BattlePokemon", field: "BattleField", logs: list)
         _STAT_JP = {"stage_attack": "こうげき", "stage_defense": "ぼうぎょ", "stage_sp_attack": "とくこう",
                     "stage_sp_defense": "とくぼう", "stage_speed": "すばやさ"}
         logs.append(f"{poke.name} の ムラっけ！ {_STAT_JP.get(up_stat, '-')}↑↑ {_STAT_JP.get(down_stat, '-')}↓")
+
+    # はらぺこスイッチ（ターン終わりにまんぷく/はらぺこを切り替え。Showdown 29 番）
+    if ab == "はらぺこスイッチ":
+        poke._hangry = not getattr(poke, "_hangry", False)  # type: ignore
+        logs.append(f"{poke.name} の はらぺこスイッチ！ 模様が変わった！")
 
 
 # ── 交代で引っ込む時 ────────────────────────────────────────────────────────

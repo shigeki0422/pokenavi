@@ -645,6 +645,8 @@ class ManualActionRequest(BaseModel):
 def _get_available_actions(side: BattleSide, opp_active=None, field=None) -> dict:
     from simulator.data import get_type_effectiveness
     from simulator.damage import _effective_move_type
+    from simulator.battle import rampage_locked
+    from simulator.items import is_choice_item
     p = side.active
     moves = []
 
@@ -657,10 +659,11 @@ def _get_available_actions(side: BattleSide, opp_active=None, field=None) -> dic
             continue
         disabled = bool(
             p.disabled_move == mv.name_jp
-            or (p.choice_locked_move and p.choice_locked_move != mv.name_jp)
+            or (p.choice_locked_move and p.choice_locked_move != mv.name_jp and is_choice_item(p.item))
             or (p.encore_count > 0 and p.locked_move and p.locked_move != mv.name_jp)
             or (p.lock_count > 0 and p.locked_move and p.locked_move != mv.name_jp)
             or (p.taunt_count > 0 and mv.category == "status")
+            or (p.torment and p.last_used_move == mv.name_jp)
         )
         eff_type = _effective_move_type(p, mv, _field)
         # ウェザーボールの威力
@@ -684,7 +687,7 @@ def _get_available_actions(side: BattleSide, opp_active=None, field=None) -> dic
         })
     switches = []
     for i, sp in enumerate(side.party):
-        if i != side.active_idx and sp.is_alive:
+        if i != side.active_idx and sp.is_alive and not rampage_locked(p):
             switches.append({
                 "idx": i,
                 "name": sp.name,
@@ -696,6 +699,7 @@ def _get_available_actions(side: BattleSide, opp_active=None, field=None) -> dic
     can_mega = (
         not side.mega_used
         and not p.mega_evolved
+        and not rampage_locked(p)
         and bool(p.item and "ナイト" in p.item)
     )
     return {"moves": moves, "switches": switches, "can_mega": can_mega}
@@ -1050,7 +1054,7 @@ def _f1_store_put(aid, label, card):
 _F1_CACHE_DIR = os.path.join(os.path.dirname(__file__), "f1_cache")
 _F1_SAVED = {}   # subject_label -> {analysis_id, cards(サマリ)}
 # AIバージョン：探索/評価を変えたら更新。記録の再利用（対戦数の段階拡張）は同一バージョン間のみ。
-AI_VER = "mcts-guardq800-2-net1006-mc1019"
+AI_VER = "mcts-guardq800-2-net1006-mc1020"
 
 
 def _f1_safe(name):

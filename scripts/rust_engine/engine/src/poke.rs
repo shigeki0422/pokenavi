@@ -129,6 +129,10 @@ pub struct Poke {
     pub minimized: bool,
     pub switched_this_turn: bool,
     pub confused: bool,
+    /// こんらんの残り（行動しようとするたびに1減らし、0で解ける。battle.py BattlePokemon.confuse_count）
+    pub confuse_count: i64,
+    /// このターンにあばれ技が当たった（あばれの固定が続く）
+    pub rampage_hit: bool,
     pub protecting: bool,
     pub lock_on: bool,
     // ── 以下 R2 で追加（BattlePokemon の残り） ──
@@ -778,6 +782,11 @@ impl Poke {
             3 => self.sp_defense = v,
             _ => self.speed = v,
         }
+    }
+    /// BattlePokemon.confuse（2〜4回目の行動で解ける）
+    pub fn confuse(&mut self, rng: &mut dyn crate::rng::BRng) {
+        self.confused = true;
+        self.confuse_count = rng.randint(2, 4);
     }
     /// BattlePokemon.take_damage
     #[inline]

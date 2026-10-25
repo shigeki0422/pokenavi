@@ -11,7 +11,7 @@ from .battle import Action, BattleSide, BattleField, crit_chance, forced_recharg
 from .pokemon import BattlePokemon
 from .data import get_type_effectiveness, DataLoader
 from .damage import calc_damage, estimate_only
-from .items import get_speed_item_multiplier
+from .items import get_speed_item_multiplier, is_choice_item
 
 HAZARD_MOVES = {"ステルスロック", "まきびし", "スパイク", "どくびし"}
 _AVG_HP = 170  # 設置技価値計算用 平均HP概算
@@ -663,13 +663,25 @@ def _forced_charging_action(me: BattlePokemon) -> Optional[Action]:
 
 
 def _filter_valid_by_lock(valid: list, me: BattlePokemon) -> list:
-    """こだわり縛り・アンコール・あばれ状態・のろわれボディによる技制限を適用"""
+    """こだわり縛り・アンコール・あばれ状態・のろわれボディ・ちょうはつ・いちゃもんによる技制限を適用"""
     if me.disabled_move:
         valid = [(i, mv) for i, mv in valid if mv.name_jp != me.disabled_move]
-    # あばれ状態(lock_count>0)・アンコール・こだわり縛りの優先順で固定技を決定
+    # ちょうはつ中は変化技を選べない・いちゃもん中は直前の技を選べない（A05・A06。全部選べなければわるあがき）
+    _restricted = False
+    if me.taunt_count > 0:
+        valid = [(i, mv) for i, mv in valid if mv.category != "status"]
+        _restricted = True
+    if me.torment and me.last_used_move:
+        valid = [(i, mv) for i, mv in valid if mv.name_jp != me.last_used_move]
+        _restricted = True
+    # アンコールの技のPPが尽きていれば縛りは無い（A04）・こだわりアイテムを失ったら縛りは無い（A23）
+    _enc = me.locked_move if (me.encore_count > 0 or me.lock_count > 0) else None
+    if _enc and me.encore_count > 0 and not any(
+            mv is not None and mv.name_jp == _enc and i < len(me.pp) and me.pp[i] > 0 for i, mv in enumerate(me.moves)):
+        _enc = None
     lock = (
-        me.choice_locked_move
-        or (me.locked_move if (me.encore_count > 0 or me.lock_count > 0) else None)
+        (me.choice_locked_move if is_choice_item(me.item) else None)
+        or _enc
     )
     if lock:
         # 縛られた技が使えない（かなしばり等）ときは、他の技は選べずわるあがきになる（実機仕様）。
@@ -677,6 +689,8 @@ def _filter_valid_by_lock(valid: list, me: BattlePokemon) -> list:
         locked = [(i, mv) for i, mv in valid if mv.name_jp == lock]
         if locked or any(mv is not None and mv.name_jp == lock for mv in me.moves):
             return locked
+        return valid
+    if _restricted:
         return valid
     return valid if valid else [(i, mv) for i, mv in enumerate(me.moves) if mv]
 

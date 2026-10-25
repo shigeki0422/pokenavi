@@ -140,6 +140,10 @@ pub struct MoveFlags {
     pub encore_fail: bool,
     pub protect_pierce: bool,
     pub protect_pierce_status: bool,
+    pub thaw_self: bool,
+    pub thaws_target: bool,
+    /// プレッシャーで PP が1多く減る変化技（damage.py PRESSURE_STATUS）
+    pub pressure_status: bool,
     /// 半無敵の状態（1=空 2=地中 3=水中 4=ゴーストダイブ）。0 は該当なし
     pub semi_inv: u8,
     /// 半無敵の状態に当たる技（bit 1=空 2=地中 3=水中）
@@ -466,6 +470,10 @@ impl Pack {
             });
             mark(&mut move_flags, &intern, crate::syms::PROTECT_PIERCE, |m| m.protect_pierce = true);
             mark(&mut move_flags, &intern, crate::syms::PROTECT_PIERCE_STATUS, |m| m.protect_pierce_status = true);
+            mark(&mut move_flags, &intern, crate::syms::THAW_MOVES, |m| m.thaw_self = true);
+            mark(&mut move_flags, &intern, crate::syms::THAWS_TARGET, |m| m.thaws_target = true);
+            mark(&mut move_flags, &intern, crate::syms::FOE_STATUS_MOVES, |m| m.pressure_status = true);
+            mark(&mut move_flags, &intern, crate::syms::PRESSURE_EXTRA, |m| m.pressure_status = true);
             mark(&mut move_flags, &intern, crate::syms::SEMI_INVULN_SKY, |m| m.semi_inv = 1);
             mark(&mut move_flags, &intern, crate::syms::SEMI_INVULN_DIG, |m| m.semi_inv = 2);
             mark(&mut move_flags, &intern, crate::syms::SEMI_INVULN_DIVE, |m| m.semi_inv = 3);

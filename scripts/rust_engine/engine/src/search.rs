@@ -27,11 +27,11 @@ pub fn action_index(a: &Action) -> usize {
 /// alphazero.legal_actions_indexed（方策マスク用の列挙。設置技の除外は無い）
 pub fn legal_actions_indexed(pack: &Pack, me_s: &Side, op_s: &Side) -> Vec<usize> {
     let me = me_s.active();
-    if let Some(a) = crate::ai::forced_recharge_action(me) {
+    if let Some(a) = crate::ai::forced_recharge_action(pack, me) {
         return vec![a.move_idx as usize];
     }
     let can_mega = me.mega.is_some() && !me.mega_evolved && !me_s.mega_used;
-    let valid = filter_valid_by_lock(me);
+    let valid = filter_valid_by_lock(pack, me);
     let pp_valid = filter_by_pp(&valid, me);
     let mut out = Vec::with_capacity(12);
     if pp_valid.is_empty() {
@@ -57,6 +57,12 @@ pub fn legal_actions_indexed(pack: &Pack, me_s: &Side, op_s: &Side) -> Vec<usize
 /// SearchAI._candidate_actions
 pub fn candidate_actions(pack: &Pack, me_s: &Side, op_s: &Side, field: &Field, collapse_mega: bool) -> Vec<Action> {
     let me = me_s.active();
+    // 反動ターン・あばれの固定中はその技だけ（交代・メガシンカも選べない。search_ai.py と同じ。A01）
+    if !crate::ai::legal_old() {
+        if let Some(a) = crate::ai::forced_recharge_action(pack, me) {
+            return vec![a];
+        }
+    }
     let can_mega = me.mega.is_some() && !me.mega_evolved && !me_s.mega_used;
     let mega_flags: &[bool] = if can_mega {
         if collapse_mega {
@@ -67,7 +73,7 @@ pub fn candidate_actions(pack: &Pack, me_s: &Side, op_s: &Side, field: &Field, c
     } else {
         &[false]
     };
-    let valid = filter_valid_by_lock(me);
+    let valid = filter_valid_by_lock(pack, me);
     let pp_valid = filter_by_pp(&valid, me);
     let hz = HazCtx::of(op_s);
     let mut move_cands: Vec<(usize, crate::damage::DMove)> = pp_valid
@@ -576,6 +582,8 @@ pub struct SearchAI {
     pub kov: u8,
     /// A/B 用（AI_DRAW_OLD_1 / AI_DRAW_OLD_2）: 最後の1体どうしの相打ちを 2026-10-18 以前の「側2の勝ち」として探索する
     pub draw_old: bool,
+    /// A/B 用（AI_LEGAL_OLD_1 / AI_LEGAL_OLD_2）: 合法手を 2026-10-20 以前の列挙で探索する（ai::legal_old）
+    pub legal_old: bool,
     /// 既定ON。AI_FIX200=0 で旧挙動（監査200 C。AI_FIX200_2 で側2だけ）
     pub fix200: bool,
     /// 既定ON。AI_FIXHZ=0 で旧挙動（設置済みの設置技を外す。AI_FIXHZ_2 で側2だけ）
@@ -630,6 +638,7 @@ impl SearchAI {
             fix40: crate::ai::fix40_env(),
             kov: crate::ai::kov_env(),
             draw_old: false,
+            legal_old: false,
             fix200: crate::ai::fix200_env(),
             fixhz: crate::ai::fixhz_env(),
             oracle_mix: std::env::var("ORACLE_MIX").ok().and_then(|v| v.parse().ok()).unwrap_or(0.0),
@@ -661,7 +670,9 @@ impl SearchAI {
     ) -> Action {
         let cur = sides[me_idx].active_idx;
         self.guard_now = false;
+        crate::ai::set_legal_old(self.legal_old);
         let a = self.choose_inner(pack, net, sides, me_idx, field, belief, grng);
+        crate::ai::set_legal_old(false);
         let h = if a.kind == ActKind::Switch && a.switch_to >= 0 { Some((cur, a.switch_to as usize)) } else { None };
         self.sw_hist.push(h);
         self.guard_hist.push(self.guard_now);
@@ -700,7 +711,7 @@ impl SearchAI {
         if !sides[me_idx].active().is_alive {
             return Action { kind: ActKind::Pass, ..Default::default() };
         }
-        if let Some(a) = forced_charging_action(sides[me_idx].active_mut()) {
+        if let Some(a) = forced_charging_action(pack, sides[me_idx].active_mut()) {
             return a;
         }
         let mut cands =

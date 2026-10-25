@@ -13,6 +13,7 @@ from .damage import calc_damage, check_hit, _effective_move_type, is_contact_mov
 from .abilities import (
     entry_ability, on_after_hit, on_ko, on_switch_out,
     end_of_turn_ability, on_stat_lowered, MOLD_BREAKER_ABILITIES,
+    eot_weather_ability, eot_cure_ability, eot_late_ability,
     _rough_skin_recoil, on_defender_ko, scrappy_override, synchronize,
 )
 from .items import (
@@ -30,6 +31,7 @@ _ENCORE_FAIL = frozenset({"アンコール", "ねごと", "まねっこ", "へ�
 
 
 from .damage import FOE_STATUS as _FOE_STATUS
+from .damage import PRESSURE_STATUS, RESIST_BERRIES
 from .damage import targets_foe as _targets_foe
 def battle_outcome(s1, s2, default=0) -> int:
     """1=side1勝ち 2=side2勝ち 0=引き分け。最後の1体どうしが同じターンに倒れたら引き分け（原因を問わない）"""
@@ -69,6 +71,8 @@ def _is_megastone(item: Optional[str]) -> bool:
 def is_trapped(poke, opponent) -> bool:
     """poke が交代できない状態か。かげふみ・逃げられない状態（くろいまなざし・くらいつく・たこがため 等。縛った相手が場を離れると解ける）・
     はいすいのじん・バインド。ゴーストタイプと きれいなぬけがら は常に交代できる（にげあし は野生からの逃走だけで交代には効かない）。"""
+    if rampage_locked(poke):
+        return True
     if "ゴースト" in (poke.type1, poke.type2) or poke.item == "きれいなぬけがら":
         return False
     if opponent is not None and getattr(opponent, "is_alive", False) and opponent.ability == "かげふみ":
@@ -130,8 +134,14 @@ class Action:
 
 
 def forced_recharge_action(me) -> Optional[Action]:
-    """反動ターン（はかいこうせん等の次ターン）は交代も含めて行動を選べない。反動の技（無ければ先頭の技）を返す"""
-    if not getattr(me, "recharge", False) or not me.is_alive:
+    """反動ターン（はかいこうせん等の次ターン）とあばれの固定中は交代も含めて行動を選べない。反動の技（無ければ先頭の技）・固定の技を返す"""
+    if not me.is_alive:
+        return None
+    if rampage_locked(me):
+        idx = next((i for i, mv in enumerate(me.moves) if mv is not None and mv.name_jp == me.locked_move), None)
+        if idx is not None:
+            return Action(type="move", move=me.moves[idx], move_idx=idx, do_mega=False)
+    if not getattr(me, "recharge", False):
         return None
     idx = next((i for i, mv in enumerate(me.moves) if mv is not None and mv.name_jp == me.last_used_move), None)
     if idx is None:
@@ -207,6 +217,8 @@ class BattleSide:
         prev.type1 = prev.base_type1
         prev.type2 = prev.base_type2
         prev.confused = False
+        prev.confuse_count = 0
+        prev._sealed = False  # type: ignore
         prev.yawn_count = 0
         prev.flinched = False
         prev.protecting = False
@@ -411,6 +423,10 @@ def _entry_effects(poke: BattlePokemon, side_idx: int, field: BattleField,
             status = "badpoison" if layers >= 2 else "poison"
             if poke.apply_status(status, field=field):
                 logs.append(subj_line(poke, f"{poke.name} は どくびし で {'もうどく' if status == 'badpoison' else 'どく'} になった！"))
+                try_cure_berry(poke, logs)
+
+    # 設置技で HP が半分以下になったらすぐ オボンのみ 等を食べる（C06）
+    _hp_berry_now(poke, opponent if isinstance(opponent, BattlePokemon) else None, logs)
 
     # ねばねばネット（ひこう・ふゆう免疫）
     if field.sticky_web[side_idx] and not immune_to_ground:
@@ -669,6 +685,7 @@ def _execute_move(
             _att.take_damage(_att.hp)
             _att.is_alive = False
             logs.append(f"{_att.name} は 倒れた！")
+            _att._faint_logged = True  # type: ignore
     return logs
 
 
@@ -712,6 +729,22 @@ def _mark_move_used(attacker_side: BattleSide, defender_side: BattleSide, move, 
     return logs
 
 
+def _contact_reactions(attacker_side, defender_side, attacker, defender, move, logs, field) -> None:
+    """技が当たった時の接触の反応（ゴツゴツメット・さめはだ・てつのとげ）と、それで減った攻撃側のオボン"""
+    _rx: List[str] = []
+    _rough_skin_recoil(attacker, defender, move, _rx, field)
+    _rx.extend(_disclose_contact_reaction(attacker_side, attacker, defender, move))
+    _hp_berry_now(attacker, defender, _rx, defender_side.opp_view if defender_side is not None else None)
+    logs.extend(_rx)
+
+
+# 使うと自分のこおりが治って技が出る（Showdown の defrost。DB の効果文「使うとこおり状態が治る」。A11）
+THAW_MOVES = frozenset({"もえつきる", "ねっとう", "ねっさのだいち", "せいなるほのお", "かえんボール", "フレアドライブ",
+                        "かえんぐるま", "クロスフレイム", "シャカシャカほう", "ハイドロスチーム", "スチームバースト"})
+# 当たると相手のこおりを治す技（ほのお技以外を含む。Showdown の thawsTarget）
+THAWS_TARGET = frozenset({"ねっとう", "ねっさのだいち", "シャカシャカほう", "ハイドロスチーム", "スチームバースト"})
+
+
 def _execute_move_inner(
     attacker_side: BattleSide, defender_side: BattleSide,
     action: Action, field: BattleField,
@@ -727,6 +760,7 @@ def _execute_move_inner(
     defender = defender_side.active
     attacker._defenseless = False  # type: ignore
     move = action.move
+    _prev_last = attacker.last_used_move
 
     if move is None:
         return logs
@@ -804,7 +838,6 @@ def _execute_move_inner(
     # こおりチェック (20% で解除)
     if attacker.status == "freeze":
         # 解凍техн: 使うと自分のこおりを治して行動できる（もえつきる/ねっとう/ねっさのだいち等）
-        THAW_MOVES = {"もえつきる", "ねっとう", "ねっさのだいち", "せいなるほのお", "かえんボール"}
         if move.name_jp in THAW_MOVES:
             attacker.status = None
             logs.append(f"{attacker.name} は {move.name_jp} でこおりがとけた！")
@@ -816,9 +849,16 @@ def _execute_move_inner(
             attacker._immobile = True  # type: ignore
             return logs
 
-    # こんらんチェック
+    # こんらんチェック（行動しようとするたびに残りを1減らし、0で解けてそのまま行動する。REQUIREMENTS 4-3）
     if attacker.confused:
-        if random.random() < 0.33:
+        if attacker.confuse_count <= 0:
+            attacker.confuse_count = random.randint(2, 4)
+        attacker.confuse_count -= 1
+        if attacker.confuse_count <= 0:
+            attacker.confused = False
+            attacker.confuse_count = 0
+            logs.append(f"{attacker.name} の こんらん が とけた！")
+        elif random.random() < 0.33:
             logs.append(f"{attacker.name} はこんらんして自分を傷つけた！")
             self_dmg = max(1, math.floor(
                 (math.floor(math.floor(2 * 50 / 5 + 2) * 40 * attacker.attack / attacker.defense) / 50) + 2
@@ -843,6 +883,15 @@ def _execute_move_inner(
     # ふういん・のろわれボディによる封じチェック
     if attacker.disabled_move and move.name_jp == attacker.disabled_move:
         logs.append(f"{attacker.name} の {move.name_jp} は封じられている！")
+        return logs
+    # いちゃもん: 同じ技を続けて出せない（A06）
+    if attacker.torment and move.name_jp == _prev_last and move.name_jp != "わるあがき":
+        logs.append(f"{attacker.name} は いちゃもん で {move.name_jp} を続けて出せない！")
+        return logs
+    # ふういん: 使った相手が覚えている技は出せない（A08）
+    if (getattr(defender, "_sealed", False) and defender.is_alive and move.name_jp != "わるあがき"
+            and any(m is not None and m.name_jp == move.name_jp for m in defender.moves)):
+        logs.append(f"{attacker.name} は ふういん で {move.name_jp} が使えない！")
         return logs
 
     # まもる / キングシールド / ニードルガード / こらえる
@@ -974,6 +1023,8 @@ def _execute_move_inner(
         if field.weather != "hail":
             field.weather = "hail"; field.weather_count = _wturns("つめたいいわ")
             logs.append("さむいギャグ！ 雪が降り始めた！")
+        else:
+            logs.append(f"{attacker.name} は さむいギャグ を使った！")
         attacker._pivot_out = True  # type: ignore
         return logs
 
@@ -1016,12 +1067,14 @@ def _execute_move_inner(
 
     # ふいうち：相手が今ターン攻撃技を使わない場合は失敗
     if move.name_jp == "ふいうち":
+        # 相手がもう行動した（自分が後攻）なら失敗（B10。Showdown: queue.willMove(target) が無い）
         opp_is_attacking = _ASSUME_OPP_ATTACKS or (
             opp_action is not None
             and opp_action.type == "move"
             and opp_action.move is not None
             and opp_action.move.category != "status"
             and not getattr(defender, "recharge", False)
+            and not getattr(attacker, "_acts_second", False)
         )
         if not opp_is_attacking:
             logs.append(f"{attacker.name} の ふいうち は失敗した！")
@@ -1086,6 +1139,20 @@ def _execute_move_inner(
         if not check_hit(attacker, defender, move, field):
             logs.append(f"{attacker.name} の {move.name_jp} は外れた！")
             return logs
+        from .abilities import should_ignore_ability as _sia_o
+        # ばけのかわ は一撃必殺も1回防ぐ（Showdown の onDamage。接触の反応は起きる。A35）
+        if (defender.ability == "ばけのかわ" and not getattr(defender, '_disguise_broken', False)
+                and not _sia_o(attacker)):
+            defender._disguise_broken = True  # type: ignore
+            logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に 0ダメ")
+            _pen = max(1, math.floor(defender.max_hp / 8))
+            defender.take_damage(_pen)
+            logs.append(subj_line(defender, f"{defender.name} の ばけのかわ が破れた！({_pen})"))
+            logs.extend(attacker_side.opp_view.on_ability(defender.name, "ばけのかわ"))
+            _contact_reactions(attacker_side, defender_side, attacker, defender, move, logs, field)
+            return logs
+        _ohko_ko = False
+        _ohko_h0 = defender.hp
         if defender.item == "きあいのタスキ" and defender.hp == defender.max_hp:
             defender.item = None
             logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に {defender.hp - 1}ダメ")
@@ -1102,8 +1169,23 @@ def _execute_move_inner(
             defender.hp = 0
             defender.is_alive = False
             logs.append(subj_line(defender, f"一撃必殺！ {defender.name} は倒れた！"))
+            defender._faint_logged = True  # type: ignore
+            _ohko_ko = True
+        # 一撃必殺も攻撃技の命中＝接触の反応（ゴツゴツメット・さめはだ）・被弾の特性・どくげしょう が起きる（C09・C21）
+        _contact_reactions(attacker_side, defender_side, attacker, defender, move, logs, field)
+        on_after_hit(attacker, defender, move, logs, field, hp_before=_ohko_h0)
+        if defender.ability == "どくげしょう" and move.category == "physical":
+            if field.toxic_spikes[attacker_side.field_idx] < 2:
+                field.toxic_spikes[attacker_side.field_idx] += 1
+                logs.append(subj_line(defender, f"{defender.name} の どくげしょう！ {attacker.name} の足元にどくびしがまかれた！"))
+        if _ohko_ko:
             on_defender_ko(attacker, defender, overkill, logs)
             on_ko(attacker, logs)
+            if defender.destiny_bond and attacker.is_alive:
+                attacker.take_damage(attacker.hp)
+                attacker.is_alive = False
+                logs.append(f"{attacker.name} は みちづれ に巻き込まれた！")
+                attacker._faint_logged = True  # type: ignore
         return logs
 
     # ── 溜め技（2ターン攻撃） ────────────────────────────
@@ -1303,11 +1385,16 @@ def _execute_move_inner(
         defender.take_damage(dmg_penalty)
         logs.append(subj_line(defender, f"{defender.name} の ばけのかわ が破れた！({dmg_penalty})"))
         logs.extend(attacker_side.opp_view.on_ability(defender.name, "ばけのかわ"))
+        # ばけのかわ が受けた一撃も命中＝接触の反応は起きる（Showdown: ダメージ0でも DamagingHit。C09）
+        _contact_reactions(attacker_side, defender_side, attacker, defender, move, logs, field)
         if move.name_jp == "ねこだまし" and defender.is_alive and defender.ability not in ("せいしんりょく", "どんかん"):
             defender.flinched = True
             logs.append(subj_line(defender, f"{defender.name} はひるんだ！"))
         _disguise_ate_first = _is_multi_hit(move) and defender.is_alive
     if _disguise_just_broken and not _disguise_ate_first:
+        # ばけのかわ が受けても技は当たった＝自分への能力変化・あばれの固定は起きる（B09・A01）
+        _self_stat_effects(attacker, defender, move.name_jp, logs)
+        _rampage_progress(attacker, move.name_jp, field, logs)
         # いのちのたま: ばけのかわに当たってダメージが0でも反動を受ける（実機どおり）
         if attacker.item == "いのちのたま" and move.category != "status" and attacker.is_alive \
                 and attacker.ability != "マジックガード":
@@ -1351,12 +1438,29 @@ def _execute_move_inner(
         if defender.item == "きあいのハチマキ" and ret_dmg >= defender.hp and random.random() < 0.10:
             ret_dmg = defender.hp - 1
             _rx.append(subj_line(defender, f"{defender.name} の きあいのハチマキ で耐えた！"))
+        _ch0 = defender.hp
         defender.take_damage(ret_dmg)
         logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に {ret_dmg}ダメ")
         logs.extend(_rx)
+        # 反射技も攻撃技の命中＝ふうせん が割れ、被弾の特性（じきゅうりょく 等）・接触の反応が起きる（C18・C39）
+        if ret_dmg > 0:
+            defender._took_damage_this_turn = True  # type: ignore
+            if defender.item == "ふうせん":
+                defender.item = None
+                logs.append(subj_line(defender, f"{defender.name} の ふうせん が割れた！"))
+                on_item_consumed(defender, logs)
+                logs.extend(attacker_side.opp_view.on_item(defender.name, "ふうせん", "割れて判明"))
+        on_after_hit(attacker, defender, move, logs, field, hp_before=_ch0)
+        _contact_reactions(attacker_side, defender_side, attacker, defender, move, logs, field)
+        _hp_berry_now(defender, attacker, logs, attacker_side.opp_view)
         if not defender.is_alive:
             on_defender_ko(attacker, defender, ret_dmg, logs)
             on_ko(attacker, logs)
+            if defender.destiny_bond and attacker.is_alive:
+                attacker.take_damage(attacker.hp)
+                attacker.is_alive = False
+                logs.append(f"{attacker.name} は みちづれ に巻き込まれた！")
+                attacker._faint_logged = True  # type: ignore
         return logs
 
     # 急所判定
@@ -1391,6 +1495,7 @@ def _execute_move_inner(
     dealt_hp = 0
     rough_skin_logs: List[str] = []  # さめはだ/てつのとげはダメージログの後にまとめて出力
     _sub_hits = _real_hits = 0
+    _sub_dmg = 0
     # 発ごとの反応（タスキ・かるわざ・被弾の特性等）は技の行の後に出す。みがわり の行だけはその場
     _main_logs = logs
     logs = _hit_logs = []
@@ -1407,7 +1512,10 @@ def _execute_move_inner(
             screen_mult = _screen_mult(critical)
             _any_crit = _any_crit or critical
         attacker._multi_hit_index = _hit_i  # type: ignore
+        _res_item = defender.item
         dmg = calc_damage(attacker, defender, move, field, critical)
+        if _res_item in RESIST_BERRIES and defender.item is None:
+            logs.append(subj_line(defender, f"{defender.name} の {_res_item}！ ダメージが半分になった！"))
         if screen_mult < 1.0:
             dmg = max(1, math.floor(dmg * screen_mult))
         # かんつうドリル：守りを貫通した攻撃は本来の1/4ダメージ
@@ -1420,11 +1528,13 @@ def _execute_move_inner(
             # みがわり が受けた攻撃: 追加効果・接触の反応・防御側の持ち物/特性は起きない（自分の能力変化・反動・吸収・いのちのたまは起きる）
             if dmg >= sub_hp:
                 defender._substitute_hp = 0  # type: ignore
+                _main_logs.append(f"{attacker.name} の {move.name_jp} → みがわり に {sub_hp} ダメ")
                 _main_logs.append(f"{defender.name} の みがわり が壊れた！")
             else:
                 defender._substitute_hp = sub_hp - dmg  # type: ignore
                 _main_logs.append(f"{attacker.name} の {move.name_jp} → みがわり に {dmg} ダメ")
             total_dmg += dmg
+            _sub_dmg += dmg
             dealt_hp += min(dmg, sub_hp)
             _sub_hits += 1
             if attacker.item == "ノーマルジュエル" and _eff_type == "ノーマル":
@@ -1467,6 +1577,10 @@ def _execute_move_inner(
         dealt_hp += _hp0 - defender.hp
         if dmg > 0:
             defender._took_damage_this_turn = True  # type: ignore
+        # こおり: ほのお技を受けると治る（REQUIREMENTS 4-3。A11）
+        if defender.is_alive and defender.status == "freeze" and _eff_type == "ほのお":
+            defender.status = None
+            logs.append(subj_line(defender, f"{defender.name} の こおり が治った！"))
 
         # イリュージョン解除（ダメージを受けたとき）
         if getattr(defender, '_illusion_name', None):
@@ -1487,9 +1601,9 @@ def _execute_move_inner(
             logs.append(f"{attacker.name} の ノーマルジュエル が消費された！")
             on_item_consumed(attacker, logs)
 
-        # レッドカード: ダメージを与えてきた相手を追い出す（消費）。持ち主は防御側。
-        # マジックミラーと同じ attacker._force_switch を使う＝処理タイミングも既存と揃える。
-        if defender.item == "レッドカード" and total_dmg > 0 and attacker.is_alive:
+        # レッドカード: ダメージを与えてきた相手を追い出す（消費）。持ち主は防御側で、倒れていないこと（Showdown target.hp）。
+        # attacker._force_switch は技の処理の直後に Battle._do_action_body が消化する（A25）
+        if defender.item == "レッドカード" and total_dmg > 0 and attacker.is_alive and defender.is_alive:
             if any(p.is_alive for i, p in enumerate(attacker_side.party)
                    if i != attacker_side.active_idx):
                 defender.item = None
@@ -1578,9 +1692,8 @@ def _execute_move_inner(
                     _s = _QB[_berry]
                     setattr(attacker, f"stage_{_s}", min(6, getattr(attacker, f"stage_{_s}", 0) + 1))
 
-        # 被弾後特性効果（くだけるよろい・せいでんき等）
-        if defender.is_alive:
-            on_after_hit(attacker, defender, move, logs, field)
+        # 被弾後特性効果（くだけるよろい・せいでんき等）。接触で相手に起きる反応は持ち主が倒れても起きる（C23）
+        on_after_hit(attacker, defender, move, logs, field, hp_before=_hp0)
 
         # ポイズンタッチ（攻撃側特性：接触技で30%毒）
         if defender.is_alive and attacker.ability == "ポイズンタッチ" and is_contact_move(move):
@@ -1615,10 +1728,13 @@ def _execute_move_inner(
     _sub_absorbed = _sub_hits > 0 and _real_hits == 0
     if dmg_out is not None:
         dmg_out.append(total_dmg)
-    if hits > 1:
-        logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に {total_dmg}ダメ ({_nhit}回)")
-    else:
-        logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に {total_dmg}ダメ")
+    # 本体への行は本体が受けた分だけ（みがわり が受けた発は上の みがわり の行。D20）
+    _body_dmg = total_dmg - _sub_dmg
+    if _real_hits > 0 or _disguise_ate_first:
+        if hits > 1:
+            logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に {_body_dmg}ダメ ({_nhit}回)")
+        else:
+            logs.append(f"{attacker.name} の {move.name_jp} → {defender.name} に {_body_dmg}ダメ")
 
     if _any_crit:
         logs.append("急所に当たった！")
@@ -1626,9 +1742,16 @@ def _execute_move_inner(
         if defender.is_alive and defender.ability == "いかりのつぼ" and not _sub_absorbed:
             defender.stage_attack = 6
             logs.append(subj_line(defender, f"{defender.name} の いかりのつぼ！ 攻撃が最大まで上がった！"))
-    if eff > 1.0:
+    _eff_disp = eff
+    if eff == 0 and scrappy_override(attacker, _eff_type, defender):
+        # きもったま: ゴーストの無効を外した相性で表示する（B05）
+        _eff_disp = 1.0
+        for _t in (defender.type1, defender.type2):
+            if _t and _t != "ゴースト":
+                _eff_disp *= get_type_effectiveness(_eff_type, _t, None)
+    if _eff_disp > 1.0:
         logs.append("こうかはばつぐんだ！")
-    elif eff < 1.0:
+    elif _eff_disp < 1.0:
         logs.append("こうかはいまひとつ…")
     logs.extend(_hit_logs)
 
@@ -1637,12 +1760,14 @@ def _execute_move_inner(
         attacker.take_damage(attacker.hp)
         attacker.is_alive = False
         logs.append(f"{attacker.name} は爆発して倒れた！")
+        attacker._faint_logged = True  # type: ignore
 
     # みちづれ：倒された場合に相手も道連れ
     if not defender.is_alive and defender.destiny_bond and attacker.is_alive:
         attacker.take_damage(attacker.hp)
         attacker.is_alive = False
         logs.append(f"{attacker.name} は みちづれ に巻き込まれた！")
+        attacker._faint_logged = True  # type: ignore
 
     # かいがらのすず（与えたダメージの1/8回復）
     if attacker.item == "かいがらのすず" and dealt_hp > 0 and attacker.is_alive and _can_heal(attacker):
@@ -1671,8 +1796,10 @@ def _execute_move_inner(
         heal = max(1, math.floor(dealt_hp * DRAIN_RATES[move.name_jp]))
         if attacker.item == "おおきなねっこ":
             heal = math.floor(heal * 1.3)
+        _ah0 = attacker.hp
         attacker.hp = min(attacker.max_hp, attacker.hp + heal)
-        logs.append(f"{attacker.name} は {heal}HP 吸収した！")
+        if attacker.hp > _ah0:
+            logs.append(f"{attacker.name} は {attacker.hp - _ah0}HP 吸収した！")
 
     # さめはだ/てつのとげ（ダメージ・効果テキストの後）
     logs.extend(rough_skin_logs)
@@ -1781,6 +1908,7 @@ def _execute_move_inner(
         attacker.take_damage(attacker.hp)
         attacker.is_alive = False
         logs.append(f"いのちがけ で {dmg} ダメ！ {attacker.name} は倒れた！")
+        attacker._faint_logged = True  # type: ignore
 
     # はきだす：たくわえ回数で威力100/200/300、使用後たくわえ消費
     if move.name_jp == "はきだす" and defender.is_alive:
@@ -2054,7 +2182,7 @@ def _execute_move_inner(
         _hp_berry_now(defender, attacker, logs, attacker_side.opp_view if attacker_side is not None else None)
         pb_rough: List[str] = []
         if defender.is_alive:
-            on_after_hit(attacker, defender, move, logs, field)
+            on_after_hit(attacker, defender, move, logs, field, hp_before=_pb0)
             _apply_secondary(attacker, defender, move, pb_dmg, logs, field, defender_side)
         _rough_skin_recoil(attacker, defender, move, pb_rough, field)
         logs.extend(pb_rough)
@@ -2224,6 +2352,9 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
         attacker._sleep_rest = True  # type: ignore
         attacker.bad_poison_count = 0
         logs.append(f"{attacker.name} はねむって体力を回復した！")
+        # ラムのみ・カゴのみ はすぐ発動する（C42。Showdown の Lum onAfterSetStatus・Chesto onUpdate）
+        if not (defender.is_alive and defender.ability == "きんちょうかん"):
+            try_cure_berry(attacker, logs)
         return logs
 
     # はらだいこ：HP半分消費してA最大（残りHPが足りないと失敗）
@@ -2646,8 +2777,10 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
                     logs.append(subj_line(defender, f"{defender.name} の マイペース でこんらんを防いだ！"))
                 elif misty_blocks(defender, field):
                     logs.append(subj_line(defender, f"{defender.name} は ミストフィールド でこんらんを防いだ！"))
+                elif defender.confused:
+                    logs.append(subj_line(defender, f"しかし {defender.name} は すでに こんらんしている！"))
                 else:
-                    defender.confused = True
+                    defender.confuse()
                     logs.append(subj_line(defender, f"{defender.name} はこんらんした！"))
                     try_cure_berry(defender, logs)
             elif attr.startswith("stage_"):
@@ -2805,7 +2938,7 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
         tgt.status = None
         if tgt in attacker_side.fainted:
             attacker_side.fainted.remove(tgt)
-        logs.append(f"{tgt.name} は さいきのいのり で復活した！")
+        logs.append(subj_line(tgt, f"{tgt.name} は さいきのいのり で復活した！"))
         return logs
 
     # いやしのねがい（自身が倒れ次のポケモンを全回復）
@@ -2814,6 +2947,7 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
         attacker.take_damage(attacker.hp)
         attacker.is_alive = False
         logs.append(f"{attacker.name} は いやしのねがい を使って倒れた！")
+        attacker._faint_logged = True  # type: ignore
         return logs
 
     # おきみやげ（相手A・C -2後に自倒）
@@ -2822,6 +2956,7 @@ def _apply_status_move(attacker: BattlePokemon, defender: BattlePokemon,
         attacker.take_damage(attacker.hp)
         attacker.is_alive = False
         logs.append(f"{attacker.name} は おきみやげ を使って倒れた！")
+        attacker._faint_logged = True  # type: ignore
         return logs
 
     # どくびし
@@ -3207,38 +3342,126 @@ def _calc_hits(move: MoveData, attacker=None) -> int:
     return 1
 
 
+SELF_EFFECTS: dict[str, list[tuple[str, int, float]]] = {
+    "インファイト":   [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
+    "クローズコンバット": [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
+    "ばかぢから":    [("stage_attack", -1, 1.0), ("stage_defense", -1, 1.0)],
+    "りゅうせいぐん": [("stage_sp_attack", -2, 1.0)],
+    "リーフストーム": [("stage_sp_attack", -2, 1.0)],
+    "オーバーヒート": [("stage_sp_attack", -2, 1.0)],
+    "サイコブースト": [("stage_sp_attack", -2, 1.0)],
+    "ゴールドラッシュ": [("stage_sp_attack", -2, 1.0)],
+    "だいばくはつ":   [],  # 倒れる（別処理）
+    "じばく":         [],
+    "フレアソング":   [("stage_sp_attack", 1, 1.0)],
+    "ほのおのまい":  [("stage_sp_attack", 1, 0.50)],
+    "チャージビーム": [("stage_sp_attack", 1, 0.70)],
+    "ニトロチャージ": [("stage_speed", 1, 1.0)],
+    "アクアステップ": [("stage_speed", 1, 1.0)],
+    "くさわけ":      [("stage_speed", 1, 1.0)],
+    "コメットパンチ": [("stage_attack", 1, 0.20)],
+    "アームハンマー": [("stage_speed", -1, 1.0)],
+    "アーマーキャノン": [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
+    "オーラぐるま":    [("stage_speed", 1, 1.0)],
+    "バリアーラッシュ":[("stage_defense", 1, 1.0)],
+    "はがねのつばさ":  [("stage_defense", 1, 0.10)],
+    "ぶちかまし":      [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
+    "アイスハンマー":  [("stage_speed", -1, 1.0)],
+    "スケイルノイズ":  [("stage_defense", -1, 1.0)],
+    "スケイルショット":[("stage_defense", -1, 1.0), ("stage_speed", 1, 1.0)],
+}
+
+
+def _self_stat_effects(attacker, defender, n, logs):
+    """技の自分への能力変化（倒した時も起きる。B09）"""
+    if n in SELF_EFFECTS:
+        for stat, delta, prob in SELF_EFFECTS[n]:
+            if random.random() < prob:
+                # あまのじゃく：能力変化を反転
+                _d = -delta if attacker.ability == "あまのじゃく" else delta
+                old_val = getattr(attacker, stat, 0)
+                new_val = max(-6, min(6, old_val + _d))
+                setattr(attacker, stat, new_val)
+                if new_val != old_val:
+                    logs.append(f"{attacker.name} の {STAT_JP.get(stat, stat)} が{'下がった' if _d < 0 else '上がった'}！")
+                    from .abilities import on_stat_lowered
+                    if _d < 0:
+                        on_stat_lowered(attacker, logs)
+                    # びんじょう：相手の能力が上がると自分も同じだけ上がる
+                    if _d > 0 and defender.is_alive and defender.ability == "びんじょう":
+                        _ov = getattr(defender, stat, 0)
+                        setattr(defender, stat, min(6, _ov + _d))
+                        if getattr(defender, stat, 0) != _ov:
+                            logs.append(subj_line(defender, f"{defender.name} の びんじょう！ {STAT_JP.get(stat, stat)} が上がった！"))
+
+
+RAGE_MOVES = frozenset({"げきりん", "あばれる", "はなびらのまい", "だいふんげき"})
+RAMPAGE_MOVES = RAGE_MOVES | {"さわぐ"}
+
+
+def rampage_locked(p) -> bool:
+    """あばれ（げきりん等）・さわぐ で技が固定されている（交代もメガシンカも選べない）"""
+    return p.lock_count > 0 and p.locked_move in RAMPAGE_MOVES and p.encore_count == 0
+
+
+def _rampage_end(p, field, logs, last: bool) -> None:
+    """あばれを終える。last: 最後のターン（疲れてこんらん。マイペース・ミストフィールドは除く）"""
+    n = p.locked_move
+    p.locked_move = None
+    p.lock_count = 0
+    if last and n in RAGE_MOVES and p.is_alive and p.ability != "マイペース" and not misty_blocks(p, field) and not p.confused:
+        p.confuse()
+        logs.append(f"{p.name} は疲れてこんらんした！")
+        from .items import try_cure_berry as _tcb
+        _tcb(p, logs)
+
+
+def _rampage_progress(attacker, n, field, logs) -> None:
+    """あばれ技が当たった（倒した・みがわり・ばけのかわを含む）。合計2〜3ターン（Showdown lockedmove の trueDuration）。
+    lock_count はこのターンの後に残る回数"""
+    if n not in RAMPAGE_MOVES or getattr(attacker, "_via_call", False):
+        return
+    attacker._rampage_hit = True  # type: ignore
+    if attacker.locked_move == n and attacker.lock_count > 0:
+        attacker.lock_count -= 1
+        if attacker.lock_count <= 0:
+            _rampage_end(attacker, field, logs, True)
+    else:
+        attacker.locked_move = n
+        attacker.lock_count = 2 if n == "さわぐ" else random.randint(2, 3) - 1
+
+
+def _rampage_disrupted(p, field, logs) -> None:
+    """固定中のあばれ技が当たらなかった・動けなかったターン: 固定は解ける。最後のターンだったら疲れてこんらん（ねむりは除く）"""
+    if not rampage_locked(p):
+        return
+    _rampage_end(p, field, logs, p.lock_count == 1 and p.status != "sleep")
+
+
 def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_side=None, sub_hit=False):
     """追加効果（状態異常・ひるみ・能力変化）。sub_hit: みがわり が受けた（相手への効果は起きず、自分への効果だけ起きる）"""
     n = move.name_jp
 
     if not defender.is_alive:
-        # 自己能力変化（りゅうせいぐん等）は倒した時も発動
-        SELF_EFFECTS_KO: dict[str, list[tuple[str, int, float]]] = {
-            "インファイト":     [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
-            "クローズコンバット": [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
-            "ばかぢから":       [("stage_attack", -1, 1.0), ("stage_defense", -1, 1.0)],
-            "りゅうせいぐん":   [("stage_sp_attack", -2, 1.0)],
-            "リーフストーム":   [("stage_sp_attack", -2, 1.0)],
-            "オーバーヒート":   [("stage_sp_attack", -2, 1.0)],
-            "サイコブースト":   [("stage_sp_attack", -2, 1.0)],
-            "ゴールドラッシュ": [("stage_sp_attack", -2, 1.0)],
-            "アームハンマー":   [("stage_speed", -1, 1.0)],
-            "アーマーキャノン": [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
-            "とどめばり":       [("stage_attack", 3, 1.0)],
-        }
-        if n in SELF_EFFECTS_KO:
-            for stat, delta, prob in SELF_EFFECTS_KO[n]:
-                if random.random() < prob:
-                    old_val = getattr(attacker, stat, 0)
-                    new_val = max(-6, min(6, old_val + delta))
-                    setattr(attacker, stat, new_val)
-                    if new_val != old_val:
-                        logs.append(f"{attacker.name} の {STAT_JP.get(stat, stat)} が{'下がった' if delta < 0 else '上がった'}！")
+        # 自分への効果（能力変化・ミストバースト・あばれの固定）は倒した時も起きる（B09・A01）
+        if n == "げんしのちから" and attacker.ability != "ちからずく" and defender.ability != "りんぷん" and random.random() < 0.10:
+            for st in ("stage_attack","stage_defense","stage_sp_attack","stage_sp_defense","stage_speed"):
+                v = getattr(attacker, st, 0)
+                if v < 6:
+                    setattr(attacker, st, v + 1)
+            logs.append(f"{attacker.name} の能力が上がった！")
+        _self_stat_effects(attacker, defender, n, logs)
+        # とどめばり: 倒したときだけ攻撃+3
+        if n == "とどめばり" and attacker.stage_attack < 6:
+            attacker.stage_attack = min(6, attacker.stage_attack + 3)
+            logs.append(f"{attacker.name} の こうげき が上がった！")
         # ミストバースト: 相手を倒しても自分は倒れる（以前はこの早期 return で自分が残っていた。battle.rs と同じ）
         if n == "ミストバースト" and attacker.is_alive:
             attacker.hp = 0
             attacker.is_alive = False
             logs.append(f"{attacker.name} は ミストバースト の反動で倒れた！")
+            attacker._faint_logged = True  # type: ignore
+        _rampage_progress(attacker, n, field, logs)
         return
 
     # ふんどのこぶし用: 攻撃技で被弾した回数を加算（防御側は生存中）
@@ -3326,8 +3549,8 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
             pass
         elif random.random() < prob:
             if effect == "confused":
-                if defender.ability not in ("マイペース",) and not misty_blocks(defender, field):
-                    defender.confused = True
+                if defender.ability not in ("マイペース",) and not misty_blocks(defender, field) and not defender.confused:
+                    defender.confuse()
                     logs.append(subj_line(defender, f"{defender.name} はこんらんした！"))
                     from .items import try_cure_berry
                     try_cure_berry(defender, logs)
@@ -3358,8 +3581,8 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
                    "stage_speed","stage_accuracy","stage_evasion")
         if any(getattr(defender, s, 0) > 0 for s in _stages):
             if n == "みわくのボイス":
-                if defender.ability not in ("マイペース",) and not misty_blocks(defender, field):
-                    defender.confused = True
+                if defender.ability not in ("マイペース",) and not misty_blocks(defender, field) and not defender.confused:
+                    defender.confuse()
                     logs.append(subj_line(defender, f"{defender.name} はこんらんした！"))
                     from .items import try_cure_berry as _tcb_v
                     _tcb_v(defender, logs)
@@ -3369,10 +3592,6 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
                     from .items import try_cure_berry as _tcb_j
                     _tcb_j(defender, logs)
                     synchronize(defender, attacker, "burn", logs, field)
-
-    # りんぷん: 追加効果をブロック
-    if defender.ability == "りんぷん":
-        return
 
     # ── 防御側能力ダウン ──────────────────────────────
     DEF_DOWNS: dict[str, tuple[str, int, float]] = {
@@ -3459,34 +3678,6 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
                     on_stat_lowered(defender, logs)
 
     # ── 攻撃側自己能力変化 ──────────────────────────────
-    SELF_EFFECTS: dict[str, list[tuple[str, int, float]]] = {
-        "インファイト":   [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
-        "クローズコンバット": [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
-        "ばかぢから":    [("stage_attack", -1, 1.0), ("stage_defense", -1, 1.0)],
-        "りゅうせいぐん": [("stage_sp_attack", -2, 1.0)],
-        "リーフストーム": [("stage_sp_attack", -2, 1.0)],
-        "オーバーヒート": [("stage_sp_attack", -2, 1.0)],
-        "サイコブースト": [("stage_sp_attack", -2, 1.0)],
-        "ゴールドラッシュ": [("stage_sp_attack", -2, 1.0)],
-        "だいばくはつ":   [],  # 倒れる（別処理）
-        "じばく":         [],
-        "フレアソング":   [("stage_sp_attack", 1, 1.0)],
-        "ほのおのまい":  [("stage_sp_attack", 1, 0.50)],
-        "チャージビーム": [("stage_sp_attack", 1, 0.70)],
-        "ニトロチャージ": [("stage_speed", 1, 1.0)],
-        "アクアステップ": [("stage_speed", 1, 1.0)],
-        "くさわけ":      [("stage_speed", 1, 1.0)],
-        "コメットパンチ": [("stage_attack", 1, 0.20)],
-        "アームハンマー": [("stage_speed", -1, 1.0)],
-        "アーマーキャノン": [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
-        "オーラぐるま":    [("stage_speed", 1, 1.0)],
-        "バリアーラッシュ":[("stage_defense", 1, 1.0)],
-        "はがねのつばさ":  [("stage_defense", 1, 0.10)],
-        "ぶちかまし":      [("stage_defense", -1, 1.0), ("stage_sp_defense", -1, 1.0)],
-        "アイスハンマー":  [("stage_speed", -1, 1.0)],
-        "スケイルノイズ":  [("stage_defense", -1, 1.0)],
-        "スケイルショット":[("stage_defense", -1, 1.0), ("stage_speed", 1, 1.0)],
-    }
     # げんしのちから/シルバーウィンド等：10%で全能力1段階上昇（一括判定）
     if n == "げんしのちから" and not force_no_secondary and random.random() < 0.10:
         for st in ("stage_attack","stage_defense","stage_sp_attack","stage_sp_defense","stage_speed"):
@@ -3494,28 +3685,10 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
             if v < 6:
                 setattr(attacker, st, v + 1)
         logs.append(f"{attacker.name} の能力が上がった！")
-    if n in SELF_EFFECTS:
-        for stat, delta, prob in SELF_EFFECTS[n]:
-            if random.random() < prob:
-                # あまのじゃく：能力変化を反転
-                _d = -delta if attacker.ability == "あまのじゃく" else delta
-                old_val = getattr(attacker, stat, 0)
-                new_val = max(-6, min(6, old_val + _d))
-                setattr(attacker, stat, new_val)
-                if new_val != old_val:
-                    logs.append(f"{attacker.name} の {STAT_JP.get(stat, stat)} が{'下がった' if _d < 0 else '上がった'}！")
-                    from .abilities import on_stat_lowered
-                    if _d < 0:
-                        on_stat_lowered(attacker, logs)
-                    # びんじょう：相手の能力が上がると自分も同じだけ上がる
-                    if _d > 0 and defender.is_alive and defender.ability == "びんじょう":
-                        _ov = getattr(defender, stat, 0)
-                        setattr(defender, stat, min(6, _ov + _d))
-                        if getattr(defender, stat, 0) != _ov:
-                            logs.append(subj_line(defender, f"{defender.name} の びんじょう！ {STAT_JP.get(stat, stat)} が上がった！"))
+    _self_stat_effects(attacker, defender, n, logs)
 
     # ぶきみなじゅもん（攻撃技）：命中後に相手の最後の技のPPを3減らす
-    if n == "ぶきみなじゅもん" and defender.is_alive and defender.last_used_move and tgt:
+    if n == "ぶきみなじゅもん" and defender.is_alive and defender.last_used_move and tgt and not force_no_secondary:
         for i, mv in enumerate(defender.moves):
             if mv and mv.name_jp == defender.last_used_move and i < len(defender.pp):
                 defender.pp[i] = max(0, defender.pp[i] - 3)
@@ -3562,12 +3735,12 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
                 synchronize(defender, attacker, chosen, logs, field)
 
     # かげぬい（ダメージ技）：命中時に相手をにげられない状態に
-    if n == "かげぬい" and dmg > 0 and defender.is_alive and tgt:
+    if n == "かげぬい" and dmg > 0 and defender.is_alive and tgt and not force_no_secondary:
         defender.trapped = True
         logs.append(subj_line(defender, f"{defender.name} は逃げられなくなった！"))
 
     # こおり治癒：ねっとう/ねっさのだいち=相手のこおりを治す、自分のこおりも治す
-    if n in ("ねっとう", "ねっさのだいち") and tgt:
+    if n in THAWS_TARGET and tgt:
         if defender.is_alive and defender.status == "freeze":
             defender.status = None
             logs.append(subj_line(defender, f"{defender.name} の こおり が治った！"))
@@ -3615,34 +3788,9 @@ def _apply_secondary(attacker, defender, move, dmg, logs, field=None, defender_s
         attacker.hp = 0
         attacker.is_alive = False
         logs.append(f"{attacker.name} は ミストバースト の反動で倒れた！")
+        attacker._faint_logged = True  # type: ignore
 
-    # げきりん・あばれる・はなびらのまい・だいふんげき：2〜3ターンロック後にこんらん
-    RAGE_MOVES = {"げきりん", "あばれる", "はなびらのまい", "だいふんげき"}
-    if n in RAGE_MOVES:
-        if not attacker.locked_move:
-            attacker.locked_move = n
-            attacker.lock_count = random.randint(2, 3)
-        else:
-            attacker.lock_count -= 1
-            if attacker.lock_count <= 0:
-                attacker.locked_move = None
-                attacker.lock_count = 0
-                if attacker.ability != "マイペース" and not misty_blocks(attacker, field):
-                    attacker.confused = True
-                    logs.append(f"{attacker.name} は疲れてこんらんした！")
-                    from .items import try_cure_berry as _tcb
-                    _tcb(attacker, logs)
-
-    # さわぐ：2〜3ターン連続使用ロック（あばれる類似だが終了後こんらんしない）
-    if n == "さわぐ":
-        if not attacker.locked_move:
-            attacker.locked_move = n
-            attacker.lock_count = random.randint(2, 3)
-        else:
-            attacker.lock_count -= 1
-            if attacker.lock_count <= 0:
-                attacker.locked_move = None
-                attacker.lock_count = 0
+    _rampage_progress(attacker, n, field, logs)
 
     # last_used_moveを記録（ふいうち・アンコール用）
     attacker.last_used_move = n
@@ -3701,7 +3849,7 @@ def _hp_berry_now(p, opp, logs, opp_view=None):
     p._last_berry = berry  # type: ignore
     p.item = None
     p.ate_berry = True
-    logs.append(f"{p.name} の {berry} が発動！ HPが {heal} 回復した！")
+    logs.append(subj_line(p, f"{p.name} の {berry} が発動！ HPが {heal} 回復した！"))
     on_item_consumed(p, logs)
     if opp_view is not None:
         logs.extend(opp_view.on_item(p.name, berry, "HP回復から判明"))
@@ -3960,16 +4108,18 @@ class Battle:
                 break
 
             # 後攻行動
-            if second_side.active is not second_chooser:
-                # 行動者が先攻で倒されて交代済み → このターンは行動権を失う
+            if second_side.active is not second_chooser or not second_side.active.is_alive:
+                # 行動者が先攻で倒された（交代はターン終了時）・強制交代で入れ替わった → このターンは行動権を失う
                 pass
             elif not second_opp.active.is_alive and _needs_target(second_side.active, second_action):
-                # 先攻が自滅(反動/自爆)で退場し場が空 → 相手が対象の技は失敗（自分・場が対象の技は出す。瀕死交代はターン終了時）
+                # 先攻が倒れて場が空 → 相手が対象の技は失敗（自分・場が対象の技は出す。瀕死交代はターン終了時）
                 self.logs.append(subj_line(second_side.active, f"{second_side.active.name} は こうげきしようとしたが 相手がいない！"))
                 second_side.active.protect_consecutive = 0
+                _rampage_disrupted(second_side.active, self.field, self.logs)
             elif second_side.active.flinched:
                 self.logs.append(subj_line(second_side.active, f"{second_side.active.name} はひるんで動けない！"))
                 second_side.active.protect_consecutive = 0
+                _rampage_disrupted(second_side.active, self.field, self.logs)
                 if second_side.active.ability == "ふくつのこころ":
                     second_side.active.stage_speed = min(6, second_side.active.stage_speed + 1)
                     self.logs.append(subj_line(second_side.active, f"{second_side.active.name} の ふくつのこころ！ 素早さが上がった！"))
@@ -4009,6 +4159,7 @@ class Battle:
     def _do_action_body(self, my_side: BattleSide, opp_side: BattleSide,
                         action: Action, opp_ai, opp_action: Optional[Action] = None,
                         defer_self_faint: bool = False):
+        """倒れた個体の交代はターン終了時の処理の後（_end_of_turn の末尾。REQUIREMENTS 4-6。D06）"""
         if action.type == "switch":
             idx = action.switch_to
             if 0 <= idx < len(my_side.party) and my_side.party[idx].is_alive:
@@ -4021,12 +4172,16 @@ class Battle:
                                 self.field, opp_side.active, self.logs, my_side.party)
                 self._apply_healing_wish(my_side)
                 self.logs.extend(opp_side.opp_view.on_enter(my_side.active))
-                self._faint_switch(my_side, opp_side)
+                self._log_fainted_actives()
             return
 
         if action.type == "move" and action.move is not None:
             _a = my_side.active
-            _opp_down = not opp_side.active.is_alive   # 先攻が自滅した後の自分・場が対象の技（E5）。その交代はターン終了時のまま
+            if not _a.is_alive:
+                return
+            # こだわりアイテムを失ったら技の縛りは解ける（A23）
+            if _a.choice_locked_move is not None and not is_choice_item(_a.item):
+                _a.choice_locked_move = None
             # アンコールされた技のPPが尽きたらアンコールは解ける（わるあがき等をその技に差し替えない）
             if _a.encore_count > 0 and _a.locked_move and _move_pp(_a, _a.locked_move) <= 0:
                 _a.encore_count = 0
@@ -4037,8 +4192,15 @@ class Battle:
                     action = Action(type="move", move=_a.moves[_ei], move_idx=_ei, do_mega=action.do_mega)
                     my_side._encore_exec = ("メガ+" if action.do_mega else "") + _a.locked_move  # type: ignore
             _recharging = bool(getattr(_a, "recharge", False))
+            # あばれの固定中（2ターン目以降）: PPは減らない。当たらなかった・動けなかったら固定が解ける（A01）
+            _ramp_cont = rampage_locked(_a) and action.move.name_jp == _a.locked_move
+            _a._rampage_hit = False  # type: ignore
             _a._immobile = False  # type: ignore
+            # プレッシャーは技を出す時点の相手で決まる（ほえる 等で入れ替わった後の個体ではない）
+            _press = opp_side.active.is_alive and opp_side.active.ability == "プレッシャー"
             logs = _execute_move(my_side, opp_side, action, self.field, opp_action)
+            if _ramp_cont and not getattr(_a, "_rampage_hit", False):
+                _rampage_disrupted(_a, self.field, logs)
             self.logs.extend(logs)
             try_white_herb(my_side.active, self.logs)
             try_white_herb(opp_side.active, self.logs)
@@ -4048,17 +4210,18 @@ class Battle:
 
             # PP消費（わるあがきはmove_idx=-1なのでスキップ）
             attacker = my_side.active
-            if (not _recharging and not getattr(_a, "_immobile", False)
+            _acted = not _recharging and not getattr(_a, "_immobile", False)
+            if (_acted and not _ramp_cont
                     and action.move_idx is not None and 0 <= action.move_idx < len(attacker.pp)):
-                # プレッシャー: 相手の技を受けると追加で1減る（攻撃技が相手を対象にした場合）
+                # プレッシャー: 相手を対象にとる技（攻撃技・相手や場全体が対象の変化技・設置技の一部）は追加で1減る（B12）
                 _pp_cost = 1
-                if (action.move is not None and action.move.category != "status"
-                        and opp_side.active.is_alive and opp_side.active.ability == "プレッシャー"):
+                if (action.move is not None and _press
+                        and (action.move.category != "status" or action.move.name_jp in PRESSURE_STATUS)):
                     _pp_cost = 2
                 attacker.pp[action.move_idx] = max(0, attacker.pp[action.move_idx] - _pp_cost)
 
-            # こだわりアイテム: 技を使ったらその技に縛る（変化技も含む）
-            if is_choice_item(attacker.item):
+            # こだわりアイテム: 技を使ったらその技に縛る（変化技も含む）。動けなかったターンは縛らない（A23）
+            if _acted and _a is attacker and is_choice_item(attacker.item):
                 if attacker.choice_locked_move is None:
                     attacker.choice_locked_move = action.move.name_jp
 
@@ -4068,13 +4231,13 @@ class Battle:
                 opp_side.stealth_rock_set = True
                 self.field.stealth_rock[opp_side.field_idx] = True
 
-            # 倒れた場合の交代（ハザードで連続倒れも対応）
-            if not _opp_down:
-                self._faint_switch(opp_side, my_side)
-            # 先攻が自滅(反動/自爆)した時の交代はターン終了時まで保留（後攻技を空振りさせるため）。
-            # 保留分は _end_of_turn 末尾の _faint_switch が回収する。
-            if not defer_self_faint:
-                self._faint_switch(my_side, opp_side)
+            self._log_fainted_actives()
+
+            # レッドカード・はね返された ほえる: 技を使った側がそのまま追い出される（ピボット技より先。A25）
+            if my_side.active.is_alive and getattr(my_side.active, '_force_switch', False):
+                my_side.active._force_switch = False  # type: ignore
+                my_side.active._pivot_out = False  # type: ignore
+                self._random_drag(my_side, opp_side)
 
             # ピボット技（ボルトチェンジ・とんぼがえり・バトンタッチ等）：生存中に引っ込む
             # 交代先は戦略的に選ぶ（バトンは積みエースへ、通常は有利な受け先へ）
@@ -4093,7 +4256,7 @@ class Battle:
                                        self.field, opp_side.active, self.logs, my_side.party)
                         self._apply_healing_wish(my_side)
                         self.logs.extend(opp_side.opp_view.on_enter(my_side.active))
-                        self._faint_switch(my_side, opp_side)
+                        self._log_fainted_actives()
 
             # だっしゅつボタン：ダメージを受けた側（=相手）が引っ込む。交代先は戦略的に選ぶ。
             # 攻撃側の _pivot_out（とんぼがえり等）は上で処理済み。防御側に立つのは本アイテムのみ。
@@ -4111,24 +4274,37 @@ class Battle:
                                        self.field, my_side.active, self.logs, opp_side.party)
                         self._apply_healing_wish(opp_side)
                         self.logs.extend(my_side.opp_view.on_enter(opp_side.active))
-                        self._faint_switch(opp_side, my_side)
+                        self._log_fainted_actives()
 
             # 強制交代技（ドラゴンテール等）：相手をランダム交代
             if opp_side.active.is_alive and getattr(opp_side.active, '_force_switch', False):
                 opp_side.active._force_switch = False  # type: ignore
-                benched = [i for i, p in enumerate(opp_side.party)
-                           if p.is_alive and i != opp_side.active_idx]
-                if benched:
-                    new_idx = random.choice(benched)
-                    self.logs.append(f"{opp_side.active.name} は強制交代させられた！")
-                    opp_side.switch_to(new_idx, self.logs, self.field)
-                    _release_by_leaving(my_side.active)
-                    self.logs.append(f"{opp_side.active.name} が出てきた！")
-                    _entry_effects(opp_side.active,
-                                   opp_side.field_idx,
-                                   self.field, my_side.active, self.logs, opp_side.party)
-                    self.logs.extend(my_side.opp_view.on_enter(opp_side.active))
-                    self._faint_switch(opp_side, my_side)
+                self._random_drag(opp_side, my_side)
+
+    def _random_drag(self, side: BattleSide, other: BattleSide) -> None:
+        """side の場のポケモンを控えからランダムに選んだ個体と入れ替える（ドラゴンテール・ほえる・レッドカード）"""
+        benched = [i for i, p in enumerate(side.party)
+                   if p.is_alive and i != side.active_idx]
+        if not benched:
+            return
+        new_idx = random.choice(benched)
+        self.logs.append(f"{side.active.name} は強制交代させられた！")
+        side.switch_to(new_idx, self.logs, self.field)
+        _release_by_leaving(other.active)
+        self.logs.append(f"{side.active.name} が出てきた！")
+        _entry_effects(side.active, side.field_idx,
+                       self.field, other.active, self.logs, side.party)
+        self.logs.extend(other.opp_view.on_enter(side.active))
+        self._log_fainted_actives()
+
+    def _log_fainted_actives(self):
+        """場で倒れている個体の「倒れた！」（交代はターン終了時。1体につき1回）"""
+        for side in (self.side1, self.side2):
+            if not side.active.is_alive:
+                prev = getattr(self, "_log_ctx", 0)
+                self._log_ctx = 1 if side is self.side1 else 2
+                self._log_faint(side.active)
+                self._log_ctx = prev
 
     def _log_faint(self, poke):
         """「倒れた！」の行（1体につき1回。最後の1体も出す）"""
@@ -4191,6 +4367,37 @@ class Battle:
                 self._apply_healing_wish(fainted_side)
                 self.logs.extend(opp_side.opp_view.on_enter(fainted_side.active))
 
+    def _faint_switch_simul(self):
+        """両側とも倒れていたら、両方の交代先を出してから素早さの速い側から登場時の効果（いかく・天候 等）を起こす（Showdown の同時の交代）。
+        片側ずつ入れると、先に出た側の いかく が倒れたままの相手に出ていた（rule_audit_1020 C01）"""
+        s1, s2 = self.side1, self.side2
+        if not all(not s.active.is_alive and s.has_alive() for s in (s1, s2)):
+            return
+        if getattr(s1, "_manual_switch", False) or getattr(s2, "_manual_switch", False):
+            return
+        picks = []
+        for side, opp in ((s1, s2), (s2, s1)):
+            self._log_ctx = 1 if side is s1 else 2
+            self._log_faint(side.active)
+            chooser = getattr(self, "_faint_chooser1", None) if side is s1 else getattr(self, "_faint_chooser2", None)
+            bench = sum(1 for i, p in enumerate(side.party) if p.is_alive and i != side.active_idx)
+            idx = chooser(side, opp, self.field) if (chooser is not None and bench >= 2) else None
+            if idx is None:
+                idx = _best_faint_switch(side, opp.active, self.field)
+            picks.append(idx)
+        if None in picks:
+            return
+        for (side, opp), idx in zip(((s1, s2), (s2, s1)), picks):
+            self._log_ctx = 1 if side is s1 else 2
+            side.switch_to(idx, self.logs, self.field)
+            _release_by_leaving(opp.active)
+            self.logs.append(f"{side.active.name} が登場した！")
+        for _sd, _os, _ix in _entry_order(s1, s2, self.field):
+            self._log_ctx = 1 if _sd is s1 else 2
+            _entry_effects(_sd.active, _ix, self.field, _os.active, self.logs, _sd.party)
+            self._apply_healing_wish(_sd)
+            self.logs.extend(_os.opp_view.on_enter(_sd.active))
+
     def _info_abilities_on_entry(self):
         """おみとおし/きけんよち：登場時に相手情報を強制開示し、開示情報(opp_view)へ記録する。
         1回の登場につき1度（_info_doneフラグ、交代でリセット）。"""
@@ -4230,30 +4437,54 @@ class Battle:
         finally:
             self._log_ctx = prev
 
+    def _eot_update(self, side, opp_side):
+        """ターン終了時の各段の直後: HPが減った・状態異常になった直後に発動する持ち物（オボン・ラム・ピンチきのみ・ハーブ・ヒメリ）"""
+        p = side.active
+        if not p.is_alive:
+            return
+        self._log_ctx = 1 if side is self.side1 else 2
+        _blk = opp_side.active.is_alive and opp_side.active.ability == "きんちょうかん"
+        if p.item in ("オボンのみ", "オレンのみ") and p.hp <= p.max_hp // 2 and not _blk and _can_heal(p):
+            self._eot_ate.add(id(p))
+        _hp_berry_now(p, opp_side.active, self.logs, opp_side.opp_view)
+        if not _blk:
+            try_cure_berry(p, self.logs)
+        try_white_herb(p, self.logs)
+        try_mental_herb(p, self.logs)
+        try_leppa_berry(p, self.logs)
+        if not _blk:
+            apply_hp_berry(p, self.logs)
+
     def _end_of_turn_body(self):
+        """ターン終了時の処理順は Showdown の残り処理の順（REQUIREMENTS 4-6c。D10）:
+        天候(1)→みらいよち(3)→ねがいごと(4)→グラスフィールド・うるおいボディ/だっぴ・たべのこし(5)→アクアリング(6)→ねをはる(7)→
+        やどりぎ(8)→どく(9)→やけど(10)→のろい(12)→バインド・しおづけ(13)→たこがため(14)→ちょうはつ等の残りターン(15〜22)→
+        あくび(23)→ほろびのうた(24)→はねやすめの戻り(25)→壁・おいかぜ(26)→トリックルーム・フィールド(27)→かそく・ムラっけ等(28〜29)。
+        各段は素早さの速い側から（同速は side1 が先）。HPが減った・状態異常になった直後に持ち物（オボン・ラム等）が発動する。
+        倒れた個体の交代はこの後"""
+        self._eot_ate = set()
         # ひるみはそのターン限り＝次ターンへ持ち越さない（後攻が当てたひるみは無意味）
         self.side1.active.flinched = False
         self.side2.active.flinched = False
         # ノーてんき無効化フラグを最新化（とんぼがえり等の交代後にも対応）
         self.field._weather_negated = "ノーてんき" in (self.side1.active.ability, self.side2.active.ability)
-        # 天候カウントを先に更新（終了ターンはダメージなし）
+        _order = [(self.side1, self.side2), (self.side2, self.side1)]
+        if _speed_for_order(self.side2.active, self.field) > _speed_for_order(self.side1.active, self.field):
+            _order.reverse()
+
+        def alive_each():
+            for side, opp_side in _order:
+                if side.active.is_alive:
+                    self._log_ctx = 1 if side is self.side1 else 2
+                    yield side, opp_side, side.active
+
+        # 1. 天候（終了ターンはダメージなし）
         if self.field.weather and self.field.weather_count > 0:
             self.field.weather_count -= 1
             if self.field.weather_count == 0:
                 self.field.weather = None
                 self.logs.append("天候がおわった！")
-
-        # 天候ダメ・アイテム・状態異常（素早さの速い側から。同速は side1 が先）
-        _eot_order = [(self.side1, 0), (self.side2, 1)]
-        if _speed_for_order(self.side2.active, self.field) > _speed_for_order(self.side1.active, self.field):
-            _eot_order.reverse()
-        for side, side_idx in _eot_order:
-            self._log_ctx = 1 if side is self.side1 else 2
-            p = side.active
-            if not p.is_alive:
-                continue
-
-            # 天候ダメ（ノーてんきが場にいると無効・effective_weatherで判定）
+        for side, opp_side, p in alive_each():
             if effective_weather(self.field, p) == "sandstorm":
                 if p.type1 not in ("いわ","はがね","じめん") and \
                    (p.type2 is None or p.type2 not in ("いわ","はがね","じめん")) and \
@@ -4261,48 +4492,34 @@ class Battle:
                     dmg = max(1, p.max_hp // 16)
                     p.take_damage(dmg)
                     self.logs.append(f"{p.name} は すなあらし のダメージを受けた！({dmg})")
-            # ゆき（旧あられ）: ターンダメージなし
+            if p.is_alive:
+                eot_weather_ability(p, self.field, self.logs)
+            self._eot_update(side, opp_side)
 
-            opp_side = self.side2 if side is self.side1 else self.side1
+        # 3. みらいよち
+        for side, opp_side in _order:
+            self._log_ctx = 1 if side is self.side1 else 2
+            if side.future_sight_count > 0:
+                side.future_sight_count -= 1
+                if side.future_sight_count == 0 and side.active.is_alive:
+                    fs = side.future_sight_dmg
+                    side.active.take_damage(fs)
+                    self.logs.append(subj_line(side.active, f"{side.active.name} は みらいよち の攻撃を受けた！({fs})"))
+                    self._eot_update(side, opp_side)
 
-            # 状態異常・持ち物（個別に処理してログを出す）
-            if p.ability != "マジックガード":
-                # やけど
-                if p.status == "burn":
-                    dmg = max(1, p.max_hp // 16)
-                    p.take_damage(dmg)
-                    self.logs.append(f"{p.name} は やけど のダメージを受けた！({dmg})")
-                # どく・もうどく
-                elif p.status in ("poison", "badpoison"):
-                    if p.ability == "ポイズンヒール":
-                        if _can_heal(p):
-                            heal = max(1, p.max_hp // 8)
-                            p.hp = min(p.max_hp, p.hp + heal)
-                            self.logs.append(f"{p.name} の ポイズンヒール で回復！(+{heal})")
-                    elif p.status == "poison":
-                        dmg = max(1, p.max_hp // 8)
-                        p.take_damage(dmg)
-                        self.logs.append(f"{p.name} は どく のダメージを受けた！({dmg})")
-                    else:
-                        p.bad_poison_count += 1
-                        dmg = max(1, p.max_hp * p.bad_poison_count // 16)
-                        p.take_damage(dmg)
-                        self.logs.append(f"{p.name} は もうどく のダメージを受けた！({dmg})")
+        # 4. ねがいごと
+        for side, opp_side in _order:
+            self._log_ctx = 1 if side is self.side1 else 2
+            if side.wish_count > 0:
+                side.wish_count -= 1
+                if side.wish_count == 0 and side.active.is_alive and _can_heal(side.active):
+                    heal = min(side.wish_hp, side.active.max_hp - side.active.hp)
+                    side.active.hp += heal
+                    self.logs.append(subj_line(side.active, f"{side.active.name} の ねがいごと が叶った！（+{heal}HP）"))
 
-            if not p.is_alive:
-                continue
-
-            # ねをはる/アクアリング：ターン終了時HP1/16回復
-            if (getattr(p, 'rooted', False) or getattr(p, 'aqua_ring', False)) and p.is_alive and _can_heal(p):
-                heal = max(1, p.max_hp // 16)
-                old_hp = p.hp
-                p.hp = min(p.max_hp, p.hp + heal)
-                if p.hp > old_hp:
-                    src = "ねをはる" if getattr(p, 'rooted', False) else "アクアリング"
-                    self.logs.append(f"{p.name} は {src} で HPが {p.hp - old_hp} 回復した！")
-
-            # グラスフィールド：地面にいるポケモンはターン終了時に最大HPの1/16回復
-            if self.field.grassy_terrain and p.is_alive and p.hp < p.max_hp and _can_heal(p):
+        # 5. グラスフィールド → うるおいボディ・だっぴ → たべのこし・くろいヘドロ
+        for side, opp_side, p in alive_each():
+            if self.field.grassy_terrain and p.hp < p.max_hp and _can_heal(p):
                 _grounded = not ("ひこう" in (p.type1, p.type2) or p.ability == "ふゆう"
                                  or getattr(p, "magnet_rise", False) or p.item == "ふうせん") \
                     or getattr(p, "grounded", False) or getattr(self.field, "gravity", 0) > 0
@@ -4310,8 +4527,7 @@ class Battle:
                     old_hp = p.hp
                     p.hp = min(p.max_hp, p.hp + max(1, p.max_hp // 16))
                     self.logs.append(f"{p.name} は グラスフィールド で HPが {p.hp - old_hp} 回復した！")
-
-            # 持ち物回復・ダメージ（たべのこし等）
+            eot_cure_ability(p, self.field, self.logs)
             if p.item == "たべのこし" and _can_heal(p):
                 heal = max(1, p.max_hp // 16)
                 old_hp = p.hp
@@ -4331,87 +4547,126 @@ class Battle:
                     dmg = max(1, p.max_hp // 16)
                     p.take_damage(dmg)
                     self.logs.append(f"{p.name} は くろいヘドロ のダメージを受けた！({dmg})")
-
             # 否定的観測: HPが満タンでないのにターン終了で回復しなかった＝回復持ち物ではない。
             # 満タンだと回復が起きなくても何も分からないので除外する。
             if opp_side.belief is not None and p.hp < p.max_hp and p.is_alive and _can_heal(p):
                 if p.item not in ("たべのこし", "くろいヘドロ"):
                     opp_side.belief.observe_absent_item(p.name, ("たべのこし", "くろいヘドロ"))
+            self._eot_update(side, opp_side)
 
-            # きんちょうかん：相手がいるとこのポケモンはきのみを食べられない
-            _berry_blocked = opp_side.active.is_alive and opp_side.active.ability == "きんちょうかん"
+        # 6. アクアリング 7. ねをはる
+        for attr, src in (("aqua_ring", "アクアリング"), ("rooted", "ねをはる")):
+            for side, opp_side, p in alive_each():
+                if getattr(p, attr, False) and _can_heal(p):
+                    heal = max(1, p.max_hp // 16)
+                    old_hp = p.hp
+                    p.hp = min(p.max_hp, p.hp + heal)
+                    if p.hp > old_hp:
+                        self.logs.append(f"{p.name} は {src} で HPが {p.hp - old_hp} 回復した！")
 
-            _item_before_berry = p.item
-            # オボンのみ (HP半分以下)
-            if not _berry_blocked and p.item == "オボンのみ" and p.hp <= p.max_hp // 2 and _can_heal(p):
-                heal = p.max_hp // 4
-                p.hp = min(p.max_hp, p.hp + heal)
-                p._last_berry = "オボンのみ"  # type: ignore
-                p.item = None
-                p.ate_berry = True
-                self.logs.append(f"{p.name} の オボンのみ が発動！ HPが {heal} 回復した！")
-                on_item_consumed(p, self.logs)
-                self.logs.extend(opp_side.opp_view.on_item(p.name, "オボンのみ", "HP回復から判明"))
-
-            # オレンのみ (HP半分以下で10回復・固定値)
-            if not _berry_blocked and p.item == "オレンのみ" and p.hp <= p.max_hp // 2 and _can_heal(p):
-                heal = 10
-                p.hp = min(p.max_hp, p.hp + heal)
-                p._last_berry = "オレンのみ"  # type: ignore
-                p.item = None
-                p.ate_berry = True
-                self.logs.append(f"{p.name} の オレンのみ が発動！ HPが {heal} 回復した！")
-                on_item_consumed(p, self.logs)
-                self.logs.extend(opp_side.opp_view.on_item(p.name, "オレンのみ", "HP回復から判明"))
-
-            # 否定的観測: 表示HPが半分を確実に下回ったのにきのみが発動しなかった＝オボンのみ/オレンのみではない。
-            # 表示は整数％なので境目（50%付近）は推論しない。きんちょうかんで食べられないときも何も分からない
-            if (opp_side.belief is not None and not _berry_blocked and p.is_alive and _can_heal(p)
-                    and _item_before_berry not in ("オボンのみ", "オレンのみ")
-                    and p.hp <= p.max_hp // 2 and p.hp * 100 < p.max_hp * 49):
-                opp_side.belief.observe_absent_item(p.name, ("オボンのみ", "オレンのみ"))
-
-            # ラムのみ・カゴのみ・モモンのみ・チーゴのみ
-            if not _berry_blocked:
-                try_cure_berry(p, self.logs)
-
-            # しろいハーブ・メンタルハーブ
-            try_white_herb(p, self.logs)
-            try_mental_herb(p, self.logs)
-            try_leppa_berry(p, self.logs)
-
-            # ステータスきのみ（HP1/4以下で能力上昇）
-            if not _berry_blocked:
-                apply_hp_berry(p, self.logs)
-
-            # かそく等のターン終了特性
-            end_of_turn_ability(p, self.field, self.logs)
-
-            # やどりぎのタネ吸収
-            opp = (self.side2 if side is self.side1 else self.side1).active
-            if p.seeded and p.is_alive and p.ability != "マジックガード":
+        # 8. やどりぎのタネ（回復は実際に減らしたHPだけ。A17）
+        for side, opp_side, p in alive_each():
+            if p.seeded and p.ability != "マジックガード":
+                opp = opp_side.active
                 drain = max(1, p.max_hp // 8)
+                _h0 = p.hp
                 p.take_damage(drain)
-                self.logs.append(f"{p.name} は やどりぎのタネ で {drain} のダメージを受けた！")
-                if opp.is_alive and _can_heal(opp):
-                    opp.hp = min(opp.max_hp, opp.hp + drain)
-                    self.logs.append(subj_line(opp, f"{opp.name} は やどりぎのタネ で {drain} 回復した！"))
+                dealt = _h0 - p.hp
+                self.logs.append(f"{p.name} は やどりぎのタネ で {dealt} のダメージを受けた！")
+                if opp.is_alive and _can_heal(opp) and dealt > 0:
+                    _o0 = opp.hp
+                    opp.hp = min(opp.max_hp, opp.hp + dealt)
+                    if opp.hp > _o0:
+                        self.logs.append(subj_line(opp, f"{opp.name} は やどりぎのタネ で {opp.hp - _o0} 回復した！"))
+                self._eot_update(side, opp_side)
 
-            # たこがため：ターン終わりに防御・特防が1段階下がる
-            if getattr(p, '_octolocked', False) and p.is_alive:
-                p.stage_defense = max(-6, p.stage_defense - 1)
-                p.stage_sp_defense = max(-6, p.stage_sp_defense - 1)
-                self.logs.append(f"{p.name} は たこがため で防御・特防が下がった！")
+        # 9. どく・もうどく（ポイズンヒール） 10. やけど
+        for side, opp_side, p in alive_each():
+            if p.ability != "マジックガード" and p.status in ("poison", "badpoison"):
+                if p.ability == "ポイズンヒール":
+                    if _can_heal(p):
+                        heal = max(1, p.max_hp // 8)
+                        p.hp = min(p.max_hp, p.hp + heal)
+                        self.logs.append(f"{p.name} の ポイズンヒール で回復！(+{heal})")
+                elif p.status == "poison":
+                    dmg = max(1, p.max_hp // 8)
+                    p.take_damage(dmg)
+                    self.logs.append(f"{p.name} は どく のダメージを受けた！({dmg})")
+                else:
+                    p.bad_poison_count += 1
+                    dmg = max(1, p.max_hp * p.bad_poison_count // 16)
+                    p.take_damage(dmg)
+                    self.logs.append(f"{p.name} は もうどく のダメージを受けた！({dmg})")
+                self._eot_update(side, opp_side)
+        for side, opp_side, p in alive_each():
+            if p.ability != "マジックガード" and p.status == "burn":
+                dmg = max(1, p.max_hp // 16)
+                p.take_damage(dmg)
+                self.logs.append(f"{p.name} は やけど のダメージを受けた！({dmg})")
+                self._eot_update(side, opp_side)
 
-            # しおづけ（ソルトキュア継続ダメ）はがね/みずは1/8、それ以外は1/16
+        # 12. のろい
+        for side, opp_side, p in alive_each():
+            if p.cursed and p.ability != "マジックガード":
+                dmg = max(1, p.max_hp // 4)
+                p.take_damage(dmg)
+                self.logs.append(f"{p.name} は のろい のダメージを受けた！({dmg})")
+                self._eot_update(side, opp_side)
+
+        # 13. バインド（縛った側が場を離れた・倒れたら解ける）・しおづけ
+        for side, opp_side, p in alive_each():
+            if p.bound_count > 0 and not opp_side.active.is_alive:
+                p.bound_count = 0
+            if p.bound_count > 0:
+                if p.ability != "マジックガード":
+                    bind_dmg = max(1, p.max_hp // (6 if getattr(p, "_bound_by_band", False) else 8))
+                    p.take_damage(bind_dmg)
+                    self.logs.append(f"{p.name} は バインド のダメージを受けた！({bind_dmg})")
+                p.bound_count -= 1
+                if p.bound_count == 0:
+                    self.logs.append(f"{p.name} の バインド が解けた！")
+            # しおづけ（はがね/みずは1/8、それ以外は1/16）
             if getattr(p, '_salted', False) and p.is_alive and p.ability != "マジックガード":
                 is_water_steel = "みず" in (p.type1, p.type2) or "はがね" in (p.type1, p.type2)
                 rate = 1/8 if is_water_steel else 1/16
                 dmg = max(1, math.floor(p.max_hp * rate))
                 p.take_damage(dmg)
                 self.logs.append(f"{p.name} は しおづけ のダメージを受けた！({dmg})")
+            self._eot_update(side, opp_side)
 
-            # あくびカウント（0になったらねむり）
+        # 14. たこがため（防御・特防-1）・あめまみれ 〜 22. じごくづき（残りターン）・23. あくび・24. ほろびのうた・25. はねやすめ
+        for side, opp_side, p in alive_each():
+            if getattr(p, '_octolocked', False):
+                p.stage_defense = max(-6, p.stage_defense - 1)
+                p.stage_sp_defense = max(-6, p.stage_sp_defense - 1)
+                self.logs.append(f"{p.name} は たこがため で防御・特防が下がった！")
+                self._eot_update(side, opp_side)
+            if p.syrup_count > 0:
+                p.syrup_count -= 1
+        for side, opp_side, p in alive_each():
+            if p.taunt_count > 0:
+                p.taunt_count -= 1
+            # アンコール: 残りターンが尽きたか、技のPPが0なら解ける（Showdown encore onResidual。A04）
+            if p.encore_count > 0:
+                p.encore_count -= 1
+                if p.encore_count == 0 or (p.locked_move and _move_pp(p, p.locked_move) <= 0):
+                    p.encore_count = 0
+                    p.locked_move = None
+            if p.disabled_turns > 0:
+                p.disabled_turns -= 1
+                if p.disabled_turns == 0:
+                    p.disabled_move = None
+            # でんじふゆう: 使ったターンを含め5ターン
+            if getattr(p, "_levitate_turns", 0) > 0:
+                p._levitate_turns -= 1  # type: ignore
+                if p._levitate_turns == 0:
+                    p.magnet_rise = False
+                    self.logs.append(f"{p.name} の でんじふゆう が終わった！")
+            if p.heal_block_count > 0:
+                p.heal_block_count -= 1
+            if p.throat_chop_count > 0:
+                p.throat_chop_count -= 1
+        for side, opp_side, p in alive_each():
             if p.yawn_count > 0:
                 p.yawn_count -= 1
                 if p.yawn_count == 0 and p.status is None:
@@ -4422,123 +4677,8 @@ class Battle:
                         p._sleep_acts = 0  # type: ignore
                         p._sleep_rest = False  # type: ignore
                         self.logs.append(f"{p.name} は ねむって しまった！")
-
-            # バインド継続ダメ・カウントダウン
-            if p.bound_count > 0 and p.is_alive and not (self.side2 if side_idx == 0 else self.side1).active.is_alive:
-                p.bound_count = 0
-            if p.bound_count > 0 and p.is_alive:
-                if p.ability != "マジックガード":
-                    bind_dmg = max(1, p.max_hp // (6 if getattr(p, "_bound_by_band", False) else 8))
-                    p.take_damage(bind_dmg)
-                    self.logs.append(f"{p.name} は バインド のダメージを受けた！({bind_dmg})")
-                p.bound_count -= 1
-                if p.bound_count == 0:
-                    self.logs.append(f"{p.name} の バインド が解けた！")
-
-            # じごくづきカウントダウン
-            if p.throat_chop_count > 0:
-                p.throat_chop_count -= 1
-
-            # ちょうはつ・アンコール・封じカウント
-            if p.taunt_count > 0:
-                p.taunt_count -= 1
-            if p.encore_count > 0:
-                p.encore_count -= 1
-                if p.encore_count == 0:
-                    p.locked_move = None
-            if p.disabled_turns > 0:
-                p.disabled_turns -= 1
-                if p.disabled_turns == 0:
-                    p.disabled_move = None
-
-            # まもる解除
-            p.protecting = False
-            p.enduring = False
-            # みちづれ連続失敗フラグ：今ターンみちづれを使っていなければリセット
-            if p.last_used_move != "みちづれ":
-                p._destiny_bond_last_turn = False  # type: ignore
-            # はねやすめのタイプ消失を復元
-            if getattr(p, '_roost_types', None):
-                p.type1, p.type2 = p._roost_types  # type: ignore
-                p._roost_types = None  # type: ignore
-
-            if p.syrup_count > 0:
-                p.syrup_count -= 1
-            if p.heal_block_count > 0:
-                p.heal_block_count -= 1
-            # でんじふゆう: 使ったターンを含め5ターン
-            if getattr(p, "_levitate_turns", 0) > 0:
-                p._levitate_turns -= 1  # type: ignore
-                if p._levitate_turns == 0:
-                    p.magnet_rise = False
-                    self.logs.append(f"{p.name} の でんじふゆう が終わった！")
-            # じだんだ/やけっぱち：今ターンの技失敗を「前ターン失敗」へ繰り越す
-            p._move_failed_last = getattr(p, '_move_failed_this_turn', False)  # type: ignore
-            p._move_failed_this_turn = False  # type: ignore
-
-            # 交代で出たターンは「場に出て行動できたターン」に数えない（次の行動ターンが最初＝
-            # ねこだまし/であいがしらが交代後の初手で打てる。1ターン目限定バグの修正）。
-            if getattr(p, '_switched_this_turn', False):
-                p._switched_this_turn = False  # type: ignore
-            else:
-                p.turns_out += 1
-
-        # ものひろい：両者のきのみ処理後、道具未所持なら相手が消費したきのみを拾う
-        for _ms, _os in ((self.side1, self.side2), (self.side2, self.side1)):
-            self._log_ctx = 1 if _ms is self.side1 else 2
-            _mp = _ms.active
-            if _mp.is_alive and _mp.ability == "ものひろい" and _mp.item is None \
-                    and getattr(_os.active, "_last_berry", None):
-                _mp.item = _os.active._last_berry  # type: ignore
-                _os.active._last_berry = None  # type: ignore
-                self.logs.append(f"{_mp.name} の ものひろい！ {_mp.item} を拾った！")
-
-        # トリルカウント
-        if self.field.trick_room and self.field.trick_room_count > 0:
-            self.field.trick_room_count -= 1
-            if self.field.trick_room_count == 0:
-                self.field.trick_room = False
-                self.logs.append("トリックルーム の効果が切れた！")
-
-        # フィールドカウント
-        for fname in ("misty_terrain", "electric_terrain", "psychic_terrain", "grassy_terrain"):
-            count_attr = fname + "_count"
-            if getattr(self.field, fname, False):
-                cnt = getattr(self.field, count_attr, 0) - 1
-                setattr(self.field, count_attr, cnt)
-                if cnt <= 0:
-                    setattr(self.field, fname, False)
-                    setattr(self.field, count_attr, 0)
-                    self.logs.append(f"{_TERRAIN_JP[fname]} の効果が切れた！")
-
-        # ねがいごと（ウィッシュ回復）
-        for side in [self.side1, self.side2]:
-            self._log_ctx = 1 if side is self.side1 else 2
-            if side.wish_count > 0:
-                side.wish_count -= 1
-                if side.wish_count == 0 and side.active.is_alive and _can_heal(side.active):
-                    heal = min(side.wish_hp, side.active.max_hp - side.active.hp)
-                    side.active.hp += heal
-                    self.logs.append(subj_line(side.active, f"{side.active.name} の ねがいごと が叶った！（+{heal}HP）"))
-
-        # みらいよち発動
-        for side in [self.side1, self.side2]:
-            self._log_ctx = 1 if side is self.side1 else 2
-            if side.future_sight_count > 0:
-                side.future_sight_count -= 1
-                if side.future_sight_count == 0 and side.active.is_alive:
-                    fs = side.future_sight_dmg
-                    side.active.take_damage(fs)
-                    self.logs.append(subj_line(side.active, f"{side.active.name} は みらいよち の攻撃を受けた！({fs})"))
-                    if not side.active.is_alive:
-                        self.logs.append(subj_line(side.active, f"{side.active.name} は倒れた！"))
-
-        # ほろびのうた・のろい
-        for side, opp_side in [(self.side1, self.side2), (self.side2, self.side1)]:
-            self._log_ctx = 1 if side is self.side1 else 2
-            p = side.active
-            if not p.is_alive:
-                continue
+                        self._eot_update(side, opp_side)
+        for side, opp_side, p in alive_each():
             if p.perish_count > 0:
                 p.perish_count -= 1
                 self.logs.append(f"{p.name} の ほろびのうた カウント：{p.perish_count}")
@@ -4546,13 +4686,14 @@ class Battle:
                     p.take_damage(p.hp)
                     p.is_alive = False
                     self.logs.append(f"{p.name} は ほろびのうた で倒れた！")
-            if p.cursed and p.is_alive and p.ability != "マジックガード":
-                dmg = max(1, p.max_hp // 4)
-                p.take_damage(dmg)
-                self.logs.append(f"{p.name} は のろい のダメージを受けた！({dmg})")
+                    p._faint_logged = True  # type: ignore
+        for side, opp_side, p in alive_each():
+            if getattr(p, '_roost_types', None):
+                p.type1, p.type2 = p._roost_types  # type: ignore
+                p._roost_types = None  # type: ignore
 
-        # スクリーン・おいかぜカウント
-        for side in [self.side1, self.side2]:
+        # 26. 壁・おいかぜ
+        for side, opp_side in _order:
             self._log_ctx = 1 if side is self.side1 else 2
             if side.reflect_count > 0:
                 side.reflect_count -= 1
@@ -4575,14 +4716,63 @@ class Battle:
                     side.tailwind = False
                     self.logs.append("おいかぜ の効果が切れた！")
 
-        # カウンター系トラッカーをリセット（次ターン用）
-        for side in [self.side1, self.side2]:
+        # 27. トリックルーム・フィールド
+        self._log_ctx = 0
+        if self.field.trick_room and self.field.trick_room_count > 0:
+            self.field.trick_room_count -= 1
+            if self.field.trick_room_count == 0:
+                self.field.trick_room = False
+                self.logs.append("トリックルーム の効果が切れた！")
+        for fname in ("misty_terrain", "electric_terrain", "psychic_terrain", "grassy_terrain"):
+            count_attr = fname + "_count"
+            if getattr(self.field, fname, False):
+                cnt = getattr(self.field, count_attr, 0) - 1
+                setattr(self.field, count_attr, cnt)
+                if cnt <= 0:
+                    setattr(self.field, fname, False)
+                    setattr(self.field, count_attr, 0)
+                    self.logs.append(f"{_TERRAIN_JP[fname]} の効果が切れた！")
+
+        # 28〜29. かそく・ムラっけ・しゅうかく 等・ものひろい
+        for side, opp_side, p in alive_each():
+            eot_late_ability(p, self.field, self.logs)
+            if p.ability == "ものひろい" and p.item is None and getattr(opp_side.active, "_last_berry", None):
+                p.item = opp_side.active._last_berry  # type: ignore
+                opp_side.active._last_berry = None  # type: ignore
+                self.logs.append(f"{p.name} の ものひろい！ {p.item} を拾った！")
+            self._eot_update(side, opp_side)
+
+        for side, opp_side in _order:
             self._log_ctx = 1 if side is self.side1 else 2
             p = side.active
+            # 否定的観測: 表示HPが半分を確実に下回ったのにきのみが発動しなかった＝オボンのみ/オレンのみではない。
+            # 表示は整数％なので境目（50%付近）は推論しない。きんちょうかんで食べられないときも何も分からない
+            _blk = opp_side.active.is_alive and opp_side.active.ability == "きんちょうかん"
+            if (opp_side.belief is not None and not _blk and p.is_alive and _can_heal(p)
+                    and id(p) not in self._eot_ate and p.item not in ("オボンのみ", "オレンのみ")
+                    and p.hp <= p.max_hp // 2 and p.hp * 100 < p.max_hp * 49):
+                opp_side.belief.observe_absent_item(p.name, ("オボンのみ", "オレンのみ"))
+            # まもる解除・みちづれの連続失敗フラグ・技の失敗の繰り越し・場に出ていたターン数
+            p.protecting = False
+            p.enduring = False
+            if p.last_used_move != "みちづれ":
+                p._destiny_bond_last_turn = False  # type: ignore
+            p._move_failed_last = getattr(p, '_move_failed_this_turn', False)  # type: ignore
+            p._move_failed_this_turn = False  # type: ignore
+            if p.is_alive:
+                # 交代で出たターンは「場に出て行動できたターン」に数えない（次の行動ターンが最初＝
+                # ねこだまし/であいがしらが交代後の初手で打てる。1ターン目限定バグの修正）。
+                if getattr(p, '_switched_this_turn', False):
+                    p._switched_this_turn = False  # type: ignore
+                else:
+                    p.turns_out += 1
+            # カウンター系トラッカーをリセット（次ターン用）
             p._last_physical_dmg_received = 0  # type: ignore
             p._last_special_dmg_received = 0   # type: ignore
 
-        # ターン終了時に倒れたポケモンの交代（毒・やけど等によるKO）
+        # 倒れたポケモンの交代（このターンに倒れた全員。ターン終了時の処理の後＝交代先はこのターンの残り処理を受けない）
+        self._log_last_faints()
+        self._faint_switch_simul()
         self._faint_switch(self.side1, self.side2)
         self._faint_switch(self.side2, self.side1)
         # ターン終了後に出たポケモンは次のターンの頭から場にいる扱い（実機の activeTurns。かそく・はりこみ・ねこだまし）

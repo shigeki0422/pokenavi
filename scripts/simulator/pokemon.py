@@ -82,6 +82,7 @@ class BattlePokemon:
     bad_poison_count: int = 0           # どくどくのカウント
     sleep_count: int = 0                # ねむりのターン数
     confused: bool = False
+    confuse_count: int = 0              # こんらんの残り（行動しようとするたびに1減らし、0で解ける）
     flinched: bool = False
 
     # 性格・努力値（ログ表示用）
@@ -284,6 +285,11 @@ class BattlePokemon:
         # 「持ち物なし」で失敗する等の不整合。はたきおとす/トリック/なげつける等は _is_megastone で
         # メガストーンを保護済みなので剥奪・1.5倍補正は乗らない。効果アイテムでもないのでEOT効果も出ない。
         self.mega_evolved = True
+
+    def confuse(self) -> None:
+        """こんらんにする（REQUIREMENTS 4-3: 2〜4回目の行動で解ける）"""
+        self.confused = True
+        self.confuse_count = random.randint(2, 4)
 
     def take_damage(self, dmg: int):
         if self.enduring and dmg >= self.hp and self.hp > 0:
