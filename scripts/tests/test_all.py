@@ -10438,6 +10438,9 @@ def _t52_speed_ctrl():
         "            z[k] += b['weight']\n"
         "    tot = sum(w.values())\n"
         "    out[sp] = {k: [w[k] / tot, z[k] / w[k]] for k in w}\n"
+        "    d = G.latest('pokemon_moves', sp)\n"
+        "    u = G.con.execute('select usage_rate from pokemon_moves where season=? and crawled_date=? and pokemon=? and move=?', (G.SEASON, d, sp, 'がんせきふうじ')).fetchone()\n"
+        "    out[sp + '_meta'] = {'sides': r.get('sides'), 'gate_spec': G.gate('がんせきふうじ', 'spec', r.get('sides')), 'marg': (u[0] if u else 0) / 100, 'date': d}\n"
         "print(json.dumps(out, ensure_ascii=False))\n")
     _r = _sp52.run([_sy52.executable, "-c", _code], cwd=_sd, env=dict(_o52.environ, SEASON="M-7"),
                    capture_output=True, text=True)
@@ -10447,9 +10450,13 @@ def _t52_speed_ctrl():
     _g = _d.get("ガブリアス", {}).get("Z", [0, 1])
     check("52 M-7 ガブリアスナイトZ の型に がんせきふうじ が主力として入らない（上位構築 M-6 の Z 19型で0件。修正前81%）・Z の型が縮まない（使用率35%）",
           _g[1] < 0.10 and _g[0] >= 0.25, str(_d.get("ガブリアス")))
+    # がんせきふうじ の採用率はクロールごとに動く（10/11 43%→10/24 17.5%）ので、絶対値ではなく今の採用率と比べる
     _b = _d.get("バクフーン", {}).get("spec", [0, 0])
-    check("52 M-7 バクフーン（特殊の層 0.94・がんせきふうじ 43%）は特殊の型に がんせきふうじ が入る",
-          _b[1] >= 0.3, str(_d.get("バクフーン")))
+    _bm = _d.get("バクフーン_meta", {})
+    _bs = (_bm.get("sides") or {}).get("spec", 0)
+    check("52 M-7 バクフーン（特殊の層が過半）は がんせきふうじ を特殊の層から締め出さない（gate が通す・特殊の型の採用が今の採用率の半分以上）",
+          _bs >= 0.5 and _bm.get("marg", 0) >= 0.05 and _bm.get("gate_spec") is True and _b[1] >= 0.5 * _bm["marg"],
+          str(_d.get("バクフーン")) + " " + str(_bm))
 
 
 try:

@@ -76,7 +76,8 @@ scripts/venv/bin/python scripts/update_type_pool.py
 ```
 - 新しい詳細データで型プール→系統表→想定型（src/data/archetypes.json）と1v1の代表型・仮想敵（public/builder-data）を同じ版から作り直す。エラーなら止まるので直してから再実行
 - 出力の `report.md`（パスは実行ログの最後）を読み、警告（前回比の大きな変化・「生成側の疑い」・使用率との差）をユーザーに要約して見せる。詳しい読み方は `.claude/commands/weekly-pool-update.md`
-- コミット時は `src/data/archetypes.json`・`public/builder-data/`・`scripts/pool_versions.json`・`scripts/builder_targets.json`・`scripts/suggest_cache.json` も含める
+- コミット時は `src/data/archetypes.json`・`public/builder-data/`・`scripts/pool_versions.json`・`scripts/builder_targets.json`・`scripts/suggest_cache.json` も含める。含め忘れの確認は `cmp scripts/builder_targets.json public/builder-data/targets.json` と、コミット後に `git status --short public/builder-data scripts/builder_targets.json scripts/suggest_cache.json` が空であること
+- DB を更新すると手元の `scripts/_rust_engine/datapack.json`（git 管理外・Cloud Run に載る）も古くなり、Rust 経路が無効になる。Cloud Run を再デプロイする前に `cd scripts && venv/bin/python _rust_engine/datapack_export.py` → `./_rust_engine/run_gates.sh all`（R2 の乖離は `IN='_rust_engine/cases/turn_*.jsonl' venv/bin/python _rust_engine/gen_r2_cases.py` で採り直して再実行）
 
 ### 8. ローカル確認
 ```bash

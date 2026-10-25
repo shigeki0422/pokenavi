@@ -74,6 +74,13 @@ python3 scripts/inject_faq_frontmatter.py
 - 想定型・1v1の型（型プール）はここでは作り直さない（詳細データの週次クロール `/crawl-full` の手順 7-2 で更新）。gen_builder_data.py は `scripts/pool_versions.json` の版を読むので、毎日流しても想定型と番号はずれない
 - `gen_builder_data.py` を流したら、`public/builder-data/`・`scripts/builder_targets.json`・`scripts/suggest_cache.json` を**必ず一緒にコミット**する（2026-10-16〜19 は targets.json だけコミットされ、簡単構築の一覧の記号が古い相手のまま残った。test_all 46 が検出する）。コミット前に `cd scripts && PYTHONHASHSEED=0 venv/bin/python tests/test_all.py`（約3分）で 46（一覧の相手・記号の鮮度）を含む全件パスを確認し、コミット後に `git status --short public/builder-data scripts/builder_targets.json scripts/suggest_cache.json` が空であることを確認。suggest_cache.json が変わったら Cloud Run（pokenavi-suggest）の再デプロイが要るのでユーザーに伝える
 - ビルド前の `[archetypes]` 警告（ランキングに新しく入った種に想定型が無い等）が出たら、ユーザーに伝えて次の詳細クロールで更新する
+- コミットは下の `git add` をそのまま使う（10/20・10/22・10/23・10/25 は手で選んだ一覧から scripts/ の2ファイルが漏れ、test_all 46 が赤のまま push された）。scripts/ に他作業の変更が混ざっていても、この2ファイルは gen_builder_data.py の出力なので必ず含める
+```bash
+cmp scripts/builder_targets.json public/builder-data/targets.json && \
+git add scripts/pokenavi.db scripts/icon_cache/ src/data/ranking.json src/data/learnsets.json src/data/move-details.json src/content/pokemon/ public/builder-data/ scripts/builder_targets.json scripts/suggest_cache.json && \
+git status --short public/builder-data scripts/builder_targets.json scripts/suggest_cache.json
+```
+- DB を更新すると手元の `scripts/_rust_engine/datapack.json`（git 管理外・Cloud Run に載る）も古くなり、Rust 経路が無効になる。Cloud Run を再デプロイする前に `cd scripts && venv/bin/python _rust_engine/datapack_export.py` → `./_rust_engine/run_gates.sh all`（R2 の乖離は `IN='_rust_engine/cases/turn_*.jsonl' venv/bin/python _rust_engine/gen_r2_cases.py` で採り直して再実行）
 
 ### 8. ローカル確認
 ```bash
