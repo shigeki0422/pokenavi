@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのゴウカザル基礎データ
 pokemonName: 'ゴウカザル'
 dexNumber: 392
 usageRank: 120
-updatedDate: '2026-10-24'
+updatedDate: '2026-10-25'
 pubDate: '2026-10-24'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのハラバリー基礎データ
 pokemonName: 'ハラバリー'
 dexNumber: 939
 usageRank: 52
-updatedDate: '2026-10-24'
+updatedDate: '2026-10-25'
 pubDate: '2026-10-24'
 draft: false
 analysisSlug: 'bellibolt-analysis-m2'

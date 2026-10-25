@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのドヒドイデ基礎データ
 pokemonName: 'ドヒドイデ'
 dexNumber: 748
 usageRank: 33
-updatedDate: '2026-10-24'
+updatedDate: '2026-10-25'
 pubDate: '2026-10-24'
 draft: false
 analysisSlug: 'toxapex-analysis-m2'
