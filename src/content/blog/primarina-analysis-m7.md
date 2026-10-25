@@ -457,11 +457,11 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 </div>
 
 <!-- gate:rows start id=diff_movers facts=896ba6967af74e6ac1e9c94e39b1be10fd4d5845 -->
-- なみのり：6.6%→22.8%（+16.2pt）。アンコール型、アンコール＋めいそう型（型カード外）、フルアタ型に共通 → 型の増減とは言えない
-- うたかたのアリア：90.8%→75.3%（-15.5pt）。めいそう型、アンコール型、フルアタ型、アンコール＋めいそう型（型カード外）に共通 → 型の増減とは言えない
-- たべのこし：31.4%→23.2%（-8.2pt）。めいそう型、アンコール型、アンコール＋めいそう型（型カード外）に共通 → 型の増減とは言えない
-- オボンのみ：40.4%→47.2%（+6.8pt）。めいそう型、アンコール型、フルアタ型、アンコール＋めいそう型（型カード外）に共通 → 型の増減とは言えない
-- ひかえめ：70.9%→77.2%（+6.3pt）。めいそう型、アンコール型、フルアタ型、アンコール＋めいそう型（型カード外）に共通 → 型の増減とは言えない
+- なみのり：6.6%→22.8%（+16.2pt）。アンコール型、フルアタ型とほかの型に共通 → 型の増減とは言えない
+- うたかたのアリア：90.8%→75.3%（-15.5pt）。めいそう型、アンコール型、フルアタ型とほかの型に共通 → 型の増減とは言えない
+- たべのこし：31.4%→23.2%（-8.2pt）。めいそう型、アンコール型とほかの型に共通 → 型の増減とは言えない
+- オボンのみ：40.4%→47.2%（+6.8pt）。めいそう型、アンコール型、フルアタ型とほかの型に共通 → 型の増減とは言えない
+- ひかえめ：70.9%→77.2%（+6.3pt）。めいそう型、アンコール型、フルアタ型とほかの型に共通 → 型の増減とは言えない
 - れいせい：9.9%→6.6%（-3.3pt）。型カードのどれにも含まれない
 <!-- gate:rows end id=diff_movers -->
 
@@ -489,14 +489,14 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ミミッキュ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定3発（ばけのかわで1発無効化されるため）。ミミッキュのじゃれつく（採用率98.0%）は確定3発で、S80対S148で後手のため、先に倒されます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定3発（ミミッキュのばけのかわで1発無効化されるため）。ミミッキュのじゃれつく（採用率98.0%）は確定3発で、S80対S148で後手のため、先に倒されます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンX" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">メガリザードンX
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位（リザードナイトX32.3%）</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガリザードンXのかみなりパンチ（採用率19.5%）は乱数2発（56%）で、S80対S167で後手のため、先に倒されます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガリザードンXのかみなりパンチ（採用率19.5%・少数派）は乱数2発（56%）で、S80対S167で後手のため、先に倒されます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -517,7 +517,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0812-00.webp" alt="ゴリランダー" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゴリランダー
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。ゴリランダーのウッドハンマー（採用率11.1%）は確定1発で、S80対S107で後手のため、先に倒されます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。ゴリランダーのウッドハンマー（採用率11.1%・少数派）は確定1発で、S80対S107で後手のため、先に倒されます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -545,7 +545,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ギャラドス
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定3発。ギャラドスのパワーウィップ（採用率66.5%）は確定3発（オボンのみの回復込み）で、S80対S101で後手のため、先に倒されます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定3発。ギャラドスのパワーウィップ（採用率66.5%）は確定3発（アシレーヌのオボンのみ回復込み）で、S80対S101で後手のため、先に倒されます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -624,7 +624,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">アーマーガア
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のうたかたのアリアは確定2発。アーマーガアのブレイブバード（採用率28.4%）は乱数4発（>99%）（オボンのみの回復込み）で、S80対S78で先手を取り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のうたかたのアリアは確定2発。アーマーガアのブレイブバード（採用率28.4%）は乱数4発（>99%）（アシレーヌのオボンのみ回復込み）で、S80対S78で先手を取り、先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -645,14 +645,14 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">カイリュー
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガカイリューの10まんボルト（採用率57.1%）は確定3発（オボンのみの回復込み）で、S80対S152で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガカイリューの10まんボルト（採用率57.1%）は確定3発（アシレーヌのオボンのみ回復込み）で、S80対S152で後手ですが確定数で上回り、先に倒せます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0876-00.webp" alt="イエッサン(オス)" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">イエッサン(オス)
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。イエッサン(オス)のワイドフォース（採用率99.8%）は確定3発（オボンのみの回復込み）で、S80対S161で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。イエッサン(オス)のワイドフォース（採用率99.8%）は確定3発（アシレーヌのオボンのみ回復込み）で、S80対S161で後手ですが確定数で上回り、先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
