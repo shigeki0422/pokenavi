@@ -369,7 +369,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ブリジュラス（ずぶとい・オボンのみ）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">サーフゴー（ずぶとい・ふうせん）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">サーフゴー（おくびょう・ふうせん）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td></tr>
-<tr class="note"><td colspan="4" style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b;text-align:left">◎有利 ○やや有利 △五分 ▲やや不利 ×不利。相手の型によって勝敗が割れるため苦手/得意表に載せない相手のうち、自分の型で判定が変わる個体。※＝型カードに無い選択技での判定。グソクムシャ、キラフロルは型で判定が変わらない</td></tr>
+<tr class="note"><td colspan="4" style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b;text-align:left">◎有利 ○やや有利 △五分 ▲やや不利 ×不利。相手の型によって勝敗が割れるため苦手/得意表に載せない相手のうち、自分の型で判定が変わる個体。※＝上の型の技構成に無い選択技での判定。グソクムシャ、キラフロルは型で判定が変わらない</td></tr>
 </tbody>
 </table>
 </div>
@@ -462,7 +462,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 - たべのこし：31.4%→23.2%（-8.2pt）。めいそう型、アンコール型とほかの型に共通 → 型の増減とは言えない
 - オボンのみ：40.4%→47.2%（+6.8pt）。めいそう型、アンコール型、フルアタ型とほかの型に共通 → 型の増減とは言えない
 - ひかえめ：70.9%→77.2%（+6.3pt）。めいそう型、アンコール型、フルアタ型とほかの型に共通 → 型の増減とは言えない
-- れいせい：9.9%→6.6%（-3.3pt）。型カードのどれにも含まれない
+- れいせい：9.9%→6.6%（-3.3pt）。この記事の型の技構成には含まれない
 <!-- gate:rows end id=diff_movers -->
 
 うたかたのアリア（75.3%）となみのり（22.8%）はどちらも威力90の一致みず技です。アリアとなみのりの選び方は、相手の想定によって変わります。アリアは音技でみがわりを貫通できますが、相手のやけど状態を治してしまいます。環境上位にはみがわりを採用する個体もおり、ライチュウ（23位、みがわり採用率24.1%）・フラエッテ(永遠)（25位、みがわり採用率19.3%）にはアリアが有効です。持ち物はオボンのみが47.2%（+6.8pt）に伸び、たべのこしが23.2%（-8.2pt）に下落しました。型カードの持ち物も3型ともオボンのみです。
@@ -489,7 +489,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ミミッキュ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定3発（ミミッキュのばけのかわで1発無効化されるため）。ミミッキュのじゃれつく（採用率98.0%）は確定3発で、S80対S148で後手のため、先に倒されます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定3発（ばけのかわ込み）。ミミッキュのじゃれつく（採用率98.0%）は確定3発で、S80対S148で後手のため、先に倒されます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -545,7 +545,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0130-00.webp" alt="ギャラドス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ギャラドス
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定3発。ギャラドスのパワーウィップ（採用率66.5%）は確定3発（アシレーヌのオボンのみ回復込み）で、S80対S101で後手のため、先に倒されます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定3発。ギャラドスのパワーウィップ（採用率66.5%）は確定3発（アシレーヌのオボンのみ込み）で、S80対S101で後手のため、先に倒されます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -624,7 +624,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0823-00.webp" alt="アーマーガア" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">アーマーガア
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">11位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のうたかたのアリアは確定2発。アーマーガアのブレイブバード（採用率28.4%）は乱数4発（>99%）（アシレーヌのオボンのみ回復込み）で、S80対S78で先手を取り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のうたかたのアリアは確定2発。アーマーガアのブレイブバード（採用率28.4%）は乱数4発（>99%）（アシレーヌのオボンのみ込み）で、S80対S78で先手を取り、先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -645,14 +645,14 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">カイリュー
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガカイリューの10まんボルト（採用率57.1%）は確定3発（アシレーヌのオボンのみ回復込み）で、S80対S152で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガカイリューの10まんボルト（採用率57.1%）は確定3発（アシレーヌのオボンのみ込み）で、S80対S152で後手ですが確定数で上回り、先に倒せます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0876-00.webp" alt="イエッサン(オス)" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">イエッサン(オス)
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。イエッサン(オス)のワイドフォース（採用率99.8%）は確定3発（アシレーヌのオボンのみ回復込み）で、S80対S161で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。イエッサン(オス)のワイドフォース（採用率99.8%）は確定3発（アシレーヌのオボンのみ込み）で、S80対S161で後手ですが確定数で上回り、先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -752,9 +752,9 @@ M-7でアシレーヌと同じパーティに入る頻度が高いポケモン�
 </tr>
 </thead>
 <tbody>
-<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ミミッキュ</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
-<tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">メガリザードンX・メガリザードンY</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
-<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">メタグロス</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ミミッキュ</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">—</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
+<tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">メガリザードンX・メガリザードンY</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">—</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">メタグロス</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">—</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ゴリランダー</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">マスカーニャ</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">エースバーン</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td></tr>
@@ -763,7 +763,8 @@ M-7でアシレーヌと同じパーティに入る頻度が高いポケモン�
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ライチュウ</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">フラエッテ(永遠)</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">オオニューラ</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td></tr>
-<tr class="note"><td colspan="11" style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b;text-align:left">◎＝主力技（採用率30%以上の攻撃技）をすべて半減以下で受けられる、○＝最も採用率の高い技を半減以下で受けられる、空欄＝最も採用率の高い技が等倍以上で通る。列はパートナーの同居率順。メガ石の採用率が50%以上の種はメガ形態で判定。主力技：ミミッキュ＝じゃれつく・かげうち・シャドークロー；メガリザードンX・メガリザードンY＝ソーラービーム・りゅうのはどう・かえんほうしゃ・フレアドライブ；メタグロス＝バレットパンチ・サイコファング・れいとうパンチ・じしん・かみなりパンチ；ゴリランダー＝グラススライダー・ドラムアタック・とんぼがえり・10まんばりき・はたきおとす；マスカーニャ＝トリックフラワー・トリプルアクセル・はたきおとす・とんぼがえり；エースバーン＝かえんボール・とびひざげり・ダストシュート・ふいうち・とんぼがえり；ゲンガー＝シャドーボール・ヘドロウェーブ・こごえるかぜ；ギャラドス＝じしん・パワーウィップ・たきのぼり・ゆきなだれ・こおりのキバ；ライチュウ＝でんじほう・きあいだま・ねこだまし・ボルトチェンジ；フラエッテ(永遠)＝ムーンフォース・ドレインキッス；オオニューラ＝インファイト・フェイタルクロー・じごくづき・ねこだまし</td></tr>
+<tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><strong>受けられる相手の数</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○2</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○5</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎1・○4</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○6</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎1・○7</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎1・○5</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎1・○3</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎1・○6</td></tr>
+<tr class="note"><td colspan="11" style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b;text-align:left">◎＝主力技（採用率30%以上の攻撃技）をすべて半減以下で受けられる、○＝最も採用率の高い技を半減以下で受けられる、空欄＝最も採用率の高い技が等倍以上で通る。—＝相手と同じ種族。列はパートナーの同居率順。メガ石の採用率が50%以上の種はメガ形態で判定。主力技：ミミッキュ＝じゃれつく・かげうち・シャドークロー；メガリザードンX・メガリザードンY＝ソーラービーム・りゅうのはどう・かえんほうしゃ・フレアドライブ；メタグロス＝バレットパンチ・サイコファング・れいとうパンチ・じしん・かみなりパンチ；ゴリランダー＝グラススライダー・ドラムアタック・とんぼがえり・10まんばりき・はたきおとす；マスカーニャ＝トリックフラワー・トリプルアクセル・はたきおとす・とんぼがえり；エースバーン＝かえんボール・とびひざげり・ダストシュート・ふいうち・とんぼがえり；ゲンガー＝シャドーボール・ヘドロウェーブ・こごえるかぜ；ギャラドス＝じしん・パワーウィップ・たきのぼり・ゆきなだれ・こおりのキバ；ライチュウ＝でんじほう・きあいだま・ねこだまし・ボルトチェンジ；フラエッテ(永遠)＝ムーンフォース・ドレインキッス；オオニューラ＝インファイト・フェイタルクロー・じごくづき・ねこだまし</td></tr>
 </tbody>
 </table>
 </div>
