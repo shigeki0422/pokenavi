@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのルチャブル基礎データ
 pokemonName: 'ルチャブル'
 dexNumber: 701
 usageRank: 132
-updatedDate: '2026-10-26'
+updatedDate: '2026-10-27'
 pubDate: '2026-10-24'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのリザードン基礎データ
 pokemonName: 'リザードン'
 dexNumber: 6
 usageRank: 6
-updatedDate: '2026-10-26'
+updatedDate: '2026-10-27'
 pubDate: '2026-10-24'
 draft: false
 

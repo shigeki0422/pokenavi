@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのケケンカニ基礎データ
 pokemonName: 'ケケンカニ'
 dexNumber: 740
 usageRank: 179
-updatedDate: '2026-10-26'
+updatedDate: '2026-10-27'
 pubDate: '2026-10-24'
 draft: false
 

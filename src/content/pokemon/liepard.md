@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのレパルダス基礎データ
 pokemonName: 'レパルダス'
 dexNumber: 510
 usageRank: 200
-updatedDate: '2026-10-26'
+updatedDate: '2026-10-27'
 pubDate: '2026-05-24'
 draft: false
 

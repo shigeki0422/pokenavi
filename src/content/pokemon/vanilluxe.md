@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのバイバニラ基礎データ
 pokemonName: 'バイバニラ'
 dexNumber: 584
 usageRank: 57
-updatedDate: '2026-10-26'
+updatedDate: '2026-10-27'
 pubDate: '2026-10-24'
 draft: false
 analysisSlug: 'vanilluxe-analysis-m2'

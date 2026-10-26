@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのメガニウム基礎データ
 pokemonName: 'メガニウム'
 dexNumber: 154
 usageRank: 61
-updatedDate: '2026-10-26'
+updatedDate: '2026-10-27'
 pubDate: '2026-10-24'
 draft: false
 analysisSlug: 'meganium-analysis-m2'

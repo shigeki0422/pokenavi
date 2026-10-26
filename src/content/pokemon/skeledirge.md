@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのラウドボーン基礎デー
 pokemonName: 'ラウドボーン'
 dexNumber: 911
 usageRank: 42
-updatedDate: '2026-10-26'
+updatedDate: '2026-10-27'
 pubDate: '2026-10-24'
 draft: false
 analysisSlug: 'skeledirge-analysis-m2'
