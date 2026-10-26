@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのオニゴーリ基礎データ
 pokemonName: 'オニゴーリ'
 dexNumber: 362
 usageRank: 144
-updatedDate: '2026-10-25'
+updatedDate: '2026-10-26'
 pubDate: '2026-10-24'
 draft: false
 

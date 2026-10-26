@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのマスカーニャ基礎デー
 pokemonName: 'マスカーニャ'
 dexNumber: 908
 usageRank: 17
-updatedDate: '2026-10-25'
+updatedDate: '2026-10-26'
 pubDate: '2026-10-24'
 draft: false
 

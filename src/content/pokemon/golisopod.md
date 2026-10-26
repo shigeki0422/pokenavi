@@ -4,10 +4,10 @@ description: 'ポケモンチャンピオンズのグソクムシャ基礎デー
 pokemonName: 'グソクムシャ'
 dexNumber: 768
 usageRank: 5
-updatedDate: '2026-10-25'
+updatedDate: '2026-10-26'
 pubDate: '2026-10-24'
 draft: false
-analysisSlug: 'golisopod-analysis-m7'
+
 faq:
   season: 'M-7'
   topMoves: ['ふいうち', 'きゅうけつ', 'つるぎのまい', 'アイアンヘッド']
@@ -902,7 +902,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】グソクムシャ 考察 M-7 シーズン つるぎのまい型解説</div>
   </div>
 </a>
-
 <a href="/blog/golisopod-analysis-m6/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0768-00.webp" alt="グソクムシャ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>
