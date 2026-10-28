@@ -1,0 +1,35 @@
+{
+  "slug": "ditto-analysis-m7",
+  "subject": "メタモン",
+  "icon": "0132-00",
+  "season": "M-7",
+  "prev_season": "M-6",
+  "detail_date": null,
+  "pool_version": null,
+  "majority_pct": 20,
+  "aliases": {},
+  "cards": [
+    {
+      "arch": "スカーフ型",
+      "pool_group": "スカーフ",
+      "item": "こだわりスカーフ",
+      "nature": "のんき",
+      "ability": "かわりもの",
+      "ev": [32, 0, 2, 0, 0, 32],
+      "moves": ["へんしん"],
+      "mpool": ["へんしん"]
+    },
+    {
+      "arch": "きあいのタスキ型",
+      "pool_group": "きあいのタスキ／せんせいのツメ",
+      "item": "きあいのタスキ",
+      "nature": "のんき",
+      "ability": "かわりもの",
+      "ev": [32, 0, 2, 0, 0, 32],
+      "moves": ["へんしん"],
+      "mpool": ["へんしん"]
+    }
+  ],
+  "boosts": [],
+  "extra_pokemon": []
+}

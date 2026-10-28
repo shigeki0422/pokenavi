@@ -1,6 +1,6 @@
 ---
 title: '【ポケモンチャンピオンズ】グソクムシャ 考察 M-7 シーズン つるぎのまい型解説'
-description: 'M-7シーズン使用率8位（M-6:5位）のグソクムシャ考察。「つるぎのまい型」「フルアタ・耐久型」「フルアタ・速攻型」の3型を比較し、M-6からのであいがしら-43.3pt・つるぎのまい+41.9ptの採用変化と型別の苦手/得意なポケモンをデータで解説します。'
+description: 'M-7シーズン使用率8位（M-6:6位）のグソクムシャ考察。「つるぎのまい型」「フルアタ・耐久型」「フルアタ・速攻型」の3型を比較し、M-6からのであいがしら-43.3pt・つるぎのまい+41.9ptの採用変化と型別の苦手/得意なポケモンをデータで解説します。'
 pubDate: '2026-10-25'
 updatedDate: '2026-10-18'
 heroImage: '../../assets/hero-golisopod-m7.png'
@@ -28,76 +28,83 @@ draft: false
       <img src="/images/types/type-08-steel.png" alt="はがね" style="width:44px;height:44px" />
     </div>
     <div style="margin-top:8px;font-size:0.9em;color:#555">
-      使用率: <strong style="color:#e67e22">8位</strong>（M-6: 5位）　持ち物: <strong>グソクムシャナイト 98.8%</strong>
+      使用率: <strong style="color:#e67e22">8位</strong>（M-6: 6位）　持ち物: <strong>グソクムシャナイト 98.8%</strong>
     </div>
   </div>
 </div>
 
 ※本記事の使用率順位・技・持ち物・性格・特性・EV・同居率はすべて2026-10-11時点の実測データに統一しています。
 
-M-7シーズンのグソクムシャは使用率8位（M-6: 5位）です。持ち物グソクムシャナイトの採用率は98.8%で、ほぼ全個体がメガ進化前提です。M-7ではつるぎのまいでこうげきを積んでから押し切る構成が最多勢力です。
+M-7シーズンのグソクムシャは使用率8位（M-6: 6位）です。持ち物グソクムシャナイトの採用率は98.8%で、ほぼ全個体がメガ進化前提です。M-7ではつるぎのまいでこうげきを積んでから押し切る構成が最多勢力です。
 
 ---
 
 ## グソクムシャの基本スペック
 
-### 種族値（通常→メガ後）
+<!-- gate:rows start id=base_stats facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
+### 種族値（通常→メガグソクムシャ）
 
 <div style="max-width:480px;margin:16px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:4px;padding:4px 0;font-size:0.8em;color:#666;border-bottom:2px solid #e2e8f0;margin-bottom:4px">
     <span style="width:72px;min-width:72px"></span>
     <div style="flex:1"></div>
     <span style="width:32px;text-align:right">通常</span>
-    <span style="width:40px;text-align:right">メガ後</span>
+    <span style="width:32px;text-align:right">メガ後</span>
+    <span style="width:40px;text-align:right">差分</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">HP</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:38%;background:linear-gradient(90deg,#94a3b8,#64748b);height:12px;border-radius:4px"></div>
+      <div style="width:37.5%;background:linear-gradient(90deg,#f472b6,#db2777);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">75</span><span style="width:40px"></span>
+    <span style="width:32px;text-align:right">75</span><span style="width:32px;text-align:right">75</span><span style="width:40px"></span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">こうげき</span>
-    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:75%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px;overflow:hidden;display:flex">
+      <div style="width:62.5%;background:linear-gradient(90deg,#fb923c,#ea580c);height:12px"></div>
+      <div style="width:12.5%;background:linear-gradient(90deg,#fb923c,#ea580c);height:12px;opacity:0.35"></div>
     </div>
-    <span style="width:32px;text-align:right">125</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+25</span>
+    <span style="width:32px;text-align:right">125</span><span style="width:32px;text-align:right"><strong style="color:#dc2626">150</strong></span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+25</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
-    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:88%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px;overflow:hidden;display:flex">
+      <div style="width:70%;background:linear-gradient(90deg,#60a5fa,#2563eb);height:12px"></div>
+      <div style="width:17.5%;background:linear-gradient(90deg,#60a5fa,#2563eb);height:12px;opacity:0.35"></div>
     </div>
-    <span style="width:32px;text-align:right">140</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+35</span>
+    <span style="width:32px;text-align:right">140</span><span style="width:32px;text-align:right"><strong style="color:#dc2626">175</strong></span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+35</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくこう</span>
-    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:35%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px;overflow:hidden;display:flex">
+      <div style="width:30%;background:linear-gradient(90deg,#c084fc,#7c3aed);height:12px"></div>
+      <div style="width:5%;background:linear-gradient(90deg,#c084fc,#7c3aed);height:12px;opacity:0.35"></div>
     </div>
-    <span style="width:32px;text-align:right">60</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+10</span>
+    <span style="width:32px;text-align:right">60</span><span style="width:32px;text-align:right"><strong style="color:#dc2626">70</strong></span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+10</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
-    <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:60%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+    <div style="flex:1;background:#eee;border-radius:4px;height:12px;overflow:hidden;display:flex">
+      <div style="width:45%;background:linear-gradient(90deg,#34d399,#059669);height:12px"></div>
+      <div style="width:15%;background:linear-gradient(90deg,#34d399,#059669);height:12px;opacity:0.35"></div>
     </div>
-    <span style="width:32px;text-align:right">90</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+30</span>
+    <span style="width:32px;text-align:right">90</span><span style="width:32px;text-align:right"><strong style="color:#dc2626">120</strong></span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+30</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:20%;background:linear-gradient(90deg,#94a3b8,#64748b);height:12px;border-radius:4px"></div>
+      <div style="width:20%;background:linear-gradient(90deg,#fbbf24,#d97706);height:12px;border-radius:4px"></div>
     </div>
-    <span style="width:32px;text-align:right">40</span><span style="width:40px"></span>
+    <span style="width:32px;text-align:right">40</span><span style="width:32px;text-align:right">40</span><span style="width:40px"></span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">530</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+100</span>
+    <span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">530</span><span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">630</span><span style="width:40px;text-align:right;font-size:0.82em;font-weight:700;color:#059669">+100</span>
   </div>
 </div>
+<!-- gate:rows end id=base_stats -->
 
 メガ進化でこうげき+25・ぼうぎょ+35・とくこう+10・とくぼう+30と攻守が底上げされますが、すばやさは40のまま変化しません。型1・型2のEV配分（H32-A32-D2）ではすばやさ実数値60にとどまり、型3（ようき・H2-A32-S32）でもS101止まりです。
 
@@ -156,97 +163,99 @@ M-7シーズンのグソクムシャは使用率8位（M-6: 5位）です。持�
 
 ## 主要な技と採用率
 
+<!-- gate:rows start id=move_table facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+<th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+<th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+<th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+<th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+<th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">効果</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ふいうち</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">79.9%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+1。相手が攻撃技を選んでいる時のみ成功する先制技</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ふいうち</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">79.9%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">優先度+1。相手が攻撃を選んでおりかつこの技を使ったターン中、まだ攻撃をしていない時でないと失敗する。</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>きゅうけつ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">74.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">与えたダメージの1/2を回復するむし一致技</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>きゅうけつ</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">74.8%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">相手に与えたダメージの1/2自分のHPを回復する。</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">66.1%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">こうげきを2段階上げる積み技</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>つるぎのまい</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">66.1%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">自分の攻撃を2段階上げる。</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アイアンヘッド</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">43.1%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">はがね一致の主力打点</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アイアンヘッド</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-08-steel.png" alt="はがね" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">43.1%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">20%の確率で相手をひるませる。</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>インファイト</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">33.7%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">使用後、自分の防御・特防が1段階ずつ下がる高火力技</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>インファイト</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">120</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">33.7%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">自分の防御と特防が1段階下がる。</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ドリルライナー</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">29.1%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">急所に当たりやすい技。サーフゴー等はがね複合への選択技</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ドリルライナー</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-04-ground.png" alt="じめん" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">80</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">29.1%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">きゅうしょアップ+1で攻撃する。</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>であいがしら</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.1%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+2だが、登場して最初に出す技でないと失敗</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>であいがしら</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">22.1%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">優先度+2。登場して最初に出す技でない場合失敗する。</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>とんぼがえり</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17.7%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に交代して後続につなぐ技</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1">とんぼがえり</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-06-bug.png" alt="むし" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">70</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">17.7%</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">攻撃した後、手持ちの他のポケモンと交代する。</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ちょうはつ</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手の変化技を封じる</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1">ちょうはつ</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-16-dark.png" alt="あく" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12.2%</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">相手をちょうはつ状態にする。</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アクアジェット</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">8.9%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+1で先制できる。威力は低いみず技</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1">アクアジェット</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">8.9%</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">優先度+1。優先度0の技より先に出せる。</td>
 </tr>
 </tbody>
 </table>
 </div>
+<!-- gate:rows end id=move_table -->
 
 ---
 
 ## M-7の採用型
 
-技・持ち物・性格・EVの組み合わせから、採用割合が高い順に3つの型を紹介します。
+技・性格・EVの組み合わせから、採用割合が高い順に3つの型を紹介します。
 
 ### 型1：つるぎのまい型
 
@@ -275,13 +284,13 @@ M-7シーズンのグソクムシャは使用率8位（M-6: 5位）です。持�
 
 つるぎのまいでこうげきを2段階上げ、きゅうけつ・ふいうち・インファイトで押し切る構成です。4つ目の技はインファイトが主流で、ドリルライナー・アイアンヘッドが選択候補として並びます。
 
-**強み:**
+<!-- gate:rows start id=card:1 facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
+**他の型との違い:**
 
-つるぎのまいを採用するのはこの型だけで、積んだ後はA444まで上がり、型2・型3には無い火力になります。
-
-**弱み:**
-
-であいがしら・とんぼがえりを採用せず、型2・型3が持つ優先度+2の登場ターン限定先制技や、後続への繋ぎができません。
+- 他の型に無い技：つるぎのまい
+- きゅうけつ：この型は必ず持ち、フルアタ・耐久型・フルアタ・速攻型では選択技
+- ふいうち：この型は必ず持ち、フルアタ・耐久型・フルアタ・速攻型では選択技
+<!-- gate:rows end id=card:1 -->
 
 ---
 
@@ -312,13 +321,11 @@ M-7シーズンのグソクムシャは使用率8位（M-6: 5位）です。持�
 
 であいがしら・アイアンヘッドでタイプ一致の打点を並べ、とんぼがえりで攻撃後に交代して後続につなぎます。4つ目の技はインファイトのほか、ふいうち・きゅうけつを選ぶ個体もいます。
 
-**強み:**
+<!-- gate:rows start id=card:2 facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
+**他の型との違い:**
 
-型1にはないであいがしら・とんぼがえりを両方採用でき、登場ターンの先制打点と攻撃後の交代を両立します。型3とは3技が共通ですが、EVをすばやさに回さない分H182（型3はH152）、いじっぱりの性格補正でA222（ようきの型3はA202）と、耐久・火力の実数値が高くなっています。
-
-**弱み:**
-
-つるぎのまいを採用しないため、型1が積んだ後のような伸びしろがありません。型3と異なりS60のままで、登場ターン以外に使える先制技を持ちません。
+- フルアタ・速攻型との技の違い：この型はインファイト、フルアタ・速攻型はアクアジェット
+<!-- gate:rows end id=card:2 -->
 
 ---
 
@@ -349,19 +356,19 @@ M-7シーズンのグソクムシャは使用率8位（M-6: 5位）です。持�
 
 型2と同じであいがしら・とんぼがえり・アイアンヘッドの3枚に、S101でも上から動けない相手への先制技としてアクアジェットを加えた構成です。
 
-**強み:**
+<!-- gate:rows start id=card:3 facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
+**他の型との違い:**
 
-アクアジェットを採用するのはこの型だけで、相手の技選択や登場ターンに関わらず使える優先度+1の先制技として、上から動けない相手に打点を出せます。
-
-**弱み:**
-
-型1・型2が採用するインファイト（威力120）を持たず、こうげき実数値も202と型1・型2の222より低いため、一撃の重さでは見劣りします。H152も型1・型2のH182より低く、耐久面も型1・型2を下回ります。
+- アクアジェット：この型は必ず持ち、フルアタ・耐久型では選択技
+- 3つの型で最も高い実数値：すばやさ101
+- 3つの型で最も低い実数値：HP152・こうげき202・とくぼう140
+<!-- gate:rows end id=card:3 -->
 
 ---
 
 ### 型による有利不利の違い
 
-<!-- gate:rows start id=arch_grid facts=5adb0bb60e20105de3bf2088bfc6020f6609b879 -->
+<!-- gate:rows start id=arch_grid facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
 <thead>
@@ -403,7 +410,7 @@ M-7シーズンのグソクムシャは使用率8位（M-6: 5位）です。持�
 <tbody>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">使用率順位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">5位（M-6）</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">6位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>8位</strong></td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center;color:#dc2626">下降</td>
 </tr>
@@ -477,18 +484,16 @@ M-7シーズンのグソクムシャは使用率8位（M-6: 5位）です。持�
 </table>
 </div>
 
-<!-- gate:rows start id=diff_movers facts=5adb0bb60e20105de3bf2088bfc6020f6609b879 -->
-- であいがしら：65.4%→22.1%（-43.3pt）。フルアタ・耐久型、フルアタ・速攻型に共通 → 型の増減とは言えない
-- つるぎのまい：24.2%→66.1%（+41.9pt）。つるぎのまい型とほかの型に共通 → 型の増減とは言えない
-- きゅうけつ：39.6%→74.8%（+35.2pt）。つるぎのまい型、フルアタ・耐久型、フルアタ・速攻型とほかの型に共通 → 型の増減とは言えない
-- アイアンヘッド：75.1%→43.1%（-32.0pt）。フルアタ・耐久型、フルアタ・速攻型、つるぎのまい型に共通 → 型の増減とは言えない
-- とんぼがえり：37.6%→17.7%（-19.9pt）。フルアタ・耐久型、フルアタ・速攻型に共通 → 型の増減とは言えない
-- ふいうち：61.7%→79.9%（+18.2pt）。つるぎのまい型、フルアタ・耐久型、フルアタ・速攻型とほかの型に共通 → 型の増減とは言えない
-- インファイト：20.5%→33.7%（+13.2pt）。つるぎのまい型、フルアタ・耐久型に共通 → 型の増減とは言えない
-- ようき：0.3%→8.8%（+8.5pt）。フルアタ・速攻型だけが持つ → その型の増減を示す
+<!-- gate:rows start id=diff_movers facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
+- であいがしら：65.4%→22.1%（-43.3pt）。フルアタ・耐久型・フルアタ・速攻型に共通のため、型の増減とは言えません。
+- つるぎのまい：24.2%→66.1%（+41.9pt）。記事の型ではつるぎのまい型だけが持ちますが、記事に載せていない型にもあるため、型の増減とは言い切れません。
+- きゅうけつ：39.6%→74.8%（+35.2pt）。つるぎのまい型が持ち、フルアタ・耐久型・フルアタ・速攻型でも選択技のため、型の増減とは言えません。
+- アイアンヘッド：75.1%→43.1%（-32.0pt）。記事のすべての型に共通のため、型の増減とは言えません。
+- とんぼがえり：37.6%→17.7%（-19.9pt）。フルアタ・耐久型・フルアタ・速攻型に共通のため、型の増減とは言えません。
+- ふいうち：61.7%→79.9%（+18.2pt）。つるぎのまい型が持ち、フルアタ・耐久型・フルアタ・速攻型でも選択技のため、型の増減とは言えません。
+- インファイト：20.5%→33.7%（+13.2pt）。つるぎのまい型・フルアタ・耐久型に共通のため、型の増減とは言えません。
+- ようき：0.3%→8.8%（+8.5pt）。フルアタ・速攻型だけが選んでいるため、この変化はその型の増減を示します。
 <!-- gate:rows end id=diff_movers -->
-
-M-7で対面するグソクムシャには、登場ターンのであいがしらよりも、つるぎのまいで積んでからふいうち・きゅうけつで居座る動きを想定しておく必要があります。
 
 ---
 
@@ -506,7 +511,7 @@ M-7で対面するグソクムシャには、登場ターンのであいがし�
 </tr>
 </thead>
 <tbody>
-<!-- gate:rows start id=weak facts=5adb0bb60e20105de3bf2088bfc6020f6609b879 -->
+<!-- gate:rows start id=weak facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0006-00.webp" alt="メガリザードンX" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">メガリザードンX
@@ -557,7 +562,7 @@ M-7で対面するグソクムシャには、登場ターンのであいがし�
 </tr>
 </thead>
 <tbody>
-<!-- gate:rows start id=strong facts=5adb0bb60e20105de3bf2088bfc6020f6609b879 -->
+<!-- gate:rows start id=strong facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-1018-00.webp" alt="ブリジュラス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ブリジュラス
@@ -584,60 +589,60 @@ M-7で対面するグソクムシャには、登場ターンのであいがし�
     <img src="/images/pokemon/pokemon-1000-00.webp" alt="サーフゴー" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">サーフゴー
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">9位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型のふいうちは確定2発。サーフゴーのシャドーボール（採用率97.8%）は乱数3発（97%）で、S60対S149で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型のふいうちは確定2発。サーフゴーのシャドーボール（採用率97.8%）は乱数3発（97%）で、優先度+1のふいうちで先に動き、先に倒せます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0998-00.webp" alt="セグレイブ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">セグレイブ
+    <img src="/images/pokemon/pokemon-0998-00.webp" alt="セグレイブ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">セグレイブ<br><span style="font-size:0.8em;color:#64748b">メガセグレイブで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・速攻型のアイアンヘッドは確定2発。メガセグレイブのじしん（採用率92.1%）は乱数3発（96%）で、S101対S139で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・速攻型のアイアンヘッドは確定2発。メガセグレイブのじしん（採用率92.1%）は乱数3発（96%）で、最後は優先度+1のアクアジェットで先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">イダイトウ(オス)
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・速攻型の選択技ふいうちは確定1発。イダイトウ(オス)のウェーブタックル（採用率86.3%）は確定2発で、S101対S214で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・速攻型の選択技ふいうちは確定1発。イダイトウ(オス)のウェーブタックル（採用率86.3%）は確定2発で、優先度+1のふいうちで先に動き、先に倒せます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">メタグロス
+    <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">メタグロス<br><span style="font-size:0.8em;color:#64748b">メガメタグロスで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型のふいうちは確定2発。メガメタグロスのじしん（採用率68.0%）は乱数4発（70%）で、S60対S162で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型のふいうちは確定2発。メガメタグロスのじしん（採用率68.0%）は乱数4発（70%）で、優先度+1のふいうちで先に動き、先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0970-00.webp" alt="キラフロル" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">キラフロル
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">16位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型の選択技アイアンヘッドは確定2発。キラフロルのパワージェム（採用率87.9%）は乱数3発（97%）で、S60対S151で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型の選択技アイアンヘッドは確定2発（相手のきあいのタスキ込み）。キラフロルのパワージェム（採用率87.9%）は乱数3発（97%）で、最後は優先度+1のふいうちで先に倒せます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0812-00.webp" alt="ゴリランダー" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゴリランダー
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">18位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型のきゅうけつは確定1発。ゴリランダーのはたきおとす（採用率44.5%）は倒しきれないため、S60対S107で後手ですが、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型のきゅうけつは確定1発。ゴリランダーのはたきおとす（採用率44.5%）は倒しきれず、S60対S107で後手ですが、先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">マスカーニャ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・速攻型のとんぼがえりは確定2発（相手のきあいのタスキ込み）。マスカーニャのはたきおとす（採用率64.3%）は確定5発で、S101対S192で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・速攻型のとんぼがえりは確定2発（相手のきあいのタスキ込み）。マスカーニャのはたきおとす（採用率64.3%）は確定5発で、最後は優先度+1のアクアジェットで先に倒せます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0094-00.webp" alt="ゲンガー" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゲンガー
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">21位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型のふいうちは確定2発（相手のきあいのタスキ込み）。ゲンガーのシャドーボール（採用率84.5%）は乱数3発（97%）で、S60対S178で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型のふいうちは確定2発（相手のきあいのタスキ込み）。ゲンガーのシャドーボール（採用率84.5%）は乱数3発（97%）で、優先度+1のふいうちで先に動き、先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ライチュウ
+    <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ライチュウ<br><span style="font-size:0.8em;color:#64748b">メガライチュウYで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">23位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・耐久型のであいがしらは確定2発。メガライチュウYのでんじほう（採用率97.1%）は確定3発で、S60対S200で後手ですが確定数で上回り、先に倒せます。</td>
@@ -647,18 +652,18 @@ M-7で対面するグソクムシャには、登場ターンのであいがし�
     <img src="/images/pokemon/pokemon-0658-00.webp" alt="ゲッコウガ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ゲッコウガ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">24位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・耐久型のとんぼがえりは確定2発（相手のきあいのタスキ込み）。ゲッコウガのなみのり（採用率36.9%）は確定3発で、S60対S174で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・耐久型のとんぼがえりは確定2発（相手のきあいのタスキ込み）。ゲッコウガのなみのり（採用率36.9%）は確定3発で、最後は優先度+1の選択技ふいうちで先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0670-05.webp" alt="フラエッテ(永遠)" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">フラエッテ(永遠)
+    <img src="/images/pokemon/pokemon-0670-05.webp" alt="フラエッテ(永遠)" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">フラエッテ(永遠)<br><span style="font-size:0.8em;color:#64748b">メガフラエッテで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">25位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型の選択技アイアンヘッドは確定1発。メガフラエッテのムーンフォース（採用率96.9%）は乱数4発（97%）で、S60対S169で後手ですが確定数で上回り、先に倒せます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0009-00.webp" alt="カメックス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">カメックス
+    <img src="/images/pokemon/pokemon-0009-00.webp" alt="カメックス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">カメックス<br><span style="font-size:0.8em;color:#64748b">メガカメックスで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・速攻型の選択技きゅうけつは確定2発。メガカメックスのみずのはどう（採用率16.4%・少数派）は確定2発で、最後は優先度+1の選択技ふいうちで先に倒せます。</td>
@@ -668,7 +673,7 @@ M-7で対面するグソクムシャには、登場ターンのであいがし�
     <img src="/images/pokemon/pokemon-0903-00.webp" alt="オオニューラ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">オオニューラ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">27位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型の選択技アイアンヘッドは確定2発。オオニューラのほのおのパンチ（採用率15.0%・少数派）は確定3発で、S60対S344で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">つるぎのまい型の選択技アイアンヘッドは確定2発。オオニューラのほのおのパンチ（採用率15.0%・少数派）は確定3発で、S60対S172で後手ですが確定数で上回り、先に倒せます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -682,7 +687,7 @@ M-7で対面するグソクムシャには、登場ターンのであいがし�
     <img src="/images/pokemon/pokemon-0681-00.webp" alt="ギルガルド" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ギルガルド
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">34位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・速攻型の選択技ふいうちは確定2発。ギルガルドのポルターガイスト（採用率76.4%）は確定2発で、S101対S80で先手を取り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">フルアタ・速攻型の選択技ふいうちは確定2発。ギルガルドのポルターガイスト（採用率76.4%）は確定2発で、優先度+1のふいうちで先に動き、先に倒せます。</td>
 </tr>
 <tr class="note"><td colspan="3" style="padding:6px 12px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b">※相手は型ごとに判定が最も僅差になる個体。技の採用率は種全体の値（メガ形態も同じ）。自分の技の採用率は「主要な技と採用率」の表を参照。「選択技」は型の4技には無いが、その型で採用されることがある技。</td></tr>
 <!-- gate:rows end id=strong -->
@@ -749,7 +754,7 @@ M-7でグソクムシャと同じパーティに入る頻度が高いポケモ�
   </div>
 </div>
 
-<!-- gate:rows start id=partner_grid facts=5adb0bb60e20105de3bf2088bfc6020f6609b879 -->
+<!-- gate:rows start id=partner_grid facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
 <thead>
@@ -764,18 +769,16 @@ M-7でグソクムシャと同じパーティに入る頻度が高いポケモ�
 <th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">サーフゴー<br><span style="font-weight:normal;font-size:0.85em">同居率7位</span></th>
 <th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">セグレイブ<br><span style="font-weight:normal;font-size:0.85em">同居率8位</span></th>
 <th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">イエッサン(オス)<br><span style="font-weight:normal;font-size:0.85em">同居率9位</span></th>
-<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">メガボーマンダ<br><span style="font-weight:normal;font-size:0.85em">同居率10位</span></th>
+<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">ボーマンダ<br><span style="font-weight:normal;font-size:0.85em">同居率10位・メガボーマンダで判定</span></th>
 </tr>
 </thead>
 <tbody>
-<tr style="background:#eff6ff"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">グソクムシャの弱点：いわ技</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td></tr>
-<tr style="background:#eff6ff"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">グソクムシャの弱点：でんき技</td><td style="padding:6px 8px;border:1px solid #cbd5e1">無効</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">無効</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td></tr>
-<tr style="background:#eff6ff"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">グソクムシャの弱点：ひこう技</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td></tr>
+<tr style="background:#eff6ff"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">メガグソクムシャの弱点：ほのお技</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">メガリザードンX・メガリザードンY</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">エースバーン</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ヒートロトム</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1"></td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left"><strong>受けられる相手の数</strong></td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎1・○1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○2</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○0</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○2</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○0</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○1</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○0</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎0・○3</td></tr>
-<tr class="note"><td colspan="11" style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b;text-align:left">◎＝主力技（採用率30%以上の攻撃技）をすべて半減以下で受けられる、○＝最も採用率の高い技を半減以下で受けられる、空欄＝最も採用率の高い技が等倍以上で通る。青い行＝グソクムシャの弱点タイプの技を、◎＝半減以下で受けられる／無効＝無効にできる。—＝相手と同じ種族。列はパートナーの同居率順。メガ石の採用率が50%以上の種はメガ形態で判定。主力技：メガリザードンX・メガリザードンY＝ソーラービーム・りゅうのはどう・かえんほうしゃ・フレアドライブ；エースバーン＝かえんボール・とびひざげり・ダストシュート・ふいうち・とんぼがえり；ヒートロトム＝オーバーヒート・ボルトチェンジ・10まんボルト</td></tr>
+<tr class="note"><td colspan="11" style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b;text-align:left">◎＝主力技（採用率30%以上の攻撃技）をすべて半減以下で受けられる、○＝最も採用率の高い技を半減以下で受けられる、空欄＝最も採用率の高い技が等倍以上で通る。青い行＝メガグソクムシャの弱点タイプの技を、◎＝半減以下で受けられる／無効＝無効にできる。—＝相手と同じ種族。列はパートナーの同居率順。メガ石の採用率が50%以上の種はメガ形態で判定。主力技：メガリザードンX・メガリザードンY＝ソーラービーム・りゅうのはどう・かえんほうしゃ・フレアドライブ；エースバーン＝かえんボール・とびひざげり・ダストシュート・ふいうち・とんぼがえり；ヒートロトム＝オーバーヒート・ボルトチェンジ・10まんボルト</td></tr>
 </tbody>
 </table>
 </div>
@@ -785,15 +788,32 @@ M-7でグソクムシャと同じパーティに入る頻度が高いポケモ�
 
 ## まとめ
 
-M-7のグソクムシャはM-6の5位から8位に後退しました。技構成・性格のデータからは、であいがしら・とんぼがえりを軸にした登場ターンの先制と後続への繋ぎから、つるぎのまいで積んでから押し切る技選択への重心の移動がうかがえます。
+<!-- gate:rows start id=summary facts=6bdfeeb7e39ece8a67f902ceeed2e9be5802bce4 -->
+**強み**
 
-- **技構成：つるぎのまい+41.9pt・きゅうけつ+35.2pt・ふいうち+18.2pt**：であいがしら-43.3pt・とんぼがえり-19.9pt・アイアンヘッド-32.0ptも大きく変化しています
-- **性格：ようき+8.5pt**
+- 得意な相手は18体です。使用率上位では、ブリジュラス（3位）にドリルライナー、カバルドン（4位）・ミミッキュ（5位）にアイアンヘッドで勝てます。
+- タイプ相性では、グソクムシャはみず・こおり・かくとう・じめん・はがねを半減以下で受けられます。
+- タイプ相性では、メガグソクムシャはノーマル・くさ・こおり・エスパー・むし・ドラゴン・はがね・フェアリーを半減以下、どくを無効で受けられます。
 
-3つの型のうち、つるぎのまいを積めるのはつるぎのまい型だけで、積んだ後のこうげき実数値はA222からA444まで伸びます。フルアタ・耐久型はインファイトを残しH182・A222を維持し、フルアタ・速攻型はS101まで素早さを伸ばしてアクアジェットで先制する構成です。弱点はほのお×4の一点に絞られています。
+**弱み**
 
----
+- 苦手な相手は4体です。使用率上位では、メガリザードンX（6位）のフレアドライブ、メガリザードンY（6位）のかえんほうしゃ、エースバーン（20位）のかえんボールで先に倒されます。
+- グソクムシャの弱点はでんき・ひこう・いわです。
+- メガグソクムシャの弱点はほのお（×4）です。
+
+**型の選び分け**
+
+- 「つるぎのまい型」：他の型に無い技はつるぎのまい。
+- 「フルアタ・耐久型」：フルアタ・速攻型のアクアジェットの代わりにインファイトを持つ。
+- 「フルアタ・速攻型」：アクアジェットを必ず持つ（フルアタ・耐久型では選択技）。
+- 型によって勝敗が変わる相手は「型による有利不利の違い」の表にまとめています。
+
+**M-6からの変化**
+
+- 使用率は8位です（M-6: 6位）。
+- 採用率の変化が大きいのはであいがしら（-43.3pt）・つるぎのまい（+41.9pt）・きゅうけつ（+35.2pt）です。
+<!-- gate:rows end id=summary -->
 
 ## 関連記事
 
-- [M-6シーズン（使用率5位）のグソクムシャ考察](/blog/golisopod-analysis-m6/)
+- [M-6シーズン（使用率6位）のグソクムシャ考察](/blog/golisopod-analysis-m6/)

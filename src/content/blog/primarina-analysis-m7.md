@@ -41,57 +41,59 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 
 ## アシレーヌの基本スペック
 
+<!-- gate:rows start id=base_stats facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
 ### 種族値
 
 <div style="max-width:480px;margin:16px 0;font-size:0.9em">
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">HP</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:53%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+      <div style="width:40%;background:linear-gradient(90deg,#f472b6,#db2777);height:12px;border-radius:4px"></div>
     </div>
-    <span style="min-width:40px;text-align:right">80</span>
+    <span style="width:32px;text-align:right">80</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">こうげき</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:49%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
+      <div style="width:37%;background:linear-gradient(90deg,#fb923c,#ea580c);height:12px;border-radius:4px"></div>
     </div>
-    <span style="min-width:40px;text-align:right">74</span>
+    <span style="width:32px;text-align:right">74</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">ぼうぎょ</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:49%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
+      <div style="width:37%;background:linear-gradient(90deg,#60a5fa,#2563eb);height:12px;border-radius:4px"></div>
     </div>
-    <span style="min-width:40px;text-align:right">74</span>
+    <span style="width:32px;text-align:right">74</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくこう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:84%;background:linear-gradient(90deg,#94a3b8,#64748b);height:12px;border-radius:4px"></div>
+      <div style="width:63%;background:linear-gradient(90deg,#c084fc,#7c3aed);height:12px;border-radius:4px"></div>
     </div>
-    <span style="min-width:40px;text-align:right">126</span>
+    <span style="width:32px;text-align:right">126</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">とくぼう</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:77%;background:linear-gradient(90deg,#60a5fa,#3b82f6);height:12px;border-radius:4px"></div>
+      <div style="width:58%;background:linear-gradient(90deg,#34d399,#059669);height:12px;border-radius:4px"></div>
     </div>
-    <span style="min-width:40px;text-align:right">116</span>
+    <span style="width:32px;text-align:right">116</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:5px 0;border-bottom:1px solid #e2e8f0">
     <span style="width:72px;min-width:72px;color:#555;font-weight:600;white-space:nowrap">すばやさ</span>
     <div style="flex:1;background:#eee;border-radius:4px;height:12px">
-      <div style="width:40%;background:linear-gradient(90deg,#f97316,#dc2626);height:12px;border-radius:4px"></div>
+      <div style="width:30%;background:linear-gradient(90deg,#fbbf24,#d97706);height:12px;border-radius:4px"></div>
     </div>
-    <span style="min-width:40px;text-align:right">60</span>
+    <span style="width:32px;text-align:right">60</span>
   </div>
   <div style="display:flex;align-items:center;gap:4px;padding:8px 0;font-weight:700">
     <span style="width:72px;min-width:72px;color:#555;white-space:nowrap">合計</span>
     <div style="flex:1"></div>
-    <span style="min-width:40px;text-align:right;color:#2563eb;white-space:nowrap">530</span>
+    <span style="width:32px;text-align:right;color:#2563eb;white-space:nowrap">530</span>
   </div>
 </div>
+<!-- gate:rows end id=base_stats -->
 
 種族値はC126の火力とH80・D116の特殊耐久を併せ持ち、A74・B74と物理面は平均的です。S60は環境上位の多くに先手を取られる数値で、耐えてから打ち返す立ち回りが基本になります。型カードの推定EV（H32-B32-D2・ひかえめ）ではH187 A84 B126 C160 D138 S80になります。
 
@@ -149,91 +151,79 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 
 ## 主要な技と採用率
 
+<!-- gate:rows start id=move_table facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
 <thead>
 <tr style="background:#f1f5f9">
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
-  <th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">備考</th>
+<th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">技名</th>
+<th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">タイプ</th>
+<th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">威力</th>
+<th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">採用率</th>
+<th style="padding:8px 12px;border:1px solid #cbd5e1;text-align:left">効果</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ムーンフォース</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">95</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">98.8%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">フェアリー一致のメインウェポン。低確率で相手のとくこうを下げる追加効果もある</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ムーンフォース</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-17-fairy.png" alt="フェアリー" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">95</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">98.8%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">10%の確率で相手の特攻を1段階下げる。</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>うたかたのアリア</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">75.3%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">みず一致。命中した相手のやけど状態を治す</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>うたかたのアリア</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">75.3%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">相手のやけど状態を治す。</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アクアジェット</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">66.5%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">優先度+1。S60の遅さを補い削り合いで先手を確保</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アクアジェット</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">40</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">66.5%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">優先度+1。優先度0の技より先に出せる。</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アンコール</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>49.9%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">相手を直前の技に固定。積み技・補助技のターンを潰す</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>アンコール</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">49.9%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">相手をアンコール状態にする。</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>めいそう</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong>38.0%</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">自分のとくこう・とくぼうを1段階ずつ上げる</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>めいそう</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">38.0%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">自分の特攻と特防が1段階ずつ上がる。</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>なみのり</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">22.8%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリアと同威力のみず技。音技ではなく、相手のやけど状態は治さない</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>なみのり</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><strong style="color:#dc2626">22.8%</strong></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">水中状態の相手には威力が2倍になる。</td>
 </tr>
 <tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>クイックターン</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13.8%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">攻撃後に手持ちの他のポケモンと交代する</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1">クイックターン</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-10-water.png" alt="みず" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">60</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13.8%</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">攻撃した後、手持ちの他のポケモンと交代する。</td>
 </tr>
 <tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>ねむる</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">9.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">HPと状態異常を全回復し2ターンの間ねむり状態になる</td>
-</tr>
-<tr>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>みがわり</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-00-normal.png" alt="ノーマル" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">4.2%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">最大HPの1/4を消費してみがわりを設置</td>
-</tr>
-<tr style="background:#fafafa">
-  <td style="padding:8px 12px;border:1px solid #cbd5e1"><strong>エナジーボール</strong></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-11-grass.png" alt="くさ" style="width:28px;height:28px;vertical-align:middle"></td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">90</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">3.7%</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">うたかたのアリア・なみのりが半減されるみずタイプの相手に効果抜群で通る打点を補う技</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1">ねむる</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center"><img src="/images/types/type-13-psychic.png" alt="エスパー" style="width:28px;height:28px;vertical-align:middle"></td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">—</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">9.2%</td>
+<td style="padding:8px 12px;border:1px solid #cbd5e1;font-size:0.95em">自分のHPを全回復し状態異常も回復する。2ターンの間ねむり状態になる。HPが満タンだと失敗する。</td>
 </tr>
 </tbody>
 </table>
 </div>
+<!-- gate:rows end id=move_table -->
 
 ---
 
@@ -268,13 +258,11 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 
 ムーンフォース・うたかたのアリアの2タイプ打点に、アクアジェットの先制技を組み合わせ、アンコールで相手の行動を縛る構成です。
 
-**強み:**
+<!-- gate:rows start id=card:1 facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
+**他の型との違い:**
 
-アンコールは型2・型3には無い技で、相手が積み技や補助技を選んだ直後（相手が既にそのターンの行動を終えた状態）に当てれば、その技に3ターンの間固定できます。
-
-**弱み:**
-
-めいそうを持たないため、長期戦で打点が伸びません。
+- 他の型に無い技：アンコール
+<!-- gate:rows end id=card:1 -->
 
 ---
 
@@ -305,13 +293,11 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 
 ムーンフォース・うたかたのアリアの2タイプ打点に、めいそうを積む構成です。
 
-**強み:**
+<!-- gate:rows start id=card:2 facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
+**他の型との違い:**
 
-めいそうを積めば、とくこう・とくぼうが同時に1段階上がるため、ムーンフォース・うたかたのアリアの打点に加え、特殊技への受けも型1より向上します。
-
-**弱み:**
-
-アンコールを持たないため、相手の積み技や補助技を縛れません。
+- 他の型に無い技：めいそう
+<!-- gate:rows end id=card:2 -->
 
 ---
 
@@ -342,19 +328,17 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 
 攻撃しながら交代できるクイックターンで対面を動かしつつ、ムーンフォースとみず技（うたかたのアリアまたはなみのり）で打点を確保する構成です。
 
-**強み:**
+<!-- gate:rows start id=card:3 facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
+**他の型との違い:**
 
-クイックターンは型1・型2にはない、後続への負担を抑えながら対面を変える手段です。
-
-**弱み:**
-
-アンコール・めいそうのどちらも持たないため、相手の補助技を縛る手段も長期戦での火力上昇手段もありません。
+- 他の型に無い技：クイックターン
+<!-- gate:rows end id=card:3 -->
 
 ---
 
 ### 型による有利不利の違い
 
-<!-- gate:rows start id=arch_grid facts=896ba6967af74e6ac1e9c94e39b1be10fd4d5845 -->
+<!-- gate:rows start id=arch_grid facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
 <thead>
@@ -369,7 +353,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">ブリジュラス（ずぶとい・オボンのみ）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td></tr>
 <tr style="background:#fafafa"><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">サーフゴー（ずぶとい・ふうせん）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td><td style="padding:6px 8px;border:1px solid #cbd5e1">◎</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td></tr>
 <tr><td style="padding:6px 8px;border:1px solid #cbd5e1;text-align:left">サーフゴー（おくびょう・ふうせん）</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td><td style="padding:6px 8px;border:1px solid #cbd5e1">○</td><td style="padding:6px 8px;border:1px solid #cbd5e1">▲</td></tr>
-<tr class="note"><td colspan="4" style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b;text-align:left">◎有利 ○やや有利 △五分 ▲やや不利 ×不利。相手の型によって勝敗が割れるため苦手/得意表に載せない相手のうち、自分の型で判定が変わる個体。※＝上の型の技構成に無い選択技での判定。グソクムシャ、キラフロルは型で判定が変わらない</td></tr>
+<tr class="note"><td colspan="4" style="padding:6px 8px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b;text-align:left">◎有利 ○やや有利 △五分 ▲やや不利 ×不利。相手の型によって勝敗が割れるため苦手/得意表に載せない相手のうち、自分の型で判定が変わる個体。グソクムシャ、キラフロルは型で判定が変わらない</td></tr>
 </tbody>
 </table>
 </div>
@@ -379,7 +363,6 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 
 ## データ分析：M-6→M-7 採用データの変化
 
-※M-6列は2026-09-23時点（M-6シーズン終了時点）、M-7列は2026-10-11時点の実測データです。
 
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.92em">
@@ -456,16 +439,14 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 </table>
 </div>
 
-<!-- gate:rows start id=diff_movers facts=896ba6967af74e6ac1e9c94e39b1be10fd4d5845 -->
-- なみのり：6.6%→22.8%（+16.2pt）。アンコール型、フルアタ型とほかの型に共通 → 型の増減とは言えない
-- うたかたのアリア：90.8%→75.3%（-15.5pt）。めいそう型、アンコール型、フルアタ型とほかの型に共通 → 型の増減とは言えない
-- たべのこし：31.4%→23.2%（-8.2pt）。めいそう型、アンコール型とほかの型に共通 → 型の増減とは言えない
-- オボンのみ：40.4%→47.2%（+6.8pt）。めいそう型、アンコール型、フルアタ型とほかの型に共通 → 型の増減とは言えない
-- ひかえめ：70.9%→77.2%（+6.3pt）。めいそう型、アンコール型、フルアタ型とほかの型に共通 → 型の増減とは言えない
-- れいせい：9.9%→6.6%（-3.3pt）。この記事の型の技構成には含まれない
+<!-- gate:rows start id=diff_movers facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
+- なみのり：6.6%→22.8%（+16.2pt）。アンコール型・フルアタ型の一部の個体が採用しているもので、型の増減とは言えません。
+- うたかたのアリア：90.8%→75.3%（-15.5pt）。記事のすべての型に共通のため、型の増減とは言えません。
+- たべのこし：31.4%→23.2%（-8.2pt）。アンコール型・めいそう型の一部の個体が持つもので、型の増減とは言えません。
+- オボンのみ：40.4%→47.2%（+6.8pt）。記事のすべての型が持つため、型の増減とは言えません。
+- ひかえめ：70.9%→77.2%（+6.3pt）。記事のすべての型が選んでいるため、型の増減とは言えません。
+- れいせい：9.9%→6.6%（-3.3pt）。この記事の型の性格には含まれません。
 <!-- gate:rows end id=diff_movers -->
-
-うたかたのアリア（75.3%）となみのり（22.8%）はどちらも威力90の一致みず技です。アリアとなみのりの選び方は、相手の想定によって変わります。アリアは音技でみがわりを貫通できますが、相手のやけど状態を治してしまいます。環境上位にはみがわりを採用する個体もおり、ライチュウ（23位、みがわり採用率24.1%）・フラエッテ(永遠)（25位、みがわり採用率19.3%）にはアリアが有効です。持ち物はオボンのみが47.2%（+6.8pt）に伸び、たべのこしが23.2%（-8.2pt）に下落しました。型カードの持ち物も3型ともオボンのみです。
 
 ---
 
@@ -483,7 +464,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 </tr>
 </thead>
 <tbody>
-<!-- gate:rows start id=weak facts=896ba6967af74e6ac1e9c94e39b1be10fd4d5845 -->
+<!-- gate:rows start id=weak facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0778-00.webp" alt="ミミッキュ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ミミッキュ
@@ -507,7 +488,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">メタグロス
+    <img src="/images/pokemon/pokemon-0376-00.webp" alt="メタグロス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">メタグロス<br><span style="font-size:0.8em;color:#64748b">メガメタグロスで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">14位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のうたかたのアリアは確定2発。メガメタグロスのサイコファング（採用率75.7%）は乱数2発（65%）で、S80対S162で後手のため、先に倒されます。</td>
@@ -524,7 +505,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0908-00.webp" alt="マスカーニャ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">マスカーニャ
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">19位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。マスカーニャのトリックフラワー（採用率95.4%）は確定2発で、S80対S288で後手のため、先に倒されます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。マスカーニャのトリックフラワー（採用率95.4%）は確定2発で、S80対S288（スカーフ込み）で後手のため、先に倒されます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -549,14 +530,14 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ライチュウ
+    <img src="/images/pokemon/pokemon-0026-00.webp" alt="ライチュウ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ライチュウ<br><span style="font-size:0.8em;color:#64748b">メガライチュウYで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">23位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガライチュウYのでんじほう（採用率97.1%）は確定1発で、S80対S200で後手のため、先に倒されます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0670-05.webp" alt="フラエッテ(永遠)" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">フラエッテ(永遠)
+    <img src="/images/pokemon/pokemon-0670-05.webp" alt="フラエッテ(永遠)" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">フラエッテ(永遠)<br><span style="font-size:0.8em;color:#64748b">メガフラエッテで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">25位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">めいそう型のムーンフォースは確定3発。メガフラエッテのムーンフォース（採用率96.9%）は確定3発で、S80対S169で後手のため、先に倒されます。</td>
@@ -568,7 +549,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">27位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは乱数2発（69%）。オオニューラのフェイタルクロー（採用率95.0%）は確定2発で、S80対S146で後手のため、先に倒されます。</td>
 </tr>
-<tr class="note"><td colspan="3" style="padding:6px 12px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b">※相手は型ごとに判定が最も僅差になる個体。技の採用率は種全体の値（メガ形態も同じ）。自分の技の採用率は「主要な技と採用率」の表を参照。「選択技」は型の4技には無いが、その型で採用されることがある技。</td></tr>
+<tr class="note"><td colspan="3" style="padding:6px 12px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b">※相手は型ごとに判定が最も僅差になる個体。技の採用率は種全体の値（メガ形態も同じ）。自分の技の採用率は「主要な技と採用率」の表を参照。</td></tr>
 <!-- gate:rows end id=weak -->
 </tbody>
 </table>
@@ -590,13 +571,13 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 </tr>
 </thead>
 <tbody>
-<!-- gate:rows start id=strong facts=896ba6967af74e6ac1e9c94e39b1be10fd4d5845 -->
+<!-- gate:rows start id=strong facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
     <img src="/images/pokemon/pokemon-0445-00.webp" alt="ガブリアス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ガブリアス
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">1位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。ガブリアスのじしん（採用率68.1%）は確定3発で、S80対S253で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。ガブリアスのじしん（採用率68.1%）は確定3発で、最後は優先度+1のアクアジェットで先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -607,14 +588,14 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ルカリオ
+    <img src="/images/pokemon/pokemon-0448-00.webp" alt="ルカリオ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ルカリオ<br><span style="font-size:0.8em;color:#64748b">メガルカリオZで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">7位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガルカリオZのラスターカノン（採用率45.5%）は乱数3発（61%）で、S80対S223で後手ですが確定数で上回り、先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0373-00.webp" alt="ボーマンダ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ボーマンダ
+    <img src="/images/pokemon/pokemon-0373-00.webp" alt="ボーマンダ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">ボーマンダ<br><span style="font-size:0.8em;color:#64748b">メガボーマンダで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">10位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定1発。メガボーマンダのすてみタックル（採用率78.2%）は確定2発で、S80対S172で後手ですが確定数で上回り、先に倒せます。</td>
@@ -628,7 +609,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0998-00.webp" alt="セグレイブ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">セグレイブ
+    <img src="/images/pokemon/pokemon-0998-00.webp" alt="セグレイブ" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">セグレイブ<br><span style="font-size:0.8em;color:#64748b">メガセグレイブで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">12位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガセグレイブのじしん（採用率92.1%）は乱数3発（92%）で、S80対S139で後手ですが確定数で上回り、先に倒せます。</td>
@@ -638,11 +619,11 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
     <img src="/images/pokemon/pokemon-0902-00.webp" alt="イダイトウ(オス)" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">イダイトウ(オス)
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">13位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは乱数2発（56%）。イダイトウ(オス)のウェーブタックル（採用率86.3%）は確定4発で、S80対S214で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは乱数2発（56%）。イダイトウ(オス)のウェーブタックル（採用率86.3%）は確定4発で、S80対S214（スカーフ込み）で後手ですが確定数で上回り、先に倒せます。</td>
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">カイリュー
+    <img src="/images/pokemon/pokemon-0149-00.webp" alt="カイリュー" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">カイリュー<br><span style="font-size:0.8em;color:#64748b">メガカイリューで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">15位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガカイリューの10まんボルト（採用率57.1%）は確定3発（アシレーヌのオボンのみ込み）で、S80対S152で後手ですが確定数で上回り、先に倒せます。</td>
@@ -656,10 +637,10 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
 </tr>
 <tr style="background:#fafafa">
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
-    <img src="/images/pokemon/pokemon-0009-00.webp" alt="カメックス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">カメックス
+    <img src="/images/pokemon/pokemon-0009-00.webp" alt="カメックス" style="width:36px;height:36px;vertical-align:middle;margin-right:6px">カメックス<br><span style="font-size:0.8em;color:#64748b">メガカメックスで判定</span>
   </td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">26位</td>
-  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガカメックスのはどうだん（採用率92.5%）は確定4発で、S80対S260で後手ですが確定数で上回り、先に倒せます。</td>
+  <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のムーンフォースは確定2発。メガカメックスのはどうだん（採用率92.5%）は確定4発で、S80対S130で後手ですが確定数で上回り、先に倒せます。</td>
 </tr>
 <tr>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">
@@ -668,7 +649,7 @@ M-7シーズンのアシレーヌは使用率2位です。ムーンフォース�
   <td style="padding:8px 12px;border:1px solid #cbd5e1;text-align:center">35位</td>
   <td style="padding:8px 12px;border:1px solid #cbd5e1">アンコール型のうたかたのアリアは確定2発。ヒートロトムのボルトチェンジ（採用率89.2%）は乱数3発（61%）で、S80対S106で後手ですが確定数で上回り、先に倒せます。</td>
 </tr>
-<tr class="note"><td colspan="3" style="padding:6px 12px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b">※相手は型ごとに判定が最も僅差になる個体。技の採用率は種全体の値（メガ形態も同じ）。自分の技の採用率は「主要な技と採用率」の表を参照。「選択技」は型の4技には無いが、その型で採用されることがある技。</td></tr>
+<tr class="note"><td colspan="3" style="padding:6px 12px;border:1px solid #cbd5e1;font-size:0.85em;color:#64748b">※相手は型ごとに判定が最も僅差になる個体。技の採用率は種全体の値（メガ形態も同じ）。自分の技の採用率は「主要な技と採用率」の表を参照。</td></tr>
 <!-- gate:rows end id=strong -->
 </tbody>
 </table>
@@ -733,7 +714,7 @@ M-7でアシレーヌと同じパーティに入る頻度が高いポケモン�
   </div>
 </div>
 
-<!-- gate:rows start id=partner_grid facts=896ba6967af74e6ac1e9c94e39b1be10fd4d5845 -->
+<!-- gate:rows start id=partner_grid facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
 <div style="overflow-x:auto;margin:12px 0">
 <table style="width:100%;border-collapse:collapse;font-size:0.9em;text-align:center">
 <thead>
@@ -743,11 +724,11 @@ M-7でアシレーヌと同じパーティに入る頻度が高いポケモン�
 <th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">カバルドン<br><span style="font-weight:normal;font-size:0.85em">同居率2位</span></th>
 <th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">ブリジュラス<br><span style="font-weight:normal;font-size:0.85em">同居率3位</span></th>
 <th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">ミミッキュ<br><span style="font-weight:normal;font-size:0.85em">同居率4位</span></th>
-<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">メガメタグロス<br><span style="font-weight:normal;font-size:0.85em">同居率5位</span></th>
-<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">メガボーマンダ<br><span style="font-weight:normal;font-size:0.85em">同居率6位</span></th>
-<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">メガリザードンY<br><span style="font-weight:normal;font-size:0.85em">同居率7位</span></th>
-<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">メガグソクムシャ<br><span style="font-weight:normal;font-size:0.85em">同居率8位</span></th>
-<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">メガルカリオZ<br><span style="font-weight:normal;font-size:0.85em">同居率9位</span></th>
+<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">メタグロス<br><span style="font-weight:normal;font-size:0.85em">同居率5位・メガメタグロスで判定</span></th>
+<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">ボーマンダ<br><span style="font-weight:normal;font-size:0.85em">同居率6位・メガボーマンダで判定</span></th>
+<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">リザードン<br><span style="font-weight:normal;font-size:0.85em">同居率7位・メガリザードンYで判定</span></th>
+<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">グソクムシャ<br><span style="font-weight:normal;font-size:0.85em">同居率8位・メガグソクムシャで判定</span></th>
+<th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">ルカリオ<br><span style="font-weight:normal;font-size:0.85em">同居率9位・メガルカリオZで判定</span></th>
 <th style="padding:6px 8px;border:1px solid #cbd5e1;background:#f1f5f9">アーマーガア<br><span style="font-weight:normal;font-size:0.85em">同居率10位</span></th>
 </tr>
 </thead>
@@ -777,8 +758,28 @@ M-7でアシレーヌと同じパーティに入る頻度が高いポケモン�
 
 ## まとめ
 
-M-7のアシレーヌはM-6の3位から2位に上昇しました。技構成の骨格はM-6から継続していますが、みず技の一部がうたかたのアリアからなみのりへ移っています。持ち物もオボンのみが伸び、たべのこしが下落しました。アンコールで相手の補助技を縛るか、めいそうで打点と特殊耐久を同時に伸ばすかが主な選択肢です。
+<!-- gate:rows start id=summary facts=529ff2abbd7df479cf8203721ab311f3c542628b -->
+**強み**
 
----
+- 得意な相手は11体です。使用率上位では、ガブリアス（1位）・ルカリオ（7位）にムーンフォース、カバルドン（4位）にうたかたのアリアで勝てます。
+- タイプ相性では、ほのお・みず・こおり・かくとう・むし・あくを半減以下、ドラゴンを無効で受けられます。
+
+**弱み**
+
+- 苦手な相手は12体です。使用率上位では、ミミッキュ（5位）のじゃれつく、メガリザードンX（6位）のかみなりパンチ、メガリザードンY（6位）のソーラービームで先に倒されます。
+- 弱点はでんき・くさ・どくです。
+
+**型の選び分け**
+
+- 「アンコール型」：他の型に無い技はアンコール。
+- 「めいそう型」：他の型に無い技はめいそう。
+- 「フルアタ型」：他の型に無い技はクイックターン。
+- 型によって勝敗が変わる相手は「型による有利不利の違い」の表にまとめています。
+
+**M-6からの変化**
+
+- 使用率は2位です（M-6: 3位）。
+- 採用率の変化が大きいのはなみのり（+16.2pt）・うたかたのアリア（-15.5pt）・たべのこし（-8.2pt）です。
+<!-- gate:rows end id=summary -->
 
 関連記事: [アシレーヌ M-6シーズン考察](/blog/primarina-analysis-m6/)

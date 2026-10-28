@@ -1,0 +1,25 @@
+{
+  "slug": "bellibolt-analysis-m7",
+  "subject": "ハラバリー",
+  "icon": "0939-00",
+  "season": "M-7",
+  "prev_season": "M-6",
+  "detail_date": null,
+  "pool_version": null,
+  "majority_pct": 20,
+  "aliases": {},
+  "cards": [
+    {
+      "arch": "耐久型",
+      "pool_group": "単一の型",
+      "item": "たべのこし",
+      "nature": "おだやか",
+      "ability": "でんきにかえる",
+      "ev": [32, 0, 2, 0, 32, 0],
+      "moves": ["パラボラチャージ", "みずびたし", "なまける", "どくどく"],
+      "mpool": ["パラボラチャージ", "みずびたし", "なまける", "どくどく", "ボルトチェンジ"]
+    }
+  ],
+  "boosts": [],
+  "extra_pokemon": []
+}
