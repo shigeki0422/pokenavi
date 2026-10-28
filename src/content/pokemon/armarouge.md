@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのグレンアルマ基礎デー
 pokemonName: 'グレンアルマ'
 dexNumber: 936
 usageRank: 77
-updatedDate: '2026-10-27'
+updatedDate: '2026-10-28'
 pubDate: '2026-10-24'
 draft: false
 

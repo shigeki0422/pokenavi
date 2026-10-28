@@ -5,7 +5,7 @@ pokemonName: 'カットロトム'
 dexNumber: 479
 usageRank: 187
 imageForm: '05'
-updatedDate: '2026-10-27'
+updatedDate: '2026-10-28'
 pubDate: '2026-10-24'
 draft: false
 

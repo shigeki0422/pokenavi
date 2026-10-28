@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのウェーニバル基礎デー
 pokemonName: 'ウェーニバル'
 dexNumber: 914
 usageRank: 135
-updatedDate: '2026-10-27'
+updatedDate: '2026-10-28'
 pubDate: '2026-10-24'
 draft: false
 

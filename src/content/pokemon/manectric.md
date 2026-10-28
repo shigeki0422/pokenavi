@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのライボルト基礎データ
 pokemonName: 'ライボルト'
 dexNumber: 310
 usageRank: 185
-updatedDate: '2026-10-27'
+updatedDate: '2026-10-28'
 pubDate: '2026-10-24'
 draft: false
 

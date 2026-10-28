@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのエレザード基礎データ
 pokemonName: 'エレザード'
 dexNumber: 695
 usageRank: 136
-updatedDate: '2026-10-27'
+updatedDate: '2026-10-28'
 pubDate: '2026-10-24'
 draft: false
 
