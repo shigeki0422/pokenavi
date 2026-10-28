@@ -1729,7 +1729,7 @@
         ],
         "matchKey": "ヒスイダイケンキ",
         "dex": 503,
-        "form": "99"
+        "form": "01"
     },
     "golisopod-analysis-m6": {
         "name": "グソクムシャ",
@@ -2324,7 +2324,7 @@
         ],
         "matchKey": "ヒスイヌメルゴン",
         "dex": 706,
-        "form": "99"
+        "form": "01"
     },
     "greninja-analysis-m7": {
         "name": "ゲッコウガ",
@@ -2509,7 +2509,7 @@
         ],
         "matchKey": "アローラキュウコン",
         "dex": 38,
-        "form": "99"
+        "form": "01"
     },
     "pawmot-analysis-m7": {
         "name": "パーモット",
@@ -2595,7 +2595,7 @@
         ],
         "matchKey": "ヒスイダイケンキ",
         "dex": 503,
-        "form": "99"
+        "form": "01"
     },
     "scizor-analysis-m7": {
         "name": "ハッサム",
@@ -2650,7 +2650,7 @@
         ],
         "matchKey": "ガラルヤドキング",
         "dex": 199,
-        "form": "99"
+        "form": "01"
     },
     "sneasler-analysis-m7": {
         "name": "オオニューラ",
@@ -2800,7 +2800,7 @@
         ],
         "matchKey": "ヒスイゾロアーク",
         "dex": 571,
-        "form": "99"
+        "form": "01"
     },
     "kangaskhan-analysis-m7": {
         "name": "メガガルーラ",
@@ -2834,5 +2834,230 @@
         "dex": 670,
         "form": "05",
         "pokemonId": "floette-eternal"
+    },
+    "aggron-analysis-m7": {
+        "name": "ボスゴドラ",
+        "rank": 99,
+        "types": [
+            "はがね",
+            "いわ"
+        ],
+        "matchKey": "ボスゴドラ",
+        "dex": 306,
+        "form": "00"
+    },
+    "arboliva-analysis-m7": {
+        "name": "オリーヴァ",
+        "rank": 91,
+        "types": [
+            "くさ",
+            "ノーマル"
+        ],
+        "matchKey": "オリーヴァ",
+        "dex": 930,
+        "form": "00"
+    },
+    "arcanine-hisui-analysis-m7": {
+        "name": "ヒスイウインディ",
+        "rank": 84,
+        "types": [
+            "ほのお",
+            "いわ"
+        ],
+        "matchKey": "ヒスイウインディ",
+        "dex": 59,
+        "form": "01"
+    },
+    "azumarill-analysis-m7": {
+        "name": "マリルリ",
+        "rank": 90,
+        "types": [
+            "みず",
+            "フェアリー"
+        ],
+        "matchKey": "マリルリ",
+        "dex": 184,
+        "form": "00"
+    },
+    "dragalge-analysis-m7": {
+        "name": "ドラミドロ",
+        "rank": 87,
+        "types": [
+            "どく",
+            "ドラゴン"
+        ],
+        "matchKey": "ドラミドロ",
+        "dex": 691,
+        "form": "00"
+    },
+    "espeon-analysis-m7": {
+        "name": "エーフィ",
+        "rank": 93,
+        "types": [
+            "エスパー"
+        ],
+        "matchKey": "エーフィ",
+        "dex": 196,
+        "form": "00"
+    },
+    "froslass-analysis-m7": {
+        "name": "ユキメノコ",
+        "rank": 83,
+        "types": [
+            "こおり",
+            "ゴースト"
+        ],
+        "matchKey": "ユキメノコ",
+        "dex": 478,
+        "form": "00"
+    },
+    "gallade-analysis-m7": {
+        "name": "エルレイド",
+        "rank": 81,
+        "types": [
+            "エスパー",
+            "かくとう"
+        ],
+        "matchKey": "エルレイド",
+        "dex": 475,
+        "form": "00"
+    },
+    "incineroar-analysis-m7": {
+        "name": "ガオガエン",
+        "rank": 92,
+        "types": [
+            "ほのお",
+            "あく"
+        ],
+        "matchKey": "ガオガエン",
+        "dex": 727,
+        "form": "00"
+    },
+    "maushold-analysis-m7": {
+        "name": "イッカネズミ",
+        "rank": 95,
+        "types": [
+            "ノーマル"
+        ],
+        "matchKey": "イッカネズミ",
+        "dex": 925,
+        "form": "00"
+    },
+    "overqwil-analysis-m7": {
+        "name": "ハリーマン",
+        "rank": 100,
+        "types": [
+            "あく",
+            "どく"
+        ],
+        "matchKey": "ハリーマン",
+        "dex": 904,
+        "form": "00"
+    },
+    "polteageist-analysis-m7": {
+        "name": "ポットデス",
+        "rank": 88,
+        "types": [
+            "ゴースト"
+        ],
+        "matchKey": "ポットデス",
+        "dex": 855,
+        "form": "00"
+    },
+    "reuniclus-analysis-m7": {
+        "name": "ランクルス",
+        "rank": 101,
+        "types": [
+            "エスパー"
+        ],
+        "matchKey": "ランクルス",
+        "dex": 579,
+        "form": "00"
+    },
+    "sableye-analysis-m7": {
+        "name": "ヤミラミ",
+        "rank": 82,
+        "types": [
+            "あく",
+            "ゴースト"
+        ],
+        "matchKey": "ヤミラミ",
+        "dex": 302,
+        "form": "00"
+    },
+    "sceptile-analysis-m7": {
+        "name": "ジュカイン",
+        "rank": 98,
+        "types": [
+            "くさ"
+        ],
+        "matchKey": "ジュカイン",
+        "dex": 254,
+        "form": "00"
+    },
+    "scolipede-analysis-m7": {
+        "name": "ペンドラー",
+        "rank": 86,
+        "types": [
+            "むし",
+            "どく"
+        ],
+        "matchKey": "ペンドラー",
+        "dex": 545,
+        "form": "00"
+    },
+    "serperior-analysis-m7": {
+        "name": "ジャローダ",
+        "rank": 96,
+        "types": [
+            "くさ"
+        ],
+        "matchKey": "ジャローダ",
+        "dex": 497,
+        "form": "00"
+    },
+    "slowbro-galar-analysis-m7": {
+        "name": "ガラルヤドラン",
+        "rank": 97,
+        "types": [
+            "どく",
+            "エスパー"
+        ],
+        "matchKey": "ガラルヤドラン",
+        "dex": 80,
+        "form": "02"
+    },
+    "tinkaton-analysis-m7": {
+        "name": "デカヌチャン",
+        "rank": 89,
+        "types": [
+            "フェアリー",
+            "はがね"
+        ],
+        "matchKey": "デカヌチャン",
+        "dex": 959,
+        "form": "00"
+    },
+    "toucannon-analysis-m7": {
+        "name": "ドデカバシ",
+        "rank": 94,
+        "types": [
+            "ノーマル",
+            "ひこう"
+        ],
+        "matchKey": "ドデカバシ",
+        "dex": 733,
+        "form": "00"
+    },
+    "whimsicott-analysis-m7": {
+        "name": "エルフーン",
+        "rank": 85,
+        "types": [
+            "くさ",
+            "フェアリー"
+        ],
+        "matchKey": "エルフーン",
+        "dex": 547,
+        "form": "00"
     }
 }
