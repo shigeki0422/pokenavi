@@ -14,7 +14,7 @@ const tabs = [
   { href: `${pfx}/pokemon/`, icon: '🔍', label: LABELS.research, active: isActive(`${pfx}/pokemon`) || isActive(`${pfx}/ranking`) },
   // 考察記事(読む)はen/ko版の翻訳記事が存在しないためja版のみ表示する
   ...(lang === 'ja' ? [{ href: '/blog/', icon: '📖', label: LABELS.read, active: isActive('/blog') }] : []),
-  { href: `${pfx}/simulator-mb/`, icon: '🎬', label: LABELS.watch, active: isActive(`${pfx}/simulator`) || isActive(`${pfx}/battle-simulator`) },
+  { href: `${pfx}/simulator-mc/`, icon: '🎬', label: LABELS.watch, active: isActive(`${pfx}/simulator`) || isActive(`${pfx}/battle-simulator`) },
   { href: `${pfx}/party-builder/`, icon: '⚔️', label: LABELS.battle, active: isActive(`${pfx}/party-builder`) || isActive(`${pfx}/party-suggest`) || isActive(`${pfx}/party-building`) },
 ];
 ---
