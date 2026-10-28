@@ -4,6 +4,7 @@ import verifyIndexData from '../../public/sim-data-verify-meta/index.json';
 import iconsData from '../../public/sim-data/icons.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
+import { simWatchUrl } from '../utils/simLink';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 
 interface Props {
@@ -182,7 +183,7 @@ const cards = matches.map((match: any, ci: number) => {
 });
 
 const pfx = lang === 'ja' ? '' : `/${lang}`;
-const simulatorUrl = `${pfx}/simulator-mb/?sf=${encodeURIComponent(pokemonName)}`;
+const simulatorUrl = simWatchUrl(pokemonName, pfx);
 ---
 
 <section class="spc-section">

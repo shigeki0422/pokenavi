@@ -10,6 +10,7 @@ import MentionedPokemon from '../components/MentionedPokemon.astro';
 import RelatedPosts from '../components/RelatedPosts.astro';
 import SimPartyCard from '../components/SimPartyCard.astro';
 import articleMeta from '../data/article-meta.json';
+import { simWatchUrl } from '../utils/simLink';
 
 type Props = CollectionEntry<'blog'>['data'] & { slug?: string; body?: string };
 
@@ -245,7 +246,7 @@ const breadcrumbJsonLd = {
 					{body && <MentionedPokemon currentSlug={slug ?? ''} body={body} />}
 					<RelatedPosts currentSlug={slug ?? ''} />
 					{blogPokemonName && (
-						<a class="sim-cta" href={`/simulator-mb/?sf=${encodeURIComponent(blogPokemonName)}`}>
+						<a class="sim-cta" href={simWatchUrl(blogPokemonName)}>
 							<span>{blogPokemonName}入りの上位構築で対戦シミュレーション</span>
 							<span class="sim-cta-arrow">M-Bシミュレーターで試す →</span>
 						</a>

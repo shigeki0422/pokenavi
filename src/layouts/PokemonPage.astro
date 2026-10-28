@@ -15,6 +15,7 @@ import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 import partySuggestSlugs from '../data/party-suggest-slugs.json';
 import rankingData from '../data/ranking.json';
 import targetsData from '../../public/builder-data/targets.json';
+import { simWatchUrl } from '../utils/simLink';
 
 type Props = CollectionEntry<'pokemon'>['data'] & { lang?: 'ja' | 'en' | 'ko' };
 
@@ -464,7 +465,7 @@ const breadcrumbJsonLd = {
 							<a href={`/blog/${analysisSlug}/`} class="hub-btn hub-primary">{T.hubAnalysis}</a>
 						)}
 						{pokemonName && (
-							<a href={`${pfx}/simulator-mb/?sf=${encodeURIComponent(pokemonName)}`} class="hub-btn">{T.hubWatch}</a>
+							<a href={simWatchUrl(pokemonName, pfx)} class="hub-btn">{T.hubWatch}</a>
 						)}
 						<a href={`${pfx}/party-builder/`} class="hub-btn">{T.hubBuild}</a>
 					</div>
