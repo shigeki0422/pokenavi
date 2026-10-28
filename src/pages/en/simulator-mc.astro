@@ -1,0 +1,43 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import SimulatorApp from '../../components/SimulatorApp.astro';
+
+const title = 'M-C Simulator (M-6) | Win Rate, Selection & 1v1 Matchups';
+const description = 'Round-robin battle simulation of 100 parties generated to match the usage and set statistics of the Pokémon Champions M-6 top environment. Analyze win rate, selection rate, 1v1 matchups and replays from AI battles.';
+const siteUrl = 'https://pokenavi.jp';
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'PokeNavi M-C Simulator',
+  description,
+  applicationCategory: 'GameApplication',
+  operatingSystem: 'Web',
+  url: siteUrl + '/en/simulator-mc/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'JPY' },
+  author: { '@type': 'Organization', name: 'PokeNavi', url: siteUrl },
+};
+const alternates = [
+  { lang: 'ja', url: siteUrl + '/simulator-mc/' },
+  { lang: 'en', url: siteUrl + '/en/simulator-mc/' },
+  { lang: 'ko', url: siteUrl + '/ko/simulator-mc/' },
+  { lang: 'x-default', url: siteUrl + '/simulator-mc/' },
+];
+
+---
+
+<html lang="en">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png"
+      alternates={alternates}
+      ogLocale="en_US"
+    />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <SimulatorApp mode="MC" lang="en" />
+    <Footer />
+  </body>
+</html>

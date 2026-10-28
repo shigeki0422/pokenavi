@@ -1,21 +1,24 @@
 ---
 import OnboardingGuide from './OnboardingGuide.astro';
-import { NATURE_NAME_EN, NATURE_NAME_KO, MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO } from '../i18n/game-terms';
+import { NATURE_NAME_EN, NATURE_NAME_KO, MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, TYPE_NAME_EN, TYPE_NAME_KO } from '../i18n/game-terms';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
+import { SIM_LOG_TERM, SIM_LOG_REASON, SIM_LOG_RULES_SRC } from '../scripts/party-builder/diag-shared';
 
-interface Props { mode?: 'MA' | 'MB'; lang?: 'ja' | 'en' | 'ko'; }
+interface Props { mode?: 'MA' | 'MB' | 'MC'; lang?: 'ja' | 'en' | 'ko'; }
 const { mode = 'MA', lang = 'ja' } = Astro.props;
 const isMB = mode === 'MB';
+const isMC = mode === 'MC';
+const isPartyMode = isMB || isMC;
 const pfx = lang === 'ja' ? '' : `/${lang}`;
-// ページごとに同居しているシーズン（M-A=/sim-data は M-1/M-2/M-3、M-B=/sim-data-verify は M-3/M-4）。
+// ページごとに同居しているシーズン（M-A=/sim-data は M-1/M-2/M-3、M-B=/sim-data-verify-meta は M-3/M-4、M-C=/sim-data-mc-meta は M-6 生成）。
 // 絞り込みチェックボックスと JS 側の既定値の両方をこの1か所から決める。
-const SEASONS = isMB ? ['M-3', 'M-4'] : ['M-1', 'M-2'];
+const SEASONS = isMC ? ['M-6'] : isMB ? ['M-3', 'M-4'] : ['M-1', 'M-2'];
 const seasonCls = (s: string) => s.toLowerCase().replace('-', '');
 
 const I18N_ALL = {
-  ja: { htmlLang:'ja', title:'上位環境シミュレーション（バトルシミュレータ）| ポケナビ', desc:'ランカー同士の総当たり対戦シミュレーション。パーティを選び、各ランカー・各ポケモンとの勝率・選出・1v1相性・実戦リプレイをデータで診断します。', h1:'上位環境シミュレーション', lead:'環境トップ構築同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。', bsHref:'/battle-simulator', bsLink:'バトルシミュレータとは →', sec1:'パーティ選択', showLabel:'表示:', clearBtn:'クリア', filterPh:'ポケモン名で絞り込み', noPartyMsg:'パーティを選択してください', analyzeBtn:'このパーティで総当たり', sec2:'戦績', tabRanker:'VS ランカー', tabPoke:'VS ポケモン', sortLabel:'並び替え:', sortNum:'番号順', sortWr:'勝率順', oppSelectMsg:'左の一覧から対戦相手を選択', loading:'読み込み中…', analyzing:'分析中…', dataFail:'データ取得に失敗しました', notCalc:'未計算', done:'完了', errPfx:'エラー: ', noPartyMatch:'一致するパーティなし', selectSeason:'表示するシーズンを選択してください', noData:'データなし', noSelectData:'選出データなし', runFirst:'「このパーティで総当たり」を実行してください', runFirstPoke:'「このパーティで総当たり」を実行すると、相手ポケモン別の勝敗が表示されます', aggregating:'集計中…', leftSelectMsg:'左の一覧から選択', compOf:' の構成', filterMore:'さらに追加...', sortNumAscR:'番号順 ↑', sortNumDescR:'番号順 ↓', sortWrAscR:'勝率順 ↑（苦手→得意）', sortWrDescR:'勝率順 ↓（得意→苦手）', sortBaseP:'対戦数順', sortNumAscP:'対戦数順 ↑（少→多）', sortNumDescP:'対戦数順 ↓（多→少）', sortWrAscP:'勝率順 ↑（苦手→得意）', sortWrDescP:'勝率順 ↓（得意→苦手）', sortWrBaseP:'勝率順', progMid:' 戦（', progSfx:'カード）', sumRkMid:' vs ', sumRkSfx:'ランカー', sumGoodFmt:'得意{n}', sumEvenFmt:'五分{n}', sumBadFmt:'苦手{n}', sumSep:'・', sumPokePfx:'相手に選出された ', sumPokeMid:'種のポケモンに対する ', sumPokeSfx:' の戦績（選出された対戦のみ集計）', totalLabel:'通算', battlePfx:'第', battleSfx:'戦', winMark:'○勝', loseMark:'●負', drawMark:'△分', noRecord:'記録なし', replayPfx:'第', replaySfx:'戦 再生', verdictWinAllT:'完勝（全勝）', verdictWinT:'有利', verdictEvenT:'互角', verdictLoseT:'苦戦', verdictLoseAllT:'相性最悪（全敗）', sumTitle:'📊 対戦サマリ', winsLabel:'勝', lossesLabel:'敗', drawsLabel:'分', winPath:'<b class="g">勝ち筋</b>', losePath:'<b class="r">負け筋</b>', carryLabel:'残りやすい主軸: ', koLabel:'安定して倒せる相手: ', surviveLabel:'倒し切れない核: ', deadLabel:'落ちやすい自個体: ', setupLossPfx:'積み全抜き負け ', setupLossSfx:'%', rp_pickhd:'🎬 <b>対戦記録</b> — 実際のシミュレーション結果を再生（タブで各戦、<span class="g">勝</span>/<span class="r">負</span>）', autoPlay:'自動再生', autoStop:'停止', mtxCornerMe:'自分 ↓', mtxCornerOpp:'相手 →', mtxWin:'自分勝ち', mtxLose:'相手勝ち', mtxDmgNote:'数字=与/被ダメ%', mtxNote:'淡色＝選出されなかった個体', mtxHelpSum:'表の見方（与/被ダメと勝敗）', mtxHelpBody:'各マスは「左の自分の個体」対「上の相手の個体」の1v1を、互いの<b>最大火力で殴り合った</b>想定で評価します（メガ石持ちはメガ後で評価）。<br>・<b>数字「与／被」</b>＝1発あたりの最大ダメージ割合。<b>与</b>＝自分の最大打点が相手の最大HPの何%か／<b>被</b>＝相手の最大打点が自分の何%か。<br>・<b>勝敗</b>（<span class="bg-g" style="padding:0 .3em;border-radius:3px">緑＝自分勝ち</span>／<span class="bg-r" style="padding:0 .3em;border-radius:3px">赤＝相手勝ち</span>）＝この火力で<b>相手を倒すのに必要な手数が少ない方</b>。手数が同じなら<b>素早さが速い方</b>が勝ち。きあいのタスキ／がんじょう（1発耐え）や先制技も加味します。<br>・例：<b>与45／被83で相手勝ち</b>＝自分は45%×3発必要、相手は83%×2発で倒し切り、かつ相手が速い、という評価。', t1v1Pfx:'⚔ 1v1相性表（自分有利 ', t1v1Mid:' / 相手有利 ', t1v1Sfx:'）', buildTitle:'🧬 型情報', buildTypePfx:' の型別戦績（', buildTypeSfx:'型）', buildsOpp:'<div class="muted" style="font-weight:700;color:#dc2626">相手</div>', buildsMe:'<div class="muted" style="font-weight:700;color:var(--accent-dark);margin-top:.5em">自分</div>', usedBy:'使用ランカー: ', labelItem:'持ち物', labelAbil:'特性', labelNat:'性格', labelMv:'技', hazSR:'ステルスロック', hazSpikes:'まきびし', hazToxicSpikes:'どくびし', hazReflect:'リフレクター', hazLightScreen:'ひかりのかべ', hazAuroraVeil:'オーロラベール', steMega:'<span class="rp-mega">メガ</span>', steBlade:'<span class="rp-forme">ブレード</span>', steHero:'<span class="rp-forme">マイティ</span>', steDisg:'<span class="rp-disg">皮破れ</span>', steCharge:'<span class="rp-charge">充電</span>', steConfused:'<span class="rp-vol">😵こんらん</span>', steSeeded:'<span class="rp-vol">🌱やどりぎ</span>', steTaunt:'<span class="rp-vol">😈ちょうはつ</span>', steEncore:'<span class="rp-vol">🔄アンコール</span>', steSalted:'<span class="rp-vol">🧂しおづけ</span>', steTrans:'<span class="rp-vol">🎭へんしん</span>', steSubPfx:'<span class="rp-vol">🪆みがわり(', steSubSfx:')</span>', steIlluPfx:'<span class="rp-vol">イリュージョン:', steIlluSfx:'</span>', steUnknown:'Unknown', steNotAppeared:'未登場', wSunny:'☀ 晴れ', wRain:'🌧 あめ', wSand:'🌪 すなあらし', wHail:'❄ あられ', wSnow:'❄ ゆき', stBurn:'やけど', stPoison:'どく', stBadPoison:'もうどく', stParalysis:'まひ', stSleep:'ねむり', stFreeze:'こおり', swBadge:'交代', mine:'自分', opp:'相手', sideMe:'自分', sideOpp:'相手', logTitle:'📜 バトルログ', logDetail:'詳細ログを見る', noAction:'行動なし', turnPfx:'ターン ', turnMid:' / ', aiTitle:'🧠 この手番のAIの読み', candidateMove:'候補手', winRateLabel:'勝率', honmei:'本命', lowconf:'自信×', calcMtx1v1:'1v1相性表を計算中…' , headingMA:'シミュレーション：M-A', headingMB:'シミュレーション：M-B', toMAText:'M-A（過去シーズン）へ →', toMBText:'M-B（最新シーズン）へ →', tabParty:'VS パーティ', obStep1T:'パーティを選ぶ', obStep1D:'一覧から気になる上位構築を選択（名前で絞り込み可）', obStep2T:'対戦相手を選ぶ', obStep2D:'VSランカーで総当たり戦績、VSポケモンで特定の相手との相性を確認', obStep3T:'結果を読む', obStep3D:'勝率・選出傾向・リプレイで上位構築の動きを学ぶ' },
-  en: { htmlLang:'en', title:'Top Environment Simulator | PokéNavi', desc:'Round-robin battles between top-ranked team compositions (AI vs AI). Select a party and check win rates vs Rankers / vs Pokémon.', h1:'Top Environment Simulation', lead:'Round-robin battles between top-ranked team compositions (AI vs AI). Select a party and check results vs Rankers / vs Pokémon. ', bsHref:'/en/battle-simulator', bsLink:'What is Battle Simulator →', sec1:'Select Party', showLabel:'Show:', clearBtn:'Clear', filterPh:'Filter by Pokémon name', noPartyMsg:'Select a party', analyzeBtn:'Run round-robin', sec2:'Results', tabRanker:'VS Ranker', tabPoke:'VS Pokémon', sortLabel:'Sort:', sortNum:'By rank', sortWr:'By win rate', oppSelectMsg:'Select opponent from the list', loading:'Loading…', analyzing:'Analyzing…', dataFail:'Failed to load data', notCalc:'Not calculated', done:'Done', errPfx:'Error: ', noPartyMatch:'No matching parties', selectSeason:'Please select a season', noData:'No data', noSelectData:'No selection data', runFirst:'Run "round-robin with this party" first', runFirstPoke:'Run round-robin to see results by opponent Pokémon', aggregating:'Aggregating…', leftSelectMsg:'Select from the list', compOf:"'s team", filterMore:'Add more...', sortNumAscR:'Rank ↑', sortNumDescR:'Rank ↓', sortWrAscR:'Win rate ↑ (weak→strong)', sortWrDescR:'Win rate ↓ (strong→weak)', sortBaseP:'Match count', sortNumAscP:'Match count ↑ (few→many)', sortNumDescP:'Match count ↓ (many→few)', sortWrAscP:'Win rate ↑ (weak→strong)', sortWrDescP:'Win rate ↓ (strong→weak)', sortWrBaseP:'Win rate', progMid:' battles (', progSfx:' cards)', sumRkMid:' vs ', sumRkSfx:' rankers', sumGoodFmt:'win {n}', sumEvenFmt:'even {n}', sumBadFmt:'lose {n}', sumSep:' · ', sumPokePfx:'', sumPokeMid:' types of Pokémon selected by opponents against ', sumPokeSfx:' (battles where selected)', totalLabel:'Total', battlePfx:'Battle ', battleSfx:'', winMark:'○ Win', loseMark:'● Lose', drawMark:'△ Draw', noRecord:'No record', replayPfx:'Battle ', replaySfx:' Playback', verdictWinAllT:'Perfect win (all)', verdictWinT:'Favorable', verdictEvenT:'Even', verdictLoseT:'Unfavorable', verdictLoseAllT:'Worst matchup (all lost)', sumTitle:'📊 Match Summary', winsLabel:'W', lossesLabel:'L', drawsLabel:'D', winPath:'<b class="g">Win path</b>', losePath:'<b class="r">Loss path</b>', carryLabel:'Core survivors: ', koLabel:'Reliably defeated: ', surviveLabel:'Surviving threats: ', deadLabel:'Commonly lost: ', setupLossPfx:'Setup sweep loss ', setupLossSfx:'%', rp_pickhd:'🎬 <b>Battle Records</b> — Replay simulation results (tabs for each battle, <span class="g">W</span>/<span class="r">L</span>)', autoPlay:'Auto play', autoStop:'Stop', mtxCornerMe:'Mine ↓', mtxCornerOpp:'Opp →', mtxWin:'Mine wins', mtxLose:'Opp wins', mtxDmgNote:'Dmg dealt/taken%', mtxNote:'Dim = not selected', mtxHelpSum:'How to read (damage and result)', mtxHelpBody:'Each cell evaluates the 1v1 between the Pokémon on the left (mine) vs. the one above (opp), assuming both hit with their <b>maximum damage move</b> (Mega forms evaluated after mega evolution).<br>・<b>Numbers "dealt/taken"</b> = max damage % per hit. <b>Dealt</b> = my max damage as % of opponent\'s max HP / <b>Taken</b> = opponent\'s max damage as % of my max HP.<br>・<b>Result</b> (<span class="bg-g" style="padding:0 .3em;border-radius:3px">green = mine wins</span>/<span class="bg-r" style="padding:0 .3em;border-radius:3px">red = opp wins</span>) = <b>fewer hits needed to KO</b>. On tie, <b>higher Speed wins</b>. Focus Sash / Sturdy (survive 1 hit) and priority moves are factored in.<br>・Example: <b>dealt 45/taken 83, opp wins</b> = mine needs 45%×3 hits, opp needs 83%×2 hits and is faster.', t1v1Pfx:'⚔ 1v1 matchup (Mine: ', t1v1Mid:' / Opp: ', t1v1Sfx:')', buildTitle:'🧬 Build Info', buildTypePfx:' builds (', buildTypeSfx:')', buildsOpp:'<div class="muted" style="font-weight:700;color:#dc2626">Opponent</div>', buildsMe:'<div class="muted" style="font-weight:700;color:var(--accent-dark);margin-top:.5em">Mine</div>', usedBy:'Used by: ', labelItem:'Item', labelAbil:'Ability', labelNat:'Nature', labelMv:'Moves', hazSR:'Stealth Rock', hazSpikes:'Spikes', hazToxicSpikes:'Toxic Spikes', hazReflect:'Reflect', hazLightScreen:'Light Screen', hazAuroraVeil:'Aurora Veil', steMega:'<span class="rp-mega">Mega</span>', steBlade:'<span class="rp-forme">Blade</span>', steHero:'<span class="rp-forme">Mighty</span>', steDisg:'<span class="rp-disg">Broken</span>', steCharge:'<span class="rp-charge">Charged</span>', steConfused:'<span class="rp-vol">😵Confused</span>', steSeeded:'<span class="rp-vol">🌱Seeded</span>', steTaunt:'<span class="rp-vol">😈Taunt</span>', steEncore:'<span class="rp-vol">🔄Encore</span>', steSalted:'<span class="rp-vol">🧂Salted</span>', steTrans:'<span class="rp-vol">🎭Transform</span>', steSubPfx:'<span class="rp-vol">🪆Sub(', steSubSfx:')</span>', steIlluPfx:'<span class="rp-vol">Illusion:', steIlluSfx:'</span>', steUnknown:'Unknown', steNotAppeared:'Not appeared', wSunny:'☀ Sunny', wRain:'🌧 Rain', wSand:'🌪 Sandstorm', wHail:'❄ Hail', wSnow:'❄ Snow', stBurn:'Burn', stPoison:'Poison', stBadPoison:'Badly Poisoned', stParalysis:'Paralysis', stSleep:'Sleep', stFreeze:'Frozen', swBadge:'Switch', mine:'Mine', opp:'Opp', sideMe:'Mine', sideOpp:'Opp', logTitle:'📜 Battle Log', logDetail:'View detailed log', noAction:'No action', turnPfx:'Turn ', turnMid:' / ', aiTitle:"🧠 AI's read this turn", candidateMove:'Candidates', winRateLabel:'Win rate', honmei:'Top', lowconf:'Low conf', calcMtx1v1:'Calculating 1v1 matchup…' , headingMA:'Simulation: M-A', headingMB:'Simulation: M-B', toMAText:'Go to M-A (past season) →', toMBText:'Go to M-B (latest season) →', tabParty:'VS Party', obStep1T:'Pick a party', obStep1D:'Choose a top-tier build from the list (filter by name)', obStep2T:'Pick an opponent', obStep2D:'See round-robin results with VS Ranker, or matchup details with VS Pokémon', obStep3T:'Read the results', obStep3D:'Learn from win rates, selection trends, and replays' },
-  ko: { htmlLang:'ko', title:'상위 환경 시뮬레이터 | 포케나비', desc:'상위 환경 구성끼리의 리그전（AI 대결）. 파티를 선택해서 VS 랭커 / VS 포켓몬의 전적을 확인할 수 있습니다.', h1:'상위 환경 시뮬레이션', lead:'상위 환경 구성끼리의 리그전（AI 대결）. 파티를 선택해서 VS 랭커 / VS 포켓몬 전적을 확인할 수 있습니다. ', bsHref:'/ko/battle-simulator', bsLink:'배틀 시뮬레이터란 →', sec1:'파티 선택', showLabel:'표시:', clearBtn:'초기화', filterPh:'포켓몬 이름으로 검색', noPartyMsg:'파티를 선택해 주세요', analyzeBtn:'이 파티로 리그전 실행', sec2:'전적', tabRanker:'VS 랭커', tabPoke:'VS 포켓몬', sortLabel:'정렬:', sortNum:'번호순', sortWr:'승률순', oppSelectMsg:'왼쪽 목록에서 상대를 선택', loading:'불러오는 중…', analyzing:'분석 중…', dataFail:'데이터 불러오기 실패', notCalc:'미계산', done:'완료', errPfx:'오류: ', noPartyMatch:'일치하는 파티 없음', selectSeason:'표시할 시즌을 선택해 주세요', noData:'데이터 없음', noSelectData:'선출 데이터 없음', runFirst:'"이 파티로 리그전 실행"을 먼저 실행해 주세요', runFirstPoke:'리그전을 실행하면 상대 포켓몬별 전적이 표시됩니다', aggregating:'집계 중…', leftSelectMsg:'왼쪽 목록에서 선택', compOf:'의 파티', filterMore:'더 추가...', sortNumAscR:'번호순 ↑', sortNumDescR:'번호순 ↓', sortWrAscR:'승률순 ↑（불리→유리）', sortWrDescR:'승률순 ↓（유리→불리）', sortBaseP:'대전수순', sortNumAscP:'대전수순 ↑（적→많）', sortNumDescP:'대전수순 ↓（많→적）', sortWrAscP:'승률순 ↑（불리→유리）', sortWrDescP:'승률순 ↓（유리→불리）', sortWrBaseP:'승률순', progMid:'전（', progSfx:'카드）', sumRkMid:' vs ', sumRkSfx:' 랭커', sumGoodFmt:'유리 {n}', sumEvenFmt:'무난 {n}', sumBadFmt:'불리 {n}', sumSep:' · ', sumPokePfx:'상대에게 선출된 ', sumPokeMid:'종의 포켓몬에 대한 ', sumPokeSfx:' 의 전적（선출된 대전만 집계）', totalLabel:'통산', battlePfx:'제', battleSfx:'전', winMark:'○승', loseMark:'●패', drawMark:'△무', noRecord:'기록 없음', replayPfx:'제', replaySfx:'전 재생', verdictWinAllT:'완승（전승）', verdictWinT:'유리', verdictEvenT:'호각', verdictLoseT:'고전', verdictLoseAllT:'최악의 상성（전패）', sumTitle:'📊 대전 요약', winsLabel:'승', lossesLabel:'패', drawsLabel:'무', winPath:'<b class="g">이기는 방법</b>', losePath:'<b class="r">지는 패턴</b>', carryLabel:'남기 쉬운 핵심: ', koLabel:'안정적으로 쓰러뜨릴 수 있는 상대: ', surviveLabel:'쓰러뜨리지 못하는 핵심: ', deadLabel:'쓰러지기 쉬운 내 포켓몬: ', setupLossPfx:'쌓기 전파 패배 ', setupLossSfx:'%', rp_pickhd:'🎬 <b>대전 기록</b> — 실제 시뮬레이션 결과 재생（탭으로 각 전，<span class="g">승</span>/<span class="r">패</span>）', autoPlay:'자동 재생', autoStop:'정지', mtxCornerMe:'내 포켓몬 ↓', mtxCornerOpp:'상대 →', mtxWin:'내 쪽 승리', mtxLose:'상대 승리', mtxDmgNote:'숫자=주/받은 데미지%', mtxNote:'흐린 색 = 선출되지 않은 개체', mtxHelpSum:'표 보는 법（주고받는 데미지와 승패）', mtxHelpBody:'각 칸은 왼쪽의 내 포켓몬 vs 위의 상대 포켓몬의 1v1을 <b>최대 화력으로 맞붙은</b> 상정으로 평가합니다（메가스톤 보유 시 메가 진화 후로 평가）.<br>・<b>숫자「주/받」</b>＝1발당 최대 데미지 비율. <b>주</b>＝내 최대 타점이 상대 최대 HP의 몇%인지 / <b>받</b>＝상대 최대 타점이 내 HP의 몇%인지.<br>・<b>승패</b>（<span class="bg-g" style="padding:0 .3em;border-radius:3px">초록＝내 승리</span>／<span class="bg-r" style="padding:0 .3em;border-radius:3px">빨강＝상대 승리</span>）＝이 화력으로 <b>상대를 쓰러뜨리는 데 필요한 횟수가 적은 쪽</b>. 횟수가 같으면 <b>빠른 쪽</b>이 승리. 기합의 띠／옹골참（1발 버팀）과 선제기도 고려합니다.<br>・예：<b>주45／받83으로 상대 승리</b>＝내 쪽은 45%×3발 필요，상대는 83%×2발로 쓰러뜨리고 또한 빠름.', t1v1Pfx:'⚔ 1v1 상성표（내 유리 ', t1v1Mid:' / 상대 유리 ', t1v1Sfx:'）', buildTitle:'🧬 型 정보', buildTypePfx:' 型별 전적（', buildTypeSfx:'형）', buildsOpp:'<div class="muted" style="font-weight:700;color:#dc2626">상대</div>', buildsMe:'<div class="muted" style="font-weight:700;color:var(--accent-dark);margin-top:.5em">내 포켓몬</div>', usedBy:'사용 랭커: ', labelItem:'지닌 물건', labelAbil:'특성', labelNat:'성격', labelMv:'기술', hazSR:'스텔스록', hazSpikes:'압정뿌리기', hazToxicSpikes:'독압정', hazReflect:'리플렉터', hazLightScreen:'빛의장막', hazAuroraVeil:'오로라베일', steMega:'<span class="rp-mega">메가</span>', steBlade:'<span class="rp-forme">블레이드</span>', steHero:'<span class="rp-forme">마이티</span>', steDisg:'<span class="rp-disg">피부 파괴</span>', steCharge:'<span class="rp-charge">충전</span>', steConfused:'<span class="rp-vol">😵혼란</span>', steSeeded:'<span class="rp-vol">🌱씨뿌리기</span>', steTaunt:'<span class="rp-vol">😈도발</span>', steEncore:'<span class="rp-vol">🔄앙코르</span>', steSalted:'<span class="rp-vol">🧂소금절임</span>', steTrans:'<span class="rp-vol">🎭변신</span>', steSubPfx:'<span class="rp-vol">🪆대타(', steSubSfx:')</span>', steIlluPfx:'<span class="rp-vol">일루전:', steIlluSfx:'</span>', steUnknown:'Unknown', steNotAppeared:'미등장', wSunny:'☀ 맑음', wRain:'🌧 비', wSand:'🌪 모래바람', wHail:'❄ 싸라기눈', wSnow:'❄ 눈', stBurn:'화상', stPoison:'독', stBadPoison:'맹독', stParalysis:'마비', stSleep:'수면', stFreeze:'얼음', swBadge:'교체', mine:'내 쪽', opp:'상대', sideMe:'내 쪽', sideOpp:'상대', logTitle:'📜 배틀 로그', logDetail:'상세 로그 보기', noAction:'행동 없음', turnPfx:'턴 ', turnMid:' / ', aiTitle:'🧠 이 턴의 AI 예상', candidateMove:'후보 수', winRateLabel:'승률', honmei:'유력', lowconf:'자신 없음', calcMtx1v1:'1v1 상성표 계산 중…' , headingMA:'시뮬레이션: M-A', headingMB:'시뮬레이션: M-B', toMAText:'M-A(과거 시즌)로 →', toMBText:'M-B(최신 시즌)로 →', tabParty:'VS 파티', obStep1T:'파티를 선택', obStep1D:'목록에서 원하는 상위 구성을 선택(이름으로 검색 가능)', obStep2T:'상대를 선택', obStep2D:'VS 랭커에서 전체 전적을, VS 포켓몬에서 특정 상대와의 상성을 확인', obStep3T:'결과를 확인', obStep3D:'승률·선출 경향·리플레이로 상위 구성의 움직임을 학습' },
+  ja: { htmlLang:'ja', title:'上位環境シミュレーション（バトルシミュレータ）| ポケナビ', desc:'ランカー同士の総当たり対戦シミュレーション。パーティを選び、各ランカー・各ポケモンとの勝率・選出・1v1相性・実戦リプレイをデータで診断します。', h1:'上位環境シミュレーション', lead:'環境トップ構築同士の総当たり対戦（対戦AI同士）。パーティを選び、VSランカー／VSポケモンで戦績を確認できます。', bsHref:'/battle-simulator', bsLink:'バトルシミュレータとは →', sec1:'パーティ選択', showLabel:'表示:', clearBtn:'クリア', filterPh:'ポケモン名で絞り込み', noPartyMsg:'パーティを選択してください', analyzeBtn:'このパーティで総当たり', sec2:'戦績', tabRanker:'VS ランカー', tabPoke:'VS ポケモン', sortLabel:'並び替え:', sortNum:'番号順', sortWr:'勝率順', oppSelectMsg:'左の一覧から対戦相手を選択', loading:'読み込み中…', analyzing:'分析中…', dataFail:'データ取得に失敗しました', notCalc:'未計算', done:'完了', errPfx:'エラー: ', noPartyMatch:'一致するパーティなし', selectSeason:'表示するシーズンを選択してください', noData:'データなし', noSelectData:'選出データなし', runFirst:'「このパーティで総当たり」を実行してください', runFirstPoke:'「このパーティで総当たり」を実行すると、相手ポケモン別の勝敗が表示されます', aggregating:'集計中…', leftSelectMsg:'左の一覧から選択', compOf:' の構成', filterMore:'さらに追加...', sortNumAscR:'番号順 ↑', sortNumDescR:'番号順 ↓', sortWrAscR:'勝率順 ↑（苦手→得意）', sortWrDescR:'勝率順 ↓（得意→苦手）', sortBaseP:'対戦数順', sortNumAscP:'対戦数順 ↑（少→多）', sortNumDescP:'対戦数順 ↓（多→少）', sortWrAscP:'勝率順 ↑（苦手→得意）', sortWrDescP:'勝率順 ↓（得意→苦手）', sortWrBaseP:'勝率順', progMid:' 戦（', progSfx:'カード）', sumRkMid:' vs ', sumRkSfx:'ランカー', sumGoodFmt:'得意{n}', sumEvenFmt:'五分{n}', sumBadFmt:'苦手{n}', sumSep:'・', sumPokePfx:'相手に選出された ', sumPokeMid:'種のポケモンに対する ', sumPokeSfx:' の戦績（選出された対戦のみ集計）', totalLabel:'通算', battlePfx:'第', battleSfx:'戦', winMark:'○勝', loseMark:'●負', drawMark:'△分', noRecord:'記録なし', replayPfx:'第', replaySfx:'戦 再生', verdictWinAllT:'完勝（全勝）', verdictWinT:'有利', verdictEvenT:'互角', verdictLoseT:'苦戦', verdictLoseAllT:'相性最悪（全敗）', sumTitle:'📊 対戦サマリ', winsLabel:'勝', lossesLabel:'敗', drawsLabel:'分', winPath:'<b class="g">勝ち筋</b>', losePath:'<b class="r">負け筋</b>', carryLabel:'残りやすい主軸: ', koLabel:'安定して倒せる相手: ', surviveLabel:'倒し切れない核: ', deadLabel:'落ちやすい自個体: ', setupLossPfx:'積み全抜き負け ', setupLossSfx:'%', rp_pickhd:'🎬 <b>対戦記録</b> — 実際のシミュレーション結果を再生（タブで各戦、<span class="g">勝</span>/<span class="r">負</span>）', autoPlay:'自動再生', autoStop:'停止', mtxCornerMe:'自分 ↓', mtxCornerOpp:'相手 →', mtxWin:'自分勝ち', mtxLose:'相手勝ち', mtxDmgNote:'数字=与/被ダメ%', mtxNote:'淡色＝選出されなかった個体', mtxHelpSum:'表の見方（与/被ダメと勝敗）', mtxHelpBody:'各マスは「左の自分の個体」対「上の相手の個体」の1v1を、互いの<b>最大火力で殴り合った</b>想定で評価します（メガ石持ちはメガ後で評価）。<br>・<b>数字「与／被」</b>＝1発あたりの最大ダメージ割合。<b>与</b>＝自分の最大打点が相手の最大HPの何%か／<b>被</b>＝相手の最大打点が自分の何%か。<br>・<b>勝敗</b>（<span class="bg-g" style="padding:0 .3em;border-radius:3px">緑＝自分勝ち</span>／<span class="bg-r" style="padding:0 .3em;border-radius:3px">赤＝相手勝ち</span>）＝この火力で<b>相手を倒すのに必要な手数が少ない方</b>。手数が同じなら<b>素早さが速い方</b>が勝ち。きあいのタスキ／がんじょう（1発耐え）や先制技も加味します。<br>・例：<b>与45／被83で相手勝ち</b>＝自分は45%×3発必要、相手は83%×2発で倒し切り、かつ相手が速い、という評価。', t1v1Pfx:'⚔ 1v1相性表（自分有利 ', t1v1Mid:' / 相手有利 ', t1v1Sfx:'）', buildTitle:'🧬 型情報', buildTypePfx:' の型別戦績（', buildTypeSfx:'型）', evMorePfx:'ほかEV', evMoreSfx:'種', remPfx:'（あと', remSfx:'）', sideSfx:'側', drawResult:'引き分け', buildsOpp:'<div class="muted" style="font-weight:700;color:#dc2626">相手</div>', buildsMe:'<div class="muted" style="font-weight:700;color:var(--accent-dark);margin-top:.5em">自分</div>', usedBy:'使用ランカー: ', labelItem:'持ち物', labelAbil:'特性', labelNat:'性格', labelMv:'技', hazSR:'ステルスロック', hazSpikes:'まきびし', hazToxicSpikes:'どくびし', hazReflect:'リフレクター', hazLightScreen:'ひかりのかべ', hazAuroraVeil:'オーロラベール', steMega:'<span class="rp-mega">メガ</span>', steBlade:'<span class="rp-forme">ブレード</span>', steHero:'<span class="rp-forme">マイティ</span>', steDisg:'<span class="rp-disg">皮破れ</span>', steCharge:'<span class="rp-charge">充電</span>', steConfused:'<span class="rp-vol">😵こんらん</span>', steSeeded:'<span class="rp-vol">🌱やどりぎ</span>', steTaunt:'<span class="rp-vol">😈ちょうはつ</span>', steEncore:'<span class="rp-vol">🔄アンコール</span>', steSalted:'<span class="rp-vol">🧂しおづけ</span>', steTrans:'<span class="rp-vol">🎭へんしん</span>', steSubPfx:'<span class="rp-vol">🪆みがわり(', steSubSfx:')</span>', steIlluPfx:'<span class="rp-vol">イリュージョン:', steIlluSfx:'</span>', steUnknown:'Unknown', steNotAppeared:'未登場', wSunny:'☀ 晴れ', wRain:'🌧 あめ', wSand:'🌪 すなあらし', wHail:'❄ あられ', wSnow:'❄ ゆき', stBurn:'やけど', stPoison:'どく', stBadPoison:'もうどく', stParalysis:'まひ', stSleep:'ねむり', stFreeze:'こおり', swBadge:'交代', mine:'自分', opp:'相手', sideMe:'自分', sideOpp:'相手', logTitle:'📜 バトルログ', logDetail:'詳細ログを見る', noAction:'行動なし', turnPfx:'ターン ', turnMid:' / ', aiTitle:'🧠 この手番のAIの読み', candidateMove:'候補手', winRateLabel:'勝率', honmei:'本命', lowconf:'自信×', calcMtx1v1:'1v1相性表を計算中…' , headingMA:'シミュレーション：M-A', headingMB:'シミュレーション：M-B', headingMC:'シミュレーション：M-C', leadMC:'M-6 上位環境を再現した生成パーティ同士の総当たり対戦（対戦AI同士）。パーティを選び、VSパーティ／VSポケモンで戦績を確認できます。', mcNote:'このページのパーティは M-6 の上位構築そのものではなく、M-6 上位環境の使用率・型の統計に合わせて生成した100パーティです。結果はその100パーティ同士の総当たりです。', toMAText:'M-A（M-1/M-2）へ →', toMBText:'M-B（M-3/M-4）へ →', toMCText:'M-C（最新シーズン）へ →', tabParty:'VS パーティ', obStep1T:'パーティを選ぶ', obStep1D:'一覧から気になる上位構築を選択（名前で絞り込み可）', obStep2T:'対戦相手を選ぶ', obStep2D:'VSランカーで総当たり戦績、VSポケモンで特定の相手との相性を確認', obStep3T:'結果を読む', obStep3D:'勝率・選出傾向・リプレイで上位構築の動きを学ぶ' },
+  en: { htmlLang:'en', title:'Top Environment Simulator | PokéNavi', desc:'Round-robin battles between top-ranked team compositions (AI vs AI). Select a party and check win rates vs Rankers / vs Pokémon.', h1:'Top Environment Simulation', lead:'Round-robin battles between top-ranked team compositions (AI vs AI). Select a party and check results vs Rankers / vs Pokémon. ', bsHref:'/en/battle-simulator', bsLink:'What is Battle Simulator →', sec1:'Select Party', showLabel:'Show:', clearBtn:'Clear', filterPh:'Filter by Pokémon name', noPartyMsg:'Select a party', analyzeBtn:'Run round-robin', sec2:'Results', tabRanker:'VS Ranker', tabPoke:'VS Pokémon', sortLabel:'Sort:', sortNum:'By rank', sortWr:'By win rate', oppSelectMsg:'Select opponent from the list', loading:'Loading…', analyzing:'Analyzing…', dataFail:'Failed to load data', notCalc:'Not calculated', done:'Done', errPfx:'Error: ', noPartyMatch:'No matching parties', selectSeason:'Please select a season', noData:'No data', noSelectData:'No selection data', runFirst:'Run "round-robin with this party" first', runFirstPoke:'Run round-robin to see results by opponent Pokémon', aggregating:'Aggregating…', leftSelectMsg:'Select from the list', compOf:"'s team", filterMore:'Add more...', sortNumAscR:'Rank ↑', sortNumDescR:'Rank ↓', sortWrAscR:'Win rate ↑ (weak→strong)', sortWrDescR:'Win rate ↓ (strong→weak)', sortBaseP:'Match count', sortNumAscP:'Match count ↑ (few→many)', sortNumDescP:'Match count ↓ (many→few)', sortWrAscP:'Win rate ↑ (weak→strong)', sortWrDescP:'Win rate ↓ (strong→weak)', sortWrBaseP:'Win rate', progMid:' battles (', progSfx:' cards)', sumRkMid:' vs ', sumRkSfx:' rankers', sumGoodFmt:'win {n}', sumEvenFmt:'even {n}', sumBadFmt:'lose {n}', sumSep:' · ', sumPokePfx:'', sumPokeMid:' types of Pokémon selected by opponents against ', sumPokeSfx:' (battles where selected)', totalLabel:'Total', battlePfx:'Battle ', battleSfx:'', winMark:'○ Win', loseMark:'● Lose', drawMark:'△ Draw', noRecord:'No record', replayPfx:'Battle ', replaySfx:' Playback', verdictWinAllT:'Perfect win (all)', verdictWinT:'Favorable', verdictEvenT:'Even', verdictLoseT:'Unfavorable', verdictLoseAllT:'Worst matchup (all lost)', sumTitle:'📊 Match Summary', winsLabel:'W', lossesLabel:'L', drawsLabel:'D', winPath:'<b class="g">Win path</b>', losePath:'<b class="r">Loss path</b>', carryLabel:'Core survivors: ', koLabel:'Reliably defeated: ', surviveLabel:'Surviving threats: ', deadLabel:'Commonly lost: ', setupLossPfx:'Setup sweep loss ', setupLossSfx:'%', rp_pickhd:'🎬 <b>Battle Records</b> — Replay simulation results (tabs for each battle, <span class="g">W</span>/<span class="r">L</span>)', autoPlay:'Auto play', autoStop:'Stop', mtxCornerMe:'Mine ↓', mtxCornerOpp:'Opp →', mtxWin:'Mine wins', mtxLose:'Opp wins', mtxDmgNote:'Dmg dealt/taken%', mtxNote:'Dim = not selected', mtxHelpSum:'How to read (damage and result)', mtxHelpBody:'Each cell evaluates the 1v1 between the Pokémon on the left (mine) vs. the one above (opp), assuming both hit with their <b>maximum damage move</b> (Mega forms evaluated after mega evolution).<br>・<b>Numbers "dealt/taken"</b> = max damage % per hit. <b>Dealt</b> = my max damage as % of opponent\'s max HP / <b>Taken</b> = opponent\'s max damage as % of my max HP.<br>・<b>Result</b> (<span class="bg-g" style="padding:0 .3em;border-radius:3px">green = mine wins</span>/<span class="bg-r" style="padding:0 .3em;border-radius:3px">red = opp wins</span>) = <b>fewer hits needed to KO</b>. On tie, <b>higher Speed wins</b>. Focus Sash / Sturdy (survive 1 hit) and priority moves are factored in.<br>・Example: <b>dealt 45/taken 83, opp wins</b> = mine needs 45%×3 hits, opp needs 83%×2 hits and is faster.', t1v1Pfx:'⚔ 1v1 matchup (Mine: ', t1v1Mid:' / Opp: ', t1v1Sfx:')', buildTitle:'🧬 Build Info', buildTypePfx:' builds (', buildTypeSfx:')', evMorePfx:'+', evMoreSfx:' other EV spreads', remPfx:' (', remSfx:' left)', sideSfx:' side', drawResult:'Draw', buildsOpp:'<div class="muted" style="font-weight:700;color:#dc2626">Opponent</div>', buildsMe:'<div class="muted" style="font-weight:700;color:var(--accent-dark);margin-top:.5em">Mine</div>', usedBy:'Used by: ', labelItem:'Item', labelAbil:'Ability', labelNat:'Nature', labelMv:'Moves', hazSR:'Stealth Rock', hazSpikes:'Spikes', hazToxicSpikes:'Toxic Spikes', hazReflect:'Reflect', hazLightScreen:'Light Screen', hazAuroraVeil:'Aurora Veil', steMega:'<span class="rp-mega">Mega</span>', steBlade:'<span class="rp-forme">Blade</span>', steHero:'<span class="rp-forme">Mighty</span>', steDisg:'<span class="rp-disg">Broken</span>', steCharge:'<span class="rp-charge">Charged</span>', steConfused:'<span class="rp-vol">😵Confused</span>', steSeeded:'<span class="rp-vol">🌱Seeded</span>', steTaunt:'<span class="rp-vol">😈Taunt</span>', steEncore:'<span class="rp-vol">🔄Encore</span>', steSalted:'<span class="rp-vol">🧂Salted</span>', steTrans:'<span class="rp-vol">🎭Transform</span>', steSubPfx:'<span class="rp-vol">🪆Sub(', steSubSfx:')</span>', steIlluPfx:'<span class="rp-vol">Illusion:', steIlluSfx:'</span>', steUnknown:'Unknown', steNotAppeared:'Not appeared', wSunny:'☀ Sunny', wRain:'🌧 Rain', wSand:'🌪 Sandstorm', wHail:'❄ Hail', wSnow:'❄ Snow', stBurn:'Burn', stPoison:'Poison', stBadPoison:'Badly Poisoned', stParalysis:'Paralysis', stSleep:'Sleep', stFreeze:'Frozen', swBadge:'Switch', mine:'Mine', opp:'Opp', sideMe:'Mine', sideOpp:'Opp', logTitle:'📜 Battle Log', logDetail:'View detailed log', noAction:'No action', turnPfx:'Turn ', turnMid:' / ', aiTitle:"🧠 AI's read this turn", candidateMove:'Candidates', winRateLabel:'Win rate', honmei:'Top', lowconf:'Low conf', calcMtx1v1:'Calculating 1v1 matchup…' , headingMA:'Simulation: M-A', headingMB:'Simulation: M-B', headingMC:'Simulation: M-C', leadMC:'Round-robin battles between generated parties that reproduce the M-6 top environment (AI vs AI). Select a party and check results vs Parties / vs Pokémon. ', mcNote:'The parties on this page are not actual M-6 top teams: they are 100 parties generated to match the usage and set statistics of the M-6 top environment, and the results are a round-robin among those 100.', toMAText:'Go to M-A (M-1/M-2) →', toMBText:'Go to M-B (M-3/M-4) →', toMCText:'Go to M-C (latest season) →', tabParty:'VS Party', obStep1T:'Pick a party', obStep1D:'Choose a top-tier build from the list (filter by name)', obStep2T:'Pick an opponent', obStep2D:'See round-robin results with VS Ranker, or matchup details with VS Pokémon', obStep3T:'Read the results', obStep3D:'Learn from win rates, selection trends, and replays' },
+  ko: { htmlLang:'ko', title:'상위 환경 시뮬레이터 | 포케나비', desc:'상위 환경 구성끼리의 리그전（AI 대결）. 파티를 선택해서 VS 랭커 / VS 포켓몬의 전적을 확인할 수 있습니다.', h1:'상위 환경 시뮬레이션', lead:'상위 환경 구성끼리의 리그전（AI 대결）. 파티를 선택해서 VS 랭커 / VS 포켓몬 전적을 확인할 수 있습니다. ', bsHref:'/ko/battle-simulator', bsLink:'배틀 시뮬레이터란 →', sec1:'파티 선택', showLabel:'표시:', clearBtn:'초기화', filterPh:'포켓몬 이름으로 검색', noPartyMsg:'파티를 선택해 주세요', analyzeBtn:'이 파티로 리그전 실행', sec2:'전적', tabRanker:'VS 랭커', tabPoke:'VS 포켓몬', sortLabel:'정렬:', sortNum:'번호순', sortWr:'승률순', oppSelectMsg:'왼쪽 목록에서 상대를 선택', loading:'불러오는 중…', analyzing:'분석 중…', dataFail:'데이터 불러오기 실패', notCalc:'미계산', done:'완료', errPfx:'오류: ', noPartyMatch:'일치하는 파티 없음', selectSeason:'표시할 시즌을 선택해 주세요', noData:'데이터 없음', noSelectData:'선출 데이터 없음', runFirst:'"이 파티로 리그전 실행"을 먼저 실행해 주세요', runFirstPoke:'리그전을 실행하면 상대 포켓몬별 전적이 표시됩니다', aggregating:'집계 중…', leftSelectMsg:'왼쪽 목록에서 선택', compOf:'의 파티', filterMore:'더 추가...', sortNumAscR:'번호순 ↑', sortNumDescR:'번호순 ↓', sortWrAscR:'승률순 ↑（불리→유리）', sortWrDescR:'승률순 ↓（유리→불리）', sortBaseP:'대전수순', sortNumAscP:'대전수순 ↑（적→많）', sortNumDescP:'대전수순 ↓（많→적）', sortWrAscP:'승률순 ↑（불리→유리）', sortWrDescP:'승률순 ↓（유리→불리）', sortWrBaseP:'승률순', progMid:'전（', progSfx:'카드）', sumRkMid:' vs ', sumRkSfx:' 랭커', sumGoodFmt:'유리 {n}', sumEvenFmt:'무난 {n}', sumBadFmt:'불리 {n}', sumSep:' · ', sumPokePfx:'상대에게 선출된 ', sumPokeMid:'종의 포켓몬에 대한 ', sumPokeSfx:' 의 전적（선출된 대전만 집계）', totalLabel:'통산', battlePfx:'제', battleSfx:'전', winMark:'○승', loseMark:'●패', drawMark:'△무', noRecord:'기록 없음', replayPfx:'제', replaySfx:'전 재생', verdictWinAllT:'완승（전승）', verdictWinT:'유리', verdictEvenT:'호각', verdictLoseT:'고전', verdictLoseAllT:'최악의 상성（전패）', sumTitle:'📊 대전 요약', winsLabel:'승', lossesLabel:'패', drawsLabel:'무', winPath:'<b class="g">이기는 방법</b>', losePath:'<b class="r">지는 패턴</b>', carryLabel:'남기 쉬운 핵심: ', koLabel:'안정적으로 쓰러뜨릴 수 있는 상대: ', surviveLabel:'쓰러뜨리지 못하는 핵심: ', deadLabel:'쓰러지기 쉬운 내 포켓몬: ', setupLossPfx:'쌓기 전파 패배 ', setupLossSfx:'%', rp_pickhd:'🎬 <b>대전 기록</b> — 실제 시뮬레이션 결과 재생（탭으로 각 전，<span class="g">승</span>/<span class="r">패</span>）', autoPlay:'자동 재생', autoStop:'정지', mtxCornerMe:'내 포켓몬 ↓', mtxCornerOpp:'상대 →', mtxWin:'내 쪽 승리', mtxLose:'상대 승리', mtxDmgNote:'숫자=주/받은 데미지%', mtxNote:'흐린 색 = 선출되지 않은 개체', mtxHelpSum:'표 보는 법（주고받는 데미지와 승패）', mtxHelpBody:'각 칸은 왼쪽의 내 포켓몬 vs 위의 상대 포켓몬의 1v1을 <b>최대 화력으로 맞붙은</b> 상정으로 평가합니다（메가스톤 보유 시 메가 진화 후로 평가）.<br>・<b>숫자「주/받」</b>＝1발당 최대 데미지 비율. <b>주</b>＝내 최대 타점이 상대 최대 HP의 몇%인지 / <b>받</b>＝상대 최대 타점이 내 HP의 몇%인지.<br>・<b>승패</b>（<span class="bg-g" style="padding:0 .3em;border-radius:3px">초록＝내 승리</span>／<span class="bg-r" style="padding:0 .3em;border-radius:3px">빨강＝상대 승리</span>）＝이 화력으로 <b>상대를 쓰러뜨리는 데 필요한 횟수가 적은 쪽</b>. 횟수가 같으면 <b>빠른 쪽</b>이 승리. 기합의 띠／옹골참（1발 버팀）과 선제기도 고려합니다.<br>・예：<b>주45／받83으로 상대 승리</b>＝내 쪽은 45%×3발 필요，상대는 83%×2발로 쓰러뜨리고 또한 빠름.', t1v1Pfx:'⚔ 1v1 상성표（내 유리 ', t1v1Mid:' / 상대 유리 ', t1v1Sfx:'）', buildTitle:'🧬 형 정보', buildTypePfx:' 형별 전적（', buildTypeSfx:'형）', evMorePfx:'외 EV ', evMoreSfx:'종', remPfx:' (', remSfx:'턴 남음)', sideSfx:' 측', drawResult:'무승부', buildsOpp:'<div class="muted" style="font-weight:700;color:#dc2626">상대</div>', buildsMe:'<div class="muted" style="font-weight:700;color:var(--accent-dark);margin-top:.5em">내 포켓몬</div>', usedBy:'사용 랭커: ', labelItem:'지닌 물건', labelAbil:'특성', labelNat:'성격', labelMv:'기술', hazSR:'스텔스록', hazSpikes:'압정뿌리기', hazToxicSpikes:'독압정', hazReflect:'리플렉터', hazLightScreen:'빛의장막', hazAuroraVeil:'오로라베일', steMega:'<span class="rp-mega">메가</span>', steBlade:'<span class="rp-forme">블레이드</span>', steHero:'<span class="rp-forme">마이티</span>', steDisg:'<span class="rp-disg">피부 파괴</span>', steCharge:'<span class="rp-charge">충전</span>', steConfused:'<span class="rp-vol">😵혼란</span>', steSeeded:'<span class="rp-vol">🌱씨뿌리기</span>', steTaunt:'<span class="rp-vol">😈도발</span>', steEncore:'<span class="rp-vol">🔄앙코르</span>', steSalted:'<span class="rp-vol">🧂소금절임</span>', steTrans:'<span class="rp-vol">🎭변신</span>', steSubPfx:'<span class="rp-vol">🪆대타(', steSubSfx:')</span>', steIlluPfx:'<span class="rp-vol">일루전:', steIlluSfx:'</span>', steUnknown:'미확인', steNotAppeared:'미등장', wSunny:'☀ 맑음', wRain:'🌧 비', wSand:'🌪 모래바람', wHail:'❄ 싸라기눈', wSnow:'❄ 눈', stBurn:'화상', stPoison:'독', stBadPoison:'맹독', stParalysis:'마비', stSleep:'수면', stFreeze:'얼음', swBadge:'교체', mine:'내 쪽', opp:'상대', sideMe:'내 쪽', sideOpp:'상대', logTitle:'📜 배틀 로그', logDetail:'상세 로그 보기', noAction:'행동 없음', turnPfx:'턴 ', turnMid:' / ', aiTitle:'🧠 이 턴의 AI 예상', candidateMove:'후보 수', winRateLabel:'승률', honmei:'유력', lowconf:'자신 없음', calcMtx1v1:'1v1 상성표 계산 중…' , headingMA:'시뮬레이션: M-A', headingMB:'시뮬레이션: M-B', headingMC:'시뮬레이션: M-C', leadMC:'M-6 상위 환경을 재현한 생성 파티끼리의 리그전（AI 대결）. 파티를 선택해서 VS 파티 / VS 포켓몬 전적을 확인할 수 있습니다. ', mcNote:'이 페이지의 파티는 M-6 상위 구성 그 자체가 아니라, M-6 상위 환경의 사용률·육성 형태 통계에 맞춰 생성한 100개 파티입니다. 결과는 그 100개 파티끼리의 리그전입니다.', toMAText:'M-A(M-1/M-2)로 →', toMBText:'M-B(M-3/M-4)로 →', toMCText:'M-C(최신 시즌)로 →', tabParty:'VS 파티', obStep1T:'파티를 선택', obStep1D:'목록에서 원하는 상위 구성을 선택(이름으로 검색 가능)', obStep2T:'상대를 선택', obStep2D:'VS 랭커에서 전체 전적을, VS 포켓몬에서 특정 상대와의 상성을 확인', obStep3T:'결과를 확인', obStep3D:'승률·선출 경향·리플레이로 상위 구성의 움직임을 학습' },
 };
 const I18N = I18N_ALL[lang];
 const NATURE_NAME_MAP = lang === 'en' ? NATURE_NAME_EN : lang === 'ko' ? NATURE_NAME_KO : {};
@@ -23,9 +26,12 @@ const POKEMON_NAME_MAP = lang === 'en' ? POKEMON_NAME_EN : lang === 'ko' ? POKEM
 const MOVE_NAME_MAP = lang === 'en' ? MOVE_NAME_EN : lang === 'ko' ? MOVE_NAME_KO : {};
 const ITEM_NAME_MAP = lang === 'en' ? ITEM_NAME_EN : lang === 'ko' ? ITEM_NAME_KO : {};
 const ABILITY_NAME_MAP = lang === 'en' ? ABILITY_NAME_EN : lang === 'ko' ? ABILITY_NAME_KO : {};
+const TYPE_NAME_MAP = lang === 'en' ? TYPE_NAME_EN : lang === 'ko' ? TYPE_NAME_KO : {};
 
-const heading = isMB ? I18N.headingMB : I18N.headingMA;
-const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href="${isMB ? pfx + '/simulator' : pfx + '/simulator-mb'}">${isMB ? I18N.toMAText : I18N.toMBText}</a>`;
+const heading = isMC ? I18N.headingMC : isMB ? I18N.headingMB : I18N.headingMA;
+const modeLinks = [['MA', '/simulator', I18N.toMAText], ['MB', '/simulator-mb', I18N.toMBText], ['MC', '/simulator-mc', I18N.toMCText]]
+  .filter(([m]) => m !== mode).map(([, href, text]) => `<a href="${pfx}${href}">${text}</a>`).join('　');
+const lead = `${isMC ? I18N.leadMC : I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　${modeLinks}`;
 ---
 
 <style is:global>
@@ -72,6 +78,7 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       .pitem.s-m2{box-shadow:inset 3px 0 0 #fcd34d}
       .pitem.s-m3{box-shadow:inset 3px 0 0 #86efac}
       .pitem.s-m4{box-shadow:inset 3px 0 0 #c4b5fd}
+      .pitem.s-m6{box-shadow:inset 3px 0 0 #fdba74}
       .seasonbar{display:flex;align-items:center;gap:.5em;padding:.25em .15em .4em;font-size:.78rem;flex-wrap:wrap}
       .seasonbar .schk{display:inline-flex;align-items:center;gap:.3em;cursor:pointer;user-select:none}
       .sbadge{font-size:.62rem;font-weight:800;padding:.08em .4em;border-radius:5px;flex-shrink:0;letter-spacing:-.02em}
@@ -79,8 +86,10 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       .sbadge.m2{background:#fef3c7;color:#b45309}
       .sbadge.m3{background:#dcfce7;color:#15803d}
       .sbadge.m4{background:#ede9fe;color:#6d28d9}
+      .sbadge.m6{background:#ffedd5;color:#c2410c}
       .expl{margin:.5em 0;padding:.5em .7em;background:#f8fafc;border:1px solid rgb(var(--gray-light));border-radius:8px;font-size:.8rem}
       .expl-h{font-weight:800;margin-bottom:.35em}
+      .expl-note{font-size:.72rem;color:#92400e;margin-top:.3em}
       .expl-side{margin-bottom:.35em}
       .expl-side.opp2{color:rgb(var(--gray));font-size:.76rem}
       .expl-tbl{border-collapse:collapse;margin-top:.25em;width:100%;max-width:360px}
@@ -186,6 +195,7 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       .rlog-side.s1{background:#dbeafe;color:#1d4ed8}
       .rlog-side.s2{background:#fee2e2;color:#b91c1c}
       .rlog-simple div .rlog-dmg{font-size:.72rem;font-weight:500;color:rgb(var(--gray))}
+      .rlog-simple div .rlog-fld{font-size:.72rem;font-weight:600;color:#7c3aed}
       .rlog-detail{margin-top:.45em;border-top:1px dashed rgb(var(--gray-light));padding-top:.35em}
       .rlog-detail summary{cursor:pointer;font-size:.72rem;color:var(--accent);font-weight:700}
       .rlog-full{margin-top:.3em;max-height:8rem;overflow:auto;font-size:.72rem;color:rgb(var(--gray))}
@@ -281,6 +291,7 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
     <main data-simmode={mode}>
       <h1>{heading}</h1>
       <p class="lead" set:html={lead}></p>
+      {isMC && <p class="lead" set:html={I18N.mcNote}></p>}
       <OnboardingGuide
         storageKey="sim"
         lang={lang}
@@ -311,7 +322,7 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       <!-- ② 戦績（タブ） -->
       <div class="seclabel">{I18N.sec2}</div>
       <div class="tabs">
-        <button class="tab active" id="tab-ranker" onclick="switchTab('ranker')">{isMB ? I18N.tabParty : I18N.tabRanker}</button>
+        <button class="tab active" id="tab-ranker" onclick="switchTab('ranker')">{isPartyMode ? I18N.tabParty : I18N.tabRanker}</button>
         <button class="tab" id="tab-pokemon" onclick="switchTab('pokemon')">{I18N.tabPoke}</button>
       </div>
       <div id="summary" class="muted mb"></div>
@@ -324,7 +335,7 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       <!-- ③ 相手一覧＋構成＋詳細 -->
       <section class="card" style="padding:.9em 1em">
         <div class="split">
-          <div class="pl-wrap"><div class="seasonbar" id="opp-seasonbar">{!isMB && (<Fragment><span class="muted">{I18N.showLabel}</span>{SEASONS.map((s) => (<label class="schk"><input type="checkbox" checked onchange={`toggleOppSeason('${s}',this)`}/><span class={`sbadge ${seasonCls(s)}`}>{s}</span></label>))}</Fragment>)}<div id="opp-filter-chips" class="filter-chips"></div></div><div class="filter-wrap"><input type="text" id="opp-filter" class="filter-inp" placeholder={I18N.filterPh} autocomplete="off" oninput="onOppFilterInput(this.value)" onkeydown="onOppFilterKey(event)"><div class="filter-sug" id="opp-sug" style="display:none"></div></div><div class="picklist" id="opp-list" style="max-height:300px"></div></div>
+          <div class="pl-wrap"><div class="seasonbar" id="opp-seasonbar">{!isPartyMode && (<Fragment><span class="muted">{I18N.showLabel}</span>{SEASONS.map((s) => (<label class="schk"><input type="checkbox" checked onchange={`toggleOppSeason('${s}',this)`}/><span class={`sbadge ${seasonCls(s)}`}>{s}</span></label>))}</Fragment>)}<div id="opp-filter-chips" class="filter-chips"></div></div><div class="filter-wrap"><input type="text" id="opp-filter" class="filter-inp" placeholder={I18N.filterPh} autocomplete="off" oninput="onOppFilterInput(this.value)" onkeydown="onOppFilterKey(event)"><div class="filter-sug" id="opp-sug" style="display:none"></div></div><div class="picklist" id="opp-list" style="max-height:300px"></div></div>
           <div class="comp" id="opp-comp"><div class="muted">{I18N.oppSelectMsg}</div></div>
         </div>
         <div id="detail" style="margin-top:.9em"></div>
@@ -332,8 +343,9 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
   <slot />
     </main>
 
-    <script is:inline define:vars={{ I18N, NATURE_NAME_MAP, POKEMON_NAME_MAP, MOVE_NAME_MAP, ITEM_NAME_MAP, ABILITY_NAME_MAP, LANG: lang }}>
-      const IS_MB = document.querySelector('main[data-simmode]')?.dataset.simmode === 'MB';
+    <script is:inline define:vars={{ I18N, NATURE_NAME_MAP, POKEMON_NAME_MAP, MOVE_NAME_MAP, ITEM_NAME_MAP, ABILITY_NAME_MAP, TYPE_NAME_MAP, LANG: lang, SIM_LOG_TERM, SIM_LOG_REASON, SIM_LOG_RULES_SRC }}>
+      const SIMMODE = document.querySelector('main[data-simmode]')?.dataset.simmode || 'MA';
+      const IS_MB = SIMMODE === 'MB', IS_MC = SIMMODE === 'MC', IS_PARTY = IS_MB || IS_MC;
       const _IS_JA = LANG === 'ja';
       /** メガ進化名(「メガガブリアス」等)は辞書に個別登録せず、素体名+メガ接頭辞から動的に組み立てる
        * (公式訳が存在しないポケモンチャンピオンズ独自メガ進化が大半のため)。 */
@@ -351,52 +363,41 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       function tMove(m){ return MOVE_NAME_MAP[m]||m; }
       function tItem(it){ if(!it||it==='—') return it; if(ITEM_NAME_MAP[it]) return ITEM_NAME_MAP[it]; var mX=/^(.+)ナイトX$/.exec(it),mY=/^(.+)ナイトY$/.exec(it),m0=/^(.+)ナイト$/.exec(it),base=mX||mY||m0; if(base){var en=POKEMON_NAME_MAP[base[1]]||POKEMON_NAME_MAP[base[1]+'ー'];if(en)return en+(mX?' X':mY?' Y':'')+'ite';} return it; }
       function tAbil(a){ return ABILITY_NAME_MAP[a]||a; }
-      let _tlPairs = null;
-      function _buildTLPairs() {
-        const s = (map) => Object.entries(map).sort((a,b)=>b[0].length-a[0].length).filter(([k,v])=>k!==v);
-        return [...s(POKEMON_NAME_MAP),...s(MOVE_NAME_MAP),...s(ABILITY_NAME_MAP),...s(ITEM_NAME_MAP)];
-      }
-      function translateLogText(text) {
-        if(_IS_JA||!text) return text;
-        if(!_tlPairs) _tlPairs=_buildTLPairs();
-        let t=text;
-        t=t
-          .replace(/こんらん（あばれ終了）/g,'Confusion (end)')
-          .replace(/こんらんで自傷/g,'Confusion self-hit')
-          .replace(/こんらんになった/g,'Confused')
-          .replace(/反動/g,'Recoil')
-          .replace(/繰り出し（瀕死後）/g,'sent out (after KO)')
-          .replace(/繰り出し/g,'sent out')
-          .replace(/（瀕死後）/g,' (after KO)')
-          .replace(/が強制交代/g,' forced out')
-          .replace(/が破れた/g,' broken')
-          .replace(/回復/g,' healed')
-          .replace(/（効果なし）/g,'(immune)')
-          .replace(/に無効/g,'→ (immune)');
-        for(const [jp,tr] of _tlPairs){ if(t.includes(jp)) t=t.split(jp).join(tr); }
-        t=t
-          .replace(/ の (.+?) を落とした/g,' knocked off $1')
-          .replace(/ に(\d)/g,' $1')
-          .replace(/：/g,': ')
-          .replace(/ は /g,' ');
-        return t;
-      }
-      const _TAGS_EN = {外し:'Miss',効果抜群:'Super eff.',いまひとつ:'Resisted',急所:'Crit',相手耐え:'Endured',展開:'Setup',設置:'Hazard',ばけのかわ:'Disguise',防がれた:'Blocked',ひるみで動けない:'Flinch',守り:'Protect'};
+      const _TAGS = {外し:['Miss','빗나감'],効果抜群:['Super eff.','효과 굉장'],いまひとつ:['Resisted','효과 별로'],急所:['Crit','급소'],相手耐え:['Endured','버팀'],展開:['Setup','전개'],設置:['Hazard','설치'],ばけのかわ:['Disguise','탈'],防がれた:['Blocked','막힘'],ひるみで動けない:['Flinch','풀죽음'],守り:['Protect','방어']};
       function translateTag(t) {
         if(_IS_JA) return t;
-        const ko=t.match(/^(.+?)を倒した$/); if(ko) return `KO'd ${tPoke(ko[1])}`;
+        const ko=t.match(/^(.+?)を倒した$/); if(ko) return LANG==='ko' ? `${tPoke(ko[1])} 쓰러뜨림` : `KO'd ${tPoke(ko[1])}`;
         const st=t.match(/^(こうげき|ぼうぎょ|とくこう|とくぼう|すばやさ)([↑↓])$/);
-        if(st){const S={こうげき:'Atk',ぼうぎょ:'Def',とくこう:'SpAtk',とくぼう:'SpDef',すばやさ:'Spd'};return `${S[st[1]]}${st[2]}`;}
-        return _TAGS_EN[t]||t;
+        if(st){const S=LANG==='ko'?{こうげき:'공격',ぼうぎょ:'방어',とくこう:'특공',とくぼう:'특방',すばやさ:'스피드'}:{こうげき:'Atk',ぼうぎょ:'Def',とくこう:'SpAtk',とくぼう:'SpDef',すばやさ:'Spd'};return `${S[st[1]]}${st[2]}`;}
+        return _TAGS[t] ? _TAGS[t][LANG==='ko'?1:0] : t;
       }
       function translateCandAction(a) {
         if(_IS_JA||!a) return a;
-        const hasMega=a.startsWith('メガ+'); const base=hasMega?a.slice(3):a;
-        const sw=base.match(/^(.+?)に交代$/); if(sw) return (hasMega?'Mega+':'')+'Switch → '+tPoke(sw[1]);
-        return (hasMega?'Mega+':'')+tMove(base);
+        const hasMega=a.startsWith('メガ+'); const base=hasMega?a.slice(3):a; const mg=hasMega?(LANG==='ko'?'메가+':'Mega+'):'';
+        const sw=base.match(/^(.+?)に交代$/); if(sw) return mg+(LANG==='ko'?'교체 → ':'Switch → ')+tPoke(sw[1]);
+        return mg+tMove(base);
       }
-      const VSNOUN = LANG==='ja' ? (IS_MB?'パーティ':'ランカー') : LANG==='ko' ? (IS_MB?' 파티':' 랭커') : (IS_MB?' parties':' rankers');
-      const USED_BY_LABEL = LANG==='ja' ? (IS_MB?'使用パーティ: ':'使用ランカー: ') : LANG==='ko' ? (IS_MB?'사용 파티: ':'사용 랭커: ') : I18N.usedBy;
+      const _TERM=SIM_LOG_TERM;
+      const _KO=LANG==='ko'?1:0;
+      function tX(x){
+        if(_IS_JA||x==null||x==='') return x;
+        if(x.includes('/')) return x.split('/').map(tX).join('/');
+        if(x.includes(', ')) return x.split(', ').map(tX).join(', ');
+        if(_TERM[x]) return _TERM[x][_KO];
+        if(POKEMON_NAME_MAP[x]||x.startsWith('メガ')){ const p=tPoke(x); if(p!==x) return p; }
+        return MOVE_NAME_MAP[x]||ABILITY_NAME_MAP[x]||ITEM_NAME_MAP[x]||TYPE_NAME_MAP[x]||tItem(x)||x;
+      }
+      const _REASON=SIM_LOG_REASON;
+      const _rs=r=>{ if(_REASON[r]) return _REASON[r][_KO]; const m=r.match(/^(\d+)ターン目以降$/); return m?(_KO?`${m[1]}턴째 이후`:`turn ${m[1]} or later`):tX(r); };
+      const _LOGR=SIM_LOG_RULES_SRC.map(([src,en,ko])=>[new RegExp(src),en,ko]);
+      function translateRawLog(l){
+        if(_IS_JA||!l) return l;
+        const pm=l.match(/^(▷P\d+: ?)/); const pre=pm?pm[1]:''; const body=l.slice(pre.length);
+        for(const [re,en,ko] of _LOGR){ const m=body.match(re); if(m) return pre+(_KO?ko:en).replace(/\$(R?)(\d)/g,(_,r,i)=>r?_rs(m[+i]):tX(m[+i])); }
+        return pre+body;
+      }
+      const VSNOUN = LANG==='ja' ? (IS_PARTY?'パーティ':'ランカー') : LANG==='ko' ? (IS_PARTY?' 파티':' 랭커') : (IS_PARTY?' parties':' rankers');
+      const USED_BY_LABEL = LANG==='ja' ? (IS_PARTY?'使用パーティ: ':'使用ランカー: ') : LANG==='ko' ? (IS_PARTY?'사용 파티: ':'사용 랭커: ') : I18N.usedBy;
       // 構築を表す名前の材料（メガ軸を先頭に、以降は編成順）。「メガ」の文字は軸であることが自明なので付けない。
       // 括弧書きの型注記（永遠/オス等）は表示幅の都合で省略（アイコンで判別可能・titleに全体名を残す）。
       const _shortMonName = n => tPoke(n).replace(/[（(][^）)]*[）)]$/,'');
@@ -442,14 +443,14 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       const API = (location.port === '8888') ? '' : 'http://localhost:8888';
       // 本番＝静的配信モード（localhost/8888以外、または ?static=1 で強制）。dev＝従来のローカルAPI。
       const THEME = location.search.includes('theme=1');     // ?theme=1 でテーマ総当たり(/sim-data-theme)
-      const VERIFY = IS_MB || location.search.includes('verify=1');   // M-Bページ or ?verify=1 で上位環境・検証用総当たり(/sim-data-verify)
+      const VERIFY = IS_PARTY || location.search.includes('verify=1');   // M-B/M-Cページ or ?verify=1 で上位環境・検証用総当たり(/sim-data-verify)
       const STATIC = THEME || VERIFY || location.search.includes('static=1') || !(location.hostname==='localhost'||location.hostname==='127.0.0.1'||location.port==='8888');
-      const R2_BASE = (!THEME && location.hostname.endsWith('pokenavi.jp')) ? 'https://sim.pokenavi.jp' : '';   // 本番はR2（M-A/M-B共通）/ ローカルは同梱
-      const META = THEME ? '/sim-data-theme' : (VERIFY ? '/sim-data-verify-meta' : '/sim-data');      // 同梱メタ（index/icons/move_types・軽量・commit対象）
+      const R2_BASE = (!THEME && location.hostname.endsWith('pokenavi.jp')) ? 'https://sim.pokenavi.jp' : '';   // 本番はR2（M-A/M-B/M-C共通）/ ローカルは同梱
+      const META = THEME ? '/sim-data-theme' : IS_MC ? '/sim-data-mc-meta' : (VERIFY ? '/sim-data-verify-meta' : '/sim-data');      // 同梱メタ（index/icons/move_types・軽量・commit対象）
       const R2 = R2_BASE || (VERIFY ? '/sim-data-verify' : '/sim-data');    // subjects取得元（本番=R2 / ローカルはpublic同梱）
       let RANKERS = [], SAVED = {}, ICONS = {}, SUBJECT = null, AID = null, CARDS = {}, TAB = 'ranker', SORT = 'num', NUMDIR = 'asc', WRDIR = 'asc';
-      // 同居シーズンはページ種別で決まる（M-A=M-1/M-2/M-3 / M-B=M-3/M-4）。既定は全て表示。
-      const SEASON_SET = IS_MB ? ['M-3','M-4'] : ['M-1','M-2'];
+      // 同居シーズンはページ種別で決まる（M-A=M-1/M-2/M-3 / M-B=M-3/M-4 / M-C=M-6）。既定は全て表示。
+      const SEASON_SET = IS_MC ? ['M-6'] : IS_MB ? ['M-3','M-4'] : ['M-1','M-2'];
       const allSeasonsOn = () => Object.fromEntries(SEASON_SET.map(s=>[s,true]));
       let SUBJ_SEASONS = allSeasonsOn(), OPP_SEASONS = allSeasonsOn();
       let SUBJ_FILTER_POKES = [], OPP_FILTER_POKES = [];  // [{name, icon}]
@@ -488,9 +489,10 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       const NATURE = {いじっぱり:'A↑C↓',さみしがり:'A↑B↓',ゆうかん:'A↑S↓',やんちゃ:'A↑D↓',ずぶとい:'B↑A↓',わんぱく:'B↑C↓',のんき:'B↑S↓',のうてんき:'B↑D↓',ひかえめ:'C↑A↓',おっとり:'C↑B↓',れいせい:'C↑S↓',うっかりや:'C↑D↓',おだやか:'D↑A↓',おとなしい:'D↑B↓',なまいき:'D↑S↓',しんちょう:'D↑C↓',おくびょう:'S↑A↓',せっかち:'S↑B↓',ようき:'S↑C↓',むじゃき:'S↑D↓'};
       const MOVET = {};   // 技名→タイプ（initで取得）
       const TYPEICON = {ノーマル:['00','normal'],かくとう:['01','fighting'],ひこう:['02','flying'],どく:['03','poison'],じめん:['04','ground'],いわ:['05','rock'],むし:['06','bug'],ゴースト:['07','ghost'],はがね:['08','steel'],ほのお:['09','fire'],みず:['10','water'],くさ:['11','grass'],でんき:['12','electric'],エスパー:['13','psychic'],こおり:['14','ice'],ドラゴン:['15','dragon'],あく:['16','dark'],フェアリー:['17','fairy']};
-      function typeIcon(move){ const t=MOVET[move], e=TYPEICON[t]; return e?`<img class="tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${t}" title="${t}">`:''; }
-      function typeIconName(t){ const e=TYPEICON[t]; return e?`<img class="rp-tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${t}" title="${t}">`:''; }
+      function typeIcon(move){ const t=MOVET[move], e=TYPEICON[t], n=TYPE_NAME_MAP[t]||t; return e?`<img class="tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${n}" title="${n}">`:''; }
+      function typeIconName(t){ const e=TYPEICON[t], n=TYPE_NAME_MAP[t]||t; return e?`<img class="rp-tic" src="/images/types/type-${e[0]}-${e[1]}.png" alt="${n}" title="${n}">`:''; }
       const WEATHER={sunny:I18N.wSunny,rain:I18N.wRain,sandstorm:I18N.wSand,hail:I18N.wHail,snow:I18N.wSnow};
+      const TERRAIN={psychic:['🔮','サイコフィールド'],electric:['⚡','エレキフィールド'],grassy:['🌿','グラスフィールド'],misty:['🌫','ミストフィールド']};
       const STATUS_JP={burn:I18N.stBurn,poison:I18N.stPoison,badpoison:I18N.stBadPoison,paralysis:I18N.stParalysis,sleep:I18N.stSleep,freeze:I18N.stFreeze};
       const ITEM_PNG={"きあいのタスキ":"item-0275-tasuki.png","こだわりスカーフ":"item-0287-scarf.png","オボンのみ":"item-0158-obon.png","ラムのみ":"item-0157-ram.png","ヤチェのみ":"item-0188-yache.png","ハバンのみ":"item-0197-haban.png"};
       const ITEM_SPR={"オレンのみ":[-408,-96],"ラムのみ":[-456,-96],"オボンのみ":[0,-120],"カゴのみ":[-48,-120],"ヒメリのみ":[-72,-120],"ヨロギのみ":[-96,-120],"ビアーのみ":[-120,-120],"リンドのみ":[-24,-144],"モモンのみ":[-48,-144],"リリバのみ":[-72,-144],"オッカのみ":[-96,-144],"チーゴのみ":[-120,-144],"イトケのみ":[-144,-144],"ロゼルのみ":[-168,-144],"ウタンのみ":[-192,-144],"ナモのみ":[-216,-144],"ヤチェのみ":[-240,-144],"ソクノのみ":[-264,-144],"タンガのみ":[-312,-144],"シュカのみ":[-336,-144],"ヨプのみ":[-360,-144],"カシブのみ":[-384,-144],"バコウのみ":[-408,-144],"ホズのみ":[-432,-144],"ハバンのみ":[-456,-144],"コランのみ":[0,-168]};
@@ -498,14 +500,14 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       // 盤面の行動表示。技の所属側を「確認(相手の技=3-n)」「減少(自分の与ダメ=n)」から判定し、
       // ダメ行/確認行/外し行で (名前,技) を拾う。確認行の無い再使用技(ドラゴンテール等)も取りこぼさない。
       // side1=自分(P1), side2=相手(P2)。ミラー(両者同名)でも取り違えない。
-      function parseActions(logs, actives){ const m={1:{},2:{}}; let ord=0; const moveSide={};
+      function parseActions(logs, actives, ls){ const m={1:{},2:{}}; let ord=0; const moveSide={};
         (logs||[]).forEach(raw=>{ const pm=raw.match(/^▷P(\d+):\s*/); if(!pm)return; const obs=+pm[1]; if(obs!==1&&obs!==2)return; const l=raw.slice(pm[0].length); let r;
           if(r=l.match(/^(.+?) の技【(.+?)】を確認/)) moveSide[r[2]]=3-obs;
           else if(r=l.match(/^(.+?) に (.+?) で (?:約)?-?\d+% 減少/)){ if(moveSide[r[2]]==null) moveSide[r[2]]=obs; }
         });
         const put=(side,name,move,force)=>{ if(side!==1&&side!==2)return; if(force||!m[side][name]) m[side][name]={move, order:(m[side][name]?m[side][name].order:++ord)}; };
-        (logs||[]).forEach(raw=>{ const l=raw.replace(/^▷P\d+:\s*/,''); let r;
-          if(r=l.match(/^(.+?) の (.+?) → .+? に \d+ダメ/)) put(moveSide[r[2]],r[1],r[2]);
+        (logs||[]).forEach((raw,i)=>{ const l=raw.replace(/^▷P\d+:\s*/,''); let r; const ss=(ls&&!/^▷/.test(raw))?ls[i]:0;
+          if(r=l.match(/^(.+?) の (.+?) → .+? に \d+ダメ/)) put(ss||moveSide[r[2]],r[1],r[2],!!ss);
           else if(r=l.match(/^(.+?) の (.+?) は外れた/)) put(moveSide[r[2]],r[1],r[2]);
           else if(r=l.match(/^(.+?) の技【(.+?)】を確認/)) put(moveSide[r[2]],r[1],r[2]);
           // 確認/減少の無い再使用技も拾う（守り系・防がれた技など）。側は盤面のアクティブ名で確定。
@@ -518,26 +520,27 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
         });
         return m; }
       // 詳細ログの表示順補正：おやこあいの「追撃」は本体ヒットの後に判定されるので、本体ダメ行の後ろへ入れ替える
-      function reorderLogs(logs){
-        const a=[...logs];
+      function reorderLogs(pairs){
+        const a=[...pairs];
         for(let i=0;i<a.length-1;i++){
-          if(/おやこあい 追撃！/.test(a[i]) && / → .+ に \d+ダメ/.test(a[i+1])){ const t=a[i]; a[i]=a[i+1]; a[i+1]=t; i++; }
+          if(/おやこあい 追撃！/.test(a[i][0]) && / → .+ に \d+ダメ/.test(a[i+1][0])){ const t=a[i]; a[i]=a[i+1]; a[i+1]=t; i++; }
         }
         return a;
       }
       // 簡易ログ：技・交代を発生順に1行ずつ（①②で行動順、各行に技→対象・与ダメ・結果）
-      function summarizeTurn(logs, actives){
+      const _L=(ja,en,ko)=>LANG==='en'?en:LANG==='ko'?ko:ja;
+      function summarizeTurn(logs, actives, ls){
         const events=[]; const megaed=new Set(); let ord=0, last=null, pendingOut=null;
         const moveOwner={}; const sideName={}; const protectAct={}; const SIDEJP={1:I18N.sideMe,2:I18N.sideOpp};
         const newAct=(side,name,move)=>{ const e={kind:'act',side:side||0,order:++ord,name,move,target:null,dmg:null,tags:[]}; if(side)sideName[side+'|'+name]=e; if(move)moveOwner[move]=e; events.push(e); last=e; return e; };
         // 行動は技名(moveOwner)でのみ照合する。名前だけの照合はミラー(同名)で別の技に化けるため禁止。
-        const findActor=(name,move)=>{ return (move&&moveOwner[move])?moveOwner[move]:null; };
+        const findActor=(name,move,sd)=>{ if(move&&sd){ const e=moveOwner[sd+'|'+move]; if(e) return e; const f=moveOwner[move]; return (f&&(!f.side||f.side===sd))?f:null; } return (move&&moveOwner[move])?moveOwner[move]:null; };
         const tag=t=>{ if(last&&last.kind==='act'&&!last.tags.includes(t)) last.tags.push(t); };
-        (logs||[]).forEach(raw=>{ const pm=raw.match(/^▷P(\d+):\s*/); const obs=pm?+pm[1]:0; const side=obs?3-obs:0; const l=pm?raw.slice(pm[0].length):raw; let m;
+        (logs||[]).forEach((raw,i)=>{ const pm=raw.match(/^▷P(\d+):\s*/); const obs=pm?+pm[1]:0; const side=obs?3-obs:((ls&&ls[i])||0); const l=pm?raw.slice(pm[0].length):raw; let m;
           if(/^P[12]選出:|見せ合い/.test(l)) return;
           if(obs&&(m=l.match(/^(.+?) に (.+?) で (?:約)?-?\d+% 減少/))){ const e=moveOwner[m[2]]; if(e&&!e.side){ e.side=obs; sideName[obs+'|'+e.name]=e; } return; }
           if(m=l.match(/^(.+?) はメガ進化した！/)){ megaed.add(m[1]); return; }
-          if(m=l.match(/^(.+?) の (.+?) → (.+?) に (\d+)ダメ/)){ const e=findActor(m[1],m[2])||newAct(0,m[1],m[2]); e.move=e.move||m[2]; e.target=m[3]; e.dmg=+m[4]; last=e; return; }
+          if(m=l.match(/^(.+?) の (.+?) → (.+?) に (\d+)ダメ/)){ const e=findActor(m[1],m[2],side)||newAct(side,m[1],m[2]); if(side&&!e.side){ e.side=side; } if(side) moveOwner[side+'|'+m[2]]=e; e.move=e.move||m[2]; e.target=m[3]; e.dmg=+m[4]; last=e; return; }
           if(m=l.match(/^おやこあい 追撃！ (\d+)ダメ/)){ if(last&&last.kind==='act') last.pb=(last.pb||0)+(+m[1]); return; }
           if(m=l.match(/^(.+?) は (.+?) を使った/)){ const e=findActor(m[1],m[2]); if(!e){ newAct(side,m[1],m[2]); } else { if(side&&!e.side){e.side=side;sideName[side+'|'+m[1]]=e;} last=e; } return; }
           if(m=l.match(/^(.+?) の技【(.+?)】を確認/)){ let e=side?sideName[side+'|'+m[1]]:null; if(!e){ e=newAct(side,m[1],m[2]); } else { last=e; } if(m[2])moveOwner[m[2]]=e; return; }
@@ -546,30 +549,36 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
           // 守り系：再使用ターンは確認行が無いので「身を守っている」「X の キングシールド！」から拾う
           if(m=l.match(/^(.+?) は身を守っている/)){ const nm=m[1]; let e=events.find(x=>x.kind==='act'&&x.name===nm); if(!e){ e=newAct((actives&&actives[nm])||0,nm,'守り'); } protectAct[nm]=e; last=e; return; }
           if(m=l.match(/^(.+?) の (キングシールド|トーチカ|ニードルガード|まもる|みきり|こらえる)！/)){ const e=protectAct[m[1]]; if(e){ e.move=m[2]; last=e; } return; }
-          if(m=l.match(/^(.+?) は疲れてこんらんした/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：こんらん（あばれ終了）`}); return; }
-          if(m=l.match(/^(.+?) はこんらんして自分を傷つけた/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：こんらんで自傷`}); return; }
-          if(m=l.match(/^(.+?) はこんらんした/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：こんらんになった`}); return; }
+          if(m=l.match(/^(.+?) は疲れてこんらんした/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：こんらん（あばれ終了）`,`${tPoke(m[1])}: Confusion (rampage ended)`,`${tPoke(m[1])}: 혼란 (난동 종료)`)}); return; }
+          if(m=l.match(/^(.+?) はこんらんして自分を傷つけた/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：こんらんで自傷`,`${tPoke(m[1])}: Confusion self-hit`,`${tPoke(m[1])}: 혼란으로 자해`)}); return; }
+          if(m=l.match(/^(.+?) はこんらんした/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：こんらんになった`,`${tPoke(m[1])}: Confused`,`${tPoke(m[1])}: 혼란 상태`)}); return; }
           if(m=l.match(/^(.+?) は引っ込んだ/)){ pendingOut=m[1]; return; }
-          if(m=l.match(/^(.+?) が出てきた/)){ events.push({kind:'sw',order:++ord,text:pendingOut?`${pendingOut} → ${m[1]}`:`${m[1]} 繰り出し`}); pendingOut=null; last=null; return; }
-          if(m=l.match(/^(.+?) が登場した/)){ events.push({kind:'sw',order:++ord,text:`${m[1]}（瀕死後）`}); last=null; return; }
-          if(m=l.match(/^(.+?) は強制交代させられ/)){ events.push({kind:'sw',order:++ord,text:`${m[1]} が強制交代`}); return; }
+          if(m=l.match(/^(.+?) が出てきた/)){ events.push({kind:'sw',order:++ord,text:pendingOut?`${tPoke(pendingOut)} → ${tPoke(m[1])}`:_L(`${m[1]} 繰り出し`,`${tPoke(m[1])} sent out`,`${tPoke(m[1])} 등장`)}); pendingOut=null; last=null; return; }
+          if(m=l.match(/^(.+?) が登場した/)){ events.push({kind:'sw',order:++ord,text:_L(`${m[1]}（瀕死後）`,`${tPoke(m[1])} (after KO)`,`${tPoke(m[1])} (기절 후)`)}); last=null; return; }
+          if(m=l.match(/^(.+?) は強制交代させられ/)){ events.push({kind:'sw',order:++ord,text:_L(`${m[1]} が強制交代`,`${tPoke(m[1])} forced out`,`${tPoke(m[1])} 강제 교체`)}); return; }
           // ダメージ系（特性・設置・状態・天候・反動）を漏れなく
-          if(m=l.match(/^(.+?) の (.+?)！ (.+?) に (\d+) のダメージ/)){ events.push({kind:'dmg',order:++ord,text:`${m[2]}：${m[3]}に${m[4]}`}); return; }
-          if(m=l.match(/^(.+?) はステルスロックの効果を受けた！\((\d+)\)/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：ステルスロック ${m[2]}`}); return; }
-          if(m=l.match(/^(.+?) は (.+?) で (\d+) のダメージを受けた/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：${m[2]} ${m[3]}`}); return; }
-          if(m=l.match(/^(.+?) は (.+?) のダメージを受けた！\((\d+)\)/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：${m[2]} ${m[3]}`}); return; }
-          if(m=l.match(/^(.+?) は (?:.+? の )?反動を受けた！\((\d+)\)/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：反動 ${m[2]}`}); return; }
-          if(m=l.match(/^(.+?) の (.+?) が叩き落とされた！/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]} の ${m[2]} を落とした`}); return; }
-          if(m=l.match(/^(.+?) の ばけのかわ が破れた！\((\d+)\)/)){ const e=(last&&last.kind==='act')?last:null; if(e){ e.target=m[1]; e.dmg=+m[2]; if(!e.tags.includes('ばけのかわ')) e.tags.push('ばけのかわ'); } else { events.push({kind:'dmg',order:++ord,text:`${m[1]}：ばけのかわ が破れた（${m[2]}）`}); } return; }
-          if(m=l.match(/^(.+?) は (.+?) に効かない/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]} は ${m[2]} に無効（効果なし）`}); return; }
+          if(m=l.match(/^(.+?) の (.+?)！ (.+?) に (\d+) のダメージ/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[2]}：${m[3]}に${m[4]}`,`${tX(m[2])}: ${tPoke(m[3])} ${m[4]}`,`${tX(m[2])}: ${tPoke(m[3])}에게 ${m[4]}`)}); return; }
+          if(m=l.match(/^(.+?) はステルスロックの効果を受けた！\((\d+)\)/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：ステルスロック ${m[2]}`,`${tPoke(m[1])}: ${tMove('ステルスロック')} ${m[2]}`,`${tPoke(m[1])}: ${tMove('ステルスロック')} ${m[2]}`)}); return; }
+          if(m=l.match(/^(.+?) は (.+?) で (\d+) のダメージを受けた/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：${m[2]} ${m[3]}`,`${tPoke(m[1])}: ${tX(m[2])} ${m[3]}`,`${tPoke(m[1])}: ${tX(m[2])} ${m[3]}`)}); return; }
+          if(m=l.match(/^(.+?) は (.+?) のダメージを受けた！\((\d+)\)/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：${m[2]} ${m[3]}`,`${tPoke(m[1])}: ${tX(m[2])} ${m[3]}`,`${tPoke(m[1])}: ${tX(m[2])} ${m[3]}`)}); return; }
+          if(m=l.match(/^(.+?) は (?:.+? の )?反動を受けた！\((\d+)\)/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：反動 ${m[2]}`,`${tPoke(m[1])}: Recoil ${m[2]}`,`${tPoke(m[1])}: 반동 ${m[2]}`)}); return; }
+          if(m=l.match(/^(.+?) の (.+?) が叩き落とされた！/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]} の ${m[2]} を落とした`,`Knocked off ${tPoke(m[1])}'s ${tItem(m[2])}`,`${tPoke(m[1])}의 ${tItem(m[2])} 떨어뜨림`)}); return; }
+          if(m=l.match(/^(.+?) の ばけのかわ が破れた！\((\d+)\)/)){ const e=(last&&last.kind==='act')?last:null; if(e){ e.target=m[1]; e.dmg=+m[2]; if(!e.tags.includes('ばけのかわ')) e.tags.push('ばけのかわ'); } else { events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：ばけのかわ が破れた（${m[2]}）`,`${tPoke(m[1])}: ${tAbil('ばけのかわ')} busted (${m[2]})`,`${tPoke(m[1])}: ${tAbil('ばけのかわ')} 해제 (${m[2]})`)}); } return; }
+          if(m=l.match(/^(.+?) は (.+?) に効かない/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]} は ${m[2]} に無効（効果なし）`,`${tX(m[1])} → ${tPoke(m[2])} (no effect)`,`${tX(m[1])} → ${tPoke(m[2])} (효과 없음)`)}); return; }
           if(m=l.match(/^(.+?) の (.+?) は (.+?) に防がれた/)){ let e=findActor(m[1],m[2]); if(!e){ e=newAct((actives&&actives[m[1]])||0,m[1],m[2]); } if(!e.tags.includes('防がれた')) e.tags.push('防がれた'); last=e; return; }
-          if(m=l.match(/^(.+?) の オボンのみ が発動！ HPが (\d+) 回復/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：オボンのみ +${m[2]}回復`}); return; }
-          if(m=l.match(/^(.+?) の でんきにかえる！/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：でんきにかえる（充電）`}); return; }
-          if(m=l.match(/^(.+?) (?:の|は) (.+?) で HPが (\d+) 回復/)){ events.push({kind:'dmg',order:++ord,text:`${m[1]}：${m[2]} +${m[3]}回復`}); return; }
+          if(m=l.match(/^(.+?) の オボンのみ が発動！ HPが (\d+) 回復/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：オボンのみ +${m[2]}回復`,`${tPoke(m[1])}: ${tItem('オボンのみ')} +${m[2]} HP`,`${tPoke(m[1])}: ${tItem('オボンのみ')} +${m[2]} 회복`)}); return; }
+          if(m=l.match(/^(.+?) の でんきにかえる！/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：でんきにかえる（充電）`,`${tPoke(m[1])}: ${tAbil('でんきにかえる')} (charged)`,`${tPoke(m[1])}: ${tAbil('でんきにかえる')} (충전)`)}); return; }
+          if(m=l.match(/^(.+?) (?:の|は) (.+?) で HPが (\d+) 回復/)){ events.push({kind:'dmg',order:++ord,text:_L(`${m[1]}：${m[2]} +${m[3]}回復`,`${tPoke(m[1])}: ${tX(m[2])} +${m[3]} HP`,`${tPoke(m[1])}: ${tX(m[2])} +${m[3]} 회복`)}); return; }
           if(/ばつぐん/.test(l)){ tag('効果抜群'); return; }
           if(/いまひとつ/.test(l)){ tag('いまひとつ'); return; }
           if(/急所に当たった/.test(l)){ tag('急所'); return; }
           if(/(タスキ|がんじょう).*耐え/.test(l)){ tag('相手耐え'); return; }
+          if(m=l.match(/^(サイコフィールド|エレキフィールド|グラスフィールド|ミストフィールド)が広がった！/)){ events.push({kind:'fld',order:++ord,text:_L(`${m[1]} が張られた`,`${tMove(m[1])} set`,`${tMove(m[1])} 전개`)}); return; }
+          if(m=l.match(/^(.+?) の (サイコメイカー|エレキメイカー|グラスメイカー|こぼれダネ)！/)){ const f={サイコメイカー:'サイコフィールド',エレキメイカー:'エレキフィールド',グラスメイカー:'グラスフィールド',こぼれダネ:'グラスフィールド'}[m[2]]; events.push({kind:'fld',order:++ord,text:_L(`${m[1]} の ${m[2]}：${f} が張られた`,`${tPoke(m[1])}'s ${tAbil(m[2])}: ${tMove(f)} set`,`${tPoke(m[1])}의 ${tAbil(m[2])}: ${tMove(f)} 전개`)}); return; }
+          if(m=l.match(/^トリックルーム が(発動した|解除された)！/)){ const on=m[1]==='発動した'; events.push({kind:'fld',order:++ord,text:_L(`トリックルーム が${on?'発動した':'解除された'}`,`${tMove('トリックルーム')} ${on?'set':'ended'}`,`${tMove('トリックルーム')} ${on?'발동':'해제'}`)}); return; }
+          if(m=l.match(/^(psychic|electric|grassy|misty) フィールドが終わった！/)){ const f=TERRAIN[m[1]][1]; events.push({kind:'fld',order:++ord,text:_L(`${f} が切れた`,`${tMove(f)} ended`,`${tMove(f)} 종료`)}); return; }
+          if(m=l.match(/^(.+?) の効果が切れた！/)){ events.push({kind:'fld',order:++ord,text:_L(`${m[1]} が切れた`,`${tX(m[1])} ended`,`${tX(m[1])} 종료`)}); return; }
+          if(m=l.match(/^(.+?) は フィールド を解除した！/)){ events.push({kind:'fld',order:++ord,text:_L(`${m[1]} がフィールドを解除した`,`${tPoke(m[1])} cleared the terrain`,`${tPoke(m[1])} 필드 해제`)}); return; }
           if(/吹き始めた/.test(l)){ tag('展開'); return; }
           if(/まき散らされ|ステルスロックを/.test(l)){ tag('設置'); return; }
           if(m=l.match(/^(.+?) は倒れた/)){ tag(`${m[1]}を倒した`); return; }
@@ -578,11 +587,12 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
         if(actives) events.forEach(e=>{ if(e.kind==='act'&&!e.side&&actives[e.name]) e.side=actives[e.name]; });
         const circ=['①','②','③','④']; let an=0;
         return events.sort((a,b)=>a.order-b.order).map(e=>{
-          if(e.kind==='sw') return `<span class="rlog-sw">${I18N.swBadge}</span> ${translateLogText(e.text)}`;
-          if(e.kind==='dmg') return `<span class="rlog-dmg">↳ ${translateLogText(e.text)}</span>`;
+          if(e.kind==='sw') return `<span class="rlog-sw">${I18N.swBadge}</span> ${e.text}`;
+          if(e.kind==='dmg') return `<span class="rlog-dmg">↳ ${e.text}</span>`;
+          if(e.kind==='fld') return `<span class="rlog-fld">◆ ${e.text}</span>`;
           an++; const sl=e.side?`<span class="rlog-side s${e.side}">${SIDEJP[e.side]}</span> `:'';
-          const sep=_IS_JA?'：':': '; const megaBadge=_IS_JA?'<span class="rlog-mega">メガ</span> ':'<span class="rlog-mega">Mega</span> ';
-          let s=`${circ[an-1]||an} ${sl}${megaed.has(e.name)?megaBadge:''}${tPoke(e.name)}${sep}${tMove(e.move)||'—'}`;
+          const sep=_IS_JA?'：':': '; const megaBadge=`<span class="rlog-mega">${_L('メガ','Mega','메가')}</span> `;
+          let s=`${circ[an-1]||an} ${sl}${megaed.has(e.name)?megaBadge:''}${tPoke(e.name)}${sep}${tX(e.move)||'—'}`;
           if(e.dmg!=null) s+=_IS_JA?` → ${e.target} に ${e.dmg}${e.pb?'+'+e.pb:''}`:` → ${tPoke(e.target)} ${e.dmg}${e.pb?'+'+e.pb:''}`;
           if(e.tags.length) s+=_IS_JA?`（${e.tags.join('・')}）`:` (${e.tags.map(translateTag).join(' · ')})`;
           return s;
@@ -632,7 +642,7 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
 
       function renderFilterChips(){
         const el=$('filter-chips'); if(!el) return;
-        el.innerHTML = SUBJ_FILTER_POKES.map(p=>`<span class="filter-chip" title="${p.name}">${p.icon?`<img src="${p.icon}" alt="${p.name}">`:''}<button class="filter-chip-x" onclick="removeFilterPoke('${p.name.replace(/'/g,"\\'")}')">✕</button></span>`).join('');
+        el.innerHTML = SUBJ_FILTER_POKES.map(p=>`<span class="filter-chip" title="${tPoke(p.name)}">${p.icon?`<img src="${p.icon}" alt="${tPoke(p.name)}">`:''}<button class="filter-chip-x" onclick="removeFilterPoke('${p.name.replace(/'/g,"\\'")}')">✕</button></span>`).join('');
         $('subj-filter').placeholder = SUBJ_FILTER_POKES.length ? I18N.filterMore : I18N.filterPh;
         const btn=$('subj-clear-btn'); if(btn) btn.style.display = SUBJ_FILTER_POKES.length ? '' : 'none';
       }
@@ -661,17 +671,19 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       let _searchIdx = null;
       let _sugActive = -1;
       async function loadSearchIdx(){ if(_searchIdx) return _searchIdx; try{ _searchIdx=await fetch('/search-index.json').then(r=>r.json()); }catch{ _searchIdx=[]; } return _searchIdx; }
-      function hlSug(text, q){ const qk=toKatakana(q); const t=qk!==q?qk:q; const i=text.indexOf(t); if(i<0)return text; return text.slice(0,i)+'<mark>'+text.slice(i,i+t.length)+'</mark>'+text.slice(i+t.length); }
+      const sugName = x => _IS_JA ? x.n : ((LANG==='ko'?x.k:x.e) || tPoke(x.n));
+      const sugHit = (x,q,qk) => x.n.includes(q)||x.n.includes(qk)||(!_IS_JA&&sugName(x).toLowerCase().includes(q.toLowerCase()));
+      function hlSug(text, q){ const qk=toKatakana(q); const t=qk!==q?qk:q; const i=_IS_JA?text.indexOf(t):text.toLowerCase().indexOf(q.toLowerCase()); if(i<0)return text; return text.slice(0,i)+'<mark>'+text.slice(i,i+t.length)+'</mark>'+text.slice(i+t.length); }
       async function onSubjFilterInput(val){
         const sug=$('subj-sug'); _sugActive=-1;
         if(!val.trim()){ sug.style.display='none'; return; }
         const q=val.trim(), qk=toKatakana(q);
         const idx=await loadSearchIdx();
-        const hits=idx.filter(x=>x.t==='p'&&(x.n.includes(q)||x.n.includes(qk))).slice(0,8);
+        const hits=idx.filter(x=>x.t==='p'&&sugHit(x,q,qk)).slice(0,8);
         if(!hits.length){ sug.style.display='none'; return; }
         sug.innerHTML=hits.map((x,i)=>{
           const already=SUBJ_FILTER_POKES.some(p=>p.name===x.n);
-          return `<div class="sug-item${already?' added':''}" data-name="${x.n}" data-icon="${x.i}" data-idx="${i}" onclick="applySug('${x.n.replace(/'/g,"\\'")}','${x.i}')"><img src="${x.i}" alt=""><span>${hlSug(x.n,q)}</span></div>`;
+          return `<div class="sug-item${already?' added':''}" data-name="${x.n}" data-icon="${x.i}" data-idx="${i}" onclick="applySug('${x.n.replace(/'/g,"\\'")}','${x.i}')"><img src="${x.i}" alt=""><span>${hlSug(sugName(x),q)}</span></div>`;
         }).join('');
         sug.style.display='block';
       }
@@ -695,7 +707,7 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       let _oppSugActive = -1;
       function renderOppFilterChips(){
         const el=$('opp-filter-chips'); if(!el) return;
-        el.innerHTML = OPP_FILTER_POKES.map(p=>`<span class="filter-chip" title="${p.name}">${p.icon?`<img src="${p.icon}" alt="${p.name}">`:''}<button class="filter-chip-x" onclick="removeOppFilterPoke('${p.name.replace(/'/g,"\\'")}')">✕</button></span>`).join('');
+        el.innerHTML = OPP_FILTER_POKES.map(p=>`<span class="filter-chip" title="${tPoke(p.name)}">${p.icon?`<img src="${p.icon}" alt="${tPoke(p.name)}">`:''}<button class="filter-chip-x" onclick="removeOppFilterPoke('${p.name.replace(/'/g,"\\'")}')">✕</button></span>`).join('');
         $('opp-filter').placeholder = OPP_FILTER_POKES.length ? I18N.filterMore : I18N.filterPh;
       }
       function removeOppFilterPoke(name){
@@ -713,11 +725,11 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
         if(!val.trim()){ sug.style.display='none'; return; }
         const q=val.trim(), qk=toKatakana(q);
         const idx=await loadSearchIdx();
-        const hits=idx.filter(x=>x.t==='p'&&(x.n.includes(q)||x.n.includes(qk))).slice(0,8);
+        const hits=idx.filter(x=>x.t==='p'&&sugHit(x,q,qk)).slice(0,8);
         if(!hits.length){ sug.style.display='none'; return; }
         sug.innerHTML=hits.map((x,i)=>{
           const already=OPP_FILTER_POKES.some(p=>p.name===x.n);
-          return `<div class="sug-item${already?' added':''}" data-name="${x.n}" data-icon="${x.i}" data-idx="${i}" onclick="applyOppSug('${x.n.replace(/'/g,"\\'")}','${x.i}')"><img src="${x.i}" alt=""><span>${hlSug(x.n,q)}</span></div>`;
+          return `<div class="sug-item${already?' added':''}" data-name="${x.n}" data-icon="${x.i}" data-idx="${i}" onclick="applyOppSug('${x.n.replace(/'/g,"\\'")}','${x.i}')"><img src="${x.i}" alt=""><span>${hlSug(sugName(x),q)}</span></div>`;
         }).join('');
         sug.style.display='block';
       }
@@ -736,7 +748,7 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       }
       const rankNo=l=>{const mm=(l||'').match(/#(\d+)/);return mm?+mm[1]:99999;};  // 「M-1#100」の100を数値で抽出（番号順ソート用）
       const seasonOf=l=>{const m=(l||'').match(/^(M-\d)/);return m?m[1]:'';};       // ラベル先頭の「M-1」「M-2」
-      const SEASON_ORD={'M-1':0,'M-2':1,'M-3':2,'M-4':3};
+      const SEASON_ORD={'M-1':0,'M-2':1,'M-3':2,'M-4':3,'M-6':5};
       const seasonOrd=l=>{const o=SEASON_ORD[seasonOf(l)];return o===undefined?99:o;};   // M-1→M-2→M-3→M-4の順
       const cmpLabel=(a,b)=>{const d=seasonOrd(a.label)-seasonOrd(b.label);return d||rankNo(a.label)-rankNo(b.label);};
       if(STATIC){
@@ -1023,13 +1035,13 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
           }).forEach((b,bi)=>{const wr=Math.round(b.win_rate*100),cls=b.win_rate>=0.6?'g':b.win_rate<=0.4?'r':'n';
             const _bNatNm=NATURE_NAME_MAP[b.nature]||b.nature; const nat=b.nature?`${_bNatNm}${NATURE[b.nature]?` (${NATURE[b.nature]})`:''}`:'—';
             const moves=(b.moves&&b.moves.length)?b.moves.map(m=>`<span class="mvchip">${typeIcon(m)}${tMove(m)}</span>`).join(''):'—';
-            const movesTxt=(b.moves&&b.moves.length)?b.moves.join(' / '):'—';
+            const movesTxt=(b.moves&&b.moves.length)?b.moves.map(tMove).join(' / '):'—';
             const ev=b.evs?['H','A','B','C','D','S'].map(l=>b.evs[l]?`<span class="evchip ev-${l}">${l}<b>${b.evs[l]}</b></span>`:null).filter(Boolean).join(''):'';
-            const evx=b.ev_variants>1?` <span class="muted" style="font-size:.7rem">ほかEV${b.ev_variants-1}種</span>`:'';
+            const evx=b.ev_variants>1?` <span class="muted" style="font-size:.7rem">${I18N.evMorePfx}${b.ev_variants-1}${I18N.evMoreSfx}</span>`:'';
             h+=`<div class="bvrow${bi===0?' open':''}" onclick="this.classList.toggle('open')">
               <div class="bvhd">
                 <span class="wr ${cls}">${wr}%</span>
-                <span class="bv-item">${itemIcon(b.item)}${b.item||'—'}</span>
+                <span class="bv-item">${itemIcon(b.item)}${tItem(b.item)||'—'}</span>
                 <span class="bv-moves">${movesTxt}</span>
                 <span class="bv-toggle">▼</span>
               </div>
@@ -1071,13 +1083,13 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
         const f=p.max_hp?p.hp/p.max_hp:0; const u=iconUrl(p.name);
         const boosts=Object.entries(p.stages||{}).filter(([,v])=>v).map(([k,v])=>`<span class="${v>0?'bup':'bdn'}">${k}${v>0?'▲':'▼'}${Math.abs(v)}</span>`).join(' ');
         return `<div class="rp-mon ${active?'act':''} ${p.alive?'':'dead'}">
-          <div class="rp-mon-ico">${u?`<img src="${u}" alt="${p.name}" onerror="this.style.display='none'">`:''}${active?`<span class="rp-active-badge">${mine?'🔵':'🔴'}</span>`:''}${p.alive?'':'<span class="rp-x">×</span>'}</div>
+          <div class="rp-mon-ico">${u?`<img src="${u}" alt="${tPoke(p.name)}" onerror="this.style.display='none'">`:''}${active?`<span class="rp-active-badge">${mine?'🔵':'🔴'}</span>`:''}${p.alive?'':'<span class="rp-x">×</span>'}</div>
           <div class="rp-mon-body">
             <div class="rp-mon-name">${tPoke(p.name)}${typeIconName(p.type1)}${p.type2?typeIconName(p.type2):''}</div>
             ${(()=>{const b=`${p.mega?I18N.steMega:''}${p.blade_forme?I18N.steBlade:''}${p.hero?I18N.steHero:''}${p.status?`<span class="rp-status">${STATUS_JP[p.status]||p.status}</span>`:''}${p.disguise_broken?I18N.steDisg:''}${p.electro_charged?I18N.steCharge:''}${p.confused?I18N.steConfused:''}${p.seeded?I18N.steSeeded:''}${p.taunt?I18N.steTaunt:''}${p.encore?I18N.steEncore:''}${p.salted?I18N.steSalted:''}${p.transformed?I18N.steTrans:''}${p.substitute_hp?I18N.steSubPfx+p.substitute_hp+I18N.steSubSfx:''}${p.illusion_name?I18N.steIlluPfx+p.illusion_name+I18N.steIlluSfx:''}`;return b?`<div class="rp-badges">${b}</div>`:'';})()}
             <div class="row" style="gap:.3rem"><div class="hpbar"><div class="hpfill" style="width:${Math.round(f*100)}%;background:${hpColor(f)}"></div></div><span class="rp-hp">${p.hp}/${p.max_hp}</span></div>
             ${boosts?`<div class="rp-boost">${boosts}</div>`:''}
-            ${action?`<div class="rp-move"><span class="rp-order ${action.order===1?'first':''}">${action.order}</span>${typeIcon(action.move)||'➤'} ${tMove(action.move)}</div>`:''}
+            ${action?`<div class="rp-move"><span class="rp-order ${action.order===1?'first':''}">${action.order}</span>${typeIcon(action.move)||'➤'} ${tX(action.move)}</div>`:''}
           </div>
         </div>`;
       }
@@ -1086,12 +1098,18 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
         if(sd.stealth_rock) h.push(I18N.hazSR);
         if(sd.spikes) h.push(I18N.hazSpikes+(sd.spikes>1?`×${sd.spikes}`:''));
         if(sd.toxic_spikes) h.push(I18N.hazToxicSpikes+(sd.toxic_spikes>1?`×${sd.toxic_spikes}`:''));
-        if(sd.reflect) h.push(I18N.hazReflect);
-        if(sd.light_screen) h.push(I18N.hazLightScreen);
-        if(sd.aurora_veil) h.push(I18N.hazAuroraVeil);
+        if(sd.sticky_web) h.push(tMove('ねばねばネット'));
+        const rem=c=>c?`${I18N.remPfx}${c}${I18N.remSfx}`:'';
+        if(sd.reflect) h.push(I18N.hazReflect+rem(sd.reflect_count));
+        if(sd.light_screen) h.push(I18N.hazLightScreen+rem(sd.light_screen_count));
+        if(sd.aurora_veil) h.push(I18N.hazAuroraVeil+rem(sd.aurora_veil_count));
+        if(sd.tailwind) h.push('🍃 '+tMove('おいかぜ')+rem(sd.tailwind_count));
         return `<div class="rp-haz">${h.map(x=>`<span class="hazchip">${x}</span>`).join('')}</div>`;
       }
       const EXPL_REASON={qselect:'十分読んだ中で最も勝率が高い手',visit:'最も多く探索した手',downside_guard:'最悪ケースを避けて交代に変更',certain_ko:'相手を確定で倒せる手'};
+      const EXEC_TXT={ja:{pfx:'実行した手: ',lp:'（',rp:'）',certain_ko:'確定で倒せる手に差し替え。探索の選択: ',encore:'アンコールで固定。選んだ手: ',downside_guard:'最悪のケースを避けるため交代に差し替え。探索の選択: '},
+        en:{pfx:'Executed: ',lp:' (',rp:')',certain_ko:'replaced with a guaranteed KO; search picked ',encore:'locked by Encore; picked ',downside_guard:'switched out to avoid the worst case; search picked '},
+        ko:{pfx:'실행한 수: ',lp:' (',rp:')',certain_ko:'확정 KO 기술로 교체. 탐색의 선택: ',encore:'앙코르로 고정. 고른 수: ',downside_guard:'최악의 경우를 피하려고 교체로 변경. 탐색의 선택: '}}[LANG]||{};
       function renderExplain(t, played){
         const e1=t.expl1; if(!e1) return '';        // 相手の評価は非表示（自分のみ）
         const pc=x=>x==null?'—':Math.round(x*100)+'%';
@@ -1101,12 +1119,14 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
         // ▶は「実際に打った手」(played=ログ由来)に合わせる。確定KO安全弁等でMCTS選択とズレるため。
         const norm=s=>(s||'').replace('メガ+','');
         let chosen=e1.chosen;
-        if(played){ const h=cands.find(c=>norm(c.a)===played); if(h) chosen=h.a; }
+        if(e1.exec){ if(!cands.some(c=>c.a===e1.exec)) cands.push({a:e1.exec,v:null,q:null}); chosen=e1.exec; }
+        else if(played){ const h=cands.find(c=>norm(c.a)===played); if(h) chosen=h.a; }
         cands.sort((a,b)=>(b.q==null?-1:b.q)-(a.q==null?-1:a.q));                      // 勝率順
         const rows=cands.map(c=>{ const weak=(c.v||0)<thr && c.a!==chosen;            // 探索不足＝勝率が当てにならない
           return `<tr class="${c.a===chosen?'chosen':''}${weak?' weak':''}"><td>${c.a===chosen?'▶ ':''}${translateCandAction(c.a)}${c.a===hon?`<span class="honmei">${I18N.honmei}</span>`:''}${weak?`<span class="lowconf">${I18N.lowconf}</span>`:''}</td><td>${pc(c.q)}</td></tr>`;
         }).join('');
-        return `<div class="expl"><div class="expl-h">${I18N.aiTitle}</div><div class="expl-side"><table class="expl-tbl"><tr><th>${I18N.candidateMove}</th><th>${I18N.winRateLabel}</th></tr>${rows}</table></div></div>`;
+        const ex=(e1.exec&&e1.exec!==e1.chosen&&EXEC_TXT[e1.reason])?`<div class="expl-note">${EXEC_TXT.pfx}${translateCandAction(e1.exec)}${EXEC_TXT.lp}${EXEC_TXT[e1.reason]}${translateCandAction(e1.chosen)}${EXEC_TXT.rp}</div>`:'';
+        return `<div class="expl"><div class="expl-h">${I18N.aiTitle}</div><div class="expl-side"><table class="expl-tbl"><tr><th>${I18N.candidateMove}</th><th>${I18N.winRateLabel}</th></tr>${rows}</table>${ex}</div></div>`;
       }
       function renderColumn(sd,mine,act,revealed){
         return `<div class="rp-col ${mine?'mine':'opp'}"><div class="rp-label">${mine?I18N.mine:I18N.opp}</div>${hazardBar(sd)}
@@ -1114,18 +1134,19 @@ const lead = `${I18N.lead}<a href="${I18N.bsHref}">${I18N.bsLink}</a>　<a href=
       }
       function renderReplay(idx){ if(!RBATTLE)return; RTURN=Math.max(0,Math.min(idx,RBATTLE.turns.length-1)); const t=RBATTLE.turns[RTURN];
         const acn={}; const a1=t.side1.party[t.side1.active_idx], a2=t.side2.party[t.side2.active_idx]; if(a1&&a2&&a1.name!==a2.name){ acn[a1.name]=1; acn[a2.name]=2; }
-        const wc=t.weather_count?`（あと${t.weather_count}）`:''; const wx=(t.weather&&WEATHER[t.weather])?`${WEATHER[t.weather]}${wc}　`:''; const trc=t.trick_room_count?`（あと${t.trick_room_count}）`:''; const tr=t.trick_room?`🌀 トリックルーム${trc}`:''; const ACT=parseActions(t.logs, acn);
-        const banner=(wx||tr)?`<div class="rp-banner">${wx}${tr}</div>`:'';
+        const wc=t.weather_count?`${I18N.remPfx}${t.weather_count}${I18N.remSfx}`:''; const wx=(t.weather&&WEATHER[t.weather])?`${WEATHER[t.weather]}${wc}　`:''; const trc=t.trick_room_count?`${I18N.remPfx}${t.trick_room_count}${I18N.remSfx}`:''; const tr=t.trick_room?`🌀 ${tMove('トリックルーム')}${trc}　`:''; const tf=(t.terrain&&TERRAIN[t.terrain])?`${TERRAIN[t.terrain][0]} ${tMove(TERRAIN[t.terrain][1])}${t.terrain_count?`${I18N.remPfx}${t.terrain_count}${I18N.remSfx}`:''}`:''; const ACT=parseActions(t.logs, acn, t.log_sides);
+        const banner=(wx||tr||tf)?`<div class="rp-banner">${wx}${tf?tf+'　':''}${tr}</div>`:'';
         const seenOpp=new Set(); for(let k=0;k<=RTURN;k++){ const ai=RBATTLE.turns[k].side2.active_idx; if(ai!=null)seenOpp.add(ai); }
         $('replay-sides').innerHTML=`${banner}<div class="rp-grid">${renderColumn(t.side1,true,ACT[1])}${renderColumn(t.side2,false,ACT[2],seenOpp)}</div>`;
         $('replay-expl').innerHTML = renderExplain(t, (a1 && ACT[1] && ACT[1][a1.name]) ? ACT[1][a1.name].move : null);
-        const simple=summarizeTurn(t.logs, acn);
+        const simple=summarizeTurn(t.logs, acn, t.log_sides);
         $('replay-log').innerHTML =
           `<div class="expl-h" style="margin-bottom:.35em">${I18N.logTitle}</div>`
           + `<div class="rlog-simple">${simple.length?simple.map(s=>`<div>${s}</div>`).join(''):`<div class="muted">${I18N.noAction}</div>`}</div>`
-          + `<details class="rlog-detail"><summary>${I18N.logDetail}</summary><div class="rlog-full">${reorderLogs(t.logs||[]).map(l=>`<div>${l}</div>`).join('')||'—'}</div></details>`;
+          + `<details class="rlog-detail"><summary>${I18N.logDetail}</summary><div class="rlog-full">${reorderLogs((t.logs||[]).map((l,i)=>[l,(t.log_sides&&!/^▷/.test(l))?t.log_sides[i]:0])).map(([l,sd])=>`<div>${sd?`<span class="rlog-side s${sd}">${sd===1?I18N.sideMe:I18N.sideOpp}</span> `:''}${translateRawLog(l)}</div>`).join('')||'—'}</div></details>`;
         $('replay-turn').textContent=I18N.turnPfx+t.turn+I18N.turnMid+(RBATTLE.turns.length-1);
-        const rb=$('replay-result'); if(RTURN===RBATTLE.turns.length-1){rb.textContent='🏆 '+RBATTLE.winner;rb.className='wr-tag '+(RBATTLE.result===1?'g':RBATTLE.result===2?'r':'n');}else rb.textContent=''; }
+        const rb=$('replay-result'); if(RTURN===RBATTLE.turns.length-1){rb.textContent='🏆 '+tWinner(RBATTLE.winner);rb.className='wr-tag '+(RBATTLE.result===1?'g':RBATTLE.result===2?'r':'n');}else rb.textContent=''; }
+      function tWinner(w){ if(_IS_JA||!w) return w; if(w==='引き分け') return I18N.drawResult; const m=w.match(/^(P\d) \((.+)側\)$/); return m?`${m[1]} (${tPoke(m[2])}${I18N.sideSfx})`:w; }
       function stepTurn(d){
         stopAuto(); renderReplay(RTURN+d);
         const log=$('replay-log');
