@@ -93,7 +93,16 @@ def main():
             continue
 
         # ランク検索（まず記事名、次にメガ除去で再試行）
-        rank = lookup_rank(cur, season, pokemon_name)
+        # 事実ファイルがあれば本文と同じ日の順位（使用率は毎日クロールされ、最新日だと本文の順位と食い違う。2026-10-28 ヒスイゾロアーク 73位/74位）
+        facts_path = os.path.join(os.path.dirname(__file__), '..', '_local', 'article_facts', f'{slug}.json')
+        rank = None
+        if os.path.exists(facts_path):
+            with open(facts_path, encoding='utf-8') as ff:
+                fx = json.load(ff)
+            subj = fx['subject']['name']
+            rank = next((x['value'] for x in fx['facts'] if x['kind'] == 'usage_rank' and not x.get('season') and x['pokemon'] == subj), None)
+        if rank is None:
+            rank = lookup_rank(cur, season, pokemon_name)
         match_key = pokemon_name
         if rank is None:
             stripped = re.sub(r'^メガ', '', pokemon_name)

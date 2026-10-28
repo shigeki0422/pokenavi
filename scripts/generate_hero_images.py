@@ -278,14 +278,16 @@ def generate(cfg: dict):
 
     LX, LY = 22, 20
 
-    # シーズン M-2 バッジ
+    # シーズンバッジ（cfgで上書き可、未指定時はM-2既定値を維持）
+    badge_label = cfg.get("badge_label", "シーズン M-2")
+    date_range  = cfg.get("date_range", "2026/05/13 〜 06/17")
     bw, bh = 145, 38
     draw.rounded_rectangle([LX, LY, LX+bw, LY+bh], radius=19, fill=cfg["badge_bg"])
-    draw.text((LX+14, LY+9), "シーズン M-2",
+    draw.text((LX+14, LY+9), badge_label,
               font=get_font(18, bold=True), fill=BADGE_TXT)
 
     # 日付
-    draw.text((LX+2, LY+48), "2026/05/13 〜 06/17",
+    draw.text((LX+2, LY+48), date_range,
               font=get_font(12), fill=META_GRAY)
 
     # シングルバトル タグ

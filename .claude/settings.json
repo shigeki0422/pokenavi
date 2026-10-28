@@ -9,6 +9,18 @@
             "command": "h=\"$CLAUDE_PROJECT_DIR/.claude/hooks/destructive_guard.py\"; [ -f \"$h\" ] || h=\"$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/destructive_guard.py\"; [ -f \"$h\" ] || exit 0; python3 \"$h\"",
             "timeout": 15,
             "statusMessage": "破壊的コマンドを検査中"
+          },
+          {
+            "type": "command",
+            "command": "h=\"$CLAUDE_PROJECT_DIR/.claude/hooks/hero_image_guard.py\"; [ -f \"$h\" ] || h=\"$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/hero_image_guard.py\"; [ -f \"$h\" ] || exit 0; python3 \"$h\"",
+            "timeout": 15,
+            "statusMessage": "heroImage未コミットを検査中"
+          },
+          {
+            "type": "command",
+            "command": "h=\"$CLAUDE_PROJECT_DIR/.claude/hooks/article_publish_gate.py\"; [ -f \"$h\" ] || h=\"$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/article_publish_gate.py\"; [ -f \"$h\" ] || exit 0; python3 \"$h\"",
+            "timeout": 60,
+            "statusMessage": "記事公開ゲートを検査中"
           }
         ]
       }
