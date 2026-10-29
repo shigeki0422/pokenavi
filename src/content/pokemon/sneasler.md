@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのオオニューラ基礎デー
 pokemonName: 'オオニューラ'
 dexNumber: 903
 usageRank: 24
-updatedDate: '2026-10-28'
+updatedDate: '2026-10-29'
 pubDate: '2026-10-24'
 draft: false
 
@@ -843,7 +843,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】オオニューラ 考察 M-7 シーズン 使用率25位の型解説</div>
   </div>
 </a>
-
 <a href="/blog/sneasler-analysis-m6/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0903-00.webp" alt="オオニューラ" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>

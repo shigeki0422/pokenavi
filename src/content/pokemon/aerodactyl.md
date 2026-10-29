@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのプテラ基礎データ。種
 pokemonName: 'プテラ'
 dexNumber: 142
 usageRank: 146
-updatedDate: '2026-10-28'
+updatedDate: '2026-10-29'
 pubDate: '2026-10-24'
 draft: false
 

@@ -5,7 +5,7 @@ pokemonName: 'ストリンダー(ロー)'
 dexNumber: 849
 usageRank: 130
 imageForm: '01'
-updatedDate: '2026-10-28'
+updatedDate: '2026-10-29'
 pubDate: '2026-10-24'
 draft: false
 

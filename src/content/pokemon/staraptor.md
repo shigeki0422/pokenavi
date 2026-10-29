@@ -4,10 +4,10 @@ description: 'ポケモンチャンピオンズのムクホーク基礎データ
 pokemonName: 'ムクホーク'
 dexNumber: 398
 usageRank: 46
-updatedDate: '2026-10-28'
+updatedDate: '2026-10-29'
 pubDate: '2026-10-24'
 draft: false
-analysisSlug: 'staraptor-analysis-m3'
+
 faq:
   season: 'M-7'
   topMoves: ['インファイト', 'ブレイブバード', 'はねやすめ', 'ブレイズキック']
@@ -894,7 +894,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ムクホーク 考察 M-7 シーズン 使用率46位の3型解説</div>
   </div>
 </a>
-
 <a href="/blog/staraptor-analysis-m3/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0398-00.webp" alt="ムクホーク" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>

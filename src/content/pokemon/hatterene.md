@@ -2,13 +2,12 @@
 title: 'ブリムオン | ポケモンチャンピオンズ 使用率・基礎データ'
 description: 'ポケモンチャンピオンズのブリムオン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率49位。'
 pokemonName: 'ブリムオン'
-analysisSlug: 'hatterene-analysis-m7'
 dexNumber: 858
 usageRank: 49
-updatedDate: '2026-10-28'
+updatedDate: '2026-10-29'
 pubDate: '2026-10-24'
 draft: false
-
+analysisSlug: 'hatterene-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['トリックルーム', 'ドレインキッス', 'いやしのねがい', 'サイコノイズ']

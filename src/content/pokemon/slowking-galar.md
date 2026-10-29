@@ -7,7 +7,7 @@ usageRank: 72
 imageForm: '01'
 pubDate: '2026-10-24'
 draft: false
-analysisSlug: 'slowking-galar-analysis-m2'
+
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
@@ -805,7 +805,6 @@ document.querySelectorAll('.pn-rate-wrap').forEach(function(wrap){
     <div style="font-size:0.95rem;font-weight:bold;color:#1e293b">【ポケモンチャンピオンズ】ガラルヤドキング 考察 M-7 シーズン 使用率75位の3型解説</div>
   </div>
 </a>
-
 <a href="/blog/slowking-galar-analysis-m2/" style="display:flex;align-items:center;gap:12px;padding:16px;border:1px solid #e2e8f0;border-radius:8px;text-decoration:none;background:#f8fafc;transition:box-shadow 0.2s;margin-bottom:8px" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.1)'" onmouseout="this.style.boxShadow=''">
   <img src="/images/pokemon/pokemon-0199-01.webp" alt="ヤドキング（ガラル）" style="width:56px;height:56px;flex-shrink:0" loading="lazy">
   <div>

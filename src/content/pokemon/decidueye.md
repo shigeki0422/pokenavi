@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのジュナイパー基礎デー
 pokemonName: 'ジュナイパー'
 dexNumber: 724
 usageRank: 999
-updatedDate: '2026-10-28'
+updatedDate: '2026-10-29'
 pubDate: '2026-05-24'
 draft: false
 

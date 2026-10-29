@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのデスバーン基礎データ
 pokemonName: 'デスバーン'
 dexNumber: 867
 usageRank: 153
-updatedDate: '2026-10-28'
+updatedDate: '2026-10-29'
 pubDate: '2026-10-24'
 draft: false
 
