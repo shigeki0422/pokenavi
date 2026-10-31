@@ -5,6 +5,7 @@ import iconsData from '../../public/sim-data/icons.json';
 import moveTypesData from '../../public/sim-data/move_types.json';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 import { simWatchUrl } from '../utils/simLink';
+import { simNameMatch } from '../utils/simName';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 
 interface Props {
@@ -79,7 +80,6 @@ function iconUrl(name: string): string | null {
   }
   return id ? `/images/pokemon/pokemon-${id}.webp` : null;
 }
-function baseName(n: string) { return n.split('（')[0].split('(')[0].trim(); }
 
 const NATURE: Record<string, string> = {いじっぱり:'A↑C↓',さみしがり:'A↑B↓',ゆうかん:'A↑S↓',やんちゃ:'A↑D↓',ずぶとい:'B↑A↓',わんぱく:'B↑C↓',のんき:'B↑S↓',のうてんき:'B↑D↓',ひかえめ:'C↑A↓',おっとり:'C↑B↓',れいせい:'C↑S↓',うっかりや:'C↑D↓',おだやか:'D↑A↓',おとなしい:'D↑B↓',なまいき:'D↑S↓',しんちょう:'D↑C↓',おくびょう:'S↑A↓',せっかち:'S↑B↓',ようき:'S↑C↓',むじゃき:'S↑D↓'};
 const TYPEICON: Record<string, [string,string]> = {ノーマル:['00','normal'],かくとう:['01','fighting'],ひこう:['02','flying'],どく:['03','poison'],じめん:['04','ground'],いわ:['05','rock'],むし:['06','bug'],ゴースト:['07','ghost'],はがね:['08','steel'],ほのお:['09','fire'],みず:['10','water'],くさ:['11','grass'],でんき:['12','electric'],エスパー:['13','psychic'],こおり:['14','ice'],ドラゴン:['15','dragon'],あく:['16','dark'],フェアリー:['17','fairy']};
@@ -109,7 +109,6 @@ function seasonLabel(label: string): string {
 
 const EV_LABELS = ['H','A','B','C','D','S'];
 
-const bn = baseName(pokemonName);
 // M-A(sim-data: M-1〜M-3) と M-B(sim-data-verify-meta: M-3実構築/M-4) を統合。
 // 同一ラベルは先勝ちで重複排除し、後段の「新しいシーズン優先」でM-4が先に出る。
 const subjects = (() => {
@@ -124,7 +123,7 @@ const subjects = (() => {
 })();
 
 const candidates = subjects.filter((s: any) => s.party && s.party.some((spec: string) => {
-  const n = parseSpec(spec).name; return n === pokemonName || baseName(n) === bn;
+  return simNameMatch(pokemonName, parseSpec(spec).name);
 }));
 
 function seasonNum(label: string): number {
@@ -171,7 +170,7 @@ function buildParty(match: any) {
 
 const cards = matches.map((match: any, ci: number) => {
   const party = buildParty(match);
-  const targetIdx = party.findIndex((p: any) => p.name === pokemonName || baseName(p.name) === bn);
+  const targetIdx = party.findIndex((p: any) => simNameMatch(pokemonName, p.name));
   const t = party[targetIdx] ?? party[0];
   const uid = `spc-${ci}-${Math.random().toString(36).slice(2, 7)}`;
   const season = seasonLabel(match.label ?? '');

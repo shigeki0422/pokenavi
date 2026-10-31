@@ -3,6 +3,7 @@ import OnboardingGuide from './OnboardingGuide.astro';
 import { NATURE_NAME_EN, NATURE_NAME_KO, MOVE_NAME_EN, MOVE_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, TYPE_NAME_EN, TYPE_NAME_KO } from '../i18n/game-terms';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 import { SIM_LOG_TERM, SIM_LOG_REASON, SIM_LOG_RULES_SRC } from '../scripts/party-builder/diag-shared';
+import { SIM_NAME_FN_SRC } from '../utils/simName';
 
 interface Props { mode?: 'MA' | 'MB' | 'MC'; lang?: 'ja' | 'en' | 'ko'; }
 const { mode = 'MA', lang = 'ja' } = Astro.props;
@@ -343,7 +344,7 @@ const lead = `${isMC ? I18N.leadMC : I18N.lead}<a href="${I18N.bsHref}">${I18N.b
   <slot />
     </main>
 
-    <script is:inline define:vars={{ I18N, NATURE_NAME_MAP, POKEMON_NAME_MAP, MOVE_NAME_MAP, ITEM_NAME_MAP, ABILITY_NAME_MAP, TYPE_NAME_MAP, LANG: lang, SIM_LOG_TERM, SIM_LOG_REASON, SIM_LOG_RULES_SRC }}>
+    <script is:inline define:vars={{ I18N, NATURE_NAME_MAP, POKEMON_NAME_MAP, MOVE_NAME_MAP, ITEM_NAME_MAP, ABILITY_NAME_MAP, TYPE_NAME_MAP, LANG: lang, SIM_LOG_TERM, SIM_LOG_REASON, SIM_LOG_RULES_SRC, SIM_NAME_FN_SRC }}>
       const SIMMODE = document.querySelector('main[data-simmode]')?.dataset.simmode || 'MA';
       const IS_MB = SIMMODE === 'MB', IS_MC = SIMMODE === 'MC', IS_PARTY = IS_MB || IS_MC;
       const _IS_JA = LANG === 'ja';
@@ -616,28 +617,25 @@ const lead = `${isMC ? I18N.leadMC : I18N.lead}<a href="${I18N.bsHref}">${I18N.b
 
       const toKatakana = s => s.replace(/[ぁ-ゖ]/g, c => String.fromCharCode(c.charCodeAt(0) + 0x60));
 
-      const basePoName = n => n.split('（')[0].split('(')[0].trim();
+      const { simNameMatch } = new Function(SIM_NAME_FN_SRC + '\nreturn { simNameKey, simNameMatch };')();
       function partyMatches(r){
         if(!SUBJ_FILTER_POKES.length) return true;
         if(!r.party) return false;
-        const names = r.party.map(s => basePoName(parseSpec(s).name));
-        return SUBJ_FILTER_POKES.every(p => {
-          const fb = basePoName(p.name);
-          return names.includes(fb);
-        });
+        const names = r.party.map(s => parseSpec(s).name);
+        return SUBJ_FILTER_POKES.every(p => names.some(n => simNameMatch(p.name, n)));
       }
-      function specsIconsHtml(specs, filterBases){
+      function specsIconsHtml(specs, filterNames){
         if(!specs||!specs.length) return '';
         const imgs = specs.slice(0,6).map(s=>{
           const n=parseSpec(s).name; const u=iconUrl(n);
-          const hit=filterBases&&filterBases.length&&filterBases.includes(basePoName(n));
+          const hit=filterNames&&filterNames.some(f=>simNameMatch(f,n));
           return u?`<img src="${u}" alt="" class="${hit?'matched':''}">`:''
         }).join('');
         return imgs ? `<div class="pitem-icons">${imgs}</div>` : '';
       }
       function partyIconsHtml(r){
         if(!r.party) return '';
-        return specsIconsHtml(r.party, SUBJ_FILTER_POKES.map(p=>basePoName(p.name)));
+        return specsIconsHtml(r.party, SUBJ_FILTER_POKES.map(p=>p.name));
       }
 
       function renderFilterChips(){
@@ -717,8 +715,8 @@ const lead = `${isMC ? I18N.leadMC : I18N.lead}<a href="${I18N.bsHref}">${I18N.b
       function oppCardMatches(c){
         if(!OPP_FILTER_POKES.length) return true;
         if(!c.specs||!c.specs.length) return false;
-        const names = c.specs.map(s=>basePoName(parseSpec(s).name));
-        return OPP_FILTER_POKES.every(p=>names.includes(basePoName(p.name)));
+        const names = c.specs.map(s=>parseSpec(s).name);
+        return OPP_FILTER_POKES.every(p=>names.some(n=>simNameMatch(p.name,n)));
       }
       async function onOppFilterInput(val){
         const sug=$('opp-sug'); _oppSugActive=-1;
@@ -803,8 +801,9 @@ const lead = `${isMC ? I18N.leadMC : I18N.lead}<a href="${I18N.bsHref}">${I18N.b
         const ofNames=(p.get('of')||'').split(',').filter(Boolean);
         if(sfNames.length||ofNames.length){
           const idx=await loadSearchIdx();
-          sfNames.forEach(n=>{if(!SUBJ_FILTER_POKES.some(x=>x.name===n)){const f=idx.find(x=>x.n===n);SUBJ_FILTER_POKES.push({name:n,icon:f?.i||''});}});
-          ofNames.forEach(n=>{if(!OPP_FILTER_POKES.some(x=>x.name===n)){const f=idx.find(x=>x.n===n);OPP_FILTER_POKES.push({name:n,icon:f?.i||''});}});
+          const findPoke=n=>idx.find(x=>x.t==='p'&&(x.n===n||x.e===n||x.k===n));
+          sfNames.forEach(q=>{const f=findPoke(q),n=f?.n||q;if(!SUBJ_FILTER_POKES.some(x=>x.name===n))SUBJ_FILTER_POKES.push({name:n,icon:f?.i||''});});
+          ofNames.forEach(q=>{const f=findPoke(q),n=f?.n||q;if(!OPP_FILTER_POKES.some(x=>x.name===n))OPP_FILTER_POKES.push({name:n,icon:f?.i||''});});
           renderFilterChips(); renderOppFilterChips(); renderSubjectList();
           if(STATIC) prefetchAllParties();
         }
@@ -891,7 +890,7 @@ const lead = `${isMC ? I18N.leadMC : I18N.lead}<a href="${I18N.bsHref}">${I18N.b
         if(!cards.length){ const all=Object.keys(CARDS).length; ol.innerHTML=`<div class="muted" style="padding:.6em">${OPP_FILTER_POKES.length?I18N.noPartyMatch:all?I18N.selectSeason:I18N.noData}</div>`; $('summary').textContent=''; return; }
         const ng=cards.filter(c=>c.win_rate>=0.6).length, nb=cards.filter(c=>c.win_rate<=0.4).length, nm=cards.length-ng-nb;
         $('summary').innerHTML=`<div class="wr-summary"><span>${labelName(SUBJECT.label, SUBJECT.party)}${I18N.sumRkMid}${cards.length}${VSNOUN}</span><div class="wr-bar"><div class="wr-bar-g" style="flex:${ng}"></div><div class="wr-bar-n" style="flex:${nm}"></div><div class="wr-bar-r" style="flex:${nb}"></div></div><span><span class="wr-cnt-g">${I18N.sumGoodFmt.replace('{n}',ng)}</span>${I18N.sumSep}${I18N.sumEvenFmt.replace('{n}',nm)}${I18N.sumSep}<span class="wr-cnt-r">${I18N.sumBadFmt.replace('{n}',nb)}</span></span></div>`;
-        const oppFilterBases = OPP_FILTER_POKES.map(p=>basePoName(p.name));
+        const oppFilterBases = OPP_FILTER_POKES.map(p=>p.name);
         const uNames = uniquePartyNames(cards.map(c=>c.specs));
         ol.innerHTML = cards.map((c,k)=>{ const wr=c.win_rate, sc=seasonCls(c.label)?'s-'+seasonCls(c.label):'', wrc=wr>=0.6?'opp-g':wr<=0.4?'opp-r':'';
           return `<div class="pitem ${sc} ${wrc}" data-label="${encodeURIComponent(c.label)}" onclick="selectOppRanker('${c.label.replace(/'/g,"\\'")}')">${seasonBadge(c.label)}<span class="nm" title="${partyFullTitle(c.specs)}">${uNames[k]}</span>${specsIconsHtml(c.specs,oppFilterBases)}</div>`;
