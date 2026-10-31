@@ -142,8 +142,15 @@ const siteUrl = 'https://pokenavi.jp';
 const rankLabel = (r: number | null | undefined) => (r && r <= 200 ? `使用率${r}位` : '圏外');
 const ranked = !!defenderRank && defenderRank <= 200;
 const rankText = ranked ? `使用率${defenderRank}位の` : '';
-const title = `${defenderName}対策｜${defenderName}に強いポケモン ${MATCHUP_SEASON}【${rankText}ランキング】`;
-const description = `${rankText}${defenderName}に強いポケモン${counters.length}体を使用率上位から抽出。1v1事前計算（実数値・タスキ/がんじょう考慮）で確実に有利を取れる対策ポケモンをランキング形式で紹介。`;
+/** 検索結果では「使用率◯位の」より「何体載っているか・1位は誰か」の方が
+ * クリックの判断材料になるため、具体の数字と名前をタイトル・説明文に出す。 */
+const topCounterName = bestCounters[0]?.name ?? counters[0]?.name ?? '';
+const title = counters.length
+  ? `${defenderName}対策 ${MATCHUP_SEASON}｜有利を取れる${counters.length}体${topCounterName ? `｜1位は${topCounterName}` : ''}`
+  : `${defenderName}対策 ${MATCHUP_SEASON}｜${defenderName}に強いポケモン`;
+const description = counters.length
+  ? `${defenderName}に強いポケモン${counters.length}体（明確に有利${bestCounters.length}体）を1v1事前計算で抽出。${topCounterName ? `1位は${topCounterName}。` : ''}技・持ち物・EVまで含めた型別の判定内訳つき。${rankText ? `${MATCHUP_SEASON}の${rankText}${defenderName}の対策に。` : ''}`
+  : `${defenderName}に強いポケモンを1v1事前計算で抽出。技・持ち物・EVまで含めた型別の判定内訳つき。`;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'ItemList',
