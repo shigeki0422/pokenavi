@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのマニューラ基礎データ
 pokemonName: 'マニューラ'
 dexNumber: 461
 usageRank: 127
-updatedDate: '2026-10-29'
+updatedDate: '2026-10-31'
 pubDate: '2026-10-24'
 draft: false
 

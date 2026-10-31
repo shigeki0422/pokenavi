@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのマフォクシー基礎デー
 pokemonName: 'マフォクシー'
 dexNumber: 655
 usageRank: 47
-updatedDate: '2026-10-29'
+updatedDate: '2026-10-31'
 pubDate: '2026-10-24'
 draft: false
 

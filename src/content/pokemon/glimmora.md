@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのキラフロル基礎データ
 pokemonName: 'キラフロル'
 dexNumber: 970
 usageRank: 18
-updatedDate: '2026-10-29'
+updatedDate: '2026-10-31'
 pubDate: '2026-10-24'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのカイロス基礎データ。
 pokemonName: 'カイロス'
 dexNumber: 127
 usageRank: 170
-updatedDate: '2026-10-29'
+updatedDate: '2026-10-31'
 pubDate: '2026-10-24'
 draft: false
 

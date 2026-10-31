@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのジュペッタ基礎データ
 pokemonName: 'ジュペッタ'
 dexNumber: 354
 usageRank: 60
-updatedDate: '2026-10-29'
+updatedDate: '2026-10-31'
 pubDate: '2026-10-24'
 draft: false
 
