@@ -8,6 +8,7 @@ updatedDate: '2026-10-31'
 pubDate: '2026-10-24'
 draft: false
 
+analysisSlug: 'garchomp-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['じしん', 'ステルスロック', 'かえんほうしゃ', 'りゅうせいぐん']

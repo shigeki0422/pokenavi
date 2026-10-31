@@ -8,6 +8,8 @@ imageForm: '01'
 pubDate: '2026-10-24'
 draft: false
 
+
+analysisSlug: 'slowking-galar-analysis-m7'
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
