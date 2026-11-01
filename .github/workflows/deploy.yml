@@ -4,6 +4,11 @@ on:
   push:
     branches: [main, draft]
 
+# 同時に走ると後から終わった方が本番を上書きする（古い中身で戻ることがある）ため、ブランチごとに1本ずつ流す
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
