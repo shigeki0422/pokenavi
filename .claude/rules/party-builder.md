@@ -39,6 +39,7 @@ paths:
   └ pyengine → Cloud Run pokenavi-suggest（簡単構築の提案API。エンジンを変えたら再デプロイが要る。gcloud はユーザーが実行）
 ```
 
+- **Cloud Run は Rust エンジンが無効なら起動しない**（2026-11-01）: pokenavi.db を更新したあと datapack を作り直さずにデプロイすると Python 経路に落ち、提案1件に約4時間かかって重い処理の枠を塞ぎ、作り置き以外の提案が全部「混み合っています」（429）になった（10/28〜11/01）。`product3_server.py` が起動時に `engine_dispatch.rust()` を確かめ、`K_SERVICE`（Cloud Run）で無効なら終了する＝デプロイが失敗して前の版のまま。デプロイ前に `_rust_engine/datapack_export.py` で作り直す。
 - **型の出どころは型プール（版指定）に一本化**（2026-10-08）: 提案・生成集団・工房・情報ページ・AI はすべて同じ型プールの版を使う（提案・生成集団・AI＝season、工房・情報ページ＝page）。提案（`PartyGen`）は手元に版が無ければ datapack の `build_pool`（Cloud Run。同じ season の版）を読む。`build_pool_<シーズン>.md`（手作りのドラフト型）は型プールの無い過去シーズン（M-3 等）専用（`gen_build_pool.py`・`gen_party_ga.py`・`_append_m4_builds.py` も過去シーズン用。`_gen_type_pool.md_builds` の M-4 上位構築 md は系統の事前分布で、型の出どころではない）。`pool_checks.py` が「型の出どころ」と「努力値の合計≠66」をエラーにする。
 - 努力値は合計66（各≤32）。余りはその種の DB（そのシーズンの最新日）で余りが最も多く置かれている能力へ（同じ大きな振り先の配分を優先・データが無ければ H→B→D→S→A→C）。`ev_fill.py`。
 - **新シーズンは使用率の順位が先に入り、詳細（技・持ち物・性格・EV・チームメイト）は後日のフルクロールで入る。この間にシーズンを自動で決める生成物を流すと中身が空になる**:

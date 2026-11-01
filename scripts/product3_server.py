@@ -245,6 +245,13 @@ for sp in SPECIES:
         VARIANTS.append(v)
 print(f"準備完了。種{len(SPECIES)} 選択肢{len(VARIANTS)} / http://localhost:{PORT}", flush=True)
 
+# Python 経路は提案1件に数時間かかり、重い処理の枠を塞いで全員を 429 にする（2026-10-28〜11-01 の障害）。
+# Cloud Run では起動を失敗させ、デプロイを失敗扱いにして前の版のまま配信を続けさせる。
+import engine_dispatch as _ED
+if os.environ.get("K_SERVICE") and _ED.ENGINE == "rust" and _ED.rust() is None:
+    raise SystemExit("Rust エンジンが無効のため起動しない（上の [engine_dispatch] の理由を参照。"
+                     "多くは pokenavi.db 更新後の datapack 未再生成 → _rust_engine/datapack_export.py）")
+
 def _cpu_avail():
     try:
         return len(os.sched_getaffinity(0))   # cgroup/affinity準拠（コンテナのCPU割当を尊重）
