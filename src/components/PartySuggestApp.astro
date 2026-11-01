@@ -126,6 +126,18 @@ const I18N = I18N_ALL[lang];
       {mode === 'single' && <div class="ps-help">{I18N.blankAutoHelp}</div>}
       {mode === 'single' && <a class="ps-to-multi" id="ps-to-multi" href={`${pfx}/party-suggest/multi/`}>{I18N.toMultiHint}</a>}
     </div>
+    {/* 1軸→複数軸へ移る前に「広告を見て使う／プレミアム」を選んでもらう（未課金・日本語のみ。複数軸ページの広告はオファーウォール） */}
+    {mode === 'single' && lang === 'ja' && (
+      <dialog id="ps-gate" class="ps-gate">
+        <p class="ps-gate-t">複数の軸で提案するには</p>
+        <p class="ps-gate-d">複数の軸を組み合わせた提案（ライブ計算）は、短い広告を見ると24時間ご利用いただけます。プレミアム会員は広告なしでご利用いただけます。</p>
+        <div class="ps-gate-btns">
+          <a id="ps-gate-ad" class="pb-btn-sub" href="#">広告を見て使う（24時間）</a>
+          <a id="ps-gate-prem" class="btn" href="/premium/?from=suggest">プレミアムに登録（月300円・広告なし）</a>
+        </div>
+        <button id="ps-gate-x" class="ps-gate-x" aria-label="閉じる">✕</button>
+      </dialog>
+    )}
     <div class="row" style="margin-top:.6em">
       <button id="go" class="btn">{I18N.go}</button>
     </div>
@@ -161,6 +173,13 @@ const I18N = I18N_ALL[lang];
   .ps-mode-desc{font-size:.8rem;color:rgb(var(--gray));margin:0 0 .7em}
   .ps-to-multi{display:inline-block;margin-top:.5em;font-size:.82rem;font-weight:700;color:var(--accent)}
   .ps-addaxis{margin:0 0 .8em}
+  .ps-gate{border:none;border-radius:12px;padding:1.4em 1.2em 1.2em;max-width:min(26rem,calc(100vw - 32px));box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .ps-gate::backdrop{background:rgba(15,23,42,.45)}
+  .ps-gate-t{font-weight:700;font-size:1.05rem;margin:0 0 .5em}
+  .ps-gate-d{font-size:.88rem;margin:0 0 1em;line-height:1.6}
+  .ps-gate-btns{display:flex;flex-direction:column;gap:.6em}
+  .ps-gate-btns a{display:block;text-align:center;text-decoration:none;padding:.7em .9em;font-size:.9rem}
+  .ps-gate-x{position:absolute;top:.4em;right:.5em;background:none;border:none;font-size:1rem;cursor:pointer;color:#64748b}
   .ps-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.7em;padding:3.2em 1em;background:#fff;border:1px solid rgb(var(--gray-light));border-radius:12px}
   .ps-spinner{width:38px;height:38px;border:4px solid rgb(var(--gray-light));border-top-color:var(--accent);border-radius:50%;animation:ps-spin .8s linear infinite}
   @keyframes ps-spin{to{transform:rotate(360deg)}}
@@ -1324,6 +1343,33 @@ const I18N = I18N_ALL[lang];
    * 誘導する。ja版は静的プリセットページ側のpreCoreLabelプロパティを優先する。
    * sessionStorageに軸が完全一致する結果があればAPIを叩き直さず即復元する。
    * (C9) /species取得待ちのポーリングには上限を設け、失敗時に無限ループしないようにする。 */
+  // 1軸→複数軸のリンク（タブ・案内・「軸を追加」）で、未課金の人に選択を出す。「広告を見て使う」を選んだら24時間は出さない
+  const gate = document.getElementById('ps-gate');
+  if (gate) {
+    const GATE_KEY = 'pn_gate_ad_until';
+    let gateHref = '';
+    const skipGate = () => { try { return +localStorage.getItem(GATE_KEY) > Date.now(); } catch (e) { return false; } };
+    document.addEventListener('click', (e) => {
+      const a = e.target.closest && e.target.closest('a[href*="/party-suggest/multi/"]');
+      if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const h = document.documentElement.classList;
+      if (!h.contains('pn-billing') || h.contains('pn-premium') || skipGate()) return;
+      e.preventDefault();
+      gateHref = a.href;
+      gate.showModal();
+      window.track?.('premium_gate', { action: 'show' });
+    });
+    document.getElementById('ps-gate-ad').addEventListener('click', (e) => {
+      e.preventDefault();
+      try { localStorage.setItem(GATE_KEY, String(Date.now() + 24 * 3600 * 1000)); } catch (err) {}
+      window.track?.('premium_gate', { action: 'ad' });
+      location.href = gateHref;
+    });
+    document.getElementById('ps-gate-prem').addEventListener('click', () => window.track?.('premium_gate', { action: 'premium' }));
+    document.getElementById('ps-gate-x').addEventListener('click', () => { gate.close(); window.track?.('premium_gate', { action: 'close' }); });
+    gate.addEventListener('click', (e) => { if (e.target === gate) gate.close(); });
+  }
+
   const _preCore = preCoreLabel || new URLSearchParams(location.search).get('core');
   // 以前の共有URL（1軸のページに ?core=A,B）は複数軸モードへ移す
   if (PS_MODE === 'single' && _preCore && !preCoreLabel && _preCore.includes(',')) location.replace(`${pfx}/party-suggest/multi/` + location.search);
