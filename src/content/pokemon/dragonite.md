@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのカイリュー基礎データ
 pokemonName: 'カイリュー'
 dexNumber: 149
 usageRank: 12
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'dragonite-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['しんそく', 'かえんほうしゃ', '10まんボルト', 'はねやすめ']

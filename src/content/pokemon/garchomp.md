@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのガブリアス基礎データ
 pokemonName: 'ガブリアス'
 dexNumber: 445
 usageRank: 1
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'garchomp-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['じしん', 'ステルスロック', 'かえんほうしゃ', 'りゅうせいぐん']

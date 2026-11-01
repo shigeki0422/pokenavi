@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのエアームド基礎データ
 pokemonName: 'エアームド'
 dexNumber: 227
 usageRank: 74
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'skarmory-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['ステルスロック', 'はねやすめ', 'ふきとばし', 'ちょうはつ']

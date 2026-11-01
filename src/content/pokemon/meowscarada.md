@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのマスカーニャ基礎デー
 pokemonName: 'マスカーニャ'
 dexNumber: 908
 usageRank: 16
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'meowscarada-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['トリックフラワー', 'トリプルアクセル', 'はたきおとす', 'とんぼがえり']

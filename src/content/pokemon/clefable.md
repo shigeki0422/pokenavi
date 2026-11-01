@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのピクシー基礎データ。
 pokemonName: 'ピクシー'
 dexNumber: 36
 usageRank: 42
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'clefable-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['ムーンフォース', 'つきのひかり', 'かえんほうしゃ', 'コスモパワー']

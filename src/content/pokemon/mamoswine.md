@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのマンムー基礎データ。
 pokemonName: 'マンムー'
 dexNumber: 473
 usageRank: 72
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'mamoswine-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['じしん', 'こおりのつぶて', 'つららおとし', 'がんせきふうじ']

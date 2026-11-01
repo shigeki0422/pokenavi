@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのムクホーク基礎データ
 pokemonName: 'ムクホーク'
 dexNumber: 398
 usageRank: 46
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'staraptor-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['インファイト', 'ブレイブバード', 'はねやすめ', 'ブレイズキック']

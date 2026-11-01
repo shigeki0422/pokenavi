@@ -1,10 +1,10 @@
 ---
 title: 'ストリンダー(ハイ) | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのストリンダー(ハイ)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率108位。'
+description: 'ポケモンチャンピオンズのストリンダー(ハイ)基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率109位。'
 pokemonName: 'ストリンダー(ハイ)'
 dexNumber: 849
-usageRank: 108
-updatedDate: '2026-10-31'
+usageRank: 109
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
@@ -31,7 +31,7 @@ faq:
       <img src="/images/types/type-03-poison.png" alt="どく" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.849</strong>　／　使用率 <strong style="color:#dc2626">108位</strong>
+      全国図鑑 <strong>No.849</strong>　／　使用率 <strong style="color:#dc2626">109位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-10-24</div>
   </div>

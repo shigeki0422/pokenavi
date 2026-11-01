@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのクエスパトラ基礎デー
 pokemonName: 'クエスパトラ'
 dexNumber: 956
 usageRank: 68
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'espathra-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['ルミナコリジョン', 'まもる', 'めいそう', 'バトンタッチ']

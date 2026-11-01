@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのレントラー基礎データ
 pokemonName: 'レントラー'
 dexNumber: 405
 usageRank: 999
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 

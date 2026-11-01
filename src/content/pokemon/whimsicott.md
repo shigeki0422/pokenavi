@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのエルフーン基礎データ
 pokemonName: 'エルフーン'
 dexNumber: 547
 usageRank: 85
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'whimsicott-analysis-m3'
 faq:
   season: 'M-7'
   topMoves: ['ムーンフォース', 'アンコール', 'おいかぜ', 'やどりぎのタネ']

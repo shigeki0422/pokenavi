@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのボーマンダ基礎データ
 pokemonName: 'ボーマンダ'
 dexNumber: 373
 usageRank: 15
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'salamence-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['すてみタックル', 'じしん', 'りゅうのまい', 'はねやすめ']

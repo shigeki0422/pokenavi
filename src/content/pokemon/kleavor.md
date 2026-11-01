@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのバサギリ基礎データ。
 pokemonName: 'バサギリ'
 dexNumber: 900
 usageRank: 76
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'kleavor-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['がんせきアックス', 'シザークロス', 'インファイト', 'つじぎり']

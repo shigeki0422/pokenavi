@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのバシャーモ基礎データ
 pokemonName: 'バシャーモ'
 dexNumber: 257
 usageRank: 40
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'blaziken-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['フレアドライブ', 'インファイト', 'かみなりパンチ', 'みきり']

@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのソウブレイズ基礎デー
 pokemonName: 'ソウブレイズ'
 dexNumber: 937
 usageRank: 58
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'ceruledge-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['むねんのつるぎ', 'かげうち', 'ポルターガイスト', 'つるぎのまい']

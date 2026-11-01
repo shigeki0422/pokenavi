@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのオニシズクモ基礎デー
 pokemonName: 'オニシズクモ'
 dexNumber: 752
 usageRank: 77
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'araquanid-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['ねばねばネット', 'ミラーコート', 'アクアブレイク', 'なみのり']

@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのオオニューラ基礎デー
 pokemonName: 'オオニューラ'
 dexNumber: 903
 usageRank: 24
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'sneasler-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['インファイト', 'フェイタルクロー', 'ねこだまし', 'じごくづき']

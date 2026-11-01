@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのミミッキュ基礎データ
 pokemonName: 'ミミッキュ'
 dexNumber: 778
 usageRank: 3
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'mimikyu-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['じゃれつく', 'かげうち', 'つるぎのまい', 'シャドークロー']

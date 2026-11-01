@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのハッサム基礎データ。
 pokemonName: 'ハッサム'
 dexNumber: 212
 usageRank: 36
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'scizor-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['バレットパンチ', 'とんぼがえり', 'はねやすめ', 'つるぎのまい']

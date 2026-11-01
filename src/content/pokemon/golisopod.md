@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのグソクムシャ基礎デー
 pokemonName: 'グソクムシャ'
 dexNumber: 768
 usageRank: 5
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'golisopod-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['ふいうち', 'きゅうけつ', 'つるぎのまい', 'アイアンヘッド']

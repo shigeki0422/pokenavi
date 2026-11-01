@@ -5,11 +5,10 @@ pokemonName: 'ウォッシュロトム'
 dexNumber: 479
 usageRank: 27
 imageForm: '02'
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'rotom-wash-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['ハイドロポンプ', 'ボルトチェンジ', 'おにび', '10まんボルト']

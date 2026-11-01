@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのスターミー基礎データ
 pokemonName: 'スターミー'
 dexNumber: 121
 usageRank: 55
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'starmie-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['アイススピナー', 'アクアジェット', 'クイックターン', 'アクアブレイク']

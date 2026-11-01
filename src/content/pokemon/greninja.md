@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのゲッコウガ基礎データ
 pokemonName: 'ゲッコウガ'
 dexNumber: 658
 usageRank: 28
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'greninja-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['れいとうビーム', 'あくのはどう', 'ヘドロウェーブ', 'みずしゅりけん']

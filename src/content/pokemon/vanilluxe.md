@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのバイバニラ基礎データ
 pokemonName: 'バイバニラ'
 dexNumber: 584
 usageRank: 59
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'vanilluxe-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['フリーズドライ', 'ふぶき', 'こおりのつぶて', 'オーロラベール']

@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのミロカロス基礎データ
 pokemonName: 'ミロカロス'
 dexNumber: 350
 usageRank: 57
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'milotic-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['ねっとう', 'じこさいせい', 'れいとうビーム', 'ミラーコート']

@@ -4,11 +4,10 @@ description: 'ポケモンチャンピオンズのラウドボーン基礎デー
 pokemonName: 'ラウドボーン'
 dexNumber: 911
 usageRank: 44
-updatedDate: '2026-10-31'
+updatedDate: '2026-11-01'
 pubDate: '2026-10-24'
 draft: false
 
-analysisSlug: 'skeledirge-analysis-m7'
 faq:
   season: 'M-7'
   topMoves: ['フレアソング', 'なまける', 'おにび', 'シャドーボール']
