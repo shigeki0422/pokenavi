@@ -9,7 +9,7 @@ const description = 'ポケナビの有料プラン「ポケナビ プレミア�
 
 <html lang="ja">
   <head>
-    <BaseHead title={title} description={description} imageUrl="/og-image.png" noindex />
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
     <style is:global>
       main {
         max-width: 720px;
@@ -66,7 +66,7 @@ const description = 'ポケナビの有料プラン「ポケナビ プレミア�
         <tr><td>パーティ診断</td><td class="c">1日の回数に上限あり・広告の視聴が必要</td><td class="c">回数無制限・広告なし</td></tr>
         <tr><td>パーティの保存</td><td class="c">このブラウザ内のみ</td><td class="c">端末間で同期</td></tr>
       </table>
-      <p>※パーティ診断と端末間の同期は順次提供します。提供開始時に内容を変更する場合があります。</p>
+      <p>※パーティ診断は順次提供します。提供開始時に内容を変更する場合があります。</p>
 
       <h2>ご利用にあたって</h2>
       <ul>
@@ -116,6 +116,14 @@ const description = 'ポケナビの有料プラン「ポケナビ プレミア�
           $('pb-note').textContent = 'お支払いは Stripe の決済ページで行います。カード情報は当サイトを通りません。';
         }
         button('ログアウト', async () => { await fetch('/api/auth/logout', { method: 'POST' }); location.href = '/premium/'; }, 'pb-sub');
+        button('同期データを削除', async (b) => {
+          if (!confirm('サーバーに保存した端末間同期のパーティを削除します。各端末のブラウザに保存されたパーティは消えません。よろしいですか？')) return;
+          b.disabled = true;
+          const r = await fetch('/api/sync', { method: 'DELETE' }).catch(() => null);
+          $('pb-msg').className = 'pb-msg ' + (r && r.ok ? 'ok' : 'err');
+          $('pb-msg').textContent = r && r.ok ? '同期データを削除しました。' : '削除できませんでした。時間をおいて再度お試しください。';
+          b.disabled = false;
+        }, 'pb-sub');
       })();
     </script>
     <Footer />

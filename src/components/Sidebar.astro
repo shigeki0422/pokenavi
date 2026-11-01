@@ -102,6 +102,8 @@ const langUrls = isBlogPath
 		<a href={`${pfx}/party-suggest`} class:list={['sb-sublink', { active: isQuickBuildActive }]}>{NAV.quickBuild}</a>
 		<a href={`${pfx}/party-builder`} class:list={['sb-sublink', { active: isDetailBuildActive }]}>{NAV.detailBuild}</a>
 		<a href={`${pfx}/battle-assist`} class:list={['sb-sublink', { active: isAssistActive }]}>{NAV.assist}<span class="season-badge new">NEW</span></a>
+		{/* 課金が有効なときだけ、未課金の利用者に出す（BaseHead の pn-billing・pn-prem-cta） */}
+		{lang === 'ja' && <a href="/premium/" class:list={['sb-link', 'sb-premium', 'pn-prem-cta', { active: path.startsWith('/premium') }]}>✨ プレミアム（広告なし・同期）</a>}
 	</nav>
 	<div class="sb-foot">
 		<div class="lang-switcher">
@@ -326,6 +328,11 @@ const langUrls = isBlogPath
 	.sb-type img {
 		width: 20px;
 		height: 20px;
+	}
+	.sb-premium {
+		margin-top: .8em;
+		color: #7c3aed;
+		font-weight: 700;
 	}
 	.sb-foot {
 		display: flex;

@@ -6,6 +6,7 @@
  * (環境変数経由はビルド環境側の設定漏れで広告が消える事故が起きたため)。 */
 const CLIENT_ID = 'ca-pub-6144860227440327';
 const SLOT_ID = '8319443257';
+const removeLabel = Astro.url.pathname.startsWith('/en') ? 'Remove ads' : Astro.url.pathname.startsWith('/ko') ? '광고 숨기기' : '広告を非表示にする（プレミアム）';
 ---
 
 <div class="ad-unit">
@@ -18,11 +19,15 @@ const SLOT_ID = '8319443257';
     data-full-width-responsive="true"
   ></ins>
   <script is:inline>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  <a class="pn-prem-cta pn-ad-remove ad-unit-remove" href="/premium/">{removeLabel}</a>
 </div>
 
 <style>
   /* 本文がflexコンテナの場合、幅指定がないと中身が空のうちは0pxに潰れて
      広告が表示されないため、幅を明示する。 */
+  .ad-unit-remove {
+    font-size: .75rem;
+  }
   .ad-unit {
     margin: 2rem auto;
     width: 100%;
