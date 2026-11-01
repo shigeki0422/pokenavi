@@ -102,8 +102,9 @@ const langUrls = isBlogPath
 		<a href={`${pfx}/party-suggest`} class:list={['sb-sublink', { active: isQuickBuildActive }]}>{NAV.quickBuild}</a>
 		<a href={`${pfx}/party-builder`} class:list={['sb-sublink', { active: isDetailBuildActive }]}>{NAV.detailBuild}</a>
 		<a href={`${pfx}/battle-assist`} class:list={['sb-sublink', { active: isAssistActive }]}>{NAV.assist}<span class="season-badge new">NEW</span></a>
-		{/* 課金が有効なときだけ、未課金の利用者に出す（BaseHead の pn-billing・pn-prem-cta） */}
+		{/* 未課金の利用者には申し込み、会員には会員ページ（状態・解約の管理）への導線（BaseHead の pn-prem-cta・pn-prem-member） */}
 		{lang === 'ja' && <a href="/premium/" class:list={['sb-link', 'sb-premium', 'pn-prem-cta', { active: path.startsWith('/premium') }]}>✨ プレミアム（広告なし・同期）</a>}
+		{lang === 'ja' && <a href="/premium/" class:list={['sb-link', 'sb-premium', 'pn-prem-member', { active: path.startsWith('/premium') }]}>✨ プレミアム会員</a>}
 	</nav>
 	<div class="sb-foot">
 		<div class="lang-switcher">

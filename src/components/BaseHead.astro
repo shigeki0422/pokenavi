@@ -103,7 +103,7 @@ const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
      /api/auth/me は課金が有効な環境でだけ応答する。応答があれば html に pn-billing を付け、プレミアムへの導線(.pn-prem-cta)を
      未課金の利用者にだけ出す。結果は window.__pnMe で各ツールと共有する（期限切れの目印の更新もここで取り込まれる） -->
 <script is:inline>try{var d=document.documentElement,m=document.cookie.match(/(?:^|; )pn_prem=(\d+)/);if(m&&+m[1]*1e3>Date.now()){d.classList.add('pn-premium');(window.adsbygoogle=window.adsbygoogle||[]).pauseAdRequests=1;}window.__pnMe=fetch('/api/auth/me').then(function(r){return r.ok?r.json():null}).catch(function(){return null}).then(function(me){if(me&&me.enabled){d.classList.add('pn-billing');if(me.premium)d.classList.add('pn-premium');}return me;});}catch(e){}</script>
-<style is:inline>.pn-premium .ad-unit,.pn-premium .ps-ad-inline,.pn-premium .pb-ad,.pn-premium ins.adsbygoogle,.pn-premium .google-auto-placed{display:none!important}html:not(.pn-billing) .pn-prem-cta,html.pn-premium .pn-prem-cta{display:none!important}.pn-ad-remove{font-weight:600;margin-left:.6em;color:rgb(var(--gray));text-decoration:underline}</style>
+<style is:inline>.pn-premium .ad-unit,.pn-premium .ps-ad-inline,.pn-premium .pb-ad,.pn-premium ins.adsbygoogle,.pn-premium .google-auto-placed{display:none!important}html:not(.pn-billing) .pn-prem-cta,html.pn-premium .pn-prem-cta{display:none!important}html:not(.pn-premium) .pn-prem-member{display:none!important}.pn-ad-remove{font-weight:600;margin-left:.6em;color:rgb(var(--gray));text-decoration:underline}</style>
 
 <!-- Google AdSense -->
 {adsSkipPremium
