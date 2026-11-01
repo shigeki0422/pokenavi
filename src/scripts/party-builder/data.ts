@@ -23,6 +23,19 @@ export interface PokemonUrlEntry {
 let nameUrlCache: Map<string, PokemonUrlEntry> | null = null;
 let nameUrlPromise: Promise<Map<string, PokemonUrlEntry>> | null = null;
 
+/** 仮想敵（1v1・素早さの相手）の体数。プレミアム会員は上位50体（counter-targets.json＝上位100体の先頭。先頭は targets.json と同一）。 */
+export const TARGET_N =
+  typeof document !== "undefined" && document.documentElement.classList.contains("pn-premium") ? 50 : 30;
+
+/** 使用率順の先頭 n 種ぶん（メガX/Yで1種が複数エントリに分かれる） */
+function topSpecies(groups: TargetGroup[], n: number): TargetGroup[] {
+  const seen = new Set<string>();
+  return groups.filter((g) => {
+    if (!seen.has(g.sp)) seen.add(g.sp);
+    return seen.size <= n;
+  });
+}
+
 async function fetchJson<T>(url: string): Promise<T> {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`fetch failed: ${url} (${res.status})`);
@@ -37,7 +50,9 @@ export function loadCore(): Promise<CoreData> {
     const [species, moves, targets, items] = await Promise.all([
       fetchJson<SpeciesMaster[]>("/builder-data/species.json"),
       fetchJson<MoveDict>("/builder-data/moves.json"),
-      fetchJson<TargetGroup[]>("/builder-data/targets.json"),
+      TARGET_N > 30
+        ? fetchJson<TargetGroup[]>("/builder-data/counter-targets.json").then((t) => topSpecies(t, TARGET_N))
+        : fetchJson<TargetGroup[]>("/builder-data/targets.json"),
       fetchJson<string[]>("/builder-data/items.json"),
     ]);
     coreCache = { species, moves, targets, items };
