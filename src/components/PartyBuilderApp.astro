@@ -952,6 +952,7 @@ const I18N = I18N_ALL[lang];
   import { validateParty } from '../scripts/party-builder/validate';
   import { mgWrapHtml, initMgHints } from '../scripts/party-builder/mg-hints';
   import { track } from '../scripts/track';
+  import { startSync } from '../scripts/party-builder/sync';
 
   const lang = window.__PB_LANG__;
   const pfx = window.__PB_PFX__;
@@ -986,6 +987,7 @@ const I18N = I18N_ALL[lang];
       evDownAria: label => `${label}を1下げる`, evUpAria: label => `${label}を1上げる`,
       partyNew: '新規', partyDup: '複製', partyRen: 'リネーム', partyDel: '削除', partyExp: 'エクスポート', partyImp: 'インポート',
       storageNote: 'パーティはこのブラウザ内に保存されます(端末間の同期はありません)。持ち出しはエクスポートをご利用ください。',
+      syncOk: (t) => `☁ PC・スマホで自動同期しています（${t} に同期）`, syncing: '☁ 同期中…', syncErr: '⚠ 同期できませんでした（このブラウザには保存済み・次の保存で再試行します）', syncTooLarge: '⚠ パーティが多すぎて同期できません。不要なパーティを削除してください', syncCta: 'プレミアムならPC・スマホで自動同期 →',
       deleteConfirm: name => `「${name}」を削除しますか？`,
       slotRemoveTitle: '外す', undoRemoved: name => `${name}を外しました`, undoBtn: '元に戻す',
       slotSearchTitle: n => `枠${n}にポケモンを追加`, slotSearchClose: '✕ 閉じる',
@@ -1104,6 +1106,7 @@ const I18N = I18N_ALL[lang];
       evDownAria: label => `Decrease ${label} by 1`, evUpAria: label => `Increase ${label} by 1`,
       partyNew: 'New', partyDup: 'Duplicate', partyRen: 'Rename', partyDel: 'Delete', partyExp: 'Export', partyImp: 'Import',
       storageNote: 'Parties are saved in this browser (not synced across devices). Use Export to take them with you.',
+      syncOk: (t) => `☁ Synced across your devices (last synced ${t})`, syncing: '☁ Syncing…', syncErr: '⚠ Could not sync (saved in this browser; will retry on the next save)', syncTooLarge: '⚠ Too many parties to sync. Please delete ones you no longer need', syncCta: 'Premium syncs across PC and phone →',
       deleteConfirm: name => `Delete "${name}"?`,
       slotRemoveTitle: 'Remove', undoRemoved: name => `Removed ${name}`, undoBtn: 'Undo',
       slotSearchTitle: n => `Add a Pokémon to slot ${n}`, slotSearchClose: '✕ Close',
@@ -1224,6 +1227,7 @@ const I18N = I18N_ALL[lang];
       evDownAria: label => `${label} 1 감소`, evUpAria: label => `${label} 1 증가`,
       partyNew: '신규', partyDup: '복제', partyRen: '이름변경', partyDel: '삭제', partyExp: '내보내기', partyImp: '가져오기',
       storageNote: '파티는 이 브라우저 안에 저장됩니다(기기 간 동기화는 없습니다). 반출은 내보내기를 이용해 주세요.',
+      syncOk: (t) => `☁ PC・스마트폰에서 자동 동기화 중（${t} 동기화）`, syncing: '☁ 동기화 중…', syncErr: '⚠ 동기화하지 못했습니다（이 브라우저에는 저장됨・다음 저장 시 재시도）', syncTooLarge: '⚠ 파티가 너무 많아 동기화할 수 없습니다. 필요 없는 파티를 삭제해 주세요', syncCta: '프리미엄은 PC・스마트폰 자동 동기화 →',
       deleteConfirm: name => `「${name}」을(를) 삭제하시겠습니까?`,
       slotRemoveTitle: '제거', undoRemoved: name => `${name}을(를) 제거했습니다`, undoBtn: '되돌리기',
       slotSearchTitle: n => `칸${n}에 포켓몬 추가`, slotSearchClose: '✕ 닫기',
@@ -2006,6 +2010,16 @@ const I18N = I18N_ALL[lang];
     el.innerHTML = `<div class="pb-valid-banner"><ul>${issues.map((i) => `<li>⚠ ${esc(issueText(i))}</li>`).join('')}</ul></div>`;
   }
 
+  /** 保存先の説明。会員は同期の状態、課金が有効な未課金の利用者には同期への案内を添える。 */
+  let syncState = null;
+  let syncAt = 0;
+  function storageNoteHtml() {
+    if (syncState === 'ok') return esc(I18N.syncOk(new Date(syncAt).toLocaleTimeString(lang === 'en' ? 'en-US' : lang === 'ko' ? 'ko-KR' : 'ja-JP', { hour: '2-digit', minute: '2-digit' })));
+    if (syncState === 'syncing') return esc(I18N.syncing);
+    if (syncState === 'error') return esc(I18N.syncErr);
+    if (syncState === 'too-large') return esc(I18N.syncTooLarge);
+    return `${esc(I18N.storageNote)} <a class="pn-prem-cta" href="/premium/">${esc(I18N.syncCta)}</a>`;
+  }
   function renderPartyBar() {
     const el = document.getElementById('pb-partybar');
     const p = activeParty();
@@ -2024,7 +2038,7 @@ const I18N = I18N_ALL[lang];
         <button class="pb-btn-sub" id="pb-p-exp" ${p && !renamingParty ? '' : 'disabled'}>${esc(I18N.partyExp)}</button>
         <button class="pb-btn-sub" id="pb-p-imp" ${renamingParty ? 'disabled' : ''}>${esc(I18N.partyImp)}</button>
       </div>
-      <div class="muted pb-storage-note">${esc(I18N.storageNote)}</div>`;
+      <div class="muted pb-storage-note">${storageNoteHtml()}</div>`;
     if (renamingParty && p) {
       // (12b) prompt()の代わりにインライン編集。Enter/blurで確定・Escで取消(esc()はvalue属性側で適用済み)。
       const input = document.getElementById('pb-party-rename-input');
@@ -4522,6 +4536,15 @@ const I18N = I18N_ALL[lang];
     else diag = initDiag(diagEl, diagHost);
     render();
     if (restoredScrollY !== null) requestAnimationFrame(() => window.scrollTo(0, restoredScrollY));
+    // プレミアム会員はサーバーと同期（他の端末のパーティを取り込み、以後は保存のたびに送る）
+    (window.__pnMe || Promise.resolve(null)).then((me) => {
+      if (!me || !me.premium) return;
+      startSync({
+        getStore: () => store,
+        replaceStore: (s) => { store = s; saveStore(store); render(); },
+        onState: (st, at) => { syncState = st; if (at) syncAt = at; const n = document.querySelector('.pb-storage-note'); if (n) n.innerHTML = storageNoteHtml(); },
+      });
+    });
   }
   /** 広告は未課金の利用者だけに2か所（ページ最下部・空き枠提案の結果）。課金が有効な環境
    * （/api/auth/me が enabled を返す）でだけ出す。本番で課金を始めるまでは従来どおり工房に広告は無い。 */

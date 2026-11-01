@@ -46,6 +46,8 @@ export interface Store {
   /** 仮想敵カスタム型(キー=仮想敵ラベル)。未編集のラベルはtargets.jsonのデフォルトのまま。
    * 既存Store(v1)に対する後方互換の追加フィールド(バージョン上げ不要)。 */
   customTargets?: Record<string, TargetBuild[]>;
+  /** 削除したパーティのID→削除時刻(ms)。端末間同期で他の端末から復活させないための記録。 */
+  deleted?: Record<string, number>;
 }
 
 // ---- 静的データ (public/builder-data/*.json) ----

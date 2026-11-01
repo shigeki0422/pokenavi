@@ -138,19 +138,29 @@ function compactSlots(slots: (Slot | null)[]): (Slot | null)[] {
   return out;
 }
 
+/** 外から来た Store（localStorage・端末間同期のサーバー）を検証・矯正する。不正なら null。 */
+export function sanitizeStore(parsed: any): Store | null {
+  if (!isStore(parsed)) return null;
+  parsed.parties.forEach((p) => {
+    p.slots = compactSlots(p.slots.map((s) => (s === null ? null : sanitizeSlot(s))));
+  });
+  const sane = sanitizeCustomTargets(parsed.customTargets);
+  if (sane) parsed.customTargets = sane;
+  else delete parsed.customTargets;
+  const deleted: Record<string, number> = {};
+  if (parsed.deleted && typeof parsed.deleted === "object") {
+    for (const [id, at] of Object.entries(parsed.deleted)) if (typeof at === "number" && Number.isFinite(at)) deleted[id] = at;
+  }
+  if (Object.keys(deleted).length) parsed.deleted = deleted;
+  else delete parsed.deleted;
+  return parsed;
+}
+
 export function loadStore(): Store {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return initialStore();
-    const parsed = JSON.parse(raw);
-    if (!isStore(parsed)) return initialStore();
-    parsed.parties.forEach((p) => {
-      p.slots = compactSlots(p.slots.map((s) => (s === null ? null : sanitizeSlot(s))));
-    });
-    const sane = sanitizeCustomTargets(parsed.customTargets);
-    if (sane) parsed.customTargets = sane;
-    else delete parsed.customTargets;
-    return parsed;
+    return sanitizeStore(JSON.parse(raw)) ?? initialStore();
   } catch {
     return initialStore();
   }
@@ -171,6 +181,11 @@ export function getEffectiveTargets(store: Store, coreTargets: TargetGroup[]): T
 }
 
 let saveTimer: ReturnType<typeof setTimeout> | null = null;
+const saveListeners: ((s: Store) => void)[] = [];
+/** 保存のたびに呼ばれる（端末間同期が送信の予約に使う）。 */
+export function onStoreSaved(cb: (s: Store) => void): void {
+  saveListeners.push(cb);
+}
 
 /** 300msデバウンスでlocalStorageへ書き込む。 */
 export function saveStore(s: Store): void {
@@ -182,6 +197,7 @@ export function saveStore(s: Store): void {
     } catch {
       // localStorage不可(容量超過・シークレットモード等)は無視。UIはsaveStore呼び出し側で失敗を気にしない設計。
     }
+    for (const cb of saveListeners) cb(s);
   }, SAVE_DEBOUNCE_MS);
 }
 
@@ -256,6 +272,8 @@ export function deleteParty(store: Store, id: string): boolean {
   const idx = store.parties.findIndex((p) => p.id === id);
   if (idx === -1) return false;
   store.parties.splice(idx, 1);
+  // 端末間同期で他の端末から復活しないよう、削除した時刻を残す（sync.ts が期限切れを掃除する）
+  store.deleted = { ...(store.deleted || {}), [id]: Date.now() };
   if (store.activeId === id) {
     store.activeId = store.parties.length ? store.parties[0].id : null;
   }
