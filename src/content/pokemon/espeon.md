@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのエーフィ基礎データ。
 pokemonName: 'エーフィ'
 dexNumber: 196
 usageRank: 93
-updatedDate: '2026-11-01'
+updatedDate: '2026-11-02'
 pubDate: '2026-10-24'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのモルペコ基礎データ。
 pokemonName: 'モルペコ'
 dexNumber: 877
 usageRank: 167
-updatedDate: '2026-11-01'
+updatedDate: '2026-11-02'
 pubDate: '2026-10-24'
 draft: false
 

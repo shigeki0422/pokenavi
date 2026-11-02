@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのミミロップ基礎データ
 pokemonName: 'ミミロップ'
 dexNumber: 428
 usageRank: 69
-updatedDate: '2026-11-01'
+updatedDate: '2026-11-02'
 pubDate: '2026-10-24'
 draft: false
 

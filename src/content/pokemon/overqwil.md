@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのハリーマン基礎データ
 pokemonName: 'ハリーマン'
 dexNumber: 904
 usageRank: 96
-updatedDate: '2026-11-01'
+updatedDate: '2026-11-02'
 pubDate: '2026-10-24'
 draft: false
 analysisSlug: 'overqwil-analysis-m3'

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのチャーレム基礎データ
 pokemonName: 'チャーレム'
 dexNumber: 308
 usageRank: 158
-updatedDate: '2026-11-01'
+updatedDate: '2026-11-02'
 pubDate: '2026-10-24'
 draft: false
 

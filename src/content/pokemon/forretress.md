@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのフォレトス基礎データ
 pokemonName: 'フォレトス'
 dexNumber: 205
 usageRank: 164
-updatedDate: '2026-11-01'
+updatedDate: '2026-11-02'
 pubDate: '2026-10-24'
 draft: false
 

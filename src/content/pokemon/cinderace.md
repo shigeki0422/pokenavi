@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのエースバーン基礎デー
 pokemonName: 'エースバーン'
 dexNumber: 815
 usageRank: 20
-updatedDate: '2026-11-01'
+updatedDate: '2026-11-02'
 pubDate: '2026-10-24'
 draft: false
 

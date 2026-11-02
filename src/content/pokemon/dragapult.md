@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのドラパルト基礎データ
 pokemonName: 'ドラパルト'
 dexNumber: 887
 usageRank: 62
-updatedDate: '2026-11-01'
+updatedDate: '2026-11-02'
 pubDate: '2026-10-24'
 draft: false
 
