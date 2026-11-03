@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのフーディン基礎データ
 pokemonName: 'フーディン'
 dexNumber: 65
 usageRank: 115
-updatedDate: '2026-11-02'
+updatedDate: '2026-11-03'
 pubDate: '2026-10-24'
 draft: false
 

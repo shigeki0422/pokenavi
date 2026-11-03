@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのロズレイド基礎データ
 pokemonName: 'ロズレイド'
 dexNumber: 407
 usageRank: 160
-updatedDate: '2026-11-02'
+updatedDate: '2026-11-03'
 pubDate: '2026-10-24'
 draft: false
 

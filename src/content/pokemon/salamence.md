@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのボーマンダ基礎データ
 pokemonName: 'ボーマンダ'
 dexNumber: 373
 usageRank: 15
-updatedDate: '2026-11-02'
+updatedDate: '2026-11-03'
 pubDate: '2026-10-24'
 draft: false
 

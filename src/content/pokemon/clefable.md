@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのピクシー基礎データ。
 pokemonName: 'ピクシー'
 dexNumber: 36
 usageRank: 42
-updatedDate: '2026-11-02'
+updatedDate: '2026-11-03'
 pubDate: '2026-10-24'
 draft: false
 
