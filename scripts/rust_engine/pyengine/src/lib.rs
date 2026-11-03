@@ -608,7 +608,7 @@ fn version() -> String {
 /// 観戦記録用: mcts_3v3 と同じ両者MCTSの1戦の (勝敗, 各手番の行動と行動選択直後の乱数の状態, 各ターンの要約)。
 /// sa/sb は並びのまま（先頭がリード）。state＝6体生成後に置き換える CPython random の状態（624語＋位置）
 #[pyfunction]
-#[pyo3(signature = (pa, sa, pb, sb, seed, sims, season="M-6", state=None))]
+#[pyo3(signature = (pa, sa, pb, sb, seed, sims, season="M-6", state=None, pred=false))]
 #[allow(clippy::too_many_arguments, clippy::type_complexity)]
 fn mcts_3v3_record(
     pa: Vec<String>,
@@ -619,7 +619,8 @@ fn mcts_3v3_record(
     sims: usize,
     season: &str,
     state: Option<Vec<u32>>,
-) -> PyResult<(u8, Vec<engine::sim::DecRec>, Vec<engine::sim::TurnSum>)> {
+    pred: bool,
+) -> PyResult<(u8, Vec<engine::sim::DecRec>, Vec<engine::sim::TurnSum>, Vec<String>)> {
     if state.as_ref().map(|v| v.len() != 625).unwrap_or(false) {
         return Err(PyValueError::new_err("state は 625 語"));
     }
@@ -627,8 +628,8 @@ fn mcts_3v3_record(
     let mut g = lock_eng(m);
     let Eng { pack, net, .. } = &mut *g;
     let net = net.clone();
-    let (r, d, t) = engine::sim::mcts_3v3_record(pack, &net, &pa, &sa, &pb, &sb, season, seed, sims, state.as_deref());
-    Ok((r as u8, d, t))
+    let (r, d, t, p) = engine::sim::mcts_3v3_record(pack, &net, &pa, &sa, &pb, &sb, season, seed, sims, state.as_deref(), pred);
+    Ok((r as u8, d, t, p))
 }
 
 #[pymodule]

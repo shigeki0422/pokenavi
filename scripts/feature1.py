@@ -4,6 +4,7 @@
 本物の engine（Battle.run の on_turn フック）でターン毎スナップショットを取り、全対戦の記録を保存。
 リプレイは保存記録の再生（再シミュレーションしない）。fork並列で全戦を一括実行。
 """
+import json
 import os
 import random
 import re
@@ -132,6 +133,7 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, m
     mcts_sims未指定(None)＝本番既定MCTS(env F1_MCTS_SIMS, 既定400)。>0でMCTS@N、明示0でtree d2。
     predict=True: 各ターンの記録に両AIの「相手の型の読み」（turns[i].predict）と、
     選出個体の実際の型（truth）を足す（simulator/predict.py。対戦の進行は変わらない）。
+    predict="side1": 読みは自分側（side1）だけ（相手側の読みは型プールの尤度計算で1戦の約2割を食う）。
     sel1_idx: P1 の選出を specs1 の添字で指定（先頭がリード）。sel1_temp: P1 を自動選出するときの温度（None＝sel_temp）。"""
     if mcts_sims is None:
         mcts_sims = int(os.environ.get("F1_MCTS_SIMS", "400"))
@@ -171,7 +173,7 @@ def play_and_record(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed=0, m
 
     def _pp(t, s1_, s2_):
         if _pred is not None:
-            t["predict"] = {"side1": _pred.snapshot(s1_, s2_), "side2": _pred.snapshot(s2_, s1_)}
+            t["predict"] = {"side1": _pred.snapshot(s1_, s2_), **({} if predict == "side1" else {"side2": _pred.snapshot(s2_, s1_)})}
         return t
     init_logs = [f"P1選出: {', '.join(p.name for p in sel1)}",
                  f"P2選出: {', '.join(p.name for p in sel2)}"] + list(battle.logs)
@@ -257,7 +259,8 @@ def play_and_record_rust(specs1, specs2, season="M-2", sel_temp=0.6, seed=0, mct
     ia = [next(i for i, q in enumerate(P1) if q is p) for p in sel1]
     ib = [next(i for i, q in enumerate(P2) if q is p) for p in sel2]
     st = list(random.getstate()[1])
-    r_res, decs, sums = E.mcts_3v3_record(list(specs1), ia, list(specs2), ib, seed, mcts_sims, season, st)
+    rs_pred = predict == "side1"
+    r_res, decs, sums, rsnaps = E.mcts_3v3_record(list(specs1), ia, list(specs2), ib, seed, mcts_sims, season, st, pred=rs_pred)
     dec_at = {t: (a, s) for t, a, s in decs}
     sum_at = {t: s for t, s in sums}
     s1 = BattleSide(sel1, viewer_label="P1", source6=P1); s2 = BattleSide(sel2, viewer_label="P2", source6=P2)
@@ -282,11 +285,16 @@ def play_and_record_rust(specs1, specs2, season="M-2", sel_temp=0.6, seed=0, mct
     _pred = None
     if predict:
         from simulator.predict import Predictor, truth_of
-        _pred = Predictor(L)
+        # side1 だけの読みは Rust が探索と同じ信念で出す（Python の型プール尤度計算は1戦の2割強を食う）
+        _pred = rsnaps if rs_pred else Predictor(L)
         _truth = {"side1": [truth_of(p) for p in sel1], "side2": [truth_of(p) for p in sel2]}
 
     def _pp(t, s1_, s2_):
-        if _pred is not None:
+        if rs_pred:
+            if t["turn"] >= len(rsnaps):
+                raise ReplayMismatch(f"turn {t['turn']}: Rust の読みが無い")
+            t["predict"] = {"side1": json.loads(rsnaps[t["turn"]])}
+        elif _pred is not None:
             t["predict"] = {"side1": _pred.snapshot(s1_, s2_), "side2": _pred.snapshot(s2_, s1_)}
         return t
     init_logs = [f"P1選出: {', '.join(p.name for p in sel1)}",
@@ -390,7 +398,7 @@ def play_and_record_both(specs1, specs2, season="M-2", det=8, sel_temp=0.6, seed
 
     def _pp(t, s1_, s2_):
         if _pred is not None:
-            t["predict"] = {"side1": _pred.snapshot(s1_, s2_), "side2": _pred.snapshot(s2_, s1_)}
+            t["predict"] = {"side1": _pred.snapshot(s1_, s2_), **({} if predict == "side1" else {"side2": _pred.snapshot(s2_, s1_)})}
         return t
     init_logs = [f"P1選出: {', '.join(p.name for p in sel1)}",
                  f"P2選出: {', '.join(p.name for p in sel2)}"] + list(battle.logs)

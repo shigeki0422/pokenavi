@@ -808,7 +808,7 @@ pub fn det_log_push(
 }
 
 /// 葉のネット評価を記録する（入力xのハッシュと価値）。既定では何もしない。
-pub fn eval_log_push(xh: u64, v: f64) {
+pub fn eval_log_push(x: &[f64], v: f64) {
     // 葉展開(expand_with_value)からの評価だけを拾う。downside_guard 等の呼び出しを
     // 混ぜると両エンジンでログの系列が揃わず、比較そのものが無意味になる（実際に一度そうなった）。
     if !EVAL_TAG.with(|t| *t.borrow()) {
@@ -818,6 +818,8 @@ pub fn eval_log_push(xh: u64, v: f64) {
         let mut b = l.borrow_mut();
         let Some(vv) = b.as_mut() else { return };
         if vv.len() < 60 {
+            // ハッシュは記録するときだけ取る（毎回取ると探索時間の約半分を食っていた）
+            let xh = crate::statec::f64_hash(x);
             vv.push(format!("{xh:016x} {v:.17}"));
         }
     });
@@ -1175,7 +1177,8 @@ pub fn mcts_3v3_record(
     seed: i128,
     sims: usize,
     state: Option<&[u32]>,
-) -> (i64, Vec<DecRec>, Vec<TurnSum>) {
+    pred: bool,
+) -> (i64, Vec<DecRec>, Vec<TurnSum>, Vec<String>) {
     let mut rng0 = CpyRandom::new(seed);
     let mut a6: Vec<Poke> = Vec::with_capacity(pa.len());
     for s in pa {
@@ -1207,6 +1210,20 @@ pub fn mcts_3v3_record(
     crate::search::set_belief(&mut b.sides[0], OpponentBelief::new(belief_season()));
     crate::search::set_belief(&mut b.sides[1], OpponentBelief::new(belief_season()));
     let packr: &Pack = pack;
+    // pred: 開始時と各ターン終了時の side1 の「相手の型の読み」（predict.py の snapshot と同じ JSON）
+    let joint = std::env::var("JOINT_BUILD").map(|v| v != "0").unwrap_or(true);
+    let mut app: Vec<String> = Vec::new();
+    let mut snaps: Vec<String> = Vec::new();
+    let snap = |bt: &Battle, app: &mut Vec<String>, snaps: &mut Vec<String>| {
+        let n = packr.intern.resolve(bt.sides[1].active().name).to_string();
+        if !app.contains(&n) {
+            app.push(n);
+        }
+        snaps.push(crate::predict::snapshot(packr, &bt.sides[0], app, joint).to_string());
+    };
+    if pred {
+        snap(&b, &mut app, &mut snaps);
+    }
     let mut ai1 = SearchAI::new(packr, belief_season(), seed, sims);
     let mut ai2 = SearchAI::new(packr, belief_season(), seed ^ 0x5bd1e995, sims);
     let mut decs: Vec<DecRec> = Vec::new();
@@ -1219,6 +1236,11 @@ pub fn mcts_3v3_record(
             let mut out: [crate::battle::Action; 2] = [Default::default(), Default::default()];
             for sx in 0..2usize {
                 let mut bl = bt.sides[sx].belief.0.take().unwrap();
+                // 手が1つしかない番は探索を省くので開示の取り込みが次の判断まで遅れる。記録の再生（feature1）は
+                // 毎番取り込むので合わせる（読みの表示が再生側と同じ時点の信念になる）
+                if pred {
+                    bl.observe_disclosure(packr, &bt.sides[sx].opp_view);
+                }
                 let ai: &mut SearchAI = if sx == 0 { &mut ai1 } else { &mut ai2 };
                 let a = ai.choose(packr, net, &mut bt.sides, sx, &mut bt.field, &mut bl, rng);
                 bt.sides[sx].belief.0 = Some(bl);
@@ -1229,9 +1251,14 @@ pub fn mcts_3v3_record(
             decs.push((bt.turn, [act_rec(packr, &out[0]), act_rec(packr, &out[1])], cell.borrow().state()));
             out
         },
-        |bt| sums.push((bt.turn, [side_sum(packr, &bt.sides[0]), side_sum(packr, &bt.sides[1])])),
+        |bt| {
+            sums.push((bt.turn, [side_sum(packr, &bt.sides[0]), side_sum(packr, &bt.sides[1])]));
+            if pred {
+                snap(bt, &mut app, &mut snaps);
+            }
+        },
     );
-    (result, decs, sums)
+    (result, decs, sums, snaps)
 }
 
 /// 生成用の探索（AlphaZero 方式）: 序盤 turns ターンは根の訪問回数^(1/temp) に比例して手を抽選し、

@@ -468,7 +468,7 @@ pub fn net_eval(
     encode_state_into(pack, &ctx.ft, sides, first, field, &mut ctx.memo, rng, &mut x);
     let l: Vec<usize> = if legal.is_empty() { vec![0] } else { legal.clone() };
     let (p, v) = net.evaluate(&x, &l, &mut ctx.scratch);
-    crate::sim::eval_log_push(crate::statec::f64_hash(&x), v);
+    crate::sim::eval_log_push(&x, v);
     crate::sim::eval_x_push(&x);
     ctx.x = x;
     let pol: Vec<(usize, f64)> = if legal.is_empty() {

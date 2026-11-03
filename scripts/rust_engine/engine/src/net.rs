@@ -10,8 +10,10 @@ pub struct NetW {
     pub hidden: usize,
     pub hidden2: usize,
     pub w1: Vec<f64>, // hidden x dim (row-major)
+    pub w1t: Vec<f64>, // dim x hidden（w1 の転置。forward 用）
     pub b1: Vec<f64>,
     pub w2: Vec<f64>, // hidden2 x hidden
+    pub w2t: Vec<f64>, // hidden x hidden2
     pub b2: Vec<f64>,
     pub wv: Vec<f64>, // vbins=0 なら hidden2、vbins>0 なら vbins x hidden2（row-major）
     pub bv: f64,      // vbins=0 のときのスカラーバイアス
@@ -43,6 +45,16 @@ fn mat(v: &Value) -> (Vec<f64>, usize, usize) {
     (out, rows.len(), c)
 }
 
+fn transpose(w: &[f64], rows: usize, cols: usize) -> Vec<f64> {
+    let mut t = vec![0.0f64; rows * cols];
+    for r in 0..rows {
+        for c in 0..cols {
+            t[c * rows + r] = w[r * cols + c];
+        }
+    }
+    t
+}
+
 fn vecf(v: &Value) -> Vec<f64> {
     v.as_array().unwrap().iter().map(|x| x.as_f64().unwrap()).collect()
 }
@@ -72,8 +84,10 @@ impl NetW {
             dim: d,
             hidden: h,
             hidden2: h2,
+            w1t: transpose(&w1, h, d),
             w1,
             b1: vecf(&v["b1"]),
+            w2t: transpose(&w2, h2, h),
             w2,
             b2: vecf(&v["b2"]),
             wv: wv_flat,
@@ -87,8 +101,7 @@ impl NetW {
         })
     }
 
-    /// 最終隠れ層の活性（各行は左→右の逐次加算。行同士は独立なので8行ずつ
-    /// インターリーブしてILPを稼ぐ＝丸め順は不変・ビット一致のまま高速化）。
+    /// 最終隠れ層の活性（各出力は入力の左→右の逐次加算＝丸め順は Python の逐次実装と同じ）。
     pub fn top(&self, x: &[f64], h1: &mut Vec<f64>, h2: &mut Vec<f64>, nz: &mut Vec<(usize, f64)>) {
         debug_assert_eq!(x.len(), self.dim);
         h1.clear();
@@ -101,10 +114,10 @@ impl NetW {
                 nz.push((k, *v));
             }
         }
-        rows8_sparse(&self.w1, self.dim, self.hidden, nz, &self.b1, h1, self.relu);
+        cols_acc(&self.w1t, self.hidden, nz.iter().copied(), &self.b1, h1, self.relu);
         h2.clear();
         h2.resize(self.hidden2, 0.0);
-        rows8(&self.w2, self.hidden, self.hidden2, h1, &self.b2, h2, self.relu);
+        cols_acc(&self.w2t, self.hidden2, h1.iter().copied().enumerate(), &self.b2, h2, self.relu);
     }
 
     /// top表現 → 価値。two-hot のときは softmax の期待値（Python の _value_from_top と同じ順序）。
@@ -177,7 +190,6 @@ impl NetW {
     }
 }
 
-/// 非ゼロ入力のみを左→右順にたどる版（rows8 とビット完全一致）
 #[inline]
 fn act1(z: f64, relu: bool) -> f64 {
     if relu {
@@ -191,76 +203,18 @@ fn act1(z: f64, relu: bool) -> f64 {
     }
 }
 
+/// 転置した重みで入力1つずつ全出力へ足し込む（out は 0.0 で渡す）。各出力の加算は入力の左→右順のままなので
+/// 行ごとの内積とビット完全一致。行を跨ぐ飛び飛びの読み出しが無くなり、出力方向にベクトル化される
 #[inline]
-#[allow(clippy::too_many_arguments)]
-fn rows8_sparse(
-    w: &[f64],
-    dim: usize,
-    rows: usize,
-    nz: &[(usize, f64)],
-    b: &[f64],
-    out: &mut [f64],
-    relu: bool,
-) {
-    const B: usize = 8;
-    let mut j = 0usize;
-    while j + B <= rows {
-        let r0 = &w[j * dim..(j + B) * dim];
-        let mut a = [0.0f64; B];
-        for &(k, xv) in nz {
-            a[0] += xv * r0[k];
-            a[1] += xv * r0[dim + k];
-            a[2] += xv * r0[2 * dim + k];
-            a[3] += xv * r0[3 * dim + k];
-            a[4] += xv * r0[4 * dim + k];
-            a[5] += xv * r0[5 * dim + k];
-            a[6] += xv * r0[6 * dim + k];
-            a[7] += xv * r0[7 * dim + k];
+fn cols_acc(wt: &[f64], rows: usize, xs: impl Iterator<Item = (usize, f64)>, b: &[f64], out: &mut [f64], relu: bool) {
+    for (k, xv) in xs {
+        let col = &wt[k * rows..(k + 1) * rows];
+        for (o, w) in out.iter_mut().zip(col) {
+            *o += xv * w;
         }
-        for t in 0..B {
-            out[j + t] = act1(a[t] + b[j + t], relu);
-        }
-        j += B;
     }
-    while j < rows {
-        let row = &w[j * dim..(j + 1) * dim];
-        let mut acc = 0.0f64;
-        for &(k, xv) in nz {
-            acc += xv * row[k];
-        }
-        out[j] = act1(acc + b[j], relu);
-        j += 1;
-    }
-}
-
-/// 行ブロック8本の独立な逐次加算（各行内の順序は左→右のまま）
-#[inline]
-#[allow(clippy::too_many_arguments)]
-fn rows8(w: &[f64], dim: usize, rows: usize, x: &[f64], b: &[f64], out: &mut [f64], relu: bool) {
-    const B: usize = 8;
-    let mut j = 0usize;
-    while j + B <= rows {
-        let r0 = &w[j * dim..(j + B) * dim];
-        let mut a = [0.0f64; B];
-        for k in 0..dim {
-            let xv = x[k];
-            for (t, av) in a.iter_mut().enumerate() {
-                *av += xv * r0[t * dim + k];
-            }
-        }
-        for t in 0..B {
-            out[j + t] = act1(a[t] + b[j + t], relu);
-        }
-        j += B;
-    }
-    while j < rows {
-        let row = &w[j * dim..(j + 1) * dim];
-        let mut acc = 0.0f64;
-        for k in 0..dim {
-            acc += x[k] * row[k];
-        }
-        out[j] = act1(acc + b[j], relu);
-        j += 1;
+    for (o, bj) in out.iter_mut().zip(b) {
+        *o = act1(*o + bj, relu);
     }
 }
 

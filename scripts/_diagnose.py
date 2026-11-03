@@ -219,7 +219,7 @@ def battle_job(a):
     探索は Rust（mcts_3v3_record）・記録は Python で同じ乱数のまま再生。再生が食い違った戦だけ従来の Python 版で記録する"""
     specs, opp, season, seed, my_sel = a
     import feature1 as F1
-    kw = dict(season=season, seed=seed, predict=True, sel1_idx=my_sel, sel1_temp=0.0)
+    kw = dict(season=season, seed=seed, predict="side1", sel1_idx=my_sel, sel1_temp=0.0)
     try:
         rec = F1.play_and_record_rust(list(specs), list(opp), **kw)
     except (F1.ReplayMismatch, ImportError, AttributeError):

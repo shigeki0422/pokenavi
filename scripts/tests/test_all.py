@@ -7846,6 +7846,22 @@ if _ok35:
           all(set(r) == _keys35 and [t["turn"] for t in r["turns"]] == list(range(len(r["turns"])))
               and all("predict" in t for t in r["turns"]) and r["result"] in (0, 1, 2)
               and (sl is None or r["selected1"] == [_P1s[i].split("@")[0] for i in sl]) for sl, r in _rd35))
+    _s1o35 = _F35.play_and_record_rust(_P1s, _O34[3], season="M-6", seed=3, mcts_sims=40, predict="side1", sel1_temp=0.0)
+    _bo35 = next(r for sl, r in _rd35 if sl is None)
+    def _near35(a, b):
+        if isinstance(a, dict) and isinstance(b, dict):
+            return set(a) == set(b) and all(_near35(a[k], b[k]) for k in a)
+        if isinstance(a, list) and isinstance(b, list):
+            return len(a) == len(b) and all(_near35(x, y) for x, y in zip(a, b))
+        if isinstance(a, float) or isinstance(b, float):
+            return abs(a - b) <= 2e-4
+        return a == b
+    _pd35 = [(i, x, y) for i, (x, y) in enumerate(zip([t["predict"]["side1"] for t in _s1o35["turns"]],
+                                                       [t["predict"]["side1"] for t in _bo35["turns"]])) if not _near35(x, y)]
+    check("診断の1戦 predict=\"side1\": 読みは自分側だけ（Rust）・Python の読みと一致（2e-4）・対戦の中身は predict=True と同じ",
+          all(set(t["predict"]) == {"side1"} for t in _s1o35["turns"]) and len(_s1o35["turns"]) == len(_bo35["turns"]) and not _pd35
+          and [{k: v for k, v in t.items() if k != "predict"} for t in _s1o35["turns"]]
+          == [{k: v for k, v in t.items() if k != "predict"} for t in _bo35["turns"]], str(_pd35[:1])[:400])
     _mv35 = _mk26c(_P1s[0])
     _a35 = [_F35._rust_action((1, "", 0, 2, False), _mv35), _F35._rust_action((3, "", 0, -1, False), _mv35),
             _F35._rust_action((0, _mv35.moves[1].name_jp, 1, -1, True), _mv35),
@@ -7856,9 +7872,9 @@ if _ok35:
           and _a35[3].move.name_jp == "わるあがき")
     _orig35 = _E35.mcts_3v3_record
     def _bad35(*a, **k):
-        r, d, t = _orig35(*a, **k)
+        r, d, t, p = _orig35(*a, **k)
         t0, (sa, sb) = t[0]
-        return r, d, [(t0, ((sa[0], [(n, h + 1, m, st) for n, h, m, st in sa[1]]), sb))] + t[1:]
+        return r, d, [(t0, ((sa[0], [(n, h + 1, m, st) for n, h, m, st in sa[1]]), sb))] + t[1:], p
     _E35.mcts_3v3_record = _bad35
     try:
         _F35.play_and_record_rust(_P1s, _O34[3], season="M-6", seed=3, mcts_sims=40)
