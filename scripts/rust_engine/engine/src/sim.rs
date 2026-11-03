@@ -1178,7 +1178,7 @@ pub fn mcts_3v3_record(
     sims: usize,
     state: Option<&[u32]>,
     pred: bool,
-) -> (i64, Vec<DecRec>, Vec<TurnSum>, Vec<String>) {
+) -> (i64, Vec<DecRec>, Vec<TurnSum>, Vec<String>, Vec<(i64, String)>) {
     let mut rng0 = CpyRandom::new(seed);
     let mut a6: Vec<Poke> = Vec::with_capacity(pa.len());
     for s in pa {
@@ -1226,8 +1226,10 @@ pub fn mcts_3v3_record(
     }
     let mut ai1 = SearchAI::new(packr, belief_season(), seed, sims);
     let mut ai2 = SearchAI::new(packr, belief_season(), seed ^ 0x5bd1e995, sims);
+    ai1.explain = pred;
     let mut decs: Vec<DecRec> = Vec::new();
     let mut sums: Vec<TurnSum> = Vec::new();
+    let mut expls: Vec<(i64, String)> = Vec::new();
     let mut sr = SharedRng(&cell);
     let result = b.run_loop(
         packr,
@@ -1242,11 +1244,15 @@ pub fn mcts_3v3_record(
                     bl.observe_disclosure(packr, &bt.sides[sx].opp_view);
                 }
                 let ai: &mut SearchAI = if sx == 0 { &mut ai1 } else { &mut ai2 };
+                ai.last_expl = None;
                 let a = ai.choose(packr, net, &mut bt.sides, sx, &mut bt.field, &mut bl, rng);
                 bt.sides[sx].belief.0 = Some(bl);
                 let (precise, cond, fx40, kov) = (ai.ko_precise, ai.ko_cond, ai.fix40, ai.kov);
                 let (me, op) = crate::battle::split2(&mut bt.sides, sx);
                 out[sx] = crate::ai::certain_ko_override_kov(packr, a, me, op, &mut bt.field, rng, precise, cond, fx40, kov);
+                if let Some(e) = ai.last_expl.take() {
+                    expls.push((bt.turn, expl_json(packr, &bt.sides[sx], &e, &out[sx])));
+                }
             }
             decs.push((bt.turn, [act_rec(packr, &out[0]), act_rec(packr, &out[1])], cell.borrow().state()));
             out
@@ -1258,7 +1264,46 @@ pub fn mcts_3v3_record(
             }
         },
     );
-    (result, decs, sums, snaps)
+    (result, decs, sums, snaps, expls)
+}
+
+/// 観戦の「この手番のAIの読み」（search_ai.py の last_decision と同じ形）。候補は訪問の多い順に4手＋選んだ手
+fn expl_json(pack: &Pack, side: &Side, e: &crate::search::Expl, fin: &crate::battle::Action) -> String {
+    use crate::battle::ActKind;
+    let label = |a: &crate::battle::Action| -> String {
+        match a.kind {
+            ActKind::Switch => {
+                let i = a.switch_to;
+                let n = if i >= 0 && (i as usize) < side.party.len() { pack.intern.resolve(side.party[i as usize].name) } else { "?" };
+                format!("{}に交代", n)
+            }
+            ActKind::Move => {
+                let n = a.mv.as_ref().map(|m| pack.intern.resolve(m.name)).unwrap_or("?");
+                format!("{}{}", if a.do_mega { "メガ+" } else { "" }, n)
+            }
+            _ => "様子見".to_string(),
+        }
+    };
+    let same = |a: &crate::battle::Action, b: &crate::battle::Action| label(a) == label(b);
+    let r3 = |x: f64| format!("{:.3}", x).parse::<f64>().unwrap();
+    let tot = e.stats.iter().map(|x| x.1).sum::<i64>().max(1) as f64;
+    let mut top: Vec<&(crate::battle::Action, i64, f64)> = e.stats.iter().collect();
+    top.sort_by(|a, b| b.1.cmp(&a.1));
+    top.truncate(4);
+    if !top.iter().any(|x| same(&x.0, &e.chosen)) {
+        if let Some(x) = e.stats.iter().find(|x| same(&x.0, &e.chosen)) {
+            top.push(x);
+        }
+    }
+    let cands: Vec<serde_json::Value> = top.iter().map(|(a, n, q)| serde_json::json!({
+        "a": label(a), "v": r3(*n as f64 / tot), "q": if *q >= 0.0 { serde_json::json!(r3(*q)) } else { serde_json::Value::Null }
+    })).collect();
+    let mut o = serde_json::json!({"chosen": label(&e.chosen), "reason": "qselect", "cands": cands});
+    if !same(fin, &e.chosen) {
+        o["exec"] = serde_json::json!(label(fin));
+        o["reason"] = serde_json::json!(if e.guard && same(fin, &e.exec) { "downside_guard" } else { "certain_ko" });
+    }
+    o.to_string()
 }
 
 /// 生成用の探索（AlphaZero 方式）: 序盤 turns ターンは根の訪問回数^(1/temp) に比例して手を抽選し、

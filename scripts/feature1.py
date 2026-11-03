@@ -233,6 +233,15 @@ def _rust_action(rec, active):
     raise ReplayMismatch(f"技が無い: {active.name} {mv}")
 
 
+def _act_view(a, my):
+    """ターン頭に選んだ行動（観戦表示用）。交代先は選出内の名前"""
+    if a.type == "switch":
+        return {"kind": "switch", "who": my.active.name, "to": my.party[a.switch_to].name}
+    if a.type == "move":
+        return {"kind": "move", "who": my.active.name, "move": a.move.name_jp, "mega": bool(a.do_mega)}
+    return {"kind": a.type, "who": my.active.name}
+
+
 def _sum_of(side):
     return (side.active_idx, [(p.hp, p.max_hp, p.status or "") for p in side.party])
 
@@ -260,7 +269,8 @@ def play_and_record_rust(specs1, specs2, season="M-2", sel_temp=0.6, seed=0, mct
     ib = [next(i for i, q in enumerate(P2) if q is p) for p in sel2]
     st = list(random.getstate()[1])
     rs_pred = predict == "side1"
-    r_res, decs, sums, rsnaps = E.mcts_3v3_record(list(specs1), ia, list(specs2), ib, seed, mcts_sims, season, st, pred=rs_pred)
+    r_res, decs, sums, rsnaps, rexpl = E.mcts_3v3_record(list(specs1), ia, list(specs2), ib, seed, mcts_sims, season, st, pred=rs_pred)
+    expl_at = {t: json.loads(x) for t, x in rexpl}
     dec_at = {t: (a, s) for t, a, s in decs}
     sum_at = {t: s for t, s in sums}
     s1 = BattleSide(sel1, viewer_label="P1", source6=P1); s2 = BattleSide(sel2, viewer_label="P2", source6=P2)
@@ -275,10 +285,12 @@ def play_and_record_rust(specs1, specs2, season="M-2", sel_temp=0.6, seed=0, mct
             if my.belief is not None:
                 my.belief.observe_disclosure(my.opp_view)
             a = _rust_action(got[0][sx], my.active)
+            acts.setdefault(battle.turn, {})[f"side{sx + 1}"] = _act_view(a, my)
             if sx == 1:
                 random.setstate((3, tuple(got[1]), None))
             return a
         return ai
+    acts = {}
     ai1, ai2 = mk(0), mk(1)
     battle.start(ai1, ai2)
     turns = []
@@ -313,7 +325,8 @@ def play_and_record_rust(specs1, specs2, season="M-2", sel_temp=0.6, seed=0, mct
         nl = b.logs[prev[0]:]; prev[0] = len(b.logs)
         turns.append(_pp({"turn": b.turn, "logs": nl,
                       "side1": side_snapshot(b.side1, b.field), "side2": side_snapshot(b.side2, b.field),
-                      **field_snapshot(b.field)}, b.side1, b.side2))
+                      **field_snapshot(b.field), **({"acts": acts[b.turn]} if b.turn in acts else {}),
+                      **({"expl1": expl_at[b.turn]} if b.turn in expl_at else {})}, b.side1, b.side2))
         _tag_turn(turns[-1], b, len(b.logs) - len(nl))
 
     result = battle_outcome(s1, s2, battle._turn_loop(ai1, ai2, on_turn=cb))

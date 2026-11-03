@@ -1,5 +1,7 @@
 // /api/* → Cloud Run(pokenavi-suggest) の中継。ブラウザに Cloud Run の URL を出さず、
 // Cloud Run 側は PROXY_SECRET を知るこの中継からの呼び出しだけを受け付けられるようにする。
+import { readSession } from '../../lib/pages/session.js';
+
 const ORIGIN = 'https://pokenavi-suggest-799947701075.asia-northeast1.run.app';
 const GET_PATHS = new Set(['species']);
 const POST_PATHS = new Set(['suggest', 'simulate', 'complete', 'speed_detail', 'atk_detail', 'guide', 'diagnose', 'diag_battle', 'improve', 'job_status']);
@@ -23,6 +25,11 @@ export async function onRequest({ request, env, params, waitUntil }) {
     'X-Pokenavi-Proxy': env.PROXY_SECRET || '',
     'X-Pokenavi-Client-IP': request.headers.get('CF-Connecting-IP') || '',
   };
+  // 診断の無料枠はプレミアム会員には掛けない（会員期限は署名付き Cookie の値。Stripe への問い合わせはしない）
+  if (env.BILLING_ENABLED && (path === 'diagnose' || path === 'diag_battle')) {
+    const s = await readSession(request, env);
+    if (s && s.p > Math.floor(Date.now() / 1000)) headers['X-Pokenavi-Premium'] = '1';
+  }
   let body;
   if (method === 'POST') {
     // サーバーは Content-Length で本文を読むので、chunked にならないよう読み切ってから送る

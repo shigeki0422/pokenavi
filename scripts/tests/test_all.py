@@ -7860,8 +7860,35 @@ if _ok35:
                                                        [t["predict"]["side1"] for t in _bo35["turns"]])) if not _near35(x, y)]
     check("診断の1戦 predict=\"side1\": 読みは自分側だけ（Rust）・Python の読みと一致（2e-4）・対戦の中身は predict=True と同じ",
           all(set(t["predict"]) == {"side1"} for t in _s1o35["turns"]) and len(_s1o35["turns"]) == len(_bo35["turns"]) and not _pd35
-          and [{k: v for k, v in t.items() if k != "predict"} for t in _s1o35["turns"]]
-          == [{k: v for k, v in t.items() if k != "predict"} for t in _bo35["turns"]], str(_pd35[:1])[:400])
+          and [{k: v for k, v in t.items() if k not in ("predict", "expl1")} for t in _s1o35["turns"]]
+          == [{k: v for k, v in t.items() if k not in ("predict", "expl1")} for t in _bo35["turns"]], str(_pd35[:1])[:400])
+    _ex35 = [(t, t["expl1"]) for t in _s1o35["turns"] if "expl1" in t]
+    check("観戦: 自分側の各手番に AI の読み（expl1：候補手・訪問割合・勝率・選んだ手）を残し、選んだ手は候補にあり、実行した手と一致する",
+          bool(_ex35) and all(1 <= len(e["cands"]) <= 5 and any(c["a"] == e["chosen"] for c in e["cands"])
+                              and all(0 <= c["v"] <= 1 and (c["q"] is None or 0 <= c["q"] <= 1) for c in e["cands"])
+                              and (e.get("exec") or e["chosen"]).replace("メガ+", "") == (t["acts"]["side1"].get("move") or f'{t["acts"]["side1"].get("to")}に交代')
+                              for t, e in _ex35), str(_ex35[:1])[:400])
+    _pl35 = [e["pool"] for t in _s1o35["turns"] + _bo35["turns"] for e in t["predict"]["side1"].values() if e.get("pool")]
+    _gk35 = lambda c: (c["item"], c["ability"], tuple(sorted(c["moves"])))
+    check("相手の型の読み: 努力値・性格だけが違う型は1つの型（sets）にまとめ、内訳を spread に持つ（Rust・Python とも）",
+          bool(_pl35) and all("sets" in pl and len({_gk35(c) for c in pl["sets"]}) == len(pl["sets"])
+                              and pl["sets"][0]["p"] >= pl["top"][0]["p"] - 1e-9
+                              and all(sum(x[1] for x in c["spread"]) <= c["p"] + 2e-4 for c in pl["sets"]) for pl in _pl35)
+          and any(pl["sets"][0]["p"] > pl["top"][0]["p"] + 1e-3 for pl in _pl35), str(_pl35[:1])[:400])
+    def _actok35(rec):
+        ts = rec["turns"]
+        for p, c in zip(ts, ts[1:]):
+            for sd in ("side1", "side2"):
+                a = c.get("acts", {}).get(sd)
+                act = p[sd]["party"][p[sd]["active_idx"]]
+                if not a or a["who"] != act["name"]:
+                    return False
+                if a["kind"] == "move" and a["move"] not in [m["name"] for m in act["moves"]] + ["わるあがき"]:
+                    return False
+                if a["kind"] == "switch" and a["to"] not in [q["name"] for q in p[sd]["party"] if q["alive"]]:
+                    return False
+        return len(ts) > 1
+    check("観戦: 各ターンに両者が選んだ行動（acts：技・交代）を残し、場の個体・覚えている技・控えと矛盾しない", _actok35(_s1o35), str([t.get("acts") for t in _s1o35["turns"][:3]]))
     _mv35 = _mk26c(_P1s[0])
     _a35 = [_F35._rust_action((1, "", 0, 2, False), _mv35), _F35._rust_action((3, "", 0, -1, False), _mv35),
             _F35._rust_action((0, _mv35.moves[1].name_jp, 1, -1, True), _mv35),
@@ -7872,9 +7899,9 @@ if _ok35:
           and _a35[3].move.name_jp == "わるあがき")
     _orig35 = _E35.mcts_3v3_record
     def _bad35(*a, **k):
-        r, d, t, p = _orig35(*a, **k)
+        r, d, t, p, x = _orig35(*a, **k)
         t0, (sa, sb) = t[0]
-        return r, d, [(t0, ((sa[0], [(n, h + 1, m, st) for n, h, m, st in sa[1]]), sb))] + t[1:], p
+        return r, d, [(t0, ((sa[0], [(n, h + 1, m, st) for n, h, m, st in sa[1]]), sb))] + t[1:], p, x
     _E35.mcts_3v3_record = _bad35
     try:
         _F35.play_and_record_rust(_P1s, _O34[3], season="M-6", seed=3, mcts_sims=40)
@@ -11818,6 +11845,30 @@ for _nm58, _fn58 in (("1-2", _t58_lashout), ("全再戦後", _t58_post_rr), ("C0
     except Exception as _e58:
         import traceback as _tb58
         check(f"58 {_nm58} のテストが実行できる", False, f"{type(_e58).__name__}: {_e58} {_tb58.format_exc()[-400:]}")
+
+print("\n=== 59. パーティ診断の無料枠（IPごと・日本時間の1日） ===")
+try:
+    import _diagnose as _DG59
+    _day59 = ["2026-11-03"]
+    _q59 = _DG59.DailyQuota({"diag": 2, "battle": 3}, today=lambda: _day59[0])
+    _r59 = [_q59.take("a", "battle") for _ in range(4)]
+    check("59 対戦は上限まで通り、超えたら止まる（残りも返す）", _r59 == [(True, 2), (True, 1), (True, 0), (False, 0)], str(_r59))
+    check("59 上限は IP ごと（別の IP は減っていない）", _q59.take("b", "battle") == (True, 2) and _q59.left("a", "battle") == 0)
+    _d59 = [_q59.take("a", "diag", k) for k in ("P1", "P1", "P2", "P1", "P3")]
+    check("59 診断は同じパーティを数え直さない（再表示・タブの行き来で減らない）",
+          _d59 == [(True, 1), (True, 1), (True, 0), (True, 0), (False, 0)], str(_d59))
+    _day59[0] = "2026-11-04"
+    check("59 日付（日本時間）が変わると戻る", _q59.take("a", "battle") == (True, 2) and _q59.left("a", "diag") == 2)
+    check("59 上限0以下は無制限", _DG59.DailyQuota({"diag": 0, "battle": 0}).take("a", "battle") == (True, None))
+    _src59 = open(_os0.path.join(_os0.path.dirname(_os0.path.abspath(__file__)), "..", "product3_server.py"), encoding="utf-8").read()
+    _rel59 = open(_os0.path.join(_os0.path.dirname(_os0.path.abspath(__file__)), "..", "..", "functions", "api", "[[path]].js"), encoding="utf-8").read()
+    check("59 サーバは /diagnose（パーティを key）と /diag_battle に無料枠を掛け、会員の印は中継経由のときだけ信じる",
+          'self._quota("diag", DG.party_key(specs))' in _src59 and 'self._quota("battle")' in _src59
+          and 'return self._from_proxy() and self.headers.get("X-Pokenavi-Premium") == "1"' in _src59)
+    check("59 中継は会員（署名付き Cookie の期限内）にだけ X-Pokenavi-Premium を付ける",
+          "readSession(request, env)" in _rel59 and "headers['X-Pokenavi-Premium'] = '1'" in _rel59)
+except Exception as _e59:
+    check("59 無料枠のテストが実行できる", False, f"{type(_e59).__name__}: {_e59}")
 
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:

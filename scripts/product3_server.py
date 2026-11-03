@@ -810,6 +810,10 @@ MAX_CORE = 6                                         # /suggest の軸の数の�
 # 送信元IPが Cloudflare になるので、MIN_INTERVAL はこの値が合うときだけ中継が渡す利用者のIPで数える
 PROXY_SECRET = os.environ.get("PROXY_SECRET", "")
 PROXY_REQUIRED = os.environ.get("PROXY_REQUIRED") == "1"  # 1で中継を経ない直接の呼び出しを403にする
+# 診断の無料枠（IPごと・日本時間の1日）。プレミアム会員は中継が X-Pokenavi-Premium を付け、数えない
+QUOTA = DG.DailyQuota()
+_QUOTA_MSG = {"diag": "本日の無料の診断（{n}パーティ）を使い切りました。日本時間の0時に戻ります。",
+              "battle": "本日の無料の対戦（{n}戦）を使い切りました。日本時間の0時に戻ります。"}
 
 class H(BaseHTTPRequestHandler):
     def _send(self, code, body, ctype="application/json"):
@@ -828,6 +832,22 @@ class H(BaseHTTPRequestHandler):
         if PROXY_REQUIRED and self.path != "/health" and not self._from_proxy():
             self._send(403, "{}"); return True
         return False
+
+    def _premium(self):
+        return self._from_proxy() and self.headers.get("X-Pokenavi-Premium") == "1"
+
+    def _quota(self, kind, key=None):
+        """通れば残りの dict、使い切っていれば 429 を返して None"""
+        if self._premium():
+            return {"premium": True}
+        ip = self._client_ip()
+        ok, left = QUOTA.take(ip, kind, key)
+        if not ok:
+            n = QUOTA.lim[kind]
+            self._send(429, json.dumps({"error": _QUOTA_MSG[kind].format(n=n), "quota": {"kind": kind, "limit": n}}, ensure_ascii=False))
+            return None
+        return {"diag_left": QUOTA.left(ip, "diag"), "battle_left": QUOTA.left(ip, "battle"),
+                "diag_limit": QUOTA.lim["diag"], "battle_limit": QUOTA.lim["battle"]}
 
     def _client_ip(self):
         if self._from_proxy() and self.headers.get("X-Pokenavi-Client-IP"):
@@ -880,7 +900,9 @@ class H(BaseHTTPRequestHandler):
                 if self.path == "/guide":
                     self._send(200, json.dumps(guide(specs), ensure_ascii=False)); return
                 if self.path == "/diagnose":
-                    self._send(200, json.dumps(diagnose(specs), ensure_ascii=False)); return
+                    q = self._quota("diag", DG.party_key(specs))
+                    if q is None: return
+                    self._send(200, json.dumps(dict(diagnose(specs), quota=q), ensure_ascii=False)); return
                 if self.path == "/diag_battle":
                     opp, seed, my_sel = req.get("opp"), req.get("seed", 0), req.get("my_sel")
                     if type(opp) is not int or not 0 <= opp < len(GPOOL) or type(seed) is not int or not 0 <= seed < 2 ** 31:
@@ -888,7 +910,9 @@ class H(BaseHTTPRequestHandler):
                     if my_sel is not None and not (isinstance(my_sel, list) and len(my_sel) == 3
                                                    and all(type(i) is int and 0 <= i < 6 for i in my_sel) and len(set(my_sel)) == 3):
                         self._send(200, json.dumps({"error": "my_selは0〜5の異なる整数3つ（先頭がリード）かnullで指定してください"}, ensure_ascii=False)); return
-                    self._send(200, json.dumps(diag_battle(specs, opp, seed, my_sel), ensure_ascii=False)); return
+                    q = self._quota("battle")
+                    if q is None: return
+                    self._send(200, json.dumps(dict(diag_battle(specs, opp, seed, my_sel), quota=q), ensure_ascii=False)); return
                 self._send(200, json.dumps(improve_start(specs), ensure_ascii=False)); return
             if self.path == "/atk_detail":
                 self._send(200, json.dumps(EX.atk_detail(req.get("specs") or [], req.get("mon", ""), req.get("type", ""), L), ensure_ascii=False)); return

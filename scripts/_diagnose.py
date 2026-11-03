@@ -9,6 +9,8 @@ import json
 import math
 from array import array
 import os
+import threading
+import time
 from collections import Counter
 
 import _select_guide as SG
@@ -22,6 +24,52 @@ MC_NC = 20
 ADV_OPPS, ADV_K, OPP_K = 200, 4, 16
 N_OPPS, IMPROVE_OPPS, IMPROVE_K, PER_SLOT, D_MIN, Z_MIN, FIX_MIN_N = 9, 300, 4, 2, 0.03, 2.0, 30
 PRED_TOP = 3
+
+
+DIAG_DAILY = int(os.environ.get("DIAG_DAILY", "5"))
+BATTLE_DAILY = int(os.environ.get("BATTLE_DAILY", "10"))
+
+
+def _jst_day():
+    return time.strftime("%Y-%m-%d", time.gmtime(time.time() + 9 * 3600))
+
+
+class DailyQuota:
+    """無料の1日あたりの上限（日本時間の0時に戻る）。上限0以下は無制限。
+    key を渡した利用（診断＝パーティ）は同じ key を数え直さない（同じパーティの再表示・タブの行き来で減らない）"""
+
+    def __init__(self, limits=None, today=_jst_day):
+        self.lim = dict(limits or {"diag": DIAG_DAILY, "battle": BATTLE_DAILY})
+        self._today, self._day, self._use, self._lock = today, None, {}, threading.Lock()
+
+    def _u(self, who, kind):
+        d = self._today()
+        if d != self._day:
+            self._day, self._use = d, {}
+        return self._use.setdefault((who, kind), {"n": 0, "keys": set()})
+
+    def take(self, who, kind, key=None):
+        """(通ったか, 残り)。残りは無制限なら None"""
+        lim = self.lim.get(kind, 0)
+        with self._lock:
+            u = self._u(who, kind)
+            if lim <= 0:
+                return True, None
+            if key is not None and key in u["keys"]:
+                return True, lim - u["n"]
+            if u["n"] >= lim:
+                return False, 0
+            u["n"] += 1
+            if key is not None:
+                u["keys"].add(key)
+            return True, lim - u["n"]
+
+    def left(self, who, kind):
+        lim = self.lim.get(kind, 0)
+        if lim <= 0:
+            return None
+        with self._lock:
+            return lim - self._u(who, kind)["n"]
 
 
 def _name(spec):

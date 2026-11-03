@@ -114,10 +114,12 @@ impl NetW {
                 nz.push((k, *v));
             }
         }
-        cols_acc(&self.w1t, self.hidden, nz.iter().copied(), &self.b1, h1, self.relu);
+        cols_acc(&self.w1t, self.hidden, nz, &self.b1, h1, self.relu);
         h2.clear();
         h2.resize(self.hidden2, 0.0);
-        cols_acc(&self.w2t, self.hidden2, h1.iter().copied().enumerate(), &self.b2, h2, self.relu);
+        nz.clear();
+        nz.extend(h1.iter().copied().enumerate());
+        cols_acc(&self.w2t, self.hidden2, nz, &self.b2, h2, self.relu);
     }
 
     /// top表現 → 価値。two-hot のときは softmax の期待値（Python の _value_from_top と同じ順序）。
@@ -203,13 +205,27 @@ fn act1(z: f64, relu: bool) -> f64 {
     }
 }
 
-/// 転置した重みで入力1つずつ全出力へ足し込む（out は 0.0 で渡す）。各出力の加算は入力の左→右順のままなので
-/// 行ごとの内積とビット完全一致。行を跨ぐ飛び飛びの読み出しが無くなり、出力方向にベクトル化される
+/// 転置した重みで入力を全出力へ足し込む（out は 0.0 で渡す）。各出力の加算は入力の左→右順のままなので
+/// 行ごとの内積とビット完全一致。入力4つずつまとめて足すのは出力の読み書きを1/4にするため（順序は変わらない）
 #[inline]
-fn cols_acc(wt: &[f64], rows: usize, xs: impl Iterator<Item = (usize, f64)>, b: &[f64], out: &mut [f64], relu: bool) {
-    for (k, xv) in xs {
-        let col = &wt[k * rows..(k + 1) * rows];
-        for (o, w) in out.iter_mut().zip(col) {
+fn cols_acc(wt: &[f64], rows: usize, xs: &[(usize, f64)], b: &[f64], out: &mut [f64], relu: bool) {
+    let out = &mut out[..rows];
+    let col = |k: usize| &wt[k * rows..(k + 1) * rows];
+    let mut q = xs.chunks_exact(4);
+    for c in &mut q {
+        let (x0, x1, x2, x3) = (c[0].1, c[1].1, c[2].1, c[3].1);
+        let (c0, c1, c2, c3) = (col(c[0].0), col(c[1].0), col(c[2].0), col(c[3].0));
+        for j in 0..rows {
+            let mut o = out[j];
+            o += x0 * c0[j];
+            o += x1 * c1[j];
+            o += x2 * c2[j];
+            o += x3 * c3[j];
+            out[j] = o;
+        }
+    }
+    for &(k, xv) in q.remainder() {
+        for (o, w) in out.iter_mut().zip(col(k)) {
             *o += xv * w;
         }
     }

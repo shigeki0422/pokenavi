@@ -103,6 +103,8 @@ fn entry(pack: &Pack, name: &str, pb: &mut PokemonBelief, season: &str, appeared
             if tot > 0.0 {
                 ws.sort_by(|a, b| b.1.partial_cmp(&a.1).unwrap());
                 let (mut pm, mut pi, mut pn) = (Vec::new(), Vec::new(), Vec::new());
+                // 努力値・性格だけが違う型は同じ型にまとめる（振り分け違いで確率が割れて低く見えるため）
+                let mut gs: Vec<(String, f64, usize, Vec<(String, f64)>)> = Vec::new();
                 for (i, x) in &ws {
                     let b = &arr[*i];
                     let p = x / tot;
@@ -110,14 +112,30 @@ fn entry(pack: &Pack, name: &str, pb: &mut PokemonBelief, season: &str, appeared
                         add(&mut pm, m, p);
                     }
                     add(&mut pi, &b.item, p);
-                    add(&mut pn, &format!("{} {}", ev_str(&b.ev), b.nature), p);
+                    let sk = format!("{} {}", ev_str(&b.ev), b.nature);
+                    add(&mut pn, &sk, p);
+                    let mut ms: Vec<&String> = b.moves.iter().collect();
+                    ms.sort();
+                    let gk = format!("{}|{}|{}", b.item, b.ability, ms.iter().map(|s| s.as_str()).collect::<Vec<_>>().join("|"));
+                    match gs.iter_mut().find(|g| g.0 == gk) {
+                        Some(g) => {
+                            g.1 += p;
+                            add(&mut g.3, &sk, p);
+                        }
+                        None => gs.push((gk, p, *i, vec![(sk, p)])),
+                    }
                 }
+                gs.sort_by(|a, b| r4(b.1).partial_cmp(&r4(a.1)).unwrap().then_with(|| a.0.cmp(&b.0)));
+                let sets: Vec<Value> = gs.iter().take(topn).map(|(_, p, i, sp)| {
+                    let b = &arr[*i];
+                    json!({"p": r4(*p), "item": b.item, "ability": b.ability, "moves": b.moves, "spread": top(sp, 3)})
+                }).collect();
                 let tops: Vec<Value> = ws.iter().take(topn).map(|(i, x)| {
                     let b = &arr[*i];
                     json!({"side": b.side, "p": r4(x / tot), "item": b.item, "nature": b.nature,
                            "ev": ev_str(&b.ev), "ability": b.ability, "moves": b.moves})
                 }).collect();
-                pool = json!({"n_consistent": ok.len(), "top": tops, "moves": top(&pm, 12),
+                pool = json!({"n_consistent": ok.len(), "top": tops, "sets": sets, "moves": top(&pm, 12),
                               "item": top(&pi, topn), "spread": top(&pn, 3)});
             }
         }

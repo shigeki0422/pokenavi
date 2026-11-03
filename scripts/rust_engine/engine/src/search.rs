@@ -535,7 +535,18 @@ pub struct SampledCfg {
     pub moves: Vec<String>,
 }
 
+/// 観戦用：直前の手番の根の候補（行動, 訪問数, 勝率。未訪問は -1）・探索が選んだ手（下方ガード前）・実行した手
+pub struct Expl {
+    pub stats: Vec<(Action, i64, f64)>,
+    pub chosen: Action,
+    pub exec: Action,
+    pub guard: bool,
+}
+
 pub struct SearchAI {
+    /// true のとき mcts_choose が last_expl を残す（記録用の対戦だけ。探索には影響しない）
+    pub explain: bool,
+    pub last_expl: Option<Expl>,
     pub season: String,
     pub rng: CpyRandom,
     pub mcts_sims: usize,
@@ -648,6 +659,8 @@ impl SearchAI {
             tpl: TplCache::default(),
             nodes: Vec::new(),
             pending_nodes: Vec::new(),
+            explain: false,
+            last_expl: None,
         }
     }
 
@@ -908,6 +921,16 @@ impl SearchAI {
                 pack, net, sides, me_idx, field, belief, cands, chosen, my_is_s1, grng, &sq, qc,
             );
         }
+        if self.explain {
+            let pre = cands[chosen_i].clone();
+            let guard = action_index(&pre) != action_index(&chosen) || pre.do_mega != chosen.do_mega;
+            self.last_expl = Some(Expl {
+                stats: stats.iter().map(|(i, n, q)| (cands[*i].clone(), *n, *q)).collect(),
+                chosen: pre,
+                exec: chosen.clone(),
+                guard,
+            });
+        }
         chosen
     }
 
@@ -1057,46 +1080,61 @@ fn pick_pool_build<'a>(
 ) -> Option<&'a crate::pack::PoolBuild> {
     let arr = pack.build_pool.get(name)?;
     // 観測したダメージで絞った型ごとの重み（テンプレが無ければ元の出現率）
-    let wts: Vec<f64> = match tpl {
-        Some(t) => pb.pool_weights(pack, t, arr).to_vec(),
-        None => arr.iter().map(|b| b.weight).collect(),
-    };
-    let mut tot = 0.0;
-    let mut ok: Vec<(&crate::pack::PoolBuild, f64)> = Vec::with_capacity(arr.len());
-    for (b, &bw) in arr.iter().zip(wts.iter()) {
-        if let Some(it) = pb.known_item.as_deref() {
-            if b.item != it {
-                continue;
-            }
-        }
-        // メガ進化で分かる特性はメガ後のもの。判明したメガ石の型は特性で弾かない（belief.py と同じ）
-        let mega_seen = pb.known_item.as_deref() == Some(b.item.as_str())
-            && crate::battle::is_megastone(pack, pack.intern.get(&b.item));
-        if let Some(ab) = pb.known_ability.as_deref() {
-            if !b.ability.is_empty() && b.ability != ab && !mega_seen {
-                continue;
-            }
-        }
-        if !pb.known_moves.iter().all(|m| b.moves.iter().any(|x| x == m)) {
-            continue;
-        }
-        if pb.known_item.is_none() && pb.absent_items.iter().any(|x| *x == b.item) {
-            continue;   // 発動しなかった持ち物（たべのこし等）
-        }
-        tot += bw;
-        ok.push((b, bw));
+    if let Some(t) = tpl {
+        pb.pool_weights(pack, t, arr);
     }
-    if ok.is_empty() || tot <= 0.0 {
+    let hit = pb.pick.as_ref().map_or(false, |c| {
+        c.from_tpl == tpl.is_some() && c.applied == pb.pool_applied && c.n == arr.len()
+            && c.item == pb.known_item && c.ability == pb.known_ability
+            && c.moves == pb.known_moves && c.absent == pb.absent_items
+    });
+    if !hit {
+        let mut tot = 0.0;
+        let mut ok: Vec<(usize, f64)> = Vec::with_capacity(arr.len());
+        for (i, b) in arr.iter().enumerate() {
+            let bw = if tpl.is_some() { pb.pool_w[i] } else { b.weight };
+            if let Some(it) = pb.known_item.as_deref() {
+                if b.item != it {
+                    continue;
+                }
+            }
+            // メガ進化で分かる特性はメガ後のもの。判明したメガ石の型は特性で弾かない（belief.py と同じ）
+            if let Some(ab) = pb.known_ability.as_deref() {
+                if !b.ability.is_empty() && b.ability != ab {
+                    let mega_seen = pb.known_item.as_deref() == Some(b.item.as_str())
+                        && crate::battle::is_megastone(pack, pack.intern.get(&b.item));
+                    if !mega_seen {
+                        continue;
+                    }
+                }
+            }
+            if !pb.known_moves.iter().all(|m| b.moves.iter().any(|x| x == m)) {
+                continue;
+            }
+            if pb.known_item.is_none() && pb.absent_items.iter().any(|x| *x == b.item) {
+                continue;   // 発動しなかった持ち物（たべのこし等）
+            }
+            tot += bw;
+            ok.push((i, bw));
+        }
+        pb.pick = Some(crate::belief::PickCache {
+            from_tpl: tpl.is_some(), applied: pb.pool_applied, n: arr.len(),
+            item: pb.known_item.clone(), ability: pb.known_ability.clone(),
+            moves: pb.known_moves.clone(), absent: pb.absent_items.clone(), ok, tot,
+        });
+    }
+    let c = pb.pick.as_ref().unwrap();
+    if c.ok.is_empty() || c.tot <= 0.0 {
         return None;
     }
-    let mut r = rng.random() * tot;
-    for (b, bw) in &ok {
+    let mut r = rng.random() * c.tot;
+    for &(i, bw) in &c.ok {
         r -= bw;
         if r <= 0.0 {
-            return Some(b);
+            return Some(&arr[i]);
         }
     }
-    ok.last().map(|x| x.0)
+    c.ok.last().map(|x| &arr[x.0])
 }
 
     fn sample_opp_config(
@@ -1131,7 +1169,7 @@ fn pick_pool_build<'a>(
             // 型プールから型まるごと引く。技・持ち物・性格・努力値を独立に引くと
             // 実在しない組み合わせになる（型丸ごと一致は事前で7%しかなかった）。
             if self.joint_build {
-                if let Some(b) = Self::pick_pool_build(pack, &name, pb, tpl_j.as_ref(), &mut self.rng) {
+                if let Some(b) = Self::pick_pool_build(pack, &name, pb, tpl_j.as_deref(), &mut self.rng) {
                     crate::sim::cfg_log_push(pack, &name, &b.ev, &b.nature,
                                              Some(b.item.as_str()), &b.ability, &b.moves);
                     Self::det_score(pack, p, pb.known_moves.len(),

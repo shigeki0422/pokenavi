@@ -1,6 +1,7 @@
 // 工房の「パーティ診断」パネル（試作・ローカル用）。API 契約は product3_server.py の /diagnose・/diag_battle・/improve。
-import { guideBody, gdAdv, gdRound, makeLogTranslator, SIM_LOG_TERM } from './diag-shared';
+import { guideBody, gdAdv, gdRound, makeLogTranslator } from './diag-shared';
 import { normalizeSuggestSpeciesName } from './spec';
+import { makeReplay } from './sim-replay';
 import { MATCHUP_SEASON } from '../../consts';
 import { track } from '../track';
 
@@ -35,25 +36,17 @@ const T: Record<Lang, any> = {
     refGreedy: '（比較対象は簡易AIでの値）',
     tabSum: '概要', tabGuide: '選出ガイド', tabSim: '対戦シミュレーション', tabImp: '改善案',
     overall: '全体の有利度', rank: (n: number, p: number) => `生成した ${MATCHUP_SEASON} のパーティ ${n} 党の中で <b>${p <= 50 ? `上位 ${p}%` : `下位 ${101 - p}%`}</b>`,
-    strong: '強み', weak: '弱み・注意点', tend: '選出の傾向', none: '特になし',
+    strong: '強み', weak: '弱み・注意点', none: '特になし',
     sStrong: (m: string, d: string) => `${m} がいる相手に強い（${d}）`,
     sWeak: (m: string, d: string) => `${m} がいる相手に弱い（${d}）`,
-    sCore: (m: string, p: string) => `${m} はほぼ毎回選出される主軸（選出率 ${p}）`,
-    sIdle: (m: string, p: string) => `${m} はほぼ出番がない枠（選出率 ${p}）`,
-    sLead: (ms: string) => `先発は ${ms} が多い`,
-    sRule: (o: string, add: string, drop: string) => `相手に ${o} がいたら${add ? ` ${add} を入れる` : ''}${add && drop ? '・' : ''}${drop ? ` ${drop} を外す` : ''}`,
     oppHd: '対戦相手の候補', whyWeak: (m: string) => `苦手な ${m} を含む相手`, whyMeta: 'よくある相手',
     advVs: '有利度', selHd: '自分の選出', selAuto: '自動（AI）', selManual: '自分で3匹選ぶ',
     selHint: 'タップした順に選出（1番目が先発）', lead: '先発',
-    fight: '対戦する', fightRandom: 'ほかの相手（ランダム）', pickOpp: '上の候補から相手を選んでください', pick3: '3匹選んでください',
+    fight: '対戦する', fightRandom: 'ランダムな相手（3000党から）', pickOpp: '上の候補から相手を選んでください', pick3: '3匹選んでください',
     fighting: '対戦中…（1戦 数秒）', battles: '対戦の記録', nth: (n: number) => `第${n}戦`,
     win: '勝ち', lose: '負け', draw: '引き分け', randomTag: 'ランダム',
-    mySel: '自分の選出', oppSel: '相手の選出', autoTag: 'AI', manualTag: '手動', left: '残り',
-    prev: '◀ 前へ', next: '次へ ▶', auto: '▶ 自動再生', stop: '■ 停止', turn: (t: number, n: number) => `ターン ${t} / ${n}`,
-    me: '自分', opp: '相手', fainted: 'ひんし', unseen: '未登場',
-    aiNote: '自分AIのメモ', predHd: '相手の型の読み（自分側AI）', predNone: 'まだ相手が場に出ていません',
-    known: '判明', correct: '正解', items: '持ち物', abil: '特性',
-    impBtn: '改善案を計算', impLoading: (s: number) => `計算中…（数分〜十数分かかります・${s}秒経過）`,
+    mySel: '自分の選出', oppSel: '相手の選出', autoTag: 'AI', manualTag: '手動',     prev: '◀ 前へ', next: '次へ ▶', auto: '▶ 自動再生', stop: '■ 停止', turn: (t: number, n: number) => `ターン ${t} / ${n}`,
+        rdSeen: '判明', rdGuess: '推定', rdEv: (s: string) => `${s} 振り`, rdEvMix: '振り方はばらつく',         impBtn: '改善案を計算', impLoading: (s: number) => `計算中…（数分〜十数分かかります・${s}秒経過）`,
     impProg: (d: number, t: number, eta: number | null) => `本番AIで対戦中… ${d}/${t}${eta != null ? `（残り約 ${Math.max(1, Math.round(eta / 60))} 分）` : ''}`,
     impCands: '入れ替え候補を作成中…',
     impNone: '有利度が 3pt 以上・有意に上がる1枠の入れ替えは見つかりませんでした。',
@@ -61,9 +54,8 @@ const T: Record<Lang, any> = {
     mega2: 'メガシンカは1試合に1体だけなので、2体目のメガストーンは同時には選出されません（控えの選択肢として効く案です）',
     impFix: '効く相手', impTry: 'この入れ替えを試す', impStale: 'パーティが変わったため試せません（もう一度診断してください）',
     applied: (o: string, i: string) => `${o} を ${i} に入れ替えました`, undo: '入れ替え前に戻す',
-    errOld: 'サーバ未対応です（API サーバがパーティ診断に対応していません）', errNet: 'サーバに接続できませんでした', errPfx: 'エラー: ',
-    weather: '天候', tr: 'トリックルーム',
-  },
+    quotaDiag: (n: number) => `本日の無料の診断（${n}パーティ）を使い切りました。日本時間の0時に戻ります。`, quotaBattle: (n: number) => `本日の無料の対戦（${n}戦）を使い切りました。日本時間の0時に戻ります。`, battleLeft: (n: number) => `今日の無料枠: あと ${n} 戦`, errOld: 'サーバ未対応です（API サーバがパーティ診断に対応していません）', errNet: 'サーバに接続できませんでした', errPfx: 'エラー: ',
+      },
   en: {
     head: 'Team Checkup', badge: 'Beta', run: 'Run checkup', rerun: 'Run again',
     needSix: (n: number) => `Add all 6 Pokémon to run the checkup (now ${n})`,
@@ -75,25 +67,17 @@ const T: Record<Lang, any> = {
     refGreedy: ' (reference measured with the fast AI)',
     tabSum: 'Overview', tabGuide: 'Pick guide', tabSim: 'Battle sim', tabImp: 'Improvements',
     overall: 'Overall edge', rank: (n: number, p: number) => `<b>${p <= 50 ? `Top ${p}%` : `Bottom ${101 - p}%`}</b> among ${n} generated ${MATCHUP_SEASON} teams`,
-    strong: 'Strengths', weak: 'Weaknesses', tend: 'Pick tendencies', none: 'Nothing notable',
+    strong: 'Strengths', weak: 'Weaknesses', none: 'Nothing notable',
     sStrong: (m: string, d: string) => `Strong against teams with ${m} (${d})`,
     sWeak: (m: string, d: string) => `Weak against teams with ${m} (${d})`,
-    sCore: (m: string, p: string) => `${m} is a core pick almost every game (pick rate ${p})`,
-    sIdle: (m: string, p: string) => `${m} rarely gets picked (pick rate ${p})`,
-    sLead: (ms: string) => `Usually leads with ${ms}`,
-    sRule: (o: string, add: string, drop: string) => `If the opponent has ${o}:${add ? ` bring ${add}` : ''}${add && drop ? ',' : ''}${drop ? ` leave out ${drop}` : ''}`,
     oppHd: 'Opponent candidates', whyWeak: (m: string) => `Has ${m} (a tough matchup)`, whyMeta: 'Common team',
     advVs: 'Edge', selHd: 'Your picks', selAuto: 'Auto (AI)', selManual: 'Pick 3 yourself',
     selHint: 'Tap in order (1st = lead)', lead: 'Lead',
-    fight: 'Battle', fightRandom: 'Random opponent', pickOpp: 'Choose an opponent above', pick3: 'Pick 3 Pokémon',
+    fight: 'Battle', fightRandom: 'Random opponent (from 3,000 teams)', pickOpp: 'Choose an opponent above', pick3: 'Pick 3 Pokémon',
     fighting: 'Battling… (a few seconds per battle)', battles: 'Battle log', nth: (n: number) => `Battle ${n}`,
     win: 'Win', lose: 'Loss', draw: 'Draw', randomTag: 'Random',
-    mySel: 'Your picks', oppSel: 'Opponent picks', autoTag: 'AI', manualTag: 'Manual', left: 'Remaining',
-    prev: '◀ Prev', next: 'Next ▶', auto: '▶ Auto', stop: '■ Stop', turn: (t: number, n: number) => `Turn ${t} / ${n}`,
-    me: 'You', opp: 'Opponent', fainted: 'Fainted', unseen: 'Not yet seen',
-    aiNote: 'Your AI notes', predHd: 'Set predictions (your AI)', predNone: 'No opposing Pokémon has appeared yet',
-    known: 'Revealed', correct: 'Correct', items: 'Item', abil: 'Ability',
-    impBtn: 'Find improvements', impLoading: (s: number) => `Calculating… (takes several minutes, ${s}s)`,
+    mySel: 'Your picks', oppSel: 'Opponent picks', autoTag: 'AI', manualTag: 'Manual',     prev: '◀ Prev', next: 'Next ▶', auto: '▶ Auto', stop: '■ Stop', turn: (t: number, n: number) => `Turn ${t} / ${n}`,
+        rdSeen: 'Seen', rdGuess: 'Likely', rdEv: (s: string) => `EVs in ${s}`, rdEvMix: 'EV spread varies',         impBtn: 'Find improvements', impLoading: (s: number) => `Calculating… (takes several minutes, ${s}s)`,
     impProg: (d: number, t: number, eta: number | null) => `Battling with the battle AI… ${d}/${t}${eta != null ? ` (about ${Math.max(1, Math.round(eta / 60))} min left)` : ''}`,
     impCands: 'Building swap candidates…',
     impNone: 'No single-slot swap raises the edge by 3pt or more with significance.',
@@ -101,9 +85,8 @@ const T: Record<Lang, any> = {
     mega2: 'Only one Pokémon can Mega Evolve per battle, so a second Mega Stone is never brought together with the first (it works as a back-up option).',
     impFix: 'Helps against', impTry: 'Try this swap', impStale: 'Team has changed; run the checkup again to try this',
     applied: (o: string, i: string) => `Swapped ${o} for ${i}`, undo: 'Undo swap',
-    errOld: 'Not supported by the server (API server has no checkup endpoints)', errNet: 'Could not connect to the server', errPfx: 'Error: ',
-    weather: 'Weather', tr: 'Trick Room',
-  },
+    quotaDiag: (n: number) => `You've used today's free checkups (${n} teams). Resets at midnight JST.`, quotaBattle: (n: number) => `You've used today's free battles (${n}). Resets at midnight JST.`, battleLeft: (n: number) => `Free today: ${n} battles left`, errOld: 'Not supported by the server (API server has no checkup endpoints)', errNet: 'Could not connect to the server', errPfx: 'Error: ',
+      },
   ko: {
     head: '파티 진단', badge: '시험판', run: '진단하기', rerun: '다시 진단하기',
     needSix: (n: number) => `6마리를 모두 채우면 진단할 수 있습니다（현재 ${n}마리）`,
@@ -115,25 +98,17 @@ const T: Record<Lang, any> = {
     refGreedy: '（비교 대상은 간이 AI 값）',
     tabSum: '개요', tabGuide: '선출 가이드', tabSim: '대전 시뮬레이션', tabImp: '개선안',
     overall: '전체 유리도', rank: (n: number, p: number) => `생성한 ${MATCHUP_SEASON} 파티 ${n}개 중 <b>${p <= 50 ? `상위 ${p}%` : `하위 ${101 - p}%`}</b>`,
-    strong: '강점', weak: '약점・주의점', tend: '선출 경향', none: '특별히 없음',
+    strong: '강점', weak: '약점・주의점', none: '특별히 없음',
     sStrong: (m: string, d: string) => `${m}이(가) 있는 상대에게 강함（${d}）`,
     sWeak: (m: string, d: string) => `${m}이(가) 있는 상대에게 약함（${d}）`,
-    sCore: (m: string, p: string) => `${m}은(는) 거의 매번 선출되는 주축（선출률 ${p}）`,
-    sIdle: (m: string, p: string) => `${m}은(는) 거의 출전하지 않는 칸（선출률 ${p}）`,
-    sLead: (ms: string) => `선봉은 ${ms}이(가) 많음`,
-    sRule: (o: string, add: string, drop: string) => `상대에게 ${o}이(가) 있으면${add ? ` ${add} 넣기` : ''}${add && drop ? '・' : ''}${drop ? ` ${drop} 빼기` : ''}`,
     oppHd: '대전 상대 후보', whyWeak: (m: string) => `어려운 ${m}을(를) 포함한 상대`, whyMeta: '자주 보이는 상대',
     advVs: '유리도', selHd: '내 선출', selAuto: '자동（AI）', selManual: '직접 3마리 고르기',
     selHint: '탭한 순서대로 선출（1번째가 선봉）', lead: '선봉',
-    fight: '대전하기', fightRandom: '다른 상대（랜덤）', pickOpp: '위 후보에서 상대를 고르세요', pick3: '3마리를 고르세요',
+    fight: '대전하기', fightRandom: '랜덤 상대（3000팀 중）', pickOpp: '위 후보에서 상대를 고르세요', pick3: '3마리를 고르세요',
     fighting: '대전 중…（1전 몇 초）', battles: '대전 기록', nth: (n: number) => `제${n}전`,
     win: '승리', lose: '패배', draw: '무승부', randomTag: '랜덤',
-    mySel: '내 선출', oppSel: '상대 선출', autoTag: 'AI', manualTag: '수동', left: '남은 포켓몬',
-    prev: '◀ 이전', next: '다음 ▶', auto: '▶ 자동 재생', stop: '■ 정지', turn: (t: number, n: number) => `턴 ${t} / ${n}`,
-    me: '나', opp: '상대', fainted: '기절', unseen: '미등장',
-    aiNote: '내 AI 메모', predHd: '상대 샘플 예측（내 AI）', predNone: '아직 상대가 등장하지 않았습니다',
-    known: '판명', correct: '정답', items: '지닌 물건', abil: '특성',
-    impBtn: '개선안 계산', impLoading: (s: number) => `계산 중…（수 분 걸립니다・${s}초 경과）`,
+    mySel: '내 선출', oppSel: '상대 선출', autoTag: 'AI', manualTag: '수동',     prev: '◀ 이전', next: '다음 ▶', auto: '▶ 자동 재생', stop: '■ 정지', turn: (t: number, n: number) => `턴 ${t} / ${n}`,
+        rdSeen: '판명', rdGuess: '추정', rdEv: (s: string) => `${s} 투자`, rdEvMix: '투자 분산',         impBtn: '개선안 계산', impLoading: (s: number) => `계산 중…（수 분 걸립니다・${s}초 경과）`,
     impProg: (d: number, t: number, eta: number | null) => `실전 AI로 대전 중… ${d}/${t}${eta != null ? `（약 ${Math.max(1, Math.round(eta / 60))}분 남음）` : ''}`,
     impCands: '교체 후보 작성 중…',
     impNone: '유리도가 3pt 이상・유의미하게 좋아지는 1칸 교체를 찾지 못했습니다.',
@@ -141,12 +116,12 @@ const T: Record<Lang, any> = {
     mega2: '메가진화는 한 시합에 1마리뿐이라 2번째 메가스톤은 동시에 선출되지 않습니다（후보 교체 요원으로서 효과가 있는 안입니다）',
     impFix: '효과 있는 상대', impTry: '이 교체 시험하기', impStale: '파티가 바뀌어 시험할 수 없습니다（다시 진단해 주세요）',
     applied: (o: string, i: string) => `${o}을(를) ${i}(으)로 교체했습니다`, undo: '교체 전으로 되돌리기',
-    errOld: '서버 미지원（API 서버가 파티 진단에 대응하지 않습니다）', errNet: '서버에 연결할 수 없습니다', errPfx: '오류: ',
-    weather: '날씨', tr: '트릭룸',
-  },
+    quotaDiag: (n: number) => `오늘의 무료 진단(${n}파티)을 모두 사용했습니다. 일본 시간 0시에 초기화됩니다.`, quotaBattle: (n: number) => `오늘의 무료 대전(${n}전)을 모두 사용했습니다. 일본 시간 0시에 초기화됩니다.`, battleLeft: (n: number) => `오늘 무료: ${n}전 남음`, errOld: '서버 미지원（API 서버가 파티 진단에 대응하지 않습니다）', errNet: '서버에 연결할 수 없습니다', errPfx: '오류: ',
+      },
 };
 
-class ApiError extends Error { kind: 'old' | 'net' | 'srv'; constructor(kind: 'old' | 'net' | 'srv', msg = '') { super(msg); this.kind = kind; } }
+type ErrKind = 'old' | 'net' | 'srv' | 'quota';
+class ApiError extends Error { kind: ErrKind; quota: any; constructor(kind: ErrKind, msg = '', quota: any = null) { super(msg); this.kind = kind; this.quota = quota; } }
 
 async function post(path: string, body: unknown): Promise<any> {
   let r: Response;
@@ -154,6 +129,10 @@ async function post(path: string, body: unknown): Promise<any> {
     r = await fetch(API + path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
   } catch (e) { throw new ApiError('net'); }
   if (r.status === 404 || r.status === 405 || r.status === 501) throw new ApiError('old');
+  if (r.status === 429) {
+    const q = await r.json().catch(() => null);
+    throw new ApiError(q && q.quota ? 'quota' : 'srv', (q && q.error) || 'HTTP 429', q && q.quota);
+  }
   if (!r.ok) throw new ApiError('srv', `HTTP ${r.status}`);
   let d: any;
   try { d = await r.json(); } catch (e) { throw new ApiError('srv', 'bad json'); }
@@ -191,12 +170,10 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
   };
   const mon = (n: string, cls = 'dg-ico') => `<span class="dg-mon">${ico(n, cls)}<span>${esc(tP(n))}</span></span>`;
   const logTr = makeLogTranslator(lang, { ...host.maps, tPoke: host.tPoke, tItem: host.tItem });
-  const WEATHER: Record<string, [string, string, string]> = { sunny: ['はれ', 'Harsh sunlight', '쾌청'], rain: ['あめ', 'Rain', '비'], sandstorm: ['すなあらし', 'Sandstorm', '모래바람'], hail: ['あられ', 'Hail', '싸라기눈'], snow: ['ゆき', 'Snow', '설경'] };
-  const weatherName = (w: string) => (WEATHER[w] ? WEATHER[w][lang === 'ko' ? 2 : lang === 'en' ? 1 : 0] : w);
-  const term = (x: string) => (lang === 'ja' || !SIM_LOG_TERM[x] ? x : SIM_LOG_TERM[x][lang === 'ko' ? 1 : 0]);
   const paren = (s: string) => (lang === 'en' ? ` (${esc(s)})` : `（${esc(s)}）`);
   const pt = (d: number) => `${d < 0 ? '−' : '+'}${Math.abs(d * 100).toFixed(1)}pt`;
-  const errMsg = (e: any) => (e && e.kind === 'old' ? I.errOld : e && e.kind === 'net' ? I.errNet : I.errPfx + esc((e && e.message) || ''));
+  const errMsg = (e: any) => (e && e.kind === 'quota' ? esc(e.quota.kind === 'diag' ? I.quotaDiag(e.quota.limit) : I.quotaBattle(e.quota.limit))
+    : e && e.kind === 'old' ? I.errOld : e && e.kind === 'net' ? I.errNet : I.errPfx + esc((e && e.message) || ''));
   const evShort = (ev: string) => ev.split('/').map((v, i) => (+v ? `${EVK[i]}${v}` : '')).filter(Boolean).join(' ') || '—';
   const specName = (spec: string) => spec.split('@')[0];
   function specSummary(spec: string) {
@@ -251,12 +228,17 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     if (st.impTimer) clearInterval(st.impTimer);
     Object.assign(st, { specs, key: specs.join('\n'), loading: true, err: null, data: null, opp: null, mySel: [], battles: [], cur: -1, imp: null, impErr: null, impLoading: false, impJob: null, advJob: null, applied: null });
     renderBody(); refresh();
-    track('diag_run');
+    track('diag_run', { again: !!st.ranOnce });
+    st.ranOnce = true;
+    const t0 = performance.now();
     try {
       const [d] = await Promise.all([post('/diagnose', { specs }), loadIcons()]);
       if (st.key !== specs.join('\n')) return;
       st.data = d;
-    } catch (e) { st.err = e; }
+      if (d.quota) st.quota = d.quota;
+      const pct = d.rank && typeof d.rank.pct === 'number' ? Math.max(1, Math.round(d.rank.pct * 100)) : null;
+      track('diag_result', { ms: Math.round(performance.now() - t0), approx: !!(d.adv && d.adv.approx), top_pct: pct === null ? -1 : pct <= 10 ? 10 : pct <= 30 ? 30 : pct <= 50 ? 50 : 100 });
+    } catch (e: any) { st.err = e; track('diag_error', { at: 'diagnose', kind: (e && e.kind) || 'js' }); }
     st.loading = false;
     renderBody(); refresh();
     if (st.data && st.data.adv_job) pollAdv(st.data.adv_job);
@@ -265,12 +247,14 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
   async function pollAdv(job: any) {
     const key = st.key;
     const tick = (j: any) => { st.advJob = j; const m = el.querySelector('#dg-adv-run'); if (m) m.textContent = I.approxRun(j.done || 0, j.total || 0); };
+    const t0 = performance.now();
     try {
       const r = await pollJob(job, key, tick);
       if (!r || key !== st.key) return;
       Object.assign(st.data, { adv: r.adv, rank: r.rank });
       st.data.guide.adv = r.adv.adv;
-    } catch (e) { if (key === st.key && st.data) st.data.adv.failed = true; }
+      track('diag_adv_done', { ms: Math.round(performance.now() - t0) });
+    } catch (e: any) { if (key === st.key && st.data) st.data.adv.failed = true; track('diag_error', { at: 'adv', kind: (e && e.kind) || 'js' }); }
     if (key === st.key && (st.tab === 'sum' || st.tab === 'guide') && $('dg-pane')) renderPane();
   }
 
@@ -279,12 +263,14 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     if (st.loading) { body.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I.loading)}</div></div>`; return; }
     if (st.err) { body.innerHTML = `<div class="dg-err">${errMsg(st.err)}</div>`; return; }
     if (!st.data) { body.innerHTML = ''; return; }
-    const tabs: [string, string][] = [['sum', I.tabSum], ['guide', I.tabGuide], ['sim', I.tabSim], ['imp', I.tabImp]];
+    // 改善案（renderImp・/improve）は計算が重いので一旦タブから外している
+    const tabs: [string, string][] = [['sum', I.tabSum], ['guide', I.tabGuide], ['sim', I.tabSim]];
     body.innerHTML = `<div class="mtx-legend dg-legend"><span>${esc(I.legend)}</span></div>
       <div class="tabbar dg-tabs">${tabs.map(([k, l]) => `<button type="button" class="tb${st.tab === k ? ' active' : ''}" data-dt="${k}">${esc(l)}</button>`).join('')}</div>
       <div class="dg-pane" id="dg-pane"></div>`;
     body.querySelectorAll<HTMLElement>('[data-dt]').forEach((b) => b.addEventListener('click', () => {
       st.tab = b.dataset.dt;
+      track('diag_tab', { tab: st.tab });
       body.querySelectorAll<HTMLElement>('[data-dt]').forEach((x) => x.classList.toggle('active', x === b));
       renderPane();
     }));
@@ -303,19 +289,9 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
 
   function summaryHtml() {
     const g = st.data.guide, rk = st.data.rank;
-    const strong: string[] = [], weak: string[] = [], tend: string[] = [];
+    const strong: string[] = [], weak: string[] = [];
     for (const o of g.strong || []) strong.push(I.sStrong(mon(o.opp, 'dg-ico-s'), pt(o.diff)));
-    for (const m of g.members || []) {
-      if (m.sel >= 0.9) strong.push(I.sCore(mon(m.name, 'dg-ico-s'), gdRound(m.sel)));
-      if (m.sel < 0.1) weak.push(I.sIdle(mon(m.name, 'dg-ico-s'), gdRound(m.sel)));
-    }
     for (const o of g.weak || []) weak.push(I.sWeak(mon(o.opp, 'dg-ico-s'), pt(o.diff)));
-    const leads = (g.members || []).filter((m: any) => m.lead >= 0.2).sort((a: any, b: any) => b.lead - a.lead);
-    if (leads.length) tend.push(I.sLead(leads.map((m: any) => `${mon(m.name, 'dg-ico-s')}${lang === 'en' ? ` (${gdRound(m.lead)})` : `（${gdRound(m.lead)}）`}`).join(lang === 'en' ? ', ' : '・')));
-    for (const r of g.rules || []) {
-      const names = (a: any[]) => (a || []).map((x) => mon(x.mon, 'dg-ico-s')).join(lang === 'en' ? ', ' : '・');
-      tend.push(I.sRule(mon(r.opp, 'dg-ico-s'), names(r.add), names(r.drop)));
-    }
     const list = (arr: string[], cls: string) => arr.length ? `<ul class="dg-ul ${cls}">${arr.map((x) => `<li>${x}</li>`).join('')}</ul>` : `<div class="muted">${esc(I.none)}</div>`;
     const pct = rk && typeof rk.pct === 'number' ? Math.max(1, Math.round(rk.pct * 100)) : null;
     const a = st.data.adv || {};
@@ -325,8 +301,7 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     return `<div class="dg-overall"><div class="dg-ov-lb">${esc(I.overall)}</div><div class="dg-ov-v">${gdAdv(g.adv, lang)}</div>${advSub}
         ${pct !== null ? `<div class="dg-rank">${I.rank(rk.ref_n, pct)}${rk.method === 'greedy' ? esc(I.refGreedy) : ''}</div>` : ''}</div>
       <div class="dg-h3">${esc(I.strong)}</div>${list(strong, 'dg-good')}
-      <div class="dg-h3">${esc(I.weak)}</div>${list(weak, 'dg-bad')}
-      <div class="dg-h3">${esc(I.tend)}</div>${list(tend, '')}`;
+      <div class="dg-h3">${esc(I.weak)}</div>${list(weak, 'dg-bad')}`;
   }
 
   // ---- 対戦シミュレーション ----
@@ -345,14 +320,17 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     const manual = st.selMode === 'manual';
     const ready = !st.fighting && (!manual || st.mySel.length === 3);
     const hint = st.fighting ? '' : manual && st.mySel.length < 3 ? I.pick3 : st.opp === null ? I.pickOpp : '';
-    pane.innerHTML = `<div class="dg-h3">${esc(I.oppHd)}</div><div class="dg-opps">${oppRows}</div>
+    const rndRow = `<button type="button" class="dg-opp${st.opp === -1 ? ' sel' : ''}" data-opp="-1"><span class="dg-opp-icons">?</span>
+        <span class="dg-opp-meta"><span class="dg-why">${esc(I.fightRandom)}</span></span></button>`;
+    const left = st.quota && typeof st.quota.battle_left === 'number' ? st.quota.battle_left : null;
+    pane.innerHTML = `<div class="dg-h3">${esc(I.oppHd)}</div><div class="dg-opps">${oppRows}${rndRow}</div>
       <div class="dg-h3">${esc(I.selHd)}</div>
       <div class="dg-mode"><label><input type="radio" name="dg-mode" value="auto" ${manual ? '' : 'checked'}> ${esc(I.selAuto)}</label>
         <label><input type="radio" name="dg-mode" value="manual" ${manual ? 'checked' : ''}> ${esc(I.selManual)}</label></div>
       ${manual ? `<div class="muted">${esc(I.selHint)}</div><div class="dg-picks">${selChips}</div>` : ''}
-      <div class="dg-fight-row"><button type="button" class="btn" id="dg-fight" ${ready && st.opp !== null ? '' : 'disabled'}>${esc(I.fight)}</button>
-        <button type="button" class="pb-btn-sub" id="dg-fight-rnd" ${ready ? '' : 'disabled'}>${esc(I.fightRandom)}</button>
-        <span class="muted">${esc(hint)}</span></div>
+      <div class="dg-fight-row"><button type="button" class="btn" id="dg-fight" ${ready && st.opp !== null && left !== 0 ? '' : 'disabled'}>${esc(I.fight)}</button>
+        <span class="muted">${esc(left === 0 ? I.quotaBattle(st.quota.battle_limit) : hint)}</span></div>
+      ${left != null && left > 0 ? `<div class="muted dg-quota">${esc(I.battleLeft(left))}</div>` : ''}
       <div id="dg-blist"></div><div id="dg-replay"></div>`;
     pane.querySelectorAll<HTMLElement>('[data-opp]').forEach((b) => b.addEventListener('click', () => { st.opp = +b.dataset.opp!; renderSim(); }));
     pane.querySelectorAll<HTMLInputElement>('input[name="dg-mode"]').forEach((r) => r.addEventListener('change', () => { st.selMode = r.value; renderSim(); }));
@@ -361,16 +339,19 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
       if (k >= 0) st.mySel.splice(k, 1); else if (st.mySel.length < 3) st.mySel.push(i);
       renderSim();
     }));
-    $('dg-fight').addEventListener('click', () => { if (st.opp !== null) fight(st.opp, false); });
-    $('dg-fight-rnd').addEventListener('click', () => fight(Math.floor(Math.random() * ((st.data.guide && st.data.guide.n) || 3000)), true));
+    $('dg-fight').addEventListener('click', () => {
+      if (st.opp === -1) fight(Math.floor(Math.random() * ((st.data.guide && st.data.guide.n) || 3000)), true);
+      else if (st.opp !== null) fight(st.opp, false);
+    });
     renderBattleList();
     renderReplay();
   }
 
   async function fight(oppId: number, random: boolean) {
     if (st.fighting) return;
-    track('diag_fight', { random });
     const o = (st.data.opps || []).find((x: any) => x.id === oppId);
+    track('diag_fight', { random, why: random ? 'random' : (o && o.why) || 'other', sel: st.selMode, n: st.battles.length + 1 });
+    const t0 = performance.now();
     const b: any = { opp: oppId, random, names: o ? o.names : null, seed: Math.floor(Math.random() * 2147483647), mySel: st.selMode === 'manual' ? [...st.mySel] : null, rec: null, err: null };
     st.battles.push(b);
     st.cur = st.battles.length - 1; st.turn = 0; st.fighting = true;
@@ -380,10 +361,15 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     try {
       const d = await post('/diag_battle', { specs: st.specs, opp: oppId, seed: b.seed, my_sel: b.mySel });
       b.rec = d.record || d;
+      if (d.quota) st.quota = d.quota;
       b.names = d.opp_names || b.names;
       b.mySelReal = d.my_sel || b.mySel;
       b.auto = d.auto !== undefined ? d.auto : b.mySel === null;
-    } catch (e) { b.err = e; }
+      track('diag_fight_done', { ms: Math.round(performance.now() - t0), result: b.rec.result === 1 ? 'win' : b.rec.result === 2 ? 'lose' : 'draw', turns: (b.rec.turns || []).length - 1 });
+    } catch (e: any) {
+      b.err = e; track('diag_error', { at: 'battle', kind: (e && e.kind) || 'js' });
+      if (e && e.kind === 'quota') st.quota = { ...(st.quota || {}), battle_left: 0, battle_limit: e.quota.limit };
+    }
     st.fighting = false;
     if (key === st.key && st.tab === 'sim' && $('dg-pane')) renderSim();
   }
@@ -408,47 +394,39 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     }));
   }
 
-  function hpBar(p: any) {
-    const r = p.max_hp ? Math.max(0, p.hp) / p.max_hp : 0;
-    const c = r > 0.5 ? 'g' : r > 0.2 ? 'y' : 'r';
-    return `<span class="dg-hp"><i class="dg-hp-${c}" style="width:${Math.round(r * 100)}%"></i></span><span class="dg-hpv">${Math.round(r * 100)}%</span>`;
-  }
-  function stagesTxt(s: any) {
-    return s ? Object.entries(s).filter(([, v]) => v).map(([k, v]: any) => `<span class="dg-stg">${k}${v > 0 ? '+' : ''}${v}</span>`).join('') : '';
-  }
-  function sideHtml(sd: any, mine: boolean, seen: Set<number>) {
-    return sd.party.map((p: any, i: number) => {
-      if (!mine && !seen.has(i)) return `<div class="dg-pm dg-unseen"><span class="dg-q">？</span><span class="dg-sub">${esc(I.unseen)}</span></div>`;
-      const nm = p.mega && p.mega_name ? p.mega_name : p.name;
-      const dead = !p.alive || p.hp <= 0;
-      return `<div class="dg-pm${i === sd.active_idx && !dead ? ' act' : ''}${dead ? ' dead' : ''}">
-        <div class="dg-pm-hd">${ico(nm, 'dg-ico-s') || ico(p.name, 'dg-ico-s')}<b>${esc(tP(nm))}</b>${p.status ? `<span class="dg-st">${esc(term(p.status))}</span>` : ''}${dead ? `<span class="dg-st">${esc(I.fainted)}</span>` : ''}${stagesTxt(p.stages)}</div>
-        <div class="dg-pm-hp">${hpBar(p)}</div></div>`;
-    }).join('');
-  }
-  function sameSet(c: any, t: any) {
-    if (!t) return false;
-    const a = [...(c.moves || [])].sort().join('|'), b = [...(t.moves || [])].sort().join('|');
-    return c.item === t.item && c.nature === t.nature && c.ev === t.ev && c.ability === t.ability && a === b;
-  }
-  function predictHtml(turn: any, rec: any) {
-    const pr = turn.predict && turn.predict.side1;
+  const EV_AX = ['H', 'A', 'B', 'C', 'D', 'S'];
+  // 相手の個体カードに足す型の読み：見えたもの（特性・持ち物・技）と、まだ見えていない持ち物・努力値の目安だけ
+  function readHtml(pr: any) {
     if (!pr) return '';
-    const truth: Record<string, any> = {};
-    for (const t of (rec.truth && rec.truth.side2) || []) truth[t.name] = t;
-    const shown = Object.entries(pr).filter(([, v]: any) => v.appeared);
-    if (!shown.length) return `<div class="dg-h4">${esc(I.predHd)}</div><div class="muted">${esc(I.predNone)}</div>`;
-    const blocks = shown.map(([name, v]: any) => {
-      const kn = v.known || {};
-      const knownBits = [kn.item ? `${esc(I.items)}: ${esc(host.tItem(kn.item))}` : '', kn.ability ? `${esc(I.abil)}: ${esc(host.tAbil(kn.ability))}` : '', ...(kn.moves || []).map((m: string) => esc(host.tMove(m)))].filter(Boolean);
-      const top = ((v.pool && v.pool.top) || []).slice(0, 3);
-      const cands = top.map((c: any, k: number) => `<div class="dg-cand${sameSet(c, truth[name]) ? ' ok' : ''}"><span class="dg-cand-p">${k + 1}. ${Math.round(c.p * 100)}%</span>
-          <span class="dg-cand-b">${esc(host.tItem(c.item) || '—')}・${esc(host.tNature(c.nature))}・${esc(host.tAbil(c.ability))}・${evShort(c.ev)}${sameSet(c, truth[name]) ? ` <span class="dg-ok">✓ ${esc(I.correct)}</span>` : ''}<br>${(c.moves || []).map((m: string) => esc(host.tMove(m))).join(' / ')}</span></div>`).join('');
-      return `<div class="dg-pred"><div class="dg-pm-hd">${mon(name, 'dg-ico-s')}</div>
-        ${knownBits.length ? `<div class="dg-known"><span class="dg-sub">${esc(I.known)}:</span> ${knownBits.join(' / ')}</div>` : ''}${cands}</div>`;
-    }).join('');
-    return `<div class="dg-h4">${esc(I.predHd)}</div>${blocks}`;
+    const kn = pr.known || {}, pool = pr.pool;
+    const seen = [kn.ability ? esc(host.tAbil(kn.ability)) : '', kn.item ? esc(host.tItem(kn.item)) : '', ...(kn.moves || []).map((m: string) => esc(host.tMove(m)))].filter(Boolean);
+    const guess: string[] = [];
+    const items = (pool && pool.item) || (pr.marginal && pr.marginal.item) || [];
+    if (!kn.item && items.length) guess.push(`${esc(host.tItem(items[0][0]) || '—')} ${Math.round(items[0][1] * 100)}%`);
+    const sp: [string, number][] = (pool && pool.spread) || [];
+    if (sp.length) {
+      const tot = sp.reduce((a, x) => a + x[1], 0) || 1;
+      const ax = EV_AX.filter((_, k) => sp.reduce((a, [s, p]) => a + (+s.split(' ')[0].split('/')[k] >= 16 ? p : 0), 0) / tot >= 0.5);
+      const nat: Record<string, number> = {};
+      for (const [s, p] of sp) { const n = s.split(' ')[1]; nat[n] = (nat[n] || 0) + p; }
+      const nb = Object.entries(nat).sort((a, b) => b[1] - a[1])[0];
+      guess.push(`${ax.length ? I.rdEv(ax.join('・')) : I.rdEvMix}${nb ? paren(host.tNature(nb[0])) : ''}`);
+    }
+    if (!seen.length && !guess.length) return '';
+    return `<div class="dg-read">${seen.length ? `<div><span class="dg-read-k">${esc(I.rdSeen)}</span>${seen.join(' / ')}</div>` : ''}${guess.length ? `<div><span class="dg-read-k">${esc(I.rdGuess)}</span>${guess.join('・')}</div>` : ''}</div>`;
   }
+  let MOVET: Record<string, string> | null = null;
+  let movetP: Promise<void> | null = null;
+  const loadMoveTypes = () => (movetP ||= fetch('/sim-data/move_types.json').then((r) => r.json()).then((d) => { MOVET = d; }).catch(() => { MOVET = {}; }));
+  let curPred: any = null;
+  const RP = makeReplay({
+    lang, tPoke: tP, tMove: host.tMove, tItem: host.tItem, tAbil: host.tAbil,
+    typeName: (x: string) => host.maps.type[x] || x,
+    iconUrl: (n: string) => { const id = iconId(n); return id ? `/images/pokemon/pokemon-${id}.webp` : null; },
+    moveType: (m: string) => (MOVET ? MOVET[m] : undefined),
+    logTr,
+    oppExtra: (n: string) => readHtml(curPred && curPred[n]),
+  });
 
   function renderReplay() {
     const box = $('dg-replay');
@@ -457,39 +435,28 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     if (!b) { box.innerHTML = ''; return; }
     if (b.err) { box.innerHTML = `<div class="dg-err">${errMsg(b.err)}</div>`; return; }
     if (!b.rec) { box.innerHTML = `<div class="ps-loading"><div class="ps-spinner"></div><div class="ps-lmsg">${esc(I.fighting)}</div></div>`; return; }
+    if (!MOVET) { loadMoveTypes().then(() => { if ($('dg-replay')) renderReplay(); }); }
     const rec = b.rec, turns = rec.turns || [];
     if (!turns.length) { box.innerHTML = ''; return; }
     st.turn = Math.max(0, Math.min(st.turn, turns.length - 1));
-    const t = turns[st.turn], last = turns[turns.length - 1];
+    const t = turns[st.turn], lastIdx = turns.length - 1;
+    if (st.turn === lastIdx && lastIdx > 0 && !b.ended) { b.ended = true; track('diag_replay_end', { turns: lastIdx }); }
     const r = resultOf(b)!;
-    const sep = lang === 'en' ? ', ' : '・';
-    const leftMine = last.side1.party.filter((p: any) => p.hp > 0).map((p: any) => tP(p.name));
-    const leftOpp = last.side2.party.filter((p: any) => p.hp > 0).map((p: any) => tP(p.name));
     const selRow = (arr: string[]) => (arr || []).map((n, i) => `${mon(n, 'dg-ico-s')}${i === 0 ? `<span class="dg-lead">${esc(I.lead)}</span>` : ''}`).join('');
-    const seen = new Set<number>();
-    for (let k = 0; k <= st.turn; k++) { const ai = turns[k].side2.active_idx; if (ai != null) seen.add(ai); }
-    const logs = (t.logs || []).filter((l: string) => !/^▷P2:/.test(l)).map((l: string) => {
-      const note = /^▷P1:/.test(l);
-      const txt = logTr(l).replace(/^▷P1: ?/, '');
-      return `<div class="dg-log${note ? ' note' : ''}">${note ? `<span class="dg-note-tag">${esc(I.aiNote)}</span>` : ''}${esc(txt)}</div>`;
-    }).join('');
-    const field = [t.weather ? `${esc(I.weather)}: ${esc(weatherName(t.weather))}` : '', t.trick_room ? esc(I.tr) : ''].filter(Boolean).join(' / ');
+    curPred = t.predict && t.predict.side1;
     box.innerHTML = `<div class="dg-rp">
-      <div class="dg-rp-hd"><span class="dg-res dg-res-${r[0]} dg-res-big">${esc(r[1])}</span>
-        <span class="dg-sub">${esc(I.left)} — ${esc(I.me)}: ${esc(leftMine.join(sep) || '—')} / ${esc(I.opp)}: ${esc(leftOpp.join(sep) || '—')}</span></div>
       <div class="dg-selrow"><span class="dg-sub">${esc(I.mySel)}${paren(b.auto ? I.autoTag : I.manualTag)}</span>${selRow(rec.selected1)}</div>
       <div class="dg-selrow"><span class="dg-sub">${esc(I.oppSel)}</span>${selRow(rec.selected2)}</div>
-      <div class="dg-ctl"><button type="button" class="pb-btn-sub" data-rp="-1" ${st.turn <= 0 ? 'disabled' : ''}>${esc(I.prev)}</button>
-        <button type="button" class="pb-btn-sub" data-rp="1" ${st.turn >= turns.length - 1 ? 'disabled' : ''}>${esc(I.next)}</button>
-        <button type="button" class="pb-btn-sub" data-rp="auto">${esc(st.timer ? I.stop : I.auto)}</button>
-        <span class="dg-turn">${esc(I.turn(t.turn, turns[turns.length - 1].turn))}</span></div>
-      ${field ? `<div class="dg-sub">${field}</div>` : ''}
-      <div class="dg-sides"><div class="dg-side"><div class="dg-h4">${esc(I.me)}</div>${sideHtml(t.side1, true, seen)}</div>
-        <div class="dg-side"><div class="dg-h4">${esc(I.opp)}</div>${sideHtml(t.side2, false, seen)}</div></div>
-      <div class="dg-logs">${logs}</div>
-      ${predictHtml(t, rec)}</div>`;
+      <div class="dg-ctl"><button type="button" class="pb-btn-sub" data-rp="-1" ${st.turn <= 0 ? 'disabled' : ''} aria-label="${esc(I.prev)}">◀</button>
+        <span class="dg-turn">${esc(I.turn(t.turn, turns[lastIdx].turn))}</span>
+        <button type="button" class="pb-btn-sub" data-rp="1" ${st.turn >= lastIdx ? 'disabled' : ''} aria-label="${esc(I.next)}">▶</button>
+        <button type="button" class="btn" data-rp="auto">${esc(st.timer ? I.stop : I.auto)}</button>
+        ${st.turn === lastIdx ? `<span class="dg-res dg-res-${r[0]}">${esc(r[1])}</span>` : ''}</div>
+      ${RP.turnHtml(turns, st.turn)}</div>`;
     box.querySelectorAll<HTMLElement>('[data-rp]').forEach((x) => x.addEventListener('click', () => {
       const v = x.dataset.rp;
+      const bb = st.battles[st.cur];
+      if (bb && !bb.watched) { bb.watched = true; track('diag_replay', { how: v === 'auto' ? 'auto' : 'step' }); }
       if (v === 'auto') { if (st.timer) stopAuto(); else startAuto(); renderReplay(); return; }
       stopAuto(); st.turn += +v!; renderReplay();
     }));

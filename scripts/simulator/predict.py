@@ -127,6 +127,8 @@ class Predictor:
                         pm: Dict[str, float] = {}
                         pi: Dict[str, float] = {}
                         pn: Dict[str, float] = {}
+                        # 努力値・性格だけが違う型は同じ型にまとめる（振り分け違いで確率が割れて低く見えるため）
+                        gs: Dict[str, dict] = {}
                         for b, x in ws:
                             p = x / tot
                             for m in b["moves"]:
@@ -134,12 +136,20 @@ class Predictor:
                             pi[b["item"]] = pi.get(b["item"], 0.0) + p
                             key = f'{_ev_str(b["ev"])} {b["nature"]}'
                             pn[key] = pn.get(key, 0.0) + p
+                            gk = f'{b["item"]}|{b.get("ability", "")}|{"|".join(sorted(b["moves"]))}'
+                            g = gs.setdefault(gk, {"p": 0.0, "b": b, "sp": {}})
+                            g["p"] += p
+                            g["sp"][key] = g["sp"].get(key, 0.0) + p
+                        sets = [{"p": round(g["p"], 4), "item": g["b"]["item"], "ability": g["b"].get("ability", ""),
+                                 "moves": list(g["b"]["moves"]), "spread": _top(g["sp"], 3)}
+                                for _, g in sorted(gs.items(), key=lambda kv: (-round(kv[1]["p"], 4), kv[0]))[:self.top]]
                         pool = {"n_consistent": len(ok),
                                 "top": [{"side": b.get("side", ""),
                                          "p": round(x / tot, 4), "item": b["item"],
                                          "nature": b["nature"], "ev": _ev_str(b["ev"]),
                                          "ability": b.get("ability", ""), "moves": list(b["moves"])}
                                         for b, x in ws[:self.top]],
+                                "sets": sets,
                                 "moves": _top(pm, 12), "item": _top(pi, self.top),
                                 "spread": _top(pn, 3)}
             ent["pool"] = pool

@@ -209,7 +209,7 @@ pub struct Pack {
     /// 型プール（_gen_type_pool.py の出力）。種族名 → 型まるごとの候補。
     /// 技・持ち物・性格・努力値を独立に引くと実在しない組み合わせができるので、
     /// 型単位で引けるようにする（既定で有効。JOINT_BUILD=0 で無効）。
-    pub build_pool: HashMap<String, Vec<PoolBuild>>,
+    pub build_pool: crate::interner::FxMap<String, Vec<PoolBuild>>,
     /// R4: ネット重み
     pub net: Option<crate::net::NetW>,
     /// ダンプ時点の simulator/** ダイジェスト（ケースの刻印照合用。casehdr参照）
@@ -546,7 +546,7 @@ impl Pack {
             }
         }
 
-        let mut build_pool: HashMap<String, Vec<PoolBuild>> = HashMap::new();
+        let mut build_pool: crate::interner::FxMap<String, Vec<PoolBuild>> = Default::default();
         if let Some(bp) = v.get("build_pool").and_then(|x| x.as_object()) {
             for (sp, arr) in bp {
                 let mut out = Vec::new();

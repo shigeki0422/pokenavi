@@ -620,7 +620,7 @@ fn mcts_3v3_record(
     season: &str,
     state: Option<Vec<u32>>,
     pred: bool,
-) -> PyResult<(u8, Vec<engine::sim::DecRec>, Vec<engine::sim::TurnSum>, Vec<String>)> {
+) -> PyResult<(u8, Vec<engine::sim::DecRec>, Vec<engine::sim::TurnSum>, Vec<String>, Vec<(i64, String)>)> {
     if state.as_ref().map(|v| v.len() != 625).unwrap_or(false) {
         return Err(PyValueError::new_err("state は 625 語"));
     }
@@ -628,8 +628,8 @@ fn mcts_3v3_record(
     let mut g = lock_eng(m);
     let Eng { pack, net, .. } = &mut *g;
     let net = net.clone();
-    let (r, d, t, p) = engine::sim::mcts_3v3_record(pack, &net, &pa, &sa, &pb, &sb, season, seed, sims, state.as_deref(), pred);
-    Ok((r as u8, d, t, p))
+    let (r, d, t, p, x) = engine::sim::mcts_3v3_record(pack, &net, &pa, &sa, &pb, &sb, season, seed, sims, state.as_deref(), pred);
+    Ok((r as u8, d, t, p, x))
 }
 
 #[pymodule]

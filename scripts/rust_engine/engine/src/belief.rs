@@ -157,6 +157,21 @@ pub struct PokemonBelief {
     pub pool_applied: usize,
     pub pool_prof: Vec<usize>,
     pub profs: Vec<Poke>,
+    /// 型プールから引ける型（添字, 重み）と重みの合計。判明情報と重みが変わるまで使い回す
+    pub pick: Option<PickCache>,
+}
+
+#[derive(Clone, Debug)]
+pub struct PickCache {
+    pub from_tpl: bool,
+    pub applied: usize,
+    pub n: usize,
+    pub item: Option<String>,
+    pub ability: Option<String>,
+    pub moves: Vec<String>,
+    pub absent: Vec<String>,
+    pub ok: Vec<(usize, f64)>,
+    pub tot: f64,
 }
 
 fn ev_key(e: &EvEntry) -> (i64, i64, i64, i64, i64, i64) {
@@ -246,6 +261,7 @@ impl PokemonBelief {
             absent_items: Vec::new(),
             pool_w: Vec::new(),
             pool_applied: 0,
+            pick: None,
             pool_prof: Vec::new(),
             profs: Vec::new(),
         }
@@ -525,7 +541,7 @@ impl PokemonBelief {
         }
         let rs = rolls();
         // 計測用: POOL_DMG=0 で観測を反映しない（ダメージによる絞り込みの効果の切り分け）
-        if std::env::var("POOL_DMG").map(|v| v == "0").unwrap_or(false) {
+        if self.pool_applied < self.dmg_obs.len() && std::env::var("POOL_DMG").map(|v| v == "0").unwrap_or(false) {
             self.pool_applied = self.dmg_obs.len();
         }
         while self.pool_applied < self.dmg_obs.len() {
@@ -911,6 +927,7 @@ impl PokemonBelief {
             absent_items: Vec::new(),
             pool_w: Vec::new(),
             pool_applied: 0,
+            pick: None,
             pool_prof: Vec::new(),
             profs: Vec::new(),
         }
@@ -920,22 +937,22 @@ impl PokemonBelief {
 /// SearchAI._tpl_cache 相当
 #[derive(Default)]
 pub struct TplCache {
-    map: HashMap<String, Option<Template>>,
-    playable: HashMap<String, Option<Template>>,
+    map: HashMap<String, Option<std::sync::Arc<Template>>>,
+    playable: HashMap<String, Option<std::sync::Arc<Template>>>,
 }
 
 impl TplCache {
-    pub fn get(&mut self, pack: &Pack, name: &str, season: &str) -> Option<Template> {
+    pub fn get(&mut self, pack: &Pack, name: &str, season: &str) -> Option<std::sync::Arc<Template>> {
         if let Some(t) = self.map.get(name) {
             return t.clone();
         }
-        let t = get_pokemon_template(pack, name, season);
+        let t = get_pokemon_template(pack, name, season).map(std::sync::Arc::new);
         self.map.insert(name.to_string(), t.clone());
         t
     }
 
     /// SearchAI._tpl_playable: season に使用率行（技）が無い種は、行のある新しいシーズンのテンプレを使う
-    pub fn get_playable(&mut self, pack: &Pack, name: &str, season: &str) -> Option<Template> {
+    pub fn get_playable(&mut self, pack: &Pack, name: &str, season: &str) -> Option<std::sync::Arc<Template>> {
         if let Some(t) = self.playable.get(name) {
             return t.clone();
         }
@@ -949,7 +966,7 @@ impl TplCache {
                     }
                     if let Some(c) = get_pokemon_template(pack, name, s) {
                         if !c.top_moves.is_empty() {
-                            alt = Some(c);
+                            alt = Some(std::sync::Arc::new(c));
                             break;
                         }
                     }
