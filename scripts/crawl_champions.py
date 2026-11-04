@@ -21,7 +21,9 @@ import sys
 from datetime import date
 from PIL import Image
 
-OUTPUT_DIR    = f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{date.today().isoformat()}"
+# OUT_DIR: シーズン切替日など同じ日に2回撮る時に既存分を上書きしないための退避先
+OUTPUT_DIR    = os.environ.get(
+    "OUT_DIR", f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{date.today().isoformat()}")
 TOTAL_POKEMON = 200
 
 LIST_X        = 1600

@@ -2,7 +2,7 @@
 アイコンテンプレートマッチングでポケモン名を識別してpokemon_usageに投入
 RANK_OVERRIDESで上書き可能（パンプジン・フォーム違い等）
 """
-import sqlite3, cv2, numpy as np, sys
+import os, sqlite3, cv2, numpy as np, sys
 from pathlib import Path
 from datetime import datetime, timezone
 
@@ -11,10 +11,10 @@ CROP = (240, 10, 390, 135)
 
 TEMPLATE_DATE = None  # build_templates() 内で自動決定
 
-SEASON = "M-7"
+SEASON = "M-8"
 # 取り込む順位の上限。通常は200。クロールが途中で止まった等で
 # 上位のみ扱う場合に下げる（M-6初日は端末スリープで101位以降が取れず100件）
-MAX_RANK = 200
+MAX_RANK = int(os.environ.get("MAX_RANK", 200))  # 一覧が200未満で終わるシーズン初日は実測値を渡す
 HEADER_MIN = 0.30       # これ未満はランキングの詳細でない画面とみなす（正常の下限 0.47 と異常の上限 0.15 の間）
 RULE   = "single"
 MATCH_THRESHOLD = 0.80  # 通常フォーマット用
@@ -86,7 +86,7 @@ TARGETS = {
     },
 }
 
-CRAWLED_DATE = "2026-10-28"  # ← 実行時に変更
+CRAWLED_DATE = "2026-11-04"  # ← 実行時に変更
 
 TARGETS["2026-07-09"] = {
     124: "ケンタロス:炎",
@@ -419,7 +419,8 @@ def check_headers(target_dir):
 
 def main():
     overrides = TARGETS.get(CRAWLED_DATE, {})
-    target_dir = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{CRAWLED_DATE}/detail")
+    target_dir = Path(os.environ.get(
+        "OUT_DIR", f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{CRAWLED_DATE}")) / "detail"
 
     bad = check_headers(target_dir)
     if bad:
@@ -1136,6 +1137,18 @@ TARGETS["2026-10-10"] = {}
 TARGETS["2026-10-11"] = {}
 
 TARGETS["2026-10-28"] = {}
+TARGETS["2026-10-29"] = {}
+TARGETS["2026-10-31"] = {}
+TARGETS["2026-11-01"] = {}
+TARGETS["2026-11-02"] = {}
+TARGETS["2026-11-03"] = {}
+TARGETS["2026-11-04"] = {
+    # M-8 初日。同シーズンの前日が無く icon_cache だけで組むため誤マッチが出る。画像のヘッダで確認
+    123: "バクーダ",    # No.323（ドサイドン 0.658 と誤マッチ・110位の本物と重複）
+    132: "バオッキー",   # No.514（ミカルゲ 0.628 と誤マッチ）
+    150: "マッギョ",    # No.618 じめん/でんき（ガラルマッギョではない）
+    153: "トリミアン",   # No.676（モルペコ 0.642 と誤マッチ・159位の本物と重複）
+}
 
 TARGETS["2026-10-27"] = {}
 
