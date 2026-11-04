@@ -7800,6 +7800,26 @@ check("集計: 選出率の合計＝3・先発率の合計＝1・多い3体は�
 check("集計: 相手にいると有利度が上がる種を得意に出す（差＝較正の傾き）",
       any(x["opp"] == "テスト用X" and abs(x["diff"] - _SG34.CAL_B) < 1e-3 for x in _sm34["strong"]), str(_sm34["strong"]))
 
+def _rows34c(inter):
+    out = []
+    for k in range(800):
+        x, p, q = k % 2 == 0, (k // 2) % 2 == 1, (k // 4) % 2 == 1
+        g = 0.6 - 0.2 * p - 0.2 * q - (0.3 if inter and p and q else 0) + 0.01 * (k % 3)
+        out.append(([0, 1, 2] if x else [1, 0, 3], ["X"] * x + ["P"] * p + ["Q"] * q + ["Z"], g))
+    return out
+_n34c = ["A", "B", "C", "D", "E", "F"]
+_sc34 = _SG34.summarize(_n34c, _rows34c(True))
+check("集計: 相手にいると先発が変わる種を先発の指針に出す（Xがいたら先発A 0%→100%）",
+      any(r["opp"] == "X" and any(m["mon"] == "A" and m["with"] == 1 and m["without"] == 0 for m in r["lead"]) for r in _sc34.get("leads", [])), str(_sc34.get("leads")))
+check("集計: 2体そろうと単独の和より下がる組を苦手な並びに出す（交互作用＝−0.3·較正の傾き）",
+      [p["opp"] for p in _sc34.get("pairs", [])] == [["P", "Q"]] and abs(_sc34["pairs"][0]["inter"] + 0.3 * _SG34.CAL_B) < 1e-3, str(_sc34.get("pairs")))
+check("集計: 効果が足し算どおりの2体は苦手な並びに出さない", _SG34.summarize(_n34c, _rows34c(False)).get("pairs") == [])
+check("集計: 選出の幅＝上位から累積8割に達する3匹の組の数（半々の2組→2）", _sc34.get("spread", {}).get("k") == 2 and _sc34["spread"]["of"] == 2)
+_wk34 = [w for w in _sc34["weak"] if w["opp"] in ("P", "Q")]
+check("集計: 苦手な相手ごとに AI の最多の3匹・割合・その組の先発を付ける",
+      _wk34 and all(len(w["pick"]["my"]) == 3 and set(w["pick"]["my"]) <= set(_n34c) and 0 < w["pick"]["share"] <= 1
+                    and w["pick"]["lead"] in w["pick"]["my"] for w in _wk34 if "pick" in w) and all("pick" in w for w in _wk34), str(_sc34["weak"]))
+
 # 4-1k: 診断の有利度＝guide_rows と同じ選出・乱数で対戦を MCTS にした guide_rows_mcts
 try:
     import pokenavi_engine as _E36
@@ -8713,15 +8733,28 @@ if _ok39:
                   [f"ブラッキー@{_N39}:ずぶとい:でんじは|イカサマ:32/0/32/0/0/0:せいしんりょく"], "ミストフィールド"),
     }
     _mm39, _seen39 = [], {}
+
+
+    def _run39(_k39, _pa39, _pb39, _kw39, _sd39):
+        try:
+            _rec39 = _F39f.play_and_record_rust(_pa39, _pb39, season="M-6", seed=_sd39, mcts_sims=30,
+                                                 sel1_idx=list(range(len(_pa39))))
+        except _F39f.ReplayMismatch as _e39x:
+            _mm39.append((_k39, _sd39, str(_e39x)[:160]))
+            return
+        if any(_kw39 in l for t in _rec39["turns"] for l in t["logs"]):
+            _seen39[_k39] = True
+
+
     for _k39, (_pa39, _pb39, _kw39) in _PAR39.items():
         for _sd39 in (1, 2, 3, 4, 5, 6, 7, 8):
-            try:
-                _rec39 = _F39f.play_and_record_rust(_pa39, _pb39, season="M-6", seed=_sd39, mcts_sims=30,
-                                                     sel1_idx=list(range(len(_pa39))))
-                if any(_kw39 in l for t in _rec39["turns"] for l in t["logs"]):
-                    _seen39[_k39] = True
-            except _F39f.ReplayMismatch as _e39x:
-                _mm39.append((_k39, _sd39, str(_e39x)[:160]))
+            _run39(_k39, _pa39, _pb39, _kw39, _sd39)
+    # 使用率データの更新で AI の手が変わり固定シードでは局面が出なくなることがあるため、未出現のみ延長
+    for _k39, (_pa39, _pb39, _kw39) in _PAR39.items():
+        _sd39 = 9
+        while _k39 not in _seen39 and _sd39 <= 64:
+            _run39(_k39, _pa39, _pb39, _kw39, _sd39)
+            _sd39 += 1
     check("audit40 Python/Rust 照合: 各問題の局面（#1〜#17・みがわり・ミストフィールド）で再生が一致", not _mm39, str(_mm39)[:600])
     check("audit40 Python/Rust 照合: 各局面で問題の場面が実際に起きた", set(_seen39) == set(_PAR39), str(set(_PAR39) - set(_seen39)))
 
@@ -11869,6 +11902,75 @@ try:
           "readSession(request, env)" in _rel59 and "headers['X-Pokenavi-Premium'] = '1'" in _rel59)
 except Exception as _e59:
     check("59 無料枠のテストが実行できる", False, f"{type(_e59).__name__}: {_e59}")
+
+print("\n=== 60. 診断は相手候補の測り直しを待たずに返す ===")
+try:
+    import re as _re60
+    _src60 = open(_os0.path.join(_os0.path.dirname(_os0.path.abspath(__file__)), "..", "product3_server.py"), encoding="utf-8").read()
+    _dg60 = _src60[_src60.index("def diagnose(specs):"):]
+    _dg60 = _dg60[:_dg60.index("\ndef ")]
+    check("60 /diagnose は測り直し（MCTS@SIMS×16戦×9党＝診断の7割）を待たず、opps_job で後から差し替える",
+          "opps_job" in _dg60 and ".get()" not in _dg60 and "remeasure" not in _dg60 and "def _opps_job" in _src60, _dg60[:300])
+    import _diagnose as _DG60
+    _o60 = [{"id": 1, "adv": 0.5}, {"id": 2, "adv": 0.4}]
+    _r60 = _DG60.apply_remeasure([dict(o) for o in _o60], [0.7, None])
+    check("60 測り直しの結果は相手ごとに差し替わり（k 付き＝精密）、元の概算は書き換えない",
+          [(o["adv"], o["k"]) for o in _r60] == [(0.7, _DG60.OPP_K), (None, _DG60.OPP_K)] and "k" not in _o60[0]
+          and callable(getattr(_DG60, "remeasure_job_i", None)))
+except Exception as _e60:
+    check("60 測り直しのテストが実行できる", False, f"{type(_e60).__name__}: {_e60}")
+
+print("\n=== 61. 診断を CPU の多い別サービスへ振り分ける中継 ===")
+try:
+    _rel61 = open(_os0.path.join(_os0.path.dirname(_os0.path.abspath(__file__)), "..", "..", "functions", "api", "[[path]].js"), encoding="utf-8").read()
+    _m61 = _re60.search(r"DIAG_PATHS = new Set\(\[([^\]]*)\]\)", _rel61)
+    check("61 診断の API（diagnose・diag_battle・job_status）だけを env.DIAG_ORIGIN へ送り、未設定なら従来どおり",
+          _m61 is not None and sorted(x.strip(" '") for x in _m61.group(1).split(",")) == ["diag_battle", "diagnose", "job_status"]
+          and "env.DIAG_ORIGIN && DIAG_PATHS.has(path) ? env.DIAG_ORIGIN : ORIGIN" in _rel61)
+    _df61 = open(_os0.path.join(_os0.path.dirname(_os0.path.abspath(__file__)), "..", "Dockerfile"), encoding="utf-8").read()
+    check("61 本番ビルドは AVX2（x86-64-v3）で Rust を作る", 'RUSTFLAGS="-C target-cpu=x86-64-v3"' in _df61)
+    _src61 = open(_os0.path.join(_os0.path.dirname(_os0.path.abspath(__file__)), "..", "product3_server.py"), encoding="utf-8").read()
+    _ts61 = open(_os0.path.join(_os0.path.dirname(_os0.path.abspath(__file__)), "..", "..", "src", "scripts", "party-builder", "diag.ts"), encoding="utf-8").read()
+    check("61 /job_status は wait 秒までジョブの終わりを待って返し（処理中だけ CPU が付く Cloud Run で裏のジョブを進める）、画面は wait 付きで問い合わせる",
+          'j["ev"].wait(min(float(w), JOB_WAIT_MAX))' in _src61 and 'j["ev"].set()' in _src61 and "post('/job_status', { job: j.job, wait: 5 })" in _ts61)
+except Exception as _e61:
+    check("61 振り分けのテストが実行できる", False, f"{type(_e61).__name__}: {_e61}")
+
+print("\n=== 62. 選出の対面の値の使い回し（相手・呼び出しをまたぐ）で結果が変わらない ===")
+try:
+    import json as _js62, subprocess as _sp62
+    _code62 = """
+import json, sys
+import _select_guide as SG, pokenavi_engine as E
+from simulator.learned_selection import _PATH
+P = SG.load_pool()
+a = P[2950]; b = a[:5] + [P[2951][0] if P[2951][0].split("@")[0] not in [x.split("@")[0] for x in a] else P[2951][1]]
+r = [E.guide_rows(a, P[:150], "M-7", 4, 1, _PATH), E.guide_rows(b, P[:150], "M-7", 4, 1, _PATH), E.guide_rows(a, P[100:180], "M-7", 4, 1, _PATH),
+     E.guide_rows_mcts(b, P[:3], "M-7", 1, 1, _PATH, 8)]
+print(json.dumps(r))
+"""
+    _d62 = _os0.path.join(_os0.path.dirname(_os0.path.abspath(__file__)), "..")
+    _run62 = lambda env: _js62.loads(_sp62.run([sys.executable, "-c", _code62], cwd=_d62, env=dict(_os0.environ, PYTHONPATH=_d62, PYTHONHASHSEED="0", **env),
+                                              capture_output=True, text=True, check=True).stdout)
+    _on62, _off62 = _run62({"SEL_XCACHE": "1"}), _run62({"SEL_XCACHE": "0"})
+    check("62 簡易AIの選出（相手150党・1体違いの党・重なる相手）と MCTS 版が、使い回し無し（SEL_XCACHE=0）と完全に同じ",
+          _on62 == _off62 and len(_on62[0]) == 150, str([sum(x != y for x, y in zip(a, b)) for a, b in zip(_on62, _off62)]))
+except Exception as _e62:
+    check("62 使い回しのテストが実行できる", False, f"{type(_e62).__name__}: {_e62}")
+
+print("\n=== 63. 診断 MCTS の1戦ずつ（k 奇数）は相手ごとに自分の側を交互にする ===")
+try:
+    import _select_guide as _SG63, pokenavi_engine as _E63
+    from simulator.learned_selection import _PATH as _PA63
+    _P63 = _SG63.load_pool(); _a63 = _P63[2950]; _O63 = _P63[3:11]
+    _mc63 = lambda opps, k, seed: _E63.guide_rows_mcts(_a63, opps, "M-7", k, seed, _PA63, 8)
+    _r0, _r1 = _mc63(_O63, 1, 100_000), _mc63(_P63[:1] + _O63, 1, 100_000 - 7919)[1:]
+    check("63 k=1 で同じ相手・同じ乱数のまま相手の位置を1つずらすと、選出は同じで側が入れ替わり勝敗が変わる",
+          [x[0] for x in _r0] == [x[0] for x in _r1] and [x[1] for x in _r0] != [x[1] for x in _r1], str([_r0, _r1]))
+    check("63 k 偶数は側が相手の位置によらない（従来と同じ結果）",
+          _mc63(_O63[:4], 2, 100_000) == _mc63(_P63[:1] + _O63[:4], 2, 100_000 - 7919)[1:])
+except Exception as _e63:
+    check("63 側の交互のテストが実行できる", False, f"{type(_e63).__name__}: {_e63}")
 
 print(f"結果: {PASS}件 PASS / {FAIL}件 FAIL  (計{PASS+FAIL}件)")
 if FAILURES:

@@ -2,14 +2,14 @@
 journal.jsonlからM-3詳細データ（技/持ち物/特性/性格/EV/パートナー）をDB投入
 OCR補正マッピング適用済み、マスター照合、INSERT OR IGNORE
 """
-import json, sqlite3, glob
+import json, sqlite3, glob, pathlib
 from datetime import datetime, timezone
 from pathlib import Path
 
 DB = Path(__file__).parent / "pokenavi.db"
 
 WF_DIRS = [
-    "/private/tmp/claude-501/-Users-shigeki-work/5c9e5884-44f0-4cfa-ae54-b0230dd188ae/scratchpad/journal_1024",
+    "/Users/shigeki/work/pokenavi/crawl_data/ocr_out_2026-11-04",
 ]
 
 OCR_MOVES = {
@@ -154,6 +154,7 @@ OCR_MOVES = {
     "サンダータイブ": "サンダーダイブ",
 }
 OCR_ITEMS = {
+    "カイリューナイト": "カイリュナイト",  # 171/_s_item_01.png 10位0.1% を画像確認（2026-11-04）
     "マフォクシーナイト": "マフォクシナイト",  # 2026-10-24 長音符の足しすぎ（画像は「マフォクシナイト」96.7%）
     "テンリュウナイト": "デンリュウナイト",  # 2026-10-24 濁点落ち（144位 デンリュウ No.181 のメガ石）
     "だつじんのおび": "たつじんのおび",
@@ -510,7 +511,7 @@ def resolve_partner_form(name, types):
     type_set = frozenset(types)
     return FORM_BY_TYPES[name].get(type_set, name)
 
-CRAWLED_DATE = "2026-10-24"
+CRAWLED_DATE = "2026-11-04"
 
 # 実在する別の技名に誤読され、マスター照合では検出できないケースの位置指定上書き。
 # GATE2（リスト内重複）で気付いたものを、必ずクロール画像で確認してから登録する。
@@ -791,6 +792,11 @@ def main():
             for rec in extract_structured_outputs(jsonl):
                 rank = rec["rank"]
                 all_data[rank] = rec  # 後のWFで上書き（後が正しい）
+        # OCRエージェントが1ランク1ファイルで書き出した素のJSON
+        for js in sorted(glob.glob(f"{wf_dir}/*.json")):
+            rec = json.loads(pathlib.Path(js).read_text())
+            if "rank" in rec and "pokemon" in rec:
+                all_data[rec["rank"]] = rec
     MAX_RANK = 200
 
     print(f"Journal から取得: {len(all_data)} ランク")
