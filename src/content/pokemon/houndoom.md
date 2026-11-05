@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのヘルガー基礎データ。
 pokemonName: 'ヘルガー'
 dexNumber: 229
 usageRank: 175
-updatedDate: '2026-11-04'
+updatedDate: '2026-11-05'
 pubDate: '2026-11-04'
 draft: false
 

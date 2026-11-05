@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのブラッキー基礎データ
 pokemonName: 'ブラッキー'
 dexNumber: 197
 usageRank: 25
-updatedDate: '2026-11-04'
+updatedDate: '2026-11-05'
 pubDate: '2026-11-04'
 draft: false
 

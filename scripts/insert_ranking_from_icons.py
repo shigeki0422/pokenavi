@@ -14,7 +14,19 @@ TEMPLATE_DATE = None  # build_templates() 内で自動決定
 SEASON = "M-8"
 # 取り込む順位の上限。通常は200。クロールが途中で止まった等で
 # 上位のみ扱う場合に下げる（M-6初日は端末スリープで101位以降が取れず100件）
-MAX_RANK = int(os.environ.get("MAX_RANK", 200))  # 一覧が200未満で終わるシーズン初日は実測値を渡す
+MAX_RANK = int(os.environ.get("MAX_RANK", 200))
+
+CRAWL_ROOT = "/Users/shigeki/work/pokenavi/crawl_data"
+# 同じ日付で2回撮った日は、その SEASON の実体が champ_crawl_<日付> ではない。
+# テンプレートを別シーズンの画像から作らないための対応表（SEASON ごと）
+CRAWL_DIRS = {
+    ("M-8", "2026-11-04"): f"{CRAWL_ROOT}/champ_crawl_2026-11-04_M8",
+}
+
+
+def crawl_dir(date):
+    return Path(CRAWL_DIRS.get((SEASON, date), f"{CRAWL_ROOT}/champ_crawl_{date}"))
+  # 一覧が200未満で終わるシーズン初日は実測値を渡す
 HEADER_MIN = 0.30       # これ未満はランキングの詳細でない画面とみなす（正常の下限 0.47 と異常の上限 0.15 の間）
 RULE   = "single"
 MATCH_THRESHOLD = 0.80  # 通常フォーマット用
@@ -86,7 +98,7 @@ TARGETS = {
     },
 }
 
-CRAWLED_DATE = "2026-11-04"  # ← 実行時に変更
+CRAWLED_DATE = "2026-11-05"  # ← 実行時に変更
 
 TARGETS["2026-07-09"] = {
     124: "ケンタロス:炎",
@@ -221,7 +233,7 @@ def _find_icon(pokemon, conn, exclude_date):
         (pokemon, SEASON, RULE, exclude_date)
     ).fetchall()
     for date, rank in rows:
-        d = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{date}/detail")
+        d = crawl_dir(date) / "detail"
         for fname in ["move_00.png", "_c_move_00.png", "_c_ability_00.png"]:
             p = d / f"{rank:03d}" / fname
             if p.exists():
@@ -257,7 +269,7 @@ def build_templates(conn):
                 templates[pokemon] = cached
         print(f"⚠ 同シーズンの直前データなし → icon_cache のみで構築: {len(templates)}件")
         return templates
-    template_dir = Path(f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{template_date}/detail")
+    template_dir = crawl_dir(template_date) / "detail"
     print(f"テンプレート日付: {template_date}")
 
     rows = conn.execute(
@@ -419,8 +431,7 @@ def check_headers(target_dir):
 
 def main():
     overrides = TARGETS.get(CRAWLED_DATE, {})
-    target_dir = Path(os.environ.get(
-        "OUT_DIR", f"/Users/shigeki/work/pokenavi/crawl_data/champ_crawl_{CRAWLED_DATE}")) / "detail"
+    target_dir = Path(os.environ["OUT_DIR"]) / "detail" if os.environ.get("OUT_DIR") else crawl_dir(CRAWLED_DATE) / "detail"
 
     bad = check_headers(target_dir)
     if bad:
@@ -1142,6 +1153,14 @@ TARGETS["2026-10-31"] = {}
 TARGETS["2026-11-01"] = {}
 TARGETS["2026-11-02"] = {}
 TARGETS["2026-11-03"] = {}
+TARGETS["2026-11-05"] = {
+    # 画像のヘッダで確認（161位以降は前日の M-8 160件にテンプレートが無く誤マッチする）
+    153: "デデンネ",     # No.702（バチンウニ 0.606 と誤マッチ・152位の本物と重複）
+    162: "ジュナイパー",  # No.724 くさ/ゴースト（ヒスイ種はくさ/かくとう）
+    186: "フレフワン",    # No.683（モルペコ 0.641 と誤マッチ）
+    194: "タルップル",    # No.842（ドドゲザン 0.656 と誤マッチ・31位の本物と重複）
+}
+
 TARGETS["2026-11-04"] = {
     # M-8 初日。同シーズンの前日が無く icon_cache だけで組むため誤マッチが出る。画像のヘッダで確認
     123: "バクーダ",    # No.323（ドサイドン 0.658 と誤マッチ・110位の本物と重複）

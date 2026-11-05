@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのサーフゴー基礎データ
 pokemonName: 'サーフゴー'
 dexNumber: 1000
 usageRank: 10
-updatedDate: '2026-11-04'
+updatedDate: '2026-11-05'
 pubDate: '2026-11-04'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのオニシズクモ基礎デー
 pokemonName: 'オニシズクモ'
 dexNumber: 752
 usageRank: 77
-updatedDate: '2026-11-04'
+updatedDate: '2026-11-05'
 pubDate: '2026-11-04'
 draft: false
 

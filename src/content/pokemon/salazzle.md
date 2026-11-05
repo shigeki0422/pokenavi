@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのエンニュート基礎デー
 pokemonName: 'エンニュート'
 dexNumber: 758
 usageRank: 129
-updatedDate: '2026-11-04'
+updatedDate: '2026-11-05'
 pubDate: '2026-11-04'
 draft: false
 

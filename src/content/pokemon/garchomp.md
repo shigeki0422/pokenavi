@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのガブリアス基礎データ
 pokemonName: 'ガブリアス'
 dexNumber: 445
 usageRank: 1
-updatedDate: '2026-11-04'
+updatedDate: '2026-11-05'
 pubDate: '2026-11-04'
 draft: false
 

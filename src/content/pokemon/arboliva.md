@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのオリーヴァ基礎データ
 pokemonName: 'オリーヴァ'
 dexNumber: 930
 usageRank: 92
-updatedDate: '2026-11-04'
+updatedDate: '2026-11-05'
 pubDate: '2026-11-04'
 draft: false
 

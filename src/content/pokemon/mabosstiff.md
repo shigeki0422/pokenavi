@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのマフィティフ基礎デー
 pokemonName: 'マフィティフ'
 dexNumber: 943
 usageRank: 999
-updatedDate: '2026-11-04'
+updatedDate: '2026-11-05'
 pubDate: '2026-05-24'
 draft: false
 

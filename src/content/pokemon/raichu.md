@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのライチュウ基礎データ
 pokemonName: 'ライチュウ'
 dexNumber: 26
 usageRank: 23
-updatedDate: '2026-11-04'
+updatedDate: '2026-11-05'
 pubDate: '2026-11-04'
 draft: false
 
