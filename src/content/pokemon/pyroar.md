@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのカエンジシ基礎データ
 pokemonName: 'カエンジシ'
 dexNumber: 668
 usageRank: 123
-updatedDate: '2026-11-05'
+updatedDate: '2026-11-06'
 pubDate: '2026-11-04'
 draft: false
 analysisSlug: 'pyroar-analysis-m3'

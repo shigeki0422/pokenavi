@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのカラマネロ基礎データ
 pokemonName: 'カラマネロ'
 dexNumber: 687
 usageRank: 156
-updatedDate: '2026-11-05'
+updatedDate: '2026-11-06'
 pubDate: '2026-11-04'
 draft: false
 

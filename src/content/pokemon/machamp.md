@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのカイリキー基礎データ
 pokemonName: 'カイリキー'
 dexNumber: 68
 usageRank: 185
-updatedDate: '2026-11-05'
+updatedDate: '2026-11-06'
 pubDate: '2026-11-04'
 draft: false
 

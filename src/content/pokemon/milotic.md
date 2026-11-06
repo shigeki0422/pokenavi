@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのミロカロス基礎データ
 pokemonName: 'ミロカロス'
 dexNumber: 350
 usageRank: 58
-updatedDate: '2026-11-05'
+updatedDate: '2026-11-06'
 pubDate: '2026-11-04'
 draft: false
 

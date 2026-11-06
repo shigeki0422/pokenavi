@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのピカチュウ基礎データ
 pokemonName: 'ピカチュウ'
 dexNumber: 25
 usageRank: 181
-updatedDate: '2026-11-05'
+updatedDate: '2026-11-06'
 pubDate: '2026-11-04'
 draft: false
 

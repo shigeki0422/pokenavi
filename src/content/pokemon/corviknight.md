@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのアーマーガア基礎デー
 pokemonName: 'アーマーガア'
 dexNumber: 823
 usageRank: 11
-updatedDate: '2026-11-05'
+updatedDate: '2026-11-06'
 pubDate: '2026-11-04'
 draft: false
 

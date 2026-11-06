@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのドデカバシ基礎データ
 pokemonName: 'ドデカバシ'
 dexNumber: 733
 usageRank: 94
-updatedDate: '2026-11-05'
+updatedDate: '2026-11-06'
 pubDate: '2026-11-04'
 draft: false
 

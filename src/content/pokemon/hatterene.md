@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのブリムオン基礎データ
 pokemonName: 'ブリムオン'
 dexNumber: 858
 usageRank: 51
-updatedDate: '2026-11-05'
+updatedDate: '2026-11-06'
 pubDate: '2026-11-04'
 draft: false
 analysisSlug: 'hatterene-analysis-m7'

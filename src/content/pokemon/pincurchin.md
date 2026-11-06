@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのバチンウニ基礎データ
 pokemonName: 'バチンウニ'
 dexNumber: 871
 usageRank: 152
-updatedDate: '2026-11-05'
+updatedDate: '2026-11-06'
 pubDate: '2026-11-04'
 draft: false
 

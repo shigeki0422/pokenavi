@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのカイリュー基礎データ
 pokemonName: 'カイリュー'
 dexNumber: 149
 usageRank: 12
-updatedDate: '2026-11-05'
+updatedDate: '2026-11-06'
 pubDate: '2026-11-04'
 draft: false
 
