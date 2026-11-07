@@ -9,7 +9,7 @@ from pathlib import Path
 DB = Path(__file__).parent / "pokenavi.db"
 
 WF_DIRS = [
-    "/Users/shigeki/work/pokenavi/crawl_data/ocr_out_2026-11-04",
+    "/Users/shigeki/work/pokenavi/crawl_data/ocr_out_2026-11-07",
 ]
 
 OCR_MOVES = {
@@ -154,6 +154,7 @@ OCR_MOVES = {
     "サンダータイブ": "サンダーダイブ",
 }
 OCR_ITEMS = {
+    "アプソルナイトZ": "アブソルナイトZ",  # 005/_s_item_01.png 7位0.0% を画像確認（2026-11-07 濁点→半濁点）
     "カイリューナイト": "カイリュナイト",  # 171/_s_item_01.png 10位0.1% を画像確認（2026-11-04）
     "マフォクシーナイト": "マフォクシナイト",  # 2026-10-24 長音符の足しすぎ（画像は「マフォクシナイト」96.7%）
     "テンリュウナイト": "デンリュウナイト",  # 2026-10-24 濁点落ち（144位 デンリュウ No.181 のメガ石）
@@ -511,7 +512,7 @@ def resolve_partner_form(name, types):
     type_set = frozenset(types)
     return FORM_BY_TYPES[name].get(type_set, name)
 
-CRAWLED_DATE = "2026-11-04"
+CRAWLED_DATE = "2026-11-07"
 
 # 実在する別の技名に誤読され、マスター照合では検出できないケースの位置指定上書き。
 # GATE2（リスト内重複）で気付いたものを、必ずクロール画像で確認してから登録する。
@@ -521,7 +522,7 @@ MOVE_FIX_BY_DATE = {
         169: {3: "じこさいせい"},  # クレベース: 169/move_00.png で 3位72.6%=じこさいせい を確認
     },
 }
-SEASON = "M-7"
+SEASON = "M-8"
 
 # ランク番号で確定したフォーム名（OCR_POKEMONより優先）、日付別に管理
 #

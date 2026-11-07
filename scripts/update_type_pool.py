@@ -149,6 +149,28 @@ def main():
     none += [sp for sp, s in other.items() if sp not in fallback]
     import ev_fill
     ev_fill.fill_pool(pool, SEASON)
+    # 別シーズンで作った種は、そのシーズンの DB が汚れていると規則違反の型になる
+    # （例: M-4 の「ジュナイパー」の詳細がエンブオーのもの）。今シーズンの種を巻き添えに
+    # しないよう、違反した種だけプールから外す。外した種は meta の dropped_fallback に残す
+    dropped = {}
+    if fallback:
+        import pool_checks as _C
+        _used = collections.defaultdict(set)
+        for _sp, _mv in G.con.execute("select pokemon, move from pokemon_moves"):
+            _used[_sp].add(_mv)
+        _nats, _abil = _C.natures(G), _C.species_abilities(G)
+        for r in [r for r in pool if r["species"] in fallback]:
+            sp = r["species"]
+            errs = _C.rule_errors(G, sp, r["builds"], _used[r.get("source_species", sp)] | _used[sp], _nats)
+            errs += _C.form_label_errors(G, _abil, sp, r["builds"])
+            if errs:
+                dropped[sp] = f"{fallback[sp]} {errs[0]}"[:200]
+        if dropped:
+            pool = [r for r in pool if r["species"] not in dropped]
+            for sp in dropped:
+                fallback.pop(sp, None)
+            none += sorted(dropped)
+            print(f"⚠ 別シーズンのデータが規則違反のため型プールから外した: {sorted(dropped)}")
     t_fb = time.time() - t0 - t_pool
 
     import arch_groups as A
@@ -180,6 +202,7 @@ def main():
         "older_detail_date": {sp: G.latest("pokemon_moves", sp) for sp in cur
                               if G.latest("pokemon_moves", sp) != G.latest("pokemon_moves", None)},
         "fallback_season": fallback, "simple_product": simple, "not_generated": none, "form_fixed": form_fixed,
+        "dropped_fallback": dropped,
         "params": params, "git": git_info(), "jobs": jobs,
         "seconds": {"pool": round(t_pool), "fallback": round(t_fb), "groups": round(t_grp)},
     }
