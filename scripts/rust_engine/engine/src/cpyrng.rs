@@ -64,7 +64,13 @@ impl CpyRandom {
 
     /// init_by_array
     fn init_by_array(&mut self, key: &[u32]) {
-        self.init_genrand(19650218);
+        static BASE: std::sync::OnceLock<[u32; N]> = std::sync::OnceLock::new();
+        self.mt = *BASE.get_or_init(|| {
+            let mut r = CpyRandom { mt: [0u32; N], idx: N };
+            r.init_genrand(19650218);
+            r.mt
+        });
+        self.idx = N;
         let mut i: usize = 1;
         let mut j: usize = 0;
         let mut k: usize = std::cmp::max(N, key.len());

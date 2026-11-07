@@ -177,6 +177,7 @@ impl TyC {
 }
 
 pub struct Pack {
+    pub memo: crate::poke::BuildMemo,
     pub intern: Interner,
     pub sy: Syms,
     pub types: Vec<String>,
@@ -598,6 +599,7 @@ impl Pack {
         move_flags.resize(intern.len(), MoveFlags::default());
 
         Pack {
+            memo: Default::default(),
             scenario: Scenario::default(),
             prepared: None,
             env_blade_forme: std::env::var("AI_BLADE_FORME").as_deref() != Ok("0"),

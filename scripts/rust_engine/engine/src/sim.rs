@@ -179,15 +179,17 @@ pub fn guide_rows(
     seed: i128,
 ) -> Vec<(Vec<usize>, f64)> {
     let a6: Vec<Poke> = specs.iter().map(|s| build_poke(pack, s, season)).collect();
+    let aid: Vec<u64> = specs.iter().map(|s| crate::selector::spec_id(s, season)).collect();
     let mut out = Vec::with_capacity(opps.len());
     for (j, op) in opps.iter().enumerate() {
         let b6: Vec<Poke> = op.iter().map(|s| build_poke(pack, s, season)).collect();
+        let bid: Vec<u64> = op.iter().map(|s| crate::selector::spec_id(s, season)).collect();
         let jj = seed + 7919 * j as i128;
         let mut g = crate::cpyrng::CpyRandom::new(jj);
         let mut s1 = crate::cpyrng::CpyRandom::new(jj + 1);
         let mut s2 = crate::cpyrng::CpyRandom::new(jj + 2);
         let mut r = crate::cpyrng::CpyRandom::new(jj + 3);
-        let mut pc = crate::selector::PairCache::default();
+        let mut pc = crate::selector::PairCache::with_ids(&aid, &bid);
         let (mut a, mut b) = (a6.clone(), b6.clone());
         let packr: &Pack = pack;
         let (mc, mv) = crate::selector::select_scores(packr, ft, sel, &mut a, &mut b, 3, &mut g, &mut s1, &mut pc, true);
@@ -227,15 +229,17 @@ pub fn guide_rows_mcts(
     sims: usize,
 ) -> Vec<(Vec<usize>, f64)> {
     let a6: Vec<Poke> = specs.iter().map(|s| build_poke(pack, s, season)).collect();
+    let aid: Vec<u64> = specs.iter().map(|s| crate::selector::spec_id(s, season)).collect();
     let mut out = Vec::with_capacity(opps.len());
     for (j, op) in opps.iter().enumerate() {
         let b6: Vec<Poke> = op.iter().map(|s| build_poke(pack, s, season)).collect();
+        let bid: Vec<u64> = op.iter().map(|s| crate::selector::spec_id(s, season)).collect();
         let jj = seed + 7919 * j as i128;
         let mut g = crate::cpyrng::CpyRandom::new(jj);
         let mut s1 = crate::cpyrng::CpyRandom::new(jj + 1);
         let mut s2 = crate::cpyrng::CpyRandom::new(jj + 2);
         let mut r = crate::cpyrng::CpyRandom::new(jj + 3);
-        let mut pc = crate::selector::PairCache::default();
+        let mut pc = crate::selector::PairCache::with_ids(&aid, &bid);
         let (mut a, mut b) = (a6.clone(), b6.clone());
         let packr: &Pack = pack;
         let (mc, mv) = crate::selector::select_scores(packr, ft, sel, &mut a, &mut b, 3, &mut g, &mut s1, &mut pc, true);
@@ -251,12 +255,14 @@ pub fn guide_rows_mcts(
         for gi in 0..k {
             let ob = &oc[crate::selector::softmax_pick(&ov, 1.0, r.random())];
             let sd = jj + 1000 + gi as i128;
-            let res = if gi % 2 == 0 {
+            // 戦数が奇数（1戦ずつ）だと側が片寄るので、相手ごとに交互にする
+            let side = (gi + if k % 2 == 1 { j } else { 0 }) % 2;
+            let res = if side == 0 {
                 mcts_3v3(pack, net, None, specs, &my, op, ob, season, season, sd, sims, |_, _| {}).0
             } else {
                 mcts_3v3(pack, net, None, op, ob, specs, &my, season, season, sd, sims, |_, _| {}).0
             };
-            let (win, lose) = if gi % 2 == 0 { (1, 2) } else { (2, 1) };
+            let (win, lose) = if side == 0 { (1, 2) } else { (2, 1) };
             w += if res == win { 1.0 } else if res == lose { 0.0 } else { 0.5 };
         }
         out.push((my, if k > 0 { w / k as f64 } else { 0.5 }));

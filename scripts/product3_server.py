@@ -120,7 +120,7 @@ def guide(specs):
     return _guide_all(specs)[0]
 
 # パーティ診断（ローカル版）。中身は _diagnose.py。有利度は MCTS@64（事前計算 diag_adv_<シーズン>.json）。
-# 無い党は貪欲の値を「概算」で即返し、裏で MCTS@64（事前計算と同じ 相手200党×4戦）を回す（adv_job を /job_status で取る）。
+# 無い党は貪欲の値を「概算」で即返し、裏で MCTS@64（事前計算と同じ 相手600党×1戦）を回す（adv_job を /job_status で取る）。
 # その場で相手100党×2戦にすると WORKERS=2・負荷下で +35秒（実測）かかり、待たせるより概算＋差し替えにした
 _AMEMO = {}
 
@@ -142,18 +142,27 @@ def _adv_job(specs):
         return {"adv": a, "rank": _rank(a["adv"])}
     return _start_job(("adv", key), run)
 
+def _opps_job(specs, opps):
+    """表示する相手の測り直し（MCTS@SIMS×OPP_K）。診断の7割を占めるので結果を待たずに返し、/job_status で差し替える"""
+    jobs = DG.remeasure_jobs(specs, GPOOL, opps, SEASON)
+    def run(j):
+        ws = [None] * len(jobs)
+        for n, (i, w) in enumerate(_get_pool().imap_unordered(DG.remeasure_job_i, list(enumerate(jobs))), 1):
+            ws[i] = w
+            j.update(done=n, total=len(jobs))
+        return {"opps": DG.apply_remeasure([dict(o) for o in opps], ws)}
+    return _start_job(("opps", DG.party_key(specs)), run)
+
 def diagnose(specs):
     g, gs = _guide_all(specs)
     opps = DG.pick_opps(GPOOL, gs, g["weak"])
-    pend = _get_pool().map_async(DG.remeasure_job, DG.remeasure_jobs(specs, GPOOL, opps, SEASON), chunksize=1)
     adv = DG.cached_adv(specs) or _AMEMO.get(DG.party_key(specs))
-    out = {}
+    out = {"opps_job": _opps_job(specs, opps)}
     if adv:
         adv = dict(adv, approx=False)
     else:
         adv = {"adv": g["adv"], "approx": "greedy"}
         out["adv_job"] = _adv_job(specs)
-    opps = DG.apply_remeasure(opps, pend.get())
     out.update({"guide": dict(g, adv=adv["adv"], adv_greedy=g["adv"]), "adv": adv, "rank": _rank(adv["adv"]), "opps": opps})
     return out
 
@@ -165,6 +174,7 @@ def diag_battle(specs, opp, seed, my_sel):
 
 # 数分かかる計算は非同期ジョブ（開始で job id、POST /job_status {job} で進捗・結果）。同じ入力のジョブは使い回す（失敗したものだけ作り直す）
 _JOBS, _JBYKEY = {}, {}
+JOB_WAIT_MAX = 20.0
 _IMP_RUN = threading.Lock()
 
 def _job_view(j):
@@ -184,7 +194,7 @@ def _start_job(key, fn):
         for k in [k for k, v in _JOBS.items() if v["state"] in ("done", "error")][:150]:
             _JOBS.pop(k, None)
     jid = os.urandom(6).hex()
-    j = {"job": jid, "kind": key[0], "state": "queued", "done": 0, "total": 0, "t0": time.time()}
+    j = {"job": jid, "kind": key[0], "state": "queued", "done": 0, "total": 0, "t0": time.time(), "ev": threading.Event()}
     _JOBS[jid] = j
     _JBYKEY[key] = jid
 
@@ -196,6 +206,7 @@ def _start_job(key, fn):
         except Exception as e:
             j.update(state="error", error=repr(e))
         j["t_end"] = time.time()
+        j["ev"].set()
     threading.Thread(target=run, daemon=True).start()
     return _job_view(j)
 
@@ -892,6 +903,10 @@ class H(BaseHTTPRequestHandler):
             req = json.loads(self.rfile.read(n) or "{}")
             if self.path == "/job_status":
                 j = _JOBS.get(req.get("job") if isinstance(req.get("job"), str) else "")
+                # Cloud Run はリクエスト処理中しか CPU を割り当てないので、裏のジョブは問い合わせを返さずに待たせている間だけ進む
+                w = req.get("wait")
+                if j and type(w) in (int, float) and w > 0:
+                    j["ev"].wait(min(float(w), JOB_WAIT_MAX))
                 self._send(200, json.dumps(_job_view(j) if j else {"error": "job が見つかりません"}, ensure_ascii=False)); return
             if self.path in ("/guide", "/diagnose", "/diag_battle", "/improve"):
                 specs = req.get("specs") or []

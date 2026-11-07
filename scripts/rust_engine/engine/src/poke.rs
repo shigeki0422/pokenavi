@@ -927,11 +927,88 @@ pub fn build_poke_rand(
     season: &str,
     rng: &mut Option<&mut dyn crate::rng::BRng>,
 ) -> Poke {
-    let spec = parse_pokemon_spec(spec_str);
-    let tpl = get_pokemon_template(pack, &spec.name, season)
+    if let Some(p) = pack.memo.poke(spec_str, season) {
+        return p;
+    }
+    let spec = pack.memo.spec(spec_str);
+    let tpl = pack.memo.template(pack, &spec.name, season)
         .unwrap_or_else(|| panic!("ポケモン '{}' が見つかりません (season={})", spec.name, season));
-    let b = build_from_template_rand(pack, &tpl, &spec, rng);
-    to_poke_mut(pack, &b)
+    let Some(r) = rng.as_deref_mut() else {
+        let b = build_from_template_rand(pack, &tpl, &spec, rng);
+        return to_poke_mut(pack, &b);
+    };
+    let mut w = Watch(r, false);
+    let b = build_from_template_rand(pack, &tpl, &spec, &mut Some(&mut w));
+    let p = to_poke_mut(pack, &b);
+    if !w.1 {
+        pack.memo.put_poke(spec_str, season, &p);
+    }
+    p
+}
+
+/// 乱数を引いたかを見る（引かなかった＝型の文字列だけで決まった個体は使い回せる）
+struct Watch<'a>(&'a mut dyn crate::rng::BRng, bool);
+impl crate::rng::BRng for Watch<'_> {
+    fn random(&mut self) -> f64 {
+        self.1 = true;
+        self.0.random()
+    }
+    fn hit_continue(&mut self) -> f64 {
+        self.1 = true;
+        self.0.hit_continue()
+    }
+    fn choice(&mut self, n: usize) -> usize {
+        self.1 = true;
+        self.0.choice(n)
+    }
+    fn randint(&mut self, a: i64, b: i64) -> i64 {
+        self.1 = true;
+        self.0.randint(a, b)
+    }
+    fn choices(&mut self) -> i64 {
+        self.1 = true;
+        self.0.choices()
+    }
+}
+
+/// 型の文字列の解析と雛形（使用率データから組む）の使い回し。どちらも Pack の不変データだけで決まる。
+/// 簡易AIの対戦は毎戦12体を作り直し、その半分がこの2つだった
+#[derive(Default)]
+pub struct BuildMemo {
+    specs: std::sync::Mutex<crate::interner::FxMap<String, std::sync::Arc<Spec>>>,
+    tpls: std::sync::Mutex<crate::interner::FxMap<(String, String), Option<std::sync::Arc<Template>>>>,
+    pokes: std::sync::Mutex<crate::interner::FxMap<String, crate::interner::FxMap<String, Poke>>>,
+}
+
+impl BuildMemo {
+    pub fn spec(&self, s: &str) -> std::sync::Arc<Spec> {
+        if let Some(x) = self.specs.lock().unwrap().get(s) {
+            return x.clone();
+        }
+        let x = std::sync::Arc::new(parse_pokemon_spec(s));
+        self.specs.lock().unwrap().insert(s.to_string(), x.clone());
+        x
+    }
+    pub fn poke(&self, spec: &str, season: &str) -> Option<Poke> {
+        self.pokes.lock().unwrap().get(season)?.get(spec).cloned()
+    }
+    pub fn put_poke(&self, spec: &str, season: &str, p: &Poke) {
+        let mut m = self.pokes.lock().unwrap();
+        let s = m.entry(season.to_string()).or_default();
+        if s.len() >= 50_000 {
+            s.clear();
+        }
+        s.insert(spec.to_string(), p.clone());
+    }
+    pub fn template(&self, pack: &Pack, name: &str, season: &str) -> Option<std::sync::Arc<Template>> {
+        let k = (season.to_string(), name.to_string());
+        if let Some(x) = self.tpls.lock().unwrap().get(&k) {
+            return x.clone();
+        }
+        let x = get_pokemon_template(pack, name, season).map(std::sync::Arc::new);
+        self.tpls.lock().unwrap().insert(k, x.clone());
+        x
+    }
 }
 
 /// 未登録語彙を登録してから Poke 化する（spec 由来の新語彙に対応）

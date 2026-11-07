@@ -21,7 +21,7 @@ REF_FILE = os.path.join(_DIR, os.environ.get("DIAG_REF") or f"diag_ref_{_PVS.fil
 ADV_FILE = os.path.join(_DIR, os.environ.get("DIAG_ADV") or f"diag_adv_{_PVS.file_tag()}.json")
 SIMS = int(os.environ.get("DIAG_SIMS", "64"))
 MC_NC = 20
-ADV_OPPS, ADV_K, OPP_K = 200, 4, 16
+ADV_OPPS, ADV_K, OPP_K = 600, 1, 16
 N_OPPS, IMPROVE_OPPS, IMPROVE_K, PER_SLOT, D_MIN, Z_MIN, FIX_MIN_N = 9, 300, 4, 2, 0.03, 2.0, 30
 PRED_TOP = 3
 
@@ -236,6 +236,10 @@ def remeasure_job(a):
     from simulator.learned_selection import _PATH
     my, w = E.guide_rows_mcts(list(specs), [opp], season, OPP_K, 7 + 7919 * oid, _PATH, SIMS)[0]
     return w if my else None
+
+
+def remeasure_job_i(a):
+    return a[0], remeasure_job(a[1])
 
 
 def remeasure_jobs(specs, pool, opps, season):

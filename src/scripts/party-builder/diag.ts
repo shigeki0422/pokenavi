@@ -192,9 +192,11 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     let j = job;
     while (j && j.state !== 'done' && j.state !== 'error') {
       onTick(j);
-      await sleep(3000);
       if (key !== st.key) return null;
-      j = await post('/job_status', { job: j.job });
+      // サーバは終わるか wait 秒経つまで返さない（その間だけ本番の CPU が割り当てられる）
+      const t0 = Date.now();
+      j = await post('/job_status', { job: j.job, wait: 5 });
+      if (Date.now() - t0 < 1000 && j && j.state !== 'done' && j.state !== 'error') await sleep(1000);
     }
     if (j && j.state === 'error') throw new ApiError('srv', String(j.error || ''));
     return j ? j.result : null;
@@ -242,6 +244,19 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     st.loading = false;
     renderBody(); refresh();
     if (st.data && st.data.adv_job) pollAdv(st.data.adv_job);
+    if (st.data && st.data.opps_job) pollOpps(st.data.opps_job);
+  }
+
+  // 相手候補の有利度は簡易AIの概算で先に出し、精密AIの測り直しが終わったら差し替える（診断の待ち時間の7割）
+  async function pollOpps(job: any) {
+    const key = st.key;
+    st.oppsFailed = false;
+    try {
+      const r = await pollJob(job, key, () => {});
+      if (!r || key !== st.key) return;
+      st.data.opps = r.opps;
+    } catch (e: any) { if (key === st.key) st.oppsFailed = true; track('diag_error', { at: 'opps', kind: (e && e.kind) || 'js' }); }
+    if (key === st.key && st.tab === 'sim' && $('dg-pane') && !st.fighting) renderSim();
   }
 
   async function pollAdv(job: any) {
@@ -311,7 +326,7 @@ export function initDiag(el: HTMLElement, host: DiagHost) {
     const oppRows = opps.map((o: any) => `<button type="button" class="dg-opp${st.opp === o.id ? ' sel' : ''}" data-opp="${o.id}">
         <span class="dg-opp-icons">${o.names.map((n: string) => ico(n, 'dg-ico-s')).join('')}</span>
         <span class="dg-opp-meta"><span class="dg-why ${o.why === 'weak' ? 'dg-why-w' : ''}">${o.why === 'weak' && o.focus ? I.whyWeak(esc(tP(o.focus))) : esc(I.whyMeta)}</span>
-        <span class="dg-sub">${esc(I.advVs)} ${gdAdv(o.adv, lang)}</span></span></button>`).join('');
+        <span class="dg-sub">${esc(I.advVs)} ${o.k ? gdAdv(o.adv, lang) : st.oppsFailed ? `${gdAdv(o.adv, lang)} <span class="dg-approx">${esc(I.approx)}</span>` : `<span class="dg-approx">${esc(I.approxRun(0, 0))}</span>`}</span></span></button>`).join('');
     const names = st.specs.map(specName);
     const selChips = names.map((n: string, i: number) => {
       const k = st.mySel.indexOf(i);

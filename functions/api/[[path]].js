@@ -3,6 +3,9 @@
 import { readSession } from '../../lib/pages/session.js';
 
 const ORIGIN = 'https://pokenavi-suggest-799947701075.asia-northeast1.run.app';
+// パーティ診断は CPU を多く割り当てた別サービス（env.DIAG_ORIGIN）へ。並列に回せる計算なので台の CPU を増やすほど待ちが縮む。
+// 改善案（improve）は画面から外しているので提案サービス側のまま
+const DIAG_PATHS = new Set(['diagnose', 'diag_battle', 'job_status']);
 const GET_PATHS = new Set(['species']);
 const POST_PATHS = new Set(['suggest', 'simulate', 'complete', 'speed_detail', 'atk_detail', 'guide', 'diagnose', 'diag_battle', 'improve', 'job_status']);
 const MAX_BODY_BYTES = 16 * 1024;
@@ -45,7 +48,8 @@ export async function onRequest({ request, env, params, waitUntil }) {
 
   let res;
   try {
-    res = await fetch(`${ORIGIN}/${path}`, { method, headers, body });
+    const origin = env.DIAG_ORIGIN && DIAG_PATHS.has(path) ? env.DIAG_ORIGIN : ORIGIN;
+    res = await fetch(`${origin}/${path}`, { method, headers, body });
   } catch (e) {
     return json(502, { error: '計算サーバーに接続できませんでした' });
   }

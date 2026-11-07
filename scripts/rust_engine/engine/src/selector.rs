@@ -323,25 +323,68 @@ struct FieldTab {
 }
 
 impl FieldTab {
-    fn build(pack: &Pack, ft: &FeatTables, me: &[Poke], opp: &[Poke], key: Option<FKey>) -> FieldTab {
+    fn build(pack: &Pack, ft: &FeatTables, me: &[Poke], opp: &[Poke], key: Option<FKey>, ids: Option<&XIds>) -> FieldTab {
         let f = sel_field_obj(key);
-        let vm: Vec<Poke> = me.iter().map(|p| if key.is_some() { sel_field_view(pack, p, &f) } else { p.clone() }).collect();
-        let vo: Vec<Poke> = opp.iter().map(|p| if key.is_some() { sel_field_view(pack, p, &f) } else { p.clone() }).collect();
+        let view = |ps: &[Poke]| -> Vec<Poke> { ps.iter().map(|p| if key.is_some() { sel_field_view(pack, p, &f) } else { p.clone() }).collect() };
         let (nm, no) = (me.len(), opp.len());
-        let mut mo = vec![0.0; nm * no];
-        let mut om = vec![0.0; nm * no];
-        for p in 0..nm {
-            for q in 0..no {
-                mo[p * no + q] = crate::features::sel_frac(pack, ft, &vm[p], &vo[q], &f);
-                om[q * nm + p] = crate::features::sel_frac(pack, ft, &vo[q], &vm[p], &f);
+        let Some(ids) = ids else {
+            let (vm, vo) = (view(me), view(opp));
+            let mut mo = vec![0.0; nm * no];
+            let mut om = vec![0.0; nm * no];
+            for p in 0..nm {
+                for q in 0..no {
+                    mo[p * no + q] = crate::features::sel_frac(pack, ft, &vm[p], &vo[q], &f);
+                    om[q * nm + p] = crate::features::sel_frac(pack, ft, &vo[q], &vm[p], &f);
+                }
             }
-        }
-        FieldTab {
-            mo,
-            om,
-            sm: vm.iter().map(|p| crate::features::sel_speed(pack, ft, p, &f)).collect(),
-            so: vo.iter().map(|p| crate::features::sel_speed(pack, ft, p, &f)).collect(),
-        }
+            return FieldTab {
+                mo,
+                om,
+                sm: vm.iter().map(|p| crate::features::sel_speed(pack, ft, p, &f)).collect(),
+                so: vo.iter().map(|p| crate::features::sel_speed(pack, ft, p, &f)).collect(),
+            };
+        };
+        let k = ids.tag ^ fkey_bits(key);
+        let mut t = FieldTab { mo: vec![0.0; nm * no], om: vec![0.0; nm * no], sm: vec![0.0; nm], so: vec![0.0; no] };
+        XC.with(|c| {
+            let mut c = c.borrow_mut();
+            c.trim();
+            let mut vs: Option<(Vec<Poke>, Vec<Poke>)> = None;
+            for p in 0..nm {
+                for q in 0..no {
+                    for (a, (ai, di)) in [(true, (ids.me[p], ids.opp[q])), (false, (ids.opp[q], ids.me[p]))] {
+                        let v = match c.frac.get(&(k, ai, di)) {
+                            Some(&v) => v,
+                            None => {
+                                let (vm, vo) = vs.get_or_insert_with(|| (view(me), view(opp)));
+                                let v = if a { crate::features::sel_frac(pack, ft, &vm[p], &vo[q], &f) } else { crate::features::sel_frac(pack, ft, &vo[q], &vm[p], &f) };
+                                c.frac.insert((k, ai, di), v);
+                                v
+                            }
+                        };
+                        if a {
+                            t.mo[p * no + q] = v;
+                        } else {
+                            t.om[q * nm + p] = v;
+                        }
+                    }
+                }
+            }
+            for (is, out, m) in [(&ids.me, &mut t.sm, true), (&ids.opp, &mut t.so, false)] {
+                for (i, o) in out.iter_mut().enumerate() {
+                    *o = match c.speed.get(&(k, is[i])) {
+                        Some(&v) => v,
+                        None => {
+                            let (vm, vo) = vs.get_or_insert_with(|| (view(me), view(opp)));
+                            let v = crate::features::sel_speed(pack, ft, if m { &vm[i] } else { &vo[i] }, &f);
+                            c.speed.insert((k, is[i]), v);
+                            v
+                        }
+                    };
+                }
+            }
+        });
+        t
     }
 }
 
@@ -352,31 +395,45 @@ struct FieldTabs<'a> {
     me: &'a [Poke],
     opp: &'a [Poke],
     tabs: Vec<(Option<FKey>, FieldTab)>,
+    ids: Option<XIds>,
 }
 
 impl<'a> FieldTabs<'a> {
     fn new(pack: &'a Pack, ft: &'a FeatTables, me: &'a [Poke], opp: &'a [Poke]) -> Self {
-        FieldTabs { pack, ft, me, opp, tabs: Vec::new() }
+        FieldTabs { pack, ft, me, opp, tabs: Vec::new(), ids: None }
+    }
+    /// 以前に作った部品を引き継ぐ（大きさが合わなければ捨てる）
+    fn with(pack: &'a Pack, ft: &'a FeatTables, me: &'a [Poke], opp: &'a [Poke], mut tabs: Vec<(Option<FKey>, FieldTab)>, ids: Option<XIds>) -> Self {
+        tabs.retain(|(_, t)| t.mo.len() == me.len() * opp.len() && t.sm.len() == me.len() && t.so.len() == opp.len());
+        FieldTabs { pack, ft, me, opp, tabs, ids }
     }
     fn get(&mut self, key: Option<FKey>) -> usize {
         if let Some(i) = self.tabs.iter().position(|(k, _)| *k == key) {
             return i;
         }
-        let t = FieldTab::build(self.pack, self.ft, self.me, self.opp, key);
+        let t = FieldTab::build(self.pack, self.ft, self.me, self.opp, key, self.ids.as_ref());
         self.tabs.push((key, t));
         self.tabs.len() - 1
     }
     /// sel_field_block（自分の並び c・相手の並び os。いずれも 3体）
     fn block(&mut self, c: &[usize], os: &[usize]) -> Vec<f64> {
         let mut out = vec![0.0f64; SEL_EXTRA_FIELD];
+        let fm = self.field_of(c, true);
+        let fo = self.field_of(os, false);
+        self.block_into(c, os, &fm, &fo, &mut out);
+        out
+    }
+    fn field_of(&self, ix: &[usize], me: bool) -> FieldOf {
+        let trio: Vec<&Poke> = ix.iter().map(|&i| if me { &self.me[i] } else { &self.opp[i] }).collect();
+        sel_field_of(self.pack, &trio)
+    }
+    /// out は 0 で渡す。fm/fo＝自分・相手の3体の sel_field_of
+    fn block_into(&mut self, c: &[usize], os: &[usize], fm: &FieldOf, fo: &FieldOf, out: &mut [f64]) {
         let no = self.opp.len();
         let nm = self.me.len();
         let t0 = self.get(None);
         for side in 0..2 {
-            let (key, s, flags) = {
-                let trio: Vec<&Poke> = if side == 0 { c.iter().map(|&i| &self.me[i]).collect() } else { os.iter().map(|&i| &self.opp[i]).collect() };
-                sel_field_of(self.pack, &trio)
-            };
+            let (key, s, flags) = if side == 0 { *fm } else { *fo };
             out[54 + side * 4..58 + side * 4].copy_from_slice(&flags);
             if key.is_none() {
                 continue;
@@ -393,9 +450,10 @@ impl<'a> FieldTabs<'a> {
                 }
             }
         }
-        out
     }
 }
+
+type FieldOf = (Option<FKey>, f64, [f64; 4]);
 
 /// features.py sel_field_block（3体ずつ・メガ後の形を渡す）
 pub fn sel_field_block(pack: &Pack, ft: &FeatTables, a: &[Poke], b: &[Poke]) -> Vec<f64> {
@@ -1051,8 +1109,77 @@ struct Tabs {
 #[derive(Default)]
 pub struct PairCache {
     tabs: Option<Tabs>,
+    /// 場ごとの部品（FieldTab）を向き（me_is_x）別に。同じ相手への選出の呼び出しで毎回作り直していた（簡易AIの約2割）
+    ftab: [Vec<(Option<FKey>, FieldTab)>; 2],
     hb: FnvMap<u32, (f64, bool)>,
     hbad: bool,
+    /// x 側・y 側の個体の型の識別子（with_ids）。あれば対面の値を相手・呼び出しをまたいで XC に残す
+    ids: Option<[Vec<u64>; 2]>,
+    /// 向き別に、候補の並び（vc）と相手の仮定ごとの全候補の値（vm）。自分→相手の選出と、相手の選出の中の「こちらの仮定」とで同じ組を評価している
+    vc: [Vec<Vec<usize>>; 2],
+    vm: [Vec<(Vec<usize>, Vec<f64>)>; 2],
+}
+
+impl PairCache {
+    /// 型の文字列（＋シーズン）で個体を識別する。同じ型の対面は同じ値なので、相手集団の数千党で使い回せる
+    pub fn with_ids(xs: &[u64], ys: &[u64]) -> Self {
+        PairCache { ids: if xcache_on() { Some([xs.to_vec(), ys.to_vec()]) } else { None }, ..Default::default() }
+    }
+    fn xids(&self, me_is_x: bool, v2: bool, nm: usize, no: usize) -> Option<XIds> {
+        let [x, y] = self.ids.as_ref()?;
+        let (me, opp) = if me_is_x { (x, y) } else { (y, x) };
+        (me.len() == nm && opp.len() == no).then(|| XIds { me: me.clone(), opp: opp.clone(), tag: (v2 as u64) << 63 })
+    }
+}
+
+pub fn spec_id(spec: &str, season: &str) -> u64 {
+    use std::hash::Hasher;
+    let mut h = Fnv::default();
+    h.write(spec.as_bytes());
+    h.write_u64(0xff);
+    h.write(season.as_bytes());
+    h.finish()
+}
+
+fn xcache_on() -> bool {
+    static V: OnceLock<bool> = OnceLock::new();
+    *V.get_or_init(|| std::env::var("SEL_XCACHE").map(|v| v != "0").unwrap_or(true))
+}
+
+struct XIds {
+    me: Vec<u64>,
+    opp: Vec<u64>,
+    tag: u64,
+}
+
+fn fkey_bits(key: Option<FKey>) -> u64 {
+    match key {
+        None => 0,
+        Some((t, w)) => 1 | (t as u64) << 1 | w.map_or(0, |s| s as u64 + 1) << 9,
+    }
+}
+
+const XC_MAX: usize = 400_000;
+
+/// 相手・呼び出しをまたぐ対面の値（キーは spec_id）。frac・speed＝場の部品、pair＝pair_table（None＝乱数を引いた）、bed＝heur_tab の1対面
+#[derive(Default)]
+struct XCache {
+    frac: FnvMap<(u64, u64, u64), f64>,
+    speed: FnvMap<(u64, u64), f64>,
+    pair: FnvMap<(u64, u64, u64), Option<PairT>>,
+    bed: FnvMap<(u64, u64, u64), Option<(f64, bool)>>,
+}
+
+impl XCache {
+    fn trim(&mut self) {
+        if self.frac.len() + self.speed.len() + self.pair.len() + self.bed.len() > XC_MAX {
+            *self = XCache::default();
+        }
+    }
+}
+
+thread_local! {
+    static XC: std::cell::RefCell<XCache> = std::cell::RefCell::new(XCache::default());
 }
 
 /// 乱数を引いたら印を付ける（引かれたら表は使わず元の実装へ）
@@ -1091,6 +1218,10 @@ fn heur_tab(
     if pc.hbad || party.len() > 15 || opp.len() > 15 {
         return None;
     }
+    let gids = pc.ids.as_ref().filter(|[x, y]| {
+        let (p, o) = if party_is_x { (x, y) } else { (y, x) };
+        p.len() == party.len() && o.len() == opp.len()
+    }).map(|[x, y]| if party_is_x { (x.clone(), y.clone()) } else { (y.clone(), x.clone()) });
     let hb = &mut pc.hb;
     let mut bad = false;
     let mut bed = |pa: bool, ai: usize, am: bool, ac: bool, di: usize, dm: bool, dc: bool| -> Option<(f64, bool)> {
@@ -1098,6 +1229,24 @@ fn heur_tab(
         let key = (ax as u32) | (ai as u32) << 1 | (am as u32) << 5 | (ac as u32) << 6 | (di as u32) << 7 | (dm as u32) << 11 | (dc as u32) << 12;
         if let Some(&r) = hb.get(&key) {
             return Some(r);
+        }
+        let gk = gids.as_ref().map(|(pi, oi)| {
+            let (x, y) = if pa { (pi[ai], oi[di]) } else { (oi[ai], pi[di]) };
+            (x, y, 0x5eed_0000 | (am as u64) | (ac as u64) << 1 | (dm as u64) << 2 | (dc as u64) << 3)
+        });
+        if let Some(g) = gk {
+            if let Some(r) = XC.with(|c| c.borrow().bed.get(&g).copied()) {
+                match r {
+                    Some(r) => {
+                        hb.insert(key, r);
+                        return Some(r);
+                    }
+                    None => {
+                        bad = true;
+                        return None;
+                    }
+                }
+            }
         }
         let (att, def) = if pa { (&party[ai], &opp[di]) } else { (&opp[ai], &party[di]) };
         let mut a = att.clone();
@@ -1118,11 +1267,18 @@ fn heur_tab(
         let mut f = Field::default();
         let mut r = FlagRng(false);
         let v = crate::ai::best_expected_damage(pack, &mut a, &mut d, &mut f, &mut r);
+        let out = (v, d.item != it);
+        if let Some(g) = gk {
+            XC.with(|c| {
+                let mut c = c.borrow_mut();
+                c.trim();
+                c.bed.insert(g, if r.0 { None } else { Some(out) });
+            });
+        }
         if r.0 {
             bad = true;
             return None;
         }
-        let out = (v, d.item != it);
         hb.insert(key, out);
         Some(out)
     };
@@ -1167,21 +1323,43 @@ fn pair_table(pack: &Pack, att: &mut Poke, deff: &mut Poke, rng_used: &mut bool)
 }
 
 impl Tabs {
-    fn build(pack: &Pack, xs: &[Poke], ys: &[Poke]) -> Option<Tabs> {
+    fn build(pack: &Pack, xs: &[Poke], ys: &[Poke], ids: Option<(&[u64], &[u64], u64)>) -> Option<Tabs> {
         let (nx, ny) = (xs.len(), ys.len());
         let mut used = false;
         let mut xw = xs.to_vec();
         let mut yw = ys.to_vec();
+        let mut one = |a: &mut Poke, d: &mut Poke, ai: usize, di: usize, a_is_x: bool, used: &mut bool| -> PairT {
+            let Some((xi, yi, tag)) = ids else { return pair_table(pack, a, d, used) };
+            let g = if a_is_x { (tag, xi[ai], yi[di]) } else { (tag, yi[ai], xi[di]) };
+            XC.with(|c| {
+                if let Some(r) = c.borrow().pair.get(&g) {
+                    return match r {
+                        Some(t) => *t,
+                        None => {
+                            *used = true;
+                            PairT::default()
+                        }
+                    };
+                }
+                let mut u = false;
+                let t = pair_table(pack, a, d, &mut u);
+                let mut c = c.borrow_mut();
+                c.trim();
+                c.pair.insert(g, if u { None } else { Some(t) });
+                *used |= u;
+                t
+            })
+        };
         let mut xy = Vec::with_capacity(nx * ny);
-        for x in xw.iter_mut() {
-            for y in yw.iter_mut() {
-                xy.push(pair_table(pack, x, y, &mut used));
+        for (i, x) in xw.iter_mut().enumerate() {
+            for (j, y) in yw.iter_mut().enumerate() {
+                xy.push(one(x, y, i, j, true, &mut used));
             }
         }
         let mut yx = Vec::with_capacity(nx * ny);
-        for y in yw.iter_mut() {
-            for x in xw.iter_mut() {
-                yx.push(pair_table(pack, y, x, &mut used));
+        for (j, y) in yw.iter_mut().enumerate() {
+            for (i, x) in xw.iter_mut().enumerate() {
+                yx.push(one(y, x, j, i, false, &mut used));
             }
         }
         if used {
@@ -1264,11 +1442,13 @@ fn select_fast(
     if d != dbase + if sel.v2 { SEL_EXTRA_V2 } else { 0 } + if sel.field { SEL_EXTRA_FIELD } else { 0 } {
         return None;
     }
-    let mut ftabs = FieldTabs::new(pack, ft, me, opp);
+    let xids = pc.xids(me_is_x, sel.v2, me.len(), opp.len());
     if pc.tabs.is_none() {
         let (xs, ys) = if me_is_x { (me, opp) } else { (opp, me) };
-        pc.tabs = Some(Tabs::build(pack, xs, ys)?);
+        let ids = xids.as_ref().map(|i| if me_is_x { (&i.me[..], &i.opp[..], i.tag ^ 0x7ab5) } else { (&i.opp[..], &i.me[..], i.tag ^ 0x7ab5) });
+        pc.tabs = Some(Tabs::build(pack, xs, ys, ids)?);
     }
+    let mut ftabs = FieldTabs::with(pack, ft, me, opp, std::mem::take(&mut pc.ftab[me_is_x as usize]), xids);
     let tb = pc.tabs.as_ref().unwrap();
     let (nm, no) = (me.len(), opp.len());
     if (if me_is_x { (tb.nx, tb.ny) } else { (tb.ny, tb.nx) }) != (nm, no) {
@@ -1344,9 +1524,26 @@ fn select_fast(
             }
         };
     }
+    let dir = me_is_x as usize;
+    if pc.vc[dir].as_slice() != cands {
+        pc.vc[dir] = cands.to_vec();
+        pc.vm[dir].clear();
+    }
+    let cols: Vec<Option<Vec<f64>>> = uniq.iter().map(|os| pc.vm[dir].iter().find(|(o, _)| o == *os).map(|(_, v)| v.clone())).collect();
+    let (fm, fo): (Vec<FieldOf>, Vec<FieldOf>) = if sel.field {
+        (cands.iter().map(|c| ftabs.field_of(c, true)).collect(), uniq.iter().map(|os| ftabs.field_of(os, false)).collect())
+    } else {
+        (Vec::new(), Vec::new())
+    };
+    let mut fb = vec![0.0f64; SEL_EXTRA_FIELD];
     let mut base: Vec<Vec<f64>> = Vec::with_capacity(uniq.len());
     let mut wt: Vec<Vec<f64>> = Vec::with_capacity(uniq.len()); // [(p*3+k)*h + j]
-    for os in &uniq {
+    for (ui, os) in uniq.iter().enumerate() {
+        if cols[ui].is_some() {
+            base.push(Vec::new());
+            wt.push(Vec::new());
+            continue;
+        }
         let mut b = c0.clone();
         for k in 0..3 {
             let u = &u2[os[k]][k * h..(k + 1) * h];
@@ -1382,7 +1579,8 @@ fn select_fast(
     }
 
     let mut s = vec![0.0f64; h];
-    let mut value = |c: &[usize], u: usize| -> f64 {
+    let mut value = |ci: usize, u: usize| -> f64 {
+        let c = &cands[ci][..];
         s.copy_from_slice(&base[u]);
         let w = &wt[u];
         for k in 0..3 {
@@ -1421,7 +1619,8 @@ fn select_fast(
             }
         }
         if sel.field {
-            let fb = ftabs.block(c, os);
+            fb.fill(0.0);
+            ftabs.block_into(c, os, &fm[ci], &fo[u], &mut fb);
             for (k, &v) in fb.iter().enumerate() {
                 axpy(&mut s, v, dbase + SEL_EXTRA_V2 + k);
             }
@@ -1437,9 +1636,17 @@ fn select_fast(
     let mut vals = Vec::with_capacity(cands.len());
     let mut uv = vec![0.0f64; uniq.len()];
     let mut ov = vec![0.0f64; osels.len()];
-    for (k, c) in cands.iter().enumerate() {
+    let mut fresh: Vec<Vec<f64>> = uniq.iter().map(|_| Vec::with_capacity(cands.len())).collect();
+    for k in 0..cands.len() {
         for (u, x) in uv.iter_mut().enumerate() {
-            *x = value(c, u);
+            *x = match &cols[u] {
+                Some(v) => v[k],
+                None => {
+                    let y = value(k, u);
+                    fresh[u].push(y);
+                    y
+                }
+            };
         }
         for (j, x) in ov.iter_mut().enumerate() {
             *x = uv[umap[j]];
@@ -1451,6 +1658,12 @@ fn select_fast(
             best = k;
         }
     }
+    for (u, v) in fresh.into_iter().enumerate() {
+        if cols[u].is_none() {
+            pc.vm[dir].push((uniq[u].clone(), v));
+        }
+    }
+    pc.ftab[me_is_x as usize] = ftabs.tabs;
     Some((best, vals))
 }
 

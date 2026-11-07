@@ -1253,22 +1253,26 @@ fn opp_max_priority_known(pack: &Pack, my: &mut Side, op: &Poke) -> i64 {
 
 /// AI_KO_COND=0 で成功条件の確認を外す（A/B 用。既定 ON）
 pub fn ko_cond_env() -> bool {
-    std::env::var("AI_KO_COND").map(|v| v != "0").unwrap_or(true)
+    static V: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *V.get_or_init(|| std::env::var("AI_KO_COND").map(|v| v != "0").unwrap_or(true))
 }
 
 /// 監査40の AI 修正の既定（AI_FIX40=0 で旧挙動。ai.py / search_ai.py の _FIX40_ON と同じ）
 pub fn fix40_env() -> bool {
-    std::env::var("AI_FIX40").map(|v| v != "0").unwrap_or(true)
+    static V: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *V.get_or_init(|| std::env::var("AI_FIX40").map(|v| v != "0").unwrap_or(true))
 }
 
 /// 監査200 C の AI 修正の既定（AI_FIX200=0 で旧挙動。search_ai.py の _FIX200_ON と同じ）
 pub fn fix200_env() -> bool {
-    std::env::var("AI_FIX200").map(|v| v != "0").unwrap_or(true)
+    static V: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *V.get_or_init(|| std::env::var("AI_FIX200").map(|v| v != "0").unwrap_or(true))
 }
 
 /// 設置済み（上限まで）の設置技を外す AI 修正の既定（AI_FIXHZ=0 で旧挙動。search_ai.py の _FIXHZ_ON と同じ）
 pub fn fixhz_env() -> bool {
-    std::env::var("AI_FIXHZ").map(|v| v != "0").unwrap_or(true)
+    static V: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *V.get_or_init(|| std::env::var("AI_FIXHZ").map(|v| v != "0").unwrap_or(true))
 }
 
 /// ai.py `_ko_hit_prob`: 確定KOの安全弁で使う命中率（公開情報）
@@ -1364,7 +1368,8 @@ fn ko_move_fails(pack: &Pack, me: &Poke, op: &Poke, mv: &DMove, field: &Field, f
 
 /// 確定KO安全弁の版（env AI_KOV。ai.py _KOV）: 2=絞った版（既定）、1=2026-10-18 以前、0=上書きしない
 pub fn kov_env() -> u8 {
-    std::env::var("AI_KOV").ok().and_then(|v| v.parse::<u8>().ok()).unwrap_or(2)
+    static V: std::sync::OnceLock<u8> = std::sync::OnceLock::new();
+    *V.get_or_init(|| std::env::var("AI_KOV").ok().and_then(|v| v.parse::<u8>().ok()).unwrap_or(2))
 }
 
 /// ai.py `_charges_this_turn`

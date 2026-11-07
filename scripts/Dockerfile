@@ -6,6 +6,8 @@ ENV PATH=/root/.cargo/bin:$PATH
 RUN pip install --no-cache-dir maturin==1.15.0
 WORKDIR /src
 COPY rust_engine rust_engine
+# AVX2 で f64 を4つずつ計算する（ネットの行列計算）。積和を融合しない（FMA を使わない）ので結果は変わらない
+ENV RUSTFLAGS="-C target-cpu=x86-64-v3"
 RUN maturin build -m rust_engine/pyengine/Cargo.toml --release -i python3.12 --out /wheels
 
 FROM python:3.12-slim
