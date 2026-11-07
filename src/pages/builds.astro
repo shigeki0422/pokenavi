@@ -1,0 +1,312 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import ToolPageNotes from '../components/ToolPageNotes.astro';
+import AdUnit from '../components/AdUnit.astro';
+import buildsData from '../data/builds.json';
+
+type Mon = {
+  name: string;
+  icon: string | null;
+  rank: number | null;
+  slug: string | null;
+  suggest: string | null;
+  suggestLabel: string | null;
+};
+type Pair = { a: Mon; b: Mon; ra: number; rb: number };
+
+const data = buildsData as unknown as {
+  season: string;
+  date: string;
+  classic: Pair[];
+  signature: Pair[];
+  trios: { mons: Mon[] }[];
+  byCore: { core: Mon; partners: Mon[] }[];
+};
+
+const { season, date, classic, signature, trios, byCore } = data;
+const [, mm, dd] = date.split('-');
+const dateLabel = `${parseInt(mm)}月${parseInt(dd)}日`;
+const siteUrl = 'https://pokenavi.jp';
+
+const title = `ポケモンチャンピオンズ 構築 ${season}｜使用率データで見る軸の組み合わせ`;
+const description = `ポケモンチャンピオンズ${season}の構築を、同居率データから集計した「実際に一緒に使われている組み合わせ」で掲載。定番の軸の組み合わせ、戦術がはっきり出ている組み合わせ、3体の骨格、使用率上位20体の定番パートナーを${dateLabel}時点のデータで更新しています。`;
+
+const faqs = [
+  {
+    q: 'ここに載っている組み合わせは何を根拠にしていますか。',
+    a: `ポケモンチャンピオンズ${season}の対戦データから集計した同居率(どのポケモンと一緒に使われているか)です。特定のプレイヤーの構築記事ではなく、ランクマッチ全体の集計なので、いま実際に多く使われている並びがそのまま出ます。${dateLabel}時点のデータです。`,
+  },
+  {
+    q: '「定番の組み合わせ」と「戦術がはっきり出ている組み合わせ」はどう違いますか。',
+    a: '定番の組み合わせは、使用率上位同士で互いの同居率も高いものです。多くの構築に入るため、並べただけでは戦術が決まりません。戦術がはっきり出ている組み合わせは、使用率の順位より同居率の順位がずっと高いもの、つまり「この2体はセットで使われる」という結びつきが強いものを抽出しています。後者は雨や展開のように戦術ごと持ってくる組み合わせになりやすいです。',
+  },
+  {
+    q: '残りの枠はどう決めればいいですか。',
+    a: '各組み合わせの「この軸で組む」から軸から簡単構築に移ると、その軸を含む6匹を自動で提案します。提案は同じ同居率データと対戦シミュレーションをもとに作られるため、ここで見た組み合わせの延長になります。',
+  },
+  {
+    q: 'データはいつ更新されますか。',
+    a: `使用率は毎日、同居率はシーズン単位で更新しています。シーズンが変わると、このページの組み合わせも新しいシーズンの集計に切り替わります(現在は${season}・${dateLabel}時点)。`,
+  },
+  {
+    q: '載っている組み合わせをそのまま使えば勝てますか。',
+    a: '同居率は「よく使われている」ことを示すもので、勝率そのものではありません。環境に多い並びを知ることで、自分の構築が何に当たりやすいかを把握する使い方が向いています。相性の確認はパーティ工房の1v1判定や対策ページを併せてご覧ください。',
+  },
+];
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Dataset',
+  name: `ポケモンチャンピオンズ${season} 構築（軸の組み合わせ）`,
+  description,
+  url: siteUrl + '/builds/',
+  temporalCoverage: date,
+  creator: { '@type': 'Organization', name: 'ポケナビ', url: siteUrl },
+  isAccessibleForFree: true,
+};
+
+const icon = (m: Mon) => `/images/pokemon/pokemon-${m.icon}.webp`;
+const rankText = (m: Mon) => (m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外');
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>ポケモンチャンピオンズの構築 {season}</h1>
+      <p class="lead">
+        ランクマッチ全体の<strong>同居率データ</strong>から、いま実際に一緒に使われている軸の組み合わせを集計しています。
+        特定のプレイヤーの構築記事ではなく環境全体の集計のため、{dateLabel}時点で多数派になっている並びがそのまま出ます。
+      </p>
+
+      <section>
+        <h2>定番の軸の組み合わせ</h2>
+        <p class="note">使用率15位以内で、互いの定番パートナー上位に入っている組み合わせです。多くの構築に入る骨格なので、ここから入ると大きく外れません。</p>
+        <ol class="pairs">
+          {classic.map((p) => (
+            <li class="pair">
+              <div class="duo">
+                {[p.a, p.b].map((m) => (
+                  <span class="mon">
+                    <img src={icon(m)} alt={m.name} loading="lazy" width="56" height="56" />
+                    <span class="mon-name">{m.slug ? <a href={`/pokemon/${m.slug}/`}>{m.name}</a> : m.name}</span>
+                    <span class="mon-rank">使用率{rankText(m)}</span>
+                  </span>
+                ))}
+              </div>
+              <p class="rel">
+                {p.a.name}から見て{p.b.name}は定番パートナー{p.ra}位、{p.b.name}から見て{p.a.name}は{p.rb}位。
+              </p>
+              <div class="acts">
+                {p.a.suggest && <a class="act" href={`/party-suggest/${p.a.suggest}/`}>{p.a.suggestLabel}軸で組む →</a>}
+                {p.b.suggest && <a class="act" href={`/party-suggest/${p.b.suggest}/`}>{p.b.suggestLabel}軸で組む →</a>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section>
+        <h2>戦術がはっきり出ている組み合わせ</h2>
+        <p class="note">
+          使用率の順位よりも同居率の順位がずっと高い、つまり<strong>セットで使われている</strong>度合いが強い組み合わせです。
+          定番の組み合わせと違い、この2体を選んだ時点で構築の方向が決まります。
+        </p>
+        <ol class="pairs">
+          {signature.map((p) => (
+            <li class="pair">
+              <div class="duo">
+                {[p.a, p.b].map((m) => (
+                  <span class="mon">
+                    <img src={icon(m)} alt={m.name} loading="lazy" width="56" height="56" />
+                    <span class="mon-name">{m.slug ? <a href={`/pokemon/${m.slug}/`}>{m.name}</a> : m.name}</span>
+                    <span class="mon-rank">使用率{rankText(m)}</span>
+                  </span>
+                ))}
+              </div>
+              <p class="rel">
+                使用率は{rankText(p.a)}・{rankText(p.b)}ながら、{p.a.name}から見て{p.b.name}は定番パートナー{p.ra}位、
+                {p.b.name}から見て{p.a.name}は{p.rb}位。使用率の順位より同居率の順位が大きく先行しています。
+              </p>
+              <div class="acts">
+                {p.a.suggest && <a class="act" href={`/party-suggest/${p.a.suggest}/`}>{p.a.suggestLabel}軸で組む →</a>}
+                {p.b.suggest && <a class="act" href={`/party-suggest/${p.b.suggest}/`}>{p.b.suggestLabel}軸で組む →</a>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <section>
+        <h2>3体の骨格</h2>
+        <p class="note">3体が互いの定番パートナーに入っている組み合わせです。6匹のうち半分が決まるため、残り3枠を弱点補完に使えます。</p>
+        <ol class="trios">
+          {trios.map((t) => (
+            <li class="trio">
+              <div class="duo">
+                {t.mons.map((m) => (
+                  <span class="mon">
+                    <img src={icon(m)} alt={m.name} loading="lazy" width="48" height="48" />
+                    <span class="mon-name">{m.slug ? <a href={`/pokemon/${m.slug}/`}>{m.name}</a> : m.name}</span>
+                    <span class="mon-rank">使用率{rankText(m)}</span>
+                  </span>
+                ))}
+              </div>
+              <div class="acts">
+                {t.mons.filter((m) => m.suggest).map((m) => (
+                  <a class="act" href={`/party-suggest/${m.suggest}/`}>{m.suggestLabel}軸で残り3枠を埋める →</a>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <AdUnit />
+
+      <section>
+        <h2>軸別の定番パートナー</h2>
+        <p class="note">使用率上位20体が、どのポケモンと一緒に使われているかの上位5体です。使いたい軸が決まっている場合はここから並びを決められます。</p>
+        <div class="table-wrap">
+          <table class="cores">
+            <thead>
+              <tr><th>軸</th><th>定番パートナー（同居率の高い順）</th></tr>
+            </thead>
+            <tbody>
+              {byCore.map((row) => (
+                <tr>
+                  <th class="core-cell">
+                    <img src={icon(row.core)} alt={row.core.name} loading="lazy" width="40" height="40" />
+                    <span>
+                      {row.core.slug ? <a href={`/pokemon/${row.core.slug}/`}>{row.core.name}</a> : row.core.name}
+                      <small>使用率{rankText(row.core)}</small>
+                    </span>
+                  </th>
+                  <td>
+                    <span class="plist">
+                      {row.partners.map((m) => (
+                        <span class="pchip">
+                          <img src={icon(m)} alt={m.name} loading="lazy" width="28" height="28" />
+                          {m.slug ? <a href={`/pokemon/${m.slug}/`}>{m.name}</a> : m.name}
+                        </span>
+                      ))}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="tools">
+        <h2>構築を組むためのツール</h2>
+        <div class="cards">
+          <a class="tcard" href="/party-suggest/">
+            <strong>軸から簡単構築</strong>
+            <span>軸を1体決めると、残り5枠を同居率と対戦シミュレーションから自動で提案します。</span>
+          </a>
+          <a class="tcard" href="/party-builder/">
+            <strong>パーティ工房</strong>
+            <span>6匹の持ち物・特性・性格・EV・技を詰め、使用率上位との1v1相性を判定します。</span>
+          </a>
+          <a class="tcard" href="/counters/">
+            <strong>対策ページ</strong>
+            <span>この並びに当たったときに有利を取れるポケモンを、ポケモンごとに一覧できます。</span>
+          </a>
+        </div>
+      </section>
+
+      <ToolPageNotes faqs={faqs} summary="このページについて — 集計方法・データの根拠・よくある質問">
+        <h2>構築の組み方</h2>
+        <p>このページの組み合わせは、構築を組む最初の2〜3枠を決めるためのものです。残りの枠は次の順で埋めていきます。</p>
+        <ol>
+          <li><strong>軸を決める</strong> — 使いたいポケモン、またはメガシンカ枠を1体決めます</li>
+          <li><strong>定番パートナーを1〜2体入れる</strong> — このページの表から、同居率の高い相手を選びます</li>
+          <li><strong>残り枠を弱点補完に使う</strong> — <a href="/party-suggest/">軸から簡単構築</a>で残り枠を自動提案させると、タイプ相性と素早さ関係を考慮した並びが出ます</li>
+          <li><strong>型を詰める</strong> — <a href="/party-builder/">パーティ工房</a>で持ち物・EV・技を調整し、仮想敵との1v1判定を確認します</li>
+        </ol>
+
+        <h2>同居率の見方</h2>
+        <p>同居率は「ある軸を使っている構築のうち、そのポケモンが一緒に入っている割合」です。使用率が高いポケモンは自然とどの軸のパートナー上位にも現れるため、順位だけを見ると上位勢同士の組み合わせばかりになります。</p>
+        <p>そこでこのページでは、<strong>使用率の順位と同居率の順位の差</strong>も見ています。使用率{season}で40位台のポケモンが、ある軸の定番パートナー1位に入っているなら、それは偶然ではなく戦術としてセットで使われているということです。「戦術がはっきり出ている組み合わせ」はこの差で並べ替えたものです。</p>
+        <p>個別のポケモンの技・持ち物・特性の採用率と、推定される型は<a href="/pokemon/">ポケモン情報ページ</a>に掲載しています。シーズンごとの使用率の推移は<a href="/ranking/">使用率ランキング</a>をご覧ください。</p>
+      </ToolPageNotes>
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  main { max-width: 900px; margin: 0 auto; padding: 1.8em 1.1em 4em; color: rgb(var(--gray-dark)); }
+  h1 { font-size: 1.5rem; margin: 0 0 .6em; line-height: 1.4; }
+  .lead { font-size: .92rem; line-height: 1.8; margin: 0 0 2em; color: rgb(var(--gray-dark)); }
+  section { margin-bottom: 2.6em; }
+  h2 { font-size: 1.2rem; margin: 0 0 .4em; }
+  .note { font-size: .85rem; line-height: 1.75; color: rgb(var(--gray)); margin: 0 0 1.2em; }
+
+  .pairs, .trios { list-style: none; padding: 0; margin: 0; display: grid; gap: .9rem; }
+  .pairs { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+  .trios { grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+  .pair, .trio {
+    border: 1px solid rgba(var(--gray-light), .9);
+    border-radius: 10px;
+    padding: .9rem 1rem;
+    background: #fff;
+  }
+  .duo { display: flex; flex-wrap: wrap; gap: .5rem 1.1rem; align-items: flex-start; }
+  .mon { display: flex; flex-direction: column; align-items: center; width: 84px; text-align: center; }
+  .mon img { width: 56px; height: 56px; }
+  .trio .mon img { width: 48px; height: 48px; }
+  .mon-name { font-size: .8rem; font-weight: 600; line-height: 1.3; }
+  .mon-name a { color: inherit; text-decoration: none; }
+  .mon-name a:hover { text-decoration: underline; }
+  .mon-rank { font-size: .7rem; color: rgb(var(--gray)); }
+  .rel { font-size: .78rem; line-height: 1.7; color: rgb(var(--gray)); margin: .7rem 0 0; }
+  .acts { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .7rem; }
+  .act {
+    font-size: .76rem;
+    padding: .3rem .6rem;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--gray-light), 1);
+    text-decoration: none;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .act:hover { background: rgba(var(--gray-light), .4); }
+
+  .table-wrap { overflow-x: auto; }
+  .cores { border-collapse: collapse; width: 100%; font-size: .82rem; }
+  .cores th, .cores td { border-bottom: 1px solid rgba(var(--gray-light), .9); padding: .5rem .4rem; text-align: left; vertical-align: middle; }
+  .cores thead th { font-size: .78rem; color: rgb(var(--gray)); white-space: nowrap; }
+  .core-cell { display: flex; align-items: center; gap: .4rem; white-space: nowrap; }
+  .core-cell img { width: 40px; height: 40px; }
+  .core-cell small { display: block; font-weight: 400; font-size: .7rem; color: rgb(var(--gray)); }
+  .core-cell a, .pchip a { color: inherit; text-decoration: none; }
+  .core-cell a:hover, .pchip a:hover { text-decoration: underline; }
+  .plist { display: flex; flex-wrap: wrap; gap: .3rem .8rem; }
+  .pchip { display: inline-flex; align-items: center; gap: .2rem; white-space: nowrap; }
+  .pchip img { width: 28px; height: 28px; }
+
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .8rem; }
+  .tcard {
+    display: flex; flex-direction: column; gap: .3rem;
+    border: 1px solid rgba(var(--gray-light), .9);
+    border-radius: 10px; padding: .9rem 1rem;
+    text-decoration: none; color: inherit; background: #fff;
+  }
+  .tcard:hover { border-color: var(--accent); }
+  .tcard strong { font-size: .95rem; color: var(--accent); }
+  .tcard span { font-size: .78rem; line-height: 1.7; color: rgb(var(--gray)); }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 1.3rem; }
+    .pairs, .trios { grid-template-columns: 1fr; }
+  }
+</style>

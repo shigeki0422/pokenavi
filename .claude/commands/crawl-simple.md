@@ -62,6 +62,7 @@ python3 scripts/insert_ranking_from_icons.py
 ### 6. ranking.json 再生成
 ```bash
 python3 scripts/generate_ranking_json.py
+python3 scripts/generate_builds_json.py   # /builds/ の軸の組み合わせ(同居率ベース)。src/data/builds.json も一緒にコミットする
 ```
 
 ### 7. ポケモンページ再生成
