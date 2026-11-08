@@ -6,7 +6,7 @@ import ToolPageNotes from '../components/ToolPageNotes.astro';
 import rankingData from '../data/ranking.json';
 
 const title = 'ポケモンチャンピオンズ AI構築ツール | 軸から自動生成・パーティ工房';
-const description = 'ポケモンチャンピオンズのAIパーティ構築ツール3種。軸ポケモンから残り5枠を自動生成する「軸から簡単構築」、1v1相性を見ながら6匹の型を微調整できる「パーティ工房」、対戦中のダメージ計算に使う「対戦アシスト」。';
+const description = 'ポケモンチャンピオンズのAIパーティ構築ツール3種。軸ポケモンから残り5枠を自動生成する「軸から構築」、1v1相性を見ながら6匹の型を微調整できる「パーティ工房」、対戦中のダメージ計算に使う「対戦アシスト」。';
 const siteUrl = 'https://pokenavi.jp';
 
 /** シーズン名・集計規模はranking.jsonから引く(固定値だと更新のたびに古くなる)。 */
@@ -20,7 +20,7 @@ const fmtDate = (d: string) => { const [, m, dd] = d.split('-'); return `${parse
 const faqs = [
   {
     q: 'どのツールを使えばいいですか。',
-    a: '軸にしたいポケモンだけ決まっていて残り5枠が白紙なら「軸から簡単構築」、6匹はすでに決まっていて型を詰めたいなら「パーティ工房」、組んだパーティで対戦している最中なら「対戦アシスト」です。まず簡単構築でたたき台を作り、工房で仕上げ、対戦中はアシストで数字を確認する流れになります。',
+    a: '軸にしたいポケモンだけ決まっていて残り5枠が白紙なら「軸から構築」、6匹はすでに決まっていて型を詰めたいなら「パーティ工房」、組んだパーティで対戦している最中なら「対戦アシスト」です。まず簡単構築でたたき台を作り、工房で仕上げ、対戦中はアシストで数字を確認する流れになります。',
   },
   {
     q: '提案や判定は何を根拠にしていますか。',
@@ -49,7 +49,7 @@ const jsonLd = {
   hasPart: [
     {
       '@type': 'SoftwareApplication',
-      name: '軸から簡単構築',
+      name: '軸から構築',
       url: siteUrl + '/party-suggest/',
       applicationCategory: 'GameApplication',
       operatingSystem: 'Web',
@@ -151,7 +151,7 @@ const jsonLd = {
       <div class="cards">
         <div class="card">
           <div class="card-head">
-            <h2>軸から簡単構築</h2>
+            <h2>軸から構築</h2>
           </div>
           <p class="for-whom">まず全体像がほしい人向け</p>
           <p class="desc">軸にしたいポケモンを1体決めるだけで、AIが環境に合った残り5枠を自動提案します。</p>
@@ -160,7 +160,7 @@ const jsonLd = {
             <li>選出ガイド付き</li>
             <li>使用率TOP30との1v1相性を診断</li>
           </ul>
-          <a class="cta" href="/party-suggest">軸から簡単構築を使う →</a>
+          <a class="cta" href="/party-suggest">軸から構築を使う →</a>
         </div>
 
         <div class="card">
@@ -192,7 +192,7 @@ const jsonLd = {
         </div>
       </div>
 
-      <p class="usage-tip">いま環境でどの軸が組み合わされているかは<a href="/builds/">構築まとめ</a>で確認できます。まず「軸から簡単構築」でたたき台を作り、「パーティ工房」で仮想敵に合わせて詰め、対戦中は「対戦アシスト」で数字を確かめる、という流れがおすすめです。</p>
+      <p class="usage-tip">いま環境でどの軸が組み合わされているかは<a href="/builds/">定番構築</a>で確認できます。まず「軸から構築」でたたき台を作り、「パーティ工房」で仮想敵に合わせて詰め、対戦中は「対戦アシスト」で数字を確かめる、という流れがおすすめです。</p>
 
     <ToolPageNotes faqs={faqs}>
         <h2>どちらを使うか</h2>
@@ -204,7 +204,7 @@ const jsonLd = {
           <tbody>
             <tr>
               <td>軸1体だけ決まっている</td>
-              <td>軸から簡単構築</td>
+              <td>軸から構築</td>
               <td>残り5枠を自動で埋め、各ポケモンの役割と選出の指針まで提示します。</td>
             </tr>
             <tr>

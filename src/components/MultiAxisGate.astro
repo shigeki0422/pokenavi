@@ -1,0 +1,55 @@
+---
+// 1軸→複数軸（ライブ計算）へ移る前に「広告を見て使う／プレミアム」を選んでもらうダイアログ。
+// /party-suggest/multi/ へのリンクを持つページで読み込む（簡単構築・定番構築）。
+---
+<dialog id="ps-gate" class="ps-gate">
+  <p class="ps-gate-t">複数の軸で提案するには</p>
+  <p class="ps-gate-d">複数の軸を組み合わせた提案（ライブ計算）は、短い広告を見ると24時間ご利用いただけます。プレミアム会員は広告なしでご利用いただけます。</p>
+  <div class="ps-gate-btns">
+    <a id="ps-gate-ad" class="ps-gate-sub" href="#">広告を見て使う（24時間）</a>
+    <a id="ps-gate-prem" class="ps-gate-main" href="/premium/?from=suggest">プレミアムに登録（月300円・広告なし）</a>
+  </div>
+  <button id="ps-gate-x" class="ps-gate-x" aria-label="閉じる">✕</button>
+</dialog>
+
+<style>
+  .ps-gate{border:none;border-radius:12px;padding:1.4em 1.2em 1.2em;max-width:min(26rem,calc(100vw - 32px));box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  .ps-gate::backdrop{background:rgba(15,23,42,.45)}
+  .ps-gate-t{font-weight:700;font-size:1.05rem;margin:0 0 .5em}
+  .ps-gate-d{font-size:.88rem;margin:0 0 1em;line-height:1.6}
+  .ps-gate-btns{display:flex;flex-direction:column;gap:.6em}
+  .ps-gate-btns a{display:block;text-align:center;text-decoration:none;padding:.7em .9em;font-size:.9rem;border-radius:8px;font-weight:700;font-family:var(--font-atkinson)}
+  .ps-gate-sub{background:#eef2ff;color:#3730a3;border:1px solid #c7d2fe}
+  .ps-gate-sub:hover{background:#e0e7ff}
+  .ps-gate-main{background:var(--accent);color:#fff;border:none}
+  .ps-gate-x{position:absolute;top:.4em;right:.5em;background:none;border:none;font-size:1rem;cursor:pointer;color:#64748b}
+</style>
+
+<script>
+  const gate = document.getElementById('ps-gate');
+  if (gate instanceof HTMLDialogElement) {
+    const GATE_KEY = 'pn_gate_ad_until';
+    let gateHref = '';
+    const skipGate = () => { try { return +localStorage.getItem(GATE_KEY) > Date.now(); } catch (e) { return false; } };
+    document.addEventListener('click', (e) => {
+      const t = e.target;
+      const a = t instanceof Element ? t.closest('a[href*="/party-suggest/multi/"]') : null;
+      if (!a || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      const h = document.documentElement.classList;
+      if (!h.contains('pn-billing') || h.contains('pn-premium') || skipGate()) return;
+      e.preventDefault();
+      gateHref = a.href;
+      gate.showModal();
+      window.track?.('premium_gate', { action: 'show' });
+    });
+    document.getElementById('ps-gate-ad').addEventListener('click', (e) => {
+      e.preventDefault();
+      try { localStorage.setItem(GATE_KEY, String(Date.now() + 24 * 3600 * 1000)); } catch (err) {}
+      window.track?.('premium_gate', { action: 'ad' });
+      location.href = gateHref;
+    });
+    document.getElementById('ps-gate-prem').addEventListener('click', () => window.track?.('premium_gate', { action: 'premium' }));
+    document.getElementById('ps-gate-x').addEventListener('click', () => { gate.close(); window.track?.('premium_gate', { action: 'close' }); });
+    gate.addEventListener('click', (e) => { if (e.target === gate) gate.close(); });
+  }
+</script>

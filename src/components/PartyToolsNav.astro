@@ -1,14 +1,20 @@
 ---
-interface Props { current: 'suggest' | 'builder' | 'assist'; lang?: 'ja' | 'en' | 'ko' }
+interface Props { current: 'builds' | 'suggest' | 'builder' | 'assist'; lang?: 'ja' | 'en' | 'ko' }
 const { current, lang = 'ja' } = Astro.props;
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 const LABELS = {
-	ja: { suggest: '軸から簡単構築', builder: 'パーティ工房', assist: '対戦アシスト', start: 'はじめはこちら' },
-	en: { suggest: 'Quick Build from Core', builder: 'Party Workshop', assist: 'Battle Assist', start: 'Start here' },
-	ko: { suggest: '축으로 간단 구성', builder: '파티 공방', assist: '배틀 어시스트', start: '처음이라면 여기' },
+	ja: { builds: '定番構築', suggest: '軸から構築', builder: 'パーティ工房', assist: '対戦アシスト', start: 'はじめはこちら' },
+	en: { builds: 'Team Cores', suggest: 'Quick Build from Core', builder: 'Party Workshop', assist: 'Battle Assist', start: 'Start here' },
+	ko: { builds: '정석 구축', suggest: '축으로 간단 구성', builder: '파티 공방', assist: '배틀 어시스트', start: '처음이라면 여기' },
 }[lang];
 ---
 <nav class="pt-nav" aria-label={LABELS.suggest + ' / ' + LABELS.builder}>
+	{lang === 'ja' && (
+		<a href="/builds/" class:list={['pt-tab', { active: current === 'builds' }]} aria-current={current === 'builds' ? 'page' : undefined}>
+			<svg class="pt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="8" r="3"/><circle cx="17" cy="8" r="3"/><path d="M4 19c0-2.2 1.8-4 4-4M16 15c2.2 0 4 1.8 4 4"/><path d="M10 8h4"/></svg>
+			<span class="pt-label">{LABELS.builds}</span>
+		</a>
+	)}
 	<a href={`${pfx}/party-suggest`} class:list={['pt-tab', { active: current === 'suggest' }]} aria-current={current === 'suggest' ? 'page' : undefined}>
 		<svg class="pt-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.6L18.5 9.5l-4.7 1.9L12 16l-1.8-4.6L5.5 9.5l4.7-1.9z"/><path d="M19 15v4M17 17h4"/></svg>
 		<span class="pt-label">{LABELS.suggest}</span>
@@ -57,7 +63,14 @@ const LABELS = {
 	.pt-start svg { width: 0.7rem; height: 0.7rem; }
 	/* (S17) 自分がいるページのタブに「はじめはこちら」は不要 */
 	.pt-tab.active .pt-start { display: none; }
-	@media (max-width: 420px) {
-		.pt-tab { font-size: 0.8rem; padding: 0.4rem 0.4rem; gap: 0.3rem; }
+	@media (max-width: 620px) {
+		.pt-tab { font-size: 0.78rem; padding: 0.4rem 0.3rem; gap: 0.25rem; }
+		.pt-ico { width: 1em; height: 1em; }
+	}
+	/* 4タブは狭い幅でラベルが折り返すため、アイコンを落として1行に収める */
+	@media (max-width: 500px) {
+		.pt-tab { font-size: 0.72rem; padding: 0.4rem 0.15rem; gap: 0.15rem; white-space: nowrap; }
+		.pt-ico { display: none; }
+		.pt-tab.active::after { left: 12%; right: 12%; }
 	}
 </style>

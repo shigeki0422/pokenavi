@@ -11,7 +11,7 @@ const NAV = {
     home: 'ホーム',
     navResearch: '調べる', navRead: '読む', navWatch: '観る', navBuild: '戦う',
     watchParent: '仮想バトル観戦', simA: 'M-A環境', simB: 'M-B環境', simC: 'M-C環境', soonTitle: '近日公開予定',
-    buildParent: 'パーティ構築', builds: '構築まとめ', quickBuild: '軸から簡単構築', detailBuild: 'パーティ工房', assist: '対戦アシスト',
+    buildParent: 'パーティ構築', builds: '定番構築', quickBuild: '軸から構築', detailBuild: 'パーティ工房', assist: '対戦アシスト',
     pokemon: 'ポケモン情報', ranking: '使用率ランキング', blog: '考察記事',
     m7: 'M-7 シーズン', archive: 'M-7シーズン以前', about: '運営者情報', privacy: 'プライバシーポリシー',
   },
@@ -62,7 +62,9 @@ const basePath = path.startsWith('/en/') ? path.slice(3)
                : path;
 // 考察記事(/blog/)はen/koに翻訳ページが存在しないため、言語切り替え時はパスを引き継がずトップページへ
 const isBlogPath = basePath === '/blog' || basePath.startsWith('/blog/');
-const langUrls = isBlogPath
+// 日本語版しかないページは言語切替で各言語のトップへ送る(/en/builds/ 等は存在しない)
+const isJaOnlyPath = isBlogPath || basePath === '/builds' || basePath === '/builds/';
+const langUrls = isJaOnlyPath
   ? { ja: '/', en: '/en/', ko: '/ko/' }
   : {
       ja: basePath || '/',

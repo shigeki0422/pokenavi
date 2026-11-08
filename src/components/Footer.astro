@@ -3,7 +3,7 @@ const path = Astro.url.pathname;
 const lang = path.startsWith('/en') ? 'en' : path.startsWith('/ko') ? 'ko' : 'ja';
 const pfx = lang === 'ja' ? '' : `/${lang}`;
 const FOOT = {
-  ja: { about: '運営者情報', privacy: 'プライバシーポリシー', siteName: 'ポケナビ', terms: '利用規約', tokushoho: '特定商取引法に基づく表記' },
+  ja: { builds: '定番構築', about: '運営者情報', privacy: 'プライバシーポリシー', siteName: 'ポケナビ', terms: '利用規約', tokushoho: '特定商取引法に基づく表記' },
   en: { about: 'About', privacy: 'Privacy Policy', siteName: 'PokeNavi', terms: 'Terms of Service', tokushoho: 'Specified Commercial Transactions Act (Japanese)' },
   ko: { about: '운영자 정보', privacy: '개인정보 처리방침', siteName: '포케나비', terms: '이용약관', tokushoho: '특정상거래법에 따른 표기(일본어)' },
 }[lang];
@@ -17,6 +17,7 @@ const FOOT = {
 		</a>
 	</div>
 	<div class="links">
+		{lang === 'ja' && <><a href="/builds/">{FOOT.builds}</a><span class="sep">|</span></>}
 		<a href={`${pfx}/about/`}>{FOOT.about}</a>
 		<span class="sep">|</span>
 		<a href={`${pfx}/privacy/`}>{FOOT.privacy}</a>

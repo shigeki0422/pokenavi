@@ -144,6 +144,8 @@ def main():
             "slug": slug,
             "suggest": entry["pattern"].format(slug=suggest_slug) if entry and suggest_slug else None,
             "suggestLabel": entry["label"] if entry and suggest_slug else None,
+            # 複数軸モードは ?core= に species.json の和名を渡すだけなので、静的ページの有無に依存しない
+            "label": entry["label"] if entry else None,
         }
 
     def mutual(a, b):

@@ -4,6 +4,8 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import ToolPageNotes from '../components/ToolPageNotes.astro';
 import AdUnit from '../components/AdUnit.astro';
+import PartyToolsNav from '../components/PartyToolsNav.astro';
+import MultiAxisGate from '../components/MultiAxisGate.astro';
 import buildsData from '../data/builds.json';
 
 type Mon = {
@@ -13,6 +15,7 @@ type Mon = {
   slug: string | null;
   suggest: string | null;
   suggestLabel: string | null;
+  label: string | null;
 };
 type Pair = { a: Mon; b: Mon; ra: number; rb: number };
 
@@ -44,7 +47,7 @@ const faqs = [
   },
   {
     q: '残りの枠はどう決めればいいですか。',
-    a: '各組み合わせの「この軸で組む」から軸から簡単構築に移ると、その軸を含む6匹を自動で提案します。提案は同じ同居率データと対戦シミュレーションをもとに作られるため、ここで見た組み合わせの延長になります。',
+    a: '各組み合わせの「この2体（3体）を軸に」から複数軸モードに移ると、その組み合わせをそのまま軸にした6匹を提案します。提案は同じ同居率データと対戦シミュレーションをもとに作られるため、ここで見た組み合わせの延長になります。',
   },
   {
     q: 'データはいつ更新されますか。',
@@ -68,6 +71,10 @@ const jsonLd = {
 };
 
 const icon = (m: Mon) => `/images/pokemon/pokemon-${m.icon}.webp`;
+const multiHref = (mons: Mon[]) => {
+  const labels = mons.map((m) => m.label).filter(Boolean);
+  return labels.length >= 2 ? `/party-suggest/multi/?core=${encodeURIComponent(labels.join(','))}` : null;
+};
 const rankText = (m: Mon) => (m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外');
 ---
 
@@ -80,6 +87,7 @@ const rankText = (m: Mon) => (m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外
     <Header />
     <main>
       <h1>ポケモンチャンピオンズの構築 {season}</h1>
+      <PartyToolsNav current="builds" />
       <p class="lead">
         ランクマッチ全体の<strong>同居率データ</strong>から、いま実際に一緒に使われている軸の組み合わせを集計しています。
         特定のプレイヤーの構築記事ではなく環境全体の集計のため、{dateLabel}時点で多数派になっている並びがそのまま出ます。
@@ -104,8 +112,11 @@ const rankText = (m: Mon) => (m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外
                 {p.a.name}から見て{p.b.name}は定番パートナー{p.ra}位、{p.b.name}から見て{p.a.name}は{p.rb}位。
               </p>
               <div class="acts">
-                {p.a.suggest && <a class="act" href={`/party-suggest/${p.a.suggest}/`}>{p.a.suggestLabel}軸で組む →</a>}
-                {p.b.suggest && <a class="act" href={`/party-suggest/${p.b.suggest}/`}>{p.b.suggestLabel}軸で組む →</a>}
+                {multiHref([p.a, p.b]) && <a class="act primary" href={multiHref([p.a, p.b])}>この2体を軸に残り4枠を埋める →</a>}
+              </div>
+              <div class="acts sub">
+                {p.a.suggest && <a class="act" href={`/party-suggest/${p.a.suggest}/`}>{p.a.suggestLabel}だけを軸に →</a>}
+                {p.b.suggest && <a class="act" href={`/party-suggest/${p.b.suggest}/`}>{p.b.suggestLabel}だけを軸に →</a>}
               </div>
             </li>
           ))}
@@ -135,8 +146,11 @@ const rankText = (m: Mon) => (m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外
                 {p.b.name}から見て{p.a.name}は{p.rb}位。使用率の順位より同居率の順位が大きく先行しています。
               </p>
               <div class="acts">
-                {p.a.suggest && <a class="act" href={`/party-suggest/${p.a.suggest}/`}>{p.a.suggestLabel}軸で組む →</a>}
-                {p.b.suggest && <a class="act" href={`/party-suggest/${p.b.suggest}/`}>{p.b.suggestLabel}軸で組む →</a>}
+                {multiHref([p.a, p.b]) && <a class="act primary" href={multiHref([p.a, p.b])}>この2体を軸に残り4枠を埋める →</a>}
+              </div>
+              <div class="acts sub">
+                {p.a.suggest && <a class="act" href={`/party-suggest/${p.a.suggest}/`}>{p.a.suggestLabel}だけを軸に →</a>}
+                {p.b.suggest && <a class="act" href={`/party-suggest/${p.b.suggest}/`}>{p.b.suggestLabel}だけを軸に →</a>}
               </div>
             </li>
           ))}
@@ -159,9 +173,7 @@ const rankText = (m: Mon) => (m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外
                 ))}
               </div>
               <div class="acts">
-                {t.mons.filter((m) => m.suggest).map((m) => (
-                  <a class="act" href={`/party-suggest/${m.suggest}/`}>{m.suggestLabel}軸で残り3枠を埋める →</a>
-                ))}
+                {multiHref(t.mons) && <a class="act primary" href={multiHref(t.mons)}>この3体を軸に残り3枠を埋める →</a>}
               </div>
             </li>
           ))}
@@ -209,7 +221,7 @@ const rankText = (m: Mon) => (m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外
         <h2>構築を組むためのツール</h2>
         <div class="cards">
           <a class="tcard" href="/party-suggest/">
-            <strong>軸から簡単構築</strong>
+            <strong>軸から構築</strong>
             <span>軸を1体決めると、残り5枠を同居率と対戦シミュレーションから自動で提案します。</span>
           </a>
           <a class="tcard" href="/party-builder/">
@@ -229,7 +241,7 @@ const rankText = (m: Mon) => (m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外
         <ol>
           <li><strong>軸を決める</strong> — 使いたいポケモン、またはメガシンカ枠を1体決めます</li>
           <li><strong>定番パートナーを1〜2体入れる</strong> — このページの表から、同居率の高い相手を選びます</li>
-          <li><strong>残り枠を弱点補完に使う</strong> — <a href="/party-suggest/">軸から簡単構築</a>で残り枠を自動提案させると、タイプ相性と素早さ関係を考慮した並びが出ます</li>
+          <li><strong>残り枠を弱点補完に使う</strong> — <a href="/party-suggest/">軸から構築</a>で残り枠を自動提案させると、タイプ相性と素早さ関係を考慮した並びが出ます</li>
           <li><strong>型を詰める</strong> — <a href="/party-builder/">パーティ工房</a>で持ち物・EV・技を調整し、仮想敵との1v1判定を確認します</li>
         </ol>
 
@@ -239,6 +251,7 @@ const rankText = (m: Mon) => (m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外
         <p>個別のポケモンの技・持ち物・特性の採用率と、推定される型は<a href="/pokemon/">ポケモン情報ページ</a>に掲載しています。シーズンごとの使用率の推移は<a href="/ranking/">使用率ランキング</a>をご覧ください。</p>
       </ToolPageNotes>
     </main>
+    <MultiAxisGate />
     <Footer />
   </body>
 </html>
@@ -280,6 +293,10 @@ const rankText = (m: Mon) => (m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外
     white-space: nowrap;
   }
   .act:hover { background: rgba(var(--gray-light), .4); }
+  .act.primary { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 700; }
+  .act.primary:hover { opacity: .88; background: var(--accent); }
+  .acts.sub { margin-top: .4rem; }
+  .acts.sub .act { font-size: .72rem; border-color: transparent; padding: .2rem .3rem; }
 
   .table-wrap { overflow-x: auto; }
   .cores { border-collapse: collapse; width: 100%; font-size: .82rem; }
