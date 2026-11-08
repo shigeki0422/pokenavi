@@ -272,7 +272,7 @@
       "a": {
         "name": "ドリュウズ",
         "icon": "0530-00",
-        "rank": 60,
+        "rank": 57,
         "slug": "excadrill",
         "suggest": "excadrill",
         "suggestLabel": "ドリュウズ",
@@ -289,28 +289,6 @@
       },
       "ra": 1,
       "rb": 4
-    },
-    {
-      "a": {
-        "name": "ペリッパー",
-        "icon": "0279-00",
-        "rank": 53,
-        "slug": "pelipper",
-        "suggest": "pelipper",
-        "suggestLabel": "ペリッパー",
-        "label": "ペリッパー"
-      },
-      "b": {
-        "name": "ラグラージ",
-        "icon": "0260-00",
-        "rank": 36,
-        "slug": "swampert",
-        "suggest": "swampert",
-        "suggestLabel": "ラグラージ",
-        "label": "ラグラージ"
-      },
-      "ra": 2,
-      "rb": 2
     },
     {
       "a": {
@@ -333,6 +311,28 @@
       },
       "ra": 4,
       "rb": 5
+    },
+    {
+      "a": {
+        "name": "ペリッパー",
+        "icon": "0279-00",
+        "rank": 51,
+        "slug": "pelipper",
+        "suggest": "pelipper",
+        "suggestLabel": "ペリッパー",
+        "label": "ペリッパー"
+      },
+      "b": {
+        "name": "ラグラージ",
+        "icon": "0260-00",
+        "rank": 34,
+        "slug": "swampert",
+        "suggest": "swampert",
+        "suggestLabel": "ラグラージ",
+        "label": "ラグラージ"
+      },
+      "ra": 2,
+      "rb": 2
     },
     {
       "a": {

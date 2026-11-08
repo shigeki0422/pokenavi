@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのジジーロン基礎データ
 pokemonName: 'ジジーロン'
 dexNumber: 780
 usageRank: 189
-updatedDate: '2026-11-07'
+updatedDate: '2026-11-08'
 pubDate: '2026-11-07'
 draft: false
 
