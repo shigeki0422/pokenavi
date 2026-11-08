@@ -6749,7 +6749,7 @@ if _sv32 is None: os.environ.pop("JOINT_BUILD", None)
 else: os.environ["JOINT_BUILD"] = _sv32
 check("型候補: JOINT_BUILD=0 なら型候補を読み込まない（旧挙動）", _ob32c.joint is False and _ob32c._builds == {})
 check("信念シーズン: BELIEF_SEASON > POOL_SEASON > season の版のシーズン の順で解決する（使用率行のあるシーズン）",
-      _ds32() in ("M-2", "M-3", "M-4", "M-5", "M-6", "M-7"), _ds32())
+      _ds32() in ("M-2", "M-3", "M-4", "M-5", "M-6", "M-7", "M-8"), _ds32())
 
 # ════════════════════════════════════════════════════════════════
 # SearchAI の計測用フック（既定OFFで本番挙動が変わらないこと）
@@ -10458,7 +10458,9 @@ def _t51_season_pointer():
     check("51 datapack の使用率に season のシーズンが入る（入らないと信念・テンプレートが前シーズンへフォールバックする）",
           _out is not None and _s in _out[5], str(_out))
     check("51 提案の型プールの版は season のポインタ", _out is not None and _out[6] == _PV51.pointer("season"), str(_out))
-    for _f in (f"guide_pool_{_t}.json", f"archetypes_{_t}.json", f"ensemble_model_{_t}.json", f"diag_ref_{_t}.json", f"diag_adv_{_t}.json"):
+    # 採点モデルはシーズンを跨いで据え置くことがある（M-8 は m7）ので、手元の版を全部入れていることを見る
+    _ens51 = sorted(f for f in _o51.listdir(_sd) if f.startswith("ensemble_model_m") and f.endswith(".json"))
+    for _f in [f"guide_pool_{_t}.json", f"archetypes_{_t}.json", f"diag_ref_{_t}.json", f"diag_adv_{_t}.json"] + _ens51:
         check(f"51 .gcloudignore が {_f} をコンテナに入れる", f"!{_f}" in open(_o51.path.join(_sd, ".gcloudignore")).read().splitlines())
     # pool_checks を SEASON 無しで流すと、監査の緩和判定（_audit_type_pool.relax）が既定のシーズンの使用率で行われ、
     # M-7 の版に M-6 の使用率で「監査の違反率」の警告が出ていた。新しい版のシーズンを既定にする

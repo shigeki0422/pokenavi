@@ -19,6 +19,10 @@
 !guide_pool_m7.json
 !diag_ref_m7.json
 !diag_adv_m7.json
+!archetypes_m8.json
+!guide_pool_m8.json
+!diag_ref_m8.json
+!diag_adv_m8.json
 !pool_versions.json
 simulator/__pycache__
 **/__pycache__

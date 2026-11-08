@@ -23,7 +23,7 @@ from simulator.data import NATURE_MODS, _chart_raw, _types, DataLoader, default_
 from simulator.damage import _is_secondary_effect, effect_text_of  # noqa: E402
 from simulator.ability_categories import CATEGORIES as _ABIL_CATS, ABILITY_CAT_BITS as _ABIL_CAT_BITS  # noqa: E402
 
-SEASONS = os.environ.get("DATAPACK_SEASONS", "M-2,M-3,M-4,M-5,M-6,M-7").split(",")
+SEASONS = os.environ.get("DATAPACK_SEASONS", "M-2,M-3,M-4,M-5,M-6,M-7,M-8").split(",")
 
 TOPN = {"moves": 12, "items": 5, "abilities": 3, "natures": 3, "evs": 3}
 

@@ -770,7 +770,7 @@ impl OpponentBelief {
                 t
             } else {
                 let mut alt = None;
-                for s in ["M-7", "M-6", "M-5", "M-4", "M-3", "M-2"] {
+                for s in ["M-8", "M-7", "M-6", "M-5", "M-4", "M-3", "M-2"] {
                     if s == self.season {
                         continue;
                     }
@@ -960,7 +960,7 @@ impl TplCache {
         let r = match &t {
             Some(x) if x.top_moves.is_empty() => {
                 let mut alt = None;
-                for s in ["M-7", "M-6", "M-5", "M-4", "M-3", "M-2"] {
+                for s in ["M-8", "M-7", "M-6", "M-5", "M-4", "M-3", "M-2"] {
                     if s == season {
                         continue;
                     }

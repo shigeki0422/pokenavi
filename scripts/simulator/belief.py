@@ -657,7 +657,7 @@ class OpponentBelief:
         return None
 
     # 使用率行のあるシーズンを新しい順に探す（事前分布が空だと型リークになるため）。
-    _FALLBACK_SEASONS = ("M-7", "M-6", "M-5", "M-4", "M-3", "M-2")
+    _FALLBACK_SEASONS = ("M-8", "M-7", "M-6", "M-5", "M-4", "M-3", "M-2")
 
     def _tpl_with_prior(self, name: str):
         """事前分布を持つテンプレート。self.season に使用率行が無い種は、行のある
