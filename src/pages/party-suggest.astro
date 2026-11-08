@@ -7,7 +7,7 @@ import PartySuggestApp from '../components/PartySuggestApp.astro';
 import ToolPageNotes from '../components/ToolPageNotes.astro';
 import rankingData from '../data/ranking.json';
 
-const title = `ポケモンチャンピオンズ${MATCHUP_SEASON} 軸から簡単構築(パーティ提案) | 軸から最適構築を自動生成`;
+const title = `ポケモンチャンピオンズ${MATCHUP_SEASON} 軸から構築(パーティ提案) | 軸から最適構築を自動生成`;
 const description = `ポケモンチャンピオンズ${MATCHUP_SEASON}対応。軸にしたいポケモンを指定するだけで環境に合った6匹を自動提案。各ポケの役割・タイプ相性・素早さ・使用率TOP30との1v1相性をAIシミュレーション結果から診断。`;
 const siteUrl = 'https://pokenavi.jp';
 
@@ -40,7 +40,7 @@ const faqs = [
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: 'ポケナビ 軸から簡単構築',
+  name: 'ポケナビ 軸から構築',
   description,
   applicationCategory: 'GameApplication',
   operatingSystem: 'Web',

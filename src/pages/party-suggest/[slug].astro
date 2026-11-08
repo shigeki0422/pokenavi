@@ -86,13 +86,13 @@ export async function getStaticPaths() {
 
 const { label, sp, rank, baseSlug, isMega, articleSlug } = Astro.props;
 const siteUrl = 'https://pokenavi.jp';
-const title = `${label}構築 ${MATCHUP_SEASON} | ${label}軸のパーティ自動提案（軸から簡単構築）`;
+const title = `${label}構築 ${MATCHUP_SEASON} | ${label}軸のパーティ自動提案（軸から構築）`;
 const rankText = rank ? `使用率${rank}位の` : '';
 const description = `${label}構築をAIで自動提案。ポケモンチャンピオンズ${MATCHUP_SEASON} ${rankText}${label}を軸にしたパーティを自動生成し、役割・タイプ相性・使用率TOP30との1v1相性まで診断。`;
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'SoftwareApplication',
-  name: `${label}軸 軸から簡単構築 | ポケナビ`,
+  name: `${label}軸 軸から構築 | ポケナビ`,
   description,
   applicationCategory: 'GameApplication',
   operatingSystem: 'Web',
