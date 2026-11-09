@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのグライオン基礎データ
 pokemonName: 'グライオン'
 dexNumber: 472
 usageRank: 113
-updatedDate: '2026-11-08'
+updatedDate: '2026-11-09'
 pubDate: '2026-11-07'
 draft: false
 

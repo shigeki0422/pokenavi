@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのプクリン基礎データ。
 pokemonName: 'プクリン'
 dexNumber: 40
 usageRank: 999
-updatedDate: '2026-11-08'
+updatedDate: '2026-11-09'
 pubDate: '2026-05-24'
 draft: false
 
