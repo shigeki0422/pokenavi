@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのドクロッグ基礎データ
 pokemonName: 'ドクロッグ'
 dexNumber: 454
 usageRank: 999
-updatedDate: '2026-11-09'
+updatedDate: '2026-11-10'
 pubDate: '2026-05-24'
 draft: false
 

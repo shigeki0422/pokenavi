@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのゴリランダー基礎デー
 pokemonName: 'ゴリランダー'
 dexNumber: 812
 usageRank: 15
-updatedDate: '2026-11-09'
+updatedDate: '2026-11-10'
 pubDate: '2026-11-07'
 draft: false
 

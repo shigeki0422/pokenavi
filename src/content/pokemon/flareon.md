@@ -1,10 +1,10 @@
 ---
 title: 'ブースター | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのブースター基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率199位。'
+description: 'ポケモンチャンピオンズのブースター基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率200位。'
 pokemonName: 'ブースター'
 dexNumber: 136
-usageRank: 199
-updatedDate: '2026-11-09'
+usageRank: 200
+updatedDate: '2026-11-10'
 pubDate: '2026-11-07'
 draft: false
 
@@ -30,7 +30,7 @@ faq:
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.136</strong>　／　使用率 <strong style="color:#dc2626">199位</strong>
+      全国図鑑 <strong>No.136</strong>　／　使用率 <strong style="color:#dc2626">200位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-11-07</div>
   </div>
