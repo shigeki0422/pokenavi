@@ -1,10 +1,10 @@
 ---
 title: 'エースバーン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのエースバーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率23位。'
+description: 'ポケモンチャンピオンズのエースバーン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率22位。'
 pokemonName: 'エースバーン'
 dexNumber: 815
-usageRank: 23
-updatedDate: '2026-11-10'
+usageRank: 22
+updatedDate: '2026-11-11'
 pubDate: '2026-11-07'
 draft: false
 
@@ -30,7 +30,7 @@ faq:
       <img src="/images/types/type-09-fire.png" alt="ほのお" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.815</strong>　／　使用率 <strong style="color:#dc2626">23位</strong>
+      全国図鑑 <strong>No.815</strong>　／　使用率 <strong style="color:#dc2626">22位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-11-07</div>
   </div>
