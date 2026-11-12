@@ -272,7 +272,7 @@
       "a": {
         "name": "ドリュウズ",
         "icon": "0530-00",
-        "rank": 55,
+        "rank": 54,
         "slug": "excadrill",
         "suggest": "excadrill",
         "suggestLabel": "ドリュウズ",
@@ -281,7 +281,7 @@
       "b": {
         "name": "バンギラス",
         "icon": "0248-00",
-        "rank": 35,
+        "rank": 33,
         "slug": "tyranitar",
         "suggest": "tyranitar",
         "suggestLabel": "バンギラス",
@@ -840,7 +840,7 @@
         {
           "name": "ボーマンダ",
           "icon": "0373-00",
-          "rank": 11,
+          "rank": 10,
           "slug": "salamence",
           "suggest": "salamence",
           "suggestLabel": "ボーマンダ",
@@ -1142,7 +1142,7 @@
       "core": {
         "name": "グソクムシャ",
         "icon": "0768-00",
-        "rank": 8,
+        "rank": 7,
         "slug": "golisopod",
         "suggest": "mega-golisopod",
         "suggestLabel": "メガグソクムシャ",
@@ -1286,7 +1286,7 @@
         {
           "name": "ボーマンダ",
           "icon": "0373-00",
-          "rank": 11,
+          "rank": 10,
           "slug": "salamence",
           "suggest": "salamence",
           "suggestLabel": "ボーマンダ",
@@ -1309,6 +1309,64 @@
           "suggest": "mimikyu",
           "suggestLabel": "ミミッキュ",
           "label": "ミミッキュ"
+        }
+      ]
+    },
+    {
+      "core": {
+        "name": "ボーマンダ",
+        "icon": "0373-00",
+        "rank": 10,
+        "slug": "salamence",
+        "suggest": "salamence",
+        "suggestLabel": "ボーマンダ",
+        "label": "ボーマンダ"
+      },
+      "partners": [
+        {
+          "name": "カバルドン",
+          "icon": "0450-00",
+          "rank": 3,
+          "slug": "hippowdon",
+          "suggest": "hippowdon",
+          "suggestLabel": "カバルドン",
+          "label": "カバルドン"
+        },
+        {
+          "name": "アシレーヌ",
+          "icon": "0730-00",
+          "rank": 2,
+          "slug": "primarina",
+          "suggest": "primarina",
+          "suggestLabel": "アシレーヌ",
+          "label": "アシレーヌ"
+        },
+        {
+          "name": "サーフゴー",
+          "icon": "1000-00",
+          "rank": 10,
+          "slug": "gholdengo",
+          "suggest": "gholdengo",
+          "suggestLabel": "サーフゴー",
+          "label": "サーフゴー"
+        },
+        {
+          "name": "ルカリオ",
+          "icon": "0448-00",
+          "rank": 5,
+          "slug": "lucario",
+          "suggest": "mega-lucario-z",
+          "suggestLabel": "メガルカリオZ",
+          "label": "メガルカリオZ"
+        },
+        {
+          "name": "ガブリアス",
+          "icon": "0445-00",
+          "rank": 1,
+          "slug": "garchomp",
+          "suggest": "garchomp",
+          "suggestLabel": "ガブリアス",
+          "label": "ガブリアス"
         }
       ]
     },
@@ -1367,64 +1425,6 @@
           "suggest": "mega-lucario-z",
           "suggestLabel": "メガルカリオZ",
           "label": "メガルカリオZ"
-        }
-      ]
-    },
-    {
-      "core": {
-        "name": "ボーマンダ",
-        "icon": "0373-00",
-        "rank": 11,
-        "slug": "salamence",
-        "suggest": "salamence",
-        "suggestLabel": "ボーマンダ",
-        "label": "ボーマンダ"
-      },
-      "partners": [
-        {
-          "name": "カバルドン",
-          "icon": "0450-00",
-          "rank": 3,
-          "slug": "hippowdon",
-          "suggest": "hippowdon",
-          "suggestLabel": "カバルドン",
-          "label": "カバルドン"
-        },
-        {
-          "name": "アシレーヌ",
-          "icon": "0730-00",
-          "rank": 2,
-          "slug": "primarina",
-          "suggest": "primarina",
-          "suggestLabel": "アシレーヌ",
-          "label": "アシレーヌ"
-        },
-        {
-          "name": "サーフゴー",
-          "icon": "1000-00",
-          "rank": 10,
-          "slug": "gholdengo",
-          "suggest": "gholdengo",
-          "suggestLabel": "サーフゴー",
-          "label": "サーフゴー"
-        },
-        {
-          "name": "ルカリオ",
-          "icon": "0448-00",
-          "rank": 5,
-          "slug": "lucario",
-          "suggest": "mega-lucario-z",
-          "suggestLabel": "メガルカリオZ",
-          "label": "メガルカリオZ"
-        },
-        {
-          "name": "ガブリアス",
-          "icon": "0445-00",
-          "rank": 1,
-          "slug": "garchomp",
-          "suggest": "garchomp",
-          "suggestLabel": "ガブリアス",
-          "label": "ガブリアス"
         }
       ]
     },
@@ -1634,7 +1634,7 @@
         {
           "name": "グソクムシャ",
           "icon": "0768-00",
-          "rank": 8,
+          "rank": 7,
           "slug": "golisopod",
           "suggest": "mega-golisopod",
           "suggestLabel": "メガグソクムシャ",
@@ -1759,7 +1759,7 @@
         {
           "name": "グソクムシャ",
           "icon": "0768-00",
-          "rank": 8,
+          "rank": 7,
           "slug": "golisopod",
           "suggest": "mega-golisopod",
           "suggestLabel": "メガグソクムシャ",

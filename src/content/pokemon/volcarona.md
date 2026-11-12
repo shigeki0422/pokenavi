@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのウルガモス基礎データ
 pokemonName: 'ウルガモス'
 dexNumber: 637
 usageRank: 34
-updatedDate: '2026-11-11'
+updatedDate: '2026-11-12'
 pubDate: '2026-11-07'
 draft: false
 

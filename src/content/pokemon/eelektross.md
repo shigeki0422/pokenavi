@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのシビルドン基礎データ
 pokemonName: 'シビルドン'
 dexNumber: 604
 usageRank: 120
-updatedDate: '2026-11-11'
+updatedDate: '2026-11-12'
 pubDate: '2026-11-07'
 draft: false
 analysisSlug: 'eelektross-analysis-m3'

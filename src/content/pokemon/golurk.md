@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのゴルーグ基礎データ。
 pokemonName: 'ゴルーグ'
 dexNumber: 623
 usageRank: 193
-updatedDate: '2026-11-11'
+updatedDate: '2026-11-12'
 pubDate: '2026-11-07'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのアーボック基礎データ
 pokemonName: 'アーボック'
 dexNumber: 24
 usageRank: 189
-updatedDate: '2026-11-11'
+updatedDate: '2026-11-12'
 pubDate: '2026-05-24'
 draft: false
 
