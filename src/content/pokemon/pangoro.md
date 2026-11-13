@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのゴロンダ基礎データ。
 pokemonName: 'ゴロンダ'
 dexNumber: 675
 usageRank: 999
-updatedDate: '2026-11-12'
+updatedDate: '2026-11-13'
 pubDate: '2026-05-24'
 draft: false
 

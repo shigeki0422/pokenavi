@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのファイアロー基礎デー
 pokemonName: 'ファイアロー'
 dexNumber: 663
 usageRank: 152
-updatedDate: '2026-11-12'
+updatedDate: '2026-11-13'
 pubDate: '2026-11-07'
 draft: false
 

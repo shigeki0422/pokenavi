@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのチルタリス基礎データ
 pokemonName: 'チルタリス'
 dexNumber: 334
 usageRank: 116
-updatedDate: '2026-11-12'
+updatedDate: '2026-11-13'
 pubDate: '2026-11-07'
 draft: false
 

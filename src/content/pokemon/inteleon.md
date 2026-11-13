@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのインテレオン基礎デー
 pokemonName: 'インテレオン'
 dexNumber: 818
 usageRank: 98
-updatedDate: '2026-11-12'
+updatedDate: '2026-11-13'
 pubDate: '2026-11-07'
 draft: false
 
