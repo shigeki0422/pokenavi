@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのドサイドン基礎データ
 pokemonName: 'ドサイドン'
 dexNumber: 464
 usageRank: 191
-updatedDate: '2026-11-13'
+updatedDate: '2026-11-14'
 pubDate: '2026-11-07'
 draft: false
 

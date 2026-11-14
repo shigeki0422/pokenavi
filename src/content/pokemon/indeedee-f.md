@@ -5,7 +5,7 @@ pokemonName: 'イエッサン(メス)'
 dexNumber: 876
 usageRank: 121
 imageForm: '01'
-updatedDate: '2026-11-13'
+updatedDate: '2026-11-14'
 pubDate: '2026-11-07'
 draft: false
 

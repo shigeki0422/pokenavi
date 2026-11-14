@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのタイレーツ基礎データ
 pokemonName: 'タイレーツ'
 dexNumber: 870
 usageRank: 999
-updatedDate: '2026-11-13'
+updatedDate: '2026-11-14'
 pubDate: '2026-11-07'
 draft: false
 

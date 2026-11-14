@@ -270,28 +270,6 @@
   "signature": [
     {
       "a": {
-        "name": "ドリュウズ",
-        "icon": "0530-00",
-        "rank": 54,
-        "slug": "excadrill",
-        "suggest": "excadrill",
-        "suggestLabel": "ドリュウズ",
-        "label": "ドリュウズ"
-      },
-      "b": {
-        "name": "バンギラス",
-        "icon": "0248-00",
-        "rank": 33,
-        "slug": "tyranitar",
-        "suggest": "tyranitar",
-        "suggestLabel": "バンギラス",
-        "label": "バンギラス"
-      },
-      "ra": 1,
-      "rb": 4
-    },
-    {
-      "a": {
         "name": "ウツボット",
         "icon": "0071-00",
         "rank": 54,
@@ -311,6 +289,28 @@
       },
       "ra": 4,
       "rb": 5
+    },
+    {
+      "a": {
+        "name": "ドリュウズ",
+        "icon": "0530-00",
+        "rank": 54,
+        "slug": "excadrill",
+        "suggest": "excadrill",
+        "suggestLabel": "ドリュウズ",
+        "label": "ドリュウズ"
+      },
+      "b": {
+        "name": "バンギラス",
+        "icon": "0248-00",
+        "rank": 31,
+        "slug": "tyranitar",
+        "suggest": "tyranitar",
+        "suggestLabel": "バンギラス",
+        "label": "バンギラス"
+      },
+      "ra": 1,
+      "rb": 4
     },
     {
       "a": {

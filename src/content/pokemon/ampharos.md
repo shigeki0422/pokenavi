@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのデンリュウ基礎データ
 pokemonName: 'デンリュウ'
 dexNumber: 181
 usageRank: 143
-updatedDate: '2026-11-13'
+updatedDate: '2026-11-14'
 pubDate: '2026-11-07'
 draft: false
 

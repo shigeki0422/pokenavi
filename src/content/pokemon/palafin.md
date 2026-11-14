@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのイルカマン基礎データ
 pokemonName: 'イルカマン'
 dexNumber: 964
 usageRank: 136
-updatedDate: '2026-11-13'
+updatedDate: '2026-11-14'
 pubDate: '2026-11-07'
 draft: false
 
