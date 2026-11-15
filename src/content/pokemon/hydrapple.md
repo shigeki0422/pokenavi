@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのカミツオロチ基礎デー
 pokemonName: 'カミツオロチ'
 dexNumber: 1019
 usageRank: 197
-updatedDate: '2026-11-14'
+updatedDate: '2026-11-15'
 pubDate: '2026-11-07'
 draft: false
 
