@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのスコヴィラン基礎デー
 pokemonName: 'スコヴィラン'
 dexNumber: 952
 usageRank: 50
-updatedDate: '2026-11-15'
+updatedDate: '2026-11-16'
 pubDate: '2026-11-07'
 draft: false
 

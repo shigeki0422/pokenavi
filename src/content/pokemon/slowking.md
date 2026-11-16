@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのヤドキング基礎データ
 pokemonName: 'ヤドキング'
 dexNumber: 199
 usageRank: 128
-updatedDate: '2026-11-15'
+updatedDate: '2026-11-16'
 pubDate: '2026-11-07'
 draft: false
 

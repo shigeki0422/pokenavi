@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのペンドラー基礎データ
 pokemonName: 'ペンドラー'
 dexNumber: 545
 usageRank: 90
-updatedDate: '2026-11-15'
+updatedDate: '2026-11-16'
 pubDate: '2026-11-07'
 draft: false
 analysisSlug: 'scolipede-analysis-m3'

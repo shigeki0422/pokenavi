@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのカメックス基礎データ
 pokemonName: 'カメックス'
 dexNumber: 9
 usageRank: 45
-updatedDate: '2026-11-15'
+updatedDate: '2026-11-16'
 pubDate: '2026-11-07'
 draft: false
 

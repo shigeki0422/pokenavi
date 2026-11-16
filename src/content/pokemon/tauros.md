@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのケンタロス基礎データ
 pokemonName: 'ケンタロス'
 dexNumber: 128
 usageRank: 999
-updatedDate: '2026-11-15'
+updatedDate: '2026-11-16'
 pubDate: '2026-05-24'
 draft: false
 

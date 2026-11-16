@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのギャラドス基礎データ
 pokemonName: 'ギャラドス'
 dexNumber: 130
 usageRank: 20
-updatedDate: '2026-11-15'
+updatedDate: '2026-11-16'
 pubDate: '2026-11-07'
 draft: false
 

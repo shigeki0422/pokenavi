@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのシャワーズ基礎データ
 pokemonName: 'シャワーズ'
 dexNumber: 134
 usageRank: 99
-updatedDate: '2026-11-15'
+updatedDate: '2026-11-16'
 pubDate: '2026-11-07'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのソウブレイズ基礎デー
 pokemonName: 'ソウブレイズ'
 dexNumber: 937
 usageRank: 49
-updatedDate: '2026-11-15'
+updatedDate: '2026-11-16'
 pubDate: '2026-11-07'
 draft: false
 
