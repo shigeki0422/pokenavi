@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのローブシン基礎データ
 pokemonName: 'ローブシン'
 dexNumber: 534
 usageRank: 125
-updatedDate: '2026-11-16'
+updatedDate: '2026-11-17'
 pubDate: '2026-11-07'
 draft: false
 analysisSlug: 'conkeldurr-analysis-m2'
