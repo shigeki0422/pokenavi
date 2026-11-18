@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのミミッキュ基礎データ
 pokemonName: 'ミミッキュ'
 dexNumber: 778
 usageRank: 5
-updatedDate: '2026-11-17'
+updatedDate: '2026-11-18'
 pubDate: '2026-11-07'
 draft: false
 

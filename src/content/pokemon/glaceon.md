@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのグレイシア基礎データ
 pokemonName: 'グレイシア'
 dexNumber: 471
 usageRank: 148
-updatedDate: '2026-11-17'
+updatedDate: '2026-11-18'
 pubDate: '2026-11-07'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのサダイジャ基礎データ
 pokemonName: 'サダイジャ'
 dexNumber: 844
 usageRank: 199
-updatedDate: '2026-11-17'
+updatedDate: '2026-11-18'
 pubDate: '2026-11-07'
 draft: false
 

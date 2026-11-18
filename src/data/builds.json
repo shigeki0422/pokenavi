@@ -303,7 +303,7 @@
       "b": {
         "name": "バンギラス",
         "icon": "0248-00",
-        "rank": 31,
+        "rank": 30,
         "slug": "tyranitar",
         "suggest": "tyranitar",
         "suggestLabel": "バンギラス",
@@ -338,7 +338,7 @@
       "a": {
         "name": "オオニューラ",
         "icon": "0903-00",
-        "rank": 34,
+        "rank": 33,
         "slug": "sneasler",
         "suggest": "sneasler",
         "suggestLabel": "オオニューラ",

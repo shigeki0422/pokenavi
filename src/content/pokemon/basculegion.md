@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのイダイトウ(オス)基礎�
 pokemonName: 'イダイトウ(オス)'
 dexNumber: 902
 usageRank: 9
-updatedDate: '2026-11-17'
+updatedDate: '2026-11-18'
 pubDate: '2026-11-07'
 draft: false
 analysisSlug: 'basculegion-analysis-m2'
