@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのポットデス基礎データ
 pokemonName: 'ポットデス'
 dexNumber: 855
 usageRank: 82
-updatedDate: '2026-11-18'
+updatedDate: '2026-11-19'
 pubDate: '2026-11-07'
 draft: false
 analysisSlug: 'polteageist-analysis-m2'

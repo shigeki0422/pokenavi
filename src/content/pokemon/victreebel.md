@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのウツボット基礎データ
 pokemonName: 'ウツボット'
 dexNumber: 71
 usageRank: 76
-updatedDate: '2026-11-18'
+updatedDate: '2026-11-19'
 pubDate: '2026-11-07'
 draft: false
 

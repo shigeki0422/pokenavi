@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのムクホーク基礎データ
 pokemonName: 'ムクホーク'
 dexNumber: 398
 usageRank: 43
-updatedDate: '2026-11-18'
+updatedDate: '2026-11-19'
 pubDate: '2026-11-07'
 draft: false
 

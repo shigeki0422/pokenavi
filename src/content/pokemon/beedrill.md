@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのスピアー基礎データ。
 pokemonName: 'スピアー'
 dexNumber: 15
 usageRank: 156
-updatedDate: '2026-11-18'
+updatedDate: '2026-11-19'
 pubDate: '2026-11-07'
 draft: false
 

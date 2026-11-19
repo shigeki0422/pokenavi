@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのパーモット基礎データ
 pokemonName: 'パーモット'
 dexNumber: 923
 usageRank: 34
-updatedDate: '2026-11-18'
+updatedDate: '2026-11-19'
 pubDate: '2026-11-07'
 draft: false
 

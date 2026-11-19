@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのオトスパス基礎データ
 pokemonName: 'オトスパス'
 dexNumber: 853
 usageRank: 143
-updatedDate: '2026-11-18'
+updatedDate: '2026-11-19'
 pubDate: '2026-11-07'
 draft: false
 
