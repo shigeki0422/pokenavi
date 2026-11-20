@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのアマージョ基礎データ
 pokemonName: 'アマージョ'
 dexNumber: 763
 usageRank: 193
-updatedDate: '2026-11-19'
+updatedDate: '2026-11-20'
 pubDate: '2026-11-07'
 draft: false
 

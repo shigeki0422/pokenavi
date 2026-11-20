@@ -1778,13 +1778,13 @@
     },
     {
       "core": {
-        "name": "メタグロス",
-        "icon": "0376-00",
+        "name": "セグレイブ",
+        "icon": "0998-00",
         "rank": 15,
-        "slug": "metagross",
-        "suggest": "mega-metagross",
-        "suggestLabel": "メガメタグロス",
-        "label": "メガメタグロス"
+        "slug": "baxcalibur",
+        "suggest": "baxcalibur",
+        "suggestLabel": "セグレイブ",
+        "label": "セグレイブ"
       },
       "partners": [
         {
@@ -1806,15 +1806,6 @@
           "label": "アシレーヌ"
         },
         {
-          "name": "ミミッキュ",
-          "icon": "0778-00",
-          "rank": 3,
-          "slug": "mimikyu",
-          "suggest": "mimikyu",
-          "suggestLabel": "ミミッキュ",
-          "label": "ミミッキュ"
-        },
-        {
           "name": "リザードン",
           "icon": "0006-00",
           "rank": 6,
@@ -1824,13 +1815,22 @@
           "label": "メガリザードンY"
         },
         {
-          "name": "カバルドン",
-          "icon": "0450-00",
+          "name": "グソクムシャ",
+          "icon": "0768-00",
+          "rank": 7,
+          "slug": "golisopod",
+          "suggest": "mega-golisopod",
+          "suggestLabel": "メガグソクムシャ",
+          "label": "メガグソクムシャ"
+        },
+        {
+          "name": "ミミッキュ",
+          "icon": "0778-00",
           "rank": 3,
-          "slug": "hippowdon",
-          "suggest": "hippowdon",
-          "suggestLabel": "カバルドン",
-          "label": "カバルドン"
+          "slug": "mimikyu",
+          "suggest": "mimikyu",
+          "suggestLabel": "ミミッキュ",
+          "label": "ミミッキュ"
         }
       ]
     }

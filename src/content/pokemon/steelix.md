@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのハガネール基礎データ
 pokemonName: 'ハガネール'
 dexNumber: 208
 usageRank: 161
-updatedDate: '2026-11-19'
+updatedDate: '2026-11-20'
 pubDate: '2026-11-07'
 draft: false
 

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのサメハダー基礎データ
 pokemonName: 'サメハダー'
 dexNumber: 319
 usageRank: 123
-updatedDate: '2026-11-19'
+updatedDate: '2026-11-20'
 pubDate: '2026-11-07'
 draft: false
 
