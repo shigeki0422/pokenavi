@@ -4,22 +4,22 @@ description: 'ポケモンチャンピオンズのブースター基礎データ
 pokemonName: 'ブースター'
 dexNumber: 136
 usageRank: 999
-updatedDate: '2026-11-20'
+updatedDate: '2026-11-21'
 pubDate: '2026-11-07'
 draft: false
 
 faq:
-  season: 'M-8'
-  topMoves: ['フレアドライブ', 'でんこうせっか', 'ばかぢから', 'おにび']
-  topMovePct: [84.4, 56.4, 52.8, 45.0]
-  topItems: ['もくたん', 'きあいのタスキ', 'こだわりスカーフ']
-  topItemPct: [47.9, 15.2, 12.1]
+  season: 'M-5'
+  topMoves: ['フレアドライブ', 'ばかぢから', 'おにび', 'でんこうせっか']
+  topMovePct: [88.0, 42.0, 37.1, 34.3]
+  topItems: ['もくたん', 'きあいのタスキ', 'オボンのみ']
+  topItemPct: [30.6, 20.2, 14.5]
   topAbility: 'もらいび'
-  topAbilityPct: 86.2
+  topAbilityPct: 87.1
   topNature: 'いじっぱり'
-  topNaturePct: 67.7
-  topNature2: 'おだやか'
-  topNaturePct2: 14.5
+  topNaturePct: 38.1
+  topNature2: 'しんちょう'
+  topNaturePct2: 26.7
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

@@ -9,7 +9,7 @@ from pathlib import Path
 DB = Path(__file__).parent / "pokenavi.db"
 
 WF_DIRS = [
-    "/Users/shigeki/work/pokenavi/crawl_data/ocr_out_2026-11-07",
+    "/Users/shigeki/work/pokenavi/crawl_data/ocr_out_2026-11-21",
 ]
 
 OCR_MOVES = {
@@ -430,6 +430,7 @@ OCR_POKEMON = {
     "グレバース": "クレベース",
     "トリテプス": "トリデプス",
     "フラエッテ": "フラエッテ(永遠)",
+    "フラエッティ": "フラエッテ(永遠)",
     # パートナー追加補正
     "ミミツキ": "ミミッキュ",
     "ミミツキュ": "ミミッキュ",
@@ -512,7 +513,7 @@ def resolve_partner_form(name, types):
     type_set = frozenset(types)
     return FORM_BY_TYPES[name].get(type_set, name)
 
-CRAWLED_DATE = "2026-11-07"
+CRAWLED_DATE = "2026-11-21"
 
 # 実在する別の技名に誤読され、マスター照合では検出できないケースの位置指定上書き。
 # GATE2（リスト内重複）で気付いたものを、必ずクロール画像で確認してから登録する。

@@ -4,22 +4,22 @@ description: 'ポケモンチャンピオンズのムシャーナ基礎データ
 pokemonName: 'ムシャーナ'
 dexNumber: 518
 usageRank: 999
-updatedDate: '2026-11-20'
+updatedDate: '2026-11-21'
 pubDate: '2026-11-07'
 draft: false
 
 faq:
-  season: 'M-8'
-  topMoves: ['いやしのねがい', 'トリックルーム', 'サイコキネシス', 'あくび']
-  topMovePct: [94.9, 94.9, 48.4, 36.3]
-  topItems: ['オボンのみ', 'メンタルハーブ', 'きあいのタスキ']
-  topItemPct: [59.3, 15.8, 12.8]
+  season: 'M-5'
+  topMoves: ['トリックルーム', 'いやしのねがい', 'あくび', 'ムーンフォース']
+  topMovePct: [84.9, 78.0, 70.4, 45.1]
+  topItems: ['メンタルハーブ', 'オボンのみ', 'たべのこし']
+  topItemPct: [33.6, 25.7, 19.4]
   topAbility: 'シンクロ'
-  topAbilityPct: 52.0
+  topAbilityPct: 52.6
   topNature: 'のんき'
-  topNaturePct: 47.3
-  topNature2: 'れいせい'
-  topNaturePct2: 20.5
+  topNaturePct: 47.7
+  topNature2: 'ずぶとい'
+  topNaturePct2: 19.4
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">

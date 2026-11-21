@@ -4,22 +4,22 @@ description: 'ポケモンチャンピオンズのフラージェス基礎デー
 pokemonName: 'フラージェス'
 dexNumber: 671
 usageRank: 999
-updatedDate: '2026-11-20'
+updatedDate: '2026-11-21'
 pubDate: '2026-11-07'
 draft: false
 
 faq:
-  season: 'M-8'
-  topMoves: ['めいそう', 'ムーンフォース', 'ギガドレイン', 'こうごうせい']
-  topMovePct: [85.3, 81.6, 43.1, 33.4]
-  topItems: ['たべのこし', 'オボンのみ', 'いのちのたま']
-  topItemPct: [68.9, 13.4, 8.4]
+  season: 'M-5'
+  topMoves: ['めいそう', 'ムーンフォース', 'こうごうせい', 'ドレインキッス']
+  topMovePct: [71.9, 70.2, 43.8, 39.0]
+  topItems: ['たべのこし', 'おおきなねっこ', 'オボンのみ']
+  topItemPct: [34.1, 19.8, 16.9]
   topAbility: 'フラワーベール'
-  topAbilityPct: 92.0
+  topAbilityPct: 80.0
   topNature: 'おだやか'
-  topNaturePct: 49.8
-  topNature2: 'ずぶとい'
-  topNaturePct2: 33.4
+  topNaturePct: 50.2
+  topNature2: 'ひかえめ'
+  topNaturePct2: 24.8
 ---
 
 <div style="display:flex;align-items:center;gap:16px;margin:0 0 24px">
