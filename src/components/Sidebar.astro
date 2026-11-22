@@ -12,7 +12,7 @@ const NAV = {
     navResearch: '調べる', navRead: '読む', navWatch: '観る', navBuild: '戦う',
     watchParent: '仮想バトル観戦', simA: 'M-A環境', simB: 'M-B環境', simC: 'M-C環境', soonTitle: '近日公開予定',
     buildParent: 'パーティ構築', builds: '定番構築', quickBuild: '軸から構築', detailBuild: 'パーティ工房', assist: '対戦アシスト',
-    pokemon: 'ポケモン情報', ranking: '使用率ランキング', blog: '考察記事',
+    pokemon: 'ポケモン情報', ranking: '使用率ランキング', speed: '素早さ実数値', blog: '考察記事',
     m7: 'M-7 シーズン', archive: 'M-7シーズン以前', about: '運営者情報', privacy: 'プライバシーポリシー',
   },
   en: {
@@ -63,7 +63,7 @@ const basePath = path.startsWith('/en/') ? path.slice(3)
 // 考察記事(/blog/)はen/koに翻訳ページが存在しないため、言語切り替え時はパスを引き継がずトップページへ
 const isBlogPath = basePath === '/blog' || basePath.startsWith('/blog/');
 // 日本語版しかないページは言語切替で各言語のトップへ送る(/en/builds/ 等は存在しない)
-const isJaOnlyPath = isBlogPath || basePath === '/builds' || basePath === '/builds/';
+const isJaOnlyPath = isBlogPath || ['/builds', '/builds/', '/speed', '/speed/'].includes(basePath) || basePath.startsWith('/speed/');
 const langUrls = isJaOnlyPath
   ? { ja: '/', en: '/en/', ko: '/ko/' }
   : {
@@ -86,6 +86,7 @@ const langUrls = isJaOnlyPath
 		<div class="sb-verb-caption">🔍 {NAV.navResearch}</div>
 		<a href={`${pfx}/pokemon`} class:list={['sb-link', { active: isActive(`${pfx}/pokemon`) }]}>{NAV.pokemon}</a>
 		<a href={`${pfx}/ranking/`} class:list={['sb-sublink', { active: isActive(`${pfx}/ranking`) }]}>{NAV.ranking}</a>
+		{lang === 'ja' && <a href="/speed/" class:list={['sb-sublink', { active: isActive('/speed') }]}>{NAV.speed}</a>}
 
 		{lang === 'ja' && <>
 			<div class="sb-verb-caption">📖 {NAV.navRead}</div>

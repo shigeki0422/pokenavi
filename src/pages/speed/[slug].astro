@@ -1,0 +1,164 @@
+---
+import BaseHead from '../../components/BaseHead.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import speedData from '../../data/speed.json';
+import { MATCHUP_SEASON } from '../../consts';
+
+type Line = { nature: string; evS: number; item: string; speed: number; eff: number; share: number; archs: string[] };
+type Form = { label: string; icon: string; types: string[]; baseSpeed: number; lines: Line[]; ref: { max: number; semi: number; none: number; maxScarf: number } };
+type Mon = { key: string; name: string; slug: string | null; rank: number | null; forms: Form[] };
+
+const data = speedData as { season: string; mons: Mon[] };
+
+export async function getStaticPaths() {
+  const d = speedData as { mons: Mon[] };
+  return d.mons.filter((m) => m.slug).map((m) => ({ params: { slug: m.slug! }, props: { mon: m } }));
+}
+
+const { mon } = Astro.props as { mon: Mon };
+const top = mon.forms[0];
+
+/** 環境の素早さライン。各フォルムの「最速」で並べた1本の表を作り、
+ * そこから「抜ける／抜かれる」を切り出す。最速同士で比べるのが調整の基準。 */
+const tiers = data.mons
+  .flatMap((m) => m.forms.map((f) => ({ name: f.label, slug: m.slug, rank: m.rank, max: f.ref.max })))
+  .sort((a, b) => b.max - a.max);
+
+const nearby = (spd: number) => {
+  const below = tiers.filter((t) => t.max < spd && t.name !== top.label).slice(0, 8);
+  const above = tiers.filter((t) => t.max > spd && t.name !== top.label).slice(-8).reverse();
+  return { below, above };
+};
+const near = nearby(top.ref.max);
+
+const rankText = mon.rank && mon.rank <= 200 ? `使用率${mon.rank}位` : '';
+const title = `${top.label} 素早さ実数値｜最速${top.ref.max}・準速${top.ref.semi}・無振り${top.ref.none}｜${MATCHUP_SEASON}`;
+const description = `${top.label}（種族値S${top.baseSpeed}）の素早さ実数値。最速${top.ref.max}・準速${top.ref.semi}・無振り${top.ref.none}・最速スカーフ${top.ref.maxScarf}。${MATCHUP_SEASON}で実際に使われている型のS実数値と採用率、抜ける／抜かれるポケモンまで掲載。`;
+
+const fmtItem = (it: string) => (it ? it : '—');
+const natLabel = (n: string) => (n ? n : '—');
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <style>
+      main { max-width: 900px; margin: 0 auto; padding: 1.4em 1em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.45rem; margin: 0 0 .3em; display: flex; align-items: center; gap: .5em; flex-wrap: wrap; }
+      h1 img { width: 40px; height: 40px; object-fit: contain; }
+      .lead { font-size: .9rem; color: rgb(var(--gray)); margin: 0 0 1.4em; line-height: 1.7; }
+      .links { display: flex; flex-wrap: wrap; gap: .6em; font-size: .84rem; margin: 0 0 1.6em; }
+      .links a { color: var(--accent); text-decoration: none; font-weight: 700; }
+      .links a:hover { text-decoration: underline; }
+      h2 { font-size: 1.05rem; font-weight: 800; margin: 1.8em 0 .7em; padding: .4em .8em; background: #f8fafc; border-left: 3px solid var(--accent); border-radius: 0 6px 6px 0; }
+      h3 { font-size: .95rem; margin: 1.4em 0 .5em; }
+      table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+      th, td { border: 1px solid #e2e8f0; padding: .45em .7em; text-align: left; }
+      th { background: #f8fafc; font-weight: 700; white-space: nowrap; }
+      td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 700; }
+      .note { font-size: .78rem; color: rgb(var(--gray)); margin: .6em 0 0; line-height: 1.7; }
+      .tier { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; }
+      @media (max-width: 640px) {
+        .tier { grid-template-columns: 1fr; }
+        main { padding: 1em .6em 3em; }
+        th, td { padding: .35em .35em; font-size: .78rem; }
+        /* 型名は折り返すと1文字ずつ縦に割れて読めなくなるため、狭い幅では落とす */
+        .c-arch { display: none; }
+      }
+      .tier ul { list-style: none; padding: 0; margin: 0; font-size: .84rem; }
+      .tier li { display: flex; justify-content: space-between; gap: .6em; padding: .3em 0; border-bottom: 1px dashed #e2e8f0; }
+      .tier a { color: var(--accent); text-decoration: none; }
+      .tier a:hover { text-decoration: underline; }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>
+        <img src={`/images/pokemon/pokemon-${top.icon}.webp`} alt={mon.name} />
+        {top.label}の素早さ実数値
+      </h1>
+      <p class="lead">
+        {MATCHUP_SEASON}の{rankText && <>{rankText}・</>}{top.label}（素早さ種族値 {top.baseSpeed}）の実数値です。
+        Lv50・個体値31で計算しています。努力値は最大32スケールです。
+      </p>
+      <p class="links">
+        <a href={`/pokemon/${mon.slug}/`}>{mon.name}の対戦データ →</a>
+        <a href="/speed/">環境全体の素早さ一覧 →</a>
+      </p>
+
+      {mon.forms.map((f) => (
+        <section>
+          <h2>{f.label}（種族値S {f.baseSpeed}）</h2>
+          <table>
+            <thead>
+              <tr><th>振り方</th><th>性格</th><th>努力値S</th><th>実数値</th><th>スカーフ</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>最速</td><td>S↑</td><td>32</td><td class="num">{f.ref.max}</td><td class="num">{f.ref.maxScarf}</td></tr>
+              <tr><td>準速</td><td>無補正</td><td>32</td><td class="num">{f.ref.semi}</td><td class="num">{Math.floor(f.ref.semi * 1.5)}</td></tr>
+              <tr><td>無振り</td><td>無補正</td><td>0</td><td class="num">{f.ref.none}</td><td class="num">{Math.floor(f.ref.none * 1.5)}</td></tr>
+            </tbody>
+          </table>
+
+          {f.lines.length > 0 && (
+            <>
+              <h3>{MATCHUP_SEASON}で実際に使われている型</h3>
+              <table>
+                <thead>
+                  <tr><th>性格</th><th>努力値S</th><th>持ち物</th><th>実数値</th><th>採用率</th><th class="c-arch">型</th></tr>
+                </thead>
+                <tbody>
+                  {f.lines.map((ln) => (
+                    <tr>
+                      <td>{natLabel(ln.nature)}</td>
+                      <td class="num">{ln.evS}</td>
+                      <td>{fmtItem(ln.item)}</td>
+                      <td class="num">{ln.eff}{ln.eff !== ln.speed && <span style="font-weight:400;font-size:.78rem"> ({ln.speed}×1.5)</span>}</td>
+                      <td class="num">{ln.share}%</td>
+                      <td class="c-arch" style="font-size:.78rem">{ln.archs.join('・')}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p class="note">
+                系統ごとの代表型（上位3つ）を実数値がそろうものでまとめた割合です。全型を網羅した分布ではないため、合計は100%になりません。
+              </p>
+            </>
+          )}
+        </section>
+      ))}
+
+      <h2>最速{top.ref.max}で抜ける／抜かれるポケモン</h2>
+      <div class="tier">
+        <div>
+          <h3>抜かれる（最速が{top.label}より速い）</h3>
+          <ul>
+            {near.above.map((t) => (
+              <li>
+                <span>{t.slug ? <a href={`/speed/${t.slug}/`}>{t.name}</a> : t.name}</span>
+                <span class="num">{t.max}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div>
+          <h3>抜ける（最速が{top.label}より遅い）</h3>
+          <ul>
+            {near.below.map((t) => (
+              <li>
+                <span>{t.slug ? <a href={`/speed/${t.slug}/`}>{t.name}</a> : t.name}</span>
+                <span class="num">{t.max}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <p class="note">
+        どちらも最速同士の比較です。相手が準速・無振りなら順序は変わります。天候で素早さが変わる特性（すいすい・ようりょくそ・すなかき）はこの表に含めていません。
+      </p>
+    </main>
+    <Footer />
+  </body>
+</html>

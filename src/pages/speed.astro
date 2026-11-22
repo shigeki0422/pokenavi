@@ -1,0 +1,122 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import speedData from '../data/speed.json';
+import { MATCHUP_SEASON } from '../consts';
+
+type Form = { label: string; icon: string; baseSpeed: number; lines: { eff: number; share: number }[]; ref: { max: number; semi: number; none: number; maxScarf: number } };
+type Mon = { key: string; name: string; slug: string | null; rank: number | null; forms: Form[] };
+const data = speedData as { season: string; mons: Mon[] };
+
+const rows = data.mons
+  .flatMap((m) => m.forms.map((f) => ({
+    label: f.label, icon: f.icon, slug: m.slug, rank: m.rank,
+    base: f.baseSpeed, ...f.ref,
+    // 実際の主流型の実効素早さ（スカーフ込み）。採用率が最大のものを代表に出す。
+    real: f.lines.length ? f.lines[0].eff : null,
+    realShare: f.lines.length ? f.lines[0].share : null,
+    // 比較演算子を JSX 内に置くと Astro のパーサがタグ開始と解釈するため先に文字列化する
+    rankLabel: m.rank && m.rank <= 200 ? `${m.rank}位` : '圏外',
+  })))
+  .sort((a, b) => b.max - a.max);
+
+const title = `ポケモンチャンピオンズ${MATCHUP_SEASON} 素早さ実数値一覧｜最速・準速・スカーフの抜きライン`;
+const description = `ポケモンチャンピオンズ(ポケチャン)${MATCHUP_SEASON}の素早さ実数値一覧。${rows.length}件の最速・準速・無振り・最速スカーフをLv50で計算し、環境の抜きラインを一覧にしました。各ポケモンの実際に使われている型のS実数値つき。`;
+---
+
+<html lang="ja">
+  <head>
+    <BaseHead title={title} description={description} imageUrl="/og-image.png" />
+    <style>
+      main { max-width: 1000px; margin: 0 auto; padding: 1.4em 1em 4em; color: rgb(var(--gray-dark)); }
+      h1 { font-size: 1.5rem; margin: 0 0 .3em; }
+      .lead { font-size: .9rem; color: rgb(var(--gray)); margin: 0 0 1.2em; line-height: 1.7; }
+      .tools { display: flex; gap: .6em; align-items: center; margin: 0 0 1em; flex-wrap: wrap; }
+      .tools input { padding: .45em .7em; border: 1px solid #e2e8f0; border-radius: 6px; font-size: .88rem; min-width: 220px; }
+      table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+      th, td { border: 1px solid #e2e8f0; padding: .4em .6em; text-align: left; }
+      th { background: #f8fafc; font-weight: 700; white-space: nowrap; position: sticky; top: 0; }
+      td.num { text-align: right; font-variant-numeric: tabular-nums; }
+      td.num.key { font-weight: 700; }
+      .mon { display: flex; align-items: center; gap: 6px; }
+      .mon img { width: 28px; height: 28px; object-fit: contain; }
+      .mon a { color: rgb(var(--black)); text-decoration: none; font-weight: 700; }
+      .mon a:hover { color: var(--accent); text-decoration: underline; }
+      .note { font-size: .78rem; color: rgb(var(--gray)); margin: 1em 0 0; line-height: 1.7; }
+      @media (max-width: 760px) {
+        main { padding: 1em .6em 3em; }
+        th, td { padding: .35em .3em; font-size: .76rem; }
+        .mon img { width: 22px; height: 22px; }
+        /* 狭い幅では名前が1文字ずつ縦に割れるため、補助列を落として名前に幅を回す */
+        .mon a, .mon span { white-space: nowrap; }
+        .c-opt { display: none; }
+      }
+      @media (max-width: 430px) {
+        .c-opt2 { display: none; }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>素早さ実数値一覧 {MATCHUP_SEASON}</h1>
+      <p class="lead">
+        ポケモンチャンピオンズ(ポケチャン){MATCHUP_SEASON}の環境に出ている{rows.length}件の素早さ実数値です。
+        Lv50・個体値31で計算し、最速（S↑・努力値32）順に並べています。努力値は最大32スケールです。
+      </p>
+      <div class="tools">
+        <input type="text" id="q" placeholder="ポケモン名で絞り込み" autocomplete="off" />
+        <span class="note" id="cnt" style="margin:0"></span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>ポケモン</th><th class="c-opt">使用率</th><th class="c-opt">種族値S</th><th class="c-opt">無振り</th><th>準速</th><th>最速</th><th>スカーフ</th><th class="c-opt2">主流型</th>
+          </tr>
+        </thead>
+        <tbody id="tb">
+          {rows.map((r) => (
+            <tr data-name={r.label}>
+              <td>
+                <span class="mon">
+                  <img src={`/images/pokemon/pokemon-${r.icon}.webp`} alt={r.label} loading="lazy" />
+                  {r.slug ? <a href={`/speed/${r.slug}/`}>{r.label}</a> : <span>{r.label}</span>}
+                </span>
+              </td>
+              <td class="num c-opt">{r.rankLabel}</td>
+              <td class="num c-opt">{r.base}</td>
+              <td class="num c-opt">{r.none}</td>
+              <td class="num">{r.semi}</td>
+              <td class="num key">{r.max}</td>
+              <td class="num">{r.maxScarf}</td>
+              <td class="num c-opt2">{r.real ?? '—'}{r.realShare ? <span style="font-weight:400;color:#64748b"> ({r.realShare}%)</span> : null}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="note">
+        「主流型の実数値」は、そのポケモンで最も採用率の高い型のS実数値です（こだわりスカーフの1.5倍を反映）。
+        天候で素早さが変わる特性（すいすい・ようりょくそ・すなかき）と、積み技・下降補正は含めていません。
+      </p>
+    </main>
+    <Footer />
+    <script>
+      const q = document.getElementById('q');
+      const tb = document.getElementById('tb');
+      const cnt = document.getElementById('cnt');
+      const rows = Array.from(tb ? tb.querySelectorAll('tr') : []);
+      const update = () => {
+        const v = (q && q.value ? q.value : '').trim();
+        let n = 0;
+        for (const tr of rows) {
+          const hit = !v || (tr.getAttribute('data-name') || '').includes(v);
+          tr.style.display = hit ? '' : 'none';
+          if (hit) n++;
+        }
+        if (cnt) cnt.textContent = v ? n + '件' : '';
+      };
+      if (q) q.addEventListener('input', update);
+    </script>
+  </body>
+</html>

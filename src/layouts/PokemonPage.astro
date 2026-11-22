@@ -13,6 +13,7 @@ import LearnsetSection from '../components/LearnsetSection.astro';
 import { MOVE_NAME_EN, MOVE_NAME_KO, ABILITY_NAME_EN, ABILITY_NAME_KO, ITEM_NAME_EN, ITEM_NAME_KO, NATURE_NAME_EN, NATURE_NAME_KO } from '../i18n/game-terms';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 import partySuggestSlugs from '../data/party-suggest-slugs.json';
+import speedData from '../data/speed.json';
 import rankingData from '../data/ranking.json';
 import targetsData from '../../public/builder-data/targets.json';
 import { simWatchUrl } from '../utils/simLink';
@@ -28,7 +29,9 @@ const pokemonSlugIdx = pathParts.findIndex(p => p === 'pokemon');
 const pokemonSlug = pokemonSlugIdx >= 0 ? pathParts[pokemonSlugIdx + 1] : '';
 const pfx = lang === 'en' ? '/en' : lang === 'ko' ? '/ko' : '';
 const psSlugSet = new Set(partySuggestSlugs as string[]);
+const speedSlugSet = new Set((speedData as { mons: { slug: string | null }[] }).mons.map((m) => m.slug).filter(Boolean) as string[]);
 const hasPartySuggest = !!pokemonSlug && psSlugSet.has(pokemonSlug);
+const hasSpeedPage = !!pokemonSlug && speedSlugSet.has(pokemonSlug);
 const hasMegaPartySuggest = !!pokemonSlug && psSlugSet.has(`mega-${pokemonSlug}`);
 /** メガリザードンX/Y、メガライチュウX/Yのように、種族によってはメガ進化が
  * 複数系統ある。party-suggest/[slug].astroはこの場合スラッグをX/Yで分けて
@@ -71,9 +74,9 @@ const metaDescription = !pokemonName ? description : ranked ? (
     : `ポケモンチャンピオンズ${seasonLabel}の${pokemonName}の基礎データ。種族値・タイプ相性・特性と覚える技の一覧を掲載。`
 );
 const T = {
-  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる', quickBuild: (n: string) => `${n}を軸にした簡単構築`, quickBuildMega: (n: string) => `メガ${n}を軸にした簡単構築`, quickBuildMegaVariant: (n: string, v: string) => `メガ${n}${v}を軸にした簡単構築`, counters: (n: string) => `${n}対策 — 有利を取れるポケモンを見る` },
-  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', quickBuild: (n: string) => `Quick Build from ${n}`, quickBuildMega: (n: string) => `Quick Build from Mega ${n}`, quickBuildMegaVariant: (n: string, v: string) => `Quick Build from Mega ${n} ${v}`, counters: (n: string) => `Counters to ${n}` },
-  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로', hubAnalysis: '📖 분석 기사 읽기', hubWatch: '🎬 상위 구성 대전 관전', hubBuild: '⚔️ 파티에 추가', quickBuild: (n: string) => `${n} 축으로 간단 구성`, quickBuildMega: (n: string) => `메가${n} 축으로 간단 구성`, quickBuildMegaVariant: (n: string, v: string) => `메가${n}${v} 축으로 간단 구성`, counters: (n: string) => `${n} 대책 포켓몬 보기` },
+  ja: { home: 'ホーム', pokemonInfo: 'ポケモン情報', badge: 'ポケモン情報', navAria: 'セクションナビゲーション', breadAria: 'パンくずリスト', hubAnalysis: '📖 考察記事を読む', hubWatch: '🎬 上位構築の対戦を観る', hubBuild: '⚔️ パーティに入れる', quickBuild: (n: string) => `${n}を軸にした簡単構築`, quickBuildMega: (n: string) => `メガ${n}を軸にした簡単構築`, quickBuildMegaVariant: (n: string, v: string) => `メガ${n}${v}を軸にした簡単構築`, counters: (n: string) => `${n}対策 — 有利を取れるポケモンを見る`, speed: (n: string) => `${n}の素早さ実数値（最速・準速・スカーフ）` },
+  en: { home: 'Home', pokemonInfo: 'Pokémon Info', badge: 'Pokémon Info', navAria: 'Section navigation', breadAria: 'Breadcrumb', hubAnalysis: '📖 Read Analysis', hubWatch: '🎬 Watch Top Builds Battle', hubBuild: '⚔️ Add to Party', quickBuild: (n: string) => `Quick Build from ${n}`, quickBuildMega: (n: string) => `Quick Build from Mega ${n}`, quickBuildMegaVariant: (n: string, v: string) => `Quick Build from Mega ${n} ${v}`, counters: (n: string) => `Counters to ${n}`, speed: (n: string) => `${n} Speed Stats` },
+  ko: { home: '홈', pokemonInfo: '포켓몬 정보', badge: '포켓몬 정보', navAria: '섹션 네비게이션', breadAria: '탐색 경로', hubAnalysis: '📖 분석 기사 읽기', hubWatch: '🎬 상위 구성 대전 관전', hubBuild: '⚔️ 파티에 추가', quickBuild: (n: string) => `${n} 축으로 간단 구성`, quickBuildMega: (n: string) => `메가${n} 축으로 간단 구성`, quickBuildMegaVariant: (n: string, v: string) => `메가${n}${v} 축으로 간단 구성`, counters: (n: string) => `${n} 대책 포켓몬 보기`, speed: (n: string) => `${n} 스피드 실수치` },
 }[lang];
 /** contentコレクションのtitleは和名のみ(全言語共通データ)のため、en/koでは
  * <title>・OGP・JSON-LD name にそのまま使うと日本語タイトルがSEOに露出してしまう。
@@ -468,6 +471,9 @@ const breadcrumbJsonLd = {
 							<a href={simWatchUrl(pokemonName, pfx)} class="hub-btn">{T.hubWatch}</a>
 						)}
 						<a href={`${pfx}/party-builder/`} class="hub-btn">{T.hubBuild}</a>
+						{lang === 'ja' && hasSpeedPage && (
+							<a href={`/speed/${pokemonSlug}/`} class="hub-btn">⚡ {T.speed(pokemonName)}</a>
+						)}
 					</div>
 					<slot />
 					<BuildArchetypeSection icon={ownIcon} lang={lang} />
