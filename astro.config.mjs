@@ -10,7 +10,15 @@ export default defineConfig({
 	integrations: [
 		mdx(),
 		sitemap({
-			filter: (page) => !/\/(en|ko|matchup)\//.test(page),
+			// matchup は1v1計算の雛形でページ間の差分が数値だけ。
+			// en/ko は翻訳済みの第1階層(/en/ ・/en/ranking/ 等)だけ載せる。
+			// 下位(/en/pokemon/<slug>/)はUIラベルが未翻訳で BaseHead が noindex にする。
+			filter: (page) => {
+				const segs = new URL(page).pathname.split('/').filter(Boolean);
+				if (segs[0] === 'matchup') return false;
+				if (segs[0] === 'en' || segs[0] === 'ko') return segs.length <= 2;
+				return true;
+			},
 		}),
 	],
 	fonts: [

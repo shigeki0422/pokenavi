@@ -32,11 +32,15 @@ const ogImageUrl = imageUrl ? new URL(imageUrl, Astro.site) : new URL(image.src,
 // サイト名・og:localeはURLのプレフィックスから判定する(呼び出し元がlang propを
 // 渡さないページでも、en/ko版に日本語の「｜ポケナビ」やja_JPが付くのを防ぐ)。
 const pagePath = Astro.url.pathname;
-/** 未翻訳のen/ko複製は検索結果に出さない(followは残すのでリンク評価は流れる)。
- * party-suggestは213件中195件がインデックス済みで、Googleが薄いと判断していない
- * ため対象外。matchupはページ側がnoindex propで組み合わせごとに判断する
- * (使用率上位どうしだけ検索対象にする)。 */
-const noindex = noindexProp ?? /^\/(en|ko)\//.test(pagePath);
+/** en/ko のうち、翻訳が済んでいるのは各言語の第1階層まで(/en/ ・/en/ranking/ 等
+ * 26ページ。本文の日本語は0〜2%)。/en/pokemon/<slug>/ のような下位はグラフ・表の
+ * UIラベルが日本語のまま残っているので、従来どおり検索結果に出さない
+ * (followは残すのでリンク評価は流れる)。ラベルの翻訳が済んだらこの条件を外す。
+ * matchupはページ側がnoindex propで組み合わせごとに判断する。 */
+const i18nSegs = pagePath.split('/').filter(Boolean);
+const isI18nPrefixed = i18nSegs[0] === 'en' || i18nSegs[0] === 'ko';
+const i18nShallow = (isI18nPrefixed ? i18nSegs.length - 1 : i18nSegs.length) <= 1;
+const noindex = noindexProp ?? (isI18nPrefixed && !i18nShallow);
 const pageLang = pagePath.startsWith('/en') ? 'en' : pagePath.startsWith('/ko') ? 'ko' : 'ja';
 const siteName = pageLang === 'en' ? 'PokeNavi' : pageLang === 'ko' ? '포케나비' : SITE_TITLE;
 const resolvedOgLocale = ogLocale ?? (pageLang === 'en' ? 'en_US' : pageLang === 'ko' ? 'ko_KR' : 'ja_JP');
@@ -71,6 +75,9 @@ const cfBeaconToken = import.meta.env.PUBLIC_CF_BEACON_TOKEN;
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />
 {noindex && <meta name="robots" content="noindex, follow" />}
+{/* noindexのページを「同一内容の別言語版」と宣言すると打ち消したい複製シグナルが
+    残るため、3言語とも検索対象になる第1階層でだけ hreflang を出す。 */}
+{i18nShallow && alternates?.map(a => <link rel="alternate" hreflang={a.lang} href={a.url} />)}
 
 <!-- Primary Meta Tags -->
 <title>{pageTitle}</title>
