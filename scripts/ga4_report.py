@@ -53,6 +53,24 @@ def run_report(access_token, body, silent=False):
     return resp.json()
 
 
+SITE_URL = "sc-domain:pokenavi.jp"
+
+
+def gsc_query(access_token, dimension, days, limit=20):
+    # GA4 Data API の searchConsole* 次元は廃止されたため Search Console API を直接叩く
+    end = datetime.now().date() - timedelta(days=2)
+    start = end - timedelta(days=days - 1)
+    resp = requests.post(
+        f"https://www.googleapis.com/webmasters/v3/sites/{requests.utils.quote(SITE_URL, safe='')}/searchAnalytics/query",
+        headers={"Authorization": f"Bearer {access_token}"},
+        json={"startDate": str(start), "endDate": str(end),
+              "dimensions": [dimension], "rowLimit": limit},
+    )
+    if not resp.ok:
+        return None, (start, end)
+    return resp.json().get("rows", []), (start, end)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--days", type=int, default=7)
@@ -204,58 +222,32 @@ def main():
                 print(f"  {name:<20}: {cur_val:>8.0f}")
 
     # 6. Search Console 検索クエリ
-    data6 = run_report(access_token, {
-        "dateRanges": [{"startDate": start_date, "endDate": "today"}],
-        "dimensions": [{"name": "searchConsoleQuery"}],
-        "metrics": [
-            {"name": "searchConsoleClicks"},
-            {"name": "searchConsoleImpressions"},
-            {"name": "searchConsoleCtr"},
-            {"name": "searchConsoleAveragePosition"},
-        ],
-        "orderBys": [{"metric": {"metricName": "searchConsoleClicks"}, "desc": True}],
-        "limit": 20,
-    })
+    rows6, span = gsc_query(access_token, "query", args.days, 20)
 
-    print(f"\n【検索クエリ TOP20（Search Console）】")
+    print(f"\n【検索クエリ TOP20（Search Console {span[0]}〜{span[1]}）】")
     print(f"{'クエリ':<40} {'クリック':>8} {'表示':>8} {'CTR':>8} {'平均順位':>8}")
     print("-" * 78)
-    if data6 and data6.get("rows"):
-        for row in data6["rows"]:
-            query = row["dimensionValues"][0]["value"][:39]
-            clicks = int(float(row["metricValues"][0]["value"]))
-            impr = int(float(row["metricValues"][1]["value"]))
-            ctr = float(row["metricValues"][2]["value"]) * 100
-            pos = float(row["metricValues"][3]["value"])
-            print(f"{query:<40} {clicks:>8} {impr:>8} {ctr:>7.1f}% {pos:>8.1f}")
+    if rows6:
+        for row in rows6:
+            query = row["keys"][0][:39]
+            print(f"{query:<40} {int(row['clicks']):>8} {int(row['impressions']):>8} "
+                  f"{row['ctr']*100:>7.1f}% {row['position']:>8.1f}")
     else:
-        print("  データなし（連携後24〜48時間で反映されます）")
+        print("  データなし")
 
     # 7. Search Console ランディングページ別
-    data7 = run_report(access_token, {
-        "dateRanges": [{"startDate": start_date, "endDate": "today"}],
-        "dimensions": [{"name": "searchConsoleLandingPagePath"}],
-        "metrics": [
-            {"name": "searchConsoleClicks"},
-            {"name": "searchConsoleImpressions"},
-            {"name": "searchConsoleAveragePosition"},
-        ],
-        "orderBys": [{"metric": {"metricName": "searchConsoleClicks"}, "desc": True}],
-        "limit": 15,
-    })
+    rows7, span = gsc_query(access_token, "page", args.days, 15)
 
-    print(f"\n【検索流入 着地ページ TOP15（Search Console）】")
-    print(f"{'ページ':<50} {'クリック':>8} {'表示':>8} {'平均順位':>8}")
+    print(f"\n【検索流入 着地ページ TOP15（Search Console {span[0]}〜{span[1]}）】")
+    print(f"{'ページ':<50} {'クリック':>8} {'表示':>8} {'CTR':>8} {'平均順位':>8}")
     print("-" * 78)
-    if data7 and data7.get("rows"):
-        for row in data7["rows"]:
-            path = row["dimensionValues"][0]["value"][:49]
-            clicks = int(float(row["metricValues"][0]["value"]))
-            impr = int(float(row["metricValues"][1]["value"]))
-            pos = float(row["metricValues"][2]["value"])
-            print(f"{path:<50} {clicks:>8} {impr:>8} {pos:>8.1f}")
+    if rows7:
+        for row in rows7:
+            path = row["keys"][0].replace("https://pokenavi.jp", "")[:49]
+            print(f"{path:<50} {int(row['clicks']):>8} {int(row['impressions']):>8} "
+                  f"{row['ctr']*100:>7.1f}% {row['position']:>8.1f}")
     else:
-        print("  データなし（連携後24〜48時間で反映されます）")
+        print("  データなし")
 
     print(f"\n{'='*60}\n")
 
