@@ -1,0 +1,17 @@
+---
+import RankingPageLayout from '../../layouts/RankingPageLayout.astro';
+import rankingData from '../../data/ranking.json';
+
+/** 過去シーズンの使用率ランキング。/blog/m7/ と同じ m7 形式のスラッグに揃える。 */
+export async function getStaticPaths() {
+  const keys = Object.keys((rankingData as any).seasons).sort();
+  // 最新シーズンは /ranking/ が持つため除く（同じ内容の2URLを作らない）。
+  return keys.slice(0, -1).map((key) => ({
+    params: { season: key.replace('-', '').toLowerCase() },
+    props: { key },
+  }));
+}
+
+const { key } = Astro.props;
+---
+<RankingPageLayout lang="ja" season={key} />

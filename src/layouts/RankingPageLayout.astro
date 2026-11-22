@@ -9,8 +9,8 @@ import { ui, type Lang } from '../i18n/ui';
 import { NAME_MAP } from '../data/ranking-name-map';
 import { POKEMON_NAME_EN, POKEMON_NAME_KO } from '../i18n/pokemon-names';
 
-interface Props { lang?: Lang; }
-const { lang = 'ja' } = Astro.props;
+interface Props { lang?: Lang; season?: string; }
+const { lang = 'ja', season: seasonProp } = Astro.props;
 const T = ui[lang];
 
 
@@ -26,7 +26,10 @@ type SeasonData = { dates: string[]; pokemon: PokemonEntry[] };
 const { seasons } = rankingData as { seasons: Record<string, SeasonData> };
 const seasonKeys = Object.keys(seasons).sort();
 const latestSeason = seasonKeys[seasonKeys.length - 1];
-const { dates, pokemon } = seasons[latestSeason];
+/** 過去シーズンを /ranking/<slug>/ で出すため、表示シーズンは外から渡せるようにする。
+ * シーズン表記がページから消えると、そのシーズンのクエリを丸ごと失う（M-7で787表示）。 */
+const season = seasonProp && seasons[seasonProp] ? seasonProp : latestSeason;
+const { dates, pokemon } = seasons[season];
 
 const fmtDate = (d: string) => {
   const [, m, day] = d.split('-');
@@ -51,7 +54,7 @@ function buildChartSeason(sd: SeasonData) {
   return { dates: sd.dates, pokemon: cp };
 }
 
-const chartPokemon = buildChartSeason(seasons[latestSeason]).pokemon;
+const chartPokemon = buildChartSeason(seasons[season]).pokemon;
 const chartJson = JSON.stringify({ dates, pokemon: chartPokemon });
 
 // SEO: top 50 for ItemList structured data
@@ -69,7 +72,7 @@ const NAME_I18N: Record<string, string> = lang === 'en' ? POKEMON_NAME_EN : lang
 const dispName = (n: string) => NAME_I18N[n] ?? n;
 const rankedCount = pokemon.filter(p => p.dates[lastDate]?.rank).length;
 const metaVars: Record<string, string> = {
-  season: latestSeason,
+  season,
   count: String(rankedCount),
   date: fmtDate(lastDate),
   top1: dispName(top50[0]?.name ?? ''),
@@ -302,6 +305,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
       }
       /* シーズンタブ */
       .season-tabs { display: flex; gap: 6px; margin-bottom: 1rem; }
+      .season-tabs a.stab { text-decoration: none; display: inline-block; }
       .stab {
         padding: 5px 16px; border: 1px solid #e2e8f0; border-radius: 20px;
         font-size: 0.82rem; font-weight: 700; cursor: pointer;
@@ -376,7 +380,11 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
       <h1>{T.rankingH1}</h1>
       <div class="season-tabs" id="season-tabs">
         {seasonKeys.map(s => (
-          <button class={`stab${s === latestSeason ? ' active' : ''}`} data-season={s}>{s}</button>
+          lang === 'ja'
+            /* クロールされる内部リンクにするため a にする。JSは従来どおりその場で差し替える。 */
+            ? <a class={`stab${s === season ? ' active' : ''}`} data-season={s}
+                 href={s === latestSeason ? '/ranking/' : `/ranking/${s.replace('-', '').toLowerCase()}/`}>{s}</a>
+            : <button class={`stab${s === season ? ' active' : ''}`} data-season={s}>{s}</button>
         ))}
       </div>
       <p class="subtitle">
@@ -449,10 +457,10 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
 
       {lang === 'ja' && (
         <section class="rk-summary">
-          <h2>{latestSeason}シーズンの環境（{fmtDate(dates[0])}〜{fmtDate(lastDate)}）</h2>
+          <h2>{season}シーズンの環境（{fmtDate(dates[0])}〜{fmtDate(lastDate)}）</h2>
           <p>
             ポケモンチャンピオンズ(ポケチャン) シングルバトルの使用率ランキングです。{fmtDate(lastDate)}時点の1位は{top10Rows[0]?.name}、2位{top10Rows[1]?.name}、3位{top10Rows[2]?.name}で、
-            {rankedCount}体を毎日集計しています（{latestSeason}シーズン{spanDays}日分）。
+            {rankedCount}体を毎日集計しています（{season}シーズン{spanDays}日分）。
             {risers.length > 0 && <>直近1週間で最も順位を上げたのは{risers[0].name}（{risers[0].prev}位→{risers[0].cur}位）、</>}
             {fallers.length > 0 && <>最も下げたのは{fallers[0].name}（{fallers[0].prev}位→{fallers[0].cur}位）です。</>}
           </p>
@@ -487,7 +495,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
               </ul>
             </div>
           </div>
-          <h3 id="full-list">{latestSeason} 使用率ランキング 全{allRows.length}体（{fmtDate(lastDate)}時点）</h3>
+          <h3 id="full-list">{season} 使用率ランキング 全{allRows.length}体（{fmtDate(lastDate)}時点）</h3>
           <p class="rk-note">
             チャートと同じ順位をテキストの一覧にしたものです。ポケモン名から各ポケモンの技・持ち物・特性の採用率ページへ移動できます。
           </p>
@@ -536,7 +544,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         </section>
       )}
 
-      <script define:vars={{ chartJson, latestSeason, seasonDataBase: `${lang === 'ja' ? '' : `/${lang}`}/ranking-data/${lang}/`, CHART_ROWS, T_JS: {
+      <script define:vars={{ chartJson, latestSeason: season, seasonDataBase: `${lang === 'ja' ? '' : `/${lang}`}/ranking-data/${lang}/`, CHART_ROWS, T_JS: {
         chartTitleBase: T.rankingChartTitleBase,
         rankSuffix: T.rankSuffix,
         rankPrefix: T.rankPrefix,
@@ -1145,13 +1153,18 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
 
         document.getElementById('season-tabs')?.addEventListener('pointerenter', e => {
           const btn = e.target.closest?.('.stab');
+          if (btn?.tagName === 'A') return;
           if (btn?.dataset.season) fetchSeason(btn.dataset.season).catch(() => {});
         }, true);
         document.getElementById('season-tabs')?.addEventListener('click', async e => {
           const btn = e.target.closest('.stab');
           if (!btn) return;
           const s = btn.dataset.season;
-          if (!s || s === currentSeason) return;
+          if (!s) return;
+          // ja はシーズンごとに実ページがある。タブ切替はチャートだけ差し替えて下の全件表が
+          // 元のシーズンのまま残る不整合があったため、リンクとして素直に遷移させる。
+          if (btn.tagName === 'A') return;
+          if (s === currentSeason) return;
           let sd;
           btn.classList.add('loading');
           try { sd = await fetchSeason(s); } catch (err) { btn.classList.remove('loading'); return; }
