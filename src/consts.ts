@@ -11,4 +11,4 @@ import poolVersions from '../scripts/pool_versions.json';
 export const SUGGEST_SEASON = (poolVersions.season ?? '').split('/')[0];
 // シーズン名は入れない（固定値だと更新のたびに検索結果の説明文が古いまま残る）。
 // トップページはsrc/pages/index.astroでranking.jsonの最新シーズンを差し込む。
-export const SITE_DESCRIPTION = 'ポケモンチャンピオンズの使用率・勝率・パーティ構成をデータで分析。対戦シミュレーターとパーティ提案で最新環境を攻略。';
+export const SITE_DESCRIPTION = 'ポケモンチャンピオンズ(ポケチャン)の使用率・勝率・パーティ構成をデータで分析。対戦シミュレーターとパーティ提案で最新環境を攻略。';

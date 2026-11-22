@@ -451,7 +451,7 @@ const htmlLang = lang === 'ko' ? 'ko' : lang === 'en' ? 'en' : 'ja';
         <section class="rk-summary">
           <h2>{latestSeason}シーズンの環境（{fmtDate(dates[0])}〜{fmtDate(lastDate)}）</h2>
           <p>
-            ポケモンチャンピオンズ シングルバトルの使用率ランキングです。{fmtDate(lastDate)}時点の1位は{top10Rows[0]?.name}、2位{top10Rows[1]?.name}、3位{top10Rows[2]?.name}で、
+            ポケモンチャンピオンズ(ポケチャン) シングルバトルの使用率ランキングです。{fmtDate(lastDate)}時点の1位は{top10Rows[0]?.name}、2位{top10Rows[1]?.name}、3位{top10Rows[2]?.name}で、
             {rankedCount}体を毎日集計しています（{latestSeason}シーズン{spanDays}日分）。
             {risers.length > 0 && <>直近1週間で最も順位を上げたのは{risers[0].name}（{risers[0].prev}位→{risers[0].cur}位）、</>}
             {fallers.length > 0 && <>最も下げたのは{fallers[0].name}（{fallers[0].prev}位→{fallers[0].cur}位）です。</>}

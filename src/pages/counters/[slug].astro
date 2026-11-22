@@ -145,11 +145,17 @@ const rankText = ranked ? `使用率${defenderRank}位の` : '';
 /** 検索結果では「使用率◯位の」より「何体載っているか・1位は誰か」の方が
  * クリックの判断材料になるため、具体の数字と名前をタイトル・説明文に出す。 */
 const topCounterName = bestCounters[0]?.name ?? counters[0]?.name ?? '';
+/** 「◯◯に強いポケモン」で上位に出ているのにCTRが伸びないため、タイトルに
+ * その語を入れる。シーズンは先頭に置くと次シーズンで旧シーズンのクエリを
+ * 丸ごと失う(M-7で787表示が消えた)ので後方へ下げる。 */
 const title = counters.length
-  ? `${defenderName}対策 ${MATCHUP_SEASON}｜有利を取れる${counters.length}体${topCounterName ? `｜1位は${topCounterName}` : ''}`
-  : `${defenderName}対策 ${MATCHUP_SEASON}｜${defenderName}に強いポケモン`;
+  ? `${defenderName}対策｜${defenderName}に強いポケモン${counters.length}体${topCounterName ? `・1位は${topCounterName}` : ''}｜${MATCHUP_SEASON}`
+  : `${defenderName}対策｜${defenderName}に強いポケモン｜${MATCHUP_SEASON}`;
+/** 明確に有利が0〜2体のときに「明確に有利0体」と書くと、対策を探している人に
+ * 「答えが無い」と見せてしまう。少ないときは件数を出さず、総数だけを出す。 */
+const bestText = bestCounters.length >= 3 ? `（明確に有利${bestCounters.length}体）` : '';
 const description = counters.length
-  ? `${defenderName}に強いポケモン${counters.length}体（明確に有利${bestCounters.length}体）を1v1事前計算で抽出。${topCounterName ? `1位は${topCounterName}。` : ''}技・持ち物・EVまで含めた型別の判定内訳つき。${rankText ? `${MATCHUP_SEASON}の${rankText}${defenderName}の対策に。` : ''}`
+  ? `${defenderName}に強いポケモン${counters.length}体${bestText}を1v1事前計算で抽出。${topCounterName ? `1位は${topCounterName}。` : ''}技・持ち物・EVまで含めた型別の判定内訳つき。${rankText ? `${MATCHUP_SEASON}の${rankText}${defenderName}の対策に。` : ''}`
   : `${defenderName}に強いポケモンを1v1事前計算で抽出。技・持ち物・EVまで含めた型別の判定内訳つき。`;
 const jsonLd = {
   '@context': 'https://schema.org',
