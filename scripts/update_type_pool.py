@@ -5,7 +5,7 @@
      技が4つに満たず生成器が作れない種（メタモン）は、技・持ち物・性格・努力値の周辺分布の積で作る。
   2. 系統表: scripts/arch_groups.py
   3. _local/ai_work/pools/<シーズン>/<日付>/ に type_pool.json・type_groups.json・meta.json を書く（既にあれば止める。上書きしない）
-  4. scripts/pool_versions.json の page を新しい版へ向け、gen_builder_data.py → gen_archetype_data.py を流す（archNo を揃えるため必ず両方）
+  4. scripts/pool_versions.json の page を新しい版へ向け、gen_builder_data.py → gen_archetype_data.py → generate_builds_json.py → generate_speed_json.py を流す（archNo を揃えるため必ず全部）
      簡単構築の一覧の記号（suggest_cache.json の matchup）も同じ代表型（scripts/builder_targets.json）で作り直す（gen_builder_data.py が最後に _refresh_panel.py MATCHUP_ONLY=1 を流す）
   5. チェックと前の page 版との差分レポート（scripts/pool_checks.py）を版のフォルダの report.md に書く。
      プールと系統表のエラーなら 4 の前に止める（ポインタも生成物も変えない）。出力の整合のエラーならポインタを戻して生成物を作り直す。終了コード1
@@ -240,6 +240,10 @@ def main():
     def pages():
         subprocess.run([py, os.path.join(HERE, "gen_builder_data.py")], cwd=ROOT, check=True)
         subprocess.run([py, os.path.join(HERE, "gen_archetype_data.py")], cwd=ROOT, check=True)
+        # 定番構築と素早さ実数値は archetypes.json・同居率DBから作り直す。手動に任せると
+        # シーズンが変わったときに前シーズンのまま公開される（/builds/ が M-7 のまま出た）。
+        subprocess.run([py, os.path.join(HERE, "generate_builds_json.py")], cwd=ROOT, check=True)
+        subprocess.run([py, os.path.join(HERE, "generate_speed_json.py")], cwd=ROOT, check=True)
     PV.set_pointer("page", version)
     t1 = time.time()
     pages()
