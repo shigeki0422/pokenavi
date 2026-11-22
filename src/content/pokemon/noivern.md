@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのオンバーン基礎データ
 pokemonName: 'オンバーン'
 dexNumber: 715
 usageRank: 169
-updatedDate: '2026-11-21'
+updatedDate: '2026-11-22'
 pubDate: '2026-11-21'
 draft: false
 
