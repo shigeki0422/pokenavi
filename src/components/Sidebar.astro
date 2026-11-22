@@ -1,5 +1,6 @@
 ---
 import { SITE_TITLE } from '../consts';
+import { blogSeasons, seasonLabel } from '../utils/blogSeasons';
 import GlobalSearch from './GlobalSearch.astro';
 
 const path = Astro.url.pathname;
@@ -13,7 +14,7 @@ const NAV = {
     watchParent: '仮想バトル観戦', simA: 'M-A環境', simB: 'M-B環境', simC: 'M-C環境', soonTitle: '近日公開予定',
     buildParent: 'パーティ構築', builds: '定番構築', quickBuild: '軸から構築', detailBuild: 'パーティ工房', assist: '対戦アシスト',
     pokemon: 'ポケモン情報', ranking: '使用率ランキング', speed: '素早さ実数値', blog: '考察記事',
-    m7: 'M-7 シーズン', archive: 'M-7シーズン以前', about: '運営者情報', privacy: 'プライバシーポリシー',
+    archive: 'シーズン以前', about: '運営者情報', privacy: 'プライバシーポリシー',
   },
   en: {
     home: 'Home',
@@ -34,11 +35,15 @@ const NAV = {
 }[lang];
 
 const isActive = (href: string) => (href === `${pfx}/` ? path === `${pfx}/` || path === `${pfx}` : path.startsWith(href));
-const isM7Active = path.startsWith('/blog/m7') || (path.startsWith('/blog/') && path.includes('-m7'));
+/** 見出しとリンク先をハードコードすると、新シーズンの記事を出したときに
+ * 古いシーズンのまま残る（/blog/m8/ へのリンク切れになる）。記事から引く。 */
+const latestBlogSeason = (await blogSeasons())[0] ?? 'm7';
+const latestBlogLabel = seasonLabel(latestBlogSeason);
+const isM7Active = path.startsWith(`/blog/${latestBlogSeason}`) || (path.startsWith('/blog/') && path.includes(`-${latestBlogSeason}`));
 const isArchiveActive = path.startsWith('/blog/archive')
   || (path.startsWith('/blog/') && ['-m6', '-m5', '-m4', '-m3', '-m2'].some((s) => path.includes(s)));
 const isBlogActive = (path === '/blog' || path === '/blog/')
-  || (path.startsWith('/blog/') && !path.startsWith('/blog/m7') && !path.startsWith('/blog/archive')
+  || (path.startsWith('/blog/') && !path.startsWith(`/blog/${latestBlogSeason}`) && !path.startsWith('/blog/archive')
       && !['-m6', '-m5', '-m4', '-m3', '-m2'].some((s) => path.includes(s)));
 const isSimAActive = path === `${pfx}/simulator` || path === `${pfx}/simulator/`;
 const isSimBActive = isActive(`${pfx}/simulator-mb`);
@@ -91,8 +96,8 @@ const langUrls = isJaOnlyPath
 		{lang === 'ja' && <>
 			<div class="sb-verb-caption">📖 {NAV.navRead}</div>
 			<a href="/blog" class:list={['sb-link', { active: isBlogActive }]}>{NAV.blog}</a>
-			<a href="/blog/m7/" class:list={['sb-sublink', { active: isM7Active }]}>{NAV.m7}</a>
-			<a href="/blog/archive/" class:list={['sb-sublink', { active: isArchiveActive }]}>{NAV.archive}</a>
+			<a href={`/blog/${latestBlogSeason}/`} class:list={['sb-sublink', { active: isM7Active }]}>{latestBlogLabel} シーズン</a>
+			<a href="/blog/archive/" class:list={['sb-sublink', { active: isArchiveActive }]}>{latestBlogLabel}{NAV.archive}</a>
 		</>}
 
 		<div class="sb-verb-caption">🎬 {NAV.navWatch}</div>

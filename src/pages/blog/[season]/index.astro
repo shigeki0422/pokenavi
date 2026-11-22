@@ -4,6 +4,16 @@ import BaseHead from '../../../components/BaseHead.astro';
 import Footer from '../../../components/Footer.astro';
 import Header from '../../../components/Header.astro';
 import articleMeta from '../../../data/article-meta.json';
+import { blogSeasons, seasonLabel } from '../../../utils/blogSeasons';
+
+/** シーズンごとの一覧。手書きのディレクトリ(blog/m7/ 等)だと新シーズンの記事を
+ * 出すたびに作り忘れてリンク切れになるため、記事スラッグの -m<N> から生成する。 */
+export async function getStaticPaths() {
+	return (await blogSeasons()).map((season, i) => ({ params: { season }, props: { season, isLatest: i === 0 } }));
+}
+
+const { season, isLatest } = Astro.props as { season: string; isLatest: boolean };
+const label = seasonLabel(season);
 
 const ITEMS_PER_PAGE = 20;
 
@@ -17,7 +27,7 @@ const TYPE_COLOR: Record<string, string> = {
 
 const showDrafts = import.meta.env.INCLUDE_DRAFTS === 'true';
 const allPosts = (await getCollection('blog'))
-	.filter((post) => (showDrafts || !post.data.draft) && post.id.includes('-m4'))
+	.filter((post) => (showDrafts || !post.data.draft) && post.id.endsWith(`-${season}`))
 	.sort((a, b) => {
 		const ma = (articleMeta as any)[a.id];
 		const mb = (articleMeta as any)[b.id];
@@ -32,8 +42,8 @@ const posts = allPosts;
 <html lang="ja">
 	<head>
 		<BaseHead
-			title="M-4 シーズン 考察記事一覧 | ポケナビ"
-			description="ポケモンチャンピオンズ M-4 シーズンのポケモン別考察記事。使用率上位ポケモンの型・立ち回り・パーティ構成をデータで解説。"
+			title={`${label} シーズン 考察記事一覧 | ポケナビ`}
+			description={`ポケモンチャンピオンズ ${label} シーズンのポケモン別考察記事。使用率上位ポケモンの型・立ち回り・パーティ構成をデータで解説。`}
 			imageUrl="/og-image.png"
 		/>
 		<style>
@@ -84,6 +94,7 @@ const posts = allPosts;
 			.types { display: flex; gap: 3px; flex-wrap: wrap; margin-bottom: 3px; }
 			.type-badge { font-size: 0.65rem; padding: 1px 5px; border-radius: 3px; color: white; font-weight: 700; }
 			.card-date { font-size: 0.7rem; color: rgb(var(--gray)); }
+			.empty { color: rgb(var(--gray)); font-size: 0.9rem; padding: 2rem 0; text-align: center; }
 			.pagination {
 				display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 2rem;
 			}
@@ -99,46 +110,49 @@ const posts = allPosts;
 		<Header />
 		<main>
 			<div class="breadcrumb">
-				<a href="/">ホーム</a> &rsaquo; <a href="/blog/">考察記事</a> &rsaquo; M-4 シーズン
+				<a href="/">ホーム</a> &rsaquo; <a href="/blog/">考察記事</a> &rsaquo; {label} シーズン
 			</div>
 			<div class="season-banner">
 				<div>
 					<div class="label">シーズン</div>
-					<div class="name">M-4</div>
+					<div class="name">{label}</div>
 				</div>
-				<span class="badge">最新シーズン</span>
+				{isLatest && <span class="badge">最新シーズン</span>}
 			</div>
-			<h1>M-4 シーズン 考察記事</h1>
+			<h1>{label} シーズン 考察記事</h1>
 			<p class="subtitle">使用率上位ポケモン考察（{allPosts.length}件）</p>
-			<div class="grid" id="post-grid">
-				{posts.map((post, i) => {
-					const meta = (articleMeta as any)[post.id];
-					const dex = meta?.dex;
-					const form = meta?.form ?? '00';
-					const types: string[] = meta?.types ?? [];
-					const rank: number | null = meta?.rank ?? null;
-					const imgSrc = dex
-						? `/images/pokemon/pokemon-${String(dex).padStart(4,'0')}-${form}.webp`
-						: null;
-					return (
-						<a class="card" data-index={i} href={`/blog/${post.id}/`}>
-							{imgSrc
-								? <img class="card-img" src={imgSrc} alt={meta?.name ?? ''} loading={i < 10 ? 'eager' : 'lazy'} />
-								: <div class="card-img" style="background:#f1f5f9;border-radius:8px" />
-							}
-							<div class="card-body">
-								{rank && <div class="card-rank">使用率 {rank}位</div>}
-								<div class="card-title">{post.data.title}</div>
-								<div class="types">
-									{types.map((t) => (
-										<span class="type-badge" style={`background:${TYPE_COLOR[t] ?? '#999'}`}>{t}</span>
-									))}
+			{posts.length === 0
+				? <p class="empty">{label} シーズンの記事は準備中です。</p>
+				: <div class="grid" id="post-grid">
+					{posts.map((post, i) => {
+						const meta = (articleMeta as any)[post.id];
+						const dex = meta?.dex;
+						const form = meta?.form ?? '00';
+						const types: string[] = meta?.types ?? [];
+						const rank: number | null = meta?.rank ?? null;
+						const imgSrc = dex
+							? `/images/pokemon/pokemon-${String(dex).padStart(4,'0')}-${form}.webp`
+							: null;
+						return (
+							<a class="card" data-index={i} href={`/blog/${post.id}/`}>
+								{imgSrc
+									? <img class="card-img" src={imgSrc} alt={meta?.name ?? ''} loading={i < 10 ? 'eager' : 'lazy'} />
+									: <div class="card-img" style="background:#f1f5f9;border-radius:8px" />
+								}
+								<div class="card-body">
+									{rank && <div class="card-rank">使用率 {rank}位</div>}
+									<div class="card-title">{post.data.title}</div>
+									<div class="types">
+										{types.map((t) => (
+											<span class="type-badge" style={`background:${TYPE_COLOR[t] ?? '#999'}`}>{t}</span>
+										))}
+									</div>
 								</div>
-							</div>
-						</a>
-					);
-				})}
-			</div>
+							</a>
+						);
+					})}
+				</div>
+			}
 			{totalPages > 1 && <div class="pagination" id="pagination"></div>}
 			<script define:vars={{ totalPages, ITEMS_PER_PAGE }}>
 				(function() {
