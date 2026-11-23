@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのメタモン基礎データ。
 pokemonName: 'メタモン'
 dexNumber: 132
 usageRank: 63
-updatedDate: '2026-11-22'
+updatedDate: '2026-11-23'
 pubDate: '2026-11-21'
 draft: false
 analysisSlug: 'ditto-analysis-m2'
