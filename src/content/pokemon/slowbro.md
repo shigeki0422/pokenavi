@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのヤドラン基礎データ。
 pokemonName: 'ヤドラン'
 dexNumber: 80
 usageRank: 107
-updatedDate: '2026-11-23'
+updatedDate: '2026-11-24'
 pubDate: '2026-11-21'
 draft: false
 analysisSlug: 'slowbro-analysis-m2'

@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのエルフーン基礎データ
 pokemonName: 'エルフーン'
 dexNumber: 547
 usageRank: 83
-updatedDate: '2026-11-23'
+updatedDate: '2026-11-24'
 pubDate: '2026-11-21'
 draft: false
 

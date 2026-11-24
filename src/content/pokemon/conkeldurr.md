@@ -1,10 +1,10 @@
 ---
 title: 'ローブシン | ポケモンチャンピオンズ 使用率・基礎データ'
-description: 'ポケモンチャンピオンズのローブシン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率126位。'
+description: 'ポケモンチャンピオンズのローブシン基礎データ。種族値・タイプ相性・特性と、技・持ち物・性格・チームメイトの使用率TOP10を掲載。使用率127位。'
 pokemonName: 'ローブシン'
 dexNumber: 534
-usageRank: 126
-updatedDate: '2026-11-23'
+usageRank: 127
+updatedDate: '2026-11-24'
 pubDate: '2026-11-21'
 draft: false
 analysisSlug: 'conkeldurr-analysis-m2'
@@ -30,7 +30,7 @@ faq:
       <img src="/images/types/type-01-fighting.png" alt="かくとう" style="width:40px;height:40px;vertical-align:middle" />
     </div>
     <div style="font-size:0.85rem;color:#555">
-      全国図鑑 <strong>No.534</strong>　／　使用率 <strong style="color:#dc2626">126位</strong>
+      全国図鑑 <strong>No.534</strong>　／　使用率 <strong style="color:#dc2626">127位</strong>
     </div>
     <div style="font-size:0.78rem;color:#999;margin-top:4px">データ集計日：2026-11-21</div>
   </div>

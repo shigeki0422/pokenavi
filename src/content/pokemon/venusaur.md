@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのフシギバナ基礎データ
 pokemonName: 'フシギバナ'
 dexNumber: 3
 usageRank: 49
-updatedDate: '2026-11-23'
+updatedDate: '2026-11-24'
 pubDate: '2026-11-21'
 draft: false
 

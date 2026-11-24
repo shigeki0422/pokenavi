@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのサザンドラ基礎データ
 pokemonName: 'サザンドラ'
 dexNumber: 635
 usageRank: 37
-updatedDate: '2026-11-23'
+updatedDate: '2026-11-24'
 pubDate: '2026-11-21'
 draft: false
 

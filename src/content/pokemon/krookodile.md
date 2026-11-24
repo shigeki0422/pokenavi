@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのワルビアル基礎データ
 pokemonName: 'ワルビアル'
 dexNumber: 553
 usageRank: 160
-updatedDate: '2026-11-23'
+updatedDate: '2026-11-24'
 pubDate: '2026-11-21'
 draft: false
 
