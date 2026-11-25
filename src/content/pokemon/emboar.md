@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのエンブオー基礎データ
 pokemonName: 'エンブオー'
 dexNumber: 500
 usageRank: 130
-updatedDate: '2026-11-24'
+updatedDate: '2026-11-25'
 pubDate: '2026-11-21'
 draft: false
 

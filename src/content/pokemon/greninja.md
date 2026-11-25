@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのゲッコウガ基礎データ
 pokemonName: 'ゲッコウガ'
 dexNumber: 658
 usageRank: 24
-updatedDate: '2026-11-24'
+updatedDate: '2026-11-25'
 pubDate: '2026-11-21'
 draft: false
 

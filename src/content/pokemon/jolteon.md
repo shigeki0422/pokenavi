@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのサンダース基礎データ
 pokemonName: 'サンダース'
 dexNumber: 135
 usageRank: 150
-updatedDate: '2026-11-24'
+updatedDate: '2026-11-25'
 pubDate: '2026-11-21'
 draft: false
 

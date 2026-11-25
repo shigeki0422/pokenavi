@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのスターミー基礎データ
 pokemonName: 'スターミー'
 dexNumber: 121
 usageRank: 43
-updatedDate: '2026-11-24'
+updatedDate: '2026-11-25'
 pubDate: '2026-11-21'
 draft: false
 

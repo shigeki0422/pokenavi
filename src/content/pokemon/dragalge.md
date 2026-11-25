@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのドラミドロ基礎データ
 pokemonName: 'ドラミドロ'
 dexNumber: 691
 usageRank: 89
-updatedDate: '2026-11-24'
+updatedDate: '2026-11-25'
 pubDate: '2026-11-21'
 draft: false
 analysisSlug: 'dragalge-analysis-m3'

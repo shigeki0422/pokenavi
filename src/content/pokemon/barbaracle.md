@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのガメノデス基礎データ
 pokemonName: 'ガメノデス'
 dexNumber: 689
 usageRank: 134
-updatedDate: '2026-11-24'
+updatedDate: '2026-11-25'
 pubDate: '2026-11-21'
 draft: false
 analysisSlug: 'barbaracle-analysis-m3'

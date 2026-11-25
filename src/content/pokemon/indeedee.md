@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのイエッサン(オス)基礎�
 pokemonName: 'イエッサン(オス)'
 dexNumber: 876
 usageRank: 19
-updatedDate: '2026-11-24'
+updatedDate: '2026-11-25'
 pubDate: '2026-11-21'
 draft: false
 

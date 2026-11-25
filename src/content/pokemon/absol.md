@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのアブソル基礎データ。
 pokemonName: 'アブソル'
 dexNumber: 359
 usageRank: 75
-updatedDate: '2026-11-24'
+updatedDate: '2026-11-25'
 pubDate: '2026-11-21'
 draft: false
 
