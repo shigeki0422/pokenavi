@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのブリガロン基礎データ
 pokemonName: 'ブリガロン'
 dexNumber: 652
 usageRank: 158
-updatedDate: '2026-11-25'
+updatedDate: '2026-11-26'
 pubDate: '2026-11-21'
 draft: false
 

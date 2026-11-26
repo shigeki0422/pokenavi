@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのクレッフィ基礎データ
 pokemonName: 'クレッフィ'
 dexNumber: 707
 usageRank: 157
-updatedDate: '2026-11-25'
+updatedDate: '2026-11-26'
 pubDate: '2026-11-21'
 draft: false
 

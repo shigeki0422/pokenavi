@@ -316,7 +316,7 @@
       "a": {
         "name": "オオニューラ",
         "icon": "0903-00",
-        "rank": 32,
+        "rank": 31,
         "slug": "sneasler",
         "suggest": "sneasler",
         "suggestLabel": "オオニューラ",
@@ -1386,6 +1386,64 @@
     },
     {
       "core": {
+        "name": "マスカーニャ",
+        "icon": "0908-00",
+        "rank": 11,
+        "slug": "meowscarada",
+        "suggest": "meowscarada",
+        "suggestLabel": "マスカーニャ",
+        "label": "マスカーニャ"
+      },
+      "partners": [
+        {
+          "name": "ガブリアス",
+          "icon": "0445-00",
+          "rank": 1,
+          "slug": "garchomp",
+          "suggest": "garchomp",
+          "suggestLabel": "ガブリアス",
+          "label": "ガブリアス"
+        },
+        {
+          "name": "アシレーヌ",
+          "icon": "0730-00",
+          "rank": 2,
+          "slug": "primarina",
+          "suggest": "primarina",
+          "suggestLabel": "アシレーヌ",
+          "label": "アシレーヌ"
+        },
+        {
+          "name": "カバルドン",
+          "icon": "0450-00",
+          "rank": 3,
+          "slug": "hippowdon",
+          "suggest": "hippowdon",
+          "suggestLabel": "カバルドン",
+          "label": "カバルドン"
+        },
+        {
+          "name": "ルカリオ",
+          "icon": "0448-00",
+          "rank": 5,
+          "slug": "lucario",
+          "suggest": "mega-lucario-z",
+          "suggestLabel": "メガルカリオZ",
+          "label": "メガルカリオZ"
+        },
+        {
+          "name": "ブリジュラス",
+          "icon": "1018-00",
+          "rank": 4,
+          "slug": "archaludon",
+          "suggest": "archaludon",
+          "suggestLabel": "ブリジュラス",
+          "label": "ブリジュラス"
+        }
+      ]
+    },
+    {
+      "core": {
         "name": "アーマーガア",
         "icon": "0823-00",
         "rank": 12,
@@ -1497,64 +1555,6 @@
           "suggest": "hippowdon",
           "suggestLabel": "カバルドン",
           "label": "カバルドン"
-        }
-      ]
-    },
-    {
-      "core": {
-        "name": "マスカーニャ",
-        "icon": "0908-00",
-        "rank": 12,
-        "slug": "meowscarada",
-        "suggest": "meowscarada",
-        "suggestLabel": "マスカーニャ",
-        "label": "マスカーニャ"
-      },
-      "partners": [
-        {
-          "name": "ガブリアス",
-          "icon": "0445-00",
-          "rank": 1,
-          "slug": "garchomp",
-          "suggest": "garchomp",
-          "suggestLabel": "ガブリアス",
-          "label": "ガブリアス"
-        },
-        {
-          "name": "アシレーヌ",
-          "icon": "0730-00",
-          "rank": 2,
-          "slug": "primarina",
-          "suggest": "primarina",
-          "suggestLabel": "アシレーヌ",
-          "label": "アシレーヌ"
-        },
-        {
-          "name": "カバルドン",
-          "icon": "0450-00",
-          "rank": 3,
-          "slug": "hippowdon",
-          "suggest": "hippowdon",
-          "suggestLabel": "カバルドン",
-          "label": "カバルドン"
-        },
-        {
-          "name": "ルカリオ",
-          "icon": "0448-00",
-          "rank": 5,
-          "slug": "lucario",
-          "suggest": "mega-lucario-z",
-          "suggestLabel": "メガルカリオZ",
-          "label": "メガルカリオZ"
-        },
-        {
-          "name": "ブリジュラス",
-          "icon": "1018-00",
-          "rank": 4,
-          "slug": "archaludon",
-          "suggest": "archaludon",
-          "suggestLabel": "ブリジュラス",
-          "label": "ブリジュラス"
         }
       ]
     },
