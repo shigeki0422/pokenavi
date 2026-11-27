@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのエモンガ基礎データ。
 pokemonName: 'エモンガ'
 dexNumber: 587
 usageRank: 175
-updatedDate: '2026-11-26'
+updatedDate: '2026-11-27'
 pubDate: '2026-11-21'
 draft: false
 

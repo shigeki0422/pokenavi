@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのキョジオーン基礎デー
 pokemonName: 'キョジオーン'
 dexNumber: 934
 usageRank: 185
-updatedDate: '2026-11-26'
+updatedDate: '2026-11-27'
 pubDate: '2026-11-21'
 draft: false
 

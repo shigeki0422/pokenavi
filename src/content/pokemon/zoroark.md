@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのゾロアーク基礎データ
 pokemonName: 'ゾロアーク'
 dexNumber: 571
 usageRank: 187
-updatedDate: '2026-11-26'
+updatedDate: '2026-11-27'
 pubDate: '2026-11-21'
 draft: false
 

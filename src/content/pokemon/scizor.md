@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのハッサム基礎データ。
 pokemonName: 'ハッサム'
 dexNumber: 212
 usageRank: 46
-updatedDate: '2026-11-26'
+updatedDate: '2026-11-27'
 pubDate: '2026-11-21'
 draft: false
 

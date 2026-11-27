@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのアリアドス基礎データ
 pokemonName: 'アリアドス'
 dexNumber: 168
 usageRank: 200
-updatedDate: '2026-11-26'
+updatedDate: '2026-11-27'
 pubDate: '2026-05-24'
 draft: false
 

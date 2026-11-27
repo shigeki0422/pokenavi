@@ -589,7 +589,7 @@
         {
           "name": "グソクムシャ",
           "icon": "0768-00",
-          "rank": 7,
+          "rank": 6,
           "slug": "golisopod",
           "suggest": "mega-golisopod",
           "suggestLabel": "メガグソクムシャ",
@@ -680,7 +680,7 @@
         {
           "name": "グソクムシャ",
           "icon": "0768-00",
-          "rank": 7,
+          "rank": 6,
           "slug": "golisopod",
           "suggest": "mega-golisopod",
           "suggestLabel": "メガグソクムシャ",
@@ -1038,6 +1038,64 @@
     },
     {
       "core": {
+        "name": "グソクムシャ",
+        "icon": "0768-00",
+        "rank": 6,
+        "slug": "golisopod",
+        "suggest": "mega-golisopod",
+        "suggestLabel": "メガグソクムシャ",
+        "label": "メガグソクムシャ"
+      },
+      "partners": [
+        {
+          "name": "ガブリアス",
+          "icon": "0445-00",
+          "rank": 1,
+          "slug": "garchomp",
+          "suggest": "garchomp",
+          "suggestLabel": "ガブリアス",
+          "label": "ガブリアス"
+        },
+        {
+          "name": "アシレーヌ",
+          "icon": "0730-00",
+          "rank": 2,
+          "slug": "primarina",
+          "suggest": "primarina",
+          "suggestLabel": "アシレーヌ",
+          "label": "アシレーヌ"
+        },
+        {
+          "name": "カバルドン",
+          "icon": "0450-00",
+          "rank": 3,
+          "slug": "hippowdon",
+          "suggest": "hippowdon",
+          "suggestLabel": "カバルドン",
+          "label": "カバルドン"
+        },
+        {
+          "name": "ブリジュラス",
+          "icon": "1018-00",
+          "rank": 4,
+          "slug": "archaludon",
+          "suggest": "archaludon",
+          "suggestLabel": "ブリジュラス",
+          "label": "ブリジュラス"
+        },
+        {
+          "name": "サーフゴー",
+          "icon": "1000-00",
+          "rank": 10,
+          "slug": "gholdengo",
+          "suggest": "gholdengo",
+          "suggestLabel": "サーフゴー",
+          "label": "サーフゴー"
+        }
+      ]
+    },
+    {
+      "core": {
         "name": "リザードン",
         "icon": "0006-00",
         "rank": 6,
@@ -1091,64 +1149,6 @@
           "suggest": "archaludon",
           "suggestLabel": "ブリジュラス",
           "label": "ブリジュラス"
-        }
-      ]
-    },
-    {
-      "core": {
-        "name": "グソクムシャ",
-        "icon": "0768-00",
-        "rank": 7,
-        "slug": "golisopod",
-        "suggest": "mega-golisopod",
-        "suggestLabel": "メガグソクムシャ",
-        "label": "メガグソクムシャ"
-      },
-      "partners": [
-        {
-          "name": "ガブリアス",
-          "icon": "0445-00",
-          "rank": 1,
-          "slug": "garchomp",
-          "suggest": "garchomp",
-          "suggestLabel": "ガブリアス",
-          "label": "ガブリアス"
-        },
-        {
-          "name": "アシレーヌ",
-          "icon": "0730-00",
-          "rank": 2,
-          "slug": "primarina",
-          "suggest": "primarina",
-          "suggestLabel": "アシレーヌ",
-          "label": "アシレーヌ"
-        },
-        {
-          "name": "カバルドン",
-          "icon": "0450-00",
-          "rank": 3,
-          "slug": "hippowdon",
-          "suggest": "hippowdon",
-          "suggestLabel": "カバルドン",
-          "label": "カバルドン"
-        },
-        {
-          "name": "ブリジュラス",
-          "icon": "1018-00",
-          "rank": 4,
-          "slug": "archaludon",
-          "suggest": "archaludon",
-          "suggestLabel": "ブリジュラス",
-          "label": "ブリジュラス"
-        },
-        {
-          "name": "サーフゴー",
-          "icon": "1000-00",
-          "rank": 10,
-          "slug": "gholdengo",
-          "suggest": "gholdengo",
-          "suggestLabel": "サーフゴー",
-          "label": "サーフゴー"
         }
       ]
     },
@@ -1260,7 +1260,7 @@
         {
           "name": "グソクムシャ",
           "icon": "0768-00",
-          "rank": 7,
+          "rank": 6,
           "slug": "golisopod",
           "suggest": "mega-golisopod",
           "suggestLabel": "メガグソクムシャ",
@@ -1590,7 +1590,7 @@
         {
           "name": "グソクムシャ",
           "icon": "0768-00",
-          "rank": 7,
+          "rank": 6,
           "slug": "golisopod",
           "suggest": "mega-golisopod",
           "suggestLabel": "メガグソクムシャ",
@@ -1764,7 +1764,7 @@
         {
           "name": "グソクムシャ",
           "icon": "0768-00",
-          "rank": 7,
+          "rank": 6,
           "slug": "golisopod",
           "suggest": "mega-golisopod",
           "suggestLabel": "メガグソクムシャ",

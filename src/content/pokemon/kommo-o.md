@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのジャラランガ基礎デー
 pokemonName: 'ジャラランガ'
 dexNumber: 784
 usageRank: 141
-updatedDate: '2026-11-26'
+updatedDate: '2026-11-27'
 pubDate: '2026-11-21'
 draft: false
 

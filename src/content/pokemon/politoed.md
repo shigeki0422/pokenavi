@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのニョロトノ基礎データ
 pokemonName: 'ニョロトノ'
 dexNumber: 186
 usageRank: 81
-updatedDate: '2026-11-26'
+updatedDate: '2026-11-27'
 pubDate: '2026-11-21'
 draft: false
 

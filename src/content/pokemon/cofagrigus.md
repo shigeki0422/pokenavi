@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのデスカーン基礎データ
 pokemonName: 'デスカーン'
 dexNumber: 563
 usageRank: 164
-updatedDate: '2026-11-26'
+updatedDate: '2026-11-27'
 pubDate: '2026-11-21'
 draft: false
 
