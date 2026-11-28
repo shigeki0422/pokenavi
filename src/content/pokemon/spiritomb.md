@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのミカルゲ基礎データ。
 pokemonName: 'ミカルゲ'
 dexNumber: 442
 usageRank: 166
-updatedDate: '2026-11-27'
+updatedDate: '2026-11-28'
 pubDate: '2026-11-21'
 draft: false
 

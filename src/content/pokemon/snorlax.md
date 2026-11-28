@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのカビゴン基礎データ。
 pokemonName: 'カビゴン'
 dexNumber: 143
 usageRank: 58
-updatedDate: '2026-11-27'
+updatedDate: '2026-11-28'
 pubDate: '2026-11-21'
 draft: false
 

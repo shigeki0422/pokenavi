@@ -5,7 +5,7 @@ pokemonName: 'スピンロトム'
 dexNumber: 479
 usageRank: 199
 imageForm: '04'
-updatedDate: '2026-11-27'
+updatedDate: '2026-11-28'
 pubDate: '2026-11-21'
 draft: false
 

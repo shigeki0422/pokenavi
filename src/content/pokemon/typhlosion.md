@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのバクフーン基礎データ
 pokemonName: 'バクフーン'
 dexNumber: 157
 usageRank: 189
-updatedDate: '2026-11-27'
+updatedDate: '2026-11-28'
 pubDate: '2026-11-21'
 draft: false
 

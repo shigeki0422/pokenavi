@@ -5,7 +5,7 @@ pokemonName: 'ヒートロトム'
 dexNumber: 479
 usageRank: 26
 imageForm: '01'
-updatedDate: '2026-11-27'
+updatedDate: '2026-11-28'
 pubDate: '2026-11-21'
 draft: false
 

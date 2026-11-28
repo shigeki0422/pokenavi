@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのドダイトス基礎データ
 pokemonName: 'ドダイトス'
 dexNumber: 389
 usageRank: 179
-updatedDate: '2026-11-27'
+updatedDate: '2026-11-28'
 pubDate: '2026-11-21'
 draft: false
 

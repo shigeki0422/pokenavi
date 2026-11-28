@@ -4,7 +4,7 @@ description: 'ポケモンチャンピオンズのゲンガー基礎データ。
 pokemonName: 'ゲンガー'
 dexNumber: 94
 usageRank: 27
-updatedDate: '2026-11-27'
+updatedDate: '2026-11-28'
 pubDate: '2026-11-21'
 draft: false
 
